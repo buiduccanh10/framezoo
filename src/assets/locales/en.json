@@ -877,6 +877,8 @@
         "primary": "Primary",
         "secondary": "Secondary",
         "clearSecondary": "Clear secondary subtitle",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
         "selectingSecondary": "Selecting secondary subtitle"
       },
