@@ -19,6 +19,7 @@ export function useCaptions() {
     (s) => s.resetSubtitleSpecificSettings,
   );
   const setCaption = usePlayerStore((s) => s.setCaption);
+  const setSecondaryCaption = usePlayerStore((s) => s.setSecondaryCaption);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const lastSelectedLanguage = useSubtitleStore((s) => s.lastSelectedLanguage);
   const setIsOpenSubtitles = useSubtitleStore((s) => s.setIsOpenSubtitles);
@@ -27,6 +28,7 @@ export function useCaptions() {
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
   const source = usePlayerStore((s) => s.source);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
+  const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
 
   const getSubtitleTracks = usePlayerStore((s) => s.display?.getSubtitleTracks);
   const setSubtitlePreference = usePlayerStore(
@@ -122,6 +124,62 @@ export function useCaptions() {
     },
     [captions, getSubtitleTracks, setSubtitlePreference, setDirectCaption],
   );
+
+  const selectSecondaryCaptionById = useCallback(
+    async (captionId: string | null) => {
+      if (!captionId) {
+        setSecondaryCaption(null);
+        return;
+      }
+
+      const caption = captions.find((v) => v.id === captionId);
+      if (!caption) return;
+
+      const captionToSet: Caption = {
+        id: caption.id,
+        language: caption.language,
+        url: caption.url,
+        srtData: "",
+      };
+
+      if (!caption.hls) {
+        const srtData = await downloadCaption(caption);
+        captionToSet.srtData = srtData;
+      } else {
+        await setSubtitlePreference?.(caption.language);
+        const track = getSubtitleTracks?.().find(
+          (t) => t.id.toString() === caption.id && t.details !== undefined,
+        );
+        if (!track) return;
+
+        const fragments =
+          track.details?.fragments?.filter(
+            (frag) => frag !== null && frag.url !== null,
+          ) ?? [];
+
+        const vttCaptions = (
+          await Promise.all(
+            fragments.map(async (frag) => {
+              const vtt = await downloadWebVTT(frag.url);
+              return parseVttSubtitles(vtt);
+            }),
+          )
+        ).flat();
+
+        const filtered = filterDuplicateCaptionCues(vttCaptions);
+
+        const srtData = subsrt.build(filtered, { format: "srt" });
+        captionToSet.srtData = srtData;
+      }
+
+      setSecondaryCaption(captionToSet);
+    },
+    [captions, getSubtitleTracks, setSubtitlePreference, setSecondaryCaption],
+  );
+
+  const disableSecondary = useCallback(() => {
+    setSecondaryCaption(null);
+  }, [setSecondaryCaption]);
 
   const selectLanguage = useCallback(
     async (language: string) => {
@@ -237,5 +295,8 @@ export function useCaptions() {
     setDirectCaption,
     selectCaptionById,
     selectRandomCaptionFromLastUsedLanguage,
+    selectSecondaryCaptionById,
+    disableSecondary,
+    secondaryCaption,
   };
 }

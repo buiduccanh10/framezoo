@@ -17,7 +17,10 @@ import { usePlayerStore } from "@/stores/player/store";
 
 import { AudioView } from "./settings/AudioView";
 import { CaptionSettingsView } from "./settings/CaptionSettingsView";
-import { CaptionsView } from "./settings/CaptionsView";
+import {
+  CaptionsView,
+  type SubtitleSelectionMode,
+} from "./settings/CaptionsView";
 import { DownloadRoutes } from "./settings/Downloads";
 import { LanguageSubtitlesView } from "./settings/LanguageSubtitlesView";
 import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
@@ -33,6 +36,8 @@ function SettingsOverlay({ id }: { id: string }) {
   const [chosenLanguage, setChosenLanguage] = useState<string | null>(null);
   const [captionToTranslate, setCaptionToTranslate] =
     useState<CaptionListItem | null>(null);
+  const [subtitleSelectionMode, setSubtitleSelectionMode] =
+    useState<SubtitleSelectionMode>("primary");
   const router = useOverlayRouter(id);
 
   // reset source id and language when going to home or closing overlay
@@ -40,6 +45,7 @@ function SettingsOverlay({ id }: { id: string }) {
     if (!router.isRouterActive) {
       setChosenSourceId(null);
       setChosenLanguage(null);
+      setSubtitleSelectionMode("primary");
     }
     if (router.route === "/") {
       setChosenSourceId(null);
@@ -69,13 +75,20 @@ function SettingsOverlay({ id }: { id: string }) {
               id={id}
               backLink
               onChooseLanguage={setChosenLanguage}
+              selectionMode={subtitleSelectionMode}
+              onSelectionModeChange={setSubtitleSelectionMode}
             />
           </Menu.CardWithScrollable>
         </OverlayPage>
         {/* This is used by the captions shortcut in bottomControls of player */}
         <OverlayPage id={id} path="/captionsOverlay" width={343} height={496}>
           <Menu.CardWithScrollable>
-            <CaptionsView id={id} onChooseLanguage={setChosenLanguage} />
+            <CaptionsView
+              id={id}
+              onChooseLanguage={setChosenLanguage}
+              selectionMode={subtitleSelectionMode}
+              onSelectionModeChange={setSubtitleSelectionMode}
+            />
           </Menu.CardWithScrollable>
         </OverlayPage>
         <OverlayPage
@@ -91,6 +104,7 @@ function SettingsOverlay({ id }: { id: string }) {
                 language={chosenLanguage}
                 onTranslateSubtitle={setCaptionToTranslate}
                 overlayBackLink
+                selectionMode={subtitleSelectionMode}
               />
             )}
           </Menu.CardWithScrollable>
@@ -174,6 +188,7 @@ function SettingsOverlay({ id }: { id: string }) {
                 id={id}
                 language={chosenLanguage}
                 onTranslateSubtitle={setCaptionToTranslate}
+                selectionMode={subtitleSelectionMode}
               />
             )}
           </Menu.CardWithScrollable>

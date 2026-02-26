@@ -13,6 +13,7 @@ export interface ScrapeItemProps {
   name: string;
   id?: string;
   percentage?: number;
+  reason?: string;
   children?: ReactNode;
 }
 
@@ -37,7 +38,11 @@ const statusMap: Record<ScrapeCardProps["status"], StatusCircleProps["type"]> =
 
 export function ScrapeItem(props: ScrapeItemProps) {
   const { t } = useTranslation();
-  const text = statusTextMap[props.status];
+  const isTimeout =
+    props.status === "failure" && props.reason?.includes("Timeout");
+  const text = isTimeout
+    ? "player.scraping.items.timeout"
+    : statusTextMap[props.status];
   const status = statusMap[props.status];
 
   return (

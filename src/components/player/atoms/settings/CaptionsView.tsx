@@ -34,6 +34,7 @@ export interface CaptionOptionProps {
   countryCode?: string;
   children: React.ReactNode;
   selected?: boolean;
+  secondarySelected?: boolean;
   disabled?: boolean;
   loading?: boolean;
   onClick?: () => void;
@@ -83,13 +84,17 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
     );
   }
 
-  if (props.selected || props.error) {
+  if (props.selected || props.secondarySelected || props.error) {
     return (
       <div className="flex items-center">
         {translateBtn(true)}
         {props.error ? (
           <span className="flex items-center text-video-context-error">
             <Icon className="ml-2" icon={Icons.WARNING} />
+          </span>
+        ) : props.secondarySelected ? (
+          <span className="flex items-center gap-1 text-xs font-medium text-purple-400 bg-purple-500/20 px-2 py-0.5 rounded">
+            2nd
           </span>
         ) : (
           <Icon
@@ -173,7 +178,7 @@ export function CaptionOption(props: CaptionOptionProps) {
       onMouseLeave={handleMouseLeave}
     >
       <SelectableLink
-        selected={props.selected}
+        selected={props.selected || props.secondarySelected}
         loading={props.loading}
         error={props.error}
         disabled={props.disabled}
@@ -433,22 +438,30 @@ export function PasteCaptionOption(props: { selected?: boolean }) {
   );
 }
 
+export type SubtitleSelectionMode = "primary" | "secondary";
+
 export interface CaptionsViewProps {
   id: string;
   backLink?: boolean;
   onChooseLanguage?: (language: string) => void;
+  selectionMode?: SubtitleSelectionMode;
+  onSelectionModeChange?: (mode: SubtitleSelectionMode) => void;
 }
 
 export function CaptionsView({
   id,
   backLink,
   onChooseLanguage,
+  selectionMode = "primary",
+  onSelectionModeChange,
 }: CaptionsViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
+  const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
-  const { disable, selectRandomCaptionFromLastUsedLanguage } = useCaptions();
+  const { disable, selectRandomCaptionFromLastUsedLanguage, disableSecondary } =
+    useCaptions();
   const [isRandomSelecting, setIsRandomSelecting] = useState(false);
   const [dragging, setDragging] = useState(false);
 
@@ -640,8 +653,59 @@ export function CaptionsView({
         }}
         onDrop={(event) => onDrop(event)}
       >
+        {/* Dual Subtitle Mode Toggle */}
+        {onSelectionModeChange && (
+          <div className="flex items-center justify-center gap-2 px-4 py-3 border-b border-video-context-border">
+            <button
+              type="button"
+              onClick={() => onSelectionModeChange("primary")}
+              className={classNames(
+                "px-4 py-1.5 rounded text-sm font-medium transition-colors",
+                selectionMode === "primary"
+                  ? "bg-video-context-buttons-primary text-white"
+                  : "bg-video-context-buttons-secondary text-video-context-type-secondary hover:bg-video-context-light",
+              )}
+            >
+              {t("player.menus.subtitles.primary") || "Primary"}
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectionModeChange("secondary")}
+              className={classNames(
+                "px-4 py-1.5 rounded text-sm font-medium transition-colors",
+                selectionMode === "secondary"
+                  ? "bg-purple-600 text-white"
+                  : "bg-video-context-buttons-secondary text-video-context-type-secondary hover:bg-video-context-light",
+              )}
+            >
+              {t("player.menus.subtitles.secondary") || "Secondary"}
+            </button>
+            {secondaryCaption && (
+              <button
+                type="button"
+                onClick={() => disableSecondary()}
+                className="px-2 py-1.5 rounded text-sm text-video-context-type-secondary hover:bg-video-context-light"
+                title={
+                  t("player.menus.subtitles.clearSecondary") ||
+                  "Clear secondary"
+                }
+              >
+                <Icon icon={Icons.X} className="text-base" />
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Secondary subtitle hint */}
+        {onSelectionModeChange && selectionMode === "secondary" && (
+          <div className="px-4 py-2 text-xs text-video-context-type-secondary text-center bg-video-context-light bg-opacity-30">
+            {t("player.menus.subtitles.dualSubHint") ||
+              "Select a language for the secondary subtitle (shown above primary)"}
+          </div>
+        )}
+
         {/* Current subtitle preview */}
-        {selectedCaption && (
+        {selectedCaption && selectionMode === "primary" && (
           <div className="mt-3 p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center sm:hidden">
             <div className="text-sm text-video-context-type-secondary mb-1">
               {t("player.menus.subtitles.previewLabel")}
@@ -663,6 +727,63 @@ export function CaptionsView({
                 </span>
               )}
             </div>
+          </div>
+        )}
+
+        {/* Selected captions indicator */}
+        {onSelectionModeChange && (selectedCaption || secondaryCaption) && (
+          <div className="mx-4 mt-3 space-y-2">
+            {/* Primary caption indicator */}
+            {selectedCaption && (
+              <div className="p-2 rounded-lg bg-video-context-type-accent/20 border border-video-context-type-accent/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-video-context-type-accent bg-video-context-type-accent/30 px-2 py-0.5 rounded">
+                      1st
+                    </span>
+                    <FlagIcon langCode={selectedCaption.language} />
+                    <span className="text-sm text-white">
+                      {getPrettyLanguageNameFromLocale(
+                        selectedCaption.language,
+                      ) || selectedCaption.language}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => disable()}
+                    className="text-video-context-type-accent hover:text-white transition-colors"
+                  >
+                    <Icon icon={Icons.X} className="text-base" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Secondary caption indicator */}
+            {secondaryCaption && (
+              <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-purple-400 bg-purple-500/30 px-2 py-0.5 rounded">
+                      2nd
+                    </span>
+                    <FlagIcon langCode={secondaryCaption.language} />
+                    <span className="text-sm text-white">
+                      {getPrettyLanguageNameFromLocale(
+                        secondaryCaption.language,
+                      ) || secondaryCaption.language}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => disableSecondary()}
+                    className="text-purple-400 hover:text-white transition-colors"
+                  >
+                    <Icon icon={Icons.X} className="text-base" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -745,31 +866,50 @@ export function CaptionsView({
           {/* Language selection */}
           {groupedCaptions.length > 0 &&
             groupedCaptions.map(
-              ({ language, languageName, captions: captionsForLang }) => (
-                <Menu.ChevronLink
-                  key={language}
-                  selected={
-                    (!currentTranslateTask && selectedLanguage === language) ||
-                    (!!currentTranslateTask &&
-                      !currentTranslateTask.error &&
-                      currentTranslateTask.targetCaption.language === language)
-                  }
-                  rightText={captionsForLang.length.toString()}
-                  onClick={() => {
-                    onChooseLanguage?.(language);
-                    router.navigate(
-                      backLink
-                        ? "/captions/languages"
-                        : "/captionsOverlay/languagesOverlay",
-                    );
-                  }}
-                >
-                  <span className="flex items-center">
-                    <FlagIcon langCode={language} />
-                    <span className="ml-3">{languageName}</span>
-                  </span>
-                </Menu.ChevronLink>
-              ),
+              ({ language, languageName, captions: captionsForLang }) => {
+                const isPrimarySelected =
+                  (!currentTranslateTask && selectedLanguage === language) ||
+                  (!!currentTranslateTask &&
+                    !currentTranslateTask.error &&
+                    currentTranslateTask.targetCaption.language === language);
+                const isSecondarySelected =
+                  secondaryCaption?.language === language;
+
+                return (
+                  <Menu.ChevronLink
+                    key={language}
+                    selected={
+                      selectionMode === "primary"
+                        ? isPrimarySelected
+                        : isSecondarySelected
+                    }
+                    rightText={captionsForLang.length.toString()}
+                    onClick={() => {
+                      onChooseLanguage?.(language);
+                      router.navigate(
+                        backLink
+                          ? "/captions/languages"
+                          : "/captionsOverlay/languagesOverlay",
+                      );
+                    }}
+                  >
+                    <span className="flex items-center">
+                      <FlagIcon langCode={language} />
+                      <span className="ml-3">{languageName}</span>
+                      {isPrimarySelected && selectionMode === "secondary" && (
+                        <span className="ml-2 text-xs font-medium text-video-context-type-accent bg-video-context-type-accent/20 px-1.5 py-0.5 rounded">
+                          1st
+                        </span>
+                      )}
+                      {isSecondarySelected && selectionMode === "primary" && (
+                        <span className="ml-2 text-xs font-medium text-purple-400 bg-purple-500/20 px-1.5 py-0.5 rounded">
+                          2nd
+                        </span>
+                      )}
+                    </span>
+                  </Menu.ChevronLink>
+                );
+              },
             )}
         </Menu.ScrollToActiveSection>
       </FileDropHandler>

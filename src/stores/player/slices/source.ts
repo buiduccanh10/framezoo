@@ -101,6 +101,7 @@ export interface SourceSlice {
   isLoadingExternalSubtitles: boolean;
   caption: {
     selected: Caption | null;
+    secondary: Caption | null;
     asTrack: boolean;
     translateTask: TranslateTask | null;
   };
@@ -117,6 +118,7 @@ export interface SourceSlice {
   switchQuality(quality: SourceQuality): void;
   setMeta(meta: PlayerMeta, status?: PlayerStatus): void;
   setCaption(caption: Caption | null): void;
+  setSecondaryCaption(caption: Caption | null): void;
   setSourceId(id: string | null): void;
   setEmbedId(id: string | null): void;
   enableAutomaticQuality(): void;
@@ -197,6 +199,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   resumeFromSourceId: null,
   caption: {
     selected: null,
+    secondary: null,
     asTrack: false,
     translateTask: null,
   },
@@ -253,6 +256,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     }
     set((s) => {
       s.caption.selected = caption;
+    });
+  },
+  setSecondaryCaption(caption) {
+    set((s) => {
+      s.caption.secondary = caption;
     });
   },
   setSource(
@@ -417,6 +425,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       this.clearTranslateTask();
       s.caption = {
         selected: null,
+        secondary: null,
         asTrack: false,
         translateTask: null,
       };
@@ -431,9 +440,8 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     });
 
     try {
-      const { scrapeExternalSubtitles } = await import(
-        "@/utils/externalSubtitles"
-      );
+      const { scrapeExternalSubtitles } =
+        await import("@/utils/externalSubtitles");
       const externalCaptions = await scrapeExternalSubtitles(store.meta);
 
       if (externalCaptions.length > 0) {

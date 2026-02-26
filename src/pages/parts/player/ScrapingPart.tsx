@@ -36,13 +36,21 @@ export interface ScrapingProps {
 
 export function ScrapingPart(props: ScrapingProps) {
   const { report } = useReportProviders();
-  const { startScraping, resumeScraping, sourceOrder, sources, currentSource } =
-    useScrape();
+  const {
+    startScraping,
+    resumeScraping,
+    sourceOrder,
+    sources,
+    currentSource,
+    timedOutSource,
+    clearTimeoutTimer,
+  } = useScrape();
   const isMounted = useMountedState();
   const { t } = useTranslation();
   const setStatus = usePlayerStore((s) => s.setStatus);
   const addFailedSource = usePlayerStore((s) => s.addFailedSource);
   const sourceId = usePlayerStore((s) => s.sourceId);
+  const [isAutoResuming, setIsAutoResuming] = useState(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -65,8 +73,62 @@ export function ScrapingPart(props: ScrapingProps) {
   }, [sourceOrder, sources]);
 
   const started = useRef<string | null>(null);
+  const timeoutHandled = useRef<string | null>(null);
+
   useEffect(() => {
-    // Only start scraping if we haven't started with this startFromSourceId before
+    if (
+      timedOutSource &&
+      timedOutSource !== timeoutHandled.current &&
+      !isAutoResuming
+    ) {
+      timeoutHandled.current = timedOutSource;
+      setIsAutoResuming(true);
+
+      addFailedSource(timedOutSource);
+
+      (async () => {
+        clearTimeoutTimer();
+        const output = await resumeScraping(props.media, timedOutSource);
+        if (!isMounted()) return;
+        setIsAutoResuming(false);
+        props.onResult?.(
+          resultRef.current.sources,
+          resultRef.current.sourceOrder,
+        );
+        report(
+          scrapePartsToProviderMetric(
+            props.media,
+            resultRef.current.sourceOrder,
+            resultRef.current.sources,
+          ),
+        );
+        props.onGetStream?.(output);
+      })().catch((error) => {
+        if (!isMounted()) return;
+        setIsAutoResuming(false);
+        usePlayerStore.setState((s) => {
+          s.interface.error = {
+            errorName: "ScrapingError",
+            message:
+              error?.message || "Failed to resume scraping after timeout",
+            type: "global",
+          };
+          s.status = playerStatus.PLAYBACK_ERROR;
+        });
+      });
+    }
+  }, [
+    timedOutSource,
+    isAutoResuming,
+    resumeScraping,
+    props,
+    report,
+    isMounted,
+    addFailedSource,
+    clearTimeoutTimer,
+  ]);
+
+  useEffect(() => {
     const currentKey = props.startFromSourceId || "default";
     if (started.current === currentKey) return;
     started.current = currentKey;
@@ -90,14 +152,11 @@ export function ScrapingPart(props: ScrapingProps) {
       props.onGetStream?.(output);
     })().catch((error) => {
       if (!isMounted()) return;
-      // Treat scraping failure as fatal error
-      // Mark current source as failed if we have one
       if (sourceId) {
         addFailedSource(sourceId);
       } else if (currentSource) {
         addFailedSource(currentSource);
       }
-      // Set error and status to trigger PlaybackErrorPart
       usePlayerStore.setState((s) => {
         s.interface.error = {
           errorName: "ScrapingError",
@@ -161,6 +220,7 @@ export function ScrapingPart(props: ScrapingProps) {
                 status={source.status}
                 hasChildren={order.children.length > 0}
                 percentage={source.percentage}
+                reason={source.reason}
               >
                 <div
                   className={classNames({
@@ -175,6 +235,7 @@ export function ScrapingPart(props: ScrapingProps) {
                         name={embed.name}
                         status={embed.status}
                         percentage={embed.percentage}
+                        reason={embed.reason}
                         key={embedId}
                       />
                     );

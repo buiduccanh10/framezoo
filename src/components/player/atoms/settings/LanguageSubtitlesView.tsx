@@ -11,7 +11,7 @@ import { CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
-import { CaptionOption } from "./CaptionsView";
+import { CaptionOption, type SubtitleSelectionMode } from "./CaptionsView";
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
 
 export interface LanguageSubtitlesViewProps {
@@ -19,6 +19,7 @@ export interface LanguageSubtitlesViewProps {
   language: string;
   overlayBackLink?: boolean;
   onTranslateSubtitle?: (caption: CaptionListItem) => void;
+  selectionMode?: SubtitleSelectionMode;
 }
 
 export function LanguageSubtitlesView({
@@ -26,12 +27,14 @@ export function LanguageSubtitlesView({
   language,
   overlayBackLink,
   onTranslateSubtitle,
+  selectionMode = "primary",
 }: LanguageSubtitlesViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
+  const secondaryCaptionId = usePlayerStore((s) => s.caption.secondary?.id);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
-  const { selectCaptionById } = useCaptions();
+  const { selectCaptionById, selectSecondaryCaptionById } = useCaptions();
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
     string | null
   >(null);
@@ -79,9 +82,12 @@ export function LanguageSubtitlesView({
   const [downloadReq, startDownload] = useAsyncFn(
     async (captionId: string) => {
       setCurrentlyDownloading(captionId);
+      if (selectionMode === "secondary") {
+        return selectSecondaryCaptionById(captionId);
+      }
       return selectCaptionById(captionId);
     },
-    [selectCaptionById, setCurrentlyDownloading],
+    [selectCaptionById, selectSecondaryCaptionById, selectionMode],
   );
 
   // Random subtitle selection
@@ -117,21 +123,28 @@ export function LanguageSubtitlesView({
 
       try {
         await navigator.clipboard.writeText(JSON.stringify(copyData));
-        // Could add a toast notification here if needed
       } catch (err) {
         console.error("Failed to copy subtitle data:", err);
       }
     };
 
+    const isPrimarySelected =
+      v.id === selectedCaptionId ||
+      (!!currentTranslateTask &&
+        !currentTranslateTask.error &&
+        v.id === currentTranslateTask.targetCaption.id);
+    const isSecondarySelected = v.id === secondaryCaptionId;
+
+    const isSelected =
+      selectionMode === "primary" ? isPrimarySelected : isSecondarySelected;
+
     return (
       <CaptionOption
         key={v.id}
         countryCode={v.language}
-        selected={
-          v.id === selectedCaptionId ||
-          (!!currentTranslateTask &&
-            !currentTranslateTask.error &&
-            v.id === currentTranslateTask.targetCaption.id)
+        selected={isSelected}
+        secondarySelected={
+          selectionMode === "primary" ? isSecondarySelected : isPrimarySelected
         }
         disabled={
           !!currentTranslateTask &&
@@ -171,7 +184,7 @@ export function LanguageSubtitlesView({
         }
         onDoubleClick={handleDoubleClick}
         flag
-        translatable
+        translatable={selectionMode === "primary"}
         subtitleUrl={v.url}
         subtitleType={v.type}
         subtitleSource={v.source}
@@ -212,6 +225,14 @@ export function LanguageSubtitlesView({
           <span className="ml-3">{languageName}</span>
         </span>
       </Menu.BackLink>
+
+      {/* Selection mode indicator */}
+      {selectionMode === "secondary" && (
+        <div className="px-4 py-2 text-xs text-center bg-purple-500/20 text-purple-300 border-b border-purple-500/30">
+          {t("player.menus.subtitles.selectingSecondary") ||
+            "Selecting secondary subtitle"}
+        </div>
+      )}
 
       <Menu.ScrollToActiveSection
         className="!pt-1 mt-2 pb-3"

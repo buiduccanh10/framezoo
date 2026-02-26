@@ -150,8 +150,52 @@ export function SubtitleRenderer() {
   );
 }
 
+export function SecondarySubtitleRenderer() {
+  const videoTime = usePlayerStore((s) => s.progress.time);
+  const srtData = usePlayerStore((s) => s.caption.secondary?.srtData);
+  const language = usePlayerStore((s) => s.caption.secondary?.language);
+  const styling = useSubtitleStore((s) => s.styling);
+  const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
+  const delay = useSubtitleStore((s) => s.delay);
+
+  const parsedCaptions = useMemo(
+    () => (srtData ? parseSubtitles(srtData, language) : []),
+    [srtData, language],
+  );
+
+  const visibleCaptions = useMemo(
+    () =>
+      parsedCaptions.filter(({ start, end }) =>
+        captionIsVisible(start, end, delay, videoTime),
+      ),
+    [parsedCaptions, videoTime, delay],
+  );
+
+  if (!srtData) return null;
+
+  const secondaryStyling = {
+    ...styling,
+    size: styling.size * 0.85,
+    backgroundOpacity: styling.backgroundOpacity * 0.8,
+  };
+
+  return (
+    <div className="opacity-90">
+      {visibleCaptions.map(({ start, end, content }, i) => (
+        <CaptionCue
+          key={`secondary-${makeQueId(i, start, end)}`}
+          text={content}
+          styling={secondaryStyling}
+          overrideCasing={overrideCasing}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function SubtitleView(props: { controlsShown: boolean }) {
   const caption = usePlayerStore((s) => s.caption.selected);
+  const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const source = usePlayerStore((s) => s.source);
   const display = usePlayerStore((s) => s.display);
   const isCasting = display?.getType() === "casting";
@@ -162,7 +206,8 @@ export function SubtitleView(props: { controlsShown: boolean }) {
 
   // Hide custom captions when native subtitles are enabled
   const shouldUseNativeTrack = enableNativeSubtitles && source !== null;
-  if (shouldUseNativeTrack || !caption || isCasting) return null;
+  if (shouldUseNativeTrack || (!caption && !secondaryCaption) || isCasting)
+    return null;
 
   return (
     <Transition animation="slide-up" show>
@@ -175,7 +220,8 @@ export function SubtitleView(props: { controlsShown: boolean }) {
           transform: "translateZ(0)",
         }}
       >
-        <SubtitleRenderer />
+        {secondaryCaption && <SecondarySubtitleRenderer />}
+        {caption && <SubtitleRenderer />}
       </div>
     </Transition>
   );

@@ -494,7 +494,12 @@
         "useNativeSubtitlesDescription": "Có thể sửa phụ đề khi phát và trong PiP",
         "offChoice": "Tắt",
         "SourceChoice": "Nguồn phụ đề",
-        "OpenSubtitlesChoice": "Phụ đề bên ngoài"
+        "OpenSubtitlesChoice": "Phụ đề bên ngoài",
+        "primary": "Phụ đề chính",
+        "secondary": "Phụ đề phụ",
+        "clearSecondary": "Xóa phụ đề phụ",
+        "dualSubHint": "Chọn ngôn ngữ cho phụ đề phụ (hiển thị phía trên phụ đề chính)",
+        "selectingSecondary": "Đang chọn phụ đề phụ"
       },
       "playback": {
         "speedLabel": "Tốc độ phát lại",
@@ -582,6 +587,12 @@
       "homeButton": "Về trang chính"
     },
     "scraping": {
+      "items": {
+        "failure": "Đã xảy ra lỗi",
+        "timeout": "Hết thời gian (15s)",
+        "notFound": "Không có video (╥﹏╥)",
+        "pending": "Đang kiểm tra video..."
+      },
       "notFound": {
         "homeButton": "Về trang chính",
         "text": "Chúng tôi đã tìm kiếm thông qua các nhà cung cấp của mình và không thể tìm thấy phương tiện truyền thông bạn đang tìm kiếm! Chúng tôi không host các phương tiện truyền thông và không có quyền kiểm soát những gì có sẵn. Vui lòng nhấp vào 'Hiển thị chi tiết' bên dưới để biết thêm chi tiết.",

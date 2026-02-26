@@ -873,7 +873,12 @@
         "delayEarly": "Saw caption",
         "translate": {
           "title": "Translate from {{language}}"
-        }
+        },
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "clearSecondary": "Clear secondary subtitle",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "selectingSecondary": "Selecting secondary subtitle"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -944,6 +949,7 @@
     "scraping": {
       "items": {
         "failure": "Error occurred",
+        "timeout": "Timed out (15s)",
         "notFound": "Doesn't have the video (╥﹏╥)",
         "pending": "Checking for videos..."
       },

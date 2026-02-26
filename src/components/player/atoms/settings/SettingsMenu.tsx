@@ -20,6 +20,9 @@ export function SettingsMenu({ id }: { id: string }) {
   const selectedCaptionLanguage = usePlayerStore(
     (s) => s.caption.selected?.language,
   );
+  const secondaryCaptionLanguage = usePlayerStore(
+    (s) => s.caption.secondary?.language,
+  );
   const subtitlesEnabled = useSubtitleStore((s) => s.enabled);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const currentEmbedId = usePlayerStore(
@@ -41,6 +44,11 @@ export function SettingsMenu({ id }: { id: string }) {
 
   const selectedLanguagePretty = selectedCaptionLanguage
     ? (getPrettyLanguageNameFromLocale(selectedCaptionLanguage) ??
+      t("player.menus.subtitles.unknownLanguage"))
+    : undefined;
+
+  const secondaryLanguagePretty = secondaryCaptionLanguage
+    ? (getPrettyLanguageNameFromLocale(secondaryCaptionLanguage) ??
       t("player.menus.subtitles.unknownLanguage"))
     : undefined;
 
@@ -89,6 +97,11 @@ export function SettingsMenu({ id }: { id: string }) {
           <span className="text-type-secondary text-sm">
             {selectedLanguagePretty ?? t("player.menus.subtitles.offChoice")}
           </span>
+          {secondaryLanguagePretty && (
+            <span className="text-purple-400 text-xs">
+              + {secondaryLanguagePretty}
+            </span>
+          )}
         </Menu.ChevronLink>
         {currentAudioTrack ? (
           <Menu.ChevronLink

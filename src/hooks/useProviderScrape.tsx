@@ -9,6 +9,8 @@ import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
+const SOURCE_TIMEOUT_MS = 15000;
+
 export interface ScrapingItems {
   id: string;
   children: string[];
@@ -32,7 +34,17 @@ function useBaseScrape() {
   const [sources, setSources] = useState<Record<string, ScrapingSegment>>({});
   const [sourceOrder, setSourceOrder] = useState<ScrapingItems[]>([]);
   const [currentSource, setCurrentSource] = useState<string>();
+  const [timedOutSource, setTimedOutSource] = useState<string | null>(null);
   const lastId = useRef<string | null>(null);
+  const sourceStartTime = useRef<number | null>(null);
+  const timeoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimeoutTimer = useCallback(() => {
+    if (timeoutTimerRef.current) {
+      clearTimeout(timeoutTimerRef.current);
+      timeoutTimerRef.current = null;
+    }
+  }, []);
 
   const initEvent = useCallback((evt: ScraperEvent<"init">) => {
     setSources(
@@ -54,31 +66,60 @@ function useBaseScrape() {
         }, {}),
     );
     setSourceOrder(evt.sourceIds.map((v) => ({ id: v, children: [] })));
+    setTimedOutSource(null);
   }, []);
 
-  const startEvent = useCallback((id: ScraperEvent<"start">) => {
-    const lastIdTmp = lastId.current;
-    setSources((s) => {
-      if (s[id]) s[id].status = "pending";
-      if (lastIdTmp && s[lastIdTmp] && s[lastIdTmp].status === "pending")
-        s[lastIdTmp].status = "success";
-      return { ...s };
-    });
-    setCurrentSource(id);
-    lastId.current = id;
-  }, []);
+  const startEvent = useCallback(
+    (id: ScraperEvent<"start">) => {
+      const lastIdTmp = lastId.current;
+      setSources((s) => {
+        if (s[id]) s[id].status = "pending";
+        if (lastIdTmp && s[lastIdTmp] && s[lastIdTmp].status === "pending")
+          s[lastIdTmp].status = "success";
+        return { ...s };
+      });
+      setCurrentSource(id);
+      lastId.current = id;
 
-  const updateEvent = useCallback((evt: ScraperEvent<"update">) => {
-    setSources((s) => {
-      if (s[evt.id]) {
-        s[evt.id].status = evt.status;
-        s[evt.id].reason = evt.reason;
-        s[evt.id].error = evt.error;
-        s[evt.id].percentage = evt.percentage;
+      clearTimeoutTimer();
+      sourceStartTime.current = Date.now();
+
+      timeoutTimerRef.current = setTimeout(() => {
+        setSources((s) => {
+          if (s[id] && s[id].status === "pending") {
+            s[id].status = "failure";
+            s[id].reason = "Timeout after 15s";
+          }
+          return { ...s };
+        });
+        setTimedOutSource(id);
+      }, SOURCE_TIMEOUT_MS);
+    },
+    [clearTimeoutTimer],
+  );
+
+  const updateEvent = useCallback(
+    (evt: ScraperEvent<"update">) => {
+      if (
+        evt.status === "success" ||
+        evt.status === "failure" ||
+        evt.status === "notfound"
+      ) {
+        clearTimeoutTimer();
       }
-      return { ...s };
-    });
-  }, []);
+
+      setSources((s) => {
+        if (s[evt.id]) {
+          s[evt.id].status = evt.status;
+          s[evt.id].reason = evt.reason;
+          s[evt.id].error = evt.error;
+          s[evt.id].percentage = evt.percentage;
+        }
+        return { ...s };
+      });
+    },
+    [clearTimeoutTimer],
+  );
 
   const discoverEmbedsEvent = useCallback(
     (evt: ScraperEvent<"discoverEmbeds">) => {
@@ -111,18 +152,25 @@ function useBaseScrape() {
 
   const startScrape = useCallback(() => {
     lastId.current = null;
-  }, []);
+    sourceStartTime.current = null;
+    clearTimeoutTimer();
+    setTimedOutSource(null);
+  }, [clearTimeoutTimer]);
 
-  const getResult = useCallback((output: RunOutput | null) => {
-    if (output && lastId.current) {
-      setSources((s) => {
-        if (!lastId.current) return s;
-        if (s[lastId.current]) s[lastId.current].status = "success";
-        return { ...s };
-      });
-    }
-    return output;
-  }, []);
+  const getResult = useCallback(
+    (output: RunOutput | null) => {
+      clearTimeoutTimer();
+      if (output && lastId.current) {
+        setSources((s) => {
+          if (!lastId.current) return s;
+          if (s[lastId.current]) s[lastId.current].status = "success";
+          return { ...s };
+        });
+      }
+      return output;
+    },
+    [clearTimeoutTimer],
+  );
 
   return {
     initEvent,
@@ -134,6 +182,8 @@ function useBaseScrape() {
     sources,
     sourceOrder,
     currentSource,
+    timedOutSource,
+    clearTimeoutTimer,
   };
 }
 
@@ -148,6 +198,8 @@ export function useScrape() {
     getResult,
     startEvent,
     startScrape,
+    timedOutSource,
+    clearTimeoutTimer,
   } = useBaseScrape();
 
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
@@ -292,6 +344,8 @@ export function useScrape() {
     sourceOrder,
     sources,
     currentSource,
+    timedOutSource,
+    clearTimeoutTimer,
   };
 }
 
