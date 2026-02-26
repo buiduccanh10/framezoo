@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        TMDB_READ_API_KEY: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjhlZDExNzExMTk2MWJkYTM4NDFjNjQxNWMxN2U5MSIsIm5iZiI6MTc3MjA3NDU5My43MDg5OTk5LCJzdWIiOiI2OTlmYjY2MTZmYmE5MjNhOTBiMmY5YjciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.bHX19e5jzxEpmh1EmChhGB7yKDJLM2KjSTELD6Z9-O8"
+        TMDB_READ_API_KEY: ${VITE_TMDB_READ_API_KEY}
         APP_DOMAIN: https://movie.betakiot.id.vn
         PWA_ENABLED: "true"
         OPENSEARCH_ENABLED: "true"
