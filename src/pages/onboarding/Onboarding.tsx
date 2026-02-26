@@ -181,34 +181,7 @@ export function OnboardingPage() {
         </Paragraph>
 
         {/* Desktop Cards */}
-        <div className="hidden md:flex w-full flex-row gap-3 pb-6">
-          <Card
-            onClick={() =>
-              window.open(
-                "https://github.com/p-stream/p-stream-desktop/releases",
-                "_blank",
-              )
-            }
-            className="w-1/3"
-          >
-            <CardContent
-              colorClass="!text-onboarding-best"
-              title={t("onboarding.start.options.desktopapp.title")}
-              subtitle={t("onboarding.start.options.desktopapp.quality")}
-              description={t("onboarding.start.options.desktopapp.description")}
-            >
-              <Link className="!text-onboarding-best">
-                {t("onboarding.start.options.desktopapp.action")}
-              </Link>
-            </CardContent>
-          </Card>
-          <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
-            <VerticalLine className="items-end" />
-            <span className="text-xs uppercase font-bold">
-              {t("onboarding.start.options.or")}
-            </span>
-            <VerticalLine />
-          </div>
+        <div className="hidden md:flex w-full flex-row gap-3 pb-6 justify-center">
           <Card
             onClick={() => navigate("/onboarding/extension")}
             className="w-1/3"
@@ -233,14 +206,7 @@ export function OnboardingPage() {
                 </span>
                 <VerticalLine />
               </div>
-              <Card
-                onClick={
-                  isFebboxSetup && isExtensionActiveCached()
-                    ? () => completeAndRedirect()
-                    : skipModal.show
-                }
-                className="w-1/3"
-              >
+              <Card onClick={completeAndRedirect} className="w-1/3">
                 <CardContent
                   colorClass="!text-onboarding-bad"
                   title={t("onboarding.defaultConfirm.confirm")}
@@ -256,25 +222,9 @@ export function OnboardingPage() {
 
         {/* Mobile Cards */}
         <div className="md:hidden flex w-full flex-col gap-3 pb-6">
-          {/* <Card
-            onClick={() =>
-              window.open(
-                "https://github.com/p-stream/p-stream-desktop/releases",
-                "_blank",
-              )
-            }
-            className="w-full"
-          >
-            <MiniCardContent
-              colorClass="!text-onboarding-best"
-              title={t("onboarding.start.options.desktopapp.title")}
-              subtitle={t("onboarding.start.options.desktopapp.quality")}
-              description={t("onboarding.start.options.desktopapp.description")}
-            />
-          </Card> */}
           <Card
             onClick={() => navigate("/onboarding/extension")}
-            className="md:w-1/3 md:h-full"
+            className="w-full md:w-1/3 md:h-full"
           >
             <MiniCardContent
               colorClass="!text-onboarding-good"
@@ -285,12 +235,8 @@ export function OnboardingPage() {
           </Card>
           {noProxies ? null : (
             <Card
-              onClick={
-                isFebboxSetup && isExtensionActiveCached()
-                  ? () => completeAndRedirect()
-                  : skipModal.show
-              }
-              className="md:w-1/3"
+              onClick={completeAndRedirect}
+              className="w-full md:w-1/3 md:h-full"
             >
               <MiniCardContent
                 colorClass="!text-onboarding-bad"

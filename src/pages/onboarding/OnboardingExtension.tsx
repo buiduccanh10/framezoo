@@ -16,7 +16,7 @@ import {
 } from "@/pages/onboarding/onboardingHooks";
 import { Card, Link } from "@/pages/onboarding/utils";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
-import { conf } from "@/setup/config";
+// import { conf } from "@/setup/config";
 import {
   ExtensionDetectionResult,
   detectExtensionInstall,
@@ -124,8 +124,8 @@ interface ExtensionPageProps {
 
 function DefaultExtensionPage(props: ExtensionPageProps) {
   const { t } = useTranslation();
-  const installChromeLink = conf().ONBOARDING_CHROME_EXTENSION_INSTALL_LINK;
-  const installFirefoxLink = conf().ONBOARDING_FIREFOX_EXTENSION_INSTALL_LINK;
+  // const installChromeLink = conf().ONBOARDING_CHROME_EXTENSION_INSTALL_LINK;
+  // const installFirefoxLink = conf().ONBOARDING_FIREFOX_EXTENSION_INSTALL_LINK;
 
   const browser = useMemo(() => {
     return detectExtensionInstall();
@@ -142,10 +142,9 @@ function DefaultExtensionPage(props: ExtensionPageProps) {
 
       {/* Main extension icons */}
       <div className="mb-4 flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 justify-center items-center">
-        {installChromeLink &&
-        (browser === "chrome" || browser === "unknown") ? (
+        {browser === "chrome" || browser === "unknown" ? (
           <Link
-            href={installChromeLink}
+            href="https://chromewebstore.google.com/detail/p-stream-extension/gnheenieicoichghfmjlpofcaebbgclh?pli=1"
             target="_blank"
             className="flex flex-col items-center space-y-2 p-4 rounded-lg hover:bg-type-surface-hover transition-colors"
           >
@@ -165,10 +164,9 @@ function DefaultExtensionPage(props: ExtensionPageProps) {
             </span>
           </Link>
         ) : null}
-        {installFirefoxLink &&
-        (browser === "firefox" || browser === "unknown") ? (
+        {browser === "firefox" || browser === "unknown" ? (
           <Link
-            href={installFirefoxLink}
+            href="https://chromewebstore.google.com/detail/p-stream-extension/gnheenieicoichghfmjlpofcaebbgclh?pli=1"
             target="_blank"
             className="flex flex-col items-center space-y-2 p-4 rounded-lg hover:bg-type-surface-hover transition-colors"
           >
