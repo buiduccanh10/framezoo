@@ -77,6 +77,7 @@ export async function getTurnstileToken(
 
     return new Promise<string>((resolve, reject) => {
       let widgetId: string | undefined;
+      // eslint-disable-next-line prefer-const
       let timeoutId: any;
 
       const cleanup = () => {
