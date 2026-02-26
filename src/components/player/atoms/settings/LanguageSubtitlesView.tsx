@@ -42,7 +42,6 @@ export function LanguageSubtitlesView({
   const captionList = usePlayerStore((s) => s.captionList);
   const matchScore = useCaptionMatchScore();
 
-  // Trigger scroll when selected caption changes
   useEffect(() => {
     if (selectedCaptionId) {
       setScrollTrigger((prev) => prev + 1);
@@ -65,20 +64,17 @@ export function LanguageSubtitlesView({
     (s) => s.isLoadingExternalSubtitles,
   );
 
-  // Get combined caption list
   const captions = useMemo(
     () =>
       captionList.length !== 0 ? captionList : (getHlsCaptionList?.() ?? []),
     [captionList, getHlsCaptionList],
   );
 
-  // Filter captions for this specific language
   const languageCaptions = useMemo(
     () => captions.filter((caption) => caption.language === language),
     [captions, language],
   );
 
-  // Download handler
   const [downloadReq, startDownload] = useAsyncFn(
     async (captionId: string) => {
       setCurrentlyDownloading(captionId);
@@ -90,7 +86,6 @@ export function LanguageSubtitlesView({
     [selectCaptionById, selectSecondaryCaptionById, selectionMode],
   );
 
-  // Random subtitle selection
   const handleRandomSelect = async () => {
     if (languageCaptions.length === 0) return;
 
@@ -98,12 +93,9 @@ export function LanguageSubtitlesView({
     const randomCaption = languageCaptions[randomIndex];
 
     await startDownload(randomCaption.id);
-
-    // Scroll to the newly selected caption after a brief delay to ensure DOM updates
     setTimeout(() => scrollToActiveCaption(), 100);
   };
 
-  // Render subtitle option
   const renderSubtitleOption = (v: CaptionListItem) => {
     const handleDoubleClick = async () => {
       const copyData = {
@@ -138,6 +130,11 @@ export function LanguageSubtitlesView({
     const isSelected =
       selectionMode === "primary" ? isPrimarySelected : isSecondarySelected;
 
+    const isTranslating =
+      !!currentTranslateTask &&
+      !currentTranslateTask.done &&
+      !currentTranslateTask.error;
+
     return (
       <CaptionOption
         key={v.id}
@@ -146,11 +143,7 @@ export function LanguageSubtitlesView({
         secondarySelected={
           selectionMode === "primary" ? isSecondarySelected : isPrimarySelected
         }
-        disabled={
-          !!currentTranslateTask &&
-          !currentTranslateTask.done &&
-          !currentTranslateTask.error
-        }
+        disabled={isTranslating}
         loading={
           (v.id === currentlyDownloading && downloadReq.loading) ||
           (!!currentTranslateTask &&
@@ -163,12 +156,7 @@ export function LanguageSubtitlesView({
             ? downloadReq.error.toString()
             : undefined
         }
-        onClick={() =>
-          (!currentTranslateTask ||
-            currentTranslateTask.done ||
-            currentTranslateTask.error) &&
-          startDownload(v.id)
-        }
+        onClick={() => !isTranslating && startDownload(v.id)}
         onTranslate={() => {
           onTranslateSubtitle?.(v);
           router.navigate(
@@ -203,37 +191,39 @@ export function LanguageSubtitlesView({
 
   return (
     <>
-      <Menu.BackLink
-        onClick={() =>
-          router.navigate(overlayBackLink ? "/captionsOverlay" : "/captions")
-        }
-        rightSide={
-          languageCaptions.length > 0 && (
-            <button
-              type="button"
-              onClick={handleRandomSelect}
-              className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
-              title="Pick random subtitle"
-            >
-              <Icon icon={Icons.REPEAT} className="text-lg" />
-            </button>
-          )
-        }
-      >
-        <span className="flex items-center">
-          <FlagIcon langCode={language} />
-          <span className="ml-3">{languageName}</span>
-        </span>
-      </Menu.BackLink>
+      {/* Header — wrapped in single div for CardWithScrollable grid layout */}
+      <div>
+        <Menu.BackLink
+          onClick={() =>
+            router.navigate(overlayBackLink ? "/captionsOverlay" : "/captions")
+          }
+          rightSide={
+            languageCaptions.length > 0 && (
+              <button
+                type="button"
+                onClick={handleRandomSelect}
+                className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+                title="Pick random subtitle"
+              >
+                <Icon icon={Icons.REPEAT} className="text-lg" />
+              </button>
+            )
+          }
+        >
+          <span className="flex items-center">
+            <FlagIcon langCode={language} />
+            <span className="ml-3">{languageName}</span>
+          </span>
+        </Menu.BackLink>
 
-      {/* Selection mode indicator */}
-      {selectionMode === "secondary" && (
-        <div className="px-4 py-2 text-xs text-center bg-purple-500/20 text-purple-300 border-b border-purple-500/30">
-          {t("player.menus.subtitles.selectingSecondary") ||
-            "Selecting secondary subtitle"}
-        </div>
-      )}
+        {selectionMode === "secondary" && (
+          <div className="px-4 py-2 text-xs text-center bg-purple-500/20 text-purple-300 border-b border-purple-500/30">
+            {t("player.menus.subtitles.selectingSecondary")}
+          </div>
+        )}
+      </div>
 
+      {/* Scrollable subtitle list — always 2nd child for CardWithScrollable */}
       <Menu.ScrollToActiveSection
         className="!pt-1 mt-2 pb-3"
         loaded={scrollTrigger > 0}
@@ -246,7 +236,6 @@ export function LanguageSubtitlesView({
           </div>
         )}
 
-        {/* Loading indicator */}
         {isLoadingExternalSubtitles && languageCaptions.length === 0 && (
           <div className="text-center text-video-context-type-secondary py-4 mt-2">
             {t("player.menus.subtitles.loadingExternal") ||

@@ -446,6 +446,8 @@ export interface CaptionsViewProps {
   onChooseLanguage?: (language: string) => void;
   selectionMode?: SubtitleSelectionMode;
   onSelectionModeChange?: (mode: SubtitleSelectionMode) => void;
+  isDualSubEnabled?: boolean;
+  onDualSubToggle?: (enabled: boolean) => void;
 }
 
 export function CaptionsView({
@@ -454,6 +456,8 @@ export function CaptionsView({
   onChooseLanguage,
   selectionMode = "primary",
   onSelectionModeChange,
+  isDualSubEnabled = false,
+  onDualSubToggle,
 }: CaptionsViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
@@ -653,54 +657,10 @@ export function CaptionsView({
         }}
         onDrop={(event) => onDrop(event)}
       >
-        {/* Dual Subtitle Mode Toggle */}
-        {onSelectionModeChange && (
-          <div className="flex items-center justify-center gap-2 px-4 py-3 border-b border-video-context-border">
-            <button
-              type="button"
-              onClick={() => onSelectionModeChange("primary")}
-              className={classNames(
-                "px-4 py-1.5 rounded text-sm font-medium transition-colors",
-                selectionMode === "primary"
-                  ? "bg-video-context-buttons-primary text-white"
-                  : "bg-video-context-buttons-secondary text-video-context-type-secondary hover:bg-video-context-light",
-              )}
-            >
-              {t("player.menus.subtitles.primary") || "Primary"}
-            </button>
-            <button
-              type="button"
-              onClick={() => onSelectionModeChange("secondary")}
-              className={classNames(
-                "px-4 py-1.5 rounded text-sm font-medium transition-colors",
-                selectionMode === "secondary"
-                  ? "bg-purple-600 text-white"
-                  : "bg-video-context-buttons-secondary text-video-context-type-secondary hover:bg-video-context-light",
-              )}
-            >
-              {t("player.menus.subtitles.secondary") || "Secondary"}
-            </button>
-            {secondaryCaption && (
-              <button
-                type="button"
-                onClick={() => disableSecondary()}
-                className="px-2 py-1.5 rounded text-sm text-video-context-type-secondary hover:bg-video-context-light"
-                title={
-                  t("player.menus.subtitles.clearSecondary") ||
-                  "Clear secondary"
-                }
-              >
-                <Icon icon={Icons.X} className="text-base" />
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Secondary subtitle hint */}
-        {onSelectionModeChange && selectionMode === "secondary" && (
+        {/* Secondary subtitle hint — shown when dual sub is active */}
+        {isDualSubEnabled && selectionMode === "secondary" && (
           <div className="px-4 py-2 text-xs text-video-context-type-secondary text-center bg-video-context-light bg-opacity-30">
-            {t("player.menus.subtitles.dualSubHint") ||
-              "Select a language for the secondary subtitle (shown above primary)"}
+            {t("player.menus.subtitles.dualSubHint")}
           </div>
         )}
 
@@ -730,10 +690,9 @@ export function CaptionsView({
           </div>
         )}
 
-        {/* Selected captions indicator */}
-        {onSelectionModeChange && (selectedCaption || secondaryCaption) && (
+        {/* Selected captions indicator — only when dual sub is active */}
+        {isDualSubEnabled && (selectedCaption || secondaryCaption) && (
           <div className="mx-4 mt-3 space-y-2">
-            {/* Primary caption indicator */}
             {selectedCaption && (
               <div className="p-2 rounded-lg bg-video-context-type-accent/20 border border-video-context-type-accent/30">
                 <div className="flex items-center justify-between">
@@ -759,7 +718,6 @@ export function CaptionsView({
               </div>
             )}
 
-            {/* Secondary caption indicator */}
             {secondaryCaption && (
               <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30">
                 <div className="flex items-center justify-between">
@@ -792,6 +750,85 @@ export function CaptionsView({
           <CaptionOption onClick={() => disable()} selected={!selectedCaption}>
             {t("player.menus.subtitles.offChoice")}
           </CaptionOption>
+
+          {/* Dual Subtitles option */}
+          {onDualSubToggle && (
+            <div>
+              <SelectableLink
+                selected={isDualSubEnabled}
+                onClick={() => {
+                  const next = !isDualSubEnabled;
+                  onDualSubToggle(next);
+                  if (!next) {
+                    disableSecondary();
+                    onSelectionModeChange?.("primary");
+                  }
+                }}
+                rightSide={
+                  <div
+                    className={classNames(
+                      "w-8 h-4 rounded-full transition-colors relative",
+                      isDualSubEnabled ? "bg-purple-500" : "bg-white/20",
+                    )}
+                  >
+                    <div
+                      className={classNames(
+                        "absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform",
+                        isDualSubEnabled ? "translate-x-4" : "translate-x-0.5",
+                      )}
+                    />
+                  </div>
+                }
+              >
+                <span className="flex flex-col">
+                  <span>{t("player.menus.subtitles.dualSub")}</span>
+                  <span className="text-xs text-video-context-type-secondary mt-0.5">
+                    {t("player.menus.subtitles.dualSubDesc")}
+                  </span>
+                </span>
+              </SelectableLink>
+
+              {/* Primary / Secondary tab selector — only visible when dual sub is on */}
+              {isDualSubEnabled && (
+                <div className="flex items-center justify-center gap-2 px-4 py-2">
+                  <button
+                    type="button"
+                    onClick={() => onSelectionModeChange?.("primary")}
+                    className={classNames(
+                      "px-4 py-1.5 rounded text-sm font-medium transition-colors",
+                      selectionMode === "primary"
+                        ? "bg-video-context-type-accent text-white"
+                        : "bg-video-context-light bg-opacity-50 text-video-context-type-secondary hover:bg-opacity-80",
+                    )}
+                  >
+                    {t("player.menus.subtitles.primary")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onSelectionModeChange?.("secondary")}
+                    className={classNames(
+                      "px-4 py-1.5 rounded text-sm font-medium transition-colors",
+                      selectionMode === "secondary"
+                        ? "bg-purple-600 text-white"
+                        : "bg-video-context-light bg-opacity-50 text-video-context-type-secondary hover:bg-opacity-80",
+                    )}
+                  >
+                    {t("player.menus.subtitles.secondary")}
+                  </button>
+                  {secondaryCaption && (
+                    <button
+                      type="button"
+                      onClick={() => disableSecondary()}
+                      className="px-2 py-1.5 rounded text-sm text-video-context-type-secondary hover:bg-video-context-light"
+                      title={t("player.menus.subtitles.clearSecondary")}
+                    >
+                      <Icon icon={Icons.X} className="text-base" />
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Automatically select subtitles option */}
           {captions.length > 0 && (
@@ -896,16 +933,20 @@ export function CaptionsView({
                     <span className="flex items-center">
                       <FlagIcon langCode={language} />
                       <span className="ml-3">{languageName}</span>
-                      {isPrimarySelected && selectionMode === "secondary" && (
-                        <span className="ml-2 text-xs font-medium text-video-context-type-accent bg-video-context-type-accent/20 px-1.5 py-0.5 rounded">
-                          1st
-                        </span>
-                      )}
-                      {isSecondarySelected && selectionMode === "primary" && (
-                        <span className="ml-2 text-xs font-medium text-purple-400 bg-purple-500/20 px-1.5 py-0.5 rounded">
-                          2nd
-                        </span>
-                      )}
+                      {isDualSubEnabled &&
+                        isPrimarySelected &&
+                        selectionMode === "secondary" && (
+                          <span className="ml-2 text-xs font-medium text-video-context-type-accent bg-video-context-type-accent/20 px-1.5 py-0.5 rounded">
+                            1st
+                          </span>
+                        )}
+                      {isDualSubEnabled &&
+                        isSecondarySelected &&
+                        selectionMode === "primary" && (
+                          <span className="ml-2 text-xs font-medium text-purple-400 bg-purple-500/20 px-1.5 py-0.5 rounded">
+                            2nd
+                          </span>
+                        )}
                     </span>
                   </Menu.ChevronLink>
                 );

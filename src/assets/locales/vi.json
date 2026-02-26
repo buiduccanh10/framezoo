@@ -498,6 +498,8 @@
         "primary": "Phụ đề chính",
         "secondary": "Phụ đề phụ",
         "clearSecondary": "Xóa phụ đề phụ",
+        "dualSub": "Phụ đề kép",
+        "dualSubDesc": "Chọn cùng định dạng (SRT, VTT...) & nhà cung cấp (OpenSubs...) để đồng bộ tốt nhất",
         "dualSubHint": "Chọn ngôn ngữ cho phụ đề phụ (hiển thị phía trên phụ đề chính)",
         "selectingSecondary": "Đang chọn phụ đề phụ"
       },
