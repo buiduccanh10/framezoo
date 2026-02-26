@@ -1,0 +1,37 @@
+services:
+  pstream-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TMDB_READ_API_KEY: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMjhlZDExNzExMTk2MWJkYTM4NDFjNjQxNWMxN2U5MSIsIm5iZiI6MTc3MjA3NDU5My43MDg5OTk5LCJzdWIiOiI2OTlmYjY2MTZmYmE5MjNhOTBiMmY5YjciLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.bHX19e5jzxEpmh1EmChhGB7yKDJLM2KjSTELD6Z9-O8"
+        APP_DOMAIN: https://movie.betakiot.id.vn
+        PWA_ENABLED: "true"
+        OPENSEARCH_ENABLED: "true"
+    hostname: pstream-frontend
+    expose:
+      - '80'
+    ports:
+      - '4080:80'
+    environment:
+      - VIRTUAL_HOST=movie.betakiot.id.vn
+      - VIRTUAL_PORT=80
+      - VIRTUAL_PROTO=http
+      - VIRTUAL_PATH=/
+      - LETSENCRYPT_HOST=movie.betakiot.id.vn
+      - LETSENCRYPT_EMAIL=buiduccanh10@gmail.com
+      - NGINX_PROXY_READ_TIMEOUT=30s
+      - NGINX_PROXY_CONNECT_TIMEOUT=10s
+      - NGINX_PROXY_SEND_TIMEOUT=30s
+    env_file:
+      - .env
+    networks:
+      - pstream-prod-network
+      - betakiot_proxy_network
+    restart: always
+
+networks:
+  pstream-prod-network:
+    driver: bridge
+  betakiot_proxy_network:
+    external: true
