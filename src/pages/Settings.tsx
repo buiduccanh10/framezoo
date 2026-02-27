@@ -1111,20 +1111,20 @@ export function SettingsPage() {
           selectedCategory === "settings-connection") && (
           <div id="settings-connection">
             <ConnectionsPart
-              backendUrl={state.backendUrl.state}
-              setBackendUrl={state.backendUrl.set}
-              proxyUrls={state.proxyUrls.state}
-              setProxyUrls={state.proxyUrls.set}
-              febboxKey={state.febboxKey.state}
-              setFebboxKey={state.febboxKey.set}
-              debridToken={state.debridToken.state}
-              setdebridToken={state.debridToken.set}
-              debridService={state.debridService.state}
-              setdebridService={state.debridService.set}
-              tidbKey={state.tidbKey.state}
-              setTIDBKey={state.tidbKey.set}
-              proxyTmdb={state.proxyTmdb.state}
-              setProxyTmdb={state.proxyTmdb.set}
+            // backendUrl={state.backendUrl.state}
+            // setBackendUrl={state.backendUrl.set}
+            // proxyUrls={state.proxyUrls.state}
+            // setProxyUrls={state.proxyUrls.set}
+            // febboxKey={state.febboxKey.state}
+            // setFebboxKey={state.febboxKey.set}
+            // debridToken={state.debridToken.state}
+            // setdebridToken={state.debridToken.set}
+            // debridService={state.debridService.state}
+            // setdebridService={state.debridService.set}
+            // tidbKey={state.tidbKey.state}
+            // setTIDBKey={state.tidbKey.set}
+            // proxyTmdb={state.proxyTmdb.state}
+            // setProxyTmdb={state.proxyTmdb.set}
             />
           </div>
         )}

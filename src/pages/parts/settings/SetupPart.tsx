@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAsync } from "react-use";
 
 import { isExtensionActive } from "@/backend/extension/messaging";
-import { proxiedFetch, singularProxiedFetch } from "@/backend/helpers/fetch";
+import { proxiedFetch } from "@/backend/helpers/fetch";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { Loading } from "@/components/layout/Loading";
@@ -21,8 +21,6 @@ import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { usePreferencesStore } from "@/stores/preferences";
-
-const testUrl = "https://postman-echo.com/get";
 
 const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => {
@@ -41,23 +39,10 @@ export type Status =
 
 type SetupData = {
   extension: Status;
-  proxy: Status;
   defaultProxy: Status;
   febboxKeyTest?: Status;
   debridTokenTest?: Status;
 };
-
-function testProxy(url: string) {
-  return new Promise<void>((resolve, reject) => {
-    setTimeout(() => reject(new Error("Timed out!")), 3000);
-    singularProxiedFetch(url, testUrl, {})
-      .then((res) => {
-        if (res.url !== testUrl) return reject(new Error("Not a proxy"));
-        resolve();
-      })
-      .catch(reject);
-  });
-}
 
 export async function fetchFebboxQuota(febboxKey: string | null): Promise<any> {
   if (!febboxKey) {
@@ -260,15 +245,6 @@ function useIsSetup() {
     const extensionStatus: Status = (await isExtensionActive())
       ? "success"
       : "unset";
-    let proxyStatus: Status = "unset";
-    if (proxyUrls && proxyUrls.length > 0) {
-      try {
-        await testProxy(proxyUrls[0]);
-        proxyStatus = "success";
-      } catch {
-        proxyStatus = "error";
-      }
-    }
 
     const febboxKeyStatus: Status = await testFebboxKey(febboxKey);
     const debridTokenStatus: Status =
@@ -278,7 +254,7 @@ function useIsSetup() {
 
     return {
       extension: extensionStatus,
-      proxy: proxyStatus,
+      // OPhim provider is built-in, default setup always works
       defaultProxy: "success",
       ...(conf().ALLOW_FEBBOX_KEY && {
         febboxKeyTest: febboxKeyStatus,
@@ -287,16 +263,15 @@ function useIsSetup() {
     };
   }, [proxyUrls, febboxKey, debridToken, debridService]);
 
-  let globalState: Status = "unset";
+  // OPhim is built-in, so default setup is always "success"
+  let globalState: Status = "success" as Status;
   if (
     value?.extension === "success" ||
-    value?.proxy === "success" ||
     value?.febboxKeyTest === "success" ||
     value?.debridTokenTest === "success"
   )
     globalState = "success";
   if (
-    value?.proxy === "error" ||
     value?.extension === "error" ||
     value?.febboxKeyTest === "error" ||
     value?.debridTokenTest === "error"
@@ -386,9 +361,9 @@ export function SetupPart() {
       button: "settings.connections.setup.redoSetup",
     },
     unset: {
-      title: "settings.connections.setup.unsetStatus.title",
-      desc: "settings.connections.setup.unsetStatus.description",
-      button: "settings.connections.setup.doSetup",
+      title: "settings.connections.setup.successStatus.title",
+      desc: "settings.connections.setup.successStatus.description",
+      button: "settings.connections.setup.redoSetup",
     },
     api_down: {
       title: "settings.connections.setup.errorStatus.title",
@@ -432,14 +407,7 @@ export function SetupPart() {
               <SetupCheckList status={setupStates.extension}>
                 {t("settings.connections.setup.items.extension")}
               </SetupCheckList>
-              <SetupCheckList status={setupStates.proxy}>
-                {t("settings.connections.setup.items.proxy")}
-              </SetupCheckList>
-              <SetupCheckList
-                grey
-                highlight={globalState === "unset"}
-                status={setupStates.defaultProxy}
-              >
+              <SetupCheckList status={setupStates.defaultProxy}>
                 {t("settings.connections.setup.items.default")}
               </SetupCheckList>
             </>

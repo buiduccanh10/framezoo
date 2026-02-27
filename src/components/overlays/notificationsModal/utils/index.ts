@@ -43,7 +43,7 @@ export const fetchRssFeed = async (feedUrl: string): Promise<string> => {
 
 export const getSourceName = (feedUrl: string): string => {
   if (feedUrl === "/notifications.xml") {
-    return "P-Stream";
+    return "BetaMovie";
   }
 
   try {

@@ -34,9 +34,8 @@ import {
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
-import { getProxyUrls } from "@/utils/proxyUrls";
 
-import { DebridEdit, FebboxSetup } from "../parts/settings/ConnectionsPart";
+// import { DebridEdit, FebboxSetup } from "../parts/settings/ConnectionsPart";
 
 function Item(props: { title: string; children: React.ReactNode }) {
   return (
@@ -53,7 +52,6 @@ export function OnboardingPage() {
   const infoModal = useModal("info");
   const { completeAndRedirect } = useRedirectBack();
   const { t } = useTranslation();
-  const noProxies = getProxyUrls().length === 0;
 
   const isFebboxSetup = usePreferencesStore((s) => s.febboxKey) !== "";
 
@@ -126,16 +124,23 @@ export function OnboardingPage() {
             <Ol
               items={[
                 <Item
+                  key="extension"
                   title={t("onboarding.start.moreInfo.explainer.extension")}
                 >
                   {t(
                     "onboarding.start.moreInfo.explainer.extensionDescription",
                   )}
                 </Item>,
-                <Item title={t("onboarding.start.moreInfo.explainer.proxy")}>
-                  {t("onboarding.start.moreInfo.explainer.proxyDescription")}
-                </Item>,
-                <Item title={t("onboarding.start.moreInfo.explainer.default")}>
+                // <Item
+                //   key="proxy"
+                //   title={t("onboarding.start.moreInfo.explainer.proxy")}
+                // >
+                //   {t("onboarding.start.moreInfo.explainer.proxyDescription")}
+                // </Item>,
+                <Item
+                  key="default"
+                  title={t("onboarding.start.moreInfo.explainer.default")}
+                >
                   {t("onboarding.start.moreInfo.explainer.defaultDescription")}
                 </Item>,
               ].filter(Boolean)}
@@ -197,27 +202,23 @@ export function OnboardingPage() {
               </Link>
             </CardContent>
           </Card>
-          {noProxies ? null : (
-            <>
-              <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
-                <VerticalLine className="items-end" />
-                <span className="text-xs uppercase font-bold">
-                  {t("onboarding.start.options.or")}
-                </span>
-                <VerticalLine />
-              </div>
-              <Card onClick={completeAndRedirect} className="w-1/3">
-                <CardContent
-                  colorClass="!text-onboarding-bad"
-                  title={t("onboarding.defaultConfirm.confirm")}
-                  subtitle=""
-                  description={t("onboarding.defaultConfirm.description")}
-                >
-                  <Trans i18nKey="onboarding.start.options.default.text" />
-                </CardContent>
-              </Card>
-            </>
-          )}
+          <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
+            <VerticalLine className="items-end" />
+            <span className="text-xs uppercase font-bold">
+              {t("onboarding.start.options.or")}
+            </span>
+            <VerticalLine />
+          </div>
+          <Card onClick={completeAndRedirect} className="w-1/3">
+            <CardContent
+              colorClass="!text-type-secondary"
+              title={t("onboarding.defaultConfirm.confirm")}
+              subtitle=""
+              description={t("onboarding.defaultConfirm.description")}
+            >
+              <Trans i18nKey="onboarding.start.options.default.text" />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Mobile Cards */}
@@ -233,19 +234,17 @@ export function OnboardingPage() {
               description={t("onboarding.start.options.extension.description")}
             />
           </Card>
-          {noProxies ? null : (
-            <Card
-              onClick={completeAndRedirect}
-              className="w-full md:w-1/3 md:h-full"
-            >
-              <MiniCardContent
-                colorClass="!text-onboarding-bad"
-                title={t("onboarding.defaultConfirm.confirm")}
-                subtitle=""
-                description={t("onboarding.defaultConfirm.description")}
-              />
-            </Card>
-          )}
+          <Card
+            onClick={completeAndRedirect}
+            className="w-full md:w-1/3 md:h-full"
+          >
+            <MiniCardContent
+              colorClass="!text-type-secondary"
+              title={t("onboarding.defaultConfirm.confirm")}
+              subtitle=""
+              description={t("onboarding.defaultConfirm.description")}
+            />
+          </Card>
         </div>
 
         {(conf().ALLOW_FEBBOX_KEY || conf().ALLOW_DEBRID_KEY) === true && (
@@ -253,7 +252,7 @@ export function OnboardingPage() {
             {t("onboarding.start.options.addons.title")}
           </Heading3>
         )}
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <FebboxSetup
             febboxKey={usePreferencesStore((s) => s.febboxKey)}
             setFebboxKey={usePreferencesStore((s) => s.setFebboxKey)}
@@ -268,7 +267,7 @@ export function OnboardingPage() {
             setdebridService={usePreferencesStore((s) => s.setdebridService)}
             mode="onboarding"
           />
-        </div>
+        </div> */}
       </BiggerCenterContainer>
     </MinimalPageLayout>
   );

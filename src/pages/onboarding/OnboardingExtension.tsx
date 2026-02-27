@@ -144,7 +144,7 @@ function DefaultExtensionPage(props: ExtensionPageProps) {
       <div className="mb-4 flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 justify-center items-center">
         {browser === "chrome" || browser === "unknown" ? (
           <Link
-            href="https://chromewebstore.google.com/detail/p-stream-extension/gnheenieicoichghfmjlpofcaebbgclh?pli=1"
+            href="https://chromewebstore.google.com/detail/BetaMovie-extension/gnheenieicoichghfmjlpofcaebbgclh?pli=1"
             target="_blank"
             className="flex flex-col items-center space-y-2 p-4 rounded-lg hover:bg-type-surface-hover transition-colors"
           >
@@ -166,7 +166,7 @@ function DefaultExtensionPage(props: ExtensionPageProps) {
         ) : null}
         {browser === "firefox" || browser === "unknown" ? (
           <Link
-            href="https://chromewebstore.google.com/detail/p-stream-extension/gnheenieicoichghfmjlpofcaebbgclh?pli=1"
+            href="https://chromewebstore.google.com/detail/BetaMovie-extension/gnheenieicoichghfmjlpofcaebbgclh?pli=1"
             target="_blank"
             className="flex flex-col items-center space-y-2 p-4 rounded-lg hover:bg-type-surface-hover transition-colors"
           >
@@ -192,7 +192,7 @@ function DefaultExtensionPage(props: ExtensionPageProps) {
       <div className="mb-6 text-left">
         <div className="flex flex-col items-center space-y-1">
           <Link
-            href="https://raw.githubusercontent.com/p-stream/Userscript/main/p-stream.user.js"
+            href="https://raw.githubusercontent.com/BetaMovie/Userscript/main/BetaMovie.user.js"
             target="_blank"
             className="text-sm"
           >
@@ -206,7 +206,7 @@ function DefaultExtensionPage(props: ExtensionPageProps) {
 
       <ExtensionStatus status={props.status} loading={props.loading} showHelp />
       <Link
-        href="https://github.com/p-stream/extension"
+        href="https://github.com/BetaMovie/extension"
         target="_blank"
         className="pt-4 !text-type-dimmed"
       >

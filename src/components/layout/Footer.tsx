@@ -74,13 +74,12 @@ export function Footer() {
           </h3>
           <p className="mt-3">{t("footer.legal.disclaimerText")}</p>
         </div>
-        <div className="flex flex-wrap gap-[0.5rem] -ml-3">
+        {/* <div className="flex flex-wrap gap-[0.5rem] -ml-3">
           {conf().GITHUB_LINK && (
             <FooterLink icon={Icons.GITHUB} href={conf().GITHUB_LINK}>
               {t("footer.links.github")}
             </FooterLink>
           )}
-          {/* TODO: remove discord text */}
           <FooterLink icon={Icons.FLUXER} href={conf().FLUXER_LINK}>
             {t("footer.links.fluxer")}/Discord
           </FooterLink>
@@ -93,7 +92,7 @@ export function Footer() {
         </div>
         <div className="hidden items-center justify-end md:flex -mr-3">
           <Legal />
-        </div>
+        </div> */}
       </WideContainer>
     </footer>
   );
