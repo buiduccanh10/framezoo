@@ -1,96 +1,55 @@
 {
   "about": {
     "description": "uwu-stream is a fowk of m-movie-web that is ensuwed t-to stay up even OwO a-a-aftew the shutdown of movie-web.app. uwu-stream wuns on a p-pwivate, sewf-hosted VPS. I wun this site at a woss; thewe awe nyo ads due t-to my bewiefs in fwee media.",
-    "faqTitle": "Common qwestions",
-    "q1": {
-      "body": "uwu-stream does nyot host any OwO content. When you cwick ^w^ on something t-to watch, the intewnyet is seawched fow the sewected media (-(On the w-w-woading scween and in the 'video s-sources' tab you c-can see which souwce you'we using). Media nyevew gets upwoaded by majesty.wow, evewything is thwough this seawching mechanyism.",
-      "title": "Whewe does the content come fwom!?",
-      "section": "genewaw"
-    },
-    "q2": {
-      "body": "It's not pawwsible to reqwest a show or movie, uwu-stream does not manage any content. Awl content is viewed through sources on the internet.",
-      "title": "Where can I rewqest a show or movie?",
-      "section": "seawch"
-    },
-    "q3": {
-      "body": "Our search results are powered by The Movie Database (TMDB) and display regardless of whether our sources actuawy have the content.",
-      "title": "The search wesults display the show or movie, why can't I play it?",
-      "section": "seawch"
-    },
-    "q4": {
-      "body": "Awl data is synced to the community backend, anyone is free to use this as well.",
-      "title": "What about my data and stuff 👉👈?",
-      "section": "genewal"
-    },
-    "q5": {
-      "body": "uwu-stream has a Fluxer server that can be found at the header of this page!",
-      "title": "How can I find out more 😩?",
-      "section": "genewal"
-    },
-    "title": "About uwu-stream (^▽^)",
     "help": "can't find an answer (o_O)? <0>get s-suppowt here ☆*</0>",
-    "q9": {
-      "body": "no—since we don't h-host content, we cannot add ow change what's avaiwable-.- the content wist is based on w-what's p-pubwicwy accessible thwough the seawch mechanism.",
-      "title": "this media is missing / can i w-wequest m-media (°ロ°)!?",
-      "section": "seawch"
-    },
-    "q25": {
-      "body": "we pwiowitize engwish, but some souwces offer other wanguages. t-twy switching souwces uguu.., fow FED API, onwy safawi suppowts audio switching in mp4 f-files (≧◡≦).",
-      "title": "how do i change wanguages (o_O)?",
-      "section": "wanguage"
-    },
-    "q6": {
-      "body": "not yet,,, b-but you can install it as a pwa (pwogwessive w-web app) xD on IOS, use safawi → share → add to h-home scween on andwoid, use chwome → 3 dots → add t-to home scween. an expewimentaw apk i-is a-avaiwable via ouw discowd, but it's not wecommended.",
-      "title": "is there a uwu-stream app owo?",
-      "section": "genewal"
-    },
-    "q15": {
-      "body": "ensure youw device isn't muted and twy switching souwces. audio i-issues may be s-souwce-specific xD.",
-      "title": "why is there n-no audio uguu?",
-      "section": "pwayback"
-    },
-    "q18": {
-      "body": "speed depends on the hosting s-site. switch to a-another s-souwce fow better pewfowmance (o^▽^o).",
-      "section": "pwayback",
-      "title": "t-the souwce is w-woading swowwy :(."
-    },
-    "q19": {
-      "body": "While pwaying , tap the ⚙️ icon, t-then choose a-another s-souwce under \"video s-souwces\" (o^▽^o).",
-      "title": "h-how do i switch souwces (o_O)?",
-      "section": "pwayback"
-    },
-    "q17": {
-      "section": "pwayback",
-      "title": "i'm e-expewiencing visuaw gwitches xD.",
-      "body": "visuaw bugs u-usuawwy come fwom poow file upwoads. twy s-switching souwces."
-    },
-    "q24": {
-      "body": "youw isp might be bwocking FED API. s-set a c-custom dns wike 1.1.1.1 ow nextdns. you can awso change youw wegion in the admin panew (o^▽^o).",
-      "title": "my f-febbox token faiws duwing setup. what shouwd i do?",
-      "section": "connecwions"
-    },
-    "q20": {
-      "body": "FED API is ouw p-pwivate scwaper that pulls stweams diwectwy fwom febbox. each fwee febbox account incwudes 100 gb/month o-of unwimited bandwidth,,, and we use youw ui token to scwape content as if ur watching it youwsewf xD setup is e-easiest via desktop bwowser, but mobile instwuctions are avaiwable on ouw discowd :3.",
-      "title": "what i-is fed api (o_O)?",
-      "section": "connecwions"
-    },
-    "q12": {
-      "body": "switch to a diffewent souwce. we don't contwow any content ow episode accuwacy. (o^▽^o).",
-      "title": "t-the episode i'm watching i-is incowwect.",
-      "section": "pwayback"
-    },
+    "faqTitle": "Common qwestions",
     "searchPlaceholder": "Seawch faq...",
     "sections": {
+      "general": "genewaw",
       "search": "seawch & content avaiwabiwity",
       "playback": "p-pwayback issues",
       "connections": "connections >~<",
-      "language": "wanguage & s-subtitle settings",
-      "general": "genewaw"
+      "language": "wanguage & s-subtitle settings"
+    },
+    "q1": {
+      "title": "Whewe does the content come fwom!?",
+      "body": "uwu-stream does nyot host any OwO content. When you cwick ^w^ on something t-to watch, the intewnyet is seawched fow the sewected media (-(On the w-w-woading scween and in the 'video s-sources' tab you c-can see which souwce you'we using). Media nyevew gets upwoaded by majesty.wow, evewything is thwough this seawching mechanyism.",
+      "section": "genewaw"
+    },
+    "q2": {
+      "title": "Where can I rewqest a show or movie?",
+      "body": "It's not pawwsible to reqwest a show or movie, uwu-stream does not manage any content. Awl content is viewed through sources on the internet.",
+      "section": "seawch"
+    },
+    "q3": {
+      "title": "The search wesults display the show or movie, why can't I play it?",
+      "body": "Our search results are powered by The Movie Database (TMDB) and display regardless of whether our sources actuawy have the content.",
+      "section": "seawch"
+    },
+    "q4": {
+      "title": "What about my data and stuff 👉👈?",
+      "body": "Awl data is synced to the community backend, anyone is free to use this as well.",
+      "section": "genewal"
+    },
+    "q5": {
+      "title": "How can I find out more 😩?",
+      "body": "uwu-stream has a Fluxer server that can be found at the header of this page!",
+      "section": "genewal"
+    },
+    "q6": {
+      "title": "is there a uwu-stream app owo?",
+      "body": "not yet,,, b-but you can install it as a pwa (pwogwessive w-web app) xD on IOS, use safawi → share → add to h-home scween on andwoid, use chwome → 3 dots → add t-to home scween. an expewimentaw apk i-is a-avaiwable via ouw discowd, but it's not wecommended.",
+      "section": "genewal"
     },
     "q7": {
       "title": "how do i m-make an account?",
       "body": "Tap \\\"Sync to Cwoud\\\" in the dwopdown menu ow go to settings to cweate and sync a community account♡.",
       "section": "genewaw"
+    },
+    "q9": {
+      "title": "this media is missing / can i w-wequest m-media (°ロ°)!?",
+      "body": "no—since we don't h-host content, we cannot add ow change what's avaiwable-.- the content wist is based on w-what's p-pubwicwy accessible thwough the seawch mechanism.",
+      "section": "seawch"
     },
     "q10": {
       "title": "I can't find the movie/show I'm seawching for!",
@@ -100,6 +59,11 @@
     "q11": {
       "title": "why am i seeing a bwack scween?",
       "body": "wikewy a cowwupt ow bwoken video file (▽_▽) twy switching s-souwces.",
+      "section": "pwayback"
+    },
+    "q12": {
+      "title": "t-the episode i'm watching i-is incowwect.",
+      "body": "switch to a diffewent souwce. we don't contwow any content ow episode accuwacy. (o^▽^o).",
       "section": "pwayback"
     },
     "q13": {
@@ -112,10 +76,35 @@
       "body": "if 4k i-is not shown, it's wikewy unavaiwable fwom that souwce :(.",
       "section": "pwayback"
     },
+    "q15": {
+      "title": "why is there n-no audio uguu?",
+      "body": "ensure youw device isn't muted and twy switching souwces. audio i-issues may be s-souwce-specific xD.",
+      "section": "pwayback"
+    },
     "q16": {
       "title": "t-the video is twinted ow washed out.",
       "body": "Couwd be a fauwty file ow a-an HDR v-video. ensure youw device s-suppowts HDR, ow switch s-souwces.",
       "section": "pwayback"
+    },
+    "q17": {
+      "title": "i'm e-expewiencing visuaw gwitches xD.",
+      "body": "visuaw bugs u-usuawwy come fwom poow file upwoads. twy s-switching souwces.",
+      "section": "pwayback"
+    },
+    "q18": {
+      "title": "t-the souwce is w-woading swowwy :(.",
+      "body": "speed depends on the hosting s-site. switch to a-another s-souwce fow better pewfowmance (o^▽^o).",
+      "section": "pwayback"
+    },
+    "q19": {
+      "title": "h-how do i switch souwces (o_O)?",
+      "body": "While pwaying , tap the ⚙️ icon, t-then choose a-another s-souwce under \"video s-souwces\" (o^▽^o).",
+      "section": "pwayback"
+    },
+    "q20": {
+      "title": "what i-is fed api (o_O)?",
+      "body": "FED API is ouw p-pwivate scwaper that pulls stweams diwectwy fwom febbox. each fwee febbox account incwudes 100 gb/month o-of unwimited bandwidth,,, and we use youw ui token to scwape content as if ur watching it youwsewf xD setup is e-easiest via desktop bwowser, but mobile instwuctions are avaiwable on ouw discowd :3.",
+      "section": "connecwions"
     },
     "q21": {
       "title": "dwoes FED API wowk on awl devices?",
@@ -132,11 +121,22 @@
       "body": "it's a wocal pwoxy toow used to access stweams that w-westwict scwapers xD it mimics youw bwowsing session. it's awso compwetwy o-opensouwce and can b-be f-found on ouw g-github.",
       "section": "connecwions"
     },
+    "q24": {
+      "title": "my f-febbox token faiws duwing setup. what shouwd i do?",
+      "body": "youw isp might be bwocking FED API. s-set a c-custom dns wike 1.1.1.1 ow nextdns. you can awso change youw wegion in the admin panew (o^▽^o).",
+      "section": "connecwions"
+    },
+    "q25": {
+      "title": "how do i change wanguages (o_O)?",
+      "body": "we pwiowitize engwish, but some souwces offer other wanguages. t-twy switching souwces uguu.., fow FED API, onwy safawi suppowts audio switching in mp4 f-files (≧◡≦).",
+      "section": "wanguage"
+    },
     "q26": {
       "title": "my subtwitles a-awen't i-in sync :(.",
       "body": "use the \"customize\" option i-in subtitle s-settings ow t-tap [ and ] on youw keyboawd to adjust. y-you can awso upwoad y-youw own subtitle file.",
       "section": "wanguage"
-    }
+    },
+    "title": "About uwu-stream (^▽^)"
   },
   "actions": {
     "copied": "Cawpied",
@@ -154,11 +154,12 @@
       "passphraseFrameLabel": "Passphwase",
       "title": "Your passphwase",
       "custom": "Cwustom UwU",
-      "customPassphrasePlaceholder": "Entew uw cuwstom passphwase",
       "customPassphraseLabel": "Cwustom Passphwase >~<",
+      "customPassphrasePlaceholder": "Entew uw cuwstom passphwase",
       "useCustomPassphrase": "Use cuwstom passphwase",
       "invalidPassphraseCharacters": "Invawid passphwase chawactews. Onwy engwish wettews, nuwmbews 1-10, and nowmaw symbows awe awwowed.",
-      "passphraseTooShort": "Passphwase muwst be at weast 8 chawactews wong."
+      "passphraseTooShort": "Passphwase muwst be at weast 8 chawactews wong.",
+      "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "Already have an account? <0>wogin here!</0>",
     "login": {
@@ -168,7 +169,10 @@
       "passphrasePlaceholder": "passphwase",
       "submit": "wogin",
       "title": "wogin to your accowunt",
-      "validationError": "Incorrect or incomplete passphwase /ᐠ. .ᐟ\\"
+      "validationError": "Incorrect or incomplete passphwase /ᐠ. .ᐟ\\",
+      "usePasskey": "Use passkey",
+      "or": "or",
+      "noBackendUrl": "No backend URL"
     },
     "register": {
       "information": {
@@ -179,6 +183,16 @@
         "next": "Next",
         "title": "Account infowmation"
       }
+    },
+    "backendSelection": {
+      "title": "Select Account Server",
+      "description": "Choose which backend server to connect to",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "active": "Active",
+      "selecting": "Selecting..."
     },
     "trust": {
       "failed": {
@@ -199,7 +213,10 @@
       "passphraseLabel": "Y-Y-Youw 12-wowd passphwase",
       "recaptchaFailed": "WeCaptcha vawidation f-faiwed",
       "register": "Cweate account",
-      "title": "Confiwm youw passphwase"
+      "title": "Confiwm youw passphwase",
+      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
+      "authenticatePasskey": "Authenticate with Passkey",
+      "passkeyError": "Passkey verification failed"
     }
   },
   "errors": {
@@ -237,17 +254,135 @@
       "settings": "Settings",
       "migration": "m-migwate account",
       "jip": "Jwip"
+    },
+    "keyboardShortcuts": {
+      "title": "Keyboard Shortcuts",
+      "subtitle": "Hold ` to show this help anytime",
+      "groups": {
+        "videoPlayback": "Video Playback",
+        "jumpToPosition": "Jump to Position",
+        "audioVideo": "Audio & Video",
+        "subtitlesAccessibility": "Subtitles & Accessibility",
+        "interface": "Interface"
+      },
+      "shortcuts": {
+        "playPause": "Play/pause (or hold for 2x speed when enabled)",
+        "playPauseAlt": "Play/pause",
+        "skipForward5": "Skip forward 5 seconds",
+        "skipBackward5": "Skip backward 5 seconds",
+        "skipBackward10": "Skip backward 10 seconds",
+        "skipForward10": "Skip forward 10 seconds",
+        "skipForward1": "Skip forward 1 second",
+        "skipBackward1": "Skip backward 1 second",
+        "jumpTo0": "Jump to 0% (beginning)",
+        "jumpTo9": "Jump to 90%",
+        "increaseVolume": "Increase volume",
+        "decreaseVolume": "Decrease volume",
+        "mute": "Mute/unmute",
+        "changeSpeed": "Increase/decrease playback speed",
+        "toggleFullscreen": "Toggle fullscreen",
+        "toggleCaptions": "Toggle captions",
+        "randomCaption": "Select random caption from last used language",
+        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
+        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleNativeSubtitles": "Toggle native subtitles",
+        "barrelRoll": "Do a barrel roll! 🌀",
+        "closeOverlay": "Close overlay/modal",
+        "nextEpisode": "Next episode",
+        "previousEpisode": "Previous episode",
+        "widescreenMode": "to toggle the widescreen button visibility",
+        "copyLinkWithTime": "+ click the title to copy the link with time"
+      },
+      "conditions": {
+        "notInWatchParty": "Not in watch party",
+        "showsOnly": "Shows only"
+      },
+      "editInSettings": "Edit keyboard commands from settings",
+      "clickToEdit": "Click on a key badge to edit it",
+      "conflict": "conflict",
+      "conflicts": "conflicts",
+      "detected": "detected",
+      "resetAllToDefault": "Reset All to Default",
+      "pressKey": "Press a key...",
+      "none": "None",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "resetToDefault": "Reset to default",
+      "numberKeySeeking": "Number key progress seeking",
+      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Bookmawks"
+      "sectionTitle": "Bookmawks",
+      "showAll": "Show all",
+      "groups": {
+        "dropdown": {
+          "placeholderButton": "Add to group",
+          "empty": "No groups yet",
+          "removeFromGroup": "Remove from group",
+          "removeAll": "Remove all"
+        },
+        "reorder": {
+          "button": "Reorder",
+          "done": "Done",
+          "title": "Edit Group Order",
+          "description": "Drag and drop to reorder your bookmark groups",
+          "cancel": "Cancel",
+          "save": "Save"
+        },
+        "editGroup": {
+          "title": "Edit Group",
+          "description": "Edit the name and icon of your bookmark group",
+          "cancel": "Cancel",
+          "save": "Save",
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group"
+        }
+      },
+      "edit": {
+        "title": "Edit Bookmark",
+        "description": "Edit the details for this bookmark",
+        "cancel": "Cancel",
+        "save": "Save",
+        "groupsLabel": "Groups",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter a title for your bookmark",
+        "yearLabel": "Year",
+        "yearPlaceholder": "Enter a year for your bookmark"
+      },
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
     },
     "continueWatching": {
-      "sectionTitle": "Continyue Watching... *screeches*"
+      "sectionTitle": "Continyue Watching... *screeches*",
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
     },
     "mediaList": {
       "stopEditing": "Stop editing"
+    },
+    "watchHistory": {
+      "sectionTitle": "Watch History",
+      "recentlyWatched": "Recently Watched"
     },
     "search": {
       "allResults": "That's aww we *notices buldge* have...",
@@ -268,7 +403,6 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Seawch wesuwts",
       "empty": {
         "default": "w-wewcome, find media to watch here!",
         "extra": [
@@ -278,35 +412,67 @@
           "Haiii new user :3"
         ]
       },
+      "sectionTitle": "Seawch wesuwts",
       "discoverMore": "Discwover more",
       "discover": "Discwover"
-    },
-    "titles": {
-      "day": {
-        "default": "What w-wouwd you wike t-to watch this aftewnyoon!!11",
-        "extra": [" /ᐠ>ヮ<ᐟ\\ฅ"]
-      },
-      "morning": {
-        "default": "What w-wouwd you wike t-to watch this mownying?!! *walks away*",
-        "extra": ["\"૮₍ ˶•⤙•˶ ₎ა"]
-      },
-      "night": {
-        "default": "What w-wouwd you wike t-to watch tonyight?!!",
-        "extra": ["(づ ᴗ _ᴗ)づ♡"]
-      },
-      "420": {
-        "default": "What w-wouwd you wike t-to watch this 4/20!? *cries*",
-        "extra": ["(づ ᴗ _ᴗ)づ♡ Weed!"]
-      },
-      "69": {
-        "default": "up fow something spicy owo?",
-        "extra": ["happy 69 day 😘 (* ^ ω ^)!"]
-      }
     },
     "mediaCard": {
       "moreInfo": "m-More Infwo",
       "copyLink": "cwopy w-wink",
       "close": "Cwose"
+    },
+    "titles": {
+      "69": {
+        "default": "up fow something spicy owo?",
+        "extra": [
+          "happy 69 day 😘 (* ^ ω ^)!"
+        ]
+      },
+      "420": {
+        "default": "What w-wouwd you wike t-to watch this 4/20!? *cries*",
+        "extra": [
+          "(づ ᴗ _ᴗ)づ♡ Weed!"
+        ]
+      },
+      "day": {
+        "default": "What w-wouwd you wike t-to watch this aftewnyoon!!11",
+        "extra": [
+          " /ᐠ>ヮ<ᐟ\\ฅ"
+        ]
+      },
+      "morning": {
+        "default": "What w-wouwd you wike t-to watch this mownying?!! *walks away*",
+        "extra": [
+          "\"૮₍ ˶•⤙•˶ ₎ა"
+        ]
+      },
+      "night": {
+        "default": "What w-wouwd you wike t-to watch tonyight?!!",
+        "extra": [
+          "(づ ᴗ _ᴗ)づ♡"
+        ]
+      },
+      "halloween": {
+        "default": "What spooky movie would you like to watch this Halloween?",
+        "extra": [
+          "Happy Halloween! 🎃👻",
+          "Boo! 👻",
+          "Trick or treat! 🍬",
+          "It's the Great Pumpkin, Charlie Brown!"
+        ]
+      }
+    },
+    "support": {
+      "title": "BetaMovie needs your help!",
+      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "moreInfo": "More info",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "fluxer": "Fluxer",
+      "thankYou": "Thank you for your support!",
+      "donate": "Donate",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "complete": "complete"
     }
   },
   "media": {
@@ -317,7 +483,130 @@
       "show": "Show"
     },
     "episodeShort": "E",
-    "seasonShort": "S"
+    "seasonShort": "S",
+    "seasonWatched": "Are you sure you want to mark the season as watched?",
+    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
+  },
+  "details": {
+    "resume": "Wesume :3",
+    "play": "P-Pway",
+    "runtime": "w-wuntime:",
+    "language": "Wangwuage:",
+    "releaseDate": "w-wewease date:",
+    "rating": "Wating:",
+    "votes": "vwotes",
+    "tmdb": "vwiew on TMDB",
+    "imdb": "vwiew on IMDb",
+    "episodes": "Episwodes",
+    "seasons": "Sweason/s",
+    "season": "Sweason",
+    "episode": "Epwisode",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
+    "airs": "aiws",
+    "endsAt": "e-ends at {{time}}",
+    "trailer": "twaiwer",
+    "trailers": "Trailers",
+    "similar": "Similar",
+    "collection": {
+      "movies": "Movies",
+      "movie": "Movie",
+      "sortBy": "Sort by",
+      "releaseDate": "Release Date",
+      "rating": "Rating"
+    }
+  },
+  "migration": {
+    "loginRequired": "you must be wogged in to migwate youw data, pwease go back and w-wogin to continue.",
+    "start": {
+      "title": "migwate youw d-data",
+      "explainer": "if y-you wish to migwate ow backup youw data (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄).. you can do so using the options bewow this will awwow you to keep youw data when you switch b-backend sewvers.",
+      "options": {
+        "or": "ow",
+        "direct": {
+          "description": "this will diwectwy migwate youw d-data t-to the new sewver. this is the fastest o-option.. <br /><br /> this option awwows y-you t-to keep youw passphwase the same (o^▽^o)!",
+          "title": "Diwect migwation",
+          "quality": "easiest a-and fwastest",
+          "action": "Twansfer dwata"
+        },
+        "download": {
+          "description": "t-this w-will downwoad y-youw data to youw device. you can then upwoad it to the new s-sewver ow j-just keep it fow safekeeping.",
+          "title": "Downwoad dwata",
+          "quality": "More twechnical",
+          "action": "Downwoad dwata"
+        },
+        "upload": {
+          "title": "Upwoad Dwata",
+          "description": "upwoad youw pweviouswy expowted dwata file t-to w-westore youw bwookmarks and pwogwess on this account.",
+          "quality": "Westowe fwom bwackup",
+          "action": "Upwoad Dwata"
+        }
+      }
+    },
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "uploadDescription": "Data to upload:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      }
+    },
+    "direct": {
+      "title": "Diwect migwation",
+      "description": "e-enter the d-destination b-backend url to migwate youw cuwwent account dwata to a new backend. this keeps youw p-passphwase t-the s-same!",
+      "backendLabel": "Dwestination Backend URL",
+      "recaptchaLabel": "WeCaptcha Key (Optional >v<)",
+      "toggleLable": "Nweed WeCaptcha?",
+      "status": {
+        "error": "Fwaild to migwate your dwata. 😿",
+        "success": "y-youw dwata has been migwated succwessfully! 🎉"
+      },
+      "button": {
+        "migrate": "Migwate",
+        "processing": "Pwocessing...",
+        "home": "Gwo home >:(",
+        "login": "Contwinue to wogin"
+      }
+    },
+    "download": {
+      "title": "Downwoad dwata",
+      "description": "this will downwoad youw dwata to youw d-device. you can then upwoad it t-to t-the n-new sewver ow j-just keep it fow s-safekeeping.",
+      "status": {
+        "error": "Fwailed to downwoad youw dwata. 😿",
+        "success": "y-youw dwata has been downwoaded succwessfully! 🎉"
+      },
+      "button": {
+        "download": "Downwoad dwata",
+        "home": "Gwo home >:(",
+        "login": "Contwinue to wogin"
+      }
+    },
+    "upload": {
+      "title": "Upwoad dwata",
+      "description": "Upwoad youw pweviouswy expowted data file to westore youw bookmawks and pwogwess on this accwount☆ .",
+      "status": {
+        "processing": "Pwocessing dwata...",
+        "error": "Fwailed to upwoad youw dwata. 😿",
+        "success": "y-youw dwata has been upwoaded succwessfully! 🎉",
+        "successLocal": "Youww data has been saved wocawwy! OwO 🎉"
+      },
+      "file": {
+        "description": "Sewect the file you w-want to upwoad",
+        "select": "Sewect fwile >~<",
+        "change": "Chwange fwile",
+        "name": "Fwile nwame"
+      },
+      "exportedOn": "Expworted on",
+      "previewTitle": "Preview:",
+      "button": {
+        "import": "Impwort dwata",
+        "processing": "Pwocessing...",
+        "success": "Impwort compwete",
+        "home": "Contwinue to home",
+        "saveLocal": "Save wocawwy"
+      }
+    },
+    "back": "Go Bwack"
   },
   "navigation": {
     "banner": {
@@ -330,7 +619,8 @@
       "settings": "Settings",
       "support": "Suppowt",
       "discover": "Discwover",
-      "development": "Devewopmwent"
+      "development": "Devewopmwent",
+      "desktop": "App Settings"
     }
   },
   "notFound": {
@@ -351,6 +641,7 @@
       "cancel": "Cancel",
       "confirm": "Use defauwt setup",
       "description": "the *runs away* defauwt setup does nyot have the best *starts twerking* stweams and c-can be unbeawabwy swow. ( ͠° ͟ʖ ͡-͡°)",
+      "tip": "It's recommended to set up the extension and/or FED API!",
       "title": "Awe you suwe?!?!"
     },
     "extension": {
@@ -360,6 +651,8 @@
       "extensionHelp": "If you've instawwed the extension but it's nyot detected, <bold>open the extension thwough youw bwowsews extension menyu</bold> and fowwow the steps on scween.",
       "linkChrome": "Instaww Chwome extension",
       "linkFirefox": "Instaww Firefox extension",
+      "linkUserscript": "Alternative Userscript",
+      "userscriptNote": "(The extension is more reliable than the userscript!)",
       "notDetecting": "I-Instawwed on Chwome, but the site isn't detecting it?!?1 Twy wewoading the page?!?",
       "notDetectingAction": "Weowoad da page",
       "status": {
@@ -389,43 +682,24 @@
     },
     "start": {
       "explainer": "To get the best *starts twerking* stweams possibwe, you wiww nyeed t-to choose which stweaming method you w-want t-to use. *walks away*",
-      "options": {
-        "default": {
-          "text": "I don't w-want good *whispers to self* quawity stweams,<0 /> *walks away* <1>use the defauwt setupʔ</1>"
-        },
-        "extension": {
-          "action": "Instaww extension",
-          "description": "Instaww bwowsew extension and gain access t-to the best *starts twerking* souwces, but wemembew t-to enyabwe i-it fow this site.",
-          "quality": "Best quawity",
-          "title": "Bwowsew extension"
-        },
-        "proxy": {
-          "action": "Setup pwoxy",
-          "description": "setup a fwee pwoxy in just 5 minyutes and gain access t-to gweat souwces...",
-          "quality": "Good quawity",
-          "title": "Custom pwoxy"
-        },
-        "or": "ow"
-      },
-      "title": "Wet's get you setup with uwu-flix 🥳",
       "moreInfo": {
         "button": "Mwore info",
+        "title": "Understwanding a swetup",
         "explainer": {
-          "proxyDescription": "the p-pwoxy s-scwapes media fwom o-other websites. it bypasses bwowser westwictions (wike CORS) to awwow scwaping (≧◡≦).",
-          "fedapi": {
-            "fedapiDescription": "b-bwing youw o-own FWEE Febbox accwount to gain access to FED API (pwivate), t-the best s-souwce with 4k quawity, dowby atmos, skip intwo and the fastest woad times (≧◡≦) highwy wecommended option!",
-            "fedapi": "a-additionaw: FED API (pwivate) token"
-          },
           "intro": "uwu-stweam doesn't h-host v-videos. it wewies on thiwd-pawty websites f-fow content, so you need to choose how i-it c-connects to t-those sites.",
           "options": "y-youw options:",
           "extension": "1. Extwension",
           "extensionDescription": "the extension gives you access to the most souwces. it acts as a wocaw pwoxy a-and can h-handle sites t-that n-need speciaw cookies ow headers to woad.",
           "proxy": "2. Pwoxy",
+          "proxyDescription": "the p-pwoxy s-scwapes media fwom o-other websites. it bypasses bwowser westwictions (wike CORS) to awwow scwaping (≧◡≦).",
           "default": "3. Defwault Swetup",
           "defaultDescription": "uses uwu-stweam's buiwt-in pwoxy. it's the easiest option but might be swowew due to shawed bandwidth.",
+          "fedapi": {
+            "fedapi": "a-additionaw: FED API (pwivate) token",
+            "fedapiDescription": "b-bwing youw o-own FWEE Febbox accwount to gain access to FED API (pwivate), t-the best s-souwce with 4k quawity, dowby atmos, skip intwo and the fastest woad times (≧◡≦) highwy wecommended option!"
+          },
           "outro": "if you have m-mwore qwuestions on how this wowks, feew fwee to ask on the <0>uwu-stream Fluxer</0> swervwer!"
         },
-        "title": "Understwanding a swetup",
         "recommended": {
           "title": "nwot sure what to c-choose (o_O)?",
           "subtitle": "Wecommwended Confwiguwations:",
@@ -442,7 +716,35 @@
             "description": "Extwension + FED API (Pwivate)"
           }
         }
-      }
+      },
+      "options": {
+        "or": "ow",
+        "default": {
+          "text": "I don't w-want good *whispers to self* quawity stweams,<0 /> *walks away* <1>use the defauwt setupʔ</1>"
+        },
+        "extension": {
+          "action": "Instaww extension",
+          "description": "Instaww bwowsew extension and gain access t-to the best *starts twerking* souwces, but wemembew t-to enyabwe i-it fow this site.",
+          "quality": "Best quawity",
+          "title": "Bwowsew extension"
+        },
+        "desktopapp": {
+          "action": "Install Desktop app",
+          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
+          "quality": "Best quality + Even more sources",
+          "title": "BetaMovie Desktop app"
+        },
+        "proxy": {
+          "action": "Setup pwoxy",
+          "description": "setup a fwee pwoxy in just 5 minyutes and gain access t-to gweat souwces...",
+          "quality": "Good quawity",
+          "title": "Custom pwoxy"
+        },
+        "addons": {
+          "title": "Additional sources:"
+        }
+      },
+      "title": "Wet's get you setup with uwu-flix 🥳"
     }
   },
   "overlays": {
@@ -454,14 +756,23 @@
       "short": "Back"
     },
     "casting": {
+      "to": "Casting to {{device}} 📺",
+      "device": "device",
       "enabled": "Casting t-to device 🎬"
     },
     "menus": {
       "downloads": {
+        "button": "Atwempt downwoad",
+        "hlsDownloader": "ow, go to the <0>hls downwoader website</0> and pwaste the pwaylist URL f-fwom bewow.",
         "disclaimer": "Downwoads awe taken diwectwy fwom the x3 pwovidew. uwu-flix does nyot have contwow uvw how the downwoads awe pwovided.",
         "copyHlsPlaylist": "Copy H-HWS pwaywist wink",
         "downloadSubtitle": "Downwoad cuwwent subtitwe",
         "downloadVideo": "Downwoad v-v-video",
+        "openIn": "Opwen in...",
+        "vlc": "VLC >_<",
+        "iina": "IINA",
+        "outplayer": "Outpwayer",
+        "hlsOpenInDisclaimer": "Opwening HLS stweams in an extewnal pwayer MAY NOT WORK!",
         "hlsDisclaimer": "Downwoads awe taken diwectwy fwom the pwovidew. uwufwix does nyot have contwow uvw how the downwoads awe pwovided.<br /><br />Pwease nyote you awe downwoading an H-HWS pwaywist, <bold>it is nyot wecommended t-to downwoad if you awe nyot famiwiaw with advanced stweaming fowmats</bold>. Twy diffewent souwces fow diffewent fowmats.",
         "onAndroid": {
           "1": "To downwoad on A-A-Andwoid, cwick ^w^ the downwoad button ;;w;; then, on the nyew page, <bold>tap and howd</bold> on the x3 video, then sewect <bold>save</bold>.",
@@ -478,14 +789,7 @@
           "shortTitle": "Downwoad / PC",
           "title": "Downwoading on PC"
         },
-        "title": "Downwoad OwO",
-        "hlsOpenInDisclaimer": "Opwening HLS stweams in an extewnal pwayer MAY NOT WORK!",
-        "outplayer": "Outpwayer",
-        "button": "Atwempt downwoad",
-        "hlsDownloader": "ow, go to the <0>hls downwoader website</0> and pwaste the pwaylist URL f-fwom bewow.",
-        "openIn": "Opwen in...",
-        "vlc": "VLC >_<",
-        "iina": "IINA"
+        "title": "Downwoad OwO"
       },
       "episodes": {
         "button": "Episodes",
@@ -495,16 +799,21 @@
         "loadingList": "Loading...",
         "loadingTitle": "Loading...",
         "unairedEpisodes": "OO-Onye ow (・`ω´・) mowe episodes in this season have been disabwed.",
-        "markAsWatched": "Mwark as watched",
-        "markAsUnwatched": "Mwark as unwatched",
         "seasons": "Sweasons",
         "showMore": "Show mwore",
-        "showLess": "Shwow less :,3"
+        "showLess": "Shwow less :,3",
+        "markAsWatched": "Mwark as watched",
+        "markAsUnwatched": "Mwark as unwatched",
+        "markAsFavorite": "Mark as favorite",
+        "favorites": "Favorites",
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
       },
       "playback": {
         "speedLabel": "Pwayback speed",
         "title": "Pwayback settings",
-        "disabled": "(Dwisabled in watch pwarty)"
+        "disabled": "(Dwisabled in watch pwarty)",
+        "speedBoosted": "2x",
+        "speedUnboosted": "{{speed}}x"
       },
       "quality": {
         "automaticLabel": "Automatic quawity",
@@ -525,6 +834,13 @@
         "videoSection": "Video settings"
       },
       "sources": {
+        "extensionHint": {
+          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
+          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
+          "setupButton": "Setup Extension",
+          "moreSources": "Want more sources? Setup the Extension.",
+          "installButton": "Install Extension Now"
+        },
         "failed": {
           "text": "Thewe was an ewwow whiwe t-twying t-to find any v-videos... Twy a diffewent souwce!?",
           "title": "Faiwed t-to scwape"
@@ -539,12 +855,22 @@
         },
         "title": "Souwces",
         "unknownOption": "Unknyown",
-        "editOrder": "Edit owder"
+        "findNextSource": "Find next source"
       },
       "subtitles": {
         "customChoice": "Dwop ow upwoad fiwe",
+        "pasteChoice": "Paste subtitle data",
+        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Customize",
+        "previewLabel": "Subtitle preview:",
         "offChoice": "Off",
+        "onChoice": "On",
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
+        "SourceChoice": "Swource Swubtitles",
+        "OpenSubtitlesChoice": "Extwernal Swubtitles",
+        "loadingExternal": "Loading external subtitles...",
+        "transcriptChoice": "Transcript",
         "settings": {
           "backlink": "Custom subtitwes",
           "delay": "Subtitwe deway",
@@ -553,14 +879,25 @@
         "title": "Subtitwes",
         "unknownLanguage": "Unknyown",
         "dropSubtitleFile": "Dwop subtitwe fiwe h-h-hewe",
-        "useNativeSubtitles": "Use nawtive vwideo swubtitles",
-        "onChoice": "On",
         "scrapeButton": "Scwape swubtitles",
+        "refresh": "Refresh External Subtitles",
+        "refreshing": "Refreshing...",
         "empty": "There are no pwovided swubtitles fwor this :< .",
         "notFound": "Nwone of the avwailable options mwatch your qwuery",
+        "useNativeSubtitles": "Use nawtive vwideo swubtitles",
         "useNativeSubtitlesDescription": "Mway fix swubtitles when cwasting and in PiP",
-        "SourceChoice": "Swource Swubtitles",
-        "OpenSubtitlesChoice": "Extwernal Swubtitles"
+        "delayLate": "Heard audio",
+        "delayEarly": "Saw caption",
+        "translate": {
+          "title": "Translate from {{language}}"
+        },
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "clearSecondary": "Clear secondary subtitle",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "selectingSecondary": "Selecting secondary subtitle"
       },
       "watchparty": {
         "watchpartyItem": "Watch Pwarty :3",
@@ -605,6 +942,12 @@
       "next": "Nyext episode",
       "nextSeason": "Nyext season"
     },
+    "resume": {
+      "title": "Continue watching?",
+      "description": "This episode is {{percentage}}% watched",
+      "resume": "Resume",
+      "restart": "Restart"
+    },
     "playbackError": {
       "badge": "Pwayback ewwow",
       "errors": {
@@ -614,13 +957,18 @@
         "errorNetwork": "Some kind of nyetwowk ewwow occuwwed which pwevented the media fwom b-being successfuwwy fetched, despite having pweviouswy been avaiwabwe.",
         "errorNotSupported": "The media ow media p-pwovidew object is nyot suppowted. ^-^"
       },
+      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
+      "copyDebugInfo": "Copy debug info",
+      "debugInfo": "Check console for more details.",
       "homeButton": "Go home",
+      "resumeButton": "Try next sources",
       "text": "Thewe was an ewwow t-twying t-to pway the media 😖. Pwease twy again.",
       "title": "Faiwed t-to pway video?!?1"
     },
     "scraping": {
       "items": {
         "failure": "Ewwow occuwwed",
+        "timeout": "Timed out (15s)",
         "notFound": "Doesn't have the v-v-video (╥﹏╥)",
         "pending": "Checking fow videos..."
       },
@@ -630,7 +978,9 @@
         "homeButton": "Go home",
         "discoverButton": "Discuvw mowe",
         "text": "We have seawched thwough ouw p-pwovidews and cannyot ^w^ find the x3 media you awe wooking fow?!?! We do nyot host the media and have nyo contwow uvw what is avaiwabwe. Pwease cwick ^w^ 'Show d-detaiws' bewow fow mowe detaiws.",
-        "title": "We couwdn't find that"
+        "title": "We couwdn't find that",
+        "onboarding": "More sources might be avalible using the extension or febbox token!",
+        "onboardingButton": "Do setup again"
       },
       "extensionFailure": {
         "badge": "Extension disabwed",
@@ -640,27 +990,17 @@
         "text": "You've instawwed the s-BetaMovie e-extension. To stawt u-using it, you nyeed t-to enyabwe the extension fow this site."
       },
       "tips": {
-        "7": "Hold SHIFT and twap the twitle to copy the wink with time!",
-        "11": "Use [ and ] two adjust swubtitle timing!",
-        "17": "Use UP and DOWN awwows to chwange vowume!",
         "1": "Twap the gwear icwon to switch swources!",
         "2": "Twap the twitle to cwopy the w-wink!",
         "3": "tap and howd ow howd shift to show widescween button instead of fuwwscween (* ^ ω ^)!",
         "4": "Some swources work bwetter than others!",
         "5": "Gwet the extwension for more swources!",
         "6": "Howd bookmwarks to edit or dewete them!",
+        "7": "Hold SHIFT and twap the twitle to copy the wink with time!",
         "8": "Set a cwustom swubtitle cowor!",
         "9": "Migwate youw accwount to a new bwackend in settings (* ^ ω ^)!",
         "10": "Join the Dwiscord!",
-        "12": "Pwess SPACE or K to pway/pwause!",
-        "13": "Use LEFT and RIGHT awwow k-keys t-to skip 5 seconds!",
-        "14": "Use J and L k-keys to skip 10 seconds!",
-        "15": "Pwess F to twoggle fullscween!",
-        "16": "Pwess M to twoggle mute!",
-        "18": "Press < and > to change pwayback spweed!",
-        "19": "Press . and , to move fwame by fwame when pwaused!",
-        "20": "Pwess C to twoggle swubtitles!",
-        "21": "Pwess R to do a bawwel woll!"
+        "11": "Use [ and ] two adjust swubtitle timing!"
       }
     },
     "time": {
@@ -669,11 +1009,109 @@
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     },
-    "turnstile": {
-      "description": "Pwease pwuv youw humanyity by compweting the Captcha on the wight. This is t-to k-k-keep uwu-flix safe!?",
-      "error": "Faiwed t-to vewify youw humanyity?!! Pwease twy again.",
-      "title": "Awe You a Wobot 🤖?",
-      "verifyingHumanity": "Vewifying youw humanyity... (^▽^)👍"
+    "segment": {
+      "intro": "Intro",
+      "recap": "Recap",
+      "credits": "Credits"
+    },
+    "skipTime": {
+      "intro": "Skip Intro",
+      "recap": "Skip Recap",
+      "credits": "Skip Credits",
+      "skipSegments": "Skip Segments",
+      "submitSegment": "Submit Segment",
+      "noSegments": "No skip segments available",
+      "startsAt": "Starts at {{time}}",
+      "endsAt": "Ends at {{time}}",
+      "timeUnknown": "Time unknown",
+      "confidence": "confidence",
+      "submissions": "{{count}} submissions",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "endOfVideo": "End",
+      "feedback": {
+        "title": "Was this skip correct?",
+        "modal": {
+          "title": "Submit Timestamps to TheIntroDB",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "segmentType": "Segment Type",
+          "types": {
+            "intro": "Intro",
+            "recap": "Recap",
+            "credits": "Credits",
+            "preview": "Preview"
+          },
+          "startTimeLabel": "Start (s)",
+          "endTimeLabel": "End (s)",
+          "placeholders": {
+            "start": {
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)",
+              "credits": "2:30 or 150 (required)",
+              "preview": "2:30 or 150 (required)"
+            },
+            "end": {
+              "intro": "3:30 or 210 (required)",
+              "recap": "3:30 or 210 (required)",
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "preview": "3:30 or 210 (leave empty for end of media)"
+            }
+          },
+          "whenToTitle": "Timestamps guide:",
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "guide": {
+            "startLabel": "Start:",
+            "startDesc": "Required - when credits begin rolling",
+            "endLabel": "End:",
+            "endDesc": "Optional - empty if extends to end",
+            "durationLabel": "Duration:",
+            "durationDesc": "Min 5s if end provided",
+            "excludeLabel": "Exclude:",
+            "excludeDesc": "Post-credits scenes",
+            "intro": {
+              "whenToTitle": "Intro timestamps guide:",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
+            },
+            "recap": {
+              "whenToTitle": "Recap timestamps guide:",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
+            },
+            "credits": {
+              "whenToTitle": "Credits timestamps guide:",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
+            },
+            "preview": {
+              "whenToTitle": "Preview timestamps guide:",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
+            }
+          },
+          "cancel": "Cancel",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "error": {
+            "tidbKey": "TIDB API key is not set",
+            "mediaInfo": "Media information is not available",
+            "endTime": "End time is required",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "segment": "No segment selected"
+          },
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          }
+        }
+      }
     }
   },
   "support": {
@@ -688,6 +1126,18 @@
       "title": "H-How c-can I wepowt a bug ow issue!!11 (・`ω´・)"
     }
   },
+  "jip": {
+    "title": "Jwip",
+    "text": "uwu-stweam didn't fall out of a coconut twee, it was made mostwy by a s-single p-pewson (a vewy epic one at that☆) .",
+    "q1": {
+      "body": "well, you can join the officiaw <0>uwu-stream discowd</0> and a-ask questions there ow you can emaiw the one pwovided at the bottom of this page.",
+      "title": "w-where can i get hewp (o_O)?"
+    },
+    "q2": {
+      "body": "w-we h-have a <0>github</0> where you can cweate a detaiwed issue in ouw wepositowy. additionawwy, if you w-wish (*^.^*).., you can c-cweate a pull wequest to fix the issue youwsewf xD.",
+      "title": "How can I weport a bwug or issue?"
+    }
+  },
   "screens": {
     "legal": {
       "title": "Legal / DMCA (っ◞‸◟ c)"
@@ -697,9 +1147,14 @@
     "loadingUserError": {
       "logout": "Wogout",
       "reset": "Weset custom sewvew",
+      "disconnect": "Disconnect from backend",
       "text": "Faiwed t-to woad youw pwofiwe",
       "reload": "Wewoad",
-      "textWithReset": "Faiwed t-to woad youw pwofiwe fwom youw custom sewvew, w-want t-to weset back t-to the defauwt sewvew?!!"
+      "textWithReset": "Faiwed t-to woad youw pwofiwe fwom youw custom sewvew, w-want t-to weset back t-to the defauwt sewvew?!!",
+      "disconnectTitle": "Disconnect from backend?",
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectConfirm": "Confirm",
+      "disconectCancel": "Cancel"
     },
     "migration": {
       "failed": "Faiwed t-to migwate youw data. 😿",
@@ -707,8 +1162,16 @@
     }
   },
   "settings": {
+    "search": {
+      "placeholder": "Search settings..."
+    },
+    "all": {
+      "title": "All Settings"
+    },
     "account": {
       "accountDetails": {
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device nyame",
         "deviceNamePlaceholder": "Pewsonyaw phonye",
         "editProfile": "Edit",
@@ -716,8 +1179,7 @@
       },
       "admin": {
         "title": "Admin panyew",
-        "text": "Utiwize toows made fow testing uwu-flix's condition.",
-        "button": "Check i-it out"
+        "text": "Utiwize toows made fow testing uwu-flix's condition."
       },
       "actions": {
         "delete": {
@@ -728,20 +1190,21 @@
           "text": "This action is iwwevewsibwe. aww >w< data wiww be deweted and nyothing *runs away* c-can be wecuvwed.",
           "title": "Dewete account"
         },
+        "migration": {
+          "title": "Accwount migwation",
+          "text": "migwate youw account to a new s-sewver o-ow downwoad youw data.",
+          "button": "Migwate accwount"
+        },
         "title": "Actions :3",
         "logoutAllDevices": {
           "title": "End Awll Sessions",
           "text": "This wwill siwn uwu wout from awll dewices winked to wur account.",
           "button": "Wog Out of Awll Devwices"
-        },
-        "migration": {
-          "title": "Accwount migwation",
-          "text": "migwate youw account to a new s-sewver o-ow downwoad youw data.",
-          "button": "Migwate accwount"
         }
       },
       "devices": {
         "deviceNameLabel": "Device nyame",
+        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Faiwed t-to woad sessions",
         "removeDevice": "Wemuv",
         "title": "D-Devices"
@@ -764,6 +1227,7 @@
       "activeTheme": "Active",
       "themes": {
         "blue": "Blue",
+        "custom": "Custom",
         "default": "Default",
         "gray": "Gray",
         "red": "Red",
@@ -772,16 +1236,25 @@
         "green": "Gween",
         "mocha": "Mwocha",
         "pink": "Pwink",
-        "forest": "Fowest",
         "noir": "Noir",
         "ember": "Embwer",
         "acid": "Acid OwO",
         "spark": "Spwark",
         "grape": "Gwape",
         "spiderman": "spidrman :>",
+        "forest": "Fowest",
         "wolverine": "Wolverwine",
         "popsicle": "Popswicle",
-        "hulk": "Bulgy Hulky"
+        "hulk": "Bulgy Hulky",
+        "autumn": "Autumn",
+        "cobalt": "Cobalt",
+        "frost": "Frost",
+        "christmas": "Christmas"
+      },
+      "customParts": {
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "tertiary": "Tertiary"
       },
       "title": "Appeawance",
       "options": {
@@ -798,12 +1271,25 @@
         "logosDescription": "Show image wogos instwead of text twitles in the detwails modal and featured section. Enabled by default.",
         "logosNotice": "Most of the time, wogos are Engwlish only. Other wangwuages might want to disable this!",
         "logosLabel": "Image wogos",
+        "carouselView": "Cawousel view",
         "carouselViewDescription": "Dispway your cuwently watching and bookmwark sections as carousels instead of a gwid. Disabled by default.",
+        "carouselViewLabel": "Carousel view",
+        "minimalCards": "Minimal cards",
+        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
+        "minimalCardsLabel": "Minimal cards",
         "forceCompactEpisodeView": "Fworce compwact episode view",
         "forceCompactEpisodeViewDescription": "fowce the episode cawousew in the p-pwayer to use the \"cwassic\" compact vewticaw view. Disabled by default.",
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
         "forceCompactEpisodeViewLabel": "Compwact episodes",
-        "carouselView": "Cawousel view",
-        "carouselViewLabel": "Carousel view"
+        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "pauseOverlay": "Pause overlay",
+        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
+        "pauseOverlayLabel": "Pause overlay"
+      },
+      "sections": {
+        "watching": "Currently Watching",
+        "bookmarks": "Bookmarks"
       }
     },
     "connections": {
@@ -811,11 +1297,19 @@
         "description": "If you w-wouwd wike t-to connyect t-to a custom backend t-to stowe youw d-d-data, enyabwe this and pwovide the x3 UWW. <0>Instwuctions.</0>",
         "label": "Custom sewvew",
         "urlLabel": "Custom sewvew URL",
+        "selectBackend": "Select Backend Server",
+        "currentBackend": "Current Backend",
+        "changeWarning": "Changing backend server will log you out. Continue?",
+        "confirm": "Log out and change server",
+        "cancel": "Cancel",
+        "changeWarningTitle": "Change Backend Server",
         "migration": {
           "description": "<0>Migwate my dwata</0> to a new sewver.",
           "link": "Migwate my dwata"
         },
-        "documentation": "Bwackend documwentwation"
+        "documentation": "Bwackend documwentwation",
+        "error": "Error connecting to backend",
+        "notice": "Your account does NOT sync between backends, so remember which one you use!"
       },
       "setup": {
         "doSetup": "Do setup",
@@ -827,7 +1321,8 @@
         "items": {
           "default": "Defauwt setup",
           "extension": "Extension",
-          "proxy": "Custom pwoxy"
+          "proxy": "Custom pwoxy",
+          "desktopapp": "Native app"
         },
         "redoSetup": "Wedo setup",
         "successStatus": {
@@ -843,18 +1338,31 @@
       "workers": {
         "addButton": "Add nyew w-w-wowkew",
         "description": "To make the x3 appwication function, ;;w;; aww twaffic is wouted thwough pwoxies. Enyabwe this if you w-want t-to b-bwing youw own wowkews. <0>Instwuctions.</0>",
+        "documentation": "Pwoxy documwentwation (・`ω´・)",
         "emptyState": "Nyo wowkews yet >w<, add onye bewow",
         "label": "Use custom pwoxy wowkews",
         "urlLabel": "Wowkew URLs",
         "urlPlaceholder": "https://",
         "proxyTMDB": {
-          "description": "onwy needed if y-you can't access t-themoviedb diwectwy, such as if y-youw ISP bwocks it. it is wecomended to disable the discover section to i-impwove pewfowmance with this :3.",
-          "title": "Pwoxy TMDB"
-        },
-        "documentation": "Pwoxy documwentwation (・`ω´・)"
+          "title": "Pwoxy TMDB",
+          "description": "onwy needed if y-you can't access t-themoviedb diwectwy, such as if y-youw ISP bwocks it. it is wecomended to disable the discover section to i-impwove pewfowmance with this :3."
+        }
+      },
+      "tidb": {
+        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
+        "tokenLabel": "API Key"
+      },
+      "trakt": {
+        "title": "Trakt",
+        "description": "Sync your watchlist and history with Trakt.",
+        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
+        "connect": "Connect Trakt",
+        "syncing": "Syncing...",
+        "disconnect": "Disconnect"
       }
     },
     "preferences": {
+      "title": "Pwefewences",
       "language": "Appwication wanguage",
       "languageDescription": "Wanguage appwied t-to the entiwe a-appwication, onwy Engwish has siwwy stuff 🙁.",
       "thumbnail": "Genyewate thumbnyaiws",
@@ -863,16 +1371,41 @@
       "autoplay": "Autopway",
       "autoplayDescription": "Automaticawwy pway *notices buldge* the nyext episode in a sewies a-a-aftew weaching :3 the end. Can be enyabwed by usews with the x3 bwowsew extension, a custom pwoxy, ow (・`ω´・) with the x3 defauwt setup if awwowed by the host.",
       "autoplayLabel": "Autopway",
-      "title": "Pwefewences",
       "skipCredits": "Skip End Cwedits",
       "skipCreditsDescription": "when e-enabwed, automaticawwy pway the next episode at 99% c-compwetion t-to skip end cwedits. w-when disabwed, wait untiw the episode is fuwwy compweted xD.",
-      "sourceOrderDescription": "dwag and dwop t-to weowder souwces. this w-will detewmine the owder in which souwces are checked fow t-the media you are twying to watch xD i-if a souwce is gweyed out.., it means the <bold>extwension</bold> i-is wequiwed fow that souwce. <br><br> <strong>(the defauwt owder is best fow most usews)</strong>",
-      "lowPerformanceModeDescription": "optimizes the appwication fow s-swower connections and d-devices by disabwing bandwidth-heavy features (o^▽^o) this mode w-weduces data usage and i-impwoves pewfowmance while k-keeping the core seawch and watch f-functionawity i-intact. ",
       "skipCreditsLabel": "Skwip end cwedits",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
       "lowPerformanceMode": "wow pewfowmance/bandwidth mwode",
+      "lowPerformanceModeDescription": "optimizes the appwication fow s-swower connections and d-devices by disabwing bandwidth-heavy features (o^▽^o) this mode w-weduces data usage and i-impwoves pewfowmance while k-keeping the core seawch and watch f-functionawity i-intact. ",
       "lowPerformanceModeLabel": "wow pewfowmance mode",
+      "holdToBoost": "Hold to boost speed",
+      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
+      "holdToBoostLabel": "Enable hold to boost",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
       "sourceOrder": "weowdewing souwces",
-      "sourceOrderEnableLabel": "Cwustom swource owder"
+      "sourceOrderDescription": "dwag and dwop t-to weowder souwces. this w-will detewmine the owder in which souwces are checked fow t-the media you are twying to watch xD i-if a souwce is gweyed out.., it means the <bold>extwension</bold> i-is wequiwed fow that souwce. <br><br> <strong>(the defauwt owder is best fow most usews)</strong>",
+      "sourceOrderEnableLabel": "Cwustom swource owder",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "autoResumeOnPlaybackError": "Auto resume on playback error",
+      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
+      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "lastSuccessfulSource": "Last used source",
+      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
+      "lastSuccessfulSourceEnableLabel": "Last used source"
     },
     "reset": "Weset",
     "save": "Save",
@@ -883,6 +1416,7 @@
         "backendVersion": "Backend version",
         "hostname": "Hostnyame",
         "insecure": "Insecuwe",
+        "nickname": "Nickname",
         "notLoggedIn": "You awe nyot wogged in",
         "secure": "Secuwe",
         "title": "App stats",
@@ -892,247 +1426,63 @@
     },
     "subtitles": {
       "backgroundLabel": "Backgwound opacity",
+      "backgroundBlurEnabledLabel": "Background blur",
+      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
       "backgroundBlurLabel": "Background bwuw",
       "colorLabel": "Cowow",
       "previewQuote": "A wizard is never late, Frodo Baggins. Nor is he early. He arrives precisely when he means to.",
       "textSizeLabel": "Text size",
       "title": "Subtitwes",
-      "verticalPositionLabel": "vwertical pwosition",
       "textBoldLabel": "Bulgy Wulgy text",
-      "default": "Defwault",
+      "verticalPositionLabel": "vwertical pwosition",
+      "high": "High",
       "low": "wow",
       "textStyle": {
         "title": "Twext stwyle",
         "default": "Defwault",
         "raised": "Waised",
         "depressed": "Depwessed",
-        "uniform": "Unifworm",
+        "Border": "Border",
         "dropShadow": "Dwop Swadow"
-      }
+      },
+      "BorderThicknessLabel": "Border Thickness"
     },
     "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
   },
-  "migration": {
-    "start": {
-      "explainer": "if y-you wish to migwate ow backup youw data (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄).. you can do so using the options bewow this will awwow you to keep youw data when you switch b-backend sewvers.",
-      "options": {
-        "download": {
-          "description": "t-this w-will downwoad y-youw data to youw device. you can then upwoad it to the new s-sewver ow j-just keep it fow safekeeping.",
-          "title": "Downwoad dwata",
-          "quality": "More twechnical",
-          "action": "Downwoad dwata"
-        },
-        "or": "ow",
-        "direct": {
-          "description": "this will diwectwy migwate youw d-data t-to the new sewver. this is the fastest o-option.. <br /><br /> this option awwows y-you t-to keep youw passphwase the same (o^▽^o)!",
-          "title": "Diwect migwation",
-          "quality": "easiest a-and fwastest",
-          "action": "Twansfer dwata"
-        },
-        "upload": {
-          "title": "Upwoad Dwata",
-          "description": "upwoad youw pweviouswy expowted dwata file t-to w-westore youw bwookmarks and pwogwess on this account.",
-          "quality": "Westowe fwom bwackup",
-          "action": "Upwoad Dwata"
-        }
-      },
-      "title": "migwate youw d-data"
-    },
-    "upload": {
-      "description": "Upwoad youw pweviouswy expowted data file to westore youw bookmawks and pwogwess on this accwount☆ .",
-      "button": {
-        "success": "Impwort compwete",
-        "import": "Impwort dwata",
-        "processing": "Pwocessing...",
-        "home": "Contwinue to home",
-        "saveLocal": "Save wocawwy"
-      },
-      "title": "Upwoad dwata",
-      "status": {
-        "processing": "Pwocessing dwata...",
-        "error": "Fwailed to upwoad youw dwata. 😿",
-        "success": "y-youw dwata has been upwoaded succwessfully! 🎉",
-        "successLocal": "Youww data has been saved wocawwy! OwO 🎉"
-      },
-      "file": {
-        "description": "Sewect the file you w-want to upwoad",
-        "select": "Sewect fwile >~<",
-        "change": "Chwange fwile",
-        "name": "Fwile nwame"
-      },
-      "dataPreview": "Pweview:",
-      "items": {
-        "bookmarks": "Bwookmarked mwedia",
-        "progress": "Watch pwogwess"
-      },
-      "exportedOn": "Expworted on"
-    },
-    "download": {
-      "description": "this will downwoad youw dwata to youw d-device. you can then upwoad it t-to t-the n-new sewver ow j-just keep it fow s-safekeeping.",
-      "title": "Downwoad dwata",
-      "items": {
-        "description": "Dwonwoad Incwudes:",
-        "bookmarks": "Bwookmarked mwedia",
-        "progress": "Watch pwogwess"
-      },
-      "status": {
-        "error": "Fwailed to downwoad youw dwata. 😿",
-        "success": "y-youw dwata has been downwoaded succwessfully! 🎉"
-      },
-      "button": {
-        "download": "Downwoad dwata",
-        "home": "Gwo home >:(",
-        "login": "Contwinue to wogin"
-      }
-    },
-    "loginRequired": "you must be wogged in to migwate youw data, pwease go back and w-wogin to continue.",
-    "direct": {
-      "status": {
-        "error": "Fwaild to migwate your dwata. 😿",
-        "success": "y-youw dwata has been migwated succwessfully! 🎉"
-      },
-      "toggleLable": "Nweed WeCaptcha?",
-      "title": "Diwect migwation",
-      "description": "e-enter the d-destination b-backend url to migwate youw cuwwent account dwata to a new backend. this keeps youw p-passphwase t-the s-same!",
-      "backendLabel": "Dwestination Backend URL",
-      "recaptchaLabel": "WeCaptcha Key (Optional >v<)",
-      "button": {
-        "migrate": "Migwate",
-        "processing": "Pwocessing...",
-        "home": "Gwo home >:(",
-        "login": "Contwinue to wogin"
-      }
-    },
-    "back": "Go Bwack"
-  },
-  "details": {
-    "language": "Wangwuage:",
-    "resume": "Wesume :3",
-    "play": "P-Pway",
-    "runtime": "w-wuntime:",
-    "releaseDate": "w-wewease date:",
-    "rating": "Wating:",
-    "votes": "vwotes",
-    "tmdb": "vwiew on TMDB",
-    "imdb": "vwiew on IMDb",
-    "episodes": "Episwodes",
-    "seasons": "Sweason/s",
-    "season": "Sweason",
-    "episode": "Epwisode",
-    "airs": "aiws",
-    "endsAt": "e-ends at {{time}}",
-    "trailer": "twaiwer"
-  },
-  "jip": {
-    "q2": {
-      "body": "w-we h-have a <0>github</0> where you can cweate a detaiwed issue in ouw wepositowy. additionawwy, if you w-wish (*^.^*).., you can c-cweate a pull wequest to fix the issue youwsewf xD.",
-      "title": "How can I weport a bwug or issue?"
-    },
-    "text": "uwu-stweam didn't fall out of a coconut twee, it was made mostwy by a s-single p-pewson (a vewy epic one at that☆) .",
-    "q1": {
-      "body": "well, you can join the officiaw <0>uwu-stream discowd</0> and a-ask questions there ow you can emaiw the one pwovided at the bottom of this page.",
-      "title": "w-where can i get hewp (o_O)?"
-    },
-    "title": "Jwip"
-  },
-  "fedapi": {
-    "setup": {
-      "step": {
-        "1": "1. Gwo to <0>febbox.com</0> and wog in with Google (use a fwesh accwount!)",
-        "2": "2. Open DevTools or inspect the pwage >_<",
-        "3": "3. Go to Applicwation tab → Cwookies",
-        "4": "4. Copy the 'ui' cwookie.",
-        "5": "5. Cwose the tab, but do NOT wogout!",
-        "warning": "(Do not share this twoken!)"
-      },
-      "title": "To gwet your UI twoken:",
-      "showVideo": "Show Video Tutowial",
-      "hideVideo": "Hide Video Tutowial"
-    },
-    "status": {
-      "invalid_token": "Fwailed to fetch a 'VIP' stweam. Your twoken is invalid!",
-      "success": "s-success",
-      "api_down": "Cannot weach an API! :<"
-    },
-    "onboarding": {
-      "title": "Febbox twoken",
-      "description": "bwing youw o-own FWEE febbox account to gain access to excwusive swources! The best s-souwce with 4k quawity, dowby atmos, skip intwo and the fwastest woad times! highwy wecommended o-option!"
-    }
-  },
-  "realdebrid": {
-    "status": {
-      "api_down": "Weal Debwid API is cuwwently unavailable. Pwease twy again later.",
-      "failure": "Fwailed to connect to Weal Debwid. Pwease check your API key.",
-      "invalid_token": "Invawid API key or non-pwemium account. Weal Debwid wequires a pwemium account."
-    },
-    "title": "Weal Debwid (Bweta)",
-    "description": "Entew your Weal Debwid API key to access Weal Debwid. Extwension wequired.",
-    "tokenLabel": "API Kwey"
-  },
-  "watchParty": {
-    "contentMismatch": "cannot join watch p-pawty: the content does not match the h-host's content (*^*).",
-    "isGuest": "Watching as a gwuest on <0>{{backendName}}</0>",
-    "shareCode": "Share this cwode with fwiends (cwick to copy wink)",
-    "status": {
-      "inSync": "In sync :3",
-      "outOfSync": "Out of sync :<"
-    },
-    "alone": "Alone QwQ",
-    "withCount": "With {{count}} others x3",
-    "isHost": "Howsting on <0>{{backendName}}</0>",
-    "hosting": "Hwosting",
-    "watching": "w-watching",
-    "syncing": "Nya~ Syncing...",
-    "behindHost": "Behind mwaster by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of mwaster by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overway",
-    "leaveWatchParty": "Weave Watch Pwarty",
-    "connectedAsGuest": "connected to watch pawty as guest",
-    "hostParty": "host a watch pwarty",
-    "joinParty": "OwO notices your watch party",
-    "viewers": "Vwiewers ({{count}})",
-    "copyCode": "cwick to copy >ω<",
-    "join": "Jwoin",
-    "cancel": "Cwancel",
-    "save": "Swave",
-    "emptyRoom": "Nyo one is in this woom yet :<",
-    "invalidRoom": "Unable to connect to this woom",
-    "episodeMismatch": "cannot join watch pawty: you are w-watching a d-diffewent episode t-than t-the host.",
-    "validating": "Vawidating watch pwarty...",
-    "linkCopied": "Cwopied x3!"
-  },
   "discover": {
+    "tabs": {
+      "movies": "Mwovies",
+      "tvshows": "TV shows >~<",
+      "editorpicks": "Masters Picks!"
+    },
     "carousel": {
       "title": {
-        "tvshowsOn": "Shwows on {{provider}}",
-        "nowPlaying": "In Cinemwas",
-        "onTheAir": "On The Aiw",
         "loading": "Woading...",
         "movies": "{{category}} Mwovies",
         "tvshows": "{{category}} Shwows",
         "inCinemas": "In Cinemwas",
         "popular": "Most Pwopular",
+        "nowPlaying": "In Cinemwas",
         "topRated": "Top Wated",
         "latestReleases": "Watest Weweases",
         "4kReleases": "4K Weweases",
+        "onTheAir": "On The Aiw",
         "latestTVReleases": "Watest TV Shwows",
         "popularOn": "Pwopular {{type}} on {{provider}}",
         "editorPicksMovies": "Mwasters Picks Movies",
         "editorPicksShows": "Mwasters Picks Shows",
         "moviesOn": "Mwovies on {{provider}}",
+        "tvshowsOn": "Shwows on {{provider}}",
         "recommended": "Becwause You Watched x3 : {{title}}",
+        "forYou": "For You",
         "genreMovies": "{{genre}} Mwovies",
         "genreShows": "{{genre}} Shwows",
         "categoryMovies": "{{category}} Mwovies",
-        "categoryShows": "{{category}} Shwows"
+        "categoryShows": "{{category}} Shwows",
+        "top10": "Top 10"
       },
       "change": "Chwange >_<",
       "more": "View mwore"
-    },
-    "tabs": {
-      "movies": "Mwovies",
-      "tvshows": "TV shows >~<",
-      "editorpicks": "Masters Picks!"
     },
     "featured": {
       "playNow": "Pway Now",
@@ -1155,5 +1505,89 @@
     "viewLists": "View All Mwovie Wists",
     "allLists": "All Mwovie Wists",
     "scrollToTop": "Back to twop"
+  },
+  "fedapi": {
+    "onboarding": {
+      "title": "Febbox twoken",
+      "description": "bwing youw o-own FWEE febbox account to gain access to excwusive swources! The best s-souwce with 4k quawity, dowby atmos, skip intwo and the fwastest woad times! highwy wecommended o-option!"
+    },
+    "setup": {
+      "title": "To gwet your UI twoken:",
+      "showVideo": "Show Video Tutowial",
+      "hideVideo": "Hide Video Tutowial",
+      "step": {
+        "1": "1. Gwo to <0>febbox.com</0> and wog in with Google (use a fwesh accwount!)",
+        "2": "2. Open DevTools or inspect the pwage >_<",
+        "3": "3. Go to Applicwation tab → Cwookies",
+        "4": "4. Copy the 'ui' cwookie.",
+        "5": "5. Cwose the tab, but do NOT wogout!"
+      },
+      "tokenLabel": "Token",
+      "tokenExample": {
+        "button": "(Example)",
+        "title": "Example Token",
+        "description": "This is what a Febbox UI token looks like:",
+        "warning": "Don't try to use, it's fake.",
+        "close": "Got it"
+      },
+      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
+      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
+      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
+    },
+    "status": {
+      "success": "s-success",
+      "api_down": "Cannot weach an API! :<",
+      "invalid_token": "Fwailed to fetch a 'VIP' stweam. Your twoken is invalid!"
+    }
+  },
+  "debrid": {
+    "title": "Debrid (Beta)",
+    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
+    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
+    "tokenLabel": "API Key",
+    "serviceOptions": {
+      "realdebrid": "Real Debrid",
+      "torbox": "TorBox"
+    },
+    "status": {
+      "failure": "Failed to connect to Debrid. Please check your API key.",
+      "api_down": "Hmm, something went wrong. Please try again later.",
+      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
+    }
+  },
+  "watchParty": {
+    "status": {
+      "inSync": "In sync :3",
+      "outOfSync": "Out of sync :<"
+    },
+    "alone": "Alone QwQ",
+    "withCount": "With {{count}} others x3",
+    "isHost": "Howsting on <0>{{backendName}}</0>",
+    "isGuest": "Watching as a gwuest on <0>{{backendName}}</0>",
+    "hosting": "Hwosting",
+    "watching": "w-watching",
+    "syncing": "Nya~ Syncing...",
+    "behindHost": "Behind mwaster by {{seconds}} seconds",
+    "aheadOfHost": "Ahead of mwaster by {{seconds}} seconds",
+    "showStatusOverlay": "Show status overway",
+    "leaveWatchParty": "Weave Watch Pwarty",
+    "shareCode": "Share this cwode with fwiends (cwick to copy wink)",
+    "connectedAsGuest": "connected to watch pawty as guest",
+    "hostParty": "host a watch pwarty",
+    "joinParty": "OwO notices your watch party",
+    "viewers": "Vwiewers ({{count}})",
+    "copyCode": "cwick to copy >ω<",
+    "join": "Jwoin",
+    "cancel": "Cwancel",
+    "save": "Swave",
+    "emptyRoom": "Nyo one is in this woom yet :<",
+    "noHost": "No host in this watch party",
+    "invalidRoom": "Unable to connect to this woom",
+    "contentMismatch": "cannot join watch p-pawty: the content does not match the h-host's content (*^*).",
+    "episodeMismatch": "cannot join watch pawty: you are w-watching a d-diffewent episode t-than t-the host.",
+    "validating": "Vawidating watch pwarty...",
+    "linkCopied": "Cwopied x3!",
+    "backendRequirement": "All users must use the same backend server",
+    "activeBackend": "Active Backend: {{backend}}"
   }
 }

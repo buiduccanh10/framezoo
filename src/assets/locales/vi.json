@@ -1,86 +1,60 @@
 {
   "about": {
     "description": "BetaMovie là một nhánh của movie-web được đảm bảo sẽ tiếp tục hoạt động ngay cả sau khi movie-web.app ngừng hoạt động. BetaMovie chạy trên VPS riêng tư, tự lưu trữ. Tôi điều hành trang web này phi lợi nhuận; có rất ít quảng cáo vì tôi tin vào phương tiện truyền thông miễn phí.",
+    "help": "Không thể tìm được câu trả lời? <0>Nhận trợ giúp tại đây.</0>",
     "faqTitle": "Các câu hỏi thường gặp",
+    "searchPlaceholder": "Tìm kiếm FAQ...",
+    "sections": {
+      "general": "Chung",
+      "search": "Tìm kiếm & Tính khả dụng của nội dung",
+      "playback": "Sự cố phát lại",
+      "connections": "Kết nối",
+      "language": "Cài đặt Ngôn ngữ & Phụ đề"
+    },
     "q1": {
-      "body": "BetaMovie không lưu trữ bất kì nội dung nào. Khi bạn chọn xem một nội dung nào đó, ứng dụng sẽ tìm kiếm nội dung đó trên Internet (Khi nội dung tải và trong tab 'nguồn video' bạn sẽ tìm thấy nguồn đang được dùng). Nội dung không bao giờ được tải lên trên BetaMovie, mọi thứ đều được tìm kiếm thông qua phương thức này.",
       "title": "Nội dung đến từ đâu?",
+      "body": "BetaMovie không lưu trữ bất kỳ nội dung nào. Khi bạn nhấn vào nội dung muốn xem, hệ thống sẽ tìm kiếm trên internet phương tiện đã chọn (Trong màn hình tải và tab 'nguồn video', bạn có thể thấy nguồn nào đang được sử dụng). Phương tiện không bao giờ được tải lên bởi BetaMovie, mọi thứ đều thông qua cơ chế tìm kiếm này.",
       "section": "chung"
     },
     "q2": {
-      "body": "Việc yêu cầu thêm một chương trình truyền hình hoặc phim là điều bất khả thi bởi vì BetaMovie không quản lý bất kỳ nội dung nào. Tất cả nội dung được truyền thông qua những nguồn trên internet.",
-      "title": "Tôi có thể yêu cầu thêm một chương trình truyền hình hoặc phim ở đâu?",
+      "title": "Tôi có thể yêu cầu phim hoặc chương trình ở đâu?",
+      "body": "Không thể yêu cầu phim hoặc chương trình, BetaMovie không quản lý bất kỳ nội dung nào. Tất cả nội dung được xem thông qua các nguồn trên internet.",
       "section": "tìm kiếm"
     },
     "q3": {
-      "body": "Các kết quả tìm kiếm được cung cấp bởi The Movie Database (TMDB) và hiện lên bất kể các nguồn của trang thực sự có lưu trữ nội dung đó hay không.",
-      "title": "Tại sao kết quả tìm kiếm hiển thị chương trình truyền hình hoặc phim nhưng tôi không thể xem nó?",
+      "title": "Kết quả tìm kiếm hiển thị phim hoặc chương trình, tại sao tôi không thể xem?",
+      "body": "Các kết quả tìm kiếm của chúng tôi được cung cấp bởi The Movie Database (TMDB) và hiển thị bất kể nguồn của chúng tôi có thực sự có nội dung đó hay không.",
       "section": "tìm kiếm"
     },
-    "title": "Về BetaMovie",
     "q4": {
-      "body": "Tất cả dữ liệu đều được đồng bộ với hệ thống cộng đồng, bất kỳ ai cũng có thể sử dụng tự do.",
-      "title": "Còn dữ liệu với mấy thứ của tôi thì sao?",
+      "title": "Còn dữ liệu của tôi thì sao?",
+      "body": "Tất cả dữ liệu được đồng bộ hóa với hệ thống cộng đồng, bất kỳ ai cũng có thể sử dụng dữ liệu này.",
       "section": "chung"
     },
     "q5": {
-      "body": "BetaMovie có Fluxer server nằm ở phần đầu trang này đó!",
-      "title": "Muốn biết thêm thì làm sao?",
+      "title": "Làm thế nào để tìm hiểu thêm?",
+      "body": "BetaMovie có máy chủ Fluxer có thể tìm thấy ở đầu trang này!",
       "section": "chung"
-    },
-    "q10": {
-      "body": "TMDB hỗ trợ tìm kiếm của chúng tôi. Hãy thử nhấn vào biểu tượng 🔎 để xem các tùy chọn tìm kiếm nâng cao nếu kết quả không chính xác.",
-      "title": "Tôi không thể tìm thấy bộ phim/chương trình mà tôi đang tìm kiếm!",
-      "section": "tìm kiếm"
-    },
-    "q23": {
-      "body": "Nó là một công cụ local proxy được dùng để kết nối các đường truyền mà ngăn chặn các máy quét. Nó bắt chước phiên duyệt web của bạn. Nó cũng hoàn toàn là một mã nguồn mở và có thể được tìm thấy trên github.",
-      "title": "Tiện ích mở rộng là gì? Nó có an toàn không?",
-      "section": "kết nối"
-    },
-    "q25": {
-      "body": "Chúng tôi ưu tiên Tiếng Anh, nhưng một số nguồn cung cấp những ngôn ngữ khác. Hãy thử chuyển nguồn. Đối với FED API, chỉ có Safari mới hỗ trợ đổi âm thanh trong những tệp MP4.",
-      "title": "Làm sao để tôi đổi ngôn ngữ?",
-      "section": "ngôn ngữ"
-    },
-    "q20": {
-      "body": "FED API là công cụ quét riêng của chúng tôi kéo các luồng trực tiếp từ Febbox. Mỗi tài khoản Febbox miễn phí bao gồm 100 GB/tháng băng thông không giới hạn và chúng tôi sử dụng UI token để thu thập nội dung như thể bạn đang tự xem. Thiết lập thông qua trình duyệt máy tính để bàn là dễ nhất, nhưng hướng dẫn di động có sẵn trên Fluxer của chúng tôi.",
-      "title": "FED API là gì?",
-      "section": "kết nối"
-    },
-    "q19": {
-      "body": "Trong khi phát, hãy nhấn vào biểu tượng ⚙️ , sau đó chọn một nguồn khác trong \"nguồn video\".",
-      "title": "Làm cách nào để đổi nguồn?",
-      "section": "phát lại"
-    },
-    "q26": {
-      "body": "Sử dụng lựa chọn \"Tùy chỉnh\" trong cài đặt phụ đề hoặc nhấn [ và ] trên bàn phím của bạn để điều chỉnh. Bạn cũng có thể tải lên tệp phụ đề riêng của bạn.",
-      "title": "Phụ đề của tôi không đồng bộ.",
-      "section": "ngôn ngữ"
     },
     "q6": {
       "title": "Có ứng dụng BetaMovie không?",
-      "body": "Chưa, nhưng bạn có thể cài đặt nó dưới dạng PWA (ỨProgressive Web App). Trên iOS, hãy sử dụng Safari → Chia sẻ → Thêm vào Màn hình chính. Trên Android, hãy sử dụng Chrome → 3 chấm → Thêm vào Màn hình chính. APK thử nghiệm có sẵn thông qua Fluxer của chúng tôi, nhưng không được khuyến khích.",
+      "body": "Có! Chúng tôi đã có ứng dụng dành cho máy tính để bàn chính thức! https://github.com/BetaMovie/BetaMovie-desktop/releases",
       "section": "chung"
     },
     "q7": {
-      "title": "Làm cách nào để tạo tài khoản?",
-      "body": "Nhấn vào \"Đồng bộ hóa với đám mây\" trong menu thả xuống hoặc đi tới Cài đặt để tạo và đồng bộ hóa tài khoản cộng đồng.",
+      "title": "Làm thế nào để tạo tài khoản?",
+      "body": "Nhấn vào \"Đồng bộ hóa với đám mây\" trong menu thả xuống hoặc vào Cài đặt để tạo và đồng bộ hóa tài khoản cộng đồng.",
       "section": "chung"
     },
     "q9": {
-      "title": "Phương tiện này bị thiếu / Tôi có thể yêu cầu phương tiện không?",
-      "body": "Không—vì chúng tôi không lưu trữ nội dung nên chúng tôi không thể thêm hoặc thay đổi nội dung có sẵn. Danh sách nội dung dựa trên những gì có thể truy cập công khai thông qua cơ chế tìm kiếm.",
+      "title": "Nội dung này bị thiếu / Tôi có thể yêu cầu không?",
+      "body": "Không—vì chúng tôi không lưu trữ nội dung, chúng tôi không thể thêm hoặc thay đổi những gì có sẵn. Danh sách nội dung dựa trên những gì có thể truy cập công khai thông qua cơ chế tìm kiếm.",
       "section": "tìm kiếm"
     },
-    "help": "Không thể tìm được câu trả lời? <0>Nhận trợ giúp tại đây.</0>",
-    "searchPlaceholder": "Tìm kiếm câu hỏi thường gặp...",
-    "sections": {
-      "search": "Tính khả dụng của Tìm kiếm & Nội dung",
-      "playback": "Sự cố phát lại",
-      "language": "Cài đặt Ngôn ngữ & Phụ đề",
-      "general": "Chung",
-      "connections": "Kết nối"
+    "q10": {
+      "title": "Tôi không thể tìm thấy phim/chương trình tôi đang tìm!",
+      "body": "TMDB cung cấp dữ liệu tìm kiếm của chúng tôi. Hãy thử nhấn vào biểu tượng 🔎 để có các tùy chọn tìm kiếm nâng cao nếu kết quả không chính xác.",
+      "section": "tìm kiếm"
     },
     "q11": {
       "title": "Tại sao tôi lại thấy màn hình đen?",
@@ -122,6 +96,16 @@
       "body": "Tốc độ phụ thuộc vào trang web lưu trữ. Chuyển sang một nguồn khác để có hiệu suất tốt hơn.",
       "section": "phát lại"
     },
+    "q19": {
+      "title": "Làm cách nào để đổi nguồn?",
+      "body": "Trong khi phát, hãy nhấn vào biểu tượng ⚙️ , sau đó chọn một nguồn khác trong \"nguồn video\".",
+      "section": "phát lại"
+    },
+    "q20": {
+      "title": "FED API là gì?",
+      "body": "FED API là công cụ quét riêng của chúng tôi kéo các luồng trực tiếp từ Febbox. Mỗi tài khoản Febbox miễn phí bao gồm 100 GB/tháng băng thông không giới hạn và chúng tôi sử dụng UI token để thu thập nội dung như thể bạn đang tự xem. Thiết lập thông qua trình duyệt máy tính để bàn là dễ nhất, nhưng hướng dẫn di động có sẵn trên Fluxer của chúng tôi.",
+      "section": "kết nối"
+    },
     "q21": {
       "title": "FED API có hoạt động trên mọi thiết bị không?",
       "body": "Có. Một khi hoàn tất cài đặt, token của bạn sẽ hoạt động trên mọi thiết bị đã đăng nhập.",
@@ -132,17 +116,33 @@
       "body": "Một số nguồn chặn máy quét. Tiện ích mở rộng hoạt động như một local proxy và bỏ qua những chướng vật như chặn IP, headers và cookies.",
       "section": "kết nối"
     },
+    "q23": {
+      "title": "Tiện ích mở rộng là gì? Nó có an toàn không?",
+      "body": "Nó là một công cụ local proxy được dùng để kết nối các đường truyền mà ngăn chặn các máy quét. Nó bắt chước phiên duyệt web của bạn. Nó cũng hoàn toàn là một mã nguồn mở và có thể được tìm thấy trên github.",
+      "section": "kết nối"
+    },
     "q24": {
       "title": "Febbox token của tôi thất bại trong lúc thiết lập. Tôi nên làm gì?",
       "body": "ISP của bạn có thể đang chặn FED API. Cài đặt một DNS tùy chọn như 1.1.1.1 hay NextDNS. Bạn cũng có thể thay đổi khu vực của bạn trong panel người dùng.",
       "section": "kết nối"
-    }
+    },
+    "q25": {
+      "title": "Làm thế nào để thay đổi ngôn ngữ?",
+      "body": "Chúng tôi ưu tiên tiếng Anh, nhưng một số nguồn cung cấp các ngôn ngữ khác. Hãy thử chuyển nguồn.",
+      "section": "ngôn ngữ"
+    },
+    "q26": {
+      "title": "Phụ đề của tôi không đồng bộ.",
+      "body": "Sử dụng tùy chọn \"Tùy chỉnh\" trong cài đặt phụ đề hoặc nhấn phím [ và ] trên bàn phím để điều chỉnh. Bạn cũng có thể tải lên tệp phụ đề của riêng mình.",
+      "section": "ngôn ngữ"
+    },
+    "title": "Về BetaMovie và FAQ (^▽^)"
   },
   "actions": {
     "copied": "Đã sao chép",
     "copy": "Sao chép",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "cancel": "Hủy",
+    "confirm": "Xác nhận"
   },
   "auth": {
     "createAccount": "Chưa có tài khoản? <0>Hãy tạo tài khoản.</0>",
@@ -153,13 +153,13 @@
       "next": "Tôi đã lưu giữ mật ngữ của mình",
       "passphraseFrameLabel": "Mật ngữ",
       "title": "Mật ngữ của bạn",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
+      "custom": "Tùy chỉnh",
+      "customPassphraseLabel": "Mật ngữ tùy chỉnh",
+      "customPassphrasePlaceholder": "Nhập mật ngữ tùy chỉnh của bạn",
+      "useCustomPassphrase": "Sử dụng mật ngữ tùy chỉnh",
+      "invalidPassphraseCharacters": "Ký tự mật ngữ không hợp lệ. Chỉ cho phép các chữ cái tiếng Anh, số 1-10 và các biểu tượng thông thường.",
+      "passphraseTooShort": "Mật ngữ phải dài ít nhất 8 ký tự.",
+      "usePasskeyInstead": "Sử dụng passkey thay thế"
     },
     "hasAccount": "Đã có tài khoản? <0>Hãy đăng nhập.</0>",
     "login": {
@@ -170,9 +170,9 @@
       "submit": "Đăng nhập",
       "title": "Đăng nhập vào tài khoản của bạn",
       "validationError": "Mật ngữ không chính xác hoặc không đầy đủ",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL"
+      "usePasskey": "Sử dụng passkey",
+      "or": "hoặc",
+      "noBackendUrl": "Không có URL backend"
     },
     "register": {
       "information": {
@@ -184,17 +184,27 @@
         "title": "Thông tin tài khoản"
       }
     },
+    "backendSelection": {
+      "title": "Chọn máy chủ tài khoản",
+      "description": "Chọn máy chủ backend để kết nối",
+      "customBackend": "Backend tùy chỉnh",
+      "customBackendPlaceholder": "https://",
+      "confirm": "Xác nhận",
+      "cancel": "Hủy",
+      "active": "Đang hoạt động",
+      "selecting": "Đang chọn..."
+    },
     "trust": {
       "failed": {
         "text": "Bạn đã cài đặt nó một cách chính xác chưa?",
         "title": "Không thể truy vấn máy chủ"
       },
+      "noHostTitle": "Máy chủ chưa được cấu hình!",
+      "noHost": "Máy chủ chưa được cấu hình, nên bạn không thể tạo tài khoản",
       "host": "Bạn đang kết nối đến máy chủ <0>{{hostname}}</0> - vui lòng chắc chắn rằng bạn tin tưởng máy chủ này trước khi tạo tài khoản...",
       "no": "Quay lại",
       "title": "Bạn có tin tưởng máy chủ này không?",
-      "yes": "Tôi tin tưởng máy chủ này",
-      "noHostTitle": "Máy chủ chưa được cấu hình!",
-      "noHost": "Máy chủ chưa được cấu hình, nên bạn không thể tạo tài khoản"
+      "yes": "Tôi tin tưởng máy chủ này"
     },
     "verify": {
       "description": "Vui lòng nhập mật ngữ của bạn lúc nãy đễ chắc chắn rằng bạn đã lưu nó và để tạo tài khoản",
@@ -204,19 +214,9 @@
       "recaptchaFailed": "Xác minh bằng ReCaptcha không hợp lệ",
       "register": "Tạo tài khoản",
       "title": "Nhập lại mật ngữ của bạn",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passkeyDescription": "Vui lòng xác thực bằng passkey của bạn để hoàn tất đăng ký.",
+      "authenticatePasskey": "Xác thực bằng Passkey",
+      "passkeyError": "Xác thực Passkey thất bại"
     }
   },
   "errors": {
@@ -245,140 +245,144 @@
     "pages": {
       "about": "Thông tin",
       "legal": "Legal / DMCA",
+      "discover": "Khám phá",
+      "support": "Hỗ trợ khách hàng",
       "login": "Đăng nhập",
       "onboarding": "Cài đặt",
       "pagetitle": "{{title}} - BetaMovie",
       "register": "Đăng ký",
       "settings": "Cài đặt",
       "migration": "Chuyển tài khoản",
-      "discover": "Khám phá",
-      "support": "Hỗ trợ khách hàng",
       "jip": "Jip"
     },
     "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
+      "title": "Phím tắt bàn phím",
+      "subtitle": "Giữ phím ` để hiển thị trợ giúp này bất cứ lúc nào",
       "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
+        "videoPlayback": "Phát video",
+        "jumpToPosition": "Nhảy tới vị trí",
+        "audioVideo": "Âm thanh & Video",
+        "subtitlesAccessibility": "Phụ đề & Khả năng truy cập",
+        "interface": "Giao diện"
       },
       "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
+        "playPause": "Phát/tạm dừng (hoặc giữ để tăng tốc 2x khi được bật)",
+        "playPauseAlt": "Phát/tạm dừng",
+        "skipForward5": "Tua tiến 5 giây",
+        "skipBackward5": "Tua lùi 5 giây",
+        "skipBackward10": "Tua lùi 10 giây",
+        "skipForward10": "Tua tiến 10 giây",
+        "skipForward1": "Tua tiến 1 giây",
+        "skipBackward1": "Tua lùi 1 giây",
+        "jumpTo0": "Nhảy tới 0% (bắt đầu)",
+        "jumpTo9": "Nhảy tới 90%",
+        "increaseVolume": "Tăng âm lượng",
+        "decreaseVolume": "Giảm âm lượng",
+        "mute": "Bật/tắt tiếng",
+        "changeSpeed": "Tăng/giảm tốc độ phát lại",
+        "toggleFullscreen": "Bật/tắt toàn màn hình",
+        "toggleCaptions": "Bật/tắt phụ đề",
+        "randomCaption": "Chọn phụ đề ngẫu nhiên từ ngôn ngữ dùng gần nhất",
+        "syncSubtitlesEarlier": "Đồng bộ phụ đề sớm hơn (-0.5 giây)",
+        "syncSubtitlesLater": "Đồng bộ phụ đề muộn hơn (+0.5 giây)",
+        "toggleNativeSubtitles": "Bật/tắt phụ đề gốc",
+        "barrelRoll": "Lộn vòng! 🌀",
+        "closeOverlay": "Đóng lớp phủ/cửa sổ",
+        "nextEpisode": "Tập kế tiếp",
+        "previousEpisode": "Tập trước đó",
+        "widescreenMode": "để bật/tắt nút chế độ màn hình rộng",
+        "copyLinkWithTime": "+ nhấn vào tiêu đề để sao chép liên kết kèm thời gian"
       },
       "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
+        "notInWatchParty": "Không trong buổi tiệc xem",
+        "showsOnly": "Chỉ phim truyền hình"
       },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "editInSettings": "Chỉnh sửa lệnh bàn phím từ cài đặt",
+      "clickToEdit": "Nhấn vào huy hiệu phím để chỉnh sửa",
+      "conflict": "xung đột",
+      "conflicts": "xung đột",
+      "detected": "đã phát hiện",
+      "resetAllToDefault": "Đặt lại tất cả về mặc định",
+      "pressKey": "Nhấn một phím...",
+      "none": "Không có",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "saveChanges": "Lưu thay đổi",
+      "resetToDefault": "Đặt lại về mặc định",
+      "numberKeySeeking": "Tìm kiếm tiến trình bằng phím số",
+      "numberKeySeekingDescription": "Sử dụng các phím số 0-9 để nhảy tới các vị trí cụ thể trong video. 0 về đầu, 1-8 nhảy tới 10%-80%, và 9 nhảy tới 90%."
     }
   },
   "home": {
     "bookmarks": {
       "sectionTitle": "Đánh dấu",
-      "showAll": "Show all",
+      "showAll": "Xem tất cả",
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
+          "placeholderButton": "Thêm vào nhóm",
+          "empty": "Chưa có nhóm nào",
+          "removeFromGroup": "Xóa khỏi nhóm",
+          "removeAll": "Xóa tất cả"
         },
         "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "button": "Sắp xếp lại",
+          "done": "Xong",
+          "title": "Chỉnh sửa thứ tự nhóm",
+          "description": "Kéo và thả để sắp xếp lại các nhóm dấu trang của bạn",
+          "cancel": "Hủy",
+          "save": "Lưu"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "title": "Chỉnh sửa nhóm",
+          "description": "Chỉnh sửa tên và biểu tượng của nhóm dấu trang",
+          "cancel": "Hủy",
+          "save": "Lưu",
+          "affectsBookmarks": "Điều này sẽ ảnh hưởng đến {{count}} dấu trang",
+          "nameLabel": "Tên nhóm",
+          "namePlaceholder": "Nhập tên cho nhóm của bạn"
         }
       },
       "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
+        "title": "Chỉnh sửa dấu trang",
+        "description": "Chỉnh sửa chi tiết cho dấu trang này",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "groupsLabel": "Nhóm",
+        "titleLabel": "Tiêu đề",
+        "titlePlaceholder": "Nhập tiêu đề cho dấu trang của bạn",
+        "yearLabel": "Năm",
+        "yearPlaceholder": "Nhập năm cho dấu trang của bạn"
       },
       "sorting": {
-        "label": "Sort by",
+        "label": "Sắp xếp theo",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Mặc định (Ngày thêm)",
+          "titleAsc": "Tiêu đề A-Z",
+          "titleDesc": "Tiêu đề Z-A",
+          "yearAsc": "Ngày phát hành Cũ-Mới",
+          "yearDesc": "Ngày phát hành Mới-Cũ"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "Tiếp tục xem...",
       "sorting": {
-        "label": "Sort by",
+        "label": "Sắp xếp theo",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Mặc định (Ngày thêm)",
+          "titleAsc": "Tiêu đề A-Z",
+          "titleDesc": "Tiêu đề Z-A",
+          "yearAsc": "Ngày phát hành Cũ-Mới",
+          "yearDesc": "Ngày phát hành Mới-Cũ"
         }
       }
     },
     "mediaList": {
       "stopEditing": "Hoàn thành"
+    },
+    "watchHistory": {
+      "sectionTitle": "Lịch sử xem",
+      "recentlyWatched": "Xem gần đây"
     },
     "search": {
       "allResults": "Đó là tất cả chúng tôi có...",
@@ -399,8 +403,6 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Kết quả tìm kiếm",
-      "discover": "Khám phá",
       "empty": {
         "default": "Chào mừng, tìm phương tiện truyền thông để xem tại đây!",
         "extra": [
@@ -410,7 +412,14 @@
           "Xin chào người dùng mới :3"
         ]
       },
-      "discoverMore": "Khám phá thêm"
+      "sectionTitle": "Kết quả tìm kiếm",
+      "discoverMore": "Khám phá thêm",
+      "discover": "Khám phá"
+    },
+    "mediaCard": {
+      "moreInfo": "Thông tin thêm",
+      "copyLink": "Sao chép Link",
+      "close": "Đóng"
     },
     "titles": {
       "69": {
@@ -453,15 +462,6 @@
         ]
       }
     },
-    "mediaCard": {
-      "moreInfo": "Thông tin thêm",
-      "copyLink": "Sao chép Link",
-      "close": "Đóng"
-    },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "support": {
       "title": "BetaMovie needs your help!",
       "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
@@ -477,15 +477,136 @@
   },
   "media": {
     "episodeDisplay": "M{{season}} T{{episode}}",
+    "unreleased": "Chưa phát hành",
     "types": {
       "movie": "Phim",
       "show": "Chương trình truyền hình"
     },
-    "unreleased": "Chưa phát hành",
     "episodeShort": "T",
     "seasonShort": "M",
     "seasonWatched": "Are you sure you want to mark the season as watched?",
     "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
+  },
+  "details": {
+    "resume": "Tiếp tục",
+    "play": "Phát",
+    "runtime": "Thời lượng:",
+    "language": "Ngôn ngữ:",
+    "releaseDate": "Ngày phát hành:",
+    "rating": "Đánh giá:",
+    "votes": "phiếu bầu",
+    "tmdb": "Xem trên TMDB",
+    "imdb": "Xem trên IMDb",
+    "episodes": "Tập phim",
+    "seasons": "Mùa phim",
+    "season": "Mùa",
+    "episode": "Tập",
+    "watched": "Đã xem {{watched}} trên {{total}} ({{percentage}}%)",
+    "airs": "Phát sóng",
+    "endsAt": "Kết thúc tại {{time}}",
+    "trailer": "Trailer",
+    "trailers": "Trailers",
+    "similar": "Tương tự",
+    "collection": {
+      "movies": "Phim điện ảnh",
+      "movie": "Phim điện ảnh",
+      "sortBy": "Sắp xếp theo",
+      "releaseDate": "Ngày phát hành",
+      "rating": "Đánh giá"
+    }
+  },
+  "migration": {
+    "loginRequired": "Bạn phải đăng nhập để nhập dữ liệu của bạn! Xin quay lại và đăng nhập để tiếp tục.",
+    "start": {
+      "title": "Nhập dữ liệu của bạn",
+      "explainer": "Nếu bạn muốn nhập hoặc sao lưu dữ liệu, bạn cóthể làm điều đó sử dụng những tùy chọn phía dưới. Nó sẽ cho phép bạn giữ dữ liệu của mình khi bạn đổi máy chủ đầu cuối.",
+      "options": {
+        "or": "hoặc",
+        "direct": {
+          "description": "Điều này sẽ nhập trực tiếp dữ liệu của bạn vào máy chủ mới. Đây là cách nhanh nhất. <br /><br />Tùy chọn này cho phép bạn giữ nguyên passphrase!",
+          "title": "Nhập trực tiếp",
+          "quality": "Dễ nhất và nhanh nhất",
+          "action": "Chuyển đổi dữ liệu"
+        },
+        "download": {
+          "description": "Điều này sẽ tải dữ liệu đến thiết bị của bạn. Bạn có thể tải nó lên máy chủ mới hoặc giữ nguyên để bảo mật.",
+          "title": "Tải dữ liệu",
+          "quality": "Nâng cao",
+          "action": "Tải dữ liệu"
+        },
+        "upload": {
+          "title": "Tải lên dữ liệu",
+          "description": "Tải lên tệp dữ liệu đã xuất của bạn để phục hồi các trang dấu và quá trình trên tài khoản này.",
+          "quality": "Phục hồi sao lưu",
+          "action": "Tải lên dữ liệu"
+        }
+      }
+    },
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "uploadDescription": "Data to upload:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      }
+    },
+    "direct": {
+      "title": "Nhập trực tiếp",
+      "description": "Nhập địa điểm URL cuối để gộp dữ liệu tài khoản hiện tại của bạn đến một đầu cuối mới. Passphrase của bạn vẫn được giữ nguyên!",
+      "backendLabel": "Điểm đến URL cuối",
+      "recaptchaLabel": "Mã ReCaptcha (Tùy chọn)",
+      "toggleLable": "Cần ReCaptcha?",
+      "status": {
+        "error": "Nhập dữ liệu thất bại.😿",
+        "success": "Dữ liệu của bạn đã được nhập thành công! 🎉"
+      },
+      "button": {
+        "migrate": "Nhập",
+        "processing": "Đang xử lý...",
+        "home": "Về trang chính",
+        "login": "Tiếp tục đăng nhập"
+      }
+    },
+    "download": {
+      "title": "Tải dữ liệu",
+      "description": "Điều này sẽ tải dữ liệu đến thiết bị của bạn. Bạn có thể tải nó lên máy chủ mới hoặc giữ nguyên để bảo mật.",
+      "status": {
+        "error": "Tải dữ liệu thất bại. 😿",
+        "success": "Dữ liệu của bạn đã được tải thành công! 🎉"
+      },
+      "button": {
+        "download": "Tải dữ liệu",
+        "home": "Về trang chính",
+        "login": "Tiếp tục đăng nhập"
+      }
+    },
+    "upload": {
+      "title": "Tải lên dữ liệu",
+      "description": "Tải lên tệp dữ liệu đã xuất của bạn để phục hồi các trang dấu và quá trình trên tài khoản này.",
+      "status": {
+        "processing": "Đang xử lý dữ liệu...",
+        "error": "Tải dữ liệu lên thất bại. 😿",
+        "success": "Dữ liệu của bạn đã được tải lên thành công! 🎉",
+        "successLocal": "Your data has been saved locally! 🎉"
+      },
+      "file": {
+        "description": "Chọn tệp bạn muốn tải lên",
+        "select": "Chọn tệp",
+        "change": "Đổi tệp",
+        "name": "Tên tệp"
+      },
+      "exportedOn": "Xuất ra",
+      "previewTitle": "Preview:",
+      "button": {
+        "import": "Nhập dữ liệu",
+        "processing": "Đang xử lý...",
+        "success": "Hoàn tất quá trình nhập",
+        "home": "Tiếp tục về trang chính",
+        "saveLocal": "Save locally"
+      }
+    },
+    "back": "Quay về"
   },
   "navigation": {
     "banner": {
@@ -505,110 +626,49 @@
   "notFound": {
     "badge": "Không tìm thấy",
     "goHome": "Quay lại trang chính",
+    "reloadButton": "Thử lại",
     "message": "Chúng tôi đã tìm kiếm khắp nơi: dưới thùng rác, trong tủ quần áo, đằng sau máy chủ proxy nhưng vẫn không thể tìm thấy trang bạn đang tìm kiếm. (ಥ﹏ಥ)",
-    "title": "Không thể tìm thấy trang",
-    "reloadButton": "Thử lại"
+    "title": "Không thể tìm thấy trang"
+  },
+  "downtimeNotice": {
+    "badge": "Sự cố",
+    "goHome": "Về trang chính",
+    "message": "BetaMovie đang gặp sự cố với một số nhà cung cấp một lần nữa, nếu bạn không tìm thấy hoặc không phát được chương trình, vui lòng thay đổi nguồn. Dự kiến lỗi này sẽ tiếp diễn trong thời gian tới.",
+    "title": "Sự cố nhà cung cấp"
   },
   "onboarding": {
     "defaultConfirm": {
       "cancel": "Huỷ",
       "confirm": "Chọn cài đặt mặc định",
       "description": "Cài đặt mặc định có thể dẫn đến việc phát video chậm. Bạn sẽ bỏ lỡ những nguồn tốt nhất!",
-      "title": "Bạn có chắc không?",
-      "tip": "It's recommended to set up the extension and/or FED API!"
+      "tip": "It's recommended to set up the extension and/or FED API!",
+      "title": "Bạn có chắc không?"
     },
     "extension": {
       "back": "Trở lại",
       "explainer": "Bạn có thể sử dụng các nguồn tốt nhất mà chúng tôi cung cấp bằng cách sử dụng tiện ích mở rộng trình duyệt. Cài đặt rất đơn giản.👌",
+      "explainerIos": "Thật không may, tiện ích mở rộng của trình duyệt không được hỗ trợ trên iOS. Nhấn <bold>Quay lại</bold> để chọn tùy chọn khác.",
+      "extensionHelp": "Nếu bạn đã cài đặt tiện ích mở rộng nhưng không được phát hiện, hãy <bold>mở tiện ích mở rộng thông qua menu tiện ích mở rộng của trình duyệt</bold> và làm theo các bước trên màn hình.",
+      "linkChrome": "Cài đặt tiện ích mở rộng của Chrome",
+      "linkFirefox": "Cài đặt tiện ích mở rộng của Firefox",
+      "linkUserscript": "Alternative Userscript",
+      "userscriptNote": "(The extension is more reliable than the userscript!)",
+      "notDetecting": "Đã cài đặt trên Chrome nhưng trang web không phát hiện? Hãy thử tải lại trang!",
+      "notDetectingAction": "Tải lại trang",
       "status": {
-        "outdated": "Phiên bản tiện ích mở rộng quá cũ",
         "disallowed": "Tiện ích mở rộng chưa được bật cho trang này (,,>﹏<,,)",
         "disallowedAction": "Bật tiện ích mở rộng",
         "failed": "Không thể yêu cầu trạng thái",
         "loading": "Đang chờ bạn cài đặt tiện ích mở rộng",
+        "outdated": "Phiên bản tiện ích mở rộng quá cũ",
         "success": "Tiện ích mở rộng đang hoạt động như mong đợi!"
       },
-      "extensionHelp": "Nếu bạn đã cài đặt tiện ích mở rộng nhưng không được phát hiện, hãy <bold>mở tiện ích mở rộng thông qua menu tiện ích mở rộng của trình duyệt</bold> và làm theo các bước trên màn hình.",
-      "explainerIos": "Thật không may, tiện ích mở rộng của trình duyệt không được hỗ trợ trên iOS. Nhấn <bold>Quay lại</bold> để chọn tùy chọn khác.",
-      "linkChrome": "Cài đặt tiện ích mở rộng của Chrome",
-      "linkFirefox": "Cài đặt tiện ích mở rộng của Firefox",
-      "notDetecting": "Đã cài đặt trên Chrome nhưng trang web không phát hiện? Hãy thử tải lại trang!",
-      "notDetectingAction": "Tải lại trang",
       "submit": "Tiếp tục",
-      "title": "Hãy bắt đầu với một tiện ích mở rộng",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)"
-    },
-    "start": {
-      "moreInfo": {
-        "explainer": {
-          "outro": "Nếu bạn còn thắc mắc cách hoạt động của trang, liên hệ server <0>BetaMovie Fluxer</0>!",
-          "proxy": "2. Proxy",
-          "extensionDescription": "Tiện ích mở rộng này cho phép bạn truy cập vào hầu hết các nguồn. Nó hoạt động như một proxy cục bộ và có thể xử lý các trang web cần cookie hoặc tiêu đề đặc biệt để tải.",
-          "proxyDescription": "Proxy thu thập phương tiện truyền thông từ các trang web khác. Nó bỏ qua các hạn chế của trình duyệt (như CORS) để cho phép thu thập.",
-          "fedapi": {
-            "fedapiDescription": "Mang theo tài khoản Febbox MIỄN PHÍ của riêng bạn để có quyền truy cập vào FED API (Riêng tư), nguồn tốt nhất với chất lượng 4K, Dolby Atmos, bỏ qua phần giới thiệu và thời gian tải nhanh nhất! Khuyến nghị cao!",
-            "fedapi": "Bổ sung: Mã token FED API (Riêng tư)"
-          },
-          "extension": "1. Tiện ích mở rộng",
-          "intro": "BetaMovie không lưu trữ video. Nó dựa vào các trang web của bên thứ ba để có nội dung, vì vậy bạn cần chọn cách kết nối với các trang web đó.",
-          "options": "Các lựa chọn của bạn:",
-          "default": "3. Thiết lập mặc định",
-          "defaultDescription": "Sử dụng proxy tích hợp của BetaMovie. Đây là lựa chọn dễ nhất nhưng có thể chậm hơn do băng thông được chia sẻ."
-        },
-        "recommended": {
-          "desktop": {
-            "description": "Tiện ích mở rộng + FED API (Riêng tư)",
-            "title": "Desktop:"
-          },
-          "android": {
-            "description": "Tiện ích mở rộng + FED API (Riêng tư)",
-            "title": "Android:"
-          },
-          "title": "Bạn không biết nên chọn gì?",
-          "subtitle": "Cấu hình được đề xuất:",
-          "iOS": {
-            "title": "iOS:",
-            "description": "Proxy tùy chỉnh + FED API (Riêng tư)"
-          }
-        },
-        "button": "Thêm thông tin",
-        "title": "Tìm hiểu thiết lập"
-      },
-      "explainer": "Để có được luồng phát trực tuyến tốt nhất có thể, bạn sẽ cần chọn phương pháp phát trực tuyến mà bạn muốn sử dụng.",
-      "options": {
-        "extension": {
-          "action": "Cài đặt tiện ích mở rộng",
-          "description": "Cài đặt tiện ích mở rộng trình duyệt và truy cập vào các nguồn bổ sung! Hãy nhớ bật tiện ích này cho trang web này.",
-          "quality": "Chất lượng tốt nhất + Nhiều nguồn hơn",
-          "title": "Tiện ích mở rộng trình duyệt"
-        },
-        "or": "hoặc",
-        "default": {
-          "text": "Tôi không muốn có luồng chất lượng tốt, hãy sử dụng thiết lập mặc định."
-        },
-        "proxy": {
-          "action": "Thiết lập proxy",
-          "description": "Thiết lập proxy miễn phí chỉ trong 5 phút! Cải thiện độ tin cậy khi tải!",
-          "quality": "Chất lượng tốt",
-          "title": "Proxy tùy chỉnh"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "BetaMovie Desktop app"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Hãy thiết lập BetaMovie nào🥳"
+      "title": "Hãy bắt đầu với một tiện ích mở rộng"
     },
     "proxy": {
-      "explainer": "Bạn có thể có được luồng chất lượng cao bằng cách tạo và sử dụng proxy tự phục vụ.",
-      "title": "Hãy tạo một proxy mới",
       "back": "Quay về",
+      "explainer": "Bạn có thể có được luồng chất lượng cao bằng cách tạo và sử dụng proxy tự phục vụ.",
       "input": {
         "errorConnection": "Không thể kết nối tới proxy",
         "errorInvalidUrl": "URL không hợp lệ",
@@ -617,105 +677,136 @@
         "placeholder": "https://"
       },
       "link": "Tìm hiểu cách tạo proxy",
-      "submit": "Nhập proxy"
+      "submit": "Nhập proxy",
+      "title": "Hãy tạo một proxy mới"
+    },
+    "start": {
+      "explainer": "Để có được luồng phát trực tuyến tốt nhất có thể, bạn sẽ cần chọn phương pháp phát trực tuyến mà bạn muốn sử dụng.",
+      "moreInfo": {
+        "button": "Thêm thông tin",
+        "title": "Tìm hiểu thiết lập",
+        "explainer": {
+          "intro": "BetaMovie không lưu trữ video. Nó dựa vào các trang web của bên thứ ba để có nội dung, vì vậy bạn cần chọn cách kết nối với các trang web đó.",
+          "options": "Các lựa chọn của bạn:",
+          "extension": "1. Tiện ích mở rộng",
+          "extensionDescription": "Tiện ích mở rộng này cho phép bạn truy cập vào hầu hết các nguồn. Nó hoạt động như một proxy cục bộ và có thể xử lý các trang web cần cookie hoặc tiêu đề đặc biệt để tải.",
+          "proxy": "2. Proxy",
+          "proxyDescription": "Proxy thu thập phương tiện truyền thông từ các trang web khác. Nó bỏ qua các hạn chế của trình duyệt (như CORS) để cho phép thu thập.",
+          "default": "3. Thiết lập mặc định",
+          "defaultDescription": "Sử dụng proxy tích hợp của BetaMovie. Đây là lựa chọn dễ nhất nhưng có thể chậm hơn do băng thông được chia sẻ.",
+          "fedapi": {
+            "fedapi": "Bổ sung: Mã token FED API (Riêng tư)",
+            "fedapiDescription": "Mang theo tài khoản Febbox MIỄN PHÍ của riêng bạn để có quyền truy cập vào FED API (Riêng tư), nguồn tốt nhất với chất lượng 4K, Dolby Atmos, bỏ qua phần giới thiệu và thời gian tải nhanh nhất! Khuyến nghị cao!"
+          },
+          "outro": "Nếu bạn còn thắc mắc cách hoạt động của trang, liên hệ server <0>BetaMovie Fluxer</0>!"
+        },
+        "recommended": {
+          "title": "Bạn không biết nên chọn gì?",
+          "subtitle": "Cấu hình được đề xuất:",
+          "desktop": {
+            "title": "Desktop:",
+            "description": "Tiện ích mở rộng + FED API (Riêng tư)"
+          },
+          "iOS": {
+            "title": "iOS:",
+            "description": "Proxy tùy chỉnh + FED API (Riêng tư)"
+          },
+          "android": {
+            "title": "Android:",
+            "description": "Tiện ích mở rộng + FED API (Riêng tư)"
+          }
+        }
+      },
+      "options": {
+        "or": "hoặc",
+        "default": {
+          "text": "Tôi không muốn có luồng chất lượng tốt, hãy sử dụng thiết lập mặc định."
+        },
+        "extension": {
+          "action": "Cài đặt tiện ích mở rộng",
+          "description": "Cài đặt tiện ích mở rộng trình duyệt và truy cập vào các nguồn bổ sung! Hãy nhớ bật tiện ích này cho trang web này.",
+          "quality": "Chất lượng tốt nhất + Nhiều nguồn hơn",
+          "title": "Tiện ích mở rộng trình duyệt"
+        },
+        "desktopapp": {
+          "action": "Install Desktop app",
+          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
+          "quality": "Best quality + Even more sources",
+          "title": "BetaMovie Desktop app"
+        },
+        "proxy": {
+          "action": "Thiết lập proxy",
+          "description": "Thiết lập proxy miễn phí chỉ trong 5 phút! Cải thiện độ tin cậy khi tải!",
+          "quality": "Chất lượng tốt",
+          "title": "Proxy tùy chỉnh"
+        },
+        "addons": {
+          "title": "Additional sources:"
+        }
+      },
+      "title": "Hãy thiết lập BetaMovie nào🥳"
     }
+  },
+  "overlays": {
+    "close": "Đóng"
   },
   "player": {
     "back": {
       "default": "Quay lại trang chính",
       "short": "Quay lại"
     },
+    "casting": {
+      "to": "Đang truyền tới {{device}} 📺",
+      "device": "thiết bị",
+      "enabled": "Đang truyền tới thiết bị 🎬"
+    },
     "menus": {
+      "downloads": {
+        "button": "Thử tải xuống",
+        "hlsDownloader": "Hoặc truy cập <0>trang web tải xuống hls</0> và dán URL danh sách phát phía dưới.",
+        "disclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. BetaMovie không kiểm soát cách thức cung cấp tải xuống.",
+        "copyHlsPlaylist": "Sao chép liên kết danh sách phát HLS",
+        "downloadSubtitle": "Tải xuống phụ đề hiện tại",
+        "downloadVideo": "Tải xuống video",
+        "openIn": "Mở trong...",
+        "vlc": "VLC",
+        "iina": "IINA",
+        "outplayer": "Outplayer",
+        "hlsOpenInDisclaimer": "Mở luồng HLS bằng trình phát bên ngoài CÓ THỂ KHÔNG HOẠT ĐỘNG!",
+        "hlsDisclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. BetaMovie không kiểm soát cách thức cung cấp tải xuống.<br /><br />Lưu ý bạn đang tải xuống danh sách phát HLS, <bold>những người không quen với các định dạng phát trực tuyến nâng cao không nên tải xuống</bold>. Hãy thử các nguồn khác cho các định dạng khác nhau.",
+        "onAndroid": {
+          "1": "Để tải xuống trên Android, nhấp vào nút tải xuống sau đó trong trang mới, <bold>nhấn và giữ</bold> vào video, rồi chọn <bold>lưu</bold>.",
+          "shortTitle": "Tải xuống / Android",
+          "title": "Tải xuống trên Android"
+        },
+        "onIos": {
+          "1": "Để tải xuống trên iOS, nhấp vào nút tải xuống sau đó trong trang mới, nhấp <bold><ios_share /></bold>, rồi <bold>Lưu vào Tệp <ios_files /></bold>.",
+          "shortTitle": "Tải xuống / iOS",
+          "title": "Tải xuống trên iOS"
+        },
+        "onPc": {
+          "1": "Trên PC, nhấp vào nút tải xuống sau đó trong trang mới, chuột phải vào video và chọn <bold>Lưu video thành</bold>",
+          "shortTitle": "Tải xuống / PC",
+          "title": "Tải xuống trên PC"
+        },
+        "title": "Tải xuống"
+      },
       "episodes": {
-        "button": "Tập",
-        "loadingList": "Đang tải...",
-        "loadingTitle": "Đang tải...",
-        "markAsWatched": "Đánh dấu là đã xem",
-        "markAsUnwatched": "Đánh dấu là chưa xem",
+        "button": "Tập phim",
         "emptyState": "Không có tập nào trong mùa này, hãy quay lại sau (xin lỗi :3)...",
         "episodeBadge": "T{{episode}}",
-        "loadingError": "Lỗi khi tải mùa này",
-        "unairedEpisodes": "Một hoặc nhiều tập trong mùa này đã bị tắt vì chúng chưa được phát sóng.",
-        "seasons": "Mùa",
+        "loadingError": "Lỗi khi tải mùa phim",
+        "loadingList": "Đang tải...",
+        "loadingTitle": "Đang tải...",
+        "unairedEpisodes": "Một hoặc nhiều tập trong mùa này bị vô hiệu hóa vì chúng chưa được phát sóng.",
+        "seasons": "Mùa phim",
         "showMore": "Xem thêm",
-        "showLess": "Hiển thị ít hơn",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
-      },
-      "sources": {
-        "extensionHint": {
-          "noEmbeds": "Không có luồng phát. Cài đặt Tiện ích mở rộng (Extension) để xem thêm các nguồn phim khác.",
-          "failed": "Tải luồng phát thất bại. Cài đặt Tiện ích mở rộng (Extension) để tải thêm các nguồn phim khác.",
-          "setupButton": "Thiết lập tiện ích mở rộng",
-          "moreSources": "Bạn muốn xem nhiều nguồn phim hơn? Hãy thiết lập Tiện ích mở rộng.",
-          "installButton": "Cài đặt Tiện ích mở rộng"
-        },
-        "title": "Nguồn",
-        "failed": {
-          "text": "Đã xảy ra lỗi khi cố gắng tìm video... Hãy thử nguồn khác?",
-          "title": "Failed to scrape"
-        },
-        "noStream": {
-          "text": "Nguồn này không có luồng nào cho bộ phim hoặc chương trình này. /ᐠ - ˕ -マ Ⳋ",
-          "title": "Không có luồng :("
-        },
-        "noEmbeds": {
-          "text": "Chúng tôi không tìm thấy bất kỳ nội dung nhúng nào, vui lòng thử nguồn khác.",
-          "title": "Không tìm thấy mã nhúng"
-        },
-        "unknownOption": "Không rõ",
-        "editOrder": "Sắp xếp thứ tự",
-        "findNextSource": "Find next source"
-      },
-      "quality": {
-        "hint": "Bạn có thể thử <0>chuyển đổi nguồn</0> để có các tùy chọn chất lượng khác nhau.",
-        "iosNoQuality": "Do những hạn chế do Apple xác định, lựa chọn chất lượng không khả dụng trên iOS cho nguồn này. Bạn có thể thử <0>chuyển sang nguồn khác</0> để có các tùy chọn chất lượng khác.",
-        "automaticLabel": "Chất lượng tự động",
-        "title": "Chất lượng",
-        "auto": "Tự động"
-      },
-      "subtitles": {
-        "notFound": "Không có tùy chọn nào có sẵn phù hợp với truy vấn của bạn",
-        "customChoice": "Thả hoặc tải tập tin lên",
-        "customizeLabel": "Tùy chỉnh",
-        "onChoice": "Bật",
-        "settings": {
-          "backlink": "Phụ đề tùy chỉnh",
-          "delay": "Độ trễ phụ đề",
-          "fixCapitals": "Sửa lỗi viết hoa"
-        },
-        "title": "Phụ đề",
-        "unknownLanguage": "Không rõ",
-        "dropSubtitleFile": "Thả file phụ đề vào đây! >_<",
-        "empty": "Không có phụ đề nào được cung cấp cho video này.",
-        "useNativeSubtitles": "Sử dụng phụ đề video gốc",
-        "useNativeSubtitlesDescription": "Có thể sửa phụ đề khi phát và trong PiP",
-        "offChoice": "Tắt",
-        "SourceChoice": "Nguồn phụ đề",
-        "OpenSubtitlesChoice": "Phụ đề bên ngoài",
-        "primary": "Phụ đề chính",
-        "secondary": "Phụ đề phụ",
-        "clearSecondary": "Xóa phụ đề phụ",
-        "dualSub": "Phụ đề kép",
-        "dualSubDesc": "Chọn cùng định dạng (SRT, VTT...) & nhà cung cấp (OpenSubs...) để đồng bộ tốt nhất",
-        "dualSubHint": "Chọn ngôn ngữ cho phụ đề phụ (hiển thị phía trên phụ đề chính)",
-        "selectingSecondary": "Đang chọn phụ đề phụ",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
-        "previewLabel": "Subtitle preview:",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
-        "translate": {
-          "title": "Translate from {{language}}"
-        }
+        "showLess": "Xem ít hơn",
+        "markAsWatched": "Đánh dấu là đã xem",
+        "markAsUnwatched": "Đánh dấu là chưa xem",
+        "markAsFavorite": "Gắn sao yêu thích",
+        "favorites": "Yêu thích",
+        "noFavorites": "Chưa có tập phim yêu thích nào. Hãy gắn sao các tập để thêm vào đây!"
       },
       "playback": {
         "speedLabel": "Tốc độ phát lại",
@@ -723,6 +814,13 @@
         "disabled": "(Tắt trong buổi tiệc xem)",
         "speedBoosted": "2x",
         "speedUnboosted": "{{speed}}x"
+      },
+      "quality": {
+        "automaticLabel": "Chất lượng tự động",
+        "hint": "Bạn có thể thử <0>chuyển đổi nguồn</0> để có các tùy chọn chất lượng khác nhau.",
+        "iosNoQuality": "Do những hạn chế do Apple xác định, lựa chọn chất lượng không khả dụng trên iOS cho nguồn này. Bạn có thể thử <0>chuyển sang nguồn khác</0> để có các tùy chọn chất lượng khác.",
+        "title": "Chất lượng",
+        "auto": "Tự động"
       },
       "settings": {
         "downloadItem": "Tải xuống",
@@ -735,6 +833,72 @@
         "subtitleItem": "Phụ đề",
         "videoSection": "Cài đặt video"
       },
+      "sources": {
+        "extensionHint": {
+          "noEmbeds": "Không có luồng phát. Cài đặt Tiện ích mở rộng (Extension) để xem thêm các nguồn phim khác.",
+          "failed": "Tải luồng phát thất bại. Cài đặt Tiện ích mở rộng (Extension) để tải thêm các nguồn phim khác.",
+          "setupButton": "Thiết lập tiện ích mở rộng",
+          "moreSources": "Bạn muốn xem nhiều nguồn phim hơn? Hãy thiết lập Tiện ích mở rộng.",
+          "installButton": "Cài đặt Tiện ích mở rộng"
+        },
+        "failed": {
+          "text": "Đã xảy ra lỗi khi cố gắng tìm video... Hãy thử nguồn khác?",
+          "title": "Tìm kiếm thất bại"
+        },
+        "noEmbeds": {
+          "text": "Chúng tôi không tìm thấy bất kỳ nội dung nhúng nào, vui lòng thử nguồn khác.",
+          "title": "Không tìm thấy mã nhúng"
+        },
+        "noStream": {
+          "text": "Nguồn này không có luồng nào cho bộ phim hoặc chương trình này. /ᐠ - ˕ -マ Ⳋ",
+          "title": "Không có luồng :("
+        },
+        "title": "Nguồn",
+        "unknownOption": "Không rõ",
+        "findNextSource": "Tìm nguồn tiếp theo"
+      },
+      "subtitles": {
+        "customChoice": "Thả hoặc tải tập tin lên",
+        "pasteChoice": "Dán dữ liệu phụ đề",
+        "doubleClickToCopy": "Nhấp đúp để sao chép dữ liệu phụ đề",
+        "customizeLabel": "Tùy chỉnh",
+        "previewLabel": "Xem trước phụ đề:",
+        "offChoice": "Tắt",
+        "onChoice": "Bật",
+        "autoSelectChoice": "Tự động chọn",
+        "autoSelectDifferentChoice": "Nhấn lại để tự động chọn phụ đề khác",
+        "SourceChoice": "Nguồn phụ đề",
+        "OpenSubtitlesChoice": "Phụ đề bên ngoài",
+        "loadingExternal": "Đang tải phụ đề bên ngoài...",
+        "transcriptChoice": "Bản ghi âm",
+        "settings": {
+          "backlink": "Phụ đề tùy chỉnh",
+          "delay": "Độ trễ phụ đề",
+          "fixCapitals": "Sửa lỗi viết hoa"
+        },
+        "title": "Phụ đề",
+        "unknownLanguage": "Không rõ",
+        "dropSubtitleFile": "Thả file phụ đề vào đây! >_<",
+        "scrapeButton": "Tìm phụ đề",
+        "refresh": "Làm mới phụ đề bên ngoài",
+        "refreshing": "Đang làm mới...",
+        "empty": "Không có phụ đề nào được cung cấp cho video này.",
+        "notFound": "Không có tùy chọn nào có sẵn phù hợp với truy vấn của bạn",
+        "useNativeSubtitles": "Sử dụng phụ đề video gốc",
+        "useNativeSubtitlesDescription": "Có thể sửa phụ đề khi phát và trong PiP",
+        "delayLate": "Nghe thấy âm thanh",
+        "delayEarly": "Nhìn thấy phụ đề",
+        "translate": {
+          "title": "Dịch từ {{language}}"
+        },
+        "primary": "Phụ đề chính",
+        "secondary": "Phụ đề phụ",
+        "clearSecondary": "Xóa phụ đề phụ",
+        "dualSub": "Phụ đề kép",
+        "dualSubDesc": "Chọn cùng định dạng (SRT, VTT...) & nhà cung cấp (OpenSubs...) để đồng bộ tốt nhất",
+        "dualSubHint": "Chọn ngôn ngữ cho phụ đề phụ (hiển thị phía trên phụ đề chính)",
+        "selectingSecondary": "Đang chọn phụ đề phụ"
+      },
       "watchparty": {
         "watchpartyItem": "Watch Party",
         "notice": "Legacy Watch Party có thể không khả dụng đối với một số nguồn",
@@ -742,70 +906,49 @@
       },
       "audio": {
         "default": "Mặc định"
-      },
-      "downloads": {
-        "openIn": "Mở trong...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "hlsOpenInDisclaimer": "Mở luồng HLS với trình phát bên ngoài CÓ THỂ KHÔNG HOẠT ĐỘNG!",
-        "hlsDisclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. BetaMovie không kiểm soát cách cung cấp tải xuống.<br /><br />Xin lưu ý rằng bạn đang tải xuống danh sách phát HLS, <bold>không nên tải xuống nếu bạn không quen với các định dạng phát trực tuyến nâng cao</bold>. Hãy thử các nguồn khác nhau cho các định dạng khác nhau.",
-        "onAndroid": {
-          "1": "Để tải xuống trên Android, hãy nhấp vào nút tải xuống, sau đó trên trang mới, <bold>nhấn và giữ</bold> vào video, sau đó chọn <bold>lưu</bold>.",
-          "shortTitle": "Tải xuống / Android",
-          "title": "Tải xuống trên Android"
-        },
-        "onIos": {
-          "1": "Để tải xuống trên iOS, hãy nhấp vào nút tải xuống, sau đó trên trang mới, nhấp vào <bold><ios_share /></bold>, sau đó <bold>Lưu vào Tệp <ios_files /></bold>.",
-          "shortTitle": "Tải xuống / iOS",
-          "title": "Tải xuống trên iOS"
-        },
-        "onPc": {
-          "1": "Trên PC, nhấp vào nút tải xuống, sau đó, trên trang mới, nhấp chuột phải vào video và chọn <bold>Lưu video thành</bold>",
-          "shortTitle": "Tải xuống / PC",
-          "title": "Tải xuống trên PC"
-        },
-        "title": "Tải xuống",
-        "button": "Lượt tải xuống",
-        "hlsDownloader": "Hoặc, hãy truy cập <0>trang web tải xuống hls</0> và dán URL danh sách phát bên dưới.",
-        "disclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. BetaMovie không kiểm soát cách cung cấp tải xuống.",
-        "copyHlsPlaylist": "Sao chép liên kết danh sách phát HLS",
-        "downloadSubtitle": "Tải xuống phụ đề hiện tại",
-        "downloadVideo": "Tải xuống video",
-        "outplayer": "Outplayer"
       }
     },
     "metadata": {
-      "notFound": {
-        "badge": "Không tìm thấy",
-        "homeButton": "Quay lại trang chính",
-        "text": "Chúng tôi không thể tìm thấy nội dung mà bạn yêu cầu. Hoặc là nó đã bị xóa, hoặc bạn đã xáo trộn URL.",
-        "title": "Không thể tìm thấy nội dung."
-      },
-      "failed": {
-        "homeButton": "Về trang chính",
-        "badge": "Thất bại",
-        "text": "Could not load the media's metadata from TMDB. Please check whether TMDB is down or blocked on your internet connection.",
-        "title": "Failed to load metadata"
-      },
       "api": {
         "text": "Không thể tải dữ liệu API, vui lòng kiểm tra kết nối internet của bạn.",
-        "title": "Không thể tải dữ liệu API"
-      },
-      "extensionPermission": {
-        "badge": "Quyền bị thiếu",
-        "button": "Sử dụng tiện ích mở rộng",
-        "text": "Bạn có tiện ích mở rộng cho trình duyệt, nhưng chúng tôi cần sự cho phép của bạn để bắt đầu sử dụng tiện ích mở rộng. (¬_¬)",
-        "title": "Cấu hình tiện ích mở rộng"
+        "title": "Lỗi tải dữ liệu API"
       },
       "legal": {
-        "text": "Phương tiện truyền thông này không còn khả dụng do thông báo gỡ xuống hoặc khiếu nại về bản quyền. 😨",
         "badge": "Đã xóa",
+        "text": "Phương tiện truyền thông này không còn khả dụng do thông báo gỡ xuống hoặc khiếu nại về bản quyền. 😨",
         "title": "Phương tiện truyền thông đã bị xóa"
+      },
+      "extensionPermission": {
+        "badge": "Thiếu quyền",
+        "button": "Sử dụng tiện ích mở rộng",
+        "text": "Bạn đã có tiện ích mở rộng, nhưng chúng tôi cần sự cho phép của bạn để bắt đầu sử dụng nó. (¬_¬)",
+        "title": "Cấu hình tiện ích mở rộng"
+      },
+      "failed": {
+        "badge": "Thất bại",
+        "homeButton": "Về trang chính",
+        "text": "Không thể tải siêu dữ liệu của phim từ TMDB. Vui lòng kiểm tra xem TMDB có đang bị sập hay bị chặn bởi kết nối internet của bạn không.",
+        "title": "Tải siêu dữ liệu thất bại"
+      },
+      "notFound": {
+        "badge": "Không tìm thấy",
+        "homeButton": "Về trang chính",
+        "text": "Chúng tôi không thể tìm thấy nội dung bạn yêu cầu. Có thể nó đã bị xóa, hoặc bạn đã nhập sai URL.",
+        "title": "Không tìm thấy nội dung."
       }
     },
+    "nextEpisode": {
+      "replay": "Replay",
+      "next": "Next episode",
+      "nextSeason": "Next season"
+    },
+    "resume": {
+      "title": "Continue watching?",
+      "description": "This episode is {{percentage}}% watched",
+      "resume": "Resume",
+      "restart": "Restart"
+    },
     "playbackError": {
-      "title": "Rất tiếc, đã hỏng!",
-      "homeButton": "Về trang chính",
       "badge": "Playback error",
       "errors": {
         "errorAborted": "The fetching of the media was aborted by the user's request.",
@@ -817,8 +960,10 @@
       "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
       "copyDebugInfo": "Copy debug info",
       "debugInfo": "Check console for more details.",
+      "homeButton": "Về trang chính",
       "resumeButton": "Try next sources",
-      "text": "There was an error trying to play the media 😖. Please try again or try a different source!"
+      "text": "There was an error trying to play the media 😖. Please try again or try a different source!",
+      "title": "Rất tiếc, đã hỏng!"
     },
     "scraping": {
       "items": {
@@ -828,21 +973,21 @@
         "pending": "Đang kiểm tra video..."
       },
       "notFound": {
-        "homeButton": "Về trang chính",
-        "text": "Chúng tôi đã tìm kiếm thông qua các nhà cung cấp của mình và không thể tìm thấy phương tiện truyền thông bạn đang tìm kiếm! Chúng tôi không host các phương tiện truyền thông và không có quyền kiểm soát những gì có sẵn. Vui lòng nhấp vào 'Hiển thị chi tiết' bên dưới để biết thêm chi tiết.",
         "badge": "Không tìm thấy",
         "detailsButton": "Chi tiết",
+        "homeButton": "Về trang chính",
         "discoverButton": "Khám phá thêm",
+        "text": "Chúng tôi đã tìm kiếm thông qua các nhà cung cấp của mình và không thể tìm thấy phương tiện truyền thông bạn đang tìm kiếm! Chúng tôi không host các phương tiện truyền thông và không có quyền kiểm soát những gì có sẵn. Vui lòng nhấp vào 'Hiển thị chi tiết' bên dưới để biết thêm chi tiết.",
         "title": "Chúng tôi không tìm thấy",
         "onboarding": "More sources might be avalible using the extension or febbox token!",
         "onboardingButton": "Do setup again"
       },
       "extensionFailure": {
-        "homeButton": "Về trang chính",
         "badge": "Tiện ích mở rộng đã bị vô hiệu hóa",
-        "text": "Bạn đã cài đặt tiện ích mở rộng BetaMovie. Để bắt đầu sử dụng, bạn cần bật tiện ích mở rộng cho trang web này.",
+        "homeButton": "Về trang chính",
         "enableExtension": "Bật tiện ích mở rộng",
-        "title": "Vui lòng bật tiện ích mở rộng"
+        "title": "Vui lòng bật tiện ích mở rộng",
+        "text": "Bạn đã cài đặt tiện ích mở rộng BetaMovie. Để bắt đầu sử dụng, bạn cần bật tiện ích mở rộng cho trang web này."
       },
       "tips": {
         "1": "Tap the gear icon to switch sources!",
@@ -857,22 +1002,6 @@
         "10": "Join the Fluxer!",
         "11": "Hold ` to view keyboard shortcuts!"
       }
-    },
-    "casting": {
-      "enabled": "Truyền đến thiết bị 🎬",
-      "to": "Casting to {{device}} 📺",
-      "device": "device"
-    },
-    "nextEpisode": {
-      "replay": "Replay",
-      "next": "Next episode",
-      "nextSeason": "Next season"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
@@ -985,191 +1114,54 @@
       }
     }
   },
+  "support": {
+    "title": "Support",
+    "text": "BetaMovie is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
+    "q1": {
+      "body": "You can join the official <0>BetaMovie fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
+      "title": "Where can I get help?"
+    },
+    "q2": {
+      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
+      "title": "How can I report a bug or issue?"
+    }
+  },
+  "jip": {
+    "title": "Jip",
+    "text": "BetaMovie didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
+    "q1": {
+      "body": "You can join the official <0>BetaMovie fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
+      "title": "Where can I get help?"
+    },
+    "q2": {
+      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
+      "title": "How can I report a bug or issue?"
+    }
+  },
+  "screens": {
+    "legal": {
+      "title": "Legal / DMCA"
+    },
+    "loadingApp": "Loading application",
+    "loadingUser": "Loading your profile",
+    "loadingUserError": {
+      "logout": "Logout",
+      "reset": "Đặt lại tùy chỉnh máy chủ",
+      "disconnect": "Disconnect from backend",
+      "text": "Failed to load your profile",
+      "reload": "Reload",
+      "textWithReset": "Failed to load your profile from your custom server, want to reset back to the default server?",
+      "disconnectTitle": "Disconnect from backend?",
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectConfirm": "Confirm",
+      "disconectCancel": "Cancel"
+    },
+    "migration": {
+      "failed": "Failed to migrate your data. 😿",
+      "inProgress": "Please hold, we are migrating your data. This shouldn't take long..."
+    }
+  },
   "settings": {
-    "connections": {
-      "setup": {
-        "items": {
-          "default": "Cài đặt mặc định",
-          "extension": "Tiện ích mở rộng",
-          "proxy": "Proxy tùy chỉnh",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Thiết lập lại",
-        "successStatus": {
-          "description": "Tất cả mọi thứ đã sẵn sàng để bạn bắt đầu xem phương tiện bạn yêu thích. (๑>◡<๑)",
-          "title": "Mọi thứ đã hoàn tất!"
-        },
-        "unsetStatus": {
-          "title": "Bạn vẫn chưa hoàn thành cài đặt",
-          "description": "Xin nhấn vào nút bên phải để bắt đầu quy trình cài đặt."
-        },
-        "itemError": "Cài đặt của bạn có gì đó sai. Hãy làm lại bước cài đặt để sửa chữa nó. (ᴗ_ ᴗ。)",
-        "doSetup": "Do setup",
-        "errorStatus": {
-          "description": "It seems that one or more items in this setup need your attention.",
-          "title": "Something needs your attention 😱"
-        }
-      },
-      "title": "Kết nối",
-      "workers": {
-        "documentation": "Tài liệu Proxy",
-        "emptyState": "Chưa có workers (｡•́︿•̀｡), thêm ở phía dưới",
-        "label": "Sử dụng các proxy worker tùy chỉnh",
-        "urlLabel": "Worker URLs",
-        "addButton": "Thêm worker mới",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Chỉ cần thiết nếu bạn không thể truy cập TheMovieDB trực tiếp, chẳng hạn như nếu ISP của bạn chặn nó. Khuyên dùng để hủy kích hoạt mục Khám phá để cải thiện hiệu suất với cái này."
-        },
-        "description": "Để làm ứng dụng hoạt động, mọi traffic đều được thông qua proxy. Kích hoạt cái này nếu bạn muốn mang theo workers của riêng bạn. <0>Instructions.</0>"
-      },
-      "server": {
-        "description": "If you would like to connect to a custom backend to store your data, enable this and provide the URL. <0>Instructions.</0>",
-        "label": "Backend Server",
-        "urlLabel": "Custom server URL",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      },
-      "trakt": {
-        "title": "Trakt",
-        "description": "Sync your watchlist and history with Trakt.",
-        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
-        "connect": "Connect Trakt",
-        "syncing": "Syncing...",
-        "disconnect": "Disconnect"
-      }
-    },
-    "preferences": {
-      "lowPerformanceModeDescription": "Tối ưu hóa ứng dụng cho các kết nối và thiết bị chậm hơn bằng cách tắt các tính năng sử dụng nhiều băng thông. Chế độ này giúp giảm mức sử dụng dữ liệu và cải thiện hiệu suất trong khi vẫn giữ nguyên chức năng tìm kiếm và xem phim. ",
-      "sourceOrderDescription": "Kéo và thả để sắp xếp lại các nguồn. Thao tác này sẽ xác định thứ tự các nguồn được kiểm tra cho phương tiện bạn đang cố gắng xem. Nếu một nguồn bị mờ đi, điều đó có nghĩa là <bold>tiện ích mở rộng</bold> là bắt buộc đối với nguồn đó. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
-      "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc. Người dùng có thể bật bằng tiện ích mở rộng trình duyệt, proxy tùy chỉnh hoặc bằng thiết lập mặc định nếu được máy chủ cho phép.",
-      "title": "Preferences",
-      "language": "Application language",
-      "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
-      "thumbnail": "Generate thumbnails",
-      "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
-      "thumbnailLabel": "Generate thumbnails",
-      "autoplay": "Autoplay",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
-    },
-    "appearance": {
-      "options": {
-        "modalDescription": "Hiển thị chi tiết khi bạn nhấp vào thẻ phương tiện thay vì đi đến trang xem. Cần có Proxy hoặc Tiện ích mở rộng cho đoạn giới thiệu. Bị tắt theo mặc định.",
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
-      },
-      "activeTheme": "Active",
-      "themes": {
-        "blue": "Blue",
-        "custom": "Custom",
-        "default": "Default",
-        "gray": "Gray",
-        "red": "Red",
-        "teal": "Teal",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
-      "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
-      },
-      "title": "Appearance",
-      "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
-    },
     "search": {
       "placeholder": "Search settings..."
     },
@@ -1231,6 +1223,190 @@
       },
       "title": "Account"
     },
+    "appearance": {
+      "activeTheme": "Active",
+      "themes": {
+        "blue": "Blue",
+        "custom": "Custom",
+        "default": "Default",
+        "gray": "Gray",
+        "red": "Red",
+        "teal": "Teal",
+        "classic": "Classic",
+        "green": "Green",
+        "mocha": "Mocha",
+        "pink": "Pink",
+        "noir": "Noir",
+        "ember": "Ember",
+        "acid": "Acid",
+        "spark": "Spark",
+        "grape": "Grape",
+        "spiderman": "Spiderman",
+        "forest": "Forest",
+        "wolverine": "Wolverine",
+        "popsicle": "Popsicle",
+        "hulk": "Hulk",
+        "autumn": "Autumn",
+        "cobalt": "Cobalt",
+        "frost": "Frost",
+        "christmas": "Christmas"
+      },
+      "customParts": {
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "tertiary": "Tertiary"
+      },
+      "title": "Appearance",
+      "options": {
+        "discover": "Discover section",
+        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
+        "discoverLabel": "Discover section",
+        "featured": "Featured media",
+        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
+        "featuredLabel": "Featured media",
+        "modal": "Details modal",
+        "modalDescription": "Hiển thị chi tiết khi bạn nhấp vào thẻ phương tiện thay vì đi đến trang xem. Cần có Proxy hoặc Tiện ích mở rộng cho đoạn giới thiệu. Bị tắt theo mặc định.",
+        "modalLabel": "Details modal",
+        "logos": "Image logos",
+        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
+        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
+        "logosLabel": "Image logos",
+        "carouselView": "Carousel view",
+        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
+        "carouselViewLabel": "Carousel view",
+        "minimalCards": "Minimal cards",
+        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
+        "minimalCardsLabel": "Minimal cards",
+        "forceCompactEpisodeView": "Force compact episode view",
+        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
+        "forceCompactEpisodeViewLabel": "Compact episodes",
+        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "pauseOverlay": "Pause overlay",
+        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
+        "pauseOverlayLabel": "Pause overlay"
+      },
+      "sections": {
+        "watching": "Currently Watching",
+        "bookmarks": "Bookmarks"
+      }
+    },
+    "connections": {
+      "server": {
+        "description": "If you would like to connect to a custom backend to store your data, enable this and provide the URL. <0>Instructions.</0>",
+        "label": "Backend Server",
+        "urlLabel": "Custom server URL",
+        "selectBackend": "Select Backend Server",
+        "currentBackend": "Current Backend",
+        "changeWarning": "Changing backend server will log you out. Continue?",
+        "confirm": "Log out and change server",
+        "cancel": "Cancel",
+        "changeWarningTitle": "Change Backend Server",
+        "migration": {
+          "description": "<0>Migrate my data</0> to a new server.",
+          "link": "Migrate my data"
+        },
+        "documentation": "Backend documentation",
+        "error": "Error connecting to backend",
+        "notice": "Your account does NOT sync between backends, so remember which one you use!"
+      },
+      "setup": {
+        "doSetup": "Do setup",
+        "errorStatus": {
+          "description": "It seems that one or more items in this setup need your attention.",
+          "title": "Something needs your attention 😱"
+        },
+        "itemError": "Cài đặt của bạn có gì đó sai. Hãy làm lại bước cài đặt để sửa chữa nó. (ᴗ_ ᴗ。)",
+        "items": {
+          "default": "Cài đặt mặc định",
+          "extension": "Tiện ích mở rộng",
+          "proxy": "Proxy tùy chỉnh",
+          "desktopapp": "Native app"
+        },
+        "redoSetup": "Thiết lập lại",
+        "successStatus": {
+          "description": "Tất cả mọi thứ đã sẵn sàng để bạn bắt đầu xem phương tiện bạn yêu thích. (๑>◡<๑)",
+          "title": "Mọi thứ đã hoàn tất!"
+        },
+        "unsetStatus": {
+          "description": "Xin nhấn vào nút bên phải để bắt đầu quy trình cài đặt.",
+          "title": "Bạn vẫn chưa hoàn thành cài đặt"
+        }
+      },
+      "title": "Kết nối",
+      "workers": {
+        "addButton": "Thêm worker mới",
+        "description": "Để làm ứng dụng hoạt động, mọi traffic đều được thông qua proxy. Kích hoạt cái này nếu bạn muốn mang theo workers của riêng bạn. <0>Instructions.</0>",
+        "documentation": "Tài liệu Proxy",
+        "emptyState": "Chưa có workers (｡•́︿•̀｡), thêm ở phía dưới",
+        "label": "Sử dụng các proxy worker tùy chỉnh",
+        "urlLabel": "Worker URLs",
+        "urlPlaceholder": "https://",
+        "proxyTMDB": {
+          "title": "Proxy TMDB",
+          "description": "Chỉ cần thiết nếu bạn không thể truy cập TheMovieDB trực tiếp, chẳng hạn như nếu ISP của bạn chặn nó. Khuyên dùng để hủy kích hoạt mục Khám phá để cải thiện hiệu suất với cái này."
+        }
+      },
+      "tidb": {
+        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
+        "tokenLabel": "API Key"
+      },
+      "trakt": {
+        "title": "Trakt",
+        "description": "Sync your watchlist and history with Trakt.",
+        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
+        "connect": "Connect Trakt",
+        "syncing": "Syncing...",
+        "disconnect": "Disconnect"
+      }
+    },
+    "preferences": {
+      "title": "Preferences",
+      "language": "Application language",
+      "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
+      "thumbnail": "Generate thumbnails",
+      "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
+      "thumbnailLabel": "Generate thumbnails",
+      "autoplay": "Autoplay",
+      "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc. Người dùng có thể bật bằng tiện ích mở rộng trình duyệt, proxy tùy chỉnh hoặc bằng thiết lập mặc định nếu được máy chủ cho phép.",
+      "autoplayLabel": "Autoplay",
+      "skipCredits": "Skip End Credits",
+      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
+      "skipCreditsLabel": "Skip end credits",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
+      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "lowPerformanceModeDescription": "Tối ưu hóa ứng dụng cho các kết nối và thiết bị chậm hơn bằng cách tắt các tính năng sử dụng nhiều băng thông. Chế độ này giúp giảm mức sử dụng dữ liệu và cải thiện hiệu suất trong khi vẫn giữ nguyên chức năng tìm kiếm và xem phim. ",
+      "lowPerformanceModeLabel": "Low performance mode",
+      "holdToBoost": "Hold to boost speed",
+      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
+      "holdToBoostLabel": "Enable hold to boost",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "sourceOrder": "Reordering sources",
+      "sourceOrderDescription": "Kéo và thả để sắp xếp lại các nguồn. Thao tác này sẽ xác định thứ tự các nguồn được kiểm tra cho phương tiện bạn đang cố gắng xem. Nếu một nguồn bị mờ đi, điều đó có nghĩa là <bold>tiện ích mở rộng</bold> là bắt buộc đối với nguồn đó. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
+      "sourceOrderEnableLabel": "Custom source order",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "autoResumeOnPlaybackError": "Auto resume on playback error",
+      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
+      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "lastSuccessfulSource": "Last used source",
+      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
+      "lastSuccessfulSourceEnableLabel": "Last used source"
+    },
     "reset": "Reset",
     "save": "Save",
     "sidebar": {
@@ -1273,335 +1449,145 @@
     },
     "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
   },
-  "migration": {
-    "loginRequired": "Bạn phải đăng nhập để nhập dữ liệu của bạn! Xin quay lại và đăng nhập để tiếp tục.",
-    "start": {
-      "explainer": "Nếu bạn muốn nhập hoặc sao lưu dữ liệu, bạn cóthể làm điều đó sử dụng những tùy chọn phía dưới. Nó sẽ cho phép bạn giữ dữ liệu của mình khi bạn đổi máy chủ đầu cuối.",
-      "options": {
-        "download": {
-          "description": "Điều này sẽ tải dữ liệu đến thiết bị của bạn. Bạn có thể tải nó lên máy chủ mới hoặc giữ nguyên để bảo mật.",
-          "title": "Tải dữ liệu",
-          "quality": "Nâng cao",
-          "action": "Tải dữ liệu"
-        },
-        "upload": {
-          "quality": "Phục hồi sao lưu",
-          "title": "Tải lên dữ liệu",
-          "description": "Tải lên tệp dữ liệu đã xuất của bạn để phục hồi các trang dấu và quá trình trên tài khoản này.",
-          "action": "Tải lên dữ liệu"
-        },
-        "or": "hoặc",
-        "direct": {
-          "description": "Điều này sẽ nhập trực tiếp dữ liệu của bạn vào máy chủ mới. Đây là cách nhanh nhất. <br /><br />Tùy chọn này cho phép bạn giữ nguyên passphrase!",
-          "title": "Nhập trực tiếp",
-          "quality": "Dễ nhất và nhanh nhất",
-          "action": "Chuyển đổi dữ liệu"
-        }
-      },
-      "title": "Nhập dữ liệu của bạn"
-    },
-    "download": {
-      "description": "Điều này sẽ tải dữ liệu đến thiết bị của bạn. Bạn có thể tải nó lên máy chủ mới hoặc giữ nguyên để bảo mật.",
-      "status": {
-        "success": "Dữ liệu của bạn đã được tải thành công! 🎉",
-        "error": "Tải dữ liệu thất bại. 😿"
-      },
-      "title": "Tải dữ liệu",
-      "items": {
-        "description": "Tải bao gồm:",
-        "bookmarks": "Phương tiện đã đánh dấu",
-        "progress": "Quá trình xem"
-      },
-      "button": {
-        "download": "Tải dữ liệu",
-        "login": "Tiếp tục đăng nhập",
-        "home": "Về trang chính"
-      }
-    },
-    "direct": {
-      "status": {
-        "success": "Dữ liệu của bạn đã được nhập thành công! 🎉",
-        "error": "Nhập dữ liệu thất bại.😿"
-      },
-      "title": "Nhập trực tiếp",
-      "description": "Nhập địa điểm URL cuối để gộp dữ liệu tài khoản hiện tại của bạn đến một đầu cuối mới. Passphrase của bạn vẫn được giữ nguyên!",
-      "recaptchaLabel": "Mã ReCaptcha (Tùy chọn)",
-      "toggleLable": "Cần ReCaptcha?",
-      "backendLabel": "Điểm đến URL cuối",
-      "button": {
-        "home": "Về trang chính",
-        "migrate": "Nhập",
-        "processing": "Đang xử lý...",
-        "login": "Tiếp tục đăng nhập"
-      }
-    },
-    "upload": {
-      "description": "Tải lên tệp dữ liệu đã xuất của bạn để phục hồi các trang dấu và quá trình trên tài khoản này.",
-      "button": {
-        "home": "Tiếp tục về trang chính",
-        "import": "Nhập dữ liệu",
-        "processing": "Đang xử lý...",
-        "success": "Hoàn tất quá trình nhập",
-        "saveLocal": "Save locally"
-      },
-      "title": "Tải lên dữ liệu",
-      "status": {
-        "processing": "Đang xử lý dữ liệu...",
-        "error": "Tải dữ liệu lên thất bại. 😿",
-        "success": "Dữ liệu của bạn đã được tải lên thành công! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Chọn tệp bạn muốn tải lên",
-        "select": "Chọn tệp",
-        "change": "Đổi tệp",
-        "name": "Tên tệp"
-      },
-      "dataPreview": "Xem trước:",
-      "items": {
-        "bookmarks": "Phương tiện đã đánh dấu",
-        "progress": "Quá trình xem"
-      },
-      "exportedOn": "Xuất ra",
-      "previewTitle": "Preview:"
-    },
-    "back": "Quay về",
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    }
-  },
-  "screens": {
-    "loadingUserError": {
-      "reset": "Đặt lại tùy chỉnh máy chủ",
-      "logout": "Logout",
-      "disconnect": "Disconnect from backend",
-      "text": "Failed to load your profile",
-      "reload": "Reload",
-      "textWithReset": "Failed to load your profile from your custom server, want to reset back to the default server?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
-    },
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "Loading application",
-    "loadingUser": "Loading your profile",
-    "migration": {
-      "failed": "Failed to migrate your data. 😿",
-      "inProgress": "Please hold, we are migrating your data. This shouldn't take long..."
-    }
-  },
-  "details": {
-    "releaseDate": "Ngày phát hành:",
-    "resume": "Tiếp tục",
-    "play": "Phát",
-    "runtime": "Thời lượng:",
-    "language": "Ngôn ngữ:",
-    "rating": "Đánh giá:",
-    "tmdb": "Xem trên TMDB",
-    "imdb": "Xem trên IMDb",
-    "episodes": "Tập phim",
-    "seasons": "Mùa phim",
-    "season": "Mùa",
-    "episode": "Tập",
-    "endsAt": "Kết thúc tại {{time}}",
-    "trailer": "Trailer",
-    "votes": "phiếu bầu",
-    "airs": "Phát sóng",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
-  },
-  "downtimeNotice": {
-    "goHome": "Về trang chính",
-    "badge": "Sự cố",
-    "message": "BetaMovie đang gặp sự cố với một số nhà cung cấp một lần nữa, nếu bạn không tìm thấy hoặc không phát được chương trình, vui lòng thay đổi nguồn. Dự kiến lỗi này sẽ tiếp diễn trong thời gian tới.",
-    "title": "Sự cố nhà cung cấp"
-  },
-  "realdebrid": {
-    "description": "Nhập mã API Real Debrid của bạn để truy cập Real Debrid. Cần có tiện ích mở rộng."
-  },
-  "watchParty": {
-    "linkCopied": "Đã sao chép!",
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
-  },
-  "overlays": {
-    "close": "Đóng"
-  },
-  "support": {
-    "title": "Support",
-    "text": "BetaMovie is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>BetaMovie fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "BetaMovie didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>BetaMovie fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
   "discover": {
     "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "movies": "Phim điện ảnh",
+      "tvshows": "Phim truyền hình",
+      "editorpicks": "Lựa chọn của biên tập viên"
     },
     "carousel": {
       "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
+        "loading": "Đang tải...",
+        "movies": "Phim {{category}}",
+        "tvshows": "Phim truyền hình {{category}}",
+        "inCinemas": "Đang chiếu rạp",
+        "popular": "Phổ biến nhất",
+        "nowPlaying": "Đang chiếu rạp",
+        "topRated": "Đánh giá cao nhất",
+        "latestReleases": "Phát hành mới nhất",
+        "4kReleases": "Phát hành 4K",
+        "onTheAir": "Đang phát sóng",
+        "latestTVReleases": "Phim truyền hình mới nhất",
+        "popularOn": "{{type}} phổ biến trên {{provider}}",
+        "editorPicksMovies": "Phim điện ảnh biên tập viên chọn",
+        "editorPicksShows": "Phim truyền hình biên tập viên chọn",
+        "moviesOn": "Phim điện ảnh trên {{provider}}",
+        "tvshowsOn": "Phim truyền hình trên {{provider}}",
+        "recommended": "Vì bạn đã xem: {{title}}",
+        "forYou": "Dành cho bạn",
+        "genreMovies": "Phim điện ảnh thể loại {{genre}}",
+        "genreShows": "Phim truyền hình thể loại {{genre}}",
+        "categoryMovies": "Phim điện ảnh {{category}}",
+        "categoryShows": "Phim truyền hình {{category}}",
         "top10": "Top 10"
       },
-      "change": "Change",
-      "more": "View more"
+      "change": "Thay đổi",
+      "more": "Xem thêm"
     },
     "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
+      "playNow": "Xem ngay",
+      "moreInfo": "Thông tin thêm"
     },
     "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
+      "button": "Xem một nội dung ngẫu nhiên",
+      "cancel": "Hủy đếm ngược",
+      "countdown": "{{countdown}} giây",
+      "nowPlaying": "Đang chiếu",
+      "in": "trong"
     },
     "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
+      "title": "Khám phá Phim & TV",
+      "subtitle": "Khám phá các bản hit mới nhất và các tác phẩm kinh điển vượt thời gian.",
+      "loadMore": "Tải thêm",
+      "loading": "Đang tải...",
+      "back": "Quay lại"
     },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "viewLists": "Xem tất cả danh sách phim",
+    "allLists": "Tất cả danh sách phim",
+    "scrollToTop": "Quay lại đầu trang"
   },
   "fedapi": {
     "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
+      "title": "Token Febbox",
+      "description": "Sử dụng tài khoản Febbox MIỄN PHÍ của riêng bạn để truy cập FED API, nguồn tốt nhất với chất lượng 4K, Dolby Atmos, bỏ qua giới thiệu và thời gian tải nhanh nhất! Tùy chọn cực kỳ được khuyến khích!"
     },
     "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
+      "title": "Để lấy UI token của bạn:",
+      "showVideo": "Hiển thị video hướng dẫn",
+      "hideVideo": "Ẩn video hướng dẫn",
       "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
+        "1": "1. Truy cập <0>febbox.com</0> và đăng nhập bằng Google (nên dùng tài khoản mới!)",
+        "2": "2. Mở DevTools hoặc kiểm tra trang (Inspect)",
+        "3": "3. Chuyển đến tab Application → Cookies",
+        "4": "4. Sao chép giá trị của cookie 'ui'.",
+        "5": "5. Đóng tab, nhưng ĐỪNG đăng xuất!"
       },
       "tokenLabel": "Token",
       "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
+        "button": "(Ví dụ)",
+        "title": "Token ví dụ",
+        "description": "Đây là giao diện của một Febbox UI token:",
+        "warning": "Đừng thử dùng, nó là giả đó.",
+        "close": "Đã hiểu"
       },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
+      "traffic": "{{used}} / {{limit}} Lưu lượng tốc độ cao • Reset sau {{reset}}",
+      "trafficExplanation": "Febbox cung cấp cho bạn 100GB/tháng lưu lượng tốc độ cao, các luồng có thể bị buffer nhiều hơn sau khi bạn dùng hết hạn mức. Phụ thuộc vào tốc độ internet và chất lượng của luồng phát.",
+      "useMp4": "Bật luồng MP4. Có thể nhanh hơn ở bên ngoài Hoa Kỳ, nhưng không thể thay đổi bản âm thanh."
     },
     "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
+      "success": "thành công",
+      "api_down": "Không thể kết nối với FED API!",
+      "invalid_token": "Không thể lấy luồng 'VIP'. Token của bạn không hợp lệ!"
     }
   },
   "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
+    "title": "Debrid (Thử nghiệm)",
+    "description": "Nhập mã API Debrid của bạn để truy cập các dịch vụ Debrid. Yêu cầu tài khoản <0>Real-Debrid</0> hoặc <1>TorBox</1> có trả phí!",
+    "notice": "Lưu ý: Tính năng này có thể không hoạt động trên tất cả trình duyệt, hãy dùng Chromium để có khả năng tương thích tốt nhất. Nếu không nghe thấy âm thanh, hãy đổi nguồn khác. :(",
+    "tokenLabel": "Mã API",
     "serviceOptions": {
       "realdebrid": "Real Debrid",
       "torbox": "TorBox"
     },
     "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
+      "failure": "Kết nối với Debrid thất bại. Vui lòng kiểm tra mã API của bạn.",
+      "api_down": "Hệ thống có chút trục trặc. Vui lòng thử lại sau.",
+      "invalid_token": "Mã API không hợp lệ hoặc tài khoản không phải premium. Debrid yêu cầu tài khoản premium."
     }
+  },
+  "watchParty": {
+    "status": {
+      "inSync": "Đã đồng bộ",
+      "outOfSync": "Mất đồng bộ"
+    },
+    "alone": "Một mình",
+    "withCount": "Với {{count}} người khác",
+    "isHost": "Đang làm chủ phòng trên <0>{{backendName}}</0>",
+    "isGuest": "Đang xem với tư cách khách trên <0>{{backendName}}</0>",
+    "hosting": "Đang làm chủ phòng",
+    "watching": "Đang xem",
+    "syncing": "Đang đồng bộ...",
+    "behindHost": "Chậm hơn chủ phòng {{seconds}} giây",
+    "aheadOfHost": "Nhanh hơn chủ phòng {{seconds}} giây",
+    "showStatusOverlay": "Hiển thị lớp phủ trạng thái",
+    "leaveWatchParty": "Rời buổi tiệc xem",
+    "shareCode": "Chia sẻ mã này với bạn bè (nhấn để sao chép liên kết)",
+    "connectedAsGuest": "Đã kết nối với buổi tiệc xem với tư cách khách",
+    "hostParty": "Tổ chức buổi tiệc xem",
+    "joinParty": "Tham gia buổi tiệc xem",
+    "viewers": "Người xem ({{count}})",
+    "copyCode": "Nhấn để sao chép",
+    "join": "Tham gia",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "emptyRoom": "Chưa có ai trong phòng này",
+    "noHost": "Không có chủ phòng trong buổi tiệc xem này",
+    "invalidRoom": "Không thể kết nối với phòng này",
+    "contentMismatch": "Không thể tham gia buổi tiệc xem: Nội dung không khớp với chủ phòng.",
+    "episodeMismatch": "Không thể tham gia buổi tiệc xem: Bạn đang xem tập khác với chủ phòng.",
+    "validating": "Đang xác thực buổi tiệc xem...",
+    "linkCopied": "Đã sao chép!",
+    "backendRequirement": "Tất cả người dùng phải sử dụng cùng một máy chủ backend",
+    "activeBackend": "Backend đang hoạt động: {{backend}}"
   }
 }

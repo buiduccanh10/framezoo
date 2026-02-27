@@ -1,24 +1,148 @@
 {
   "about": {
     "description": "BetaMovie என்பது இணையத்தில் ஸ்ட்ரீம்களைத் தேடும் ஒரு வலைப் பயன்பாடு ஆகும். உள்ளடக்கத்தை உட்கொள்வதற்கான ஒரு சிறிய அணுகுமுறையை குழு நோக்கமாகக் கொண்டுள்ளது.",
+    "help": "Can't find an answer? <0>Get support here.</0>",
     "faqTitle": "பொதுவான கேள்விகள்",
+    "searchPlaceholder": "Search FAQ...",
+    "sections": {
+      "general": "General",
+      "search": "Search & Content Availability",
+      "playback": "Playback Issues",
+      "connections": "Connections",
+      "language": "Language & Subtitle Settings"
+    },
     "q1": {
+      "title": "பதிவு எங்கிருந்து வருகிறது?",
       "body": "மூவி வெப் எந்தவொரு பதிவுகளையும் வழங்குவதில்லை. நீங்கள் ஒரு காட்சியை தேர்ந்தெடுத்து காண விரும்பும் போது அதற்கான பதிவை இணையத்தில் உள்ள பல்வேறு தளங்களில் இருந்து தேடி உங்களுக்கு வழங்குகிறது. பதிவுகள் ஒரு போதும் மூவி வெப் மூலம் பதிவேற்றப்படுவது இல்லை. நீங்கள் காணும் அனைத்து காட்சிகளும் தேடு பொறி முறையின் சிறப்பம்சத்தின் மூலமாகவே உங்களுக்கு வழங்கப்படுகிறது.",
-      "title": "பதிவு எங்கிருந்து வருகிறது?"
+      "section": "general"
     },
     "q2": {
+      "title": "ஒரு தொடர் அல்லது திரைப்படத்தை நான் எங்கே கோருவது?",
       "body": "ஒரு திரைப்படம் அல்லது தொடரை உங்களால் நேரடியாக கோர முடியாது. மூவி வெப் எந்த ஒரு பதிவுகளையும் நிர்வகிப்பதில்லை. அணைத்து பதிவுகளும் இணையத்தில் உள்ள தளங்களின் வழியாகவே உங்களுக்கு அளிக்கப்படுகின்றது.",
-      "title": "ஒரு தொடர் அல்லது திரைப்படத்தை நான் எங்கே கோருவது?"
+      "section": "search"
     },
     "q3": {
+      "title": "தேடல் முடிவுகள் திரைப்படம் அல்லது தொடரை காட்டுகிறது. ஆனால், ஏன் என்னால் அதை பார்க்க முடியவில்லை?",
       "body": "எங்கள் தேடல் முடிவுகள் The Movie Database (TMDB) தரவு தளம் மூலம் வழங்கப்படுகிறது. தேடல் முடிவுகள் தேடலுக்கான பதிவுகளை கட்டாயம் உள்ளடக்கி இருக்கும் என்பதை உறுதியாக கூற இயலாது.",
-      "title": "தேடல் முடிவுகள் திரைப்படம் அல்லது தொடரை காட்டுகிறது. ஆனால், ஏன் என்னால் அதை பார்க்க முடியவில்லை?"
+      "section": "search"
+    },
+    "q4": {
+      "title": "What about my data and stuff?",
+      "body": "All data is synced to the community backend, anyone is free to use this as well.",
+      "section": "general"
+    },
+    "q5": {
+      "title": "How can I find out more?",
+      "body": "BetaMovie has a Fluxer server that can be found at the header of this page!",
+      "section": "general"
+    },
+    "q6": {
+      "title": "Is there a BetaMovie app?",
+      "body": "Yes! We now have an official desktop app available for download! https://github.com/BetaMovie/BetaMovie-desktop/releases",
+      "section": "general"
+    },
+    "q7": {
+      "title": "How do I make an account?",
+      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
+      "section": "general"
+    },
+    "q9": {
+      "title": "This media is missing / Can I request media?",
+      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
+      "section": "search"
+    },
+    "q10": {
+      "title": "I can't find the movie/show I'm searching for!",
+      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
+      "section": "search"
+    },
+    "q11": {
+      "title": "Why am I seeing a black screen?",
+      "body": "Likely a corrupt or broken video file. Try switching sources.",
+      "section": "playback"
+    },
+    "q12": {
+      "title": "The episode I'm watching is incorrect.",
+      "body": "Switch to a different source. We don't control any content or episode accuracy.",
+      "section": "playback"
+    },
+    "q13": {
+      "title": "The video quality isn't what I expected.",
+      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
+      "section": "playback"
+    },
+    "q14": {
+      "title": "4K isn't available.",
+      "body": "If 4K is not shown, it's likely unavailable from that source.",
+      "section": "playback"
+    },
+    "q15": {
+      "title": "Why is there no audio?",
+      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
+      "section": "playback"
+    },
+    "q16": {
+      "title": "The video is tinted or washed out.",
+      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
+      "section": "playback"
+    },
+    "q17": {
+      "title": "I'm experiencing visual glitches.",
+      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
+      "section": "playback"
+    },
+    "q18": {
+      "title": "The source is loading slowly.",
+      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
+      "section": "playback"
+    },
+    "q19": {
+      "title": "How do I switch sources?",
+      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
+      "section": "playback"
+    },
+    "q20": {
+      "title": "What is FED API?",
+      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
+      "section": "connections"
+    },
+    "q21": {
+      "title": "Does FED API work on all devices?",
+      "body": "Yes. Once set up, your token works across all devices!",
+      "section": "connections"
+    },
+    "q22": {
+      "title": "Why do I need the extension or custom proxy?",
+      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
+      "section": "connections"
+    },
+    "q23": {
+      "title": "What is the extension? Is it safe?",
+      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
+      "section": "connections"
+    },
+    "q24": {
+      "title": "My febbox token fails during setup. What should I do?",
+      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
+      "section": "connections"
+    },
+    "q25": {
+      "title": "How do I change languages?",
+      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
+      "section": "language"
+    },
+    "q26": {
+      "title": "My subtitles aren't in sync.",
+      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
+      "section": "language"
     },
     "title": "BetaMovie பற்றி"
   },
   "actions": {
     "copied": "நகலெடுக்கப்பட்டது",
-    "copy": "நகல்"
+    "copy": "நகல்",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "auth": {
     "createAccount": "கணக்கு இல்லையா? <0>புதிய கணக்கை உருவாக்குங்கள்</0>",
@@ -28,7 +152,14 @@
       "description": "தங்கள் கடவுச்சொற்றொடரே தங்களது பயனர் பெயர் மற்றும் கடவுச்சொல். கணக்கினுள் நுழைய அதனை பாதுகாப்பாக வைத்திருங்கள்",
       "next": "கடவுச்சொற்றொடரை சேமித்துவிட்டேன்",
       "passphraseFrameLabel": "கடவுச்சொற்றொடர்",
-      "title": "உங்கள் கடவுச்சொற்றொடர்"
+      "title": "உங்கள் கடவுச்சொற்றொடர்",
+      "custom": "Custom",
+      "customPassphraseLabel": "Custom Passphrase",
+      "customPassphrasePlaceholder": "Enter your custom passphrase",
+      "useCustomPassphrase": "Use Custom Passphrase",
+      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
+      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
+      "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "ஏற்கனவே ஒரு கணக்கு உள்ளதா? <0>இங்கே உள்நுழைக. </0>",
     "login": {
@@ -38,7 +169,10 @@
       "passphrasePlaceholder": "கடவுச்சொற்றொடர்",
       "submit": "புகுபதிகை",
       "title": "உங்கள் கணக்கில் உள்நுழைக",
-      "validationError": "தவறான அல்லது முழுமையற்ற கடவுச்சொற்றொடர்"
+      "validationError": "தவறான அல்லது முழுமையற்ற கடவுச்சொற்றொடர்",
+      "usePasskey": "Use passkey",
+      "or": "or",
+      "noBackendUrl": "No backend URL"
     },
     "register": {
       "information": {
@@ -50,11 +184,23 @@
         "title": "கணக்கு விவரம்"
       }
     },
+    "backendSelection": {
+      "title": "Select Account Server",
+      "description": "Choose which backend server to connect to",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "active": "Active",
+      "selecting": "Selecting..."
+    },
     "trust": {
       "failed": {
         "text": "நீங்கள் அதை சரியாக உள்ளமைத்தீர்களா?",
         "title": "சர்வரை தொடர்பு கொள்ள முடியவில்லை"
       },
+      "noHostTitle": "Server not configured!",
+      "noHost": "The server has not been configured, therefore you cannot create an account",
       "host": "நீங்கள் <0>{{hostname}}</0> உடன் இணைக்கப்படுகிறீர்கள். கணக்கை உருவாக்கும் முன் சரியான தகவல் தானா எனபதை உறுதி செய்து கொள்ளவும்",
       "no": "பின்செல்",
       "title": "நீங்கள் இந்த சர்வரை நம்புகிறீர்களா?",
@@ -67,7 +213,10 @@
       "passphraseLabel": "உங்களின் 12-சொல் கடவுச்சொற்றொடர்",
       "recaptchaFailed": "ReCaptcha சரிபார்ப்பு தோல்வியடைந்தது",
       "register": "கணக்கை உருவாக்கு",
-      "title": "கடவுச்சொற்றொடரை உறுதி செய்க"
+      "title": "கடவுச்சொற்றொடரை உறுதி செய்க",
+      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
+      "authenticatePasskey": "Authenticate with Passkey",
+      "passkeyError": "Passkey verification failed"
     }
   },
   "errors": {
@@ -85,7 +234,9 @@
     "links": {
       "fluxer": "Fluxer",
       "legal": "Legal / DMCA",
-      "github": "GitHub"
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "funding": "Support us"
     },
     "tagline": "இந்த ஓப்பன் சோர்ஸ் (Open Source) இணைய தளம் மூலம் உங்களுக்குப் பிடித்த தொடர்களையும் திரைப்படங்களையும் பார்க்கலாம்."
   },
@@ -94,31 +245,195 @@
     "pages": {
       "about": "தெரிந்து கொள்ள",
       "legal": "Legal / DMCA",
+      "discover": "Discover",
+      "support": "Support",
       "login": "புகுபதிகை",
       "onboarding": "அமை",
       "pagetitle": "{{title}} - மூவி- வெப்",
       "register": "பதிவு",
-      "settings": "அமைப்புகள்"
+      "settings": "அமைப்புகள்",
+      "migration": "Migrate Account",
+      "jip": "Jip"
+    },
+    "keyboardShortcuts": {
+      "title": "Keyboard Shortcuts",
+      "subtitle": "Hold ` to show this help anytime",
+      "groups": {
+        "videoPlayback": "Video Playback",
+        "jumpToPosition": "Jump to Position",
+        "audioVideo": "Audio & Video",
+        "subtitlesAccessibility": "Subtitles & Accessibility",
+        "interface": "Interface"
+      },
+      "shortcuts": {
+        "playPause": "Play/pause (or hold for 2x speed when enabled)",
+        "playPauseAlt": "Play/pause",
+        "skipForward5": "Skip forward 5 seconds",
+        "skipBackward5": "Skip backward 5 seconds",
+        "skipBackward10": "Skip backward 10 seconds",
+        "skipForward10": "Skip forward 10 seconds",
+        "skipForward1": "Skip forward 1 second",
+        "skipBackward1": "Skip backward 1 second",
+        "jumpTo0": "Jump to 0% (beginning)",
+        "jumpTo9": "Jump to 90%",
+        "increaseVolume": "Increase volume",
+        "decreaseVolume": "Decrease volume",
+        "mute": "Mute/unmute",
+        "changeSpeed": "Increase/decrease playback speed",
+        "toggleFullscreen": "Toggle fullscreen",
+        "toggleCaptions": "Toggle captions",
+        "randomCaption": "Select random caption from last used language",
+        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
+        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleNativeSubtitles": "Toggle native subtitles",
+        "barrelRoll": "Do a barrel roll! 🌀",
+        "closeOverlay": "Close overlay/modal",
+        "nextEpisode": "Next episode",
+        "previousEpisode": "Previous episode",
+        "widescreenMode": "to toggle the widescreen button visibility",
+        "copyLinkWithTime": "+ click the title to copy the link with time"
+      },
+      "conditions": {
+        "notInWatchParty": "Not in watch party",
+        "showsOnly": "Shows only"
+      },
+      "editInSettings": "Edit keyboard commands from settings",
+      "clickToEdit": "Click on a key badge to edit it",
+      "conflict": "conflict",
+      "conflicts": "conflicts",
+      "detected": "detected",
+      "resetAllToDefault": "Reset All to Default",
+      "pressKey": "Press a key...",
+      "none": "None",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "resetToDefault": "Reset to default",
+      "numberKeySeeking": "Number key progress seeking",
+      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "குறிப்புகள்"
+      "sectionTitle": "குறிப்புகள்",
+      "showAll": "Show all",
+      "groups": {
+        "dropdown": {
+          "placeholderButton": "Add to group",
+          "empty": "No groups yet",
+          "removeFromGroup": "Remove from group",
+          "removeAll": "Remove all"
+        },
+        "reorder": {
+          "button": "Reorder",
+          "done": "Done",
+          "title": "Edit Group Order",
+          "description": "Drag and drop to reorder your bookmark groups",
+          "cancel": "Cancel",
+          "save": "Save"
+        },
+        "editGroup": {
+          "title": "Edit Group",
+          "description": "Edit the name and icon of your bookmark group",
+          "cancel": "Cancel",
+          "save": "Save",
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group"
+        }
+      },
+      "edit": {
+        "title": "Edit Bookmark",
+        "description": "Edit the details for this bookmark",
+        "cancel": "Cancel",
+        "save": "Save",
+        "groupsLabel": "Groups",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter a title for your bookmark",
+        "yearLabel": "Year",
+        "yearPlaceholder": "Enter a year for your bookmark"
+      },
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
     },
     "continueWatching": {
-      "sectionTitle": "தொடர்ந்து பார்க்க"
+      "sectionTitle": "தொடர்ந்து பார்க்க",
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
     },
     "mediaList": {
       "stopEditing": "திருத்துவதை நிறுத்து"
+    },
+    "watchHistory": {
+      "sectionTitle": "Watch History",
+      "recentlyWatched": "Recently Watched"
     },
     "search": {
       "allResults": "மேலும் எங்களிடம் இல்லை!",
       "failed": "மீடியாவைக் கண்டறிய முடியவில்லை, மீண்டும் முயலவும்!",
       "loading": "Loading...",
       "noResults": "எங்களால் எதையும் கண்டுபிடிக்க இயலவில்லை!",
-      "sectionTitle": "தேடல் முடிவுகள்"
+      "placeholder": {
+        "default": "What do you want to watch?",
+        "extra": [
+          "What are you in the mood for?",
+          "Should we delete your browser history?",
+          "What do you want to stream?",
+          "BetaMovie is the best site ever!",
+          "What's on your watchlist today?",
+          "How was your day?",
+          "My bad the site never works...",
+          "Isn't BetaMovie just the best?",
+          ">ᴗ<"
+        ]
+      },
+      "empty": {
+        "default": "Welcome, find media to watch here!",
+        "extra": [
+          "There's nothing here :(",
+          "So empty...",
+          "Such emptiness.",
+          "Hi new user :3"
+        ]
+      },
+      "sectionTitle": "தேடல் முடிவுகள்",
+      "discoverMore": "Discover more",
+      "discover": "Discover"
+    },
+    "mediaCard": {
+      "moreInfo": "More Info",
+      "copyLink": "Copy Link",
+      "close": "Close"
     },
     "titles": {
+      "69": {
+        "default": "Up for something spicy?",
+        "extra": [
+          "Happy 69 day 😘!"
+        ]
+      },
+      "420": {
+        "default": "What would you like to watch this 4/20?",
+        "extra": [
+          "Happy 4/20 🥳!"
+        ]
+      },
       "day": {
         "default": "மதிய வணக்கம். தற்போது என்ன காண விரும்புகிறீர்கள்?",
         "extra": [
@@ -127,20 +442,171 @@
       },
       "morning": {
         "default": "காலை வணக்கம். தற்போது என்ன காண விரும்புகிறீர்கள்?",
-        "extra": ["சூரிய உதயத்திற்கு முன் நல்லது என்று கேள்விப்படுகிறேன்"]
+        "extra": [
+          "சூரிய உதயத்திற்கு முன் நல்லது என்று கேள்விப்படுகிறேன்"
+        ]
       },
       "night": {
         "default": "இன்றைய இரவு என்ன காண விரும்புகிறீர்கள்?",
-        "extra": ["சோர்வாக உள்ளீர்களா? Exorcist திரைப்படம் காணுங்கள்."]
+        "extra": [
+          "சோர்வாக உள்ளீர்களா? Exorcist திரைப்படம் காணுங்கள்."
+        ]
+      },
+      "halloween": {
+        "default": "What spooky movie would you like to watch this Halloween?",
+        "extra": [
+          "Happy Halloween! 🎃👻",
+          "Boo! 👻",
+          "Trick or treat! 🍬",
+          "It's the Great Pumpkin, Charlie Brown!"
+        ]
       }
+    },
+    "support": {
+      "title": "BetaMovie needs your help!",
+      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "moreInfo": "More info",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "fluxer": "Fluxer",
+      "thankYou": "Thank you for your support!",
+      "donate": "Donate",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "complete": "complete"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
+    "unreleased": "Unreleased",
     "types": {
       "movie": "திரைப்படம்",
       "show": "காட்சி"
+    },
+    "episodeShort": "E",
+    "seasonShort": "S",
+    "seasonWatched": "Are you sure you want to mark the season as watched?",
+    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
+  },
+  "details": {
+    "resume": "Resume",
+    "play": "Play",
+    "runtime": "Runtime:",
+    "language": "Language:",
+    "releaseDate": "Release Date:",
+    "rating": "Rating:",
+    "votes": "votes",
+    "tmdb": "View on TMDB",
+    "imdb": "View on IMDb",
+    "episodes": "Episodes",
+    "seasons": "Season/s",
+    "season": "Season",
+    "episode": "Episode",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
+    "airs": "Airs",
+    "endsAt": "Ends at {{time}}",
+    "trailer": "Trailer",
+    "trailers": "Trailers",
+    "similar": "Similar",
+    "collection": {
+      "movies": "Movies",
+      "movie": "Movie",
+      "sortBy": "Sort by",
+      "releaseDate": "Release Date",
+      "rating": "Rating"
     }
+  },
+  "migration": {
+    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
+    "start": {
+      "title": "Migrate your data",
+      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
+      "options": {
+        "or": "or",
+        "direct": {
+          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
+          "title": "Direct migration",
+          "quality": "Easiest and fastest",
+          "action": "Transfer data"
+        },
+        "download": {
+          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
+          "title": "Download data",
+          "quality": "More technical",
+          "action": "Download data"
+        },
+        "upload": {
+          "title": "Upload Data",
+          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+          "quality": "Restore from backup",
+          "action": "Upload Data"
+        }
+      }
+    },
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "uploadDescription": "Data to upload:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      }
+    },
+    "direct": {
+      "title": "Direct migration",
+      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
+      "backendLabel": "Destination Backend URL",
+      "recaptchaLabel": "ReCaptcha Key (Optional)",
+      "toggleLable": "Needs ReCaptcha?",
+      "status": {
+        "error": "Failed to migrate your data. 😿",
+        "success": "Your data has been migrated successfully! 🎉"
+      },
+      "button": {
+        "migrate": "Migrate",
+        "processing": "Processing...",
+        "home": "Go home",
+        "login": "Continue to login"
+      }
+    },
+    "download": {
+      "title": "Download data",
+      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
+      "status": {
+        "error": "Failed to download your data. 😿",
+        "success": "Your data has been downloaded successfully! 🎉"
+      },
+      "button": {
+        "download": "Download data",
+        "home": "Go home",
+        "login": "Continue to login"
+      }
+    },
+    "upload": {
+      "title": "Upload data",
+      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "status": {
+        "processing": "Processing data...",
+        "error": "Failed to upload your data. 😿",
+        "success": "Your data has been uploaded successfully! 🎉",
+        "successLocal": "Your data has been saved locally! 🎉"
+      },
+      "file": {
+        "description": "Select the file you want to upload",
+        "select": "Select file",
+        "change": "Change file",
+        "name": "File name"
+      },
+      "exportedOn": "Exported on",
+      "previewTitle": "Preview:",
+      "button": {
+        "import": "Import data",
+        "processing": "Processing...",
+        "success": "Import complete",
+        "home": "Continue to home",
+        "saveLocal": "Save locally"
+      }
+    },
+    "back": "Go back"
   },
   "navigation": {
     "banner": {
@@ -151,20 +617,31 @@
       "logout": "வெளியேறு",
       "register": "இணைய கணக்கோடு ஒத்திசை (Sync to Cloud)",
       "settings": "அமைப்புகள்",
-      "support": "உதவி மையம்"
+      "support": "உதவி மையம்",
+      "discover": "Discover",
+      "development": "Development",
+      "desktop": "App Settings"
     }
   },
   "notFound": {
     "badge": "கிடைக்கவில்லை",
     "goHome": "முகப்பிற்குச் செல்",
+    "reloadButton": "Try again",
     "message": "எங்களால் இயன்றவரை தேடினோம். ஆனால் உங்களுக்கான பக்கத்தை கண்டுபிடிக்க இயலவில்லை.",
     "title": "உங்களுக்கான பக்கத்தை கண்டுபிடிக்க இயலவில்லை"
+  },
+  "downtimeNotice": {
+    "badge": "Issues",
+    "goHome": "Go home",
+    "message": "BetaMovie is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
+    "title": "Provider issues"
   },
   "onboarding": {
     "defaultConfirm": {
       "cancel": "ரத்து செய்",
       "confirm": "இயல்புநிலை அமைப்பைப் பயன்படுத்தவும்",
       "description": "இயல்புநிலை அமைப்பில் உள்ள தரவுகள் சிறந்த அனுபவத்தை வழங்க உகந்தவை அல்ல. மேலும், இவை மிகவும் மெதுவான இணைய வேகத்தையே கொண்டிருக்கும்.",
+      "tip": "It's recommended to set up the extension and/or FED API!",
       "title": "உறுதி செய்யலாமா?"
     },
     "extension": {
@@ -174,6 +651,8 @@
       "extensionHelp": "நீங்கள் நீட்டிப்பை நிறுவியிருந்தும் அது கண்டறியப்படவில்லை எனில், <bold>உங்கள் உலாவி நீட்டிப்பு மெனு மூலம் நீட்டிப்பைத் திறந்து</bold> திரையில் உள்ள படிகளைப் பின்பற்றவும்.",
       "linkChrome": "Chrome நீட்டிப்பை நிறுவவும்",
       "linkFirefox": "Firefox நீட்டிப்பை நிறுவவும்",
+      "linkUserscript": "Alternative Userscript",
+      "userscriptNote": "(The extension is more reliable than the userscript!)",
       "notDetecting": "Chrome இல் நிறுவப்பட்டு விட்டது, ஆனால் தளம் அதைக் கண்டறியவில்லையா? பக்கத்தை மீண்டும் இயக்கி (Reload) முயற்சிக்கவும்!",
       "notDetectingAction": "பக்கத்தை மீண்டும் இயக்கு",
       "status": {
@@ -203,7 +682,43 @@
     },
     "start": {
       "explainer": "சிறந்த ஸ்ட்ரீம்களைப் பெற, நீங்கள் எந்த ஸ்ட்ரீமிங் முறையைப் பயன்படுத்த விரும்புகிறீர்கள் என்பதை நீங்கள் தேர்வு செய்ய வேண்டும்.",
+      "moreInfo": {
+        "button": "Which setup should I choose?",
+        "title": "Understanding a setup",
+        "explainer": {
+          "intro": "BetaMovie doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
+          "options": "Your Options:",
+          "extension": "Extension",
+          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
+          "proxy": "Proxy",
+          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
+          "default": "Default Setup",
+          "defaultDescription": "Uses BetaMovie's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
+          "fedapi": {
+            "fedapi": "Additional: Febbox token",
+            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
+          },
+          "outro": "If you have more questions on how this works, feel free to ask on the <0>BetaMovie Fluxer</0> server!"
+        },
+        "recommended": {
+          "title": "Not sure what to choose?",
+          "subtitle": "Recommended Configurations:",
+          "desktop": {
+            "title": "Desktop:",
+            "description": "Extension (or app) + Febbox token"
+          },
+          "iOS": {
+            "title": "iOS:",
+            "description": "Custom proxy + Febbox token"
+          },
+          "android": {
+            "title": "Android:",
+            "description": "Extension + Febbox token"
+          }
+        }
+      },
       "options": {
+        "or": "or",
         "default": {
           "text": "எனக்கு நல்ல தரமான ஸ்ட்ரீம்கள் வேண்டாம்,<0 /> <1>இயல்புநிலை அமைப்பைப் பயன்படுத்தவும்</1>"
         },
@@ -213,11 +728,20 @@
           "quality": "சிறந்த தரம்",
           "title": "உலாவி நீட்டிப்பு"
         },
+        "desktopapp": {
+          "action": "Install Desktop app",
+          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
+          "quality": "Best quality + Even more sources",
+          "title": "BetaMovie Desktop app"
+        },
         "proxy": {
           "action": "Proxy யை அமைக்கவும்",
           "description": "வெறும் 5 நிமிடங்களில் Proxy யை அமைத்து, சிறந்த தரவுகளை பெறுங்கள்.",
           "quality": "நல்ல தரம்",
           "title": "தனிப்பட்ட Proxy"
+        },
+        "addons": {
+          "title": "Additional sources:"
         }
       },
       "title": "உங்களின் மூவி-வெப் அமைப்பை நிறுவலாம் வாருங்கள்"
@@ -232,14 +756,23 @@
       "short": "பின் செல்"
     },
     "casting": {
+      "to": "Casting to {{device}} 📺",
+      "device": "device",
       "enabled": "சாதனத்தின் வழி திரையிடப்படுகிறது..."
     },
     "menus": {
       "downloads": {
-        "copyHlsPlaylist": "HLS Playlist link யை காப்பி செய்யவும்",
+        "button": "Attempt download",
+        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
         "disclaimer": "பதிவிறக்கங்கள் வழங்குநரிடமிருந்து நேரடியாக வழங்கப்படுகின்றன. பதிவிறக்கங்கள் எவ்வாறு வழங்கப்படுகின்றன என்பதை மூவி-வெப் கட்டுப்படுத்தாது.",
+        "copyHlsPlaylist": "HLS Playlist link யை காப்பி செய்யவும்",
         "downloadSubtitle": "தற்போதைய வசனத்தைப் பதிவிறக்கவும்",
         "downloadVideo": "Video வை பதிவிறக்கம் செய்",
+        "openIn": "Open in...",
+        "vlc": "VLC",
+        "iina": "IINA",
+        "outplayer": "Outplayer",
+        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "பதிவிறக்கங்கள் வழங்குநரிடமிருந்து நேரடியாக எடுக்கப்படுகின்றன. பதிவிறக்கங்கள் எவ்வாறு வழங்கப்படுகின்றன என்பதை மூவி-வெப் கட்டுப்படுத்தவில்லை.<br /><br />நீங்கள் HLS Playlist யை பதிவிறக்குகிறீர்கள் என்பதை நினைவில் கொள்ளவும், <bold> Advanced streaming formats பற்றி நீங்கள் அறிந்து இருக்கவில்லையென்றால் பதிவிறக்கம் செய்ய உங்களை நாங்கள் பரிந்துரைக்கவில்லை. </bold>. வெவ்வேறு வடிவங்கள் அல்லது வெவ்வேறு ஆதாரங்களை முயற்சிக்கவும்.",
         "onAndroid": {
           "1": "Android இல் பதிவிறக்க, பதிவிறக்க பொத்தானைக் கிளிக் செய்து, புதிய பக்கத்தில், வீடியோ வின் மீது <bold>tap and hold</bold>கிளிக் செய்யவும், பின்னர் <bold>save</bold> என்பதைத் தேர்ந்தெடுக்கவும்.",
@@ -265,29 +798,49 @@
         "loadingError": "தொடரை திரையிட முடியவில்லை",
         "loadingList": "திரையிடப்படுகிறது...",
         "loadingTitle": "திரையிடப்படுகிறது...",
-        "unairedEpisodes": "இந்த Season இல் ஒன்று அல்லது அதற்கு மேற்பட்ட Episode கள் இன்னும் ஒளிபரப்பப்படாததால் அவை முடக்கப்பட்டுள்ளன."
+        "unairedEpisodes": "இந்த Season இல் ஒன்று அல்லது அதற்கு மேற்பட்ட Episode கள் இன்னும் ஒளிபரப்பப்படாததால் அவை முடக்கப்பட்டுள்ளன.",
+        "seasons": "Seasons",
+        "showMore": "Show more",
+        "showLess": "Show less",
+        "markAsWatched": "Mark as watched",
+        "markAsUnwatched": "Mark as unwatched",
+        "markAsFavorite": "Mark as favorite",
+        "favorites": "Favorites",
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
       },
       "playback": {
         "speedLabel": "காட்சி பின்னணி வேகம்",
-        "title": "காட்சி பின்னணி அமைப்புகள்"
+        "title": "காட்சி பின்னணி அமைப்புகள்",
+        "disabled": "(Disabled in watch party)",
+        "speedBoosted": "2x",
+        "speedUnboosted": "{{speed}}x"
       },
       "quality": {
         "automaticLabel": "இயல்பான தரம்",
         "hint": "வெவ்வேறு தர விருப்பங்களைப் பெற <0>switching source</0> தெரிவு செய்யலாம்.",
         "iosNoQuality": "Apple நிறுவனத்தின் வரையறுக்கப்பட்ட வரம்புகள் காரணமாக, இந்த Source இன் தரமான தேர்வு iOS இயங்கு தளத்தில் வழங்க இயலவில்லை. வெவ்வேறு தர விருப்பங்களைப் பெற, <0>switching to another source</0> தெரிவு செய்யவும்.",
-        "title": "தரம்"
+        "title": "தரம்",
+        "auto": "Auto"
       },
       "settings": {
         "downloadItem": "பதிவிறக்கம்",
         "enableSubtitles": "வசனங்களை இயக்கு",
         "experienceSection": "பார்க்கும் அனுபவம்",
         "playbackItem": "காட்சி பின்னணி அமைப்புகள்",
+        "audioItem": "Audio",
         "qualityItem": "தரம்",
         "sourceItem": "வீடியோ ஆதாரங்கள்",
         "subtitleItem": "வசன அமைப்புகள்",
         "videoSection": "வீடியோ அமைப்புகள்"
       },
       "sources": {
+        "extensionHint": {
+          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
+          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
+          "setupButton": "Setup Extension",
+          "moreSources": "Want more sources? Setup the Extension.",
+          "installButton": "Install Extension Now"
+        },
         "failed": {
           "text": "வீடியோக்களை கண்டுபிடிக்க முயற்சிக்கும் போது பிழை ஏற்பட்டுள்ளது , வேறு ஆதாரங்களை முயற்சிக்கவும்.",
           "title": "Scrape செய்ய முடியவில்லை"
@@ -301,19 +854,58 @@
           "title": "தரவு கிடைக்கப்பெறவில்லை"
         },
         "title": "தரவு தளங்கள்",
-        "unknownOption": "தெரியவில்லை"
+        "unknownOption": "தெரியவில்லை",
+        "findNextSource": "Find next source"
       },
       "subtitles": {
         "customChoice": "File இல் இருந்து வசனத்தைத் தேர்ந்தெடுக்கவும்",
+        "pasteChoice": "Paste subtitle data",
+        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "தனிப்பயன்முறை",
+        "previewLabel": "Subtitle preview:",
         "offChoice": "அனை",
+        "onChoice": "On",
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
+        "SourceChoice": "Source Subtitles",
+        "OpenSubtitlesChoice": "External Subtitles",
+        "loadingExternal": "Loading external subtitles...",
+        "transcriptChoice": "Transcript",
         "settings": {
           "backlink": "தனிப்பட்ட வசன வரிகள்",
           "delay": "வசன வரி தாமதம்",
           "fixCapitals": "Capitals யை சரி செய்யவும்"
         },
         "title": "வசன வரிகள்",
-        "unknownLanguage": "தெரியவில்லை"
+        "unknownLanguage": "தெரியவில்லை",
+        "dropSubtitleFile": "Drop subtitle file here! >_<",
+        "scrapeButton": "Scrape subtitles",
+        "refresh": "Refresh External Subtitles",
+        "refreshing": "Refreshing...",
+        "empty": "There are no provided subtitles for this.",
+        "notFound": "None of the available options match your query",
+        "useNativeSubtitles": "Native video subtitles",
+        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
+        "delayLate": "Heard audio",
+        "delayEarly": "Saw caption",
+        "translate": {
+          "title": "Translate from {{language}}"
+        },
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "clearSecondary": "Clear secondary subtitle",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "selectingSecondary": "Selecting secondary subtitle"
+      },
+      "watchparty": {
+        "watchpartyItem": "Watch Party",
+        "notice": "Legacy Watch Party might not be available for some sources",
+        "legacyWatchparty": "Use legacy Watch Party"
+      },
+      "audio": {
+        "default": "Default"
       }
     },
     "metadata": {
@@ -346,7 +938,15 @@
       }
     },
     "nextEpisode": {
-      "next": "அடுத்த Episode"
+      "replay": "Replay",
+      "next": "அடுத்த Episode",
+      "nextSeason": "Next season"
+    },
+    "resume": {
+      "title": "Continue watching?",
+      "description": "This episode is {{percentage}}% watched",
+      "resume": "Resume",
+      "restart": "Restart"
     },
     "playbackError": {
       "badge": "பின்னணி பிழை",
@@ -357,13 +957,18 @@
         "errorNetwork": "மீடியா கிடைத்த போதிலும், சில நெட்ஒர்க் பிழையின் காரணமாக இந்த மீடியா இப்போது கிடைக்கப்பெறவில்லை.",
         "errorNotSupported": "மீடியா அல்லது மீடியா வழங்குநர் பொருள் ஆதரிக்கப்படவில்லை."
       },
+      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
+      "copyDebugInfo": "Copy debug info",
+      "debugInfo": "Check console for more details.",
       "homeButton": "முகப்பிற்கு செல்",
+      "resumeButton": "Try next sources",
       "text": "மீடியாவை இயக்கும் முயற்சியில் பிழை ஏற்பட்டுள்ளது. தயவு செய்து மீண்டும் முயற்சிக்கவும்.",
       "title": "வீடியோவை இயக்க முடியவில்லை!"
     },
     "scraping": {
       "items": {
         "failure": "பிழை ஏற்பட்டுள்ளது",
+        "timeout": "Timed out (15s)",
         "notFound": "வீடியோ இல்லை",
         "pending": "வீடியோக்களை எடுத்து கொண்டிருக்கிறது..."
       },
@@ -371,8 +976,31 @@
         "badge": "கிடைக்கவில்லை",
         "detailsButton": "விவரங்களை காட்டு",
         "homeButton": "முகப்பிற்கு செல்",
+        "discoverButton": "Discover more",
         "text": "எங்கள் வழங்குநர்கள் மூலம் நாங்கள் தேடினோம், நீங்கள் தேடும் மீடியாவைக் கண்டுபிடிக்க இயலவில்லை! நாங்கள் மீடியாவை host செய்யவில்லை, என்ன கிடைக்கும் என்பதில் எங்களுக்கு எந்த கட்டுப்பாடும் இல்லை. மேலும் விவரங்களுக்கு கீழே உள்ள 'விவரங்களைக் காட்டு' என்பதைக் கிளிக் செய்யவும்.",
-        "title": "அதை எங்களால் கண்டுபிடிக்க முடியவில்லை"
+        "title": "அதை எங்களால் கண்டுபிடிக்க முடியவில்லை",
+        "onboarding": "More sources might be avalible using the extension or febbox token!",
+        "onboardingButton": "Do setup again"
+      },
+      "extensionFailure": {
+        "badge": "Extension disabled",
+        "homeButton": "Go home",
+        "enableExtension": "Enable extension",
+        "title": "Please enable the extension",
+        "text": "You've installed the BetaMovie extension. To start using it, you need to enable the extension for this site."
+      },
+      "tips": {
+        "1": "Tap the gear icon to switch sources!",
+        "2": "Tap the title to copy the link!",
+        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
+        "4": "Some sources work better than others!",
+        "5": "Get the extension for more sources!",
+        "6": "Hold bookmarks to edit or delete them!",
+        "7": "Hold SHIFT and tap the title to copy the link with time!",
+        "8": "Set a custom subtitle color!",
+        "9": "Migrate your account to a new backend in settings!",
+        "10": "Join the Fluxer!",
+        "11": "Hold ` to view keyboard shortcuts!"
       }
     },
     "time": {
@@ -381,11 +1009,133 @@
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     },
-    "turnstile": {
-      "description": "நீங்கள் மனிதர் தானா என்பதை உறுதி செய்யவும். இது எங்களை பாதுகாப்பாக வைத்திருக்க உதவும்!",
-      "error": "நீங்கள் மனிதர் என்பதை தான் சரிபார்க்க முடியவில்லை. தயவு செய்து மீண்டும் முயற்சிக்கவும்.",
-      "title": "நீங்கள் ஒரு மனிதர் என்பதை நாங்கள் உறுதி செய்ய வேண்டும்.",
-      "verifyingHumanity": "நீங்கள் மனிதர் தானா என்பதை உறுதி செய்கிறோம். காத்திருக்கவும்..."
+    "segment": {
+      "intro": "Intro",
+      "recap": "Recap",
+      "credits": "Credits"
+    },
+    "skipTime": {
+      "intro": "Skip Intro",
+      "recap": "Skip Recap",
+      "credits": "Skip Credits",
+      "skipSegments": "Skip Segments",
+      "submitSegment": "Submit Segment",
+      "noSegments": "No skip segments available",
+      "startsAt": "Starts at {{time}}",
+      "endsAt": "Ends at {{time}}",
+      "timeUnknown": "Time unknown",
+      "confidence": "confidence",
+      "submissions": "{{count}} submissions",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "endOfVideo": "End",
+      "feedback": {
+        "title": "Was this skip correct?",
+        "modal": {
+          "title": "Submit Timestamps to TheIntroDB",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "segmentType": "Segment Type",
+          "types": {
+            "intro": "Intro",
+            "recap": "Recap",
+            "credits": "Credits",
+            "preview": "Preview"
+          },
+          "startTimeLabel": "Start (s)",
+          "endTimeLabel": "End (s)",
+          "placeholders": {
+            "start": {
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)",
+              "credits": "2:30 or 150 (required)",
+              "preview": "2:30 or 150 (required)"
+            },
+            "end": {
+              "intro": "3:30 or 210 (required)",
+              "recap": "3:30 or 210 (required)",
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "preview": "3:30 or 210 (leave empty for end of media)"
+            }
+          },
+          "whenToTitle": "Timestamps guide:",
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "guide": {
+            "startLabel": "Start:",
+            "startDesc": "Required - when credits begin rolling",
+            "endLabel": "End:",
+            "endDesc": "Optional - empty if extends to end",
+            "durationLabel": "Duration:",
+            "durationDesc": "Min 5s if end provided",
+            "excludeLabel": "Exclude:",
+            "excludeDesc": "Post-credits scenes",
+            "intro": {
+              "whenToTitle": "Intro timestamps guide:",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
+            },
+            "recap": {
+              "whenToTitle": "Recap timestamps guide:",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
+            },
+            "credits": {
+              "whenToTitle": "Credits timestamps guide:",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
+            },
+            "preview": {
+              "whenToTitle": "Preview timestamps guide:",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
+            }
+          },
+          "cancel": "Cancel",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "error": {
+            "tidbKey": "TIDB API key is not set",
+            "mediaInfo": "Media information is not available",
+            "endTime": "End time is required",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "segment": "No segment selected"
+          },
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          }
+        }
+      }
+    }
+  },
+  "support": {
+    "title": "Support",
+    "text": "BetaMovie is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
+    "q1": {
+      "body": "You can join the official <0>BetaMovie fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
+      "title": "Where can I get help?"
+    },
+    "q2": {
+      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
+      "title": "How can I report a bug or issue?"
+    }
+  },
+  "jip": {
+    "title": "Jip",
+    "text": "BetaMovie didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
+    "q1": {
+      "body": "You can join the official <0>BetaMovie fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
+      "title": "Where can I get help?"
+    },
+    "q2": {
+      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
+      "title": "How can I report a bug or issue?"
     }
   },
   "screens": {
@@ -397,8 +1147,14 @@
     "loadingUserError": {
       "logout": "வெளியேறு",
       "reset": "Custom server யை மீட்டமைக்கவும்",
+      "disconnect": "Disconnect from backend",
       "text": "Profile லோட் செய்ய முடியவில்லை",
-      "textWithReset": "உங்கள் Profile Custom Server இல் இருந்து லோட் செய்ய இயலவில்லை. மீண்டும் Default Server க்கு மாற்றியமைக்க விரும்புகிறீர்களா?"
+      "reload": "Reload",
+      "textWithReset": "உங்கள் Profile Custom Server இல் இருந்து லோட் செய்ய இயலவில்லை. மீண்டும் Default Server க்கு மாற்றியமைக்க விரும்புகிறீர்களா?",
+      "disconnectTitle": "Disconnect from backend?",
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectConfirm": "Confirm",
+      "disconectCancel": "Cancel"
     },
     "migration": {
       "failed": "உங்கள் தரவுகளை புதுப்பிக்க இயலவில்லை.",
@@ -406,12 +1162,24 @@
     }
   },
   "settings": {
+    "search": {
+      "placeholder": "Search settings..."
+    },
+    "all": {
+      "title": "All Settings"
+    },
     "account": {
       "accountDetails": {
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "சாதனத்தின் பெயர்",
         "deviceNamePlaceholder": "தனிப்பட்ட போன்",
         "editProfile": "எடிட்",
         "logoutButton": "வெளியேறு"
+      },
+      "admin": {
+        "title": "Admin panel",
+        "text": "Test BetaMovie's condition."
       },
       "actions": {
         "delete": {
@@ -422,6 +1190,11 @@
           "text": "இந்த நடவடிக்கை திரும்ப பெற முடியாதது. அனைத்து தரவுகளும் நீக்கப்படும் மற்றும் எதையும் மீட்டெடுக்க இயலாது.",
           "title": "கணக்கை நீக்குக"
         },
+        "migration": {
+          "title": "Account migration",
+          "text": "Migrate your account to a new server or download your data.",
+          "button": "Migrate account"
+        },
         "title": "செயல்கள்",
         "logoutAllDevices": {
           "title": "எல்லா அம்சங்களையும் முடி",
@@ -431,6 +1204,7 @@
       },
       "devices": {
         "deviceNameLabel": "சாதனத்தின் பெயர்",
+        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "சாதனத்தின் தரவுகளை காண்பிக்க இயலவில்லை",
         "removeDevice": "நீக்கு",
         "title": "சாதனங்கள்"
@@ -453,18 +1227,89 @@
       "activeTheme": "செயலில் உள்ளது",
       "themes": {
         "blue": "நீலம்",
+        "custom": "Custom",
         "default": "இயல்பு அமைப்பு",
         "gray": "சாம்பல்",
         "red": "சிவப்பு",
-        "teal": "அடர் பச்சை"
+        "teal": "அடர் பச்சை",
+        "classic": "Classic",
+        "green": "Green",
+        "mocha": "Mocha",
+        "pink": "Pink",
+        "noir": "Noir",
+        "ember": "Ember",
+        "acid": "Acid",
+        "spark": "Spark",
+        "grape": "Grape",
+        "spiderman": "Spiderman",
+        "forest": "Forest",
+        "wolverine": "Wolverine",
+        "popsicle": "Popsicle",
+        "hulk": "Hulk",
+        "autumn": "Autumn",
+        "cobalt": "Cobalt",
+        "frost": "Frost",
+        "christmas": "Christmas"
       },
-      "title": "தோற்றம்"
+      "customParts": {
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "tertiary": "Tertiary"
+      },
+      "title": "தோற்றம்",
+      "options": {
+        "discover": "Discover section",
+        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
+        "discoverLabel": "Discover section",
+        "featured": "Featured media",
+        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
+        "featuredLabel": "Featured media",
+        "modal": "Details modal",
+        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
+        "modalLabel": "Details modal",
+        "logos": "Image logos",
+        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
+        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
+        "logosLabel": "Image logos",
+        "carouselView": "Carousel view",
+        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
+        "carouselViewLabel": "Carousel view",
+        "minimalCards": "Minimal cards",
+        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
+        "minimalCardsLabel": "Minimal cards",
+        "forceCompactEpisodeView": "Force compact episode view",
+        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
+        "forceCompactEpisodeViewLabel": "Compact episodes",
+        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "pauseOverlay": "Pause overlay",
+        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
+        "pauseOverlayLabel": "Pause overlay"
+      },
+      "sections": {
+        "watching": "Currently Watching",
+        "bookmarks": "Bookmarks"
+      }
     },
     "connections": {
       "server": {
         "description": "நீங்கள் உங்கள் தரவுகளை உங்களின் தனிப்பட்ட பின்தளம் (Backend) இல் சேமிக்க விரும்பினால் இதை தெரிவு செய்து URL யை உள்ளீடு செய்யவும்",
         "label": "தனிப்பயன் சர்வர்",
-        "urlLabel": "தனிப்பட்ட சர்வரின் URL"
+        "urlLabel": "தனிப்பட்ட சர்வரின் URL",
+        "selectBackend": "Select Backend Server",
+        "currentBackend": "Current Backend",
+        "changeWarning": "Changing backend server will log you out. Continue?",
+        "confirm": "Log out and change server",
+        "cancel": "Cancel",
+        "changeWarningTitle": "Change Backend Server",
+        "migration": {
+          "description": "<0>Migrate my data</0> to a new server.",
+          "link": "Migrate my data"
+        },
+        "documentation": "Backend documentation",
+        "error": "Error connecting to backend",
+        "notice": "Your account does NOT sync between backends, so remember which one you use!"
       },
       "setup": {
         "doSetup": "அமைக்கவும்",
@@ -476,7 +1321,8 @@
         "items": {
           "default": "இயல்புநிலை அமைப்பு",
           "extension": "நீட்டிப்பு",
-          "proxy": "தனிப்பயன் Proxy"
+          "proxy": "தனிப்பயன் Proxy",
+          "desktopapp": "Native app"
         },
         "redoSetup": "அமைப்பை மீண்டும் செய்",
         "successStatus": {
@@ -492,19 +1338,74 @@
       "workers": {
         "addButton": "புதிய worker யை சேர்க்கவும்",
         "description": "இந்த பயன்பாடு செயல்பட அனைத்து இணைய போக்குவரத்தும் இந்த proxies வழியாக அனுப்பப்பட உள்ளது. உங்களின் தனிப்பட்ட workers யை உபயோகிக்க இதை தெரிவு செய்யவும். <0>வழிமுறைகள்.</0>",
+        "documentation": "Proxy documentation",
         "emptyState": "எந்தவொரு workers ம் இல்லை. கீழே புதியதாக சேர்க்கவும்",
         "label": "Custom proxy workers யை உபயோகப்படுத்த",
         "urlLabel": "Worker URL கள்",
-        "urlPlaceholder": "https://"
+        "urlPlaceholder": "https://",
+        "proxyTMDB": {
+          "title": "Proxy TMDB",
+          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
+        }
+      },
+      "tidb": {
+        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
+        "tokenLabel": "API Key"
+      },
+      "trakt": {
+        "title": "Trakt",
+        "description": "Sync your watchlist and history with Trakt.",
+        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
+        "connect": "Connect Trakt",
+        "syncing": "Syncing...",
+        "disconnect": "Disconnect"
       }
     },
     "preferences": {
+      "title": "விருப்பங்கள்",
       "language": "பயன்பாட்டின் மொழி",
       "languageDescription": "பயன்பாடு முழுமைக்கும் மொழி பயன்படுத்தப்பட்டது.",
       "thumbnail": "சிறுபடங்களை உருவாக்கவும்",
       "thumbnailDescription": "பெரும்பாலான நேரங்களில், வீடியோக்களில் சிறுபடங்கள் இருக்காது. அவற்றை உருவாக்க இந்த அமைப்பை நீங்கள் இயக்கலாம். ஆனால் அவை உங்கள் வீடியோவை மெதுவாக்கும்.",
       "thumbnailLabel": "சிறுபடங்களை உருவாக்கவும்",
-      "title": "விருப்பங்கள்"
+      "autoplay": "Autoplay",
+      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
+      "autoplayLabel": "Autoplay",
+      "skipCredits": "Skip End Credits",
+      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
+      "skipCreditsLabel": "Skip end credits",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
+      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
+      "lowPerformanceModeLabel": "Low performance mode",
+      "holdToBoost": "Hold to boost speed",
+      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
+      "holdToBoostLabel": "Enable hold to boost",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "sourceOrder": "Reordering sources",
+      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
+      "sourceOrderEnableLabel": "Custom source order",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "autoResumeOnPlaybackError": "Auto resume on playback error",
+      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
+      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "lastSuccessfulSource": "Last used source",
+      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
+      "lastSuccessfulSourceEnableLabel": "Last used source"
     },
     "reset": "மீட்டமை",
     "save": "சேமி",
@@ -515,6 +1416,7 @@
         "backendVersion": "பின்தள பதிப்பு",
         "hostname": "Hostname",
         "insecure": "பாதுகாப்பற்றது",
+        "nickname": "Nickname",
         "notLoggedIn": "நீங்கள் உள்நுழையவில்லை",
         "secure": "பாதுகாப்பானது",
         "title": "பயன்பாட்டின் தகவல்கள்",
@@ -524,11 +1426,168 @@
     },
     "subtitles": {
       "backgroundLabel": "பின்னணி ஒளிபுகாநிலை (Background opacity)",
+      "backgroundBlurEnabledLabel": "Background blur",
+      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurLabel": "Background blur intensity",
       "colorLabel": "நிறம்",
       "previewQuote": "நான் பயப்படக்கூடாது. பயம் மனதைக் கொல்லும்.",
       "textSizeLabel": "எழுத்து அளவு",
-      "title": "வசன வரிகள்"
+      "title": "வசன வரிகள்",
+      "textBoldLabel": "Bold text",
+      "verticalPositionLabel": "Vertical position",
+      "high": "High",
+      "low": "Default",
+      "textStyle": {
+        "title": "Text style",
+        "default": "Default",
+        "raised": "Raised",
+        "depressed": "Depressed",
+        "Border": "Border",
+        "dropShadow": "Drop Shadow"
+      },
+      "BorderThicknessLabel": "Border Thickness"
     },
     "unsaved": "உங்களிடம் சேமிக்கப்படாத மாற்றங்கள் உள்ளன"
+  },
+  "discover": {
+    "tabs": {
+      "movies": "Movies",
+      "tvshows": "TV Shows",
+      "editorpicks": "Editor Picks"
+    },
+    "carousel": {
+      "title": {
+        "loading": "Loading...",
+        "movies": "{{category}} Movies",
+        "tvshows": "{{category}} Shows",
+        "inCinemas": "In Cinemas",
+        "popular": "Most Popular",
+        "nowPlaying": "In Cinemas",
+        "topRated": "Top Rated",
+        "latestReleases": "Latest Releases",
+        "4kReleases": "4K Releases",
+        "onTheAir": "On The Air",
+        "latestTVReleases": "Latest TV Shows",
+        "popularOn": "Popular {{type}} on {{provider}}",
+        "editorPicksMovies": "Editor Picks Movies",
+        "editorPicksShows": "Editor Picks Shows",
+        "moviesOn": "Movies on {{provider}}",
+        "tvshowsOn": "Shows on {{provider}}",
+        "recommended": "Because You Watched: {{title}}",
+        "forYou": "For You",
+        "genreMovies": "{{genre}} Movies",
+        "genreShows": "{{genre}} Shows",
+        "categoryMovies": "{{category}} Movies",
+        "categoryShows": "{{category}} Shows",
+        "top10": "Top 10"
+      },
+      "change": "Change",
+      "more": "View more"
+    },
+    "featured": {
+      "playNow": "Play Now",
+      "moreInfo": "More Info"
+    },
+    "randomMovie": {
+      "button": "Watch Something Random",
+      "cancel": "Cancel Countdown",
+      "countdown": "{{countdown}}s",
+      "nowPlaying": "Now Playing",
+      "in": "in"
+    },
+    "page": {
+      "title": "Discover Movies & TV",
+      "subtitle": "Explore the latest hits and timeless classics.",
+      "loadMore": "Load more",
+      "loading": "Loading...",
+      "back": "Go back"
+    },
+    "viewLists": "View All Movie Lists",
+    "allLists": "All Movie Lists",
+    "scrollToTop": "Back to top"
+  },
+  "fedapi": {
+    "onboarding": {
+      "title": "Febbox token",
+      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
+    },
+    "setup": {
+      "title": "To get your UI token:",
+      "showVideo": "Show Video Tutorial",
+      "hideVideo": "Hide Video Tutorial",
+      "step": {
+        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
+        "2": "2. Open DevTools or inspect the page",
+        "3": "3. Go to Application tab → Cookies",
+        "4": "4. Copy the 'ui' cookie's value.",
+        "5": "5. Close the tab, but do NOT logout!"
+      },
+      "tokenLabel": "Token",
+      "tokenExample": {
+        "button": "(Example)",
+        "title": "Example Token",
+        "description": "This is what a Febbox UI token looks like:",
+        "warning": "Don't try to use, it's fake.",
+        "close": "Got it"
+      },
+      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
+      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
+      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
+    },
+    "status": {
+      "success": "success",
+      "api_down": "Cannot reach FED API!",
+      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
+    }
+  },
+  "debrid": {
+    "title": "Debrid (Beta)",
+    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
+    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
+    "tokenLabel": "API Key",
+    "serviceOptions": {
+      "realdebrid": "Real Debrid",
+      "torbox": "TorBox"
+    },
+    "status": {
+      "failure": "Failed to connect to Debrid. Please check your API key.",
+      "api_down": "Hmm, something went wrong. Please try again later.",
+      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
+    }
+  },
+  "watchParty": {
+    "status": {
+      "inSync": "In sync",
+      "outOfSync": "Out of sync"
+    },
+    "alone": "Alone",
+    "withCount": "With {{count}} others",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "hosting": "Hosting",
+    "watching": "Watching",
+    "syncing": "Syncing...",
+    "behindHost": "Behind host by {{seconds}} seconds",
+    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
+    "showStatusOverlay": "Show status overlay",
+    "leaveWatchParty": "Leave Watch Party",
+    "shareCode": "Share this code with friends (click to copy link)",
+    "connectedAsGuest": "Connected to watch party as guest",
+    "hostParty": "Host a Watch Party",
+    "joinParty": "Join a Watch Party",
+    "viewers": "Viewers ({{count}})",
+    "copyCode": "Click to copy",
+    "join": "Join",
+    "cancel": "Cancel",
+    "save": "Save",
+    "emptyRoom": "No one is in this room yet",
+    "noHost": "No host in this watch party",
+    "invalidRoom": "Unable to connect to this room",
+    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
+    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
+    "validating": "Validating watch party...",
+    "linkCopied": "Copied!",
+    "backendRequirement": "All users must use the same backend server",
+    "activeBackend": "Active Backend: {{backend}}"
   }
 }

@@ -1,44 +1,45 @@
 {
   "about": {
     "description": "BetaMovie هو تطبيق ويب يبحث عن البثوث على الإنترنت وسيبقى متاحًا دائمًا ولن يتوقف عن العمل. يهدف الفريق إلى توفير طريقة سهلة وبسيطة لاستهلاك المحتوى. الموقع يُدار بتكلفة شخصية دون تحقيق أرباح، ولا يحتوي على إعلانات بسبب إيماني بحرية الإعلام.",
+    "help": "لم تجد اي اجابة؟ <0>احصل على مساعدة من هنا.</0>",
     "faqTitle": "الأسئلة الشائعة",
-    "q1": {
-      "body": "لا يستضيف BetaMovie أي محتوى. عندما تنقر فوق شيء للمشاهدة، يتم البحث على الإنترنت عن الوسائط المحددة (يمكنك رؤية المصدر الذي تستخدمه على شاشة التحميل وفي علامة تبويب \"مصادر الفيديو\"). لا يتم رفع الوسائط أبدًا عن طريق BetaMovie، كل شيء يتم من خلال آلية البحث هذه.",
-      "title": "من أين يأتي المحتوى؟",
-      "section": "عام"
-    },
-    "q2": {
-      "body": "لا يمكن طلب عرض أو فيلم، لأن BetaMovie لا يدير أي محتوى. يتم مشاهدة جميع المحتويات من خلال مصادر على الإنترنت.",
-      "title": "أين يمكنني طلب مسلسل أو فيلم؟",
-      "section": "بحث"
-    },
-    "q3": {
-      "body": "نتائج البحث لدينا مدعومة بقاعدة بيانات الأفلام (TMDB) وتظهر بغض النظر عما إذا كانت مصادرنا تتضمن فعليًا المحتوى أم لا.",
-      "title": "تعرِضُ نتائجُ البحثِ الخاصِّ بالعرض أو الفيلم اللذي أريد، لكن لماذا لا يمكنني تشغيله؟",
-      "section": "بحث"
-    },
-    "title": "حول BetaMovie والأسئلة الشائعة (^▽^)",
-    "q4": {
-      "body": "يتم مزامنة كافة البيانات مع الواجهة الخلفية للمجتمع، ويمكن لأي شخص استخدامها أيضًا.",
-      "title": "ماذا عن بياناتي وأشيائي؟",
-      "section": "عام"
-    },
-    "q5": {
-      "body": "يحتوي BetaMovie على خادم Fluxer يمكن العثور عليه في أعلى هذه الصفحة!",
-      "title": "كيف يمكنني معرفة المزيد؟",
-      "section": "عام"
-    },
+    "searchPlaceholder": "البحث في الأسئلة الشائعة...",
     "sections": {
+      "general": "عام",
       "search": "البحث و توافر العناوين",
       "playback": "مشاكل التشغيل",
       "connections": "الاتصالات",
-      "language": "اللغة و اعدادات الترجمة",
-      "general": "عام"
+      "language": "اللغة و اعدادات الترجمة"
+    },
+    "q1": {
+      "title": "من أين يأتي المحتوى؟",
+      "body": "لا يستضيف BetaMovie أي محتوى. عندما تنقر فوق شيء للمشاهدة، يتم البحث على الإنترنت عن الوسائط المحددة (يمكنك رؤية المصدر الذي تستخدمه على شاشة التحميل وفي علامة تبويب \"مصادر الفيديو\"). لا يتم رفع الوسائط أبدًا عن طريق BetaMovie، كل شيء يتم من خلال آلية البحث هذه.",
+      "section": "عام"
+    },
+    "q2": {
+      "title": "أين يمكنني طلب مسلسل أو فيلم؟",
+      "body": "لا يمكن طلب عرض أو فيلم، لأن BetaMovie لا يدير أي محتوى. يتم مشاهدة جميع المحتويات من خلال مصادر على الإنترنت.",
+      "section": "بحث"
+    },
+    "q3": {
+      "title": "تعرِضُ نتائجُ البحثِ الخاصِّ بالعرض أو الفيلم اللذي أريد، لكن لماذا لا يمكنني تشغيله؟",
+      "body": "نتائج البحث لدينا مدعومة بقاعدة بيانات الأفلام (TMDB) وتظهر بغض النظر عما إذا كانت مصادرنا تتضمن فعليًا المحتوى أم لا.",
+      "section": "بحث"
+    },
+    "q4": {
+      "title": "ماذا عن بياناتي وأشيائي؟",
+      "body": "يتم مزامنة كافة البيانات مع الواجهة الخلفية للمجتمع، ويمكن لأي شخص استخدامها أيضًا.",
+      "section": "عام"
+    },
+    "q5": {
+      "title": "كيف يمكنني معرفة المزيد؟",
+      "body": "يحتوي BetaMovie على خادم Fluxer يمكن العثور عليه في أعلى هذه الصفحة!",
+      "section": "عام"
     },
     "q6": {
       "title": "هل هناك تطبيق BetaMovie؟",
-      "section": "عام",
-      "body": "ليس بعد، لكن يمكنك تثبيته كتطبيق ويب تقدمي (PWA): على iOS: استخدم Safari ← مشاركة ← إضافة إلى الشاشة الرئيسية على Android: افتح Chrome ← الثلاث نقاط ← إضافة إلى الشاشة الرئيسية. يوجد ملف APK تجريبي متاح عبر Fluxer، لكن لا يُنصح باستخدامه حاليًا."
+      "body": "ليس بعد، لكن يمكنك تثبيته كتطبيق ويب تقدمي (PWA): على iOS: استخدم Safari ← مشاركة ← إضافة إلى الشاشة الرئيسية على Android: افتح Chrome ← الثلاث نقاط ← إضافة إلى الشاشة الرئيسية. يوجد ملف APK تجريبي متاح عبر Fluxer، لكن لا يُنصح باستخدامه حاليًا.",
+      "section": "عام"
     },
     "q7": {
       "title": "كيف أقوم بإنشاء حساب؟",
@@ -47,8 +48,8 @@
     },
     "q9": {
       "title": "هذا المحتوى غير متوفر / هل يمكنني طلب هذا المحتوى؟",
-      "section": "بحث",
-      "body": "لا، بما أننا لا نستضيف محتوى، فلا يمكننا إضافة أو تغيير ما هو متاح. تعتمد قائمة المحتوى على ما هو متاح عبر آلية البحث."
+      "body": "لا، بما أننا لا نستضيف محتوى، فلا يمكننا إضافة أو تغيير ما هو متاح. تعتمد قائمة المحتوى على ما هو متاح عبر آلية البحث.",
+      "section": "بحث"
     },
     "q10": {
       "title": "لا استطيع العثور على الفيلم/العرض الذي ابحث عنه!",
@@ -56,9 +57,9 @@
       "section": "بحث"
     },
     "q11": {
-      "section": "التشغيل",
       "title": "لماذا أرى شاشة سوداء؟",
-      "body": "من الممكن أن ملف الفيديو تالف أو معطل. حاول تغيير المصدر."
+      "body": "من الممكن أن ملف الفيديو تالف أو معطل. حاول تغيير المصدر.",
+      "section": "التشغيل"
     },
     "q12": {
       "title": "الحلقة التي أشاهدها غير صحيحة.",
@@ -66,19 +67,19 @@
       "section": "التشغيل"
     },
     "q13": {
+      "title": "جودة الفيديو ليست كما توقعت.",
       "body": "حاول تغيير المصادر. تختلف الجودة باختلاف المزوّد؛ غالبًا ما يوفر FED API خيارات أكثر.",
-      "section": "التشغيل",
-      "title": "جودة الفيديو ليست كما توقعت."
+      "section": "التشغيل"
     },
     "q14": {
       "title": "4k غير متاح.",
-      "section": "التشغيل",
-      "body": "إذا لم يتم عرض 4K، فمن المحتمل أنه غير متاح من هذا المصدر."
+      "body": "إذا لم يتم عرض 4K، فمن المحتمل أنه غير متاح من هذا المصدر.",
+      "section": "التشغيل"
     },
     "q15": {
       "title": "لماذا لا يوجد صوت؟",
-      "section": "التشغيل",
-      "body": "تأكّد من أن جهازك ليس في وضع كتم الصوت، وجرّب التبديل بين المصادر. قد تكون مشكلات الصوت متعلقة بمصدر المحتوى نفسه."
+      "body": "تأكّد من أن جهازك ليس في وضع كتم الصوت، وجرّب التبديل بين المصادر. قد تكون مشكلات الصوت متعلقة بمصدر المحتوى نفسه.",
+      "section": "التشغيل"
     },
     "q16": {
       "title": "الفيديو يحتوي على تدرج لوني غير طبيعي أو يبدو باهتًا.",
@@ -86,24 +87,24 @@
       "section": "التشغيل"
     },
     "q17": {
+      "title": "أواجه مشكلات بصرية.",
       "body": "الأخطاء البصرية غالبًا ما تكون ناتجة عن رفع ملفات بجودة منخفضة. جرّب التبديل إلى مصدر آخر.",
-      "section": "التشغيل",
-      "title": "أواجه مشكلات بصرية."
+      "section": "التشغيل"
     },
     "q18": {
-      "section": "التشغيل",
       "title": "المصدر يتم تحميله ببطء.",
-      "body": "تعتمد السرعة على موقع الاستضافة. جرّب التبديل إلى مصدر آخر لأداء أفضل."
+      "body": "تعتمد السرعة على موقع الاستضافة. جرّب التبديل إلى مصدر آخر لأداء أفضل.",
+      "section": "التشغيل"
     },
     "q19": {
-      "section": "التشغيل",
+      "title": "كيف يمكنني التبديل بين المصادر؟",
       "body": "اثناء التشغيل، اضغط على ايقونة ⚙️ ، ثم اختر مصدرًا آخر من قسم \"مصادر الفديو\".",
-      "title": "كيف يمكنني التبديل بين المصادر؟"
+      "section": "التشغيل"
     },
     "q20": {
       "title": "ما هو FED API؟",
-      "section": "الاتصالات",
-      "body": "FED API هي أداة استخراج المحتوى الخاصة بنا، والتي تسحب البثوث مباشرةً من Febbox. يتضمن كل حساب Febbox مجاني 100 جيجابايت شهريًا من النطاق الترددي غير المحدود، ونستخدم رمز واجهة المستخدم الخاص بك لاستخراج المحتوى كما لو كنت تشاهده بنفسك. أسهل طريقة للإعداد هي عبر متصفح سطح المكتب، ولكن تتوفر تعليمات الهاتف المحمول على Fluxer الخاص بنا."
+      "body": "FED API هي أداة استخراج المحتوى الخاصة بنا، والتي تسحب البثوث مباشرةً من Febbox. يتضمن كل حساب Febbox مجاني 100 جيجابايت شهريًا من النطاق الترددي غير المحدود، ونستخدم رمز واجهة المستخدم الخاص بك لاستخراج المحتوى كما لو كنت تشاهده بنفسك. أسهل طريقة للإعداد هي عبر متصفح سطح المكتب، ولكن تتوفر تعليمات الهاتف المحمول على Fluxer الخاص بنا.",
+      "section": "الاتصالات"
     },
     "q21": {
       "title": "هل يعمل FED API على كل الأجهزة؟",
@@ -117,13 +118,13 @@
     },
     "q23": {
       "title": "ما هي الإضافة؟ هل هي آمنة؟",
-      "section": "الاتصالات",
-      "body": "إنها أداة وكيل محلي تُستخدم للوصول إلى البث التي تقيّد عمليات البحث. تُحاكي جلسة تصفحك. وهي أيضًا مفتوحة المصدر تمامًا، ويمكن العثور عليها على صفحتنا على github."
+      "body": "إنها أداة وكيل محلي تُستخدم للوصول إلى البث التي تقيّد عمليات البحث. تُحاكي جلسة تصفحك. وهي أيضًا مفتوحة المصدر تمامًا، ويمكن العثور عليها على صفحتنا على github.",
+      "section": "الاتصالات"
     },
     "q24": {
       "title": "رمز febbox الخاص بي يفشل أثناء الإعداد. ماذا أفعل؟",
-      "section": "الاتصالات",
-      "body": "قد يحظر مزود خدمة الإنترنت لديك واجهة برمجة تطبيقات FED. عيّن DNS مخصصًا مثل 1.1.1.1 أو NextDNS. يمكنك أيضًا تغيير منطقتك من لوحة الإدارة."
+      "body": "قد يحظر مزود خدمة الإنترنت لديك واجهة برمجة تطبيقات FED. عيّن DNS مخصصًا مثل 1.1.1.1 أو NextDNS. يمكنك أيضًا تغيير منطقتك من لوحة الإدارة.",
+      "section": "الاتصالات"
     },
     "q25": {
       "title": "كيف اقوم بتغير اللغة؟",
@@ -132,15 +133,16 @@
     },
     "q26": {
       "title": "الترجمة غير متزامنة.",
-      "section": "اللغة",
-      "body": "استخدم خيار \"تخصيص\" في إعدادات الترجمة النصية أو اضغط على [ and ] في لوحة المفاتيح للتعديل. يمكنك أيضًا رفع ملف ترجمة خاص بك."
+      "body": "استخدم خيار \"تخصيص\" في إعدادات الترجمة النصية أو اضغط على [ and ] في لوحة المفاتيح للتعديل. يمكنك أيضًا رفع ملف ترجمة خاص بك.",
+      "section": "اللغة"
     },
-    "help": "لم تجد اي اجابة؟ <0>احصل على مساعدة من هنا.</0>",
-    "searchPlaceholder": "البحث في الأسئلة الشائعة..."
+    "title": "حول BetaMovie والأسئلة الشائعة (^▽^)"
   },
   "actions": {
     "copied": "تم النسخ",
-    "copy": "نسخ"
+    "copy": "نسخ",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "auth": {
     "createAccount": "ليس لديك حساب بعد؟😬 <0>أنشئ حسابًا.</0>",
@@ -150,7 +152,14 @@
       "description": "عبارة المرور الخاصة بك تعمل كاسم مستخدم وكلمة مرور. تأكد من حفظها جيدًا لأنها مطلوبة لتسجيل الدخول إلى حسابك. <bold>لا تفقد عبارة المرور الخاصة بك!</bold>",
       "next": "لقد قمتُ بحفظ جملة مروري",
       "passphraseFrameLabel": "جملة المرور",
-      "title": "جملة مرورك"
+      "title": "جملة مرورك",
+      "custom": "Custom",
+      "customPassphraseLabel": "Custom Passphrase",
+      "customPassphrasePlaceholder": "Enter your custom passphrase",
+      "useCustomPassphrase": "Use Custom Passphrase",
+      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
+      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
+      "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "لديك حساب بالفعل؟ <0>قم بتسجيل الدخول هنا.</0>",
     "login": {
@@ -160,7 +169,10 @@
       "passphrasePlaceholder": "جملة مرور",
       "submit": "تسجيل الدخول",
       "title": "تسجيل الدخول إلى حسابك",
-      "validationError": "جملة المرور خاطئة أو ناقصة"
+      "validationError": "جملة المرور خاطئة أو ناقصة",
+      "usePasskey": "Use passkey",
+      "or": "or",
+      "noBackendUrl": "No backend URL"
     },
     "register": {
       "information": {
@@ -172,17 +184,27 @@
         "title": "معلومات الحساب"
       }
     },
+    "backendSelection": {
+      "title": "Select Account Server",
+      "description": "Choose which backend server to connect to",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "active": "Active",
+      "selecting": "Selecting..."
+    },
     "trust": {
       "failed": {
         "text": "هل قمت بضبطه بشكل صحيح؟",
         "title": "تعَذَّر الوصول إلى الخادم"
       },
+      "noHostTitle": "لم يتم تكوين الخادم!",
+      "noHost": "لم يتم تكوين الخادم، وبالتالي لا يمكنك إنشاء حساب",
       "host": "أنت على وشك الاتصال بـ <0>{{hostname}}</0> - يرجى تأكيد أنك تثق فيه قبل إنشاء حساب...",
       "no": "عودة",
       "title": "هل تثِقُ في هذا الخادم؟",
-      "yes": "أثِقُ في هذا الخادم 🤞",
-      "noHostTitle": "لم يتم تكوين الخادم!",
-      "noHost": "لم يتم تكوين الخادم، وبالتالي لا يمكنك إنشاء حساب"
+      "yes": "أثِقُ في هذا الخادم 🤞"
     },
     "verify": {
       "description": "رجاءً أدخل جملة المرور السابقة لتأكيد أنك قد قمت بحفظها ولإنشاء حسابك",
@@ -191,7 +213,10 @@
       "passphraseLabel": "جملة مرورك المكونة من 12 كلمة",
       "recaptchaFailed": "فشل التحقق من ReCaptcha",
       "register": "إنشاء حساب",
-      "title": "قم بتأكيد جملة مرورك"
+      "title": "قم بتأكيد جملة مرورك",
+      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
+      "authenticatePasskey": "Authenticate with Passkey",
+      "passkeyError": "Passkey verification failed"
     }
   },
   "errors": {
@@ -220,26 +245,144 @@
     "pages": {
       "about": "عنا والأسئلة الشائعة",
       "legal": "Legal / DMCA",
+      "discover": "اكتشف",
+      "support": "الدعم",
       "login": "تسجيل الدخول",
       "onboarding": "إعداد",
       "pagetitle": "\"{{title}} - BetaMovie\"",
       "register": "تسجيل",
       "settings": "الإعدادات",
-      "support": "الدعم",
-      "discover": "اكتشف",
       "migration": "ترحيل الحساب",
       "jip": "جيب"
+    },
+    "keyboardShortcuts": {
+      "title": "Keyboard Shortcuts",
+      "subtitle": "Hold ` to show this help anytime",
+      "groups": {
+        "videoPlayback": "Video Playback",
+        "jumpToPosition": "Jump to Position",
+        "audioVideo": "Audio & Video",
+        "subtitlesAccessibility": "Subtitles & Accessibility",
+        "interface": "Interface"
+      },
+      "shortcuts": {
+        "playPause": "Play/pause (or hold for 2x speed when enabled)",
+        "playPauseAlt": "Play/pause",
+        "skipForward5": "Skip forward 5 seconds",
+        "skipBackward5": "Skip backward 5 seconds",
+        "skipBackward10": "Skip backward 10 seconds",
+        "skipForward10": "Skip forward 10 seconds",
+        "skipForward1": "Skip forward 1 second",
+        "skipBackward1": "Skip backward 1 second",
+        "jumpTo0": "Jump to 0% (beginning)",
+        "jumpTo9": "Jump to 90%",
+        "increaseVolume": "Increase volume",
+        "decreaseVolume": "Decrease volume",
+        "mute": "Mute/unmute",
+        "changeSpeed": "Increase/decrease playback speed",
+        "toggleFullscreen": "Toggle fullscreen",
+        "toggleCaptions": "Toggle captions",
+        "randomCaption": "Select random caption from last used language",
+        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
+        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleNativeSubtitles": "Toggle native subtitles",
+        "barrelRoll": "Do a barrel roll! 🌀",
+        "closeOverlay": "Close overlay/modal",
+        "nextEpisode": "Next episode",
+        "previousEpisode": "Previous episode",
+        "widescreenMode": "to toggle the widescreen button visibility",
+        "copyLinkWithTime": "+ click the title to copy the link with time"
+      },
+      "conditions": {
+        "notInWatchParty": "Not in watch party",
+        "showsOnly": "Shows only"
+      },
+      "editInSettings": "Edit keyboard commands from settings",
+      "clickToEdit": "Click on a key badge to edit it",
+      "conflict": "conflict",
+      "conflicts": "conflicts",
+      "detected": "detected",
+      "resetAllToDefault": "Reset All to Default",
+      "pressKey": "Press a key...",
+      "none": "None",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "resetToDefault": "Reset to default",
+      "numberKeySeeking": "Number key progress seeking",
+      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "علامات مرجعية"
+      "sectionTitle": "علامات مرجعية",
+      "showAll": "Show all",
+      "groups": {
+        "dropdown": {
+          "placeholderButton": "Add to group",
+          "empty": "No groups yet",
+          "removeFromGroup": "Remove from group",
+          "removeAll": "Remove all"
+        },
+        "reorder": {
+          "button": "Reorder",
+          "done": "Done",
+          "title": "Edit Group Order",
+          "description": "Drag and drop to reorder your bookmark groups",
+          "cancel": "Cancel",
+          "save": "Save"
+        },
+        "editGroup": {
+          "title": "Edit Group",
+          "description": "Edit the name and icon of your bookmark group",
+          "cancel": "Cancel",
+          "save": "Save",
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group"
+        }
+      },
+      "edit": {
+        "title": "Edit Bookmark",
+        "description": "Edit the details for this bookmark",
+        "cancel": "Cancel",
+        "save": "Save",
+        "groupsLabel": "Groups",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter a title for your bookmark",
+        "yearLabel": "Year",
+        "yearPlaceholder": "Enter a year for your bookmark"
+      },
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
     },
     "continueWatching": {
-      "sectionTitle": "متابعة المشاهدة ..."
+      "sectionTitle": "متابعة المشاهدة ...",
+      "sorting": {
+        "label": "Sort by",
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
     },
     "mediaList": {
       "stopEditing": "إنهاء التعديل"
+    },
+    "watchHistory": {
+      "sectionTitle": "Watch History",
+      "recentlyWatched": "Recently Watched"
     },
     "search": {
       "allResults": "هذا كل ما لدينا...",
@@ -260,7 +403,6 @@
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "نتائج البحث",
       "empty": {
         "default": "مرحبًا بك، يمكنك العثور على الوسائط التي يمكنك مشاهدتها هنا!",
         "extra": [
@@ -270,46 +412,201 @@
           "مرحباً بالمستخدم الجديد :3"
         ]
       },
+      "sectionTitle": "نتائج البحث",
       "discoverMore": "اكتشف المزيد",
       "discover": "اكتشف"
-    },
-    "titles": {
-      "day": {
-        "default": "ماذا تريد أن تشاهد في هذه الظهيرة؟",
-        "extra": ["يحيا BetaMovie!"]
-      },
-      "morning": {
-        "default": "ماذا تريد أن تشاهد في هذا الصباح؟",
-        "extra": ["تحيا BetaMovie!"]
-      },
-      "night": {
-        "default": "ماذا تريد أن تشاهد في هذه الليلة؟",
-        "extra": ["تحيا BetaMovie!"]
-      },
-      "420": {
-        "default": "ماذا تريد أن تشاهد اليوم؟",
-        "extra": ["يوم 4/20 سعيد 🥳!"]
-      },
-      "69": {
-        "default": "هل ترغب في شيء مثير؟",
-        "extra": ["يوم 69 سعيد 😘!"]
-      }
     },
     "mediaCard": {
       "moreInfo": "المزيد من المعلومات",
       "copyLink": "نسخ الرابط",
       "close": "غلق"
+    },
+    "titles": {
+      "69": {
+        "default": "هل ترغب في شيء مثير؟",
+        "extra": [
+          "يوم 69 سعيد 😘!"
+        ]
+      },
+      "420": {
+        "default": "ماذا تريد أن تشاهد اليوم؟",
+        "extra": [
+          "يوم 4/20 سعيد 🥳!"
+        ]
+      },
+      "day": {
+        "default": "ماذا تريد أن تشاهد في هذه الظهيرة؟",
+        "extra": [
+          "يحيا BetaMovie!"
+        ]
+      },
+      "morning": {
+        "default": "ماذا تريد أن تشاهد في هذا الصباح؟",
+        "extra": [
+          "تحيا BetaMovie!"
+        ]
+      },
+      "night": {
+        "default": "ماذا تريد أن تشاهد في هذه الليلة؟",
+        "extra": [
+          "تحيا BetaMovie!"
+        ]
+      },
+      "halloween": {
+        "default": "What spooky movie would you like to watch this Halloween?",
+        "extra": [
+          "Happy Halloween! 🎃👻",
+          "Boo! 👻",
+          "Trick or treat! 🍬",
+          "It's the Great Pumpkin, Charlie Brown!"
+        ]
+      }
+    },
+    "support": {
+      "title": "BetaMovie needs your help!",
+      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "moreInfo": "More info",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "fluxer": "Fluxer",
+      "thankYou": "Thank you for your support!",
+      "donate": "Donate",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "complete": "complete"
     }
   },
   "media": {
     "episodeDisplay": "\"موسم{{season}} حلقة{{episode}}\"",
+    "unreleased": "لم يصدر بعد",
     "types": {
       "movie": "فيلم",
       "show": "مسلسل"
     },
-    "unreleased": "لم يصدر بعد",
     "episodeShort": "ح",
-    "seasonShort": "م"
+    "seasonShort": "م",
+    "seasonWatched": "Are you sure you want to mark the season as watched?",
+    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
+  },
+  "details": {
+    "resume": "متابعة",
+    "play": "تشغيل",
+    "runtime": "مدة:",
+    "language": "اللغة:",
+    "releaseDate": "تاريخ الاصدار:",
+    "rating": "التقييم:",
+    "votes": "الأصوات",
+    "tmdb": "عرض في TMDB",
+    "imdb": "عرض في IMDb",
+    "episodes": "الحلقات",
+    "seasons": "موسم",
+    "season": "الموسم",
+    "episode": "حلقة",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
+    "airs": "يصدر",
+    "endsAt": "ينتهي الساعة {{time}}",
+    "trailer": "الإعلان الترويجي",
+    "trailers": "Trailers",
+    "similar": "Similar",
+    "collection": {
+      "movies": "Movies",
+      "movie": "Movie",
+      "sortBy": "Sort by",
+      "releaseDate": "Release Date",
+      "rating": "Rating"
+    }
+  },
+  "migration": {
+    "loginRequired": "يجب عليك تسجيل الدخول لنقل بياناتك! يُرجى العودة وتسجيل الدخول للمتابعة.",
+    "start": {
+      "title": "انقل بياناتك",
+      "explainer": "إذا كنت ترغب في نقل بياناتك أو نسخها احتياطيًا، يمكنك القيام بذلك باستخدام الخيارات أدناه. سيسمح لك هذا بالاحتفاظ ببياناتك عند تغيير خوادم الواجهة الخلفية.",
+      "options": {
+        "or": "أو",
+        "direct": {
+          "description": "سيؤدي هذا إلى نقل بياناتك مباشرةً إلى الخادم الجديد. هذا هو الخيار الأسرع. <br /><br />يتيح لك هذا الخيار الاحتفاظ بعبارة المرور كما هي!",
+          "title": "النقل المباشر",
+          "quality": "الأسهل و الأسرع",
+          "action": "نقل البيانات"
+        },
+        "download": {
+          "description": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى الخادم الجديد أو الاحتفاظ بها.",
+          "title": "تنزيل البيانات",
+          "quality": "أكثر تقنية",
+          "action": "تنزيل البيانات"
+        },
+        "upload": {
+          "title": "رفع البيانات",
+          "description": "قم بتحميل ملف البيانات الذي قمت بتصديره مسبقًا لاستعادة الوسائط المفضلة و التقدم على هذا الحساب.",
+          "quality": "استعادة من النسخة الاحتياطية",
+          "action": "رفع البيانات"
+        }
+      }
+    },
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "uploadDescription": "Data to upload:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      }
+    },
+    "direct": {
+      "title": "النقل المباشر",
+      "description": "أدخل رابط الواجهة الخلفية (Backend) الجديدة لنقل بيانات حسابك الحالية. ستبقى كلمة المرور الخاصة بك كما هي!",
+      "backendLabel": "رابط الواجهة الخلفية الجديدة",
+      "recaptchaLabel": "مفتاح ReCaptcha (اختياري)",
+      "toggleLable": "هل تحتاج إلى ReCaptcha؟",
+      "status": {
+        "error": "فشل نقل بياناتك. 😿",
+        "success": "لقد تم نقل بياناتك بنجاح! 🎉"
+      },
+      "button": {
+        "migrate": "نقل",
+        "processing": "تتم المعالجة...",
+        "home": "الذهاب إلي الصفحة الرئيسية",
+        "login": "الاستمرار في تسجيل الدخول"
+      }
+    },
+    "download": {
+      "title": "تنزيل البيانات",
+      "description": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى سيرفر جديد أو الاحتفاظ بها.",
+      "status": {
+        "error": "فشل في تنزيل بياناتك. 😿",
+        "success": "تم تنزيل بياناتك! 🎉"
+      },
+      "button": {
+        "download": "نزل البيانات",
+        "home": "اذهب للصفحة الرئيسية",
+        "login": "استمرار الى تسجيل الدخول"
+      }
+    },
+    "upload": {
+      "title": "تحميل البيانات",
+      "description": "قم برفع ملف البيانات الذي صدّرته مسبقًا لاستعادة المعلومات لهذا الحساب.",
+      "status": {
+        "processing": "جارٍ معالجة البيانات...",
+        "error": "فشل في تحميل بياناتك. 😿",
+        "success": "‌تم تحميل بيناتك! 🎉",
+        "successLocal": "Your data has been saved locally! 🎉"
+      },
+      "file": {
+        "description": "اختر الملف الذي تريد رفعه",
+        "select": "اختر الملف",
+        "change": "غير الملف",
+        "name": "اسم الملف"
+      },
+      "exportedOn": "تم التصدير في",
+      "previewTitle": "Preview:",
+      "button": {
+        "import": "استرداد البيانات",
+        "processing": "جاري التنفيذ...",
+        "success": "تمت العملية بنجاح",
+        "home": "الاستمرار للصفحة الرئيسية",
+        "saveLocal": "Save locally"
+      }
+    },
+    "back": "رجوع"
   },
   "navigation": {
     "banner": {
@@ -321,22 +618,30 @@
       "register": "مزامنة إلى التخزين السحابي",
       "settings": "الإعدادات",
       "support": "الدعم",
+      "discover": "اكتشف‏",
       "development": "تطوير",
-      "discover": "اكتشف‏"
+      "desktop": "App Settings"
     }
   },
   "notFound": {
     "badge": "صفحة غير موجودة",
     "goHome": "العودة إلى الصفحة الرئيسية",
+    "reloadButton": "حاول مرة أخرى",
     "message": "بحثنا في كل مكان: في الخزانة وحتى تحت الصناديق، ومع ذلك لم نعثر عن الصفحة التي طلبتَها. (ಥ﹏ಥ)",
-    "title": "تعذر العثور على هذه الصفحة",
-    "reloadButton": "حاول مرة أخرى"
+    "title": "تعذر العثور على هذه الصفحة"
+  },
+  "downtimeNotice": {
+    "badge": "مشكلات",
+    "goHome": "اذهب للصفحة الرئيسية",
+    "message": "نحن نواجه بعض المشاكل، إذا لم تتمكن من العثور على شيء أو تشغيله، يرجى تغيير المصدر. نتوقع استمرار هذه المشكلة خلال الأوقات التالية.",
+    "title": "خطأ في المزودين"
   },
   "onboarding": {
     "defaultConfirm": {
       "cancel": "إلغاء",
       "confirm": "استخدم الإعداد الإفتراضي",
       "description": "الإعداد الافتراضي لا يحتوي على أفضل البثوث. ستفقد الوصول إلى أفضل المصادر!",
+      "tip": "It's recommended to set up the extension and/or FED API!",
       "title": "هل انت متأكد؟"
     },
     "extension": {
@@ -346,6 +651,8 @@
       "extensionHelp": "إذا قمت بتثبيت الإضافة ولكن لم يتم اكتشافه، <bold> افتح الإضافةمن خلال قائمة إضافات المتصفح </bold> واتبع الخطوات على الشاشة.",
       "linkChrome": "تثبيت إضافة Chrome",
       "linkFirefox": "تثبيت إضافة Firefox",
+      "linkUserscript": "Alternative Userscript",
+      "userscriptNote": "(The extension is more reliable than the userscript!)",
       "notDetecting": "تم تثبيته على Chrome، لكن الموقع لا يكتشفه ؟ حاول إعادة تحميل الصفحة!",
       "notDetectingAction": "إعادة تحميل الصفحة",
       "status": {
@@ -375,39 +682,22 @@
     },
     "start": {
       "explainer": "للحصول على أفضل بثوث ممكنة، ستحتاج إلى اختيار طريقة البث التي تريد استخدامها.",
-      "options": {
-        "default": {
-          "text": "لا أريد بثوث ذات جودة جيدة،استخدم الإعداد الافتراضي."
-        },
-        "extension": {
-          "action": "ثبت الإضافة",
-          "description": "قم بتركيب إضافة المتصفح واستمتع بمصادر أكثر! تذكر تفعيل الإضافة لهذا الموقع.",
-          "quality": "افضل جودة + مصادر اكثر",
-          "title": "إضافة المتصفح"
-        },
-        "proxy": {
-          "action": "إعداد وكيل",
-          "description": "قم بإعداد وكيل في 5 دقائق فقط وهذا يحسّن التحميل!",
-          "quality": "جودة جيدة",
-          "title": "وكيل مخصص"
-        },
-        "or": "او"
-      },
-      "title": "دعونا نحصل على إعداد مع BetaMovie 🥳",
       "moreInfo": {
+        "button": "المزيد من المعلومات",
+        "title": "فهم الإعداد",
         "explainer": {
-          "fedapi": {
-            "fedapiDescription": "احصل على حساب مجاني في Febbox واستمتع بوصول حصري إلى FED API الخاص، أفضل مصدر يقدم لك جودة 4K، صوت دولبي أتموس، إمكانية تخطي المقدمات، وأسرع تحميل للفيديوهات! ننصح به بشدة!",
-            "fedapi": "إضافة: رمز (توكن) FED API الخاص"
-          },
-          "extension": "1. إضافة",
           "intro": "نحن لا نستضيف الفيديوهات. نعتمد على مواقع خارجية لمحتوى الفيديو، لذلك عليك اختيار الطريقة التي تتصل بها بتلك المواقع.",
           "options": "اختياراتك:",
+          "extension": "1. إضافة",
           "extensionDescription": "تمنحك الإضافة الوصول إلى أكبر عدد من المصادر. تعمل كوكيل محلي (بروكسي) ويمكنها التعامل مع المواقع التي تحتاج إلى ملفات تعريف الارتباط أو رؤوس خاصة للتحميل.",
           "proxy": "2. بروكسي",
           "proxyDescription": "يقوم الوكيل بجمع الوسائط من مواقع أخرى. يتجاوز قيود المتصفح (مثل CORS) للسماح بجمع البيانات.",
           "default": "3. الإعداد الافتراضي",
           "defaultDescription": "يستخدم وكيل BetaMovie المدمج. هذا هو اسهل خيار ولكن ممكن يكون بطيء بسبب النطاق الترددي المشترك.",
+          "fedapi": {
+            "fedapi": "إضافة: رمز (توكن) FED API الخاص",
+            "fedapiDescription": "احصل على حساب مجاني في Febbox واستمتع بوصول حصري إلى FED API الخاص، أفضل مصدر يقدم لك جودة 4K، صوت دولبي أتموس، إمكانية تخطي المقدمات، وأسرع تحميل للفيديوهات! ننصح به بشدة!"
+          },
           "outro": "اذا كان لديك المزيد من الأسئلة حول طريقة العمل، لا تتردد تسأل في <0>سيرفر ديسكورد BetaMovie</0>!"
         },
         "recommended": {
@@ -425,10 +715,36 @@
             "title": "لأجهزة أندرويد:",
             "description": "الإضافة + FED API الخاص"
           }
+        }
+      },
+      "options": {
+        "or": "او",
+        "default": {
+          "text": "لا أريد بثوث ذات جودة جيدة،استخدم الإعداد الافتراضي."
         },
-        "button": "المزيد من المعلومات",
-        "title": "فهم الإعداد"
-      }
+        "extension": {
+          "action": "ثبت الإضافة",
+          "description": "قم بتركيب إضافة المتصفح واستمتع بمصادر أكثر! تذكر تفعيل الإضافة لهذا الموقع.",
+          "quality": "افضل جودة + مصادر اكثر",
+          "title": "إضافة المتصفح"
+        },
+        "desktopapp": {
+          "action": "Install Desktop app",
+          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
+          "quality": "Best quality + Even more sources",
+          "title": "BetaMovie Desktop app"
+        },
+        "proxy": {
+          "action": "إعداد وكيل",
+          "description": "قم بإعداد وكيل في 5 دقائق فقط وهذا يحسّن التحميل!",
+          "quality": "جودة جيدة",
+          "title": "وكيل مخصص"
+        },
+        "addons": {
+          "title": "Additional sources:"
+        }
+      },
+      "title": "دعونا نحصل على إعداد مع BetaMovie 🥳"
     }
   },
   "overlays": {
@@ -440,13 +756,23 @@
       "short": "عُدْ"
     },
     "casting": {
+      "to": "Casting to {{device}} 📺",
+      "device": "device",
       "enabled": "البث إلى الجهاز 🎬"
     },
     "menus": {
       "downloads": {
+        "button": "تجربة التحميل",
+        "hlsDownloader": "أو، اذهب الى <0>موقع تحميل HLS</0> والصق رابط قائمة التشغيل من تحت.",
         "disclaimer": "يتم أخذ التنزيلات مباشرةً من قبل مقدم الخدمة. BetaMovie لاسيطرة له على كيفية توفير تلك التنزيلات.",
+        "copyHlsPlaylist": "انسخ رابط قائمة تشغيل HLS",
         "downloadSubtitle": "تنزيل الترجمة الحالية",
         "downloadVideo": "تنزيل الفيديو",
+        "openIn": "فتح في ...",
+        "vlc": "VLC",
+        "iina": "IINA",
+        "outplayer": "outplayer",
+        "hlsOpenInDisclaimer": "فتح بث HLS في مشغل خارجي قد لا يعمل!",
         "hlsDisclaimer": "يتم أخذ التنزيلات مباشرة من المزود. لا تتحكم BetaMovie في كيفية توفير التنزيلات.<br /><br />يرجى ملاحظة أنك تقوم بتنزيل قائمة تشغيل HLS،<bold> لا ينصح بالتنزيل إذا لم تكن على دراية بتنسيقات البث المتقدمة</bold>. جرب مصادر مختلفة لتنسيقات مختلفة.",
         "onAndroid": {
           "1": "لتنزيل الفيديو على أندرويد، اضغط على زر التحميل، ثم في الصفحة الجديدة، <bold>اضغط مطولًا</bold> على الفيديو، ثم اختر <bold>حفظ</bold>.",
@@ -463,15 +789,7 @@
           "shortTitle": "تنزيل / حاسوب",
           "title": "تنزيل على الحاسوب"
         },
-        "title": "تنزيل",
-        "hlsDownloader": "أو، اذهب الى <0>موقع تحميل HLS</0> والصق رابط قائمة التشغيل من تحت.",
-        "button": "تجربة التحميل",
-        "copyHlsPlaylist": "انسخ رابط قائمة تشغيل HLS",
-        "outplayer": "outplayer",
-        "hlsOpenInDisclaimer": "فتح بث HLS في مشغل خارجي قد لا يعمل!",
-        "openIn": "فتح في ...",
-        "vlc": "VLC",
-        "iina": "IINA"
+        "title": "تنزيل"
       },
       "episodes": {
         "button": "الحلقات",
@@ -482,13 +800,20 @@
         "loadingTitle": "تحميل...",
         "unairedEpisodes": "تم تعطيل حلقة واحدة أو أكثر من هذا الموسم لأنه لم يتم اصدارهم بعد.",
         "seasons": "مواسم",
+        "showMore": "عرض المزيد",
         "showLess": "عرض أقل",
-        "showMore": "عرض المزيد"
+        "markAsWatched": "Mark as watched",
+        "markAsUnwatched": "Mark as unwatched",
+        "markAsFavorite": "Mark as favorite",
+        "favorites": "Favorites",
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
       },
       "playback": {
         "speedLabel": "سرعة التشغيل",
         "title": "إعدادات التشغيل",
-        "disabled": "(غير متاح في حفلة المشاهدة)"
+        "disabled": "(غير متاح في حفلة المشاهدة)",
+        "speedBoosted": "2x",
+        "speedUnboosted": "{{speed}}x"
       },
       "quality": {
         "automaticLabel": "جودة تلقائية",
@@ -502,13 +827,20 @@
         "enableSubtitles": "تفعيل الترجمة",
         "experienceSection": "تجربة المشاهدة",
         "playbackItem": "إعدادات التشغيل",
+        "audioItem": "الصوت",
         "qualityItem": "جودة",
         "sourceItem": "المصدر",
         "subtitleItem": "الترجمة",
-        "videoSection": "إعدادات الفيديو",
-        "audioItem": "الصوت"
+        "videoSection": "إعدادات الفيديو"
       },
       "sources": {
+        "extensionHint": {
+          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
+          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
+          "setupButton": "Setup Extension",
+          "moreSources": "Want more sources? Setup the Extension.",
+          "installButton": "Install Extension Now"
+        },
         "failed": {
           "text": "حدث خطأ أثناء محاولة إيجاد أي مقاطع فيديو... تجربة مصدر آخر ؟",
           "title": "فشلت عملية الاستخراج"
@@ -523,12 +855,22 @@
         },
         "title": "مصادر",
         "unknownOption": "مجهول",
-        "editOrder": "تعديل الترتيب"
+        "findNextSource": "Find next source"
       },
       "subtitles": {
         "customChoice": "قم بسحب الملف أو رفعه",
+        "pasteChoice": "Paste subtitle data",
+        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "تخصيص",
+        "previewLabel": "Subtitle preview:",
         "offChoice": "معطل",
+        "onChoice": "مفعّل",
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
+        "SourceChoice": "مصدر الترجمة",
+        "OpenSubtitlesChoice": "ترجمة خارجية",
+        "loadingExternal": "Loading external subtitles...",
+        "transcriptChoice": "Transcript",
         "settings": {
           "backlink": "ترجمة مخصصة",
           "delay": "تأخير الترجمة",
@@ -536,15 +878,26 @@
         },
         "title": "الترجمة",
         "unknownLanguage": "مجهول",
-        "notFound": "لا توجد نتائج مطابقة لبحثك",
-        "useNativeSubtitlesDescription": "ممكن يحل مشكلة الترجمات وقت البث وفي وضع PiP",
-        "OpenSubtitlesChoice": "ترجمة خارجية",
-        "onChoice": "مفعّل",
-        "SourceChoice": "مصدر الترجمة",
         "dropSubtitleFile": "اسحب ملف الترجمة هنا! 😄",
         "scrapeButton": "جلب الترجمة",
+        "refresh": "Refresh External Subtitles",
+        "refreshing": "Refreshing...",
         "empty": "لا توجد ترجمات متوفرة لهذا الفيديو.",
-        "useNativeSubtitles": "استخدم ترجمة الفيديو الأصلية"
+        "notFound": "لا توجد نتائج مطابقة لبحثك",
+        "useNativeSubtitles": "استخدم ترجمة الفيديو الأصلية",
+        "useNativeSubtitlesDescription": "ممكن يحل مشكلة الترجمات وقت البث وفي وضع PiP",
+        "delayLate": "Heard audio",
+        "delayEarly": "Saw caption",
+        "translate": {
+          "title": "Translate from {{language}}"
+        },
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "clearSecondary": "Clear secondary subtitle",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "selectingSecondary": "Selecting secondary subtitle"
       },
       "watchparty": {
         "watchpartyItem": "المشاهدة الجماعية",
@@ -585,9 +938,15 @@
       }
     },
     "nextEpisode": {
-      "next": "الحلقة التالية",
       "replay": "إعادة المشاهدة",
+      "next": "الحلقة التالية",
       "nextSeason": "‎‏الموسم القادم"
+    },
+    "resume": {
+      "title": "Continue watching?",
+      "description": "This episode is {{percentage}}% watched",
+      "resume": "Resume",
+      "restart": "Restart"
     },
     "playbackError": {
       "badge": "خطأ في التشغيل",
@@ -598,13 +957,18 @@
         "errorNetwork": "حدث نوع من خطأ في الشبكة منع تحميل الوسائط بنجاح، رغم أنها كانت متاحة سابقًا.",
         "errorNotSupported": "المحتوى أو مزود المحتوى غير مدعوم."
       },
+      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
+      "copyDebugInfo": "Copy debug info",
+      "debugInfo": "Check console for more details.",
       "homeButton": "عُدْ للصفحة الرئيسية",
+      "resumeButton": "Try next sources",
       "text": "حدث خطأ أثناء محاولة تشغيل الوسائط😖، الرجاء المحاولة مرة أخرى أو تجربة مصدر مختلف!",
       "title": "فشِلَ تشغيلُ الفيديو!"
     },
     "scraping": {
       "items": {
         "failure": "حدث خطأ",
+        "timeout": "Timed out (15s)",
         "notFound": "لا يحتوي على اي فيديو(╥﹏╥)",
         "pending": "جارٍ التحققُ من وجود فيديوهات..."
       },
@@ -612,39 +976,31 @@
         "badge": "غير موجود",
         "detailsButton": "عرض التفاصيل",
         "homeButton": "عُدْ للصفحة الرئيسية",
+        "discoverButton": "اكتشف المزيد",
         "text": "لقد بحثنا في مزودينا ولم نتمكن من العثور على المحتوى الذي تبحث عنه! نحن لا نستضيف المحتوى ولا نتحكم في ما هو متاح. الرجاء الضغط على \"عرض التفاصيل\" أدناه لمزيد من المعلومات.",
         "title": "لم نتمكن من العثور على ذلك",
-        "discoverButton": "اكتشف المزيد"
+        "onboarding": "More sources might be avalible using the extension or febbox token!",
+        "onboardingButton": "Do setup again"
+      },
+      "extensionFailure": {
+        "badge": "الإضافة غير مفعّلة",
+        "homeButton": "الذهاب الي الصفحة الرئيسية",
+        "enableExtension": "فعّل الإضافة",
+        "title": "الرجاء تفعيل الإضافة",
+        "text": "لقد ثبّت إضافة BetaMovie بنجاح! لتبدأ تستخدمها، يجب تفعيل الإضافة لهذا الموقع."
       },
       "tips": {
-        "7": "اضغط باستمرار على Shift ثم اضغط على العنوان لنسخ الرابط مع التوقيت!",
-        "19": "اضغط . و ، للتنقل إطاراً بإطار عند الإيقاف المؤقت!",
-        "5": "احصل على الإضافة لمصادر أكثر!",
-        "13": "استخدم السهم الأيسر و السهم الأيمن لتخطي 5 ثوانٍ!",
         "1": "اضغط على أيقونة الإعدادات لتغيير المصادر!",
         "2": "اضغط على العنوان لنسخ الرابط!",
         "3": "اضغط باستمرار على Shift لإظهار زر الشاشة العريضة!",
         "4": "بعض المصادر تعمل أفضل من غيرها!",
+        "5": "احصل على الإضافة لمصادر أكثر!",
         "6": "اضغط باستمرار على العلامات المرجعية لتعديلها أو حذفها!",
+        "7": "اضغط باستمرار على Shift ثم اضغط على العنوان لنسخ الرابط مع التوقيت!",
         "8": "قم باختيار لوناً مخصصاً للترجمة!",
         "9": "انقل حسابك إلى واجهة خلفية جديدة من الإعدادات!",
         "10": "انضم إلى الديسكورد!",
-        "11": "استخدم [ and] لضبط توقيت الترجمة!",
-        "12": "اضغط على المسافة أو K للتشغيل/الإيقاف الفيلم!",
-        "17": "استخدم مفتاحي السهمين لأعلى ولأسفل لتغيير مستوى الصوت!",
-        "18": "اضغط < و > لتغيير سرعة التشغيل!",
-        "20": "اضغط C لتشغيل/إيقاف الترجمات!",
-        "21": "اضغط R لتدوير الشاشة!",
-        "14": "استخدم مفتاحي J و L لتخطي 10 ثوان!",
-        "15": "اضغط F لتشغيل/إيقاف ملء الشاشة!",
-        "16": "اضغط M لكتم/إلغاء كتم الصوت!"
-      },
-      "extensionFailure": {
-        "badge": "الإضافة غير مفعّلة",
-        "text": "لقد ثبّت إضافة BetaMovie بنجاح! لتبدأ تستخدمها، يجب تفعيل الإضافة لهذا الموقع.",
-        "homeButton": "الذهاب الي الصفحة الرئيسية",
-        "enableExtension": "فعّل الإضافة",
-        "title": "الرجاء تفعيل الإضافة"
+        "11": "استخدم [ and] لضبط توقيت الترجمة!"
       }
     },
     "time": {
@@ -653,11 +1009,133 @@
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     },
-    "turnstile": {
-      "description": "الرجاء التحقق من أنك إنسان عبر إكمال تحدي سريع . هذا للحفاظ على أمان BetaMovie.",
-      "error": "فشل التحقق من أنك إنسان - تعذّر تحميل البث. قم بمسح ذاكرة التخزين المؤقت وحاول مرة أخرى، أو جرّب التبديل إلى مصدر آخر (اضغط على أيقونة الترس).",
-      "title": "هل أنت روبوت 🤖؟",
-      "verifyingHumanity": "التحقق انك لست روبوت..(^▽^)👍"
+    "segment": {
+      "intro": "Intro",
+      "recap": "Recap",
+      "credits": "Credits"
+    },
+    "skipTime": {
+      "intro": "Skip Intro",
+      "recap": "Skip Recap",
+      "credits": "Skip Credits",
+      "skipSegments": "Skip Segments",
+      "submitSegment": "Submit Segment",
+      "noSegments": "No skip segments available",
+      "startsAt": "Starts at {{time}}",
+      "endsAt": "Ends at {{time}}",
+      "timeUnknown": "Time unknown",
+      "confidence": "confidence",
+      "submissions": "{{count}} submissions",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "endOfVideo": "End",
+      "feedback": {
+        "title": "Was this skip correct?",
+        "modal": {
+          "title": "Submit Timestamps to TheIntroDB",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "segmentType": "Segment Type",
+          "types": {
+            "intro": "Intro",
+            "recap": "Recap",
+            "credits": "Credits",
+            "preview": "Preview"
+          },
+          "startTimeLabel": "Start (s)",
+          "endTimeLabel": "End (s)",
+          "placeholders": {
+            "start": {
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)",
+              "credits": "2:30 or 150 (required)",
+              "preview": "2:30 or 150 (required)"
+            },
+            "end": {
+              "intro": "3:30 or 210 (required)",
+              "recap": "3:30 or 210 (required)",
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "preview": "3:30 or 210 (leave empty for end of media)"
+            }
+          },
+          "whenToTitle": "Timestamps guide:",
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "guide": {
+            "startLabel": "Start:",
+            "startDesc": "Required - when credits begin rolling",
+            "endLabel": "End:",
+            "endDesc": "Optional - empty if extends to end",
+            "durationLabel": "Duration:",
+            "durationDesc": "Min 5s if end provided",
+            "excludeLabel": "Exclude:",
+            "excludeDesc": "Post-credits scenes",
+            "intro": {
+              "whenToTitle": "Intro timestamps guide:",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
+            },
+            "recap": {
+              "whenToTitle": "Recap timestamps guide:",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
+            },
+            "credits": {
+              "whenToTitle": "Credits timestamps guide:",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
+            },
+            "preview": {
+              "whenToTitle": "Preview timestamps guide:",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
+            }
+          },
+          "cancel": "Cancel",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "error": {
+            "tidbKey": "TIDB API key is not set",
+            "mediaInfo": "Media information is not available",
+            "endTime": "End time is required",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "segment": "No segment selected"
+          },
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          }
+        }
+      }
+    }
+  },
+  "support": {
+    "title": "الدعم",
+    "text": "صُمم BetaMovie ليكون سهل الاستخدام قدر الإمكان. ولكن، لا يزال لدى المستخدمين بعض الأسئلة أو يواجهون بعض المشاكل. هذه الصفحة متواجدة هنا لمساعدتك في حل هذه الأمور",
+    "q1": {
+      "body": "بإمكانك الانضمام إلى <0>ديسكورد BetaMovie الرسمي</0> وطرح أسئلتك هناك، أو يمكنك مراسلتنا عبر البريد الإلكتروني الموجود في أسفل هذه الصفحة.",
+      "title": "أين يمكنني الحصول على المساعدة؟"
+    },
+    "q2": {
+      "body": "لدينا <0>صفحة على GitHub</0> حيث يمكنك إنشاء مشكلة مفصّلة في مستودعنا. بالإضافة إلى ذلك، إذا رغبت، يمكنك إنشاء طلب سحب (Pull Request) لإصلاح المشكلة بنفسك.",
+      "title": "كيف يمكنني الإبلاغ عن خطأ أو مشكلة؟"
+    }
+  },
+  "jip": {
+    "title": "جيب",
+    "text": "لم يخرج BetaMovie من شجرة جوز الهند، بل تم صنعه في الغالب بواسطة شخص واحد (شخص ملحمي للغاية).",
+    "q1": {
+      "body": "بإمكانك الانضمام إلى <0>ديسكورد BetaMovie الرسمي</0> وطرح أسئلتك هناك، أو يمكنك مراسلتنا عبر البريد الإلكتروني الموجود في أسفل هذه الصفحة.",
+      "title": "أين يمكنني الحصول على المساعدة؟"
+    },
+    "q2": {
+      "body": "لدينا <0>صفحة على GitHub</0> حيث يمكنك إنشاء مشكلة مفصّلة في مستودعنا. بالإضافة إلى ذلك، إذا رغبت، يمكنك إنشاء طلب سحب (Pull Request) لإصلاح المشكلة بنفسك.",
+      "title": "كيف يمكنني الإبلاغ عن خطأ أو مشكلة؟"
     }
   },
   "screens": {
@@ -669,9 +1147,14 @@
     "loadingUserError": {
       "logout": "تسجيل الخروج",
       "reset": "إعادة تعيين الخادم المخصص",
+      "disconnect": "Disconnect from backend",
       "text": "فشل تحميل ملفك الشخصي",
+      "reload": "إعادة تحميل",
       "textWithReset": "فشل تحميل ملفك الشخصي من خادمك المخصص، هل ترغب في العودة إلى الخادم الافتراضي؟",
-      "reload": "إعادة تحميل"
+      "disconnectTitle": "Disconnect from backend?",
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectConfirm": "Confirm",
+      "disconectCancel": "Cancel"
     },
     "migration": {
       "failed": "فشلت عملية ترحيل بياناتك.😿",
@@ -679,12 +1162,24 @@
     }
   },
   "settings": {
+    "search": {
+      "placeholder": "Search settings..."
+    },
+    "all": {
+      "title": "All Settings"
+    },
     "account": {
       "accountDetails": {
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "اسم الجهاز",
         "deviceNamePlaceholder": "الهاتف الشخصي",
         "editProfile": "تعديل",
         "logoutButton": "تسجيل الخروج"
+      },
+      "admin": {
+        "title": "لوحة الإدارة",
+        "text": "استخدم الأدوات المصممة لاختبار حالة BetaMovie."
       },
       "actions": {
         "delete": {
@@ -695,20 +1190,21 @@
           "text": "هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع البيانات ولا يمكن استعادتها.",
           "title": "حذف الحساب"
         },
+        "migration": {
+          "title": "نقل الحساب",
+          "text": "قم بنقل حسابك إلى خادم جديد أو حمّل بياناتك.",
+          "button": "نقل الحساب"
+        },
         "title": "الإجراءات",
         "logoutAllDevices": {
           "title": "إنهاء جميع الجلسات",
           "text": "سيؤدي هذا إلى تسجيل خروجك من جميع الأجهزة المرتبطة بحسابك.",
           "button": "تسجيل الخروج من جميع الأجهزة"
-        },
-        "migration": {
-          "title": "نقل الحساب",
-          "text": "قم بنقل حسابك إلى خادم جديد أو حمّل بياناتك.",
-          "button": "نقل الحساب"
         }
       },
       "devices": {
         "deviceNameLabel": "اسم الجهاز",
+        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "فشل تحميل الجلسات",
         "removeDevice": "إزالة",
         "title": "الأجهزة"
@@ -725,57 +1221,75 @@
         "text": "شارك تقدم مشاهدتك بين الأجهزة وحافظ على تزامنها. ( ̧⸝⸝⍢⸝⸝)ෆ",
         "title": "مزامنة إلى التخزين لسحابي"
       },
-      "title": "الحساب",
-      "admin": {
-        "title": "لوحة الإدارة",
-        "button": "اطّلع عليه",
-        "text": "استخدم الأدوات المصممة لاختبار حالة BetaMovie."
-      }
+      "title": "الحساب"
     },
     "appearance": {
       "activeTheme": "مفعل",
       "themes": {
         "blue": "أزرق",
+        "custom": "Custom",
         "default": "افتراضي",
         "gray": "رمادي",
         "red": "أحمر",
         "teal": "تركواز",
+        "classic": "كلاسيكي",
         "green": "أخضر",
         "mocha": "بني",
         "pink": "وردي",
+        "noir": "أسود",
         "ember": "أحمر غامق",
         "acid": "أخضر حامضي",
         "spark": "ذهبي",
         "grape": "عنابي",
         "spiderman": "سبايدرمان",
         "forest": "أخضر غابي",
+        "wolverine": "وولفرين",
         "popsicle": "صيفي",
         "hulk": "هالك",
-        "noir": "أسود",
-        "classic": "كلاسيكي",
-        "wolverine": "وولفرين"
+        "autumn": "Autumn",
+        "cobalt": "Cobalt",
+        "frost": "Frost",
+        "christmas": "Christmas"
+      },
+      "customParts": {
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "tertiary": "Tertiary"
       },
       "title": "المظهر",
       "options": {
         "discover": "قسم الاكتشاف",
+        "discoverDescription": "اعرض قسم الاكتشاف في الصفحة الرئيسية أسفل الوسائط التي قمت بوضع إشارة عليها.",
         "discoverLabel": "قسم الاكتشاف",
         "featured": "المحتوى المميز",
         "featuredDescription": "اعرض شريط تمرير للأفلام والبرامج المميزة في أعلى الصفحة الرئيسية! معطلة افتراضيا.",
         "featuredLabel": "المحتوى المميز",
         "modal": "نافذة التفاصيل",
+        "modalDescription": "اعرض نافذة التفاصيل عند النقر على بطاقة الوسائط بدلًا من الانتقال إلى صفحة المشاهدة. يتطلب الأمر بروكسي أو إضافة للتشغيل التجريبي.",
         "modalLabel": "نافذة التفاصيل",
-        "logosDescription": "اعرض شعارات الصور بدلًا من عناوين النص في نافذة التفاصيل وقسم المحتوى المميز.",
         "logos": "شعارات الصور",
+        "logosDescription": "اعرض شعارات الصور بدلًا من عناوين النص في نافذة التفاصيل وقسم المحتوى المميز.",
+        "logosNotice": "في معظم الوقت، تكون الشعارات باللغة الإنجليزية فقط. قد يرغب المستخدمون الذين يتحدثون لغات أخرى في ايقاف هذا!",
         "logosLabel": "شعارات الصور",
         "carouselView": "عرض شريط التمرير",
         "carouselViewDescription": "اعرض قسمي \"تشاهد حاليًا\" و\"المحفوظات\" كشرائط تمرير بدلًا من شبكة.",
         "carouselViewLabel": "عرض شريط التمرير",
-        "discoverDescription": "اعرض قسم الاكتشاف في الصفحة الرئيسية أسفل الوسائط التي قمت بوضع إشارة عليها.",
-        "modalDescription": "اعرض نافذة التفاصيل عند النقر على بطاقة الوسائط بدلًا من الانتقال إلى صفحة المشاهدة. يتطلب الأمر بروكسي أو إضافة للتشغيل التجريبي.",
-        "logosNotice": "في معظم الوقت، تكون الشعارات باللغة الإنجليزية فقط. قد يرغب المستخدمون الذين يتحدثون لغات أخرى في ايقاف هذا!",
+        "minimalCards": "Minimal cards",
+        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
+        "minimalCardsLabel": "Minimal cards",
         "forceCompactEpisodeView": "فرض عرض الحلقات المضغوطة",
         "forceCompactEpisodeViewDescription": "فرض عرض الحلقات داخل المشغّل باستخدام العرض العمودي الكلاسيكي المضغوط. يكون هذا الخيار معطّلًا بشكل افتراضي.",
-        "forceCompactEpisodeViewLabel": "الحلقات المضغوطة"
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
+        "forceCompactEpisodeViewLabel": "الحلقات المضغوطة",
+        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "pauseOverlay": "Pause overlay",
+        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
+        "pauseOverlayLabel": "Pause overlay"
+      },
+      "sections": {
+        "watching": "Currently Watching",
+        "bookmarks": "Bookmarks"
       }
     },
     "connections": {
@@ -783,11 +1297,19 @@
         "description": "إذا كنت ترغب في الاتصال بواجهة خلفية مخصصة لتخزين بياناتك، فعّل هذا الخيار وأدخل الرابط. <0>التعليمات.</0>",
         "label": "خادم مُخصص",
         "urlLabel": "رابط الخادم المخصص",
+        "selectBackend": "Select Backend Server",
+        "currentBackend": "Current Backend",
+        "changeWarning": "Changing backend server will log you out. Continue?",
+        "confirm": "Log out and change server",
+        "cancel": "Cancel",
+        "changeWarningTitle": "Change Backend Server",
         "migration": {
           "description": "<0>انقل بياناتي</0> إلى خادم جديد.",
           "link": "انقل بياناتي"
         },
-        "documentation": "توثيق الواجهة الخلفية"
+        "documentation": "توثيق الواجهة الخلفية",
+        "error": "Error connecting to backend",
+        "notice": "Your account does NOT sync between backends, so remember which one you use!"
       },
       "setup": {
         "doSetup": "إعداد",
@@ -799,7 +1321,8 @@
         "items": {
           "default": "الإعداد الافتراضي",
           "extension": "إضافة BetaMovie",
-          "proxy": "وكيل (بروكسي) مخصص"
+          "proxy": "وكيل (بروكسي) مخصص",
+          "desktopapp": "Native app"
         },
         "redoSetup": "إعادة الإعداد",
         "successStatus": {
@@ -815,6 +1338,7 @@
       "workers": {
         "addButton": "إضافة وكيل جديد",
         "description": "لكي يعمل التطبيق، يتم توجيه كل البيانات عبر البروكسيات. فعّل هذا الخيار إذا كنت تريد استخدام العمال (workers) الخاصين بك. <0>التعليمات.</0>",
+        "documentation": "توثيق البروكسي",
         "emptyState": "لا يوجد وكلاء حتى الآن، أضف واحدًا أدناه",
         "label": "استخدم وكلاء بروكسي مخصصين",
         "urlLabel": "روابط العمال",
@@ -822,29 +1346,66 @@
         "proxyTMDB": {
           "title": "بروكسي TMDB",
           "description": "مطلوب فقط إذا لم تتمكن من الوصول إلى TheMovieDB مباشرةً، مثلًا إذا كان مزود خدمة الإنترنت لديك يحجبه. يُنصح بتعطيل قسم الاكتشاف لتحسين الأداء في هذه الحالة."
-        },
-        "documentation": "توثيق البروكسي"
+        }
+      },
+      "tidb": {
+        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
+        "tokenLabel": "API Key"
+      },
+      "trakt": {
+        "title": "Trakt",
+        "description": "Sync your watchlist and history with Trakt.",
+        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
+        "connect": "Connect Trakt",
+        "syncing": "Syncing...",
+        "disconnect": "Disconnect"
       }
     },
     "preferences": {
+      "title": "التفضيلات",
       "language": "لغة الموقع",
       "languageDescription": "تم تطبيق اللغة على الموقع.",
       "thumbnail": "إنشاء صور مصغرة",
       "thumbnailDescription": "في معظم الأوقات، لا تحتوي مقاطع الفيديو على صور مصغرة. يمكنك تمكين هذا الإعداد من توليدها بسرعة ولكن يمكنها جعل الفيديو الخاص بك أبطأ.",
       "thumbnailLabel": "إنشاء صور مصغرة",
-      "title": "التفضيلات",
-      "autoplayLabel": "التشغيل التلقائي",
       "autoplay": "التشغيل التلقائي",
+      "autoplayDescription": "تشغيل الحلقة التالية تلقائيًا عند الوصول إلى نهاية الحلقة الحالية. يمكن للمستخدمين تفعيل هذا الخيار من خلال إضافة المتصفح، أو بروكسي مخصص، أو من خلال الإعداد الافتراضي إذا سمح المضيف بذلك.",
+      "autoplayLabel": "التشغيل التلقائي",
       "skipCredits": "تخطي النهاية",
       "skipCreditsDescription": "عند التفعيل، يتم تشغيل الحلقة التالية تلقائيًا عند إكمال 99% لتخطي نهاية الاعتمادات. عند التعطيل، ينتظر حتى انتهاء الحلقة بالكامل.",
       "skipCreditsLabel": "تخطي النهاية",
-      "sourceOrder": "إعادة ترتيب المصادر",
-      "sourceOrderEnableLabel": "ترتيب المصادر المخصص",
-      "sourceOrderDescription": "اسحب وأفلت لإعادة ترتيب المصادر. هذا سيحدد ترتيب التحقق من المصادر للوسائط التي تحاول مشاهدتها. إذا كان المصدر مظللًا بالرمادي، فهذا يعني أن <bold>الإضافة</bold> مطلوبة لهذا المصدر. <br><br><strong>(الترتيب الافتراضي هو الأفضل لمعظم المستخدمين)</strong>",
-      "autoplayDescription": "تشغيل الحلقة التالية تلقائيًا عند الوصول إلى نهاية الحلقة الحالية. يمكن للمستخدمين تفعيل هذا الخيار من خلال إضافة المتصفح، أو بروكسي مخصص، أو من خلال الإعداد الافتراضي إذا سمح المضيف بذلك.",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
       "lowPerformanceMode": "وضع الأداء المنخفض / تقليل استهلاك البيانات",
       "lowPerformanceModeDescription": "يقوم بتحسين التطبيق للاتصالات والأجهزة ذات السرعة المنخفضة عن طريق تعطيل الميزات التي تستهلك الكثير من البيانات. يقلل هذا الوضع من استخدام البيانات ويحسّن الأداء مع الحفاظ على وظائف البحث والمشاهدة الأساسية. ",
-      "lowPerformanceModeLabel": "وضع الأداء المنخفض"
+      "lowPerformanceModeLabel": "وضع الأداء المنخفض",
+      "holdToBoost": "Hold to boost speed",
+      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
+      "holdToBoostLabel": "Enable hold to boost",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "sourceOrder": "إعادة ترتيب المصادر",
+      "sourceOrderDescription": "اسحب وأفلت لإعادة ترتيب المصادر. هذا سيحدد ترتيب التحقق من المصادر للوسائط التي تحاول مشاهدتها. إذا كان المصدر مظللًا بالرمادي، فهذا يعني أن <bold>الإضافة</bold> مطلوبة لهذا المصدر. <br><br><strong>(الترتيب الافتراضي هو الأفضل لمعظم المستخدمين)</strong>",
+      "sourceOrderEnableLabel": "ترتيب المصادر المخصص",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "autoResumeOnPlaybackError": "Auto resume on playback error",
+      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
+      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "lastSuccessfulSource": "Last used source",
+      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
+      "lastSuccessfulSourceEnableLabel": "Last used source"
     },
     "reset": "إعادة تعيين",
     "save": "حفظ",
@@ -855,6 +1416,7 @@
         "backendVersion": "إصدار الواجهة الخلفية",
         "hostname": "اسم المضيف",
         "insecure": "غير آمن",
+        "nickname": "Nickname",
         "notLoggedIn": "أنت لم تسجل دخولك بعد",
         "secure": "آمن",
         "title": "معلومات التطبيق",
@@ -864,220 +1426,28 @@
     },
     "subtitles": {
       "backgroundLabel": "تعتيم الخلفية",
+      "backgroundBlurEnabledLabel": "Background blur",
+      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurLabel": "تغبيش الخلفية",
       "colorLabel": "لون",
       "previewQuote": "هٰذا نَص تجريبيّ لترجمة الفِيدْيو. قُمْ بتَعديل الحجمِ أو النَّمط أو المَوضِع هُنَا.",
       "textSizeLabel": "حجم النص",
       "title": "الترجمة",
       "textBoldLabel": "خط عريض",
       "verticalPositionLabel": "مكان الترجمة عموديًا",
-      "default": "افتراضي",
+      "high": "High",
       "low": "منخفض",
       "textStyle": {
         "title": "نمط النص",
         "default": "افتراضي",
         "raised": "مرفوع",
         "depressed": "منخفض",
-        "uniform": "متساوي",
+        "Border": "Border",
         "dropShadow": "ظل مُسقط"
       },
-      "backgroundBlurLabel": "تغبيش الخلفية"
+      "BorderThicknessLabel": "Border Thickness"
     },
     "unsaved": "لديك تغييرات غير محفوظة"
-  },
-  "migration": {
-    "loginRequired": "يجب عليك تسجيل الدخول لنقل بياناتك! يُرجى العودة وتسجيل الدخول للمتابعة.",
-    "start": {
-      "options": {
-        "or": "أو",
-        "direct": {
-          "description": "سيؤدي هذا إلى نقل بياناتك مباشرةً إلى الخادم الجديد. هذا هو الخيار الأسرع. <br /><br />يتيح لك هذا الخيار الاحتفاظ بعبارة المرور كما هي!",
-          "title": "النقل المباشر",
-          "quality": "الأسهل و الأسرع",
-          "action": "نقل البيانات"
-        },
-        "download": {
-          "description": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى الخادم الجديد أو الاحتفاظ بها.",
-          "title": "تنزيل البيانات",
-          "quality": "أكثر تقنية",
-          "action": "تنزيل البيانات"
-        },
-        "upload": {
-          "title": "رفع البيانات",
-          "description": "قم بتحميل ملف البيانات الذي قمت بتصديره مسبقًا لاستعادة الوسائط المفضلة و التقدم على هذا الحساب.",
-          "quality": "استعادة من النسخة الاحتياطية",
-          "action": "رفع البيانات"
-        }
-      },
-      "title": "انقل بياناتك",
-      "explainer": "إذا كنت ترغب في نقل بياناتك أو نسخها احتياطيًا، يمكنك القيام بذلك باستخدام الخيارات أدناه. سيسمح لك هذا بالاحتفاظ ببياناتك عند تغيير خوادم الواجهة الخلفية."
-    },
-    "direct": {
-      "button": {
-        "migrate": "نقل",
-        "processing": "تتم المعالجة...",
-        "home": "الذهاب إلي الصفحة الرئيسية",
-        "login": "الاستمرار في تسجيل الدخول"
-      },
-      "description": "أدخل رابط الواجهة الخلفية (Backend) الجديدة لنقل بيانات حسابك الحالية. ستبقى كلمة المرور الخاصة بك كما هي!",
-      "recaptchaLabel": "مفتاح ReCaptcha (اختياري)",
-      "toggleLable": "هل تحتاج إلى ReCaptcha؟",
-      "status": {
-        "error": "فشل نقل بياناتك. 😿",
-        "success": "لقد تم نقل بياناتك بنجاح! 🎉"
-      },
-      "backendLabel": "رابط الواجهة الخلفية الجديدة",
-      "title": "النقل المباشر"
-    },
-    "download": {
-      "title": "تنزيل البيانات",
-      "description": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى سيرفر جديد أو الاحتفاظ بها.",
-      "items": {
-        "description": "التحميل يشمل:",
-        "bookmarks": "الوسائط المفضلة",
-        "progress": "تقدم المشاهدة"
-      },
-      "status": {
-        "error": "فشل في تنزيل بياناتك. 😿",
-        "success": "تم تنزيل بياناتك! 🎉"
-      },
-      "button": {
-        "download": "نزل البيانات",
-        "home": "اذهب للصفحة الرئيسية",
-        "login": "استمرار الى تسجيل الدخول"
-      }
-    },
-    "upload": {
-      "description": "قم برفع ملف البيانات الذي صدّرته مسبقًا لاستعادة المعلومات لهذا الحساب.",
-      "items": {
-        "progress": "معدل التقدم في المشاهدة",
-        "bookmarks": "الافلام المحفوظة"
-      },
-      "title": "تحميل البيانات",
-      "status": {
-        "processing": "جارٍ معالجة البيانات...",
-        "error": "فشل في تحميل بياناتك. 😿",
-        "success": "‌تم تحميل بيناتك! 🎉"
-      },
-      "file": {
-        "description": "اختر الملف الذي تريد رفعه",
-        "select": "اختر الملف",
-        "change": "غير الملف",
-        "name": "اسم الملف"
-      },
-      "dataPreview": "نظرة عامة:",
-      "exportedOn": "تم التصدير في",
-      "button": {
-        "import": "استرداد البيانات",
-        "processing": "جاري التنفيذ...",
-        "success": "تمت العملية بنجاح",
-        "home": "الاستمرار للصفحة الرئيسية"
-      }
-    },
-    "back": "رجوع"
-  },
-  "details": {
-    "resume": "متابعة",
-    "play": "تشغيل",
-    "runtime": "مدة:",
-    "releaseDate": "تاريخ الاصدار:",
-    "rating": "التقييم:",
-    "votes": "الأصوات",
-    "tmdb": "عرض في TMDB",
-    "imdb": "عرض في IMDb",
-    "episodes": "الحلقات",
-    "season": "الموسم",
-    "airs": "يصدر",
-    "language": "اللغة:",
-    "endsAt": "ينتهي الساعة {{time}}",
-    "seasons": "موسم",
-    "episode": "حلقة",
-    "trailer": "الإعلان الترويجي"
-  },
-  "fedapi": {
-    "status": {
-      "api_down": "لا يمكن الوصول إلى واجهة برمجة تطبيقات FED!",
-      "invalid_token": "فشل جلب بث 'VIP'. الرمز غير صالح!",
-      "success": "نجاح"
-    },
-    "setup": {
-      "title": "للحصول على رمز واجهة المستخدم (UI token) الخاص بك:",
-      "showVideo": "عرض شرح بالفيديو",
-      "hideVideo": "إخفاء شرح الفيديو",
-      "step": {
-        "1": "1. اذهب إلى <0>febbox.com</0> وسجل الدخول باستخدام جوجل (استخدم حساباً جديداً!)",
-        "2": "2. افتح أدوات المطور أو قم بفحص الصفحة (Inspect)",
-        "4": "4. انسخ كوكي 'ui'.",
-        "5": "5. يمكنك إغلاق التبويب، ولكن لا تسجل خروج!",
-        "warning": "(لا تشارك هذا الرمز مع أي شخص!)",
-        "3": "3. اذهب إلى تبويب التطبيق (Application tab) ← ملفات تعريف الارتباط (Cookies)"
-      }
-    },
-    "onboarding": {
-      "title": "رمز (توكن) FED API الخاص",
-      "description": "احصل على حساب مجاني في Febbox واستمتع بوصول حصري إلى FED API الخاص، أفضل مصدر يقدم لك جودة 4K، صوت دولبي أتموس، إمكانية تخطي المقدمات، وأسرع تحميل للفيديوهات! ننصح به بشدة!"
-    }
-  },
-  "watchParty": {
-    "alone": "بمفردك",
-    "status": {
-      "outOfSync": "غير متزامن",
-      "inSync": "متزامن"
-    },
-    "hosting": "استضافة",
-    "withCount": "مع {{count}} آخرين",
-    "isHost": "مستضاف على <0>{{backendName}}</0>",
-    "isGuest": "تشاهد كضيف على <0>{{backendName}}</0>",
-    "watching": "مشاهدة",
-    "syncing": "جاري المزامنة...",
-    "aheadOfHost": "متقدم على المضيف بـ {{seconds}} ثواني",
-    "showStatusOverlay": "عرض حالة التراكب",
-    "leaveWatchParty": "مغادرة جلسة المشاهدة الجماعية",
-    "connectedAsGuest": "تم الاتصال بجلسة المشاهدة كضيف",
-    "hostParty": "استضافة جلسة مشاهدة جماعية",
-    "joinParty": "انضم إلى جلسة مشاهدة جماعية",
-    "viewers": "عدد المشاهدين ({{count}})",
-    "join": "انضم",
-    "cancel": "إلغاء",
-    "save": "حفظ",
-    "emptyRoom": "لا يوجد أحد في هذه الغرفة بعد",
-    "contentMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: المحتوى لا يتطابق مع محتوى المضيف.",
-    "validating": "جاري التحقق من جلسة المشاهدة...",
-    "linkCopied": "تم النسخ!",
-    "behindHost": "متأخر عن المضيف بـ {{seconds}} ثانية",
-    "shareCode": "شارك هذا الرمز مع أصدقائك (اضغط لنسخ الرابط)",
-    "copyCode": "انقر للنسخ",
-    "invalidRoom": "غير قادر على الاتصال بهذه الغرفة",
-    "episodeMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: أنت تشاهد حلقة مختلفة عن المضيف."
-  },
-  "downtimeNotice": {
-    "message": "نحن نواجه بعض المشاكل، إذا لم تتمكن من العثور على شيء أو تشغيله، يرجى تغيير المصدر. نتوقع استمرار هذه المشكلة خلال الأوقات التالية.",
-    "title": "خطأ في المزودين",
-    "badge": "مشكلات",
-    "goHome": "اذهب للصفحة الرئيسية"
-  },
-  "support": {
-    "title": "الدعم",
-    "q1": {
-      "body": "بإمكانك الانضمام إلى <0>ديسكورد BetaMovie الرسمي</0> وطرح أسئلتك هناك، أو يمكنك مراسلتنا عبر البريد الإلكتروني الموجود في أسفل هذه الصفحة.",
-      "title": "أين يمكنني الحصول على المساعدة؟"
-    },
-    "q2": {
-      "title": "كيف يمكنني الإبلاغ عن خطأ أو مشكلة؟",
-      "body": "لدينا <0>صفحة على GitHub</0> حيث يمكنك إنشاء مشكلة مفصّلة في مستودعنا. بالإضافة إلى ذلك، إذا رغبت، يمكنك إنشاء طلب سحب (Pull Request) لإصلاح المشكلة بنفسك."
-    },
-    "text": "صُمم BetaMovie ليكون سهل الاستخدام قدر الإمكان. ولكن، لا يزال لدى المستخدمين بعض الأسئلة أو يواجهون بعض المشاكل. هذه الصفحة متواجدة هنا لمساعدتك في حل هذه الأمور"
-  },
-  "jip": {
-    "q1": {
-      "title": "أين يمكنني الحصول على المساعدة؟",
-      "body": "بإمكانك الانضمام إلى <0>ديسكورد BetaMovie الرسمي</0> وطرح أسئلتك هناك، أو يمكنك مراسلتنا عبر البريد الإلكتروني الموجود في أسفل هذه الصفحة."
-    },
-    "q2": {
-      "title": "كيف يمكنني الإبلاغ عن خطأ أو مشكلة؟",
-      "body": "لدينا <0>صفحة على GitHub</0> حيث يمكنك إنشاء مشكلة مفصّلة في مستودعنا. بالإضافة إلى ذلك، إذا رغبت، يمكنك إنشاء طلب سحب (Pull Request) لإصلاح المشكلة بنفسك."
-    },
-    "title": "جيب",
-    "text": "لم يخرج BetaMovie من شجرة جوز الهند، بل تم صنعه في الغالب بواسطة شخص واحد (شخص ملحمي للغاية)."
   },
   "discover": {
     "tabs": {
@@ -1097,17 +1467,19 @@
         "latestReleases": "أحدث الإصدارات",
         "4kReleases": "إصدارات 4K",
         "onTheAir": "يعرض حالياً",
+        "latestTVReleases": "أحدث المسلسلات",
+        "popularOn": "الأكثر شعبية من {{type}} على {{provider}}",
         "editorPicksMovies": "أفلام مختارة بعناية",
         "editorPicksShows": "مسلسلات مختارة بعناية",
         "moviesOn": "أفلام على {{provider}}",
         "tvshowsOn": "مسلسلات على {{provider}}",
         "recommended": "لأنك شاهدت: {{title}}",
+        "forYou": "For You",
         "genreMovies": "أفلام {{genre}}",
-        "categoryShows": "مسلسلات {{category}}",
-        "popularOn": "الأكثر شعبية من {{type}} على {{provider}}",
         "genreShows": "مسلسلات {{genre}}",
         "categoryMovies": "أفلام {{category}}",
-        "latestTVReleases": "أحدث المسلسلات"
+        "categoryShows": "مسلسلات {{category}}",
+        "top10": "Top 10"
       },
       "change": "تغيير",
       "more": "عرض المزيد"
@@ -1118,30 +1490,104 @@
     },
     "randomMovie": {
       "button": "شاهد شيئًا عشوائيًا",
+      "cancel": "إلغاء العد التنازلي",
       "countdown": "{{countdown}} ث",
       "nowPlaying": "يعرض الآن",
-      "in": "في",
-      "cancel": "إلغاء العد التنازلي"
+      "in": "في"
     },
     "page": {
       "title": "اكتشف الأفلام والمسلسلات",
+      "subtitle": "استكشف أحدث الأعمال والكلاسيكيات الخالدة.",
       "loadMore": "تحميل المزيد",
       "loading": "جارٍ التحميل...",
-      "back": "عودة",
-      "subtitle": "استكشف أحدث الأعمال والكلاسيكيات الخالدة."
+      "back": "عودة"
     },
-    "scrollToTop": "العودة إلى الأعلى",
     "viewLists": "عرض جميع قوائم الأفلام",
-    "allLists": "جميع قوائم الأفلام"
+    "allLists": "جميع قوائم الأفلام",
+    "scrollToTop": "العودة إلى الأعلى"
   },
-  "realdebrid": {
-    "status": {
-      "api_down": "Real Debrid API غير متاح حاليا الرجاء المحاولة في وقت لاحق.",
-      "failure": "فشل الاتصال ب Real Debrid . الرجاء التحقق من مفتاح API الخاص بك.",
-      "invalid_token": "مفتاح API تالف او الحساب غير مميز ، Real Debrid تتطلب حساب مميز."
+  "fedapi": {
+    "onboarding": {
+      "title": "رمز (توكن) FED API الخاص",
+      "description": "احصل على حساب مجاني في Febbox واستمتع بوصول حصري إلى FED API الخاص، أفضل مصدر يقدم لك جودة 4K، صوت دولبي أتموس، إمكانية تخطي المقدمات، وأسرع تحميل للفيديوهات! ننصح به بشدة!"
     },
-    "description": "أدخل مفتاح API الخاص بـ Real Debrid للوصول إلىReal Debrid . يتطلب وجود الإضافة.",
-    "title": "Real Debrid (نسخة تجريبية)",
-    "tokenLabel": "مفتاح API"
+    "setup": {
+      "title": "للحصول على رمز واجهة المستخدم (UI token) الخاص بك:",
+      "showVideo": "عرض شرح بالفيديو",
+      "hideVideo": "إخفاء شرح الفيديو",
+      "step": {
+        "1": "1. اذهب إلى <0>febbox.com</0> وسجل الدخول باستخدام جوجل (استخدم حساباً جديداً!)",
+        "2": "2. افتح أدوات المطور أو قم بفحص الصفحة (Inspect)",
+        "3": "3. اذهب إلى تبويب التطبيق (Application tab) ← ملفات تعريف الارتباط (Cookies)",
+        "4": "4. انسخ كوكي 'ui'.",
+        "5": "5. يمكنك إغلاق التبويب، ولكن لا تسجل خروج!"
+      },
+      "tokenLabel": "Token",
+      "tokenExample": {
+        "button": "(Example)",
+        "title": "Example Token",
+        "description": "This is what a Febbox UI token looks like:",
+        "warning": "Don't try to use, it's fake.",
+        "close": "Got it"
+      },
+      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
+      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
+      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
+    },
+    "status": {
+      "success": "نجاح",
+      "api_down": "لا يمكن الوصول إلى واجهة برمجة تطبيقات FED!",
+      "invalid_token": "فشل جلب بث 'VIP'. الرمز غير صالح!"
+    }
+  },
+  "debrid": {
+    "title": "Debrid (Beta)",
+    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
+    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
+    "tokenLabel": "API Key",
+    "serviceOptions": {
+      "realdebrid": "Real Debrid",
+      "torbox": "TorBox"
+    },
+    "status": {
+      "failure": "Failed to connect to Debrid. Please check your API key.",
+      "api_down": "Hmm, something went wrong. Please try again later.",
+      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
+    }
+  },
+  "watchParty": {
+    "status": {
+      "inSync": "متزامن",
+      "outOfSync": "غير متزامن"
+    },
+    "alone": "بمفردك",
+    "withCount": "مع {{count}} آخرين",
+    "isHost": "مستضاف على <0>{{backendName}}</0>",
+    "isGuest": "تشاهد كضيف على <0>{{backendName}}</0>",
+    "hosting": "استضافة",
+    "watching": "مشاهدة",
+    "syncing": "جاري المزامنة...",
+    "behindHost": "متأخر عن المضيف بـ {{seconds}} ثانية",
+    "aheadOfHost": "متقدم على المضيف بـ {{seconds}} ثواني",
+    "showStatusOverlay": "عرض حالة التراكب",
+    "leaveWatchParty": "مغادرة جلسة المشاهدة الجماعية",
+    "shareCode": "شارك هذا الرمز مع أصدقائك (اضغط لنسخ الرابط)",
+    "connectedAsGuest": "تم الاتصال بجلسة المشاهدة كضيف",
+    "hostParty": "استضافة جلسة مشاهدة جماعية",
+    "joinParty": "انضم إلى جلسة مشاهدة جماعية",
+    "viewers": "عدد المشاهدين ({{count}})",
+    "copyCode": "انقر للنسخ",
+    "join": "انضم",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "emptyRoom": "لا يوجد أحد في هذه الغرفة بعد",
+    "noHost": "No host in this watch party",
+    "invalidRoom": "غير قادر على الاتصال بهذه الغرفة",
+    "contentMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: المحتوى لا يتطابق مع محتوى المضيف.",
+    "episodeMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: أنت تشاهد حلقة مختلفة عن المضيف.",
+    "validating": "جاري التحقق من جلسة المشاهدة...",
+    "linkCopied": "تم النسخ!",
+    "backendRequirement": "All users must use the same backend server",
+    "activeBackend": "Active Backend: {{backend}}"
   }
 }
