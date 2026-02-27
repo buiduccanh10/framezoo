@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { MetaResponse } from "@/backend/accounts/meta";
+import { getBackendMeta } from "@/backend/accounts/meta";
 import { Button } from "@/components/buttons/Button";
 import { BackendSelector } from "@/components/form/BackendSelector";
 import {
@@ -17,7 +17,6 @@ import {
   AccountProfile,
 } from "@/pages/parts/auth/AccountCreatePart";
 import { PassphraseGeneratePart } from "@/pages/parts/auth/PassphraseGeneratePart";
-import { TrustBackendPart } from "@/pages/parts/auth/TrustBackendPart";
 import { VerifyPassphrase } from "@/pages/parts/auth/VerifyPassphrasePart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
@@ -54,7 +53,7 @@ export function RegisterPage() {
     (availableBackends.length === 1 ? availableBackends[0] : null);
 
   const [step, setStep] = useState(
-    availableBackends.length > 1 || !defaultBackend ? -1 : 0,
+    availableBackends.length > 1 || !defaultBackend ? -1 : 1,
   );
   const [mnemonic, setMnemonic] = useState<null | string>(null);
   const [credentialId, setCredentialId] = useState<null | string>(null);
@@ -66,6 +65,22 @@ export function RegisterPage() {
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
     currentBackendUrl ?? defaultBackend ?? null,
   );
+
+  useEffect(() => {
+    if (selectedBackendUrl) {
+      getBackendMeta(selectedBackendUrl)
+        .then((meta) => {
+          setSiteKey(
+            meta.hasCaptcha && meta.captchaClientKey
+              ? meta.captchaClientKey
+              : null,
+          );
+        })
+        .catch((err) => {
+          console.error("Failed to fetch backend meta:", err);
+        });
+    }
+  }, [selectedBackendUrl]);
 
   const handleBackendSelect = (url: string | null) => {
     setSelectedBackendUrl(url);
@@ -97,7 +112,7 @@ export function RegisterPage() {
                 theme="purple"
                 onClick={() => {
                   if (selectedBackendUrl) {
-                    setStep(0);
+                    setStep(1);
                   }
                 }}
                 disabled={!selectedBackendUrl}
@@ -107,19 +122,7 @@ export function RegisterPage() {
             </LargeCardButtons>
           </LargeCard>
         ) : null}
-        {step === 0 ? (
-          <TrustBackendPart
-            backendUrl={selectedBackendUrl}
-            onNext={(meta: MetaResponse) => {
-              setSiteKey(
-                meta.hasCaptcha && meta.captchaClientKey
-                  ? meta.captchaClientKey
-                  : null,
-              );
-              setStep(1);
-            }}
-          />
-        ) : null}
+
         {step === 1 ? (
           <PassphraseGeneratePart
             onNext={(m) => {
