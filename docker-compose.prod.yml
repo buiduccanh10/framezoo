@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
       args:
         TMDB_READ_API_KEY: ${VITE_TMDB_READ_API_KEY}
+        BACKEND_URL: ${VITE_BACKEND_URL}
+        CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
         APP_DOMAIN: https://movie.betakiot.id.vn
         PWA_ENABLED: "true"
         OPENSEARCH_ENABLED: "true"
