@@ -143,14 +143,14 @@ export function Navigation(props: NavigationProps) {
               >
                 <BrandPill clickable header />
               </Link>
-              <a
+              {/* <a
                 href={conf().FLUXER_LINK}
                 target="_blank"
                 rel="noreferrer"
                 className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
               >
                 <IconPatch icon={Icons.FLUXER} clickable downsized navigation />
-              </a>
+              </a> */}
               {!enableLowPerformanceMode &&
                 (window.location.pathname !== "/discover" ? (
                   <a
@@ -179,7 +179,7 @@ export function Navigation(props: NavigationProps) {
                     />
                   </a>
                 ))}
-              <a
+              {/* <a
                 onClick={() => openNotifications()}
                 rel="noreferrer"
                 className="text-xl text-white tabbable rounded-full backdrop-blur-lg relative"
@@ -195,7 +195,7 @@ export function Navigation(props: NavigationProps) {
                     </span>
                   ) : null;
                 })()}
-              </a>
+              </a> */}
             </div>
             <div className="relative pointer-events-auto">
               <LinksDropdown>

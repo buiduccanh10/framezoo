@@ -285,7 +285,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               })()}
             </DropdownLink>
           ) : (
-            <DropdownLink href="/login" icon={Icons.RISING_STAR} highlight>
+            <DropdownLink href="/login" icon={Icons.CLOUD_ARROW_UP} highlight>
               {t("navigation.menu.register")}
             </DropdownLink>
           )}
@@ -321,7 +321,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               {t("navigation.menu.discover")}
             </DropdownLink>
           )}
-          {backendSupportsWatchParty && <WatchPartyInputLink />}
+          {/* {backendSupportsWatchParty && <WatchPartyInputLink />} */}
           {deviceName ? (
             <DropdownLink
               className="!text-type-danger opacity-75 hover:opacity-100"
@@ -332,7 +332,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             </DropdownLink>
           ) : null}
           <Divider />
-          <div className="my-4 flex justify-center items-center gap-4">
+          {/* <div className="my-4 flex justify-center items-center gap-4">
             {conf().GITHUB_LINK && (
               <CircleDropdownLink
                 href={conf().GITHUB_LINK}
@@ -345,7 +345,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               href="https://rentry.co/nnqtas3e"
               icon={Icons.TIP_JAR}
             />
-          </div>
+          </div> */}
         </div>
       </Transition>
     </div>
