@@ -30,7 +30,13 @@ export function scrollToElement(
     }
 
     if (typeof selector === "string") {
-      element = document.querySelector(selector);
+      try {
+        if (!selector.includes("/")) {
+          element = document.querySelector(selector);
+        }
+      } catch {
+        // Ignore invalid selector
+      }
     } else {
       element = selector;
     }
