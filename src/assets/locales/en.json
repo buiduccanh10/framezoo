@@ -824,6 +824,13 @@
         "videoSection": "Video settings"
       },
       "sources": {
+        "extensionHint": {
+          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
+          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
+          "setupButton": "Setup Extension",
+          "moreSources": "Want more sources? Setup the Extension.",
+          "installButton": "Install Extension Now"
+        },
         "failed": {
           "text": "There was an error while trying to find any videos... Try a different source?",
           "title": "Failed to scrape"
