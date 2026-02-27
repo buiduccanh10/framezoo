@@ -44,9 +44,9 @@ importers:
       '@noble/hashes':
         specifier: ^1.8.0
         version: 1.8.0
-      '@BetaMovie/providers':
-        specifier: github:BetaMovie/providers#production
-        version: https://codeload.github.com/BetaMovie/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f
+      '@p-stream/providers':
+        specifier: github:p-stream/providers#production
+        version: https://codeload.github.com/p-stream/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f
       '@plasmohq/messaging':
         specifier: ^0.6.2
         version: 0.6.2(react@18.3.1)
@@ -1180,8 +1180,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@BetaMovie/providers@https://codeload.github.com/BetaMovie/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f':
-    resolution: {tarball: https://codeload.github.com/BetaMovie/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f}
+  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f':
+    resolution: {tarball: https://codeload.github.com/p-stream/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f}
     version: 3.2.0
 
   '@pkgr/core@0.2.9':
@@ -5251,7 +5251,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
 
-  '@BetaMovie/providers@https://codeload.github.com/BetaMovie/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f':
+  '@p-stream/providers@https://codeload.github.com/p-stream/providers/tar.gz/09a28ebb7596112b456c56821554a3d6b41a535f':
     dependencies:
       abort-controller: 3.0.0
       cheerio: 1.0.0-rc.12
