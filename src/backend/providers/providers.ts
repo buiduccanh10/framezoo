@@ -14,6 +14,10 @@ import {
 } from "@/backend/providers/fetchers";
 
 import {
+  scrapeKKPhimMovie,
+  scrapeKKPhimShow,
+} from "./custom/sources/kkphimSource";
+import {
   scrapeOPhimMovie,
   scrapeOPhimShow,
 } from "./custom/sources/ophimSource";
@@ -35,6 +39,20 @@ const ophimSource = {
   scrapeShow: scrapeOPhimShow,
 };
 
+// Custom KKPhim source definition
+const kkphimSource = {
+  id: "kkphim",
+  name: "KKPhim",
+  rank: 190,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeKKPhimMovie,
+  scrapeShow: scrapeKKPhimShow,
+};
+
 function isDesktopApp(): boolean {
   return Boolean(typeof window !== "undefined" && window.__PSTREAM_DESKTOP__);
 }
@@ -49,6 +67,7 @@ export function getProviders() {
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
       .addSource(ophimSource)
+      .addSource(kkphimSource)
       .build();
   }
 
@@ -60,6 +79,7 @@ export function getProviders() {
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
       .addSource(ophimSource)
+      .addSource(kkphimSource)
       .build();
   }
 
@@ -71,6 +91,7 @@ export function getProviders() {
     .setTarget(targets.BROWSER)
     .addBuiltinProviders()
     .addSource(ophimSource)
+    .addSource(kkphimSource)
     .build();
 }
 
