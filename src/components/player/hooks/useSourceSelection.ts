@@ -50,9 +50,6 @@ export function useEmbedScraping(
   const setLastSuccessfulSource = usePreferencesStore(
     (s) => s.setLastSuccessfulSource,
   );
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
 
   const [request, run] = useAsyncFn(async () => {
     let result: EmbedOutput | undefined;
@@ -90,9 +87,7 @@ export function useEmbedScraping(
       getSavedProgress(progressItems, meta),
     );
     // Save the last successful source when manually selected
-    if (enableLastSuccessfulSource) {
-      setLastSuccessfulSource(sourceId);
-    }
+    setLastSuccessfulSource(sourceId);
     router.close();
   }, [
     embedId,
@@ -101,7 +96,6 @@ export function useEmbedScraping(
     router,
     report,
     setCaption,
-    enableLastSuccessfulSource,
     setLastSuccessfulSource,
   ]);
 
@@ -124,9 +118,6 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
   const { report } = useReportProviders();
   const setLastSuccessfulSource = usePreferencesStore(
     (s) => s.setLastSuccessfulSource,
-  );
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
   );
 
   const [request, run] = useAsyncFn(async () => {
@@ -164,9 +155,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       );
       setSourceId(sourceId);
       // Save the last successful source when manually selected
-      if (enableLastSuccessfulSource) {
-        setLastSuccessfulSource(sourceId);
-      }
+      setLastSuccessfulSource(sourceId);
       router.close();
       return null;
     }
@@ -212,20 +201,11 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
         getSavedProgress(progressItems, meta),
       );
       // Save the last successful source when manually selected
-      if (enableLastSuccessfulSource) {
-        setLastSuccessfulSource(sourceId);
-      }
+      setLastSuccessfulSource(sourceId);
       router.close();
     }
     return result.embeds;
-  }, [
-    sourceId,
-    meta,
-    router,
-    setCaption,
-    enableLastSuccessfulSource,
-    setLastSuccessfulSource,
-  ]);
+  }, [sourceId, meta, router, setCaption, setLastSuccessfulSource]);
 
   return {
     run,

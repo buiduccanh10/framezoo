@@ -207,9 +207,6 @@ export function useScrape() {
   const lastSuccessfulSource = usePreferencesStore(
     (s) => s.lastSuccessfulSource,
   );
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
   const preferredEmbedOrder = usePreferencesStore((s) => s.embedOrder);
   const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
 
@@ -264,11 +261,7 @@ export function useScrape() {
 
       // If we have a last successful source and the feature is enabled, prioritize it
       // BUT only if we're not resuming from a specific source (to preserve custom order)
-      if (
-        enableLastSuccessfulSource &&
-        lastSuccessfulSource &&
-        !startFromSourceId
-      ) {
+      if (lastSuccessfulSource && !startFromSourceId) {
         const lastSourceIndex = baseSourceOrder.indexOf(lastSuccessfulSource);
         if (lastSourceIndex !== -1) {
           baseSourceOrder = [
@@ -325,7 +318,6 @@ export function useScrape() {
       preferredSourceOrder,
       enableSourceOrder,
       lastSuccessfulSource,
-      enableLastSuccessfulSource,
       preferredEmbedOrder,
       enableEmbedOrder,
     ],

@@ -43,7 +43,7 @@ const ophimSource = {
 const kkphimSource = {
   id: "kkphim",
   name: "KKPhim",
-  rank: 190,
+  rank: 210,
   disabled: false,
   externalSource: false,
   type: "source" as const,
