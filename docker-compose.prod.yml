@@ -7,7 +7,7 @@ services:
         TMDB_READ_API_KEY: ${VITE_TMDB_READ_API_KEY}
         BACKEND_URL: ${VITE_BACKEND_URL}
         CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
-        APP_DOMAIN: https://movie.betakiot.id.vn
+        APP_DOMAIN: https://alphaflix.io.vn
         PWA_ENABLED: "true"
         OPENSEARCH_ENABLED: "true"
     hostname: pstream-frontend
@@ -16,11 +16,11 @@ services:
     ports:
       - '4080:80'
     environment:
-      - VIRTUAL_HOST=movie.betakiot.id.vn
+      - VIRTUAL_HOST=alphaflix.io.vn
       - VIRTUAL_PORT=80
       - VIRTUAL_PROTO=http
       - VIRTUAL_PATH=/
-      - LETSENCRYPT_HOST=movie.betakiot.id.vn
+      - LETSENCRYPT_HOST=alphaflix.io.vn
       - LETSENCRYPT_EMAIL=buiduccanh10@gmail.com
       - NGINX_PROXY_READ_TIMEOUT=30s
       - NGINX_PROXY_CONNECT_TIMEOUT=10s
