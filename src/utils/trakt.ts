@@ -18,7 +18,6 @@ import {
 export const TRAKT_API_URL = "https://api.trakt.tv";
 
 export class TraktService {
-  // eslint-disable-next-line no-use-before-define -- self-reference for singleton
   private static instance: TraktService;
 
   private readonly MIN_API_INTERVAL = 500;
@@ -36,7 +35,6 @@ export class TraktService {
     return TraktService.instance;
   }
 
-  // eslint-disable-next-line class-methods-use-this -- part of instance API
   public getAuthUrl(): string {
     const config = conf();
     if (!config.TRAKT_CLIENT_ID || !config.TRAKT_REDIRECT_URI) return "";
@@ -88,7 +86,6 @@ export class TraktService {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this -- called as this.refreshToken from apiRequest
   public async refreshToken(): Promise<void> {
     const config = conf();
     const { refreshToken } = useTraktAuthStore.getState();
@@ -433,7 +430,7 @@ export class TraktService {
     const fetchAll = async (endpoint: string) => {
       let page = 1;
       const items: TraktWatchedItem[] = [];
-      // eslint-disable-next-line no-constant-condition -- pagination loop
+
       while (true) {
         const results = await this.apiRequest<TraktWatchedItem[]>(
           `${endpoint}?extended=full,images&page=${page}&limit=${limit}`,
@@ -544,7 +541,6 @@ export class TraktService {
     return {};
   }
 
-  // eslint-disable-next-line class-methods-use-this -- part of payload builder chain
   private buildIds(item: TraktContentData): any {
     const ids: any = {};
     if (item.imdbId) ids.imdb = item.imdbId;

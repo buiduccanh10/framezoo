@@ -90,7 +90,6 @@ export function DetailView({
         <div className="prose prose-invert max-w-none">
           <div
             className="text-type-secondary leading-relaxed"
-            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: formatNotificationDescription(
                 selectedNotification.description,

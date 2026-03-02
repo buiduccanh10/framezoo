@@ -48,7 +48,7 @@ export function makeChromecastDisplayInterface(
     title: "",
     type: MWMediaType.MOVIE,
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   let caption: DisplayCaption | null = null;
 
   function listenForEvents() {

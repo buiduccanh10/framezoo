@@ -66,7 +66,7 @@ export const UserIcon = memo((props: UserIconProps) => {
   if (!icon) return <Icon className={props.className} icon={Icons.X} />;
   return (
     <span
-      dangerouslySetInnerHTML={{ __html: icon }} // eslint-disable-line react/no-danger
+      dangerouslySetInnerHTML={{ __html: icon }}
       style={{
         display: "flex",
         justifyContent: "center",

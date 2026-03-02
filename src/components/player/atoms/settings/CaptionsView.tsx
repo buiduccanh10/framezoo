@@ -29,7 +29,6 @@ import {
 
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
 
-/* eslint-disable react/no-unused-prop-types */
 export interface CaptionOptionProps {
   countryCode?: string;
   children: React.ReactNode;
@@ -51,7 +50,6 @@ export interface CaptionOptionProps {
   onTranslate?: () => void;
   matchScore?: number | null;
 }
-/* eslint-enable react/no-unused-prop-types */
 
 function CaptionOptionRightSide(props: CaptionOptionProps) {
   if (props.loading) {
@@ -676,7 +674,6 @@ export function CaptionsView({
             >
               {currentSubtitleText ? (
                 <div
-                  // eslint-disable-next-line react/no-danger
                   dangerouslySetInnerHTML={{
                     __html: currentSubtitleText.replaceAll(/\r?\n/g, "<br />"),
                   }}

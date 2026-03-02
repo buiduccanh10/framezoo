@@ -252,7 +252,7 @@ export function TranscriptView({ id }: { id: string }) {
                     }
                   >
                     <span
-                      dangerouslySetInnerHTML={{ __html: html }} // eslint-disable-line react/no-danger
+                      dangerouslySetInnerHTML={{ __html: html }}
                       dir="ltr"
                     />
                   </span>

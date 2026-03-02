@@ -9,6 +9,7 @@ import { Modal, useModal } from "@/components/overlays/Modal";
 import { SegmentData } from "@/components/player/hooks/useSkipTime";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Heading3, Paragraph } from "@/components/utils/Text";
+import { conf } from "@/setup/config";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { submitIntro } from "@/utils/tidb";
@@ -79,7 +80,9 @@ export function TIDBSubmissionForm({
 }: TIDBSubmissionFormProps) {
   const { t } = useTranslation();
   const meta = usePlayerStore((s) => s.meta);
-  const tidbKey = usePreferencesStore((s) => s.tidbKey);
+  const config = conf();
+  const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
+  const tidbKey = config.TIDB_API_KEY || tidbKeyFromStore;
   const submissionModal = useModal("tidb-submission");
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -113,18 +116,15 @@ export function TIDBSubmissionForm({
     e.preventDefault();
 
     if (!formData.segment) {
-      // eslint-disable-next-line no-alert
       alert(t("player.skipTime.feedback.modal.error.segment"));
       return;
     }
 
     if (!tidbKey) {
-      // eslint-disable-next-line no-alert
       alert(t("player.skipTime.feedback.modal.error.tidbKey"));
       return;
     }
     if (!meta) {
-      // eslint-disable-next-line no-alert
       alert(t("player.skipTime.feedback.modal.error.mediaInfo"));
       return;
     }
@@ -136,7 +136,6 @@ export function TIDBSubmissionForm({
       // Validate required fields based on segment type
       if (formData.segment === "intro" || formData.segment === "recap") {
         if (endSeconds === null || Number.isNaN(endSeconds)) {
-          // eslint-disable-next-line no-alert
           alert(t("player.skipTime.feedback.modal.error.endTime"));
           setIsSubmitting(false);
           return;
@@ -146,7 +145,6 @@ export function TIDBSubmissionForm({
         formData.segment === "preview"
       ) {
         if (startSeconds === null || Number.isNaN(startSeconds)) {
-          // eslint-disable-next-line no-alert
           alert(t("player.skipTime.feedback.modal.error.startTime"));
           setIsSubmitting(false);
           return;
@@ -189,7 +187,6 @@ export function TIDBSubmissionForm({
       if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error submitting:", error);
-      // eslint-disable-next-line no-alert
       alert(
         `${t("player.skipTime.feedback.modal.error.submission")}: ${error instanceof Error ? error.message : String(error)}`,
       );

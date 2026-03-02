@@ -81,7 +81,7 @@ export function WatchPartyReporter() {
             });
             disable();
             emitValidationStatus(false);
-            // eslint-disable-next-line no-alert
+
             alert(t("watchParty.contentMismatch"));
             return;
           }
@@ -126,7 +126,7 @@ export function WatchPartyReporter() {
               );
               disable();
               emitValidationStatus(false);
-              // eslint-disable-next-line no-alert
+
               alert(t("watchParty.episodeMismatch"));
               return;
             }

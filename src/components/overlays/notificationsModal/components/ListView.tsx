@@ -180,7 +180,6 @@ export function ListView({
                       </div>
                       <div
                         className="text-sm text-type-secondary mb-2 line-clamp-2 max-w-[12rem] md:max-w-[30rem] md:pr-8"
-                        // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{
                           __html:
                             formatNotificationDescription(

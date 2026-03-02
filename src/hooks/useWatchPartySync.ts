@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // import { getRoomStatuses, getUserPlayerStatus } from "@/backend/player/status";

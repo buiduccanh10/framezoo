@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useAsync } from "react-use";

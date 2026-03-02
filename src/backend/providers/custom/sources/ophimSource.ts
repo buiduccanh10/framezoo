@@ -73,6 +73,8 @@ async function findOPhimSlug(
     searchTerms.unshift(viTitle);
   }
 
+  let potentialMatchSlug: string | null = null;
+
   for (const term of searchTerms) {
     const searchUrl = `${OPHIM_API_BASE}/tim-kiem?keyword=${encodeURIComponent(term)}`;
     try {
@@ -104,6 +106,9 @@ async function findOPhimSlug(
                 detailItem.tmdb.season !== undefined &&
                 detailItem.tmdb.season !== showCtx.media.season.number
               ) {
+                if (!potentialMatchSlug) {
+                  potentialMatchSlug = item.slug;
+                }
                 continue;
               }
             }
@@ -116,6 +121,10 @@ async function findOPhimSlug(
     } catch {
       // Bỏ qua lỗi tìm kiếm, thử term tiếp theo
     }
+  }
+
+  if (potentialMatchSlug) {
+    return potentialMatchSlug;
   }
 
   throw new NotFoundError("Could not find matching movie on OPhim");

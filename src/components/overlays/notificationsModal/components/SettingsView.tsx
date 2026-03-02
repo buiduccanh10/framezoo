@@ -99,7 +99,6 @@ export function SettingsView({
             ) : null}
             {customFeeds.map((feed, i) => (
               <div
-                // eslint-disable-next-line react/no-array-index-key
                 key={i}
                 className="grid grid-cols-[1fr,auto] items-center gap-2"
               >

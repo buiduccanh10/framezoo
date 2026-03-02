@@ -116,7 +116,6 @@ export function PassphraseDisplay(props: {
         <div className="px-4 py-4">
           <AuthInputBox
             value={customPassphrase}
-            // eslint-disable-next-line react/jsx-no-bind
             onChange={handleCustomPassphraseChange}
             placeholder={t("auth.generate.customPassphrasePlaceholder")}
             passwordToggleable
@@ -179,7 +178,7 @@ export function PassphraseDisplay(props: {
           <div
             className="rounded-md py-2 bg-authentication-wordBackground text-white font-medium text-center"
             // this doesn't get rerendered nor does it have state so its fine
-            // eslint-disable-next-line react/no-array-index-key
+
             key={i}
           >
             {word}

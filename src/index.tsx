@@ -75,20 +75,18 @@ function ErrorScreen(props: {
 
   const resetBackend = useCallback(() => {
     setBackendUrl(null);
-    // eslint-disable-next-line no-restricted-globals
+
     location.reload();
   }, [setBackendUrl]);
 
   const logoutFromBackend = useCallback(() => {
     logout().then(() => {
-      // eslint-disable-next-line no-restricted-globals
       location.reload();
     });
   }, [logout]);
 
   const handleDisconnectConfirm = useCallback(() => {
     disconnectFromBackend().then(() => {
-      // eslint-disable-next-line no-restricted-globals
       location.reload();
     });
   }, [disconnectFromBackend]);

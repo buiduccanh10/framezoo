@@ -38,7 +38,6 @@ export function MigrationDirectPage() {
     }
 
     if (!backendUrl) {
-      // eslint-disable-next-line no-alert
       alert("Please provide a Backend URL.");
       return;
     }

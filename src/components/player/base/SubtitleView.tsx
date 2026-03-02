@@ -105,7 +105,7 @@ export function CaptionCue({
     >
       <span
         // Sanitised a few lines up
-        // eslint-disable-next-line react/no-danger
+
         dangerouslySetInnerHTML={{
           __html: parsedHtml,
         }}

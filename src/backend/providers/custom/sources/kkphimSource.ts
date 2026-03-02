@@ -72,6 +72,8 @@ async function findKKPhimSlug(
     searchTerms.unshift(viTitle);
   }
 
+  let potentialMatchSlug: string | null = null;
+
   for (const term of searchTerms) {
     const searchUrl = `${KKPHIM_API_BASE}/v1/api/tim-kiem?keyword=${encodeURIComponent(term)}`;
     try {
@@ -105,6 +107,9 @@ async function findKKPhimSlug(
                 movie.tmdb?.season != null &&
                 movie.tmdb.season !== showCtx.media.season.number
               ) {
+                if (!potentialMatchSlug) {
+                  potentialMatchSlug = item.slug;
+                }
                 continue;
               }
             }
@@ -152,6 +157,10 @@ async function findKKPhimSlug(
     } catch {
       continue;
     }
+  }
+
+  if (potentialMatchSlug) {
+    return potentialMatchSlug;
   }
 
   throw new NotFoundError("Could not find matching movie on KKPhim");
