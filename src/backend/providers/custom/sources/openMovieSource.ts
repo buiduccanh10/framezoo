@@ -79,7 +79,7 @@ export async function scrapeOpenMovieShow(
   );
   ctx.progress(10);
 
-  const apiUrl = `${OPENMOVIE_API_BASE}/series/${ctx.media.tmdbId}`;
+  const apiUrl = `${OPENMOVIE_API_BASE}/series/${ctx.media.tmdbId}?season=${ctx.media.season.number}&episode=${ctx.media.episode.number}`;
   console.info(
     `[OpenMovie] Show: Fetching from API: ${apiUrl} (S${ctx.media.season.number}E${ctx.media.episode.number})`,
   );

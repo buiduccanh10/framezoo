@@ -27,7 +27,10 @@ function decodeStreamInfo(encodedUrl: string): OpenMovieStreamInfo {
 // Determine if a URL is an M3U8/HLS stream
 function isHlsUrl(url: string): boolean {
   return (
-    url.includes("m3u8") || url.includes("/m3u8-proxy") || url.includes(".m3u8")
+    url.includes("m3u8") ||
+    url.includes("/api/streams/") ||
+    url.includes("/m3u8-proxy") ||
+    url.includes(".m3u8")
   );
 }
 
