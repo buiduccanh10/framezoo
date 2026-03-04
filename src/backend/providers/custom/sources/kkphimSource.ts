@@ -77,10 +77,11 @@ async function findKKPhimSlug(
   for (const term of searchTerms) {
     const searchUrl = `${KKPHIM_API_BASE}/v1/api/tim-kiem?keyword=${encodeURIComponent(term)}`;
     try {
-      const data = await ctx.fetcher<{
+      const response = await fetch(searchUrl);
+      const data = (await response.json()) as {
         status: string;
         data: { items: KKPhimSearchItem[] };
-      }>(searchUrl);
+      };
 
       if (!data?.data?.items?.length) continue;
 
@@ -88,10 +89,11 @@ async function findKKPhimSlug(
         // Lấy chi tiết để match TMDB ID
         const detailUrl = `${KKPHIM_API_BASE}/phim/${item.slug}`;
         try {
-          const detail = await ctx.fetcher<{
+          const responseDetail = await fetch(detailUrl);
+          const detail = (await responseDetail.json()) as {
             status: boolean;
             movie: KKPhimDetail;
-          }>(detailUrl);
+          };
 
           const movie = detail?.movie;
           if (!movie) continue;
@@ -172,10 +174,11 @@ async function getKKPhimStreams(
   slug: string,
 ): Promise<SourcererOutput> {
   const detailUrl = `${KKPHIM_API_BASE}/phim/${slug}`;
-  const detail = await ctx.fetcher<{
+  const response = await fetch(detailUrl);
+  const detail = (await response.json()) as {
     status: boolean;
     episodes: KKPhimServerData[];
-  }>(detailUrl);
+  };
 
   const episodes = detail?.episodes;
   if (!episodes?.length) {

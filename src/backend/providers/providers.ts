@@ -1,7 +1,6 @@
 import {
   buildProviders,
   flags,
-  makeProviders,
   makeStandardFetcher,
   targets,
 } from "@p-stream/providers";
@@ -17,6 +16,10 @@ import {
   scrapeKKPhimMovie,
   scrapeKKPhimShow,
 } from "./custom/sources/kkphimSource";
+import {
+  scrapeNguoncMovie,
+  scrapeNguoncShow,
+} from "./custom/sources/nguoncSource";
 import {
   scrapeOPhimMovie,
   scrapeOPhimShow,
@@ -37,6 +40,20 @@ const ophimSource = {
   mediaTypes: ["movie" as const, "show" as const],
   scrapeMovie: scrapeOPhimMovie,
   scrapeShow: scrapeOPhimShow,
+};
+
+// Custom NguonC source definition
+const nguoncSource = {
+  id: "nguonc",
+  name: "NguonC",
+  rank: 205,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeNguoncMovie,
+  scrapeShow: scrapeNguoncShow,
 };
 
 // Custom KKPhim source definition
@@ -67,6 +84,7 @@ export function getProviders() {
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
       .addSource(ophimSource)
+      .addSource(nguoncSource)
       .addSource(kkphimSource)
       .build();
   }
@@ -79,6 +97,7 @@ export function getProviders() {
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
       .addSource(ophimSource)
+      .addSource(nguoncSource)
       .addSource(kkphimSource)
       .build();
   }
@@ -91,14 +110,19 @@ export function getProviders() {
     .setTarget(targets.BROWSER)
     .addBuiltinProviders()
     .addSource(ophimSource)
+    .addSource(nguoncSource)
     .addSource(kkphimSource)
     .build();
 }
 
 export function getAllProviders() {
-  return makeProviders({
-    fetcher: makeStandardFetcher(fetch),
-    target: targets.BROWSER_EXTENSION,
-    consistentIpForRequests: true,
-  });
+  return buildProviders()
+    .setFetcher(makeStandardFetcher(fetch))
+    .setTarget(targets.BROWSER_EXTENSION)
+    .enableConsistentIpForRequests()
+    .addBuiltinProviders()
+    .addSource(ophimSource)
+    .addSource(nguoncSource)
+    .addSource(kkphimSource)
+    .build();
 }

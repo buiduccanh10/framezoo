@@ -78,10 +78,11 @@ async function findOPhimSlug(
   for (const term of searchTerms) {
     const searchUrl = `${OPHIM_API_BASE}/tim-kiem?keyword=${encodeURIComponent(term)}`;
     try {
-      const data = await ctx.fetcher<{
+      const response = await fetch(searchUrl);
+      const data = (await response.json()) as {
         status: string;
         data: { items: OPhimSearchItem[] };
-      }>(searchUrl);
+      };
 
       if (!data?.data?.items?.length) continue;
 
@@ -89,10 +90,11 @@ async function findOPhimSlug(
       for (const item of data.data.items) {
         const detailUrl = `${OPHIM_API_BASE}/phim/${item.slug}`;
         try {
-          const detail = await ctx.fetcher<{
+          const responseDetail = await fetch(detailUrl);
+          const detail = (await responseDetail.json()) as {
             status: string;
             data: { item: OPhimDetail };
-          }>(detailUrl);
+          };
 
           const detailItem = detail?.data?.item;
           if (!detailItem?.tmdb?.id) continue;
@@ -136,10 +138,11 @@ async function getOPhimStreams(
   slug: string,
 ): Promise<SourcererOutput> {
   const detailUrl = `${OPHIM_API_BASE}/phim/${slug}`;
-  const detail = await ctx.fetcher<{
+  const response = await fetch(detailUrl);
+  const detail = (await response.json()) as {
     status: string;
     data: { item: OPhimDetail };
-  }>(detailUrl);
+  };
 
   const item = detail?.data?.item;
   if (!item?.episodes?.length) {
