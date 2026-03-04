@@ -25,10 +25,23 @@ function EmbedOption(props: {
   const unknownEmbedName = t("player.menus.sources.unknownOption");
 
   const embedName = useMemo(() => {
+    // For OpenMovie embeds, parse the stream name from the encoded URL
+    if (
+      props.embedId === "openmovie-embed" &&
+      props.url?.startsWith("openmovie://")
+    ) {
+      try {
+        const encoded = props.url.replace("openmovie://", "");
+        const info = JSON.parse(decodeURIComponent(encoded));
+        return info.name || info.title || "OpenMovie Stream";
+      } catch {
+        // Fall through to default
+      }
+    }
     if (!props.embedId) return unknownEmbedName;
     const sourceMeta = getCachedMetadata().find((s) => s.id === props.embedId);
     return sourceMeta?.name ?? unknownEmbedName;
-  }, [props.embedId, unknownEmbedName]);
+  }, [props.embedId, props.url, unknownEmbedName]);
 
   const { run, errored, loading, notFound } = useEmbedScraping(
     props.routerId,

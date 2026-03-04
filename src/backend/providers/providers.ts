@@ -20,6 +20,11 @@ import {
   scrapeNguoncMovie,
   scrapeNguoncShow,
 } from "./custom/sources/nguoncSource";
+import { scrapeOpenMovieEmbed } from "./custom/sources/openMovieEmbed";
+import {
+  scrapeOpenMovieMovie,
+  scrapeOpenMovieShow,
+} from "./custom/sources/openMovieSource";
 import {
   scrapeOPhimMovie,
   scrapeOPhimShow,
@@ -70,6 +75,32 @@ const kkphimSource = {
   scrapeShow: scrapeKKPhimShow,
 };
 
+// Custom OpenMovie source definition
+const openMovieSource = {
+  id: "openmovie",
+  name: "OpenMovie",
+  rank: 195,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeOpenMovieMovie,
+  scrapeShow: scrapeOpenMovieShow,
+};
+
+// Custom OpenMovie embed definition
+const openMovieEmbed = {
+  id: "openmovie-embed",
+  name: "OpenMovie Stream",
+  rank: 190,
+  disabled: false,
+  type: "embed" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: undefined as undefined,
+  scrape: scrapeOpenMovieEmbed,
+};
+
 function isDesktopApp(): boolean {
   return Boolean(typeof window !== "undefined" && window.__PSTREAM_DESKTOP__);
 }
@@ -86,6 +117,8 @@ export function getProviders() {
       .addSource(ophimSource)
       .addSource(nguoncSource)
       .addSource(kkphimSource)
+      .addSource(openMovieSource)
+      .addEmbed(openMovieEmbed)
       .build();
   }
 
@@ -99,6 +132,8 @@ export function getProviders() {
       .addSource(ophimSource)
       .addSource(nguoncSource)
       .addSource(kkphimSource)
+      .addSource(openMovieSource)
+      .addEmbed(openMovieEmbed)
       .build();
   }
 
@@ -112,6 +147,8 @@ export function getProviders() {
     .addSource(ophimSource)
     .addSource(nguoncSource)
     .addSource(kkphimSource)
+    .addSource(openMovieSource)
+    .addEmbed(openMovieEmbed)
     .build();
 }
 
@@ -124,5 +161,7 @@ export function getAllProviders() {
     .addSource(ophimSource)
     .addSource(nguoncSource)
     .addSource(kkphimSource)
+    .addSource(openMovieSource)
+    .addEmbed(openMovieEmbed)
     .build();
 }

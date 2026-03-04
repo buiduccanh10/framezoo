@@ -144,7 +144,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       scrapeSourceOutputToProviderMetric(meta, sourceId, null, "success", null),
     ]);
 
-    if (result.stream) {
+    if (result.stream && result.stream.length > 0) {
       if (isExtensionActiveCached()) await prepareStream(result.stream[0]);
       setEmbedId(null);
       setCaption(null);
