@@ -463,10 +463,10 @@
       }
     },
     "support": {
-      "title": "BetaMovie needs your help!",
-      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "title": "AlphaFlix needs your help!",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
       "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
       "thankYou": "Thank you for your support!",
@@ -732,7 +732,7 @@
           "action": "Install Desktop app",
           "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
           "quality": "Best quality + Even more sources",
-          "title": "BetaMovie Desktop app"
+          "title": "AlphaFlix Desktop app"
         },
         "proxy": {
           "action": "Setup pwoxy",
@@ -987,7 +987,7 @@
         "homeButton": "Go home",
         "enableExtension": "Enyabwe extension",
         "title": "Pwease enyabwe the extension",
-        "text": "You've instawwed the s-BetaMovie e-extension. To stawt u-using it, you nyeed t-to enyabwe the extension fow this site."
+        "text": "You've instawwed the s-AlphaFlix e-extension. To stawt u-using it, you nyeed t-to enyabwe the extension fow this site."
       },
       "tips": {
         "1": "Twap the gwear icwon to switch swources!",
@@ -998,9 +998,7 @@
         "6": "Howd bookmwarks to edit or dewete them!",
         "7": "Hold SHIFT and twap the twitle to copy the wink with time!",
         "8": "Set a cwustom swubtitle cowor!",
-        "9": "Migwate youw accwount to a new bwackend in settings (* ^ ω ^)!",
-        "10": "Join the Dwiscord!",
-        "11": "Use [ and ] two adjust swubtitle timing!"
+        "9": "Use [ and ] two adjust swubtitle timing!"
       }
     },
     "time": {
@@ -1118,7 +1116,7 @@
     "title": "Suppowt",
     "text": "uwu-flix is designyed t-to be as usew-fwiendwy as possibwe. Howevew, peopwe stiww have questions and issues. This page is h-h-hewe t-to hewp wesowve these showtcomings",
     "q1": {
-      "body": "weww, :3 you c-can join the officiaw <0>BetaMovie discowd</0> and ask questions thewe ow (・`ω´・) you c-can emaiw the onye pwovided at the bottom of this page.",
+      "body": "weww, :3 you c-can join the officiaw <0>AlphaFlix discowd</0> and ask questions thewe ow (・`ω´・) you c-can emaiw the onye pwovided at the bottom of this page.",
       "title": "Where can I get help?"
     },
     "q2": {

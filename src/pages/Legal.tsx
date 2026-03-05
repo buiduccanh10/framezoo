@@ -70,7 +70,7 @@ export function LegalPage() {
             description={
               <>
                 <Paragraph>
-                  BetaMovie functions as a search engine and content aggregator
+                  AlphaFlix functions as a search engine and content aggregator
                   that indexes publicly available media from across the
                   internet.
                   <br />
@@ -84,7 +84,7 @@ export function LegalPage() {
                   that&apos;s already available online, without bypassing any
                   security measures.
                 </Paragraph>
-                <Link to="/about">Learn more about how BetaMovie works</Link>
+                <Link to="/about">Learn more about how AlphaFlix works</Link>
               </>
             }
           />
@@ -131,7 +131,7 @@ export function LegalPage() {
                 information or identifying data.
                 <br />
                 <br />
-                BetaMovie is entirely self hostable, and can be run on any
+                AlphaFlix is entirely self hostable, and can be run on any
                 server. Even by yourself.
               </Paragraph>
             }
@@ -165,7 +165,7 @@ export function LegalPage() {
             colorClass="text-red-400"
             description={
               <Paragraph>
-                BetaMovie is licensed under the MIT license.
+                AlphaFlix is licensed under the MIT license.
                 <br />
                 <br />
                 By using our platform, you acknowledge these terms and agree
@@ -191,7 +191,7 @@ export function LegalPage() {
                 files.
                 <br />
                 <br />
-                BetaMovie operates within legal boundaries and cooperates with
+                AlphaFlix operates within legal boundaries and cooperates with
                 legitimate requests when technically feasible.
               </Paragraph>
             }

@@ -1,6 +1,6 @@
 {
   "about": {
-    "description": "BetaMovie 是 movie-web 的一个分叉，可确保在 movie-web.app 关闭后仍能正常运行。BetaMovie 运行在一个私有的、自我托管的 VPS 上。我在亏损的情况下运营这个网站，但这里没有广告，因为我对免费媒体的信仰。",
+    "description": "AlphaFlix 是 movie-web 的一个分叉，可确保在 movie-web.app 关闭后仍能正常运行。AlphaFlix 运行在一个私有的、自我托管的 VPS 上。我在亏损的情况下运营这个网站，但这里没有广告，因为我对免费媒体的信仰。",
     "help": "Can't find an answer? <0>Get support here.</0>",
     "faqTitle": "常见问题",
     "searchPlaceholder": "Search FAQ...",
@@ -13,12 +13,12 @@
     },
     "q1": {
       "title": "这些内容来自哪里？",
-      "body": "BetaMovie 不托管任何内容。当您点击要观看的内容时，会在互联网上搜索所选媒体（在加载屏幕和“片源”选项卡中，您可以看到您正在使用的视频源）。BetaMovie 不上传媒体，所有内容都是通过这种搜索机制获取的。",
+      "body": "AlphaFlix 不托管任何内容。当您点击要观看的内容时，会在互联网上搜索所选媒体（在加载屏幕和“片源”选项卡中，您可以看到您正在使用的视频源）。AlphaFlix 不上传媒体，所有内容都是通过这种搜索机制获取的。",
       "section": "general"
     },
     "q2": {
       "title": "我可以从哪里请求增加节目或电影？",
-      "body": "无法主动请求增加节目或电影，BetaMovie 不托管任何内容。所有内容均通过网络上的片源服务器获取并供您观看。",
+      "body": "无法主动请求增加节目或电影，AlphaFlix 不托管任何内容。所有内容均通过网络上的片源服务器获取并供您观看。",
       "section": "search"
     },
     "q3": {
@@ -33,12 +33,12 @@
     },
     "q5": {
       "title": "如何了解更多信息？",
-      "body": "BetaMovie 有一个 Fluxer 服务器，可在本页上方找到！",
+      "body": "AlphaFlix 有一个 Fluxer 服务器，可在本页上方找到！",
       "section": "general"
     },
     "q6": {
-      "title": "Is there a BetaMovie app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/BetaMovie/BetaMovie-desktop/releases",
+      "title": "Is there a AlphaFlix app?",
+      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
       "section": "general"
     },
     "q7": {
@@ -136,7 +136,7 @@
       "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
       "section": "language"
     },
-    "title": "关于 BetaMovie"
+    "title": "关于 AlphaFlix"
   },
   "actions": {
     "copied": "已复制",
@@ -229,7 +229,7 @@
   "footer": {
     "legal": {
       "disclaimer": "免责声明",
-      "disclaimerText": "请注意：BetaMovie 本身不托管任何文件，只提供第三方提供商的内容。如有法律问题，请与它们联系。"
+      "disclaimerText": "请注意：AlphaFlix 本身不托管任何文件，只提供第三方提供商的内容。如有法律问题，请与它们联系。"
     },
     "links": {
       "fluxer": "Fluxer",
@@ -241,7 +241,7 @@
     "tagline": "免费观看您喜爱的节目和电影，绝无任何广告！"
   },
   "global": {
-    "name": "BetaMovie",
+    "name": "AlphaFlix",
     "pages": {
       "about": "关于",
       "legal": "Legal / DMCA",
@@ -249,7 +249,7 @@
       "support": "支持",
       "login": "登录",
       "onboarding": "设定",
-      "pagetitle": "{{title}} - BetaMovie",
+      "pagetitle": "{{title}} - AlphaFlix",
       "register": "注册",
       "settings": "设置",
       "migration": "迁移账户",
@@ -395,11 +395,11 @@
           "您想探索些什么？",
           "您的片单上都有啥？",
           "您最喜欢的影片是什么？",
-          "BetaMovie 是最好的网站！",
+          "AlphaFlix 是最好的网站！",
           "您今天的片单上有什么？",
           "今天过得怎么样？",
           "是我的错，网站总是无法正常运行…",
-          "BetaMovie 不就是最棒的吗？",
+          "AlphaFlix 不就是最棒的吗？",
           ">ᴗ<"
         ]
       },
@@ -437,19 +437,19 @@
       "day": {
         "default": "您今天下午想看什么？",
         "extra": [
-          "BetaMovie 万岁！"
+          "AlphaFlix 万岁！"
         ]
       },
       "morning": {
         "default": "您今早想看什么？",
         "extra": [
-          "BetaMovie 万岁！"
+          "AlphaFlix 万岁！"
         ]
       },
       "night": {
         "default": "您今晚想看什么？",
         "extra": [
-          "BetaMovie 万岁！"
+          "AlphaFlix 万岁！"
         ]
       },
       "halloween": {
@@ -463,10 +463,10 @@
       }
     },
     "support": {
-      "title": "BetaMovie needs your help!",
-      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "title": "AlphaFlix needs your help!",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
       "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
       "thankYou": "Thank you for your support!",
@@ -633,7 +633,7 @@
   "downtimeNotice": {
     "badge": "问题",
     "goHome": "返回首页",
-    "message": "BetaMovie 在某些片源提供商处遇到问题，如果您无法找到或播放节目，请更换片源。预计该错误将在一段时间内持续存在。",
+    "message": "AlphaFlix 在某些片源提供商处遇到问题，如果您无法找到或播放节目，请更换片源。预计该错误将在一段时间内持续存在。",
     "title": "片源提供商问题"
   },
   "onboarding": {
@@ -686,19 +686,19 @@
         "button": "Which setup should I choose?",
         "title": "Understanding a setup",
         "explainer": {
-          "intro": "BetaMovie doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
+          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
           "options": "Your Options:",
           "extension": "Extension",
           "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
           "proxy": "Proxy",
           "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
           "default": "Default Setup",
-          "defaultDescription": "Uses BetaMovie's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
+          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
           "fedapi": {
             "fedapi": "Additional: Febbox token",
             "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
           },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>BetaMovie Fluxer</0> server!"
+          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
         },
         "recommended": {
           "title": "Not sure what to choose?",
@@ -732,7 +732,7 @@
           "action": "Install Desktop app",
           "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
           "quality": "Best quality + Even more sources",
-          "title": "BetaMovie Desktop app"
+          "title": "AlphaFlix Desktop app"
         },
         "proxy": {
           "action": "设定代理",
@@ -744,7 +744,7 @@
           "title": "Additional sources:"
         }
       },
-      "title": "让我们为您设定 BetaMovie"
+      "title": "让我们为您设定 AlphaFlix"
     }
   },
   "overlays": {
@@ -764,7 +764,7 @@
       "downloads": {
         "button": "Attempt download",
         "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "下载内容是直接从内容提供者获取的。BetaMovie 无法控制下载内容如何被提供。",
+        "disclaimer": "下载内容是直接从内容提供者获取的。AlphaFlix 无法控制下载内容如何被提供。",
         "copyHlsPlaylist": "复制 HLS 播放列表链接",
         "downloadSubtitle": "下载当前字幕",
         "downloadVideo": "下载视频",
@@ -773,7 +773,7 @@
         "iina": "IINA",
         "outplayer": "Outplayer",
         "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
-        "hlsDisclaimer": "下载内容是直接从内容提供者获取的。BetaMovie 无法控制下载内容如何被提供。<br /><br />请注意，您正在下载 HLS 播放列表，<bold>如您不熟悉高级流媒体格式，我们不推荐此操作</bold>。如需下载其他格式，请尝试切换视频源。",
+        "hlsDisclaimer": "下载内容是直接从内容提供者获取的。AlphaFlix 无法控制下载内容如何被提供。<br /><br />请注意，您正在下载 HLS 播放列表，<bold>如您不熟悉高级流媒体格式，我们不推荐此操作</bold>。如需下载其他格式，请尝试切换视频源。",
         "onAndroid": {
           "1": "要从 Android 下载，先点击下载按钮，之后在新的页面上， <bold>点击并按住</bold>视频，然后选择 <bold>保存</bold>。",
           "shortTitle": "下载 / Android",
@@ -987,7 +987,7 @@
         "homeButton": "返回首页",
         "enableExtension": "启用扩展程序",
         "title": "请启用扩展程序",
-        "text": "您已经安装 BetaMovie 扩展程序。要开始使用，您需要为此站点启用扩展。"
+        "text": "您已经安装 AlphaFlix 扩展程序。要开始使用，您需要为此站点启用扩展。"
       },
       "tips": {
         "1": "Tap the gear icon to switch sources!",
@@ -998,9 +998,7 @@
         "6": "Hold bookmarks to edit or delete them!",
         "7": "Hold SHIFT and tap the title to copy the link with time!",
         "8": "Set a custom subtitle color!",
-        "9": "Migrate your account to a new backend in settings!",
-        "10": "Join the Fluxer!",
-        "11": "Hold ` to view keyboard shortcuts!"
+        "9": "Hold ` to view keyboard shortcuts!"
       }
     },
     "time": {
@@ -1116,9 +1114,9 @@
   },
   "support": {
     "title": "支持",
-    "text": "BetaMovie 的设计尽可能方便用户使用。但是人们仍然会有疑问和问题，本页将帮助解决这些问题",
+    "text": "AlphaFlix 的设计尽可能方便用户使用。但是人们仍然会有疑问和问题，本页将帮助解决这些问题",
     "q1": {
-      "body": "您可以加入 <0>BetaMovie 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
+      "body": "您可以加入 <0>AlphaFlix 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
       "title": "我可以在哪获取帮助？"
     },
     "q2": {
@@ -1128,9 +1126,9 @@
   },
   "jip": {
     "title": "Jip",
-    "text": "BetaMovie 并不是大风刮来的，它主要是由一个人（一个非常史诗般的人）创造的。",
+    "text": "AlphaFlix 并不是大风刮来的，它主要是由一个人（一个非常史诗般的人）创造的。",
     "q1": {
-      "body": "您可以加入 <0>BetaMovie 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
+      "body": "您可以加入 <0>AlphaFlix 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
       "title": "我可以在哪获取帮助？"
     },
     "q2": {
@@ -1179,7 +1177,7 @@
       },
       "admin": {
         "title": "管理面板",
-        "text": "用于测试 BetaMovie 状态的工具。"
+        "text": "用于测试 AlphaFlix 状态的工具。"
       },
       "actions": {
         "delete": {

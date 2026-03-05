@@ -10,7 +10,7 @@ export function useRedirectBack() {
   const setCompleted = useOnboardingStore((s) => s.setCompleted);
 
   const redirectBack = useCallback(() => {
-    navigate(url ?? "/");
+    navigate(url ?? "/discover");
   }, [navigate, url]);
 
   const completeAndRedirect = useCallback(() => {

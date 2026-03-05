@@ -1,4 +1,4 @@
-# Contributing Guidelines for BetaMovie
+# Contributing Guidelines for AlphaFlix
 
 Thank you for investing your time in contributing to our project! Your contribution will be reflected on all of the community hosted instances that are on the latest version.
 
@@ -6,7 +6,7 @@ Please read our [Code of Conduct](./CODE_OF_CONDUCT.md) to keep our community ap
 
 ## Contents
 
-- [Contributing Guidelines for BetaMovie](#contributing-guidelines-for-BetaMovie)
+- [Contributing Guidelines for AlphaFlix](#contributing-guidelines-for-AlphaFlix)
   - [Contents](#contents)
   - [New contributor guide](#new-contributor-guide)
   - [Requesting a feature or reporting a bug](#requesting-a-feature-or-reporting-a-bug)
@@ -31,7 +31,7 @@ To get an overview of the project, read the [README](README.md). Here are some r
 
 There are two places where to request features or report bugs:
 
-- The BetaMovie Fluxer server
+- The AlphaFlix Fluxer server
 - GitHub Issues
 
 ### Fluxer Server
@@ -44,28 +44,28 @@ Fluxer is an OSS Discord alternative.
 
 ### GitHub Issues
 
-To make a GitHub issue for BetaMovie, please visit the [new issue page](https://github.com/BetaMovie/BetaMovie/issues/new/choose) where you can pick either the "Bug Report" or "Feature Request" template.
+To make a GitHub issue for AlphaFlix, please visit the [new issue page](https://github.com/AlphaFlix/AlphaFlix/issues/new/choose) where you can pick either the "Bug Report" or "Feature Request" template.
 
 When filling out an issue template, please include as much detail as possible and any screenshots or console logs as appropriate.
 
-After an issue is created, it will be assigned either the https://github.com/BetaMovie/BetaMovie/labels/bug or https://github.com/BetaMovie/BetaMovie/labels/feature label, along with https://github.com/BetaMovie/BetaMovie/labels/awaiting-approval. One of our maintainers will review your issue and, if it's accepted, will set the https://github.com/BetaMovie/BetaMovie/labels/approved label.
+After an issue is created, it will be assigned either the https://github.com/AlphaFlix/AlphaFlix/labels/bug or https://github.com/AlphaFlix/AlphaFlix/labels/feature label, along with https://github.com/AlphaFlix/AlphaFlix/labels/awaiting-approval. One of our maintainers will review your issue and, if it's accepted, will set the https://github.com/AlphaFlix/AlphaFlix/labels/approved label.
 
 ## Before you start!
 
-Before starting a contribution, please check your contribution is part of an open issue on [our issues page](https://github.com/BetaMovie/BetaMovie/issues?q=is%3Aopen+is%3Aissue+label%3Aapproved).
+Before starting a contribution, please check your contribution is part of an open issue on [our issues page](https://github.com/AlphaFlix/AlphaFlix/issues?q=is%3Aopen+is%3Aissue+label%3Aapproved).
 
-GitHub issues are how we track our bugs and feature requests that will be implemented into BetaMovie - all contributions **must** have an issue and be approved by a maintainer before a pull request can be worked on.
+GitHub issues are how we track our bugs and feature requests that will be implemented into AlphaFlix - all contributions **must** have an issue and be approved by a maintainer before a pull request can be worked on.
 
 If a pull request is opened before an issue is created and accepted, you may risk having your pull request rejected! Always check with us before starting work on a feature - we don't want to waste your time!
 
 > **Note**
 > The exception to this are language contributions, which are discussed in [this section](#language-contributions)
 
-Also, make sure that the issue you would like to work on has been given the https://github.com/BetaMovie/BetaMovie/labels/approved label by a maintainer. Otherwise, if we reject the issue, it means your work will have gone to waste!
+Also, make sure that the issue you would like to work on has been given the https://github.com/AlphaFlix/AlphaFlix/labels/approved label by a maintainer. Otherwise, if we reject the issue, it means your work will have gone to waste!
 
 ## Contributing
 
-If you're here because you'd like to work on an issue, amazing! Thank you for even considering contributing to BetaMovie; it means a lot :heart:
+If you're here because you'd like to work on an issue, amazing! Thank you for even considering contributing to AlphaFlix; it means a lot :heart:
 
 Firstly, make sure you've read the [Before you start!](#before-you-start) section!
 
@@ -75,7 +75,7 @@ If you are assigned to an issue but can't complete it for whatever reason, no pr
 
 ### Recommended Development Environment
 
-Our recommended development environment to work on BetaMovie is:
+Our recommended development environment to work on AlphaFlix is:
 
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [ESLint Extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
@@ -91,13 +91,13 @@ Here are some tips to make sure that your pull requests are :pinched_fingers: fi
 
 - KISS - Keep It Simple Soldier! - Simple code makes readable and efficient code!
 - Follow standard best practices for TypeScript and React.
-- Keep as much as possible to the style of BetaMovie. Look around our codebase to familiarise yourself with how we do things!
+- Keep as much as possible to the style of AlphaFlix. Look around our codebase to familiarise yourself with how we do things!
 - Ensure to take note of the ESLint errors and warnings! **Do not ignore them!** They are there for a reason.
 - Test, test, test! Make sure you thoroughly test the features you are contributing.
 
 ### Language Contributions
 
-Language contributions help BetaMovie massively, allowing people worldwide to use our app!
+Language contributions help AlphaFlix massively, allowing people worldwide to use our app!
 
 We use Weblate for crowdsourcing our translations. [Click here to go to our translation tool.](https://docs.pstream.mov/links/weblate)
 

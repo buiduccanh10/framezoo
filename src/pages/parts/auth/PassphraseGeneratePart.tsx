@@ -36,7 +36,7 @@ export function PassphraseGeneratePart(props: PassphraseGeneratePartProps) {
 
     const credential = await createPasskey(
       `user-${Date.now()}`,
-      "BetaMovie User",
+      "AlphaFlix User",
     );
     return credential.id;
   }, []);

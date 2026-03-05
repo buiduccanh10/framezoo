@@ -1,6 +1,6 @@
 {
   "about": {
-    "description": "BetaMovie isch e Abspaltig vo movie-web und wird sichergstellt, dass es au no lauft, wenn movie-web.app nüm verfügbar isch. BetaMovie lauft uf eme private, selbstghostete VPS. Ich betreib die Site mit Verlust – ohni Werbig, will ich a freiji Medie glaub.",
+    "description": "AlphaFlix isch e Abspaltig vo movie-web und wird sichergstellt, dass es au no lauft, wenn movie-web.app nüm verfügbar isch. AlphaFlix lauft uf eme private, selbstghostete VPS. Ich betreib die Site mit Verlust – ohni Werbig, will ich a freiji Medie glaub.",
     "help": "Fendisch kei antwort? <0>Bechom en Antwort.</0>",
     "faqTitle": "Hüfig gstelti Froge",
     "searchPlaceholder": "Suech FAQ…",
@@ -13,12 +13,12 @@
     },
     "q1": {
       "title": "Woher stamme die Videos?",
-      "body": "BetaMovie hostet kei Inhalt selber. Wenn du öpis zum Luege aaklicksch, wird s’Internet nach dem usgwählte Medium dürsuecht (uf em Ladebildschirm ond im Tab „Videoquellen“ gsesch, weli Quelle grad brucht wird). Medie wird nie vo BetaMovie ufelade – alles lauft über die Suechfunktion.",
+      "body": "AlphaFlix hostet kei Inhalt selber. Wenn du öpis zum Luege aaklicksch, wird s’Internet nach dem usgwählte Medium dürsuecht (uf em Ladebildschirm ond im Tab „Videoquellen“ gsesch, weli Quelle grad brucht wird). Medie wird nie vo AlphaFlix ufelade – alles lauft über die Suechfunktion.",
       "section": "generel"
     },
     "q2": {
       "title": "Wo chan ich en Serie oder en Felm afroge?",
-      "body": "Es isch nöd möglich, e Serie oder e Film z'wünsche, will BetaMovie kei Inhalt verwaltet. Alles wird über Quellen im Internet agluegt.",
+      "body": "Es isch nöd möglich, e Serie oder e Film z'wünsche, will AlphaFlix kei Inhalt verwaltet. Alles wird über Quellen im Internet agluegt.",
       "section": "suechi"
     },
     "q3": {
@@ -33,11 +33,11 @@
     },
     "q5": {
       "title": "Wie chani me usefende?",
-      "body": "BetaMovie het en Fluxer server, me fendet en zoberscht of de Website!",
+      "body": "AlphaFlix het en Fluxer server, me fendet en zoberscht of de Website!",
       "section": "generel"
     },
     "q6": {
-      "title": "Gets en BetaMovie app?",
+      "title": "Gets en AlphaFlix app?",
       "body": "Momentan noni, aber du chasch en PWA (Progressive Web App) installiere. Of iOS, benotz Safari → Share → Add to Home Screen. Of Andriod, benotz Chrome → 3 dots → Add to Home Screen. En Beta fonere APK esch of üsem Fluxer verfüegbar, aber es werd net empfole.",
       "section": "generel"
     },
@@ -136,7 +136,7 @@
       "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
       "section": "language"
     },
-    "title": "Öber BetaMovie (^▽^)"
+    "title": "Öber AlphaFlix (^▽^)"
   },
   "actions": {
     "copied": "Kopieret",
@@ -229,7 +229,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Hewis",
-      "disclaimerText": "Bitte beacht: BetaMovie host kei Date selber, sondern zeigt nor Inhalt vo Drittabieter a. Rechtlichi Froge sete metem Abieter klärt werde."
+      "disclaimerText": "Bitte beacht: AlphaFlix host kei Date selber, sondern zeigt nor Inhalt vo Drittabieter a. Rechtlichi Froge sete metem Abieter klärt werde."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -241,7 +241,7 @@
     "tagline": "Lueg dini lieblings Serie ond Felme gratis ohni Werbig z’gse! (っ'ヮ'c)"
   },
   "global": {
-    "name": "BetaMovie",
+    "name": "AlphaFlix",
     "pages": {
       "about": "Öber",
       "legal": "Legal / DMCA",
@@ -249,7 +249,7 @@
       "support": "Onterstötze",
       "login": "Amälde",
       "onboarding": "Irechte",
-      "pagetitle": "{{title}} - BetaMovie",
+      "pagetitle": "{{title}} - AlphaFlix",
       "register": "Regischtriere",
       "settings": "Ischtelige",
       "migration": "Account öberträge",
@@ -395,11 +395,11 @@
           "I was för nere Stemig besch grad?",
           "Sölle mer dini Browser-Historie lösche?",
           "Was möchtisch gern luege?",
-          "BetaMovie esch die bescht Site ever!",
+          "AlphaFlix esch die bescht Site ever!",
           "Was esch of dim Felm ToDo Zetteli?",
           "Wie esch din Tag gse?",
           "Min Fähler, t’Site fonktioniert nie…",
-          "BetaMovie esch die bescht Site, oder?",
+          "AlphaFlix esch die bescht Site, oder?",
           ">ᴗ<"
         ]
       },
@@ -437,13 +437,13 @@
       "day": {
         "default": "Was möchtisch a däm schöne nomitag aluege?",
         "extra": [
-          "Viva la BetaMovie e ciao Svizzera"
+          "Viva la AlphaFlix e ciao Svizzera"
         ]
       },
       "morning": {
         "default": "Was welsch a däm morge aluege?",
         "extra": [
-          "Viva la BetaMovie!"
+          "Viva la AlphaFlix!"
         ]
       },
       "night": {
@@ -463,10 +463,10 @@
       }
     },
     "support": {
-      "title": "BetaMovie needs your help!",
-      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "title": "AlphaFlix needs your help!",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
       "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
       "thankYou": "Thank you for your support!",
@@ -633,7 +633,7 @@
   "downtimeNotice": {
     "badge": "Fehler",
     "goHome": "Zor Start-Site",
-    "message": "BetaMovie het wieder Problemli mit einzelne Anbieter. Wenn du e Serie nöd finde oder abspiele chasch, versuech bitte d’Quelle z’wechsle. Dä Fehler wird voraussichtlich während de unten aaggehne Zytspanne ahalte.",
+    "message": "AlphaFlix het wieder Problemli mit einzelne Anbieter. Wenn du e Serie nöd finde oder abspiele chasch, versuech bitte d’Quelle z’wechsle. Dä Fehler wird voraussichtlich während de unten aaggehne Zytspanne ahalte.",
     "title": "Abieter Problem"
   },
   "onboarding": {
@@ -686,19 +686,19 @@
         "button": "Me Info",
         "title": "Es Setup versto",
         "explainer": {
-          "intro": "BetaMovie hostet kei Videos. Es isch uf Drittanbieter-Websites angewiese für d’Inhalt, drum muesch du wähle, wie s sich mit dene Site verbindet.",
+          "intro": "AlphaFlix hostet kei Videos. Es isch uf Drittanbieter-Websites angewiese für d’Inhalt, drum muesch du wähle, wie s sich mit dene Site verbindet.",
           "options": "Dini Optione:",
           "extension": "1. Erwiterig",
           "extensionDescription": "D’Erweiterig git der Zuegriff uf d’meiste Quellen. Si funktioniert wie en lokale Proxy und cha Site verwände, wo spezielli Cookies oder Header bruuche zum Lade.",
           "proxy": "2. Proxy",
           "proxyDescription": "Dr Proxy scrape Medien vo andere Websites. Er umgoh Browser-Einschränkige (wie CORS), um s’Scrape z’ermögliche.",
           "default": "3. Standart Istelige",
-          "defaultDescription": "Bruchsch der integrierti BetaMovie Proxy. Es isch der eifachscht Option, chönnt aber langsamer si weg der teilte Bandbreite.",
+          "defaultDescription": "Bruchsch der integrierti AlphaFlix Proxy. Es isch der eifachscht Option, chönnt aber langsamer si weg der teilte Bandbreite.",
           "fedapi": {
             "fedapi": "Optional: FED API (Private) token",
             "fedapiDescription": "Bring din eigene gratis Febbox-Account mit, zum Zuegriff uf d’FED API (Privat) z’übercho. Die beschti Quälle mit 4K-Qualität, Dolby Atmos, Intro Skip ond superschnälle Ladezyte! Wörklich sehr zom Empfehle!"
           },
-          "outro": "Wenn du meh Froge hesch, wie das funktioniert, chasch gärn uf em <0>BetaMovie Fluxer\\</0>-Server frage!"
+          "outro": "Wenn du meh Froge hesch, wie das funktioniert, chasch gärn uf em <0>AlphaFlix Fluxer\\</0>-Server frage!"
         },
         "recommended": {
           "title": "Net secher, was de uswähle welsch?",
@@ -732,7 +732,7 @@
           "action": "Install Desktop app",
           "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
           "quality": "Best quality + Even more sources",
-          "title": "BetaMovie Desktop app"
+          "title": "AlphaFlix Desktop app"
         },
         "proxy": {
           "action": "Proxy istelle",
@@ -744,7 +744,7 @@
           "title": "Additional sources:"
         }
       },
-      "title": "Lass üs metem istelle fo BetaMovie starte 🥳"
+      "title": "Lass üs metem istelle fo AlphaFlix starte 🥳"
     }
   },
   "overlays": {
@@ -764,7 +764,7 @@
       "downloads": {
         "button": "Versuech zom abelade",
         "hlsDownloader": "Oder, goh uf d’<0>HLS Downloader-Website\\</0> und füeg die Playlist-URL vo unten ei.",
-        "disclaimer": "Downloads chömed direkt vom Anbieter. BetaMovie het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde.",
+        "disclaimer": "Downloads chömed direkt vom Anbieter. AlphaFlix het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde.",
         "copyHlsPlaylist": "Kopier HLS-Playlist Link",
         "downloadSubtitle": "Aktuelle Untertitel ablade",
         "downloadVideo": "Video abelade",
@@ -773,7 +773,7 @@
         "iina": "IINA",
         "outplayer": "Outplayer",
         "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
-        "hlsDisclaimer": "Downloads chömed direkt vom Anbieter. BetaMovie het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde. <br /><br />Bitte beachte, dass du e HLS-Playlist abeladsch, <bold>es wird nöd empfohle zum abelade, wenn du dich mit fortgschrittliche Streaming-Formate nöd uskennsch</bold>. Versuech anderi Quellen für anderi Formate.",
+        "hlsDisclaimer": "Downloads chömed direkt vom Anbieter. AlphaFlix het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde. <br /><br />Bitte beachte, dass du e HLS-Playlist abeladsch, <bold>es wird nöd empfohle zum abelade, wenn du dich mit fortgschrittliche Streaming-Formate nöd uskennsch</bold>. Versuech anderi Quellen für anderi Formate.",
         "onAndroid": {
           "1": "Om of Android abezlade, klick ofe abelad chnopf, <bold>Klick ond halt</bold> ofs Video, den wählsch <bold>save</bold>us.",
           "shortTitle": "Abelade / Android",
@@ -987,7 +987,7 @@
         "homeButton": "Gang heime",
         "enableExtension": "Erwiterig aktiviere",
         "title": "Bitte aktivier t Erwiterig",
-        "text": "Du hescht BetaMovie Erwiterig installiert. Demet du si chasch benotze, muesch si aktiviere."
+        "text": "Du hescht AlphaFlix Erwiterig installiert. Demet du si chasch benotze, muesch si aktiviere."
       },
       "tips": {
         "1": "Klick uf s‘Zahnradsymbol, um d‘Quellen z‘wechse!",
@@ -998,9 +998,7 @@
         "6": "Halt Lesezeichä, um sie z'ändere oder z'lösche!",
         "7": "Halt SHIFT und klick uf den Titel, um de Link mit der Zeit z'kopiere!",
         "8": "Wähl en eigeni Ontertetel Farb!",
-        "9": "Migrier dis Konto zonere neue Backend i de Einstellungen!",
-        "10": "Tret em Fluxer bi!",
-        "11": "Bruch [ und ], om d‘Ontertitel-Ziit z'ändere!"
+        "9": "Bruch [ und ], om d‘Ontertitel-Ziit z'ändere!"
       }
     },
     "time": {
@@ -1116,9 +1114,9 @@
   },
   "support": {
     "title": "Support",
-    "text": "BetaMovie isch druf usgleit, so benotzerfröntlech wie möglech z‘si. Trotzdäm het Lüüt no Froge und Problem. Die Site isch do, om z‘hälfe.",
+    "text": "AlphaFlix isch druf usgleit, so benotzerfröntlech wie möglech z‘si. Trotzdäm het Lüüt no Froge und Problem. Die Site isch do, om z‘hälfe.",
     "q1": {
-      "body": "Nun, du chasch em Officiele <0>BetaMovie-Fluxer</0> biträte ond det Froge stelle oder du chasch en Email schecke a d‘Adresse ganz onte uf dere Site.",
+      "body": "Nun, du chasch em Officiele <0>AlphaFlix-Fluxer</0> biträte ond det Froge stelle oder du chasch en Email schecke a d‘Adresse ganz onte uf dere Site.",
       "title": "Wo chani Helf hole?"
     },
     "q2": {
@@ -1128,9 +1126,9 @@
   },
   "jip": {
     "title": "Jip",
-    "text": "BetaMovie isch net usem Hemel gheit - s meischte esch vonere einzelne Person gmacht worde (ond das no sehr idrocksvoll!).",
+    "text": "AlphaFlix isch net usem Hemel gheit - s meischte esch vonere einzelne Person gmacht worde (ond das no sehr idrocksvoll!).",
     "q1": {
-      "body": "Nun, du chasch em Officielle <0>BetaMovie-Fluxer</0> biträte ond det Froge stelle oder en Email at adresse wo onde a dere Site esch, schribe.",
+      "body": "Nun, du chasch em Officielle <0>AlphaFlix-Fluxer</0> biträte ond det Froge stelle oder en Email at adresse wo onde a dere Site esch, schribe.",
       "title": "Wo bechomi helf?"
     },
     "q2": {
@@ -1179,7 +1177,7 @@
       },
       "admin": {
         "title": "Admin-Zentrale",
-        "text": "Notz d‘Wärchzüg wo deför do si, der zuestand vo BetaMovie z öberprüefe."
+        "text": "Notz d‘Wärchzüg wo deför do si, der zuestand vo AlphaFlix z öberprüefe."
       },
       "actions": {
         "delete": {

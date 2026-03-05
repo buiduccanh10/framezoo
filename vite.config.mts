@@ -67,8 +67,8 @@ export default defineConfig(({ mode }) => {
           "safari-pinned-tab.svg",
         ],
         manifest: {
-          name: "BetaMovie",
-          short_name: "BetaMovie",
+          name: "AlphaFlix",
+          short_name: "AlphaFlix",
           description:
             "Watch your favorite shows and movies for free with no ads ever! (っ'ヮ'c)",
           theme_color: "#000000",

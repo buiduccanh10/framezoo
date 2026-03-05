@@ -1,6 +1,6 @@
 {
   "about": {
-    "description": "BetaMovie est une application web qui recherche des flux sur Internet. L'équipe vise une approche minimaliste de la consommation de contenu.",
+    "description": "AlphaFlix est une application web qui recherche des flux sur Internet. L'équipe vise une approche minimaliste de la consommation de contenu.",
     "help": "Vous ne trouvez pas de réponse ? <0>Contactez notre support ici.</0>",
     "faqTitle": "Questions fréquentes",
     "searchPlaceholder": "Rechercher dans la FAQ...",
@@ -13,12 +13,12 @@
     },
     "q1": {
       "title": "D’où proviennent les contenus proposés ?",
-      "body": "BetaMovie n'héberge aucun contenu. Lorsque vous cliquez sur un élément à regarder, une recherche est effectuée sur Internet pour trouver le média sélectionné (sur l'écran de chargement et dans l'onglet \"sources vidéo\", vous pouvez voir quelle source vous utilisez). Les médias ne sont jamais téléchargés par BetaMovie, tout passe par ce mécanisme de recherche.",
+      "body": "AlphaFlix n'héberge aucun contenu. Lorsque vous cliquez sur un élément à regarder, une recherche est effectuée sur Internet pour trouver le média sélectionné (sur l'écran de chargement et dans l'onglet \"sources vidéo\", vous pouvez voir quelle source vous utilisez). Les médias ne sont jamais téléchargés par AlphaFlix, tout passe par ce mécanisme de recherche.",
       "section": "général"
     },
     "q2": {
       "title": "Où puis-je demander une série ou un film ?",
-      "body": "Il est impossible de demander un film ou une série, car BetaMovie ne gère aucun contenu. Le contenu est récupéré en explorant d'autres sites sur Internet.",
+      "body": "Il est impossible de demander un film ou une série, car AlphaFlix ne gère aucun contenu. Le contenu est récupéré en explorant d'autres sites sur Internet.",
       "section": "rechercher"
     },
     "q3": {
@@ -33,11 +33,11 @@
     },
     "q5": {
       "title": "Comment puis-je en savoir plus ?",
-      "body": "BetaMovie possède un serveur Fluxer qui peut être trouvé en-tête de page !",
+      "body": "AlphaFlix possède un serveur Fluxer qui peut être trouvé en-tête de page !",
       "section": "général"
     },
     "q6": {
-      "title": "Y a-t-il une application BetaMovie ?",
+      "title": "Y a-t-il une application AlphaFlix ?",
       "body": "Pas encore, mais vous pouvez l'installer en tant que PWA (Progressive Web App). Sur iOS, utilisez Safari → Partager → Sur l'écran d'accueil. Sur Android, utilisez Chrome → 3 points → Ajouter à l'écran d'accueil. Un APK expérimental est disponible via notre Fluxer, mais il n'est pas recommendé.",
       "section": "général"
     },
@@ -136,7 +136,7 @@
       "body": "Utilisez l'option «Personnaliser» dans les paramètres des sous-titres ou appuyez sur [ et ] sur votre clavier pour ajuster. Vous pouvez également importer votre propre fichier de sous-titres.",
       "section": "langue"
     },
-    "title": "À propos de BetaMovie (^▽^)"
+    "title": "À propos de AlphaFlix (^▽^)"
   },
   "actions": {
     "copied": "Copié",
@@ -229,7 +229,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Avertissement",
-      "disclaimerText": "BetaMovie ne stocke pas de fichiers, mais propose des liens vers des services externes. Les problèmes juridiques doivent être traités avec les fournisseurs et les hébergeurs de fichiers. Les fichiers multimédias diffusés par les fournisseurs de vidéos ne sont pas couverts par BetaMovie."
+      "disclaimerText": "AlphaFlix ne stocke pas de fichiers, mais propose des liens vers des services externes. Les problèmes juridiques doivent être traités avec les fournisseurs et les hébergeurs de fichiers. Les fichiers multimédias diffusés par les fournisseurs de vidéos ne sont pas couverts par AlphaFlix."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -241,7 +241,7 @@
     "tagline": "Regardez vos émissions et films préférés gratuitement et sans aucune pubs ! (っ'ヮ'c)"
   },
   "global": {
-    "name": "BetaMovie",
+    "name": "AlphaFlix",
     "pages": {
       "about": "À propos",
       "legal": "Legal / DMCA",
@@ -249,7 +249,7 @@
       "support": "Support",
       "login": "Se connecter",
       "onboarding": "Mise en place",
-      "pagetitle": "{{title}} - BetaMovie",
+      "pagetitle": "{{title}} - AlphaFlix",
       "register": "Créer un compte",
       "settings": "Paramètres",
       "migration": "Migrer le compte",
@@ -395,11 +395,11 @@
           "Que voulez-vous explorer ?",
           "Qu'y a-t-il dans votre liste de lecture ?",
           "Quel est votre film préféré ?",
-          "BetaMovie est le meilleur site au monde !",
+          "AlphaFlix est le meilleur site au monde !",
           "Qu'est-ce que tu as prévu de regarder aujourd'hui ?",
           "Comment s'est passée ta journée ?",
           "C'est ma faute, le site ne fonctionne jamais...",
-          "Est-ce que BetaMovie n'est pas tout simplement le meilleur ?",
+          "Est-ce que AlphaFlix n'est pas tout simplement le meilleur ?",
           ">ᴗ<"
         ]
       },
@@ -437,7 +437,7 @@
       "day": {
         "default": "Que voulez-vous regarder cet après-midi ?",
         "extra": [
-          "Viva la BetaMovie !"
+          "Viva la AlphaFlix !"
         ]
       },
       "morning": {
@@ -463,10 +463,10 @@
       }
     },
     "support": {
-      "title": "BetaMovie needs your help!",
-      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "title": "AlphaFlix needs your help!",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
       "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
       "thankYou": "Thank you for your support!",
@@ -633,7 +633,7 @@
   "downtimeNotice": {
     "badge": "Problèmes",
     "goHome": "Retour à l’accueil",
-    "message": "BetaMovie rencontre à nouveau des problèmes avec certains fournisseurs. Si vous ne parvenez pas à trouver ou à lire un contenu, veuillez changer de source. Cette erreur risque de persister durant les périodes indiquées ci-dessous.",
+    "message": "AlphaFlix rencontre à nouveau des problèmes avec certains fournisseurs. Si vous ne parvenez pas à trouver ou à lire un contenu, veuillez changer de source. Cette erreur risque de persister durant les périodes indiquées ci-dessous.",
     "title": "Problèmes liés aux fournisseurs"
   },
   "onboarding": {
@@ -686,19 +686,19 @@
         "button": "Voir plus",
         "title": "Comprendre le paramétrage",
         "explainer": {
-          "intro": "BetaMovie n’héberge pas de vidéos. Il s’appuie sur des sites tiers pour accéder au contenu, vous devez donc choisir comment il s’y connecte.",
+          "intro": "AlphaFlix n’héberge pas de vidéos. Il s’appuie sur des sites tiers pour accéder au contenu, vous devez donc choisir comment il s’y connecte.",
           "options": "Vos Options :",
           "extension": "1. Extension",
           "extensionDescription": "L'extension vous donne accès à la plupart des sources. Elle agit comme un proxy local et peut gérer les sites nécessitant des cookies ou des en-têtes spécifiques pour se charger.",
           "proxy": "2. Proxy",
           "proxyDescription": "Le proxy récupère les contenus depuis d’autres sites web. Il contourne les restrictions du navigateur (comme CORS) pour permettre cette récupération.",
           "default": "3. Configuration par défaut",
-          "defaultDescription": "Utilise le proxy intégré de BetaMovie. C’est l’option la plus simple, mais elle peut être plus lente en raison de la bande passante partagée.",
+          "defaultDescription": "Utilise le proxy intégré de AlphaFlix. C’est l’option la plus simple, mais elle peut être plus lente en raison de la bande passante partagée.",
           "fedapi": {
             "fedapi": "Optionnel : jeton API FED (privé)",
             "fedapiDescription": "Connectez votre propre compte gratuit Febbox pour accéder à l’API FED (privée), la meilleure source avec qualité 4K, Dolby Atmos, fonction sauter l’intro et des temps de chargement ultra rapides! Cette option est fortement recommandée."
           },
-          "outro": "Si vous avez d’autres questions sur le fonctionnement, n’hésitez pas à les poser sur le serveur <0>Fluxer de BetaMovie</0> !"
+          "outro": "Si vous avez d’autres questions sur le fonctionnement, n’hésitez pas à les poser sur le serveur <0>Fluxer de AlphaFlix</0> !"
         },
         "recommended": {
           "title": "Vous ne savez pas quoi choisir ?",
@@ -732,7 +732,7 @@
           "action": "Install Desktop app",
           "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
           "quality": "Best quality + Even more sources",
-          "title": "BetaMovie Desktop app"
+          "title": "AlphaFlix Desktop app"
         },
         "proxy": {
           "action": "Configurez le proxy",
@@ -744,7 +744,7 @@
           "title": "Additional sources:"
         }
       },
-      "title": "Commençons par configurer BetaMovie"
+      "title": "Commençons par configurer AlphaFlix"
     }
   },
   "overlays": {
@@ -764,7 +764,7 @@
       "downloads": {
         "button": "Essayer de télécharger",
         "hlsDownloader": "Ou rendez-vous sur le site <0>HLS Downloader Website</0> et collez l’URL de la playlist ci-dessous.",
-        "disclaimer": "Les téléchargements sont effectués directement par le fournisseur. BetaMovie n'a aucun contrôle sur la manière dont les téléchargements sont effectués.",
+        "disclaimer": "Les téléchargements sont effectués directement par le fournisseur. AlphaFlix n'a aucun contrôle sur la manière dont les téléchargements sont effectués.",
         "copyHlsPlaylist": "Copier le lien de la playlist HLS",
         "downloadSubtitle": "Télécharger les sous-titres",
         "downloadVideo": "Télécharger la vidéo",
@@ -773,7 +773,7 @@
         "iina": "IINA",
         "outplayer": "Outplayer",
         "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
-        "hlsDisclaimer": "Les téléchargements sont effectués directement auprès du fournisseur. BetaMovie n'a aucun contrôle sur la façon dont les téléchargements sont fournis.<br /><br />Veuillez noter que vous téléchargez une liste de lecture HLS, <bold>il n'est pas recommandé de la télécharger si vous n'êtes pas familier avec les formats de streaming avancés</bold>. Essayez différentes sources pour différents formats.",
+        "hlsDisclaimer": "Les téléchargements sont effectués directement auprès du fournisseur. AlphaFlix n'a aucun contrôle sur la façon dont les téléchargements sont fournis.<br /><br />Veuillez noter que vous téléchargez une liste de lecture HLS, <bold>il n'est pas recommandé de la télécharger si vous n'êtes pas familier avec les formats de streaming avancés</bold>. Essayez différentes sources pour différents formats.",
         "onAndroid": {
           "1": "Pour télécharger sur Android, cliquez sur le bouton de téléchargement, puis, sur la nouvelle page, <bold>tapez et maintenez</bold> sur la vidéo, et sélectionnez <bold>enregistrer</bold>.",
           "shortTitle": "Télécharger / Android",
@@ -987,7 +987,7 @@
         "homeButton": "Revenir à l'accueil",
         "enableExtension": "Activer l'extension",
         "title": "Veuillez activer l'extension",
-        "text": "Vous avez installé l'extension BetaMovie. Pour commencer à l'utiliser, vous devez activer l'extension pour ce site."
+        "text": "Vous avez installé l'extension AlphaFlix. Pour commencer à l'utiliser, vous devez activer l'extension pour ce site."
       },
       "tips": {
         "1": "Tap the gear icon to switch sources!",
@@ -998,9 +998,7 @@
         "6": "Hold bookmarks to edit or delete them!",
         "7": "Hold SHIFT and tap the title to copy the link with time!",
         "8": "Personnalisez la couleur des sous-titres !",
-        "9": "Migrate your account to a new backend in settings!",
-        "10": "Rejoignez le Fluxer !",
-        "11": "Hold ` to view keyboard shortcuts!"
+        "9": "Hold ` to view keyboard shortcuts!"
       }
     },
     "time": {
@@ -1116,9 +1114,9 @@
   },
   "support": {
     "title": "Centre d’aide",
-    "text": "BetaMovie a été conçu pour être aussi simple et intuitif que possible. Cependant, il est normal que des questions ou des problèmes surviennent. Cette page est là pour vous aider à y répondre et à résoudre ces difficultés.",
+    "text": "AlphaFlix a été conçu pour être aussi simple et intuitif que possible. Cependant, il est normal que des questions ou des problèmes surviennent. Cette page est là pour vous aider à y répondre et à résoudre ces difficultés.",
     "q1": {
-      "body": "Vous pouvez rejoindre le <0>Fluxer officiel de BetaMovie</0> pour poser vos questions, ou envoyer un e-mail à l’adresse indiquée en bas de cette page.",
+      "body": "Vous pouvez rejoindre le <0>Fluxer officiel de AlphaFlix</0> pour poser vos questions, ou envoyer un e-mail à l’adresse indiquée en bas de cette page.",
       "title": "Où puis-je obtenir de l’aide ?"
     },
     "q2": {
@@ -1128,9 +1126,9 @@
   },
   "jip": {
     "title": "Jip",
-    "text": "BetaMovie didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
+    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
     "q1": {
-      "body": "You can join the official <0>BetaMovie fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
+      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
       "title": "Where can I get help?"
     },
     "q2": {
@@ -1179,7 +1177,7 @@
       },
       "admin": {
         "title": "Panneau d'administration",
-        "text": "Test BetaMovie's condition."
+        "text": "Test AlphaFlix's condition."
       },
       "actions": {
         "delete": {

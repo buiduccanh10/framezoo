@@ -1,6 +1,6 @@
 {
-  "name": "BetaMovie",
-  "short_name": "BetaMovie",
+  "name": "AlphaFlix",
+  "short_name": "AlphaFlix",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#120f1d",

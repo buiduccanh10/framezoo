@@ -138,7 +138,7 @@ export function Navigation(props: NavigationProps) {
             <div className="flex items-center space-x-1.5 ssm:space-x-3 pointer-events-auto">
               <Link
                 className="block tabbable rounded-full text-xs ssm:text-base"
-                to="/"
+                to="/discover"
                 onClick={() => window.scrollTo(0, 0)}
               >
                 <BrandPill clickable header />
@@ -152,14 +152,14 @@ export function Navigation(props: NavigationProps) {
                 <IconPatch icon={Icons.FLUXER} clickable downsized navigation />
               </a> */}
               {!enableLowPerformanceMode &&
-                (window.location.pathname !== "/discover" ? (
+                (window.location.pathname === "/discover" ? (
                   <a
-                    onClick={() => handleClick("/discover")}
+                    onClick={() => handleClick("/browse")}
                     rel="noreferrer"
-                    className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
+                    className="text-lg text-white tabbable rounded-full backdrop-blur-lg"
                   >
                     <IconPatch
-                      icon={Icons.RISING_STAR}
+                      icon={Icons.SEARCH}
                       clickable
                       downsized
                       navigation
@@ -167,12 +167,12 @@ export function Navigation(props: NavigationProps) {
                   </a>
                 ) : (
                   <a
-                    onClick={() => handleClick("/")}
+                    onClick={() => handleClick("/discover")}
                     rel="noreferrer"
-                    className="text-lg text-white tabbable rounded-full backdrop-blur-lg"
+                    className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
                   >
                     <IconPatch
-                      icon={Icons.SEARCH}
+                      icon={Icons.RISING_STAR}
                       clickable
                       downsized
                       navigation

@@ -221,7 +221,7 @@ export async function createPasskey(
     {
       challenge,
       rp: {
-        name: "BetaMovie",
+        name: "AlphaFlix",
         id: window.location.hostname,
       },
       user: {

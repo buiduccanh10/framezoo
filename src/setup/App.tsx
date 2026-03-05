@@ -63,7 +63,7 @@ function LegacyUrlView({ children }: { children: ReactElement }) {
     const url = location.pathname;
     if (!isLegacyUrl(url)) return;
     convertLegacyUrl(location.pathname).then((convertedUrl) => {
-      navigate(convertedUrl ?? "/", { replace: true });
+      navigate(convertedUrl ?? "/discover", { replace: true });
     });
   }, [location.pathname, navigate]);
 
@@ -78,10 +78,10 @@ function QuickSearch() {
   useEffect(() => {
     if (query) {
       generateQuickSearchMediaUrl(query).then((url) => {
-        navigate(url ?? "/", { replace: true });
+        navigate(url ?? "/discover", { replace: true });
       });
     } else {
-      navigate("/", { replace: true });
+      navigate("/discover", { replace: true });
     }
   }, [query, navigate]);
 
@@ -96,7 +96,7 @@ function QueryView() {
     if (query) {
       navigate(`/browse/${encodeURIComponent(query)}`, { replace: true });
     } else {
-      navigate("/", { replace: true });
+      navigate("/discover", { replace: true });
     }
   }, [query, navigate]);
 
@@ -164,7 +164,7 @@ function App() {
             }
           />
           <Route path="/browse/:query?" element={<HomePage />} />
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Navigate to="/discover" replace />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<AboutPage />} />

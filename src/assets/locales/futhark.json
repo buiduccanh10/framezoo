@@ -37,8 +37,8 @@
       "section": "general"
     },
     "q6": {
-      "title": "Is there a BetaMovie app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/BetaMovie/BetaMovie-desktop/releases",
+      "title": "Is there a AlphaFlix app?",
+      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
       "section": "general"
     },
     "q7": {
@@ -463,10 +463,10 @@
       }
     },
     "support": {
-      "title": "BetaMovie needs your help!",
-      "description": "BetaMovie is run at a loss, and we need help to keep it ad free! If you enjoy using BetaMovie, please consider donating to help us cover our costs.",
+      "title": "AlphaFlix needs your help!",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
       "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using BetaMovie, please consider donating to help us cover our growing costs.",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
       "thankYou": "Thank you for your support!",
@@ -686,19 +686,19 @@
         "button": "ᛗᛟᚱᛖ ᛁᚾᚠᛟ",
         "title": "Understanding a setup",
         "explainer": {
-          "intro": "BetaMovie doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
+          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
           "options": "Your Options:",
           "extension": "Extension",
           "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
           "proxy": "Proxy",
           "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
           "default": "Default Setup",
-          "defaultDescription": "Uses BetaMovie's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
+          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
           "fedapi": {
             "fedapi": "Additional: Febbox token",
             "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
           },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>BetaMovie Fluxer</0> server!"
+          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
         },
         "recommended": {
           "title": "Not sure what to choose?",
@@ -732,7 +732,7 @@
           "action": "Install Desktop app",
           "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
           "quality": "Best quality + Even more sources",
-          "title": "BetaMovie Desktop app"
+          "title": "AlphaFlix Desktop app"
         },
         "proxy": {
           "action": "ᛊᛖᛏᚢᛈ ᛈᚱᛟᚲᛊᛁ",
@@ -998,9 +998,7 @@
         "6": "Hold bookmarks to edit or delete them!",
         "7": "Hold SHIFT and tap the title to copy the link with time!",
         "8": "Set a custom subtitle color!",
-        "9": "Migrate your account to a new backend in settings!",
-        "10": "Join the Fluxer!",
-        "11": "Hold ` to view keyboard shortcuts!"
+        "9": "Hold ` to view keyboard shortcuts!"
       }
     },
     "time": {

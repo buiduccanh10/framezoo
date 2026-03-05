@@ -101,7 +101,7 @@ function VideoElement() {
     subtitleTrack = (
       <track
         ref={trackEl}
-        label="BetaMovie Captions"
+        label="AlphaFlix Captions"
         kind="subtitles"
         srcLang={language}
         src={trackObjectUrl}
