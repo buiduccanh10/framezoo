@@ -1419,7 +1419,8 @@
         "secure": "安全",
         "title": "应用信息",
         "unknownVersion": "未知",
-        "userId": "用户 ID"
+        "userId": "用户 ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

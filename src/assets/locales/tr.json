@@ -1419,7 +1419,8 @@
         "secure": "Güvenli",
         "title": "Uygulama bilgisi",
         "unknownVersion": "Bilinmeyen",
-        "userId": "Kullanıcı Kimliği"
+        "userId": "Kullanıcı Kimliği",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

@@ -1419,7 +1419,8 @@
         "secure": "Drošs",
         "title": "Aplikācijas informācija",
         "unknownVersion": "Nezināms",
-        "userId": "Lietotāja ID"
+        "userId": "Lietotāja ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

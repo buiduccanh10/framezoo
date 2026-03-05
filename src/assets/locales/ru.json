@@ -1419,7 +1419,8 @@
         "secure": "Безопасный",
         "title": "Информация о приложении",
         "unknownVersion": "Неизвестный",
-        "userId": "ID пользователя"
+        "userId": "ID пользователя",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

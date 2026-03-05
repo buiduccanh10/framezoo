@@ -1419,7 +1419,8 @@
         "secure": "Biztonságos",
         "title": "Applikáció statisztikái",
         "unknownVersion": "Ismeretlen",
-        "userId": "Felhasználó ID"
+        "userId": "Felhasználó ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

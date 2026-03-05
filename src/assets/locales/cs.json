@@ -1414,7 +1414,8 @@
         "secure": "bezpečný",
         "title": "Informace o aplikaci",
         "unknownVersion": "Neznámo",
-        "userId": "Uživatelské ID"
+        "userId": "Uživatelské ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

@@ -1414,7 +1414,8 @@
         "secure": "ਸੁਰੱਖਿਅਤ",
         "title": "ਐਪ ਜਾਣਕਾਰੀ",
         "unknownVersion": "ਅਗਿਆਤ",
-        "userId": "ਯੂਜਰ ਆਈਡੀ"
+        "userId": "ਯੂਜਰ ਆਈਡੀ",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

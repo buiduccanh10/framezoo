@@ -1414,7 +1414,8 @@
         "secure": "امن",
         "title": "اطلاعات برنامه",
         "unknownVersion": "ناشناخته",
-        "userId": "شناسه کاربری"
+        "userId": "شناسه کاربری",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

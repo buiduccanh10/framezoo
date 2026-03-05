@@ -1414,7 +1414,8 @@
         "secure": "Örrugt",
         "title": "Forrits upplýsingar",
         "unknownVersion": "Óvitað",
-        "userId": "Notanda kóði"
+        "userId": "Notanda kóði",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

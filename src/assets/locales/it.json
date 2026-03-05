@@ -1419,7 +1419,8 @@
         "secure": "Sicuro",
         "title": "Statistiche dell'app (per nerd) 🤓",
         "unknownVersion": "Sconosciuto",
-        "userId": "ID utente"
+        "userId": "ID utente",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

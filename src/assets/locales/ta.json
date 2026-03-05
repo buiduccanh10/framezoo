@@ -1419,7 +1419,8 @@
         "secure": "பாதுகாப்பானது",
         "title": "பயன்பாட்டின் தகவல்கள்",
         "unknownVersion": "தெரியவில்லை",
-        "userId": "பயனர் ID"
+        "userId": "பயனர் ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

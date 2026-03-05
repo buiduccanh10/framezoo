@@ -1419,7 +1419,8 @@
         "secure": "Secure",
         "title": "App information",
         "unknownVersion": "Unknown",
-        "userId": "Pirate ID"
+        "userId": "Pirate ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

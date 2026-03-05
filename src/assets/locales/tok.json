@@ -1414,7 +1414,8 @@
         "secure": "pona",
         "title": "sona ilo",
         "unknownVersion": "mi sona ala",
-        "userId": "nanpa sina"
+        "userId": "nanpa sina",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

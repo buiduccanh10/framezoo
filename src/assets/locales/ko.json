@@ -1414,7 +1414,8 @@
         "secure": "안전함",
         "title": "앱 정보",
         "unknownVersion": "알 수 없음",
-        "userId": "유저 ID"
+        "userId": "유저 ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

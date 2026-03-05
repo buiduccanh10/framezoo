@@ -1419,7 +1419,8 @@
         "secure": "Säker",
         "title": "Appinformation",
         "unknownVersion": "Okänd",
-        "userId": "Användar-ID"
+        "userId": "Användar-ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

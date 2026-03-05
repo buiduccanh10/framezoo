@@ -1419,7 +1419,8 @@
         "secure": "Veilig",
         "title": "App informatie",
         "unknownVersion": "Onbekend",
-        "userId": "Gebruiker ID"
+        "userId": "Gebruiker ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

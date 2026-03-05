@@ -1419,7 +1419,8 @@
         "secure": "מאובטח",
         "title": "מידע על האפליקציה",
         "unknownVersion": "לא ידוע",
-        "userId": "זהות המשתמש"
+        "userId": "זהות המשתמש",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

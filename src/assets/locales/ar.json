@@ -1419,7 +1419,8 @@
         "secure": "آمن",
         "title": "معلومات التطبيق",
         "unknownVersion": "غير معروف",
-        "userId": "معرِّف المستخدم"
+        "userId": "معرِّف المستخدم",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

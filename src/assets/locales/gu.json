@@ -1419,7 +1419,8 @@
         "secure": "સુરક્ષિત",
         "title": "એપ્લિકેશન માહિતી",
         "unknownVersion": "અજ્ઞાત",
-        "userId": "વપરાશકર્તા ID"
+        "userId": "વપરાશકર્તા ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

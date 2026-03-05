@@ -1419,7 +1419,8 @@
         "secure": "Secuwe",
         "title": "App stats",
         "unknownVersion": "Unknyown",
-        "userId": "Usew ID"
+        "userId": "Usew ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

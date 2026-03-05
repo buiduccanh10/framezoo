@@ -1414,7 +1414,8 @@
         "secure": "सुरक्षित",
         "title": "एप बारे जानकारी",
         "unknownVersion": "अज्ञात",
-        "userId": "प्रयोगकर्ता ID"
+        "userId": "प्रयोगकर्ता ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

@@ -1419,7 +1419,8 @@
         "secure": "Securizat",
         "title": "Informația aplicației",
         "unknownVersion": "Necunoscut",
-        "userId": "ID-ul utilizatorului"
+        "userId": "ID-ul utilizatorului",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

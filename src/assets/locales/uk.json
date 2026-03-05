@@ -1414,7 +1414,8 @@
         "secure": "Безпечно",
         "title": "Інформація про застосунок",
         "unknownVersion": "Невідомо",
-        "userId": "ID користувача"
+        "userId": "ID користувача",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

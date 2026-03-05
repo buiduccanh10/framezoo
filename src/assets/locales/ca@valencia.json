@@ -1414,7 +1414,8 @@
         "secure": "Segur",
         "title": "Informació de l'aplicació",
         "unknownVersion": "Desconeguda",
-        "userId": "ID d'usuari"
+        "userId": "ID d'usuari",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

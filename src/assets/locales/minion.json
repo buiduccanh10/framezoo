@@ -1419,7 +1419,8 @@
         "secure": "Banana",
         "title": "Banana information",
         "unknownVersion": "Unknown",
-        "userId": "Minion ID"
+        "userId": "Minion ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

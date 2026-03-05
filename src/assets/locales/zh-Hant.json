@@ -1414,7 +1414,8 @@
         "secure": "安全",
         "title": "應用程式的資訊",
         "unknownVersion": "未知",
-        "userId": "使用者ID"
+        "userId": "使用者ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

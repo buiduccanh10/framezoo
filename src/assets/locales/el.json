@@ -1419,7 +1419,8 @@
         "secure": "Ασφαλές",
         "title": "Πληροφορίες εφαρμογής",
         "unknownVersion": "Άγνωστο",
-        "userId": "Αναγνωριστικό χρήστη"
+        "userId": "Αναγνωριστικό χρήστη",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

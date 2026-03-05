@@ -1419,7 +1419,8 @@
         "secure": "Secher",
         "title": "App Status",
         "unknownVersion": "Onbekannt",
-        "userId": "Nutzer-ID"
+        "userId": "Nutzer-ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

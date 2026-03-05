@@ -1419,7 +1419,8 @@
         "secure": "ᛊᛖᚲᚢᚱᛖ",
         "title": "ᚨᛈᛈ ᛊᛏᚨᛏᛊ",
         "unknownVersion": "ᚢᚾᚲᚾᛟᚹᚾ",
-        "userId": "ᚢᛊᛖᚱ ᛁᛞ"
+        "userId": "ᚢᛊᛖᚱ ᛁᛞ",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

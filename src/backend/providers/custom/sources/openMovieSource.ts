@@ -108,18 +108,14 @@ function fixSubtitleUrl(
 export async function scrapeOpenMovieMovie(
   ctx: MovieScrapeContext,
 ): Promise<SourcererOutput> {
-  console.info("[OpenMovie] Starting Movie Scrape for TMDB:", ctx.media.tmdbId);
   ctx.progress(10);
 
   const apiUrl = `${OPENMOVIE_API_BASE}/movie/${ctx.media.tmdbId}`;
-  console.info("[OpenMovie] Fetching from API:", apiUrl);
 
   try {
     const data = await ctx.fetcher<OpenMovieApiResponse>(apiUrl);
-    console.info("[OpenMovie] API Response:", data);
 
     if (!data.success || !data.streams?.length) {
-      console.warn("[OpenMovie] No streams found or success is false");
       throw new NotFoundError("No streams found on OpenMovie");
     }
 
@@ -153,19 +149,12 @@ export async function scrapeOpenMovieMovie(
 export async function scrapeOpenMovieShow(
   ctx: ShowScrapeContext,
 ): Promise<SourcererOutput> {
-  console.info(
-    `[OpenMovie] Starting Show Scrape for TMDB: ${ctx.media.tmdbId} (S${ctx.media.season.number}E${ctx.media.episode.number})`,
-  );
   ctx.progress(10);
 
   const apiUrl = `${OPENMOVIE_API_BASE}/series/${ctx.media.tmdbId}?season=${ctx.media.season.number}&episode=${ctx.media.episode.number}`;
-  console.info(
-    `[OpenMovie] Show: Fetching from API: ${apiUrl} (S${ctx.media.season.number}E${ctx.media.episode.number})`,
-  );
 
   try {
     const data = await ctx.fetcher<OpenMovieApiResponse>(apiUrl);
-    console.info("[OpenMovie] API Response:", data);
 
     if (!data.success || !data.streams?.length) {
       throw new NotFoundError("No streams found on OpenMovie");

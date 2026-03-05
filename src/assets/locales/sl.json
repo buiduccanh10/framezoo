@@ -1414,7 +1414,8 @@
         "secure": "Varna povezava",
         "title": "Informacije o aplikaciji",
         "unknownVersion": "Neznano",
-        "userId": "ID uporabnika"
+        "userId": "ID uporabnika",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

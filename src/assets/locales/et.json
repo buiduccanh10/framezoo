@@ -1414,7 +1414,8 @@
         "secure": "Turvaline",
         "title": "Rakenduse teave",
         "unknownVersion": "Teadmatu",
-        "userId": "Kasutaja ID"
+        "userId": "Kasutaja ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

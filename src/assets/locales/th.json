@@ -1419,7 +1419,8 @@
         "secure": "ความปลอดภัย",
         "title": "ข้อมูลแอปพลิเคชัน",
         "unknownVersion": "ไม่ทราบ",
-        "userId": "รหัสผู้ใช้"
+        "userId": "รหัสผู้ใช้",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

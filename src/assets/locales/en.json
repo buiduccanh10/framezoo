@@ -424,33 +424,23 @@
     "titles": {
       "day": {
         "default": "What would you like to watch this afternoon?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "morning": {
         "default": "What would you like to watch this morning?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "night": {
         "default": "What would you like to watch tonight?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -1419,7 +1409,8 @@
         "secure": "Secure",
         "title": "App stats",
         "unknownVersion": "Unknown",
-        "userId": "User ID"
+        "userId": "User ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

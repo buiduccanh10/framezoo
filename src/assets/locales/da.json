@@ -1419,7 +1419,8 @@
         "secure": "Sikker",
         "title": "Appstatistik (for nørder) 🤓",
         "unknownVersion": "Ukendt",
-        "userId": "Bruger ID"
+        "userId": "Bruger ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {

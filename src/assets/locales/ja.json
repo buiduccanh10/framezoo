@@ -1409,7 +1409,8 @@
         "secure": "Secure",
         "title": "App stats",
         "unknownVersion": "Unknown",
-        "userId": "User ID"
+        "userId": "User ID",
+        "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {
