@@ -16,10 +16,6 @@ import {
   scrapeKKPhimMovie,
   scrapeKKPhimShow,
 } from "./custom/sources/kkphimSource";
-import {
-  scrapeNguoncMovie,
-  scrapeNguoncShow,
-} from "./custom/sources/nguoncSource";
 import { scrapeOpenMovieEmbed } from "./custom/sources/openMovieEmbed";
 import {
   scrapeOpenMovieMovie,
@@ -45,20 +41,6 @@ const ophimSource = {
   mediaTypes: ["movie" as const, "show" as const],
   scrapeMovie: scrapeOPhimMovie,
   scrapeShow: scrapeOPhimShow,
-};
-
-// Custom NguonC source definition
-const nguoncSource = {
-  id: "nguonc",
-  name: "NguonC",
-  rank: 205,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeNguoncMovie,
-  scrapeShow: scrapeNguoncShow,
 };
 
 // Custom KKPhim source definition
@@ -115,7 +97,6 @@ export function getProviders() {
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
       .addSource(ophimSource)
-      .addSource(nguoncSource)
       .addSource(kkphimSource)
       .addSource(openMovieSource)
       .addEmbed(openMovieEmbed)
@@ -130,7 +111,6 @@ export function getProviders() {
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
       .addSource(ophimSource)
-      .addSource(nguoncSource)
       .addSource(kkphimSource)
       .addSource(openMovieSource)
       .addEmbed(openMovieEmbed)
@@ -145,7 +125,6 @@ export function getProviders() {
     .setTarget(targets.BROWSER)
     .addBuiltinProviders()
     .addSource(ophimSource)
-    .addSource(nguoncSource)
     .addSource(kkphimSource)
     .addSource(openMovieSource)
     .addEmbed(openMovieEmbed)
@@ -159,7 +138,6 @@ export function getAllProviders() {
     .enableConsistentIpForRequests()
     .addBuiltinProviders()
     .addSource(ophimSource)
-    .addSource(nguoncSource)
     .addSource(kkphimSource)
     .addSource(openMovieSource)
     .addEmbed(openMovieEmbed)

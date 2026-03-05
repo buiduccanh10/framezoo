@@ -33,7 +33,7 @@ function EmbedOption(props: {
       try {
         const encoded = props.url.replace("openmovie://", "");
         const info = JSON.parse(decodeURIComponent(encoded));
-        return info.name || info.title || "OpenMovie Stream";
+        return info.title || info.name || "OpenMovie Stream";
       } catch {
         // Fall through to default
       }

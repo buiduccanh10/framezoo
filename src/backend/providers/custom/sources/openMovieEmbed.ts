@@ -45,45 +45,36 @@ export async function scrapeOpenMovieEmbed(
 
   const isHls = isHlsUrl(streamInfo.url);
 
-  if (isHls) {
-    return {
-      stream: [
-        {
-          id: `openmovie-${streamInfo.provider}-hls`,
-          type: "hls" as const,
-          playlist: streamInfo.url,
-          flags: [flags.CORS_ALLOWED],
-          captions: [],
-          skipValidation: true,
-        },
-      ],
-    };
-  }
+  const qualityMap: Record<string, string> = {
+    "2160p": "4k",
+    "1440p": "1440",
+    "1080p": "1080",
+    "720p": "720",
+    "480p": "480",
+    "360p": "360",
+  };
 
-  // MP4/direct file stream
+  const quality =
+    qualityMap[streamInfo.quality] ||
+    streamInfo.quality?.replace("p", "") ||
+    "unknown";
+
   return {
     stream: [
       {
-        id: `openmovie-${streamInfo.provider}-file`,
-        type: "file" as const,
+        id: `openmovie-${streamInfo.provider}-${isHls ? "hls" : "file"}-${quality}`,
+        type: isHls ? ("hls" as const) : ("file" as const),
         flags: [flags.CORS_ALLOWED],
         captions: [],
         skipValidation: true,
+        ...(isHls ? { playlist: streamInfo.url } : {}),
         qualities: {
-          [streamInfo.quality === "1080p"
-            ? "1080"
-            : streamInfo.quality === "720p"
-              ? "720"
-              : streamInfo.quality === "480p"
-                ? "480"
-                : streamInfo.quality === "360p"
-                  ? "360"
-                  : "unknown"]: {
-            type: "mp4" as const,
+          [quality]: {
+            type: isHls ? ("hls" as const) : ("mp4" as const),
             url: streamInfo.url,
           },
         },
       },
     ],
-  };
+  } as any;
 }
