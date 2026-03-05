@@ -75,12 +75,32 @@ export function EmbedOption(props: {
     );
   }
 
+  const activeStreamId = usePlayerStore((s) => s.source?.id);
+  const isSelected = useMemo(() => {
+    if (
+      props.embedId === "openmovie-embed" &&
+      props.url?.startsWith("openmovie://")
+    ) {
+      if (activeStreamId?.startsWith("openmovie-")) {
+        try {
+          const encoded = props.url.replace("openmovie://", "");
+          const info = JSON.parse(decodeURIComponent(encoded));
+          const parts = activeStreamId.split("-");
+          return parts[1] === info.provider;
+        } catch {
+          return false;
+        }
+      }
+    }
+    return props.embedId === currentEmbedId;
+  }, [props.embedId, props.url, currentEmbedId, activeStreamId]);
+
   return (
     <SelectableLink
       loading={loading}
       error={errored && !notFound}
       onClick={run}
-      selected={props.embedId === currentEmbedId}
+      selected={isSelected}
       rightSide={rightSide}
     >
       <span className="flex flex-col">
@@ -296,6 +316,8 @@ export function SourceSelectionView({
   const showExtensionHint = !isExtensionActiveCached();
   const navigate = useNavigate();
 
+  const activeStreamId = usePlayerStore((s) => s.source?.id);
+
   return (
     <>
       <Menu.BackLink
@@ -317,18 +339,41 @@ export function SourceSelectionView({
         {t("player.menus.sources.title")}
       </Menu.BackLink>
       <Menu.Section className="pb-4">
-        {sources.map((v) => (
-          <SelectableLink
-            key={v.id}
-            onClick={() => {
-              onChoose?.(v.id);
-              router.navigate("/source/embeds");
-            }}
-            selected={v.id === currentSourceId}
-          >
-            {v.name}
-          </SelectableLink>
-        ))}
+        {sources.map((v) => {
+          const isSelected = v.id === currentSourceId;
+          let subSourceLabel = null;
+
+          if (isSelected && v.id === "openmovie") {
+            if (activeStreamId?.startsWith("openmovie-")) {
+              const parts = activeStreamId.split("-");
+              if (parts.length >= 2) {
+                const provider = parts[1];
+                subSourceLabel =
+                  provider.charAt(0).toUpperCase() + provider.slice(1);
+              }
+            }
+          }
+
+          return (
+            <SelectableLink
+              key={v.id}
+              onClick={() => {
+                onChoose?.(v.id);
+                router.navigate("/source/embeds");
+              }}
+              selected={isSelected}
+            >
+              <div className="flex flex-col">
+                <span>{v.name}</span>
+                {subSourceLabel && (
+                  <span className="text-[0.7em] opacity-60 font-medium">
+                    {subSourceLabel}
+                  </span>
+                )}
+              </div>
+            </SelectableLink>
+          );
+        })}
       </Menu.Section>
       {showExtensionHint && (
         <div className="mx-4 mb-4 mt-2 px-4 py-3 bg-video-context-light/5 hover:bg-video-context-light/10 rounded-xl border border-video-context-light/10 flex flex-col items-center text-center transition-colors">

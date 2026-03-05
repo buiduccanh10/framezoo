@@ -20,12 +20,14 @@ export type LoadableSource = {
 
 export type SourceSliceSource =
   | {
+      id?: string;
       type: "file";
       qualities: Partial<Record<SourceQuality, SourceFileStream>>;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     }
   | {
+      id?: string;
       type: "hls";
       url: string;
       headers?: Stream["headers"];

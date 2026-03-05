@@ -26,6 +26,7 @@ export function convertRunoutputToSource(out: {
 }): SourceSliceSource {
   if (out.stream.type === "hls") {
     return {
+      id: out.stream.id,
       type: "hls",
       url: out.stream.playlist,
       headers: out.stream.headers,
@@ -49,6 +50,7 @@ export function convertRunoutputToSource(out: {
       };
     });
     return {
+      id: out.stream.id,
       type: "file",
       qualities,
       headers: out.stream.headers,

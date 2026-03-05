@@ -46,7 +46,7 @@ const ophimSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "KKPhim",
+  name: "KKPhim ",
   rank: 210,
   disabled: false,
   externalSource: false,
@@ -60,8 +60,8 @@ const kkphimSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "OpenMovie",
-  rank: 195,
+  name: "AlphaFlix 🔥",
+  rank: 300,
   disabled: false,
   externalSource: false,
   type: "source" as const,
