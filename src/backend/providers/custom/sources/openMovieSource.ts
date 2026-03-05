@@ -49,6 +49,7 @@ function encodeStreamInfo(stream: OpenMovieStream): string {
 
 function fixStreamUrl(url: string, baseUrl: string): string {
   if (!url) return url;
+  if (url.startsWith(baseUrl)) return url; // Already fixed!
 
   // Case 1: Proxy URL from tmdb-embed-api (contains -proxy?)
   if (url.includes("-proxy?")) {
