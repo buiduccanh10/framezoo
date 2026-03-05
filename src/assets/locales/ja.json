@@ -148,6 +148,10 @@
     "createAccount": "まだアカウントをお持ちでないですか？ <0>アカウントを作成</0> してください。",
     "deviceNameLabel": "デバイス名",
     "deviceNamePlaceholder": "個人用の電話",
+    "inviteCodeLabel": "招待コード",
+    "inviteCodePlaceholder": "友達のユーザーIDを入力してください",
+    "inviteCodeRequiredError": "招待コードは必須です",
+    "inviteCodeInvalidError": "無効な招待コードです（ユーザーIDが見つかりません）",
     "generate": {
       "description": "パスフレーズはユーザー名とパスワードとして機能します。アカウントにログインする際には必ず入力する必要があるため、安全に保管してください。",
       "next": "パスフレーズを保存しました",
@@ -1162,6 +1166,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "退室"
       },

@@ -148,6 +148,10 @@
     "createAccount": "¿Todavía no tienes una cuenta? <0>Crea una cuenta.</0>",
     "deviceNameLabel": "Nombre del dispositivo",
     "deviceNamePlaceholder": "Teléfono personal",
+    "inviteCodeLabel": "Código de invitación",
+    "inviteCodePlaceholder": "Ingresa el ID de usuario de tu amigo",
+    "inviteCodeRequiredError": "El código de invitación es obligatorio",
+    "inviteCodeInvalidError": "Código de invitación no válido (ID de usuario no encontrado)",
     "generate": {
       "description": "Tu frase de contraseña actúa como tu nombre de usuario y contraseña. Asegúrate de mantenerlas seguras, ya que las necesitarás para iniciar sesión en tu cuenta",
       "next": "He guardado mi frase de contraseña",
@@ -424,15 +428,11 @@
     "titles": {
       "69": {
         "default": "¿Te apetece algo picante?",
-        "extra": [
-          "¡Feliz día 69 😘!"
-        ]
+        "extra": ["¡Feliz día 69 😘!"]
       },
       "420": {
         "default": "¿Qué te gustaría ver este 4/20?",
-        "extra": [
-          "¡Feliz 4/20 🥳!"
-        ]
+        "extra": ["¡Feliz 4/20 🥳!"]
       },
       "day": {
         "default": "¿Qué te gustaría ver esta tarde?",
@@ -442,15 +442,11 @@
       },
       "morning": {
         "default": "¿Qué te gustaría ver esta mañana?",
-        "extra": [
-          "Escuché que “Antes del amanecer” es buena"
-        ]
+        "extra": ["Escuché que “Antes del amanecer” es buena"]
       },
       "night": {
         "default": "¿Qué te gustaría ver esta noche?",
-        "extra": [
-          "¿Cansado? Escuché que “El Exorcista” es buena."
-        ]
+        "extra": ["¿Cansado? Escuché que “El Exorcista” es buena."]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",

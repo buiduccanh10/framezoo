@@ -128,13 +128,16 @@ export function Navigation(props: NavigationProps) {
         <div className={classNames("fixed left-0 right-0 flex items-center")}>
           <div className="px-7 py-5 relative z-[60] flex flex-1 items-center justify-between">
             <div className="flex items-center space-x-1.5 ssm:space-x-3 pointer-events-auto">
-              <Link
-                className="block tabbable rounded-full text-xs ssm:text-base"
-                to="/discover"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                <BrandPill clickable header />
-              </Link>
+              {location.pathname !== "/login" &&
+                location.pathname !== "/register" && (
+                  <Link
+                    className="block tabbable rounded-full text-xs ssm:text-base"
+                    to="/discover"
+                    onClick={() => window.scrollTo(0, 0)}
+                  >
+                    <BrandPill clickable header />
+                  </Link>
+                )}
               {/* <a
                 href={conf().FLUXER_LINK}
                 target="_blank"
@@ -144,6 +147,8 @@ export function Navigation(props: NavigationProps) {
                 <IconPatch icon={Icons.FLUXER} clickable downsized navigation />
               </a> */}
               {!enableLowPerformanceMode &&
+                location.pathname !== "/login" &&
+                location.pathname !== "/register" &&
                 (location.pathname === "/discover" ? (
                   <Link
                     to="/browse"
@@ -189,11 +194,14 @@ export function Navigation(props: NavigationProps) {
                 })()}
               </a> */}
             </div>
-            <div className="relative pointer-events-auto">
-              <LinksDropdown>
-                {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
-              </LinksDropdown>
-            </div>
+            {location.pathname !== "/login" &&
+              location.pathname !== "/register" && (
+                <div className="relative pointer-events-auto">
+                  <LinksDropdown>
+                    {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
+                  </LinksDropdown>
+                </div>
+              )}
           </div>
         </div>
       </div>

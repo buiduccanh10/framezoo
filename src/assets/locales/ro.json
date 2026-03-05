@@ -148,6 +148,10 @@
     "createAccount": "Nu aveți încă un cont? <0>Creați un cont.</0>",
     "deviceNameLabel": "Nume dispozitiv",
     "deviceNamePlaceholder": "Telefon personal",
+    "inviteCodeLabel": "Cod de invitație",
+    "inviteCodePlaceholder": "Introduceți ID-ul de utilizator al unui prieten",
+    "inviteCodeRequiredError": "Codul de invitație este obligatoriu",
+    "inviteCodeInvalidError": "Cod de invitație nevalid (ID-ul de utilizator nu a fost găsit)",
     "generate": {
       "description": "Fraza de acces acționează ca nume de utilizator și parolă. Asigurați-vă că îl păstrați în siguranță, deoarece va trebui să îl introduceți pentru a vă conecta la contul dvs",
       "next": "Mi-am salvat fraza de acces",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Numele dispozitivului",
         "deviceNamePlaceholder": "Telefonul personal",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Editează",
         "logoutButton": "Deconectați-vă"
       },

@@ -148,6 +148,10 @@
     "createAccount": "Non tes unha conta aínda? <0>Crea unha conta.</0>",
     "deviceNameLabel": "Nome do dispositivo",
     "deviceNamePlaceholder": "Teléfono persoal",
+    "inviteCodeLabel": "Código de invitación",
+    "inviteCodePlaceholder": "Introduce o ID de usuario dun amigo",
+    "inviteCodeRequiredError": "O código de invitación é requirido",
+    "inviteCodeInvalidError": "Código de invitación non válido (ID de usuario non atopado)",
     "generate": {
       "description": "A túa contraseña actua como o teu nome de usuario e contraseña. Asegúrate de mantelas seguras, xa que as necesitarás para iniciar sesión na túa conta",
       "next": "Gardei a contraseña exitosamente",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Nome do dispositivo",
         "deviceNamePlaceholder": "Teléfono persoal",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Editar",
         "logoutButton": "Pechar sesión"
       },

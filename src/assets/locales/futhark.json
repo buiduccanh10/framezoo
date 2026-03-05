@@ -148,6 +148,10 @@
     "createAccount": "ᛞᛟᚾ×ᛏ ᚺᚨᚢᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ ᛁᛖᛏ. <0>ᚲᚱᛖᛏᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ.</0>",
     "deviceNameLabel": "ᛞᛖᚢᛁᚲᛖ ᚾᚨᛗᛖ",
     "deviceNamePlaceholder": "ᛈᛖᚱᛊᛟᚾᚨᛚ ᛈᚺᛟᚾᛖ",
+    "inviteCodeLabel": "ᚱᚢᚿᛅ ᚴᚭᚦ",
+    "inviteCodePlaceholder": "Enteᚱ fᚱiend's Useᚱ ID",
+    "inviteCodeRequiredError": "ᛚᛅᛒᛅᛚ ᛁᛋ ᚱᛅᚴᚢᛁᚱᛅᛏ",
+    "inviteCodeInvalidError": "ᛋᚴᚭᚦ ᛁᛋ ᚾᚭᛏ ᚠᚭᚢᚾᚦ",
     "generate": {
       "description": "ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᚨᚲᛏᛊ ᚨᛊ ᛁᛟᚢᚱ ᚢᛊᛖᚱᚾᚨᛗᛖ ᚨᚾᛞ ᛈᚨᛊᛊᚹᛟᚱᛞ. ᛗᚨᚲᛖ ᛊᚢᚱᛖ ᛏᛟ ᚲᛖᛖᛈ ᛁᛏ ᛊᚨᚠᛖ ᚨᛊ ᛁᛟᚢ ᚹᛁᛚᛚ ᚾᛖᛖᛞ ᛏᛟ ᛖᚾᛏᛖᚱ ᛁᛏ ᛏᛟ ᛚᛟᚷᛁᚾ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ. <bold>ᛞᛟ ᚾᛟᛏ ᛚᛟᛊᛖ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ!</ᛒᛟᛚᛞ</bold>",
       "next": "ᛁ ᚺᚨᚢᛖ ᛊᚨᚢᛖᛞ ᛗᛁ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "ᛞᛖᚢᛁᚲᛖ ᚾᚨᛗᛖ",
         "deviceNamePlaceholder": "ᛈᛖᚱᛊᛟᚾᚨᛚ ᛈᚺᛟᚾᛖ",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "ᛖᛞᛁᛏ",
         "logoutButton": "ᛚᛟᚷ ᛟᚢᛏ"
       },

@@ -148,6 +148,10 @@
     "createAccount": "Še nimate računa? <0>Ustvari račun.</0>",
     "deviceNameLabel": "Ime naprave",
     "deviceNamePlaceholder": "Mobilni telefon",
+    "inviteCodeLabel": "Koda za povabilo",
+    "inviteCodePlaceholder": "Vnesite uporabniški ID prijatelja",
+    "inviteCodeRequiredError": "Koda za povabilo je obvezna",
+    "inviteCodeInvalidError": "Neveljavna koda za povabilo (uporabniški ID ni bil najden)",
     "generate": {
       "description": "Vaša fraza deluje kot vaše uporabniško ime in geslo. Shranite ga na varnem mestu, saj ga boste morali vnesti za prijavo v svoj račun",
       "next": "Frazo sem shranil na varno mesto",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Ime naprave",
         "deviceNamePlaceholder": "Mobilni telefon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Uredi",
         "logoutButton": "Odjava"
       },

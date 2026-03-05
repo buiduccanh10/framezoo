@@ -148,6 +148,10 @@
     "createAccount": "Encara no teniu un compte? <0>Creeu un compte.</0>",
     "deviceNameLabel": "Nom del dispositiu",
     "deviceNamePlaceholder": "Telèfon personal",
+    "inviteCodeLabel": "Codi d'invitació",
+    "inviteCodePlaceholder": "Introdueix l'ID d'usuari d'un amic",
+    "inviteCodeRequiredError": "El codi d'invitació és requerit",
+    "inviteCodeInvalidError": "Codi d'invitació no vàlid (ID d'usuari no trobat)",
     "generate": {
       "description": "La frase de contrasenya actua com a nom d'usuari i contrasenya. Assegureu-vos de mantenir-la segura, ja que haureu d'introduir-la per a iniciar la sessió al vostre compte",
       "next": "He desat la frase de contrasenya",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Nom del dispositiu",
         "deviceNamePlaceholder": "Telèfon personal",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edita",
         "logoutButton": "Tanca la sessió"
       },

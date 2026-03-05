@@ -148,6 +148,10 @@
     "createAccount": "Vous n'avez-vous pas encore de compte ? <0>Créer un compte.</0>",
     "deviceNameLabel": "Nom de l'appareil",
     "deviceNamePlaceholder": "Téléphone personnel",
+    "inviteCodeLabel": "Code d'invitation",
+    "inviteCodePlaceholder": "Entrez l'ID utilisateur d'un ami",
+    "inviteCodeRequiredError": "Le code d'invitation est requis",
+    "inviteCodeInvalidError": "Code d'invitation invalide (ID utilisateur non trouvé)",
     "generate": {
       "description": "Le nom d'utilisateur et le mot de passe sont obtenus à partir de votre phrase d'accès. Vous devrez la saisir pour accéder à votre compte,<bold>alors gardez-la précieusement !</bold>",
       "next": "J'ai sauvegardé ma phrase d'accès",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Nom de l'appareil",
         "deviceNamePlaceholder": "Téléphone personnel",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Éditer",
         "logoutButton": "Se déconnecter"
       },

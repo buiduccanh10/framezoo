@@ -148,6 +148,10 @@
     "createAccount": "ليس لديك حساب بعد؟😬 <0>أنشئ حسابًا.</0>",
     "deviceNameLabel": "اسم الجهاز",
     "deviceNamePlaceholder": "الهاتف الشخصي",
+    "inviteCodeLabel": "رمز الدعوة",
+    "inviteCodePlaceholder": "أدخل معرف المستخدم الخاص بالصديق",
+    "inviteCodeRequiredError": "رمز الدعوة مطلوب",
+    "inviteCodeInvalidError": "رمز دعوة غير صالح (لم يتم العثور على معرف المستخدم)",
     "generate": {
       "description": "عبارة المرور الخاصة بك تعمل كاسم مستخدم وكلمة مرور. تأكد من حفظها جيدًا لأنها مطلوبة لتسجيل الدخول إلى حسابك. <bold>لا تفقد عبارة المرور الخاصة بك!</bold>",
       "next": "لقد قمتُ بحفظ جملة مروري",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "اسم الجهاز",
         "deviceNamePlaceholder": "الهاتف الشخصي",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "تعديل",
         "logoutButton": "تسجيل الخروج"
       },

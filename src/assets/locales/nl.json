@@ -148,6 +148,10 @@
     "createAccount": "Heb je nog geen account? <0>Maak er dan een.</0>",
     "deviceNameLabel": "Naam toestel",
     "deviceNamePlaceholder": "Mijn telefoon",
+    "inviteCodeLabel": "Uitnodigingscode",
+    "inviteCodePlaceholder": "Voer de gebruikers-ID van een vriend in",
+    "inviteCodeRequiredError": "Uitnodigingscode is vereist",
+    "inviteCodeInvalidError": "Ongeldige uitnodigingscode (gebruikers-ID niet gevonden)",
     "generate": {
       "description": "Je passphrase werkt als je gebruikersnaam en wachtwoord. Sla je passphrase dus goed op, je hebt hem namelijk nodig om in te loggen. <bold>Verlies hem dus NIET!</bold>",
       "next": "Ik heb mijn passphrase opgeslagen",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Apparaatnaam",
         "deviceNamePlaceholder": "Persoonlijke telefoon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Bewerken",
         "logoutButton": "Uitloggen"
       },

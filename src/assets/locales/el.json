@@ -148,6 +148,10 @@
     "createAccount": "Δεν έχετε ακόμη λογαριασμό; 😬 <0>Δημιουργήστε ένα λογαριασμό.</0>",
     "deviceNameLabel": "Όνομα συσκευής",
     "deviceNamePlaceholder": "Προσωπικός αριθμός τηλεφώνου",
+    "inviteCodeLabel": "Κωδικός πρόσκλησης",
+    "inviteCodePlaceholder": "Εισαγάγετε το ID χρήστη ενός φίλου",
+    "inviteCodeRequiredError": "Απαιτείται κωδικός πρόσκλησης",
+    "inviteCodeInvalidError": "Μη έγκυρος κωδικός πρόσκλησης (το ID χρήστη δεν βρέθηκε)",
     "generate": {
       "description": "Η συνθηματική σας φράση λειτουργεί ταυτόχρονα ως όνομα χρήστη και ως κωδικός πρόσβασης. Φροντίστε να το φυλάξετε, καθώς θα χρειαστεί να το εισάγετε για να συνδεθείτε στο λογαριασμό σας <bold>ΜΗΝ χάσετε τον κωδικό σας!</bold>",
       "next": "Έχω αποθηκεύσει την συνθηματική μου φράση",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Όνομα συσκευής",
         "deviceNamePlaceholder": "Προσωπικό τηλέφωνο",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Επεξεργασία",
         "logoutButton": "Αποσύνδεση"
       },

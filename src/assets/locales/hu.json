@@ -148,6 +148,10 @@
     "createAccount": "Még nincsen fiókod? <0>Csinálj egy fiókot.</0>",
     "deviceNameLabel": "Eszköz név",
     "deviceNamePlaceholder": "Személyes telefon",
+    "inviteCodeLabel": "Meghívó kód",
+    "inviteCodePlaceholder": "Add meg egy barátod felhasználói azonosítóját",
+    "inviteCodeRequiredError": "Meghívó kód szükséges",
+    "inviteCodeInvalidError": "Érvénytelen meghívó kód (felhasználói azonosító nem található)",
     "generate": {
       "description": "A szósorozatod a felhasználó nevedként és egyben jelszavadként is viselkedik. Tárold biztonságos, megjegyezhető helyen, mert a bejelentkezéshez szükséged lesz rá. <bold>NE veszítsd el a szósorozatodat!</bold>",
       "next": "Elmentettem a szósorozatomat",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Eszköz neve",
         "deviceNamePlaceholder": "Személyes telefon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Szerkesztés",
         "logoutButton": "Kijelentkezés"
       },

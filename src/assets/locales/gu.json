@@ -148,6 +148,10 @@
     "createAccount": "હજુ સુધી એકાઉન્ટ નથી? <0>એકાઉન્ટ બનાવો.</0>",
     "deviceNameLabel": "ડિવાઇસ નામ",
     "deviceNamePlaceholder": "વ્યક્તિગત ફોન",
+    "inviteCodeLabel": "આમંત્રણ કોડ",
+    "inviteCodePlaceholder": "મિત્રનું વપરાશકર્તા ID દાખલ કરો",
+    "inviteCodeRequiredError": "આમંત્રણ કોડ જરૂરી છે",
+    "inviteCodeInvalidError": "અમાન્ય આમંત્રણ કોડ (વપરાશકર્તા ID મળ્યું નથી)",
     "generate": {
       "description": "તમારો પાસફ્રેઝ તમારા યુઝરનેમ અને પાસવર્ડ તરીકે કાર્ય કરે છે. તેને સુરક્ષિત રાખવાની ખાતરી કરો કારણ કે તમારે તમારા એકાઉન્ટમાં લૉગિન કરવા માટે તેને દાખલ કરવાની જરૂર પડશે",
       "next": "મેં મારો પાસફ્રેઝ સેવ કર્યો છે",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "ડિવાઇસ નામ",
         "deviceNamePlaceholder": "વ્યક્તિગત ફોન",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "સંપાદિત કરો",
         "logoutButton": "લૉગ આઉટ"
       },

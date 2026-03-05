@@ -148,6 +148,10 @@
     "createAccount": "Ještě nemáte účet? <0>Vytvořte si účet.</0>",
     "deviceNameLabel": "Název zařízení",
     "deviceNamePlaceholder": "Osobní telefon",
+    "inviteCodeLabel": "Zvací kód",
+    "inviteCodePlaceholder": "Zadejte ID uživatele přítele",
+    "inviteCodeRequiredError": "Zvací kód je vyžadován",
+    "inviteCodeInvalidError": "Neplatný zvací kód (ID uživatele nebylo nalezeno)",
     "generate": {
       "description": "Vaše přístupová fráze se chová jako vaše přezdívka a heslo. Uchovejte jí v bezpečí, protože jí budete muset zadat, abyste se mohli přihlásit ke svému účtu",
       "next": "Uložil jsem si moji přístupovou frázi",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Název zařízení",
         "deviceNamePlaceholder": "Osobní telefon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Upravit",
         "logoutButton": "Odhlásit se"
       },

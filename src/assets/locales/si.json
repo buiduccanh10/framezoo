@@ -148,6 +148,10 @@
     "createAccount": "තවම ගිණුමක් නැත 😬 <0>ගිණුමක් සාදන්න.</0>",
     "deviceNameLabel": "උපාංගයේ නම",
     "deviceNamePlaceholder": "පුද්ගලික දුරකථනය",
+    "inviteCodeLabel": "ආරාධනා කේතය",
+    "inviteCodePlaceholder": "මිතුරෙකුගේ පරිශීලක හැඳුනුම්පත ඇතුළත් කරන්න",
+    "inviteCodeRequiredError": "ආරාධනා කේතය අවශ්‍යයි",
+    "inviteCodeInvalidError": "අවලංගු ආරාධනා කේතය (පරිශීලක හැඳුනුම්පත හමු නොවීය)",
     "generate": {
       "description": "ඔබගේ මුරපදය ඔබගේ පරිශීලක නාමය සහ මුරපදය ලෙස ක්‍රියා කරයි. ඔබගේ ගිණුමට පිවිසීමට ඔබට එය ඇතුළත් කිරීමට අවශ්‍ය වන බැවින් එය ආරක්ෂිතව තබා ගැනීමට වග බලා ගන්න. <bold>ඔබගේ මුරපදය නැති කර නොගන්න!</bold>",
       "next": "මම මගේ මුරවදන සුරැකුවා.",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Log out"
       },

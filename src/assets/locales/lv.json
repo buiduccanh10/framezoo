@@ -148,6 +148,10 @@
     "createAccount": "Nav vēl konts? <0>Taisīt kontu.</0>",
     "deviceNameLabel": "Ierīces nosaukums",
     "deviceNamePlaceholder": "Personiskais telefons",
+    "inviteCodeLabel": "Ielūguma kods",
+    "inviteCodePlaceholder": "Ievadiet drauga lietotāja ID",
+    "inviteCodeRequiredError": "Nepieciešams ielūguma kods",
+    "inviteCodeInvalidError": "Nederīgs ielūguma kods (lietotāja ID nav atrasts)",
     "generate": {
       "description": "Tava paroles frāze ir kā vārds un parole. Esi drošs ka turi to drošibā jo tev vajadzēs to izmantot lai ieietu kontā",
       "next": "Esmu saglabājis paroles frāzi",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Ierīces vārds",
         "deviceNamePlaceholder": "Personiskais telefons",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Reģistrēt",
         "logoutButton": "Iziet"
       },

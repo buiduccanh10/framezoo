@@ -40,7 +40,7 @@ export interface RegistrationData {
   mnemonic?: string;
   credentialId?: string;
   userData: {
-    device: string;
+    inviteCode: string; // added invite code
     profile: {
       colorA: string;
       colorB: string;
@@ -53,7 +53,7 @@ export interface LoginData {
   mnemonic?: string;
   credentialId?: string;
   userData: {
-    device: string;
+    // device name removed from UI
   };
 }
 
@@ -99,7 +99,7 @@ export function useAuth() {
           signature,
         },
         publicKey: publicKeyBase64Url,
-        device: await encryptData(loginData.userData.device, keys.seed),
+        device: await encryptData("Browser", keys.seed),
       });
 
       const user = await getUser(backendUrl, loginResult.token);
@@ -166,7 +166,8 @@ export function useAuth() {
           signature,
         },
         publicKey: publicKeyBase64Url,
-        device: await encryptData(registerData.userData.device, keys.seed),
+        inviteCode: registerData.userData.inviteCode,
+        device: await encryptData("Browser", keys.seed),
         profile: registerData.userData.profile,
       });
 

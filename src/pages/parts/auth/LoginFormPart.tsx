@@ -29,68 +29,55 @@ interface LoginFormPartProps {
 
 export function LoginFormPart(props: LoginFormPartProps) {
   const [mnemonic, setMnemonic] = useState("");
-  const [device, setDevice] = useState("");
   const { login, restore, importData } = useAuth();
   const backendUrl = useBackendUrl();
   const progressItems = useProgressStore((store) => store.items);
   const bookmarkItems = useBookmarkStore((store) => store.bookmarks);
   const { t } = useTranslation();
 
-  const [passkeyResult, executePasskey] = useAsyncFn(
-    async (inputDevice: string) => {
-      if (!backendUrl) {
-        throw new Error(t("auth.login.noBackendUrl") ?? "No backend URL");
-      }
+  const [passkeyResult, executePasskey] = useAsyncFn(async () => {
+    if (!backendUrl) {
+      throw new Error(t("auth.login.noBackendUrl") ?? "No backend URL");
+    }
 
-      const validatedDevice = inputDevice.trim();
-      if (validatedDevice.length === 0)
-        throw new Error(t("auth.login.deviceLengthError") ?? undefined);
+    // Authenticate with passkey (no credential ID specified, browser will show all available)
+    const assertion = await authenticatePasskey();
+    const credentialId = assertion.id;
 
-      // Authenticate with passkey (no credential ID specified, browser will show all available)
-      const assertion = await authenticatePasskey();
-      const credentialId = assertion.id;
-
-      let account: AsyncReturnType<typeof login>;
-      try {
-        account = await login({
-          credentialId,
-          userData: {
-            device: validatedDevice,
-          },
-        });
-      } catch (err) {
-        if ((err as any).status === 401)
-          throw new Error(t("auth.login.validationError") ?? undefined);
-        throw err;
-      }
-
-      if (!account)
+    let account: AsyncReturnType<typeof login>;
+    try {
+      account = await login({
+        credentialId,
+        userData: {
+          device: "Browser",
+        },
+      });
+    } catch (err) {
+      if ((err as any).status === 401)
         throw new Error(t("auth.login.validationError") ?? undefined);
+      throw err;
+    }
 
-      await importData(account, progressItems, bookmarkItems);
+    if (!account) throw new Error(t("auth.login.validationError") ?? undefined);
 
-      await restore(account);
+    await importData(account, progressItems, bookmarkItems);
 
-      props.onLogin?.();
-    },
-    [props, login, restore, backendUrl, t],
-  );
+    await restore(account);
+
+    props.onLogin?.();
+  }, [props, login, restore, backendUrl, t, progressItems, bookmarkItems]);
 
   const [result, execute] = useAsyncFn(
-    async (inputMnemonic: string, inputdevice: string) => {
+    async (inputMnemonic: string) => {
       if (!verifyValidMnemonic(inputMnemonic))
         throw new Error(t("auth.login.validationError") ?? undefined);
-
-      const validatedDevice = inputdevice.trim();
-      if (validatedDevice.length === 0)
-        throw new Error(t("auth.login.deviceLengthError") ?? undefined);
 
       let account: AsyncReturnType<typeof login>;
       try {
         account = await login({
           mnemonic: inputMnemonic,
           userData: {
-            device: validatedDevice,
+            device: "Browser",
           },
         });
       } catch (err) {
@@ -108,7 +95,7 @@ export function LoginFormPart(props: LoginFormPartProps) {
 
       props.onLogin?.();
     },
-    [props, login, restore, t],
+    [props, login, restore, t, progressItems, bookmarkItems],
   );
 
   return (
@@ -117,12 +104,6 @@ export function LoginFormPart(props: LoginFormPartProps) {
         {t("auth.login.description")}
       </LargeCardText>
       <div className="space-y-4">
-        <AuthInputBox
-          label={t("auth.deviceNameLabel") ?? undefined}
-          value={device}
-          onChange={setDevice}
-          placeholder={t("auth.deviceNamePlaceholder") ?? undefined}
-        />
         <AuthInputBox
           label={t("auth.login.passphraseLabel") ?? undefined}
           value={mnemonic}
@@ -146,13 +127,9 @@ export function LoginFormPart(props: LoginFormPartProps) {
             </div>
             <Button
               theme="secondary"
-              onClick={() => executePasskey(device)}
+              onClick={() => executePasskey()}
               loading={passkeyResult.loading}
-              disabled={
-                passkeyResult.loading ||
-                result.loading ||
-                device.trim().length === 0
-              }
+              disabled={passkeyResult.loading || result.loading}
               className="w-full"
             >
               <Icon icon={Icons.LOCK} className="mr-2" />
@@ -173,7 +150,7 @@ export function LoginFormPart(props: LoginFormPartProps) {
         <Button
           theme="purple"
           loading={result.loading}
-          onClick={() => execute(mnemonic, device)}
+          onClick={() => execute(mnemonic)}
         >
           {t("auth.login.submit")}
         </Button>

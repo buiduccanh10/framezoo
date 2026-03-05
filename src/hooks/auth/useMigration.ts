@@ -47,7 +47,7 @@ export interface RegistrationData {
   recaptchaToken?: string;
   mnemonic: string;
   userData: {
-    device: string;
+    inviteCode: string; // added invite code
     profile: {
       colorA: string;
       colorB: string;
@@ -175,7 +175,8 @@ export function useMigration() {
           signature,
         },
         publicKey: bytesToBase64Url(keys.publicKey),
-        device: await encryptData(currentAccount.deviceName, keys.seed),
+        inviteCode: "MIGRATED", // Default for migrated users or we should ask?
+        device: await encryptData("Browser", keys.seed),
         profile: currentAccount.profile,
       });
 

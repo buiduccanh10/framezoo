@@ -148,6 +148,10 @@
     "createAccount": "Chưa có tài khoản? <0>Hãy tạo tài khoản.</0>",
     "deviceNameLabel": "Tên thiết bị",
     "deviceNamePlaceholder": "Điện thoại cá nhân",
+    "inviteCodeLabel": "Mã mời",
+    "inviteCodePlaceholder": "Nhập ID người dùng của bạn bè",
+    "inviteCodeRequiredError": "Vui lòng nhập mã mời",
+    "inviteCodeInvalidError": "Mã mời không hợp lệ (Không tìm thấy ID người dùng)",
     "generate": {
       "description": "Passphrase đóng vai trò là tên người dùng và mật khẩu của bạn. Hãy giữ nó an toàn vì bạn sẽ cần nó để đăng nhập vào tài khoản của bạn.<bold>ĐỪNG làm mất passphrase của bạn!</bold>",
       "next": "Tôi đã lưu giữ mật ngữ của mình",

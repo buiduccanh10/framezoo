@@ -148,6 +148,10 @@
     "createAccount": "آیا هنوز حساب کاربری ندارید؟ <0>حساب ایجاد کنید.</0>",
     "deviceNameLabel": "نام دستگاه",
     "deviceNamePlaceholder": "تلفن شخصی",
+    "inviteCodeLabel": "کد دعوت",
+    "inviteCodePlaceholder": "شناسه کاربری دوست خود را وارد کنید",
+    "inviteCodeRequiredError": "کد دعوت الزامی است",
+    "inviteCodeInvalidError": "کد دعوت نامعتبر است (شناسه کاربری پیدا نشد)",
     "generate": {
       "description": "عبارت عبور شما به عنوان نام کاربری و رمز عبور عمل می‌کند. آن را در جایی ذخیره کنید چون برای ورود به آن نیاز دارید",
       "next": "عبارت عبور امنیتی خود را ذخیره کرده‌ام",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "نام دستگاه",
         "deviceNamePlaceholder": "تلفن شخصی",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "ویرایش",
         "logoutButton": "خروج"
       },

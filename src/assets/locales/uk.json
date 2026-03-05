@@ -148,6 +148,10 @@
     "createAccount": "У вас ще немає облікового запису? <0>Створити обліковий запис.</0>",
     "deviceNameLabel": "Ім'я пристрою",
     "deviceNamePlaceholder": "Особистий телефон",
+    "inviteCodeLabel": "Код запрошення",
+    "inviteCodePlaceholder": "Ввдедіть ID користувача друга",
+    "inviteCodeRequiredError": "Код запрошення є обов’язковим",
+    "inviteCodeInvalidError": "Недійсний код запрошення (ID користувача не знайдено)",
     "generate": {
       "description": "Ваша парольна фраза виступає як ваше ім'я користувача та пароль. Переконайтеся, що ви зберігаєте його в безпеці, оскільки вам буде потрібно вводити його для входу в свій обліковий запис",
       "next": "Я зберіг(ла) свою парольну фразу",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Назва пристрою",
         "deviceNamePlaceholder": "Номер телефону",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Редагувати",
         "logoutButton": "Вийти"
       },

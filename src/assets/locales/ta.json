@@ -148,6 +148,10 @@
     "createAccount": "கணக்கு இல்லையா? <0>புதிய கணக்கை உருவாக்குங்கள்</0>",
     "deviceNameLabel": "சாதனத்தின் பெயர்",
     "deviceNamePlaceholder": "எனது கைபேசி",
+    "inviteCodeLabel": "அழைப்பு குறியீடு",
+    "inviteCodePlaceholder": "நண்பரின் பயனர் ஐடியை உள்ளிடவும்",
+    "inviteCodeRequiredError": "அழைப்பு குறியீடு தேவை",
+    "inviteCodeInvalidError": "தவறான அழைப்பு குறியீடு (பயனர் ஐடி காணப்படவில்லை)",
     "generate": {
       "description": "தங்கள் கடவுச்சொற்றொடரே தங்களது பயனர் பெயர் மற்றும் கடவுச்சொல். கணக்கினுள் நுழைய அதனை பாதுகாப்பாக வைத்திருங்கள்",
       "next": "கடவுச்சொற்றொடரை சேமித்துவிட்டேன்",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "சாதனத்தின் பெயர்",
         "deviceNamePlaceholder": "தனிப்பட்ட போன்",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "எடிட்",
         "logoutButton": "வெளியேறு"
       },

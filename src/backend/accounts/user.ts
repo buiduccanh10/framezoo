@@ -243,3 +243,16 @@ export async function getWatchHistory(url: string, account: AccountWithToken) {
     },
   );
 }
+export async function checkUserExists(
+  url: string,
+  userId: string,
+): Promise<boolean> {
+  try {
+    await ofetch(`/users/${userId}`, {
+      baseURL: url,
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}

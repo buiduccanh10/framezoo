@@ -148,6 +148,10 @@
     "createAccount": "Nie masz jeszcze konta? 😬 <0>Utwórz konto.</0>",
     "deviceNameLabel": "Nazwa urządzenia",
     "deviceNamePlaceholder": "Telefon osobisty",
+    "inviteCodeLabel": "Kod zaproszenia",
+    "inviteCodePlaceholder": "Wprowadź ID użytkownika znajomego",
+    "inviteCodeRequiredError": "Kod zaproszenia jest wymagany",
+    "inviteCodeInvalidError": "Nieprawidłowy kod zaproszenia (nie znaleziono ID użytkownika)",
     "generate": {
       "description": "Twoja fraza działa jako nazwa użytkownika i hasło. Pamiętaj, aby zachować ją w bezpiecznym miejscu, ponieważ będziesz musiał ją wprowadzić, aby zalogować się na swoje konto. <bold>NIE zgub swojej frazy!</bold>",
       "next": "Zapisałem frazę",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Nazwa urządzenia",
         "deviceNamePlaceholder": "Telefon osobisty",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edytuj",
         "logoutButton": "Wyloguj się"
       },

@@ -148,6 +148,10 @@
     "createAccount": "Don't have an account yet 😬 <0>Create an account.</0>",
     "deviceNameLabel": "Device name",
     "deviceNamePlaceholder": "Personal phone",
+    "inviteCodeLabel": "Invite Code",
+    "inviteCodePlaceholder": "Enter friendx27s User ID",
+    "inviteCodeRequiredError": "Invite code is required",
+    "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
     "generate": {
       "description": "Your passphrase acts as your username and password. Make sure to keep it safe as you will need to enter it to login to your account. <bold>Do NOT lose your passphrase!</bold>",
       "next": "I have saved my passphrase",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
+    "inviteCodeLabel": "Invite Code",
+    "inviteCodePlaceholder": "Enter friendx27s User ID",
+    "inviteCodeRequiredError": "Invite code is required",
+    "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Log out"
       },

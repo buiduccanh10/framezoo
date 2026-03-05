@@ -148,6 +148,10 @@
     "createAccount": "Don't have an account yet 😬 <0>Cweate an account.</0>",
     "deviceNameLabel": "Device nyame",
     "deviceNamePlaceholder": "Pewsonyaw phonye",
+    "inviteCodeLabel": "Inwvite Code (・ω・)",
+    "inviteCodePlaceholder": "Entew fwiend's Usew ID",
+    "inviteCodeRequiredError": "Inwvite code is wequiwed... pwease?",
+    "inviteCodeInvalidError": "Inwvidalid inwvite code... (・~・)",
     "generate": {
       "description": "Youw passphwase acts as youw usewnyame ;;w;; and passwowd. Make suwe t-to k-k-keep i-it safe ;;w;; as you wiww nyeed t-to entew i-it t-to wogin t-to youw account. <bold>Do NyOT wose youw passphwase!</bold>",
       "next": "I have saved my passphwase",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device nyame",
         "deviceNamePlaceholder": "Pewsonyaw phonye",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Wog out"
       },

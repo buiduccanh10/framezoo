@@ -148,6 +148,10 @@
     "createAccount": "Don't have a ship yet? <0>Hoist the sails and make yer own</0>",
     "deviceNameLabel": "Ship name",
     "deviceNamePlaceholder": "Muad'Dib's Pirate Ship",
+    "inviteCodeLabel": "Parley Code",
+    "inviteCodePlaceholder": "Scrawl yer matey's mark",
+    "inviteCodeRequiredError": "Ye need a code to board!",
+    "inviteCodeInvalidError": "That mark be cursed! (Mark not found)",
     "generate": {
       "description": "If ye lose this, ye be a silly goose and will be posted on the wall of shame™️",
       "next": "Ahoy! I've stashed me secret code away for safe keepin'.",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Ship name",
         "deviceNamePlaceholder": "Fremen tablet",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Abandon ship"
       },

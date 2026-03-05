@@ -148,6 +148,10 @@
     "createAccount": "Non hai ancora un account 😬 <0>Crea un account.</0>",
     "deviceNameLabel": "Nome del dispositivo",
     "deviceNamePlaceholder": "Telefono personale",
+    "inviteCodeLabel": "Codice di invito",
+    "inviteCodePlaceholder": "Inserisci l'ID utente di un amico",
+    "inviteCodeRequiredError": "Il codice di invito è obbligatorio",
+    "inviteCodeInvalidError": "Codice di invito non valido (ID utente non trovato)",
     "generate": {
       "description": "La tua frase d'accesso funziona come nome utente e password. Assicurati di tenerla al sicuro poiché dovrai inserirla per accedere al tuo account. <bold>NON perdere la tua frase d'accesso!</bold>",
       "next": "Ho salvato la mia frase d'accesso",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Nome del dispositivo",
         "deviceNamePlaceholder": "Telefono personale",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Modifica",
         "logoutButton": "Esci"
       },

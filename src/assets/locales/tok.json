@@ -148,6 +148,10 @@
     "createAccount": "sina jo ala e lipu open la <0>o pali e lipu open</0>",
     "deviceNameLabel": "nimi ilo",
     "deviceNamePlaceholder": "ilo mi",
+    "inviteCodeLabel": "nanpa toki",
+    "inviteCodePlaceholder": "o pana e nanpa pi jan pona",
+    "inviteCodeRequiredError": "nanpa toki li wile",
+    "inviteCodeInvalidError": "nanpa toki li pona ala",
     "generate": {
       "description": "nimi open sina li lon nasin open pi lipu open sina. o awen pona e ona. sina open e lipu open sina la sina wile pana e nimi open ale sina",
       "next": "mi jo e nimi open mi",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "nimi ilo",
         "deviceNamePlaceholder": "ilo",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "o ante",
         "logoutButton": "o weka sona e ona"
       },

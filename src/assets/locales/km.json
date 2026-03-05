@@ -148,6 +148,10 @@
     "createAccount": "មិនទាន់មានគណនីមែនទេ? <0>បង្កើតគណនី</0>",
     "deviceNameLabel": "ឈ្មោះឧបករណ៍",
     "deviceNamePlaceholder": "ទូរស័ព្ទផ្ទាល់ខ្លួន",
+    "inviteCodeLabel": "លេខកូដអញ្ជើញ",
+    "inviteCodePlaceholder": "បញ្ចូលលេខសម្គាល់អ្នកប្រើប្រាស់មិត្តភក្តិ",
+    "inviteCodeRequiredError": "លេខកូដអញ្ជើញត្រូវបានទាមទារ",
+    "inviteCodeInvalidError": "លេខកូដអញ្ជើញមិនត្រឹមត្រូវ (រកមិនឃើញលេខសម្គាល់អ្នកប្រើប្រាស់)",
     "generate": {
       "description": "ឃ្លាសម្ងាត់របស់អ្នកដើរតួជាឈ្មោះអ្នកប្រើប្រាស់ និងពាក្យសម្ងាត់របស់អ្នក។ ត្រូវប្រាកដថារក្សាវាឱ្យមានសុវត្ថិភាព ព្រោះអ្នកនឹងត្រូវបញ្ចូលវាដើម្បីចូលគណនីរបស់អ្នក",
       "next": "ខ្ញុំបានរក្សាទុកឃ្លាសម្ងាត់របស់ខ្ញុំរួចហើយ",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Log out"
       },

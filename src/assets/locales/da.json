@@ -148,6 +148,10 @@
     "createAccount": "Du har ikke en profil endnu 😬 <0>Opret en profil.</0>",
     "deviceNameLabel": "Navn på enhed",
     "deviceNamePlaceholder": "Personlig telefon",
+    "inviteCodeLabel": "Invitationskode",
+    "inviteCodePlaceholder": "Indtast ven's bruger-ID",
+    "inviteCodeRequiredError": "Invitationskode er påkrævet",
+    "inviteCodeInvalidError": "Ugyldig invitationskode (bruger-ID ikke fundet)",
     "generate": {
       "description": "Din adgangssætning fungerer som dit brugernavn og adgangskode. Sørg for at opbevare den sikkert, da du skal bruge den til at logge ind på din profil. <bold>Husk IKKE at glemme din adgangskode!</bold>",
       "next": "Jeg har gemt min adgangssætning",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Navn på enhed",
         "deviceNamePlaceholder": "Personlig telefon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Rediger",
         "logoutButton": "Log ud"
       },

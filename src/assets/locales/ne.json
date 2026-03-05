@@ -148,6 +148,10 @@
     "createAccount": "अझै खाता छैन?<0>खाता खोल्नुहोस्|.</0>",
     "deviceNameLabel": "उपकरणको नाम",
     "deviceNamePlaceholder": "निजी फोन",
+    "inviteCodeLabel": "निमन्त्रणा कोड",
+    "inviteCodePlaceholder": "साथीको प्रयोगकर्ता आईडी प्रविष्ट गर्नुहोस्",
+    "inviteCodeRequiredError": "निमन्त्रणा कोड आवश्यक छ",
+    "inviteCodeInvalidError": "अमान्य निมन्त्रणा कोड (प्रयोगकर्ता आईडी फेला परेन)",
     "generate": {
       "description": "तपाईंको पासफ्रेजले तपाईंको प्रयोगकर्ता नाम र पासवर्डको रूपमा कार्य गर्दछ। यसलाई सुरक्षित राख्नुहोस् किनकि तपाईंले आफ्नो खातामा लगइन गर्न आवश्यक हुनेछ",
       "next": "मैले मेरो पासफ्रेज सुरक्षित गरेको छु",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "उपकरणको नाम",
         "deviceNamePlaceholder": "व्यक्तिगत फोन",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "सम्पादन गर्नुहोस्",
         "logoutButton": "बाहिर निस्कनु"
       },

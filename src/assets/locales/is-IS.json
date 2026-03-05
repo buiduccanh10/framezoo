@@ -148,6 +148,10 @@
     "createAccount": "Hefurðu ekki reikning ennþá? <0>Búðu til reikning.</0>",
     "deviceNameLabel": "Nafn tækis",
     "deviceNamePlaceholder": "Einkasími",
+    "inviteCodeLabel": "Boðskóði",
+    "inviteCodePlaceholder": "Sláðu inn notandaauðkenni vinar",
+    "inviteCodeRequiredError": "Boðskóði er nauðsynlegur",
+    "inviteCodeInvalidError": "Ógildur boðskóði (notandaauðkenni fannst ekki)",
     "generate": {
       "description": "Þitt lykilorð lætur eins og notandanafn og lykilorð. Vertu viss um að halda því öruggu út að þú munt þurfa að nota það til að komast inn í reikningin þinn",
       "next": "Ég hef vistað lykilorðið mitt",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Nafn tækis",
         "deviceNamePlaceholder": "Einkasími",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Breyta",
         "logoutButton": "Skrá út"
       },

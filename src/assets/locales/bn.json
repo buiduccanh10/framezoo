@@ -148,6 +148,10 @@
     "createAccount": "কোনো একাউন্ট এখনও আছে না? <0>একটি অ্যাকাউন্ট তৈরি করুন৷</0>৷",
     "deviceNameLabel": "ডিভাইসের নাম",
     "deviceNamePlaceholder": "ব্যক্তিগত ফোন",
+    "inviteCodeLabel": "আমন্ত্রণ কোড",
+    "inviteCodePlaceholder": "বন্ধুর ইউজার আইডি লিখুন",
+    "inviteCodeRequiredError": "আমন্ত্রণ কোড প্রয়োজন",
+    "inviteCodeInvalidError": "অবৈধ আমন্ত্রণ কোড (ইউজার আইডি পাওয়া যায়নি)",
     "generate": {
       "description": "আপনার পাসফ্রেজ আপনার ব্যবহারকারীর নাম এবং পাসওয়ার্ড হিসাবে কাজ করে। আপনার অ্যাকাউন্টে লগইন করার জন্য আপনাকে এটি প্রদান করতে হবে বলে এটিকে সুরক্ষিত রাখা নিশ্চিত করুন৷<bold> আপনার পাসফ্রেজটি হারাবেন না!</bold>",
       "next": "আমি আমার পাসফ্রেজ সংরক্ষণ করেছি",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Log out"
       },

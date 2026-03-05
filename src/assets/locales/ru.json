@@ -148,6 +148,10 @@
     "createAccount": "Нет аккаунта?😬 <0>Создать аккаунт</0>",
     "deviceNameLabel": "Имя устройства",
     "deviceNamePlaceholder": "Личный телефон",
+    "inviteCodeLabel": "Инвайт-код",
+    "inviteCodePlaceholder": "Введите ID пользователя друга",
+    "inviteCodeRequiredError": "Требуется инвайт-код",
+    "inviteCodeInvalidError": "Неверный инвайт-код (ID пользователя не найден)",
     "generate": {
       "description": "Ваша кодовая фраза служит вашим именем пользователя и паролем. Храните ее в надёжном месте, поскольку она понадобится вам для входа в аккаунт <bold>Не теряйте свой пароль-фразу!</bold>",
       "next": "Я сохранил свою кодовую фразу",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Имя устройства",
         "deviceNamePlaceholder": "Личный телефон",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Редактировать",
         "logoutButton": "Выйти"
       },

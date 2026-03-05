@@ -148,6 +148,10 @@
     "createAccount": "Whaaaat? Don't have an account yet? <0>Create an account.</0>",
     "deviceNameLabel": "Device name",
     "deviceNamePlaceholder": "Meow phone",
+    "inviteCodeLabel": "Invite Meow",
+    "inviteCodePlaceholder": "Enter kitty's ID",
+    "inviteCodeRequiredError": "Meow needs code!",
+    "inviteCodeInvalidError": "Bad meow! (Kitty ID not found)",
     "generate": {
       "description": "Your meow passphrase acts as your meow username and meow password. Make sure to keep it safe as you will need to enter it to meow to your account",
       "next": "I have saved my meow passphrase",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Meow name",
         "deviceNamePlaceholder": "Meow phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Meow",
         "logoutButton": "Meow out"
       },

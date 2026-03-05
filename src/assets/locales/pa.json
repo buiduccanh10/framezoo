@@ -148,6 +148,10 @@
     "createAccount": "ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਅਜੇ ਖਾਤਾ ਨਹੀਂ ਹੈ? <0>ਇੱਕ ਖਾਤਾ ਬਣਾਓ.</0>",
     "deviceNameLabel": "ਡਿਵਾਈਸ ਦਾ ਨਾਮ",
     "deviceNamePlaceholder": "ਨਿੱਜੀ ਫ਼ੋਨ",
+    "inviteCodeLabel": "ਸੱਦਾ ਕੋਡ",
+    "inviteCodePlaceholder": "ਦੋਸਤ ਦੀ ਯੂਜ਼ਰ ਆਈਡੀ ਦਰਜ ਕਰੋ",
+    "inviteCodeRequiredError": "ਸੱਦਾ ਕੋਡ ਲੋੜੀਂਦਾ ਹੈ",
+    "inviteCodeInvalidError": "ਅਵੈਧ ਸੱਦਾ ਕੋਡ (ਯੂਜ਼ਰ ਆਈਡੀ ਨਹੀਂ ਮਿਲਿਆ)",
     "generate": {
       "description": "ਤੁਹਾਡਾ ਗੁਪਤਕੋਡ ਤੁਹਾਡੇ ਉਪਭੋਗਤਾ ਨਾਮ ਅਤੇ ਪਾਸਵਰਡ ਵਜੋਂ ਕੰਮ ਕਰਦਾ ਹੈ. ਇਸਨੂੰ ਸੁਰੱਖਿਅਤ ਰੱਖਣਾ ਯਕੀਨੀ ਬਣਾਓ ਕਿਉਂਕਿ ਤੁਹਾਨੂੰ ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਲੌਗਇਨ ਕਰਨ ਲਈ ਇਸਨੂੰ ਦਾਖਲ ਕਰਨ ਦੀ ਲੋੜ ਹੋਵੇਗੀ",
       "next": "ਮੈਂ ਆਪਣਾ ਪਾਸਫਰੇਜ ਸੁਰੱਖਿਅਤ ਕਰ ਲਿਆ ਹੈ",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "ਡਿਵਾਈਸ ਦਾ ਨਾਮ",
         "deviceNamePlaceholder": "ਨਿੱਜੀ ਫ਼ੋਨ",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "ਸੰਪਾਦਿਤ ਕਰੋ",
         "logoutButton": "ਲਾੱਗ ਆਊਟ"
       },

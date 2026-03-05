@@ -148,6 +148,10 @@
     "createAccount": "Whaaaat? Don't have an account yet? <0>Create an account.</0>",
     "deviceNameLabel": "Device name",
     "deviceNamePlaceholder": "Banana phone",
+    "inviteCodeLabel": "Invite Banana",
+    "inviteCodePlaceholder": "Enter bff's ID",
+    "inviteCodeRequiredError": "Need banana code!",
+    "inviteCodeInvalidError": "No banana! (ID not found)",
     "generate": {
       "description": "Your banana passphrase acts as your banana username and banana password. Make sure to keep it safe as you will need to enter it to banana to your account",
       "next": "I have saved my banana passphrase",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Banana name",
         "deviceNamePlaceholder": "Banana phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Banana",
         "logoutButton": "Banana out"
       },

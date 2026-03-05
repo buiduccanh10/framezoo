@@ -148,6 +148,10 @@
     "createAccount": "ยังไม่มีบัญชีใช่หรือไม่?<0>สร้างบัญชี</0>",
     "deviceNameLabel": "ชื่ออุปกรณ์",
     "deviceNamePlaceholder": "โทรศัพท์ส่วนบุคคล",
+    "inviteCodeLabel": "รหัสคำเชิญ",
+    "inviteCodePlaceholder": "ป้อน ID ผู้ใช้ของเพื่อน",
+    "inviteCodeRequiredError": "ต้องมีรหัสคำเชิญ",
+    "inviteCodeInvalidError": "รหัสคำเชิญไม่ถูกต้อง (ไม่พบ ID ผู้ใช้)",
     "generate": {
       "description": "รหัสผ่านของคุณถูกตั้งเช่นเดียวกับชื่อผู้ใช้และรหัสผ่าน โปรดตรวจสอบให้แน่ใจว่ารหัสผ่านของคุณถูกเก็บอย่างปลอดภัย คุณจำเป็นต้องใช้เพื่อเข้าสู่ระบบบัญชีของคุณ",
       "next": "ฉันบันทึกรหัสผ่านของฉันแล้ว",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "ชื่ออุปกรณ์",
         "deviceNamePlaceholder": "โทรศัพท์ส่วนบุคคล",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "แก้ไข",
         "logoutButton": "ออกจากระบบ"
       },

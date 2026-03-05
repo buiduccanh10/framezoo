@@ -148,6 +148,10 @@
     "createAccount": "Har du inget konto ännu? <0>Skapa ett konto.</0>",
     "deviceNameLabel": "Enhetsnamn",
     "deviceNamePlaceholder": "Min telefon",
+    "inviteCodeLabel": "Inbjudningskod",
+    "inviteCodePlaceholder": "Ange väns användar-ID",
+    "inviteCodeRequiredError": "Inbjudningskod krävs",
+    "inviteCodeInvalidError": "Ogiltig inbjudningskod (användar-ID hittades inte)",
     "generate": {
       "description": "Din lösenfras fungerar som ditt användarnamn och lösenord. Se till att hålla den säker eftersom du behöver ange den för att logga in på ditt konto. <bold>Förlora INTE din lösenfras!</bold>",
       "next": "Jag har sparat mitt lösenord",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Enhetens namn",
         "deviceNamePlaceholder": "Min telefon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Redigera",
         "logoutButton": "Logga ut"
       },

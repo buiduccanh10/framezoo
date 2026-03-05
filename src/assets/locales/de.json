@@ -148,6 +148,10 @@
     "createAccount": "Du hast noch keinen Account? <0>Registriere dich jetzt.</0>",
     "deviceNameLabel": "Gerätename",
     "deviceNamePlaceholder": "Handy",
+    "inviteCodeLabel": "Einladungscode",
+    "inviteCodePlaceholder": "Benutzer-ID eines Freundes eingeben",
+    "inviteCodeRequiredError": "Einladungscode ist erforderlich",
+    "inviteCodeInvalidError": "Ungültiger Einladungscode (Benutzer-ID nicht gefunden)",
     "generate": {
       "description": "Deine Passphrase dient als dein Nutzername und Passwort. Speichere sie sicher ab, damit du dich in deinem Konto anmelden kannst. <bold>Verliere deine Passphrase auf keinen Fall!</bold>",
       "next": "Ich habe meine Passphrase gespeichert",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Gerätename",
         "deviceNamePlaceholder": "Handy",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Bearbeiten",
         "logoutButton": "Abmelden"
       },

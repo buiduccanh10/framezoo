@@ -148,6 +148,10 @@
     "createAccount": "還沒有帳戶？ <0>建立一個</0>",
     "deviceNameLabel": "裝置名稱",
     "deviceNamePlaceholder": "我的手機",
+    "inviteCodeLabel": "邀請碼",
+    "inviteCodePlaceholder": "輸入好友的用户 ID",
+    "inviteCodeRequiredError": "需要邀請碼",
+    "inviteCodeInvalidError": "邀請碼無效（未找到用户 ID）",
     "generate": {
       "description": "您的密碼短語相當於使用者名稱與密碼。由於您需要輸入它來登入帳戶，請確保將其存放到安全位置",
       "next": "我已經儲存密碼短語",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "設備名稱",
         "deviceNamePlaceholder": "個人電話",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "編輯",
         "logoutButton": "登出"
       },

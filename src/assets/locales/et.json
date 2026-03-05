@@ -148,6 +148,10 @@
     "createAccount": "Ei ole kontot veel?<0>Loo konto.</0>",
     "deviceNameLabel": "Seadme nimi",
     "deviceNamePlaceholder": "Isiklik telefon",
+    "inviteCodeLabel": "Kutsekood",
+    "inviteCodePlaceholder": "Sisesta sõbra kasutaja ID",
+    "inviteCodeRequiredError": "Kutsekood on kohustuslik",
+    "inviteCodeInvalidError": "Vigane kutsekood (kasutaja ID-d ei leitud)",
     "generate": {
       "description": "Teie paroolifraas toimib teie kasutajanime ja paroolina. Veenduge, et see oleks ohutus kohas, kuna peate kasutama seda, et logida oma kontosse sisse",
       "next": "Olen salvestanud oma paroolifraasi",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Seadme nimi",
         "deviceNamePlaceholder": "Isiklik telefon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Muuda",
         "logoutButton": "Logi välja"
       },

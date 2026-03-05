@@ -148,6 +148,10 @@
     "createAccount": "계정이 없으십니까? <0>계정을 생성하세요.</0>",
     "deviceNameLabel": "기기명",
     "deviceNamePlaceholder": "개인 휴대폰",
+    "inviteCodeLabel": "초대 코드",
+    "inviteCodePlaceholder": "친구의 사용자 ID를 입력하세요",
+    "inviteCodeRequiredError": "초대 코드가 필요합니다",
+    "inviteCodeInvalidError": "유효하지 않은 초대 코드입니다 (사용자 ID를 찾을 수 없음)",
     "generate": {
       "description": "암호문은 사용자 아이디와 비밀번호 역할을 합니다. 계정에 로그인할 때 발급 받은 암호문을 입력해야 하므로 안전하게 보관하세요",
       "next": "암호문을 저장했습니다",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "기기명",
         "deviceNamePlaceholder": "개인 휴대폰",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "수정",
         "logoutButton": "로그아웃"
       },

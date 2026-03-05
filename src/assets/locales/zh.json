@@ -148,6 +148,10 @@
     "createAccount": "还没有账户？ <0>创建一个</0>",
     "deviceNameLabel": "设备名称",
     "deviceNamePlaceholder": "我的手机",
+    "inviteCodeLabel": "邀请码",
+    "inviteCodePlaceholder": "输入好友的用户 ID",
+    "inviteCodeRequiredError": "需要邀请码",
+    "inviteCodeInvalidError": "邀请码无效（未找到用户 ID）",
     "generate": {
       "description": "助记词相当于您的用户名和密码。请务必妥善保管，因为登录账户时需要输入该密码。<bold>切勿遗失你的助记词！</bold>",
       "next": "我已妥善保管助记词",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "设备名称",
         "deviceNamePlaceholder": "我的手机",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "编辑",
         "logoutButton": "登出"
       },

@@ -148,6 +148,10 @@
     "createAccount": "Hesch no kei Account? <0>Erschtel eine.</0>",
     "deviceNameLabel": "Grätename",
     "deviceNamePlaceholder": "Persöndlechs Natel",
+    "inviteCodeLabel": "Einladungscode",
+    "inviteCodePlaceholder": "Benutzer-ID eines Freundes eingeben",
+    "inviteCodeRequiredError": "Einladungscode ist erforderlich",
+    "inviteCodeInvalidError": "Ungültiger Einladungscode (Benutzer-ID nicht gefunden)",
     "generate": {
       "description": "Dini Passphrase fonktioniert wie din Benotzername ond s'Passwort. Heb sorg dezue, will du muesch si iigäh, um dich i din Konto iizlogge. <bold>Verlier dini Passphrase OF KEI FALL!</bold>",
       "next": "Ich han mi Passphrase g'spicheret",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Gräte name",
         "deviceNamePlaceholder": "Natel",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Bearbeite",
         "logoutButton": "Abmälde"
       },

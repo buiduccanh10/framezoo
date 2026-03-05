@@ -148,6 +148,10 @@
     "createAccount": "Eikö sinulla ole vielä tiliä? <0>Luo tili.</0>",
     "deviceNameLabel": "Laitteen nimi",
     "deviceNamePlaceholder": "Henkilökohtainen puhelin",
+    "inviteCodeLabel": "Kutsuavain",
+    "inviteCodePlaceholder": "Syötä ystävän käyttäjätunnus",
+    "inviteCodeRequiredError": "Kutsuavain vaaditaan",
+    "inviteCodeInvalidError": "Virheellinen kutsuavain (käyttäjätunnusta ei löytynyt)",
     "generate": {
       "description": "Tunnuslauseesi toimii käyttäjätunnuksena ja salasanana. Varmista, että pidät sen turvassa, sillä sinun on annettava se kirjautuaksesi tilillesi. <bold>Älä hävitä tunnuslausettasi!</bold>",
       "next": "Olen tallentanut tunnuslauseeni",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Log out"
       },

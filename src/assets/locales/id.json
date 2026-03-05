@@ -148,6 +148,10 @@
     "createAccount": "Belum memiliki akun? <0>Buat akun.</0>",
     "deviceNameLabel": "Nama perangkat",
     "deviceNamePlaceholder": "Perangkat personal",
+    "inviteCodeLabel": "Kode Undangan",
+    "inviteCodePlaceholder": "Masukkan ID Pengguna teman",
+    "inviteCodeRequiredError": "Kode undangan wajib diisi",
+    "inviteCodeInvalidError": "Kode undangan tidak valid (ID Pengguna tidak ditemukan)",
     "generate": {
       "description": "Kombinasi kata ini berfungsi sebagai nama pengguna sekaligus kata sandi anda. Pastikan untuk menyimpannya dengan aman karena anda memerlukannya untuk masuk ke akun anda",
       "next": "Saya sudah menyimpan kombinasi kata",
@@ -1167,6 +1171,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Nama perangkat",
         "deviceNamePlaceholder": "Ponsel personal",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Ubah",
         "logoutButton": "Keluar"
       },

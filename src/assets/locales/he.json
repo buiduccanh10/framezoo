@@ -148,6 +148,10 @@
     "createAccount": "עדיין אין לך חשבון 😬 <0>צור חשבון.</0>",
     "deviceNameLabel": "שם המכשיר",
     "deviceNamePlaceholder": "טלפון אישי",
+    "inviteCodeLabel": "קוד הזמנה",
+    "inviteCodePlaceholder": "הזן את מזהه המשתמש של חבר",
+    "inviteCodeRequiredError": "קוד הזמנה נדרש",
+    "inviteCodeInvalidError": "קוד הזמנה לא חוקי (מזהה משתמש לא נמצא)",
     "generate": {
       "description": "הביטוי הסודי שלך משמש כשם משתמש וסיסמה. חשוב לשמור עליו היטב כי תצטרך להזין אותו כדי להתחבר לחשבונך. <bold>אל תאבד את הביטוי הסודי שלך!</bold>",
       "next": "אני שמרתי את משפט הסיסמה שלי",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "שם מכשיר",
         "deviceNamePlaceholder": "מכשיר אישי",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "ערוך",
         "logoutButton": "התנתק"
       },

@@ -148,6 +148,10 @@
     "createAccount": "Все още нямате акаунт? <0>Създайте акаунт.</0>",
     "deviceNameLabel": "Име на устройството",
     "deviceNamePlaceholder": "Личен телефон",
+    "inviteCodeLabel": "Код за покана",
+    "inviteCodePlaceholder": "Въведете потребителското ID на приятел",
+    "inviteCodeRequiredError": "Кодът за покана е задължителен",
+    "inviteCodeInvalidError": "Невалиден код за покана (потребителското ID не е намерено)",
     "generate": {
       "description": "Вашата паролна фраза служи като потребителско име и парола. Уверете се, че я пазите в безопасност, тъй като ще трябва да я въведете, за да влезете в своя акаунт.",
       "next": "Запазих паролната си фраза",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Log out"
       },

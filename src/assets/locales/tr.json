@@ -148,6 +148,10 @@
     "createAccount": "Henüz bir hesabınız yok mu? <0>Hesap oluşturun.</0>",
     "deviceNameLabel": "Cihaz ismi",
     "deviceNamePlaceholder": "Kişisel telefon",
+    "inviteCodeLabel": "Davet Kodu",
+    "inviteCodePlaceholder": "Arkadaşının Kullanıcı Kimliğini gir",
+    "inviteCodeRequiredError": "Davet kodu gerekli",
+    "inviteCodeInvalidError": "Geçersiz davet kodu (Kullanıcı Kimliği bulunamadı)",
     "generate": {
       "description": "Şifreleme anahtarınız, kullanıcı adınız ve parolanız olarak işlev görür. Hesabınıza giriş yapmak için bu parolayı girmeniz gerekeceğinden onu güvende tuttuğunuzdan emin olun",
       "next": "Şifreleme anahtarımı kaydettim",
@@ -1172,6 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Cihaz adı",
         "deviceNamePlaceholder": "Kişisel telefon",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Düzenle",
         "logoutButton": "Çıkış yap"
       },
