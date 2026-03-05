@@ -23,7 +23,7 @@ export function LeftSideControls(props: {
 
   return (
     <div
-      className={classNames(["flex space-x-3 items-center", props.className])}
+      className={classNames(["flex space-x-6 items-center", props.className])}
       onMouseLeave={mouseLeave}
     >
       {props.children}

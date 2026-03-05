@@ -179,15 +179,15 @@ export function ProgressBar() {
         >
           <div
             className={[
-              "relative w-full h-1 bg-progress-background bg-opacity-25 rounded-full transition-[height] duration-100 group-hover:h-1.5",
-              dragging ? "!h-1.5" : "",
+              "relative w-full h-[4px] bg-progress-background bg-opacity-25 rounded-sm transition-[height] duration-100 group-hover:h-[6px]",
+              dragging ? "!h-[6px]" : "",
             ].join(" ")}
           >
             {/* Skip segment markers */}
             {segmentRanges.map((range) => (
               <div
                 key={range.key}
-                className="absolute top-0 bottom-0 rounded-full pointer-events-none"
+                className="absolute top-0 bottom-0 rounded-sm pointer-events-none"
                 style={{
                   left: `${range.left}%`,
                   width: `${range.width}%`,
@@ -197,7 +197,7 @@ export function ProgressBar() {
             ))}
             {/* Pre-loaded content bar */}
             <div
-              className="absolute top-0 left-0 h-full rounded-full bg-progress-preloaded bg-opacity-50 flex justify-end items-center"
+              className="absolute top-0 left-0 h-full rounded-sm bg-progress-preloaded bg-opacity-50 flex justify-end items-center"
               style={{
                 width: `${(buffered / duration) * 100}%`,
               }}
@@ -205,7 +205,7 @@ export function ProgressBar() {
 
             {/* Actual progress bar */}
             <div
-              className="absolute top-0 dir-neutral:left-0 h-full rounded-full bg-progress-filled flex justify-end items-center"
+              className="absolute top-0 dir-neutral:left-0 h-full rounded-sm bg-progress-filled flex justify-end items-center"
               style={{
                 width: `${
                   Math.max(
@@ -220,7 +220,7 @@ export function ProgressBar() {
             >
               <div
                 className={[
-                  "w-[1rem] min-w-[1rem] h-[1rem] rounded-full transform translate-x-1/2 scale-0 group-hover:scale-100 bg-white transition-[transform] duration-100",
+                  "w-[20px] min-w-[20px] h-[20px] rounded-full transform translate-x-1/2 scale-0 group-hover:scale-100 bg-progress-filled transition-[transform] duration-100 shadow-[0_0_8px_rgba(0,0,0,0.5)]",
                   isSeeking ? "scale-100" : "",
                 ].join(" ")}
               />

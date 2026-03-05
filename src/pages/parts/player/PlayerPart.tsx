@@ -175,15 +175,17 @@ export function PlayerPart(props: PlayerPartProps) {
 
       <Player.BottomControls show={showTargets}>
         {status !== playerStatus.PLAYING && !manualSourceSelection && <Tips />}
-        <div className="flex items-center justify-center space-x-3 h-full">
+        <div className="flex flex-col w-full">
           {status === playerStatus.SCRAPING ? (
-            <ScrapingPartInterruptButton />
+            <div className="flex justify-center mb-4">
+              <ScrapingPartInterruptButton />
+            </div>
           ) : null}
           {status === playerStatus.PLAYING ? (
-            <>
-              {isMobile ? <Player.Time short /> : null}
+            <div className="w-full mb-2 flex items-center space-x-4">
               <Player.ProgressBar />
-            </>
+              {isMobile ? <Player.Time short /> : null}
+            </div>
           ) : null}
         </div>
         <div className="hidden lg:flex justify-between" dir="ltr">
@@ -198,7 +200,7 @@ export function PlayerPart(props: PlayerPartProps) {
               </>
             ) : null}
           </Player.LeftSideControls>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-6">
             <Player.Episodes inControl={inControl} />
             <Player.SkipEpisodeButton
               inControl={inControl}
