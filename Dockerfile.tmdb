@@ -4,17 +4,17 @@ ARG VERSION=dev
 WORKDIR /app
 
 # Install only production dependencies first (leveraging cache)
-COPY package.json package-lock.json ./
+COPY provider-db-api/package.json provider-db-api/package-lock.json ./
 # Using npm install instead of npm ci because lock file appears out-of-sync
 # If you later regenerate lock (npm install locally) you can revert to npm ci for reproducibility
 RUN npm install --omit=dev
 
 # Copy only required source (avoid sending screenshots, node_modules already installed)
-COPY apiServer.js ./
-COPY providers ./providers
-COPY public ./public
-COPY utils ./utils
-COPY README.md ./
+COPY provider-db-api/apiServer.js ./
+COPY provider-db-api/providers ./providers
+COPY provider-db-api/public ./public
+COPY provider-db-api/utils ./utils
+COPY provider-db-api/README.md ./
 
 # ---------- Runtime Stage ----------
 FROM node:20-alpine AS runtime

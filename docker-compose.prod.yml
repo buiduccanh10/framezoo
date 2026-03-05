@@ -34,8 +34,8 @@ services:
 
   tmdb-embed-api:
     build:
-      context: ../provider-db-api
-      dockerfile: ./Dockerfile.tmdb
+      context: ../
+      dockerfile: ./betamovie/Dockerfile.tmdb
     container_name: tmdb-embed-api
     environment:
       - TMDB_API_KEY=${VITE_TMDB_READ_API_KEY}
