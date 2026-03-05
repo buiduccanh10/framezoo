@@ -64,10 +64,17 @@ export async function scrapeOpenMovieMovie(
     }
 
     // Map each stream to an embed entry
-    const embeds = data.streams.map((stream) => ({
-      embedId: "openmovie-embed",
-      url: encodeStreamInfo(stream),
-    }));
+    const embeds = data.streams.map((stream) => {
+      // Fix proxy URLs that point to localhost:8787
+      const fixedUrl = stream.url.includes("localhost:8787")
+        ? stream.url.replace(/https?:\/\/localhost:8787/, getBaseUrl())
+        : stream.url;
+
+      return {
+        embedId: "openmovie-embed",
+        url: encodeStreamInfo({ ...stream, url: fixedUrl }),
+      };
+    });
 
     ctx.progress(100);
     return {
@@ -101,10 +108,16 @@ export async function scrapeOpenMovieShow(
       throw new NotFoundError("No streams found on OpenMovie");
     }
 
-    const embeds = data.streams.map((stream) => ({
-      embedId: "openmovie-embed",
-      url: encodeStreamInfo(stream),
-    }));
+    const embeds = data.streams.map((stream) => {
+      const fixedUrl = stream.url.includes("localhost:8787")
+        ? stream.url.replace(/https?:\/\/localhost:8787/, getBaseUrl())
+        : stream.url;
+
+      return {
+        embedId: "openmovie-embed",
+        url: encodeStreamInfo({ ...stream, url: fixedUrl }),
+      };
+    });
 
     ctx.progress(100);
     return {
