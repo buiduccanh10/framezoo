@@ -43,6 +43,7 @@ services:
       - API_PORT=8787
       - BIND_HOST=0.0.0.0
       - OVERRIDE_CONFIG_PATH=/app/data/user-config.json
+      - ENABLE_PROXY=true
     volumes:
       - tmdb-api-data:/app/data
     networks:

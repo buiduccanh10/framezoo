@@ -9,6 +9,7 @@ interface OpenMovieStreamInfo {
   name: string;
   title: string;
   url: string;
+  subtitle?: string;
   quality: string;
   provider: string;
 }
@@ -65,7 +66,17 @@ export async function scrapeOpenMovieEmbed(
         id: `openmovie-${streamInfo.provider}-${isHls ? "hls" : "file"}-${quality}`,
         type: isHls ? ("hls" as const) : ("file" as const),
         flags: [flags.CORS_ALLOWED],
-        captions: [],
+        captions: streamInfo.subtitle
+          ? [
+              {
+                id: streamInfo.subtitle,
+                type: "srt", // Default to srt as seen in API response
+                url: streamInfo.subtitle,
+                hasCorsRestrictions: false,
+                language: "en", // Default to English if not specified
+              },
+            ]
+          : [],
         skipValidation: true,
         ...(isHls ? { playlist: streamInfo.url } : {}),
         qualities: {

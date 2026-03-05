@@ -20,6 +20,7 @@ interface OpenMovieStream {
   name: string;
   title: string;
   url: string;
+  subtitle?: string;
   quality: string;
   provider: string;
 }
@@ -39,6 +40,7 @@ function encodeStreamInfo(stream: OpenMovieStream): string {
     name: stream.name,
     title: stream.title,
     url: stream.url,
+    subtitle: stream.subtitle,
     quality: stream.quality,
     provider: stream.provider,
   };
@@ -65,14 +67,23 @@ export async function scrapeOpenMovieMovie(
 
     // Map each stream to an embed entry
     const embeds = data.streams.map((stream) => {
-      // Fix proxy URLs that point to localhost:8787
+      const baseUrl = getBaseUrl();
+      // Fix proxy URLs that point to localhost:8787 for both stream and subtitles
       const fixedUrl = stream.url.includes("localhost:8787")
-        ? stream.url.replace(/https?:\/\/localhost:8787/, getBaseUrl())
+        ? stream.url.replace(/https?:\/\/localhost:8787/, baseUrl)
         : stream.url;
+
+      const fixedSubtitle = stream.subtitle?.includes("localhost:8787")
+        ? stream.subtitle.replace(/https?:\/\/localhost:8787/, baseUrl)
+        : stream.subtitle;
 
       return {
         embedId: "openmovie-embed",
-        url: encodeStreamInfo({ ...stream, url: fixedUrl }),
+        url: encodeStreamInfo({
+          ...stream,
+          url: fixedUrl,
+          subtitle: fixedSubtitle,
+        }),
       };
     });
 
@@ -109,13 +120,22 @@ export async function scrapeOpenMovieShow(
     }
 
     const embeds = data.streams.map((stream) => {
+      const baseUrl = getBaseUrl();
       const fixedUrl = stream.url.includes("localhost:8787")
-        ? stream.url.replace(/https?:\/\/localhost:8787/, getBaseUrl())
+        ? stream.url.replace(/https?:\/\/localhost:8787/, baseUrl)
         : stream.url;
+
+      const fixedSubtitle = stream.subtitle?.includes("localhost:8787")
+        ? stream.subtitle.replace(/https?:\/\/localhost:8787/, baseUrl)
+        : stream.subtitle;
 
       return {
         embedId: "openmovie-embed",
-        url: encodeStreamInfo({ ...stream, url: fixedUrl }),
+        url: encodeStreamInfo({
+          ...stream,
+          url: fixedUrl,
+          subtitle: fixedSubtitle,
+        }),
       };
     });
 
