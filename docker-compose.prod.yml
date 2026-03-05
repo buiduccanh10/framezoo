@@ -10,6 +10,7 @@ services:
         APP_DOMAIN: https://alphaflix.io.vn
         PWA_ENABLED: "true"
         OPENSEARCH_ENABLED: "true"
+        TMDB_EMBED_API_URL: /tmdb-api
     hostname: pstream-frontend
     expose:
       - '80'

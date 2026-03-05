@@ -5,7 +5,9 @@ import {
   type SourcererOutput,
 } from "@p-stream/providers";
 
-const OPENMOVIE_API_BASE = "http://localhost:8787/api/streams";
+const OPENMOVIE_API_BASE =
+  (import.meta.env.VITE_TMDB_EMBED_API_URL || "http://localhost:8787") +
+  "/api/streams";
 
 interface OpenMovieStream {
   name: string;
