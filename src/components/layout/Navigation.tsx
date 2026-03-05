@@ -1,16 +1,14 @@
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import { Link, To, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icons } from "@/components/Icon";
 import { LinksDropdown } from "@/components/LinksDropdown";
-import { useNotifications } from "@/components/overlays/notificationsModal";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
-import { conf } from "@/setup/config";
 import { useBannerSize } from "@/stores/banner";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -25,10 +23,9 @@ export interface NavigationProps {
 
 export function Navigation(props: NavigationProps) {
   const bannerHeight = useBannerSize();
-  const navigate = useNavigate();
+  const location = useLocation();
   const { loggedIn } = useAuth();
   const [scrollPosition, setScrollPosition] = useState(0);
-  const { openNotifications, getUnreadCount } = useNotifications();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,11 +35,6 @@ export function Navigation(props: NavigationProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleClick = (path: To) => {
-    window.scrollTo(0, 0);
-    navigate(path);
-  };
 
   // Calculate mask length based on scroll position
   const getMaskLength = () => {
@@ -152,10 +144,10 @@ export function Navigation(props: NavigationProps) {
                 <IconPatch icon={Icons.FLUXER} clickable downsized navigation />
               </a> */}
               {!enableLowPerformanceMode &&
-                (window.location.pathname === "/discover" ? (
-                  <a
-                    onClick={() => handleClick("/browse")}
-                    rel="noreferrer"
+                (location.pathname === "/discover" ? (
+                  <Link
+                    to="/browse"
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-lg text-white tabbable rounded-full backdrop-blur-lg"
                   >
                     <IconPatch
@@ -164,11 +156,11 @@ export function Navigation(props: NavigationProps) {
                       downsized
                       navigation
                     />
-                  </a>
+                  </Link>
                 ) : (
-                  <a
-                    onClick={() => handleClick("/discover")}
-                    rel="noreferrer"
+                  <Link
+                    to="/discover"
+                    onClick={() => window.scrollTo(0, 0)}
                     className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
                   >
                     <IconPatch
@@ -177,7 +169,7 @@ export function Navigation(props: NavigationProps) {
                       downsized
                       navigation
                     />
-                  </a>
+                  </Link>
                 ))}
               {/* <a
                 onClick={() => openNotifications()}

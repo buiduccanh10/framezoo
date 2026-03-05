@@ -128,7 +128,7 @@ export function SettingsMenu({ id }: { id: string }) {
         )}
       </Menu.Section>
       <Menu.Section>
-        <Menu.Link
+        {/* <Menu.Link
           clickable
           onClick={() =>
             router.navigate(downloadable ? "/download" : "/download/unable")
@@ -137,7 +137,7 @@ export function SettingsMenu({ id }: { id: string }) {
           className={downloadable ? "opacity-100" : "opacity-50"}
         >
           {t("player.menus.settings.downloadItem")}
-        </Menu.Link>
+        </Menu.Link> */}
         <Menu.Link
           clickable
           onClick={() =>

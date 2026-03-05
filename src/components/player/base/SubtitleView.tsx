@@ -204,8 +204,10 @@ export function SubtitleView(props: { controlsShown: boolean }) {
     (s) => s.enableNativeSubtitles,
   );
 
-  // Hide custom captions when native subtitles are enabled
-  const shouldUseNativeTrack = enableNativeSubtitles && source !== null;
+  const asTrack = usePlayerStore((s) => s.caption.asTrack);
+  // Hide custom captions when native subtitles are enabled or when asTrack is true (e.g. mobile fullscreen)
+  const shouldUseNativeTrack =
+    (enableNativeSubtitles || asTrack) && source !== null;
   if (shouldUseNativeTrack || (!caption && !secondaryCaption) || isCasting)
     return null;
 

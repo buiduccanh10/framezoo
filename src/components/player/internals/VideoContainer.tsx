@@ -77,8 +77,10 @@ function VideoElement() {
     [srtData],
   );
 
-  // Use native tracks when the setting is enabled
-  const shouldUseNativeTrack = enableNativeSubtitles && source !== null;
+  const asTrack = usePlayerStore((s) => s.caption.asTrack);
+  // Use native tracks when the setting is enabled or when requested (e.g. mobile fullscreen)
+  const shouldUseNativeTrack =
+    (enableNativeSubtitles || asTrack) && source !== null;
 
   // report video element to display interface
   useEffect(() => {
