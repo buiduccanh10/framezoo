@@ -47,6 +47,46 @@ function encodeStreamInfo(stream: OpenMovieStream): string {
   return `openmovie://${encodeURIComponent(JSON.stringify(info))}`;
 }
 
+function fixStreamUrl(url: string, baseUrl: string): string {
+  if (!url) return url;
+
+  // Case 1: Proxy URL from tmdb-embed-api (contains -proxy?)
+  if (url.includes("-proxy?")) {
+    try {
+      const urlObj = new URL(url);
+      // Prepend baseUrl (including its path prefix) to the path and search
+      return baseUrl + urlObj.pathname + urlObj.search;
+    } catch {
+      // Fallback: replace origin
+      return url.replace(/^https?:\/\/[^/]+/, baseUrl);
+    }
+  }
+
+  // Case 2: Literal localhost:8787 (development fallback)
+  if (url.includes("localhost:8787")) {
+    return url.replace(/https?:\/\/localhost:8787/, baseUrl);
+  }
+
+  return url;
+}
+
+function fixSubtitleUrl(
+  url: string | undefined,
+  baseUrl: string,
+): string | undefined {
+  if (!url) return url;
+
+  // Apply general mapping first
+  const fixed = fixStreamUrl(url, baseUrl);
+
+  // If still external and doesn't use our proxy, wrap it in sub-proxy for CORS
+  if (fixed && !fixed.startsWith(baseUrl) && fixed.startsWith("http")) {
+    return `${baseUrl}/sub-proxy?url=${encodeURIComponent(fixed)}`;
+  }
+
+  return fixed;
+}
+
 export async function scrapeOpenMovieMovie(
   ctx: MovieScrapeContext,
 ): Promise<SourcererOutput> {
@@ -68,14 +108,8 @@ export async function scrapeOpenMovieMovie(
     // Map each stream to an embed entry
     const embeds = data.streams.map((stream) => {
       const baseUrl = getBaseUrl();
-      // Fix proxy URLs that point to localhost:8787 for both stream and subtitles
-      const fixedUrl = stream.url.includes("localhost:8787")
-        ? stream.url.replace(/https?:\/\/localhost:8787/, baseUrl)
-        : stream.url;
-
-      const fixedSubtitle = stream.subtitle?.includes("localhost:8787")
-        ? stream.subtitle.replace(/https?:\/\/localhost:8787/, baseUrl)
-        : stream.subtitle;
+      const fixedUrl = fixStreamUrl(stream.url, baseUrl);
+      const fixedSubtitle = fixSubtitleUrl(stream.subtitle, baseUrl);
 
       return {
         embedId: "openmovie-embed",
@@ -121,13 +155,8 @@ export async function scrapeOpenMovieShow(
 
     const embeds = data.streams.map((stream) => {
       const baseUrl = getBaseUrl();
-      const fixedUrl = stream.url.includes("localhost:8787")
-        ? stream.url.replace(/https?:\/\/localhost:8787/, baseUrl)
-        : stream.url;
-
-      const fixedSubtitle = stream.subtitle?.includes("localhost:8787")
-        ? stream.subtitle.replace(/https?:\/\/localhost:8787/, baseUrl)
-        : stream.subtitle;
+      const fixedUrl = fixStreamUrl(stream.url, baseUrl);
+      const fixedSubtitle = fixSubtitleUrl(stream.subtitle, baseUrl);
 
       return {
         embedId: "openmovie-embed",
