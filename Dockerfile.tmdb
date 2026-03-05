@@ -49,4 +49,4 @@ USER app
 # Healthcheck (simple)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s CMD wget -qO- http://localhost:${API_PORT:-8787}/api/health || exit 1
 
-CMD ["node","apiServer.js"]
+CMD ["sh", "-c", "[ ! -f /app/data/user-config.json ] && [ -f /app/utils/user-config.json ] && cp /app/utils/user-config.json /app/data/user-config.json; node apiServer.js"]
