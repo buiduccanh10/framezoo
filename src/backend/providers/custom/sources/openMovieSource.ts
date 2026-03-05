@@ -5,9 +5,16 @@ import {
   type SourcererOutput,
 } from "@p-stream/providers";
 
-const OPENMOVIE_API_BASE =
-  (import.meta.env.VITE_TMDB_EMBED_API_URL || "http://localhost:8787") +
-  "/api/streams";
+const getBaseUrl = () => {
+  const envUrl =
+    import.meta.env.VITE_TMDB_EMBED_API_URL || "http://localhost:8787";
+  if (envUrl.startsWith("/") && typeof window !== "undefined") {
+    return window.location.origin + envUrl;
+  }
+  return envUrl;
+};
+
+const OPENMOVIE_API_BASE = `${getBaseUrl()}/api/streams`;
 
 interface OpenMovieStream {
   name: string;
