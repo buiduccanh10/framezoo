@@ -41,8 +41,9 @@ services:
       - TMDB_API_KEY=${VITE_TMDB_READ_API_KEY}
       - API_PORT=8787
       - BIND_HOST=0.0.0.0
+      - OVERRIDE_CONFIG_PATH=/app/data/user-config.json
     volumes:
-      - tmdb-api-data:/app/utils/user-config.json
+      - tmdb-api-data:/app/data
     networks:
       - pstream-prod-network
       - betakiot_proxy_network
