@@ -49,17 +49,34 @@ function encodeStreamInfo(stream: OpenMovieStream): string {
 
 function fixStreamUrl(url: string, baseUrl: string): string {
   if (!url) return url;
-  if (url.startsWith(baseUrl)) return url; // Already fixed!
 
-  // Case 1: Proxy URL from tmdb-embed-api (contains -proxy?)
-  if (url.includes("-proxy?")) {
-    try {
-      const urlObj = new URL(url);
-      // Prepend baseUrl (including its path prefix) to the path and search
-      return baseUrl + urlObj.pathname + urlObj.search;
-    } catch {
-      // Fallback: replace origin
-      return url.replace(/^https?:\/\/[^/]+/, baseUrl);
+  try {
+    const urlObj = new URL(url);
+    const baseObj = new URL(baseUrl);
+
+    // If protocol and host already match, just return as is
+    if (urlObj.origin === baseObj.origin && url.startsWith(baseUrl)) {
+      return url;
+    }
+
+    const pathAndSearch = urlObj.pathname + urlObj.search;
+
+    // If the URL is a proxy URL
+    if (pathAndSearch.includes("-proxy?")) {
+      const basePath = baseObj.pathname === "/" ? "" : baseObj.pathname;
+
+      // If the pathname already starts with the prefix, just fix the origin/protocol
+      if (basePath && urlObj.pathname.startsWith(basePath)) {
+        return baseObj.origin + pathAndSearch;
+      }
+
+      // Otherwise, prepend the whole baseUrl
+      return baseUrl + pathAndSearch;
+    }
+  } catch {
+    // Fallback for relative or malformed URLs
+    if (url.includes("-proxy?") && !url.startsWith("http")) {
+      return baseUrl + (url.startsWith("/") ? "" : "/") + url;
     }
   }
 
