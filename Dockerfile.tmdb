@@ -39,8 +39,11 @@ COPY --from=build /app/proxy ./proxy
 COPY --from=build /app/package.json ./
 COPY --from=build /app/README.md ./
 
-# Expose port (documentational; runtime can override)
+# Expose port
 EXPOSE 8787
+
+# Create data directory and ensure permissions
+RUN mkdir -p /app/data && chown -R app:app /app/data && chmod 777 /app/data
 
 # Ensure runtime user owns app directory for writes (overrides, restart marker)
 RUN chown -R app:app /app
@@ -49,4 +52,5 @@ USER app
 # Healthcheck (simple)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s CMD wget -qO- http://localhost:${API_PORT:-8787}/api/health || exit 1
 
-CMD ["sh", "-c", "[ ! -f /app/data/user-config.json ] && [ -f /app/utils/user-config.json ] && cp /app/utils/user-config.json /app/data/user-config.json; node apiServer.js"]
+# If volume is empty, copy default config from image
+CMD ["sh", "-c", "if [ ! -f /app/data/user-config.json ]; then cp /app/utils/user-config.json /app/data/user-config.json; fi; node apiServer.js"]
