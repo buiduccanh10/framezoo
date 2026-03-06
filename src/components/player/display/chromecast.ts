@@ -44,6 +44,7 @@ export function makeChromecastDisplayInterface(
   let isPausedBeforeSeeking = false;
   let isSeeking = false;
   let startAt = 0;
+  let autoplay = true;
   let meta: DisplayMeta = {
     title: "",
     type: MWMediaType.MOVIE,
@@ -163,7 +164,7 @@ export function makeChromecastDisplayInterface(
     }
 
     const request = new chrome.cast.media.LoadRequest(mediaInfo);
-    request.autoplay = true;
+    request.autoplay = autoplay;
     request.currentTime = startAt;
     if (caption?.url) request.activeTrackIds = [1];
 
@@ -219,6 +220,7 @@ export function makeChromecastDisplayInterface(
       source = loadOps.source;
       emit("loading", true);
       startAt = loadOps.startAt;
+      autoplay = loadOps.autoplay ?? true;
       setSource();
     },
     changeQuality() {

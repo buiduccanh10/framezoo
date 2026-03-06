@@ -8,6 +8,7 @@ import {
   SourceSliceSource,
   selectQuality,
 } from "@/stores/player/utils/qualities";
+import { usePreferencesStore } from "@/stores/preferences";
 import { useQualityStore } from "@/stores/quality";
 import googletranslate from "@/utils/translation/googletranslate";
 import { translate } from "@/utils/translation/index";
@@ -296,6 +297,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const store = get();
     if (!store.source) return;
     const qualityPreferences = useQualityStore.getState();
+    const playbackPreferences = usePreferencesStore.getState();
     const loadableStream = selectQuality(store.source, {
       automaticQuality: qualityPreferences.quality.automaticQuality,
       lastChosenQuality: qualityPreferences.quality.lastChosenQuality,
@@ -309,6 +311,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       startAt,
       automaticQuality: qualityPreferences.quality.automaticQuality,
       preferredQuality: qualityPreferences.quality.lastChosenQuality,
+      autoplay: playbackPreferences.enableAutoplay,
     });
   },
   switchQuality(quality) {
@@ -327,6 +330,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         startAt: store.progress.time,
         automaticQuality: false,
         preferredQuality: quality,
+        autoplay: store.mediaPlaying.isPlaying,
       });
     } else if (store.source.type === "hls") {
       store.display?.changeQuality(false, quality);

@@ -58,6 +58,7 @@ export interface qualityChangeOptions {
   automaticQuality: boolean;
   preferredQuality: SourceQuality | null;
   startAt: number;
+  autoplay?: boolean;
 }
 
 export interface DisplayMeta {
