@@ -354,6 +354,31 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
             zIndex: -1,
           }}
         />
+        {/* CRT Screen Effect Overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.25) 2px, rgba(0, 0, 0, 0.25) 3px)",
+            backgroundSize: "100% 4px",
+            maskImage:
+              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+            WebkitMaskImage:
+              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+            zIndex: -1,
+          }}
+        />
+        {/* Focus Vignette / Edge Blur Overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none backdrop-blur-md bg-black/10"
+          style={{
+            maskImage:
+              "radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 1) 100%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 1) 100%)",
+            zIndex: -1,
+          }}
+        />
       </div>
 
       {/* Content */}

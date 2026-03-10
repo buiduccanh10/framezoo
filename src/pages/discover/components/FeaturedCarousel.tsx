@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import { t } from "i18next";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
 import { isExtensionActive } from "@/backend/extension/messaging";
@@ -138,7 +137,7 @@ export function FeaturedCarousel({
   const hasExtension = useRef<boolean>(false);
   const logoFetchController = useRef<AbortController | null>(null);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
-  const navigate = useNavigate();
+
   const enableImageLogos = usePreferencesStore(
     (state) => state.enableImageLogos,
   );
@@ -641,6 +640,19 @@ export function FeaturedCarousel({
             }}
           />
         ))}
+        {/* CRT Screen Effect Overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none z-[1]"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.25) 2px, rgba(0, 0, 0, 0.25) 3px)",
+            backgroundSize: "100% 4px",
+            maskImage:
+              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+            WebkitMaskImage:
+              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+          }}
+        />
       </div>
 
       {/* Navigation Buttons */}
@@ -801,11 +813,7 @@ export function FeaturedCarousel({
               onMouseLeave={() => setIsAutoPlaying(true)}
             >
               <Button
-                onClick={() =>
-                  navigate(
-                    `/media/tmdb-${currentMedia.type}-${currentMedia.id}-${mediaTitle?.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-                  )
-                }
+                onClick={() => onShowDetails(currentMedia)}
                 theme="secondary"
                 className="w-full sm:w-auto text-base"
               >

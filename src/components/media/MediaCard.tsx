@@ -341,9 +341,6 @@ function MediaCardContent({
 export function MediaCard(props: MediaCardProps) {
   const { media, onShowDetails, forceSkeleton } = props;
   const { showModal } = useOverlayStack();
-  const enableDetailsModal = usePreferencesStore(
-    (state) => state.enableDetailsModal,
-  );
 
   const isReleased = useCallback(
     () => checkReleased(props.media),
@@ -379,7 +376,7 @@ export function MediaCard(props: MediaCardProps) {
   }, [media, showModal, onShowDetails]);
 
   const handleCardClick = (e: React.MouseEvent) => {
-    if (enableDetailsModal && canLink) {
+    if (canLink) {
       e.preventDefault();
       handleShowDetails();
     }
