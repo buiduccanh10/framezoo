@@ -6,6 +6,7 @@ import { getSeasonDetails } from "@/backend/metadata/tmdb";
 import { getNetworkContent } from "@/backend/metadata/traktApi";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
+import { LazyImage } from "@/components/utils/Image";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
@@ -328,7 +329,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         {/* Title/Logo positioned on backdrop */}
         <div ref={logoRef} className="absolute inset-x-0 bottom-20 z-30 px-6">
           {data.logoUrl && enableImageLogos ? (
-            <img
+            <LazyImage
               src={data.logoUrl}
               alt={data.title}
               className="max-w-[16rem] md:max-w-[20rem] lg:max-w-[30rem] max-h-[12rem] object-contain drop-shadow-lg bg-transparent"
@@ -340,34 +341,32 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
             </h3>
           )}
         </div>
-        <div
-          className="absolute inset-0 bg-cover bg-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
-          style={{
-            backgroundImage: data.backdrop
-              ? `url(${data.backdrop})`
-              : undefined,
-            backgroundPosition: "center top",
-            maskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-            WebkitMaskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-            zIndex: -1,
-          }}
-        />
-        {/* CRT Screen Effect Overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.25) 2px, rgba(0, 0, 0, 0.25) 3px)",
-            backgroundSize: "100% 4px",
-            maskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-            WebkitMaskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-            zIndex: -1,
-          }}
-        />
+        {data.backdrop ? (
+          <LazyImage
+            src={data.backdrop}
+            alt={data.title}
+            className="absolute inset-0 w-full h-full object-cover object-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
+            style={{
+              maskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+              WebkitMaskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+              zIndex: -1,
+            }}
+          />
+        ) : (
+          <div
+            className="absolute inset-0 bg-cover bg-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
+            style={{
+              maskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+              WebkitMaskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+              zIndex: -1,
+            }}
+          />
+        )}
+
         {/* Focus Vignette / Edge Blur Overlay */}
         <div
           className="absolute inset-0 pointer-events-none backdrop-blur-md bg-black/10"

@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { t } from "i18next";
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
 import { isExtensionActive } from "@/backend/extension/messaging";
@@ -13,6 +14,7 @@ import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
+import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { conf } from "@/setup/config";
 import { useDiscoverStore } from "@/stores/discover";
@@ -137,6 +139,7 @@ export function FeaturedCarousel({
   const hasExtension = useRef<boolean>(false);
   const logoFetchController = useRef<AbortController | null>(null);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
+  const navigate = useNavigate();
 
   const enableImageLogos = usePreferencesStore(
     (state) => state.enableImageLogos,
@@ -629,30 +632,20 @@ export function FeaturedCarousel({
             className={`absolute inset-0 transition-opacity duration-1000 ${
               index === currentIndex ? "opacity-100" : "opacity-0"
             }`}
-            style={{
-              backgroundImage: `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center top",
-              maskImage:
-                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
-              WebkitMaskImage:
-                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
-            }}
-          />
+          >
+            <LazyImage
+              src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+              alt={item.title || item.name || ""}
+              className="absolute inset-0 w-full h-full object-cover object-top"
+              style={{
+                maskImage:
+                  "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+                WebkitMaskImage:
+                  "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+              }}
+            />
+          </div>
         ))}
-        {/* CRT Screen Effect Overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none z-[1]"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.25) 2px, rgba(0, 0, 0, 0.25) 3px)",
-            backgroundSize: "100% 4px",
-            maskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
-            WebkitMaskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
-          }}
-        />
       </div>
 
       {/* Navigation Buttons */}
@@ -734,7 +727,7 @@ export function FeaturedCarousel({
         <div className="container mx-auto px-8 lg:px-4 flex justify-between items-end w-full">
           <div className="max-w-3xl">
             {logoUrl && enableImageLogos ? (
-              <img
+              <LazyImage
                 src={logoUrl}
                 alt={mediaTitle}
                 className="max-w-[14rem] md:max-w-[22rem] max-h-[20vh] object-contain drop-shadow-lg bg-transparent mb-6"
@@ -813,7 +806,11 @@ export function FeaturedCarousel({
               onMouseLeave={() => setIsAutoPlaying(true)}
             >
               <Button
-                onClick={() => onShowDetails(currentMedia)}
+                onClick={() =>
+                  navigate(
+                    `/media/tmdb-${currentMedia.type}-${currentMedia.id}-${mediaTitle?.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+                  )
+                }
                 theme="secondary"
                 className="w-full sm:w-auto text-base"
               >

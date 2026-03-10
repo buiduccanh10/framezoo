@@ -270,13 +270,93 @@ export async function get<T>(url: string, params?: object): Promise<T> {
         params: allParams,
         signal: abortOnTimeout(5000),
       });
-    } catch (err) {
+    } catch {
       result = await mwFetch<T>(encodeURI(url), {
         headers: tmdbHeaders,
         baseURL: tmdbBaseUrl2,
         params: allParams,
         signal: abortOnTimeout(30000),
       });
+    }
+  }
+
+  // Filter out Vietnamese and Indian movies/shows
+  if (result && typeof result === "object" && "results" in result) {
+    const res = result as { results?: any[] };
+    if (Array.isArray(res.results)) {
+      const excludedLanguages = [
+        "vi", // Vietnamese
+        "hi",
+        "te",
+        "ta",
+        "ml",
+        "kn",
+        "bn",
+        "pa",
+        "gu",
+        "mr",
+        "ur", // Indian languages
+      ];
+      const excludedCountries = ["VN", "IN"];
+
+      res.results = res.results.filter((item) => {
+        // Skip filtering for people
+        if (item.media_type === "person") return true;
+
+        const isExcludedLanguage =
+          item.original_language &&
+          excludedLanguages.includes(item.original_language);
+
+        const isExcludedCountry =
+          item.origin_country &&
+          Array.isArray(item.origin_country) &&
+          item.origin_country.some((c: string) =>
+            excludedCountries.includes(c),
+          );
+
+        return !(isExcludedLanguage || isExcludedCountry);
+      });
+    }
+  }
+
+  // Filter out Vietnamese and Indian movies/shows for single items
+  if (
+    result &&
+    typeof result === "object" &&
+    !("results" in result) &&
+    !("episodes" in result) &&
+    !("cast" in result)
+  ) {
+    const item = result as any;
+    // We only want to filter media items, not people or other resources
+    if (item.original_language || item.origin_country) {
+      const excludedLanguages = [
+        "vi", // Vietnamese
+        "hi",
+        "te",
+        "ta",
+        "ml",
+        "kn",
+        "bn",
+        "pa",
+        "gu",
+        "mr",
+        "ur", // Indian languages
+      ];
+      const excludedCountries = ["VN", "IN"];
+
+      const isExcludedLanguage =
+        item.original_language &&
+        excludedLanguages.includes(item.original_language);
+
+      const isExcludedCountry =
+        item.origin_country &&
+        Array.isArray(item.origin_country) &&
+        item.origin_country.some((c: string) => excludedCountries.includes(c));
+
+      if (isExcludedLanguage || isExcludedCountry) {
+        throw new Error("Content filtered by region/language settings");
+      }
     }
   }
 
