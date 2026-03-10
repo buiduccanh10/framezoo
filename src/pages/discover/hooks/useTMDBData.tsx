@@ -2,10 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import { get } from "@/backend/metadata/tmdb";
 import { Category, Genre, Movie, TVShow } from "@/pages/discover/common";
-import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
-
 type MediaType = "movie" | "tv";
 
 export function useTMDBData(
@@ -32,11 +30,11 @@ export function useTMDBData(
         // Reduce the number of pages to improve performance
         for (let page = 1; page <= 2; page += 1) {
           const data = await get<any>(endpoint, {
-            api_key: conf().TMDB_READ_API_KEY,
             language: formattedLanguage,
             page: page.toString(),
             ...(isGenre ? { with_genres: key } : {}),
           });
+
           media.push(...data.results);
         }
 
@@ -118,11 +116,11 @@ export function useLazyTMDBData(
         const mediaItems: Movie[] | TVShow[] = [];
         // Only fetch one page for better performance
         const data = await get<any>(endpoint, {
-          api_key: conf().TMDB_READ_API_KEY,
           language: formattedLanguage,
           page: "1",
           ...(isGenre ? { with_genres: key } : {}),
         });
+
         mediaItems.push(...data.results);
         setMedia(mediaItems);
         setIsLoading(false);

@@ -4,7 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        TMDB_READ_API_KEY: ${VITE_TMDB_READ_API_KEY}
         BACKEND_URL: ${VITE_BACKEND_URL}
         CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
         APP_DOMAIN: https://alphaflix.io.vn
@@ -39,7 +38,6 @@ services:
       dockerfile: ./betamovie/Dockerfile.tmdb
     container_name: tmdb-embed-api
     environment:
-      - TMDB_API_KEY=${VITE_TMDB_READ_API_KEY}
       - API_PORT=8787
       - BIND_HOST=0.0.0.0
       - OVERRIDE_CONFIG_PATH=/app/data/user-config.json

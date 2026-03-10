@@ -112,16 +112,7 @@ function ErrorScreen(props: {
           </Button>
         </div>
       ) : null}
-      {props.showDisconnectButton ? (
-        <div className="mt-6">
-          <Button
-            theme="secondary"
-            onClick={() => setShowDisconnectConfirm(true)}
-          >
-            {t("screens.loadingUserError.disconnect")}
-          </Button>
-        </div>
-      ) : null}
+
       {props.showReloadButton ? (
         <div className="mt-6">
           <Button theme="secondary" onClick={() => window.location.reload()}>
@@ -172,7 +163,6 @@ function AuthWrapper() {
       <ErrorScreen
         showResetButton={isCustomUrl}
         showLogoutButton={!isCustomUrl}
-        showDisconnectButton={!isCustomUrl}
         showReloadButton={!isCustomUrl}
       >
         {t(

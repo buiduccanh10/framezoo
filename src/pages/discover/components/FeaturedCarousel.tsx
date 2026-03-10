@@ -16,7 +16,6 @@ import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
-import { conf } from "@/setup/config";
 import { useDiscoverStore } from "@/stores/discover";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -234,7 +233,6 @@ export function FeaturedCarousel({
               get<any>(
                 `/${effectiveCategory === "movies" ? "movie" : "tv"}/${id}`,
                 {
-                  api_key: conf().TMDB_READ_API_KEY,
                   language: formattedLanguage,
                   append_to_response: "external_ids",
                 },
@@ -261,7 +259,6 @@ export function FeaturedCarousel({
             if (effectiveCategory === "movies") {
               // First get the list of popular movies
               const listData = await get<any>("/movie/popular", {
-                api_key: conf().TMDB_READ_API_KEY,
                 language: formattedLanguage,
               });
 
@@ -270,7 +267,6 @@ export function FeaturedCarousel({
                 .slice(0, FETCH_QUANTITY)
                 .map((movie: any) =>
                   get<any>(`/movie/${movie.id}`, {
-                    api_key: conf().TMDB_READ_API_KEY,
                     language: formattedLanguage,
                     append_to_response: "external_ids",
                   }),
@@ -290,7 +286,6 @@ export function FeaturedCarousel({
             } else if (effectiveCategory === "tvshows") {
               // First get the list of popular shows
               const listData = await get<any>("/tv/popular", {
-                api_key: conf().TMDB_READ_API_KEY,
                 language: formattedLanguage,
               });
 
@@ -299,7 +294,6 @@ export function FeaturedCarousel({
                 .slice(0, FETCH_QUANTITY)
                 .map((show: any) =>
                   get<any>(`/tv/${show.id}`, {
-                    api_key: conf().TMDB_READ_API_KEY,
                     language: formattedLanguage,
                     append_to_response: "external_ids",
                   }),
@@ -345,7 +339,6 @@ export function FeaturedCarousel({
           // Fetch items
           const moviePromises = selectedMovieIds.map(({ id }) =>
             get<any>(`/movie/${id}`, {
-              api_key: conf().TMDB_READ_API_KEY,
               language: formattedLanguage,
               append_to_response: "external_ids",
             }),
@@ -353,7 +346,6 @@ export function FeaturedCarousel({
 
           const showPromises = selectedShowIds.map(({ id }) =>
             get<any>(`/tv/${id}`, {
-              api_key: conf().TMDB_READ_API_KEY,
               language: formattedLanguage,
               append_to_response: "external_ids",
             }),

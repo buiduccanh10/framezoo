@@ -135,7 +135,7 @@ export function TMDBIdToUrlId(
     "tmdb",
     mediaTypeToTMDB(type),
     tmdbId,
-    slugify(title, { lower: true, strict: true }),
+    slugify(title, { lower: true, strict: true }) || "media",
   ].join("-");
 }
 
@@ -168,14 +168,11 @@ export function decodeTMDBId(
   };
 }
 
-const tmdbBaseUrl1 = "https://api.themoviedb.org/3/";
-const tmdbBaseUrl2 = "https://api.tmdb.org/3/";
-
-const apiKey = conf().TMDB_READ_API_KEY;
+const tmdbBaseUrl1 = `${conf().BACKEND_URL}/api/tmdb/`;
+const tmdbBaseUrl2 = `${conf().BACKEND_URL}/api/tmdb/`;
 
 const tmdbHeaders = {
   accept: "application/json",
-  Authorization: `Bearer ${apiKey}`,
 };
 
 // Cache for TMDB API responses
@@ -217,8 +214,6 @@ export async function get<T>(url: string, params?: object): Promise<T> {
   const userLanguage = useLanguageStore.getState().language;
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
-  if (!apiKey) throw new Error("TMDB API key not set");
-
   // Check cache first
   const cacheKey: TMDBCacheKey = {
     url,
@@ -232,11 +227,18 @@ export async function get<T>(url: string, params?: object): Promise<T> {
   }
 
   // directly writing parameters, otherwise it will start the first parameter in the proxied request as "&" instead of "?" because it doesnt understand its proxied
-  const fullUrl = new URL(tmdbBaseUrl1 + url);
-  const allParams = {
+  // Ensure base and path are joined correctly without double slashes
+  const baseUrl = tmdbBaseUrl1.endsWith("/")
+    ? tmdbBaseUrl1
+    : `${tmdbBaseUrl1}/`;
+  const cleanUrl = url.startsWith("/") ? url.slice(1) : url;
+  const fullUrl = new URL(baseUrl + cleanUrl);
+
+  const allParams: any = {
     ...params,
     language: formattedLanguage,
   };
+  delete allParams.api_key;
 
   if (allParams) {
     Object.entries(allParams).forEach(([key, value]) => {

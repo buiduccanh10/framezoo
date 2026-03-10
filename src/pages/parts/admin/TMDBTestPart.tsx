@@ -8,10 +8,8 @@ import { Icon, Icons } from "@/components/Icon";
 import { Box } from "@/components/layout/Box";
 import { Spinner } from "@/components/layout/Spinner";
 import { Heading2 } from "@/components/utils/Text";
-import { conf } from "@/setup/config";
 
 export function TMDBTestPart() {
-  const tmdbApiKey = conf().TMDB_READ_API_KEY;
   const [status, setStatus] = useState({
     hasTested: false,
     success: false,
@@ -25,30 +23,15 @@ export function TMDBTestPart() {
       errorText: "",
     });
 
-    if (!tmdbApiKey || tmdbApiKey.length === 0) {
-      return setStatus({
-        hasTested: true,
-        success: false,
-        errorText: "TMDB API key is not set",
-      });
-    }
-    const isJWT = tmdbApiKey.split(".").length > 2;
-    if (!isJWT) {
-      return setStatus({
-        hasTested: true,
-        success: false,
-        errorText: "TMDB API key is not a read only key",
-      });
-    }
-
     try {
+      // Test connectivity through backend proxy by fetching a known movie
       await getMediaDetails("556574", TMDBContentTypes.MOVIE);
-    } catch (err) {
+    } catch {
       return setStatus({
         hasTested: true,
         success: false,
         errorText:
-          "Failed to call TMDB, double check API key and your internet connection",
+          "Failed to call TMDB via Backend. Ensure TMDB_API_KEY is correctly set in backend .env and backend is running.",
       });
     }
 
@@ -57,7 +40,7 @@ export function TMDBTestPart() {
       success: true,
       errorText: "",
     });
-  }, [tmdbApiKey, setStatus]);
+  }, [setStatus]);
 
   return (
     <>

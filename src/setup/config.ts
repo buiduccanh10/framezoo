@@ -12,7 +12,6 @@ interface Config {
   FLUXER_LINK: string;
   DMCA_EMAIL: string;
   TWITTER_LINK: string;
-  TMDB_READ_API_KEY: string;
   CORS_PROXY_URL: string;
   M3U8_PROXY_URL: string;
   NORMAL_ROUTER: boolean;
@@ -47,8 +46,8 @@ export interface RuntimeConfig {
   FLUXER_LINK: string;
   DMCA_EMAIL: string | null;
   TWITTER_LINK: string;
-  TMDB_READ_API_KEY: string | null;
   ALLOW_DEBRID_KEY: boolean;
+
   NORMAL_ROUTER: boolean;
   PROXY_URLS: string[];
   M3U8_PROXY_URLS: string[];
@@ -78,11 +77,11 @@ export interface RuntimeConfig {
 }
 
 const env: Record<keyof Config, undefined | string> = {
-  TMDB_READ_API_KEY: import.meta.env.VITE_TMDB_READ_API_KEY,
   APP_VERSION: undefined,
   GITHUB_LINK: undefined,
   FLUXER_LINK: undefined,
   TWITTER_LINK: undefined,
+
   ONBOARDING_CHROME_EXTENSION_INSTALL_LINK: import.meta.env
     .VITE_ONBOARDING_CHROME_EXTENSION_INSTALL_LINK,
   ONBOARDING_FIREFOX_EXTENSION_INSTALL_LINK: import.meta.env
@@ -168,7 +167,6 @@ export function conf(): RuntimeConfig {
       }
       return backendUrlValue;
     })(),
-    TMDB_READ_API_KEY: getKey("TMDB_READ_API_KEY"),
     PROXY_URLS: getKey("CORS_PROXY_URL", "")
       .split(",")
       .map((v) => v.trim())

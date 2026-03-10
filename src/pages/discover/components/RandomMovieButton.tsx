@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { get } from "@/backend/metadata/tmdb";
 import { Movie } from "@/pages/discover/common";
-import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
 
@@ -26,10 +25,10 @@ export function RandomMovieButton() {
     const fetchMovies = async () => {
       try {
         const data = await get<TMDBMovieResponse>("/movie/popular", {
-          api_key: conf().TMDB_READ_API_KEY,
           language: formattedLanguage,
           page: 2,
         });
+
         setMovies(data.results);
       } catch (error) {
         console.error("Error fetching popular movies:", error);
