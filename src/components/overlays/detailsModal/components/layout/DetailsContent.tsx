@@ -1,12 +1,15 @@
 import { t } from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCopyToClipboard } from "react-use";
 
-import { getSeasonDetails } from "@/backend/metadata/tmdb";
+import { TMDBIdToUrlId, getSeasonDetails } from "@/backend/metadata/tmdb";
 import { getNetworkContent } from "@/backend/metadata/traktApi";
+import { MWMediaType } from "@/backend/metadata/types/mw";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
+import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
@@ -26,6 +29,7 @@ import { DetailsBody } from "../sections/DetailsBody";
 import { DetailsInfo } from "../sections/DetailsInfo";
 
 export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
+  const navigate = useNavigate();
   const [imdbData, setImdbData] = useState<any>(null);
   const [rtData, setRtData] = useState<any>(null);
   const [providerData, setProviderData] = useState<string | undefined>(
@@ -217,29 +221,41 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   }, [data.imdbId, data.title, data.releaseDate, data.type]);
 
   const handlePlayClick = () => {
+    if (!data.id) return;
+
     if (data.type === "movie") {
-      window.location.assign(
-        `/media/tmdb-movie-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+      const urlId = TMDBIdToUrlId(
+        MWMediaType.MOVIE,
+        data.id.toString(),
+        data.title,
       );
+      navigate(`/media/${urlId}`);
     } else if (data.type === "show") {
+      const urlId = TMDBIdToUrlId(
+        MWMediaType.SERIES,
+        data.id.toString(),
+        data.title,
+      );
       if (showProgress?.season?.id && showProgress?.episode?.id) {
-        window.location.assign(
-          `/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${showProgress.season.id}/${showProgress.episode.id}`,
+        navigate(
+          `/media/${urlId}/${showProgress.season.id}/${showProgress.episode.id}`,
         );
       } else {
         // Start new show
-        window.location.assign(
-          `/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-        );
+        navigate(`/media/${urlId}`);
       }
     }
   };
 
   const handleShareClick = () => {
-    const shareUrl =
-      data.type === "movie"
-        ? `${window.location.origin}/media/tmdb-movie-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
-        : `${window.location.origin}/media/tmdb-tv-${data.id}-${data.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+    if (!data.id) return;
+    const urlId = TMDBIdToUrlId(
+      data.type === "movie" ? MWMediaType.MOVIE : MWMediaType.SERIES,
+      data.id.toString(),
+      data.title,
+    );
+    const middlePart = conf().NORMAL_ROUTER ? "" : "/#";
+    const shareUrl = `${window.location.origin}${middlePart}/media/${urlId}`;
 
     // Check if the device is iOS and share API is available
     if (/iPad|iPhone|iPod/i.test(navigator.userAgent) && navigator.share) {
@@ -314,7 +330,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
           onMovieClick={(movieId) => {
             setShowCollection(false);
             // Optionally navigate to the movie details
-            window.location.href = `/media/tmdb-movie-${movieId}`;
+            navigate(`/media/tmdb-movie-${movieId}`);
           }}
         />
       )}
