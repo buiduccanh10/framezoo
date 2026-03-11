@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { type SubtitleData, searchSubtitles } from "wyzie-lib";
 
 import { CaptionListItem } from "@/stores/player/slices/source";
