@@ -10,7 +10,9 @@ export type DiscoverContentType =
   | "genre"
   | "provider"
   | "editorPicks"
-  | "recommendations";
+  | "recommendations"
+  | "trending"
+  | "search";
 
 export type MediaType = "movie" | "tv";
 

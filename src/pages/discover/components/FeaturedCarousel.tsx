@@ -6,12 +6,7 @@ import { useWindowSize } from "react-use";
 
 import { isExtensionActive } from "@/backend/extension/messaging";
 import { get, getMediaLogo } from "@/backend/metadata/tmdb";
-import {
-  getDiscoverContent,
-  getReleaseDetails,
-} from "@/backend/metadata/traktApi";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
-import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
@@ -129,6 +124,7 @@ export function FeaturedCarousel({
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [media, setMedia] = useState<FeaturedMedia[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const [logoUrl, setLogoUrl] = useState<string | undefined>();
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -146,9 +142,6 @@ export function FeaturedCarousel({
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
   const { width: windowWidth, height: windowHeight } = useWindowSize();
-  const [releaseInfo, setReleaseInfo] = useState<TraktReleaseResponse | null>(
-    null,
-  );
   const [contentOpacity, setContentOpacity] = useState(1);
 
   const currentMedia = media[currentIndex];
@@ -209,108 +202,68 @@ export function FeaturedCarousel({
       // Clear all previous data when transitioning
       setLogoUrl(undefined);
       setImdbRatings({});
-      setReleaseInfo(null);
       setCurrentIndex(0);
       setContentOpacity(1);
       if (logoFetchController.current) {
-        logoFetchController.current.abort(); // Cancel any in-progress logo fetches
+        logoFetchController.current.abort();
       }
+
       try {
+        setIsLoading(true);
         if (effectiveCategory === "movies" || effectiveCategory === "tvshows") {
-          // First try to get IDs from Trakt discover endpoint
-          try {
-            const discoverData = await getDiscoverContent();
+          // TMDB method
+          if (effectiveCategory === "movies") {
+            // First get the list of popular movies
+            const listData = await get<any>("/movie/popular", {
+              language: formattedLanguage,
+            });
 
-            let tmdbIds: number[] = [];
-            if (effectiveCategory === "movies") {
-              tmdbIds = discoverData.movie_tmdb_ids;
-            } else {
-              tmdbIds = discoverData.tv_tmdb_ids;
-            }
-
-            // Then fetch full details for each movie/show to get external_ids
-            const detailPromises = tmdbIds.map((id) =>
-              get<any>(
-                `/${effectiveCategory === "movies" ? "movie" : "tv"}/${id}`,
-                {
+            // Then fetch full details for each movie to get external_ids
+            const moviePromises = listData.results
+              .slice(0, FETCH_QUANTITY)
+              .map((movie: any) =>
+                get<any>(`/movie/${movie.id}`, {
                   language: formattedLanguage,
                   append_to_response: "external_ids",
-                },
-              ),
-            );
+                }),
+              );
 
-            const details = await Promise.all(detailPromises);
-            const mediaItems = details.map((item) => ({
-              ...item,
-              type:
-                effectiveCategory === "movies" ? "movie" : ("show" as const),
+            const movieDetails = await Promise.all(moviePromises);
+            const allMovies = movieDetails.map((movie) => ({
+              ...movie,
+              type: "movie" as const,
             }));
 
-            // Take the first SLIDE_QUANTITY items
-            setMedia(mediaItems.slice(0, SLIDE_QUANTITY));
-          } catch (traktError) {
-            console.error(
-              "Falling back to TMDB method",
-              "Error fetching from Trakt discover:",
-              traktError,
+            // Shuffle
+            const shuffledMovies = [...allMovies].sort(
+              () => 0.5 - Math.random(),
             );
+            setMedia(shuffledMovies.slice(0, SLIDE_QUANTITY));
+          } else if (effectiveCategory === "tvshows") {
+            // First get the list of popular shows
+            const listData = await get<any>("/tv/popular", {
+              language: formattedLanguage,
+            });
 
-            // Fallback to TMDB method
-            if (effectiveCategory === "movies") {
-              // First get the list of popular movies
-              const listData = await get<any>("/movie/popular", {
-                language: formattedLanguage,
-              });
-
-              // Then fetch full details for each movie to get external_ids
-              const moviePromises = listData.results
-                .slice(0, FETCH_QUANTITY)
-                .map((movie: any) =>
-                  get<any>(`/movie/${movie.id}`, {
-                    language: formattedLanguage,
-                    append_to_response: "external_ids",
-                  }),
-                );
-
-              const movieDetails = await Promise.all(moviePromises);
-              const allMovies = movieDetails.map((movie) => ({
-                ...movie,
-                type: "movie" as const,
-              }));
-
-              // Shuffle
-              const shuffledMovies = [...allMovies].sort(
-                () => 0.5 - Math.random(),
+            // Then fetch full details for each show to get external_ids
+            const showPromises = listData.results
+              .slice(0, FETCH_QUANTITY)
+              .map((show: any) =>
+                get<any>(`/tv/${show.id}`, {
+                  language: formattedLanguage,
+                  append_to_response: "external_ids",
+                }),
               );
-              setMedia(shuffledMovies.slice(0, SLIDE_QUANTITY));
-            } else if (effectiveCategory === "tvshows") {
-              // First get the list of popular shows
-              const listData = await get<any>("/tv/popular", {
-                language: formattedLanguage,
-              });
 
-              // Then fetch full details for each show to get external_ids
-              const showPromises = listData.results
-                .slice(0, FETCH_QUANTITY)
-                .map((show: any) =>
-                  get<any>(`/tv/${show.id}`, {
-                    language: formattedLanguage,
-                    append_to_response: "external_ids",
-                  }),
-                );
+            const showDetails = await Promise.all(showPromises);
+            const allShows = showDetails.map((show) => ({
+              ...show,
+              type: "show" as const,
+            }));
 
-              const showDetails = await Promise.all(showPromises);
-              const allShows = showDetails.map((show) => ({
-                ...show,
-                type: "show" as const,
-              }));
-
-              // Shuffle
-              const shuffledShows = [...allShows].sort(
-                () => 0.5 - Math.random(),
-              );
-              setMedia(shuffledShows.slice(0, SLIDE_QUANTITY));
-            }
+            // Shuffle
+            const shuffledShows = [...allShows].sort(() => 0.5 - Math.random());
+            setMedia(shuffledShows.slice(0, SLIDE_QUANTITY));
           }
         } else if (effectiveCategory === "editorpicks") {
           // Shuffle editor picks Ids
@@ -380,7 +333,6 @@ export function FeaturedCarousel({
   const handlePrevSlide = () => {
     setContentOpacity(0);
     setImdbRatings({});
-    setReleaseInfo(null);
 
     // Wait for fade out, then change index and fade in
     setTimeout(() => {
@@ -404,7 +356,6 @@ export function FeaturedCarousel({
   const handleNextSlide = () => {
     setContentOpacity(0);
     setImdbRatings({});
-    setReleaseInfo(null);
 
     // Wait for fade out, then change index and fade in
     setTimeout(() => {
@@ -512,7 +463,6 @@ export function FeaturedCarousel({
       autoPlayInterval.current = setInterval(() => {
         setContentOpacity(0);
         setImdbRatings({});
-        setReleaseInfo(null);
 
         // Wait for fade out, then change index and fade in
         setTimeout(() => {
@@ -531,20 +481,6 @@ export function FeaturedCarousel({
     };
   }, [isAutoPlaying, media.length]);
 
-  useEffect(() => {
-    const fetchReleaseInfo = async () => {
-      if (currentMedia?.id) {
-        try {
-          const info = await getReleaseDetails(currentMedia.id.toString());
-          setReleaseInfo(info);
-        } catch (error) {
-          console.error("Failed to fetch release info:", error);
-        }
-      }
-    };
-    fetchReleaseInfo();
-  }, [currentMedia?.id]);
-
   if (isLoading) {
     return <FeaturedCarouselSkeleton shorter={shorter} />;
   }
@@ -558,43 +494,6 @@ export function FeaturedCarousel({
   let searchClasses = "";
   if (searching) searchClasses = "opacity-0 transition-opacity duration-300";
   else searchClasses = "opacity-100 transition-opacity duration-300";
-
-  const getQualityIndicator = () => {
-    if (!releaseInfo || currentMedia.type === "show") return null;
-
-    const hasDigitalRelease = !!releaseInfo.digital_release_date;
-    const hasTheatricalRelease = !!releaseInfo.theatrical_release_date;
-
-    if (hasDigitalRelease) {
-      const digitalReleaseDate = new Date(releaseInfo.digital_release_date!);
-
-      if (new Date() >= digitalReleaseDate) {
-        return <span className="text-green-400">HD</span>;
-      }
-    }
-
-    if (hasTheatricalRelease) {
-      const theatricalReleaseDate = new Date(
-        releaseInfo.theatrical_release_date!,
-      );
-
-      if (new Date() >= theatricalReleaseDate) {
-        return (
-          <div className="px-2 py-1 rounded-lg backdrop-blur-sm bg-gray-600/40">
-            <span className="text-green-400">HD</span>
-          </div>
-        );
-      }
-
-      return (
-        <div className="px-2 py-1 rounded-lg backdrop-blur-sm bg-gray-600/40">
-          <span className="text-yellow-400">CAM</span>
-        </div>
-      );
-    }
-
-    return null;
-  };
 
   return (
     <div
@@ -677,8 +576,6 @@ export function FeaturedCarousel({
             type="button"
             onClick={() => {
               setContentOpacity(0);
-              setImdbRatings({});
-              setReleaseInfo(null);
 
               // Wait for fade out, then change index and fade in
               setTimeout(() => {
@@ -695,7 +592,7 @@ export function FeaturedCarousel({
               if (isAutoPlaying) {
                 autoPlayInterval.current = setInterval(() => {
                   setCurrentIndex((prev) => (prev + 1) % media.length);
-                }, 5000);
+                }, SLIDE_DURATION);
               }
             }}
             className={`w-2.5 h-2.5 rounded-full transition-all ${
@@ -732,13 +629,6 @@ export function FeaturedCarousel({
             )}
             {/* TMDB Rating and Year/Seasons */}
             <div className="flex items-center gap-2 text-sm text-white/80 mb-4">
-              {/* Quality Indicator */}
-              {getQualityIndicator() && (
-                <>
-                  {getQualityIndicator()}
-                  <span className="text-white/60">•</span>
-                </>
-              )}
               {currentMedia?.vote_average && (
                 <div className="flex items-center gap-1">
                   <Icon icon={Icons.TMDB} />

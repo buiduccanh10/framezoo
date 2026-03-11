@@ -17,7 +17,6 @@ import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsMod
 import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { TraktAuthHandler } from "@/components/TraktAuthHandler";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
 import { AboutPage } from "@/pages/About";
@@ -128,7 +127,6 @@ function App() {
 
   return (
     <Layout>
-      <TraktAuthHandler />
       <LanguageProvider />
       <NotificationModal id="notifications" />
       <KeyboardCommandsModal id="keyboard-commands" />

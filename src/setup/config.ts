@@ -30,10 +30,7 @@ interface Config {
   TRACK_SCRIPT: string; // like <script src="https://umami.com/script.js"></script>
   BANNER_MESSAGE: string;
   BANNER_ID: string;
-  USE_TRAKT: boolean;
-  TRAKT_CLIENT_ID: string;
-  TRAKT_CLIENT_SECRET: string;
-  TRAKT_REDIRECT_URI: string;
+
   HIDE_PROXY_ONBOARDING: boolean;
   SHOW_SUPPORT_BAR: boolean;
   SUPPORT_BAR_VALUE: string;
@@ -66,10 +63,7 @@ export interface RuntimeConfig {
   TRACK_SCRIPT: string | null;
   BANNER_MESSAGE: string | null;
   BANNER_ID: string | null;
-  USE_TRAKT: boolean;
-  TRAKT_CLIENT_ID: string | null;
-  TRAKT_CLIENT_SECRET: string | null;
-  TRAKT_REDIRECT_URI: string | null;
+
   HIDE_PROXY_ONBOARDING: boolean;
   SHOW_SUPPORT_BAR: boolean;
   SUPPORT_BAR_VALUE: string;
@@ -104,10 +98,7 @@ const env: Record<keyof Config, undefined | string> = {
   TRACK_SCRIPT: import.meta.env.VITE_TRACK_SCRIPT,
   BANNER_MESSAGE: import.meta.env.VITE_BANNER_MESSAGE,
   BANNER_ID: import.meta.env.VITE_BANNER_ID,
-  USE_TRAKT: import.meta.env.VITE_USE_TRAKT,
-  TRAKT_CLIENT_ID: import.meta.env.VITE_TRAKT_CLIENT_ID,
-  TRAKT_CLIENT_SECRET: import.meta.env.VITE_TRAKT_CLIENT_SECRET,
-  TRAKT_REDIRECT_URI: import.meta.env.VITE_TRAKT_REDIRECT_URI,
+
   HIDE_PROXY_ONBOARDING: import.meta.env.VITE_HIDE_PROXY_ONBOARDING,
   SHOW_SUPPORT_BAR: import.meta.env.VITE_SHOW_SUPPORT_BAR,
   SUPPORT_BAR_VALUE: import.meta.env.VITE_SUPPORT_BAR_VALUE,
@@ -201,10 +192,7 @@ export function conf(): RuntimeConfig {
     TRACK_SCRIPT: getKey("TRACK_SCRIPT"),
     BANNER_MESSAGE: getKey("BANNER_MESSAGE"),
     BANNER_ID: getKey("BANNER_ID"),
-    USE_TRAKT: getKey("USE_TRAKT", "false") === "true",
-    TRAKT_CLIENT_ID: getKey("TRAKT_CLIENT_ID"),
-    TRAKT_CLIENT_SECRET: getKey("TRAKT_CLIENT_SECRET"),
-    TRAKT_REDIRECT_URI: getKey("TRAKT_REDIRECT_URI"),
+
     HIDE_PROXY_ONBOARDING: getKey("HIDE_PROXY_ONBOARDING", "false") === "true",
     SHOW_SUPPORT_BAR: getKey("SHOW_SUPPORT_BAR", "false") === "true",
     SUPPORT_BAR_VALUE: getKey("SUPPORT_BAR_VALUE") ?? "",

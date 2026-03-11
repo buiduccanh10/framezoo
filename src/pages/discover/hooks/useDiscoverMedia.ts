@@ -2,28 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { get, getMediaDetails } from "@/backend/metadata/tmdb";
-import {
-  PROVIDER_TO_TRAKT_MAP,
-  getAppleMovieReleases,
-  getAppleTVReleases,
-  getDisneyMovies,
-  getDisneyTVShows,
-  getHBOMovies,
-  getHBOTVShows,
-  getHuluMovies,
-  getHuluTVShows,
-  getLatest4KReleases,
-  getLatestReleases,
-  getLatestTVReleases,
-  getNetflixMovies,
-  getNetflixTVShows,
-  getParamountMovies,
-  getParamountTVShows,
-  getPrimeMovies,
-  getPrimeTVShows,
-  getTop10Movies,
-} from "@/backend/metadata/traktApi";
-import { paginateResults } from "@/backend/metadata/traktFunctions";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import type {
   TMDBMovieData,
@@ -31,7 +9,6 @@ import type {
   TMDBShowData,
   TMDBShowSearchResult,
 } from "@/backend/metadata/types/tmdb";
-import type { TraktListResponse } from "@/backend/metadata/types/trakt";
 import {
   EDITOR_PICKS_MOVIES,
   EDITOR_PICKS_TV_SHOWS,
@@ -179,122 +156,6 @@ export function useDiscoverMedia({
       }
     },
     [formattedLanguage, page, mediaType, isCarouselView],
-  );
-
-  const fetchTraktMedia = useCallback(
-    async (traktFunction: () => Promise<TraktListResponse>) => {
-      try {
-        // Create a timeout promise
-        const timeoutPromise = new Promise<TraktListResponse>((_, reject) => {
-          setTimeout(() => reject(new Error("Trakt request timed out")), 3000);
-        });
-
-        // Race between the Trakt request and timeout
-        const response = await Promise.race([traktFunction(), timeoutPromise]);
-
-        // Check if response is null
-        if (!response) {
-          throw new Error("Trakt API returned null response");
-        }
-
-        // Paginate the results
-        const pageSize = isCarouselView ? 20 : 100; // Limit to 20 items for carousels, get more for detailed views
-        const { tmdb_ids: tmdbIds, hasMore: hasMoreResults } = paginateResults(
-          response,
-          page,
-          pageSize,
-          mediaType === "movie" ? "movie" : mediaType === "tv" ? "tv" : "both",
-        );
-
-        // For carousel views, we only need to fetch details for displayed items
-        const idsToFetch = isCarouselView ? tmdbIds.slice(0, 20) : tmdbIds;
-
-        // Fetch details for each TMDB ID
-        const mediaPromises = idsToFetch.map(async (tmdbId: number) => {
-          const endpoint = `/${mediaType}/${tmdbId}`;
-          try {
-            const data = await get<any>(endpoint, {
-              language: formattedLanguage,
-            });
-
-            return {
-              ...data,
-              type: mediaType === "movie" ? "movie" : "show",
-            };
-          } catch (err) {
-            console.error(`Error fetching details for TMDB ID ${tmdbId}:`, err);
-            return null; // Return null for failed items
-          }
-        });
-
-        // Use Promise.allSettled to handle failed requests gracefully
-        const settledResults = await Promise.allSettled(mediaPromises);
-
-        // Filter out failed requests and nulls
-        const results = settledResults
-          .filter(
-            (result): result is PromiseFulfilledResult<any> =>
-              result.status === "fulfilled" && result.value !== null,
-          )
-          .map((result) => result.value);
-
-        return {
-          results,
-          hasMore: hasMoreResults,
-        };
-      } catch (err) {
-        console.error("Error fetching Trakt media:", err);
-        throw err;
-      }
-    },
-    [mediaType, formattedLanguage, page, isCarouselView],
-  );
-
-  // Get Trakt function for provider
-  const getTraktProviderFunction = useCallback(
-    (providerId: string) => {
-      // Create the key based on provider ID and media type
-      const key = mediaType === "tv" ? `${providerId}tv` : providerId;
-      const trakt =
-        PROVIDER_TO_TRAKT_MAP[key as keyof typeof PROVIDER_TO_TRAKT_MAP];
-
-      if (!trakt) return null;
-
-      // Map trakt endpoint to corresponding function
-      switch (trakt) {
-        case "appletv":
-          return getAppleTVReleases;
-        case "applemovie":
-          return getAppleMovieReleases;
-        case "netflixmovies":
-          return getNetflixMovies;
-        case "netflixtv":
-          return getNetflixTVShows;
-        case "primemovies":
-          return getPrimeMovies;
-        case "primetv":
-          return getPrimeTVShows;
-        case "hulumovies":
-          return getHuluMovies;
-        case "hulutv":
-          return getHuluTVShows;
-        case "disneymovies":
-          return getDisneyMovies;
-        case "disneytv":
-          return getDisneyTVShows;
-        case "hbomovies":
-          return getHBOMovies;
-        case "hbotv":
-          return getHBOTVShows;
-        case "paramountmovies":
-          return getParamountMovies;
-        case "paramounttv":
-          return getParamountTVShows;
-        default:
-          return null;
-      }
-    },
-    [mediaType],
   );
 
   const fetchEditorPicks = useCallback(async () => {
@@ -448,7 +309,6 @@ export function useDiscoverMedia({
 
     const attemptFetch = async (type: DiscoverContentType) => {
       let data;
-      let traktProviderFunction;
 
       // Map content types to their endpoints and handling logic
       switch (type) {
@@ -480,30 +340,9 @@ export function useDiscoverMedia({
           }
           break;
 
-        case "top10":
-          data = await fetchTraktMedia(getTop10Movies);
-          setSectionTitle(t("discover.carousel.title.top10"));
-          break;
-
-        case "latest":
-          data = await fetchTraktMedia(getLatestReleases);
-          setSectionTitle(t("discover.carousel.title.latestReleases"));
-          break;
-
-        case "latest4k":
-          data = await fetchTraktMedia(getLatest4KReleases);
-          setSectionTitle(t("discover.carousel.title.4kReleases"));
-          break;
-
-        case "latesttv":
-          data = await fetchTraktMedia(getLatestTVReleases);
-          setSectionTitle(t("discover.carousel.title.latestTVReleases"));
-          break;
-
         case "genre":
           if (!id) throw new Error("Genre ID is required");
 
-          // Use TMDB for genres (Trakt genre endpoints removed)
           data = await fetchTMDBMedia(`/discover/${mediaType}`, {
             with_genres: id,
           });
@@ -517,56 +356,20 @@ export function useDiscoverMedia({
         case "provider":
           if (!id) throw new Error("Provider ID is required");
 
-          // Try to use Trakt provider endpoint if available
-          traktProviderFunction = getTraktProviderFunction(id);
-          if (traktProviderFunction) {
-            try {
-              data = await fetchTraktMedia(traktProviderFunction);
-              setSectionTitle(
-                mediaType === "movie"
-                  ? t("discover.carousel.title.moviesOn", {
-                      provider: providerName,
-                    })
-                  : t("discover.carousel.title.tvshowsOn", {
-                      provider: providerName,
-                    }),
-              );
-            } catch (traktErr) {
-              console.error(
-                "Trakt provider fetch failed, falling back to TMDB:",
-                traktErr,
-              );
-              // Fall back to TMDB
-              data = await fetchTMDBMedia(`/discover/${mediaType}`, {
-                with_watch_providers: id,
-                watch_region: "US",
-              });
-              setSectionTitle(
-                mediaType === "movie"
-                  ? t("discover.carousel.title.moviesOn", {
-                      provider: providerName,
-                    })
-                  : t("discover.carousel.title.tvshowsOn", {
-                      provider: providerName,
-                    }),
-              );
-            }
-          } else {
-            // Use TMDB if no Trakt endpoint exists for this provider
-            data = await fetchTMDBMedia(`/discover/${mediaType}`, {
-              with_watch_providers: id,
-              watch_region: "US",
-            });
-            setSectionTitle(
-              mediaType === "movie"
-                ? t("discover.carousel.title.moviesOn", {
-                    provider: providerName,
-                  })
-                : t("discover.carousel.title.tvshowsOn", {
-                    provider: providerName,
-                  }),
-            );
-          }
+          // Use TMDB for watch providers
+          data = await fetchTMDBMedia(`/discover/${mediaType}`, {
+            with_watch_providers: id,
+            watch_region: "US",
+          });
+          setSectionTitle(
+            mediaType === "movie"
+              ? t("discover.carousel.title.moviesOn", {
+                  provider: providerName,
+                })
+              : t("discover.carousel.title.tvshowsOn", {
+                  provider: providerName,
+                }),
+          );
           break;
 
         case "recommendations":
@@ -584,6 +387,19 @@ export function useDiscoverMedia({
               ? t("discover.carousel.title.editorPicksMovies")
               : t("discover.carousel.title.editorPicksShows"),
           );
+          break;
+
+        case "trending":
+          data = await fetchTMDBMedia(`/trending/${mediaType}/week`);
+          setSectionTitle(t("discover.carousel.title.trending"));
+          break;
+
+        case "search":
+          if (!mediaTitle) throw new Error("Search title is required");
+          data = await fetchTMDBMedia(`/search/${mediaType}`, {
+            query: mediaTitle,
+          });
+          setSectionTitle(t("discover.page.title"));
           break;
 
         default:
@@ -635,12 +451,10 @@ export function useDiscoverMedia({
     providerName,
     mediaTitle,
     fetchTMDBMedia,
-    fetchTraktMedia,
     fetchEditorPicks,
     fetchRecommendationsWithFedSimilar,
     t,
     page,
-    getTraktProviderFunction,
   ]);
 
   useEffect(() => {

@@ -1176,10 +1176,10 @@
         "nicknamePlaceholder": "Enter your nickname",
         "deviceNameLabel": "Device name",
         "deviceNamePlaceholder": "Personal phone",
-    "inviteCodeLabel": "Invite Code",
-    "inviteCodePlaceholder": "Enter friendx27s User ID",
-    "inviteCodeRequiredError": "Invite code is required",
-    "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
+        "inviteCodeLabel": "Invite Code",
+        "inviteCodePlaceholder": "Enter friendx27s User ID",
+        "inviteCodeRequiredError": "Invite code is required",
+        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Edit",
         "logoutButton": "Log out"
       },
@@ -1357,14 +1357,6 @@
       "tidb": {
         "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
         "tokenLabel": "API Key"
-      },
-      "trakt": {
-        "title": "Trakt",
-        "description": "Sync your watchlist and history with Trakt.",
-        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
-        "connect": "Connect Trakt",
-        "syncing": "Syncing...",
-        "disconnect": "Disconnect"
       }
     },
     "preferences": {

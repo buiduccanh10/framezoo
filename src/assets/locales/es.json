@@ -428,11 +428,15 @@
     "titles": {
       "69": {
         "default": "¿Te apetece algo picante?",
-        "extra": ["¡Feliz día 69 😘!"]
+        "extra": [
+          "¡Feliz día 69 😘!"
+        ]
       },
       "420": {
         "default": "¿Qué te gustaría ver este 4/20?",
-        "extra": ["¡Feliz 4/20 🥳!"]
+        "extra": [
+          "¡Feliz 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "¿Qué te gustaría ver esta tarde?",
@@ -442,11 +446,15 @@
       },
       "morning": {
         "default": "¿Qué te gustaría ver esta mañana?",
-        "extra": ["Escuché que “Antes del amanecer” es buena"]
+        "extra": [
+          "Escuché que “Antes del amanecer” es buena"
+        ]
       },
       "night": {
         "default": "¿Qué te gustaría ver esta noche?",
-        "extra": ["¿Cansado? Escuché que “El Exorcista” es buena."]
+        "extra": [
+          "¿Cansado? Escuché que “El Exorcista” es buena."
+        ]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -1345,14 +1353,6 @@
       "tidb": {
         "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
         "tokenLabel": "API Key"
-      },
-      "trakt": {
-        "title": "Trakt",
-        "description": "Sync your watchlist and history with Trakt.",
-        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
-        "connect": "Connect Trakt",
-        "syncing": "Syncing...",
-        "disconnect": "Disconnect"
       }
     },
     "preferences": {

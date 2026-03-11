@@ -234,7 +234,6 @@ export interface TMDBEpisodeResult {
   number: number;
   title: string;
   ids: {
-    trakt: number;
     tvdb: number;
     imdb: string;
     tmdb: number;

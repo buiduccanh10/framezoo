@@ -577,7 +577,7 @@ export function getMediaPoster(posterPath: string | null): string | undefined {
 
 /**
  * Fetches the poster URL for a movie or show from TMDB by ID.
- * Use this when importing from external sources (e.g. Trakt) that may not have poster URLs.
+ * Use this when importing from external sources that may not have poster URLs.
  */
 export async function getPosterForMedia(
   tmdbId: string,
@@ -616,7 +616,6 @@ export async function getEpisodes(
 
 /**
  * Resolve TMDB season and episode IDs for a show. Use when external sources
- * (e.g. Trakt) only provide season/episode numbers.
  */
 export async function getEpisodeIds(
   showTmdbId: string,

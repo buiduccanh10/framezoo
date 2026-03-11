@@ -1,9 +1,6 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
 
-import { getReleaseDetails } from "@/backend/metadata/traktApi";
-import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
 import { Button } from "@/components/buttons/Button";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { GroupDropdown } from "@/components/form/GroupDropdown";
@@ -24,9 +21,6 @@ export function DetailsBody({
   seasons,
   imdbData,
 }: DetailsBodyProps) {
-  const [releaseInfo, setReleaseInfo] = useState<TraktReleaseResponse | null>(
-    null,
-  );
   const addBookmarkWithGroups = useBookmarkStore(
     (s) => s.addBookmarkWithGroups,
   );
@@ -80,57 +74,6 @@ export function DetailsBody({
     }
   };
 
-  useEffect(() => {
-    const fetchReleaseInfo = async () => {
-      if (data.id) {
-        try {
-          const info = await getReleaseDetails(data.id.toString());
-          setReleaseInfo(info);
-        } catch (error) {
-          console.error("Failed to fetch release info:", error);
-        }
-      }
-    };
-    fetchReleaseInfo();
-  }, [data.id]);
-
-  const getQualityIndicator = () => {
-    if (!releaseInfo || data.type === "show") return null;
-
-    const hasDigitalRelease = !!releaseInfo.digital_release_date;
-    const hasTheatricalRelease = !!releaseInfo.theatrical_release_date;
-
-    if (hasDigitalRelease) {
-      const digitalReleaseDate = new Date(releaseInfo.digital_release_date!);
-
-      if (new Date() >= digitalReleaseDate) {
-        return <span className="text-green-400">HD</span>;
-      }
-    }
-
-    if (hasTheatricalRelease) {
-      const theatricalReleaseDate = new Date(
-        releaseInfo.theatrical_release_date!,
-      );
-
-      if (new Date() >= theatricalReleaseDate) {
-        return (
-          <div className="px-2 py-1 rounded-lg backdrop-blur-sm bg-gray-600/40">
-            <span className="text-green-400">HD</span>
-          </div>
-        );
-      }
-
-      return (
-        <div className="px-2 py-1 rounded-lg backdrop-blur-sm bg-gray-600/40">
-          <span className="text-yellow-400">CAM</span>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
   const formatDate = (dateString?: string) => {
     if (!dateString) return null;
     return new Date(dateString).getFullYear();
@@ -140,14 +83,6 @@ export function DetailsBody({
     <div className="space-y-4">
       {/* TMDB Rating and Year/Seasons */}
       <div className="flex flex-wrap items-center gap-2 text-sm text-white/80">
-        {/* Quality Indicator */}
-        {getQualityIndicator() && (
-          <>
-            {getQualityIndicator()}
-            <span className="text-white/60">•</span>
-          </>
-        )}
-
         {/* Ratings Group */}
         <div className="flex items-center gap-2">
           {voteAverage && (

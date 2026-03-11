@@ -428,33 +428,23 @@
     "titles": {
       "69": {
         "default": "هل ترغب في شيء مثير؟",
-        "extra": [
-          "يوم 69 سعيد 😘!"
-        ]
+        "extra": ["يوم 69 سعيد 😘!"]
       },
       "420": {
         "default": "ماذا تريد أن تشاهد اليوم؟",
-        "extra": [
-          "يوم 4/20 سعيد 🥳!"
-        ]
+        "extra": ["يوم 4/20 سعيد 🥳!"]
       },
       "day": {
         "default": "ماذا تريد أن تشاهد في هذه الظهيرة؟",
-        "extra": [
-          "يحيا AlphaFlix!"
-        ]
+        "extra": ["يحيا AlphaFlix!"]
       },
       "morning": {
         "default": "ماذا تريد أن تشاهد في هذا الصباح؟",
-        "extra": [
-          "تحيا AlphaFlix!"
-        ]
+        "extra": ["تحيا AlphaFlix!"]
       },
       "night": {
         "default": "ماذا تريد أن تشاهد في هذه الليلة؟",
-        "extra": [
-          "تحيا AlphaFlix!"
-        ]
+        "extra": ["تحيا AlphaFlix!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -1357,14 +1347,6 @@
       "tidb": {
         "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
         "tokenLabel": "API Key"
-      },
-      "trakt": {
-        "title": "Trakt",
-        "description": "Sync your watchlist and history with Trakt.",
-        "details": "Syncing might take a few minutes to complete. Changes on Trakt may conflict with local changes, so local items are prioritized.",
-        "connect": "Connect Trakt",
-        "syncing": "Syncing...",
-        "disconnect": "Disconnect"
       }
     },
     "preferences": {
@@ -1486,6 +1468,7 @@
         "genreShows": "مسلسلات {{genre}}",
         "categoryMovies": "أفلام {{category}}",
         "categoryShows": "مسلسلات {{category}}",
+        "trending": "رائج الآن",
         "top10": "Top 10"
       },
       "change": "تغيير",

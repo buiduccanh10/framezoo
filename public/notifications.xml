@@ -14,7 +14,6 @@
       <description>Minor update this time but some nice quality of life improvements!
 
 Changes:
-- Added a new 'Trakt Sync' setting. You can now sync your bookmarks and watch history to Trakt!
 - Added colored indicator for intro, recap, credits, and preview segments in the player!
 - Updated the pause overlay to show the episode rating instead of the show's rating.
 - Fixed subtitle enable/disable not persisting between episodes or media.
@@ -660,7 +659,6 @@ Most pages should now be working. If you had an account on the old site, your da
       <title>AlphaFlix v5.0.1</title>
       <description>Some minor updates this time:
 - Added network images to the details modal.
-- Added a letterboxd/trakt list page: "Discover All Lists."
 - Fixed audio description not displaying.
 - Automatically open the settings menu when failing to play.
 - Added a compact episodes view.
@@ -688,7 +686,6 @@ Most pages should now be working. If you had an account on the old site, your da
 
 New Features
 - Discover Page Overhaul: The Discover page has been completely rewritten.
-- New Trakt Sections: Explore new "Latest Releases" and "Top 4K" sections.
 - Featured Movies/Shows Carousel: A new slideshow of new and popular movies or shows is now on the Discover page.
 - Quality Indicators: See the video quality (HD or CAM) on the Details Modal or Featured Carousel.
 - Expanded Descriptions: Episode descriptions can now be expanded.
