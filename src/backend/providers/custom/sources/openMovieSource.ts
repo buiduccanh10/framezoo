@@ -6,12 +6,9 @@ import {
 } from "@p-stream/providers";
 
 const getBaseUrl = () => {
-  const envUrl =
-    import.meta.env.VITE_TMDB_EMBED_API_URL || "http://localhost:8787";
-  if (envUrl.startsWith("/") && typeof window !== "undefined") {
-    return window.location.origin + envUrl;
-  }
-  return envUrl;
+  const backendUrl =
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+  return `${backendUrl}/api/embed`;
 };
 
 const OPENMOVIE_API_BASE = `${getBaseUrl()}/api/streams`;

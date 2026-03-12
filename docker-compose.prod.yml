@@ -32,32 +32,6 @@ services:
       - betakiot_proxy_network
     restart: always
 
-  tmdb-embed-api:
-    build:
-      context: ../
-      dockerfile: ./betamovie/Dockerfile.tmdb
-      args:
-        TMDB_API_KEY: ${TMDB_API_KEY}
-    container_name: tmdb-embed-api
-    environment:
-      - TMDB_API_KEY=${TMDB_API_KEY}
-      - API_PORT=8787
-      - BIND_HOST=0.0.0.0
-      - OVERRIDE_CONFIG_PATH=/app/data/user-config.json
-      - ENABLE_PROXY=true
-    volumes:
-      - tmdb-api-data:/app/data
-    networks:
-      - pstream-prod-network
-      - betakiot_proxy_network
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8787/api/health || exit 1"]
-      interval: 30s
-      timeout: 5s
-      start_period: 20s
-      retries: 3
-
 
 networks:
   pstream-prod-network:
@@ -66,4 +40,3 @@ networks:
     external: true
 
 volumes:
-  tmdb-api-data:
