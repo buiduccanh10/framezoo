@@ -117,7 +117,7 @@ function VideoElement() {
         kind="subtitles"
         srcLang={language || "en"}
         src={trackObjectUrl}
-        default={shouldUseNativeTrack}
+        default
       />
     );
   }

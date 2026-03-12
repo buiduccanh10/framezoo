@@ -745,6 +745,12 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       }
       if (canWebkitFullscreen()) {
         if (videoElement) {
+          const tracks = videoElement.textTracks;
+          for (let i = 0; i < tracks.length; i++) {
+            if (tracks[i].kind === "subtitles") {
+              tracks[i].mode = "showing";
+            }
+          }
           emit("needstrack", true);
           (videoElement as any).webkitEnterFullscreen();
         }
