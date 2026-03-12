@@ -54,7 +54,6 @@ function useObjectUrl(cb: () => string | null, deps: any[]) {
   useEffect(() => {
     return () => {
       // this is intentionally done only in cleanup
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       if (lastObjectUrl.current) URL.revokeObjectURL(lastObjectUrl.current);
     };
   }, []);
@@ -68,13 +67,15 @@ function VideoElement() {
   const display = usePlayerStore((s) => s.display);
   const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
   const language = usePlayerStore((s) => s.caption.selected?.language);
+  const secondarySrtData = usePlayerStore((s) => s.caption.secondary?.srtData);
   const source = usePlayerStore((s) => s.source);
   const enableNativeSubtitles = usePreferencesStore(
     (s) => s.enableNativeSubtitles,
   );
   const trackObjectUrl = useObjectUrl(
-    () => (srtData ? convertSubtitlesToObjectUrl(srtData) : null),
-    [srtData],
+    () =>
+      srtData ? convertSubtitlesToObjectUrl(srtData, secondarySrtData) : null,
+    [srtData, secondarySrtData],
   );
 
   const asTrack = usePlayerStore((s) => s.caption.asTrack);
@@ -91,23 +92,32 @@ function VideoElement() {
 
   // Control track visibility based on setting
   useEffect(() => {
-    if (trackEl.current) {
-      trackEl.current.track.mode = shouldUseNativeTrack ? "showing" : "hidden";
-    }
-  }, [shouldUseNativeTrack, trackEl]);
+    const track = trackEl.current;
+    if (!track) return;
+
+    const setMode = () => {
+      track.track.mode = shouldUseNativeTrack ? "showing" : "hidden";
+    };
+
+    setMode();
+    track.addEventListener("load", setMode);
+    return () => {
+      track.removeEventListener("load", setMode);
+    };
+  }, [shouldUseNativeTrack, trackObjectUrl]);
 
   // Attach track when native subtitles are enabled
-  // SubtitleView handles showing custom captions when native subtitles are disabled
+  // SubtitleView handles showing custom captions when native subtitles is disabled
   let subtitleTrack: ReactNode = null;
-  if (shouldUseNativeTrack && trackObjectUrl && language) {
+  if (trackObjectUrl) {
     subtitleTrack = (
       <track
         ref={trackEl}
         label="AlphaFlix Captions"
         kind="subtitles"
-        srcLang={language}
+        srcLang={language || "en"}
         src={trackObjectUrl}
-        default
+        default={shouldUseNativeTrack}
       />
     );
   }

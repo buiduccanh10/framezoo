@@ -449,26 +449,34 @@
         "extra": ["Cảm thấy mệt? Tôi nghe nói phim The Exorcist hay đấy."]
       },
       "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
+        "default": "Bộ phim rùng rợn nào bạn muốn xem trong dịp Halloween này?",
         "extra": [
-          "Happy Halloween! 🎃👻",
+          "Chúc mừng Halloween! 🎃👻",
           "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
+          "Cho kẹo hay bị ghẹo! 🍬",
+          "Đó là Great Pumpkin, Charlie Brown!"
         ]
-      }
+      },
+      "dayTitle": "Chào buổi sáng",
+      "nightTitle": "Chào buổi tối",
+      "morningTitle": "Chào buổi sáng",
+      "afternoonTitle": "Chào buổi chiều",
+      "continue": "Tiếp tục xem",
+      "bookmarks": "Dấu trang chính",
+      "search": "Dấu trang tìm kiếm",
+      "favorites": "Phim yêu thích"
     },
     "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
+      "title": "BetaMovie cần sự giúp đỡ của bạn!",
+      "description": "BetaMovie hoạt động không vì lợi nhuận, và chúng tôi cần sự giúp đỡ để duy trì ứng dụng không có quảng cáo! Nếu bạn thích sử dụng BetaMovie, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải chi phí.",
+      "moreInfo": "Thêm thông tin",
+      "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng BetaMovie, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
+      "explanation2": "Nếu bạn muốn biết thêm thông tin, vui lòng tham gia ",
       "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+      "thankYou": "Cảm ơn sự ủng hộ của bạn!",
+      "donate": "Quyên góp",
+      "label": "Kinh phí dự án: ${{current}} / ${{goal}}",
+      "complete": "hoàn thành"
     }
   },
   "media": {
@@ -480,8 +488,8 @@
     },
     "episodeShort": "T",
     "seasonShort": "M",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
+    "seasonWatched": "Bạn có chắc chắn muốn đánh dấu mùa này là đã xem không?",
+    "seasonUnwatched": "Bạn có chắc chắn muốn đánh dấu mùa này là chưa xem không?"
   },
   "details": {
     "resume": "Tiếp tục",
@@ -500,6 +508,7 @@
     "watched": "Đã xem {{watched}} trên {{total}} ({{percentage}}%)",
     "airs": "Phát sóng",
     "endsAt": "Kết thúc tại {{time}}",
+    "metadata": "Siêu dữ liệu",
     "trailer": "Trailer",
     "trailers": "Trailers",
     "similar": "Tương tự",
@@ -539,12 +548,12 @@
       }
     },
     "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
+      "downloadDescription": "Bản tải xuống bao gồm:",
+      "uploadDescription": "Dữ liệu để tải lên:",
       "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
+        "bookmarks": "Phương tiện đã đánh dấu",
+        "progress": "Tiến trình xem",
+        "settings": "Cài đặt & Tùy chọn"
       }
     },
     "direct": {
@@ -584,7 +593,7 @@
         "processing": "Đang xử lý dữ liệu...",
         "error": "Tải dữ liệu lên thất bại. 😿",
         "success": "Dữ liệu của bạn đã được tải lên thành công! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
+        "successLocal": "Dữ liệu của bạn đã được lưu cục bộ! 🎉"
       },
       "file": {
         "description": "Chọn tệp bạn muốn tải lên",
@@ -593,13 +602,19 @@
         "name": "Tên tệp"
       },
       "exportedOn": "Xuất ra",
-      "previewTitle": "Preview:",
+      "previewTitle": "Xem trước:",
+      "setup": {
+        "title": "Thiết lập tải lên",
+        "description": "Để tải dữ liệu của bạn lên một máy chủ backend betaMovie, bạn trước hết phải cài đặt xong mọi thứ đã.",
+        "button": "Thực hiện cài đặt"
+      },
       "button": {
         "import": "Nhập dữ liệu",
         "processing": "Đang xử lý...",
         "success": "Hoàn tất quá trình nhập",
         "home": "Tiếp tục về trang chính",
-        "saveLocal": "Save locally"
+        "saveLocal": "Lưu cục bộ",
+        "start": "Tải dữ liệu lên"
       }
     },
     "back": "Quay về"
@@ -616,7 +631,8 @@
       "support": "Hỗ trợ",
       "discover": "Khám phá",
       "development": "Phát triển",
-      "desktop": "App Settings"
+      "desktop": "Cài đặt ứng dụng",
+      "account": "Cài đặt tài khoản"
     }
   },
   "notFound": {
@@ -767,7 +783,8 @@
         "openIn": "Mở trong...",
         "vlc": "VLC",
         "iina": "IINA",
-        "outplayer": "Outplayer",
+        "outplayer": "IINA",
+        "copyUrl": "Sao chép URL",
         "hlsOpenInDisclaimer": "Mở luồng HLS bằng trình phát bên ngoài CÓ THỂ KHÔNG HOẠT ĐỘNG!",
         "hlsDisclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. AlphaFlix không kiểm soát cách thức cung cấp tải xuống.<br /><br />Lưu ý bạn đang tải xuống danh sách phát HLS, <bold>những người không quen với các định dạng phát trực tuyến nâng cao không nên tải xuống</bold>. Hãy thử các nguồn khác cho các định dạng khác nhau.",
         "onAndroid": {
@@ -934,32 +951,32 @@
       }
     },
     "nextEpisode": {
-      "replay": "Replay",
-      "next": "Next episode",
-      "nextSeason": "Next season"
+      "replay": "Chơi lại",
+      "next": "Tập tiếp theo",
+      "nextSeason": "Mùa tiếp theo"
     },
     "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "title": "Tiếp tục xem?",
+      "description": "Tập này đã xem {{percentage}}%",
+      "resume": "Tiếp tục",
+      "restart": "Xem lại từ đầu"
     },
     "playbackError": {
-      "badge": "Playback error",
+      "badge": "Lỗi phát lại",
       "errors": {
-        "errorAborted": "The fetching of the media was aborted by the user's request.",
-        "errorDecode": "Despite having previously been determined to be usable, an error occurred while trying to decode the media resource, resulting in an error.",
-        "errorGenericMedia": "Unknown media error occurred.",
-        "errorNetwork": "Some kind of network error occurred which prevented the media from being successfully fetched, despite having previously been available.",
-        "errorNotSupported": "The media or media provider object is not supported."
+        "errorAborted": "Việc tải phương tiện đã bị hủy bỏ theo yêu cầu của người dùng.",
+        "errorDecode": "Mặc dù trước đó đã được xác định là có thể sử dụng được, nhưng đã xảy ra lỗi khi cố gắng giải mã tài nguyên phương tiện, dẫn đến lỗi.",
+        "errorGenericMedia": "Đã xảy ra lỗi phương tiện không xác định.",
+        "errorNetwork": "Đã xảy ra một số loại lỗi mạng ngăn cản việc tải phương tiện thành công, mặc dù trước đó đã có sẵn.",
+        "errorNotSupported": "Đối tượng phương tiện hoặc nhà cung cấp phương tiện không được hỗ trợ."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
+      "autoResumeText": "Đã xảy ra lỗi khi cố gắng phát phương tiện 😖. Đang tự động thử các nguồn khác...",
+      "copyDebugInfo": "Sao chép thông tin gỡ lỗi",
+      "debugInfo": "Kiểm tra console để biết thêm chi tiết.",
       "homeButton": "Về trang chính",
-      "resumeButton": "Try next sources",
-      "text": "There was an error trying to play the media 😖. Please try again or try a different source!",
-      "title": "Rất tiếc, đã hỏng!"
+      "resumeButton": "Thử các nguồn tiếp theo",
+      "text": "Đã xảy ra lỗi khi cố gắng phát phương tiện 😖. Vui lòng thử lại hoặc thử một nguồn khác!",
+      "title": "Phát video thất bại!"
     },
     "scraping": {
       "items": {
@@ -999,324 +1016,324 @@
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
-      "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
+      "remaining": "Còn {{timeLeft}} • Kết thúc lúc {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     },
     "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
+      "intro": "Mở đầu",
+      "recap": "Tóm tắt",
+      "credits": "Giới thiệu cuối"
     },
     "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
+      "intro": "Bỏ qua",
+      "recap": "Bỏ qua tóm tắt",
+      "credits": "Bỏ qua",
+      "skipSegments": "Bỏ qua phân đoạn",
+      "submitSegment": "Gửi phân đoạn",
+      "noSegments": "Không có phân đoạn bỏ qua nào khả dụng",
+      "startsAt": "Bắt đầu lúc {{time}}",
+      "endsAt": "Kết thúc lúc {{time}}",
+      "timeUnknown": "Không rõ thời gian",
+      "confidence": "độ tin cậy",
+      "submissions": "{{count}} lượt gửi",
+      "connectApiKeyMessage": "Để gửi các phân đoạn mới, hãy nhập khóa API TheIntroDB của bạn trong cài đặt kết nối",
+      "endOfVideo": "Kết thúc",
       "feedback": {
-        "title": "Was this skip correct?",
+        "title": "Việc bỏ qua này có đúng không?",
         "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
+          "title": "Gửi dấu thời gian cho TheIntroDB",
+          "description": "Đóng góp cho TheIntroDB bằng cách gửi dấu thời gian phân đoạn chính xác. Tất cả các lượt gửi đều được cộng đồng chấp nhận trước khi được công bố.",
+          "segmentType": "Loại phân đoạn",
           "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
+            "intro": "Mở đầu",
+            "recap": "Tóm tắt",
+            "credits": "Giới thiệu cuối",
+            "preview": "Xem trước"
           },
-          "startTimeLabel": "Start (s)",
+          "startTimeLabel": "Bắt đầu (s)",
           "endTimeLabel": "End (s)",
           "placeholders": {
             "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
+              "intro": "2:30 hoặc 150 (để trống nếu bắt đầu từ đầu)",
+              "recap": "2:30 hoặc 150 (để trống nếu bắt đầu từ đầu)",
+              "credits": "2:30 hoặc 150 (bắt buộc)",
+              "preview": "2:30 hoặc 150 (bắt buộc)"
             },
             "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
+              "intro": "3:30 hoặc 210 (bắt buộc)",
+              "recap": "3:30 hoặc 210 (bắt buộc)",
+              "credits": "3:30 hoặc 210 (để trống nếu kết thúc phim)",
+              "preview": "3:30 hoặc 210 (để trống nếu kết thúc phim)"
             }
           },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "whenToTitle": "Hướng dẫn dấu thời gian:",
+          "whenToDesc": "Nhập dấu thời gian bằng giây (ví dụ: 150), định dạng mm:ss (ví dụ: 2:30), hoặc định dạng hh:mm:ss (ví dụ: 1:42:20). Chúng tôi sẽ tự động chuyển đổi định dạng cho bạn.",
           "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
+            "startLabel": "Bắt đầu:",
+            "startDesc": "Bắt buộc - khi phần tín dụng bắt đầu chạy",
+            "endLabel": "Kết thúc:",
+            "endDesc": "Tùy chọn - để trống nếu kéo dài đến hết",
+            "durationLabel": "Thời lượng:",
+            "durationDesc": "Tối thiểu 5 giây nếu có cung cấp thời gian kết thúc",
+            "excludeLabel": "Loại trừ:",
+            "excludeDesc": "Các cảnh sau phần giới thiệu cuối",
             "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
+              "whenToTitle": "Hướng dẫn dấu thời gian intro:",
+              "startDesc": "Tùy chọn - để trống nếu intro bắt đầu từ đầu tập phim.",
+              "endDesc": "Bắt buộc - khi intro kết thúc (thường là khi thẻ tiêu đề hoặc nội dung chính của tập bắt đầu).",
+              "durationDesc": "Hầu hết các intro dài từ 30-90 giây. Tối thiểu 5 giây nếu cả bắt đầu và kết thúc đều được đặt.",
+              "excludeDesc": "Không bao gồm cold opens hoặc các cảnh trước intro; chỉ bao gồm trình tự tiêu đề chính."
             },
             "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
+              "whenToTitle": "Hướng dẫn dấu thời gian recap:",
+              "startDesc": "Tùy chọn - để trống nếu phần tóm tắt bắt đầu từ đầu tập phim.",
+              "endDesc": "Bắt buộc - khi phần tóm tắt kết thúc và nội dung mới bắt đầu.",
+              "durationDesc": "Các phần tóm tắt có độ dài khác nhau. Tối thiểu 5 giây nếu cả bắt đầu và kết thúc đều được đặt.",
+              "excludeDesc": "Chỉ phân đoạn \"tập trước\" hoặc tóm tắt; không bao gồm intro hoặc các cảnh mới."
             },
             "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
+              "whenToTitle": "Hướng dẫn dấu thời gian credits:",
+              "startDesc": "Bắt buộc - khi phần giới thiệu cuối bắt đầu (ví dụ: khi văn bản tín dụng đầu tiên xuất hiện).",
+              "endDesc": "Tùy chọn - để trống nếu phần tín dụng chạy đến hết tập tin.",
+              "durationDesc": "Tối thiểu 5 giây nếu có cung cấp thời gian kết thúc. Có thể kéo dài đến hết phương tiện.",
+              "excludeDesc": "Loại trừ các cảnh mid-credits hoặc post-credits; chỉ bao gồm phần chạy chữ tín dụng chính."
             },
             "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
+              "whenToTitle": "Hướng dẫn dấu thời gian preview:",
+              "startDesc": "Bắt buộc - khi phần xem trước bắt đầu (ví dụ: khi văn bản xem trước xuất hiện).",
+              "endDesc": "Tùy chọn - để trống nếu phần xem trước kết thúc ở cuối phương tiện.",
+              "durationDesc": "Phần xem trước có độ dài khác nhau. Tối thiểu 5 giây.",
+              "excludeDesc": "Phần xem trước thường dài 15-90 giây ở cuối tập phim, giới thiệu về tập tiếp theo."
             }
           },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
+          "cancel": "Hủy",
+          "submit": "Gửi",
+          "submitting": "Đang gửi...",
           "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
+            "tidbKey": "Khóa API TIDB chưa được đặt",
+            "mediaInfo": "Thông tin phương tiện không khả dụng",
+            "endTime": "Thời gian kết thúc là bắt buộc",
+            "startTime": "Thời gian bắt đầu là bắt buộc",
+            "submission": "Lỗi khi gửi dấu thời gian",
+            "segment": "Chưa chọn phân đoạn"
           },
           "success": {
-            "title": "Submission Successful! Thanks!"
+            "title": "Gửi thành công! Cảm ơn bạn!"
           }
         }
       }
     }
   },
   "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
+    "title": "Hỗ trợ",
+    "text": "BetaMovie được thiết kế để thân thiện nhất có thể với người dùng. Tuy nhiên, mọi người vẫn có những câu hỏi và thắc mắc. Trang này ở đây để giúp giải quyết những thiếu sót đó",
     "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
+      "body": "Bạn có thể tham gia <0>BetaMovie Fluxer</0> chính thức và đặt câu hỏi tại đó hoặc bạn có thể gửi email theo địa chỉ được cung cấp ở cuối trang này.",
+      "title": "Tôi có thể nhận trợ giúp ở đâu?"
     },
     "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
+      "body": "Chúng tôi có <0>GitHub</0> nơi bạn có thể tạo báo cáo vấn đề chi tiết trong kho lưu trữ của chúng tôi. Ngoài ra, nếu muốn, bạn có thể tạo pull request để tự khắc phục vấn đề.",
+      "title": "Làm thế nào để báo cáo lỗi hoặc vấn đề?"
     }
   },
   "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
+    "title": "Lời nhắn",
+    "text": "BetaMovie không tự nhiên mà có, nó được tạo ra chủ yếu bởi một người duy nhất (một người rất tuyệt vời).",
     "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
+      "body": "Bạn có thể tham gia <0>BetaMovie Fluxer</0> chính thức và đặt câu hỏi tại đó hoặc bạn có thể gửi email theo địa chỉ được cung cấp ở cuối trang này.",
+      "title": "Tôi có thể nhận trợ giúp ở đâu?"
     },
     "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
+      "body": "Chúng tôi có <0>GitHub</0> nơi bạn có thể tạo báo cáo vấn đề chi tiết trong kho lưu trữ của chúng tôi. Ngoài ra, nếu muốn, bạn có thể tạo pull request để tự khắc phục vấn đề.",
+      "title": "Làm thế nào để báo cáo lỗi hoặc vấn đề?"
     }
   },
   "screens": {
     "legal": {
       "title": "Legal / DMCA"
     },
-    "loadingApp": "Loading application",
-    "loadingUser": "Loading your profile",
+    "loadingApp": "Đang tải ứng dụng",
+    "loadingUser": "Đang tải hồ sơ của bạn",
     "loadingUserError": {
-      "logout": "Logout",
+      "logout": "Đăng xuất",
       "reset": "Đặt lại tùy chỉnh máy chủ",
-      "disconnect": "Disconnect from backend",
-      "text": "Failed to load your profile",
-      "reload": "Reload",
-      "textWithReset": "Failed to load your profile from your custom server, want to reset back to the default server?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "disconnect": "Ngắt kết nối khỏi backend",
+      "text": "Tải hồ sơ của bạn thất bại",
+      "reload": "Tải lại",
+      "textWithReset": "Tải hồ sơ của bạn từ máy chủ tùy chỉnh thất bại, bạn có muốn đặt lại về máy chủ mặc định không?",
+      "disconnectTitle": "Ngắt kết nối khỏi backend?",
+      "disconnectMessage": "Ngắt kết nối khỏi máy chủ tài khoản, duy trì dữ liệu cục bộ gần đây nhất. Các thay đổi và nội dung đã xem sẽ không được đồng bộ hóa cho đến khi bạn đăng nhập lại.",
+      "disconnectConfirm": "Xác nhận",
+      "disconectCancel": "Hủy"
     },
     "migration": {
-      "failed": "Failed to migrate your data. 😿",
-      "inProgress": "Please hold, we are migrating your data. This shouldn't take long..."
+      "failed": "Di chuyển dữ liệu của bạn thất bại. 😿",
+      "inProgress": "Vui lòng chờ, chúng tôi đang di chuyển dữ liệu của bạn. Việc này sẽ không mất nhiều thời gian..."
     }
   },
   "settings": {
     "search": {
-      "placeholder": "Search settings..."
+      "placeholder": "Tìm kiếm cài đặt..."
     },
     "all": {
-      "title": "All Settings"
+      "title": "Tất cả cài đặt"
     },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Device name",
-        "deviceNamePlaceholder": "Personal phone",
-        "editProfile": "Edit",
-        "logoutButton": "Log out"
+        "nicknameLabel": "Biệt danh",
+        "nicknamePlaceholder": "Nhập biệt danh của bạn",
+        "deviceNameLabel": "Tên thiết bị",
+        "deviceNamePlaceholder": "Điện thoại cá nhân",
+        "editProfile": "Chỉnh sửa",
+        "logoutButton": "Đăng xuất"
       },
       "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
+        "title": "Bảng quản trị",
+        "text": "Kiểm tra tình trạng của BetaMovie."
       },
       "actions": {
         "delete": {
-          "button": "Delete account",
-          "confirmButton": "Delete account",
-          "confirmDescription": "Are you sure you want to delete your account? All your data will be lost! ૮₍˶Ó﹏Ò ⑅₎ა",
-          "confirmTitle": "Are you sure?",
-          "text": "This action is irreversible. All data will be deleted and nothing can be recovered.",
-          "title": "Delete account"
+          "button": "Xóa tài khoản",
+          "confirmButton": "Xóa tài khoản",
+          "confirmDescription": "Bạn có chắc chắn muốn xóa tài khoản của mình không? Tất cả dữ liệu của bạn sẽ bị mất! ૮₍˶Ó﹏Ò ⑅₎ა",
+          "confirmTitle": "Bạn có chắc chắn không?",
+          "text": "Hành động này không thể hoàn tác. Tất cả dữ liệu sẽ bị xóa và không thể khôi phục.",
+          "title": "Xóa tài khoản"
         },
         "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
+          "title": "Di chuyển tài khoản",
+          "text": "Di chuyển tài khoản của bạn sang máy chủ mới hoặc tải xuống dữ liệu của bạn.",
+          "button": "Di chuyển tài khoản"
         },
-        "title": "Actions",
+        "title": "Hành động",
         "logoutAllDevices": {
-          "title": "End All Sessions",
-          "text": "This will sign you out from all devices linked to your account.",
-          "button": "Log Out of All Devices"
+          "title": "Kết thúc tất cả các phiên",
+          "text": "Điều này sẽ đăng xuất bạn khỏi tất cả các thiết bị được liên kết với tài khoản của bạn.",
+          "button": "Đăng xuất khỏi tất cả các thiết bị"
         }
       },
       "devices": {
-        "deviceNameLabel": "Device name",
-        "unknownDevice": "Unknown device, error decrypting name",
-        "failed": "Failed to load sessions",
-        "removeDevice": "Remove",
-        "title": "Devices"
+        "deviceNameLabel": "Tên thiết bị",
+        "unknownDevice": "Thiết bị không xác định, lỗi giải mã tên",
+        "failed": "Tải các phiên thất bại",
+        "removeDevice": "Xóa",
+        "title": "Thiết bị"
       },
       "profile": {
-        "finish": "Finish editing",
-        "firstColor": "Profile color one",
-        "secondColor": "Profile color two",
-        "title": "Edit profile picture",
-        "userIcon": "User icon"
+        "finish": "Hoàn tất chỉnh sửa",
+        "firstColor": "Màu hồ sơ thứ nhất",
+        "secondColor": "Màu hồ sơ thứ hai",
+        "title": "Chỉnh sửa ảnh hồ sơ",
+        "userIcon": "Biểu tượng người dùng"
       },
       "register": {
-        "cta": "Get started",
-        "text": "Share your watch progress between devices and keep them synced. ( ̧⸝⸝⍢⸝⸝)ෆ",
-        "title": "Sync to the Cloud"
+        "cta": "Bắt đầu",
+        "text": "Chia sẻ tiến trình xem của bạn giữa các thiết bị và giữ cho chúng luôn đồng bộ. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "title": "Đồng bộ hóa với Đám mây"
       },
-      "title": "Account"
+      "title": "Tài khoản"
     },
     "appearance": {
-      "activeTheme": "Active",
+      "activeTheme": "Đang hoạt động",
       "themes": {
-        "blue": "Blue",
-        "custom": "Custom",
-        "default": "Default",
-        "gray": "Gray",
-        "red": "Red",
-        "teal": "Teal",
-        "classic": "Classic",
-        "green": "Green",
+        "blue": "Xanh dương",
+        "custom": "Tùy chỉnh",
+        "default": "Mặc định",
+        "gray": "Xám",
+        "red": "Đỏ",
+        "teal": "Xanh mòng két",
+        "classic": "Cổ điển",
+        "green": "Xanh lá",
         "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
+        "pink": "Hồng",
+        "noir": "Đen",
+        "ember": "Hổ phách",
         "acid": "Acid",
         "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
+        "grape": "Nho",
+        "spiderman": "Spider-man",
+        "forest": "Rừng rậm",
         "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
+        "popsicle": "Kem que",
         "hulk": "Hulk",
-        "autumn": "Autumn",
+        "autumn": "Mùa thu",
         "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
+        "frost": "Băng giá",
+        "christmas": "Giáng sinh"
       },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "Chính",
+        "secondary": "Phụ",
+        "tertiary": "Bổ trợ"
       },
-      "title": "Appearance",
+      "title": "Giao diện",
       "options": {
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
+        "discover": "Mục Khám phá",
+        "discoverDescription": "Hiển thị mục Khám phá trên Trang chủ bên dưới các phương tiện đã đánh dấu của bạn. Được bật theo mặc định.",
+        "discoverLabel": "Mục Khám phá",
+        "featured": "Phương tiện nổi bật",
+        "featuredDescription": "Hiển thị băng chuyền các bộ phim và chương trình nổi bật ở đầu trang chủ của bạn! Bị tắt theo mặc định.",
+        "featuredLabel": "Phương tiện nổi bật",
+        "modal": "Hộp thoại chi tiết",
         "modalDescription": "Hiển thị chi tiết khi bạn nhấp vào thẻ phương tiện thay vì đi đến trang xem. Cần có Proxy hoặc Tiện ích mở rộng cho đoạn giới thiệu. Bị tắt theo mặc định.",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "modalLabel": "Hộp thoại chi tiết",
+        "logos": "Logo hình ảnh",
+        "logosDescription": "Hiển thị logo hình ảnh thay vì tiêu đề văn bản trong hộp thoại chi tiết và phần nổi bật. Được bật theo mặc định.",
+        "logosNotice": "Hầu hết các logo chỉ có tiếng Anh. Các ngôn ngữ khác có thể muốn tắt tính năng này!",
+        "logosLabel": "Logo hình ảnh",
+        "carouselView": "Chế độ xem băng chuyền",
+        "carouselViewDescription": "Hiển thị các phần đang xem và dấu trang của bạn dưới dạng băng chuyền thay vì dạng lưới. Bị tắt theo mặc định.",
+        "carouselViewLabel": "Chế độ xem băng chuyền",
+        "minimalCards": "Thẻ tối giản",
+        "minimalCardsDescription": "Ẩn nội dung văn bản (tiêu đề, loại, năm) trên thẻ phương tiện, chỉ hiển thị hình ảnh poster.",
+        "minimalCardsLabel": "Thẻ tối giản",
+        "forceCompactEpisodeView": "Bắt buộc xem tập tối giản",
+        "forceCompactEpisodeViewDescription": "Bắt buộc băng chuyền tập phim trong trình phát sử dụng chế độ xem dọc tối giản \"cổ điển\". Bị tắt theo mặc định.",
+        "homeSectionOrder": "Thứ tự phần trang chủ",
+        "homeSectionOrderDescription": "Kéo và thả để sắp xếp lại các phần đang xem và dấu trang trên trang chủ của bạn. Thứ tự nhóm có thể được chỉnh sửa từ trang chủ.",
+        "forceCompactEpisodeViewLabel": "Tập tối giản",
+        "homeSectionOrderGroups": "Sắp xếp lại các nhóm dấu trang",
+        "pauseOverlay": "Lớp phủ tạm dừng",
+        "pauseOverlayDescription": "Hiển thị lớp phủ tiêu đề/logo và mô tả khi trình phát bị tạm dừng và ở trạng thái rảnh.",
+        "pauseOverlayLabel": "Lớp phủ tạm dừng"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
+        "watching": "Đang xem",
+        "bookmarks": "Dấu trang"
       }
     },
     "connections": {
       "server": {
-        "description": "If you would like to connect to a custom backend to store your data, enable this and provide the URL. <0>Instructions.</0>",
-        "label": "Backend Server",
-        "urlLabel": "Custom server URL",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
+        "description": "Nếu bạn muốn kết nối với một backend tùy chỉnh để lưu trữ dữ liệu của mình, hãy bật tính năng này và cung cấp URL. <0>Hướng dẫn.</0>",
+        "label": "Máy chủ Backend",
+        "urlLabel": "URL máy chủ tùy chỉnh",
+        "selectBackend": "Chọn máy chủ Backend",
+        "currentBackend": "Backend hiện tại",
+        "changeWarning": "Thay đổi máy chủ backend sẽ đăng xuất bạn. Tiếp tục?",
+        "confirm": "Đăng xuất và thay đổi máy chủ",
+        "cancel": "Hủy",
+        "changeWarningTitle": "Thay đổi máy chủ Backend",
         "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
+          "description": "<0>Di chuyển dữ liệu của tôi</0> sang máy chủ mới.",
+          "link": "Di chuyển dữ liệu của tôi"
         },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
+        "documentation": "Tài liệu Backend",
+        "error": "Lỗi kết nối với backend",
+        "notice": "Tài khoản của bạn KHÔNG đồng bộ hóa giữa các backend, vì vậy hãy nhớ cái nào bạn sử dụng!"
       },
       "setup": {
-        "doSetup": "Do setup",
+        "doSetup": "Thực hiện thiết lập",
         "errorStatus": {
-          "description": "It seems that one or more items in this setup need your attention.",
-          "title": "Something needs your attention 😱"
+          "description": "Có vẻ như một hoặc nhiều mục trong thiết lập này cần sự chú ý của bạn.",
+          "title": "Có điều gì đó cần bạn chú ý 😱"
         },
         "itemError": "Cài đặt của bạn có gì đó sai. Hãy làm lại bước cài đặt để sửa chữa nó. (ᴗ_ ᴗ。)",
         "items": {
           "default": "Cài đặt mặc định",
           "extension": "Tiện ích mở rộng",
           "proxy": "Proxy tùy chỉnh",
-          "desktopapp": "Native app"
+          "desktopapp": "Ứng dụng gốc"
         },
         "redoSetup": "Thiết lập lại",
         "successStatus": {
@@ -1331,11 +1348,11 @@
       "title": "Kết nối",
       "workers": {
         "addButton": "Thêm worker mới",
-        "description": "Để làm ứng dụng hoạt động, mọi traffic đều được thông qua proxy. Kích hoạt cái này nếu bạn muốn mang theo workers của riêng bạn. <0>Instructions.</0>",
+        "description": "Để làm ứng dụng hoạt động, mọi traffic đều được thông qua proxy. Kích hoạt cái này nếu bạn muốn mang theo workers của riêng bạn. <0>Hướng dẫn.</0>",
         "documentation": "Tài liệu Proxy",
         "emptyState": "Chưa có workers (｡•́︿•̀｡), thêm ở phía dưới",
         "label": "Sử dụng các proxy worker tùy chỉnh",
-        "urlLabel": "Worker URLs",
+        "urlLabel": "URL của Worker",
         "urlPlaceholder": "https://",
         "proxyTMDB": {
           "title": "Proxy TMDB",
@@ -1343,98 +1360,98 @@
         }
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
+        "description": "Đóng góp cho TheIntroDB bằng cách để lại phản hồi về các phân đoạn intro, recap và credits. <0>Tìm hiểu thêm.</0>",
+        "tokenLabel": "Khóa API"
       }
     },
     "preferences": {
-      "title": "Preferences",
-      "language": "Application language",
-      "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
-      "thumbnail": "Generate thumbnails",
-      "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
-      "thumbnailLabel": "Generate thumbnails",
-      "autoplay": "Autoplay",
+      "title": "Tùy chọn",
+      "language": "Ngôn ngữ ứng dụng",
+      "languageDescription": "Ngôn ngữ áp dụng cho toàn bộ ứng dụng, chỉ tiếng Anh mới có những thứ ngớ ngẩn thôi 🙁.",
+      "thumbnail": "Tạo hình thu nhỏ",
+      "thumbnailDescription": "Hầu hết các video không có hình thu nhỏ. Bạn có thể bật cài đặt này để tạo chúng ngay lập tức nhưng chúng có thể làm video của bạn chạy chậm hơn.",
+      "thumbnailLabel": "Tạo hình thu nhỏ",
+      "autoplay": "Tự động phát",
       "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc. Người dùng có thể bật bằng tiện ích mở rộng trình duyệt, proxy tùy chỉnh hoặc bằng thiết lập mặc định nếu được máy chủ cho phép.",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "autoplayLabel": "Tự động phát",
+      "skipCredits": "Bỏ qua giới thiệu cuối",
+      "skipCreditsDescription": "Khi được bật, tự động phát tập tiếp theo khi hoàn thành 99% để bỏ qua phần giới thiệu cuối. Khi bị tắt, đợi cho đến khi tập phim hoàn thành hoàn toàn.",
+      "skipCreditsLabel": "Bỏ qua giới thiệu cuối",
+      "autoSkipSegments": "Tự động bỏ qua phân đoạn",
+      "autoSkipSegmentsDescription": "Khi được bật, tự động bỏ qua các phân đoạn intro, recap và preview khi đang xem.",
+      "autoSkipSegmentsLabel": "Tự động bỏ qua phân đoạn",
+      "lowPerformanceMode": "Chế độ hiệu suất/băng thông thấp",
       "lowPerformanceModeDescription": "Tối ưu hóa ứng dụng cho các kết nối và thiết bị chậm hơn bằng cách tắt các tính năng sử dụng nhiều băng thông. Chế độ này giúp giảm mức sử dụng dữ liệu và cải thiện hiệu suất trong khi vẫn giữ nguyên chức năng tìm kiếm và xem phim. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
+      "lowPerformanceModeLabel": "Chế độ hiệu suất thấp",
+      "holdToBoost": "Nhấn giữ để tăng tốc",
+      "holdToBoostDescription": "Nhấn giữ phím cách hoặc chạm và giữ màn hình để tạm thời tăng tốc độ phát lại lên 2x. Thả ra để quay lại tốc độ trước đó.",
+      "holdToBoostLabel": "Bật nhấn giữ để tăng tốc",
+      "doubleClickToSeek": "Nhấn đúp để tua",
+      "doubleClickToSeekDescription": "Nhấn đúp vào bên trái hoặc bên phải của trình phát để tua lùi hoặc tua đi 10 giây.",
+      "doubleClickToSeekLabel": "Bật nhấn đúp để tua",
+      "keyboardShortcuts": "Phím tắt bàn phím",
+      "keyboardShortcutsDescription": "Tùy chỉnh các phím tắt cho ứng dụng. Nhấn giữ ` để xem trợ giúp này bất cứ lúc nào",
+      "keyboardShortcutsLabel": "Tùy chỉnh phím tắt bàn phím",
+      "sourceOrder": "Sắp xếp lại nguồn",
       "sourceOrderDescription": "Kéo và thả để sắp xếp lại các nguồn. Thao tác này sẽ xác định thứ tự các nguồn được kiểm tra cho phương tiện bạn đang cố gắng xem. Nếu một nguồn bị mờ đi, điều đó có nghĩa là <bold>tiện ích mở rộng</bold> là bắt buộc đối với nguồn đó. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "sourceOrderEnableLabel": "Thứ tự nguồn tùy chỉnh",
+      "showLess": "Hiện ít hơn",
+      "showMore": "Hiện thêm",
+      "embedOrder": "Sắp xếp lại mã nhúng",
+      "embedOrderDescription": "Kéo và thả để sắp xếp lại các mã nhúng. Điều này sẽ xác định thứ tự các mã nhúng được kiểm tra cho phương tiện bạn đang cố gắng xem. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
+      "embedOrderEnableLabel": "Thứ tự mã nhúng tùy chỉnh",
+      "manualSource": "Lựa chọn nguồn thủ công",
+      "manualSourceDescription": "Yêu cầu chọn một nguồn trước khi tìm kiếm. Tắt lựa chọn nguồn tự động và mở trình chọn nguồn khi bắt đầu phát lại.",
+      "manualSourceLabel": "Lựa chọn nguồn thủ công",
+      "autoResumeOnPlaybackError": "Tự động tiếp tục khi lỗi phát lại",
+      "autoResumeOnPlaybackErrorDescription": "Tự động tiếp tục tìm kiếm các nguồn khác khi nguồn hiện tại thất bại trong quá trình phát lại. Nếu bị tắt, bạn sẽ thấy màn hình lỗi với tùy chọn tiếp tục thủ công.",
+      "autoResumeOnPlaybackErrorLabel": "Tự động tiếp tục khi lỗi phát lại",
+      "lastSuccessfulSource": "Nguồn sử dụng lần cuối",
+      "lastSuccessfulSourceDescription": "Tự động ưu tiên nguồn đã cung cấp nội dung thành công cho tập trước đó. Điều này giúp đảm bảo tính liên tục khi xem phim bộ.",
+      "lastSuccessfulSourceEnableLabel": "Nguồn sử dụng lần cuối"
     },
-    "reset": "Reset",
-    "save": "Save",
+    "reset": "Đặt lại",
+    "save": "Lưu",
     "sidebar": {
       "info": {
-        "appVersion": "App version",
-        "backendUrl": "Backend URL",
-        "backendVersion": "Backend version",
-        "hostname": "Hostname",
-        "insecure": "Insecure",
-        "nickname": "Nickname",
-        "notLoggedIn": "You are not logged in",
-        "secure": "Secure",
-        "title": "App stats",
-        "unknownVersion": "Unknown",
-        "userId": "User ID",
+        "appVersion": "Phiên bản ứng dụng",
+        "backendUrl": "URL Backend",
+        "backendVersion": "Phiên bản Backend",
+        "hostname": "Tên máy chủ",
+        "insecure": "Không an toàn",
+        "nickname": "Biệt danh",
+        "notLoggedIn": "Bạn chưa đăng nhập",
+        "secure": "An toàn",
+        "title": "Thống kê ứng dụng",
+        "unknownVersion": "Không rõ",
+        "userId": "ID người dùng",
         "userIdDescription": "Sử dụng mã này làm mã mời khi bạn bè đăng ký"
       }
     },
     "subtitles": {
-      "backgroundLabel": "Background opacity",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
-      "backgroundBlurLabel": "Background blur intensity",
-      "colorLabel": "Color",
-      "previewQuote": "Convinced life is meaningless, I lack the courage of my conviction.",
-      "textSizeLabel": "Text size",
-      "title": "Subtitles",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
+      "backgroundLabel": "Độ mờ nền",
+      "backgroundBlurEnabledLabel": "Làm mờ nền",
+      "backgroundBlurEnabledDescription": "Tắt làm mờ nền phụ đề có thể khắc phục một số vấn đề nhấp nháy",
+      "backgroundBlurLabel": "Cường độ làm mờ nền",
+      "colorLabel": "Màu sắc",
+      "previewQuote": "Tin rằng cuộc sống là vô nghĩa, tôi thiếu đi sự can đảm của niềm tin đó.",
+      "textSizeLabel": "Kích cỡ chữ",
+      "title": "Phụ đề",
+      "textBoldLabel": "Chữ đậm",
+      "verticalPositionLabel": "Vị trí dọc",
+      "high": "Cao",
+      "low": "Mặc định",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "title": "Kiểu chữ",
+        "default": "Mặc định",
+        "raised": "Nâng lên",
+        "depressed": "Hạ xuống",
+        "Border": "Viền",
+        "dropShadow": "Đổ bóng"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "BorderThicknessLabel": "Độ dày viền"
     },
-    "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
+    "unsaved": "Bạn có thay đổi chưa lưu... ฅ^•ﻌ•^ฅ"
   },
   "discover": {
     "tabs": {
@@ -1510,7 +1527,7 @@
         "4": "4. Sao chép giá trị của cookie 'ui'.",
         "5": "5. Đóng tab, nhưng ĐỪNG đăng xuất!"
       },
-      "tokenLabel": "Token",
+      "tokenLabel": "Mã Token",
       "tokenExample": {
         "button": "(Ví dụ)",
         "title": "Token ví dụ",

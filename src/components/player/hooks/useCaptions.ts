@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import subsrt from "subsrt-ts";
 
 import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
+import { useLanguageStore } from "@/stores/language";
 import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -14,6 +15,7 @@ import {
 
 export function useCaptions() {
   const setLanguage = useSubtitleStore((s) => s.setLanguage);
+  const userLanguage = useLanguageStore((s) => s.language);
   const enabled = useSubtitleStore((s) => s.enabled);
   const resetSubtitleSpecificSettings = useSubtitleStore(
     (s) => s.resetSubtitleSpecificSettings,
@@ -197,22 +199,22 @@ export function useCaptions() {
   }, [setCaption, setLanguage, setIsOpenSubtitles]);
 
   const selectLastUsedLanguage = useCallback(async () => {
-    const language = lastSelectedLanguage ?? "en";
+    const language = lastSelectedLanguage ?? userLanguage ?? "en";
     await selectLanguage(language);
     return true;
-  }, [lastSelectedLanguage, selectLanguage]);
+  }, [lastSelectedLanguage, userLanguage, selectLanguage]);
+
+  const selectLastUsedLanguageIfEnabled = useCallback(async () => {
+    if (enabled || !lastSelectedLanguage) await selectLastUsedLanguage();
+  }, [selectLastUsedLanguage, enabled, lastSelectedLanguage]);
 
   const toggleLastUsed = useCallback(async () => {
     if (enabled) disable();
     else await selectLastUsedLanguage();
   }, [selectLastUsedLanguage, disable, enabled]);
 
-  const selectLastUsedLanguageIfEnabled = useCallback(async () => {
-    if (enabled) await selectLastUsedLanguage();
-  }, [selectLastUsedLanguage, enabled]);
-
   const selectRandomCaptionFromLastUsedLanguage = useCallback(async () => {
-    const language = lastSelectedLanguage ?? "en";
+    const language = lastSelectedLanguage ?? userLanguage ?? "en";
 
     // Filter captions by language
     const languageCaptions = captions.filter(
@@ -237,11 +239,22 @@ export function useCaptions() {
 
     // Select the random caption
     await selectCaptionById(randomCaption.id);
-  }, [lastSelectedLanguage, captions, selectedCaption, selectCaptionById]);
+  }, [
+    lastSelectedLanguage,
+    userLanguage,
+    captions,
+    selectedCaption,
+    selectCaptionById,
+  ]);
 
   // Validate selected caption when caption list changes
   useEffect(() => {
-    if (!selectedCaption) return;
+    if (captions.length === 0) return;
+
+    if (!selectedCaption) {
+      if (enabled) selectLastUsedLanguage();
+      return;
+    }
 
     // Skip validation for custom/pasted captions that aren't in the caption list
     const isCustomCaption =
@@ -284,6 +297,8 @@ export function useCaptions() {
     setCaption,
     selectCaptionById,
     currentTranslateTask,
+    enabled,
+    selectLastUsedLanguage,
   ]);
 
   return {

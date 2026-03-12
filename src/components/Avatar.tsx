@@ -60,35 +60,35 @@ export function UserAvatar(props: {
 
   if (!auth.account || auth.account === null) return null;
 
-  const deviceName = bufferSeed
-    ? (() => {
-        try {
-          return decryptData(auth.account.deviceName, bufferSeed);
-        } catch (error) {
-          console.warn(
-            "Failed to decrypt device name in Avatar, using fallback:",
-            error,
-          );
-          return t("settings.account.devices.unknownDevice");
-        }
-      })()
-    : "...";
+  const displayName =
+    auth.account.nickname ||
+    (bufferSeed
+      ? (() => {
+          try {
+            return decryptData(auth.account.deviceName, bufferSeed);
+          } catch (error) {
+            console.warn(
+              "Failed to decrypt device name in Avatar, using fallback:",
+              error,
+            );
+            return t("settings.account.devices.unknownDevice");
+          }
+        })()
+      : "...");
 
   return (
     <>
       <Avatar
         profile={auth.account.profile}
-        sizeClass={
-          props.sizeClass ?? "w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem]"
-        }
+        sizeClass={props.sizeClass ?? "w-[1.5rem] h-[1.5rem]"}
         iconClass={props.iconClass}
         bottom={props.bottom}
       />
-      {props.withName && bufferSeed ? (
+      {props.withName ? (
         <span className="hidden md:inline-block">
-          {deviceName.length >= 20
-            ? `${deviceName.slice(0, 20 - 1)}…`
-            : deviceName}
+          {displayName.length >= 20
+            ? `${displayName.slice(0, 20 - 1)}…`
+            : displayName}
         </span>
       ) : null}
     </>

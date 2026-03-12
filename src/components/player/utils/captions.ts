@@ -86,9 +86,17 @@ export function convertSubtitlesToSrtDataurl(text: string): string {
   )}`;
 }
 
-export function convertSubtitlesToObjectUrl(text: string): string {
+export function convertSubtitlesToObjectUrl(
+  text: string,
+  secondaryText?: string,
+): string {
+  let vtt = convertSubtitlesToVtt(text);
+  if (secondaryText) {
+    const secondaryVtt = convertSubtitlesToVtt(secondaryText);
+    vtt = vtt + "\n\n" + secondaryVtt.replace(/^WEBVTT(?:[\r\n]+)?/i, "");
+  }
   return URL.createObjectURL(
-    new Blob([convertSubtitlesToVtt(text)], {
+    new Blob([vtt], {
       type: "text/vtt",
     }),
   );
