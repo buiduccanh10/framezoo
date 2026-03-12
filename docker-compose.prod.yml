@@ -38,5 +38,3 @@ networks:
     driver: bridge
   betakiot_proxy_network:
     external: true
-
-volumes:
