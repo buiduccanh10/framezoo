@@ -185,7 +185,10 @@ export function useCaptions() {
 
   const selectLanguage = useCallback(
     async (language: string) => {
-      const caption = captions.find((v) => v.language === language);
+      let caption = captions.find((v) => v.language === language);
+      if (!caption && language !== "en") {
+        caption = captions.find((v) => v.language === "en");
+      }
       if (!caption) return;
       return selectCaptionById(caption.id);
     },

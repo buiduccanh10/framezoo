@@ -500,6 +500,11 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         }
       }
     });
+    videoElement.addEventListener("webkitbeginfullscreen", () => {
+      isFullscreen = true;
+      emit("fullscreen", isFullscreen);
+      emit("needstrack", true);
+    });
     videoElement.addEventListener("webkitendfullscreen", () => {
       isFullscreen = false;
       emit("fullscreen", isFullscreen);
