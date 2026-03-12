@@ -36,8 +36,11 @@ services:
     build:
       context: ../
       dockerfile: ./betamovie/Dockerfile.tmdb
+      args:
+        TMDB_API_KEY: ${TMDB_API_KEY}
     container_name: tmdb-embed-api
     environment:
+      - TMDB_API_KEY=${TMDB_API_KEY}
       - API_PORT=8787
       - BIND_HOST=0.0.0.0
       - OVERRIDE_CONFIG_PATH=/app/data/user-config.json

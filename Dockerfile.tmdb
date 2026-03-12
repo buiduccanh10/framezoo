@@ -1,6 +1,8 @@
 # ---------- Build Stage ----------
 FROM node:20-alpine AS build
 ARG VERSION=dev
+ARG TMDB_API_KEY
+ENV TMDB_API_KEY=${TMDB_API_KEY}
 WORKDIR /app
 
 # Install only production dependencies first (leveraging cache)
@@ -20,11 +22,13 @@ COPY provider-db-api/README.md ./
 # ---------- Runtime Stage ----------
 FROM node:20-alpine AS runtime
 ARG VERSION=dev
+ARG TMDB_API_KEY
 WORKDIR /app
 ENV NODE_ENV=production \
     API_PORT=8787 \
     BIND_HOST=0.0.0.0 \
-    APP_VERSION=${VERSION}
+    APP_VERSION=${VERSION} \
+    TMDB_API_KEY=${TMDB_API_KEY}
 
 # Create non-root user
 RUN addgroup -S app && adduser -S app -G app
