@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React, { ImgHTMLAttributes, useEffect, useRef, useState } from "react";
+import React, { ImgHTMLAttributes, useEffect, useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import { Icon, Icons } from "@/components/Icon";
 
@@ -25,25 +26,12 @@ export function LazyImage({
   const [hasError, setHasError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
 
-  const imgRef = useRef<HTMLImageElement>(null);
-
   useEffect(() => {
     // Reset state when src changes
     setIsLoaded(false);
     setHasError(false);
     setCurrentSrc(src);
   }, [src]);
-
-  useEffect(() => {
-    if (imgRef.current && imgRef.current.complete) {
-      if (imgRef.current.naturalWidth === 0) {
-        // Cached image failed to load
-        setHasError(true);
-      } else {
-        setIsLoaded(true);
-      }
-    }
-  }, [currentSrc]);
 
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     setIsLoaded(true);
@@ -87,8 +75,7 @@ export function LazyImage({
 
       {/* Actual Image */}
       {currentSrc && !hasError && (
-        <img
-          ref={imgRef}
+        <LazyLoadImage
           src={currentSrc}
           alt={alt || ""}
           loading={loading}
