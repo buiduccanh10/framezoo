@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Sticky from "react-sticky-el";
 
 import { SearchBarInput } from "@/components/form/SearchBar";
@@ -71,7 +72,14 @@ export function HeroPart({
   const title = randomT(`home.titles.${time}`);
   const placeholder = randomT(`home.search.placeholder`);
   const inputRef = useRef<HTMLInputElement>(null);
+  const location = useLocation();
   useSlashFocus(inputRef);
+
+  useEffect(() => {
+    if (location.pathname === "/browse") {
+      inputRef.current?.focus();
+    }
+  }, [location.pathname]);
 
   return (
     <ThinContainer>

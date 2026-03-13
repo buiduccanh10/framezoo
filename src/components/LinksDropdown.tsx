@@ -209,6 +209,7 @@ function WatchPartyInputLink() {
 export function LinksDropdown(props: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const nickname = useAuthStore((s) => s.account?.nickname);
   const deviceName = useAuthStore((s) => s.account?.deviceName);
   const seed = useAuthStore((s) => s.account?.seed);
   const bufferSeed = useMemo(
@@ -273,6 +274,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             <DropdownLink className="text-white" href="/settings">
               <UserAvatar />
               {(() => {
+                if (nickname?.trim()) return nickname;
                 try {
                   return decryptData(deviceName, bufferSeed);
                 } catch (error) {

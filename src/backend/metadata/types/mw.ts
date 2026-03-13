@@ -29,6 +29,8 @@ type MWMediaMetaBase = {
   id: string;
   year?: string;
   poster?: string;
+  backdrop?: string;
+  logo?: string;
   overview?: string;
 };
 

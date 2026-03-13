@@ -9,7 +9,9 @@ import {
   TMDBMediaToMediaType,
   formatTMDBMeta,
   getEpisodes,
+  getMediaBackdrop,
   getMediaDetails,
+  getMediaLogo,
   getMediaPoster,
   getMovieFromExternalId,
   mediaTypeToTMDB,
@@ -38,6 +40,7 @@ export interface DetailedMeta {
 export function formatTMDBMetaResult(
   details: TMDBShowData | TMDBMovieData,
   type: MWMediaType,
+  logo?: string,
 ): TMDBMediaResult {
   if (type === MWMediaType.MOVIE) {
     const movie = details as TMDBMovieData;
@@ -46,6 +49,8 @@ export function formatTMDBMetaResult(
       title: movie.title,
       object_type: mediaTypeToTMDB(type),
       poster: getMediaPoster(movie.poster_path) ?? undefined,
+      backdrop: getMediaBackdrop(movie.backdrop_path) ?? undefined,
+      logo,
       original_release_date: new Date(movie.release_date),
       overview: movie.overview || undefined,
     };
@@ -62,6 +67,8 @@ export function formatTMDBMetaResult(
         title: v.name,
       })),
       poster: getMediaPoster(show.poster_path) ?? undefined,
+      backdrop: getMediaBackdrop(show.backdrop_path) ?? undefined,
+      logo,
       original_release_date: new Date(show.first_air_date),
       overview: show.overview,
     };
@@ -75,11 +82,13 @@ export async function getMetaFromId(
   id: string,
   seasonId?: string,
 ): Promise<DetailedMeta | null> {
-  const details = await getMediaDetails(id, mediaTypeToTMDB(type));
+  const tmdbType = mediaTypeToTMDB(type);
+  const details = await getMediaDetails(id, tmdbType);
 
   if (!details) return null;
 
   const imdbId = details.external_ids.imdb_id ?? undefined;
+  const logoPromise = getMediaLogo(id, tmdbType).catch(() => undefined);
 
   let seasonData: TMDBSeasonMetaResult | undefined;
 
@@ -106,7 +115,8 @@ export async function getMetaFromId(
     }
   }
 
-  const tmdbmeta = formatTMDBMetaResult(details, type);
+  const logo = await logoPromise;
+  const tmdbmeta = formatTMDBMetaResult(details, type, logo);
   if (!tmdbmeta) return null;
   const meta = formatTMDBMeta(tmdbmeta, seasonData);
   if (!meta) return null;

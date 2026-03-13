@@ -250,24 +250,26 @@ export function RealPlayerView() {
         manualSourceSelection ? (
           <SourceSelectPart media={scrapeMedia} />
         ) : (
-          <ScrapingPart
-            key={`scraping-${resumeFromSourceId || storeResumeFromSourceId || "default"}`}
-            media={scrapeMedia}
-            startFromSourceId={
-              resumeFromSourceId || storeResumeFromSourceId || undefined
-            }
-            onResult={(sources, sourceOrder) => {
-              setErrorData({
-                sourceOrder,
-                sources,
-              });
-              setScrapeNotFound();
-              // Clear resume state after scraping
-              setResumeFromSourceId(null);
-              setResumeFromSourceIdInStore(null);
-            }}
-            onGetStream={playAfterScrape}
-          />
+          <div className="absolute inset-0 pointer-events-none opacity-0 overflow-hidden">
+            <ScrapingPart
+              key={`scraping-${resumeFromSourceId || storeResumeFromSourceId || "default"}`}
+              media={scrapeMedia}
+              startFromSourceId={
+                resumeFromSourceId || storeResumeFromSourceId || undefined
+              }
+              onResult={(sources, sourceOrder) => {
+                setErrorData({
+                  sourceOrder,
+                  sources,
+                });
+                setScrapeNotFound();
+                // Clear resume state after scraping
+                setResumeFromSourceId(null);
+                setResumeFromSourceIdInStore(null);
+              }}
+              onGetStream={playAfterScrape}
+            />
+          </div>
         )
       ) : null}
       {status === playerStatus.SCRAPE_NOT_FOUND && errorData ? (

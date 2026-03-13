@@ -97,6 +97,8 @@ export function formatTMDBMeta(
     id: media.id.toString(),
     year: media.original_release_date?.getFullYear()?.toString(),
     poster: media.poster,
+    backdrop: media.backdrop,
+    logo: media.logo,
     type,
     overview: media.overview,
     seasons: seasons as any,

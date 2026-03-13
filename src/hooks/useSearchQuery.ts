@@ -8,7 +8,7 @@ function decode(query: string | null | undefined) {
 export function useSearchQuery(): [
   string,
   (inp: string, force?: boolean) => void,
-  () => void,
+  (newSearch?: string) => void,
 ] {
   const navigate = useNavigate();
   const params = useParams<{ query: string }>();
@@ -22,7 +22,7 @@ export function useSearchQuery(): [
     setSearch(inp);
     if (!commitToUrl) return;
     if (inp.length === 0) {
-      navigate("/", { replace: true });
+      navigate("/browse", { replace: true });
       return;
     }
     navigate(

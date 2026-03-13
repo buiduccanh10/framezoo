@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { BrandPill } from "@/components/layout/BrandPill";
 import { Player } from "@/components/player";
+import { PlayerLoadingOverlay } from "@/components/player/atoms/PlayerLoadingOverlay";
 import { SkipSegmentButton } from "@/components/player/atoms/SkipSegmentButton";
 import { ThumbsFeedback } from "@/components/player/atoms/ThumbsFeedback";
 import { WatchPartyStatus } from "@/components/player/atoms/WatchPartyStatus";
@@ -15,10 +16,7 @@ import { PauseOverlay } from "@/components/player/overlays/PauseOverlay";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useWatchPartyStore } from "@/stores/watchParty";
-
-import { ScrapingPartInterruptButton, Tips } from "./ScrapingPart";
 
 export interface PlayerPartProps {
   children?: ReactNode;
@@ -31,9 +29,6 @@ export function PlayerPart(props: PlayerPartProps) {
   const { showTargets, showTouchTargets } = useShouldShowControls();
   const status = usePlayerStore((s) => s.status);
   const { isMobile } = useIsMobile();
-  const manualSourceSelection = usePreferencesStore(
-    (s) => s.manualSourceSelection,
-  );
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { isHost, enabled } = useWatchPartyStore();
   const { t } = useTranslation();
@@ -107,10 +102,10 @@ export function PlayerPart(props: PlayerPartProps) {
       <Player.EpisodesRouter onChange={props.onMetaChange} />
       <Player.SettingsRouter />
       <Player.SubtitleView controlsShown={showTargets} />
+      <PlayerLoadingOverlay />
 
       {status === playerStatus.PLAYING ? (
         <Player.CenterControls>
-          <Player.LoadingSpinner />
           <Player.AutoPlayStart />
           <Player.CastingNotification />
         </Player.CenterControls>
@@ -174,13 +169,7 @@ export function PlayerPart(props: PlayerPartProps) {
       </Player.TopControls>
 
       <Player.BottomControls show={showTargets}>
-        {status !== playerStatus.PLAYING && !manualSourceSelection && <Tips />}
         <div className="flex flex-col w-full">
-          {status === playerStatus.SCRAPING ? (
-            <div className="flex justify-center mb-4">
-              <ScrapingPartInterruptButton />
-            </div>
-          ) : null}
           {status === playerStatus.PLAYING ? (
             <div className="w-full mb-2 flex items-center space-x-4">
               <Player.ProgressBar />

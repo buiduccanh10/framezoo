@@ -13,7 +13,6 @@ import { getProviders } from "@/backend/providers/providers";
 import { Button } from "@/components/buttons/Button";
 import { Icons } from "@/components/Icon";
 import { IconPill } from "@/components/layout/IconPill";
-import { Loading } from "@/components/layout/Loading";
 import { Paragraph } from "@/components/text/Paragraph";
 import { Title } from "@/components/text/Title";
 import { ErrorContainer, ErrorLayout } from "@/pages/layouts/ErrorLayout";
@@ -191,11 +190,5 @@ export function MetaPart(props: MetaPartProps) {
     );
   }
 
-  return (
-    <ErrorLayout>
-      <div className="flex items-center justify-center">
-        <Loading />
-      </div>
-    </ErrorLayout>
-  );
+  return null;
 }

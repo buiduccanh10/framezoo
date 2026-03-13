@@ -40,6 +40,8 @@ export interface PlayerMeta {
   imdbId?: string;
   releaseYear: number;
   poster?: string;
+  backdrop?: string;
+  logo?: string;
   overview?: string;
   episodes?: PlayerMetaEpisode[];
   episode?: PlayerMetaEpisode;
