@@ -15,6 +15,15 @@ function getRandomMessage(messages: string[], prev?: string) {
   return next;
 }
 
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve();
+    image.onerror = () => resolve();
+    image.src = src;
+  });
+}
+
 export function PlayerLoadingOverlay() {
   const { t } = useTranslation();
   const status = usePlayerStore((s) => s.status);
@@ -40,10 +49,12 @@ export function PlayerLoadingOverlay() {
       ).filter(Boolean),
     [t],
   );
+  const backgroundImage = meta?.backdrop ?? meta?.poster;
 
   const [shouldRender, setShouldRender] = useState(showOverlay);
   const [isVisible, setIsVisible] = useState(showOverlay);
   const [hideLogo, setHideLogo] = useState(false);
+  const [assetsReady, setAssetsReady] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState(() =>
     getRandomMessage(loadingMessages),
   );
@@ -54,11 +65,40 @@ export function PlayerLoadingOverlay() {
   }, [meta?.logo]);
 
   useEffect(() => {
+    let cancelled = false;
+
+    if (!showOverlay) {
+      setAssetsReady(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const sources = [backgroundImage, meta?.logo].filter(Boolean) as string[];
+    if (sources.length === 0) {
+      setAssetsReady(true);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    Promise.all(sources.map(preloadImage)).then(() => {
+      if (!cancelled) setAssetsReady(true);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [showOverlay, backgroundImage, meta?.logo]);
+
+  const showOverlayWhenReady = showOverlay && assetsReady;
+
+  useEffect(() => {
     setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
   }, [loadingMessages]);
 
   useEffect(() => {
-    if (showOverlay) {
+    if (showOverlayWhenReady) {
       setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
       setMessageVisible(true);
       setShouldRender(true);
@@ -72,10 +112,10 @@ export function PlayerLoadingOverlay() {
     }, 250);
 
     return () => window.clearTimeout(timeout);
-  }, [showOverlay, loadingMessages]);
+  }, [showOverlayWhenReady, loadingMessages]);
 
   useEffect(() => {
-    if (!showOverlay) return;
+    if (!showOverlayWhenReady) return;
 
     const interval = window.setInterval(() => {
       setMessageVisible(false);
@@ -86,11 +126,10 @@ export function PlayerLoadingOverlay() {
     }, 2600);
 
     return () => window.clearInterval(interval);
-  }, [showOverlay, loadingMessages]);
+  }, [showOverlayWhenReady, loadingMessages]);
 
   if (!shouldRender) return null;
 
-  const backgroundImage = meta?.backdrop ?? meta?.poster;
   const showLogo = Boolean(meta?.logo && !hideLogo);
   const displayTitle = meta?.title || "Loading media";
 
