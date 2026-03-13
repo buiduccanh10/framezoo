@@ -995,6 +995,24 @@
         "9": "Hold ` to view keyboard shortcuts!"
       }
     },
+    "loadingOverlayMessages": {
+      "1": "Finding the way through the internet...",
+      "2": "Calling API back home...",
+      "3": "Asking the server for advice...",
+      "4": "Lubricating the gears...",
+      "5": "Tightening a few server bolts...",
+      "6": "Fixing some cables...",
+      "7": "Pushing data through the pipeline...",
+      "8": "Rechecking the circuit...",
+      "9": "Hold on, brewing some coffee...",
+      "10": "Almost there... for real.",
+      "11": "Still faster than Windows Update...",
+      "12": "Stay calm...",
+      "13": "Wait a sec, looking for the remote...",
+      "14": "Give us a moment, instant noodles break...",
+      "15": "Asking Google...",
+      "16": "Please be patient, magic is being cast..."
+    },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",

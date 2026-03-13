@@ -1014,6 +1014,24 @@
         "9": "Giữ ` để xem các phím tắt!"
       }
     },
+    "loadingOverlayMessages": {
+      "1": "Đang tìm đường trên internet...",
+      "2": "Đang gọi API về nhà...",
+      "3": "Đang hỏi ý kiến server...",
+      "4": "Đang tra dầu bánh răng...",
+      "5": "Đang vặn lại mấy con ốc server...",
+      "6": "Đang chỉnh lại dây điện...",
+      "7": "Đang đẩy dữ liệu qua đường ống...",
+      "8": "Đang kiểm tra lại mạch...",
+      "9": "Đợi chút, đang pha cà phê...",
+      "10": "Sắp được rồi... thật.",
+      "11": "Vẫn nhanh hơn window update...",
+      "12": "Cứ bình tĩnh...",
+      "13": "Đợi tí, đang tìm remote...",
+      "14": "Đợi chút, đang ăn mì gói...",
+      "15": "Đang hỏi Google...",
+      "16": "Xin kiên nhẫn, phép thuật đang được thi triển..."
+    },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "Còn {{timeLeft}} • Kết thúc lúc {{timeFinished, datetime}}",

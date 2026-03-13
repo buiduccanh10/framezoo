@@ -1,39 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { LazyImage } from "@/components/utils/Image";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
-const loadingMessages = [
-  "Đang tìm đường trên internet...",
-  "Đang gọi API về nhà...",
-  "Đang hỏi ý kiến server...",
-  "Đang tra dầu bánh răng...",
-  "Đang vặn lại mấy con ốc server...",
-  "Đang chỉnh lại dây điện...",
-  "Đang đẩy dữ liệu qua đường ống...",
-  "Đang kiểm tra lại mạch...",
-  "Đợi chút, đang pha cà phê...",
-  "Sắp được rồi... thật.",
-  "Vẫn nhanh hơn window update...",
-  "Cứ bình tĩnh...",
-  "Đợi tí, đang tìm remote...",
-  "Đợi chút, đang ăn mì gói...",
-  "Đang hỏi Google...",
-  "Xin kiên nhẫn, phép thuật đang được thi triển...",
-];
-
-function getRandomMessage(prev?: string) {
-  if (loadingMessages.length <= 1) return loadingMessages[0] ?? "";
+function getRandomMessage(messages: string[], prev?: string) {
+  if (messages.length <= 1) return messages[0] ?? "";
   let next = prev ?? "";
   while (next === prev) {
-    next = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+    next = messages[Math.floor(Math.random() * messages.length)];
   }
   return next;
 }
 
 export function PlayerLoadingOverlay() {
+  const { t } = useTranslation();
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
@@ -47,11 +30,19 @@ export function PlayerLoadingOverlay() {
     (status === playerStatus.SCRAPING && !manualSourceSelection) ||
     (status === playerStatus.PLAYING && isLoading && !hasPlayedOnce);
 
+  const loadingMessages = useMemo(
+    () =>
+      Array.from({ length: 16 }, (_, i) =>
+        t(`player.loadingOverlayMessages.${i + 1}`),
+      ).filter(Boolean),
+    [t],
+  );
+
   const [shouldRender, setShouldRender] = useState(showOverlay);
   const [isVisible, setIsVisible] = useState(showOverlay);
   const [hideLogo, setHideLogo] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState(() =>
-    getRandomMessage(),
+    getRandomMessage(loadingMessages),
   );
   const [messageVisible, setMessageVisible] = useState(true);
 
@@ -60,8 +51,12 @@ export function PlayerLoadingOverlay() {
   }, [meta?.logo]);
 
   useEffect(() => {
+    setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
+  }, [loadingMessages]);
+
+  useEffect(() => {
     if (showOverlay) {
-      setLoadingMessage((prev) => getRandomMessage(prev));
+      setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
       setMessageVisible(true);
       setShouldRender(true);
       const frame = window.requestAnimationFrame(() => setIsVisible(true));
@@ -74,7 +69,7 @@ export function PlayerLoadingOverlay() {
     }, 250);
 
     return () => window.clearTimeout(timeout);
-  }, [showOverlay]);
+  }, [showOverlay, loadingMessages]);
 
   useEffect(() => {
     if (!showOverlay) return;
@@ -82,13 +77,13 @@ export function PlayerLoadingOverlay() {
     const interval = window.setInterval(() => {
       setMessageVisible(false);
       window.setTimeout(() => {
-        setLoadingMessage((prev) => getRandomMessage(prev));
+        setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
         setMessageVisible(true);
       }, 260);
     }, 2600);
 
     return () => window.clearInterval(interval);
-  }, [showOverlay]);
+  }, [showOverlay, loadingMessages]);
 
   if (!shouldRender) return null;
 
