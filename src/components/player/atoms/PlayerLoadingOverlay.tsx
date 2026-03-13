@@ -20,6 +20,7 @@ export function PlayerLoadingOverlay() {
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
+  const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
   const hasPlayedOnce = usePlayerStore((s) => s.mediaPlaying.hasPlayedOnce);
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
@@ -28,7 +29,9 @@ export function PlayerLoadingOverlay() {
   const showOverlay =
     status === playerStatus.IDLE ||
     (status === playerStatus.SCRAPING && !manualSourceSelection) ||
-    (status === playerStatus.PLAYING && isLoading && !hasPlayedOnce);
+    (status === playerStatus.PLAYING &&
+      isLoading &&
+      (!hasPlayedOnce || !isPlaying));
 
   const loadingMessages = useMemo(
     () =>
@@ -110,8 +113,8 @@ export function PlayerLoadingOverlay() {
         <div className="absolute inset-0 bg-background-main" />
       )}
 
-      <div className="absolute inset-0 bg-black/65" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/45 to-black/75" />
+      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/45 to-black/45" />
 
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
         {showLogo ? (

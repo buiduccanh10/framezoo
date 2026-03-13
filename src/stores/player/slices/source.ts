@@ -428,6 +428,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.failedSourcesPerMedia = {};
       s.failedEmbedsPerMedia = {};
       s.resumeFromSourceId = null;
+      s.mediaPlaying.isPlaying = false;
+      s.mediaPlaying.isPaused = true;
+      s.mediaPlaying.isLoading = false;
+      s.mediaPlaying.hasPlayedOnce = false;
       this.clearTranslateTask();
       s.caption = {
         selected: null,
