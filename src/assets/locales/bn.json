@@ -428,33 +428,23 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "day": {
         "default": "আপনি এই বিকেলে কি দেখতে চান?",
-        "extra": [
-          "পি-স্ট্রীম দীর্ঘ জীবী হক!"
-        ]
+        "extra": ["পি-স্ট্রীম দীর্ঘ জীবী হক!"]
       },
       "morning": {
         "default": "আপনি এই সকালে কি দেখতে চান?",
-        "extra": [
-          "পি-স্ট্রীম দীর্ঘ জীবী হক!"
-        ]
+        "extra": ["পি-স্ট্রীম দীর্ঘ জীবী হক!"]
       },
       "night": {
         "default": "আপনি আজ রাতে কি দেখতে চান?",
-        "extra": [
-          "পি-স্ট্রীম দীর্ঘ জীবী হক!"
-        ]
+        "extra": ["পি-স্ট্রীম দীর্ঘ জীবী হক!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -1446,7 +1436,7 @@
       },
       "BorderThicknessLabel": "Border Thickness"
     },
-    "unsaved": "You have unsaved changes... ฅ^•ﻌ•^ฅ"
+    "unsaved": "You have unsaved changes... "
   },
   "discover": {
     "tabs": {
