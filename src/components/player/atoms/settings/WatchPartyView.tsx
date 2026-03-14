@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useAsync } from "react-use";
 
@@ -14,17 +14,14 @@ import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useAuthStore } from "@/stores/auth";
 import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
-
-import { useDownloadLink } from "./Downloads";
+import { getOrCreateWatchPartyParticipantId } from "@/utils/watchPartyParticipant";
 
 export function WatchPartyView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
   const { t } = useTranslation();
-  const downloadUrl = useDownloadLink();
   const [joinCode, setJoinCode] = useState("");
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
-  const [backendName, setBackendName] = useState("");
   const [editingCode, setEditingCode] = useState(false);
   const [customCode, setCustomCode] = useState("");
   const [hasCopiedShare, setHasCopiedShare] = useState(false);
@@ -32,13 +29,30 @@ export function WatchPartyView({ id }: { id: string }) {
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const account = useAuthStore((s) => s.account);
+  const currentParticipantId = useMemo(
+    () => account?.userId ?? getOrCreateWatchPartyParticipantId(),
+    [account?.userId],
+  );
 
-  // Get display name for a user (nickname if it's the current user, otherwise truncated userId)
-  const getDisplayName = (userId: string) => {
-    if (account?.userId === userId && account?.nickname) {
-      return account.nickname;
+  const clearWatchPartyQueryParam = () => {
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has("watchparty")) return;
+    url.searchParams.delete("watchparty");
+    window.history.replaceState({}, "", url.toString());
+  };
+
+  // Prefer participant nickname so room members are readable.
+  const getDisplayName = (
+    nickname: string | undefined,
+    participantId: string,
+  ) => {
+    if (currentParticipantId === participantId) {
+      return t("watchParty.you");
     }
-    return `${userId.substring(0, 8)}...`;
+    if (nickname && nickname.trim().length > 0) {
+      return nickname;
+    }
+    return t("watchParty.guestFallback");
   };
 
   const backendMeta = useAsync(async () => {
@@ -64,33 +78,23 @@ export function WatchPartyView({ id }: { id: string }) {
   } = useWatchPartyStore();
 
   // Watch party sync data
-  const { roomUsers } = useWatchPartySync();
+  const { roomUsers, hostUser } = useWatchPartySync();
 
-  // Auto-host timer
+  // If guest no longer sees a host in room, leave watch party instead of auto-promoting.
   useEffect(() => {
-    if (!enabled || isHost || roomUsers.length > 1) return;
+    if (!enabled || isHost) return;
+    if (roomUsers.length === 0 || hostUser) return;
 
     const timer = setTimeout(() => {
-      if (roomUsers.length <= 1) {
-        enableAsHost();
-      }
-    }, 10000);
+      clearWatchPartyQueryParam();
+      disable();
+      setIsJoining(false);
+      setShowJoinInput(true);
+      setValidationError(t("watchParty.noHost"));
+    }, 4000);
 
     return () => clearTimeout(timer);
-  }, [enabled, isHost, roomUsers.length, enableAsHost]);
-
-  // Fetch backend name
-  useEffect(() => {
-    if (backendUrl && enabled) {
-      getBackendMeta(backendUrl)
-        .then((meta) => {
-          setBackendName(meta.name);
-        })
-        .catch(() => {
-          setBackendName("Unknown Server");
-        });
-    }
-  }, [backendUrl, enabled]);
+  }, [enabled, isHost, roomUsers.length, hostUser, disable, t]);
 
   // Listen for validation status events
   useEffect(() => {
@@ -117,15 +121,6 @@ export function WatchPartyView({ id }: { id: string }) {
       setIsJoining(false);
     }
   }, [enabled]);
-
-  const handlelegacyWatchPartyClick = () => {
-    if (downloadUrl) {
-      const watchPartyUrl = `https://www.watchparty.me/create?video=${encodeURIComponent(
-        downloadUrl,
-      )}`;
-      window.open(watchPartyUrl);
-    }
-  };
 
   const handleHostParty = () => {
     enableAsHost();
@@ -160,6 +155,7 @@ export function WatchPartyView({ id }: { id: string }) {
   };
 
   const handleDisableParty = () => {
+    clearWatchPartyQueryParam();
     disable();
     setShowJoinInput(false);
     setJoinCode("");
@@ -220,21 +216,10 @@ export function WatchPartyView({ id }: { id: string }) {
                   <>
                     <div className="flex flex-col gap-2">
                       <div className="text-center space-y-2">
-                        <div className="text-xs text-type-logo font-semibold flex flex-col gap-1 bg-type-danger/10 px-2 py-1 rounded mb-2">
-                          <span className="text-xs">
-                            {t("watchParty.backendRequirement")}
-                          </span>
-                          <span className="text-xs">
-                            {t("watchParty.activeBackend", {
-                              backend: backendUrl || "Unknown",
-                            })}
-                          </span>
-                        </div>
                         <Trans
                           i18nKey={
                             isHost ? "watchParty.isHost" : "watchParty.isGuest"
                           }
-                          values={{ backendName }}
                           className="text-sm text-type-secondary"
                         >
                           <span className="text-type-logo" />
@@ -322,7 +307,7 @@ export function WatchPartyView({ id }: { id: string }) {
                         <div className="max-h-32 overflow-y-auto space-y-1">
                           {roomUsers.map((user) => (
                             <div
-                              key={user.userId}
+                              key={user.participantId}
                               className="flex items-center justify-between text-xs py-1"
                             >
                               <span className="flex items-center gap-1">
@@ -339,7 +324,10 @@ export function WatchPartyView({ id }: { id: string }) {
                                       : "text-type-secondary"
                                   }
                                 >
-                                  {getDisplayName(user.userId)}
+                                  {getDisplayName(
+                                    user.nickname,
+                                    user.participantId,
+                                  )}
                                 </span>
                               </span>
                               <span className="text-type-secondary">
@@ -447,19 +435,6 @@ export function WatchPartyView({ id }: { id: string }) {
                 )}
               </div>
             ))}
-
-          {backendSupportsWatchParty && <Menu.Divider />}
-
-          <Menu.Link
-            clickable
-            onClick={handlelegacyWatchPartyClick}
-            rightSide={<Icon className="text-xl" icon={Icons.WATCH_PARTY} />}
-          >
-            {t("player.menus.watchparty.legacyWatchparty")}
-          </Menu.Link>
-          <Menu.Paragraph marginClass="text-xs text-type-secondary mt-2">
-            {t("player.menus.watchparty.notice")}
-          </Menu.Paragraph>
         </div>
       </Menu.Section>
     </>

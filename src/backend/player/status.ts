@@ -23,7 +23,9 @@ interface ContentInfo {
 }
 
 interface PlayerStatusRequest {
+  participantId: string;
   userId: string;
+  nickname?: string;
   roomCode: string;
   isHost: boolean;
   content: ContentInfo;
@@ -36,10 +38,14 @@ interface PlayerStatusResponse {
 }
 
 interface UserStatusResponse {
+  participantId: string;
   userId: string;
+  nickname?: string;
   roomCode: string;
   statuses: Array<{
+    participantId: string;
     userId: string;
+    nickname?: string;
     roomCode: string;
     isHost: boolean;
     content: ContentInfo;
@@ -53,7 +59,9 @@ interface RoomStatusesResponse {
   users: Record<
     string,
     Array<{
+      participantId: string;
       userId: string;
+      nickname?: string;
       roomCode: string;
       isHost: boolean;
       content: ContentInfo;

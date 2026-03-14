@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getRoomStatuses, sendPlayerStatus } from "@/backend/player/status";
@@ -8,6 +8,10 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player/store";
 import { useWatchPartyStore } from "@/stores/watchParty";
+import {
+  getOrCreateWatchPartyGuestNickname,
+  getOrCreateWatchPartyParticipantId,
+} from "@/utils/watchPartyParticipant";
 
 // Event for content validation status
 const VALIDATION_EVENT = "watchparty:validation";
@@ -30,7 +34,15 @@ export function WatchPartyReporter() {
 
   // Auth data
   const account = useAuthStore((s) => s.account);
-  const userId = account?.userId || "guest";
+  const participantId = useMemo(
+    () => account?.userId ?? getOrCreateWatchPartyParticipantId(),
+    [account?.userId],
+  );
+  const userId = account?.userId || participantId;
+  const nickname = useMemo(
+    () => account?.nickname || getOrCreateWatchPartyGuestNickname(),
+    [account?.nickname],
+  );
   const backendUrl = useBackendUrl();
 
   // Player metadata
@@ -314,7 +326,9 @@ export function WatchPartyReporter() {
     const sendStatusToBackend = async () => {
       try {
         await sendPlayerStatus(backendUrl, account, {
+          participantId,
           userId,
+          nickname,
           roomCode,
           isHost,
           content: {
@@ -353,6 +367,7 @@ export function WatchPartyReporter() {
           isPlaying: latestStatus.isPlaying,
           currentTime: Math.floor(latestStatus.time),
           userId,
+          participantId,
           content: contentTitle,
           roomCode,
         });
@@ -365,6 +380,8 @@ export function WatchPartyReporter() {
   }, [
     latestStatus,
     statusHistory.length,
+    participantId,
+    nickname,
     userId,
     account,
     meta,

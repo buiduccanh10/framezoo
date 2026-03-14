@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useAuthStore } from "@/stores/auth";
 import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
+import { getOrCreateWatchPartyParticipantId } from "@/utils/watchPartyParticipant";
 
 export function WatchPartyStatus() {
   const { t } = useTranslation();
@@ -16,8 +16,10 @@ export function WatchPartyStatus() {
   const [showNotification, setShowNotification] = useState(false);
   const [lastUserCount, setLastUserCount] = useState(1);
   const account = useAuthStore((s) => s.account);
-  const backendUrl = useBackendUrl();
-  const backendHostname = backendUrl ? new URL(backendUrl).hostname : null;
+  const currentParticipantId = useMemo(
+    () => account?.userId ?? getOrCreateWatchPartyParticipantId(),
+    [account?.userId],
+  );
 
   const {
     roomUsers,
@@ -32,11 +34,15 @@ export function WatchPartyStatus() {
 
   // Show notification when users join
   useEffect(() => {
+    if (userCount === lastUserCount) return;
+
     if (userCount > lastUserCount) {
       setShowNotification(true);
       const timer = setTimeout(() => setShowNotification(false), 3000);
+      setLastUserCount(userCount);
       return () => clearTimeout(timer);
     }
+
     setLastUserCount(userCount);
   }, [userCount, lastUserCount]);
 
@@ -49,44 +55,52 @@ export function WatchPartyStatus() {
   };
 
   // Get display name for a user (nickname if it's the current user, otherwise truncated userId)
-  const getDisplayName = (userId: string) => {
-    if (account?.userId === userId && account?.nickname) {
-      return account.nickname;
+  const getDisplayName = (
+    nickname: string | undefined,
+    participantId: string,
+  ) => {
+    if (currentParticipantId === participantId) {
+      return t("watchParty.you");
     }
-    return `${userId.substring(0, 12)}...`;
+    if (nickname && nickname.trim().length > 0) {
+      return nickname;
+    }
+    return t("watchParty.guestFallback");
   };
 
   return (
     <div
-      className={`absolute top-4 right-4 z-50 p-2 bg-mediaCard-shadow bg-opacity-70 backdrop-blur-sm rounded-md text-white text-xs 
-        flex flex-col items-end gap-1 max-w-[260px] transition-all duration-300
-        ${showNotification ? "ring-1 ring-buttons-purple shadow-lg shadow-buttons-purple" : ""}`}
+      className={`w-[280px] max-w-[calc(100vw-2rem)] rounded-xl border border-mediaCard-hoverAccent/25 bg-mediaCard-shadow/75 p-3 text-white text-xs backdrop-blur-md transition-all duration-300 ${
+        showNotification
+          ? "ring-1 ring-buttons-purple shadow-lg shadow-buttons-purple/40"
+          : ""
+      }`}
     >
-      <div className="flex gap-2 w-full justify-between items-center">
+      <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Icon icon={Icons.WATCH_PARTY} className="w-4 h-4" />
-          <span className="font-bold pr-1">
+          <Icon icon={Icons.WATCH_PARTY} className="h-4 w-4 text-type-logo" />
+          <span className="font-semibold">
             {isHost ? t("watchParty.hosting") : t("watchParty.watching")}
           </span>
         </div>
-        <span className="text-type-logo font-mono tracking-wider">
+        <span className="rounded-md bg-mediaCard-hoverBackground px-2 py-0.5 font-mono tracking-wider text-type-logo">
           {roomCode}
         </span>
       </div>
-      {backendHostname && (
-        <div className="w-full text-xs text-type-secondary text-center">
-          {t("watchParty.activeBackend", { backend: backendHostname })}
-        </div>
-      )}
 
-      <div className="w-full text-type-secondary flex justify-between items-center space-x-2">
-        <div className="cursor-pointer" onClick={handleToggleExpanded}>
+      <div className="mt-1 flex w-full items-center justify-between gap-2 text-type-secondary">
+        <button
+          type="button"
+          className="rounded p-0.5 transition-colors hover:bg-mediaCard-hoverBackground"
+          onClick={handleToggleExpanded}
+          aria-label="Toggle room members"
+        >
           <Icon
             icon={expanded ? Icons.CHEVRON_DOWN : Icons.CHEVRON_RIGHT}
             className="w-3 h-3"
           />
-        </div>
-        <span>
+        </button>
+        <span className="truncate">
           {roomUsers.length <= 1
             ? t("watchParty.alone")
             : t("watchParty.withCount", { count: roomUsers.length - 1 })}
@@ -110,21 +124,23 @@ export function WatchPartyStatus() {
       </div>
 
       {expanded && roomUsers.length > 1 && (
-        <div className="w-full mt-1 border-t border-mediaCard-hoverBackground pt-1">
-          <div className="text-xs text-type-secondary mb-1">Viewers:</div>
-          <div className="space-y-1 max-h-24 overflow-y-auto">
+        <div className="mt-2 w-full border-t border-mediaCard-hoverBackground/70 pt-2">
+          <div className="mb-2 text-[11px] font-medium uppercase tracking-wide text-type-secondary">
+            {t("watchParty.viewers", { count: roomUsers.length })}
+          </div>
+          <div className="max-h-28 space-y-1 overflow-y-auto pr-1">
             {roomUsers.map((user) => (
               <div
-                key={user.userId}
-                className="flex items-center justify-between text-xs"
+                key={user.participantId}
+                className="flex items-center justify-between rounded-md bg-mediaCard-hoverBackground/50 px-2 py-1.5 text-xs"
               >
                 <span className="flex items-center gap-1">
                   <Icon
                     icon={user.isHost ? Icons.RISING_STAR : Icons.USER}
-                    className={`w-3 h-3 ${user.isHost ? "text-onboarding-best" : ""}`}
+                    className={`h-3 w-3 ${user.isHost ? "text-onboarding-best" : "text-type-secondary"}`}
                   />
                   <span className={user.isHost ? "text-onboarding-best" : ""}>
-                    {getDisplayName(user.userId)}
+                    {getDisplayName(user.nickname, user.participantId)}
                   </span>
                 </span>
                 <span className="text-type-secondary">
@@ -139,10 +155,10 @@ export function WatchPartyStatus() {
       )}
 
       {!isHost && hostUser && (isBehindHost || isAheadOfHost) && (
-        <div className="mt-1 w-full">
+        <div className="mt-2 w-full">
           <Button
             theme="secondary"
-            className="text-xs py-1 px-2 bg-buttons-purple bg-opacity-50 hover:bg-buttons-purpleHover hover:bg-opacity-80 w-full flex items-center justify-center gap-1"
+            className="flex w-full items-center justify-center gap-1 bg-buttons-purple/60 px-2 py-1 text-xs hover:bg-buttons-purpleHover/80"
             onClick={syncWithHost}
             disabled={isSyncing}
           >

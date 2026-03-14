@@ -8,7 +8,9 @@ import { usePlayerStore } from "@/stores/player/store";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 interface RoomUser {
+  participantId: string;
   userId: string;
+  nickname?: string;
   isHost: boolean;
   lastUpdate: number;
   player: {
@@ -231,7 +233,7 @@ export function useWatchPartySync(
 
       // Process each user's latest status
       Object.entries(response.users).forEach(
-        ([userIdFromResponse, statuses]) => {
+        ([participantIdFromResponse, statuses]) => {
           if (statuses.length > 0) {
             // Get the latest status (sort by timestamp DESC)
             const latestStatus = [...statuses].sort(
@@ -239,7 +241,10 @@ export function useWatchPartySync(
             )[0];
 
             users.push({
-              userId: userIdFromResponse,
+              participantId:
+                latestStatus.participantId || participantIdFromResponse,
+              userId: latestStatus.userId || participantIdFromResponse,
+              nickname: latestStatus.nickname,
               isHost: latestStatus.isHost,
               lastUpdate: latestStatus.timestamp,
               player: {

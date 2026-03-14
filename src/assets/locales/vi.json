@@ -467,10 +467,10 @@
       "favorites": "Phim yêu thích"
     },
     "support": {
-      "title": "BetaMovie cần sự giúp đỡ của bạn!",
-      "description": "BetaMovie hoạt động không vì lợi nhuận, và chúng tôi cần sự giúp đỡ để duy trì ứng dụng không có quảng cáo! Nếu bạn thích sử dụng BetaMovie, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải chi phí.",
+      "title": "AlphaFlix cần sự giúp đỡ của bạn!",
+      "description": "AlphaFlix hoạt động không vì lợi nhuận, và chúng tôi cần sự giúp đỡ để duy trì ứng dụng không có quảng cáo! Nếu bạn thích sử dụng AlphaFlix, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải chi phí.",
       "moreInfo": "Thêm thông tin",
-      "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng BetaMovie, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
+      "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng AlphaFlix, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
       "explanation2": "Nếu bạn muốn biết thêm thông tin, vui lòng tham gia ",
       "fluxer": "Fluxer",
       "thankYou": "Cảm ơn sự ủng hộ của bạn!",
@@ -605,7 +605,7 @@
       "previewTitle": "Xem trước:",
       "setup": {
         "title": "Thiết lập tải lên",
-        "description": "Để tải dữ liệu của bạn lên một máy chủ backend betaMovie, bạn trước hết phải cài đặt xong mọi thứ đã.",
+        "description": "Để tải dữ liệu của bạn lên một máy chủ backend AlphaFlix, bạn trước hết phải cài đặt xong mọi thứ đã.",
         "button": "Thực hiện cài đặt"
       },
       "button": {
@@ -913,9 +913,7 @@
         "selectingSecondary": "Đang chọn phụ đề phụ"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party có thể không khả dụng đối với một số nguồn",
-        "legacyWatchparty": "Dùng legacy Watch Party"
+        "watchpartyItem": "Xem cùng bạn bè"
       },
       "audio": {
         "default": "Mặc định"
@@ -1145,9 +1143,9 @@
   },
   "support": {
     "title": "Hỗ trợ",
-    "text": "BetaMovie được thiết kế để thân thiện nhất có thể với người dùng. Tuy nhiên, mọi người vẫn có những câu hỏi và thắc mắc. Trang này ở đây để giúp giải quyết những thiếu sót đó",
+    "text": "AlphaFlix được thiết kế để thân thiện nhất có thể với người dùng. Tuy nhiên, mọi người vẫn có những câu hỏi và thắc mắc. Trang này ở đây để giúp giải quyết những thiếu sót đó",
     "q1": {
-      "body": "Bạn có thể tham gia <0>BetaMovie Fluxer</0> chính thức và đặt câu hỏi tại đó hoặc bạn có thể gửi email theo địa chỉ được cung cấp ở cuối trang này.",
+      "body": "Bạn có thể tham gia <0>AlphaFlix Fluxer</0> chính thức và đặt câu hỏi tại đó hoặc bạn có thể gửi email theo địa chỉ được cung cấp ở cuối trang này.",
       "title": "Tôi có thể nhận trợ giúp ở đâu?"
     },
     "q2": {
@@ -1157,9 +1155,9 @@
   },
   "jip": {
     "title": "Lời nhắn",
-    "text": "BetaMovie không tự nhiên mà có, nó được tạo ra chủ yếu bởi một người duy nhất (một người rất tuyệt vời).",
+    "text": "AlphaFlix không tự nhiên mà có, nó được tạo ra chủ yếu bởi một người duy nhất (một người rất tuyệt vời).",
     "q1": {
-      "body": "Bạn có thể tham gia <0>BetaMovie Fluxer</0> chính thức và đặt câu hỏi tại đó hoặc bạn có thể gửi email theo địa chỉ được cung cấp ở cuối trang này.",
+      "body": "Bạn có thể tham gia <0>AlphaFlix Fluxer</0> chính thức và đặt câu hỏi tại đó hoặc bạn có thể gửi email theo địa chỉ được cung cấp ở cuối trang này.",
       "title": "Tôi có thể nhận trợ giúp ở đâu?"
     },
     "q2": {
@@ -1208,7 +1206,7 @@
       },
       "admin": {
         "title": "Bảng quản trị",
-        "text": "Kiểm tra tình trạng của BetaMovie."
+        "text": "Kiểm tra tình trạng của AlphaFlix."
       },
       "actions": {
         "delete": {
@@ -1585,8 +1583,8 @@
     },
     "alone": "Một mình",
     "withCount": "Với {{count}} người khác",
-    "isHost": "Đang làm chủ phòng trên <0>{{backendName}}</0>",
-    "isGuest": "Đang xem với tư cách khách trên <0>{{backendName}}</0>",
+    "isHost": "Đang làm chủ phòng trên <0>alpha.flix</0>",
+    "isGuest": "Đang xem với tư cách khách trên <0>alpha.flix</0>",
     "hosting": "Đang làm chủ phòng",
     "watching": "Đang xem",
     "syncing": "Đang đồng bộ...",
@@ -1595,6 +1593,7 @@
     "showStatusOverlay": "Hiển thị lớp phủ trạng thái",
     "leaveWatchParty": "Rời buổi tiệc xem",
     "shareCode": "Chia sẻ mã này với bạn bè (nhấn để sao chép liên kết)",
+    "enterCodeOrLink": "Nhập liên kết hoặc mã phòng được bạn bè chia sẻ",
     "connectedAsGuest": "Đã kết nối với buổi tiệc xem với tư cách khách",
     "hostParty": "Tổ chức buổi tiệc xem",
     "joinParty": "Tham gia buổi tiệc xem",
@@ -1611,6 +1610,8 @@
     "validating": "Đang xác thực buổi tiệc xem...",
     "linkCopied": "Đã sao chép!",
     "backendRequirement": "Tất cả người dùng phải sử dụng cùng một máy chủ backend",
-    "activeBackend": "Backend đang hoạt động: {{backend}}"
+    "activeBackend": "Backend đang hoạt động: {{backend}}",
+    "you": "Bạn",
+    "guestFallback": "Guest"
   }
 }

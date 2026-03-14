@@ -6,7 +6,7 @@ import { usePlayerStore } from "@/stores/player/store";
 interface WatchPartyStore {
   // Whether the watch party feature is enabled
   enabled: boolean;
-  // The room code for the watch party (4 digits)
+  // The room code for the watch party (6 digits)
   roomCode: string | null;
   // If the user is hosting (true) or joining (false)
   isHost: boolean;
@@ -24,11 +24,11 @@ interface WatchPartyStore {
   setShowStatusOverlay(show: boolean): void;
 }
 
-// Generate a random 4-digit code
+// Generate a random 6-digit numeric code
 export const generateRoomCode = (): string => {
   const array = new Uint32Array(1);
   crypto.getRandomValues(array);
-  return (1000 + (array[0] % 9000)).toString();
+  return (100000 + (array[0] % 900000)).toString();
 };
 
 // Helper function to reset playback rate to 1x
@@ -75,6 +75,7 @@ export const useWatchPartyStore = create<WatchPartyStore>()(
         set(() => ({
           enabled: false,
           roomCode: null,
+          isHost: false,
         })),
 
       setShowStatusOverlay: (show: boolean) =>

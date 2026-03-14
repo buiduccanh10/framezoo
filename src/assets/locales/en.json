@@ -1566,8 +1566,8 @@
     },
     "alone": "Alone",
     "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>alpha.flix</0>",
+    "isGuest": "Watching as a guest on <0>alpha.flix</0>",
     "hosting": "Hosting",
     "watching": "Watching",
     "syncing": "Syncing...",
@@ -1576,6 +1576,7 @@
     "showStatusOverlay": "Show status overlay",
     "leaveWatchParty": "Leave Watch Party",
     "shareCode": "Share this code with friends (click to copy link)",
+    "enterCodeOrLink": "Enter a shared watch party link or room code",
     "connectedAsGuest": "Connected to watch party as guest",
     "hostParty": "Host a Watch Party",
     "joinParty": "Join a Watch Party",
@@ -1592,6 +1593,8 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "you": "You",
+    "guestFallback": "Guest"
   }
 }
