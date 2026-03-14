@@ -1,60 +1,7 @@
-import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import type { RequireExactlyOne } from "type-fest";
 
-import { Icon, Icons } from "@/components/Icon";
 import { BrandPill } from "@/components/layout/BrandPill";
 import { WideContainer } from "@/components/layout/WideContainer";
-import { shouldHaveLegalPage } from "@/pages/Legal";
-import { conf } from "@/setup/config";
-
-// to and href are mutually exclusive
-type FooterLinkProps = RequireExactlyOne<
-  {
-    children: React.ReactNode;
-    icon: Icons;
-    to: string;
-    href: string;
-  },
-  "to" | "href"
->;
-
-function FooterLink(props: FooterLinkProps) {
-  const navigate = useNavigate();
-
-  const navigateTo = useCallback(() => {
-    if (!props.to) return;
-
-    navigate(props.to);
-  }, [navigate, props.to]);
-
-  return (
-    <a
-      href={props.href}
-      target={props.href ? "_blank" : undefined}
-      rel="noreferrer"
-      className="tabbable rounded py-2 px-3 inline-flex cursor-pointer items-center space-x-3 transition-colors duration-200 hover:text-type-emphasis"
-      onClick={props.to ? navigateTo : undefined}
-    >
-      <Icon icon={props.icon} className="text-2xl" />
-      <span className="font-medium">{props.children}</span>
-    </a>
-  );
-}
-
-function Legal() {
-  const { t } = useTranslation();
-
-  if (!shouldHaveLegalPage()) return null;
-  if (window.location.hash === "#/legal") return null;
-
-  return (
-    <FooterLink to="/legal" icon={Icons.DRAGON}>
-      {t("footer.links.legal")}
-    </FooterLink>
-  );
-}
 
 export function Footer() {
   const { t } = useTranslation();

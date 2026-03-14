@@ -1,4 +1,4 @@
-import { ReactElement, Suspense, lazy, useEffect, useState } from "react";
+import { ReactElement, Suspense, useEffect, useState } from "react";
 import { lazyWithPreload } from "react-lazy-with-preload";
 import {
   Navigate,
@@ -15,21 +15,16 @@ import { DetailsModal } from "@/components/overlays/detailsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
 import { NotificationModal } from "@/components/overlays/notificationsModal";
-import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
-import { AdminPage } from "@/pages/admin/AdminPage";
 import { AllBookmarks } from "@/pages/bookmarks/AllBookmarks";
-import VideoTesterView from "@/pages/developer/VideoTesterView";
 import { DiscoverMore } from "@/pages/discover/AllMovieLists";
 import { Discover } from "@/pages/discover/Discover";
 import { MoreContent } from "@/pages/discover/MoreContent";
 import MaintenancePage from "@/pages/errors/MaintenancePage";
 import { NotFoundPage } from "@/pages/errors/NotFoundPage";
 import { HomePage } from "@/pages/HomePage";
-import { JipPage } from "@/pages/Jip";
-import { LegalPage, shouldHaveLegalPage } from "@/pages/Legal";
 import { LoginPage } from "@/pages/Login";
 import { MigrationPage } from "@/pages/migration/Migration";
 import { MigrationDirectPage } from "@/pages/migration/MigrationDirect";
@@ -37,17 +32,13 @@ import { MigrationDownloadPage } from "@/pages/migration/MigrationDownload";
 import { MigrationUploadPage } from "@/pages/migration/MigrationUpload";
 import { OnboardingPage } from "@/pages/onboarding/Onboarding";
 import { OnboardingExtensionPage } from "@/pages/onboarding/OnboardingExtension";
-import { OnboardingProxyPage } from "@/pages/onboarding/OnboardingProxy";
 import { RegisterPage } from "@/pages/Register";
-import { SupportPage } from "@/pages/Support";
 import { WatchHistory } from "@/pages/watchHistory/WatchHistory";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
 import { useClearModalsOnNavigation } from "@/stores/interface/overlayStack";
 import { LanguageProvider } from "@/stores/language";
 
-const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
-const TestView = lazy(() => import("@/pages/developer/TestView"));
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
 const SettingsPage = lazyWithPreload(() => import("@/pages/Settings"));
 
@@ -130,7 +121,6 @@ function App() {
       <NotificationModal id="notifications" />
       <KeyboardCommandsModal id="keyboard-commands" />
       <KeyboardCommandsEditModal id="keyboard-commands-edit" />
-      <SupportInfoModal id="support-info" />
       <DetailsModal id="details" />
       <DetailsModal id="discover-details" />
       <DetailsModal id="player-details" />
@@ -144,10 +134,6 @@ function App() {
           {/* Public pages */}
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/support" element={<SupportPage />} />
-          {shouldHaveLegalPage() ? (
-            <Route path="/legal" element={<LegalPage />} />
-          ) : null}
 
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
@@ -178,7 +164,6 @@ function App() {
               path="/onboarding/extension"
               element={<OnboardingExtensionPage />}
             />
-            <Route path="/onboarding/proxy" element={<OnboardingProxyPage />} />
 
             {/* Migration pages */}
             <Route path="/migration" element={<MigrationPage />} />
@@ -189,7 +174,6 @@ function App() {
             />
             <Route path="/migration/upload" element={<MigrationUploadPage />} />
 
-            <Route path="/jip" element={<JipPage />} />
             {/* Discover pages */}
             <Route path="/discover" element={<Discover />} />
             <Route
@@ -215,15 +199,6 @@ function App() {
                 </Suspense>
               }
             />
-            {/* admin routes */}
-            <Route path="/admin" element={<AdminPage />} />
-            {/* other */}
-            <Route path="/dev" element={<DeveloperPage />} />
-            <Route path="/dev/video" element={<VideoTesterView />} />
-            {/* developer routes disable in production */}
-            {process.env.NODE_ENV === "development" ? (
-              <Route path="/dev/test" element={<TestView />} />
-            ) : null}
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
