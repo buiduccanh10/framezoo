@@ -30,6 +30,11 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
   }, [tidbKey, preferences.tidbKey, setTIDBKey]);
 
   const isEnvSet = !!config.TIDB_API_KEY;
+  const shouldHideInProduction = isEnvSet && !import.meta.env.DEV;
+
+  if (shouldHideInProduction) {
+    return null;
+  }
 
   return (
     <SettingsCard>

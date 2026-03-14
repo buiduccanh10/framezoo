@@ -50,7 +50,8 @@ export function useSkipTime() {
   const skipSegmentsCacheKey = usePlayerStore((s) => s.skipSegmentsCacheKey);
   const skipSegments = usePlayerStore((s) => s.skipSegments);
   const setSkipSegments = usePlayerStore((s) => s.setSkipSegments);
-  const tidbKey = usePreferencesStore((s) => s.tidbKey);
+  const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
+  const tidbKey = conf().TIDB_API_KEY ?? tidbKeyFromStore;
 
   useEffect(() => {
     if (!cacheKey) return;

@@ -6,6 +6,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { SegmentData } from "@/components/player/hooks/useSkipTime";
 import { TIDBSubmissionForm } from "@/components/player/TIDBSubmissionForm";
 import { Transition } from "@/components/utils/Transition";
+import { conf } from "@/setup/config";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -26,7 +27,8 @@ export function ThumbsFeedback({
 }: ThumbsFeedbackProps) {
   const { t } = useTranslation();
   const time = usePlayerStore((s) => s.progress.time);
-  const tidbKey = usePreferencesStore((s) => s.tidbKey);
+  const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
+  const tidbKey = conf().TIDB_API_KEY ?? tidbKeyFromStore;
 
   // State for feedback
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);

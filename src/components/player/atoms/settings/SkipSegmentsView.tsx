@@ -6,6 +6,7 @@ import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { TIDBSubmissionForm } from "@/components/player/TIDBSubmissionForm";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { conf } from "@/setup/config";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -16,7 +17,8 @@ export function SkipSegmentsView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
   const display = usePlayerStore((s) => s.display);
   const segments = useSkipTime();
-  const tidbKey = usePreferencesStore((s) => s.tidbKey);
+  const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
+  const tidbKey = conf().TIDB_API_KEY ?? tidbKeyFromStore;
   const { setCurrentOverlay } = useOverlayStack();
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
 
