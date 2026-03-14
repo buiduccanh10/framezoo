@@ -14,6 +14,27 @@ import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 import { CaptionOption, type SubtitleSelectionMode } from "./CaptionsView";
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
 
+function isLikelyUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function inferSubtitleSource(
+  source: string | undefined,
+  url: string,
+): string | undefined {
+  if (source && source.trim().length > 0) return source;
+
+  if (url.includes("sub.wyzie.io")) return "wyzie";
+  if (url.includes("opensubtitles")) return "opensubs";
+
+  return undefined;
+}
+
 export interface LanguageSubtitlesViewProps {
   id: string;
   language: string;
@@ -97,6 +118,13 @@ export function LanguageSubtitlesView({
   };
 
   const renderSubtitleOption = (v: CaptionListItem) => {
+    const inferredSource = inferSubtitleSource(v.source, v.url);
+    const prettyLanguage =
+      getPrettyLanguageNameFromLocale(v.language) ||
+      t("player.menus.subtitles.unknownLanguage");
+    const displayTitle =
+      v.display && !isLikelyUrl(v.display) ? v.display : prettyLanguage;
+
     const handleDoubleClick = async () => {
       const copyData = {
         id: v.id,
@@ -175,12 +203,12 @@ export function LanguageSubtitlesView({
         translatable={selectionMode === "primary"}
         subtitleUrl={v.url}
         subtitleType={v.type}
-        subtitleSource={v.source}
+        subtitleSource={inferredSource}
         subtitleEncoding={v.encoding}
         isHearingImpaired={v.isHearingImpaired}
         matchScore={v.id === selectedCaptionId ? matchScore : undefined}
       >
-        {v.display || v.id}
+        {displayTitle}
       </CaptionOption>
     );
   };
