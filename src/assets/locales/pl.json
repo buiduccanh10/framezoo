@@ -621,7 +621,7 @@
     "badge": "Nie znaleziono",
     "goHome": "Wróć na stronę główną",
     "reloadButton": "Spróbuj jeszcze raz",
-    "message": "Szukaliśmy wszędzie: w koszu, w szafie, a nawet w piwnicy, ale nie byliśmy w stanie znaleźć strony której szukasz. (ಥ﹏ಥ)",
+    "message": "Szukaliśmy wszędzie: w koszu, w szafie, a nawet w piwnicy, ale nie byliśmy w stanie znaleźć strony której szukasz. ",
     "title": "Nie można znaleźć tej strony"
   },
   "downtimeNotice": {

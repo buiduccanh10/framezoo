@@ -19,7 +19,6 @@ import { SupportInfoModal } from "@/components/overlays/SupportInfoModal";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
-import { AboutPage } from "@/pages/About";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import { AllBookmarks } from "@/pages/bookmarks/AllBookmarks";
 import VideoTesterView from "@/pages/developer/VideoTesterView";
@@ -145,7 +144,6 @@ function App() {
           {/* Public pages */}
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/about" element={<AboutPage />} />
           <Route path="/support" element={<SupportPage />} />
           {shouldHaveLegalPage() ? (
             <Route path="/legal" element={<LegalPage />} />

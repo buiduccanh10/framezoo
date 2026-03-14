@@ -621,7 +621,7 @@
     "badge": "Non trovato",
     "goHome": "Torna alla pagina iniziale",
     "reloadButton": "Riprova",
-    "message": "Abbiamo cercato ovunque: sotto i bidoni, nell'armadio, dietro il proxy, ma alla fine non siamo riusciti a trovare la pagina che stai cercando. (ಥ﹏ಥ)",
+    "message": "Abbiamo cercato ovunque: sotto i bidoni, nell'armadio, dietro il proxy, ma alla fine non siamo riusciti a trovare la pagina che stai cercando. ",
     "title": "Impossibile trovare quella pagina"
   },
   "downtimeNotice": {

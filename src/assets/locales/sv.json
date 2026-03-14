@@ -428,33 +428,23 @@
     "titles": {
       "69": {
         "default": "Sugen på något hett?",
-        "extra": [
-          "Glad 69 dag 😘!"
-        ]
+        "extra": ["Glad 69 dag 😘!"]
       },
       "420": {
         "default": "Vad vill du titta denna 4/20?",
-        "extra": [
-          "Glad 4/20 🥳!"
-        ]
+        "extra": ["Glad 4/20 🥳!"]
       },
       "day": {
         "default": "Vad vill du titta på i eftermiddag?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "morning": {
         "default": "Vad vill du titta på den här morgonen?",
-        "extra": [
-          "Jag hör att Before Sunrise är bra"
-        ]
+        "extra": ["Jag hör att Before Sunrise är bra"]
       },
       "night": {
         "default": "Vad vill du titta på ikväll?",
-        "extra": [
-          "Trött? Jag hör att The Exorcist är bra."
-        ]
+        "extra": ["Trött? Jag hör att The Exorcist är bra."]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -631,7 +621,7 @@
     "badge": "Ej hittad",
     "goHome": "Tillbaka till startsidan",
     "reloadButton": "Försök igen",
-    "message": "Vi letade överallt: under soptunnorna, i garderoben, bakom proxy men kunde slutligen inte hitta sidan du letar efter. (ಥ﹏ಥ)",
+    "message": "Vi letade överallt: under soptunnorna, i garderoben, bakom proxy men kunde slutligen inte hitta sidan du letar efter. ",
     "title": "Kunde inte hitta den sidan"
   },
   "downtimeNotice": {

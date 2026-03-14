@@ -315,9 +315,6 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               {t("navigation.menu.development")}
             </DropdownLink>
           ) : null}
-          <DropdownLink href="/about" icon={Icons.CIRCLE_QUESTION}>
-            {t("navigation.menu.about")}
-          </DropdownLink>
           {/* {!enableLowPerformanceMode && (
             <DropdownLink href="/discover" icon={Icons.RISING_STAR}>
               {t("navigation.menu.discover")}

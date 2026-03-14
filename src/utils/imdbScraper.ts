@@ -111,16 +111,6 @@ export async function scrapeIMDb(
   const hasProxy = Boolean(useAuthStore.getState().proxySet);
 
   if (!hasExtension && !hasProxy) {
-    // Custom API for trailers:
-    const trailerResponse = await fetch(
-      `https://fed-trailers.pstream.mov/${type === "movie" ? "movie" : "tv"}/${imdbId}`,
-    ).then((res) => res.json());
-    if (trailerResponse.trailer?.embed_url) {
-      return {
-        trailer_url: trailerResponse.trailer.embed_url,
-      };
-    }
-    // END CUSTOM API
     throw new Error(
       "IMDb scraping requires either the browser extension or a custom proxy to be set up. " +
         "Please install the extension or set up a proxy in the settings.",

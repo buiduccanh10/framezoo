@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { To, useNavigate } from "react-router-dom";
 
+import { ActionPillButton } from "@/components/buttons/ActionPillButton";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
@@ -23,7 +24,6 @@ import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePreferencesStore } from "@/stores/preferences";
 import { MediaItem } from "@/utils/mediaTypes";
 
-import { Button } from "./About";
 import { AdsPart } from "./parts/home/AdsPart";
 import { SupportBar } from "./parts/home/SupportBar";
 
@@ -224,12 +224,12 @@ export function HomePage() {
           <div className="flex flex-col justify-center items-center h-40 space-y-4">
             <div className="flex flex-col items-center justify-center">
               {!search && !enableLowPerformanceMode && (
-                <Button
+                <ActionPillButton
                   className="px-py p-[0.35em] mt-3 rounded-xl text-type-dimmed box-content text-[18px] bg-largeCard-background justify-center items-center"
                   onClick={() => handleClick("/discover")}
                 >
                   {t("home.search.discover")}
-                </Button>
+                </ActionPillButton>
               )}
             </div>
           </div>

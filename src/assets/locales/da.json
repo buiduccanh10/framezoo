@@ -621,7 +621,7 @@
     "badge": "Ikke fundet",
     "goHome": "Tilbage til hjem",
     "reloadButton": "Prøv igen",
-    "message": "Vi har ledt overalt: under skraldespandene, i skabet, bag proxy'en, men i sidste ende kunne vi ikke finde den side, du leder efter. (ಥ﹏ಥ)",
+    "message": "Vi har ledt overalt: under skraldespandene, i skabet, bag proxy'en, men i sidste ende kunne vi ikke finde den side, du leder efter. ",
     "title": "Kunne ikke finde den side"
   },
   "downtimeNotice": {

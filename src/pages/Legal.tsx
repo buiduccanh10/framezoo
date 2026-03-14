@@ -84,7 +84,7 @@ export function LegalPage() {
                   that&apos;s already available online, without bypassing any
                   security measures.
                 </Paragraph>
-                <Link to="/about">Learn more about how AlphaFlix works</Link>
+                <Link to="/support">Learn more about how AlphaFlix works</Link>
               </>
             }
           />

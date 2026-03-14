@@ -625,7 +625,7 @@
     "badge": "Ei löydetty",
     "goHome": "Takaisin kotiin",
     "reloadButton": "Try again",
-    "message": "Etsimme kaikkialta: roskisten alta, kaapista, välityspalvelimen takaa… mutta emme silti löytäneet etsimääsi sivua. (ಥ﹏ಥ)",
+    "message": "Etsimme kaikkialta: roskisten alta, kaapista, välityspalvelimen takaa… mutta emme silti löytäneet etsimääsi sivua. ",
     "title": "Sivua ei löytynyt"
   },
   "downtimeNotice": {

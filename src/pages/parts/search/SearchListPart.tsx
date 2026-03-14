@@ -5,12 +5,12 @@ import { useAsyncFn } from "react-use";
 
 import { searchForMedia } from "@/backend/metadata/search";
 import { MWQuery } from "@/backend/metadata/types/mw";
+import { ActionPillButton } from "@/components/buttons/ActionPillButton";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
-import { Button } from "@/pages/About";
 import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
 import { MediaItem } from "@/utils/mediaTypes";
 
@@ -34,12 +34,12 @@ function SearchSuffix(props: { failed?: boolean; results?: number }) {
           {(props.results ?? 0) > 0 ? (
             <>
               <p>{t("home.search.allResults")}</p>
-              <Button
+              <ActionPillButton
                 className="px-py p-[0.3em] mt-3 rounded-xl text-type-dimmed box-content text-[17px] bg-largeCard-background justify-center items-center"
                 onClick={() => navigate("/discover")}
               >
                 {t("home.search.discoverMore")}
-              </Button>
+              </ActionPillButton>
             </>
           ) : (
             <p>{t("home.search.noResults")}</p>

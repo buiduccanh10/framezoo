@@ -418,33 +418,23 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "day": {
         "default": "今日の午後はどんな映画を見たい？",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "morning": {
         "default": "今朝はどんな映画を見たい？",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "night": {
         "default": "今夜はどんな映画を見たい？",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -621,7 +611,7 @@
     "badge": "Not found",
     "goHome": "Back to home",
     "reloadButton": "Try again",
-    "message": "We looked everywhere: under the bins, in the closet, behind the proxy, but ultimately couldn't find the page you are looking for. (ಥ﹏ಥ)",
+    "message": "We looked everywhere: under the bins, in the closet, behind the proxy, but ultimately couldn't find the page you are looking for. ",
     "title": "Couldn't find that page"
   },
   "downtimeNotice": {
