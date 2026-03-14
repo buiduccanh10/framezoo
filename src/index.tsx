@@ -1,7 +1,7 @@
 import "@/setup/pwa";
 import "core-js/stable";
 import "./stores/__old/imports";
-import "@/setup/ga";
+import "@/setup/devtoolsProtection";
 import "@/assets/css/index.css";
 
 import { StrictMode, Suspense, useCallback, useState } from "react";
