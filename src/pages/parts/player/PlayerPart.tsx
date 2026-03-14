@@ -35,6 +35,9 @@ export function PlayerPart(props: PlayerPartProps) {
   const meta = usePlayerStore((s) => s.meta);
 
   const inControl = !enabled || isHost;
+  const shouldShowBottomControls = isMobile ? true : showTargets;
+  const shouldShowCenterMobileControls =
+    status === playerStatus.PLAYING && (isMobile || showTouchTargets);
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isPWA = window.matchMedia("(display-mode: standalone)").matches;
@@ -113,7 +116,7 @@ export function PlayerPart(props: PlayerPartProps) {
 
       <Player.CenterMobileControls
         className="text-white"
-        show={showTouchTargets && status === playerStatus.PLAYING}
+        show={shouldShowCenterMobileControls}
       >
         <Player.SkipBackward iconSizeClass="text-3xl" inControl={inControl} />
         <Player.Pause
@@ -168,7 +171,7 @@ export function PlayerPart(props: PlayerPartProps) {
         </div>
       </Player.TopControls>
 
-      <Player.BottomControls show={showTargets}>
+      <Player.BottomControls show={shouldShowBottomControls}>
         <div className="flex flex-col w-full">
           {status === playerStatus.PLAYING ? (
             <div className="w-full mb-2 flex items-center space-x-4">
@@ -214,20 +217,46 @@ export function PlayerPart(props: PlayerPartProps) {
             )}
           </div>
         </div>
-        <div className="grid grid-cols-[2.5rem,1fr,2.5rem] gap-3 lg:hidden">
+        <div className="grid grid-cols-[2rem,minmax(0,1fr),2rem] gap-1 ssm:gap-2 lg:hidden">
           <div />
-          <div className="flex justify-center space-x-3">
+          <div className="flex max-w-full items-center justify-center gap-1 ssm:gap-2 flex-wrap">
             {/* Disable PiP for iOS PWA */}
             {!(isPWA && isIOS) && status === playerStatus.PLAYING && (
-              <Player.Pip />
+              <Player.Pip
+                iconSizeClass="text-[22px] ssm:text-[24px]"
+                className="p-2 ssm:p-2.5"
+              />
             )}
-            <Player.Episodes inControl={inControl} />
+            {status === playerStatus.PLAYING && (
+              <Player.Pause
+                iconSizeClass="text-[22px] ssm:text-[24px]"
+                className="p-2 ssm:p-2.5"
+              />
+            )}
+            {status === playerStatus.PLAYING && (
+              <Player.Volume
+                iconSizeClass="text-[22px] ssm:text-[24px]"
+                className="shrink-0"
+              />
+            )}
+            <Player.Episodes
+              inControl={inControl}
+              compact
+              iconSizeClass="text-[22px] ssm:text-[24px]"
+              className="p-2 ssm:p-2.5"
+            />
             {status === playerStatus.PLAYING ? (
               <div className="hidden ssm:block">
-                <Player.Captions />
+                <Player.Captions
+                  iconSizeClass="text-[22px] ssm:text-[24px]"
+                  className="p-2 ssm:p-2.5"
+                />
               </div>
             ) : null}
-            <Player.Settings />
+            <Player.Settings
+              iconSizeClass="text-[22px] ssm:text-[24px]"
+              className="p-2 ssm:p-2.5"
+            />
           </div>
           <div>
             {status === playerStatus.PLAYING && (

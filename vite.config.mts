@@ -70,7 +70,7 @@ export default defineConfig(({ mode }) => {
           name: "AlphaFlix",
           short_name: "AlphaFlix",
           description:
-            "Watch your favorite shows and movies for free with no ads ever! (っ'ヮ'c)",
+            "Watch your favorite shows and movies for free with no ads ever! ",
           theme_color: "#000000",
           background_color: "#000000",
           display: "standalone",

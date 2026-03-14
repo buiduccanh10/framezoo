@@ -1102,7 +1102,12 @@ export function EpisodesRouter(props: EpisodesProps) {
   return <EpisodesOverlay onChange={props.onChange} id="episodes" />;
 }
 
-export function Episodes(props: { inControl: boolean }) {
+export function Episodes(props: {
+  inControl: boolean;
+  compact?: boolean;
+  iconSizeClass?: string;
+  className?: string;
+}) {
   const { t } = useTranslation();
   const router = useOverlayRouter("episodes");
   const setHasOpenOverlay = usePlayerStore((s) => s.setHasOpenOverlay);
@@ -1116,10 +1121,12 @@ export function Episodes(props: { inControl: boolean }) {
   return (
     <OverlayAnchor id={router.id}>
       <VideoPlayerButton
+        className={props.className}
+        iconSizeClass={props.iconSizeClass}
         onClick={() => router.open("/episodes")}
         icon={Icons.EPISODES}
       >
-        {t("player.menus.episodes.button")}
+        {props.compact ? null : t("player.menus.episodes.button")}
       </VideoPlayerButton>
     </OverlayAnchor>
   );

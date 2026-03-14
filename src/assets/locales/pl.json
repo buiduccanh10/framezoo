@@ -242,7 +242,7 @@
       "twitter": "Twitter",
       "funding": "Wesprzyj nas"
     },
-    "tagline": "Oglądaj swoje ulubione seriale i filmy za darmo, bez reklam! (っ'ヮ'c)"
+    "tagline": "Oglądaj swoje ulubione seriale i filmy za darmo, bez reklam! "
   },
   "global": {
     "name": "AlphaFlix",
@@ -428,33 +428,23 @@
     "titles": {
       "69": {
         "default": "Masz ochotę na coś pikantnego?",
-        "extra": [
-          "Wesołego dnia 69 😘!"
-        ]
+        "extra": ["Wesołego dnia 69 😘!"]
       },
       "420": {
         "default": "Dziś jest 20 kwietnia, co chciałbyś obejrzeć?",
-        "extra": [
-          "Wesołego 420 🥳!"
-        ]
+        "extra": ["Wesołego 420 🥳!"]
       },
       "day": {
         "default": "Co chciałbyś obejrzeć dziś po południu?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "morning": {
         "default": "Co chciałbyś obejrzeć dziś rano?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "night": {
         "default": "Co chciałbyś obejrzeć dziś wieczorem?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",

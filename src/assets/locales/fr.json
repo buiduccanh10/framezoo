@@ -242,7 +242,7 @@
       "twitter": "Twitter",
       "funding": "Soutenez-nous"
     },
-    "tagline": "Regardez vos émissions et films préférés gratuitement et sans aucune pubs ! (っ'ヮ'c)"
+    "tagline": "Regardez vos émissions et films préférés gratuitement et sans aucune pubs ! "
   },
   "global": {
     "name": "AlphaFlix",
@@ -428,27 +428,19 @@
     "titles": {
       "69": {
         "default": "Partant pour quelque chose de corsé ?",
-        "extra": [
-          "Joyeux jour 69 😘 !"
-        ]
+        "extra": ["Joyeux jour 69 😘 !"]
       },
       "420": {
         "default": "Qu'aimeriez-vous regarder ce 20/4?",
-        "extra": [
-          "Joyeux 4/20 🥳!"
-        ]
+        "extra": ["Joyeux 4/20 🥳!"]
       },
       "day": {
         "default": "Que voulez-vous regarder cet après-midi ?",
-        "extra": [
-          "Viva la AlphaFlix !"
-        ]
+        "extra": ["Viva la AlphaFlix !"]
       },
       "morning": {
         "default": "Que voulez-vous regarder ce matin ?",
-        "extra": [
-          "Les films, c'est comme les voyages : ça nous ouvre l'esprit"
-        ]
+        "extra": ["Les films, c'est comme les voyages : ça nous ouvre l'esprit"]
       },
       "night": {
         "default": "Que voulez-vous regarder ce soir ?",

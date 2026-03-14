@@ -242,7 +242,7 @@
       "twitter": "Twitter",
       "funding": "Support us"
     },
-    "tagline": "Se dine favoritserier og -film gratis og uden reklamer! (っ'ヮ'c)"
+    "tagline": "Se dine favoritserier og -film gratis og uden reklamer! "
   },
   "global": {
     "name": "AlphaFlix",
@@ -428,33 +428,23 @@
     "titles": {
       "69": {
         "default": "Har du lyst til at \"hygge\"?",
-        "extra": [
-          "Glædelig 69-dag 😘!"
-        ]
+        "extra": ["Glædelig 69-dag 😘!"]
       },
       "420": {
         "default": "Hvad vil du gerne se denne 4/20?",
-        "extra": [
-          "Glædelig 4/20 🥳!"
-        ]
+        "extra": ["Glædelig 4/20 🥳!"]
       },
       "day": {
         "default": "Hvad vil du gerne se i eftermiddag?",
-        "extra": [
-          "Længe leve AlphaFlix!"
-        ]
+        "extra": ["Længe leve AlphaFlix!"]
       },
       "morning": {
         "default": "Hvad vil du gerne se her til morgen?",
-        "extra": [
-          "Længe leve AlphaFlix!"
-        ]
+        "extra": ["Længe leve AlphaFlix!"]
       },
       "night": {
         "default": "Hvad vil du gerne se i aften?",
-        "extra": [
-          "Længe leve AlphaFlix!"
-        ]
+        "extra": ["Længe leve AlphaFlix!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",

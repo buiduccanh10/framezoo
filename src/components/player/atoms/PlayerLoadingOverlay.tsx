@@ -6,6 +6,8 @@ import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
+const MESSAGE_INITIAL_DELAY_MS = 4000;
+
 function getRandomMessage(messages: string[], prev?: string) {
   if (messages.length <= 1) return messages[0] ?? "";
   let next = prev ?? "";
@@ -58,6 +60,7 @@ export function PlayerLoadingOverlay() {
   const [loadingMessage, setLoadingMessage] = useState(() =>
     getRandomMessage(loadingMessages),
   );
+  const [messageEnabled, setMessageEnabled] = useState(false);
   const [messageVisible, setMessageVisible] = useState(true);
 
   useEffect(() => {
@@ -100,7 +103,6 @@ export function PlayerLoadingOverlay() {
   useEffect(() => {
     if (showOverlayWhenReady) {
       setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
-      setMessageVisible(true);
       setShouldRender(true);
       const frame = window.requestAnimationFrame(() => setIsVisible(true));
       return () => window.cancelAnimationFrame(frame);
@@ -115,7 +117,22 @@ export function PlayerLoadingOverlay() {
   }, [showOverlayWhenReady, loadingMessages]);
 
   useEffect(() => {
-    if (!showOverlayWhenReady) return;
+    if (!showOverlayWhenReady) {
+      setMessageEnabled(false);
+      setMessageVisible(false);
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setMessageEnabled(true);
+      setMessageVisible(true);
+    }, MESSAGE_INITIAL_DELAY_MS);
+
+    return () => window.clearTimeout(timeout);
+  }, [showOverlayWhenReady]);
+
+  useEffect(() => {
+    if (!showOverlayWhenReady || !messageEnabled) return;
 
     const interval = window.setInterval(() => {
       setMessageVisible(false);
@@ -126,7 +143,7 @@ export function PlayerLoadingOverlay() {
     }, 2600);
 
     return () => window.clearInterval(interval);
-  }, [showOverlayWhenReady, loadingMessages]);
+  }, [showOverlayWhenReady, loadingMessages, messageEnabled]);
 
   if (!shouldRender) return null;
 
@@ -170,7 +187,7 @@ export function PlayerLoadingOverlay() {
         ) : null}
         <p
           className={`text-[16px] text-white/60 font-medium transition-all duration-300 ${
-            messageVisible
+            messageEnabled && messageVisible
               ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-2"
           }`}

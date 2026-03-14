@@ -242,7 +242,7 @@
       "twitter": "טוויטר",
       "funding": "לתמיכה"
     },
-    "tagline": "צפה בסדרות ובסרטים האהובים עליך בחינם, בלי פרסומות לעולם! (っ'ヮ'c)"
+    "tagline": "צפה בסדרות ובסרטים האהובים עליך בחינם, בלי פרסומות לעולם! "
   },
   "global": {
     "name": "פיי-סטרים",
@@ -428,33 +428,23 @@
     "titles": {
       "69": {
         "default": "באלך משהו חריף?",
-        "extra": [
-          "יום 69 שמח 😘!"
-        ]
+        "extra": ["יום 69 שמח 😘!"]
       },
       "420": {
         "default": "מה היית רוצה לראות ב-4/20 הזה?",
-        "extra": [
-          "4/20 שמח 🥳!"
-        ]
+        "extra": ["4/20 שמח 🥳!"]
       },
       "day": {
         "default": "במה תרצה לצפות באחר צהריים זה?",
-        "extra": [
-          "עם ישראל חיי AlphaFlix!"
-        ]
+        "extra": ["עם ישראל חיי AlphaFlix!"]
       },
       "morning": {
         "default": "אני אוהב את חברה שלי?",
-        "extra": [
-          "עם ישראל חיי AlphaFlix!"
-        ]
+        "extra": ["עם ישראל חיי AlphaFlix!"]
       },
       "night": {
         "default": "במה תרצה לצפות הלילה?",
-        "extra": [
-          "עם ישראל חיי AlphaFlix!"
-        ]
+        "extra": ["עם ישראל חיי AlphaFlix!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",

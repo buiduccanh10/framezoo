@@ -242,7 +242,7 @@
       "twitter": "Zwetschere",
       "funding": "Onterstötz üs"
     },
-    "tagline": "Lueg dini lieblings Serie ond Felme gratis ohni Werbig z’gse! (っ'ヮ'c)"
+    "tagline": "Lueg dini lieblings Serie ond Felme gratis ohni Werbig z’gse! "
   },
   "global": {
     "name": "AlphaFlix",
@@ -428,33 +428,23 @@
     "titles": {
       "69": {
         "default": "Hesch loscht of öpis scharfs?",
-        "extra": [
-          "Schöne 69. Tag 😘!"
-        ]
+        "extra": ["Schöne 69. Tag 😘!"]
       },
       "420": {
         "default": "Gets öpis, wodu am 4/20 welsch luege?",
-        "extra": [
-          "Fröhleche 4/20 🥳!"
-        ]
+        "extra": ["Fröhleche 4/20 🥳!"]
       },
       "day": {
         "default": "Was möchtisch a däm schöne nomitag aluege?",
-        "extra": [
-          "Viva la AlphaFlix e ciao Svizzera"
-        ]
+        "extra": ["Viva la AlphaFlix e ciao Svizzera"]
       },
       "morning": {
         "default": "Was welsch a däm morge aluege?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "night": {
         "default": "Besch no wach? Was möchtisch luege?",
-        "extra": [
-          "Viva la ﻿﻿Svizzera!"
-        ]
+        "extra": ["Viva la ﻿﻿Svizzera!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",

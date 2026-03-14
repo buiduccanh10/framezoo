@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useWindowSize } from "react-use";
 
 import { Icons } from "@/components/Icon";
 import { OverlayAnchor } from "@/components/overlays/OverlayAnchor";
@@ -11,6 +12,7 @@ import {
 } from "@/components/player/atoms/settings/SourceSelectingView";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { Menu } from "@/components/player/internals/ContextMenu";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -39,7 +41,20 @@ function SettingsOverlay({ id }: { id: string }) {
   const [subtitleSelectionMode, setSubtitleSelectionMode] =
     useState<SubtitleSelectionMode>("primary");
   const [isDualSubEnabled, setIsDualSubEnabled] = useState(false);
+  const { width: viewportWidth, height: viewportHeight } = useWindowSize();
+  const { isMobile } = useIsMobile();
   const router = useOverlayRouter(id);
+
+  const isLandscape = viewportWidth > viewportHeight;
+  const horizontalPadding = isMobile ? 20 : 60;
+  const verticalPadding = isMobile ? (isLandscape ? 12 : 24) : 40;
+  const maxOverlayWidth = Math.max(280, viewportWidth - horizontalPadding * 2);
+  const maxOverlayHeight = Math.max(260, viewportHeight - verticalPadding * 2);
+  const defaultWidth = Math.min(343, maxOverlayWidth);
+  const wideWidth = Math.min(443, maxOverlayWidth);
+  const defaultHeight = Math.min(496, maxOverlayHeight);
+  const playbackHeight = Math.min(330, maxOverlayHeight);
+  const skipSegmentsHeight = Math.min(446, maxOverlayHeight);
 
   // reset source id and language when going to home or closing overlay
   useEffect(() => {
@@ -57,20 +72,40 @@ function SettingsOverlay({ id }: { id: string }) {
   return (
     <Overlay id={id}>
       <OverlayRouter id={id}>
-        <OverlayPage id={id} path="/" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <SettingsMenu id={id} />
         </OverlayPage>
-        <OverlayPage id={id} path="/quality" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/quality"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.Card>
             <QualityView id={id} />
           </Menu.Card>
         </OverlayPage>
-        <OverlayPage id={id} path="/audio" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/audio"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.Card>
             <AudioView id={id} />
           </Menu.Card>
         </OverlayPage>
-        <OverlayPage id={id} path="/captions" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/captions"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.CardWithScrollable>
             <CaptionsView
               id={id}
@@ -84,7 +119,12 @@ function SettingsOverlay({ id }: { id: string }) {
           </Menu.CardWithScrollable>
         </OverlayPage>
         {/* This is used by the captions shortcut in bottomControls of player */}
-        <OverlayPage id={id} path="/captionsOverlay" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/captionsOverlay"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.CardWithScrollable>
             <CaptionsView
               id={id}
@@ -99,8 +139,8 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captionsOverlay/languagesOverlay"
-          width={443}
-          height={496}
+          width={wideWidth}
+          height={defaultHeight}
         >
           <Menu.CardWithScrollable>
             {chosenLanguage && (
@@ -117,8 +157,8 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captionsOverlay/languagesOverlay/translateSubtitleOverlay"
-          width={443}
-          height={496}
+          width={wideWidth}
+          height={defaultHeight}
         >
           <Menu.CardWithScrollable>
             {captionToTranslate && (
@@ -130,7 +170,12 @@ function SettingsOverlay({ id }: { id: string }) {
             )}
           </Menu.CardWithScrollable>
         </OverlayPage>
-        <OverlayPage id={id} path="/captions/settings" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/captions/settings"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.Card>
             <CaptionSettingsView id={id} />
           </Menu.Card>
@@ -139,24 +184,39 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captions/settingsOverlay"
-          width={343}
-          height={496}
+          width={defaultWidth}
+          height={defaultHeight}
         >
           <Menu.Card>
             <CaptionSettingsView id={id} overlayBackLink />
           </Menu.Card>
         </OverlayPage>
-        <OverlayPage id={id} path="/source" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/source"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.CardWithScrollable>
             <SourceSelectionView id={id} onChoose={setChosenSourceId} />
           </Menu.CardWithScrollable>
         </OverlayPage>
-        <OverlayPage id={id} path="/source/embeds" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/source/embeds"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.CardWithScrollable>
             <EmbedSelectionView id={id} sourceId={chosenSourceId} />
           </Menu.CardWithScrollable>
         </OverlayPage>
-        <OverlayPage id={id} path="/playback" width={343} height={330}>
+        <OverlayPage
+          id={id}
+          path="/playback"
+          width={defaultWidth}
+          height={playbackHeight}
+        >
           <Menu.Card>
             <PlaybackSettingsView id={id} />
           </Menu.Card>
@@ -164,8 +224,8 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/playback/skip-segments"
-          width={343}
-          height={446}
+          width={defaultWidth}
+          height={skipSegmentsHeight}
         >
           <Menu.Card>
             <SkipSegmentsView id={id} />
@@ -174,8 +234,8 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captions/transcript"
-          width={343}
-          height={496}
+          width={defaultWidth}
+          height={defaultHeight}
         >
           <Menu.CardWithScrollable>
             <TranscriptView id={id} />
@@ -184,8 +244,8 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captions/languages"
-          width={443}
-          height={496}
+          width={wideWidth}
+          height={defaultHeight}
         >
           <Menu.CardWithScrollable>
             {chosenLanguage && (
@@ -201,8 +261,8 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captions/languages/translateSubtitleOverlay"
-          width={443}
-          height={496}
+          width={wideWidth}
+          height={defaultHeight}
         >
           <Menu.CardWithScrollable>
             {captionToTranslate && (
@@ -211,7 +271,12 @@ function SettingsOverlay({ id }: { id: string }) {
           </Menu.CardWithScrollable>
         </OverlayPage>
         <DownloadRoutes id={id} />
-        <OverlayPage id={id} path="/watchparty" width={343} height={496}>
+        <OverlayPage
+          id={id}
+          path="/watchparty"
+          width={defaultWidth}
+          height={defaultHeight}
+        >
           <Menu.CardWithScrollable>
             <WatchPartyView id={id} />
           </Menu.CardWithScrollable>
@@ -225,7 +290,10 @@ export function SettingsRouter() {
   return <SettingsOverlay id="settings" />;
 }
 
-export function Settings() {
+export function Settings(props: {
+  iconSizeClass?: string;
+  className?: string;
+}) {
   const router = useOverlayRouter("settings");
   const setHasOpenOverlay = usePlayerStore((s) => s.setHasOpenOverlay);
 
@@ -235,7 +303,12 @@ export function Settings() {
 
   return (
     <OverlayAnchor id={router.id}>
-      <VideoPlayerButton onClick={() => router.open()} icon={Icons.GEAR} />
+      <VideoPlayerButton
+        className={props.className}
+        iconSizeClass={props.iconSizeClass}
+        onClick={() => router.open()}
+        icon={Icons.GEAR}
+      />
     </OverlayAnchor>
   );
 }
