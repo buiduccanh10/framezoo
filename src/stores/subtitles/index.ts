@@ -194,6 +194,32 @@ export const useSubtitleStore = create(
     })),
     {
       name: "__MW::subtitles",
+      version: 2,
+      migrate: (persistedState: unknown, version: number) => {
+        if (!persistedState || typeof persistedState !== "object") {
+          return persistedState;
+        }
+
+        const state = persistedState as {
+          styling?: Partial<SubtitleStyling>;
+        };
+
+        if (!state.styling) return state;
+
+        // Migrate old defaults:
+        // - size: 100% (1.0) -> 165% effective size (1.1 * 1.5 in renderer)
+        // - background opacity: 50% -> 0%
+        if (version < 2) {
+          if (state.styling.size === 1) {
+            state.styling.size = 1.1;
+          }
+          if (state.styling.backgroundOpacity === 0.5) {
+            state.styling.backgroundOpacity = 0;
+          }
+        }
+
+        return state;
+      },
       merge: (persisted, current) => merge({}, current, persisted),
     },
   ),
