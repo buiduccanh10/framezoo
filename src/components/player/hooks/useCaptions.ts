@@ -7,11 +7,37 @@ import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
+import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import {
   filterDuplicateCaptionCues,
   parseVttSubtitles,
 } from "../utils/captions";
+
+const LANGUAGE_ALIASES: Record<string, string[]> = {
+  vi: ["vie", "vietnamese"],
+  en: ["eng", "english"],
+};
+
+function normalizeLanguageToken(value: string): string {
+  return value.trim().toLowerCase().replaceAll("_", "-");
+}
+
+function getLanguageCandidates(language: string): string[] {
+  const normalized = normalizeLanguageToken(language);
+  const base = normalized.split("-")[0];
+  const aliases = LANGUAGE_ALIASES[base] ?? [];
+  return [normalized, base, ...aliases];
+}
+
+function isLanguageMatch(a: string, b: string): boolean {
+  const aCandidates = new Set(getLanguageCandidates(a));
+  const bCandidates = new Set(getLanguageCandidates(b));
+  for (const candidate of aCandidates) {
+    if (bCandidates.has(candidate)) return true;
+  }
+  return false;
+}
 
 export function useCaptions() {
   const setLanguage = useSubtitleStore((s) => s.setLanguage);
@@ -45,6 +71,34 @@ export function useCaptions() {
     () =>
       captionList.length !== 0 ? captionList : (getHlsCaptionList?.() ?? []),
     [captionList, getHlsCaptionList],
+  );
+
+  const findCaptionByPreferredLanguage = useCallback(
+    (language: string) => {
+      const exact = captions.find((caption) => caption.language === language);
+      if (exact) return exact;
+
+      const byCode = captions.find((caption) =>
+        isLanguageMatch(caption.language, language),
+      );
+      if (byCode) return byCode;
+
+      const preferredName = getPrettyLanguageNameFromLocale(language)
+        ?.toLowerCase()
+        .split(" (")[0];
+      if (preferredName) {
+        const byPrettyName = captions.find((caption) => {
+          const captionName = getPrettyLanguageNameFromLocale(caption.language)
+            ?.toLowerCase()
+            .split(" (")[0];
+          return captionName === preferredName;
+        });
+        if (byPrettyName) return byPrettyName;
+      }
+
+      return null;
+    },
+    [captions],
   );
 
   const setDirectCaption = useCallback(
@@ -184,15 +238,21 @@ export function useCaptions() {
   }, [setSecondaryCaption]);
 
   const selectLanguage = useCallback(
-    async (language: string) => {
-      let caption = captions.find((v) => v.language === language);
-      if (!caption && language !== "en") {
-        caption = captions.find((v) => v.language === "en");
+    async (
+      language: string,
+      options?: {
+        fallbackToEnglish?: boolean;
+      },
+    ) => {
+      const fallbackToEnglish = options?.fallbackToEnglish ?? true;
+      let caption = findCaptionByPreferredLanguage(language);
+      if (!caption && fallbackToEnglish && language !== "en") {
+        caption = findCaptionByPreferredLanguage("en");
       }
       if (!caption) return;
       return selectCaptionById(caption.id);
     },
-    [captions, selectCaptionById],
+    [findCaptionByPreferredLanguage, selectCaptionById],
   );
 
   const disable = useCallback(async () => {
@@ -203,7 +263,7 @@ export function useCaptions() {
 
   const selectLastUsedLanguage = useCallback(async () => {
     const language = lastSelectedLanguage ?? userLanguage ?? "en";
-    await selectLanguage(language);
+    await selectLanguage(language, { fallbackToEnglish: false });
     return true;
   }, [lastSelectedLanguage, userLanguage, selectLanguage]);
 
@@ -277,13 +337,11 @@ export function useCaptions() {
 
     if (!isSelectedCaptionStillAvailable) {
       // Try to find a caption with the same language
-      const sameLanguageCaption = captions.find(
-        (caption) =>
-          caption.language ===
-          (currentTranslateTask
-            ? currentTranslateTask.targetCaption
-            : selectedCaption
-          ).language,
+      const sameLanguageCaption = findCaptionByPreferredLanguage(
+        (currentTranslateTask
+          ? currentTranslateTask.targetCaption
+          : selectedCaption
+        ).language,
       );
 
       if (sameLanguageCaption) {
@@ -302,6 +360,38 @@ export function useCaptions() {
     currentTranslateTask,
     enabled,
     selectLastUsedLanguage,
+    findCaptionByPreferredLanguage,
+  ]);
+
+  // Validate secondary caption when caption list changes
+  useEffect(() => {
+    if (captions.length === 0 || !secondaryCaption) return;
+
+    const isCustomCaption =
+      secondaryCaption.id === "custom-caption" ||
+      secondaryCaption.id === "pasted-caption";
+    if (isCustomCaption) return;
+
+    const isSecondaryCaptionStillAvailable = captions.some(
+      (caption) => caption.id === secondaryCaption.id,
+    );
+    if (isSecondaryCaptionStillAvailable) return;
+
+    const sameLanguageCaption = findCaptionByPreferredLanguage(
+      secondaryCaption.language,
+    );
+    if (sameLanguageCaption) {
+      selectSecondaryCaptionById(sameLanguageCaption.id);
+      return;
+    }
+
+    setSecondaryCaption(null);
+  }, [
+    captions,
+    secondaryCaption,
+    selectSecondaryCaptionById,
+    setSecondaryCaption,
+    findCaptionByPreferredLanguage,
   ]);
 
   return {

@@ -211,7 +211,11 @@ export function useScrape() {
   const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
 
   const startScraping = useCallback(
-    async (media: ScrapeMedia, startFromSourceId?: string) => {
+    async (
+      media: ScrapeMedia,
+      startFromSourceId?: string,
+      preferredSourceId?: string,
+    ) => {
       const providerInstance = getProviders();
       const allSources = providerInstance.listSources();
       const playerState = usePlayerStore.getState();
@@ -278,6 +282,17 @@ export function useScrape() {
         const startIndex = filteredSourceOrder.indexOf(startFromSourceId);
         if (startIndex !== -1) {
           filteredSourceOrder = filteredSourceOrder.slice(startIndex + 1);
+        }
+      }
+
+      // Prefer a specific source first (used for episode-to-episode continuity).
+      if (preferredSourceId && !startFromSourceId) {
+        const preferredIndex = filteredSourceOrder.indexOf(preferredSourceId);
+        if (preferredIndex !== -1) {
+          filteredSourceOrder = [
+            preferredSourceId,
+            ...filteredSourceOrder.filter((id) => id !== preferredSourceId),
+          ];
         }
       }
 

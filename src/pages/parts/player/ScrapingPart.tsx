@@ -31,7 +31,8 @@ export interface ScrapingProps {
     sources: Record<string, ScrapingSegment>,
     sourceOrder: ScrapingItems[],
   ) => void;
-  startFromSourceId?: string;
+  resumeAfterSourceId?: string;
+  preferredSourceId?: string;
 }
 
 export function ScrapingPart(props: ScrapingProps) {
@@ -129,14 +130,14 @@ export function ScrapingPart(props: ScrapingProps) {
   ]);
 
   useEffect(() => {
-    const currentKey = props.startFromSourceId || "default";
+    const currentKey = `${props.resumeAfterSourceId || "none"}-${props.preferredSourceId || "none"}`;
     if (started.current === currentKey) return;
     started.current = currentKey;
 
     (async () => {
-      const output = props.startFromSourceId
-        ? await resumeScraping(props.media, props.startFromSourceId)
-        : await startScraping(props.media);
+      const output = props.resumeAfterSourceId
+        ? await resumeScraping(props.media, props.resumeAfterSourceId)
+        : await startScraping(props.media, undefined, props.preferredSourceId);
       if (!isMounted()) return;
       props.onResult?.(
         resultRef.current.sources,

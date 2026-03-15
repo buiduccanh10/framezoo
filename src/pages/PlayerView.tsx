@@ -47,6 +47,9 @@ export function RealPlayerView() {
   const [resumeFromSourceId, setResumeFromSourceId] = useState<string | null>(
     null,
   );
+  const [preferredSourceId, setPreferredSourceId] = useState<string | null>(
+    null,
+  );
   const storeResumeFromSourceId = usePlayerStore((s) => s.resumeFromSourceId);
   const setResumeFromSourceIdInStore = usePlayerStore(
     (s) => s.setResumeFromSourceId,
@@ -119,13 +122,17 @@ export function RealPlayerView() {
 
   const metaChange = useCallback(
     (meta: PlayerMeta) => {
+      if (sourceId) {
+        setPreferredSourceId(sourceId);
+      }
+
       if (meta?.type === "show")
         navigate(
           `/media/${params.media}/${meta.season?.tmdbId}/${meta.episode?.tmdbId}`,
         );
       else navigate(`/media/${params.media}`);
     },
-    [navigate, params],
+    [navigate, params, sourceId],
   );
 
   // Check if episode is more than 80% watched
@@ -254,9 +261,10 @@ export function RealPlayerView() {
             <ScrapingPart
               key={`scraping-${resumeFromSourceId || storeResumeFromSourceId || "default"}`}
               media={scrapeMedia}
-              startFromSourceId={
+              resumeAfterSourceId={
                 resumeFromSourceId || storeResumeFromSourceId || undefined
               }
+              preferredSourceId={preferredSourceId || undefined}
               onResult={(sources, sourceOrder) => {
                 setErrorData({
                   sourceOrder,
@@ -266,6 +274,7 @@ export function RealPlayerView() {
                 // Clear resume state after scraping
                 setResumeFromSourceId(null);
                 setResumeFromSourceIdInStore(null);
+                setPreferredSourceId(null);
               }}
               onGetStream={playAfterScrape}
             />
