@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
@@ -25,7 +26,11 @@ export function Navigation(props: NavigationProps) {
   const bannerHeight = useBannerSize();
   const location = useLocation();
   const { loggedIn } = useAuth();
+  const { t } = useTranslation();
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [installPromptEvent, setInstallPromptEvent] = useState<any | null>(
+    null,
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +40,52 @@ export function Navigation(props: NavigationProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Capture PWA install prompt so we can trigger it from a button (mobile & desktop)
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event: any) => {
+      event.preventDefault();
+      setInstallPromptEvent(event);
+    };
+
+    window.addEventListener(
+      "beforeinstallprompt",
+      handleBeforeInstallPrompt as any,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt as any,
+      );
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (installPromptEvent) {
+      try {
+        await installPromptEvent.prompt();
+        await installPromptEvent.userChoice?.then?.(() => {});
+      } catch {
+        // ignore errors from prompt
+      } finally {
+        setInstallPromptEvent(null);
+      }
+      return;
+    }
+
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isSafari =
+      /Safari/i.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
+
+    if (isIOS && isSafari) {
+      alert(t("navigation.install.iosSafariGuide"));
+      return;
+    }
+
+    alert(t("navigation.install.genericGuide"));
+  };
 
   // Calculate mask length based on scroll position
   const getMaskLength = () => {
@@ -179,6 +230,22 @@ export function Navigation(props: NavigationProps) {
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <WatchPartyInputLink triggerVariant="icon" />
+                )}
+
+              {location.pathname !== "/login" &&
+                location.pathname !== "/register" && (
+                  <button
+                    type="button"
+                    onClick={handleInstallClick}
+                    className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
+                  >
+                    <IconPatch
+                      icon={Icons.DOWNLOAD}
+                      clickable
+                      downsized
+                      navigation
+                    />
+                  </button>
                 )}
               {/* <a
                 onClick={() => openNotifications()}

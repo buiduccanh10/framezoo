@@ -37,8 +37,12 @@ export function Volume(props: Props) {
   );
 
   const handleClick = useCallback(() => {
+    if (!hovering) {
+      setHovering(true);
+      return;
+    }
     toggleMute();
-  }, [toggleMute]);
+  }, [hovering, setHovering, toggleMute]);
 
   const handleMouseEnter = useCallback(async () => {
     if (await canChangeVolume()) setHovering(true);
