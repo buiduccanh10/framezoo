@@ -29,15 +29,15 @@ export function PlayerPart(props: PlayerPartProps) {
   const { showTargets, showTouchTargets } = useShouldShowControls();
   const status = usePlayerStore((s) => s.status);
   const { isMobile } = useIsMobile();
-  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { isHost, enabled } = useWatchPartyStore();
   const { t } = useTranslation();
   const meta = usePlayerStore((s) => s.meta);
 
   const inControl = !enabled || isHost;
-  const shouldShowBottomControls = isMobile ? true : showTargets;
+  const shouldShowBottomControls = showTargets;
   const shouldShowCenterMobileControls =
-    status === playerStatus.PLAYING && (isMobile || showTouchTargets);
+    status === playerStatus.PLAYING &&
+    (isMobile ? showTargets : showTouchTargets);
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isPWA = window.matchMedia("(display-mode: standalone)").matches;
@@ -119,10 +119,7 @@ export function PlayerPart(props: PlayerPartProps) {
         show={shouldShowCenterMobileControls}
       >
         <Player.SkipBackward iconSizeClass="text-3xl" inControl={inControl} />
-        <Player.Pause
-          iconSizeClass="text-5xl"
-          className={isLoading ? "opacity-0" : "opacity-100"}
-        />
+        <Player.Pause iconSizeClass="text-5xl" />
         <Player.SkipForward iconSizeClass="text-3xl" inControl={inControl} />
       </Player.CenterMobileControls>
 
