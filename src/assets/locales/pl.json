@@ -1181,7 +1181,7 @@
         "delete": {
           "button": "Usuń konto",
           "confirmButton": "Usuń konto",
-          "confirmDescription": "Na pewno chcesz usunąć swoje konto? Wszystkie twoje dane zostaną stracone! ૮₍˶Ó﹏Ò ⑅₎ა",
+          "confirmDescription": "Na pewno chcesz usunąć swoje konto? Wszystkie twoje dane zostaną stracone! ",
           "confirmTitle": "Jesteś pewny?",
           "text": "Działanie to jest nieodwracalne. Wszystkie dane zostaną usunięte i nie będzie można ich odzyskać.",
           "title": "Usuń konto"

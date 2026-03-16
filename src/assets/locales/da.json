@@ -1181,7 +1181,7 @@
         "delete": {
           "button": "Slet profil",
           "confirmButton": "Bekræft sletning",
-          "confirmDescription": "Er du sikker på, at du vil slette din profil? Alle dine data vil gå tabt! ૮₍˶Ó﹏Ò ⑅₎ა",
+          "confirmDescription": "Er du sikker på, at du vil slette din profil? Alle dine data vil gå tabt! ",
           "confirmTitle": "Er du sikker?",
           "text": "Denne handling er permanent. Alle data slettes, og intet kan gendannes.",
           "title": "Slet profil"

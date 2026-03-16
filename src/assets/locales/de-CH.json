@@ -1181,7 +1181,7 @@
         "delete": {
           "button": "Account lösche",
           "confirmButton": "Account lösche",
-          "confirmDescription": "Welsch der Account wörklech lösche? All dini Date göi verlore! ૮₍˶Ó﹏Ò ⑅₎ა",
+          "confirmDescription": "Welsch der Account wörklech lösche? All dini Date göi verlore! ",
           "confirmTitle": "Besch secher?",
           "text": "Die Aktion cha net röckgängig gmacht wärde. Alli date werne glöscht ond chöne net wederhergstellt werde.",
           "title": "Account lösche"

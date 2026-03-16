@@ -1181,7 +1181,7 @@
         "delete": {
           "button": "Elimina l'account",
           "confirmButton": "Elimina l'account",
-          "confirmDescription": "Sei sicuro di voler eliminare il tuo account? Tutti i tuoi dati andranno persi! ૮₍˶Ó﹏Ò ⑅₎ა",
+          "confirmDescription": "Sei sicuro di voler eliminare il tuo account? Tutti i tuoi dati andranno persi! ",
           "confirmTitle": "Sei sicuro?",
           "text": "Questa azione è irreversibile. Tutti i dati verranno cancellati e nulla potrà essere recuperato.",
           "title": "Elimina l'account"

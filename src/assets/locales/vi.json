@@ -1237,7 +1237,7 @@
         "delete": {
           "button": "Xóa tài khoản",
           "confirmButton": "Xóa tài khoản",
-          "confirmDescription": "Bạn có chắc chắn muốn xóa tài khoản của mình không? Tất cả dữ liệu của bạn sẽ bị mất! ૮₍˶Ó﹏Ò ⑅₎ა",
+          "confirmDescription": "Bạn có chắc chắn muốn xóa tài khoản của mình không? Tất cả dữ liệu của bạn sẽ bị mất! ",
           "confirmTitle": "Bạn có chắc chắn không?",
           "text": "Hành động này không thể hoàn tác. Tất cả dữ liệu sẽ bị xóa và không thể khôi phục.",
           "title": "Xóa tài khoản"
