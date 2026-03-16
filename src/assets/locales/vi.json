@@ -1238,7 +1238,9 @@
         "unknownDevice": "Thiết bị không xác định, lỗi giải mã tên",
         "failed": "Tải các phiên thất bại",
         "removeDevice": "Xóa",
-        "title": "Thiết bị"
+        "title": "Thiết bị",
+        "lastActive": "Hoạt động gần nhất: {{date}}",
+        "loggedInAt": "Đăng nhập lúc: {{date}}"
       },
       "profile": {
         "finish": "Hoàn tất chỉnh sửa",

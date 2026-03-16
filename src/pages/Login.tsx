@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -14,10 +14,12 @@ import { LoginFormPart } from "@/pages/parts/auth/LoginFormPart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { usePreviewThemeStore } from "@/stores/theme";
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const config = conf();
   const availableBackends =
@@ -37,6 +39,13 @@ export function LoginPage() {
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
     currentBackendUrl ?? null,
   );
+
+  useEffect(() => {
+    setPreviewTheme("ember");
+    return () => {
+      setPreviewTheme(null);
+    };
+  }, [setPreviewTheme]);
 
   const handleBackendSelect = (url: string | null) => {
     setSelectedBackendUrl(url);

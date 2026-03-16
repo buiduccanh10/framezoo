@@ -23,8 +23,10 @@ export const signOutAllDevices = () => {
 
 export function Device(props: {
   name: string;
-  id: string;
+  ids: string[];
   isCurrent?: boolean;
+  createdAt?: string;
+  accessedAt?: string;
   onRemove?: () => void;
 }) {
   const { t } = useTranslation();
@@ -33,9 +35,9 @@ export function Device(props: {
   const [result, exec] = useAsyncFn(async () => {
     if (!token) throw new Error("No token present");
     if (!url) throw new Error("No backend set");
-    await removeSession(url, token, props.id);
+    await Promise.all(props.ids.map((id) => removeSession(url, token, id)));
     props.onRemove?.();
-  }, [url, token, props.id]);
+  }, [url, token, props.ids]);
 
   return (
     <SettingsCard
@@ -47,6 +49,17 @@ export function Device(props: {
           {t("settings.account.devices.deviceNameLabel")}
         </SecondaryLabel>
         <p className="text-white">{props.name}</p>
+        {(props.createdAt || props.accessedAt) && (
+          <p className="text-xs text-gray-400 mt-1">
+            {props.accessedAt
+              ? t("settings.account.devices.lastActive", {
+                  date: new Date(props.accessedAt).toLocaleString(),
+                })
+              : t("settings.account.devices.loggedInAt", {
+                  date: new Date(props.createdAt as string).toLocaleString(),
+                })}
+          </p>
+        )}
       </div>
       {!props.isCurrent ? (
         <Button
@@ -72,26 +85,96 @@ export function DeviceListPart(props: {
   const seed = useAuthStore((s) => s.account?.seed);
   const sessions = props.sessions;
   const currentSessionId = useAuthStore((s) => s.account?.sessionId);
+
+  const getDeviceLabel = (
+    session: SessionResponse,
+    deviceSeed: string,
+  ): string => {
+    let decryptedName: string | null = null;
+    try {
+      decryptedName = decryptData(session.device, base64ToBuffer(deviceSeed));
+    } catch (error) {
+      console.warn(
+        `Failed to decrypt device name for session ${session.id}:`,
+        error,
+      );
+    }
+
+    const ua = session.userAgent ?? "";
+    const isMobile = /Mobile|Android|iPhone|iPad/i.test(ua);
+
+    let os = "Unknown OS";
+    if (/Windows NT 10\.0/.test(ua)) os = "Windows 10";
+    else if (/Windows NT 11\.0/.test(ua)) os = "Windows 11";
+    else if (/Mac OS X 10[._]\d+/.test(ua) || /Macintosh/.test(ua))
+      os = "macOS";
+    else if (/Android/.test(ua)) os = "Android";
+    else if (/iPhone|iPad|iPod/.test(ua)) os = "iOS";
+    else if (/Linux/.test(ua)) os = "Linux";
+
+    let browser = "Browser";
+    if (/Edg\//.test(ua)) browser = "Edge";
+    else if (/OPR\//.test(ua) || /Opera/.test(ua)) browser = "Opera";
+    else if (/Chrome\//.test(ua) && !/Edg\//.test(ua)) browser = "Chrome";
+    else if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) browser = "Safari";
+    else if (/Firefox\//.test(ua)) browser = "Firefox";
+
+    const baseLabel = isMobile
+      ? `${browser} · ${os} (mobile)`
+      : `${browser} · ${os}`;
+
+    if (decryptedName && decryptedName !== "Browser") {
+      return `${decryptedName} · ${baseLabel}`;
+    }
+
+    if (!ua && !decryptedName) {
+      return t("settings.account.devices.unknownDevice");
+    }
+
+    return baseLabel;
+  };
+
   const deviceListSorted = useMemo(() => {
     if (!seed) return [];
-    let list = sessions.map((session) => {
-      let decryptedName: string;
-      try {
-        decryptedName = decryptData(session.device, base64ToBuffer(seed));
-      } catch (error) {
-        console.warn(
-          `Failed to decrypt device name for session ${session.id}:`,
-          error,
-        );
-        decryptedName = t("settings.account.devices.unknownDevice");
+    const groups = new Map<
+      string,
+      {
+        current: boolean;
+        ids: string[];
+        name: string;
+        createdAt?: string;
+        accessedAt?: string;
       }
-      return {
-        current: session.id === currentSessionId,
-        id: session.id,
-        name: decryptedName,
-      };
+    >();
+
+    sessions.forEach((session) => {
+      const label = getDeviceLabel(session, seed);
+      const key = `${label}__${session.userAgent}`;
+      const existing = groups.get(key);
+
+      if (existing) {
+        existing.ids.push(session.id);
+        if (session.id === currentSessionId) {
+          existing.current = true;
+        }
+        if (
+          new Date(session.accessedAt) >
+          new Date(existing.accessedAt ?? existing.createdAt ?? 0)
+        ) {
+          existing.accessedAt = session.accessedAt;
+        }
+      } else {
+        groups.set(key, {
+          current: session.id === currentSessionId,
+          ids: [session.id],
+          name: label,
+          createdAt: session.createdAt,
+          accessedAt: session.accessedAt,
+        });
+      }
     });
-    list = list.sort((a, b) => {
+
+    const list = Array.from(groups.values()).sort((a, b) => {
       if (a.current) return -1;
       if (b.current) return 1;
       return a.name.localeCompare(b.name);
@@ -114,8 +197,10 @@ export function DeviceListPart(props: {
           {deviceListSorted.map((session) => (
             <Device
               name={session.name}
-              id={session.id}
-              key={session.id}
+              ids={session.ids}
+              createdAt={session.createdAt}
+              accessedAt={session.accessedAt}
+              key={session.ids.join(",")}
               isCurrent={session.current}
               onRemove={props.onChange}
             />

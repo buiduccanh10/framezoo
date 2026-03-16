@@ -1221,7 +1221,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "Last active: {{date}}",
+        "loggedInAt": "Logged in at: {{date}}"
       },
       "profile": {
         "finish": "Finish editing",

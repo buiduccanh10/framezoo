@@ -21,6 +21,7 @@ import { VerifyPassphrase } from "@/pages/parts/auth/VerifyPassphrasePart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { usePreviewThemeStore } from "@/stores/theme";
 
 function CaptchaProvider(props: {
   siteKey: string | null;
@@ -37,6 +38,7 @@ function CaptchaProvider(props: {
 export function RegisterPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const currentBackendUrl = useAuthStore((s) => s.backendUrl);
   const config = conf();
@@ -65,6 +67,13 @@ export function RegisterPage() {
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
     currentBackendUrl ?? defaultBackend ?? null,
   );
+
+  useEffect(() => {
+    setPreviewTheme("ember");
+    return () => {
+      setPreviewTheme(null);
+    };
+  }, [setPreviewTheme]);
 
   useEffect(() => {
     if (selectedBackendUrl) {
