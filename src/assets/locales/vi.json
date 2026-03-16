@@ -167,26 +167,47 @@
     },
     "hasAccount": "Đã có tài khoản? <0>Hãy đăng nhập.</0>",
     "login": {
-      "description": "Hãy nhập mật ngữ của bạn để đăng nhập vào tài khoản",
+      "description": "Hãy nhập biệt danh và mật khẩu của bạn để đăng nhập vào tài khoản",
       "deviceLengthError": "Hãy nhập tên thiết bị",
       "passphraseLabel": "Mật ngữ gồm 12 từ",
       "passphrasePlaceholder": "Mật ngữ",
       "submit": "Đăng nhập",
       "title": "Đăng nhập vào tài khoản của bạn",
-      "validationError": "Mật ngữ không chính xác hoặc không đầy đủ",
+      "validationError": "Mật khẩu không chính xác hoặc không đầy đủ",
       "usePasskey": "Sử dụng passkey",
       "or": "hoặc",
-      "noBackendUrl": "Không có URL backend"
+      "noBackendUrl": "Không có URL backend",
+      "nicknameLabel": "Biệt danh",
+      "nicknamePlaceholder": "Nhập biệt danh của bạn",
+      "passwordLabel": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "nicknameRequired": "Vui lòng nhập biệt danh",
+      "passwordRequired": "Vui lòng nhập mật khẩu",
+      "nicknameNotFound": "Không tìm thấy biệt danh",
+      "passwordIncorrect": "Mật khẩu không chính xác"
     },
     "register": {
       "information": {
         "color1": "Màu hồ sơ số một",
         "color2": "Màu hồ sơ số hai",
-        "header": "Hãy nhập tên cho thiết bị của bạn và chọn màu sắc và biểu tượng người dùng!",
+        "header": "Chọn màu hồ sơ và biểu tượng của bạn.",
         "icon": "Biểu tượng người dùng",
         "next": "Tiếp theo",
         "title": "Thông tin tài khoản"
-      }
+      },
+      "passwordInput": {
+        "title": "Tạo thông tin đăng nhập",
+        "description": "Chọn biệt danh và mật khẩu. Mật khẩu của bạn hoạt động như một mật ngữ an toàn, vì vậy hãy chắc chắn rằng bạn nhớ nó nhé!"
+      },
+      "nicknameLabel": "Biệt danh",
+      "nicknamePlaceholder": "Chọn một biệt danh duy nhất",
+      "nicknameTaken": "Biệt danh đã được sử dụng",
+      "passwordLabel": "Mật khẩu",
+      "passwordPlaceholder": "Tạo mật khẩu (được dùng làm mật ngữ)",
+      "passwordWeak": "Mật khẩu phải có ít nhất 8 ký tự gồm cả chữ và số",
+      "passwordMismatch": "Mật khẩu nhập lại không khớp",
+      "confirmPasswordLabel": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu"
     },
     "backendSelection": {
       "title": "Chọn máy chủ tài khoản",

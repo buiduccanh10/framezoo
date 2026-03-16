@@ -224,6 +224,7 @@ export function Navigation(props: NavigationProps) {
               {!enableLowPerformanceMode &&
                 location.pathname !== "/login" &&
                 location.pathname !== "/register" &&
+                location.pathname !== "/settings" &&
                 (location.pathname === "/discover" ? (
                   <Link
                     to="/browse"
@@ -252,11 +253,13 @@ export function Navigation(props: NavigationProps) {
                   </Link>
                 ))}
               {location.pathname !== "/login" &&
+                location.pathname !== "/settings" &&
                 location.pathname !== "/register" && (
                   <WatchPartyInputLink triggerVariant="icon" />
                 )}
 
               {location.pathname !== "/login" &&
+                location.pathname !== "/settings" &&
                 location.pathname !== "/register" && (
                   <button
                     type="button"

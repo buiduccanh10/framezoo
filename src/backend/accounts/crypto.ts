@@ -25,6 +25,13 @@ async function seedFromMnemonic(mnemonic: string) {
   });
 }
 
+async function seedFromPassword(password: string) {
+  return pbkdf2Async(sha256, password, "password", {
+    c: 2048,
+    dkLen: 32,
+  });
+}
+
 export function verifyValidMnemonic(mnemonic: string) {
   // First try to validate as BIP39 mnemonic
   if (validateMnemonic(mnemonic, wordlist)) {
@@ -53,6 +60,18 @@ export async function keysFromMnemonic(mnemonic: string): Promise<Keys> {
   const seed = await seedFromMnemonic(mnemonic);
 
   return keysFromSeed(seed);
+}
+
+export async function keysFromPassword(password: string): Promise<Keys> {
+  const seed = await seedFromPassword(password);
+
+  return keysFromSeed(seed);
+}
+
+export function verifyValidPassword(password: string) {
+  // Password must be at least 8 characters and contain at least one letter and one digit
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\W_]{8,}$/;
+  return passwordRegex.test(password);
 }
 
 export function genMnemonic(): string {

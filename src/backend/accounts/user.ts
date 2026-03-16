@@ -256,3 +256,20 @@ export async function checkUserExists(
     return false;
   }
 }
+
+export async function checkNicknameExists(
+  url: string,
+  nickname: string,
+): Promise<boolean> {
+  try {
+    const response = await ofetch<{ exists: boolean }>(
+      `/nickname/${nickname}/exists`,
+      {
+        baseURL: url,
+      },
+    );
+    return response.exists;
+  } catch {
+    return true; // If error, assume exists to be safe
+  }
+}

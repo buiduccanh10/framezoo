@@ -11,36 +11,34 @@ import {
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { BrandPill } from "@/components/layout/BrandPill";
-import {
-  LargeCard,
-  LargeCardButtons,
-  LargeCardText,
-} from "@/components/layout/LargeCard";
+import { LargeCard, LargeCardText } from "@/components/layout/LargeCard";
 import { MwLink } from "@/components/text/Link";
-import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { useAuth } from "@/hooks/auth/useAuth";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
+
+import { type PasswordInputData, PasswordInputPart } from "./PasswordInputPart";
 
 interface LoginFormPartProps {
   onLogin?: () => void;
 }
 
 export function LoginFormPart(props: LoginFormPartProps) {
-  const [mnemonic, setMnemonic] = useState("");
   const { login, restore, importData } = useAuth();
-  const backendUrl = useBackendUrl();
   const progressItems = useProgressStore((store) => store.items);
   const bookmarkItems = useBookmarkStore((store) => store.bookmarks);
   const { t } = useTranslation();
 
+  const [nicknameError, setNicknameError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
   const [passkeyResult, executePasskey] = useAsyncFn(async () => {
+    const backendUrl = useAuthStore.getState().backendUrl;
     if (!backendUrl) {
       throw new Error(t("auth.login.noBackendUrl") ?? "No backend URL");
     }
 
-    // Authenticate with passkey (no credential ID specified, browser will show all available)
     const assertion = await authenticatePasskey();
     const credentialId = assertion.id;
 
@@ -65,24 +63,49 @@ export function LoginFormPart(props: LoginFormPartProps) {
     await restore(account);
 
     props.onLogin?.();
-  }, [props, login, restore, backendUrl, t, progressItems, bookmarkItems]);
+  }, [props, login, restore, t, progressItems, bookmarkItems]);
 
   const [result, execute] = useAsyncFn(
-    async (inputMnemonic: string) => {
-      if (!verifyValidMnemonic(inputMnemonic))
+    async (data: PasswordInputData) => {
+      // clear previous field errors
+      setNicknameError(null);
+      setPasswordError(null);
+
+      // Password UI field is actually the mnemonic/passphrase
+      if (!verifyValidMnemonic(data.password))
         throw new Error(t("auth.login.validationError") ?? undefined);
 
       let account: AsyncReturnType<typeof login>;
       try {
         account = await login({
-          mnemonic: inputMnemonic,
+          nickname: data.nickname,
+          password: data.password,
           userData: {
             device: "Browser",
           },
         });
       } catch (err) {
-        if ((err as any).status === 401)
-          throw new Error(t("auth.login.validationError") ?? undefined);
+        const anyErr: any = err;
+        const status = anyErr?.response?.status;
+        const beMessage: string =
+          anyErr?.response?._data?.message ?? anyErr?.message ?? "";
+
+        // Nickname not found
+        if (status === 401 && beMessage.includes("User cannot be found")) {
+          setNicknameError(
+            t("auth.login.nicknameNotFound") ?? "Nickname not found",
+          );
+          return;
+        }
+
+        // Password / passphrase incorrect (invalid signature or generic 401)
+        if (beMessage.includes("Invalid signature") || status === 401) {
+          setPasswordError(
+            t("auth.login.passwordIncorrect") ?? "Password is incorrect",
+          );
+          return;
+        }
+
         throw err;
       }
 
@@ -98,20 +121,21 @@ export function LoginFormPart(props: LoginFormPartProps) {
     [props, login, restore, t, progressItems, bookmarkItems],
   );
 
+  const handlePasswordSubmit = (data: PasswordInputData) => {
+    execute(data);
+  };
+
   return (
     <LargeCard top={<BrandPill backgroundClass="bg-[#161527]" />}>
       <LargeCardText title={t("auth.login.title")}>
         {t("auth.login.description")}
       </LargeCardText>
       <div className="space-y-4">
-        <AuthInputBox
-          label={t("auth.login.passphraseLabel") ?? undefined}
-          value={mnemonic}
-          autoComplete="username"
-          name="username"
-          onChange={setMnemonic}
-          placeholder={t("auth.login.passphrasePlaceholder") ?? undefined}
-          passwordToggleable
+        <PasswordInputPart
+          forLogin
+          onNext={handlePasswordSubmit}
+          externalNicknameError={nicknameError}
+          externalPasswordError={passwordError}
         />
         {isPasskeySupported() && (
           <div className="relative mb-4">
@@ -145,16 +169,6 @@ export function LoginFormPart(props: LoginFormPartProps) {
           </p>
         ) : null}
       </div>
-
-      <LargeCardButtons>
-        <Button
-          theme="purple"
-          loading={result.loading}
-          onClick={() => execute(mnemonic)}
-        >
-          {t("auth.login.submit")}
-        </Button>
-      </LargeCardButtons>
       <p className="text-center mt-6">
         <Trans i18nKey="auth.createAccount">
           <MwLink to="/register">.</MwLink>

@@ -11,13 +11,16 @@ import {
   LargeCardButtons,
   LargeCardText,
 } from "@/components/layout/LargeCard";
+import { useAuth } from "@/hooks/auth/useAuth";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import {
   AccountCreatePart,
   AccountProfile,
 } from "@/pages/parts/auth/AccountCreatePart";
-import { PassphraseGeneratePart } from "@/pages/parts/auth/PassphraseGeneratePart";
-import { VerifyPassphrase } from "@/pages/parts/auth/VerifyPassphrasePart";
+import {
+  PasswordInputData,
+  PasswordInputPart,
+} from "@/pages/parts/auth/PasswordInputPart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
@@ -38,6 +41,7 @@ function CaptchaProvider(props: {
 export function RegisterPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { register } = useAuth();
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const currentBackendUrl = useAuthStore((s) => s.backendUrl);
@@ -57,12 +61,10 @@ export function RegisterPage() {
   const [step, setStep] = useState(
     availableBackends.length > 1 || !defaultBackend ? -1 : 1,
   );
-  const [mnemonic, setMnemonic] = useState<null | string>(null);
-  const [credentialId, setCredentialId] = useState<null | string>(null);
-  const [authMethod, setAuthMethod] = useState<"mnemonic" | "passkey">(
-    "mnemonic",
+  const [passwordData, setPasswordData] = useState<PasswordInputData | null>(
+    null,
   );
-  const [account, setAccount] = useState<null | AccountProfile>(null);
+  const [, setAccountProfile] = useState<AccountProfile | null>(null);
   const [siteKey, setSiteKey] = useState<string | null>(null);
   const [selectedBackendUrl, setSelectedBackendUrl] = useState<string | null>(
     currentBackendUrl ?? defaultBackend ?? null,
@@ -96,6 +98,31 @@ export function RegisterPage() {
     if (url) {
       setBackendUrl(url);
     }
+  };
+
+  const handlePasswordNext = (data: PasswordInputData) => {
+    setPasswordData(data);
+    setStep(2);
+  };
+
+  const handleAccountNext = (data: AccountProfile) => {
+    setAccountProfile(data);
+    // Final step: register immediately after selecting profile
+    if (!passwordData) return;
+    register({
+      nickname: passwordData.nickname,
+      password: passwordData.password,
+      userData: {
+        inviteCode: passwordData.inviteCode ?? "",
+        profile: data.profile,
+      },
+    })
+      .then(() => {
+        navigate("/");
+      })
+      .catch((err) => {
+        console.error("Registration failed:", err);
+      });
   };
 
   return (
@@ -133,40 +160,10 @@ export function RegisterPage() {
         ) : null}
 
         {step === 1 ? (
-          <PassphraseGeneratePart
-            onNext={(m) => {
-              setMnemonic(m);
-              setAuthMethod("mnemonic");
-              setStep(2);
-            }}
-            onPasskeyNext={(credId) => {
-              setCredentialId(credId);
-              setAuthMethod("passkey");
-              setStep(2);
-            }}
-          />
+          <PasswordInputPart forLogin={false} onNext={handlePasswordNext} />
         ) : null}
-        {step === 2 ? (
-          <AccountCreatePart
-            onNext={(a) => {
-              setAccount(a);
-              setStep(3);
-            }}
-          />
-        ) : null}
-        {step === 3 ? (
-          <VerifyPassphrase
-            hasCaptcha={!!siteKey}
-            mnemonic={mnemonic}
-            credentialId={credentialId}
-            authMethod={authMethod}
-            userData={account}
-            backendUrl={selectedBackendUrl}
-            onNext={() => {
-              navigate("/");
-            }}
-          />
-        ) : null}
+
+        {step === 2 ? <AccountCreatePart onNext={handleAccountNext} /> : null}
       </SubPageLayout>
     </CaptchaProvider>
   );

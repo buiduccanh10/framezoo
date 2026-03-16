@@ -4,16 +4,17 @@ import { SessionResponse } from "@/backend/accounts/auth";
 
 export interface ChallengeTokenResponse {
   challenge: string;
+  publicKey?: string;
 }
 
 export async function getLoginChallengeToken(
   url: string,
-  publicKey: string,
+  nickname: string,
 ): Promise<ChallengeTokenResponse> {
   return ofetch<ChallengeTokenResponse>("/auth/login/start", {
     method: "POST",
     body: {
-      publicKey,
+      nickname,
     },
     baseURL: url,
   });
@@ -25,6 +26,7 @@ export interface LoginResponse {
 }
 
 export interface LoginInput {
+  nickname?: string;
   publicKey: string;
   challenge: {
     code: string;

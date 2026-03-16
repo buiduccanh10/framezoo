@@ -33,7 +33,8 @@ export interface RegisterInput {
     signature: string;
   };
   device: string;
-  inviteCode: string; // added invite code
+  nickname: string;
+  inviteCode: string;
   profile: {
     colorA: string;
     colorB: string;

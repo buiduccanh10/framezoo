@@ -167,26 +167,47 @@
     },
     "hasAccount": "Already have an account? <0>Login here.</0>",
     "login": {
-      "description": "Please enter your passphrase to login to your account",
+      "description": "Please enter your nickname and password to login to your account",
       "deviceLengthError": "Please enter a device name",
       "passphraseLabel": "12-Word passphrase",
       "passphrasePlaceholder": "Passphrase",
       "submit": "Login",
       "title": "Login to your account",
-      "validationError": "Incorrect or incomplete passphrase /ᐠ. .ᐟ\\",
+      "validationError": "Incorrect or incomplete password /ᐠ. .ᐟ\\",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Nickname",
+      "nicknamePlaceholder": "Enter your nickname",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "nicknameRequired": "Nickname is required",
+      "passwordRequired": "Password is required",
+      "nicknameNotFound": "Nickname not found",
+      "passwordIncorrect": "Password is incorrect"
     },
     "register": {
       "information": {
         "color1": "Profile color one",
         "color2": "Profile color two",
-        "header": "Enter a name for your device then pick colors and a user icon of your choosing!",
+        "header": "Pick your profile colors and choose an icon.",
         "icon": "User icon",
         "next": "Next",
         "title": "Account information"
-      }
+      },
+      "passwordInput": {
+        "title": "Create your login",
+        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!"
+      },
+      "nicknameLabel": "Nickname",
+      "nicknamePlaceholder": "Choose a unique nickname",
+      "nicknameTaken": "Nickname is already taken",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Create a password (used as your passphrase)",
+      "passwordWeak": "Password must be at least 8 characters with letters and numbers",
+      "passwordMismatch": "Passwords do not match",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -1489,8 +1510,7 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "trending": "Trending Now",
-        "top10": "Top 10"
+        "trending": "Trending Now"
       },
       "change": "Change",
       "more": "View more"

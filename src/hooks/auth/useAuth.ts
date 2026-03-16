@@ -39,8 +39,10 @@ export interface RegistrationData {
   recaptchaToken?: string;
   mnemonic?: string;
   credentialId?: string;
+  nickname?: string;
+  password?: string;
   userData: {
-    inviteCode: string; // added invite code
+    inviteCode: string;
     profile: {
       colorA: string;
       colorB: string;
@@ -52,6 +54,8 @@ export interface RegistrationData {
 export interface LoginData {
   mnemonic?: string;
   credentialId?: string;
+  nickname?: string;
+  password?: string;
   userData: {
     // device name removed from UI
   };
@@ -71,46 +75,87 @@ export function useAuth() {
   const login = useCallback(
     async (loginData: LoginData) => {
       if (!backendUrl) return;
-      if (!loginData.mnemonic && !loginData.credentialId) {
-        throw new Error("Either mnemonic or credentialId must be provided");
-      }
 
-      const keys = loginData.credentialId
-        ? await keysFromCredentialId(loginData.credentialId)
-        : await keysFromMnemonic(loginData.mnemonic!);
-      const publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
+      // Support both old (mnemonic/credentialId) and new (nickname/password) auth methods
+      let keys: any;
+      let publicKeyBase64Url: string;
+      let nickname: string | undefined;
 
-      // Try to get credential ID from storage if using mnemonic
-      let credentialId: string | null = null;
-      if (loginData.mnemonic) {
-        credentialId = getCredentialId(backendUrl, publicKeyBase64Url);
+      if (loginData.nickname && loginData.password) {
+        // New method: nickname + password (password is mnemonic/passphrase)
+        keys = await keysFromMnemonic(loginData.password);
+        publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
+        nickname = loginData.nickname;
+
+        // Get challenge using nickname
+        const challengeResponse = await getLoginChallengeToken(
+          backendUrl,
+          nickname,
+        );
+        const { challenge, publicKey: returnedPublicKey } = challengeResponse;
+
+        const signature = await signChallenge(keys, challenge);
+        const loginResult = await loginAccount(backendUrl, {
+          nickname,
+          publicKey: returnedPublicKey || publicKeyBase64Url,
+          challenge: {
+            code: challenge,
+            signature,
+          },
+          device: await encryptData("Browser", keys.seed),
+        });
+
+        const user = await getUser(backendUrl, loginResult.token);
+        const seedBase64 = bytesToBase64(keys.seed);
+
+        return userDataLogin(loginResult, user.user, user.session, seedBase64);
+      } else if (loginData.mnemonic || loginData.credentialId) {
+        // Old method: mnemonic or credentialId
+        if (!loginData.mnemonic && !loginData.credentialId) {
+          throw new Error("Either mnemonic or credentialId must be provided");
+        }
+
+        keys = loginData.credentialId
+          ? await keysFromCredentialId(loginData.credentialId)
+          : await keysFromMnemonic(loginData.mnemonic!);
+        publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
+
+        // Try to get credential ID from storage if using mnemonic
+        let credentialId: string | null = null;
+        if (loginData.mnemonic) {
+          credentialId = getCredentialId(backendUrl, publicKeyBase64Url);
+        } else {
+          credentialId = loginData.credentialId || null;
+        }
+
+        const { challenge } = await getLoginChallengeToken(
+          backendUrl,
+          publicKeyBase64Url,
+        );
+        const signature = await signChallenge(keys, challenge);
+        const loginResult = await loginAccount(backendUrl, {
+          publicKey: publicKeyBase64Url,
+          challenge: {
+            code: challenge,
+            signature,
+          },
+          device: await encryptData("Browser", keys.seed),
+        });
+
+        const user = await getUser(backendUrl, loginResult.token);
+        const seedBase64 = bytesToBase64(keys.seed);
+
+        // Store credential mapping if we have a credential ID
+        if (credentialId) {
+          storeCredentialMapping(backendUrl, publicKeyBase64Url, credentialId);
+        }
+
+        return userDataLogin(loginResult, user.user, user.session, seedBase64);
       } else {
-        credentialId = loginData.credentialId || null;
+        throw new Error(
+          "Either nickname/password or mnemonic/credentialId must be provided",
+        );
       }
-
-      const { challenge } = await getLoginChallengeToken(
-        backendUrl,
-        publicKeyBase64Url,
-      );
-      const signature = await signChallenge(keys, challenge);
-      const loginResult = await loginAccount(backendUrl, {
-        challenge: {
-          code: challenge,
-          signature,
-        },
-        publicKey: publicKeyBase64Url,
-        device: await encryptData("Browser", keys.seed),
-      });
-
-      const user = await getUser(backendUrl, loginResult.token);
-      const seedBase64 = bytesToBase64(keys.seed);
-
-      // Store credential mapping if we have a credential ID
-      if (credentialId) {
-        storeCredentialMapping(backendUrl, publicKeyBase64Url, credentialId);
-      }
-
-      return userDataLogin(loginResult, user.user, user.session, seedBase64);
     },
     [userDataLogin, backendUrl],
   );
@@ -147,45 +192,88 @@ export function useAuth() {
   const register = useCallback(
     async (registerData: RegistrationData) => {
       if (!backendUrl) return;
-      if (!registerData.mnemonic && !registerData.credentialId) {
-        throw new Error("Either mnemonic or credentialId must be provided");
-      }
 
-      const { challenge } = await getRegisterChallengeToken(
-        backendUrl,
-        registerData.recaptchaToken,
-      );
-      const keys = registerData.credentialId
-        ? await keysFromCredentialId(registerData.credentialId)
-        : await keysFromMnemonic(registerData.mnemonic!);
-      const signature = await signChallenge(keys, challenge);
-      const publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
-      const registerResult = await registerAccount(backendUrl, {
-        challenge: {
-          code: challenge,
-          signature,
-        },
-        publicKey: publicKeyBase64Url,
-        inviteCode: registerData.userData.inviteCode,
-        device: await encryptData("Browser", keys.seed),
-        profile: registerData.userData.profile,
-      });
+      // Support both old (mnemonic/credentialId) and new (nickname/password) auth methods
+      let keys: any;
+      let publicKeyBase64Url: string;
+      let nickname: string | undefined;
 
-      // Store credential mapping if we have a credential ID
-      if (registerData.credentialId) {
-        storeCredentialMapping(
+      if (registerData.nickname && registerData.password) {
+        // New method: nickname + password (password is mnemonic/passphrase)
+        keys = await keysFromMnemonic(registerData.password);
+        publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
+        nickname = registerData.nickname;
+
+        const { challenge } = await getRegisterChallengeToken(
           backendUrl,
-          publicKeyBase64Url,
-          registerData.credentialId,
+          registerData.recaptchaToken,
+        );
+        const signature = await signChallenge(keys, challenge);
+        const registerResult = await registerAccount(backendUrl, {
+          challenge: {
+            code: challenge,
+            signature,
+          },
+          publicKey: publicKeyBase64Url,
+          nickname: nickname,
+          inviteCode: registerData.userData.inviteCode,
+          device: await encryptData("Browser", keys.seed),
+          profile: registerData.userData.profile,
+        });
+
+        return userDataLogin(
+          registerResult,
+          registerResult.user,
+          registerResult.session,
+          bytesToBase64(keys.seed),
+        );
+      } else if (registerData.mnemonic || registerData.credentialId) {
+        // Old method: mnemonic or credentialId
+        if (!registerData.mnemonic && !registerData.credentialId) {
+          throw new Error("Either mnemonic or credentialId must be provided");
+        }
+
+        const { challenge } = await getRegisterChallengeToken(
+          backendUrl,
+          registerData.recaptchaToken,
+        );
+        keys = registerData.credentialId
+          ? await keysFromCredentialId(registerData.credentialId)
+          : await keysFromMnemonic(registerData.mnemonic!);
+        const signature = await signChallenge(keys, challenge);
+        publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
+        const registerResult = await registerAccount(backendUrl, {
+          challenge: {
+            code: challenge,
+            signature,
+          },
+          publicKey: publicKeyBase64Url,
+          nickname: "",
+          inviteCode: registerData.userData.inviteCode,
+          device: await encryptData("Browser", keys.seed),
+          profile: registerData.userData.profile,
+        });
+
+        // Store credential mapping if we have a credential ID
+        if (registerData.credentialId) {
+          storeCredentialMapping(
+            backendUrl,
+            publicKeyBase64Url,
+            registerData.credentialId,
+          );
+        }
+
+        return userDataLogin(
+          registerResult,
+          registerResult.user,
+          registerResult.session,
+          bytesToBase64(keys.seed),
+        );
+      } else {
+        throw new Error(
+          "Either nickname/password or mnemonic/credentialId must be provided",
         );
       }
-
-      return userDataLogin(
-        registerResult,
-        registerResult.user,
-        registerResult.session,
-        bytesToBase64(keys.seed),
-      );
     },
     [backendUrl, userDataLogin],
   );

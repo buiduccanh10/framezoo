@@ -175,6 +175,7 @@ export function useMigration() {
           signature,
         },
         publicKey: bytesToBase64Url(keys.publicKey),
+        nickname: currentAccount.nickname ?? "MigratedUser",
         inviteCode: "MIGRATED", // Default for migrated users or we should ask?
         device: await encryptData("Browser", keys.seed),
         profile: currentAccount.profile,
