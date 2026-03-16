@@ -44,6 +44,13 @@ export function Navigation(props: NavigationProps) {
   // Capture PWA install prompt so we can trigger it from a button (mobile & desktop)
   useEffect(() => {
     const handleBeforeInstallPrompt = (event: any) => {
+      // Debug: log when Chrome fires the PWA install prompt
+      // This helps verify installability in production.
+      // eslint-disable-next-line no-console
+      console.log("[PWA] beforeinstallprompt fired", {
+        time: new Date().toISOString(),
+        platform: (event as any).platforms,
+      });
       event.preventDefault();
       setInstallPromptEvent(event);
     };
@@ -62,12 +69,29 @@ export function Navigation(props: NavigationProps) {
   }, []);
 
   const handleInstallClick = async () => {
+    // Debug: log click and whether we currently have a saved install event
+    // eslint-disable-next-line no-console
+    console.log("[PWA] Install button clicked", {
+      hasEvent: !!installPromptEvent,
+      time: new Date().toISOString(),
+    });
+
     if (installPromptEvent) {
       try {
+        // eslint-disable-next-line no-console
+        console.log("[PWA] Calling prompt() for install");
         await installPromptEvent.prompt();
-        await installPromptEvent.userChoice?.then?.(() => {});
-      } catch {
-        // ignore errors from prompt
+        await installPromptEvent.userChoice?.then?.(
+          // eslint-disable-next-line no-console
+          (choiceResult: any) =>
+            console.log("[PWA] User choice", {
+              outcome: choiceResult?.outcome,
+              platform: choiceResult?.platform,
+            }),
+        );
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error("[PWA] Error during install prompt", error);
       } finally {
         setInstallPromptEvent(null);
       }

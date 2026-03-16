@@ -295,6 +295,30 @@ export function useDiscoverMedia({
           setSectionTitle(t("discover.page.title"));
           break;
 
+        case "top10":
+          data = await fetchTMDBMedia(`/${mediaType}/top_rated`);
+          setSectionTitle(t("discover.carousel.title.top10"));
+          data.results = data.results.slice(0, 10);
+          break;
+
+        case "latest":
+          data = await fetchTMDBMedia(
+            mediaType === "movie" ? "/movie/now_playing" : "/tv/on_the_air",
+          );
+          setSectionTitle(t("discover.carousel.title.latestReleases"));
+          break;
+
+        case "latest4k":
+          data = await fetchTMDBMedia(`/${mediaType}/top_rated`);
+          setSectionTitle(t("discover.carousel.title.4kReleases"));
+          data.results = data.results.slice(0, 20);
+          break;
+
+        case "latesttv":
+          data = await fetchTMDBMedia("/tv/on_the_air");
+          setSectionTitle(t("discover.carousel.title.latestTVReleases"));
+          break;
+
         default:
           throw new Error(`Unsupported content type: ${type}`);
       }
