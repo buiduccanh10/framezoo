@@ -3,10 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Icons } from "@/components/Icon";
 import { SidebarLink, SidebarSection } from "@/components/layout/Sidebar";
-import { Divider } from "@/components/utils/Divider";
 import { useIsMobile } from "@/hooks/useIsMobile";
-
-import { AppInfoPart } from "./AppInfoPart";
 
 export function SidebarPart(props: {
   selectedCategory: string | null;
@@ -148,10 +145,6 @@ export function SidebarPart(props: {
             </SidebarLink>
           ))}
         </SidebarSection>
-        <div className="hidden lg:block">
-          <Divider />
-          <AppInfoPart />
-        </div>
       </div>
     </div>
   );

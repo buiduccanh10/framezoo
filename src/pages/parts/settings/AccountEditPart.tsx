@@ -1,4 +1,6 @@
+import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useCopyToClipboard, useMountedState } from "react-use";
 
 import { Avatar } from "@/components/Avatar";
 import { Button } from "@/components/buttons/Button";
@@ -9,6 +11,7 @@ import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { UserIcons } from "@/components/UserIcon";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { ProfileEditModal } from "@/pages/parts/settings/ProfileEditModal";
+import { useAuthStore } from "@/stores/auth";
 
 export function AccountEditPart(props: {
   deviceName: string;
@@ -24,7 +27,22 @@ export function AccountEditPart(props: {
 }) {
   const { t } = useTranslation();
   const { logout } = useAuth();
+  const { account } = useAuthStore();
   const profileEditModal = useModal("profile-edit");
+  const [, copy] = useCopyToClipboard();
+  const [hasCopied, setHasCopied] = useState(false);
+  const isMounted = useMountedState();
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
+
+  const copyUserId = useCallback(() => {
+    if (!account?.userId) return;
+    copy(account.userId);
+    setHasCopied(true);
+    if (timeout.current) clearTimeout(timeout.current);
+    timeout.current = setTimeout(() => {
+      if (isMounted()) setHasCopied(false);
+    }, 2000);
+  }, [account?.userId, copy, isMounted]);
 
   return (
     <SettingsCard paddingClass="px-8 py-10" className="!mt-8">
@@ -74,19 +92,34 @@ export function AccountEditPart(props: {
               />
             </div>
             <div className="w-full">
-              <AuthInputBox
-                label={
-                  t("settings.account.accountDetails.deviceNameLabel") ??
-                  undefined
-                }
-                placeholder={
-                  t("settings.account.accountDetails.deviceNamePlaceholder") ??
-                  undefined
-                }
-                value={props.deviceName}
-                onChange={(value) => props.setDeviceName(value)}
-                className="w-full"
-              />
+              <div className="mb-2">
+                <p className="text-type-dimmed font-medium mb-1">
+                  {t("settings.sidebar.info.userId")}
+                </p>
+                <p className="text-[10px] text-type-dimmed opacity-60 leading-tight mb-2">
+                  {t("settings.sidebar.info.userIdDescription")}
+                </p>
+                <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-largeCard-background bg-opacity-50">
+                  <p className="text-white truncate">
+                    {account?.userId ?? t("settings.sidebar.info.notLoggedIn")}
+                  </p>
+                  {account?.userId && (
+                    <button
+                      type="button"
+                      className="text-type-dimmed hover:text-white transition-colors duration-200 flex items-center gap-1.5 shrink-0 px-2 py-1 -mr-1 rounded hover:bg-white/5"
+                      onClick={copyUserId}
+                    >
+                      <Icon
+                        icon={hasCopied ? Icons.CHECKMARK : Icons.COPY}
+                        className={hasCopied ? "text-[#4BB4D6]" : "text-xs"}
+                      />
+                      <span className="text-xs">
+                        {hasCopied ? t("actions.copied") : t("actions.copy")}
+                      </span>
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           <div className="flex space-x-3 mt-4">
