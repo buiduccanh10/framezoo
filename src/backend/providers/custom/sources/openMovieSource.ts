@@ -11,7 +11,7 @@ const getBaseUrl = () => {
   return `${backendUrl}/api/embed`;
 };
 
-const OPENMOVIE_API_BASE = `${getBaseUrl()}/api/streams`;
+const OPENMOVIE_API_BASE = `${getBaseUrl()}/api/streams/vixsrc`;
 
 interface OpenMovieStream {
   name: string;
