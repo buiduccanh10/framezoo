@@ -148,7 +148,7 @@ export async function scrapeOpenMovieShow(
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const apiUrl = `${OPENMOVIE_API_BASE}/series/${ctx.media.tmdbId}?season=${ctx.media.season.number}&episode=${ctx.media.episode.number}`;
+  const apiUrl = `${OPENMOVIE_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
 
   try {
     const data = await ctx.fetcher<OpenMovieApiResponse>(apiUrl);
