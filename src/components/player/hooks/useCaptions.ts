@@ -315,7 +315,9 @@ export function useCaptions() {
     if (captions.length === 0) return;
 
     if (!selectedCaption) {
-      if (enabled) selectLastUsedLanguage();
+      if (enabled || !lastSelectedLanguage) {
+        void selectLastUsedLanguage();
+      }
       return;
     }
 
@@ -359,6 +361,7 @@ export function useCaptions() {
     selectCaptionById,
     currentTranslateTask,
     enabled,
+    lastSelectedLanguage,
     selectLastUsedLanguage,
     findCaptionByPreferredLanguage,
   ]);
