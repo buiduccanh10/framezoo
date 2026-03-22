@@ -88,17 +88,22 @@ export function CaptionCue({
 
   const textEffectStyles = getTextEffectStyles();
 
+  const bgOpacity = styling.backgroundOpacity;
+  const showBackgroundBlur =
+    bgOpacity > 0 &&
+    styling.backgroundBlurEnabled &&
+    styling.backgroundBlur !== 0;
+
   return (
     <p
       className="mb-1 rounded px-4 py-1 text-center leading-normal"
       style={{
         color: styling.color,
         fontSize: `${(1.5 * styling.size).toFixed(2)}em`,
-        backgroundColor: `rgba(0,0,0,${styling.backgroundOpacity.toFixed(2)})`,
-        backdropFilter:
-          styling.backgroundBlurEnabled && styling.backgroundBlur !== 0
-            ? `blur(${Math.floor(styling.backgroundBlur * 64)}px)`
-            : "none",
+        backgroundColor: `rgba(0,0,0,${bgOpacity.toFixed(2)})`,
+        backdropFilter: showBackgroundBlur
+          ? `blur(${Math.floor(styling.backgroundBlur * 64)}px)`
+          : "none",
         fontWeight: styling.bold ? "bold" : "normal",
         ...textEffectStyles,
       }}

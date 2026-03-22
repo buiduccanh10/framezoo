@@ -89,8 +89,8 @@ export const useSubtitleStore = create(
       delay: 0,
       styling: {
         color: "#ffffff",
-        backgroundOpacity: 0.5,
-        size: 1,
+        backgroundOpacity: 0,
+        size: 1.65,
         backgroundBlur: 0.5,
         backgroundBlurEnabled: !isFirefox,
         bold: false,
@@ -142,8 +142,8 @@ export const useSubtitleStore = create(
         set((s) => {
           s.styling = {
             color: "#ffffff",
-            backgroundOpacity: 0.5,
-            size: 1,
+            backgroundOpacity: 0,
+            size: 1.65,
             backgroundBlur: 0.5,
             backgroundBlurEnabled: !isFirefox,
             bold: false,
@@ -207,11 +207,11 @@ export const useSubtitleStore = create(
         if (!state.styling) return state;
 
         // Migrate old defaults:
-        // - size: 100% (1.0) -> 165% effective size (1.1 * 1.5 in renderer)
+        // - size: 100% (1.0) -> 165% in UI (1.65 * 1.5 in renderer em)
         // - background opacity: 50% -> 0%
         if (version < 2) {
           if (state.styling.size === 1) {
-            state.styling.size = 1.1;
+            state.styling.size = 1.65;
           }
           if (state.styling.backgroundOpacity === 0.5) {
             state.styling.backgroundOpacity = 0;

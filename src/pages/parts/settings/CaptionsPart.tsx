@@ -128,8 +128,8 @@ export function CaptionsPart(props: {
     subtitleStore.resetStyling();
     props.setStyling({
       color: "#ffffff",
-      backgroundOpacity: 0.5,
-      size: 1,
+      backgroundOpacity: 0,
+      size: 1.65,
       backgroundBlur: 0.5,
       backgroundBlurEnabled: !isFirefox,
       bold: false,
