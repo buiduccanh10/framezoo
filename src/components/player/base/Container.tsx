@@ -8,6 +8,7 @@ import { HeadUpdater } from "@/components/player/internals/HeadUpdater";
 import { KeyboardEvents } from "@/components/player/internals/KeyboardEvents";
 import { MediaSession } from "@/components/player/internals/MediaSession";
 import { MetaReporter } from "@/components/player/internals/MetaReporter";
+import { MobileLandscapeLock } from "@/components/player/internals/MobileLandscapeLock";
 import { ProgressSaver } from "@/components/player/internals/ProgressSaver";
 import { ThumbnailScraper } from "@/components/player/internals/ThumbnailScraper";
 import { VideoClickTarget } from "@/components/player/internals/VideoClickTarget";
@@ -106,6 +107,7 @@ export function Container(props: PlayerProps) {
           <VideoClickTarget showingControls={props.showingControls} />
           <HeadUpdater />
           {props.children}
+          <MobileLandscapeLock />
         </div>
       </BaseContainer>
     </div>
