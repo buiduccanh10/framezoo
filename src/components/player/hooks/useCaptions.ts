@@ -10,34 +10,13 @@ import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import {
+  getCaptionLanguageGroupKey,
+  isLanguageMatch,
+} from "../utils/captionLanguage";
+import {
   filterDuplicateCaptionCues,
   parseVttSubtitles,
 } from "../utils/captions";
-
-const LANGUAGE_ALIASES: Record<string, string[]> = {
-  vi: ["vie", "vietnamese"],
-  en: ["eng", "english"],
-};
-
-function normalizeLanguageToken(value: string): string {
-  return value.trim().toLowerCase().replaceAll("_", "-");
-}
-
-function getLanguageCandidates(language: string): string[] {
-  const normalized = normalizeLanguageToken(language);
-  const base = normalized.split("-")[0];
-  const aliases = LANGUAGE_ALIASES[base] ?? [];
-  return [normalized, base, ...aliases];
-}
-
-function isLanguageMatch(a: string, b: string): boolean {
-  const aCandidates = new Set(getLanguageCandidates(a));
-  const bCandidates = new Set(getLanguageCandidates(b));
-  for (const candidate of aCandidates) {
-    if (bCandidates.has(candidate)) return true;
-  }
-  return false;
-}
 
 export function useCaptions() {
   const setLanguage = useSubtitleStore((s) => s.setLanguage);
@@ -279,28 +258,24 @@ export function useCaptions() {
   const selectRandomCaptionFromLastUsedLanguage = useCallback(async () => {
     const language = lastSelectedLanguage ?? userLanguage ?? "en";
 
-    // Filter captions by language
     const languageCaptions = captions.filter(
-      (caption) => caption.language === language,
+      (caption) =>
+        isLanguageMatch(getCaptionLanguageGroupKey(caption), language) ||
+        isLanguageMatch(caption.language, language),
     );
 
-    // If no captions exist for that language, return early
     if (languageCaptions.length === 0) return;
 
-    // Filter out the currently selected caption if possible
     const availableCaptions = languageCaptions.filter(
       (caption) => caption.id !== selectedCaption?.id,
     );
 
-    // If we filtered out all captions (only one caption available), use all captions
     const captionsToChooseFrom =
       availableCaptions.length > 0 ? availableCaptions : languageCaptions;
 
-    // Pick a random caption
     const randomIndex = Math.floor(Math.random() * captionsToChooseFrom.length);
     const randomCaption = captionsToChooseFrom[randomIndex];
 
-    // Select the random caption
     await selectCaptionById(randomCaption.id);
   }, [
     lastSelectedLanguage,

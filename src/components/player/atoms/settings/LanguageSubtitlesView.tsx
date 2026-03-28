@@ -13,6 +13,7 @@ import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import { CaptionOption, type SubtitleSelectionMode } from "./CaptionsView";
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
+import { getCaptionLanguageGroupKey } from "../../utils/captionLanguage";
 
 function isLikelyUrl(value: string): boolean {
   try {
@@ -92,7 +93,10 @@ export function LanguageSubtitlesView({
   );
 
   const languageCaptions = useMemo(
-    () => captions.filter((caption) => caption.language === language),
+    () =>
+      captions.filter(
+        (caption) => getCaptionLanguageGroupKey(caption) === language,
+      ),
     [captions, language],
   );
 
