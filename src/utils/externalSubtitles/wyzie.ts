@@ -1,5 +1,7 @@
-import { type SubtitleData, searchSubtitles } from "wyzie-lib";
+import type { SubtitleData } from "wyzie-lib";
+import { configure, searchSubtitles } from "wyzie-lib";
 
+import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
 
 export async function scrapeWyzieCaptions(
@@ -9,11 +11,21 @@ export async function scrapeWyzieCaptions(
   episode?: number,
 ): Promise<CaptionListItem[]> {
   try {
+    const wyzieApiKey = conf().WYZIE_API_KEY;
+
+    configure({
+      baseUrl: "https://sub.wyzie.io",
+    });
+
     const searchParams: any = {
       encoding: "utf-8",
       source: "all",
       imdb_id: imdbId,
     };
+
+    if (wyzieApiKey) {
+      searchParams.key = wyzieApiKey;
+    }
 
     if (tmdbId && !imdbId) {
       searchParams.tmdb_id =
@@ -25,7 +37,17 @@ export async function scrapeWyzieCaptions(
       searchParams.episode = episode;
     }
 
-    console.log("Searching Wyzie subtitles with params:", searchParams);
+    if (!wyzieApiKey) {
+      console.warn(
+        "Wyzie API key is not configured; skipping authenticated subtitle search",
+      );
+      return [];
+    }
+
+    console.info("Searching Wyzie subtitles with params:", {
+      ...searchParams,
+      key: "[redacted]",
+    });
     const wyzieSubtitles: SubtitleData[] = await searchSubtitles(searchParams);
 
     const wyzieCaptions: CaptionListItem[] = wyzieSubtitles.map((subtitle) => ({

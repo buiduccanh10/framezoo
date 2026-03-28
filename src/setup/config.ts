@@ -35,6 +35,7 @@ interface Config {
   SHOW_SUPPORT_BAR: boolean;
   SUPPORT_BAR_VALUE: string;
   TIDB_API_KEY: string;
+  WYZIE_API_KEY: string;
 }
 
 export interface RuntimeConfig {
@@ -68,6 +69,7 @@ export interface RuntimeConfig {
   SHOW_SUPPORT_BAR: boolean;
   SUPPORT_BAR_VALUE: string;
   TIDB_API_KEY: string | null;
+  WYZIE_API_KEY: string | null;
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -103,6 +105,7 @@ const env: Record<keyof Config, undefined | string> = {
   SHOW_SUPPORT_BAR: import.meta.env.VITE_SHOW_SUPPORT_BAR,
   SUPPORT_BAR_VALUE: import.meta.env.VITE_SUPPORT_BAR_VALUE,
   TIDB_API_KEY: import.meta.env.VITE_TIDB_API_KEY,
+  WYZIE_API_KEY: import.meta.env.VITE_WYZIE_API_KEY,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -197,5 +200,6 @@ export function conf(): RuntimeConfig {
     SHOW_SUPPORT_BAR: getKey("SHOW_SUPPORT_BAR", "false") === "true",
     SUPPORT_BAR_VALUE: getKey("SUPPORT_BAR_VALUE") ?? "",
     TIDB_API_KEY: getKey("TIDB_API_KEY"),
+    WYZIE_API_KEY: getKey("WYZIE_API_KEY"),
   };
 }
