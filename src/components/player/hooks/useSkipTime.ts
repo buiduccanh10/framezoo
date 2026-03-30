@@ -43,6 +43,58 @@ export interface SegmentData {
   submission_count: number;
 }
 
+function toNullableNumber(value: unknown): number | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim().length > 0) {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return null;
+}
+
+function normalizeSegment(
+  type: SegmentData["type"],
+  raw: unknown,
+): SegmentData | null {
+  if (!raw || typeof raw !== "object") return null;
+  const segment = raw as Record<string, unknown>;
+
+  const startMs = toNullableNumber(segment.start_ms);
+  const endMs = toNullableNumber(segment.end_ms);
+
+  if (startMs === null && endMs === null) return null;
+
+  const confidence = toNullableNumber(segment.confidence);
+  const submissionCount = toNullableNumber(segment.submission_count);
+
+  return {
+    type,
+    start_ms: startMs,
+    end_ms: endMs,
+    confidence,
+    submission_count:
+      submissionCount !== null && submissionCount > 0 ? submissionCount : 1,
+  };
+}
+
+function pushNormalizedSegments(
+  target: SegmentData[],
+  type: SegmentData["type"],
+  source: unknown,
+) {
+  if (Array.isArray(source)) {
+    for (const item of source) {
+      const normalized = normalizeSegment(type, item);
+      if (normalized) target.push(normalized);
+    }
+    return;
+  }
+
+  const normalized = normalizeSegment(type, source);
+  if (normalized) target.push(normalized);
+}
+
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
   const febboxKey = usePreferencesStore((s) => s.febboxKey);
@@ -85,65 +137,11 @@ export function useSkipTime() {
 
         const fetchedSegments: SegmentData[] = [];
 
-        // Process intro segments (v2: array of segments)
-        if (Array.isArray(data?.intro) && data.intro.length > 0) {
-          for (const segment of data.intro) {
-            if (segment.submission_count > 0) {
-              fetchedSegments.push({
-                type: "intro",
-                start_ms: segment.start_ms,
-                end_ms: segment.end_ms,
-                confidence: segment.confidence,
-                submission_count: segment.submission_count,
-              });
-            }
-          }
-        }
-
-        // Process recap segments (v2: array of segments)
-        if (Array.isArray(data?.recap) && data.recap.length > 0) {
-          for (const segment of data.recap) {
-            if (segment.submission_count > 0) {
-              fetchedSegments.push({
-                type: "recap",
-                start_ms: segment.start_ms,
-                end_ms: segment.end_ms,
-                confidence: segment.confidence,
-                submission_count: segment.submission_count,
-              });
-            }
-          }
-        }
-
-        // Process credits segments (v2: array of segments)
-        if (Array.isArray(data?.credits) && data.credits.length > 0) {
-          for (const segment of data.credits) {
-            if (segment.submission_count > 0) {
-              fetchedSegments.push({
-                type: "credits",
-                start_ms: segment.start_ms,
-                end_ms: segment.end_ms,
-                confidence: segment.confidence,
-                submission_count: segment.submission_count,
-              });
-            }
-          }
-        }
-
-        // Process preview segments (v2: array of segments)
-        if (Array.isArray(data?.preview) && data.preview.length > 0) {
-          for (const segment of data.preview) {
-            if (segment.submission_count > 0) {
-              fetchedSegments.push({
-                type: "preview",
-                start_ms: segment.start_ms,
-                end_ms: segment.end_ms,
-                confidence: segment.confidence,
-                submission_count: segment.submission_count,
-              });
-            }
-          }
-        }
+        // Accept both array/object segment payloads and default missing metadata.
+        pushNormalizedSegments(fetchedSegments, "intro", data?.intro);
+        pushNormalizedSegments(fetchedSegments, "recap", data?.recap);
+        pushNormalizedSegments(fetchedSegments, "credits", data?.credits);
+        pushNormalizedSegments(fetchedSegments, "preview", data?.preview);
 
         // TIDB returned 200 – we have segment data for this media (even if no intro)
         return { segments: fetchedSegments, tidbNotFound: false };
@@ -191,7 +189,7 @@ export function useSkipTime() {
 
         const parseSkipTime = (timeStr: string | undefined): number | null => {
           if (!timeStr || typeof timeStr !== "string") return null;
-          const match = timeStr.match(/^($\d+$)s$/);
+          const match = timeStr.match(/^(\d+)s$/);
           if (!match) return null;
           return parseInt(match[1], 10);
         };
