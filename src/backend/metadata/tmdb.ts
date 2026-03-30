@@ -214,7 +214,15 @@ export async function get<T>(url: string, params?: object): Promise<T> {
   const proxy = getNextProxy(proxyUrls);
   const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
   const userLanguage = useLanguageStore.getState().language;
-  const formattedLanguage = getTmdbLanguageCode(userLanguage);
+  const requestedLanguage =
+    params &&
+    typeof params === "object" &&
+    "language" in params &&
+    typeof (params as { language?: unknown }).language === "string"
+      ? ((params as { language: string }).language ?? "").trim()
+      : "";
+  const formattedLanguage =
+    requestedLanguage || getTmdbLanguageCode(userLanguage);
 
   // Check cache first
   const cacheKey: TMDBCacheKey = {

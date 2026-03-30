@@ -254,6 +254,13 @@ export function useDiscoverMedia({
             with_watch_providers: id,
             watch_region: "US",
           });
+          if (data.results.length === 0 && formattedLanguage !== "en-US") {
+            data = await fetchTMDBMedia(`/discover/${mediaType}`, {
+              with_watch_providers: id,
+              watch_region: "US",
+              language: "en-US",
+            });
+          }
           setSectionTitle(
             mediaType === "movie"
               ? t("discover.carousel.title.moviesOn", {
