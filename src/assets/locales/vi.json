@@ -449,11 +449,15 @@
     "titles": {
       "69": {
         "default": "Muốn khuấy đảo tí cho đời thêm vui không?",
-        "extra": ["Chúc mừng 69 ngày 😘!"]
+        "extra": [
+          "Chúc mừng 69 ngày 😘!"
+        ]
       },
       "420": {
         "default": "Bạn muốn xem gì ngày 20/4 này?",
-        "extra": ["Chúc mừng ngày 20/4 🥳 !"]
+        "extra": [
+          "Chúc mừng ngày 20/4 🥳 !"
+        ]
       },
       "day": {
         "default": "Chiều nay bạn muốn coi gì?",
@@ -463,11 +467,15 @@
       },
       "morning": {
         "default": "Sáng nay bạn muốn coi gì?",
-        "extra": ["Tôi nghe nói rằng bộ phim Before Sunrise hay đấy"]
+        "extra": [
+          "Tôi nghe nói rằng bộ phim Before Sunrise hay đấy"
+        ]
       },
       "night": {
         "default": "Đêm nay bạn muốn coi gì?",
-        "extra": ["Cảm thấy mệt? Tôi nghe nói phim The Exorcist hay đấy."]
+        "extra": [
+          "Cảm thấy mệt? Tôi nghe nói phim The Exorcist hay đấy."
+        ]
       },
       "halloween": {
         "default": "Bộ phim rùng rợn nào bạn muốn xem trong dịp Halloween này?",
@@ -1038,22 +1046,28 @@
       }
     },
     "loadingOverlayMessages": {
-      "1": "Đang tìm đường trên internet...",
-      "2": "Đang gọi API về nhà...",
-      "3": "Đang hỏi ý kiến server...",
-      "4": "Đang tra dầu bánh răng...",
-      "5": "Đang vặn lại mấy con ốc server...",
-      "6": "Đang chỉnh lại dây điện...",
-      "7": "Đang đẩy dữ liệu qua đường ống...",
-      "8": "Đang kiểm tra lại mạch...",
-      "9": "Đợi chút, đang pha cà phê...",
-      "10": "Sắp được rồi... thật.",
-      "11": "Vẫn nhanh hơn window update...",
-      "12": "Cứ bình tĩnh...",
-      "13": "Đợi tí, đang tìm remote...",
-      "14": "Đợi chút, đang ăn mì gói...",
-      "15": "Đang hỏi Google...",
-      "16": "Xin kiên nhẫn, phép thuật đang được thi triển..."
+      "1": "Đang trích điện dev…",
+      "2": "Nghỉ xíu đã...",
+      "3": "Kích hoạt chế độ tự huỷ...",
+      "4": "Dev đang bận đi trà đá…",
+      "5": "Hacking nasa...",
+      "6": "Chúng tôi đã cố gắng hết sức...",
+      "7": "Sắp được rồi... thật.",
+      "8": "Vẫn nhanh hơn window update...",
+      "9": "Cứ bình tĩnh...",
+      "10": "Đợi chút, đang ăn mì gói...",
+      "11": "Tắt đi, bật lại…",
+      "12": "Downloading more RAM...",
+      "13": "Winter is coming...",
+      "14": "Sắp xong rồi…(nghe bảo vậy)",
+      "15": "Dữ liệu của bạn giờ thuộc về chúng tôi…",
+      "16": "Hay là bạn tìm cái gì ăn tạm đi?",
+      "17": "Vui lòng chờ trong lúc chúng tôi giả vờ đang làm việc…",
+      "18": "Tìm thêm cách mới để bạn phải chờ…",
+      "19": "Đừng lo, chúng tôi cũng đang chờ…",
+      "20": "Nếu bạn đọc được dòng này…loading vẫn chưa xong",
+      "21": "Coi chừng đằng sau kìa",
+      "22": "Đừng nhìn thanh loading… nó sẽ chậm hơn."
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
@@ -1528,8 +1542,7 @@
         "genreShows": "Phim truyền hình thể loại {{genre}}",
         "categoryMovies": "Phim điện ảnh {{category}}",
         "categoryShows": "Phim truyền hình {{category}}",
-        "trending": "Xu hướng",
-        "top10": "Top 10"
+        "trending": "Xu hướng"
       },
       "change": "Thay đổi",
       "more": "Xem thêm"

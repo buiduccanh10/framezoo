@@ -428,23 +428,33 @@
     "titles": {
       "69": {
         "default": "Θές να δεις τίποτα πικάντικο;",
-        "extra": ["Χαρούμενη μέρα 69 😘!"]
+        "extra": [
+          "Χαρούμενη μέρα 69 😘!"
+        ]
       },
       "420": {
         "default": "Τι θα ήθελες να δεις αυτή τη 4/20 ;",
-        "extra": ["Χαρούμενη μέρα 4/20 🥳!"]
+        "extra": [
+          "Χαρούμενη μέρα 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Τι θα θέλατε να παρακολουθήσετε σήμερα το απόγευμα;",
-        "extra": ["Ζήτω το AlphaFlix!"]
+        "extra": [
+          "Ζήτω το AlphaFlix!"
+        ]
       },
       "morning": {
         "default": "Τι θα θέλατε να παρακολουθήσετε σήμερα το πρωί;",
-        "extra": ["Έχω ακούσει ότι το Before Sunrise είναι καλό!"]
+        "extra": [
+          "Έχω ακούσει ότι το Before Sunrise είναι καλό!"
+        ]
       },
       "night": {
         "default": "Τι θα θέλατε να παρακολουθήσετε απόψε;",
-        "extra": ["Βαρεμάρα; Έχω ακούσει ότι ο Εξορκιστής είναι καλός!"]
+        "extra": [
+          "Βαρεμάρα; Έχω ακούσει ότι ο Εξορκιστής είναι καλός!"
+        ]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -1104,6 +1114,30 @@
           }
         }
       }
+    },
+    "loadingOverlayMessages": {
+      "1": "Downloading more RAM...",
+      "2": "Converting caffeine to content...",
+      "3": "Teaching the hamster to run faster...",
+      "4": "Convincing electrons to move quicker...",
+      "5": "Almost there... said every loading bar ever...",
+      "6": "Finding the remote... wait, wrong problem...",
+      "7": "Counting backwards from infinity...",
+      "8": "Simulating the future...",
+      "9": "Watching cat videos...",
+      "10": "Distracted by cat GIFs...",
+      "11": "Please wait while the intern refills his coffee...",
+      "12": "Checking if it's plugged in...",
+      "13": "Turning it off and on again...",
+      "14": "Don't panic...",
+      "15": "Winter is coming...",
+      "16": "Logging into Skynet...",
+      "17": "All your browser are belong to us...",
+      "18": "Looking for infinite improbability drive...",
+      "19": "Discovering new ways of making you wait...",
+      "20": "Your time is very important to us. Please wait while we ignore you...",
+      "21": "Still faster than Windows Update...",
+      "22": "Why don't you grab a sandwich?"
     }
   },
   "support": {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { playerStatus } from "@/stores/player/slices/source";
@@ -34,28 +34,12 @@ async function lockLandscape() {
 
 export function MobileLandscapeLock() {
   const status = usePlayerStore((s) => s.status);
+  const display = usePlayerStore((s) => s.display);
+  const isFullscreen = usePlayerStore((s) => s.interface.isFullscreen);
   const { isMobile } = useIsMobile();
-  const shouldLock = isMobile && status === playerStatus.PLAYING;
-  const [isPortrait, setIsPortrait] = useState(() =>
-    typeof window !== "undefined"
-      ? window.innerHeight > window.innerWidth
-      : false,
-  );
-
-  useEffect(() => {
-    const updateOrientation = () => {
-      setIsPortrait(window.innerHeight > window.innerWidth);
-    };
-
-    updateOrientation();
-    window.addEventListener("resize", updateOrientation);
-    window.addEventListener("orientationchange", updateOrientation);
-
-    return () => {
-      window.removeEventListener("resize", updateOrientation);
-      window.removeEventListener("orientationchange", updateOrientation);
-    };
-  }, []);
+  const isWebPlayer = display?.getType() === "web";
+  const shouldLock =
+    isMobile && status === playerStatus.PLAYING && isWebPlayer && !isFullscreen;
 
   useEffect(() => {
     if (!shouldLock) {
@@ -82,17 +66,5 @@ export function MobileLandscapeLock() {
       unlockOrientation();
     };
   }, [shouldLock]);
-
-  if (!shouldLock || !isPortrait) return null;
-
-  return (
-    <div className="absolute inset-0 z-[90] flex items-center justify-center bg-black/95 px-6 text-center text-white">
-      <div className="max-w-xs space-y-3">
-        <p className="text-lg font-semibold">Rotate your device</p>
-        <p className="text-sm text-type-secondary">
-          Landscape mode is required while the video is playing.
-        </p>
-      </div>
-    </div>
-  );
+  return null;
 }

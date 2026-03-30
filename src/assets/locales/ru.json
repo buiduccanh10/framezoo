@@ -428,11 +428,15 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": ["Happy 69 day 😘!"]
+        "extra": [
+          "Happy 69 day 😘!"
+        ]
       },
       "420": {
         "default": "20/4 - день веселья и травки! Что посмотрим?",
-        "extra": ["С праздником 20/4! 🥳 Празднуем вместе!"]
+        "extra": [
+          "С праздником 20/4! 🥳 Празднуем вместе!"
+        ]
       },
       "day": {
         "default": "Что бы вы хотели посмотреть в этот прекрасный день?",
@@ -442,7 +446,9 @@
       },
       "morning": {
         "default": "Что бы вы хотели посмотреть этим утром?",
-        "extra": ["Слышали, что «Перед рассветом» – отличный фильм"]
+        "extra": [
+          "Слышали, что «Перед рассветом» – отличный фильм"
+        ]
       },
       "night": {
         "default": "Что бы вы хотели посмотреть этим вечером?",
@@ -1108,6 +1114,30 @@
           }
         }
       }
+    },
+    "loadingOverlayMessages": {
+      "1": "Downloading more RAM...",
+      "2": "Converting caffeine to content...",
+      "3": "Teaching the hamster to run faster...",
+      "4": "Convincing electrons to move quicker...",
+      "5": "Almost there... said every loading bar ever...",
+      "6": "Finding the remote... wait, wrong problem...",
+      "7": "Counting backwards from infinity...",
+      "8": "Simulating the future...",
+      "9": "Watching cat videos...",
+      "10": "Distracted by cat GIFs...",
+      "11": "Please wait while the intern refills his coffee...",
+      "12": "Checking if it's plugged in...",
+      "13": "Turning it off and on again...",
+      "14": "Don't panic...",
+      "15": "Winter is coming...",
+      "16": "Logging into Skynet...",
+      "17": "All your browser are belong to us...",
+      "18": "Looking for infinite improbability drive...",
+      "19": "Discovering new ways of making you wait...",
+      "20": "Your time is very important to us. Please wait while we ignore you...",
+      "21": "Still faster than Windows Update...",
+      "22": "Why don't you grab a sandwich?"
     }
   },
   "support": {

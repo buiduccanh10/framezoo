@@ -6,7 +6,7 @@ import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
-const MESSAGE_INITIAL_DELAY_MS = 4000;
+const MESSAGE_INITIAL_DELAY_MS = 6000;
 
 function getRandomMessage(messages: string[], prev?: string) {
   if (messages.length <= 1) return messages[0] ?? "";
@@ -46,7 +46,7 @@ export function PlayerLoadingOverlay() {
 
   const loadingMessages = useMemo(
     () =>
-      Array.from({ length: 16 }, (_, i) =>
+      Array.from({ length: 22 }, (_, i) =>
         t(`player.loadingOverlayMessages.${i + 1}`),
       ).filter(Boolean),
     [t],

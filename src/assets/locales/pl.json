@@ -428,23 +428,33 @@
     "titles": {
       "69": {
         "default": "Masz ochotę na coś pikantnego?",
-        "extra": ["Wesołego dnia 69 😘!"]
+        "extra": [
+          "Wesołego dnia 69 😘!"
+        ]
       },
       "420": {
         "default": "Dziś jest 20 kwietnia, co chciałbyś obejrzeć?",
-        "extra": ["Wesołego 420 🥳!"]
+        "extra": [
+          "Wesołego 420 🥳!"
+        ]
       },
       "day": {
         "default": "Co chciałbyś obejrzeć dziś po południu?",
-        "extra": ["Viva la AlphaFlix!"]
+        "extra": [
+          "Viva la AlphaFlix!"
+        ]
       },
       "morning": {
         "default": "Co chciałbyś obejrzeć dziś rano?",
-        "extra": ["Viva la AlphaFlix!"]
+        "extra": [
+          "Viva la AlphaFlix!"
+        ]
       },
       "night": {
         "default": "Co chciałbyś obejrzeć dziś wieczorem?",
-        "extra": ["Viva la AlphaFlix!"]
+        "extra": [
+          "Viva la AlphaFlix!"
+        ]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -1104,6 +1114,30 @@
           }
         }
       }
+    },
+    "loadingOverlayMessages": {
+      "1": "Downloading more RAM...",
+      "2": "Converting caffeine to content...",
+      "3": "Teaching the hamster to run faster...",
+      "4": "Convincing electrons to move quicker...",
+      "5": "Almost there... said every loading bar ever...",
+      "6": "Finding the remote... wait, wrong problem...",
+      "7": "Counting backwards from infinity...",
+      "8": "Simulating the future...",
+      "9": "Watching cat videos...",
+      "10": "Distracted by cat GIFs...",
+      "11": "Please wait while the intern refills his coffee...",
+      "12": "Checking if it's plugged in...",
+      "13": "Turning it off and on again...",
+      "14": "Don't panic...",
+      "15": "Winter is coming...",
+      "16": "Logging into Skynet...",
+      "17": "All your browser are belong to us...",
+      "18": "Looking for infinite improbability drive...",
+      "19": "Discovering new ways of making you wait...",
+      "20": "Your time is very important to us. Please wait while we ignore you...",
+      "21": "Still faster than Windows Update...",
+      "22": "Why don't you grab a sandwich?"
     }
   },
   "support": {
