@@ -98,6 +98,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let lastValidTime = 0; // Store the last valid time to prevent reset during source switches
   let shouldAutoplayAfterLoad = false; // Flag to track if we should autoplay after loading completes
   let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
+  let qualitySetupRetryTimeout: NodeJS.Timeout | null = null; // Retry manual quality setup after manifest load
 
   const languagePromises = new Map<
     string,
@@ -161,12 +162,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           const bestLevel = sortLevelsByQuality(matchingLevels)[0];
           const levelIndex = hls.levels.indexOf(bestLevel);
           if (levelIndex !== -1) {
+            hls.startLevel = levelIndex;
+            hls.nextLevel = levelIndex;
             hls.currentLevel = levelIndex;
             hls.loadLevel = levelIndex;
           }
         }
       }
     } else {
+      hls.startLevel = -1;
       hls.currentLevel = -1;
       hls.loadLevel = -1;
     }
@@ -176,7 +180,14 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   }
 
   function setupSource(vid: HTMLVideoElement, src: LoadableSource) {
-    hls = null;
+    if (hls) {
+      hls.destroy();
+      hls = null;
+    }
+    if (qualitySetupRetryTimeout) {
+      clearTimeout(qualitySetupRetryTimeout);
+      qualitySetupRetryTimeout = null;
+    }
     if (src.type === "hls") {
       if (canPlayHlsNatively(vid)) {
         vid.src = processCdnLink(src.url);
@@ -188,7 +199,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         throw new Error("HLS not supported. Update your browser. 🤦‍♂️");
       if (!hls) {
         hls = new Hls({
-          autoStartLoad: true,
+          autoStartLoad: false,
           maxBufferLength: 120, // 120 seconds
           maxMaxBufferLength: 240,
           abrEwmaDefaultEstimate: 5 * 1000 * 1000, // 5 Mbps default bandwidth estimate for better ABR decisions
@@ -269,7 +280,21 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           if (!hls) return;
           reportLevels();
           setupQualityForHls();
+
+          if (!automaticQuality) {
+            if (qualitySetupRetryTimeout) {
+              clearTimeout(qualitySetupRetryTimeout);
+              qualitySetupRetryTimeout = null;
+            }
+            qualitySetupRetryTimeout = setTimeout(() => {
+              if (!hls) return;
+              if (automaticQuality) return;
+              setupQualityForHls();
+            }, 250);
+          }
+
           reportAudioTracks();
+          hls.startLoad(startAt);
 
           if (isExtensionActiveCached()) {
             hls.on(Hls.Events.LEVEL_LOADED, async (_, data) => {
@@ -545,6 +570,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       clearTimeout(qualityChangeTimeout);
       qualityChangeTimeout = null;
     }
+    if (qualitySetupRetryTimeout) {
+      clearTimeout(qualitySetupRetryTimeout);
+      qualitySetupRetryTimeout = null;
+    }
 
     if (videoElement) {
       videoElement.removeAttribute("src");
@@ -568,6 +597,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     if (qualityChangeTimeout) {
       clearTimeout(qualityChangeTimeout);
       qualityChangeTimeout = null;
+    }
+    if (qualitySetupRetryTimeout) {
+      clearTimeout(qualitySetupRetryTimeout);
+      qualitySetupRetryTimeout = null;
     }
   }
 
@@ -653,6 +686,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       if (qualityChangeTimeout) {
         clearTimeout(qualityChangeTimeout);
         qualityChangeTimeout = null;
+      }
+      if (qualitySetupRetryTimeout) {
+        clearTimeout(qualitySetupRetryTimeout);
+        qualitySetupRetryTimeout = null;
       }
 
       automaticQuality = newAutomaticQuality;
