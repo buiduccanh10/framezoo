@@ -1,7 +1,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type Category = "movies" | "tvshows" | "editorpicks";
+export type GenreCategory = `genre:${string}`;
+
+export type Category =
+  | "movies"
+  | "tvshows"
+  | "editorpicks"
+  | "top10"
+  | GenreCategory;
 
 interface DiscoverView {
   url: string;

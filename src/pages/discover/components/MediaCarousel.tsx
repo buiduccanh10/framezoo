@@ -38,6 +38,9 @@ interface MediaCarouselProps {
   showProviders?: boolean;
   showGenres?: boolean;
   showRecommendations?: boolean;
+  forcedGenreId?: string;
+  forcedGenreName?: string;
+  hideRelatedButtons?: boolean;
 }
 
 function MoreCard({ link }: { link: string }) {
@@ -82,6 +85,9 @@ export function MediaCarousel({
   showProviders = false,
   showGenres = false,
   showRecommendations = false,
+  forcedGenreId,
+  forcedGenreName,
+  hideRelatedButtons = false,
 }: MediaCarouselProps) {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
@@ -139,6 +145,11 @@ export function MediaCarousel({
 
   // Set initial provider/genre selection
   useEffect(() => {
+    if (forcedGenreId) {
+      handleGenreChange(forcedGenreId, forcedGenreName || "");
+      return;
+    }
+
     if (showProviders && providers.length > 0 && !selectedProviderId) {
       handleProviderChange(providers[0].id, providers[0].name);
     }
@@ -150,6 +161,8 @@ export function MediaCarousel({
     showGenres,
     providers,
     genres,
+    forcedGenreId,
+    forcedGenreName,
     selectedProviderId,
     selectedGenreId,
     handleProviderChange,
@@ -416,7 +429,7 @@ export function MediaCarousel({
             </Link>
           )}
         </div>
-        {relatedButtons && relatedButtons.length > 0 && (
+        {!hideRelatedButtons && relatedButtons && relatedButtons.length > 0 && (
           <div className="flex items-center space-x-2 mr-6">
             {visibleButtons?.map((button) => (
               <button

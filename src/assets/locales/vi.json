@@ -1500,7 +1500,8 @@
     "tabs": {
       "movies": "Phim điện ảnh",
       "tvshows": "Phim truyền hình",
-      "editorpicks": "Lựa chọn của biên tập viên"
+      "editorpicks": "Lựa chọn của biên tập viên",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {

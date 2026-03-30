@@ -1483,7 +1483,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {

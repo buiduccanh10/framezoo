@@ -12,6 +12,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useDiscoverStore } from "@/stores/discover";
+import type { Category } from "@/stores/discover";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
 import { scrapeIMDb } from "@/utils/imdbScraper";
@@ -45,7 +46,7 @@ interface FeaturedCarouselProps {
   children?: ReactNode;
   searching?: boolean;
   shorter?: boolean;
-  forcedCategory?: "movies" | "tvshows" | "editorpicks";
+  forcedCategory?: Category;
 }
 
 interface IMDbRatingData {
@@ -120,6 +121,10 @@ export function FeaturedCarousel({
 }: FeaturedCarouselProps) {
   const { selectedCategory } = useDiscoverStore();
   const effectiveCategory = forcedCategory || selectedCategory;
+  const featuredCategory =
+    effectiveCategory === "top10" || effectiveCategory.startsWith("genre:")
+      ? "movies"
+      : effectiveCategory;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [media, setMedia] = useState<FeaturedMedia[]>([]);
@@ -210,9 +215,9 @@ export function FeaturedCarousel({
 
       try {
         setIsLoading(true);
-        if (effectiveCategory === "movies" || effectiveCategory === "tvshows") {
+        if (featuredCategory === "movies" || featuredCategory === "tvshows") {
           // TMDB method
-          if (effectiveCategory === "movies") {
+          if (featuredCategory === "movies") {
             // First get the list of popular movies
             const listData = await get<any>("/movie/popular", {
               language: formattedLanguage,
@@ -239,7 +244,7 @@ export function FeaturedCarousel({
               () => 0.5 - Math.random(),
             );
             setMedia(shuffledMovies.slice(0, SLIDE_QUANTITY));
-          } else if (effectiveCategory === "tvshows") {
+          } else if (featuredCategory === "tvshows") {
             // First get the list of popular shows
             const listData = await get<any>("/tv/popular", {
               language: formattedLanguage,
@@ -265,7 +270,7 @@ export function FeaturedCarousel({
             const shuffledShows = [...allShows].sort(() => 0.5 - Math.random());
             setMedia(shuffledShows.slice(0, SLIDE_QUANTITY));
           }
-        } else if (effectiveCategory === "editorpicks") {
+        } else if (featuredCategory === "editorpicks") {
           // Shuffle editor picks Ids
           const allMovieIds = EDITOR_PICKS_MOVIES.map((item) => ({
             id: item.id,
@@ -328,7 +333,7 @@ export function FeaturedCarousel({
     };
 
     fetchFeaturedMedia();
-  }, [formattedLanguage, effectiveCategory]);
+  }, [featuredCategory, formattedLanguage]);
 
   const handlePrevSlide = () => {
     setContentOpacity(0);
