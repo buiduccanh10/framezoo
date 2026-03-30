@@ -34,7 +34,16 @@ interface SubSourceSubtitleResult {
 interface SubSourceSubtitleResponse {
   success: boolean;
   data?: SubSourceSubtitleResult[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
 }
+
+const SUBSOURCE_PAGE_SIZE = 100;
+const SUBSOURCE_MAX_TV_PAGES = 5;
 
 function normalizeSubSourceLanguage(language: string): string {
   const normalized = language
@@ -80,6 +89,53 @@ function createEpisodePatterns(season: number, episode: number): RegExp[] {
   ];
 }
 
+function createSeasonPackPatterns(season: number): RegExp[] {
+  const seasonPadded = season.toString().padStart(2, "0");
+
+  return [
+    new RegExp(`Season\\s*0*${season}\\b|Season\\s*${seasonPadded}\\b`, "i"),
+    new RegExp(`S${seasonPadded}\\b`, "i"),
+    new RegExp(`S${season}\\b`, "i"),
+    new RegExp(`S${seasonPadded}\\s*(Complete|Full|All)`, "i"),
+    new RegExp(`S${season}\\s*(Complete|Full|All)`, "i"),
+    new RegExp(`All\\s*Episode`, "i"),
+    new RegExp(`Complete`, "i"),
+  ];
+}
+
+function matchesEpisodeRange(
+  haystack: string,
+  season: number,
+  episode: number,
+): boolean {
+  const seasonVariants = [
+    season.toString(),
+    season.toString().padStart(2, "0"),
+  ];
+  const episodeVariants = [
+    episode.toString(),
+    episode.toString().padStart(2, "0"),
+  ];
+
+  return seasonVariants.some((seasonValue) =>
+    episodeVariants.some((episodeValue) => {
+      const rangePatterns = [
+        new RegExp(
+          `S${seasonValue}E\\d{1,2}\\s*[-~]\\s*E?${episodeValue}`,
+          "i",
+        ),
+        new RegExp(
+          `S${seasonValue}E${episodeValue}\\s*[-~]\\s*E?\\d{1,2}`,
+          "i",
+        ),
+        new RegExp(`S${seasonValue}E\\d{1,2}\\s*[-~]\\s*\\d{1,2}`, "i"),
+      ];
+
+      return rangePatterns.some((pattern) => pattern.test(haystack));
+    }),
+  );
+}
+
 function matchesEpisode(
   subtitle: SubSourceSubtitleResult,
   season?: number,
@@ -92,9 +148,70 @@ function matchesEpisode(
     subtitle.commentary ?? "",
   ].join(" ");
 
-  return createEpisodePatterns(season, episode).some((pattern) =>
+  const exactEpisodeMatch = createEpisodePatterns(season, episode).some(
+    (pattern) => pattern.test(haystack),
+  );
+  if (exactEpisodeMatch) return true;
+
+  const rangeMatch = matchesEpisodeRange(haystack, season, episode);
+  if (rangeMatch) return true;
+
+  return createSeasonPackPatterns(season).some((pattern) =>
     pattern.test(haystack),
   );
+}
+
+function mapSubSourceCaptions(
+  subtitles: SubSourceSubtitleResult[],
+  season?: number,
+  episode?: number,
+): CaptionListItem[] {
+  return subtitles
+    .filter((subtitle) => matchesEpisode(subtitle, season, episode))
+    .reduce<CaptionListItem[]>((captions, subtitle) => {
+      const language = normalizeSubSourceLanguage(subtitle.language);
+      if (!language) return captions;
+
+      const releaseName = subtitle.releaseInfo?.join(", ").trim();
+      const downloadUrl = `${SUBSOURCE_API_URL}/api/v1/subtitles/${subtitle.subtitleId}/download`;
+
+      captions.push({
+        id: downloadUrl,
+        language,
+        url: downloadUrl,
+        type: "srt",
+        needsProxy: false,
+        opensubtitles: true,
+        display: releaseName || subtitle.commentary || subtitle.language,
+        source: "subsource",
+      });
+
+      return captions;
+    }, []);
+}
+
+async function fetchSubSourceSubtitlePage(
+  apiKey: string,
+  movieId: number,
+  page: number,
+): Promise<SubSourceSubtitleResponse> {
+  const subtitlesUrl = new URL(`${SUBSOURCE_API_URL}/api/v1/subtitles`);
+  subtitlesUrl.searchParams.set("movieId", String(movieId));
+  subtitlesUrl.searchParams.set("sort", "rating");
+  subtitlesUrl.searchParams.set("limit", String(SUBSOURCE_PAGE_SIZE));
+  subtitlesUrl.searchParams.set("page", String(page));
+
+  const subtitleResponse = await fetch(subtitlesUrl.toString(), {
+    headers: createApiHeaders(apiKey),
+  });
+
+  if (!subtitleResponse.ok) {
+    throw new Error(
+      `SubSource subtitles API returned ${subtitleResponse.status}`,
+    );
+  }
+
+  return (await subtitleResponse.json()) as SubSourceSubtitleResponse;
 }
 
 export async function scrapeSubSourceCaptions(
@@ -166,52 +283,53 @@ export async function scrapeSubSourceCaptions(
       return [];
     }
 
-    const subtitlesUrl = new URL(`${SUBSOURCE_API_URL}/api/v1/subtitles`);
-    subtitlesUrl.searchParams.set("movieId", String(chosenMatch.movieId));
-    subtitlesUrl.searchParams.set("sort", "rating");
-
-    const subtitleResponse = await fetch(subtitlesUrl.toString(), {
-      headers: createApiHeaders(apiKey),
-    });
-
-    if (!subtitleResponse.ok) {
-      throw new Error(
-        `SubSource subtitles API returned ${subtitleResponse.status}`,
-      );
-    }
-
-    const subtitleData =
-      (await subtitleResponse.json()) as SubSourceSubtitleResponse;
-    const subtitles = subtitleData.data ?? [];
-    if (!subtitleData.success || subtitles.length === 0) {
+    const firstPage = await fetchSubSourceSubtitlePage(
+      apiKey,
+      chosenMatch.movieId,
+      1,
+    );
+    const firstPageSubtitles = firstPage.data ?? [];
+    if (!firstPage.success || firstPageSubtitles.length === 0) {
       return [];
     }
 
-    const subSourceCaptions = subtitles
-      .filter((subtitle) => matchesEpisode(subtitle, season, episode))
-      .reduce<CaptionListItem[]>((captions, subtitle) => {
-        const language = normalizeSubSourceLanguage(subtitle.language);
-        if (!language) return captions;
+    let matchedSubtitles = mapSubSourceCaptions(
+      firstPageSubtitles,
+      season,
+      episode,
+    );
 
-        const releaseName = subtitle.releaseInfo?.join(", ").trim();
-        const downloadUrl = `${SUBSOURCE_API_URL}/api/v1/subtitles/${subtitle.subtitleId}/download`;
+    if (
+      mediaType === "show" &&
+      season &&
+      episode &&
+      matchedSubtitles.length === 0
+    ) {
+      const totalPages = Math.min(
+        firstPage.pagination?.pages ?? 1,
+        SUBSOURCE_MAX_TV_PAGES,
+      );
 
-        captions.push({
-          id: downloadUrl,
-          language,
-          url: downloadUrl,
-          type: "srt",
-          needsProxy: false,
-          opensubtitles: true,
-          display: releaseName || subtitle.commentary || subtitle.language,
-          source: "subsource",
-        });
+      for (let page = 2; page <= totalPages; page += 1) {
+        const pageData = await fetchSubSourceSubtitlePage(
+          apiKey,
+          chosenMatch.movieId,
+          page,
+        );
+        const pageSubtitles = pageData.data ?? [];
+        if (!pageData.success || pageSubtitles.length === 0) {
+          continue;
+        }
 
-        return captions;
-      }, []);
+        matchedSubtitles = mapSubSourceCaptions(pageSubtitles, season, episode);
+        if (matchedSubtitles.length > 0) {
+          break;
+        }
+      }
+    }
 
-    console.log(`Found ${subSourceCaptions.length} SubSource subtitles`);
-    return subSourceCaptions;
+    console.log(`Found ${matchedSubtitles.length} SubSource subtitles`);
+    return matchedSubtitles;
   } catch (error) {
     console.error("Error fetching SubSource subtitles:", error);
     return [];
