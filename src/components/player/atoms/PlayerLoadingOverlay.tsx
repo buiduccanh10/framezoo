@@ -140,7 +140,7 @@ export function PlayerLoadingOverlay() {
         setLoadingMessage((prev) => getRandomMessage(loadingMessages, prev));
         setMessageVisible(true);
       }, 260);
-    }, 2600);
+    }, MESSAGE_INITIAL_DELAY_MS);
 
     return () => window.clearInterval(interval);
   }, [showOverlayWhenReady, loadingMessages, messageEnabled]);
