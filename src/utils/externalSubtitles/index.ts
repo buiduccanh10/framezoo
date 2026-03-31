@@ -22,15 +22,10 @@ export async function scrapeExternalSubtitles(
     const season = meta.season?.number;
     const episode = meta.episode?.number;
 
-    // Set a reasonable timeout for each source (10 seconds)
-    const timeout = 10000;
-
-    // Create timeout promises
-    const timeoutPromise = new Promise<
-      import("@/stores/player/slices/source").CaptionListItem[]
-    >((resolve) => {
-      setTimeout(() => resolve([]), timeout);
-    });
+    // External subtitle providers can be noticeably slower on Safari.
+    // Keep a timeout so a hung provider does not block forever, but give
+    // the slower sources enough time to return real results.
+    const timeoutMs = 30000;
 
     // Start all promises and collect results as they complete
     const allCaptions: import("@/stores/player/slices/source").CaptionListItem[] =
@@ -52,14 +47,36 @@ export async function scrapeExternalSubtitles(
       );
     };
 
+    const withSourceTimeout = (
+      sourceName: string,
+      promise: Promise<
+        import("@/stores/player/slices/source").CaptionListItem[]
+      >,
+    ) => {
+      let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+      return Promise.race([
+        promise,
+        new Promise<import("@/stores/player/slices/source").CaptionListItem[]>(
+          (resolve) => {
+            timeoutId = setTimeout(() => {
+              console.warn(
+                `${sourceName} timed out after ${timeoutMs}ms, using empty subtitle list`,
+              );
+              resolve([]);
+            }, timeoutMs);
+          },
+        ),
+      ]).then((captions) => {
+        if (timeoutId) clearTimeout(timeoutId);
+        handleSourceCompletion(sourceName, captions);
+        return captions;
+      });
+    };
+
     if (tmdbId && imdbId) {
       const wyziePromise = scrapeWyzieCaptions(tmdbId, imdbId, season, episode);
-      sourcePromises.push(
-        Promise.race([wyziePromise, timeoutPromise]).then((captions) => {
-          handleSourceCompletion("Wyzie", captions);
-          return captions;
-        }),
-      );
+      sourcePromises.push(withSourceTimeout("Wyzie", wyziePromise));
     }
 
     if (imdbId) {
@@ -68,22 +85,12 @@ export async function scrapeExternalSubtitles(
         season,
         episode,
       );
-      sourcePromises.push(
-        Promise.race([openSubsPromise, timeoutPromise]).then((captions) => {
-          handleSourceCompletion("OpenSubtitles", captions);
-          return captions;
-        }),
-      );
+      sourcePromises.push(withSourceTimeout("OpenSubtitles", openSubsPromise));
     }
 
     if (tmdbId) {
       const vdrkPromise = scrapeVdrkCaptions(tmdbId, season, episode);
-      sourcePromises.push(
-        Promise.race([vdrkPromise, timeoutPromise]).then((captions) => {
-          handleSourceCompletion("Granite", captions);
-          return captions;
-        }),
-      );
+      sourcePromises.push(withSourceTimeout("Granite", vdrkPromise));
     }
 
     const totalSources = sourcePromises.length;

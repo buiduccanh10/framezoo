@@ -7,28 +7,28 @@ import { CaptionListItem } from "@/stores/player/slices/source";
 import { useSubtitleStore } from "@/stores/subtitles";
 
 function normalizeSubtitleFormat(
-  format: string | undefined,
+  format: string | undefined | null,
   url: string | undefined,
-): string {
+): string | undefined {
   const normalizedFormat = format?.trim().toLowerCase();
   if (normalizedFormat) return normalizedFormat;
 
-  if (!url) return "srt";
+  if (!url) return undefined;
 
   try {
     const pathname = new URL(url).pathname;
     const extension = pathname.split(".").pop()?.toLowerCase();
-    return extension || "srt";
+    return extension || undefined;
   } catch {
-    return "srt";
+    return undefined;
   }
 }
 
-function buildWyzieCaptionId(subtitle: SubtitleData, format: string): string {
+function buildWyzieCaptionId(subtitle: SubtitleData, format?: string): string {
   const source = subtitle.source?.toString() || "unknown";
   const language = subtitle.language || "unknown";
   const url = subtitle.url || "";
-  return `wyzie:${source}:${subtitle.id}:${language}:${format}:${url}`;
+  return `wyzie:${source}:${subtitle.id}:${language}:${format ?? "unknown"}:${url}`;
 }
 
 function getWyzieCaptionIdentityKey(caption: CaptionListItem): string {
@@ -157,7 +157,6 @@ export async function scrapeWyzieCaptions(
         type,
         needsProxy: false,
         opensubtitles: true,
-        // Additional metadata from Wyzie
         display: subtitle.display,
         media: subtitle.media,
         isHearingImpaired: subtitle.isHearingImpaired,
