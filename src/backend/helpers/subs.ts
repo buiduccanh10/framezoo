@@ -2,7 +2,6 @@ import { list } from "subsrt-ts";
 
 import { proxiedFetch } from "@/backend/helpers/fetch";
 import { convertSubtitlesToSrt } from "@/components/player/utils/captions";
-import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { SimpleCache } from "@/utils/cache";
 
@@ -155,16 +154,7 @@ async function extractSubtitleFromZip(buffer: ArrayBuffer): Promise<string> {
 async function downloadSubSourceCaption(
   caption: CaptionListItem,
 ): Promise<string> {
-  const apiKey = conf().SUBSOURCE_API_KEY;
-  if (!apiKey) {
-    throw new Error("SubSource API key is not configured");
-  }
-
-  const response = await fetch(caption.url, {
-    headers: {
-      "X-API-Key": apiKey,
-    },
-  });
+  const response = await fetch(caption.url);
 
   if (!response.ok) {
     throw new Error(`SubSource download returned ${response.status}`);

@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
 import { labelToLanguageCode } from "@p-stream/providers";
+import { ofetch } from "ofetch";
 
 import { get as getTmdb } from "@/backend/metadata/tmdb";
-import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
-
-const SUBSOURCE_API_URL = "https://api.subsource.net";
 
 interface SubSourceSearchResult {
   movieId: number;
@@ -51,12 +49,6 @@ function normalizeSubSourceLanguage(language: string): string {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 
   return labelToLanguageCode(normalized) || labelToLanguageCode(language) || "";
-}
-
-function createApiHeaders(apiKey: string): HeadersInit {
-  return {
-    "X-API-Key": apiKey,
-  };
 }
 
 async function resolveImdbIdFromTmdb(
@@ -163,6 +155,7 @@ function matchesEpisode(
 
 function mapSubSourceCaptions(
   subtitles: SubSourceSubtitleResult[],
+  backendUrl: string,
   season?: number,
   episode?: number,
 ): CaptionListItem[] {
@@ -173,7 +166,7 @@ function mapSubSourceCaptions(
       if (!language) return captions;
 
       const releaseName = subtitle.releaseInfo?.join(", ").trim();
-      const downloadUrl = `${SUBSOURCE_API_URL}/api/v1/subtitles/${subtitle.subtitleId}/download`;
+      const downloadUrl = `${backendUrl}/api/subtitles/subsource/${subtitle.subtitleId}/download`;
 
       captions.push({
         id: downloadUrl,
@@ -191,30 +184,21 @@ function mapSubSourceCaptions(
 }
 
 async function fetchSubSourceSubtitlePage(
-  apiKey: string,
+  backendUrl: string,
   movieId: number,
   page: number,
 ): Promise<SubSourceSubtitleResponse> {
-  const subtitlesUrl = new URL(`${SUBSOURCE_API_URL}/api/v1/subtitles`);
+  const subtitlesUrl = new URL(`${backendUrl}/api/subtitles/subsource`);
   subtitlesUrl.searchParams.set("movieId", String(movieId));
   subtitlesUrl.searchParams.set("sort", "rating");
   subtitlesUrl.searchParams.set("limit", String(SUBSOURCE_PAGE_SIZE));
   subtitlesUrl.searchParams.set("page", String(page));
 
-  const subtitleResponse = await fetch(subtitlesUrl.toString(), {
-    headers: createApiHeaders(apiKey),
-  });
-
-  if (!subtitleResponse.ok) {
-    throw new Error(
-      `SubSource subtitles API returned ${subtitleResponse.status}`,
-    );
-  }
-
-  return (await subtitleResponse.json()) as SubSourceSubtitleResponse;
+  return ofetch<SubSourceSubtitleResponse>(subtitlesUrl.toString());
 }
 
 export async function scrapeSubSourceCaptions(
+  backendUrl: string | null,
   tmdbId: string | number,
   title: string,
   releaseYear: number,
@@ -224,14 +208,10 @@ export async function scrapeSubSourceCaptions(
   episode?: number,
 ): Promise<CaptionListItem[]> {
   try {
-    const apiKey = conf().SUBSOURCE_API_KEY;
-    if (!apiKey) {
-      console.warn(
-        "SubSource API key is not configured; skipping SubSource subtitle search",
-      );
+    if (!backendUrl) {
+      console.warn("Backend URL is not configured; skipping SubSource search");
       return [];
     }
-
     const tmdbIdValue =
       typeof tmdbId === "string" ? parseInt(tmdbId, 10) : tmdbId;
     if (!tmdbIdValue || Number.isNaN(tmdbIdValue)) {
@@ -239,7 +219,7 @@ export async function scrapeSubSourceCaptions(
       return [];
     }
 
-    const searchUrl = new URL(`${SUBSOURCE_API_URL}/api/v1/movies/search`);
+    const searchUrl = new URL(`${backendUrl}/api/subtitles/subsource/search`);
     const resolvedImdbId =
       imdbId ?? (await resolveImdbIdFromTmdb(tmdbIdValue, mediaType));
 
@@ -260,15 +240,9 @@ export async function scrapeSubSourceCaptions(
       searchUrl.searchParams.set("season", String(season));
     }
 
-    const searchResponse = await fetch(searchUrl.toString(), {
-      headers: createApiHeaders(apiKey),
-    });
-
-    if (!searchResponse.ok) {
-      throw new Error(`SubSource search API returned ${searchResponse.status}`);
-    }
-
-    const searchData = (await searchResponse.json()) as SubSourceSearchResponse;
+    const searchData = await ofetch<SubSourceSearchResponse>(
+      searchUrl.toString(),
+    );
     const matches = searchData.data ?? [];
     if (!searchData.success || matches.length === 0) {
       return [];
@@ -284,7 +258,7 @@ export async function scrapeSubSourceCaptions(
     }
 
     const firstPage = await fetchSubSourceSubtitlePage(
-      apiKey,
+      backendUrl,
       chosenMatch.movieId,
       1,
     );
@@ -295,6 +269,7 @@ export async function scrapeSubSourceCaptions(
 
     let matchedSubtitles = mapSubSourceCaptions(
       firstPageSubtitles,
+      backendUrl,
       season,
       episode,
     );
@@ -312,7 +287,7 @@ export async function scrapeSubSourceCaptions(
 
       for (let page = 2; page <= totalPages; page += 1) {
         const pageData = await fetchSubSourceSubtitlePage(
-          apiKey,
+          backendUrl,
           chosenMatch.movieId,
           page,
         );
@@ -321,7 +296,12 @@ export async function scrapeSubSourceCaptions(
           continue;
         }
 
-        matchedSubtitles = mapSubSourceCaptions(pageSubtitles, season, episode);
+        matchedSubtitles = mapSubSourceCaptions(
+          pageSubtitles,
+          backendUrl,
+          season,
+          episode,
+        );
         if (matchedSubtitles.length > 0) {
           break;
         }
