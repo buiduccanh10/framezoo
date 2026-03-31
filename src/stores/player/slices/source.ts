@@ -186,6 +186,16 @@ export function metaToScrapeMedia(meta: PlayerMeta): ScrapeMedia {
   };
 }
 
+function getCaptionIdentityKey(caption: CaptionListItem): string {
+  return [
+    caption.url,
+    caption.language,
+    caption.type ?? "",
+    caption.source ?? "",
+    caption.display ?? "",
+  ].join("::");
+}
+
 export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   source: null,
   sourceId: null,
@@ -469,9 +479,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         set((s) => {
           if (s.externalSubtitleRequestId !== activeRequestId) return;
           // Add external captions to the existing list, avoiding duplicates
-          const existingIds = new Set(s.captionList.map((c) => c.id));
+          const existingCaptionKeys = new Set(
+            s.captionList.map(getCaptionIdentityKey),
+          );
           const newCaptions = externalCaptions.filter(
-            (c) => !existingIds.has(c.id),
+            (c) => !existingCaptionKeys.has(getCaptionIdentityKey(c)),
           );
           s.captionList = [...s.captionList, ...newCaptions];
         });

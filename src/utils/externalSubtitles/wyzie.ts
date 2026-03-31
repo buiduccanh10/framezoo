@@ -4,6 +4,31 @@ import { configure, searchSubtitles } from "wyzie-lib";
 import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
 
+function normalizeSubtitleFormat(
+  format: string | undefined,
+  url: string | undefined,
+): string {
+  const normalizedFormat = format?.trim().toLowerCase();
+  if (normalizedFormat) return normalizedFormat;
+
+  if (!url) return "srt";
+
+  try {
+    const pathname = new URL(url).pathname;
+    const extension = pathname.split(".").pop()?.toLowerCase();
+    return extension || "srt";
+  } catch {
+    return "srt";
+  }
+}
+
+function buildWyzieCaptionId(subtitle: SubtitleData, format: string): string {
+  const source = subtitle.source?.toString() || "unknown";
+  const language = subtitle.language || "unknown";
+  const url = subtitle.url || "";
+  return `wyzie:${source}:${subtitle.id}:${language}:${format}:${url}`;
+}
+
 export async function scrapeWyzieCaptions(
   tmdbId: string | number,
   imdbId: string,
@@ -17,24 +42,18 @@ export async function scrapeWyzieCaptions(
       baseUrl: "https://sub.wyzie.io",
     });
 
-    const searchParams: any = {
-      encoding: "utf-8",
+    const baseSearchParams: any = {
       source: "all",
-      imdb_id: imdbId,
+      refresh: true,
     };
 
     if (wyzieApiKey) {
-      searchParams.key = wyzieApiKey;
-    }
-
-    if (tmdbId && !imdbId) {
-      searchParams.tmdb_id =
-        typeof tmdbId === "string" ? parseInt(tmdbId, 10) : tmdbId;
+      baseSearchParams.key = wyzieApiKey;
     }
 
     if (season && episode) {
-      searchParams.season = season;
-      searchParams.episode = episode;
+      baseSearchParams.season = season;
+      baseSearchParams.episode = episode;
     }
 
     if (!wyzieApiKey) {
@@ -44,26 +63,65 @@ export async function scrapeWyzieCaptions(
       return [];
     }
 
-    console.info("Searching Wyzie subtitles with params:", {
-      ...searchParams,
-      key: "[redacted]",
-    });
-    const wyzieSubtitles: SubtitleData[] = await searchSubtitles(searchParams);
+    const searchRequests: Array<Promise<SubtitleData[]>> = [];
 
-    const wyzieCaptions: CaptionListItem[] = wyzieSubtitles.map((subtitle) => ({
-      id: subtitle.id,
-      language: subtitle.language || "unknown",
-      url: subtitle.url,
-      type: subtitle.format?.toLowerCase() || "srt",
-      needsProxy: false,
-      opensubtitles: true,
-      // Additional metadata from Wyzie
-      display: subtitle.display,
-      media: subtitle.media,
-      isHearingImpaired: subtitle.isHearingImpaired,
-      source: `wyzie ${subtitle.source?.toString() === "opensubtitles" ? "opensubs" : subtitle.source}`,
-      encoding: subtitle.encoding,
-    }));
+    if (imdbId) {
+      const imdbSearchParams = {
+        ...baseSearchParams,
+        imdb_id: imdbId,
+      };
+      console.info("Searching Wyzie subtitles with IMDb params:", {
+        ...imdbSearchParams,
+        key: "[redacted]",
+      });
+      searchRequests.push(searchSubtitles(imdbSearchParams));
+    }
+
+    if (tmdbId) {
+      const parsedTmdbId =
+        typeof tmdbId === "string" ? parseInt(tmdbId, 10) : tmdbId;
+
+      if (!Number.isNaN(parsedTmdbId)) {
+        const tmdbSearchParams = {
+          ...baseSearchParams,
+          tmdb_id: parsedTmdbId,
+        };
+        console.info("Searching Wyzie subtitles with TMDB params:", {
+          ...tmdbSearchParams,
+          key: "[redacted]",
+        });
+        searchRequests.push(searchSubtitles(tmdbSearchParams));
+      }
+    }
+
+    const wyzieSearchResults = await Promise.allSettled(searchRequests);
+    const wyzieSubtitles: SubtitleData[] = wyzieSearchResults.flatMap(
+      (result) => {
+        if (result.status === "fulfilled") return result.value;
+
+        console.error("A Wyzie subtitle search failed:", result.reason);
+        return [];
+      },
+    );
+
+    const wyzieCaptions: CaptionListItem[] = wyzieSubtitles.map((subtitle) => {
+      const type = normalizeSubtitleFormat(subtitle.format, subtitle.url);
+
+      return {
+        id: buildWyzieCaptionId(subtitle, type),
+        language: subtitle.language || "unknown",
+        url: subtitle.url,
+        type,
+        needsProxy: false,
+        opensubtitles: true,
+        // Additional metadata from Wyzie
+        display: subtitle.display,
+        media: subtitle.media,
+        isHearingImpaired: subtitle.isHearingImpaired,
+        source: `wyzie ${subtitle.source?.toString() === "opensubtitles" ? "opensubs" : subtitle.source}`,
+        encoding: subtitle.encoding,
+      };
+    });
 
     return wyzieCaptions;
   } catch (error) {
