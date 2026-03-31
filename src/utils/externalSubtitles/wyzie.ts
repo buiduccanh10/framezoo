@@ -2,7 +2,9 @@ import type { SubtitleData } from "wyzie-lib";
 import { configure, searchSubtitles } from "wyzie-lib";
 
 import { conf } from "@/setup/config";
+import { useLanguageStore } from "@/stores/language";
 import { CaptionListItem } from "@/stores/player/slices/source";
+import { useSubtitleStore } from "@/stores/subtitles";
 
 function normalizeSubtitleFormat(
   format: string | undefined,
@@ -29,6 +31,16 @@ function buildWyzieCaptionId(subtitle: SubtitleData, format: string): string {
   return `wyzie:${source}:${subtitle.id}:${language}:${format}:${url}`;
 }
 
+function getWyzieCaptionIdentityKey(caption: CaptionListItem): string {
+  return [
+    caption.url,
+    caption.language,
+    caption.type ?? "",
+    caption.encoding ?? "",
+    caption.isHearingImpaired ? "hi" : "normal",
+  ].join("::");
+}
+
 export async function scrapeWyzieCaptions(
   tmdbId: string | number,
   imdbId: string,
@@ -37,6 +49,13 @@ export async function scrapeWyzieCaptions(
 ): Promise<CaptionListItem[]> {
   try {
     const wyzieApiKey = conf().WYZIE_API_KEY;
+    const preferredSubtitleLanguage =
+      useSubtitleStore.getState().lastSelectedLanguage ??
+      useLanguageStore.getState().language;
+    const normalizedLanguage = preferredSubtitleLanguage
+      ?.trim()
+      .toLowerCase()
+      .split("-")[0];
 
     configure({
       baseUrl: "https://sub.wyzie.io",
@@ -65,16 +84,46 @@ export async function scrapeWyzieCaptions(
 
     const searchRequests: Array<Promise<SubtitleData[]>> = [];
 
-    if (imdbId) {
-      const imdbSearchParams = {
+    function addSearchRequests(
+      params: { imdb_id?: string; tmdb_id?: number },
+      label: string,
+    ) {
+      const filteredSearchParams = {
         ...baseSearchParams,
-        imdb_id: imdbId,
+        ...params,
+        ...(normalizedLanguage ? { language: normalizedLanguage } : {}),
+        encoding: "utf-8",
       };
-      console.info("Searching Wyzie subtitles with IMDb params:", {
-        ...imdbSearchParams,
+      console.info(`Searching Wyzie subtitles with ${label} params:`, {
+        ...filteredSearchParams,
         key: "[redacted]",
       });
-      searchRequests.push(searchSubtitles(imdbSearchParams));
+      searchRequests.push(searchSubtitles(filteredSearchParams));
+
+      const fallbackSearchParams = {
+        ...baseSearchParams,
+        ...params,
+        ...(normalizedLanguage ? { language: normalizedLanguage } : {}),
+      };
+      console.info(`Searching Wyzie subtitles with ${label} fallback params:`, {
+        ...fallbackSearchParams,
+        key: "[redacted]",
+      });
+      searchRequests.push(searchSubtitles(fallbackSearchParams));
+
+      const rawSearchParams = {
+        ...baseSearchParams,
+        ...params,
+      };
+      console.info(`Searching Wyzie subtitles with ${label} raw params:`, {
+        ...rawSearchParams,
+        key: "[redacted]",
+      });
+      searchRequests.push(searchSubtitles(rawSearchParams));
+    }
+
+    if (imdbId) {
+      addSearchRequests({ imdb_id: imdbId }, "IMDb");
     }
 
     if (tmdbId) {
@@ -82,15 +131,7 @@ export async function scrapeWyzieCaptions(
         typeof tmdbId === "string" ? parseInt(tmdbId, 10) : tmdbId;
 
       if (!Number.isNaN(parsedTmdbId)) {
-        const tmdbSearchParams = {
-          ...baseSearchParams,
-          tmdb_id: parsedTmdbId,
-        };
-        console.info("Searching Wyzie subtitles with TMDB params:", {
-          ...tmdbSearchParams,
-          key: "[redacted]",
-        });
-        searchRequests.push(searchSubtitles(tmdbSearchParams));
+        addSearchRequests({ tmdb_id: parsedTmdbId }, "TMDB");
       }
     }
 
@@ -104,10 +145,12 @@ export async function scrapeWyzieCaptions(
       },
     );
 
-    const wyzieCaptions: CaptionListItem[] = wyzieSubtitles.map((subtitle) => {
-      const type = normalizeSubtitleFormat(subtitle.format, subtitle.url);
+    const wyzieCaptions: CaptionListItem[] = [];
+    const seenCaptionKeys = new Set<string>();
 
-      return {
+    wyzieSubtitles.forEach((subtitle) => {
+      const type = normalizeSubtitleFormat(subtitle.format, subtitle.url);
+      const caption: CaptionListItem = {
         id: buildWyzieCaptionId(subtitle, type),
         language: subtitle.language || "unknown",
         url: subtitle.url,
@@ -121,6 +164,12 @@ export async function scrapeWyzieCaptions(
         source: `wyzie ${subtitle.source?.toString() === "opensubtitles" ? "opensubs" : subtitle.source}`,
         encoding: subtitle.encoding,
       };
+
+      const captionKey = getWyzieCaptionIdentityKey(caption);
+      if (seenCaptionKeys.has(captionKey)) return;
+
+      seenCaptionKeys.add(captionKey);
+      wyzieCaptions.push(caption);
     });
 
     return wyzieCaptions;
