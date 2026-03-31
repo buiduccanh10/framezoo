@@ -1,11 +1,8 @@
 /* eslint-disable no-console */
-import { conf } from "@/setup/config";
-import { useAuthStore } from "@/stores/auth";
 import { PlayerMeta } from "@/stores/player/slices/source";
 
 import { scrapeFebboxCaptions as _scrapeFebboxCaptions } from "./febbox";
 import { scrapeOpenSubtitlesCaptions } from "./opensubtitles";
-import { scrapeSubSourceCaptions } from "./subsource";
 import { scrapeVdrkCaptions } from "./vdrk";
 import { scrapeWyzieCaptions } from "./wyzie";
 
@@ -13,13 +10,6 @@ export async function scrapeExternalSubtitles(
   meta: PlayerMeta,
 ): Promise<import("@/stores/player/slices/source").CaptionListItem[]> {
   try {
-    const authBackendUrl = useAuthStore.getState().backendUrl;
-    const config = conf();
-    const backendUrl =
-      authBackendUrl ??
-      config.BACKEND_URL ??
-      (config.BACKEND_URLS.length > 0 ? config.BACKEND_URLS[0] : null);
-
     const imdbId = meta.imdbId;
     const tmdbId = meta.tmdbId;
     if (!imdbId && !tmdbId) {
@@ -94,23 +84,6 @@ export async function scrapeExternalSubtitles(
           return captions;
         }),
       );
-
-      const subSourcePromise = scrapeSubSourceCaptions(
-        backendUrl,
-        tmdbId,
-        meta.title,
-        meta.releaseYear,
-        meta.type,
-        imdbId,
-        season,
-        episode,
-      );
-      sourcePromises.push(
-        Promise.race([subSourcePromise, timeoutPromise]).then((captions) => {
-          handleSourceCompletion("SubSource", captions);
-          return captions;
-        }),
-      );
     }
 
     const totalSources = sourcePromises.length;
@@ -134,4 +107,3 @@ export { scrapeWyzieCaptions } from "./wyzie";
 export { scrapeOpenSubtitlesCaptions } from "./opensubtitles";
 export { scrapeFebboxCaptions } from "./febbox";
 export { scrapeVdrkCaptions } from "./vdrk";
-export { scrapeSubSourceCaptions } from "./subsource";

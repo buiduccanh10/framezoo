@@ -19,7 +19,7 @@ function sanitizeLanguageLabel(value: string): string {
     .trim();
 }
 
-function canonicalizeLanguageCode(value: string): string {
+export function canonicalizeLanguageCode(value: string): string {
   const normalized = sanitizeLanguageLabel(value);
   const base = normalized.split("-")[0];
 
@@ -30,6 +30,17 @@ function canonicalizeLanguageCode(value: string): string {
   }
 
   return base || "unknown";
+}
+
+export function normalizeCaptionLanguage(value?: string | null): string | null {
+  if (!value) return null;
+
+  const sanitized = sanitizeLanguageLabel(value);
+  if (!sanitized) return null;
+
+  const fromLabel = labelToLanguageCode(sanitized);
+
+  return canonicalizeLanguageCode(fromLabel || sanitized);
 }
 
 export function getLanguageCandidates(language: string): string[] {
@@ -53,20 +64,20 @@ export function isLanguageMatch(a: string, b: string): boolean {
 export function getCaptionLanguageGroupKey(
   caption: Pick<CaptionListItem, "language" | "display">,
 ): string {
-  const fromDisplay = caption.display
-    ? labelToLanguageCode(sanitizeLanguageLabel(caption.display))
-    : null;
+  if (caption.language) {
+    const normalizedLanguage = normalizeCaptionLanguage(caption.language);
 
-  if (fromDisplay) {
-    return canonicalizeLanguageCode(fromDisplay);
+    if (normalizedLanguage && normalizedLanguage !== "unknown") {
+      return normalizedLanguage;
+    }
   }
 
-  if (caption.language) {
-    const fromLanguageLabel = labelToLanguageCode(
-      sanitizeLanguageLabel(caption.language),
-    );
+  if (caption.display) {
+    const normalizedDisplay = normalizeCaptionLanguage(caption.display);
 
-    return canonicalizeLanguageCode(fromLanguageLabel || caption.language);
+    if (normalizedDisplay) {
+      return normalizedDisplay;
+    }
   }
 
   return "unknown";
