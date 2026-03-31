@@ -54,10 +54,7 @@ export async function scrapeWyzieCaptions(
       id: subtitle.id,
       language: subtitle.language || "unknown",
       url: subtitle.url,
-      type:
-        subtitle.format === "srt" || subtitle.format === "vtt"
-          ? subtitle.format
-          : "srt",
+      type: subtitle.format?.toLowerCase() || "srt",
       needsProxy: false,
       opensubtitles: true,
       // Additional metadata from Wyzie
