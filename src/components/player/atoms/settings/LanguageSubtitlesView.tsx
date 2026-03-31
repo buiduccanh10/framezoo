@@ -260,18 +260,14 @@ export function LanguageSubtitlesView({
         className="!pt-1 mt-2 pb-3"
         loaded={scrollTrigger > 0}
       >
-        {languageCaptions.length > 0 ? (
+        {!isLoadingExternalSubtitles && languageCaptions.length > 0 ? (
           languageCaptions.map(renderSubtitleOption)
         ) : (
           <div className="text-center text-video-context-type-secondary py-2">
-            {t("player.menus.subtitles.notFound")}
-          </div>
-        )}
-
-        {isLoadingExternalSubtitles && languageCaptions.length === 0 && (
-          <div className="text-center text-video-context-type-secondary py-4 mt-2">
-            {t("player.menus.subtitles.loadingExternal") ||
-              "Loading external subtitles..."}
+            {isLoadingExternalSubtitles
+              ? t("player.menus.subtitles.loadingExternal") ||
+                "Loading external subtitles..."
+              : t("player.menus.subtitles.notFound")}
           </div>
         )}
       </Menu.ScrollToActiveSection>

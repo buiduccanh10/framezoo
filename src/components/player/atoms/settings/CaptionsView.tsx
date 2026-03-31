@@ -893,7 +893,8 @@ export function CaptionsView({
           )}
 
           {/* Language selection */}
-          {groupedCaptions.length > 0 &&
+          {!isLoadingExternalSubtitles &&
+            groupedCaptions.length > 0 &&
             groupedCaptions.map(
               ({ language, languageName, captions: captionsForLang }) => {
                 const isPrimarySelected =
