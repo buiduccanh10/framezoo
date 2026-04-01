@@ -21,6 +21,9 @@ import {
 } from "../utils/captions";
 
 let autoSelectionRequestId = 0;
+const AUTO_SCORE_MAX_CANDIDATES = 8;
+const AUTO_SCORE_CONCURRENCY = 3;
+const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
 
 function resolvePreferredAutoSubtitleLanguage(
   lastSelectedLanguage: string | null,
@@ -101,7 +104,13 @@ export function useCaptions() {
   );
 
   const scoreCaptionsForLanguage = useCallback(
-    async (language: string) => {
+    async (
+      language: string,
+      options?: {
+        mode?: "auto" | "full";
+      },
+    ) => {
+      const mode = options?.mode ?? "full";
       const languageCaptions = captions.filter(
         (caption) =>
           isLanguageMatch(getCaptionLanguageGroupKey(caption), language) ||
@@ -110,22 +119,59 @@ export function useCaptions() {
 
       if (languageCaptions.length === 0) return [];
 
-      const videoDurationMs = videoDuration > 0 ? videoDuration * 1000 : 0;
-      const scored = await Promise.all(
-        languageCaptions.map(async (caption, index) => {
-          const fit = await scoreCaptionSourceFit(caption, {
-            videoDurationMs,
-            segments,
-          });
-
-          return {
-            caption,
-            index,
-            score: fit?.score ?? -1,
-            confidence: fit?.confidence ?? "low",
-          };
-        }),
+      const inSourceCaptions = languageCaptions.filter(
+        (caption) => !caption.opensubtitles,
       );
+      if (inSourceCaptions.length > 0) {
+        return inSourceCaptions.map((caption, index) => ({
+          caption,
+          index,
+          score: 100,
+          confidence: "high" as const,
+        }));
+      }
+
+      const videoDurationMs = videoDuration > 0 ? videoDuration * 1000 : 0;
+      const candidates =
+        mode === "auto"
+          ? languageCaptions.slice(0, AUTO_SCORE_MAX_CANDIDATES)
+          : languageCaptions;
+      const scored: Array<{
+        caption: CaptionListItem;
+        index: number;
+        score: number;
+        confidence: "high" | "medium" | "low";
+      }> = [];
+
+      let nextIndex = 0;
+      const workers = Array.from(
+        { length: Math.min(AUTO_SCORE_CONCURRENCY, candidates.length) },
+        async () => {
+          while (nextIndex < candidates.length) {
+            const currentIndex = nextIndex;
+            nextIndex += 1;
+            const caption = candidates[currentIndex];
+
+            const fit = await Promise.race([
+              scoreCaptionSourceFit(caption, {
+                videoDurationMs,
+                segments,
+              }),
+              new Promise<null>((resolve) => {
+                setTimeout(() => resolve(null), AUTO_SCORE_PER_ITEM_TIMEOUT_MS);
+              }),
+            ]);
+
+            scored.push({
+              caption,
+              index: currentIndex,
+              score: fit?.score ?? -1,
+              confidence: fit?.confidence ?? "low",
+            });
+          }
+        },
+      );
+      await Promise.all(workers);
 
       scored.sort((a, b) => {
         if (b.score !== a.score) return b.score - a.score;
@@ -289,7 +335,9 @@ export function useCaptions() {
       const requestId = ++autoSelectionRequestId;
 
       const selectBestAvailableCaption = async (targetLanguage: string) => {
-        const scoredCaptions = await scoreCaptionsForLanguage(targetLanguage);
+        const scoredCaptions = await scoreCaptionsForLanguage(targetLanguage, {
+          mode: "auto",
+        });
         if (requestId !== autoSelectionRequestId) return false;
         const bestCaption = scoredCaptions[0]?.caption;
         if (!bestCaption) return false;
