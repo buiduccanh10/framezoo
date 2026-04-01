@@ -52,7 +52,7 @@ export function LazyImage({
   return (
     <div
       className={classNames(
-        "relative overflow-hidden w-full h-full",
+        "relative",
         // Optional placeholder background until loaded
         !isLoaded && showSkeleton
           ? "bg-mediaCard-hoverBackground"
@@ -82,7 +82,7 @@ export function LazyImage({
           decoding={decoding}
           onLoad={handleLoad}
           onError={handleError}
-          className={classNames("w-full h-full object-cover", className)}
+          className={classNames("block", className)}
           {...props} // Passed props should go to the img tag, minus any wrapper style props potentially conflicting
         />
       )}
