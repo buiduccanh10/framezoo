@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import subsrt from "subsrt-ts";
 
 import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
@@ -22,6 +22,13 @@ import {
 
 let autoSelectionRequestId = 0;
 
+function resolvePreferredAutoSubtitleLanguage(
+  lastSelectedLanguage: string | null,
+  userLanguage: string | null | undefined,
+) {
+  return lastSelectedLanguage ?? userLanguage ?? "en";
+}
+
 export function useCaptions() {
   const setLanguage = useSubtitleStore((s) => s.setLanguage);
   const userLanguage = useLanguageStore((s) => s.language);
@@ -40,11 +47,11 @@ export function useCaptions() {
   const source = usePlayerStore((s) => s.source);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
+  const externalSubtitleRequestId = usePlayerStore(
+    (s) => s.externalSubtitleRequestId,
+  );
   const isLoadingExternalSubtitles = usePlayerStore(
     (s) => s.isLoadingExternalSubtitles,
-  );
-  const externalSubtitleLoadProgress = usePlayerStore(
-    (s) => s.externalSubtitleLoadProgress,
   );
   const videoDuration = usePlayerStore((s) => s.progress.duration);
   const segments = useSkipTime();
@@ -57,6 +64,7 @@ export function useCaptions() {
   const enableNativeSubtitles = usePreferencesStore(
     (s) => s.enableNativeSubtitles,
   );
+  const latestAutoSelectRequestIdRef = useRef<number | null>(null);
 
   const captions = useMemo(
     () =>
@@ -295,12 +303,7 @@ export function useCaptions() {
           isLanguageMatch(caption.language, language),
       );
 
-      const isWaitingForFirstExternalSource =
-        waitForExternal &&
-        isLoadingExternalSubtitles &&
-        externalSubtitleLoadProgress.completed === 0;
-
-      if (isWaitingForFirstExternalSource) {
+      if (waitForExternal && isLoadingExternalSubtitles) {
         return false;
       }
 
@@ -324,14 +327,14 @@ export function useCaptions() {
 
         caption = findCaptionByPreferredLanguage("en");
       }
-      if (!caption) return;
-      return selectCaptionById(caption.id);
+      if (!caption) return false;
+      await selectCaptionById(caption.id);
+      return true;
     },
     [
       captions,
       findCaptionByPreferredLanguage,
       isLoadingExternalSubtitles,
-      externalSubtitleLoadProgress.completed,
       scoreCaptionsForLanguage,
       selectCaptionById,
     ],
@@ -344,12 +347,14 @@ export function useCaptions() {
   }, [setCaption, setLanguage, setIsOpenSubtitles]);
 
   const selectLastUsedLanguage = useCallback(async () => {
-    const language = lastSelectedLanguage ?? userLanguage ?? "en";
-    await selectLanguage(language, {
+    const language = resolvePreferredAutoSubtitleLanguage(
+      lastSelectedLanguage,
+      userLanguage,
+    );
+    return selectLanguage(language, {
       fallbackToEnglish: false,
       waitForExternal: true,
     });
-    return true;
   }, [lastSelectedLanguage, userLanguage, selectLanguage]);
 
   const selectLastUsedLanguageIfEnabled = useCallback(async () => {
@@ -362,7 +367,10 @@ export function useCaptions() {
   }, [selectLastUsedLanguage, disable, enabled]);
 
   const selectBestCaptionFromLastUsedLanguage = useCallback(async () => {
-    const language = lastSelectedLanguage ?? userLanguage ?? "en";
+    const language = resolvePreferredAutoSubtitleLanguage(
+      lastSelectedLanguage,
+      userLanguage,
+    );
     const scoredCaptions = await scoreCaptionsForLanguage(language);
     if (scoredCaptions.length === 0) return;
 
@@ -385,11 +393,21 @@ export function useCaptions() {
     if (captions.length === 0) return;
 
     if (!selectedCaption) {
-      if (enabled || !lastSelectedLanguage) {
-        void selectLastUsedLanguage();
+      const isNewSourceRequest =
+        latestAutoSelectRequestIdRef.current !== externalSubtitleRequestId;
+      const shouldAutoSelect =
+        isNewSourceRequest || enabled || !lastSelectedLanguage;
+
+      if (shouldAutoSelect) {
+        void selectLastUsedLanguage().then((didSelect) => {
+          if (didSelect || !isLoadingExternalSubtitles) {
+            latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
+          }
+        });
       }
       return;
     }
+    latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
 
     // Skip validation for custom/pasted captions that aren't in the caption list
     const isCustomCaption =
@@ -433,6 +451,7 @@ export function useCaptions() {
     currentTranslateTask,
     enabled,
     isLoadingExternalSubtitles,
+    externalSubtitleRequestId,
     lastSelectedLanguage,
     selectLastUsedLanguage,
     selectLanguage,

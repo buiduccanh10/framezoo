@@ -328,11 +328,14 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.currentQuality = loadableStream.quality;
       s.captionList = captions;
       s.externalSubtitleRequestId = nextRequestId;
-      s.isLoadingExternalSubtitles = false;
+      s.isLoadingExternalSubtitles = true;
       s.externalSubtitleLoadProgress = {
         completed: 0,
         total: 0,
       };
+      s.caption.selected = null;
+      s.caption.secondary = null;
+      s.caption.translateTask = null;
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
       s.audioTracks = [];
