@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { LazyImage } from "@/components/utils/Image";
@@ -30,8 +30,9 @@ export function PlayerLoadingOverlay() {
   const { t } = useTranslation();
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
+  const sourceId = usePlayerStore((s) => s.sourceId);
+  const embedId = usePlayerStore((s) => s.embedId);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
-  const hasPlayedOnce = usePlayerStore((s) => s.mediaPlaying.hasPlayedOnce);
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
   );
@@ -40,10 +41,69 @@ export function PlayerLoadingOverlay() {
     status === playerStatus.IDLE ||
     (status === playerStatus.SCRAPING && !manualSourceSelection) ||
     (status === playerStatus.PLAYING && isLoading);
+
+  const metaType = meta?.type;
+  const metaTmdbId = meta?.tmdbId;
+  const metaSeasonTmdbId = meta?.season?.tmdbId;
+  const metaEpisodeTmdbId = meta?.episode?.tmdbId;
+
+  const playbackKey = useMemo(() => {
+    if (!metaType || !metaTmdbId) return null;
+    const episodeKey =
+      metaType === "show"
+        ? `${metaSeasonTmdbId ?? ""}:${metaEpisodeTmdbId ?? ""}`
+        : "";
+    return [
+      metaType,
+      metaTmdbId,
+      episodeKey,
+      sourceId ?? "",
+      embedId ?? "",
+    ].join("|");
+  }, [
+    metaType,
+    metaTmdbId,
+    metaSeasonTmdbId,
+    metaEpisodeTmdbId,
+    sourceId,
+    embedId,
+  ]);
+
+  const lastPlaybackKeyRef = useRef<string | null>(null);
+  const [initialLoadPlaybackKey, setInitialLoadPlaybackKey] = useState<
+    string | null
+  >(null);
+
+  useEffect(() => {
+    if (!playbackKey) {
+      lastPlaybackKeyRef.current = null;
+      setInitialLoadPlaybackKey(null);
+      return;
+    }
+    if (lastPlaybackKeyRef.current !== playbackKey) {
+      lastPlaybackKeyRef.current = playbackKey;
+      setInitialLoadPlaybackKey(playbackKey);
+    }
+  }, [playbackKey]);
+
+  useEffect(() => {
+    if (
+      initialLoadPlaybackKey &&
+      playbackKey === initialLoadPlaybackKey &&
+      status === playerStatus.PLAYING &&
+      !isLoading
+    ) {
+      setInitialLoadPlaybackKey(null);
+    }
+  }, [initialLoadPlaybackKey, playbackKey, status, isLoading]);
+
   const showBackdropImage =
     status === playerStatus.IDLE ||
     (status === playerStatus.SCRAPING && !manualSourceSelection) ||
-    (status === playerStatus.PLAYING && isLoading && !hasPlayedOnce);
+    (status === playerStatus.PLAYING &&
+      isLoading &&
+      playbackKey !== null &&
+      initialLoadPlaybackKey === playbackKey);
 
   const loadingMessages = useMemo(
     () =>
