@@ -28,6 +28,7 @@ export interface PlayerPartProps {
 export function PlayerPart(props: PlayerPartProps) {
   const { showTargets, showTouchTargets } = useShouldShowControls();
   const status = usePlayerStore((s) => s.status);
+  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { isMobile } = useIsMobile();
   const { isHost, enabled } = useWatchPartyStore();
   const { t } = useTranslation();
@@ -37,6 +38,7 @@ export function PlayerPart(props: PlayerPartProps) {
   const shouldShowBottomControls = showTargets;
   const shouldShowCenterMobileControls =
     status === playerStatus.PLAYING &&
+    !isLoading &&
     (isMobile ? showTargets : showTouchTargets);
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);

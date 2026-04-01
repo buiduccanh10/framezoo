@@ -31,7 +31,6 @@ export function PlayerLoadingOverlay() {
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
-  const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
   const hasPlayedOnce = usePlayerStore((s) => s.mediaPlaying.hasPlayedOnce);
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
@@ -40,9 +39,11 @@ export function PlayerLoadingOverlay() {
   const showOverlay =
     status === playerStatus.IDLE ||
     (status === playerStatus.SCRAPING && !manualSourceSelection) ||
-    (status === playerStatus.PLAYING &&
-      isLoading &&
-      (!hasPlayedOnce || !isPlaying));
+    (status === playerStatus.PLAYING && isLoading);
+  const showBackdropImage =
+    status === playerStatus.IDLE ||
+    (status === playerStatus.SCRAPING && !manualSourceSelection) ||
+    (status === playerStatus.PLAYING && isLoading && !hasPlayedOnce);
 
   const loadingMessages = useMemo(
     () =>
@@ -77,7 +78,10 @@ export function PlayerLoadingOverlay() {
       };
     }
 
-    const sources = [backgroundImage, meta?.logo].filter(Boolean) as string[];
+    const sources = [
+      showBackdropImage ? backgroundImage : null,
+      meta?.logo,
+    ].filter(Boolean) as string[];
     if (sources.length === 0) {
       setAssetsReady(true);
       return () => {
@@ -92,7 +96,7 @@ export function PlayerLoadingOverlay() {
     return () => {
       cancelled = true;
     };
-  }, [showOverlay, backgroundImage, meta?.logo]);
+  }, [showOverlay, showBackdropImage, backgroundImage, meta?.logo]);
 
   const showOverlayWhenReady = showOverlay && assetsReady;
 
@@ -156,18 +160,20 @@ export function PlayerLoadingOverlay() {
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
-      {backgroundImage ? (
-        <LazyImage
-          src={backgroundImage}
-          alt={displayTitle}
-          className="absolute inset-0 w-full h-full object-cover"
-          showSkeleton={false}
-          loading="eager"
-          decoding="sync"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-background-main" />
-      )}
+      {showBackdropImage ? (
+        backgroundImage ? (
+          <LazyImage
+            src={backgroundImage}
+            alt={displayTitle}
+            className="absolute inset-0 w-full h-full object-cover"
+            showSkeleton={false}
+            loading="eager"
+            decoding="sync"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-background-main" />
+        )
+      ) : null}
 
       <div className="absolute inset-0 bg-black/45" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/45 to-black/45" />
