@@ -90,7 +90,7 @@ export function Container(props: PlayerProps) {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative" data-player-root="true">
       <BaseContainer>
         <MetaReporter />
         <ThumbnailScraper />
