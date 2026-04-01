@@ -1,5 +1,12 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type PointerEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -55,6 +62,7 @@ export function CaptionDelay(props: {
   decimalsAllowed?: number;
 }) {
   const { t } = useTranslation();
+  const onChange = props.onChange;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const ref = useRef<HTMLDivElement>(null);
@@ -77,6 +85,76 @@ export function CaptionDelay(props: {
 
   const [isFocused, setIsFocused] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const stepSize = 1 / 10 ** (props.decimalsAllowed ?? 0);
+  const latestValueRef = useRef(props.value);
+  const holdDelayTimeoutRef = useRef<number | null>(null);
+  const holdIntervalRef = useRef<number | null>(null);
+  const hasRepeatedRef = useRef(false);
+
+  useEffect(() => {
+    latestValueRef.current = props.value;
+  }, [props.value]);
+
+  const stopContinuousChange = useCallback(() => {
+    if (holdDelayTimeoutRef.current !== null) {
+      window.clearTimeout(holdDelayTimeoutRef.current);
+      holdDelayTimeoutRef.current = null;
+    }
+    if (holdIntervalRef.current !== null) {
+      window.clearInterval(holdIntervalRef.current);
+      holdIntervalRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      stopContinuousChange();
+    };
+  }, [stopContinuousChange]);
+
+  const applyStepChange = useCallback(
+    (direction: -1 | 1) => {
+      const nextValue = latestValueRef.current + direction * stepSize;
+      latestValueRef.current = nextValue;
+      onChange?.(nextValue);
+    },
+    [onChange, stepSize],
+  );
+
+  const startContinuousChange = useCallback(
+    (direction: -1 | 1) => {
+      stopContinuousChange();
+      hasRepeatedRef.current = false;
+      holdDelayTimeoutRef.current = window.setTimeout(() => {
+        hasRepeatedRef.current = true;
+        applyStepChange(direction);
+        holdIntervalRef.current = window.setInterval(() => {
+          applyStepChange(direction);
+        }, 60);
+      }, 350);
+    },
+    [applyStepChange, stopContinuousChange],
+  );
+
+  const handleButtonClick = useCallback(
+    (direction: -1 | 1) => {
+      if (hasRepeatedRef.current) {
+        hasRepeatedRef.current = false;
+        return;
+      }
+      applyStepChange(direction);
+    },
+    [applyStepChange],
+  );
+
+  const handlePointerDown = useCallback(
+    (direction: -1 | 1, event: PointerEvent<HTMLButtonElement>) => {
+      if (event.button !== 0) return;
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+      startContinuousChange(direction);
+    },
+    [startContinuousChange],
+  );
 
   useEffect(() => {
     function listener(e: KeyboardEvent) {
@@ -142,11 +220,11 @@ export function CaptionDelay(props: {
           {/* Left arrow button - full width */}
           <button
             type="button"
-            onClick={() =>
-              props.onChange?.(
-                props.value - 1 / 10 ** (props.decimalsAllowed ?? 0),
-              )
-            }
+            onPointerDown={(e) => handlePointerDown(-1, e)}
+            onPointerUp={stopContinuousChange}
+            onPointerCancel={stopContinuousChange}
+            onLostPointerCapture={stopContinuousChange}
+            onClick={() => handleButtonClick(-1)}
             className="flex-1 flex-col tabbable py-2 h-12 hover:text-white transition-colors duration-100 flex justify-center items-center hover:bg-video-context-buttonOverInputHover rounded bg-video-context-inputBg"
           >
             <Icon icon={Icons.CHEVRON_LEFT} />
@@ -198,11 +276,11 @@ export function CaptionDelay(props: {
           {/* Right arrow button - full width */}
           <button
             type="button"
-            onClick={() =>
-              props.onChange?.(
-                props.value + 1 / 10 ** (props.decimalsAllowed ?? 0),
-              )
-            }
+            onPointerDown={(e) => handlePointerDown(1, e)}
+            onPointerUp={stopContinuousChange}
+            onPointerCancel={stopContinuousChange}
+            onLostPointerCapture={stopContinuousChange}
+            onClick={() => handleButtonClick(1)}
             className="flex-1 flex-col tabbable py-2 h-12 hover:text-white transition-colors duration-100 flex justify-center items-center hover:bg-video-context-buttonOverInputHover rounded bg-video-context-inputBg"
           >
             <Icon icon={Icons.CHEVRON_RIGHT} />
@@ -490,8 +568,8 @@ export function CaptionSettingsView({
             </span>
             <CaptionDelay
               label={t("player.menus.subtitles.settings.delay")}
-              max={40}
-              min={-40}
+              max={60}
+              min={-60}
               onChange={(v) => setDelay(v)}
               value={delay}
               textTransformer={(s) => `${s}s`}
