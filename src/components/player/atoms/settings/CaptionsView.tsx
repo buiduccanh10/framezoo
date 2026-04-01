@@ -16,6 +16,7 @@ import {
   captionIsVisible,
   parseSubtitles,
 } from "@/components/player/utils/captions";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useLanguageStore } from "@/stores/language";
 import { CaptionListItem } from "@/stores/player/slices/source";
@@ -461,6 +462,7 @@ export function CaptionsView({
 }: CaptionsViewProps) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
+  const { isMobile } = useIsMobile();
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
@@ -683,8 +685,8 @@ export function CaptionsView({
         )}
 
         {/* Current subtitle preview */}
-        {selectedCaption && selectionMode === "primary" && (
-          <div className="mt-3 p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center sm:hidden">
+        {isMobile && selectedCaption && selectionMode === "primary" && (
+          <div className="mt-3 p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center">
             <div className="text-sm text-video-context-type-secondary mb-1">
               {t("player.menus.subtitles.previewLabel")}
             </div>

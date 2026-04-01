@@ -11,6 +11,7 @@ import {
   captionIsVisible,
   parseSubtitles,
 } from "@/components/player/utils/captions";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
@@ -405,6 +406,7 @@ export function CaptionSettingsView({
 }) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
+  const { isMobile } = useIsMobile();
   const subtitleStore = useSubtitleStore();
   const preferencesStore = usePreferencesStore();
   const styling = subtitleStore.styling;
@@ -495,8 +497,8 @@ export function CaptionSettingsView({
               textTransformer={(s) => `${s}s`}
               decimalsAllowed={1}
             />
-            {selectedCaption && (
-              <div className="p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center sm:hidden">
+            {isMobile && selectedCaption && (
+              <div className="p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center">
                 <div className="text-sm text-video-context-type-secondary mb-1">
                   {t("player.menus.subtitles.previewLabel")}
                 </div>

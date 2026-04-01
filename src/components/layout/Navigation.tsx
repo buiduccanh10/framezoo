@@ -258,7 +258,7 @@ export function Navigation(props: NavigationProps) {
                   <WatchPartyInputLink triggerVariant="icon" />
                 )}
 
-              {location.pathname !== "/login" &&
+              {/* {location.pathname !== "/login" &&
                 location.pathname !== "/settings" &&
                 location.pathname !== "/register" && (
                   <button
@@ -273,7 +273,7 @@ export function Navigation(props: NavigationProps) {
                       navigation
                     />
                   </button>
-                )}
+                )} */}
               {/* <a
                 onClick={() => openNotifications()}
                 rel="noreferrer"
