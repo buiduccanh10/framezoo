@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -7,6 +7,10 @@ import { Toggle } from "@/components/buttons/Toggle";
 import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
+import {
+  captionIsVisible,
+  parseSubtitles,
+} from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
@@ -409,6 +413,10 @@ export function CaptionSettingsView({
   const setOverrideCasing = subtitleStore.setOverrideCasing;
   const setDelay = subtitleStore.setDelay;
   const updateStyling = subtitleStore.updateStyling;
+  const selectedCaption = usePlayerStore((s) => s.caption.selected);
+  const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
+  const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
+  const videoTime = usePlayerStore((s) => s.progress.time);
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const enableNativeSubtitles = preferencesStore.enableNativeSubtitles;
 
@@ -424,6 +432,15 @@ export function CaptionSettingsView({
   const handleStylingChange = (newStyling: SubtitleStyling) => {
     updateStyling(newStyling);
   };
+
+  const currentSubtitleText = useMemo(() => {
+    if (!srtData || !selectedCaption) return null;
+    const parsedCaptions = parseSubtitles(srtData, selectedLanguage);
+    const visibleCaption = parsedCaptions.find(({ start, end }) =>
+      captionIsVisible(start, end, delay, videoTime),
+    );
+    return visibleCaption?.content;
+  }, [srtData, selectedCaption, selectedLanguage, delay, videoTime]);
 
   const resetSubStyling = () => {
     subtitleStore.updateStyling({
@@ -478,6 +495,29 @@ export function CaptionSettingsView({
               textTransformer={(s) => `${s}s`}
               decimalsAllowed={1}
             />
+            {selectedCaption && (
+              <div className="p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center sm:hidden">
+                <div className="text-sm text-video-context-type-secondary mb-1">
+                  {t("player.menus.subtitles.previewLabel")}
+                </div>
+                <div className="text-base font-medium min-h-[3rem] flex items-center justify-center">
+                  {currentSubtitleText ? (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: currentSubtitleText.replaceAll(
+                          /\r?\n/g,
+                          "<br />",
+                        ),
+                      }}
+                    />
+                  ) : (
+                    <span className="text-video-context-type-secondary italic">
+                      ...{" "}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
             <div className="flex justify-between items-center">
               <Menu.FieldTitle>
                 {t("player.menus.subtitles.settings.fixCapitals")}
