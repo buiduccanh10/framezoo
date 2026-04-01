@@ -42,14 +42,11 @@ export function OverlayMobilePosition(props: MobilePositionProps) {
       {/* Main Overlay */}
       <div
         className={classNames([
-          "pointer-events-auto px-4 pb-6 z-10 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)] bottom-0 origin-top-left inset-x-0 absolute overflow-hidden grid grid-rows-[minmax(0,1fr),auto]",
+          "pointer-events-auto px-4 pb-6 z-10 ml-[env(safe-area-inset-left)] mr-[env(safe-area-inset-right)] bottom-0 origin-top-left inset-x-0 absolute overflow-hidden max-h-[calc(100vh-1.5rem)] grid grid-rows-[minmax(0,1fr),auto]",
           props.className,
           "transition-all duration-300",
           isPreviewMode ? "opacity-50" : "opacity-100",
         ])}
-        style={{
-          maxHeight: "var(--player-overlay-max-height, calc(100vh - 1.5rem))",
-        }}
       >
         {props.children}
 

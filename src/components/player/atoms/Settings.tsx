@@ -33,12 +33,6 @@ import { TranscriptView } from "./settings/TranscriptView";
 import { TranslateSubtitleView } from "./settings/TranslateSubtitleView";
 import { WatchPartyView } from "./settings/WatchPartyView";
 
-function isCssLandscapeFallbackActive() {
-  if (typeof document === "undefined") return false;
-  const playerRoot = document.querySelector('[data-player-root="true"]');
-  return playerRoot?.classList.contains("mobile-landscape-lock-fallback");
-}
-
 function SettingsOverlay({ id }: { id: string }) {
   const [chosenSourceId, setChosenSourceId] = useState<string | null>(null);
   const [chosenLanguage, setChosenLanguage] = useState<string | null>(null);
@@ -51,28 +45,11 @@ function SettingsOverlay({ id }: { id: string }) {
   const { isMobile } = useIsMobile();
   const router = useOverlayRouter(id);
 
-  const useLandscapeFallback =
-    isMobile &&
-    viewportWidth > 0 &&
-    viewportHeight > 0 &&
-    isCssLandscapeFallbackActive();
-  const effectiveViewportWidth = useLandscapeFallback
-    ? viewportHeight
-    : viewportWidth;
-  const effectiveViewportHeight = useLandscapeFallback
-    ? viewportWidth
-    : viewportHeight;
-  const isLandscape = effectiveViewportWidth > effectiveViewportHeight;
+  const isLandscape = viewportWidth > viewportHeight;
   const horizontalPadding = isMobile ? 20 : 60;
   const verticalPadding = isMobile ? (isLandscape ? 12 : 24) : 40;
-  const maxOverlayWidth = Math.max(
-    280,
-    effectiveViewportWidth - horizontalPadding * 2,
-  );
-  const maxOverlayHeight = Math.max(
-    260,
-    effectiveViewportHeight - verticalPadding * 2,
-  );
+  const maxOverlayWidth = Math.max(280, viewportWidth - horizontalPadding * 2);
+  const maxOverlayHeight = Math.max(260, viewportHeight - verticalPadding * 2);
   const defaultWidth = Math.min(343, maxOverlayWidth);
   const wideWidth = Math.min(443, maxOverlayWidth);
   const defaultHeight = Math.min(496, maxOverlayHeight);
