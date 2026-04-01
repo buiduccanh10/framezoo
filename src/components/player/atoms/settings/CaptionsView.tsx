@@ -239,7 +239,10 @@ export function CaptionOption(props: CaptionOptionProps) {
                   },
                 )}
               >
-                ~{props.matchScore}% match
+                {t("player.menus.subtitles.matchScoreLabel", {
+                  score: props.matchScore,
+                  defaultValue: "Match ~{{score}}%",
+                })}
               </span>
             )}
           </div>
@@ -461,7 +464,7 @@ export function CaptionsView({
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
-  const { disable, selectRandomCaptionFromLastUsedLanguage, disableSecondary } =
+  const { disable, selectBestCaptionFromLastUsedLanguage, disableSecondary } =
     useCaptions();
   const [isRandomSelecting, setIsRandomSelecting] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -470,7 +473,7 @@ export function CaptionsView({
     if (isRandomSelecting) return; // Prevent multiple simultaneous calls
     setIsRandomSelecting(true);
     try {
-      await selectRandomCaptionFromLastUsedLanguage();
+      await selectBestCaptionFromLastUsedLanguage();
     } finally {
       setIsRandomSelecting(false);
     }
@@ -484,10 +487,32 @@ export function CaptionsView({
   const isLoadingExternalSubtitles = usePlayerStore(
     (s) => s.isLoadingExternalSubtitles,
   );
+  const externalSubtitleLoadProgress = usePlayerStore(
+    (s) => s.externalSubtitleLoadProgress,
+  );
+  const externalSubtitleProgressLabel =
+    externalSubtitleLoadProgress.total > 0
+      ? t("player.menus.subtitles.loadingExternalProgress", {
+          progress: Math.round(
+            (externalSubtitleLoadProgress.completed /
+              externalSubtitleLoadProgress.total) *
+              100,
+          ),
+          defaultValue: "Loading external subtitles... ({{progress}}%)",
+        })
+      : t("player.menus.subtitles.loadingExternal");
   const delay = useSubtitleStore((s) => s.delay);
   const appLanguage = useLanguageStore((s) => s.language);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
   const matchScore = useCaptionMatchScore();
+  const effectiveMatchScore = matchScore ?? 0;
+  const matchScoreLabel =
+    matchScore !== undefined && matchScore !== null
+      ? t("player.menus.subtitles.matchScoreLabel", {
+          score: matchScore,
+          defaultValue: "Match ~{{score}}%",
+        })
+      : null;
 
   // Get combined caption list
   const captions = useMemo(
@@ -836,18 +861,20 @@ export function CaptionsView({
                     {t("player.menus.subtitles.autoSelectDifferentChoice")}
                   </span>
                 )}
-                {matchScore !== undefined && matchScore !== null && (
+                {matchScoreLabel && (
                   <span
                     className={classNames(
                       "text-xs font-bold mt-2 whitespace-nowrap",
                       {
-                        "text-video-context-type-accent": matchScore >= 80,
-                        "text-yellow-500": matchScore >= 50 && matchScore < 80,
-                        "text-video-context-error": matchScore < 50,
+                        "text-video-context-type-accent":
+                          effectiveMatchScore >= 80,
+                        "text-yellow-500":
+                          effectiveMatchScore >= 50 && effectiveMatchScore < 80,
+                        "text-video-context-error": effectiveMatchScore < 50,
                       },
                     )}
                   >
-                    ~{matchScore}% match
+                    {matchScoreLabel}
                   </span>
                 )}
               </div>
@@ -887,14 +914,13 @@ export function CaptionsView({
           {isLoadingExternalSubtitles && (
             <div className="p-4 rounded-xl bg-video-context-light bg-opacity-10 text-center">
               <div className="text-video-context-type-secondary">
-                {t("player.menus.subtitles.loadingExternal")}
+                {externalSubtitleProgressLabel}
               </div>
             </div>
           )}
 
           {/* Language selection */}
-          {!isLoadingExternalSubtitles &&
-            groupedCaptions.length > 0 &&
+          {groupedCaptions.length > 0 &&
             groupedCaptions.map(
               ({ language, languageName, captions: captionsForLang }) => {
                 const isPrimarySelected =

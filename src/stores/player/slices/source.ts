@@ -103,6 +103,10 @@ export interface SourceSlice {
   captionList: CaptionListItem[];
   isLoadingExternalSubtitles: boolean;
   externalSubtitleRequestId: number;
+  externalSubtitleLoadProgress: {
+    completed: number;
+    total: number;
+  };
   caption: {
     selected: Caption | null;
     secondary: Caption | null;
@@ -196,6 +200,31 @@ function getCaptionIdentityKey(caption: CaptionListItem): string {
   ].join("::");
 }
 
+function getCaptionSourcePriority(caption: CaptionListItem): number {
+  if (!caption.opensubtitles) return -1;
+
+  const normalizedSource = caption.source?.toLowerCase() ?? "";
+  if (normalizedSource.includes("wyzie")) return 0;
+  if (normalizedSource.includes("opensubs")) return 1;
+  if (normalizedSource.includes("granite")) return 2;
+  if (normalizedSource.includes("febbox")) return 3;
+
+  return Number.MAX_SAFE_INTEGER;
+}
+
+function sortCaptionList(captions: CaptionListItem[]) {
+  return [...captions].sort((a, b) => {
+    const priorityDiff =
+      getCaptionSourcePriority(a) - getCaptionSourcePriority(b);
+    if (priorityDiff !== 0) return priorityDiff;
+
+    const languageCompare = a.language.localeCompare(b.language);
+    if (languageCompare !== 0) return languageCompare;
+
+    return (a.display ?? "").localeCompare(b.display ?? "");
+  });
+}
+
 export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   source: null,
   sourceId: null,
@@ -205,6 +234,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   captionList: [],
   isLoadingExternalSubtitles: false,
   externalSubtitleRequestId: 0,
+  externalSubtitleLoadProgress: {
+    completed: 0,
+    total: 0,
+  },
   currentQuality: null,
   currentAudioTrack: null,
   status: playerStatus.IDLE,
@@ -296,6 +329,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.captionList = captions;
       s.externalSubtitleRequestId = nextRequestId;
       s.isLoadingExternalSubtitles = false;
+      s.externalSubtitleLoadProgress = {
+        completed: 0,
+        total: 0,
+      };
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
       s.audioTracks = [];
@@ -438,6 +475,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.captionList = [];
       s.isLoadingExternalSubtitles = false;
       s.externalSubtitleRequestId += 1;
+      s.externalSubtitleLoadProgress = {
+        completed: 0,
+        total: 0,
+      };
       s.currentQuality = null;
       s.currentAudioTrack = null;
       s.status = playerStatus.IDLE;
@@ -466,29 +507,44 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     set((s) => {
       if (s.externalSubtitleRequestId === activeRequestId) {
         s.isLoadingExternalSubtitles = true;
+        s.externalSubtitleLoadProgress = {
+          completed: 0,
+          total: 0,
+        };
       }
     });
 
     try {
       const { scrapeExternalSubtitles } =
         await import("@/utils/externalSubtitles");
-      const externalCaptions = await scrapeExternalSubtitles(store.meta);
-      if (get().externalSubtitleRequestId !== activeRequestId) return;
+      await scrapeExternalSubtitles(
+        store.meta,
+        ({ captions, completed, total }) => {
+          if (get().externalSubtitleRequestId !== activeRequestId) return;
 
-      if (externalCaptions.length > 0) {
-        set((s) => {
-          if (s.externalSubtitleRequestId !== activeRequestId) return;
-          // Add external captions to the existing list, avoiding duplicates
-          const existingCaptionKeys = new Set(
-            s.captionList.map(getCaptionIdentityKey),
-          );
-          const newCaptions = externalCaptions.filter(
-            (c) => !existingCaptionKeys.has(getCaptionIdentityKey(c)),
-          );
-          s.captionList = [...s.captionList, ...newCaptions];
-        });
-        console.log(`Added ${externalCaptions.length} external captions`);
-      }
+          set((s) => {
+            if (s.externalSubtitleRequestId !== activeRequestId) return;
+
+            s.externalSubtitleLoadProgress = {
+              completed,
+              total,
+            };
+
+            if (captions.length > 0) {
+              const existingCaptionKeys = new Set(
+                s.captionList.map(getCaptionIdentityKey),
+              );
+              const newCaptions = captions.filter(
+                (c) => !existingCaptionKeys.has(getCaptionIdentityKey(c)),
+              );
+              s.captionList = sortCaptionList([
+                ...s.captionList,
+                ...newCaptions,
+              ]);
+            }
+          });
+        },
+      );
     } catch (error) {
       if (get().externalSubtitleRequestId !== activeRequestId) return;
       console.error("Failed to scrape external subtitles:", error);

@@ -1,14 +1,64 @@
 /* eslint-disable no-console */
 import { PlayerMeta } from "@/stores/player/slices/source";
+import type { CaptionListItem } from "@/stores/player/slices/source";
 
 import { scrapeFebboxCaptions as _scrapeFebboxCaptions } from "./febbox";
 import { scrapeOpenSubtitlesCaptions } from "./opensubtitles";
 import { scrapeVdrkCaptions } from "./vdrk";
 import { scrapeWyzieCaptions } from "./wyzie";
 
+const EXTERNAL_SUBTITLE_SOURCE_PRIORITY: Record<string, number> = {
+  wyzie: 0,
+  opensubs: 1,
+  granite: 2,
+  febbox: 3,
+};
+
+function getExternalSubtitleSourcePriority(caption: CaptionListItem) {
+  const normalizedSource = caption.source?.toLowerCase() ?? "";
+  if (normalizedSource.includes("wyzie")) {
+    return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.wyzie;
+  }
+  if (normalizedSource.includes("opensubs")) {
+    return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.opensubs;
+  }
+  if (normalizedSource.includes("granite")) {
+    return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.granite;
+  }
+  if (normalizedSource.includes("febbox")) {
+    return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.febbox;
+  }
+  return Number.MAX_SAFE_INTEGER;
+}
+
+function sortExternalCaptions(captions: CaptionListItem[]) {
+  return [...captions].sort((a, b) => {
+    const priorityDiff =
+      getExternalSubtitleSourcePriority(a) -
+      getExternalSubtitleSourcePriority(b);
+    if (priorityDiff !== 0) return priorityDiff;
+
+    const sourceCompare = (a.source ?? "").localeCompare(b.source ?? "");
+    if (sourceCompare !== 0) return sourceCompare;
+
+    const languageCompare = a.language.localeCompare(b.language);
+    if (languageCompare !== 0) return languageCompare;
+
+    return (a.display ?? "").localeCompare(b.display ?? "");
+  });
+}
+
+export interface ExternalSubtitleProgressUpdate {
+  captions: CaptionListItem[];
+  completed: number;
+  total: number;
+  sourceName: string;
+}
+
 export async function scrapeExternalSubtitles(
   meta: PlayerMeta,
-): Promise<import("@/stores/player/slices/source").CaptionListItem[]> {
+  onProgress?: (update: ExternalSubtitleProgressUpdate) => void,
+): Promise<CaptionListItem[]> {
   try {
     const imdbId = meta.imdbId;
     const tmdbId = meta.tmdbId;
@@ -28,45 +78,50 @@ export async function scrapeExternalSubtitles(
     const timeoutMs = 30000;
 
     // Start all promises and collect results as they complete
-    const allCaptions: import("@/stores/player/slices/source").CaptionListItem[] =
-      [];
+    const allCaptions: CaptionListItem[] = [];
     let completedSources = 0;
-    const sourcePromises: Array<
-      Promise<import("@/stores/player/slices/source").CaptionListItem[]>
-    > = [];
+    const sourcePromises: Array<Promise<CaptionListItem[]>> = [];
+    const sourceDefinitions: Array<{
+      name: string;
+      priority: number;
+      promise: Promise<CaptionListItem[]>;
+    }> = [];
 
     // Helper function to handle individual source completion
     const handleSourceCompletion = (
       sourceName: string,
-      captions: import("@/stores/player/slices/source").CaptionListItem[],
+      captions: CaptionListItem[],
     ) => {
-      allCaptions.push(...captions);
       completedSources += 1;
+      const sortedCaptions = sortExternalCaptions(captions);
+      allCaptions.push(...sortedCaptions);
       console.log(
         `${sourceName} completed with ${captions.length} captions (${completedSources}/${totalSources} sources done)`,
       );
+      onProgress?.({
+        sourceName,
+        captions: sortedCaptions,
+        completed: completedSources,
+        total: totalSources,
+      });
     };
 
     const withSourceTimeout = (
       sourceName: string,
-      promise: Promise<
-        import("@/stores/player/slices/source").CaptionListItem[]
-      >,
+      promise: Promise<CaptionListItem[]>,
     ) => {
       let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
       return Promise.race([
         promise,
-        new Promise<import("@/stores/player/slices/source").CaptionListItem[]>(
-          (resolve) => {
-            timeoutId = setTimeout(() => {
-              console.warn(
-                `${sourceName} timed out after ${timeoutMs}ms, using empty subtitle list`,
-              );
-              resolve([]);
-            }, timeoutMs);
-          },
-        ),
+        new Promise<CaptionListItem[]>((resolve) => {
+          timeoutId = setTimeout(() => {
+            console.warn(
+              `${sourceName} timed out after ${timeoutMs}ms, using empty subtitle list`,
+            );
+            resolve([]);
+          }, timeoutMs);
+        }),
       ]).then((captions) => {
         if (timeoutId) clearTimeout(timeoutId);
         handleSourceCompletion(sourceName, captions);
@@ -75,25 +130,46 @@ export async function scrapeExternalSubtitles(
     };
 
     if (tmdbId && imdbId) {
-      const wyziePromise = scrapeWyzieCaptions(tmdbId, imdbId, season, episode);
-      sourcePromises.push(withSourceTimeout("Wyzie", wyziePromise));
+      sourceDefinitions.push({
+        name: "Wyzie",
+        priority: 0,
+        promise: scrapeWyzieCaptions(tmdbId, imdbId, season, episode),
+      });
     }
 
     if (imdbId) {
-      const openSubsPromise = scrapeOpenSubtitlesCaptions(
-        imdbId,
-        season,
-        episode,
-      );
-      sourcePromises.push(withSourceTimeout("OpenSubtitles", openSubsPromise));
+      sourceDefinitions.push({
+        name: "OpenSubtitles",
+        priority: 1,
+        promise: scrapeOpenSubtitlesCaptions(imdbId, season, episode),
+      });
     }
 
     if (tmdbId) {
-      const vdrkPromise = scrapeVdrkCaptions(tmdbId, season, episode);
-      sourcePromises.push(withSourceTimeout("Granite", vdrkPromise));
+      sourceDefinitions.push({
+        name: "Granite",
+        priority: 2,
+        promise: scrapeVdrkCaptions(tmdbId, season, episode),
+      });
     }
 
+    sourceDefinitions.sort((a, b) => a.priority - b.priority);
+    sourcePromises.push(
+      ...sourceDefinitions.map((source) =>
+        withSourceTimeout(source.name, source.promise),
+      ),
+    );
+
     const totalSources = sourcePromises.length;
+    if (totalSources === 0) {
+      onProgress?.({
+        sourceName: "",
+        captions: [],
+        completed: 0,
+        total: 0,
+      });
+      return [];
+    }
 
     // Start all sources concurrently and handle them as they complete
     await Promise.allSettled(sourcePromises);
@@ -102,7 +178,7 @@ export async function scrapeExternalSubtitles(
       `Found ${allCaptions.length} total external captions from all sources`,
     );
 
-    return allCaptions;
+    return sortExternalCaptions(allCaptions);
   } catch (error) {
     console.error("Error in scrapeExternalSubtitles:", error);
     return [];

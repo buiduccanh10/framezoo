@@ -899,6 +899,8 @@
         "SourceChoice": "Source Subtitles",
         "OpenSubtitlesChoice": "External Subtitles",
         "loadingExternal": "Loading external subtitles...",
+        "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
+        "matchScoreLabel": "Match ~{{score}}%",
         "transcriptChoice": "Transcript",
         "settings": {
           "backlink": "Custom subtitles",

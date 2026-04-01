@@ -85,6 +85,20 @@ export function LanguageSubtitlesView({
   const isLoadingExternalSubtitles = usePlayerStore(
     (s) => s.isLoadingExternalSubtitles,
   );
+  const externalSubtitleLoadProgress = usePlayerStore(
+    (s) => s.externalSubtitleLoadProgress,
+  );
+  const externalSubtitleProgressLabel =
+    externalSubtitleLoadProgress.total > 0
+      ? t("player.menus.subtitles.loadingExternalProgress", {
+          progress: Math.round(
+            (externalSubtitleLoadProgress.completed /
+              externalSubtitleLoadProgress.total) *
+              100,
+          ),
+          defaultValue: "Loading external subtitles... ({{progress}}%)",
+        })
+      : t("player.menus.subtitles.loadingExternal");
 
   const captions = useMemo(
     () =>
@@ -260,13 +274,12 @@ export function LanguageSubtitlesView({
         className="!pt-1 mt-2 pb-3"
         loaded={scrollTrigger > 0}
       >
-        {!isLoadingExternalSubtitles && languageCaptions.length > 0 ? (
+        {languageCaptions.length > 0 ? (
           languageCaptions.map(renderSubtitleOption)
         ) : (
           <div className="text-center text-video-context-type-secondary py-2">
             {isLoadingExternalSubtitles
-              ? t("player.menus.subtitles.loadingExternal") ||
-                "Loading external subtitles..."
+              ? externalSubtitleProgressLabel
               : t("player.menus.subtitles.notFound")}
           </div>
         )}

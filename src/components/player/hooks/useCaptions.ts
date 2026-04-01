@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo } from "react";
 import subsrt from "subsrt-ts";
 
 import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
+import { useSkipTime } from "@/components/player/hooks/useSkipTime";
+import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFit";
 import { useLanguageStore } from "@/stores/language";
 import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -17,6 +19,8 @@ import {
   filterDuplicateCaptionCues,
   parseVttSubtitles,
 } from "../utils/captions";
+
+let autoSelectionRequestId = 0;
 
 export function useCaptions() {
   const setLanguage = useSubtitleStore((s) => s.setLanguage);
@@ -36,6 +40,14 @@ export function useCaptions() {
   const source = usePlayerStore((s) => s.source);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
+  const isLoadingExternalSubtitles = usePlayerStore(
+    (s) => s.isLoadingExternalSubtitles,
+  );
+  const externalSubtitleLoadProgress = usePlayerStore(
+    (s) => s.externalSubtitleLoadProgress,
+  );
+  const videoDuration = usePlayerStore((s) => s.progress.duration);
+  const segments = useSkipTime();
 
   const getSubtitleTracks = usePlayerStore((s) => s.display?.getSubtitleTracks);
   const setSubtitlePreference = usePlayerStore(
@@ -78,6 +90,46 @@ export function useCaptions() {
       return null;
     },
     [captions],
+  );
+
+  const scoreCaptionsForLanguage = useCallback(
+    async (language: string) => {
+      const languageCaptions = captions.filter(
+        (caption) =>
+          isLanguageMatch(getCaptionLanguageGroupKey(caption), language) ||
+          isLanguageMatch(caption.language, language),
+      );
+
+      if (languageCaptions.length === 0) return [];
+
+      const videoDurationMs = videoDuration > 0 ? videoDuration * 1000 : 0;
+      const scored = await Promise.all(
+        languageCaptions.map(async (caption, index) => {
+          const fit = await scoreCaptionSourceFit(caption, {
+            videoDurationMs,
+            segments,
+          });
+
+          return {
+            caption,
+            index,
+            score: fit?.score ?? -1,
+            confidence: fit?.confidence ?? "low",
+          };
+        }),
+      );
+
+      scored.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (a.caption.opensubtitles !== b.caption.opensubtitles) {
+          return a.caption.opensubtitles ? 1 : -1;
+        }
+        return a.index - b.index;
+      });
+
+      return scored;
+    },
+    [captions, segments, videoDuration],
   );
 
   const setDirectCaption = useCallback(
@@ -221,17 +273,68 @@ export function useCaptions() {
       language: string,
       options?: {
         fallbackToEnglish?: boolean;
+        waitForExternal?: boolean;
       },
     ) => {
       const fallbackToEnglish = options?.fallbackToEnglish ?? true;
+      const waitForExternal = options?.waitForExternal ?? false;
+      const requestId = ++autoSelectionRequestId;
+
+      const selectBestAvailableCaption = async (targetLanguage: string) => {
+        const scoredCaptions = await scoreCaptionsForLanguage(targetLanguage);
+        if (requestId !== autoSelectionRequestId) return false;
+        const bestCaption = scoredCaptions[0]?.caption;
+        if (!bestCaption) return false;
+        await selectCaptionById(bestCaption.id);
+        return true;
+      };
+
+      const hasLanguageMatch = captions.some(
+        (caption) =>
+          isLanguageMatch(getCaptionLanguageGroupKey(caption), language) ||
+          isLanguageMatch(caption.language, language),
+      );
+
+      const isWaitingForFirstExternalSource =
+        waitForExternal &&
+        isLoadingExternalSubtitles &&
+        externalSubtitleLoadProgress.completed === 0;
+
+      if (isWaitingForFirstExternalSource) {
+        return false;
+      }
+
+      if (!hasLanguageMatch && isLoadingExternalSubtitles && waitForExternal) {
+        return false;
+      }
+
+      if (await selectBestAvailableCaption(language)) {
+        return true;
+      }
+
       let caption = findCaptionByPreferredLanguage(language);
       if (!caption && fallbackToEnglish && language !== "en") {
+        if (waitForExternal && isLoadingExternalSubtitles) {
+          return false;
+        }
+
+        if (await selectBestAvailableCaption("en")) {
+          return true;
+        }
+
         caption = findCaptionByPreferredLanguage("en");
       }
       if (!caption) return;
       return selectCaptionById(caption.id);
     },
-    [findCaptionByPreferredLanguage, selectCaptionById],
+    [
+      captions,
+      findCaptionByPreferredLanguage,
+      isLoadingExternalSubtitles,
+      externalSubtitleLoadProgress.completed,
+      scoreCaptionsForLanguage,
+      selectCaptionById,
+    ],
   );
 
   const disable = useCallback(async () => {
@@ -242,7 +345,10 @@ export function useCaptions() {
 
   const selectLastUsedLanguage = useCallback(async () => {
     const language = lastSelectedLanguage ?? userLanguage ?? "en";
-    await selectLanguage(language, { fallbackToEnglish: false });
+    await selectLanguage(language, {
+      fallbackToEnglish: false,
+      waitForExternal: true,
+    });
     return true;
   }, [lastSelectedLanguage, userLanguage, selectLanguage]);
 
@@ -255,33 +361,22 @@ export function useCaptions() {
     else await selectLastUsedLanguage();
   }, [selectLastUsedLanguage, disable, enabled]);
 
-  const selectRandomCaptionFromLastUsedLanguage = useCallback(async () => {
+  const selectBestCaptionFromLastUsedLanguage = useCallback(async () => {
     const language = lastSelectedLanguage ?? userLanguage ?? "en";
+    const scoredCaptions = await scoreCaptionsForLanguage(language);
+    if (scoredCaptions.length === 0) return;
 
-    const languageCaptions = captions.filter(
-      (caption) =>
-        isLanguageMatch(getCaptionLanguageGroupKey(caption), language) ||
-        isLanguageMatch(caption.language, language),
-    );
+    const bestAlternativeCaption =
+      scoredCaptions.find((item) => item.caption.id !== selectedCaption?.id)
+        ?.caption ?? scoredCaptions[0]?.caption;
 
-    if (languageCaptions.length === 0) return;
-
-    const availableCaptions = languageCaptions.filter(
-      (caption) => caption.id !== selectedCaption?.id,
-    );
-
-    const captionsToChooseFrom =
-      availableCaptions.length > 0 ? availableCaptions : languageCaptions;
-
-    const randomIndex = Math.floor(Math.random() * captionsToChooseFrom.length);
-    const randomCaption = captionsToChooseFrom[randomIndex];
-
-    await selectCaptionById(randomCaption.id);
+    if (!bestAlternativeCaption) return;
+    await selectCaptionById(bestAlternativeCaption.id);
   }, [
     lastSelectedLanguage,
     userLanguage,
-    captions,
     selectedCaption,
+    scoreCaptionsForLanguage,
     selectCaptionById,
   ]);
 
@@ -322,8 +417,9 @@ export function useCaptions() {
       );
 
       if (sameLanguageCaption) {
-        // Automatically select the first caption with the same language
-        selectCaptionById(sameLanguageCaption.id);
+        void selectLanguage(sameLanguageCaption.language, {
+          fallbackToEnglish: false,
+        });
       } else {
         // No caption with the same language found, clear the selection
         setCaption(null);
@@ -336,8 +432,10 @@ export function useCaptions() {
     selectCaptionById,
     currentTranslateTask,
     enabled,
+    isLoadingExternalSubtitles,
     lastSelectedLanguage,
     selectLastUsedLanguage,
+    selectLanguage,
     findCaptionByPreferredLanguage,
   ]);
 
@@ -380,7 +478,7 @@ export function useCaptions() {
     selectLastUsedLanguageIfEnabled,
     setDirectCaption,
     selectCaptionById,
-    selectRandomCaptionFromLastUsedLanguage,
+    selectBestCaptionFromLastUsedLanguage,
     selectSecondaryCaptionById,
     disableSecondary,
     secondaryCaption,

@@ -916,6 +916,8 @@
         "SourceChoice": "Nguồn phụ đề",
         "OpenSubtitlesChoice": "Phụ đề bên ngoài",
         "loadingExternal": "Đang tải phụ đề bên ngoài...",
+        "loadingExternalProgress": "Đang tải phụ đề bên ngoài... ({{progress}}%)",
+        "matchScoreLabel": "Khớp ~{{score}}%",
         "transcriptChoice": "Bản ghi âm",
         "settings": {
           "backlink": "Phụ đề tùy chỉnh",

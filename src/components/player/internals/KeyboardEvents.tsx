@@ -41,7 +41,7 @@ export function KeyboardEvents() {
     (s) => s.setLastSuccessfulSource,
   );
 
-  const { toggleLastUsed, selectRandomCaptionFromLastUsedLanguage } =
+  const { toggleLastUsed, selectBestCaptionFromLastUsedLanguage } =
     useCaptions();
   const setShowVolume = useEmpheralVolumeStore((s) => s.setShowVolume);
   const setDelay = useSubtitleStore((s) => s.setDelay);
@@ -290,7 +290,7 @@ export function KeyboardEvents() {
     toggleMute,
     setIsRolling,
     toggleLastUsed,
-    selectRandomCaptionFromLastUsedLanguage,
+    selectBestCaptionFromLastUsedLanguage,
     display,
     mediaPlaying,
     mediaProgress,
@@ -327,7 +327,7 @@ export function KeyboardEvents() {
       toggleMute,
       setIsRolling,
       toggleLastUsed,
-      selectRandomCaptionFromLastUsedLanguage,
+      selectBestCaptionFromLastUsedLanguage,
       display,
       mediaPlaying,
       mediaProgress,
@@ -362,7 +362,7 @@ export function KeyboardEvents() {
     toggleMute,
     setIsRolling,
     toggleLastUsed,
-    selectRandomCaptionFromLastUsedLanguage,
+    selectBestCaptionFromLastUsedLanguage,
     display,
     mediaPlaying,
     mediaProgress,
@@ -690,16 +690,14 @@ export function KeyboardEvents() {
       ) {
         dataRef.current.toggleLastUsed().catch(() => {}); // ignore errors
       }
-      // Random caption selection - customizable
+      // Best-fit caption selection - customizable
       if (
         matchesShortcut(
           evt,
           dataRef.current.keyboardShortcuts[ShortcutId.RANDOM_CAPTION],
         )
       ) {
-        dataRef.current
-          .selectRandomCaptionFromLastUsedLanguage()
-          .catch(() => {}); // ignore errors
+        dataRef.current.selectBestCaptionFromLastUsedLanguage().catch(() => {}); // ignore errors
       }
 
       // Barrel roll - customizable
