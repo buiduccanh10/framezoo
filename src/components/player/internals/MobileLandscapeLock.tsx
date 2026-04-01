@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 type OrientationApi = ScreenOrientation & {
@@ -33,13 +32,11 @@ async function lockLandscape() {
 }
 
 export function MobileLandscapeLock() {
-  const status = usePlayerStore((s) => s.status);
   const display = usePlayerStore((s) => s.display);
   const isFullscreen = usePlayerStore((s) => s.interface.isFullscreen);
   const { isMobile } = useIsMobile();
   const isWebPlayer = display?.getType() === "web";
-  const shouldLock =
-    isMobile && status === playerStatus.PLAYING && isWebPlayer && !isFullscreen;
+  const shouldLock = isMobile && isWebPlayer && !isFullscreen;
 
   useEffect(() => {
     if (!shouldLock) {
@@ -58,11 +55,15 @@ export function MobileLandscapeLock() {
     document.addEventListener("fullscreenchange", retryLock);
     document.addEventListener("visibilitychange", retryLock);
     window.addEventListener("focus", retryLock);
+    window.addEventListener("orientationchange", retryLock);
+    window.addEventListener("resize", retryLock);
 
     return () => {
       document.removeEventListener("fullscreenchange", retryLock);
       document.removeEventListener("visibilitychange", retryLock);
       window.removeEventListener("focus", retryLock);
+      window.removeEventListener("orientationchange", retryLock);
+      window.removeEventListener("resize", retryLock);
       unlockOrientation();
     };
   }, [shouldLock]);
