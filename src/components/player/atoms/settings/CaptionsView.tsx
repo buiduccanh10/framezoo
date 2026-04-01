@@ -1,6 +1,13 @@
 import classNames from "classnames";
 import Fuse from "fuse.js";
-import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type DragEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { convert } from "subsrt-ts";
 
@@ -486,6 +493,7 @@ export function CaptionsView({
   const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
+  const addExternalSubtitles = usePlayerStore((s) => s.addExternalSubtitles);
   const isLoadingExternalSubtitles = usePlayerStore(
     (s) => s.isLoadingExternalSubtitles,
   );
@@ -503,6 +511,9 @@ export function CaptionsView({
           defaultValue: "Loading external subtitles... ({{progress}}%)",
         })
       : t("player.menus.subtitles.loadingExternal");
+  const refreshButtonLabel = isLoadingExternalSubtitles
+    ? t("player.menus.subtitles.refreshing")
+    : t("player.menus.subtitles.refresh");
   const delay = useSubtitleStore((s) => s.delay);
   const appLanguage = useLanguageStore((s) => s.language);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
@@ -515,6 +526,40 @@ export function CaptionsView({
           defaultValue: "Match ~{{score}}%",
         })
       : null;
+  const handleRefreshExternalSubtitles = useCallback(() => {
+    if (isLoadingExternalSubtitles) return;
+    void addExternalSubtitles();
+  }, [addExternalSubtitles, isLoadingExternalSubtitles]);
+  const renderHeaderActions = (settingsPath: string) => (
+    <div className="flex items-center gap-1">
+      <button
+        type="button"
+        onClick={handleRefreshExternalSubtitles}
+        disabled={isLoadingExternalSubtitles}
+        className={classNames(
+          "-my-1 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10",
+          isLoadingExternalSubtitles ? "opacity-60 cursor-not-allowed" : "",
+        )}
+        aria-label={refreshButtonLabel}
+        title={refreshButtonLabel}
+      >
+        <Icon
+          icon={Icons.RELOAD}
+          className={classNames(
+            "text-lg",
+            isLoadingExternalSubtitles ? "animate-spin" : "",
+          )}
+        />
+      </button>
+      <button
+        type="button"
+        onClick={() => router.navigate(settingsPath)}
+        className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
+      >
+        {t("player.menus.subtitles.customizeLabel")}
+      </button>
+    </div>
+  );
 
   // Get combined caption list
   const captions = useMemo(
@@ -642,29 +687,13 @@ export function CaptionsView({
         {backLink ? (
           <Menu.BackLink
             onClick={() => router.navigate("/")}
-            rightSide={
-              <button
-                type="button"
-                onClick={() => router.navigate("/captions/settings")}
-                className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
-              >
-                {t("player.menus.subtitles.customizeLabel")}
-              </button>
-            }
+            rightSide={renderHeaderActions("/captions/settings")}
           >
             {t("player.menus.subtitles.title")}
           </Menu.BackLink>
         ) : (
           <Menu.Title
-            rightSide={
-              <button
-                type="button"
-                onClick={() => router.navigate("/captions/settingsOverlay")}
-                className="-mr-2 -my-1 px-2 p-[0.4em] rounded tabbable hover:bg-video-context-light hover:bg-opacity-10"
-              >
-                {t("player.menus.subtitles.customizeLabel")}
-              </button>
-            }
+            rightSide={renderHeaderActions("/captions/settingsOverlay")}
           >
             {t("player.menus.subtitles.title")}
           </Menu.Title>
