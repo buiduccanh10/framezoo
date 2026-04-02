@@ -25,6 +25,10 @@ import {
   scrapeOPhimMovie,
   scrapeOPhimShow,
 } from "./custom/sources/ophimSource";
+import {
+  scrapeVidlinkMovie,
+  scrapeVidlinkShow,
+} from "./custom/sources/vidlinkSource";
 
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
@@ -60,7 +64,7 @@ const kkphimSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "AlphaFlix 🔥",
+  name: "AlphaFlix VixSrc🔥",
   rank: 300,
   disabled: false,
   externalSource: false,
@@ -69,6 +73,20 @@ const openMovieSource = {
   mediaTypes: ["movie" as const, "show" as const],
   scrapeMovie: scrapeOpenMovieMovie,
   scrapeShow: scrapeOpenMovieShow,
+};
+
+// Custom Vidlink source definition
+const vidlinkSource = {
+  id: "alphaflix-vidlink",
+  name: "AlphaFlix Vidlink🔥",
+  rank: 310,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVidlinkMovie,
+  scrapeShow: scrapeVidlinkShow,
 };
 
 // Custom OpenMovie embed definition
@@ -98,6 +116,7 @@ export function getProviders() {
       .addBuiltinProviders()
       .addSource(ophimSource)
       .addSource(kkphimSource)
+      .addSource(vidlinkSource)
       .addSource(openMovieSource)
       .addEmbed(openMovieEmbed)
       .build();
@@ -112,6 +131,7 @@ export function getProviders() {
       .addBuiltinProviders()
       .addSource(ophimSource)
       .addSource(kkphimSource)
+      .addSource(vidlinkSource)
       .addSource(openMovieSource)
       .addEmbed(openMovieEmbed)
       .build();
@@ -126,6 +146,7 @@ export function getProviders() {
     .addBuiltinProviders()
     .addSource(ophimSource)
     .addSource(kkphimSource)
+    .addSource(vidlinkSource)
     .addSource(openMovieSource)
     .addEmbed(openMovieEmbed)
     .build();
@@ -139,6 +160,7 @@ export function getAllProviders() {
     .addBuiltinProviders()
     .addSource(ophimSource)
     .addSource(kkphimSource)
+    .addSource(vidlinkSource)
     .addSource(openMovieSource)
     .addEmbed(openMovieEmbed)
     .build();
