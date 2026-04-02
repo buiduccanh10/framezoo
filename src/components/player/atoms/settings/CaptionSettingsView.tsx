@@ -568,8 +568,8 @@ export function CaptionSettingsView({
             </span>
             <CaptionDelay
               label={t("player.menus.subtitles.settings.delay")}
-              max={60}
-              min={-60}
+              max={120}
+              min={-120}
               onChange={(v) => setDelay(v)}
               value={delay}
               textTransformer={(s) => `${s}s`}
