@@ -251,7 +251,9 @@ export function SourceSelectionView({
     if (!metaType) return [];
     const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
-      .filter((v) => v.mediaTypes?.includes(metaType));
+      .filter(
+        (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
+      );
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
       // Even without custom source order, prioritize last successful source if enabled

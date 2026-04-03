@@ -1,5 +1,4 @@
-import { Stream } from "@p-stream/providers";
-
+import { Stream } from "@/lib/providers";
 import {
   SourceFileStream,
   SourceQuality,

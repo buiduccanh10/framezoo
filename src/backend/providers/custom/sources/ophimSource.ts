@@ -4,7 +4,7 @@ import {
   type ShowScrapeContext,
   type SourcererOutput,
   flags,
-} from "@p-stream/providers";
+} from "@/lib/providers";
 
 const OPHIM_API_BASE = "https://ophim1.com/v1/api";
 const TMDB_API_KEY = "a500049f3e06109fe3e8289b06cf5685";

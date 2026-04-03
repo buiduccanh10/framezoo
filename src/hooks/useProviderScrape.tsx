@@ -1,10 +1,10 @@
-import { FullScraperEvents, RunOutput, ScrapeMedia } from "@p-stream/providers";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { prepareStream } from "@/backend/extension/streams";
 import { getCachedMetadata } from "@/backend/helpers/providerApi";
 import { getProviders } from "@/backend/providers/providers";
+import { FullScraperEvents, RunOutput, ScrapeMedia } from "@/lib/providers";
 import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";

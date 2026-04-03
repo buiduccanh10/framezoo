@@ -1,16 +1,15 @@
-import {
-  buildProviders,
-  flags,
-  makeStandardFetcher,
-  targets,
-} from "@p-stream/providers";
-
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import {
   makeExtensionFetcher,
   makeLoadBalancedSimpleProxyFetcher,
   setupM3U8Proxy,
 } from "@/backend/providers/fetchers";
+import {
+  buildProviders,
+  flags,
+  makeStandardFetcher,
+  targets,
+} from "@/lib/providers";
 
 import {
   scrapeKKPhimMovie,
@@ -37,7 +36,7 @@ setupM3U8Proxy();
 const ophimSource = {
   id: "ophim",
   name: "OPhim",
-  rank: 200,
+  rank: 40,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -51,7 +50,7 @@ const ophimSource = {
 const kkphimSource = {
   id: "kkphim",
   name: "KKPhim ",
-  rank: 210,
+  rank: 30,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -65,7 +64,7 @@ const kkphimSource = {
 const openMovieSource = {
   id: "openmovie",
   name: "AlphaFlix VixSrc🔥",
-  rank: 300,
+  rank: 20,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -79,7 +78,7 @@ const openMovieSource = {
 const vidlinkSource = {
   id: "alphaflix-vidlink",
   name: "AlphaFlix Vidlink🔥",
-  rank: 310,
+  rank: 10,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -93,7 +92,7 @@ const vidlinkSource = {
 const openMovieEmbed = {
   id: "openmovie-embed",
   name: "OpenMovie Stream",
-  rank: 190,
+  rank: 50,
   disabled: false,
   type: "embed" as const,
   flags: [flags.CORS_ALLOWED],

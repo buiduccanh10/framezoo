@@ -3,7 +3,7 @@ import {
   type EmbedScrapeContext,
   NotFoundError,
   flags,
-} from "@p-stream/providers";
+} from "@/lib/providers";
 
 interface OpenMovieStreamInfo {
   name: string;

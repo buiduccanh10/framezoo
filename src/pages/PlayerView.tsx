@@ -1,4 +1,3 @@
-import { RunOutput } from "@p-stream/providers";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Navigate,
@@ -16,6 +15,7 @@ import { convertRunoutputToSource } from "@/components/player/utils/convertRunou
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { ScrapingItems, ScrapingSegment } from "@/hooks/useProviderScrape";
 import { useQueryParam } from "@/hooks/useQueryParams";
+import { RunOutput } from "@/lib/providers";
 import { MetaPart } from "@/pages/parts/player/MetaPart";
 import { PlaybackErrorPart } from "@/pages/parts/player/PlaybackErrorPart";
 import { PlayerPart } from "@/pages/parts/player/PlayerPart";

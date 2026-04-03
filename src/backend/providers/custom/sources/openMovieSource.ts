@@ -3,7 +3,7 @@ import {
   NotFoundError,
   type ShowScrapeContext,
   type SourcererOutput,
-} from "@p-stream/providers";
+} from "@/lib/providers";
 
 const getBaseUrl = () => {
   const backendUrl =

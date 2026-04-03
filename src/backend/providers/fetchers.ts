@@ -1,11 +1,10 @@
+import { sendExtensionRequest } from "@/backend/extension/messaging";
+import { getApiToken, setApiToken } from "@/backend/helpers/providerApi";
 import {
   Fetcher,
   makeSimpleProxyFetcher,
   setM3U8ProxyUrl,
-} from "@p-stream/providers";
-
-import { sendExtensionRequest } from "@/backend/extension/messaging";
-import { getApiToken, setApiToken } from "@/backend/helpers/providerApi";
+} from "@/lib/providers";
 import { getM3U8ProxyUrls, getProxyUrls } from "@/utils/proxyUrls";
 
 import { convertBodyToObject, getBodyTypeFromBody } from "../extension/request";
@@ -99,11 +98,13 @@ function makeFinalHeaders(
 
 export function makeExtensionFetcher() {
   const fetcher: Fetcher = async (url, ops) => {
+    const safeOps = ops ?? {};
     const result = await sendExtensionRequest<any>({
       url,
-      ...ops,
-      body: convertBodyToObject(ops.body),
-      bodyType: getBodyTypeFromBody(ops.body),
+      method: safeOps.method ?? "GET",
+      ...safeOps,
+      body: convertBodyToObject(safeOps.body),
+      bodyType: getBodyTypeFromBody(safeOps.body),
     });
     if (!result?.success) throw new Error(`extension error: ${result?.error}`);
     const res = result.response;
@@ -111,7 +112,7 @@ export function makeExtensionFetcher() {
       body: res.body,
       finalUrl: res.finalUrl,
       statusCode: res.statusCode,
-      headers: makeFinalHeaders(ops.readHeaders, res.headers),
+      headers: makeFinalHeaders(safeOps.readHeaders ?? [], res.headers),
     };
   };
   return fetcher;
