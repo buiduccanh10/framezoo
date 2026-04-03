@@ -51,6 +51,7 @@ const qualityThresholds = [
   { minHeight: 420, quality: "480" as SourceQuality },
   { minHeight: 0, quality: "360" as SourceQuality },
 ];
+const MIN_AUTOPLAY_BUFFER_SECONDS = 3;
 
 function hlsLevelToQuality(level?: Level): SourceQuality | null {
   if (!level?.height) return null;
@@ -104,6 +105,53 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     string,
     (value: void | PromiseLike<void>) => void
   >();
+
+  function getBufferedAhead(): number {
+    if (!videoElement) return 0;
+    const currentTime = videoElement.currentTime ?? 0;
+    const buffered = videoElement.buffered;
+    if (buffered.length === 0) return 0;
+
+    for (let i = 0; i < buffered.length; i += 1) {
+      if (currentTime >= buffered.start(i) && currentTime <= buffered.end(i)) {
+        return buffered.end(i) - currentTime;
+      }
+    }
+    return 0;
+  }
+
+  function hasEnoughBufferForPlayback() {
+    return getBufferedAhead() >= MIN_AUTOPLAY_BUFFER_SECONDS;
+  }
+
+  function tryAutoplayWhenReady() {
+    if (!videoElement || !shouldAutoplayAfterLoad) return;
+
+    // For resumed playback (>0s), allow immediate autoplay attempt.
+    // For initial startup, wait until enough data is buffered.
+    const isResumedPlayback = (videoElement.currentTime ?? 0) > 0;
+    if (!isResumedPlayback && !hasEnoughBufferForPlayback()) return;
+
+    const playPromise = videoElement.play();
+    if (!playPromise) {
+      shouldAutoplayAfterLoad = false;
+      return;
+    }
+
+    playPromise
+      .then(() => {
+        shouldAutoplayAfterLoad = false;
+        emit("loading", false);
+      })
+      .catch((error: unknown) => {
+        const errorName = error instanceof DOMException ? error.name : "";
+        // Browser policy block needs user gesture; don't keep retrying.
+        if (errorName === "NotAllowedError") {
+          shouldAutoplayAfterLoad = false;
+          emit("pause", undefined);
+        }
+      });
+  }
 
   function reportLevels() {
     if (!hls) return;
@@ -380,11 +428,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
 
     // On iOS, entering PiP may allow autoplay that was previously blocked
     if (isInWebkitPip && videoElement.paused && shouldAutoplayAfterLoad) {
-      shouldAutoplayAfterLoad = false;
-      videoElement.play().catch(() => {
-        // If still blocked, emit pause to show play button
-        emit("pause", undefined);
-      });
+      tryAutoplayWhenReady();
     }
   }
 
@@ -408,48 +452,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     videoElement.addEventListener("playing", () => emit("play", undefined));
     videoElement.addEventListener("pause", () => emit("pause", undefined));
     videoElement.addEventListener("canplay", () => {
-      // Check if video has enough buffered data to play smoothly (at least 5 seconds ahead)
-      const hasEnoughBuffer = (() => {
-        if (!videoElement) return false;
-        const currentTime = videoElement.currentTime ?? 0;
-        const buffered = videoElement.buffered;
-        if (buffered.length === 0) return false;
+      const hasEnoughBuffer = hasEnoughBufferForPlayback();
 
-        // Find the buffered range that contains current time
-        for (let i = 0; i < buffered.length; i += 1) {
-          if (
-            currentTime >= buffered.start(i) &&
-            currentTime <= buffered.end(i)
-          ) {
-            const bufferedAhead = buffered.end(i) - currentTime;
-            return bufferedAhead >= 5; // At least 5 seconds buffered ahead
-          }
-        }
-        return false;
-      })();
-
-      // Only set loading to false if we have enough buffer or if we're not at the start
+      // Only set loading to false if we have enough buffer or if we're not at startup.
       if (hasEnoughBuffer || (videoElement?.currentTime ?? 0) > 0) {
         emit("loading", false);
       }
 
-      // Attempt autoplay if this was an autoplay transition
-      if (shouldAutoplayAfterLoad && videoElement) {
-        shouldAutoplayAfterLoad = false; // Reset the flag
-        // Try to play - this will work on most platforms, but iOS may block it
-        const playPromise = videoElement.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              // Autoplay succeeded
-            })
-            .catch((_error) => {
-              // Play was blocked (likely iOS), emit that we're not playing
-              // The AutoPlayStart component will show a play button
-              emit("pause", undefined);
-            });
-        }
-      }
+      // Attempt autoplay only when playback is ready.
+      tryAutoplayWhenReady();
     });
     videoElement.addEventListener("waiting", () => emit("loading", true));
     videoElement.addEventListener("volumechange", () =>
@@ -499,29 +510,16 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         );
         emit("buffered", bufferedTime);
 
-        // Check if we now have enough buffer to stop loading
-        const hasEnoughBuffer = (() => {
-          const buffered = videoElement.buffered;
-          if (buffered.length === 0) return false;
-
-          const currentTime = videoElement.currentTime ?? 0;
-          // Find the buffered range that contains current time
-          for (let i = 0; i < buffered.length; i += 1) {
-            if (
-              currentTime >= buffered.start(i) &&
-              currentTime <= buffered.end(i)
-            ) {
-              const bufferedAhead = buffered.end(i) - currentTime;
-              return bufferedAhead >= 5; // At least 5 seconds buffered ahead
-            }
-          }
-          return false;
-        })();
+        const hasEnoughBuffer = hasEnoughBufferForPlayback();
 
         // If we're still loading but now have enough buffer, stop loading
         // This handles cases where canplay fired with insufficient buffer
         if (hasEnoughBuffer && videoElement.readyState >= 3) {
           emit("loading", false);
+        }
+
+        if (hasEnoughBuffer && videoElement.readyState >= 3) {
+          tryAutoplayWhenReady();
         }
       }
     });
@@ -618,11 +616,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       videoElement.paused &&
       shouldAutoplayAfterLoad
     ) {
-      shouldAutoplayAfterLoad = false;
-      videoElement.play().catch(() => {
-        // If still blocked, emit pause to show play button
-        emit("pause", undefined);
-      });
+      tryAutoplayWhenReady();
     }
   }
   fscreen.addEventListener("fullscreenchange", fullscreenChange);
@@ -639,11 +633,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       videoElement.paused &&
       shouldAutoplayAfterLoad
     ) {
-      shouldAutoplayAfterLoad = false;
-      videoElement.play().catch(() => {
-        // If still blocked, emit pause to show play button
-        emit("pause", undefined);
-      });
+      tryAutoplayWhenReady();
     }
   }
 
