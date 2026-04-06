@@ -197,6 +197,17 @@ export function useDiscoverMedia({
       return;
     }
 
+    if (contentType === "provider" && !id) {
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
+    if (contentType === "genre" && !id) {
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -379,18 +390,20 @@ export function useDiscoverMedia({
     fetchRecommendations,
     t,
     page,
+    formattedLanguage,
   ]);
 
   useEffect(() => {
+    if (!enabled) {
+      setIsLoading(false);
+      return;
+    }
     // Reset media when content type, media type, or id changes
     if (contentType !== currentContentType || page === 1) {
       setMedia([]);
       setCurrentContentType(contentType);
     }
-    // Only fetch when enabled
-    if (enabled) {
-      fetchMedia();
-    }
+    fetchMedia();
   }, [fetchMedia, contentType, currentContentType, page, id, enabled]);
 
   return {

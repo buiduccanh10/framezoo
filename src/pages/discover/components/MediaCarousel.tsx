@@ -204,17 +204,39 @@ export function MediaCarousel({
     content.type,
   ]);
 
+  const discoverMediaEnabled = React.useMemo(
+    () =>
+      (!showProviders || Boolean(selectedProviderId)) &&
+      (!showGenres || Boolean(forcedGenreId) || Boolean(selectedGenreId)) &&
+      (!showRecommendations || Boolean(selectedRecommendationId)),
+    [
+      showProviders,
+      selectedProviderId,
+      showGenres,
+      forcedGenreId,
+      selectedGenreId,
+      showRecommendations,
+      selectedRecommendationId,
+    ],
+  );
+
   // Fetch media using our hook
   const { media, sectionTitle, actualContentType, error, isLoading } =
     useDiscoverMedia({
       contentType,
       mediaType,
-      id: selectedProviderId || selectedGenreId || selectedRecommendationId,
+      id:
+        selectedProviderId ||
+        selectedGenreId ||
+        selectedRecommendationId ||
+        forcedGenreId ||
+        "",
       fallbackType: content.fallback,
       genreName: selectedGenreName,
       providerName: selectedProviderName,
       mediaTitle: selectedRecommendationTitle,
       isCarouselView: true,
+      enabled: discoverMediaEnabled,
     });
 
   // Hide section if there's an error or no content (after loading is complete)

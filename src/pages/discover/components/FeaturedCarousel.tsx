@@ -22,6 +22,8 @@ import { RandomMovieButton } from "./RandomMovieButton";
 import {
   EDITOR_PICKS_MOVIES,
   EDITOR_PICKS_TV_SHOWS,
+  MOVIE_PROVIDERS,
+  TV_PROVIDERS,
 } from "../hooks/useDiscoverMedia";
 
 export interface FeaturedMedia extends Partial<Movie & TVShow> {
@@ -152,7 +154,6 @@ export function FeaturedCarousel({
   const currentMedia = media[currentIndex];
 
   const SLIDE_QUANTITY = 10;
-  const FETCH_QUANTITY = 20;
   const SLIDE_QUANTITY_EDITOR_PICKS_MOVIES = 6;
   const SLIDE_QUANTITY_EDITOR_PICKS_TV_SHOWS = 4;
   const SLIDE_DURATION = 8000;
@@ -216,17 +217,35 @@ export function FeaturedCarousel({
       try {
         setIsLoading(true);
         if (featuredCategory === "movies" || featuredCategory === "tvshows") {
-          // TMDB method
-          if (featuredCategory === "movies") {
-            // First get the list of popular movies
-            const listData = await get<any>("/movie/popular", {
+          // Discover by watch provider (same params as useDiscoverMedia "provider")
+          const fetchDiscoverByProvider = async (
+            mediaPath: "movie" | "tv",
+            providerId: string,
+          ) => {
+            let listData = await get<any>(`/discover/${mediaPath}`, {
               language: formattedLanguage,
+              with_watch_providers: providerId,
+              watch_region: "US",
             });
+            if (
+              (!listData.results || listData.results.length === 0) &&
+              formattedLanguage !== "en-US"
+            ) {
+              listData = await get<any>(`/discover/${mediaPath}`, {
+                language: "en-US",
+                with_watch_providers: providerId,
+                watch_region: "US",
+              });
+            }
+            return listData.results ?? [];
+          };
 
-            // Then fetch full details for each movie to get external_ids
-            const moviePromises = listData.results
-              .slice(0, FETCH_QUANTITY)
-              .map((movie: any) =>
+          if (featuredCategory === "movies") {
+            const providerId = MOVIE_PROVIDERS[0].id;
+            const results = await fetchDiscoverByProvider("movie", providerId);
+            const moviePromises = results
+              .slice(0, SLIDE_QUANTITY)
+              .map((movie: { id: number }) =>
                 get<any>(`/movie/${movie.id}`, {
                   language: formattedLanguage,
                   append_to_response: "external_ids",
@@ -234,26 +253,18 @@ export function FeaturedCarousel({
               );
 
             const movieDetails = await Promise.all(moviePromises);
-            const allMovies = movieDetails.map((movie) => ({
-              ...movie,
-              type: "movie" as const,
-            }));
-
-            // Shuffle
-            const shuffledMovies = [...allMovies].sort(
-              () => 0.5 - Math.random(),
+            setMedia(
+              movieDetails.map((movie) => ({
+                ...movie,
+                type: "movie" as const,
+              })),
             );
-            setMedia(shuffledMovies.slice(0, SLIDE_QUANTITY));
           } else if (featuredCategory === "tvshows") {
-            // First get the list of popular shows
-            const listData = await get<any>("/tv/popular", {
-              language: formattedLanguage,
-            });
-
-            // Then fetch full details for each show to get external_ids
-            const showPromises = listData.results
-              .slice(0, FETCH_QUANTITY)
-              .map((show: any) =>
+            const providerId = TV_PROVIDERS[0].id;
+            const results = await fetchDiscoverByProvider("tv", providerId);
+            const showPromises = results
+              .slice(0, SLIDE_QUANTITY)
+              .map((show: { id: number }) =>
                 get<any>(`/tv/${show.id}`, {
                   language: formattedLanguage,
                   append_to_response: "external_ids",
@@ -261,14 +272,12 @@ export function FeaturedCarousel({
               );
 
             const showDetails = await Promise.all(showPromises);
-            const allShows = showDetails.map((show) => ({
-              ...show,
-              type: "show" as const,
-            }));
-
-            // Shuffle
-            const shuffledShows = [...allShows].sort(() => 0.5 - Math.random());
-            setMedia(shuffledShows.slice(0, SLIDE_QUANTITY));
+            setMedia(
+              showDetails.map((show) => ({
+                ...show,
+                type: "show" as const,
+              })),
+            );
           }
         } else if (featuredCategory === "editorpicks") {
           // Shuffle editor picks Ids
