@@ -35,7 +35,7 @@ setupM3U8Proxy();
 // Custom OPhim source definition
 const ophimSource = {
   id: "ophim",
-  name: "OPhim",
+  name: "Server 4",
   rank: 40,
   disabled: false,
   externalSource: false,
@@ -49,7 +49,7 @@ const ophimSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "KKPhim ",
+  name: "Server 3",
   rank: 30,
   disabled: false,
   externalSource: false,
@@ -63,7 +63,7 @@ const kkphimSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "AlphaFlix VixSrc🔥",
+  name: "Server 2 🔥",
   rank: 20,
   disabled: false,
   externalSource: false,
@@ -77,7 +77,7 @@ const openMovieSource = {
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "AlphaFlix Vidlink🔥",
+  name: "Server 1 🔥",
   rank: 10,
   disabled: false,
   externalSource: false,
