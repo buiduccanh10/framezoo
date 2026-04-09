@@ -1,5 +1,12 @@
 import classNames from "classnames";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useAsync } from "react-use";
 
@@ -27,6 +34,35 @@ import { scrollToElement } from "@/utils/scroll";
 import { hasAired } from "../utils/aired";
 
 const EMPTY_ARRAY: string[] = [];
+const EPISODE_GROUP_SIZE = 100;
+
+interface EpisodeGroup {
+  index: number;
+  label: string;
+  startEpisodeNumber: number;
+  endEpisodeNumber: number;
+}
+
+function createEpisodeGroups(episodes: any[]): EpisodeGroup[] {
+  const groups: EpisodeGroup[] = [];
+
+  for (let index = 0; index < episodes.length; index += EPISODE_GROUP_SIZE) {
+    const groupEpisodes = episodes.slice(index, index + EPISODE_GROUP_SIZE);
+    if (groupEpisodes.length === 0) continue;
+
+    const startEpisodeNumber = groupEpisodes[0].number;
+    const endEpisodeNumber = groupEpisodes[groupEpisodes.length - 1].number;
+
+    groups.push({
+      index: Math.floor(index / EPISODE_GROUP_SIZE),
+      label: `${startEpisodeNumber}-${endEpisodeNumber}`,
+      startEpisodeNumber,
+      endEpisodeNumber,
+    });
+  }
+
+  return groups;
+}
 
 function CenteredText(props: { children: React.ReactNode }) {
   return (
@@ -626,17 +662,63 @@ export function EpisodesView({
   const [truncatedEpisodes, setTruncatedEpisodes] = useState<{
     [key: string]: boolean;
   }>({});
+  const [selectedEpisodeGroupIndex, setSelectedEpisodeGroupIndex] = useState(0);
   const descriptionRefs = useRef<{
     [key: string]: HTMLParagraphElement | null;
   }>({});
   const forceCompactEpisodeView = usePreferencesStore(
     (s) => s.forceCompactEpisodeView,
   );
+  const seasonEpisodes = useMemo(
+    () => loadingState.value?.season.episodes ?? [],
+    [loadingState.value],
+  );
+  const episodeGroups = useMemo(
+    () =>
+      selectedSeason === "favorites" ? [] : createEpisodeGroups(seasonEpisodes),
+    [seasonEpisodes, selectedSeason],
+  );
+  const shouldGroupEpisodes = episodeGroups.length > 1;
+  const visibleSeasonEpisodes = useMemo(() => {
+    if (!shouldGroupEpisodes) return seasonEpisodes;
+
+    const startIndex = selectedEpisodeGroupIndex * EPISODE_GROUP_SIZE;
+    return seasonEpisodes.slice(startIndex, startIndex + EPISODE_GROUP_SIZE);
+  }, [seasonEpisodes, selectedEpisodeGroupIndex, shouldGroupEpisodes]);
 
   const isTextTruncated = (element: HTMLElement | null) => {
     if (!element) return false;
     return element.scrollHeight > element.clientHeight;
   };
+
+  useEffect(() => {
+    setSelectedEpisodeGroupIndex(0);
+  }, [selectedSeason]);
+
+  useEffect(() => {
+    if (!shouldGroupEpisodes) {
+      setSelectedEpisodeGroupIndex(0);
+      return;
+    }
+
+    const activeEpisodeIndex = seasonEpisodes.findIndex(
+      (episode) => episode.id === meta?.episode?.tmdbId,
+    );
+    const maxGroupIndex = episodeGroups.length - 1;
+
+    setSelectedEpisodeGroupIndex((currentIndex) => {
+      if (activeEpisodeIndex >= 0) {
+        return Math.floor(activeEpisodeIndex / EPISODE_GROUP_SIZE);
+      }
+
+      return currentIndex > maxGroupIndex ? maxGroupIndex : currentIndex;
+    });
+  }, [
+    episodeGroups.length,
+    meta?.episode?.tmdbId,
+    seasonEpisodes,
+    shouldGroupEpisodes,
+  ]);
 
   // Check truncation after render and when expanded state changes
   useEffect(() => {
@@ -644,7 +726,7 @@ export function EpisodesView({
       const newTruncatedState: { [key: string]: boolean } = {};
       if (!loadingState.value) return;
 
-      loadingState.value.season.episodes.forEach((ep) => {
+      visibleSeasonEpisodes.forEach((ep) => {
         // Check medium view
         if (!expandedEpisodes[`medium-${ep.id}`]) {
           const mediumElement = descriptionRefs.current[`medium-${ep.id}`];
@@ -675,7 +757,7 @@ export function EpisodesView({
       clearTimeout(timeoutId);
       window.removeEventListener("resize", handleResize);
     };
-  }, [loadingState.value, expandedEpisodes]);
+  }, [expandedEpisodes, loadingState.value, visibleSeasonEpisodes]);
 
   const toggleEpisodeExpansion = (
     episodeId: string,
@@ -813,8 +895,41 @@ export function EpisodesView({
           block: "center",
         });
       }
+    } else if (carouselRef.current) {
+      carouselRef.current.scrollTo({
+        left: 0,
+        behavior: "smooth",
+      });
     }
-  }, [loadingState.value]);
+  }, [loadingState.value, selectedEpisodeGroupIndex]);
+
+  const episodeGroupSelector = shouldGroupEpisodes ? (
+    <div className="sticky top-0 z-20 -mx-6 px-6 pt-3 pb-3 bg-video-context-background border-b border-video-context-border">
+      <div
+        className="flex flex-nowrap gap-2 overflow-x-auto overflow-y-hidden scrollbar-hide pb-1"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
+        {episodeGroups.map((group) => (
+          <button
+            key={`${group.startEpisodeNumber}-${group.endEpisodeNumber}`}
+            type="button"
+            onClick={() => setSelectedEpisodeGroupIndex(group.index)}
+            className={classNames(
+              "shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border",
+              group.index === selectedEpisodeGroupIndex
+                ? "bg-video-context-light/20 border-video-context-type-accent text-white"
+                : "bg-video-context-light/10 border-video-context-border text-video-context-type-secondary hover:bg-video-context-light/20 hover:text-white",
+            )}
+          >
+            {group.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  ) : null;
 
   if (!meta?.tmdbId) return null;
 
@@ -922,101 +1037,105 @@ export function EpisodesView({
     }
   } else if (loadingState.value) {
     content = (
-      <div className="relative">
-        {/* Horizontal scroll buttons */}
-        <div
-          className={classNames(
-            "absolute left-0 top-1/2 transform -translate-y-1/2 z-10 px-4",
-            forceCompactEpisodeView ? "hidden" : "hidden lg:block",
-          )}
-        >
-          <button
-            type="button"
-            className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
-            onClick={() => handleScroll("left")}
+      <div>
+        {episodeGroupSelector}
+        <div className="relative">
+          {/* Horizontal scroll buttons */}
+          <div
+            className={classNames(
+              "absolute left-0 top-1/2 transform -translate-y-1/2 z-10 px-4",
+              forceCompactEpisodeView ? "hidden" : "hidden lg:block",
+            )}
           >
-            <Icon icon={Icons.CHEVRON_LEFT} className="text-white/80" />
-          </button>
-        </div>
+            <button
+              type="button"
+              className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
+              onClick={() => handleScroll("left")}
+            >
+              <Icon icon={Icons.CHEVRON_LEFT} className="text-white/80" />
+            </button>
+          </div>
 
-        <div
-          ref={carouselRef}
-          className={classNames(
-            "flex pb-4 pt-2 scrollbar-hide",
-            {
-              "carousel-container":
-                window.innerWidth >= 1024 && !forceCompactEpisodeView,
-            },
-            forceCompactEpisodeView
-              ? "flex-col  space-y-3"
-              : "flex-col lg:flex-row lg:overflow-x-auto space-y-3 sm:space-y-4 lg:space-y-0 lg:space-x-4 lg:px-12 ",
-          )}
-          style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          }}
-        >
-          {loadingState.value.season.episodes.length === 0 ? (
-            <div className="flex-shrink-0 w-full flex justify-center items-center p-4">
-              <p>{t("player.menus.episodes.emptyState")}</p>
-            </div>
-          ) : (
-            loadingState.value.season.episodes.map((ep) => {
-              const episodeProgress =
-                progress.items[meta?.tmdbId]?.episodes?.[ep.id];
-              const percentage = episodeProgress
-                ? (episodeProgress.progress.watched /
-                    episodeProgress.progress.duration) *
-                  100
-                : 0;
-
-              const isAired = hasAired(ep.air_date);
-              const isActive = ep.id === meta?.episode?.tmdbId;
-              const isWatched = percentage > 90;
-              const isFavorited = meta?.tmdbId
-                ? (bookmarks[meta.tmdbId]?.favoriteEpisodes?.includes(ep.id) ??
-                  false)
-                : false;
-
-              return (
-                <div key={ep.id} ref={isActive ? activeEpisodeRef : null}>
-                  <EpisodeItem
-                    episode={ep}
-                    isActive={isActive}
-                    isAired={isAired}
-                    isWatched={isWatched}
-                    isFavorited={isFavorited}
-                    percentage={percentage}
-                    episodeProgress={episodeProgress}
-                    onPlay={playEpisode}
-                    onToggleWatch={toggleWatchStatus}
-                    onToggleFavorite={toggleFavoriteStatus}
-                    onToggleExpansion={toggleEpisodeExpansion}
-                    expandedEpisodes={expandedEpisodes}
-                    truncatedEpisodes={truncatedEpisodes}
-                    descriptionRefs={descriptionRefs}
-                    forceCompactEpisodeView={forceCompactEpisodeView}
-                  />
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Right scroll button */}
-        <div
-          className={classNames(
-            "absolute right-0 top-1/2 transform -translate-y-1/2 z-10 px-4",
-            forceCompactEpisodeView ? "hidden" : "hidden lg:block",
-          )}
-        >
-          <button
-            type="button"
-            className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
-            onClick={() => handleScroll("right")}
+          <div
+            ref={carouselRef}
+            className={classNames(
+              "flex pb-4 pt-2 scrollbar-hide",
+              {
+                "carousel-container":
+                  window.innerWidth >= 1024 && !forceCompactEpisodeView,
+              },
+              forceCompactEpisodeView
+                ? "flex-col  space-y-3"
+                : "flex-col lg:flex-row lg:overflow-x-auto space-y-3 sm:space-y-4 lg:space-y-0 lg:space-x-4 lg:px-12 ",
+            )}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
           >
-            <Icon icon={Icons.CHEVRON_RIGHT} className="text-white/80" />
-          </button>
+            {seasonEpisodes.length === 0 ? (
+              <div className="flex-shrink-0 w-full flex justify-center items-center p-4">
+                <p>{t("player.menus.episodes.emptyState")}</p>
+              </div>
+            ) : (
+              visibleSeasonEpisodes.map((ep) => {
+                const episodeProgress =
+                  progress.items[meta?.tmdbId]?.episodes?.[ep.id];
+                const percentage = episodeProgress
+                  ? (episodeProgress.progress.watched /
+                      episodeProgress.progress.duration) *
+                    100
+                  : 0;
+
+                const isAired = hasAired(ep.air_date);
+                const isActive = ep.id === meta?.episode?.tmdbId;
+                const isWatched = percentage > 90;
+                const isFavorited = meta?.tmdbId
+                  ? (bookmarks[meta.tmdbId]?.favoriteEpisodes?.includes(
+                      ep.id,
+                    ) ?? false)
+                  : false;
+
+                return (
+                  <div key={ep.id} ref={isActive ? activeEpisodeRef : null}>
+                    <EpisodeItem
+                      episode={ep}
+                      isActive={isActive}
+                      isAired={isAired}
+                      isWatched={isWatched}
+                      isFavorited={isFavorited}
+                      percentage={percentage}
+                      episodeProgress={episodeProgress}
+                      onPlay={playEpisode}
+                      onToggleWatch={toggleWatchStatus}
+                      onToggleFavorite={toggleFavoriteStatus}
+                      onToggleExpansion={toggleEpisodeExpansion}
+                      expandedEpisodes={expandedEpisodes}
+                      truncatedEpisodes={truncatedEpisodes}
+                      descriptionRefs={descriptionRefs}
+                      forceCompactEpisodeView={forceCompactEpisodeView}
+                    />
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Right scroll button */}
+          <div
+            className={classNames(
+              "absolute right-0 top-1/2 transform -translate-y-1/2 z-10 px-4",
+              forceCompactEpisodeView ? "hidden" : "hidden lg:block",
+            )}
+          >
+            <button
+              type="button"
+              className="p-2 bg-black/80 hover:bg-video-context-hoverColor transition-colors rounded-full border border-video-context-border backdrop-blur-sm"
+              onClick={() => handleScroll("right")}
+            >
+              <Icon icon={Icons.CHEVRON_RIGHT} className="text-white/80" />
+            </button>
+          </div>
         </div>
       </div>
     );
