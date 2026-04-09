@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { TFunction } from "i18next";
 import {
   ReactNode,
   useCallback,
@@ -43,6 +44,9 @@ interface EpisodeGroup {
   endEpisodeNumber: number;
 }
 
+const GENERIC_SEASON_TITLE_PATTERN = /^season\s+\d+$/i;
+const GENERIC_SPECIALS_TITLE_PATTERN = /^specials?$/i;
+
 function createEpisodeGroups(episodes: any[]): EpisodeGroup[] {
   const groups: EpisodeGroup[] = [];
 
@@ -62,6 +66,30 @@ function createEpisodeGroups(episodes: any[]): EpisodeGroup[] {
   }
 
   return groups;
+}
+
+function formatSeasonTitle(
+  title: string | undefined,
+  seasonNumber: number | undefined,
+  t: TFunction,
+) {
+  const trimmedTitle = title?.trim();
+
+  if (
+    seasonNumber === 0 ||
+    (trimmedTitle && GENERIC_SPECIALS_TITLE_PATTERN.test(trimmedTitle))
+  ) {
+    return t("player.menus.episodes.specials");
+  }
+
+  if (
+    seasonNumber &&
+    (!trimmedTitle || GENERIC_SEASON_TITLE_PATTERN.test(trimmedTitle))
+  ) {
+    return `${t("details.season")} ${seasonNumber}`;
+  }
+
+  return trimmedTitle || t("player.menus.episodes.loadingTitle");
 }
 
 function CenteredText(props: { children: React.ReactNode }) {
@@ -112,6 +140,14 @@ function EpisodeItem({
   seasonNumber,
 }: EpisodeItemProps) {
   const { t } = useTranslation();
+  const episodeBadgeLabel = seasonNumber
+    ? t("media.episodeDisplay", {
+        season: seasonNumber,
+        episode: episode.number,
+      })
+    : t("player.menus.episodes.episodeBadge", {
+        episode: episode.number,
+      });
 
   return (
     <div>
@@ -179,9 +215,7 @@ function EpisodeItem({
               )}
             >
               <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-50">
-                {seasonNumber
-                  ? `S${seasonNumber}E${episode.number}`
-                  : `E${episode.number}`}
+                {episodeBadgeLabel}
               </span>
               <span className="line-clamp-1 break-all">{episode.title}</span>
             </div>
@@ -221,9 +255,7 @@ function EpisodeItem({
           {/* Episode Number Badge */}
           <div className="absolute top-2 left-2 flex items-center space-x-2">
             <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
-              {seasonNumber
-                ? `S${seasonNumber}E${episode.number}`
-                : `E${episode.number}`}
+              {episodeBadgeLabel}
             </span>
             {!isAired && (
               <span className="bg-video-context-hoverColor/50 text-video-context-type-main/80 text-sm px-1 py-0.5 rounded-md">
@@ -364,9 +396,7 @@ function EpisodeItem({
             {/* Episode Number Badge */}
             <div className="absolute top-2 left-2 flex items-center space-x-2">
               <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
-                {seasonNumber
-                  ? `S${seasonNumber}E${episode.number}`
-                  : `E${episode.number}`}
+                {episodeBadgeLabel}
               </span>
               {!isAired && (
                 <span className="bg-video-context-hoverColor/50 text-video-context-type-main/80 text-sm px-1 py-0.5 rounded-md">
@@ -571,7 +601,7 @@ function SeasonsView({
               key={season.id}
               onClick={() => setSeason(season.id)}
             >
-              {season.title}
+              {formatSeasonTitle(season.title, season.number, t)}
             </Menu.ChevronLink>
           );
         })}
@@ -1146,8 +1176,11 @@ export function EpisodesView({
       <Menu.BackLink onClick={goBack} side="right">
         {selectedSeason === "favorites"
           ? t("player.menus.episodes.favorites")
-          : loadingState?.value?.season.title ||
-            t("player.menus.episodes.loadingTitle")}
+          : formatSeasonTitle(
+              loadingState?.value?.season.title,
+              loadingState?.value?.season.number,
+              t,
+            )}
       </Menu.BackLink>
       {content}
     </Menu.CardWithScrollable>
