@@ -26,6 +26,7 @@ import MaintenancePage from "@/pages/errors/MaintenancePage";
 import { NotFoundPage } from "@/pages/errors/NotFoundPage";
 import { HomePage } from "@/pages/HomePage";
 import { LoginPage } from "@/pages/Login";
+import { Marked } from "@/pages/marked/Marked";
 import { MigrationPage } from "@/pages/migration/Migration";
 import { MigrationDirectPage } from "@/pages/migration/MigrationDirect";
 import { MigrationDownloadPage } from "@/pages/migration/MigrationDownload";
@@ -188,6 +189,7 @@ function App() {
             <Route path="/discover/all" element={<DiscoverMore />} />
             {/* Bookmarks page */}
             <Route path="/bookmarks" element={<AllBookmarks />} />
+            <Route path="/marked" element={<Marked />} />
             {/* Watch History page */}
             <Route path="/watch-history" element={<WatchHistory />} />
             {/* Settings page */}
