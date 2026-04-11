@@ -79,6 +79,21 @@ export interface ProgressStore {
 }
 
 let updateId = 0;
+const WATCH_HISTORY_THRESHOLD = 0.2;
+const WATCH_HISTORY_COMPLETED_THRESHOLD = 0.9;
+
+function getProgressRatio(progress: ProgressItem): number {
+  if (progress.duration <= 0) return 0;
+  return progress.watched / progress.duration;
+}
+
+function hasReachedWatchHistoryThreshold(progress: ProgressItem): boolean {
+  return getProgressRatio(progress) > WATCH_HISTORY_THRESHOLD;
+}
+
+function hasCompletedWatchHistoryItem(progress: ProgressItem): boolean {
+  return getProgressRatio(progress) > WATCH_HISTORY_COMPLETED_THRESHOLD;
+}
 
 export const useProgressStore = create(
   persist(
@@ -142,17 +157,21 @@ export const useProgressStore = create(
                 watched: 0,
               };
 
-            const wasCompleted =
-              item.progress.duration > 0 &&
-              item.progress.watched / item.progress.duration > 0.9;
+            const previousProgress = item.progress;
+            const wasInWatchHistory =
+              hasReachedWatchHistoryThreshold(previousProgress);
+            const wasCompleted = hasCompletedWatchHistoryItem(previousProgress);
             item.progress = { ...progress };
 
-            // Update watch history only if becoming completed
-            const isCompleted =
-              progress.duration > 0 &&
-              progress.watched / progress.duration > 0.9;
-            if (isCompleted && !wasCompleted) {
-              useWatchHistoryStore.getState().addItem(meta, progress, true);
+            const isInWatchHistory = hasReachedWatchHistoryThreshold(progress);
+            const isCompleted = hasCompletedWatchHistoryItem(progress);
+
+            // Add items to watch history once they pass the minimum watch threshold,
+            // and upgrade existing history entries to completed later if needed.
+            if (isInWatchHistory && (!wasInWatchHistory || !wasCompleted)) {
+              useWatchHistoryStore
+                .getState()
+                .addItem(meta, progress, isCompleted);
             }
             return;
           }
@@ -180,16 +199,18 @@ export const useProgressStore = create(
             };
 
           const episodeItem = item.episodes[meta.episode.tmdbId];
-          const wasCompleted =
-            episodeItem.progress.duration > 0 &&
-            episodeItem.progress.watched / episodeItem.progress.duration > 0.9;
+          const previousProgress = episodeItem.progress;
+          const wasInWatchHistory =
+            hasReachedWatchHistoryThreshold(previousProgress);
+          const wasCompleted = hasCompletedWatchHistoryItem(previousProgress);
           episodeItem.progress = { ...progress };
 
-          // Update watch history only if becoming completed
-          const isCompleted =
-            progress.duration > 0 && progress.watched / progress.duration > 0.9;
-          if (isCompleted && !wasCompleted) {
-            useWatchHistoryStore.getState().addItem(meta, progress, true);
+          const isInWatchHistory = hasReachedWatchHistoryThreshold(progress);
+          const isCompleted = hasCompletedWatchHistoryItem(progress);
+          if (isInWatchHistory && (!wasInWatchHistory || !wasCompleted)) {
+            useWatchHistoryStore
+              .getState()
+              .addItem(meta, progress, isCompleted);
           }
         });
       },
