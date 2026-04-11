@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
 import { convertSubtitlesToObjectUrl } from "@/components/player/utils/captions";
@@ -41,22 +41,25 @@ export function useShouldShowVideoElement() {
 }
 
 function useObjectUrl(cb: () => string | null, deps: any[]) {
-  const lastObjectUrl = useRef<string | null>(null);
-  const output = useMemo(() => {
-    if (lastObjectUrl.current) URL.revokeObjectURL(lastObjectUrl.current);
-    const data = cb();
-    lastObjectUrl.current = data;
-    return data;
+  const [output, setOutput] = useState<string | null>(null);
+
+  useEffect(() => {
+    const nextUrl = cb();
+    setOutput((previousUrl) => {
+      if (previousUrl && previousUrl !== nextUrl) {
+        URL.revokeObjectURL(previousUrl);
+      }
+      return nextUrl;
+    });
+
+    return () => {
+      if (nextUrl) {
+        URL.revokeObjectURL(nextUrl);
+      }
+    };
     // deps are passed in, cb is known not to be changed
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
-
-  useEffect(() => {
-    return () => {
-      // this is intentionally done only in cleanup
-      if (lastObjectUrl.current) URL.revokeObjectURL(lastObjectUrl.current);
-    };
-  }, []);
 
   return output;
 }

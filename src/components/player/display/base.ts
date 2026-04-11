@@ -1,5 +1,5 @@
 import fscreen from "fscreen";
-import Hls, { Level } from "hls.js";
+import Hls, { ErrorData, ErrorDetails, Level } from "hls.js";
 
 import {
   RULE_IDS,
@@ -52,6 +52,21 @@ const qualityThresholds = [
   { minHeight: 0, quality: "360" as SourceQuality },
 ];
 const MIN_AUTOPLAY_BUFFER_SECONDS = 3;
+const RECOVERABLE_HLS_BUFFER_ERRORS = new Set<string>([
+  ErrorDetails.BUFFER_STALLED_ERROR,
+  ErrorDetails.BUFFER_NUDGE_ON_STALL,
+  ErrorDetails.BUFFER_SEEK_OVER_HOLE,
+]);
+const RECOVERABLE_HLS_NETWORK_ERRORS = new Set<string>([
+  ErrorDetails.KEY_LOAD_ERROR,
+  ErrorDetails.KEY_LOAD_TIMEOUT,
+  ErrorDetails.FRAG_LOAD_ERROR,
+  ErrorDetails.FRAG_LOAD_TIMEOUT,
+  ErrorDetails.AUDIO_TRACK_LOAD_ERROR,
+  ErrorDetails.AUDIO_TRACK_LOAD_TIMEOUT,
+  ErrorDetails.LEVEL_LOAD_ERROR,
+  ErrorDetails.LEVEL_LOAD_TIMEOUT,
+]);
 
 function hlsLevelToQuality(level?: Level): SourceQuality | null {
   if (!level?.height) return null;
@@ -81,6 +96,14 @@ function sortLevelsByQuality(levels: Level[]): Level[] {
   return [...levels].sort((a, b) => (b.height || 0) - (a.height || 0));
 }
 
+function isRecoverableHlsBufferIssue(data: ErrorData) {
+  return RECOVERABLE_HLS_BUFFER_ERRORS.has(data.details);
+}
+
+function isRecoverableHlsNetworkIssue(data: ErrorData) {
+  return !data.fatal && RECOVERABLE_HLS_NETWORK_ERRORS.has(data.details);
+}
+
 export function makeVideoElementDisplayInterface(): DisplayInterface {
   const { emit, on, off } = makeEmitter<DisplayInterfaceEvents>();
   let source: LoadableSource | null = null;
@@ -100,6 +123,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let shouldAutoplayAfterLoad = false; // Flag to track if we should autoplay after loading completes
   let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
   let qualitySetupRetryTimeout: NodeJS.Timeout | null = null; // Retry manual quality setup after manifest load
+  let hlsRecoveryTimeout: NodeJS.Timeout | null = null; // Throttle recovery attempts for transient HLS failures
 
   const languagePromises = new Map<
     string,
@@ -151,6 +175,37 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           emit("pause", undefined);
         }
       });
+  }
+
+  function clearHlsRecoveryTimeout() {
+    if (hlsRecoveryTimeout) {
+      clearTimeout(hlsRecoveryTimeout);
+      hlsRecoveryTimeout = null;
+    }
+  }
+
+  function scheduleHlsRecovery() {
+    if (hlsRecoveryTimeout) return;
+
+    hlsRecoveryTimeout = setTimeout(() => {
+      hlsRecoveryTimeout = null;
+      if (!hls || !videoElement || isSeeking || videoElement.ended) return;
+
+      const currentTime = videoElement.currentTime ?? 0;
+      const bufferAhead = getBufferedAhead();
+      const notReadyForPlayback = videoElement.readyState < 3;
+
+      // Only intervene if playback still looks starved after hls.js had time to recover on its own.
+      if (!notReadyForPlayback && bufferAhead >= 1.5) return;
+
+      if (hls.currentLevel > 0) {
+        hls.nextLevel = hls.currentLevel - 1;
+      }
+
+      emit("loading", true);
+      hls.startLoad(currentTime);
+      tryAutoplayWhenReady();
+    }, 1500);
   }
 
   function reportLevels() {
@@ -236,6 +291,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       clearTimeout(qualitySetupRetryTimeout);
       qualitySetupRetryTimeout = null;
     }
+    clearHlsRecoveryTimeout();
     if (src.type === "hls") {
       if (canPlayHlsNatively(vid)) {
         vid.src = processCdnLink(src.url);
@@ -273,7 +329,16 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           "Failed to execute 'appendBuffer' on 'SourceBuffer': This SourceBuffer has been removed from the parent media source.",
         ];
         hls?.on(Hls.Events.ERROR, (event, data) => {
-          console.error("HLS error", data);
+          if (isRecoverableHlsBufferIssue(data)) {
+            emit("loading", true);
+            console.warn("HLS buffering event", data);
+          } else if (isRecoverableHlsNetworkIssue(data)) {
+            emit("loading", true);
+            scheduleHlsRecovery();
+            console.warn("HLS recoverable network event", data);
+          } else {
+            console.error("HLS error", data);
+          }
 
           // Extract detailed HLS error information
           const hlsErrorInfo = {
@@ -301,15 +366,22 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
             url: (data as any).url,
           };
 
+          if (isRecoverableHlsBufferIssue(data)) {
+            return;
+          }
+          if (isRecoverableHlsNetworkIssue(data)) {
+            return;
+          }
+
           if (
             data.fatal &&
             src?.url === data.frag?.baseurl &&
-            !exceptions.includes(data.error.message)
+            !exceptions.includes(data.error?.message ?? "")
           ) {
             emit("error", {
-              message: data.error.message,
-              stackTrace: data.error.stack,
-              errorName: data.error.name,
+              message: data.error?.message,
+              stackTrace: data.error?.stack,
+              errorName: data.error?.name ?? "HLSError",
               type: "hls",
               hls: hlsErrorInfo,
             });
@@ -323,6 +395,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
               hls: hlsErrorInfo,
             });
           }
+        });
+        hls.on(Hls.Events.STALL_RESOLVED, () => {
+          clearHlsRecoveryTimeout();
+          emit("loading", false);
         });
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
           if (!hls) return;
@@ -572,6 +648,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       clearTimeout(qualitySetupRetryTimeout);
       qualitySetupRetryTimeout = null;
     }
+    clearHlsRecoveryTimeout();
 
     if (videoElement) {
       videoElement.removeAttribute("src");
@@ -600,6 +677,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       clearTimeout(qualitySetupRetryTimeout);
       qualitySetupRetryTimeout = null;
     }
+    clearHlsRecoveryTimeout();
   }
 
   function fullscreenChange() {
