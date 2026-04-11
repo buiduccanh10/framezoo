@@ -248,8 +248,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       if (!hls) {
         hls = new Hls({
           autoStartLoad: false,
-          maxBufferLength: 120, // 120 seconds
-          maxMaxBufferLength: 240,
+          maxBufferLength: 240, // 240 seconds
+          maxMaxBufferLength: 480,
           abrEwmaDefaultEstimate: 5 * 1000 * 1000, // 5 Mbps default bandwidth estimate for better ABR decisions
           fragLoadPolicy: {
             default: {
