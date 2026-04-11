@@ -321,11 +321,17 @@ export function MediaCarousel({
     if (moreLink) return moreLink;
 
     const baseLink = `/discover/more`;
+    const resolvedGenreId = forcedGenreId || selectedGenreId;
+
+    if (resolvedGenreId) {
+      return `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
+    }
+
     if (showProviders && selectedProviderId) {
       return `${baseLink}/provider/${selectedProviderId}/${mediaType}`;
     }
     if (showGenres && selectedGenreId) {
-      return `${baseLink}/genre/${selectedGenreId}/${mediaType}`;
+      return `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
     }
     if (showRecommendations && selectedRecommendationId) {
       return `${baseLink}/recommendations/${selectedRecommendationId}/${mediaType}`;
@@ -337,6 +343,7 @@ export function MediaCarousel({
     selectedProviderId,
     showGenres,
     selectedGenreId,
+    forcedGenreId,
     showRecommendations,
     selectedRecommendationId,
     mediaType,

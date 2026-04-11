@@ -194,7 +194,7 @@ export function HomePage() {
       )}
 
       {/* User Content */}
-      {!search && renderHomeSections()}
+      {/* {!search && renderHomeSections()} */}
 
       {/* Under user content */}
       <WideContainer ultraWide classNames="!px-3 md:!px-9">

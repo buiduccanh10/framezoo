@@ -22,6 +22,7 @@ export interface UseDiscoverMediaProps {
   id?: string;
   fallbackType?: DiscoverContentType;
   page?: number;
+  releaseYear?: string;
   genreName?: string;
   providerName?: string;
   mediaTitle?: string;

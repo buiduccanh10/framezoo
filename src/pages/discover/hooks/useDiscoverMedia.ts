@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { get } from "@/backend/metadata/tmdb";
@@ -85,6 +85,7 @@ export function useDiscoverMedia({
   id,
   fallbackType,
   page = 1,
+  releaseYear,
   genreName,
   providerName,
   mediaTitle,
@@ -104,6 +105,13 @@ export function useDiscoverMedia({
   const { t } = useTranslation();
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
+  const releaseYearParams = useMemo(
+    () =>
+      mediaType === "movie" && releaseYear
+        ? { primary_release_year: releaseYear }
+        : {},
+    [mediaType, releaseYear],
+  );
 
   // Reset media when content type or media type changes
   useEffect(() => {
@@ -149,6 +157,24 @@ export function useDiscoverMedia({
     [formattedLanguage, page, mediaType, isCarouselView],
   );
 
+  const filterResultsByReleaseYear = useCallback(
+    (data: { results: DiscoverMedia[]; hasMore: boolean }) => {
+      if (!releaseYear) {
+        return data;
+      }
+
+      return {
+        ...data,
+        results: data.results.filter((item) => {
+          const releaseDate =
+            mediaType === "movie" ? item.release_date : item.first_air_date;
+          return releaseDate?.startsWith(`${releaseYear}-`);
+        }),
+      };
+    },
+    [mediaType, releaseYear],
+  );
+
   const fetchEditorPicks = useCallback(async () => {
     const picks =
       mediaType === "movie" ? EDITOR_PICKS_MOVIES : EDITOR_PICKS_TV_SHOWS;
@@ -171,20 +197,27 @@ export function useDiscoverMedia({
       });
 
       const results = await Promise.all(mediaPromises);
-      return {
+      return filterResultsByReleaseYear({
         results,
         hasMore: picks.length > picksToFetch.length,
-      };
+      });
     } catch (err) {
       console.error("Error fetching editor picks:", err);
       throw err;
     }
-  }, [mediaType, formattedLanguage, isCarouselView]);
+  }, [
+    mediaType,
+    formattedLanguage,
+    isCarouselView,
+    filterResultsByReleaseYear,
+  ]);
 
   const fetchRecommendations = useCallback(
     async (mediaId: string) =>
-      fetchTMDBMedia(`/${mediaType}/${mediaId}/recommendations`),
-    [fetchTMDBMedia, mediaType],
+      filterResultsByReleaseYear(
+        await fetchTMDBMedia(`/${mediaType}/${mediaId}/recommendations`),
+      ),
+    [fetchTMDBMedia, filterResultsByReleaseYear, mediaType],
   );
 
   const fetchMedia = useCallback(async () => {
@@ -217,12 +250,23 @@ export function useDiscoverMedia({
       // Map content types to their endpoints and handling logic
       switch (type) {
         case "popular":
-          data = await fetchTMDBMedia(`/${mediaType}/popular`);
+          data = releaseYear
+            ? await fetchTMDBMedia(`/discover/${mediaType}`, {
+                sort_by: "popularity.desc",
+                ...releaseYearParams,
+              })
+            : await fetchTMDBMedia(`/${mediaType}/popular`);
           setSectionTitle(t("discover.carousel.title.popular"));
           break;
 
         case "topRated":
-          data = await fetchTMDBMedia(`/${mediaType}/top_rated`);
+          data = releaseYear
+            ? await fetchTMDBMedia(`/discover/${mediaType}`, {
+                sort_by: "vote_average.desc",
+                "vote_count.gte": 200,
+                ...releaseYearParams,
+              })
+            : await fetchTMDBMedia(`/${mediaType}/top_rated`);
           setSectionTitle(t("discover.carousel.title.topRated"));
           break;
 
@@ -237,7 +281,12 @@ export function useDiscoverMedia({
 
         case "nowPlaying":
           if (mediaType === "movie") {
-            data = await fetchTMDBMedia("/movie/now_playing");
+            data = releaseYear
+              ? await fetchTMDBMedia("/discover/movie", {
+                  sort_by: "primary_release_date.desc",
+                  ...releaseYearParams,
+                })
+              : await fetchTMDBMedia("/movie/now_playing");
             setSectionTitle(t("discover.carousel.title.inCinemas"));
           } else {
             throw new Error("nowPlaying is only available for movies");
@@ -249,6 +298,7 @@ export function useDiscoverMedia({
 
           data = await fetchTMDBMedia(`/discover/${mediaType}`, {
             with_genres: id,
+            ...releaseYearParams,
           });
           setSectionTitle(
             mediaType === "movie"
@@ -264,12 +314,14 @@ export function useDiscoverMedia({
           data = await fetchTMDBMedia(`/discover/${mediaType}`, {
             with_watch_providers: id,
             watch_region: "US",
+            ...releaseYearParams,
           });
           if (data.results.length === 0 && formattedLanguage !== "en-US") {
             data = await fetchTMDBMedia(`/discover/${mediaType}`, {
               with_watch_providers: id,
               watch_region: "US",
               language: "en-US",
+              ...releaseYearParams,
             });
           }
           setSectionTitle(
@@ -309,25 +361,50 @@ export function useDiscoverMedia({
           if (!mediaTitle) throw new Error("Search title is required");
           data = await fetchTMDBMedia(`/search/${mediaType}`, {
             query: mediaTitle,
+            ...(mediaType === "movie" && releaseYear
+              ? { year: releaseYear }
+              : {}),
           });
           setSectionTitle(t("discover.page.title"));
           break;
 
         case "top10":
-          data = await fetchTMDBMedia(`/${mediaType}/top_rated`);
+          data = releaseYear
+            ? await fetchTMDBMedia(`/discover/${mediaType}`, {
+                sort_by: "vote_average.desc",
+                "vote_count.gte": 200,
+                ...releaseYearParams,
+              })
+            : await fetchTMDBMedia(`/${mediaType}/top_rated`);
           setSectionTitle(t("discover.carousel.title.top10"));
           data.results = data.results.slice(0, 10);
           break;
 
         case "latest":
           data = await fetchTMDBMedia(
-            mediaType === "movie" ? "/movie/now_playing" : "/tv/on_the_air",
+            mediaType === "movie" && releaseYear
+              ? "/discover/movie"
+              : mediaType === "movie"
+                ? "/movie/now_playing"
+                : "/tv/on_the_air",
+            mediaType === "movie" && releaseYear
+              ? {
+                  sort_by: "primary_release_date.desc",
+                  ...releaseYearParams,
+                }
+              : undefined,
           );
           setSectionTitle(t("discover.carousel.title.latestReleases"));
           break;
 
         case "latest4k":
-          data = await fetchTMDBMedia(`/${mediaType}/top_rated`);
+          data = releaseYear
+            ? await fetchTMDBMedia(`/discover/${mediaType}`, {
+                sort_by: "vote_average.desc",
+                "vote_count.gte": 200,
+                ...releaseYearParams,
+              })
+            : await fetchTMDBMedia(`/${mediaType}/top_rated`);
           setSectionTitle(t("discover.carousel.title.4kReleases"));
           data.results = data.results.slice(0, 20);
           break;
@@ -341,7 +418,7 @@ export function useDiscoverMedia({
           throw new Error(`Unsupported content type: ${type}`);
       }
 
-      return data;
+      return filterResultsByReleaseYear(data);
     };
 
     try {
@@ -382,10 +459,13 @@ export function useDiscoverMedia({
     mediaType,
     id,
     fallbackType,
+    releaseYear,
+    releaseYearParams,
     genreName,
     providerName,
     mediaTitle,
     fetchTMDBMedia,
+    filterResultsByReleaseYear,
     fetchEditorPicks,
     fetchRecommendations,
     t,

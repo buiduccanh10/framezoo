@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
 import { Button } from "@/components/buttons/Button";
@@ -36,6 +36,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   const [selectedRecommendationId, setSelectedRecommendationId] =
     useState<string>("");
   const [isContentVisible, setIsContentVisible] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showModal } = useOverlayStack();
@@ -67,6 +68,34 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   const actualContentType = contentType || category?.split("-")[0] || "popular";
   const actualMediaType =
     mediaType || (category?.endsWith("-tv") ? "tv" : "movie");
+  const selectedReleaseYear =
+    actualMediaType === "movie"
+      ? searchParams.get("year")?.match(/^\d{4}$/)?.[0] || ""
+      : "";
+  const yearOptions: OptionItem[] = React.useMemo(() => {
+    if (actualMediaType !== "movie") {
+      return [];
+    }
+
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: currentYear - 1899 }, (_, index) => {
+      const year = (currentYear - index).toString();
+      return { id: year, name: year };
+    });
+
+    return [
+      {
+        id: "",
+        name: t("home.bookmarks.edit.yearLabel"),
+      },
+      ...years,
+    ];
+  }, [actualMediaType, t]);
+  const selectedYearOption =
+    yearOptions.find((option) => option.id === selectedReleaseYear) ||
+    yearOptions[0];
+  const queryString = searchParams.toString();
+  const searchSuffix = queryString ? `?${queryString}` : "";
 
   // Fetch media using our hook
   const {
@@ -83,6 +112,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
       selectedGenre?.id ||
       selectedRecommendationId,
     page: currentPage,
+    releaseYear: selectedReleaseYear || undefined,
     genreName: selectedGenre?.name,
     providerName: selectedProvider?.name,
     mediaTitle: selectedRecommendationSource?.title,
@@ -104,7 +134,16 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   // Scroll to top when entering the page
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [contentType, mediaType, id]);
+  }, [contentType, mediaType, id, selectedReleaseYear]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [contentType, mediaType, id, category, selectedReleaseYear]);
+
+  const buildMoreRoute = React.useCallback(
+    (basePath: string) => `${basePath}${searchSuffix}`,
+    [searchSuffix],
+  );
 
   const handleBack = () => {
     if (lastView) {
@@ -151,13 +190,21 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   useEffect(() => {
     if (contentType === "provider" && selectedProvider) {
       navigate(
-        `/discover/more/provider/${selectedProvider.id}/${actualMediaType}`,
+        buildMoreRoute(
+          `/discover/more/provider/${selectedProvider.id}/${actualMediaType}`,
+        ),
       );
     } else if (contentType === "genre" && selectedGenre) {
-      navigate(`/discover/more/genre/${selectedGenre.id}/${actualMediaType}`);
+      navigate(
+        buildMoreRoute(
+          `/discover/more/genre/${selectedGenre.id}/${actualMediaType}`,
+        ),
+      );
     } else if (contentType === "recommendations" && selectedRecommendationId) {
       navigate(
-        `/discover/more/recommendations/${selectedRecommendationId}/${actualMediaType}`,
+        buildMoreRoute(
+          `/discover/more/recommendations/${selectedRecommendationId}/${actualMediaType}`,
+        ),
       );
     }
   }, [
@@ -166,6 +213,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
     selectedRecommendationId,
     contentType,
     actualMediaType,
+    buildMoreRoute,
     navigate,
   ]);
 
@@ -229,7 +277,10 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                       }
                     : { id: "", name: "..." }
                 }
-                setSelectedItem={(item) => setSelectedRecommendationId(item.id)}
+                setSelectedItem={(item) => {
+                  setCurrentPage(1);
+                  setSelectedRecommendationId(item.id);
+                }}
                 options={recommendationSources.map((source) => ({
                   id: source.id,
                   name: source.title,
@@ -261,6 +312,43 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
             <Icon className="text-xl" icon={Icons.ARROW_LEFT} />
             <span className="ml-2">{t("discover.page.back")}</span>
           </button>
+          {/* {actualMediaType === "movie" && selectedYearOption && (
+            <div className="relative pr-2">
+              <Dropdown
+                selectedItem={selectedYearOption}
+                setSelectedItem={(item) => {
+                  setCurrentPage(1);
+                  const nextParams = new URLSearchParams(searchParams);
+                  if (item.id) {
+                    nextParams.set("year", item.id);
+                  } else {
+                    nextParams.delete("year");
+                  }
+                  setSearchParams(nextParams);
+                }}
+                options={yearOptions}
+                customButton={
+                  <button
+                    type="button"
+                    className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                  >
+                    <span>
+                      {selectedReleaseYear
+                        ? `${t("home.bookmarks.edit.yearLabel")}: ${selectedReleaseYear}`
+                        : t("home.bookmarks.edit.yearLabel")}
+                    </span>
+                    <Icon
+                      icon={Icons.UP_DOWN_ARROW}
+                      className="text-xs text-dropdown-secondary"
+                    />
+                  </button>
+                }
+                side="right"
+                preventWrap
+                className="!my-0"
+              />
+            </div>
+          )} */}
         </div>
 
         {(contentType === "provider" || contentType === "genre") && (
@@ -270,6 +358,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                 type="button"
                 key={item.id}
                 onClick={() => {
+                  setCurrentPage(1);
                   if (contentType === "provider") {
                     setSelectedProvider({ id: item.id, name: item.name });
                   } else {
@@ -298,6 +387,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                       : selectedGenre || { id: "", name: "..." }
                   }
                   setSelectedItem={(item) => {
+                    setCurrentPage(1);
                     if (contentType === "provider") {
                       setSelectedProvider(item);
                     } else {
@@ -322,6 +412,44 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                     </button>
                   }
                   side="right"
+                />
+              </div>
+            )}
+
+            {actualMediaType === "movie" && selectedYearOption && (
+              <div className="relative pr-2">
+                <Dropdown
+                  selectedItem={selectedYearOption}
+                  setSelectedItem={(item) => {
+                    setCurrentPage(1);
+                    const nextParams = new URLSearchParams(searchParams);
+                    if (item.id) {
+                      nextParams.set("year", item.id);
+                    } else {
+                      nextParams.delete("year");
+                    }
+                    setSearchParams(nextParams);
+                  }}
+                  options={yearOptions}
+                  customButton={
+                    <button
+                      type="button"
+                      className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                    >
+                      <span>
+                        {selectedReleaseYear
+                          ? `${t("home.bookmarks.edit.yearLabel")}: ${selectedReleaseYear}`
+                          : t("home.bookmarks.edit.yearLabel")}
+                      </span>
+                      <Icon
+                        icon={Icons.UP_DOWN_ARROW}
+                        className="text-xs text-dropdown-secondary"
+                      />
+                    </button>
+                  }
+                  side="right"
+                  preventWrap
+                  className="!my-0"
                 />
               </div>
             )}
