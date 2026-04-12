@@ -24,6 +24,7 @@ export interface InterfaceSlice {
     isCasting: boolean;
     hideNextEpisodeBtn: boolean;
     shouldStartFromBeginning: boolean;
+    skipNextSavedProgressResume: boolean;
     error?: DisplayError;
 
     volumeChangedWithKeybind: boolean; // has the volume recently been adjusted with the up/down arrows recently?
@@ -44,6 +45,7 @@ export interface InterfaceSlice {
   setLastVolume(state: number): void;
   hideNextEpisodeButton(): void;
   setShouldStartFromBeginning(val: boolean): void;
+  setSkipNextSavedProgressResume(val: boolean): void;
   setSpeedBoosted(state: boolean): void;
   setShowSpeedIndicator(state: boolean): void;
 }
@@ -65,6 +67,7 @@ export const createInterfaceSlice: MakeSlice<InterfaceSlice> = (set, get) => ({
     canAirplay: false,
     hideNextEpisodeBtn: false,
     shouldStartFromBeginning: false,
+    skipNextSavedProgressResume: false,
     isSpeedBoosted: false,
     showSpeedIndicator: false,
   },
@@ -72,6 +75,11 @@ export const createInterfaceSlice: MakeSlice<InterfaceSlice> = (set, get) => ({
   setShouldStartFromBeginning(val) {
     set((s) => {
       s.interface.shouldStartFromBeginning = val;
+    });
+  },
+  setSkipNextSavedProgressResume(val) {
+    set((s) => {
+      s.interface.skipNextSavedProgressResume = val;
     });
   },
   setLastVolume(state) {

@@ -22,6 +22,10 @@ export interface ProgressInput {
   updatedAt?: string;
 }
 
+interface ProgressRequestOptions {
+  keepalive?: boolean;
+}
+
 export function progressUpdateItemToInput(
   item: ProgressUpdateItem,
 ): ProgressInput {
@@ -39,6 +43,9 @@ export function progressUpdateItemToInput(
     seasonId: item.seasonId,
     episodeNumber: item.episodeNumber,
     seasonNumber: item.seasonNumber,
+    updatedAt: item.updatedAt
+      ? new Date(item.updatedAt).toISOString()
+      : undefined,
   };
 }
 
@@ -84,6 +91,7 @@ export async function setProgress(
   url: string,
   account: AccountWithToken,
   input: ProgressInput,
+  options?: ProgressRequestOptions,
 ) {
   return ofetch<ProgressResponse>(
     `/users/${account.userId}/progress/${input.tmdbId}`,
@@ -92,6 +100,7 @@ export async function setProgress(
       headers: getAuthHeaders(account.token),
       baseURL: url,
       body: input,
+      keepalive: options?.keepalive,
     },
   );
 }
@@ -102,6 +111,7 @@ export async function removeProgress(
   id: string,
   episodeId?: string,
   seasonId?: string,
+  options?: ProgressRequestOptions,
 ) {
   await ofetch(`/users/${account.userId}/progress/${id}`, {
     method: "DELETE",
@@ -111,5 +121,6 @@ export async function removeProgress(
       episodeId,
       seasonId,
     },
+    keepalive: options?.keepalive,
   });
 }

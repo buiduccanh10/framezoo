@@ -104,6 +104,42 @@ function isRecoverableHlsNetworkIssue(data: ErrorData) {
   return !data.fatal && RECOVERABLE_HLS_NETWORK_ERRORS.has(data.details);
 }
 
+function getHlsErrorMessage(data: ErrorData) {
+  const error = (data.error ?? (data as any).err) as
+    | Error
+    | { message?: string; name?: string }
+    | undefined;
+  return error?.message ?? "";
+}
+
+function getHlsErrorName(data: ErrorData) {
+  const error = (data.error ?? (data as any).err) as
+    | Error
+    | { message?: string; name?: string }
+    | undefined;
+  return error?.name ?? "";
+}
+
+function isDetachedSourceBufferRace(data: ErrorData) {
+  if (
+    data.details !== ErrorDetails.BUFFER_APPEND_ERROR &&
+    data.details !== ErrorDetails.BUFFER_APPENDING_ERROR
+  ) {
+    return false;
+  }
+
+  const errorMessage = getHlsErrorMessage(data);
+  const errorName = getHlsErrorName(data);
+
+  return (
+    errorName === "HlsJsTrackRemovedError" ||
+    errorMessage.includes(
+      "SourceBuffer has been removed from the parent media source",
+    ) ||
+    errorMessage.includes("SourceBuffer, but it does not exist")
+  );
+}
+
 export function makeVideoElementDisplayInterface(): DisplayInterface {
   const { emit, on, off } = makeEmitter<DisplayInterfaceEvents>();
   let source: LoadableSource | null = null;
@@ -325,10 +361,18 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           },
           renderTextTracksNatively: false,
         });
+        const currentHls = hls;
         const exceptions = [
           "Failed to execute 'appendBuffer' on 'SourceBuffer': This SourceBuffer has been removed from the parent media source.",
         ];
         hls?.on(Hls.Events.ERROR, (event, data) => {
+          if (hls !== currentHls) return;
+          if (isDetachedSourceBufferRace(data)) {
+            clearHlsRecoveryTimeout();
+            console.warn("Ignoring transient HLS SourceBuffer race", data);
+            return;
+          }
+
           if (isRecoverableHlsBufferIssue(data)) {
             emit("loading", true);
             console.warn("HLS buffering event", data);
@@ -376,12 +420,12 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           if (
             data.fatal &&
             src?.url === data.frag?.baseurl &&
-            !exceptions.includes(data.error?.message ?? "")
+            !exceptions.includes(getHlsErrorMessage(data))
           ) {
             emit("error", {
-              message: data.error?.message,
+              message: getHlsErrorMessage(data),
               stackTrace: data.error?.stack,
-              errorName: data.error?.name ?? "HLSError",
+              errorName: getHlsErrorName(data) || "HLSError",
               type: "hls",
               hls: hlsErrorInfo,
             });
@@ -397,10 +441,12 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           }
         });
         hls.on(Hls.Events.STALL_RESOLVED, () => {
+          if (hls !== currentHls) return;
           clearHlsRecoveryTimeout();
           emit("loading", false);
         });
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
+          if (hls !== currentHls) return;
           if (!hls) return;
           reportLevels();
           setupQualityForHls();

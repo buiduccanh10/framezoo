@@ -49,6 +49,7 @@ export interface ProgressUpdateItem {
   poster?: string;
   type?: "show" | "movie";
   progress?: ProgressItem;
+  updatedAt?: number;
   tmdbId: string;
   id: string;
   episodeId?: string;
@@ -76,6 +77,7 @@ export interface ProgressStore {
   clear(): void;
   clearUpdateQueue(): void;
   removeUpdateItem(id: string): void;
+  removeUpdateItems(ids: string[]): void;
 }
 
 let updateId = 0;
@@ -119,6 +121,7 @@ export const useProgressStore = create(
       },
       updateItem({ meta, progress }) {
         set((s) => {
+          const now = Date.now();
           // add to updateQueue
           updateId += 1;
           s.updateQueue.push({
@@ -128,6 +131,7 @@ export const useProgressStore = create(
             poster: meta.poster,
             type: meta.type,
             progress: { ...progress },
+            updatedAt: now,
             id: updateId.toString(),
             episodeId: meta.episode?.tmdbId,
             seasonId: meta.season?.tmdbId,
@@ -148,7 +152,7 @@ export const useProgressStore = create(
               poster: meta.poster,
             };
           const item = s.items[meta.tmdbId];
-          item.updatedAt = Date.now();
+          item.updatedAt = now;
 
           if (meta.type === "movie") {
             if (!item.progress)
@@ -204,6 +208,7 @@ export const useProgressStore = create(
             hasReachedWatchHistoryThreshold(previousProgress);
           const wasCompleted = hasCompletedWatchHistoryItem(previousProgress);
           episodeItem.progress = { ...progress };
+          episodeItem.updatedAt = now;
 
           const isInWatchHistory = hasReachedWatchHistoryThreshold(progress);
           const isCompleted = hasCompletedWatchHistoryItem(progress);
@@ -227,6 +232,14 @@ export const useProgressStore = create(
       removeUpdateItem(id: string) {
         set((s) => {
           s.updateQueue = [...s.updateQueue.filter((v) => v.id !== id)];
+        });
+      },
+      removeUpdateItems(ids: string[]) {
+        if (ids.length === 0) return;
+
+        const queuedIds = new Set(ids);
+        set((s) => {
+          s.updateQueue = s.updateQueue.filter((v) => !queuedIds.has(v.id));
         });
       },
       modifyProgressItems(
@@ -259,6 +272,7 @@ export const useProgressStore = create(
                   poster: progressItem.poster,
                   type: progressItem.type,
                   progress: progressItem.progress,
+                  updatedAt: progressItem.updatedAt,
                 });
               }
             });

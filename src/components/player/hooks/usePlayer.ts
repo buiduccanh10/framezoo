@@ -7,27 +7,12 @@ import {
 } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { SourceSliceSource } from "@/stores/player/utils/qualities";
-import { ProgressMediaItem, useProgressStore } from "@/stores/progress";
+import { useProgressStore } from "@/stores/progress";
+import { getSavedProgressTime } from "@/stores/progress/selectors";
 
 export interface Source {
   url: string;
   type: "hls" | "mp4";
-}
-
-function getProgress(
-  items: Record<string, ProgressMediaItem>,
-  meta: PlayerMeta | null,
-): number {
-  const item = items[meta?.tmdbId ?? ""];
-  if (!item || !meta) return 0;
-  if (meta.type === "movie") {
-    if (!item.progress) return 0;
-    return item.progress.watched;
-  }
-
-  const ep = item.episodes[meta.episode?.tmdbId ?? ""];
-  if (!ep) return 0;
-  return ep.progress.watched;
 }
 
 export function usePlayer() {
@@ -65,7 +50,8 @@ export function usePlayer() {
       sourceId: string | null,
       startAtOverride?: number,
     ) {
-      const start = startAtOverride ?? getProgress(progressStore.items, meta);
+      const start =
+        startAtOverride ?? getSavedProgressTime(progressStore.items, meta);
       setCaption(null);
       setEmbedId(null);
       setSource(source, captions, start);

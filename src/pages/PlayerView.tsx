@@ -28,6 +28,7 @@ import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
+import { getSavedProgressItem } from "@/stores/progress/selectors";
 import { needsOnboarding } from "@/utils/onboarding";
 import { parseTimestamp } from "@/utils/timestamp";
 
@@ -64,6 +65,9 @@ export function RealPlayerView() {
     setShouldStartFromBeginning,
     setStatus,
   } = usePlayer();
+  const setSkipNextSavedProgressResume = usePlayerStore(
+    (s) => s.setSkipNextSavedProgressResume,
+  );
   const sourceId = usePlayerStore((s) => s.sourceId);
   const { setPlayerMeta, scrapeMedia } = usePlayerMeta();
   const backUrl = useLastNonPlayerLink();
@@ -138,31 +142,14 @@ export function RealPlayerView() {
   // Check if episode is more than 80% watched
   const shouldShowResumeScreen = useCallback(
     (meta: PlayerMeta) => {
-      if (!meta?.tmdbId) return false;
+      const savedProgress = getSavedProgressItem(progressItems, meta);
+      if (!savedProgress) return false;
 
-      const item = progressItems[meta.tmdbId];
-      if (!item) return false;
-
-      if (meta.type === "movie") {
-        if (!item.progress) return false;
-        const percentage = getProgressPercentage(
-          item.progress.watched,
-          item.progress.duration,
-        );
-        return percentage > 80;
-      }
-
-      if (meta.type === "show" && meta.episode?.tmdbId) {
-        const episode = item.episodes?.[meta.episode.tmdbId];
-        if (!episode) return false;
-        const percentage = getProgressPercentage(
-          episode.progress.watched,
-          episode.progress.duration,
-        );
-        return percentage > 80;
-      }
-
-      return false;
+      const percentage = getProgressPercentage(
+        savedProgress.watched,
+        savedProgress.duration,
+      );
+      return percentage > 80;
     },
     [progressItems],
   );
@@ -183,8 +170,9 @@ export function RealPlayerView() {
 
   const handleRestart = useCallback(() => {
     setShouldStartFromBeginning(true);
+    setSkipNextSavedProgressResume(true);
     setStatus(playerStatus.SCRAPING);
-  }, [setShouldStartFromBeginning, setStatus]);
+  }, [setShouldStartFromBeginning, setSkipNextSavedProgressResume, setStatus]);
 
   const handleResumeScraping = useCallback(
     (startFromSourceId: string) => {

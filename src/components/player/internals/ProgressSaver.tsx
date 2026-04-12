@@ -1,9 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useInterval } from "react-use";
 
-import { playerStatus } from "@/stores/player/slices/source";
+import { getMediaKey, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { ProgressItem, useProgressStore } from "@/stores/progress";
+import { getSavedProgressItem } from "@/stores/progress/selectors";
+
+const LATE_RESUME_WINDOW_SECONDS = 15;
+const LATE_RESUME_TOLERANCE_SECONDS = 5;
 
 function progressIsNotStarted(duration: number, watched: number): boolean {
   // too short watch time
@@ -59,12 +63,25 @@ function shouldSaveProgress(
 export function ProgressSaver() {
   const meta = usePlayerStore((s) => s.meta);
   const progress = usePlayerStore((s) => s.progress);
+  const display = usePlayerStore((s) => s.display);
   const updateItem = useProgressStore((s) => s.updateItem);
   const progressItems = useProgressStore((s) => s.items);
   const status = usePlayerStore((s) => s.status);
   const hasPlayedOnce = usePlayerStore((s) => s.mediaPlaying.hasPlayedOnce);
+  const shouldStartFromBeginning = usePlayerStore(
+    (s) => s.interface.shouldStartFromBeginning,
+  );
+  const skipNextSavedProgressResume = usePlayerStore(
+    (s) => s.interface.skipNextSavedProgressResume,
+  );
+  const setSkipNextSavedProgressResume = usePlayerStore(
+    (s) => s.setSkipNextSavedProgressResume,
+  );
 
   const lastSavedRef = useRef<ProgressItem | null>(null);
+  const handledLateResumeMediaKeyRef = useRef<string | null>(null);
+  const mediaKey = getMediaKey(meta);
+  const savedProgress = getSavedProgressItem(progressItems, meta);
 
   const dataRef = useRef({
     updateItem,
@@ -83,23 +100,72 @@ export function ProgressSaver() {
     dataRef.current.hasPlayedOnce = hasPlayedOnce;
   }, [updateItem, progressItems, progress, meta, status, hasPlayedOnce]);
 
+  useEffect(() => {
+    if (!mediaKey) {
+      handledLateResumeMediaKeyRef.current = null;
+      return;
+    }
+
+    if (handledLateResumeMediaKeyRef.current !== mediaKey) {
+      handledLateResumeMediaKeyRef.current = null;
+    }
+  }, [mediaKey]);
+
+  useEffect(() => {
+    if (!mediaKey || !skipNextSavedProgressResume) return;
+
+    handledLateResumeMediaKeyRef.current = mediaKey;
+    setSkipNextSavedProgressResume(false);
+  }, [mediaKey, setSkipNextSavedProgressResume, skipNextSavedProgressResume]);
+
+  useEffect(() => {
+    if (!mediaKey || handledLateResumeMediaKeyRef.current === mediaKey) return;
+    if (!display || status !== playerStatus.PLAYING) return;
+    if (shouldStartFromBeginning || !savedProgress) return;
+    if (savedProgress.duration <= 0 || savedProgress.watched <= 0) return;
+
+    const currentTime = progress.time;
+    if (currentTime > LATE_RESUME_WINDOW_SECONDS) {
+      if (
+        Math.abs(savedProgress.watched - currentTime) <=
+        LATE_RESUME_TOLERANCE_SECONDS
+      ) {
+        handledLateResumeMediaKeyRef.current = mediaKey;
+      }
+      return;
+    }
+
+    if (progress.duration <= 0) return;
+
+    display.setTime(savedProgress.watched);
+    handledLateResumeMediaKeyRef.current = mediaKey;
+  }, [
+    display,
+    mediaKey,
+    progress.duration,
+    progress.time,
+    savedProgress,
+    shouldStartFromBeginning,
+    status,
+  ]);
+
   useInterval(() => {
     const d = dataRef.current;
     if (!d.progress || !d.meta || !d.updateItem) return;
     if (d.status !== playerStatus.PLAYING) return;
-    if (!hasPlayedOnce) return;
+    if (!d.hasPlayedOnce) return;
 
     let isDifferent = false;
     if (!lastSavedRef.current) isDifferent = true;
     else if (
-      lastSavedRef.current?.duration !== progress.duration ||
-      lastSavedRef.current?.watched !== progress.time
+      lastSavedRef.current?.duration !== d.progress.duration ||
+      lastSavedRef.current?.watched !== d.progress.time
     )
       isDifferent = true;
 
     lastSavedRef.current = {
-      duration: progress.duration,
-      watched: progress.time,
+      duration: d.progress.duration,
+      watched: d.progress.time,
     };
     if (
       isDifferent &&

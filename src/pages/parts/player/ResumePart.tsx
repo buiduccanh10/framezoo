@@ -9,6 +9,7 @@ import { ErrorContainer, ErrorLayout } from "@/pages/layouts/ErrorLayout";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
+import { getSavedProgressItem } from "@/stores/progress/selectors";
 
 export interface ResumePartProps {
   onResume: () => void;
@@ -23,29 +24,10 @@ export function ResumePart(props: ResumePartProps) {
 
   // Calculate watch percentage
   const watchPercentage = (() => {
-    if (!meta?.tmdbId) return 0;
+    const savedProgress = getSavedProgressItem(progressItems, meta);
+    if (!savedProgress) return 0;
 
-    const item = progressItems[meta.tmdbId];
-    if (!item) return 0;
-
-    if (meta.type === "movie") {
-      if (!item.progress) return 0;
-      return getProgressPercentage(
-        item.progress.watched,
-        item.progress.duration,
-      );
-    }
-
-    if (meta.type === "show" && meta.episode?.tmdbId) {
-      const episode = item.episodes?.[meta.episode.tmdbId];
-      if (!episode) return 0;
-      return getProgressPercentage(
-        episode.progress.watched,
-        episode.progress.duration,
-      );
-    }
-
-    return 0;
+    return getProgressPercentage(savedProgress.watched, savedProgress.duration);
   })();
 
   const roundedPercentage = Math.round(watchPercentage);
