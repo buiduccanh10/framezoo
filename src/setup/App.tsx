@@ -31,8 +31,6 @@ import { MigrationPage } from "@/pages/migration/Migration";
 import { MigrationDirectPage } from "@/pages/migration/MigrationDirect";
 import { MigrationDownloadPage } from "@/pages/migration/MigrationDownload";
 import { MigrationUploadPage } from "@/pages/migration/MigrationUpload";
-import { OnboardingPage } from "@/pages/onboarding/Onboarding";
-import { OnboardingExtensionPage } from "@/pages/onboarding/OnboardingExtension";
 import { RegisterPage } from "@/pages/Register";
 import { WatchHistory } from "@/pages/watchHistory/WatchHistory";
 import { Layout } from "@/setup/Layout";
@@ -160,12 +158,6 @@ function App() {
             />
             <Route path="/browse/:query?" element={<HomePage />} />
             <Route path="/" element={<Navigate to="/discover" replace />} />
-            <Route path="/onboarding" element={<OnboardingPage />} />
-            <Route
-              path="/onboarding/extension"
-              element={<OnboardingExtensionPage />}
-            />
-
             {/* Migration pages */}
             <Route path="/migration" element={<MigrationPage />} />
             <Route path="/migration/direct" element={<MigrationDirectPage />} />

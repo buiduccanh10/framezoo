@@ -48,8 +48,7 @@ export function useLastNonPlayerLink() {
       if (
         !v.path.startsWith("/media") && // cannot be a player link
         location.pathname !== v.path && // cannot be current link
-        !v.path.startsWith("/s/") && // cannot be a quick search link
-        !v.path.startsWith("/onboarding") // cannot be an onboarding link
+        !v.path.startsWith("/s/") // cannot be a quick search link
       ) {
         return v.path;
       }

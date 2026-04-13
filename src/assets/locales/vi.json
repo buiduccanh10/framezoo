@@ -1453,7 +1453,7 @@
       "keyboardShortcutsDescription": "Tùy chỉnh các phím tắt cho ứng dụng. Nhấn giữ ` để xem trợ giúp này bất cứ lúc nào",
       "keyboardShortcutsLabel": "Tùy chỉnh phím tắt bàn phím",
       "sourceOrder": "Sắp xếp lại nguồn",
-      "sourceOrderDescription": "Kéo và thả để sắp xếp lại các nguồn. Thao tác này sẽ xác định thứ tự các nguồn được kiểm tra cho phương tiện bạn đang cố gắng xem. Nếu một nguồn bị mờ đi, điều đó có nghĩa là <bold>tiện ích mở rộng</bold> là bắt buộc đối với nguồn đó. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
+      "sourceOrderDescription": "Kéo và thả để sắp xếp lại các nguồn. Thao tác này sẽ xác định thứ tự các nguồn được kiểm tra cho phương tiện bạn đang cố gắng xem. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
       "sourceOrderEnableLabel": "Thứ tự nguồn tùy chỉnh",
       "showLess": "Hiện ít hơn",
       "showMore": "Hiện thêm",

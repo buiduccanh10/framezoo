@@ -6,7 +6,6 @@ import { SettingsCard } from "@/components/layout/SettingsCard";
 import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Heading1 } from "@/components/utils/Text";
-import { SetupPart } from "@/pages/parts/settings/SetupPart";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -82,7 +81,6 @@ export function ConnectionsPart(props: TIDBKeyProps) {
     <div>
       <Heading1 border>{t("settings.connections.title")}</Heading1>
       <div className="space-y-6">
-        <SetupPart />
         <TIDBEdit tidbKey={props.tidbKey} setTIDBKey={props.setTIDBKey} />
       </div>
     </div>

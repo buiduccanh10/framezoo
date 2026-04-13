@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 import { getAllProviders, getProviders } from "@/backend/providers/providers";
 import { Button } from "@/components/buttons/Button";
@@ -22,7 +21,6 @@ export function EmbedOrderPart({
   setEnableEmbedOrder,
 }: EmbedOrderPartProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const allEmbeds = getAllProviders().listEmbeds();
 
@@ -57,12 +55,7 @@ export function EmbedOrderPart({
           <Trans
             i18nKey="settings.preferences.embedOrderDescription"
             components={{
-              bold: (
-                <span
-                  className="text-type-link font-bold cursor-pointer"
-                  onClick={() => navigate("/onboarding/extension")}
-                />
-              ),
+              bold: <span className="text-type-link font-bold" />,
             }}
           />
           <div

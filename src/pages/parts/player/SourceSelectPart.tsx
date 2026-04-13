@@ -1,8 +1,6 @@
 import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
-import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { getCachedMetadata } from "@/backend/helpers/providerApi";
 import { Loading } from "@/components/layout/Loading";
 import {
@@ -88,8 +86,6 @@ function EmbedSelectionView(props: {
     props.sourceId,
     props.routerId,
   );
-  const showExtensionHint = !isExtensionActiveCached();
-  const navigate = useNavigate();
 
   const sourceName = useMemo(() => {
     if (!props.sourceId) return "...";
@@ -128,23 +124,6 @@ function EmbedSelectionView(props: {
         >
           {t("player.menus.sources.noEmbeds.text")}
         </Menu.TextDisplay>
-        {showExtensionHint && (
-          <div className="px-5 py-3 border-t border-video-context-border flex flex-col items-center text-center">
-            <span className="text-sm text-type-dimmed mb-3">
-              {t("player.menus.sources.extensionHint.noEmbeds")}
-            </span>
-            <a
-              href="/onboarding"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/onboarding");
-              }}
-              className="bg-video-context-light/10 hover:bg-video-context-light/20 text-type-link text-sm font-medium px-4 py-2 rounded-full transition-colors"
-            >
-              {t("player.menus.sources.extensionHint.setupButton")}
-            </a>
-          </div>
-        )}
       </>
     );
   else if (errored)
@@ -155,23 +134,6 @@ function EmbedSelectionView(props: {
         >
           {t("player.menus.sources.failed.text")}
         </Menu.TextDisplay>
-        {showExtensionHint && (
-          <div className="px-5 py-3 border-t border-video-context-border flex flex-col items-center text-center">
-            <span className="text-sm text-type-dimmed mb-3">
-              {t("player.menus.sources.extensionHint.failed")}
-            </span>
-            <a
-              href="/onboarding"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/onboarding");
-              }}
-              className="bg-video-context-light/10 hover:bg-video-context-light/20 text-type-link text-sm font-medium px-4 py-2 rounded-full transition-colors"
-            >
-              {t("player.menus.sources.extensionHint.setupButton")}
-            </a>
-          </div>
-        )}
       </>
     );
   else if (items && props.sourceId)
@@ -200,7 +162,6 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
     null,
   );
   const routerId = "manualSourceSelect";
-  const navigate = useNavigate();
   const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
   const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
   const lastSuccessfulSource = usePreferencesStore(
@@ -269,8 +230,6 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
     enableLastSuccessfulSource,
   ]);
 
-  const showExtensionHint = !isExtensionActiveCached();
-
   if (selectedSourceId) {
     return (
       <div className="h-full w-full flex items-center justify-center">
@@ -302,23 +261,6 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
               </SelectableLink>
             ))}
           </Menu.Section>
-          {showExtensionHint && (
-            <div className="mx-4 mb-4 mt-2 px-4 py-3 bg-video-context-light/5 hover:bg-video-context-light/10 rounded-xl border border-video-context-light/10 flex flex-col items-center text-center transition-colors">
-              <span className="text-sm font-medium text-type-dimmed mb-3">
-                {t("player.menus.sources.extensionHint.moreSources")}
-              </span>
-              <a
-                href="/onboarding"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate("/onboarding");
-                }}
-                className="text-type-link text-sm font-bold w-full py-2 bg-video-context-light/10 hover:bg-video-context-light/20 rounded-lg transition-colors"
-              >
-                {t("player.menus.sources.extensionHint.installButton")}
-              </a>
-            </div>
-          )}
         </Menu.CardWithScrollable>
       </div>
     </div>

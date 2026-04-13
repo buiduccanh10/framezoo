@@ -1438,7 +1438,7 @@
       "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
       "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
       "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
+      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
       "sourceOrderEnableLabel": "Custom source order",
       "showLess": "Show less",
       "showMore": "Show more",

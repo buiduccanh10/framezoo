@@ -43,7 +43,6 @@ import { usePreviewThemeStore, useThemeStore } from "@/stores/theme";
 import { scrollToElement, scrollToHash } from "@/utils/scroll";
 
 import { SubPageLayout } from "./layouts/SubPageLayout";
-import { AppInfoPart } from "./parts/settings/AppInfoPart";
 import { PreferencesPart } from "./parts/settings/PreferencesPart";
 
 function SettingsLayout(props: {
@@ -112,7 +111,6 @@ function SettingsLayout(props: {
         <div className={className}>{props.children}</div>
         <div className="block lg:hidden">
           <Divider />
-          <AppInfoPart />
         </div>
       </div>
     </WideContainer>
