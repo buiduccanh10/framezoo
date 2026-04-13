@@ -1,5 +1,12 @@
 import { Listbox } from "@headlessui/react";
-import React, { Fragment } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import { Transition } from "@/components/utils/Transition";
@@ -19,21 +26,69 @@ interface DropdownProps {
   customButton?: React.ReactNode;
   customMenu?: React.ReactNode;
   className?: string;
+  menuClassName?: string;
   preventWrap?: boolean;
 }
 
 export function Dropdown(props: DropdownProps) {
   const { direction = "down", customButton, customMenu } = props;
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [autoSide, setAutoSide] = useState<"left" | "right">("left");
+  const estimatedMenuWidth = useMemo(() => {
+    const longestOption = props.options.reduce(
+      (max, option) => Math.max(max, option.name.length),
+      0,
+    );
+    return Math.min(420, Math.max(180, longestOption * 9 + 64));
+  }, [props.options]);
+
+  const resolveAutoSide = useCallback(() => {
+    if (props.side || !containerRef.current) return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const spaceToRight = window.innerWidth - rect.left;
+    const spaceToLeft = rect.right;
+
+    if (spaceToRight >= estimatedMenuWidth) {
+      setAutoSide("left");
+      return;
+    }
+
+    if (spaceToLeft >= estimatedMenuWidth) {
+      setAutoSide("right");
+      return;
+    }
+
+    setAutoSide(spaceToRight >= spaceToLeft ? "left" : "right");
+  }, [props.side, estimatedMenuWidth]);
+
+  useEffect(() => {
+    resolveAutoSide();
+    if (props.side) return;
+
+    window.addEventListener("resize", resolveAutoSide);
+    return () => window.removeEventListener("resize", resolveAutoSide);
+  }, [props.side, resolveAutoSide]);
+
+  const effectiveSide = props.side ?? autoSide;
 
   return (
-    <div className={`relative my-4 w-fit max-w-[25rem] ${props.className}`}>
+    <div
+      ref={containerRef}
+      className={`relative my-4 w-fit max-w-[25rem] ${props.className}`}
+    >
       <Listbox value={props.selectedItem} onChange={props.setSelectedItem}>
         {({ open }) => (
           <>
             {customButton ? (
-              <Listbox.Button as={Fragment}>{customButton}</Listbox.Button>
+              <div onMouseDownCapture={resolveAutoSide}>
+                <Listbox.Button as={Fragment}>{customButton}</Listbox.Button>
+              </div>
             ) : (
-              <Listbox.Button className="relative z-[30] w-full rounded-xl bg-dropdown-background hover:bg-dropdown-hoverBackground py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none tabbable cursor-pointer">
+              <Listbox.Button
+                onMouseDown={resolveAutoSide}
+                className="relative z-[30] w-full rounded-xl bg-dropdown-background hover:bg-dropdown-hoverBackground py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none tabbable cursor-pointer"
+              >
                 <span className="flex gap-4 items-center truncate">
                   {props.selectedItem.leftIcon
                     ? props.selectedItem.leftIcon
@@ -53,7 +108,7 @@ export function Dropdown(props: DropdownProps) {
               show={open}
               className={`absolute z-[40] min-w-[20px] w-fit max-h-60 overflow-auto rounded-xl bg-dropdown-background py-1 text-white shadow-lg ring-1 ring-black ring-opacity-5 scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary focus:outline-none ${
                 direction === "up" ? "bottom-full mb-4" : "top-full mt-1"
-              } ${props.side === "right" ? "right-0" : "left-0"}`}
+              } ${effectiveSide === "right" ? "right-0" : "left-0"} ${props.menuClassName ?? ""}`}
             >
               {customMenu ? (
                 <Listbox.Options static as={Fragment}>

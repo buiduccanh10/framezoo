@@ -372,7 +372,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
         </div>
 
         {(contentType === "provider" || contentType === "genre") && (
-          <div className="flex items-center space-x-2 mb-4">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
             {visibleButtons.map((item: any) => (
               <button
                 type="button"
@@ -399,7 +399,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
               </button>
             ))}
             {dropdownButtons.length > 0 && (
-              <div className="relative">
+              <div className="relative whitespace-nowrap">
                 <Dropdown
                   selectedItem={
                     contentType === "provider"
@@ -431,12 +431,11 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                       />
                     </button>
                   }
-                  side="right"
                 />
               </div>
             )}
 
-            <div className="relative pr-2">
+            <div className="relative">
               <Dropdown
                 selectedItem={selectedCountryOption}
                 setSelectedItem={(item) => {
@@ -466,9 +465,6 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                     />
                   </button>
                 }
-                side="right"
-                preventWrap
-                className="!my-0"
               />
             </div>
 
@@ -503,7 +499,6 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                       />
                     </button>
                   }
-                  side="right"
                   preventWrap
                   className="!my-0"
                 />
