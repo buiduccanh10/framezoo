@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix це веб-додаток, який шукає інтернет для стрімінгових відтворень. Команда прагне до мінімалістичного стилю в споживанні контенту.",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "Загальні питання",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "Звідки береться вміст?",
-      "body": "AlphaFlix не зберігає жодного контенту. Коли ви натискаєте щось для перегляду, в Інтернеті виконується пошук вибраного медіа (на екрані завантаження та на вкладці «джерела відео» ви можете побачити, яке джерело ви використовуєте). Медіафайли ніколи не завантажуються за допомогою \"AlphaFlix\", усе відбувається через цей механізм пошуку.",
-      "section": "general"
-    },
-    "q2": {
-      "title": "Де я можу подати запит на шоу чи фільм?",
-      "body": "Неможливо подати запит на шоу чи фільм, оскільки AlphaFlix не керує жодним вмістом. Весь контент переглядається через джерела в Інтернеті.",
-      "section": "search"
-    },
-    "q3": {
-      "title": "Результати пошуку відображають шоу чи фільм, чому я не можу його відтворити?",
-      "body": "Наші результати пошуку надходять від The Movie Database (TMDB) і відображаються незалежно від того, чи насправді є вміст у наших джерелах.",
-      "section": "search"
-    },
-    "q4": {
-      "title": "What about my data and stuff?",
-      "body": "All data is synced to the community backend, anyone is free to use this as well.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "How can I find out more?",
-      "body": "AlphaFlix has a Fluxer server that can be found at the header of this page!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "Про AlphaFlix"
-  },
   "actions": {
+    "cancel": "Скасувати",
+    "confirm": "Підтвердити",
     "copied": "Скопійовано",
-    "copy": "Копіювати",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "Копіювати"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Активний",
+      "confirm": "Підтвердити",
+      "customBackend": "Настроюваний бекенд",
+      "customBackendPlaceholder": "https://",
+      "description": "Виберіть, до якого серверу підключитися",
+      "title": "Виберіть Сервер облікових записів"
+    },
     "createAccount": "У вас ще немає облікового запису? <0>Створити обліковий запис.</0>",
-    "deviceNameLabel": "Ім'я пристрою",
-    "deviceNamePlaceholder": "Особистий телефон",
+    "generate": {
+      "custom": "Custom",
+      "customPassphraseLabel": "Спеціальна парольна фраза",
+      "customPassphrasePlaceholder": "Введіть свою спеціальну парольну фразу",
+      "description": "Ваша парольна фраза виступає як ваше ім'я користувача та пароль. Переконайтеся, що ви зберігаєте його в безпеці, оскільки вам буде потрібно вводити його для входу в свій обліковий запис",
+      "invalidPassphraseCharacters": "Недійсні символи парольної фрази. Допускаються лише англійські літери, цифри 1-10 і звичайні символи.",
+      "next": "Я зберіг(ла) свою парольну фразу",
+      "passphraseFrameLabel": "Парольна фраза",
+      "passphraseTooShort": "Довжина пароля має бути не менше 8 символів.",
+      "title": "Ваша парольна фраза",
+      "useCustomPassphrase": "Використовуйте спеціальну парольну фразу",
+      "usePasskeyInstead": "Замість цього використовуйте ключ доступу"
+    },
+    "hasAccount": "Вже є аккаунт? <0>Увійдіть тут.</0>",
+    "inviteCodeInvalidError": "Недійсний код запрошення (ID користувача не знайдено)",
     "inviteCodeLabel": "Код запрошення",
     "inviteCodePlaceholder": "Ввдедіть ID користувача друга",
     "inviteCodeRequiredError": "Код запрошення є обов’язковим",
-    "inviteCodeInvalidError": "Недійсний код запрошення (ID користувача не знайдено)",
-    "generate": {
-      "description": "Ваша парольна фраза виступає як ваше ім'я користувача та пароль. Переконайтеся, що ви зберігаєте його в безпеці, оскільки вам буде потрібно вводити його для входу в свій обліковий запис",
-      "next": "Я зберіг(ла) свою парольну фразу",
-      "passphraseFrameLabel": "Парольна фраза",
-      "title": "Ваша парольна фраза",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "Вже є аккаунт? <0>Увійдіть тут.</0>",
     "login": {
       "description": "Будь ласка, введіть свій пароль для входу до вашого облікового запису",
-      "deviceLengthError": "Будь ласка, введіть назву пристрою",
-      "passphraseLabel": "Парольна фраза з 12 слів",
-      "passphrasePlaceholder": "Парольна фраза",
-      "submit": "Логін",
-      "title": "Увійти до свого облікового запису",
-      "validationError": "Неправильна або неповна парольна фраза",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "псевдонім",
+      "nicknameNotFound": "Нік не знайдено",
       "nicknamePlaceholder": "Введіть свій псевдонім",
+      "nicknameRequired": "Введіть псевдонім",
+      "noBackendUrl": "Немає серверної URL-адреси",
+      "or": "or",
+      "passwordIncorrect": "Пароль неправильний",
       "passwordLabel": "Пароль",
       "passwordPlaceholder": "Введіть свій пароль",
-      "nicknameRequired": "Введіть псевдонім",
       "passwordRequired": "Необхідно ввести пароль",
-      "nicknameNotFound": "Нік не знайдено",
-      "passwordIncorrect": "Пароль неправильний"
+      "submit": "Логін",
+      "title": "Увійти до свого облікового запису",
+      "usePasskey": "Використовуйте пароль",
+      "validationError": "Неправильна або неповна парольна фраза"
     },
     "register": {
+      "confirmPasswordLabel": "Підтвердьте пароль",
+      "confirmPasswordPlaceholder": "Підтвердьте свій пароль",
       "information": {
         "color1": "Перший колір профілю",
         "color2": "Другий колір профілю",
@@ -195,39 +61,27 @@
         "next": "Наступний",
         "title": "Інформація про обліковий запис"
       },
-      "passwordInput": {
-        "title": "Створіть свій логін",
-        "description": "Виберіть нік і пароль. Ваш пароль працює як безпечна парольна фраза, тому переконайтеся, що ви його запам’ятали!"
-      },
       "nicknameLabel": "псевдонім",
       "nicknamePlaceholder": "Виберіть унікальний нік",
       "nicknameTaken": "Нік уже зайнятий",
+      "passwordInput": {
+        "description": "Виберіть нік і пароль. Ваш пароль працює як безпечна парольна фраза, тому переконайтеся, що ви його запам’ятали!",
+        "title": "Створіть свій логін"
+      },
       "passwordLabel": "Пароль",
-      "passwordPlaceholder": "Створіть пароль (використовується як ваша парольна фраза)",
-      "passwordWeak": "Пароль повинен містити не менше 8 символів з літерами та цифрами",
       "passwordMismatch": "Паролі не збігаються",
-      "confirmPasswordLabel": "Підтвердьте пароль",
-      "confirmPasswordPlaceholder": "Підтвердьте свій пароль"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Створіть пароль (використовується як ваша парольна фраза)",
+      "passwordWeak": "Пароль повинен містити не менше 8 символів з літерами та цифрами"
     },
     "trust": {
       "failed": {
         "text": "Чи ви налаштували це правильно?",
         "title": "Не вдалося зв’язатися з сервером"
       },
-      "noHostTitle": "Сервер не налаштований!",
-      "noHost": "Сервер не був налаштований, тому ви не можете створити обліковий запис",
       "host": "Ви під’єднуєтеся до <0>{{hostname}}</0> – підтвердьте, що довіряєте йому, перш ніж створювати обліковий запис",
       "no": "Повернутися назад",
+      "noHost": "Сервер не був налаштований, тому ви не можете створити обліковий запис",
+      "noHostTitle": "Сервер не налаштований!",
       "title": "Чи довіряєте ви цьому серверу?",
       "yes": "Я довіряю цьому серверу"
     },
@@ -235,14 +89,88 @@
       "description": "Будь ласка, введіть свою парольну фразу, яка була раніше, щоб підтвердити її збереження та створити обліковий запис",
       "invalidData": "Дані недійсні",
       "noMatch": "Парольна фраза не збігається",
-      "passphraseLabel": "Ваша парольна фраза з 12 слів",
       "recaptchaFailed": "Валідація капчі не вдалася",
       "register": "Створити акаунт",
-      "title": "Підтвердьте свою парольну фразу",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "Підтвердьте свою парольну фразу"
     }
+  },
+  "details": {
+    "airs": "Ефіри",
+    "collection": {
+      "movie": "фільм",
+      "movies": "фільми",
+      "rating": "Рейтинг",
+      "releaseDate": "Дата випуску",
+      "sortBy": "Сортувати за"
+    },
+    "endsAt": "Закінчується о {{time}}",
+    "episode": "Епізод",
+    "episodes": "Епізоди",
+    "imdb": "Переглянути на IMDb",
+    "language": "мова:",
+    "play": "грати",
+    "rating": "Рейтинг:",
+    "releaseDate": "Дата виходу:",
+    "resume": "Резюме",
+    "runtime": "час виконання:",
+    "season": "Сезон",
+    "seasons": "Сезон/и",
+    "similar": "Схожі",
+    "tmdb": "Переглянути на TMDB",
+    "trailers": "Трейлери",
+    "watched": "Переглянуто {{watched}} з {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Усі списки фільмів",
+    "carousel": {
+      "change": "Зміна",
+      "more": "Переглянути більше",
+      "title": {
+        "4kReleases": "Випуски 4K",
+        "editorPicksMovies": "Редактор вибирає фільми",
+        "editorPicksShows": "Редактор вибирає шоу",
+        "forYou": "Для Вас",
+        "inCinemas": "У кінотеатрах",
+        "latestReleases": "Останні релізи",
+        "latestTVReleases": "Останні телешоу",
+        "movies": "{{category}} Фільми",
+        "moviesOn": "Фільми на {{provider}}",
+        "onTheAir": "В ефірі",
+        "popular": "Найпопулярніший",
+        "recommended": "Тому що ви дивилися: {{title}}",
+        "top10": "Топ 10",
+        "topRated": "Найвищий рейтинг",
+        "trending": "У тренді зараз",
+        "tvshows": "{{category}} Шоу",
+        "tvshowsOn": "Показує {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Більше інформації",
+      "playNow": "Грати зараз"
+    },
+    "filters": {
+      "country": "Країна"
+    },
+    "page": {
+      "back": "Іди назад",
+      "loading": "Завантаження...",
+      "loadMore": "Завантажте більше",
+      "title": "Відкрийте для себе фільми та ТБ"
+    },
+    "scrollToTop": "Повернутися до початку",
+    "tabs": {
+      "movies": "фільми",
+      "top10": "Топ 10",
+      "tvshows": "Телешоу"
+    },
+    "viewLists": "Переглянути всі списки фільмів"
+  },
+  "downtimeNotice": {
+    "badge": "Питання",
+    "goHome": "Іди додому",
+    "message": "AlphaFlix знову має проблеми з деякими провайдерами. Якщо ви не можете знайти або відтворити шоу, змініть джерело. Очікуйте, що ця помилка залишатиметься протягом указаних нижче періодів.",
+    "title": "Проблеми з провайдером"
   },
   "errors": {
     "badge": "Це зламалося",
@@ -258,159 +186,153 @@
     },
     "links": {
       "fluxer": "Діскорд",
-      "legal": "Legal / DMCA",
-      "github": "GitHub",
-      "twitter": "Twitter",
-      "funding": "Support us"
+      "funding": "Підтримайте нас",
+      "github": "GitHub"
     },
     "tagline": "Дивіться свої улюблені шоу та фільми за допомогою цього відкритого стрімінгового додатка."
   },
   "global": {
-    "name": "AlphaFlix",
+    "keyboardShortcuts": {
+      "cancel": "Скасувати",
+      "clickToEdit": "Натисніть значок ключа, щоб відредагувати його",
+      "conditions": {
+        "showsOnly": "Тільки шоу"
+      },
+      "conflict": "конфлікт",
+      "conflicts": "конфлікти",
+      "detected": "виявлено",
+      "editInSettings": "Редагувати команди клавіатури з налаштувань",
+      "groups": {
+        "audioVideo": "Аудіо та відео",
+        "interface": "Інтерфейс",
+        "jumpToPosition": "Перейти на позицію",
+        "subtitlesAccessibility": "Субтитри та спеціальні можливості",
+        "videoPlayback": "Відтворення відео"
+      },
+      "none": "Жодного",
+      "numberKeySeeking": "Цифровий ключ прогрес пошуку",
+      "numberKeySeekingDescription": "Використовуйте цифрові клавіші 0-9, щоб перейти до певних позицій у відео. 0 переходить на початок, 1-8 переходить до 10%-80%, а 9 переходить до 90%.",
+      "pressKey": "Натисніть клавішу...",
+      "resetAllToDefault": "Скинути все до замовчування",
+      "resetToDefault": "Скинути до замовчування",
+      "save": "зберегти",
+      "saveChanges": "Зберегти зміни",
+      "shortcuts": {
+        "barrelRoll": "Зробіть бочку! 🌀",
+        "closeOverlay": "Закрити накладання/модальність",
+        "decreaseVolume": "Зменшити гучність",
+        "increaseVolume": "Збільшити гучність",
+        "jumpTo0": "Перейти до 0% (початок)",
+        "jumpTo9": "Стрибок до 90%",
+        "mute": "Вимкнути/увімкнути звук",
+        "nextEpisode": "Наступний епізод",
+        "playPause": "Відтворення/пауза (або утримуйте для 2-кратної швидкості, якщо ввімкнено)",
+        "playPauseAlt": "Відтворення/пауза",
+        "previousEpisode": "Попередній епізод",
+        "randomCaption": "Виберіть довільний заголовок з останньої використовуваної мови",
+        "skipBackward1": "Перейти на 1 секунду назад",
+        "skipBackward10": "Перейти на 10 секунд назад",
+        "skipBackward5": "Перейти на 5 секунд назад",
+        "skipForward1": "Перейти на 1 секунду вперед",
+        "skipForward10": "Перейти вперед на 10 секунд",
+        "skipForward5": "Перейти вперед на 5 секунд",
+        "syncSubtitlesEarlier": "Синхронізувати субтитри раніше (-0,5 с)",
+        "syncSubtitlesLater": "Синхронізувати субтитри пізніше (+0,5 с)",
+        "toggleCaptions": "Перемкнути субтитри",
+        "toggleFullscreen": "Перемкнути повноекранний режим",
+        "toggleNativeSubtitles": "Увімкнути або вимкнути рідні субтитри"
+      },
+      "subtitle": "Утримуйте `, щоб показати цю довідку в будь-який час",
+      "title": "Комбінації клавіш"
+    },
+    "name": "АльфаФлікс",
     "pages": {
-      "about": "Про",
-      "legal": "Legal / DMCA",
-      "discover": "Discover",
-      "support": "Support",
+      "discover": "Відкрийте для себе",
       "login": "Логін",
-      "onboarding": "Встановлення",
+      "migration": "Перенести обліковий запис",
       "pagetitle": "{{title}} - AlphaFlix",
       "register": "Зареєструватися",
-      "settings": "Налаштування",
-      "migration": "Migrate Account",
-      "jip": "Jip"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "settings": "Налаштування"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Закладки",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "Скасувати",
+        "description": "Відредагуйте деталі цієї закладки",
+        "groupsLabel": "Групи",
+        "save": "зберегти",
+        "title": "Редагувати закладку",
+        "titleLabel": "Назва",
+        "titlePlaceholder": "Введіть назву вашої закладки",
+        "yearLabel": "рік",
+        "yearPlaceholder": "Введіть рік для закладки"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "Груп ще немає",
+          "placeholderButton": "Додати до групи",
+          "removeAll": "Видалити все",
+          "removeFromGroup": "Видалити з групи"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "Це вплине на таку кількість закладок: {{count}}",
+          "cancel": "Скасувати",
+          "description": "Відредагуйте назву та значок вашої групи закладок",
+          "nameLabel": "Назва групи",
+          "namePlaceholder": "Введіть назву для вашої групи",
+          "save": "зберегти",
+          "title": "Редагувати групу"
+        },
+        "reorder": {
+          "button": "Змінити порядок",
+          "cancel": "Скасувати",
+          "description": "Перетягніть і опустіть, щоб змінити порядок груп закладок",
+          "done": "Готово",
+          "save": "зберегти",
+          "title": "Редагувати груповий порядок"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "Закладки",
+      "showAll": "Показати все",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "За умовчанням (дата додавання)",
+          "titleAsc": "Назва A-Z",
+          "titleDesc": "Назва Z-A",
+          "yearAsc": "Дата випуску Найстаріший-найновіший",
+          "yearDesc": "Дата випуску Найновіший-Найстарший"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "Продовжити перегляд",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "За умовчанням (дата додавання)",
+          "titleAsc": "Назва A-Z",
+          "titleDesc": "Назва Z-A",
+          "yearAsc": "Дата випуску Найстаріший-найновіший",
+          "yearDesc": "Дата випуску Найновіший-Найстарший"
         }
       }
     },
     "mediaList": {
       "stopEditing": "Зупинити редагування"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "Це все, що ми маємо!",
+      "discover": "Відкрийте для себе",
+      "discoverMore": "Дізнайтеся більше",
+      "empty": {
+        "default": "Ласкаво просимо, знайдіть медіа для перегляду тут!",
+        "extra": [
+          "Тут нічого немає :(",
+          "Так пусто...",
+          "Така порожнеча.",
+          "Привіт новий користувач :3"
+        ]
+      },
       "failed": "Не вдалося знайти медіафайли, повторіть спробу!",
       "loading": "Завантаження...",
       "noResults": "Ми не змогли знайти нічого!",
@@ -423,41 +345,46 @@
           "Який ваш улюблений серіал?"
         ]
       },
-      "empty": {
-        "default": "Welcome, find media to watch here!",
-        "extra": [
-          "There's nothing here :(",
-          "So empty...",
-          "Such emptiness.",
-          "Hi new user :3"
-        ]
-      },
-      "sectionTitle": "Результати пошуку",
-      "discoverMore": "Discover more",
-      "discover": "Discover"
+      "sectionTitle": "Результати пошуку"
     },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+    "support": {
+      "complete": "повний",
+      "description": "AlphaFlix працює збитково, і нам потрібна допомога, щоб у ньому не було реклами! Якщо вам подобається користуватися AlphaFlix, зробіть пожертву, щоб допомогти нам покрити наші витрати.",
+      "donate": "Пожертвуйте",
+      "explanation": "Якщо ви не використовуєте розширення або не налаштували FED API, може бути складніше знайти вміст! Ми хочемо це виправити, але набагато важче надавати вміст без дорогих серверів. Тож, будь ласка, якщо вам подобається користуватися AlphaFlix, зробіть пожертву, щоб допомогти нам покрити наші зростаючі витрати.",
+      "explanation2": "Якщо ви хочете отримати більше інформації, будь ласка, приєднуйтесь до нас",
+      "fluxer": "Флюксер",
+      "label": "Фінансування проекту: ${{current}} / ${{goal}}",
+      "moreInfo": "Більше інформації",
+      "thankYou": "Дякуємо за підтримку!",
+      "title": "AlphaFlix потрібна ваша допомога!"
     },
     "titles": {
       "69": {
-        "default": "Up for something spicy?",
+        "default": "Хочете чогось гострого?",
         "extra": [
-          "Happy 69 day 😘!"
+          "З 69 днем ​​😘!"
         ]
       },
       "420": {
-        "default": "What would you like to watch this 4/20?",
+        "default": "Що б ви хотіли подивитися в цьому 4/20?",
         "extra": [
-          "Happy 4/20 🥳!"
+          "Щасливого 4/20 🥳!"
         ]
       },
       "day": {
         "default": "Що б ви хотіли подивитися сьогодні вдень?",
         "extra": [
           "Хочете пригод? Парк Юрського періоду може стати ідеальним вибором."
+        ]
+      },
+      "halloween": {
+        "default": "Який моторошний фільм ти хотів би подивитись цього Хелловіну?",
+        "extra": [
+          "З Хелловіном! 🎃👻",
+          "бу! 👻",
+          "Трик або задоволення! 🍬",
+          "Це великий гарбуз, Чарлі Браун!"
         ]
       },
       "morning": {
@@ -471,304 +398,116 @@
         "extra": [
           "Втомився? Я чув, що \"Екзорцист\" хороший."
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Нещодавно переглянуто",
+      "sectionTitle": "Історія переглядів"
     }
   },
   "media": {
     "episodeDisplay": "С{{season}} Е{{episode}}",
-    "unreleased": "Unreleased",
+    "episodeShort": "E",
+    "seasonUnwatched": "Ви впевнені, що хочете позначити сезон як непереглянутий?",
+    "seasonWatched": "Ви впевнені, що хочете позначити сезон як переглянутий?",
     "types": {
       "movie": "Фільм",
       "show": "Шоу"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "Невиданий"
   },
   "migration": {
-    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
-    "start": {
-      "title": "Migrate your data",
-      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
-      "options": {
-        "or": "or",
-        "direct": {
-          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
-          "title": "Direct migration",
-          "quality": "Easiest and fastest",
-          "action": "Transfer data"
-        },
-        "download": {
-          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-          "title": "Download data",
-          "quality": "More technical",
-          "action": "Download data"
-        },
-        "upload": {
-          "title": "Upload Data",
-          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-          "quality": "Restore from backup",
-          "action": "Upload Data"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Direct migration",
-      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
-      "backendLabel": "Destination Backend URL",
-      "recaptchaLabel": "ReCaptcha Key (Optional)",
-      "toggleLable": "Needs ReCaptcha?",
-      "status": {
-        "error": "Failed to migrate your data. 😿",
-        "success": "Your data has been migrated successfully! 🎉"
-      },
-      "button": {
-        "migrate": "Migrate",
-        "processing": "Processing...",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
-    },
+    "back": "Іди назад",
     "download": {
-      "title": "Download data",
-      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-      "status": {
-        "error": "Failed to download your data. 😿",
-        "success": "Your data has been downloaded successfully! 🎉"
-      },
       "button": {
-        "download": "Download data",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
+        "download": "Завантажити дані",
+        "home": "Іди додому"
+      },
+      "description": "Це завантажить ваші дані на ваш пристрій. Потім ви можете завантажити його на новий сервер або просто зберегти на безпечне зберігання.",
+      "status": {
+        "error": "Не вдалося завантажити ваші дані. 😿",
+        "success": "Ваші дані успішно завантажено! 🎉"
+      },
+      "title": "Завантажити дані"
+    },
+    "loginRequired": "Ви повинні увійти в систему, щоб перенести свої дані! Будь ласка, поверніться та увійдіть, щоб продовжити.",
+    "preview": {
+      "downloadDescription": "Завантаження містить:",
+      "items": {
+        "bookmarks": "Медіа з закладками",
+        "progress": "Слідкуйте за прогресом",
+        "settings": "Параметри та налаштування"
+      },
+      "uploadDescription": "Дані для завантаження:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "Завантажити дані",
+          "description": "Це завантажить ваші дані на ваш пристрій. Потім ви можете завантажити його на новий сервер або просто зберегти на безпечне зберігання.",
+          "quality": "Більш технічний",
+          "title": "Завантажити дані"
+        },
+        "or": "or",
+        "upload": {
+          "action": "Завантажити дані",
+          "description": "Завантажте раніше експортований файл даних, щоб відновити свої закладки та прогрес у цьому обліковому записі.",
+          "quality": "Відновити з резервної копії",
+          "title": "Завантажити дані"
+        }
+      },
+      "title": "Перенесіть свої дані"
     },
     "upload": {
-      "title": "Upload data",
-      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-      "status": {
-        "processing": "Processing data...",
-        "error": "Failed to upload your data. 😿",
-        "success": "Your data has been uploaded successfully! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Select the file you want to upload",
-        "select": "Select file",
-        "change": "Change file",
-        "name": "File name"
-      },
-      "exportedOn": "Exported on",
-      "previewTitle": "Preview:",
       "button": {
-        "import": "Import data",
-        "processing": "Processing...",
-        "success": "Import complete",
-        "home": "Continue to home",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Go back"
+        "home": "Продовжуйте додому",
+        "import": "Імпорт даних",
+        "processing": "Обробка...",
+        "saveLocal": "Зберегти локально"
+      },
+      "description": "Завантажте раніше експортований файл даних, щоб відновити свої закладки та прогрес у цьому обліковому записі.",
+      "exportedOn": "Експортовано на",
+      "file": {
+        "change": "Змінити файл",
+        "description": "Виберіть файл, який потрібно завантажити",
+        "select": "Виберіть файл"
+      },
+      "previewTitle": "Попередній перегляд:",
+      "status": {
+        "error": "Не вдалося завантажити ваші дані. 😿",
+        "processing": "Обробка даних...",
+        "success": "Ваші дані успішно завантажено! 🎉",
+        "successLocal": "Ваші дані збережено локально! 🎉"
+      },
+      "title": "Завантажити дані"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "Перевірте підключення до Інтернету"
     },
+    "install": {
+      "genericGuide": "Ваш браузер не підтримує запит на автоматичне встановлення PWA.\nВи все ще можете встановити за допомогою меню браузера (наприклад, «Установити програму», «Створити ярлик» або «Додати на панель/головний екран»).",
+      "iosSafariGuide": "Щоб установити BetaMovie як програму:\n\n1. Натисніть кнопку «Поділитися» (квадрат зі стрілкою).\n2. Виберіть «Додати на головний екран».\n3. Натисніть Додати."
+    },
     "menu": {
-      "about": "Про нас",
+      "desktop": "Налаштування програми",
       "logout": "Вийти",
       "register": "Синхронізація з хмарою",
-      "settings": "Налаштування",
-      "support": "Підтримка",
-      "discover": "Discover",
-      "development": "Development",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "Щоб установити BetaMovie як програму:\n\n1. Натисніть кнопку «Поділитися» (квадрат зі стрілкою).\n2. Виберіть «Додати на головний екран».\n3. Натисніть Додати.",
-      "genericGuide": "Ваш браузер не підтримує запит на автоматичне встановлення PWA.\nВи все ще можете встановити за допомогою меню браузера (наприклад, «Установити програму», «Створити ярлик» або «Додати на панель/головний екран»)."
+      "settings": "Налаштування"
     }
   },
   "notFound": {
     "badge": "Не знайдено",
     "goHome": "На головну",
-    "reloadButton": "Try again",
     "message": "Ми шукали всюди: під смітниками, у шафі, за проксі-сервером, але зрештою не змогли знайти сторінку, яку ви шукали.",
+    "reloadButton": "Спробуйте знову",
     "title": "Не вдалося знайти цю сторінку"
-  },
-  "downtimeNotice": {
-    "badge": "Issues",
-    "goHome": "Go home",
-    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
-    "title": "Provider issues"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Скасувати",
-      "confirm": "Використовувати налаштування за умовчанням",
-      "description": "Налаштування за замовчуванням не мають найкращих потоків і можуть бути нестерпно повільними.",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Ви впевнені?"
-    },
-    "extension": {
-      "back": "Повернутись назад",
-      "explainer": "Використовуючи розширення для браузера, ви можете отримати найякісніші трансляції, які ми можемо запропонувати. Просто встановивши його.",
-      "explainerIos": "На жаль, розширення браузера не підтримується на iOS, натисніть <bold>Повернутися</bold>, щоб вибрати інший варіант.",
-      "extensionHelp": "Якщо ви встановили розширення, але воно не виявлено, <bold>відкрийте розширення в меню розширень вашого браузеру</bold> і дотримуйтеся вказівок на екрані.",
-      "linkChrome": "Встанови Chrome розширення",
-      "linkFirefox": "Встанови Firefox розширення",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Встановили в Chrome, але сайт його не виявляє? Спробуйте перезавантажити сторінку!",
-      "notDetectingAction": "Оновити сторінку",
-      "status": {
-        "disallowed": "Розширення не ввімкнено для цієї сторінки",
-        "disallowedAction": "Активувати розширення",
-        "failed": "Не вдалося отримати статус",
-        "loading": "Очікуємо, поки ви встановите розширення",
-        "outdated": "Версія розширення застаріла",
-        "success": "Розширення працює як очікувалося!"
-      },
-      "submit": "Продовжити",
-      "title": "Почати використовувати розширення"
-    },
-    "proxy": {
-      "back": "Повернутись назад",
-      "explainer": "З використанням проксі ви можете отримати високоякісні потоки, створивши самостійний проксі-сервіс.",
-      "input": {
-        "errorConnection": "Не вдалося підключитися до проксі",
-        "errorInvalidUrl": "Не валідний URL",
-        "errorNotProxy": "Очікувався проксі, але отримано вебсайт",
-        "label": "URL проксі",
-        "placeholder": "https://"
-      },
-      "link": "Дізнайтесь як створити проксі",
-      "submit": "Надати проксі",
-      "title": "Давайте створимо новий проксі"
-    },
-    "start": {
-      "explainer": "Щоб отримати найкращу трансляцію, вам потрібно буде вибрати, який метод стрімінгу ви хочете використовувати.",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "or",
-        "default": {
-          "text": "Мені не потрібна хороша якість потоків,<0 /> <1>використовувати налаштування за замовчуванням</1>"
-        },
-        "extension": {
-          "action": "Встановити розширення",
-          "description": "Встановіть розширення для браузера та отримайте доступ до найкращих джерел.",
-          "quality": "Найкраща якість",
-          "title": "Розширення браузера"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Налаштування проксі",
-          "description": "Налаштуйте проксі всього за 5 хвилин і отримайте доступ до чудових джерел.",
-          "quality": "Гарна якість",
-          "title": "Користувацький проксі"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Давайте налаштуємо вам AlphaFlix"
+      "cancel": "Скасувати"
     }
   },
   "overlays": {
@@ -780,24 +519,45 @@
       "short": "Назад"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "Трансляція на пристрій..."
+      "device": "пристрій",
+      "to": "Трансляція на {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Завантаження додаткової пам'яті...",
+      "2": "Перетворення кофеїну на вміст...",
+      "3": "Як навчити хом'яка бігати швидше...",
+      "4": "Переконання електронів рухатися швидше...",
+      "5": "Майже готово... на кожній панелі завантаження...",
+      "6": "Пошук пульта дистанційного керування... зачекайте, помилка...",
+      "7": "Лічити назад від нескінченності...",
+      "8": "Симуляція майбутнього...",
+      "9": "Перегляд відео про котів...",
+      "10": "Відволіклися на GIF-файли котів...",
+      "11": "Будь ласка, зачекайте, поки стажер наповнить собі кави...",
+      "12": "Перевірка, чи підключено...",
+      "13": "Вимкнути і знову ввімкнути...",
+      "14": "Не панікуйте...",
+      "15": "Наближається зима...",
+      "16": "Вхід у Skynet...",
+      "17": "Усі ваші браузери належать нам...",
+      "18": "Шукаєте нескінченний драйв неймовірності...",
+      "19": "Відкриваємо нові способи змусити вас чекати...",
+      "20": "Ваш час дуже важливий для нас. Будь ласка, зачекайте, поки ми вас ігноруємо...",
+      "21": "Все ще швидше, ніж Windows Update...",
+      "22": "Чому б тобі не взяти бутерброд?"
     },
     "menus": {
+      "audio": {
+        "default": "За замовчуванням"
+      },
       "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "Завантаження беруться безпосередньо від провайдера. У AlphaFlix немає контролю над тим, як надаються завантаження.",
+        "button": "Спроба завантажити",
         "copyHlsPlaylist": "Копіювати посилання на плейлист HLS",
+        "disclaimer": "Завантаження беруться безпосередньо від провайдера. У AlphaFlix немає контролю над тим, як надаються завантаження.",
         "downloadSubtitle": "Завантажити поточні субтитри",
         "downloadVideo": "Завантажити відео",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "Завантаження виконуються безпосередньо від постачальника. У AlphaFlix немає контролю над тим, як надаються завантаження.<br /><br />Зверніть увагу, що ви завантажуєте список відтворення HLS, <bold>його не рекомендується завантажувати, якщо ви не знайомі з розширеними форматами потокового передавання</bold>. Спробуйте різні джерела для інших форматів.",
+        "hlsDownloader": "Або перейдіть на веб-сайт <0>завантажувача hls</0> і вставте URL-адресу списку відтворення знизу.",
         "onAndroid": {
           "1": "Щоб завантажити на Android, натисніть кнопку завантаження, потім на новій сторінці <bold>торкніться й утримуйте</bold> відео, а потім виберіть <bold>зберегти</bold>.",
           "shortTitle": "Завантажити / Android",
@@ -819,57 +579,47 @@
         "button": "Епізоди",
         "emptyState": "У цьому сезоні немає серій, перевірте пізніше!",
         "episodeBadge": "Е{{episode}}",
+        "favorites": "Вибране",
         "loadingError": "Помилка завантаження сезону",
         "loadingList": "Завантаження...",
         "loadingTitle": "Завантаження...",
-        "unairedEpisodes": "Один або кілька епізодів у цьому сезоні недоступні, оскільки вони ще не вийшли в ефір.",
-        "seasons": "Seasons",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "markAsFavorite": "Позначити як улюблене",
+        "markAsUnwatched": "Позначити як непереглянуте",
+        "markAsWatched": "Позначити як переглянуте",
+        "noFavorites": "Ще немає улюблених епізодів. Позначте епізоди, щоб додати їх до вибраних!",
+        "showLess": "Показувати менше",
+        "showMore": "Показати більше",
         "specials": "Спец"
       },
       "playback": {
-        "speedLabel": "Швидкість відтворення",
-        "title": "Налаштування відтворення",
-        "disabled": "(Disabled in watch party)",
+        "disabled": "(Вимкнено під час перегляду)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "Швидкість відтворення",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Налаштування відтворення"
       },
       "quality": {
+        "auto": "Авто",
         "automaticLabel": "Якість автоматична",
         "hint": "Спробуйте <0>переключити джерело</0>, аби отримати інші варіанти якості.",
         "iosNoQuality": "Через обмеження, встановлені Apple, вибір якості не доступний у системі iOS для цього джерела. Ви можете спробувати <0>змінити джерело</0>, щоб отримати інші варіанти якості.",
-        "title": "Якість",
-        "auto": "Auto"
+        "title": "Якість"
       },
       "settings": {
+        "audioItem": "Аудіо",
         "downloadItem": "Завантажити",
         "enableSubtitles": "Увімкнути субтитри",
-        "experienceSection": "Враження від перегляду",
         "playbackItem": "Налаштування відтворення",
-        "audioItem": "Audio",
         "qualityItem": "Якість",
         "sourceItem": "Джерела відео",
-        "subtitleItem": "Налаштування субтитрів",
-        "videoSection": "Налаштування відео"
+        "subtitleItem": "Налаштування субтитрів"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "Під час спроби знайти будь-яке відео сталася помилка. Спробуйте інше джерело.",
           "title": "Не вдалося отримати дані"
         },
+        "findNextSource": "Знайти наступне джерело",
         "noEmbeds": {
           "text": "Ми не змогли знайти жодних вставок. Будь ласка, спробуйте інше джерело.",
           "title": "Не знайдено вбудованих елементів"
@@ -879,72 +629,53 @@
           "title": "Немає потоку"
         },
         "title": "Джерела",
-        "unknownOption": "Невідомий",
-        "findNextSource": "Find next source"
+        "unknownOption": "Невідомий"
       },
       "subtitles": {
+        "autoSelectChoice": "Автоматичний вибір",
+        "autoSelectDifferentChoice": "Натисніть знову, щоб автоматично вибрати інший субтитр",
+        "clearSecondary": "Очистити вторинні субтитри",
         "customChoice": "Виберіть субтитри з файлу",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Налаштувати",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "Побачив підпис",
+        "delayLate": "Почуто аудіо",
+        "doubleClickToCopy": "Двічі клацніть, щоб скопіювати дані субтитрів",
+        "dropSubtitleFile": "Перетягніть файл субтитрів сюди! >_<",
+        "dualSub": "Подвійні субтитри",
+        "dualSubDesc": "Виберіть той самий формат (SRT, VTT...) і постачальника (OpenSubs...) для найкращої синхронізації",
+        "dualSubHint": "Виберіть мову для вторинних субтитрів (показано над основними)",
+        "empty": "Для цього немає субтитрів.",
+        "loadingExternal": "Завантаження зовнішніх субтитрів...",
+        "loadingExternalProgress": "Завантаження зовнішніх субтитрів... ({{progress}}%)",
+        "matchScoreLabel": "Збіг ~{{score}}%",
+        "notFound": "Жоден із доступних варіантів не відповідає вашому запиту",
         "offChoice": "Вимкнено",
-        "onChoice": "On",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Source Subtitles",
-        "OpenSubtitlesChoice": "External Subtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "Вставте дані субтитрів",
+        "previewLabel": "Попередній перегляд субтитрів:",
+        "primary": "Первинний",
+        "refresh": "Оновити зовнішні субтитри",
+        "refreshing": "Оновлення...",
+        "secondary": "Вторинний",
+        "selectingSecondary": "Вибір вторинних субтитрів",
         "settings": {
           "backlink": "Власні субтитри",
           "delay": "Затримка субтитрів",
           "fixCapitals": "Виправити використання великих літер"
         },
         "title": "Субтитри",
-        "unknownLanguage": "Невідомий",
-        "dropSubtitleFile": "Drop subtitle file here! >_<",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "There are no provided subtitles for this.",
-        "notFound": "None of the available options match your query",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "Стенограма",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "Перекласти з {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Завантаження зовнішніх субтитрів... ({{progress}}%)",
-        "matchScoreLabel": "Збіг ~{{score}}%"
+        "unknownLanguage": "Невідомий",
+        "useNativeSubtitles": "Власні субтитри відео",
+        "useNativeSubtitlesDescription": "Трансляція субтитрів для рідного повноекранного режиму та PiP"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
+        "watchpartyItem": "Watch Party"
       }
     },
     "metadata": {
-      "api": {
-        "text": "Не вдалося завантажити метадані API, перевірте підключення до Інтернету.",
-        "title": "Не вдалося завантажити метадані API"
-      },
-      "legal": {
-        "badge": "Видалено",
-        "text": "Це медіа більше не доступне через повідомлення про видалення або позов про порушення авторських прав.",
-        "title": "Медіа було видалено"
-      },
       "extensionPermission": {
         "badge": "Дозвіл Відсутній",
         "button": "Використовувати розширення",
@@ -957,6 +688,11 @@
         "text": "Не вдалося завантажити метадані мультимедіа з TMDB. Перевірте, чи не відбувається збій TMDB або чи не є заблоковано у вашому інтернет-з'єднанні.",
         "title": "Не вдалося завантажити метадані"
       },
+      "legal": {
+        "badge": "Видалено",
+        "text": "Це медіа більше не доступне через повідомлення про видалення або позов про порушення авторських прав.",
+        "title": "Медіа було видалено"
+      },
       "notFound": {
         "badge": "Не знайдено",
         "homeButton": "Повернутися на головну",
@@ -965,18 +701,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Replay",
       "next": "Наступний епізод",
-      "nextSeason": "Next season"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "Наступний сезон",
+      "replay": "Повтор"
     },
     "playbackError": {
+      "autoResumeText": "Під час відтворення медіа виникла помилка 😖. Автоматично спробувати інші джерела...",
       "badge": "Помилка відтворення",
+      "copyDebugInfo": "Копіювати інформацію про налагодження",
+      "debugInfo": "Перевірте консоль для отримання додаткової інформації.",
       "errors": {
         "errorAborted": "Завантаження мультимедіа було скасовано на вимогу користувача.",
         "errorDecode": "Незважаючи на те, що раніше було заявлено, що медіа-ресурс придатний для використання, при спробі декодування медіа-ресурсу виникла проблема, яка призвела до помилки.",
@@ -984,226 +717,168 @@
         "errorNetwork": "Виникла якась помилка мережі, яка завадила успішному завантаженню мультимедіа, незважаючи на те, що раніше вони були доступні.",
         "errorNotSupported": "Медіаоб'єкт або провайдер медіа не підтримується."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "Повернутися на головну",
-      "resumeButton": "Try next sources",
+      "resumeButton": "Спробуйте наступні джерела",
       "text": "Сталася помилка при спробі відтворити медіа. Будь ласка спробуйте ще раз.",
       "title": "Сталася помилка при відтворенні відео!"
     },
+    "resume": {
+      "description": "Цей епізод переглянули {{percentage}}%.",
+      "restart": "Перезапустіть",
+      "resume": "Резюме",
+      "title": "Продовжити перегляд?"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "Розширення вимкнено",
+        "enableExtension": "Увімкнути розширення",
+        "homeButton": "Іди додому",
+        "text": "Ви встановили розширення AlphaFlix. Щоб почати використовувати його, вам потрібно ввімкнути розширення для цього сайту.",
+        "title": "Увімкніть розширення"
+      },
       "items": {
-        "failure": "Сталася помилка",
-        "timeout": "Timed out (15s)",
-        "notFound": "Не має цього відео",
         "pending": "Шукаємо відео..."
       },
       "notFound": {
         "badge": "Не знайдено",
         "detailsButton": "Показати деталі",
+        "discoverButton": "Дізнайтеся більше",
         "homeButton": "Повернутись на головну сторінку",
-        "discoverButton": "Discover more",
         "text": "Ми здійснили пошук серед наших провайдерів і не знайшли медіафайлів, які ви шукаєте! Ми не розміщуємо медіафайли та не контролюємо доступність. Будь ласка, натисніть 'Показати деталі' нижче, щоб дізнатися більше.",
-        "title": "Ми не знайшли цього",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Extension disabled",
-        "homeButton": "Go home",
-        "enableExtension": "Enable extension",
-        "title": "Please enable the extension",
-        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site."
+        "title": "Ми не знайшли цього"
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "Торкніться значка шестірні, щоб переключити джерело!",
+        "2": "Торкніться заголовка, щоб скопіювати посилання!",
+        "3": "Натисніть і утримуйте або утримуйте SHIFT, щоб відобразити широкоекранну кнопку замість повного екрана!",
+        "4": "Деякі джерела працюють краще, ніж інші!",
+        "5": "Отримайте розширення, щоб отримати більше джерел!",
+        "6": "Тримайте закладки, щоб редагувати або видаляти їх!",
+        "7": "Утримуйте SHIFT і торкніться заголовка, щоб скопіювати посилання з часом!",
+        "8": "Встановіть власний колір субтитрів!",
+        "9": "Утримуйте `, щоб переглянути комбінації клавіш!"
       }
+    },
+    "segment": {
+      "credits": "Кредити",
+      "intro": "вступ",
+      "recap": "Підведення підсумків"
+    },
+    "skipTime": {
+      "confidence": "впевненість",
+      "connectApiKeyMessage": "Щоб надіслати нові сегменти, введіть ключ API TheIntroDB у налаштуваннях з’єднань",
+      "credits": "Пропустити кредити",
+      "endOfVideo": "Кінець",
+      "endsAt": "Закінчується о {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Скасувати",
+          "description": "Внесіть свій внесок у TheIntroDB, надсилаючи точні часові позначки сегментів. Усі подання приймаються спільнотою перед публікацією.",
+          "endTimeLabel": "Кінець (и)",
+          "error": {
+            "endTime": "Потрібно вказати час завершення",
+            "mediaInfo": "Інформація ЗМІ недоступна",
+            "segment": "Не вибрано жодного сегмента",
+            "startTime": "Потрібно вказати час початку",
+            "submission": "Помилка надсилання позначок часу",
+            "tidbKey": "Ключ API TIDB не встановлено"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Мінімум 5 с, якщо вказано кінець. Може розширюватися до кінця носія.",
+              "endDesc": "Необов’язково – залиште пустим, якщо титри йдуть до кінця файлу.",
+              "excludeDesc": "Виключити сцени в середині або після титрів; лише основний кредитний список.",
+              "startDesc": "Обов’язково – коли починаються титри (наприклад, коли з’являється текст першого титру).",
+              "whenToTitle": "Посібник із тимчасових позначок кредитів:"
+            },
+            "durationDesc": "Мінімум 5 с, якщо вказано кінець",
+            "durationLabel": "Тривалість:",
+            "endDesc": "Необов’язковий – пустий, якщо продовжується до кінця",
+            "endLabel": "Кінець:",
+            "excludeDesc": "Сцени після титрів",
+            "excludeLabel": "Виключити:",
+            "intro": {
+              "durationDesc": "Тривалість більшості вступів становить 30–90 секунд. Мінімум 5 с, якщо встановлено початок і кінець.",
+              "endDesc": "Обов’язково – коли закінчується вступ (зазвичай, коли починається титульна картка або основний епізод).",
+              "excludeDesc": "Не включайте перші сцени або сцени перед вступом; лише основна послідовність заголовків.",
+              "startDesc": "Необов’язково – залиште поле порожнім, якщо вступ починається на початку епізоду.",
+              "whenToTitle": "Вступний посібник із міток часу:"
+            },
+            "preview": {
+              "durationDesc": "Попередній перегляд різниться за довжиною. Minimum 5s.",
+              "endDesc": "Необов’язково – залиште порожнім, якщо попередній перегляд закінчується в кінці медіа.",
+              "excludeDesc": "Попередній перегляд зазвичай займає 15-90 секунд у кінці епізоду для попереднього перегляду наступного епізоду.",
+              "startDesc": "Обов’язково – коли починається попередній перегляд (наприклад, коли з’являється текст попереднього перегляду).",
+              "whenToTitle": "Попередній перегляд часових позначок:"
+            },
+            "recap": {
+              "durationDesc": "Повторення мають різну довжину. Мінімум 5 с, якщо встановлено початок і кінець.",
+              "endDesc": "Обов’язковий – коли закінчується підсумок і починається новий вміст.",
+              "excludeDesc": "Лише сегмент «раніше» або підсумковий сегмент; не включайте вступ або нові сцени.",
+              "startDesc": "Необов’язково – залиште поле пустим, якщо підсумок починається на початку епізоду.",
+              "whenToTitle": "Короткий посібник із часових позначок:"
+            },
+            "startDesc": "Обов’язковий – коли починаються кредити",
+            "startLabel": "початок:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 або 210 (залиште порожнім для кінця медіа)",
+              "intro": "3:30 або 210 (обов'язково)",
+              "preview": "3:30 або 210 (залиште порожнім для кінця медіа)",
+              "recap": "3:30 або 210 (обов'язково)"
+            },
+            "start": {
+              "credits": "2:30 або 150 (обов'язково)",
+              "intro": "2:30 або 150 (залиште порожнім, щоб почати на початку)",
+              "preview": "2:30 або 150 (обов'язково)",
+              "recap": "2:30 або 150 (залиште порожнім, щоб почати на початку)"
+            }
+          },
+          "segmentType": "Тип сегмента",
+          "startTimeLabel": "Початок (и)",
+          "submit": "Надіслати",
+          "submitting": "Подання...",
+          "success": {
+            "title": "Подання успішне! дякую"
+          },
+          "title": "Надішліть позначки часу до TheIntroDB",
+          "types": {
+            "credits": "Кредити",
+            "intro": "вступ",
+            "preview": "Попередній перегляд",
+            "recap": "Підведення підсумків"
+          },
+          "whenToDesc": "Введіть мітки часу в секундах (наприклад, 150), форматі мм:сс (наприклад, 2:30) або форматі гг:хх:сс (наприклад, 1:42:20). Ми автоматично конвертуємо формат для вас.",
+          "whenToTitle": "Посібник із часовими мітками:"
+        },
+        "title": "Чи був цей пропуск правильним?"
+      },
+      "intro": "Пропустити вступ",
+      "noSegments": "Немає доступних сегментів пропуску",
+      "recap": "Пропустити повторення",
+      "skipSegments": "Пропустити сегменти",
+      "startsAt": "Початок о {{time}}",
+      "submissions": "{{count}} подання",
+      "submitSegment": "Надіслати сегмент",
+      "timeUnknown": "Час невідомий"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "{{timeLeft}} залишилось • Закінчити в {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "Завантаження застосунку",
-    "loadingUser": "Завантаження вашого профілю",
     "loadingUserError": {
+      "disconectCancel": "Скасувати",
+      "disconnectConfirm": "Підтвердити",
+      "disconnectMessage": "Відключіться від сервера облікового запису, зберігаючи найновіші локальні дані. Зміни та переглянутий вміст не синхронізуються, доки ви не ввійдете знову.",
+      "disconnectTitle": "Відключитися від сервера?",
       "logout": "Вийти",
-      "reset": "Перезавантажити власний сервер",
-      "disconnect": "Disconnect from backend",
-      "text": "Сталася помилка при завантаженні вашого профілю",
-      "reload": "Reload",
-      "textWithReset": "Сталася помилка при завантаженні вашого профілю з вашого сервера, чи бажаєте повернутись на стандартний сервер?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reload": "Перезавантажити",
+      "reset": "Перезавантажити власний сервер"
     },
     "migration": {
       "failed": "Сталася помилка під час міграції даних.",
@@ -1211,28 +886,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Назва пристрою",
-        "deviceNamePlaceholder": "Номер телефону",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Редагувати",
-        "logoutButton": "Вийти"
-      },
-      "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
+        "logoutButton": "Вийти",
+        "nicknameLabel": "псевдонім",
+        "nicknamePlaceholder": "Введіть свій псевдонім"
       },
       "actions": {
         "delete": {
@@ -1243,26 +902,26 @@
           "text": "Ця дія незворотна. Всі дані будуть видалені і нічого не можна буде відновити.",
           "title": "Видалити акаунт"
         },
-        "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
-        },
-        "title": "Дії",
         "logoutAllDevices": {
-          "title": "Завершити всі сесії",
+          "button": "Вийти з усіх пристроїв",
           "text": "Це виведе вас з усіх пристроїв, пов'язаних з вашим акаунтом.",
-          "button": "Вийти з усіх пристроїв"
-        }
+          "title": "Завершити всі сесії"
+        },
+        "migration": {
+          "button": "Перенести обліковий запис",
+          "text": "Перенесіть свій обліковий запис на новий сервер або завантажте свої дані.",
+          "title": "Міграція облікового запису"
+        },
+        "title": "Дії"
       },
       "devices": {
         "deviceNameLabel": "Назва пристрою",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Сталася помилка при завантаженні сесій",
+        "lastActive": "Остання активність: {{date}}",
+        "loggedInAt": "Увійшли в систему: {{date}}",
         "removeDevice": "Видалити",
         "title": "Пристрої",
-        "lastActive": "Остання активність: {{date}}",
-        "loggedInAt": "Увійшли в систему: {{date}}"
+        "unknownDevice": "Невідомий пристрій, помилка розшифровки імені"
       },
       "profile": {
         "finish": "Завершити редагування",
@@ -1278,377 +937,213 @@
       },
       "title": "Обліковий запис"
     },
+    "all": {
+      "title": "Усі налаштування"
+    },
     "appearance": {
       "activeTheme": "Активна тема",
-      "themes": {
-        "blue": "Блакитний",
-        "custom": "Custom",
-        "default": "За замовчуванням",
-        "gray": "Сірий",
-        "red": "Червоний",
-        "teal": "Бірюзовий",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "Первинний",
+        "secondary": "Вторинний",
+        "tertiary": "Третинний"
       },
-      "title": "Вигляд",
       "options": {
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "carouselView": "Карусельний вид",
+        "carouselViewDescription": "Відображайте розділи, які ви зараз переглядаєте, і закладки як каруселі замість сітки. Вимкнено за замовчуванням.",
+        "carouselViewLabel": "Карусельний вид",
+        "discover": "Відкрийте розділ",
+        "discoverDescription": "Показуйте розділ «Відкрити» на домашній сторінці під медіафайлами, доданими в закладки. Увімкнено за замовчуванням.",
+        "discoverLabel": "Відкрийте розділ",
+        "featured": "Рекомендовані медіа",
+        "featuredDescription": "Показуйте карусель пропонованих фільмів і шоу у верхній частині домашньої сторінки! Вимкнено за замовчуванням.",
+        "featuredLabel": "Рекомендовані медіа",
+        "forceCompactEpisodeView": "Примусовий компактний перегляд епізоду",
+        "forceCompactEpisodeViewDescription": "Змусити карусель епізодів у програвачі використовувати «класичний» компактний вертикальний вигляд. Вимкнено за замовчуванням.",
+        "forceCompactEpisodeViewLabel": "Компактні епізоди",
+        "homeSectionOrder": "Порядок домашнього розділу",
+        "homeSectionOrderDescription": "Перетягніть і опустіть, щоб змінити порядок розділів перегляду та закладок на домашній сторінці. Груповий порядок можна редагувати з головної сторінки.",
+        "homeSectionOrderGroups": "Змінити порядок груп закладок",
+        "logos": "Зображення логотипів",
+        "logosDescription": "Показувати логотипи зображень замість текстових заголовків у модальному та рекомендованому розділі деталей. Увімкнено за замовчуванням.",
+        "logosLabel": "Зображення логотипів",
+        "logosNotice": "У більшості випадків логотипи лише англійською мовою. Інші мови можуть вимкнути це!",
+        "minimalCards": "Мінімальні картки",
+        "minimalCardsDescription": "Приховати текстовий вміст (заголовок, тип, рік) на картках пам’яті, показуючи лише зображення плаката.",
+        "minimalCardsLabel": "Мінімальні картки",
+        "modal": "Деталі модальні",
+        "modalDescription": "Показувати деталі модально, коли ви натискаєте на картку пам’яті замість переходу на сторінку перегляду. Для трейлера потрібен проксі або розширення. Вимкнено за замовчуванням.",
+        "modalLabel": "Деталі модальні",
+        "pauseOverlay": "Призупинити накладання",
+        "pauseOverlayDescription": "Показувати назву/логотип і накладання опису, коли програвач призупинено та неактивний.",
+        "pauseOverlayLabel": "Призупинити накладання"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Закладки",
+        "watching": "Зараз дивляться"
+      },
+      "themes": {
+        "acid": "Кислота",
+        "autumn": "осінь",
+        "blue": "Блакитний",
+        "christmas": "Різдво",
+        "classic": "класичний",
+        "cobalt": "Кобальт",
+        "custom": "Custom",
+        "default": "За замовчуванням",
+        "ember": "Ембер",
+        "forest": "Ліс",
+        "frost": "Мороз",
+        "grape": "виноград",
+        "gray": "Сірий",
+        "green": "Зелений",
+        "hulk": "Халк",
+        "mocha": "Мокко",
+        "noir": "Нуар",
+        "pink": "Рожевий",
+        "popsicle": "Ескімо",
+        "red": "Червоний",
+        "spark": "Іскра",
+        "spiderman": "Людина-павук",
+        "teal": "Бірюзовий",
+        "wolverine": "Росомаха"
+      },
+      "title": "Вигляд"
     },
     "connections": {
       "server": {
-        "description": "Якщо ви бажаєте підключитися до користувацького сервера для зберігання даних, увімкніть це та вкажіть URL-адресу. <0>Інструкції.</0>",
-        "label": "Власний сервер",
-        "urlLabel": "URL сервера",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "Виконайте налаштування",
-        "errorStatus": {
-          "description": "Здається, що один або декілька пунктів у цьому налаштуванні потребують вашої уваги.",
-          "title": "Дещо потребує вашої уваги"
-        },
-        "itemError": "Щось не так із цією настройкою. Пройдіть налаштування ще раз, щоб виправити це.",
-        "items": {
-          "default": "Налаштування за замовчанням",
-          "extension": "Розширення",
-          "proxy": "Користувацький проксі",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Повторити налаштування",
-        "successStatus": {
-          "description": "Усе готово для того, щоб ви могли почати дивитися улюблені медіа.",
-          "title": "Все готово!"
-        },
-        "unsetStatus": {
-          "description": "Будь ласка, натисніть кнопку праворуч, щоб розпочати процес налаштування.",
-          "title": "Ви не завершили налаштування"
-        }
-      },
-      "title": "З'єднання",
-      "workers": {
-        "addButton": "Додати нового працівника",
-        "description": "Щоб додаток працював, весь трафік маршрутизується через проксі-сервери. Увімкніть це, якщо ви хочете використовувати власні проксі воркери. <0>Інструкція.</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "Немає працівників",
-        "label": "Використовувати власних проксі-працівників",
-        "urlLabel": "URL-у працівника",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
+        "changeWarning": "Зміна внутрішнього сервера призведе до виходу з системи. Продовжити?",
+        "changeWarningTitle": "Змінити внутрішній сервер",
+        "error": "Помилка підключення до сервера",
+        "notice": "Ваш обліковий запис НЕ синхронізується між бекендами, тож запам’ятайте, який з них ви використовуєте!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "Внесіть свій внесок у TheIntroDB, залишивши відгук про сегменти вступу, підсумку та титрів. <0>Докладніше.</0>",
+        "tokenLabel": "Ключ API"
+      },
+      "title": "З'єднання"
     },
     "preferences": {
-      "title": "Параметри",
+      "autoplay": "Автовідтворення",
+      "autoplayDescription": "Автоматично відтворювати наступний епізод серії після досягнення кінця. Може бути ввімкнено користувачами за допомогою розширення браузера, спеціального проксі-сервера або налаштування за замовчуванням, якщо це дозволено хостом.",
+      "autoplayLabel": "Автовідтворення",
+      "autoResumeOnPlaybackError": "Автоматичне відновлення після помилки відтворення",
+      "autoResumeOnPlaybackErrorDescription": "Автоматично продовжувати пошук інших джерел, якщо поточне джерело не працює під час відтворення. Якщо вимкнено, ви побачите екран помилки з опцією ручного відновлення.",
+      "autoResumeOnPlaybackErrorLabel": "Автоматичне відновлення після помилки відтворення",
+      "autoSkipSegments": "Автоматичний пропуск сегментів",
+      "autoSkipSegmentsDescription": "Коли ввімкнено, автоматично пропускати вступ, підсумок і попередній перегляд під час перегляду.",
+      "autoSkipSegmentsLabel": "Автоматичний пропуск сегментів",
+      "doubleClickToSeek": "Двічі торкніться, щоб шукати",
+      "doubleClickToSeekDescription": "Двічі торкніться лівого або правого боку плеєра, щоб перейти на 10 секунд вперед або назад.",
+      "doubleClickToSeekLabel": "Увімкніть подвійне торкання для пошуку",
+      "embedOrder": "Зміна порядку вставок",
+      "embedOrderDescription": "Перетягніть, щоб змінити порядок вставок. Це визначатиме порядок, у якому перевірятимуться вставки для медіафайлів, які ви намагаєтеся переглянути. <br><br> <strong>(Порядок за умовчанням найкращий для більшості користувачів)</strong>",
+      "embedOrderEnableLabel": "Індивідуальний порядок вставки",
+      "holdToBoost": "Утримуйте, щоб збільшити швидкість",
+      "holdToBoostDescription": "Утримуйте пробіл або торкніться й утримуйте екран, щоб тимчасово збільшити швидкість відтворення до 2 разів. Відпустіть, щоб повернутися до попередньої швидкості.",
+      "holdToBoostLabel": "Увімкніть утримання для посилення",
+      "keyboardShortcuts": "Комбінації клавіш",
+      "keyboardShortcutsDescription": "Налаштуйте комбінації клавіш для програми. Утримуйте `, щоб показати цю довідку в будь-який час",
+      "keyboardShortcutsLabel": "Налаштування комбінацій клавіш",
       "language": "Мова додатку",
       "languageDescription": "Мова застосована до всього додатку.",
+      "lastSuccessfulSource": "Останнє використане джерело",
+      "lastSuccessfulSourceDescription": "Автоматично визначати пріоритет джерела, яке успішно надало вміст для попереднього епізоду. Це допомагає забезпечити безперервність перегляду серіалів.",
+      "lastSuccessfulSourceEnableLabel": "Останнє використане джерело",
+      "lowPerformanceMode": "Режим низької продуктивності/пропускної здатності",
+      "lowPerformanceModeDescription": "Оптимізує програму для повільніших з’єднань і пристроїв, вимикаючи функції, які потребують великої пропускної здатності. Цей режим зменшує використання даних і покращує продуктивність, зберігаючи основні функції пошуку та перегляду.",
+      "lowPerformanceModeLabel": "Режим низької продуктивності",
+      "manualSource": "Ручний вибір джерела",
+      "manualSourceDescription": "Вимагати вибору джерела перед збиранням. Вимикає автоматичний вибір джерела та відкриває засіб вибору джерела під час початку відтворення.",
+      "manualSourceLabel": "Ручний вибір джерела",
+      "showLess": "Показувати менше",
+      "showMore": "Показати більше",
+      "skipCredits": "Пропустити кінцеві титри",
+      "skipCreditsDescription": "Якщо ввімкнено, автоматично відтворювати наступний епізод після завершення 99%, щоб пропустити кінцеві титри. Якщо вимкнено, дочекатися повного завершення епізоду.",
+      "skipCreditsLabel": "Пропустити кінцеві титри",
+      "sourceOrder": "Перевпорядкування джерел",
+      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
+      "sourceOrderEnableLabel": "Індивідуальний порядок джерел",
       "thumbnail": "Створити мініатюри",
       "thumbnailDescription": "Часто відео не мають мініатюр. Ви можете активувати цей параметр для їх генерації під час відтворення, але це може уповільнити відтворення відео.",
       "thumbnailLabel": "Сгенерувати мініатюри",
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "title": "Параметри"
     },
     "reset": "Скинути налаштування",
     "save": "Зберегти",
+    "search": {
+      "placeholder": "Налаштування пошуку..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "Версія застосунку",
-        "backendUrl": "URL сервера",
-        "backendVersion": "Версія сервера",
-        "hostname": "Ім'я хоста",
-        "insecure": "Небезпечно",
-        "nickname": "Nickname",
         "notLoggedIn": "Ви не увійшли",
-        "secure": "Безпечно",
-        "title": "Інформація про застосунок",
-        "unknownVersion": "Невідомо",
         "userId": "ID користувача",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Використовуйте це як код запрошення для реєстрації друзів"
       }
     },
     "subtitles": {
-      "backgroundLabel": "Прозорість фону",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "Вимкнення розмиття фону підписів може вирішити деякі проблеми з мерехтінням",
+      "backgroundBlurEnabledLabel": "Розмиття фону",
       "backgroundBlurLabel": "Розмиття фону",
+      "backgroundLabel": "Прозорість фону",
+      "BorderThicknessLabel": "Товщина кордону",
       "colorLabel": "Колір",
+      "high": "Високий",
+      "low": "За замовчуванням",
       "previewQuote": "Я не повинен боятися. Страх вбиває розум.",
+      "textBoldLabel": "Жирний текст",
       "textSizeLabel": "Розмір шрифту",
-      "title": "Субтитри",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "Border": "Кордон",
+        "default": "За замовчуванням",
+        "depressed": "депресія",
+        "dropShadow": "Тінь",
+        "raised": "Піднятий",
+        "title": "Стиль тексту"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "Субтитри",
+      "verticalPositionLabel": "Вертикальне положення"
     },
     "unsaved": "У вас є незбережені зміни"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
-      "top10": "Топ 10"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "У тренді зараз"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
-    },
-    "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "filters": {
-      "country": "Країна"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Введіть посилання на вечірку спільного перегляду або код кімнати",
-    "you": "Ви",
-    "guestFallback": "Гість"
   },
   "tmdb": {
     "genres": {
       "10759": "Бойовик і пригоди"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "Випереджає господаря на {{seconds}} секунд",
+    "alone": "На самоті",
+    "behindHost": "Відставання від хоста на {{seconds}} секунд",
+    "cancel": "Скасувати",
+    "connectedAsGuest": "Підключено до перегляду вечірки як гість",
+    "contentMismatch": "Неможливо приєднатися до перегляду: вміст не відповідає вмісту організатора.",
+    "copyCode": "Натисніть, щоб скопіювати",
+    "emptyRoom": "У цій кімнаті ще нікого немає",
+    "enterCodeOrLink": "Введіть посилання на вечірку спільного перегляду або код кімнати",
+    "episodeMismatch": "Неможливо приєднатися до вечірки перегляду: Ви дивитесь епізод, відмінний від ведучого.",
+    "guestFallback": "Гість",
+    "hosting": "Хостинг",
+    "hostParty": "Влаштуйте вечірку перегляду",
+    "invalidRoom": "Неможливо підключитися до цієї кімнати",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Приєднуйтесь",
+    "joinParty": "Приєднуйтесь до Watch Party",
+    "leaveWatchParty": "Залишити Watch Party",
+    "linkCopied": "Скопійовано!",
+    "noHost": "На цій вечірці немає ведучого",
+    "save": "зберегти",
+    "shareCode": "Поділіться цим кодом з друзями (натисніть, щоб скопіювати посилання)",
+    "showStatusOverlay": "Показати накладення стану",
+    "status": {
+      "inSync": "Синхронно",
+      "outOfSync": "Не синхронізовано"
+    },
+    "syncing": "Синхронізація...",
+    "validating": "Перевірка перегляду...",
+    "viewers": "Глядачі ({{count}})",
+    "watching": "Дивлячись",
+    "withCount": "З {{count}} іншими",
+    "you": "Ви"
   }
 }

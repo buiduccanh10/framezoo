@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix 是 movie-web 的一个分叉，可确保在 movie-web.app 关闭后仍能正常运行。AlphaFlix 运行在一个私有的、自我托管的 VPS 上。我在亏损的情况下运营这个网站，但这里没有广告，因为我对免费媒体的信仰。",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "常见问题",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "这些内容来自哪里？",
-      "body": "AlphaFlix 不托管任何内容。当您点击要观看的内容时，会在互联网上搜索所选媒体（在加载屏幕和“片源”选项卡中，您可以看到您正在使用的视频源）。AlphaFlix 不上传媒体，所有内容都是通过这种搜索机制获取的。",
-      "section": "general"
-    },
-    "q2": {
-      "title": "我可以从哪里请求增加节目或电影？",
-      "body": "无法主动请求增加节目或电影，AlphaFlix 不托管任何内容。所有内容均通过网络上的片源服务器获取并供您观看。",
-      "section": "search"
-    },
-    "q3": {
-      "title": "搜索结果中已显示了节目或电影，为何我无法播放？",
-      "body": "我们的搜索结果由 The Movie Database (TMDB) 提供，无论我们的片源服务器是否实际拥有该内容，都会显示搜索结果。",
-      "section": "search"
-    },
-    "q4": {
-      "title": "那我的数据呢？",
-      "body": "所有数据都同步到社区后台，任何人都可以免费使用。",
-      "section": "general"
-    },
-    "q5": {
-      "title": "如何了解更多信息？",
-      "body": "AlphaFlix 有一个 Fluxer 服务器，可在本页上方找到！",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "关于 AlphaFlix"
-  },
   "actions": {
-    "copied": "已复制",
-    "copy": "复制",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "copied": "已复制",
+    "copy": "复制"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Active",
+      "confirm": "Confirm",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Choose which backend server to connect to",
+      "title": "Select Account Server"
+    },
     "createAccount": "还没有账户？ <0>创建一个</0>",
-    "deviceNameLabel": "设备名称",
-    "deviceNamePlaceholder": "我的手机",
-    "inviteCodeLabel": "邀请码",
-    "inviteCodePlaceholder": "输入好友的用户 ID",
-    "inviteCodeRequiredError": "需要邀请码",
-    "inviteCodeInvalidError": "邀请码无效（未找到用户 ID）",
     "generate": {
-      "description": "助记词相当于您的用户名和密码。请务必妥善保管，因为登录账户时需要输入该密码。<bold>切勿遗失你的助记词！</bold>",
-      "next": "我已妥善保管助记词",
-      "passphraseFrameLabel": "助记词",
-      "title": "您的助记词",
       "custom": "Custom",
       "customPassphraseLabel": "Custom Passphrase",
       "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
+      "description": "助记词相当于您的用户名和密码。请务必妥善保管，因为登录账户时需要输入该密码。<bold>切勿遗失你的助记词！</bold>",
       "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
+      "next": "我已妥善保管助记词",
+      "passphraseFrameLabel": "助记词",
       "passphraseTooShort": "Passphrase must be at least 8 characters long.",
+      "title": "您的助记词",
+      "useCustomPassphrase": "Use Custom Passphrase",
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "已经拥有账户？<0>点击此处登录</0>",
+    "inviteCodeInvalidError": "邀请码无效（未找到用户 ID）",
+    "inviteCodeLabel": "邀请码",
+    "inviteCodePlaceholder": "输入好友的用户 ID",
+    "inviteCodeRequiredError": "需要邀请码",
     "login": {
       "description": "请输入助记词以登录您的账户",
-      "deviceLengthError": "请输入设备名称",
-      "passphraseLabel": "12 词助记词",
-      "passphrasePlaceholder": "助记词",
-      "submit": "登录",
-      "title": "登录您的账户",
-      "validationError": "助记词不正确或不完整",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "昵称",
+      "nicknameNotFound": "未找到昵称",
       "nicknamePlaceholder": "输入您的昵称",
+      "nicknameRequired": "昵称为必填项",
+      "noBackendUrl": "No backend URL",
+      "or": "or",
+      "passwordIncorrect": "密码不正确",
       "passwordLabel": "密码",
       "passwordPlaceholder": "输入您的密码",
-      "nicknameRequired": "昵称为必填项",
       "passwordRequired": "需要密码",
-      "nicknameNotFound": "未找到昵称",
-      "passwordIncorrect": "密码不正确"
+      "submit": "登录",
+      "title": "登录您的账户",
+      "usePasskey": "Use passkey",
+      "validationError": "助记词不正确或不完整"
     },
     "register": {
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "确认您的密码",
       "information": {
         "color1": "头像配色 1",
         "color2": "头像配色 2",
@@ -195,39 +61,27 @@
         "next": "下一步",
         "title": "账户信息"
       },
-      "passwordInput": {
-        "title": "创建您的登录名",
-        "description": "选择昵称和密码。您的密码是安全密码，因此请务必记住它！"
-      },
       "nicknameLabel": "昵称",
       "nicknamePlaceholder": "选择一个独特的昵称",
       "nicknameTaken": "昵称已被占用",
+      "passwordInput": {
+        "description": "选择昵称和密码。您的密码是安全密码，因此请务必记住它！",
+        "title": "创建您的登录名"
+      },
       "passwordLabel": "密码",
-      "passwordPlaceholder": "创建密码（用作您的密码）",
-      "passwordWeak": "密码必须至少8位，包含字母和数字",
       "passwordMismatch": "密码不匹配",
-      "confirmPasswordLabel": "确认密码",
-      "confirmPasswordPlaceholder": "确认您的密码"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "创建密码（用作您的密码）",
+      "passwordWeak": "密码必须至少8位，包含字母和数字"
     },
     "trust": {
       "failed": {
         "text": "您的配置是否正确？",
         "title": "无法连接服务器"
       },
-      "noHostTitle": "未配置服务器！",
-      "noHost": "服务器尚未配置，因此您无法创建账户",
       "host": "您正在连接到 <0>{{hostname}}</0> - 在创建账户前，确保您信任它…",
       "no": "返回",
+      "noHost": "服务器尚未配置，因此您无法创建账户",
+      "noHostTitle": "未配置服务器！",
       "title": "您是否信任这个服务器？",
       "yes": "我信任这个服务器"
     },
@@ -235,14 +89,88 @@
       "description": "请输入您之前得到的助记词，以确认您已保存密码并继续创建账户",
       "invalidData": "数据无效",
       "noMatch": "助记词不匹配",
-      "passphraseLabel": "您的 12 词助记词",
       "recaptchaFailed": "ReCaptcha 验证失败",
       "register": "创建账户",
-      "title": "确认您的助记词",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "确认您的助记词"
     }
+  },
+  "details": {
+    "airs": "Airs",
+    "collection": {
+      "movie": "Movie",
+      "movies": "Movies",
+      "rating": "Rating",
+      "releaseDate": "Release Date",
+      "sortBy": "Sort by"
+    },
+    "endsAt": "Ends at {{time}}",
+    "episode": "Episode",
+    "episodes": "Episodes",
+    "imdb": "View on IMDb",
+    "language": "Language:",
+    "play": "Play",
+    "rating": "Rating:",
+    "releaseDate": "Release Date:",
+    "resume": "Resume",
+    "runtime": "Runtime:",
+    "season": "Season",
+    "seasons": "Season/s",
+    "similar": "Similar",
+    "tmdb": "View on TMDB",
+    "trailers": "Trailers",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "All Movie Lists",
+    "carousel": {
+      "change": "Change",
+      "more": "View more",
+      "title": {
+        "4kReleases": "4K Releases",
+        "editorPicksMovies": "Editor Picks Movies",
+        "editorPicksShows": "Editor Picks Shows",
+        "forYou": "For You",
+        "inCinemas": "电影院中",
+        "latestReleases": "Latest Releases",
+        "latestTVReleases": "Latest TV Shows",
+        "movies": "{{category}}电影",
+        "moviesOn": "Movies on {{provider}}",
+        "onTheAir": "On The Air",
+        "popular": "Most Popular",
+        "recommended": "Because You Watched: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Top Rated",
+        "trending": "现在流行",
+        "tvshows": "{{category}}节目",
+        "tvshowsOn": "Shows on {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "More Info",
+      "playNow": "Play Now"
+    },
+    "filters": {
+      "country": "国家"
+    },
+    "page": {
+      "back": "Go back",
+      "loading": "Loading...",
+      "loadMore": "Load more",
+      "title": "探索电影和节目"
+    },
+    "scrollToTop": "返回顶部",
+    "tabs": {
+      "movies": "电影",
+      "top10": "前10名",
+      "tvshows": "节目"
+    },
+    "viewLists": "View All Movie Lists"
+  },
+  "downtimeNotice": {
+    "badge": "问题",
+    "goHome": "返回首页",
+    "message": "AlphaFlix 在某些片源提供商处遇到问题，如果您无法找到或播放节目，请更换片源。预计该错误将在一段时间内持续存在。",
+    "title": "片源提供商问题"
   },
   "errors": {
     "badge": "出现错误",
@@ -258,128 +186,116 @@
     },
     "links": {
       "fluxer": "Fluxer",
-      "legal": "Legal / DMCA",
-      "github": "GitHub",
-      "twitter": "X (Formerly Twitter)",
-      "funding": "Support us"
+      "funding": "Support us",
+      "github": "GitHub"
     },
     "tagline": "免费观看您喜爱的节目和电影，绝无任何广告！"
   },
   "global": {
-    "name": "AlphaFlix",
-    "pages": {
-      "about": "关于",
-      "legal": "Legal / DMCA",
-      "discover": "探索",
-      "support": "支持",
-      "login": "登录",
-      "onboarding": "设定",
-      "pagetitle": "{{title}} - AlphaFlix",
-      "register": "注册",
-      "settings": "设置",
-      "migration": "迁移账户",
-      "jip": "Jip"
-    },
     "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
+      "cancel": "Cancel",
+      "clickToEdit": "Click on a key badge to edit it",
       "conditions": {
-        "notInWatchParty": "Not in watch party",
         "showsOnly": "Shows only"
       },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
       "conflict": "conflict",
       "conflicts": "conflicts",
       "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
+      "editInSettings": "Edit keyboard commands from settings",
+      "groups": {
+        "audioVideo": "Audio & Video",
+        "interface": "Interface",
+        "jumpToPosition": "Jump to Position",
+        "subtitlesAccessibility": "Subtitles & Accessibility",
+        "videoPlayback": "Video Playback"
+      },
       "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
       "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%.",
+      "pressKey": "Press a key...",
+      "resetAllToDefault": "Reset All to Default",
+      "resetToDefault": "Reset to default",
+      "save": "Save",
+      "saveChanges": "Save Changes",
+      "shortcuts": {
+        "barrelRoll": "Do a barrel roll! 🌀",
+        "closeOverlay": "Close overlay/modal",
+        "decreaseVolume": "Decrease volume",
+        "increaseVolume": "Increase volume",
+        "jumpTo0": "Jump to 0% (beginning)",
+        "jumpTo9": "Jump to 90%",
+        "mute": "Mute/unmute",
+        "nextEpisode": "Next episode",
+        "playPause": "Play/pause (or hold for 2x speed when enabled)",
+        "playPauseAlt": "Play/pause",
+        "previousEpisode": "Previous episode",
+        "randomCaption": "Select random caption from last used language",
+        "skipBackward1": "Skip backward 1 second",
+        "skipBackward10": "Skip backward 10 seconds",
+        "skipBackward5": "Skip backward 5 seconds",
+        "skipForward1": "Skip forward 1 second",
+        "skipForward10": "Skip forward 10 seconds",
+        "skipForward5": "Skip forward 5 seconds",
+        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
+        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleCaptions": "Toggle captions",
+        "toggleFullscreen": "Toggle fullscreen",
+        "toggleNativeSubtitles": "Toggle native subtitles"
+      },
+      "subtitle": "Hold ` to show this help anytime",
+      "title": "Keyboard Shortcuts"
+    },
+    "name": "AlphaFlix",
+    "pages": {
+      "discover": "探索",
+      "login": "登录",
+      "migration": "迁移账户",
+      "pagetitle": "{{title}} - AlphaFlix",
+      "register": "注册",
+      "settings": "设置"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "书签",
-      "showAll": "Show all",
-      "groups": {
-        "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
-        },
-        "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
-        }
-      },
       "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
         "cancel": "Cancel",
-        "save": "Save",
+        "description": "Edit the details for this bookmark",
         "groupsLabel": "Groups",
+        "save": "Save",
+        "title": "Edit Bookmark",
         "titleLabel": "Title",
         "titlePlaceholder": "Enter a title for your bookmark",
         "yearLabel": "Year",
         "yearPlaceholder": "Enter a year for your bookmark"
       },
+      "groups": {
+        "dropdown": {
+          "empty": "No groups yet",
+          "placeholderButton": "Add to group",
+          "removeAll": "Remove all",
+          "removeFromGroup": "Remove from group"
+        },
+        "editGroup": {
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "cancel": "Cancel",
+          "description": "Edit the name and icon of your bookmark group",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group",
+          "save": "Save",
+          "title": "Edit Group"
+        },
+        "reorder": {
+          "button": "Reorder",
+          "cancel": "Cancel",
+          "description": "Drag and drop to reorder your bookmark groups",
+          "done": "Done",
+          "save": "Save",
+          "title": "Edit Group Order"
+        }
+      },
+      "sectionTitle": "书签",
+      "showAll": "Show all",
       "sorting": {
-        "label": "Sort by",
         "options": {
           "date": "Default (Date added)",
           "titleAsc": "Title A-Z",
@@ -392,7 +308,6 @@
     "continueWatching": {
       "sectionTitle": "继续观看",
       "sorting": {
-        "label": "Sort by",
         "options": {
           "date": "Default (Date added)",
           "titleAsc": "Title A-Z",
@@ -405,12 +320,19 @@
     "mediaList": {
       "stopEditing": "编辑完成"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "以上是我们能找到的所有结果…",
+      "discover": "探索",
+      "discoverMore": "探索更多",
+      "empty": {
+        "default": "欢迎，在这里找到你想看的！",
+        "extra": [
+          "这里啥都没有",
+          "空空如也…",
+          "空空如也…",
+          "Hi，新用户"
+        ]
+      },
       "failed": "查找媒体失败，请重试！",
       "loading": "加载中…",
       "noResults": "我们找不到任何结果！",
@@ -428,23 +350,19 @@
           ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "欢迎，在这里找到你想看的！",
-        "extra": [
-          "这里啥都没有",
-          "空空如也…",
-          "空空如也…",
-          "Hi，新用户"
-        ]
-      },
-      "sectionTitle": "搜索结果",
-      "discoverMore": "探索更多",
-      "discover": "探索"
+      "sectionTitle": "搜索结果"
     },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+    "support": {
+      "complete": "complete",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
+      "donate": "Donate",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "fluxer": "Fluxer",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "moreInfo": "More info",
+      "thankYou": "Thank you for your support!",
+      "title": "AlphaFlix needs your help!"
     },
     "titles": {
       "69": {
@@ -465,6 +383,15 @@
           "AlphaFlix 万岁！"
         ]
       },
+      "halloween": {
+        "default": "What spooky movie would you like to watch this Halloween?",
+        "extra": [
+          "Happy Halloween! 🎃👻",
+          "Boo! 👻",
+          "Trick or treat! 🍬",
+          "It's the Great Pumpkin, Charlie Brown!"
+        ]
+      },
       "morning": {
         "default": "您今早想看什么？",
         "extra": [
@@ -476,304 +403,116 @@
         "extra": [
           "AlphaFlix 万岁！"
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Recently Watched",
+      "sectionTitle": "Watch History"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
-    "unreleased": "未发布",
+    "episodeShort": "E",
+    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?",
+    "seasonWatched": "Are you sure you want to mark the season as watched?",
     "types": {
       "movie": "电影",
       "show": "节目"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "未发布"
   },
   "migration": {
-    "loginRequired": "您必须登录后才能迁移数据！请返回并登录以继续。",
-    "start": {
-      "title": "迁移你的数据",
-      "explainer": "如果您希望迁移或备份数据，可以使用以下选项。这样当您切换后端服务器时就可以保留您的数据。",
-      "options": {
-        "or": "或",
-        "direct": {
-          "description": "这将直接将您的数据迁移到新服务器。这是最快的选项。<br /><br />该选项允许你保持助记词不变！",
-          "title": "直接迁移",
-          "quality": "最简单快捷",
-          "action": "传输数据"
-        },
-        "download": {
-          "description": "这将把您的数据下载到您的设备上。然后您可以将其上传到新的服务器，或将其妥善保存。",
-          "title": "下载数据",
-          "quality": "更高级",
-          "action": "下载数据"
-        },
-        "upload": {
-          "title": "上传数据",
-          "description": "上传您之前导出的数据文件，以恢复您在此账户上的书签和进度。",
-          "quality": "从备份恢复",
-          "action": "上传数据"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "直接迁移",
-      "description": "输入目标后端服务器 URL 以将当前账户数据迁移到新的后端服务器。这样可以保持助记词不变！",
-      "backendLabel": "目标后端服务器 URL",
-      "recaptchaLabel": "ReCaptcha 密钥（可选）",
-      "toggleLable": "需要 ReCaptcha？",
-      "status": {
-        "error": "数据迁移失败",
-        "success": "你的数据已被成功迁移！"
-      },
-      "button": {
-        "migrate": "迁移",
-        "processing": "处理中…",
-        "home": "返回首页",
-        "login": "继续登录"
-      }
-    },
+    "back": "返回",
     "download": {
-      "title": "下载数据",
+      "button": {
+        "download": "下载数据",
+        "home": "返回首页"
+      },
       "description": "这将把您的数据下载到您的设备上。然后您可以将其上传到新的服务器，或将其妥善保存。",
       "status": {
         "error": "数据下载失败",
         "success": "你的数据已被成功下载！"
       },
-      "button": {
-        "download": "下载数据",
-        "home": "返回首页",
-        "login": "继续登录"
-      }
+      "title": "下载数据"
+    },
+    "loginRequired": "您必须登录后才能迁移数据！请返回并登录以继续。",
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      },
+      "uploadDescription": "Data to upload:"
+    },
+    "start": {
+      "explainer": "这将把您的数据下载到您的设备上。然后您可以将其上传到新的服务器，或将其妥善保存。 上传您之前导出的数据文件，以恢复您在此账户上的书签和进度。",
+      "options": {
+        "download": {
+          "action": "下载数据",
+          "description": "这将把您的数据下载到您的设备上。然后您可以将其上传到新的服务器，或将其妥善保存。",
+          "quality": "更高级",
+          "title": "下载数据"
+        },
+        "or": "或",
+        "upload": {
+          "action": "上传数据",
+          "description": "上传您之前导出的数据文件，以恢复您在此账户上的书签和进度。",
+          "quality": "从备份恢复",
+          "title": "上传数据"
+        }
+      },
+      "title": "迁移你的数据"
     },
     "upload": {
-      "title": "上传数据",
+      "button": {
+        "home": "返回主页",
+        "import": "导入数据",
+        "processing": "处理中…",
+        "saveLocal": "Save locally"
+      },
       "description": "上传您之前导出的数据文件，以恢复您在此账户上的书签和进度。",
+      "exportedOn": "被导出的账户",
+      "file": {
+        "change": "更改文件",
+        "description": "选择你想上传的文件",
+        "select": "选择文件"
+      },
+      "previewTitle": "Preview:",
       "status": {
-        "processing": "处理数据中…",
         "error": "上传数据失败",
+        "processing": "处理数据中…",
         "success": "你的数据已被成功上传！",
         "successLocal": "Your data has been saved locally! 🎉"
       },
-      "file": {
-        "description": "选择你想上传的文件",
-        "select": "选择文件",
-        "change": "更改文件",
-        "name": "文件名称"
-      },
-      "exportedOn": "被导出的账户",
-      "previewTitle": "Preview:",
-      "button": {
-        "import": "导入数据",
-        "processing": "处理中…",
-        "success": "导入完成",
-        "home": "返回主页",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "返回"
+      "title": "上传数据"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "请检查您的互联网连接"
     },
+    "install": {
+      "genericGuide": "您的浏览器不支持自动 PWA 安装提示。\n您仍然可以使用浏览器菜单进行安装（例如：“安装应用程序”、“创建快捷方式”或“添加到 Dock/主屏幕”）。",
+      "iosSafariGuide": "要将 BetaMovie 安装为应用程序：\n\n1. 点击共享按钮（带箭头的方块）。\n2. 选择“添加到主屏幕”。\n3. 点击添加。"
+    },
     "menu": {
-      "about": "关于我们",
+      "desktop": "App Settings",
       "logout": "登出",
       "register": "同步到云端",
-      "settings": "设置",
-      "support": "支持",
-      "discover": "探索",
-      "development": "Development",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "要将 BetaMovie 安装为应用程序：\n\n1. 点击共享按钮（带箭头的方块）。\n2. 选择“添加到主屏幕”。\n3. 点击添加。",
-      "genericGuide": "您的浏览器不支持自动 PWA 安装提示。\n您仍然可以使用浏览器菜单进行安装（例如：“安装应用程序”、“创建快捷方式”或“添加到 Dock/主屏幕”）。"
+      "settings": "设置"
     }
   },
   "notFound": {
     "badge": "未找到",
     "goHome": "返回首页",
-    "reloadButton": "重试",
     "message": "我们找遍了所有地方：不管是废纸篓、衣柜里还是代理服务器后，但最终还是没有找到你要找的那一页。",
+    "reloadButton": "重试",
     "title": "无法找到此页面"
-  },
-  "downtimeNotice": {
-    "badge": "问题",
-    "goHome": "返回首页",
-    "message": "AlphaFlix 在某些片源提供商处遇到问题，如果您无法找到或播放节目，请更换片源。预计该错误将在一段时间内持续存在。",
-    "title": "片源提供商问题"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "取消",
-      "confirm": "使用默认设定",
-      "description": "默认设置没有最好的视频串流，您将错过最好的片源！",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "您确定吗？"
-    },
-    "extension": {
-      "back": "返回",
-      "explainer": "使用浏览器扩展，您可以获得我们提供的最佳串流。只需简单几步来安装即可。",
-      "explainerIos": "很遗憾，浏览器扩展不支持 iOS，单击<bold>返回</bold>以选择其他选项。",
-      "extensionHelp": "如您已安装扩展程序但未被检测到，<bold>请从浏览器的扩展菜单打开扩展</bold> 并按屏幕上的指示操作。",
-      "linkChrome": "安装 Chrome 扩展程序",
-      "linkFirefox": "安装 Firefox 扩展程序",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "已在 Chrome 上安装，但网站未能检测到？尝试刷新页面！",
-      "notDetectingAction": "刷新页面",
-      "status": {
-        "disallowed": "扩展程序未对本页面启用",
-        "disallowedAction": "启用扩展程序",
-        "failed": "请求状态失败",
-        "loading": "正等待您安装扩展程序",
-        "outdated": "扩展版本过旧",
-        "success": "扩展程序工作正常！"
-      },
-      "submit": "继续",
-      "title": "让我们从扩展程序开始"
-    },
-    "proxy": {
-      "back": "返回",
-      "explainer": "使用代理方法，您可以通过自己搭建的代理获得高质量的串流。",
-      "input": {
-        "errorConnection": "无法连接到代理",
-        "errorInvalidUrl": "URL 无效",
-        "errorNotProxy": "检测到常规网站，链接应指向代理",
-        "label": "代理 URL",
-        "placeholder": "https://"
-      },
-      "link": "了解如何设置代理",
-      "submit": "提交代理",
-      "title": "让我们设置新的代理"
-    },
-    "start": {
-      "explainer": "为了尽可能获得最佳串流，您将要选择使用何种串流方法。",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "或",
-        "default": {
-          "text": "我不想要高质量的串流，使用默认设置。"
-        },
-        "extension": {
-          "action": "安装扩展程序",
-          "description": "安装浏览器扩展并获取最佳片源。",
-          "quality": "最佳质量 + 更多片源",
-          "title": "浏览器扩展"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "设定代理",
-          "description": "在 5 分钟内设定好代理并获取优质资源。",
-          "quality": "高质量",
-          "title": "自定义代理"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "让我们为您设定 AlphaFlix"
+      "cancel": "取消"
     }
   },
   "overlays": {
@@ -785,363 +524,8 @@
       "short": "返回"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
       "device": "device",
-      "enabled": "正在投送到设备…"
-    },
-    "menus": {
-      "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "下载内容是直接从内容提供者获取的。AlphaFlix 无法控制下载内容如何被提供。",
-        "copyHlsPlaylist": "复制 HLS 播放列表链接",
-        "downloadSubtitle": "下载当前字幕",
-        "downloadVideo": "下载视频",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
-        "hlsDisclaimer": "下载内容是直接从内容提供者获取的。AlphaFlix 无法控制下载内容如何被提供。<br /><br />请注意，您正在下载 HLS 播放列表，<bold>如您不熟悉高级流媒体格式，我们不推荐此操作</bold>。如需下载其他格式，请尝试切换视频源。",
-        "onAndroid": {
-          "1": "要从 Android 下载，先点击下载按钮，之后在新的页面上， <bold>点击并按住</bold>视频，然后选择 <bold>保存</bold>。",
-          "shortTitle": "下载 / Android",
-          "title": "正在 Android 上下载"
-        },
-        "onIos": {
-          "1": "要从 iOS 下载，点击下载按钮，之后在新的页面上，点击 <bold><ios_share /></bold>，然后选择<bold>保存到文件 <ios_files /></bold>。",
-          "shortTitle": "下载 / iOS",
-          "title": "正在 iOS 上下载"
-        },
-        "onPc": {
-          "1": "在 PC 上，点击下载按钮，之后在新的页面上，右击视频并选择 <bold>另存视频为</bold>",
-          "shortTitle": "下载 / PC",
-          "title": "正在 PC 上下载"
-        },
-        "title": "下载"
-      },
-      "episodes": {
-        "button": "分集",
-        "emptyState": "该季暂无剧集，请稍后再来！",
-        "episodeBadge": "E{{episode}}",
-        "loadingError": "加载分季时发生错误",
-        "loadingList": "加载中……",
-        "loadingTitle": "加载中……",
-        "unairedEpisodes": "本季中的一集或多集已因尚未播出而被禁用。",
-        "seasons": "季",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
-        "specials": "特价商品"
-      },
-      "playback": {
-        "speedLabel": "播放速度",
-        "title": "播放设置",
-        "disabled": "(Disabled in watch party)",
-        "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
-      },
-      "quality": {
-        "automaticLabel": "自动质量",
-        "hint": "您可以尝试<0>切换片源</0>以获取不同的质量选项。",
-        "iosNoQuality": "由于 Apple 的（common IOS L）限制，iOS 上无法为该片源提供质量选择。您可以尝试<0>切换到另一个片源</0>，以获得不同的画质选项。",
-        "title": "画质",
-        "auto": "Auto"
-      },
-      "settings": {
-        "downloadItem": "下载",
-        "enableSubtitles": "启用字幕",
-        "experienceSection": "观看体验",
-        "playbackItem": "播放设置",
-        "audioItem": "音频",
-        "qualityItem": "画质",
-        "sourceItem": "片源",
-        "subtitleItem": "字幕设置",
-        "videoSection": "视频设置"
-      },
-      "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
-        "failed": {
-          "text": "尝试查找视频时出现错误… 试试其他片源？",
-          "title": "刮削失败"
-        },
-        "noEmbeds": {
-          "text": "我们无法找到任何嵌入内容，请尝试其他片源。",
-          "title": "未找到嵌入内容"
-        },
-        "noStream": {
-          "text": "此视频源没有该电影或节目的串流。",
-          "title": "没有串流"
-        },
-        "title": "片源",
-        "unknownOption": "未知",
-        "findNextSource": "Find next source"
-      },
-      "subtitles": {
-        "customChoice": "拖入或上传文件",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
-        "customizeLabel": "自定义",
-        "previewLabel": "Subtitle preview:",
-        "offChoice": "关闭",
-        "onChoice": "打开",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "来自片源的字幕",
-        "OpenSubtitlesChoice": "OpenSubtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
-        "settings": {
-          "backlink": "自定义字幕",
-          "delay": "字幕偏移",
-          "fixCapitals": "修正大小写"
-        },
-        "title": "字幕",
-        "unknownLanguage": "未知",
-        "dropSubtitleFile": "将字幕拖入这里",
-        "scrapeButton": "刮削字幕",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "没有提供的字幕。",
-        "notFound": "没有一个可用选项符合您的查询",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
-        "translate": {
-          "title": "Translate from {{language}}"
-        },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "正在加载外部字幕... ({{progress}}%)",
-        "matchScoreLabel": "匹配 ~{{score}}%"
-      },
-      "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
-      }
-    },
-    "metadata": {
-      "api": {
-        "text": "无法载入 API 元数据，请检查您的互联网连接。",
-        "title": "载入 API 元数据失败"
-      },
-      "legal": {
-        "badge": "已移除",
-        "text": "由于侵权通知或版权要求，该媒体已不可用。",
-        "title": "媒体已被移除"
-      },
-      "extensionPermission": {
-        "badge": "没有权限",
-        "button": "使用扩展程序",
-        "text": "您已安装浏览器扩展，但我们需要您的许可才能启用它。",
-        "title": "配置扩展程序"
-      },
-      "failed": {
-        "badge": "失败",
-        "homeButton": "返回首页",
-        "text": "无法从 TMDB 载入媒体的元数据。请检查 TMDB 是否掉线或在您的网络连接中被屏蔽。",
-        "title": "载入元数据失败"
-      },
-      "notFound": {
-        "badge": "未找到",
-        "homeButton": "返回首页",
-        "text": "我们无法找到您请求的媒体。它可能已被删除，或您篡改了 URL。",
-        "title": "无法找到媒体。"
-      }
-    },
-    "nextEpisode": {
-      "replay": "重新播放",
-      "next": "下一集",
-      "nextSeason": "下一季"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
-    },
-    "playbackError": {
-      "badge": "播放错误",
-      "errors": {
-        "errorAborted": "用户已请求中止获取媒体。",
-        "errorDecode": "尽管媒体资源此前已确定可用，但在尝试解码时产生问题，导致错误。",
-        "errorGenericMedia": "发生了未知的媒体错误。",
-        "errorNetwork": "发生了一些网络错误，导致媒体无法成功获取，尽管此前它可用。",
-        "errorNotSupported": "该媒体或媒体提供者对象不被支持。"
-      },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
-      "homeButton": "返回首页",
-      "resumeButton": "Try next sources",
-      "text": "尝试播放媒体时发生错误。请尝试其他片源。",
-      "title": "视频播放失败！"
-    },
-    "scraping": {
-      "items": {
-        "failure": "发生错误",
-        "timeout": "Timed out (15s)",
-        "notFound": "没有此视频",
-        "pending": "正在检查视频…"
-      },
-      "notFound": {
-        "badge": "未找到",
-        "detailsButton": "显示详情",
-        "homeButton": "返回首页",
-        "discoverButton": "探索更多",
-        "text": "我们已在所有片源提供者中搜索，但无法发现您搜寻的媒体内容！我们并不托管媒体内容，也无法控制有什么内容可用。请点击下方的“显示细节”了解更多。",
-        "title": "我们无法找到它",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "扩展程序已禁用",
-        "homeButton": "返回首页",
-        "enableExtension": "启用扩展程序",
-        "title": "请启用扩展程序",
-        "text": "您已经安装 AlphaFlix 扩展程序。要开始使用，您需要为此站点启用扩展。"
-      },
-      "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
-      }
-    },
-    "time": {
-      "regular": "{{timeWatched}} / {{duration}}",
-      "remaining": "剩余 {{timeLeft}} • 结束于 {{timeFinished, datetime}}",
-      "shortRegular": "{{timeWatched}}",
-      "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
+      "to": "Casting to {{device}} 📺"
     },
     "loadingOverlayMessages": {
       "1": "Downloading more RAM...",
@@ -1166,49 +550,340 @@
       "20": "Your time is very important to us. Please wait while we ignore you...",
       "21": "Still faster than Windows Update...",
       "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "支持",
-    "text": "AlphaFlix 的设计尽可能方便用户使用。但是人们仍然会有疑问和问题，本页将帮助解决这些问题",
-    "q1": {
-      "body": "您可以加入 <0>AlphaFlix 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
-      "title": "我可以在哪获取帮助？"
     },
-    "q2": {
-      "body": "我们有一个 <0>GitHub</0> 仓库，您可以在我们的仓库中创建一个详细的问题。此外如果您愿意，还可以创建一个拉取请求来自行修复问题。",
-      "title": "如何报告错误或问题？"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix 并不是大风刮来的，它主要是由一个人（一个非常史诗般的人）创造的。",
-    "q1": {
-      "body": "您可以加入 <0>AlphaFlix 官方 Fluxer</0> 并在那里提问，也可以向本页底部的电子邮件地址发送邮件。",
-      "title": "我可以在哪获取帮助？"
+    "menus": {
+      "audio": {
+        "default": "Default"
+      },
+      "downloads": {
+        "button": "Attempt download",
+        "copyHlsPlaylist": "复制 HLS 播放列表链接",
+        "disclaimer": "下载内容是直接从内容提供者获取的。AlphaFlix 无法控制下载内容如何被提供。",
+        "downloadSubtitle": "下载当前字幕",
+        "downloadVideo": "下载视频",
+        "hlsDisclaimer": "下载内容是直接从内容提供者获取的。AlphaFlix 无法控制下载内容如何被提供。<br /><br />请注意，您正在下载 HLS 播放列表，<bold>如您不熟悉高级流媒体格式，我们不推荐此操作</bold>。如需下载其他格式，请尝试切换视频源。",
+        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
+        "onAndroid": {
+          "1": "要从 Android 下载，先点击下载按钮，之后在新的页面上， <bold>点击并按住</bold>视频，然后选择 <bold>保存</bold>。",
+          "shortTitle": "下载 / Android",
+          "title": "正在 Android 上下载"
+        },
+        "onIos": {
+          "1": "要从 iOS 下载，点击下载按钮，之后在新的页面上，点击 <bold><ios_share /></bold>，然后选择<bold>保存到文件 <ios_files /></bold>。",
+          "shortTitle": "下载 / iOS",
+          "title": "正在 iOS 上下载"
+        },
+        "onPc": {
+          "1": "在 PC 上，点击下载按钮，之后在新的页面上，右击视频并选择 <bold>另存视频为</bold>",
+          "shortTitle": "下载 / PC",
+          "title": "正在 PC 上下载"
+        },
+        "title": "下载"
+      },
+      "episodes": {
+        "button": "分集",
+        "emptyState": "该季暂无剧集，请稍后再来！",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "Favorites",
+        "loadingError": "加载分季时发生错误",
+        "loadingList": "加载中……",
+        "loadingTitle": "加载中……",
+        "markAsFavorite": "Mark as favorite",
+        "markAsUnwatched": "Mark as unwatched",
+        "markAsWatched": "Mark as watched",
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "showLess": "Show less",
+        "showMore": "Show more",
+        "specials": "特价商品"
+      },
+      "playback": {
+        "disabled": "(Disabled in watch party)",
+        "speedBoosted": "2x",
+        "speedLabel": "播放速度",
+        "speedUnboosted": "{{speed}}x",
+        "title": "播放设置"
+      },
+      "quality": {
+        "auto": "Auto",
+        "automaticLabel": "自动质量",
+        "hint": "您可以尝试<0>切换片源</0>以获取不同的质量选项。",
+        "iosNoQuality": "由于 Apple 的（common IOS L）限制，iOS 上无法为该片源提供质量选择。您可以尝试<0>切换到另一个片源</0>，以获得不同的画质选项。",
+        "title": "画质"
+      },
+      "settings": {
+        "audioItem": "音频",
+        "downloadItem": "下载",
+        "enableSubtitles": "启用字幕",
+        "playbackItem": "播放设置",
+        "qualityItem": "画质",
+        "sourceItem": "片源",
+        "subtitleItem": "字幕设置"
+      },
+      "sources": {
+        "failed": {
+          "text": "尝试查找视频时出现错误… 试试其他片源？",
+          "title": "刮削失败"
+        },
+        "findNextSource": "Find next source",
+        "noEmbeds": {
+          "text": "我们无法找到任何嵌入内容，请尝试其他片源。",
+          "title": "未找到嵌入内容"
+        },
+        "noStream": {
+          "text": "此视频源没有该电影或节目的串流。",
+          "title": "没有串流"
+        },
+        "title": "片源",
+        "unknownOption": "未知"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
+        "clearSecondary": "Clear secondary subtitle",
+        "customChoice": "拖入或上传文件",
+        "customizeLabel": "自定义",
+        "delayEarly": "Saw caption",
+        "delayLate": "Heard audio",
+        "doubleClickToCopy": "Double click to copy subtitle data",
+        "dropSubtitleFile": "将字幕拖入这里",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "empty": "没有提供的字幕。",
+        "loadingExternal": "Loading external subtitles...",
+        "loadingExternalProgress": "正在加载外部字幕... ({{progress}}%)",
+        "matchScoreLabel": "匹配 ~{{score}}%",
+        "notFound": "没有一个可用选项符合您的查询",
+        "offChoice": "关闭",
+        "pasteChoice": "Paste subtitle data",
+        "previewLabel": "Subtitle preview:",
+        "primary": "Primary",
+        "refresh": "Refresh External Subtitles",
+        "refreshing": "Refreshing...",
+        "secondary": "Secondary",
+        "selectingSecondary": "Selecting secondary subtitle",
+        "settings": {
+          "backlink": "自定义字幕",
+          "delay": "字幕偏移",
+          "fixCapitals": "修正大小写"
+        },
+        "title": "字幕",
+        "transcriptChoice": "Transcript",
+        "translate": {
+          "title": "Translate from {{language}}"
+        },
+        "unknownLanguage": "未知",
+        "useNativeSubtitles": "Native video subtitles",
+        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Watch Party"
+      }
     },
-    "q2": {
-      "body": "我们有一个 <0>GitHub</0> 仓库，您可以在我们的仓库中创建一个详细的问题。此外如果您愿意，还可以创建一个拉取请求来自行修复问题。",
-      "title": "如何报告错误或问题？"
+    "metadata": {
+      "extensionPermission": {
+        "badge": "没有权限",
+        "button": "使用扩展程序",
+        "text": "您已安装浏览器扩展，但我们需要您的许可才能启用它。",
+        "title": "配置扩展程序"
+      },
+      "failed": {
+        "badge": "失败",
+        "homeButton": "返回首页",
+        "text": "无法从 TMDB 载入媒体的元数据。请检查 TMDB 是否掉线或在您的网络连接中被屏蔽。",
+        "title": "载入元数据失败"
+      },
+      "legal": {
+        "badge": "已移除",
+        "text": "由于侵权通知或版权要求，该媒体已不可用。",
+        "title": "媒体已被移除"
+      },
+      "notFound": {
+        "badge": "未找到",
+        "homeButton": "返回首页",
+        "text": "我们无法找到您请求的媒体。它可能已被删除，或您篡改了 URL。",
+        "title": "无法找到媒体。"
+      }
+    },
+    "nextEpisode": {
+      "next": "下一集",
+      "nextSeason": "下一季",
+      "replay": "重新播放"
+    },
+    "playbackError": {
+      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
+      "badge": "播放错误",
+      "copyDebugInfo": "Copy debug info",
+      "debugInfo": "Check console for more details.",
+      "errors": {
+        "errorAborted": "用户已请求中止获取媒体。",
+        "errorDecode": "尽管媒体资源此前已确定可用，但在尝试解码时产生问题，导致错误。",
+        "errorGenericMedia": "发生了未知的媒体错误。",
+        "errorNetwork": "发生了一些网络错误，导致媒体无法成功获取，尽管此前它可用。",
+        "errorNotSupported": "该媒体或媒体提供者对象不被支持。"
+      },
+      "homeButton": "返回首页",
+      "resumeButton": "Try next sources",
+      "text": "尝试播放媒体时发生错误。请尝试其他片源。",
+      "title": "视频播放失败！"
+    },
+    "resume": {
+      "description": "This episode is {{percentage}}% watched",
+      "restart": "Restart",
+      "resume": "Resume",
+      "title": "Continue watching?"
+    },
+    "scraping": {
+      "extensionFailure": {
+        "badge": "扩展程序已禁用",
+        "enableExtension": "启用扩展程序",
+        "homeButton": "返回首页",
+        "text": "您已经安装 AlphaFlix 扩展程序。要开始使用，您需要为此站点启用扩展。",
+        "title": "请启用扩展程序"
+      },
+      "items": {
+        "pending": "正在检查视频…"
+      },
+      "notFound": {
+        "badge": "未找到",
+        "detailsButton": "显示详情",
+        "discoverButton": "探索更多",
+        "homeButton": "返回首页",
+        "text": "我们已在所有片源提供者中搜索，但无法发现您搜寻的媒体内容！我们并不托管媒体内容，也无法控制有什么内容可用。请点击下方的“显示细节”了解更多。",
+        "title": "我们无法找到它"
+      },
+      "tips": {
+        "1": "Tap the gear icon to switch sources!",
+        "2": "Tap the title to copy the link!",
+        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
+        "4": "Some sources work better than others!",
+        "5": "Get the extension for more sources!",
+        "6": "Hold bookmarks to edit or delete them!",
+        "7": "Hold SHIFT and tap the title to copy the link with time!",
+        "8": "Set a custom subtitle color!",
+        "9": "Hold ` to view keyboard shortcuts!"
+      }
+    },
+    "segment": {
+      "credits": "Credits",
+      "intro": "Intro",
+      "recap": "Recap"
+    },
+    "skipTime": {
+      "confidence": "confidence",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "credits": "Skip Credits",
+      "endOfVideo": "End",
+      "endsAt": "Ends at {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Cancel",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "endTimeLabel": "End (s)",
+          "error": {
+            "endTime": "End time is required",
+            "mediaInfo": "Media information is not available",
+            "segment": "No segment selected",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "tidbKey": "TIDB API key is not set"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll.",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "whenToTitle": "Credits timestamps guide:"
+            },
+            "durationDesc": "Min 5s if end provided",
+            "durationLabel": "Duration:",
+            "endDesc": "Optional - empty if extends to end",
+            "endLabel": "End:",
+            "excludeDesc": "Post-credits scenes",
+            "excludeLabel": "Exclude:",
+            "intro": {
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence.",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "whenToTitle": "Intro timestamps guide:"
+            },
+            "preview": {
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode.",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "whenToTitle": "Preview timestamps guide:"
+            },
+            "recap": {
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes.",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "whenToTitle": "Recap timestamps guide:"
+            },
+            "startDesc": "Required - when credits begin rolling",
+            "startLabel": "Start:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "intro": "3:30 or 210 (required)",
+              "preview": "3:30 or 210 (leave empty for end of media)",
+              "recap": "3:30 or 210 (required)"
+            },
+            "start": {
+              "credits": "2:30 or 150 (required)",
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "preview": "2:30 or 150 (required)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)"
+            }
+          },
+          "segmentType": "Segment Type",
+          "startTimeLabel": "Start (s)",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          },
+          "title": "Submit Timestamps to TheIntroDB",
+          "types": {
+            "credits": "Credits",
+            "intro": "Intro",
+            "preview": "Preview",
+            "recap": "Recap"
+          },
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "whenToTitle": "Timestamps guide:"
+        },
+        "title": "Was this skip correct?"
+      },
+      "intro": "Skip Intro",
+      "noSegments": "No skip segments available",
+      "recap": "Skip Recap",
+      "skipSegments": "Skip Segments",
+      "startsAt": "Starts at {{time}}",
+      "submissions": "{{count}} submissions",
+      "submitSegment": "Submit Segment",
+      "timeUnknown": "Time unknown"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "剩余 {{timeLeft}} • 结束于 {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "正在载入应用程序",
-    "loadingUser": "正在载入您的个人资料",
     "loadingUserError": {
-      "logout": "登出",
-      "reset": "重设自定义服务器",
-      "disconnect": "Disconnect from backend",
-      "text": "个人资料载入失败",
-      "reload": "重新加载",
-      "textWithReset": "从您的自定义服务器载入个人资料失败，您想重设到默认服务器吗？",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconectCancel": "Cancel",
       "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectTitle": "Disconnect from backend?",
+      "logout": "登出",
+      "reload": "重新加载",
+      "reset": "重设自定义服务器"
     },
     "migration": {
       "failed": "数据迁移失败",
@@ -1216,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "设备名称",
-        "deviceNamePlaceholder": "我的手机",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "编辑",
-        "logoutButton": "登出"
-      },
-      "admin": {
-        "title": "管理面板",
-        "text": "用于测试 AlphaFlix 状态的工具。"
+        "logoutButton": "登出",
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname"
       },
       "actions": {
         "delete": {
@@ -1248,26 +907,26 @@
           "text": "此操作不可逆。所有数据将被删除且无法恢复。",
           "title": "删除账户"
         },
-        "migration": {
-          "title": "账户迁移",
-          "text": "将账户迁移到新服务器或下载数据。",
-          "button": "迁移账户"
-        },
-        "title": "操作",
         "logoutAllDevices": {
-          "title": "结束所有会话",
+          "button": "登出所有设备",
           "text": "这将会登出所有与您的账户关联的设备。",
-          "button": "登出所有设备"
-        }
+          "title": "结束所有会话"
+        },
+        "migration": {
+          "button": "迁移账户",
+          "text": "将账户迁移到新服务器或下载数据。",
+          "title": "账户迁移"
+        },
+        "title": "操作"
       },
       "devices": {
         "deviceNameLabel": "设备名称",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "载入会话失败",
+        "lastActive": "最后活跃时间：{{date}}",
+        "loggedInAt": "登录于：{{date}}",
         "removeDevice": "移除",
         "title": "设备",
-        "lastActive": "最后活跃时间：{{date}}",
-        "loggedInAt": "登录于：{{date}}"
+        "unknownDevice": "Unknown device, error decrypting name"
       },
       "profile": {
         "finish": "完成编辑",
@@ -1283,377 +942,213 @@
       },
       "title": "账户"
     },
+    "all": {
+      "title": "All Settings"
+    },
     "appearance": {
       "activeTheme": "已激活",
-      "themes": {
-        "blue": "湛蓝海韵",
-        "custom": "Custom",
-        "default": "默认",
-        "gray": "银月暮霭",
-        "red": "绯焰之心",
-        "teal": "翡翠烟波",
-        "classic": "经典",
-        "green": "碧草春风",
-        "mocha": "摩卡",
-        "pink": "桃花",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
         "primary": "Primary",
         "secondary": "Secondary",
         "tertiary": "Tertiary"
       },
-      "title": "外观",
       "options": {
+        "carouselView": "Carousel view",
+        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
+        "carouselViewLabel": "Carousel view",
         "discover": "“探索”部分",
         "discoverDescription": "在主页上书签媒体下方显示“探索”部分。默认已启用。",
         "discoverLabel": "“探索”部分",
         "featured": "Featured media",
         "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
         "featuredLabel": "Featured media",
-        "modal": "详细信息",
-        "modalDescription": "点击媒体卡片时显示详细信息模式，而不是转到观看页面。预告片需要代理或扩展。默认已禁用。",
-        "modalLabel": "详细信息",
+        "forceCompactEpisodeView": "Force compact episode view",
+        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
+        "forceCompactEpisodeViewLabel": "Compact episodes",
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
+        "homeSectionOrderGroups": "Reorder bookmark groups",
         "logos": "Image logos",
         "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
         "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
+        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
         "minimalCards": "Minimal cards",
         "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
         "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "modal": "详细信息",
+        "modalDescription": "点击媒体卡片时显示详细信息模式，而不是转到观看页面。预告片需要代理或扩展。默认已禁用。",
+        "modalLabel": "详细信息",
         "pauseOverlay": "Pause overlay",
         "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
         "pauseOverlayLabel": "Pause overlay"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Bookmarks",
+        "watching": "Currently Watching"
+      },
+      "themes": {
+        "acid": "Acid",
+        "autumn": "Autumn",
+        "blue": "湛蓝海韵",
+        "christmas": "Christmas",
+        "classic": "经典",
+        "cobalt": "Cobalt",
+        "custom": "Custom",
+        "default": "默认",
+        "ember": "Ember",
+        "forest": "Forest",
+        "frost": "Frost",
+        "grape": "Grape",
+        "gray": "银月暮霭",
+        "green": "碧草春风",
+        "hulk": "Hulk",
+        "mocha": "摩卡",
+        "noir": "Noir",
+        "pink": "桃花",
+        "popsicle": "Popsicle",
+        "red": "绯焰之心",
+        "spark": "Spark",
+        "spiderman": "Spiderman",
+        "teal": "翡翠烟波",
+        "wolverine": "Wolverine"
+      },
+      "title": "外观"
     },
     "connections": {
       "server": {
-        "description": "若您想连接到自定义后端保存数据，请启用此选项并提供 URL。 <0>查看指引</0>",
-        "label": "自定义服务器",
-        "urlLabel": "自定义服务器 URL",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
         "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
         "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>迁移我的数据</0> 到新的后端服务器。",
-          "link": "迁移我的数据"
-        },
-        "documentation": "Backend documentation",
         "error": "Error connecting to backend",
         "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "进行设定",
-        "errorStatus": {
-          "description": "看起来此配置中的一项或多项需要您的注意。",
-          "title": "有件事需要您的注意"
-        },
-        "itemError": "此设定存在错误。再次进行设定过程以修复它。",
-        "items": {
-          "default": "默认设定",
-          "extension": "扩展程序",
-          "proxy": "自定义代理",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "重新进行设定",
-        "successStatus": {
-          "description": "一切就绪，您可以开始观看你喜爱的媒体了。",
-          "title": "一切就绪！"
-        },
-        "unsetStatus": {
-          "description": "请单击右侧的按钮开始进行设定。",
-          "title": "您尚未完成设定"
-        }
-      },
-      "title": "连接",
-      "workers": {
-        "addButton": "添加新的 Worker",
-        "description": "要让应用程序正常运作，所有流量会通过代理路由。若您想使用自己的 Worker，请启用该选项。 <0>查看指引</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "还没有 Worker，在下方添加一个",
-        "label": "使用自定义代理 Worker",
-        "urlLabel": "Worker URL",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
       },
       "tidb": {
         "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
         "tokenLabel": "API Key"
-      }
+      },
+      "title": "连接"
     },
     "preferences": {
-      "title": "偏好设置",
-      "language": "应用程序语言",
-      "languageDescription": "作用于整个应用程序的语言。",
-      "thumbnail": "生成缩略图",
-      "thumbnailDescription": "大多数时候，视频没有缩略图。您可以启用此设置以在视频播放时动态生成它们，但此选项可能会拖慢视频速度。",
-      "thumbnailLabel": "生成缩略图",
       "autoplay": "自动播放",
       "autoplayDescription": "在系列节目（剧集）束后自动播放下一集。如果主机允许，用户可以使用浏览器扩展、自定义代理或默认设置启用。",
       "autoplayLabel": "自动播放",
-      "skipCredits": "跳过片尾",
-      "skipCreditsDescription": "启用后在进度达到 99% 时自动播放下一集，跳过片尾字幕。禁用时会等待节目全部结束。",
-      "skipCreditsLabel": "跳过片尾",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "重新排序片源",
-      "sourceOrderDescription": "拖拽以排序片源，这将决定片源的检查顺序。如果某个源显示为灰色，则表示该源需要<bold>扩展程序</bold>。<br><br><strong>默认顺序最适合大多数用户</strong>",
-      "sourceOrderEnableLabel": "自定义片源顺序",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
       "autoResumeOnPlaybackError": "Auto resume on playback error",
       "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
       "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "holdToBoost": "Hold to boost speed",
+      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
+      "holdToBoostLabel": "Enable hold to boost",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "language": "应用程序语言",
+      "languageDescription": "作用于整个应用程序的语言。",
       "lastSuccessfulSource": "Last used source",
       "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "lastSuccessfulSourceEnableLabel": "Last used source",
+      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
+      "lowPerformanceModeLabel": "Low performance mode",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "skipCredits": "跳过片尾",
+      "skipCreditsDescription": "启用后在进度达到 99% 时自动播放下一集，跳过片尾字幕。禁用时会等待节目全部结束。",
+      "skipCreditsLabel": "跳过片尾",
+      "sourceOrder": "重新排序片源",
+      "sourceOrderDescription": "拖拽以排序片源，这将决定片源的检查顺序。如果某个源显示为灰色，则表示该源需要<bold>扩展程序</bold>。<br><br><strong>默认顺序最适合大多数用户</strong>",
+      "sourceOrderEnableLabel": "自定义片源顺序",
+      "thumbnail": "生成缩略图",
+      "thumbnailDescription": "大多数时候，视频没有缩略图。您可以启用此设置以在视频播放时动态生成它们，但此选项可能会拖慢视频速度。",
+      "thumbnailLabel": "生成缩略图",
+      "title": "偏好设置"
     },
     "reset": "重设",
     "save": "保存",
+    "search": {
+      "placeholder": "Search settings..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "应用版本",
-        "backendUrl": "后端 URL",
-        "backendVersion": "后端版本",
-        "hostname": "主机名",
-        "insecure": "不安全",
-        "nickname": "Nickname",
         "notLoggedIn": "您尚未登录",
-        "secure": "安全",
-        "title": "应用信息",
-        "unknownVersion": "未知",
         "userId": "用户 ID",
         "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {
-      "backgroundLabel": "背景不透明度",
-      "backgroundBlurEnabledLabel": "Background blur",
       "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledLabel": "Background blur",
       "backgroundBlurLabel": "背景模糊",
+      "backgroundLabel": "背景不透明度",
+      "BorderThicknessLabel": "Border Thickness",
       "colorLabel": "颜色",
-      "previewQuote": "我不能害怕。恐惧是心灵的杀手。",
-      "textSizeLabel": "字体大小",
-      "title": "字幕",
-      "textBoldLabel": "粗体文本",
-      "verticalPositionLabel": "Vertical position",
       "high": "High",
       "low": "Default",
+      "previewQuote": "我不能害怕。恐惧是心灵的杀手。",
+      "textBoldLabel": "粗体文本",
+      "textSizeLabel": "字体大小",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
         "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "default": "Default",
+        "depressed": "Depressed",
+        "dropShadow": "Drop Shadow",
+        "raised": "Raised",
+        "title": "Text style"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "字幕",
+      "verticalPositionLabel": "Vertical position"
     },
     "unsaved": "您有未保存的更改…"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "电影",
-      "tvshows": "节目",
-      "editorpicks": "编辑精选",
-      "top10": "前10名"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}}电影",
-        "tvshows": "{{category}}节目",
-        "inCinemas": "电影院中",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "{{provider}}上受欢迎的{{type}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "现在流行"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "随便看点什么",
-      "cancel": "取消倒数",
-      "countdown": "{{countdown}}秒内",
-      "nowPlaying": "即将播放",
-      "in": "在"
-    },
-    "page": {
-      "title": "探索电影和节目",
-      "subtitle": "探索最新热门和永恒经典。",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "返回顶部",
-    "filters": {
-      "country": "国家"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "输入共享观看派对链接或房间代码",
-    "you": "你",
-    "guestFallback": "客人"
   },
   "tmdb": {
     "genres": {
       "10759": "动作与冒险"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
+    "alone": "Alone",
+    "behindHost": "Behind host by {{seconds}} seconds",
+    "cancel": "Cancel",
+    "connectedAsGuest": "Connected to watch party as guest",
+    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
+    "copyCode": "Click to copy",
+    "emptyRoom": "No one is in this room yet",
+    "enterCodeOrLink": "输入共享观看派对链接或房间代码",
+    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
+    "guestFallback": "客人",
+    "hosting": "Hosting",
+    "hostParty": "Host a Watch Party",
+    "invalidRoom": "Unable to connect to this room",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Join",
+    "joinParty": "Join a Watch Party",
+    "leaveWatchParty": "Leave Watch Party",
+    "linkCopied": "Copied!",
+    "noHost": "No host in this watch party",
+    "save": "Save",
+    "shareCode": "Share this code with friends (click to copy link)",
+    "showStatusOverlay": "Show status overlay",
+    "status": {
+      "inSync": "In sync",
+      "outOfSync": "Out of sync"
+    },
+    "syncing": "Syncing...",
+    "validating": "Validating watch party...",
+    "viewers": "Viewers ({{count}})",
+    "watching": "Watching",
+    "withCount": "With {{count}} others",
+    "you": "你"
   }
 }

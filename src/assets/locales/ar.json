@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix هو تطبيق ويب يبحث عن البثوث على الإنترنت وسيبقى متاحًا دائمًا ولن يتوقف عن العمل. يهدف الفريق إلى توفير طريقة سهلة وبسيطة لاستهلاك المحتوى. الموقع يُدار بتكلفة شخصية دون تحقيق أرباح، ولا يحتوي على إعلانات بسبب إيماني بحرية الإعلام.",
-    "help": "لم تجد اي اجابة؟ <0>احصل على مساعدة من هنا.</0>",
-    "faqTitle": "الأسئلة الشائعة",
-    "searchPlaceholder": "البحث في الأسئلة الشائعة...",
-    "sections": {
-      "general": "عام",
-      "search": "البحث و توافر العناوين",
-      "playback": "مشاكل التشغيل",
-      "connections": "الاتصالات",
-      "language": "اللغة و اعدادات الترجمة"
-    },
-    "q1": {
-      "title": "من أين يأتي المحتوى؟",
-      "body": "لا يستضيف AlphaFlix أي محتوى. عندما تنقر فوق شيء للمشاهدة، يتم البحث على الإنترنت عن الوسائط المحددة (يمكنك رؤية المصدر الذي تستخدمه على شاشة التحميل وفي علامة تبويب \"مصادر الفيديو\"). لا يتم رفع الوسائط أبدًا عن طريق AlphaFlix، كل شيء يتم من خلال آلية البحث هذه.",
-      "section": "عام"
-    },
-    "q2": {
-      "title": "أين يمكنني طلب مسلسل أو فيلم؟",
-      "body": "لا يمكن طلب عرض أو فيلم، لأن AlphaFlix لا يدير أي محتوى. يتم مشاهدة جميع المحتويات من خلال مصادر على الإنترنت.",
-      "section": "بحث"
-    },
-    "q3": {
-      "title": "تعرِضُ نتائجُ البحثِ الخاصِّ بالعرض أو الفيلم اللذي أريد، لكن لماذا لا يمكنني تشغيله؟",
-      "body": "نتائج البحث لدينا مدعومة بقاعدة بيانات الأفلام (TMDB) وتظهر بغض النظر عما إذا كانت مصادرنا تتضمن فعليًا المحتوى أم لا.",
-      "section": "بحث"
-    },
-    "q4": {
-      "title": "ماذا عن بياناتي وأشيائي؟",
-      "body": "يتم مزامنة كافة البيانات مع الواجهة الخلفية للمجتمع، ويمكن لأي شخص استخدامها أيضًا.",
-      "section": "عام"
-    },
-    "q5": {
-      "title": "كيف يمكنني معرفة المزيد؟",
-      "body": "يحتوي AlphaFlix على خادم Fluxer يمكن العثور عليه في أعلى هذه الصفحة!",
-      "section": "عام"
-    },
-    "q6": {
-      "title": "هل هناك تطبيق AlphaFlix؟",
-      "body": "ليس بعد، لكن يمكنك تثبيته كتطبيق ويب تقدمي (PWA): على iOS: استخدم Safari ← مشاركة ← إضافة إلى الشاشة الرئيسية على Android: افتح Chrome ← الثلاث نقاط ← إضافة إلى الشاشة الرئيسية. يوجد ملف APK تجريبي متاح عبر Fluxer، لكن لا يُنصح باستخدامه حاليًا.",
-      "section": "عام"
-    },
-    "q7": {
-      "title": "كيف أقوم بإنشاء حساب؟",
-      "body": "اضغط على \"مزامنة مع السحابة\" في القائمة المنسدلة، أو انتقل إلى الإعدادات لإنشاء حساب في المجتمع ومزامنته.",
-      "section": "عام"
-    },
-    "q9": {
-      "title": "هذا المحتوى غير متوفر / هل يمكنني طلب هذا المحتوى؟",
-      "body": "لا، بما أننا لا نستضيف محتوى، فلا يمكننا إضافة أو تغيير ما هو متاح. تعتمد قائمة المحتوى على ما هو متاح عبر آلية البحث.",
-      "section": "بحث"
-    },
-    "q10": {
-      "title": "لا استطيع العثور على الفيلم/العرض الذي ابحث عنه!",
-      "body": "يقوم TMDB بتشغيل بحثنا. جرّب النقر على أيقونة 🔎 لخيارات بحث متقدمة إذا لم تكن النتائج دقيقة.",
-      "section": "بحث"
-    },
-    "q11": {
-      "title": "لماذا أرى شاشة سوداء؟",
-      "body": "من الممكن أن ملف الفيديو تالف أو معطل. حاول تغيير المصدر.",
-      "section": "التشغيل"
-    },
-    "q12": {
-      "title": "الحلقة التي أشاهدها غير صحيحة.",
-      "body": "بدِّل إلى مصدر آخر. نحن لا نتحكم في دقة اي محتوى أو حلقات.",
-      "section": "التشغيل"
-    },
-    "q13": {
-      "title": "جودة الفيديو ليست كما توقعت.",
-      "body": "حاول تغيير المصادر. تختلف الجودة باختلاف المزوّد؛ غالبًا ما يوفر FED API خيارات أكثر.",
-      "section": "التشغيل"
-    },
-    "q14": {
-      "title": "4k غير متاح.",
-      "body": "إذا لم يتم عرض 4K، فمن المحتمل أنه غير متاح من هذا المصدر.",
-      "section": "التشغيل"
-    },
-    "q15": {
-      "title": "لماذا لا يوجد صوت؟",
-      "body": "تأكّد من أن جهازك ليس في وضع كتم الصوت، وجرّب التبديل بين المصادر. قد تكون مشكلات الصوت متعلقة بمصدر المحتوى نفسه.",
-      "section": "التشغيل"
-    },
-    "q16": {
-      "title": "الفيديو يحتوي على تدرج لوني غير طبيعي أو يبدو باهتًا.",
-      "body": "قد يكون الملف تالفًا أو الفيديو بتقنية HDR. تأكّد من أن جهازك يدعم HDR، أو جرّب التبديل إلى مصدر آخر.",
-      "section": "التشغيل"
-    },
-    "q17": {
-      "title": "أواجه مشكلات بصرية.",
-      "body": "الأخطاء البصرية غالبًا ما تكون ناتجة عن رفع ملفات بجودة منخفضة. جرّب التبديل إلى مصدر آخر.",
-      "section": "التشغيل"
-    },
-    "q18": {
-      "title": "المصدر يتم تحميله ببطء.",
-      "body": "تعتمد السرعة على موقع الاستضافة. جرّب التبديل إلى مصدر آخر لأداء أفضل.",
-      "section": "التشغيل"
-    },
-    "q19": {
-      "title": "كيف يمكنني التبديل بين المصادر؟",
-      "body": "اثناء التشغيل، اضغط على ايقونة ⚙️ ، ثم اختر مصدرًا آخر من قسم \"مصادر الفديو\".",
-      "section": "التشغيل"
-    },
-    "q20": {
-      "title": "ما هو FED API؟",
-      "body": "FED API هي أداة استخراج المحتوى الخاصة بنا، والتي تسحب البثوث مباشرةً من Febbox. يتضمن كل حساب Febbox مجاني 100 جيجابايت شهريًا من النطاق الترددي غير المحدود، ونستخدم رمز واجهة المستخدم الخاص بك لاستخراج المحتوى كما لو كنت تشاهده بنفسك. أسهل طريقة للإعداد هي عبر متصفح سطح المكتب، ولكن تتوفر تعليمات الهاتف المحمول على Fluxer الخاص بنا.",
-      "section": "الاتصالات"
-    },
-    "q21": {
-      "title": "هل يعمل FED API على كل الأجهزة؟",
-      "body": "نعم. بمجرد الإعداد، يعمل رمز الدخول الخاص بك على جميع الأجهزة التي تم تسجيل الدخول بها.",
-      "section": "الاتصالات"
-    },
-    "q22": {
-      "title": "لماذا قد احتاج الى الاضافة او وكيل مخصص؟",
-      "body": "بعض المصادر تحظر أدوات البحث. تعمل الاضافة كوكيل محلي ويتجاوز هذه الحجب باستخدام عنوان IP الخاص بك، والرؤوس، وملفات تعريف الارتباط.",
-      "section": "الاتصالات"
-    },
-    "q23": {
-      "title": "ما هي الإضافة؟ هل هي آمنة؟",
-      "body": "إنها أداة وكيل محلي تُستخدم للوصول إلى البث التي تقيّد عمليات البحث. تُحاكي جلسة تصفحك. وهي أيضًا مفتوحة المصدر تمامًا، ويمكن العثور عليها على صفحتنا على github.",
-      "section": "الاتصالات"
-    },
-    "q24": {
-      "title": "رمز febbox الخاص بي يفشل أثناء الإعداد. ماذا أفعل؟",
-      "body": "قد يحظر مزود خدمة الإنترنت لديك واجهة برمجة تطبيقات FED. عيّن DNS مخصصًا مثل 1.1.1.1 أو NextDNS. يمكنك أيضًا تغيير منطقتك من لوحة الإدارة.",
-      "section": "الاتصالات"
-    },
-    "q25": {
-      "title": "كيف اقوم بتغير اللغة؟",
-      "body": "نحن نعطي أولوية للغة الإنجليزية، لكن بعض المصادر توفر لغات أخرى. جرّب التبديل بين المصادر.بالنسبة لـ FED API، يدعم متصفح Safari فقط تبديل الصوت في ملفات MP4.",
-      "section": "اللغة"
-    },
-    "q26": {
-      "title": "الترجمة غير متزامنة.",
-      "body": "استخدم خيار \"تخصيص\" في إعدادات الترجمة النصية أو اضغط على [ and ] في لوحة المفاتيح للتعديل. يمكنك أيضًا رفع ملف ترجمة خاص بك.",
-      "section": "اللغة"
-    },
-    "title": "حول AlphaFlix والأسئلة الشائعة (^▽^)"
-  },
   "actions": {
+    "cancel": "يلغي",
+    "confirm": "يتأكد",
     "copied": "تم النسخ",
-    "copy": "نسخ",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "نسخ"
   },
   "auth": {
+    "backendSelection": {
+      "active": "نشيط",
+      "confirm": "يتأكد",
+      "customBackend": "الخلفية المخصصة",
+      "customBackendPlaceholder": "https://",
+      "description": "اختر الخادم الخلفي الذي تريد الاتصال به",
+      "title": "حدد خادم الحساب"
+    },
     "createAccount": "ليس لديك حساب بعد؟😬 <0>أنشئ حسابًا.</0>",
-    "deviceNameLabel": "اسم الجهاز",
-    "deviceNamePlaceholder": "الهاتف الشخصي",
+    "generate": {
+      "custom": "مخصص",
+      "customPassphraseLabel": "عبارة المرور المخصصة",
+      "customPassphrasePlaceholder": "أدخل عبارة المرور المخصصة الخاصة بك",
+      "description": "عبارة المرور الخاصة بك تعمل كاسم مستخدم وكلمة مرور. تأكد من حفظها جيدًا لأنها مطلوبة لتسجيل الدخول إلى حسابك. <bold>لا تفقد عبارة المرور الخاصة بك!</bold>",
+      "invalidPassphraseCharacters": "أحرف عبارة المرور غير صالحة. يُسمح فقط بالأحرف الإنجليزية والأرقام من 1 إلى 10 والرموز العادية.",
+      "next": "لقد قمتُ بحفظ جملة مروري",
+      "passphraseFrameLabel": "جملة المرور",
+      "passphraseTooShort": "يجب أن تتكون عبارة المرور من 8 أحرف على الأقل.",
+      "title": "جملة مرورك",
+      "useCustomPassphrase": "استخدم عبارة المرور المخصصة",
+      "usePasskeyInstead": "استخدم مفتاح المرور بدلاً من ذلك"
+    },
+    "hasAccount": "لديك حساب بالفعل؟ <0>قم بتسجيل الدخول هنا.</0>",
+    "inviteCodeInvalidError": "رمز دعوة غير صالح (لم يتم العثور على معرف المستخدم)",
     "inviteCodeLabel": "رمز الدعوة",
     "inviteCodePlaceholder": "أدخل معرف المستخدم الخاص بالصديق",
     "inviteCodeRequiredError": "رمز الدعوة مطلوب",
-    "inviteCodeInvalidError": "رمز دعوة غير صالح (لم يتم العثور على معرف المستخدم)",
-    "generate": {
-      "description": "عبارة المرور الخاصة بك تعمل كاسم مستخدم وكلمة مرور. تأكد من حفظها جيدًا لأنها مطلوبة لتسجيل الدخول إلى حسابك. <bold>لا تفقد عبارة المرور الخاصة بك!</bold>",
-      "next": "لقد قمتُ بحفظ جملة مروري",
-      "passphraseFrameLabel": "جملة المرور",
-      "title": "جملة مرورك",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "لديك حساب بالفعل؟ <0>قم بتسجيل الدخول هنا.</0>",
     "login": {
       "description": "رجاءً ضع جملة المرور لتسجيل الدخول إلى حسابك",
-      "deviceLengthError": "رجاءً أدخل اسم جهاز",
-      "passphraseLabel": "جملة مرور من 12 كلمة",
-      "passphrasePlaceholder": "جملة مرور",
-      "submit": "تسجيل الدخول",
-      "title": "تسجيل الدخول إلى حسابك",
-      "validationError": "جملة المرور خاطئة أو ناقصة",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "كنية",
+      "nicknameNotFound": "لم يتم العثور على اللقب",
       "nicknamePlaceholder": "أدخل لقبك",
+      "nicknameRequired": "اللقب مطلوب",
+      "noBackendUrl": "لا يوجد عنوان URL للواجهة الخلفية",
+      "or": "أو",
+      "passwordIncorrect": "كلمة المرور غير صحيحة",
       "passwordLabel": "كلمة المرور",
       "passwordPlaceholder": "أدخل كلمة المرور الخاصة بك",
-      "nicknameRequired": "اللقب مطلوب",
       "passwordRequired": "كلمة المرور مطلوبة",
-      "nicknameNotFound": "لم يتم العثور على اللقب",
-      "passwordIncorrect": "كلمة المرور غير صحيحة"
+      "submit": "تسجيل الدخول",
+      "title": "تسجيل الدخول إلى حسابك",
+      "usePasskey": "استخدم مفتاح المرور",
+      "validationError": "جملة المرور خاطئة أو ناقصة"
     },
     "register": {
+      "confirmPasswordLabel": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "قم بتأكيد كلمة المرور الخاصة بك",
       "information": {
         "color1": "لون الملف الشخصي الأول",
         "color2": "لون الملف الشخصي الثاني",
@@ -195,39 +61,27 @@
         "next": "التالي",
         "title": "معلومات الحساب"
       },
-      "passwordInput": {
-        "title": "قم بإنشاء تسجيل الدخول الخاص بك",
-        "description": "اختر اللقب وكلمة المرور. تعمل كلمة المرور الخاصة بك بمثابة عبارة مرور آمنة، لذا تأكد من تذكرها!"
-      },
       "nicknameLabel": "كنية",
       "nicknamePlaceholder": "اختر لقبًا فريدًا",
       "nicknameTaken": "اللقب مأخوذ بالفعل",
+      "passwordInput": {
+        "description": "اختر اللقب وكلمة المرور. تعمل كلمة المرور الخاصة بك بمثابة عبارة مرور آمنة، لذا تأكد من تذكرها!",
+        "title": "قم بإنشاء تسجيل الدخول الخاص بك"
+      },
       "passwordLabel": "كلمة المرور",
-      "passwordPlaceholder": "إنشاء كلمة مرور (تُستخدم كعبارة المرور الخاصة بك)",
-      "passwordWeak": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل مكونة من حروف وأرقام",
       "passwordMismatch": "كلمات المرور غير متطابقة",
-      "confirmPasswordLabel": "تأكيد كلمة المرور",
-      "confirmPasswordPlaceholder": "قم بتأكيد كلمة المرور الخاصة بك"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "إنشاء كلمة مرور (تُستخدم كعبارة المرور الخاصة بك)",
+      "passwordWeak": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل مكونة من حروف وأرقام"
     },
     "trust": {
       "failed": {
         "text": "هل قمت بضبطه بشكل صحيح؟",
         "title": "تعَذَّر الوصول إلى الخادم"
       },
-      "noHostTitle": "لم يتم تكوين الخادم!",
-      "noHost": "لم يتم تكوين الخادم، وبالتالي لا يمكنك إنشاء حساب",
       "host": "أنت على وشك الاتصال بـ <0>{{hostname}}</0> - يرجى تأكيد أنك تثق فيه قبل إنشاء حساب...",
       "no": "عودة",
+      "noHost": "لم يتم تكوين الخادم، وبالتالي لا يمكنك إنشاء حساب",
+      "noHostTitle": "لم يتم تكوين الخادم!",
       "title": "هل تثِقُ في هذا الخادم؟",
       "yes": "أثِقُ في هذا الخادم 🤞"
     },
@@ -235,14 +89,88 @@
       "description": "رجاءً أدخل جملة المرور السابقة لتأكيد أنك قد قمت بحفظها ولإنشاء حسابك",
       "invalidData": "البيانات غير صالحة",
       "noMatch": "جملة المرور غير متطابقة😭",
-      "passphraseLabel": "جملة مرورك المكونة من 12 كلمة",
       "recaptchaFailed": "فشل التحقق من ReCaptcha",
       "register": "إنشاء حساب",
-      "title": "قم بتأكيد جملة مرورك",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "قم بتأكيد جملة مرورك"
     }
+  },
+  "details": {
+    "airs": "يصدر",
+    "collection": {
+      "movie": "فيلم",
+      "movies": "أفلام",
+      "rating": "تصنيف",
+      "releaseDate": "تاريخ الافراج عنه",
+      "sortBy": "الترتيب حسب"
+    },
+    "endsAt": "ينتهي الساعة {{time}}",
+    "episode": "حلقة",
+    "episodes": "الحلقات",
+    "imdb": "عرض في IMDb",
+    "language": "اللغة:",
+    "play": "تشغيل",
+    "rating": "التقييم:",
+    "releaseDate": "تاريخ الاصدار:",
+    "resume": "متابعة",
+    "runtime": "مدة:",
+    "season": "الموسم",
+    "seasons": "موسم",
+    "similar": "مشابه",
+    "tmdb": "عرض في TMDB",
+    "trailers": "مقطورات",
+    "watched": "تمت مشاهدة {{watched}} من {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "جميع قوائم الأفلام",
+    "carousel": {
+      "change": "تغيير",
+      "more": "عرض المزيد",
+      "title": {
+        "4kReleases": "إصدارات 4K",
+        "editorPicksMovies": "أفلام مختارة بعناية",
+        "editorPicksShows": "مسلسلات مختارة بعناية",
+        "forYou": "لك",
+        "inCinemas": "في السينما",
+        "latestReleases": "أحدث الإصدارات",
+        "latestTVReleases": "أحدث المسلسلات",
+        "movies": "أفلام {{category}}",
+        "moviesOn": "أفلام على {{provider}}",
+        "onTheAir": "يعرض حالياً",
+        "popular": "الأكثر شعبية",
+        "recommended": "لأنك شاهدت: {{title}}",
+        "top10": "أعلى 10",
+        "topRated": "الأعلى تقييم",
+        "trending": "رائج الآن",
+        "tvshows": "مسلسلات {{category}}",
+        "tvshowsOn": "مسلسلات على {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "المزيد من المعلومات",
+      "playNow": "شغل الآن"
+    },
+    "filters": {
+      "country": "دولة"
+    },
+    "page": {
+      "back": "عودة",
+      "loading": "جارٍ التحميل...",
+      "loadMore": "تحميل المزيد",
+      "title": "اكتشف الأفلام والمسلسلات"
+    },
+    "scrollToTop": "العودة إلى الأعلى",
+    "tabs": {
+      "movies": "أفلام",
+      "top10": "أعلى 10",
+      "tvshows": "مسلسلات"
+    },
+    "viewLists": "عرض جميع قوائم الأفلام"
+  },
+  "downtimeNotice": {
+    "badge": "مشكلات",
+    "goHome": "اذهب للصفحة الرئيسية",
+    "message": "نحن نواجه بعض المشاكل، إذا لم تتمكن من العثور على شيء أو تشغيله، يرجى تغيير المصدر. نتوقع استمرار هذه المشكلة خلال الأوقات التالية.",
+    "title": "خطأ في المزودين"
   },
   "errors": {
     "badge": "تعطّل النظام 💀",
@@ -258,159 +186,153 @@
     },
     "links": {
       "fluxer": "ديسكورد",
-      "legal": "Legal / DMCA",
-      "github": "GitHub",
-      "twitter": "Twitter",
-      "funding": "ادعمنا"
+      "funding": "ادعمنا",
+      "github": "جيثب"
     },
     "tagline": "شاهد عروضك وأفلامك المفضلة مجانا بدون اي اعلانات اطلاقا! "
   },
   "global": {
-    "name": "P‐Stream",
+    "keyboardShortcuts": {
+      "cancel": "يلغي",
+      "clickToEdit": "انقر على شارة المفتاح لتحريرها",
+      "conditions": {
+        "showsOnly": "يظهر فقط"
+      },
+      "conflict": "صراع",
+      "conflicts": "الصراعات",
+      "detected": "مُكتَشَف",
+      "editInSettings": "تحرير أوامر لوحة المفاتيح من الإعدادات",
+      "groups": {
+        "audioVideo": "الصوت والفيديو",
+        "interface": "واجهة",
+        "jumpToPosition": "انتقل إلى الموضع",
+        "subtitlesAccessibility": "الترجمة وإمكانية الوصول",
+        "videoPlayback": "تشغيل الفيديو"
+      },
+      "none": "لا أحد",
+      "numberKeySeeking": "البحث عن التقدم في مفتاح الرقم",
+      "numberKeySeekingDescription": "استخدم مفاتيح الأرقام من 0 إلى 9 للبحث عن مواضع محددة في الفيديو. 0 يذهب إلى البداية، 1-8 يقفز إلى 10%-80%، و9 يذهب إلى 90%.",
+      "pressKey": "اضغط على مفتاح...",
+      "resetAllToDefault": "إعادة تعيين الكل إلى الافتراضي",
+      "resetToDefault": "إعادة التعيين إلى الوضع الافتراضي",
+      "save": "يحفظ",
+      "saveChanges": "حفظ التغييرات",
+      "shortcuts": {
+        "barrelRoll": "هل لفة برميل! 🌀",
+        "closeOverlay": "إغلاق التراكب/المشروط",
+        "decreaseVolume": "تقليل الحجم",
+        "increaseVolume": "زيادة الحجم",
+        "jumpTo0": "الانتقال إلى 0% (البداية)",
+        "jumpTo9": "القفز إلى 90%",
+        "mute": "كتم الصوت/إلغاء كتم الصوت",
+        "nextEpisode": "الحلقة القادمة",
+        "playPause": "تشغيل/إيقاف مؤقت (أو اضغط مع الاستمرار على سرعة 2x عند التمكين)",
+        "playPauseAlt": "تشغيل/إيقاف مؤقت",
+        "previousEpisode": "الحلقة السابقة",
+        "randomCaption": "حدد تسمية توضيحية عشوائية من آخر لغة مستخدمة",
+        "skipBackward1": "تخطي إلى الوراء 1 ثانية",
+        "skipBackward10": "تخطي إلى الوراء 10 ثانية",
+        "skipBackward5": "تخطي إلى الوراء 5 ثوان",
+        "skipForward1": "تخطي إلى الأمام 1 ثانية",
+        "skipForward10": "تخطي إلى الأمام 10 ثانية",
+        "skipForward5": "انتقل إلى الأمام لمدة 5 ثوان",
+        "syncSubtitlesEarlier": "مزامنة الترجمات في وقت سابق (-0.5 ثانية)",
+        "syncSubtitlesLater": "مزامنة الترجمات لاحقًا (+0.5 ثانية)",
+        "toggleCaptions": "تبديل التسميات التوضيحية",
+        "toggleFullscreen": "تبديل ملء الشاشة",
+        "toggleNativeSubtitles": "تبديل الترجمات الأصلية"
+      },
+      "subtitle": "اضغط باستمرار لإظهار هذه المساعدة في أي وقت",
+      "title": "اختصارات لوحة المفاتيح"
+    },
+    "name": "ألفا فليكس",
     "pages": {
-      "about": "عنا والأسئلة الشائعة",
-      "legal": "Legal / DMCA",
       "discover": "اكتشف",
-      "support": "الدعم",
       "login": "تسجيل الدخول",
-      "onboarding": "إعداد",
+      "migration": "ترحيل الحساب",
       "pagetitle": "\"{{title}} - AlphaFlix\"",
       "register": "تسجيل",
-      "settings": "الإعدادات",
-      "migration": "ترحيل الحساب",
-      "jip": "جيب"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "settings": "الإعدادات"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "علامات مرجعية",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "يلغي",
+        "description": "قم بتحرير تفاصيل هذه الإشارة المرجعية",
+        "groupsLabel": "المجموعات",
+        "save": "يحفظ",
+        "title": "تحرير الإشارة المرجعية",
+        "titleLabel": "عنوان",
+        "titlePlaceholder": "أدخل عنوانًا للإشارة المرجعية الخاصة بك",
+        "yearLabel": "سنة",
+        "yearPlaceholder": "أدخل سنة للإشارة المرجعية الخاصة بك"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "لا توجد مجموعات حتى الآن",
+          "placeholderButton": "أضف إلى المجموعة",
+          "removeAll": "إزالة الكل",
+          "removeFromGroup": "إزالة من المجموعة"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "سيؤثر هذا على {{count}} من الإشارات المرجعية",
+          "cancel": "يلغي",
+          "description": "قم بتحرير اسم وأيقونة مجموعة الإشارات المرجعية الخاصة بك",
+          "nameLabel": "اسم المجموعة",
+          "namePlaceholder": "أدخل اسمًا لمجموعتك",
+          "save": "يحفظ",
+          "title": "تحرير المجموعة"
+        },
+        "reorder": {
+          "button": "إعادة الترتيب",
+          "cancel": "يلغي",
+          "description": "قم بالسحب والإفلات لإعادة ترتيب مجموعات الإشارات المرجعية الخاصة بك",
+          "done": "منتهي",
+          "save": "يحفظ",
+          "title": "تحرير ترتيب المجموعة"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "علامات مرجعية",
+      "showAll": "إظهار الكل",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "الافتراضي (تاريخ الإضافة)",
+          "titleAsc": "العنوان من الألف إلى الياء",
+          "titleDesc": "العنوان Z-A",
+          "yearAsc": "تاريخ الإصدار الأقدم والأحدث",
+          "yearDesc": "تاريخ الإصدار الأحدث-الأقدم"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "متابعة المشاهدة ...",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "الافتراضي (تاريخ الإضافة)",
+          "titleAsc": "العنوان من الألف إلى الياء",
+          "titleDesc": "العنوان Z-A",
+          "yearAsc": "تاريخ الإصدار الأقدم والأحدث",
+          "yearDesc": "تاريخ الإصدار الأحدث-الأقدم"
         }
       }
     },
     "mediaList": {
       "stopEditing": "إنهاء التعديل"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "هذا كل ما لدينا...",
+      "discover": "اكتشف",
+      "discoverMore": "اكتشف المزيد",
+      "empty": {
+        "default": "مرحبًا بك، يمكنك العثور على الوسائط التي يمكنك مشاهدتها هنا!",
+        "extra": [
+          "لا يوجد شيء هنا :(",
+          "فارغ جدا ...",
+          "مثل هذا الفراغ.",
+          "مرحباً بالمستخدم الجديد :3"
+        ]
+      },
       "failed": "تعذر العثور على الوسائط، حاول مجددا!",
       "loading": "جار التحميل...",
       "noResults": "لم نتمكن من العثور على أي شيء :(",
@@ -428,23 +350,19 @@
           ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "مرحبًا بك، يمكنك العثور على الوسائط التي يمكنك مشاهدتها هنا!",
-        "extra": [
-          "لا يوجد شيء هنا :(",
-          "فارغ جدا ...",
-          "مثل هذا الفراغ.",
-          "مرحباً بالمستخدم الجديد :3"
-        ]
-      },
-      "sectionTitle": "نتائج البحث",
-      "discoverMore": "اكتشف المزيد",
-      "discover": "اكتشف"
+      "sectionTitle": "نتائج البحث"
     },
-    "mediaCard": {
-      "moreInfo": "المزيد من المعلومات",
-      "copyLink": "نسخ الرابط",
-      "close": "غلق"
+    "support": {
+      "complete": "مكتمل",
+      "description": "يتم تشغيل AlphaFlix بخسارة، ونحن بحاجة إلى المساعدة لإبقائه خاليًا من الإعلانات! إذا كنت تستمتع باستخدام AlphaFlix، يرجى النظر في التبرع لمساعدتنا في تغطية تكاليفنا.",
+      "donate": "يتبرع",
+      "explanation": "إذا كنت لا تستخدم الامتداد أو لم تقم بإعداد FED API، فقد يكون من الصعب العثور على المحتوى! نريد إصلاح هذه المشكلة، ولكن من الصعب جدًا توفير محتوى بدون خوادم باهظة الثمن. لذا، من فضلك، إذا كنت تستمتع باستخدام AlphaFlix، فيرجى التفكير في التبرع لمساعدتنا في تغطية تكاليفنا المتزايدة.",
+      "explanation2": "إذا كنت تريد المزيد من المعلومات، يرجى الانضمام إلينا",
+      "fluxer": "الجريان",
+      "label": "تمويل المشروع: ${{current}} / ${{goal}}",
+      "moreInfo": "مزيد من المعلومات",
+      "thankYou": "شكرا لدعمكم!",
+      "title": "AlphaFlix يحتاج الى مساعدتكم!"
     },
     "titles": {
       "69": {
@@ -465,6 +383,15 @@
           "يحيا AlphaFlix!"
         ]
       },
+      "halloween": {
+        "default": "ما هو الفيلم المخيف الذي تود مشاهدته في عيد الهالوين هذا؟",
+        "extra": [
+          "عيد الهالوين سعيد! 🎃👻",
+          "بوو! 👻",
+          "خدعة أو علاج! 🍬",
+          "إنها القرع العظيم يا تشارلي براون!"
+        ]
+      },
       "morning": {
         "default": "ماذا تريد أن تشاهد في هذا الصباح؟",
         "extra": [
@@ -476,304 +403,116 @@
         "extra": [
           "تحيا AlphaFlix!"
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "تمت مشاهدته مؤخرًا",
+      "sectionTitle": "شاهد التاريخ"
     }
   },
   "media": {
     "episodeDisplay": "\"موسم{{season}} حلقة{{episode}}\"",
-    "unreleased": "لم يصدر بعد",
+    "episodeShort": "ح",
+    "seasonUnwatched": "هل أنت متأكد أنك تريد وضع علامة على الموسم بأنه غير مراقب؟",
+    "seasonWatched": "هل أنت متأكد أنك تريد وضع علامة على الموسم كما تمت مشاهدته؟",
     "types": {
       "movie": "فيلم",
       "show": "مسلسل"
     },
-    "episodeShort": "ح",
-    "seasonShort": "م",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "متابعة",
-    "play": "تشغيل",
-    "runtime": "مدة:",
-    "language": "اللغة:",
-    "releaseDate": "تاريخ الاصدار:",
-    "rating": "التقييم:",
-    "votes": "الأصوات",
-    "tmdb": "عرض في TMDB",
-    "imdb": "عرض في IMDb",
-    "episodes": "الحلقات",
-    "seasons": "موسم",
-    "season": "الموسم",
-    "episode": "حلقة",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "يصدر",
-    "endsAt": "ينتهي الساعة {{time}}",
-    "trailer": "الإعلان الترويجي",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "لم يصدر بعد"
   },
   "migration": {
-    "loginRequired": "يجب عليك تسجيل الدخول لنقل بياناتك! يُرجى العودة وتسجيل الدخول للمتابعة.",
-    "start": {
-      "title": "انقل بياناتك",
-      "explainer": "إذا كنت ترغب في نقل بياناتك أو نسخها احتياطيًا، يمكنك القيام بذلك باستخدام الخيارات أدناه. سيسمح لك هذا بالاحتفاظ ببياناتك عند تغيير خوادم الواجهة الخلفية.",
-      "options": {
-        "or": "أو",
-        "direct": {
-          "description": "سيؤدي هذا إلى نقل بياناتك مباشرةً إلى الخادم الجديد. هذا هو الخيار الأسرع. <br /><br />يتيح لك هذا الخيار الاحتفاظ بعبارة المرور كما هي!",
-          "title": "النقل المباشر",
-          "quality": "الأسهل و الأسرع",
-          "action": "نقل البيانات"
-        },
-        "download": {
-          "description": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى الخادم الجديد أو الاحتفاظ بها.",
-          "title": "تنزيل البيانات",
-          "quality": "أكثر تقنية",
-          "action": "تنزيل البيانات"
-        },
-        "upload": {
-          "title": "رفع البيانات",
-          "description": "قم بتحميل ملف البيانات الذي قمت بتصديره مسبقًا لاستعادة الوسائط المفضلة و التقدم على هذا الحساب.",
-          "quality": "استعادة من النسخة الاحتياطية",
-          "action": "رفع البيانات"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "النقل المباشر",
-      "description": "أدخل رابط الواجهة الخلفية (Backend) الجديدة لنقل بيانات حسابك الحالية. ستبقى كلمة المرور الخاصة بك كما هي!",
-      "backendLabel": "رابط الواجهة الخلفية الجديدة",
-      "recaptchaLabel": "مفتاح ReCaptcha (اختياري)",
-      "toggleLable": "هل تحتاج إلى ReCaptcha؟",
-      "status": {
-        "error": "فشل نقل بياناتك. 😿",
-        "success": "لقد تم نقل بياناتك بنجاح! 🎉"
-      },
-      "button": {
-        "migrate": "نقل",
-        "processing": "تتم المعالجة...",
-        "home": "الذهاب إلي الصفحة الرئيسية",
-        "login": "الاستمرار في تسجيل الدخول"
-      }
-    },
+    "back": "رجوع",
     "download": {
-      "title": "تنزيل البيانات",
+      "button": {
+        "download": "نزل البيانات",
+        "home": "اذهب للصفحة الرئيسية"
+      },
       "description": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى سيرفر جديد أو الاحتفاظ بها.",
       "status": {
         "error": "فشل في تنزيل بياناتك. 😿",
         "success": "تم تنزيل بياناتك! 🎉"
       },
-      "button": {
-        "download": "نزل البيانات",
-        "home": "اذهب للصفحة الرئيسية",
-        "login": "استمرار الى تسجيل الدخول"
-      }
+      "title": "تنزيل البيانات"
+    },
+    "loginRequired": "يجب عليك تسجيل الدخول لنقل بياناتك! يُرجى العودة وتسجيل الدخول للمتابعة.",
+    "preview": {
+      "downloadDescription": "التحميل يشمل:",
+      "items": {
+        "bookmarks": "الوسائط المرجعية",
+        "progress": "شاهد التقدم",
+        "settings": "الإعدادات والتفضيلات"
+      },
+      "uploadDescription": "البيانات المراد تحميلها:"
+    },
+    "start": {
+      "explainer": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى الخادم الجديد أو الاحتفاظ بها. قم بتحميل ملف البيانات الذي قمت بتصديره مسبقًا لاستعادة الوسائط المفضلة و التقدم على هذا الحساب.",
+      "options": {
+        "download": {
+          "action": "تنزيل البيانات",
+          "description": "سيؤدي هذا إلى تنزيل بياناتك على جهازك. يمكنك بعد ذلك تحميلها إلى الخادم الجديد أو الاحتفاظ بها.",
+          "quality": "أكثر تقنية",
+          "title": "تنزيل البيانات"
+        },
+        "or": "أو",
+        "upload": {
+          "action": "رفع البيانات",
+          "description": "قم بتحميل ملف البيانات الذي قمت بتصديره مسبقًا لاستعادة الوسائط المفضلة و التقدم على هذا الحساب.",
+          "quality": "استعادة من النسخة الاحتياطية",
+          "title": "رفع البيانات"
+        }
+      },
+      "title": "انقل بياناتك"
     },
     "upload": {
-      "title": "تحميل البيانات",
-      "description": "قم برفع ملف البيانات الذي صدّرته مسبقًا لاستعادة المعلومات لهذا الحساب.",
-      "status": {
-        "processing": "جارٍ معالجة البيانات...",
-        "error": "فشل في تحميل بياناتك. 😿",
-        "success": "‌تم تحميل بيناتك! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "اختر الملف الذي تريد رفعه",
-        "select": "اختر الملف",
-        "change": "غير الملف",
-        "name": "اسم الملف"
-      },
-      "exportedOn": "تم التصدير في",
-      "previewTitle": "Preview:",
       "button": {
+        "home": "الاستمرار للصفحة الرئيسية",
         "import": "استرداد البيانات",
         "processing": "جاري التنفيذ...",
-        "success": "تمت العملية بنجاح",
-        "home": "الاستمرار للصفحة الرئيسية",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "رجوع"
+        "saveLocal": "حفظ محليا"
+      },
+      "description": "قم برفع ملف البيانات الذي صدّرته مسبقًا لاستعادة المعلومات لهذا الحساب.",
+      "exportedOn": "تم التصدير في",
+      "file": {
+        "change": "غير الملف",
+        "description": "اختر الملف الذي تريد رفعه",
+        "select": "اختر الملف"
+      },
+      "previewTitle": "معاينة:",
+      "status": {
+        "error": "فشل في تحميل بياناتك. 😿",
+        "processing": "جارٍ معالجة البيانات...",
+        "success": "‌تم تحميل بيناتك! 🎉",
+        "successLocal": "تم حفظ بياناتك محليًا! 🎉"
+      },
+      "title": "تحميل البيانات"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "تحقّق من اتصالك بالإنترنت، أيتها الإوزة ! 🦢"
     },
+    "install": {
+      "genericGuide": "لا يدعم متصفحك مطالبة تثبيت PWA التلقائية.\nلا يزال بإمكانك التثبيت باستخدام قائمة المتصفح (على سبيل المثال: \"تثبيت التطبيق\" أو \"إنشاء اختصار\" أو \"إضافة إلى Dock/الشاشة الرئيسية\").",
+      "iosSafariGuide": "لتثبيت AlphaFlix كتطبيق:\n\n1. اضغط على زر المشاركة (مربع به سهم).\n2. اختر \"إضافة إلى الشاشة الرئيسية\".\n3. اضغط على إضافة."
+    },
     "menu": {
-      "about": "عنا والأسئلة الشائعة",
+      "desktop": "إعدادات التطبيق",
       "logout": "تسجيل الخروج",
       "register": "مزامنة إلى التخزين السحابي",
-      "settings": "الإعدادات",
-      "support": "الدعم",
-      "discover": "اكتشف‏",
-      "development": "تطوير",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "لتثبيت AlphaFlix كتطبيق:\n\n1. اضغط على زر المشاركة (مربع به سهم).\n2. اختر \"إضافة إلى الشاشة الرئيسية\".\n3. اضغط على إضافة.",
-      "genericGuide": "لا يدعم متصفحك مطالبة تثبيت PWA التلقائية.\nلا يزال بإمكانك التثبيت باستخدام قائمة المتصفح (على سبيل المثال: \"تثبيت التطبيق\" أو \"إنشاء اختصار\" أو \"إضافة إلى Dock/الشاشة الرئيسية\")."
+      "settings": "الإعدادات"
     }
   },
   "notFound": {
     "badge": "صفحة غير موجودة",
     "goHome": "العودة إلى الصفحة الرئيسية",
-    "reloadButton": "حاول مرة أخرى",
     "message": "بحثنا في كل مكان: في الخزانة وحتى تحت الصناديق، ومع ذلك لم نعثر عن الصفحة التي طلبتَها. ",
+    "reloadButton": "حاول مرة أخرى",
     "title": "تعذر العثور على هذه الصفحة"
-  },
-  "downtimeNotice": {
-    "badge": "مشكلات",
-    "goHome": "اذهب للصفحة الرئيسية",
-    "message": "نحن نواجه بعض المشاكل، إذا لم تتمكن من العثور على شيء أو تشغيله، يرجى تغيير المصدر. نتوقع استمرار هذه المشكلة خلال الأوقات التالية.",
-    "title": "خطأ في المزودين"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "إلغاء",
-      "confirm": "استخدم الإعداد الإفتراضي",
-      "description": "الإعداد الافتراضي لا يحتوي على أفضل البثوث. ستفقد الوصول إلى أفضل المصادر!",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "هل انت متأكد؟"
-    },
-    "extension": {
-      "back": "ارجع",
-      "explainer": "باستخدام إضافةالمتصفح، يمكنك الحصول على أفضل البثوث التي نقدمها. فقط ثبت الإضافة.👌",
-      "explainerIos": "لسوء الحظ، لا يتم دعم الإضافة على iOS، اضغط<bold>ارجع </bold> لاختيار خيار آخر.",
-      "extensionHelp": "إذا قمت بتثبيت الإضافة ولكن لم يتم اكتشافه، <bold> افتح الإضافةمن خلال قائمة إضافات المتصفح </bold> واتبع الخطوات على الشاشة.",
-      "linkChrome": "تثبيت إضافة Chrome",
-      "linkFirefox": "تثبيت إضافة Firefox",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "تم تثبيته على Chrome، لكن الموقع لا يكتشفه ؟ حاول إعادة تحميل الصفحة!",
-      "notDetectingAction": "إعادة تحميل الصفحة",
-      "status": {
-        "disallowed": "الإضافة غير مفعلة لهذه الصفحة(,,>﹏<,,)",
-        "disallowedAction": "فعل الإضافة",
-        "failed": "فشل ارسل الحالة",
-        "loading": "في انتظارك لتثبيت الإضافة",
-        "outdated": "إصدار الإضافة قديم جدا",
-        "success": "الإضافة تعمل كما هو متوقع!"
-      },
-      "submit": "اكمل",
-      "title": "لنبدا بإضافة"
-    },
-    "proxy": {
-      "back": "ارجع",
-      "explainer": "باستخدام طريقة الوكيل، يمكنك الحصول على بثوث عالية الجودة من خلال عمل وكيل خدمة ذاتية.",
-      "input": {
-        "errorConnection": "لايمكن الاتصال بالوكيل",
-        "errorInvalidUrl": "رابط غير صالح",
-        "errorNotProxy": "توقعنا وكيل ولكن حصلنا على موقع",
-        "label": "رابط الوكيل",
-        "placeholder": "https://"
-      },
-      "link": "تعلم كيف تصنع وكيل",
-      "submit": "تأكيد الوكيل",
-      "title": "دعنا نصنع وكيل جديد"
-    },
-    "start": {
-      "explainer": "للحصول على أفضل بثوث ممكنة، ستحتاج إلى اختيار طريقة البث التي تريد استخدامها.",
-      "moreInfo": {
-        "button": "المزيد من المعلومات",
-        "title": "فهم الإعداد",
-        "explainer": {
-          "intro": "نحن لا نستضيف الفيديوهات. نعتمد على مواقع خارجية لمحتوى الفيديو، لذلك عليك اختيار الطريقة التي تتصل بها بتلك المواقع.",
-          "options": "اختياراتك:",
-          "extension": "1. إضافة",
-          "extensionDescription": "تمنحك الإضافة الوصول إلى أكبر عدد من المصادر. تعمل كوكيل محلي (بروكسي) ويمكنها التعامل مع المواقع التي تحتاج إلى ملفات تعريف الارتباط أو رؤوس خاصة للتحميل.",
-          "proxy": "2. بروكسي",
-          "proxyDescription": "يقوم الوكيل بجمع الوسائط من مواقع أخرى. يتجاوز قيود المتصفح (مثل CORS) للسماح بجمع البيانات.",
-          "default": "3. الإعداد الافتراضي",
-          "defaultDescription": "يستخدم وكيل AlphaFlix المدمج. هذا هو اسهل خيار ولكن ممكن يكون بطيء بسبب النطاق الترددي المشترك.",
-          "fedapi": {
-            "fedapi": "إضافة: رمز (توكن) FED API الخاص",
-            "fedapiDescription": "احصل على حساب مجاني في Febbox واستمتع بوصول حصري إلى FED API الخاص، أفضل مصدر يقدم لك جودة 4K، صوت دولبي أتموس، إمكانية تخطي المقدمات، وأسرع تحميل للفيديوهات! ننصح به بشدة!"
-          },
-          "outro": "اذا كان لديك المزيد من الأسئلة حول طريقة العمل، لا تتردد تسأل في <0>سيرفر ديسكورد AlphaFlix</0>!"
-        },
-        "recommended": {
-          "title": "محتار ماذا تختار؟",
-          "subtitle": "إعدادات مقترحة:",
-          "desktop": {
-            "title": "سطح المكتب:",
-            "description": "الإضافة + FED API الخاص"
-          },
-          "iOS": {
-            "title": "لأجهزة آيفون وآيباد (iOS):",
-            "description": "وكيل مخصص (بروكسي) + FED API الخاص"
-          },
-          "android": {
-            "title": "لأجهزة أندرويد:",
-            "description": "الإضافة + FED API الخاص"
-          }
-        }
-      },
-      "options": {
-        "or": "او",
-        "default": {
-          "text": "لا أريد بثوث ذات جودة جيدة،استخدم الإعداد الافتراضي."
-        },
-        "extension": {
-          "action": "ثبت الإضافة",
-          "description": "قم بتركيب إضافة المتصفح واستمتع بمصادر أكثر! تذكر تفعيل الإضافة لهذا الموقع.",
-          "quality": "افضل جودة + مصادر اكثر",
-          "title": "إضافة المتصفح"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "إعداد وكيل",
-          "description": "قم بإعداد وكيل في 5 دقائق فقط وهذا يحسّن التحميل!",
-          "quality": "جودة جيدة",
-          "title": "وكيل مخصص"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "دعونا نحصل على إعداد مع AlphaFlix 🥳"
+      "cancel": "إلغاء"
     }
   },
   "overlays": {
@@ -785,24 +524,45 @@
       "short": "عُدْ"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "البث إلى الجهاز 🎬"
+      "device": "جهاز",
+      "to": "الإرسال إلى {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "جارٍ تنزيل المزيد من ذاكرة الوصول العشوائي...",
+      "2": "تحويل الكافيين إلى محتوى...",
+      "3": "تعليم الهامستر الجري بشكل أسرع.",
+      "4": "إقناع الإلكترونات بالتحرك بشكل أسرع",
+      "5": "تقريبًا هناك... قال كل شريط تحميل على الإطلاق...",
+      "6": "جارٍ العثور على جهاز التحكم عن بُعد...انتظر، مشكلة خاطئة...",
+      "7": "العد التنازلي من اللانهاية...",
+      "8": "محاكاة المستقبل...",
+      "9": "مشاهدة فيديوهات القطط...",
+      "10": "تشتت انتباهك بواسطة صور GIF الخاصة بالقطط...",
+      "11": "من فضلك انتظر بينما يقوم المتدرب بإعادة ملء قهوته...",
+      "12": "التحقق مما إذا كان متصلاً...",
+      "13": "إيقاف تشغيله وتشغيله مرة أخرى...",
+      "14": "لا تُصب بالذعر...",
+      "15": "الشتاء قادم...",
+      "16": "تسجيل الدخول إلى سكاي نت...",
+      "17": "كل متصفحك ملك لنا...",
+      "18": "أبحث عن محرك الاحتمال اللانهائي ...",
+      "19": "اكتشاف طرق جديدة تجعلك تنتظر...",
+      "20": "وقتك مهم جدا بالنسبة لنا. من فضلك انتظر حتى نتجاهلك..",
+      "21": "لا يزال أسرع من Windows Update...",
+      "22": "لماذا لا تتناول شطيرة؟"
     },
     "menus": {
+      "audio": {
+        "default": "افتراضي"
+      },
       "downloads": {
         "button": "تجربة التحميل",
-        "hlsDownloader": "أو، اذهب الى <0>موقع تحميل HLS</0> والصق رابط قائمة التشغيل من تحت.",
-        "disclaimer": "يتم أخذ التنزيلات مباشرةً من قبل مقدم الخدمة. AlphaFlix لاسيطرة له على كيفية توفير تلك التنزيلات.",
         "copyHlsPlaylist": "انسخ رابط قائمة تشغيل HLS",
+        "disclaimer": "يتم أخذ التنزيلات مباشرةً من قبل مقدم الخدمة. AlphaFlix لاسيطرة له على كيفية توفير تلك التنزيلات.",
         "downloadSubtitle": "تنزيل الترجمة الحالية",
         "downloadVideo": "تنزيل الفيديو",
-        "openIn": "فتح في ...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "outplayer",
-        "hlsOpenInDisclaimer": "فتح بث HLS في مشغل خارجي قد لا يعمل!",
         "hlsDisclaimer": "يتم أخذ التنزيلات مباشرة من المزود. لا تتحكم AlphaFlix في كيفية توفير التنزيلات.<br /><br />يرجى ملاحظة أنك تقوم بتنزيل قائمة تشغيل HLS،<bold> لا ينصح بالتنزيل إذا لم تكن على دراية بتنسيقات البث المتقدمة</bold>. جرب مصادر مختلفة لتنسيقات مختلفة.",
+        "hlsDownloader": "أو، اذهب الى <0>موقع تحميل HLS</0> والصق رابط قائمة التشغيل من تحت.",
         "onAndroid": {
           "1": "لتنزيل الفيديو على أندرويد، اضغط على زر التحميل، ثم في الصفحة الجديدة، <bold>اضغط مطولًا</bold> على الفيديو، ثم اختر <bold>حفظ</bold>.",
           "shortTitle": "تنزيل / Android",
@@ -824,57 +584,47 @@
         "button": "الحلقات",
         "emptyState": "لا توجد حلقات في هذا الموسم حالياً، يرجى التحقق لاحقًا (,,>﹏<,,)...",
         "episodeBadge": "ح{{episode}}",
+        "favorites": "المفضلة",
         "loadingError": "خطأ في تحميل الموسم",
         "loadingList": "تحميل...",
         "loadingTitle": "تحميل...",
-        "unairedEpisodes": "تم تعطيل حلقة واحدة أو أكثر من هذا الموسم لأنه لم يتم اصدارهم بعد.",
-        "seasons": "مواسم",
-        "showMore": "عرض المزيد",
+        "markAsFavorite": "وضع علامة كمفضلة",
+        "markAsUnwatched": "وضع علامة على أنه غير مراقب",
+        "markAsWatched": "وضع علامة كما شاهدت",
+        "noFavorites": "لا توجد حلقات مفضلة حتى الآن. حلقات النجمة لإضافتها إلى المفضلة لديك!",
         "showLess": "عرض أقل",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "showMore": "عرض المزيد",
         "specials": "العروض الخاصة"
       },
       "playback": {
-        "speedLabel": "سرعة التشغيل",
-        "title": "إعدادات التشغيل",
         "disabled": "(غير متاح في حفلة المشاهدة)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "سرعة التشغيل",
+        "speedUnboosted": "{{speed}}x",
+        "title": "إعدادات التشغيل"
       },
       "quality": {
+        "auto": "تلقائي",
         "automaticLabel": "جودة تلقائية",
         "hint": "يمكنك محاولة <0>تغيير المصدر</0> للحصول على خيارات جودة مختلفة.",
         "iosNoQuality": "نظرًا للقيود المحددة من قبل Apple، خيارات الجودة غير متوفرة على iOS لهذا المصدر. يمكنك محاولة <0>التبديل إلى مصدر آخر</0> للحصول على خيارات جودة مختلفة.",
-        "title": "جودة",
-        "auto": "تلقائي"
+        "title": "جودة"
       },
       "settings": {
+        "audioItem": "الصوت",
         "downloadItem": "تنزيل",
         "enableSubtitles": "تفعيل الترجمة",
-        "experienceSection": "تجربة المشاهدة",
         "playbackItem": "إعدادات التشغيل",
-        "audioItem": "الصوت",
         "qualityItem": "جودة",
         "sourceItem": "المصدر",
-        "subtitleItem": "الترجمة",
-        "videoSection": "إعدادات الفيديو"
+        "subtitleItem": "الترجمة"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "حدث خطأ أثناء محاولة إيجاد أي مقاطع فيديو... تجربة مصدر آخر ؟",
           "title": "فشلت عملية الاستخراج"
         },
+        "findNextSource": "البحث عن المصدر التالي",
         "noEmbeds": {
           "text": "تعذر العثور على أي تضمينات، يرجى تجربة مصدر آخر.",
           "title": "لم يتم العثور على تضمينات"
@@ -884,72 +634,53 @@
           "title": "لا بث (,,>﹏<,,)"
         },
         "title": "مصادر",
-        "unknownOption": "مجهول",
-        "findNextSource": "Find next source"
+        "unknownOption": "مجهول"
       },
       "subtitles": {
+        "autoSelectChoice": "تحديد تلقائي",
+        "autoSelectDifferentChoice": "انقر مرة أخرى لتحديد عنوان فرعي مختلف تلقائيًا",
+        "clearSecondary": "مسح العنوان الفرعي الثانوي",
         "customChoice": "قم بسحب الملف أو رفعه",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "تخصيص",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "رأيت التسمية التوضيحية",
+        "delayLate": "سمعت الصوت",
+        "doubleClickToCopy": "انقر نقرًا مزدوجًا لنسخ بيانات الترجمة",
+        "dropSubtitleFile": "اسحب ملف الترجمة هنا! 😄",
+        "dualSub": "ترجمات مزدوجة",
+        "dualSubDesc": "حدد نفس التنسيق (SRT، VTT...) والموفر (OpenSubs...) للحصول على أفضل مزامنة",
+        "dualSubHint": "حدد لغة للترجمة الثانوية (كما هو موضح فوق اللغة الأساسية)",
+        "empty": "لا توجد ترجمات متوفرة لهذا الفيديو.",
+        "loadingExternal": "جارٍ تحميل الترجمات الخارجية...",
+        "loadingExternalProgress": "جارٍ تحميل الترجمات الخارجية... ({{progress}}%)",
+        "matchScoreLabel": "مطابقة ~{{score}}%",
+        "notFound": "لا توجد نتائج مطابقة لبحثك",
         "offChoice": "معطل",
-        "onChoice": "مفعّل",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "مصدر الترجمة",
-        "OpenSubtitlesChoice": "ترجمة خارجية",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "لصق بيانات الترجمة",
+        "previewLabel": "معاينة الترجمة:",
+        "primary": "أساسي",
+        "refresh": "تحديث الترجمات الخارجية",
+        "refreshing": "منعش...",
+        "secondary": "ثانوي",
+        "selectingSecondary": "اختيار العنوان الفرعي الثانوي",
         "settings": {
           "backlink": "ترجمة مخصصة",
           "delay": "تأخير الترجمة",
           "fixCapitals": "تصحيح تهجئة الحروف"
         },
         "title": "الترجمة",
-        "unknownLanguage": "مجهول",
-        "dropSubtitleFile": "اسحب ملف الترجمة هنا! 😄",
-        "scrapeButton": "جلب الترجمة",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "لا توجد ترجمات متوفرة لهذا الفيديو.",
-        "notFound": "لا توجد نتائج مطابقة لبحثك",
-        "useNativeSubtitles": "استخدم ترجمة الفيديو الأصلية",
-        "useNativeSubtitlesDescription": "ممكن يحل مشكلة الترجمات وقت البث وفي وضع PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "نص",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "الترجمة من {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "جارٍ تحميل الترجمات الخارجية... ({{progress}}%)",
-        "matchScoreLabel": "مطابقة ~{{score}}%"
+        "unknownLanguage": "مجهول",
+        "useNativeSubtitles": "استخدم ترجمة الفيديو الأصلية",
+        "useNativeSubtitlesDescription": "ممكن يحل مشكلة الترجمات وقت البث وفي وضع PiP"
       },
       "watchparty": {
-        "watchpartyItem": "المشاهدة الجماعية",
-        "notice": "نظام المشاهدة الجماعية القديمة قد لا تكون متوفرة لبعض المصادر",
-        "legacyWatchparty": "استخدم نظام المشاهدة الجماعية القديم"
-      },
-      "audio": {
-        "default": "افتراضي"
+        "watchpartyItem": "المشاهدة الجماعية"
       }
     },
     "metadata": {
-      "api": {
-        "text": "تعذّر تحميل بيانات واجهة البرمجة (API)، يرجى التحقق من اتصالك بالإنترنت.",
-        "title": "فشل في تحميل بيانات واجهة البرمجة (API)"
-      },
-      "legal": {
-        "badge": "محذوف",
-        "text": "لم تعد هذه الوسائط متاحة بسبب إشعار الإزالة أو مطالبة حقوق النشر.😨",
-        "title": "الوسائط محذوفه"
-      },
       "extensionPermission": {
         "badge": "التصريح مفقود",
         "button": "استخدم الإضافة",
@@ -962,6 +693,11 @@
         "text": "تعذر تحميل البيانات الوصفية للوسائط من قاعدة البيانات TMDB. يرجى التحقق مما إذا كانت TMDB غير متاحة أو محظورة على اتصال الإنترنت الخاص بك.",
         "title": "فشل في تحميل البيانات الوصفية"
       },
+      "legal": {
+        "badge": "محذوف",
+        "text": "لم تعد هذه الوسائط متاحة بسبب إشعار الإزالة أو مطالبة حقوق النشر.😨",
+        "title": "الوسائط محذوفه"
+      },
       "notFound": {
         "badge": "غير موجود",
         "homeButton": "عُدْ للصفحة الرئيسية",
@@ -970,18 +706,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "إعادة المشاهدة",
       "next": "الحلقة التالية",
-      "nextSeason": "‎‏الموسم القادم"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "‎‏الموسم القادم",
+      "replay": "إعادة المشاهدة"
     },
     "playbackError": {
+      "autoResumeText": "حدث خطأ أثناء محاولة تشغيل الوسائط 😖. تجربة المصادر الأخرى تلقائيًا...",
       "badge": "خطأ في التشغيل",
+      "copyDebugInfo": "انسخ معلومات التصحيح",
+      "debugInfo": "تحقق من وحدة التحكم لمزيد من التفاصيل.",
       "errors": {
         "errorAborted": "تم إلغاء جلب الوسائط بناءً على طلب المستخدم.",
         "errorDecode": "على الرغم من أنه تم التأكد سابقًا من إمكانية استخدام المورد، حدث خطأ أثناء محاولة فك ترميز محتوى الوسائط، مما أدى إلى حدوث خلل.",
@@ -989,37 +722,35 @@
         "errorNetwork": "حدث نوع من خطأ في الشبكة منع تحميل الوسائط بنجاح، رغم أنها كانت متاحة سابقًا.",
         "errorNotSupported": "المحتوى أو مزود المحتوى غير مدعوم."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "عُدْ للصفحة الرئيسية",
-      "resumeButton": "Try next sources",
+      "resumeButton": "جرب المصادر التالية",
       "text": "حدث خطأ أثناء محاولة تشغيل الوسائط😖، الرجاء المحاولة مرة أخرى أو تجربة مصدر مختلف!",
       "title": "فشِلَ تشغيلُ الفيديو!"
     },
+    "resume": {
+      "description": "تمت مشاهدة هذه الحلقة بنسبة {{percentage}}%",
+      "restart": "إعادة تشغيل",
+      "resume": "سيرة ذاتية",
+      "title": "مواصلة المشاهدة؟"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "الإضافة غير مفعّلة",
+        "enableExtension": "فعّل الإضافة",
+        "homeButton": "الذهاب الي الصفحة الرئيسية",
+        "text": "لقد ثبّت إضافة AlphaFlix بنجاح! لتبدأ تستخدمها، يجب تفعيل الإضافة لهذا الموقع.",
+        "title": "الرجاء تفعيل الإضافة"
+      },
       "items": {
-        "failure": "حدث خطأ",
-        "timeout": "Timed out (15s)",
-        "notFound": "لا يحتوي على اي فيديو(╥﹏╥)",
         "pending": "جارٍ التحققُ من وجود فيديوهات..."
       },
       "notFound": {
         "badge": "غير موجود",
         "detailsButton": "عرض التفاصيل",
-        "homeButton": "عُدْ للصفحة الرئيسية",
         "discoverButton": "اكتشف المزيد",
+        "homeButton": "عُدْ للصفحة الرئيسية",
         "text": "لقد بحثنا في مزودينا ولم نتمكن من العثور على المحتوى الذي تبحث عنه! نحن لا نستضيف المحتوى ولا نتحكم في ما هو متاح. الرجاء الضغط على \"عرض التفاصيل\" أدناه لمزيد من المعلومات.",
-        "title": "لم نتمكن من العثور على ذلك",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "الإضافة غير مفعّلة",
-        "homeButton": "الذهاب الي الصفحة الرئيسية",
-        "enableExtension": "فعّل الإضافة",
-        "title": "الرجاء تفعيل الإضافة",
-        "text": "لقد ثبّت إضافة AlphaFlix بنجاح! لتبدأ تستخدمها، يجب تفعيل الإضافة لهذا الموقع."
+        "title": "لم نتمكن من العثور على ذلك"
       },
       "tips": {
         "1": "اضغط على أيقونة الإعدادات لتغيير المصادر!",
@@ -1033,182 +764,126 @@
         "9": "استخدم [ and] لضبط توقيت الترجمة!"
       }
     },
+    "segment": {
+      "credits": "الاعتمادات",
+      "intro": "مقدمة",
+      "recap": "خلاصة"
+    },
+    "skipTime": {
+      "confidence": "ثقة",
+      "connectApiKeyMessage": "لإرسال شرائح جديدة، أدخل مفتاح TheIntroDB API الخاص بك في إعدادات الاتصالات",
+      "credits": "تخطي الاعتمادات",
+      "endOfVideo": "نهاية",
+      "endsAt": "ينتهي عند {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "يلغي",
+          "description": "ساهم في TheIntroDB عن طريق إرسال طوابع زمنية دقيقة للقطاع. يتم قبول جميع المشاركات من قبل المجتمع قبل نشرها.",
+          "endTimeLabel": "نهاية (ق)",
+          "error": {
+            "endTime": "وقت الانتهاء مطلوب",
+            "mediaInfo": "معلومات الوسائط غير متوفرة",
+            "segment": "لم يتم تحديد أي شريحة",
+            "startTime": "وقت البدء مطلوب",
+            "submission": "حدث خطأ أثناء إرسال الطوابع الزمنية",
+            "tidbKey": "لم يتم تعيين مفتاح TIDB API"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "الحد الأدنى 5S إذا تم توفير النهاية. يمكن أن تمتد إلى نهاية وسائل الإعلام.",
+              "endDesc": "اختياري - اتركه فارغًا في حالة تشغيل الاعتمادات حتى نهاية الملف.",
+              "excludeDesc": "استبعاد مشاهد منتصف الاعتمادات أو ما بعد الاعتمادات؛ فقط قائمة الائتمان الرئيسية.",
+              "startDesc": "مطلوب - عندما تبدأ الاعتمادات الختامية (على سبيل المثال، عندما يظهر نص الاعتماد الأول).",
+              "whenToTitle": "دليل الطوابع الزمنية للاعتمادات:"
+            },
+            "durationDesc": "الحد الأدنى 5 ثواني إذا تم توفير النهاية",
+            "durationLabel": "مدة:",
+            "endDesc": "اختياري - فارغ إذا امتد إلى النهاية",
+            "endLabel": "نهاية:",
+            "excludeDesc": "مشاهد ما بعد الاعتمادات",
+            "excludeLabel": "استبعاد:",
+            "intro": {
+              "durationDesc": "تتراوح مدة معظم المقدمات بين 30 و90 ثانية. الحد الأدنى 5 ثواني إذا تم ضبط البداية والنهاية.",
+              "endDesc": "مطلوب - عندما تنتهي المقدمة (عادة عندما تبدأ بطاقة العنوان أو الحلقة الرئيسية).",
+              "excludeDesc": "لا تقم بتضمين مشاهد الافتتاح البارد أو مشاهد ما قبل المقدمة؛ فقط تسلسل العنوان الرئيسي.",
+              "startDesc": "اختياري - اتركه فارغًا إذا كانت المقدمة تبدأ في بداية الحلقة.",
+              "whenToTitle": "دليل الطوابع الزمنية المقدمة:"
+            },
+            "preview": {
+              "durationDesc": "تختلف مدة المعاينة. الحد الأدنى 5S.",
+              "endDesc": "اختياري - اتركه فارغًا إذا انتهت المعاينة في نهاية الوسائط.",
+              "excludeDesc": "تستغرق المعاينة عادة 15-90 ثانية في نهاية الحلقة لمعاينة الحلقة التالية.",
+              "startDesc": "مطلوب - عند بدء المعاينة (على سبيل المثال، عندما يظهر نص المعاينة).",
+              "whenToTitle": "دليل معاينة الطوابع الزمنية:"
+            },
+            "recap": {
+              "durationDesc": "تختلف الملخصات في الطول. الحد الأدنى 5 ثواني إذا تم ضبط البداية والنهاية.",
+              "endDesc": "مطلوب - عند انتهاء الملخّص وبدء المحتوى الجديد.",
+              "excludeDesc": "فقط الجزء \"الذي تم تشغيله سابقًا\" أو مقطع التلخيص؛ لا تشمل المقدمة أو المشاهد الجديدة.",
+              "startDesc": "اختياري - اتركه فارغًا إذا كان الملخّص يبدأ في بداية الحلقة.",
+              "whenToTitle": "دليل تلخيص الطوابع الزمنية:"
+            },
+            "startDesc": "مطلوب - عندما تبدأ الاعتمادات المتداول",
+            "startLabel": "يبدأ:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 أو 210 (اتركه فارغًا لنهاية الوسائط)",
+              "intro": "3:30 أو 210 (مطلوب)",
+              "preview": "3:30 أو 210 (اتركه فارغًا لنهاية الوسائط)",
+              "recap": "3:30 أو 210 (مطلوب)"
+            },
+            "start": {
+              "credits": "2:30 أو 150 (مطلوب)",
+              "intro": "2:30 أو 150 (اتركها فارغة للبدء في البداية)",
+              "preview": "2:30 أو 150 (مطلوب)",
+              "recap": "2:30 أو 150 (اتركها فارغة للبدء في البداية)"
+            }
+          },
+          "segmentType": "نوع القطعة",
+          "startTimeLabel": "البداية (الخطوات)",
+          "submit": "يُقدِّم",
+          "submitting": "تقديم...",
+          "success": {
+            "title": "تم التقديم بنجاح! شكرًا!"
+          },
+          "title": "إرسال الطوابع الزمنية إلى TheIntroDB",
+          "types": {
+            "credits": "الاعتمادات",
+            "intro": "مقدمة",
+            "preview": "معاينة",
+            "recap": "خلاصة"
+          },
+          "whenToDesc": "أدخل الطوابع الزمنية بالثواني (على سبيل المثال 150)، أو بتنسيق mm:ss (على سبيل المثال 2:30)، أو بتنسيق hh:mm:ss (على سبيل المثال، 1:42:20). سنقوم تلقائيًا بتحويل التنسيق لك.",
+          "whenToTitle": "دليل الطوابع الزمنية:"
+        },
+        "title": "هل كان هذا التخطي صحيحا؟"
+      },
+      "intro": "تخطي المقدمة",
+      "noSegments": "لا توجد شرائح تخطي المتاحة",
+      "recap": "تخطي الخلاصة",
+      "skipSegments": "تخطي المقاطع",
+      "startsAt": "يبدأ عند {{time}}",
+      "submissions": "{{count}} عمليات الإرسال",
+      "submitSegment": "إرسال الجزء",
+      "timeUnknown": "الوقت غير معروف"
+    },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "تبقى {{timeLeft}} • ينتهي في {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "الدعم",
-    "text": "صُمم AlphaFlix ليكون سهل الاستخدام قدر الإمكان. ولكن، لا يزال لدى المستخدمين بعض الأسئلة أو يواجهون بعض المشاكل. هذه الصفحة متواجدة هنا لمساعدتك في حل هذه الأمور",
-    "q1": {
-      "body": "بإمكانك الانضمام إلى <0>ديسكورد AlphaFlix الرسمي</0> وطرح أسئلتك هناك، أو يمكنك مراسلتنا عبر البريد الإلكتروني الموجود في أسفل هذه الصفحة.",
-      "title": "أين يمكنني الحصول على المساعدة؟"
-    },
-    "q2": {
-      "body": "لدينا <0>صفحة على GitHub</0> حيث يمكنك إنشاء مشكلة مفصّلة في مستودعنا. بالإضافة إلى ذلك، إذا رغبت، يمكنك إنشاء طلب سحب (Pull Request) لإصلاح المشكلة بنفسك.",
-      "title": "كيف يمكنني الإبلاغ عن خطأ أو مشكلة؟"
-    }
-  },
-  "jip": {
-    "title": "جيب",
-    "text": "لم يخرج AlphaFlix من شجرة جوز الهند، بل تم صنعه في الغالب بواسطة شخص واحد (شخص ملحمي للغاية).",
-    "q1": {
-      "body": "بإمكانك الانضمام إلى <0>ديسكورد AlphaFlix الرسمي</0> وطرح أسئلتك هناك، أو يمكنك مراسلتنا عبر البريد الإلكتروني الموجود في أسفل هذه الصفحة.",
-      "title": "أين يمكنني الحصول على المساعدة؟"
-    },
-    "q2": {
-      "body": "لدينا <0>صفحة على GitHub</0> حيث يمكنك إنشاء مشكلة مفصّلة في مستودعنا. بالإضافة إلى ذلك، إذا رغبت، يمكنك إنشاء طلب سحب (Pull Request) لإصلاح المشكلة بنفسك.",
-      "title": "كيف يمكنني الإبلاغ عن خطأ أو مشكلة؟"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "جار تحميل التطبيق",
-    "loadingUser": "جارٍ تحميل ملفك الشخصي",
     "loadingUserError": {
+      "disconectCancel": "يلغي",
+      "disconnectConfirm": "يتأكد",
+      "disconnectMessage": "قطع الاتصال بخادم الحساب، والحفاظ على أحدث البيانات المحلية. لن تتم مزامنة التغييرات والمحتوى الذي تمت مشاهدته حتى تقوم بتسجيل الدخول مرة أخرى.",
+      "disconnectTitle": "قطع الاتصال من الخلفية؟",
       "logout": "تسجيل الخروج",
-      "reset": "إعادة تعيين الخادم المخصص",
-      "disconnect": "Disconnect from backend",
-      "text": "فشل تحميل ملفك الشخصي",
       "reload": "إعادة تحميل",
-      "textWithReset": "فشل تحميل ملفك الشخصي من خادمك المخصص، هل ترغب في العودة إلى الخادم الافتراضي؟",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reset": "إعادة تعيين الخادم المخصص"
     },
     "migration": {
       "failed": "فشلت عملية ترحيل بياناتك.😿",
@@ -1216,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "اسم الجهاز",
-        "deviceNamePlaceholder": "الهاتف الشخصي",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "تعديل",
-        "logoutButton": "تسجيل الخروج"
-      },
-      "admin": {
-        "title": "لوحة الإدارة",
-        "text": "استخدم الأدوات المصممة لاختبار حالة AlphaFlix."
+        "logoutButton": "تسجيل الخروج",
+        "nicknameLabel": "كنية",
+        "nicknamePlaceholder": "أدخل لقبك"
       },
       "actions": {
         "delete": {
@@ -1248,26 +907,26 @@
           "text": "هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع البيانات ولا يمكن استعادتها.",
           "title": "حذف الحساب"
         },
-        "migration": {
-          "title": "نقل الحساب",
-          "text": "قم بنقل حسابك إلى خادم جديد أو حمّل بياناتك.",
-          "button": "نقل الحساب"
-        },
-        "title": "الإجراءات",
         "logoutAllDevices": {
-          "title": "إنهاء جميع الجلسات",
+          "button": "تسجيل الخروج من جميع الأجهزة",
           "text": "سيؤدي هذا إلى تسجيل خروجك من جميع الأجهزة المرتبطة بحسابك.",
-          "button": "تسجيل الخروج من جميع الأجهزة"
-        }
+          "title": "إنهاء جميع الجلسات"
+        },
+        "migration": {
+          "button": "نقل الحساب",
+          "text": "قم بنقل حسابك إلى خادم جديد أو حمّل بياناتك.",
+          "title": "نقل الحساب"
+        },
+        "title": "الإجراءات"
       },
       "devices": {
         "deviceNameLabel": "اسم الجهاز",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "فشل تحميل الجلسات",
+        "lastActive": "آخر نشاط: {{date}}",
+        "loggedInAt": "تم تسجيل الدخول في: {{date}}",
         "removeDevice": "إزالة",
         "title": "الأجهزة",
-        "lastActive": "آخر نشاط: {{date}}",
-        "loggedInAt": "تم تسجيل الدخول في: {{date}}"
+        "unknownDevice": "جهاز غير معروف، خطأ في فك تشفير الاسم"
       },
       "profile": {
         "finish": "إنهاء التعديل",
@@ -1283,377 +942,213 @@
       },
       "title": "الحساب"
     },
+    "all": {
+      "title": "جميع الإعدادات"
+    },
     "appearance": {
       "activeTheme": "مفعل",
-      "themes": {
-        "blue": "أزرق",
-        "custom": "Custom",
-        "default": "افتراضي",
-        "gray": "رمادي",
-        "red": "أحمر",
-        "teal": "تركواز",
-        "classic": "كلاسيكي",
-        "green": "أخضر",
-        "mocha": "بني",
-        "pink": "وردي",
-        "noir": "أسود",
-        "ember": "أحمر غامق",
-        "acid": "أخضر حامضي",
-        "spark": "ذهبي",
-        "grape": "عنابي",
-        "spiderman": "سبايدرمان",
-        "forest": "أخضر غابي",
-        "wolverine": "وولفرين",
-        "popsicle": "صيفي",
-        "hulk": "هالك",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "أساسي",
+        "secondary": "ثانوي",
+        "tertiary": "التعليم العالي"
       },
-      "title": "المظهر",
       "options": {
+        "carouselView": "عرض شريط التمرير",
+        "carouselViewDescription": "اعرض قسمي \"تشاهد حاليًا\" و\"المحفوظات\" كشرائط تمرير بدلًا من شبكة.",
+        "carouselViewLabel": "عرض شريط التمرير",
         "discover": "قسم الاكتشاف",
         "discoverDescription": "اعرض قسم الاكتشاف في الصفحة الرئيسية أسفل الوسائط التي قمت بوضع إشارة عليها.",
         "discoverLabel": "قسم الاكتشاف",
         "featured": "المحتوى المميز",
         "featuredDescription": "اعرض شريط تمرير للأفلام والبرامج المميزة في أعلى الصفحة الرئيسية! معطلة افتراضيا.",
         "featuredLabel": "المحتوى المميز",
+        "forceCompactEpisodeView": "فرض عرض الحلقات المضغوطة",
+        "forceCompactEpisodeViewDescription": "فرض عرض الحلقات داخل المشغّل باستخدام العرض العمودي الكلاسيكي المضغوط. يكون هذا الخيار معطّلًا بشكل افتراضي.",
+        "forceCompactEpisodeViewLabel": "الحلقات المضغوطة",
+        "homeSectionOrder": "ترتيب قسم المنزل",
+        "homeSectionOrderDescription": "قم بالسحب والإفلات لإعادة ترتيب أقسام المشاهدة والإشارات المرجعية على صفحتك الرئيسية. يمكن تحرير ترتيب المجموعة من الصفحة الرئيسية.",
+        "homeSectionOrderGroups": "إعادة ترتيب مجموعات الإشارات المرجعية",
+        "logos": "شعارات الصور",
+        "logosDescription": "اعرض شعارات الصور بدلًا من عناوين النص في نافذة التفاصيل وقسم المحتوى المميز.",
+        "logosLabel": "شعارات الصور",
+        "logosNotice": "في معظم الوقت، تكون الشعارات باللغة الإنجليزية فقط. قد يرغب المستخدمون الذين يتحدثون لغات أخرى في ايقاف هذا!",
+        "minimalCards": "الحد الأدنى من البطاقات",
+        "minimalCardsDescription": "إخفاء محتوى النص (العنوان، النوع، السنة) على بطاقات الوسائط، مع إظهار صورة الملصق فقط.",
+        "minimalCardsLabel": "الحد الأدنى من البطاقات",
         "modal": "نافذة التفاصيل",
         "modalDescription": "اعرض نافذة التفاصيل عند النقر على بطاقة الوسائط بدلًا من الانتقال إلى صفحة المشاهدة. يتطلب الأمر بروكسي أو إضافة للتشغيل التجريبي.",
         "modalLabel": "نافذة التفاصيل",
-        "logos": "شعارات الصور",
-        "logosDescription": "اعرض شعارات الصور بدلًا من عناوين النص في نافذة التفاصيل وقسم المحتوى المميز.",
-        "logosNotice": "في معظم الوقت، تكون الشعارات باللغة الإنجليزية فقط. قد يرغب المستخدمون الذين يتحدثون لغات أخرى في ايقاف هذا!",
-        "logosLabel": "شعارات الصور",
-        "carouselView": "عرض شريط التمرير",
-        "carouselViewDescription": "اعرض قسمي \"تشاهد حاليًا\" و\"المحفوظات\" كشرائط تمرير بدلًا من شبكة.",
-        "carouselViewLabel": "عرض شريط التمرير",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "فرض عرض الحلقات المضغوطة",
-        "forceCompactEpisodeViewDescription": "فرض عرض الحلقات داخل المشغّل باستخدام العرض العمودي الكلاسيكي المضغوط. يكون هذا الخيار معطّلًا بشكل افتراضي.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "الحلقات المضغوطة",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "pauseOverlay": "وقفة تراكب",
+        "pauseOverlayDescription": "إظهار تراكب العنوان/الشعار والوصف عند توقف المشغل مؤقتًا وخموله.",
+        "pauseOverlayLabel": "وقفة تراكب"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "الإشارات المرجعية",
+        "watching": "جاري المشاهدة"
+      },
+      "themes": {
+        "acid": "أخضر حامضي",
+        "autumn": "خريف",
+        "blue": "أزرق",
+        "christmas": "عيد الميلاد",
+        "classic": "كلاسيكي",
+        "cobalt": "الكوبالت",
+        "custom": "مخصص",
+        "default": "افتراضي",
+        "ember": "أحمر غامق",
+        "forest": "أخضر غابي",
+        "frost": "الصقيع",
+        "grape": "عنابي",
+        "gray": "رمادي",
+        "green": "أخضر",
+        "hulk": "هالك",
+        "mocha": "بني",
+        "noir": "أسود",
+        "pink": "وردي",
+        "popsicle": "صيفي",
+        "red": "أحمر",
+        "spark": "ذهبي",
+        "spiderman": "سبايدرمان",
+        "teal": "تركواز",
+        "wolverine": "وولفرين"
+      },
+      "title": "المظهر"
     },
     "connections": {
       "server": {
-        "description": "إذا كنت ترغب في الاتصال بواجهة خلفية مخصصة لتخزين بياناتك، فعّل هذا الخيار وأدخل الرابط. <0>التعليمات.</0>",
-        "label": "خادم مُخصص",
-        "urlLabel": "رابط الخادم المخصص",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>انقل بياناتي</0> إلى خادم جديد.",
-          "link": "انقل بياناتي"
-        },
-        "documentation": "توثيق الواجهة الخلفية",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "إعداد",
-        "errorStatus": {
-          "description": "يبدو أن عنصرًا أو أكثر في هذا الإعداد يحتاج إلى انتباهك.",
-          "title": "شيء ما يحتاج إلى انتباهك😱"
-        },
-        "itemError": "هناك شيء خاطئ في هذا الإعداد. اذهب من خلال إعداد مرة أخرى لإصلاحه.(ᴗ_ ᴗ。)",
-        "items": {
-          "default": "الإعداد الافتراضي",
-          "extension": "إضافة AlphaFlix",
-          "proxy": "وكيل (بروكسي) مخصص",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "إعادة الإعداد",
-        "successStatus": {
-          "description": "كل شيء موجود لبدء مشاهدة أفلامك ومسلسلاتك المفضلة.(๑>◡<๑)",
-          "title": "تم إعداد كل شيء!"
-        },
-        "unsetStatus": {
-          "description": "يرجى النقر على الزر إلى اليمين لبدء عملية الإعداد.",
-          "title": "أنت لم تمر من خلال الإعداد"
-        }
-      },
-      "title": "الاتصالات",
-      "workers": {
-        "addButton": "إضافة وكيل جديد",
-        "description": "لكي يعمل التطبيق، يتم توجيه كل البيانات عبر البروكسيات. فعّل هذا الخيار إذا كنت تريد استخدام العمال (workers) الخاصين بك. <0>التعليمات.</0>",
-        "documentation": "توثيق البروكسي",
-        "emptyState": "لا يوجد وكلاء حتى الآن، أضف واحدًا أدناه",
-        "label": "استخدم وكلاء بروكسي مخصصين",
-        "urlLabel": "روابط العمال",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "بروكسي TMDB",
-          "description": "مطلوب فقط إذا لم تتمكن من الوصول إلى TheMovieDB مباشرةً، مثلًا إذا كان مزود خدمة الإنترنت لديك يحجبه. يُنصح بتعطيل قسم الاكتشاف لتحسين الأداء في هذه الحالة."
-        }
+        "changeWarning": "سيؤدي تغيير خادم الواجهة الخلفية إلى تسجيل خروجك. يكمل؟",
+        "changeWarningTitle": "تغيير الخادم الخلفي",
+        "error": "حدث خطأ أثناء الاتصال بالواجهة الخلفية",
+        "notice": "لا تتم مزامنة حسابك بين الواجهات الخلفية، لذا تذكر أي منها تستخدمه!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "ساهم في TheIntroDB من خلال ترك تعليقات حول شرائح المقدمة والخلاصة والاعتمادات. <0>معرفة المزيد.</0>",
+        "tokenLabel": "مفتاح واجهة برمجة التطبيقات"
+      },
+      "title": "الاتصالات"
     },
     "preferences": {
-      "title": "التفضيلات",
-      "language": "لغة الموقع",
-      "languageDescription": "تم تطبيق اللغة على الموقع.",
-      "thumbnail": "إنشاء صور مصغرة",
-      "thumbnailDescription": "في معظم الأوقات، لا تحتوي مقاطع الفيديو على صور مصغرة. يمكنك تمكين هذا الإعداد من توليدها بسرعة ولكن يمكنها جعل الفيديو الخاص بك أبطأ.",
-      "thumbnailLabel": "إنشاء صور مصغرة",
       "autoplay": "التشغيل التلقائي",
       "autoplayDescription": "تشغيل الحلقة التالية تلقائيًا عند الوصول إلى نهاية الحلقة الحالية. يمكن للمستخدمين تفعيل هذا الخيار من خلال إضافة المتصفح، أو بروكسي مخصص، أو من خلال الإعداد الافتراضي إذا سمح المضيف بذلك.",
       "autoplayLabel": "التشغيل التلقائي",
-      "skipCredits": "تخطي النهاية",
-      "skipCreditsDescription": "عند التفعيل، يتم تشغيل الحلقة التالية تلقائيًا عند إكمال 99% لتخطي نهاية الاعتمادات. عند التعطيل، ينتظر حتى انتهاء الحلقة بالكامل.",
-      "skipCreditsLabel": "تخطي النهاية",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
+      "autoResumeOnPlaybackError": "استئناف تلقائي عند حدوث خطأ في التشغيل",
+      "autoResumeOnPlaybackErrorDescription": "متابعة البحث تلقائيًا عن مصادر أخرى عند فشل المصدر الحالي أثناء التشغيل. إذا تم تعطيله، فسترى شاشة خطأ مع خيار استئناف يدوي.",
+      "autoResumeOnPlaybackErrorLabel": "استئناف تلقائي عند حدوث خطأ في التشغيل",
+      "autoSkipSegments": "تخطي المقاطع تلقائيًا",
+      "autoSkipSegmentsDescription": "عند التمكين، يمكنك تخطي المقدمة والملخص ومقاطع المعاينة تلقائيًا أثناء المشاهدة.",
+      "autoSkipSegmentsLabel": "تخطي الأجزاء تلقائيًا",
+      "doubleClickToSeek": "انقر نقرا مزدوجا للبحث",
+      "doubleClickToSeekDescription": "انقر نقرًا مزدوجًا على الجانب الأيسر أو الأيمن من اللاعب للبحث عن 10 ثوانٍ للأمام أو للخلف.",
+      "doubleClickToSeekLabel": "تمكين النقر المزدوج للبحث",
+      "embedOrder": "إعادة ترتيب التضمينات",
+      "embedOrderDescription": "قم بالسحب والإسقاط لإعادة ترتيب التضمينات. سيحدد هذا الترتيب الذي يتم به فحص التضمينات للوسائط التي تحاول مشاهدتها. <br><br> <strong>(الترتيب الافتراضي هو الأفضل لمعظم المستخدمين)</strong>",
+      "embedOrderEnableLabel": "ترتيب تضمين مخصص",
+      "holdToBoost": "عقد لتعزيز السرعة",
+      "holdToBoostDescription": "اضغط مع الاستمرار على مفتاح المسافة أو المس الشاشة مع الاستمرار لزيادة سرعة التشغيل مؤقتًا إلى 2x. حرر للعودة إلى السرعة السابقة.",
+      "holdToBoostLabel": "تمكين عقد لتعزيز",
+      "keyboardShortcuts": "اختصارات لوحة المفاتيح",
+      "keyboardShortcutsDescription": "تخصيص اختصارات لوحة المفاتيح للتطبيق. اضغط باستمرار لإظهار هذه المساعدة في أي وقت",
+      "keyboardShortcutsLabel": "تخصيص اختصارات لوحة المفاتيح",
+      "language": "لغة الموقع",
+      "languageDescription": "تم تطبيق اللغة على الموقع.",
+      "lastSuccessfulSource": "آخر مصدر مستخدم",
+      "lastSuccessfulSourceDescription": "تحديد الأولوية تلقائيًا للمصدر الذي نجح في تقديم محتوى الحلقة السابقة. وهذا يساعد على ضمان الاستمرارية عند مشاهدة المسلسلات.",
+      "lastSuccessfulSourceEnableLabel": "آخر مصدر مستخدم",
       "lowPerformanceMode": "وضع الأداء المنخفض / تقليل استهلاك البيانات",
       "lowPerformanceModeDescription": "يقوم بتحسين التطبيق للاتصالات والأجهزة ذات السرعة المنخفضة عن طريق تعطيل الميزات التي تستهلك الكثير من البيانات. يقلل هذا الوضع من استخدام البيانات ويحسّن الأداء مع الحفاظ على وظائف البحث والمشاهدة الأساسية. ",
       "lowPerformanceModeLabel": "وضع الأداء المنخفض",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "manualSource": "اختيار المصدر يدويا",
+      "manualSourceDescription": "تتطلب اختيار مصدر قبل تجريف. تعطيل التحديد التلقائي للمصدر وفتح منتقي المصدر عند بدء التشغيل.",
+      "manualSourceLabel": "اختيار المصدر يدويا",
+      "showLess": "عرض أقل",
+      "showMore": "عرض المزيد",
+      "skipCredits": "تخطي النهاية",
+      "skipCreditsDescription": "عند التفعيل، يتم تشغيل الحلقة التالية تلقائيًا عند إكمال 99% لتخطي نهاية الاعتمادات. عند التعطيل، ينتظر حتى انتهاء الحلقة بالكامل.",
+      "skipCreditsLabel": "تخطي النهاية",
       "sourceOrder": "إعادة ترتيب المصادر",
       "sourceOrderDescription": "اسحب وأفلت لإعادة ترتيب المصادر. هذا سيحدد ترتيب التحقق من المصادر للوسائط التي تحاول مشاهدتها. إذا كان المصدر مظللًا بالرمادي، فهذا يعني أن <bold>الإضافة</bold> مطلوبة لهذا المصدر. <br><br><strong>(الترتيب الافتراضي هو الأفضل لمعظم المستخدمين)</strong>",
       "sourceOrderEnableLabel": "ترتيب المصادر المخصص",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "thumbnail": "إنشاء صور مصغرة",
+      "thumbnailDescription": "في معظم الأوقات، لا تحتوي مقاطع الفيديو على صور مصغرة. يمكنك تمكين هذا الإعداد من توليدها بسرعة ولكن يمكنها جعل الفيديو الخاص بك أبطأ.",
+      "thumbnailLabel": "إنشاء صور مصغرة",
+      "title": "التفضيلات"
     },
     "reset": "إعادة تعيين",
     "save": "حفظ",
+    "search": {
+      "placeholder": "إعدادات البحث..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "إصدار التطبيق",
-        "backendUrl": "رابط الواجهة الخلفية",
-        "backendVersion": "إصدار الواجهة الخلفية",
-        "hostname": "اسم المضيف",
-        "insecure": "غير آمن",
-        "nickname": "Nickname",
         "notLoggedIn": "أنت لم تسجل دخولك بعد",
-        "secure": "آمن",
-        "title": "معلومات التطبيق",
-        "unknownVersion": "غير معروف",
         "userId": "معرِّف المستخدم",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "استخدم هذا كرمز دعوة لتسجيل صديقك"
       }
     },
     "subtitles": {
-      "backgroundLabel": "تعتيم الخلفية",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "قد يؤدي تعطيل تعتيم خلفية التسمية التوضيحية إلى إصلاح بعض مشكلات الوميض",
+      "backgroundBlurEnabledLabel": "طمس الخلفية",
       "backgroundBlurLabel": "تغبيش الخلفية",
+      "backgroundLabel": "تعتيم الخلفية",
+      "BorderThicknessLabel": "سمك الحدود",
       "colorLabel": "لون",
-      "previewQuote": "هٰذا نَص تجريبيّ لترجمة الفِيدْيو. قُمْ بتَعديل الحجمِ أو النَّمط أو المَوضِع هُنَا.",
-      "textSizeLabel": "حجم النص",
-      "title": "الترجمة",
-      "textBoldLabel": "خط عريض",
-      "verticalPositionLabel": "مكان الترجمة عموديًا",
-      "high": "High",
+      "high": "عالي",
       "low": "منخفض",
+      "previewQuote": "هٰذا نَص تجريبيّ لترجمة الفِيدْيو. قُمْ بتَعديل الحجمِ أو النَّمط أو المَوضِع هُنَا.",
+      "textBoldLabel": "خط عريض",
+      "textSizeLabel": "حجم النص",
       "textStyle": {
-        "title": "نمط النص",
+        "Border": "حدود",
         "default": "افتراضي",
-        "raised": "مرفوع",
         "depressed": "منخفض",
-        "Border": "Border",
-        "dropShadow": "ظل مُسقط"
+        "dropShadow": "ظل مُسقط",
+        "raised": "مرفوع",
+        "title": "نمط النص"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "الترجمة",
+      "verticalPositionLabel": "مكان الترجمة عموديًا"
     },
     "unsaved": "لديك تغييرات غير محفوظة"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "أفلام",
-      "tvshows": "مسلسلات",
-      "editorpicks": "اختيارات المحرر",
-      "top10": "أعلى 10"
-    },
-    "carousel": {
-      "title": {
-        "loading": "جارٍ التحميل...",
-        "movies": "أفلام {{category}}",
-        "tvshows": "مسلسلات {{category}}",
-        "inCinemas": "في السينما",
-        "popular": "الأكثر شعبية",
-        "nowPlaying": "في السينما",
-        "topRated": "الأعلى تقييم",
-        "latestReleases": "أحدث الإصدارات",
-        "4kReleases": "إصدارات 4K",
-        "onTheAir": "يعرض حالياً",
-        "latestTVReleases": "أحدث المسلسلات",
-        "popularOn": "الأكثر شعبية من {{type}} على {{provider}}",
-        "editorPicksMovies": "أفلام مختارة بعناية",
-        "editorPicksShows": "مسلسلات مختارة بعناية",
-        "moviesOn": "أفلام على {{provider}}",
-        "tvshowsOn": "مسلسلات على {{provider}}",
-        "recommended": "لأنك شاهدت: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "أفلام {{genre}}",
-        "genreShows": "مسلسلات {{genre}}",
-        "categoryMovies": "أفلام {{category}}",
-        "categoryShows": "مسلسلات {{category}}",
-        "trending": "رائج الآن",
-        "top10": "Top 10"
-      },
-      "change": "تغيير",
-      "more": "عرض المزيد"
-    },
-    "featured": {
-      "playNow": "شغل الآن",
-      "moreInfo": "المزيد من المعلومات"
-    },
-    "randomMovie": {
-      "button": "شاهد شيئًا عشوائيًا",
-      "cancel": "إلغاء العد التنازلي",
-      "countdown": "{{countdown}} ث",
-      "nowPlaying": "يعرض الآن",
-      "in": "في"
-    },
-    "page": {
-      "title": "اكتشف الأفلام والمسلسلات",
-      "subtitle": "استكشف أحدث الأعمال والكلاسيكيات الخالدة.",
-      "loadMore": "تحميل المزيد",
-      "loading": "جارٍ التحميل...",
-      "back": "عودة"
-    },
-    "viewLists": "عرض جميع قوائم الأفلام",
-    "allLists": "جميع قوائم الأفلام",
-    "scrollToTop": "العودة إلى الأعلى",
-    "filters": {
-      "country": "دولة"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "رمز (توكن) FED API الخاص",
-      "description": "احصل على حساب مجاني في Febbox واستمتع بوصول حصري إلى FED API الخاص، أفضل مصدر يقدم لك جودة 4K، صوت دولبي أتموس، إمكانية تخطي المقدمات، وأسرع تحميل للفيديوهات! ننصح به بشدة!"
-    },
-    "setup": {
-      "title": "للحصول على رمز واجهة المستخدم (UI token) الخاص بك:",
-      "showVideo": "عرض شرح بالفيديو",
-      "hideVideo": "إخفاء شرح الفيديو",
-      "step": {
-        "1": "1. اذهب إلى <0>febbox.com</0> وسجل الدخول باستخدام جوجل (استخدم حساباً جديداً!)",
-        "2": "2. افتح أدوات المطور أو قم بفحص الصفحة (Inspect)",
-        "3": "3. اذهب إلى تبويب التطبيق (Application tab) ← ملفات تعريف الارتباط (Cookies)",
-        "4": "4. انسخ كوكي 'ui'.",
-        "5": "5. يمكنك إغلاق التبويب، ولكن لا تسجل خروج!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "نجاح",
-      "api_down": "لا يمكن الوصول إلى واجهة برمجة تطبيقات FED!",
-      "invalid_token": "فشل جلب بث 'VIP'. الرمز غير صالح!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "متزامن",
-      "outOfSync": "غير متزامن"
-    },
-    "alone": "بمفردك",
-    "withCount": "مع {{count}} آخرين",
-    "isHost": "مستضاف على <0>{{backendName}}</0>",
-    "isGuest": "تشاهد كضيف على <0>{{backendName}}</0>",
-    "hosting": "استضافة",
-    "watching": "مشاهدة",
-    "syncing": "جاري المزامنة...",
-    "behindHost": "متأخر عن المضيف بـ {{seconds}} ثانية",
-    "aheadOfHost": "متقدم على المضيف بـ {{seconds}} ثواني",
-    "showStatusOverlay": "عرض حالة التراكب",
-    "leaveWatchParty": "مغادرة جلسة المشاهدة الجماعية",
-    "shareCode": "شارك هذا الرمز مع أصدقائك (اضغط لنسخ الرابط)",
-    "connectedAsGuest": "تم الاتصال بجلسة المشاهدة كضيف",
-    "hostParty": "استضافة جلسة مشاهدة جماعية",
-    "joinParty": "انضم إلى جلسة مشاهدة جماعية",
-    "viewers": "عدد المشاهدين ({{count}})",
-    "copyCode": "انقر للنسخ",
-    "join": "انضم",
-    "cancel": "إلغاء",
-    "save": "حفظ",
-    "emptyRoom": "لا يوجد أحد في هذه الغرفة بعد",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "غير قادر على الاتصال بهذه الغرفة",
-    "contentMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: المحتوى لا يتطابق مع محتوى المضيف.",
-    "episodeMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: أنت تشاهد حلقة مختلفة عن المضيف.",
-    "validating": "جاري التحقق من جلسة المشاهدة...",
-    "linkCopied": "تم النسخ!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "أدخل رابط حفلة المشاهدة المشتركة أو رمز الغرفة",
-    "you": "أنت",
-    "guestFallback": "ضيف"
   },
   "tmdb": {
     "genres": {
       "10759": "العمل والمغامرة"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "متقدم على المضيف بـ {{seconds}} ثواني",
+    "alone": "بمفردك",
+    "behindHost": "متأخر عن المضيف بـ {{seconds}} ثانية",
+    "cancel": "إلغاء",
+    "connectedAsGuest": "تم الاتصال بجلسة المشاهدة كضيف",
+    "contentMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: المحتوى لا يتطابق مع محتوى المضيف.",
+    "copyCode": "انقر للنسخ",
+    "emptyRoom": "لا يوجد أحد في هذه الغرفة بعد",
+    "enterCodeOrLink": "أدخل رابط حفلة المشاهدة المشتركة أو رمز الغرفة",
+    "episodeMismatch": "لا يمكن الانضمام إلى جلسة المشاهدة: أنت تشاهد حلقة مختلفة عن المضيف.",
+    "guestFallback": "ضيف",
+    "hosting": "استضافة",
+    "hostParty": "استضافة جلسة مشاهدة جماعية",
+    "invalidRoom": "غير قادر على الاتصال بهذه الغرفة",
+    "isGuest": "تشاهد كضيف على <0>{{backendName}}</0>",
+    "isHost": "مستضاف على <0>{{backendName}}</0>",
+    "join": "انضم",
+    "joinParty": "انضم إلى جلسة مشاهدة جماعية",
+    "leaveWatchParty": "مغادرة جلسة المشاهدة الجماعية",
+    "linkCopied": "تم النسخ!",
+    "noHost": "لا يوجد مضيف في حفلة المراقبة هذه",
+    "save": "حفظ",
+    "shareCode": "شارك هذا الرمز مع أصدقائك (اضغط لنسخ الرابط)",
+    "showStatusOverlay": "عرض حالة التراكب",
+    "status": {
+      "inSync": "متزامن",
+      "outOfSync": "غير متزامن"
+    },
+    "syncing": "جاري المزامنة...",
+    "validating": "جاري التحقق من جلسة المشاهدة...",
+    "viewers": "عدد المشاهدين ({{count}})",
+    "watching": "مشاهدة",
+    "withCount": "مع {{count}} آخرين",
+    "you": "أنت"
   }
 }

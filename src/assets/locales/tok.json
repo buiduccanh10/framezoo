@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "ilo Muwi-We li lukin li wile e sitelen. kulupu lawa li lawa pona",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "sona wile",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "sitelen li tan seme?",
-      "body": "ilo Muwi-We li mama ala e sitelen. sina lukin e sitelen la mi alasa e sitelen lon lipu ale. (sina ken sona e mama sitelen lon tenpo alasa lon poki 'mama'.) sitelen li awen ala lon ilo Muwi-We. ale li lon alasa ni",
-      "section": "general"
-    },
-    "q2": {
-      "title": "mi wile alasa e sitelen lon seme?",
-      "body": "sina ken ala wile alasa e sitelen. ilo Muwi-We li lawa ala e sitelen. sitelen li tan lipu mama ante",
-      "section": "search"
-    },
-    "q3": {
-      "title": "sitelen pi wile mi li lon lukin ilo. seme la mi ken ala lukin e ona?",
-      "body": "sitelen lon lukin ilo li tan lipu The Movie Database (lipu TMDB). jo li ante ala e ni",
-      "section": "search"
-    },
-    "q4": {
-      "title": "What about my data and stuff?",
-      "body": "All data is synced to the community backend, anyone is free to use this as well.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "How can I find out more?",
-      "body": "AlphaFlix has a Fluxer server that can be found at the header of this page!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "ilo Muwi-We la"
-  },
   "actions": {
-    "copied": "sama a",
-    "copy": "o sama",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "copied": "sama a",
+    "copy": "o sama"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Active",
+      "confirm": "Confirm",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Choose which backend server to connect to",
+      "title": "Select Account Server"
+    },
     "createAccount": "sina jo ala e lipu open la <0>o pali e lipu open</0>",
-    "deviceNameLabel": "nimi ilo",
-    "deviceNamePlaceholder": "ilo mi",
-    "inviteCodeLabel": "nanpa toki",
-    "inviteCodePlaceholder": "o pana e nanpa pi jan pona",
-    "inviteCodeRequiredError": "nanpa toki li wile",
-    "inviteCodeInvalidError": "nanpa toki li pona ala",
     "generate": {
-      "description": "nimi open sina li lon nasin open pi lipu open sina. o awen pona e ona. sina open e lipu open sina la sina wile pana e nimi open ale sina",
-      "next": "mi jo e nimi open mi",
-      "passphraseFrameLabel": "nimi open",
-      "title": "nimi open sina",
       "custom": "Custom",
       "customPassphraseLabel": "Custom Passphrase",
       "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
+      "description": "nimi open sina li lon nasin open pi lipu open sina. o awen pona e ona. sina open e lipu open sina la sina wile pana e nimi open ale sina",
       "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
+      "next": "mi jo e nimi open mi",
+      "passphraseFrameLabel": "nimi open",
       "passphraseTooShort": "Passphrase must be at least 8 characters long.",
+      "title": "nimi open sina",
+      "useCustomPassphrase": "Use Custom Passphrase",
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "sina jo e lipu open la <0>o pana e nimi sina</0>",
+    "inviteCodeInvalidError": "nanpa toki li pona ala",
+    "inviteCodeLabel": "nanpa toki",
+    "inviteCodePlaceholder": "o pana e nanpa pi jan pona",
+    "inviteCodeRequiredError": "nanpa toki li wile",
     "login": {
       "description": "lipu open sina la o sitelen e nimi ale sina",
-      "deviceLengthError": "o pana e nimi ilo",
-      "passphraseLabel": "nimi open 12",
-      "passphrasePlaceholder": "nimi open",
-      "submit": "o open",
-      "title": "o pana e nimi sina",
-      "validationError": "pakala",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "Nickname",
+      "nicknameNotFound": "Nickname not found",
       "nicknamePlaceholder": "Enter your nickname",
+      "nicknameRequired": "Nickname is required",
+      "noBackendUrl": "No backend URL",
+      "or": "or",
+      "passwordIncorrect": "Password is incorrect",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Enter your password",
-      "nicknameRequired": "Nickname is required",
       "passwordRequired": "Password is required",
-      "nicknameNotFound": "Nickname not found",
-      "passwordIncorrect": "Password is incorrect"
+      "submit": "o open",
+      "title": "o pana e nimi sina",
+      "usePasskey": "Use passkey",
+      "validationError": "pakala"
     },
     "register": {
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
       "information": {
         "color1": "kule nanpa wan",
         "color2": "kule nanpa tu",
@@ -195,39 +61,27 @@
         "next": "o pana",
         "title": "lipu open"
       },
-      "passwordInput": {
-        "title": "Create your login",
-        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!"
-      },
       "nicknameLabel": "Nickname",
       "nicknamePlaceholder": "Choose a unique nickname",
       "nicknameTaken": "Nickname is already taken",
+      "passwordInput": {
+        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!",
+        "title": "Create your login"
+      },
       "passwordLabel": "Password",
-      "passwordPlaceholder": "Create a password (used as your passphrase)",
-      "passwordWeak": "Password must be at least 8 characters with letters and numbers",
       "passwordMismatch": "Passwords do not match",
-      "confirmPasswordLabel": "Confirm Password",
-      "confirmPasswordPlaceholder": "Confirm your password"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Create a password (used as your passphrase)",
+      "passwordWeak": "Password must be at least 8 characters with letters and numbers"
     },
     "trust": {
       "failed": {
         "text": "nasin ale sina li pona anu seme?",
         "title": "toki tawa lawa ilo li pakala"
       },
-      "noHostTitle": "lawa ilo li open ala a!",
-      "noHost": "lawa ilo ni li open ala li nasin ala la, sina ken ala pali e lipu open",
       "host": "lawa ilo sina li <0>{{hostname}}</0> - ona li pona tawa sina la sina ken pali e lipu open",
       "no": "o weka",
+      "noHost": "lawa ilo ni li open ala li nasin ala la, sina ken ala pali e lipu open",
+      "noHostTitle": "lawa ilo li open ala a!",
       "title": "lawa ilo ni li pona tawa sina anu seme?",
       "yes": "lawa ilo ni li pona"
     },
@@ -235,14 +89,88 @@
       "description": "sina awen e nimi open sina la o pana e nimi open",
       "invalidData": "pakala",
       "noMatch": "nimi li sama ala",
-      "passphraseLabel": "nimi open 12 sina",
       "recaptchaFailed": "nasin ReCaptcha li pakala",
       "register": "o pali e lipu open",
-      "title": "nimi open sina",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "nimi open sina"
     }
+  },
+  "details": {
+    "airs": "Airs",
+    "collection": {
+      "movie": "Movie",
+      "movies": "Movies",
+      "rating": "Rating",
+      "releaseDate": "Release Date",
+      "sortBy": "Sort by"
+    },
+    "endsAt": "Ends at {{time}}",
+    "episode": "Episode",
+    "episodes": "Episodes",
+    "imdb": "View on IMDb",
+    "language": "Language:",
+    "play": "Play",
+    "rating": "Rating:",
+    "releaseDate": "Release Date:",
+    "resume": "Resume",
+    "runtime": "Runtime:",
+    "season": "Season",
+    "seasons": "Season/s",
+    "similar": "Similar",
+    "tmdb": "View on TMDB",
+    "trailers": "Trailers",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "All Movie Lists",
+    "carousel": {
+      "change": "Change",
+      "more": "View more",
+      "title": {
+        "4kReleases": "4K Releases",
+        "editorPicksMovies": "Editor Picks Movies",
+        "editorPicksShows": "Editor Picks Shows",
+        "forYou": "For You",
+        "inCinemas": "In Cinemas",
+        "latestReleases": "Latest Releases",
+        "latestTVReleases": "Latest TV Shows",
+        "movies": "{{category}} Movies",
+        "moviesOn": "Movies on {{provider}}",
+        "onTheAir": "On The Air",
+        "popular": "Most Popular",
+        "recommended": "Because You Watched: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Top Rated",
+        "trending": "Trending Now",
+        "tvshows": "{{category}} Shows",
+        "tvshowsOn": "Shows on {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "More Info",
+      "playNow": "Play Now"
+    },
+    "filters": {
+      "country": "Country"
+    },
+    "page": {
+      "back": "Go back",
+      "loading": "Loading...",
+      "loadMore": "Load more",
+      "title": "Discover Movies & TV"
+    },
+    "scrollToTop": "Back to top",
+    "tabs": {
+      "movies": "Movies",
+      "top10": "Top 10",
+      "tvshows": "TV Shows"
+    },
+    "viewLists": "View All Movie Lists"
+  },
+  "downtimeNotice": {
+    "badge": "Issues",
+    "goHome": "Go home",
+    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
+    "title": "Provider issues"
   },
   "errors": {
     "badge": "pakala a",
@@ -258,128 +186,116 @@
     },
     "links": {
       "fluxer": "kulupu Siko",
-      "legal": "Legal / DMCA",
-      "github": "lipu Kita",
-      "twitter": "Twitter",
-      "funding": "Support us"
+      "funding": "Support us",
+      "github": "lipu Kita"
     },
     "tagline": "o lukin e sitelen ale pi wile sina kepeken ilo ni"
   },
   "global": {
-    "name": "ilo Muwi-We",
-    "pages": {
-      "about": "o sona",
-      "legal": "Legal / DMCA",
-      "discover": "Discover",
-      "support": "Support",
-      "login": "o open",
-      "onboarding": "o pali",
-      "pagetitle": "{{title}} - ilo Muwi-We",
-      "register": "o pali open",
-      "settings": "o ante",
-      "migration": "Migrate Account",
-      "jip": "Jip"
-    },
     "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
+      "cancel": "Cancel",
+      "clickToEdit": "Click on a key badge to edit it",
       "conditions": {
-        "notInWatchParty": "Not in watch party",
         "showsOnly": "Shows only"
       },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
       "conflict": "conflict",
       "conflicts": "conflicts",
       "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
+      "editInSettings": "Edit keyboard commands from settings",
+      "groups": {
+        "audioVideo": "Audio & Video",
+        "interface": "Interface",
+        "jumpToPosition": "Jump to Position",
+        "subtitlesAccessibility": "Subtitles & Accessibility",
+        "videoPlayback": "Video Playback"
+      },
       "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
       "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%.",
+      "pressKey": "Press a key...",
+      "resetAllToDefault": "Reset All to Default",
+      "resetToDefault": "Reset to default",
+      "save": "Save",
+      "saveChanges": "Save Changes",
+      "shortcuts": {
+        "barrelRoll": "Do a barrel roll! 🌀",
+        "closeOverlay": "Close overlay/modal",
+        "decreaseVolume": "Decrease volume",
+        "increaseVolume": "Increase volume",
+        "jumpTo0": "Jump to 0% (beginning)",
+        "jumpTo9": "Jump to 90%",
+        "mute": "Mute/unmute",
+        "nextEpisode": "Next episode",
+        "playPause": "Play/pause (or hold for 2x speed when enabled)",
+        "playPauseAlt": "Play/pause",
+        "previousEpisode": "Previous episode",
+        "randomCaption": "Select random caption from last used language",
+        "skipBackward1": "Skip backward 1 second",
+        "skipBackward10": "Skip backward 10 seconds",
+        "skipBackward5": "Skip backward 5 seconds",
+        "skipForward1": "Skip forward 1 second",
+        "skipForward10": "Skip forward 10 seconds",
+        "skipForward5": "Skip forward 5 seconds",
+        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
+        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleCaptions": "Toggle captions",
+        "toggleFullscreen": "Toggle fullscreen",
+        "toggleNativeSubtitles": "Toggle native subtitles"
+      },
+      "subtitle": "Hold ` to show this help anytime",
+      "title": "Keyboard Shortcuts"
+    },
+    "name": "ilo Muwi-We",
+    "pages": {
+      "discover": "Discover",
+      "login": "o open",
+      "migration": "Migrate Account",
+      "pagetitle": "{{title}} - ilo Muwi-We",
+      "register": "o pali open",
+      "settings": "o ante"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "poki awen",
-      "showAll": "Show all",
-      "groups": {
-        "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
-        },
-        "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
-        }
-      },
       "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
         "cancel": "Cancel",
-        "save": "Save",
+        "description": "Edit the details for this bookmark",
         "groupsLabel": "Groups",
+        "save": "Save",
+        "title": "Edit Bookmark",
         "titleLabel": "Title",
         "titlePlaceholder": "Enter a title for your bookmark",
         "yearLabel": "Year",
         "yearPlaceholder": "Enter a year for your bookmark"
       },
+      "groups": {
+        "dropdown": {
+          "empty": "No groups yet",
+          "placeholderButton": "Add to group",
+          "removeAll": "Remove all",
+          "removeFromGroup": "Remove from group"
+        },
+        "editGroup": {
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "cancel": "Cancel",
+          "description": "Edit the name and icon of your bookmark group",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group",
+          "save": "Save",
+          "title": "Edit Group"
+        },
+        "reorder": {
+          "button": "Reorder",
+          "cancel": "Cancel",
+          "description": "Drag and drop to reorder your bookmark groups",
+          "done": "Done",
+          "save": "Save",
+          "title": "Edit Group Order"
+        }
+      },
+      "sectionTitle": "poki awen",
+      "showAll": "Show all",
       "sorting": {
-        "label": "Sort by",
         "options": {
           "date": "Default (Date added)",
           "titleAsc": "Title A-Z",
@@ -392,7 +308,6 @@
     "continueWatching": {
       "sectionTitle": "o awen lukin",
       "sorting": {
-        "label": "Sort by",
         "options": {
           "date": "Default (Date added)",
           "titleAsc": "Title A-Z",
@@ -405,12 +320,19 @@
     "mediaList": {
       "stopEditing": "o pini ante"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "pini a!",
+      "discover": "Discover",
+      "discoverMore": "Discover more",
+      "empty": {
+        "default": "Welcome, find media to watch here!",
+        "extra": [
+          "There's nothing here :(",
+          "So empty...",
+          "Such emptiness.",
+          "Hi new user :3"
+        ]
+      },
       "failed": "lukin li pakala a! o alasa sin",
       "loading": "alasa...",
       "noResults": "ijo li lon ala a!",
@@ -423,23 +345,19 @@
           "sitelen nanpa wan sina li seme?"
         ]
       },
-      "empty": {
-        "default": "Welcome, find media to watch here!",
-        "extra": [
-          "There's nothing here :(",
-          "So empty...",
-          "Such emptiness.",
-          "Hi new user :3"
-        ]
-      },
-      "sectionTitle": "mi lukin e ni:",
-      "discoverMore": "Discover more",
-      "discover": "Discover"
+      "sectionTitle": "mi lukin e ni:"
     },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+    "support": {
+      "complete": "complete",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
+      "donate": "Donate",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "fluxer": "Fluxer",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "moreInfo": "More info",
+      "thankYou": "Thank you for your support!",
+      "title": "AlphaFlix needs your help!"
     },
     "titles": {
       "69": {
@@ -460,6 +378,15 @@
           "sina pilin alasa la o lukin e sitelen Jurassic Park"
         ]
       },
+      "halloween": {
+        "default": "What spooky movie would you like to watch this Halloween?",
+        "extra": [
+          "Happy Halloween! 🎃👻",
+          "Boo! 👻",
+          "Trick or treat! 🍬",
+          "It's the Great Pumpkin, Charlie Brown!"
+        ]
+      },
       "morning": {
         "default": "tenpo sin ni la sina wile lukin e seme?",
         "extra": [
@@ -471,304 +398,116 @@
         "extra": [
           "sina pilin lape anu seme? o alasa lukin e sitelen Exorcist"
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Recently Watched",
+      "sectionTitle": "Watch History"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
-    "unreleased": "Unreleased",
+    "episodeShort": "E",
+    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?",
+    "seasonWatched": "Are you sure you want to mark the season as watched?",
     "types": {
       "movie": "sitelen wan",
       "show": "sitelen kulupu"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "Unreleased"
   },
   "migration": {
-    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
-    "start": {
-      "title": "Migrate your data",
-      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
-      "options": {
-        "or": "or",
-        "direct": {
-          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
-          "title": "Direct migration",
-          "quality": "Easiest and fastest",
-          "action": "Transfer data"
-        },
-        "download": {
-          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-          "title": "Download data",
-          "quality": "More technical",
-          "action": "Download data"
-        },
-        "upload": {
-          "title": "Upload Data",
-          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-          "quality": "Restore from backup",
-          "action": "Upload Data"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Direct migration",
-      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
-      "backendLabel": "Destination Backend URL",
-      "recaptchaLabel": "ReCaptcha Key (Optional)",
-      "toggleLable": "Needs ReCaptcha?",
-      "status": {
-        "error": "Failed to migrate your data. 😿",
-        "success": "Your data has been migrated successfully! 🎉"
-      },
-      "button": {
-        "migrate": "Migrate",
-        "processing": "Processing...",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
-    },
+    "back": "Go back",
     "download": {
-      "title": "Download data",
+      "button": {
+        "download": "Download data",
+        "home": "Go home"
+      },
       "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
       "status": {
         "error": "Failed to download your data. 😿",
         "success": "Your data has been downloaded successfully! 🎉"
       },
-      "button": {
-        "download": "Download data",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
+      "title": "Download data"
+    },
+    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      },
+      "uploadDescription": "Data to upload:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "Download data",
+          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
+          "quality": "More technical",
+          "title": "Download data"
+        },
+        "or": "or",
+        "upload": {
+          "action": "Upload Data",
+          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+          "quality": "Restore from backup",
+          "title": "Upload Data"
+        }
+      },
+      "title": "Migrate your data"
     },
     "upload": {
-      "title": "Upload data",
+      "button": {
+        "home": "Continue to home",
+        "import": "Import data",
+        "processing": "Processing...",
+        "saveLocal": "Save locally"
+      },
       "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "exportedOn": "Exported on",
+      "file": {
+        "change": "Change file",
+        "description": "Select the file you want to upload",
+        "select": "Select file"
+      },
+      "previewTitle": "Preview:",
       "status": {
-        "processing": "Processing data...",
         "error": "Failed to upload your data. 😿",
+        "processing": "Processing data...",
         "success": "Your data has been uploaded successfully! 🎉",
         "successLocal": "Your data has been saved locally! 🎉"
       },
-      "file": {
-        "description": "Select the file you want to upload",
-        "select": "Select file",
-        "change": "Change file",
-        "name": "File name"
-      },
-      "exportedOn": "Exported on",
-      "previewTitle": "Preview:",
-      "button": {
-        "import": "Import data",
-        "processing": "Processing...",
-        "success": "Import complete",
-        "home": "Continue to home",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Go back"
+      "title": "Upload data"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "wawa linja sina li seme?"
     },
+    "install": {
+      "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
+      "iosSafariGuide": "To install BetaMovie as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
+    },
     "menu": {
-      "about": "mi",
+      "desktop": "App Settings",
       "logout": "o weka sona e sina",
       "register": "Sync to Cloud",
-      "settings": "o ante",
-      "support": "o supa",
-      "discover": "Discover",
-      "development": "Development",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "To install BetaMovie as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add.",
-      "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen')."
+      "settings": "o ante"
     }
   },
   "notFound": {
     "badge": "lon ala",
     "goHome": "o tawa weka",
-    "reloadButton": "Try again",
     "message": "mi lukin lon anpa poki, lon insa tomo, lon monsi ilo. taso mi lukin ala e lipu pi wile sina",
+    "reloadButton": "Try again",
     "title": "mi ken ala lukin e lipu ona"
-  },
-  "downtimeNotice": {
-    "badge": "Issues",
-    "goHome": "Go home",
-    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
-    "title": "Provider issues"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "ala",
-      "confirm": "Use default setup",
-      "description": "The default setup does not have the best streams. You'll be missing out on the best sources!",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Are you sure?"
-    },
-    "extension": {
-      "back": "Go back",
-      "explainer": "Using the browser extension, you can get the best streams we have to offer. With just a simple install. 👌",
-      "explainerIos": "Unfortunately, the browser extension is not supported on iOS, Press <bold>Go back</bold> to choose another option.",
-      "extensionHelp": "If you've installed the extension but it's not detected, <bold>open the extension through your browsers extension menu</bold> and follow the steps on screen.",
-      "linkChrome": "Install Chrome extension",
-      "linkFirefox": "Install Firefox extension",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Installed on Chrome, but the site isn't detecting it? Try reloading the page!",
-      "notDetectingAction": "Reload page",
-      "status": {
-        "disallowed": "Extension is not enabled for this page (,,>﹏<,,)",
-        "disallowedAction": "Enable extension",
-        "failed": "Failed to request status",
-        "loading": "Waiting for you to install the extension",
-        "outdated": "Extension version too old",
-        "success": "Extension is working as expected!"
-      },
-      "submit": "Continue",
-      "title": "Let's start with an extension"
-    },
-    "proxy": {
-      "back": "Go back",
-      "explainer": "With the proxy method, you can get great quality streams by making a self-service proxy.",
-      "input": {
-        "errorConnection": "Could not connect to proxy",
-        "errorInvalidUrl": "Not a valid URL",
-        "errorNotProxy": "Expected a proxy but got a website",
-        "label": "Proxy URL",
-        "placeholder": "https://"
-      },
-      "link": "Learn how to make a proxy",
-      "submit": "Submit proxy",
-      "title": "Let's make a new proxy"
-    },
-    "start": {
-      "explainer": "To get the best streams possible, you will need to choose which streaming method you want to use.",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "or",
-        "default": {
-          "text": "I don't want good quality streams, use the default setup."
-        },
-        "extension": {
-          "action": "Install extension",
-          "description": "Install browser extension and gain access to additional sources! Remember to enable it for this site.",
-          "quality": "Best quality + More sources",
-          "title": "Browser extension"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Setup proxy",
-          "description": "Setup a free proxy in just 5 minutes! Improves loading reliability!",
-          "quality": "Good quality",
-          "title": "Custom proxy"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "o open e ilo Muwi-We"
+      "cancel": "ala"
     }
   },
   "overlays": {
@@ -780,363 +519,8 @@
       "short": "o tawa"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
       "device": "device",
-      "enabled": "mi pana e sitelen tawa ilo ante..."
-    },
-    "menus": {
-      "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "sina kama jo e sitelen tawa ilo sina tan lipu mama. ilo Muwi-We li lawa ala e nasin jo",
-        "copyHlsPlaylist": "Copy HLS playlist link",
-        "downloadSubtitle": "o jo e nimi toki",
-        "downloadVideo": "o jo e sitelen",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
-        "hlsDisclaimer": "jo li tan mama. ilo Muwi-We li lawa ala e nasin jo. o sona e ni: sina jo e lipu sitelen HLS. ni li tawa jan pi sona sitelen",
-        "onAndroid": {
-          "1": "ilo Android la o luka e nena 'o jo'. lon lipu sin la <bold>o luka wawa</bold> e sitelen. o luka e nena 'o jo'",
-          "shortTitle": "Android ) o jo",
-          "title": "o jo lon ilo Android"
-        },
-        "onIos": {
-          "1": "ilo iOS la o luka e nena 'o jo'. lon lipu sin la o luka e <bold><ios_share /></bold>, e <bold>o jo poki <ios_files /></bold>.",
-          "shortTitle": "iOS ) o jo",
-          "title": "o jo lon ilo iOS"
-        },
-        "onPc": {
-          "1": "ilo suli la o luka e nena 'o jo e sitelen'. lon lipu sin la o luka ante e sitelen. o luka e nena <bold>'o jo e sitelen lon nimi ante'</bold>",
-          "shortTitle": "ilo suli ) o jo",
-          "title": "o jo lon ilo suli"
-        },
-        "title": "kama jo"
-      },
-      "episodes": {
-        "button": "sitelen mute",
-        "emptyState": "kulupu ni li jo ala e sitelen. o lukin lon tenpo ante a!",
-        "episodeBadge": "E{{episode}}",
-        "loadingError": "alasa li pakala",
-        "loadingList": "alasa...",
-        "loadingTitle": "alasa...",
-        "unairedEpisodes": "sitelen li lon ala lukin la ken la sina lukin ala e ona",
-        "seasons": "Seasons",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
-        "specials": "Specials"
-      },
-      "playback": {
-        "speedLabel": "tenpo lukin",
-        "title": "nasin pali",
-        "disabled": "(Disabled in watch party)",
-        "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
-      },
-      "quality": {
-        "automaticLabel": "ilo o lawa",
-        "hint": "ante pi pona lukin la sina ken <0>ante e mama</0>",
-        "iosNoQuality": "tan lawa pi esun Apple la ante pi pona lukin li ken ala lon ilo iOS. ante pi pona lukin la o alasa <0>ante e mama</0>",
-        "title": "pona lukin",
-        "auto": "Auto"
-      },
-      "settings": {
-        "downloadItem": "o jo",
-        "enableSubtitles": "nimi toki",
-        "experienceSection": "nasin lukin",
-        "playbackItem": "nasin pali",
-        "audioItem": "Audio",
-        "qualityItem": "pona lukin",
-        "sourceItem": "mama sitelen",
-        "subtitleItem": "nimi toki",
-        "videoSection": "nasin sitelen"
-      },
-      "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
-        "failed": {
-          "text": "lukin sitelen li pakala. o alasa e mama ante.",
-          "title": "pakala jo"
-        },
-        "noEmbeds": {
-          "text": "mi lukin ala e lipu. o alasa e mama ante.",
-          "title": "lipu li lon ala"
-        },
-        "noStream": {
-          "text": "lipu mama ni li jo ala e sitelen ni",
-          "title": "sitelen li lon ala"
-        },
-        "title": "mama",
-        "unknownOption": "mi sona ala",
-        "findNextSource": "Find next source"
-      },
-      "subtitles": {
-        "customChoice": "o pana tan ilo",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
-        "customizeLabel": "o ante",
-        "previewLabel": "Subtitle preview:",
-        "offChoice": "ala",
-        "onChoice": "On",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Source Subtitles",
-        "OpenSubtitlesChoice": "External Subtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
-        "settings": {
-          "backlink": "nimi toki ante",
-          "delay": "o ante e tenpo nimi",
-          "fixCapitals": "o pona e suli nimi"
-        },
-        "title": "nimi toki",
-        "unknownLanguage": "mi sona ala",
-        "dropSubtitleFile": "Drop subtitle file here! >_<",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "There are no provided subtitles for this.",
-        "notFound": "None of the available options match your query",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
-        "translate": {
-          "title": "Translate from {{language}}"
-        },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
-        "matchScoreLabel": "Match ~{{score}}%"
-      },
-      "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
-      }
-    },
-    "metadata": {
-      "api": {
-        "text": "Could not load API metadata, please check your internet connection.",
-        "title": "Failed to load API metadata"
-      },
-      "legal": {
-        "badge": "weka",
-        "text": "wile weka li kama tan mama sitelen la sitelen ni li ken ala",
-        "title": "sitelen li weka"
-      },
-      "extensionPermission": {
-        "badge": "Permission Missing",
-        "button": "o kepeken namako",
-        "text": "You have the browser extension, but we need your permission to get started using the extension. (¬_¬)",
-        "title": "Configure the extension"
-      },
-      "failed": {
-        "badge": "pakala",
-        "homeButton": "o tawa weka",
-        "text": "mi pakala alasa e sona sitelen tan lipu TMDB. ken la ona li lape anu moli",
-        "title": "mi pakala alasa e sona sitelen"
-      },
-      "notFound": {
-        "badge": "lon ala",
-        "homeButton": "o tawa weka",
-        "text": "mi lukin ala e lipu pi wile sina. lipu li weka anu ante",
-        "title": "mi lukin ala e ona"
-      }
-    },
-    "nextEpisode": {
-      "replay": "Replay",
-      "next": "o sitelen sin",
-      "nextSeason": "Next season"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
-    },
-    "playbackError": {
-      "badge": "pakala lukin",
-      "errors": {
-        "errorAborted": "jan li pini alasa e sitelen",
-        "errorDecode": "sitelen li kama ante la pakala li kama lon",
-        "errorGenericMedia": "pakala sitelen pi sona ala li lon",
-        "errorNetwork": "pakala linja li pakala e alasa sitelen",
-        "errorNotSupported": "mi ken ala supa e sitelen anu mama sitelen"
-      },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
-      "homeButton": "o tawa weka",
-      "resumeButton": "Try next sources",
-      "text": "mi alasa lukin e sitelen. taso pakala li lon. o alasa sin",
-      "title": "mi pakala lukin a"
-    },
-    "scraping": {
-      "items": {
-        "failure": "mi pakala",
-        "timeout": "Timed out (15s)",
-        "notFound": "sitelen li lon ala",
-        "pending": "mi alasa e sitelen..."
-      },
-      "notFound": {
-        "badge": "lon ala",
-        "detailsButton": "o pana e sona",
-        "homeButton": "o tawa weka",
-        "discoverButton": "Discover more",
-        "text": "mi lukin e lipu mama ale mi. taso mi lukin ala e ijo pi wile sina. mi mama ala e sitelen. mi lawa ala e sitelen. o luka e nena anpa",
-        "title": "mi lukin ala e ona",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Extension disabled",
-        "homeButton": "Go home",
-        "enableExtension": "Enable extension",
-        "title": "Please enable the extension",
-        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site."
-      },
-      "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
-      }
-    },
-    "time": {
-      "regular": "{{timeWatched}} / {{duration}}",
-      "remaining": "tenpo {{timeLeft}} la o awen • tenpo {{timeFinished, datetime}} la ona li pini",
-      "shortRegular": "{{timeWatched}}",
-      "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
+      "to": "Casting to {{device}} 📺"
     },
     "loadingOverlayMessages": {
       "1": "Downloading more RAM...",
@@ -1161,49 +545,340 @@
       "20": "Your time is very important to us. Please wait while we ignore you...",
       "21": "Still faster than Windows Update...",
       "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
     },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
+    "menus": {
+      "audio": {
+        "default": "Default"
+      },
+      "downloads": {
+        "button": "Attempt download",
+        "copyHlsPlaylist": "Copy HLS playlist link",
+        "disclaimer": "sina kama jo e sitelen tawa ilo sina tan lipu mama. ilo Muwi-We li lawa ala e nasin jo",
+        "downloadSubtitle": "o jo e nimi toki",
+        "downloadVideo": "o jo e sitelen",
+        "hlsDisclaimer": "jo li tan mama. ilo Muwi-We li lawa ala e nasin jo. o sona e ni: sina jo e lipu sitelen HLS. ni li tawa jan pi sona sitelen",
+        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
+        "onAndroid": {
+          "1": "ilo Android la o luka e nena 'o jo'. lon lipu sin la <bold>o luka wawa</bold> e sitelen. o luka e nena 'o jo'",
+          "shortTitle": "Android ) o jo",
+          "title": "o jo lon ilo Android"
+        },
+        "onIos": {
+          "1": "ilo iOS la o luka e nena 'o jo'. lon lipu sin la o luka e <bold><ios_share /></bold>, e <bold>o jo poki <ios_files /></bold>.",
+          "shortTitle": "iOS ) o jo",
+          "title": "o jo lon ilo iOS"
+        },
+        "onPc": {
+          "1": "ilo suli la o luka e nena 'o jo e sitelen'. lon lipu sin la o luka ante e sitelen. o luka e nena <bold>'o jo e sitelen lon nimi ante'</bold>",
+          "shortTitle": "ilo suli ) o jo",
+          "title": "o jo lon ilo suli"
+        },
+        "title": "kama jo"
+      },
+      "episodes": {
+        "button": "sitelen mute",
+        "emptyState": "kulupu ni li jo ala e sitelen. o lukin lon tenpo ante a!",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "Favorites",
+        "loadingError": "alasa li pakala",
+        "loadingList": "alasa...",
+        "loadingTitle": "alasa...",
+        "markAsFavorite": "Mark as favorite",
+        "markAsUnwatched": "Mark as unwatched",
+        "markAsWatched": "Mark as watched",
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "showLess": "Show less",
+        "showMore": "Show more",
+        "specials": "Specials"
+      },
+      "playback": {
+        "disabled": "(Disabled in watch party)",
+        "speedBoosted": "2x",
+        "speedLabel": "tenpo lukin",
+        "speedUnboosted": "{{speed}}x",
+        "title": "nasin pali"
+      },
+      "quality": {
+        "auto": "Auto",
+        "automaticLabel": "ilo o lawa",
+        "hint": "ante pi pona lukin la sina ken <0>ante e mama</0>",
+        "iosNoQuality": "tan lawa pi esun Apple la ante pi pona lukin li ken ala lon ilo iOS. ante pi pona lukin la o alasa <0>ante e mama</0>",
+        "title": "pona lukin"
+      },
+      "settings": {
+        "audioItem": "Audio",
+        "downloadItem": "o jo",
+        "enableSubtitles": "nimi toki",
+        "playbackItem": "nasin pali",
+        "qualityItem": "pona lukin",
+        "sourceItem": "mama sitelen",
+        "subtitleItem": "nimi toki"
+      },
+      "sources": {
+        "failed": {
+          "text": "lukin sitelen li pakala. o alasa e mama ante.",
+          "title": "pakala jo"
+        },
+        "findNextSource": "Find next source",
+        "noEmbeds": {
+          "text": "mi lukin ala e lipu. o alasa e mama ante.",
+          "title": "lipu li lon ala"
+        },
+        "noStream": {
+          "text": "lipu mama ni li jo ala e sitelen ni",
+          "title": "sitelen li lon ala"
+        },
+        "title": "mama",
+        "unknownOption": "mi sona ala"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
+        "clearSecondary": "Clear secondary subtitle",
+        "customChoice": "o pana tan ilo",
+        "customizeLabel": "o ante",
+        "delayEarly": "Saw caption",
+        "delayLate": "Heard audio",
+        "doubleClickToCopy": "Double click to copy subtitle data",
+        "dropSubtitleFile": "Drop subtitle file here! >_<",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "empty": "There are no provided subtitles for this.",
+        "loadingExternal": "Loading external subtitles...",
+        "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
+        "matchScoreLabel": "Match ~{{score}}%",
+        "notFound": "None of the available options match your query",
+        "offChoice": "ala",
+        "pasteChoice": "Paste subtitle data",
+        "previewLabel": "Subtitle preview:",
+        "primary": "Primary",
+        "refresh": "Refresh External Subtitles",
+        "refreshing": "Refreshing...",
+        "secondary": "Secondary",
+        "selectingSecondary": "Selecting secondary subtitle",
+        "settings": {
+          "backlink": "nimi toki ante",
+          "delay": "o ante e tenpo nimi",
+          "fixCapitals": "o pona e suli nimi"
+        },
+        "title": "nimi toki",
+        "transcriptChoice": "Transcript",
+        "translate": {
+          "title": "Translate from {{language}}"
+        },
+        "unknownLanguage": "mi sona ala",
+        "useNativeSubtitles": "Native video subtitles",
+        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Watch Party"
+      }
     },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Permission Missing",
+        "button": "o kepeken namako",
+        "text": "You have the browser extension, but we need your permission to get started using the extension. (¬_¬)",
+        "title": "Configure the extension"
+      },
+      "failed": {
+        "badge": "pakala",
+        "homeButton": "o tawa weka",
+        "text": "mi pakala alasa e sona sitelen tan lipu TMDB. ken la ona li lape anu moli",
+        "title": "mi pakala alasa e sona sitelen"
+      },
+      "legal": {
+        "badge": "weka",
+        "text": "wile weka li kama tan mama sitelen la sitelen ni li ken ala",
+        "title": "sitelen li weka"
+      },
+      "notFound": {
+        "badge": "lon ala",
+        "homeButton": "o tawa weka",
+        "text": "mi lukin ala e lipu pi wile sina. lipu li weka anu ante",
+        "title": "mi lukin ala e ona"
+      }
+    },
+    "nextEpisode": {
+      "next": "o sitelen sin",
+      "nextSeason": "Next season",
+      "replay": "Replay"
+    },
+    "playbackError": {
+      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
+      "badge": "pakala lukin",
+      "copyDebugInfo": "Copy debug info",
+      "debugInfo": "Check console for more details.",
+      "errors": {
+        "errorAborted": "jan li pini alasa e sitelen",
+        "errorDecode": "sitelen li kama ante la pakala li kama lon",
+        "errorGenericMedia": "pakala sitelen pi sona ala li lon",
+        "errorNetwork": "pakala linja li pakala e alasa sitelen",
+        "errorNotSupported": "mi ken ala supa e sitelen anu mama sitelen"
+      },
+      "homeButton": "o tawa weka",
+      "resumeButton": "Try next sources",
+      "text": "mi alasa lukin e sitelen. taso pakala li lon. o alasa sin",
+      "title": "mi pakala lukin a"
+    },
+    "resume": {
+      "description": "This episode is {{percentage}}% watched",
+      "restart": "Restart",
+      "resume": "Resume",
+      "title": "Continue watching?"
+    },
+    "scraping": {
+      "extensionFailure": {
+        "badge": "Extension disabled",
+        "enableExtension": "Enable extension",
+        "homeButton": "Go home",
+        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site.",
+        "title": "Please enable the extension"
+      },
+      "items": {
+        "pending": "mi alasa e sitelen..."
+      },
+      "notFound": {
+        "badge": "lon ala",
+        "detailsButton": "o pana e sona",
+        "discoverButton": "Discover more",
+        "homeButton": "o tawa weka",
+        "text": "mi lukin e lipu mama ale mi. taso mi lukin ala e ijo pi wile sina. mi mama ala e sitelen. mi lawa ala e sitelen. o luka e nena anpa",
+        "title": "mi lukin ala e ona"
+      },
+      "tips": {
+        "1": "Tap the gear icon to switch sources!",
+        "2": "Tap the title to copy the link!",
+        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
+        "4": "Some sources work better than others!",
+        "5": "Get the extension for more sources!",
+        "6": "Hold bookmarks to edit or delete them!",
+        "7": "Hold SHIFT and tap the title to copy the link with time!",
+        "8": "Set a custom subtitle color!",
+        "9": "Hold ` to view keyboard shortcuts!"
+      }
+    },
+    "segment": {
+      "credits": "Credits",
+      "intro": "Intro",
+      "recap": "Recap"
+    },
+    "skipTime": {
+      "confidence": "confidence",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "credits": "Skip Credits",
+      "endOfVideo": "End",
+      "endsAt": "Ends at {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Cancel",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "endTimeLabel": "End (s)",
+          "error": {
+            "endTime": "End time is required",
+            "mediaInfo": "Media information is not available",
+            "segment": "No segment selected",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "tidbKey": "TIDB API key is not set"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll.",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "whenToTitle": "Credits timestamps guide:"
+            },
+            "durationDesc": "Min 5s if end provided",
+            "durationLabel": "Duration:",
+            "endDesc": "Optional - empty if extends to end",
+            "endLabel": "End:",
+            "excludeDesc": "Post-credits scenes",
+            "excludeLabel": "Exclude:",
+            "intro": {
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence.",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "whenToTitle": "Intro timestamps guide:"
+            },
+            "preview": {
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode.",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "whenToTitle": "Preview timestamps guide:"
+            },
+            "recap": {
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes.",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "whenToTitle": "Recap timestamps guide:"
+            },
+            "startDesc": "Required - when credits begin rolling",
+            "startLabel": "Start:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "intro": "3:30 or 210 (required)",
+              "preview": "3:30 or 210 (leave empty for end of media)",
+              "recap": "3:30 or 210 (required)"
+            },
+            "start": {
+              "credits": "2:30 or 150 (required)",
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "preview": "2:30 or 150 (required)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)"
+            }
+          },
+          "segmentType": "Segment Type",
+          "startTimeLabel": "Start (s)",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          },
+          "title": "Submit Timestamps to TheIntroDB",
+          "types": {
+            "credits": "Credits",
+            "intro": "Intro",
+            "preview": "Preview",
+            "recap": "Recap"
+          },
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "whenToTitle": "Timestamps guide:"
+        },
+        "title": "Was this skip correct?"
+      },
+      "intro": "Skip Intro",
+      "noSegments": "No skip segments available",
+      "recap": "Skip Recap",
+      "skipSegments": "Skip Segments",
+      "startsAt": "Starts at {{time}}",
+      "submissions": "{{count}} submissions",
+      "submitSegment": "Submit Segment",
+      "timeUnknown": "Time unknown"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "tenpo {{timeLeft}} la o awen • tenpo {{timeFinished, datetime}} la ona li pini",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "mi alasa e ilo",
-    "loadingUser": "mi alasa e lipu sina",
     "loadingUserError": {
-      "logout": "o weka sona e sina",
-      "reset": "o sin e lawa ilo sina",
-      "disconnect": "Disconnect from backend",
-      "text": "alasa li pakala",
-      "reload": "Reload",
-      "textWithReset": "alasa tan lawa ilo sina li pakala. sina wile e lawa ilo mi anu seme?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconectCancel": "Cancel",
       "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectTitle": "Disconnect from backend?",
+      "logout": "o weka sona e sina",
+      "reload": "Reload",
+      "reset": "o sin e lawa ilo sina"
     },
     "migration": {
       "failed": "tawa pi sona sina li pakala",
@@ -1211,28 +886,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "nimi ilo",
-        "deviceNamePlaceholder": "ilo",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "o ante",
-        "logoutButton": "o weka sona e ona"
-      },
-      "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
+        "logoutButton": "o weka sona e ona",
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname"
       },
       "actions": {
         "delete": {
@@ -1243,26 +902,26 @@
           "text": "tenpo kama la sina ken ala ante e weka ni. ale li kama weka",
           "title": "o weka e ale"
         },
-        "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
-        },
-        "title": "pali",
         "logoutAllDevices": {
-          "title": "kama ala e sona ale",
+          "button": "kama ala e sona ale",
           "text": "tenpo ni la sina ken ala kama lon e sona ale ale.",
-          "button": "kama ala e sona ale"
-        }
+          "title": "kama ala e sona ale"
+        },
+        "migration": {
+          "button": "Migrate account",
+          "text": "Migrate your account to a new server or download your data.",
+          "title": "Account migration"
+        },
+        "title": "pali"
       },
       "devices": {
         "deviceNameLabel": "nimi ilo",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "alasa li pakala",
+        "lastActive": "Last active: {{date}}",
+        "loggedInAt": "Logged in at: {{date}}",
         "removeDevice": "o weka",
         "title": "ilo",
-        "lastActive": "Last active: {{date}}",
-        "loggedInAt": "Logged in at: {{date}}"
+        "unknownDevice": "Unknown device, error decrypting name"
       },
       "profile": {
         "finish": "o ante",
@@ -1278,377 +937,213 @@
       },
       "title": "lipu open"
     },
+    "all": {
+      "title": "All Settings"
+    },
     "appearance": {
       "activeTheme": "lon",
-      "themes": {
-        "blue": "laso",
-        "custom": "Custom",
-        "default": "sama",
-        "gray": "pimeja",
-        "red": "loje",
-        "teal": "laso walo",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
         "primary": "Primary",
         "secondary": "Secondary",
         "tertiary": "Tertiary"
       },
-      "title": "kule",
       "options": {
+        "carouselView": "Carousel view",
+        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
+        "carouselViewLabel": "Carousel view",
         "discover": "Discover section",
         "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
         "discoverLabel": "Discover section",
         "featured": "Featured media",
         "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
         "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
+        "forceCompactEpisodeView": "Force compact episode view",
+        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
+        "forceCompactEpisodeViewLabel": "Compact episodes",
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
+        "homeSectionOrderGroups": "Reorder bookmark groups",
         "logos": "Image logos",
         "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
         "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
+        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
         "minimalCards": "Minimal cards",
         "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
         "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "modal": "Details modal",
+        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
+        "modalLabel": "Details modal",
         "pauseOverlay": "Pause overlay",
         "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
         "pauseOverlayLabel": "Pause overlay"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Bookmarks",
+        "watching": "Currently Watching"
+      },
+      "themes": {
+        "acid": "Acid",
+        "autumn": "Autumn",
+        "blue": "laso",
+        "christmas": "Christmas",
+        "classic": "Classic",
+        "cobalt": "Cobalt",
+        "custom": "Custom",
+        "default": "sama",
+        "ember": "Ember",
+        "forest": "Forest",
+        "frost": "Frost",
+        "grape": "Grape",
+        "gray": "pimeja",
+        "green": "Green",
+        "hulk": "Hulk",
+        "mocha": "Mocha",
+        "noir": "Noir",
+        "pink": "Pink",
+        "popsicle": "Popsicle",
+        "red": "loje",
+        "spark": "Spark",
+        "spiderman": "Spiderman",
+        "teal": "laso walo",
+        "wolverine": "Wolverine"
+      },
+      "title": "kule"
     },
     "connections": {
       "server": {
-        "description": "sina wile e poki sona ante la o pana e nimi ona lon ni: <0>nasin</0>",
-        "label": "lawa ante",
-        "urlLabel": "nimi pi lawa ante",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
         "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
         "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
         "error": "Error connecting to backend",
         "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "o pali",
-        "errorStatus": {
-          "description": "ni li wile e lukin sina",
-          "title": "o lukin"
-        },
-        "itemError": "ni li pakala. o pali sin",
-        "items": {
-          "default": "pali sama",
-          "extension": "namako",
-          "proxy": "Custom proxy",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "o pali sin",
-        "successStatus": {
-          "description": "ijo ale li pona. sina ken lukin e sitelen ale pi wile sina",
-          "title": "pali li pini a!"
-        },
-        "unsetStatus": {
-          "description": "o luka e nena lon poka ni tawa open pali",
-          "title": "sina pali ala"
-        }
-      },
-      "title": "kulupu",
-      "workers": {
-        "addButton": "Add new worker",
-        "description": "To make the application function, all traffic is routed through proxies. Enable this if you want to bring your own workers. <0>Instructions.</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "No workers yet (｡•́︿•̀｡), add one below",
-        "label": "Use custom proxy workers",
-        "urlLabel": "Worker URLs",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
       },
       "tidb": {
         "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
         "tokenLabel": "API Key"
-      }
+      },
+      "title": "kulupu"
     },
     "preferences": {
-      "title": "wile",
-      "language": "toki ilo",
-      "languageDescription": "ilo li toki kepeken toki ni",
-      "thumbnail": "o pali e sitelen awen",
-      "thumbnailDescription": "tenpo mute la, sitelen tawa li jo ala e sitelen awen. sina wile e sitelen lili pi lukin wan la o lon e ni. taso, ni li ken suli ike e tenpo sitelen sina",
-      "thumbnailLabel": "o pali e sitelen awen",
       "autoplay": "Autoplay",
       "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
       "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
       "autoResumeOnPlaybackError": "Auto resume on playback error",
       "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
       "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "holdToBoost": "Hold to boost speed",
+      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
+      "holdToBoostLabel": "Enable hold to boost",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "language": "toki ilo",
+      "languageDescription": "ilo li toki kepeken toki ni",
       "lastSuccessfulSource": "Last used source",
       "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "lastSuccessfulSourceEnableLabel": "Last used source",
+      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
+      "lowPerformanceModeLabel": "Low performance mode",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "skipCredits": "Skip End Credits",
+      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
+      "skipCreditsLabel": "Skip end credits",
+      "sourceOrder": "Reordering sources",
+      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
+      "sourceOrderEnableLabel": "Custom source order",
+      "thumbnail": "o pali e sitelen awen",
+      "thumbnailDescription": "tenpo mute la, sitelen tawa li jo ala e sitelen awen. sina wile e sitelen lili pi lukin wan la o lon e ni. taso, ni li ken suli ike e tenpo sitelen sina",
+      "thumbnailLabel": "o pali e sitelen awen",
+      "title": "wile"
     },
     "reset": "o weka e ante",
     "save": "o ante",
+    "search": {
+      "placeholder": "Search settings..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "nanpa ilo",
-        "backendUrl": "Backend URL",
-        "backendVersion": "Backend version",
-        "hostname": "nimi mama",
-        "insecure": "ike",
-        "nickname": "Nickname",
         "notLoggedIn": "mi sona ala e sina",
-        "secure": "pona",
-        "title": "sona ilo",
-        "unknownVersion": "mi sona ala",
         "userId": "nanpa sina",
         "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {
-      "backgroundLabel": "kon",
-      "backgroundBlurEnabledLabel": "Background blur",
       "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledLabel": "Background blur",
       "backgroundBlurLabel": "Background blur intensity",
+      "backgroundLabel": "kon",
+      "BorderThicknessLabel": "Border Thickness",
       "colorLabel": "kule",
-      "previewQuote": "kijetesantakalu tonsi li lanpan ala lanpan e soko?",
-      "textSizeLabel": "suli",
-      "title": "nimi toki",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
       "high": "High",
       "low": "Default",
+      "previewQuote": "kijetesantakalu tonsi li lanpan ala lanpan e soko?",
+      "textBoldLabel": "Bold text",
+      "textSizeLabel": "suli",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
         "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "default": "Default",
+        "depressed": "Depressed",
+        "dropShadow": "Drop Shadow",
+        "raised": "Raised",
+        "title": "Text style"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "nimi toki",
+      "verticalPositionLabel": "Vertical position"
     },
     "unsaved": "ante sina li awen ala"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
-      "top10": "Top 10"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "Trending Now"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
-    },
-    "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "filters": {
-      "country": "Country"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Enter a shared watch party link or room code",
-    "you": "You",
-    "guestFallback": "Guest"
   },
   "tmdb": {
     "genres": {
       "10759": "Action & Adventure"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
+    "alone": "Alone",
+    "behindHost": "Behind host by {{seconds}} seconds",
+    "cancel": "Cancel",
+    "connectedAsGuest": "Connected to watch party as guest",
+    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
+    "copyCode": "Click to copy",
+    "emptyRoom": "No one is in this room yet",
+    "enterCodeOrLink": "Enter a shared watch party link or room code",
+    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
+    "guestFallback": "Guest",
+    "hosting": "Hosting",
+    "hostParty": "Host a Watch Party",
+    "invalidRoom": "Unable to connect to this room",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Join",
+    "joinParty": "Join a Watch Party",
+    "leaveWatchParty": "Leave Watch Party",
+    "linkCopied": "Copied!",
+    "noHost": "No host in this watch party",
+    "save": "Save",
+    "shareCode": "Share this code with friends (click to copy link)",
+    "showStatusOverlay": "Show status overlay",
+    "status": {
+      "inSync": "In sync",
+      "outOfSync": "Out of sync"
+    },
+    "syncing": "Syncing...",
+    "validating": "Validating watch party...",
+    "viewers": "Viewers ({{count}})",
+    "watching": "Watching",
+    "withCount": "With {{count}} others",
+    "you": "You"
   }
 }

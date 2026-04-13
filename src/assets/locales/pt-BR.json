@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix é uma aplicação web que busca na internet por streams. A equipe visa uma abordagem principalmente minimalista para consumir conteúdo.",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "Perguntas comuns",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "De onde vem o conteúdo?",
-      "body": "AlphaFlix não hospeda nenhum conteúdo. Quando você clica em algo para assistir, a internet é pesquisada pela mídia selecionada (Na tela de carregamento e na aba 'fontes de vídeo' você pode ver qual fonte está usando). A mídia nunca é carregada pelo AlphaFlix, tudo é através deste mecanismo de busca.",
-      "section": "general"
-    },
-    "q2": {
-      "title": "Onde posso solicitar um filme ou série?",
-      "body": "Não é possível solicitar um filme ou série, o AlphaFlix não gerencia nenhum conteúdo. Todo o conteúdo é visualizado através de fontes na internet.",
-      "section": "search"
-    },
-    "q3": {
-      "title": "Os resultados da pesquisa mostram o filme ou série, por que não consigo reproduzi-lo?",
-      "body": "Nossos resultados de pesquisa são alimentados pelo The Movie Database (TMDB) e são exibidos independentemente de nossas fontes terem ou não o conteúdo.",
-      "section": "search"
-    },
-    "q4": {
-      "title": "E quanto aos meus dados e tudo mais?",
-      "body": "Todos os dados estão sincronizados com o backend da comunidade, qualquer pessoa pode usá-los também.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "Como posso saber mais?",
-      "body": "O AlphaFlix tem um servidor no Fluxer que pode ser encontrado no topo desta página!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "Sobre o AlphaFlix"
-  },
   "actions": {
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
     "copied": "Copiado",
-    "copy": "Copiar",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "Copiar"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Ativo",
+      "confirm": "Confirmar",
+      "customBackend": "Back-end personalizado",
+      "customBackendPlaceholder": "https://",
+      "description": "Escolha a qual servidor backend se conectar",
+      "title": "Selecione o servidor da conta"
+    },
     "createAccount": "Ainda não tem uma conta? <0>Crie uma conta.</0>",
-    "deviceNameLabel": "Nome do dispositivo",
-    "deviceNamePlaceholder": "Telefone pessoal",
+    "generate": {
+      "custom": "Personalizado",
+      "customPassphraseLabel": "Senha personalizada",
+      "customPassphrasePlaceholder": "Digite sua senha personalizada",
+      "description": "Sua frase de acesso funciona como seu nome de usuário e senha. Certifique-se de mantê-la segura, pois você precisará inseri-la para entrar na sua conta",
+      "invalidPassphraseCharacters": "Caracteres de senha inválidos. Somente letras inglesas, números de 1 a 10 e símbolos normais são permitidos.",
+      "next": "Eu salvei minha frase de acesso",
+      "passphraseFrameLabel": "Frase de acesso",
+      "passphraseTooShort": "A senha deve ter pelo menos 8 caracteres.",
+      "title": "Sua frase de acesso",
+      "useCustomPassphrase": "Use senha personalizada",
+      "usePasskeyInstead": "Use a chave de acesso"
+    },
+    "hasAccount": "Já tem uma conta? <0>Entre aqui.</0>",
+    "inviteCodeInvalidError": "Código de convite inválido (ID de usuário não encontrado)",
     "inviteCodeLabel": "Código de convite",
     "inviteCodePlaceholder": "Insira o ID de usuário de um amigo",
     "inviteCodeRequiredError": "O código de convite é obrigatório",
-    "inviteCodeInvalidError": "Código de convite inválido (ID de usuário não encontrado)",
-    "generate": {
-      "description": "Sua frase de acesso funciona como seu nome de usuário e senha. Certifique-se de mantê-la segura, pois você precisará inseri-la para entrar na sua conta",
-      "next": "Eu salvei minha frase de acesso",
-      "passphraseFrameLabel": "Frase de acesso",
-      "title": "Sua frase de acesso",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "Já tem uma conta? <0>Entre aqui.</0>",
     "login": {
       "description": "Por favor, insira sua frase de acesso para entrar na sua conta",
-      "deviceLengthError": "Por favor, insira um nome para o dispositivo",
-      "passphraseLabel": "Frase de acesso de 12 palavras",
-      "passphrasePlaceholder": "Frase de acesso",
-      "submit": "Entrar",
-      "title": "Entrar na sua conta",
-      "validationError": "Frase de acesso incorreta ou incompleta",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "Apelido",
+      "nicknameNotFound": "Apelido não encontrado",
       "nicknamePlaceholder": "Digite seu apelido",
+      "nicknameRequired": "O apelido é obrigatório",
+      "noBackendUrl": "Sem URL de back-end",
+      "or": "or",
+      "passwordIncorrect": "A senha está incorreta",
       "passwordLabel": "Senha",
       "passwordPlaceholder": "Digite sua senha",
-      "nicknameRequired": "O apelido é obrigatório",
       "passwordRequired": "A senha é obrigatória",
-      "nicknameNotFound": "Apelido não encontrado",
-      "passwordIncorrect": "A senha está incorreta"
+      "submit": "Entrar",
+      "title": "Entrar na sua conta",
+      "usePasskey": "Usar chave de acesso",
+      "validationError": "Frase de acesso incorreta ou incompleta"
     },
     "register": {
+      "confirmPasswordLabel": "Confirme sua senha",
+      "confirmPasswordPlaceholder": "Confirme sua senha",
       "information": {
         "color1": "Cor do perfil um",
         "color2": "Cor do perfil dois",
@@ -195,39 +61,27 @@
         "next": "Próximo",
         "title": "Informações da conta"
       },
-      "passwordInput": {
-        "title": "Crie seu login",
-        "description": "Escolha um apelido e uma senha. Sua senha funciona como uma senha segura, portanto lembre-se dela!"
-      },
       "nicknameLabel": "Apelido",
       "nicknamePlaceholder": "Escolha um apelido exclusivo",
       "nicknameTaken": "O apelido já está em uso",
+      "passwordInput": {
+        "description": "Escolha um apelido e uma senha. Sua senha funciona como uma senha segura, portanto lembre-se dela!",
+        "title": "Crie seu login"
+      },
       "passwordLabel": "Senha",
-      "passwordPlaceholder": "Crie uma senha (usada como sua senha)",
-      "passwordWeak": "A senha deve ter pelo menos 8 caracteres com letras e números",
       "passwordMismatch": "As senhas não coincidem",
-      "confirmPasswordLabel": "Confirme sua senha",
-      "confirmPasswordPlaceholder": "Confirme sua senha"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Crie uma senha (usada como sua senha)",
+      "passwordWeak": "A senha deve ter pelo menos 8 caracteres com letras e números"
     },
     "trust": {
       "failed": {
         "text": "Você o configurou corretamente?",
         "title": "Falha ao alcançar o servidor"
       },
-      "noHostTitle": "Servidor não configurado!",
-      "noHost": "O servidor não foi configurado, portanto você não pode criar uma conta",
       "host": "Você está se conectando a <0>{{hostname}}</0> - por favor, confirme se confia nele antes de criar uma conta",
       "no": "Voltar",
+      "noHost": "O servidor não foi configurado, portanto você não pode criar uma conta",
+      "noHostTitle": "Servidor não configurado!",
       "title": "Você confia neste servidor?",
       "yes": "Eu confio neste servidor"
     },
@@ -235,14 +89,88 @@
       "description": "Por favor, insira sua frase de acesso anterior para confirmar que você a salvou e para criar sua conta",
       "invalidData": "Dados não são válidos",
       "noMatch": "Frase de acesso não corresponde",
-      "passphraseLabel": "Sua frase de acesso de 12 palavras",
       "recaptchaFailed": "Falha na validação do ReCaptcha",
       "register": "Criar conta",
-      "title": "Confirme sua frase de acesso",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "Confirme sua frase de acesso"
     }
+  },
+  "details": {
+    "airs": "Lançamento",
+    "collection": {
+      "movie": "Filme",
+      "movies": "Filmes",
+      "rating": "Avaliação",
+      "releaseDate": "Data de lançamento",
+      "sortBy": "Ordenar por"
+    },
+    "endsAt": "Termina em {{time}}",
+    "episode": "Episódio",
+    "episodes": "Episódios",
+    "imdb": "Ver no IMDb",
+    "language": "Idioma:",
+    "play": "Jogar",
+    "rating": "Avaliação:",
+    "releaseDate": "Data de lançamento:",
+    "resume": "Continuar",
+    "runtime": "Tempo de execução:",
+    "season": "Temporada",
+    "seasons": "Temporada(s)",
+    "similar": "Semelhante",
+    "tmdb": "Ver no TMDB",
+    "trailers": "Reboques",
+    "watched": "Assisti {{watched}} de {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Todas as listas de filmes",
+    "carousel": {
+      "change": "Mudar",
+      "more": "Ver mais",
+      "title": {
+        "4kReleases": "Lançamentos em 4K",
+        "editorPicksMovies": "Editor escolhe filmes",
+        "editorPicksShows": "Editor escolhe programas",
+        "forYou": "Para você",
+        "inCinemas": "Nos cinemas",
+        "latestReleases": "Últimos lançamentos",
+        "latestTVReleases": "Últimos programas de TV",
+        "movies": "{{category}} Filmes",
+        "moviesOn": "Filmes em {{provider}}",
+        "onTheAir": "No ar",
+        "popular": "Mais populares",
+        "recommended": "Porque você assistiu: {{title}}",
+        "top10": "10 principais",
+        "topRated": "Mais bem avaliados",
+        "trending": "Tendências agora",
+        "tvshows": "{{category}} Programas",
+        "tvshowsOn": "Programa em {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Mais informações",
+      "playNow": "Jogue agora"
+    },
+    "filters": {
+      "country": "País"
+    },
+    "page": {
+      "back": "Volte",
+      "loading": "Carregando...",
+      "loadMore": "Carregar mais",
+      "title": "Descubra filmes e TV"
+    },
+    "scrollToTop": "Voltar ao topo",
+    "tabs": {
+      "movies": "Filmes",
+      "top10": "10 principais",
+      "tvshows": "Programas de TV"
+    },
+    "viewLists": "Ver todas as listas de filmes"
+  },
+  "downtimeNotice": {
+    "badge": "Problemas",
+    "goHome": "Ir para página inicial",
+    "message": "O AlphaFlix está enfrentando problemas com alguns provedores novamente. Se você não consegue encontrar ou reproduzir um programa, por favor, mude a fonte. É esperado que este erro persista durante os horários abaixo.",
+    "title": "Problema com provedores"
   },
   "errors": {
     "badge": "Quebrou",
@@ -257,160 +185,154 @@
       "disclaimerText": "AlphaFlix não hospeda nenhum arquivo, apenas fornece links para serviços de terceiros. Questões legais devem ser tratadas com os hosts de arquivos e provedores. AlphaFlix não é responsável por quaisquer arquivos de mídia exibidos pelos provedores de vídeo."
     },
     "links": {
-      "fluxer": "Fluxer",
-      "legal": "Legal / DMCA",
-      "github": "GitHub",
-      "twitter": "Twitter",
-      "funding": "Nos ajude"
+      "fluxer": "Fluxador",
+      "funding": "Nos ajude",
+      "github": "GitHub"
     },
     "tagline": "Assista seus programas e filmes favoritos com este aplicativo de streaming de código aberto."
   },
   "global": {
+    "keyboardShortcuts": {
+      "cancel": "Cancelar",
+      "clickToEdit": "Clique em um selo de chave para editá-lo",
+      "conditions": {
+        "showsOnly": "Apenas mostra"
+      },
+      "conflict": "conflito",
+      "conflicts": "conflitos",
+      "detected": "detectado",
+      "editInSettings": "Edite comandos de teclado nas configurações",
+      "groups": {
+        "audioVideo": "Áudio e Vídeo",
+        "interface": "Interface",
+        "jumpToPosition": "Ir para a posição",
+        "subtitlesAccessibility": "Legendas e acessibilidade",
+        "videoPlayback": "Reprodução de vídeo"
+      },
+      "none": "Nenhum",
+      "numberKeySeeking": "Busca de progresso da chave numérica",
+      "numberKeySeekingDescription": "Use as teclas numéricas de 0 a 9 para buscar posições específicas no vídeo. 0 vai para o início, 1-8 salta para 10%-80% e 9 vai para 90%.",
+      "pressKey": "Pressione uma tecla...",
+      "resetAllToDefault": "Redefinir tudo para o padrão",
+      "resetToDefault": "Redefinir para o padrão",
+      "save": "Salvar",
+      "saveChanges": "Salvar alterações",
+      "shortcuts": {
+        "barrelRoll": "Faça um ioiô! 🌀",
+        "closeOverlay": "Fechar sobreposição/modal",
+        "decreaseVolume": "Diminuir volume",
+        "increaseVolume": "Aumentar o volume",
+        "jumpTo0": "Ir para 0% (início)",
+        "jumpTo9": "Salte para 90%",
+        "mute": "Ativar/desativar som",
+        "nextEpisode": "Próximo episódio",
+        "playPause": "Reproduzir/pausar (ou segurar para velocidade 2x quando ativado)",
+        "playPauseAlt": "Reproduzir/pausar",
+        "previousEpisode": "Episódio anterior",
+        "randomCaption": "Selecione a legenda aleatória do último idioma usado",
+        "skipBackward1": "Retroceder 1 segundo",
+        "skipBackward10": "Retroceder 10 segundos",
+        "skipBackward5": "Retroceder 5 segundos",
+        "skipForward1": "Avançar 1 segundo",
+        "skipForward10": "Avançar 10 segundos",
+        "skipForward5": "Avançar 5 segundos",
+        "syncSubtitlesEarlier": "Sincronize as legendas mais cedo (-0,5s)",
+        "syncSubtitlesLater": "Sincronize as legendas mais tarde (+0,5s)",
+        "toggleCaptions": "Alternar legendas",
+        "toggleFullscreen": "Alternar tela cheia",
+        "toggleNativeSubtitles": "Alternar legendas nativas"
+      },
+      "subtitle": "Segure ` para mostrar esta ajuda a qualquer momento",
+      "title": "Atalhos de teclado"
+    },
     "name": "AlphaFlix",
     "pages": {
-      "about": "Sobre",
-      "legal": "Legal / DMCA",
       "discover": "Descubra",
-      "support": "Ajuda",
       "login": "Entrar",
-      "onboarding": "Configuração",
+      "migration": "Migrar conta",
       "pagetitle": "{{title}} - AlphaFlix",
       "register": "Registrar",
-      "settings": "Configurações",
-      "migration": "Migrar conta",
-      "jip": "Jip"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "settings": "Configurações"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Favoritos",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "Cancelar",
+        "description": "Edite os detalhes deste marcador",
+        "groupsLabel": "Grupos",
+        "save": "Salvar",
+        "title": "Editar marcador",
+        "titleLabel": "Título",
+        "titlePlaceholder": "Insira um título para o seu favorito",
+        "yearLabel": "Ano",
+        "yearPlaceholder": "Insira um ano para o seu favorito"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "Nenhum grupo ainda",
+          "placeholderButton": "Adicionar ao grupo",
+          "removeAll": "Remover tudo",
+          "removeFromGroup": "Remover do grupo"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "Isso afetará {{count}} favoritos",
+          "cancel": "Cancelar",
+          "description": "Edite o nome e o ícone do seu grupo de favoritos",
+          "nameLabel": "Nome do grupo",
+          "namePlaceholder": "Digite um nome para o seu grupo",
+          "save": "Salvar",
+          "title": "Editar grupo"
+        },
+        "reorder": {
+          "button": "Reordenar",
+          "cancel": "Cancelar",
+          "description": "Arraste e solte para reordenar seus grupos de favoritos",
+          "done": "Feito",
+          "save": "Salvar",
+          "title": "Editar pedido de grupo"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "Favoritos",
+      "showAll": "Mostrar tudo",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Padrão (data adicionada)",
+          "titleAsc": "Título A-Z",
+          "titleDesc": "Título Z-A",
+          "yearAsc": "Data de lançamento mais antiga-mais recente",
+          "yearDesc": "Data de lançamento mais recente-mais antiga"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "Continue assistindo",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Padrão (data adicionada)",
+          "titleAsc": "Título A-Z",
+          "titleDesc": "Título Z-A",
+          "yearAsc": "Data de lançamento mais antiga-mais recente",
+          "yearDesc": "Data de lançamento mais recente-mais antiga"
         }
       }
     },
     "mediaList": {
       "stopEditing": "Parar de editar"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "Isso é tudo que temos!",
+      "discover": "Descobrir",
+      "discoverMore": "Descubra mais",
+      "empty": {
+        "default": "Bem vindo(a), encontre mídias para assistir aqui!",
+        "extra": [
+          "Não há nada aqui :(",
+          "Tão vazio...",
+          "Que vazio.",
+          "Oi usuário novo :3"
+        ]
+      },
       "failed": "Falha ao encontrar mídia, tente novamente!",
       "loading": "Carregando...",
       "noResults": "Não conseguimos encontrar nada!",
@@ -428,23 +350,19 @@
           ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "Bem vindo(a), encontre mídias para assistir aqui!",
-        "extra": [
-          "Não há nada aqui :(",
-          "Tão vazio...",
-          "Que vazio.",
-          "Oi usuário novo :3"
-        ]
-      },
-      "sectionTitle": "Resultados da pesquisa",
-      "discoverMore": "Descubra mais",
-      "discover": "Descobrir"
+      "sectionTitle": "Resultados da pesquisa"
     },
-    "mediaCard": {
-      "moreInfo": "Mais informação",
-      "copyLink": "Copiar link",
-      "close": "Fechar"
+    "support": {
+      "complete": "completo",
+      "description": "AlphaFlix funciona com prejuízo e precisamos de ajuda para mantê-lo livre de anúncios! Se você gosta de usar AlphaFlix, considere fazer uma doação para nos ajudar a cobrir nossos custos.",
+      "donate": "Doar",
+      "explanation": "Se você não estiver usando a extensão ou não tiver a API FED configurada, pode ser mais difícil encontrar conteúdo! Queremos corrigir isso, mas é muito mais difícil fornecer conteúdo sem servidores caros. Então, por favor, se você gosta de usar AlphaFlix, considere fazer uma doação para nos ajudar a cobrir nossos custos crescentes.",
+      "explanation2": "Se você quiser mais informações, por favor junte-se ao nosso",
+      "fluxer": "Fluxador",
+      "label": "Financiamento do projeto: ${{current}} / ${{goal}}",
+      "moreInfo": "Mais informações",
+      "thankYou": "Obrigado pelo seu apoio!",
+      "title": "AlphaFlix precisa da sua ajuda!"
     },
     "titles": {
       "69": {
@@ -465,6 +383,15 @@
           "Se sentindo aventureiro? Jurassic Park pode ser a escolha perfeita."
         ]
       },
+      "halloween": {
+        "default": "Que filme assustador você gostaria de assistir neste Halloween?",
+        "extra": [
+          "Feliz Dia das Bruxas! 🎃👻",
+          "Vaia! 👻",
+          "Doçura ou travessura! 🍬",
+          "É a Grande Abóbora, Charlie Brown!"
+        ]
+      },
       "morning": {
         "default": "O que você gostaria de assistir esta manhã?",
         "extra": [
@@ -476,304 +403,116 @@
         "extra": [
           "Cansado? Ouvi dizer que O Exorcista é bom."
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Assistidos recentemente",
+      "sectionTitle": "Histórico de exibição"
     }
   },
   "media": {
     "episodeDisplay": "T{{season}} E{{episode}}",
-    "unreleased": "Não lançado",
+    "episodeShort": "E",
+    "seasonUnwatched": "Tem certeza de que deseja marcar a temporada como não assistida?",
+    "seasonWatched": "Tem certeza de que deseja marcar a temporada como assistida?",
     "types": {
       "movie": "Filme",
       "show": "Série"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Continuar",
-    "play": "Play",
-    "runtime": "Tempo de execução:",
-    "language": "Idioma:",
-    "releaseDate": "Data de lançamento:",
-    "rating": "Rating:",
-    "votes": "votos",
-    "tmdb": "Ver no TMDB",
-    "imdb": "Ver no IMDb",
-    "episodes": "Episódios",
-    "seasons": "Temporada(s)",
-    "season": "Temporada",
-    "episode": "Episódio",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Lançamento",
-    "endsAt": "Termina em {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "Não lançado"
   },
   "migration": {
-    "loginRequired": "Você precisa estar logado para migrar seus dados! Por favor, volte e faça o login para continuar.",
-    "start": {
-      "title": "Migrar seus dados",
-      "explainer": "Se você deseja migrar ou fazer backup de seus dados, pode fazê-lo usando as opções abaixo. Isso permitirá que você mantenha seus dados ao trocar de servidores de backend.",
-      "options": {
-        "or": "ou",
-        "direct": {
-          "description": "Esta opção irá migrar seus dados para o novo servidor. Esta é a opção mais rápida. <br /><br />Esta opção permitirá que sua senha continue a mesma!",
-          "title": "Migração direta",
-          "quality": "Fácil e rápido",
-          "action": "Transferir dados"
-        },
-        "download": {
-          "description": "Isto baixará seus dados para o seu dispositivo. Você pode então enviá-lo para o novo servidor ou apenas guardá-lo por segurança.",
-          "title": "Baixar dados",
-          "quality": "Mais técnico",
-          "action": "Baixar dados"
-        },
-        "upload": {
-          "title": "Upar dados",
-          "description": "Faça o upload do seu arquivo de dados exportado anteriormente para restaurar seus favoritos e seu progresso nesta conta.",
-          "quality": "Restaurar backup",
-          "action": "Upar dados"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Migração direta",
-      "description": "Insira a URL do backend de destino para migrar os dados da sua conta atual para um novo backend. Isto mantém sua passphrase inalterada!",
-      "backendLabel": "URL de destino do backend",
-      "recaptchaLabel": "Chave ReCaptcha (Opcional)",
-      "toggleLable": "Precisa de ReCaptcha?",
-      "status": {
-        "error": "Falha ao migrar seus dados. 😿",
-        "success": "Seus dados foram migrados com sucesso! 🎉"
-      },
-      "button": {
-        "migrate": "Migrar",
-        "processing": "Processando...",
-        "home": "Página inicial",
-        "login": "Continuar com login"
-      }
-    },
+    "back": "Voltar",
     "download": {
-      "title": "Baixar dados",
+      "button": {
+        "download": "Baixar dados",
+        "home": "Página inicial"
+      },
       "description": "Isto baixará seus dados para o seu dispositivo. Você pode então enviá-lo para o novo servidor ou apenas guardá-lo por segurança.",
       "status": {
         "error": "Falha ao baixar seus dados. 😿",
         "success": "Seus dados foram baixados com sucesso! 🎉"
       },
-      "button": {
-        "download": "Baixar dados",
-        "home": "Página inicial",
-        "login": "Continuar com login"
-      }
+      "title": "Baixar dados"
+    },
+    "loginRequired": "Você precisa estar logado para migrar seus dados! Por favor, volte e faça o login para continuar.",
+    "preview": {
+      "downloadDescription": "O download inclui:",
+      "items": {
+        "bookmarks": "Mídia marcada",
+        "progress": "Observe o progresso",
+        "settings": "Configurações e preferências"
+      },
+      "uploadDescription": "Dados para carregar:"
+    },
+    "start": {
+      "explainer": "Isto baixará seus dados para o seu dispositivo. Você pode então enviá-lo para o novo servidor ou apenas guardá-lo por segurança. Faça o upload do seu arquivo de dados exportado anteriormente para restaurar seus favoritos e seu progresso nesta conta.",
+      "options": {
+        "download": {
+          "action": "Baixar dados",
+          "description": "Isto baixará seus dados para o seu dispositivo. Você pode então enviá-lo para o novo servidor ou apenas guardá-lo por segurança.",
+          "quality": "Mais técnico",
+          "title": "Baixar dados"
+        },
+        "or": "ou",
+        "upload": {
+          "action": "Upar dados",
+          "description": "Faça o upload do seu arquivo de dados exportado anteriormente para restaurar seus favoritos e seu progresso nesta conta.",
+          "quality": "Restaurar backup",
+          "title": "Upar dados"
+        }
+      },
+      "title": "Migrar seus dados"
     },
     "upload": {
-      "title": "Upar dados",
-      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-      "status": {
-        "processing": "Processando dados...",
-        "error": "Falha ao upar seus dados. 😿",
-        "success": "Seus dados foram upados com sucesso! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Selecione o arquivo que você quer enviar",
-        "select": "Selecionar arquivo",
-        "change": "Mudar arquivo",
-        "name": "Nome do arquivo"
-      },
-      "exportedOn": "Exportado em",
-      "previewTitle": "Preview:",
       "button": {
+        "home": "Ir para o início",
         "import": "Importar dados",
         "processing": "Processando...",
-        "success": "Importação completa",
-        "home": "Ir para o início",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Voltar"
+        "saveLocal": "Salvar localmente"
+      },
+      "description": "Carregue seu arquivo de dados exportado anteriormente para restaurar seus favoritos e o progresso nesta conta.",
+      "exportedOn": "Exportado em",
+      "file": {
+        "change": "Mudar arquivo",
+        "description": "Selecione o arquivo que você quer enviar",
+        "select": "Selecionar arquivo"
+      },
+      "previewTitle": "Visualização:",
+      "status": {
+        "error": "Falha ao upar seus dados. 😿",
+        "processing": "Processando dados...",
+        "success": "Seus dados foram upados com sucesso! 🎉",
+        "successLocal": "Seus dados foram salvos localmente! 🎉"
+      },
+      "title": "Upar dados"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "Verifique sua conexão com a internet"
     },
+    "install": {
+      "genericGuide": "Seu navegador não oferece suporte a um prompt de instalação automática do PWA.\nVocê ainda pode instalar usando o menu do navegador (por exemplo: 'Instalar aplicativo', 'Criar atalho' ou 'Adicionar ao Dock/Tela inicial').",
+      "iosSafariGuide": "Para instalar AlphaFlix como um aplicativo:\n\n1. Toque no botão Compartilhar (quadrado com uma seta).\n2. Escolha ‘Adicionar à tela inicial’.\n3. Toque em Adicionar."
+    },
     "menu": {
-      "about": "Sobre nós",
+      "desktop": "Configurações do aplicativo",
       "logout": "Sair",
       "register": "Sincronizar com a nuvem",
-      "settings": "Configurações",
-      "support": "Suporte",
-      "discover": "Descobrir",
-      "development": "Desenvolvimento",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "Para instalar AlphaFlix como um aplicativo:\n\n1. Toque no botão Compartilhar (quadrado com uma seta).\n2. Escolha ‘Adicionar à tela inicial’.\n3. Toque em Adicionar.",
-      "genericGuide": "Seu navegador não oferece suporte a um prompt de instalação automática do PWA.\nVocê ainda pode instalar usando o menu do navegador (por exemplo: 'Instalar aplicativo', 'Criar atalho' ou 'Adicionar ao Dock/Tela inicial')."
+      "settings": "Configurações"
     }
   },
   "notFound": {
     "badge": "Não encontrado",
     "goHome": "Voltar para o início",
-    "reloadButton": "Tentar novamente",
     "message": "Procuramos em todos os lugares: debaixo das lixeiras, no armário, atrás do proxy, mas no final não conseguimos encontrar a página que você está procurando.",
+    "reloadButton": "Tentar novamente",
     "title": "Não conseguimos encontrar essa página"
-  },
-  "downtimeNotice": {
-    "badge": "Problemas",
-    "goHome": "Ir para página inicial",
-    "message": "O AlphaFlix está enfrentando problemas com alguns provedores novamente. Se você não consegue encontrar ou reproduzir um programa, por favor, mude a fonte. É esperado que este erro persista durante os horários abaixo.",
-    "title": "Problema com provedores"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Cancelar",
-      "confirm": "Usar configuração padrão",
-      "description": "A configuração padrão não possui os melhores streams e pode ser insuportavelmente lenta.",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Você tem certeza?"
-    },
-    "extension": {
-      "back": "Voltar",
-      "explainer": "Usando a extensão de navegador, você pode obter os melhores streams que temos a oferecer. Com apenas uma simples instalação.",
-      "explainerIos": "Infelizmente, a extensão de navegador não é suportado no iOS. Pressione <bold>Voltar</bold> para escolher outra opção.",
-      "extensionHelp": "Se você instalou a extensão mas ela não foi detectada, <bold>abra a extensão através do menu de extensões do seu navegador</bold> e siga as instruções na tela.",
-      "linkChrome": "Instalar extensão do Chrome",
-      "linkFirefox": "Instalar extensão do Firefox",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Instalou no Chrome, mas o site não está detectando? Tente recarregar a página!",
-      "notDetectingAction": "Recarregar página",
-      "status": {
-        "disallowed": "A extensão não está ativada para esta página",
-        "disallowedAction": "Ativar extensão",
-        "failed": "Falha ao solicitar status",
-        "loading": "Aguardando que você instale a extensão",
-        "outdated": "A versão da extensão é muito antiga",
-        "success": "A extensão está funcionado como esperado!"
-      },
-      "submit": "Continuar",
-      "title": "Vamos começar com uma extensão"
-    },
-    "proxy": {
-      "back": "Voltar",
-      "explainer": "Com o método proxy, você pode obter streams de ótima qualidade criando um proxy de autoatendimento.",
-      "input": {
-        "errorConnection": "Não foi possível conectar ao proxy",
-        "errorInvalidUrl": "Não é uma URL válida",
-        "errorNotProxy": "Esperava um proxy, mas recebi um site",
-        "label": "URL do Proxy",
-        "placeholder": "https://"
-      },
-      "link": "Aprenda como criar um proxy",
-      "submit": "Enviar proxy",
-      "title": "Vamos preparar um novo proxy"
-    },
-    "start": {
-      "explainer": "Para obter os melhores streams possíveis, você precisará escolher qual método de streaming deseja usar.",
-      "moreInfo": {
-        "button": "Mais informação",
-        "title": "Entendendo a configuração",
-        "explainer": {
-          "intro": "O AlphaFlix não hospeda vídeos. Ele depende de sites de terceiros para o conteúdo, então você precisa escolher como ele se conecta a esses sites.",
-          "options": "Suas opções:",
-          "extension": "1. Extenção",
-          "extensionDescription": "A extensão te dá acesso ao maior número de fontes. Ela atua como um proxy local e consegue lidar com sites que precisam de cookies ou cabeçalhos especiais para carregar.",
-          "proxy": "2. Proxy",
-          "proxyDescription": "O proxy extrai mídia de outros sites. Ele contorna as restrições do navegador (como o CORS) para permitir a extração.",
-          "default": "3. Configuração padrão",
-          "defaultDescription": "Usa o proxy embutido do AlphaFlix. É a opção mais fácil, mas pode ser mais lento devido à largura de banda compartilhada.",
-          "fedapi": {
-            "fedapi": "Adicional: Token da API FED (Privado)",
-            "fedapiDescription": "Use sua própria conta Febbox GRÁTIS para ter acesso à API FED (Privada), a melhor fonte com qualidade 4K, Dolby Atmos, opção para pular a introdução e os tempos de carregamento mais rápidos! Opção altamente recomendada!"
-          },
-          "outro": "Se tiver mais dúvidas sobre como isto funciona, sinta-se à vontade para perguntar no servidor do <0>AlphaFlix Fluxer</0>!"
-        },
-        "recommended": {
-          "title": "Sem certeza do quê escolher?",
-          "subtitle": "Configurações recomendadas:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extensão + API FED (Privada)"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Proxy Personalizado + API FED (Privada)"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extensão + API FED (Privada)"
-          }
-        }
-      },
-      "options": {
-        "or": "ou",
-        "default": {
-          "text": "Eu não quero streams de boa qualidade, <0 /> <1>use a configuração padrão</1>"
-        },
-        "extension": {
-          "action": "Instalar extensão",
-          "description": "Instale a extensão para navegador e tenha acesso a fontes adicionais! Lembre-se de ativá-la para este site.",
-          "quality": "Melhor qualidade",
-          "title": "Extensão de navegador"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Configurar proxy",
-          "description": "Configure um proxy gratuito em apenas 5 minutos! Melhora a confiabilidade do carregamento!",
-          "quality": "Boa qualidade",
-          "title": "Proxy personalizado"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Vamos juntos configurar o AlphaFlix"
+      "cancel": "Cancelar"
     }
   },
   "overlays": {
@@ -785,24 +524,45 @@
       "short": "Voltar"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "Transmitindo para o dispositivo..."
+      "device": "dispositivo",
+      "to": "Transmitindo para {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Baixando mais RAM...",
+      "2": "Convertendo cafeína em conteúdo...",
+      "3": "Ensinando o hamster a correr mais rápido...",
+      "4": "Convencendo os elétrons a se moverem mais rápido...",
+      "5": "Quase lá... disse todas as barras de carregamento de todos os tempos...",
+      "6": "Encontrando o controle remoto... espere, problema errado...",
+      "7": "Contando regressivamente a partir do infinito...",
+      "8": "Simulando o futuro...",
+      "9": "Assistindo vídeos de gatos...",
+      "10": "Distraído por GIFs de gatos...",
+      "11": "Por favor, espere enquanto o estagiário reabastece seu café...",
+      "12": "Verificando se está conectado...",
+      "13": "Desligando e ligando novamente...",
+      "14": "Não entrar em pânico...",
+      "15": "O inverno está chegando...",
+      "16": "Fazendo login na Skynet...",
+      "17": "Todos os seus navegadores pertencem a nós...",
+      "18": "Procurando por impulso de improbabilidade infinita...",
+      "19": "Descobrindo novas maneiras de fazer você esperar...",
+      "20": "Seu tempo é muito importante para nós. Por favor, espere enquanto ignoramos você...",
+      "21": "Ainda mais rápido que o Windows Update...",
+      "22": "Por que você não pega um sanduíche?"
     },
     "menus": {
+      "audio": {
+        "default": "Padrão"
+      },
       "downloads": {
         "button": "Tentar download",
-        "hlsDownloader": "Ou, acesse o site <0>hls downloader website</0> e cole a URL da playlist abaixo.",
-        "disclaimer": "Os downloads são feitos diretamente do provedor. AlphaFlix não tem controle sobre como os downloads são fornecidos.",
         "copyHlsPlaylist": "Copiar link da playlist HLS",
+        "disclaimer": "Os downloads são feitos diretamente do provedor. AlphaFlix não tem controle sobre como os downloads são fornecidos.",
         "downloadSubtitle": "Baixar legenda atual",
         "downloadVideo": "Baixar vídeo",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "Os downloads são feitos diretamente do provedor. AlphaFlix não tem controle sobre como os downloads são fornecidos.<br /><br />Por favor, note que você está baixando uma playlist HLS, <bold>isso é destinado para usuários familiarizados com streaming multimídia avançado.</bold>. Experimente outras fontes para formatos diferentes.",
+        "hlsDownloader": "Ou, acesse o site <0>hls downloader website</0> e cole a URL da playlist abaixo.",
         "onAndroid": {
           "1": "Para baixar no Android, clique no botão de download e, na nova página, <bold>toque e segure</bold> no vídeo, depois selecione <bold>salvar</bold>.",
           "shortTitle": "Baixar / Android",
@@ -824,57 +584,47 @@
         "button": "Episódios",
         "emptyState": "Não há episódios nesta temporada, volte mais tarde!",
         "episodeBadge": "E{{episode}}",
+        "favorites": "Favoritos",
         "loadingError": "Erro ao carregar temporada",
         "loadingList": "Carregando...",
         "loadingTitle": "Carregando...",
-        "unairedEpisodes": "Um ou mais episódios nesta temporada foram desabilitados porque ainda não foram ao ar.",
-        "seasons": "Temporadas",
-        "showMore": "Mais",
+        "markAsFavorite": "Marcar como favorito",
+        "markAsUnwatched": "Marcar como não assistido",
+        "markAsWatched": "Marcar como assistido",
+        "noFavorites": "Nenhum episódio favorito ainda. Estrele episódios para adicioná-los aos seus favoritos!",
         "showLess": "Menos",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "showMore": "Mais",
         "specials": "Especiais"
       },
       "playback": {
-        "speedLabel": "Velocidade de reprodução",
-        "title": "Configurações de reprodução",
         "disabled": "Desativado no modo Watch Party",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "Velocidade de reprodução",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Configurações de reprodução"
       },
       "quality": {
+        "auto": "Automático",
         "automaticLabel": "Qualidade automática",
         "hint": "Você pode tentar <0>trocar de fonte</0> para obter diferentes opções de qualidade.",
         "iosNoQuality": "Devido a limitações definidas pela Apple, a seleção de qualidade não está disponível no iOS para esta fonte. Você pode tentar <0>trocar para outra fonte</0> para obter diferentes opções de qualidade.",
-        "title": "Qualidade",
-        "auto": "Automático"
+        "title": "Qualidade"
       },
       "settings": {
+        "audioItem": "Áudio",
         "downloadItem": "Baixar",
         "enableSubtitles": "Ativar Legendas",
-        "experienceSection": "Experiência de visualização",
         "playbackItem": "Configurações de reprodução",
-        "audioItem": "Áudio",
         "qualityItem": "Qualidade",
         "sourceItem": "Fonte",
-        "subtitleItem": "Legendas",
-        "videoSection": "Configurações de vídeo"
+        "subtitleItem": "Legendas"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "Houve um erro ao tentar encontrar vídeos, por favor, tente uma fonte diferente.",
           "title": "Falha ao raspar"
         },
+        "findNextSource": "Encontre a próxima fonte",
         "noEmbeds": {
           "text": "Não conseguimos encontrar nenhum incorporado, por favor, tente uma fonte diferente.",
           "title": "Nenhum incorporado encontrado"
@@ -884,72 +634,53 @@
           "title": "Sem transmissão"
         },
         "title": "Fontes",
-        "unknownOption": "Desconhecido",
-        "findNextSource": "Find next source"
+        "unknownOption": "Desconhecido"
       },
       "subtitles": {
+        "autoSelectChoice": "Seleção automática",
+        "autoSelectDifferentChoice": "Toque novamente para selecionar automaticamente legendas diferentes",
+        "clearSecondary": "Limpar legenda secundária",
         "customChoice": "Solte ou faça upload do arquivo",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Personalizar",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "Vi legenda",
+        "delayLate": "Áudio ouvido",
+        "doubleClickToCopy": "Clique duas vezes para copiar os dados da legenda",
+        "dropSubtitleFile": "Solte o arquivo da legenda aqui",
+        "dualSub": "Legendas Duplas",
+        "dualSubDesc": "Selecione o mesmo formato (SRT, VTT...) e provedor (OpenSubs...) para melhor sincronização",
+        "dualSubHint": "Selecione um idioma para a legenda secundária (mostrada acima da primária)",
+        "empty": "Não há legendas fornecidas para isso.",
+        "loadingExternal": "Carregando legendas externas...",
+        "loadingExternalProgress": "Carregando legendas externas... ({{progress}}%)",
+        "matchScoreLabel": "Correspondência ~{{score}}%",
+        "notFound": "Nenhuma das opções disponíveis corresponde à sua consulta",
         "offChoice": "Desativadas",
-        "onChoice": "Ativado",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Fonte das legendas",
-        "OpenSubtitlesChoice": "OpenSubtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "Colar dados de legenda",
+        "previewLabel": "Visualização da legenda:",
+        "primary": "Primário",
+        "refresh": "Atualizar legendas externas",
+        "refreshing": "Refrescante...",
+        "secondary": "Secundário",
+        "selectingSecondary": "Selecionando legenda secundária",
         "settings": {
           "backlink": "Legendas personalizadas",
           "delay": "Atraso da legenda",
           "fixCapitals": "Corrigir letras maiúsculas"
         },
         "title": "Legendas",
-        "unknownLanguage": "Desconhecido",
-        "dropSubtitleFile": "Solte o arquivo da legenda aqui",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "There are no provided subtitles for this.",
-        "notFound": "None of the available options match your query",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "Transcrição",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "Traduzir de {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Carregando legendas externas... ({{progress}}%)",
-        "matchScoreLabel": "Correspondência ~{{score}}%"
+        "unknownLanguage": "Desconhecido",
+        "useNativeSubtitles": "Legendas de vídeo nativas",
+        "useNativeSubtitlesDescription": "Transmita legendas para tela cheia nativa e PiP"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
+        "watchpartyItem": "Assistir festa"
       }
     },
     "metadata": {
-      "api": {
-        "text": "Não foi possível carregar os metadados da API. Por favor, verifique sua conexão com a internet.",
-        "title": "Falha ao carregar os metadados da API"
-      },
-      "legal": {
-        "badge": "Removido",
-        "text": "Esta mídia não está mais disponível devido a um aviso de remoção ou reivindicação de direitos autorais.",
-        "title": "A mídia foi removida"
-      },
       "extensionPermission": {
         "badge": "Permissão Pendente",
         "button": "Usar extensão",
@@ -962,6 +693,11 @@
         "text": "Não foi possível carregar os metadados da mídia do TMDB. Por favor, verifique se o TMDB está fora do ar ou bloqueado na sua conexão de internet.",
         "title": "Falha ao carregar metadados"
       },
+      "legal": {
+        "badge": "Removido",
+        "text": "Esta mídia não está mais disponível devido a um aviso de remoção ou reivindicação de direitos autorais.",
+        "title": "A mídia foi removida"
+      },
       "notFound": {
         "badge": "Não encontrado",
         "homeButton": "Voltar para o início",
@@ -970,18 +706,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Replay",
       "next": "Próximo episódio",
-      "nextSeason": "Next season"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "Próxima temporada",
+      "replay": "Repetir"
     },
     "playbackError": {
+      "autoResumeText": "Ocorreu um erro ao tentar reproduzir a mídia 😖. Tentando automaticamente as outras fontes...",
       "badge": "Erro de reprodução",
+      "copyDebugInfo": "Copiar informações de depuração",
+      "debugInfo": "Verifique o console para obter mais detalhes.",
       "errors": {
         "errorAborted": "A busca pela mídia foi abortada a pedido do usuário.",
         "errorDecode": "Apesar de ter sido previamente determinado como utilizável, ocorreu um erro ao tentar decodificar o recurso de mídia, resultando em um erro.",
@@ -989,226 +722,168 @@
         "errorNetwork": "Ocorreu algum tipo de erro de rede que impediu a mídia de ser buscada com sucesso, apesar de ter sido previamente disponível.",
         "errorNotSupported": "A mídia ou objeto do provedor de mídia não é suportado."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "Ir para o início",
-      "resumeButton": "Try next sources",
+      "resumeButton": "Experimente as próximas fontes",
       "text": "Houve um erro ao tentar reproduzir a mídia. Por favor, tente novamente.",
       "title": "Falha ao reproduzir o vídeo!"
     },
+    "resume": {
+      "description": "Este episódio foi assistido por {{percentage}}%",
+      "restart": "Reiniciar",
+      "resume": "Retomar",
+      "title": "Continuar assistindo?"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "Extensão desativada",
+        "enableExtension": "Ativar extensão",
+        "homeButton": "Ir para o início",
+        "text": "Você instalou a extensão AlphaFlix. Para começar a usá-la, você precisa ativar a extensão neste site.",
+        "title": "Por favor, ative a extensão"
+      },
       "items": {
-        "failure": "Ocorreu um erro",
-        "timeout": "Timed out (15s)",
-        "notFound": "Não tem o vídeo",
         "pending": "Verificando vídeos..."
       },
       "notFound": {
         "badge": "Não encontrado",
         "detailsButton": "Mostrar detalhes",
+        "discoverButton": "Descubra mais",
         "homeButton": "Ir para o início",
-        "discoverButton": "Discover more",
         "text": "Procuramos em nossos provedores e não conseguimos encontrar a mídia que você está procurando! Não hospedamos a mídia e não temos controle sobre o que está disponível. Por favor, clique em 'Mostrar detalhes' abaixo para mais informações.",
-        "title": "Não conseguimos encontrar isso",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Extensão desativada",
-        "homeButton": "Ir para o início",
-        "enableExtension": "Ativar extensão",
-        "title": "Por favor, ative a extensão",
-        "text": "Você instalou a extensão AlphaFlix. Para começar a usá-la, você precisa ativar a extensão neste site."
+        "title": "Não conseguimos encontrar isso"
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "Toque no ícone de engrenagem para mudar de fonte!",
+        "2": "Toque no título para copiar o link!",
+        "3": "Toque e segure ou segure SHIFT para mostrar o botão widescreen em vez de tela cheia!",
+        "4": "Algumas fontes funcionam melhor que outras!",
+        "5": "Obtenha a extensão para mais fontes!",
+        "6": "Segure os favoritos para editá-los ou excluí-los!",
+        "7": "Segure SHIFT e toque no título para copiar o link com o tempo!",
+        "8": "Defina uma cor de legenda personalizada!",
+        "9": "Segure ` para ver os atalhos do teclado!"
       }
+    },
+    "segment": {
+      "credits": "Créditos",
+      "intro": "Introdução",
+      "recap": "Recapitular"
+    },
+    "skipTime": {
+      "confidence": "confiança",
+      "connectApiKeyMessage": "Para enviar novos segmentos, insira sua chave de API TheIntroDB nas configurações de conexões",
+      "credits": "Pular créditos",
+      "endOfVideo": "Fim",
+      "endsAt": "Termina em {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Cancelar",
+          "description": "Contribua para o TheIntroDB enviando carimbos de data/hora de segmento precisos. Todas as submissões são aceitas pela comunidade antes de serem publicadas.",
+          "endTimeLabel": "Fim(es)",
+          "error": {
+            "endTime": "O horário de término é obrigatório",
+            "mediaInfo": "As informações da mídia não estão disponíveis",
+            "segment": "Nenhum segmento selecionado",
+            "startTime": "O horário de início é obrigatório",
+            "submission": "Erro ao enviar carimbos de data/hora",
+            "tidbKey": "A chave da API TIDB não está definida"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Mínimo 5s se o final for fornecido. Pode se estender até o final da mídia.",
+              "endDesc": "Opcional - deixe em branco se os créditos vão até o final do arquivo.",
+              "excludeDesc": "Exclua cenas de meio-crédito ou pós-crédito; apenas a rolagem de crédito principal.",
+              "startDesc": "Obrigatório - quando os créditos finais começam (por exemplo, quando o primeiro texto de crédito aparece).",
+              "whenToTitle": "Guia de carimbos de data e hora de créditos:"
+            },
+            "durationDesc": "Min 5s se o final for fornecido",
+            "durationLabel": "Duração:",
+            "endDesc": "Opcional - vazio se estender até o fim",
+            "endLabel": "Fim:",
+            "excludeDesc": "Cenas pós-créditos",
+            "excludeLabel": "Excluir:",
+            "intro": {
+              "durationDesc": "A maioria das introduções dura de 30 a 90 segundos. Mínimo de 5s se o início e o fim estiverem definidos.",
+              "endDesc": "Obrigatório - quando a introdução termina (geralmente quando o cartão de título ou o episódio principal começa).",
+              "excludeDesc": "Não inclua aberturas frias ou cenas de pré-introdução; apenas a sequência do título principal.",
+              "startDesc": "Opcional – deixe em branco se a introdução começar no início do episódio.",
+              "whenToTitle": "Guia de carimbos de data/hora de introdução:"
+            },
+            "preview": {
+              "durationDesc": "A visualização varia em duração. Mínimo 5s.",
+              "endDesc": "Opcional – deixe em branco se a visualização terminar no final da mídia.",
+              "excludeDesc": "A visualização geralmente dura de 15 a 90 segundos no final do episódio, visualizando o próximo episódio.",
+              "startDesc": "Obrigatório - quando a visualização começa (por exemplo, quando o texto da visualização aparece).",
+              "whenToTitle": "Guia de visualização de carimbos de data/hora:"
+            },
+            "recap": {
+              "durationDesc": "As recapitulações variam em duração. Mínimo de 5s se o início e o fim estiverem definidos.",
+              "endDesc": "Obrigatório – quando a recapitulação termina e o novo conteúdo começa.",
+              "excludeDesc": "Somente o segmento \"anteriormente ativado\" ou recapitulação; não inclua a introdução ou novas cenas.",
+              "startDesc": "Opcional - deixe em branco se a recapitulação começar no início do episódio.",
+              "whenToTitle": "Guia de recapitulação de carimbos de data/hora:"
+            },
+            "startDesc": "Obrigatório - quando os créditos começam a rolar",
+            "startLabel": "Começar:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 ou 210 (deixe em branco para o final da mídia)",
+              "intro": "3h30 ou 210h (obrigatório)",
+              "preview": "3:30 ou 210 (deixe em branco para o final da mídia)",
+              "recap": "3h30 ou 210h (obrigatório)"
+            },
+            "start": {
+              "credits": "2h30 ou 150h (obrigatório)",
+              "intro": "2:30 ou 150 (deixe em branco para iniciar no início)",
+              "preview": "2h30 ou 150h (obrigatório)",
+              "recap": "2:30 ou 150 (deixe em branco para iniciar no início)"
+            }
+          },
+          "segmentType": "Tipo de segmento",
+          "startTimeLabel": "Início(ões)",
+          "submit": "Enviar",
+          "submitting": "Enviando...",
+          "success": {
+            "title": "Envio realizado com sucesso! Obrigado!"
+          },
+          "title": "Enviar carimbos de data e hora para TheIntroDB",
+          "types": {
+            "credits": "Créditos",
+            "intro": "Introdução",
+            "preview": "Visualização",
+            "recap": "Recapitular"
+          },
+          "whenToDesc": "Insira carimbos de data/hora em segundos (por exemplo, 150), formato mm:ss (por exemplo, 2:30) ou formato hh:mm:ss (por exemplo, 1:42:20). Converteremos automaticamente o formato para você.",
+          "whenToTitle": "Guia de carimbos de data/hora:"
+        },
+        "title": "Este salto foi correto?"
+      },
+      "intro": "Pular introdução",
+      "noSegments": "Não há segmentos para pular disponíveis",
+      "recap": "Pular recapitulação",
+      "skipSegments": "Pular segmentos",
+      "startsAt": "Começa em {{time}}",
+      "submissions": "{{count}} envios",
+      "submitSegment": "Enviar segmento",
+      "timeUnknown": "Hora desconhecida"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "{{timeLeft}} restantes • Terminar às {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "Carregando aplicativo",
-    "loadingUser": "Carregando seu perfil",
     "loadingUserError": {
+      "disconectCancel": "Cancelar",
+      "disconnectConfirm": "Confirmar",
+      "disconnectMessage": "Desconecte-se do servidor da conta, mantendo os dados locais mais recentes. As alterações e o conteúdo assistido não serão sincronizados até que você faça login novamente.",
+      "disconnectTitle": "Desconectar do back-end?",
       "logout": "Sair",
-      "reset": "Redefinir servidor personalizado",
-      "disconnect": "Disconnect from backend",
-      "text": "Falha ao carregar seu perfil",
-      "reload": "Reload",
-      "textWithReset": "Falha ao carregar seu perfil do seu servidor personalizado, deseja redefinir para o servidor padrão?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reload": "Recarregar",
+      "reset": "Redefinir servidor personalizado"
     },
     "migration": {
       "failed": "Falha ao migrar seus dados.",
@@ -1216,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Nome do dispositivo",
-        "deviceNamePlaceholder": "Telefone pessoal",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Editar",
-        "logoutButton": "Sair"
-      },
-      "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
+        "logoutButton": "Sair",
+        "nicknameLabel": "Apelido",
+        "nicknamePlaceholder": "Digite seu apelido"
       },
       "actions": {
         "delete": {
@@ -1248,26 +907,26 @@
           "text": "Esta ação é irreversível. Todos os dados serão excluídos e nada poderá ser recuperado.",
           "title": "Excluir conta"
         },
-        "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
-        },
-        "title": "Ações",
         "logoutAllDevices": {
-          "title": "Encerrar todas as sessões",
+          "button": "Sair de todos os dispositivos",
           "text": "Isso irá desconectar você de todos os dispositivos vinculados à sua conta.",
-          "button": "Sair de todos os dispositivos"
-        }
+          "title": "Encerrar todas as sessões"
+        },
+        "migration": {
+          "button": "Migrar conta",
+          "text": "Migre sua conta para um novo servidor ou baixe seus dados.",
+          "title": "Migração de conta"
+        },
+        "title": "Ações"
       },
       "devices": {
         "deviceNameLabel": "Nome do dispositivo",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Falha ao carregar sessões",
+        "lastActive": "Último ativo: {{date}}",
+        "loggedInAt": "Conectado em: {{date}}",
         "removeDevice": "Remover",
         "title": "Dispositivos",
-        "lastActive": "Último ativo: {{date}}",
-        "loggedInAt": "Conectado em: {{date}}"
+        "unknownDevice": "Dispositivo desconhecido, erro ao descriptografar o nome"
       },
       "profile": {
         "finish": "Finalizar edição",
@@ -1283,377 +942,213 @@
       },
       "title": "Conta"
     },
+    "all": {
+      "title": "Todas as configurações"
+    },
     "appearance": {
       "activeTheme": "Ativo",
-      "themes": {
-        "blue": "Azul",
-        "custom": "Custom",
-        "default": "Padrão",
-        "gray": "Cinza",
-        "red": "Vermelho",
-        "teal": "Verde-azulado",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "Primário",
+        "secondary": "Secundário",
+        "tertiary": "Terciário"
       },
-      "title": "Aparência",
       "options": {
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "carouselView": "Visualização carrossel",
+        "carouselViewDescription": "Exiba as seções que você está assistindo e marque como carrosséis em vez de uma grade. Desativado por padrão.",
+        "carouselViewLabel": "Visualização carrossel",
+        "discover": "Seção Descobrir",
+        "discoverDescription": "Mostre a seção Descobrir na página inicial abaixo da mídia marcada. Habilitado por padrão.",
+        "discoverLabel": "Seção Descobrir",
+        "featured": "Mídia em destaque",
+        "featuredDescription": "Mostre um carrossel de filmes e programas em destaque no topo da sua página inicial! Desativado por padrão.",
+        "featuredLabel": "Mídia em destaque",
+        "forceCompactEpisodeView": "Forçar visualização compacta do episódio",
+        "forceCompactEpisodeViewDescription": "Force o carrossel de episódios no player a usar a visualização vertical compacta \"clássica\". Desativado por padrão.",
+        "forceCompactEpisodeViewLabel": "Episódios compactos",
+        "homeSectionOrder": "Ordem da seção inicial",
+        "homeSectionOrderDescription": "Arraste e solte para reordenar as seções de visualização e favoritos em sua página inicial. A ordem do grupo pode ser editada na página inicial.",
+        "homeSectionOrderGroups": "Reordenar grupos de favoritos",
+        "logos": "Logotipos de imagem",
+        "logosDescription": "Mostre logotipos de imagens em vez de títulos de texto na seção de detalhes modais e em destaque. Habilitado por padrão.",
+        "logosLabel": "Logotipos de imagem",
+        "logosNotice": "Na maioria das vezes, os logotipos são apenas em inglês. Outros idiomas podem querer desabilitar isso!",
+        "minimalCards": "Cartões mínimos",
+        "minimalCardsDescription": "Ocultar o conteúdo do texto (título, tipo, ano) nos cartões de mídia, mostrando apenas a imagem do pôster.",
+        "minimalCardsLabel": "Cartões mínimos",
+        "modal": "Detalhes modais",
+        "modalDescription": "Mostre os detalhes do modo quando você clica em um cartão de mídia em vez de ir para a página de exibição. Proxy ou extensão necessária para trailer. Desativado por padrão.",
+        "modalLabel": "Detalhes modais",
+        "pauseOverlay": "Pausar sobreposição",
+        "pauseOverlayDescription": "Mostrar uma sobreposição de título/logotipo e descrição quando o player estiver pausado e ocioso.",
+        "pauseOverlayLabel": "Pausar sobreposição"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Favoritos",
+        "watching": "Atualmente assistindo"
+      },
+      "themes": {
+        "acid": "Ácido",
+        "autumn": "Outono",
+        "blue": "Azul",
+        "christmas": "Natal",
+        "classic": "Clássico",
+        "cobalt": "Cobalto",
+        "custom": "Personalizado",
+        "default": "Padrão",
+        "ember": "Brasa",
+        "forest": "Floresta",
+        "frost": "Geada",
+        "grape": "Uva",
+        "gray": "Cinza",
+        "green": "Verde",
+        "hulk": "Hulk",
+        "mocha": "Mocha",
+        "noir": "Preto",
+        "pink": "Rosa",
+        "popsicle": "Picolé",
+        "red": "Vermelho",
+        "spark": "Fagulha",
+        "spiderman": "Homem Aranha",
+        "teal": "Verde-azulado",
+        "wolverine": "Carcaju"
+      },
+      "title": "Aparência"
     },
     "connections": {
       "server": {
-        "description": "Se você deseja se conectar a um backend personalizado para armazenar seus dados, ative isso e forneça a URL. <0>Instruções.</0>",
-        "label": "Servidor personalizado",
-        "urlLabel": "URL do servidor personalizado",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "Configurar",
-        "errorStatus": {
-          "description": "Parece que um ou mais itens nesta configuração necessitam sua atenção.",
-          "title": "Algo necessita de sua atenção"
-        },
-        "itemError": "Há algo errado com esta configuração. Realize uma nova configuração para corrigir.",
-        "items": {
-          "default": "Configuração padrão",
-          "extension": "Extensão",
-          "proxy": "Proxy personalizado",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Refazer configuração",
-        "successStatus": {
-          "description": "Tudo está pronto para você começar a assistir sua mídia favorita.",
-          "title": "Está tudo pronto!"
-        },
-        "unsetStatus": {
-          "description": "Por favor, clique no botão à direita para iniciar a configuração.",
-          "title": "Você não realizou a configuração"
-        }
-      },
-      "title": "Conexões",
-      "workers": {
-        "addButton": "Adicionar novo worker",
-        "description": "Para fazer o aplicativo funcionar, todo o tráfego é roteado através de proxies. Ative isso se você quiser trazer seus próprios workers. <0>Instruções.</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "Ainda não há workers, adicione um abaixo",
-        "label": "Usar proxy workers personalizados",
-        "urlLabel": "URLs dos workers",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
+        "changeWarning": "Alterar o servidor backend irá desconectar você. Continuar?",
+        "changeWarningTitle": "Alterar servidor back-end",
+        "error": "Erro ao conectar ao back-end",
+        "notice": "Sua conta NÃO sincroniza entre back-ends, então lembre-se de qual você usa!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "Contribua para o TheIntroDB deixando comentários sobre os segmentos de introdução, recapitulação e créditos. <0>Saiba mais.</0>",
+        "tokenLabel": "Chave de API"
+      },
+      "title": "Conexões"
     },
     "preferences": {
-      "title": "Preferências",
+      "autoplay": "Reprodução automática",
+      "autoplayDescription": "Reproduza automaticamente o próximo episódio de uma série após chegar ao final. Pode ser habilitado por usuários com a extensão do navegador, um proxy personalizado ou com a configuração padrão, se permitido pelo host.",
+      "autoplayLabel": "Reprodução automática",
+      "autoResumeOnPlaybackError": "Retomada automática em caso de erro de reprodução",
+      "autoResumeOnPlaybackErrorDescription": "Continue procurando automaticamente outras fontes quando a fonte atual falhar durante a reprodução. Se desativado, você verá uma tela de erro com uma opção de retomada manual.",
+      "autoResumeOnPlaybackErrorLabel": "Retomada automática em caso de erro de reprodução",
+      "autoSkipSegments": "Ignorar segmentos automaticamente",
+      "autoSkipSegmentsDescription": "Quando ativado, pule automaticamente os segmentos de introdução, recapitulação e visualização enquanto assiste.",
+      "autoSkipSegmentsLabel": "Pular segmentos automaticamente",
+      "doubleClickToSeek": "Toque duas vezes para procurar",
+      "doubleClickToSeekDescription": "Toque duas vezes no lado esquerdo ou direito do player para avançar ou retroceder 10 segundos.",
+      "doubleClickToSeekLabel": "Ative o toque duplo para buscar",
+      "embedOrder": "Reordenando incorporações",
+      "embedOrderDescription": "Arraste e solte para reordenar as incorporações. Isso determinará a ordem em que as incorporações serão verificadas na mídia que você está tentando assistir. <br><br> <strong>(A ordem padrão é melhor para a maioria dos usuários)</strong>",
+      "embedOrderEnableLabel": "Ordem de incorporação personalizada",
+      "holdToBoost": "Segure para aumentar a velocidade",
+      "holdToBoostDescription": "Segure a barra de espaço ou toque e segure a tela para aumentar temporariamente a velocidade de reprodução para 2x. Solte para retornar à velocidade anterior.",
+      "holdToBoostLabel": "Ative a espera para aumentar",
+      "keyboardShortcuts": "Atalhos de teclado",
+      "keyboardShortcutsDescription": "Personalize os atalhos de teclado do aplicativo. Segure ` para mostrar esta ajuda a qualquer momento",
+      "keyboardShortcutsLabel": "Personalize atalhos de teclado",
       "language": "Idioma do aplicativo",
       "languageDescription": "Idioma aplicado para todo o aplicativo.",
+      "lastSuccessfulSource": "Última fonte usada",
+      "lastSuccessfulSourceDescription": "Priorize automaticamente a fonte que forneceu o conteúdo do episódio anterior com sucesso. Isso ajuda a garantir a continuidade ao assistir as séries.",
+      "lastSuccessfulSourceEnableLabel": "Última fonte usada",
+      "lowPerformanceMode": "Modo de baixo desempenho/largura de banda",
+      "lowPerformanceModeDescription": "Otimiza o aplicativo para conexões e dispositivos mais lentos, desativando recursos que exigem muita largura de banda. Este modo reduz o uso de dados e melhora o desempenho, mantendo intactas as principais funcionalidades de pesquisa e observação.",
+      "lowPerformanceModeLabel": "Modo de baixo desempenho",
+      "manualSource": "Seleção manual de fonte",
+      "manualSourceDescription": "Exige a escolha de uma fonte antes da raspagem. Desativa a seleção automática de fonte e abre o seletor de fonte ao iniciar a reprodução.",
+      "manualSourceLabel": "Seleção manual de fonte",
+      "showLess": "Mostrar menos",
+      "showMore": "Mostrar mais",
+      "skipCredits": "Pular créditos finais",
+      "skipCreditsDescription": "Quando ativado, reproduz automaticamente o próximo episódio com 99% de conclusão para pular os créditos finais. Quando desativado, espere até que o episódio seja totalmente concluído.",
+      "skipCreditsLabel": "Pular créditos finais",
+      "sourceOrder": "Reordenando fontes",
+      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
+      "sourceOrderEnableLabel": "Ordem de origem personalizada",
       "thumbnail": "Gerar miniaturas",
       "thumbnailDescription": "Na maior parte do tempo, os vídeos não possuem miniaturas. Você pode ativar esta configuração para gerá-las dinamicamente, mas elas podem tornar seu vídeo mais lento.",
       "thumbnailLabel": "Gerar miniaturas",
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "title": "Preferências"
     },
     "reset": "Redefinir",
     "save": "Salvar",
+    "search": {
+      "placeholder": "Configurações de pesquisa..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "Versão do aplicativo",
-        "backendUrl": "URL do backend",
-        "backendVersion": "Versão do backend",
-        "hostname": "Nome do host",
-        "insecure": "Inseguro",
-        "nickname": "Nickname",
         "notLoggedIn": "Você não está logado",
-        "secure": "Seguro",
-        "title": "Informações do aplicativo",
-        "unknownVersion": "Desconhecido",
         "userId": "ID do usuário",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Use isto como código de convite para o registro de seu amigo"
       }
     },
     "subtitles": {
-      "backgroundLabel": "Opacidade do fundo",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "Desativar o desfoque de fundo da legenda pode corrigir alguns problemas de oscilação",
+      "backgroundBlurEnabledLabel": "Desfoque de fundo",
       "backgroundBlurLabel": "Desfoque de fundo",
+      "backgroundLabel": "Opacidade do fundo",
+      "BorderThicknessLabel": "Espessura da borda",
       "colorLabel": "Cor",
+      "high": "Alto",
+      "low": "Padrão",
       "previewQuote": "Eu não devo ter medo. Medo é o assassino da mente.",
+      "textBoldLabel": "Texto em negrito",
       "textSizeLabel": "Tamanho do texto",
-      "title": "Legendas",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "Border": "Fronteira",
+        "default": "Padrão",
+        "depressed": "Deprimido",
+        "dropShadow": "Sombra projetada",
+        "raised": "Criado",
+        "title": "Estilo de texto"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "Legendas",
+      "verticalPositionLabel": "Posição vertical"
     },
     "unsaved": "Você tem alterações não salvas"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
-      "top10": "10 principais"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "Tendências agora"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
-    },
-    "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "filters": {
-      "country": "País"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Insira um link de grupo de observação compartilhado ou código de sala",
-    "you": "Você",
-    "guestFallback": "Convidado"
   },
   "tmdb": {
     "genres": {
       "10759": "Ação e aventura"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "À frente do host em {{seconds}} segundos",
+    "alone": "Sozinho",
+    "behindHost": "Atrás do host em {{seconds}} segundos",
+    "cancel": "Cancelar",
+    "connectedAsGuest": "Conectado para assistir à festa como convidado",
+    "contentMismatch": "Não é possível participar do grupo de observação: o conteúdo não corresponde ao conteúdo do anfitrião.",
+    "copyCode": "Clique para copiar",
+    "emptyRoom": "Ninguém está nesta sala ainda",
+    "enterCodeOrLink": "Insira um link de grupo de observação compartilhado ou código de sala",
+    "episodeMismatch": "Não é possível participar do grupo de exibição: você está assistindo a um episódio diferente do apresentador.",
+    "guestFallback": "Convidado",
+    "hosting": "Hospedagem",
+    "hostParty": "Organize uma festa de observação",
+    "invalidRoom": "Não foi possível conectar-se a esta sala",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Juntar",
+    "joinParty": "Participe de uma festa de observação",
+    "leaveWatchParty": "Sair da festa de exibição",
+    "linkCopied": "Copiado!",
+    "noHost": "Nenhum anfitrião nesta festa de observação",
+    "save": "Salvar",
+    "shareCode": "Compartilhe este código com amigos (clique para copiar o link)",
+    "showStatusOverlay": "Mostrar sobreposição de status",
+    "status": {
+      "inSync": "Em sincronia",
+      "outOfSync": "Fora de sincronia"
+    },
+    "syncing": "Sincronizando...",
+    "validating": "Validando grupo de observação...",
+    "viewers": "Espectadores ({{count}})",
+    "watching": "Assistindo",
+    "withCount": "Com {{count}} outras pessoas",
+    "you": "Você"
   }
 }

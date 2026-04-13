@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "Το AlphaFlix είναι ένα παρακλάδι του movie-web, σχεδιασμένο ώστε να παραμείνει ενεργό ακόμα και μετά το κλείσιμο του movie-web.app. Το AlphaFlix λειτουργεί σε ιδιωτικό, αυτοφιλοξενούμενο VPS. Διατηρώ αυτήν την ιστοσελίδα χωρίς προσωπικό ώφελος και χωρίς διαφημίσεις, λόγω των πεποιθήσεών μου υπέρ της ελεύθερης πρόσβασης στα μέσα.",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "Συχνές ερωτήσεις",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "Από πού προέρχεται το περιεχόμενο;",
-      "body": "Το AlphaFlix δεν φιλοξενεί περιεχόμενο. Όταν κάνεις κλικ για οτιδήποτε που θέλεις να παρακολουθήσεις, το AlphaFlix πραγματοποιεί αναζήτηση στο διαδίκτυο για το επιλεγμένο πολυμέσο (Στην οθόνη φόρτωσης και στην καρτέλα \"πηγές βίντεο\" μπορείτε να δείτε ποια πηγή χρησιμοποιείτε). Τα πολυμέσα δεν φορτώνονται ποτέ από το AlphaFlix, όλα γίνονται μέσω του παραπάνω μηχανισμού.",
-      "section": "general"
-    },
-    "q2": {
-      "title": "Που μπορώ να αιτηθώ μία σειρά ή ταινία;",
-      "body": "Δεν είναι εφικτό να αιτηθούν σειρές ή ταινίες, το AlphaFlix δεν διαχειρίζεται το περιεχόμενο. Όλα τα πολυμέσα προβάλονται από πηγές στο διαδίκτυο.",
-      "section": "search"
-    },
-    "q3": {
-      "title": "Τα αποτελέσματα της αναζήτησης εμφανίζουν την σειρά ή την ταινία, γιατί δεν μπορώ να την αναπαράγω;",
-      "body": "Τα αποτελέσματα των αναζητήσεων τροφοδοτούνται από το The Movie Database (TMDB) και προβάλλονται ανεξάρτητα με το αν οι πηγές διαθέτουν το εν λόγω πολυμέσο.",
-      "section": "search"
-    },
-    "q4": {
-      "title": "Τι γίνεται με τα δεδομένα μου και τα λοιπά;",
-      "body": "Όλα τα δεδομένα συγχρονίζονται με το backend της κοινότητας και οποιοσδήποτε είναι ελεύθερος να το χρησιμοποιήσει.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "Πώς μπορώ να μάθω περισσότερα;",
-      "body": "Το AlphaFlix έχει Fluxer Server! Μπορείς να τον βρεις στην κορυφή της σελίδας!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "Σχετικά με το AlphaFlix (^▽^)"
-  },
   "actions": {
+    "cancel": "Ματαίωση",
+    "confirm": "Επιβεβαιώνω",
     "copied": "Αντιγράφθηκε",
-    "copy": "Αντιγραφή",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "Αντιγραφή"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Ενεργός",
+      "confirm": "Επιβεβαιώνω",
+      "customBackend": "Προσαρμοσμένο Backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Επιλέξτε σε ποιον διακομιστή υποστήριξης θα συνδεθείτε",
+      "title": "Επιλέξτε Διακομιστής λογαριασμού"
+    },
     "createAccount": "Δεν έχετε ακόμη λογαριασμό; 😬 <0>Δημιουργήστε ένα λογαριασμό.</0>",
-    "deviceNameLabel": "Όνομα συσκευής",
-    "deviceNamePlaceholder": "Προσωπικός αριθμός τηλεφώνου",
+    "generate": {
+      "custom": "Εθιμο",
+      "customPassphraseLabel": "Προσαρμοσμένη φράση πρόσβασης",
+      "customPassphrasePlaceholder": "Εισαγάγετε την προσαρμοσμένη φράση πρόσβασης",
+      "description": "Η συνθηματική σας φράση λειτουργεί ταυτόχρονα ως όνομα χρήστη και ως κωδικός πρόσβασης. Φροντίστε να το φυλάξετε, καθώς θα χρειαστεί να το εισάγετε για να συνδεθείτε στο λογαριασμό σας <bold>ΜΗΝ χάσετε τον κωδικό σας!</bold>",
+      "invalidPassphraseCharacters": "Μη έγκυροι χαρακτήρες φράσης πρόσβασης. Επιτρέπονται μόνο αγγλικά γράμματα, αριθμοί 1-10 και κανονικά σύμβολα.",
+      "next": "Έχω αποθηκεύσει την συνθηματική μου φράση",
+      "passphraseFrameLabel": "Συνθηματική φράση",
+      "passphraseTooShort": "Η φράση πρόσβασης πρέπει να αποτελείται από τουλάχιστον 8 χαρακτήρες.",
+      "title": "Η συνθηματική σας φράση",
+      "useCustomPassphrase": "Χρησιμοποιήστε προσαρμοσμένη φράση πρόσβασης",
+      "usePasskeyInstead": "Χρησιμοποιήστε τον κωδικό πρόσβασης"
+    },
+    "hasAccount": "Έχετε ήδη λογαριασμό; <0>Συνδεθείτε εδώ.</0>",
+    "inviteCodeInvalidError": "Μη έγκυρος κωδικός πρόσκλησης (το ID χρήστη δεν βρέθηκε)",
     "inviteCodeLabel": "Κωδικός πρόσκλησης",
     "inviteCodePlaceholder": "Εισαγάγετε το ID χρήστη ενός φίλου",
     "inviteCodeRequiredError": "Απαιτείται κωδικός πρόσκλησης",
-    "inviteCodeInvalidError": "Μη έγκυρος κωδικός πρόσκλησης (το ID χρήστη δεν βρέθηκε)",
-    "generate": {
-      "description": "Η συνθηματική σας φράση λειτουργεί ταυτόχρονα ως όνομα χρήστη και ως κωδικός πρόσβασης. Φροντίστε να το φυλάξετε, καθώς θα χρειαστεί να το εισάγετε για να συνδεθείτε στο λογαριασμό σας <bold>ΜΗΝ χάσετε τον κωδικό σας!</bold>",
-      "next": "Έχω αποθηκεύσει την συνθηματική μου φράση",
-      "passphraseFrameLabel": "Συνθηματική φράση",
-      "title": "Η συνθηματική σας φράση",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "Έχετε ήδη λογαριασμό; <0>Συνδεθείτε εδώ.</0>",
     "login": {
       "description": "Παρακαλώ εισάγετε τη συνθηματική σας φράση για να συνδεθείτε στο λογαριασμό σας",
-      "deviceLengthError": "Παρακαλώ εισάγετε όνομα συσκευής",
-      "passphraseLabel": "Συνθηματική φράση 12 λέξεων",
-      "passphrasePlaceholder": "Συνθηματική φράση",
-      "submit": "Σύνδεση",
-      "title": "Συνδεθείτε στον λογαριασμό σας",
-      "validationError": "Λανθασμένη ή ελλιπής συνθηματική φράση",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "Παρατσούκλι",
+      "nicknameNotFound": "Το ψευδώνυμο δεν βρέθηκε",
       "nicknamePlaceholder": "Εισαγάγετε το ψευδώνυμό σας",
+      "nicknameRequired": "Απαιτείται ψευδώνυμο",
+      "noBackendUrl": "Δεν υπάρχει διεύθυνση URL υποστήριξης",
+      "or": "or",
+      "passwordIncorrect": "Ο κωδικός πρόσβασης είναι λανθασμένος",
       "passwordLabel": "Σύνθημα",
       "passwordPlaceholder": "Εισαγάγετε τον κωδικό πρόσβασής σας",
-      "nicknameRequired": "Απαιτείται ψευδώνυμο",
       "passwordRequired": "Απαιτείται κωδικός πρόσβασης",
-      "nicknameNotFound": "Το ψευδώνυμο δεν βρέθηκε",
-      "passwordIncorrect": "Ο κωδικός πρόσβασης είναι λανθασμένος"
+      "submit": "Σύνδεση",
+      "title": "Συνδεθείτε στον λογαριασμό σας",
+      "usePasskey": "Χρησιμοποιήστε τον κωδικό πρόσβασης",
+      "validationError": "Λανθασμένη ή ελλιπής συνθηματική φράση"
     },
     "register": {
+      "confirmPasswordLabel": "Επιβεβαίωση κωδικού πρόσβασης",
+      "confirmPasswordPlaceholder": "Επιβεβαιώστε τον κωδικό πρόσβασής σας",
       "information": {
         "color1": "Πρωτεύον χρώμα προφίλ",
         "color2": "Δευτερεύον χρώμα προφίλ",
@@ -195,39 +61,27 @@
         "next": "Επόμενο",
         "title": "Πληροφορίες λογαριασμού"
       },
-      "passwordInput": {
-        "title": "Δημιουργήστε τη σύνδεσή σας",
-        "description": "Επιλέξτε ψευδώνυμο και κωδικό πρόσβασης. Ο κωδικός πρόσβασής σας λειτουργεί ως ασφαλής φράση πρόσβασης, οπότε φροντίστε να τον θυμάστε!"
-      },
       "nicknameLabel": "Παρατσούκλι",
       "nicknamePlaceholder": "Επιλέξτε ένα μοναδικό ψευδώνυμο",
       "nicknameTaken": "Το ψευδώνυμο έχει ήδη ληφθεί",
+      "passwordInput": {
+        "description": "Επιλέξτε ψευδώνυμο και κωδικό πρόσβασης. Ο κωδικός πρόσβασής σας λειτουργεί ως ασφαλής φράση πρόσβασης, οπότε φροντίστε να τον θυμάστε!",
+        "title": "Δημιουργήστε τη σύνδεσή σας"
+      },
       "passwordLabel": "Σύνθημα",
-      "passwordPlaceholder": "Δημιουργήστε έναν κωδικό πρόσβασης (χρησιμοποιείται ως φράση πρόσβασης)",
-      "passwordWeak": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 8 χαρακτήρες με γράμματα και αριθμούς",
       "passwordMismatch": "Οι κωδικοί πρόσβασης δεν ταιριάζουν",
-      "confirmPasswordLabel": "Επιβεβαίωση κωδικού πρόσβασης",
-      "confirmPasswordPlaceholder": "Επιβεβαιώστε τον κωδικό πρόσβασής σας"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Δημιουργήστε έναν κωδικό πρόσβασης (χρησιμοποιείται ως φράση πρόσβασης)",
+      "passwordWeak": "Ο κωδικός πρόσβασης πρέπει να αποτελείται από τουλάχιστον 8 χαρακτήρες με γράμματα και αριθμούς"
     },
     "trust": {
       "failed": {
         "text": "Το ρυθμίσατε σωστά;",
         "title": "Αδυναμία σύνδεσης με τον διακομιστή"
       },
-      "noHostTitle": "Ο server δεν έχει ρυθμιστεί!",
-      "noHost": "Ο server δεν εχει ρυθμιστεί , οπότε δεν μπορείτε να δημιουργήσετε λογαριασμό",
       "host": "Συνδέεστε στον διακομιστή <0>{{hostname}}</0> - παρακαλούμε επιβεβαιώστε ότι τον εμπιστεύεστε πριν δημιουργήσετε λογαριασμό...",
       "no": "Επιστροφή",
+      "noHost": "Ο server δεν εχει ρυθμιστεί , οπότε δεν μπορείτε να δημιουργήσετε λογαριασμό",
+      "noHostTitle": "Ο server δεν έχει ρυθμιστεί!",
       "title": "Εμπιστεύεστε αυτόν τον διακομιστή;",
       "yes": "Εμπιστεύομαι αυτόν τον διακομιστή 🤞"
     },
@@ -235,14 +89,88 @@
       "description": "Παρακαλώ εισάγετε τη συνθηματική σας φράση από τα προηγούμενα βήματα για να επιβεβαιώσετε ότι την έχετε αποθηκεύσει και για να δημιουργήσετε τον λογαριασμό σας",
       "invalidData": "Τα δεδομένα δεν είναι έγκυρα",
       "noMatch": "Η φράση πρόσβασης δεν ταυτίζεται 😭",
-      "passphraseLabel": "Η συνθηματική σας φράση 12 λέξεων",
       "recaptchaFailed": "Η επικύρωση του ReCaptcha απέτυχε",
       "register": "Δημιουργία λογαριασμού",
-      "title": "Επικυρώστε τη συνθηματική σας φράση",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "Επικυρώστε τη συνθηματική σας φράση"
     }
+  },
+  "details": {
+    "airs": "Κυκλοφορίες στις",
+    "collection": {
+      "movie": "Ταινία",
+      "movies": "Κινηματογράφος",
+      "rating": "Εκτίμηση",
+      "releaseDate": "Ημερομηνία κυκλοφορίας",
+      "sortBy": "Ταξινόμηση κατά"
+    },
+    "endsAt": "Λήγει στις {{time}}",
+    "episode": "Επεισόδιο",
+    "episodes": "Επεισόδια",
+    "imdb": "Προβολή στο IMDb",
+    "language": "Γλώσσα:",
+    "play": "Αναπαραγωγή",
+    "rating": "Βαθμολογία:",
+    "releaseDate": "Ημερομηνία κυκλοφορίας:",
+    "resume": "Συνεχίστε",
+    "runtime": "Διάρκεια:",
+    "season": "Σεζόν",
+    "seasons": "Εποχή/ες",
+    "similar": "Παρόμοιος",
+    "tmdb": "Προβολή στο TMDB",
+    "trailers": "Ρυμουλκούμενα",
+    "watched": "Παρακολούθησαν {{watched}} από {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Όλες οι λίστες ταινιών",
+    "carousel": {
+      "change": "Αλλαγή",
+      "more": "Δείτε περισσότερα",
+      "title": {
+        "4kReleases": "Εκδόσεις 4K",
+        "editorPicksMovies": "Ο συντάκτης επιλέγει ταινίες",
+        "editorPicksShows": "Εκπομπές επιλογών συντάκτη",
+        "forYou": "Για Σένα",
+        "inCinemas": "Στα Σινεμά",
+        "latestReleases": "Τελευταίες εκδόσεις",
+        "latestTVReleases": "Τελευταίες τηλεοπτικές εκπομπές",
+        "movies": "{{category}}Ταινίες",
+        "moviesOn": "Ταινίες σε {{provider}}",
+        "onTheAir": "Στον Αέρα",
+        "popular": "Δημοφιλέστερο",
+        "recommended": "Επειδή παρακολουθήσατε: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Κορυφαία βαθμολογία",
+        "trending": "Τάσεις τώρα",
+        "tvshows": "{{category}}Σειρές",
+        "tvshowsOn": "Εμφανίζεται στις {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Περισσότερες Πληροφορίες",
+      "playNow": "Παίξτε Τώρα"
+    },
+    "filters": {
+      "country": "Χώρα"
+    },
+    "page": {
+      "back": "Πάω πίσω",
+      "loading": "Φόρτωση...",
+      "loadMore": "Φορτώστε περισσότερα",
+      "title": "Ανακάλυψε ταινίες και σειρές"
+    },
+    "scrollToTop": "Πίσω στη κορυφή",
+    "tabs": {
+      "movies": "Ταινίες",
+      "top10": "Top 10",
+      "tvshows": "Σειρές"
+    },
+    "viewLists": "Προβολή όλων των λιστών ταινιών"
+  },
+  "downtimeNotice": {
+    "badge": "Προβλήματα",
+    "goHome": "Πήγαινε στην αρχική σελίδα",
+    "message": "Το AlphaFlix αντιμετωπίζει ξανά προβλημάτα με τους παρόχους,αν δεν μπορείς να βρεις ή να παίξεις κάτι παρακαλώ άλλαξε τη πηγή. Ανέμενε αυτό το πρόβλημα να συνεχίσει.",
+    "title": "Θέματα παρόχου"
   },
   "errors": {
     "badge": "﻿﻿Χάλασε",
@@ -258,159 +186,153 @@
     },
     "links": {
       "fluxer": "Fluxer",
-      "legal": "Legal / DMCA (νόμος περί πνευματικών δικαιωμάτων)",
-      "github": "GitHub",
-      "twitter": "Twitter",
-      "funding": "Υποστηρίξτε μας"
+      "funding": "Υποστηρίξτε μας",
+      "github": "GitHub"
     },
     "tagline": "Παρακολουθήστε τις αγαπημένες σας σειρές και ταινίες με αυτή την εφαρμογή streaming ανοιχτού κώδικα! "
   },
   "global": {
+    "keyboardShortcuts": {
+      "cancel": "Ματαίωση",
+      "clickToEdit": "Κάντε κλικ σε ένα σήμα κλειδιού για να το επεξεργαστείτε",
+      "conditions": {
+        "showsOnly": "Εμφανίζει μόνο"
+      },
+      "conflict": "σύγκρουση",
+      "conflicts": "συγκρούσεις",
+      "detected": "εντοπιστεί",
+      "editInSettings": "Επεξεργασία εντολών πληκτρολογίου από τις ρυθμίσεις",
+      "groups": {
+        "audioVideo": "Ήχος & Βίντεο",
+        "interface": "Διασύνδεση",
+        "jumpToPosition": "Μετάβαση στη θέση",
+        "subtitlesAccessibility": "Υπότιτλοι & Προσβασιμότητα",
+        "videoPlayback": "Αναπαραγωγή βίντεο"
+      },
+      "none": "Κανένας",
+      "numberKeySeeking": "Αριθμός κλειδί αναζήτηση προόδου",
+      "numberKeySeekingDescription": "Χρησιμοποιήστε τα αριθμητικά πλήκτρα 0-9 για να αναζητήσετε συγκεκριμένες θέσεις στο βίντεο. Το 0 πηγαίνει στην αρχή, το 1-8 πηδά στο 10%-80% και το 9 πηγαίνει στο 90%.",
+      "pressKey": "Πατήστε ένα πλήκτρο...",
+      "resetAllToDefault": "Επαναφορά όλων στην προεπιλογή",
+      "resetToDefault": "Επαναφορά στην προεπιλογή",
+      "save": "Εκτός",
+      "saveChanges": "Αποθήκευση αλλαγών",
+      "shortcuts": {
+        "barrelRoll": "Κάνε ένα ρολό βαρελιού! 🌀",
+        "closeOverlay": "Κλείσιμο επικάλυψης/τροπικού",
+        "decreaseVolume": "Μειώστε την ένταση",
+        "increaseVolume": "Αυξήστε την ένταση",
+        "jumpTo0": "Μετάβαση στο 0% (αρχή)",
+        "jumpTo9": "Άλμα στο 90%",
+        "mute": "Σίγαση/κατάργηση σίγασης",
+        "nextEpisode": "Επόμενο επεισόδιο",
+        "playPause": "Αναπαραγωγή/παύση (ή κρατήστε πατημένο για ταχύτητα 2x όταν είναι ενεργοποιημένη)",
+        "playPauseAlt": "Αναπαραγωγή/παύση",
+        "previousEpisode": "Προηγούμενο επεισόδιο",
+        "randomCaption": "Επιλέξτε τυχαία λεζάντα από τη γλώσσα που χρησιμοποιήθηκε τελευταία",
+        "skipBackward1": "Μετάβαση προς τα πίσω 1 δευτερόλεπτο",
+        "skipBackward10": "Μετάβαση προς τα πίσω 10 δευτερόλεπτα",
+        "skipBackward5": "Μετάβαση προς τα πίσω 5 δευτερόλεπτα",
+        "skipForward1": "Μετάβαση προς τα εμπρός 1 δευτερόλεπτο",
+        "skipForward10": "Μετάβαση προς τα εμπρός 10 δευτερόλεπτα",
+        "skipForward5": "Μετάβαση προς τα εμπρός 5 δευτερόλεπτα",
+        "syncSubtitlesEarlier": "Συγχρονισμός υπότιτλων νωρίτερα (-0,5 δευτ.)",
+        "syncSubtitlesLater": "Συγχρονισμός υποτίτλων αργότερα (+0,5 δευτ.)",
+        "toggleCaptions": "Εναλλαγή υπότιτλων",
+        "toggleFullscreen": "Εναλλαγή πλήρους οθόνης",
+        "toggleNativeSubtitles": "Εναλλαγή εγγενών υπότιτλων"
+      },
+      "subtitle": "Κρατήστε το ` για να εμφανιστεί αυτή η βοήθεια ανά πάσα στιγμή",
+      "title": "Συντομεύσεις πληκτρολογίου"
+    },
     "name": "AlphaFlix",
     "pages": {
-      "about": "Σχετικά",
-      "legal": "Legal / DMCA (νόμος περί πνευματικών δικαιωμάτων)",
       "discover": "Ανακαλύψτε",
-      "support": "Υποστήριξη",
       "login": "Σύνδεση",
-      "onboarding": "Setup",
+      "migration": "Μεταφορά λογαριασμού",
       "pagetitle": "{{title}} - AlphaFlix",
       "register": "Εγγραφή",
-      "settings": "Ρυθμίσεις",
-      "migration": "Μεταφορά λογαριασμού",
-      "jip": "Jip"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "settings": "Ρυθμίσεις"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Σελιδοδείκτες",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "Ματαίωση",
+        "description": "Επεξεργαστείτε τις λεπτομέρειες για αυτόν τον σελιδοδείκτη",
+        "groupsLabel": "Ομάδες",
+        "save": "Εκτός",
+        "title": "Επεξεργασία σελιδοδείκτη",
+        "titleLabel": "Τίτλος",
+        "titlePlaceholder": "Εισαγάγετε έναν τίτλο για το σελιδοδείκτη σας",
+        "yearLabel": "Ετος",
+        "yearPlaceholder": "Εισαγάγετε ένα έτος για τον σελιδοδείκτη σας"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "Δεν υπάρχουν ακόμη ομάδες",
+          "placeholderButton": "Προσθήκη στην ομάδα",
+          "removeAll": "Κατάργηση όλων",
+          "removeFromGroup": "Αφαίρεση από την ομάδα"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "Αυτό θα επηρεάσει {{count}} σελιδοδείκτες",
+          "cancel": "Ματαίωση",
+          "description": "Επεξεργαστείτε το όνομα και το εικονίδιο της ομάδας σελιδοδεικτών σας",
+          "nameLabel": "Όνομα ομάδας",
+          "namePlaceholder": "Εισαγάγετε ένα όνομα για την ομάδα σας",
+          "save": "Εκτός",
+          "title": "Επεξεργασία ομάδας"
+        },
+        "reorder": {
+          "button": "Παραγγέλλω πάλι",
+          "cancel": "Ματαίωση",
+          "description": "Σύρετε και αποθέστε για να αναδιατάξετε τις ομάδες σελιδοδεικτών σας",
+          "done": "Γινώμενος",
+          "save": "Εκτός",
+          "title": "Επεξεργασία ομαδικής παραγγελίας"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "Σελιδοδείκτες",
+      "showAll": "Εμφάνιση όλων",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Προεπιλογή (Ημερομηνία προσθήκης)",
+          "titleAsc": "Τίτλος Α-Ω",
+          "titleDesc": "Τίτλος Ζ-Α",
+          "yearAsc": "Ημερομηνία κυκλοφορίας Παλαιότερο-Νεότερο",
+          "yearDesc": "Ημερομηνία κυκλοφορίας Νεότερο-Παλαιότερο"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "Συνεχίστε να παρακολουθείτε...",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Προεπιλογή (Ημερομηνία προσθήκης)",
+          "titleAsc": "Τίτλος Α-Ω",
+          "titleDesc": "Τίτλος Ζ-Α",
+          "yearAsc": "Ημερομηνία κυκλοφορίας Παλαιότερο-Νεότερο",
+          "yearDesc": "Ημερομηνία κυκλοφορίας Νεότερο-Παλαιότερο"
         }
       }
     },
     "mediaList": {
       "stopEditing": "Σταματήστε την επεξεργασία"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "Αυτά είναι όλα όσα έχουμε...",
+      "discover": "Ανακάλυψε",
+      "discoverMore": "Ανακάλυψε περισσότερα",
+      "empty": {
+        "default": "Καλοσορίσατε! Βρείτε σειρές και ταινίες εδώ!",
+        "extra": [
+          "Δεν υπάρχει τίποτα εδώ :(",
+          "Τόσο ερημιά...",
+          "Τίποτα.",
+          "Γειά καινούργε χρήστη :3"
+        ]
+      },
       "failed": "Απέτυχε η εύρεση πολυμέσων, δοκιμάστε ξανά!",
       "loading": "Φόρτωση...",
       "noResults": "Δεν μπορέσαμε να βρούμε τίποτα :(",
@@ -428,23 +350,19 @@
           ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "Καλοσορίσατε! Βρείτε σειρές και ταινίες εδώ!",
-        "extra": [
-          "Δεν υπάρχει τίποτα εδώ :(",
-          "Τόσο ερημιά...",
-          "Τίποτα.",
-          "Γειά καινούργε χρήστη :3"
-        ]
-      },
-      "sectionTitle": "Αποτελέσματα αναζήτησης",
-      "discoverMore": "Ανακάλυψε περισσότερα",
-      "discover": "Ανακάλυψε"
+      "sectionTitle": "Αποτελέσματα αναζήτησης"
     },
-    "mediaCard": {
+    "support": {
+      "complete": "πλήρης",
+      "description": "Το AlphaFlix εκτελείται με ζημία και χρειαζόμαστε βοήθεια για να το διατηρήσουμε χωρίς διαφημίσεις! Εάν σας αρέσει να χρησιμοποιείτε το AlphaFlix, σκεφτείτε να κάνετε δωρεά για να μας βοηθήσετε να καλύψουμε το κόστος μας.",
+      "donate": "Προσφέρω",
+      "explanation": "Εάν δεν χρησιμοποιείτε την επέκταση ή δεν έχετε ρυθμίσει το FED API, μπορεί να είναι πιο δύσκολο να βρείτε περιεχόμενο! Θέλουμε να το διορθώσουμε, αλλά είναι πολύ πιο δύσκολο να παρέχουμε περιεχόμενο χωρίς ακριβούς διακομιστές. Επομένως, εάν σας αρέσει να χρησιμοποιείτε το AlphaFlix, σκεφτείτε να κάνετε δωρεά για να μας βοηθήσετε να καλύψουμε το αυξανόμενο κόστος μας.",
+      "explanation2": "Εάν θέλετε περισσότερες πληροφορίες, παρακαλούμε εγγραφείτε",
+      "fluxer": "Fluxer",
+      "label": "Χρηματοδότηση έργου: ${{current}} / ${{goal}}",
       "moreInfo": "Περισσότερες πληροφορίες",
-      "copyLink": "Αντιγραφή συνδέσμου",
-      "close": "Κλείσιμο"
+      "thankYou": "Σας ευχαριστούμε για την υποστήριξή σας!",
+      "title": "Το AlphaFlix χρειάζεται τη βοήθειά σας!"
     },
     "titles": {
       "69": {
@@ -465,6 +383,15 @@
           "Ζήτω το AlphaFlix!"
         ]
       },
+      "halloween": {
+        "default": "Ποια τρομακτική ταινία θα θέλατε να παρακολουθήσετε αυτό το Halloween;",
+        "extra": [
+          "Καλές Απόκριες! 🎃👻",
+          "Γιούχα! 👻",
+          "Κόλπο ή κέρασμα! 🍬",
+          "Είναι η Μεγάλη Κολοκύθα, Τσάρλι Μπράουν!"
+        ]
+      },
       "morning": {
         "default": "Τι θα θέλατε να παρακολουθήσετε σήμερα το πρωί;",
         "extra": [
@@ -476,304 +403,116 @@
         "extra": [
           "Βαρεμάρα; Έχω ακούσει ότι ο Εξορκιστής είναι καλός!"
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Πρόσφατα Παρακολούθηση",
+      "sectionTitle": "Παρακολουθήστε το Ιστορικό"
     }
   },
   "media": {
     "episodeDisplay": "Σ{{season}} Ε{{episode}}",
-    "unreleased": "Ακυκλοφόρητο",
+    "episodeShort": "E",
+    "seasonUnwatched": "Είστε βέβαιοι ότι θέλετε να χαρακτηρίσετε τη σεζόν ως απαρατήρητη;",
+    "seasonWatched": "Είστε βέβαιοι ότι θέλετε να επισημάνετε τη σεζόν ως παρακολουθημένη;",
     "types": {
       "movie": "Ταινία",
       "show": "Σειρά"
     },
-    "episodeShort": "E",
-    "seasonShort": "Σ",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Συνεχίστε",
-    "play": "Αναπαραγωγή",
-    "runtime": "Διάρκεια:",
-    "language": "Language:",
-    "releaseDate": "Ημερομηνία κυκλοφορίας:",
-    "rating": "Βαθμολογία:",
-    "votes": "Ψήφοι",
-    "tmdb": "Προβολή στο TMDB",
-    "imdb": "Προβολή στο IMDb",
-    "episodes": "Επεισόδια",
-    "seasons": "Season/s",
-    "season": "Σεζόν",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Κυκλοφορίες στις",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "Ακυκλοφόρητο"
   },
   "migration": {
-    "loginRequired": "Πρέπει να είσαι συνδεδεμένος για να μεταφέρεις τα δεδομένα σου! Παρακαλώ επέστρεψε και συνδέσου για να συνεχίσεις.",
-    "start": {
-      "title": "Μετέφερε τα δεδομένα σου",
-      "explainer": "Αν επιθύμεις να μεταφέρεις ή να κανεις backup τα δεδομένα σου, μπορείς να το κάνεις με τους εξής τρόπους. Αυτό θα σου επιτρέψει να διατήρησεις τα δεδομένα σου οταν αλλάζεις backend servers.",
-      "options": {
-        "or": "ή",
-        "direct": {
-          "description": "Αυτό θα μεταφέρει άμεσα τα δεδομένα σου στον νέο server. Αυτή είναι η γρηγορότερη επιλογή. <br /><br /> Αύτη η επιλογή σου επιτρέπει να κρατήσεις το συνθυματικό σου ίδιο!",
-          "title": "Άμεση μεταφορά",
-          "quality": "Ευκολότερος και γρηγορότερος",
-          "action": "Μεταφορά δεδομένων"
-        },
-        "download": {
-          "description": "Με αυτό θα κατεβάσεις τα δεδομένα σου στη συσκευή σου. Μπόρεις να τα ανεβάσεις στον νέο server ή να κρατήσεις για καλό και για κακό.",
-          "title": "Κατέβασε τα δεδομένα σου",
-          "quality": "Πιο τεχνικός",
-          "action": "Κατέβασε τα δεδομένα σου"
-        },
-        "upload": {
-          "title": "Ανέβασε τα δεδομένα σου",
-          "description": "Ανέβασε τα δεδομένα που προηγουμένως είχες κατεβάσει για να επαναφέρεις τους σελιδοδείκτες σου και τη πρόοδο σε αυτό το λογαριασμό.",
-          "quality": "Επανέφερε απο backup",
-          "action": "Ανέβασε δεδομένα"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Άμεση μεταφόρα",
-      "description": "Εισήγαγε τη τελική backend URL για να μεταφέρεις τον τωρινό σου λογαριασμό σε καινουργιό backend. Αυτό διατηρεί το συνθηματικό σου ίδιο!",
-      "backendLabel": "Τελική Backend URL",
-      "recaptchaLabel": "ReCaptcha Key (Προαιρετικό)",
-      "toggleLable": "Χρειάζεσαι ReCaptcha;",
-      "status": {
-        "error": "Αποτυχία μεταφοράς δεδομένων. 😿",
-        "success": "Η μεταφόρα δεδομένων ήταν επιτυχής! 🎉"
-      },
-      "button": {
-        "migrate": "Μεταφόρα",
-        "processing": "Επεξεργάζοντας...",
-        "home": "Επιστροφή στην αρxή",
-        "login": "Συνέχισε για να συνδεθείς"
-      }
-    },
+    "back": "Επέστρεψε",
     "download": {
-      "title": "Κατέβασε τα δεδομένα σου",
+      "button": {
+        "download": "Κατέβασε τα δεδομένα σου",
+        "home": "Επιστροφή στην αρxική σελίδα"
+      },
       "description": "Αυτό θα κατεβάσει τα δεδομένα σου στη συσκευή σου. Μπορείς να τα ανεβάσεις στον νέο server ή να τα κρατήσεις.",
       "status": {
         "error": "Αποτυχία μεταφοράς δεδομένων. 😿",
         "success": "Η μεταφόρα δεδομένων ήταν επιτυχής! 🎉"
       },
-      "button": {
-        "download": "Κατέβασε τα δεδομένα σου",
-        "home": "Επιστροφή στην αρxική σελίδα",
-        "login": "Συνέχισε για να συνδεθείς"
-      }
+      "title": "Κατέβασε τα δεδομένα σου"
+    },
+    "loginRequired": "Πρέπει να είσαι συνδεδεμένος για να μεταφέρεις τα δεδομένα σου! Παρακαλώ επέστρεψε και συνδέσου για να συνεχίσεις.",
+    "preview": {
+      "downloadDescription": "Η λήψη περιλαμβάνει:",
+      "items": {
+        "bookmarks": "Μέσα σελιδοδείκτη",
+        "progress": "Παρακολουθήστε την πρόοδο",
+        "settings": "Ρυθμίσεις & Προτιμήσεις"
+      },
+      "uploadDescription": "Δεδομένα για μεταφόρτωση:"
+    },
+    "start": {
+      "explainer": "Με αυτό θα κατεβάσεις τα δεδομένα σου στη συσκευή σου. Μπόρεις να τα ανεβάσεις στον νέο server ή να κρατήσεις για καλό και για κακό. Ανέβασε τα δεδομένα που προηγουμένως είχες κατεβάσει για να επαναφέρεις τους σελιδοδείκτες σου και τη πρόοδο σε αυτό το λογαριασμό.",
+      "options": {
+        "download": {
+          "action": "Κατέβασε τα δεδομένα σου",
+          "description": "Με αυτό θα κατεβάσεις τα δεδομένα σου στη συσκευή σου. Μπόρεις να τα ανεβάσεις στον νέο server ή να κρατήσεις για καλό και για κακό.",
+          "quality": "Πιο τεχνικός",
+          "title": "Κατέβασε τα δεδομένα σου"
+        },
+        "or": "ή",
+        "upload": {
+          "action": "Ανέβασε δεδομένα",
+          "description": "Ανέβασε τα δεδομένα που προηγουμένως είχες κατεβάσει για να επαναφέρεις τους σελιδοδείκτες σου και τη πρόοδο σε αυτό το λογαριασμό.",
+          "quality": "Επανέφερε απο backup",
+          "title": "Ανέβασε τα δεδομένα σου"
+        }
+      },
+      "title": "Μετέφερε τα δεδομένα σου"
     },
     "upload": {
-      "title": "Ανέβασε τα δεδομένα σου",
-      "description": "Ανέβασε τα προηγουμένως κατεβασμένα δεδομένα για να επαναφέρεις τα αποθηκευμένα σου και τη πρόοδο σε αυτόν τον λογαριασμό.",
-      "status": {
-        "processing": "Επεξεργάζοντας τα δεδομένα...",
-        "error": "Αποτυχία μεταφοράς δεδομένων. 😿",
-        "success": "Η μεταφόρα δεδομένων ήταν επιτυχής! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Επέλεξε το αρχείο που θέλεις να ανεβάσεις",
-        "select": "Επέλεξε το αρχείο",
-        "change": "Άλλαξε το αρχείο",
-        "name": "Όνομα αρχείου"
-      },
-      "exportedOn": "Exported on",
-      "previewTitle": "Preview:",
       "button": {
-        "import": "Import data",
-        "processing": "Επεξεργάζοντας...",
-        "success": "Το Import ολοκληρώθηκε",
         "home": "Συνέχισε στην αρχική σελίδα",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Επέστρεψε"
+        "import": "Εισαγωγή δεδομένων",
+        "processing": "Επεξεργάζοντας...",
+        "saveLocal": "Αποθήκευση τοπικά"
+      },
+      "description": "Ανέβασε τα προηγουμένως κατεβασμένα δεδομένα για να επαναφέρεις τα αποθηκευμένα σου και τη πρόοδο σε αυτόν τον λογαριασμό.",
+      "exportedOn": "Εξαγωγή στις",
+      "file": {
+        "change": "Άλλαξε το αρχείο",
+        "description": "Επέλεξε το αρχείο που θέλεις να ανεβάσεις",
+        "select": "Επέλεξε το αρχείο"
+      },
+      "previewTitle": "Πρεμιέρα:",
+      "status": {
+        "error": "Αποτυχία μεταφοράς δεδομένων. 😿",
+        "processing": "Επεξεργάζοντας τα δεδομένα...",
+        "success": "Η μεταφόρα δεδομένων ήταν επιτυχής! 🎉",
+        "successLocal": "Τα δεδομένα σας έχουν αποθηκευτεί τοπικά! 🎉"
+      },
+      "title": "Ανέβασε τα δεδομένα σου"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "Ελέγξτε τη σύνδεσή σας στο διαδίκτυο"
     },
+    "install": {
+      "genericGuide": "Το πρόγραμμα περιήγησής σας δεν υποστηρίζει μια ερώτηση αυτόματης εγκατάστασης PWA.\nΜπορείτε ακόμα να εγκαταστήσετε χρησιμοποιώντας το μενού του προγράμματος περιήγησης (για παράδειγμα: \"Εγκατάσταση εφαρμογής\", \"Δημιουργία συντόμευσης\" ή \"Προσθήκη στη βάση σύνδεσης/Αρχική οθόνη\").",
+      "iosSafariGuide": "Για να εγκαταστήσετε το AlphaFlix ως εφαρμογή:\n\n1. Πατήστε το κουμπί Κοινή χρήση (στο τετράγωνο με ένα βέλος).\n2. Επιλέξτε «Προσθήκη στην αρχική οθόνη».\n3. Πατήστε Προσθήκη."
+    },
     "menu": {
-      "about": "Σχετικά με εμάς",
+      "desktop": "Ρυθμίσεις εφαρμογής",
       "logout": "Αποσύνδεση",
       "register": "Συγχρονισμός με το Cloud",
-      "settings": "Ρυθμίσεις",
-      "support": "Υποστήριξη",
-      "discover": "Ανακάλυψε",
-      "development": "Ανάπτυξη",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "Για να εγκαταστήσετε το AlphaFlix ως εφαρμογή:\n\n1. Πατήστε το κουμπί Κοινή χρήση (στο τετράγωνο με ένα βέλος).\n2. Επιλέξτε «Προσθήκη στην αρχική οθόνη».\n3. Πατήστε Προσθήκη.",
-      "genericGuide": "Το πρόγραμμα περιήγησής σας δεν υποστηρίζει μια ερώτηση αυτόματης εγκατάστασης PWA.\nΜπορείτε ακόμα να εγκαταστήσετε χρησιμοποιώντας το μενού του προγράμματος περιήγησης (για παράδειγμα: \"Εγκατάσταση εφαρμογής\", \"Δημιουργία συντόμευσης\" ή \"Προσθήκη στη βάση σύνδεσης/Αρχική οθόνη\")."
+      "settings": "Ρυθμίσεις"
     }
   },
   "notFound": {
     "badge": "Δεν βρέθηκε",
     "goHome": "Επιστροφή στην αρχική",
-    "reloadButton": "Ξαναπροσπάθησε",
     "message": "Ψάξαμε παντού: κάτω από τους κάδους, στην ντουλάπα, πίσω από το proxy, αλλά τελικά δεν μπορέσαμε να βρούμε τη σελίδα που ψάχνετε. ",
+    "reloadButton": "Ξαναπροσπάθησε",
     "title": "Δεν μπόρεσε να βρεθεί η σελίδα"
-  },
-  "downtimeNotice": {
-    "badge": "Προβλήματα",
-    "goHome": "Πήγαινε στην αρχική σελίδα",
-    "message": "Το AlphaFlix αντιμετωπίζει ξανά προβλημάτα με τους παρόχους,αν δεν μπορείς να βρεις ή να παίξεις κάτι παρακαλώ άλλαξε τη πηγή. Ανέμενε αυτό το πρόβλημα να συνεχίσει.",
-    "title": "Θέματα παρόχου"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Ακύρωση",
-      "confirm": "Χρησιμοποίησε το default setup",
-      "description": "Το default setup δεν έχει τα καλύτερα streams. Δεν θα έχεις τις καλύτερες πηγές!",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Είσαι σίγουρος;"
-    },
-    "extension": {
-      "back": "Επέστρεψε",
-      "explainer": "Χρησιμοποιώντας το browser extension , μπορείς να έχεις τα καλύτερα streams που προσφέρουμε , με μία απλή εγκατάσταση.👌",
-      "explainerIos": "Δυστυχώς , το browser extension δεν υποστηρίζεται στο iOS, πάτησε το <bold> Επιστροφή </bold> για να διαλέξεις άλλη επιλογή.",
-      "extensionHelp": "Εάν έχεις εγκαταστήσει το extension αλλά δεν εμφανίζεται , <bold> άνοιξε το extension μέσω του extension menu στον browser σου</bold> και ακολούθησε τα βήματα στην οθόνη .",
-      "linkChrome": "Εγκατέστησε το Chrome extension",
-      "linkFirefox": "Εγκατέστησε Firefox extension",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Έχεις εγκαταστήσει το extension στο Chrome αλλά δεν εμφανίζεται; Δοκίμασε να κάνεις reload τη σελίδα!",
-      "notDetectingAction": "Reload page",
-      "status": {
-        "disallowed": "Το extension δεν είναι διαθέσιμο σε αυτήν τη σελίδα (,,>﹏<,,)",
-        "disallowedAction": "Ενεργοποίησε το extension",
-        "failed": "Αποτυχία εύρεσης status",
-        "loading": "Περιμένοντας να κατεβάσεις το extension",
-        "outdated": "Η έκδοση του extension είναι παραχωρημένη",
-        "success": "Το extension δουλεύει όπως πρέπει!"
-      },
-      "submit": "Συνέχισε",
-      "title": "Ας ξεκινήσουμε με ένα extension"
-    },
-    "proxy": {
-      "back": "Επέστρεψε",
-      "explainer": "Με τη μέθοδο proxy , έχεις προσβαση σε εξαιρετικά streams , δημιουργώντας ένα proxy αυτοεξυπηρέτησης.",
-      "input": {
-        "errorConnection": "Αποτυχία σύνδεσης στο proxy",
-        "errorInvalidUrl": "Μη έγκυρο URL",
-        "errorNotProxy": "Θέλαμε proxy και βρήκαμε σελίδα",
-        "label": "Proxy URL",
-        "placeholder": "https://"
-      },
-      "link": "Μάθε πως να χρησιμοποιείς ένα proxy",
-      "submit": "Υπέβαλλε proxy",
-      "title": "Ας φτιάξουμε ένα νέο proxy"
-    },
-    "start": {
-      "explainer": "Για να έχεις τα καλύτερα streams , χρειάζεσαι να διαλέξεις ποιά μέθοδο streaming θες να χρησιμοποιήσεις.",
-      "moreInfo": {
-        "button": "Περισσότερες πληροφορίες",
-        "title": "Κατανόηση μιας ρύθμισης",
-        "explainer": {
-          "intro": "Το AlphaFlix δεν φιλοξενεί βίντεο. Βασίζεται σε ιστότοπους τρίτων για περιεχόμενο, επομένως πρέπει να επιλέξετε πώς συνδέεται με αυτούς τους ιστότοπους.",
-          "options": "Οι επιλογές σας:",
-          "extension": "1. Επέκταση (συνιστάται)",
-          "extensionDescription": "Η επέκταση σάς δίνει πρόσβαση στις περισσότερες πηγές. Λειτουργεί ως τοπικός διακομιστής μεσολάβησης και μπορεί να χειριστεί ιστότοπους που χρειάζονται ειδικά cookies ή κεφαλίδες για φόρτωση.",
-          "proxy": "2. Proxy",
-          "proxyDescription": "Το proxy συλλέγει μέσα από άλλους ιστότοπους. Παρακάμπτει τους περιορισμούς του προγράμματος περιήγησης (όπως το CORS) για να επιτρέπει τη διάσυρση.",
-          "default": "3. Προεπιλεγμένη ρύθμιση",
-          "defaultDescription": "Χρησιμοποιεί το εμφυτεύμενο proxy του AlphaFlix. Είναι η ευκολότερη επιλογή, αλλά μπορεί να είναι πιο αργό λόγω της κοινής χρήσης του εύρους ζώνης.",
-          "fedapi": {
-            "fedapi": "Προαιρετικό token UI για FED API (Febbox)",
-            "fedapiDescription": "Η δημιουργία του δικού σας λογαριασμού Febbox σας επιτρέπει να ξεκλειδώσετε το FED API, την καλύτερη μας πηγή με ποιότητα 4K, Dolby Atmos, το περισσότερο περιεχόμενο και τους καλύτερους (πιο γρήγορους) χρόνους φόρτωσης. Αυτό είναι το πολύ συνιστώμενο!"
-          },
-          "outro": "Αν έχετε περισσότερες ερωτήσεις για το πώς λειτουργεί αυτό, μη διστάσετε να ρωτήσετε στον <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "ή",
-        "default": {
-          "text": "Δεν θέλω καλής ποιότητας streams, χρησιμοποίησε το default setup."
-        },
-        "extension": {
-          "action": "Εγκατάστηση extension",
-          "description": "Εγκατέστησε το browser extension και έχε προσβαση στις καλύτερες πηγές , να θυμάσαι πως πρέπει να το ενεργοποιήσεις για αυτή τη σελίδα.",
-          "quality": "Η καλύτερη ποιότητα + Περισσότερες πηγές",
-          "title": "Browser extension"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Setup proxy",
-          "description": "Κάνε setup το proxy σε 5 λέπτα και έχε πρόσβαση σε εξαιρετικές πήγες...",
-          "quality": "Καλή ποιότητα",
-          "title": "Custom proxy"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Ας ετοιμάσουμε το setup σου με το AlphaFlix 🥳"
+      "cancel": "Ακύρωση"
     }
   },
   "overlays": {
@@ -785,24 +524,45 @@
       "short": "Επιστροφή"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "Αναμετάδοση στην συσκευή🎬"
+      "device": "συσκευή",
+      "to": "Μετάδοση σε {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Λήψη περισσότερης RAM...",
+      "2": "Μετατροπή καφεΐνης σε περιεχόμενο...",
+      "3": "Διδάσκοντας το χάμστερ να τρέχει πιο γρήγορα...",
+      "4": "Πείθει τα ηλεκτρόνια να κινούνται πιο γρήγορα...",
+      "5": "Σχεδόν εκεί... είπε κάθε μπάρα φόρτωσης ποτέ...",
+      "6": "Εύρεση του τηλεχειριστηρίου... περιμένετε, λάθος πρόβλημα...",
+      "7": "Μετρώντας αντίστροφα από το άπειρο...",
+      "8": "Προσομοίωση του μέλλοντος...",
+      "9": "Βλέποντας βίντεο με γάτες...",
+      "10": "Αποσπάται η προσοχή από GIF για γάτες...",
+      "11": "Περιμένετε μέχρι ο ασκούμενος να ξαναγεμίσει τον καφέ του...",
+      "12": "Έλεγχος αν είναι συνδεδεμένο...",
+      "13": "Απενεργοποιώντας και ξανά ενεργοποιώντας το...",
+      "14": "Μην πανικοβάλλεστε...",
+      "15": "Έρχεται χειμώνας...",
+      "16": "Σύνδεση στο Skynet...",
+      "17": "Όλα τα προγράμματα περιήγησής σας ανήκουν σε εμάς...",
+      "18": "Ψάχνετε για άπειρες απιθανότητες...",
+      "19": "Ανακαλύπτοντας νέους τρόπους για να σας κάνουν να περιμένετε...",
+      "20": "Ο χρόνος σας είναι πολύ σημαντικός για εμάς. Περιμένετε όσο σας αγνοούμε...",
+      "21": "Ακόμα πιο γρήγορο από το Windows Update...",
+      "22": "Γιατί δεν πιάνεις ένα σάντουιτς;"
     },
     "menus": {
+      "audio": {
+        "default": "Αθέτηση"
+      },
       "downloads": {
         "button": "Προσπάθεια λήψης",
-        "hlsDownloader": "Ή, μεταβείτε στον ιστότοπο <0>hls downloader</0> και επικολλήστε το URL της λίστας αναπαραγωγής από παρακάτω.",
+        "copyHlsPlaylist": "Αντιγραφή συνδέσμου λίστας αναπαραγωγής HLS",
         "disclaimer": "Οι λήψεις προέρχονται απευθείας από τον πάροχο. Το AlphaFlix δεν ελέγχει τον τρόπο με τον οποίο παρέχονται οι λήψεις.",
-        "copyHlsPlaylist": "Copy HLS playlist link",
         "downloadSubtitle": "Κατέβασμα τρέχοντος υπότιτλου",
         "downloadVideo": "Λήψη βίντεο",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "Οι λήψεις προέρχονται απευθείας από τον πάροχο. Το AlphaFlix δεν ελέγχει τον τρόπο με τον οποίο παρέχονται οι λήψεις. <br /><br />Παρακαλώ λάβετε υπόψη ότι κατεβάζετε μια λίστα αναπαραγωγής HLS, <bold>η οποία προορίζεται για χρήστες που είναι εξοικειωμένοι με την προηγμένη ροή πολυμέσων</bold>. Δοκίμασε διαφορετικές πηγές για διαφορετικά formats.",
+        "hlsDownloader": "Ή, μεταβείτε στον ιστότοπο <0>hls downloader</0> και επικολλήστε το URL της λίστας αναπαραγωγής από παρακάτω.",
         "onAndroid": {
           "1": "Για να κάνετε λήψη σε συσκευή Android, κάντε κλικ στο κουμπί λήψης και, στη νέα σελίδα, <bold>πατήστε παρατεταμένα</bold> στο βίντεο και, στη συνέχεια, επιλέξτε <bold>αποθήκευση</bold>.",
           "shortTitle": "Λήψη / Android",
@@ -824,57 +584,47 @@
         "button": "Επεισόδια",
         "emptyState": "Δεν υπάρχουν επεισόδια σε αυτή τη σεζόν, επιστρέψτε αργότερα (sorry :3)...",
         "episodeBadge": "Ε{{episode}}",
+        "favorites": "Αγαπημένα",
         "loadingError": "Σφάλμα φόρτωσης της σεζόν",
         "loadingList": "Φόρτωση...",
         "loadingTitle": "Φόρτωση...",
-        "unairedEpisodes": "Ένα ή περισσότερα επεισόδια αυτής της σεζόν έχουν απενεργοποιηθεί επειδή δεν έχουν προβληθεί ακόμα.",
-        "seasons": "Σεζόν",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "markAsFavorite": "Επισήμανση ως αγαπημένου",
+        "markAsUnwatched": "Επισημάνετε ως απαρατήρητο",
+        "markAsWatched": "Επισήμανση ως παρακολούθησης",
+        "noFavorites": "Δεν υπάρχουν ακόμα αγαπημένα επεισόδια. Αστέριτε επεισόδια για να τα προσθέσετε στα αγαπημένα σας!",
+        "showLess": "Δείξτε λιγότερα",
+        "showMore": "Εμφάνιση περισσότερων",
         "specials": "Ειδικά"
       },
       "playback": {
-        "speedLabel": "Ταχύτητα αναπαραγωγής",
-        "title": "Ρυθμίσεις αναπαραγωγής",
-        "disabled": "(Disabled in watch party)",
+        "disabled": "(Απενεργοποιημένο στο πάρτι ρολογιού)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "Ταχύτητα αναπαραγωγής",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Ρυθμίσεις αναπαραγωγής"
       },
       "quality": {
+        "auto": "Αυτο",
         "automaticLabel": "Αυτόματη ποιότητα",
         "hint": "Μπορείτε να δοκιμάσετε <0>να αλλάξετε πηγή</0> για να έχετε διαφορετικές επιλογές ποιότητας.",
         "iosNoQuality": "Λόγω των περιορισμών που έχει ορίσει η Apple, η επιλογή ποιότητας δεν είναι διαθέσιμη σε συσκευές iOS για αυτή την πηγή. Μπορείτε να δοκιμάσετε <0>να αλλάξετε πηγή</0> για να έχετε διαφορετικές επιλογές ποιότητας.",
-        "title": "Ποιότητα",
-        "auto": "Auto"
+        "title": "Ποιότητα"
       },
       "settings": {
+        "audioItem": "Ήχος",
         "downloadItem": "Λήψη",
         "enableSubtitles": "Ενεργοποίηση υποτίτλων",
-        "experienceSection": "Εμπειρία θέασης",
         "playbackItem": "Ρυθμίσεις αναπαραγωγής",
-        "audioItem": "Ήχος",
         "qualityItem": "Ποιότητα",
         "sourceItem": "Πηγές βίντεο",
-        "subtitleItem": "Ρυθμίσεις υποτίτλων",
-        "videoSection": "Ρυθμίσεις βίντεο"
+        "subtitleItem": "Ρυθμίσεις υποτίτλων"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "Υπήρξε σφάλμα κατά την προσπάθεια εύρεσης βίντεο, παρακαλούμε δοκιμάστε μια άλλη πηγή.",
           "title": "Το scrape απέτυχε"
         },
+        "findNextSource": "Βρείτε την επόμενη πηγή",
         "noEmbeds": {
           "text": "Δεν μπορέσαμε να βρούμε κανένα embed, παρακαλούμε δοκιμάστε μια άλλη πηγή.",
           "title": "Δεν βρέθηκε κανένα embed"
@@ -884,72 +634,53 @@
           "title": "Δεν υπάρχει stream"
         },
         "title": "Πηγές",
-        "unknownOption": "Άγνωστο",
-        "findNextSource": "Find next source"
+        "unknownOption": "Άγνωστο"
       },
       "subtitles": {
+        "autoSelectChoice": "Αυτόματη επιλογή",
+        "autoSelectDifferentChoice": "Πατήστε ξανά για αυτόματη επιλογή διαφορετικών υπότιτλων",
+        "clearSecondary": "Διαγραφή δευτερεύοντος υπότιτλου",
         "customChoice": "Επιλογή υποτίτλων από αρχείο",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Προσαρμογή",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "Είδα λεζάντα",
+        "delayLate": "Ακούστηκε ήχος",
+        "doubleClickToCopy": "Κάντε διπλό κλικ για να αντιγράψετε δεδομένα υποτίτλων",
+        "dropSubtitleFile": "Άφησε το αρχείο υποτίτλων εδώ!>_<",
+        "dualSub": "Διπλοί υπότιτλοι",
+        "dualSubDesc": "Επιλέξτε την ίδια μορφή (SRT, VTT...) & πάροχο (OpenSubs...) για καλύτερο συγχρονισμό",
+        "dualSubHint": "Επιλέξτε μια γλώσσα για τον δευτερεύοντα υπότιτλο (εμφανίζεται πάνω από τον κύριο)",
+        "empty": "Δεν υπάρχουν υπότιτλοι για αυτό.",
+        "loadingExternal": "Φόρτωση εξωτερικών υπότιτλων...",
+        "loadingExternalProgress": "Φόρτωση εξωτερικών υπότιτλων... ({{progress}}%)",
+        "matchScoreLabel": "Ταίριασμα ~{{score}}%",
+        "notFound": "Καμία από τις διαθέσιμες επιλογές σου , δεν ταιριάζουν με την αναζήτηση σου",
         "offChoice": "Σβηστό",
-        "onChoice": "Ενεργοποιημένο",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Ψάξε για υπότιτλους",
-        "OpenSubtitlesChoice": "OpenSubtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "Επικόλληση δεδομένων υποτίτλων",
+        "previewLabel": "Προεπισκόπηση υπότιτλων:",
+        "primary": "Πρωταρχικός",
+        "refresh": "Ανανέωση εξωτερικών υπότιτλων",
+        "refreshing": "Δροσιστικός...",
+        "secondary": "Δευτερεύων",
+        "selectingSecondary": "Επιλογή δευτερεύοντος υπότιτλου",
         "settings": {
           "backlink": "Προσαρμοσμένοι υπότιτλοι",
           "delay": "Καθυστέρηση υποτίτλων",
           "fixCapitals": "Επιδιόρθωση κεφαλαιοποίησης"
         },
         "title": "Υπότιτλοι",
-        "unknownLanguage": "Άγνωστο",
-        "dropSubtitleFile": "Άφησε το αρχείο υποτίτλων εδώ!>_<",
-        "scrapeButton": "Βρες υπότιτλους",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "Δεν υπάρχουν υπότιτλοι για αυτό.",
-        "notFound": "Καμία από τις διαθέσιμες επιλογές σου , δεν ταιριάζουν με την αναζήτηση σου",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "Αντίγραφο",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "Μετάφραση από {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Φόρτωση εξωτερικών υπότιτλων... ({{progress}}%)",
-        "matchScoreLabel": "Ταίριασμα ~{{score}}%"
+        "unknownLanguage": "Άγνωστο",
+        "useNativeSubtitles": "Εγγενείς υπότιτλοι βίντεο",
+        "useNativeSubtitlesDescription": "Μετάδοση υπότιτλων για εγγενή πλήρη οθόνη και PiP"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Η λειτουργία Watch Party μπορεί να μην είναι διαθέσιμη για μερικές πηγές.",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
+        "watchpartyItem": "Παρακολουθήστε το Party"
       }
     },
     "metadata": {
-      "api": {
-        "text": "Δεν ήταν δυνατή η φόρτωση των μεταδεδομένων του API, ελέγξτε τη σύνδεσή σας στο διαδίκτυο.",
-        "title": "Αποτυχία φόρτωσης μεταδεδομένων API"
-      },
-      "legal": {
-        "badge": "Αφαιρέθηκε",
-        "text": "Αυτό το περιεχόμενο δεν είναι πλέον διαθέσιμο εξαιτίας κάποιας παρατήρησης για δικαίωμα πνευματικού περιεχομένου.😨",
-        "title": "Το περιεχόμενο έχει αφαιρεθεί"
-      },
       "extensionPermission": {
         "badge": "Λείπει η άδεια",
         "button": "Χρησιμοποίησε το extension",
@@ -962,6 +693,11 @@
         "text": "Δεν ήταν δυνατή η φόρτωση των μεταδεδομένων του πολυμέσου από την TMDB. Ελέγξτε αν η TMDB είναι εκτός λειτουργίας ή αποκλεισμένη στη σύνδεσή σας στο διαδίκτυο.",
         "title": "Αποτυχία φόρτωσης μεταδεδομένων"
       },
+      "legal": {
+        "badge": "Αφαιρέθηκε",
+        "text": "Αυτό το περιεχόμενο δεν είναι πλέον διαθέσιμο εξαιτίας κάποιας παρατήρησης για δικαίωμα πνευματικού περιεχομένου.😨",
+        "title": "Το περιεχόμενο έχει αφαιρεθεί"
+      },
       "notFound": {
         "badge": "Δεν βρέθηκε",
         "homeButton": "Επιστροφή στην αρχική σελίδα",
@@ -970,18 +706,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Ξαναπαίξε",
       "next": "Επόμενο επεισόδιο",
-      "nextSeason": "Επόμενη σεζόν"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "Επόμενη σεζόν",
+      "replay": "Ξαναπαίξε"
     },
     "playbackError": {
+      "autoResumeText": "Παρουσιάστηκε σφάλμα κατά την αναπαραγωγή των μέσων 😖. Αυτόματη δοκιμή άλλων πηγών...",
       "badge": "Σφάλμα αναπαραγωγής",
+      "copyDebugInfo": "Αντιγραφή πληροφοριών εντοπισμού σφαλμάτων",
+      "debugInfo": "Ελέγξτε την κονσόλα για περισσότερες λεπτομέρειες.",
       "errors": {
         "errorAborted": "Η λήψη των πολυμέσων διακόπηκε κατόπιν αιτήματος του χρήστη.",
         "errorDecode": "Παρά το γεγονός ότι προηγουμένως είχε διαπιστωθεί ότι μπορεί να χρησιμοποιηθεί, προέκυψε σφάλμα κατά την αποκωδικοποίηση του πολυμέσου, με αποτέλεσμα την εμφάνιση σφάλματος.",
@@ -989,37 +722,35 @@
         "errorNetwork": "Παρουσιάστηκε κάποιο σφάλμα δικτύου που εμπόδισε την επιτυχή ανάκτηση των πολυμέσων, παρόλο που προηγουμένως ήταν διαθέσιμα.",
         "errorNotSupported": "Το αντικείμενο πολυμέσων ή ο πάροχος πολυμέσων δεν υποστηρίζεται."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "Επιστροφή στην αρχική",
-      "resumeButton": "Try next sources",
+      "resumeButton": "Δοκιμάστε τις επόμενες πηγές",
       "text": "Υπήρξε σφάλμα κατά την προσπάθεια αναπαραγωγής του πολυμέσου. Προσπαθήστε ξανά με άλλη πηγή!",
       "title": "Αποτυχία αναπαραγωγής βίντεο!"
     },
+    "resume": {
+      "description": "Αυτό το επεισόδιο παρακολουθήθηκε {{percentage}}%.",
+      "restart": "Επανεκκίνηση",
+      "resume": "Περίληψη",
+      "title": "Συνέχεια παρακολούθησης;"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "Το extension είναι απενεργοποιημένο",
+        "enableExtension": "Ενεργοποίησε το extension",
+        "homeButton": "Πήγαινε στην αρχική σελίδα",
+        "text": "Έχεις εγκαταστήσει το AlphaFlix extension. Για να το χρησιμοποιήσεις πρέπει να το ενεργοποιήσεις για αυτό το site.",
+        "title": "Παρακαλώ ενεργοποίησε το extension"
+      },
       "items": {
-        "failure": "Παρουσιάστηκε σφάλμα",
-        "timeout": "Timed out (15s)",
-        "notFound": "Δεν έχει το βίντεο",
         "pending": "Έλεγχος για βίντεο..."
       },
       "notFound": {
         "badge": "Δεν βρέθηκε",
         "detailsButton": "Εμφάνιση λεπτομερειών",
-        "homeButton": "Επιστροφή στην αρχική",
         "discoverButton": "Ανακάλυψε κι άλλα",
+        "homeButton": "Επιστροφή στην αρχική",
         "text": "Ψάξαμε στους παρόχους μας και δεν μπορέσαμε να βρούμε το πολυμέσο που αναζητάτε! Δεν φιλοξενούμε τα πολυμέσα και δεν έχουμε κανέναν έλεγχο για το τι είναι διαθέσιμο. Παρακαλούμε κάντε κλικ στο 'Εμφάνιση λεπτομερειών' παρακάτω για περισσότερες λεπτομέρειες.",
-        "title": "Δεν μπορέσαμε να το βρούμε αυτό",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Το extension είναι απενεργοποιημένο",
-        "homeButton": "Πήγαινε στην αρχική σελίδα",
-        "enableExtension": "Ενεργοποίησε το extension",
-        "title": "Παρακαλώ ενεργοποίησε το extension",
-        "text": "Έχεις εγκαταστήσει το AlphaFlix extension. Για να το χρησιμοποιήσεις πρέπει να το ενεργοποιήσεις για αυτό το site."
+        "title": "Δεν μπορέσαμε να το βρούμε αυτό"
       },
       "tips": {
         "1": "Πατήστε το εικονίδιο γραναζιού για να εναλλάξετε πηγές!",
@@ -1033,182 +764,126 @@
         "9": "Χρησιμοποιήστε τα [ και ] για να προσαρμόσετε το χρόνο των υποτίτλων!"
       }
     },
+    "segment": {
+      "credits": "Πιστώσεις",
+      "intro": "Εισαγωγή",
+      "recap": "Βουλώνω πάλι"
+    },
+    "skipTime": {
+      "confidence": "εμπιστοσύνη",
+      "connectApiKeyMessage": "Για να υποβάλετε νέα τμήματα, εισαγάγετε το κλειδί API TheIntroDB στις ρυθμίσεις συνδέσεων",
+      "credits": "Παράλειψη πιστώσεων",
+      "endOfVideo": "Τέλος",
+      "endsAt": "Λήγει στις {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Ματαίωση",
+          "description": "Συνεισφέρετε στο TheIntroDB υποβάλλοντας ακριβείς χρονικές σημάνσεις τμήματος. Όλες οι υποβολές γίνονται δεκτές από την κοινότητα πριν δημοσιευτούν.",
+          "endTimeLabel": "Τέλος (α)",
+          "error": {
+            "endTime": "Απαιτείται ώρα λήξης",
+            "mediaInfo": "Οι πληροφορίες πολυμέσων δεν είναι διαθέσιμες",
+            "segment": "Δεν έχει επιλεγεί τμήμα",
+            "startTime": "Απαιτείται χρόνος έναρξης",
+            "submission": "Σφάλμα κατά την υποβολή χρονικών σφραγίδων",
+            "tidbKey": "Το κλειδί API TIDB δεν έχει οριστεί"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Τουλάχιστον 5 δευτερόλεπτα εάν παρέχεται τέλος. Μπορεί να επεκταθεί στο τέλος του μέσου.",
+              "endDesc": "Προαιρετικό - αφήστε κενό εάν οι πιστώσεις τρέχουν μέχρι το τέλος του αρχείου.",
+              "excludeDesc": "Εξαίρεση σκηνών μεσαίας ή μετά τη συναυλία. μόνο το κύριο πιστωτικό ρολό.",
+              "startDesc": "Υποχρεωτικό - όταν ξεκινούν οι πιστώσεις κλεισίματος (π.χ. όταν εμφανίζεται το πρώτο κείμενο πίστωσης).",
+              "whenToTitle": "Οδηγός χρονοσήμανσης πιστώσεων:"
+            },
+            "durationDesc": "Ελάχιστο 5 δευτερόλεπτα, εάν παρέχεται τέλος",
+            "durationLabel": "Διάρκεια:",
+            "endDesc": "Προαιρετικό - κενό εάν επεκτείνεται μέχρι το τέλος",
+            "endLabel": "Τέλος:",
+            "excludeDesc": "Σκηνές μετά τις πιστώσεις",
+            "excludeLabel": "Αποκλείω:",
+            "intro": {
+              "durationDesc": "Οι περισσότερες εισαγωγές είναι 30–90 δευτερόλεπτα. Τουλάχιστον 5 δευτερόλεπτα εάν έχουν οριστεί και η αρχή και το τέλος.",
+              "endDesc": "Υποχρεωτικό - όταν τελειώνει η εισαγωγή (συνήθως όταν ξεκινά η κάρτα τίτλου ή το κύριο επεισόδιο).",
+              "excludeDesc": "Μην συμπεριλάβετε ψυχρά ανοίγματα ή προ-εισαγωγικές σκηνές. μόνο η κύρια ακολουθία τίτλου.",
+              "startDesc": "Προαιρετικά - αφήστε κενό εάν η εισαγωγή ξεκινά στην αρχή του επεισοδίου.",
+              "whenToTitle": "Οδηγός εισαγωγής χρονικών σφραγίδων:"
+            },
+            "preview": {
+              "durationDesc": "Η διάρκεια της προεπισκόπησης ποικίλλει. Τουλάχιστον 5 δευτερόλεπτα.",
+              "endDesc": "Προαιρετικό - αφήστε το κενό εάν η προεπισκόπηση τελειώνει στο τέλος του μέσου.",
+              "excludeDesc": "Η προεπισκόπηση είναι συνήθως 15-90 δευτερόλεπτα στο τέλος του επεισοδίου προεπισκόπησης του επόμενου επεισοδίου.",
+              "startDesc": "Απαιτείται - όταν ξεκινά η προεπισκόπηση (π.χ. όταν εμφανίζεται το κείμενο προεπισκόπησης).",
+              "whenToTitle": "Προεπισκόπηση οδηγού χρονικών σημάνσεων:"
+            },
+            "recap": {
+              "durationDesc": "Οι επαναλήψεις ποικίλλουν σε μήκος. Τουλάχιστον 5 δευτερόλεπτα εάν έχουν οριστεί και η αρχή και το τέλος.",
+              "endDesc": "Υποχρεωτικό - όταν τελειώνει η ανακεφαλαίωση και ξεκινά το νέο περιεχόμενο.",
+              "excludeDesc": "Μόνο το τμήμα \"προηγουμένως ενεργό\" ή ανακεφαλαιωτικό. μην περιλαμβάνουν την εισαγωγή ή τις νέες σκηνές.",
+              "startDesc": "Προαιρετικό - αφήστε το κενό εάν η ανακεφαλαίωση ξεκινά στην αρχή του επεισοδίου.",
+              "whenToTitle": "Ανακεφαλαίωση οδηγού χρονικών σφραγίδων:"
+            },
+            "startDesc": "Υποχρεωτικό - όταν οι πιστώσεις αρχίζουν να κυλά",
+            "startLabel": "Αρχή:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 ή 210 (αφήστε κενό για το τέλος του μέσου)",
+              "intro": "3:30 ή 210 (απαιτείται)",
+              "preview": "3:30 ή 210 (αφήστε κενό για το τέλος του μέσου)",
+              "recap": "3:30 ή 210 (απαιτείται)"
+            },
+            "start": {
+              "credits": "2:30 ή 150 (απαιτείται)",
+              "intro": "2:30 ή 150 (αφήστε κενό για αρχή στην αρχή)",
+              "preview": "2:30 ή 150 (απαιτείται)",
+              "recap": "2:30 ή 150 (αφήστε κενό για αρχή στην αρχή)"
+            }
+          },
+          "segmentType": "Τύπος τμήματος",
+          "startTimeLabel": "Έναρξη (ες)",
+          "submit": "Υποτάσσομαι",
+          "submitting": "Υποβολή...",
+          "success": {
+            "title": "Η υποβολή ήταν επιτυχής! Ευχαριστώ!"
+          },
+          "title": "Υποβάλετε Timestamps στο TheIntroDB",
+          "types": {
+            "credits": "Πιστώσεις",
+            "intro": "Εισαγωγή",
+            "preview": "Πρεμιέρα",
+            "recap": "Βουλώνω πάλι"
+          },
+          "whenToDesc": "Εισαγάγετε χρονικές σημάνσεις σε δευτερόλεπτα (π.χ. 150), μορφή mm:δδ (π.χ. 2:30) ή μορφή ωω:λλ:δδ (π.χ. μορφή 1:42:20). Θα μετατρέψουμε αυτόματα τη μορφή για εσάς.",
+          "whenToTitle": "Οδηγός χρονοσήμανσης:"
+        },
+        "title": "Ήταν σωστή αυτή η παράκαμψη;"
+      },
+      "intro": "Παράλειψη εισαγωγής",
+      "noSegments": "Δεν υπάρχουν διαθέσιμα τμήματα παράβλεψης",
+      "recap": "Παράλειψη Ανακεφαλαίωση",
+      "skipSegments": "Παράλειψη τμημάτων",
+      "startsAt": "Ξεκινά στις {{time}}",
+      "submissions": "{{count}} υποβολές",
+      "submitSegment": "Υποβολή τμήματος",
+      "timeUnknown": "Άγνωστος χρόνος"
+    },
     "time": {
       "regular": "{{timeWatched}}/{{duration}}",
       "remaining": "{{timeLeft}} απέμεινε • Ολοκλήρωση στις {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Υποστήριξη",
-    "text": "Το AlphaFlix είναι σχεδιασμένο να είναι όσο το δυνατόν πιο φιλικό προς τους χρήστες . Όμως , κάποιοι εξακολοθούν να έχουν ερωτήσεις και προβλήματα. Αυτή η σελίδα θα σε βοηθήσει να αντιμετωπίσεις αυτά τα ζητήματα",
-    "q1": {
-      "body": "Μπορείς να μπεις στον official <0>AlphaFlix fluxer server</0> και να ρωτήσεις εκεί τις ερωτήσεις σου ή να στείλεις email στη παρακάτω διεύθηνση.",
-      "title": "που μπορώ να βρω βοήθεια;"
-    },
-    "q2": {
-      "body": "Έχουμε <0>GitHub</0> όπου μπόρεις να δημιουργήσεις νεα λεπτομερές issue στο repositort μας. Ακόμα, έαν το επιιυμείς , μπορείς να δημιουργήσεις ένα pull request για να φτιάξεις το πρόβλημα μόνος σου.",
-      "title": "Πού μπορώ να αναφέρω κάποιο bug ή πρόβλημα;"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "Το AlphaFlix δεν έπεσε από τη καρυδιά, φτιάχθηκε κυρίως από ένα άτομο (ένα πολύ επικό άτομο).",
-    "q1": {
-      "body": "Μπορείς να μπεις στον official <0>AlphaFlix fluxer server</0> και να ρωτήσεις εκεί τις ερωτήσεις σου ή να στείλεις email στη παρακάτω διεύθηνση.",
-      "title": "που μπορώ να βρω βοήθεια;"
-    },
-    "q2": {
-      "body": "Έχουμε <0>GitHub</0> όπου μπόρεις να δημιουργήσεις νεα λεπτομερές issue στο repositort μας. Ακόμα, έαν το επιιυμείς , μπορείς να δημιουργήσεις ένα pull request για να φτιάξεις το πρόβλημα μόνος σου.",
-      "title": "Πώς μπορώ να αναφέρω κάποιο bug ή πρόβλημα;"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA (νόμος περί πνευματικών δικαιωμάτων)"
-    },
-    "loadingApp": "Φόρτωση εφαρμογής",
-    "loadingUser": "Φόρτωση του προφίλ σας",
     "loadingUserError": {
+      "disconectCancel": "Ματαίωση",
+      "disconnectConfirm": "Επιβεβαιώνω",
+      "disconnectMessage": "Αποσυνδεθείτε από τον διακομιστή λογαριασμού, διατηρώντας τα πιο πρόσφατα τοπικά δεδομένα. Οι αλλαγές και το περιεχόμενο που παρακολουθήσατε δεν θα συγχρονιστούν μέχρι να συνδεθείτε ξανά.",
+      "disconnectTitle": "Αποσύνδεση από το backend;",
       "logout": "Αποσύνδεση",
-      "reset": "Επαναφορά προσαρμοσμένου διακομιστή",
-      "disconnect": "Disconnect from backend",
-      "text": "Απέτυχε η φόρτωση του προφίλ σας",
       "reload": "Άνανέωση",
-      "textWithReset": "Αποτυχία φόρτωσης του προφίλ σας από τον προσαρμοσμένο διακομιστή σας, θα θέλετε να επιστρέψετε στον προεπιλεγμένο διακομιστή;",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reset": "Επαναφορά προσαρμοσμένου διακομιστή"
     },
     "migration": {
       "failed": "Απέτυχε η μεταφορά των δεδομένων σας.😿",
@@ -1216,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Όνομα συσκευής",
-        "deviceNamePlaceholder": "Προσωπικό τηλέφωνο",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Επεξεργασία",
-        "logoutButton": "Αποσύνδεση"
-      },
-      "admin": {
-        "title": "Πάνελ για διαχειριστές",
-        "text": "Χρησιμοποίησε εργαλεία για να τεστάρεις τη κατάσταση του AlphaFlix."
+        "logoutButton": "Αποσύνδεση",
+        "nicknameLabel": "Παρατσούκλι",
+        "nicknamePlaceholder": "Εισαγάγετε το ψευδώνυμό σας"
       },
       "actions": {
         "delete": {
@@ -1248,26 +907,26 @@
           "text": "Η ενέργεια αυτή είναι μη αναστρέψιμη. Όλα τα δεδομένα θα διαγραφούν και τίποτα δεν μπορεί να ανακτηθεί.",
           "title": "Διαγραφή λογαριασμού"
         },
-        "migration": {
-          "title": "Μεταφόρα λογαριασμού",
-          "text": "Μετέφερε τον λογαριασμό σου σε έναν νέο sever ή κατέβασε τα δεδομένα σου.",
-          "button": "Μεταφορά λογαριασμού"
-        },
-        "title": "Ενέργειες",
         "logoutAllDevices": {
-          "title": "Τερματισμός όλων των συνεδριών",
+          "button": "Αποσύνδεση από όλες τις συσκευές",
           "text": "Αυτό θα σας αποσυνδέσει από όλες τις συσκευές που συνδέονται με τον λογαριασμό σας.",
-          "button": "Αποσύνδεση από όλες τις συσκευές"
-        }
+          "title": "Τερματισμός όλων των συνεδριών"
+        },
+        "migration": {
+          "button": "Μεταφορά λογαριασμού",
+          "text": "Μετέφερε τον λογαριασμό σου σε έναν νέο sever ή κατέβασε τα δεδομένα σου.",
+          "title": "Μεταφόρα λογαριασμού"
+        },
+        "title": "Ενέργειες"
       },
       "devices": {
         "deviceNameLabel": "Όνομα συσκευής",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Αποτυχία φόρτωσης συνεδριών",
+        "lastActive": "Τελευταία ενεργή δραστηριότητα: {{date}}",
+        "loggedInAt": "Συνδεθήκατε στο: {{date}}",
         "removeDevice": "Αφαίρεση",
         "title": "Συσκευές",
-        "lastActive": "Τελευταία ενεργή δραστηριότητα: {{date}}",
-        "loggedInAt": "Συνδεθήκατε στο: {{date}}"
+        "unknownDevice": "Άγνωστη συσκευή, σφάλμα αποκρυπτογράφησης ονόματος"
       },
       "profile": {
         "finish": "Ολοκλήρωση της επεξεργασίας",
@@ -1283,377 +942,213 @@
       },
       "title": "Λογαριασμός"
     },
+    "all": {
+      "title": "Όλες οι Ρυθμίσεις"
+    },
     "appearance": {
       "activeTheme": "Ενεργός",
-      "themes": {
-        "blue": "Μπλε",
-        "custom": "Custom",
-        "default": "Προεπιλογή",
-        "gray": "Γκρι",
-        "red": "Κόκκινο",
-        "teal": "Πετρόλ",
-        "classic": "Κλασσικό",
-        "green": "Πράσινο",
-        "mocha": "Μόκα",
-        "pink": "Ροζ",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Οξύ",
-        "spark": "Σπίθα",
-        "grape": "Σταφύλι",
-        "spiderman": "Spiderman",
-        "forest": "Δάσος",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "Πρωταρχικός",
+        "secondary": "Δευτερεύων",
+        "tertiary": "Τριτογενής"
       },
-      "title": "Εμφάνιση",
       "options": {
+        "carouselView": "Θέα καρουζέλ",
+        "carouselViewDescription": "Εμφανίστε τις ενότητες που παρακολουθείτε αυτήν τη στιγμή και προσθέστε σελιδοδείκτες ως καρουζέλ αντί για πλέγμα. Απενεργοποιημένο από προεπιλογή.",
+        "carouselViewLabel": "Θέα καρουζέλ",
         "discover": "Τμήμα ανακάλυψης",
         "discoverDescription": "Δείξε το Τμήμα ανακάλυψης στην αρχική σελίδα κάτω από το αποθηκευμένο περιεχόμενο. Ενεργοποιημένο από προεπιλογή.",
         "discoverLabel": "Τμήμα ανακάλυψης",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
+        "featured": "Επιλεγμένα μέσα",
+        "featuredDescription": "Δείξτε ένα καρουζέλ με επιλεγμένες ταινίες και εκπομπές στο επάνω μέρος της αρχικής σας σελίδας! Απενεργοποιημένο από προεπιλογή.",
+        "featuredLabel": "Επιλεγμένα μέσα",
+        "forceCompactEpisodeView": "Επιβολή συμπαγούς προβολής επεισοδίου",
+        "forceCompactEpisodeViewDescription": "Αναγκάστε το καρουσέλ επεισοδίου στο πρόγραμμα αναπαραγωγής να χρησιμοποιήσει την \"κλασική\" συμπαγή κατακόρυφη προβολή. Απενεργοποιημένο από προεπιλογή.",
+        "forceCompactEpisodeViewLabel": "Συμπαγείς επεισόδια",
+        "homeSectionOrder": "Παραγγελία ενότητας σπιτιού",
+        "homeSectionOrderDescription": "Σύρετε και αποθέστε για να αναδιατάξετε τις ενότητες παρακολούθησης και σελιδοδεικτών στην αρχική σας σελίδα. Η ομαδική παραγγελία μπορεί να τροποποιηθεί από την αρχική σελίδα.",
+        "homeSectionOrderGroups": "Αναδιάταξη ομάδων σελιδοδεικτών",
+        "logos": "Λογότυπα εικόνων",
+        "logosDescription": "Εμφάνιση λογότυπων εικόνων αντί για τίτλους κειμένου στην ενότητα λεπτομερειών τύπου και χαρακτηριστικών. Ενεργοποιημένο από προεπιλογή.",
+        "logosLabel": "Λογότυπα εικόνων",
+        "logosNotice": "Τις περισσότερες φορές, τα λογότυπα είναι μόνο αγγλικά. Άλλες γλώσσες μπορεί να θέλουν να το απενεργοποιήσουν!",
+        "minimalCards": "Ελάχιστες κάρτες",
+        "minimalCardsDescription": "Απόκρυψη περιεχομένου κειμένου (τίτλος, τύπος, έτος) σε κάρτες πολυμέσων, εμφανίζοντας μόνο την εικόνα της αφίσας.",
+        "minimalCardsLabel": "Ελάχιστες κάρτες",
         "modal": "Λεπτομέρειες modal",
         "modalDescription": "Εμφάνιση των λεπτομερειών όταν κάνετε κλικ σε μια κάρτα πολυμέσων αντί να μεταβείτε στη σελίδα παρακολούθησης. Απαιτείται διακομιστής μεσολάβησης ή επέκταση για το τρέιλερ. Απενεργοποιημένο από προεπιλογή.",
         "modalLabel": "Λεπτομέρειες modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "pauseOverlay": "Παύση επικάλυψης",
+        "pauseOverlayDescription": "Εμφάνιση επικάλυψης τίτλου/λογότυπου και περιγραφής όταν το πρόγραμμα αναπαραγωγής είναι σε παύση και αδράνεια.",
+        "pauseOverlayLabel": "Παύση επικάλυψης"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Σελιδοδείκτες",
+        "watching": "Παρακολούθηση επί του παρόντος"
+      },
+      "themes": {
+        "acid": "Οξύ",
+        "autumn": "Φθινόπωρο",
+        "blue": "Μπλε",
+        "christmas": "Χριστούγεννα",
+        "classic": "Κλασσικό",
+        "cobalt": "Κοβάλτιο",
+        "custom": "Εθιμο",
+        "default": "Προεπιλογή",
+        "ember": "Χόβολη",
+        "forest": "Δάσος",
+        "frost": "Παγωνιά",
+        "grape": "Σταφύλι",
+        "gray": "Γκρι",
+        "green": "Πράσινο",
+        "hulk": "Σκάφος",
+        "mocha": "Μόκα",
+        "noir": "Noir",
+        "pink": "Ροζ",
+        "popsicle": "Popsicle",
+        "red": "Κόκκινο",
+        "spark": "Σπίθα",
+        "spiderman": "Spiderman",
+        "teal": "Πετρόλ",
+        "wolverine": "Σαρκοφάγο ζώο του βορρά"
+      },
+      "title": "Εμφάνιση"
     },
     "connections": {
       "server": {
-        "description": "Αν θέλετε να συνδεθείτε σε ένα προσαρμοσμένο backend για την αποθήκευση των δεδομένων σας, ενεργοποιήστε το και παραχωρήστε τη διεύθυνση URL. <0> Οδηγίες.</0>",
-        "label": "Προσαρμοσμένος διακομιστής",
-        "urlLabel": "Διεύθυνση URL προσαρμοσμένου διακομιστή",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0> Μετέφερε τα δεδομένα μου</0> σε νέο server.",
-          "link": "Μετέφερε τα δεδομένα μου"
-        },
-        "documentation": "Τεκμηρίωση backend",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "Ετοίμασε το setup",
-        "errorStatus": {
-          "description": "Φαίνεται ότι ένα ή περισσότερα πράγματα σε αυτό το setup χρειάζονται τη προσοχή σου.",
-          "title": "Κάτι χρειάζεται τη προσοχή σου 😱"
-        },
-        "itemError": "Κάτι πάει λαθος με αυτή τη ρύθμιση. Ξανάκανε το setup για να το φτιάξεις . (ᴗ_ ᴗ。)",
-        "items": {
-          "default": "Default setup",
-          "extension": "Extension",
-          "proxy": "Custom proxy",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Ξανακάνε το setup",
-        "successStatus": {
-          "description": "Όλα είναι έτοιμα , ξεκίνα να βλέπεις ό,τι αγαπάς! (๑>◡<๑)",
-          "title": "Όλα είναι έτοιμα!"
-        },
-        "unsetStatus": {
-          "description": "Παρακαλώ πάτα το κουμπί στα δεξία για να ξεκινήσεις τη διαδικασία του setup.",
-          "title": "Δεν έχεις κάνει το setup"
-        }
-      },
-      "title": "Συνδέσεις",
-      "workers": {
-        "addButton": "Προσθήκη νέου worker",
-        "description": "Για να λειτουργήσει η εφαρμογή, όλη η κυκλοφορία δρομολογείται μέσω διακομιστών μεσολάβησης. Ενεργοποιήστε το εάν θέλετε να φέρετε τους δικούς σας workers. <0>Οδηγίες.</0>",
-        "documentation": "Τεκμηρίωση πληρεξουσίου",
-        "emptyState": "Δεν υπάρχουν ακόμη workers, προσθέστε έναν παρακάτω",
-        "label": "Χρήση προσαρμοσμένων proxy workers",
-        "urlLabel": "Διευθύνσεις URL των worker",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Απαιτείται μόνο εάν δεν μπορείτε να αποκτήσετε απευθείας πρόσβαση στο TheMovieDB, όπως εάν ο ISP σας το αποκλείσει. Συνιστάται να απενεργοποιήσετε την ενότητα Discover για να βελτιώσετε την απόδοση με αυτό."
-        }
+        "changeWarning": "Η αλλαγή του διακομιστή υποστήριξης θα σας αποσυνδεθεί. Συνεχίζω;",
+        "changeWarningTitle": "Αλλαγή διακομιστή Backend",
+        "error": "Σφάλμα σύνδεσης στο backend",
+        "notice": "Ο λογαριασμός σας ΔΕΝ συγχρονίζεται μεταξύ backend, οπότε θυμηθείτε ποιο χρησιμοποιείτε!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "Συνεισφέρετε στο TheIntroDB αφήνοντας σχόλια για τα τμήματα εισαγωγής, ανακεφαλαίωσης και πιστώσεων. <0>Μάθετε περισσότερα.</0>",
+        "tokenLabel": "Κλειδί API"
+      },
+      "title": "Συνδέσεις"
     },
     "preferences": {
-      "title": "Προτιμήσεις",
+      "autoplay": "Αυτόματη αναπαραγωγή",
+      "autoplayDescription": "Αυτόματα παίξε το επόμενο επεισόδειο στη σειρά , αφού ολοκληρωθεί. Μπορεί να ενεργοποιηθεί από χρήστες που έχουν το browser extension, custom proxy ή το default setup , εάν το επιτρέψει ο host.",
+      "autoplayLabel": "Αυτόματη αναπαραγωγή",
+      "autoResumeOnPlaybackError": "Σφάλμα αυτόματης συνέχισης κατά την αναπαραγωγή",
+      "autoResumeOnPlaybackErrorDescription": "Συνεχίστε αυτόματα την αναζήτηση για άλλες πηγές όταν η τρέχουσα πηγή αποτυγχάνει κατά την αναπαραγωγή. Εάν είναι απενεργοποιημένο, θα δείτε μια οθόνη σφάλματος με μια επιλογή μη αυτόματης συνέχισης.",
+      "autoResumeOnPlaybackErrorLabel": "Σφάλμα αυτόματης συνέχισης κατά την αναπαραγωγή",
+      "autoSkipSegments": "Αυτόματη παράλειψη τμημάτων",
+      "autoSkipSegmentsDescription": "Όταν είναι ενεργοποιημένο, παραλείπετε αυτόματα την εισαγωγή, την ανακεφαλαίωση και την προεπισκόπηση τμημάτων κατά την παρακολούθηση.",
+      "autoSkipSegmentsLabel": "Αυτόματη παράβλεψη τμημάτων",
+      "doubleClickToSeek": "Πατήστε δύο φορές για αναζήτηση",
+      "doubleClickToSeekDescription": "Πατήστε δύο φορές στην αριστερή ή δεξιά πλευρά του προγράμματος αναπαραγωγής για αναζήτηση 10 δευτερολέπτων προς τα εμπρός ή προς τα πίσω.",
+      "doubleClickToSeekLabel": "Ενεργοποιήστε το διπλό πάτημα για αναζήτηση",
+      "embedOrder": "Αναδιάταξη ενσωματώσεων",
+      "embedOrderDescription": "Σύρετε και αποθέστε για αναδιάταξη ενσωματώσεων. Αυτό θα καθορίσει τη σειρά με την οποία ελέγχονται οι ενσωματώσεις για τα μέσα που προσπαθείτε να παρακολουθήσετε. <br><br> <strong>(Η προεπιλεγμένη σειρά είναι καλύτερη για τους περισσότερους χρήστες)</strong>",
+      "embedOrderEnableLabel": "Προσαρμοσμένη σειρά ενσωμάτωσης",
+      "holdToBoost": "Κρατήστε πατημένο για να αυξήσετε την ταχύτητα",
+      "holdToBoostDescription": "Κρατήστε πατημένο το πλήκτρο διαστήματος ή αγγίξτε παρατεταμένα την οθόνη για να αυξήσετε προσωρινά την ταχύτητα αναπαραγωγής στο 2x. Αφήστε το για να επιστρέψετε στην προηγούμενη ταχύτητα.",
+      "holdToBoostLabel": "Ενεργοποιήστε το κράτημα για ενίσχυση",
+      "keyboardShortcuts": "Συντομεύσεις πληκτρολογίου",
+      "keyboardShortcutsDescription": "Προσαρμόστε τις συντομεύσεις πληκτρολογίου για την εφαρμογή. Κρατήστε το ` για να εμφανιστεί αυτή η βοήθεια ανά πάσα στιγμή",
+      "keyboardShortcutsLabel": "Προσαρμόστε τις συντομεύσεις πληκτρολογίου",
       "language": "Γλώσσα εφαρμογής",
       "languageDescription": "Η γλώσσα εφαρμόστηκε σε όλη την εφαρμογή, και τα ελληνικά έχουν αστειάκα.",
-      "thumbnail": "Δημιούργησε thumbnails",
-      "thumbnailDescription": "Τις περισσότερες φορές , τα βίντεο δεν έχουν thumbnails. Μπορείς να ενεργοποιήσεις αυτή τη ρύθμιση για να τα δημιουργήσεις εκείνη τη στιγμή αλλά θα καθυστερήσουν το load των βίντεο.",
-      "thumbnailLabel": "Δημιουργία thumbnails",
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Αυτόματα παίξε το επόμενο επεισόδειο στη σειρά , αφού ολοκληρωθεί. Μπορεί να ενεργοποιηθεί από χρήστες που έχουν το browser extension, custom proxy ή το default setup , εάν το επιτρέψει ο host.",
-      "autoplayLabel": "Autoplay",
+      "lastSuccessfulSource": "Πηγή τελευταίας χρήσης",
+      "lastSuccessfulSourceDescription": "Δώστε αυτόματα προτεραιότητα στην πηγή που παρείχε με επιτυχία περιεχόμενο για το προηγούμενο επεισόδιο. Αυτό βοηθά στη διασφάλιση της συνέχειας κατά την παρακολούθηση σειρών.",
+      "lastSuccessfulSourceEnableLabel": "Πηγή τελευταίας χρήσης",
+      "lowPerformanceMode": "Λειτουργία χαμηλής απόδοσης/εύρος ζώνης",
+      "lowPerformanceModeDescription": "Βελτιστοποιεί την εφαρμογή για πιο αργές συνδέσεις και συσκευές απενεργοποιώντας λειτουργίες με μεγάλο εύρος ζώνης. Αυτή η λειτουργία μειώνει τη χρήση δεδομένων και βελτιώνει την απόδοση, ενώ διατηρεί ανέπαφη τη βασική λειτουργία αναζήτησης και παρακολούθησης.",
+      "lowPerformanceModeLabel": "Λειτουργία χαμηλής απόδοσης",
+      "manualSource": "Χειροκίνητη επιλογή πηγής",
+      "manualSourceDescription": "Απαιτήστε να επιλέξετε μια πηγή πριν το ξύσιμο. Απενεργοποιεί την αυτόματη επιλογή πηγής και ανοίγει τον επιλογέα πηγής κατά την έναρξη της αναπαραγωγής.",
+      "manualSourceLabel": "Χειροκίνητη επιλογή πηγής",
+      "showLess": "Δείξτε λιγότερα",
+      "showMore": "Εμφάνιση περισσότερων",
       "skipCredits": "Σκίππαρε τα end credits",
       "skipCreditsDescription": "Όταν είναι ενεργοποιημένο , αυτομάτα παίζει το επόμενο επεισόδειο οταν βρίσκεται στο 99% για να σκιππάρει τα end credits. Όταν είναι απενεργοποιημένο , περίμενε μέχρι να ολοκληρωθεί τελειώς το επισόδειο.",
       "skipCreditsLabel": "Σκίππαρε τα end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
       "sourceOrder": "Άλλαξε σειρά στις πηγές",
       "sourceOrderDescription": "Διάλεξε και σύρε για να αλλάξεις σειρά στις πηγές. Αυτό θα καθορίσει τη σειρά στην οποία οι πηγές θα ελεχθούν για το αν έχουν το περιεχομένο που ψάχνεις. Εάν η πηγή σου γίνει γκρι, σημαίνει οτι <bold>το extension </bold> χρείαζεται για αυτή τη πηγή. <br><br> <strong> ( Η προεπιλεγμένη σειρά είναι η καλύτερη για τους περισσότερους χρήστες)</strong>",
       "sourceOrderEnableLabel": "Προσαρμοσμένη σειρά πηγών",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "thumbnail": "Δημιούργησε thumbnails",
+      "thumbnailDescription": "Τις περισσότερες φορές , τα βίντεο δεν έχουν thumbnails. Μπορείς να ενεργοποιήσεις αυτή τη ρύθμιση για να τα δημιουργήσεις εκείνη τη στιγμή αλλά θα καθυστερήσουν το load των βίντεο.",
+      "thumbnailLabel": "Δημιουργία thumbnails",
+      "title": "Προτιμήσεις"
     },
     "reset": "Επαναφορά",
     "save": "Αποθήκευση",
+    "search": {
+      "placeholder": "Ρυθμίσεις αναζήτησης..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "Έκδοση εφαρμογής",
-        "backendUrl": "Διεύθυνση URL του backend",
-        "backendVersion": "Έκδοση του backend",
-        "hostname": "Όνομα διακομιστή",
-        "insecure": "Ανασφαλές",
-        "nickname": "Nickname",
         "notLoggedIn": "Δεν είστε συνδεδεμένοι",
-        "secure": "Ασφαλές",
-        "title": "Πληροφορίες εφαρμογής",
-        "unknownVersion": "Άγνωστο",
         "userId": "Αναγνωριστικό χρήστη",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Χρησιμοποιήστε αυτόν ως κωδικό πρόσκλησης για την εγγραφή φίλων σας"
       }
     },
     "subtitles": {
-      "backgroundLabel": "Διαφάνεια φόντου",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "Η απενεργοποίηση του θαμπώματος φόντου υπότιτλων μπορεί να διορθώσει ορισμένα προβλήματα με το τρεμόπαιγμα",
+      "backgroundBlurEnabledLabel": "Θάμπωμα φόντου",
       "backgroundBlurLabel": "Blur του φόντου",
+      "backgroundLabel": "Διαφάνεια φόντου",
+      "BorderThicknessLabel": "Πάχος περιγράμματος",
       "colorLabel": "Χρώμα",
-      "previewQuote": "Δεν πρέπει να φοβάμαι. Ο φόβος είναι ο δολοφόνος του μυαλού.",
-      "textSizeLabel": "Μέγεθος κειμένου",
-      "title": "Υπότιτλοι",
-      "textBoldLabel": "Bold κείμενο",
-      "verticalPositionLabel": "Κάθετη θέση",
-      "high": "High",
+      "high": "Ψηλά",
       "low": "Χαμηλός",
+      "previewQuote": "Δεν πρέπει να φοβάμαι. Ο φόβος είναι ο δολοφόνος του μυαλού.",
+      "textBoldLabel": "Bold κείμενο",
+      "textSizeLabel": "Μέγεθος κειμένου",
       "textStyle": {
-        "title": "Στυλ κειμένου",
+        "Border": "Σύνορο",
         "default": "Αθέτηση",
-        "raised": "Ανυψωμένος",
         "depressed": "Μελαγχολικός",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "dropShadow": "Drop Shadow",
+        "raised": "Ανυψωμένος",
+        "title": "Στυλ κειμένου"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "Υπότιτλοι",
+      "verticalPositionLabel": "Κάθετη θέση"
     },
     "unsaved": "Έχετε μη αποθηκευμένες αλλαγές"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Ταινίες",
-      "tvshows": "Σειρές",
-      "editorpicks": "Επιλογές Συντακτών",
-      "top10": "Top 10"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}}Ταινίες",
-        "tvshows": "{{category}}Σειρές",
-        "inCinemas": "Στα Σινεμά",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Δημοφιλείς{{type}} στο {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "Τάσεις τώρα"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Παρακολούθησε κάτι τυχαίο",
-      "cancel": "Ακύρωσε την αντίστροφη μέτρηση",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Παίζει τώρα",
-      "in": "μέσα"
-    },
-    "page": {
-      "title": "Ανακάλυψε ταινίες και σειρές",
-      "subtitle": "Εξερεύνησε τις τελευταιές επιτυχίες αλλά και κλασσικά.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Πίσω στη κορυφή",
-    "filters": {
-      "country": "Χώρα"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Προαιρετικό: διακριτικό FED API (Febbox).",
-      "description": "Φέρτε τον δικό σας λογαριασμό Febbox για να έχετε την καλύτερη ροή με ποιότητα 4K, Dolby Atmos, παράβλεψη εισαγωγής και τους καλύτερους (γρηγορότερους) χρόνους φόρτωσης!"
-    },
-    "setup": {
-      "title": "Για να λάβετε το διακριτικό διεπαφής χρήστη:",
-      "showVideo": "Εμφάνιση εκπαιδευτικού βίντεο",
-      "hideVideo": "Απόκρυψη εκπαιδευτικού βίντεο",
-      "step": {
-        "1": "1. Μεταβείτε στη διεύθυνση <0>febbox.com</0> και συνδεθείτε με το Google (χρησιμοποιήστε νέο λογαριασμό!)",
-        "2": "2. Ανοίξτε το DevTools ή ελέγξτε τη σελίδα",
-        "3": "3. Μεταβείτε στην καρτέλα Εφαρμογές → Cookies",
-        "4": "4. Αντιγράψτε το cookie 'ui'.",
-        "5": "5. Κλείστε την καρτέλα, αλλά ΜΗΝ αποσυνδεθείτε!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "επιτυχία",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Εισαγάγετε έναν κοινό σύνδεσμο πάρτι ρολογιού ή έναν κωδικό δωματίου",
-    "you": "Εσείς",
-    "guestFallback": "Επισκέπτης"
   },
   "tmdb": {
     "genres": {
       "10759": "Δράση & Περιπέτεια"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "Μπροστά από τον κεντρικό υπολογιστή κατά {{seconds}} δευτερόλεπτα",
+    "alone": "Μόνος",
+    "behindHost": "Πίσω από τον κεντρικό υπολογιστή κατά {{seconds}} δευτερόλεπτα",
+    "cancel": "Ματαίωση",
+    "connectedAsGuest": "Συνδέθηκε στο πάρτι παρακολούθησης ως επισκέπτης",
+    "contentMismatch": "Δεν είναι δυνατή η συμμετοχή σε πάρτι παρακολούθησης: Το περιεχόμενο δεν ταιριάζει με το περιεχόμενο του οικοδεσπότη.",
+    "copyCode": "Κάντε κλικ για αντιγραφή",
+    "emptyRoom": "Κανείς δεν είναι ακόμα σε αυτό το δωμάτιο",
+    "enterCodeOrLink": "Εισαγάγετε έναν κοινό σύνδεσμο πάρτι ρολογιού ή έναν κωδικό δωματίου",
+    "episodeMismatch": "Δεν είναι δυνατή η συμμετοχή σε πάρτι παρακολούθησης: Παρακολουθείτε ένα διαφορετικό επεισόδιο από τον οικοδεσπότη.",
+    "guestFallback": "Επισκέπτης",
+    "hosting": "Φιλοξενία",
+    "hostParty": "Διοργανώστε ένα πάρτι ρολογιού",
+    "invalidRoom": "Δεν είναι δυνατή η σύνδεση σε αυτό το δωμάτιο",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Ενώνω",
+    "joinParty": "Λάβετε μέρος σε ένα Watch Party",
+    "leaveWatchParty": "Αποχώρηση από το Watch Party",
+    "linkCopied": "Αντιγράφηκε!",
+    "noHost": "Δεν υπάρχει οικοδεσπότης σε αυτό το πάρτι ρολογιών",
+    "save": "Εκτός",
+    "shareCode": "Μοιραστείτε αυτόν τον κωδικό με φίλους (κάντε κλικ για να αντιγράψετε τον σύνδεσμο)",
+    "showStatusOverlay": "Εμφάνιση επικάλυψης κατάστασης",
+    "status": {
+      "inSync": "Σε συγχρονισμό",
+      "outOfSync": "Εκτός συγχρονισμού"
+    },
+    "syncing": "Συγχρονισμός...",
+    "validating": "Επικύρωση πάρτι ρολογιών...",
+    "viewers": "Θεατές ({{count}})",
+    "watching": "Παρακολούθηση",
+    "withCount": "Με {{count}} άλλους",
+    "you": "Εσείς"
   }
 }

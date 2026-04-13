@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix is een webapplicatie die het internet afzoekt naar streams. Het team streeft naar een minimalistische benadering van het consumeren van inhoud.",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "Veelgestelde vragen",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "Waar komt de content vandaan?",
-      "body": "AlphaFlix host geen inhoud. Wanneer je op iets klikt om te bekijken, wordt het internet afgezocht naar de geselecteerde media (op het laadscherm en in het tabblad 'videobronnen' kun je zien welke bron je gebruikt). Media wordt nooit geüpload door AlphaFlix, alles gaat via dit zoekmechanisme.",
-      "section": "general"
-    },
-    "q2": {
-      "title": "Waar kan ik een show of film aanvragen?",
-      "body": "Het is niet mogelijk om een show of film aan te vragen, AlphaFlix beheert geen content. Alle inhoud wordt bekeken via bronnen op het internet.",
-      "section": "search"
-    },
-    "q3": {
-      "title": "De zoekresultaten tonen de show of film, waarom kan ik hem niet afspelen?",
-      "body": "Onze zoekresultaten worden aangestuurd door The Movie Database (TMDB) en worden weergegeven ongeacht of onze bronnen de inhoud daadwerkelijk hebben.",
-      "section": "search"
-    },
-    "q4": {
-      "title": "Hoe zit het met mijn gegevens en dergelijke?",
-      "body": "Alle data worden gesynchroniseerd met de community backend. Iedereen kan deze ook vrij gebruiken.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "Hoe kan ik meer te weten komen?",
-      "body": "AlphaFlix heeft een Fluxer server die je bovenaan in deze pagina kunt vinden!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "Over AlphaFlix"
-  },
   "actions": {
+    "cancel": "Annuleren",
+    "confirm": "Bevestigen",
     "copied": "Gekopieerd",
-    "copy": "Kopieer",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "Kopieer"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Actief",
+      "confirm": "Bevestigen",
+      "customBackend": "Aangepaste backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Kies met welke backendserver u verbinding wilt maken",
+      "title": "Selecteer Accountserver"
+    },
     "createAccount": "Heb je nog geen account? <0>Maak er dan een.</0>",
-    "deviceNameLabel": "Naam toestel",
-    "deviceNamePlaceholder": "Mijn telefoon",
+    "generate": {
+      "custom": "Aangepast",
+      "customPassphraseLabel": "Aangepaste wachtwoordzin",
+      "customPassphrasePlaceholder": "Voer uw aangepaste wachtwoordzin in",
+      "description": "Je passphrase werkt als je gebruikersnaam en wachtwoord. Sla je passphrase dus goed op, je hebt hem namelijk nodig om in te loggen. <bold>Verlies hem dus NIET!</bold>",
+      "invalidPassphraseCharacters": "Ongeldige wachtwoordzintekens. Alleen Engelse letters, cijfers 1-10 en normale symbolen zijn toegestaan.",
+      "next": "Ik heb mijn passphrase opgeslagen",
+      "passphraseFrameLabel": "Wachtwoord",
+      "passphraseTooShort": "De wachtwoordzin moet minimaal 8 tekens lang zijn.",
+      "title": "Uw wachtwoord",
+      "useCustomPassphrase": "Gebruik een aangepaste wachtwoordzin",
+      "usePasskeyInstead": "Gebruik in plaats daarvan een toegangssleutel"
+    },
+    "hasAccount": "Heb je al een account? <0>Log hier in.</0>",
+    "inviteCodeInvalidError": "Ongeldige uitnodigingscode (gebruikers-ID niet gevonden)",
     "inviteCodeLabel": "Uitnodigingscode",
     "inviteCodePlaceholder": "Voer de gebruikers-ID van een vriend in",
     "inviteCodeRequiredError": "Uitnodigingscode is vereist",
-    "inviteCodeInvalidError": "Ongeldige uitnodigingscode (gebruikers-ID niet gevonden)",
-    "generate": {
-      "description": "Je passphrase werkt als je gebruikersnaam en wachtwoord. Sla je passphrase dus goed op, je hebt hem namelijk nodig om in te loggen. <bold>Verlies hem dus NIET!</bold>",
-      "next": "Ik heb mijn passphrase opgeslagen",
-      "passphraseFrameLabel": "Wachtwoord",
-      "title": "Uw wachtwoord",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "Heb je al een account? <0>Log hier in.</0>",
     "login": {
       "description": "Vul je wachtwoord in",
-      "deviceLengthError": "Vul de naam van je apparaat in",
-      "passphraseLabel": "12-Woordelijke wachtwoord",
-      "passphrasePlaceholder": "Wachtwoord",
-      "submit": "Log in",
-      "title": "Log in bij je account",
-      "validationError": "Incorrecte of incompleet wachtwoord",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "Bijnaam",
+      "nicknameNotFound": "Bijnaam niet gevonden",
       "nicknamePlaceholder": "Voer uw bijnaam in",
+      "nicknameRequired": "Bijnaam is vereist",
+      "noBackendUrl": "Geen backend-URL",
+      "or": "or",
+      "passwordIncorrect": "Wachtwoord is onjuist",
       "passwordLabel": "Wachtwoord",
       "passwordPlaceholder": "Voer uw wachtwoord in",
-      "nicknameRequired": "Bijnaam is vereist",
       "passwordRequired": "Wachtwoord is vereist",
-      "nicknameNotFound": "Bijnaam niet gevonden",
-      "passwordIncorrect": "Wachtwoord is onjuist"
+      "submit": "Log in",
+      "title": "Log in bij je account",
+      "usePasskey": "Gebruik de toegangssleutel",
+      "validationError": "Incorrecte of incompleet wachtwoord"
     },
     "register": {
+      "confirmPasswordLabel": "Bevestig wachtwoord",
+      "confirmPasswordPlaceholder": "Bevestig uw wachtwoord",
       "information": {
         "color1": "Profielkleur 1",
         "color2": "Profielkleur 2",
@@ -195,39 +61,27 @@
         "next": "Volgende",
         "title": "Account informatie"
       },
-      "passwordInput": {
-        "title": "Maak uw login aan",
-        "description": "Kies een bijnaam en wachtwoord. Uw wachtwoord werkt als een veilige wachtwoordzin, dus zorg ervoor dat u deze onthoudt!"
-      },
       "nicknameLabel": "Bijnaam",
       "nicknamePlaceholder": "Kies een unieke bijnaam",
       "nicknameTaken": "Bijnaam is al in gebruik",
+      "passwordInput": {
+        "description": "Kies een bijnaam en wachtwoord. Uw wachtwoord werkt als een veilige wachtwoordzin, dus zorg ervoor dat u deze onthoudt!",
+        "title": "Maak uw login aan"
+      },
       "passwordLabel": "Wachtwoord",
-      "passwordPlaceholder": "Maak een wachtwoord aan (gebruikt als uw wachtwoordzin)",
-      "passwordWeak": "Het wachtwoord moet minimaal 8 tekens lang zijn, met letters en cijfers",
       "passwordMismatch": "Wachtwoorden komen niet overeen",
-      "confirmPasswordLabel": "Bevestig wachtwoord",
-      "confirmPasswordPlaceholder": "Bevestig uw wachtwoord"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Maak een wachtwoord aan (gebruikt als uw wachtwoordzin)",
+      "passwordWeak": "Het wachtwoord moet minimaal 8 tekens lang zijn, met letters en cijfers"
     },
     "trust": {
       "failed": {
         "text": "Heb je het goed ingesteld?",
         "title": "Kon niet met de server verbinden"
       },
-      "noHostTitle": "Server niet geconfigureerd!",
-      "noHost": "De server is nog niet geconfigureerd, daarom kunt u geen account aanmaken",
       "host": "Je gaat zo verbinden met <0>{{hostname}}</0>, check even of je deze link vertrouwt",
       "no": "Vorige pagina",
+      "noHost": "De server is nog niet geconfigureerd, daarom kunt u geen account aanmaken",
+      "noHostTitle": "Server niet geconfigureerd!",
       "title": "Vertrouw je deze server?",
       "yes": "Ik vertrouw deze server"
     },
@@ -235,14 +89,88 @@
       "description": "Vul je wachtwoord in zodat we weten dat je het opgeslagen hebt, dan kunnen we je account maken",
       "invalidData": "Ongeldige data",
       "noMatch": "Wachtwoord komt niet overeen",
-      "passphraseLabel": "Jouw wachtwoord",
       "recaptchaFailed": "ReCatpcha validatie is mislukt",
       "register": "Maak een account",
-      "title": "Bevestig je wachtwoord",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "Bevestig je wachtwoord"
     }
+  },
+  "details": {
+    "airs": "Luchten",
+    "collection": {
+      "movie": "Film",
+      "movies": "Films",
+      "rating": "Beoordeling",
+      "releaseDate": "Releasedatum",
+      "sortBy": "Sorteer op"
+    },
+    "endsAt": "Eindigt op {{time}}",
+    "episode": "Aflevering",
+    "episodes": "Afleveringen",
+    "imdb": "Bekijk op IMDb",
+    "language": "Taal:",
+    "play": "Toneelstuk",
+    "rating": "Beoordeling:",
+    "releaseDate": "Releasedatum:",
+    "resume": "Cv",
+    "runtime": "Looptijd:",
+    "season": "Seizoen",
+    "seasons": "Seizoen(en).",
+    "similar": "Vergelijkbaar",
+    "tmdb": "Bekijk op TMDB",
+    "trailers": "Aanhangwagens",
+    "watched": "{{watched}} van {{total}} bekeken ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Alle filmlijsten",
+    "carousel": {
+      "change": "Wijziging",
+      "more": "Bekijk meer",
+      "title": {
+        "4kReleases": "4K-releases",
+        "editorPicksMovies": "Editor kiest films",
+        "editorPicksShows": "Editor kiest shows",
+        "forYou": "Voor jou",
+        "inCinemas": "In de bioscoop",
+        "latestReleases": "Nieuwste releases",
+        "latestTVReleases": "Nieuwste tv-programma's",
+        "movies": "{{category}} Films",
+        "moviesOn": "Films op {{provider}}",
+        "onTheAir": "In de lucht",
+        "popular": "Meest populair",
+        "recommended": "Omdat je hebt gekeken: {{title}}",
+        "top10": "Top-10",
+        "topRated": "Hoogst gewaardeerd",
+        "trending": "Nu populair",
+        "tvshows": "{{category}} Toont",
+        "tvshowsOn": "Wordt vertoond op {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Meer informatie",
+      "playNow": "Speel nu"
+    },
+    "filters": {
+      "country": "Land"
+    },
+    "page": {
+      "back": "Ga terug",
+      "loading": "Laden...",
+      "loadMore": "Laad meer",
+      "title": "Ontdek Films & TV"
+    },
+    "scrollToTop": "Terug naar boven",
+    "tabs": {
+      "movies": "Films",
+      "top10": "Top-10",
+      "tvshows": "Televisieshows"
+    },
+    "viewLists": "Bekijk alle filmlijsten"
+  },
+  "downtimeNotice": {
+    "badge": "Problemen",
+    "goHome": "Ga naar startpagina",
+    "message": "AlphaFlix ondervindt opnieuw problemen met sommige providers. Als je een show niet kunt vinden of afspelen, probeer dan de bron te wijzigen. Verwacht dat deze fout zich zal blijven voordoen gedurende de onderstaande tijden.",
+    "title": "Providerproblemen"
   },
   "errors": {
     "badge": "Tis kapot",
@@ -258,159 +186,153 @@
     },
     "links": {
       "fluxer": "Fluxer",
-      "legal": "Legal / DMCA",
-      "github": "Github",
-      "twitter": "Twitter / X",
-      "funding": "Support us"
+      "funding": "Steun ons",
+      "github": "Github"
     },
     "tagline": "Bekijk je favoriete shows en films met deze open source streaming app."
   },
   "global": {
+    "keyboardShortcuts": {
+      "cancel": "Annuleren",
+      "clickToEdit": "Klik op een sleutelbadge om deze te bewerken",
+      "conditions": {
+        "showsOnly": "Alleen shows"
+      },
+      "conflict": "conflict",
+      "conflicts": "conflicten",
+      "detected": "gedetecteerd",
+      "editInSettings": "Bewerk toetsenbordopdrachten vanuit instellingen",
+      "groups": {
+        "audioVideo": "Audio en video",
+        "interface": "Interface",
+        "jumpToPosition": "Spring naar positie",
+        "subtitlesAccessibility": "Ondertiteling en toegankelijkheid",
+        "videoPlayback": "Video afspelen"
+      },
+      "none": "Geen",
+      "numberKeySeeking": "Nummer sleutel vooruitgang zoeken",
+      "numberKeySeekingDescription": "Gebruik de cijfertoetsen 0-9 om naar specifieke posities in de video te zoeken. 0 gaat naar het begin, 1-8 springt naar 10%-80% en 9 gaat naar 90%.",
+      "pressKey": "Druk op een toets...",
+      "resetAllToDefault": "Alles terugzetten naar standaard",
+      "resetToDefault": "Resetten naar standaard",
+      "save": "Redden",
+      "saveChanges": "Wijzigingen opslaan",
+      "shortcuts": {
+        "barrelRoll": "Doe een vatrol! 🌀",
+        "closeOverlay": "Overlay/modaal sluiten",
+        "decreaseVolume": "Verlaag het volume",
+        "increaseVolume": "Verhoog het volume",
+        "jumpTo0": "Spring naar 0% (begin)",
+        "jumpTo9": "Spring naar 90%",
+        "mute": "Mute/demping opheffen",
+        "nextEpisode": "Volgende aflevering",
+        "playPause": "Afspelen/pauzeren (of vasthouden voor 2x snelheid indien ingeschakeld)",
+        "playPauseAlt": "Afspelen/pauzeren",
+        "previousEpisode": "Vorige aflevering",
+        "randomCaption": "Selecteer een willekeurig bijschrift uit de laatst gebruikte taal",
+        "skipBackward1": "Spring 1 seconde achteruit",
+        "skipBackward10": "Spring 10 seconden achteruit",
+        "skipBackward5": "Spring 5 seconden achteruit",
+        "skipForward1": "Spring 1 seconde vooruit",
+        "skipForward10": "Spring 10 seconden vooruit",
+        "skipForward5": "Spring 5 seconden vooruit",
+        "syncSubtitlesEarlier": "Ondertitels eerder synchroniseren (-0,5s)",
+        "syncSubtitlesLater": "Ondertitels later synchroniseren (+0,5s)",
+        "toggleCaptions": "Schakel bijschriften in",
+        "toggleFullscreen": "Schakel volledig scherm in",
+        "toggleNativeSubtitles": "Schakel native ondertitels in"
+      },
+      "subtitle": "Houd ` vast om deze hulp op elk gewenst moment weer te geven",
+      "title": "Sneltoetsen op het toetsenbord"
+    },
     "name": "AlphaFlix",
     "pages": {
-      "about": "Over",
-      "legal": "Legal / DMCA",
       "discover": "Ondek",
-      "support": "Steun",
       "login": "Login",
-      "onboarding": "Instellen",
+      "migration": "Account migreren",
       "pagetitle": "{{title}} - AlphaFlix",
       "register": "Registreren",
-      "settings": "Instellingen",
-      "migration": "Account migreren",
-      "jip": "Jipy"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "settings": "Instellingen"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Opgeslagen",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "Annuleren",
+        "description": "Bewerk de details voor deze bladwijzer",
+        "groupsLabel": "Groepen",
+        "save": "Redden",
+        "title": "Bladwijzer bewerken",
+        "titleLabel": "Titel",
+        "titlePlaceholder": "Voer een titel in voor uw bladwijzer",
+        "yearLabel": "Jaar",
+        "yearPlaceholder": "Voer een jaar in voor uw bladwijzer"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "Nog geen groepen",
+          "placeholderButton": "Toevoegen aan groep",
+          "removeAll": "Verwijder alles",
+          "removeFromGroup": "Verwijderen uit groep"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "Dit heeft invloed op {{count}} bladwijzer(s)",
+          "cancel": "Annuleren",
+          "description": "Bewerk de naam en het pictogram van uw bladwijzergroep",
+          "nameLabel": "Groepsnaam",
+          "namePlaceholder": "Voer een naam in voor uw groep",
+          "save": "Redden",
+          "title": "Groep bewerken"
+        },
+        "reorder": {
+          "button": "Opnieuw ordenen",
+          "cancel": "Annuleren",
+          "description": "Slepen en neerzetten om uw bladwijzergroepen opnieuw te ordenen",
+          "done": "Klaar",
+          "save": "Redden",
+          "title": "Groepsvolgorde bewerken"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "Opgeslagen",
+      "showAll": "Toon alles",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Standaard (datum toegevoegd)",
+          "titleAsc": "Titel A-Z",
+          "titleDesc": "Titel Z-A",
+          "yearAsc": "Releasedatum Oudste-nieuwste",
+          "yearDesc": "Releasedatum Nieuwste-Oudste"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "Kijk verder",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Standaard (datum toegevoegd)",
+          "titleAsc": "Titel A-Z",
+          "titleDesc": "Titel Z-A",
+          "yearAsc": "Releasedatum Oudste-nieuwste",
+          "yearDesc": "Releasedatum Nieuwste-Oudste"
         }
       }
     },
     "mediaList": {
       "stopEditing": "Stoppen met bewerken"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "Dat is het!",
+      "discover": "Ondek",
+      "discoverMore": "Ondek meer",
+      "empty": {
+        "default": "Welkom, hier vindt je de media om te bekijken!",
+        "extra": [
+          "Hier is niks :(",
+          "Zo leeg...",
+          "Wat een leegte.",
+          "Hallo nieuwe gebruiker :3"
+        ]
+      },
       "failed": "Het is niet gelukt de media te laden, probeer het nog eens!",
       "loading": "Aan het zoeken...",
       "noResults": "We konden helaas niets vinden!",
@@ -428,23 +350,19 @@
           ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "Welkom, hier vindt je de media om te bekijken!",
-        "extra": [
-          "Hier is niks :(",
-          "Zo leeg...",
-          "Wat een leegte.",
-          "Hallo nieuwe gebruiker :3"
-        ]
-      },
-      "sectionTitle": "Zoekresultaten",
-      "discoverMore": "Ondek meer",
-      "discover": "Ondek"
+      "sectionTitle": "Zoekresultaten"
     },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+    "support": {
+      "complete": "compleet",
+      "description": "AlphaFlix draait met verlies en we hebben hulp nodig om het advertentievrij te houden! Als u AlphaFlix graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze kosten te dekken.",
+      "donate": "Doneer",
+      "explanation": "Als u de extensie niet gebruikt of de FED API niet heeft ingesteld, kan het moeilijker zijn om inhoud te vinden! We willen dit oplossen, maar het is een stuk moeilijker om inhoud aan te bieden zonder dure servers. Dus alsjeblieft, als je AlphaFlix graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze groeikosten te dekken.",
+      "explanation2": "Als je meer informatie wilt, sluit je dan aan bij onze",
+      "fluxer": "Fluxer",
+      "label": "Projectfinanciering: ${{current}} / ${{goal}}",
+      "moreInfo": "Meer informatie",
+      "thankYou": "Bedankt voor uw steun!",
+      "title": "AlphaFlix heeft jouw hulp nodig!"
     },
     "titles": {
       "69": {
@@ -465,6 +383,15 @@
           "Lang leven AlphaFlix!"
         ]
       },
+      "halloween": {
+        "default": "Welke griezelige film zou jij deze Halloween graag willen zien?",
+        "extra": [
+          "Gelukkig Halloween! 🎃👻",
+          "Boe! 👻",
+          "Truc of behandel! 🍬",
+          "Het is de Grote Pompoen, Charlie Brown!"
+        ]
+      },
       "morning": {
         "default": "Waar wil je deze ochtend naar kijken?",
         "extra": [
@@ -476,304 +403,116 @@
         "extra": [
           "Moe? Ik hoor dat The Exorcist goed is."
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Onlangs bekeken",
+      "sectionTitle": "Bekijk Geschiedenis"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} A{{episode}}",
-    "unreleased": "Niet uitgebracht",
+    "episodeShort": "E",
+    "seasonUnwatched": "Weet je zeker dat je het seizoen als niet bekeken wilt markeren?",
+    "seasonWatched": "Weet je zeker dat je het seizoen als bekeken wilt markeren?",
     "types": {
       "movie": "Film",
       "show": "Serie"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "Niet uitgebracht"
   },
   "migration": {
-    "loginRequired": "U moet ingelogd zijn om uw data te migreren! Ga terug en log in om verder te gaan.",
-    "start": {
-      "title": "Migreer uw gegevens",
-      "explainer": "Als je je gegevens wilt migreren of back-uppen, kun je dat doen met de onderstaande opties. Zo kunt u uw gegevens behouden wanneer u van backendserver wisselt.",
-      "options": {
-        "or": "Of",
-        "direct": {
-          "description": "Hiermee worden je gegevens direct naar de nieuwe server gemigreerd. Dit is de snelste optie.  <br /><br />Met deze optie kun je je wachtwoordzin hetzelfde houden!",
-          "title": "Rechtstreekse migratie",
-          "quality": "Gemakkelijkst en het snelst",
-          "action": "Gegevens overdragen"
-        },
-        "download": {
-          "description": "Hierdoor worden je gegevens gedownload naar je apparaat. Je kunt ze dan uploaden naar de nieuwe server of ze gewoon bewaren.",
-          "title": "Download gegevens",
-          "quality": "Meer technisch",
-          "action": "Download data"
-        },
-        "upload": {
-          "title": "Upload data",
-          "description": "Upload uw eerder geëxporteerde gegevensbestand om uw bladwijzers en voortgang op dit account te herstellen.",
-          "quality": "Herstellen vanaf back-up",
-          "action": "Upload Data"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Rechtstreekse migratie",
-      "description": "Voer de bestemmingsbackend URL in om je huidige accountgegevens naar een nieuwe backend te migreren. Je wachtwoordzin blijft hetzelfde!",
-      "backendLabel": "Bestemmingsbackend URL",
-      "recaptchaLabel": "ReCaptcha Sleutel (Optioneel)",
-      "toggleLable": "ReCaptcha nodig?",
-      "status": {
-        "error": "Migratie van je gegevens is mislukt. 😿",
-        "success": "Je gegevens zijn succesvol gemigreerd! 🎉"
-      },
-      "button": {
-        "migrate": "Migreren",
-        "processing": "Bezig met verwerken...",
-        "home": "Ga naar startpagina",
-        "login": "Ga verder naar inloggen"
-      }
-    },
+    "back": "Ga terug",
     "download": {
-      "title": "Gegevens downloaden",
+      "button": {
+        "download": "Gegevens downloaden",
+        "home": "Ga naar startpagina"
+      },
       "description": "Hiermee download je jouw gegevens naar je apparaat. Je kunt deze daarna uploaden naar de nieuwe server of bewaren voor later gebruik.",
       "status": {
         "error": "Het downloaden van je gegevens is mislukt. 😿",
         "success": "Je gegevens zijn succesvol gedownload! 🎉"
       },
-      "button": {
-        "download": "Gegevens downloaden",
-        "home": "Ga naar startpagina",
-        "login": "Ga door naar inloggen"
-      }
+      "title": "Gegevens downloaden"
+    },
+    "loginRequired": "U moet ingelogd zijn om uw data te migreren! Ga terug en log in om verder te gaan.",
+    "preview": {
+      "downloadDescription": "Downloaden omvat:",
+      "items": {
+        "bookmarks": "Media met bladwijzer",
+        "progress": "Bekijk de voortgang",
+        "settings": "Instellingen en voorkeuren"
+      },
+      "uploadDescription": "Gegevens om te uploaden:"
+    },
+    "start": {
+      "explainer": "Hierdoor worden je gegevens gedownload naar je apparaat. Je kunt ze dan uploaden naar de nieuwe server of ze gewoon bewaren. Upload uw eerder geëxporteerde gegevensbestand om uw bladwijzers en voortgang op dit account te herstellen.",
+      "options": {
+        "download": {
+          "action": "Gegevens downloaden",
+          "description": "Hierdoor worden je gegevens gedownload naar je apparaat. Je kunt ze dan uploaden naar de nieuwe server of ze gewoon bewaren.",
+          "quality": "Meer technisch",
+          "title": "Download gegevens"
+        },
+        "or": "Of",
+        "upload": {
+          "action": "Gegevens uploaden",
+          "description": "Upload uw eerder geëxporteerde gegevensbestand om uw bladwijzers en voortgang op dit account te herstellen.",
+          "quality": "Herstellen vanaf back-up",
+          "title": "Upload data"
+        }
+      },
+      "title": "Migreer uw gegevens"
     },
     "upload": {
-      "title": "Upload gegevens",
-      "description": "Upload je eerder geëxporteerde gegevensbestand om je bladwijzers en voortgang op dit account te herstellen.",
-      "status": {
-        "processing": "Gegevens worden verwerkt...",
-        "error": "Het is niet gelukt om je gegevens te uploaden. 😿",
-        "success": "Je gegevens zijn succesvol geüpload! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Selecteer het bestand dat je wilt uploaden",
-        "select": "Selecteer bestand",
-        "change": "Wijzig bestand",
-        "name": "Bestandsnaam"
-      },
-      "exportedOn": "Geëxporteerd op",
-      "previewTitle": "Preview:",
       "button": {
+        "home": "Ga naar start",
         "import": "Gegevens importeren",
         "processing": "Bezig met verwerken...",
-        "success": "Importeren voltooid",
-        "home": "Ga naar start",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Ga terug"
+        "saveLocal": "Lokaal opslaan"
+      },
+      "description": "Upload je eerder geëxporteerde gegevensbestand om je bladwijzers en voortgang op dit account te herstellen.",
+      "exportedOn": "Geëxporteerd op",
+      "file": {
+        "change": "Wijzig bestand",
+        "description": "Selecteer het bestand dat je wilt uploaden",
+        "select": "Selecteer bestand"
+      },
+      "previewTitle": "Voorbeeld:",
+      "status": {
+        "error": "Het is niet gelukt om je gegevens te uploaden. 😿",
+        "processing": "Gegevens worden verwerkt...",
+        "success": "Je gegevens zijn succesvol geüpload! 🎉",
+        "successLocal": "Uw gegevens zijn lokaal opgeslagen! 🎉"
+      },
+      "title": "Upload gegevens"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "Controleer je internetverbinding"
     },
+    "install": {
+      "genericGuide": "Uw browser ondersteunt geen automatische PWA-installatieprompt.\nJe kunt nog steeds installeren via het browsermenu (bijvoorbeeld: 'App installeren', 'Snelkoppeling maken' of 'Toevoegen aan Dock/Startscherm').",
+      "iosSafariGuide": "AlphaFlix als app installeren:\n\n1. Tik op de knop Delen (vierkant met een pijl).\n2. Kies 'Toevoegen aan startscherm'.\n3. Tik op Toevoegen."
+    },
     "menu": {
-      "about": "Over ons",
+      "desktop": "App-instellingen",
       "logout": "Log uit",
       "register": "Synchroniseren met de Cloud",
-      "settings": "Instellingen",
-      "support": "Ondersteuning",
-      "discover": "Ontdek",
-      "development": "Development",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "AlphaFlix als app installeren:\n\n1. Tik op de knop Delen (vierkant met een pijl).\n2. Kies 'Toevoegen aan startscherm'.\n3. Tik op Toevoegen.",
-      "genericGuide": "Uw browser ondersteunt geen automatische PWA-installatieprompt.\nJe kunt nog steeds installeren via het browsermenu (bijvoorbeeld: 'App installeren', 'Snelkoppeling maken' of 'Toevoegen aan Dock/Startscherm')."
+      "settings": "Instellingen"
     }
   },
   "notFound": {
     "badge": "Pagina niet gevonden",
     "goHome": "Naar de home-pagina",
-    "reloadButton": "Probeer opnieuw",
     "message": "We hebben echt alles geprobeerd, zelfs tijdrijzen; echter hebben we deze pagina helaas niet kunnen vinden.",
+    "reloadButton": "Probeer opnieuw",
     "title": "Pagina niet gevonden"
-  },
-  "downtimeNotice": {
-    "badge": "Problemen",
-    "goHome": "Ga naar startpagina",
-    "message": "AlphaFlix ondervindt opnieuw problemen met sommige providers. Als je een show niet kunt vinden of afspelen, probeer dan de bron te wijzigen. Verwacht dat deze fout zich zal blijven voordoen gedurende de onderstaande tijden.",
-    "title": "Providerproblemen"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Annuleren",
-      "confirm": "Gebruik standaardinstallatie",
-      "description": "De standaardinstallatie heeft niet de beste streams. Je mist de beste bronnen!",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Weet je het zeker?"
-    },
-    "extension": {
-      "back": "Terug",
-      "explainer": "Door gebruik te maken van de browserextensie kun je de beste streams krijgen. Met slechts een eenvoudige installatie. 👌",
-      "explainerIos": "Helaas, de browserextensie is niet ondersteund op iOS. Druk op <bold>Terug</bold> om een andere optie te kiezen.",
-      "extensionHelp": "Als je de extensie hebt geïnstalleerd maar niet wordt gedetecteerd, <bold>open dan de extensie via het extensies menu in je browser</bold> en volg de stappen op het scherm.",
-      "linkChrome": "Installeer de Chrome-extensie",
-      "linkFirefox": "Installeer de Firefox-extensie",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Geïnstalleerd op Chrome, maar de site detecteert het niet? Probeer de pagina opnieuw te laden!",
-      "notDetectingAction": "Pagina opnieuw laden",
-      "status": {
-        "disallowed": "Extensie is niet ingeschakeld voor deze pagina",
-        "disallowedAction": "Extensie inschakelen",
-        "failed": "Mislukt om status aan te vragen",
-        "loading": "Aan het wachten tot je de extensie hebt geïnstalleerd",
-        "outdated": "Extensieversie te oud",
-        "success": "Extensie werkt zoals verwacht!"
-      },
-      "submit": "Doorgaan",
-      "title": "Laten we beginnen met de extensie"
-    },
-    "proxy": {
-      "back": "Terug",
-      "explainer": "Met de proxy-methode kun je hoogwaardige streams verkrijgen door zelf een proxy op te zetten.",
-      "input": {
-        "errorConnection": "Kon geen verbinding maken met de proxy",
-        "errorInvalidUrl": "Geen geldige URL",
-        "errorNotProxy": "Verwachtte een proxy maar kreeg een website",
-        "label": "Proxy URL",
-        "placeholder": "https://"
-      },
-      "link": "Leer hoe je de proxy kunt instellen",
-      "submit": "Proxy opslaan",
-      "title": "Laten we een nieuwe proxy instellen"
-    },
-    "start": {
-      "explainer": "Om de beste streams mogelijk te krijgen, moet je kiezen welke streammethode je wilt gebruiken.",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "of",
-        "default": {
-          "text": "Ik wil geen streams van goede kwaliteit, gebruik de standaardinstellingen."
-        },
-        "extension": {
-          "action": "Installeer extensie",
-          "description": "Installeer browserextensie en krijg toegang tot de beste bronnen.",
-          "quality": "Beste kwaliteit",
-          "title": "Browserextensie"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Proxy instellen",
-          "description": "Proxy instellen in slechts 5 minuten en krijg toegang tot geweldige bronnen.",
-          "quality": "Goede kwaliteit",
-          "title": "Eigen proxy"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Laten we beginnen met het instellen van AlphaFlix"
+      "cancel": "Annuleren"
     }
   },
   "overlays": {
@@ -785,96 +524,107 @@
       "short": "Terug"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "Aan het casten... 🎬"
+      "device": "apparaat",
+      "to": "Casten naar {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Meer RAM downloaden...",
+      "2": "Cafeïne omzetten in inhoud...",
+      "3": "De hamster leren sneller te rennen...",
+      "4": "Elektronen overtuigen om sneller te bewegen...",
+      "5": "Bijna daar... zei elke laadbalk ooit...",
+      "6": "De afstandsbediening vinden... wacht, verkeerd probleem...",
+      "7": "Terugtellen vanaf oneindig...",
+      "8": "De toekomst simuleren...",
+      "9": "Kattenvideo's kijken...",
+      "10": "Afgeleid door katten-GIF's...",
+      "11": "Even geduld a.u.b. terwijl de stagiair zijn koffie bijvult...",
+      "12": "Controleren of de stekker in het stopcontact zit...",
+      "13": "Uit- en weer aanzetten...",
+      "14": "Geen paniek...",
+      "15": "De winter komt eraan...",
+      "16": "Aanmelden bij Skynet...",
+      "17": "Al uw browsers zijn van ons...",
+      "18": "Op zoek naar oneindige onwaarschijnlijkheidsdrift...",
+      "19": "Nieuwe manieren ontdekken om je te laten wachten...",
+      "20": "Uw tijd is erg belangrijk voor ons. Even geduld a.u.b. terwijl we u negeren...",
+      "21": "Nog steeds sneller dan Windows Update...",
+      "22": "Waarom pak je geen broodje?"
     },
     "menus": {
+      "audio": {
+        "default": "Standaard"
+      },
       "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "Downloads worden direct bij de bron opgehaald. AlphaFlix heeft geen controle over het bestand dat je ontvangt.",
+        "button": "Probeer te downloaden",
         "copyHlsPlaylist": "HLS-afspeellijstlink kopiëren",
+        "disclaimer": "Downloads worden direct bij de bron opgehaald. AlphaFlix heeft geen controle over het bestand dat je ontvangt.",
         "downloadSubtitle": "Download huidige ondertiteling",
         "downloadVideo": "Download filmpje",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "Downloads worden rechtstreeks van de aanbieder gehaald. AlphaFlix heeft geen controle over de manier waarop de downloads worden aangeboden.<br /><br />Houd er rekening mee dat u nu een HLS-afspeellijst downloadt, het wordt <bold>afgeraden deze te downloaden als u niet bekend bent met geavanceerde streamingbestandstypen</bold>. Probeer verschillende bronnen voor verschillende streamingbestandstypen.",
+        "hlsDownloader": "Of ga naar de <0>hls downloaderwebsite</0> en plak de URL van de afspeellijst hieronder.",
         "onAndroid": {
           "1": "Om te downloaden op Android, klik je op de downloadknop en vervolgens, op de nieuwe pagina, <bold>tap and hold</bold> op de video en selecteer <bold>save</bold>.",
-          "shortTitle": "Download / Android",
+          "shortTitle": "Downloaden/Android",
           "title": "Downloaden op Android"
         },
         "onIos": {
           "1": "Als je wilt downloaden op iOS, klik je op de downloadknop en vervolgens op de nieuwe pagina op <bold><ios_share /></bold> en vervolgens op <bold>Save to Files <ios_files /></bold>.",
-          "shortTitle": "Download / iOS",
+          "shortTitle": "Downloaden / iOS",
           "title": "Downloaden op iOS"
         },
         "onPc": {
           "1": "Klik op de downloadknop op de pc en klik op de nieuwe pagina met de rechtermuisknop op de video en selecteer <bold>Video opslaan als</bold>",
-          "shortTitle": "Download / PC",
+          "shortTitle": "Downloaden / pc",
           "title": "Downloaden op PC"
         },
-        "title": "Download"
+        "title": "Downloaden"
       },
       "episodes": {
         "button": "Afleveringen",
         "emptyState": "Er zijn in dit seizoen geen afleveringen, kijk over een paar jaar nog eens!",
         "episodeBadge": "A{{episode}}",
+        "favorites": "Favorieten",
         "loadingError": "Er ging iets mis bij het laden van dit seizoen",
         "loadingList": "Aan het laden...",
         "loadingTitle": "Aan het zoeken...",
-        "unairedEpisodes": "Een of meer afleveringen van dit seizoen zijn uitgeschakeld omdat ze nog niet zijn uitgezonden.",
-        "seasons": "Seizoenen",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "markAsFavorite": "Markeer als favoriet",
+        "markAsUnwatched": "Markeer als onbewaakt",
+        "markAsWatched": "Markeer als bekeken",
+        "noFavorites": "Nog geen favoriete afleveringen. Geef afleveringen een ster om ze aan je favorieten toe te voegen!",
+        "showLess": "Laat minder zien",
+        "showMore": "Laat meer zien",
         "specials": "Speciale aanbiedingen"
       },
       "playback": {
-        "speedLabel": "Afspeelsnelheid",
-        "title": "Afspeel instellingen",
-        "disabled": "(Disabled in watch party)",
+        "disabled": "(Uitgeschakeld tijdens kijkfeest)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "Afspeelsnelheid",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Afspeel instellingen"
       },
       "quality": {
+        "auto": "Auto",
         "automaticLabel": "Automatische kwaliteit",
         "hint": "Je kunt <0>bron omschakelen</0> proberen om verschillende kwaliteitsopties te krijgen.",
         "iosNoQuality": "Vanwege door Apple gedefinieerde beperkingen is kwaliteitsselectie niet beschikbaar op iOS voor deze bron. U kunt <0>omschakelen naar een andere bron</0> proberen om andere kwaliteitsopties te krijgen.",
-        "title": "Kwaliteit",
-        "auto": "Auto"
+        "title": "Kwaliteit"
       },
       "settings": {
-        "downloadItem": "Download",
-        "enableSubtitles": "Ondertitels inschakelen",
-        "experienceSection": "Kijk-ervaring",
-        "playbackItem": "Afspeel instellingen",
         "audioItem": "Audio",
+        "downloadItem": "Downloaden",
+        "enableSubtitles": "Ondertitels inschakelen",
+        "playbackItem": "Afspeel instellingen",
         "qualityItem": "Kwaliteit",
         "sourceItem": "Video-bron",
-        "subtitleItem": "Instellingen ondertiteling",
-        "videoSection": "Video instellingen"
+        "subtitleItem": "Instellingen ondertiteling"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "Er ging iets mis bij het zoeken naar videos, probeer een andere bron.",
           "title": "Het is niet gelukt dit op te halen"
         },
+        "findNextSource": "Zoek de volgende bron",
         "noEmbeds": {
           "text": "We konden geen embeds vinden, probeer een andere bron.",
           "title": "Geen embeds gevonden"
@@ -884,72 +634,53 @@
           "title": "Geen bron"
         },
         "title": "Bronnen",
-        "unknownOption": "Onbekend",
-        "findNextSource": "Find next source"
+        "unknownOption": "Onbekend"
       },
       "subtitles": {
+        "autoSelectChoice": "Automatische selectie",
+        "autoSelectDifferentChoice": "Tik nogmaals om automatisch een andere ondertitel te selecteren",
+        "clearSecondary": "Duidelijke secundaire ondertitel",
         "customChoice": "Sleep of upload bestand",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Aanpassen",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "Onderschrift gezien",
+        "delayLate": "Audio gehoord",
+        "doubleClickToCopy": "Dubbelklik om ondertitelgegevens te kopiëren",
+        "dropSubtitleFile": "Sleep ondertitelbestand naar hier",
+        "dualSub": "Dubbele ondertitels",
+        "dualSubDesc": "Selecteer hetzelfde formaat (SRT, VTT...) en provider (OpenSubs...) voor de beste synchronisatie",
+        "dualSubHint": "Selecteer een taal voor de secundaire ondertitel (weergegeven boven de primaire ondertitel)",
+        "empty": "Er zijn geen ondertitels beschikbaar voor dit.",
+        "loadingExternal": "Externe ondertiteling laden...",
+        "loadingExternalProgress": "Externe ondertitels laden... ({{progress}}%)",
+        "matchScoreLabel": "Komt overeen met ~{{score}}%",
+        "notFound": "Geen van de beschikbare opties komt overeen met je zoekopdracht",
         "offChoice": "Uit",
-        "onChoice": "Aan",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Bronondertitels",
-        "OpenSubtitlesChoice": "OpenOndertitels",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "Ondertitelgegevens plakken",
+        "previewLabel": "Voorbeeld van ondertiteling:",
+        "primary": "Primair",
+        "refresh": "Ververs externe ondertitels",
+        "refreshing": "Verfrissend...",
+        "secondary": "Secundair",
+        "selectingSecondary": "Secundaire ondertiteling selecteren",
         "settings": {
           "backlink": "Aangepaste ondertiteling",
           "delay": "Ondertiteling vertraging",
           "fixCapitals": "Hoofdlettergebruik corrigeren"
         },
         "title": "Ondertiteling",
-        "unknownLanguage": "Onbekend",
-        "dropSubtitleFile": "Sleep ondertitelbestand naar hier",
-        "scrapeButton": "Onder titels ophalen",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "Er zijn geen ondertitels beschikbaar voor dit.",
-        "notFound": "Geen van de beschikbare opties komt overeen met je zoekopdracht",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "Afschrift",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "Vertalen van {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Externe ondertitels laden... ({{progress}}%)",
-        "matchScoreLabel": "Komt overeen met ~{{score}}%"
+        "unknownLanguage": "Onbekend",
+        "useNativeSubtitles": "Native video-ondertitels",
+        "useNativeSubtitlesDescription": "Ondertiteling uitzenden voor native fullscreen en PiP"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
+        "watchpartyItem": "Kijk Feest"
       }
     },
     "metadata": {
-      "api": {
-        "text": "Kan API-metagegevens niet laden. Controleer uw internetverbinding.",
-        "title": "Kan API-metagegevens niet laden"
-      },
-      "legal": {
-        "badge": "Weggehaald",
-        "text": "Deze media is niet langer beschikbaar vanwege een verwijderingsverzoek of auteursrechtenclaim.",
-        "title": "Media is weggehaald"
-      },
       "extensionPermission": {
         "badge": "Toestemming ontbreekt",
         "button": "Gebruik de extensie",
@@ -962,6 +693,11 @@
         "text": "We konden geen informatie over deze media ophalen bij TMDB. Kijk even na of TMDB te bereiken is op dit netwerk.",
         "title": "Metadata ophalen mislukt"
       },
+      "legal": {
+        "badge": "Weggehaald",
+        "text": "Deze media is niet langer beschikbaar vanwege een verwijderingsverzoek of auteursrechtenclaim.",
+        "title": "Media is weggehaald"
+      },
       "notFound": {
         "badge": "Pagina niet gevonden",
         "homeButton": "Naar de home-pagina",
@@ -970,18 +706,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Opnieuw afspelen",
       "next": "Volgende aflevering",
-      "nextSeason": "Volgend seizoen"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "Volgend seizoen",
+      "replay": "Opnieuw afspelen"
     },
     "playbackError": {
+      "autoResumeText": "Er is een fout opgetreden bij het afspelen van de media 😖. Automatisch andere bronnen proberen...",
       "badge": "Afspeelfout",
+      "copyDebugInfo": "Kopieer debug-informatie",
+      "debugInfo": "Controleer console voor meer details.",
       "errors": {
         "errorAborted": "Het laden van de media is stopgezet omdat de gebruiker daar om vroeg.",
         "errorDecode": "Ondanks het feit dat we eerder dachten dat deze bron beschikbaar, was dat toch niet zo en is er een decode error ontstaan.",
@@ -989,226 +722,168 @@
         "errorNetwork": "Er ging iets mis waardoor de media niet langer beschikbaar is, al was hij dat eerst wel.",
         "errorNotSupported": "Deze media or media provider wordt niet ondersteund."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "Naar de home-pagina",
-      "resumeButton": "Try next sources",
+      "resumeButton": "Probeer de volgende bronnen",
       "text": "Er ging iets mis bij het afspelen. Probeer het nog eens.",
       "title": "Oeps, hier ging iets mis!"
     },
+    "resume": {
+      "description": "Deze aflevering wordt door {{percentage}}% bekeken",
+      "restart": "Opnieuw opstarten",
+      "resume": "Cv",
+      "title": "Verder kijken?"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "Extensie uitgeschakeld",
+        "enableExtension": "Extensie inschakelen",
+        "homeButton": "Naar hoofdpagina",
+        "text": "Je hebt de AlphaFlix extensie geïnstalleerd. Om deze te gebruiken, moet je de extensie inschakelen voor deze site.",
+        "title": "Activeer alstublieft de extensie"
+      },
       "items": {
-        "failure": "Daar ging iets mis",
-        "timeout": "Timed out (15s)",
-        "notFound": "Er is geen video gevonden",
         "pending": "Naar videos aan het zoeken..."
       },
       "notFound": {
         "badge": "Niet gevonden",
         "detailsButton": "Meer informatie",
-        "homeButton": "Naar de home-pagina",
         "discoverButton": "Ontdek meer",
+        "homeButton": "Naar de home-pagina",
         "text": "We hebben al onze providers lief aangekeken maar we hebben niets kunnen vinden. Wij beheersen de media niet, en bepalen dus niet wat er beschikbaar is. Klik op \"meer informatie over foutmelding\" voor meer informatie.",
-        "title": "Dat konden we niet vinden",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Extensie uitgeschakeld",
-        "homeButton": "Naar hoofdpagina",
-        "enableExtension": "Extensie inschakelen",
-        "title": "Activeer alstublieft de extensie",
-        "text": "Je hebt de AlphaFlix extensie geïnstalleerd. Om deze te gebruiken, moet je de extensie inschakelen voor deze site."
+        "title": "Dat konden we niet vinden"
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "Tik op het tandwielpictogram om van bron te wisselen!",
+        "2": "Tik op de titel om de link te kopiëren!",
+        "3": "Tik en houd SHIFT ingedrukt om de breedbeeldknop weer te geven in plaats van volledig scherm!",
+        "4": "Sommige bronnen werken beter dan andere!",
+        "5": "Download de extensie voor meer bronnen!",
+        "6": "Houd bladwijzers vast om ze te bewerken of te verwijderen!",
+        "7": "Houd SHIFT ingedrukt en tik op de titel om de link met de tijd te kopiëren!",
+        "8": "Stel een aangepaste ondertitelkleur in!",
+        "9": "Houd ` ingedrukt om sneltoetsen te bekijken!"
       }
+    },
+    "segment": {
+      "credits": "Kredieten",
+      "intro": "Intro",
+      "recap": "Samenvatten"
+    },
+    "skipTime": {
+      "confidence": "vertrouwen",
+      "connectApiKeyMessage": "Om nieuwe segmenten in te dienen, voert u uw TheIntroDB API-sleutel in de verbindingsinstellingen in",
+      "credits": "Credits overslaan",
+      "endOfVideo": "Einde",
+      "endsAt": "Eindigt op {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Annuleren",
+          "description": "Draag bij aan TheIntroDB door nauwkeurige segmenttijdstempels in te dienen. Alle inzendingen worden door de community geaccepteerd voordat ze worden gepubliceerd.",
+          "endTimeLabel": "Einde(n)",
+          "error": {
+            "endTime": "Eindtijd is vereist",
+            "mediaInfo": "Media-informatie is niet beschikbaar",
+            "segment": "Geen segment geselecteerd",
+            "startTime": "Starttijd is vereist",
+            "submission": "Fout bij het indienen van tijdstempels",
+            "tidbKey": "TIDB API-sleutel is niet ingesteld"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minimaal 5 seconden als er een einde is voorzien. Kan zich uitstrekken tot het einde van de media.",
+              "endDesc": "Optioneel - laat leeg als de credits tot het einde van het bestand doorlopen.",
+              "excludeDesc": "Sluit scènes uit de mid-credits of postcredits uit; alleen de hoofdcreditrol.",
+              "startDesc": "Vereist - wanneer de aftiteling begint (bijvoorbeeld wanneer de eerste aftiteling verschijnt).",
+              "whenToTitle": "Gids voor tijdstempels voor credits:"
+            },
+            "durationDesc": "Min 5s indien einde voorzien",
+            "durationLabel": "Duur:",
+            "endDesc": "Optioneel - leeg als het tot het einde reikt",
+            "endLabel": "Einde:",
+            "excludeDesc": "Scènes na de credits",
+            "excludeLabel": "Uitsluiten:",
+            "intro": {
+              "durationDesc": "De meeste intro's duren 30-90 seconden. Minimaal 5s als zowel begin als einde zijn ingesteld.",
+              "endDesc": "Vereist - wanneer de intro eindigt (meestal wanneer de titelkaart of hoofdaflevering begint).",
+              "excludeDesc": "Voeg geen koude openingen of pre-introscènes toe; alleen de hoofdtitelreeks.",
+              "startDesc": "Optioneel - laat leeg als de intro aan het begin van de aflevering begint.",
+              "whenToTitle": "Intro-gids voor tijdstempels:"
+            },
+            "preview": {
+              "durationDesc": "Preview varieert in lengte. Minimaal 5s.",
+              "endDesc": "Optioneel - laat leeg als het voorbeeld eindigt aan het einde van de media.",
+              "excludeDesc": "Het voorbeeld duurt meestal 15-90 seconden aan het einde van de aflevering, waarin een voorbeeld van de volgende aflevering wordt weergegeven.",
+              "startDesc": "Vereist - wanneer het voorbeeld start (bijvoorbeeld wanneer de voorbeeldtekst verschijnt).",
+              "whenToTitle": "Gids voor voorbeeldtijdstempels:"
+            },
+            "recap": {
+              "durationDesc": "De samenvattingen variëren in lengte. Minimaal 5s als zowel begin als einde zijn ingesteld.",
+              "endDesc": "Vereist - wanneer de samenvatting eindigt en de nieuwe inhoud begint.",
+              "excludeDesc": "Alleen het segment 'eerder aan' of samenvatting; bevatten niet de intro of nieuwe scènes.",
+              "startDesc": "Optioneel - laat leeg als de samenvatting aan het begin van de aflevering begint.",
+              "whenToTitle": "Samenvatting van de tijdstempelgids:"
+            },
+            "startDesc": "Vereist - wanneer de credits beginnen te rollen",
+            "startLabel": "Begin:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 of 210 (laat leeg voor einde media)",
+              "intro": "3:30 of 210 (verplicht)",
+              "preview": "3:30 of 210 (laat leeg voor einde media)",
+              "recap": "3:30 of 210 (verplicht)"
+            },
+            "start": {
+              "credits": "2:30 of 150 (verplicht)",
+              "intro": "2:30 of 150 (laat leeg voor start bij begin)",
+              "preview": "2:30 of 150 (verplicht)",
+              "recap": "2:30 of 150 (laat leeg voor start bij begin)"
+            }
+          },
+          "segmentType": "Segmenttype",
+          "startTimeLabel": "Begin(nen)",
+          "submit": "Indienen",
+          "submitting": "Verzenden...",
+          "success": {
+            "title": "Inzending succesvol! Bedankt!"
+          },
+          "title": "Verzend tijdstempels naar TheIntroDB",
+          "types": {
+            "credits": "Kredieten",
+            "intro": "Intro",
+            "preview": "Voorbeeld",
+            "recap": "Samenvatten"
+          },
+          "whenToDesc": "Voer tijdstempels in seconden in (bijvoorbeeld 150), mm:ss-indeling (bijvoorbeeld 2:30) of uu:mm:ss-indeling (bijvoorbeeld 1:42:20). Wij converteren het formaat automatisch voor u.",
+          "whenToTitle": "Gids voor tijdstempels:"
+        },
+        "title": "Was dit overslaan juist?"
+      },
+      "intro": "Intro overslaan",
+      "noSegments": "Er zijn geen segmenten overslaan beschikbaar",
+      "recap": "Samenvatting overslaan",
+      "skipSegments": "Segmenten overslaan",
+      "startsAt": "Begint om {{time}}",
+      "submissions": "{{count}} inzendingen",
+      "submitSegment": "Segment indienen",
+      "timeUnknown": "Tijd onbekend"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "Nog {{timeLeft}} • Klaar om {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Ondersteuning",
-    "text": "AlphaFlix is ontworpen om zo gebruiksvriendelijk mogelijk te zijn. Mensen hebben echter nog steeds vragen en problemen. Deze pagina is hier om deze tekortkomingen op te lossen",
-    "q1": {
-      "body": "Je kunt lid worden van de officiële <0>P‑Stream Fluxer</0> en daar vragen stellen, of je kunt een e‑mail sturen naar het adres onderaan deze pagina.",
-      "title": "Waar kan ik hulp krijgen?"
-    },
-    "q2": {
-      "body": "We hebben een <0>GitHub</0> waar je een gedetailleerd issue in onze repository kunt aanmaken. Daarnaast kun je, als je dat wilt, een pull request indienen om het probleem zelf op te lossen.",
-      "title": "Hoe kan ik een bug of probleem melden?"
-    }
-  },
-  "jip": {
-    "title": "Over de maker",
-    "text": "P‑Stream is niet zomaar uit een kokosnootboom gevallen, het is grotendeels door één persoon gemaakt (en niet zomaar één, maar een zeer epische).",
-    "q1": {
-      "body": "Je kunt lid worden van de officiële <0>P‑Stream Fluxer</0> en daar vragen stellen, of je kunt een e‑mail sturen naar het adres onderaan deze pagina.",
-      "title": "Waar kan ik hulp krijgen?"
-    },
-    "q2": {
-      "body": "We hebben een <0>GitHub</0> waar je een gedetailleerd issue in onze repository kunt aanmaken. Daarnaast kun je, als je dat wilt, een pull request indienen om het probleem zelf op te lossen.",
-      "title": "Hoe kan ik een bug of probleem melden?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "Toepassing laden",
-    "loadingUser": "Je profiel laden",
     "loadingUserError": {
+      "disconectCancel": "Annuleren",
+      "disconnectConfirm": "Bevestigen",
+      "disconnectMessage": "Verbreek de verbinding met de accountserver en behoud de meest recente lokale gegevens. Wijzigingen en bekeken inhoud worden pas gesynchroniseerd als u opnieuw bent ingelogd.",
+      "disconnectTitle": "Verbinding met backend verbreken?",
       "logout": "Uitloggen",
-      "reset": "Aangepaste server resetten",
-      "disconnect": "Disconnect from backend",
-      "text": "Het laden van uw profiel is mislukt",
       "reload": "Opnieuw laden",
-      "textWithReset": "Is het laden van je profiel van je aangepaste server mislukt en wil je terug naar de standaardserver?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reset": "Aangepaste server resetten"
     },
     "migration": {
       "failed": "Het migreren van uw gegevens is mislukt.",
@@ -1216,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Apparaatnaam",
-        "deviceNamePlaceholder": "Persoonlijke telefoon",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Bewerken",
-        "logoutButton": "Uitloggen"
-      },
-      "admin": {
-        "title": "Beheerderspaneel",
-        "text": "Gebruik de tools om de status van P‑Stream te testen."
+        "logoutButton": "Uitloggen",
+        "nicknameLabel": "Bijnaam",
+        "nicknamePlaceholder": "Voer uw bijnaam in"
       },
       "actions": {
         "delete": {
@@ -1248,26 +907,26 @@
           "text": "Deze actie is onomkeerbaar. Alle gegevens worden verwijderd en er kan niets worden hersteld.",
           "title": "Account verwijderen"
         },
-        "migration": {
-          "title": "Accountmigratie",
-          "text": "Zet je account over naar een nieuwe server of download je gegevens.",
-          "button": "Account overzetten"
-        },
-        "title": "Acties",
         "logoutAllDevices": {
-          "title": "Eindig alle sessies",
+          "button": "Log uit van alle apparaten",
           "text": "Dit zal je afmelden van alle apparaten die gekoppeld zijn aan je account.",
-          "button": "Log uit van alle apparaten"
-        }
+          "title": "Eindig alle sessies"
+        },
+        "migration": {
+          "button": "Account overzetten",
+          "text": "Zet je account over naar een nieuwe server of download je gegevens.",
+          "title": "Accountmigratie"
+        },
+        "title": "Acties"
       },
       "devices": {
         "deviceNameLabel": "Apparaatnaam",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Sessies niet geladen",
+        "lastActive": "Laatst actief: {{date}}",
+        "loggedInAt": "Ingelogd op: {{date}}",
         "removeDevice": "Verwijder",
         "title": "Apparaten",
-        "lastActive": "Laatst actief: {{date}}",
-        "loggedInAt": "Ingelogd op: {{date}}"
+        "unknownDevice": "Onbekend apparaat, fout bij het decoderen van naam"
       },
       "profile": {
         "finish": "Bewerken voltooien",
@@ -1281,379 +940,215 @@
         "text": "Deel uw kijkvoortgang tussen apparaten en houd ze gesynchroniseerd.",
         "title": "Synchroniseren met de Cloud"
       },
-      "title": "Account"
+      "title": "Rekening"
+    },
+    "all": {
+      "title": "Alle instellingen"
     },
     "appearance": {
       "activeTheme": "Actief",
-      "themes": {
-        "blue": "Blauw",
-        "custom": "Custom",
-        "default": "Standaard",
-        "gray": "Grijs",
-        "red": "Rood",
-        "teal": "Groenblauw",
-        "classic": "Klassiek",
-        "green": "Groen",
-        "mocha": "Mokka",
-        "pink": "Roze",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "Primair",
+        "secondary": "Secundair",
+        "tertiary": "Tertiair"
       },
-      "title": "Uiterlijk",
       "options": {
+        "carouselView": "Carrousel weergave",
+        "carouselViewDescription": "Geef uw momenteel bekeken en bladwijzersecties weer als carrousels in plaats van als een raster. Standaard uitgeschakeld.",
+        "carouselViewLabel": "Carrousel weergave",
         "discover": "Ontdek sectie",
         "discoverDescription": "Toon de Ontdek sectie op de startpagina onder je gebookmarkte media. Standaard ingeschakeld.",
         "discoverLabel": "Ontdek sectie",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
+        "featured": "Uitgelichte media",
+        "featuredDescription": "Toon een carrousel met aanbevolen films en shows bovenaan uw startpagina! Standaard uitgeschakeld.",
+        "featuredLabel": "Uitgelichte media",
+        "forceCompactEpisodeView": "Forceer een compacte afleveringsweergave",
+        "forceCompactEpisodeViewDescription": "Forceer de afleveringscarrousel in de speler om de \"klassieke\" compacte verticale weergave te gebruiken. Standaard uitgeschakeld.",
+        "forceCompactEpisodeViewLabel": "Compacte afleveringen",
+        "homeSectionOrder": "Volgorde van de startsectie",
+        "homeSectionOrderDescription": "Sleep en zet neer om de kijk- en bladwijzersecties op uw startpagina opnieuw te ordenen. Groepsbestellingen kunnen vanaf de startpagina worden aangepast.",
+        "homeSectionOrderGroups": "Bladwijzergroepen opnieuw rangschikken",
+        "logos": "Afbeelding logo's",
+        "logosDescription": "Toon afbeeldingslogo's in plaats van teksttitels in de modale en aanbevolen sectie met details. Standaard ingeschakeld.",
+        "logosLabel": "Afbeelding logo's",
+        "logosNotice": "Meestal zijn logo's alleen in het Engels. Andere talen willen dit misschien uitschakelen!",
+        "minimalCards": "Minimale kaarten",
+        "minimalCardsDescription": "Verberg tekstinhoud (titel, type, jaar) op mediakaarten, waarbij alleen de posterafbeelding wordt weergegeven.",
+        "minimalCardsLabel": "Minimale kaarten",
         "modal": "Details pop-up",
         "modalDescription": "Toon de details pop-up wanneer je op een media kaart klikt in plaats van naar de kijkpagina te gaan. Proxy of extensie vereist voor trailer. Standaard uitgeschakeld.",
         "modalLabel": "Details pop-up",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "pauseOverlay": "Pauzeer overlay",
+        "pauseOverlayDescription": "Toon een titel/logo en beschrijvingsoverlay wanneer de speler gepauzeerd en inactief is.",
+        "pauseOverlayLabel": "Pauzeer overlay"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Bladwijzers",
+        "watching": "Momenteel aan het kijken"
+      },
+      "themes": {
+        "acid": "Zuur",
+        "autumn": "Herfst",
+        "blue": "Blauw",
+        "christmas": "Kerstmis",
+        "classic": "Klassiek",
+        "cobalt": "Kobalt",
+        "custom": "Aangepast",
+        "default": "Standaard",
+        "ember": "Sintel",
+        "forest": "Woud",
+        "frost": "Vorst",
+        "grape": "Druif",
+        "gray": "Grijs",
+        "green": "Groen",
+        "hulk": "Hulk",
+        "mocha": "Mokka",
+        "noir": "Zwart",
+        "pink": "Roze",
+        "popsicle": "Ijslolly",
+        "red": "Rood",
+        "spark": "Vonk",
+        "spiderman": "Spiderman",
+        "teal": "Groenblauw",
+        "wolverine": "Wolverine"
+      },
+      "title": "Uiterlijk"
     },
     "connections": {
       "server": {
-        "description": "Als je verbinding wilt maken met een eigen backend om je gegevens op te slaan, schakel dan deze optie in en geef de URL op. <0>Instructies.</0>",
-        "label": "Eigen server",
-        "urlLabel": "Eigen server URL",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migreer mijn gegevens</0> naar een nieuwe server.",
-          "link": "Migreer mijn gegevens"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "Instellen",
-        "errorStatus": {
-          "description": "Het lijkt erop dat één of meer items in deze configuratie jouw aandacht nodig hebben.",
-          "title": "Iets vereist jouw aandacht"
-        },
-        "itemError": "Er is iets mis met deze instelling. Klik op opnieuw instellen om op te lossen.",
-        "items": {
-          "default": "Standaard installatie",
-          "extension": "Extensie",
-          "proxy": "Eigen proxy",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Opnieuw instellen",
-        "successStatus": {
-          "description": "In alles is ingesteld, je kunt nu je favoriete media bekijken.",
-          "title": "Alles is ingesteld!"
-        },
-        "unsetStatus": {
-          "description": "Klik op de knop aan de rechterkant om het installatieproces te starten.",
-          "title": "Je hebt de installatieprocedure nog niet doorlopen"
-        }
-      },
-      "title": "Verbindingen",
-      "workers": {
-        "addButton": "Nieuwe worker toevoegen",
-        "description": "Om de applicatie te laten werken, wordt al het verkeer omgeleid via proxies. Schakel dit in als je je eigen workers wilt gebruiken. <0>Instructies.</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "Nog geen workers, voeg er hieronder een toe",
-        "label": "Eigen proxy werker gebruiken",
-        "urlLabel": "Worker URLs",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
+        "changeWarning": "Als u de backend-server wijzigt, wordt u uitgelogd. Doorgaan?",
+        "changeWarningTitle": "Wijzig de backend-server",
+        "error": "Fout bij verbinden met backend",
+        "notice": "Uw account synchroniseert NIET tussen backends, dus onthoud welke u gebruikt!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "Draag bij aan TheIntroDB door feedback achter te laten over de intro-, samenvatting- en creditsegmenten. <0>Meer informatie.</0>",
+        "tokenLabel": "API-sleutel"
+      },
+      "title": "Verbindingen"
     },
     "preferences": {
-      "title": "Voorkeuren",
-      "language": "Applicatietaal",
-      "languageDescription": "Taal toegepast op de gehele applicatie.",
-      "thumbnail": "Genereer miniaturen",
-      "thumbnailDescription": "Meestal hebben video's geen miniaturen. Je kunt deze instelling inschakelen om ze dynamisch te genereren, maar dit kan je video vertragen.",
-      "thumbnailLabel": "Genereer miniaturen",
       "autoplay": "Automatisch afspelen",
       "autoplayDescription": "Speel automatisch de volgende aflevering in een serie af nadat het einde is bereikt. Kan ingeschakeld worden door gebruikers met de browserextensie, een eigen proxy, of met de standaardinstellingen als dit toegestaan is door de host.",
       "autoplayLabel": "Automatisch afspelen",
+      "autoResumeOnPlaybackError": "Automatisch hervatten bij afspeelfout",
+      "autoResumeOnPlaybackErrorDescription": "Ga automatisch verder met zoeken naar andere bronnen wanneer de huidige bron uitvalt tijdens het afspelen. Indien uitgeschakeld, ziet u een foutscherm met een optie voor handmatig hervatten.",
+      "autoResumeOnPlaybackErrorLabel": "Automatisch hervatten bij afspeelfout",
+      "autoSkipSegments": "Segmenten automatisch overslaan",
+      "autoSkipSegmentsDescription": "Indien ingeschakeld, kun je tijdens het kijken automatisch de intro-, samenvatting- en voorbeeldsegmenten overslaan.",
+      "autoSkipSegmentsLabel": "Segmenten automatisch overslaan",
+      "doubleClickToSeek": "Dubbeltik om te zoeken",
+      "doubleClickToSeekDescription": "Dubbeltik op de linker- of rechterkant van de speler om 10 seconden vooruit of achteruit te zoeken.",
+      "doubleClickToSeekLabel": "Schakel dubbeltikken om te zoeken in",
+      "embedOrder": "Insluitingen opnieuw ordenen",
+      "embedOrderDescription": "Slepen en neerzetten om de insluitingen opnieuw te ordenen. Dit bepaalt de volgorde waarin insluitingen worden gecontroleerd voor de media die u probeert te bekijken. <br><br> <strong>(De standaardvolgorde is het beste voor de meeste gebruikers)</strong>",
+      "embedOrderEnableLabel": "Aangepaste insluitvolgorde",
+      "holdToBoost": "Houd ingedrukt om de snelheid te verhogen",
+      "holdToBoostDescription": "Houd de spatiebalk ingedrukt of blijf het scherm aanraken om de afspeelsnelheid tijdelijk te verhogen tot 2x. Laat los om terug te keren naar de vorige snelheid.",
+      "holdToBoostLabel": "Schakel vasthouden in om te boosten",
+      "keyboardShortcuts": "Sneltoetsen op het toetsenbord",
+      "keyboardShortcutsDescription": "Pas de sneltoetsen voor de toepassing aan. Houd ` vast om deze hulp op elk gewenst moment weer te geven",
+      "keyboardShortcutsLabel": "Pas sneltoetsen aan",
+      "language": "Applicatietaal",
+      "languageDescription": "Taal toegepast op de gehele applicatie.",
+      "lastSuccessfulSource": "Laatst gebruikte bron",
+      "lastSuccessfulSourceDescription": "Geef automatisch prioriteit aan de bron die met succes inhoud voor de vorige aflevering heeft geleverd. Dit zorgt voor continuïteit bij het kijken van series.",
+      "lastSuccessfulSourceEnableLabel": "Laatst gebruikte bron",
+      "lowPerformanceMode": "Lage prestatie/bandbreedtemodus",
+      "lowPerformanceModeDescription": "Optimaliseert de applicatie voor langzamere verbindingen en apparaten door bandbreedte-intensieve functies uit te schakelen. Deze modus vermindert het datagebruik en verbetert de prestaties, terwijl de kernzoek- en kijkfunctionaliteit intact blijft.",
+      "lowPerformanceModeLabel": "Lage prestatiemodus",
+      "manualSource": "Handmatige bronselectie",
+      "manualSourceDescription": "Vereist dat u een bron kiest voordat u gaat schrapen. Schakelt de automatische bronselectie uit en opent de bronkiezer bij het starten van het afspelen.",
+      "manualSourceLabel": "Handmatige bronselectie",
+      "showLess": "Laat minder zien",
+      "showMore": "Laat meer zien",
       "skipCredits": "Sla eindcredits over",
       "skipCreditsDescription": "Wanneer ingeschakeld, wordt automatisch de volgende aflevering afgespeeld bij 99% voltooiing om de eindcredits over te slaan. Wanneer uitgeschakeld, wacht je totdat de aflevering volledig af is.",
       "skipCreditsLabel": "Sla eindcredits over",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
       "sourceOrder": "Volgorde van bronnen",
       "sourceOrderDescription": "Sleep om de volgorde van de bronnen te herordenen. Dit bepaalt de volgorde waarin de bronnen worden gecontroleerd voor de media die je probeert te bekijken. Als een bron grijs is, betekent dit dat de <bold>extensie</bold> vereist is voor die bron. <br><br> <strong>(De standaardvolgorde is het beste voor de meeste gebruikers)</strong>",
       "sourceOrderEnableLabel": "Aangepaste bronvolgorde",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "thumbnail": "Genereer miniaturen",
+      "thumbnailDescription": "Meestal hebben video's geen miniaturen. Je kunt deze instelling inschakelen om ze dynamisch te genereren, maar dit kan je video vertragen.",
+      "thumbnailLabel": "Genereer miniaturen",
+      "title": "Voorkeuren"
     },
     "reset": "Resetten",
     "save": "Wijzigingen opslaan",
+    "search": {
+      "placeholder": "Zoekinstellingen..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "App versie",
-        "backendUrl": "Backend URL",
-        "backendVersion": "Backend versie",
-        "hostname": "hostnaam",
-        "insecure": "Onveilig",
-        "nickname": "Nickname",
         "notLoggedIn": "U bent niet ingelogd",
-        "secure": "Veilig",
-        "title": "App informatie",
-        "unknownVersion": "Onbekend",
         "userId": "Gebruiker ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Gebruik dit als uitnodigingscode voor uw vriendenregister"
       }
     },
     "subtitles": {
-      "backgroundLabel": "Achtergrond dekking",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "Als u de achtergrondvervaging van de ondertiteling uitschakelt, kunnen enkele flikkeringsproblemen worden opgelost",
+      "backgroundBlurEnabledLabel": "Achtergrondvervaging",
       "backgroundBlurLabel": "Achtergrondvervaging",
+      "backgroundLabel": "Achtergrond dekking",
+      "BorderThicknessLabel": "Randdikte",
       "colorLabel": "Kleur",
+      "high": "Hoog",
+      "low": "Standaard",
       "previewQuote": "Ik mag niet bang zijn. Angst doodt de geest.",
-      "textSizeLabel": "Tekengrootte",
-      "title": "Ondertiteling",
       "textBoldLabel": "Vetgedrukte tekst",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
+      "textSizeLabel": "Tekengrootte",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "Border": "Grens",
+        "default": "Standaard",
+        "depressed": "Depressief",
+        "dropShadow": "Slagschaduw",
+        "raised": "Opgeheven",
+        "title": "Tekststijl"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "Ondertiteling",
+      "verticalPositionLabel": "Verticale positie"
     },
     "unsaved": "U heeft niet-opgeslagen wijzigingen"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Films",
-      "tvshows": "Televisieshows",
-      "editorpicks": "Aanbevolen door ons",
-      "top10": "Top-10"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Films",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In de bioscoop",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Populair {{type}} op {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "Nu populair"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Kijk iets willekeurigs",
-      "cancel": "Annuleer aftelling",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Nu aan het afspelen",
-      "in": "in"
-    },
-    "page": {
-      "title": "Ontdek Films & TV",
-      "subtitle": "Ontdek de nieuwste hits en tijdloze klassiekers.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Terug naar boven",
-    "filters": {
-      "country": "Land"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Voer een gedeelde kijkfeestlink of kamercode in",
-    "you": "Jij",
-    "guestFallback": "Gast"
   },
   "tmdb": {
     "genres": {
       "10759": "Actie en avontuur"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "{{seconds}} seconden voorsprong op de gastheer",
+    "alone": "Alleen",
+    "behindHost": "{{seconds}} seconden achter de host",
+    "cancel": "Annuleren",
+    "connectedAsGuest": "Verbonden om als gast naar de party te kijken",
+    "contentMismatch": "Kan niet deelnemen aan de kijkparty: de inhoud komt niet overeen met de inhoud van de host.",
+    "copyCode": "Klik om te kopiëren",
+    "emptyRoom": "Er is nog niemand in deze kamer",
+    "enterCodeOrLink": "Voer een gedeelde kijkfeestlink of kamercode in",
+    "episodeMismatch": "Kan niet deelnemen aan de kijkparty: je kijkt naar een andere aflevering dan de presentator.",
+    "guestFallback": "Gast",
+    "hosting": "Hosten",
+    "hostParty": "Organiseer een kijkfeest",
+    "invalidRoom": "Kan geen verbinding maken met deze kamer",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Meedoen",
+    "joinParty": "Sluit je aan bij een kijkfeest",
+    "leaveWatchParty": "Verlaat de Watch Party",
+    "linkCopied": "Gekopieerd!",
+    "noHost": "Geen gastheer in dit kijkfeest",
+    "save": "Redden",
+    "shareCode": "Deel deze code met vrienden (klik om de link te kopiëren)",
+    "showStatusOverlay": "Statusoverlay weergeven",
+    "status": {
+      "inSync": "Synchroniseren",
+      "outOfSync": "Niet gesynchroniseerd"
+    },
+    "syncing": "Synchroniseren...",
+    "validating": "Watchparty valideren...",
+    "viewers": "Kijkers ({{count}})",
+    "watching": "Kijken",
+    "withCount": "Met {{count}} anderen",
+    "you": "Jij"
   }
 }

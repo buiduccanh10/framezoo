@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "ᛈ-ᛊᛏᚱᛖᛗ ᛁᛊ ᚨ ᚠᛟᚱᚲ ᛟᚠ ᛗᛟᚢᛁᛖ-ᚹᛖᛒ ᚦᚨᛏ ᛁᛊ ᛖᚾᛊᚢᚱᛖᛞ ᛏᛟ ᛊᛏᚨᛁ ᚢᛈ ᛖᚢᛖᚾ ᚨᚠᛏᛖᚱ ᚦᛖ ᛊᚺᚢᛏᛞᛟᚹᚾ ᛟᚠ ᛗᛟᚢᛁᛖ-ᚹᛖᛒ.ᚨᛈᛈ. ᛈ-ᛊᛏᚱᛖᛗ ᚱᚢᚾᛊ ᛟᚾ ᚨ ᛈᚱᛁᚢᚨᛏᛖ, ᛊᛖᛚᚠ-ᚺᛟᛊᛏᛖᛞ ᚢᛈᛊ. ᛁ ᚱᚢᚾ ᚦᛁᛊ ᛊᛁᛏᛖ ᚨᛏ ᚨ ᛚᛟᛊᛊ; ᚦᛖᚱᛖ ᚨᚱᛖ ᚾᛟ ᚨᛞᛊ ᛞᚢᛖ ᛏᛟ ᛗᛁ ᛒᛖᛚᛁᛖᚠᛊ ᛁᚾ ᚠᚱᛖᛖ ᛗᛖᛞᛟ.",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "ᚲᛟᛗᛗᛟᚾ ᚲᚢᛖᛊᛏᛟᚾᛊ",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "ᚹᚺᛖᚱᛖ ᛞᛟᛖᛊ ᚦᛖ ᚲᛟᚾᛏᛖᚾᛏ ᚲᛟᛗᛖ ᚠᚱᛟᛗ?",
-      "body": "ᛈ-ᛊᛏᚱᛖᛗ ᛞᛟᛖᛊ ᚾᛟᛏ ᚺᛟᛊᛏ ᚨᚾᛁ ᚲᛟᚾᛏᛖᚾᛏ. ᚹᚺᛖᚾ ᛁᛟᚢ ᚲᛚᛁᚲᚲ ᛟᚾ ᛊᛟᛗᛖᚦᛁᛜ ᛏᛟ ᚹᚨᛏᚲᚺ, ᚦᛖ ᛁᚾᛏᛖᚱᚾᛖᛏ ᛁᛊ ᛊᛖᚱᚲᚺᛖᛞ ᚠᛟᚱ ᚦᛖ ᛊᛖᛚᛖᚲᛏᛖᛞ ᛗᛖᛞᛟ (ᛟᚾ ᚦᛖ ᛚᛟᚨᛞᛁᛜ ᛊᚲᚱᛖᛖᚾ ᚨᚾᛞ ᛁᚾ ᚦᛖ ×ᚢᛁᛞᛖᛟ ᛊᛟᚢᚱᚲᛖᛊ× ᛏᚨᛒ ᛁᛟᚢ ᚲᚨᚾ ᛊᛖᛖ ᚹᚺᛁᚲᚺ ᛊᛟᚢᚱᚲᛖ ᛁᛟᚢ×ᚱᛖ ᚢᛊᛁᛜ). ᛗᛖᛞᛟ ᚾᛖᚢᛖᚱ ᚷᛖᛏᛊ ᚢᛈᛚᛟᚨᛞᛖᛞ ᛒᛁ ᛈ-ᛊᛏᚱᛖᛗ, ᛖᚢᛖᚱᛁᚦᛁᛜ ᛁᛊ ᚦᚱᛟᚢᚷᚺ ᚦᛁᛊ ᛊᛖᚱᚲᚺᛁᛜ ᛗᛖᚲᚺᚨᚾᛁᛊᛗ.",
-      "section": "general"
-    },
-    "q2": {
-      "title": "ᚹᚺᛖᚱᛖ ᚲᚨᚾ ᛁ ᚱᛖᚲᚢᛖᛊᛏ ᚨ ᛊᚺᛟᚹ ᛟᚱ ᛗᛟᚢᛁᛖ?",
-      "body": "ᛁᛏ×ᛊ ᚾᛟᛏ ᛈᛟᛊᛊᛁᛒᛚᛖ ᛏᛟ ᚱᛖᚲᚢᛖᛊᛏ ᚨ ᛊᚺᛟᚹ ᛟᚱ ᛗᛟᚢᛁᛖ, ᛈ-ᛊᛏᚱᛖᛗ ᛞᛟᛖᛊ ᚾᛟᛏ ᛗᚨᚾᚨᚷᛖ ᚨᚾᛁ ᚲᛟᚾᛏᛖᚾᛏ. ᚨᛚᛚ ᚲᛟᚾᛏᛖᚾᛏ ᛁᛊ ᚢᛁᛖᚹᛖᛞ ᚦᚱᛟᚢᚷᚺ ᛊᛟᚢᚱᚲᛖᛊ ᛟᚾ ᚦᛖ ᛁᚾᛏᛖᚱᚾᛖᛏ.",
-      "section": "search"
-    },
-    "q3": {
-      "title": "ᛏᚺᛖ ᛊᛖᚱᚲᚺ ᚱᛖᛊᚢᛚᛏᛊ ᛞᛁᛊᛈᛚᚨᛁ ᚦᛖ ᛊᚺᛟᚹ ᛟᚱ ᛗᛟᚢᛁᛖ, ᚹᚺᛁ ᚲᚨᚾ×ᛏ ᛁ ᛈᛚᚨᛁ ᛁᛏ?",
-      "body": "ᛟᚢᚱ ᛊᛖᚱᚲᚺ ᚱᛖᛊᚢᛚᛏᛊ ᚨᚱᛖ ᛈᛟᚹᛖᚱᛖᛞ ᛒᛁ ᛏᚺᛖ ᛗᛟᚢᛁᛖ ᛞᚨᛏᚨᛒᚨᛊᛖ (ᛏᛗᛞᛒ) ᚨᚾᛞ ᛞᛁᛊᛈᛚᚨᛁ ᚱᛖᚷᚨᚱᛞᛚᛖᛊᛊ ᛟᚠ ᚹᚺᛖᚦᛖᚱ ᛟᚢᚱ ᛊᛟᚢᚱᚲᛖᛊ ᚨᚲᛏᚢᚨᛚᛚᛁ ᚺᚨᚢᛖ ᚦᛖ ᚲᛟᚾᛏᛖᚾᛏ.",
-      "section": "search"
-    },
-    "q4": {
-      "title": "ᚹᚺᚨᛏ ᚨᛒᛟᚢᛏ ᛗᛁ ᛞᚨᛏᚨ ᚨᚾᛞ ᛊᛏᚢᚠᚠ?",
-      "body": "ᚨᛚᛚ ᛞᚨᛏᚨ ᛁᛊ ᛊᛁᚾᚲᛖᛞ ᛏᛟ ᚦᛖ ᚲᛟᛗᛗᚢᚾᛁᛏᛁ ᛒᚨᚲᚲᛖᚾᛞ, ᚨᚾᛁᛟᚾᛖ ᛁᛊ ᚠᚱᛖᛖ ᛏᛟ ᚢᛊᛖ ᚦᛁᛊ ᚨᛊ ᚹᛖᛚᛚ.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "ᚺᛟᚹ ᚲᚨᚾ ᛁ ᚠᛁᚾᛞ ᛟᚢᛏ ᛗᛟᚱᛖ?",
-      "body": "ᛈ-ᛊᛏᚱᛖᛗ ᚺᚨᛊ ᚨ ᛞᛁᛊᚲᛟᚱᛞ ᛊᛖᚱᚢᛖᚱ ᚦᚨᛏ ᚲᚨᚾ ᛒᛖ ᚠᛟᚢᚾᛞ ᚨᛏ ᚦᛖ ᚺᛖᛞᛖᚱ ᛟᚠ ᚦᛁᛊ ᛈᚨᚷᛖ!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "ᚨᛒᛟᚢᛏ ᛈ-ᛊᛏᚱᛖᛗ"
-  },
   "actions": {
-    "copied": "ᚲᛟᛈᛁᛖᛞ",
-    "copy": "ᚲᛟᛈᛁ",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "copied": "ᚲᛟᛈᛁᛖᛞ",
+    "copy": "ᚲᛟᛈᛁ"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Active",
+      "confirm": "Confirm",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Choose which backend server to connect to",
+      "title": "Select Account Server"
+    },
     "createAccount": "ᛞᛟᚾ×ᛏ ᚺᚨᚢᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ ᛁᛖᛏ. <0>ᚲᚱᛖᛏᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ.</0>",
-    "deviceNameLabel": "ᛞᛖᚢᛁᚲᛖ ᚾᚨᛗᛖ",
-    "deviceNamePlaceholder": "ᛈᛖᚱᛊᛟᚾᚨᛚ ᛈᚺᛟᚾᛖ",
-    "inviteCodeLabel": "ᚱᚢᚿᛅ ᚴᚭᚦ",
-    "inviteCodePlaceholder": "Enteᚱ fᚱiend's Useᚱ ID",
-    "inviteCodeRequiredError": "ᛚᛅᛒᛅᛚ ᛁᛋ ᚱᛅᚴᚢᛁᚱᛅᛏ",
-    "inviteCodeInvalidError": "ᛋᚴᚭᚦ ᛁᛋ ᚾᚭᛏ ᚠᚭᚢᚾᚦ",
     "generate": {
-      "description": "ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᚨᚲᛏᛊ ᚨᛊ ᛁᛟᚢᚱ ᚢᛊᛖᚱᚾᚨᛗᛖ ᚨᚾᛞ ᛈᚨᛊᛊᚹᛟᚱᛞ. ᛗᚨᚲᛖ ᛊᚢᚱᛖ ᛏᛟ ᚲᛖᛖᛈ ᛁᛏ ᛊᚨᚠᛖ ᚨᛊ ᛁᛟᚢ ᚹᛁᛚᛚ ᚾᛖᛖᛞ ᛏᛟ ᛖᚾᛏᛖᚱ ᛁᛏ ᛏᛟ ᛚᛟᚷᛁᚾ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ. <bold>ᛞᛟ ᚾᛟᛏ ᛚᛟᛊᛖ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ!</ᛒᛟᛚᛞ</bold>",
-      "next": "ᛁ ᚺᚨᚢᛖ ᛊᚨᚢᛖᛞ ᛗᛁ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
-      "passphraseFrameLabel": "ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
-      "title": "ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
       "custom": "Custom",
       "customPassphraseLabel": "Custom Passphrase",
       "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
+      "description": "ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᚨᚲᛏᛊ ᚨᛊ ᛁᛟᚢᚱ ᚢᛊᛖᚱᚾᚨᛗᛖ ᚨᚾᛞ ᛈᚨᛊᛊᚹᛟᚱᛞ. ᛗᚨᚲᛖ ᛊᚢᚱᛖ ᛏᛟ ᚲᛖᛖᛈ ᛁᛏ ᛊᚨᚠᛖ ᚨᛊ ᛁᛟᚢ ᚹᛁᛚᛚ ᚾᛖᛖᛞ ᛏᛟ ᛖᚾᛏᛖᚱ ᛁᛏ ᛏᛟ ᛚᛟᚷᛁᚾ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ. <bold>ᛞᛟ ᚾᛟᛏ ᛚᛟᛊᛖ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ!</ᛒᛟᛚᛞ</bold>",
       "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
+      "next": "ᛁ ᚺᚨᚢᛖ ᛊᚨᚢᛖᛞ ᛗᛁ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
+      "passphraseFrameLabel": "ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
       "passphraseTooShort": "Passphrase must be at least 8 characters long.",
+      "title": "ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
+      "useCustomPassphrase": "Use Custom Passphrase",
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "ᚨᛚᚱᛖᛞᛁ ᚺᚨᚢᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ? <0>ᛚᛟᚷᛁᚾ ᚺᛖᚱᛖ.</0>",
+    "inviteCodeInvalidError": "ᛋᚴᚭᚦ ᛁᛋ ᚾᚭᛏ ᚠᚭᚢᚾᚦ",
+    "inviteCodeLabel": "ᚱᚢᚿᛅ ᚴᚭᚦ",
+    "inviteCodePlaceholder": "Enteᚱ fᚱiend's Useᚱ ID",
+    "inviteCodeRequiredError": "ᛚᛅᛒᛅᛚ ᛁᛋ ᚱᛅᚴᚢᛁᚱᛅᛏ",
     "login": {
       "description": "ᛈᛚᛖᛊᛖ ᛖᚾᛏᛖᚱ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᛏᛟ ᛚᛟᚷᛁᚾ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ",
-      "deviceLengthError": "ᛈᛚᛖᛊᛖ ᛖᚾᛏᛖᚱ ᚨ ᛞᛖᚢᛁᚲᛖ ᚾᚨᛗᛖ",
-      "passphraseLabel": "12-ᚹᛟᚱᛞ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
-      "passphrasePlaceholder": "ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
-      "submit": "ᛚᛟᚷᛁᚾ",
-      "title": "ᛚᛟᚷᛁᚾ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ",
-      "validationError": "ᛁᚾᚲᛟᚱᚱᛖᚲᛏ ᛟᚱ ᛁᚾᚲᛟᛗᛈᛚᛖᛏᛖ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "Nickname",
+      "nicknameNotFound": "Nickname not found",
       "nicknamePlaceholder": "Enter your nickname",
+      "nicknameRequired": "Nickname is required",
+      "noBackendUrl": "No backend URL",
+      "or": "or",
+      "passwordIncorrect": "Password is incorrect",
       "passwordLabel": "Password",
       "passwordPlaceholder": "Enter your password",
-      "nicknameRequired": "Nickname is required",
       "passwordRequired": "Password is required",
-      "nicknameNotFound": "Nickname not found",
-      "passwordIncorrect": "Password is incorrect"
+      "submit": "ᛚᛟᚷᛁᚾ",
+      "title": "ᛚᛟᚷᛁᚾ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ",
+      "usePasskey": "Use passkey",
+      "validationError": "ᛁᚾᚲᛟᚱᚱᛖᚲᛏ ᛟᚱ ᛁᚾᚲᛟᛗᛈᛚᛖᛏᛖ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ"
     },
     "register": {
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
       "information": {
         "color1": "ᛈᚱᛟᚠᛁᛚᛖ ᚲᛟᛚᛟᚱ ᛟᚾᛖ",
         "color2": "ᛈᚱᛟᚠᛁᛚᛖ ᚲᛟᛚᛟᚱ ᛏᚹᛟ",
@@ -195,39 +61,27 @@
         "next": "ᚾᛖᚲᛊᛏ",
         "title": "ᚨᚲᚲᛟᚢᚾᛏ ᛁᚾᚠᛟᚱᛗᚨᛏᛟᚾ"
       },
-      "passwordInput": {
-        "title": "Create your login",
-        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!"
-      },
       "nicknameLabel": "Nickname",
       "nicknamePlaceholder": "Choose a unique nickname",
       "nicknameTaken": "Nickname is already taken",
+      "passwordInput": {
+        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!",
+        "title": "Create your login"
+      },
       "passwordLabel": "Password",
-      "passwordPlaceholder": "Create a password (used as your passphrase)",
-      "passwordWeak": "Password must be at least 8 characters with letters and numbers",
       "passwordMismatch": "Passwords do not match",
-      "confirmPasswordLabel": "Confirm Password",
-      "confirmPasswordPlaceholder": "Confirm your password"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Create a password (used as your passphrase)",
+      "passwordWeak": "Password must be at least 8 characters with letters and numbers"
     },
     "trust": {
       "failed": {
         "text": "ᛞᛁᛞ ᛁᛟᚢ ᚲᛟᚾᚠᛁᚷᚢᚱᛖ ᛁᛏ ᚲᛟᚱᚱᛖᚲᛏᛚᛁ?",
         "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᚱᛖᚲᚺ ᛊᛖᚱᚢᛖᚱ"
       },
-      "noHostTitle": "ᛊᛖᚱᚢᛖᚱ ᚾᛟᛏ ᚲᛟᚾᚠᛁᚷᚢᚱᛖᛞ!",
-      "noHost": "ᛏᚺᛖ ᛊᛖᚱᚢᛖᚱ ᚺᚨᛊ ᚾᛟᛏ ᛒᛖᛖᚾ ᚲᛟᚾᚠᛁᚷᚢᚱᛖᛞ, ᚦᛖᚱᛖᚠᛟᚱᛖ ᛁᛟᚢ ᚲᚨᚾᚾᛟᛏ ᚲᚱᛖᛏᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ",
       "host": "ᛁᛟᚢ ᚨᚱᛖ ᚲᛟᚾᚾᛖᚲᛏᛁᛜ ᛏᛟ <0>{{hostname}}</0> - ᛈᛚᛖᛊᛖ ᚲᛟᚾᚠᛁᚱᛗ ᛁᛟᚢ ᛏᚱᚢᛊᛏ ᛁᛏ ᛒᛖᚠᛟᚱᛖ ᛗᚨᚲᛁᛜ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ...",
       "no": "ᚷᛟ ᛒᚨᚲᚲ",
+      "noHost": "ᛏᚺᛖ ᛊᛖᚱᚢᛖᚱ ᚺᚨᛊ ᚾᛟᛏ ᛒᛖᛖᚾ ᚲᛟᚾᚠᛁᚷᚢᚱᛖᛞ, ᚦᛖᚱᛖᚠᛟᚱᛖ ᛁᛟᚢ ᚲᚨᚾᚾᛟᛏ ᚲᚱᛖᛏᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ",
+      "noHostTitle": "ᛊᛖᚱᚢᛖᚱ ᚾᛟᛏ ᚲᛟᚾᚠᛁᚷᚢᚱᛖᛞ!",
       "title": "ᛞᛟ ᛁᛟᚢ ᛏᚱᚢᛊᛏ ᚦᛁᛊ ᛊᛖᚱᚢᛖᚱ?",
       "yes": "ᛁ ᛏᚱᚢᛊᛏ ᚦᛁᛊ ᛊᛖᚱᚢᛖᚱ"
     },
@@ -235,14 +89,88 @@
       "description": "ᛈᛚᛖᛊᛖ ᛖᚾᛏᛖᚱ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᚠᚱᛟᛗ ᛖᚱᛚᛁᛖᚱ ᛏᛟ ᚲᛟᚾᚠᛁᚱᛗ ᛁᛟᚢ ᚺᚨᚢᛖ ᛊᚨᚢᛖᛞ ᛁᛏ ᚨᚾᛞ ᛏᛟ ᚲᚱᛖᛏᛖ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ",
       "invalidData": "ᛞᚨᛏᚨ ᛁᛊ ᚾᛟᛏ ᚢᚨᛚᛁᛞ",
       "noMatch": "ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᛞᛟᛖᛊᚾ×ᛏ ᛗᚨᛏᚲᚺ",
-      "passphraseLabel": "ᛁᛟᚢᚱ 12-ᚹᛟᚱᛞ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
       "recaptchaFailed": "ᚱᛖᚲᚨᛈᛏᚲᚺᚨ ᚢᚨᛚᛁᛞᚨᛏᛟᚾ ᚠᚨᛁᛚᛖᛞ",
       "register": "ᚲᚱᛖᛏᛖ ᚨᚲᚲᛟᚢᚾᛏ",
-      "title": "ᚲᛟᚾᚠᛁᚱᛗ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "ᚲᛟᚾᚠᛁᚱᛗ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ"
     }
+  },
+  "details": {
+    "airs": "ᚨᛁᚱᛊ",
+    "collection": {
+      "movie": "Movie",
+      "movies": "Movies",
+      "rating": "Rating",
+      "releaseDate": "Release Date",
+      "sortBy": "Sort by"
+    },
+    "endsAt": "Ends at {{time}}",
+    "episode": "Episode",
+    "episodes": "ᛖᛈᛁᛊᛟᛞᛖᛊ",
+    "imdb": "ᚢᛁᛖᚹ ᛟᚾ ᛁᛗᛞᛒ",
+    "language": "Language:",
+    "play": "ᛈᛚᚨᛁ",
+    "rating": "ᚱᚨᛏᛁᛜ:",
+    "releaseDate": "ᚱᛖᛚᛖᛊᛖ ᛞᚨᛏᛖ:",
+    "resume": "ᚱᛖᛊᚢᛗᛖ",
+    "runtime": "ᚱᚢᚾᛏᛁᛗᛖ:",
+    "season": "ᛊᛖᛊᛟᚾ",
+    "seasons": "Season/s",
+    "similar": "Similar",
+    "tmdb": "ᚢᛁᛖᚹ ᛟᚾ ᛏᛗᛞᛒ",
+    "trailers": "Trailers",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "All Movie Lists",
+    "carousel": {
+      "change": "Change",
+      "more": "View more",
+      "title": {
+        "4kReleases": "4K Releases",
+        "editorPicksMovies": "Editor Picks Movies",
+        "editorPicksShows": "Editor Picks Shows",
+        "forYou": "For You",
+        "inCinemas": "In Cinemas",
+        "latestReleases": "Latest Releases",
+        "latestTVReleases": "Latest TV Shows",
+        "movies": "{{category}} Movies",
+        "moviesOn": "Movies on {{provider}}",
+        "onTheAir": "On The Air",
+        "popular": "Most Popular",
+        "recommended": "Because You Watched: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Top Rated",
+        "trending": "Trending Now",
+        "tvshows": "{{category}} Shows",
+        "tvshowsOn": "Shows on {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "More Info",
+      "playNow": "Play Now"
+    },
+    "filters": {
+      "country": "Country"
+    },
+    "page": {
+      "back": "Go back",
+      "loading": "Loading...",
+      "loadMore": "Load more",
+      "title": "Discover Movies & TV"
+    },
+    "scrollToTop": "Back to top",
+    "tabs": {
+      "movies": "Movies",
+      "top10": "Top 10",
+      "tvshows": "TV Shows"
+    },
+    "viewLists": "View All Movie Lists"
+  },
+  "downtimeNotice": {
+    "badge": "ᛁᛊᛊᚢᛖᛊ",
+    "goHome": "ᚷᛟ ᚺᛟᛗᛖ",
+    "message": "ᛈ-ᛊᛏᚱᛖᛗ ᛁᛊ ᛖᚲᛊᛈᛖᚱᛁᛖᚾᚲᛁᛜ ᛁᛊᛊᚢᛖᛊ ᚹᛁᚦ ᛊᛟᛗᛖ ᛈᚱᛟᚢᛁᛞᛖᚱᛊ ᚨᚷᚨᛁᚾ, ᛁᚠ ᛁᛟᚢ ᚲᚨᚾᛏ ᚠᛁᚾᛞ ᛟᚱ ᛈᛚᚨᛁ ᚨ ᛊᚺᛟᚹ ᛈᛚᛖᛊᛖ ᚲᚺᚨᛜᛖ ᚦᛖ ᛊᛟᚢᚱᚲᛖ. ᛖᚲᛊᛈᛖᚲᛏ ᚦᛁᛊ ᛖᚱᚱᛟᚱ ᛏᛟ ᛈᛖᚱᛊᛁᛊᛏ ᚦᚱᛟᚢᚷᚺᛟᚢᛏ ᚦᛖ ᛒᛖᛚᛟᚹ ᛏᛁᛗᛖᛊ.",
+    "title": "ᛈᚱᛟᚢᛁᛞᛖᚱ ᛁᛊᛊᚢᛖᛊ"
   },
   "errors": {
     "badge": "ᛁᛏ ᛒᚱᛟᚲᛖ 💀",
@@ -258,128 +186,116 @@
     },
     "links": {
       "fluxer": "ᛞᛁᛊᚲᛟᚱᛞ",
-      "legal": "ᛞᛗᚲᚨ",
-      "github": "ᚷᛁᛏᚺᚢᛒ",
-      "twitter": "ᛏᚹᛁᛏᛏᛖᚱ",
-      "funding": "ᛊᚢᛈᛈᛟᚱᛏ ᚢᛊ"
+      "funding": "ᛊᚢᛈᛈᛟᚱᛏ ᚢᛊ",
+      "github": "ᚷᛁᛏᚺᚢᛒ"
     },
     "tagline": "ᚹᚨᛏᚲᚺ ᛁᛟᚢᚱ ᚠᚨᚢᛟᚱᛁᛏᛖ ᛊᚺᛟᚹᛊ ᚨᚾᛞ ᛗᛟᚢᛁᛖᛊ ᚠᛟᚱ ᚠᚱᛖᛖ ᚹᛁᚦ ᚾᛟ ᚨᛞᛊ ᛖᚢᛖᚱ!"
   },
   "global": {
-    "name": "ᛈ-ᛊᛏᚱᛖᛗ",
-    "pages": {
-      "about": "ᚨᛒᛟᚢᛏ",
-      "legal": "ᛞᛗᚲᚨ",
-      "discover": "ᛞᛗᚲᚨ",
-      "support": "ᛊᚢᛈᛈᛟᚱᛏ",
-      "login": "ᛚᛟᚷᛁᚾ",
-      "onboarding": "ᛊᛖᛏᚢᛈ",
-      "pagetitle": "{{title}} - ᛈ-ᛊᛏᚱᛖᛗ",
-      "register": "ᚱᛖᚷᛁᛊᛏᛖᚱ",
-      "settings": "ᛊᛖᛏᛏᛁᛜᛊ",
-      "migration": "ᛗᛁᚷᚱᚨᛏᛖ ᚨᚲᚲᛟᚢᚾᛏ",
-      "jip": "Jip"
-    },
     "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
+      "cancel": "Cancel",
+      "clickToEdit": "Click on a key badge to edit it",
       "conditions": {
-        "notInWatchParty": "Not in watch party",
         "showsOnly": "Shows only"
       },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
       "conflict": "conflict",
       "conflicts": "conflicts",
       "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
+      "editInSettings": "Edit keyboard commands from settings",
+      "groups": {
+        "audioVideo": "Audio & Video",
+        "interface": "Interface",
+        "jumpToPosition": "Jump to Position",
+        "subtitlesAccessibility": "Subtitles & Accessibility",
+        "videoPlayback": "Video Playback"
+      },
       "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
       "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%.",
+      "pressKey": "Press a key...",
+      "resetAllToDefault": "Reset All to Default",
+      "resetToDefault": "Reset to default",
+      "save": "Save",
+      "saveChanges": "Save Changes",
+      "shortcuts": {
+        "barrelRoll": "Do a barrel roll! 🌀",
+        "closeOverlay": "Close overlay/modal",
+        "decreaseVolume": "Decrease volume",
+        "increaseVolume": "Increase volume",
+        "jumpTo0": "Jump to 0% (beginning)",
+        "jumpTo9": "Jump to 90%",
+        "mute": "Mute/unmute",
+        "nextEpisode": "Next episode",
+        "playPause": "Play/pause (or hold for 2x speed when enabled)",
+        "playPauseAlt": "Play/pause",
+        "previousEpisode": "Previous episode",
+        "randomCaption": "Select random caption from last used language",
+        "skipBackward1": "Skip backward 1 second",
+        "skipBackward10": "Skip backward 10 seconds",
+        "skipBackward5": "Skip backward 5 seconds",
+        "skipForward1": "Skip forward 1 second",
+        "skipForward10": "Skip forward 10 seconds",
+        "skipForward5": "Skip forward 5 seconds",
+        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
+        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleCaptions": "Toggle captions",
+        "toggleFullscreen": "Toggle fullscreen",
+        "toggleNativeSubtitles": "Toggle native subtitles"
+      },
+      "subtitle": "Hold ` to show this help anytime",
+      "title": "Keyboard Shortcuts"
+    },
+    "name": "ᛈ-ᛊᛏᚱᛖᛗ",
+    "pages": {
+      "discover": "ᛞᛗᚲᚨ",
+      "login": "ᛚᛟᚷᛁᚾ",
+      "migration": "ᛗᛁᚷᚱᚨᛏᛖ ᚨᚲᚲᛟᚢᚾᛏ",
+      "pagetitle": "{{title}} - ᛈ-ᛊᛏᚱᛖᛗ",
+      "register": "ᚱᛖᚷᛁᛊᛏᛖᚱ",
+      "settings": "ᛊᛖᛏᛏᛁᛜᛊ"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "ᛒᛟᛟᚲᛗᚨᚱᚲᛊ",
-      "showAll": "Show all",
-      "groups": {
-        "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
-        },
-        "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
-        }
-      },
       "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
         "cancel": "Cancel",
-        "save": "Save",
+        "description": "Edit the details for this bookmark",
         "groupsLabel": "Groups",
+        "save": "Save",
+        "title": "Edit Bookmark",
         "titleLabel": "Title",
         "titlePlaceholder": "Enter a title for your bookmark",
         "yearLabel": "Year",
         "yearPlaceholder": "Enter a year for your bookmark"
       },
+      "groups": {
+        "dropdown": {
+          "empty": "No groups yet",
+          "placeholderButton": "Add to group",
+          "removeAll": "Remove all",
+          "removeFromGroup": "Remove from group"
+        },
+        "editGroup": {
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "cancel": "Cancel",
+          "description": "Edit the name and icon of your bookmark group",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group",
+          "save": "Save",
+          "title": "Edit Group"
+        },
+        "reorder": {
+          "button": "Reorder",
+          "cancel": "Cancel",
+          "description": "Drag and drop to reorder your bookmark groups",
+          "done": "Done",
+          "save": "Save",
+          "title": "Edit Group Order"
+        }
+      },
+      "sectionTitle": "ᛒᛟᛟᚲᛗᚨᚱᚲᛊ",
+      "showAll": "Show all",
       "sorting": {
-        "label": "Sort by",
         "options": {
           "date": "Default (Date added)",
           "titleAsc": "Title A-Z",
@@ -392,7 +308,6 @@
     "continueWatching": {
       "sectionTitle": "ᚲᛟᚾᛏᛁᚾᚢᛖ ᚹᚨᛏᚲᚺᛁᛜ...",
       "sorting": {
-        "label": "Sort by",
         "options": {
           "date": "Default (Date added)",
           "titleAsc": "Title A-Z",
@@ -405,12 +320,19 @@
     "mediaList": {
       "stopEditing": "ᛊᛏᛟᛈ ᛖᛞᛁᛏᛁᛜ"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "ᛏᚺᚨᛏ×ᛊ ᚨᛚᛚ ᚹᛖ ᚺᚨᚢᛖ...",
+      "discover": "ᛞᛁᛊᚲᛟᚢᛖᚱ",
+      "discoverMore": "ᛞᛁᛊᚲᛟᚢᛖᚱ ᛗᛟᚱᛖ",
+      "empty": {
+        "default": "ᚹᛖᛚᚲᛟᛗᛖ, ᚠᛁᚾᛞ ᛗᛖᛞᛟ ᛏᛟ ᚹᚨᛏᚲᚺ ᚺᛖᚱᛖ!",
+        "extra": [
+          "ᛏᚺᛖᚱᛖ×ᛊ ᚾᛟᚦᛁᛜ ᚺᛖᚱᛖ :(",
+          "ᛊᛟ ᛖᛗᛈᛏᛁ...",
+          "ᚺᛖᛚᛚᛟ × ᛗᛁᛞᚷᚨᚱᛞ",
+          "ᚹᛖᛚᚲᛟᛗᛖ"
+        ]
+      },
       "failed": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᚠᛁᚾᛞ ᛗᛖᛞᛟ, ᛏᚱᛁ ᚨᚷᚨᛁᚾ!",
       "loading": "ᛚᛟᚨᛞᛁᛜ...",
       "noResults": "ᚹᛖ ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚨᚾᛁᚦᛁᛜ :(",
@@ -428,23 +350,19 @@
           ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "ᚹᛖᛚᚲᛟᛗᛖ, ᚠᛁᚾᛞ ᛗᛖᛞᛟ ᛏᛟ ᚹᚨᛏᚲᚺ ᚺᛖᚱᛖ!",
-        "extra": [
-          "ᛏᚺᛖᚱᛖ×ᛊ ᚾᛟᚦᛁᛜ ᚺᛖᚱᛖ :(",
-          "ᛊᛟ ᛖᛗᛈᛏᛁ...",
-          "ᚺᛖᛚᛚᛟ × ᛗᛁᛞᚷᚨᚱᛞ",
-          "ᚹᛖᛚᚲᛟᛗᛖ"
-        ]
-      },
-      "sectionTitle": "ᛊᛖᚱᚲᚺ ᚱᛖᛊᚢᛚᛏᛊ",
-      "discoverMore": "ᛞᛁᛊᚲᛟᚢᛖᚱ ᛗᛟᚱᛖ",
-      "discover": "ᛞᛁᛊᚲᛟᚢᛖᚱ"
+      "sectionTitle": "ᛊᛖᚱᚲᚺ ᚱᛖᛊᚢᛚᛏᛊ"
     },
-    "mediaCard": {
-      "moreInfo": "ᛗᛟᚱᛖ ᛁᚾᚠᛟ",
-      "copyLink": "ᚲᛟᛈᛁ ᛚᛁᚾᚲ",
-      "close": "ᚲᛚᛟᛊᛖ"
+    "support": {
+      "complete": "complete",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
+      "donate": "Donate",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "fluxer": "Fluxer",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "moreInfo": "More info",
+      "thankYou": "Thank you for your support!",
+      "title": "AlphaFlix needs your help!"
     },
     "titles": {
       "69": {
@@ -465,6 +383,15 @@
           "ᚢᛁᚢᚨ ᛚᚨ ᛈ-ᛊᛏᚱᛖᛗ!"
         ]
       },
+      "halloween": {
+        "default": "What spooky movie would you like to watch this Halloween?",
+        "extra": [
+          "Happy Halloween! 🎃👻",
+          "Boo! 👻",
+          "Trick or treat! 🍬",
+          "It's the Great Pumpkin, Charlie Brown!"
+        ]
+      },
       "morning": {
         "default": "ᚹᚺᚨᛏ ᚹᛟᚢᛚᛞ ᛁᛟᚢ ᛚᛁᚲᛖ ᛏᛟ ᚹᚨᛏᚲᚺ ᚦᛁᛊ ᛗᛟᚱᚾᛁᛜ?",
         "extra": [
@@ -476,304 +403,116 @@
         "extra": [
           "ᚢᛁᚢᚨ ᛚᚨ ᛈ-ᛊᛏᚱᛖᛗ!"
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Recently Watched",
+      "sectionTitle": "Watch History"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
-    "unreleased": "ᚢᚾᚱᛖᛚᛖᛊᛖᛞ",
+    "episodeShort": "ᛖ",
+    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?",
+    "seasonWatched": "Are you sure you want to mark the season as watched?",
     "types": {
       "movie": "ᛗᛟᚢᛁᛖ",
       "show": "ᛊᚺᛟᚹ"
     },
-    "episodeShort": "ᛖ",
-    "seasonShort": "ᛊ",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "ᚱᛖᛊᚢᛗᛖ",
-    "play": "ᛈᛚᚨᛁ",
-    "runtime": "ᚱᚢᚾᛏᛁᛗᛖ:",
-    "language": "Language:",
-    "releaseDate": "ᚱᛖᛚᛖᛊᛖ ᛞᚨᛏᛖ:",
-    "rating": "ᚱᚨᛏᛁᛜ:",
-    "votes": "ᚢᛟᛏᛖᛊ",
-    "tmdb": "ᚢᛁᛖᚹ ᛟᚾ ᛏᛗᛞᛒ",
-    "imdb": "ᚢᛁᛖᚹ ᛟᚾ ᛁᛗᛞᛒ",
-    "episodes": "ᛖᛈᛁᛊᛟᛞᛖᛊ",
-    "seasons": "Season/s",
-    "season": "ᛊᛖᛊᛟᚾ",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "ᚨᛁᚱᛊ",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "ᚢᚾᚱᛖᛚᛖᛊᛖᛞ"
   },
   "migration": {
-    "loginRequired": "ᛁᛟᚢ ᛗᚢᛊᛏ ᛒᛖ ᛚᛟᚷᚷᛖᛞ ᛁᚾ ᛏᛟ ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ! ᛈᛚᛖᛊᛖ ᚷᛟ ᛒᚨᚲᚲ ᚨᚾᛞ ᛚᛟᚷᛁᚾ ᛏᛟ ᚲᛟᚾᛏᛁᚾᚢᛖ.",
-    "start": {
-      "title": "ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ",
-      "explainer": "ᛁᚠ ᛁᛟᚢ ᚹᛁᛊᚺ ᛏᛟ ᛗᛁᚷᚱᚨᛏᛖ ᛟᚱ ᛒᚨᚲᚲᚢᛈ ᛁᛟᚢᚱ ᛞᚨᛏᚨ, ᛁᛟᚢ ᚲᚨᚾ ᛞᛟ ᛊᛟ ᚢᛊᛁᛜ ᚦᛖ ᛟᛈᛏᛟᚾᛊ ᛒᛖᛚᛟᚹ. ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᚨᛚᛚᛟᚹ ᛁᛟᚢ ᛏᛟ ᚲᛖᛖᛈ ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᚹᚺᛖᚾ ᛁᛟᚢ ᛊᚹᛁᛏᚲᚺ ᛒᚨᚲᚲᛖᚾᛞ ᛊᛖᚱᚢᛖᚱᛊ.",
-      "options": {
-        "or": "ᛟᚱ",
-        "direct": {
-          "description": "ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛞᛁᚱᛖᚲᛏᛚᛁ ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᛏᛟ ᚦᛖ ᚾᛖᚹ ᛊᛖᚱᚢᛖᚱ. ᛏᚺᛁᛊ ᛁᛊ ᚦᛖ ᚠᚨᛊᛏᛖᛊᛏ ᛟᛈᛏᛟᚾ. <br /><br />ᛏᚺᛁᛊ ᛟᛈᛏᛟᚾ ᚨᛚᛚᛟᚹᛊ ᛁᛟᚢ ᛏᛟ ᚲᛖᛖᛈ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᚦᛖ ᛊᚨᛗᛖ!",
-          "title": "ᛞᛁᚱᛖᚲᛏ ᛗᛁᚷᚱᚨᛏᛟᚾ",
-          "quality": "ᛖᚨᛊᛁᛖᛊᛏ ᚨᚾᛞ ᚠᚨᛊᛏᛖᛊᛏ",
-          "action": "ᛏᚱᚨᚾᛊᚠᛖᚱ ᛞᚨᛏᚨ"
-        },
-        "download": {
-          "description": "ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᛏᛟ ᛁᛟᚢᚱ ᛞᛖᚢᛁᚲᛖ. ᛁᛟᚢ ᚲᚨᚾ ᚦᛖᚾ ᚢᛈᛚᛟᚨᛞ ᛁᛏ ᛏᛟ ᚦᛖ ᚾᛖᚹ ᛊᛖᚱᚢᛖᚱ ᛟᚱ ᛃᚢᛊᛏ ᚲᛖᛖᛈ ᛁᛏ ᚠᛟᚱ ᛊᚨᚠᛖᚲᛖᛖᛈᛁᛜ.",
-          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ",
-          "quality": "ᛗᛟᚱᛖ ᛏᛖᚲᚺᚾᛁᚲᚨᛚ",
-          "action": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ"
-        },
-        "upload": {
-          "title": "ᚢᛈᛚᛟᚨᛞ ᛞᚨᛏᚨ",
-          "description": "ᚢᛈᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛖᚲᛊᛈᛟᚱᛏᛖᛞ ᛞᚨᛏᚨ ᚠᛁᛚᛖ ᛏᛟ ᚱᛖᛊᛏᛟᚱᛖ ᛁᛟᚢᚱ ᛒᛟᛟᚲᛗᚨᚱᚲᛊ ᚨᚾᛞ ᛈᚱᛟᚷᚱᛖᛊᛊ ᛟᚾ ᚦᛁᛊ ᚨᚲᚲᛟᚢᚾᛏ.",
-          "quality": "ᚱᛖᛊᛏᛟᚱᛖ ᚠᚱᛟᛗ ᛒᚨᚲᚲᚢᛈ",
-          "action": "ᚢᛈᛚᛟᚨᛞ ᛞᚨᛏᚨ"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "ᛞᛁᚱᛖᚲᛏ ᛗᛁᚷᚱᚨᛏᛟᚾ",
-      "description": "ᛖᚾᛏᛖᚱ ᚦᛖ ᛞᛖᛊᛏᛁᚾᚨᛏᛟᚾ ᛒᚨᚲᚲᛖᚾᛞ ᚢᚱᛚ ᛏᛟ ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᚲᚢᚱᚱᛖᚾᛏ ᚨᚲᚲᛟᚢᚾᛏ ᛞᚨᛏᚨ ᛏᛟ ᚨ ᚾᛖᚹ ᛒᚨᚲᚲᛖᚾᛞ. ᛏᚺᛁᛊ ᚲᛖᛖᛈᛊ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᚦᛖ ᛊᚨᛗᛖ!",
-      "backendLabel": "ᛞᛖᛊᛏᛁᚾᚨᛏᛟᚾ ᛒᚨᚲᚲᛖᚾᛞ ᚢᚱᛚ",
-      "recaptchaLabel": "ᚱᛖᚲᚨᛈᛏᚲᚺᚨ ᚲᛖᛁ (ᛟᛈᛏᛟᚾᚨᛚ)",
-      "toggleLable": "ᚾᛖᛖᛞᛊ ᚱᛖᚲᚨᛈᛏᚲᚺᚨ?",
-      "status": {
-        "error": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ.",
-        "success": "ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᚺᚨᛊ ᛒᛖᛖᚾ ᛗᛁᚷᚱᚨᛏᛖᛞ ᛊᚢᚲᚲᛖᛊᛊᚠᚢᛚᛚᛁ!"
-      },
-      "button": {
-        "migrate": "ᛗᛁᚷᚱᚨᛏᛖ",
-        "processing": "ᛈᚱᛟᚲᛖᛊᛊᛁᛜ...",
-        "home": "ᚷᛟ ᚺᛟᛗᛖ",
-        "login": "ᚲᛟᚾᛏᛁᚾᚢᛖ ᛏᛟ ᛚᛟᚷᛁᚾ"
-      }
-    },
+    "back": "ᚷᛟ ᛒᚨᚲᚲ",
     "download": {
-      "title": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ",
+      "button": {
+        "download": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ",
+        "home": "ᚷᛟ ᚺᛟᛗᛖ"
+      },
       "description": "ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᛏᛟ ᛁᛟᚢᚱ ᛞᛖᚢᛁᚲᛖ. ᛁᛟᚢ ᚲᚨᚾ ᚦᛖᚾ ᚢᛈᛚᛟᚨᛞ ᛁᛏ ᛏᛟ ᚦᛖ ᚾᛖᚹ ᛊᛖᚱᚢᛖᚱ ᛟᚱ ᛃᚢᛊᛏ ᚲᛖᛖᛈ ᛁᛏ ᚠᛟᚱ ᛊᚨᚠᛖᚲᛖᛖᛈᛁᛜ.",
       "status": {
         "error": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛞᚨᛏᚨ.",
         "success": "ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᚺᚨᛊ ᛒᛖᛖᚾ ᛞᛟᚹᚾᛚᛟᚨᛞᛖᛞ ᛊᚢᚲᚲᛖᛊᛊᚠᚢᛚᛚᛁ!"
       },
-      "button": {
-        "download": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ",
-        "home": "ᚷᛟ ᚺᛟᛗᛖ",
-        "login": "ᚲᛟᚾᛏᛁᚾᚢᛖ ᛏᛟ ᛚᛟᚷᛁᚾ"
-      }
+      "title": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ"
+    },
+    "loginRequired": "ᛁᛟᚢ ᛗᚢᛊᛏ ᛒᛖ ᛚᛟᚷᚷᛖᛞ ᛁᚾ ᛏᛟ ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ! ᛈᛚᛖᛊᛖ ᚷᛟ ᛒᚨᚲᚲ ᚨᚾᛞ ᛚᛟᚷᛁᚾ ᛏᛟ ᚲᛟᚾᛏᛁᚾᚢᛖ.",
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      },
+      "uploadDescription": "Data to upload:"
+    },
+    "start": {
+      "explainer": "ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᛏᛟ ᛁᛟᚢᚱ ᛞᛖᚢᛁᚲᛖ. ᛁᛟᚢ ᚲᚨᚾ ᚦᛖᚾ ᚢᛈᛚᛟᚨᛞ ᛁᛏ ᛏᛟ ᚦᛖ ᚾᛖᚹ ᛊᛖᚱᚢᛖᚱ ᛟᚱ ᛃᚢᛊᛏ ᚲᛖᛖᛈ ᛁᛏ ᚠᛟᚱ ᛊᚨᚠᛖᚲᛖᛖᛈᛁᛜ. ᚢᛈᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛖᚲᛊᛈᛟᚱᛏᛖᛞ ᛞᚨᛏᚨ ᚠᛁᛚᛖ ᛏᛟ ᚱᛖᛊᛏᛟᚱᛖ ᛁᛟᚢᚱ ᛒᛟᛟᚲᛗᚨᚱᚲᛊ ᚨᚾᛞ ᛈᚱᛟᚷᚱᛖᛊᛊ ᛟᚾ ᚦᛁᛊ ᚨᚲᚲᛟᚢᚾᛏ.",
+      "options": {
+        "download": {
+          "action": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ",
+          "description": "ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᛏᛟ ᛁᛟᚢᚱ ᛞᛖᚢᛁᚲᛖ. ᛁᛟᚢ ᚲᚨᚾ ᚦᛖᚾ ᚢᛈᛚᛟᚨᛞ ᛁᛏ ᛏᛟ ᚦᛖ ᚾᛖᚹ ᛊᛖᚱᚢᛖᚱ ᛟᚱ ᛃᚢᛊᛏ ᚲᛖᛖᛈ ᛁᛏ ᚠᛟᚱ ᛊᚨᚠᛖᚲᛖᛖᛈᛁᛜ.",
+          "quality": "ᛗᛟᚱᛖ ᛏᛖᚲᚺᚾᛁᚲᚨᛚ",
+          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᛞᚨᛏᚨ"
+        },
+        "or": "ᛟᚱ",
+        "upload": {
+          "action": "ᚢᛈᛚᛟᚨᛞ ᛞᚨᛏᚨ",
+          "description": "ᚢᛈᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛖᚲᛊᛈᛟᚱᛏᛖᛞ ᛞᚨᛏᚨ ᚠᛁᛚᛖ ᛏᛟ ᚱᛖᛊᛏᛟᚱᛖ ᛁᛟᚢᚱ ᛒᛟᛟᚲᛗᚨᚱᚲᛊ ᚨᚾᛞ ᛈᚱᛟᚷᚱᛖᛊᛊ ᛟᚾ ᚦᛁᛊ ᚨᚲᚲᛟᚢᚾᛏ.",
+          "quality": "ᚱᛖᛊᛏᛟᚱᛖ ᚠᚱᛟᛗ ᛒᚨᚲᚲᚢᛈ",
+          "title": "ᚢᛈᛚᛟᚨᛞ ᛞᚨᛏᚨ"
+        }
+      },
+      "title": "ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ"
     },
     "upload": {
-      "title": "ᚢᛈᛚᛟᚨᛞ ᛞᚨᛏᚨ",
+      "button": {
+        "home": "ᚲᛟᚾᛏᛁᚾᚢᛖ ᛏᛟ ᚺᛟᛗᛖ",
+        "import": "ᛁᛗᛈᛟᚱᛏ ᛞᚨᛏᚨ",
+        "processing": "ᛈᚱᛟᚲᛖᛊᛊᛁᛜ...",
+        "saveLocal": "Save locally"
+      },
       "description": "ᚢᛈᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛖᚲᛊᛈᛟᚱᛏᛖᛞ ᛞᚨᛏᚨ ᚠᛁᛚᛖ ᛏᛟ ᚱᛖᛊᛏᛟᚱᛖ ᛁᛟᚢᚱ ᛒᛟᛟᚲᛗᚨᚱᚲᛊ ᚨᚾᛞ ᛈᚱᛟᚷᚱᛖᛊᛊ ᛟᚾ ᚦᛁᛊ ᚨᚲᚲᛟᚢᚾᛏ.",
+      "exportedOn": "ᛖᚲᛊᛈᛟᚱᛏᛖᛞ ᛟᚾ",
+      "file": {
+        "change": "ᚲᚺᚨᛜᛖ ᚠᛁᛚᛖ",
+        "description": "ᛊᛖᛚᛖᚲᛏ ᚦᛖ ᚠᛁᛚᛖ ᛁᛟᚢ ᚹᚨᚾᛏ ᛏᛟ ᚢᛈᛚᛟᚨᛞ",
+        "select": "ᛊᛖᛚᛖᚲᛏ ᚠᛁᛚᛖ"
+      },
+      "previewTitle": "Preview:",
       "status": {
-        "processing": "ᛈᚱᛟᚲᛖᛊᛊᛁᛜ ᛞᚨᛏᚨ...",
         "error": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᚢᛈᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛞᚨᛏᚨ.",
+        "processing": "ᛈᚱᛟᚲᛖᛊᛊᛁᛜ ᛞᚨᛏᚨ...",
         "success": "ᛁᛟᚢᚱ ᛞᚨᛏᚨ ᚺᚨᛊ ᛒᛖᛖᚾ ᚢᛈᛚᛟᚨᛞᛖᛞ ᛊᚢᚲᚲᛖᛊᛊᚠᚢᛚᛚᛁ!",
         "successLocal": "Your data has been saved locally! 🎉"
       },
-      "file": {
-        "description": "ᛊᛖᛚᛖᚲᛏ ᚦᛖ ᚠᛁᛚᛖ ᛁᛟᚢ ᚹᚨᚾᛏ ᛏᛟ ᚢᛈᛚᛟᚨᛞ",
-        "select": "ᛊᛖᛚᛖᚲᛏ ᚠᛁᛚᛖ",
-        "change": "ᚲᚺᚨᛜᛖ ᚠᛁᛚᛖ",
-        "name": "ᚠᛁᛚᛖ ᚾᚨᛗᛖ"
-      },
-      "exportedOn": "ᛖᚲᛊᛈᛟᚱᛏᛖᛞ ᛟᚾ",
-      "previewTitle": "Preview:",
-      "button": {
-        "import": "ᛁᛗᛈᛟᚱᛏ ᛞᚨᛏᚨ",
-        "processing": "ᛈᚱᛟᚲᛖᛊᛊᛁᛜ...",
-        "success": "ᛁᛗᛈᛟᚱᛏ ᚲᛟᛗᛈᛚᛖᛏᛖ",
-        "home": "ᚲᛟᚾᛏᛁᚾᚢᛖ ᛏᛟ ᚺᛟᛗᛖ",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "ᚷᛟ ᛒᚨᚲᚲ"
+      "title": "ᚢᛈᛚᛟᚨᛞ ᛞᚨᛏᚨ"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "ᚲᚺᛖᚲᚲ ᛁᛟᚢᚱ ᛁᚾᛏᛖᚱᚾᛖᛏ ᚲᛟᚾᚾᛖᚲᛏᛟᚾ!"
     },
+    "install": {
+      "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
+      "iosSafariGuide": "To install AlphaFlix as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
+    },
     "menu": {
-      "about": "ᚨᛒᛟᚢᛏ ᚢᛊ",
+      "desktop": "App Settings",
       "logout": "ᛚᛟᚷ ᛟᚢᛏ",
       "register": "ᛊᛁᚾᚲ ᛏᛟ ᚲᛚᛟᚢᛞ",
-      "settings": "ᛊᛖᛏᛏᛁᛜᛊ",
-      "support": "ᛊᚢᛈᛈᛟᚱᛏ",
-      "discover": "ᛞᛁᛊᚲᛟᚢᛖᚱ",
-      "development": "ᛞᛖᚢᛖᛚᛟᛈᛗᛖᚾᛏ",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "To install AlphaFlix as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add.",
-      "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen')."
+      "settings": "ᛊᛖᛏᛏᛁᛜᛊ"
     }
   },
   "notFound": {
     "badge": "ᚾᛟᛏ ᚠᛟᚢᚾᛞ",
     "goHome": "ᛒᚨᚲᚲ ᛏᛟ ᚺᛟᛗᛖ",
-    "reloadButton": "ᛏᚱᛁ ᚨᚷᚨᛁᚾ",
     "message": "ᚹᛖ ᛚᛟᛟᚲᛖᛞ ᛖᚢᛖᚱᛁᚹᚺᛖᚱᛖ× ᚢᚾᛞᛖᚱ ᚦᛖ ᛒᛁᚾᛊ, ᛁᚾ ᚦᛖ ᚲᛚᛟᛊᛖᛏ, ᛒᛖᚺᛁᚾᛞ ᚦᛖ ᛈᚱᛟᚲᛊᛁ, ᛒᚢᛏ ᚢᛚᛏᛁᛗᚨᛏᛖᛚᛁ ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᛖ ᛈᚨᚷᛖ ᛁᛟᚢ ᚨᚱᛖ ᛚᛟᛟᚲᛁᛜ ᚠᛟᚱ.",
+    "reloadButton": "ᛏᚱᛁ ᚨᚷᚨᛁᚾ",
     "title": "ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᚨᛏ ᛈᚨᚷᛖ"
-  },
-  "downtimeNotice": {
-    "badge": "ᛁᛊᛊᚢᛖᛊ",
-    "goHome": "ᚷᛟ ᚺᛟᛗᛖ",
-    "message": "ᛈ-ᛊᛏᚱᛖᛗ ᛁᛊ ᛖᚲᛊᛈᛖᚱᛁᛖᚾᚲᛁᛜ ᛁᛊᛊᚢᛖᛊ ᚹᛁᚦ ᛊᛟᛗᛖ ᛈᚱᛟᚢᛁᛞᛖᚱᛊ ᚨᚷᚨᛁᚾ, ᛁᚠ ᛁᛟᚢ ᚲᚨᚾᛏ ᚠᛁᚾᛞ ᛟᚱ ᛈᛚᚨᛁ ᚨ ᛊᚺᛟᚹ ᛈᛚᛖᛊᛖ ᚲᚺᚨᛜᛖ ᚦᛖ ᛊᛟᚢᚱᚲᛖ. ᛖᚲᛊᛈᛖᚲᛏ ᚦᛁᛊ ᛖᚱᚱᛟᚱ ᛏᛟ ᛈᛖᚱᛊᛁᛊᛏ ᚦᚱᛟᚢᚷᚺᛟᚢᛏ ᚦᛖ ᛒᛖᛚᛟᚹ ᛏᛁᛗᛖᛊ.",
-    "title": "ᛈᚱᛟᚢᛁᛞᛖᚱ ᛁᛊᛊᚢᛖᛊ"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "ᚲᚨᚾᚲᛖᛚ",
-      "confirm": "ᚢᛊᛖ ᛞᛖᚠᚨᚢᛚᛏ ᛊᛖᛏᚢᛈ",
-      "description": "ᛏᚺᛖ ᛞᛖᚠᚨᚢᛚᛏ ᛊᛖᛏᚢᛈ ᛞᛟᛖᛊ ᚾᛟᛏ ᚺᚨᚢᛖ ᚦᛖ ᛒᛖᛊᛏ ᛊᛏᚱᛖᛗᛊ ᚨᚾᛞ ᚲᚨᚾ ᛒᛖ ᚢᚾᛒᛖᚱᚨᛒᛚᛁ ᛊᛚᛟᚹ.",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "ᚨᚱᛖ ᛁᛟᚢ ᛊᚢᚱᛖ?"
-    },
-    "extension": {
-      "back": "ᚷᛟ ᛒᚨᚲᚲ",
-      "explainer": "ᚢᛊᛁᛜ ᚦᛖ ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ, ᛁᛟᚢ ᚲᚨᚾ ᚷᛖᛏ ᚦᛖ ᛒᛖᛊᛏ ᛊᛏᚱᛖᛗᛊ ᚹᛖ ᚺᚨᚢᛖ ᛏᛟ ᛟᚠᚠᛖᚱ. ᚹᛁᚦ ᛃᚢᛊᛏ ᚨ ᛊᛁᛗᛈᛚᛖ ᛁᚾᛊᛏᚨᛚᛚ.",
-      "explainerIos": "ᚢᚾᚠᛟᚱᛏᚢᚾᚨᛏᛖᛚᛁ, ᚦᛖ ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᛁᛊ ᚾᛟᛏ ᛊᚢᛈᛈᛟᚱᛏᛖᛞ ᛟᚾ ᛁᛟᛊ, ᛈᚱᛖᛊᛊ <bold>ᚷᛟ ᛒᚨᚲᚲ</bold> ᛏᛟ ᚲᚺᛟᛟᛊᛖ ᚨᚾᛟᚦᛖᚱ ᛟᛈᛏᛟᚾ.",
-      "extensionHelp": "ᛁᚠ ᛁᛟᚢ×ᚢᛖ ᛁᚾᛊᛏᚨᛚᛚᛖᛞ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᛒᚢᛏ ᛁᛏ×ᛊ ᚾᛟᛏ ᛞᛖᛏᛖᚲᛏᛖᛞ, <bold>ᛟᛈᛖᚾ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᚦᚱᛟᚢᚷᚺ ᛁᛟᚢᚱ ᛒᚱᛟᚹᛊᛖᚱᛊ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᛗᛖᚾᚢ</bold> ᚨᚾᛞ ᚠᛟᛚᛚᛟᚹ ᚦᛖ ᛊᛏᛖᛈᛊ ᛟᚾ ᛊᚲᚱᛖᛖᚾ.",
-      "linkChrome": "ᛁᚾᛊᛏᚨᛚᛚ ᚲᚺᚱᛟᛗᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-      "linkFirefox": "ᛁᚾᛊᛏᚨᛚᛚ ᚠᛁᚱᛖᚠᛟᚲᛊ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "ᛁᚾᛊᛏᚨᛚᛚᛖᛞ ᛟᚾ ᚲᚺᚱᛟᛗᛖ, ᛒᚢᛏ ᚦᛖ ᛊᛁᛏᛖ ᛁᛊᚾ×ᛏ ᛞᛖᛏᛖᚲᛏᛁᛜ ᛁᛏ? ᛏᚱᛁ ᚱᛖᛚᛟᚨᛞᛁᛜ ᚦᛖ ᛈᚨᚷᛖ!",
-      "notDetectingAction": "ᚱᛖᛚᛟᚨᛞ ᛈᚨᚷᛖ",
-      "status": {
-        "disallowed": "ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᛁᛊ ᚾᛟᛏ ᛖᚾᚨᛒᛚᛖᛞ ᚠᛟᚱ ᚦᛁᛊ ᛈᚨᚷᛖ",
-        "disallowedAction": "ᛖᚾᚨᛒᛚᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-        "failed": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᚱᛖᚲᚢᛖᛊᛏ ᛊᛏᚨᛏᚢᛊ",
-        "loading": "ᚹᚨᛁᛏᛁᛜ ᚠᛟᚱ ᛁᛟᚢ ᛏᛟ ᛁᚾᛊᛏᚨᛚᛚ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-        "outdated": "ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᚢᛖᚱᛊᛟᚾ ᛏᛟᛟ ᛟᛚᛞ",
-        "success": "ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᛁᛊ ᚹᛟᚱᚲᛁᛜ ᚨᛊ ᛖᚲᛊᛈᛖᚲᛏᛖᛞ!"
-      },
-      "submit": "ᚲᛟᚾᛏᛁᚾᚢᛖ",
-      "title": "ᛚᛖᛏ×ᛊ ᛊᛏᚨᚱᛏ ᚹᛁᚦ ᚨᚾ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ"
-    },
-    "proxy": {
-      "back": "ᚷᛟ ᛒᚨᚲᚲ",
-      "explainer": "ᚹᛁᚦ ᚦᛖ ᛈᚱᛟᚲᛊᛁ ᛗᛖᚦᛟᛞ, ᛁᛟᚢ ᚲᚨᚾ ᚷᛖᛏ ᚷᚱᛖᛏ ᚲᚢᚨᛚᛁᛏᛁ ᛊᛏᚱᛖᛗᛊ ᛒᛁ ᛗᚨᚲᛁᛜ ᚨ ᛊᛖᛚᚠ-ᛊᛖᚱᚢᛁᚲᛖ ᛈᚱᛟᚲᛊᛁ.",
-      "input": {
-        "errorConnection": "ᚲᛟᚢᛚᛞ ᚾᛟᛏ ᚲᛟᚾᚾᛖᚲᛏ ᛏᛟ ᛈᚱᛟᚲᛊᛁ",
-        "errorInvalidUrl": "ᚾᛟᛏ ᚨ ᚢᚨᛚᛁᛞ ᚢᚱᛚ",
-        "errorNotProxy": "ᛖᚲᛊᛈᛖᚲᛏᛖᛞ ᚨ ᛈᚱᛟᚲᛊᛁ ᛒᚢᛏ ᚷᛟᛏ ᚨ ᚹᛖᛒᛊᛁᛏᛖ",
-        "label": "ᛈᚱᛟᚲᛊᛁ ᚢᚱᛚ",
-        "placeholder": "https:// (Roman characters only)"
-      },
-      "link": "ᛚᛖᚱᚾ ᚺᛟᚹ ᛏᛟ ᛗᚨᚲᛖ ᚨ ᛈᚱᛟᚲᛊᛁ",
-      "submit": "ᛊᚢᛒᛗᛁᛏ ᛈᚱᛟᚲᛊᛁ",
-      "title": "ᛚᛖᛏ×ᛊ ᛗᚨᚲᛖ ᚨ ᚾᛖᚹ ᛈᚱᛟᚲᛊᛁ"
-    },
-    "start": {
-      "explainer": "ᛏᛟ ᚷᛖᛏ ᚦᛖ ᛒᛖᛊᛏ ᛊᛏᚱᛖᛗᛊ ᛈᛟᛊᛊᛁᛒᛚᛖ, ᛁᛟᚢ ᚹᛁᛚᛚ ᚾᛖᛖᛞ ᛏᛟ ᚲᚺᛟᛟᛊᛖ ᚹᚺᛁᚲᚺ ᛊᛏᚱᛖᛗᛁᛜ ᛗᛖᚦᛟᛞ ᛁᛟᚢ ᚹᚨᚾᛏ ᛏᛟ ᚢᛊᛖ.",
-      "moreInfo": {
-        "button": "ᛗᛟᚱᛖ ᛁᚾᚠᛟ",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "or",
-        "default": {
-          "text": "ᛁ ᛞᛟᚾ×ᛏ ᚹᚨᚾᛏ ᚷᛟᛟᛞ ᚲᚢᚨᛚᛁᛏᛁ ᛊᛏᚱᛖᛗᛊ, ᚢᛊᛖ ᚦᛖ ᛞᛖᚠᚨᚢᛚᛏ ᛊᛖᛏᚢᛈ."
-        },
-        "extension": {
-          "action": "ᛁᚾᛊᛏᚨᛚᛚ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-          "description": "ᛁᚾᛊᛏᚨᛚᛚ ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᚨᚾᛞ ᚷᚨᛁᚾ ᚨᚲᚲᛖᛊᛊ ᛏᛟ ᚦᛖ ᛒᛖᛊᛏ ᛊᛟᚢᚱᚲᛖᛊ, ᛒᚢᛏ ᚱᛖᛗᛖᛗᛒᛖᚱ ᛏᛟ ᛖᚾᚨᛒᛚᛖ ᛁᛏ ᚠᛟᚱ ᚦᛁᛊ ᛊᛁᛏᛖ.",
-          "quality": "ᛒᛖᛊᛏ ᚲᚢᚨᛚᛁᛏᛁ",
-          "title": "ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "ᛊᛖᛏᚢᛈ ᛈᚱᛟᚲᛊᛁ",
-          "description": "ᛊᛖᛏᚢᛈ ᚨ ᚠᚱᛖᛖ ᛈᚱᛟᚲᛊᛁ ᛁᚾ ᛃᚢᛊᛏ 5 ᛗᛁᚾᚢᛏᛖᛊ ᚨᚾᛞ ᚷᚨᛁᚾ ᚨᚲᚲᛖᛊᛊ ᛏᛟ ᚷᚱᛖᛏ ᛊᛟᚢᚱᚲᛖᛊ...",
-          "quality": "ᚷᛟᛟᛞ ᚲᚢᚨᛚᛁᛏᛁ",
-          "title": "ᚲᚢᛊᛏᛟᛗ ᛈᚱᛟᚲᛊᛁ"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "ᛚᛖᛏ×ᛊ ᚷᛖᛏ ᛁᛟᚢ ᛊᛖᛏᚢᛈ ᚹᛁᚦ ᛈ-ᛊᛏᚱᛖᛗ"
+      "cancel": "ᚲᚨᚾᚲᛖᛚ"
     }
   },
   "overlays": {
@@ -785,363 +524,8 @@
       "short": "ᛒᚨᚲᚲ"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
       "device": "device",
-      "enabled": "ᚲᚨᛊᛏᛁᛜ ᛏᛟ ᛞᛖᚢᛁᚲᛖ"
-    },
-    "menus": {
-      "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛏᚨᚲᛖᚾ ᛞᛁᚱᛖᚲᛏᛚᛁ ᚠᚱᛟᛗ ᚦᛖ ᛈᚱᛟᚢᛁᛞᛖᚱ. ᛈ-ᛊᛏᚱᛖᛗ ᛞᛟᛖᛊ ᚾᛟᛏ ᚺᚨᚢᛖ ᚲᛟᚾᛏᚱᛟᛚ ᛟᚢᛖᚱ ᚺᛟᚹ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛈᚱᛟᚢᛁᛞᛖᛞ.",
-        "copyHlsPlaylist": "ᚲᛟᛈᛁ ᚺᛚᛊ ᛈᛚᚨᛁᛚᛁᛊᛏ ᛚᛁᚾᚲ",
-        "downloadSubtitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᚲᚢᚱᚱᛖᚾᛏ ᛊᚢᛒᛏᛁᛏᛚᛖ",
-        "downloadVideo": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᚢᛁᛞᛖᛟ",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
-        "hlsDisclaimer": "ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛏᚨᚲᛖᚾ ᛞᛁᚱᛖᚲᛏᛚᛁ ᚠᚱᛟᛗ ᚦᛖ ᛈᚱᛟᚢᛁᛞᛖᚱ. ᛈ-ᛊᛏᚱᛖᛗ ᛞᛟᛖᛊ ᚾᛟᛏ ᚺᚨᚢᛖ ᚲᛟᚾᛏᚱᛟᛚ ᛟᚢᛖᚱ ᚺᛟᚹ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛈᚱᛟᚢᛁᛞᛖᛞ.<br /><br />ᛈᛚᛖᛊᛖ ᚾᛟᛏᛖ ᛁᛟᚢ ᚨᚱᛖ ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᚨᚾ ᚺᛚᛊ ᛈᛚᚨᛁᛚᛁᛊᛏ, <bold>ᛁᛏ ᛁᛊ ᚾᛟᛏ ᚱᛖᚲᛟᛗᛗᛖᚾᛞᛖᛞ ᛏᛟ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛁᚠ ᛁᛟᚢ ᚨᚱᛖ ᚾᛟᛏ ᚠᚨᛗᛁᛚᛟᚱ ᚹᛁᚦ ᚨᛞᚢᚨᚾᚲᛖᛞ ᛊᛏᚱᛖᛗᛁᛜ ᚠᛟᚱᛗᚨᛏᛊ</bold>. ᛏᚱᛁ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛊᛟᚢᚱᚲᛖᛊ ᚠᛟᚱ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᚠᛟᚱᛗᚨᛏᛊ.",
-        "onAndroid": {
-          "1": "ᛏᛟ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛟᚾ ᚨᚾᛞᚱᛟᛁᛞ, ᚲᛚᛁᚲᚲ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛒᚢᛏᛏᛟᚾ ᚦᛖᚾ, ᛟᚾ ᚦᛖ ᚾᛖᚹ ᛈᚨᚷᛖ, <bold>ᛏᚨᛈ ᚨᚾᛞ ᚺᛟᛚᛞ</bold> ᛟᚾ ᚦᛖ ᚢᛁᛞᛖᛟ, ᚦᛖᚾ ᛊᛖᛚᛖᚲᛏ <bold>ᛊᚨᚢᛖ</bold>.",
-          "shortTitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ / ᚨᚾᛞᚱᛟᛁᛞ",
-          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᛟᚾ ᚨᚾᛞᚱᛟᛁᛞ"
-        },
-        "onIos": {
-          "1": "ᛏᛟ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛟᚾ ᛁᛟᛊ, ᚲᛚᛁᚲᚲ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛒᚢᛏᛏᛟᚾ ᚦᛖᚾ, ᛟᚾ ᚦᛖ ᚾᛖᚹ ᛈᚨᚷᛖ, ᚲᛚᛁᚲᚲ <bold><ios_share /></bold>, ᚦᛖᚾ <bold>ᛊᚨᚢᛖ ᛏᛟ ᚠᛁᛚᛖᛊ <ios_files /></bold>.",
-          "shortTitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ / ᛁᛟᛊ",
-          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᛟᚾ ᛁᛟᛊ"
-        },
-        "onPc": {
-          "1": "ᛟᚾ ᛈᚲ, ᚲᛚᛁᚲᚲ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛒᚢᛏᛏᛟᚾ ᚦᛖᚾ, ᛟᚾ ᚦᛖ ᚾᛖᚹ ᛈᚨᚷᛖ, ᚱᛁᚷᚺᛏ ᚲᛚᛁᚲᚲ ᚦᛖ ᚢᛁᛞᛖᛟ ᚨᚾᛞ ᛊᛖᛚᛖᚲᛏ <bold>ᛊᚨᚢᛖ ᚢᛁᛞᛖᛟ ᚨᛊ</bold>",
-          "shortTitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ / ᛈᚲ",
-          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᛟᚾ ᛈᚲ"
-        },
-        "title": "ᛞᛟᚹᚾᛚᛟᚨᛞ"
-      },
-      "episodes": {
-        "button": "ᛖᛈᛁᛊᛟᛞᛖᛊ",
-        "emptyState": "ᛏᚺᛖᚱᛖ ᚨᚱᛖ ᚾᛟ ᛖᛈᛁᛊᛟᛞᛖᛊ ᛁᚾ ᚦᛁᛊ ᛊᛖᛊᛟᚾ, ᚲᚺᛖᚲᚲ ᛒᚨᚲᚲ ᛚᚨᛏᛖᚱ...",
-        "episodeBadge": "ᛖ{{episode}}",
-        "loadingError": "ᛖᚱᚱᛟᚱ ᛚᛟᚨᛞᛁᛜ ᛊᛖᛊᛟᚾ",
-        "loadingList": "ᛚᛟᚨᛞᛁᛜ...",
-        "loadingTitle": "ᛚᛟᚨᛞᛁᛜ...",
-        "unairedEpisodes": "ᛟᚾᛖ ᛟᚱ ᛗᛟᚱᛖ ᛖᛈᛁᛊᛟᛞᛖᛊ ᛁᚾ ᚦᛁᛊ ᛊᛖᛊᛟᚾ ᚺᚨᚢᛖ ᛒᛖᛖᚾ ᛞᛁᛊᚨᛒᛚᛖᛞ ᛒᛖᚲᚨᚢᛊᛖ ᚦᛖᛁ ᚺᚨᚢᛖᚾ×ᛏ ᛒᛖᛖᚾ ᚨᛁᚱᛖᛞ ᛁᛖᛏ.",
-        "seasons": "ᛊᛖᛊᛟᚾᛊ",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
-        "specials": "Specials"
-      },
-      "playback": {
-        "speedLabel": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛊᛈᛖᛖᛞ",
-        "title": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛊᛖᛏᛏᛁᛜᛊ",
-        "disabled": "(Disabled in watch party)",
-        "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
-      },
-      "quality": {
-        "automaticLabel": "ᚨᚢᛏᛟᛗᚨᛏᛁᚲ ᚲᚢᚨᛚᛁᛏᛁ",
-        "hint": "ᛁᛟᚢ ᚲᚨᚾ ᛏᚱᛁ <0>ᛊᚹᛁᛏᚲᚺᛁᛜ ᛊᛟᚢᚱᚲᛖ</0> ᛏᛟ ᚷᛖᛏ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᚲᚢᚨᛚᛁᛏᛁ ᛟᛈᛏᛟᚾᛊ.",
-        "iosNoQuality": "ᛞᚢᛖ ᛏᛟ ᚨᛈᛈᛚᛖ-ᛞᛖᚠᛁᚾᛖᛞ (ᚲᛟᛗᛗᛟᚾ ᛁᛟᛊ ᛚ) ᛚᛁᛗᛁᛏᚨᛏᛟᚾᛊ, ᚲᚢᚨᛚᛁᛏᛁ ᛊᛖᛚᛖᚲᛏᛟᚾ ᛁᛊ ᚾᛟᛏ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ ᛟᚾ ᛁᛟᛊ ᚠᛟᚱ ᚦᛁᛊ ᛊᛟᚢᚱᚲᛖ. ᛁᛟᚢ ᚲᚨᚾ ᛏᚱᛁ <0>ᛊᚹᛁᛏᚲᚺᛁᛜ ᛏᛟ ᚨᚾᛟᚦᛖᚱ ᛊᛟᚢᚱᚲᛖ</0> ᛏᛟ ᚷᛖᛏ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᚲᚢᚨᛚᛁᛏᛁ ᛟᛈᛏᛟᚾᛊ.",
-        "title": "ᚲᚢᚨᛚᛁᛏᛁ",
-        "auto": "Auto"
-      },
-      "settings": {
-        "downloadItem": "ᛞᛟᚹᚾᛚᛟᚨᛞ",
-        "enableSubtitles": "ᛖᚾᚨᛒᛚᛖ ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
-        "experienceSection": "ᚢᛁᛖᚹᛁᛜ ᛖᚲᛊᛈᛖᚱᛁᛖᚾᚲᛖ",
-        "playbackItem": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛊᛖᛏᛏᛁᛜᛊ",
-        "audioItem": "ᚨᚢᛞᛟ",
-        "qualityItem": "ᚲᚢᚨᛚᛁᛏᛁ",
-        "sourceItem": "ᚢᛁᛞᛖᛟ ᛊᛟᚢᚱᚲᛖᛊ",
-        "subtitleItem": "ᛊᚢᛒᛏᛁᛏᛚᛖ ᛊᛖᛏᛏᛁᛜᛊ",
-        "videoSection": "ᚢᛁᛞᛖᛟ ᛊᛖᛏᛏᛁᛜᛊ"
-      },
-      "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
-        "failed": {
-          "text": "ᛏᚺᛖᚱᛖ ᚹᚨᛊ ᚨᚾ ᛖᚱᚱᛟᚱ ᚹᚺᛁᛚᛖ ᛏᚱᛁᛁᛜ ᛏᛟ ᚠᛁᚾᛞ ᚨᚾᛁ ᚢᛁᛞᛖᛟᛊ... ᛏᚱᛁ ᚨ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛊᛟᚢᚱᚲᛖ?",
-          "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛊᚲᚱᚨᛈᛖ"
-        },
-        "noEmbeds": {
-          "text": "ᚹᛖ ᚹᛖᚱᛖ ᚢᚾᚨᛒᛚᛖ ᛏᛟ ᚠᛁᚾᛞ ᚨᚾᛁ ᛖᛗᛒᛖᛞᛊ, ᛈᛚᛖᛊᛖ ᛏᚱᛁ ᚨ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛊᛟᚢᚱᚲᛖ.",
-          "title": "ᚾᛟ ᛖᛗᛒᛖᛞᛊ ᚠᛟᚢᚾᛞ"
-        },
-        "noStream": {
-          "text": "ᛏᚺᛁᛊ ᛊᛟᚢᚱᚲᛖ ᚺᚨᛊ ᚾᛟ ᛊᛏᚱᛖᛗᛊ ᚠᛟᚱ ᚦᛁᛊ ᛗᛟᚢᛁᛖ ᛟᚱ ᛊᚺᛟᚹ.",
-          "title": "ᚾᛟ ᛊᛏᚱᛖᛗ :("
-        },
-        "title": "ᛊᛟᚢᚱᚲᛖᛊ",
-        "unknownOption": "ᚢᚾᚲᚾᛟᚹᚾ",
-        "findNextSource": "Find next source"
-      },
-      "subtitles": {
-        "customChoice": "ᛞᚱᛟᛈ ᛟᚱ ᚢᛈᛚᛟᚨᛞ ᚠᛁᛚᛖ",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
-        "customizeLabel": "ᚲᚢᛊᛏᛟᛗᛁᛉᛖ",
-        "previewLabel": "Subtitle preview:",
-        "offChoice": "ᛟᚠᚠ",
-        "onChoice": "On",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "ᛊᛟᚢᚱᚲᛖ ᚲᚨᛈᛏᛟᚾᛊ",
-        "OpenSubtitlesChoice": "ᛟᛈᛖᚾᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
-        "settings": {
-          "backlink": "ᚲᚢᛊᛏᛟᛗ ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
-          "delay": "ᛊᚢᛒᛏᛁᛏᛚᛖ ᛞᛖᛚᚨᛁ",
-          "fixCapitals": "ᚠᛁᚲᛊ ᚲᚨᛈᛁᛏᚨᛚᛁᛉᚨᛏᛟᚾ"
-        },
-        "title": "ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
-        "unknownLanguage": "ᚢᚾᚲᚾᛟᚹᚾ",
-        "dropSubtitleFile": "ᛞᚱᛟᛈ ᛊᚢᛒᛏᛁᛏᛚᛖ ᚠᛁᛚᛖ ᚺᛖᚱᛖ!",
-        "scrapeButton": "ᛊᚲᚱᚨᛈᛖ ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "ᛏᚺᛖᚱᛖ ᚨᚱᛖ ᚾᛟ ᛈᚱᛟᚢᛁᛞᛖᛞ ᛊᚢᛒᛏᛁᛏᛚᛖᛊ ᚠᛟᚱ ᚦᛁᛊ.",
-        "notFound": "ᚾᛟᚾᛖ ᛟᚠ ᚦᛖ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ ᛟᛈᛏᛟᚾᛊ ᛗᚨᛏᚲᚺ ᛁᛟᚢᚱ ᚲᚢᛖᚱᛁ",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
-        "translate": {
-          "title": "Translate from {{language}}"
-        },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
-        "matchScoreLabel": "Match ~{{score}}%"
-      },
-      "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
-      }
-    },
-    "metadata": {
-      "api": {
-        "text": "ᚲᛟᚢᛚᛞ ᚾᛟᛏ ᛚᛟᚨᛞ ᚨᛈᛁ ᛗᛖᛏᚨᛞᚨᛏᚨ, ᛈᛚᛖᛊᛖ ᚲᚺᛖᚲᚲ ᛁᛟᚢᚱ ᛁᚾᛏᛖᚱᚾᛖᛏ ᚲᛟᚾᚾᛖᚲᛏᛟᚾ.",
-        "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛚᛟᚨᛞ ᚨᛈᛁ ᛗᛖᛏᚨᛞᚨᛏᚨ"
-      },
-      "legal": {
-        "badge": "ᚱᛖᛗᛟᚢᛖᛞ",
-        "text": "ᛏᚺᛁᛊ ᛗᛖᛞᛟ ᛁᛊ ᚾᛟ ᛚᛟᛜᛖᚱ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ ᛞᚢᛖ ᛏᛟ ᚨ ᛏᚨᚲᛖᛞᛟᚹᚾ ᚾᛟᛏᛁᚲᛖ ᛟᚱ ᚲᛟᛈᛁᚱᛁᚷᚺᛏ ᚲᛚᚨᛁᛗ.",
-        "title": "ᛗᛖᛞᛟ ᚺᚨᛊ ᛒᛖᛖᚾ ᚱᛖᛗᛟᚢᛖᛞ"
-      },
-      "extensionPermission": {
-        "badge": "ᛈᛖᚱᛗᛁᛊᛊᛟᚾ ᛗᛁᛊᛊᛁᛜ",
-        "button": "ᚢᛊᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-        "text": "ᛁᛟᚢ ᚺᚨᚢᛖ ᚦᛖ ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ, ᛒᚢᛏ ᚹᛖ ᚾᛖᛖᛞ ᛁᛟᚢᚱ ᛈᛖᚱᛗᛁᛊᛊᛟᚾ ᛏᛟ ᚷᛖᛏ ᛊᛏᚨᚱᛏᛖᛞ ᚢᛊᛁᛜ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ.",
-        "title": "ᚲᛟᚾᚠᛁᚷᚢᚱᛖ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ"
-      },
-      "failed": {
-        "badge": "ᚠᚨᛁᛚᛖᛞ",
-        "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
-        "text": "ᚲᛟᚢᛚᛞ ᚾᛟᛏ ᛚᛟᚨᛞ ᚦᛖ ᛗᛖᛞᛟ×ᛊ ᛗᛖᛏᚨᛞᚨᛏᚨ ᚠᚱᛟᛗ ᛏᛗᛞᛒ. ᛈᛚᛖᛊᛖ ᚲᚺᛖᚲᚲ ᚹᚺᛖᚦᛖᚱ ᛏᛗᛞᛒ ᛁᛊ ᛞᛟᚹᚾ ᛟᚱ ᛒᛚᛟᚲᚲᛖᛞ ᛟᚾ ᛁᛟᚢᚱ ᛁᚾᛏᛖᚱᚾᛖᛏ ᚲᛟᚾᚾᛖᚲᛏᛟᚾ.",
-        "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛚᛟᚨᛞ ᛗᛖᛏᚨᛞᚨᛏᚨ"
-      },
-      "notFound": {
-        "badge": "ᚾᛟᛏ ᚠᛟᚢᚾᛞ",
-        "homeButton": "ᛒᚨᚲᚲ ᛏᛟ ᚺᛟᛗᛖ",
-        "text": "ᚹᛖ ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᛖ ᛗᛖᛞᛟ ᛁᛟᚢ ᚱᛖᚲᚢᛖᛊᛏᛖᛞ. ᛖᛁᚦᛖᚱ ᛁᛏ×ᛊ ᛒᛖᛖᚾ ᚱᛖᛗᛟᚢᛖᛞ ᛟᚱ ᛁᛟᚢ ᛏᚨᛗᛈᛖᚱᛖᛞ ᚹᛁᚦ ᚦᛖ ᚢᚱᛚ (ᚾᚨᚢᚷᚺᛏᛁ, ᚾᚨᚢᚷᚺᛏᛁ).",
-        "title": "ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᚨᛏ ᛗᛖᛞᛟ."
-      }
-    },
-    "nextEpisode": {
-      "replay": "ᚱᛖᛈᛚᚨᛁ",
-      "next": "ᚾᛖᚲᛊᛏ ᛖᛈᛁᛊᛟᛞᛖ",
-      "nextSeason": "ᚾᛖᚲᛊᛏ ᛊᛖᛊᛟᚾ"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
-    },
-    "playbackError": {
-      "badge": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛖᚱᚱᛟᚱ",
-      "errors": {
-        "errorAborted": "ᛏᚺᛖ ᚠᛖᛏᚲᚺᛁᛜ ᛟᚠ ᚦᛖ ᛗᛖᛞᛟ ᚹᚨᛊ ᚨᛒᛟᚱᛏᛖᛞ ᛒᛁ ᚦᛖ ᚢᛊᛖᚱ×ᛊ ᚱᛖᚲᚢᛖᛊᛏ.",
-        "errorDecode": "ᛞᛖᛊᛈᛁᛏᛖ ᚺᚨᚢᛁᛜ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛒᛖᛖᚾ ᛞᛖᛏᛖᚱᛗᛁᚾᛖᛞ ᛏᛟ ᛒᛖ ᚢᛊᚨᛒᛚᛖ, ᚨᚾ ᛖᚱᚱᛟᚱ ᛟᚲᚲᚢᚱᚱᛖᛞ ᚹᚺᛁᛚᛖ ᛏᚱᛁᛁᛜ ᛏᛟ ᛞᛖᚲᛟᛞᛖ ᚦᛖ ᛗᛖᛞᛟ ᚱᛖᛊᛟᚢᚱᚲᛖ, ᚱᛖᛊᚢᛚᛏᛁᛜ ᛁᚾ ᚨᚾ ᛖᚱᚱᛟᚱ.",
-        "errorGenericMedia": "ᚢᚾᚲᚾᛟᚹᚾ ᛗᛖᛞᛟ ᛖᚱᚱᛟᚱ ᛟᚲᚲᚢᚱᚱᛖᛞ.",
-        "errorNetwork": "ᛊᛟᛗᛖ ᚲᛁᚾᛞ ᛟᚠ ᚾᛖᛏᚹᛟᚱᚲ ᛖᚱᚱᛟᚱ ᛟᚲᚲᚢᚱᚱᛖᛞ ᚹᚺᛁᚲᚺ ᛈᚱᛖᚢᛖᚾᛏᛖᛞ ᚦᛖ ᛗᛖᛞᛟ ᚠᚱᛟᛗ ᛒᛖᛁᛜ ᛊᚢᚲᚲᛖᛊᛊᚠᚢᛚᛚᛁ ᚠᛖᛏᚲᚺᛖᛞ, ᛞᛖᛊᛈᛁᛏᛖ ᚺᚨᚢᛁᛜ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛒᛖᛖᚾ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ.",
-        "errorNotSupported": "ᛏᚺᛖ ᛗᛖᛞᛟ ᛟᚱ ᛗᛖᛞᛟ ᛈᚱᛟᚢᛁᛞᛖᚱ ᛟᛒᛃᛖᚲᛏ ᛁᛊ ᚾᛟᛏ ᛊᚢᛈᛈᛟᚱᛏᛖᛞ."
-      },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
-      "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
-      "resumeButton": "Try next sources",
-      "text": "ᛏᚺᛖᚱᛖ ᚹᚨᛊ ᚨᚾ ᛖᚱᚱᛟᚱ ᛏᚱᛁᛁᛜ ᛏᛟ ᛈᛚᚨᛁ ᚦᛖ ᛗᛖᛞᛟ. ᛈᛚᛖᛊᛖ ᛏᚱᛁ ᚨᚷᚨᛁᚾ!",
-      "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛈᛚᚨᛁ ᚢᛁᛞᛖᛟ!"
-    },
-    "scraping": {
-      "items": {
-        "failure": "ᛖᚱᚱᛟᚱ ᛟᚲᚲᚢᚱᚱᛖᛞ",
-        "timeout": "Timed out (15s)",
-        "notFound": "ᛞᛟᛖᛊᚾ×ᛏ ᚺᚨᚢᛖ ᚦᛖ ᚢᛁᛞᛖᛟ",
-        "pending": "ᚲᚺᛖᚲᚲᛁᛜ ᚠᛟᚱ ᚢᛁᛞᛖᛟᛊ..."
-      },
-      "notFound": {
-        "badge": "ᚾᛟᛏ ᚠᛟᚢᚾᛞ",
-        "detailsButton": "ᛊᚺᛟᚹ ᛞᛖᛏᚨᛁᛚᛊ",
-        "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
-        "discoverButton": "ᛞᛁᛊᚲᛟᚢᛖᚱ ᛗᛟᚱᛖ",
-        "text": "ᚹᛖ ᚺᚨᚢᛖ ᛊᛖᚱᚲᚺᛖᛞ ᚦᚱᛟᚢᚷᚺ ᛟᚢᚱ ᛈᚱᛟᚢᛁᛞᛖᚱᛊ ᚨᚾᛞ ᚲᚨᚾᚾᛟᛏ ᚠᛁᚾᛞ ᚦᛖ ᛗᛖᛞᛟ ᛁᛟᚢ ᚨᚱᛖ ᛚᛟᛟᚲᛁᛜ ᚠᛟᚱ! ᚹᛖ ᛞᛟ ᚾᛟᛏ ᚺᛟᛊᛏ ᚦᛖ ᛗᛖᛞᛟ ᚨᚾᛞ ᚺᚨᚢᛖ ᚾᛟ ᚲᛟᚾᛏᚱᛟᛚ ᛟᚢᛖᚱ ᚹᚺᚨᛏ ᛁᛊ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ. ᛈᛚᛖᛊᛖ ᚲᛚᛁᚲᚲ ×ᛊᚺᛟᚹ ᛞᛖᛏᚨᛁᛚᛊ× ᛒᛖᛚᛟᚹ ᚠᛟᚱ ᛗᛟᚱᛖ ᛞᛖᛏᚨᛁᛚᛊ.",
-        "title": "ᚹᛖ ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᚨᛏ",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᛞᛁᛊᚨᛒᛚᛖᛞ",
-        "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
-        "enableExtension": "ᛖᚾᚨᛒᛚᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-        "title": "ᛈᛚᛖᛊᛖ ᛖᚾᚨᛒᛚᛖ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-        "text": "ᛁᛟᚢ×ᚢᛖ ᛁᚾᛊᛏᚨᛚᛚᛖᛞ ᚦᛖ ᛈ-ᛊᛏᚱᛖᛗ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ. ᛏᛟ ᛊᛏᚨᚱᛏ ᚢᛊᛁᛜ ᛁᛏ, ᛁᛟᚢ ᚾᛖᛖᛞ ᛏᛟ ᛖᚾᚨᛒᛚᛖ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᚠᛟᚱ ᚦᛁᛊ ᛊᛁᛏᛖ."
-      },
-      "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
-      }
-    },
-    "time": {
-      "regular": "{{timeWatched}} / {{duration}}",
-      "remaining": "{{timeLeft}} ᛚᛖᚠᛏ • ᚠᛁᚾᛁᛊᚺ ᚨᛏ {{timeFinished, datetime}}",
-      "shortRegular": "{{timeWatched}}",
-      "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
+      "to": "Casting to {{device}} 📺"
     },
     "loadingOverlayMessages": {
       "1": "Downloading more RAM...",
@@ -1166,49 +550,340 @@
       "20": "Your time is very important to us. Please wait while we ignore you...",
       "21": "Still faster than Windows Update...",
       "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "ᛊᚢᛈᛈᛟᚱᛏ",
-    "text": "ᛈ-ᛊᛏᚱᛖᛗ ᛁᛊ ᛞᛖᛊᛁᚷᚾᛖᛞ ᛏᛟ ᛒᛖ ᚨᛊ ᚢᛊᛖᚱ-ᚠᚱᛁᛖᚾᛞᛚᛁ ᚨᛊ ᛈᛟᛊᛊᛁᛒᛚᛖ. ᚺᛟᚹᛖᚢᛖᚱ, ᛈᛖᛟᛈᛚᛖ ᛊᛏᛁᛚᛚ ᚺᚨᚢᛖ ᚲᚢᛖᛊᛏᛟᚾᛊ ᚨᚾᛞ ᛁᛊᛊᚢᛖᛊ. ᛏᚺᛁᛊ ᛈᚨᚷᛖ ᛁᛊ ᚺᛖᚱᛖ ᛏᛟ ᚺᛖᛚᛈ ᚱᛖᛊᛟᛚᚢᛖ ᚦᛖᛊᛖ ᛊᚺᛟᚱᛏᚲᛟᛗᛁᛜᛊ",
-    "q1": {
-      "body": "ᚹᛖᛚᛚ, ᛁᛟᚢ ᚲᚨᚾ ᛃᛟᛁᚾ ᚦᛖ ᛟᚠᚠᛁᚲᛟᛚ <0>ᛈ-ᛊᛏᚱᛖᛗ ᛞᛁᛊᚲᛟᚱᛞ</0> ᚨᚾᛞ ᚨᛊᚲ ᚲᚢᛖᛊᛏᛟᚾᛊ ᚦᛖᚱᛖ ᛟᚱ ᛁᛟᚢ ᚲᚨᚾ ᛖᛗᚨᛁᛚ ᚦᛖ ᛟᚾᛖ ᛈᚱᛟᚢᛁᛞᛖᛞ ᚨᛏ ᚦᛖ ᛒᛟᛏᛏᛟᛗ ᛟᚠ ᚦᛁᛊ ᛈᚨᚷᛖ.",
-      "title": "ᚹᚺᛖᚱᛖ ᚲᚨᚾ ᛁ ᚷᛖᛏ ᚺᛖᛚᛈ?"
     },
-    "q2": {
-      "body": "ᚹᛖ ᚺᚨᚢᛖ ᚨ <0>ᚷᛁᛏᚺᚢᛒ</0> ᚹᚺᛖᚱᛖ ᛁᛟᚢ ᚲᚨᚾ ᚲᚱᛖᛏᛖ ᚨ ᛞᛖᛏᚨᛁᛚᛖᛞ ᛁᛊᛊᚢᛖ ᛁᚾ ᛟᚢᚱ ᚱᛖᛈᛟᛊᛁᛏᛟᚱᛁ. ᚨᛞᛞᛁᛏᛟᚾᚨᛚᛚᛁ, ᛁᚠ ᛁᛟᚢ ᚹᛁᛊᚺ, ᛁᛟᚢ ᚲᚨᚾ ᚲᚱᛖᛏᛖ ᚨ ᛈᚢᛚᛚ ᚱᛖᚲᚢᛖᛊᛏ ᛏᛟ ᚠᛁᚲᛊ ᚦᛖ ᛁᛊᛊᚢᛖ ᛁᛟᚢᚱᛊᛖᛚᚠ.",
-      "title": "ᚺᛟᚹ ᚲᚨᚾ ᛁ ᚱᛖᛈᛟᚱᛏ ᚨ ᛒᚢᚷ ᛟᚱ ᛁᛊᛊᚢᛖ?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "ᛈ-ᛊᛏᚱᛖᛗ ᛞᛁᛞᚾ×ᛏ ᚠᚨᛚᛚ ᛟᚢᛏ ᛟᚠ ᚨ ᚲᛟᚲᛟᚾᚢᛏ ᛏᚱᛖᛖ, ᛁᛏ ᚹᚨᛊ ᛗᚨᛞᛖ ᛗᛟᛊᛏᛚᛁ ᛒᛁ ᚨ ᛊᛁᛜᛚᛖ ᛈᛖᚱᛊᛟᚾ (ᚨ ᚢᛖᚱᛁ ᛖᛈᛁᚲ ᛟᚾᛖ ᚨᛏ ᚦᚨᛏ).",
-    "q1": {
-      "body": "Wᛖᛚᛚ, ᛁᛟᚢ ᚲᚨᚾ ᛃᛟᛁᚾ ᚦᛖ ᛟᚠᚠᛁᚲᛟᛚ <0>ᛈ-ᛊᛏᚱᛖᛗ ᛞᛁᛊᚲᛟᚱᛞ</0> ᚨᚾᛞ ᚨᛊᚲ ᚲᚢᛖᛊᛏᛟᚾᛊ ᚦᛖᚱᛖ ᛟᚱ ᛁᛟᚢ ᚲᚨᚾ ᛖᛗᚨᛁᛚ ᚦᛖ ᛟᚾᛖ ᛈᚱᛟᚢᛁᛞᛖᛞ ᚨᛏ ᚦᛖ ᛒᛟᛏᛏᛟᛗ ᛟᚠ ᚦᛁᛊ ᛈᚨᚷᛖ.",
-      "title": "ᚹᚺᛖᚱᛖ ᚲᚨᚾ ᛁ ᚷᛖᛏ ᚺᛖᛚᛈ?"
+    "menus": {
+      "audio": {
+        "default": "Default"
+      },
+      "downloads": {
+        "button": "Attempt download",
+        "copyHlsPlaylist": "ᚲᛟᛈᛁ ᚺᛚᛊ ᛈᛚᚨᛁᛚᛁᛊᛏ ᛚᛁᚾᚲ",
+        "disclaimer": "ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛏᚨᚲᛖᚾ ᛞᛁᚱᛖᚲᛏᛚᛁ ᚠᚱᛟᛗ ᚦᛖ ᛈᚱᛟᚢᛁᛞᛖᚱ. ᛈ-ᛊᛏᚱᛖᛗ ᛞᛟᛖᛊ ᚾᛟᛏ ᚺᚨᚢᛖ ᚲᛟᚾᛏᚱᛟᛚ ᛟᚢᛖᚱ ᚺᛟᚹ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛈᚱᛟᚢᛁᛞᛖᛞ.",
+        "downloadSubtitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᚲᚢᚱᚱᛖᚾᛏ ᛊᚢᛒᛏᛁᛏᛚᛖ",
+        "downloadVideo": "ᛞᛟᚹᚾᛚᛟᚨᛞ ᚢᛁᛞᛖᛟ",
+        "hlsDisclaimer": "ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛏᚨᚲᛖᚾ ᛞᛁᚱᛖᚲᛏᛚᛁ ᚠᚱᛟᛗ ᚦᛖ ᛈᚱᛟᚢᛁᛞᛖᚱ. ᛈ-ᛊᛏᚱᛖᛗ ᛞᛟᛖᛊ ᚾᛟᛏ ᚺᚨᚢᛖ ᚲᛟᚾᛏᚱᛟᛚ ᛟᚢᛖᚱ ᚺᛟᚹ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞᛊ ᚨᚱᛖ ᛈᚱᛟᚢᛁᛞᛖᛞ.<br /><br />ᛈᛚᛖᛊᛖ ᚾᛟᛏᛖ ᛁᛟᚢ ᚨᚱᛖ ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᚨᚾ ᚺᛚᛊ ᛈᛚᚨᛁᛚᛁᛊᛏ, <bold>ᛁᛏ ᛁᛊ ᚾᛟᛏ ᚱᛖᚲᛟᛗᛗᛖᚾᛞᛖᛞ ᛏᛟ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛁᚠ ᛁᛟᚢ ᚨᚱᛖ ᚾᛟᛏ ᚠᚨᛗᛁᛚᛟᚱ ᚹᛁᚦ ᚨᛞᚢᚨᚾᚲᛖᛞ ᛊᛏᚱᛖᛗᛁᛜ ᚠᛟᚱᛗᚨᛏᛊ</bold>. ᛏᚱᛁ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛊᛟᚢᚱᚲᛖᛊ ᚠᛟᚱ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᚠᛟᚱᛗᚨᛏᛊ.",
+        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
+        "onAndroid": {
+          "1": "ᛏᛟ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛟᚾ ᚨᚾᛞᚱᛟᛁᛞ, ᚲᛚᛁᚲᚲ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛒᚢᛏᛏᛟᚾ ᚦᛖᚾ, ᛟᚾ ᚦᛖ ᚾᛖᚹ ᛈᚨᚷᛖ, <bold>ᛏᚨᛈ ᚨᚾᛞ ᚺᛟᛚᛞ</bold> ᛟᚾ ᚦᛖ ᚢᛁᛞᛖᛟ, ᚦᛖᚾ ᛊᛖᛚᛖᚲᛏ <bold>ᛊᚨᚢᛖ</bold>.",
+          "shortTitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ / ᚨᚾᛞᚱᛟᛁᛞ",
+          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᛟᚾ ᚨᚾᛞᚱᛟᛁᛞ"
+        },
+        "onIos": {
+          "1": "ᛏᛟ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛟᚾ ᛁᛟᛊ, ᚲᛚᛁᚲᚲ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛒᚢᛏᛏᛟᚾ ᚦᛖᚾ, ᛟᚾ ᚦᛖ ᚾᛖᚹ ᛈᚨᚷᛖ, ᚲᛚᛁᚲᚲ <bold><ios_share /></bold>, ᚦᛖᚾ <bold>ᛊᚨᚢᛖ ᛏᛟ ᚠᛁᛚᛖᛊ <ios_files /></bold>.",
+          "shortTitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ / ᛁᛟᛊ",
+          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᛟᚾ ᛁᛟᛊ"
+        },
+        "onPc": {
+          "1": "ᛟᚾ ᛈᚲ, ᚲᛚᛁᚲᚲ ᚦᛖ ᛞᛟᚹᚾᛚᛟᚨᛞ ᛒᚢᛏᛏᛟᚾ ᚦᛖᚾ, ᛟᚾ ᚦᛖ ᚾᛖᚹ ᛈᚨᚷᛖ, ᚱᛁᚷᚺᛏ ᚲᛚᛁᚲᚲ ᚦᛖ ᚢᛁᛞᛖᛟ ᚨᚾᛞ ᛊᛖᛚᛖᚲᛏ <bold>ᛊᚨᚢᛖ ᚢᛁᛞᛖᛟ ᚨᛊ</bold>",
+          "shortTitle": "ᛞᛟᚹᚾᛚᛟᚨᛞ / ᛈᚲ",
+          "title": "ᛞᛟᚹᚾᛚᛟᚨᛞᛁᛜ ᛟᚾ ᛈᚲ"
+        },
+        "title": "ᛞᛟᚹᚾᛚᛟᚨᛞ"
+      },
+      "episodes": {
+        "button": "ᛖᛈᛁᛊᛟᛞᛖᛊ",
+        "emptyState": "ᛏᚺᛖᚱᛖ ᚨᚱᛖ ᚾᛟ ᛖᛈᛁᛊᛟᛞᛖᛊ ᛁᚾ ᚦᛁᛊ ᛊᛖᛊᛟᚾ, ᚲᚺᛖᚲᚲ ᛒᚨᚲᚲ ᛚᚨᛏᛖᚱ...",
+        "episodeBadge": "ᛖ{{episode}}",
+        "favorites": "Favorites",
+        "loadingError": "ᛖᚱᚱᛟᚱ ᛚᛟᚨᛞᛁᛜ ᛊᛖᛊᛟᚾ",
+        "loadingList": "ᛚᛟᚨᛞᛁᛜ...",
+        "loadingTitle": "ᛚᛟᚨᛞᛁᛜ...",
+        "markAsFavorite": "Mark as favorite",
+        "markAsUnwatched": "Mark as unwatched",
+        "markAsWatched": "Mark as watched",
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "showLess": "Show less",
+        "showMore": "Show more",
+        "specials": "Specials"
+      },
+      "playback": {
+        "disabled": "(Disabled in watch party)",
+        "speedBoosted": "2x",
+        "speedLabel": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛊᛈᛖᛖᛞ",
+        "speedUnboosted": "{{speed}}x",
+        "title": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛊᛖᛏᛏᛁᛜᛊ"
+      },
+      "quality": {
+        "auto": "Auto",
+        "automaticLabel": "ᚨᚢᛏᛟᛗᚨᛏᛁᚲ ᚲᚢᚨᛚᛁᛏᛁ",
+        "hint": "ᛁᛟᚢ ᚲᚨᚾ ᛏᚱᛁ <0>ᛊᚹᛁᛏᚲᚺᛁᛜ ᛊᛟᚢᚱᚲᛖ</0> ᛏᛟ ᚷᛖᛏ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᚲᚢᚨᛚᛁᛏᛁ ᛟᛈᛏᛟᚾᛊ.",
+        "iosNoQuality": "ᛞᚢᛖ ᛏᛟ ᚨᛈᛈᛚᛖ-ᛞᛖᚠᛁᚾᛖᛞ (ᚲᛟᛗᛗᛟᚾ ᛁᛟᛊ ᛚ) ᛚᛁᛗᛁᛏᚨᛏᛟᚾᛊ, ᚲᚢᚨᛚᛁᛏᛁ ᛊᛖᛚᛖᚲᛏᛟᚾ ᛁᛊ ᚾᛟᛏ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ ᛟᚾ ᛁᛟᛊ ᚠᛟᚱ ᚦᛁᛊ ᛊᛟᚢᚱᚲᛖ. ᛁᛟᚢ ᚲᚨᚾ ᛏᚱᛁ <0>ᛊᚹᛁᛏᚲᚺᛁᛜ ᛏᛟ ᚨᚾᛟᚦᛖᚱ ᛊᛟᚢᚱᚲᛖ</0> ᛏᛟ ᚷᛖᛏ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᚲᚢᚨᛚᛁᛏᛁ ᛟᛈᛏᛟᚾᛊ.",
+        "title": "ᚲᚢᚨᛚᛁᛏᛁ"
+      },
+      "settings": {
+        "audioItem": "ᚨᚢᛞᛟ",
+        "downloadItem": "ᛞᛟᚹᚾᛚᛟᚨᛞ",
+        "enableSubtitles": "ᛖᚾᚨᛒᛚᛖ ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
+        "playbackItem": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛊᛖᛏᛏᛁᛜᛊ",
+        "qualityItem": "ᚲᚢᚨᛚᛁᛏᛁ",
+        "sourceItem": "ᚢᛁᛞᛖᛟ ᛊᛟᚢᚱᚲᛖᛊ",
+        "subtitleItem": "ᛊᚢᛒᛏᛁᛏᛚᛖ ᛊᛖᛏᛏᛁᛜᛊ"
+      },
+      "sources": {
+        "failed": {
+          "text": "ᛏᚺᛖᚱᛖ ᚹᚨᛊ ᚨᚾ ᛖᚱᚱᛟᚱ ᚹᚺᛁᛚᛖ ᛏᚱᛁᛁᛜ ᛏᛟ ᚠᛁᚾᛞ ᚨᚾᛁ ᚢᛁᛞᛖᛟᛊ... ᛏᚱᛁ ᚨ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛊᛟᚢᚱᚲᛖ?",
+          "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛊᚲᚱᚨᛈᛖ"
+        },
+        "findNextSource": "Find next source",
+        "noEmbeds": {
+          "text": "ᚹᛖ ᚹᛖᚱᛖ ᚢᚾᚨᛒᛚᛖ ᛏᛟ ᚠᛁᚾᛞ ᚨᚾᛁ ᛖᛗᛒᛖᛞᛊ, ᛈᛚᛖᛊᛖ ᛏᚱᛁ ᚨ ᛞᛁᚠᚠᛖᚱᛖᚾᛏ ᛊᛟᚢᚱᚲᛖ.",
+          "title": "ᚾᛟ ᛖᛗᛒᛖᛞᛊ ᚠᛟᚢᚾᛞ"
+        },
+        "noStream": {
+          "text": "ᛏᚺᛁᛊ ᛊᛟᚢᚱᚲᛖ ᚺᚨᛊ ᚾᛟ ᛊᛏᚱᛖᛗᛊ ᚠᛟᚱ ᚦᛁᛊ ᛗᛟᚢᛁᛖ ᛟᚱ ᛊᚺᛟᚹ.",
+          "title": "ᚾᛟ ᛊᛏᚱᛖᛗ :("
+        },
+        "title": "ᛊᛟᚢᚱᚲᛖᛊ",
+        "unknownOption": "ᚢᚾᚲᚾᛟᚹᚾ"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
+        "clearSecondary": "Clear secondary subtitle",
+        "customChoice": "ᛞᚱᛟᛈ ᛟᚱ ᚢᛈᛚᛟᚨᛞ ᚠᛁᛚᛖ",
+        "customizeLabel": "ᚲᚢᛊᛏᛟᛗᛁᛉᛖ",
+        "delayEarly": "Saw caption",
+        "delayLate": "Heard audio",
+        "doubleClickToCopy": "Double click to copy subtitle data",
+        "dropSubtitleFile": "ᛞᚱᛟᛈ ᛊᚢᛒᛏᛁᛏᛚᛖ ᚠᛁᛚᛖ ᚺᛖᚱᛖ!",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "empty": "ᛏᚺᛖᚱᛖ ᚨᚱᛖ ᚾᛟ ᛈᚱᛟᚢᛁᛞᛖᛞ ᛊᚢᛒᛏᛁᛏᛚᛖᛊ ᚠᛟᚱ ᚦᛁᛊ.",
+        "loadingExternal": "Loading external subtitles...",
+        "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
+        "matchScoreLabel": "Match ~{{score}}%",
+        "notFound": "ᚾᛟᚾᛖ ᛟᚠ ᚦᛖ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ ᛟᛈᛏᛟᚾᛊ ᛗᚨᛏᚲᚺ ᛁᛟᚢᚱ ᚲᚢᛖᚱᛁ",
+        "offChoice": "ᛟᚠᚠ",
+        "pasteChoice": "Paste subtitle data",
+        "previewLabel": "Subtitle preview:",
+        "primary": "Primary",
+        "refresh": "Refresh External Subtitles",
+        "refreshing": "Refreshing...",
+        "secondary": "Secondary",
+        "selectingSecondary": "Selecting secondary subtitle",
+        "settings": {
+          "backlink": "ᚲᚢᛊᛏᛟᛗ ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
+          "delay": "ᛊᚢᛒᛏᛁᛏᛚᛖ ᛞᛖᛚᚨᛁ",
+          "fixCapitals": "ᚠᛁᚲᛊ ᚲᚨᛈᛁᛏᚨᛚᛁᛉᚨᛏᛟᚾ"
+        },
+        "title": "ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
+        "transcriptChoice": "Transcript",
+        "translate": {
+          "title": "Translate from {{language}}"
+        },
+        "unknownLanguage": "ᚢᚾᚲᚾᛟᚹᚾ",
+        "useNativeSubtitles": "Native video subtitles",
+        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Watch Party"
+      }
     },
-    "q2": {
-      "body": "ᚹᛖ ᚺᚨᚢᛖ ᚨ <0>ᚷᛁᛏᚺᚢᛒ</0> ᚹᚺᛖᚱᛖ ᛁᛟᚢ ᚲᚨᚾ ᚲᚱᛖᛏᛖ ᚨ ᛞᛖᛏᚨᛁᛚᛖᛞ ᛁᛊᛊᚢᛖ ᛁᚾ ᛟᚢᚱ ᚱᛖᛈᛟᛊᛁᛏᛟᚱᛁ. ᚨᛞᛞᛁᛏᛟᚾᚨᛚᛚᛁ, ᛁᚠ ᛁᛟᚢ ᚹᛁᛊᚺ, ᛁᛟᚢ ᚲᚨᚾ ᚲᚱᛖᛏᛖ ᚨ ᛈᚢᛚᛚ ᚱᛖᚲᚢᛖᛊᛏ ᛏᛟ ᚠᛁᚲᛊ ᚦᛖ ᛁᛊᛊᚢᛖ ᛁᛟᚢᚱᛊᛖᛚᚠ.",
-      "title": "ᚺᛟᚹ ᚲᚨᚾ ᛁ ᚱᛖᛈᛟᚱᛏ ᚨ ᛒᚢᚷ ᛟᚱ ᛁᛊᛊᚢᛖ?"
+    "metadata": {
+      "extensionPermission": {
+        "badge": "ᛈᛖᚱᛗᛁᛊᛊᛟᚾ ᛗᛁᛊᛊᛁᛜ",
+        "button": "ᚢᛊᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
+        "text": "ᛁᛟᚢ ᚺᚨᚢᛖ ᚦᛖ ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ, ᛒᚢᛏ ᚹᛖ ᚾᛖᛖᛞ ᛁᛟᚢᚱ ᛈᛖᚱᛗᛁᛊᛊᛟᚾ ᛏᛟ ᚷᛖᛏ ᛊᛏᚨᚱᛏᛖᛞ ᚢᛊᛁᛜ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ.",
+        "title": "ᚲᛟᚾᚠᛁᚷᚢᚱᛖ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ"
+      },
+      "failed": {
+        "badge": "ᚠᚨᛁᛚᛖᛞ",
+        "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
+        "text": "ᚲᛟᚢᛚᛞ ᚾᛟᛏ ᛚᛟᚨᛞ ᚦᛖ ᛗᛖᛞᛟ×ᛊ ᛗᛖᛏᚨᛞᚨᛏᚨ ᚠᚱᛟᛗ ᛏᛗᛞᛒ. ᛈᛚᛖᛊᛖ ᚲᚺᛖᚲᚲ ᚹᚺᛖᚦᛖᚱ ᛏᛗᛞᛒ ᛁᛊ ᛞᛟᚹᚾ ᛟᚱ ᛒᛚᛟᚲᚲᛖᛞ ᛟᚾ ᛁᛟᚢᚱ ᛁᚾᛏᛖᚱᚾᛖᛏ ᚲᛟᚾᚾᛖᚲᛏᛟᚾ.",
+        "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛚᛟᚨᛞ ᛗᛖᛏᚨᛞᚨᛏᚨ"
+      },
+      "legal": {
+        "badge": "ᚱᛖᛗᛟᚢᛖᛞ",
+        "text": "ᛏᚺᛁᛊ ᛗᛖᛞᛟ ᛁᛊ ᚾᛟ ᛚᛟᛜᛖᚱ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ ᛞᚢᛖ ᛏᛟ ᚨ ᛏᚨᚲᛖᛞᛟᚹᚾ ᚾᛟᛏᛁᚲᛖ ᛟᚱ ᚲᛟᛈᛁᚱᛁᚷᚺᛏ ᚲᛚᚨᛁᛗ.",
+        "title": "ᛗᛖᛞᛟ ᚺᚨᛊ ᛒᛖᛖᚾ ᚱᛖᛗᛟᚢᛖᛞ"
+      },
+      "notFound": {
+        "badge": "ᚾᛟᛏ ᚠᛟᚢᚾᛞ",
+        "homeButton": "ᛒᚨᚲᚲ ᛏᛟ ᚺᛟᛗᛖ",
+        "text": "ᚹᛖ ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᛖ ᛗᛖᛞᛟ ᛁᛟᚢ ᚱᛖᚲᚢᛖᛊᛏᛖᛞ. ᛖᛁᚦᛖᚱ ᛁᛏ×ᛊ ᛒᛖᛖᚾ ᚱᛖᛗᛟᚢᛖᛞ ᛟᚱ ᛁᛟᚢ ᛏᚨᛗᛈᛖᚱᛖᛞ ᚹᛁᚦ ᚦᛖ ᚢᚱᛚ (ᚾᚨᚢᚷᚺᛏᛁ, ᚾᚨᚢᚷᚺᛏᛁ).",
+        "title": "ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᚨᛏ ᛗᛖᛞᛟ."
+      }
+    },
+    "nextEpisode": {
+      "next": "ᚾᛖᚲᛊᛏ ᛖᛈᛁᛊᛟᛞᛖ",
+      "nextSeason": "ᚾᛖᚲᛊᛏ ᛊᛖᛊᛟᚾ",
+      "replay": "ᚱᛖᛈᛚᚨᛁ"
+    },
+    "playbackError": {
+      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
+      "badge": "ᛈᛚᚨᛁᛒᚨᚲᚲ ᛖᚱᚱᛟᚱ",
+      "copyDebugInfo": "Copy debug info",
+      "debugInfo": "Check console for more details.",
+      "errors": {
+        "errorAborted": "ᛏᚺᛖ ᚠᛖᛏᚲᚺᛁᛜ ᛟᚠ ᚦᛖ ᛗᛖᛞᛟ ᚹᚨᛊ ᚨᛒᛟᚱᛏᛖᛞ ᛒᛁ ᚦᛖ ᚢᛊᛖᚱ×ᛊ ᚱᛖᚲᚢᛖᛊᛏ.",
+        "errorDecode": "ᛞᛖᛊᛈᛁᛏᛖ ᚺᚨᚢᛁᛜ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛒᛖᛖᚾ ᛞᛖᛏᛖᚱᛗᛁᚾᛖᛞ ᛏᛟ ᛒᛖ ᚢᛊᚨᛒᛚᛖ, ᚨᚾ ᛖᚱᚱᛟᚱ ᛟᚲᚲᚢᚱᚱᛖᛞ ᚹᚺᛁᛚᛖ ᛏᚱᛁᛁᛜ ᛏᛟ ᛞᛖᚲᛟᛞᛖ ᚦᛖ ᛗᛖᛞᛟ ᚱᛖᛊᛟᚢᚱᚲᛖ, ᚱᛖᛊᚢᛚᛏᛁᛜ ᛁᚾ ᚨᚾ ᛖᚱᚱᛟᚱ.",
+        "errorGenericMedia": "ᚢᚾᚲᚾᛟᚹᚾ ᛗᛖᛞᛟ ᛖᚱᚱᛟᚱ ᛟᚲᚲᚢᚱᚱᛖᛞ.",
+        "errorNetwork": "ᛊᛟᛗᛖ ᚲᛁᚾᛞ ᛟᚠ ᚾᛖᛏᚹᛟᚱᚲ ᛖᚱᚱᛟᚱ ᛟᚲᚲᚢᚱᚱᛖᛞ ᚹᚺᛁᚲᚺ ᛈᚱᛖᚢᛖᚾᛏᛖᛞ ᚦᛖ ᛗᛖᛞᛟ ᚠᚱᛟᛗ ᛒᛖᛁᛜ ᛊᚢᚲᚲᛖᛊᛊᚠᚢᛚᛚᛁ ᚠᛖᛏᚲᚺᛖᛞ, ᛞᛖᛊᛈᛁᛏᛖ ᚺᚨᚢᛁᛜ ᛈᚱᛖᚢᛟᚢᛊᛚᛁ ᛒᛖᛖᚾ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ.",
+        "errorNotSupported": "ᛏᚺᛖ ᛗᛖᛞᛟ ᛟᚱ ᛗᛖᛞᛟ ᛈᚱᛟᚢᛁᛞᛖᚱ ᛟᛒᛃᛖᚲᛏ ᛁᛊ ᚾᛟᛏ ᛊᚢᛈᛈᛟᚱᛏᛖᛞ."
+      },
+      "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
+      "resumeButton": "Try next sources",
+      "text": "ᛏᚺᛖᚱᛖ ᚹᚨᛊ ᚨᚾ ᛖᚱᚱᛟᚱ ᛏᚱᛁᛁᛜ ᛏᛟ ᛈᛚᚨᛁ ᚦᛖ ᛗᛖᛞᛟ. ᛈᛚᛖᛊᛖ ᛏᚱᛁ ᚨᚷᚨᛁᚾ!",
+      "title": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛈᛚᚨᛁ ᚢᛁᛞᛖᛟ!"
+    },
+    "resume": {
+      "description": "This episode is {{percentage}}% watched",
+      "restart": "Restart",
+      "resume": "Resume",
+      "title": "Continue watching?"
+    },
+    "scraping": {
+      "extensionFailure": {
+        "badge": "ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᛞᛁᛊᚨᛒᛚᛖᛞ",
+        "enableExtension": "ᛖᚾᚨᛒᛚᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
+        "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
+        "text": "ᛁᛟᚢ×ᚢᛖ ᛁᚾᛊᛏᚨᛚᛚᛖᛞ ᚦᛖ ᛈ-ᛊᛏᚱᛖᛗ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ. ᛏᛟ ᛊᛏᚨᚱᛏ ᚢᛊᛁᛜ ᛁᛏ, ᛁᛟᚢ ᚾᛖᛖᛞ ᛏᛟ ᛖᚾᚨᛒᛚᛖ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ ᚠᛟᚱ ᚦᛁᛊ ᛊᛁᛏᛖ.",
+        "title": "ᛈᛚᛖᛊᛖ ᛖᚾᚨᛒᛚᛖ ᚦᛖ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ"
+      },
+      "items": {
+        "pending": "ᚲᚺᛖᚲᚲᛁᛜ ᚠᛟᚱ ᚢᛁᛞᛖᛟᛊ..."
+      },
+      "notFound": {
+        "badge": "ᚾᛟᛏ ᚠᛟᚢᚾᛞ",
+        "detailsButton": "ᛊᚺᛟᚹ ᛞᛖᛏᚨᛁᛚᛊ",
+        "discoverButton": "ᛞᛁᛊᚲᛟᚢᛖᚱ ᛗᛟᚱᛖ",
+        "homeButton": "ᚷᛟ ᚺᛟᛗᛖ",
+        "text": "ᚹᛖ ᚺᚨᚢᛖ ᛊᛖᚱᚲᚺᛖᛞ ᚦᚱᛟᚢᚷᚺ ᛟᚢᚱ ᛈᚱᛟᚢᛁᛞᛖᚱᛊ ᚨᚾᛞ ᚲᚨᚾᚾᛟᛏ ᚠᛁᚾᛞ ᚦᛖ ᛗᛖᛞᛟ ᛁᛟᚢ ᚨᚱᛖ ᛚᛟᛟᚲᛁᛜ ᚠᛟᚱ! ᚹᛖ ᛞᛟ ᚾᛟᛏ ᚺᛟᛊᛏ ᚦᛖ ᛗᛖᛞᛟ ᚨᚾᛞ ᚺᚨᚢᛖ ᚾᛟ ᚲᛟᚾᛏᚱᛟᛚ ᛟᚢᛖᚱ ᚹᚺᚨᛏ ᛁᛊ ᚨᚢᚨᛁᛚᚨᛒᛚᛖ. ᛈᛚᛖᛊᛖ ᚲᛚᛁᚲᚲ ×ᛊᚺᛟᚹ ᛞᛖᛏᚨᛁᛚᛊ× ᛒᛖᛚᛟᚹ ᚠᛟᚱ ᛗᛟᚱᛖ ᛞᛖᛏᚨᛁᛚᛊ.",
+        "title": "ᚹᛖ ᚲᛟᚢᛚᛞᚾ×ᛏ ᚠᛁᚾᛞ ᚦᚨᛏ"
+      },
+      "tips": {
+        "1": "Tap the gear icon to switch sources!",
+        "2": "Tap the title to copy the link!",
+        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
+        "4": "Some sources work better than others!",
+        "5": "Get the extension for more sources!",
+        "6": "Hold bookmarks to edit or delete them!",
+        "7": "Hold SHIFT and tap the title to copy the link with time!",
+        "8": "Set a custom subtitle color!",
+        "9": "Hold ` to view keyboard shortcuts!"
+      }
+    },
+    "segment": {
+      "credits": "Credits",
+      "intro": "Intro",
+      "recap": "Recap"
+    },
+    "skipTime": {
+      "confidence": "confidence",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "credits": "Skip Credits",
+      "endOfVideo": "End",
+      "endsAt": "Ends at {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Cancel",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "endTimeLabel": "End (s)",
+          "error": {
+            "endTime": "End time is required",
+            "mediaInfo": "Media information is not available",
+            "segment": "No segment selected",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "tidbKey": "TIDB API key is not set"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll.",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "whenToTitle": "Credits timestamps guide:"
+            },
+            "durationDesc": "Min 5s if end provided",
+            "durationLabel": "Duration:",
+            "endDesc": "Optional - empty if extends to end",
+            "endLabel": "End:",
+            "excludeDesc": "Post-credits scenes",
+            "excludeLabel": "Exclude:",
+            "intro": {
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence.",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "whenToTitle": "Intro timestamps guide:"
+            },
+            "preview": {
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode.",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "whenToTitle": "Preview timestamps guide:"
+            },
+            "recap": {
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes.",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "whenToTitle": "Recap timestamps guide:"
+            },
+            "startDesc": "Required - when credits begin rolling",
+            "startLabel": "Start:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "intro": "3:30 or 210 (required)",
+              "preview": "3:30 or 210 (leave empty for end of media)",
+              "recap": "3:30 or 210 (required)"
+            },
+            "start": {
+              "credits": "2:30 or 150 (required)",
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "preview": "2:30 or 150 (required)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)"
+            }
+          },
+          "segmentType": "Segment Type",
+          "startTimeLabel": "Start (s)",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          },
+          "title": "Submit Timestamps to TheIntroDB",
+          "types": {
+            "credits": "Credits",
+            "intro": "Intro",
+            "preview": "Preview",
+            "recap": "Recap"
+          },
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "whenToTitle": "Timestamps guide:"
+        },
+        "title": "Was this skip correct?"
+      },
+      "intro": "Skip Intro",
+      "noSegments": "No skip segments available",
+      "recap": "Skip Recap",
+      "skipSegments": "Skip Segments",
+      "startsAt": "Starts at {{time}}",
+      "submissions": "{{count}} submissions",
+      "submitSegment": "Submit Segment",
+      "timeUnknown": "Time unknown"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} ᛚᛖᚠᛏ • ᚠᛁᚾᛁᛊᚺ ᚨᛏ {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA :("
-    },
-    "loadingApp": "ᛚᛟᚨᛞᛁᛜ ᚨᛈᛈᛚᛁᚲᚨᛏᛟᚾ",
-    "loadingUser": "ᛚᛟᚨᛞᛁᛜ ᛁᛟᚢᚱ ᛈᚱᛟᚠᛁᛚᛖ",
     "loadingUserError": {
-      "logout": "ᛚᛟᚷᛟᚢᛏ",
-      "reset": "ᚱᛖᛊᛖᛏ ᚲᚢᛊᛏᛟᛗ ᛊᛖᚱᚢᛖᚱ",
-      "disconnect": "Disconnect from backend",
-      "text": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛈᚱᛟᚠᛁᛚᛖ",
-      "reload": "ᚱᛖᛚᛟᚨᛞ",
-      "textWithReset": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛚᛟᚨᛞ ᛁᛟᚢᚱ ᛈᚱᛟᚠᛁᛚᛖ ᚠᚱᛟᛗ ᛁᛟᚢᚱ ᚲᚢᛊᛏᛟᛗ ᛊᛖᚱᚢᛖᚱ, ᚹᚨᚾᛏ ᛏᛟ ᚱᛖᛊᛖᛏ ᛒᚨᚲᚲ ᛏᛟ ᚦᛖ ᛞᛖᚠᚨᚢᛚᛏ ᛊᛖᚱᚢᛖᚱ?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconectCancel": "Cancel",
       "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectTitle": "Disconnect from backend?",
+      "logout": "ᛚᛟᚷᛟᚢᛏ",
+      "reload": "ᚱᛖᛚᛟᚨᛞ",
+      "reset": "ᚱᛖᛊᛖᛏ ᚲᚢᛊᛏᛟᛗ ᛊᛖᚱᚢᛖᚱ"
     },
     "migration": {
       "failed": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛗᛁᚷᚱᚨᛏᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ.",
@@ -1216,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "ᛞᛖᚢᛁᚲᛖ ᚾᚨᛗᛖ",
-        "deviceNamePlaceholder": "ᛈᛖᚱᛊᛟᚾᚨᛚ ᛈᚺᛟᚾᛖ",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "ᛖᛞᛁᛏ",
-        "logoutButton": "ᛚᛟᚷ ᛟᚢᛏ"
-      },
-      "admin": {
-        "title": "ᚨᛞᛗᛁᚾ ᛈᚨᚾᛖᛚ",
-        "text": "ᚢᛏᛁᛚᛁᛉᛖ ᛏᛟᛟᛚᛊ ᛗᚨᛞᛖ ᚠᛟᚱ ᛏᛖᛊᛏᛁᛜ ᛈ-ᛊᛏᚱᛖᛗ×ᛊ ᚲᛟᚾᛞᛁᛏᛟᚾ."
+        "logoutButton": "ᛚᛟᚷ ᛟᚢᛏ",
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname"
       },
       "actions": {
         "delete": {
@@ -1248,26 +907,26 @@
           "text": "ᛏᚺᛁᛊ ᚨᚲᛏᛟᚾ ᛁᛊ ᛁᚱᚱᛖᚢᛖᚱᛊᛁᛒᛚᛖ. ᚨᛚᛚ ᛞᚨᛏᚨ ᚹᛁᛚᛚ ᛒᛖ ᛞᛖᛚᛖᛏᛖᛞ ᚨᚾᛞ ᚾᛟᚦᛁᛜ ᚲᚨᚾ ᛒᛖ ᚱᛖᚲᛟᚢᛖᚱᛖᛞ.",
           "title": "ᛞᛖᛚᛖᛏᛖ ᚨᚲᚲᛟᚢᚾᛏ"
         },
-        "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
-        },
-        "title": "ᚨᚲᛏᛟᚾᛊ",
         "logoutAllDevices": {
-          "title": "ᛖᚾᛞ ᚨᛚᛚ ᛊᛖᛊᛊᛟᚾᛊ",
+          "button": "ᛚᛟᚷ ᛟᚢᛏ ᛟᚠ ᚨᛚᛚ ᛞᛖᚢᛁᚲᛖᛊ",
           "text": "ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛊᛁᚷᚾ ᛁᛟᚢ ᛟᚢᛏ ᚠᚱᛟᛗ ᚨᛚᛚ ᛞᛖᚢᛁᚲᛖᛊ ᛚᛁᚾᚲᛖᛞ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ.",
-          "button": "ᛚᛟᚷ ᛟᚢᛏ ᛟᚠ ᚨᛚᛚ ᛞᛖᚢᛁᚲᛖᛊ"
-        }
+          "title": "ᛖᚾᛞ ᚨᛚᛚ ᛊᛖᛊᛊᛟᚾᛊ"
+        },
+        "migration": {
+          "button": "Migrate account",
+          "text": "Migrate your account to a new server or download your data.",
+          "title": "Account migration"
+        },
+        "title": "ᚨᚲᛏᛟᚾᛊ"
       },
       "devices": {
         "deviceNameLabel": "ᛞᛖᚢᛁᚲᛖ ᚾᚨᛗᛖ",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "ᚠᚨᛁᛚᛖᛞ ᛏᛟ ᛚᛟᚨᛞ ᛊᛖᛊᛊᛟᚾᛊ",
+        "lastActive": "Last active: {{date}}",
+        "loggedInAt": "Logged in at: {{date}}",
         "removeDevice": "ᚱᛖᛗᛟᚢᛖ",
         "title": "ᛞᛖᚢᛁᚲᛖᛊ",
-        "lastActive": "Last active: {{date}}",
-        "loggedInAt": "Logged in at: {{date}}"
+        "unknownDevice": "Unknown device, error decrypting name"
       },
       "profile": {
         "finish": "ᚠᛁᚾᛁᛊᚺ ᛖᛞᛁᛏᛁᛜ",
@@ -1283,377 +942,213 @@
       },
       "title": "ᚨᚲᚲᛟᚢᚾᛏ"
     },
+    "all": {
+      "title": "All Settings"
+    },
     "appearance": {
       "activeTheme": "ᚨᚲᛏᛁᚢᛖ",
-      "themes": {
-        "blue": "ᛒᛚᚢᛖ",
-        "custom": "Custom",
-        "default": "ᛞᛖᚠᚨᚢᛚᛏ",
-        "gray": "ᚷᚱᚨᛁ",
-        "red": "ᚱᛖᛞ",
-        "teal": "ᛏᛖᛚ",
-        "classic": "ᚲᛚᚨᛊᛊᛁᚲ",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
         "primary": "Primary",
         "secondary": "Secondary",
         "tertiary": "Tertiary"
       },
-      "title": "ᚨᛈᛈᛖᚱᚨᚾᚲᛖ",
       "options": {
+        "carouselView": "Carousel view",
+        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
+        "carouselViewLabel": "Carousel view",
         "discover": "Discover section",
         "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
         "discoverLabel": "Discover section",
         "featured": "Featured media",
         "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
         "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
+        "forceCompactEpisodeView": "Force compact episode view",
+        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
+        "forceCompactEpisodeViewLabel": "Compact episodes",
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
+        "homeSectionOrderGroups": "Reorder bookmark groups",
         "logos": "Image logos",
         "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
         "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
+        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
         "minimalCards": "Minimal cards",
         "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
         "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "modal": "Details modal",
+        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
+        "modalLabel": "Details modal",
         "pauseOverlay": "Pause overlay",
         "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
         "pauseOverlayLabel": "Pause overlay"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Bookmarks",
+        "watching": "Currently Watching"
+      },
+      "themes": {
+        "acid": "Acid",
+        "autumn": "Autumn",
+        "blue": "ᛒᛚᚢᛖ",
+        "christmas": "Christmas",
+        "classic": "ᚲᛚᚨᛊᛊᛁᚲ",
+        "cobalt": "Cobalt",
+        "custom": "Custom",
+        "default": "ᛞᛖᚠᚨᚢᛚᛏ",
+        "ember": "Ember",
+        "forest": "Forest",
+        "frost": "Frost",
+        "grape": "Grape",
+        "gray": "ᚷᚱᚨᛁ",
+        "green": "Green",
+        "hulk": "Hulk",
+        "mocha": "Mocha",
+        "noir": "Noir",
+        "pink": "Pink",
+        "popsicle": "Popsicle",
+        "red": "ᚱᛖᛞ",
+        "spark": "Spark",
+        "spiderman": "Spiderman",
+        "teal": "ᛏᛖᛚ",
+        "wolverine": "Wolverine"
+      },
+      "title": "ᚨᛈᛈᛖᚱᚨᚾᚲᛖ"
     },
     "connections": {
       "server": {
-        "description": "ᚠ ᛁᛟᚢ ᚹᛟᚢᛚᛞ ᛚᛁᚲᛖ ᛏᛟ ᚲᛟᚾᚾᛖᚲᛏ ᛏᛟ ᚨ ᚲᚢᛊᛏᛟᛗ ᛒᚨᚲᚲᛖᚾᛞ ᛏᛟ ᛊᛏᛟᚱᛖ ᛁᛟᚢᚱ ᛞᚨᛏᚨ, ᛖᚾᚨᛒᛚᛖ ᚦᛁᛊ ᚨᚾᛞ ᛈᚱᛟᚢᛁᛞᛖ ᚦᛖ ᚢᚱᛚ. <0>ᛁᚾᛊᛏᚱᚢᚲᛏᛟᚾᛊ.</0>",
-        "label": "ᚲᚢᛊᛏᛟᛗ ᛊᛖᚱᚢᛖᚱ",
-        "urlLabel": "ᚲᚢᛊᛏᛟᛗ ᛊᛖᚱᚢᛖᚱ ᚢᚱᛚ",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
         "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
         "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
         "error": "Error connecting to backend",
         "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "ᛞᛟ ᛊᛖᛏᚢᛈ",
-        "errorStatus": {
-          "description": "ᛁᛏ ᛊᛖᛖᛗᛊ ᚦᚨᛏ ᛟᚾᛖ ᛟᚱ ᛗᛟᚱᛖ ᛁᛏᛖᛗᛊ ᛁᚾ ᚦᛁᛊ ᛊᛖᛏᚢᛈ ᚾᛖᛖᛞ ᛁᛟᚢᚱ ᚨᛏᛏᛖᚾᛏᛟᚾ.",
-          "title": "ᛊᛟᛗᛖᚦᛁᛜ ᚾᛖᛖᛞᛊ ᛁᛟᚢᚱ ᚨᛏᛏᛖᚾᛏᛟᚾ!"
-        },
-        "itemError": "ᛏᚺᛖᚱᛖ ᛁᛊ ᛊᛟᛗᛖᚦᛁᛜ ᚹᚱᛟᛜ ᚹᛁᚦ ᚦᛁᛊ ᛊᛖᛏᛏᛁᛜ. ᚷᛟ ᚦᚱᛟᚢᚷᚺ ᛊᛖᛏᚢᛈ ᚨᚷᚨᛁᚾ ᛏᛟ ᚠᛁᚲᛊ ᛁᛏ.",
-        "items": {
-          "default": "ᛞᛖᚠᚨᚢᛚᛏ ᛊᛖᛏᚢᛈ",
-          "extension": "ᛖᚲᛊᛏᛖᚾᛊᛟᚾ",
-          "proxy": "ᚲᚢᛊᛏᛟᛗ ᛈᚱᛟᚲᛊᛁ",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "ᚱᛖᛞᛟ ᛊᛖᛏᚢᛈ",
-        "successStatus": {
-          "description": "ᚨᛚᛚ ᚦᛁᛜᛊ ᚨᚱᛖ ᛁᚾ ᛈᛚᚨᚲᛖ ᚠᛟᚱ ᛁᛟᚢ ᛏᛟ ᛊᛏᚨᚱᛏ ᚹᚨᛏᚲᚺᛁᛜ ᛁᛟᚢᚱ ᚠᚨᚢᛟᚱᛁᛏᛖ ᛗᛖᛞᛟ.",
-          "title": "ᛖᚢᛖᚱᛁᚦᛁᛜ ᛁᛊ ᛊᛖᛏ ᚢᛈ!"
-        },
-        "unsetStatus": {
-          "description": "ᛈᛚᛖᛊᛖ ᚲᛚᛁᚲᚲ ᚦᛖ ᛒᚢᛏᛏᛟᚾ ᛏᛟ ᚦᛖ ᚱᛁᚷᚺᛏ ᛏᛟ ᛊᛏᚨᚱᛏ ᚦᛖ ᛊᛖᛏᚢᛈ ᛈᚱᛟᚲᛖᛊᛊ.",
-          "title": "ᛁᛟᚢ ᚺᚨᚢᛖᚾ×ᛏ ᚷᛟᚾᛖ ᚦᚱᛟᚢᚷᚺ ᛊᛖᛏᚢᛈ"
-        }
-      },
-      "title": "ᚲᛟᚾᚾᛖᚲᛏᛟᚾᛊ",
-      "workers": {
-        "addButton": "ᚨᛞᛞ ᚾᛖᚹ ᚹᛟᚱᚲᛖᚱ",
-        "description": "ᛏᛟ ᛗᚨᚲᛖ ᚦᛖ ᚨᛈᛈᛚᛁᚲᚨᛏᛟᚾ ᚠᚢᚾᚲᛏᛟᚾ, ᚨᛚᛚ ᛏᚱᚨᚠᚠᛁᚲ ᛁᛊ ᚱᛟᚢᛏᛖᛞ ᚦᚱᛟᚢᚷᚺ ᛈᚱᛟᚲᛊᛁᛖᛊ. ᛖᚾᚨᛒᛚᛖ ᚦᛁᛊ ᛁᚠ ᛁᛟᚢ ᚹᚨᚾᛏ ᛏᛟ ᛒᚱᛁᛜ ᛁᛟᚢᚱ ᛟᚹᚾ ᚹᛟᚱᚲᛖᚱᛊ. <0>ᛁᚾᛊᛏᚱᚢᚲᛏᛟᚾᛊ.</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "ᚾᛟ ᚹᛟᚱᚲᛖᚱᛊ ᛁᛖᛏ, ᚨᛞᛞ ᛟᚾᛖ ᛒᛖᛚᛟᚹ",
-        "label": "ᚢᛊᛖ ᚲᚢᛊᛏᛟᛗ ᛈᚱᛟᚲᛊᛁ ᚹᛟᚱᚲᛖᚱᛊ",
-        "urlLabel": "ᚹᛟᚱᚲᛖᚱ ᚢᚱᛚᛊ",
-        "urlPlaceholder": "https:// (Roman characters only)",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
       },
       "tidb": {
         "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
         "tokenLabel": "API Key"
-      }
+      },
+      "title": "ᚲᛟᚾᚾᛖᚲᛏᛟᚾᛊ"
     },
     "preferences": {
-      "title": "ᛈᚱᛖᚠᛖᚱᛖᚾᚲᛖᛊ",
-      "language": "ᚨᛈᛈᛚᛁᚲᚨᛏᛟᚾ ᛚᚨᛜᚢᚨᚷᛖ",
-      "languageDescription": "ᛚᚨᛜᚢᚨᚷᛖ ᚨᛈᛈᛚᛁᛖᛞ ᛏᛟ ᚦᛖ ᛖᚾᛏᛁᚱᛖ ᚨᛈᛈᛚᛁᚲᚨᛏᛟᚾ.",
-      "thumbnail": "ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ",
-      "thumbnailDescription": "ᛗᛟᛊᛏ ᛟᚠ ᚦᛖ ᛏᛁᛗᛖ, ᚢᛁᛞᛖᛟᛊ ᛞᛟᚾ×ᛏ ᚺᚨᚢᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ. ᛁᛟᚢ ᚲᚨᚾ ᛖᚾᚨᛒᛚᛖ ᚦᛁᛊ ᛊᛖᛏᛏᛁᛜ ᛏᛟ ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᛖᛗ ᛟᚾ ᚦᛖ ᚠᛚᛁ ᛒᚢᛏ ᚦᛖᛁ ᚲᚨᚾ ᛗᚨᚲᛖ ᛁᛟᚢᚱ ᚢᛁᛞᛖᛟ ᛊᛚᛟᚹᛖᚱ.",
-      "thumbnailLabel": "ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ",
       "autoplay": "ᚨᚢᛏᛟᛈᛚᚨᛁ",
       "autoplayDescription": "ᚨᚢᛏᛟᛗᚨᛏᛁᚲᚨᛚᛚᛁ ᛈᛚᚨᛁ ᚦᛖ ᚾᛖᚲᛊᛏ ᛖᛈᛁᛊᛟᛞᛖ ᛁᚾ ᚨ ᛊᛖᚱᛁᛖᛊ ᚨᚠᛏᛖᚱ ᚱᛖᚲᚺᛁᛜ ᚦᛖ ᛖᚾᛞ. ᚲᚨᚾ ᛒᛖ ᛖᚾᚨᛒᛚᛖᛞ ᛒᛁ ᚢᛊᛖᚱᛊ ᚹᛁᚦ ᚦᛖ ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ, ᚨ ᚲᚢᛊᛏᛟᛗ ᛈᚱᛟᚲᛊᛁ, ᛟᚱ ᚹᛁᚦ ᚦᛖ ᛞᛖᚠᚨᚢᛚᛏ ᛊᛖᛏᚢᛈ ᛁᚠ ᚨᛚᛚᛟᚹᛖᛞ ᛒᛁ ᚦᛖ ᚺᛟᛊᛏ.",
       "autoplayLabel": "ᚨᚢᛏᛟᛈᛚᚨᛁ",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "ᚱᛖᛟᚱᛞᛖᚱᛁᛜ ᛊᛟᚢᚱᚲᛖᛊ",
-      "sourceOrderDescription": "ᛞᚱᚨᚷ ᚨᚾᛞ ᛞᚱᛟᛈ ᛏᛟ ᚱᛖᛟᚱᛞᛖᚱ ᛊᛟᚢᚱᚲᛖᛊ. ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛞᛖᛏᛖᚱᛗᛁᚾᛖ ᚦᛖ ᛟᚱᛞᛖᚱ ᛁᚾ ᚹᚺᛁᚲᚺ ᛊᛟᚢᚱᚲᛖᛊ ᚨᚱᛖ ᚲᚺᛖᚲᚲᛖᛞ ᚠᛟᚱ ᚦᛖ ᛗᛖᛞᛟ ᛁᛟᚢ ᚨᚱᛖ ᛏᚱᛁᛁᛜ ᛏᛟ ᚹᚨᛏᚲᚺ. ᛁᚠ ᚨ ᛊᛟᚢᚱᚲᛖ ᛁᛊ ᚷᚱᛖᛁᛖᛞ ᛟᚢᛏ, ᛁᛏ ᛗᛖᚾᛊ ᚦᛖ <bold>ᛖᚲᛊᛏᛖᚾᛊᛟᚾ</bold> ᛁᛊ ᚱᛖᚲᚢᛁᚱᛖᛞ ᚠᛟᚱ ᚦᚨᛏ ᛊᛟᚢᚱᚲᛖ.",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
       "autoResumeOnPlaybackError": "Auto resume on playback error",
       "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
       "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "holdToBoost": "Hold to boost speed",
+      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
+      "holdToBoostLabel": "Enable hold to boost",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "language": "ᚨᛈᛈᛚᛁᚲᚨᛏᛟᚾ ᛚᚨᛜᚢᚨᚷᛖ",
+      "languageDescription": "ᛚᚨᛜᚢᚨᚷᛖ ᚨᛈᛈᛚᛁᛖᛞ ᛏᛟ ᚦᛖ ᛖᚾᛏᛁᚱᛖ ᚨᛈᛈᛚᛁᚲᚨᛏᛟᚾ.",
       "lastSuccessfulSource": "Last used source",
       "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "lastSuccessfulSourceEnableLabel": "Last used source",
+      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
+      "lowPerformanceModeLabel": "Low performance mode",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "skipCredits": "Skip End Credits",
+      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
+      "skipCreditsLabel": "Skip end credits",
+      "sourceOrder": "ᚱᛖᛟᚱᛞᛖᚱᛁᛜ ᛊᛟᚢᚱᚲᛖᛊ",
+      "sourceOrderDescription": "ᛞᚱᚨᚷ ᚨᚾᛞ ᛞᚱᛟᛈ ᛏᛟ ᚱᛖᛟᚱᛞᛖᚱ ᛊᛟᚢᚱᚲᛖᛊ. ᛏᚺᛁᛊ ᚹᛁᛚᛚ ᛞᛖᛏᛖᚱᛗᛁᚾᛖ ᚦᛖ ᛟᚱᛞᛖᚱ ᛁᚾ ᚹᚺᛁᚲᚺ ᛊᛟᚢᚱᚲᛖᛊ ᚨᚱᛖ ᚲᚺᛖᚲᚲᛖᛞ ᚠᛟᚱ ᚦᛖ ᛗᛖᛞᛟ ᛁᛟᚢ ᚨᚱᛖ ᛏᚱᛁᛁᛜ ᛏᛟ ᚹᚨᛏᚲᚺ. ᛁᚠ ᚨ ᛊᛟᚢᚱᚲᛖ ᛁᛊ ᚷᚱᛖᛁᛖᛞ ᛟᚢᛏ, ᛁᛏ ᛗᛖᚾᛊ ᚦᛖ <bold>ᛖᚲᛊᛏᛖᚾᛊᛟᚾ</bold> ᛁᛊ ᚱᛖᚲᚢᛁᚱᛖᛞ ᚠᛟᚱ ᚦᚨᛏ ᛊᛟᚢᚱᚲᛖ.",
+      "sourceOrderEnableLabel": "Custom source order",
+      "thumbnail": "ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ",
+      "thumbnailDescription": "ᛗᛟᛊᛏ ᛟᚠ ᚦᛖ ᛏᛁᛗᛖ, ᚢᛁᛞᛖᛟᛊ ᛞᛟᚾ×ᛏ ᚺᚨᚢᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ. ᛁᛟᚢ ᚲᚨᚾ ᛖᚾᚨᛒᛚᛖ ᚦᛁᛊ ᛊᛖᛏᛏᛁᛜ ᛏᛟ ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᛖᛗ ᛟᚾ ᚦᛖ ᚠᛚᛁ ᛒᚢᛏ ᚦᛖᛁ ᚲᚨᚾ ᛗᚨᚲᛖ ᛁᛟᚢᚱ ᚢᛁᛞᛖᛟ ᛊᛚᛟᚹᛖᚱ.",
+      "thumbnailLabel": "ᚷᛖᚾᛖᚱᚨᛏᛖ ᚦᚢᛗᛒᚾᚨᛁᛚᛊ",
+      "title": "ᛈᚱᛖᚠᛖᚱᛖᚾᚲᛖᛊ"
     },
     "reset": "ᚱᛖᛊᛖᛏ",
     "save": "ᛊᚨᚢᛖ",
+    "search": {
+      "placeholder": "Search settings..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "ᚨᛈᛈ ᚢᛖᚱᛊᛟᚾ",
-        "backendUrl": "ᛒᚨᚲᚲᛖᚾᛞ ᚢᚱᛚ",
-        "backendVersion": "ᛒᚨᚲᚲᛖᚾᛞ ᚢᛖᚱᛊᛟᚾ",
-        "hostname": "ᚺᛟᛊᛏᚾᚨᛗᛖ",
-        "insecure": "ᛁᚾᛊᛖᚲᚢᚱᛖ",
-        "nickname": "Nickname",
         "notLoggedIn": "ᛁᛟᚢ ᚨᚱᛖ ᚾᛟᛏ ᛚᛟᚷᚷᛖᛞ ᛁᚾ",
-        "secure": "ᛊᛖᚲᚢᚱᛖ",
-        "title": "ᚨᛈᛈ ᛊᛏᚨᛏᛊ",
-        "unknownVersion": "ᚢᚾᚲᚾᛟᚹᚾ",
         "userId": "ᚢᛊᛖᚱ ᛁᛞ",
         "userIdDescription": "Use this as invite code for your friend register"
       }
     },
     "subtitles": {
-      "backgroundLabel": "ᛒᚨᚲᚲᚷᚱᛟᚢᚾᛞ ᛟᛈᚨᚲᛁᛏᛁ",
-      "backgroundBlurEnabledLabel": "Background blur",
       "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledLabel": "Background blur",
       "backgroundBlurLabel": "ᛒᚨᚲᚲᚷᚱᛟᚢᚾᛞ ᛒᛚᚢᚱ",
+      "backgroundLabel": "ᛒᚨᚲᚲᚷᚱᛟᚢᚾᛞ ᛟᛈᚨᚲᛁᛏᛁ",
+      "BorderThicknessLabel": "Border Thickness",
       "colorLabel": "ᚲᛟᛚᛟᚱ",
-      "previewQuote": "ᚲᛟᚾᚢᛁᚾᚲᛖᛞ ᛚᛁᚠᛖ ᛁᛊ ᛗᛖᚾᛁᛜᛚᛖᛊᛊ, ᛁ ᛚᚨᚲᚲ ᚦᛖ ᚲᛟᚢᚱᚨᚷᛖ ᛟᚠ ᛗᛁ ᚲᛟᚾᚢᛁᚲᛏᛟᚾ.",
-      "textSizeLabel": "ᛏᛖᚲᛊᛏ ᛊᛁᛉᛖ",
-      "title": "ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
-      "textBoldLabel": "ᛒᛟᛚᛞ ᛏᛖᚲᛊᛏ",
-      "verticalPositionLabel": "Vertical position",
       "high": "High",
       "low": "Default",
+      "previewQuote": "ᚲᛟᚾᚢᛁᚾᚲᛖᛞ ᛚᛁᚠᛖ ᛁᛊ ᛗᛖᚾᛁᛜᛚᛖᛊᛊ, ᛁ ᛚᚨᚲᚲ ᚦᛖ ᚲᛟᚢᚱᚨᚷᛖ ᛟᚠ ᛗᛁ ᚲᛟᚾᚢᛁᚲᛏᛟᚾ.",
+      "textBoldLabel": "ᛒᛟᛚᛞ ᛏᛖᚲᛊᛏ",
+      "textSizeLabel": "ᛏᛖᚲᛊᛏ ᛊᛁᛉᛖ",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
         "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "default": "Default",
+        "depressed": "Depressed",
+        "dropShadow": "Drop Shadow",
+        "raised": "Raised",
+        "title": "Text style"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "ᛊᚢᛒᛏᛁᛏᛚᛖᛊ",
+      "verticalPositionLabel": "Vertical position"
     },
     "unsaved": "ᛁᛟᚢ ᚺᚨᚢᛖ ᚢᚾᛊᚨᚢᛖᛞ ᚲᚺᚨᛜᛖᛊ..."
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
-      "top10": "Top 10"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "Trending Now"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
-    },
-    "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "filters": {
-      "country": "Country"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Enter a shared watch party link or room code",
-    "you": "You",
-    "guestFallback": "Guest"
   },
   "tmdb": {
     "genres": {
       "10759": "Action & Adventure"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
+    "alone": "Alone",
+    "behindHost": "Behind host by {{seconds}} seconds",
+    "cancel": "Cancel",
+    "connectedAsGuest": "Connected to watch party as guest",
+    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
+    "copyCode": "Click to copy",
+    "emptyRoom": "No one is in this room yet",
+    "enterCodeOrLink": "Enter a shared watch party link or room code",
+    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
+    "guestFallback": "Guest",
+    "hosting": "Hosting",
+    "hostParty": "Host a Watch Party",
+    "invalidRoom": "Unable to connect to this room",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Join",
+    "joinParty": "Join a Watch Party",
+    "leaveWatchParty": "Leave Watch Party",
+    "linkCopied": "Copied!",
+    "noHost": "No host in this watch party",
+    "save": "Save",
+    "shareCode": "Share this code with friends (click to copy link)",
+    "showStatusOverlay": "Show status overlay",
+    "status": {
+      "inSync": "In sync",
+      "outOfSync": "Out of sync"
+    },
+    "syncing": "Syncing...",
+    "validating": "Validating watch party...",
+    "viewers": "Viewers ({{count}})",
+    "watching": "Watching",
+    "withCount": "With {{count}} others",
+    "you": "You"
   }
 }

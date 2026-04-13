@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix isch e Abspaltig vo movie-web und wird sichergstellt, dass es au no lauft, wenn movie-web.app nüm verfügbar isch. AlphaFlix lauft uf eme private, selbstghostete VPS. Ich betreib die Site mit Verlust – ohni Werbig, will ich a freiji Medie glaub.",
-    "help": "Fendisch kei antwort? <0>Bechom en Antwort.</0>",
-    "faqTitle": "Hüfig gstelti Froge",
-    "searchPlaceholder": "Suech FAQ…",
-    "sections": {
-      "general": "Generel",
-      "search": "Suechi & Content verfüegbarkeit",
-      "playback": "Wedergobe Fehler",
-      "connections": "Verbendige",
-      "language": "Sproche & Ontertetel Ischtelige"
-    },
-    "q1": {
-      "title": "Woher stamme die Videos?",
-      "body": "AlphaFlix hostet kei Inhalt selber. Wenn du öpis zum Luege aaklicksch, wird s’Internet nach dem usgwählte Medium dürsuecht (uf em Ladebildschirm ond im Tab „Videoquellen“ gsesch, weli Quelle grad brucht wird). Medie wird nie vo AlphaFlix ufelade – alles lauft über die Suechfunktion.",
-      "section": "generel"
-    },
-    "q2": {
-      "title": "Wo chan ich en Serie oder en Felm afroge?",
-      "body": "Es isch nöd möglich, e Serie oder e Film z'wünsche, will AlphaFlix kei Inhalt verwaltet. Alles wird über Quellen im Internet agluegt.",
-      "section": "suechi"
-    },
-    "q3": {
-      "title": "T Suechergäbnis zeige t Serie ond t Felme, wiso chani si net abspele?",
-      "body": "Üsi Suechergebnis chöme fo The Movie Database (TMDB) ond werde au azeigt, wenn üsi Quellene dä Inhalt vellecht tatsächlech net hend.",
-      "section": "suech"
-    },
-    "q4": {
-      "title": "Was esch met mine Date und em Stuff?",
-      "body": "Alli Date werdet met der Community-Backend synchronisiert, ond jede cha die au notze.",
-      "section": "generel"
-    },
-    "q5": {
-      "title": "Wie chani me usefende?",
-      "body": "AlphaFlix het en Fluxer server, me fendet en zoberscht of de Website!",
-      "section": "generel"
-    },
-    "q6": {
-      "title": "Gets en AlphaFlix app?",
-      "body": "Momentan noni, aber du chasch en PWA (Progressive Web App) installiere. Of iOS, benotz Safari → Share → Add to Home Screen. Of Andriod, benotz Chrome → 3 dots → Add to Home Screen. En Beta fonere APK esch of üsem Fluxer verfüegbar, aber es werd net empfole.",
-      "section": "generel"
-    },
-    "q7": {
-      "title": "Wie mach ich en Account?",
-      "body": "Dröck “Sync to Cloud“ im dropdown menu oder gang it Ischtelige zom erstelle oder sync en community account.",
-      "section": "generel"
-    },
-    "q9": {
-      "title": "Die Medie fehle / Chani si afroge?",
-      "body": "Nei—wel mer kei Medie selber hei. Alli Medie basiere of däm, was öber d‘Suechfonktion öffentlich zuegänglech isch.",
-      "section": "suech"
-    },
-    "q10": {
-      "title": "Ich cha der Felm/Serie net fende!",
-      "body": "TMDB betribt üsi Suechi. Versuech mol s‘🔎 icon az‘klicke för erwitereti suech optione, fals t ergäbnis net steme.",
-      "section": "suechi"
-    },
-    "q11": {
-      "title": "Wiso gseni en Black-Screen?",
-      "body": "Wahrschindlech ein beschädigts Video. Versuech en anderi Quelle.",
-      "section": "Wedergab"
-    },
-    "q12": {
-      "title": "D‘Episode woni lueg stemt net.",
-      "body": "Due zonere andere Source wächsle. Mer hei kei iflos of d‘Medie wo for Sources chöme.",
-      "section": "Wedergob"
-    },
-    "q13": {
-      "title": "D‘Video qualität esch net die woni erwartet ha.",
-      "body": "Nem mol en anderi Source. D‘Qualität fo de Provider mängisch onterschedlech; FED API het öfters me Optione.",
-      "section": "Wedergob"
-    },
-    "q14": {
-      "title": "4K esch net verfüegbar.",
-      "body": "Wen 4K net azeigt werd, esches warschindlech fo de Source net verfüegbar.",
-      "section": "Wedergob"
-    },
-    "q15": {
-      "title": "Wiso hani kei Audio?",
-      "body": "Stel secher, das s‘Grät stom gschalte esch ond wächsle t Sources. Audio problem chöne fo de Source entsto.",
-      "section": "Wedergob"
-    },
-    "q16": {
-      "title": "S‘Video esch blass oder verschwome.",
-      "body": "Das chönnt e defekts File oder es HDR-Video sii.\nSorg derfür, dass dis Gerät HDR unterstötzt, oder wechsle d’Quälle.",
-      "section": "wedergab"
-    },
-    "q17": {
-      "title": "Ich erläb visuelli störige.",
-      "body": "Visuelli bugs chöme normalerwis us schlächt ufegladene files. Due t Quelle wächsle.",
-      "section": "Wedergab"
-    },
-    "q18": {
-      "title": "D‘Quelle ladet langsam.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "Öber AlphaFlix (^▽^)"
-  },
   "actions": {
+    "cancel": "Stornieren",
+    "confirm": "Bestätigen",
     "copied": "Kopieret",
-    "copy": "Kopiere",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "Kopiere"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Aktiv",
+      "confirm": "Bestätigen",
+      "customBackend": "Benutzerdefiniertes Backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Wählen Sie aus, mit welchem ​​Backend-Server eine Verbindung hergestellt werden soll",
+      "title": "Wählen Sie Kontoserver aus"
+    },
     "createAccount": "Hesch no kei Account? <0>Erschtel eine.</0>",
-    "deviceNameLabel": "Grätename",
-    "deviceNamePlaceholder": "Persöndlechs Natel",
+    "generate": {
+      "custom": "Brauch",
+      "customPassphraseLabel": "Benutzerdefinierte Passphrase",
+      "customPassphrasePlaceholder": "Geben Sie Ihre benutzerdefinierte Passphrase ein",
+      "description": "Dini Passphrase fonktioniert wie din Benotzername ond s'Passwort. Heb sorg dezue, will du muesch si iigäh, um dich i din Konto iizlogge. <bold>Verlier dini Passphrase OF KEI FALL!</bold>",
+      "invalidPassphraseCharacters": "Ungültige Passphrase-Zeichen. Es sind nur englische Buchstaben, Zahlen 1–10 und normale Symbole zulässig.",
+      "next": "Ich han mi Passphrase g'spicheret",
+      "passphraseFrameLabel": "Passphrase",
+      "passphraseTooShort": "Die Passphrase muss mindestens 8 Zeichen lang sein.",
+      "title": "Din Passphrase",
+      "useCustomPassphrase": "Verwenden Sie eine benutzerdefinierte Passphrase",
+      "usePasskeyInstead": "Verwenden Sie stattdessen den Passkey"
+    },
+    "hasAccount": "Du hesch bereits en Account? <0>Do Amälde.</0>",
+    "inviteCodeInvalidError": "Ungültiger Einladungscode (Benutzer-ID nicht gefunden)",
     "inviteCodeLabel": "Einladungscode",
     "inviteCodePlaceholder": "Benutzer-ID eines Freundes eingeben",
     "inviteCodeRequiredError": "Einladungscode ist erforderlich",
-    "inviteCodeInvalidError": "Ungültiger Einladungscode (Benutzer-ID nicht gefunden)",
-    "generate": {
-      "description": "Dini Passphrase fonktioniert wie din Benotzername ond s'Passwort. Heb sorg dezue, will du muesch si iigäh, um dich i din Konto iizlogge. <bold>Verlier dini Passphrase OF KEI FALL!</bold>",
-      "next": "Ich han mi Passphrase g'spicheret",
-      "passphraseFrameLabel": "Passphrase",
-      "title": "Din Passphrase",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "Du hesch bereits en Account? <0>Do Amälde.</0>",
     "login": {
       "description": "Geb din Passphrase a, om dich in di Account i z'logge",
-      "deviceLengthError": "Geb en Grätename i",
-      "passphraseLabel": "12-Word Passphrase",
-      "passphrasePlaceholder": "Passphrase",
-      "submit": "Amälde",
-      "title": "Mäld dich i dim Konto a",
-      "validationError": "Falsches oder onvollständigi Passphrase",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "Spitzname",
+      "nicknameNotFound": "Spitzname nicht gefunden",
       "nicknamePlaceholder": "Geben Sie Ihren Spitznamen ein",
+      "nicknameRequired": "Spitzname ist erforderlich",
+      "noBackendUrl": "Keine Backend-URL",
+      "or": "or",
+      "passwordIncorrect": "Das Passwort ist falsch",
       "passwordLabel": "Passwort",
       "passwordPlaceholder": "Geben Sie Ihr Passwort ein",
-      "nicknameRequired": "Spitzname ist erforderlich",
       "passwordRequired": "Passwort ist erforderlich",
-      "nicknameNotFound": "Spitzname nicht gefunden",
-      "passwordIncorrect": "Das Passwort ist falsch"
+      "submit": "Amälde",
+      "title": "Mäld dich i dim Konto a",
+      "usePasskey": "Verwenden Sie den Passkey",
+      "validationError": "Falsches oder onvollständigi Passphrase"
     },
     "register": {
+      "confirmPasswordLabel": "Passwort bestätigen",
+      "confirmPasswordPlaceholder": "Bestätigen Sie Ihr Passwort",
       "information": {
         "color1": "Profilfarb 1",
         "color2": "Profilfarb 2",
@@ -195,39 +61,27 @@
         "next": "Witer",
         "title": "Account Informatione"
       },
-      "passwordInput": {
-        "title": "Erstellen Sie Ihr Login",
-        "description": "Wählen Sie einen Spitznamen und ein Passwort. Ihr Passwort fungiert als sichere Passphrase, also merken Sie es sich unbedingt!"
-      },
       "nicknameLabel": "Spitzname",
       "nicknamePlaceholder": "Wählen Sie einen eindeutigen Spitznamen",
       "nicknameTaken": "Der Spitzname ist bereits vergeben",
+      "passwordInput": {
+        "description": "Wählen Sie einen Spitznamen und ein Passwort. Ihr Passwort fungiert als sichere Passphrase, also merken Sie es sich unbedingt!",
+        "title": "Erstellen Sie Ihr Login"
+      },
       "passwordLabel": "Passwort",
-      "passwordPlaceholder": "Erstellen Sie ein Passwort (wird als Passphrase verwendet)",
-      "passwordWeak": "Das Passwort muss mindestens 8 Zeichen lang sein und Buchstaben und Zahlen enthalten",
       "passwordMismatch": "Passwörter stimmen nicht überein",
-      "confirmPasswordLabel": "Passwort bestätigen",
-      "confirmPasswordPlaceholder": "Bestätigen Sie Ihr Passwort"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Erstellen Sie ein Passwort (wird als Passphrase verwendet)",
+      "passwordWeak": "Das Passwort muss mindestens 8 Zeichen lang sein und Buchstaben und Zahlen enthalten"
     },
     "trust": {
       "failed": {
         "text": "Hesch du’s richtig konfiguriert?",
         "title": "Server esch net erreichbar"
       },
-      "noHostTitle": "Server esch net Igstellt!",
-      "noHost": "Do der Server net igstellt esch, chasch kei Account erstelle",
       "host": "Du verbendisch di met <0>{{hostname}}</0> - stell secher das du im Server vertrausch, bevor du en Account erstellsch...",
       "no": "Zrog",
+      "noHost": "Do der Server net igstellt esch, chasch kei Account erstelle",
+      "noHostTitle": "Server esch net Igstellt!",
       "title": "Vertrousch däm Server?",
       "yes": "I vertrou däm Server 🤞"
     },
@@ -235,14 +89,88 @@
       "description": "Bitte geb din Passphrase vo forher i, um z’beschtätige, das du in gspicheret hesch, ond zom Konto erstelle",
       "invalidData": "T Date send ongöltig",
       "noMatch": "Passphrase stemt net ö ber’i",
-      "passphraseLabel": "Din 12-Wort Passphrase",
       "recaptchaFailed": "ReCaptcha Verifizierig esch felgschlage",
       "register": "Account erstelle",
-      "title": "Beschtätige din Passphrase",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "Beschtätige din Passphrase"
     }
+  },
+  "details": {
+    "airs": "Loft",
+    "collection": {
+      "movie": "Film",
+      "movies": "Filme",
+      "rating": "Bewertung",
+      "releaseDate": "Veröffentlichungsdatum",
+      "sortBy": "Sortieren nach"
+    },
+    "endsAt": "Ändet am {{time}}",
+    "episode": "Folge",
+    "episodes": "Folg",
+    "imdb": "Uf IMDb azeige",
+    "language": "Sproch:",
+    "play": "Abspele",
+    "rating": "Bewertig:",
+    "releaseDate": "Veröffentlichungsdatum:",
+    "resume": "Fortsetze",
+    "runtime": "Laufzeit:",
+    "season": "Staffle",
+    "seasons": "Jahreszeit(en).",
+    "similar": "Ähnlich",
+    "tmdb": "Uf TMDB azeige",
+    "trailers": "Anhänger",
+    "watched": "{{watched}} von {{total}} ({{percentage}} %) angesehen"
+  },
+  "discover": {
+    "allLists": "Ganzi Felm Lischte",
+    "carousel": {
+      "change": "Ändere",
+      "more": "Me Azeige",
+      "title": {
+        "4kReleases": "4K Veröffentlicht",
+        "editorPicksMovies": "Herausgeber wählt Filme aus",
+        "editorPicksShows": "Herausgeber wählt Sendungen aus",
+        "forYou": "Für Sie",
+        "inCinemas": "Im Kino",
+        "latestReleases": "Zletscht erschene",
+        "latestTVReleases": "Neuschti Serie",
+        "movies": "{{category}} Filme",
+        "moviesOn": "Felm of {{provider}}",
+        "onTheAir": "I der Loft",
+        "popular": "Am Beliebtischte",
+        "recommended": "Wel du {{title}} gse hesch",
+        "top10": "Top 10",
+        "topRated": "Top Bewärtige",
+        "trending": "Jetzt im Trend",
+        "tvshows": "{{category}} Zeigt",
+        "tvshowsOn": "Serie of {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Me Infos",
+      "playNow": "Jetzt abspele"
+    },
+    "filters": {
+      "country": "Land"
+    },
+    "page": {
+      "back": "Zrog",
+      "loading": "Ladet...",
+      "loadMore": "Me Lade",
+      "title": "Entdeck Felmli ond Serie"
+    },
+    "scrollToTop": "Ufwärts 🚀",
+    "tabs": {
+      "movies": "Filme",
+      "top10": "Top 10",
+      "tvshows": "Fernsehserie"
+    },
+    "viewLists": "Ganzi Felmlischte azeige"
+  },
+  "downtimeNotice": {
+    "badge": "Fehler",
+    "goHome": "Zor Start-Site",
+    "message": "AlphaFlix het wieder Problemli mit einzelne Anbieter. Wenn du e Serie nöd finde oder abspiele chasch, versuech bitte d’Quelle z’wechsle. Dä Fehler wird voraussichtlich während de unten aaggehne Zytspanne ahalte.",
+    "title": "Abieter Problem"
   },
   "errors": {
     "badge": "Kaputt",
@@ -258,159 +186,153 @@
     },
     "links": {
       "fluxer": "Fluxer",
-      "legal": "Legal / DMCA",
-      "github": "GitHub",
-      "twitter": "Zwetschere",
-      "funding": "Onterstötz üs"
+      "funding": "Onterstötz üs",
+      "github": "GitHub"
     },
     "tagline": "Lueg dini lieblings Serie ond Felme gratis ohni Werbig z’gse! "
   },
   "global": {
+    "keyboardShortcuts": {
+      "cancel": "Stornieren",
+      "clickToEdit": "Klicken Sie auf einen Schlüsselausweis, um ihn zu bearbeiten",
+      "conditions": {
+        "showsOnly": "Nur Shows"
+      },
+      "conflict": "Konflikt",
+      "conflicts": "Konflikte",
+      "detected": "erkannt",
+      "editInSettings": "Bearbeiten Sie Tastaturbefehle in den Einstellungen",
+      "groups": {
+        "audioVideo": "Audio und Video",
+        "interface": "Schnittstelle",
+        "jumpToPosition": "Zur Position springen",
+        "subtitlesAccessibility": "Untertitel und Barrierefreiheit",
+        "videoPlayback": "Videowiedergabe"
+      },
+      "none": "Keiner",
+      "numberKeySeeking": "Zahlenschlüssel auf der Suche nach Fortschritt",
+      "numberKeySeekingDescription": "Verwenden Sie die Zifferntasten 0-9, um bestimmte Positionen im Video zu suchen. 0 geht zum Anfang, 1-8 springt zu 10 %-80 % und 9 geht zu 90 %.",
+      "pressKey": "Drücken Sie eine Taste...",
+      "resetAllToDefault": "Alles auf Standard zurücksetzen",
+      "resetToDefault": "Auf Standard zurücksetzen",
+      "save": "Speichern",
+      "saveChanges": "Änderungen speichern",
+      "shortcuts": {
+        "barrelRoll": "Eine Drehung um die Längsachse machen! 🌀",
+        "closeOverlay": "Overlay/Modal schließen",
+        "decreaseVolume": "Lautstärke verringern",
+        "increaseVolume": "Lautstärke erhöhen",
+        "jumpTo0": "Auf 0 % springen (Anfang)",
+        "jumpTo9": "Auf 90 % springen",
+        "mute": "Stummschalten/Stummschaltung aufheben",
+        "nextEpisode": "Nächste Folge",
+        "playPause": "Wiedergabe/Pause (oder für 2-fache Geschwindigkeit gedrückt halten, wenn aktiviert)",
+        "playPauseAlt": "Abspielen/Pause",
+        "previousEpisode": "Vorherige Folge",
+        "randomCaption": "Wählen Sie eine zufällige Beschriftung aus der zuletzt verwendeten Sprache aus",
+        "skipBackward1": "1 Sekunde rückwärts springen",
+        "skipBackward10": "10 Sekunden rückwärts springen",
+        "skipBackward5": "5 Sekunden rückwärts springen",
+        "skipForward1": "1 Sekunde vorwärts springen",
+        "skipForward10": "10 Sekunden vorwärts springen",
+        "skipForward5": "5 Sekunden vorwärts springen",
+        "syncSubtitlesEarlier": "Untertitel früher synchronisieren (-0,5 Sek.)",
+        "syncSubtitlesLater": "Untertitel später synchronisieren (+0,5 Sek.)",
+        "toggleCaptions": "Untertitel umschalten",
+        "toggleFullscreen": "Vollbild umschalten",
+        "toggleNativeSubtitles": "Native Untertitel umschalten"
+      },
+      "subtitle": "Halten Sie ` gedrückt, um diese Hilfe jederzeit anzuzeigen",
+      "title": "Tastaturkürzel"
+    },
     "name": "AlphaFlix",
     "pages": {
-      "about": "Öber",
-      "legal": "Legal / DMCA",
       "discover": "Entdecke",
-      "support": "Onterstötze",
       "login": "Amälde",
-      "onboarding": "Irechte",
-      "pagetitle": "{{title}} - AlphaFlix",
-      "register": "Regischtriere",
-      "settings": "Ischtelige",
       "migration": "Account öberträge",
-      "jip": "Jip"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "pagetitle": "{{title}} – AlphaFlix",
+      "register": "Regischtriere",
+      "settings": "Ischtelige"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Läsezeiche",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "Stornieren",
+        "description": "Bearbeiten Sie die Details für dieses Lesezeichen",
+        "groupsLabel": "Gruppen",
+        "save": "Speichern",
+        "title": "Lesezeichen bearbeiten",
+        "titleLabel": "Titel",
+        "titlePlaceholder": "Geben Sie einen Titel für Ihr Lesezeichen ein",
+        "yearLabel": "Jahr",
+        "yearPlaceholder": "Geben Sie ein Jahr für Ihr Lesezeichen ein"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "Noch keine Gruppen",
+          "placeholderButton": "Zur Gruppe hinzufügen",
+          "removeAll": "Alles entfernen",
+          "removeFromGroup": "Aus der Gruppe entfernen"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "Dies wirkt sich auf {{count}} Lesezeichen aus.",
+          "cancel": "Stornieren",
+          "description": "Bearbeiten Sie den Namen und das Symbol Ihrer Lesezeichengruppe",
+          "nameLabel": "Gruppenname",
+          "namePlaceholder": "Geben Sie einen Namen für Ihre Gruppe ein",
+          "save": "Speichern",
+          "title": "Gruppe bearbeiten"
+        },
+        "reorder": {
+          "button": "Neu anordnen",
+          "cancel": "Stornieren",
+          "description": "Per Drag-and-Drop können Sie Ihre Lesezeichengruppen neu anordnen",
+          "done": "Erledigt",
+          "save": "Speichern",
+          "title": "Gruppenreihenfolge bearbeiten"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "Läsezeiche",
+      "showAll": "Alle anzeigen",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Standard (Datum hinzugefügt)",
+          "titleAsc": "Titel A-Z",
+          "titleDesc": "Titel Z-A",
+          "yearAsc": "Veröffentlichungsdatum Älteste-Neueste",
+          "yearDesc": "Erscheinungsdatum Neueste-Älteste"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "Witer luege…",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Standard (Datum hinzugefügt)",
+          "titleAsc": "Titel A-Z",
+          "titleDesc": "Titel Z-A",
+          "yearAsc": "Veröffentlichungsdatum Älteste-Neueste",
+          "yearDesc": "Erscheinungsdatum Neueste-Älteste"
         }
       }
     },
     "mediaList": {
       "stopEditing": "Bearbeitig beände"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "Dasch esch alle…",
+      "discover": "Entnecke",
+      "discoverMore": "Entdeck mee",
+      "empty": {
+        "default": "Wiiilkommme, do chasch Medie zom aluege fende!",
+        "extra": [
+          "Do gets nüt :(",
+          "so leer do...",
+          "So en leeri do.",
+          "Hallo, du cooli Socke :3"
+        ]
+      },
       "failed": "Fäler bem fende fo de Medie, versuechs nomol!",
       "loading": "Werd glade...",
       "noResults": "Mer hei nüt gfonde :(",
@@ -428,23 +350,19 @@
           ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "Wiiilkommme, do chasch Medie zom aluege fende!",
-        "extra": [
-          "Do gets nüt :(",
-          "so leer do...",
-          "So en leeri do.",
-          "Hallo, du cooli Socke :3"
-        ]
-      },
-      "sectionTitle": "Suechergebniss",
-      "discoverMore": "Entdeck mee",
-      "discover": "Entnecke"
+      "sectionTitle": "Suechergebniss"
     },
-    "mediaCard": {
-      "moreInfo": "Me Infos",
-      "copyLink": "Link Kopiere",
-      "close": "Zuemache"
+    "support": {
+      "complete": "vollständig",
+      "description": "AlphaFlix wird mit Verlust betrieben und wir brauchen Hilfe, um es werbefrei zu halten! Wenn Sie AlphaFlix gerne nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer Kosten zu helfen.",
+      "donate": "Spenden",
+      "explanation": "Wenn Sie die Erweiterung nicht verwenden oder die FED-API nicht eingerichtet haben, kann es schwieriger sein, Inhalte zu finden! Wir möchten das beheben, aber ohne teure Server ist es viel schwieriger, Inhalte bereitzustellen. Wenn Sie also gerne AlphaFlix nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer wachsenden Kosten zu helfen.",
+      "explanation2": "Wenn Sie weitere Informationen wünschen, nehmen Sie bitte an unserem teil",
+      "fluxer": "Fluxer",
+      "label": "Projektfinanzierung: ${{current}} / ${{goal}}",
+      "moreInfo": "Weitere Informationen",
+      "thankYou": "Vielen Dank für Ihre Unterstützung!",
+      "title": "AlphaFlix braucht Ihre Hilfe!"
     },
     "titles": {
       "69": {
@@ -465,6 +383,15 @@
           "Viva la AlphaFlix e ciao Svizzera"
         ]
       },
+      "halloween": {
+        "default": "Welchen gruseligen Film würden Sie dieses Halloween gerne sehen?",
+        "extra": [
+          "Fröhliches Halloween! 🎃👻",
+          "Buuuuh! 👻",
+          "Süßes oder Saures! 🍬",
+          "Es ist der große Kürbis, Charlie Brown!"
+        ]
+      },
       "morning": {
         "default": "Was welsch a däm morge aluege?",
         "extra": [
@@ -476,304 +403,116 @@
         "extra": [
           "Viva la ﻿﻿Svizzera!"
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Kürzlich gesehen",
+      "sectionTitle": "Sehen Sie sich den Verlauf an"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
-    "unreleased": "Noni veröffentlicht",
+    "episodeShort": "E",
+    "seasonUnwatched": "Sind Sie sicher, dass Sie die Saison als ungesehen markieren möchten?",
+    "seasonWatched": "Sind Sie sicher, dass Sie die Saison als gesehen markieren möchten?",
     "types": {
       "movie": "Felm",
       "show": "Serie"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Fortsetze",
-    "play": "Abspele",
-    "runtime": "Laufzeit:",
-    "language": "Sproch:",
-    "releaseDate": "Veröffentlichungsdatum:",
-    "rating": "Bewertig:",
-    "votes": "Stimmen",
-    "tmdb": "Uf TMDB azeige",
-    "imdb": "Uf IMDb azeige",
-    "episodes": "Folg",
-    "seasons": "Season/s",
-    "season": "Staffle",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Loft",
-    "endsAt": "Ändet am {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "Noni veröffentlicht"
   },
   "migration": {
-    "loginRequired": "Du muesch iglogt si om dini date z’migriere! Bitte gang zrog, ond log dich ich, zom witerfahre.",
-    "start": {
-      "title": "Öberträg dini date",
-      "explainer": "Wen du dini Date öberträge oder es Backup mache welsch, Chasch das met de folgende Optione mache. Demet paltisch du dini Date bem wächsel fo de Backend.",
-      "options": {
-        "or": "oder",
-        "direct": {
-          "description": "Das öbertreit dini Date direkt uf de neue Server. Das isch d’schnällsti Option. <br /><br /> Das erlaubt der au, der Passphrase z‘phalte!",
-          "title": "diräkti öberträgig",
-          "quality": "Liechtischti ond schnällschti",
-          "action": "Date öberträge"
-        },
-        "download": {
-          "description": "Das lädet dini Date uf dis Gerät abe. Du chasch sie nachher uf de neue Server ufelade oder si einfach zur Sicheriheit behalte.",
-          "title": "Date abelade",
-          "quality": "Me technisches",
-          "action": "Date abelade"
-        },
-        "upload": {
-          "title": "Date ufelade",
-          "description": "Lad dini vorher exportierti Datei ufe, um dini Lesezeichä und t‘Fortschritt uf däm Account wiederherzustelle.",
-          "quality": "Stell dis Backup weder her",
-          "action": "Date ufelade"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "diräkti öberträgig",
-      "description": "Gib d’Ziel-Backend-URL ii, um dini aktuelle Kontodate zum neue Backend z’öberträge. Dini Passphrase bliibt glych!",
-      "backendLabel": "Ziel-Backend-URL",
-      "recaptchaLabel": "ReCaptcha-Schlössel (optional)",
-      "toggleLable": "Brucht ReCaptcha?",
-      "status": {
-        "error": "Fähler bem öberträge fo dine Date 😿",
-        "success": "Dini date si erfolgrich öbertreit worde!🎉"
-      },
-      "button": {
-        "migrate": "öberträge",
-        "processing": "Verarbeitig…",
-        "home": "Zor Start-Site",
-        "login": "Witer zom Login"
-      }
-    },
+    "back": "Gang zrog",
     "download": {
-      "title": "Date abelade",
+      "button": {
+        "download": "Date abelade",
+        "home": "Zor Start-Site"
+      },
       "description": "Das wird dini Date uf dis Gerät abelade. Du chasch sie nacher uf de neue Server ufelade oder sie eifach zur Sicheriheit behalte.",
       "status": {
         "error": "Bem abelade fo dinere Date esch en Fehler passiert. 😿",
         "success": "Dini Date si erfolgrich abeglade worde! 🎉"
       },
-      "button": {
-        "download": "Date abelade",
-        "home": "Zor Start-Site",
-        "login": "Gang zom Login"
-      }
+      "title": "Date abelade"
+    },
+    "loginRequired": "Du muesch iglogt si om dini date z’migriere! Bitte gang zrog, ond log dich ich, zom witerfahre.",
+    "preview": {
+      "downloadDescription": "Der Download beinhaltet:",
+      "items": {
+        "bookmarks": "Mit Lesezeichen versehene Medien",
+        "progress": "Beobachten Sie den Fortschritt",
+        "settings": "Einstellungen und Präferenzen"
+      },
+      "uploadDescription": "Daten zum Hochladen:"
+    },
+    "start": {
+      "explainer": "Das lädet dini Date uf dis Gerät abe. Du chasch sie nachher uf de neue Server ufelade oder si einfach zur Sicheriheit behalte. Lad dini vorher exportierti Datei ufe, um dini Lesezeichä und t‘Fortschritt uf däm Account wiederherzustelle.",
+      "options": {
+        "download": {
+          "action": "Date abelade",
+          "description": "Das lädet dini Date uf dis Gerät abe. Du chasch sie nachher uf de neue Server ufelade oder si einfach zur Sicheriheit behalte.",
+          "quality": "Me technisches",
+          "title": "Date abelade"
+        },
+        "or": "oder",
+        "upload": {
+          "action": "Date ufelade",
+          "description": "Lad dini vorher exportierti Datei ufe, um dini Lesezeichä und t‘Fortschritt uf däm Account wiederherzustelle.",
+          "quality": "Stell dis Backup weder her",
+          "title": "Date ufelade"
+        }
+      },
+      "title": "Öberträg dini date"
     },
     "upload": {
-      "title": "Date ufelade",
-      "description": "Lad dini vorher exportierti Dateie ufe, um dini Lesezeichä und din Fortschritt uf das Konto wiederherzustelle.",
-      "status": {
-        "processing": "Verarbeitet Datene…",
-        "error": "Fähler bem ufelade fo dine Date. 😿",
-        "success": "Dini date si erfolgrich ufe glade worde! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Wähl dini Datei us, wodu welsch ufelade",
-        "select": "Wähl en Datei",
-        "change": "Ändere en Datei",
-        "name": "Datei Name"
-      },
-      "exportedOn": "Exportiert am",
-      "previewTitle": "Preview:",
       "button": {
+        "home": "Witer zor Start-Site",
         "import": "Date importiere",
         "processing": "Verarbeitete...",
-        "success": "Import abgschlosse",
-        "home": "Witer zor Start-Site",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Gang zrog"
+        "saveLocal": "Lokal speichern"
+      },
+      "description": "Lad dini vorher exportierti Dateie ufe, um dini Lesezeichä und din Fortschritt uf das Konto wiederherzustelle.",
+      "exportedOn": "Exportiert am",
+      "file": {
+        "change": "Ändere en Datei",
+        "description": "Wähl dini Datei us, wodu welsch ufelade",
+        "select": "Wähl en Datei"
+      },
+      "previewTitle": "Vorschau:",
+      "status": {
+        "error": "Fähler bem ufelade fo dine Date. 😿",
+        "processing": "Verarbeitet Datene…",
+        "success": "Dini date si erfolgrich ufe glade worde! 🎉",
+        "successLocal": "Ihre Daten wurden lokal gespeichert! 🎉"
+      },
+      "title": "Date ufelade"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "Check mol dini Internet verbendig, silly goose! 🦢"
     },
+    "install": {
+      "genericGuide": "Ihr Browser unterstützt keine automatische PWA-Installationsaufforderung.\nSie können die Installation weiterhin über das Browsermenü durchführen (z. B. „App installieren“, „Verknüpfung erstellen“ oder „Zum Dock/Startbildschirm hinzufügen“).",
+      "iosSafariGuide": "So installieren Sie AlphaFlix als App:\n\n1. Tippen Sie auf die Schaltfläche „Teilen“ (Quadrat mit einem Pfeil).\n2. Wählen Sie „Zum Startbildschirm hinzufügen“.\n3. Tippen Sie auf Hinzufügen."
+    },
     "menu": {
-      "about": "Öber üs",
+      "desktop": "App-Einstellungen",
       "logout": "Abmälde",
       "register": "Synchronisiert zo der Wolche",
-      "settings": "Ischtelige",
-      "support": "Support",
-      "discover": "Entdecke",
-      "development": "Entwecklig",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "So installieren Sie AlphaFlix als App:\n\n1. Tippen Sie auf die Schaltfläche „Teilen“ (Quadrat mit einem Pfeil).\n2. Wählen Sie „Zum Startbildschirm hinzufügen“.\n3. Tippen Sie auf Hinzufügen.",
-      "genericGuide": "Ihr Browser unterstützt keine automatische PWA-Installationsaufforderung.\nSie können die Installation weiterhin über das Browsermenü durchführen (z. B. „App installieren“, „Verknüpfung erstellen“ oder „Zum Dock/Startbildschirm hinzufügen“)."
+      "settings": "Ischtelige"
     }
   },
   "notFound": {
     "badge": "Net gfonde",
     "goHome": "Zrog zo Home",
-    "reloadButton": "Versuechs nomol",
     "message": "Mir hei überall gluegt: unter de Chübeli, im Chaschte, hinterem Proxy – aber mir hei die Seite, wo du suechsch, leider nöd gfunde. ",
+    "reloadButton": "Versuechs nomol",
     "title": "T Site heimer net gfonde"
-  },
-  "downtimeNotice": {
-    "badge": "Fehler",
-    "goHome": "Zor Start-Site",
-    "message": "AlphaFlix het wieder Problemli mit einzelne Anbieter. Wenn du e Serie nöd finde oder abspiele chasch, versuech bitte d’Quelle z’wechsle. Dä Fehler wird voraussichtlich während de unten aaggehne Zytspanne ahalte.",
-    "title": "Abieter Problem"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Abbräche",
-      "confirm": "Standard-Setup verwände",
-      "description": "S Standart Setup het net die beschte Streams. Du verpassisch die beschte Quellene!",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Besch secher?"
-    },
-    "extension": {
-      "back": "Gang zrog",
-      "explainer": "Mit dr Browser-Erweiterig chasch du d’beschte Streams nutze, wo mir z’biete hei – mit nur enere einfache Installierig. 👌",
-      "explainerIos": "Leider chasch t Browser-Erwiterig onter IOS net bruche. Klick uf <bold>Zrog</bold>, om en anderi Option z wähle.",
-      "extensionHelp": "Wenn du d’Erweiterig installiert hesch, sie aber nöd erkannt wird, <bold>öffne sie über s’Erweiterigs-Menü vo dim Browser</bold> und folg de Schritt uf em Bildschirm.",
-      "linkChrome": "Chrome Erweiterig installiere",
-      "linkFirefox": "Firefox Erweiterig installiere",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Uf Chrome installiert, aber d’Site erkennt sie nöd? Versuech d’Seite neu z’lade!",
-      "notDetectingAction": "Site neu lade",
-      "status": {
-        "disallowed": "Erwiterig esch för die Site net aktiviert (,,>﹏<,,)",
-        "disallowedAction": "Aktivier Erwiterig",
-        "failed": "Status afrog esch Fehlgschlage",
-        "loading": "Warte of dich, bes du d‘Erwiterig installiert hesch",
-        "outdated": "Erwiterig het en zu alti version",
-        "success": "D‘Erwiterig fonktioniert wie usem Näichäschtli!"
-      },
-      "submit": "Witer",
-      "title": "Lass üs met der Erwiterig starte"
-    },
-    "proxy": {
-      "back": "Zrog go",
-      "explainer": "Mit dr Proxy-Methode chasch super Qualität-Streams kriege, indem du e Self-Service-Proxy iirichtisch.",
-      "input": {
-        "errorConnection": "Chan net metem Proxy verbende",
-        "errorInvalidUrl": "Kei gültigi URL",
-        "errorNotProxy": "Esch esch en Proxy erwartet worde, aber es esch e Website cho",
-        "label": "Proxy-URL",
-        "placeholder": "https://"
-      },
-      "link": "Lehr, wie me en Proxy macht",
-      "submit": "Proxy irechte",
-      "title": "Lass üs e neue Proxy mache"
-    },
-    "start": {
-      "explainer": "Lass üs die beschte Streams hole. Du muesch uswehle, weli streaming methode du welsch ne.",
-      "moreInfo": {
-        "button": "Me Info",
-        "title": "Es Setup versto",
-        "explainer": {
-          "intro": "AlphaFlix hostet kei Videos. Es isch uf Drittanbieter-Websites angewiese für d’Inhalt, drum muesch du wähle, wie s sich mit dene Site verbindet.",
-          "options": "Dini Optione:",
-          "extension": "1. Erwiterig",
-          "extensionDescription": "D’Erweiterig git der Zuegriff uf d’meiste Quellen. Si funktioniert wie en lokale Proxy und cha Site verwände, wo spezielli Cookies oder Header bruuche zum Lade.",
-          "proxy": "2. Proxy",
-          "proxyDescription": "Dr Proxy scrape Medien vo andere Websites. Er umgoh Browser-Einschränkige (wie CORS), um s’Scrape z’ermögliche.",
-          "default": "3. Standart Istelige",
-          "defaultDescription": "Bruchsch der integrierti AlphaFlix Proxy. Es isch der eifachscht Option, chönnt aber langsamer si weg der teilte Bandbreite.",
-          "fedapi": {
-            "fedapi": "Optional: FED API (Private) token",
-            "fedapiDescription": "Bring din eigene gratis Febbox-Account mit, zum Zuegriff uf d’FED API (Privat) z’übercho. Die beschti Quälle mit 4K-Qualität, Dolby Atmos, Intro Skip ond superschnälle Ladezyte! Wörklich sehr zom Empfehle!"
-          },
-          "outro": "Wenn du meh Froge hesch, wie das funktioniert, chasch gärn uf em <0>AlphaFlix Fluxer\\</0>-Server frage!"
-        },
-        "recommended": {
-          "title": "Net secher, was de uswähle welsch?",
-          "subtitle": "Empfohleni Konfiguratione:",
-          "desktop": {
-            "title": "Schribtesch:",
-            "description": "Erwiterig + FED API (Private)"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Eigene Proxy + FED API (Private)"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Erwiterig + FED API (Private)"
-          }
-        }
-      },
-      "options": {
-        "or": "oder",
-        "default": {
-          "text": "Ich möcht kei gueti Streaming qualität, den chasch s‘standart Setup bruche"
-        },
-        "extension": {
-          "action": "Installier t‘Erwiterig",
-          "description": "Installier d’Browser-Erweiterig, um Zuegriff uf zuesätzlechi Quellen z’überchun! Aber denk dra, sie für die Site z’aktiviere.",
-          "quality": "Beschti Qually + me Quellene",
-          "title": "Browser Erwitterig"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Proxy istelle",
-          "description": "Erstell en gratis Proxy in 5Min! Verbesserti ladezite!",
-          "quality": "Gute Qualität",
-          "title": "Eigene Proxy"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Lass üs metem istelle fo AlphaFlix starte 🥳"
+      "cancel": "Abbräche"
     }
   },
   "overlays": {
@@ -785,24 +524,45 @@
       "short": "Zrog"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "Casting to device 🎬"
+      "device": "Gerät",
+      "to": "Casting auf {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Mehr RAM wird heruntergeladen...",
+      "2": "Koffein in Inhalt umwandeln...",
+      "3": "Dem Hamster beibringen, schneller zu laufen ...",
+      "4": "Elektronen davon überzeugen, sich schneller zu bewegen ...",
+      "5": "Fast geschafft... sagte jeder Ladebalken jemals...",
+      "6": "Suche nach der Fernbedienung ... Moment, falsches Problem ...",
+      "7": "Von unendlich rückwärts zählen...",
+      "8": "Die Zukunft simulieren...",
+      "9": "Katzenvideos ansehen...",
+      "10": "Abgelenkt durch Katzen-GIFs...",
+      "11": "Bitte warten Sie, während der Praktikant seinen Kaffee nachfüllt...",
+      "12": "Überprüfe, ob es angeschlossen ist...",
+      "13": "Aus- und wieder einschalten...",
+      "14": "Keine Panik...",
+      "15": "Der Winter kommt...",
+      "16": "Bei Skynet anmelden...",
+      "17": "Alle Ihre Browser gehören uns...",
+      "18": "Auf der Suche nach einem unendlichen Unwahrscheinlichkeitstrieb...",
+      "19": "Entdecken Sie neue Wege, Sie warten zu lassen ...",
+      "20": "Ihre Zeit ist uns sehr wichtig. Bitte warten Sie, während wir Sie ignorieren ...",
+      "21": "Immer noch schneller als Windows Update...",
+      "22": "Warum schnappst du dir nicht ein Sandwich?"
     },
     "menus": {
+      "audio": {
+        "default": "Standard"
+      },
       "downloads": {
         "button": "Versuech zom abelade",
-        "hlsDownloader": "Oder, goh uf d’<0>HLS Downloader-Website\\</0> und füeg die Playlist-URL vo unten ei.",
-        "disclaimer": "Downloads chömed direkt vom Anbieter. AlphaFlix het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde.",
         "copyHlsPlaylist": "Kopier HLS-Playlist Link",
+        "disclaimer": "Downloads chömed direkt vom Anbieter. AlphaFlix het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde.",
         "downloadSubtitle": "Aktuelle Untertitel ablade",
         "downloadVideo": "Video abelade",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "Downloads chömed direkt vom Anbieter. AlphaFlix het kei Kontroll drüber, wie die Downloads zur Verfüegig gstellt werde. <br /><br />Bitte beachte, dass du e HLS-Playlist abeladsch, <bold>es wird nöd empfohle zum abelade, wenn du dich mit fortgschrittliche Streaming-Formate nöd uskennsch</bold>. Versuech anderi Quellen für anderi Formate.",
+        "hlsDownloader": "Oder, goh uf d’<0>HLS Downloader-Website\\</0> und füeg die Playlist-URL vo unten ei.",
         "onAndroid": {
           "1": "Om of Android abezlade, klick ofe abelad chnopf, <bold>Klick ond halt</bold> ofs Video, den wählsch <bold>save</bold>us.",
           "shortTitle": "Abelade / Android",
@@ -824,57 +584,47 @@
         "button": "Folg",
         "emptyState": "Do si kei Folge i dere Staffle, lueg spöter nomol verbi (sorry :3)…",
         "episodeBadge": "E{{episode}}",
+        "favorites": "Favoriten",
         "loadingError": "Fehler bem lade fo de Staffle",
         "loadingList": "Werd glase...",
         "loadingTitle": "Werd glade...",
-        "unairedEpisodes": "Ei oder meh Episodä in däre Staffel sind deaktiviert worde, will sie no nöd usgstrahlt worde sind.",
-        "seasons": "Staffle",
-        "showMore": "Zeig me",
-        "showLess": "Zeig weniger",
-        "markAsWatched": "Markiers als agluegt",
+        "markAsFavorite": "Als Favorit markieren",
         "markAsUnwatched": "Markier als net agluegt",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "markAsWatched": "Markiers als agluegt",
+        "noFavorites": "Noch keine Lieblingsfolge. Markieren Sie Episoden, um sie zu Ihren Favoriten hinzuzufügen!",
+        "showLess": "Zeig weniger",
+        "showMore": "Zeig me",
         "specials": "Sonderangebote"
       },
       "playback": {
-        "speedLabel": "Wedergabegschwendigkeit",
-        "title": "Wedergab Istellig",
         "disabled": "(In watch party usschalte)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "Wedergabegschwendigkeit",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Wedergab Istellig"
       },
       "quality": {
+        "auto": "Auto",
         "automaticLabel": "Automatischi Quallität",
         "hint": "Du chasch <0>d’Quelle wechsle</0>, um anderi Qualität-Optione z’überchun.",
         "iosNoQuality": "Wäge vo Apple definierti (typisch iOS L) Einschränkige isch s’Wähle vo dr Qualität bi däre Quelle uf iOS nöd verfügbar. Du chasch <0>uf e anderi Quelle wechsle</0>, um verschideni Qualitäte z’überchun.",
-        "title": "Qualität",
-        "auto": "Auto"
+        "title": "Qualität"
       },
       "settings": {
+        "audioItem": "Audio",
         "downloadItem": "Abelade",
         "enableSubtitles": "Ontertetel aktiviere",
-        "experienceSection": "Azeige Erläbnis",
         "playbackItem": "Wedergabe Istellig",
-        "audioItem": "Audio",
         "qualityItem": "Qualität",
         "sourceItem": "Quelle",
-        "subtitleItem": "Ontertetel",
-        "videoSection": "Felmli Ischtelige"
+        "subtitleItem": "Ontertetel"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "Do esch en Fehler bem versuech Felmli z fende… Versuech mol en anderi Quelle",
           "title": "Fehler bem Lade"
         },
+        "findNextSource": "Finden Sie die nächste Quelle",
         "noEmbeds": {
           "text": "Mir hei kei Embeds gfunde, bitte versuech en anderi Quelle.",
           "title": "Kei Embeds gefonde"
@@ -884,72 +634,53 @@
           "title": "Kei Stream :("
         },
         "title": "Quellene",
-        "unknownOption": "Onbekannt",
-        "findNextSource": "Find next source"
+        "unknownOption": "Onbekannt"
       },
       "subtitles": {
+        "autoSelectChoice": "Automatische Auswahl",
+        "autoSelectDifferentChoice": "Tippen Sie erneut, um automatisch einen anderen Untertitel auszuwählen",
+        "clearSecondary": "Klarer sekundärer Untertitel",
         "customChoice": "Drop oder lad dis File ufe",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Apasse",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "Bildunterschrift gesehen",
+        "delayLate": "Audio gehört",
+        "doubleClickToCopy": "Doppelklicken Sie, um die Untertiteldaten zu kopieren",
+        "dropSubtitleFile": "Leg din Ontertetel do ab! >_<",
+        "dualSub": "Doppelte Untertitel",
+        "dualSubDesc": "Wählen Sie dasselbe Format (SRT, VTT...) und denselben Anbieter (OpenSubs...) für die beste Synchronisierung",
+        "dualSubHint": "Wählen Sie eine Sprache für den sekundären Untertitel (siehe oben)",
+        "empty": "Do si kei Ontertetel verfüegbar.",
+        "loadingExternal": "Externe Untertitel werden geladen...",
+        "loadingExternalProgress": "Externe Untertitel werden geladen... ({{progress}}%)",
+        "matchScoreLabel": "Übereinstimmung mit ~{{score}} %",
+        "notFound": "Kei vo de verfüegbare Optionä stimmt mit dinere Suchi öberi",
         "offChoice": "Us",
-        "onChoice": "Aa",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Quelle agab",
-        "OpenSubtitlesChoice": "OpenSubtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "Untertiteldaten einfügen",
+        "previewLabel": "Untertitelvorschau:",
+        "primary": "Primär",
+        "refresh": "Externe Untertitel aktualisieren",
+        "refreshing": "Erfrischend...",
+        "secondary": "Sekundär",
+        "selectingSecondary": "Auswahl des sekundären Untertitels",
         "settings": {
           "backlink": "Eigeni Ontertetel",
           "delay": "Ontertitelverzögerig",
           "fixCapitals": "Grossschribig korrigiere"
         },
         "title": "Ontertitel",
-        "unknownLanguage": "Onbekannt",
-        "dropSubtitleFile": "Leg din Ontertetel do ab! >_<",
-        "scrapeButton": "Ontertitel scrapen",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "Do si kei Ontertetel verfüegbar.",
-        "notFound": "Kei vo de verfüegbare Optionä stimmt mit dinere Suchi öberi",
-        "useNativeSubtitles": "Benotz nativi Video-Ontertetel",
-        "useNativeSubtitlesDescription": "Cha d‘Ontertetel bi Casting ond im PiP behebe",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "Transkript",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "Übersetzen von {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Externe Untertitel werden geladen... ({{progress}}%)",
-        "matchScoreLabel": "Übereinstimmung mit ~{{score}} %"
+        "unknownLanguage": "Onbekannt",
+        "useNativeSubtitles": "Benotz nativi Video-Ontertetel",
+        "useNativeSubtitlesDescription": "Cha d‘Ontertetel bi Casting ond im PiP behebe"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Watch Party esch felecht net för alli Quellene verfüegbar",
-        "legacyWatchparty": "Bruch die alti Watch Party"
-      },
-      "audio": {
-        "default": "Standard"
+        "watchpartyItem": "„Party“ ansehen"
       }
     },
     "metadata": {
-      "api": {
-        "text": "Het API Metadata net chöne lade. Bitte check dini Internet verbendig.",
-        "title": "API Metadata het net chöne lade"
-      },
-      "legal": {
-        "badge": "Entfärne",
-        "text": "Die Medie isch nüm verfügbar wäge eme Takedown-Notice oder eme Urheberrechtsanspruch. 😨",
-        "title": "D‘Medie si glöscht worde"
-      },
       "extensionPermission": {
         "badge": "D‘Berächtigong fält",
         "button": "Bruch d‘Erwiterig",
@@ -962,6 +693,11 @@
         "text": "Het d‘Metadate fo TMDB net chöne lade. Öberprüef ob entweder TMDB down esch oder öb si ächt of dim Internet blockiert esch.",
         "title": "Lade fo de Metadate fehlgschlage"
       },
+      "legal": {
+        "badge": "Entfärne",
+        "text": "Die Medie isch nüm verfügbar wäge eme Takedown-Notice oder eme Urheberrechtsanspruch. 😨",
+        "title": "D‘Medie si glöscht worde"
+      },
       "notFound": {
         "badge": "Net gfonde",
         "homeButton": "Zrog zor Start-Site",
@@ -970,18 +706,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Wederholig",
       "next": "Nächschti Folg",
-      "nextSeason": "Nächschti Staffle"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "Nächschti Staffle",
+      "replay": "Wederholig"
     },
     "playbackError": {
+      "autoResumeText": "Beim Abspielen der Medien ist ein Fehler aufgetreten 😖. Automatically trying the other sources...",
       "badge": "Wedergabe Fehler",
+      "copyDebugInfo": "Debug-Informationen kopieren",
+      "debugInfo": "Weitere Details finden Sie in der Konsole.",
       "errors": {
         "errorAborted": "S‘abrüefe fo de Medie esch vom Benotzer abbroche worde.",
         "errorDecode": "Obwohl es vorher als benutzbar bestimmt worde esch, esch e Fehler aufgetrete, während em Versuech, die Medienressource z'dekodiere, was zu eme Fehler gführt het.",
@@ -989,37 +722,35 @@
         "errorNetwork": "Es isch en Netzwerkfehler auftrete, wo verhindert het, dass d‘Medie erfolgrich abgerüft werde chöi, obwohl es vorher verfügbar gse esch.",
         "errorNotSupported": "S‘Medie oder de Medie-Anbieter wird nöd onterstützt."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "Zrog zor Start-Site",
-      "resumeButton": "Try next sources",
+      "resumeButton": "Versuchen Sie es mit den nächsten Quellen",
       "text": "Do esch en Fehler bem abspele fo de Medie 😖. Bitte versuechs nomol oder benotz en anderi Quelle!",
       "title": "Upsi, Fehler bem abspele!"
     },
+    "resume": {
+      "description": "Diese Folge wurde zu {{percentage}} % angesehen",
+      "restart": "Neustart",
+      "resume": "Wieder aufnehmen",
+      "title": "Weiter schauen?"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "Erwiterig deaktiviert",
+        "enableExtension": "Erwiterig aktiviere",
+        "homeButton": "Gang heime",
+        "text": "Du hescht AlphaFlix Erwiterig installiert. Demet du si chasch benotze, muesch si aktiviere.",
+        "title": "Bitte aktivier t Erwiterig"
+      },
       "items": {
-        "failure": "En Fehler esch ufträte",
-        "timeout": "Timed out (15s)",
-        "notFound": "Mer hei s‘Video net (╥﹏╥)",
         "pending": "Video werd gsuecht…"
       },
       "notFound": {
         "badge": "Net gfonde",
         "detailsButton": "Deteils azeige",
-        "homeButton": "Gang zor Start-Site",
         "discoverButton": "Entdeck me",
+        "homeButton": "Gang zor Start-Site",
         "text": "Mir hei d'Anbieter durchsuecht und chönd d‘Medie, wo du suechsch, nöd finde! Mir hoste kei Medie und hei kei Kontroll über das, was verfügbar isch. Bitte klick uf „Details zeige“ unten für meh Informatione.",
-        "title": "Chöne mer net fende",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Erwiterig deaktiviert",
-        "homeButton": "Gang heime",
-        "enableExtension": "Erwiterig aktiviere",
-        "title": "Bitte aktivier t Erwiterig",
-        "text": "Du hescht AlphaFlix Erwiterig installiert. Demet du si chasch benotze, muesch si aktiviere."
+        "title": "Chöne mer net fende"
       },
       "tips": {
         "1": "Klick uf s‘Zahnradsymbol, um d‘Quellen z‘wechse!",
@@ -1033,182 +764,126 @@
         "9": "Bruch [ und ], om d‘Ontertitel-Ziit z'ändere!"
       }
     },
+    "segment": {
+      "credits": "Credits",
+      "intro": "Einführung",
+      "recap": "Rekapitulieren"
+    },
+    "skipTime": {
+      "confidence": "Vertrauen",
+      "connectApiKeyMessage": "Um neue Segmente einzureichen, geben Sie Ihren TheIntroDB-API-Schlüssel in den Verbindungseinstellungen ein",
+      "credits": "Credits überspringen",
+      "endOfVideo": "Ende",
+      "endsAt": "Endet um {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Stornieren",
+          "description": "Tragen Sie zu TheIntroDB bei, indem Sie genaue Segmentzeitstempel einreichen. Alle Einsendungen werden von der Community akzeptiert, bevor sie veröffentlicht werden.",
+          "endTimeLabel": "Ende(n)",
+          "error": {
+            "endTime": "Endzeit ist erforderlich",
+            "mediaInfo": "Medieninformationen sind nicht verfügbar",
+            "segment": "Kein Segment ausgewählt",
+            "startTime": "Startzeit ist erforderlich",
+            "submission": "Fehler beim Senden der Zeitstempel",
+            "tidbKey": "Der TIDB-API-Schlüssel ist nicht festgelegt"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Mindestens 5 Sekunden, wenn ein Ende angegeben ist. Kann bis zum Ende des Mediums reichen.",
+              "endDesc": "Optional – leer lassen, wenn der Abspann bis zum Ende der Datei reicht.",
+              "excludeDesc": "Schließen Sie Szenen in der Mitte des Abspanns oder nach dem Abspann aus. nur die Hauptkreditrolle.",
+              "startDesc": "Erforderlich – wenn der Abspann beginnt (z. B. wenn der erste Abspanntext erscheint).",
+              "whenToTitle": "Leitfaden zu Credits-Zeitstempeln:"
+            },
+            "durationDesc": "Min. 5 Sekunden, wenn Ende angegeben",
+            "durationLabel": "Dauer:",
+            "endDesc": "Optional – leer, wenn es bis zum Ende reicht",
+            "endLabel": "Ende:",
+            "excludeDesc": "Szenen nach dem Abspann",
+            "excludeLabel": "Ausschließen:",
+            "intro": {
+              "durationDesc": "Die meisten Intros dauern 30–90 Sekunden. Mindestens 5 Sekunden, wenn sowohl Start als auch Ende festgelegt sind.",
+              "endDesc": "Erforderlich – wenn das Intro endet (normalerweise, wenn die Titelkarte oder die Hauptepisode beginnt).",
+              "excludeDesc": "Schließen Sie keine Cold-Opening- oder Pre-Intro-Szenen ein. nur die Haupttitelsequenz.",
+              "startDesc": "Optional – leer lassen, wenn das Intro am Anfang der Episode beginnt.",
+              "whenToTitle": "Einführungs-Zeitstempel-Leitfaden:"
+            },
+            "preview": {
+              "durationDesc": "Die Länge der Vorschau variiert. Mindestens 5 Sekunden.",
+              "endDesc": "Optional – leer lassen, wenn die Vorschau am Ende des Mediums endet.",
+              "excludeDesc": "Die Vorschau dauert normalerweise 15 bis 90 Sekunden am Ende der Episode und zeigt eine Vorschau der nächsten Episode an.",
+              "startDesc": "Erforderlich – wenn die Vorschau startet (z. B. wenn der Vorschautext erscheint).",
+              "whenToTitle": "Leitfaden für Vorschau-Zeitstempel:"
+            },
+            "recap": {
+              "durationDesc": "Zusammenfassungen variieren in der Länge. Mindestens 5 Sekunden, wenn sowohl Start als auch Ende festgelegt sind.",
+              "endDesc": "Erforderlich – wenn die Zusammenfassung endet und der neue Inhalt beginnt.",
+              "excludeDesc": "Nur das „Vorherige“- oder Recap-Segment; enthalten weder das Intro noch neue Szenen.",
+              "startDesc": "Optional – leer lassen, wenn die Zusammenfassung am Anfang der Episode beginnt.",
+              "whenToTitle": "Zusammenfassung der Zeitstempel-Anleitung:"
+            },
+            "startDesc": "Erforderlich – wenn die Credits beginnen",
+            "startLabel": "Start:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 oder 210 (für Ende des Mediums leer lassen)",
+              "intro": "3:30 oder 210 (erforderlich)",
+              "preview": "3:30 oder 210 (für Ende des Mediums leer lassen)",
+              "recap": "3:30 oder 210 (erforderlich)"
+            },
+            "start": {
+              "credits": "2:30 oder 150 (erforderlich)",
+              "intro": "2:30 oder 150 (für den Anfang leer lassen)",
+              "preview": "2:30 oder 150 (erforderlich)",
+              "recap": "2:30 oder 150 (für den Anfang leer lassen)"
+            }
+          },
+          "segmentType": "Segmenttyp",
+          "startTimeLabel": "Beginn(e)",
+          "submit": "Einreichen",
+          "submitting": "Einreichen...",
+          "success": {
+            "title": "Einreichung erfolgreich! Danke!"
+          },
+          "title": "Senden Sie Zeitstempel an TheIntroDB",
+          "types": {
+            "credits": "Credits",
+            "intro": "Einführung",
+            "preview": "Vorschau",
+            "recap": "Rekapitulieren"
+          },
+          "whenToDesc": "Geben Sie Zeitstempel in Sekunden (z. B. 150), im Format mm:ss (z. B. 2:30) oder im Format hh:mm:ss (z. B. 1:42:20) ein. Wir konvertieren das Format automatisch für Sie.",
+          "whenToTitle": "Leitfaden zu Zeitstempeln:"
+        },
+        "title": "War dieser Sprung richtig?"
+      },
+      "intro": "Einführung überspringen",
+      "noSegments": "Keine Überspringsegmente verfügbar",
+      "recap": "Zusammenfassung überspringen",
+      "skipSegments": "Segmente überspringen",
+      "startsAt": "Beginnt um {{time}}",
+      "submissions": "{{count}} Einsendungen",
+      "submitSegment": "Segment senden",
+      "timeUnknown": "Zeit unbekannt"
+    },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "{{timeLeft}} Öbrig • Fertig am {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix isch druf usgleit, so benotzerfröntlech wie möglech z‘si. Trotzdäm het Lüüt no Froge und Problem. Die Site isch do, om z‘hälfe.",
-    "q1": {
-      "body": "Nun, du chasch em Officiele <0>AlphaFlix-Fluxer</0> biträte ond det Froge stelle oder du chasch en Email schecke a d‘Adresse ganz onte uf dere Site.",
-      "title": "Wo chani Helf hole?"
-    },
-    "q2": {
-      "body": "Mir hei en <0>GitHub</0>, wo du es detailliertes Issue im Repository erstelle chasch. Zusätzlich chasch du, wenn du wetsch, au e Pull Request mache, um s’Problem sälber z’fiixe.",
-      "title": "Wo chani en Fehler oder en Bug mälde?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix isch net usem Hemel gheit - s meischte esch vonere einzelne Person gmacht worde (ond das no sehr idrocksvoll!).",
-    "q1": {
-      "body": "Nun, du chasch em Officielle <0>AlphaFlix-Fluxer</0> biträte ond det Froge stelle oder en Email at adresse wo onde a dere Site esch, schribe.",
-      "title": "Wo bechomi helf?"
-    },
-    "q2": {
-      "body": "Mir hei en <0>GitHub\\</0>, wo du es detailliertes Issue im Repository erstelle chasch. Zusätzlich chasch du, wenn du wotsch, au e Pull Request mache, um s’Problem sälber z’fiixe.",
-      "title": "Wo chani en Fehler oder en Bug mälde?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "D‘App werd glade",
-    "loadingUser": "Dis Profil werd glade",
     "loadingUserError": {
+      "disconectCancel": "Stornieren",
+      "disconnectConfirm": "Bestätigen",
+      "disconnectMessage": "Trennen Sie die Verbindung zum Kontoserver und behalten Sie die neuesten lokalen Daten bei. Änderungen und angesehene Inhalte werden erst synchronisiert, wenn Sie sich erneut anmelden.",
+      "disconnectTitle": "Verbindung zum Backend trennen?",
       "logout": "Abmälde",
-      "reset": "Eigene Server zrogsetze",
-      "disconnect": "Disconnect from backend",
-      "text": "Bem lade fo din Profil esch en Fehler uftaucht",
       "reload": "Neu lade",
-      "textWithReset": "Profil het nöd vo dim eigene Server glade werde chöne – wotsch zum Standardserver zrogwechsle?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reset": "Eigene Server zrogsetze"
     },
     "migration": {
       "failed": "Bem öberträge esch en Fehler ufträte. 😿",
@@ -1216,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Gräte name",
-        "deviceNamePlaceholder": "Natel",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Bearbeite",
-        "logoutButton": "Abmälde"
-      },
-      "admin": {
-        "title": "Admin-Zentrale",
-        "text": "Notz d‘Wärchzüg wo deför do si, der zuestand vo AlphaFlix z öberprüefe."
+        "logoutButton": "Abmälde",
+        "nicknameLabel": "Spitzname",
+        "nicknamePlaceholder": "Geben Sie Ihren Spitznamen ein"
       },
       "actions": {
         "delete": {
@@ -1248,26 +907,26 @@
           "text": "Die Aktion cha net röckgängig gmacht wärde. Alli date werne glöscht ond chöne net wederhergstellt werde.",
           "title": "Account lösche"
         },
-        "migration": {
-          "title": "Account öberträge",
-          "text": "Öberträg din Account zu eme neue Server oder lad dini Date abe.",
-          "button": "Öberträg de Account"
-        },
-        "title": "Aktione",
         "logoutAllDevices": {
-          "title": "Alli Grät abmälde",
+          "button": "Wo allne Grät abmälde",
           "text": "Das werd all dini Grät abmälde wo met dim Account verbonde si.",
-          "button": "Wo allne Grät abmälde"
-        }
+          "title": "Alli Grät abmälde"
+        },
+        "migration": {
+          "button": "Öberträg de Account",
+          "text": "Öberträg din Account zu eme neue Server oder lad dini Date abe.",
+          "title": "Account öberträge"
+        },
+        "title": "Aktione"
       },
       "devices": {
         "deviceNameLabel": "Geräte name",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Lade vo der Setzige Fehlgschlage",
+        "lastActive": "Zuletzt aktiv: {{date}}",
+        "loggedInAt": "Angemeldet unter: {{date}}",
         "removeDevice": "Entfärne",
         "title": "Geräte",
-        "lastActive": "Zuletzt aktiv: {{date}}",
-        "loggedInAt": "Angemeldet unter: {{date}}"
+        "unknownDevice": "Unbekanntes Gerät, Fehler beim Entschlüsseln des Namens"
       },
       "profile": {
         "finish": "Bearbeite beänden",
@@ -1281,379 +940,215 @@
         "text": "Teil din watch progress met dine andere Grät ond palt si Synchronisiert. ( ̧⸝⸝⍢⸝⸝)ෆ",
         "title": "Met der Cloud synchronisiere"
       },
-      "title": "Account"
+      "title": "Konto"
+    },
+    "all": {
+      "title": "Alle Einstellungen"
     },
     "appearance": {
       "activeTheme": "Aktiv",
-      "themes": {
-        "blue": "Blau",
-        "custom": "Custom",
-        "default": "Standard",
-        "gray": "Grau",
-        "red": "Rot",
-        "teal": "Türkis",
-        "classic": "Klassisch",
-        "green": "Grüen",
-        "mocha": "Mokka ☕️",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Säure",
-        "spark": "Funke",
-        "grape": "Traube",
-        "spiderman": "Spinnen Mann",
-        "forest": "Wald",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "Primär",
+        "secondary": "Sekundär",
+        "tertiary": "Tertiär"
       },
-      "title": "Erschinigsbeld",
       "options": {
+        "carouselView": "Karussell asecht",
+        "carouselViewDescription": "Zeigt dini Watch-Fortschret ond d‘gspicherete Felme imene Karrussel, anstell vonere Raschterasecht. Standartmässig usgschalte.",
+        "carouselViewLabel": "Karussell asecht",
         "discover": "Abschnett „Entdecke“",
         "discoverDescription": "Zeig d‘Entdeckigs-Sektion of der Startsite unter dine gspicherete Medie a. Standartmässig eschs Aktiviert.",
         "discoverLabel": "Abschnett „Entdecke“",
         "featured": "Vorgschlageni Medie",
         "featuredDescription": "Zeigt es Karussell met empohlene Felme ond Serie, zobersch of der Start-Site! Standardmässig usgschalte.",
         "featuredLabel": "Vorgschlagni Medie",
+        "forceCompactEpisodeView": "Erzweng kompakte Episoden ansicht",
+        "forceCompactEpisodeViewDescription": "Erzweng die klassisch kompakt Asecht vom Episodekarussell im Player. Isch standartmässig deaktiviert.",
+        "forceCompactEpisodeViewLabel": "Kompakti Episodene",
+        "homeSectionOrder": "Reihenfolge im Home-Bereich",
+        "homeSectionOrderDescription": "Per Drag-and-Drop können Sie die Bereiche „Ansehen“ und „Lesezeichen“ auf Ihrer Homepage neu anordnen. Die Gruppenreihenfolge kann auf der Startseite bearbeitet werden.",
+        "homeSectionOrderGroups": "Lesezeichengruppen neu anordnen",
+        "logos": "Beld Logos",
+        "logosDescription": "Zeigt Beld-Logos stat Texttitel im Deteilfenschter ond im Entdecke-Bereich.",
+        "logosLabel": "Beld-Logos",
+        "logosNotice": "Meischtens, si d‘Logos nome of Englisch. För anderi Sproche welsch es felecht abschalte!",
+        "minimalCards": "Minimale Karten",
+        "minimalCardsDescription": "Blenden Sie Textinhalte (Titel, Typ, Jahr) auf Medienkarten aus und zeigen Sie nur das Posterbild an.",
+        "minimalCardsLabel": "Minimale Karten",
         "modal": "Deteil-Fenschter",
         "modalDescription": "Zeigt s‘Deteil-Fenschter wen du of d‘Mediecharte klicksch anschtat diräckt luege. Före Traile esch en Proxy oder en Erwiterig nötig. Standartmässig deaktiviert.",
         "modalLabel": "Detail-Fenschter",
-        "logos": "Beld Logos",
-        "logosDescription": "Zeigt Beld-Logos stat Texttitel im Deteilfenschter ond im Entdecke-Bereich.",
-        "logosNotice": "Meischtens, si d‘Logos nome of Englisch. För anderi Sproche welsch es felecht abschalte!",
-        "logosLabel": "Beld-Logos",
-        "carouselView": "Karussell asecht",
-        "carouselViewDescription": "Zeigt dini Watch-Fortschret ond d‘gspicherete Felme imene Karrussel, anstell vonere Raschterasecht. Standartmässig usgschalte.",
-        "carouselViewLabel": "Karussell asecht",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Erzweng kompakte Episoden ansicht",
-        "forceCompactEpisodeViewDescription": "Erzweng die klassisch kompakt Asecht vom Episodekarussell im Player. Isch standartmässig deaktiviert.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Kompakti Episodene",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "pauseOverlay": "Überlagerung anhalten",
+        "pauseOverlayDescription": "Zeigt ein Titel-/Logo- und Beschreibungs-Overlay an, wenn der Player angehalten und inaktiv ist.",
+        "pauseOverlayLabel": "Überlagerung anhalten"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Lesezeichen",
+        "watching": "Ich schaue gerade"
+      },
+      "themes": {
+        "acid": "Säure",
+        "autumn": "Herbst",
+        "blue": "Blau",
+        "christmas": "Weihnachten",
+        "classic": "Klassisch",
+        "cobalt": "Kobalt",
+        "custom": "Brauch",
+        "default": "Standard",
+        "ember": "Glut",
+        "forest": "Wald",
+        "frost": "Frost",
+        "grape": "Traube",
+        "gray": "Grau",
+        "green": "Grüen",
+        "hulk": "Hulk",
+        "mocha": "Mokka ☕️",
+        "noir": "Noir",
+        "pink": "Rosa",
+        "popsicle": "Eis am Stiel",
+        "red": "Rot",
+        "spark": "Funke",
+        "spiderman": "Spinnen Mann",
+        "teal": "Türkis",
+        "wolverine": "Vielfraß"
+      },
+      "title": "Erschinigsbeld"
     },
     "connections": {
       "server": {
-        "description": "Falls du dich met enere eigene Backend verbende welsch, um deine Daten zu speichern. Aktivier das ond geb din URL i. <0>Awisig.</0>",
-        "label": "Eigene Server",
-        "urlLabel": "Eigene Server-URL",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Dini Date öberträge</0> ofene neue Server.",
-          "link": "Öberträg mini Date"
-        },
-        "documentation": "Backend-Dokumentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "Irechte",
-        "errorStatus": {
-          "description": "Es gset so us, als würdi ei oder meh Element in däre Konfiguration dini Ufmärksamkeit bruuche.",
-          "title": "Öpis brucht dini Ufmerksamkeit 😱"
-        },
-        "itemError": "Do stemt öpis net met dene Ischtelige. Mach dis Setup erneut, zoms Problem z‘fixe. (ᴗ_ ᴗ。)",
-        "items": {
-          "default": "Standart Ischtelig",
-          "extension": "Erwiterig",
-          "proxy": "Eigene Proxy",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Erneut Irechte",
-        "successStatus": {
-          "description": "Alles esch barat. Du chasch jetzt dini lieblings Medie aluege. (๑>◡<๑)",
-          "title": "Alles Igrechtet!!"
-        },
-        "unsetStatus": {
-          "description": "Klick ofe Chnopf rechts, om metem setup z‘starte.",
-          "title": "Du heschs setup noni gmacht"
-        }
-      },
-      "title": "Verbendig",
-      "workers": {
-        "addButton": "Neue Worker hinzuefüege",
-        "description": "Damit d’Applikation funktioniert, wird de gesamt Dateverkehr über en Proxys gleitet. Aktivier das, wenn du dini eigene Workers mitbringe wotsch. <0>Anweisungen.</0>",
-        "documentation": "Proxy Dokumentation",
-        "emptyState": "Kei Worker vorhande (｡•́︿•̀｡), du muesch eine hinzuefüege",
-        "label": "Verwänd en eigene Worker-Proxys",
-        "urlLabel": "Worker-URLs",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Nome den nötig, wen du kei direkte Zuegreff of TheMovieDB hesch, zom Bischpel wenn dini Internetabieter si Blockiere. Es wird empfohle, d‘Entdecke-Sektion z‘deaktiviere, om d‘Leischtig z‘verbessere."
-        }
+        "changeWarning": "Wenn Sie den Backend-Server wechseln, werden Sie abgemeldet. Weitermachen?",
+        "changeWarningTitle": "Backend-Server ändern",
+        "error": "Fehler beim Herstellen der Verbindung zum Backend",
+        "notice": "Ihr Konto wird NICHT zwischen Backends synchronisiert. Denken Sie also daran, welches Sie verwenden!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "Tragen Sie zu TheIntroDB bei, indem Sie Feedback zu den Einleitungs-, Zusammenfassungs- und Credits-Segmenten hinterlassen. <0>Erfahren Sie mehr.</0>",
+        "tokenLabel": "API-Schlüssel"
+      },
+      "title": "Verbendig"
     },
     "preferences": {
-      "title": "Preferences",
-      "language": "App-Sproch",
-      "languageDescription": "D‘Sprach wird uf d’ganzi App agwändet – nor Englisch ond Schwitzerdütsch het so lostige Sache drin.",
-      "thumbnail": "Miniaturbeld generiere",
-      "thumbnailDescription": "Meistens hei d’Videos kei Vorschaubilder. Du chasch die Option aktiviere, zum sie spontan generiere lo, aber das cha s’Video langsamer mache.",
-      "thumbnailLabel": "Miniaturasecht generiere",
       "autoplay": "Autoplay",
       "autoplayDescription": "Spelt automatisch die nöchscht Episode inere Serie ab, sobald s‘Endo erreicht esch. Chan aktiviert werde vo Notzer met dr Browser-Erwiterig, eme eigene Proxy oder mit dr Standart-Irechtig, wenn s‘vom Host erlaubt isch.",
       "autoplayLabel": "Autoplay",
-      "skipCredits": "Abspann öbersprenge",
-      "skipCreditsDescription": "Wenn aktiviert, wird die nöchscht Episode abgschpelt, wen 99% vo de Episode abgschlosse esch, om d‘Credits z‘öbersprenge. Wenn deaktiviert, wird gwartet bes d‘Episode vollständig fertig esch.",
-      "skipCreditsLabel": "Skip d‘credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
+      "autoResumeOnPlaybackError": "Automatische Fortsetzung bei Wiedergabefehler",
+      "autoResumeOnPlaybackErrorDescription": "Automatische Suche nach anderen Quellen fortsetzen, wenn die aktuelle Quelle während der Wiedergabe ausfällt. Wenn diese Option deaktiviert ist, wird ein Fehlerbildschirm mit einer manuellen Fortsetzungsoption angezeigt.",
+      "autoResumeOnPlaybackErrorLabel": "Automatische Fortsetzung bei Wiedergabefehler",
+      "autoSkipSegments": "Segmente automatisch überspringen",
+      "autoSkipSegmentsDescription": "Wenn diese Option aktiviert ist, werden beim Ansehen automatisch Einleitungs-, Zusammenfassungs- und Vorschausegmente übersprungen.",
+      "autoSkipSegmentsLabel": "Segmente automatisch überspringen",
+      "doubleClickToSeek": "Doppeltippen, um zu suchen",
+      "doubleClickToSeekDescription": "Tippen Sie zweimal auf die linke oder rechte Seite des Players, um 10 Sekunden vorwärts oder rückwärts zu suchen.",
+      "doubleClickToSeekLabel": "Aktivieren Sie Doppeltippen zum Suchen",
+      "embedOrder": "Einbettungen neu anordnen",
+      "embedOrderDescription": "Per Drag-and-Drop können Sie Einbettungen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der Einbettungen für die Medien überprüft werden, die Sie ansehen möchten. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten)</strong>",
+      "embedOrderEnableLabel": "Benutzerdefinierte Einbettungsreihenfolge",
+      "holdToBoost": "Halten Sie gedrückt, um die Geschwindigkeit zu erhöhen",
+      "holdToBoostDescription": "Halten Sie die Leertaste gedrückt oder berühren und halten Sie den Bildschirm, um die Wiedergabegeschwindigkeit vorübergehend auf das Zweifache zu erhöhen. Lassen Sie los, um zur vorherigen Geschwindigkeit zurückzukehren.",
+      "holdToBoostLabel": "Aktivieren Sie „Hold to Boost“.",
+      "keyboardShortcuts": "Tastaturkürzel",
+      "keyboardShortcutsDescription": "Passen Sie die Tastaturkürzel für die Anwendung an. Halten Sie ` gedrückt, um diese Hilfe jederzeit anzuzeigen",
+      "keyboardShortcutsLabel": "Passen Sie Tastaturkürzel an",
+      "language": "App-Sproch",
+      "languageDescription": "D‘Sprach wird uf d’ganzi App agwändet – nor Englisch ond Schwitzerdütsch het so lostige Sache drin.",
+      "lastSuccessfulSource": "Zuletzt verwendete Quelle",
+      "lastSuccessfulSourceDescription": "Priorisieren Sie automatisch die Quelle, die erfolgreich Inhalte für die vorherige Episode bereitgestellt hat. Dies trägt dazu bei, die Kontinuität beim Ansehen von Serien sicherzustellen.",
+      "lastSuccessfulSourceEnableLabel": "Zuletzt verwendete Quelle",
       "lowPerformanceMode": "Performenc/bandwiti Modus",
       "lowPerformanceModeDescription": "Optimiert d‘Application för schwachi verbendige met em drossle for Bandwiti feature. Dä Modus schränkt der Dateverbruch i, ohni d‘Hauptsuechi ond fonktione zom luege izschränke. ",
       "lowPerformanceModeLabel": "Performenc Mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "manualSource": "Manuelle Quellenauswahl",
+      "manualSourceDescription": "Vor dem Schaben muss eine Quelle ausgewählt werden. Deaktiviert die automatische Quellenauswahl und öffnet die Quellenauswahl beim Starten der Wiedergabe.",
+      "manualSourceLabel": "Manuelle Quellenauswahl",
+      "showLess": "Weniger anzeigen",
+      "showMore": "Mehr anzeigen",
+      "skipCredits": "Abspann öbersprenge",
+      "skipCreditsDescription": "Wenn aktiviert, wird die nöchscht Episode abgschpelt, wen 99% vo de Episode abgschlosse esch, om d‘Credits z‘öbersprenge. Wenn deaktiviert, wird gwartet bes d‘Episode vollständig fertig esch.",
+      "skipCreditsLabel": "Skip d‘credits",
       "sourceOrder": "Quelle neu a‘ordne",
       "sourceOrderDescription": "Per Drag & Drop chasch t Quelle neu a‘ordne. Das bestimmt d‘Reihenfolg fo de Quelle wo abgsuecht wärde. Wenn e Quelle grau isch, heisst das, d’<bold>Erweiterig</bold> isch för die Quelle nötig. <br><br> <strong>(D’Standard-Reihenfolg isch für di meiste Notzer am beste)</strong>",
       "sourceOrderEnableLabel": "Benutzerdefinierti Quellreihenfolg",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "thumbnail": "Miniaturbeld generiere",
+      "thumbnailDescription": "Meistens hei d’Videos kei Vorschaubilder. Du chasch die Option aktiviere, zum sie spontan generiere lo, aber das cha s’Video langsamer mache.",
+      "thumbnailLabel": "Miniaturasecht generiere",
+      "title": "Präferenzen"
     },
     "reset": "Zurogsetze",
     "save": "Spichere",
+    "search": {
+      "placeholder": "Sucheinstellungen..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "App-Version",
-        "backendUrl": "Backend-URL",
-        "backendVersion": "Backend-Version",
-        "hostname": "Hostname",
-        "insecure": "Onsicher",
-        "nickname": "Nickname",
         "notLoggedIn": "Du besch net agmäldet",
-        "secure": "Secher",
-        "title": "App Status",
-        "unknownVersion": "Onbekannt",
         "userId": "Nutzer-ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister"
       }
     },
     "subtitles": {
-      "backgroundLabel": "Hentergrond deckkraft",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "Durch Deaktivieren der Hintergrundunschärfe der Untertitel können einige Flimmerprobleme behoben werden",
+      "backgroundBlurEnabledLabel": "Hintergrundunschärfe",
       "backgroundBlurLabel": "Hentergrundonscherfi",
+      "backgroundLabel": "Hentergrond deckkraft",
+      "BorderThicknessLabel": "Randstärke",
       "colorLabel": "Farbe",
-      "previewQuote": "Vom Läbe überzeugt, dass es sinnlos isch, fehlt mir doch dr Muet, drüber z’stah.",
-      "textSizeLabel": "Schriftgrößi",
-      "title": "Ontertitel",
-      "textBoldLabel": "Fettdrockte Text",
-      "verticalPositionLabel": "Vertikali position",
-      "high": "High",
+      "high": "Hoch",
       "low": "Nedrig",
+      "previewQuote": "Vom Läbe überzeugt, dass es sinnlos isch, fehlt mir doch dr Muet, drüber z’stah.",
+      "textBoldLabel": "Fettdrockte Text",
+      "textSizeLabel": "Schriftgrößi",
       "textStyle": {
-        "title": "Text stil",
+        "Border": "Grenze",
         "default": "Standard",
-        "raised": "Ufzoge",
         "depressed": "Deprimiert",
-        "Border": "Border",
-        "dropShadow": "Schatteworf"
+        "dropShadow": "Schatteworf",
+        "raised": "Ufzoge",
+        "title": "Text stil"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "Ontertitel",
+      "verticalPositionLabel": "Vertikali position"
     },
     "unsaved": "Du hesch onspreichereti änderige…"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Filme",
-      "tvshows": "Fernsehserie",
-      "editorpicks": "Uniform",
-      "top10": "Top 10"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Lade...",
-        "movies": "{{category}} Filme",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "Im Kino",
-        "popular": "Am Beliebtischte",
-        "nowPlaying": "Im Kino",
-        "topRated": "Top Bewärtige",
-        "latestReleases": "Zletscht erschene",
-        "4kReleases": "4K Veröffentlicht",
-        "onTheAir": "I der Loft",
-        "latestTVReleases": "Neuschti Serie",
-        "popularOn": "Beliebti {{type}} uf {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Felm of {{provider}}",
-        "tvshowsOn": "Serie of {{provider}}",
-        "recommended": "Wel du {{title}} gse hesch",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Felme",
-        "genreShows": "{{genre}} Serie",
-        "categoryMovies": "{{category}} Felme",
-        "categoryShows": "{{category}} Serie",
-        "top10": "Top 10",
-        "trending": "Jetzt im Trend"
-      },
-      "change": "Ändere",
-      "more": "Me Azeige"
-    },
-    "featured": {
-      "playNow": "Jetzt abspele",
-      "moreInfo": "Me Infos"
-    },
-    "randomMovie": {
-      "button": "Lueg öpis zuefeligs",
-      "cancel": "Countdown abbräche",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Aktuell abgspelt",
-      "in": "in"
-    },
-    "page": {
-      "title": "Entdeck Felmli ond Serie",
-      "subtitle": "Entdeck die aktuelle Trends ond altbekannti classics.",
-      "loadMore": "Me Lade",
-      "loading": "Ladet...",
-      "back": "Zrog"
-    },
-    "viewLists": "Ganzi Felmlischte azeige",
-    "allLists": "Ganzi Felm Lischte",
-    "scrollToTop": "Ufwärts 🚀",
-    "filters": {
-      "country": "Land"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "FED API (Privat) token",
-      "description": "Erstell din eigene Gratis Febbox-Account, före zuegref of d‘FED API (Privat) z‘öbercho. Met dere bechonsch die bescht streaming qualli met 4K, Dolby Atmos, Skip Intro ond die schnellscht 🏃‍♀️💨 ladezite!"
-    },
-    "setup": {
-      "title": "Om di UI-Token z‘erhalte:",
-      "showVideo": "Video-Tutorial azeige",
-      "hideVideo": "Video-Tutorial usblände",
-      "step": {
-        "1": "1. Gang zo <0>febbox.com</0> ond meld dich met dim Google Account a (benotz es neue Account!)",
-        "2": "2. Öffne d‘DevTools oder de inspector vom Browser",
-        "3": "3. Gang zom Application Tab → \"Cookies\".",
-        "4": "4. Kopiers 'ui' Cookie.",
-        "5": "5. Schliess de Tab ond log dich aber NET us!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "Erfolgrich",
-      "api_down": "Erreicht FED API net!",
-      "invalid_token": "Fehler bem hohle fom \"VIP\" stream. Din Token esch ongöltig."
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Net synct"
-    },
-    "alone": "Einsam",
-    "withCount": "Met {{count}} andere",
-    "isHost": "Hosting of <0>{{backendName}}</0>",
-    "isGuest": "Luegt als Gascht of <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Luege",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Zeigt status overlay",
-    "leaveWatchParty": "Verlass Watch Party",
-    "shareCode": "Teil dä Code met dine frönde (klick zom kopiere)",
-    "connectedAsGuest": "Verbendet als Gascht zor Watch Party",
-    "hostParty": "Host en Watch Party",
-    "joinParty": "Join Watch Party",
-    "viewers": "Zueschauer ({{count}})",
-    "copyCode": "Klick zom Kopiere",
-    "join": "Verbende",
-    "cancel": "Abbräche",
-    "save": "Spichere",
-    "emptyRoom": "Niemer esch do",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Ruum net erreichbar",
-    "contentMismatch": "Cha nöd a de Watch Party teilneh: Dr Inhalt stimmt nöd mit dem vom Host überei.",
-    "episodeMismatch": "Cha nöd a de Watch Party teilneh: Du luegsch e anderi Episode als der Host.",
-    "validating": "Watch Party werd öberprüeft...",
-    "linkCopied": "Kopiert!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Geben Sie einen gemeinsamen Watch-Party-Link oder Raumcode ein",
-    "you": "Du",
-    "guestFallback": "Gast"
   },
   "tmdb": {
     "genres": {
       "10759": "Action & Abenteuer"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "{{seconds}} Sekunden vor dem Host",
+    "alone": "Einsam",
+    "behindHost": "{{seconds}} Sekunden hinter dem Host",
+    "cancel": "Abbräche",
+    "connectedAsGuest": "Verbendet als Gascht zor Watch Party",
+    "contentMismatch": "Cha nöd a de Watch Party teilneh: Dr Inhalt stimmt nöd mit dem vom Host überei.",
+    "copyCode": "Klick zom Kopiere",
+    "emptyRoom": "Niemer esch do",
+    "enterCodeOrLink": "Geben Sie einen gemeinsamen Watch-Party-Link oder Raumcode ein",
+    "episodeMismatch": "Cha nöd a de Watch Party teilneh: Du luegsch e anderi Episode als der Host.",
+    "guestFallback": "Gast",
+    "hosting": "Hosting",
+    "hostParty": "Host en Watch Party",
+    "invalidRoom": "Ruum net erreichbar",
+    "isGuest": "Luegt als Gascht of <0>{{backendName}}</0>",
+    "isHost": "Hosting of <0>{{backendName}}</0>",
+    "join": "Verbende",
+    "joinParty": "Join Watch Party",
+    "leaveWatchParty": "Verlass Watch Party",
+    "linkCopied": "Kopiert!",
+    "noHost": "Kein Gastgeber in dieser Wachparty",
+    "save": "Spichere",
+    "shareCode": "Teil dä Code met dine frönde (klick zom kopiere)",
+    "showStatusOverlay": "Zeigt status overlay",
+    "status": {
+      "inSync": "Synchron",
+      "outOfSync": "Net synct"
+    },
+    "syncing": "Synchronisierung...",
+    "validating": "Watch Party werd öberprüeft...",
+    "viewers": "Zueschauer ({{count}})",
+    "watching": "Luege",
+    "withCount": "Met {{count}} andere",
+    "you": "Du"
   }
 }

@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix은 인터넷에서 스트림을 검색하는 웹 애플리케이션입니다. 저희 팀은 콘텐츠 소비에 대한 최소한의 접근 방식을 지향합니다.",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "자주 묻는 질문",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "콘텐츠의 출처는 어디인가요?",
-      "body": "AlphaFlix은 어떠한 콘텐츠도 호스팅하지 않습니다. 시청할 콘텐츠를 클릭하면 인터넷에서 선택한 미디어가 검색됩니다(로딩 화면과 '비디오 소스' 탭에서 사용 중인 소스를 확인할 수 있습니다). 무비웹에서 미디어를 업로드하지 않으며, 모든 것이 이 검색 메커니즘을 통해 이루어집니다.",
-      "section": "general"
-    },
-    "q2": {
-      "title": "프로그램이나 영화는 어디에서 요청할 수 있나요?",
-      "body": "프로그램이나 영화를 요청할 수 없으며, AlphaFlix은 어떠한 콘텐츠도 관리하지 않습니다. 모든 콘텐츠는 인터넷의 소스를 통해 볼 수 있습니다.",
-      "section": "search"
-    },
-    "q3": {
-      "title": "검색 결과에 프로그램이나 영화가 표시되는데 왜 재생할 수 없나요?",
-      "body": "검색 결과는 영화 데이터베이스(TMDB)를 기반으로 하며, 출처에 실제 콘텐츠가 있는지 여부와 관계없이 표시됩니다.",
-      "section": "search"
-    },
-    "q4": {
-      "title": "What about my data and stuff?",
-      "body": "All data is synced to the community backend, anyone is free to use this as well.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "How can I find out more?",
-      "body": "AlphaFlix has a Fluxer server that can be found at the header of this page!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "AlphaFlix에 대하여"
-  },
   "actions": {
+    "cancel": "취소",
+    "confirm": "확인하다",
     "copied": "복사되었습니다",
-    "copy": "복사하기",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "복사하기"
   },
   "auth": {
+    "backendSelection": {
+      "active": "활동적인",
+      "confirm": "확인하다",
+      "customBackend": "커스텀 백엔드",
+      "customBackendPlaceholder": "https://",
+      "description": "연결할 백엔드 서버 선택",
+      "title": "계정 서버 선택"
+    },
     "createAccount": "계정이 없으십니까? <0>계정을 생성하세요.</0>",
-    "deviceNameLabel": "기기명",
-    "deviceNamePlaceholder": "개인 휴대폰",
+    "generate": {
+      "custom": "관습",
+      "customPassphraseLabel": "사용자 정의 암호",
+      "customPassphrasePlaceholder": "사용자 정의 암호를 입력하세요",
+      "description": "암호문은 사용자 아이디와 비밀번호 역할을 합니다. 계정에 로그인할 때 발급 받은 암호문을 입력해야 하므로 안전하게 보관하세요",
+      "invalidPassphraseCharacters": "잘못된 암호 문자입니다. 영문자, 숫자 1~10, 일반 기호만 허용됩니다.",
+      "next": "암호문을 저장했습니다",
+      "passphraseFrameLabel": "암호문",
+      "passphraseTooShort": "암호는 8자 이상이어야 합니다.",
+      "title": "암호 문구",
+      "useCustomPassphrase": "사용자 정의 암호 사용",
+      "usePasskeyInstead": "대신 패스키를 사용하세요"
+    },
+    "hasAccount": "이미 계정을 보유하고 있으십니까? <0>로그인 하기.</0>",
+    "inviteCodeInvalidError": "유효하지 않은 초대 코드입니다 (사용자 ID를 찾을 수 없음)",
     "inviteCodeLabel": "초대 코드",
     "inviteCodePlaceholder": "친구의 사용자 ID를 입력하세요",
     "inviteCodeRequiredError": "초대 코드가 필요합니다",
-    "inviteCodeInvalidError": "유효하지 않은 초대 코드입니다 (사용자 ID를 찾을 수 없음)",
-    "generate": {
-      "description": "암호문은 사용자 아이디와 비밀번호 역할을 합니다. 계정에 로그인할 때 발급 받은 암호문을 입력해야 하므로 안전하게 보관하세요",
-      "next": "암호문을 저장했습니다",
-      "passphraseFrameLabel": "암호문",
-      "title": "암호 문구",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "이미 계정을 보유하고 있으십니까? <0>로그인 하기.</0>",
     "login": {
       "description": "계정에 로그인하기위해 암호문을 입력하세요",
-      "deviceLengthError": "기기명을 입력하세요",
-      "passphraseLabel": "12단어 암호 문구",
-      "passphrasePlaceholder": "암호 문구",
-      "submit": "로그인",
-      "title": "계정에 로그인하기",
-      "validationError": "틀리거나 잘못된 암호문입니다",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "별명",
+      "nicknameNotFound": "닉네임을 찾을 수 없습니다",
       "nicknamePlaceholder": "닉네임을 입력하세요",
+      "nicknameRequired": "닉네임은 필수입니다",
+      "noBackendUrl": "백엔드 URL 없음",
+      "or": "or",
+      "passwordIncorrect": "비밀번호가 올바르지 않습니다.",
       "passwordLabel": "비밀번호",
       "passwordPlaceholder": "비밀번호를 입력하세요",
-      "nicknameRequired": "닉네임은 필수입니다",
       "passwordRequired": "비밀번호가 필요합니다",
-      "nicknameNotFound": "닉네임을 찾을 수 없습니다",
-      "passwordIncorrect": "비밀번호가 올바르지 않습니다."
+      "submit": "로그인",
+      "title": "계정에 로그인하기",
+      "usePasskey": "패스키 사용",
+      "validationError": "틀리거나 잘못된 암호문입니다"
     },
     "register": {
+      "confirmPasswordLabel": "비밀번호 확인",
+      "confirmPasswordPlaceholder": "비밀번호를 확인하세요",
       "information": {
         "color1": "프로필 색상 1",
         "color2": "프로필 색상 2",
@@ -195,39 +61,27 @@
         "next": "다음",
         "title": "계정 정보"
       },
-      "passwordInput": {
-        "title": "로그인 만들기",
-        "description": "닉네임과 비밀번호를 선택하세요. 귀하의 비밀번호는 안전한 비밀번호 문구로 사용되므로 반드시 기억해 두십시오!"
-      },
       "nicknameLabel": "별명",
       "nicknamePlaceholder": "독특한 별명을 선택하세요",
       "nicknameTaken": "닉네임은 이미 사용 중입니다.",
+      "passwordInput": {
+        "description": "닉네임과 비밀번호를 선택하세요. 귀하의 비밀번호는 안전한 비밀번호 문구로 사용되므로 반드시 기억해 두십시오!",
+        "title": "로그인 만들기"
+      },
       "passwordLabel": "비밀번호",
-      "passwordPlaceholder": "비밀번호 생성(암호 문구로 사용)",
-      "passwordWeak": "비밀번호는 영문, 숫자를 포함하여 8자 이상이어야 합니다.",
       "passwordMismatch": "비밀번호가 일치하지 않습니다.",
-      "confirmPasswordLabel": "비밀번호 확인",
-      "confirmPasswordPlaceholder": "비밀번호를 확인하세요"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "비밀번호 생성(암호 문구로 사용)",
+      "passwordWeak": "비밀번호는 영문, 숫자를 포함하여 8자 이상이어야 합니다."
     },
     "trust": {
       "failed": {
         "text": "올바르게 구성하셨습니까?",
         "title": "서버 연결에 실패했습니다"
       },
-      "noHostTitle": "서버가 구성되지 않았습니다!",
-      "noHost": "서버가 구성되어 있지 않기 때문에 계정을 만들 수 없습니다",
       "host": "<0>{{hostname}}</0>에 연결 중입니다 - 계정을 만들기 전에 신뢰하는지 확인해 주세요",
       "no": "뒤로 가기",
+      "noHost": "서버가 구성되어 있지 않기 때문에 계정을 만들 수 없습니다",
+      "noHostTitle": "서버가 구성되지 않았습니다!",
       "title": "이 서버를 신뢰하십니까?",
       "yes": "네, 신뢰합니다"
     },
@@ -235,14 +89,88 @@
       "description": "암호문을 저장했는지 확인하고 계정을 만들려면 앞서 입력한 암호문을 입력하세요",
       "invalidData": "데이터가 유효하지 않습니다",
       "noMatch": "암호문이 일치하지 않습니다",
-      "passphraseLabel": "12단어 암호 문구",
       "recaptchaFailed": "캡챠인증 실패",
       "register": "계정 생성",
-      "title": "암호문 확인",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "암호문 확인"
     }
+  },
+  "details": {
+    "airs": "방송",
+    "collection": {
+      "movie": "영화",
+      "movies": "영화 산업",
+      "rating": "평가",
+      "releaseDate": "출시일",
+      "sortBy": "정렬 기준"
+    },
+    "endsAt": "{{time}}에 종료",
+    "episode": "삽화",
+    "episodes": "에피소드",
+    "imdb": "IMDb에서 보기",
+    "language": "언어:",
+    "play": "놀다",
+    "rating": "평가:",
+    "releaseDate": "출시일:",
+    "resume": "재개하다",
+    "runtime": "실행 시간:",
+    "season": "계절",
+    "seasons": "시즌",
+    "similar": "비슷한",
+    "tmdb": "TMDB에서 보기",
+    "trailers": "예고편",
+    "watched": "{{total}} 중 {{watched}} 시청({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "모든 영화 목록",
+    "carousel": {
+      "change": "변화",
+      "more": "더 보기",
+      "title": {
+        "4kReleases": "4K 릴리스",
+        "editorPicksMovies": "편집자 추천 영화",
+        "editorPicksShows": "편집자 추천 프로그램",
+        "forYou": "당신을 위한",
+        "inCinemas": "영화관에서",
+        "latestReleases": "최신 릴리스",
+        "latestTVReleases": "최신 TV 프로그램",
+        "movies": "{{category}} 영화",
+        "moviesOn": "{{provider}}의 영화",
+        "onTheAir": "온더에어",
+        "popular": "가장 인기있는",
+        "recommended": "시청했기 때문에: {{title}}",
+        "top10": "상위 10위",
+        "topRated": "최고 평점",
+        "trending": "지금 인기 급상승",
+        "tvshows": "{{category}} 쇼",
+        "tvshowsOn": "{{provider}}에 상영"
+      }
+    },
+    "featured": {
+      "moreInfo": "추가 정보",
+      "playNow": "지금 플레이"
+    },
+    "filters": {
+      "country": "국가"
+    },
+    "page": {
+      "back": "돌아가기",
+      "loading": "로드 중...",
+      "loadMore": "더 로드하기",
+      "title": "영화 및 TV 살펴보기"
+    },
+    "scrollToTop": "맨 위로 돌아가기",
+    "tabs": {
+      "movies": "영화 산업",
+      "top10": "상위 10위",
+      "tvshows": "TV 프로그램"
+    },
+    "viewLists": "모든 영화 목록 보기"
+  },
+  "downtimeNotice": {
+    "badge": "문제",
+    "goHome": "집에 가세요",
+    "message": "AlphaFlix에서 일부 제공업체에 문제가 다시 발생합니다. 프로그램을 찾거나 재생할 수 없는 경우 소스를 변경하세요. 이 오류는 아래 시간 동안 지속될 것으로 예상됩니다.",
+    "title": "공급자 문제"
   },
   "errors": {
     "badge": "어딘가 고장났습니다",
@@ -258,159 +186,153 @@
     },
     "links": {
       "fluxer": "디스코드",
-      "legal": "Legal / DMCA",
-      "github": "깃허브",
-      "twitter": "Twitter",
-      "funding": "Support us"
+      "funding": "우리를 지원하세요",
+      "github": "깃허브"
     },
     "tagline": "이 오픈 소스 스트리밍 앱으로 좋아하는 프로그램과 영화를 시청하세요."
   },
   "global": {
+    "keyboardShortcuts": {
+      "cancel": "취소",
+      "clickToEdit": "수정하려면 키 배지를 클릭하세요.",
+      "conditions": {
+        "showsOnly": "쇼만"
+      },
+      "conflict": "갈등",
+      "conflicts": "갈등",
+      "detected": "감지됨",
+      "editInSettings": "설정에서 키보드 명령 편집",
+      "groups": {
+        "audioVideo": "오디오 및 비디오",
+        "interface": "인터페이스",
+        "jumpToPosition": "위치로 점프",
+        "subtitlesAccessibility": "자막 및 접근성",
+        "videoPlayback": "비디오 재생"
+      },
+      "none": "없음",
+      "numberKeySeeking": "숫자 키 진행 탐색",
+      "numberKeySeekingDescription": "비디오의 특정 위치를 찾으려면 숫자 키 0-9를 사용하십시오. 0은 처음으로 가고, 1~8은 10%~80%로 점프하고, 9는 90%로 갑니다.",
+      "pressKey": "아무 키나 누르세요...",
+      "resetAllToDefault": "모두 기본값으로 재설정",
+      "resetToDefault": "기본값으로 재설정",
+      "save": "구하다",
+      "saveChanges": "변경 사항 저장",
+      "shortcuts": {
+        "barrelRoll": "배럴롤을 해보세요! 🌀",
+        "closeOverlay": "오버레이/모달 닫기",
+        "decreaseVolume": "볼륨 줄이기",
+        "increaseVolume": "볼륨 높이기",
+        "jumpTo0": "0%로 점프(시작)",
+        "jumpTo9": "90%로 점프",
+        "mute": "음소거/음소거 해제",
+        "nextEpisode": "다음 에피소드",
+        "playPause": "재생/일시 중지(또는 활성화된 경우 2배속으로 길게 누름)",
+        "playPauseAlt": "재생/일시 정지",
+        "previousEpisode": "이전 에피소드",
+        "randomCaption": "마지막으로 사용한 언어에서 무작위 캡션 선택",
+        "skipBackward1": "1초 뒤로 건너뛰기",
+        "skipBackward10": "10초 뒤로 건너뛰기",
+        "skipBackward5": "5초 뒤로 건너뛰기",
+        "skipForward1": "1초 앞으로 건너뛰기",
+        "skipForward10": "10초 앞으로 건너뛰기",
+        "skipForward5": "5초 앞으로 건너뛰기",
+        "syncSubtitlesEarlier": "자막을 더 일찍 동기화합니다(-0.5초)",
+        "syncSubtitlesLater": "나중에 자막 동기화(+0.5초)",
+        "toggleCaptions": "캡션 전환",
+        "toggleFullscreen": "전체 화면 전환",
+        "toggleNativeSubtitles": "기본 자막 전환"
+      },
+      "subtitle": "언제든지 이 도움말을 표시하려면 `를 누르세요.",
+      "title": "키보드 단축키"
+    },
     "name": "무비-웹",
     "pages": {
-      "about": "소개",
-      "legal": "Legal / DMCA",
-      "discover": "Discover",
-      "support": "Support",
+      "discover": "발견하다",
       "login": "로그인",
-      "onboarding": "기본 구성",
+      "migration": "계정 마이그레이션",
       "pagetitle": "{{title}} - AlphaFlix",
       "register": "회원가입",
-      "settings": "설정",
-      "migration": "Migrate Account",
-      "jip": "Jip"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "settings": "설정"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "북마크",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "취소",
+        "description": "이 북마크의 세부정보를 수정하세요.",
+        "groupsLabel": "여러 떼",
+        "save": "구하다",
+        "title": "북마크 편집",
+        "titleLabel": "제목",
+        "titlePlaceholder": "북마크 제목을 입력하세요.",
+        "yearLabel": "년도",
+        "yearPlaceholder": "북마크에 연도를 입력하세요."
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "아직 그룹이 없습니다.",
+          "placeholderButton": "그룹에 추가",
+          "removeAll": "모두 제거",
+          "removeFromGroup": "그룹에서 제거"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "이는 {{count}} 북마크에 영향을 미칩니다.",
+          "cancel": "취소",
+          "description": "북마크 그룹의 이름과 아이콘을 편집하세요.",
+          "nameLabel": "그룹 이름",
+          "namePlaceholder": "그룹 이름을 입력하세요.",
+          "save": "구하다",
+          "title": "그룹 편집"
+        },
+        "reorder": {
+          "button": "재정렬",
+          "cancel": "취소",
+          "description": "북마크 그룹을 드래그 앤 드롭하여 재정렬하세요.",
+          "done": "완료",
+          "save": "구하다",
+          "title": "그룹 주문 수정"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "북마크",
+      "showAll": "모두 표시",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "기본값(추가된 날짜)",
+          "titleAsc": "제목 A~Z",
+          "titleDesc": "타이틀 Z-A",
+          "yearAsc": "출시일 오래된 것부터 최신 것까지",
+          "yearDesc": "출시일 최신순"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "이어보기",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "기본값(추가된 날짜)",
+          "titleAsc": "제목 A~Z",
+          "titleDesc": "타이틀 Z-A",
+          "yearAsc": "출시일 오래된 것부터 최신 것까지",
+          "yearDesc": "출시일 최신순"
         }
       }
     },
     "mediaList": {
       "stopEditing": "수정 중지"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "이게 전부입니다!",
+      "discover": "발견하다",
+      "discoverMore": "더 알아보기",
+      "empty": {
+        "default": "환영합니다. 여기서 시청할 미디어를 찾아보세요!",
+        "extra": [
+          "여기에는 아무것도 없습니다 :(",
+          "너무 비어...",
+          "그런 공허함.",
+          "안녕하세요 신규 사용자입니다 :3"
+        ]
+      },
       "failed": "미디어 검색에 실패하였습니다, 다시 시도해주세요!",
       "loading": "로딩...",
       "noResults": "검색결과가 없습니다!",
@@ -423,41 +345,46 @@
           "당신이 가장 좋아하는 시리즈는?"
         ]
       },
-      "empty": {
-        "default": "Welcome, find media to watch here!",
-        "extra": [
-          "There's nothing here :(",
-          "So empty...",
-          "Such emptiness.",
-          "Hi new user :3"
-        ]
-      },
-      "sectionTitle": "검색 결과",
-      "discoverMore": "Discover more",
-      "discover": "Discover"
+      "sectionTitle": "검색 결과"
     },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+    "support": {
+      "complete": "완벽한",
+      "description": "AlphaFlix는 어려움을 겪고 있으며 광고 없이 계속 운영하려면 도움이 필요합니다! AlphaFlix를 즐겨 사용하신다면 비용을 충당할 수 있도록 기부해 주시기 바랍니다.",
+      "donate": "기부",
+      "explanation": "확장 프로그램을 사용하지 않거나 FED API가 설정되어 있지 않으면 콘텐츠를 찾기가 더 어려울 수 있습니다! 우리는 이 문제를 고치고 싶지만 값비싼 서버 없이 콘텐츠를 제공하기가 훨씬 어렵습니다. 따라서 AlphaFlix를 즐겨 사용하신다면 증가하는 비용을 충당할 수 있도록 기부해 주시기 바랍니다.",
+      "explanation2": "더 많은 정보를 원하시면, 우리와 함께 해주세요",
+      "fluxer": "플럭서",
+      "label": "프로젝트 자금: ${{current}} / ${{goal}}",
+      "moreInfo": "추가 정보",
+      "thankYou": "귀하의 지원에 감사드립니다!",
+      "title": "AlphaFlix는 여러분의 도움이 필요합니다!"
     },
     "titles": {
       "69": {
-        "default": "Up for something spicy?",
+        "default": "뭔가 매운 것을 원하시나요?",
         "extra": [
-          "Happy 69 day 😘!"
+          "69일 축하해요😘!"
         ]
       },
       "420": {
-        "default": "What would you like to watch this 4/20?",
+        "default": "4/20에 무엇을 볼까?",
         "extra": [
-          "Happy 4/20 🥳!"
+          "4/20 잘 보내세요 🥳!"
         ]
       },
       "day": {
         "default": "오늘 오후에 무엇을 보고 싶으신가요?",
         "extra": [
           "모험을 즐기고 싶으신가요? 쥬라기 공원이 완벽한 선택이 될 수 있습니다."
+        ]
+      },
+      "halloween": {
+        "default": "이번 할로윈에는 어떤 으스스한 영화를 보고 싶나요?",
+        "extra": [
+          "해피 할로윈! 🎃👻",
+          "우우! 👻",
+          "트릭 오어 트리트! 🍬",
+          "위대한 호박, 찰리 브라운이에요!"
         ]
       },
       "morning": {
@@ -471,304 +398,116 @@
         "extra": [
           "피곤하신가요? The Exorcist가 좋다고 들었어요."
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "최근 시청한 콘텐츠",
+      "sectionTitle": "시청 기록"
     }
   },
   "media": {
     "episodeDisplay": "시즌{{season}} {{episode}}화",
-    "unreleased": "Unreleased",
+    "episodeShort": "E",
+    "seasonUnwatched": "시즌을 시청하지 않은 것으로 표시하시겠습니까?",
+    "seasonWatched": "시즌을 시청한 것으로 표시하시겠습니까?",
     "types": {
       "movie": "영화",
       "show": "쇼"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "미출시"
   },
   "migration": {
-    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
-    "start": {
-      "title": "Migrate your data",
-      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
-      "options": {
-        "or": "or",
-        "direct": {
-          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
-          "title": "Direct migration",
-          "quality": "Easiest and fastest",
-          "action": "Transfer data"
-        },
-        "download": {
-          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-          "title": "Download data",
-          "quality": "More technical",
-          "action": "Download data"
-        },
-        "upload": {
-          "title": "Upload Data",
-          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-          "quality": "Restore from backup",
-          "action": "Upload Data"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Direct migration",
-      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
-      "backendLabel": "Destination Backend URL",
-      "recaptchaLabel": "ReCaptcha Key (Optional)",
-      "toggleLable": "Needs ReCaptcha?",
-      "status": {
-        "error": "Failed to migrate your data. 😿",
-        "success": "Your data has been migrated successfully! 🎉"
-      },
-      "button": {
-        "migrate": "Migrate",
-        "processing": "Processing...",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
-    },
+    "back": "돌아가기",
     "download": {
-      "title": "Download data",
-      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-      "status": {
-        "error": "Failed to download your data. 😿",
-        "success": "Your data has been downloaded successfully! 🎉"
-      },
       "button": {
-        "download": "Download data",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
+        "download": "데이터 다운로드",
+        "home": "집에 가세요"
+      },
+      "description": "그러면 데이터가 장치에 다운로드됩니다. 그런 다음 새 서버에 업로드하거나 안전하게 보관할 수 있습니다.",
+      "status": {
+        "error": "데이터를 다운로드하지 못했습니다. 😿",
+        "success": "귀하의 데이터가 성공적으로 다운로드되었습니다! 🎉"
+      },
+      "title": "데이터 다운로드"
+    },
+    "loginRequired": "데이터를 이전하려면 로그인해야 합니다! 계속하려면 돌아가서 로그인하세요.",
+    "preview": {
+      "downloadDescription": "다운로드에는 다음이 포함됩니다:",
+      "items": {
+        "bookmarks": "북마크된 미디어",
+        "progress": "진행 상황 보기",
+        "settings": "설정 및 기본 설정"
+      },
+      "uploadDescription": "업로드할 데이터:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "데이터 다운로드",
+          "description": "그러면 데이터가 장치에 다운로드됩니다. 그런 다음 새 서버에 업로드하거나 안전하게 보관할 수 있습니다.",
+          "quality": "더 기술적인",
+          "title": "데이터 다운로드"
+        },
+        "or": "or",
+        "upload": {
+          "action": "데이터 업로드",
+          "description": "이전에 내보낸 데이터 파일을 업로드하여 이 계정의 북마크와 진행 상황을 복원하세요.",
+          "quality": "백업에서 복원",
+          "title": "데이터 업로드"
+        }
+      },
+      "title": "데이터 마이그레이션"
     },
     "upload": {
-      "title": "Upload data",
-      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-      "status": {
-        "processing": "Processing data...",
-        "error": "Failed to upload your data. 😿",
-        "success": "Your data has been uploaded successfully! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Select the file you want to upload",
-        "select": "Select file",
-        "change": "Change file",
-        "name": "File name"
-      },
-      "exportedOn": "Exported on",
-      "previewTitle": "Preview:",
       "button": {
-        "import": "Import data",
-        "processing": "Processing...",
-        "success": "Import complete",
-        "home": "Continue to home",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Go back"
+        "home": "집으로 계속",
+        "import": "데이터 가져오기",
+        "processing": "처리 중...",
+        "saveLocal": "로컬에 저장"
+      },
+      "description": "이전에 내보낸 데이터 파일을 업로드하여 이 계정의 북마크와 진행 상황을 복원하세요.",
+      "exportedOn": "내보낸 날짜",
+      "file": {
+        "change": "파일 변경",
+        "description": "업로드하려는 파일을 선택하세요.",
+        "select": "파일 선택"
+      },
+      "previewTitle": "시사:",
+      "status": {
+        "error": "데이터를 업로드하지 못했습니다. 😿",
+        "processing": "데이터 처리 중...",
+        "success": "귀하의 데이터가 성공적으로 업로드되었습니다! 🎉",
+        "successLocal": "귀하의 데이터가 로컬에 저장되었습니다! 🎉"
+      },
+      "title": "데이터 업로드"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "인터넷 연결을 확인해주세요"
     },
+    "install": {
+      "genericGuide": "귀하의 브라우저는 자동 PWA 설치 프롬프트를 지원하지 않습니다.\n브라우저 메뉴(예: '앱 설치', '바로가기 만들기' 또는 'Dock/홈 화면에 추가')를 사용하여 설치할 수 있습니다.",
+      "iosSafariGuide": "AlphaFlix를 앱으로 설치하려면:\n\n1. 공유 버튼(화살표가 있는 사각형)을 탭합니다.\n2. '홈 화면에 추가'를 선택하세요.\n3. 추가를 탭합니다."
+    },
     "menu": {
-      "about": "서비스 소개",
+      "desktop": "앱 설정",
       "logout": "로그아웃",
       "register": "클라우드 동기화",
-      "settings": "설정",
-      "support": "지원",
-      "discover": "Discover",
-      "development": "Development",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "AlphaFlix를 앱으로 설치하려면:\n\n1. 공유 버튼(화살표가 있는 사각형)을 탭합니다.\n2. '홈 화면에 추가'를 선택하세요.\n3. 추가를 탭합니다.",
-      "genericGuide": "귀하의 브라우저는 자동 PWA 설치 프롬프트를 지원하지 않습니다.\n브라우저 메뉴(예: '앱 설치', '바로가기 만들기' 또는 'Dock/홈 화면에 추가')를 사용하여 설치할 수 있습니다."
+      "settings": "설정"
     }
   },
   "notFound": {
     "badge": "찾을 수 없음",
     "goHome": "메인으로 돌아가기",
-    "reloadButton": "Try again",
     "message": "쓰레기통 아래, 옷장, 프록시 뒤 등 모든 곳을 찾아보았지만 결국 원하는 페이지를 찾을 수 없었습니다.",
+    "reloadButton": "다시 시도하세요",
     "title": "해당 페이지를 찾을 수 없습니다"
-  },
-  "downtimeNotice": {
-    "badge": "Issues",
-    "goHome": "Go home",
-    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
-    "title": "Provider issues"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "취소",
-      "confirm": "기본 설정 사용",
-      "description": "기본 설정은 쾌적한 스트리밍 환경을 제공하지 않으므로 다소 시청이 불편할 수 있습니다.",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "정말 진행할까요?"
-    },
-    "extension": {
-      "back": "돌아가기",
-      "explainer": "확장 프로그램을 이용하므로서, 저희가 제공해야 할 최고 화질의 영상을 시청할 수 있습니다. 간단한 설치 한 번으로요.",
-      "explainerIos": "죄송하지만, 해당 확장 프로그램은 애플 모바일 환경에서 지원하지 않습니다, <bold> 돌아가기</bold>을 눌러 다른 옵션을 선택해 주세요.",
-      "extensionHelp": "확장 프로그램을 설치했지만 인식되지 않는다면, <bold>브라우저의 확장 프로그램 메뉴를 열어 해당 확장 프로그램을 클릭한 후</bold> 화면의 안내를 따라주세요.",
-      "linkChrome": "크롬 확장 프로그램 설치",
-      "linkFirefox": "파이어폭스 확장 프로그램 설치",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "크롬 환경에서 설치했지만 사이트가 인식하지 못하나요? 새로고침을 시도해 보세요!",
-      "notDetectingAction": "새로고침",
-      "status": {
-        "disallowed": "이 페이지는 확장 프로그램 사용이 불가능합니다",
-        "disallowedAction": "확장 프로그램 사용",
-        "failed": "상태 요청 실패",
-        "loading": "확장 프로그램 설치를 기다리는 중입니다",
-        "outdated": "확장 프로그램의 버전이 오래됨",
-        "success": "확장 프로그램 정상 작동 중!"
-      },
-      "submit": "계속",
-      "title": "확장 프로그램으로 시작해 봅시다"
-    },
-    "proxy": {
-      "back": "돌아가기",
-      "explainer": "프록시 방식을 통하여, 직접 운영하는 프록시를 만들어 훌륭한 화질의 영상을 시청할 수 있습니다.",
-      "input": {
-        "errorConnection": "프록시에 연결할 수 없음",
-        "errorInvalidUrl": "유효하지 않은 URL",
-        "errorNotProxy": "프록시가 아닌 웹사이트가 입력되었습니다",
-        "label": "프록시 URL",
-        "placeholder": "https://"
-      },
-      "link": "프록시 만드는 방법 배우기",
-      "submit": "프록시 제출",
-      "title": "새로운 프록시를 만들어 봅시다"
-    },
-    "start": {
-      "explainer": "가장 쾌적한 송출을 위하여 사용하고 싶은 송출 방식을 선택해야 합니다.",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "or",
-        "default": {
-          "text": "화질 좋은 영상을 원하지는 않아요, <0 /><1>기본 설정 사용</1>"
-        },
-        "extension": {
-          "action": "확장 프로그램 설치",
-          "description": "고화질의 영상을 시청하기 위하여 브라우저 확장 프로그램을 설치해주세요.",
-          "quality": "최고의 화질",
-          "title": "브라우저 확장 프로그램"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "프록시 설정",
-          "description": "단 5분 만에 프록시를 설정하고 쾌적한 송출 환경을 이용하세요.",
-          "quality": "좋은 화질",
-          "title": "커스텀 프록시"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "AlphaFlix의 설정을 진행해 봅시다"
+      "cancel": "취소"
     }
   },
   "overlays": {
@@ -780,24 +519,45 @@
       "short": "뒤로가기"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "장치로 전송 중..."
+      "device": "장치",
+      "to": "{{device}}로 전송 중 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "추가 RAM을 다운로드하는 중...",
+      "2": "카페인을 함량으로 변환...",
+      "3": "햄스터에게 더 빨리 달리는 법을 가르치다...",
+      "4": "전자가 더 빨리 움직이도록 설득하는 중...",
+      "5": "거의 다 왔어요... 모든 로딩 바가 말하더군요...",
+      "6": "리모컨을 찾는 중... 잠깐, 문제가 잘못되었습니다...",
+      "7": "무한대부터 거꾸로 세기...",
+      "8": "미래를 시뮬레이션하다...",
+      "9": "고양이 영상을 보다가...",
+      "10": "고양이 GIF 때문에 주의가 산만해졌습니다...",
+      "11": "인턴이 커피를 리필하는 동안 기다려 주세요...",
+      "12": "꽂혀 있는지 확인 중...",
+      "13": "껐다가 다시 켜보니...",
+      "14": "당황하지 말 것...",
+      "15": "겨울이 오고 있어요...",
+      "16": "스카이넷에 로그인 중...",
+      "17": "귀하의 모든 브라우저는 우리의 것입니다...",
+      "18": "무한한 가능성 없는 드라이브를 찾아서...",
+      "19": "당신을 기다리게 만드는 새로운 방법의 발견...",
+      "20": "귀하의 시간은 우리에게 매우 중요합니다. 무시하는 동안 기다려 주세요...",
+      "21": "그래도 윈도우 업데이트보다 빠르네요...",
+      "22": "샌드위치를 ​​가져가는 게 어때요?"
     },
     "menus": {
+      "audio": {
+        "default": "기본"
+      },
       "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "다운로드는 제공업체에서 직접 가져옵니다. AlphaFlix은 다운로드 제공 방식을 통제할 수 없습니다.",
+        "button": "다운로드 시도",
         "copyHlsPlaylist": "HLS 플레이리스트 링크 복사하기",
+        "disclaimer": "다운로드는 제공업체에서 직접 가져옵니다. AlphaFlix은 다운로드 제공 방식을 통제할 수 없습니다.",
         "downloadSubtitle": "현재 자막 다운로드",
         "downloadVideo": "영상 다운로드",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "다운로드는 제공업체에서 직접 가져옵니다. AlphaFlix은 다운로드 제공 방식을 통제할 수 없습니다.<br /><br />사용자께서는 HLS 플레이리스트를 다운로드 하고 있으며, <bold>이는 고급 스트리밍 포맷의 사용에 익숙하지 않은 사용자에게는 추천하지 않는다는 것을 유의해주세요<bold>. 혹은 다른 소스와 포맷을 이용하여 보세요.",
+        "hlsDownloader": "또는 <0>hls 다운로더 웹사이트</0>로 이동하여 아래의 재생목록 URL을 붙여넣으세요.",
         "onAndroid": {
           "1": "Android에서 다운로드하려면 다운로드 버튼을 클릭한 다음 새 페이지에서 동영상을 <bold>길게 눌러</bold>저장을 선택합니다.",
           "shortTitle": "다운로드 / Android",
@@ -819,57 +579,47 @@
         "button": "회차",
         "emptyState": "이번 시즌에는 에피소드가 없으니 나중에 다시 확인하세요!",
         "episodeBadge": "{{episode}}화",
+        "favorites": "즐겨찾기",
         "loadingError": "시즌 로딩중 에러 발생",
         "loadingList": "로딩...",
         "loadingTitle": "로딩...",
-        "unairedEpisodes": "해당 시즌의 다수의 에피소드들이 아직 방송되지 않은 이유로 비공개 처리되었습니다.",
-        "seasons": "Seasons",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "markAsFavorite": "즐겨찾기로 표시",
+        "markAsUnwatched": "시청하지 않음으로 표시",
+        "markAsWatched": "시청한 것으로 표시",
+        "noFavorites": "아직 좋아하는 에피소드가 없습니다. 즐겨찾기에 추가하려면 에피소드에 별표를 표시하세요!",
+        "showLess": "간략히 보기",
+        "showMore": "더 보기",
         "specials": "스페셜"
       },
       "playback": {
-        "speedLabel": "재생 속도",
-        "title": "재생 설정",
-        "disabled": "(Disabled in watch party)",
+        "disabled": "(시청 파티에서는 비활성화됨)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "재생 속도",
+        "speedUnboosted": "{{speed}}x",
+        "title": "재생 설정"
       },
       "quality": {
+        "auto": "자동",
         "automaticLabel": "자동 품질 제어",
         "hint": "<0>소스 전환</0>을 사용하여 다양한 화질 옵션을 확인할 수 있습니다.",
         "iosNoQuality": "Apple에서 정의한 제한 사항으로 인해 이 소스에 대해 iOS에서 품질 선택을 사용할 수 없습니다. <0>다른 소스로 전환</0>하여 다른 품질 옵션을 사용해 볼 수 있습니다.",
-        "title": "화질",
-        "auto": "Auto"
+        "title": "화질"
       },
       "settings": {
+        "audioItem": "오디오",
         "downloadItem": "다운로드",
         "enableSubtitles": "자막 활성화",
-        "experienceSection": "시청 경험",
         "playbackItem": "재생 설정",
-        "audioItem": "Audio",
         "qualityItem": "화질",
         "sourceItem": "영상 소스",
-        "subtitleItem": "자막 설정",
-        "videoSection": "영상 설정"
+        "subtitleItem": "자막 설정"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "동영상을 찾는 동안 오류가 발생했습니다. 다른 소스를 사용해 보세요.",
           "title": "스크래핑 실패"
         },
+        "findNextSource": "다음 소스 찾기",
         "noEmbeds": {
           "text": "임베드를 찾을 수 없습니다. 다른 소스를 사용해 보세요.",
           "title": "발견된 임베드없음"
@@ -879,72 +629,53 @@
           "title": "발견된 스트림 없음"
         },
         "title": "소스",
-        "unknownOption": "알수없음",
-        "findNextSource": "Find next source"
+        "unknownOption": "알수없음"
       },
       "subtitles": {
+        "autoSelectChoice": "자동 선택",
+        "autoSelectDifferentChoice": "다른 자막을 자동으로 선택하려면 다시 탭하세요.",
+        "clearSecondary": "보조 자막 지우기",
         "customChoice": "파일에서 자막 선택하기",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "사용자 정의",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "캡션을 보았습니다.",
+        "delayLate": "오디오를 들음",
+        "doubleClickToCopy": "자막 데이터를 복사하려면 더블클릭하세요.",
+        "dropSubtitleFile": "여기에 자막 파일을 드롭하세요! >_<",
+        "dualSub": "이중 자막",
+        "dualSubDesc": "최상의 동기화를 위해 동일한 형식(SRT, VTT...) 및 공급자(OpenSubs...)를 선택하세요.",
+        "dualSubHint": "보조 자막의 언어를 선택하세요(기본 위에 표시됨).",
+        "empty": "이에 대해 제공된 자막이 없습니다.",
+        "loadingExternal": "외부 자막 로드 중...",
+        "loadingExternalProgress": "외부 자막 로드 중... ({{progress}}%)",
+        "matchScoreLabel": "~{{score}}% 일치",
+        "notFound": "사용 가능한 옵션 중 귀하의 검색어와 일치하는 옵션이 없습니다.",
         "offChoice": "끔",
-        "onChoice": "On",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Source Subtitles",
-        "OpenSubtitlesChoice": "External Subtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "자막 데이터 붙여넣기",
+        "previewLabel": "자막 미리보기:",
+        "primary": "주요한",
+        "refresh": "외부 자막 새로 고침",
+        "refreshing": "상쾌하다...",
+        "secondary": "반성",
+        "selectingSecondary": "보조 자막 선택",
         "settings": {
           "backlink": "자막 커스텀",
           "delay": "자막 딜레이",
           "fixCapitals": "대문자 표기 수정"
         },
         "title": "자막",
-        "unknownLanguage": "알수없음",
-        "dropSubtitleFile": "Drop subtitle file here! >_<",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "There are no provided subtitles for this.",
-        "notFound": "None of the available options match your query",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "성적 증명서",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "{{language}}에서 번역"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "외부 자막 로드 중... ({{progress}}%)",
-        "matchScoreLabel": "~{{score}}% 일치"
+        "unknownLanguage": "알수없음",
+        "useNativeSubtitles": "네이티브 비디오 자막",
+        "useNativeSubtitlesDescription": "기본 전체 화면 및 PiP용 방송 자막"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
+        "watchpartyItem": "파티 시청"
       }
     },
     "metadata": {
-      "api": {
-        "text": "API 메타데이터를 불러올 수 없었습니다. 인터넷 연결 상태를 확인해 주세요.",
-        "title": "API 메타데이터을 읽어오지 못했습니다"
-      },
-      "legal": {
-        "badge": "삭제됨",
-        "text": "이 미디어는 저작권 침해 및 신고로 인하여 더 이상 이용이 불가합니다.",
-        "title": "미디어가 삭제됨"
-      },
       "extensionPermission": {
         "badge": "권한 없음",
         "button": "확장 프로그램 사용",
@@ -957,6 +688,11 @@
         "text": "TMDB에서 미디어의 메타데이터를 로드할 수 없습니다. 인터넷 연결에서 TMDB가 다운되었거나 차단되었는지 확인하세요.",
         "title": "메타데이터를 불러오지 못했습니다"
       },
+      "legal": {
+        "badge": "삭제됨",
+        "text": "이 미디어는 저작권 침해 및 신고로 인하여 더 이상 이용이 불가합니다.",
+        "title": "미디어가 삭제됨"
+      },
       "notFound": {
         "badge": "찾을 수 없음",
         "homeButton": "메인으로 돌아가기",
@@ -965,18 +701,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Replay",
       "next": "다음 회차",
-      "nextSeason": "Next season"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "다음 시즌",
+      "replay": "다시 하다"
     },
     "playbackError": {
+      "autoResumeText": "미디어를 재생하는 중에 오류가 발생했습니다 😖. 다른 소스를 자동으로 시도하는 중...",
       "badge": "재생 에러",
+      "copyDebugInfo": "디버그 정보 복사",
+      "debugInfo": "자세한 내용은 콘솔을 확인하세요.",
       "errors": {
         "errorAborted": "사용자의 요청으로 미디어 가져오기가 중단되었습니다.",
         "errorDecode": "이전에 사용 가능한 것으로 확인되었지만 미디어 리소스를 디코딩하는 동안 오류가 발생하여 오류가 발생했습니다.",
@@ -984,226 +717,168 @@
         "errorNetwork": "네트워크 오류가 발생하여 이전에 미디어를 사용할 수 있었으나 미디어를 성공적으로 가져오지 못했습니다.",
         "errorNotSupported": "미디어 또는 미디어 공급자 개체는 지원되지 않습니다."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "메인으로 돌아가기",
-      "resumeButton": "Try next sources",
+      "resumeButton": "다음 소스를 사용해 보세요",
       "text": "미디어를 재생하는 동안 오류가 발생했습니다. 다시 시도해 주세요.",
       "title": "동영상 재생에 실패했습니다!"
     },
+    "resume": {
+      "description": "이 에피소드를 {{percentage}}% 시청했습니다.",
+      "restart": "다시 시작",
+      "resume": "재개하다",
+      "title": "계속 시청하시겠습니까?"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "확장 프로그램이 비활성화되었습니다.",
+        "enableExtension": "확장 프로그램 활성화",
+        "homeButton": "집에 가세요",
+        "text": "AlphaFlix 확장 프로그램을 설치했습니다. 이 기능을 사용하려면 이 사이트에 대한 확장 기능을 활성화해야 합니다.",
+        "title": "확장 기능을 활성화해주세요"
+      },
       "items": {
-        "failure": "오류 발생",
-        "timeout": "Timed out (15s)",
-        "notFound": "동영상이 없습니다",
         "pending": "동영상 확인 중..."
       },
       "notFound": {
         "badge": "찾을 수 없음",
         "detailsButton": "상세 보기",
+        "discoverButton": "더 알아보기",
         "homeButton": "메인으로 돌아가기",
-        "discoverButton": "Discover more",
         "text": "제공업체를 통해 검색했지만 원하는 미디어를 찾을 수 없습니다! 당사는 해당 미디어를 호스팅하지 않으며 이용 가능한 미디어에 대한 통제권이 없습니다. 자세한 내용을 보려면 아래의 '세부 정보 보기'를 클릭하세요.",
-        "title": "찾을 수 없습니다",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Extension disabled",
-        "homeButton": "Go home",
-        "enableExtension": "Enable extension",
-        "title": "Please enable the extension",
-        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site."
+        "title": "찾을 수 없습니다"
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "소스를 전환하려면 톱니바퀴 아이콘을 탭하세요!",
+        "2": "제목을 누르면 링크가 복사됩니다!",
+        "3": "전체 화면 대신 와이드스크린 버튼을 표시하려면 Shift 키를 길게 누르세요!",
+        "4": "일부 소스는 다른 소스보다 더 잘 작동합니다!",
+        "5": "더 많은 소스를 보려면 확장 프로그램을 받으세요!",
+        "6": "북마크를 유지하여 편집하거나 삭제하세요!",
+        "7": "SHIFT를 누른 상태에서 제목을 탭하면 시간과 함께 링크가 복사됩니다!",
+        "8": "맞춤 자막 색상을 설정해보세요!",
+        "9": "키보드 단축키를 보려면 `를 누르세요!"
       }
+    },
+    "segment": {
+      "credits": "크레딧",
+      "intro": "소개",
+      "recap": "요약"
+    },
+    "skipTime": {
+      "confidence": "신뢰",
+      "connectApiKeyMessage": "새 세그먼트를 제출하려면 연결 설정에 TheIntroDB API 키를 입력하세요.",
+      "credits": "크레딧 건너뛰기",
+      "endOfVideo": "끝",
+      "endsAt": "{{time}}에 종료",
+      "feedback": {
+        "modal": {
+          "cancel": "취소",
+          "description": "정확한 세그먼트 타임스탬프를 제출하여 TheIntroDB에 기여하세요. 모든 제출물은 게시되기 전에 커뮤니티에서 승인됩니다.",
+          "endTimeLabel": "종료(들)",
+          "error": {
+            "endTime": "종료 시간은 필수 항목입니다.",
+            "mediaInfo": "미디어 정보를 사용할 수 없습니다.",
+            "segment": "선택한 세그먼트가 없습니다.",
+            "startTime": "시작 시간은 필수 항목입니다.",
+            "submission": "타임스탬프 제출 오류",
+            "tidbKey": "TIDB API 키가 설정되지 않았습니다."
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "끝이 제공되는 경우 최소 5초입니다. 미디어 끝까지 확장할 수 있습니다.",
+              "endDesc": "선택 사항 - 크레딧이 파일 끝까지 실행되는 경우 비워 두세요.",
+              "excludeDesc": "크레딧 중간 또는 크레딧 이후 장면을 제외합니다. 메인 크레딧 롤만.",
+              "startDesc": "필수 - 클로징 크레딧이 시작되는 시점(예: 첫 번째 크레딧 텍스트가 나타날 때)",
+              "whenToTitle": "크레딧 타임스탬프 가이드:"
+            },
+            "durationDesc": "끝이 제공된 경우 최소 5초",
+            "durationLabel": "지속:",
+            "endDesc": "선택 사항 - 끝까지 확장되면 비어 있습니다.",
+            "endLabel": "끝:",
+            "excludeDesc": "학점 후 장면",
+            "excludeLabel": "들어오지 못하게 하다:",
+            "intro": {
+              "durationDesc": "대부분의 인트로는 30~90초입니다. 시작과 끝이 모두 설정된 경우 최소 5초입니다.",
+              "endDesc": "필수 - 인트로가 끝나는 시점(보통 타이틀 카드나 메인 에피소드가 시작되는 시점)입니다.",
+              "excludeDesc": "콜드 오픈이나 인트로 장면을 포함하지 마세요. 메인 타이틀 시퀀스만.",
+              "startDesc": "선택 사항 - 소개가 에피소드 시작 부분에서 시작되는 경우 비워 두세요.",
+              "whenToTitle": "소개 타임스탬프 가이드:"
+            },
+            "preview": {
+              "durationDesc": "미리보기의 길이는 다양합니다. 최소 5초.",
+              "endDesc": "선택 사항 - 미리보기가 미디어 끝에서 끝나는 경우 비워 두세요.",
+              "excludeDesc": "미리보기는 일반적으로 에피소드 끝에서 다음 에피소드를 미리보기하는 15~90초입니다.",
+              "startDesc": "필수 - 미리보기가 시작될 때(예: 미리보기 텍스트가 나타날 때)",
+              "whenToTitle": "타임스탬프 미리보기 가이드:"
+            },
+            "recap": {
+              "durationDesc": "요약의 길이는 다양합니다. 시작과 끝이 모두 설정된 경우 최소 5초입니다.",
+              "endDesc": "필수 - 요약이 끝나고 새 콘텐츠가 시작되는 시점입니다.",
+              "excludeDesc": "'이전 사용' 또는 요약 세그먼트만 해당. 소개나 새로운 장면은 포함하지 마세요.",
+              "startDesc": "선택사항 - 요약이 에피소드 시작 부분에서 시작되는 경우 비워 두세요.",
+              "whenToTitle": "타임스탬프 가이드 요약:"
+            },
+            "startDesc": "필수 - 크레딧이 롤링되기 시작하는 시점",
+            "startLabel": "시작:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 또는 210(미디어가 끝나려면 비워 두세요)",
+              "intro": "3:30 또는 210(필수)",
+              "preview": "3:30 또는 210(미디어가 끝나려면 비워 두세요)",
+              "recap": "3:30 또는 210(필수)"
+            },
+            "start": {
+              "credits": "2:30 또는 150(필수)",
+              "intro": "2:30 또는 150(처음부터 시작하려면 비워 두세요)",
+              "preview": "2:30 또는 150(필수)",
+              "recap": "2:30 또는 150(처음부터 시작하려면 비워 두세요)"
+            }
+          },
+          "segmentType": "세그먼트 유형",
+          "startTimeLabel": "시작(들)",
+          "submit": "제출하다",
+          "submitting": "제출 중...",
+          "success": {
+            "title": "제출 성공! 감사해요!"
+          },
+          "title": "TheIntroDB에 타임스탬프 제출",
+          "types": {
+            "credits": "크레딧",
+            "intro": "소개",
+            "preview": "시사",
+            "recap": "요약"
+          },
+          "whenToDesc": "타임스탬프를 초(예: 150), mm:ss 형식(예: 2:30) 또는 hh:mm:ss 형식(예: 1:42:20)으로 입력하세요. 자동으로 형식을 변환해 드립니다.",
+          "whenToTitle": "타임스탬프 가이드:"
+        },
+        "title": "건너뛰기가 맞나요?"
+      },
+      "intro": "소개 건너뛰기",
+      "noSegments": "건너뛰기 구간을 사용할 수 없습니다.",
+      "recap": "요약 건너뛰기",
+      "skipSegments": "세그먼트 건너뛰기",
+      "startsAt": "{{time}}에 시작",
+      "submissions": "{{count}} 제출물",
+      "submitSegment": "세그먼트 제출",
+      "timeUnknown": "시간을 알 수 없음"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "{{timeLeft}} 남음 • {{timeFinished, datetime}}에 종료",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "애플리케이션 로딩 중",
-    "loadingUser": "프로필 로 중",
     "loadingUserError": {
+      "disconectCancel": "취소",
+      "disconnectConfirm": "확인하다",
+      "disconnectMessage": "최신 로컬 데이터를 유지하면서 계정 서버와의 연결을 끊습니다. 변경 사항과 시청한 콘텐츠는 다시 로그인할 때까지 동기화되지 않습니다.",
+      "disconnectTitle": "백엔드에서 연결을 해제하시겠습니까?",
       "logout": "로그아웃",
-      "reset": "사용자 지정 서버 초기화",
-      "disconnect": "Disconnect from backend",
-      "text": "프로필을 로드하지 못했습니다",
-      "reload": "Reload",
-      "textWithReset": "사용자 지정 서버에서 프로필을 불러오는 데 실패하여 기본 서버로 다시 초기화하시겠습니까?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reload": "새로고침",
+      "reset": "사용자 지정 서버 초기화"
     },
     "migration": {
       "failed": "데이터를 마이그레이션하지 못했습니다.",
@@ -1211,28 +886,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "기기명",
-        "deviceNamePlaceholder": "개인 휴대폰",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "수정",
-        "logoutButton": "로그아웃"
-      },
-      "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
+        "logoutButton": "로그아웃",
+        "nicknameLabel": "별명",
+        "nicknamePlaceholder": "닉네임을 입력하세요"
       },
       "actions": {
         "delete": {
@@ -1243,26 +902,26 @@
           "text": "이 작업은 되돌릴 수 없습니다. 모든 데이터가 삭제되며 아무것도 복구할 수 없습니다.",
           "title": "계정 삭제"
         },
-        "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
-        },
-        "title": "작업",
         "logoutAllDevices": {
-          "title": "모든 세션 종료",
+          "button": "모든 기기에서 로그아웃",
           "text": "이 작업은 계정에 연결된 모든 기기에서 로그아웃됩니다.",
-          "button": "모든 기기에서 로그아웃"
-        }
+          "title": "모든 세션 종료"
+        },
+        "migration": {
+          "button": "계정 이전",
+          "text": "계정을 새 서버로 마이그레이션하거나 데이터를 다운로드하세요.",
+          "title": "계정 이전"
+        },
+        "title": "작업"
       },
       "devices": {
         "deviceNameLabel": "기기명",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "세션을 로드하지 못했습니다",
+        "lastActive": "마지막 활성: {{date}}",
+        "loggedInAt": "로그인한 위치: {{date}}",
         "removeDevice": "제거",
         "title": "기기",
-        "lastActive": "마지막 활성: {{date}}",
-        "loggedInAt": "로그인한 위치: {{date}}"
+        "unknownDevice": "알 수 없는 기기입니다. 이름을 해독하는 중 오류가 발생했습니다."
       },
       "profile": {
         "finish": "수정 완료",
@@ -1278,377 +937,213 @@
       },
       "title": "계정"
     },
+    "all": {
+      "title": "모든 설정"
+    },
     "appearance": {
       "activeTheme": "활성화",
-      "themes": {
-        "blue": "블루",
-        "custom": "Custom",
-        "default": "기본",
-        "gray": "그레",
-        "red": "레드",
-        "teal": "청록",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "주요한",
+        "secondary": "반성",
+        "tertiary": "제삼기"
       },
-      "title": "외관",
       "options": {
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "carouselView": "회전식 보기",
+        "carouselViewDescription": "현재 시청 중인 섹션과 북마크 섹션을 그리드 대신 캐러셀로 표시하세요. 기본적으로 비활성화되어 있습니다.",
+        "carouselViewLabel": "회전식 보기",
+        "discover": "섹션을 발견하세요",
+        "discoverDescription": "북마크한 미디어 아래 홈페이지의 검색 섹션을 표시합니다. 기본적으로 활성화되어 있습니다.",
+        "discoverLabel": "섹션을 발견하세요",
+        "featured": "주요 미디어",
+        "featuredDescription": "홈페이지 상단에 추천 영화와 프로그램의 캐러셀을 표시하세요! 기본적으로 비활성화되어 있습니다.",
+        "featuredLabel": "주요 미디어",
+        "forceCompactEpisodeView": "강제 컴팩트 에피소드 보기",
+        "forceCompactEpisodeViewDescription": "플레이어의 에피소드 캐러셀이 \"클래식\" 컴팩트 수직 보기를 사용하도록 강제합니다. 기본적으로 비활성화되어 있습니다.",
+        "forceCompactEpisodeViewLabel": "컴팩트한 에피소드",
+        "homeSectionOrder": "홈 섹션 순서",
+        "homeSectionOrderDescription": "홈페이지에서 시청 및 북마크 섹션을 드래그 앤 드롭하여 재정렬하세요. 그룹 주문은 홈페이지에서 편집할 수 있습니다.",
+        "homeSectionOrderGroups": "북마크 그룹 재정렬",
+        "logos": "이미지 로고",
+        "logosDescription": "세부 정보 모달 및 추천 섹션에 텍스트 제목 대신 이미지 로고를 표시합니다. 기본적으로 활성화되어 있습니다.",
+        "logosLabel": "이미지 로고",
+        "logosNotice": "대부분의 경우 로고는 영어로만 제공됩니다. 다른 언어에서는 이 기능을 비활성화할 수 있습니다!",
+        "minimalCards": "최소한의 카드",
+        "minimalCardsDescription": "미디어 카드의 텍스트 콘텐츠(제목, 유형, 연도)를 숨기고 포스터 이미지만 표시합니다.",
+        "minimalCardsLabel": "최소한의 카드",
+        "modal": "세부 모달",
+        "modalDescription": "보기 페이지로 이동하는 대신 미디어 카드를 클릭하면 세부정보 모달을 표시합니다. 예고편에는 프록시 또는 확장 프로그램이 필요합니다. 기본적으로 비활성화되어 있습니다.",
+        "modalLabel": "세부 모달",
+        "pauseOverlay": "오버레이 일시중지",
+        "pauseOverlayDescription": "플레이어가 일시중지되거나 유휴 상태일 때 제목/로고 및 설명 오버레이를 표시합니다.",
+        "pauseOverlayLabel": "오버레이 일시중지"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "북마크",
+        "watching": "현재 시청 중"
+      },
+      "themes": {
+        "acid": "산",
+        "autumn": "가을",
+        "blue": "블루",
+        "christmas": "크리스마스",
+        "classic": "권위 있는",
+        "cobalt": "코발트",
+        "custom": "관습",
+        "default": "기본",
+        "ember": "타다 남은 것",
+        "forest": "숲",
+        "frost": "서리",
+        "grape": "포도",
+        "gray": "그레",
+        "green": "녹색",
+        "hulk": "폐선",
+        "mocha": "모카",
+        "noir": "느와르",
+        "pink": "분홍색",
+        "popsicle": "아이스캔디",
+        "red": "레드",
+        "spark": "불꽃",
+        "spiderman": "스파이더맨",
+        "teal": "청록",
+        "wolverine": "울버린"
+      },
+      "title": "외관"
     },
     "connections": {
       "server": {
-        "description": "사용자 지정 백엔드에 연결하여 데이터를 저장하려면 이 기능을 활성화하고 URL을 입력합니다. <0>Instructions.</0>",
-        "label": "사용자 지정 서버",
-        "urlLabel": "사용자 지정 서버 URL",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "설정 진행하기",
-        "errorStatus": {
-          "description": "아직 완료되지 않은 설정이 있는 것 같습니다.",
-          "title": "완료되지 않은 설정이 있습니다"
-        },
-        "itemError": "설정에 문제가 발생하였습니다. 설정을 다시 진행하여 주세요.",
-        "items": {
-          "default": "기본 설정",
-          "extension": "확장 프로그램",
-          "proxy": "커스텀 프록시",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "설정을 다시하기",
-        "successStatus": {
-          "description": "찜한 리스트의 영상을 시청할 모든 준비가 끝났습니다.",
-          "title": "모든 설정이 완료되었습니다!"
-        },
-        "unsetStatus": {
-          "description": "기본 구성을 진행하기 위하여 오른쪽 버튼을 눌러주세요.",
-          "title": "기본 구성이 완료되지 않았습니다"
-        }
-      },
-      "title": "연결",
-      "workers": {
-        "addButton": "새 워커 추가하기",
-        "description": "애플리케이션이 작동하도록 하기 위해 모든 트래픽은 프록시를 통해 라우팅됩니다. 직접 워커를 사용하려면 이 옵션을 사용 설정하세요. <0>Instructions.</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "아직 워커가 없는 경우 아래에서 워커를 추가하세요",
-        "label": "사용자 지정 프록시 워커 사용",
-        "urlLabel": "워커 URL",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
+        "changeWarning": "백엔드 서버를 변경하면 로그아웃됩니다. 계속하다?",
+        "changeWarningTitle": "백엔드 서버 변경",
+        "error": "백엔드 연결 오류",
+        "notice": "귀하의 계정은 백엔드 간에 동기화되지 않으므로 어떤 계정을 사용하는지 기억하십시오!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "소개, 요약 및 크레딧 세그먼트에 피드백을 남겨 TheIntroDB에 기여하세요. <0>자세히 알아보기</0>",
+        "tokenLabel": "API 키"
+      },
+      "title": "연결"
     },
     "preferences": {
-      "title": "환경 설정",
+      "autoplay": "자동재생",
+      "autoplayDescription": "시리즈가 끝나면 자동으로 다음 에피소드를 재생합니다. 브라우저 확장, 사용자 정의 프록시 또는 호스트에서 허용하는 경우 기본 설정을 사용하여 사용자가 활성화할 수 있습니다.",
+      "autoplayLabel": "자동재생",
+      "autoResumeOnPlaybackError": "재생 오류 시 자동 재개",
+      "autoResumeOnPlaybackErrorDescription": "재생 중에 현재 소스에 오류가 발생하면 자동으로 다른 소스를 계속 검색합니다. 비활성화된 경우 수동 재개 옵션이 포함된 오류 화면이 표시됩니다.",
+      "autoResumeOnPlaybackErrorLabel": "재생 오류 시 자동 재개",
+      "autoSkipSegments": "자동 건너뛰기 세그먼트",
+      "autoSkipSegmentsDescription": "활성화하면 시청하는 동안 소개, 요약 및 미리보기 세그먼트를 자동으로 건너뜁니다.",
+      "autoSkipSegmentsLabel": "세그먼트 자동 건너뛰기",
+      "doubleClickToSeek": "탐색하려면 두 번 탭하세요.",
+      "doubleClickToSeekDescription": "플레이어의 왼쪽이나 오른쪽을 두 번 탭하면 10초 앞이나 뒤로 탐색됩니다.",
+      "doubleClickToSeekLabel": "탐색하려면 두 번 탭하세요.",
+      "embedOrder": "임베드 재정렬",
+      "embedOrderDescription": "드래그 앤 드롭하여 삽입 순서를 변경하세요. 이를 통해 시청하려는 미디어에 대한 임베드를 확인하는 순서가 결정됩니다. <br><br> <strong>(대부분의 사용자에게 가장 적합한 기본 순서)</strong>",
+      "embedOrderEnableLabel": "맞춤 삽입 순서",
+      "holdToBoost": "속도를 높이려면 길게 누르세요.",
+      "holdToBoostDescription": "일시적으로 재생 속도를 2배속으로 높이려면 스페이스바를 누르거나 화면을 길게 터치하세요. 이전 속도로 돌아가려면 손을 떼세요.",
+      "holdToBoostLabel": "부스트하려면 길게 누르세요.",
+      "keyboardShortcuts": "키보드 단축키",
+      "keyboardShortcutsDescription": "애플리케이션의 키보드 단축키를 사용자 정의합니다. 언제든지 이 도움말을 표시하려면 `를 누르세요.",
+      "keyboardShortcutsLabel": "키보드 단축키 사용자 정의",
       "language": "애플리케이션 언어",
       "languageDescription": "애플리케이션 전체에 적용될 언어.",
+      "lastSuccessfulSource": "마지막으로 사용한 소스",
+      "lastSuccessfulSourceDescription": "이전 에피소드에 콘텐츠를 성공적으로 제공한 소스의 우선순위를 자동으로 지정합니다. 이는 시리즈를 시청할 때 연속성을 보장하는 데 도움이 됩니다.",
+      "lastSuccessfulSourceEnableLabel": "마지막으로 사용한 소스",
+      "lowPerformanceMode": "낮은 성능/대역폭 모드",
+      "lowPerformanceModeDescription": "대역폭을 많이 사용하는 기능을 비활성화하여 느린 연결 및 장치에 맞게 애플리케이션을 최적화합니다. 이 모드는 핵심 검색 및 감시 기능을 그대로 유지하면서 데이터 사용량을 줄이고 성능을 향상시킵니다.",
+      "lowPerformanceModeLabel": "저성능 모드",
+      "manualSource": "수동 소스 선택",
+      "manualSourceDescription": "스크랩하기 전에 소스를 선택해야 합니다. 자동 소스 선택을 비활성화하고 재생을 시작할 때 소스 선택기를 엽니다.",
+      "manualSourceLabel": "수동 소스 선택",
+      "showLess": "간략히 보기",
+      "showMore": "더 보기",
+      "skipCredits": "엔딩 크레딧 건너뛰기",
+      "skipCreditsDescription": "활성화하면 99% 완료율로 다음 에피소드를 자동으로 재생하여 엔드 크레딧을 건너뜁니다. 비활성화되면 에피소드가 완전히 완료될 때까지 기다리세요.",
+      "skipCreditsLabel": "엔딩 크레딧 건너뛰기",
+      "sourceOrder": "소스 재정렬",
+      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
+      "sourceOrderEnableLabel": "맞춤 소스 순서",
       "thumbnail": "썸네일 생성",
       "thumbnailDescription": "대부분의 영상들은 섬네일을 가지고 있지 않습니다. 사용자가 직접 영상의 섬네일을 생성할 수 있지만, 잦은 버퍼링을 일으킬 수 있습니다.",
       "thumbnailLabel": "섬네일 생성",
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "title": "환경 설정"
     },
     "reset": "초기화",
     "save": "저장",
+    "search": {
+      "placeholder": "검색 설정..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "앱 버전",
-        "backendUrl": "백엔드 URL",
-        "backendVersion": "백엔드 버전",
-        "hostname": "호스트명",
-        "insecure": "안전하지 않음",
-        "nickname": "Nickname",
         "notLoggedIn": "로그인하지 않으셨습니다",
-        "secure": "안전함",
-        "title": "앱 정보",
-        "unknownVersion": "알 수 없음",
         "userId": "유저 ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "친구등록 초대코드로 사용하세요"
       }
     },
     "subtitles": {
-      "backgroundLabel": "배경 투명도",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "캡션 배경 흐림을 비활성화하면 일부 깜박이는 문제가 해결될 수 있습니다.",
+      "backgroundBlurEnabledLabel": "배경 흐림",
       "backgroundBlurLabel": "배경 흐림",
+      "backgroundLabel": "배경 투명도",
+      "BorderThicknessLabel": "테두리 두께",
       "colorLabel": "색상",
+      "high": "높은",
+      "low": "기본",
       "previewQuote": "두려워해서는 안 됩니다. 두려움은 마음을 죽이는 존재입니다.",
+      "textBoldLabel": "굵은 텍스트",
       "textSizeLabel": "글자 크기",
-      "title": "자막",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "Border": "국경",
+        "default": "기본",
+        "depressed": "우울한",
+        "dropShadow": "그림자",
+        "raised": "높은",
+        "title": "텍스트 스타일"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "자막",
+      "verticalPositionLabel": "수직 위치"
     },
     "unsaved": "저장하지 않은 변경 사항이 있습니다"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
-      "top10": "상위 10위"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "지금 인기 급상승"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
-    },
-    "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "filters": {
-      "country": "국가"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "공유된 함께 시청하기 링크 또는 룸 코드를 입력하세요.",
-    "you": "너",
-    "guestFallback": "손님"
   },
   "tmdb": {
     "genres": {
       "10759": "액션 & 어드벤처"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "호스트보다 {{seconds}}초 앞서",
+    "alone": "홀로",
+    "behindHost": "호스트보다 {{seconds}}초 뒤처짐",
+    "cancel": "취소",
+    "connectedAsGuest": "손님으로 함께 시청하기 위해 연결됨",
+    "contentMismatch": "함께 시청할 수 없습니다. 콘텐츠가 호스트의 콘텐츠와 일치하지 않습니다.",
+    "copyCode": "복사하려면 클릭하세요.",
+    "emptyRoom": "아직 이 방에 아무도 없습니다",
+    "enterCodeOrLink": "공유된 함께 시청하기 링크 또는 룸 코드를 입력하세요.",
+    "episodeMismatch": "시청 파티에 참여할 수 없습니다. 호스트와 다른 에피소드를 시청하고 있습니다.",
+    "guestFallback": "손님",
+    "hosting": "호스팅",
+    "hostParty": "시청 파티 주최",
+    "invalidRoom": "이 방에 연결할 수 없습니다",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "가입하다",
+    "joinParty": "함께 시청하기",
+    "leaveWatchParty": "시청 파티 나가기",
+    "linkCopied": "복사되었습니다!",
+    "noHost": "이 시청 파티에는 주최자가 없습니다.",
+    "save": "구하다",
+    "shareCode": "이 코드를 친구와 공유하세요(링크를 복사하려면 클릭).",
+    "showStatusOverlay": "상태 오버레이 표시",
+    "status": {
+      "inSync": "동기화 중",
+      "outOfSync": "동기화되지 않음"
+    },
+    "syncing": "동기화 중...",
+    "validating": "시청 파티 확인 중...",
+    "viewers": "시청자({{count}})",
+    "watching": "보고 있다",
+    "withCount": "{{count}} 다른 사람들과 함께",
+    "you": "너"
   }
 }

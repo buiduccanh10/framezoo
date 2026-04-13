@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix adalah website yang mengumpulkan sumber media streaming dari internet. Didesain khusus dengan pendekatan minimalis agar mempermudah konsumsi konten.",
-    "help": "Tidak dapat mencari jawaban? <0>Dapatkan dukungan di sini.</0>",
-    "faqTitle": "Pertanyaan umum",
-    "searchPlaceholder": "Pencarian FAQ...",
-    "sections": {
-      "general": "Umum",
-      "search": "Pencarian & Ketersediaan konten",
-      "playback": "Masalah Pemutaran",
-      "connections": "Jaringan Koneksi",
-      "language": "Bahasa & Pengaturan Subtitle"
-    },
-    "q1": {
-      "title": "Dari mana konten berasal?",
-      "body": "AlphaFlix tidak menyimpan berkas media apapun. Ketika anda mengklik sesuatu untuk ditonton, aplikasi akan mencari berkas media di internet (saat media dimuat dan pada tab 'sumber media' anda dapat melihat sumber mana yang digunakan). AlphaFlix tidak pernah mengunggah media apapun, semua media didapat melalui mekanisme pencarian di internet.",
-      "section": "Umum"
-    },
-    "q2": {
-      "title": "Di mana saya dapat meminta serial televisi atau film untuk ditambahkan?",
-      "body": "Kami tidak menerima permintaan penambahan serial televisi atau film, AlphaFlix tidak mengelola konten apapun. Semua konten ditonton melalui sumber-sumber dari internet.",
-      "section": "Pencarian"
-    },
-    "q3": {
-      "title": "Hasil pencarian menampilkan serial televisi atau film yang saya cari, tapi mengapa saya tidak bisa memutarnya?",
-      "body": "Hasil pencarian aplikasi ini menggunakan API milik The Movie Database (TMDB) dan menampilkan semua hasil pencarian terlepas dari apakah sumber media tersebut dapat ditemukan di penyedia pihak ketiga atau tidak.",
-      "section": "Pencarian"
-    },
-    "q4": {
-      "title": "Bagaimna data dan sebagainya?",
-      "body": "Semua data telah disinkron dalam dukungan komunitas, semua dapat menggunakannya.",
-      "section": "Umum"
-    },
-    "q5": {
-      "title": "Bagaimana saya bisa mengetahui lebih lanjut?",
-      "body": "AlphaFlix memiliki Fluxer server yang bisa diakses melalui header dihalaman ini!",
-      "section": "Umum"
-    },
-    "q6": {
-      "title": "Apakah ada aplikasi AlphaFlix?",
-      "body": "Belum ada. Tapi bisa kamu install sebagai PWA (Progressive Web App). Pada IOS, menggunakan safari → Share → Tambahkan ke Home Screen. APK tersedia dalam Fluxer dan masih experiment, tidak direkomendasikan.",
-      "section": "Umum"
-    },
-    "q7": {
-      "title": "Bagaimana cara membuat akun?",
-      "body": "Tekan \"Sync to Cloud\" pada menu dropdown atau ke pengaturan untuk membuat dan sinkronsisasi akun.",
-      "section": "Umum"
-    },
-    "q9": {
-      "title": "Konten tidak ada / Bisakah saya request konten?",
-      "body": "Tidak—karena kami tidak menyimpan konten sendiri, kami tidak dapat menambahkan atau mengubah konten yang tersedia. Daftar konten didasarkan pada apa yang bisa diakses publik melalui fitur pencarian.",
-      "section": "Pencarian"
-    },
-    "q10": {
-      "title": "Saya tidak dapat menemukan film/tayangan yang dicari!",
-      "body": "Pencarian kami didukung oleh TMDB. Coba tekan ikon 🔎 untuk opsi pencarian lanjutan jika hasilnya kurang akurat.",
-      "section": "Pencarian"
-    },
-    "q11": {
-      "title": "Kenapa saya melihat layar hitam?",
-      "body": "Tampaknya file video tidak ada atau rusak. Coba mengganti sumber lain.",
-      "section": "Pemutaran"
-    },
-    "q12": {
-      "title": "Episode tidak sesuai.",
-      "body": "Beralih ke sumber berbeda. Kami tidak mengontrol konten maupun keakuratan episode.",
-      "section": "Pemutaran"
-    },
-    "q13": {
-      "title": "Kualitas video tidak sesuai yang diharapkan.",
-      "body": "Coba mengganti sumber. Kualitas bervariasi tergantung sumber; FED API biasanya tersedia banyak pilihan.",
-      "section": "Pemutaran"
-    },
-    "q14": {
-      "title": "4K tidak tersedia.",
-      "body": "Jika 4K tidak muncul, kemungkinan format tersebut tidak tersedia dari sumber tersebut.",
-      "section": "Pemutaran"
-    },
-    "q15": {
-      "title": "Kenapa tidak ada suara?",
-      "body": "Pastikan perangkat kamu tidak dalam mode senyap dan coba beralih ke sumber lain. Masalah audio mungkin hanya terjadi pada sumber tertentu.",
-      "section": "Pemutaran"
-    },
-    "q16": {
-      "title": "Video terlihat memiliki warna yang tidak normal atau tampak pudar.",
-      "body": "Bisa jadi karena file rusak atau video HDR. Pastikan perangkat kamu mendukung HDR, atau coba ganti sumber.",
-      "section": "Pemutaran"
-    },
-    "q17": {
-      "title": "Saya mengalami gangguan visual.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "Tentang AlphaFlix"
-  },
   "actions": {
+    "cancel": "Membatalkan",
+    "confirm": "Mengonfirmasi",
     "copied": "Disalin",
-    "copy": "Salin",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "Salin"
   },
   "auth": {
+    "backendSelection": {
+      "active": "Aktif",
+      "confirm": "Mengonfirmasi",
+      "customBackend": "Bagian Belakang Kustom",
+      "customBackendPlaceholder": "https://",
+      "description": "Pilih server backend mana yang akan disambungkan",
+      "title": "Pilih Server Akun"
+    },
     "createAccount": "Belum memiliki akun? <0>Buat akun.</0>",
-    "deviceNameLabel": "Nama perangkat",
-    "deviceNamePlaceholder": "Perangkat personal",
+    "generate": {
+      "custom": "Kebiasaan",
+      "customPassphraseLabel": "Frasa Sandi Khusus",
+      "customPassphrasePlaceholder": "Masukkan frasa sandi khusus Anda",
+      "description": "Kombinasi kata ini berfungsi sebagai nama pengguna sekaligus kata sandi anda. Pastikan untuk menyimpannya dengan aman karena anda memerlukannya untuk masuk ke akun anda",
+      "invalidPassphraseCharacters": "Karakter frasa sandi tidak valid. Hanya huruf bahasa Inggris, angka 1-10, dan simbol normal yang diperbolehkan.",
+      "next": "Saya sudah menyimpan kombinasi kata",
+      "passphraseFrameLabel": "Kombinasi kata",
+      "passphraseTooShort": "Frasa sandi harus terdiri dari minimal 8 karakter.",
+      "title": "Kombinasi kata Anda",
+      "useCustomPassphrase": "Gunakan Frasa Sandi Khusus",
+      "usePasskeyInstead": "Gunakan kunci sandi sebagai gantinya"
+    },
+    "hasAccount": "Sudah memiliki akun? <0>Masuk disini.</0>",
+    "inviteCodeInvalidError": "Kode undangan tidak valid (ID Pengguna tidak ditemukan)",
     "inviteCodeLabel": "Kode Undangan",
     "inviteCodePlaceholder": "Masukkan ID Pengguna teman",
     "inviteCodeRequiredError": "Kode undangan wajib diisi",
-    "inviteCodeInvalidError": "Kode undangan tidak valid (ID Pengguna tidak ditemukan)",
-    "generate": {
-      "description": "Kombinasi kata ini berfungsi sebagai nama pengguna sekaligus kata sandi anda. Pastikan untuk menyimpannya dengan aman karena anda memerlukannya untuk masuk ke akun anda",
-      "next": "Saya sudah menyimpan kombinasi kata",
-      "passphraseFrameLabel": "Kombinasi kata",
-      "title": "Kombinasi kata Anda",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "Sudah memiliki akun? <0>Masuk disini.</0>",
     "login": {
       "description": "Mohon masukkan kombinasi kata anda untuk masuk ke akun Anda",
-      "deviceLengthError": "Mohon masukkan nama perangkat",
-      "passphraseLabel": "12 kombinasi kata unik",
-      "passphrasePlaceholder": "Kombinasi kata",
-      "submit": "Masuk",
-      "title": "Masuk ke akun Anda",
-      "validationError": "Kombinasi kata salah atau tidak lengkap",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "Nama panggilan",
+      "nicknameNotFound": "Nama panggilan tidak ditemukan",
       "nicknamePlaceholder": "Masukkan nama panggilan Anda",
+      "nicknameRequired": "Nama panggilan diperlukan",
+      "noBackendUrl": "Tidak ada URL ujung belakang",
+      "or": "or",
+      "passwordIncorrect": "Kata sandi salah",
       "passwordLabel": "Kata sandi",
       "passwordPlaceholder": "Masukkan kata sandi Anda",
-      "nicknameRequired": "Nama panggilan diperlukan",
       "passwordRequired": "Kata sandi diperlukan",
-      "nicknameNotFound": "Nama panggilan tidak ditemukan",
-      "passwordIncorrect": "Kata sandi salah"
+      "submit": "Masuk",
+      "title": "Masuk ke akun Anda",
+      "usePasskey": "Gunakan kunci sandi",
+      "validationError": "Kombinasi kata salah atau tidak lengkap"
     },
     "register": {
+      "confirmPasswordLabel": "Konfirmasi Kata Sandi",
+      "confirmPasswordPlaceholder": "Konfirmasikan kata sandi Anda",
       "information": {
         "color1": "Warna profil pertama",
         "color2": "Warna profil kedua",
@@ -195,39 +61,27 @@
         "next": "Berikutnya",
         "title": "Informasi akun"
       },
-      "passwordInput": {
-        "title": "Buat login Anda",
-        "description": "Pilih nama panggilan dan kata sandi. Kata sandi Anda berfungsi sebagai frasa sandi yang aman, jadi pastikan Anda mengingatnya!"
-      },
       "nicknameLabel": "Nama panggilan",
       "nicknamePlaceholder": "Pilih nama panggilan yang unik",
       "nicknameTaken": "Nama panggilan sudah dipakai",
+      "passwordInput": {
+        "description": "Pilih nama panggilan dan kata sandi. Kata sandi Anda berfungsi sebagai frasa sandi yang aman, jadi pastikan Anda mengingatnya!",
+        "title": "Buat login Anda"
+      },
       "passwordLabel": "Kata sandi",
-      "passwordPlaceholder": "Buat kata sandi (digunakan sebagai frasa sandi Anda)",
-      "passwordWeak": "Kata sandi minimal harus 8 karakter dengan huruf dan angka",
       "passwordMismatch": "Kata sandi tidak cocok",
-      "confirmPasswordLabel": "Konfirmasi Kata Sandi",
-      "confirmPasswordPlaceholder": "Konfirmasikan kata sandi Anda"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "Buat kata sandi (digunakan sebagai frasa sandi Anda)",
+      "passwordWeak": "Kata sandi minimal harus 8 karakter dengan huruf dan angka"
     },
     "trust": {
       "failed": {
         "text": "Apakah Anda mengkonfigurasi server dengan benar?",
         "title": "Gagal terhubung dengan server"
       },
-      "noHostTitle": "Server belum dikonfigurasi!",
-      "noHost": "Server belum dikonfigurasi, maka dari itu Anda tidak dapat membuat akun",
       "host": "Anda ingin terhubung ke <0>{{hostname}}</0> - mohon konfirmasi Anda mempercayai server ini sebelum Anda membuat akun",
       "no": "Kembali",
+      "noHost": "Server belum dikonfigurasi, maka dari itu Anda tidak dapat membuat akun",
+      "noHostTitle": "Server belum dikonfigurasi!",
       "title": "Apakah Anda mempercayai server ini?",
       "yes": "Saya percaya server ini"
     },
@@ -235,14 +89,88 @@
       "description": "Mohon masukkan kombinasi kata pribadi Anda sebelumnya untuk mengonfirmasi bahwa Anda telah menyimpannya untuk melanjutkan proses pembuatan akun",
       "invalidData": "Data tidak valid",
       "noMatch": "Kombinasi kata tidak cocok",
-      "passphraseLabel": "12 kombinasi kata Anda",
       "recaptchaFailed": "Validasi reCaptcha gagal",
       "register": "Buat akun",
-      "title": "Konfirmasi kombinasi kata Anda",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "Konfirmasi kombinasi kata Anda"
     }
+  },
+  "details": {
+    "airs": "mengudara",
+    "collection": {
+      "movie": "Film",
+      "movies": "Film",
+      "rating": "Peringkat",
+      "releaseDate": "Tanggal Rilis",
+      "sortBy": "Urutkan berdasarkan"
+    },
+    "endsAt": "Berakhir pada {{time}}",
+    "episode": "Episode",
+    "episodes": "Episode",
+    "imdb": "Lihat di IMDb",
+    "language": "Bahasa:",
+    "play": "Bermain",
+    "rating": "Peringkat:",
+    "releaseDate": "Tanggal Rilis:",
+    "resume": "Melanjutkan",
+    "runtime": "Waktu tayang:",
+    "season": "Musim",
+    "seasons": "Musim/detik",
+    "similar": "Serupa",
+    "tmdb": "Lihat di TMDB",
+    "trailers": "Trailer",
+    "watched": "Menonton {{watched}} dari {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Semua Daftar Film",
+    "carousel": {
+      "change": "Mengubah",
+      "more": "Lihat lebih banyak",
+      "title": {
+        "4kReleases": "Rilis 4K",
+        "editorPicksMovies": "Editor Memilih Film",
+        "editorPicksShows": "Pertunjukan Pilihan Editor",
+        "forYou": "Untukmu",
+        "inCinemas": "Di Bioskop",
+        "latestReleases": "Rilis Terbaru",
+        "latestTVReleases": "Acara TV Terbaru",
+        "movies": "{{category}} Film",
+        "moviesOn": "Film di {{provider}}",
+        "onTheAir": "Di Udara",
+        "popular": "Paling Populer",
+        "recommended": "Karena Anda Menonton: {{title}}",
+        "top10": "10 teratas",
+        "topRated": "Nilai Tertinggi",
+        "trending": "Sedang Tren Sekarang",
+        "tvshows": "{{category}} Pertunjukan",
+        "tvshowsOn": "Tayang di {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Info Lebih Lanjut",
+      "playNow": "Mainkan Sekarang"
+    },
+    "filters": {
+      "country": "Negara"
+    },
+    "page": {
+      "back": "Kembali",
+      "loading": "Memuat...",
+      "loadMore": "Muat lebih banyak",
+      "title": "Temukan Film & TV"
+    },
+    "scrollToTop": "Kembali ke atas",
+    "tabs": {
+      "movies": "Film",
+      "top10": "10 teratas",
+      "tvshows": "Acara TV"
+    },
+    "viewLists": "Lihat Semua Daftar Film"
+  },
+  "downtimeNotice": {
+    "badge": "Masalah",
+    "goHome": "Pulang",
+    "message": "AlphaFlix kembali mengalami masalah dengan beberapa penyedia, jika Anda tidak dapat menemukan atau memutar acara, harap ubah sumbernya. Harapkan kesalahan ini terus berlanjut sepanjang waktu di bawah ini.",
+    "title": "Masalah penyedia"
   },
   "errors": {
     "badge": "Terjadi masalah",
@@ -257,160 +185,154 @@
       "disclaimerText": "AlphaFlix tidak menyimpan berkas media apapun, aplikasi ini hanya menampilkan tautan dari pihak ketiga. Sengketa hukum harus diajukan langsung kepada penyedia pihak ketiga. AlphaFlix tidak bertanggung jawab atas berkas media yang ditampilkan oleh penyedia pihak ketiga."
     },
     "links": {
-      "fluxer": "Fluxer",
-      "legal": "Legal / DMCA",
-      "github": "GitHub",
-      "twitter": "Twitter",
-      "funding": "Support us"
+      "fluxer": "fluks",
+      "funding": "Dukung kami",
+      "github": "GitHub"
     },
     "tagline": "Tonton serial televisi dan film favorit anda dengan aplikasi streaming sumber terbuka ini."
   },
   "global": {
-    "name": "AlphaFlix",
-    "pages": {
-      "about": "Tentang",
-      "legal": "Legal / DMCA",
-      "discover": "Discover",
-      "support": "Support",
-      "login": "Masuk",
-      "onboarding": "Penyiapan",
-      "pagetitle": "{{title}} - AlphaFlix",
-      "register": "Daftar",
-      "settings": "Pengaturan",
-      "migration": "Migrate Account",
-      "jip": "Jip"
-    },
     "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
+      "cancel": "Membatalkan",
+      "clickToEdit": "Klik pada lencana kunci untuk mengeditnya",
       "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
+        "showsOnly": "Hanya menunjukkan"
       },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "conflict": "konflik",
+      "conflicts": "konflik",
+      "detected": "terdeteksi",
+      "editInSettings": "Edit perintah keyboard dari pengaturan",
+      "groups": {
+        "audioVideo": "Audio & Video",
+        "interface": "Antarmuka",
+        "jumpToPosition": "Lompat ke Posisi",
+        "subtitlesAccessibility": "Subtitle & Aksesibilitas",
+        "videoPlayback": "Pemutaran Video"
+      },
+      "none": "Tidak ada",
+      "numberKeySeeking": "Pencarian kemajuan yang penting",
+      "numberKeySeekingDescription": "Gunakan tombol angka 0-9 untuk mencari posisi tertentu dalam video. 0 menuju awal, 1-8 melompat ke 10%-80%, dan 9 menuju 90%.",
+      "pressKey": "Tekan sebuah tombol...",
+      "resetAllToDefault": "Atur Ulang Semua ke Default",
+      "resetToDefault": "Atur ulang ke default",
+      "save": "Menyimpan",
+      "saveChanges": "Simpan Perubahan",
+      "shortcuts": {
+        "barrelRoll": "Lakukan gerakan barel! 🌀",
+        "closeOverlay": "Tutup hamparan/modal",
+        "decreaseVolume": "Kurangi volumenya",
+        "increaseVolume": "Tingkatkan volume",
+        "jumpTo0": "Lompat ke 0% (awal)",
+        "jumpTo9": "Lompat ke 90%",
+        "mute": "Bisukan/suarakan",
+        "nextEpisode": "Episode selanjutnya",
+        "playPause": "Putar/jeda (atau tahan kecepatan 2x saat diaktifkan)",
+        "playPauseAlt": "Putar/jeda",
+        "previousEpisode": "Episode sebelumnya",
+        "randomCaption": "Pilih keterangan acak dari bahasa yang terakhir digunakan",
+        "skipBackward1": "Lewati mundur 1 detik",
+        "skipBackward10": "Lewati mundur 10 detik",
+        "skipBackward5": "Lewati mundur 5 detik",
+        "skipForward1": "Lewati ke depan 1 detik",
+        "skipForward10": "Lewati ke depan 10 detik",
+        "skipForward5": "Lewati ke depan 5 detik",
+        "syncSubtitlesEarlier": "Sinkronkan subtitle sebelumnya (-0,5 detik)",
+        "syncSubtitlesLater": "Sinkronkan subtitle nanti (+0,5 detik)",
+        "toggleCaptions": "Alihkan teks",
+        "toggleFullscreen": "Beralih ke layar penuh",
+        "toggleNativeSubtitles": "Alihkan subtitle asli"
+      },
+      "subtitle": "Tahan ` untuk menampilkan bantuan ini kapan saja",
+      "title": "Pintasan Papan Ketik"
+    },
+    "name": "AlfaFlix",
+    "pages": {
+      "discover": "Menemukan",
+      "login": "Masuk",
+      "migration": "Migrasi Akun",
+      "pagetitle": "{{title}} - AlfaFlix",
+      "register": "Daftar",
+      "settings": "Pengaturan"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Penanda",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "Membatalkan",
+        "description": "Edit detail untuk bookmark ini",
+        "groupsLabel": "Grup",
+        "save": "Menyimpan",
+        "title": "Sunting Penanda",
+        "titleLabel": "Judul",
+        "titlePlaceholder": "Masukkan judul untuk bookmark Anda",
+        "yearLabel": "Tahun",
+        "yearPlaceholder": "Masukkan tahun untuk bookmark Anda"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "Belum ada grup",
+          "placeholderButton": "Tambahkan ke grup",
+          "removeAll": "Hapus semua",
+          "removeFromGroup": "Hapus dari grup"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "Ini akan mempengaruhi {{count}} bookmark",
+          "cancel": "Membatalkan",
+          "description": "Edit nama dan ikon grup bookmark Anda",
+          "nameLabel": "Nama grup",
+          "namePlaceholder": "Masukkan nama untuk grup Anda",
+          "save": "Menyimpan",
+          "title": "Sunting Grup"
+        },
+        "reorder": {
+          "button": "Susun ulang",
+          "cancel": "Membatalkan",
+          "description": "Seret dan lepas untuk menyusun ulang grup bookmark Anda",
+          "done": "Selesai",
+          "save": "Menyimpan",
+          "title": "Edit Pesanan Grup"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "Penanda",
+      "showAll": "Tunjukkan semuanya",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Default (Tanggal ditambahkan)",
+          "titleAsc": "Judul A-Z",
+          "titleDesc": "Judul Z-A",
+          "yearAsc": "Tanggal Rilis Terlama-Terbaru",
+          "yearDesc": "Tanggal Rilis Terbaru-Terlama"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "Lanjut menonton",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Default (Tanggal ditambahkan)",
+          "titleAsc": "Judul A-Z",
+          "titleDesc": "Judul Z-A",
+          "yearAsc": "Tanggal Rilis Terlama-Terbaru",
+          "yearDesc": "Tanggal Rilis Terbaru-Terlama"
         }
       }
     },
     "mediaList": {
       "stopEditing": "Berhenti menyunting"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "Hanya itu yang kami punya...",
+      "discover": "Menemukan",
+      "discoverMore": "Temukan lebih banyak",
+      "empty": {
+        "default": "Selamat datang, temukan media untuk ditonton di sini!",
+        "extra": [
+          "Tidak ada apa-apa di sini :(",
+          "Sangat kosong...",
+          "Kekosongan seperti itu.",
+          "Hai pengguna baru :3"
+        ]
+      },
       "failed": "Gagal menemukan media, coba lagi!",
       "loading": "Memuat...",
       "noResults": "Kami tidak dapat menemukan apapun :(",
@@ -420,44 +342,54 @@
           "Apa yang ingin kamu jelajahi?",
           "Ada apa di daftar tontonmu?",
           "Apa film favoritmu?",
-          "Apa serial favoritmu?"
+          "Apa serial favoritmu?",
+          "Apa yang ada dalam daftar pantauan Anda hari ini?",
+          "Apa kabar hari ini?",
+          "Sayang sekali situs ini tidak pernah berfungsi...",
+          "Bukankah AlphaFlix yang terbaik?",
+          ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "Welcome, find media to watch here!",
-        "extra": [
-          "There's nothing here :(",
-          "So empty...",
-          "Such emptiness.",
-          "Hi new user :3"
-        ]
-      },
-      "sectionTitle": "Hasil pencarian",
-      "discoverMore": "Discover more",
-      "discover": "Discover"
+      "sectionTitle": "Hasil pencarian"
     },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+    "support": {
+      "complete": "menyelesaikan",
+      "description": "AlphaFlix dijalankan dalam keadaan bingung, dan kami membutuhkan bantuan untuk menjaganya tetap bebas iklan! Jika Anda senang menggunakan AlphaFlix, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami.",
+      "donate": "Menyumbangkan",
+      "explanation": "Jika Anda tidak menggunakan ekstensi atau belum menyiapkan FED API, mungkin akan lebih sulit menemukan konten! Kami ingin memperbaikinya, tetapi menyediakan konten tanpa server yang mahal jauh lebih sulit. Jadi mohon, jika Anda senang menggunakan AlphaFlix, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami yang terus meningkat.",
+      "explanation2": "Jika Anda ingin info lebih lanjut, silakan bergabung dengan kami",
+      "fluxer": "fluks",
+      "label": "Pendanaan Proyek: ${{current}} / ${{goal}}",
+      "moreInfo": "Informasi lebih lanjut",
+      "thankYou": "Terima kasih atas dukungan Anda!",
+      "title": "AlphaFlix membutuhkan bantuan Anda!"
     },
     "titles": {
       "69": {
-        "default": "Up for something spicy?",
+        "default": "Ingin sesuatu yang pedas?",
         "extra": [
-          "Happy 69 day 😘!"
+          "Selamat hari ke-69 😘!"
         ]
       },
       "420": {
-        "default": "What would you like to watch this 4/20?",
+        "default": "Apa yang ingin Anda tonton pada 20/4 ini?",
         "extra": [
-          "Happy 4/20 🥳!"
+          "Selamat 20/4 🥳!"
         ]
       },
       "day": {
         "default": "Apa yang ingin anda tonton sore ini?",
         "extra": [
           "Merasa suka bertualang? Jurassic Park mungkin pilihan cocok untuk Anda."
+        ]
+      },
+      "halloween": {
+        "default": "Film seram apa yang ingin kamu tonton di Halloween kali ini?",
+        "extra": [
+          "Selamat Halloween! 🎃👻",
+          "Huuu! 👻",
+          "Menipu atau mengobati! 🍬",
+          "Itu Labu Hebat, Charlie Brown!"
         ]
       },
       "morning": {
@@ -471,304 +403,116 @@
         "extra": [
           "Capek? Saya dengar The Exocist bagus."
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "Baru-baru ini Ditonton",
+      "sectionTitle": "Tonton Sejarah"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
-    "unreleased": "Belum dirilis",
+    "episodeShort": "E",
+    "seasonUnwatched": "Yakin ingin menandai season ini sebagai belum ditonton?",
+    "seasonWatched": "Yakin ingin menandai season sebagai ditonton?",
     "types": {
       "movie": "Film",
       "show": "Serial TV"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "Belum dirilis"
   },
   "migration": {
-    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
-    "start": {
-      "title": "Migrate your data",
-      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
-      "options": {
-        "or": "or",
-        "direct": {
-          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
-          "title": "Direct migration",
-          "quality": "Easiest and fastest",
-          "action": "Transfer data"
-        },
-        "download": {
-          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-          "title": "Download data",
-          "quality": "More technical",
-          "action": "Download data"
-        },
-        "upload": {
-          "title": "Upload Data",
-          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-          "quality": "Restore from backup",
-          "action": "Upload Data"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Direct migration",
-      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
-      "backendLabel": "Destination Backend URL",
-      "recaptchaLabel": "ReCaptcha Key (Optional)",
-      "toggleLable": "Needs ReCaptcha?",
-      "status": {
-        "error": "Failed to migrate your data. 😿",
-        "success": "Your data has been migrated successfully! 🎉"
-      },
-      "button": {
-        "migrate": "Migrate",
-        "processing": "Processing...",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
-    },
+    "back": "Kembali",
     "download": {
-      "title": "Download data",
-      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-      "status": {
-        "error": "Failed to download your data. 😿",
-        "success": "Your data has been downloaded successfully! 🎉"
-      },
       "button": {
-        "download": "Download data",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
+        "download": "Unduh datanya",
+        "home": "Pulang"
+      },
+      "description": "Ini akan mengunduh data Anda ke perangkat Anda. Anda kemudian dapat mengunggahnya ke server baru atau menyimpannya untuk diamankan.",
+      "status": {
+        "error": "Gagal mengunduh data Anda. 😿",
+        "success": "Data Anda telah berhasil diunduh! 🎉"
+      },
+      "title": "Unduh datanya"
+    },
+    "loginRequired": "Anda harus masuk untuk memigrasikan data Anda! Silakan kembali dan login untuk melanjutkan.",
+    "preview": {
+      "downloadDescription": "Unduhan meliputi:",
+      "items": {
+        "bookmarks": "Media yang ditandai",
+        "progress": "Perhatikan kemajuannya",
+        "settings": "Pengaturan & Preferensi"
+      },
+      "uploadDescription": "Data yang akan diunggah:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "Unduh datanya",
+          "description": "Ini akan mengunduh data Anda ke perangkat Anda. Anda kemudian dapat mengunggahnya ke server baru atau menyimpannya untuk diamankan.",
+          "quality": "Lebih teknis",
+          "title": "Unduh datanya"
+        },
+        "or": "or",
+        "upload": {
+          "action": "Unggah Data",
+          "description": "Unggah file data Anda yang diekspor sebelumnya untuk memulihkan bookmark dan kemajuan Anda di akun ini.",
+          "quality": "Pulihkan dari cadangan",
+          "title": "Unggah Data"
+        }
+      },
+      "title": "Migrasikan data Anda"
     },
     "upload": {
-      "title": "Upload data",
-      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-      "status": {
-        "processing": "Processing data...",
-        "error": "Failed to upload your data. 😿",
-        "success": "Your data has been uploaded successfully! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Select the file you want to upload",
-        "select": "Select file",
-        "change": "Change file",
-        "name": "File name"
-      },
-      "exportedOn": "Exported on",
-      "previewTitle": "Preview:",
       "button": {
-        "import": "Import data",
-        "processing": "Processing...",
-        "success": "Import complete",
-        "home": "Continue to home",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Go back"
+        "home": "Lanjutkan ke rumah",
+        "import": "Impor data",
+        "processing": "Pengolahan...",
+        "saveLocal": "Simpan secara lokal"
+      },
+      "description": "Unggah file data Anda yang diekspor sebelumnya untuk memulihkan bookmark dan kemajuan Anda di akun ini.",
+      "exportedOn": "Diekspor pada",
+      "file": {
+        "change": "Ubah berkas",
+        "description": "Pilih file yang ingin Anda unggah",
+        "select": "Pilih berkas"
+      },
+      "previewTitle": "Pratinjau:",
+      "status": {
+        "error": "Gagal mengunggah data Anda. 😿",
+        "processing": "Mengolah data...",
+        "success": "Data Anda telah berhasil diunggah! 🎉",
+        "successLocal": "Data Anda telah disimpan secara lokal! 🎉"
+      },
+      "title": "Unggah data"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "Periksa koneksi internet Anda"
     },
+    "install": {
+      "genericGuide": "Browser Anda tidak mendukung perintah pemasangan PWA otomatis.\nAnda masih dapat menginstal menggunakan menu browser (misalnya: 'Instal aplikasi', 'Buat pintasan', atau 'Tambahkan ke Dock/Layar Beranda').",
+      "iosSafariGuide": "Untuk menginstal AlphaFlix sebagai aplikasi:\n\n1. Ketuk tombol Bagikan (persegi dengan panah).\n2. Pilih 'Tambahkan ke Layar Beranda'.\n3. Ketuk Tambah."
+    },
     "menu": {
-      "about": "Tentang kami",
+      "desktop": "Pengaturan Aplikasi",
       "logout": "Keluar",
       "register": "Sinkronkan ke Cloud",
-      "settings": "Pengaturan",
-      "support": "Bantuan",
-      "discover": "Discover",
-      "development": "Development",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "Untuk menginstal AlphaFlix sebagai aplikasi:\n\n1. Ketuk tombol Bagikan (persegi dengan panah).\n2. Pilih 'Tambahkan ke Layar Beranda'.\n3. Ketuk Tambah.",
-      "genericGuide": "Browser Anda tidak mendukung perintah pemasangan PWA otomatis.\nAnda masih dapat menginstal menggunakan menu browser (misalnya: 'Instal aplikasi', 'Buat pintasan', atau 'Tambahkan ke Dock/Layar Beranda')."
+      "settings": "Pengaturan"
     }
   },
   "notFound": {
     "badge": "Tidak ditemukan",
     "goHome": "Kembali",
-    "reloadButton": "Try again",
     "message": "Kami sudah mencari dimana-mana: di bawah tempat sampah, di lemari, di belakang server proxy, tetapi tidak dapat menemukan halaman yang Anda cari.",
+    "reloadButton": "Coba lagi",
     "title": "Gagal menemukan halaman"
-  },
-  "downtimeNotice": {
-    "badge": "Issues",
-    "goHome": "Go home",
-    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
-    "title": "Provider issues"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Batal",
-      "confirm": "Gunakan pengaturan bawaan",
-      "description": "Pengaturan bawaan tidak memiliki streaming terbaik dan bisa menjadi sangat lambat.",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Apa Anda yakin?"
-    },
-    "extension": {
-      "back": "Kembali",
-      "explainer": "Menggunakan ekstensi browser, Anda dapat mendapatkan streaming terbaik yang kami tawarkan. Dengan instalasi sederhana.",
-      "explainerIos": "Sayangnya, ekstensi browser tidak didukung di iOS, Tekan <bold>Kembali</bold> untuk memilih opsi lain.",
-      "extensionHelp": "Jika Anda telah menginstal ekstensi tetapi tidak terdeteksi, <bold>buka ekstensi melalui menu ekstensi browser Anda</bold> dan ikuti instruksi di layar.",
-      "linkChrome": "Instal ekstensi Chrome",
-      "linkFirefox": "Instal ekstensi Firefox",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Terinstal di Chrome tetapi situs tidak mendeteksinya? Coba muat ulang halaman!",
-      "notDetectingAction": "Muat ulang halaman",
-      "status": {
-        "disallowed": "Ekstensi tidak diaktifkan untuk halaman ini",
-        "disallowedAction": "Aktifkan ekstensi",
-        "failed": "Gagal meminta status",
-        "loading": "Menunggu Anda menginstal ekstensi",
-        "outdated": "Versi ekstensi terlalu tua",
-        "success": "Ekstensi berkerja sesuai harapan!"
-      },
-      "submit": "Lanjutkan",
-      "title": "Mari mulai dengan ekstensi"
-    },
-    "proxy": {
-      "back": "Kembali",
-      "explainer": "Menggunakan metode proxy, Anda dapat mendapatkan streaming berkualitas baik dengan membuat layanan proxy mandiri.",
-      "input": {
-        "errorConnection": "Tidak dapat terhubung ke proxy",
-        "errorInvalidUrl": "URL tidak valid",
-        "errorNotProxy": "Mengharapkan proxy tapi menerima situs",
-        "label": "URL proxy",
-        "placeholder": "https://"
-      },
-      "link": "Belajar cara membuat proxy",
-      "submit": "Submit proxy",
-      "title": "Mari buat proxy baru"
-    },
-    "start": {
-      "explainer": "Untuk mendapatkan streaming terbaik, Anda perlu memilih metode streaming yang Anda ingin gunakan.",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "or",
-        "default": {
-          "text": "Saya tidak menginginkan streaming kualitas baik, <0 /> <1>gunakan pengaturan bawaan</1>"
-        },
-        "extension": {
-          "action": "Instal ekstensi",
-          "description": "Instal ekstensi browser dan dapatkan akses ke sumber terbaik.",
-          "quality": "Kualitas terbaik",
-          "title": "Ekstensi browser"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Atur proxy",
-          "description": "Atur proxy dalam hanya 5 menit dan dapatkan akses ke sumber terbaik.",
-          "quality": "Kualitas baik",
-          "title": "Custom proxy"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Let's get you setup with AlphaFlix 🥳"
+      "cancel": "Batal"
     }
   },
   "overlays": {
@@ -780,24 +524,45 @@
       "short": "Kembali"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "Casting ke perangkat..."
+      "device": "perangkat",
+      "to": "Mentransmisi ke {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Mengunduh lebih banyak RAM...",
+      "2": "Mengubah kafein menjadi konten...",
+      "3": "Mengajari hamster berlari lebih cepat...",
+      "4": "Meyakinkan elektron untuk bergerak lebih cepat...",
+      "5": "Hampir sampai... kata setiap bilah pemuatan...",
+      "6": "Menemukan remote... tunggu, masalah salah...",
+      "7": "Menghitung mundur dari tak terhingga...",
+      "8": "Mensimulasikan masa depan...",
+      "9": "Menonton video kucing...",
+      "10": "Terganggu oleh GIF kucing...",
+      "11": "Harap tunggu sementara pekerja magang mengisi ulang kopinya...",
+      "12": "Memeriksa apakah sudah terpasang...",
+      "13": "Mematikannya dan menghidupkannya lagi...",
+      "14": "Jangan panik...",
+      "15": "Musim dingin akan datang...",
+      "16": "Masuk ke Skynet...",
+      "17": "Semua browser Anda adalah milik kami...",
+      "18": "Mencari penggerak ketidakmungkinan yang tak terbatas...",
+      "19": "Menemukan cara baru untuk membuat Anda menunggu...",
+      "20": "Waktu Anda sangat penting bagi kami. Harap tunggu sementara kami mengabaikan Anda...",
+      "21": "Masih lebih cepat dari Pembaruan Windows...",
+      "22": "Mengapa kamu tidak mengambil sandwich?"
     },
     "menus": {
+      "audio": {
+        "default": "Bawaan"
+      },
       "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "Tautan unduhan diambil langsung dari penyedia pihak ketiga. Aplikasi ini tidak memiliki kendali bagaimana unduhan disediakan.",
+        "button": "Coba unduh",
         "copyHlsPlaylist": "Salin tautan daftar putar HLS",
+        "disclaimer": "Tautan unduhan diambil langsung dari penyedia pihak ketiga. Aplikasi ini tidak memiliki kendali bagaimana unduhan disediakan.",
         "downloadSubtitle": "Unduh subtitle saat ini",
         "downloadVideo": "Unduh media",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "Unduhan didapatkan langsung dari penyedia. AlphaFlix tidak memiliki kendali bagaimana unduan disediakan.<br /><br />Harap diperhatikan bahwa Anda mengunduh daftar putar HLS, <bold>ini tidak direkomendasikan untuk diunduh jika Anda tidak terbiasa dengan format streaming tingkat lanjut</bold>Coba sumber berbeda untuk format berbeda.",
+        "hlsDownloader": "Atau, buka situs web pengunduh <0>hls</0> dan tempelkan URL daftar putar dari bawah.",
         "onAndroid": {
           "1": "Untuk mengunduh di Android, klik tombol unduh, lalu di halaman baru <bold>klik dan tahan</bold> pada video, lalu pilih <bold>simpan</bold>.",
           "shortTitle": "Unduh / Android",
@@ -819,57 +584,47 @@
         "button": "Episode",
         "emptyState": "Tidak ada episode di season ini, periksa kembali nanti!",
         "episodeBadge": "E{{episode}}",
+        "favorites": "Favorit",
         "loadingError": "Gagal memuat season",
         "loadingList": "Memuat...",
         "loadingTitle": "Memuat...",
-        "unairedEpisodes": "Satu atau lebih episode dalam season ini telah dinonaktifkan karena mereka belum ditayangkan.",
-        "seasons": "Seasons",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "markAsFavorite": "Tandai sebagai favorit",
+        "markAsUnwatched": "Tandai sebagai belum ditonton",
+        "markAsWatched": "Tandai sebagai telah ditonton",
+        "noFavorites": "Belum ada episode favorit. Bintangi episode untuk menambahkannya ke favorit Anda!",
+        "showLess": "Tampilkan lebih sedikit",
+        "showMore": "Tampilkan lebih banyak",
         "specials": "Spesial"
       },
       "playback": {
-        "speedLabel": "Kecepatan pemutar",
-        "title": "Pengaturan pemutar",
-        "disabled": "(Disabled in watch party)",
+        "disabled": "(Dinonaktifkan di pesta jaga)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "Kecepatan pemutar",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Pengaturan pemutar"
       },
       "quality": {
+        "auto": "Mobil",
         "automaticLabel": "Otomatis",
         "hint": "Anda dapat mencoba <0>mengganti sumber</0> untuk mendapatkan opsi kualitas yang berbeda.",
         "iosNoQuality": "Karena keterbatasan dari Apple, opsi kualitas pada sumber ini tidak tersedia untuk iOS. Anda dapat mencoba <0>mengganti sumber</0> untuk mendapatkan opsi kualitas yang berbeda.",
-        "title": "Kualitas",
-        "auto": "Auto"
+        "title": "Kualitas"
       },
       "settings": {
+        "audioItem": "Audio",
         "downloadItem": "Unduh",
         "enableSubtitles": "Aktifkan subtitle",
-        "experienceSection": "Pengaturan tambahan",
         "playbackItem": "Pengaturan pemutar",
-        "audioItem": "Audio",
         "qualityItem": "Kualitas",
         "sourceItem": "Sumber media",
-        "subtitleItem": "Pengaturan subtitle",
-        "videoSection": "Pengaturan media"
+        "subtitleItem": "Pengaturan subtitle"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "Terjadi galat saat mencoba mencari media, mohon pilih sumber lain.",
           "title": "Gagal memuat data"
         },
+        "findNextSource": "Temukan sumber berikutnya",
         "noEmbeds": {
           "text": "Kami tidak dapat menemukan tautan, mohon pilih sumber lain.",
           "title": "Tautan tidak ditemukan"
@@ -879,83 +634,69 @@
           "title": "Tidak ada media"
         },
         "title": "Sumber",
-        "unknownOption": "Tidak diketahui",
-        "findNextSource": "Find next source"
+        "unknownOption": "Tidak diketahui"
       },
       "subtitles": {
+        "autoSelectChoice": "Pilih otomatis",
+        "autoSelectDifferentChoice": "Ketuk lagi untuk memilih subtitle yang berbeda secara otomatis",
+        "clearSecondary": "Hapus subtitle sekunder",
         "customChoice": "Jatuhkan atau unggah berkas",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "Sesuaikan",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "Melihat keterangan",
+        "delayLate": "Mendengar audio",
+        "doubleClickToCopy": "Klik dua kali untuk menyalin data subtitle",
+        "dropSubtitleFile": "Letakkan file subtitle di sini! >_<",
+        "dualSub": "Subtitle Ganda",
+        "dualSubDesc": "Pilih format yang sama (SRT, VTT...) & penyedia (OpenSubs...) untuk sinkronisasi terbaik",
+        "dualSubHint": "Pilih bahasa untuk subtitle sekunder (ditampilkan di atas bahasa utama)",
+        "empty": "Tidak ada subtitle yang disediakan untuk ini.",
+        "loadingExternal": "Memuat subtitle eksternal...",
+        "loadingExternalProgress": "Memuat subtitle eksternal... ({{progress}}%)",
+        "matchScoreLabel": "Cocok ~{{score}}%",
+        "notFound": "Tak satu pun dari opsi yang tersedia cocok dengan permintaan Anda",
         "offChoice": "Matikan",
-        "onChoice": "On",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Source Subtitles",
-        "OpenSubtitlesChoice": "External Subtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "Tempelkan data subtitle",
+        "previewLabel": "Pratinjau subtitel:",
+        "primary": "Utama",
+        "refresh": "Segarkan Subtitel Eksternal",
+        "refreshing": "Menyegarkan...",
+        "secondary": "Sekunder",
+        "selectingSecondary": "Memilih subtitle sekunder",
         "settings": {
           "backlink": "Subtitle khusus",
           "delay": "Penundaan subtitle",
           "fixCapitals": "Perbaiki kapitalisasi"
         },
         "title": "Subtitle",
-        "unknownLanguage": "Tidak diketahui",
-        "dropSubtitleFile": "Drop subtitle file here! >_<",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "There are no provided subtitles for this.",
-        "notFound": "None of the available options match your query",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "Salinan",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "Terjemahkan dari {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "Memuat subtitle eksternal... ({{progress}}%)",
-        "matchScoreLabel": "Cocok ~{{score}}%"
+        "unknownLanguage": "Tidak diketahui",
+        "useNativeSubtitles": "Subtitle video asli",
+        "useNativeSubtitlesDescription": "Siarkan subtitle untuk layar penuh asli dan PiP"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
+        "watchpartyItem": "Pesta Tontonan"
       }
     },
     "metadata": {
-      "api": {
-        "text": "Could not load API metadata, please check your internet connection.",
-        "title": "Failed to load API metadata"
-      },
-      "legal": {
-        "badge": "Removed",
-        "text": "This media is no longer available due to a takedown notice or copyright claim. 😨",
-        "title": "Media has been removed"
-      },
       "extensionPermission": {
-        "badge": "Permission Missing",
-        "button": "Use extension",
-        "text": "You have the browser extension, but we need your permission to get started using the extension. (¬_¬)",
-        "title": "Configure the extension"
+        "badge": "Izin Hilang",
+        "button": "Gunakan ekstensi",
+        "text": "Anda memiliki ekstensi browser, namun kami memerlukan izin Anda untuk mulai menggunakan ekstensi tersebut. (¬_¬)",
+        "title": "Konfigurasikan ekstensi"
       },
       "failed": {
         "badge": "Gagal",
         "homeButton": "Kembali",
         "text": "Tidak dapat memuat metadata dari TMDB. Mohon periksa apakah TMDB sedang nonaktif atau diblokir pada koneksi internet anda.",
         "title": "Gagal memuat metadata"
+      },
+      "legal": {
+        "badge": "DIHAPUS",
+        "text": "Media ini tidak lagi tersedia karena pemberitahuan penghapusan atau klaim hak cipta. 😨",
+        "title": "Media telah dihapus"
       },
       "notFound": {
         "badge": "Tidak ditemukan",
@@ -965,18 +706,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Replay",
       "next": "Episode selanjutnya",
-      "nextSeason": "Next season"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "Musim depan",
+      "replay": "Memutar ulang"
     },
     "playbackError": {
+      "autoResumeText": "Terjadi kesalahan saat mencoba memutar media 😖. Secara otomatis mencoba sumber lain...",
       "badge": "Galat pemutar",
+      "copyDebugInfo": "Salin info debug",
+      "debugInfo": "Periksa konsol untuk lebih jelasnya.",
       "errors": {
         "errorAborted": "Proses pemuatan media dibatalkan oleh permintaan penguna.",
         "errorDecode": "Meskipun sebelumnya media diputuskan dapat digunakan, terjadi masalah saat mencoba memutar berkas media, yang mengakibatkan terjadinya eror.",
@@ -984,226 +722,168 @@
         "errorNetwork": "Terjadi kesalahan pada jaringan yang menyebabkan media gagal dimuat, meskipun sebelumnya berhasil.",
         "errorNotSupported": "Berkas media atau objek penyedia media tidak didukung."
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "Kembali",
-      "resumeButton": "Try next sources",
+      "resumeButton": "Coba sumber berikutnya",
       "text": "Terjadi masalah saat mencoba memutar media. Mohon coba lagi.",
       "title": "Gagal memutar media!"
     },
+    "resume": {
+      "description": "Episode ini {{percentage}}% ditonton",
+      "restart": "Mulai ulang",
+      "resume": "Melanjutkan",
+      "title": "Lanjutkan menonton?"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "Ekstensi dinonaktifkan",
+        "enableExtension": "Aktifkan ekstensi",
+        "homeButton": "Pulang",
+        "text": "Anda telah menginstal ekstensi AlphaFlix. Untuk mulai menggunakannya, Anda perlu mengaktifkan ekstensi untuk situs ini.",
+        "title": "Harap aktifkan ekstensi"
+      },
       "items": {
-        "failure": "Terjadi masalah",
-        "timeout": "Timed out (15s)",
-        "notFound": "Media tidak ditemukan",
         "pending": "Mencari media..."
       },
       "notFound": {
         "badge": "Tidak ditemukan",
         "detailsButton": "Lihat detail",
+        "discoverButton": "Temukan lebih banyak",
         "homeButton": "Kembali",
-        "discoverButton": "Discover more",
         "text": "Kami sudah mencari ke semua penyedia yang kami miliki dan gagal menemukan media yang anda cari! Kami tidak menyimpan berkas media dan tidak memiliki kontrol atas apa yang tersedia. Periksa tombol 'Lihat detail' dibawah ini untuk informasi lebih lanjut.",
-        "title": "Kami tidak dapat menemukannya",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "Extension disabled",
-        "homeButton": "Go home",
-        "enableExtension": "Enable extension",
-        "title": "Please enable the extension",
-        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site."
+        "title": "Kami tidak dapat menemukannya"
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "Ketuk ikon roda gigi untuk berpindah sumber!",
+        "2": "Ketuk judul untuk menyalin tautan!",
+        "3": "Ketuk dan tahan atau tahan SHIFT untuk menampilkan tombol layar lebar, bukan layar penuh!",
+        "4": "Beberapa sumber bekerja lebih baik daripada yang lain!",
+        "5": "Dapatkan ekstensi untuk lebih banyak sumber!",
+        "6": "Tahan bookmark untuk mengedit atau menghapusnya!",
+        "7": "Tahan SHIFT dan ketuk judul untuk menyalin tautan dengan waktu!",
+        "8": "Tetapkan warna subtitle khusus!",
+        "9": "Tahan ` untuk melihat pintasan keyboard!"
       }
+    },
+    "segment": {
+      "credits": "Kredit",
+      "intro": "Pendahuluan",
+      "recap": "Rekap"
+    },
+    "skipTime": {
+      "confidence": "kepercayaan diri",
+      "connectApiKeyMessage": "Untuk mengirimkan segmen baru, masukkan kunci API TheIntroDB Anda di pengaturan koneksi",
+      "credits": "Lewati Kredit",
+      "endOfVideo": "Akhir",
+      "endsAt": "Berakhir pada {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Membatalkan",
+          "description": "Berkontribusi pada TheIntroDB dengan mengirimkan stempel waktu segmen yang akurat. Semua kiriman diterima oleh komunitas sebelum dipublikasikan.",
+          "endTimeLabel": "Akhir",
+          "error": {
+            "endTime": "Waktu berakhir diperlukan",
+            "mediaInfo": "Informasi media tidak tersedia",
+            "segment": "Tidak ada segmen yang dipilih",
+            "startTime": "Waktu mulai diperlukan",
+            "submission": "Terjadi kesalahan saat mengirimkan stempel waktu",
+            "tidbKey": "Kunci API TIDB tidak disetel"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minimal 5 detik jika akhir disediakan. Dapat meluas ke ujung media.",
+              "endDesc": "Opsional - biarkan kosong jika kredit habis hingga akhir file.",
+              "excludeDesc": "Kecualikan adegan pertengahan kredit atau pasca kredit; hanya daftar kredit utama.",
+              "startDesc": "Wajib - saat kredit penutup dimulai (misalnya saat teks kredit pertama muncul).",
+              "whenToTitle": "Panduan stempel waktu kredit:"
+            },
+            "durationDesc": "Min 5 detik jika akhir disediakan",
+            "durationLabel": "Lamanya:",
+            "endDesc": "Opsional - kosong jika meluas hingga akhir",
+            "endLabel": "Akhir:",
+            "excludeDesc": "Adegan pasca-kredit",
+            "excludeLabel": "Mengecualikan:",
+            "intro": {
+              "durationDesc": "Kebanyakan intro berdurasi 30–90 detik. Minimal 5 detik jika awal dan akhir disetel.",
+              "endDesc": "Wajib - saat intro berakhir (biasanya saat kartu judul atau episode utama dimulai).",
+              "excludeDesc": "Jangan sertakan adegan pembuka dingin atau adegan pra-intro; hanya urutan judul utama.",
+              "startDesc": "Opsional - biarkan kosong jika intro dimulai di awal episode.",
+              "whenToTitle": "Panduan stempel waktu intro:"
+            },
+            "preview": {
+              "durationDesc": "Durasi pratinjau bervariasi. Minimal 5 detik.",
+              "endDesc": "Opsional - biarkan kosong jika pratinjau berakhir di akhir media.",
+              "excludeDesc": "Pratinjau biasanya berdurasi 15-90 detik di akhir episode untuk meninjau episode berikutnya.",
+              "startDesc": "Wajib - saat pratinjau dimulai (misalnya saat teks pratinjau muncul).",
+              "whenToTitle": "Panduan pratinjau cap waktu:"
+            },
+            "recap": {
+              "durationDesc": "Panjang rekap bervariasi. Minimal 5 detik jika awal dan akhir disetel.",
+              "endDesc": "Wajib - saat rekap berakhir dan konten baru dimulai.",
+              "excludeDesc": "Hanya segmen \"sebelumnya aktif\" atau rekap; jangan sertakan intro atau adegan baru.",
+              "startDesc": "Opsional - biarkan kosong jika rekap dimulai di awal episode.",
+              "whenToTitle": "Panduan rekap stempel waktu:"
+            },
+            "startDesc": "Wajib - saat kredit mulai bergulir",
+            "startLabel": "Awal:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 atau 210 (biarkan kosong sampai media habis)",
+              "intro": "3:30 atau 210 (wajib)",
+              "preview": "3:30 atau 210 (biarkan kosong sampai media habis)",
+              "recap": "3:30 atau 210 (wajib)"
+            },
+            "start": {
+              "credits": "2:30 atau 150 (wajib)",
+              "intro": "02.30 atau 150 (biarkan kosong untuk memulai dari awal)",
+              "preview": "2:30 atau 150 (wajib)",
+              "recap": "02.30 atau 150 (biarkan kosong untuk memulai dari awal)"
+            }
+          },
+          "segmentType": "Tipe Segmen",
+          "startTimeLabel": "Mulai",
+          "submit": "Kirim",
+          "submitting": "Mengirimkan...",
+          "success": {
+            "title": "Pengiriman Berhasil! Terima kasih!"
+          },
+          "title": "Kirim Stempel Waktu ke TheIntroDB",
+          "types": {
+            "credits": "Kredit",
+            "intro": "Pendahuluan",
+            "preview": "Pratinjau",
+            "recap": "Rekap"
+          },
+          "whenToDesc": "Masukkan stempel waktu dalam hitungan detik (misalnya 150), format mm:ss (misalnya 2:30), atau format jj:mm:ss (misalnya 1:42:20). Kami akan secara otomatis mengonversi formatnya untuk Anda.",
+          "whenToTitle": "Panduan stempel waktu:"
+        },
+        "title": "Apakah lompatan ini benar?"
+      },
+      "intro": "Lewati Intro",
+      "noSegments": "Tidak ada segmen lewati yang tersedia",
+      "recap": "Lewati Rekap",
+      "skipSegments": "Lewati Segmen",
+      "startsAt": "Dimulai pada {{time}}",
+      "submissions": "{{count}} kiriman",
+      "submitSegment": "Kirim Segmen",
+      "timeUnknown": "Waktu tidak diketahui"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "{{timeLeft}} tersisa • Selesai pada pukul {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "Memuat aplikasi",
-    "loadingUser": "Memuat profil anda",
     "loadingUserError": {
+      "disconectCancel": "Membatalkan",
+      "disconnectConfirm": "Mengonfirmasi",
+      "disconnectMessage": "Putuskan sambungan dari server akun, pertahankan data lokal terbaru. Perubahan dan konten yang ditonton tidak akan disinkronkan hingga Anda masuk kembali.",
+      "disconnectTitle": "Putuskan sambungan dari backend?",
       "logout": "Keluar",
-      "reset": "Reset server khusus",
-      "disconnect": "Disconnect from backend",
-      "text": "Gagal memuat profil anda",
-      "reload": "Reload",
-      "textWithReset": "Gagal memuat profil anda dari server khusus yang anda pilih, ingin kembali ke server default?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reload": "Muat ulang",
+      "reset": "Reset server khusus"
     },
     "migration": {
       "failed": "Gagal memigrasi data anda.",
@@ -1211,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Nama perangkat",
-        "deviceNamePlaceholder": "Ponsel personal",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "Ubah",
-        "logoutButton": "Keluar"
-      },
-      "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
+        "logoutButton": "Keluar",
+        "nicknameLabel": "Nama panggilan",
+        "nicknamePlaceholder": "Masukkan nama panggilan Anda"
       },
       "actions": {
         "delete": {
@@ -1243,26 +907,26 @@
           "text": "Tindakan ini tidak dapat dibatalkan. Seluruh data akan dihapus dan tidak dapat dipulihkan.",
           "title": "Hapus akun"
         },
-        "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
-        },
-        "title": "Tindakan",
         "logoutAllDevices": {
-          "title": "Akhiri Semua Sesi",
+          "button": "Keluar dari Semua Perangkat",
           "text": "Ini akan mengeluarkan anda dari semua perangkat yang terhubung dengan akun anda.",
-          "button": "Keluar dari Semua Perangkat"
-        }
+          "title": "Akhiri Semua Sesi"
+        },
+        "migration": {
+          "button": "Migrasi akun",
+          "text": "Migrasikan akun Anda ke server baru atau unduh data Anda.",
+          "title": "Migrasi akun"
+        },
+        "title": "Tindakan"
       },
       "devices": {
         "deviceNameLabel": "Nama perangkat",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Gagal memuat sesi",
+        "lastActive": "Terakhir aktif: {{date}}",
+        "loggedInAt": "Masuk di: {{date}}",
         "removeDevice": "Hapus",
         "title": "Perangkat",
-        "lastActive": "Terakhir aktif: {{date}}",
-        "loggedInAt": "Masuk di: {{date}}"
+        "unknownDevice": "Perangkat tidak dikenal, kesalahan mendekripsi nama"
       },
       "profile": {
         "finish": "Selesai mengubah",
@@ -1278,377 +942,213 @@
       },
       "title": "Akun"
     },
+    "all": {
+      "title": "Semua Pengaturan"
+    },
     "appearance": {
       "activeTheme": "Aktif",
-      "themes": {
-        "blue": "Biru",
-        "custom": "Custom",
-        "default": "Default",
-        "gray": "Abu",
-        "red": "Merah",
-        "teal": "Hijau",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "Utama",
+        "secondary": "Sekunder",
+        "tertiary": "Tersier"
       },
-      "title": "Tampilan",
       "options": {
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "carouselView": "Tampilan korsel",
+        "carouselViewDescription": "Tampilkan bagian yang sedang Anda tonton dan tandai sebagai carousel, bukan kotak. Dinonaktifkan secara default.",
+        "carouselViewLabel": "Tampilan korsel",
+        "discover": "Temukan bagian",
+        "discoverDescription": "Tampilkan bagian Temukan di Beranda di bawah media yang Anda tandai. Diaktifkan secara default.",
+        "discoverLabel": "Temukan bagian",
+        "featured": "Media unggulan",
+        "featuredDescription": "Tampilkan carousel film dan acara unggulan di bagian atas beranda Anda! Dinonaktifkan secara default.",
+        "featuredLabel": "Media unggulan",
+        "forceCompactEpisodeView": "Paksa tampilan episode yang ringkas",
+        "forceCompactEpisodeViewDescription": "Paksa carousel episode di pemutar untuk menggunakan tampilan vertikal ringkas \"klasik\". Dinonaktifkan secara default.",
+        "forceCompactEpisodeViewLabel": "Episode kompak",
+        "homeSectionOrder": "Urutan bagian rumah",
+        "homeSectionOrderDescription": "Seret dan lepas untuk menyusun ulang bagian tontonan dan bookmark di beranda Anda. Pesanan grup dapat diedit dari halaman beranda.",
+        "homeSectionOrderGroups": "Susun ulang grup bookmark",
+        "logos": "Logo gambar",
+        "logosDescription": "Tampilkan logo gambar alih-alih judul teks di bagian modal detail dan fitur. Diaktifkan secara default.",
+        "logosLabel": "Logo gambar",
+        "logosNotice": "Seringkali, logo hanya dalam bahasa Inggris. Bahasa lain mungkin ingin menonaktifkan ini!",
+        "minimalCards": "Minimal kartu",
+        "minimalCardsDescription": "Sembunyikan konten teks (judul, jenis, tahun) pada kartu media, hanya menampilkan gambar poster.",
+        "minimalCardsLabel": "Minimal kartu",
+        "modal": "Modal detail",
+        "modalDescription": "Tampilkan modal detail saat Anda mengeklik kartu media alih-alih membuka laman tontonan. Proksi atau Ekstensi diperlukan untuk cuplikan. Dinonaktifkan secara default.",
+        "modalLabel": "Modal detail",
+        "pauseOverlay": "Jeda hamparan",
+        "pauseOverlayDescription": "Menampilkan hamparan judul/logo dan deskripsi saat pemutar dijeda dan tidak digunakan.",
+        "pauseOverlayLabel": "Jeda hamparan"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "Bookmark",
+        "watching": "Sedang Menonton"
+      },
+      "themes": {
+        "acid": "Asam",
+        "autumn": "Musim gugur",
+        "blue": "Biru",
+        "christmas": "Natal",
+        "classic": "Klasik",
+        "cobalt": "Kobalt",
+        "custom": "Kebiasaan",
+        "default": "Bawaan",
+        "ember": "Bara",
+        "forest": "Hutan",
+        "frost": "Embun beku",
+        "grape": "Anggur",
+        "gray": "Abu",
+        "green": "Hijau",
+        "hulk": "Hulk",
+        "mocha": "Moka",
+        "noir": "Noir",
+        "pink": "Berwarna merah muda",
+        "popsicle": "Es loli",
+        "red": "Merah",
+        "spark": "Percikan",
+        "spiderman": "manusia laba-laba",
+        "teal": "Hijau",
+        "wolverine": "serigala"
+      },
+      "title": "Tampilan"
     },
     "connections": {
       "server": {
-        "description": "Jika anda ingin menghubungkan dengan backend khusus untuk menyimpan data, hidupkan ini dan masukkan URL-nya.",
-        "label": "Server khusus",
-        "urlLabel": "URL server khusus",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "Do setup",
-        "errorStatus": {
-          "description": "It seems that one or more items in this setup need your attention.",
-          "title": "Something needs your attention 😱"
-        },
-        "itemError": "There is something wrong with this setting. Go through setup again to fix it. (ᴗ_ ᴗ。)",
-        "items": {
-          "default": "Default setup",
-          "extension": "Extension",
-          "proxy": "Custom proxy",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Redo setup",
-        "successStatus": {
-          "description": "All things are in place for you to start watching your favorite media. (๑>◡<๑)",
-          "title": "Everything is set up!"
-        },
-        "unsetStatus": {
-          "description": "Please click the button to the right to start the setup process.",
-          "title": "You haven't gone through setup"
-        }
-      },
-      "title": "Koneksi",
-      "workers": {
-        "addButton": "Tambah worker baru",
-        "description": "Agar aplikasi dapat bekerja, seluruh koneksi dialihkan menggunakan proxy. Hidupkan ini jika anda ingin menggunakan worker khusus.",
-        "documentation": "Proxy documentation",
-        "emptyState": "Belum ada worker, tambahkan dibawah",
-        "label": "Gunakan proxy worker khusus",
-        "urlLabel": "URL worker",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
+        "changeWarning": "Mengubah server backend akan mengeluarkan Anda. Melanjutkan?",
+        "changeWarningTitle": "Ubah Server Backend",
+        "error": "Terjadi kesalahan saat menyambung ke backend",
+        "notice": "Akun Anda TIDAK disinkronkan antar backend, jadi ingat yang mana yang Anda gunakan!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "Berkontribusi pada TheIntroDB dengan memberikan umpan balik pada segmen intro, rekap, dan kredit. <0>Pelajari lebih lanjut.</0>",
+        "tokenLabel": "Kunci API"
+      },
+      "title": "Koneksi"
     },
     "preferences": {
-      "title": "Preferences",
-      "language": "Application language",
-      "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
-      "thumbnail": "Generate thumbnails",
-      "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
-      "thumbnailLabel": "Generate thumbnails",
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
+      "autoplay": "Putar otomatis",
+      "autoplayDescription": "Memutar episode berikutnya secara otomatis dalam sebuah serial setelah mencapai akhir. Dapat diaktifkan oleh pengguna dengan ekstensi browser, proxy khusus, atau dengan pengaturan default jika diizinkan oleh host.",
+      "autoplayLabel": "Putar otomatis",
+      "autoResumeOnPlaybackError": "Lanjutkan otomatis pada kesalahan pemutaran",
+      "autoResumeOnPlaybackErrorDescription": "Secara otomatis melanjutkan pencarian sumber lain ketika sumber saat ini gagal selama pemutaran. Jika dinonaktifkan, Anda akan melihat layar kesalahan dengan opsi melanjutkan manual.",
+      "autoResumeOnPlaybackErrorLabel": "Lanjutkan otomatis pada kesalahan pemutaran",
+      "autoSkipSegments": "Lewati Segmen Otomatis",
+      "autoSkipSegmentsDescription": "Jika diaktifkan, otomatis lewati segmen intro, rekap, dan pratinjau saat menonton.",
+      "autoSkipSegmentsLabel": "Lewati segmen secara otomatis",
+      "doubleClickToSeek": "Ketuk dua kali untuk mencari",
+      "doubleClickToSeekDescription": "Ketuk dua kali di sisi kiri atau kanan pemutar untuk mencari 10 detik maju atau mundur.",
+      "doubleClickToSeekLabel": "Aktifkan ketuk dua kali untuk mencari",
+      "embedOrder": "Menyusun ulang penyematan",
+      "embedOrderDescription": "Seret dan lepas untuk menyusun ulang penyematan. Ini akan menentukan urutan pemeriksaan penyematan untuk media yang ingin Anda tonton. <br><br> <strong>(Urutan default adalah yang terbaik untuk sebagian besar pengguna)</strong>",
+      "embedOrderEnableLabel": "Pesanan penyematan khusus",
+      "holdToBoost": "Tahan untuk meningkatkan kecepatan",
+      "holdToBoostDescription": "Tahan bilah spasi atau sentuh dan tahan layar untuk meningkatkan kecepatan pemutaran sementara hingga 2x. Lepaskan untuk kembali ke kecepatan sebelumnya.",
+      "holdToBoostLabel": "Aktifkan tahan untuk meningkatkan",
+      "keyboardShortcuts": "Pintasan Papan Ketik",
+      "keyboardShortcutsDescription": "Sesuaikan pintasan keyboard untuk aplikasi. Tahan ` untuk menampilkan bantuan ini kapan saja",
+      "keyboardShortcutsLabel": "Sesuaikan Pintasan Keyboard",
+      "language": "Bahasa aplikasi",
+      "languageDescription": "Bahasa diterapkan ke seluruh aplikasi, hanya bahasa Inggris yang memiliki hal-hal konyol 🙁.",
+      "lastSuccessfulSource": "Sumber yang terakhir digunakan",
+      "lastSuccessfulSourceDescription": "Secara otomatis memprioritaskan sumber yang berhasil menyediakan konten untuk episode sebelumnya. Ini membantu memastikan kesinambungan saat menonton serial.",
+      "lastSuccessfulSourceEnableLabel": "Sumber yang terakhir digunakan",
+      "lowPerformanceMode": "Mode kinerja/bandwidth rendah",
+      "lowPerformanceModeDescription": "Mengoptimalkan aplikasi untuk koneksi dan perangkat yang lebih lambat dengan menonaktifkan fitur-fitur yang membutuhkan banyak bandwidth. Mode ini mengurangi penggunaan data dan meningkatkan kinerja sekaligus menjaga fungsi pencarian dan jam tangan inti tetap utuh.",
+      "lowPerformanceModeLabel": "Mode kinerja rendah",
+      "manualSource": "Pemilihan sumber manual",
+      "manualSourceDescription": "Perlu memilih sumber sebelum menggores. Menonaktifkan pemilihan sumber otomatis dan membuka pemilih sumber saat memulai pemutaran.",
+      "manualSourceLabel": "Pemilihan sumber manual",
+      "showLess": "Tampilkan lebih sedikit",
+      "showMore": "Tampilkan lebih banyak",
+      "skipCredits": "Lewati Kredit Akhir",
+      "skipCreditsDescription": "Jika diaktifkan, putar episode berikutnya secara otomatis dengan penyelesaian 99% untuk melewati kredit akhir. Jika dinonaktifkan, tunggu hingga episode selesai sepenuhnya.",
+      "skipCreditsLabel": "Lewati kredit akhir",
+      "sourceOrder": "Menyusun ulang sumber",
       "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "sourceOrderEnableLabel": "Urutan sumber khusus",
+      "thumbnail": "Hasilkan thumbnail",
+      "thumbnailDescription": "Seringkali, video tidak memiliki thumbnail. Anda dapat mengaktifkan pengaturan ini untuk membuatnya dengan cepat, tetapi pengaturan ini dapat membuat video Anda lebih lambat.",
+      "thumbnailLabel": "Hasilkan thumbnail",
+      "title": "Preferensi"
     },
-    "reset": "Reset",
+    "reset": "Mengatur ulang",
     "save": "Simpan",
+    "search": {
+      "placeholder": "Setelan penelusuran..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "Versi aplikasi",
-        "backendUrl": "URL Backend",
-        "backendVersion": "Versi Backend",
-        "hostname": "Nama host",
-        "insecure": "Tidak aman",
-        "nickname": "Nickname",
         "notLoggedIn": "Anda belum masuk ke akun anda",
-        "secure": "Aman",
-        "title": "Informasi aplikasi",
-        "unknownVersion": "Tidak diketahui",
         "userId": "ID pengguna",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Gunakan ini sebagai kode undangan untuk daftar teman Anda"
       }
     },
     "subtitles": {
+      "backgroundBlurEnabledDescription": "Menonaktifkan keburaman latar belakang teks dapat memperbaiki beberapa masalah kedipan",
+      "backgroundBlurEnabledLabel": "Latar belakang kabur",
+      "backgroundBlurLabel": "Intensitas keburaman latar belakang",
       "backgroundLabel": "Transparansi latar belakang",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
-      "backgroundBlurLabel": "Background blur intensity",
+      "BorderThicknessLabel": "Ketebalan Perbatasan",
       "colorLabel": "Warna teks",
+      "high": "Tinggi",
+      "low": "Bawaan",
       "previewQuote": "Jangan takut. Ketakutan adalah pembunuh pikiran.",
+      "textBoldLabel": "Teks tebal",
       "textSizeLabel": "Ukuran teks",
-      "title": "Subtitle",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "Border": "Berbatasan",
+        "default": "Bawaan",
+        "depressed": "Tertekan",
+        "dropShadow": "Jatuhkan Bayangan",
+        "raised": "Dinaikkan",
+        "title": "Gaya teks"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "Subtitle",
+      "verticalPositionLabel": "Posisi vertikal"
     },
     "unsaved": "Anda memiliki perubahan yang belum disimpan"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
-      "top10": "10 teratas"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "Sedang Tren Sekarang"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
-    },
-    "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "filters": {
-      "country": "Negara"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Masukkan tautan pesta menonton bersama atau kode kamar",
-    "you": "Anda",
-    "guestFallback": "Tamu"
   },
   "tmdb": {
     "genres": {
       "10759": "Aksi & Petualangan"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "Mengungguli tuan rumah dengan {{seconds}} detik",
+    "alone": "Sendiri",
+    "behindHost": "Tertinggal dari tuan rumah dengan {{seconds}} detik",
+    "cancel": "Membatalkan",
+    "connectedAsGuest": "Terhubung untuk menonton pesta sebagai tamu",
+    "contentMismatch": "Tidak dapat mengikuti pesta menonton: Konten tidak sesuai dengan konten pembawa acara.",
+    "copyCode": "Klik untuk menyalin",
+    "emptyRoom": "Belum ada seorang pun di ruangan ini",
+    "enterCodeOrLink": "Masukkan tautan pesta menonton bersama atau kode kamar",
+    "episodeMismatch": "Tidak dapat bergabung dalam pesta menonton: Anda menonton episode yang berbeda dari pembawa acara.",
+    "guestFallback": "Tamu",
+    "hosting": "Tuan rumah",
+    "hostParty": "Selenggarakan Pesta Tontonan",
+    "invalidRoom": "Tidak dapat terhubung ke ruangan ini",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Bergabung",
+    "joinParty": "Bergabunglah dengan Pesta Tontonan",
+    "leaveWatchParty": "Tinggalkan Pesta Tontonan",
+    "linkCopied": "Disalin!",
+    "noHost": "Tidak ada pembawa acara di pesta jaga ini",
+    "save": "Menyimpan",
+    "shareCode": "Bagikan kode ini ke teman (klik untuk menyalin tautan)",
+    "showStatusOverlay": "Tampilkan hamparan status",
+    "status": {
+      "inSync": "Sinkronisasi",
+      "outOfSync": "Tidak sinkron"
+    },
+    "syncing": "Menyinkronkan...",
+    "validating": "Memvalidasi pesta menonton...",
+    "viewers": "Pemirsa ({{count}})",
+    "watching": "Menonton",
+    "withCount": "Dengan {{count}} lainnya",
+    "you": "Anda"
   }
 }

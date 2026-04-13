@@ -154,8 +154,8 @@ export function FeaturedCarousel({
   const currentMedia = media[currentIndex];
 
   const SLIDE_QUANTITY = 10;
-  const SLIDE_QUANTITY_EDITOR_PICKS_MOVIES = 6;
-  const SLIDE_QUANTITY_EDITOR_PICKS_TV_SHOWS = 4;
+  const SLIDE_QUANTITY_EDITOR_PICKS_MOVIES = 5;
+  const SLIDE_QUANTITY_EDITOR_PICKS_TV_SHOWS = 5;
   const SLIDE_DURATION = 8000;
 
   // Check for extension on mount

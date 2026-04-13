@@ -1,192 +1,58 @@
 {
-  "about": {
-    "description": "AlphaFlix एउटा वेब एप हो जसले स्ट्रिमहरूको लागि इन्टरनेटमा खोज्छ। हाम्रा टोलीले सामग्री उपभोग गर्नको लागि प्रायः न्यूनतम दृष्टिकोणको लागि लक्ष्य राख्छ।",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "सामान्य प्रश्नहरू",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "सामग्री कहाँबाट आउँछ?",
-      "body": "AlphaFlix ले कुनै पनि सामग्री होस्ट गर्दैन। जब तपाइँ हेर्नको लागि केहि क्लिक गर्नुहुन्छ, इन्टरनेटमा चयन गरिएको मिडियाको लागि खोजी गरिन्छ (लोडिङ स्क्रिनमा र 'भिडियो स्रोत' ट्याबमा तपाइँ कुन स्रोत प्रयोग गरिरहनु भएको छ भनेर देख्न सक्नुहुन्छ)। मिडिया कहिले पनि चलचित्र-वेब द्वारा अपलोड हुँदैन, सबै कुरा यो खोजी संयन्त्र मार्फत हुन्छ।",
-      "section": "general"
-    },
-    "q2": {
-      "title": "म कहाँ कार्यक्रम वा चलचित्र अनुरोध गर्न सक्छु?",
-      "body": "कार्यक्रम वा चलचित्र अनुरोध गर्न सम्भव छैन, AlphaFlixले कुनै पनि सामग्री व्यवस्थापन गर्दैन। सबै सामग्री इन्टरनेटमा स्रोतहरू मार्फत हेरिन्छ।",
-      "section": "search"
-    },
-    "q3": {
-      "title": "खोज परिणामहरूले कार्यक्रम वा चलचित्र प्रदर्शन गर्दछ, म यसलाई किन प्ले गर्न सक्दिन?",
-      "body": "हाम्रा खोज परिणामहरू चलचित्र डाटाबेस (TMDB) द्वारा संचालित हुन्छन् र हाम्रा स्रोतहरूमा साँच्चै सामग्री छ कि छैन भनी प्रदर्शन गरिन्छ।",
-      "section": "search"
-    },
-    "q4": {
-      "title": "What about my data and stuff?",
-      "body": "All data is synced to the community backend, anyone is free to use this as well.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "How can I find out more?",
-      "body": "AlphaFlix has a Fluxer server that can be found at the header of this page!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "AlphaFlix बारेमा"
-  },
   "actions": {
+    "cancel": "रद्द गर्नुहोस्",
+    "confirm": "पुष्टि गर्नुहोस्",
     "copied": "कपी भयो",
-    "copy": "कपी",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copy": "कपी"
   },
   "auth": {
+    "backendSelection": {
+      "active": "सक्रिय",
+      "confirm": "पुष्टि गर्नुहोस्",
+      "customBackend": "अनुकूलन ब्याकइन्ड",
+      "customBackendPlaceholder": "https://",
+      "description": "कुन ब्याकइन्ड सर्भरमा जडान गर्ने छनौट गर्नुहोस्",
+      "title": "खाता सर्भर चयन गर्नुहोस्"
+    },
     "createAccount": "अझै खाता छैन?<0>खाता खोल्नुहोस्|.</0>",
-    "deviceNameLabel": "उपकरणको नाम",
-    "deviceNamePlaceholder": "निजी फोन",
+    "generate": {
+      "custom": "अनुकूलन",
+      "customPassphraseLabel": "अनुकूलन पासफ्रेज",
+      "customPassphrasePlaceholder": "आफ्नो अनुकूलन पासफ्रेज प्रविष्ट गर्नुहोस्",
+      "description": "तपाईंको पासफ्रेजले तपाईंको प्रयोगकर्ता नाम र पासवर्डको रूपमा कार्य गर्दछ। यसलाई सुरक्षित राख्नुहोस् किनकि तपाईंले आफ्नो खातामा लगइन गर्न आवश्यक हुनेछ",
+      "invalidPassphraseCharacters": "अवैध पासफ्रेज वर्णहरू। केवल अंग्रेजी अक्षरहरू, नम्बरहरू 1-10, र सामान्य प्रतीकहरूलाई अनुमति छ।",
+      "next": "मैले मेरो पासफ्रेज सुरक्षित गरेको छु",
+      "passphraseFrameLabel": "पासफ्रेज",
+      "passphraseTooShort": "पासफ्रेज कम्तिमा 8 वर्ण लामो हुनुपर्छ।",
+      "title": "तपाईको पासफ्रेज",
+      "useCustomPassphrase": "अनुकूलन पासफ्रेज प्रयोग गर्नुहोस्",
+      "usePasskeyInstead": "यसको सट्टा पासकी प्रयोग गर्नुहोस्"
+    },
+    "hasAccount": "पहिले नै खाता छ? <0>यहाँ लग-इन गर्नुहोस्|</0>",
+    "inviteCodeInvalidError": "अमान्य निมन्त्रणा कोड (प्रयोगकर्ता आईडी फेला परेन)",
     "inviteCodeLabel": "निमन्त्रणा कोड",
     "inviteCodePlaceholder": "साथीको प्रयोगकर्ता आईडी प्रविष्ट गर्नुहोस्",
     "inviteCodeRequiredError": "निमन्त्रणा कोड आवश्यक छ",
-    "inviteCodeInvalidError": "अमान्य निมन्त्रणा कोड (प्रयोगकर्ता आईडी फेला परेन)",
-    "generate": {
-      "description": "तपाईंको पासफ्रेजले तपाईंको प्रयोगकर्ता नाम र पासवर्डको रूपमा कार्य गर्दछ। यसलाई सुरक्षित राख्नुहोस् किनकि तपाईंले आफ्नो खातामा लगइन गर्न आवश्यक हुनेछ",
-      "next": "मैले मेरो पासफ्रेज सुरक्षित गरेको छु",
-      "passphraseFrameLabel": "पासफ्रेज",
-      "title": "तपाईको पासफ्रेज",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
-    },
-    "hasAccount": "पहिले नै खाता छ? <0>यहाँ लग-इन गर्नुहोस्|</0>",
     "login": {
       "description": "कृपया आफ्नो खातामा लगइन गर्नको लागि आफ्नो पासफ्रेज हाल्नुहोस",
-      "deviceLengthError": "कृपया फोनको नाम हाल्नुहोस",
-      "passphraseLabel": "१२-शब्द पासफ्रेज",
-      "passphrasePlaceholder": "पासफ्रेज",
-      "submit": "लगइन",
-      "title": "आफ्नो खातामा लगइन गर्नुहोस्",
-      "validationError": "गलत वा अपूर्ण पासफ्रेज",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
       "nicknameLabel": "उपनाम",
+      "nicknameNotFound": "उपनाम फेला परेन",
       "nicknamePlaceholder": "आफ्नो उपनाम प्रविष्ट गर्नुहोस्",
+      "nicknameRequired": "उपनाम आवश्यक छ",
+      "noBackendUrl": "कुनै ब्याकइन्ड URL छैन",
+      "or": "or",
+      "passwordIncorrect": "पासवर्ड गलत छ",
       "passwordLabel": "पासवर्ड",
       "passwordPlaceholder": "आफ्नो पासवर्ड प्रविष्ट गर्नुहोस्",
-      "nicknameRequired": "उपनाम आवश्यक छ",
       "passwordRequired": "पासवर्ड आवश्यक छ",
-      "nicknameNotFound": "उपनाम फेला परेन",
-      "passwordIncorrect": "पासवर्ड गलत छ"
+      "submit": "लगइन",
+      "title": "आफ्नो खातामा लगइन गर्नुहोस्",
+      "usePasskey": "पासकी प्रयोग गर्नुहोस्",
+      "validationError": "गलत वा अपूर्ण पासफ्रेज"
     },
     "register": {
+      "confirmPasswordLabel": "पासवर्ड पुष्टि गर्नुहोस्",
+      "confirmPasswordPlaceholder": "आफ्नो पासवर्ड पुष्टि गर्नुहोस्",
       "information": {
         "color1": "प्रोफाइल रङ एक",
         "color2": "प्रोफाइल रङ दुई",
@@ -195,39 +61,27 @@
         "next": "अर्को",
         "title": "खाता जानकारी"
       },
-      "passwordInput": {
-        "title": "आफ्नो लगइन सिर्जना गर्नुहोस्",
-        "description": "एउटा उपनाम र पासवर्ड छान्नुहोस्। तपाइँको पासवर्ड सुरक्षित पासफ्रेज को रूप मा काम गर्दछ, त्यसैले तपाइँ यसलाई सम्झना सुनिश्चित गर्नुहोस्!"
-      },
       "nicknameLabel": "उपनाम",
       "nicknamePlaceholder": "एक अद्वितीय उपनाम छान्नुहोस्",
       "nicknameTaken": "उपनाम पहिले नै लिइएको छ",
+      "passwordInput": {
+        "description": "एउटा उपनाम र पासवर्ड छान्नुहोस्। तपाइँको पासवर्ड सुरक्षित पासफ्रेज को रूप मा काम गर्दछ, त्यसैले तपाइँ यसलाई सम्झना सुनिश्चित गर्नुहोस्!",
+        "title": "आफ्नो लगइन सिर्जना गर्नुहोस्"
+      },
       "passwordLabel": "पासवर्ड",
-      "passwordPlaceholder": "पासवर्ड सिर्जना गर्नुहोस् (तपाईँको पासफ्रेजको रूपमा प्रयोग गरिएको)",
-      "passwordWeak": "पासवर्ड कम्तिमा 8 अक्षरहरू र संख्याहरू भएको हुनुपर्छ",
       "passwordMismatch": "पासवर्डहरू मेल खाँदैनन्",
-      "confirmPasswordLabel": "पासवर्ड पुष्टि गर्नुहोस्",
-      "confirmPasswordPlaceholder": "आफ्नो पासवर्ड पुष्टि गर्नुहोस्"
-    },
-    "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
-      "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "passwordPlaceholder": "पासवर्ड सिर्जना गर्नुहोस् (तपाईँको पासफ्रेजको रूपमा प्रयोग गरिएको)",
+      "passwordWeak": "पासवर्ड कम्तिमा 8 अक्षरहरू र संख्याहरू भएको हुनुपर्छ"
     },
     "trust": {
       "failed": {
         "text": "के तपाईंले यसलाई सही रूपमा कन्फिगर गर्नुभयो?",
         "title": "सर्भरमा पुग्न असफल भयो"
       },
-      "noHostTitle": "सर्भर कन्फिगर गरिएको छैन!",
-      "noHost": "सर्भर कन्फिगर गरिएको छैन, त्यसैले तपाईंले खाता सिर्जना गर्न सक्नुहुन्न",
       "host": "तपाइँ <0>{{hostname}}</0> मा कनेक्ट हुनुहुन्छ - कृपया खाता बनाउनु अघि तपाइँ यसलाई विश्वास गर्नुहुन्छ भनेर पुष्टि गर्नुहोस्",
       "no": "पछाडी जाउ",
+      "noHost": "सर्भर कन्फिगर गरिएको छैन, त्यसैले तपाईंले खाता सिर्जना गर्न सक्नुहुन्न",
+      "noHostTitle": "सर्भर कन्फिगर गरिएको छैन!",
       "title": "के तपाइँ यो सर्भरमा भरोसा गर्नुहुन्छ?",
       "yes": "म यो सर्भरलाई भरोसा गर्छु"
     },
@@ -235,14 +89,88 @@
       "description": "तपाईंले यसलाई सुरक्षित गर्नुभएको छ भनी पुष्टि गर्न र आफ्नो खाता सिर्जना गर्नको लागि कृपया आफ्नो पासफ्रेज हालनुहोस्",
       "invalidData": "डाटा मान्य छैन",
       "noMatch": "पासफ्रेज मेल खाँदैन",
-      "passphraseLabel": "तपाईंको १२-शब्द पासफ्रेज",
       "recaptchaFailed": "ReCaptcha प्रमाणीकरण असफल भयो",
       "register": "खाता बनाउनुहोस्",
-      "title": "आफ्नो पासफ्रेज पुष्टि गर्नुहोस्",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "title": "आफ्नो पासफ्रेज पुष्टि गर्नुहोस्"
     }
+  },
+  "details": {
+    "airs": "प्रसारण",
+    "collection": {
+      "movie": "चलचित्र",
+      "movies": "चलचित्रहरू",
+      "rating": "मूल्याङ्कन",
+      "releaseDate": "रिलीज मिति",
+      "sortBy": "क्रमबद्ध गर्नुहोस्"
+    },
+    "endsAt": "{{time}} मा समाप्त हुन्छ",
+    "episode": "एपिसोड",
+    "episodes": "एपिसोडहरू",
+    "imdb": "IMDb मा हेर्नुहोस्",
+    "language": "भाषा:",
+    "play": "खेल्नुहोस्",
+    "rating": "मूल्याङ्कन:",
+    "releaseDate": "रिलीज मिति:",
+    "resume": "पुन: सुरु गर्नुहोस्",
+    "runtime": "रनटाइम:",
+    "season": "सिजन",
+    "seasons": "सिजन/सेकेन्ड",
+    "similar": "समान",
+    "tmdb": "TMDB मा हेर्नुहोस्",
+    "trailers": "ट्रेलरहरू",
+    "watched": "{{total}} ({{percentage}}%) को {{watched}} हेरिएको"
+  },
+  "discover": {
+    "allLists": "सबै चलचित्र सूचीहरू",
+    "carousel": {
+      "change": "परिवर्तन गर्नुहोस्",
+      "more": "अझ धेरै हेर्नुहोस्",
+      "title": {
+        "4kReleases": "4K रिलीज",
+        "editorPicksMovies": "सम्पादकले चलचित्रहरू छान्छन्",
+        "editorPicksShows": "सम्पादक चयन शो",
+        "forYou": "तिम्रो लागि",
+        "inCinemas": "सिनेमाघरहरूमा",
+        "latestReleases": "पछिल्लो विज्ञप्ति",
+        "latestTVReleases": "नवीनतम टिभी शोहरू",
+        "movies": "{{category}} चलचित्रहरू",
+        "moviesOn": "{{provider}} मा चलचित्रहरू",
+        "onTheAir": "अन द एयर",
+        "popular": "सबैभन्दा लोकप्रिय",
+        "recommended": "तपाईंले हेर्नुभएको कारण: {{title}}",
+        "top10": "शीर्ष १०",
+        "topRated": "शीर्ष मूल्याङ्कन",
+        "trending": "अहिले प्रचलनमा छ",
+        "tvshows": "{{category}} शोहरू",
+        "tvshowsOn": "{{provider}} मा देखाइन्छ"
+      }
+    },
+    "featured": {
+      "moreInfo": "थप जानकारी",
+      "playNow": "अहिले खेल्नुहोस्"
+    },
+    "filters": {
+      "country": "देश"
+    },
+    "page": {
+      "back": "फिर्ता जानुहोस्",
+      "loading": "लोड गर्दै...",
+      "loadMore": "थप लोड गर्नुहोस्",
+      "title": "चलचित्र र टिभी पत्ता लगाउनुहोस्"
+    },
+    "scrollToTop": "शीर्षमा फर्कनुहोस्",
+    "tabs": {
+      "movies": "चलचित्रहरू",
+      "top10": "शीर्ष १०",
+      "tvshows": "टिभी शोहरू"
+    },
+    "viewLists": "सबै चलचित्र सूचीहरू हेर्नुहोस्"
+  },
+  "downtimeNotice": {
+    "badge": "मुद्दाहरू",
+    "goHome": "घर जानुहोस्",
+    "message": "AlphaFlix ले केही प्रदायकहरूसँग फेरि समस्याहरू अनुभव गरिरहेको छ, यदि तपाईंले शो फेला पार्न वा प्ले गर्न सक्नुहुन्न भने कृपया स्रोत परिवर्तन गर्नुहोस्। यो त्रुटि तलका समयहरूमा जारी रहने अपेक्षा गर्नुहोस्।",
+    "title": "प्रदायक समस्याहरू"
   },
   "errors": {
     "badge": "यो बिग्रियो",
@@ -257,160 +185,154 @@
       "disclaimerText": "AlphaFlixले कुनै पनि फाइलहरू होस्ट गर्दैन, यसले केवल तेस्रो पक्ष सेवाहरूमा लिङ्क गर्दछ। कानुनी मुद्दाहरू फाइल होस्ट र प्रदायकहरूसँग लिनु पर्छ। चलचित्र-वेब भिडियो प्रदायकहरू द्वारा देखाइएका कुनै पनि मिडिया फाइलहरूको लागि जिम्मेवार छैन।"
     },
     "links": {
-      "fluxer": "Fluxer",
-      "legal": "Legal / DMCA",
-      "github": "GitHub",
-      "twitter": "Twitter",
-      "funding": "Support us"
+      "fluxer": "फ्लक्सर",
+      "funding": "हामीलाई समर्थन गर्नुहोस्",
+      "github": "GitHub"
     },
     "tagline": "यो खुला स्रोत स्ट्रिमिङ एपको साथ आफ्नो मनपर्ने शो र चलचित्रहरू हेर्नुहोस्।"
   },
   "global": {
-    "name": "AlphaFlix",
+    "keyboardShortcuts": {
+      "cancel": "रद्द गर्नुहोस्",
+      "clickToEdit": "यसलाई सम्पादन गर्नको लागि कुञ्जी ब्याजमा क्लिक गर्नुहोस्",
+      "conditions": {
+        "showsOnly": "देखाउँछ मात्र"
+      },
+      "conflict": "द्वन्द्व",
+      "conflicts": "द्वन्द्वहरू",
+      "detected": "पत्ता लाग्यो",
+      "editInSettings": "सेटिङ्हरूबाट किबोर्ड आदेशहरू सम्पादन गर्नुहोस्",
+      "groups": {
+        "audioVideo": "अडियो र भिडियो",
+        "interface": "इन्टरफेस",
+        "jumpToPosition": "स्थितिमा जानुहोस्",
+        "subtitlesAccessibility": "उपशीर्षक र पहुँच",
+        "videoPlayback": "भिडियो प्लेब्याक"
+      },
+      "none": "कुनै पनि छैन",
+      "numberKeySeeking": "नम्बर कुञ्जी प्रगति खोज्दै",
+      "numberKeySeekingDescription": "भिडियोमा निर्दिष्ट स्थानहरू खोज्न नम्बर कुञ्जीहरू 0-9 प्रयोग गर्नुहोस्। 0 सुरुमा जान्छ, 1-8 जम्प 10% -80% मा, र 9 90% मा जान्छ।",
+      "pressKey": "एउटा कुञ्जी थिच्नुहोस्...",
+      "resetAllToDefault": "सबैलाई पूर्वनिर्धारितमा रिसेट गर्नुहोस्",
+      "resetToDefault": "पूर्वनिर्धारितमा रिसेट गर्नुहोस्",
+      "save": "बचत गर्नुहोस्",
+      "saveChanges": "परिवर्तनहरू बचत गर्नुहोस्",
+      "shortcuts": {
+        "barrelRoll": "ब्यारेल रोल गर्नुहोस्! 🌀",
+        "closeOverlay": "ओभरले/मोडल बन्द गर्नुहोस्",
+        "decreaseVolume": "भोल्युम घटाउनुहोस्",
+        "increaseVolume": "भोल्युम बढाउनुहोस्",
+        "jumpTo0": "०% मा जानुहोस् (सुरुवात)",
+        "jumpTo9": "९०% मा जानुहोस्",
+        "mute": "म्यूट/अनम्युट गर्नुहोस्",
+        "nextEpisode": "अर्को एपिसोड",
+        "playPause": "प्ले/पज (वा सक्षम हुँदा 2x गतिको लागि होल्ड गर्नुहोस्)",
+        "playPauseAlt": "प्ले/पज गर्नुहोस्",
+        "previousEpisode": "अघिल्लो एपिसोड",
+        "randomCaption": "पछिल्लो प्रयोग गरिएको भाषाबाट अनियमित क्याप्सन चयन गर्नुहोस्",
+        "skipBackward1": "1 सेकेन्ड पछाडि जानुहोस्",
+        "skipBackward10": "10 सेकेन्ड पछाडि छोड्नुहोस्",
+        "skipBackward5": "5 सेकेन्ड पछाडि छोड्नुहोस्",
+        "skipForward1": "1 सेकेन्ड अगाडि जानुहोस्",
+        "skipForward10": "10 सेकेन्ड अगाडि छोड्नुहोस्",
+        "skipForward5": "5 सेकेन्ड अगाडि छोड्नुहोस्",
+        "syncSubtitlesEarlier": "पहिले उपशीर्षकहरू सिंक गर्नुहोस् (-०.५ सेकेन्ड)",
+        "syncSubtitlesLater": "उपशीर्षकहरू पछि सिंक गर्नुहोस् (+0.5s)",
+        "toggleCaptions": "क्याप्सनहरू टगल गर्नुहोस्",
+        "toggleFullscreen": "फुलस्क्रिन टगल गर्नुहोस्",
+        "toggleNativeSubtitles": "नेटिभ उपशीर्षकहरू टगल गर्नुहोस्"
+      },
+      "subtitle": "कुनै पनि समयमा यो मद्दत देखाउनको लागि होल्ड गर्नुहोस्",
+      "title": "किबोर्ड सर्टकटहरू"
+    },
+    "name": "अल्फाफ्लिक्स",
     "pages": {
-      "about": "जानकारी",
-      "legal": "Legal / DMCA",
-      "discover": "Discover",
-      "support": "Support",
+      "discover": "पत्ता लगाउनुहोस्",
       "login": "लग - इन",
-      "onboarding": "सेटअप",
+      "migration": "खाता माइग्रेट गर्नुहोस्",
       "pagetitle": "{{title}} - AlphaFlix",
       "register": "दर्ता",
-      "settings": "सेटिङ्स्",
-      "migration": "Migrate Account",
-      "jip": "Jip"
-    },
-    "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
-      "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
-      },
-      "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
-      },
-      "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
-      },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "settings": "सेटिङ्स्"
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "बुकमार्कहरू",
-      "showAll": "Show all",
+      "edit": {
+        "cancel": "रद्द गर्नुहोस्",
+        "description": "यस बुकमार्कका लागि विवरणहरू सम्पादन गर्नुहोस्",
+        "groupsLabel": "समूहहरू",
+        "save": "बचत गर्नुहोस्",
+        "title": "बुकमार्क सम्पादन गर्नुहोस्",
+        "titleLabel": "शीर्षक",
+        "titlePlaceholder": "आफ्नो बुकमार्कको लागि शीर्षक प्रविष्ट गर्नुहोस्",
+        "yearLabel": "वर्ष",
+        "yearPlaceholder": "आफ्नो बुकमार्कको लागि एक वर्ष प्रविष्ट गर्नुहोस्"
+      },
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
-        },
-        "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "empty": "अहिलेसम्म कुनै समूह छैन",
+          "placeholderButton": "समूहमा थप्नुहोस्",
+          "removeAll": "सबै हटाउनुहोस्",
+          "removeFromGroup": "समूहबाट हटाउनुहोस्"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "affectsBookmarks": "यसले {{count}} बुकमार्क(हरू) लाई असर गर्नेछ",
+          "cancel": "रद्द गर्नुहोस्",
+          "description": "आफ्नो बुकमार्क समूहको नाम र प्रतिमा सम्पादन गर्नुहोस्",
+          "nameLabel": "समूह नाम",
+          "namePlaceholder": "आफ्नो समूहको लागि नाम प्रविष्ट गर्नुहोस्",
+          "save": "बचत गर्नुहोस्",
+          "title": "समूह सम्पादन गर्नुहोस्"
+        },
+        "reorder": {
+          "button": "पुन: क्रमबद्ध गर्नुहोस्",
+          "cancel": "रद्द गर्नुहोस्",
+          "description": "तपाईंको बुकमार्क समूहहरू पुन: क्रमबद्ध गर्न तान्नुहोस् र छोड्नुहोस्",
+          "done": "सकियो",
+          "save": "बचत गर्नुहोस्",
+          "title": "समूह अर्डर सम्पादन गर्नुहोस्"
         }
       },
-      "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
-      },
+      "sectionTitle": "बुकमार्कहरू",
+      "showAll": "सबै देखाउनुहोस्",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "पूर्वनिर्धारित (थपिएको मिति)",
+          "titleAsc": "शीर्षक A-Z",
+          "titleDesc": "शीर्षक Z-A",
+          "yearAsc": "रिलीज मिति सबैभन्दा पुरानो-नयाँ",
+          "yearDesc": "रिलीज मिति सबैभन्दा नयाँ-पुरानो"
         }
       }
     },
     "continueWatching": {
       "sectionTitle": "हेर्न जारी राख्नुहोस्",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "पूर्वनिर्धारित (थपिएको मिति)",
+          "titleAsc": "शीर्षक A-Z",
+          "titleDesc": "शीर्षक Z-A",
+          "yearAsc": "रिलीज मिति सबैभन्दा पुरानो-नयाँ",
+          "yearDesc": "रिलीज मिति सबैभन्दा नयाँ-पुरानो"
         }
       }
     },
     "mediaList": {
       "stopEditing": "सम्पादन रोक्नुहोस्"
     },
-    "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
-    },
     "search": {
       "allResults": "हामीसँग यति मात्र छ!",
+      "discover": "पत्ता लगाउनुहोस्",
+      "discoverMore": "थप पत्ता लगाउनुहोस्",
+      "empty": {
+        "default": "स्वागत छ, यहाँ हेर्न मिडिया खोज्नुहोस्!",
+        "extra": [
+          "यहाँ केही छैन :(",
+          "यति खाली...",
+          "यस्तो शून्यता।",
+          "नमस्ते नयाँ प्रयोगकर्ता: 3"
+        ]
+      },
       "failed": "मिडिया फेला पार्न असफल भयो, फेरि प्रयास गर्नुहोस्!",
       "loading": "लोड गर्दै...",
       "noResults": "हामीले केहि फेला पार्न सकेनौं!",
@@ -420,44 +342,54 @@
           "तपाईं के खोज्न चाहनुहुन्छ?",
           "तपाईको वाच लिस्टमा के छ?",
           "तपाईलाई मन पर्ने चलचित्र कुन हो?",
-          "तपाईलाई मनपर्ने श्रृंखला कुन हो?"
+          "तपाईलाई मनपर्ने श्रृंखला कुन हो?",
+          "आज तपाईको वाचलिस्टमा के छ?",
+          "तपाईको दिन कस्तो रह्यो ?",
+          "मेरो खराब साइट कहिल्यै काम गर्दैन ...",
+          "AlphaFlix मात्र उत्तम होइन?",
+          ">ᴗ<"
         ]
       },
-      "empty": {
-        "default": "Welcome, find media to watch here!",
-        "extra": [
-          "There's nothing here :(",
-          "So empty...",
-          "Such emptiness.",
-          "Hi new user :3"
-        ]
-      },
-      "sectionTitle": "खोज परिणामहरू",
-      "discoverMore": "Discover more",
-      "discover": "Discover"
+      "sectionTitle": "खोज परिणामहरू"
     },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+    "support": {
+      "complete": "पूरा",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! यदि तपाइँ AlphaFlix प्रयोग गरेर रमाइलो गर्नुहुन्छ भने, कृपया हामीलाई हाम्रो लागतहरू कभर गर्न मद्दत गर्न दान गर्ने विचार गर्नुहोस्।",
+      "donate": "दान गर्नुहोस्",
+      "explanation": "यदि तपाइँ एक्सटेन्सन प्रयोग गरिरहनु भएको छैन वा FED API सेटअप छैन भने, यो सामग्री फेला पार्न गाह्रो हुन सक्छ! हामी यसलाई ठीक गर्न चाहन्छौं, तर महँगो सर्भरहरू बिना सामग्री उपलब्ध गराउन धेरै गाह्रो छ। त्यसैले कृपया, यदि तपाइँ AlphaFlix प्रयोग गरेर रमाइलो गर्नुहुन्छ भने, कृपया हामीलाई हाम्रो बढ्दो लागतहरू कभर गर्न मद्दत गर्न दान गर्ने विचार गर्नुहोस्।",
+      "explanation2": "यदि तपाइँ थप जानकारी चाहनुहुन्छ भने, कृपया हाम्रो सामेल हुनुहोस्",
+      "fluxer": "फ्लक्सर",
+      "label": "परियोजना कोष: ${{current}} / ${{goal}}",
+      "moreInfo": "थप जानकारी",
+      "thankYou": "तपाईंको समर्थनको लागि धन्यवाद!",
+      "title": "AlphaFlix लाई तपाईंको मद्दत चाहिन्छ!"
     },
     "titles": {
       "69": {
-        "default": "Up for something spicy?",
+        "default": "केहि मसलादार को लागी?",
         "extra": [
-          "Happy 69 day 😘!"
+          "६९ दिनको शुभकामना 😘!"
         ]
       },
       "420": {
-        "default": "What would you like to watch this 4/20?",
+        "default": "तपाईं यो 4/20 के हेर्न चाहनुहुन्छ?",
         "extra": [
-          "Happy 4/20 🥳!"
+          "शुभ 4/20 🥳!"
         ]
       },
       "day": {
         "default": "तपाईं आज दिउँसो के हेर्न चाहनुहुन्छ?",
         "extra": [
           "साहसिक महसुस गर्दै हुनुहुन्छ? जुरासिक पार्क उत्तम विकल्प हुन सक्छ।"
+        ]
+      },
+      "halloween": {
+        "default": "तपाईं यो हेलोवीन कुन डरलाग्दो चलचित्र हेर्न चाहनुहुन्छ?",
+        "extra": [
+          "शुभ हेलोवीन! 🎃👻",
+          "बो! 👻",
+          "चाल वा उपचार! 🍬",
+          "यो महान कद्दू हो, चार्ली ब्राउन!"
         ]
       },
       "morning": {
@@ -471,304 +403,116 @@
         "extra": [
           "थकित? मैले सुनेको छु The Exorcist राम्रो छ।"
         ]
-      },
-      "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
-        "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
-        ]
       }
     },
-    "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+    "watchHistory": {
+      "recentlyWatched": "हालै हेरिएको",
+      "sectionTitle": "इतिहास हेर्नुहोस्"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
-    "unreleased": "रिलीज नभएको",
+    "episodeShort": "E",
+    "seasonUnwatched": "के तपाइँ सिजनलाई नहेरेको रूपमा चिन्ह लगाउन निश्चित हुनुहुन्छ?",
+    "seasonWatched": "के तपाइँ यो सिजन हेरिएको रूपमा चिन्ह लगाउन निश्चित हुनुहुन्छ?",
     "types": {
       "movie": "चलचित्र",
       "show": "कार्यक्रम"
     },
-    "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
-  },
-  "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
-    "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
-    "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
-    }
+    "unreleased": "रिलीज नभएको"
   },
   "migration": {
-    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
-    "start": {
-      "title": "Migrate your data",
-      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
-      "options": {
-        "or": "or",
-        "direct": {
-          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
-          "title": "Direct migration",
-          "quality": "Easiest and fastest",
-          "action": "Transfer data"
-        },
-        "download": {
-          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-          "title": "Download data",
-          "quality": "More technical",
-          "action": "Download data"
-        },
-        "upload": {
-          "title": "Upload Data",
-          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-          "quality": "Restore from backup",
-          "action": "Upload Data"
-        }
-      }
-    },
-    "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
-      "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
-      }
-    },
-    "direct": {
-      "title": "Direct migration",
-      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
-      "backendLabel": "Destination Backend URL",
-      "recaptchaLabel": "ReCaptcha Key (Optional)",
-      "toggleLable": "Needs ReCaptcha?",
-      "status": {
-        "error": "Failed to migrate your data. 😿",
-        "success": "Your data has been migrated successfully! 🎉"
-      },
-      "button": {
-        "migrate": "Migrate",
-        "processing": "Processing...",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
-    },
+    "back": "फिर्ता जानुहोस्",
     "download": {
-      "title": "Download data",
-      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-      "status": {
-        "error": "Failed to download your data. 😿",
-        "success": "Your data has been downloaded successfully! 🎉"
-      },
       "button": {
-        "download": "Download data",
-        "home": "Go home",
-        "login": "Continue to login"
-      }
+        "download": "डाटा डाउनलोड गर्नुहोस्",
+        "home": "घर जानुहोस्"
+      },
+      "description": "यसले तपाईंको यन्त्रमा तपाईंको डाटा डाउनलोड गर्नेछ। त्यसपछि तपाइँ यसलाई नयाँ सर्भरमा अपलोड गर्न सक्नुहुन्छ वा यसलाई सुरक्षित राख्नको लागि राख्न सक्नुहुन्छ।",
+      "status": {
+        "error": "तपाईंको डाटा डाउनलोड गर्न असफल भयो। 😿",
+        "success": "तपाईंको डाटा सफलतापूर्वक डाउनलोड गरिएको छ! 🎉"
+      },
+      "title": "डाटा डाउनलोड गर्नुहोस्"
+    },
+    "loginRequired": "तपाइँ तपाइँको डाटा माइग्रेट गर्न लग इन हुनुपर्छ! कृपया फिर्ता जानुहोस् र जारी राख्न लगइन गर्नुहोस्।",
+    "preview": {
+      "downloadDescription": "डाउनलोड समावेश:",
+      "items": {
+        "bookmarks": "बुकमार्क गरिएको मिडिया",
+        "progress": "प्रगति हेर्नुहोस्",
+        "settings": "सेटिङ र प्राथमिकताहरू"
+      },
+      "uploadDescription": "डाटा अपलोड गर्न:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "डाटा डाउनलोड गर्नुहोस्",
+          "description": "यसले तपाईंको यन्त्रमा तपाईंको डाटा डाउनलोड गर्नेछ। त्यसपछि तपाइँ यसलाई नयाँ सर्भरमा अपलोड गर्न सक्नुहुन्छ वा यसलाई सुरक्षित राख्नको लागि राख्न सक्नुहुन्छ।",
+          "quality": "थप प्राविधिक",
+          "title": "डाटा डाउनलोड गर्नुहोस्"
+        },
+        "or": "or",
+        "upload": {
+          "action": "डाटा अपलोड गर्नुहोस्",
+          "description": "यस खातामा तपाईंको बुकमार्कहरू र प्रगतिहरू पुनर्स्थापना गर्न तपाईंको पहिले निर्यात गरिएको डाटा फाइल अपलोड गर्नुहोस्।",
+          "quality": "ब्याकअपबाट पुनर्स्थापना गर्नुहोस्",
+          "title": "डाटा अपलोड गर्नुहोस्"
+        }
+      },
+      "title": "आफ्नो डाटा माइग्रेट गर्नुहोस्"
     },
     "upload": {
-      "title": "Upload data",
-      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-      "status": {
-        "processing": "Processing data...",
-        "error": "Failed to upload your data. 😿",
-        "success": "Your data has been uploaded successfully! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
-      },
-      "file": {
-        "description": "Select the file you want to upload",
-        "select": "Select file",
-        "change": "Change file",
-        "name": "File name"
-      },
-      "exportedOn": "Exported on",
-      "previewTitle": "Preview:",
       "button": {
-        "import": "Import data",
-        "processing": "Processing...",
-        "success": "Import complete",
-        "home": "Continue to home",
-        "saveLocal": "Save locally"
-      }
-    },
-    "back": "Go back"
+        "home": "घरमा जारी राख्नुहोस्",
+        "import": "डाटा आयात गर्नुहोस्",
+        "processing": "प्रशोधन गर्दै...",
+        "saveLocal": "स्थानीय रूपमा बचत गर्नुहोस्"
+      },
+      "description": "यस खातामा तपाईंको बुकमार्कहरू र प्रगतिहरू पुनर्स्थापना गर्न तपाईंको पहिले निर्यात गरिएको डाटा फाइल अपलोड गर्नुहोस्।",
+      "exportedOn": "मा निर्यात गरियो",
+      "file": {
+        "change": "फाइल परिवर्तन गर्नुहोस्",
+        "description": "तपाईंले अपलोड गर्न चाहनुभएको फाइल चयन गर्नुहोस्",
+        "select": "फाइल चयन गर्नुहोस्"
+      },
+      "previewTitle": "पूर्वावलोकन:",
+      "status": {
+        "error": "तपाईंको डाटा अपलोड गर्न असफल भयो। 😿",
+        "processing": "डाटा प्रशोधन गर्दै...",
+        "success": "तपाईंको डाटा सफलतापूर्वक अपलोड गरिएको छ! 🎉",
+        "successLocal": "तपाईंको डाटा स्थानीय रूपमा सुरक्षित गरिएको छ! 🎉"
+      },
+      "title": "डाटा अपलोड गर्नुहोस्"
+    }
   },
   "navigation": {
     "banner": {
       "offline": "आफ्नो इन्टरनेट जाँच गर्नुहोस्"
     },
+    "install": {
+      "genericGuide": "तपाईंको ब्राउजरले स्वचालित PWA स्थापना प्रम्प्टलाई समर्थन गर्दैन।\nतपाईं अझै पनि ब्राउजर मेनु प्रयोग गरेर स्थापना गर्न सक्नुहुन्छ (उदाहरणका लागि: 'एप स्थापना गर्नुहोस्', 'सर्टकट सिर्जना गर्नुहोस्', वा 'डक/होम स्क्रिनमा थप्नुहोस्')।",
+      "iosSafariGuide": "एउटा एपको रूपमा AlphaFlix स्थापना गर्न:\n\n1. साझेदारी बटन ट्याप गर्नुहोस् (एर्रो संग वर्ग)।\n2. 'गृह स्क्रिनमा थप्नुहोस्' छनौट गर्नुहोस्।\n3. थप्नुहोस् ट्याप गर्नुहोस्।"
+    },
     "menu": {
-      "about": "हाम्रो बारे जानकारी",
+      "desktop": "एप सेटिङहरू",
       "logout": "बाहिर निस्कनु",
       "register": "क्लाउडमा सिंक गर्नुहोस्",
-      "settings": "सेटिङ",
-      "support": "समर्थन गर्नुहोस्",
-      "discover": "Discover",
-      "development": "Development",
-      "desktop": "App Settings"
-    },
-    "install": {
-      "iosSafariGuide": "एउटा एपको रूपमा AlphaFlix स्थापना गर्न:\n\n1. साझेदारी बटन ट्याप गर्नुहोस् (एर्रो संग वर्ग)।\n2. 'गृह स्क्रिनमा थप्नुहोस्' छनौट गर्नुहोस्।\n3. थप्नुहोस् ट्याप गर्नुहोस्।",
-      "genericGuide": "तपाईंको ब्राउजरले स्वचालित PWA स्थापना प्रम्प्टलाई समर्थन गर्दैन।\nतपाईं अझै पनि ब्राउजर मेनु प्रयोग गरेर स्थापना गर्न सक्नुहुन्छ (उदाहरणका लागि: 'एप स्थापना गर्नुहोस्', 'सर्टकट सिर्जना गर्नुहोस्', वा 'डक/होम स्क्रिनमा थप्नुहोस्')।"
+      "settings": "सेटिङ"
     }
   },
   "notFound": {
     "badge": "फेला परेन",
     "goHome": "होम् फिर्ता जानुहोस्",
-    "reloadButton": "Try again",
     "message": "हामीले जताततै हेर्यौं: डिब्बा मुनि, कोठरीमा, प्रोक्सी पछाडि तर अन्ततः तपाईंले खोजिरहनु भएको पेज फेला पार्न सकेनौं।",
+    "reloadButton": "पुन: प्रयास गर्नुहोस्",
     "title": "त्यो पेज फेला पार्न सकेन"
-  },
-  "downtimeNotice": {
-    "badge": "Issues",
-    "goHome": "Go home",
-    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
-    "title": "Provider issues"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "रद्द गर्नुहोस्",
-      "confirm": "डिफल्ट सेटअप प्रयोग गर्नुहोस्",
-      "description": "पूर्वनिर्धारित सेटअपमा उत्कृष्ट स्ट्रिमहरू छैनन् र असहनीय रूपमा ढिलो हुन सक्छ।",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "के तपाईँ निश्चित हुनुहुन्छ?"
-    },
-    "extension": {
-      "back": "पछाडी जाउ",
-      "explainer": "ब्राउजर एक्सटेन्सन प्रयोग गरेर, तपाईंले हामीले प्रस्ताव गर्नु पर्ने उत्तम स्ट्रिमहरू प्राप्त गर्न सक्नुहुन्छ। केवल एक साधारण स्थापना संग।",
-      "explainerIos": "दुर्भाग्यवश, ब्राउजर एक्सटेन्सन iOS मा समर्थित छैन, अर्को विकल्प रोज्न <bold>Go back</bold> थिच्नुहोस्।",
-      "extensionHelp": "यदि तपाईंले एक्स्टेन्सन स्थापना गर्नुभएको छ तर यो पत्ता लागेको छैन, <bold>तपाईंको ब्राउजर विस्तार मेनु मार्फत विस्तार खोल्नुहोस्</bold> र स्क्रिनमा चरणहरू पालना गर्नुहोस्।",
-      "linkChrome": "क्रोम एक्सटेन्सन स्थापना गर्नुहोस्",
-      "linkFirefox": "फायरफक्स एक्सटेन्सन स्थापना गर्नुहोस्",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "Chrome मा स्थापित भयो तर देखिदैन? पृष्ठ पुन: लोड गर्ने प्रयास गर्नुहोस्!",
-      "notDetectingAction": "पृष्ठ पुन: लोड गर्नुहोस्",
-      "status": {
-        "disallowed": "यो पेजको लागि एक्सटेन्सन सक्षम गरिएको छैन",
-        "disallowedAction": "एक्स्टेन्सन सक्षम गर्नुहोस्",
-        "failed": "स्थिति अनुरोध गर्न असफल",
-        "loading": "तपाइँ एक्सटेन्सन स्थापना गर्न को लागी प्रतिक्षा गर्दै",
-        "outdated": "एक्स्टेन्सन धेरै पुरानो छ",
-        "success": "एक्सटेन्सनले अपेक्षा गरे अनुसार काम गरिरहेको छ!"
-      },
-      "submit": "जारी राख्नुहोस्",
-      "title": "एक्सटेन्सन संग सुरु गरौं"
-    },
-    "proxy": {
-      "back": "पछाडी जाउ",
-      "explainer": "प्रोक्सी विधिको साथ, तपाईं स्वयं-सेवा प्रोक्सी बनाएर उत्कृष्ट गुणस्तर स्ट्रिमहरू प्राप्त गर्न सक्नुहुन्छ।",
-      "input": {
-        "errorConnection": "प्रोक्सीमा कनेक्ट हुन सकेन",
-        "errorInvalidUrl": "मान्य URL होइन",
-        "errorNotProxy": "प्रोक्सीको अपेक्षा गरे तर वेबसाइट पायो",
-        "label": "प्रोक्सी URL",
-        "placeholder": "https://"
-      },
-      "link": "प्रोक्सी कसरी बनाउने सिक्नुहोस्",
-      "submit": "प्रोक्सी पेश गर्नुहोस्",
-      "title": "एउटा नयाँ प्रोक्सी बनाऔं"
-    },
-    "start": {
-      "explainer": "सम्भावित उत्तम स्ट्रिमहरू प्राप्त गर्न, तपाईंले कुन स्ट्रिमिङ विधि प्रयोग गर्न चाहनुहुन्छ भनेर छनौट गर्न आवश्यक हुनेछ।",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "or",
-        "default": {
-          "text": "मलाई राम्रो गुणस्तरका स्ट्रिमहरू चाहिँदैन,<0 /> <1>पूर्वनिर्धारित सेटअप प्रयोग गर्नुहोस्</1>"
-        },
-        "extension": {
-          "action": "एक्सटेन्सन हाल्नुहोस",
-          "description": "ब्राउजर एक्सटेन्सन हाल्नुहोस र उत्तम स्रोतहरूमा पहुँच प्राप्त गर्नुहोस्।",
-          "quality": "उत्कृस्ट गुणस्तर",
-          "title": "ब्राउजर एक्सटेन्सन"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "सेटअप प्रोक्सी",
-          "description": "केवल 5 मिनेटमा प्रोक्सी सेटअप गर्नुहोस् र उत्कृष्ट स्रोतहरूमा पहुँच प्राप्त गर्नुहोस्।",
-          "quality": "राम्रो क्वालिटी",
-          "title": "आफ्नै प्रोक्सी"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "तपाईँलाई AlphaFlix सँग सेटअप गरौं"
+      "cancel": "रद्द गर्नुहोस्"
     }
   },
   "overlays": {
@@ -780,24 +524,45 @@
       "short": "फिर्ता"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "उपकरणमा कास्ट गर्दै..."
+      "device": "उपकरण",
+      "to": "{{device}} 📺 मा कास्ट गर्दै"
+    },
+    "loadingOverlayMessages": {
+      "1": "थप RAM डाउनलोड गर्दै...",
+      "2": "क्याफिनलाई सामग्रीमा रूपान्तरण गर्दै...",
+      "3": "ह्याम्स्टरलाई छिटो दौडन सिकाउँदै...",
+      "4": "इलेक्ट्रोनहरू छिटो सार्नको लागि मनाउने...",
+      "5": "लगभग त्यहाँ... हरेक लोडिङ बारले भन्यो...",
+      "6": "रिमोट खोज्दै... पर्खनुहोस्, गलत समस्या...",
+      "7": "अनन्तताबाट पछाडि गन्दै...",
+      "8": "भविष्यको अनुकरण गर्दै...",
+      "9": "बिरालोको भिडियो हेर्दै...",
+      "10": "बिरालो GIFs द्वारा विचलित...",
+      "11": "इन्टर्नले आफ्नो कफी रिफिल गर्दा कृपया पर्खनुहोस्...",
+      "12": "यो प्लग इन छ कि छैन जाँच गर्दै...",
+      "13": "यसलाई बन्द गरेर फेरि सक्रिय गर्दै...",
+      "14": "नतर्सनुहोस्‌...",
+      "15": "जाडो आउँदैछ...",
+      "16": "Skynet मा लग इन गर्दै...",
+      "17": "तपाईको सबै ब्राउजर हाम्रो हो...",
+      "18": "असीम असम्भवता ड्राइव खोज्दै...",
+      "19": "तपाईंलाई पर्खने नयाँ तरिकाहरू पत्ता लगाउँदै...",
+      "20": "तपाईंको समय हाम्रो लागि धेरै महत्त्वपूर्ण छ। हामीले तपाईलाई बेवास्ता गर्दा कृपया पर्खनुहोस्...",
+      "21": "विन्डोज अपडेट भन्दा अझै छिटो...",
+      "22": "तपाईं किन स्यान्डविच समात्नुहुन्न?"
     },
     "menus": {
+      "audio": {
+        "default": "पूर्वनिर्धारित"
+      },
       "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "डाउनलोडहरू सीधा प्रदायकबाट लिइन्छ। AlphaFlix ले डाउनलोडहरू कसरी प्रदान गरिन्छ भन्नेमा नियन्त्रण गर्दैन।",
+        "button": "डाउनलोड प्रयास गर्नुहोस्",
         "copyHlsPlaylist": "HLS प्लेलिस्ट लिङ्क कपि गर्नुहोस्",
+        "disclaimer": "डाउनलोडहरू सीधा प्रदायकबाट लिइन्छ। AlphaFlix ले डाउनलोडहरू कसरी प्रदान गरिन्छ भन्नेमा नियन्त्रण गर्दैन।",
         "downloadSubtitle": "हालको उपशीर्षक डाउनलोड गर्नुहोस्",
         "downloadVideo": "डाउनलोड भिडियो",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
         "hlsDisclaimer": "डाउनलोडहरू सीधा प्रदायकबाट लिइन्छ। चलचित्र-वेबको डाउनलोडहरू कसरी प्रदान गरिन्छ भन्नेमा नियन्त्रण छैन।<br /><br />कृपया ध्यान दिनुहोस् कि तपाइँ HLS प्लेलिस्ट डाउनलोड गर्दै हुनुहुन्छ, <bold>यदि तपाइँ उन्नत स्ट्रिमिङ ढाँचाहरूसँग परिचित हुनुहुन्न भने यसलाई डाउनलोड गर्न सिफारिस गरिँदैन। </bold>। विभिन्न ढाँचाहरूको लागि विभिन्न स्रोतहरू प्रयास गर्नुहोस्।",
+        "hlsDownloader": "वा, <0>hls डाउनलोडर वेबसाइट</0> मा जानुहोस् र तलबाट प्लेलिस्ट URL टाँस्नुहोस्।",
         "onAndroid": {
           "1": "एन्ड्रोइड मा, डाउनलोड बटन क्लिक गर्नुहोस् त्यसपछि, नयाँ पृष्ठमा, भिडियोमा <bold>ट्याप गर्नुहोस् र होल्ड गर्नुहोस्</bold>, त्यसपछि <bold>बचत</bold> चयन गर्नुहोस्।",
           "shortTitle": "डाउनलोड / एन्ड्रोइड",
@@ -819,57 +584,47 @@
         "button": "एपिसोडहरू",
         "emptyState": "यस सिजनमा कुनै एपिसोडहरू छैनन्, पछि फेरि जाँच गर्नुहोस्!",
         "episodeBadge": "E{{episode}}",
+        "favorites": "मनपर्नेहरू",
         "loadingError": "सिजन लोड गर्दा त्रुटि भयो",
         "loadingList": "लोड गर्दै...",
         "loadingTitle": "लोड गर्दै...",
-        "unairedEpisodes": "यस सिजनका एक वा बढी एपिसोडहरू अझै प्रसारण नभएकाले असक्षम पारिएका छन्।",
-        "seasons": "Seasons",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "markAsFavorite": "मनपर्ने रूपमा चिन्ह लगाउनुहोस्",
+        "markAsUnwatched": "नहेरेको भनी चिन्ह लगाउनुहोस्",
+        "markAsWatched": "हेरिएको रूपमा चिन्ह लगाउनुहोस्",
+        "noFavorites": "अझै मनपर्ने एपिसोडहरू छैनन्। तारा एपिसोड तिनीहरूलाई आफ्नो मनपर्ने मा थप्न!",
+        "showLess": "कम देखाउनुहोस्",
+        "showMore": "थप देखाउनुहोस्",
         "specials": "विशेषहरू"
       },
       "playback": {
-        "speedLabel": "प्लेब्याकको गति",
-        "title": "प्लेब्याक सेटिङ",
-        "disabled": "(Disabled in watch party)",
+        "disabled": "(वाच पार्टीमा असक्षम)",
         "speedBoosted": "2x",
-        "speedUnboosted": "{{speed}}x"
+        "speedLabel": "प्लेब्याकको गति",
+        "speedUnboosted": "{{speed}}x",
+        "title": "प्लेब्याक सेटिङ"
       },
       "quality": {
+        "auto": "अटो",
         "automaticLabel": "स्वचालित क्वालिटी",
         "hint": "तपाईं विभिन्न क्वालिटी प्राप्त गर्न <0>स्रोत स्विच</0> प्रयास गर्न सक्नुहुन्छ।",
         "iosNoQuality": "Apple-परिभाषित सीमितताहरूका कारण, गुणस्तर चयन यो स्रोतको लागि iOS मा उपलब्ध छैन। तपाईं विभिन्न गुणस्तर विकल्पहरू प्राप्त गर्न <0>अर्को स्रोतमा स्विच गर्न</0> प्रयास गर्न सक्नुहुन्छ।",
-        "title": "क्वालिटी",
-        "auto": "Auto"
+        "title": "क्वालिटी"
       },
       "settings": {
+        "audioItem": "आवाज",
         "downloadItem": "डाउनलोड",
         "enableSubtitles": "उपशीर्षकहरू सक्षम गर्नुहोस्",
-        "experienceSection": "हेर्ने अनुभव",
         "playbackItem": "प्लेब्याक सेटिङ",
-        "audioItem": "आवाज",
         "qualityItem": "क्वालिटी",
         "sourceItem": "भिडियो स्रोतहरू",
-        "subtitleItem": "उपशीर्षक सेटिङ",
-        "videoSection": "भिडियो सेत्तिन्ग्स"
+        "subtitleItem": "उपशीर्षक सेटिङ"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
           "text": "कुनै पनि भिडियोहरू फेला पार्न प्रयास गर्दा त्रुटि भयो, कृपया फरक स्रोत प्रयास गर्नुहोस्।",
           "title": "फेला पार्न असफल भयो"
         },
+        "findNextSource": "अर्को स्रोत खोज्नुहोस्",
         "noEmbeds": {
           "text": "हामीले कुनै पनि इम्बेडहरू फेला पार्न सकेनौं, कृपया अर्कै स्रोत प्रयास गर्नुहोस्।",
           "title": "कुनै इम्बेडहरू फेला परेनन्"
@@ -879,72 +634,53 @@
           "title": "कुनै स्ट्रिम छैन"
         },
         "title": "स्रोतहरू",
-        "unknownOption": "अज्ञात",
-        "findNextSource": "Find next source"
+        "unknownOption": "अज्ञात"
       },
       "subtitles": {
+        "autoSelectChoice": "स्वतः चयन गर्नुहोस्",
+        "autoSelectDifferentChoice": "फरक उपशीर्षक स्वतः चयन गर्न फेरि ट्याप गर्नुहोस्",
+        "clearSecondary": "माध्यमिक उपशीर्षक खाली गर्नुहोस्",
         "customChoice": "ड्रप वा फाइल अपलोड गर्नुहोस्",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
         "customizeLabel": "अनुकूलन गर्नुहोस्",
-        "previewLabel": "Subtitle preview:",
+        "delayEarly": "क्याप्शन हेर्नुभयो",
+        "delayLate": "अडियो सुनियो",
+        "doubleClickToCopy": "उपशीर्षक डेटा प्रतिलिपि गर्न डबल क्लिक गर्नुहोस्",
+        "dropSubtitleFile": "सबटाइटल फाइल यहाँ छोड्नुहोस्",
+        "dualSub": "दोहोरो उपशीर्षकहरू",
+        "dualSubDesc": "उत्तम सिंकको लागि समान ढाँचा (SRT, VTT...) र प्रदायक (OpenSubs...) चयन गर्नुहोस्",
+        "dualSubHint": "माध्यमिक उपशीर्षकको लागि भाषा चयन गर्नुहोस् (प्राथमिक माथि देखाइएको)",
+        "empty": "यसका लागि कुनै उपशीर्षकहरू उपलब्ध छैनन्।",
+        "loadingExternal": "बाह्य उपशीर्षकहरू लोड गर्दै...",
+        "loadingExternalProgress": "बाह्य उपशीर्षकहरू लोड गर्दै... ({{progress}}%)",
+        "matchScoreLabel": "मिलान ~{{score}}%",
+        "notFound": "उपलब्ध विकल्पहरू मध्ये कुनै पनि तपाईंको क्वेरीसँग मेल खाँदैन",
         "offChoice": "बन्द",
-        "onChoice": "On",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Source Subtitles",
-        "OpenSubtitlesChoice": "External Subtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "pasteChoice": "उपशीर्षक डाटा टाँस्नुहोस्",
+        "previewLabel": "उपशीर्षक पूर्वावलोकन:",
+        "primary": "प्राथमिक",
+        "refresh": "बाह्य उपशीर्षकहरू ताजा गर्नुहोस्",
+        "refreshing": "रिफ्रेस गर्दै...",
+        "secondary": "माध्यमिक",
+        "selectingSecondary": "माध्यमिक उपशीर्षक चयन गर्दै",
         "settings": {
           "backlink": "अनुकूलन उपशीर्षकहरू",
           "delay": "उपशीर्षकको ढिलाइ",
           "fixCapitals": "पूंजीकरण ठीक गर्नुहोस्"
         },
         "title": "उपशीर्षक",
-        "unknownLanguage": "अज्ञात",
-        "dropSubtitleFile": "सबटाइटल फाइल यहाँ छोड्नुहोस्",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "There are no provided subtitles for this.",
-        "notFound": "None of the available options match your query",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "transcriptChoice": "ट्रान्सक्रिप्ट",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "{{language}} बाट अनुवाद गर्नुहोस्"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "बाह्य उपशीर्षकहरू लोड गर्दै... ({{progress}}%)",
-        "matchScoreLabel": "मिलान ~{{score}}%"
+        "unknownLanguage": "अज्ञात",
+        "useNativeSubtitles": "मूल भिडियो उपशीर्षकहरू",
+        "useNativeSubtitlesDescription": "नेटिभ फुलस्क्रिन र PiP को लागि उपशीर्षकहरू प्रसारण गर्नुहोस्"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
-      },
-      "audio": {
-        "default": "Default"
+        "watchpartyItem": "पार्टी हेर्नुहोस्"
       }
     },
     "metadata": {
-      "api": {
-        "text": "API मेटाडेटा लोड गर्न सकिएन, कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस्।",
-        "title": "API मेटाडेटा लोड गर्न असफल भयो"
-      },
-      "legal": {
-        "badge": "हटाइयो",
-        "text": "यो मिडिया हटाउने सूचना वा प्रतिलिपि अधिकार दावीको कारणले अब उपलब्ध छैन।",
-        "title": "मिडिया हटाइएको छ"
-      },
       "extensionPermission": {
         "badge": "अनुमति छैन",
         "button": "एक्सटेन्सन प्रयोग गर्नुहोस्",
@@ -957,6 +693,11 @@
         "text": "TMDB बाट मिडियाको मेटाडेटा लोड गर्न सकिएन। कृपया जाँच गर्नुहोस् कि TMDB डाउन वा तपाईंको इन्टरनेटमा प्रतिबन्धित छ।",
         "title": "मेटाडेटा लोड गर्न असफल भयो"
       },
+      "legal": {
+        "badge": "हटाइयो",
+        "text": "यो मिडिया हटाउने सूचना वा प्रतिलिपि अधिकार दावीको कारणले अब उपलब्ध छैन।",
+        "title": "मिडिया हटाइएको छ"
+      },
       "notFound": {
         "badge": "फेला परेन",
         "homeButton": "घर फिर्ता",
@@ -965,18 +706,15 @@
       }
     },
     "nextEpisode": {
-      "replay": "Replay",
       "next": "अर्को एपिसोड",
-      "nextSeason": "Next season"
-    },
-    "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "nextSeason": "अर्को सिजन",
+      "replay": "रिप्ले गर्नुहोस्"
     },
     "playbackError": {
+      "autoResumeText": "मिडिया प्ले गर्ने प्रयास गर्दा एउटा त्रुटि भयो 😖। स्वचालित रूपमा अन्य स्रोतहरू प्रयास गर्दै...",
       "badge": "प्लेब्याक त्रुटि",
+      "copyDebugInfo": "डिबग जानकारी प्रतिलिपि गर्नुहोस्",
+      "debugInfo": "थप विवरणहरूको लागि कन्सोल जाँच गर्नुहोस्।",
       "errors": {
         "errorAborted": "प्रयोगकर्ताको अनुरोधमा मिडिया ल्याउने कार्य रद्द गरियो।",
         "errorDecode": "पहिले प्रयोगयोग्य हुन निर्धारण गरिएको भए तापनि, मिडिया स्रोत डिकोड गर्ने प्रयास गर्दा त्रुटि भयो, परिणामस्वरूप त्रुटि भयो।",
@@ -984,226 +722,168 @@
         "errorNetwork": "केहि प्रकारको सञ्जाल त्रुटि देखा पर्‍यो जसले मिडियालाई पहिले उपलब्ध भएता पनि सफलतापूर्वक ल्याउनबाट रोक्यो।",
         "errorNotSupported": "मिडिया वा मिडिया प्रदायक वस्तु सपोर्ट छैन।"
       },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
       "homeButton": "होम् जाउँ",
-      "resumeButton": "Try next sources",
+      "resumeButton": "अर्को स्रोतहरू प्रयास गर्नुहोस्",
       "text": "मिडिया प्ले गर्ने प्रयास गर्दा त्रुटि भयो। फेरि प्रयास गर्नुहोस।",
       "title": "भिडियो प्ले गर्न असफल भयो!"
     },
+    "resume": {
+      "description": "यो एपिसोड {{percentage}}% हेरिएको छ",
+      "restart": "पुन: सुरु गर्नुहोस्",
+      "resume": "पुन: सुरु गर्नुहोस्",
+      "title": "हेर्न जारी राख्नुहुन्छ?"
+    },
     "scraping": {
+      "extensionFailure": {
+        "badge": "एक्स्टेन्सन बन्द छ",
+        "enableExtension": "एक्स्टेन्सन सक्षम गर्नुहोस्",
+        "homeButton": "होम् जाउँ",
+        "text": "तपाईंले चलचित्र-वेब एक्स्टेन्सन स्थापना गर्नुभएको छ। यसलाई प्रयोग गर्न सुरु गर्न, तपाईंले यो साइटको लागिएक्स्टेन्सन सक्षम गर्न आवश्यक छ।",
+        "title": "कृपया एक्स्टेन्सन सक्षम गर्नुहोस्"
+      },
       "items": {
-        "failure": "त्रुटि भयो",
-        "timeout": "Timed out (15s)",
-        "notFound": "भिडियो छैन",
         "pending": "भिडियोहरू खोज्दैछौं..."
       },
       "notFound": {
         "badge": "फेला परेन",
         "detailsButton": "विवरण देखाऊ",
+        "discoverButton": "थप पत्ता लगाउनुहोस्",
         "homeButton": "होम् जाउँ",
-        "discoverButton": "Discover more",
         "text": "हामीले हाम्रा प्रदायकहरू मार्फत खोज्यौं र तपाईंले खोजिरहनुभएको मिडिया फेला पार्न सकेनौं! हामी मिडिया होस्ट गर्दैनौं र के उपलब्ध छ त्यसमा कुनै नियन्त्रण छैन। कृपया थप विवरणहरूको लागि तल 'विवरणहरू देखाउनुहोस्' क्लिक गर्नुहोस्।",
-        "title": "हामीले त्यो फेला पार्न सकेनौं",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
-      },
-      "extensionFailure": {
-        "badge": "एक्स्टेन्सन बन्द छ",
-        "homeButton": "होम् जाउँ",
-        "enableExtension": "एक्स्टेन्सन सक्षम गर्नुहोस्",
-        "title": "कृपया एक्स्टेन्सन सक्षम गर्नुहोस्",
-        "text": "तपाईंले चलचित्र-वेब एक्स्टेन्सन स्थापना गर्नुभएको छ। यसलाई प्रयोग गर्न सुरु गर्न, तपाईंले यो साइटको लागिएक्स्टेन्सन सक्षम गर्न आवश्यक छ।"
+        "title": "हामीले त्यो फेला पार्न सकेनौं"
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "स्रोतहरू स्विच गर्न गियर आइकनमा ट्याप गर्नुहोस्!",
+        "2": "लिङ्क प्रतिलिपि गर्न शीर्षक ट्याप गर्नुहोस्!",
+        "3": "फुलस्क्रिनको सट्टा वाइडस्क्रिन बटन देखाउन SHIFT ट्याप गर्नुहोस् वा होल्ड गर्नुहोस्!",
+        "4": "केहि स्रोतहरू अरू भन्दा राम्रो काम गर्छन्!",
+        "5": "थप स्रोतहरूको लागि विस्तार प्राप्त गर्नुहोस्!",
+        "6": "बुकमार्कहरू सम्पादन गर्न वा मेटाउन तिनीहरूलाई समात्नुहोस्!",
+        "7": "समयसँगै लिङ्क प्रतिलिपि गर्न SHIFT होल्ड गर्नुहोस् र शीर्षकमा ट्याप गर्नुहोस्!",
+        "8": "अनुकूलन उपशीर्षक रङ सेट गर्नुहोस्!",
+        "9": "किबोर्ड सर्टकटहरू हेर्नको लागि होल्ड गर्नुहोस्!"
       }
+    },
+    "segment": {
+      "credits": "क्रेडिटहरू",
+      "intro": "परिचय",
+      "recap": "रिक्याप"
+    },
+    "skipTime": {
+      "confidence": "आत्मविश्वास",
+      "connectApiKeyMessage": "नयाँ खण्डहरू पेश गर्न, जडान सेटिङहरूमा आफ्नो TheIntroDB API कुञ्जी प्रविष्ट गर्नुहोस्",
+      "credits": "क्रेडिटहरू छोड्नुहोस्",
+      "endOfVideo": "अन्त्य",
+      "endsAt": "{{time}} मा समाप्त हुन्छ",
+      "feedback": {
+        "modal": {
+          "cancel": "रद्द गर्नुहोस्",
+          "description": "सही खण्ड टाइमस्ट्याम्पहरू पेश गरेर TheIntroDB मा योगदान गर्नुहोस्। सबै सबमिशनहरू प्रकाशित हुनु अघि समुदाय द्वारा स्वीकार गरिन्छ।",
+          "endTimeLabel": "अन्त्य (हरू)",
+          "error": {
+            "endTime": "अन्त्य समय आवश्यक छ",
+            "mediaInfo": "मिडिया जानकारी उपलब्ध छैन",
+            "segment": "कुनै खण्ड चयन गरिएको छैन",
+            "startTime": "सुरु समय आवश्यक छ",
+            "submission": "टाइमस्ट्याम्पहरू पेश गर्दा त्रुटि",
+            "tidbKey": "TIDB API कुञ्जी सेट गरिएको छैन"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "अन्त प्रदान गरिएको छ भने न्यूनतम 5s। मिडियाको अन्त्यसम्म विस्तार गर्न सकिन्छ।",
+              "endDesc": "ऐच्छिक - यदि क्रेडिट फाइलको अन्त्यमा चल्छ भने खाली छोड्नुहोस्।",
+              "excludeDesc": "मध्य-क्रेडिट वा पोस्ट-क्रेडिट दृश्यहरू बहिष्कार गर्नुहोस्; मुख्य क्रेडिट रोल मात्र।",
+              "startDesc": "आवश्यक - जब बन्द क्रेडिटहरू सुरु हुन्छ (जस्तै जब पहिलो क्रेडिट पाठ देखा पर्दछ)।",
+              "whenToTitle": "क्रेडिट टाइमस्ट्याम्प गाइड:"
+            },
+            "durationDesc": "अन्तिम उपलब्ध गराएमा न्यूनतम ५ सेकेन्ड",
+            "durationLabel": "अवधि:",
+            "endDesc": "ऐच्छिक - खाली छ भने अन्त्यमा विस्तार हुन्छ",
+            "endLabel": "अन्त्य:",
+            "excludeDesc": "पोस्ट-क्रेडिट दृश्यहरू",
+            "excludeLabel": "बहिष्कार:",
+            "intro": {
+              "durationDesc": "धेरैजसो परिचयहरू ३०-९० सेकेन्डका हुन्छन्। यदि दुबै सुरु र अन्त्य सेट गरिएको छ भने न्यूनतम 5s।",
+              "endDesc": "आवश्यक - जब परिचय समाप्त हुन्छ (सामान्यतया जब शीर्षक कार्ड वा मुख्य एपिसोड सुरु हुन्छ)।",
+              "excludeDesc": "चिसो ओपन वा प्रि-इन्ट्रो दृश्यहरू समावेश नगर्नुहोस्; केवल मुख्य शीर्षक अनुक्रम।",
+              "startDesc": "ऐच्छिक - एपिसोडको सुरुमा परिचय सुरु भएमा खाली छोड्नुहोस्।",
+              "whenToTitle": "परिचय टाइमस्ट्याम्प गाइड:"
+            },
+            "preview": {
+              "durationDesc": "पूर्वावलोकन लम्बाइमा भिन्न हुन्छ। न्यूनतम ५ सेकेन्ड।",
+              "endDesc": "ऐच्छिक - मिडियाको अन्त्यमा पूर्वावलोकन समाप्त भएमा खाली छोड्नुहोस्।",
+              "excludeDesc": "प्रिभ्यू सामान्यतया एपिसोडको अन्त्यमा 15-90 सेकेन्डको हुन्छ अर्को एपिसोडको पूर्वावलोकन गर्दै।",
+              "startDesc": "आवश्यक - जब पूर्वावलोकन सुरु हुन्छ (जस्तै जब पूर्वावलोकन पाठ देखा पर्दछ)।",
+              "whenToTitle": "पूर्वावलोकन टाइमस्ट्याम्प गाइड:"
+            },
+            "recap": {
+              "durationDesc": "रिक्याप्स लम्बाइमा भिन्न हुन्छन्। यदि दुबै सुरु र अन्त्य सेट गरिएको छ भने न्यूनतम 5s।",
+              "endDesc": "आवश्यक - जब रिक्याप समाप्त हुन्छ र नयाँ सामग्री सुरु हुन्छ।",
+              "excludeDesc": "केवल \"पहिले सक्रिय\" वा रिक्याप खण्ड; परिचय वा नयाँ दृश्यहरू समावेश नगर्नुहोस्।",
+              "startDesc": "ऐच्छिक - यदि रिक्याप एपिसोडको सुरुमा सुरु हुन्छ भने खाली छोड्नुहोस्।",
+              "whenToTitle": "रिक्याप टाइमस्ट्याम्प गाइड:"
+            },
+            "startDesc": "आवश्यक - जब क्रेडिटहरू रोलिङ सुरु हुन्छ",
+            "startLabel": "सुरु:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 वा 210 (मिडियाको अन्त्यको लागि खाली छोड्नुहोस्)",
+              "intro": "३:३० वा २१० (आवश्यक)",
+              "preview": "3:30 वा 210 (मिडियाको अन्त्यको लागि खाली छोड्नुहोस्)",
+              "recap": "३:३० वा २१० (आवश्यक)"
+            },
+            "start": {
+              "credits": "२:३० वा १५० (आवश्यक)",
+              "intro": "२:३० वा १५० (सुरुमा सुरुको लागि खाली छोड्नुहोस्)",
+              "preview": "२:३० वा १५० (आवश्यक)",
+              "recap": "२:३० वा १५० (सुरुमा सुरुको लागि खाली छोड्नुहोस्)"
+            }
+          },
+          "segmentType": "खण्डको प्रकार",
+          "startTimeLabel": "सुरु (हरू)",
+          "submit": "पेश गर्नुहोस्",
+          "submitting": "पेस गर्दै...",
+          "success": {
+            "title": "सबमिशन सफल भयो! धन्यवाद!"
+          },
+          "title": "TheIntroDB मा टाइमस्ट्याम्पहरू पेश गर्नुहोस्",
+          "types": {
+            "credits": "क्रेडिटहरू",
+            "intro": "परिचय",
+            "preview": "पूर्वावलोकन",
+            "recap": "रिक्याप"
+          },
+          "whenToDesc": "सेकेन्डमा टाइमस्ट्याम्पहरू प्रविष्ट गर्नुहोस् (जस्तै 150), mm:ss ढाँचा (जस्तै 2:30), वा hh:mm:ss ढाँचा (जस्तै 1:42:20)। हामी स्वचालित रूपमा तपाईंको लागि ढाँचा रूपान्तरण गर्नेछौं।",
+          "whenToTitle": "टाइमस्ट्याम्प गाइड:"
+        },
+        "title": "के यो स्किप सही थियो?"
+      },
+      "intro": "परिचय छोड्नुहोस्",
+      "noSegments": "स्किप खण्डहरू उपलब्ध छैनन्",
+      "recap": "रिक्याप छोड्नुहोस्",
+      "skipSegments": "खण्डहरू छोड्नुहोस्",
+      "startsAt": "{{time}} मा सुरु हुन्छ",
+      "submissions": "{{count}} सबमिशनहरू",
+      "submitSegment": "खण्ड पेश गर्नुहोस्",
+      "timeUnknown": "समय अज्ञात"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
       "remaining": "{{timeLeft}} बाकी • {{timeFinished, datetime}} मा सक्किनेछ",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
-    },
-    "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
-    },
-    "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
-      "feedback": {
-        "title": "Was this skip correct?",
-        "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
-          "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
-          },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
-          },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
-          "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
-          },
-          "success": {
-            "title": "Submission Successful! Thanks!"
-          }
-        }
-      }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "एप लोड हुदैछ",
-    "loadingUser": "तपाईंको प्रोफाइल लोड हुदैछ",
     "loadingUserError": {
+      "disconectCancel": "रद्द गर्नुहोस्",
+      "disconnectConfirm": "पुष्टि गर्नुहोस्",
+      "disconnectMessage": "खाता सर्भरबाट विच्छेद गर्नुहोस्, सबैभन्दा हालको स्थानीय डेटा कायम राख्दै। तपाईंले फेरि साइन इन नगरेसम्म परिवर्तनहरू र हेरिएका सामग्रीहरू सिङ्क हुने छैनन्।",
+      "disconnectTitle": "ब्याकइन्डबाट जडान विच्छेद गर्ने हो?",
       "logout": "बाहिर निस्कनु",
-      "reset": "अनुकूलन सर्भर रिसेट गर्नुहोस्",
-      "disconnect": "Disconnect from backend",
-      "text": "तपाईंको प्रोफाइल लोड गर्न असफल भयो",
-      "reload": "Reload",
-      "textWithReset": "तपाईंको अनुकूलन सर्भरबाट तपाईंको प्रोफाइल लोड गर्न असफल भयो, पूर्वनिर्धारित सर्भरमा पुन: सेट गर्न चाहनुहुन्छ?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reload": "पुन: लोड गर्नुहोस्",
+      "reset": "अनुकूलन सर्भर रिसेट गर्नुहोस्"
     },
     "migration": {
       "failed": "तपाईंको डाटा माइग्रेट गर्न असफल भयो।",
@@ -1211,28 +891,12 @@
     }
   },
   "settings": {
-    "search": {
-      "placeholder": "Search settings..."
-    },
-    "all": {
-      "title": "All Settings"
-    },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "उपकरणको नाम",
-        "deviceNamePlaceholder": "व्यक्तिगत फोन",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
         "editProfile": "सम्पादन गर्नुहोस्",
-        "logoutButton": "बाहिर निस्कनु"
-      },
-      "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
+        "logoutButton": "बाहिर निस्कनु",
+        "nicknameLabel": "उपनाम",
+        "nicknamePlaceholder": "आफ्नो उपनाम प्रविष्ट गर्नुहोस्"
       },
       "actions": {
         "delete": {
@@ -1243,26 +907,26 @@
           "text": "यो कार्य अपरिवर्तनीय छ। सबै डाटा मेटाइनेछ र केहि पनि पुन: प्राप्त गर्न सकिँदैन।",
           "title": "खाता डिलीट गर्नुहोस्"
         },
-        "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
-        },
-        "title": "कार्यहरू",
         "logoutAllDevices": {
-          "title": "सम्पूर्ण सत्र समाप्त गर्नुहोस्",
+          "button": "सबै उपकरणहरूबाट साइन आउट गर्नुहोस्",
           "text": "यसले तपाईंलाई तपाईंको खातासँग जडित सबै उपकरणहरूबाट साइन आउट गरिदिन्छ।",
-          "button": "सबै उपकरणहरूबाट साइन आउट गर्नुहोस्"
-        }
+          "title": "सम्पूर्ण सत्र समाप्त गर्नुहोस्"
+        },
+        "migration": {
+          "button": "खाता माइग्रेट गर्नुहोस्",
+          "text": "आफ्नो खातालाई नयाँ सर्भरमा माइग्रेट गर्नुहोस् वा आफ्नो डाटा डाउनलोड गर्नुहोस्।",
+          "title": "खाता माइग्रेसन"
+        },
+        "title": "कार्यहरू"
       },
       "devices": {
         "deviceNameLabel": "उपकरणको नाम",
-        "unknownDevice": "Unknown device, error decrypting name",
         "failed": "सत्रहरू लोड गर्न असफल भयो",
+        "lastActive": "पछिल्लो सक्रिय: {{date}}",
+        "loggedInAt": "लग इन: {{date}}",
         "removeDevice": "हटाउनुहोस्",
         "title": "उपकरणहरु",
-        "lastActive": "पछिल्लो सक्रिय: {{date}}",
-        "loggedInAt": "लग इन: {{date}}"
+        "unknownDevice": "अज्ञात उपकरण, नाम डिक्रिप्ट गर्दा त्रुटि"
       },
       "profile": {
         "finish": "सम्पादन समाप्त गर्नुहोस्",
@@ -1278,377 +942,213 @@
       },
       "title": "खाता"
     },
+    "all": {
+      "title": "सबै सेटिङहरू"
+    },
     "appearance": {
       "activeTheme": "सक्रिय",
-      "themes": {
-        "blue": "निलो",
-        "custom": "Custom",
-        "default": "साधारण",
-        "gray": "खैरो",
-        "red": "रातो",
-        "teal": "हरियो-नीलो",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
-        "spiderman": "Spiderman",
-        "forest": "Forest",
-        "wolverine": "Wolverine",
-        "popsicle": "Popsicle",
-        "hulk": "Hulk",
-        "autumn": "Autumn",
-        "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
-      },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "प्राथमिक",
+        "secondary": "माध्यमिक",
+        "tertiary": "तृतीयक"
       },
-      "title": "रूप-रंग",
       "options": {
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "carouselView": "क्यारोसेल दृश्य",
+        "carouselViewDescription": "ग्रिडको सट्टा carousel को रूपमा आफ्नो हाल हेर्दै र बुकमार्क सेक्सनहरू प्रदर्शन गर्नुहोस्। पूर्वनिर्धारित रूपमा असक्षम।",
+        "carouselViewLabel": "क्यारोसेल दृश्य",
+        "discover": "खण्ड पत्ता लगाउनुहोस्",
+        "discoverDescription": "तपाईंको बुकमार्क गरिएको मिडियाको तलको होमपेजमा डिस्कभर सेक्सन देखाउनुहोस्। पूर्वनिर्धारित रूपमा सक्षम।",
+        "discoverLabel": "खण्ड पत्ता लगाउनुहोस्",
+        "featured": "विशेष मिडिया",
+        "featuredDescription": "तपाईंको गृहपृष्ठको शीर्षमा विशेष चलचित्र र कार्यक्रमहरूको क्यारोसेल देखाउनुहोस्! पूर्वनिर्धारित रूपमा असक्षम।",
+        "featuredLabel": "विशेष मिडिया",
+        "forceCompactEpisodeView": "कम्प्याक्ट एपिसोड दृश्यलाई बल दिनुहोस्",
+        "forceCompactEpisodeViewDescription": "प्लेयरमा रहेको एपिसोड क्यारोसेललाई \"क्लासिक\" कम्प्याक्ट ठाडो दृश्य प्रयोग गर्न बल दिनुहोस्। पूर्वनिर्धारित रूपमा असक्षम।",
+        "forceCompactEpisodeViewLabel": "कम्प्याक्ट एपिसोडहरू",
+        "homeSectionOrder": "गृह खण्ड आदेश",
+        "homeSectionOrderDescription": "तपाईंको गृहपृष्ठमा हेर्ने र बुकमार्कहरू खण्डहरू पुन: क्रमबद्ध गर्न तान्नुहोस् र छोड्नुहोस्। समूह अर्डर गृह पृष्ठबाट सम्पादन गर्न सकिन्छ।",
+        "homeSectionOrderGroups": "बुकमार्क समूहहरू पुन: क्रमबद्ध गर्नुहोस्",
+        "logos": "छवि लोगो",
+        "logosDescription": "विवरण मोडल र विशेष खण्डमा पाठ शीर्षकको सट्टा छवि लोगो देखाउनुहोस्। पूर्वनिर्धारित रूपमा सक्षम।",
+        "logosLabel": "छवि लोगो",
+        "logosNotice": "धेरै जसो समय, लोगोहरू अंग्रेजी मात्र हुन्। अन्य भाषाहरूले यसलाई असक्षम गर्न चाहन्छन्!",
+        "minimalCards": "न्यूनतम कार्डहरू",
+        "minimalCardsDescription": "मिडिया कार्डहरूमा पाठ सामग्री (शीर्षक, प्रकार, वर्ष) लुकाउनुहोस्, पोस्टर छवि मात्र देखाउँदै।",
+        "minimalCardsLabel": "न्यूनतम कार्डहरू",
+        "modal": "विवरण मोडल",
+        "modalDescription": "तपाईंले वाच पृष्ठमा जानुको सट्टा मिडिया कार्डमा क्लिक गर्दा विवरण मोडल देखाउनुहोस्। ट्रेलरको लागि प्रोक्सी वा विस्तार आवश्यक छ। पूर्वनिर्धारित रूपमा असक्षम।",
+        "modalLabel": "विवरण मोडल",
+        "pauseOverlay": "ओभरले पज गर्नुहोस्",
+        "pauseOverlayDescription": "खेलाडी पज र निष्क्रिय हुँदा शीर्षक/लोगो र विवरण ओभरले देखाउनुहोस्।",
+        "pauseOverlayLabel": "ओभरले पज गर्नुहोस्"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
-      }
+        "bookmarks": "बुकमार्कहरू",
+        "watching": "हाल हेर्दै"
+      },
+      "themes": {
+        "acid": "एसिड",
+        "autumn": "शरद ऋतु",
+        "blue": "निलो",
+        "christmas": "क्रिसमस",
+        "classic": "क्लासिक",
+        "cobalt": "कोबाल्ट",
+        "custom": "अनुकूलन",
+        "default": "साधारण",
+        "ember": "एम्बर",
+        "forest": "वन",
+        "frost": "फ्रस्ट",
+        "grape": "अंगूर",
+        "gray": "खैरो",
+        "green": "हरियो",
+        "hulk": "हल्क",
+        "mocha": "मोचा",
+        "noir": "नोइर",
+        "pink": "गुलाबी",
+        "popsicle": "पप्सिकल",
+        "red": "रातो",
+        "spark": "स्पार्क",
+        "spiderman": "स्पाइडरम्यान",
+        "teal": "हरियो-नीलो",
+        "wolverine": "Wolverine"
+      },
+      "title": "रूप-रंग"
     },
     "connections": {
       "server": {
-        "description": "यदि तपाईं आफ्नो डेटा भण्डारण गर्न अनुकूलन ब्याकइन्डमा जडान गर्न चाहनुहुन्छ भने, यसलाई सक्षम गर्नुहोस् र URL प्रदान गर्नुहोस्। <0>निर्देशनहरू।</0>",
-        "label": "अनुकूलन सर्भर",
-        "urlLabel": "अनुकूलन सर्भर URL",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "सेटअप गर्नुहोस्",
-        "errorStatus": {
-          "description": "यो सेटअपमा एक वा बढी वस्तुहरू तपाईंको ध्यान आवश्यक छ जस्तो देखिन्छ।",
-          "title": "केहि तपाईंको ध्यान आवश्यक छ"
-        },
-        "itemError": "यस सेटिङमा केही गडबड छ। यसलाई ठीक गर्न फेरि सेटअप गर्नुहोस्।",
-        "items": {
-          "default": "डिफल्ट सेटअप",
-          "extension": "एक्सटेन्सन",
-          "proxy": "आफ्नै प्रोक्सी",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "पुन: सेटअप गर्नुहोस्",
-        "successStatus": {
-          "description": "तपाइँ तपाइँको मनपर्ने मिडिया हेर्न सुरु गर्न को लागी सबै चीजहरू छन्।",
-          "title": "सबै कुरा मिलाइएको छ!"
-        },
-        "unsetStatus": {
-          "description": "कृपया सेटअप प्रक्रिया सुरु गर्न दायाँ तिरको बटनमा क्लिक गर्नुहोस्।",
-          "title": "तपाईं सेटअप मार्फत जानुभएको छैन"
-        }
-      },
-      "title": "संबन्धहरु",
-      "workers": {
-        "addButton": "नया worker हरु हाल्नुहोस",
-        "description": "एप्लिकेसन प्रकार्य बनाउनको लागि, सबै ट्राफिक प्रोक्सीहरू मार्फत रूट गरिएको छ। यदि तपाईं आफ्नो कामदारहरू ल्याउन चाहनुहुन्छ भने यसलाई सक्षम गर्नुहोस्। <0>निर्देशनहरू।</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "अहिलेसम्म worker हरु छैनन्, तल एउटा थप्नुहोस्",
-        "label": "आफ्नै proxy workers हरु चलाउनुहोस्",
-        "urlLabel": "Worker URL हरु",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
+        "changeWarning": "ब्याकएन्ड सर्भर परिवर्तन गर्दा तपाइँ लग आउट हुनेछ। जारी राख्ने हो?",
+        "changeWarningTitle": "ब्याकएन्ड सर्भर परिवर्तन गर्नुहोस्",
+        "error": "ब्याकइन्डमा जडान गर्दा त्रुटि",
+        "notice": "तपाईंको खाता ब्याकएन्डहरू बीच सिंक गर्दैन, त्यसैले याद गर्नुहोस् कि तपाईंले कुन प्रयोग गर्नुहुन्छ!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
-      }
+        "description": "परिचय, रिक्याप, र क्रेडिट खण्डहरूमा प्रतिक्रिया छोडेर TheIntroDB मा योगदान गर्नुहोस्। <0>थप जान्नुहोस्।</0>",
+        "tokenLabel": "API कुञ्जी"
+      },
+      "title": "संबन्धहरु"
     },
     "preferences": {
-      "title": "प्राथमिकता",
+      "autoplay": "स्वतः प्ले",
+      "autoplayDescription": "अन्तमा पुगेपछि स्वचालित रूपमा अर्को एपिसोडलाई श्रृंखलामा प्ले गर्नुहोस्। ब्राउजर एक्सटेन्सन, कस्टम प्रोक्सी, वा होस्टद्वारा अनुमति दिइएको खण्डमा पूर्वनिर्धारित सेटअपको साथ प्रयोगकर्ताहरूद्वारा सक्षम गर्न सकिन्छ।",
+      "autoplayLabel": "स्वतः प्ले",
+      "autoResumeOnPlaybackError": "प्लेब्याक त्रुटिमा स्वत: पुनःसुरु",
+      "autoResumeOnPlaybackErrorDescription": "प्लेब्याकको समयमा हालको स्रोत असफल हुँदा स्वचालित रूपमा अन्य स्रोतहरूको खोजी जारी राख्नुहोस्। यदि असक्षम पारिएको छ भने, तपाईंले म्यानुअल रिजुम विकल्पको साथ त्रुटि स्क्रिन देख्नुहुनेछ।",
+      "autoResumeOnPlaybackErrorLabel": "प्लेब्याक त्रुटिमा स्वत: पुनःसुरु",
+      "autoSkipSegments": "स्वत: स्किप खण्डहरू",
+      "autoSkipSegmentsDescription": "सक्रिय हुँदा, हेरिरहँदा स्वतः परिचय, रिक्याप र पूर्वावलोकन खण्डहरू छोड्नुहोस्।",
+      "autoSkipSegmentsLabel": "स्वत: स्किप खण्डहरू",
+      "doubleClickToSeek": "खोज्न डबल ट्याप गर्नुहोस्",
+      "doubleClickToSeekDescription": "10 सेकेन्ड अगाडि वा पछाडि खोज्न खेलाडीको बायाँ वा दायाँ छेउमा डबल ट्याप गर्नुहोस्।",
+      "doubleClickToSeekLabel": "खोज्न डबल ट्याप सक्षम गर्नुहोस्",
+      "embedOrder": "इम्बेडहरू पुन: क्रमबद्ध गर्दै",
+      "embedOrderDescription": "इम्बेडहरू पुन: क्रमबद्ध गर्न तान्नुहोस् र छोड्नुहोस्। यसले तपाईँले हेर्न प्रयास गरिरहनुभएको मिडियाको लागि इम्बेडहरू जाँच गरिएको क्रम निर्धारण गर्नेछ। <br>PH_1__ <strong> (पूर्वनिर्धारित अर्डर धेरै प्रयोगकर्ताहरूको लागि उत्तम हो)</strong>",
+      "embedOrderEnableLabel": "कस्टम इम्बेड अर्डर",
+      "holdToBoost": "गति बढाउन होल्ड गर्नुहोस्",
+      "holdToBoostDescription": "स्पेसबार होल्ड गर्नुहोस् वा स्क्रिनलाई छोएर होल्ड गर्नुहोस् अस्थायी रूपमा प्लेब्याक गति 2x मा बढाउन। अघिल्लो गतिमा फर्कन रिलीज गर्नुहोस्।",
+      "holdToBoostLabel": "बढावा दिन होल्ड सक्षम गर्नुहोस्",
+      "keyboardShortcuts": "किबोर्ड सर्टकटहरू",
+      "keyboardShortcutsDescription": "अनुप्रयोगको लागि किबोर्ड सर्टकटहरू अनुकूलित गर्नुहोस्। कुनै पनि समयमा यो मद्दत देखाउनको लागि होल्ड गर्नुहोस्",
+      "keyboardShortcutsLabel": "किबोर्ड सर्टकटहरू अनुकूलित गर्नुहोस्",
       "language": "एपको भाषा",
       "languageDescription": "सम्पूर्ण एप्लिकेसनमा भाषा लागू भयो।",
+      "lastSuccessfulSource": "पछिल्लो पटक प्रयोग गरिएको स्रोत",
+      "lastSuccessfulSourceDescription": "अघिल्लो एपिसोडको लागि सफलतापूर्वक सामग्री प्रदान गर्ने स्रोतलाई स्वचालित रूपमा प्राथमिकता दिनुहोस्। यसले श्रृंखला हेर्दा निरन्तरता सुनिश्चित गर्न मद्दत गर्दछ।",
+      "lastSuccessfulSourceEnableLabel": "पछिल्लो पटक प्रयोग गरिएको स्रोत",
+      "lowPerformanceMode": "कम प्रदर्शन / ब्यान्डविथ मोड",
+      "lowPerformanceModeDescription": "ब्यान्डविथ-हेवी सुविधाहरू असक्षम गरेर ढिलो जडानहरू र उपकरणहरूको लागि अनुप्रयोगलाई अनुकूलन गर्दछ। यो मोडले डेटाको प्रयोग घटाउँछ र मुख्य खोज र घडीको कार्यक्षमतालाई अक्षुण्ण राखेर कार्यसम्पादन सुधार गर्छ।",
+      "lowPerformanceModeLabel": "कम प्रदर्शन मोड",
+      "manualSource": "म्यानुअल स्रोत चयन",
+      "manualSourceDescription": "स्क्र्याप गर्नु अघि स्रोत छनोट गर्न आवश्यक छ। स्वचालित स्रोत चयन असक्षम पार्छ र प्लेब्याक सुरु गर्दा स्रोत पिकर खोल्छ।",
+      "manualSourceLabel": "म्यानुअल स्रोत चयन",
+      "showLess": "कम देखाउनुहोस्",
+      "showMore": "थप देखाउनुहोस्",
+      "skipCredits": "अन्त्य क्रेडिटहरू छोड्नुहोस्",
+      "skipCreditsDescription": "सक्षम हुँदा, अन्तिम क्रेडिटहरू छोड्नको लागि 99% पूरा भएपछि स्वचालित रूपमा अर्को एपिसोड प्ले गर्नुहोस्। असक्षम हुँदा, एपिसोड पूर्ण रूपमा पूरा नभएसम्म पर्खनुहोस्।",
+      "skipCreditsLabel": "अन्तिम क्रेडिटहरू छोड्नुहोस्",
+      "sourceOrder": "स्रोतहरू पुन: क्रमबद्ध गर्दै",
+      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
+      "sourceOrderEnableLabel": "कस्टम स्रोत अर्डर",
       "thumbnail": "थम्बनेलहरू बनाउनुहोस्",
       "thumbnailDescription": "अधिकांश समय, भिडियोहरूमा थम्बनेलहरू हुँदैनन्। तपाईंले वर्तमानमा नै तिनीहरूलाई उत्पन्न गर्न यो सेटिङ सक्षम गर्न सक्नुहुन्छ तर तिनीहरूले तपाईंको भिडियोलाई सुस्त बनाउन सक्छन्।",
       "thumbnailLabel": "थम्बनेलहरू बनाउनुहोस्",
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "title": "प्राथमिकता"
     },
     "reset": "रिसेट गर्नुहोस्",
     "save": "सेभ गर्नुहोस्",
+    "search": {
+      "placeholder": "खोज सेटिङहरू..."
+    },
     "sidebar": {
       "info": {
-        "appVersion": "एप संस्करण",
-        "backendUrl": "ब्याकइन्ड URL",
-        "backendVersion": "ब्याकएन्ड संस्करण",
-        "hostname": "होस्टको नाम",
-        "insecure": "असुरक्षित",
-        "nickname": "Nickname",
         "notLoggedIn": "तपाईं लग्द इन हुनुहुन्न",
-        "secure": "सुरक्षित",
-        "title": "एप बारे जानकारी",
-        "unknownVersion": "अज्ञात",
         "userId": "प्रयोगकर्ता ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "तपाईंको साथी दर्ताको लागि निमन्त्रणा कोडको रूपमा यसलाई प्रयोग गर्नुहोस्"
       }
     },
     "subtitles": {
-      "backgroundLabel": "पृष्ठभूमि अस्पष्टता",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledDescription": "क्याप्सन पृष्ठभूमि धमिलो असक्षम गर्नाले केही झिलिमिली समस्याहरू समाधान गर्न सक्छ",
+      "backgroundBlurEnabledLabel": "पृष्ठभूमि धमिलो",
       "backgroundBlurLabel": "पृष्ठभूमि धमिलो",
+      "backgroundLabel": "पृष्ठभूमि अस्पष्टता",
+      "BorderThicknessLabel": "सीमा मोटाई",
       "colorLabel": "रङ",
+      "high": "उच्च",
+      "low": "पूर्वनिर्धारित",
       "previewQuote": "म डराउनु हुँदैन। डर दिमागको हत्यारा हो।",
+      "textBoldLabel": "बोल्ड टेक्स्ट",
       "textSizeLabel": "टेक्स्ट साइज",
-      "title": "उपशीर्षक",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "Border": "सीमाना",
+        "default": "पूर्वनिर्धारित",
+        "depressed": "उदास",
+        "dropShadow": "छाया छोड्नुहोस्",
+        "raised": "उठाइयो",
+        "title": "पाठ शैली"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "title": "उपशीर्षक",
+      "verticalPositionLabel": "ठाडो स्थिति"
     },
     "unsaved": "तपाईंसँग सुरक्षित नगरिएका परिवर्तनहरू छन्"
-  },
-  "discover": {
-    "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
-      "top10": "शीर्ष १०"
-    },
-    "carousel": {
-      "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
-        "top10": "Top 10",
-        "trending": "अहिले प्रचलनमा छ"
-      },
-      "change": "Change",
-      "more": "View more"
-    },
-    "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
-    },
-    "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
-    },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
-    "filters": {
-      "country": "देश"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-    },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "साझा वाच पार्टी लिङ्क वा कोठा कोड प्रविष्ट गर्नुहोस्",
-    "you": "तपाईं",
-    "guestFallback": "अतिथि"
   },
   "tmdb": {
     "genres": {
       "10759": "कार्य र साहसिक"
     }
+  },
+  "watchParty": {
+    "aheadOfHost": "होस्ट भन्दा {{seconds}} सेकेन्ड अगाडि",
+    "alone": "एक्लो",
+    "behindHost": "होस्ट पछि {{seconds}} सेकेन्ड",
+    "cancel": "रद्द गर्नुहोस्",
+    "connectedAsGuest": "पाहुनाको रूपमा पार्टी हेर्न जोडिएको छ",
+    "contentMismatch": "वाच पार्टीमा सामेल हुन सक्दैन: सामग्री होस्टको सामग्रीसँग मेल खाँदैन।",
+    "copyCode": "प्रतिलिपि गर्न क्लिक गर्नुहोस्",
+    "emptyRoom": "यो कोठामा अझै कोही छैन",
+    "enterCodeOrLink": "साझा वाच पार्टी लिङ्क वा कोठा कोड प्रविष्ट गर्नुहोस्",
+    "episodeMismatch": "वाच पार्टीमा सामेल हुन सक्दैन: तपाइँ होस्ट भन्दा फरक एपिसोड हेर्दै हुनुहुन्छ।",
+    "guestFallback": "अतिथि",
+    "hosting": "होस्टिङ",
+    "hostParty": "एक वाच पार्टी होस्ट गर्नुहोस्",
+    "invalidRoom": "यो कोठामा जडान गर्न सकिएन",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "सामेल हुनुहोस्",
+    "joinParty": "वाच पार्टीमा सामेल हुनुहोस्",
+    "leaveWatchParty": "वाच पार्टी छोड्नुहोस्",
+    "linkCopied": "प्रतिलिपि गरियो!",
+    "noHost": "यो वाच पार्टीमा कुनै होस्ट छैन",
+    "save": "बचत गर्नुहोस्",
+    "shareCode": "यो कोड साथीहरूसँग साझा गर्नुहोस् (लिङ्क प्रतिलिपि गर्न क्लिक गर्नुहोस्)",
+    "showStatusOverlay": "स्थिति ओभरले देखाउनुहोस्",
+    "status": {
+      "inSync": "सिंकमा",
+      "outOfSync": "सिंक बाहिर"
+    },
+    "syncing": "सिंक गर्दै...",
+    "validating": "वाच पार्टी प्रमाणीकरण गर्दै...",
+    "viewers": "दर्शक ({{count}})",
+    "watching": "हेर्दै",
+    "withCount": "{{count}} अन्यसँग",
+    "you": "तपाईं"
   }
 }
