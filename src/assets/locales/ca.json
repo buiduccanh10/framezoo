@@ -176,7 +176,15 @@
       "validationError": "Frase de contrasenya incorrecta o incompleta",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Pseudònim",
+      "nicknamePlaceholder": "Introduïu el vostre àlies",
+      "passwordLabel": "Contrasenya",
+      "passwordPlaceholder": "Introduïu la vostra contrasenya",
+      "nicknameRequired": "El sobrenom és obligatori",
+      "passwordRequired": "La contrasenya és necessària",
+      "nicknameNotFound": "No s'ha trobat el sobrenom",
+      "passwordIncorrect": "La contrasenya és incorrecta"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Icona d'usuari",
         "next": "Següent",
         "title": "Informació del compte"
-      }
+      },
+      "passwordInput": {
+        "title": "Creeu el vostre inici de sessió",
+        "description": "Trieu un àlies i una contrasenya. La vostra contrasenya funciona com una frase de contrasenya segura, així que assegureu-vos de recordar-la!"
+      },
+      "nicknameLabel": "Pseudònim",
+      "nicknamePlaceholder": "Trieu un sobrenom únic",
+      "nicknameTaken": "El sobrenom ja està pres",
+      "passwordLabel": "Contrasenya",
+      "passwordPlaceholder": "Crea una contrasenya (utilitzada com a frase de contrasenya)",
+      "passwordWeak": "La contrasenya ha de tenir com a mínim 8 caràcters amb lletres i números",
+      "passwordMismatch": "Les contrasenyes no coincideixen",
+      "confirmPasswordLabel": "Confirmeu la contrasenya",
+      "confirmPasswordPlaceholder": "Confirmeu la vostra contrasenya"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Per instal·lar AlphaFlix com a aplicació:\n\n1. Toqueu el botó Compartir (quadrat amb una fletxa).\n2. Trieu \"Afegeix a la pantalla d'inici\".\n3. Toqueu Afegeix.",
+      "genericGuide": "El vostre navegador no admet una sol·licitud d'instal·lació automàtica de PWA.\nEncara podeu instal·lar-lo mitjançant el menú del navegador (per exemple: \"Instal·la l'aplicació\", \"Crea una drecera\" o \"Afegeix al Dock/Pantalla d'inici\")."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Especials"
       },
       "playback": {
         "speedLabel": "Velocitat de la reproducció",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "S'estan carregant subtítols externs... ({{progress}}%)",
+        "matchScoreLabel": "Coincidència ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "La càrrega de sessions ha fallat",
         "removeDevice": "Elimina",
-        "title": "Dispositiu"
+        "title": "Dispositiu",
+        "lastActive": "Darrer actiu: {{date}}",
+        "loggedInAt": "Inicieu sessió a: {{date}}"
       },
       "profile": {
         "finish": "Finalitza l'edició",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Tendència ara"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "País"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Introduïu un enllaç d'una festa de visualització compartida o un codi d'habitació",
+    "you": "tu",
+    "guestFallback": "Convidat"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Acció i Aventura"
+    }
   }
 }

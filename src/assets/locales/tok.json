@@ -176,7 +176,15 @@
       "validationError": "pakala",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Nickname",
+      "nicknamePlaceholder": "Enter your nickname",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "nicknameRequired": "Nickname is required",
+      "passwordRequired": "Password is required",
+      "nicknameNotFound": "Nickname not found",
+      "passwordIncorrect": "Password is incorrect"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "sitelen",
         "next": "o pana",
         "title": "lipu open"
-      }
+      },
+      "passwordInput": {
+        "title": "Create your login",
+        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!"
+      },
+      "nicknameLabel": "Nickname",
+      "nicknamePlaceholder": "Choose a unique nickname",
+      "nicknameTaken": "Nickname is already taken",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Create a password (used as your passphrase)",
+      "passwordWeak": "Password must be at least 8 characters with letters and numbers",
+      "passwordMismatch": "Passwords do not match",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "To install BetaMovie as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add.",
+      "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen')."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Specials"
       },
       "playback": {
         "speedLabel": "tenpo lukin",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
+        "matchScoreLabel": "Match ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "alasa li pakala",
         "removeDevice": "o weka",
-        "title": "ilo"
+        "title": "ilo",
+        "lastActive": "Last active: {{date}}",
+        "loggedInAt": "Logged in at: {{date}}"
       },
       "profile": {
         "finish": "o ante",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Trending Now"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Country"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Enter a shared watch party link or room code",
+    "you": "You",
+    "guestFallback": "Guest"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Action & Adventure"
+    }
   }
 }

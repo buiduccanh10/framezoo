@@ -176,7 +176,15 @@
       "validationError": "ग़लत या अपूर्ण पासफ़्रेज़",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "उपनाम",
+      "nicknamePlaceholder": "अपना उपनाम दर्ज करें",
+      "passwordLabel": "पासवर्ड",
+      "passwordPlaceholder": "अपना कूटशब्द भरें",
+      "nicknameRequired": "उपनाम आवश्यक है",
+      "passwordRequired": "पासवर्ड आवश्यक है",
+      "nicknameNotFound": "उपनाम नहीं मिला",
+      "passwordIncorrect": "पासवर्ड ग़लत है"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "आइकन",
         "next": "अगला",
         "title": "खाता संबंधी जानकारी"
-      }
+      },
+      "passwordInput": {
+        "title": "अपना लॉगिन बनाएँ",
+        "description": "एक उपनाम और पासवर्ड चुनें. आपका पासवर्ड एक सुरक्षित पासफ़्रेज़ के रूप में काम करता है, इसलिए सुनिश्चित करें कि आप इसे याद रखें!"
+      },
+      "nicknameLabel": "उपनाम",
+      "nicknamePlaceholder": "एक अनोखा उपनाम चुनें",
+      "nicknameTaken": "उपनाम पहले ही लिया जा चुका है",
+      "passwordLabel": "पासवर्ड",
+      "passwordPlaceholder": "एक पासवर्ड बनाएं (आपके पासफ़्रेज़ के रूप में उपयोग किया गया)",
+      "passwordWeak": "पासवर्ड अक्षरों और संख्याओं के साथ कम से कम 8 अक्षर का होना चाहिए",
+      "passwordMismatch": "सांकेतिक शब्द मेल नहीं खाते",
+      "confirmPasswordLabel": "पासवर्ड की पुष्टि कीजिये",
+      "confirmPasswordPlaceholder": "अपने पासवर्ड की पुष्टि करें"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "खोज करना",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "अल्फ़ाफ़्लिक्स को एक ऐप के रूप में इंस्टॉल करने के लिए:\n\n1. शेयर बटन (तीर वाला वर्ग) पर टैप करें।\n2. 'होम स्क्रीन में जोड़ें' चुनें।\n3. जोड़ें टैप करें.",
+      "genericGuide": "आपका ब्राउज़र स्वचालित PWA इंस्टॉल प्रॉम्प्ट का समर्थन नहीं करता है.\nआप अभी भी ब्राउज़र मेनू का उपयोग करके इंस्टॉल कर सकते हैं (उदाहरण के लिए: 'ऐप इंस्टॉल करें', 'शॉर्टकट बनाएं', या 'डॉक/होम स्क्रीन में जोड़ें')।"
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "स्पेशल"
       },
       "playback": {
         "speedLabel": "प्लेबैक गति",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "बाहरी उपशीर्षक लोड हो रहा है... ({{progress}}%)",
+        "matchScoreLabel": "मिलान ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "सत्र लोड करने में विफल",
         "removeDevice": "निकालना",
-        "title": "उपकरण"
+        "title": "उपकरण",
+        "lastActive": "अंतिम सक्रिय: {{date}}",
+        "loggedInAt": "यहां लॉग इन किया गया: {{date}}"
       },
       "profile": {
         "finish": "संपादन समाप्त करें",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "चलचित्र",
       "tvshows": "टीवी शो",
-      "editorpicks": "संपादक की पसंद"
+      "editorpicks": "संपादक की पसंद",
+      "top10": "सर्वोत्तम 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "अब फैशन में है"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "शीर्ष पर वापस जाएँ"
+    "scrollToTop": "शीर्ष पर वापस जाएँ",
+    "filters": {
+      "country": "देश"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "एक साझा वॉच पार्टी लिंक या कमरा कोड दर्ज करें",
+    "you": "आप",
+    "guestFallback": "अतिथि"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "एक्शन एडवेंचर"
+    }
   }
 }

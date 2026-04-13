@@ -176,7 +176,15 @@
       "validationError": "Неправильна або неповна парольна фраза",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "псевдонім",
+      "nicknamePlaceholder": "Введіть свій псевдонім",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Введіть свій пароль",
+      "nicknameRequired": "Введіть псевдонім",
+      "passwordRequired": "Необхідно ввести пароль",
+      "nicknameNotFound": "Нік не знайдено",
+      "passwordIncorrect": "Пароль неправильний"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Іконка користувача",
         "next": "Наступний",
         "title": "Інформація про обліковий запис"
-      }
+      },
+      "passwordInput": {
+        "title": "Створіть свій логін",
+        "description": "Виберіть нік і пароль. Ваш пароль працює як безпечна парольна фраза, тому переконайтеся, що ви його запам’ятали!"
+      },
+      "nicknameLabel": "псевдонім",
+      "nicknamePlaceholder": "Виберіть унікальний нік",
+      "nicknameTaken": "Нік уже зайнятий",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Створіть пароль (використовується як ваша парольна фраза)",
+      "passwordWeak": "Пароль повинен містити не менше 8 символів з літерами та цифрами",
+      "passwordMismatch": "Паролі не збігаються",
+      "confirmPasswordLabel": "Підтвердьте пароль",
+      "confirmPasswordPlaceholder": "Підтвердьте свій пароль"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Щоб установити BetaMovie як програму:\n\n1. Натисніть кнопку «Поділитися» (квадрат зі стрілкою).\n2. Виберіть «Додати на головний екран».\n3. Натисніть Додати.",
+      "genericGuide": "Ваш браузер не підтримує запит на автоматичне встановлення PWA.\nВи все ще можете встановити за допомогою меню браузера (наприклад, «Установити програму», «Створити ярлик» або «Додати на панель/головний екран»)."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Спец"
       },
       "playback": {
         "speedLabel": "Швидкість відтворення",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Завантаження зовнішніх субтитрів... ({{progress}}%)",
+        "matchScoreLabel": "Збіг ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Сталася помилка при завантаженні сесій",
         "removeDevice": "Видалити",
-        "title": "Пристрої"
+        "title": "Пристрої",
+        "lastActive": "Остання активність: {{date}}",
+        "loggedInAt": "Увійшли в систему: {{date}}"
       },
       "profile": {
         "finish": "Завершити редагування",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Топ 10"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "У тренді зараз"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Країна"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Введіть посилання на вечірку спільного перегляду або код кімнати",
+    "you": "Ви",
+    "guestFallback": "Гість"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Бойовик і пригоди"
+    }
   }
 }

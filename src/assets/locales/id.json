@@ -176,7 +176,15 @@
       "validationError": "Kombinasi kata salah atau tidak lengkap",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Nama panggilan",
+      "nicknamePlaceholder": "Masukkan nama panggilan Anda",
+      "passwordLabel": "Kata sandi",
+      "passwordPlaceholder": "Masukkan kata sandi Anda",
+      "nicknameRequired": "Nama panggilan diperlukan",
+      "passwordRequired": "Kata sandi diperlukan",
+      "nicknameNotFound": "Nama panggilan tidak ditemukan",
+      "passwordIncorrect": "Kata sandi salah"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Ikon pengguna",
         "next": "Berikutnya",
         "title": "Informasi akun"
-      }
+      },
+      "passwordInput": {
+        "title": "Buat login Anda",
+        "description": "Pilih nama panggilan dan kata sandi. Kata sandi Anda berfungsi sebagai frasa sandi yang aman, jadi pastikan Anda mengingatnya!"
+      },
+      "nicknameLabel": "Nama panggilan",
+      "nicknamePlaceholder": "Pilih nama panggilan yang unik",
+      "nicknameTaken": "Nama panggilan sudah dipakai",
+      "passwordLabel": "Kata sandi",
+      "passwordPlaceholder": "Buat kata sandi (digunakan sebagai frasa sandi Anda)",
+      "passwordWeak": "Kata sandi minimal harus 8 karakter dengan huruf dan angka",
+      "passwordMismatch": "Kata sandi tidak cocok",
+      "confirmPasswordLabel": "Konfirmasi Kata Sandi",
+      "confirmPasswordPlaceholder": "Konfirmasikan kata sandi Anda"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Untuk menginstal AlphaFlix sebagai aplikasi:\n\n1. Ketuk tombol Bagikan (persegi dengan panah).\n2. Pilih 'Tambahkan ke Layar Beranda'.\n3. Ketuk Tambah.",
+      "genericGuide": "Browser Anda tidak mendukung perintah pemasangan PWA otomatis.\nAnda masih dapat menginstal menggunakan menu browser (misalnya: 'Instal aplikasi', 'Buat pintasan', atau 'Tambahkan ke Dock/Layar Beranda')."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Spesial"
       },
       "playback": {
         "speedLabel": "Kecepatan pemutar",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Memuat subtitle eksternal... ({{progress}}%)",
+        "matchScoreLabel": "Cocok ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Gagal memuat sesi",
         "removeDevice": "Hapus",
-        "title": "Perangkat"
+        "title": "Perangkat",
+        "lastActive": "Terakhir aktif: {{date}}",
+        "loggedInAt": "Masuk di: {{date}}"
       },
       "profile": {
         "finish": "Selesai mengubah",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "10 teratas"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Sedang Tren Sekarang"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Negara"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Masukkan tautan pesta menonton bersama atau kode kamar",
+    "you": "Anda",
+    "guestFallback": "Tamu"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Aksi & Petualangan"
+    }
   }
 }

@@ -176,7 +176,15 @@
       "validationError": "Incorrect or incomplete passphrase /ᐠ. .ᐟ\\",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "ឈ្មោះហៅក្រៅ",
+      "nicknamePlaceholder": "បញ្ចូលឈ្មោះហៅក្រៅរបស់អ្នក។",
+      "passwordLabel": "ពាក្យសម្ងាត់",
+      "passwordPlaceholder": "បញ្ចូលពាក្យសម្ងាត់របស់អ្នក។",
+      "nicknameRequired": "ឈ្មោះហៅក្រៅត្រូវបានទាមទារ",
+      "passwordRequired": "ទាមទារពាក្យសម្ងាត់",
+      "nicknameNotFound": "រកមិនឃើញឈ្មោះហៅក្រៅទេ។",
+      "passwordIncorrect": "ពាក្យ​សម្ងាត់​មិន​ត្រឹមត្រូវ។"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "User icon",
         "next": "Next",
         "title": "Account information"
-      }
+      },
+      "passwordInput": {
+        "title": "បង្កើតការចូលរបស់អ្នក។",
+        "description": "ជ្រើសរើសឈ្មោះហៅក្រៅ និងពាក្យសម្ងាត់។ ពាក្យសម្ងាត់របស់អ្នកដំណើរការជាឃ្លាសម្ងាត់ដែលមានសុវត្ថិភាព ដូច្នេះត្រូវប្រាកដថាអ្នកចងចាំវា!"
+      },
+      "nicknameLabel": "ឈ្មោះហៅក្រៅ",
+      "nicknamePlaceholder": "ជ្រើសរើសឈ្មោះហៅក្រៅតែមួយគត់",
+      "nicknameTaken": "ឈ្មោះហៅក្រៅត្រូវបានយករួចហើយ",
+      "passwordLabel": "ពាក្យសម្ងាត់",
+      "passwordPlaceholder": "បង្កើតពាក្យសម្ងាត់ (ប្រើជាឃ្លាសម្ងាត់របស់អ្នក)",
+      "passwordWeak": "ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់ 8 តួអក្សរដែលមានអក្សរ និងលេខ",
+      "passwordMismatch": "ពាក្យសម្ងាត់មិនត្រូវគ្នាទេ។",
+      "confirmPasswordLabel": "បញ្ជាក់ពាក្យសម្ងាត់",
+      "confirmPasswordPlaceholder": "បញ្ជាក់ពាក្យសម្ងាត់របស់អ្នក។"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "ដើម្បីដំឡើង AlphaFlix ជាកម្មវិធី៖\n\n1. ប៉ះប៊ូតុងចែករំលែក (ការ៉េដែលមានព្រួញមួយ)។\n2. ជ្រើសរើស 'បន្ថែមទៅអេក្រង់ដើម'។\n3. ប៉ះ បន្ថែម។",
+      "genericGuide": "កម្មវិធីរុករកតាមអ៊ីនធឺណិតរបស់អ្នកមិនគាំទ្រប្រអប់បញ្ចូលការដំឡើង PWA ដោយស្វ័យប្រវត្តិទេ។\nអ្នកនៅតែអាចដំឡើងដោយប្រើម៉ឺនុយកម្មវិធីរុករក (ឧទាហរណ៍៖ 'ដំឡើងកម្មវិធី' 'បង្កើតផ្លូវកាត់' ឬ 'បន្ថែមទៅចត/អេក្រង់ដើម')។"
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "ពិសេស"
       },
       "playback": {
         "speedLabel": "Playback speed",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "កំពុងផ្ទុកចំណងជើងរងខាងក្រៅ... ({{progress}}%)",
+        "matchScoreLabel": "ផ្គូផ្គង ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "សកម្មចុងក្រោយ៖ {{date}}",
+        "loggedInAt": "បានចូលនៅ៖ {{date}}"
       },
       "profile": {
         "finish": "Finish editing",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "កំពូល 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "កំពុងពេញនិយមឥឡូវនេះ"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "ប្រទេស"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "បញ្ចូលតំណភាគីនាឡិកាដែលបានចែករំលែក ឬលេខកូដបន្ទប់",
+    "you": "អ្នក",
+    "guestFallback": "ភ្ញៀវ"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "សកម្មភាព និងដំណើរផ្សងព្រេង"
+    }
   }
 }

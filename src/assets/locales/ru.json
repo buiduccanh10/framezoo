@@ -176,7 +176,15 @@
       "validationError": "Неправильная или неполная кодовая фраза",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Псевдоним",
+      "nicknamePlaceholder": "Введите свой никнейм",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Введите свой пароль",
+      "nicknameRequired": "Требуется псевдоним",
+      "passwordRequired": "Требуется пароль",
+      "nicknameNotFound": "Никнейм не найден",
+      "passwordIncorrect": "Пароль неверен"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Аватарка",
         "next": "Далее",
         "title": "Информация об аккаунте"
-      }
+      },
+      "passwordInput": {
+        "title": "Создайте свой логин",
+        "description": "Выберите никнейм и пароль. Ваш пароль работает как безопасная парольная фраза, поэтому обязательно запомните его!"
+      },
+      "nicknameLabel": "Псевдоним",
+      "nicknamePlaceholder": "Выберите уникальный никнейм",
+      "nicknameTaken": "Псевдоним уже занят",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Создайте пароль (используемый в качестве парольной фразы)",
+      "passwordWeak": "Пароль должен быть не менее 8 символов с буквами и цифрами.",
+      "passwordMismatch": "Пароли не совпадают",
+      "confirmPasswordLabel": "Подтвердите пароль",
+      "confirmPasswordPlaceholder": "Подтвердите свой пароль"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Подборки",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Чтобы установить AlphaFlix как приложение:\n\n1. Нажмите кнопку «Поделиться» (квадрат со стрелкой).\n2. Выберите «Добавить на главный экран».\n3. Нажмите «Добавить».",
+      "genericGuide": "Ваш браузер не поддерживает автоматическое приглашение на установку PWA.\nВы по-прежнему можете установить приложение с помощью меню браузера (например: «Установить приложение», «Создать ярлык» или «Добавить в Dock/главный экран»)."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Специальные предложения"
       },
       "playback": {
         "speedLabel": "Скорость воспроизведения",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Загрузка внешних субтитров... ({{progress}}%)",
+        "matchScoreLabel": "Совпадение ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Не удалось загрузить сеансы",
         "removeDevice": "Удалить",
-        "title": "Устройства"
+        "title": "Устройства",
+        "lastActive": "Последняя активность: {{date}}",
+        "loggedInAt": "Выполнен вход: {{date}}"
       },
       "profile": {
         "finish": "Завершить редактирование",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Топ 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "В тренде сейчас"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Страна"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Введите ссылку на общую группу просмотра или код комнаты.",
+    "you": "Ты",
+    "guestFallback": "Гость"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Экшн и приключения"
+    }
   }
 }

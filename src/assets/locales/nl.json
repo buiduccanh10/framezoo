@@ -176,7 +176,15 @@
       "validationError": "Incorrecte of incompleet wachtwoord",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Bijnaam",
+      "nicknamePlaceholder": "Voer uw bijnaam in",
+      "passwordLabel": "Wachtwoord",
+      "passwordPlaceholder": "Voer uw wachtwoord in",
+      "nicknameRequired": "Bijnaam is vereist",
+      "passwordRequired": "Wachtwoord is vereist",
+      "nicknameNotFound": "Bijnaam niet gevonden",
+      "passwordIncorrect": "Wachtwoord is onjuist"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Icoontje",
         "next": "Volgende",
         "title": "Account informatie"
-      }
+      },
+      "passwordInput": {
+        "title": "Maak uw login aan",
+        "description": "Kies een bijnaam en wachtwoord. Uw wachtwoord werkt als een veilige wachtwoordzin, dus zorg ervoor dat u deze onthoudt!"
+      },
+      "nicknameLabel": "Bijnaam",
+      "nicknamePlaceholder": "Kies een unieke bijnaam",
+      "nicknameTaken": "Bijnaam is al in gebruik",
+      "passwordLabel": "Wachtwoord",
+      "passwordPlaceholder": "Maak een wachtwoord aan (gebruikt als uw wachtwoordzin)",
+      "passwordWeak": "Het wachtwoord moet minimaal 8 tekens lang zijn, met letters en cijfers",
+      "passwordMismatch": "Wachtwoorden komen niet overeen",
+      "confirmPasswordLabel": "Bevestig wachtwoord",
+      "confirmPasswordPlaceholder": "Bevestig uw wachtwoord"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Ontdek",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "AlphaFlix als app installeren:\n\n1. Tik op de knop Delen (vierkant met een pijl).\n2. Kies 'Toevoegen aan startscherm'.\n3. Tik op Toevoegen.",
+      "genericGuide": "Uw browser ondersteunt geen automatische PWA-installatieprompt.\nJe kunt nog steeds installeren via het browsermenu (bijvoorbeeld: 'App installeren', 'Snelkoppeling maken' of 'Toevoegen aan Dock/Startscherm')."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Speciale aanbiedingen"
       },
       "playback": {
         "speedLabel": "Afspeelsnelheid",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Externe ondertitels laden... ({{progress}}%)",
+        "matchScoreLabel": "Komt overeen met ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Sessies niet geladen",
         "removeDevice": "Verwijder",
-        "title": "Apparaten"
+        "title": "Apparaten",
+        "lastActive": "Laatst actief: {{date}}",
+        "loggedInAt": "Ingelogd op: {{date}}"
       },
       "profile": {
         "finish": "Bewerken voltooien",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Films",
       "tvshows": "Televisieshows",
-      "editorpicks": "Aanbevolen door ons"
+      "editorpicks": "Aanbevolen door ons",
+      "top10": "Top-10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Nu populair"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Terug naar boven"
+    "scrollToTop": "Terug naar boven",
+    "filters": {
+      "country": "Land"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Voer een gedeelde kijkfeestlink of kamercode in",
+    "you": "Jij",
+    "guestFallback": "Gast"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Actie en avontuur"
+    }
   }
 }

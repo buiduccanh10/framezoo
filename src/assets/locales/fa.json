@@ -176,7 +176,15 @@
       "validationError": "عبارت عبور امنیتی نادرست یا ناقص است",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "نام مستعار",
+      "nicknamePlaceholder": "نام مستعار خود را وارد کنید",
+      "passwordLabel": "رمز عبور",
+      "passwordPlaceholder": "رمز عبور خود را وارد کنید",
+      "nicknameRequired": "نام مستعار الزامی است",
+      "passwordRequired": "رمز عبور لازم است",
+      "nicknameNotFound": "نام مستعار یافت نشد",
+      "passwordIncorrect": "رمز عبور نادرست است"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "نماد کاربری",
         "next": "بعدی",
         "title": "اطلاعات حساب کاربری"
-      }
+      },
+      "passwordInput": {
+        "title": "لاگین خود را ایجاد کنید",
+        "description": "نام مستعار و رمز عبور را انتخاب کنید. رمز عبور شما به عنوان یک کلمه عبور امن کار می کند، بنابراین مطمئن شوید که آن را به خاطر بسپارید!"
+      },
+      "nicknameLabel": "نام مستعار",
+      "nicknamePlaceholder": "یک نام مستعار منحصر به فرد انتخاب کنید",
+      "nicknameTaken": "نام مستعار قبلاً گرفته شده است",
+      "passwordLabel": "رمز عبور",
+      "passwordPlaceholder": "ایجاد یک رمز عبور (به عنوان رمز عبور شما استفاده می شود)",
+      "passwordWeak": "رمز عبور باید حداقل 8 کاراکتر با حروف و اعداد باشد",
+      "passwordMismatch": "گذرواژه ها مطابقت ندارند",
+      "confirmPasswordLabel": "رمز عبور را تایید کنید",
+      "confirmPasswordPlaceholder": "رمز عبور خود را تایید کنید"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "برای نصب AlphaFlix به عنوان یک برنامه:\n\n1. روی دکمه اشتراک گذاری (مربع با یک فلش) ضربه بزنید.\n2. «افزودن به صفحه اصلی» را انتخاب کنید.\n3. روی Add ضربه بزنید.",
+      "genericGuide": "مرورگر شما از درخواست نصب خودکار PWA پشتیبانی نمی کند.\nهمچنان می توانید با استفاده از منوی مرورگر نصب کنید (به عنوان مثال: \"نصب برنامه\"، \"ایجاد میانبر\"، یا \"افزودن به داک/صفحه اصلی\")."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "ویژه"
       },
       "playback": {
         "speedLabel": "سرعت پخش",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "در حال بارگیری زیرنویس خارجی... ({{progress}}%)",
+        "matchScoreLabel": "مطابقت با ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "دریافت نشست ها شکست خورد",
         "removeDevice": "حذف",
-        "title": "دستگاه ها"
+        "title": "دستگاه ها",
+        "lastActive": "آخرین فعالیت: {{date}}",
+        "loggedInAt": "وارد شده در: {{date}}"
       },
       "profile": {
         "finish": "تمام کردن ویرایش",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "10 تا"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "پرطرفدار در حال حاضر"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "کشور"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "پیوند مهمانی ساعت مشترک یا کد اتاق را وارد کنید",
+    "you": "شما",
+    "guestFallback": "مهمان"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "اکشن و ماجراجویی"
+    }
   }
 }

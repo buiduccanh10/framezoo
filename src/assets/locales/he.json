@@ -176,7 +176,15 @@
       "validationError": "ביטוי סיסמה שגוי או לא שלם",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "כינוי",
+      "nicknamePlaceholder": "הזן את הכינוי שלך",
+      "passwordLabel": "סִיסמָה",
+      "passwordPlaceholder": "הזן את הסיסמה שלך",
+      "nicknameRequired": "נדרש כינוי",
+      "passwordRequired": "נדרשת סיסמה",
+      "nicknameNotFound": "כינוי לא נמצא",
+      "passwordIncorrect": "הסיסמה שגויה"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "סמל משתמש",
         "next": "הבא",
         "title": "פרטי חשבון"
-      }
+      },
+      "passwordInput": {
+        "title": "צור את הכניסה שלך",
+        "description": "בחר כינוי וסיסמה. הסיסמה שלך פועלת כביטוי סיסמה מאובטח, אז וודא שאתה זוכר אותה!"
+      },
+      "nicknameLabel": "כינוי",
+      "nicknamePlaceholder": "בחר כינוי ייחודי",
+      "nicknameTaken": "הכינוי כבר נלקח",
+      "passwordLabel": "סִיסמָה",
+      "passwordPlaceholder": "צור סיסמה (המשמשת כביטוי הסיסמה שלך)",
+      "passwordWeak": "הסיסמה חייבת להיות לפחות 8 תווים עם אותיות ומספרים",
+      "passwordMismatch": "הסיסמאות אינן תואמות",
+      "confirmPasswordLabel": "אשר את הסיסמה",
+      "confirmPasswordPlaceholder": "אשר את הסיסמה שלך"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "גלה",
       "development": "פיתוח",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "כדי להתקין את AlphaFlix כאפליקציה:\n\n1. הקש על כפתור השיתוף (ריבוע עם חץ).\n2. בחר 'הוסף למסך הבית'.\n3. הקש על הוסף.",
+      "genericGuide": "הדפדפן שלך אינו תומך בהודעת התקנה אוטומטית של PWA.\nאתה עדיין יכול להתקין באמצעות תפריט הדפדפן (לדוגמה: 'התקן אפליקציה', 'צור קיצור דרך' או 'הוסף למעגן/מסך בית')."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "סמן כלא צפוי",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "מבצעים"
       },
       "playback": {
         "speedLabel": "מהירות הניגון",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "טוען כתוביות חיצוניות... ({{progress}}%)",
+        "matchScoreLabel": "התאמה ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "מסיבת צפייה",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "טעינת ההפעלות נכשלה",
         "removeDevice": "הסר",
-        "title": "מכשירים"
+        "title": "מכשירים",
+        "lastActive": "פעיל אחרון: {{date}}",
+        "loggedInAt": "מחובר ב: {{date}}"
       },
       "profile": {
         "finish": "סייםעריכה",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "סרטים",
       "tvshows": "סדרות",
-      "editorpicks": "בחירות העורך"
+      "editorpicks": "בחירות העורך",
+      "top10": "10 המובילים"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "סדרות {{genre}}",
         "categoryMovies": "סרטי {{category}}",
         "categoryShows": "סדרות {{category}}",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "פופולרי עכשיו"
       },
       "change": "שנה",
       "more": "הצג עוד"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "הצג את כל רשימות הסרטים",
     "allLists": "כל רשימות הסרטים",
-    "scrollToTop": "חזרה למעלה"
+    "scrollToTop": "חזרה למעלה",
+    "filters": {
+      "country": "מְדִינָה"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "מאמתים את מסיבת הצפייה...",
     "linkCopied": "הועתק!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "הזן קישור משותף למסיבת צפייה או קוד חדר",
+    "you": "אַתָה",
+    "guestFallback": "אוֹרֵחַ"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "פעולה והרפתקאות"
+    }
   }
 }

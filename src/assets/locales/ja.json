@@ -176,7 +176,15 @@
       "validationError": "パスワードが間違っています",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "ニックネーム",
+      "nicknamePlaceholder": "ニックネームを入力してください",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "パスワードを入力してください",
+      "nicknameRequired": "ニックネームは必須です",
+      "passwordRequired": "パスワードが必要です",
+      "nicknameNotFound": "ニックネームが見つかりません",
+      "passwordIncorrect": "パスワードが間違っています"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "ユーザーアイコン",
         "next": "次へ",
         "title": "アカウント情報"
-      }
+      },
+      "passwordInput": {
+        "title": "ログインを作成する",
+        "description": "ニックネームとパスワードを選択します。パスワードは安全なパスフレーズとして機能するので、必ず覚えておいてください。"
+      },
+      "nicknameLabel": "ニックネーム",
+      "nicknamePlaceholder": "ユニークなニックネームを選択してください",
+      "nicknameTaken": "ニックネームはすでに使用されています",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "パスワードを作成します (パスフレーズとして使用)",
+      "passwordWeak": "パスワードは文字と数字を含む 8 文字以上である必要があります",
+      "passwordMismatch": "パスワードが一致しません",
+      "confirmPasswordLabel": "パスワードを認証する",
+      "confirmPasswordPlaceholder": "パスワードを確認してください"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -615,6 +636,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "AlphaFlix をアプリとしてインストールするには:\n\n1. [共有] ボタン (矢印のある四角形) をタップします。\n2.「ホーム画面に追加」を選択します。\n3. 「追加」をタップします。",
+      "genericGuide": "お使いのブラウザは、自動 PWA インストール プロンプトをサポートしていません。\nブラウザのメニューを使用してインストールすることもできます (例: 「アプリのインストール」、「ショートカットの作成」、または「ドック/ホーム画面に追加」)。"
     }
   },
   "notFound": {
@@ -800,7 +825,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "スペシャル"
       },
       "playback": {
         "speedLabel": "Playback speed",
@@ -891,7 +917,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "外部字幕を読み込んでいます... ({{progress}}%)",
+        "matchScoreLabel": "~{{score}}% に一致"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1227,7 +1255,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "最終アクティブ: {{date}}",
+        "loggedInAt": "ログイン場所: {{date}}"
       },
       "profile": {
         "finish": "Finish editing",
@@ -1466,7 +1496,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "トップ10"
     },
     "carousel": {
       "title": {
@@ -1492,7 +1523,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "今のトレンド"
       },
       "change": "Change",
       "more": "View more"
@@ -1517,7 +1549,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "国"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1601,6 +1636,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "共有ウォッチパーティーリンクまたはルームコードを入力してください",
+    "you": "あなた",
+    "guestFallback": "ゲスト"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "アクション&アドベンチャー"
+    }
   }
 }

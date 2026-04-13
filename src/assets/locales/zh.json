@@ -176,7 +176,15 @@
       "validationError": "助记词不正确或不完整",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "昵称",
+      "nicknamePlaceholder": "输入您的昵称",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "输入您的密码",
+      "nicknameRequired": "昵称为必填项",
+      "passwordRequired": "需要密码",
+      "nicknameNotFound": "未找到昵称",
+      "passwordIncorrect": "密码不正确"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "用户图标",
         "next": "下一步",
         "title": "账户信息"
-      }
+      },
+      "passwordInput": {
+        "title": "创建您的登录名",
+        "description": "选择昵称和密码。您的密码是安全密码，因此请务必记住它！"
+      },
+      "nicknameLabel": "昵称",
+      "nicknamePlaceholder": "选择一个独特的昵称",
+      "nicknameTaken": "昵称已被占用",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "创建密码（用作您的密码）",
+      "passwordWeak": "密码必须至少8位，包含字母和数字",
+      "passwordMismatch": "密码不匹配",
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "确认您的密码"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "探索",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "要将 BetaMovie 安装为应用程序：\n\n1. 点击共享按钮（带箭头的方块）。\n2. 选择“添加到主屏幕”。\n3. 点击添加。",
+      "genericGuide": "您的浏览器不支持自动 PWA 安装提示。\n您仍然可以使用浏览器菜单进行安装（例如：“安装应用程序”、“创建快捷方式”或“添加到 Dock/主屏幕”）。"
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "特价商品"
       },
       "playback": {
         "speedLabel": "播放速度",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "正在加载外部字幕... ({{progress}}%)",
+        "matchScoreLabel": "匹配 ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "载入会话失败",
         "removeDevice": "移除",
-        "title": "设备"
+        "title": "设备",
+        "lastActive": "最后活跃时间：{{date}}",
+        "loggedInAt": "登录于：{{date}}"
       },
       "profile": {
         "finish": "完成编辑",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "电影",
       "tvshows": "节目",
-      "editorpicks": "编辑精选"
+      "editorpicks": "编辑精选",
+      "top10": "前10名"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "现在流行"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "返回顶部"
+    "scrollToTop": "返回顶部",
+    "filters": {
+      "country": "国家"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "输入共享观看派对链接或房间代码",
+    "you": "你",
+    "guestFallback": "客人"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "动作与冒险"
+    }
   }
 }

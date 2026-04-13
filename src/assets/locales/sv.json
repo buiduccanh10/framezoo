@@ -176,7 +176,15 @@
       "validationError": "Felaktigt eller ofullständigt lösenord",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Smeknamn",
+      "nicknamePlaceholder": "Ange ditt smeknamn",
+      "passwordLabel": "Lösenord",
+      "passwordPlaceholder": "Ange ditt lösenord",
+      "nicknameRequired": "Smeknamn krävs",
+      "passwordRequired": "Lösenord krävs",
+      "nicknameNotFound": "Smeknamn hittades inte",
+      "passwordIncorrect": "Lösenordet är felaktigt"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Användarikon",
         "next": "Nästa",
         "title": "Kontoinformation"
-      }
+      },
+      "passwordInput": {
+        "title": "Skapa din inloggning",
+        "description": "Choose a nickname and password. Ditt lösenord fungerar som en säker lösenordsfras, så se till att du kommer ihåg det!"
+      },
+      "nicknameLabel": "Smeknamn",
+      "nicknamePlaceholder": "Välj ett unikt smeknamn",
+      "nicknameTaken": "Smeknamn har redan tagits",
+      "passwordLabel": "Lösenord",
+      "passwordPlaceholder": "Skapa ett lösenord (används som din lösenordsfras)",
+      "passwordWeak": "Lösenordet måste bestå av minst 8 tecken med bokstäver och siffror",
+      "passwordMismatch": "Lösenord stämmer inte överens",
+      "confirmPasswordLabel": "Bekräfta lösenord",
+      "confirmPasswordPlaceholder": "Bekräfta ditt lösenord"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Utforska",
       "development": "Utveckling",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Så här installerar du AlphaFlix som en app:\n\n1. Tryck på knappen Dela (fyrkant med en pil).\n2. Välj \"Lägg till på startskärmen\".\n3. Tryck på Lägg till.",
+      "genericGuide": "Din webbläsare stöder inte en automatisk PWA-installationsuppmaning.\nDu kan fortfarande installera med hjälp av webbläsarmenyn (till exempel: 'Installera app', 'Skapa genväg' eller 'Lägg till i docka/startskärm')."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Markera som inte sedd",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Specialerbjudanden"
       },
       "playback": {
         "speedLabel": "Uppspelningshastighet",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Laddar externa undertexter... ({{progress}}%)",
+        "matchScoreLabel": "Matcha ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Tittarparty",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Misslyckades att ladda sessioner",
         "removeDevice": "Ta bort",
-        "title": "Enheter"
+        "title": "Enheter",
+        "lastActive": "Senast aktiv: {{date}}",
+        "loggedInAt": "Inloggad på: {{date}}"
       },
       "profile": {
         "finish": "Slutför redigering",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Topp 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Trendigt nu"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Land"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Ange en delad visningsfestlänk eller rumskod",
+    "you": "Du",
+    "guestFallback": "Gäst"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Action & Äventyr"
+    }
   }
 }

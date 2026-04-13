@@ -176,7 +176,15 @@
       "validationError": "Nepravilna ali nepopolna varnostna fraza",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Vzdevek",
+      "nicknamePlaceholder": "Vnesite svoj vzdevek",
+      "passwordLabel": "Geslo",
+      "passwordPlaceholder": "Vnesite vaše geslo",
+      "nicknameRequired": "Zahtevan je vzdevek",
+      "passwordRequired": "Zahtevano je geslo",
+      "nicknameNotFound": "Vzdevka ni bilo mogoče najti",
+      "passwordIncorrect": "Geslo ni pravilno"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Ikona uporabnika",
         "next": "Naprej",
         "title": "Informacije o profilu"
-      }
+      },
+      "passwordInput": {
+        "title": "Ustvarite svojo prijavo",
+        "description": "Izberite vzdevek in geslo. Vaše geslo deluje kot varno geslo, zato si ga zapomnite!"
+      },
+      "nicknameLabel": "Vzdevek",
+      "nicknamePlaceholder": "Izberite edinstven vzdevek",
+      "nicknameTaken": "Vzdevek je že zaseden",
+      "passwordLabel": "Geslo",
+      "passwordPlaceholder": "Ustvarite geslo (uporablja se kot vaše geslo)",
+      "passwordWeak": "Geslo mora imeti vsaj 8 znakov s črkami in številkami",
+      "passwordMismatch": "Gesli se ne ujemata",
+      "confirmPasswordLabel": "Potrdite geslo",
+      "confirmPasswordPlaceholder": "Potrdite svoje geslo"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Če želite namestiti AlphaFlix kot aplikacijo:\n\n1. Tapnite gumb Skupna raba (kvadrat s puščico).\n2. Izberite »Dodaj na začetni zaslon«.\n3. Tapnite Dodaj.",
+      "genericGuide": "Vaš brskalnik ne podpira samodejnega poziva za namestitev PWA.\nŠe vedno lahko namestite z uporabo menija brskalnika (na primer: »Namesti aplikacijo«, »Ustvari bližnjico« ali »Dodaj na dok/začetni zaslon«)."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Posebne ponudbe"
       },
       "playback": {
         "speedLabel": "Hitrost predvajanja",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Nalaganje zunanjih podnapisov ... ({{progress}}%)",
+        "matchScoreLabel": "Ujemanje ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Neuspešno nalaganje sej",
         "removeDevice": "Odstrani",
-        "title": "Naprave"
+        "title": "Naprave",
+        "lastActive": "Nazadnje aktiven: {{date}}",
+        "loggedInAt": "Prijavljen na: {{date}}"
       },
       "profile": {
         "finish": "Zaključi urejanje",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "10 najboljših"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Trenutno priljubljeno"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Država"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Vnesite povezavo za skupno gledanje zabave ali kodo sobe",
+    "you": "Ti",
+    "guestFallback": "Gost"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Akcija in pustolovščina"
+    }
   }
 }

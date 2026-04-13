@@ -176,7 +176,15 @@
       "validationError": "틀리거나 잘못된 암호문입니다",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "별명",
+      "nicknamePlaceholder": "닉네임을 입력하세요",
+      "passwordLabel": "비밀번호",
+      "passwordPlaceholder": "비밀번호를 입력하세요",
+      "nicknameRequired": "닉네임은 필수입니다",
+      "passwordRequired": "비밀번호가 필요합니다",
+      "nicknameNotFound": "닉네임을 찾을 수 없습니다",
+      "passwordIncorrect": "비밀번호가 올바르지 않습니다."
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "유저 아이콘",
         "next": "다음",
         "title": "계정 정보"
-      }
+      },
+      "passwordInput": {
+        "title": "로그인 만들기",
+        "description": "닉네임과 비밀번호를 선택하세요. 귀하의 비밀번호는 안전한 비밀번호 문구로 사용되므로 반드시 기억해 두십시오!"
+      },
+      "nicknameLabel": "별명",
+      "nicknamePlaceholder": "독특한 별명을 선택하세요",
+      "nicknameTaken": "닉네임은 이미 사용 중입니다.",
+      "passwordLabel": "비밀번호",
+      "passwordPlaceholder": "비밀번호 생성(암호 문구로 사용)",
+      "passwordWeak": "비밀번호는 영문, 숫자를 포함하여 8자 이상이어야 합니다.",
+      "passwordMismatch": "비밀번호가 일치하지 않습니다.",
+      "confirmPasswordLabel": "비밀번호 확인",
+      "confirmPasswordPlaceholder": "비밀번호를 확인하세요"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "AlphaFlix를 앱으로 설치하려면:\n\n1. 공유 버튼(화살표가 있는 사각형)을 탭합니다.\n2. '홈 화면에 추가'를 선택하세요.\n3. 추가를 탭합니다.",
+      "genericGuide": "귀하의 브라우저는 자동 PWA 설치 프롬프트를 지원하지 않습니다.\n브라우저 메뉴(예: '앱 설치', '바로가기 만들기' 또는 'Dock/홈 화면에 추가')를 사용하여 설치할 수 있습니다."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "스페셜"
       },
       "playback": {
         "speedLabel": "재생 속도",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "외부 자막 로드 중... ({{progress}}%)",
+        "matchScoreLabel": "~{{score}}% 일치"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "세션을 로드하지 못했습니다",
         "removeDevice": "제거",
-        "title": "기기"
+        "title": "기기",
+        "lastActive": "마지막 활성: {{date}}",
+        "loggedInAt": "로그인한 위치: {{date}}"
       },
       "profile": {
         "finish": "수정 완료",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "상위 10위"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "지금 인기 급상승"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "국가"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "공유된 함께 시청하기 링크 또는 룸 코드를 입력하세요.",
+    "you": "너",
+    "guestFallback": "손님"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "액션 & 어드벤처"
+    }
   }
 }

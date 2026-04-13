@@ -176,7 +176,15 @@
       "validationError": "Nepareizs vai nepabeigts paroles frāze",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Segvārds",
+      "nicknamePlaceholder": "Ievadiet savu segvārdu",
+      "passwordLabel": "Parole",
+      "passwordPlaceholder": "Ievadiet savu paroli",
+      "nicknameRequired": "Jānorāda segvārds",
+      "passwordRequired": "Nepieciešama parole",
+      "nicknameNotFound": "Segvārds nav atrasts",
+      "passwordIncorrect": "Parole nav pareiza"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Profila ikona",
         "next": "Nakamais",
         "title": "Konta informācija"
-      }
+      },
+      "passwordInput": {
+        "title": "Izveidojiet savu pieteikumvārdu",
+        "description": "Izvēlieties segvārdu un paroli. Jūsu parole darbojas kā droša ieejas frāze, tāpēc noteikti atcerieties to!"
+      },
+      "nicknameLabel": "Segvārds",
+      "nicknamePlaceholder": "Izvēlieties unikālu segvārdu",
+      "nicknameTaken": "Segvārds jau ir aizņemts",
+      "passwordLabel": "Parole",
+      "passwordPlaceholder": "Izveidojiet paroli (izmantojiet kā ieejas frāzi)",
+      "passwordWeak": "Parolei jābūt vismaz 8 rakstzīmēm ar burtiem un cipariem",
+      "passwordMismatch": "Paroles nesakrīt",
+      "confirmPasswordLabel": "Apstipriniet paroli",
+      "confirmPasswordPlaceholder": "Apstipriniet savu paroli"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Lai instalētu AlphaFlix kā lietotni:\n\n1. Pieskarieties pogai Kopīgot (kvadrāts ar bultiņu).\n2. Izvēlieties \"Pievienot sākuma ekrānam\".\n3. Pieskarieties Pievienot.",
+      "genericGuide": "Jūsu pārlūkprogramma neatbalsta automātisku PWA instalēšanas uzvedni.\nJūs joprojām varat instalēt, izmantojot pārlūkprogrammas izvēlni (piemēram, “Instalēt lietotni”, “Izveidot saīsni” vai “Pievienot dokam/sākuma ekrānam”)."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Īpašie piedāvājumi"
       },
       "playback": {
         "speedLabel": "Atskaņošana ātrums",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Notiek ārējo subtitru ielāde... ({{progress}}%)",
+        "matchScoreLabel": "Atbilst ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Neizdevās ielādēt sesijas",
         "removeDevice": "Nonēmt",
-        "title": "Ierīces"
+        "title": "Ierīces",
+        "lastActive": "Pēdējo reizi aktīva: {{date}}",
+        "loggedInAt": "Pieteicies: {{date}}"
       },
       "profile": {
         "finish": "Pabeidziet rediģēšanu",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Šobrīd aktuāli"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Valsts"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Ievadiet kopīgotas skatīšanās ballītes saiti vai telpas kodu",
+    "you": "Tu",
+    "guestFallback": "Viesis"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Asa sižeta un piedzīvojumi"
+    }
   }
 }

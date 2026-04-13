@@ -176,7 +176,15 @@
       "validationError": "Vitlaust eða óklárað lykilorð",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Gælunafn",
+      "nicknamePlaceholder": "Sláðu inn gælunafnið þitt",
+      "passwordLabel": "Lykilorð",
+      "passwordPlaceholder": "Sláðu inn lykilorðið þitt",
+      "nicknameRequired": "Gælunafn er áskilið",
+      "passwordRequired": "Lykilorð er krafist",
+      "nicknameNotFound": "Gælunafn fannst ekki",
+      "passwordIncorrect": "Lykilorð er rangt"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Notanda tákn",
         "next": "Næst",
         "title": "Reiknings upplýsingar"
-      }
+      },
+      "passwordInput": {
+        "title": "Búðu til innskráningu þína",
+        "description": "Veldu gælunafn og lykilorð. Lykilorðið þitt virkar sem öruggt lykilorð, svo vertu viss um að muna það!"
+      },
+      "nicknameLabel": "Gælunafn",
+      "nicknamePlaceholder": "Veldu einstakt gælunafn",
+      "nicknameTaken": "Gælunafn er þegar tekið",
+      "passwordLabel": "Lykilorð",
+      "passwordPlaceholder": "Búðu til lykilorð (notað sem lykilorðið þitt)",
+      "passwordWeak": "Lykilorð verður að vera að minnsta kosti 8 stafir með bókstöfum og tölustöfum",
+      "passwordMismatch": "Lykilorð passa ekki saman",
+      "confirmPasswordLabel": "Staðfestu lykilorð",
+      "confirmPasswordPlaceholder": "Staðfestu lykilorðið þitt"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Til að setja upp AlphaFlix sem app:\n\n1. Pikkaðu á Share hnappinn (ferningur með ör).\n2. Veldu 'Bæta við heimaskjá'.\n3. Pikkaðu á Bæta við.",
+      "genericGuide": "Vafrinn þinn styður ekki sjálfvirka PWA uppsetningarkvaðningu.\nÞú getur samt sett upp með því að nota vafravalmyndina (til dæmis: 'Setja upp app', 'Búa til flýtileið' eða 'Bæta við bryggju/heimaskjá')."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Sérstök"
       },
       "playback": {
         "speedLabel": "Spilunarhraði",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Hleður ytri skjátexta... ({{progress}}%)",
+        "matchScoreLabel": "Samsvörun ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Mistókst að hlaða fundum",
         "removeDevice": "Eyða",
-        "title": "Tæki"
+        "title": "Tæki",
+        "lastActive": "Síðast virk: {{date}}",
+        "loggedInAt": "Innskráður á: {{date}}"
       },
       "profile": {
         "finish": "Klára breytingar",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Topp 10"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Vinsælt núna"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Land"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Sláðu inn tengil eða herbergiskóða fyrir sameiginlegan áhorfsflokk",
+    "you": "Þú",
+    "guestFallback": "Gestur"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Hasar og ævintýri"
+    }
   }
 }

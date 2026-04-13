@@ -176,7 +176,15 @@
       "validationError": "ખોટો અથવા અપૂર્ણ પાસફ્રેઝ",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "ઉપનામ",
+      "nicknamePlaceholder": "તમારું ઉપનામ દાખલ કરો",
+      "passwordLabel": "પાસવર્ડ",
+      "passwordPlaceholder": "તમારો પાસવર્ડ દાખલ કરો",
+      "nicknameRequired": "ઉપનામ જરૂરી છે",
+      "passwordRequired": "પાસવર્ડ જરૂરી છે",
+      "nicknameNotFound": "ઉપનામ મળ્યું નથી",
+      "passwordIncorrect": "પાસવર્ડ ખોટો છે"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "વપરાશકર્તા ચિહ્ન",
         "next": "આગળ",
         "title": "એકાઉન્ટ માહિતી"
-      }
+      },
+      "passwordInput": {
+        "title": "તમારું લોગિન બનાવો",
+        "description": "ઉપનામ અને પાસવર્ડ પસંદ કરો. તમારો પાસવર્ડ સુરક્ષિત પાસફ્રેઝ તરીકે કામ કરે છે, તેથી ખાતરી કરો કે તમને તે યાદ છે!"
+      },
+      "nicknameLabel": "ઉપનામ",
+      "nicknamePlaceholder": "એક અનન્ય ઉપનામ પસંદ કરો",
+      "nicknameTaken": "ઉપનામ પહેલેથી જ લેવામાં આવ્યું છે",
+      "passwordLabel": "પાસવર્ડ",
+      "passwordPlaceholder": "પાસવર્ડ બનાવો (તમારા પાસફ્રેઝ તરીકે વપરાય છે)",
+      "passwordWeak": "પાસવર્ડ અક્ષરો અને સંખ્યાઓ સાથે ઓછામાં ઓછો 8 અક્ષરનો હોવો જોઈએ",
+      "passwordMismatch": "પાસવર્ડ મેળ ખાતા નથી",
+      "confirmPasswordLabel": "પાસવર્ડની પુષ્ટિ કરો",
+      "confirmPasswordPlaceholder": "તમારા પાસવર્ડની પુષ્ટિ કરો"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "એક એપ્લિકેશન તરીકે AlphaFlix ઇન્સ્ટોલ કરવા માટે:\n\n1. શેર બટનને ટેપ કરો (એરો સાથે ચોરસ).\n2. 'Add to Home Screen' પસંદ કરો.\n3. ઉમેરો ટેપ કરો.",
+      "genericGuide": "તમારું બ્રાઉઝર ઓટોમેટિક PWA ઇન્સ્ટોલ પ્રોમ્પ્ટને સપોર્ટ કરતું નથી.\nતમે હજી પણ બ્રાઉઝર મેનૂનો ઉપયોગ કરીને ઇન્સ્ટોલ કરી શકો છો (ઉદાહરણ તરીકે: 'એપ ઇન્સ્ટોલ કરો', 'શોર્ટકટ બનાવો' અથવા 'ડોક/હોમ સ્ક્રીન પર ઉમેરો')."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "વિશેષ"
       },
       "playback": {
         "speedLabel": "પ્લેબેક ઝડપ",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "બાહ્ય ઉપશીર્ષકો લોડ કરી રહ્યું છે... ({{progress}}%)",
+        "matchScoreLabel": "મેળ ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "સત્રો લોડ કરવામાં નિષ્ફળ",
         "removeDevice": "દૂર કરો",
-        "title": "ઉપકરણો"
+        "title": "ઉપકરણો",
+        "lastActive": "છેલ્લે સક્રિય: {{date}}",
+        "loggedInAt": "અહીં લૉગ ઇન કર્યું: {{date}}"
       },
       "profile": {
         "finish": "સંપાદન સમાપ્ત કરો",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "ટોચના 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "અત્યારે વલણમાં છે"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "દેશ"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "શેર કરેલ વોચ પાર્ટી લિંક અથવા રૂમ કોડ દાખલ કરો",
+    "you": "તમે",
+    "guestFallback": "મહેમાન"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "ક્રિયા અને સાહસ"
+    }
   }
 }

@@ -176,7 +176,15 @@
       "validationError": "Incorrect or incomplete passphrase /ᐠ. .ᐟ\\",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "අන්වර්ථ නාමය",
+      "nicknamePlaceholder": "ඔබගේ අන්වර්ථ නාමය ඇතුලත් කරන්න",
+      "passwordLabel": "මුරපදය",
+      "passwordPlaceholder": "ඔබගේ මුරපදය ඇතුලත් කරන්න",
+      "nicknameRequired": "අන්වර්ථ නාමය අවශ්‍යයි",
+      "passwordRequired": "මුරපදය අවශ්ය වේ",
+      "nicknameNotFound": "අන්වර්ථ නාමය හමු නොවීය",
+      "passwordIncorrect": "මුරපදය වැරදියි"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "User icon",
         "next": "Next",
         "title": "Account information"
-      }
+      },
+      "passwordInput": {
+        "title": "ඔබගේ පිවිසුම සාදන්න",
+        "description": "අන්වර්ථ නාමයක් සහ මුරපදයක් තෝරන්න. ඔබගේ මුරපදය ආරක්ෂිත මුර-වැකිකඩක් ලෙස ක්‍රියා කරයි, එබැවින් ඔබට එය මතක තබා ගැනීමට වග බලා ගන්න!"
+      },
+      "nicknameLabel": "අන්වර්ථ නාමය",
+      "nicknamePlaceholder": "අද්විතීය අන්වර්ථ නාමයක් තෝරන්න",
+      "nicknameTaken": "අන්වර්ථ නාමය දැනටමත් ගෙන ඇත",
+      "passwordLabel": "මුරපදය",
+      "passwordPlaceholder": "මුරපදයක් සාදන්න (ඔබේ මුර-වැකිකඩ ලෙස භාවිතා කරයි)",
+      "passwordWeak": "මුරපදය අකුරු සහ අංක සහිත අවම වශයෙන් අක්ෂර 8 ක් විය යුතුය",
+      "passwordMismatch": "මුරපද නොගැලපේ",
+      "confirmPasswordLabel": "මුරපදය තහවුරු කරන්න",
+      "confirmPasswordPlaceholder": "ඔබගේ මුරපදය තහවුරු කරන්න"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "යෙදුමක් ලෙස AlphaFlix ස්ථාපනය කිරීමට:\n\n1. බෙදාගැනීමේ බොත්තම තට්ටු කරන්න (ඊතලයක් සහිත හතරැස්).\n2. 'මුල් තිරයට එක් කරන්න' තෝරන්න.\n3. එකතු කරන්න තට්ටු කරන්න.",
+      "genericGuide": "ඔබගේ බ්‍රවුසරය ස්වයංක්‍රීය PWA ස්ථාපන විමසුමකට සහය නොදක්වයි.\nඔබට තවමත් බ්‍රවුසර මෙනුව භාවිතයෙන් ස්ථාපනය කළ හැක (උදාහරණයක් ලෙස: 'යෙදුම ස්ථාපනය කරන්න', 'කෙටිමං සාදන්න', හෝ 'Dock/Home Screen වෙත එක් කරන්න')."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "විශේෂ"
       },
       "playback": {
         "speedLabel": "Playback speed",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "බාහිර උපසිරැසි පූරණය කරමින්... ({{progress}}%)",
+        "matchScoreLabel": "ගැළපීම ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "අවසන් සක්‍රිය: {{date}}",
+        "loggedInAt": "පුරනය වී ඇත්තේ: {{date}}"
       },
       "profile": {
         "finish": "Finish editing",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "ඉහළම 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "දැන් ප්‍රවණතාවය"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "රට"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "බෙදාගත් ඔරලෝසු සාද සබැඳියක් හෝ කාමර කේතයක් ඇතුළු කරන්න",
+    "you": "ඔබ",
+    "guestFallback": "අමුත්තා"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "ක්‍රියාව සහ වික්‍රමය"
+    }
   }
 }

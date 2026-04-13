@@ -176,7 +176,15 @@
       "validationError": "Contraseña incorrecta ou incompleta",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Alcume",
+      "nicknamePlaceholder": "Introduce o teu alcume",
+      "passwordLabel": "Contrasinal",
+      "passwordPlaceholder": "Introduce o teu contrasinal",
+      "nicknameRequired": "O apelido é necesario",
+      "passwordRequired": "O contrasinal é necesario",
+      "nicknameNotFound": "Non se atopou o apelido",
+      "passwordIncorrect": "O contrasinal é incorrecto"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Ícono de usuario",
         "next": "Seguinte",
         "title": "Información da conta"
-      }
+      },
+      "passwordInput": {
+        "title": "Crea o teu inicio de sesión",
+        "description": "Escolla un alcume e un contrasinal. O teu contrasinal funciona como unha frase de acceso segura, así que asegúrate de lembralo."
+      },
+      "nicknameLabel": "Alcume",
+      "nicknamePlaceholder": "Escolle un alcume único",
+      "nicknameTaken": "O apelido xa está tomado",
+      "passwordLabel": "Contrasinal",
+      "passwordPlaceholder": "Crea un contrasinal (usado como frase de acceso)",
+      "passwordWeak": "O contrasinal debe ter polo menos 8 caracteres con letras e números",
+      "passwordMismatch": "Os contrasinais non coinciden",
+      "confirmPasswordLabel": "Confirme o contrasinal",
+      "confirmPasswordPlaceholder": "Confirma o teu contrasinal"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Para instalar AlphaFlix como unha aplicación:\n\n1. Toca o botón Compartir (cadrado cunha frecha).\n2. Escolla \"Engadir á pantalla de inicio\".\n3. Toque Engadir.",
+      "genericGuide": "O teu navegador non admite unha solicitude de instalación automática de PWA.\nAínda podes instalar a través do menú do navegador (por exemplo: \"Instalar aplicación\", \"Crear atallo\" ou \"Engadir ao Dock/Pantalla de inicio\")."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Especiais"
       },
       "playback": {
         "speedLabel": "Velocidade de reproducción",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Cargando subtítulos externos... ({{progress}}%)",
+        "matchScoreLabel": "Coincidencia ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Erro ao cargar sesións",
         "removeDevice": "Quitar",
-        "title": "Dispositivos"
+        "title": "Dispositivos",
+        "lastActive": "Último activo: {{date}}",
+        "loggedInAt": "Inicia sesión en: {{date}}"
       },
       "profile": {
         "finish": "Acabar de editar",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Tendencia agora"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "País"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Introduce unha ligazón para unha festa de observación compartida ou un código de sala",
+    "you": "Ti",
+    "guestFallback": "Invitado"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Acción e aventura"
+    }
   }
 }

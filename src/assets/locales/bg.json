@@ -176,7 +176,15 @@
       "validationError": "Некоректна или непълна паролна фраза",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Псевдоним",
+      "nicknamePlaceholder": "Въведете псевдонима си",
+      "passwordLabel": "Парола",
+      "passwordPlaceholder": "Въведете вашата парола",
+      "nicknameRequired": "Изисква се псевдоним",
+      "passwordRequired": "Изисква се парола",
+      "nicknameNotFound": "Псевдонимът не е намерен",
+      "passwordIncorrect": "Паролата е неправилна"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Потребителска икона",
         "next": "Напред",
         "title": "Информация за акаунта"
-      }
+      },
+      "passwordInput": {
+        "title": "Създайте своя вход",
+        "description": "Изберете псевдоним и парола. Вашата парола работи като защитена парола, така че се уверете, че я помните!"
+      },
+      "nicknameLabel": "Псевдоним",
+      "nicknamePlaceholder": "Изберете уникален псевдоним",
+      "nicknameTaken": "Псевдонимът вече е зает",
+      "passwordLabel": "Парола",
+      "passwordPlaceholder": "Създайте парола (използвана като ваша парола)",
+      "passwordWeak": "Паролата трябва да съдържа поне 8 знака с букви и цифри",
+      "passwordMismatch": "Паролите не съвпадат",
+      "confirmPasswordLabel": "Потвърдете паролата",
+      "confirmPasswordPlaceholder": "Потвърдете паролата си"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Открийте",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "За да инсталирате AlphaFlix като приложение:\n\n1. Докоснете бутона Споделяне (квадрат със стрелка).\n2. Изберете „Добавяне към началния екран“.\n3. Докоснете Добавяне.",
+      "genericGuide": "Вашият браузър не поддържа подкана за автоматично инсталиране на PWA.\nВсе още можете да инсталирате с помощта на менюто на браузъра (например: „Инсталиране на приложение“, „Създаване на пряк път“ или „Добавяне към Dock/Начален екран“)."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Специални"
       },
       "playback": {
         "speedLabel": "Скорост на възпроизвеждане",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Зареждат се външни субтитри... ({{progress}}%)",
+        "matchScoreLabel": "Съвпадение ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "Последна активност: {{date}}",
+        "loggedInAt": "Влезли сте на: {{date}}"
       },
       "profile": {
         "finish": "Finish editing",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Топ 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Набиращи популярност сега"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "държава"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Въведете споделена връзка за парти за гледане или код на стая",
+    "you": "Вие",
+    "guestFallback": "Гост"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Екшън и приключения"
+    }
   }
 }

@@ -176,7 +176,15 @@
       "validationError": "Incorrect or incomplete passphrase /ᐠ. .ᐟ\\",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "عرفی نام",
+      "nicknamePlaceholder": "اپنا عرفی نام درج کریں۔",
+      "passwordLabel": "پاس ورڈ",
+      "passwordPlaceholder": "اپنا پاس ورڈ درج کریں۔",
+      "nicknameRequired": "عرفی نام درکار ہے۔",
+      "passwordRequired": "پاس ورڈ درکار ہے۔",
+      "nicknameNotFound": "عرفی نام نہیں ملا",
+      "passwordIncorrect": "پاس ورڈ غلط ہے۔"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "User icon",
         "next": "Next",
         "title": "Account information"
-      }
+      },
+      "passwordInput": {
+        "title": "اپنا لاگ ان بنائیں",
+        "description": "ایک عرفی نام اور پاس ورڈ منتخب کریں۔ آپ کا پاس ورڈ ایک محفوظ پاس ورڈ کے طور پر کام کرتا ہے، لہذا یقینی بنائیں کہ آپ اسے یاد رکھتے ہیں!"
+      },
+      "nicknameLabel": "عرفی نام",
+      "nicknamePlaceholder": "ایک منفرد عرفی نام منتخب کریں۔",
+      "nicknameTaken": "عرفی نام پہلے ہی لیا گیا ہے۔",
+      "passwordLabel": "پاس ورڈ",
+      "passwordPlaceholder": "ایک پاس ورڈ بنائیں (آپ کے پاس فریز کے طور پر استعمال کیا جاتا ہے)",
+      "passwordWeak": "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے جس میں حروف اور نمبر ہوں۔",
+      "passwordMismatch": "پاس ورڈز مماثل نہیں ہیں۔",
+      "confirmPasswordLabel": "پاس ورڈ کی تصدیق کریں۔",
+      "confirmPasswordPlaceholder": "اپنے پاس ورڈ کی تصدیق کریں۔"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "BetaMovie کو بطور ایپ انسٹال کرنے کے لیے:\n\n1. شیئر بٹن کو تھپتھپائیں (تیر کے ساتھ مربع)۔\n2. 'ہوم اسکرین میں شامل کریں' کو منتخب کریں۔\n3. شامل کریں پر ٹیپ کریں۔",
+      "genericGuide": "آپ کا براؤزر خودکار PWA انسٹال پرامپٹ کو سپورٹ نہیں کرتا ہے۔\nآپ اب بھی براؤزر مینو کا استعمال کرتے ہوئے انسٹال کر سکتے ہیں (مثال کے طور پر: 'ایپ انسٹال کریں'، 'شارٹ کٹ بنائیں'، یا 'ڈاک/ہوم اسکرین میں شامل کریں')۔"
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "خصوصی"
       },
       "playback": {
         "speedLabel": "Playback speed",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "بیرونی سب ٹائٹلز لوڈ ہو رہے ہیں... ({{progress}}%)",
+        "matchScoreLabel": "میچ ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "آخری فعال: {{date}}",
+        "loggedInAt": "لاگ ان ہوا: {{date}}"
       },
       "profile": {
         "finish": "Finish editing",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "ٹاپ 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "ابھی ٹرینڈ ہو رہا ہے۔"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "ملک"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "مشترکہ واچ پارٹی کا لنک یا کمرے کا کوڈ درج کریں۔",
+    "you": "آپ",
+    "guestFallback": "مہمان"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "ایکشن اور ایڈونچر"
+    }
   }
 }

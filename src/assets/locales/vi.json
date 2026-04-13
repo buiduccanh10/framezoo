@@ -949,7 +949,9 @@
         "selectingSecondary": "Đang chọn phụ đề phụ"
       },
       "watchparty": {
-        "watchpartyItem": "Xem cùng bạn bè"
+        "watchpartyItem": "Xem cùng bạn bè",
+        "notice": "Bữa tiệc theo dõi kế thừa có thể không khả dụng đối với một số nguồn",
+        "legacyWatchparty": "Sử dụng buổi xem chung cũ"
       },
       "audio": {
         "default": "Mặc định"

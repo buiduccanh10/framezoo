@@ -176,7 +176,15 @@
       "validationError": "Vale vōi mittetäielik paroolifraas",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Hüüdnimi",
+      "nicknamePlaceholder": "Sisestage oma hüüdnimi",
+      "passwordLabel": "Parool",
+      "passwordPlaceholder": "Sisestage oma parool",
+      "nicknameRequired": "Hüüdnimi on kohustuslik",
+      "passwordRequired": "Parool on nõutav",
+      "nicknameNotFound": "Hüüdnime ei leitud",
+      "passwordIncorrect": "Parool on vale"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Kasutaja ikoon",
         "next": "Järgmine",
         "title": "Kontoteave"
-      }
+      },
+      "passwordInput": {
+        "title": "Looge oma sisselogimine",
+        "description": "Valige hüüdnimi ja parool. Teie parool töötab turvalise paroolina, seega jätke see kindlasti meelde!"
+      },
+      "nicknameLabel": "Hüüdnimi",
+      "nicknamePlaceholder": "Valige ainulaadne hüüdnimi",
+      "nicknameTaken": "Hüüdnimi on juba võetud",
+      "passwordLabel": "Parool",
+      "passwordPlaceholder": "Looge parool (kasutatakse paroolina)",
+      "passwordWeak": "Parool peab koosnema vähemalt 8 tähemärgist koos tähtede ja numbritega",
+      "passwordMismatch": "Paroolid ei ühti",
+      "confirmPasswordLabel": "Kinnitage parool",
+      "confirmPasswordPlaceholder": "Kinnitage oma parool"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "AlphaFlixi installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa.",
+      "genericGuide": "Teie brauser ei toeta automaatset PWA installiviipa.\nSaate siiski installida brauseri menüü kaudu (näiteks: „Installi rakendus”, „Loo otsetee” või „Lisa dokki/avakuvale”)."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Eripakkumised"
       },
       "playback": {
         "speedLabel": "Taasesituse kiirus",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Väliste subtiitrite laadimine... ({{progress}}%)",
+        "matchScoreLabel": "Vasta ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Seansside laadimine ebaõnnestus",
         "removeDevice": "Eemalda",
-        "title": "Seadmed"
+        "title": "Seadmed",
+        "lastActive": "Viimati aktiivne: {{date}}",
+        "loggedInAt": "Sisse logitud aadressil: {{date}}"
       },
       "profile": {
         "finish": "Lõpeta redigeerimine",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Hetkel populaarsust koguv"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Riik"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Sisestage jagatud vaatamispeo link või ruumi kood",
+    "you": "Sina",
+    "guestFallback": "Külaline"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Märul ja seiklus"
+    }
   }
 }

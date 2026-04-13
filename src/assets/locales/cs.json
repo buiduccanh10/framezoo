@@ -176,7 +176,15 @@
       "validationError": "Nesprávná nebo neúplná přístupová fráze",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Přezdívka",
+      "nicknamePlaceholder": "Zadejte svou přezdívku",
+      "passwordLabel": "Heslo",
+      "passwordPlaceholder": "Zadejte své heslo",
+      "nicknameRequired": "Přezdívka je povinná",
+      "passwordRequired": "Je vyžadováno heslo",
+      "nicknameNotFound": "Přezdívka nenalezena",
+      "passwordIncorrect": "Heslo je nesprávné"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Ikona uživatele",
         "next": "Další",
         "title": "Informace o účtu"
-      }
+      },
+      "passwordInput": {
+        "title": "Vytvořte si přihlašovací jméno",
+        "description": "Vyberte si přezdívku a heslo. Vaše heslo funguje jako bezpečná přístupová fráze, takže si jej zapamatujte!"
+      },
+      "nicknameLabel": "Přezdívka",
+      "nicknamePlaceholder": "Vyberte si jedinečnou přezdívku",
+      "nicknameTaken": "Přezdívka je již obsazena",
+      "passwordLabel": "Heslo",
+      "passwordPlaceholder": "Vytvořte heslo (používá se jako vaše přístupová fráze)",
+      "passwordWeak": "Heslo musí mít alespoň 8 znaků s písmeny a číslicemi",
+      "passwordMismatch": "Hesla se neshodují",
+      "confirmPasswordLabel": "Potvrďte heslo",
+      "confirmPasswordPlaceholder": "Potvrďte své heslo"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Instalace AlphaFlix jako aplikace:\n\n1. Klepněte na tlačítko Sdílet (čtverec se šipkou).\n2. Zvolte 'Přidat na domovskou obrazovku'.\n3. Klepněte na Přidat.",
+      "genericGuide": "Váš prohlížeč nepodporuje automatickou výzvu k instalaci PWA.\nStále můžete instalovat pomocí nabídky prohlížeče (například: „Instalovat aplikaci“, „Vytvořit zástupce“ nebo „Přidat do doku/domovské obrazovky“)."
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Speciality"
       },
       "playback": {
         "speedLabel": "Rychlost přehrávání",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Načítání externích titulků... ({{progress}}%)",
+        "matchScoreLabel": "Shoda ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Načtení relací se nezdařilo",
         "removeDevice": "Odstranit",
-        "title": "Zařízení"
+        "title": "Zařízení",
+        "lastActive": "Poslední aktivní: {{date}}",
+        "loggedInAt": "Přihlášen na: {{date}}"
       },
       "profile": {
         "finish": "Dokončit",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Aktuální trendy"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Země"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Zadejte odkaz na sdílený večírek nebo kód pokoje",
+    "you": "Vy",
+    "guestFallback": "Host"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Akční & Dobrodružné"
+    }
   }
 }

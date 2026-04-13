@@ -176,7 +176,15 @@
       "validationError": "ভুল বা অসম্পূর্ণ পাসফ্রেজ",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "ডাকনাম",
+      "nicknamePlaceholder": "আপনার ডাকনাম লিখুন",
+      "passwordLabel": "পাসওয়ার্ড",
+      "passwordPlaceholder": "আপনার পাসওয়ার্ড লিখুন",
+      "nicknameRequired": "ডাকনাম প্রয়োজন",
+      "passwordRequired": "পাসওয়ার্ড প্রয়োজন",
+      "nicknameNotFound": "ডাকনাম পাওয়া যায়নি",
+      "passwordIncorrect": "পাসওয়ার্ডটি ভুল"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "ব্যবহারকারী আইকন",
         "next": "পরবর্তী",
         "title": "হিসাবের তথ্য"
-      }
+      },
+      "passwordInput": {
+        "title": "আপনার লগইন তৈরি করুন",
+        "description": "একটি ডাকনাম এবং পাসওয়ার্ড চয়ন করুন. আপনার পাসওয়ার্ড একটি নিরাপদ পাসফ্রেজ হিসাবে কাজ করে, তাই নিশ্চিত করুন যে আপনি এটি মনে রাখবেন!"
+      },
+      "nicknameLabel": "ডাকনাম",
+      "nicknamePlaceholder": "একটি অনন্য ডাকনাম চয়ন করুন",
+      "nicknameTaken": "ডাক নাম ইতিমধ্যে নেওয়া হয়েছে",
+      "passwordLabel": "পাসওয়ার্ড",
+      "passwordPlaceholder": "একটি পাসওয়ার্ড তৈরি করুন (আপনার পাসফ্রেজ হিসাবে ব্যবহৃত)",
+      "passwordWeak": "অক্ষর এবং সংখ্যা সহ পাসওয়ার্ড কমপক্ষে 8 অক্ষরের হতে হবে",
+      "passwordMismatch": "পাসওয়ার্ড মেলে না",
+      "confirmPasswordLabel": "পাসওয়ার্ড নিশ্চিত করুন",
+      "confirmPasswordPlaceholder": "আপনার পাসওয়ার্ড নিশ্চিত করুন"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "একটি অ্যাপ হিসাবে AlphaFlix ইনস্টল করতে:\n\n1. শেয়ার বোতামে আলতো চাপুন (একটি তীর দিয়ে বর্গক্ষেত্র)।\n2. 'হোম স্ক্রিনে যোগ করুন' নির্বাচন করুন৷\n3. যোগ করুন আলতো চাপুন৷",
+      "genericGuide": "আপনার ব্রাউজার একটি স্বয়ংক্রিয় PWA ইনস্টল প্রম্পট সমর্থন করে না।\nআপনি এখনও ব্রাউজার মেনু ব্যবহার করে ইনস্টল করতে পারেন (উদাহরণস্বরূপ: 'অ্যাপ ইনস্টল করুন', 'শর্টকাট তৈরি করুন', বা 'ডক/হোম স্ক্রিনে যোগ করুন')।"
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "বিশেষ"
       },
       "playback": {
         "speedLabel": "প্লেব্যাক গতি",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "বাহ্যিক সাবটাইটেল লোড হচ্ছে... ({{progress}}%)",
+        "matchScoreLabel": "মিল ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "সর্বশেষ সক্রিয়: {{date}}",
+        "loggedInAt": "লগ ইন করেছেন: {{date}}"
       },
       "profile": {
         "finish": "Finish editing",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "শীর্ষ 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "এখন প্রবণতা"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "দেশ"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "একটি শেয়ার করা ওয়াচ পার্টি লিঙ্ক বা রুম কোড লিখুন",
+    "you": "আপনি",
+    "guestFallback": "অতিথি"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "অ্যাকশন এবং অ্যাডভেঞ্চার"
+    }
   }
 }

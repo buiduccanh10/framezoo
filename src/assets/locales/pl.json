@@ -176,7 +176,15 @@
       "validationError": "Nieprawidłowa lub niedokończona fraza /ᐠ. .ᐟ\\",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Przydomek",
+      "nicknamePlaceholder": "Wpisz swój pseudonim",
+      "passwordLabel": "Hasło",
+      "passwordPlaceholder": "Wpisz swoje hasło",
+      "nicknameRequired": "Pseudonim jest wymagany",
+      "passwordRequired": "Hasło jest wymagane",
+      "nicknameNotFound": "Nie znaleziono pseudonimu",
+      "passwordIncorrect": "Hasło jest nieprawidłowe"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Ikonka użytkownika",
         "next": "Dalej",
         "title": "Informacje o koncie"
-      }
+      },
+      "passwordInput": {
+        "title": "Utwórz swój login",
+        "description": "Wybierz pseudonim i hasło. Twoje hasło działa jak bezpieczne hasło, więc pamiętaj o nim!"
+      },
+      "nicknameLabel": "Przydomek",
+      "nicknamePlaceholder": "Wybierz unikalny pseudonim",
+      "nicknameTaken": "Pseudonim jest już zajęty",
+      "passwordLabel": "Hasło",
+      "passwordPlaceholder": "Utwórz hasło (używane jako hasło)",
+      "passwordWeak": "Hasło musi składać się z co najmniej 8 znaków zawierających litery i cyfry",
+      "passwordMismatch": "Hasła nie pasują",
+      "confirmPasswordLabel": "Potwierdź hasło",
+      "confirmPasswordPlaceholder": "Potwierdź swoje hasło"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Odkrywaj",
       "development": "Rozwój",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "Aby zainstalować AlphaFlix jako aplikację:\n\n1. Naciśnij przycisk Udostępnij (kwadrat ze strzałką).\n2. Wybierz opcję „Dodaj do ekranu głównego”.\n3. Stuknij Dodaj.",
+      "genericGuide": "Twoja przeglądarka nie obsługuje automatycznego monitu o instalację PWA.\nNadal możesz przeprowadzić instalację za pomocą menu przeglądarki (na przykład: „Zainstaluj aplikację”, „Utwórz skrót” lub „Dodaj do Docka/Ekranu głównego”)."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Oznacz jako do obejrzenia",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Promocje"
       },
       "playback": {
         "speedLabel": "Szybkość odtwarzania",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Ładowanie napisów zewnętrznych... ({{progress}}%)",
+        "matchScoreLabel": "Dopasuj ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Oglądaj wspólnie",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Nie udało się załadować sesji",
         "removeDevice": "Usuń",
-        "title": "Urządzenia"
+        "title": "Urządzenia",
+        "lastActive": "Ostatni aktywny: {{date}}",
+        "loggedInAt": "Zalogowano się pod adresem: {{date}}"
       },
       "profile": {
         "finish": "Zakończ edycję",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Najlepsze 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Popularne teraz"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Kraj"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Wpisz link do wspólnego oglądania imprezy lub kod pokoju",
+    "you": "Ty",
+    "guestFallback": "Gość"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Akcja i przygoda"
+    }
   }
 }

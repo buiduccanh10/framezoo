@@ -176,7 +176,15 @@
       "validationError": "Väärä tai puutteellinen tunnuslause",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "Lempinimi",
+      "nicknamePlaceholder": "Kirjoita lempinimesi",
+      "passwordLabel": "Salasana",
+      "passwordPlaceholder": "Kirjoita salasanasi",
+      "nicknameRequired": "Lempinimi vaaditaan",
+      "passwordRequired": "Salasana vaaditaan",
+      "nicknameNotFound": "Lempinimeä ei löydy",
+      "passwordIncorrect": "Salasana on väärä"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "Käyttäjäkuvake",
         "next": "Seuraava",
         "title": "Tilitiedot"
-      }
+      },
+      "passwordInput": {
+        "title": "Luo kirjautumistunnuksesi",
+        "description": "Valitse lempinimi ja salasana. Salasanasi toimii turvallisena tunnuslauseena, joten muista se muistaa!"
+      },
+      "nicknameLabel": "Lempinimi",
+      "nicknamePlaceholder": "Valitse ainutlaatuinen lempinimi",
+      "nicknameTaken": "Lempinimi on jo varattu",
+      "passwordLabel": "Salasana",
+      "passwordPlaceholder": "Luo salasana (käytetään tunnuslauseena)",
+      "passwordWeak": "Salasanassa on oltava vähintään 8 merkkiä kirjaimilla ja numeroilla",
+      "passwordMismatch": "Salasanat eivät täsmää",
+      "confirmPasswordLabel": "Vahvista salasana",
+      "confirmPasswordPlaceholder": "Vahvista salasanasi"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -625,6 +646,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "AlphaFlixin asentaminen sovelluksena:\n\n1. Napauta Jaa-painiketta (neliö nuolella).\n2. Valitse Lisää aloitusnäyttöön.\n3. Napauta Lisää.",
+      "genericGuide": "Selaimesi ei tue automaattista PWA-asennuskehotetta.\nVoit silti asentaa selaimen valikon kautta (esimerkiksi \"Asenna sovellus\", \"Luo pikakuvake\" tai \"Lisää telakkaan/aloitusnäyttöön\")."
     }
   },
   "notFound": {
@@ -810,7 +835,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "Erikoistarjoukset"
       },
       "playback": {
         "speedLabel": "Playback speed",
@@ -901,7 +927,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "Ladataan ulkoisia tekstityksiä... ({{progress}}%)",
+        "matchScoreLabel": "Vastaa ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1237,7 +1265,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "Failed to load sessions",
         "removeDevice": "Remove",
-        "title": "Devices"
+        "title": "Devices",
+        "lastActive": "Viimeksi aktiivinen: {{date}}",
+        "loggedInAt": "Kirjautunut sisään osoitteessa: {{date}}"
       },
       "profile": {
         "finish": "Finish editing",
@@ -1476,7 +1506,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "Top 10"
     },
     "carousel": {
       "title": {
@@ -1502,7 +1533,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "Nousussa nyt"
       },
       "change": "Change",
       "more": "View more"
@@ -1527,7 +1559,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "Maa"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1611,6 +1646,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "Anna jaetun katselutapahtuman linkki tai huonekoodi",
+    "you": "sinä",
+    "guestFallback": "Vieras"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Toiminta & Seikkailu"
+    }
   }
 }

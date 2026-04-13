@@ -176,7 +176,15 @@
       "validationError": "密碼短語不正確或不完整",
       "usePasskey": "Use passkey",
       "or": "or",
-      "noBackendUrl": "No backend URL"
+      "noBackendUrl": "No backend URL",
+      "nicknameLabel": "暱稱",
+      "nicknamePlaceholder": "輸入您的暱稱",
+      "passwordLabel": "密碼",
+      "passwordPlaceholder": "輸入您的密碼",
+      "nicknameRequired": "暱稱為必填項",
+      "passwordRequired": "需要密碼",
+      "nicknameNotFound": "找不到暱稱",
+      "passwordIncorrect": "密碼不正確"
     },
     "register": {
       "information": {
@@ -186,7 +194,20 @@
         "icon": "使用者圖示",
         "next": "下一步",
         "title": "帳號資訊"
-      }
+      },
+      "passwordInput": {
+        "title": "建立您的登入名",
+        "description": "選擇暱稱和密碼。您的密碼是安全密碼，因此請務必記住它！"
+      },
+      "nicknameLabel": "暱稱",
+      "nicknamePlaceholder": "選擇一個獨特的暱稱",
+      "nicknameTaken": "暱稱已被佔用",
+      "passwordLabel": "密碼",
+      "passwordPlaceholder": "建立密碼（用作您的密碼）",
+      "passwordWeak": "密碼必須至少8位，包含字母和數字",
+      "passwordMismatch": "密碼不匹配",
+      "confirmPasswordLabel": "確認密碼",
+      "confirmPasswordPlaceholder": "確認您的密碼"
     },
     "backendSelection": {
       "title": "Select Account Server",
@@ -620,6 +641,10 @@
       "discover": "Discover",
       "development": "Development",
       "desktop": "App Settings"
+    },
+    "install": {
+      "iosSafariGuide": "要將 BetaMovie 安裝為應用程式：\n\n1. 點選共享按鈕（有箭頭的方塊）。\n2. 選擇「新增至主畫面」。\n3. 點選新增。",
+      "genericGuide": "您的瀏覽器不支援自動 PWA 安裝提示。\n您仍然可以使用瀏覽器選單進行安裝（例如：「安裝應用程式」、「建立捷徑」或「新增至 Dock/主畫面」）。"
     }
   },
   "notFound": {
@@ -805,7 +830,8 @@
         "markAsUnwatched": "Mark as unwatched",
         "markAsFavorite": "Mark as favorite",
         "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!"
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "specials": "特價商品"
       },
       "playback": {
         "speedLabel": "播放速度",
@@ -896,7 +922,9 @@
         "dualSub": "Dual Subtitles",
         "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle"
+        "selectingSecondary": "Selecting secondary subtitle",
+        "loadingExternalProgress": "正在載入外部字幕... ({{progress}}%)",
+        "matchScoreLabel": "匹配 ~{{score}}%"
       },
       "watchparty": {
         "watchpartyItem": "Watch Party",
@@ -1232,7 +1260,9 @@
         "unknownDevice": "Unknown device, error decrypting name",
         "failed": "無法載入",
         "removeDevice": "刪除",
-        "title": "設備"
+        "title": "設備",
+        "lastActive": "最後活躍時間：{{date}}",
+        "loggedInAt": "登入於：{{date}}"
       },
       "profile": {
         "finish": "完成編輯",
@@ -1471,7 +1501,8 @@
     "tabs": {
       "movies": "Movies",
       "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks"
+      "editorpicks": "Editor Picks",
+      "top10": "前10名"
     },
     "carousel": {
       "title": {
@@ -1497,7 +1528,8 @@
         "genreShows": "{{genre}} Shows",
         "categoryMovies": "{{category}} Movies",
         "categoryShows": "{{category}} Shows",
-        "top10": "Top 10"
+        "top10": "Top 10",
+        "trending": "現在流行"
       },
       "change": "Change",
       "more": "View more"
@@ -1522,7 +1554,10 @@
     },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top"
+    "scrollToTop": "Back to top",
+    "filters": {
+      "country": "國家"
+    }
   },
   "fedapi": {
     "onboarding": {
@@ -1606,6 +1641,14 @@
     "validating": "Validating watch party...",
     "linkCopied": "Copied!",
     "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}"
+    "activeBackend": "Active Backend: {{backend}}",
+    "enterCodeOrLink": "輸入分享觀看派對連結或房間代碼",
+    "you": "你",
+    "guestFallback": "客人"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "動作與冒險"
+    }
   }
 }
