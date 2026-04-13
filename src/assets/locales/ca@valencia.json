@@ -1,182 +1,38 @@
 {
-  "about": {
-    "description": "AlphaFlix és una aplicació web que cerca fluxos a internet. L'equip té com a objectiu un enfocament majoritàriament minimalista del consum de contingut.",
-    "help": "Can't find an answer? <0>Get support here.</0>",
-    "faqTitle": "Preguntes freqüents",
-    "searchPlaceholder": "Search FAQ...",
-    "sections": {
-      "general": "General",
-      "search": "Search & Content Availability",
-      "playback": "Playback Issues",
-      "connections": "Connections",
-      "language": "Language & Subtitle Settings"
-    },
-    "q1": {
-      "title": "D'on prové el contingut?",
-      "body": "AlphaFlix no allotja cap contingut. Quan feu clic en un contingut per a mirar-lo, es busca a Internet (a la pantalla de càrrega i a la pestanya «Fonts de vídeo» podeu mirar quina font utilitzeu). AlphaFlix mai puja contingut, tot és a través del mecanisme de cerca.",
-      "section": "general"
-    },
-    "q2": {
-      "title": "On puc sol·licitar un programa o una pel·lícula?",
-      "body": "No és possible sol·licitar un programa o una pel·lícula, AlphaFlix no gestiona cap contingut. Tot el contingut es visualitza a través de fonts a internet.",
-      "section": "search"
-    },
-    "q3": {
-      "title": "Els resultats de la cerca mostren el programa o la pel·lícula, per què no puc reproduir-lo?",
-      "body": "Els resultats de cerca funcionen amb The Movie Database (TMDB) i es mostren independentment de si les nostres fonts realment tenen el contingut.",
-      "section": "search"
-    },
-    "q4": {
-      "title": "What about my data and stuff?",
-      "body": "All data is synced to the community backend, anyone is free to use this as well.",
-      "section": "general"
-    },
-    "q5": {
-      "title": "How can I find out more?",
-      "body": "AlphaFlix has a Fluxer server that can be found at the header of this page!",
-      "section": "general"
-    },
-    "q6": {
-      "title": "Is there a AlphaFlix app?",
-      "body": "Yes! We now have an official desktop app available for download! https://github.com/AlphaFlix/AlphaFlix-desktop/releases",
-      "section": "general"
-    },
-    "q7": {
-      "title": "How do I make an account?",
-      "body": "Tap \"Sync to Cloud\" in the dropdown menu or go to Settings to create and sync a community account.",
-      "section": "general"
-    },
-    "q9": {
-      "title": "This media is missing / Can I request media?",
-      "body": "No—since we don't host content, we cannot add or change what's available. The content list is based on what's publicly accessible through the search mechanism.",
-      "section": "search"
-    },
-    "q10": {
-      "title": "I can't find the movie/show I'm searching for!",
-      "body": "TMDB powers our search. Try tapping the 🔎 icon for advanced search options if results aren't accurate.",
-      "section": "search"
-    },
-    "q11": {
-      "title": "Why am I seeing a black screen?",
-      "body": "Likely a corrupt or broken video file. Try switching sources.",
-      "section": "playback"
-    },
-    "q12": {
-      "title": "The episode I'm watching is incorrect.",
-      "body": "Switch to a different source. We don't control any content or episode accuracy.",
-      "section": "playback"
-    },
-    "q13": {
-      "title": "The video quality isn't what I expected.",
-      "body": "Try switching sources. Quality varies by provider; FED API often offers more options.",
-      "section": "playback"
-    },
-    "q14": {
-      "title": "4K isn't available.",
-      "body": "If 4K is not shown, it's likely unavailable from that source.",
-      "section": "playback"
-    },
-    "q15": {
-      "title": "Why is there no audio?",
-      "body": "Ensure your device isn't muted and try switching sources. Audio issues may be source-specific.",
-      "section": "playback"
-    },
-    "q16": {
-      "title": "The video is tinted or washed out.",
-      "body": "Could be a faulty file or an HDR video. Ensure your device supports HDR, or switch sources.",
-      "section": "playback"
-    },
-    "q17": {
-      "title": "I'm experiencing visual glitches.",
-      "body": "Visual bugs usually come from poor file uploads. Try switching sources.",
-      "section": "playback"
-    },
-    "q18": {
-      "title": "The source is loading slowly.",
-      "body": "Speed depends on the hosting site. Switch to another source for better performance.",
-      "section": "playback"
-    },
-    "q19": {
-      "title": "How do I switch sources?",
-      "body": "While playing, tap the ⚙️ icon, then choose another source under \"video sources\".",
-      "section": "playback"
-    },
-    "q20": {
-      "title": "What is FED API?",
-      "body": "FED API is our private scraper that pulls streams directly from Febbox. Each free Febbox account includes 100 GB/month of unlimited bandwidth, and we use your UI token to scrape content as if you're watching it yourself. Setup is easiest via desktop browser, but mobile instructions are available on our Fluxer.",
-      "section": "connections"
-    },
-    "q21": {
-      "title": "Does FED API work on all devices?",
-      "body": "Yes. Once set up, your token works across all devices!",
-      "section": "connections"
-    },
-    "q22": {
-      "title": "Why do I need the extension or custom proxy?",
-      "body": "Some sources block scrapers. The extension acts like a local proxy and bypasses such blocks using your IP, headers, and cookies.",
-      "section": "connections"
-    },
-    "q23": {
-      "title": "What is the extension? Is it safe?",
-      "body": "It's a local proxy tool used to access streams that restrict scrapers. It mimics your browsing session. It's also completly opensource and can be found on our github.",
-      "section": "connections"
-    },
-    "q24": {
-      "title": "My febbox token fails during setup. What should I do?",
-      "body": "Your ISP might be blocking FED API. Use a VPN to bypass the block, we recommend Cloudflare WARP because it's free and easy to use. You can also change your region in the admin panel.",
-      "section": "connections"
-    },
-    "q25": {
-      "title": "How do I change languages?",
-      "body": "We prioritize English, but some sources offer other languages. Try switching sources.",
-      "section": "language"
-    },
-    "q26": {
-      "title": "My subtitles aren't in sync.",
-      "body": "Use the \"Customize\" option in subtitle settings or tap [ and ] on your keyboard to adjust. You can also upload your own subtitle file.",
-      "section": "language"
-    },
-    "title": "Sobre AlphaFlix"
-  },
   "actions": {
-    "copied": "S'ha copiat",
-    "copy": "Copia",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
+    "copied": "Copiat",
+    "copy": "Còpia",
+    "cancel": "Cancel·la",
+    "confirm": "Confirmeu"
   },
   "auth": {
-    "createAccount": "Encara no teniu un compte? <0>Creeu un compte.</0>",
-    "deviceNameLabel": "Nom del dispositiu",
-    "deviceNamePlaceholder": "Telèfon personal",
+    "createAccount": "Encara no tens cap compte 😬 <0>Crea un compte.</0>",
     "inviteCodeLabel": "Codi d'invitació",
-    "inviteCodePlaceholder": "Introdueix l'ID d'usuari d'un amic",
-    "inviteCodeRequiredError": "El codi d'invitació és requerit",
-    "inviteCodeInvalidError": "Codi d'invitació no vàlid (ID d'usuari no trobat)",
+    "inviteCodePlaceholder": "Introduïu l'identificador d'usuari de l'amic",
+    "inviteCodeRequiredError": "Cal un codi d'invitació",
+    "inviteCodeInvalidError": "Codi d'invitació no vàlid (no s'ha trobat l'identificador d'usuari)",
     "generate": {
-      "description": "La frase de contrasenya actua com a nom d'usuari i contrasenya. Assegureu-vos de mantindre-la segura, ja que haureu d'introduir-la per a iniciar la sessió al vostre compte",
-      "next": "He desat la frase de contrasenya",
+      "description": "La vostra frase de contrasenya actua com el vostre nom d'usuari i contrasenya. Assegureu-vos de mantenir-lo segur, ja que haureu d'introduir-lo per iniciar sessió al vostre compte. <bold>NO perdis la teva frase de contrasenya!</bold>",
+      "next": "He desat la meva frase de contrasenya",
       "passphraseFrameLabel": "Frase de contrasenya",
-      "title": "La vostra frase de contrasenya",
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "usePasskeyInstead": "Use passkey instead"
+      "title": "La teva frase de contrasenya",
+      "custom": "Personalitzat",
+      "customPassphraseLabel": "Frase de contrasenya personalitzada",
+      "customPassphrasePlaceholder": "Introduïu la vostra frase de contrasenya personalitzada",
+      "useCustomPassphrase": "Utilitzeu una frase de contrasenya personalitzada",
+      "invalidPassphraseCharacters": "Caràcters de frase de contrasenya no vàlids. Només es permeten les lletres angleses, els números de l'1 al 10 i els símbols normals.",
+      "passphraseTooShort": "La contrasenya ha de tenir almenys 8 caràcters.",
+      "usePasskeyInstead": "Utilitzeu la clau d'accés"
     },
-    "hasAccount": "Ja teniu un compte? <0>Inicieu sessió ací.</0>",
+    "hasAccount": "Ja tens un compte? <0>Inicieu sessió aquí.</0>",
     "login": {
-      "description": "Introduïu la vostra frase de contrasenya per a iniciar sessió al vostre compte",
-      "deviceLengthError": "Introduïu un nom per al dispositiu",
-      "passphraseLabel": "Frase de contrasenya de 12 paraules",
-      "passphrasePlaceholder": "Frase de contrasenya",
-      "submit": "Inicia sessió",
+      "description": "Introduïu el vostre àlies i contrasenya per iniciar sessió al vostre compte",
+      "submit": "Inicieu sessió",
       "title": "Inicieu sessió al vostre compte",
-      "validationError": "Frase de contrasenya incorrecta o incompleta",
-      "usePasskey": "Use passkey",
-      "or": "or",
-      "noBackendUrl": "No backend URL",
+      "validationError": "Contrasenya incorrecta o incompleta /ᐠ. .ᐟ\\",
+      "usePasskey": "Utilitzeu la clau d'accés",
+      "or": "o",
+      "noBackendUrl": "No hi ha URL de backend",
       "nicknameLabel": "Pseudònim",
       "nicknamePlaceholder": "Introduïu el vostre àlies",
       "passwordLabel": "Contrasenya",
@@ -188,11 +44,11 @@
     },
     "register": {
       "information": {
-        "color1": "Color de perfil 1",
-        "color2": "Color de perfil 2",
-        "header": "Introduïu un nom per al dispositiu i trieu els colors i la icona d'usuari que vulgueu",
+        "color1": "Color del perfil 1",
+        "color2": "Color del perfil dos",
+        "header": "Trieu els colors del vostre perfil i trieu una icona.",
         "icon": "Icona d'usuari",
-        "next": "Següent",
+        "next": "A continuació",
         "title": "Informació del compte"
       },
       "passwordInput": {
@@ -210,221 +66,207 @@
       "confirmPasswordPlaceholder": "Confirmeu la vostra contrasenya"
     },
     "backendSelection": {
-      "title": "Select Account Server",
-      "description": "Choose which backend server to connect to",
-      "customBackend": "Custom Backend",
+      "title": "Seleccioneu Servidor de comptes",
+      "description": "Trieu a quin servidor backend voleu connectar-vos",
+      "customBackend": "Backend personalitzat",
       "customBackendPlaceholder": "https://",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "active": "Active",
-      "selecting": "Selecting..."
+      "confirm": "Confirmeu",
+      "active": "Actius"
     },
     "trust": {
       "failed": {
-        "text": "L'heu configurada correctament?",
-        "title": "No s'ha pogut accedir al servidor"
+        "text": "L'has configurat correctament?",
+        "title": "No s'ha pogut arribar al servidor"
       },
-      "noHostTitle": "El servidor no està configurat!",
-      "noHost": "El servidor no s'ha configurat, per tant, no es pot crear un compte",
-      "host": "Esteu connectant-vos a <0>{{hostname}}</0>. Confirmeu que hi confieu abans de crear un compte",
-      "no": "Torna",
-      "title": "Confieu en este servidor?",
-      "yes": "Confie en este servidor"
+      "noHostTitle": "Servidor no configurat!",
+      "noHost": "El servidor no s'ha configurat, per tant no podeu crear un compte",
+      "host": "Us esteu connectant a <0>{{hostname}}</0>; confirmeu que hi confieu abans de crear un compte...",
+      "no": "Torna enrere",
+      "title": "Confies en aquest servidor?",
+      "yes": "Confio en aquest servidor 🤞"
     },
     "verify": {
-      "description": "Introduïu la vostra frase de contrasenya anterior per a confirmar que l'heu desat, i crear el compte",
-      "invalidData": "La data no és vàlida",
-      "noMatch": "La frase de contrasenya no coincideix",
-      "passphraseLabel": "Frase de contrasenya de 12 paraules",
-      "recaptchaFailed": "Ha fallat la validació de ReCaptcha",
-      "register": "Crea el compte",
-      "title": "Confirmeu la frase de contrasenya",
-      "passkeyDescription": "Please authenticate with your passkey to complete registration.",
-      "authenticatePasskey": "Authenticate with Passkey",
-      "passkeyError": "Passkey verification failed"
+      "description": "Introduïu la vostra frase de contrasenya anterior per confirmar que l'heu desat i per crear el vostre compte",
+      "invalidData": "Les dades no són vàlides",
+      "noMatch": "La contrasenya no coincideix 😭",
+      "recaptchaFailed": "La validació de ReCaptcha ha fallat",
+      "register": "Crea un compte",
+      "title": "Confirmeu el vostre compte"
     }
   },
   "errors": {
-    "badge": "S'ha trencat",
+    "badge": "S'ha trencat 💀",
     "details": "Detalls de l'error",
-    "reloadPage": "Recarrega la pàgina",
+    "reloadPage": "Torna a carregar la pàgina",
     "showError": "Mostra els detalls de l'error",
     "title": "Hem trobat un error!"
   },
   "footer": {
     "legal": {
-      "disclaimer": "Avís d'exempció de responsabilitat",
-      "disclaimerText": "AlphaFlix no allotja cap fitxer, només enllaça a serveis de tercers. Els problemes legals s'han d'abordar amb qui allotja i els proveïdors de fitxers. AlphaFlix no es fa responsable del contingut mostrat pels proveïdors de vídeo."
+      "disclaimer": "Exempció de responsabilitat",
+      "disclaimerText": "Tingueu en compte: AlphaFlix no allotja cap fitxer; en canvi, només mostra contingut de proveïdors de tercers. Els problemes legals s'han de tractar amb ells."
     },
     "links": {
       "fluxer": "Fluxer",
-      "legal": "Legal / DMCA",
       "github": "GitHub",
-      "twitter": "Twitter",
-      "funding": "Support us"
+      "funding": "Doneu-nos suport"
     },
-    "tagline": "Mireu els vostres programes i pel·lícules preferits amb esta aplicació de codi obert de reproducció en temps real."
+    "tagline": "Mira els teus programes i pel·lícules preferits de forma gratuïta sense anuncis!"
   },
   "global": {
     "name": "AlphaFlix",
     "pages": {
-      "about": "Quant a",
-      "legal": "Legal / DMCA",
-      "discover": "Discover",
-      "support": "Support",
-      "login": "Inicia sessió",
-      "onboarding": "Configura",
+      "discover": "Descobreix",
+      "login": "Inicieu sessió",
       "pagetitle": "{{title}} - AlphaFlix",
-      "register": "Registra",
+      "register": "Registra't",
       "settings": "Configuració",
-      "migration": "Migrate Account",
-      "jip": "Jip"
+      "migration": "Migra el compte"
     },
     "keyboardShortcuts": {
-      "title": "Keyboard Shortcuts",
-      "subtitle": "Hold ` to show this help anytime",
+      "title": "Dreceres de teclat",
+      "subtitle": "Manteniu premut ` per mostrar aquesta ajuda en qualsevol moment",
       "groups": {
-        "videoPlayback": "Video Playback",
-        "jumpToPosition": "Jump to Position",
-        "audioVideo": "Audio & Video",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "interface": "Interface"
+        "videoPlayback": "Reproducció de vídeo",
+        "jumpToPosition": "Saltar a la posició",
+        "audioVideo": "Àudio i vídeo",
+        "subtitlesAccessibility": "Subtítols i accessibilitat",
+        "interface": "Interfície"
       },
       "shortcuts": {
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "skipForward5": "Skip forward 5 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipBackward1": "Skip backward 1 second",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "increaseVolume": "Increase volume",
-        "decreaseVolume": "Decrease volume",
-        "mute": "Mute/unmute",
-        "changeSpeed": "Increase/decrease playback speed",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleCaptions": "Toggle captions",
-        "randomCaption": "Select random caption from last used language",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleNativeSubtitles": "Toggle native subtitles",
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "nextEpisode": "Next episode",
-        "previousEpisode": "Previous episode",
-        "widescreenMode": "to toggle the widescreen button visibility",
-        "copyLinkWithTime": "+ click the title to copy the link with time"
+        "playPause": "Reprodueix/pausa (o mantén premut durant 2 vegades la velocitat quan està activat)",
+        "playPauseAlt": "Reproducció/pausa",
+        "skipForward5": "Saltar endavant 5 segons",
+        "skipBackward5": "Saltar enrere 5 segons",
+        "skipBackward10": "Saltar enrere 10 segons",
+        "skipForward10": "Saltar endavant 10 segons",
+        "skipForward1": "Saltar endavant 1 segon",
+        "skipBackward1": "Saltar cap enrere 1 segon",
+        "jumpTo0": "Salta al 0% (inici)",
+        "jumpTo9": "Saltar al 90%",
+        "increaseVolume": "Augmenta el volum",
+        "decreaseVolume": "Disminuir el volum",
+        "mute": "Silenciar/activar el silenci",
+        "toggleFullscreen": "Commuta la pantalla completa",
+        "toggleCaptions": "Commuta els subtítols",
+        "randomCaption": "Seleccioneu un subtítol aleatori de l'últim idioma utilitzat",
+        "syncSubtitlesEarlier": "Sincronitza els subtítols abans (-0,5 s)",
+        "syncSubtitlesLater": "Sincronitza els subtítols més tard (+0,5 s)",
+        "toggleNativeSubtitles": "Commuta els subtítols nadius",
+        "barrelRoll": "Fes un rodet! 🌀",
+        "closeOverlay": "Tanca la superposició/modal",
+        "nextEpisode": "Següent episodi",
+        "previousEpisode": "Episodi anterior"
       },
       "conditions": {
-        "notInWatchParty": "Not in watch party",
-        "showsOnly": "Shows only"
+        "showsOnly": "Només espectacles"
       },
-      "editInSettings": "Edit keyboard commands from settings",
-      "clickToEdit": "Click on a key badge to edit it",
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "resetAllToDefault": "Reset All to Default",
-      "pressKey": "Press a key...",
-      "none": "None",
-      "save": "Save",
-      "cancel": "Cancel",
-      "saveChanges": "Save Changes",
-      "resetToDefault": "Reset to default",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%."
+      "editInSettings": "Editeu les ordres del teclat des de la configuració",
+      "clickToEdit": "Feu clic a una insígnia clau per editar-la",
+      "conflict": "conflicte",
+      "conflicts": "conflictes",
+      "detected": "detectat",
+      "resetAllToDefault": "Restableix-ho tot per defecte",
+      "pressKey": "Premeu una tecla...",
+      "none": "Cap",
+      "save": "Desa",
+      "cancel": "Cancel·la",
+      "saveChanges": "Desa els canvis",
+      "resetToDefault": "Restableix els valors predeterminats",
+      "numberKeySeeking": "Cerca de progrés clau numèrica",
+      "numberKeySeekingDescription": "Utilitza les tecles numèriques del 0 al 9 per cercar posicions específiques del vídeo. 0 va al principi, 1-8 salta al 10%-80% i 9 va al 90%."
     }
   },
   "home": {
     "bookmarks": {
-      "sectionTitle": "Marcadors",
-      "showAll": "Show all",
+      "sectionTitle": "Adreces d'interès",
+      "showAll": "Mostra-ho tot",
       "groups": {
         "dropdown": {
-          "placeholderButton": "Add to group",
-          "empty": "No groups yet",
-          "removeFromGroup": "Remove from group",
-          "removeAll": "Remove all"
+          "placeholderButton": "Afegeix al grup",
+          "empty": "Encara no hi ha cap grup",
+          "removeFromGroup": "Eliminar del grup",
+          "removeAll": "Elimina-ho tot"
         },
         "reorder": {
-          "button": "Reorder",
-          "done": "Done",
-          "title": "Edit Group Order",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "cancel": "Cancel",
-          "save": "Save"
+          "button": "Reordenar",
+          "done": "Fet",
+          "title": "Edita l'ordre del grup",
+          "description": "Arrossegueu i deixeu anar per reordenar els vostres grups d'adreces d'interès",
+          "cancel": "Cancel·la",
+          "save": "Desa"
         },
         "editGroup": {
-          "title": "Edit Group",
-          "description": "Edit the name and icon of your bookmark group",
-          "cancel": "Cancel",
-          "save": "Save",
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group"
+          "title": "Edita el grup",
+          "description": "Editeu el nom i la icona del vostre grup d'adreces d'interès",
+          "cancel": "Cancel·la",
+          "save": "Desa",
+          "affectsBookmarks": "Això afectarà {{count}} adreces d'interès",
+          "nameLabel": "Nom del grup",
+          "namePlaceholder": "Introduïu un nom per al vostre grup"
         }
       },
       "edit": {
-        "title": "Edit Bookmark",
-        "description": "Edit the details for this bookmark",
-        "cancel": "Cancel",
-        "save": "Save",
-        "groupsLabel": "Groups",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
+        "title": "Edita el marcador",
+        "description": "Editeu els detalls d'aquest marcador",
+        "cancel": "Cancel·la",
+        "save": "Desa",
+        "groupsLabel": "Grups",
+        "titleLabel": "Títol",
+        "titlePlaceholder": "Introduïu un títol per al vostre marcador",
+        "yearLabel": "Any",
+        "yearPlaceholder": "Introduïu un any per al vostre marcador"
       },
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Per defecte (data d'afegit)",
+          "titleAsc": "Títol A-Z",
+          "titleDesc": "Títol Z-A",
+          "yearAsc": "Data de llançament Més antic-Més nou",
+          "yearDesc": "Data de llançament Més recent-Més antic"
         }
       }
     },
     "continueWatching": {
-      "sectionTitle": "Continueu mirant",
+      "sectionTitle": "Continuar mirant...",
       "sorting": {
-        "label": "Sort by",
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "Per defecte (data d'afegit)",
+          "titleAsc": "Títol A-Z",
+          "titleDesc": "Títol Z-A",
+          "yearAsc": "Data de llançament Més antic-Més nou",
+          "yearDesc": "Data de llançament Més recent-Més antic"
         }
       }
     },
     "mediaList": {
-      "stopEditing": "Deixa d'editar"
+      "stopEditing": "Atura l'edició"
     },
     "watchHistory": {
-      "sectionTitle": "Watch History",
-      "recentlyWatched": "Recently Watched"
+      "sectionTitle": "Historial de visualitzacions",
+      "recentlyWatched": "Vist recentment"
     },
     "search": {
-      "allResults": "Això és tot el que tenim!",
-      "failed": "No s'ha pogut trobar cap contingut, torneu-ho a provar!",
-      "loading": "S'està carregant…",
-      "noResults": "No hem pogut trobar res!",
+      "allResults": "Això és tot el que tenim...",
+      "failed": "No s'ha pogut trobar el contingut multimèdia, torna-ho a provar!",
+      "loading": "Carregant...",
+      "noResults": "No hem trobat res :(",
       "placeholder": {
-        "default": "Què voleu mirar?",
+        "default": "Què vols veure?",
         "extra": [
-          "Què voleu explorar?",
-          "Què hi ha a la vostra llista de seguiment?",
-          "Quina és la vostra pel·lícula preferida?",
-          "Quina és la vostra sèrie preferida?"
+          "What are you in the mood for?",
+          "Should we delete your browser history?",
+          "What do you want to stream?",
+          "AlphaFlix is the best site ever!",
+          "What's on your watchlist today?",
+          "How was your day?",
+          "My bad the site never works...",
+          "Isn't AlphaFlix just the best?",
+          ">ᴗ<"
         ]
       },
       "empty": {
-        "default": "Welcome, find media to watch here!",
+        "default": "Benvingut, troba els mitjans per veure aquí!",
         "extra": [
           "There's nothing here :(",
           "So empty...",
@@ -433,47 +275,42 @@
         ]
       },
       "sectionTitle": "Resultats de la cerca",
-      "discoverMore": "Discover more",
-      "discover": "Discover"
-    },
-    "mediaCard": {
-      "moreInfo": "More Info",
-      "copyLink": "Copy Link",
-      "close": "Close"
+      "discoverMore": "Descobreix més",
+      "discover": "Descobreix"
     },
     "titles": {
       "69": {
-        "default": "Up for something spicy?",
+        "default": "Vols alguna cosa picant?",
         "extra": [
           "Happy 69 day 😘!"
         ]
       },
       "420": {
-        "default": "What would you like to watch this 4/20?",
+        "default": "Què t'agradaria veure aquest 20/4?",
         "extra": [
           "Happy 4/20 🥳!"
         ]
       },
       "day": {
-        "default": "Què vos agradaria mirar esta vesprada?",
+        "default": "Què t'agradaria veure aquesta tarda?",
         "extra": [
-          "Voleu aventura? Jurassic Park podria ser l'elecció perfecta."
+          "Viva la AlphaFlix!"
         ]
       },
       "morning": {
-        "default": "Què vos agradaria mirar este matí?",
+        "default": "Què t'agradaria veure aquest matí?",
         "extra": [
-          "He sentit que «Abans de l'alba» és bona"
+          "Viva la AlphaFlix!"
         ]
       },
       "night": {
-        "default": "Què vos agradaria mirar esta nit?",
+        "default": "Què t'agradaria veure aquesta nit?",
         "extra": [
-          "Esteu cansat? He sentit que «L'exorcista» és bona."
+          "Viva la AlphaFlix!"
         ]
       },
       "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
+        "default": "Quina pel·lícula esgarrifosa t'agradaria veure aquest Halloween?",
         "extra": [
           "Happy Halloween! 🎃👻",
           "Boo! 👻",
@@ -483,1172 +320,798 @@
       }
     },
     "support": {
-      "title": "AlphaFlix needs your help!",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "moreInfo": "More info",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
+      "title": "AlphaFlix necessita la teva ajuda!",
+      "description": "AlphaFlix s'executa amb pèrdues i necessitem ajuda per mantenir-lo sense anuncis! Si us agrada utilitzar AlphaFlix, considereu fer una donació per ajudar-nos a cobrir els nostres costos.",
+      "moreInfo": "Més informació",
+      "explanation": "Si no feu servir l'extensió o no teniu l'API FED configurada, pot ser que sigui més difícil trobar contingut! Volem solucionar-ho, però és molt més difícil oferir contingut sense servidors cars. Així que si us plau, si us agrada utilitzar AlphaFlix, considereu fer una donació per ajudar-nos a cobrir els nostres costos creixents.",
+      "explanation2": "Si vols més informació, uneix-te al nostre",
       "fluxer": "Fluxer",
-      "thankYou": "Thank you for your support!",
-      "donate": "Donate",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "complete": "complete"
+      "thankYou": "Gràcies pel vostre suport!",
+      "donate": "Donar",
+      "label": "Finançament del projecte: ${{current}} / ${{goal}}",
+      "complete": "completa"
     }
   },
   "media": {
-    "episodeDisplay": "T{{season}} E{{episode}}",
-    "unreleased": "Unreleased",
+    "episodeDisplay": "S{{season}} - E{{episode}}",
+    "unreleased": "Inèdit",
     "types": {
       "movie": "Pel·lícula",
-      "show": "Sèrie/Programa"
+      "show": "Mostra"
     },
     "episodeShort": "E",
-    "seasonShort": "S",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?"
+    "seasonWatched": "Esteu segur que voleu marcar la temporada com a vista?",
+    "seasonUnwatched": "Esteu segur que voleu marcar la temporada com a no vista?"
   },
   "details": {
-    "resume": "Resume",
-    "play": "Play",
-    "runtime": "Runtime:",
-    "language": "Language:",
-    "releaseDate": "Release Date:",
-    "rating": "Rating:",
-    "votes": "votes",
-    "tmdb": "View on TMDB",
-    "imdb": "View on IMDb",
-    "episodes": "Episodes",
-    "seasons": "Season/s",
-    "season": "Season",
-    "episode": "Episode",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)",
+    "resume": "Currículum",
+    "play": "Jugar",
+    "runtime": "Temps d'execució:",
+    "language": "Idioma:",
+    "releaseDate": "Data de llançament:",
+    "rating": "Valoració:",
+    "tmdb": "Veure a TMDB",
+    "imdb": "Veure a IMDb",
+    "episodes": "Episodis",
+    "seasons": "Temporada/s",
+    "season": "Temporada",
+    "episode": "Episodi",
+    "watched": "S'ha vist {{watched}} de {{total}} ({{percentage}}%)",
     "airs": "Airs",
-    "endsAt": "Ends at {{time}}",
-    "trailer": "Trailer",
-    "trailers": "Trailers",
-    "similar": "Similar",
+    "endsAt": "Finalitza a les {{time}}",
+    "trailers": "Remolcs",
+    "similar": "Similars",
     "collection": {
-      "movies": "Movies",
-      "movie": "Movie",
-      "sortBy": "Sort by",
-      "releaseDate": "Release Date",
-      "rating": "Rating"
+      "movies": "Pel·lícules",
+      "movie": "Pel·lícula",
+      "sortBy": "Ordena per",
+      "releaseDate": "Data de llançament",
+      "rating": "Valoració"
     }
   },
   "migration": {
-    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
+    "loginRequired": "Heu d'iniciar sessió per migrar les vostres dades! Si us plau, torneu enrere i inicieu sessió per continuar.",
     "start": {
-      "title": "Migrate your data",
-      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
+      "title": "Migra les teves dades",
+      "explainer": "Si voleu migrar o fer una còpia de seguretat de les vostres dades, podeu fer-ho mitjançant les opcions següents. Això us permetrà conservar les vostres dades quan canvieu de servidor backend.",
       "options": {
-        "or": "or",
+        "or": "o",
         "direct": {
-          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
-          "title": "Direct migration",
-          "quality": "Easiest and fastest",
-          "action": "Transfer data"
+          "description": "Això migrarà directament les vostres dades al nou servidor. Aquesta és l'opció més ràpida. <br /><br />Aquesta opció us permet mantenir la vostra frase de contrasenya igual!",
+          "title": "Migració directa",
+          "quality": "El més fàcil i ràpid",
+          "action": "Transferir dades"
         },
         "download": {
-          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-          "title": "Download data",
-          "quality": "More technical",
-          "action": "Download data"
+          "description": "Això baixarà les vostres dades al vostre dispositiu. A continuació, podeu carregar-lo al nou servidor o simplement guardar-lo per guardar-lo.",
+          "title": "Descarregar dades",
+          "quality": "Més tècnic",
+          "action": "Descarregar dades"
         },
         "upload": {
-          "title": "Upload Data",
-          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-          "quality": "Restore from backup",
-          "action": "Upload Data"
+          "title": "Carrega dades",
+          "description": "Pengeu el fitxer de dades exportat anteriorment per restaurar les adreces d'interès i el progrés en aquest compte.",
+          "quality": "Restaura des de la còpia de seguretat",
+          "action": "Carrega dades"
         }
       }
     },
     "preview": {
-      "downloadDescription": "Download includes:",
-      "uploadDescription": "Data to upload:",
+      "downloadDescription": "La descàrrega inclou:",
+      "uploadDescription": "Dades a carregar:",
       "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
+        "bookmarks": "Mitjans marcats",
+        "progress": "Observa el progrés",
+        "settings": "Configuració i preferències"
       }
     },
     "direct": {
-      "title": "Direct migration",
-      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
-      "backendLabel": "Destination Backend URL",
-      "recaptchaLabel": "ReCaptcha Key (Optional)",
-      "toggleLable": "Needs ReCaptcha?",
+      "title": "Migració directa",
+      "description": "Introduïu l'URL del backend de destinació per migrar les dades del vostre compte actual a un nou backend. Això manté la vostra frase de contrasenya igual!",
+      "backendLabel": "URL de backend de destinació",
       "status": {
-        "error": "Failed to migrate your data. 😿",
-        "success": "Your data has been migrated successfully! 🎉"
+        "error": "No s'han pogut migrar les vostres dades. 😿",
+        "success": "Les vostres dades s'han migrat correctament! 🎉"
       },
       "button": {
-        "migrate": "Migrate",
-        "processing": "Processing...",
-        "home": "Go home",
-        "login": "Continue to login"
+        "migrate": "Migrar",
+        "processing": "S'està processant...",
+        "home": "Ves a casa",
+        "login": "Continueu iniciant sessió"
       }
     },
     "download": {
-      "title": "Download data",
-      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
+      "title": "Descarregar dades",
+      "description": "Això baixarà les vostres dades al vostre dispositiu. A continuació, podeu carregar-lo al nou servidor o simplement guardar-lo per guardar-lo.",
       "status": {
-        "error": "Failed to download your data. 😿",
-        "success": "Your data has been downloaded successfully! 🎉"
+        "error": "No s'han pogut baixar les vostres dades. 😿",
+        "success": "Les vostres dades s'han baixat correctament! 🎉"
       },
       "button": {
-        "download": "Download data",
-        "home": "Go home",
-        "login": "Continue to login"
+        "download": "Descarregar dades",
+        "home": "Ves a casa"
       }
     },
     "upload": {
-      "title": "Upload data",
-      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "title": "Carregueu dades",
+      "description": "Pengeu el fitxer de dades exportat anteriorment per restaurar les adreces d'interès i el progrés en aquest compte.",
       "status": {
-        "processing": "Processing data...",
-        "error": "Failed to upload your data. 😿",
-        "success": "Your data has been uploaded successfully! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
+        "processing": "Processament de dades...",
+        "error": "No s'han pogut carregar les vostres dades. 😿",
+        "success": "Les vostres dades s'han carregat correctament! 🎉",
+        "successLocal": "Les teves dades s'han desat localment! 🎉"
       },
       "file": {
-        "description": "Select the file you want to upload",
-        "select": "Select file",
-        "change": "Change file",
-        "name": "File name"
+        "description": "Seleccioneu el fitxer que voleu carregar",
+        "select": "Seleccioneu el fitxer",
+        "change": "Canvia fitxer"
       },
-      "exportedOn": "Exported on",
-      "previewTitle": "Preview:",
+      "exportedOn": "Exportat el",
+      "previewTitle": "Vista prèvia:",
       "button": {
-        "import": "Import data",
-        "processing": "Processing...",
-        "success": "Import complete",
-        "home": "Continue to home",
-        "saveLocal": "Save locally"
+        "import": "Importa dades",
+        "processing": "S'està processant...",
+        "home": "Continueu cap a casa",
+        "saveLocal": "Estalvia localment"
       }
     },
-    "back": "Go back"
+    "back": "Torna enrere"
   },
   "navigation": {
     "banner": {
-      "offline": "Comproveu la connexió a internet"
-    },
-    "menu": {
-      "about": "Quant a nosaltres",
-      "logout": "Tanca la sessió",
-      "register": "Sincronitza al núvol",
-      "settings": "Configuració",
-      "support": "Ajuda",
-      "discover": "Discover",
-      "development": "Development",
-      "desktop": "App Settings"
+      "offline": "Comprova la teva connexió a Internet, tonto! 🦢"
     },
     "install": {
       "iosSafariGuide": "Per instal·lar AlphaFlix com a aplicació:\n\n1. Toqueu el botó Compartir (quadrat amb una fletxa).\n2. Trieu \"Afegeix a la pantalla d'inici\".\n3. Toqueu Afegeix.",
       "genericGuide": "El vostre navegador no admet una sol·licitud d'instal·lació automàtica de PWA.\nEncara podeu instal·lar-lo mitjançant el menú del navegador (per exemple: \"Instal·la l'aplicació\", \"Crea una drecera\" o \"Afegeix al Dock/Pantalla d'inici\")."
+    },
+    "menu": {
+      "logout": "Tanca la sessió",
+      "register": "Sincronitza amb el núvol",
+      "settings": "Configuració",
+      "desktop": "Configuració de l'aplicació"
     }
   },
   "notFound": {
     "badge": "No s'ha trobat",
-    "goHome": "Torna a l'inici",
-    "reloadButton": "Try again",
-    "message": "Hem mirat per tot arreu: davall de les papereres, a l'armari, darrere del servidor intermediari, però al remat no hem pogut trobar la pàgina que busqueu.",
-    "title": "No s'ha pogut trobar la pàgina"
+    "goHome": "Tornada a casa",
+    "reloadButton": "Torna-ho a provar",
+    "message": "Hem buscat per tot arreu: sota les papereres, a l'armari, darrere del proxy, però finalment no hem trobat la pàgina que cerques.",
+    "title": "No s'ha pogut trobar aquesta pàgina"
   },
   "downtimeNotice": {
-    "badge": "Issues",
-    "goHome": "Go home",
-    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
-    "title": "Provider issues"
+    "badge": "Problemes",
+    "goHome": "Ves a casa",
+    "message": "AlphaFlix torna a tenir problemes amb alguns proveïdors, si no podeu trobar o reproduir un programa, canvieu la font. Espereu que aquest error persisteixi durant els temps següents.",
+    "title": "Problemes amb el proveïdor"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Cancel·la",
-      "confirm": "Usa la configuració per defecte",
-      "description": "La configuració per defecte no té els millors fluxos i pot ser insuportablement lenta.",
-      "tip": "It's recommended to set up the extension and/or FED API!",
-      "title": "Segur?"
-    },
-    "extension": {
-      "back": "Torna",
-      "explainer": "Mitjançant l'extensió del navegador, podeu obtindre els millors fluxos que oferim. Amb només una simple instal·lació.",
-      "explainerIos": "Lamentablement, l'extensió del navegador no és compatible amb iOS, premeu <bold>Torna</bold> per a triar una altra opció.",
-      "extensionHelp": "Si heu instal·lat l'extensió, però no es detecta, <bold>obriu l'extensió al menú d'extensions del navegador</bold> i seguiu els passos en pantalla.",
-      "linkChrome": "Instal·la l'extensió de Chrome",
-      "linkFirefox": "Instal·la l'extensió de Firefox",
-      "linkUserscript": "Alternative Userscript",
-      "userscriptNote": "(The extension is more reliable than the userscript!)",
-      "notDetecting": "S'ha instal·lat a Chrome, però el lloc no el detecta? Proveu de recarregar la pàgina.",
-      "notDetectingAction": "Recarrega la pàgina",
-      "status": {
-        "disallowed": "L'extensió no està activada per a esta pàgina",
-        "disallowedAction": "Activa l'extensió",
-        "failed": "No s'ha pogut sol·licitar l'estat",
-        "loading": "Esperant que instal·leu l'extensió",
-        "outdated": "La versió de l'extensió és massa antiga",
-        "success": "L'extensió funciona com s'esperava!"
-      },
-      "submit": "Continua",
-      "title": "Comencem amb una extensió"
-    },
-    "proxy": {
-      "back": "Torna",
-      "explainer": "Amb el mètode del servidor intermediari, podeu obtindre fluxos d'alta qualitat fent un servidor intermediari propi.",
-      "input": {
-        "errorConnection": "No s'ha pogut connectar al servidor intermediari",
-        "errorInvalidUrl": "URL no vàlid",
-        "errorNotProxy": "S'esperava un servidor intermediari, però és un lloc web",
-        "label": "URL del servidor intermediari",
-        "placeholder": "https://"
-      },
-      "link": "Com fer un servidor intermediari",
-      "submit": "Envia el servidor intermediari",
-      "title": "Fem un nou servidor intermediari"
-    },
-    "start": {
-      "explainer": "Per a obtindre els millors fluxos possibles, haureu de triar quin mètode de transmissió voleu utilitzar.",
-      "moreInfo": {
-        "button": "Which setup should I choose?",
-        "title": "Understanding a setup",
-        "explainer": {
-          "intro": "AlphaFlix doesn't host videos. It relies on third-party websites for content, so you need to choose how it connects to those sites.",
-          "options": "Your Options:",
-          "extension": "Extension",
-          "extensionDescription": "The extension gives you access to the most sources. It acts as a local proxy and can handle sites that need special cookies or headers to load.",
-          "proxy": "Proxy",
-          "proxyDescription": "The proxy scrapes media from other websites. It bypasses browser restrictions (like CORS) to allow scraping.",
-          "default": "Default Setup",
-          "defaultDescription": "Uses AlphaFlix's built-in proxy. It's the easiest option but might be slower due to shared bandwidth.",
-          "fedapi": {
-            "fedapi": "Additional: Febbox token",
-            "fedapiDescription": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
-          },
-          "outro": "If you have more questions on how this works, feel free to ask on the <0>AlphaFlix Fluxer</0> server!"
-        },
-        "recommended": {
-          "title": "Not sure what to choose?",
-          "subtitle": "Recommended Configurations:",
-          "desktop": {
-            "title": "Desktop:",
-            "description": "Extension (or app) + Febbox token"
-          },
-          "iOS": {
-            "title": "iOS:",
-            "description": "Custom proxy + Febbox token"
-          },
-          "android": {
-            "title": "Android:",
-            "description": "Extension + Febbox token"
-          }
-        }
-      },
-      "options": {
-        "or": "or",
-        "default": {
-          "text": "No vull fluxos de bona qualitat,<0 /> <1>utilitza la configuració per defecte</1>"
-        },
-        "extension": {
-          "action": "Instal·la l'extensió",
-          "description": "Instal·leu l'extensió del navegador i accediu a les millors fonts.",
-          "quality": "Millor qualitat",
-          "title": "Extensió del navegador"
-        },
-        "desktopapp": {
-          "action": "Install Desktop app",
-          "description": "Install desktop app and gain access to additional sources! Simple and easy to use!",
-          "quality": "Best quality + Even more sources",
-          "title": "AlphaFlix Desktop app"
-        },
-        "proxy": {
-          "action": "Configura el servidor intermediari",
-          "description": "Configureu un servidor intermediari en només 5 minuts i accediu a bones fonts.",
-          "quality": "Bona qualitat",
-          "title": "Servidor intermediari personalitzat"
-        },
-        "addons": {
-          "title": "Additional sources:"
-        }
-      },
-      "title": "Configurem el AlphaFlix"
+      "cancel": "Cancel·la"
     }
   },
   "overlays": {
-    "close": "Tanca"
+    "close": "Tancar"
   },
   "player": {
     "back": {
-      "default": "Torna a l'inici",
-      "short": "Torna"
+      "default": "Tornada a casa",
+      "short": "Enrere"
     },
     "casting": {
-      "to": "Casting to {{device}} 📺",
-      "device": "device",
-      "enabled": "S'està emetent al dispositiu…"
+      "to": "Emet a {{device}} 📺",
+      "device": "dispositiu"
     },
     "menus": {
       "downloads": {
-        "button": "Attempt download",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "disclaimer": "Les baixades s'obtenen directament del proveïdor. AlphaFlix no té control sobre com es proporcionen les baixades.",
-        "copyHlsPlaylist": "Copia l'enllaç de la llista HLS",
-        "downloadSubtitle": "Baixa els subtítols actuals",
-        "downloadVideo": "Baixa el vídeo",
-        "openIn": "Open in...",
-        "vlc": "VLC",
-        "iina": "IINA",
-        "outplayer": "Outplayer",
-        "hlsOpenInDisclaimer": "Opening HLS streams in an external player MAY NOT WORK!",
-        "hlsDisclaimer": "Les baixades s'obtenen directament del proveïdor. AlphaFlix no té control sobre com es proporcionen les baixades. <br /><br />Tingueu en compte que esteu baixant una llista de reproducció HLS, <bold>no es recomana baixar-la si no esteu familiaritzat amb formats de transmissió avançats</bold>. Proveu diferents fonts per a diferents formats.",
+        "button": "Intenta descàrrega",
+        "hlsDownloader": "O bé, aneu al lloc web de baixada de <0>hls</0> i enganxeu l'URL de la llista de reproducció a continuació.",
+        "disclaimer": "Les descàrregues es prenen directament del proveïdor. AlphaFlix no té control sobre com es proporcionen les descàrregues.",
+        "copyHlsPlaylist": "Copia l'enllaç de la llista de reproducció HLS",
+        "downloadSubtitle": "Descarrega el subtítol actual",
+        "downloadVideo": "Descarrega el vídeo",
+        "hlsDisclaimer": "Les descàrregues es prenen directament del proveïdor. AlphaFlix no té control sobre com es proporcionen les baixades.<br /><br />Tingueu en compte que esteu baixant una llista de reproducció HLS, <bold>no es recomana baixar-la si no esteu familiaritzat amb els formats de reproducció avançats</bold>. Proveu diferents fonts per a diferents formats.",
         "onAndroid": {
-          "1": "Per a baixar-lo a Android, feu clic al botó de baixada i, a la pàgina nova, <bold>manteniu premut</bold> el vídeo i, a continuació, seleccioneu <bold>Desa</bold>.",
-          "shortTitle": "Baixa / Android",
-          "title": "Baixada a Android"
+          "1": "Per baixar a Android, fes clic al botó de baixada i, a la pàgina nova, <bold>toca i mantén premut</bold> el vídeo i, a continuació, selecciona <bold>Desa</bold>.",
+          "shortTitle": "Descarregar / Android",
+          "title": "Descàrrega a Android"
         },
         "onIos": {
-          "1": "Per a baixar a iOS, feu clic al botó de baixada i, a la pàgina nova, feu clic a <bold><ios_share /></bold> /> i, a continuació, <bold>Desa als Arxius <ios_files /></bold>.",
-          "shortTitle": "Baixa / iOS",
-          "title": "Baixada a iOS"
+          "1": "Per baixar-lo a iOS, feu clic al botó de baixada i, a la pàgina nova, feu clic a <bold><ios_share /></bold> i, a continuació, a <bold>Desa als fitxers <ios_files /></bold>.",
+          "shortTitle": "Descarregar / iOS",
+          "title": "Descàrrega a iOS"
         },
         "onPc": {
-          "1": "En un PC, feu clic al botó de baixada i, a la pàgina nova, feu clic amb el botó dret al vídeo i seleccioneu <bold>Anomena i desa el vídeo</bold>",
-          "shortTitle": "Baixa / PC",
-          "title": "Baixada a un PC"
+          "1": "A l'ordinador, feu clic al botó de baixada i, a la pàgina nova, feu clic amb el botó dret al vídeo i seleccioneu <bold>Desa el vídeo com a</bold>",
+          "shortTitle": "Descarregar / PC",
+          "title": "Descàrrega al PC"
         },
-        "title": "Baixa"
+        "title": "Descarregar"
       },
       "episodes": {
-        "button": "Episodi",
-        "emptyState": "No hi ha episodis en esta temporada, torneu-ho a comprovar més tard!",
+        "button": "Episodis",
+        "emptyState": "No hi ha cap episodi en aquesta temporada, torneu-hi més tard (ho sento :3)...",
         "episodeBadge": "E{{episode}}",
         "loadingError": "Error en carregar la temporada",
-        "loadingList": "S'està carregant…",
-        "loadingTitle": "S'està carregant…",
-        "unairedEpisodes": "Un o més episodis d'esta temporada s'han desactivat perquè encara no s'han emés.",
-        "seasons": "Seasons",
-        "showMore": "Show more",
-        "showLess": "Show less",
-        "markAsWatched": "Mark as watched",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsFavorite": "Mark as favorite",
-        "favorites": "Favorites",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
-        "specials": "Especials"
+        "loadingList": "Carregant...",
+        "loadingTitle": "Carregant...",
+        "showMore": "Mostra'n més",
+        "showLess": "Mostra menys",
+        "markAsWatched": "Marca com a observat",
+        "markAsUnwatched": "Marca com a no vist",
+        "markAsFavorite": "Marca com a favorit",
+        "specials": "Especials",
+        "favorites": "Preferits",
+        "noFavorites": "Encara no hi ha cap episodi preferit. Destaca els episodis per afegir-los als teus preferits!"
       },
       "playback": {
-        "speedLabel": "Velocitat de la reproducció",
-        "title": "Configuració de la reproducció",
-        "disabled": "(Disabled in watch party)",
+        "speedLabel": "Velocitat de reproducció",
+        "title": "Configuració de reproducció",
+        "disabled": "(Desactivat a la festa de vigilància)",
         "speedBoosted": "2x",
         "speedUnboosted": "{{speed}}x"
       },
       "quality": {
         "automaticLabel": "Qualitat automàtica",
-        "hint": "Podeu provar a <0>canviar la font</0> per a obtindre diferents opcions de qualitat.",
-        "iosNoQuality": "A causa de les limitacions definides per Apple, la selecció de qualitat no està disponible a iOS per a esta font. Podeu provar a <0>canviar a una altra font</0> per a obtindre diferents opcions de qualitat.",
         "title": "Qualitat",
-        "auto": "Auto"
+        "auto": "Automàtic"
       },
       "settings": {
-        "downloadItem": "Baixa",
+        "downloadItem": "Descarregar",
         "enableSubtitles": "Activa els subtítols",
-        "experienceSection": "Experiència de visualització",
-        "playbackItem": "Configuració de la reproducció",
-        "audioItem": "Audio",
+        "playbackItem": "Configuració de reproducció",
+        "audioItem": "Àudio",
         "qualityItem": "Qualitat",
-        "sourceItem": "Fonts de vídeo",
-        "subtitleItem": "Configuració dels subtítols",
-        "videoSection": "Configuració de vídeo"
+        "sourceItem": "Font",
+        "subtitleItem": "Subtítols"
       },
       "sources": {
-        "extensionHint": {
-          "noEmbeds": "No streams found. Install the Extension to unlock more sources.",
-          "failed": "Failed to load streams. Install the Extension to unlock more sources.",
-          "setupButton": "Setup Extension",
-          "moreSources": "Want more sources? Setup the Extension.",
-          "installButton": "Install Extension Now"
-        },
         "failed": {
-          "text": "S'ha produït un error en intentar trobar vídeos, proveu una font diferent.",
-          "title": "No s'ha pogut obtindre"
+          "text": "S'ha produït un error en provar de cercar vídeos... Vols provar una font diferent?",
+          "title": "No s'ha pogut raspar"
         },
         "noEmbeds": {
-          "text": "No hem pogut trobar cap incrustat, proveu una font diferent.",
-          "title": "No s'ha trobat cap incrustació"
+          "text": "No hem pogut trobar cap inserció, proveu amb una font diferent.",
+          "title": "No s'han trobat incrustacions"
         },
         "noStream": {
-          "text": "esta font no té fluxos per a esta pel·lícula o programa.",
-          "title": "Cap flux"
+          "text": "Aquesta font no té reproduccions per a aquesta pel·lícula o programa. /ᐠ - ˕ -マ Ⳋ",
+          "title": "Sense flux :("
         },
         "title": "Fonts",
-        "unknownOption": "Desconeguda",
-        "findNextSource": "Find next source"
+        "unknownOption": "Desconegut",
+        "findNextSource": "Trobeu la següent font"
       },
       "subtitles": {
-        "customChoice": "Selecciona un fitxer de subtítols",
-        "pasteChoice": "Paste subtitle data",
-        "doubleClickToCopy": "Double click to copy subtitle data",
+        "customChoice": "Deixa anar o pujar un fitxer",
+        "pasteChoice": "Enganxa les dades dels subtítols",
+        "doubleClickToCopy": "Feu doble clic per copiar les dades dels subtítols",
         "customizeLabel": "Personalitza",
-        "previewLabel": "Subtitle preview:",
-        "offChoice": "Desactivats",
-        "onChoice": "On",
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "SourceChoice": "Source Subtitles",
-        "OpenSubtitlesChoice": "External Subtitles",
-        "loadingExternal": "Loading external subtitles...",
-        "transcriptChoice": "Transcript",
+        "previewLabel": "Vista prèvia dels subtítols:",
+        "offChoice": "Apagat",
+        "autoSelectChoice": "Selecció automàtica",
+        "autoSelectDifferentChoice": "Torneu a tocar per seleccionar automàticament diferents subtítols",
+        "loadingExternal": "S'estan carregant subtítols externs...",
+        "loadingExternalProgress": "S'estan carregant subtítols externs... ({{progress}}%)",
+        "matchScoreLabel": "Coincidència ~{{score}}%",
+        "transcriptChoice": "Transcripció",
         "settings": {
           "backlink": "Subtítols personalitzats",
           "delay": "Retard dels subtítols",
-          "fixCapitals": "Corregeix les majúscules/minúscules"
+          "fixCapitals": "Corregir les majúscules"
         },
         "title": "Subtítols",
-        "unknownLanguage": "Desconeguda",
-        "dropSubtitleFile": "Drop subtitle file here! >_<",
-        "scrapeButton": "Scrape subtitles",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "empty": "There are no provided subtitles for this.",
-        "notFound": "None of the available options match your query",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP",
-        "delayLate": "Heard audio",
-        "delayEarly": "Saw caption",
+        "unknownLanguage": "Desconegut",
+        "dropSubtitleFile": "Deixa el fitxer de subtítols aquí! >_<",
+        "refresh": "Actualitza els subtítols externs",
+        "refreshing": "Refrescant...",
+        "empty": "No hi ha subtítols per a això.",
+        "notFound": "Cap de les opcions disponibles coincideix amb la vostra consulta",
+        "useNativeSubtitles": "Subtítols de vídeo nadius",
+        "useNativeSubtitlesDescription": "Transmet subtítols per a pantalla completa nativa i PiP",
+        "delayLate": "S'ha escoltat l'àudio",
+        "delayEarly": "He vist el subtítol",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "Tradueix de {{language}}"
         },
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "clearSecondary": "Clear secondary subtitle",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "selectingSecondary": "Selecting secondary subtitle",
-        "loadingExternalProgress": "S'estan carregant subtítols externs... ({{progress}}%)",
-        "matchScoreLabel": "Coincidència ~{{score}}%"
+        "primary": "primària",
+        "secondary": "Secundària",
+        "clearSecondary": "Esborra el subtítol secundari",
+        "dualSub": "Doble subtítol",
+        "dualSubDesc": "Seleccioneu el mateix format (SRT, VTT...) i proveïdor (OpenSubs...) per a la millor sincronització",
+        "dualSubHint": "Seleccioneu un idioma per al subtítol secundari (que es mostra a sobre del principal)",
+        "selectingSecondary": "Selecció de subtítols secundaris"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party",
-        "notice": "Legacy Watch Party might not be available for some sources",
-        "legacyWatchparty": "Use legacy Watch Party"
+        "watchpartyItem": "Veure Festa"
       },
       "audio": {
-        "default": "Default"
+        "default": "Per defecte"
       }
     },
     "metadata": {
-      "api": {
-        "text": "No s'han pogut carregar les metadades de l'API, comproveu la connexió a Internet.",
-        "title": "No s'han pogut carregar les metadades de l'API"
-      },
       "legal": {
         "badge": "Eliminat",
-        "text": "este contingut ja no està disponible a causa d'un avís de retirada o d'una reclamació de drets d'autor.",
-        "title": "El contingut s'ha eliminat"
+        "text": "Aquest mitjà ja no està disponible a causa d'un avís de retirada o d'una reclamació de drets d'autor. 😨",
+        "title": "El suport s'ha eliminat"
       },
       "extensionPermission": {
         "badge": "Falta el permís",
-        "button": "Utilitza l'extensió",
-        "text": "Teniu l'extensió del navegador, però necessitem el vostre permís per a començar a utilitzar l'extensió.",
-        "title": "Configureu l'extensió"
+        "button": "Utilitzeu l'extensió",
+        "text": "Tens l'extensió del navegador, però necessitem el teu permís per començar a utilitzar-la. (¬_¬)",
+        "title": "Configura l'extensió"
       },
       "failed": {
         "badge": "Ha fallat",
-        "homeButton": "Vés a l'inici",
-        "text": "No s'han pogut carregar les metadades del contingut des de TMDB. Comproveu si TMDB no funciona o està bloquejat a la vostra connexió a Internet.",
-        "title": "Ha fallat la càrrega de les metadades"
+        "homeButton": "Ves a casa",
+        "text": "No s'han pogut carregar les metadades del suport des de TMDB. Si us plau, comproveu si TMDB està inactiva o bloquejat a la vostra connexió a Internet.",
+        "title": "No s'han pogut carregar les metadades"
       },
       "notFound": {
         "badge": "No s'ha trobat",
-        "homeButton": "Torna a l'inici",
-        "text": "No hem pogut trobar el contingut sol·licitat. O bé s'ha eliminat o bé heu alterat l'URL.",
-        "title": "No s'ha trobat el contingut."
+        "homeButton": "Tornada a casa",
+        "text": "No hem pogut trobar el mitjà que heu sol·licitat. O s'ha eliminat o has manipulat l'URL (entremaliat, entremaliat).",
+        "title": "No he pogut trobar aquest mitjà."
       }
     },
     "nextEpisode": {
-      "replay": "Replay",
-      "next": "Episodi següent",
-      "nextSeason": "Next season"
+      "replay": "Repetició",
+      "next": "Següent episodi",
+      "nextSeason": "La temporada vinent"
     },
     "resume": {
-      "title": "Continue watching?",
-      "description": "This episode is {{percentage}}% watched",
-      "resume": "Resume",
-      "restart": "Restart"
+      "title": "Continuar mirant?",
+      "description": "Aquest episodi s'ha vist un {{percentage}}%",
+      "resume": "Currículum",
+      "restart": "Reinicieu"
     },
     "playbackError": {
-      "badge": "Error en la reproducció",
-      "errors": {
-        "errorAborted": "S'ha interromput l'obtenció del contingut per petició de l'usuari.",
-        "errorDecode": "Tot i haver-se determinat prèviament que era utilitzable, s'ha produït un error en intentar descodificar el recurs multimèdia.",
-        "errorGenericMedia": "S'ha produït un error desconegut al contingut.",
-        "errorNetwork": "S'ha produït algun tipus d'error de xarxa que ha impedit que el contingut s'obtinga correctament, tot i haver estat disponibles prèviament.",
-        "errorNotSupported": "El contingut o el proveïdor del contingut no és compatible."
-      },
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
-      "homeButton": "Torna a l'inici",
-      "resumeButton": "Try next sources",
-      "text": "S'ha produït un error en intentar reproduir el contingut. Torneu-ho a provar.",
+      "badge": "Error de reproducció",
+      "autoResumeText": "S'ha produït un error en intentar reproduir el contingut multimèdia 😖. S'està provant automàticament les altres fonts...",
+      "copyDebugInfo": "Copia la informació de depuració",
+      "debugInfo": "Consulteu la consola per obtenir més detalls.",
+      "homeButton": "Ves a casa",
+      "resumeButton": "Proveu les següents fonts",
+      "text": "S'ha produït un error en intentar reproduir el contingut multimèdia 😖. Si us plau, torna-ho a provar o prova amb una font diferent!",
       "title": "No s'ha pogut reproduir el vídeo!"
     },
     "scraping": {
       "items": {
-        "failure": "S'ha produït un error",
-        "timeout": "Timed out (15s)",
-        "notFound": "No té el vídeo",
-        "pending": "S'estan cercant vídeos…"
+        "pending": "S'estan buscant vídeos..."
       },
       "notFound": {
         "badge": "No s'ha trobat",
         "detailsButton": "Mostra els detalls",
-        "homeButton": "Torna a l'inici",
-        "discoverButton": "Discover more",
-        "text": "Hem buscat a través dels nostres proveïdors i no trobem el contingut que busqueu! No allotgem contingut i no tenim control sobre què hi ha disponible. Feu clic a «Mostra els detalls» a continuació per a més informació.",
-        "title": "No s'ha pogut trobar",
-        "onboarding": "More sources might be avalible using the extension or febbox token!",
-        "onboardingButton": "Do setup again"
+        "homeButton": "Ves a casa",
+        "discoverButton": "Descobreix més",
+        "text": "Hem cercat entre els nostres proveïdors i no hem trobat els mitjans que busqueu! No allotgem els mitjans de comunicació i no tenim control sobre el que està disponible. Feu clic a \"Mostra els detalls\" a continuació per obtenir més detalls.",
+        "title": "Això no ho hem pogut trobar"
       },
       "extensionFailure": {
-        "badge": "Extension disabled",
-        "homeButton": "Go home",
-        "enableExtension": "Enable extension",
-        "title": "Please enable the extension",
-        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site."
+        "badge": "Extensió desactivada",
+        "homeButton": "Ves a casa",
+        "enableExtension": "Activa l'extensió",
+        "title": "Activa l'extensió",
+        "text": "Heu instal·lat l'extensió AlphaFlix. Per començar a utilitzar-lo, heu d'activar l'extensió per a aquest lloc."
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "Toca la icona d'engranatge per canviar de font!",
+        "2": "Toca el títol per copiar l'enllaç!",
+        "3": "Mantén premuda la tecla MAJÚS per mostrar el botó de pantalla ampla en lloc de la pantalla completa.",
+        "4": "Algunes fonts funcionen millor que altres!",
+        "5": "Obteniu l'extensió per a més fonts!",
+        "6": "Mantingueu premuts els marcadors per editar-los o suprimir-los!",
+        "7": "Mantingueu premuda MAJÚS i toqueu el títol per copiar l'enllaç amb el temps!",
+        "8": "Estableix un color de subtítols personalitzat!",
+        "9": "Manteniu premut ` per veure les dreceres del teclat!"
       }
+    },
+    "loadingOverlayMessages": {
+      "1": "S'està baixant més memòria RAM...",
+      "2": "Convertint la cafeïna en contingut...",
+      "3": "Ensenyant al hàmster a córrer més ràpid...",
+      "4": "Convèncer els electrons perquè es moguin més ràpidament...",
+      "5": "Gairebé allà... va dir cada barra de càrrega...",
+      "6": "Trobar el comandament... espera, problema equivocat...",
+      "7": "Comptant enrere des de l'infinit...",
+      "8": "Simulant el futur...",
+      "9": "Mirant vídeos de gats...",
+      "10": "Distret pels GIF de gats...",
+      "11": "Si us plau, espereu mentre l'intern omple el seu cafè...",
+      "12": "S'està comprovant si està connectat...",
+      "13": "Apagant i tornant a encendre...",
+      "14": "No entris en pànic...",
+      "15": "S'acosta l'hivern...",
+      "16": "Inici de sessió a Skynet...",
+      "17": "Tots els teus navegadors ens pertanyen...",
+      "18": "Buscant una unitat d'improbabilitat infinita...",
+      "19": "Descobrint noves maneres de fer esperar...",
+      "20": "El vostre temps és molt important per a nosaltres. Si us plau, espereu mentre us ignorem...",
+      "21": "Encara més ràpid que Windows Update...",
+      "22": "Per què no agafes un sandvitx?"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
-      "remaining": "{{timeLeft}} restants • Acaba a les {{timeFinished, datetime}}",
+      "remaining": "{{timeLeft}} esquerra • Acabar a {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     },
     "segment": {
-      "intro": "Intro",
-      "recap": "Recap",
-      "credits": "Credits"
+      "intro": "Introducció",
+      "recap": "Recapitulació",
+      "credits": "Crèdits"
     },
     "skipTime": {
-      "intro": "Skip Intro",
-      "recap": "Skip Recap",
-      "credits": "Skip Credits",
-      "skipSegments": "Skip Segments",
-      "submitSegment": "Submit Segment",
-      "noSegments": "No skip segments available",
-      "startsAt": "Starts at {{time}}",
-      "endsAt": "Ends at {{time}}",
-      "timeUnknown": "Time unknown",
-      "confidence": "confidence",
-      "submissions": "{{count}} submissions",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "endOfVideo": "End",
+      "intro": "Omet la introducció",
+      "recap": "Omet el resum",
+      "credits": "Saltar crèdits",
+      "skipSegments": "Omet segments",
+      "submitSegment": "Envia el segment",
+      "noSegments": "No hi ha segments per saltar disponibles",
+      "connectApiKeyMessage": "Per enviar segments nous, introduïu la vostra clau de l'API TheIntroDB a la configuració de connexions",
+      "endOfVideo": "Final",
       "feedback": {
-        "title": "Was this skip correct?",
+        "title": "Va ser correcte aquest salt?",
         "modal": {
-          "title": "Submit Timestamps to TheIntroDB",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "segmentType": "Segment Type",
+          "title": "Envieu segells de temps a TheIntroDB",
+          "description": "Contribuïu a TheIntroDB enviant segells de temps de segment precisos. Tots els enviaments són acceptats per la comunitat abans de ser publicats.",
+          "segmentType": "Tipus de segment",
           "types": {
-            "intro": "Intro",
-            "recap": "Recap",
-            "credits": "Credits",
-            "preview": "Preview"
+            "intro": "Introducció",
+            "recap": "Recapitulació",
+            "credits": "Crèdits",
+            "preview": "Vista prèvia"
           },
-          "startTimeLabel": "Start (s)",
-          "endTimeLabel": "End (s)",
-          "placeholders": {
-            "start": {
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)",
-              "credits": "2:30 or 150 (required)",
-              "preview": "2:30 or 150 (required)"
-            },
-            "end": {
-              "intro": "3:30 or 210 (required)",
-              "recap": "3:30 or 210 (required)",
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "preview": "3:30 or 210 (leave empty for end of media)"
-            }
-          },
-          "whenToTitle": "Timestamps guide:",
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "startTimeLabel": "Inici (s)",
+          "endTimeLabel": "Final (s)",
+          "whenToTitle": "Guia de segells de temps:",
+          "whenToDesc": "Introduïu segells de temps en segons (p. ex. 150), format mm:ss (p. ex. 2:30) o format hh:mm:ss (p. ex. 1:42:20). Convertirem el format automàticament.",
           "guide": {
-            "startLabel": "Start:",
-            "startDesc": "Required - when credits begin rolling",
-            "endLabel": "End:",
-            "endDesc": "Optional - empty if extends to end",
-            "durationLabel": "Duration:",
-            "durationDesc": "Min 5s if end provided",
-            "excludeLabel": "Exclude:",
-            "excludeDesc": "Post-credits scenes",
-            "intro": {
-              "whenToTitle": "Intro timestamps guide:",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence."
-            },
-            "recap": {
-              "whenToTitle": "Recap timestamps guide:",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes."
-            },
-            "credits": {
-              "whenToTitle": "Credits timestamps guide:",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll."
-            },
-            "preview": {
-              "whenToTitle": "Preview timestamps guide:",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode."
-            }
+            "startLabel": "Inici:",
+            "startDesc": "Obligatori: quan els crèdits comencen a comptar",
+            "endLabel": "Final:",
+            "endDesc": "Opcional: buit si s'estén fins al final",
+            "durationLabel": "Durada:",
+            "durationDesc": "Mínim 5 s si el final es proporciona",
+            "excludeLabel": "Exclou:",
+            "excludeDesc": "Escenes posteriors als crèdits"
           },
-          "cancel": "Cancel",
-          "submit": "Submit",
-          "submitting": "Submitting...",
+          "cancel": "Cancel·la",
+          "submit": "Envia",
+          "submitting": "S'està enviant...",
           "error": {
-            "tidbKey": "TIDB API key is not set",
-            "mediaInfo": "Media information is not available",
-            "endTime": "End time is required",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "segment": "No segment selected"
+            "tidbKey": "La clau de l'API TIDB no està definida",
+            "mediaInfo": "La informació dels mitjans no està disponible",
+            "endTime": "Cal l'hora de finalització",
+            "startTime": "Cal l'hora d'inici",
+            "submission": "S'ha produït un error en enviar les marques de temps",
+            "segment": "No s'ha seleccionat cap segment"
           },
           "success": {
-            "title": "Submission Successful! Thanks!"
+            "title": "Presentació correcta! Gràcies!"
           }
         }
       }
-    },
-    "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
-    }
-  },
-  "support": {
-    "title": "Support",
-    "text": "AlphaFlix is designed to be as user-friendly as possible. However, people still have questions and issues. This page is here to help resolve these shortcomings",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
-    }
-  },
-  "jip": {
-    "title": "Jip",
-    "text": "AlphaFlix didn't fall out of a coconut tree, it was made mostly by a single person (a very epic one at that).",
-    "q1": {
-      "body": "You can join the official <0>AlphaFlix fluxer</0> and ask questions there or you can email the one provided at the bottom of this page.",
-      "title": "Where can I get help?"
-    },
-    "q2": {
-      "body": "We have a <0>GitHub</0> where you can create a detailed issue in our repository. Additionally, if you wish, you can create a pull request to fix the issue yourself.",
-      "title": "How can I report a bug or issue?"
     }
   },
   "screens": {
-    "legal": {
-      "title": "Legal / DMCA"
-    },
-    "loadingApp": "S'està carregant l'aplicació",
-    "loadingUser": "S'està carregant el perfil",
     "loadingUserError": {
       "logout": "Tanca la sessió",
       "reset": "Restableix el servidor personalitzat",
-      "disconnect": "Disconnect from backend",
-      "text": "Ha fallat la càrrega del perfil",
-      "reload": "Reload",
-      "textWithReset": "Error en carregar el vostre perfil des del servidor personalitzat, voleu restablir el servidor per defecte?",
-      "disconnectTitle": "Disconnect from backend?",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectConfirm": "Confirm",
-      "disconectCancel": "Cancel"
+      "reload": "Torna a carregar",
+      "disconnectTitle": "Vols desconnectar-te del backend?",
+      "disconnectMessage": "Desconnecteu-vos del servidor de comptes, mantenint les dades locals més recents. Els canvis i el contingut vist no se sincronitzaran fins que no torneu a iniciar la sessió.",
+      "disconnectConfirm": "Confirmeu",
+      "disconectCancel": "Cancel·la"
     },
     "migration": {
-      "failed": "La migració de les dades ha fallat.",
-      "inProgress": "Espereu, estem migrant les vostres dades. No hauria de tardar massa."
+      "failed": "No s'han pogut migrar les vostres dades. 😿",
+      "inProgress": "Espera, estem migrant les teves dades. Això no hauria de trigar gaire..."
     }
   },
   "settings": {
     "search": {
-      "placeholder": "Search settings..."
+      "placeholder": "Configuració de cerca..."
     },
     "all": {
-      "title": "All Settings"
+      "title": "Tota la configuració"
     },
     "account": {
       "accountDetails": {
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname",
-        "deviceNameLabel": "Nom del dispositiu",
-        "deviceNamePlaceholder": "Telèfon personal",
-        "inviteCodeLabel": "Invite Code",
-        "inviteCodePlaceholder": "Enter friendx27s User ID",
-        "inviteCodeRequiredError": "Invite code is required",
-        "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
+        "nicknameLabel": "Pseudònim",
+        "nicknamePlaceholder": "Introduïu el vostre àlies",
         "editProfile": "Edita",
         "logoutButton": "Tanca la sessió"
       },
-      "admin": {
-        "title": "Admin panel",
-        "text": "Test AlphaFlix's condition."
-      },
       "actions": {
         "delete": {
-          "button": "Elimina el compte",
-          "confirmButton": "Confirmar eliminació",
-          "confirmDescription": "Segur que voleu eliminar el compte? Es perdran totes les dades!",
-          "confirmTitle": "Confirmar eliminació",
-          "text": "Aquesta acció és irreversible. Totes les dades s'eliminaran i no es podran recuperar.",
-          "title": "Elimina el compte"
+          "button": "Suprimeix el compte",
+          "confirmButton": "Suprimeix el compte",
+          "confirmDescription": "Esteu segur que voleu suprimir el vostre compte? Totes les teves dades es perdran!",
+          "confirmTitle": "N'estàs segur?",
+          "text": "Aquesta acció és irreversible. Totes les dades s'eliminaran i no es podrà recuperar res.",
+          "title": "Suprimeix el compte"
         },
         "migration": {
-          "title": "Account migration",
-          "text": "Migrate your account to a new server or download your data.",
-          "button": "Migrate account"
+          "title": "Migració del compte",
+          "text": "Migra el teu compte a un servidor nou o baixa les teves dades.",
+          "button": "Migra el compte"
         },
         "title": "Accions",
         "logoutAllDevices": {
           "title": "Finalitzar totes les sessions",
-          "text": "Això us desconnectarà de tots els dispositius vinculats al vostre compte.",
-          "button": "Tancar sessió a tots els dispositius"
+          "text": "Això us tancarà la sessió de tots els dispositius enllaçats al vostre compte.",
+          "button": "Tanqueu la sessió de tots els dispositius"
         }
       },
       "devices": {
         "deviceNameLabel": "Nom del dispositiu",
-        "unknownDevice": "Unknown device, error decrypting name",
-        "failed": "La càrrega de sessions ha fallat",
-        "removeDevice": "Elimina",
-        "title": "Dispositiu",
+        "unknownDevice": "Dispositiu desconegut, error en desxifrar el nom",
+        "failed": "No s'han pogut carregar les sessions",
+        "removeDevice": "Eliminar",
+        "title": "Dispositius",
         "lastActive": "Darrer actiu: {{date}}",
         "loggedInAt": "Inicieu sessió a: {{date}}"
       },
       "profile": {
-        "finish": "Finalitza l'edició",
-        "firstColor": "Color de perfil 1",
-        "secondColor": "Color de perfil dos",
+        "finish": "Acabar l'edició",
+        "firstColor": "Color del perfil 1",
+        "secondColor": "Color del perfil dos",
         "title": "Edita la foto de perfil",
         "userIcon": "Icona d'usuari"
       },
       "register": {
         "cta": "Comença",
-        "text": "Compartiu el progrés de la visualització entre dispositius i manteniu-los sincronitzats.",
-        "title": "Sincronització amb el núvol"
+        "text": "Comparteix el progrés del teu rellotge entre dispositius i mantén-los sincronitzats. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "title": "Sincronitza amb el núvol"
       },
       "title": "Compte"
     },
     "appearance": {
-      "activeTheme": "Actiu",
+      "activeTheme": "Actius",
       "themes": {
         "blue": "Blau",
-        "custom": "Custom",
+        "custom": "Personalitzat",
         "default": "Per defecte",
         "gray": "Gris",
         "red": "Vermell",
-        "teal": "Verd blavós",
-        "classic": "Classic",
-        "green": "Green",
-        "mocha": "Mocha",
-        "pink": "Pink",
-        "noir": "Noir",
-        "ember": "Ember",
-        "acid": "Acid",
-        "spark": "Spark",
-        "grape": "Grape",
+        "teal": "Teal",
+        "classic": "Clàssic",
+        "green": "Verd",
+        "mocha": "Moca",
+        "pink": "Rosa",
+        "noir": "negre",
+        "ember": "Brasa",
+        "acid": "Àcid",
+        "spark": "Espurna",
+        "grape": "Raïm",
         "spiderman": "Spiderman",
-        "forest": "Forest",
+        "forest": "Bosc",
         "wolverine": "Wolverine",
         "popsicle": "Popsicle",
         "hulk": "Hulk",
-        "autumn": "Autumn",
+        "autumn": "Tardor",
         "cobalt": "Cobalt",
-        "frost": "Frost",
-        "christmas": "Christmas"
+        "frost": "Gelada",
+        "christmas": "Nadal"
       },
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "primària",
+        "secondary": "Secundària",
+        "tertiary": "Terciari"
       },
       "title": "Aparença",
       "options": {
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "logosLabel": "Image logos",
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "discover": "Secció Descobreix",
+        "discoverDescription": "Mostra la secció Descobreix a la pàgina d'inici a sota dels teus mitjans marcats com a adreces d'interès. Habilitat per defecte.",
+        "discoverLabel": "Secció Descobreix",
+        "featured": "Mitjans destacats",
+        "featuredDescription": "Mostra un carrusel de pel·lícules i programes destacats a la part superior de la teva pàgina d'inici! Desactivat per defecte.",
+        "featuredLabel": "Mitjans destacats",
+        "modal": "Detalls modal",
+        "modalDescription": "Mostra els detalls modal quan feu clic a una targeta multimèdia en lloc d'anar a la pàgina de visualització. Cal proxy o extensió per al tràiler. Desactivat per defecte.",
+        "modalLabel": "Detalls modal",
+        "logos": "Logotips d'imatge",
+        "logosDescription": "Mostra els logotips d'imatge en lloc dels títols de text a la secció de detalls modal i destacat. Habilitat per defecte.",
+        "logosNotice": "La majoria de vegades, els logotips són només en anglès. És possible que altres idiomes vulguin desactivar-ho!",
+        "logosLabel": "Logotips d'imatge",
+        "carouselView": "Vista de carrusel",
+        "carouselViewDescription": "Mostra les teves seccions de visualització i adreces d'interès com a carrusels en lloc d'una quadrícula. Desactivat per defecte.",
+        "carouselViewLabel": "Vista de carrusel",
+        "minimalCards": "Cartes mínimes",
+        "minimalCardsDescription": "Amaga el contingut de text (títol, tipus, any) a les targetes multimèdia, mostrant només la imatge del pòster.",
+        "minimalCardsLabel": "Cartes mínimes",
+        "forceCompactEpisodeView": "Força la visualització compacta de l'episodi",
+        "forceCompactEpisodeViewDescription": "Força el carrusel d'episodis del reproductor a utilitzar la vista vertical compacta \"clàssica\". Desactivat per defecte.",
+        "homeSectionOrder": "Ordre de la secció d'inici",
+        "homeSectionOrderDescription": "Arrossegueu i deixeu anar per reordenar les seccions de visualització i d'adreces d'interès a la vostra pàgina d'inici. La comanda del grup es pot editar des de la pàgina d'inici.",
+        "forceCompactEpisodeViewLabel": "Episodis compactes",
+        "homeSectionOrderGroups": "Reordena els grups d'adreces d'interès",
+        "pauseOverlay": "Posa en pausa la superposició",
+        "pauseOverlayDescription": "Mostra una superposició de títol/logotip i descripció quan el reproductor estigui en pausa i inactiu.",
+        "pauseOverlayLabel": "Posa en pausa la superposició"
       },
       "sections": {
-        "watching": "Currently Watching",
-        "bookmarks": "Bookmarks"
+        "watching": "S'està mirant actualment",
+        "bookmarks": "Adreces d'interès"
       }
     },
     "connections": {
       "server": {
-        "description": "Si voleu connectar-vos a un rerefons personalitzat per a emmagatzemar les vostres dades, activeu-ho i proporcioneu l'URL. <0>Instruccions.</0>",
-        "label": "Servidor personalitzat",
-        "urlLabel": "URL del servidor personalitzat",
-        "selectBackend": "Select Backend Server",
-        "currentBackend": "Current Backend",
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "confirm": "Log out and change server",
-        "cancel": "Cancel",
-        "changeWarningTitle": "Change Backend Server",
-        "migration": {
-          "description": "<0>Migrate my data</0> to a new server.",
-          "link": "Migrate my data"
-        },
-        "documentation": "Backend documentation",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
-      },
-      "setup": {
-        "doSetup": "Configura",
-        "errorStatus": {
-          "description": "Sembla que heu de revisar un o més elements de la configuració.",
-          "title": "S'ha de revisar algun element"
-        },
-        "itemError": "Hi ha alguna cosa malament en la configuració. Torneu a fer la configuració per a solucionar-ho.",
-        "items": {
-          "default": "Configuració per defecte",
-          "extension": "Extensió",
-          "proxy": "Servidor personalitzat",
-          "desktopapp": "Native app"
-        },
-        "redoSetup": "Reconfigura",
-        "successStatus": {
-          "description": "Tot està preparat perquè comenceu a mirar el vostre contingut preferit.",
-          "title": "Tot està configurat!"
-        },
-        "unsetStatus": {
-          "description": "Feu clic al botó de la dreta per a iniciar el procés de configuració.",
-          "title": "No heu fet la configuració"
-        }
+        "changeWarning": "Si canvieu el servidor backend, tanqueu la sessió. Continuar?",
+        "changeWarningTitle": "Canvia el servidor de fons",
+        "error": "S'ha produït un error en connectar-se al backend",
+        "notice": "El vostre compte NO se sincronitza entre backends, així que recordeu quin feu servir!"
       },
       "title": "Connexions",
-      "workers": {
-        "addButton": "Afig un «worker»",
-        "description": "Per fer funcionar l'aplicació, tot el trànsit s'encamina a través de servidors intermediaris. Activeu-ho si voleu portar els vostres propis «workers». <0>Instruccions.</0>",
-        "documentation": "Proxy documentation",
-        "emptyState": "Encara no hi ha «workers», afegiu-ne un a continuació",
-        "label": "Utilitza «workers» intermediaris personalitzats",
-        "urlLabel": "URL dels «workers»",
-        "urlPlaceholder": "https://",
-        "proxyTMDB": {
-          "title": "Proxy TMDB",
-          "description": "Only needed if you can't access TheMovieDB directly, such as if your ISP blocks it. It is recomended to disable the Discover section to improve performance with this."
-        }
-      },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
+        "description": "Contribuïu a TheIntroDB deixant comentaris sobre els segments d'introducció, resum i crèdits. <0>Més informació.</0>",
+        "tokenLabel": "Clau de l'API"
       }
     },
     "preferences": {
-      "title": "Configuració",
-      "language": "Llengua de l'aplicació",
-      "languageDescription": "La llengua s'aplica a tota l'aplicació.",
+      "title": "Preferències",
+      "language": "Idioma d'aplicació",
+      "languageDescription": "Idioma aplicat a tota l'aplicació, només l'anglès té coses ximples 🙁.",
       "thumbnail": "Genera miniatures",
-      "thumbnailDescription": "Majoritàriament, els vídeos no tenen miniatures. Podeu activar esta opció per a generar-les sobre la marxa, però poden alentir el vídeo.",
+      "thumbnailDescription": "La majoria de vegades, els vídeos no tenen miniatures. Podeu activar aquesta configuració per generar-los sobre la marxa, però poden fer que el vostre vídeo sigui més lent.",
       "thumbnailLabel": "Genera miniatures",
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
-      "autoplayLabel": "Autoplay",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source"
+      "autoplay": "Reproducció automàtica",
+      "autoplayDescription": "Reprodueix automàticament el següent episodi d'una sèrie després d'arribar al final. Els usuaris poden activar-lo amb l'extensió del navegador, un servidor intermediari personalitzat o amb la configuració predeterminada si l'amfitrió ho permet.",
+      "autoplayLabel": "Reproducció automàtica",
+      "skipCredits": "Saltar crèdits finals",
+      "skipCreditsDescription": "Quan estigui activat, reprodueix automàticament el següent episodi amb un 99% de finalització per saltar els crèdits finals. Quan estigui desactivat, espereu fins que l'episodi s'hagi completat completament.",
+      "skipCreditsLabel": "Saltar crèdits finals",
+      "autoSkipSegments": "Segments de salt automàtic",
+      "autoSkipSegmentsDescription": "Quan està activat, omet automàticament els segments d'introducció, resum i previsualització mentre mireu.",
+      "autoSkipSegmentsLabel": "Omet automàticament segments",
+      "lowPerformanceMode": "Mode de baix rendiment/ample de banda",
+      "lowPerformanceModeDescription": "Optimitza l'aplicació per a connexions i dispositius més lents desactivant les funcions d'amplada de banda pesada. Aquest mode redueix l'ús de dades i millora el rendiment alhora que manté intactes les funcions bàsiques de cerca i rellotge.",
+      "lowPerformanceModeLabel": "Mode de baix rendiment",
+      "holdToBoost": "Mantén premut per augmentar la velocitat",
+      "holdToBoostDescription": "Mantén premuda la barra espaiadora o mantén premuda la pantalla per augmentar temporalment la velocitat de reproducció a 2x. Deixeu anar per tornar a la velocitat anterior.",
+      "holdToBoostLabel": "Activa la retenció per augmentar",
+      "doubleClickToSeek": "Fes doble toc per cercar",
+      "doubleClickToSeekDescription": "Fes doble toc al costat esquerre o dret del reproductor per buscar 10 segons cap endavant o cap enrere.",
+      "doubleClickToSeekLabel": "Habiliteu doble toc per cercar",
+      "keyboardShortcuts": "Dreceres de teclat",
+      "keyboardShortcutsDescription": "Personalitzeu les dreceres de teclat per a l'aplicació. Manteniu premut ` per mostrar aquesta ajuda en qualsevol moment",
+      "keyboardShortcutsLabel": "Personalitza les dreceres del teclat",
+      "sourceOrder": "Reordenació de fonts",
+      "sourceOrderDescription": "Arrossegueu i deixeu anar per reordenar les fonts. Això determinarà l'ordre en què es comproven les fonts per als mitjans que esteu intentant veure. <br><br> <strong>(L'ordre predeterminat és el millor per a la majoria dels usuaris)</strong>",
+      "sourceOrderEnableLabel": "Comanda font personalitzada",
+      "showLess": "Mostra menys",
+      "showMore": "Mostra'n més",
+      "embedOrder": "Reordenant incrustacions",
+      "embedOrderDescription": "Arrossegueu i deixeu anar per reordenar les incrustacions. Això determinarà l'ordre en què es comproven les incrustacions per als mitjans que esteu intentant veure. <br><br> <strong>(L'ordre predeterminat és el millor per a la majoria dels usuaris)</strong>",
+      "embedOrderEnableLabel": "Ordre d'inserció personalitzada",
+      "manualSource": "Selecció manual de la font",
+      "manualSourceDescription": "Cal triar una font abans de raspar. Desactiva la selecció automàtica de fonts i obre el selector de fonts quan s'inicia la reproducció.",
+      "manualSourceLabel": "Selecció manual de la font",
+      "autoResumeOnPlaybackError": "Reprèn automàticament en cas d'error de reproducció",
+      "autoResumeOnPlaybackErrorDescription": "Continueu cercant altres fonts automàticament quan la font actual falla durant la reproducció. Si està desactivat, veureu una pantalla d'error amb una opció de reinici manual.",
+      "autoResumeOnPlaybackErrorLabel": "Reprèn automàticament en cas d'error de reproducció",
+      "lastSuccessfulSource": "Darrera font utilitzada",
+      "lastSuccessfulSourceDescription": "Prioritza automàticament la font que ha proporcionat correctament el contingut de l'episodi anterior. Això ajuda a garantir la continuïtat quan es veuen sèries.",
+      "lastSuccessfulSourceEnableLabel": "Darrera font utilitzada"
     },
     "reset": "Restableix",
     "save": "Desa",
     "sidebar": {
       "info": {
-        "appVersion": "Versió de l'aplicació",
-        "backendUrl": "URL del rerefons",
-        "backendVersion": "Versió del rerefons",
-        "hostname": "Nom de l'amfitrió",
-        "insecure": "Insegur",
-        "nickname": "Nickname",
         "notLoggedIn": "No heu iniciat sessió",
-        "secure": "Segur",
-        "title": "Informació de l'aplicació",
-        "unknownVersion": "Desconeguda",
         "userId": "ID d'usuari",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Utilitzeu-lo com a codi d'invitació per al vostre registre d'amics"
       }
     },
     "subtitles": {
-      "backgroundLabel": "Opacitat del fons",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
-      "backgroundBlurLabel": "Difuminat del fons",
+      "backgroundLabel": "Opacitat de fons",
+      "backgroundBlurEnabledLabel": "Desenfocament de fons",
+      "backgroundBlurEnabledDescription": "La desactivació del desenfocament de fons dels subtítols pot solucionar alguns problemes de parpelleig",
+      "backgroundBlurLabel": "Intensitat del desenfocament del fons",
       "colorLabel": "Color",
-      "previewQuote": "No he de tindre por. La por és l'assassina de la ment.",
-      "textSizeLabel": "Grandària del text",
+      "previewQuote": "Convençut que la vida no té sentit, em falta el coratge de la meva convicció.",
+      "textSizeLabel": "Mida del text",
       "title": "Subtítols",
-      "textBoldLabel": "Bold text",
-      "verticalPositionLabel": "Vertical position",
-      "high": "High",
-      "low": "Default",
+      "textBoldLabel": "Text en negreta",
+      "verticalPositionLabel": "Posició vertical",
+      "high": "Alt",
+      "low": "Per defecte",
       "textStyle": {
-        "title": "Text style",
-        "default": "Default",
-        "raised": "Raised",
-        "depressed": "Depressed",
-        "Border": "Border",
-        "dropShadow": "Drop Shadow"
+        "title": "Estil de text",
+        "default": "Per defecte",
+        "raised": "Aixecat",
+        "depressed": "Deprimit",
+        "Border": "Frontera",
+        "dropShadow": "Ombra caiguda"
       },
-      "BorderThicknessLabel": "Border Thickness"
+      "BorderThicknessLabel": "Gruix de la vora"
     },
-    "unsaved": "Hi ha canvis sense desar"
+    "unsaved": "Tens canvis no desats..."
   },
   "discover": {
     "tabs": {
-      "movies": "Movies",
-      "tvshows": "TV Shows",
-      "editorpicks": "Editor Picks",
+      "movies": "Pel·lícules",
+      "tvshows": "Programes de televisió",
       "top10": "Top 10"
     },
     "carousel": {
       "title": {
-        "loading": "Loading...",
-        "movies": "{{category}} Movies",
-        "tvshows": "{{category}} Shows",
-        "inCinemas": "In Cinemas",
-        "popular": "Most Popular",
-        "nowPlaying": "In Cinemas",
-        "topRated": "Top Rated",
-        "latestReleases": "Latest Releases",
-        "4kReleases": "4K Releases",
-        "onTheAir": "On The Air",
-        "latestTVReleases": "Latest TV Shows",
-        "popularOn": "Popular {{type}} on {{provider}}",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "moviesOn": "Movies on {{provider}}",
-        "tvshowsOn": "Shows on {{provider}}",
-        "recommended": "Because You Watched: {{title}}",
-        "forYou": "For You",
-        "genreMovies": "{{genre}} Movies",
-        "genreShows": "{{genre}} Shows",
-        "categoryMovies": "{{category}} Movies",
-        "categoryShows": "{{category}} Shows",
+        "movies": "{{category}} Pel·lícules",
+        "tvshows": "{{category}} Espectacles",
+        "inCinemas": "Als Cinemes",
+        "popular": "El més popular",
+        "topRated": "Millor valorat",
         "top10": "Top 10",
+        "latestReleases": "Darrers llançaments",
+        "4kReleases": "Llançaments 4K",
+        "onTheAir": "A l'aire",
+        "latestTVReleases": "Últims programes de televisió",
+        "editorPicksMovies": "L'editor tria pel·lícules",
+        "editorPicksShows": "L'editor tria espectacles",
+        "moviesOn": "Pel·lícules a {{provider}}",
+        "tvshowsOn": "Programa el {{provider}}",
+        "recommended": "Perquè has mirat: {{title}}",
+        "forYou": "Per a tu",
         "trending": "Tendència ara"
       },
-      "change": "Change",
-      "more": "View more"
+      "change": "Canviar",
+      "more": "Veure més"
     },
     "featured": {
-      "playNow": "Play Now",
-      "moreInfo": "More Info"
-    },
-    "randomMovie": {
-      "button": "Watch Something Random",
-      "cancel": "Cancel Countdown",
-      "countdown": "{{countdown}}s",
-      "nowPlaying": "Now Playing",
-      "in": "in"
+      "playNow": "Juga ara",
+      "moreInfo": "Més informació"
     },
     "page": {
-      "title": "Discover Movies & TV",
-      "subtitle": "Explore the latest hits and timeless classics.",
-      "loadMore": "Load more",
-      "loading": "Loading...",
-      "back": "Go back"
+      "title": "Descobreix pel·lícules i televisió",
+      "loadMore": "Carregueu més",
+      "loading": "Carregant...",
+      "back": "Torna enrere"
     },
-    "viewLists": "View All Movie Lists",
-    "allLists": "All Movie Lists",
-    "scrollToTop": "Back to top",
     "filters": {
       "country": "País"
-    }
-  },
-  "fedapi": {
-    "onboarding": {
-      "title": "Febbox token",
-      "description": "Bring your own FREE Febbox account to gain access to FED API, the best sources with 4K quality, Dolby Atmos, skip intro and the fastest load times! Highly recommended option!"
     },
-    "setup": {
-      "title": "To get your UI token:",
-      "showVideo": "Show Video Tutorial",
-      "hideVideo": "Hide Video Tutorial",
-      "step": {
-        "1": "1. Go to <0>febbox.com</0> and log in with Google (use a fresh account!)",
-        "2": "2. Open DevTools or inspect the page",
-        "3": "3. Go to Application tab → Cookies",
-        "4": "4. Copy the 'ui' cookie's value.",
-        "5": "5. Close the tab, but do NOT logout!"
-      },
-      "tokenLabel": "Token",
-      "tokenExample": {
-        "button": "(Example)",
-        "title": "Example Token",
-        "description": "This is what a Febbox UI token looks like:",
-        "warning": "Don't try to use, it's fake.",
-        "close": "Got it"
-      },
-      "traffic": "{{used}} / {{limit}} High-speed Traffic • Resets in {{reset}}",
-      "trafficExplanation": "Febbox gives you 100GB/month of high-speed traffic, the streams might buffer more after you've used up your quota. Depends on your internet speed and the quality of the stream.",
-      "useMp4": "Enable MP4 streams. May be faster outside of the U.S., but audio tracks cannot be changed."
-    },
-    "status": {
-      "success": "success",
-      "api_down": "Cannot reach FED API!",
-      "invalid_token": "Failed to fetch a 'VIP' stream. Your token is invalid!"
-    }
-  },
-  "debrid": {
-    "title": "Debrid (Beta)",
-    "description": "Enter your Debrid API key to access Debrid services. Requires a paid <0>Real-Debrid</0> or <1>TorBox</1> account!",
-    "notice": "Notice: This may not work on all browsers, use Chromium for the best compatibility. If you hear no audio, use another source. :(",
-    "tokenLabel": "API Key",
-    "serviceOptions": {
-      "realdebrid": "Real Debrid",
-      "torbox": "TorBox"
-    },
-    "status": {
-      "failure": "Failed to connect to Debrid. Please check your API key.",
-      "api_down": "Hmm, something went wrong. Please try again later.",
-      "invalid_token": "Invalid API key or non-premium account. Debrid requires a premium account."
-    }
-  },
-  "watchParty": {
-    "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
-    },
-    "alone": "Alone",
-    "withCount": "With {{count}} others",
-    "isHost": "Hosting on <0>{{backendName}}</0>",
-    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
-    "hosting": "Hosting",
-    "watching": "Watching",
-    "syncing": "Syncing...",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "showStatusOverlay": "Show status overlay",
-    "leaveWatchParty": "Leave Watch Party",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "hostParty": "Host a Watch Party",
-    "joinParty": "Join a Watch Party",
-    "viewers": "Viewers ({{count}})",
-    "copyCode": "Click to copy",
-    "join": "Join",
-    "cancel": "Cancel",
-    "save": "Save",
-    "emptyRoom": "No one is in this room yet",
-    "noHost": "No host in this watch party",
-    "invalidRoom": "Unable to connect to this room",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
-    "validating": "Validating watch party...",
-    "linkCopied": "Copied!",
-    "backendRequirement": "All users must use the same backend server",
-    "activeBackend": "Active Backend: {{backend}}",
-    "enterCodeOrLink": "Introduïu un enllaç d'una festa de visualització compartida o un codi d'habitació",
-    "you": "tu",
-    "guestFallback": "Convidat"
+    "viewLists": "Veure totes les llistes de pel·lícules",
+    "allLists": "Totes les llistes de pel·lícules",
+    "scrollToTop": "Tornar a dalt"
   },
   "tmdb": {
     "genres": {
       "10759": "Acció i Aventura"
     }
+  },
+  "watchParty": {
+    "status": {
+      "inSync": "En sincronització",
+      "outOfSync": "No sincronitzat"
+    },
+    "alone": "Sol",
+    "withCount": "Amb {{count}} més",
+    "hosting": "Hosting",
+    "watching": "Mirant",
+    "syncing": "S'està sincronitzant...",
+    "behindHost": "Darrere de l'amfitrió {{seconds}} segons",
+    "aheadOfHost": "Per davant de l'amfitrió {{seconds}} segons",
+    "showStatusOverlay": "Mostra la superposició d'estat",
+    "leaveWatchParty": "Sortir de Watch Party",
+    "shareCode": "Comparteix aquest codi amb els amics (fes clic per copiar l'enllaç)",
+    "enterCodeOrLink": "Introduïu un enllaç d'una festa de visualització compartida o un codi d'habitació",
+    "connectedAsGuest": "Connectat per veure la festa com a convidat",
+    "hostParty": "Organitzeu una festa de rellotge",
+    "joinParty": "Uneix-te a un Watch Party",
+    "viewers": "Espectadors ({{count}})",
+    "copyCode": "Feu clic per copiar",
+    "join": "Uneix-te",
+    "cancel": "Cancel·la",
+    "save": "Desa",
+    "emptyRoom": "Encara no hi ha ningú en aquesta habitació",
+    "noHost": "Cap amfitrió en aquesta festa de rellotge",
+    "invalidRoom": "No es pot connectar a aquesta sala",
+    "contentMismatch": "No es pot unir al grup de visualització: el contingut no coincideix amb el de l'amfitrió.",
+    "episodeMismatch": "No es pot unir a la festa de visualització: estàs veient un episodi diferent del de l'amfitrió.",
+    "validating": "S'està validant la festa del rellotge...",
+    "linkCopied": "Copiat!",
+    "you": "tu",
+    "guestFallback": "Convidat"
   }
 }
