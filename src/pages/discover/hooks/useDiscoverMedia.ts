@@ -41,6 +41,31 @@ export {
   TV_PROVIDERS,
 };
 
+function compareByRatingDesc(
+  a: { vote_average?: number; vote_count?: number },
+  b: { vote_average?: number; vote_count?: number },
+) {
+  const MIN_CONFIDENT_VOTES = 50;
+  const BASELINE_RATING = 6.5;
+  const getWeightedScore = (item: {
+    vote_average?: number;
+    vote_count?: number;
+  }) => {
+    const votes = item.vote_count ?? 0;
+    const rating = item.vote_average ?? 0;
+    const weight = votes / (votes + MIN_CONFIDENT_VOTES);
+    return weight * rating + (1 - weight) * BASELINE_RATING;
+  };
+
+  const weightedDiff = getWeightedScore(b) - getWeightedScore(a);
+  if (weightedDiff !== 0) return weightedDiff;
+
+  const voteDiff = (b.vote_count ?? 0) - (a.vote_count ?? 0);
+  if (voteDiff !== 0) return voteDiff;
+
+  return (b.vote_average ?? 0) - (a.vote_average ?? 0);
+}
+
 export function useDiscoverOptions(
   mediaType: MediaType,
   options?: { includeCountries?: boolean },
@@ -197,9 +222,12 @@ export function useDiscoverMedia({
         });
 
         // For carousel views, we might want to limit the number of results
+        const sortedResults = [...(data.results ?? [])].sort(
+          compareByRatingDesc,
+        );
         const results = isCarouselView
-          ? data.results.slice(0, 20)
-          : data.results;
+          ? sortedResults.slice(0, 20)
+          : sortedResults;
 
         return {
           results: results.map((item: any) => ({
@@ -257,7 +285,7 @@ export function useDiscoverMedia({
 
       const results = await Promise.all(mediaPromises);
       return filterResultsByReleaseYear({
-        results,
+        results: [...results].sort(compareByRatingDesc),
         hasMore: picks.length > picksToFetch.length,
       });
     } catch (err) {
@@ -514,8 +542,9 @@ export function useDiscoverMedia({
     try {
       const data = await attemptFetch(contentType);
       setMedia((prevMedia) => {
-        // If page is 1, replace the media array, otherwise append
-        return page === 1 ? data.results : [...prevMedia, ...data.results];
+        const mergedMedia =
+          page === 1 ? data.results : [...prevMedia, ...data.results];
+        return [...mergedMedia].sort(compareByRatingDesc);
       });
       setHasMore(data.hasMore);
     } catch (err) {
@@ -529,10 +558,11 @@ export function useDiscoverMedia({
           const fallbackData = await attemptFetch(fallbackType);
           setActualContentType(fallbackType); // Set actual content type to fallback
           setMedia((prevMedia) => {
-            // If page is 1, replace the media array, otherwise append
-            return page === 1
-              ? fallbackData.results
-              : [...prevMedia, ...fallbackData.results];
+            const mergedMedia =
+              page === 1
+                ? fallbackData.results
+                : [...prevMedia, ...fallbackData.results];
+            return [...mergedMedia].sort(compareByRatingDesc);
           });
           setHasMore(fallbackData.hasMore);
           setError(null); // Clear error if fallback succeeds
