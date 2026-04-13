@@ -435,7 +435,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
               </div>
             )}
 
-            <div className="relative">
+            <div className="relative whitespace-nowrap">
               <Dropdown
                 selectedItem={selectedCountryOption}
                 setSelectedItem={(item) => {
