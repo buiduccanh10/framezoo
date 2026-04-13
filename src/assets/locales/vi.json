@@ -1575,6 +1575,11 @@
     "allLists": "Tất cả danh sách phim",
     "scrollToTop": "Quay lại đầu trang"
   },
+  "tmdb": {
+    "genres": {
+      "10759": "Hành động & Phiêu lưu"
+    }
+  },
   "fedapi": {
     "onboarding": {
       "title": "Token Febbox",

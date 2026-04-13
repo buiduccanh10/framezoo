@@ -51,6 +51,7 @@ export function useDiscoverOptions(
   const [error, setError] = useState<string | null>(null);
   const includeCountries = options?.includeCountries ?? false;
 
+  const { t } = useTranslation();
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
@@ -69,7 +70,12 @@ export function useDiscoverOptions(
           includeCountries ? get<any[]>("/configuration/countries") : [],
         ]);
 
-        setGenres(genresData.genres.slice(0, 50));
+        setGenres(
+          (genresData.genres || []).slice(0, 50).map((genre: Genre) => ({
+            ...genre,
+            name: t(`tmdb.genres.${genre.id}`, { defaultValue: genre.name }),
+          })),
+        );
 
         if (includeCountries) {
           const localizedCountryNames = new Intl.DisplayNames(
@@ -113,7 +119,7 @@ export function useDiscoverOptions(
     };
 
     fetchOptions();
-  }, [mediaType, formattedLanguage, userLanguage, includeCountries]);
+  }, [mediaType, formattedLanguage, userLanguage, includeCountries, t]);
 
   return {
     genres,
@@ -153,8 +159,10 @@ export function useDiscoverMedia({
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
   const releaseYearParams = useMemo(
     () =>
-      mediaType === "movie" && releaseYear
-        ? { primary_release_year: releaseYear }
+      releaseYear
+        ? mediaType === "movie"
+          ? { primary_release_year: releaseYear }
+          : { first_air_date_year: releaseYear }
         : {},
     [mediaType, releaseYear],
   );
@@ -421,8 +429,10 @@ export function useDiscoverMedia({
           if (!mediaTitle) throw new Error("Search title is required");
           data = await fetchTMDBMedia(`/search/${mediaType}`, {
             query: mediaTitle,
-            ...(mediaType === "movie" && releaseYear
-              ? { year: releaseYear }
+            ...(releaseYear
+              ? mediaType === "movie"
+                ? { year: releaseYear }
+                : { first_air_date_year: releaseYear }
               : {}),
           });
           setSectionTitle(t("discover.page.title"));
@@ -448,14 +458,22 @@ export function useDiscoverMedia({
               ? "/discover/movie"
               : mediaType === "movie"
                 ? "/movie/now_playing"
-                : "/tv/on_the_air",
+                : releaseYear || hasOriginCountryFilter
+                  ? "/discover/tv"
+                  : "/tv/on_the_air",
             mediaType === "movie" && (releaseYear || hasOriginCountryFilter)
               ? {
                   sort_by: "primary_release_date.desc",
                   ...releaseYearParams,
                   ...originCountryParams,
                 }
-              : undefined,
+              : mediaType === "tv" && (releaseYear || hasOriginCountryFilter)
+                ? {
+                    sort_by: "first_air_date.desc",
+                    ...releaseYearParams,
+                    ...originCountryParams,
+                  }
+                : undefined,
           );
           setSectionTitle(t("discover.carousel.title.latestReleases"));
           break;
@@ -475,7 +493,14 @@ export function useDiscoverMedia({
           break;
 
         case "latesttv":
-          data = await fetchTMDBMedia("/tv/on_the_air");
+          data =
+            releaseYear || hasOriginCountryFilter
+              ? await fetchTMDBMedia("/discover/tv", {
+                  sort_by: "first_air_date.desc",
+                  ...releaseYearParams,
+                  ...originCountryParams,
+                })
+              : await fetchTMDBMedia("/tv/on_the_air");
           setSectionTitle(t("discover.carousel.title.latestTVReleases"));
           break;
 

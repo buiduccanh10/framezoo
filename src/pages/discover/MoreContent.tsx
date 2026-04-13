@@ -72,9 +72,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   const actualMediaType =
     mediaType || (category?.endsWith("-tv") ? "tv" : "movie");
   const selectedReleaseYear =
-    actualMediaType === "movie"
-      ? searchParams.get("year")?.match(/^\d{4}$/)?.[0] || ""
-      : "";
+    searchParams.get("year")?.match(/^\d{4}$/)?.[0] || "";
   const selectedOriginCountry =
     searchParams
       .get("country")
@@ -88,10 +86,6 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
     [countryLabel, countries],
   );
   const yearOptions: OptionItem[] = React.useMemo(() => {
-    if (actualMediaType !== "movie") {
-      return [];
-    }
-
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: currentYear - 1899 }, (_, index) => {
       const year = (currentYear - index).toString();
@@ -105,7 +99,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
       },
       ...years,
     ];
-  }, [actualMediaType, t]);
+  }, [t]);
   const selectedYearOption =
     yearOptions.find((option) => option.id === selectedReleaseYear) ||
     yearOptions[0];
@@ -478,7 +472,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
               />
             </div>
 
-            {actualMediaType === "movie" && selectedYearOption && (
+            {selectedYearOption && (
               <div className="relative pr-2">
                 <Dropdown
                   selectedItem={selectedYearOption}

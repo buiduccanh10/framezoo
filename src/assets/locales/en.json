@@ -1560,6 +1560,11 @@
     "allLists": "All Movie Lists",
     "scrollToTop": "Back to top"
   },
+  "tmdb": {
+    "genres": {
+      "10759": "Action & Adventure"
+    }
+  },
   "fedapi": {
     "onboarding": {
       "title": "Febbox token",
