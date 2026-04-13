@@ -423,21 +423,6 @@
   },
   "migration": {
     "back": "Go back",
-    "direct": {
-      "backendLabel": "Destination Backend URL",
-      "button": {
-        "home": "Go home",
-        "login": "Continue to login",
-        "migrate": "Migrate",
-        "processing": "Processing..."
-      },
-      "description": "Enter the destination backend URL to migrate your current account data to a new backend. This keeps your passphrase the same!",
-      "status": {
-        "error": "Failed to migrate your data. 😿",
-        "success": "Your data has been migrated successfully! 🎉"
-      },
-      "title": "Direct migration"
-    },
     "download": {
       "button": {
         "download": "Download data",
@@ -461,14 +446,8 @@
       "uploadDescription": "Data to upload:"
     },
     "start": {
-      "explainer": "If you wish to migrate or backup your data, you can do so using the options below. This will allow you to keep your data when you switch backend servers.",
+      "explainer": "Download your account data for backup, or upload a previous export to restore bookmarks and progress on this account.",
       "options": {
-        "direct": {
-          "action": "Transfer data",
-          "description": "This will directly migrate your data to the new server. This is the fastest option. <br /><br />This option allows you to keep your passphrase the same!",
-          "quality": "Easiest and fastest",
-          "title": "Direct migration"
-        },
         "download": {
           "action": "Download data",
           "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",

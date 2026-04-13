@@ -28,7 +28,6 @@ import { HomePage } from "@/pages/HomePage";
 import { LoginPage } from "@/pages/Login";
 import { Marked } from "@/pages/marked/Marked";
 import { MigrationPage } from "@/pages/migration/Migration";
-import { MigrationDirectPage } from "@/pages/migration/MigrationDirect";
 import { MigrationDownloadPage } from "@/pages/migration/MigrationDownload";
 import { MigrationUploadPage } from "@/pages/migration/MigrationUpload";
 import { RegisterPage } from "@/pages/Register";
@@ -160,7 +159,6 @@ function App() {
             <Route path="/" element={<Navigate to="/discover" replace />} />
             {/* Migration pages */}
             <Route path="/migration" element={<MigrationPage />} />
-            <Route path="/migration/direct" element={<MigrationDirectPage />} />
             <Route
               path="/migration/download"
               element={<MigrationDownloadPage />}

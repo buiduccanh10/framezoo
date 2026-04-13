@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { Icons } from "@/components/Icon";
@@ -27,29 +27,6 @@ export function MigrationPage() {
         </Paragraph>
 
         <div className="w-full flex flex-col md:flex-row gap-3">
-          <Card
-            onClick={() => navigate("/migration/direct")}
-            className="flex-1"
-          >
-            <CardContent
-              colorClass="!text-onboarding-best"
-              title={t("migration.start.options.direct.title")}
-              subtitle={t("migration.start.options.direct.quality")}
-              description={
-                <Trans i18nKey="migration.start.options.direct.description" />
-              }
-              icon={Icons.CLOUD_ARROW_UP}
-            >
-              <Link>{t("migration.start.options.direct.action")}</Link>
-            </CardContent>
-          </Card>
-          <div className="hidden md:grid grid-rows-[1fr,auto,1fr] justify-center gap-4">
-            <VerticalLine className="items-end" />
-            <span className="text-xs uppercase font-bold">
-              {t("migration.start.options.or")}
-            </span>
-            <VerticalLine />
-          </div>
           <Card
             onClick={() => navigate("/migration/download")}
             className="flex-1"
