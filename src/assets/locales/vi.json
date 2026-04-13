@@ -1568,6 +1568,9 @@
       "loading": "Đang tải...",
       "back": "Quay lại"
     },
+    "filters": {
+      "country": "Quốc gia"
+    },
     "viewLists": "Xem tất cả danh sách phim",
     "allLists": "Tất cả danh sách phim",
     "scrollToTop": "Quay lại đầu trang"

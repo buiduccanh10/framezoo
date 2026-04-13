@@ -45,7 +45,10 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   const progressStore = useProgressStore();
 
   // Get available providers and genres
-  const { providers, genres } = useDiscoverOptions(mediaType as MediaType);
+  const { providers, genres, countries } = useDiscoverOptions(
+    mediaType as MediaType,
+    { includeCountries: true },
+  );
 
   // Get recommendation sources from progress store
   const recommendationSources = Object.entries(progressStore.items || {})
@@ -72,6 +75,18 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
     actualMediaType === "movie"
       ? searchParams.get("year")?.match(/^\d{4}$/)?.[0] || ""
       : "";
+  const selectedOriginCountry =
+    searchParams
+      .get("country")
+      ?.toUpperCase()
+      .match(/^[A-Z]{2}$/)?.[0] || "";
+  const countryLabel = t("discover.filters.country", {
+    defaultValue: "Country",
+  });
+  const countryOptions: OptionItem[] = React.useMemo(
+    () => [{ id: "", name: countryLabel }, ...countries],
+    [countryLabel, countries],
+  );
   const yearOptions: OptionItem[] = React.useMemo(() => {
     if (actualMediaType !== "movie") {
       return [];
@@ -94,6 +109,9 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   const selectedYearOption =
     yearOptions.find((option) => option.id === selectedReleaseYear) ||
     yearOptions[0];
+  const selectedCountryOption =
+    countryOptions.find((option) => option.id === selectedOriginCountry) ||
+    countryOptions[0];
   const queryString = searchParams.toString();
   const searchSuffix = queryString ? `?${queryString}` : "";
 
@@ -113,6 +131,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
       selectedRecommendationId,
     page: currentPage,
     releaseYear: selectedReleaseYear || undefined,
+    originCountry: selectedOriginCountry || undefined,
     genreName: selectedGenre?.name,
     providerName: selectedProvider?.name,
     mediaTitle: selectedRecommendationSource?.title,
@@ -134,11 +153,18 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   // Scroll to top when entering the page
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [contentType, mediaType, id, selectedReleaseYear]);
+  }, [contentType, mediaType, id, selectedReleaseYear, selectedOriginCountry]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [contentType, mediaType, id, category, selectedReleaseYear]);
+  }, [
+    contentType,
+    mediaType,
+    id,
+    category,
+    selectedReleaseYear,
+    selectedOriginCountry,
+  ]);
 
   const buildMoreRoute = React.useCallback(
     (basePath: string) => `${basePath}${searchSuffix}`,
@@ -415,6 +441,42 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                 />
               </div>
             )}
+
+            <div className="relative pr-2">
+              <Dropdown
+                selectedItem={selectedCountryOption}
+                setSelectedItem={(item) => {
+                  setCurrentPage(1);
+                  const nextParams = new URLSearchParams(searchParams);
+                  if (item.id) {
+                    nextParams.set("country", item.id);
+                  } else {
+                    nextParams.delete("country");
+                  }
+                  setSearchParams(nextParams);
+                }}
+                options={countryOptions}
+                customButton={
+                  <button
+                    type="button"
+                    className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                  >
+                    <span>
+                      {selectedOriginCountry
+                        ? `${countryLabel}: ${selectedCountryOption.name}`
+                        : countryLabel}
+                    </span>
+                    <Icon
+                      icon={Icons.UP_DOWN_ARROW}
+                      className="text-xs text-dropdown-secondary"
+                    />
+                  </button>
+                }
+                side="right"
+                preventWrap
+                className="!my-0"
+              />
+            </div>
 
             {actualMediaType === "movie" && selectedYearOption && (
               <div className="relative pr-2">

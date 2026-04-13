@@ -1553,6 +1553,9 @@
       "loading": "Loading...",
       "back": "Go back"
     },
+    "filters": {
+      "country": "Country"
+    },
     "viewLists": "View All Movie Lists",
     "allLists": "All Movie Lists",
     "scrollToTop": "Back to top"
