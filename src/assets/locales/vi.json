@@ -117,7 +117,7 @@
     "seasons": "Mùa phim",
     "similar": "Tương tự",
     "tmdb": "Xem trên TMDB",
-    "trailers": "Trailers",
+    "trailers": "Xe kéo",
     "watched": "Đã xem {{watched}} trên {{total}} ({{percentage}}%)"
   },
   "discover": {
@@ -185,7 +185,7 @@
       "disclaimerText": "AlphaFlix không lưu trữ bất kì file nào, nó chỉ đến những đường dẫn của các dịch vụ bên thứ ba. Bất kỳ vấn đề nào về pháp lý nên được đưa đến chủ sỡ hữu của file hoặc những nhà cung cấp đó. AlphaFlix hoàn toàn không chịu trách nhiệm cho bất kỳ nội dung nào được chiếu từ các nhà cung cấp."
     },
     "links": {
-      "fluxer": "Fluxer",
+      "fluxer": "thông lượng",
       "funding": "Hỗ trợ chúng tôi",
       "github": "GitHub"
     },
@@ -358,7 +358,7 @@
       "donate": "Quyên góp",
       "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng AlphaFlix, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
       "explanation2": "Nếu bạn muốn biết thêm thông tin, vui lòng tham gia ",
-      "fluxer": "Fluxer",
+      "fluxer": "thông lượng",
       "label": "Kinh phí dự án: ${{current}} / ${{goal}}",
       "moreInfo": "Thêm thông tin",
       "thankYou": "Cảm ơn sự ủng hộ của bạn!",
@@ -387,7 +387,7 @@
         "default": "Bộ phim rùng rợn nào bạn muốn xem trong dịp Halloween này?",
         "extra": [
           "Chúc mừng Halloween! 🎃👻",
-          "Boo! 👻",
+          "Ối! 👻",
           "Cho kẹo hay bị ghẹo! 🍬",
           "Đó là Great Pumpkin, Charlie Brown!"
         ]
@@ -779,7 +779,7 @@
         "modal": {
           "cancel": "Hủy",
           "description": "Đóng góp cho TheIntroDB bằng cách gửi dấu thời gian phân đoạn chính xác. Tất cả các lượt gửi đều được cộng đồng chấp nhận trước khi được công bố.",
-          "endTimeLabel": "End (s)",
+          "endTimeLabel": "(Các) kết thúc",
           "error": {
             "endTime": "Thời gian kết thúc là bắt buộc",
             "mediaInfo": "Thông tin phương tiện không khả dụng",
@@ -987,12 +987,12 @@
         "watching": "Đang xem"
       },
       "themes": {
-        "acid": "Acid",
+        "acid": "Axit",
         "autumn": "Mùa thu",
         "blue": "Xanh dương",
         "christmas": "Giáng sinh",
         "classic": "Cổ điển",
-        "cobalt": "Cobalt",
+        "cobalt": "coban",
         "custom": "Tùy chỉnh",
         "default": "Mặc định",
         "ember": "Hổ phách",
@@ -1007,10 +1007,10 @@
         "pink": "Hồng",
         "popsicle": "Kem que",
         "red": "Đỏ",
-        "spark": "Spark",
+        "spark": "tia lửa",
         "spiderman": "Spider-man",
         "teal": "Xanh mòng két",
-        "wolverine": "Wolverine"
+        "wolverine": "Người Sói"
       },
       "title": "Giao diện"
     },
@@ -1126,7 +1126,7 @@
     "emptyRoom": "Chưa có ai trong phòng này",
     "enterCodeOrLink": "Nhập liên kết hoặc mã phòng được bạn bè chia sẻ",
     "episodeMismatch": "Không thể tham gia buổi tiệc xem: Bạn đang xem tập khác với chủ phòng.",
-    "guestFallback": "Guest",
+    "guestFallback": "Khách mời",
     "hosting": "Đang làm chủ phòng",
     "hostParty": "Tổ chức buổi tiệc xem",
     "invalidRoom": "Không thể kết nối với phòng này",

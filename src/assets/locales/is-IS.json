@@ -342,7 +342,12 @@
           "Hvað viltu kanna?",
           "Hvað er á áhorfslistanum þínum?",
           "Hvað er uppáhalds bíómyndin þín?",
-          "Hvað er uppáhalds þáttaröðin þín?"
+          "Hvað er uppáhalds þáttaröðin þín?",
+          "Hvað er á vaktlistanum þínum í dag?",
+          "Hvernig var dagurinn þinn?",
+          "Slæmt, síðan virkar aldrei...",
+          "Er AlphaFlix ekki bara best?",
+          ">ᴗ<"
         ]
       },
       "sectionTitle": "Leitar niðurstöður"
@@ -762,7 +767,7 @@
     "segment": {
       "credits": "Inneign",
       "intro": "Inngangur",
-      "recap": "Recap"
+      "recap": "Samantekt"
     },
     "skipTime": {
       "confidence": "sjálfstraust",
@@ -847,7 +852,7 @@
             "credits": "Inneign",
             "intro": "Inngangur",
             "preview": "Forskoðun",
-            "recap": "Recap"
+            "recap": "Samantekt"
           },
           "whenToDesc": "Sláðu inn tímastimpla í sekúndum (t.d. 150), mm:ss sniði (t.d. 2:30) eða klst:mm:ss sniði (t.d. 1:42:20). Við breytum sniðinu sjálfkrafa fyrir þig.",
           "whenToTitle": "Leiðbeiningar um tímastimpla:"

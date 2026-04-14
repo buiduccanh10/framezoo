@@ -1,34 +1,34 @@
 {
   "actions": {
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "copied": "Copied",
-    "copy": "Copy"
+    "cancel": "منسوخ کریں۔",
+    "confirm": "تصدیق کریں۔",
+    "copied": "کاپی",
+    "copy": "کاپی"
   },
   "auth": {
     "backendSelection": {
-      "active": "Active",
-      "confirm": "Confirm",
-      "customBackend": "Custom Backend",
+      "active": "فعال",
+      "confirm": "تصدیق کریں۔",
+      "customBackend": "حسب ضرورت پسدید",
       "customBackendPlaceholder": "https://",
-      "description": "Choose which backend server to connect to",
-      "title": "Select Account Server"
+      "description": "منتخب کریں کہ کس بیک اینڈ سرور سے جڑنا ہے۔",
+      "title": "اکاؤنٹ سرور کو منتخب کریں۔"
     },
-    "createAccount": "Don't have an account yet 😬 <0>Create an account.</0>",
+    "createAccount": "ابھی تک کوئی اکاؤنٹ نہیں ہے 😬 <0>اکاؤنٹ بنائیں</0>",
     "generate": {
-      "custom": "Custom",
-      "customPassphraseLabel": "Custom Passphrase",
-      "customPassphrasePlaceholder": "Enter your custom passphrase",
-      "description": "Your passphrase acts as your username and password. Make sure to keep it safe as you will need to enter it to login to your account. <bold>Do NOT lose your passphrase!</bold>",
-      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
-      "next": "I have saved my passphrase",
-      "passphraseFrameLabel": "Passphrase",
-      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
-      "title": "Your passphrase",
-      "useCustomPassphrase": "Use Custom Passphrase",
-      "usePasskeyInstead": "Use passkey instead"
+      "custom": "حسب ضرورت",
+      "customPassphraseLabel": "حسب ضرورت پاسفریز",
+      "customPassphrasePlaceholder": "اپنا حسب ضرورت پاسفریز درج کریں۔",
+      "description": "آپ کا پاس فریز آپ کے صارف نام اور پاس ورڈ کے طور پر کام کرتا ہے۔ اسے محفوظ رکھنا یقینی بنائیں کیونکہ آپ کو اپنے اکاؤنٹ میں لاگ ان کرنے کے لیے اسے درج کرنے کی ضرورت ہوگی۔ <bold>اپنا پاسفریز مت کھوئے!</bold>",
+      "invalidPassphraseCharacters": "غلط پاسفریز حروف۔ صرف انگریزی حروف، نمبر 1-10، اور عام علامتوں کی اجازت ہے۔",
+      "next": "میں نے اپنا پاسفریز محفوظ کر لیا ہے۔",
+      "passphraseFrameLabel": "پاس فریز",
+      "passphraseTooShort": "پاسفریز کم از کم 8 حروف کا ہونا چاہیے۔",
+      "title": "آپ کا پاس فریز",
+      "useCustomPassphrase": "حسب ضرورت پاسفریز استعمال کریں۔",
+      "usePasskeyInstead": "اس کے بجائے پاسکی استعمال کریں۔"
     },
-    "hasAccount": "Already have an account? <0>Login here.</0>",
+    "hasAccount": "پہلے سے ہی اکاؤنٹ ہے؟ <0>یہاں لاگ ان کریں۔</0>",
     "inviteCodeInvalidError": "غلط دعوتی کوڈ (یوزر آئی ڈی نہیں ملا)",
     "inviteCodeLabel": "دعوتی کوڈ",
     "inviteCodePlaceholder": "دوست کی یوزر آئی ڈی درج کریں",
@@ -39,27 +39,27 @@
       "nicknameNotFound": "عرفی نام نہیں ملا",
       "nicknamePlaceholder": "اپنا عرفی نام درج کریں۔",
       "nicknameRequired": "عرفی نام درکار ہے۔",
-      "noBackendUrl": "No backend URL",
+      "noBackendUrl": "کوئی بیک اینڈ URL نہیں ہے۔",
       "or": "or",
       "passwordIncorrect": "پاس ورڈ غلط ہے۔",
       "passwordLabel": "پاس ورڈ",
       "passwordPlaceholder": "اپنا پاس ورڈ درج کریں۔",
       "passwordRequired": "پاس ورڈ درکار ہے۔",
-      "submit": "Login",
-      "title": "Login to your account",
-      "usePasskey": "Use passkey",
+      "submit": "لاگ ان",
+      "title": "اپنے اکاؤنٹ میں لاگ ان کریں۔",
+      "usePasskey": "پاسکی استعمال کریں۔",
       "validationError": "Incorrect or incomplete passphrase /ᐠ. .ᐟ\\"
     },
     "register": {
       "confirmPasswordLabel": "پاس ورڈ کی تصدیق کریں۔",
       "confirmPasswordPlaceholder": "اپنے پاس ورڈ کی تصدیق کریں۔",
       "information": {
-        "color1": "Profile color one",
-        "color2": "Profile color two",
+        "color1": "پروفائل کا رنگ ایک",
+        "color2": "پروفائل کا رنگ دو",
         "header": "Enter a name for your device then pick colors and a user icon of your choosing!",
-        "icon": "User icon",
-        "next": "Next",
-        "title": "Account information"
+        "icon": "صارف کا آئیکن",
+        "next": "اگلا",
+        "title": "اکاؤنٹ کی معلومات"
       },
       "nicknameLabel": "عرفی نام",
       "nicknamePlaceholder": "ایک منفرد عرفی نام منتخب کریں۔",
@@ -75,1040 +75,1040 @@
     },
     "trust": {
       "failed": {
-        "text": "Did you configure it correctly?",
-        "title": "Failed to reach server"
+        "text": "کیا آپ نے اسے صحیح طریقے سے ترتیب دیا؟",
+        "title": "سرور تک پہنچنے میں ناکام"
       },
-      "host": "You are connecting to <0>{{hostname}}</0> - please confirm you trust it before making an account...",
-      "no": "Go back",
-      "noHost": "The server has not been configured, therefore you cannot create an account",
-      "noHostTitle": "Server not configured!",
-      "title": "Do you trust this server?",
-      "yes": "I trust this server 🤞"
+      "host": "آپ <0>_{{hostname}}PH_2__ سے جڑ رہے ہیں - اکاؤنٹ بنانے سے پہلے براہ کرم تصدیق کریں کہ آپ اس پر بھروسہ کرتے ہیں...",
+      "no": "واپس جاؤ",
+      "noHost": "سرور کو کنفیگر نہیں کیا گیا ہے، اس لیے آپ اکاؤنٹ نہیں بنا سکتے",
+      "noHostTitle": "سرور کنفیگر نہیں ہوا!",
+      "title": "کیا آپ کو اس سرور پر بھروسہ ہے؟",
+      "yes": "مجھے اس سرور پر بھروسہ ہے 🤞"
     },
     "verify": {
-      "description": "Please enter your passphrase from earlier to confirm you have saved it and to create your account",
-      "invalidData": "Data is not valid",
-      "noMatch": "Passphrase doesn't match 😭",
-      "recaptchaFailed": "ReCaptcha validation failed",
-      "register": "Create account",
-      "title": "Confirm your account"
+      "description": "اس بات کی تصدیق کرنے کے لیے کہ آپ نے اسے محفوظ کر لیا ہے اور اپنا اکاؤنٹ بنانے کے لیے براہ کرم پہلے کا پاسفریز درج کریں۔",
+      "invalidData": "ڈیٹا درست نہیں ہے۔",
+      "noMatch": "پاسفریز مماثل نہیں ہے 😭",
+      "recaptchaFailed": "ReCaptcha کی توثیق ناکام ہوگئی",
+      "register": "اکاؤنٹ بنائیں",
+      "title": "اپنے اکاؤنٹ کی تصدیق کریں۔"
     }
   },
   "details": {
-    "airs": "Airs",
+    "airs": "ایئرز",
     "collection": {
-      "movie": "Movie",
-      "movies": "Movies",
-      "rating": "Rating",
-      "releaseDate": "Release Date",
-      "sortBy": "Sort by"
+      "movie": "فلم",
+      "movies": "فلمیں",
+      "rating": "درجہ بندی",
+      "releaseDate": "ریلیز کی تاریخ",
+      "sortBy": "ترتیب دیں"
     },
-    "endsAt": "Ends at {{time}}",
-    "episode": "Episode",
-    "episodes": "Episodes",
-    "imdb": "View on IMDb",
-    "language": "Language:",
-    "play": "Play",
-    "rating": "Rating:",
-    "releaseDate": "Release Date:",
-    "resume": "Resume",
-    "runtime": "Runtime:",
-    "season": "Season",
-    "seasons": "Season/s",
-    "similar": "Similar",
-    "tmdb": "View on TMDB",
-    "trailers": "Trailers",
-    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)"
+    "endsAt": "{{time}} پر ختم ہوتا ہے",
+    "episode": "قسط",
+    "episodes": "اقساط",
+    "imdb": "آئی ایم ڈی بی پر دیکھیں",
+    "language": "زبان:",
+    "play": "کھیلیں",
+    "rating": "درجہ بندی:",
+    "releaseDate": "ریلیز کی تاریخ:",
+    "resume": "دوبارہ شروع کریں۔",
+    "runtime": "رن ٹائم:",
+    "season": "موسم",
+    "seasons": "سیزن/s",
+    "similar": "اسی طرح",
+    "tmdb": "TMDB پر دیکھیں",
+    "trailers": "ٹریلرز",
+    "watched": "دیکھا گیا {{watched}} از {{total}} ({{percentage}}%)"
   },
   "discover": {
-    "allLists": "All Movie Lists",
+    "allLists": "تمام فلموں کی فہرستیں۔",
     "carousel": {
-      "change": "Change",
-      "more": "View more",
+      "change": "تبدیلی",
+      "more": "مزید دیکھیں",
       "title": {
-        "4kReleases": "4K Releases",
-        "editorPicksMovies": "Editor Picks Movies",
-        "editorPicksShows": "Editor Picks Shows",
-        "forYou": "For You",
-        "inCinemas": "In Cinemas",
-        "latestReleases": "Latest Releases",
-        "latestTVReleases": "Latest TV Shows",
-        "movies": "{{category}} Movies",
-        "moviesOn": "Movies on {{provider}}",
-        "onTheAir": "On The Air",
-        "popular": "Most Popular",
-        "recommended": "Because You Watched: {{title}}",
-        "top10": "Top 10",
-        "topRated": "Top Rated",
+        "4kReleases": "4K ریلیز",
+        "editorPicksMovies": "ایڈیٹر فلمیں چنتا ہے۔",
+        "editorPicksShows": "ایڈیٹر پکس شوز",
+        "forYou": "آپ کے لیے",
+        "inCinemas": "سینما گھروں میں",
+        "latestReleases": "تازہ ترین ریلیز",
+        "latestTVReleases": "تازہ ترین ٹی وی شوز",
+        "movies": "{{category}} موویز",
+        "moviesOn": "{{provider}} پر فلمیں",
+        "onTheAir": "آن دی ایئر",
+        "popular": "سب سے زیادہ مقبول",
+        "recommended": "کیونکہ آپ نے دیکھا: {{title}}",
+        "top10": "ٹاپ 10",
+        "topRated": "ٹاپ ریٹیڈ",
         "trending": "ابھی ٹرینڈ ہو رہا ہے۔",
-        "tvshows": "{{category}} Shows",
-        "tvshowsOn": "Shows on {{provider}}"
+        "tvshows": "{{category}} شوز",
+        "tvshowsOn": "{{provider}} پر شوز"
       }
     },
     "featured": {
-      "moreInfo": "More Info",
-      "playNow": "Play Now"
+      "moreInfo": "مزید معلومات",
+      "playNow": "ابھی کھیلیں"
     },
     "filters": {
       "country": "ملک"
     },
     "page": {
-      "back": "Go back",
-      "loading": "Loading...",
-      "loadMore": "Load more",
-      "title": "Discover Movies & TV"
+      "back": "واپس جاؤ",
+      "loading": "لوڈ ہو رہا ہے...",
+      "loadMore": "مزید لوڈ کریں۔",
+      "title": "موویز اور ٹی وی دریافت کریں۔"
     },
-    "scrollToTop": "Back to top",
+    "scrollToTop": "واپس اوپر",
     "tabs": {
-      "movies": "Movies",
+      "movies": "فلمیں",
       "top10": "ٹاپ 10",
-      "tvshows": "TV Shows"
+      "tvshows": "ٹی وی شوز"
     },
-    "viewLists": "View All Movie Lists"
+    "viewLists": "تمام فلموں کی فہرستیں دیکھیں"
   },
   "downtimeNotice": {
-    "badge": "Issues",
-    "goHome": "Go home",
-    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
-    "title": "Provider issues"
+    "badge": "مسائل",
+    "goHome": "گھر جاؤ",
+    "message": "AlphaFlix کچھ فراہم کنندگان کے ساتھ دوبارہ مسائل کا سامنا کر رہا ہے، اگر آپ شو تلاش یا چلا نہیں سکتے تو براہ کرم ماخذ تبدیل کریں۔ توقع کریں کہ یہ خرابی نیچے کے تمام اوقات میں برقرار رہے گی۔",
+    "title": "فراہم کنندگان کے مسائل"
   },
   "errors": {
-    "badge": "It broke 💀",
-    "details": "Error details",
-    "reloadPage": "Reload the page",
-    "showError": "Show error details",
-    "title": "We encountered an error!"
+    "badge": "ٹوٹ گیا 💀",
+    "details": "خرابی کی تفصیلات",
+    "reloadPage": "صفحہ دوبارہ لوڈ کریں۔",
+    "showError": "غلطی کی تفصیلات دکھائیں۔",
+    "title": "ہمیں ایک خرابی کا سامنا کرنا پڑا!"
   },
   "footer": {
     "legal": {
-      "disclaimer": "Disclaimer ",
-      "disclaimerText": "Please note: AlphaFlix does not host any files itself; instead, it only displays content from third-party providers. Legal issues should be taken up with them."
+      "disclaimer": "ڈس کلیمر",
+      "disclaimerText": "براہ کرم نوٹ کریں: AlphaFlix خود کسی فائل کی میزبانی نہیں کرتا ہے۔ اس کے بجائے، یہ صرف فریق ثالث فراہم کنندگان کا مواد دکھاتا ہے۔ ان کے ساتھ قانونی مسائل اٹھائے جائیں۔"
     },
     "links": {
-      "fluxer": "Fluxer",
-      "funding": "Support us",
-      "github": "GitHub"
+      "fluxer": "فلکسر",
+      "funding": "ہمارا ساتھ دیں۔",
+      "github": "گٹ ہب"
     },
-    "tagline": "Watch your favorite shows and movies for free with no ads ever! "
+    "tagline": "بغیر کسی اشتہار کے اپنے پسندیدہ شوز اور فلمیں مفت دیکھیں!"
   },
   "global": {
     "keyboardShortcuts": {
-      "cancel": "Cancel",
-      "clickToEdit": "Click on a key badge to edit it",
+      "cancel": "منسوخ کریں۔",
+      "clickToEdit": "اس میں ترمیم کرنے کے لیے کلیدی بیج پر کلک کریں۔",
       "conditions": {
-        "showsOnly": "Shows only"
+        "showsOnly": "صرف دکھاتا ہے۔"
       },
-      "conflict": "conflict",
-      "conflicts": "conflicts",
-      "detected": "detected",
-      "editInSettings": "Edit keyboard commands from settings",
+      "conflict": "تنازعہ",
+      "conflicts": "تنازعات",
+      "detected": "پتہ چلا",
+      "editInSettings": "ترتیبات سے کی بورڈ کمانڈز میں ترمیم کریں۔",
       "groups": {
-        "audioVideo": "Audio & Video",
-        "interface": "Interface",
-        "jumpToPosition": "Jump to Position",
-        "subtitlesAccessibility": "Subtitles & Accessibility",
-        "videoPlayback": "Video Playback"
+        "audioVideo": "آڈیو اور ویڈیو",
+        "interface": "انٹرفیس",
+        "jumpToPosition": "پوزیشن پر جائیں",
+        "subtitlesAccessibility": "سب ٹائٹلز اور رسائی",
+        "videoPlayback": "ویڈیو پلے بیک"
       },
-      "none": "None",
-      "numberKeySeeking": "Number key progress seeking",
-      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%.",
-      "pressKey": "Press a key...",
-      "resetAllToDefault": "Reset All to Default",
-      "resetToDefault": "Reset to default",
-      "save": "Save",
-      "saveChanges": "Save Changes",
+      "none": "کوئی نہیں۔",
+      "numberKeySeeking": "نمبر کلیدی پیشرفت کی تلاش",
+      "numberKeySeekingDescription": "ویڈیو میں مخصوص پوزیشن حاصل کرنے کے لیے نمبر کیز 0-9 استعمال کریں۔ 0 شروع میں جاتا ہے، 1-8 چھلانگ لگا کر 10%-80%، اور 9 90% تک جاتا ہے۔",
+      "pressKey": "ایک کلید دبائیں...",
+      "resetAllToDefault": "سب کو ڈیفالٹ پر ری سیٹ کریں۔",
+      "resetToDefault": "ڈیفالٹ پر ری سیٹ کریں۔",
+      "save": "محفوظ کریں۔",
+      "saveChanges": "تبدیلیاں محفوظ کریں۔",
       "shortcuts": {
-        "barrelRoll": "Do a barrel roll! 🌀",
-        "closeOverlay": "Close overlay/modal",
-        "decreaseVolume": "Decrease volume",
-        "increaseVolume": "Increase volume",
-        "jumpTo0": "Jump to 0% (beginning)",
-        "jumpTo9": "Jump to 90%",
-        "mute": "Mute/unmute",
-        "nextEpisode": "Next episode",
-        "playPause": "Play/pause (or hold for 2x speed when enabled)",
-        "playPauseAlt": "Play/pause",
-        "previousEpisode": "Previous episode",
-        "randomCaption": "Select random caption from last used language",
-        "skipBackward1": "Skip backward 1 second",
-        "skipBackward10": "Skip backward 10 seconds",
-        "skipBackward5": "Skip backward 5 seconds",
-        "skipForward1": "Skip forward 1 second",
-        "skipForward10": "Skip forward 10 seconds",
-        "skipForward5": "Skip forward 5 seconds",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
-        "toggleCaptions": "Toggle captions",
-        "toggleFullscreen": "Toggle fullscreen",
-        "toggleNativeSubtitles": "Toggle native subtitles"
+        "barrelRoll": "ایک بیرل رول کرو! 🌀",
+        "closeOverlay": "اوورلے/موڈل بند کریں۔",
+        "decreaseVolume": "حجم کو کم کریں۔",
+        "increaseVolume": "حجم میں اضافہ کریں۔",
+        "jumpTo0": "0% پر جائیں (شروع سے)",
+        "jumpTo9": "90% پر جائیں",
+        "mute": "خاموش / چالو کریں۔",
+        "nextEpisode": "اگلی قسط",
+        "playPause": "چلائیں/روکیں (یا فعال ہونے پر 2x رفتار کے لیے پکڑیں)",
+        "playPauseAlt": "چلائیں/روکیں۔",
+        "previousEpisode": "پچھلی قسط",
+        "randomCaption": "آخری استعمال شدہ زبان سے بے ترتیب کیپشن منتخب کریں۔",
+        "skipBackward1": "1 سیکنڈ پیچھے ہٹیں۔",
+        "skipBackward10": "10 سیکنڈ پیچھے ہٹیں۔",
+        "skipBackward5": "5 سیکنڈ پیچھے ہٹیں۔",
+        "skipForward1": "1 سیکنڈ آگے بڑھیں۔",
+        "skipForward10": "10 سیکنڈ آگے بڑھیں۔",
+        "skipForward5": "5 سیکنڈ آگے بڑھیں۔",
+        "syncSubtitlesEarlier": "پہلے کے سب ٹائٹلز کی مطابقت پذیری کریں (-0.5 سیکنڈ)",
+        "syncSubtitlesLater": "بعد میں سب ٹائٹلز کی مطابقت پذیری کریں (+0.5s)",
+        "toggleCaptions": "کیپشنز ٹوگل کریں۔",
+        "toggleFullscreen": "پوری اسکرین کو ٹوگل کریں۔",
+        "toggleNativeSubtitles": "مقامی سب ٹائٹلز کو ٹوگل کریں۔"
       },
-      "subtitle": "Hold ` to show this help anytime",
-      "title": "Keyboard Shortcuts"
+      "subtitle": "کسی بھی وقت یہ مدد دکھانے کے لیے ` کو دبائے رکھیں",
+      "title": "کی بورڈ شارٹ کٹس"
     },
     "name": "پی-اسٹریم",
     "pages": {
-      "discover": "Discover",
-      "login": "Login",
-      "migration": "Migrate Account",
-      "pagetitle": "{{title}} - AlphaFlix",
-      "register": "Register",
-      "settings": "Settings"
+      "discover": "دریافت کریں۔",
+      "login": "لاگ ان",
+      "migration": "اکاؤنٹ منتقل کریں۔",
+      "pagetitle": "{{title}} - الفا فلکس",
+      "register": "رجسٹر کریں۔",
+      "settings": "ترتیبات"
     }
   },
   "home": {
     "bookmarks": {
       "edit": {
-        "cancel": "Cancel",
-        "description": "Edit the details for this bookmark",
-        "groupsLabel": "Groups",
-        "save": "Save",
-        "title": "Edit Bookmark",
-        "titleLabel": "Title",
-        "titlePlaceholder": "Enter a title for your bookmark",
-        "yearLabel": "Year",
-        "yearPlaceholder": "Enter a year for your bookmark"
+        "cancel": "منسوخ کریں۔",
+        "description": "اس بک مارک کی تفصیلات میں ترمیم کریں۔",
+        "groupsLabel": "گروپس",
+        "save": "محفوظ کریں۔",
+        "title": "بک مارک میں ترمیم کریں۔",
+        "titleLabel": "عنوان",
+        "titlePlaceholder": "اپنے بک مارک کے لیے ایک عنوان درج کریں۔",
+        "yearLabel": "سال",
+        "yearPlaceholder": "اپنے بک مارک کے لیے ایک سال درج کریں۔"
       },
       "groups": {
         "dropdown": {
-          "empty": "No groups yet",
-          "placeholderButton": "Add to group",
-          "removeAll": "Remove all",
-          "removeFromGroup": "Remove from group"
+          "empty": "ابھی تک کوئی گروپ نہیں۔",
+          "placeholderButton": "گروپ میں شامل کریں۔",
+          "removeAll": "سب کو ہٹا دیں۔",
+          "removeFromGroup": "گروپ سے نکال دیں۔"
         },
         "editGroup": {
-          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
-          "cancel": "Cancel",
-          "description": "Edit the name and icon of your bookmark group",
-          "nameLabel": "Group name",
-          "namePlaceholder": "Enter a name for your group",
-          "save": "Save",
-          "title": "Edit Group"
+          "affectsBookmarks": "یہ {{count}} بُک مارکس کو متاثر کرے گا",
+          "cancel": "منسوخ کریں۔",
+          "description": "اپنے بُک مارک گروپ کے نام اور آئیکن میں ترمیم کریں۔",
+          "nameLabel": "گروپ کا نام",
+          "namePlaceholder": "اپنے گروپ کے لیے ایک نام درج کریں۔",
+          "save": "محفوظ کریں۔",
+          "title": "گروپ میں ترمیم کریں۔"
         },
         "reorder": {
-          "button": "Reorder",
-          "cancel": "Cancel",
-          "description": "Drag and drop to reorder your bookmark groups",
-          "done": "Done",
-          "save": "Save",
-          "title": "Edit Group Order"
+          "button": "دوبارہ ترتیب دیں۔",
+          "cancel": "منسوخ کریں۔",
+          "description": "اپنے بُک مارک گروپس کو دوبارہ ترتیب دینے کے لیے گھسیٹیں اور چھوڑیں۔",
+          "done": "ہو گیا",
+          "save": "محفوظ کریں۔",
+          "title": "گروپ آرڈر میں ترمیم کریں۔"
         }
       },
-      "sectionTitle": "Bookmarks",
-      "showAll": "Show all",
+      "sectionTitle": "بک مارکس",
+      "showAll": "سب دکھائیں۔",
       "sorting": {
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "پہلے سے طے شدہ (تاریخ شامل کی گئی)",
+          "titleAsc": "عنوان A-Z",
+          "titleDesc": "عنوان Z-A",
+          "yearAsc": "ریلیز کی تاریخ قدیم ترین- تازہ ترین",
+          "yearDesc": "ریلیز کی تاریخ تازہ ترین- پرانی"
         }
       }
     },
     "continueWatching": {
-      "sectionTitle": "Continue Watching...",
+      "sectionTitle": "دیکھنا جاری رکھیں...",
       "sorting": {
         "options": {
-          "date": "Default (Date added)",
-          "titleAsc": "Title A-Z",
-          "titleDesc": "Title Z-A",
-          "yearAsc": "Release Date Oldest-Newest",
-          "yearDesc": "Release Date Newest-Oldest"
+          "date": "پہلے سے طے شدہ (تاریخ شامل کی گئی)",
+          "titleAsc": "عنوان A-Z",
+          "titleDesc": "عنوان Z-A",
+          "yearAsc": "ریلیز کی تاریخ قدیم ترین- تازہ ترین",
+          "yearDesc": "ریلیز کی تاریخ تازہ ترین- پرانی"
         }
       }
     },
     "mediaList": {
-      "stopEditing": "Stop editing"
+      "stopEditing": "ترمیم کرنا بند کریں۔"
     },
     "search": {
-      "allResults": "That's all we have...",
-      "discover": "Discover",
-      "discoverMore": "Discover more",
+      "allResults": "ہمارے پاس بس اتنا ہی ہے...",
+      "discover": "دریافت کریں۔",
+      "discoverMore": "مزید دریافت کریں۔",
       "empty": {
-        "default": "Welcome, find media to watch here!",
+        "default": "خوش آمدید، یہاں دیکھنے کے لیے میڈیا تلاش کریں!",
         "extra": [
-          "There's nothing here :(",
-          "So empty...",
-          "Such emptiness.",
-          "Hi new user :3"
+          "یہاں کچھ نہیں ہے :(",
+          "اتنا خالی...",
+          "ایسا خالی پن۔",
+          "ہیلو نئے صارف: 3"
         ]
       },
-      "failed": "Failed to find media, try again!",
-      "loading": "Loading...",
-      "noResults": "We couldn't find anything :(",
+      "failed": "میڈیا تلاش کرنے میں ناکام، دوبارہ کوشش کریں!",
+      "loading": "لوڈ ہو رہا ہے...",
+      "noResults": "ہمیں کچھ نہیں مل سکا :(",
       "placeholder": {
-        "default": "What do you want to watch?",
+        "default": "آپ کیا دیکھنا چاہتے ہیں؟",
         "extra": [
-          "What are you in the mood for?",
-          "Should we delete your browser history?",
-          "What do you want to stream?",
-          "AlphaFlix is the best site ever!",
-          "What's on your watchlist today?",
-          "How was your day?",
-          "My bad the site never works...",
-          "Isn't AlphaFlix just the best?",
+          "آپ کس کے موڈ میں ہیں؟",
+          "کیا ہمیں آپ کے براؤزر کی تاریخ کو حذف کرنا چاہئے؟",
+          "آپ کیا سلسلہ بندی کرنا چاہتے ہیں؟",
+          "AlphaFlix اب تک کی بہترین سائٹ ہے!",
+          "آج آپ کی واچ لسٹ میں کیا ہے؟",
+          "آپ کا دن کیسا رہا؟",
+          "میری بری سائٹ کبھی کام نہیں کرتی...",
+          "کیا AlphaFlix صرف بہترین نہیں ہے؟",
           ">ᴗ<"
         ]
       },
-      "sectionTitle": "Search results"
+      "sectionTitle": "تلاش کے نتائج"
     },
     "support": {
-      "complete": "complete",
-      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
-      "donate": "Donate",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
-      "explanation2": "If you want more info, please join our ",
-      "fluxer": "Fluxer",
-      "label": "Project Funding: ${{current}} / ${{goal}}",
-      "moreInfo": "More info",
-      "thankYou": "Thank you for your support!",
-      "title": "AlphaFlix needs your help!"
+      "complete": "مکمل",
+      "description": "AlphaFlix نقصان میں چلایا جاتا ہے، اور ہمیں اسے اشتہار سے پاک رکھنے میں مدد کی ضرورت ہے! اگر آپ AlphaFlix استعمال کرنے سے لطف اندوز ہوتے ہیں، تو براہ کرم ہمارے اخراجات پورے کرنے میں ہماری مدد کرنے کے لیے عطیہ کرنے پر غور کریں۔",
+      "donate": "عطیہ کریں۔",
+      "explanation": "اگر آپ ایکسٹینشن استعمال نہیں کر رہے ہیں یا آپ کے پاس FED API سیٹ اپ نہیں ہے، تو مواد تلاش کرنا مشکل ہو سکتا ہے! ہم اسے ٹھیک کرنا چاہتے ہیں، لیکن مہنگے سرورز کے بغیر مواد فراہم کرنا بہت مشکل ہے۔ لہذا براہ کرم، اگر آپ AlphaFlix استعمال کرنے سے لطف اندوز ہوتے ہیں، تو براہ کرم ہمارے بڑھتے ہوئے اخراجات کو پورا کرنے میں ہماری مدد کرنے کے لیے عطیہ کرنے پر غور کریں۔",
+      "explanation2": "اگر آپ مزید معلومات چاہتے ہیں تو براہ کرم ہمارے ساتھ شامل ہوں۔",
+      "fluxer": "فلکسر",
+      "label": "پروجیکٹ فنڈنگ: ${{current}} / ${{goal}}",
+      "moreInfo": "مزید معلومات",
+      "thankYou": "آپ کی حمایت کے لئے آپ کا شکریہ!",
+      "title": "AlphaFlix کو آپ کی مدد کی ضرورت ہے!"
     },
     "titles": {
       "69": {
-        "default": "Up for something spicy?",
+        "default": "کچھ مسالیدار کے لئے تیار؟",
         "extra": [
-          "Happy 69 day 😘!"
+          "69 دن مبارک 😘!"
         ]
       },
       "420": {
-        "default": "What would you like to watch this 4/20?",
+        "default": "آپ اس 4/20 کو کیا دیکھنا چاہیں گے؟",
         "extra": [
-          "Happy 4/20 🥳!"
+          "مبارک 4/20 🥳!"
         ]
       },
       "day": {
-        "default": "What would you like to watch this afternoon?",
+        "default": "آپ اس دوپہر کو کیا دیکھنا چاہیں گے؟",
         "extra": [
           "Viva la AlphaFlix!"
         ]
       },
       "halloween": {
-        "default": "What spooky movie would you like to watch this Halloween?",
+        "default": "آپ اس ہالووین کو کون سی ڈراونا فلم دیکھنا چاہیں گے؟",
         "extra": [
-          "Happy Halloween! 🎃👻",
-          "Boo! 👻",
-          "Trick or treat! 🍬",
-          "It's the Great Pumpkin, Charlie Brown!"
+          "ہیلووین مبارک ہو! 🎃👻",
+          "بو! 👻",
+          "چال یا علاج! 🍬",
+          "یہ عظیم قددو ہے، چارلی براؤن!"
         ]
       },
       "morning": {
-        "default": "What would you like to watch this morning?",
+        "default": "آج صبح آپ کیا دیکھنا چاہیں گے؟",
         "extra": [
           "Viva la AlphaFlix!"
         ]
       },
       "night": {
-        "default": "What would you like to watch tonight?",
+        "default": "آپ آج رات کیا دیکھنا چاہیں گے؟",
         "extra": [
           "Viva la AlphaFlix!"
         ]
       }
     },
     "watchHistory": {
-      "recentlyWatched": "Recently Watched",
-      "sectionTitle": "Watch History"
+      "recentlyWatched": "حال ہی میں دیکھا گیا۔",
+      "sectionTitle": "تاریخ دیکھیں"
     }
   },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
-    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?",
-    "seasonWatched": "Are you sure you want to mark the season as watched?",
+    "seasonUnwatched": "کیا آپ واقعی سیزن کو غیر دیکھے ہوئے کے بطور نشان زد کرنا چاہتے ہیں؟",
+    "seasonWatched": "کیا آپ واقعی سیزن کو دیکھا گیا کے بطور نشان زد کرنا چاہتے ہیں؟",
     "types": {
-      "movie": "Movie",
-      "show": "Show"
+      "movie": "فلم",
+      "show": "دکھائیں۔"
     },
-    "unreleased": "Unreleased"
+    "unreleased": "غیر جاری شدہ"
   },
   "migration": {
-    "back": "Go back",
+    "back": "واپس جاؤ",
     "download": {
       "button": {
-        "download": "Download data",
-        "home": "Go home"
+        "download": "ڈیٹا ڈاؤن لوڈ کریں۔",
+        "home": "گھر جاؤ"
       },
-      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
+      "description": "یہ آپ کا ڈیٹا آپ کے آلہ پر ڈاؤن لوڈ کر دے گا۔ پھر آپ اسے نئے سرور پر اپ لوڈ کر سکتے ہیں یا اسے محفوظ رکھنے کے لیے رکھ سکتے ہیں۔",
       "status": {
-        "error": "Failed to download your data. 😿",
-        "success": "Your data has been downloaded successfully! 🎉"
+        "error": "آپ کا ڈیٹا ڈاؤن لوڈ کرنے میں ناکام۔ 😿",
+        "success": "آپ کا ڈیٹا کامیابی سے ڈاؤن لوڈ ہو گیا ہے! 🎉"
       },
-      "title": "Download data"
+      "title": "ڈیٹا ڈاؤن لوڈ کریں۔"
     },
-    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
+    "loginRequired": "اپنے ڈیٹا کو منتقل کرنے کے لیے آپ کا لاگ ان ہونا ضروری ہے! براہ کرم واپس جائیں اور جاری رکھنے کے لیے لاگ ان کریں۔",
     "preview": {
-      "downloadDescription": "Download includes:",
+      "downloadDescription": "ڈاؤن لوڈ میں شامل ہیں:",
       "items": {
-        "bookmarks": "Bookmarked media",
-        "progress": "Watch progress",
-        "settings": "Settings & Preferences"
+        "bookmarks": "بک مارک شدہ میڈیا",
+        "progress": "پیشرفت دیکھیں",
+        "settings": "ترتیبات اور ترجیحات"
       },
-      "uploadDescription": "Data to upload:"
+      "uploadDescription": "اپ لوڈ کرنے کے لیے ڈیٹا:"
     },
     "start": {
       "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
       "options": {
         "download": {
-          "action": "Download data",
-          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
-          "quality": "More technical",
-          "title": "Download data"
+          "action": "ڈیٹا ڈاؤن لوڈ کریں۔",
+          "description": "یہ آپ کا ڈیٹا آپ کے آلہ پر ڈاؤن لوڈ کر دے گا۔ پھر آپ اسے نئے سرور پر اپ لوڈ کر سکتے ہیں یا اسے محفوظ رکھنے کے لیے رکھ سکتے ہیں۔",
+          "quality": "مزید تکنیکی",
+          "title": "ڈیٹا ڈاؤن لوڈ کریں۔"
         },
         "or": "or",
         "upload": {
-          "action": "Upload Data",
-          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-          "quality": "Restore from backup",
-          "title": "Upload Data"
+          "action": "ڈیٹا اپ لوڈ کریں۔",
+          "description": "اپنے بُک مارکس کو بحال کرنے اور اس اکاؤنٹ پر پیشرفت کے لیے اپنی سابقہ ​​برآمد شدہ ڈیٹا فائل اپ لوڈ کریں۔",
+          "quality": "بیک اپ سے بحال کریں۔",
+          "title": "ڈیٹا اپ لوڈ کریں۔"
         }
       },
-      "title": "Migrate your data"
+      "title": "اپنا ڈیٹا منتقل کریں۔"
     },
     "upload": {
       "button": {
-        "home": "Continue to home",
-        "import": "Import data",
-        "processing": "Processing...",
-        "saveLocal": "Save locally"
+        "home": "گھر کو جاری رکھیں",
+        "import": "ڈیٹا درآمد کریں۔",
+        "processing": "پروسیسنگ...",
+        "saveLocal": "مقامی طور پر محفوظ کریں۔"
       },
-      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
-      "exportedOn": "Exported on",
+      "description": "اپنے بُک مارکس کو بحال کرنے اور اس اکاؤنٹ پر پیشرفت کے لیے اپنی سابقہ ​​برآمد شدہ ڈیٹا فائل اپ لوڈ کریں۔",
+      "exportedOn": "پر برآمد کیا گیا۔",
       "file": {
-        "change": "Change file",
-        "description": "Select the file you want to upload",
-        "select": "Select file"
+        "change": "فائل کو تبدیل کریں۔",
+        "description": "وہ فائل منتخب کریں جسے آپ اپ لوڈ کرنا چاہتے ہیں۔",
+        "select": "فائل منتخب کریں۔"
       },
-      "previewTitle": "Preview:",
+      "previewTitle": "پیش نظارہ:",
       "status": {
-        "error": "Failed to upload your data. 😿",
-        "processing": "Processing data...",
-        "success": "Your data has been uploaded successfully! 🎉",
-        "successLocal": "Your data has been saved locally! 🎉"
+        "error": "آپ کا ڈیٹا اپ لوڈ کرنے میں ناکام۔ 😿",
+        "processing": "ڈیٹا پر کارروائی ہو رہی ہے...",
+        "success": "آپ کا ڈیٹا کامیابی سے اپ لوڈ ہو گیا ہے! 🎉",
+        "successLocal": "آپ کا ڈیٹا مقامی طور پر محفوظ کر لیا گیا ہے! 🎉"
       },
-      "title": "Upload data"
+      "title": "ڈیٹا اپ لوڈ کریں۔"
     }
   },
   "navigation": {
     "banner": {
-      "offline": "Check your internet connection, silly goose! 🦢"
+      "offline": "اپنا انٹرنیٹ کنیکشن چیک کریں، بے وقوف ہنس! 🦢"
     },
     "install": {
       "genericGuide": "آپ کا براؤزر خودکار PWA انسٹال پرامپٹ کو سپورٹ نہیں کرتا ہے۔\nآپ اب بھی براؤزر مینو کا استعمال کرتے ہوئے انسٹال کر سکتے ہیں (مثال کے طور پر: 'ایپ انسٹال کریں'، 'شارٹ کٹ بنائیں'، یا 'ڈاک/ہوم اسکرین میں شامل کریں')۔",
       "iosSafariGuide": "BetaMovie کو بطور ایپ انسٹال کرنے کے لیے:\n\n1. شیئر بٹن کو تھپتھپائیں (تیر کے ساتھ مربع)۔\n2. 'ہوم اسکرین میں شامل کریں' کو منتخب کریں۔\n3. شامل کریں پر ٹیپ کریں۔"
     },
     "menu": {
-      "desktop": "App Settings",
-      "logout": "Log out",
-      "register": "Sync to Cloud",
-      "settings": "Settings"
+      "desktop": "ایپ کی ترتیبات",
+      "logout": "لاگ آؤٹ کریں۔",
+      "register": "کلاؤڈ سے مطابقت پذیری کریں۔",
+      "settings": "ترتیبات"
     }
   },
   "notFound": {
-    "badge": "Not found",
-    "goHome": "Back to home",
-    "message": "We looked everywhere: under the bins, in the closet, behind the proxy, but ultimately couldn't find the page you are looking for. ",
-    "reloadButton": "Try again",
-    "title": "Couldn't find that page"
+    "badge": "نہیں ملا",
+    "goHome": "گھر واپس",
+    "message": "ہم نے ہر جگہ دیکھا: ڈبوں کے نیچے، الماری میں، پراکسی کے پیچھے، لیکن آخر کار وہ صفحہ نہیں مل سکا جس کی آپ تلاش کر رہے ہیں۔",
+    "reloadButton": "دوبارہ کوشش کریں۔",
+    "title": "وہ صفحہ نہیں مل سکا"
   },
   "onboarding": {
     "defaultConfirm": {
-      "cancel": "Cancel"
+      "cancel": "منسوخ کریں۔"
     }
   },
   "overlays": {
-    "close": "Close"
+    "close": "بند"
   },
   "player": {
     "back": {
-      "default": "Back to home",
-      "short": "Back"
+      "default": "گھر واپس",
+      "short": "پیچھے"
     },
     "casting": {
-      "device": "device",
-      "to": "Casting to {{device}} 📺"
+      "device": "آلہ",
+      "to": "{{device}} 📺 پر کاسٹ کیا جا رہا ہے۔"
     },
     "loadingOverlayMessages": {
-      "1": "Downloading more RAM...",
-      "2": "Converting caffeine to content...",
-      "3": "Teaching the hamster to run faster...",
-      "4": "Convincing electrons to move quicker...",
-      "5": "Almost there... said every loading bar ever...",
-      "6": "Finding the remote... wait, wrong problem...",
-      "7": "Counting backwards from infinity...",
-      "8": "Simulating the future...",
-      "9": "Watching cat videos...",
-      "10": "Distracted by cat GIFs...",
-      "11": "Please wait while the intern refills his coffee...",
-      "12": "Checking if it's plugged in...",
-      "13": "Turning it off and on again...",
-      "14": "Don't panic...",
-      "15": "Winter is coming...",
-      "16": "Logging into Skynet...",
-      "17": "All your browser are belong to us...",
-      "18": "Looking for infinite improbability drive...",
-      "19": "Discovering new ways of making you wait...",
-      "20": "Your time is very important to us. Please wait while we ignore you...",
-      "21": "Still faster than Windows Update...",
-      "22": "Why don't you grab a sandwich?"
+      "1": "مزید RAM ڈاؤن لوڈ ہو رہی ہے...",
+      "2": "کیفین کو مواد میں تبدیل کرنا...",
+      "3": "ہیمسٹر کو تیز دوڑنا سکھانا...",
+      "4": "الیکٹرانوں کو تیزی سے حرکت کرنے پر قائل کرنا...",
+      "5": "تقریباً پہنچ گیا... ہر بار لوڈنگ بار نے کہا...",
+      "6": "ریموٹ ڈھونڈ رہا ہے... انتظار کرو، غلط مسئلہ...",
+      "7": "لامحدودیت سے پیچھے کی طرف گننا...",
+      "8": "مستقبل کی تقلید...",
+      "9": "بلی کی ویڈیوز دیکھ کر...",
+      "10": "بلی کے GIFs سے مشغول...",
+      "11": "براہ کرم انتظار کریں جب تک کہ انٹرن اپنی کافی کو دوبارہ بھرتا ہے...",
+      "12": "چیک کیا جا رہا ہے کہ آیا یہ پلگ ان ہے...",
+      "13": "اسے آف اور دوبارہ آن کرنا...",
+      "14": "گھبرائیں نہیں...",
+      "15": "موسم سرما آ رہا ہے...",
+      "16": "Skynet میں لاگ ان ہو رہا ہے...",
+      "17": "آپ کے تمام براؤزر ہمارے ہیں...",
+      "18": "لامحدود ناممکن ڈرائیو کی تلاش ہے...",
+      "19": "آپ کو انتظار کرنے کے نئے طریقے دریافت کرنا...",
+      "20": "آپ کا وقت ہمارے لیے بہت اہم ہے۔ براہ کرم انتظار کریں جب تک ہم آپ کو نظر انداز کرتے ہیں...",
+      "21": "اب بھی ونڈوز اپ ڈیٹ سے تیز...",
+      "22": "آپ سینڈوچ کیوں نہیں پکڑ لیتے؟"
     },
     "menus": {
       "audio": {
-        "default": "Default"
+        "default": "طے شدہ"
       },
       "downloads": {
-        "button": "Attempt download",
-        "copyHlsPlaylist": "Copy HLS playlist link",
-        "disclaimer": "Downloads are taken directly from the provider. AlphaFlix does not have control over how the downloads are provided.",
-        "downloadSubtitle": "Download current subtitle",
-        "downloadVideo": "Download video",
-        "hlsDisclaimer": "Downloads are taken directly from the provider. AlphaFlix does not have control over how the downloads are provided.<br /><br />Please note you are downloading an HLS playlist, <bold>it is not recommended to download if you are not familiar with advanced streaming formats</bold>. Try different sources for different formats.",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
+        "button": "ڈاؤن لوڈ کرنے کی کوشش کریں۔",
+        "copyHlsPlaylist": "HLS پلے لسٹ لنک کاپی کریں۔",
+        "disclaimer": "ڈاؤن لوڈز براہ راست فراہم کنندہ سے لیے جاتے ہیں۔ AlphaFlix کو ڈاؤن لوڈز فراہم کرنے کے طریقہ پر کنٹرول نہیں ہے۔",
+        "downloadSubtitle": "موجودہ سب ٹائٹل ڈاؤن لوڈ کریں۔",
+        "downloadVideo": "ویڈیو ڈاؤن لوڈ کریں۔",
+        "hlsDisclaimer": "ڈاؤن لوڈز براہ راست فراہم کنندہ سے لیے جاتے ہیں۔ ڈاؤن لوڈز فراہم کرنے کے طریقے پر AlphaFlix کا کنٹرول نہیں ہے۔ <br /><br />براہ کرم نوٹ کریں کہ آپ HLS پلے لسٹ ڈاؤن لوڈ کر رہے ہیں، <bold>اگر آپ جدید اسٹریمنگ فارمیٹس سے واقف نہیں ہیں تو اسے ڈاؤن لوڈ کرنے کی سفارش نہیں کی جاتی ہے</bold>۔ مختلف فارمیٹس کے لیے مختلف ذرائع آزمائیں۔",
+        "hlsDownloader": "یا، <0>hls ڈاؤنلوڈر ویب سائٹ</0> پر جائیں اور نیچے سے پلے لسٹ URL چسپاں کریں۔",
         "onAndroid": {
-          "1": "To download on Android, click the download button then, on the new page, <bold>tap and hold</bold> on the video, then select <bold>save</bold>.",
-          "shortTitle": "Download / Android",
-          "title": "Downloading on Android"
+          "1": "Android پر ڈاؤن لوڈ کرنے کے لیے، ڈاؤن لوڈ بٹن پر کلک کریں پھر، نئے صفحہ پر، ویڈیو پر <bold>تھپتھپائیں اور ہولڈ</bold>، پھر <bold>محفوظ کریں</bold> کو منتخب کریں۔",
+          "shortTitle": "ڈاؤن لوڈ / اینڈرائیڈ",
+          "title": "اینڈرائیڈ پر ڈاؤن لوڈ ہو رہا ہے۔"
         },
         "onIos": {
-          "1": "To download on iOS, click the download button then, on the new page, click <bold><ios_share /></bold>, then <bold>Save to Files <ios_files /></bold>.",
-          "shortTitle": "Download / iOS",
-          "title": "Downloading on iOS"
+          "1": "iOS پر ڈاؤن لوڈ کرنے کے لیے، ڈاؤن لوڈ بٹن پر کلک کریں پھر، نئے صفحہ پر، <bold>PH_1</bold>، پھر <bold>Save to Files <ios_files />PH_5__ پر کلک کریں۔",
+          "shortTitle": "ڈاؤن لوڈ کریں / iOS",
+          "title": "iOS پر ڈاؤن لوڈ ہو رہا ہے۔"
         },
         "onPc": {
-          "1": "On PC, click the download button then, on the new page, right click the video and select <bold>Save video as</bold>",
-          "shortTitle": "Download / PC",
-          "title": "Downloading on PC"
+          "1": "PC پر، ڈاؤن لوڈ بٹن پر کلک کریں پھر، نئے صفحہ پر، ویڈیو پر دائیں کلک کریں اور <bold>ویڈیو کو بطور </bold> منتخب کریں",
+          "shortTitle": "ڈاؤن لوڈ / پی سی",
+          "title": "پی سی پر ڈاؤن لوڈ ہو رہا ہے۔"
         },
-        "title": "Download"
+        "title": "ڈاؤن لوڈ کریں۔"
       },
       "episodes": {
-        "button": "Episodes",
-        "emptyState": "There are no episodes in this season, check back later (sorry :3)...",
+        "button": "اقساط",
+        "emptyState": "اس سیزن میں کوئی اقساط نہیں ہیں، بعد میں دوبارہ چیک کریں (معذرت:3)...",
         "episodeBadge": "E{{episode}}",
-        "favorites": "Favorites",
-        "loadingError": "Error loading season",
-        "loadingList": "Loading...",
-        "loadingTitle": "Loading...",
-        "markAsFavorite": "Mark as favorite",
-        "markAsUnwatched": "Mark as unwatched",
-        "markAsWatched": "Mark as watched",
-        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
-        "showLess": "Show less",
-        "showMore": "Show more",
+        "favorites": "پسندیدہ",
+        "loadingError": "سیزن لوڈ کرنے میں خرابی۔",
+        "loadingList": "لوڈ ہو رہا ہے...",
+        "loadingTitle": "لوڈ ہو رہا ہے...",
+        "markAsFavorite": "پسندیدہ کے بطور نشان زد کریں۔",
+        "markAsUnwatched": "غیر دیکھے ہوئے کے بطور نشان زد کریں۔",
+        "markAsWatched": "دیکھا گیا کے طور پر نشان زد کریں۔",
+        "noFavorites": "ابھی تک کوئی پسندیدہ ایپی سوڈ نہیں ہے۔ اقساط کو اپنے پسندیدہ میں شامل کرنے کے لیے اسٹار کریں!",
+        "showLess": "کم دکھائیں۔",
+        "showMore": "مزید دکھائیں",
         "specials": "خصوصی"
       },
       "playback": {
-        "disabled": "(Disabled in watch party)",
+        "disabled": "(واچ پارٹی میں غیر فعال)",
         "speedBoosted": "2x",
-        "speedLabel": "Playback speed",
+        "speedLabel": "پلے بیک کی رفتار",
         "speedUnboosted": "{{speed}}x",
-        "title": "Playback settings"
+        "title": "پلے بیک کی ترتیبات"
       },
       "quality": {
-        "auto": "Auto",
-        "automaticLabel": "Automatic quality",
-        "hint": "You can try <0>switching source</0> to get different quality options.",
-        "iosNoQuality": "Due to Apple-defined (common IOS L) limitations, quality selection is not available on iOS for this source. You can try <0>switching to another source</0> to get different quality options.",
-        "title": "Quality"
+        "auto": "آٹو",
+        "automaticLabel": "خودکار معیار",
+        "hint": "آپ مختلف معیار کے اختیارات حاصل کرنے کے لیے <0>ذریعہ</0> کو تبدیل کرنے کی کوشش کر سکتے ہیں۔",
+        "iosNoQuality": "Apple کی وضاحت کردہ (عام IOS L) کی حدود کی وجہ سے، معیار کا انتخاب اس ذریعہ کے لیے iOS پر دستیاب نہیں ہے۔ آپ مختلف معیار کے اختیارات حاصل کرنے کے لیے <0>دوسرے ذریعہ</0> پر سوئچ کرنے کی کوشش کر سکتے ہیں۔",
+        "title": "معیار"
       },
       "settings": {
-        "audioItem": "Audio",
-        "downloadItem": "Download",
-        "enableSubtitles": "Enable Subtitles",
-        "playbackItem": "Playback settings",
-        "qualityItem": "Quality",
-        "sourceItem": "Source",
-        "subtitleItem": "Subtitles"
+        "audioItem": "آڈیو",
+        "downloadItem": "ڈاؤن لوڈ کریں۔",
+        "enableSubtitles": "سب ٹائٹلز کو فعال کریں۔",
+        "playbackItem": "پلے بیک کی ترتیبات",
+        "qualityItem": "معیار",
+        "sourceItem": "ماخذ",
+        "subtitleItem": "سب ٹائٹلز"
       },
       "sources": {
         "failed": {
-          "text": "There was an error while trying to find any videos... Try a different source?",
-          "title": "Failed to scrape"
+          "text": "کسی بھی ویڈیو کو تلاش کرنے کی کوشش میں ایک خرابی تھی... کوئی دوسرا ذریعہ آزمائیں؟",
+          "title": "کھرچنے میں ناکام"
         },
-        "findNextSource": "Find next source",
+        "findNextSource": "اگلا ذریعہ تلاش کریں۔",
         "noEmbeds": {
-          "text": "We were unable to find any embeds, please try a different source.",
-          "title": "No embeds found"
+          "text": "ہم کوئی سرایت تلاش کرنے سے قاصر تھے، براہ کرم کوئی دوسرا ذریعہ آزمائیں۔",
+          "title": "کوئی سرایت نہیں ملی"
         },
         "noStream": {
-          "text": "This source has no streams for this movie or show. /ᐠ - ˕ -マ Ⳋ",
-          "title": "No stream :("
+          "text": "اس ماخذ میں اس فلم یا شو کے لیے کوئی سلسلہ نہیں ہے۔ /ᐠ - ˕ -マ Ⳋ",
+          "title": "کوئی سلسلہ نہیں :("
         },
-        "title": "Sources",
-        "unknownOption": "Unknown"
+        "title": "ذرائع",
+        "unknownOption": "نامعلوم"
       },
       "subtitles": {
-        "autoSelectChoice": "Auto select",
-        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
-        "clearSecondary": "Clear secondary subtitle",
-        "customChoice": "Drop or upload file",
-        "customizeLabel": "Customize",
-        "delayEarly": "Saw caption",
-        "delayLate": "Heard audio",
-        "doubleClickToCopy": "Double click to copy subtitle data",
-        "dropSubtitleFile": "Drop subtitle file here! >_<",
-        "dualSub": "Dual Subtitles",
-        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
-        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
-        "empty": "There are no provided subtitles for this.",
-        "loadingExternal": "Loading external subtitles...",
+        "autoSelectChoice": "آٹو سلیکٹ",
+        "autoSelectDifferentChoice": "مختلف ذیلی عنوان کو خودکار طور پر منتخب کرنے کے لیے دوبارہ تھپتھپائیں۔",
+        "clearSecondary": "ثانوی ذیلی عنوان کو صاف کریں۔",
+        "customChoice": "فائل کو ڈراپ یا اپ لوڈ کریں۔",
+        "customizeLabel": "حسب ضرورت بنائیں",
+        "delayEarly": "کیپشن دیکھا",
+        "delayLate": "آڈیو سنی",
+        "doubleClickToCopy": "سب ٹائٹل ڈیٹا کاپی کرنے کے لیے ڈبل کلک کریں۔",
+        "dropSubtitleFile": "سب ٹائٹل فائل یہاں ڈراپ کریں! >_<",
+        "dualSub": "دوہری سب ٹائٹلز",
+        "dualSubDesc": "بہترین مطابقت پذیری کے لیے ایک ہی فارمیٹ (SRT، VTT...) اور فراہم کنندہ (OpenSubs...) کو منتخب کریں۔",
+        "dualSubHint": "ثانوی ذیلی عنوان کے لیے ایک زبان منتخب کریں (پرائمری کے اوپر دکھایا گیا ہے)",
+        "empty": "اس کے لیے کوئی ذیلی عنوانات فراہم نہیں کیے گئے ہیں۔",
+        "loadingExternal": "بیرونی سب ٹائٹلز لوڈ ہو رہے ہیں...",
         "loadingExternalProgress": "بیرونی سب ٹائٹلز لوڈ ہو رہے ہیں... ({{progress}}%)",
         "matchScoreLabel": "میچ ~{{score}}%",
-        "notFound": "None of the available options match your query",
-        "offChoice": "Off",
-        "pasteChoice": "Paste subtitle data",
-        "previewLabel": "Subtitle preview:",
-        "primary": "Primary",
-        "refresh": "Refresh External Subtitles",
-        "refreshing": "Refreshing...",
-        "secondary": "Secondary",
-        "selectingSecondary": "Selecting secondary subtitle",
+        "notFound": "دستیاب اختیارات میں سے کوئی بھی آپ کے استفسار سے میل نہیں کھاتا",
+        "offChoice": "آف",
+        "pasteChoice": "سب ٹائٹل ڈیٹا چسپاں کریں۔",
+        "previewLabel": "ذیلی عنوان کا پیش منظر:",
+        "primary": "پرائمری",
+        "refresh": "بیرونی سب ٹائٹلز کو ریفریش کریں۔",
+        "refreshing": "ریفریش ہو رہا ہے...",
+        "secondary": "ثانوی",
+        "selectingSecondary": "ثانوی ذیلی عنوان کا انتخاب",
         "settings": {
-          "backlink": "Custom subtitles",
-          "delay": "Subtitle delay",
-          "fixCapitals": "Fix capitalization"
+          "backlink": "حسب ضرورت سب ٹائٹلز",
+          "delay": "ذیلی عنوان میں تاخیر",
+          "fixCapitals": "بڑے حروف کو درست کریں۔"
         },
-        "title": "Subtitles",
-        "transcriptChoice": "Transcript",
+        "title": "سب ٹائٹلز",
+        "transcriptChoice": "نقل",
         "translate": {
-          "title": "Translate from {{language}}"
+          "title": "{{language}} سے ترجمہ کریں"
         },
-        "unknownLanguage": "Unknown",
-        "useNativeSubtitles": "Native video subtitles",
-        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP"
+        "unknownLanguage": "نامعلوم",
+        "useNativeSubtitles": "مقامی ویڈیو سب ٹائٹلز",
+        "useNativeSubtitlesDescription": "مقامی پوری اسکرین اور PiP کے لیے براڈکاسٹ سب ٹائٹلز"
       },
       "watchparty": {
-        "watchpartyItem": "Watch Party"
+        "watchpartyItem": "پارٹی دیکھیں"
       }
     },
     "metadata": {
       "extensionPermission": {
-        "badge": "Permission Missing",
-        "button": "Use extension",
-        "text": "You have the browser extension, but we need your permission to get started using the extension. (¬_¬)",
-        "title": "Configure the extension"
+        "badge": "اجازت غائب ہے۔",
+        "button": "توسیع کا استعمال کریں۔",
+        "text": "آپ کے پاس براؤزر کی توسیع ہے، لیکن ہمیں ایکسٹینشن کا استعمال شروع کرنے کے لیے آپ کی اجازت درکار ہے۔ (¬_¬)",
+        "title": "ایکسٹینشن کو کنفیگر کریں۔"
       },
       "failed": {
-        "badge": "Failed",
-        "homeButton": "Go home",
-        "text": "Could not load the media's metadata from TMDB. Please check whether TMDB is down or blocked on your internet connection.",
-        "title": "Failed to load metadata"
+        "badge": "ناکام",
+        "homeButton": "گھر جاؤ",
+        "text": "TMDB سے میڈیا کا میٹا ڈیٹا لوڈ نہیں کیا جا سکا۔ براہ کرم چیک کریں کہ آیا آپ کے انٹرنیٹ کنکشن پر TMDB بند ہے یا مسدود ہے۔",
+        "title": "میٹا ڈیٹا لوڈ کرنے میں ناکام"
       },
       "legal": {
-        "badge": "Removed",
-        "text": "This media is no longer available due to a takedown notice or copyright claim. 😨",
-        "title": "Media has been removed"
+        "badge": "ہٹا دیا گیا۔",
+        "text": "یہ میڈیا ٹیک ڈاؤن نوٹس یا کاپی رائٹ کے دعوے کی وجہ سے مزید دستیاب نہیں ہے۔ 😨",
+        "title": "میڈیا کو ہٹا دیا گیا ہے۔"
       },
       "notFound": {
-        "badge": "Not found",
-        "homeButton": "Back to home",
-        "text": "We couldn't find the media you requested. Either it's been removed or you tampered with the URL (naughty, naughty).",
-        "title": "Couldn't find that media."
+        "badge": "نہیں ملا",
+        "homeButton": "گھر واپس",
+        "text": "ہم آپ کی درخواست کردہ میڈیا کو تلاش نہیں کر سکے۔ یا تو اسے ہٹا دیا گیا ہے یا آپ نے URL (شرارتی، شرارتی) کے ساتھ چھیڑ چھاڑ کی ہے۔",
+        "title": "وہ میڈیا نہیں مل سکا۔"
       }
     },
     "nextEpisode": {
-      "next": "Next episode",
-      "nextSeason": "Next season",
-      "replay": "Replay"
+      "next": "اگلی قسط",
+      "nextSeason": "اگلا سیزن",
+      "replay": "ری پلے"
     },
     "playbackError": {
-      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
-      "badge": "Playback error",
-      "copyDebugInfo": "Copy debug info",
-      "debugInfo": "Check console for more details.",
+      "autoResumeText": "میڈیا 😖 چلانے کی کوشش میں ایک خرابی تھی۔ دوسرے ذرائع کو خود بخود آزمانا...",
+      "badge": "پلے بیک کی خرابی۔",
+      "copyDebugInfo": "ڈیبگ کی معلومات کاپی کریں۔",
+      "debugInfo": "مزید تفصیلات کے لیے کنسول چیک کریں۔",
       "errors": {
-        "errorAborted": "The fetching of the media was aborted by the user's request.",
-        "errorDecode": "Despite having previously been determined to be usable, an error occurred while trying to decode the media resource, resulting in an error.",
-        "errorGenericMedia": "Unknown media error occurred.",
-        "errorNetwork": "Some kind of network error occurred which prevented the media from being successfully fetched, despite having previously been available.",
-        "errorNotSupported": "The media or media provider object is not supported."
+        "errorAborted": "میڈیا کی بازیافت صارف کی درخواست پر روک دی گئی۔",
+        "errorDecode": "پہلے سے قابل استعمال ہونے کے عزم کے باوجود، میڈیا ریسورس کو ڈی کوڈ کرنے کی کوشش کرتے ہوئے ایک خرابی پیش آگئی، جس کے نتیجے میں ایک خرابی پیدا ہوئی۔",
+        "errorGenericMedia": "نامعلوم میڈیا خرابی پیش آگئی۔",
+        "errorNetwork": "نیٹ ورک کی کسی قسم کی خرابی پیش آگئی جس نے میڈیا کو کامیابی سے حاصل ہونے سے روک دیا، باوجود اس کے کہ پہلے دستیاب تھا۔",
+        "errorNotSupported": "میڈیا یا میڈیا فراہم کنندہ آبجیکٹ تعاون یافتہ نہیں ہے۔"
       },
-      "homeButton": "Go home",
-      "resumeButton": "Try next sources",
-      "text": "There was an error trying to play the media 😖. Please try again or try a different source!",
-      "title": "Failed to play video!"
+      "homeButton": "گھر جاؤ",
+      "resumeButton": "اگلے ذرائع آزمائیں۔",
+      "text": "میڈیا 😖 چلانے کی کوشش میں ایک خرابی تھی۔ براہ کرم دوبارہ کوشش کریں یا کوئی دوسرا ذریعہ آزمائیں!",
+      "title": "ویڈیو چلانے میں ناکام!"
     },
     "resume": {
-      "description": "This episode is {{percentage}}% watched",
-      "restart": "Restart",
-      "resume": "Resume",
-      "title": "Continue watching?"
+      "description": "اس ایپی سوڈ کو {{percentage}}% دیکھا گیا ہے۔",
+      "restart": "دوبارہ شروع کریں۔",
+      "resume": "دوبارہ شروع کریں۔",
+      "title": "دیکھنا جاری رکھیں؟"
     },
     "scraping": {
       "extensionFailure": {
-        "badge": "Extension disabled",
-        "enableExtension": "Enable extension",
-        "homeButton": "Go home",
-        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site.",
-        "title": "Please enable the extension"
+        "badge": "ایکسٹینشن غیر فعال ہے۔",
+        "enableExtension": "ایکسٹینشن کو فعال کریں۔",
+        "homeButton": "گھر جاؤ",
+        "text": "آپ نے AlphaFlix ایکسٹینشن انسٹال کر لیا ہے۔ اس کا استعمال شروع کرنے کے لیے، آپ کو اس سائٹ کے لیے ایکسٹینشن کو فعال کرنے کی ضرورت ہے۔",
+        "title": "براہ کرم توسیع کو فعال کریں۔"
       },
       "items": {
-        "pending": "Checking for videos..."
+        "pending": "ویڈیوز کی جانچ ہو رہی ہے..."
       },
       "notFound": {
-        "badge": "Not found",
-        "detailsButton": "Show details",
-        "discoverButton": "Discover more",
-        "homeButton": "Go home",
-        "text": "We have searched through our providers and cannot find the media you are looking for! We do not host the media and have no control over what is available. Please click 'Show details' below for more details.",
-        "title": "We couldn't find that"
+        "badge": "نہیں ملا",
+        "detailsButton": "تفصیلات دکھائیں۔",
+        "discoverButton": "مزید دریافت کریں۔",
+        "homeButton": "گھر جاؤ",
+        "text": "ہم نے اپنے فراہم کنندگان کے ذریعے تلاش کیا ہے اور وہ میڈیا نہیں مل سکا جس کی آپ تلاش کر رہے ہیں! ہم میڈیا کی میزبانی نہیں کرتے اور جو کچھ دستیاب ہے اس پر ہمارا کوئی کنٹرول نہیں ہے۔ براہ کرم مزید تفصیلات کے لیے نیچے 'تفصیلات دکھائیں' پر کلک کریں۔",
+        "title": "ہم اسے تلاش نہیں کر سکے۔"
       },
       "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
+        "1": "ذرائع کو تبدیل کرنے کے لیے گیئر آئیکن کو تھپتھپائیں!",
+        "2": "لنک کو کاپی کرنے کے لیے عنوان کو تھپتھپائیں!",
+        "3": "پوری اسکرین کے بجائے وائڈ اسکرین بٹن دکھانے کے لیے SHIFT کو تھپتھپائیں اور دبائے رکھیں!",
+        "4": "کچھ ذرائع دوسروں سے بہتر کام کرتے ہیں!",
+        "5": "مزید ذرائع کے لیے توسیع حاصل کریں!",
+        "6": "بُک مارکس کو ان میں ترمیم کرنے یا حذف کرنے کے لیے پکڑے رکھیں!",
+        "7": "وقت کے ساتھ لنک کاپی کرنے کے لیے SHIFT کو تھامیں اور ٹائٹل کو تھپتھپائیں!",
+        "8": "اپنی مرضی کے مطابق سب ٹائٹل کا رنگ سیٹ کریں!",
+        "9": "کی بورڈ شارٹ کٹ دیکھنے کے لیے ` کو دبائے رکھیں!"
       }
     },
     "segment": {
-      "credits": "Credits",
-      "intro": "Intro",
+      "credits": "کریڈٹس",
+      "intro": "تعارف",
       "recap": "Recap"
     },
     "skipTime": {
-      "confidence": "confidence",
-      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
-      "credits": "Skip Credits",
-      "endOfVideo": "End",
-      "endsAt": "Ends at {{time}}",
+      "confidence": "اعتماد",
+      "connectApiKeyMessage": "نئے سیگمنٹس جمع کرانے کے لیے، کنکشن کی ترتیبات میں اپنی TheIntroDB API کلید درج کریں۔",
+      "credits": "کریڈٹ چھوڑ دیں۔",
+      "endOfVideo": "ختم",
+      "endsAt": "{{time}} پر ختم ہوتا ہے",
       "feedback": {
         "modal": {
-          "cancel": "Cancel",
-          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
-          "endTimeLabel": "End (s)",
+          "cancel": "منسوخ کریں۔",
+          "description": "درست سیگمنٹ ٹائم سٹیمپ جمع کر کے TheIntroDB میں تعاون کریں۔ تمام گذارشات شائع ہونے سے پہلے کمیونٹی کے ذریعہ قبول کی جاتی ہیں۔",
+          "endTimeLabel": "اختتام",
           "error": {
-            "endTime": "End time is required",
-            "mediaInfo": "Media information is not available",
-            "segment": "No segment selected",
-            "startTime": "Start time is required",
-            "submission": "Error submitting timestamps",
-            "tidbKey": "TIDB API key is not set"
+            "endTime": "اختتامی وقت درکار ہے۔",
+            "mediaInfo": "میڈیا کی معلومات دستیاب نہیں ہیں۔",
+            "segment": "کوئی سیگمنٹ منتخب نہیں کیا گیا۔",
+            "startTime": "آغاز کا وقت درکار ہے۔",
+            "submission": "ٹائم اسٹیمپ جمع کرانے میں خرابی۔",
+            "tidbKey": "TIDB API کلید سیٹ نہیں ہے۔"
           },
           "guide": {
             "credits": {
-              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
-              "endDesc": "Optional - leave empty if credits run to the end of the file.",
-              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll.",
-              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
-              "whenToTitle": "Credits timestamps guide:"
+              "durationDesc": "کم از کم 5s اگر اختتام فراہم کیا جائے۔ میڈیا کے آخر تک بڑھا سکتے ہیں۔",
+              "endDesc": "اختیاری - اگر کریڈٹ فائل کے آخر تک چلتے ہیں تو خالی چھوڑ دیں۔",
+              "excludeDesc": "درمیانی کریڈٹ یا پوسٹ کریڈٹ کے مناظر کو خارج کریں؛ صرف مرکزی کریڈٹ رول۔",
+              "startDesc": "مطلوبہ - جب بند ہونے والے کریڈٹ شروع ہوتے ہیں (جیسے جب پہلا کریڈٹ ٹیکسٹ ظاہر ہوتا ہے)۔",
+              "whenToTitle": "کریڈٹ ٹائم اسٹیمپ گائیڈ:"
             },
-            "durationDesc": "Min 5s if end provided",
-            "durationLabel": "Duration:",
-            "endDesc": "Optional - empty if extends to end",
-            "endLabel": "End:",
-            "excludeDesc": "Post-credits scenes",
-            "excludeLabel": "Exclude:",
+            "durationDesc": "کم از کم 5 سیکنڈ اگر اختتام فراہم کیا جائے۔",
+            "durationLabel": "دورانیہ:",
+            "endDesc": "اختیاری - خالی اگر اختتام تک پھیلا ہوا ہو۔",
+            "endLabel": "اختتام:",
+            "excludeDesc": "کریڈٹ کے بعد کے مناظر",
+            "excludeLabel": "خارج کریں:",
             "intro": {
-              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
-              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
-              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence.",
-              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
-              "whenToTitle": "Intro timestamps guide:"
+              "durationDesc": "زیادہ تر تعارف 30-90 سیکنڈ کے ہوتے ہیں۔ کم از کم 5s اگر آغاز اور اختتام دونوں سیٹ ہیں۔",
+              "endDesc": "مطلوبہ - جب تعارف ختم ہوتا ہے (عام طور پر جب ٹائٹل کارڈ یا مین ایپیسوڈ شروع ہوتا ہے)۔",
+              "excludeDesc": "کولڈ اوپن یا پری انٹرو سین شامل نہ کریں۔ صرف مرکزی عنوان کی ترتیب۔",
+              "startDesc": "اختیاری - اگر تعارف ایپی سوڈ کے شروع میں شروع ہوتا ہے تو خالی چھوڑ دیں۔",
+              "whenToTitle": "انٹرو ٹائم اسٹیمپ گائیڈ:"
             },
             "preview": {
-              "durationDesc": "Preview varies in length. Minimum 5s.",
-              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
-              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode.",
-              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
-              "whenToTitle": "Preview timestamps guide:"
+              "durationDesc": "پیش نظارہ لمبائی میں مختلف ہوتا ہے۔ کم از کم 5 سیکنڈ۔",
+              "endDesc": "اختیاری - اگر پیش نظارہ میڈیا کے آخر میں ختم ہوتا ہے تو خالی چھوڑ دیں۔",
+              "excludeDesc": "پیش نظارہ عام طور پر اگلے ایپیسوڈ کا پیش نظارہ کرتے ہوئے ایپی سوڈ کے اختتام پر 15-90 سیکنڈ کا ہوتا ہے۔",
+              "startDesc": "مطلوبہ - جب پیش نظارہ شروع ہوتا ہے (مثال کے طور پر جب پیش نظارہ متن ظاہر ہوتا ہے)۔",
+              "whenToTitle": "پیش نظارہ ٹائم اسٹیمپ گائیڈ:"
             },
             "recap": {
-              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
-              "endDesc": "Required - when the recap ends and the new content begins.",
-              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes.",
-              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
-              "whenToTitle": "Recap timestamps guide:"
+              "durationDesc": "Recaps لمبائی میں مختلف ہوتے ہیں۔ کم از کم 5s اگر آغاز اور اختتام دونوں سیٹ ہیں۔",
+              "endDesc": "مطلوبہ - جب ری کیپ ختم ہو جائے اور نیا مواد شروع ہو۔",
+              "excludeDesc": "صرف \"پہلے آن\" یا recap طبقہ؛ تعارف یا نئے مناظر شامل نہ کریں۔",
+              "startDesc": "اختیاری - اگر ریکیپ ایپی سوڈ کے شروع میں شروع ہوتا ہے تو خالی چھوڑ دیں۔",
+              "whenToTitle": "ریکیپ ٹائم اسٹیمپ گائیڈ:"
             },
-            "startDesc": "Required - when credits begin rolling",
-            "startLabel": "Start:"
+            "startDesc": "مطلوبہ - جب کریڈٹ رولنگ شروع ہوتے ہیں۔",
+            "startLabel": "شروع کریں:"
           },
           "placeholders": {
             "end": {
-              "credits": "3:30 or 210 (leave empty for end of media)",
-              "intro": "3:30 or 210 (required)",
-              "preview": "3:30 or 210 (leave empty for end of media)",
-              "recap": "3:30 or 210 (required)"
+              "credits": "3:30 یا 210 (میڈیا کے اختتام کے لیے خالی چھوڑ دیں)",
+              "intro": "3:30 یا 210 (ضروری)",
+              "preview": "3:30 یا 210 (میڈیا کے اختتام کے لیے خالی چھوڑ دیں)",
+              "recap": "3:30 یا 210 (ضروری)"
             },
             "start": {
-              "credits": "2:30 or 150 (required)",
-              "intro": "2:30 or 150 (leave empty for start at beginning)",
-              "preview": "2:30 or 150 (required)",
-              "recap": "2:30 or 150 (leave empty for start at beginning)"
+              "credits": "2:30 یا 150 (ضروری)",
+              "intro": "2:30 یا 150 (شروع میں شروع کرنے کے لیے خالی چھوڑ دیں)",
+              "preview": "2:30 یا 150 (ضروری)",
+              "recap": "2:30 یا 150 (شروع میں شروع کرنے کے لیے خالی چھوڑ دیں)"
             }
           },
-          "segmentType": "Segment Type",
-          "startTimeLabel": "Start (s)",
-          "submit": "Submit",
-          "submitting": "Submitting...",
+          "segmentType": "سیگمنٹ کی قسم",
+          "startTimeLabel": "شروع کریں",
+          "submit": "جمع کروائیں۔",
+          "submitting": "جمع کر رہا ہے...",
           "success": {
-            "title": "Submission Successful! Thanks!"
+            "title": "جمع کرانے کامیاب! شکریہ!"
           },
-          "title": "Submit Timestamps to TheIntroDB",
+          "title": "TheIntroDB پر ٹائم اسٹیمپ جمع کروائیں۔",
           "types": {
-            "credits": "Credits",
-            "intro": "Intro",
-            "preview": "Preview",
+            "credits": "کریڈٹس",
+            "intro": "تعارف",
+            "preview": "پیش نظارہ",
             "recap": "Recap"
           },
-          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
-          "whenToTitle": "Timestamps guide:"
+          "whenToDesc": "ٹائم اسٹیمپس سیکنڈ میں درج کریں (جیسے 150)، mm:ss فارمیٹ (جیسے 2:30)، یا hh:mm:ss فارمیٹ (جیسے 1:42:20)۔ ہم آپ کے لیے فارمیٹ کو خود بخود تبدیل کر دیں گے۔",
+          "whenToTitle": "ٹائم اسٹیمپ گائیڈ:"
         },
-        "title": "Was this skip correct?"
+        "title": "کیا یہ سکپ درست تھا؟"
       },
-      "intro": "Skip Intro",
-      "noSegments": "No skip segments available",
-      "recap": "Skip Recap",
-      "skipSegments": "Skip Segments",
-      "startsAt": "Starts at {{time}}",
-      "submissions": "{{count}} submissions",
-      "submitSegment": "Submit Segment",
-      "timeUnknown": "Time unknown"
+      "intro": "تعارف کو چھوڑیں۔",
+      "noSegments": "کوئی سکیپ سیگمنٹ دستیاب نہیں ہے۔",
+      "recap": "Recap کو چھوڑیں۔",
+      "skipSegments": "سیگمنٹس کو چھوڑیں۔",
+      "startsAt": "{{time}} پر شروع ہوتا ہے",
+      "submissions": "{{count}} گذارشات",
+      "submitSegment": "سیگمنٹ جمع کروائیں۔",
+      "timeUnknown": "نامعلوم وقت"
     },
     "time": {
       "regular": "{{timeWatched}} / {{duration}}",
-      "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
+      "remaining": "{{timeLeft}} بائیں • {{timeFinished, datetime}} پر ختم",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
     }
   },
   "screens": {
     "loadingUserError": {
-      "disconectCancel": "Cancel",
-      "disconnectConfirm": "Confirm",
-      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
-      "disconnectTitle": "Disconnect from backend?",
-      "logout": "Logout",
-      "reload": "Reload",
-      "reset": "Reset custom server"
+      "disconectCancel": "منسوخ کریں۔",
+      "disconnectConfirm": "تصدیق کریں۔",
+      "disconnectMessage": "تازہ ترین مقامی ڈیٹا کو برقرار رکھتے ہوئے اکاؤنٹ سرور سے منقطع ہوجائیں۔ تبدیلیاں اور دیکھے گئے مواد کو اس وقت تک مطابقت پذیر نہیں بنایا جائے گا جب تک آپ دوبارہ سائن ان نہیں ہو جاتے۔",
+      "disconnectTitle": "بیک اینڈ سے رابطہ منقطع کریں؟",
+      "logout": "لاگ آؤٹ",
+      "reload": "دوبارہ لوڈ کریں۔",
+      "reset": "کسٹم سرور کو ری سیٹ کریں۔"
     },
     "migration": {
-      "failed": "Failed to migrate your data. 😿",
-      "inProgress": "Please hold, we are migrating your data. This shouldn't take long..."
+      "failed": "آپ کا ڈیٹا منتقل کرنے میں ناکام۔ 😿",
+      "inProgress": "براہ کرم روکیں، ہم آپ کا ڈیٹا منتقل کر رہے ہیں۔ اس میں زیادہ دیر نہیں لگنی چاہیے..."
     }
   },
   "settings": {
     "account": {
       "accountDetails": {
-        "editProfile": "Edit",
-        "logoutButton": "Log out",
-        "nicknameLabel": "Nickname",
-        "nicknamePlaceholder": "Enter your nickname"
+        "editProfile": "ترمیم کریں۔",
+        "logoutButton": "لاگ آؤٹ کریں۔",
+        "nicknameLabel": "عرفی نام",
+        "nicknamePlaceholder": "اپنا عرفی نام درج کریں۔"
       },
       "actions": {
         "delete": {
-          "button": "Delete account",
-          "confirmButton": "Delete account",
-          "confirmDescription": "Are you sure you want to delete your account? All your data will be lost! ",
-          "confirmTitle": "Are you sure?",
-          "text": "This action is irreversible. All data will be deleted and nothing can be recovered.",
-          "title": "Delete account"
+          "button": "اکاؤنٹ حذف کریں۔",
+          "confirmButton": "اکاؤنٹ حذف کریں۔",
+          "confirmDescription": "کیا آپ واقعی اپنا اکاؤنٹ حذف کرنا چاہتے ہیں؟ آپ کا تمام ڈیٹا ضائع ہو جائے گا!",
+          "confirmTitle": "کیا آپ کو یقین ہے؟",
+          "text": "یہ عمل ناقابل واپسی ہے۔ تمام ڈیٹا حذف کر دیا جائے گا اور کچھ بھی بازیافت نہیں کیا جا سکے گا۔",
+          "title": "اکاؤنٹ حذف کریں۔"
         },
         "logoutAllDevices": {
-          "button": "Log Out of All Devices",
-          "text": "This will sign you out from all devices linked to your account.",
-          "title": "End All Sessions"
+          "button": "تمام آلات سے لاگ آؤٹ کریں۔",
+          "text": "یہ آپ کے اکاؤنٹ سے منسلک تمام آلات سے آپ کو سائن آؤٹ کر دے گا۔",
+          "title": "تمام سیشنز ختم کریں۔"
         },
         "migration": {
-          "button": "Migrate account",
-          "text": "Migrate your account to a new server or download your data.",
-          "title": "Account migration"
+          "button": "اکاؤنٹ منتقل کریں۔",
+          "text": "اپنے اکاؤنٹ کو نئے سرور پر منتقل کریں یا اپنا ڈیٹا ڈاؤن لوڈ کریں۔",
+          "title": "اکاؤنٹ کی منتقلی"
         },
-        "title": "Actions"
+        "title": "اعمال"
       },
       "devices": {
-        "deviceNameLabel": "Device name",
-        "failed": "Failed to load sessions",
+        "deviceNameLabel": "ڈیوائس کا نام",
+        "failed": "سیشنز لوڈ کرنے میں ناکام",
         "lastActive": "آخری فعال: {{date}}",
         "loggedInAt": "لاگ ان ہوا: {{date}}",
-        "removeDevice": "Remove",
-        "title": "Devices",
-        "unknownDevice": "Unknown device, error decrypting name"
+        "removeDevice": "ہٹا دیں۔",
+        "title": "آلات",
+        "unknownDevice": "نامعلوم آلہ، نام کو ڈکرپٹ کرنے میں خرابی۔"
       },
       "profile": {
-        "finish": "Finish editing",
-        "firstColor": "Profile color one",
-        "secondColor": "Profile color two",
-        "title": "Edit profile picture",
-        "userIcon": "User icon"
+        "finish": "ترمیم مکمل کریں۔",
+        "firstColor": "پروفائل کا رنگ ایک",
+        "secondColor": "پروفائل کا رنگ دو",
+        "title": "پروفائل تصویر میں ترمیم کریں۔",
+        "userIcon": "صارف کا آئیکن"
       },
       "register": {
-        "cta": "Get started",
-        "text": "Share your watch progress between devices and keep them synced. ( ̧⸝⸝⍢⸝⸝)ෆ",
-        "title": "Sync to the Cloud"
+        "cta": "شروع کرو",
+        "text": "آلات کے درمیان اپنی گھڑی کی پیشرفت کا اشتراک کریں اور انہیں مطابقت پذیر رکھیں۔ ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "title": "کلاؤڈ سے مطابقت پذیری کریں۔"
       },
-      "title": "Account"
+      "title": "اکاؤنٹ"
     },
     "all": {
-      "title": "All Settings"
+      "title": "تمام ترتیبات"
     },
     "appearance": {
-      "activeTheme": "Active",
+      "activeTheme": "فعال",
       "customParts": {
-        "primary": "Primary",
-        "secondary": "Secondary",
-        "tertiary": "Tertiary"
+        "primary": "پرائمری",
+        "secondary": "ثانوی",
+        "tertiary": "ترتیری"
       },
       "options": {
-        "carouselView": "Carousel view",
-        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
-        "carouselViewLabel": "Carousel view",
-        "discover": "Discover section",
-        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
-        "discoverLabel": "Discover section",
-        "featured": "Featured media",
-        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
-        "featuredLabel": "Featured media",
-        "forceCompactEpisodeView": "Force compact episode view",
-        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
-        "forceCompactEpisodeViewLabel": "Compact episodes",
-        "homeSectionOrder": "Home section order",
-        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
-        "homeSectionOrderGroups": "Reorder bookmark groups",
-        "logos": "Image logos",
-        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
-        "logosLabel": "Image logos",
-        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
-        "minimalCards": "Minimal cards",
-        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
-        "minimalCardsLabel": "Minimal cards",
-        "modal": "Details modal",
-        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
-        "modalLabel": "Details modal",
-        "pauseOverlay": "Pause overlay",
-        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
-        "pauseOverlayLabel": "Pause overlay"
+        "carouselView": "کیروسل کا نظارہ",
+        "carouselViewDescription": "اپنے فی الحال دیکھے جانے والے اور بک مارک سیکشنز کو گرڈ کے بجائے carousels کے بطور دکھائیں۔ بطور ڈیفالٹ غیر فعال۔",
+        "carouselViewLabel": "کیروسل کا نظارہ",
+        "discover": "سیکشن دریافت کریں۔",
+        "discoverDescription": "اپنے بک مارک شدہ میڈیا کے نیچے ہوم پیج پر دریافت سیکشن دکھائیں۔ بطور ڈیفالٹ فعال۔",
+        "discoverLabel": "سیکشن دریافت کریں۔",
+        "featured": "نمایاں میڈیا",
+        "featuredDescription": "اپنے ہوم پیج کے اوپری حصے میں نمایاں فلموں اور شوز کا کیروسل دکھائیں! بطور ڈیفالٹ غیر فعال۔",
+        "featuredLabel": "نمایاں میڈیا",
+        "forceCompactEpisodeView": "کومپیکٹ ایپی سوڈ ویو پر مجبور کریں۔",
+        "forceCompactEpisodeViewDescription": "پلیئر میں ایپی سوڈ کیروسل کو \"کلاسک\" کمپیکٹ عمودی منظر استعمال کرنے پر مجبور کریں۔ بطور ڈیفالٹ غیر فعال۔",
+        "forceCompactEpisodeViewLabel": "کومپیکٹ اقساط",
+        "homeSectionOrder": "ہوم سیکشن آرڈر",
+        "homeSectionOrderDescription": "اپنے ہوم پیج پر دیکھنے اور بُک مارکس سیکشن کو دوبارہ ترتیب دینے کے لیے گھسیٹیں اور چھوڑیں۔ گروپ آرڈر کو ہوم پیج سے ایڈٹ کیا جا سکتا ہے۔",
+        "homeSectionOrderGroups": "بک مارک گروپس کو دوبارہ ترتیب دیں۔",
+        "logos": "تصویری لوگوز",
+        "logosDescription": "تفصیلات کے موڈل اور نمایاں سیکشن میں متن کے عنوانات کے بجائے تصویری لوگو دکھائیں۔ بطور ڈیفالٹ فعال۔",
+        "logosLabel": "تصویری لوگوز",
+        "logosNotice": "زیادہ تر وقت، لوگو صرف انگریزی ہوتے ہیں۔ دوسری زبانیں اسے غیر فعال کر سکتی ہیں!",
+        "minimalCards": "کم سے کم کارڈز",
+        "minimalCardsDescription": "میڈیا کارڈز پر متنی مواد (عنوان، قسم، سال) چھپائیں، صرف پوسٹر کی تصویر دکھائیں۔",
+        "minimalCardsLabel": "کم سے کم کارڈز",
+        "modal": "تفصیلات کا ماڈل",
+        "modalDescription": "جب آپ واچ پیج پر جانے کے بجائے میڈیا کارڈ پر کلک کرتے ہیں تو تفصیلات کا ماڈل دکھائیں۔ ٹریلر کے لیے پراکسی یا ایکسٹینشن درکار ہے۔ بطور ڈیفالٹ غیر فعال۔",
+        "modalLabel": "تفصیلات کا ماڈل",
+        "pauseOverlay": "اوورلے کو روکیں۔",
+        "pauseOverlayDescription": "جب پلیئر موقوف اور بیکار ہو تو عنوان/لوگو اور تفصیل اوورلے دکھائیں۔",
+        "pauseOverlayLabel": "اوورلے کو روکیں۔"
       },
       "sections": {
-        "bookmarks": "Bookmarks",
-        "watching": "Currently Watching"
+        "bookmarks": "بک مارکس",
+        "watching": "فی الحال دیکھ رہے ہیں۔"
       },
       "themes": {
-        "acid": "Acid",
-        "autumn": "Autumn",
-        "blue": "Blue",
-        "christmas": "Christmas",
-        "classic": "Classic",
-        "cobalt": "Cobalt",
-        "custom": "Custom",
-        "default": "Default",
-        "ember": "Ember",
-        "forest": "Forest",
-        "frost": "Frost",
-        "grape": "Grape",
-        "gray": "Gray",
-        "green": "Green",
-        "hulk": "Hulk",
-        "mocha": "Mocha",
-        "noir": "Noir",
-        "pink": "Pink",
-        "popsicle": "Popsicle",
-        "red": "Red",
-        "spark": "Spark",
-        "spiderman": "Spiderman",
-        "teal": "Teal",
-        "wolverine": "Wolverine"
+        "acid": "تیزاب",
+        "autumn": "خزاں",
+        "blue": "نیلا",
+        "christmas": "کرسمس",
+        "classic": "کلاسک",
+        "cobalt": "کوبالٹ",
+        "custom": "حسب ضرورت",
+        "default": "طے شدہ",
+        "ember": "انگارا",
+        "forest": "جنگل",
+        "frost": "ٹھنڈ",
+        "grape": "انگور",
+        "gray": "گرے",
+        "green": "سبز",
+        "hulk": "ہلک",
+        "mocha": "موچا",
+        "noir": "نوئر",
+        "pink": "گلابی",
+        "popsicle": "پاپسیکل",
+        "red": "سرخ",
+        "spark": "چنگاری",
+        "spiderman": "سپائیڈر مین",
+        "teal": "ٹیل",
+        "wolverine": "وولورین"
       },
-      "title": "Appearance"
+      "title": "ظاہری شکل"
     },
     "connections": {
       "server": {
-        "changeWarning": "Changing backend server will log you out. Continue?",
-        "changeWarningTitle": "Change Backend Server",
-        "error": "Error connecting to backend",
-        "notice": "Your account does NOT sync between backends, so remember which one you use!"
+        "changeWarning": "بیک اینڈ سرور کو تبدیل کرنے سے آپ لاگ آؤٹ ہو جائیں گے۔ جاری رکھیں؟",
+        "changeWarningTitle": "بیک اینڈ سرور کو تبدیل کریں۔",
+        "error": "بیک اینڈ سے منسلک ہونے میں خرابی۔",
+        "notice": "آپ کا اکاؤنٹ بیک اینڈ کے درمیان مطابقت پذیر نہیں ہوتا ہے، لہذا یاد رکھیں کہ آپ کون سا استعمال کرتے ہیں!"
       },
       "tidb": {
-        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
-        "tokenLabel": "API Key"
+        "description": "انٹرو، ریکیپ، اور کریڈٹس سیگمنٹس پر تاثرات چھوڑ کر TheIntroDB میں تعاون کریں۔ <0>مزید جانیں۔</0>",
+        "tokenLabel": "API کلید"
       },
-      "title": "Connections"
+      "title": "کنکشنز"
     },
     "preferences": {
-      "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
-      "autoplayLabel": "Autoplay",
-      "autoResumeOnPlaybackError": "Auto resume on playback error",
-      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
-      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
-      "autoSkipSegments": "Auto Skip Segments",
-      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
-      "autoSkipSegmentsLabel": "Auto skip segments",
-      "doubleClickToSeek": "Double tap to seek",
-      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
-      "doubleClickToSeekLabel": "Enable double tap to seek",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
-      "keyboardShortcuts": "Keyboard Shortcuts",
-      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
-      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
-      "language": "Application language",
-      "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source",
-      "lowPerformanceMode": "Low performance/bandwidth mode",
-      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
-      "lowPerformanceModeLabel": "Low performance mode",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
-      "showLess": "Show less",
-      "showMore": "Show more",
-      "skipCredits": "Skip End Credits",
-      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
-      "skipCreditsLabel": "Skip end credits",
-      "sourceOrder": "Reordering sources",
+      "autoplay": "آٹو پلے",
+      "autoplayDescription": "اختتام تک پہنچنے کے بعد خودکار طور پر سیریز میں اگلی قسط چلائیں۔ براؤزر ایکسٹینشن، کسٹم پراکسی، یا میزبان کی طرف سے اجازت ہونے پر پہلے سے طے شدہ سیٹ اپ کے ساتھ صارفین کے ذریعے فعال کیا جا سکتا ہے۔",
+      "autoplayLabel": "آٹو پلے",
+      "autoResumeOnPlaybackError": "پلے بیک کی خرابی پر آٹو ریزیوم",
+      "autoResumeOnPlaybackErrorDescription": "پلے بیک کے دوران موجودہ ماخذ کے ناکام ہونے پر خودکار طور پر دوسرے ذرائع کی تلاش جاری رکھیں۔ غیر فعال ہونے پر، آپ کو دستی دوبارہ شروع کرنے کے اختیار کے ساتھ ایک ایرر اسکرین نظر آئے گی۔",
+      "autoResumeOnPlaybackErrorLabel": "پلے بیک کی خرابی پر آٹو ریزیوم",
+      "autoSkipSegments": "آٹو سکپ سیگمنٹس",
+      "autoSkipSegmentsDescription": "فعال ہونے پر، دیکھتے وقت خود بخود تعارف، ریکیپ، اور پیش نظارہ سیگمنٹس کو چھوڑ دیں۔",
+      "autoSkipSegmentsLabel": "سیگمنٹس کو خودکار طور پر چھوڑیں۔",
+      "doubleClickToSeek": "تلاش کرنے کے لیے دو بار تھپتھپائیں۔",
+      "doubleClickToSeekDescription": "10 سیکنڈ آگے یا پیچھے جانے کے لیے پلیئر کے بائیں یا دائیں جانب دو بار تھپتھپائیں۔",
+      "doubleClickToSeekLabel": "تلاش کرنے کے لیے ڈبل تھپتھپائیں کو فعال کریں۔",
+      "embedOrder": "ایمبیڈز کو دوبارہ ترتیب دینا",
+      "embedOrderDescription": "ایمبیڈس کو دوبارہ ترتیب دینے کے لیے گھسیٹیں اور چھوڑیں۔ یہ اس ترتیب کا تعین کرے گا جس میں آپ جس میڈیا کو دیکھنے کی کوشش کر رہے ہیں اس کے لیے ایمبیڈز کو چیک کیا جاتا ہے۔ <br>PH_1__ <strong>(زیادہ تر صارفین کے لئے پہلے سے طے شدہ آرڈر بہترین ہے)</strong>",
+      "embedOrderEnableLabel": "حسب ضرورت ایمبیڈ آرڈر",
+      "holdToBoost": "رفتار بڑھانے کے لیے پکڑو",
+      "holdToBoostDescription": "اسپیس بار کو تھامیں یا پلے بیک کی رفتار کو عارضی طور پر 2x تک بڑھانے کے لیے اسکرین کو ٹچ اور تھامیں۔ پچھلی رفتار پر واپس جانے کے لیے ریلیز کریں۔",
+      "holdToBoostLabel": "فروغ دینے کے لیے ہولڈ کو فعال کریں۔",
+      "keyboardShortcuts": "کی بورڈ شارٹ کٹس",
+      "keyboardShortcutsDescription": "ایپلیکیشن کے لیے کی بورڈ شارٹ کٹس کو حسب ضرورت بنائیں۔ کسی بھی وقت یہ مدد دکھانے کے لیے ` کو دبائے رکھیں",
+      "keyboardShortcutsLabel": "کی بورڈ شارٹ کٹس کو حسب ضرورت بنائیں",
+      "language": "درخواست کی زبان",
+      "languageDescription": "پوری ایپلیکیشن پر زبان کا اطلاق ہوتا ہے، صرف انگریزی میں بے وقوف چیزیں ہیں 🙁۔",
+      "lastSuccessfulSource": "آخری استعمال شدہ ماخذ",
+      "lastSuccessfulSourceDescription": "خودکار طور پر اس ماخذ کو ترجیح دیں جس نے پچھلی ایپی سوڈ کے لیے کامیابی کے ساتھ مواد فراہم کیا۔ اس سے سیریز دیکھتے وقت تسلسل کو یقینی بنانے میں مدد ملتی ہے۔",
+      "lastSuccessfulSourceEnableLabel": "آخری استعمال شدہ ماخذ",
+      "lowPerformanceMode": "کم کارکردگی/بینڈوڈتھ موڈ",
+      "lowPerformanceModeDescription": "بینڈوڈتھ بھاری خصوصیات کو غیر فعال کر کے سست کنکشنز اور آلات کے لیے ایپلیکیشن کو بہتر بناتا ہے۔ یہ موڈ ڈیٹا کے استعمال کو کم کرتا ہے اور بنیادی تلاش اور گھڑی کی فعالیت کو برقرار رکھتے ہوئے کارکردگی کو بہتر بناتا ہے۔",
+      "lowPerformanceModeLabel": "کم کارکردگی کا موڈ",
+      "manualSource": "دستی ذریعہ کا انتخاب",
+      "manualSourceDescription": "سکریپنگ سے پہلے ایک ذریعہ منتخب کرنے کی ضرورت ہے. خودکار ذریعہ انتخاب کو غیر فعال کرتا ہے اور پلے بیک شروع کرنے پر سورس چننے والا کھولتا ہے۔",
+      "manualSourceLabel": "دستی ذریعہ کا انتخاب",
+      "showLess": "کم دکھائیں۔",
+      "showMore": "مزید دکھائیں",
+      "skipCredits": "اینڈ کریڈٹس کو چھوڑیں۔",
+      "skipCreditsDescription": "فعال ہونے پر، اختتامی کریڈٹس کو چھوڑنے کے لیے خود بخود اگلا ایپی سوڈ 99% مکمل ہونے پر چلائیں۔ غیر فعال ہونے پر، قسط مکمل ہونے تک انتظار کریں۔",
+      "skipCreditsLabel": "اختتامی کریڈٹ کو چھوڑیں۔",
+      "sourceOrder": "ذرائع کو دوبارہ ترتیب دینا",
       "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
-      "thumbnail": "Generate thumbnails",
-      "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
-      "thumbnailLabel": "Generate thumbnails",
-      "title": "Preferences"
+      "sourceOrderEnableLabel": "کسٹم سورس آرڈر",
+      "thumbnail": "تھمب نیلز بنائیں",
+      "thumbnailDescription": "زیادہ تر وقت، ویڈیوز میں تھمب نیلز نہیں ہوتے ہیں۔ آپ اس ترتیب کو فلائی پر تیار کرنے کے لیے فعال کر سکتے ہیں لیکن وہ آپ کی ویڈیو کو سست بنا سکتے ہیں۔",
+      "thumbnailLabel": "تھمب نیلز بنائیں",
+      "title": "ترجیحات"
     },
-    "reset": "Reset",
-    "save": "Save",
+    "reset": "دوبارہ ترتیب دیں۔",
+    "save": "محفوظ کریں۔",
     "search": {
-      "placeholder": "Search settings..."
+      "placeholder": "تلاش کی ترتیبات..."
     },
     "sidebar": {
       "info": {
-        "notLoggedIn": "You are not logged in",
-        "userId": "User ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "notLoggedIn": "آپ لاگ ان نہیں ہیں۔",
+        "userId": "یوزر آئی ڈی",
+        "userIdDescription": "اسے اپنے دوست کے رجسٹر کے لیے دعوتی کوڈ کے طور پر استعمال کریں۔"
       }
     },
     "subtitles": {
-      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
-      "backgroundBlurEnabledLabel": "Background blur",
-      "backgroundBlurLabel": "Background blur intensity",
-      "backgroundLabel": "Background opacity",
-      "BorderThicknessLabel": "Border Thickness",
-      "colorLabel": "Color",
-      "high": "High",
-      "low": "Default",
-      "previewQuote": "Convinced life is meaningless, I lack the courage of my conviction.",
-      "textBoldLabel": "Bold text",
-      "textSizeLabel": "Text size",
+      "backgroundBlurEnabledDescription": "کیپشن کے پس منظر کے دھندلے کو غیر فعال کرنے سے کچھ ٹمٹماتے مسائل حل ہو سکتے ہیں۔",
+      "backgroundBlurEnabledLabel": "پس منظر کا دھندلا پن",
+      "backgroundBlurLabel": "پس منظر کے دھندلا پن کی شدت",
+      "backgroundLabel": "پس منظر کی دھندلاپن",
+      "BorderThicknessLabel": "سرحد کی موٹائی",
+      "colorLabel": "رنگ",
+      "high": "اعلی",
+      "low": "طے شدہ",
+      "previewQuote": "یقین کی زندگی بے معنی ہے، مجھ میں اپنے یقین کی ہمت نہیں ہے۔",
+      "textBoldLabel": "بولڈ ٹیکسٹ",
+      "textSizeLabel": "متن کا سائز",
       "textStyle": {
-        "Border": "Border",
-        "default": "Default",
-        "depressed": "Depressed",
-        "dropShadow": "Drop Shadow",
-        "raised": "Raised",
-        "title": "Text style"
+        "Border": "بارڈر",
+        "default": "طے شدہ",
+        "depressed": "افسردہ",
+        "dropShadow": "ڈراپ شیڈو",
+        "raised": "اٹھایا",
+        "title": "متن کا انداز"
       },
-      "title": "Subtitles",
-      "verticalPositionLabel": "Vertical position"
+      "title": "سب ٹائٹلز",
+      "verticalPositionLabel": "عمودی پوزیشن"
     },
-    "unsaved": "You have unsaved changes... "
+    "unsaved": "آپ کے پاس غیر محفوظ شدہ تبدیلیاں ہیں..."
   },
   "tmdb": {
     "genres": {
@@ -1116,39 +1116,39 @@
     }
   },
   "watchParty": {
-    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
-    "alone": "Alone",
-    "behindHost": "Behind host by {{seconds}} seconds",
-    "cancel": "Cancel",
-    "connectedAsGuest": "Connected to watch party as guest",
-    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
-    "copyCode": "Click to copy",
-    "emptyRoom": "No one is in this room yet",
+    "aheadOfHost": "میزبان سے {{seconds}} سیکنڈ آگے",
+    "alone": "اکیلا",
+    "behindHost": "میزبان کے پیچھے {{seconds}} سیکنڈ",
+    "cancel": "منسوخ کریں۔",
+    "connectedAsGuest": "مہمان کے طور پر پارٹی دیکھنے سے منسلک ہے۔",
+    "contentMismatch": "واچ پارٹی میں شامل نہیں ہو سکتا: مواد میزبان کے مواد سے میل نہیں کھاتا۔",
+    "copyCode": "کاپی کرنے کے لیے کلک کریں۔",
+    "emptyRoom": "اس کمرے میں ابھی تک کوئی نہیں ہے۔",
     "enterCodeOrLink": "مشترکہ واچ پارٹی کا لنک یا کمرے کا کوڈ درج کریں۔",
-    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
+    "episodeMismatch": "واچ پارٹی میں شامل نہیں ہو سکتے: آپ میزبان سے مختلف ایپی سوڈ دیکھ رہے ہیں۔",
     "guestFallback": "مہمان",
-    "hosting": "Hosting",
-    "hostParty": "Host a Watch Party",
-    "invalidRoom": "Unable to connect to this room",
+    "hosting": "ہوسٹنگ",
+    "hostParty": "واچ پارٹی کی میزبانی کریں۔",
+    "invalidRoom": "اس کمرے سے جڑنے سے قاصر",
     "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
     "isHost": "Hosting on <0>{{backendName}}</0>",
-    "join": "Join",
-    "joinParty": "Join a Watch Party",
-    "leaveWatchParty": "Leave Watch Party",
-    "linkCopied": "Copied!",
-    "noHost": "No host in this watch party",
-    "save": "Save",
-    "shareCode": "Share this code with friends (click to copy link)",
-    "showStatusOverlay": "Show status overlay",
+    "join": "شمولیت",
+    "joinParty": "واچ پارٹی میں شامل ہوں۔",
+    "leaveWatchParty": "واچ پارٹی چھوڑ دو",
+    "linkCopied": "نقل کیا گیا!",
+    "noHost": "اس واچ پارٹی میں کوئی میزبان نہیں ہے۔",
+    "save": "محفوظ کریں۔",
+    "shareCode": "اس کوڈ کو دوستوں کے ساتھ شیئر کریں (لنک کاپی کرنے کے لیے کلک کریں)",
+    "showStatusOverlay": "اسٹیٹس اوورلے دکھائیں۔",
     "status": {
-      "inSync": "In sync",
-      "outOfSync": "Out of sync"
+      "inSync": "مطابقت پذیری میں",
+      "outOfSync": "مطابقت پذیری سے باہر"
     },
-    "syncing": "Syncing...",
-    "validating": "Validating watch party...",
-    "viewers": "Viewers ({{count}})",
-    "watching": "Watching",
-    "withCount": "With {{count}} others",
+    "syncing": "مطابقت پذیری ہو رہی ہے...",
+    "validating": "واچ پارٹی کی توثیق ہو رہی ہے...",
+    "viewers": "ناظرین ({{count}})",
+    "watching": "دیکھ رہا ہے۔",
+    "withCount": "{{count}} دوسروں کے ساتھ",
     "you": "آپ"
   }
 }
