@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Φόρτωση εφαρμογής...",
+    "loadingUser": "Φόρτωση προφίλ χρήστη...",
     "loadingUserError": {
       "disconectCancel": "Ματαίωση",
       "disconnectConfirm": "Επιβεβαιώνω",

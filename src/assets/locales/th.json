@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "กำลังโหลดแอป...",
+    "loadingUser": "กำลังโหลดโปรไฟล์ผู้ใช้...",
     "loadingUserError": {
       "disconectCancel": "ยกเลิก",
       "disconnectConfirm": "ยืนยัน",

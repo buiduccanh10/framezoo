@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Приложението се зарежда...",
+    "loadingUser": "Потребителският профил се зарежда...",
     "loadingUserError": {
       "disconectCancel": "Отказ",
       "disconnectConfirm": "Потвърдете",

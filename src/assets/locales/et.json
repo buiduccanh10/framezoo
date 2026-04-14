@@ -95,7 +95,7 @@
     }
   },
   "details": {
-    "airs": "Airs",
+    "airs": "Õhud",
     "collection": {
       "movie": "Film",
       "movies": "Filmid",
@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Rakenduse laadimine...",
+    "loadingUser": "Kasutajaprofiili laadimine...",
     "loadingUserError": {
       "disconectCancel": "Tühista",
       "disconnectConfirm": "Kinnita",

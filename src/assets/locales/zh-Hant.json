@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "正在載入應用程式...",
+    "loadingUser": "正在載入用戶個人資料...",
     "loadingUserError": {
       "disconectCancel": "取消",
       "disconnectConfirm": "確認",

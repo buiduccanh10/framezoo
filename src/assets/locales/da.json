@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Indlæser app...",
+    "loadingUser": "Indlæser brugerprofil...",
     "loadingUserError": {
       "disconectCancel": "Ophæve",
       "disconnectConfirm": "Bekræfte",

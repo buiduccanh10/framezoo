@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Đang tải ứng dụng...",
+    "loadingUser": "Đang tải hồ sơ người dùng...",
     "loadingUserError": {
       "disconectCancel": "Hủy",
       "disconnectConfirm": "Xác nhận",

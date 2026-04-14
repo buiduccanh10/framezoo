@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "جارٍ تحميل التطبيق...",
+    "loadingUser": "جارٍ تحميل ملف تعريف المستخدم...",
     "loadingUserError": {
       "disconectCancel": "يلغي",
       "disconnectConfirm": "يتأكد",

@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Загрузка приложения...",
+    "loadingUser": "Загрузка профиля пользователя...",
     "loadingUserError": {
       "disconectCancel": "Отмена",
       "disconnectConfirm": "Подтверждать",

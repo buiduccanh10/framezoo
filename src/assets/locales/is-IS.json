@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Hleður forriti...",
+    "loadingUser": "Hleður notandaprófíl...",
     "loadingUserError": {
       "disconectCancel": "Hætta við",
       "disconnectConfirm": "Staðfesta",

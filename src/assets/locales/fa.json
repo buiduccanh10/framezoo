@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "در حال بارگیری برنامه...",
+    "loadingUser": "در حال بارگیری نمایه کاربر...",
     "loadingUserError": {
       "disconectCancel": "لغو کنید",
       "disconnectConfirm": "تایید کنید",

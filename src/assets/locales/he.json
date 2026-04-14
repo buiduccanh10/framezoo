@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "טוען אפליקציה...",
+    "loadingUser": "טוען פרופיל משתמש...",
     "loadingUserError": {
       "disconectCancel": "לְבַטֵל",
       "disconnectConfirm": "לְאַשֵׁר",

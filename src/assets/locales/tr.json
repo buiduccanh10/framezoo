@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Uygulama yükleniyor...",
+    "loadingUser": "Kullanıcı profili yükleniyor...",
     "loadingUserError": {
       "disconectCancel": "İptal etmek",
       "disconnectConfirm": "Onaylamak",

@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Завантаження програми...",
+    "loadingUser": "Завантаження профілю користувача...",
     "loadingUserError": {
       "disconectCancel": "Скасувати",
       "disconnectConfirm": "Підтвердити",

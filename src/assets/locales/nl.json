@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "App laden...",
+    "loadingUser": "Gebruikersprofiel laden...",
     "loadingUserError": {
       "disconectCancel": "Annuleren",
       "disconnectConfirm": "Bevestigen",

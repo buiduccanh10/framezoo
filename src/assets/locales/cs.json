@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Načítání aplikace...",
+    "loadingUser": "Načítání uživatelského profilu...",
     "loadingUserError": {
       "disconectCancel": "Zrušit",
       "disconnectConfirm": "Potvrdit",

@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "பயன்பாட்டை ஏற்றுகிறது...",
+    "loadingUser": "பயனர் சுயவிவரத்தை ஏற்றுகிறது...",
     "loadingUserError": {
       "disconectCancel": "ரத்து செய்",
       "disconnectConfirm": "உறுதிப்படுத்தவும்",

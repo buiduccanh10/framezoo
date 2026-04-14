@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Laddar app...",
+    "loadingUser": "Laddar användarprofil...",
     "loadingUserError": {
       "disconectCancel": "Avboka",
       "disconnectConfirm": "Bekräfta",

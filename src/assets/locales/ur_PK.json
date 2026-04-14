@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "ایپ لوڈ ہو رہی ہے...",
+    "loadingUser": "صارف کا پروفائل لوڈ ہو رہا ہے...",
     "loadingUserError": {
       "disconectCancel": "منسوخ کریں۔",
       "disconnectConfirm": "تصدیق کریں۔",

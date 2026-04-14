@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "एप लोड गर्दै...",
+    "loadingUser": "प्रयोगकर्ता प्रोफाइल लोड गर्दै...",
     "loadingUserError": {
       "disconectCancel": "रद्द गर्नुहोस्",
       "disconnectConfirm": "पुष्टि गर्नुहोस्",

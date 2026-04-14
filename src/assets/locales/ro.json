@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Se încarcă aplicația...",
+    "loadingUser": "Se încarcă profilul utilizatorului...",
     "loadingUserError": {
       "disconectCancel": "Anula",
       "disconnectConfirm": "Confirma",

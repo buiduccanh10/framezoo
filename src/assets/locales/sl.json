@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Nalaganje aplikacije ...",
+    "loadingUser": "Nalaganje uporabniškega profila ...",
     "loadingUserError": {
       "disconectCancel": "Prekliči",
       "disconnectConfirm": "Potrdi",

@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "অ্যাপ লোড হচ্ছে...",
+    "loadingUser": "ব্যবহারকারীর প্রোফাইল লোড হচ্ছে...",
     "loadingUserError": {
       "disconectCancel": "বাতিল করুন",
       "disconnectConfirm": "নিশ্চিত করুন",

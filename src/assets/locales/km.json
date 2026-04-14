@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "កំពុងផ្ទុកកម្មវិធី...",
+    "loadingUser": "កំពុងផ្ទុកកម្រងព័ត៌មានអ្នកប្រើប្រាស់...",
     "loadingUserError": {
       "disconectCancel": "បោះបង់",
       "disconnectConfirm": "បញ្ជាក់",

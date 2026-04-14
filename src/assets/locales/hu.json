@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Alkalmazás betöltése...",
+    "loadingUser": "Felhasználói profil betöltése...",
     "loadingUserError": {
       "disconectCancel": "Mégsem",
       "disconnectConfirm": "Erősítse meg",

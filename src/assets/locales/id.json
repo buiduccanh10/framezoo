@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Memuat aplikasi...",
+    "loadingUser": "Memuat profil pengguna...",
     "loadingUserError": {
       "disconectCancel": "Membatalkan",
       "disconnectConfirm": "Mengonfirmasi",

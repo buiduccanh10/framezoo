@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "アプリを読み込んでいます...",
+    "loadingUser": "ユーザープロファイルをロード中...",
     "loadingUserError": {
       "disconectCancel": "キャンセル",
       "disconnectConfirm": "確認する",

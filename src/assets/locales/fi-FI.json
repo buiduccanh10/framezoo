@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Ladataan sovellusta...",
+    "loadingUser": "Ladataan käyttäjäprofiilia...",
     "loadingUserError": {
       "disconectCancel": "Peruuttaa",
       "disconnectConfirm": "Vahvistaa",

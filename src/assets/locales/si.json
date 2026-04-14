@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "යෙදුම පූරණය කරමින්...",
+    "loadingUser": "පරිශීලක පැතිකඩ පූරණය කරමින්...",
     "loadingUserError": {
       "disconectCancel": "අවලංගු කරන්න",
       "disconnectConfirm": "තහවුරු කරන්න",

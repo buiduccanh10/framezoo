@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "앱 로드 중...",
+    "loadingUser": "사용자 프로필 로드 중...",
     "loadingUserError": {
       "disconectCancel": "취소",
       "disconnectConfirm": "확인하다",

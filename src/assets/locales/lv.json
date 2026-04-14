@@ -876,6 +876,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Notiek lietotnes ielāde...",
+    "loadingUser": "Notiek lietotāja profila ielāde...",
     "loadingUserError": {
       "disconectCancel": "Atcelt",
       "disconnectConfirm": "Apstiprināt",
