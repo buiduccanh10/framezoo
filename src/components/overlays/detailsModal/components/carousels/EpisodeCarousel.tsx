@@ -14,6 +14,28 @@ import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { EpisodeCarouselProps } from "../../types";
 
 const EMPTY_ARRAY: string[] = [];
+const EPISODE_GROUP_SIZE = 100;
+
+interface EpisodeGroup {
+  index: number;
+  label: string;
+}
+
+function createEpisodeGroups(episodes: EpisodeCarouselProps["episodes"]) {
+  const groups: EpisodeGroup[] = [];
+
+  for (let index = 0; index < episodes.length; index += EPISODE_GROUP_SIZE) {
+    const groupEpisodes = episodes.slice(index, index + EPISODE_GROUP_SIZE);
+    if (groupEpisodes.length === 0) continue;
+
+    groups.push({
+      index: Math.floor(index / EPISODE_GROUP_SIZE),
+      label: `${groupEpisodes[0].episode_number}-${groupEpisodes[groupEpisodes.length - 1].episode_number}`,
+    });
+  }
+
+  return groups;
+}
 
 export function EpisodeCarousel({
   episodes,
@@ -39,6 +61,7 @@ export function EpisodeCarousel({
   }>({});
   const [showFavorites, setShowFavorites] = useState(false);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState<any[]>([]);
+  const [selectedEpisodeGroupIndex, setSelectedEpisodeGroupIndex] = useState(0);
   const episodeMenuRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const activeEpisodeRef = useRef<HTMLAnchorElement>(null);
@@ -67,41 +90,16 @@ export function EpisodeCarousel({
 
   // Function to generate the episode URL
   const getEpisodeUrl = (episode: any) => {
-    // Find the season ID for the current season
-    const season = seasons.find((s) => s.season_number === selectedSeason);
+    const targetSeasonNumber = showFavorites
+      ? episode.season_number
+      : selectedSeason;
+    const season = seasons.find((s) => s.season_number === targetSeasonNumber);
 
     if (!season || !mediaId || !mediaTitle) return "#";
 
     // Create the URL in the format: /media/tmdb-tv-{showId}-{showName}/{seasonId}/{episodeId}
     return `/media/tmdb-tv-${mediaId}-${mediaTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}/${season.id}/${episode.id}`;
   };
-
-  useEffect(() => {
-    if (carouselRef.current) {
-      if (activeEpisodeRef.current) {
-        // If there's an active episode, scroll to it
-        const containerLeft = carouselRef.current.getBoundingClientRect().left;
-        const containerWidth = carouselRef.current.clientWidth;
-        const elementLeft =
-          activeEpisodeRef.current.getBoundingClientRect().left;
-        const elementWidth = activeEpisodeRef.current.clientWidth;
-
-        const scrollPosition =
-          elementLeft - containerLeft - containerWidth / 2 + elementWidth / 2;
-
-        carouselRef.current.scrollTo({
-          left: carouselRef.current.scrollLeft + scrollPosition,
-          behavior: "smooth",
-        });
-      } else {
-        // If no active episode, scroll to the start
-        carouselRef.current.scrollTo({
-          left: 0,
-          behavior: "smooth",
-        });
-      }
-    }
-  }, [episodes, showProgress]);
 
   // Add click outside handler for episode menu
   useEffect(() => {
@@ -165,7 +163,7 @@ export function EpisodeCarousel({
       const episode = episodes.find((ep) => ep.id === episodeId);
       if (episode) {
         const seasonData = seasons.find(
-          (s) => s.season_number === selectedSeason,
+          (s) => s.season_number === episode.season_number,
         );
         if (!seasonData) return;
 
@@ -201,7 +199,7 @@ export function EpisodeCarousel({
             },
             season: {
               tmdbId: seasonData.id.toString(),
-              number: selectedSeason,
+              number: episode.season_number,
               title: seasonData.name || "",
             },
           },
@@ -218,6 +216,7 @@ export function EpisodeCarousel({
     (s) => s.toggleFavoriteEpisode,
   );
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
+  const activeEpisodeId = showProgress?.episode?.id ?? null;
 
   const toggleFavoriteStatus = (episodeId: number, event: React.MouseEvent) => {
     event.preventDefault();
@@ -243,9 +242,27 @@ export function EpisodeCarousel({
     confirmModal.hide();
   };
 
-  const currentSeasonEpisodes = episodes.filter(
-    (ep) => ep.season_number === selectedSeason,
+  const currentSeasonEpisodes = useMemo(
+    () => episodes.filter((ep) => ep.season_number === selectedSeason),
+    [episodes, selectedSeason],
   );
+  const episodeGroups = useMemo(
+    () => (showFavorites ? [] : createEpisodeGroups(currentSeasonEpisodes)),
+    [currentSeasonEpisodes, showFavorites],
+  );
+  const shouldGroupEpisodes = episodeGroups.length > 1;
+  const visibleSeasonEpisodes = useMemo(() => {
+    if (!shouldGroupEpisodes) return currentSeasonEpisodes;
+
+    const startIndex = selectedEpisodeGroupIndex * EPISODE_GROUP_SIZE;
+    return currentSeasonEpisodes.slice(
+      startIndex,
+      startIndex + EPISODE_GROUP_SIZE,
+    );
+  }, [currentSeasonEpisodes, selectedEpisodeGroupIndex, shouldGroupEpisodes]);
+  const displayedEpisodes = showFavorites
+    ? favoriteEpisodes
+    : visibleSeasonEpisodes;
 
   // Get favorite episodes for this show
   const favoriteEpisodeIds = useBookmarkStore((s) =>
@@ -303,6 +320,35 @@ export function EpisodeCarousel({
       onSeasonChange(Number(item.id));
     }
   };
+
+  useEffect(() => {
+    setSelectedEpisodeGroupIndex(0);
+  }, [selectedSeason, showFavorites]);
+
+  useEffect(() => {
+    if (!shouldGroupEpisodes) {
+      setSelectedEpisodeGroupIndex(0);
+      return;
+    }
+
+    const activeEpisodeIndex = currentSeasonEpisodes.findIndex(
+      (episode) => episode.id.toString() === activeEpisodeId,
+    );
+    const maxGroupIndex = episodeGroups.length - 1;
+
+    setSelectedEpisodeGroupIndex((currentIndex) => {
+      if (activeEpisodeIndex >= 0) {
+        return Math.floor(activeEpisodeIndex / EPISODE_GROUP_SIZE);
+      }
+
+      return currentIndex > maxGroupIndex ? maxGroupIndex : currentIndex;
+    });
+  }, [
+    currentSeasonEpisodes,
+    episodeGroups.length,
+    shouldGroupEpisodes,
+    activeEpisodeId,
+  ]);
 
   const handleConfirm = (event: React.MouseEvent) => {
     try {
@@ -370,13 +416,13 @@ export function EpisodeCarousel({
   useEffect(() => {
     setExpandedEpisodes({});
     setTruncatedEpisodes({});
-  }, [selectedSeason]);
+  }, [selectedSeason, selectedEpisodeGroupIndex, showFavorites]);
 
   // Check truncation after render and when expanded state changes
   useEffect(() => {
     const checkTruncation = () => {
       const newTruncatedState: { [key: number]: boolean } = {};
-      episodes.forEach((episode) => {
+      displayedEpisodes.forEach((episode) => {
         if (!expandedEpisodes[episode.id]) {
           const element = descriptionRefs.current[episode.id];
           newTruncatedState[episode.id] = isTextTruncated(element);
@@ -400,7 +446,38 @@ export function EpisodeCarousel({
       clearTimeout(timeoutId);
       window.removeEventListener("resize", handleResize);
     };
-  }, [episodes, expandedEpisodes]);
+  }, [displayedEpisodes, expandedEpisodes]);
+
+  useEffect(() => {
+    if (!carouselRef.current) return;
+
+    if (activeEpisodeRef.current) {
+      const containerLeft = carouselRef.current.getBoundingClientRect().left;
+      const containerWidth = carouselRef.current.clientWidth;
+      const elementLeft = activeEpisodeRef.current.getBoundingClientRect().left;
+      const elementWidth = activeEpisodeRef.current.clientWidth;
+
+      const scrollPosition =
+        elementLeft - containerLeft - containerWidth / 2 + elementWidth / 2;
+
+      carouselRef.current.scrollTo({
+        left: carouselRef.current.scrollLeft + scrollPosition,
+        behavior: "smooth",
+      });
+      return;
+    }
+
+    carouselRef.current.scrollTo({
+      left: 0,
+      behavior: "smooth",
+    });
+  }, [
+    activeEpisodeId,
+    displayedEpisodes,
+    selectedEpisodeGroupIndex,
+    selectedSeason,
+    showFavorites,
+  ]);
 
   useEffect(() => {
     const episodeWatchedStatus: boolean[] = [];
@@ -501,6 +578,26 @@ export function EpisodeCarousel({
               })}
             </span>
           )}
+          {!showFavorites && shouldGroupEpisodes && (
+            <Dropdown
+              className="my-0"
+              menuClassName="max-h-72 whitespace-nowrap"
+              options={episodeGroups.map((group) => ({
+                id: group.index.toString(),
+                name: group.label,
+              }))}
+              selectedItem={{
+                id: selectedEpisodeGroupIndex.toString(),
+                name:
+                  episodeGroups.find(
+                    (group) => group.index === selectedEpisodeGroupIndex,
+                  )?.label ?? episodeGroups[0].label,
+              }}
+              setSelectedItem={(item) =>
+                setSelectedEpisodeGroupIndex(Number(item.id))
+              }
+            />
+          )}
         </div>
 
         {/* Season Watched Confirmation */}
@@ -599,220 +696,213 @@ export function EpisodeCarousel({
               </div>
             </div>
           ) : (
-            (showFavorites ? favoriteEpisodes : currentSeasonEpisodes).map(
-              (episode) => {
-                const isActive =
-                  showProgress?.episode?.id === episode.id.toString();
-                const episodeProgress =
-                  progress[mediaId?.toString() ?? ""]?.episodes?.[episode.id];
-                const percentage = episodeProgress
-                  ? getProgressPercentage(
-                      episodeProgress.progress.watched,
-                      episodeProgress.progress.duration,
-                    )
-                  : 0;
-                const isAired = hasAired(episode.air_date);
-                const isExpanded = expandedEpisodes[episode.id];
-                const isWatched = percentage > 90;
-                const isFavorited = mediaId
-                  ? (bookmarks[mediaId.toString()]?.favoriteEpisodes?.includes(
-                      episode.id.toString(),
-                    ) ?? false)
-                  : false;
+            displayedEpisodes.map((episode) => {
+              const isActive = activeEpisodeId === episode.id.toString();
+              const episodeProgress =
+                progress[mediaId?.toString() ?? ""]?.episodes?.[episode.id];
+              const percentage = episodeProgress
+                ? getProgressPercentage(
+                    episodeProgress.progress.watched,
+                    episodeProgress.progress.duration,
+                  )
+                : 0;
+              const isAired = hasAired(episode.air_date);
+              const isExpanded = expandedEpisodes[episode.id];
+              const isWatched = percentage > 90;
+              const isFavorited = mediaId
+                ? (bookmarks[mediaId.toString()]?.favoriteEpisodes?.includes(
+                    episode.id.toString(),
+                  ) ?? false)
+                : false;
 
-                return (
-                  <Link
-                    key={episode.id}
-                    to={getEpisodeUrl(episode)}
-                    ref={isActive ? activeEpisodeRef : null}
-                    className={classNames(
-                      "flex-shrink-0 transition-all duration-200 relative cursor-pointer hover:scale-95 rounded-lg overflow-hidden",
-                      isActive
-                        ? "bg-video-context-hoverColor/50 hover:bg-white/5"
-                        : "hover:bg-white/5",
-                      !isAired ? "opacity-50" : "",
-                      isExpanded ? "w-[32rem]" : "w-52 md:w-64",
-                      "h-[280px]", // Fixed height for all states
-                    )}
-                  >
-                    {/* Thumbnail */}
-                    {!isExpanded && (
-                      <div className="relative h-[158px] w-full bg-video-context-hoverColor">
-                        {episode.still_path ? (
-                          <img
-                            src={`https://image.tmdb.org/t/p/w300${episode.still_path}`}
-                            alt={episode.name}
-                            className="w-full h-full object-cover"
+              return (
+                <Link
+                  key={episode.id}
+                  to={getEpisodeUrl(episode)}
+                  ref={isActive ? activeEpisodeRef : null}
+                  className={classNames(
+                    "flex-shrink-0 transition-all duration-200 relative cursor-pointer hover:scale-95 rounded-lg overflow-hidden",
+                    isActive
+                      ? "bg-video-context-hoverColor/50 hover:bg-white/5"
+                      : "hover:bg-white/5",
+                    !isAired ? "opacity-50" : "",
+                    isExpanded ? "w-[32rem]" : "w-52 md:w-64",
+                    "h-[280px]", // Fixed height for all states
+                  )}
+                >
+                  {/* Thumbnail */}
+                  {!isExpanded && (
+                    <div className="relative h-[158px] w-full bg-video-context-hoverColor">
+                      {episode.still_path ? (
+                        <img
+                          src={`https://image.tmdb.org/t/p/w300${episode.still_path}`}
+                          alt={episode.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                          <Icon
+                            icon={Icons.FILM}
+                            className="text-video-context-type-main opacity-50 text-3xl"
                           />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                            <Icon
-                              icon={Icons.FILM}
-                              className="text-video-context-type-main opacity-50 text-3xl"
-                            />
-                          </div>
-                        )}
-
-                        {/* Episode Number Badge */}
-                        <div className="absolute top-2 left-2 flex items-center space-x-2">
-                          <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
-                            {showFavorites
-                              ? `S${episode.season_number}E${episode.episode_number}`
-                              : `${t("media.episodeShort")}${episode.episode_number}`}
-                          </span>
-                          {!isAired && (
-                            <span className="bg-video-context-hoverColor/50 text-video-context-type-main/80 text-sm px-1 py-0.5 rounded-md">
-                              {episode.air_date
-                                ? `(${t("details.airs")} - ${new Date(episode.air_date).toLocaleDateString()})`
-                                : `(${t("media.unreleased")})`}
-                            </span>
-                          )}
                         </div>
-
-                        {/* Mark as watched and favorite buttons */}
-                        {isAired && (
-                          <div className="absolute top-2 right-2 flex gap-1">
-                            <button
-                              type="button"
-                              onClick={(e) =>
-                                toggleFavoriteStatus(episode.id, e)
-                              }
-                              className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
-                              title={t("player.menus.episodes.markAsFavorite")}
-                            >
-                              <Icon
-                                icon={
-                                  isFavorited
-                                    ? Icons.BOOKMARK
-                                    : Icons.BOOKMARK_OUTLINE
-                                }
-                                className="h-8 w-8 text-white/80"
-                              />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={(e) => toggleWatchStatus(episode.id, e)}
-                              className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
-                              title={
-                                isWatched
-                                  ? t("player.menus.episodes.markAsUnwatched")
-                                  : t("player.menus.episodes.markAsWatched")
-                              }
-                            >
-                              <Icon
-                                icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
-                                className="h-4 w-4 text-white/80"
-                              />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Content */}
-                    <div
-                      className={classNames(
-                        "p-3",
-                        isExpanded ? "h-full" : "h-[122px]",
                       )}
-                    >
-                      <div className="flex items-start justify-between">
-                        <h3 className="font-bold text-white line-clamp-1">
-                          {episode.name}
-                        </h3>
-                        {isExpanded && isAired && (
-                          <div className="flex gap-1">
-                            <button
-                              type="button"
-                              onClick={(e) =>
-                                toggleFavoriteStatus(episode.id, e)
-                              }
-                              className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
-                              title={t("player.menus.episodes.markAsFavorite")}
-                            >
-                              <Icon
-                                icon={
-                                  isFavorited
-                                    ? Icons.BOOKMARK
-                                    : Icons.BOOKMARK_OUTLINE
-                                }
-                                className="h-8 w-8 text-white/80"
-                              />
-                            </button>
-                            <button
-                              type="button"
-                              onClick={(e) => toggleWatchStatus(episode.id, e)}
-                              className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
-                              title={
-                                isWatched
-                                  ? t("player.menus.episodes.markAsUnwatched")
-                                  : t("player.menus.episodes.markAsWatched")
-                              }
-                            >
-                              <Icon
-                                icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
-                                className="h-4 w-4 text-white/80"
-                              />
-                            </button>
-                          </div>
+
+                      {/* Episode Number Badge */}
+                      <div className="absolute top-2 left-2 flex items-center space-x-2">
+                        <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
+                          {showFavorites
+                            ? `S${episode.season_number}E${episode.episode_number}`
+                            : `${t("media.episodeShort")}${episode.episode_number}`}
+                        </span>
+                        {!isAired && (
+                          <span className="bg-video-context-hoverColor/50 text-video-context-type-main/80 text-sm px-1 py-0.5 rounded-md">
+                            {episode.air_date
+                              ? `(${t("details.airs")} - ${new Date(episode.air_date).toLocaleDateString()})`
+                              : `(${t("media.unreleased")})`}
+                          </span>
                         )}
                       </div>
-                      {episode.overview && (
-                        <div className="relative">
-                          <p
-                            ref={(el) => {
-                              descriptionRefs.current[episode.id] = el;
-                            }}
-                            className={classNames(
-                              "text-sm text-white/80 mt-1.5 transition-all duration-200",
-                              !isExpanded
-                                ? "line-clamp-2"
-                                : "max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2",
-                            )}
+
+                      {/* Mark as watched and favorite buttons */}
+                      {isAired && (
+                        <div className="absolute top-2 right-2 flex gap-1">
+                          <button
+                            type="button"
+                            onClick={(e) => toggleFavoriteStatus(episode.id, e)}
+                            className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                            title={t("player.menus.episodes.markAsFavorite")}
                           >
-                            {episode.overview}
-                          </p>
-                          {!isExpanded && truncatedEpisodes[episode.id] && (
-                            <button
-                              type="button"
-                              onClick={(e) =>
-                                toggleEpisodeExpansion(episode.id, e)
+                            <Icon
+                              icon={
+                                isFavorited
+                                  ? Icons.BOOKMARK
+                                  : Icons.BOOKMARK_OUTLINE
                               }
-                              className="text-sm text-white/60 hover:text-white transition-opacity duration-200 opacity-0 animate-fade-in"
-                            >
-                              {t("player.menus.episodes.showMore")}
-                            </button>
-                          )}
-                          {isExpanded && (
-                            <button
-                              type="button"
-                              onClick={(e) =>
-                                toggleEpisodeExpansion(episode.id, e)
-                              }
-                              className="mt-2 text-sm text-white/60 hover:text-white transition-opacity duration-200 opacity-0 animate-fade-in"
-                            >
-                              {t("player.menus.episodes.showLess")}
-                            </button>
-                          )}
+                              className="h-8 w-8 text-white/80"
+                            />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => toggleWatchStatus(episode.id, e)}
+                            className="p-1.5 bg-black/50 rounded-full hover:bg-black/80 transition-colors"
+                            title={
+                              isWatched
+                                ? t("player.menus.episodes.markAsUnwatched")
+                                : t("player.menus.episodes.markAsWatched")
+                            }
+                          >
+                            <Icon
+                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                              className="h-4 w-4 text-white/80"
+                            />
+                          </button>
                         </div>
                       )}
                     </div>
+                  )}
 
-                    {/* Progress Bar */}
-                    {percentage > 0 && (
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-progress-background/25">
-                        <div
-                          className="h-full bg-progress-filled"
-                          style={{
-                            width: `${percentage > 98 ? 100 : percentage}%`,
+                  {/* Content */}
+                  <div
+                    className={classNames(
+                      "p-3",
+                      isExpanded ? "h-full" : "h-[122px]",
+                    )}
+                  >
+                    <div className="flex items-start justify-between">
+                      <h3 className="font-bold text-white line-clamp-1">
+                        {episode.name}
+                      </h3>
+                      {isExpanded && isAired && (
+                        <div className="flex gap-1">
+                          <button
+                            type="button"
+                            onClick={(e) => toggleFavoriteStatus(episode.id, e)}
+                            className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
+                            title={t("player.menus.episodes.markAsFavorite")}
+                          >
+                            <Icon
+                              icon={
+                                isFavorited
+                                  ? Icons.BOOKMARK
+                                  : Icons.BOOKMARK_OUTLINE
+                              }
+                              className="h-8 w-8 text-white/80"
+                            />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => toggleWatchStatus(episode.id, e)}
+                            className="p-1.5 rounded-full hover:bg-white/20 transition-colors"
+                            title={
+                              isWatched
+                                ? t("player.menus.episodes.markAsUnwatched")
+                                : t("player.menus.episodes.markAsWatched")
+                            }
+                          >
+                            <Icon
+                              icon={isWatched ? Icons.EYE_SLASH : Icons.EYE}
+                              className="h-4 w-4 text-white/80"
+                            />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    {episode.overview && (
+                      <div className="relative">
+                        <p
+                          ref={(el) => {
+                            descriptionRefs.current[episode.id] = el;
                           }}
-                        />
+                          className={classNames(
+                            "text-sm text-white/80 mt-1.5 transition-all duration-200",
+                            !isExpanded
+                              ? "line-clamp-2"
+                              : "max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2",
+                          )}
+                        >
+                          {episode.overview}
+                        </p>
+                        {!isExpanded && truncatedEpisodes[episode.id] && (
+                          <button
+                            type="button"
+                            onClick={(e) =>
+                              toggleEpisodeExpansion(episode.id, e)
+                            }
+                            className="text-sm text-white/60 hover:text-white transition-opacity duration-200 opacity-0 animate-fade-in"
+                          >
+                            {t("player.menus.episodes.showMore")}
+                          </button>
+                        )}
+                        {isExpanded && (
+                          <button
+                            type="button"
+                            onClick={(e) =>
+                              toggleEpisodeExpansion(episode.id, e)
+                            }
+                            className="mt-2 text-sm text-white/60 hover:text-white transition-opacity duration-200 opacity-0 animate-fade-in"
+                          >
+                            {t("player.menus.episodes.showLess")}
+                          </button>
+                        )}
                       </div>
                     )}
-                  </Link>
-                );
-              },
-            )
+                  </div>
+
+                  {/* Progress Bar */}
+                  {percentage > 0 && (
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-progress-background/25">
+                      <div
+                        className="h-full bg-progress-filled"
+                        style={{
+                          width: `${percentage > 98 ? 100 : percentage}%`,
+                        }}
+                      />
+                    </div>
+                  )}
+                </Link>
+              );
+            })
           )}
 
           {/* Add padding after the last card */}
