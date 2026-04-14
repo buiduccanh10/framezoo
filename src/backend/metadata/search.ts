@@ -1,4 +1,5 @@
 import { SimpleCache } from "@/utils/cache";
+import { compareByRatingDesc } from "@/utils/compareByRatingDesc";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import {
@@ -71,17 +72,12 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
 
   const data = await multiSearch(searchQuery);
 
-  const results = data.map((v) => {
+  const results = [...data].sort(compareByRatingDesc).map((v) => {
     const formattedResult = formatTMDBSearchResult(v, v.media_type);
     return formatTMDBMetaToMediaItem(formattedResult);
   });
 
-  const movieWithPosters = results.filter((movie) => movie.poster);
-  const movieWithoutPosters = results.filter((movie) => !movie.poster);
-
-  const sortedresult = movieWithPosters.concat(movieWithoutPosters);
-
   // cache results for 1 hour
-  cache.set(query, sortedresult, 3600);
-  return sortedresult;
+  cache.set(query, results, 3600);
+  return results;
 }

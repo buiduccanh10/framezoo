@@ -369,9 +369,6 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             </DropdownLink>
           )}
           <Divider />
-          <DropdownLink href="/settings" icon={Icons.SETTINGS}>
-            {t("navigation.menu.settings")}
-          </DropdownLink>
           {isDesktopApp && (
             <DropdownLink
               onClick={() =>
@@ -384,11 +381,15 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               {t("navigation.menu.desktop")}
             </DropdownLink>
           )}
+          <DropdownLink href="/watch-history" icon={Icons.CLOCK}>
+            {t("home.watchHistory.sectionTitle")}
+          </DropdownLink>
           <DropdownLink href="/marked" icon={Icons.BOOKMARK}>
             {t("home.bookmarks.sectionTitle")}
           </DropdownLink>
-          <DropdownLink href="/watch-history" icon={Icons.CLOCK}>
-            {t("home.watchHistory.sectionTitle")}
+          <WatchPartyInputLink />
+          <DropdownLink href="/settings" icon={Icons.SETTINGS}>
+            {t("navigation.menu.settings")}
           </DropdownLink>
           {backendSupportsWatchParty && <WatchPartyInputLink />}
           {deviceName ? (

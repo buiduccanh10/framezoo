@@ -19,6 +19,7 @@ import type {
   UseDiscoverMediaReturn,
 } from "@/pages/discover/types/discover";
 import { useLanguageStore } from "@/stores/language";
+import { compareByRatingDesc } from "@/utils/compareByRatingDesc";
 import { getTmdbLanguageCode } from "@/utils/language";
 
 // Re-export types for backward compatibility
@@ -40,31 +41,6 @@ export {
   MOVIE_PROVIDERS,
   TV_PROVIDERS,
 };
-
-function compareByRatingDesc(
-  a: { vote_average?: number; vote_count?: number },
-  b: { vote_average?: number; vote_count?: number },
-) {
-  const MIN_CONFIDENT_VOTES = 50;
-  const BASELINE_RATING = 6.5;
-  const getWeightedScore = (item: {
-    vote_average?: number;
-    vote_count?: number;
-  }) => {
-    const votes = item.vote_count ?? 0;
-    const rating = item.vote_average ?? 0;
-    const weight = votes / (votes + MIN_CONFIDENT_VOTES);
-    return weight * rating + (1 - weight) * BASELINE_RATING;
-  };
-
-  const weightedDiff = getWeightedScore(b) - getWeightedScore(a);
-  if (weightedDiff !== 0) return weightedDiff;
-
-  const voteDiff = (b.vote_count ?? 0) - (a.vote_count ?? 0);
-  if (voteDiff !== 0) return voteDiff;
-
-  return (b.vote_average ?? 0) - (a.vote_average ?? 0);
-}
 
 export function useDiscoverOptions(
   mediaType: MediaType,
