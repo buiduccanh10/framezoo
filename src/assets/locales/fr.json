@@ -885,7 +885,9 @@
       "disconnectTitle": "Se déconnecter du back-end ?",
       "logout": "Se déconnecter",
       "reload": "Recharger",
-      "reset": "Réinitialiser le serveur personnalisé"
+      "reset": "Réinitialiser le serveur personnalisé",
+      "text": "Échec du chargement de votre profil utilisateur. Veuillez essayer de recharger la page.",
+      "textWithReset": "Échec du chargement de votre profil utilisateur à l'aide du serveur personnalisé actuel. Essayez de réinitialiser le serveur personnalisé, puis rechargez."
     },
     "migration": {
       "failed": "La migration de vos données a échoué.",

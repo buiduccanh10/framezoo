@@ -885,7 +885,9 @@
       "disconnectTitle": "Ngắt kết nối khỏi backend?",
       "logout": "Đăng xuất",
       "reload": "Tải lại",
-      "reset": "Đặt lại tùy chỉnh máy chủ"
+      "reset": "Đặt lại tùy chỉnh máy chủ",
+      "text": "Không thể tải hồ sơ người dùng của bạn. Vui lòng thử tải lại trang.",
+      "textWithReset": "Không thể tải hồ sơ người dùng của bạn bằng máy chủ tùy chỉnh hiện tại. Hãy thử đặt lại máy chủ tùy chỉnh và sau đó tải lại."
     },
     "migration": {
       "failed": "Di chuyển dữ liệu của bạn thất bại. 😿",

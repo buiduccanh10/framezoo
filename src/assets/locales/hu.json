@@ -885,7 +885,9 @@
       "disconnectTitle": "Lekapcsolja a háttérrendszert?",
       "logout": "Kijelentkezés",
       "reload": "Újratöltés",
-      "reset": "Egyéni szerver alap helyzetbe állítása"
+      "reset": "Egyéni szerver alap helyzetbe állítása",
+      "text": "Nem sikerült betölteni a felhasználói profilt. Kérjük, próbálja meg újratölteni az oldalt.",
+      "textWithReset": "Nem sikerült betölteni a felhasználói profilt a jelenlegi egyéni szerver használatával. Próbálja meg alaphelyzetbe állítani az egyéni kiszolgálót, majd töltse be újra."
     },
     "migration": {
       "failed": "Adataid átvitele sikertelen.",

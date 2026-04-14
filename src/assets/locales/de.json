@@ -885,7 +885,9 @@
       "disconnectTitle": "Verbindung zum Backend trennen?",
       "logout": "Abmelden",
       "reload": "Neu laden",
-      "reset": "Eigenen Server zurücksetzen"
+      "reset": "Eigenen Server zurücksetzen",
+      "text": "Ihr Benutzerprofil konnte nicht geladen werden. Bitte versuchen Sie, die Seite neu zu laden.",
+      "textWithReset": "Ihr Benutzerprofil konnte nicht über den aktuellen benutzerdefinierten Server geladen werden. Versuchen Sie, den benutzerdefinierten Server zurückzusetzen, und laden Sie ihn dann neu."
     },
     "migration": {
       "failed": "Beim Migrieren deiner Daten ist ein Fehler aufgetreten.",

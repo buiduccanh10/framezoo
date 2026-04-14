@@ -885,7 +885,9 @@
       "disconnectTitle": "Odpojit od backendu?",
       "logout": "Odhlásit se",
       "reload": "Znovu načíst",
-      "reset": "Resetovat vlastní server"
+      "reset": "Resetovat vlastní server",
+      "text": "Nepodařilo se načíst váš uživatelský profil. Zkuste prosím znovu načíst stránku.",
+      "textWithReset": "Nepodařilo se načíst váš uživatelský profil pomocí aktuálního vlastního serveru. Zkuste resetovat vlastní server a poté znovu načíst."
     },
     "migration": {
       "failed": "Migrace dat se nezdařila.",

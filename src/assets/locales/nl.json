@@ -885,7 +885,9 @@
       "disconnectTitle": "Verbinding met backend verbreken?",
       "logout": "Uitloggen",
       "reload": "Opnieuw laden",
-      "reset": "Aangepaste server resetten"
+      "reset": "Aangepaste server resetten",
+      "text": "Kan uw gebruikersprofiel niet laden. Probeer de pagina opnieuw te laden.",
+      "textWithReset": "Kan uw gebruikersprofiel niet laden met de huidige aangepaste server. Probeer de aangepaste server opnieuw in te stellen en laad vervolgens opnieuw."
     },
     "migration": {
       "failed": "Het migreren van uw gegevens is mislukt.",

@@ -885,7 +885,9 @@
       "disconnectTitle": "Putuskan sambungan dari backend?",
       "logout": "Keluar",
       "reload": "Muat ulang",
-      "reset": "Reset server khusus"
+      "reset": "Reset server khusus",
+      "text": "Gagal memuat profil pengguna Anda. Silakan coba memuat ulang halaman tersebut.",
+      "textWithReset": "Gagal memuat profil pengguna Anda menggunakan server khusus saat ini. Coba setel ulang server khusus lalu muat ulang."
     },
     "migration": {
       "failed": "Gagal memigrasi data anda.",

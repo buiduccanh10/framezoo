@@ -885,7 +885,9 @@
       "disconnectTitle": "Arka uçla bağlantı kesilsin mi?",
       "logout": "Çıkış yap",
       "reload": "Yeniden yükle",
-      "reset": "Özel sunucuyu sıfırla"
+      "reset": "Özel sunucuyu sıfırla",
+      "text": "Kullanıcı profiliniz yüklenemedi. Lütfen sayfayı yeniden yüklemeyi deneyin.",
+      "textWithReset": "Geçerli özel sunucuyu kullanarak kullanıcı profiliniz yüklenemedi. Özel sunucuyu sıfırlamayı ve ardından yeniden yüklemeyi deneyin."
     },
     "migration": {
       "failed": "Verileriniz taşınamadı.",

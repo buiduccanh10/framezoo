@@ -885,7 +885,9 @@
       "disconnectTitle": "Prekiniti povezavo z zaledjem?",
       "logout": "Odjava",
       "reload": "Ponovno naloži",
-      "reset": "Ponastavitev strežnika po meri"
+      "reset": "Ponastavitev strežnika po meri",
+      "text": "Vašega uporabniškega profila ni bilo mogoče naložiti. Poskusite znova naložiti stran.",
+      "textWithReset": "Vašega uporabniškega profila ni bilo mogoče naložiti s trenutnim strežnikom po meri. Poskusite ponastaviti strežnik po meri in nato znova naložiti."
     },
     "migration": {
       "failed": "Podatkov ni uspelo preseliti.",

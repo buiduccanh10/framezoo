@@ -885,7 +885,9 @@
       "disconnectTitle": "Kas katkestada ühendus taustaprogrammiga?",
       "logout": "Logi välja",
       "reload": "Laadi uuesti",
-      "reset": "Lähtestage kohandatud server"
+      "reset": "Lähtestage kohandatud server",
+      "text": "Teie kasutajaprofiili laadimine ebaõnnestus. Proovige leht uuesti laadida.",
+      "textWithReset": "Teie kasutajaprofiili laadimine praeguse kohandatud serveri abil ebaõnnestus. Proovige kohandatud server lähtestada ja seejärel uuesti laadida."
     },
     "migration": {
       "failed": "Teie andmete üleviimine ebaõnnestus.",

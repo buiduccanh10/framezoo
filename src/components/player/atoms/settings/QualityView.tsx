@@ -11,6 +11,7 @@ import { usePlayerStore } from "@/stores/player/store";
 import {
   SourceQuality,
   allQualities,
+  getPreferredQuality,
   qualityToString,
 } from "@/stores/player/utils/qualities";
 import { useQualityStore } from "@/stores/quality";
@@ -49,6 +50,7 @@ export function QualityView({ id }: { id: string }) {
   );
   const setAutomaticQuality = useQualityStore((s) => s.setAutomaticQuality);
   const setLastChosenQuality = useQualityStore((s) => s.setLastChosenQuality);
+  const lastChosenQuality = useQualityStore((s) => s.quality.lastChosenQuality);
   const autoQuality = useQualityStore((s) => s.quality.automaticQuality);
 
   // Auto quality only makes sense for HLS sources
@@ -68,8 +70,32 @@ export function QualityView({ id }: { id: string }) {
   const changeAutomatic = useCallback(() => {
     const newValue = !autoQuality;
     setAutomaticQuality(newValue);
-    if (newValue) enableAutomaticQuality();
-  }, [setAutomaticQuality, autoQuality, enableAutomaticQuality]);
+    if (newValue) {
+      enableAutomaticQuality();
+      return;
+    }
+
+    const fallbackQuality =
+      currentQuality ??
+      getPreferredQuality(availableQualities, {
+        automaticQuality: false,
+        lastChosenQuality,
+      });
+
+    if (!fallbackQuality) return;
+
+    setLastChosenQuality(fallbackQuality);
+    switchQuality(fallbackQuality);
+  }, [
+    setAutomaticQuality,
+    autoQuality,
+    enableAutomaticQuality,
+    currentQuality,
+    availableQualities,
+    lastChosenQuality,
+    setLastChosenQuality,
+    switchQuality,
+  ]);
 
   const visibleQualities = allQualities.filter((quality) => {
     if (alwaysVisibleQualities[quality]) return true;

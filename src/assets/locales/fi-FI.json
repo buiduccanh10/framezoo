@@ -885,7 +885,9 @@
       "disconnectTitle": "Katkaisetko yhteyden taustajärjestelmään?",
       "logout": "Kirjaudu ulos",
       "reload": "Lataa uudelleen",
-      "reset": "Nollaa mukautettu palvelin"
+      "reset": "Nollaa mukautettu palvelin",
+      "text": "Käyttäjäprofiilisi lataaminen epäonnistui. Yritä ladata sivu uudelleen.",
+      "textWithReset": "Käyttäjäprofiilisi lataaminen nykyisellä mukautetulla palvelimella epäonnistui. Yritä nollata mukautettu palvelin ja lataa se sitten uudelleen."
     },
     "migration": {
       "failed": "Tietojesi siirto epäonnistui. 😿",

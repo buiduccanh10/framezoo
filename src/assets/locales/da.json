@@ -885,7 +885,9 @@
       "disconnectTitle": "Vil du afbryde forbindelsen til backend?",
       "logout": "Log ud",
       "reload": "Genindlæs",
-      "reset": "Nulstil brugerdefineret server"
+      "reset": "Nulstil brugerdefineret server",
+      "text": "Kunne ikke indlæse din brugerprofil. Prøv venligst at genindlæse siden.",
+      "textWithReset": "Kunne ikke indlæse din brugerprofil ved hjælp af den aktuelle brugerdefinerede server. Prøv at nulstille den brugerdefinerede server og genindlæs."
     },
     "migration": {
       "failed": "Det lykkedes ikke at migrere dine data. 😿",

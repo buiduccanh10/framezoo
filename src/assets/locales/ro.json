@@ -885,7 +885,9 @@
       "disconnectTitle": "Deconectați-vă de la backend?",
       "logout": "Deconectare",
       "reload": "Reîncărcați",
-      "reset": "Resetare servere personalizate"
+      "reset": "Resetare servere personalizate",
+      "text": "Nu s-a încărcat profilul dvs. de utilizator. Vă rugăm să încercați să reîncărcați pagina.",
+      "textWithReset": "Nu s-a putut încărca profilul dvs. de utilizator utilizând serverul personalizat curent. Încercați să resetați serverul personalizat și apoi reîncărcați."
     },
     "migration": {
       "failed": "Eroare la migrarea datelor voastre.",

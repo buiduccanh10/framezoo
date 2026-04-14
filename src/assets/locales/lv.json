@@ -885,7 +885,9 @@
       "disconnectTitle": "Vai atvienot no aizmugursistēmas?",
       "logout": "iziet",
       "reload": "Pārlādēt",
-      "reset": "Atiestatīt pielāgoto serveri"
+      "reset": "Atiestatīt pielāgoto serveri",
+      "text": "Neizdevās ielādēt jūsu lietotāja profilu. Lūdzu, mēģiniet atkārtoti ielādēt lapu.",
+      "textWithReset": "Neizdevās ielādēt jūsu lietotāja profilu, izmantojot pašreizējo pielāgoto serveri. Mēģiniet atiestatīt pielāgoto serveri un pēc tam atkārtoti ielādējiet."
     },
     "migration": {
       "failed": "Neizdevās migrēt jūsu datus.",

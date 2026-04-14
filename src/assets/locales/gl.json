@@ -885,7 +885,9 @@
       "disconnectTitle": "Desconectarte do backend?",
       "logout": "Pechar sesión",
       "reload": "Recarga",
-      "reset": "Reiniciar servidor personalizado"
+      "reset": "Reiniciar servidor personalizado",
+      "text": "Produciuse un erro ao cargar o teu perfil de usuario. Tenta cargar de novo a páxina.",
+      "textWithReset": "Produciuse un erro ao cargar o teu perfil de usuario usando o servidor personalizado actual. Proba a restablecer o servidor personalizado e despois volve cargar."
     },
     "migration": {
       "failed": "Erro ao migrar os teus datos.",

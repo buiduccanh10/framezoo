@@ -885,7 +885,9 @@
       "disconnectTitle": "Aftengjast bakenda?",
       "logout": "Skrá út",
       "reload": "Endurhlaða",
-      "reset": "Endurstilla sérsniðin netþjón"
+      "reset": "Endurstilla sérsniðin netþjón",
+      "text": "Mistókst að hlaða notandaprófílnum þínum. Vinsamlegast reyndu að endurhlaða síðuna.",
+      "textWithReset": "Mistókst að hlaða notandasniðinu þínu með því að nota núverandi sérsniðna netþjón. Prófaðu að endurstilla sérsniðna netþjóninn og endurhlaða síðan."
     },
     "migration": {
       "failed": "Mistókst að flytja gögnin þín.",

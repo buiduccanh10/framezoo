@@ -885,7 +885,9 @@
       "disconnectTitle": "Disconnect from backend?",
       "logout": "Logout",
       "reload": "Reload",
-      "reset": "Reset custom server"
+      "reset": "Reset custom server",
+      "text": "Failed to load your user profile. Please try reloading the page.",
+      "textWithReset": "Failed to load your user profile using the current custom server. Try resetting the custom server and then reload."
     },
     "migration": {
       "failed": "Failed to migrate your data. 😿",

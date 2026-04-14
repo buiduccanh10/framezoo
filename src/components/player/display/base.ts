@@ -96,6 +96,34 @@ function sortLevelsByQuality(levels: Level[]): Level[] {
   return [...levels].sort((a, b) => (b.height || 0) - (a.height || 0));
 }
 
+function getManualHlsSelection(
+  levels: Level[],
+  preferredQuality: SourceQuality | null,
+): { levelIndex: number; quality: SourceQuality } | null {
+  const sortedLevels = sortLevelsByQuality(levels);
+  const qualities = hlsLevelsToQualities(sortedLevels);
+  const availableQuality = getPreferredQuality(qualities, {
+    lastChosenQuality: preferredQuality,
+    automaticQuality: false,
+  });
+
+  if (!availableQuality) return null;
+
+  const matchingLevels = levels.filter(
+    (level) => hlsLevelToQuality(level) === availableQuality,
+  );
+  if (matchingLevels.length === 0) return null;
+
+  const bestLevel = sortLevelsByQuality(matchingLevels)[0];
+  const levelIndex = levels.indexOf(bestLevel);
+  if (levelIndex === -1) return null;
+
+  return {
+    levelIndex,
+    quality: availableQuality,
+  };
+}
+
 function isRecoverableHlsBufferIssue(data: ErrorData) {
   return RECOVERABLE_HLS_BUFFER_ERRORS.has(data.details);
 }
@@ -234,7 +262,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       // Only intervene if playback still looks starved after hls.js had time to recover on its own.
       if (!notReadyForPlayback && bufferAhead >= 1.5) return;
 
-      if (hls.currentLevel > 0) {
+      if (automaticQuality && hls.currentLevel > 0) {
         hls.nextLevel = hls.currentLevel - 1;
       }
 
@@ -278,35 +306,23 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     );
   }
 
-  function setupQualityForHls() {
+  function setupQualityForHls(): SourceQuality | null {
     if (videoElement && canPlayHlsNatively(videoElement)) {
-      return; // nothing to change
+      return null;
     }
 
-    if (!hls) return;
+    if (!hls) return null;
     if (!automaticQuality) {
-      const sortedLevels = sortLevelsByQuality(hls.levels);
-      const qualities = hlsLevelsToQualities(sortedLevels);
-      const availableQuality = getPreferredQuality(qualities, {
-        lastChosenQuality: preferenceQuality,
-        automaticQuality,
-      });
-      if (availableQuality) {
-        // Find the best level that matches our preferred quality
-        const matchingLevels = hls.levels.filter(
-          (level) => hlsLevelToQuality(level) === availableQuality,
-        );
-        if (matchingLevels.length > 0) {
-          // Pick the highest resolution level for this quality
-          const bestLevel = sortLevelsByQuality(matchingLevels)[0];
-          const levelIndex = hls.levels.indexOf(bestLevel);
-          if (levelIndex !== -1) {
-            hls.startLevel = levelIndex;
-            hls.nextLevel = levelIndex;
-            hls.currentLevel = levelIndex;
-            hls.loadLevel = levelIndex;
-          }
-        }
+      const manualSelection = getManualHlsSelection(
+        hls.levels,
+        preferenceQuality,
+      );
+      if (manualSelection) {
+        hls.startLevel = manualSelection.levelIndex;
+        hls.nextLevel = manualSelection.levelIndex;
+        hls.currentLevel = manualSelection.levelIndex;
+        hls.loadLevel = manualSelection.levelIndex;
+        return manualSelection.quality;
       }
     } else {
       hls.startLevel = -1;
@@ -316,6 +332,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     // For manual quality selection, wait for LEVEL_SWITCHED to emit quality
     // to avoid showing intermediate states when HLS switches away from unplayable levels
     // For automatic quality, currentLevel is -1, so we wait for LEVEL_SWITCHED event
+    return null;
   }
 
   function setupSource(vid: HTMLVideoElement, src: LoadableSource) {
@@ -343,6 +360,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           maxBufferLength: 240, // 240 seconds
           maxMaxBufferLength: 480,
           abrEwmaDefaultEstimate: 5 * 1000 * 1000, // 5 Mbps default bandwidth estimate for better ABR decisions
+          preserveManualLevelOnError: true,
           fragLoadPolicy: {
             default: {
               maxLoadTimeMs: 30 * 1000, // allow it load extra long, fragments are slow if requested for the first time on an origin
@@ -449,7 +467,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           if (hls !== currentHls) return;
           if (!hls) return;
           reportLevels();
-          setupQualityForHls();
+          const configuredQuality = setupQualityForHls();
+          if (configuredQuality) {
+            emit("changedquality", configuredQuality);
+          }
 
           if (!automaticQuality) {
             if (qualitySetupRetryTimeout) {
@@ -459,7 +480,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
             qualitySetupRetryTimeout = setTimeout(() => {
               if (!hls) return;
               if (automaticQuality) return;
-              setupQualityForHls();
+              const retriedQuality = setupQualityForHls();
+              if (retriedQuality) {
+                emit("changedquality", retriedQuality);
+              }
             }, 250);
           }
 
@@ -507,15 +531,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
 
           const currentLevel = hls.levels[hls.currentLevel];
           const currentQuality = hlsLevelToQuality(currentLevel);
+          const manualQuality = getManualHlsSelection(
+            hls.levels,
+            preferenceQuality,
+          )?.quality;
+          const configuredQuality = automaticQuality
+            ? currentQuality
+            : (manualQuality ?? currentQuality);
 
-          if (automaticQuality) {
-            // Only emit quality changes when automatic quality is enabled
-            emit("changedquality", currentQuality);
-          } else {
-            // For manual quality selection, emit the user's preferred quality
-            // This ensures the UI shows the selected quality, not the actual playing quality
-            emit("changedquality", preferenceQuality);
-          }
+          emit("changedquality", configuredQuality);
         });
         hls.on(Hls.Events.SUBTITLE_TRACK_LOADED, () => {
           for (const [lang, resolve] of languagePromises) {

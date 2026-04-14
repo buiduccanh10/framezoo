@@ -885,7 +885,9 @@
       "disconnectTitle": "Desconectar do back-end?",
       "logout": "Terminar sessão",
       "reload": "Recarregar",
-      "reset": "Repor servidor personalizado"
+      "reset": "Repor servidor personalizado",
+      "text": "Falha ao carregar seu perfil de usuário. Por favor, tente recarregar a página.",
+      "textWithReset": "Falha ao carregar seu perfil de usuário usando o servidor personalizado atual. Tente redefinir o servidor personalizado e recarregue."
     },
     "migration": {
       "failed": "Falha ao migrar os seus dados.",

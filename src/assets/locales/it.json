@@ -885,7 +885,9 @@
       "disconnectTitle": "Disconnettersi dal backend?",
       "logout": "Esci",
       "reload": "Ricarica",
-      "reset": "Ripristino del server personalizzato"
+      "reset": "Ripristino del server personalizzato",
+      "text": "Impossibile caricare il tuo profilo utente. Per favore prova a ricaricare la pagina.",
+      "textWithReset": "Impossibile caricare il tuo profilo utente utilizzando il server personalizzato corrente. Prova a reimpostare il server personalizzato e quindi ricaricare."
     },
     "migration": {
       "failed": "Impossibile eseguire la migrazione dei dati. 😿",

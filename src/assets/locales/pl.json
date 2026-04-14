@@ -885,7 +885,9 @@
       "disconnectTitle": "Odłączyć się od backendu?",
       "logout": "Wyloguj się",
       "reload": "Odśwież",
-      "reset": "Zresetuj serwer niestandardowy"
+      "reset": "Zresetuj serwer niestandardowy",
+      "text": "Nie udało się załadować Twojego profilu użytkownika. Spróbuj ponownie załadować stronę.",
+      "textWithReset": "Nie udało się załadować profilu użytkownika przy użyciu bieżącego serwera niestandardowego. Spróbuj zresetować serwer niestandardowy, a następnie załaduj go ponownie."
     },
     "migration": {
       "failed": "Migracja danych nie powiodła się. 😿",

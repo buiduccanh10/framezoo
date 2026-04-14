@@ -885,7 +885,9 @@
       "disconnectTitle": "Vols desconnectar-te del backend?",
       "logout": "Tanca la sessió",
       "reload": "Torna a carregar",
-      "reset": "Restableix el servidor personalitzat"
+      "reset": "Restableix el servidor personalitzat",
+      "text": "No s'ha pogut carregar el vostre perfil d'usuari. Si us plau, prova de tornar a carregar la pàgina.",
+      "textWithReset": "No s'ha pogut carregar el vostre perfil d'usuari amb el servidor personalitzat actual. Proveu de restablir el servidor personalitzat i, a continuació, torneu a carregar."
     },
     "migration": {
       "failed": "No s'han pogut migrar les vostres dades. 😿",

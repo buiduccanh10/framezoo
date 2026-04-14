@@ -885,7 +885,9 @@
       "disconnectTitle": "Koppla bort från backend?",
       "logout": "Logga ut",
       "reload": "Ladda om",
-      "reset": "Återställ anpassad server"
+      "reset": "Återställ anpassad server",
+      "text": "Det gick inte att läsa in din användarprofil. Försök att ladda om sidan.",
+      "textWithReset": "Det gick inte att ladda din användarprofil med den aktuella anpassade servern. Försök att återställa den anpassade servern och ladda sedan om."
     },
     "migration": {
       "failed": "Misslyckades att migrera dina data.",
