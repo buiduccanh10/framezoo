@@ -392,15 +392,23 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 .bookmark-button {
   opacity: 0;
   transition: opacity 0.3s;
+  pointer-events: none;
 }
 
 .group:hover .bookmark-button {
   opacity: 1;
+  pointer-events: auto;
 }
 
 @media (max-width: 1024px) {
+  .bookmark-button {
+    opacity: 0;
+    pointer-events: none;
+  }
+
   .group:hover .bookmark-button {
     opacity: 0;
+    pointer-events: none;
   }
 }
 
