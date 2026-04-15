@@ -14,7 +14,6 @@ import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
-import { NotificationModal } from "@/components/overlays/notificationsModal";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
@@ -116,7 +115,6 @@ function App() {
   return (
     <Layout>
       <LanguageProvider />
-      <NotificationModal id="notifications" />
       <KeyboardCommandsModal id="keyboard-commands" />
       <KeyboardCommandsEditModal id="keyboard-commands-edit" />
       <DetailsModal id="details" />

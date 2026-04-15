@@ -23,7 +23,6 @@ import {
   CaptionsView,
   type SubtitleSelectionMode,
 } from "./settings/CaptionsView";
-import { DownloadRoutes } from "./settings/Downloads";
 import { LanguageSubtitlesView } from "./settings/LanguageSubtitlesView";
 import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
@@ -270,7 +269,6 @@ function SettingsOverlay({ id }: { id: string }) {
             )}
           </Menu.CardWithScrollable>
         </OverlayPage>
-        <DownloadRoutes id={id} />
         <OverlayPage
           id={id}
           path="/watchparty"

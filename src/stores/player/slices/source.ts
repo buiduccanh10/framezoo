@@ -206,7 +206,6 @@ function getCaptionSourcePriority(caption: CaptionListItem): number {
   if (normalizedSource.includes("wyzie")) return 0;
   if (normalizedSource.includes("opensubs")) return 1;
   if (normalizedSource.includes("granite")) return 2;
-  if (normalizedSource.includes("febbox")) return 3;
 
   return Number.MAX_SAFE_INTEGER;
 }

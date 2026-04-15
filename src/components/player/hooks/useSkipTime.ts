@@ -7,16 +7,13 @@ import { conf } from "@/setup/config";
 import type { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
-import { getTurnstileToken } from "@/utils/turnstile";
 
 // Thanks Nemo for this API
 const THE_INTRO_DB_BASE_URL = "https://api.theintrodb.org/v2";
-const FED_SKIPS_BASE_URL = "https://fed-skips.pstream.mov";
 const INTRODB_BASE_URL = "https://api.introdb.app/intro";
-const MAX_RETRIES = 3;
 
 // Track the source of the current skip time (for analytics filtering)
-let currentSkipTimeSource: "fed-skips" | "introdb" | "theintrodb" | null = null;
+let currentSkipTimeSource: "introdb" | "theintrodb" | null = null;
 
 // Prevent multiple components from triggering overlapping fetches for the same media
 let fetchingForCacheKey: string | null = null;
@@ -97,7 +94,6 @@ function pushNormalizedSegments(
 
 export function useSkipTime() {
   const { playerMeta: meta } = usePlayerMeta();
-  const febboxKey = usePreferencesStore((s) => s.febboxKey);
   const cacheKey = getSkipSegmentsCacheKey(meta ?? null);
   const skipSegmentsCacheKey = usePlayerStore((s) => s.skipSegmentsCacheKey);
   const skipSegments = usePlayerStore((s) => s.skipSegments);
@@ -159,50 +155,6 @@ export function useSkipTime() {
       }
     };
 
-    const fetchFedSkipsTime = async (retries = 0): Promise<number | null> => {
-      if (!meta?.imdbId || meta.type === "movie") return null;
-      if (!conf().ALLOW_FEBBOX_KEY) return null;
-      if (!febboxKey) return null;
-
-      try {
-        const apiUrl = `${FED_SKIPS_BASE_URL}/${meta.imdbId}/${meta.season?.number}/${meta.episode?.number}`;
-
-        const turnstileToken = await getTurnstileToken(
-          "0x4AAAAAAB6ocCCpurfWRZyC",
-        );
-        if (!turnstileToken) return null;
-
-        const response = await fetch(apiUrl, {
-          headers: {
-            "cf-turnstile-response": turnstileToken,
-          },
-        });
-
-        if (!response.ok) {
-          if (response.status === 500 && retries < MAX_RETRIES) {
-            return fetchFedSkipsTime(retries + 1);
-          }
-          throw new Error("Fed-skips API request failed");
-        }
-
-        const data = await response.json();
-
-        const parseSkipTime = (timeStr: string | undefined): number | null => {
-          if (!timeStr || typeof timeStr !== "string") return null;
-          const match = timeStr.match(/^(\d+)s$/);
-          if (!match) return null;
-          return parseInt(match[1], 10);
-        };
-
-        const skipTime = parseSkipTime(data.introSkipTime);
-
-        return skipTime;
-      } catch (error) {
-        console.error("Error fetching fed-skips time:", error);
-        return null;
-      }
-    };
-
     const fetchIntroDBTime = async (): Promise<number | null> => {
       if (!meta?.imdbId || meta.type === "movie") return null;
 
@@ -248,26 +200,11 @@ export function useSkipTime() {
           return;
         }
 
-        // TIDB returned 404 – no segment data for this media; try fallbacks for intro only
+        // TIDB returned 404 – no segment data for this media; try fallback for intro only
         const nonIntroSegments: SegmentData[] = [];
         let fallbackIntroSegment: SegmentData | null = null;
 
-        // Fall back to Fed-skips (TV shows only)
-        if (febboxKey && meta?.type !== "movie") {
-          const fedSkipsTime = await fetchFedSkipsTime();
-          if (fedSkipsTime !== null) {
-            currentSkipTimeSource = "fed-skips";
-            fallbackIntroSegment = {
-              type: "intro",
-              start_ms: 0,
-              end_ms: fedSkipsTime * 1000,
-              confidence: null,
-              submission_count: 1,
-            };
-          }
-        }
-
-        // Last resort: IntroDB API (TV shows only)
+        // Fallback: IntroDB API (TV shows only)
         if (!fallbackIntroSegment && meta?.type !== "movie") {
           const introDBTime = await fetchIntroDBTime();
           if (introDBTime !== null) {
@@ -305,7 +242,6 @@ export function useSkipTime() {
     meta?.type,
     meta?.season?.number,
     meta?.episode?.number,
-    febboxKey,
     setSkipSegments,
     tidbKey,
   ]);

@@ -101,7 +101,7 @@ const openMovieEmbed = {
 };
 
 function isDesktopApp(): boolean {
-  return Boolean(typeof window !== "undefined" && window.__PSTREAM_DESKTOP__);
+  return Boolean(typeof window !== "undefined" && window.__ALPHAFLIX_DESKTOP__);
 }
 
 export function getProviders() {

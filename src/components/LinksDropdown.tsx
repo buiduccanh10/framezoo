@@ -373,7 +373,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             <DropdownLink
               onClick={() =>
                 window.dispatchEvent(
-                  new CustomEvent("pstream-desktop-settings"),
+                  new CustomEvent("alphaflix-desktop-settings"),
                 )
               }
               icon={Icons.GEAR}

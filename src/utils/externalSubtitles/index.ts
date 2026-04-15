@@ -2,7 +2,6 @@
 import { PlayerMeta } from "@/stores/player/slices/source";
 import type { CaptionListItem } from "@/stores/player/slices/source";
 
-import { scrapeFebboxCaptions as _scrapeFebboxCaptions } from "./febbox";
 import { scrapeOpenSubtitlesCaptions } from "./opensubtitles";
 import { scrapeVdrkCaptions } from "./vdrk";
 import { scrapeWyzieCaptions } from "./wyzie";
@@ -11,7 +10,6 @@ const EXTERNAL_SUBTITLE_SOURCE_PRIORITY: Record<string, number> = {
   wyzie: 0,
   opensubs: 1,
   granite: 2,
-  febbox: 3,
 };
 
 function getExternalSubtitleSourcePriority(caption: CaptionListItem) {
@@ -24,9 +22,6 @@ function getExternalSubtitleSourcePriority(caption: CaptionListItem) {
   }
   if (normalizedSource.includes("granite")) {
     return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.granite;
-  }
-  if (normalizedSource.includes("febbox")) {
-    return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.febbox;
   }
   return Number.MAX_SAFE_INTEGER;
 }
@@ -188,5 +183,4 @@ export async function scrapeExternalSubtitles(
 // Re-export individual functions for direct access if needed
 export { scrapeWyzieCaptions } from "./wyzie";
 export { scrapeOpenSubtitlesCaptions } from "./opensubtitles";
-export { scrapeFebboxCaptions } from "./febbox";
 export { scrapeVdrkCaptions } from "./vdrk";

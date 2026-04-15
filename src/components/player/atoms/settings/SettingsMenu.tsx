@@ -58,10 +58,6 @@ export function SettingsMenu({ id }: { id: string }) {
       t("player.menus.subtitles.unknownLanguage"))
     : undefined;
 
-  const source = usePlayerStore((s) => s.source);
-
-  const downloadable = source?.type === "file" || source?.type === "hls";
-
   return (
     <Menu.Card>
       <Menu.Section grid>
@@ -128,23 +124,10 @@ export function SettingsMenu({ id }: { id: string }) {
         )}
       </Menu.Section>
       <Menu.Section>
-        {/* <Menu.Link
-          clickable
-          onClick={() =>
-            router.navigate(downloadable ? "/download" : "/download/unable")
-          }
-          rightSide={<Icon className="text-xl" icon={Icons.DOWNLOAD} />}
-          className={downloadable ? "opacity-100" : "opacity-50"}
-        >
-          {t("player.menus.settings.downloadItem")}
-        </Menu.Link> */}
         <Menu.Link
           clickable
-          onClick={() =>
-            router.navigate(downloadable ? "/watchparty" : "/download/unable")
-          }
+          onClick={() => router.navigate("/watchparty")}
           rightSide={<Icon className="text-xl" icon={Icons.WATCH_PARTY} />}
-          className={downloadable ? "opacity-100" : "opacity-50"}
         >
           {t("player.menus.watchparty.watchpartyItem")}
         </Menu.Link>
