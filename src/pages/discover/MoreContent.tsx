@@ -287,7 +287,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
             {sectionTitle}
           </Heading1>
           {contentType === "recommendations" && (
-            <div className="relative pr-4">
+            <div className="relative pr-4 whitespace-nowrap">
               <Dropdown
                 selectedItem={
                   selectedRecommendationSource
@@ -310,14 +310,15 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                     type="button"
                     className="px-2 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
                   >
-                    <span>{t("discover.carousel.change")}</span>
+                    <span className="whitespace-nowrap">
+                      {t("discover.carousel.change")}
+                    </span>
                     <Icon
                       icon={Icons.UP_DOWN_ARROW}
                       className="text-xs text-dropdown-secondary"
                     />
                   </button>
                 }
-                side="right"
               />
             </div>
           )}

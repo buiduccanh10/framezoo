@@ -711,7 +711,7 @@ export function FeaturedCarousel({
                 className="w-full sm:w-auto text-base"
               >
                 <Icon icon={Icons.PLAY} className="text-white" />
-                <span className="text-white">
+                <span className="text-white whitespace-nowrap">
                   {t("discover.featured.playNow")}
                 </span>
               </Button>
@@ -724,7 +724,7 @@ export function FeaturedCarousel({
                   icon={Icons.CIRCLE_QUESTION}
                   className="text-white scale-100"
                 />
-                <span className="text-white">
+                <span className="text-white whitespace-nowrap">
                   {t("discover.featured.moreInfo")}
                 </span>
               </Button>

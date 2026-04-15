@@ -34,6 +34,7 @@ import { DeviceListPart } from "@/pages/parts/settings/DeviceListPart";
 import { RegisterCalloutPart } from "@/pages/parts/settings/RegisterCalloutPart";
 import { SidebarPart } from "@/pages/parts/settings/SidebarPart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
+import { conf } from "@/setup/config";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { useBannerSize } from "@/stores/banner";
 import { useLanguageStore } from "@/stores/language";
@@ -54,6 +55,7 @@ function SettingsLayout(props: {
   selectedCategory: string | null;
   setSelectedCategory: (category: string | null) => void;
   onCategoryChange?: (category: string | null) => void;
+  showConnections: boolean;
 }) {
   const { className } = props;
   const { t } = useTranslation();
@@ -107,6 +109,7 @@ function SettingsLayout(props: {
           setSelectedCategory={props.setSelectedCategory}
           onCategoryChange={props.onCategoryChange}
           searchQuery={props.searchQuery}
+          showConnections={props.showConnections}
         />
         <div className={className}>{props.children}</div>
         <div className="block lg:hidden">
@@ -168,6 +171,17 @@ export function AccountSettings(props: {
 export function SettingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const shouldShowConnections = !conf().TIDB_API_KEY || import.meta.env.DEV;
+  const validCategories = useMemo(
+    () => [
+      "settings-account",
+      "settings-preferences",
+      "settings-appearance",
+      "settings-captions",
+      ...(shouldShowConnections ? ["settings-connection"] : []),
+    ],
+    [shouldShowConnections],
+  );
   const backendChangeModal = useModal("settings-backend-change-confirmation");
   const [pendingBackendChange, setPendingBackendChange] = useState<
     string | null
@@ -177,15 +191,6 @@ export function SettingsPage() {
     const hash = window.location.hash;
     if (hash) {
       const hashId = hash.substring(1); // Remove the # symbol
-      // Check if it's a valid settings category
-      const validCategories = [
-        "settings-account",
-        "settings-preferences",
-        "settings-appearance",
-        "settings-captions",
-        "settings-connection",
-      ];
-
       // Map sub-section hashes to their parent categories
       const subSectionToCategory: Record<string, string> = {
         "source-order": "settings-preferences",
@@ -225,7 +230,7 @@ export function SettingsPage() {
         }
       }
     }
-  }, []);
+  }, [validCategories]);
 
   // Handle hash changes after initial load
   useEffect(() => {
@@ -233,13 +238,6 @@ export function SettingsPage() {
       const hash = window.location.hash;
       if (hash) {
         const hashId = hash.substring(1);
-        const validCategories = [
-          "settings-account",
-          "settings-preferences",
-          "settings-appearance",
-          "settings-captions",
-          "settings-connection",
-        ];
         const subSectionToCategory: Record<string, string> = {
           "source-order": "settings-preferences",
         };
@@ -279,7 +277,7 @@ export function SettingsPage() {
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
-  }, []);
+  }, [validCategories]);
 
   const { t } = useTranslation();
   const activeTheme = useThemeStore((s) => s.theme);
@@ -994,6 +992,7 @@ export function SettingsPage() {
         setSelectedCategory={setSelectedCategory}
         onCategoryChange={handleCategoryChange}
         className="space-y-28"
+        showConnections={shouldShowConnections}
       >
         {(searchQuery.trim() ||
           !selectedCategory ||
@@ -1115,16 +1114,17 @@ export function SettingsPage() {
             />
           </div>
         )}
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-connection") && (
-          <div id="settings-connection">
-            <ConnectionsPart
-              tidbKey={state.tidbKey.state}
-              setTIDBKey={state.tidbKey.set}
-            />
-          </div>
-        )}
+        {shouldShowConnections &&
+          (searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-connection") && (
+            <div id="settings-connection">
+              <ConnectionsPart
+                tidbKey={state.tidbKey.state}
+                setTIDBKey={state.tidbKey.set}
+              />
+            </div>
+          )}
       </SettingsLayout>
       <Transition
         animation="fade"

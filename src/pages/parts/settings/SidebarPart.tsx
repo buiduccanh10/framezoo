@@ -10,6 +10,7 @@ export function SidebarPart(props: {
   setSelectedCategory: (category: string | null) => void;
   onCategoryChange?: (category: string | null) => void;
   searchQuery: string;
+  showConnections: boolean;
 }) {
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
@@ -37,13 +38,17 @@ export function SidebarPart(props: {
         id: "settings-captions",
         icon: Icons.CAPTIONS,
       },
-      {
-        textKey: "settings.connections.title",
-        id: "settings-connection",
-        icon: Icons.LINK,
-      },
+      ...(props.showConnections
+        ? [
+            {
+              textKey: "settings.connections.title",
+              id: "settings-connection",
+              icon: Icons.LINK,
+            },
+          ]
+        : []),
     ],
-    [],
+    [props.showConnections],
   );
 
   useEffect(() => {

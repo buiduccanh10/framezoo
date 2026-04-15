@@ -69,7 +69,7 @@ export function AccountEditPart(props: {
             bottom={
               <button
                 type="button"
-                className="tabbable text-xs flex gap-2 items-center bg-editBadge-bg text-editBadge-text hover:bg-editBadge-bgHover py-1 px-3 rounded-full cursor-pointer"
+                className="tabbable whitespace-nowrap text-xs flex gap-2 items-center bg-editBadge-bg text-editBadge-text hover:bg-editBadge-bgHover py-1 px-3 rounded-full cursor-pointer"
                 onClick={profileEditModal.show}
               >
                 <Icon icon={Icons.EDIT} />
@@ -80,7 +80,7 @@ export function AccountEditPart(props: {
         </div>
         <div>
           <div className="flex flex-col md:flex-row md:gap-4 gap-4">
-            <div className="w-full">
+            <div className="w-full min-w-0">
               <AuthInputBox
                 label={t("settings.account.accountDetails.nicknameLabel")}
                 placeholder={t(
@@ -99,23 +99,26 @@ export function AccountEditPart(props: {
                 <p className="text-[10px] text-type-dimmed opacity-60 leading-tight mb-2">
                   {t("settings.sidebar.info.userIdDescription")}
                 </p>
-                <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-largeCard-background bg-opacity-50">
-                  <p className="text-white truncate">
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-2 rounded-lg bg-largeCard-background bg-opacity-50 min-w-0 overflow-hidden w-full max-w-full">
+                  <p className="text-white truncate min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
                     {account?.userId ?? t("settings.sidebar.info.notLoggedIn")}
                   </p>
                   {account?.userId && (
                     <button
                       type="button"
-                      className="text-type-dimmed hover:text-white transition-colors duration-200 flex items-center gap-1.5 shrink-0 px-2 py-1 -mr-1 rounded hover:bg-white/5"
+                      className="text-type-dimmed hover:text-white transition-colors duration-200 inline-flex items-center justify-center shrink-0 p-1.5 rounded hover:bg-white/5"
                       onClick={copyUserId}
+                      aria-label={
+                        hasCopied ? t("actions.copied") : t("actions.copy")
+                      }
+                      title={
+                        hasCopied ? t("actions.copied") : t("actions.copy")
+                      }
                     >
                       <Icon
                         icon={hasCopied ? Icons.CHECKMARK : Icons.COPY}
                         className={hasCopied ? "text-[#4BB4D6]" : "text-xs"}
                       />
-                      <span className="text-xs">
-                        {hasCopied ? t("actions.copied") : t("actions.copy")}
-                      </span>
                     </button>
                   )}
                 </div>
