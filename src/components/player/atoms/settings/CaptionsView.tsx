@@ -37,6 +37,8 @@ import {
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
 import { getCaptionLanguageGroupKey } from "../../utils/captionLanguage";
 
+const SHOW_MATCH_SCORE = false;
+
 export interface CaptionOptionProps {
   countryCode?: string;
   children: React.ReactNode;
@@ -141,7 +143,11 @@ export function CaptionOption(props: CaptionOptionProps) {
       parts.push(`URL: ${props.subtitleUrl}`);
     }
 
-    if (props.matchScore !== undefined && props.matchScore !== null) {
+    if (
+      SHOW_MATCH_SCORE &&
+      props.matchScore !== undefined &&
+      props.matchScore !== null
+    ) {
       parts.push(`Match Score: ${props.matchScore}%`);
     }
 
@@ -235,24 +241,26 @@ export function CaptionOption(props: CaptionOptionProps) {
             {props.isHearingImpaired && (
               <Icon icon={Icons.EAR} className="ml-2 mt-2" />
             )}
-            {props.matchScore !== undefined && props.matchScore !== null && (
-              <span
-                className={classNames(
-                  "text-xs font-bold ml-2 mt-2 whitespace-nowrap",
-                  {
-                    "text-video-context-type-accent": props.matchScore >= 80,
-                    "text-yellow-500":
-                      props.matchScore >= 50 && props.matchScore < 80,
-                    "text-video-context-error": props.matchScore < 50,
-                  },
-                )}
-              >
-                {t("player.menus.subtitles.matchScoreLabel", {
-                  score: props.matchScore,
-                  defaultValue: "Match ~{{score}}%",
-                })}
-              </span>
-            )}
+            {SHOW_MATCH_SCORE &&
+              props.matchScore !== undefined &&
+              props.matchScore !== null && (
+                <span
+                  className={classNames(
+                    "text-xs font-bold ml-2 mt-2 whitespace-nowrap",
+                    {
+                      "text-video-context-type-accent": props.matchScore >= 80,
+                      "text-yellow-500":
+                        props.matchScore >= 50 && props.matchScore < 80,
+                      "text-video-context-error": props.matchScore < 50,
+                    },
+                  )}
+                >
+                  {t("player.menus.subtitles.matchScoreLabel", {
+                    score: props.matchScore,
+                    defaultValue: "Match ~{{score}}%",
+                  })}
+                </span>
+              )}
           </div>
         </span>
       </SelectableLink>
@@ -892,7 +900,7 @@ export function CaptionsView({
                     {t("player.menus.subtitles.autoSelectDifferentChoice")}
                   </span>
                 )}
-                {matchScoreLabel && (
+                {SHOW_MATCH_SCORE && matchScoreLabel && (
                   <span
                     className={classNames(
                       "text-xs font-bold mt-2 whitespace-nowrap",
