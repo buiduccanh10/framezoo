@@ -2,6 +2,7 @@ import {
   type EmbedOutput,
   type EmbedScrapeContext,
   NotFoundError,
+  type StreamPreview,
   flags,
 } from "@/lib/providers";
 
@@ -12,6 +13,7 @@ interface OpenMovieStreamInfo {
   subtitle?: string;
   quality: string;
   provider: string;
+  preview?: StreamPreview;
 }
 
 // Parse the encoded stream info from the embed URL
@@ -78,6 +80,7 @@ export async function scrapeOpenMovieEmbed(
             ]
           : [],
         skipValidation: true,
+        preview: streamInfo.preview,
         ...(isHls ? { playlist: streamInfo.url } : {}),
         qualities: {
           [quality]: {

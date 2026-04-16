@@ -9,8 +9,12 @@ import {
 } from "react";
 
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
+import { LazyImage } from "@/components/utils/Image";
 import { useProgressBar } from "@/hooks/useProgressBar";
-import { nearestImageAt } from "@/stores/player/slices/thumbnails";
+import {
+  ThumbnailImage,
+  nearestImageAt,
+} from "@/stores/player/slices/thumbnails";
 import { usePlayerStore } from "@/stores/player/store";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
@@ -23,6 +27,49 @@ const SEGMENT_COLORS: Record<
   credits: "rgba(34, 197, 94, 0.75)", // green
   preview: "rgba(234, 179, 8, 0.75)", // yellow
 };
+
+function ThumbnailPreview(props: { thumbnail: ThumbnailImage }) {
+  if (props.thumbnail.data) {
+    return (
+      <LazyImage
+        src={props.thumbnail.data}
+        alt=""
+        className="h-24 border rounded-xl border-gray-800 no-fade"
+        showSkeleton={false}
+        loading="eager"
+        decoding="sync"
+      />
+    );
+  }
+
+  if (props.thumbnail.sprite) {
+    const { sprite } = props.thumbnail;
+    const scale = 96 / sprite.height;
+    const width = Math.max(1, Math.round(sprite.width * scale));
+
+    return (
+      <div
+        className="border rounded-xl border-gray-800 overflow-hidden bg-black"
+        style={{
+          width,
+          height: 96,
+        }}
+      >
+        <img
+          src={sprite.url}
+          alt=""
+          className="block max-w-none no-fade pointer-events-none select-none"
+          style={{
+            transform: `translate(${-sprite.x * scale}px, ${-sprite.y * scale}px) scale(${scale})`,
+            transformOrigin: "top left",
+          }}
+        />
+      </div>
+    );
+  }
+
+  return null;
+}
 
 function ThumbnailDisplay(props: { at: number; show: boolean }) {
   const thumbnailImages = usePlayerStore((s) => s.thumbnails.images);
@@ -46,7 +93,7 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
       offscreenLeft: left,
       offscreenRight: right,
     });
-  }, [props.at]);
+  }, [props.at, currentThumbnail]);
 
   // Keep time label width consistent and avoid recomputing
   const formattedTime = useMemo(
@@ -67,12 +114,9 @@ function ThumbnailDisplay(props: { at: number; show: boolean }) {
               transform: `translateX(${transformX}px)`,
             }}
           >
-            {currentThumbnail && (
-              <img
-                src={currentThumbnail.data}
-                className="h-24 border rounded-xl border-gray-800 no-fade"
-              />
-            )}
+            {currentThumbnail ? (
+              <ThumbnailPreview thumbnail={currentThumbnail} />
+            ) : null}
             <p className="mt-1 mx-auto text-center border rounded-xl border-gray-800 px-3 py-1 backdrop-blur-lg bg-black bg-opacity-20 w-max">
               {formattedTime}
             </p>
@@ -153,18 +197,21 @@ export function ProgressBar() {
     setDraggingTime((dragPercentage / 100) * duration);
   }, [setDraggingTime, duration, dragPercentage]);
 
+  const previewPercentage = dragging ? dragPercentage : mousePos;
+  const shouldShowPreview = dragging || mousePos > -1;
+
   return (
     <div className="w-full relative" dir="ltr">
-      <div className="top-0 absolute inset-x-0">
+      <div className="top-0 absolute inset-x-0 z-[70] pointer-events-none">
         <div
           className="absolute bottom-0"
           style={{
-            left: `${mousePos}%`,
+            left: `${previewPercentage}%`,
           }}
         >
           <ThumbnailDisplay
-            at={Math.floor((mousePos / 100) * duration)}
-            show={mousePos > -1}
+            at={Math.floor((previewPercentage / 100) * duration)}
+            show={shouldShowPreview}
           />
         </div>
       </div>

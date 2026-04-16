@@ -56,6 +56,8 @@ const RECOVERABLE_HLS_BUFFER_ERRORS = new Set<string>([
   ErrorDetails.BUFFER_STALLED_ERROR,
   ErrorDetails.BUFFER_NUDGE_ON_STALL,
   ErrorDetails.BUFFER_SEEK_OVER_HOLE,
+  ErrorDetails.BUFFER_APPEND_ERROR,
+  ErrorDetails.BUFFER_APPENDING_ERROR,
 ]);
 const RECOVERABLE_HLS_NETWORK_ERRORS = new Set<string>([
   ErrorDetails.KEY_LOAD_ERROR,
@@ -67,6 +69,10 @@ const RECOVERABLE_HLS_NETWORK_ERRORS = new Set<string>([
   ErrorDetails.LEVEL_LOAD_ERROR,
   ErrorDetails.LEVEL_LOAD_TIMEOUT,
 ]);
+const HLS_START_LOAD_THROTTLE_MS = 2500;
+const HLS_SOURCEBUFFER_RACE_WINDOW_MS = 6000;
+const HLS_SOURCEBUFFER_RACE_THRESHOLD = 3;
+const HLS_RECREATE_COOLDOWN_MS = 12000;
 
 function hlsLevelToQuality(level?: Level): SourceQuality | null {
   if (!level?.height) return null;
@@ -188,6 +194,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
   let qualitySetupRetryTimeout: NodeJS.Timeout | null = null; // Retry manual quality setup after manifest load
   let hlsRecoveryTimeout: NodeJS.Timeout | null = null; // Throttle recovery attempts for transient HLS failures
+  let lastHlsStartLoadAt = 0;
+  let detachedSourceBufferRaceCount = 0;
+  let detachedSourceBufferRaceWindowStart = 0;
+  let lastHlsRecreateAt = 0;
 
   const languagePromises = new Map<
     string,
@@ -248,6 +258,58 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     }
   }
 
+  function startHlsLoadThrottled(atTime: number): boolean {
+    if (!hls) return false;
+    const now = Date.now();
+    if (now - lastHlsStartLoadAt < HLS_START_LOAD_THROTTLE_MS) {
+      return false;
+    }
+    lastHlsStartLoadAt = now;
+    hls.startLoad(Math.max(atTime, 0));
+    return true;
+  }
+
+  function resetDetachedSourceBufferRaceTracking() {
+    detachedSourceBufferRaceCount = 0;
+    detachedSourceBufferRaceWindowStart = 0;
+  }
+
+  function trackDetachedSourceBufferRace() {
+    const now = Date.now();
+    if (
+      detachedSourceBufferRaceWindowStart === 0 ||
+      now - detachedSourceBufferRaceWindowStart >
+        HLS_SOURCEBUFFER_RACE_WINDOW_MS
+    ) {
+      detachedSourceBufferRaceWindowStart = now;
+      detachedSourceBufferRaceCount = 0;
+    }
+    detachedSourceBufferRaceCount += 1;
+    return detachedSourceBufferRaceCount;
+  }
+
+  function recreateHlsAtCurrentTime(src: LoadableSource) {
+    if (!videoElement || src.type !== "hls") return false;
+    const now = Date.now();
+    if (now - lastHlsRecreateAt < HLS_RECREATE_COOLDOWN_MS) {
+      return false;
+    }
+
+    const resumeAt = Math.max(videoElement.currentTime ?? 0, 0);
+    const shouldResumePlayback =
+      !videoElement.paused || shouldAutoplayAfterLoad;
+
+    lastHlsRecreateAt = now;
+    startAt = resumeAt;
+    shouldAutoplayAfterLoad = shouldResumePlayback;
+    resetDetachedSourceBufferRaceTracking();
+
+    emit("loading", true);
+    setupSource(videoElement, src);
+    tryAutoplayWhenReady();
+    return true;
+  }
+
   function scheduleHlsRecovery() {
     if (hlsRecoveryTimeout) return;
 
@@ -267,8 +329,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       }
 
       emit("loading", true);
-      hls.startLoad(currentTime);
-      tryAutoplayWhenReady();
+      const restarted = startHlsLoadThrottled(currentTime);
+      if (restarted) {
+        tryAutoplayWhenReady();
+      }
     }, 1500);
   }
 
@@ -340,6 +404,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       hls.destroy();
       hls = null;
     }
+    lastHlsStartLoadAt = 0;
+    resetDetachedSourceBufferRaceTracking();
     if (qualitySetupRetryTimeout) {
       clearTimeout(qualitySetupRetryTimeout);
       qualitySetupRetryTimeout = null;
@@ -387,12 +453,35 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           if (hls !== currentHls) return;
           if (isDetachedSourceBufferRace(data)) {
             clearHlsRecoveryTimeout();
-            console.warn("Ignoring transient HLS SourceBuffer race", data);
+            const raceCount = trackDetachedSourceBufferRace();
+            const recreated =
+              raceCount >= HLS_SOURCEBUFFER_RACE_THRESHOLD &&
+              recreateHlsAtCurrentTime(src);
+
+            if (recreated) {
+              console.warn(
+                "Recreated HLS instance after repeated SourceBuffer race",
+                {
+                  raceCount,
+                  details: data.details,
+                  parent: data.parent,
+                },
+              );
+              return;
+            }
+
+            scheduleHlsRecovery();
+            console.warn("Ignoring transient HLS SourceBuffer race", {
+              raceCount,
+              details: data.details,
+              parent: data.parent,
+            });
             return;
           }
 
           if (isRecoverableHlsBufferIssue(data)) {
             emit("loading", true);
+            scheduleHlsRecovery();
             console.warn("HLS buffering event", data);
           } else if (isRecoverableHlsNetworkIssue(data)) {
             emit("loading", true);
@@ -461,6 +550,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         hls.on(Hls.Events.STALL_RESOLVED, () => {
           if (hls !== currentHls) return;
           clearHlsRecoveryTimeout();
+          resetDetachedSourceBufferRaceTracking();
           emit("loading", false);
         });
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
@@ -488,6 +578,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           }
 
           reportAudioTracks();
+          resetDetachedSourceBufferRaceTracking();
+          lastHlsStartLoadAt = Date.now();
           hls.startLoad(startAt);
 
           if (isExtensionActiveCached()) {
@@ -719,6 +811,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       qualitySetupRetryTimeout = null;
     }
     clearHlsRecoveryTimeout();
+    lastHlsStartLoadAt = 0;
+    resetDetachedSourceBufferRaceTracking();
 
     if (videoElement) {
       videoElement.removeAttribute("src");

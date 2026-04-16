@@ -3,6 +3,7 @@ import {
   NotFoundError,
   type ShowScrapeContext,
   type SourcererOutput,
+  type StreamPreview,
 } from "@/lib/providers";
 
 const getBaseUrl = () => {
@@ -20,6 +21,7 @@ interface VidlinkStream {
   subtitle?: string;
   quality: string;
   provider: string;
+  preview?: StreamPreview;
 }
 
 interface VidlinkApiResponse {
@@ -39,6 +41,7 @@ function encodeStreamInfo(stream: VidlinkStream): string {
     subtitle: stream.subtitle,
     quality: stream.quality,
     provider: stream.provider,
+    preview: stream.preview,
   };
   return `openmovie://${encodeURIComponent(JSON.stringify(info))}`;
 }

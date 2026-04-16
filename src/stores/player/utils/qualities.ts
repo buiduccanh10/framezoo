@@ -1,9 +1,11 @@
-import { Qualities, Stream } from "@/lib/providers";
+import { Qualities, Stream, StreamPreview } from "@/lib/providers";
 import { QualityStore } from "@/stores/quality";
 
 export type SourceQuality = Qualities;
 
 export type StreamType = "hls" | "mp4";
+
+export type SourcePreview = StreamPreview;
 
 export type SourceFileStream = {
   type: "mp4";
@@ -24,6 +26,7 @@ export type SourceSliceSource =
       qualities: Partial<Record<SourceQuality, SourceFileStream>>;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
+      preview?: SourcePreview;
     }
   | {
       id?: string;
@@ -31,6 +34,7 @@ export type SourceSliceSource =
       url: string;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
+      preview?: SourcePreview;
     };
 
 const qualitySorting: Record<SourceQuality, number> = {

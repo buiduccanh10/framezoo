@@ -2,13 +2,21 @@ import { MakeSlice } from "@/stores/player/slices/types";
 
 export interface ThumbnailImage {
   at: number;
-  data: string;
+  data?: string;
+  sprite?: {
+    url: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 }
 
 export interface ThumbnailSlice {
   thumbnails: {
     images: ThumbnailImage[];
     addImage(img: ThumbnailImage): void;
+    setImages(images: ThumbnailImage[]): void;
     resetImages(): void;
   };
 }
@@ -77,6 +85,11 @@ export const createThumbnailSlice: MakeSlice<ThumbnailSlice> = (set, get) => ({
     resetImages() {
       set((s) => {
         s.thumbnails.images = [];
+      });
+    },
+    setImages(images) {
+      set((s) => {
+        s.thumbnails.images = [...images].sort((a, b) => a.at - b.at);
       });
     },
     addImage(img) {

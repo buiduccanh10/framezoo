@@ -30,6 +30,7 @@ export function convertRunoutputToSource(out: {
       url: out.stream.playlist,
       headers: out.stream.headers,
       preferredHeaders: out.stream.preferredHeaders,
+      preview: out.stream.preview,
     };
   }
   if (out.stream.type === "file") {
@@ -54,6 +55,7 @@ export function convertRunoutputToSource(out: {
       qualities,
       headers: out.stream.headers,
       preferredHeaders: out.stream.preferredHeaders,
+      preview: out.stream.preview,
     };
   }
   throw new Error("unrecognized type");
