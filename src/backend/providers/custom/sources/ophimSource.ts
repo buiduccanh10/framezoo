@@ -3,210 +3,120 @@ import {
   NotFoundError,
   type ShowScrapeContext,
   type SourcererOutput,
-  flags,
+  type StreamPreview,
 } from "@/lib/providers";
 
-const OPHIM_API_BASE = "https://ophim1.com/v1/api";
-const TMDB_API_KEY = "a500049f3e06109fe3e8289b06cf5685";
+const getBaseUrl = () => {
+  const backendUrl =
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+  return `${backendUrl}/api/embed`;
+};
 
-// Lấy tên tiếng Việt từ TMDB để tìm kiếm trên OPhim
-async function fetchVietnameseTitle(
-  tmdbId: string,
-  type: "movie" | "show",
-): Promise<string | null> {
+const OPHIM_API_BASE = `${getBaseUrl()}/api/streams/ophim`;
+
+interface OPhimStream {
+  name: string;
+  title: string;
+  url: string;
+  subtitle?: string;
+  quality: string;
+  provider: string;
+  preview?: StreamPreview;
+}
+
+interface OPhimApiResponse {
+  success: boolean;
+  tmdbId: string;
+  imdbId: string | null;
+  count: number;
+  providerTimings: Record<string, number>;
+  streams: OPhimStream[];
+}
+
+function buildContextQuery(
+  ctx: MovieScrapeContext | ShowScrapeContext,
+): string {
+  const query = new URLSearchParams();
+
+  if (
+    typeof ctx.media?.title === "string" &&
+    ctx.media.title.trim().length > 0
+  ) {
+    query.set("title", ctx.media.title.trim());
+  }
+
+  if (
+    typeof ctx.media?.releaseYear === "number" &&
+    Number.isFinite(ctx.media.releaseYear)
+  ) {
+    query.set("releaseYear", String(ctx.media.releaseYear));
+  }
+
+  const queryString = query.toString();
+  return queryString ? `?${queryString}` : "";
+}
+
+function encodeStreamInfo(stream: OPhimStream): string {
+  const info = {
+    name: stream.name,
+    title: stream.title,
+    url: stream.url,
+    subtitle: stream.subtitle,
+    quality: stream.quality,
+    provider: stream.provider,
+    preview: stream.preview,
+  };
+  return `openmovie://${encodeURIComponent(JSON.stringify(info))}`;
+}
+
+function fixStreamUrl(url: string, baseUrl: string): string {
+  if (!url) return url;
+
   try {
-    const mediaType = type === "movie" ? "movie" : "tv";
-    const url = `https://api.themoviedb.org/3/${mediaType}/${tmdbId}?api_key=${TMDB_API_KEY}&language=vi-VN`;
-    const response = await fetch(url);
-    if (!response.ok) return null;
-    const data = await response.json();
-    return type === "movie" ? data.title : data.name;
-  } catch {
-    return null;
-  }
-}
+    const urlObj = new URL(url);
+    const baseObj = new URL(baseUrl);
 
-interface OPhimSearchItem {
-  name: string;
-  origin_name: string;
-  slug: string;
-  type: string;
-  year?: number;
-}
+    if (urlObj.origin === baseObj.origin && url.startsWith(baseUrl)) {
+      return url;
+    }
 
-interface OPhimEpisodeData {
-  name: string;
-  slug: string;
-  link_embed: string;
-  link_m3u8: string;
-}
+    const pathAndSearch = urlObj.pathname + urlObj.search;
 
-interface OPhimServerData {
-  server_name: string;
-  server_data: OPhimEpisodeData[];
-}
+    if (pathAndSearch.includes("-proxy?")) {
+      const basePath = baseObj.pathname === "/" ? "" : baseObj.pathname;
 
-interface OPhimDetail {
-  name: string;
-  slug: string;
-  type: string;
-  tmdb?: {
-    type?: string;
-    id?: string;
-    season?: number;
-  };
-  imdb?: {
-    id?: string;
-  };
-  episodes: OPhimServerData[];
-}
-
-// Tìm slug phim trên OPhim bằng cách search + match TMDB ID
-async function findOPhimSlug(
-  ctx: MovieScrapeContext | ShowScrapeContext,
-): Promise<string> {
-  const searchTerms: string[] = [ctx.media.title];
-
-  // Thử lấy tên tiếng Việt
-  const viTitle = await fetchVietnameseTitle(ctx.media.tmdbId, ctx.media.type);
-  if (viTitle && viTitle !== ctx.media.title) {
-    searchTerms.unshift(viTitle);
-  }
-
-  let potentialMatchSlug: string | null = null;
-
-  for (const term of searchTerms) {
-    const searchUrl = `${OPHIM_API_BASE}/tim-kiem?keyword=${encodeURIComponent(term)}`;
-    try {
-      const response = await fetch(searchUrl);
-      const data = (await response.json()) as {
-        status: string;
-        data: { items: OPhimSearchItem[] };
-      };
-
-      if (!data?.data?.items?.length) continue;
-
-      // Kiểm tra từng kết quả, lấy chi tiết để match TMDB ID
-      for (const item of data.data.items) {
-        const detailUrl = `${OPHIM_API_BASE}/phim/${item.slug}`;
-        try {
-          const responseDetail = await fetch(detailUrl);
-          const detail = (await responseDetail.json()) as {
-            status: string;
-            data: { item: OPhimDetail };
-          };
-
-          const detailItem = detail?.data?.item;
-          if (!detailItem?.tmdb?.id) continue;
-
-          // Match bằng TMDB ID
-          if (detailItem.tmdb.id === ctx.media.tmdbId) {
-            // Nếu là show, kiểm tra season
-            if (ctx.media.type === "show") {
-              const showCtx = ctx as ShowScrapeContext;
-              if (
-                detailItem.tmdb.season !== undefined &&
-                detailItem.tmdb.season !== showCtx.media.season.number
-              ) {
-                if (!potentialMatchSlug) {
-                  potentialMatchSlug = item.slug;
-                }
-                continue;
-              }
-            }
-            return item.slug;
-          }
-        } catch {
-          // Bỏ qua lỗi chi tiết, thử item tiếp theo
-        }
+      if (basePath && urlObj.pathname.startsWith(basePath)) {
+        return baseObj.origin + pathAndSearch;
       }
-    } catch {
-      // Bỏ qua lỗi tìm kiếm, thử term tiếp theo
+
+      return baseUrl + pathAndSearch;
+    }
+  } catch {
+    if (url.includes("-proxy?") && !url.startsWith("http")) {
+      return baseUrl + (url.startsWith("/") ? "" : "/") + url;
     }
   }
 
-  if (potentialMatchSlug) {
-    return potentialMatchSlug;
+  if (url.includes("localhost:8787")) {
+    return url.replace(/https?:\/\/localhost:8787/, baseUrl);
   }
 
-  throw new NotFoundError("Could not find matching movie on OPhim");
+  return url;
 }
 
-// Lấy chi tiết phim và extract stream URL
-async function getOPhimStreams(
-  ctx: MovieScrapeContext | ShowScrapeContext,
-  slug: string,
-): Promise<SourcererOutput> {
-  const detailUrl = `${OPHIM_API_BASE}/phim/${slug}`;
-  const response = await fetch(detailUrl);
-  const detail = (await response.json()) as {
-    status: string;
-    data: { item: OPhimDetail };
-  };
+function fixSubtitleUrl(
+  url: string | undefined,
+  baseUrl: string,
+): string | undefined {
+  if (!url) return url;
 
-  const item = detail?.data?.item;
-  if (!item?.episodes?.length) {
-    throw new NotFoundError("No episodes found on OPhim");
+  const fixed = fixStreamUrl(url, baseUrl);
+
+  if (fixed && !fixed.startsWith(baseUrl) && fixed.startsWith("http")) {
+    return `${baseUrl}/sub-proxy?url=${encodeURIComponent(fixed)}`;
   }
 
-  // Chọn server đầu tiên có dữ liệu
-  const server = item.episodes.find((s) => s.server_data?.length > 0);
-  if (!server) {
-    throw new NotFoundError("No server with episodes found on OPhim");
-  }
-
-  let episodeData: OPhimEpisodeData | undefined;
-
-  if (ctx.media.type === "movie") {
-    // Movie: lấy episode đầu tiên (thường là "Full")
-    episodeData = server.server_data[0];
-  } else {
-    // Show: tìm episode theo số
-    const showCtx = ctx as ShowScrapeContext;
-    const episodeNumber = showCtx.media.episode.number;
-
-    episodeData = server.server_data.find(
-      (ep) =>
-        ep.name === String(episodeNumber) || ep.slug === String(episodeNumber),
-    );
-
-    // Fallback: thử match bằng index
-    if (!episodeData && episodeNumber <= server.server_data.length) {
-      episodeData = server.server_data[episodeNumber - 1];
-    }
-  }
-
-  if (!episodeData) {
-    throw new NotFoundError("Episode not found on OPhim");
-  }
-
-  const streams = [];
-
-  // Ưu tiên link_m3u8 (stream trực tiếp, chất lượng tốt hơn)
-  if (episodeData.link_m3u8) {
-    streams.push({
-      id: "ophim-hls",
-      type: "hls" as const,
-      playlist: episodeData.link_m3u8,
-      flags: [flags.CORS_ALLOWED],
-      captions: [],
-      // OPhim streams không cần validation vì URL đã xác thực qua API
-      skipValidation: true,
-      headers: {
-        Referer: "https://ophim16.cc/",
-        Origin: "https://ophim16.cc",
-      },
-    });
-  }
-
-  if (streams.length === 0) {
-    throw new NotFoundError("No streamable URL found on OPhim");
-  }
-
-  return {
-    stream: streams,
-    embeds: [],
-  };
+  return fixed;
 }
 
 export async function scrapeOPhimMovie(
@@ -214,13 +124,39 @@ export async function scrapeOPhimMovie(
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const slug = await findOPhimSlug(ctx);
-  ctx.progress(50);
+  const apiUrl = `${OPHIM_API_BASE}/movie/${ctx.media.tmdbId}${buildContextQuery(ctx)}`;
 
-  const result = await getOPhimStreams(ctx, slug);
-  ctx.progress(100);
+  try {
+    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl);
 
-  return result;
+    if (!data.success || !data.streams?.length) {
+      throw new NotFoundError("No streams found on OPhim");
+    }
+
+    const embeds = data.streams.map((stream) => {
+      const baseUrl = getBaseUrl();
+      const fixedUrl = fixStreamUrl(stream.url, baseUrl);
+      const fixedSubtitle = fixSubtitleUrl(stream.subtitle, baseUrl);
+
+      return {
+        embedId: "openmovie-embed",
+        url: encodeStreamInfo({
+          ...stream,
+          url: fixedUrl,
+          subtitle: fixedSubtitle,
+        }),
+      };
+    });
+
+    ctx.progress(100);
+    return {
+      embeds,
+    };
+  } catch (err) {
+    console.error("[OPhim] Scrape failed:", err);
+    if (err instanceof NotFoundError) throw err;
+    throw new NotFoundError("Failed to fetch streams from OPhim");
+  }
 }
 
 export async function scrapeOPhimShow(
@@ -228,11 +164,37 @@ export async function scrapeOPhimShow(
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const slug = await findOPhimSlug(ctx);
-  ctx.progress(50);
+  const apiUrl = `${OPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}${buildContextQuery(ctx)}`;
 
-  const result = await getOPhimStreams(ctx, slug);
-  ctx.progress(100);
+  try {
+    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl);
 
-  return result;
+    if (!data.success || !data.streams?.length) {
+      throw new NotFoundError("No streams found on OPhim");
+    }
+
+    const embeds = data.streams.map((stream) => {
+      const baseUrl = getBaseUrl();
+      const fixedUrl = fixStreamUrl(stream.url, baseUrl);
+      const fixedSubtitle = fixSubtitleUrl(stream.subtitle, baseUrl);
+
+      return {
+        embedId: "openmovie-embed",
+        url: encodeStreamInfo({
+          ...stream,
+          url: fixedUrl,
+          subtitle: fixedSubtitle,
+        }),
+      };
+    });
+
+    ctx.progress(100);
+    return {
+      embeds,
+    };
+  } catch (err) {
+    console.error("[OPhim] Show scrape failed:", err);
+    if (err instanceof NotFoundError) throw err;
+    throw new NotFoundError("Failed to fetch streams from OPhim");
+  }
 }
