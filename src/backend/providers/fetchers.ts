@@ -57,9 +57,10 @@ async function fetchButWithApiTokens(
     init
       ? {
           ...init,
+          credentials: "include",
           headers,
         }
-      : undefined,
+      : { credentials: "include" },
   );
   const newApiToken = response.headers.get("X-Token");
   if (newApiToken) setApiToken(newApiToken);

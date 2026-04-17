@@ -182,11 +182,12 @@ export function watchHistoryResponsesToEntries(
 
 export async function getUser(
   url: string,
-  token: string,
+  token?: string,
 ): Promise<{ user: UserResponse; session: SessionResponse }> {
   return ofetch<{ user: UserResponse; session: SessionResponse }>(
     "/users/@me",
     {
+      credentials: "include",
       headers: getAuthHeaders(token),
       baseURL: url,
     },
@@ -202,6 +203,7 @@ export async function editUser(
     `/users/${account.userId}`,
     {
       method: "PATCH",
+      credentials: "include",
       headers: getAuthHeaders(account.token),
       body: object,
       baseURL: url,
@@ -215,6 +217,7 @@ export async function deleteUser(
 ): Promise<UserResponse> {
   return ofetch<UserResponse>(`/users/${account.userId}`, {
     method: "DELETE",
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     baseURL: url,
   });
@@ -222,6 +225,7 @@ export async function deleteUser(
 
 export async function getBookmarks(url: string, account: AccountWithToken) {
   return ofetch<BookmarkResponse[]>(`/users/${account.userId}/bookmarks`, {
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     baseURL: url,
   });
@@ -229,6 +233,7 @@ export async function getBookmarks(url: string, account: AccountWithToken) {
 
 export async function getProgress(url: string, account: AccountWithToken) {
   return ofetch<ProgressResponse[]>(`/users/${account.userId}/progress`, {
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     baseURL: url,
   });
@@ -238,6 +243,7 @@ export async function getWatchHistory(url: string, account: AccountWithToken) {
   return ofetch<WatchHistoryResponse[]>(
     `/users/${account.userId}/watch-history`,
     {
+      credentials: "include",
       headers: getAuthHeaders(account.token),
       baseURL: url,
     },
@@ -249,6 +255,7 @@ export async function checkUserExists(
 ): Promise<boolean> {
   try {
     await ofetch(`/users/${userId}`, {
+      credentials: "include",
       baseURL: url,
     });
     return true;
@@ -265,6 +272,7 @@ export async function checkNicknameExists(
     const response = await ofetch<{ exists: boolean }>(
       `/nickname/${nickname}/exists`,
       {
+        credentials: "include",
         baseURL: url,
       },
     );

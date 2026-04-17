@@ -13,6 +13,7 @@ export async function getLoginChallengeToken(
 ): Promise<ChallengeTokenResponse> {
   return ofetch<ChallengeTokenResponse>("/auth/login/start", {
     method: "POST",
+    credentials: "include",
     body: {
       nickname,
     },
@@ -22,7 +23,6 @@ export async function getLoginChallengeToken(
 
 export interface LoginResponse {
   session: SessionResponse;
-  token: string;
 }
 
 export interface LoginInput {
@@ -41,6 +41,7 @@ export async function loginAccount(
 ): Promise<LoginResponse> {
   return ofetch<LoginResponse>("/auth/login/complete", {
     method: "POST",
+    credentials: "include",
     body: {
       namespace: "movie-web",
       ...data,

@@ -97,6 +97,7 @@ export async function setProgress(
     `/users/${account.userId}/progress/${input.tmdbId}`,
     {
       method: "PUT",
+      credentials: "include",
       headers: getAuthHeaders(account.token),
       baseURL: url,
       body: input,
@@ -115,6 +116,7 @@ export async function removeProgress(
 ) {
   await ofetch(`/users/${account.userId}/progress/${id}`, {
     method: "DELETE",
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     baseURL: url,
     body: {

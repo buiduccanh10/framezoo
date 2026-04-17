@@ -127,7 +127,9 @@ export async function scrapeOPhimMovie(
   const apiUrl = `${OPHIM_API_BASE}/movie/${ctx.media.tmdbId}${buildContextQuery(ctx)}`;
 
   try {
-    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl);
+    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl, {
+      credentials: "include",
+    });
 
     if (!data.success || !data.streams?.length) {
       throw new NotFoundError("No streams found on OPhim");
@@ -167,7 +169,9 @@ export async function scrapeOPhimShow(
   const apiUrl = `${OPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}${buildContextQuery(ctx)}`;
 
   try {
-    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl);
+    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl, {
+      credentials: "include",
+    });
 
     if (!data.success || !data.streams?.length) {
       throw new NotFoundError("No streams found on OPhim");

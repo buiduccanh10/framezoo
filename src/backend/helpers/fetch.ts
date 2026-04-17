@@ -8,6 +8,7 @@ type R<T> = ReturnType<typeof ofetch<T, any>>;
 
 const baseFetch = ofetch.create({
   retry: 0,
+  credentials: "include",
 });
 
 export function makeUrl(url: string, data: Record<string, string>) {

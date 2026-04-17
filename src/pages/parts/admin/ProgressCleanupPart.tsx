@@ -21,6 +21,7 @@ async function cleanupProgressItems(
 ) {
   return ofetch<CleanupResponse>(`/users/${account.userId}/progress/cleanup`, {
     method: "DELETE",
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     baseURL: backendUrl,
   });

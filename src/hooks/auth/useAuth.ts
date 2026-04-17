@@ -105,7 +105,7 @@ export function useAuth() {
           device: await encryptData("Browser", keys.seed),
         });
 
-        const user = await getUser(backendUrl, loginResult.token);
+        const user = await getUser(backendUrl);
         const seedBase64 = bytesToBase64(keys.seed);
 
         return userDataLogin(loginResult, user.user, user.session, seedBase64);
@@ -142,7 +142,7 @@ export function useAuth() {
           device: await encryptData("Browser", keys.seed),
         });
 
-        const user = await getUser(backendUrl, loginResult.token);
+        const user = await getUser(backendUrl);
         const seedBase64 = bytesToBase64(keys.seed);
 
         // Store credential mapping if we have a credential ID

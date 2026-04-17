@@ -112,7 +112,6 @@ export function useAuthData() {
       seed: string,
     ) => {
       const account = {
-        token: loginResponse.token,
         userId: user.id,
         sessionId: loginResponse.session.id,
         deviceName: session.device,

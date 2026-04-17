@@ -93,6 +93,7 @@ export async function setWatchHistory(
     `/users/${account.userId}/watch-history/${input.tmdbId}`,
     {
       method: "PUT",
+      credentials: "include",
       headers: getAuthHeaders(account.token),
       baseURL: url,
       body: input,
@@ -109,6 +110,7 @@ export async function removeWatchHistory(
 ) {
   await ofetch(`/users/${account.userId}/watch-history/${id}`, {
     method: "DELETE",
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     baseURL: url,
     body: {

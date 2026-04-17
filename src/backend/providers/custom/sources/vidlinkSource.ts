@@ -104,7 +104,9 @@ export async function scrapeVidlinkMovie(
   const apiUrl = `${VIDLINK_API_BASE}/movie/${ctx.media.tmdbId}`;
 
   try {
-    const data = await ctx.fetcher<VidlinkApiResponse>(apiUrl);
+    const data = await ctx.fetcher<VidlinkApiResponse>(apiUrl, {
+      credentials: "include",
+    });
 
     if (!data.success || !data.streams?.length) {
       throw new NotFoundError("No streams found on Vidlink");
@@ -144,7 +146,9 @@ export async function scrapeVidlinkShow(
   const apiUrl = `${VIDLINK_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
 
   try {
-    const data = await ctx.fetcher<VidlinkApiResponse>(apiUrl);
+    const data = await ctx.fetcher<VidlinkApiResponse>(apiUrl, {
+      credentials: "include",
+    });
 
     if (!data.success || !data.streams?.length) {
       throw new NotFoundError("No streams found on Vidlink");

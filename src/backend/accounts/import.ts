@@ -15,6 +15,7 @@ export function importProgress(
 ) {
   return ofetch<void>(`/users/${account.userId}/progress/import`, {
     method: "PUT",
+    credentials: "include",
     body: progressItems,
     baseURL: url,
     headers: getAuthHeaders(account.token),
@@ -28,6 +29,7 @@ export function importBookmarks(
 ) {
   return ofetch<void>(`/users/${account.userId}/bookmarks`, {
     method: "PUT",
+    credentials: "include",
     body: bookmarks,
     baseURL: url,
     headers: getAuthHeaders(account.token),
@@ -41,6 +43,7 @@ export function importGroupOrder(
 ) {
   return ofetch<void>(`/users/${account.userId}/group-order`, {
     method: "PUT",
+    credentials: "include",
     body: groupOrder,
     baseURL: url,
     headers: getAuthHeaders(account.token),
@@ -54,6 +57,7 @@ export function importWatchHistory(
 ) {
   return ofetch<void>(`/users/${account.userId}/watch-history/import`, {
     method: "PUT",
+    credentials: "include",
     body: watchHistoryItems,
     baseURL: url,
     headers: getAuthHeaders(account.token),
@@ -67,6 +71,7 @@ export function importSettings(
 ) {
   return ofetch<void>(`/users/${account.userId}/settings`, {
     method: "PUT",
+    credentials: "include",
     body: settings,
     baseURL: url,
     headers: getAuthHeaders(account.token),

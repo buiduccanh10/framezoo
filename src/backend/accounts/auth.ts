@@ -10,10 +10,13 @@ export interface SessionResponse {
 }
 export interface LoginResponse {
   session: SessionResponse;
-  token: string;
 }
 
-export function getAuthHeaders(token: string): Record<string, string> {
+export function getAuthHeaders(token?: string): Record<string, string> {
+  if (!token) {
+    return {};
+  }
+
   return {
     authorization: `Bearer ${token}`,
   };
@@ -26,6 +29,7 @@ export async function accountLogin(
 ): Promise<LoginResponse> {
   return ofetch<LoginResponse>("/auth/login", {
     method: "POST",
+    credentials: "include",
     body: {
       id,
       device: deviceName,

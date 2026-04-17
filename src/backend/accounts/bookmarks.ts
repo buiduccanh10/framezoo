@@ -45,6 +45,7 @@ export async function addBookmark(
     `/users/${account.userId}/bookmarks/${input.tmdbId}`,
     {
       method: "POST",
+      credentials: "include",
       headers: getAuthHeaders(account.token),
       baseURL: url,
       body: input,
@@ -61,6 +62,7 @@ export async function removeBookmark(
     `/users/${account.userId}/bookmarks/${id}`,
     {
       method: "DELETE",
+      credentials: "include",
       headers: getAuthHeaders(account.token),
       baseURL: url,
     },

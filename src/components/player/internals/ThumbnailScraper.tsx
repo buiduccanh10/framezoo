@@ -98,6 +98,7 @@ export function ThumbnailScraper() {
       try {
         const response = await fetch(previewVtt, {
           signal: controller.signal,
+          credentials: "include",
         });
         if (!response.ok) {
           throw new Error(

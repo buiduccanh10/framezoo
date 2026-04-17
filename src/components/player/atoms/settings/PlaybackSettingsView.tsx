@@ -182,8 +182,8 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
   const display = usePlayerStore((s) => s.display);
-  const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
-  const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
+  // const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
+  // const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
   const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
   const enableLowPerformanceMode = usePreferencesStore(
@@ -198,20 +198,20 @@ export function PlaybackSettingsView({ id }: { id: string }) {
     !isInWatchParty && allowAutoplay && !enableLowPerformanceMode;
 
   // Save settings to backend
-  const saveThumbnailSetting = useCallback(
-    async (value: boolean) => {
-      if (!account || !backendUrl) return;
+  // const saveThumbnailSetting = useCallback(
+  //   async (value: boolean) => {
+  //     if (!account || !backendUrl) return;
 
-      try {
-        await updateSettings(backendUrl, account, {
-          enableThumbnails: value,
-        });
-      } catch (error) {
-        console.error("Failed to save thumbnail setting:", error);
-      }
-    },
-    [account, backendUrl],
-  );
+  //     try {
+  //       await updateSettings(backendUrl, account, {
+  //         enableThumbnails: value,
+  //       });
+  //     } catch (error) {
+  //       console.error("Failed to save thumbnail setting:", error);
+  //     }
+  //   },
+  //   [account, backendUrl],
+  // );
 
   const saveAutoplaySetting = useCallback(
     async (value: boolean) => {
@@ -237,11 +237,11 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   );
 
   // Handle thumbnail toggle with backend save
-  const handleThumbnailToggle = useCallback(() => {
-    const newValue = !enableThumbnails;
-    setEnableThumbnails(newValue);
-    saveThumbnailSetting(newValue);
-  }, [enableThumbnails, setEnableThumbnails, saveThumbnailSetting]);
+  // const handleThumbnailToggle = useCallback(() => {
+  //   const newValue = !enableThumbnails;
+  //   setEnableThumbnails(newValue);
+  //   saveThumbnailSetting(newValue);
+  // }, [enableThumbnails, setEnableThumbnails, saveThumbnailSetting]);
 
   // Handle autoplay toggle with backend save
   const handleAutoplayToggle = useCallback(() => {
@@ -296,7 +296,7 @@ export function PlaybackSettingsView({ id }: { id: string }) {
               {t("settings.preferences.autoplayLabel")}
             </Menu.Link>
           )}
-          {!enableLowPerformanceMode && (
+          {/* {!enableLowPerformanceMode && (
             <Menu.Link
               rightSide={
                 <Toggle
@@ -307,7 +307,7 @@ export function PlaybackSettingsView({ id }: { id: string }) {
             >
               {t("settings.preferences.thumbnailLabel")}
             </Menu.Link>
-          )}
+          )} */}
         </div>
       </Menu.Section>
     </>

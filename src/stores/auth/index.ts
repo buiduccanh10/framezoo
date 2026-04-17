@@ -14,7 +14,7 @@ export interface Account {
 export type AccountWithToken = Account & {
   sessionId: string;
   userId: string;
-  token: string;
+  token?: string;
   seed: string;
   deviceName: string;
 };

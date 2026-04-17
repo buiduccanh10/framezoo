@@ -11,6 +11,7 @@ export interface MetaResponse {
 export async function getBackendMeta(url: string): Promise<MetaResponse> {
   const meta = await ofetch<MetaResponse>("/meta", {
     baseURL: url,
+    credentials: "include",
   });
 
   // Remove escaped backslashes before apostrophes (e.g., \' becomes ')

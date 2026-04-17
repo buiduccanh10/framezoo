@@ -97,6 +97,7 @@ export function updateSettings(
 ) {
   return ofetch<SettingsResponse>(`/users/${account.userId}/settings`, {
     method: "PUT",
+    credentials: "include",
     body: settings,
     baseURL: url,
     headers: getAuthHeaders(account.token),
@@ -106,6 +107,7 @@ export function updateSettings(
 export function getSettings(url: string, account: AccountWithToken) {
   return ofetch<SettingsResponse>(`/users/${account.userId}/settings`, {
     method: "GET",
+    credentials: "include",
     baseURL: url,
     headers: getAuthHeaders(account.token),
   });

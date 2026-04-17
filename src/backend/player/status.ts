@@ -85,9 +85,10 @@ export async function sendPlayerStatus(
 
   const response = await fetch(`${backendUrl}/api/player/status`, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      ...(account ? { Authorization: `Bearer ${account.token}` } : {}),
+      ...(account?.token ? { Authorization: `Bearer ${account.token}` } : {}),
     },
     body: JSON.stringify(data),
   });
@@ -117,7 +118,10 @@ export async function getUserPlayerStatus(
       userId,
     )}&roomCode=${encodeURIComponent(roomCode)}`,
     {
-      headers: account ? { Authorization: `Bearer ${account.token}` } : {},
+      credentials: "include",
+      headers: account?.token
+        ? { Authorization: `Bearer ${account.token}` }
+        : {},
     },
   );
 
@@ -143,7 +147,10 @@ export async function getRoomStatuses(
   const response = await fetch(
     `${backendUrl}/api/player/status?roomCode=${encodeURIComponent(roomCode)}`,
     {
-      headers: account ? { Authorization: `Bearer ${account.token}` } : {},
+      credentials: "include",
+      headers: account?.token
+        ? { Authorization: `Bearer ${account.token}` }
+        : {},
     },
   );
 

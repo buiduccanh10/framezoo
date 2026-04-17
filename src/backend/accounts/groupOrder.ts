@@ -14,6 +14,7 @@ export function updateGroupOrder(
 ) {
   return ofetch<GroupOrderResponse>(`/users/${account.userId}/group-order`, {
     method: "PUT",
+    credentials: "include",
     body: groupOrder,
     baseURL: url,
     headers: getAuthHeaders(account.token),
@@ -23,6 +24,7 @@ export function updateGroupOrder(
 export function getGroupOrder(url: string, account: AccountWithToken) {
   return ofetch<GroupOrderResponse>(`/users/${account.userId}/group-order`, {
     method: "GET",
+    credentials: "include",
     baseURL: url,
     headers: getAuthHeaders(account.token),
   }).catch((err) => {

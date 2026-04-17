@@ -18,6 +18,7 @@ export interface SessionUpdate {
 
 export async function getSessions(url: string, account: AccountWithToken) {
   return ofetch<SessionResponse[]>(`/users/${account.userId}/sessions`, {
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     baseURL: url,
   });
@@ -30,6 +31,7 @@ export async function updateSession(
 ) {
   return ofetch<SessionResponse[]>(`/sessions/${account.sessionId}`, {
     method: "PATCH",
+    credentials: "include",
     headers: getAuthHeaders(account.token),
     body: update,
     baseURL: url,
@@ -38,11 +40,12 @@ export async function updateSession(
 
 export async function removeSession(
   url: string,
-  token: string,
+  token: string | undefined,
   sessionId: string,
 ) {
   return ofetch<SessionResponse[]>(`/sessions/${sessionId}`, {
     method: "DELETE",
+    credentials: "include",
     headers: getAuthHeaders(token),
     baseURL: url,
   });

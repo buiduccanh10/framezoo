@@ -400,6 +400,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   }
 
   function setupSource(vid: HTMLVideoElement, src: LoadableSource) {
+    // Ensure cross-origin media requests carry auth cookies for backend-proxied endpoints.
+    vid.crossOrigin = "use-credentials";
+
     if (hls) {
       hls.destroy();
       hls = null;
@@ -423,6 +426,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       if (!hls) {
         hls = new Hls({
           autoStartLoad: false,
+          xhrSetup: (xhr) => {
+            xhr.withCredentials = true;
+          },
           maxBufferLength: 240, // 240 seconds
           maxMaxBufferLength: 480,
           abrEwmaDefaultEstimate: 5 * 1000 * 1000, // 5 Mbps default bandwidth estimate for better ABR decisions

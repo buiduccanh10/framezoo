@@ -13,6 +13,7 @@ export async function getRegisterChallengeToken(
 ): Promise<ChallengeTokenResponse> {
   return ofetch<ChallengeTokenResponse>("/auth/register/start", {
     method: "POST",
+    credentials: "include",
     body: {
       captchaToken,
     },
@@ -23,7 +24,6 @@ export async function getRegisterChallengeToken(
 export interface RegisterResponse {
   user: UserResponse;
   session: SessionResponse;
-  token: string;
 }
 
 export interface RegisterInput {
@@ -48,6 +48,7 @@ export async function registerAccount(
 ): Promise<RegisterResponse> {
   return ofetch<RegisterResponse>("/auth/register/complete", {
     method: "POST",
+    credentials: "include",
     body: {
       namespace: "movie-web",
       ...data,
