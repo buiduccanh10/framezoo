@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { type KeyboardEvent, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
@@ -152,6 +152,17 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
     inviteCode,
   ]);
 
+  const handleLoginEnter = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (!props.forLogin || event.key !== "Enter") return;
+      if (!(event.target instanceof HTMLInputElement)) return;
+
+      event.preventDefault();
+      void nextStep();
+    },
+    [props.forLogin, nextStep],
+  );
+
   return (
     <LargeCard>
       {!props.forLogin && (
@@ -161,7 +172,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
           {t("auth.register.passwordInput.description") ?? undefined}
         </LargeCardText>
       )}
-      <div className="space-y-4">
+      <div className="space-y-4" onKeyDown={handleLoginEnter}>
         <AuthInputBox
           label={
             props.forLogin
