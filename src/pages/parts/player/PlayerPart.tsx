@@ -134,11 +134,13 @@ export function PlayerPart(props: PlayerPartProps) {
       </div>
 
       <Player.TopControls show={showTargets}>
-        <div className="grid grid-cols-[1fr,auto] xl:grid-cols-3 items-center">
-          <div className="flex space-x-3 items-center">
+        <div className="grid grid-cols-[1fr,auto] xl:grid-cols-3 items-center gap-2">
+          <div className="flex min-w-0 items-center gap-1 ssm:gap-2">
             <Player.BackLink url={props.backUrl} />
             <span className="text mx-3 text-type-secondary">/</span>
-            <Player.Title />
+            <div className="min-w-0 max-w-full flex-1">
+              <Player.Title />
+            </div>
 
             {isMobile && meta?.type === "show" && (
               <span className="text-type-secondary text-sm whitespace-nowrap flex-shrink-0">
@@ -149,9 +151,10 @@ export function PlayerPart(props: PlayerPartProps) {
               </span>
             )}
 
-            <Player.InfoButton />
-
-            <Player.BookmarkButton />
+            <div className="flex items-center flex-shrink-0">
+              <Player.InfoButton />
+              <Player.BookmarkButton />
+            </div>
           </div>
           <div className="text-center hidden xl:flex justify-center items-center">
             <Player.EpisodeTitle />
@@ -218,7 +221,7 @@ export function PlayerPart(props: PlayerPartProps) {
         </div>
         <div className="grid grid-cols-[2rem,minmax(0,1fr),2rem] gap-1 ssm:gap-2 lg:hidden">
           <div />
-          <div className="flex max-w-full items-center justify-center gap-1 ssm:gap-2 flex-wrap">
+          <div className="flex max-w-full items-center justify-center gap-1 ssm:gap-2">
             {/* Disable PiP for iOS PWA */}
             {!(isPWA && isIOS) && status === playerStatus.PLAYING && (
               <Player.Pip
@@ -258,7 +261,7 @@ export function PlayerPart(props: PlayerPartProps) {
             />
           </div>
           <div>
-            {status === playerStatus.PLAYING && (
+            {status === playerStatus.PLAYING && !isMobile && (
               <div
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
