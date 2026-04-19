@@ -7,6 +7,7 @@ import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
 const MESSAGE_INITIAL_DELAY_MS = 6000;
+const ACTIVE_SEGMENT_BUFFER_THRESHOLD_SECONDS = 0.35;
 
 function getRandomMessage(messages: string[], prev?: string) {
   if (messages.length <= 1) return messages[0] ?? "";
@@ -33,14 +34,22 @@ export function PlayerLoadingOverlay() {
   const sourceId = usePlayerStore((s) => s.sourceId);
   const embedId = usePlayerStore((s) => s.embedId);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
+  const time = usePlayerStore((s) => s.progress.time);
+  const buffered = usePlayerStore((s) => s.progress.buffered);
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
   );
 
+  const isBufferingCurrentPlaybackSegment = useMemo(() => {
+    if (status !== playerStatus.PLAYING || !isLoading) return false;
+    if (!Number.isFinite(time) || !Number.isFinite(buffered)) return true;
+    return buffered - time <= ACTIVE_SEGMENT_BUFFER_THRESHOLD_SECONDS;
+  }, [status, isLoading, time, buffered]);
+
   const showOverlay =
     status === playerStatus.IDLE ||
     (status === playerStatus.SCRAPING && !manualSourceSelection) ||
-    (status === playerStatus.PLAYING && isLoading);
+    isBufferingCurrentPlaybackSegment;
 
   const metaType = meta?.type;
   const metaTmdbId = meta?.tmdbId;
@@ -91,17 +100,21 @@ export function PlayerLoadingOverlay() {
       initialLoadPlaybackKey &&
       playbackKey === initialLoadPlaybackKey &&
       status === playerStatus.PLAYING &&
-      !isLoading
+      !isBufferingCurrentPlaybackSegment
     ) {
       setInitialLoadPlaybackKey(null);
     }
-  }, [initialLoadPlaybackKey, playbackKey, status, isLoading]);
+  }, [
+    initialLoadPlaybackKey,
+    playbackKey,
+    status,
+    isBufferingCurrentPlaybackSegment,
+  ]);
 
   const showBackdropImage =
     status === playerStatus.IDLE ||
     (status === playerStatus.SCRAPING && !manualSourceSelection) ||
-    (status === playerStatus.PLAYING &&
-      isLoading &&
+    (isBufferingCurrentPlaybackSegment &&
       playbackKey !== null &&
       initialLoadPlaybackKey === playbackKey);
 
