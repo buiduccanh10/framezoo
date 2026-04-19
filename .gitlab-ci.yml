@@ -1,0 +1,51 @@
+stages:
+  - deploy
+
+# Required CI/CD variables (GitLab > Settings > CI/CD > Variables):
+# - VPS_HOST: SSH host of your VPS
+# - VPS_SSH_KEY: private SSH key for deployment user
+# - ENV_FILE: full .env file content (multiline)
+# Optional:
+# - VPS_PORT: SSH port (default: 22)
+# - VPS_USER: SSH user (default: betakiot)
+# - DEPLOY_BRANCH: git branch to deploy (default: main)
+# - DEPLOY_PATH: override deploy path on VPS (default: /home/betamovie)
+
+.default_ssh_setup: &default_ssh_setup
+  before_script:
+    - apk add --no-cache openssh-client git
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - eval "$(ssh-agent -s)"
+    - echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
+    - ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+
+deploy:betamovie:
+  stage: deploy
+  image: alpine:3.19
+  timeout: 30m
+  extends: [.default_ssh_setup]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: on_success
+  script:
+    - |
+      set -eu
+
+      if [ -z "${ENV_FILE:-}" ]; then
+        echo "ENV_FILE is empty. Please set ENV_FILE in GitLab CI/CD variables."
+        exit 1
+      fi
+
+      DEPLOY_USER="${VPS_USER:-betakiot}"
+      DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+      DEPLOY_BRANCH="${DEPLOY_BRANCH:-main}"
+      DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+
+      echo "Syncing git repository on VPS (${DEPLOY_PATH})..."
+      ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+        "set -eu; cd '${DEPLOY_PATH}'; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x deploy.sh"
+
+      echo "Running deploy.sh with temporary env file (outside project)..."
+      printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+        "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${CI_PROJECT_NAME}' ENV_FILE_PATH=\"\$ENV_TMP\" ./deploy.sh all"

@@ -27,7 +27,7 @@ services:
       - NGINX_PROXY_CONNECT_TIMEOUT=10s
       - NGINX_PROXY_SEND_TIMEOUT=30s
     env_file:
-      - .env
+      - ${ENV_FILE_PATH:-.env}
     networks:
       - pstream-prod-network
       - betakiot_proxy_network
