@@ -1,6 +1,10 @@
 import { useCallback } from "react";
 
-import { SessionResponse } from "@/backend/accounts/auth";
+import {
+  SessionResponse,
+  normalizeAccessToken,
+  refreshOAuthToken,
+} from "@/backend/accounts/auth";
 import { bookmarkMediaToInput } from "@/backend/accounts/bookmarks";
 import {
   bytesToBase64,
@@ -311,9 +315,31 @@ export function useAuth() {
   const restore = useCallback(
     async (account: AccountWithToken) => {
       if (!backendUrl) return;
+      const { setAccount } = useAuthStore.getState();
+
+      let activeAccount = account;
+
+      const refreshTokenIfPossible = async () => {
+        try {
+          const oauth = await refreshOAuthToken(backendUrl);
+          const accessToken = normalizeAccessToken(oauth);
+          if (!accessToken) return false;
+
+          activeAccount = {
+            ...activeAccount,
+            token: accessToken,
+          };
+          setAccount(activeAccount);
+          return true;
+        } catch {
+          return false;
+        }
+      };
+
       let user: { user: UserResponse; session: SessionResponse };
+
       try {
-        user = await getUser(backendUrl, account.token);
+        user = await getUser(backendUrl, activeAccount.token);
       } catch (err) {
         const anyError: any = err;
         if (
@@ -321,31 +347,33 @@ export function useAuth() {
           anyError?.response?.status === 403 ||
           anyError?.response?.status === 400
         ) {
-          await logout();
-          return;
+          const refreshed = await refreshTokenIfPossible();
+          if (!refreshed) {
+            await logout();
+            return;
+          }
+
+          user = await getUser(backendUrl, activeAccount.token);
+        } else {
+          console.error(err);
+          throw err;
         }
-        console.error(err);
-        throw err;
       }
 
       const [bookmarks, progress, watchHistory, settings, groupOrder] =
         await Promise.all([
-          getBookmarks(backendUrl, account),
-          getProgress(backendUrl, account),
-          getWatchHistory(backendUrl, account),
-          getSettings(backendUrl, account),
-          getGroupOrder(backendUrl, account),
+          getBookmarks(backendUrl, activeAccount),
+          getProgress(backendUrl, activeAccount),
+          getWatchHistory(backendUrl, activeAccount),
+          getSettings(backendUrl, activeAccount),
+          getGroupOrder(backendUrl, activeAccount),
         ]);
 
-      // Update account store with fresh user data (including nickname)
-      const { setAccount } = useAuthStore.getState();
-      if (account) {
-        setAccount({
-          ...account,
-          nickname: user.user.nickname,
-          profile: user.user.profile,
-        });
-      }
+      setAccount({
+        ...activeAccount,
+        nickname: user.user.nickname,
+        profile: user.user.profile,
+      });
 
       syncData(
         user.user,
@@ -359,7 +387,6 @@ export function useAuth() {
     },
     [backendUrl, syncData, logout],
   );
-
   return {
     loggedIn,
     profile,

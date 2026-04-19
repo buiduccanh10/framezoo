@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { SessionResponse } from "@/backend/accounts/auth";
+import { OAuthTokenResponse, SessionResponse } from "@/backend/accounts/auth";
 
 export interface ChallengeTokenResponse {
   challenge: string;
@@ -23,6 +23,7 @@ export async function getLoginChallengeToken(
 
 export interface LoginResponse {
   session: SessionResponse;
+  oauth?: OAuthTokenResponse;
 }
 
 export interface LoginInput {

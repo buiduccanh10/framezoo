@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { SessionResponse } from "@/backend/accounts/auth";
+import { OAuthTokenResponse, SessionResponse } from "@/backend/accounts/auth";
 import { UserResponse } from "@/backend/accounts/user";
 
 export interface ChallengeTokenResponse {
@@ -24,6 +24,7 @@ export async function getRegisterChallengeToken(
 export interface RegisterResponse {
   user: UserResponse;
   session: SessionResponse;
+  oauth?: OAuthTokenResponse;
 }
 
 export interface RegisterInput {

@@ -1,6 +1,10 @@
 import { useCallback } from "react";
 
-import { LoginResponse, SessionResponse } from "@/backend/accounts/auth";
+import {
+  LoginResponse,
+  SessionResponse,
+  normalizeAccessToken,
+} from "@/backend/accounts/auth";
 import { SettingsResponse } from "@/backend/accounts/settings";
 import {
   BookmarkResponse,
@@ -111,12 +115,14 @@ export function useAuthData() {
       session: SessionResponse,
       seed: string,
     ) => {
+      const accessToken = normalizeAccessToken(loginResponse.oauth);
       const account = {
         userId: user.id,
         sessionId: loginResponse.session.id,
         deviceName: session.device,
         profile: user.profile,
         nickname: user.nickname,
+        token: accessToken,
         seed,
       };
       setAccount(account);
