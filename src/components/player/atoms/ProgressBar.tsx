@@ -8,7 +8,10 @@ import {
   useState,
 } from "react";
 
-import { useSkipTime } from "@/components/player/hooks/useSkipTime";
+import {
+  getSegmentBoundsSeconds,
+  useSkipTime,
+} from "@/components/player/hooks/useSkipTime";
 import { LazyImage } from "@/components/utils/Image";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import {
@@ -160,13 +163,20 @@ export function ProgressBar() {
     if (duration <= 0) return [];
     return segments
       .map((seg) => {
-        const startSec = (seg.start_ms ?? 0) / 1000;
-        const endSec = seg.end_ms != null ? seg.end_ms / 1000 : duration;
-        if (startSec >= endSec) return null;
-        const left = (startSec / duration) * 100;
-        const width = ((endSec - startSec) / duration) * 100;
+        const bounds = getSegmentBoundsSeconds(seg, duration);
+        if (!bounds) return null;
+
+        const endSec = bounds.end ?? duration;
+        const left = Math.max(
+          0,
+          Math.min(100, (bounds.start / duration) * 100),
+        );
+        const rawWidth = ((endSec - bounds.start) / duration) * 100;
+        const width = Math.max(0, Math.min(100 - left, rawWidth));
+        if (width <= 0) return null;
+
         return {
-          key: `${seg.type}-${seg.submission_count}-${seg.start_ms ?? "null"}`,
+          key: `${seg.type}-${seg.submission_count}-${seg.start_ms ?? "null"}-${seg.end_ms ?? "null"}`,
           left,
           width,
           color: SEGMENT_COLORS[seg.type],

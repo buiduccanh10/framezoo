@@ -40,6 +40,42 @@ export interface SegmentData {
   submission_count: number;
 }
 
+export interface SegmentBoundsSeconds {
+  start: number;
+  end: number | null;
+}
+
+/**
+ * Converts segment timestamps from milliseconds to seconds and clamps them
+ * against the current media duration when available.
+ */
+export function getSegmentBoundsSeconds(
+  segment: SegmentData,
+  durationSeconds?: number,
+): SegmentBoundsSeconds | null {
+  const hasDuration =
+    typeof durationSeconds === "number" &&
+    Number.isFinite(durationSeconds) &&
+    durationSeconds > 0;
+  const maxDuration = hasDuration ? durationSeconds : null;
+
+  const rawStart = Math.max(0, (segment.start_ms ?? 0) / 1000);
+  const rawEnd =
+    segment.end_ms !== null ? Math.max(0, segment.end_ms / 1000) : null;
+
+  const start =
+    maxDuration !== null ? Math.min(rawStart, maxDuration) : rawStart;
+  const end =
+    rawEnd !== null && maxDuration !== null
+      ? Math.min(rawEnd, maxDuration)
+      : rawEnd;
+
+  if (maxDuration !== null && start >= maxDuration) return null;
+  if (end !== null && end <= start) return null;
+
+  return { start, end };
+}
+
 function toNullableNumber(value: unknown): number | null {
   if (value === null || value === undefined) return null;
   if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -193,10 +229,35 @@ export function useSkipTime() {
         const { segments: tidbSegments, tidbNotFound } =
           await fetchTheIntroDBSegments();
 
-        // TIDB returned 200 – use whatever segments we got (intro, recap, credits; may be empty)
+        // TIDB returned 200 – use its segments, and backfill missing intro from IntroDB when possible.
         if (!tidbNotFound) {
-          currentSkipTimeSource = "theintrodb";
-          applySegments(tidbSegments);
+          let finalSegments = tidbSegments;
+          const hasIntro = tidbSegments.some(
+            (segment) => segment.type === "intro",
+          );
+
+          if (!hasIntro && meta?.type !== "movie") {
+            const introDBTime = await fetchIntroDBTime();
+            if (introDBTime !== null) {
+              currentSkipTimeSource = "introdb";
+              finalSegments = [
+                {
+                  type: "intro",
+                  start_ms: 0,
+                  end_ms: introDBTime * 1000,
+                  confidence: null,
+                  submission_count: 1,
+                },
+                ...tidbSegments,
+              ];
+            } else {
+              currentSkipTimeSource = "theintrodb";
+            }
+          } else {
+            currentSkipTimeSource = "theintrodb";
+          }
+
+          applySegments(finalSegments);
           return;
         }
 

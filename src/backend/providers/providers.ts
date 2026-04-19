@@ -63,8 +63,8 @@ const kkphimSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "Server 1 🔥",
-  rank: 10,
+  name: "Server 2 🔥",
+  rank: 20,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -77,8 +77,8 @@ const openMovieSource = {
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 2 🔥",
-  rank: 20,
+  name: "Server 1 🔥",
+  rank: 10,
   disabled: false,
   externalSource: false,
   type: "source" as const,

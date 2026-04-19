@@ -10,12 +10,13 @@ import { conf } from "@/setup/config";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
-import { formatSeconds } from "@/utils/formatSeconds";
+import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
 export function SkipSegmentsView({ id }: { id: string }) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const display = usePlayerStore((s) => s.display);
+  const videoDuration = usePlayerStore((s) => s.progress.duration);
   const segments = useSkipTime();
   const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
   const tidbKey = conf().TIDB_API_KEY ?? tidbKeyFromStore;
@@ -87,6 +88,10 @@ export function SkipSegmentsView({ id }: { id: string }) {
               const startTime = (segment.start_ms ?? 0) / 1000;
               // Handle end time (null means end of video)
               const endTime = segment.end_ms ? segment.end_ms / 1000 : null;
+              const showHours =
+                durationExceedsHour(videoDuration) ||
+                durationExceedsHour(startTime) ||
+                (endTime !== null && durationExceedsHour(endTime));
 
               return (
                 <button
@@ -102,11 +107,11 @@ export function SkipSegmentsView({ id }: { id: string }) {
                     <span className="text-video-context-type-secondary text-sm">
                       {segment.start_ms === null
                         ? "0:00"
-                        : formatSeconds(startTime)}{" "}
+                        : formatSeconds(startTime, showHours)}{" "}
                       -{" "}
                       {endTime === null
                         ? t("player.skipTime.endOfVideo")
-                        : formatSeconds(endTime)}
+                        : formatSeconds(endTime, showHours)}
                     </span>
                   </div>
                   <div className="text-xs text-type-secondary mt-1">

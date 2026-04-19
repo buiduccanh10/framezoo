@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
 import { NextEpisodeButton } from "@/components/player/atoms/NextEpisodeButton";
-import { SegmentData } from "@/components/player/hooks/useSkipTime";
+import {
+  SegmentData,
+  getSegmentBoundsSeconds,
+} from "@/components/player/hooks/useSkipTime";
 import { useSkipTracking } from "@/components/player/hooks/useSkipTracking";
 import { Transition } from "@/components/utils/Transition";
 import { PlayerMeta } from "@/stores/player/slices/source";
@@ -31,22 +34,20 @@ function getSegmentText(
 function shouldShowSkipButton(
   currentTime: number,
   segment: SegmentData | null,
+  duration: number,
 ): "always" | "hover" | "none" {
   if (!segment) return "none";
 
-  // Convert current time to milliseconds for comparison
-  const currentTimeMs = currentTime * 1000;
+  const bounds = getSegmentBoundsSeconds(segment, duration);
+  if (!bounds) return "none";
 
-  // Handle start time (null means 0/start of video)
-  const startMs = segment.start_ms ?? 0;
-
-  // Handle end time (null means end of video, so we show until the end)
-  const endMs = segment.end_ms ?? Infinity;
+  const endSeconds =
+    bounds.end !== null ? bounds.end : duration > 0 ? duration : Infinity;
 
   // Check if current time is within the segment
-  if (currentTimeMs >= startMs && currentTimeMs <= endMs) {
+  if (currentTime >= bounds.start && currentTime <= endSeconds) {
     // Show "always" for the first 10 seconds of the segment, then "hover"
-    const timeInSegment = currentTimeMs - startMs;
+    const timeInSegment = (currentTime - bounds.start) * 1000;
     if (timeInSegment <= 10000) return "always"; // First 10 seconds
     return "hover";
   }
@@ -103,7 +104,7 @@ function SkipSegmentButton(props: {
     if (segment.type === "credits" && shouldShowNextEpisodeInsteadOfCredits) {
       return false;
     }
-    const showingState = shouldShowSkipButton(time, segment);
+    const showingState = shouldShowSkipButton(time, segment, _duration);
     return showingState !== "none";
   });
 
@@ -111,8 +112,10 @@ function SkipSegmentButton(props: {
   const creditsSegment = props.segments.find(
     (s) => s.type === "credits" && s.end_ms === null,
   );
-  const inCreditsSegment =
-    creditsSegment != null && time * 1000 >= (creditsSegment.start_ms ?? 0);
+  const creditsBounds = creditsSegment
+    ? getSegmentBoundsSeconds(creditsSegment, _duration)
+    : null;
+  const inCreditsSegment = creditsBounds != null && time >= creditsBounds.start;
   const showNextEpisodeButton =
     shouldShowNextEpisodeInsteadOfCredits &&
     props.inControl &&
@@ -121,11 +124,13 @@ function SkipSegmentButton(props: {
   const handleSkip = useCallback(
     (segment: SegmentData) => {
       if (!display) return;
+      const bounds = getSegmentBoundsSeconds(segment, _duration);
+      if (!bounds) return;
 
       const startTime = time;
       // Skip to the end of the segment (or end of video if end_ms is null)
-      const targetTime = segment.end_ms ? segment.end_ms / 1000 : _duration;
-      const skipDuration = targetTime - startTime;
+      const targetTime = bounds.end !== null ? bounds.end : _duration;
+      const skipDuration = Math.max(0, targetTime - startTime);
       display.setTime(targetTime);
 
       // Add manual skip event with high confidence (user explicitly clicked skip)
@@ -167,7 +172,7 @@ function SkipSegmentButton(props: {
     <>
       <div className="absolute right-[calc(3rem+env(safe-area-inset-right))] bottom-0">
         {activeSegments.map((segment, index) => {
-          const showingState = shouldShowSkipButton(time, segment);
+          const showingState = shouldShowSkipButton(time, segment, _duration);
           const animation = showingState === "hover" ? "slide-up" : "fade";
 
           let bottom = "bottom-[calc(6rem+env(safe-area-inset-bottom))]";
@@ -191,7 +196,7 @@ function SkipSegmentButton(props: {
 
           return (
             <Transition
-              key={segment.type}
+              key={`${segment.type}-${segment.start_ms ?? "null"}-${segment.end_ms ?? "null"}`}
               animation={animation}
               show={show}
               className="absolute right-0"

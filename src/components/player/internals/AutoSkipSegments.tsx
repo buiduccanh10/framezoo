@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 
-import { useSkipTime } from "@/components/player/hooks/useSkipTime";
+import {
+  getSegmentBoundsSeconds,
+  useSkipTime,
+} from "@/components/player/hooks/useSkipTime";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -21,6 +24,7 @@ export function AutoSkipSegments() {
   const skipCredits = usePreferencesStore((s) => s.enableSkipCredits);
   const display = usePlayerStore((s) => s.display);
   const time = usePlayerStore((s) => s.progress.time);
+  const duration = usePlayerStore((s) => s.progress.duration);
   const meta = usePlayerStore((s) => s.meta);
   const segments = useSkipTime();
 
@@ -49,8 +53,12 @@ export function AutoSkipSegments() {
         continue;
       }
 
-      const startSeconds = (segment.start_ms ?? 0) / 1000;
-      const endSeconds = segment.end_ms ? segment.end_ms / 1000 : Infinity;
+      const bounds = getSegmentBoundsSeconds(segment, duration);
+      if (!bounds) continue;
+
+      const startSeconds = bounds.start;
+      const endSeconds =
+        bounds.end !== null ? bounds.end : duration > 0 ? duration : Infinity;
       const segmentId = `${segment.type}-${startSeconds}-${endSeconds}`;
 
       // Check if we're inside the segment
@@ -60,9 +68,13 @@ export function AutoSkipSegments() {
         // Only skip if we haven't skipped this segment yet
         if (!skipState || !skipState.hasSkipped) {
           // Skip to the end of the segment
-          display.setTime(
-            endSeconds === Infinity ? currentSeconds + 10 : endSeconds,
-          );
+          const targetTime =
+            endSeconds === Infinity
+              ? duration > 0
+                ? duration
+                : currentSeconds + 10
+              : endSeconds;
+          display.setTime(targetTime);
 
           // Mark this segment as skipped
           skippedSegmentsRef.current.set(segmentId, {
@@ -77,6 +89,7 @@ export function AutoSkipSegments() {
     skipCredits,
     display,
     time,
+    duration,
     segments,
     meta?.tmdbId,
     meta?.season?.number,
