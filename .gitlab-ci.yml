@@ -44,7 +44,7 @@ deploy:betamovie:
 
       echo "Syncing git repository on VPS (${DEPLOY_PATH})..."
       ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-        "set -eu; cd '${DEPLOY_PATH}'; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x deploy.sh"
+        "set -eu; cd '${DEPLOY_PATH}'; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x deploy.sh"
 
       echo "Running deploy.sh with temporary env file (outside project)..."
       printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
