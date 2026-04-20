@@ -116,8 +116,10 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
         media: scrapeMedia,
       });
     } catch (err) {
-      console.error(`Failed to scrape ${sourceId}`, err);
       const notFound = err instanceof NotFoundError;
+      if (!notFound) {
+        console.error(`Failed to scrape ${sourceId}`, err);
+      }
       const status = notFound ? "notfound" : "failed";
       report([
         scrapeSourceOutputToProviderMetric(meta, sourceId, null, status, err),

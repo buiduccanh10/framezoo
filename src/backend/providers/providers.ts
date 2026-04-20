@@ -29,6 +29,10 @@ import {
   scrapeVidlinkShow,
 } from "./custom/sources/vidlinkSource";
 import {
+  scrapeVidSrcRuMovie,
+  scrapeVidSrcRuShow,
+} from "./custom/sources/vidsrcRuSource";
+import {
   scrapeVidSrcMovie,
   scrapeVidSrcShow,
 } from "./custom/sources/vidsrcSource";
@@ -39,8 +43,8 @@ setupM3U8Proxy();
 // Custom OPhim source definition
 const ophimSource = {
   id: "ophim",
-  name: "Server 5",
-  rank: 50,
+  name: "Server 6",
+  rank: 60,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -53,8 +57,8 @@ const ophimSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 4",
-  rank: 40,
+  name: "Server 5",
+  rank: 50,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -95,8 +99,8 @@ const vidlinkSource = {
 // Custom VidSrc source definition
 const vidsrcSource = {
   id: "alphaflix-vidsrc",
-  name: "Server 3 🔥",
-  rank: 30,
+  name: "Server 4 🔥",
+  rank: 40,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -106,11 +110,25 @@ const vidsrcSource = {
   scrapeShow: scrapeVidSrcShow,
 };
 
+// Custom VidSrc.ru source definition
+const vidsrcRuSource = {
+  id: "alphaflix-vidsrc-ru",
+  name: "Server 3 🔥",
+  rank: 30,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVidSrcRuMovie,
+  scrapeShow: scrapeVidSrcRuShow,
+};
+
 // Custom OpenMovie embed definition
 const openMovieEmbed = {
   id: "openmovie-embed",
   name: "OpenMovie Stream",
-  rank: 60,
+  rank: 70,
   disabled: false,
   type: "embed" as const,
   flags: [flags.CORS_ALLOWED],
@@ -135,6 +153,7 @@ export function getProviders() {
       .addSource(kkphimSource)
       .addSource(vidlinkSource)
       .addSource(vidsrcSource)
+      .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
       .addEmbed(openMovieEmbed)
       .build();
@@ -151,6 +170,7 @@ export function getProviders() {
       .addSource(kkphimSource)
       .addSource(vidlinkSource)
       .addSource(vidsrcSource)
+      .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
       .addEmbed(openMovieEmbed)
       .build();
@@ -167,6 +187,7 @@ export function getProviders() {
     .addSource(kkphimSource)
     .addSource(vidlinkSource)
     .addSource(vidsrcSource)
+    .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
     .addEmbed(openMovieEmbed)
     .build();
@@ -182,6 +203,7 @@ export function getAllProviders() {
     .addSource(kkphimSource)
     .addSource(vidlinkSource)
     .addSource(vidsrcSource)
+    .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
     .addEmbed(openMovieEmbed)
     .build();
