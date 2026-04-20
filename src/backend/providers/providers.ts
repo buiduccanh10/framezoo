@@ -39,7 +39,7 @@ setupM3U8Proxy();
 // Custom OPhim source definition
 const ophimSource = {
   id: "ophim",
-  name: "Server 4",
+  name: "Server 5",
   rank: 40,
   disabled: false,
   externalSource: false,
@@ -53,7 +53,7 @@ const ophimSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 3",
+  name: "Server 4",
   rank: 30,
   disabled: false,
   externalSource: false,
