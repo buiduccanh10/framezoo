@@ -40,7 +40,7 @@ setupM3U8Proxy();
 const ophimSource = {
   id: "ophim",
   name: "Server 5",
-  rank: 40,
+  rank: 50,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -54,7 +54,7 @@ const ophimSource = {
 const kkphimSource = {
   id: "kkphim",
   name: "Server 4",
-  rank: 30,
+  rank: 40,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -110,7 +110,7 @@ const vidsrcSource = {
 const openMovieEmbed = {
   id: "openmovie-embed",
   name: "OpenMovie Stream",
-  rank: 50,
+  rank: 60,
   disabled: false,
   type: "embed" as const,
   flags: [flags.CORS_ALLOWED],
