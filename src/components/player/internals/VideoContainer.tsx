@@ -5,6 +5,7 @@ import { convertSubtitlesToObjectUrl } from "@/components/player/utils/captions"
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
+import { isSafari } from "@/utils/detectFeatures";
 
 import { useInitializeSource } from "../hooks/useInitializePlayer";
 
@@ -65,6 +66,8 @@ function useObjectUrl(cb: () => string | null, deps: any[]) {
 }
 
 function VideoElement() {
+  const preloadMode: "auto" | "metadata" = isSafari ? "auto" : "metadata";
+
   const videoEl = useRef<HTMLVideoElement>(null);
   const trackEl = useRef<HTMLTrackElement>(null);
   const display = usePlayerStore((s) => s.display);
@@ -132,7 +135,7 @@ function VideoElement() {
       autoPlay
       playsInline
       ref={videoEl}
-      preload="metadata"
+      preload={preloadMode}
       onContextMenu={(e) => e.preventDefault()}
     >
       {subtitleTrack}

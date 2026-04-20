@@ -429,8 +429,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           xhrSetup: (xhr) => {
             xhr.withCredentials = true;
           },
-          maxBufferLength: 240, // 240 seconds
-          maxMaxBufferLength: 480,
+          maxBufferLength: 120, // 240 seconds
+          maxMaxBufferLength: 240,
           abrEwmaDefaultEstimate: 5 * 1000 * 1000, // 5 Mbps default bandwidth estimate for better ABR decisions
           preserveManualLevelOnError: true,
           fragLoadPolicy: {
