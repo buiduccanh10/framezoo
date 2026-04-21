@@ -89,6 +89,17 @@ export function RealPlayerView() {
     };
   }, [setResumeFromSourceIdInStore]);
 
+  // Keep track of the latest working source so episode changes can reuse it.
+  useEffect(() => {
+    if (!sourceId) return;
+    setPreferredSourceId(sourceId);
+  }, [sourceId]);
+
+  // Don't carry preferred source across different media pages.
+  useEffect(() => {
+    setPreferredSourceId(null);
+  }, [params.media]);
+
   const paramsData = JSON.stringify({
     media: params.media,
     season: params.season,
@@ -119,17 +130,13 @@ export function RealPlayerView() {
 
   const metaChange = useCallback(
     (meta: PlayerMeta) => {
-      if (sourceId) {
-        setPreferredSourceId(sourceId);
-      }
-
       if (meta?.type === "show")
         navigate(
           `/media/${params.media}/${meta.season?.tmdbId}/${meta.episode?.tmdbId}`,
         );
       else navigate(`/media/${params.media}`);
     },
-    [navigate, params, sourceId],
+    [navigate, params],
   );
 
   // Check if episode is more than 80% watched
