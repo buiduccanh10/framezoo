@@ -324,6 +324,7 @@
       "allResults": "Bu kadarını bulabildik!",
       "discover": "Keşfet",
       "discoverMore": "Daha fazlasını keşfet",
+      "genreFilterAll": "Tüm türler",
       "empty": {
         "default": "Hoş geldin, burada izlenecek içerikler bulabilirsin!",
         "extra": [

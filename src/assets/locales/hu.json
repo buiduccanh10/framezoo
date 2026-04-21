@@ -324,6 +324,7 @@
       "allResults": "Ennyi van...",
       "discover": "Felfedezés",
       "discoverMore": "Fedezz fel többet",
+      "genreFilterAll": "Minden műfaj",
       "empty": {
         "default": "Helló-belló, itt keress tartalmat nézésre!",
         "extra": [

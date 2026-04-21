@@ -324,6 +324,7 @@
       "allResults": "Això és tot el que tenim...",
       "discover": "Descobreix",
       "discoverMore": "Descobreix més",
+      "genreFilterAll": "Tots els gèneres",
       "empty": {
         "default": "Benvingut, troba els mitjans per veure aquí!",
         "extra": [

@@ -324,6 +324,7 @@
       "allResults": "That's all we have...",
       "discover": "Discover",
       "discoverMore": "Discover more",
+      "genreFilterAll": "All genres",
       "empty": {
         "default": "Welcome, find media to watch here!",
         "extra": [

@@ -324,6 +324,7 @@
       "allResults": "Det är allt vi har!",
       "discover": "Utforska",
       "discoverMore": "Upptäck mer",
+      "genreFilterAll": "Alla genrer",
       "empty": {
         "default": "Välkommen, hitta media att titta på här!",
         "extra": [

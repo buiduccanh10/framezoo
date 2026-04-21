@@ -324,6 +324,7 @@
       "allResults": "Siinä kaikki mitä meillä löytyy...",
       "discover": "Löydä katsottavaa",
       "discoverMore": "Löydä lisää",
+      "genreFilterAll": "Kaikki genret",
       "empty": {
         "default": "Tervetuloa! Löydä katsottavaa täältä!",
         "extra": [

@@ -40,6 +40,14 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
     try {
       const details = await getMediaDetails(id, type);
       if (details) {
+        const genreIds = Array.isArray((details as any).genres)
+          ? (details as any).genres
+              .map((genre: { id?: number }) => genre.id)
+              .filter((genreId: unknown): genreId is number =>
+                Number.isFinite(genreId),
+              )
+          : undefined;
+
         // Format the media details to our common format
         const mediaResult =
           type === TMDBContentTypes.MOVIE
@@ -61,7 +69,7 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
               };
 
         const mediaItem = formatTMDBMetaToMediaItem(mediaResult);
-        const result = [mediaItem];
+        const result = [{ ...mediaItem, genreIds }];
         cache.set(query, result, 3600);
         return result;
       }
@@ -74,7 +82,11 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
 
   const results = [...data].sort(compareByRatingDesc).map((v) => {
     const formattedResult = formatTMDBSearchResult(v, v.media_type);
-    return formatTMDBMetaToMediaItem(formattedResult);
+    const mediaItem = formatTMDBMetaToMediaItem(formattedResult);
+    return {
+      ...mediaItem,
+      genreIds: v.genre_ids,
+    };
   });
 
   // cache results for 1 hour

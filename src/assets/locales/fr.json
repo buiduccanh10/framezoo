@@ -324,6 +324,7 @@
       "allResults": "C’est tout ce que nous avons...",
       "discover": "Découvrir",
       "discoverMore": "Découvrir plus",
+      "genreFilterAll": "Tous les genres",
       "empty": {
         "default": "Bienvenue, vous pouvez trouver des films ici !",
         "extra": [
