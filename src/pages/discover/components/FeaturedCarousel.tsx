@@ -11,20 +11,14 @@ import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
-import { useDiscoverStore } from "@/stores/discover";
-import type { Category } from "@/stores/discover";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
+import { meetsMediaQualityThreshold } from "@/utils/compareByRatingDesc";
 import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
 
 import { RandomMovieButton } from "./RandomMovieButton";
-import {
-  EDITOR_PICKS_MOVIES,
-  EDITOR_PICKS_TV_SHOWS,
-  MOVIE_PROVIDERS,
-  TV_PROVIDERS,
-} from "../hooks/useDiscoverMedia";
+import { MOVIE_PROVIDERS } from "../hooks/useDiscoverMedia";
 
 export interface FeaturedMedia extends Partial<Movie & TVShow> {
   children?: ReactNode;
@@ -48,13 +42,25 @@ interface FeaturedCarouselProps {
   children?: ReactNode;
   searching?: boolean;
   shorter?: boolean;
-  forcedCategory?: Category;
+  /** @deprecated Ignored; featured slides are always a random Netflix + new releases mix. */
+  forcedCategory?: string;
 }
 
 interface IMDbRatingData {
   rating: number;
   votes: number;
 }
+
+function shuffleArray<T>(items: T[]): T[] {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+const QUALITY_MIN_YEAR = new Date().getFullYear() - 12;
 
 function FeaturedCarouselSkeleton({ shorter }: { shorter?: boolean }) {
   return (
@@ -119,14 +125,7 @@ export function FeaturedCarousel({
   children,
   searching,
   shorter,
-  forcedCategory,
 }: FeaturedCarouselProps) {
-  const { selectedCategory } = useDiscoverStore();
-  const effectiveCategory = forcedCategory || selectedCategory;
-  const featuredCategory =
-    effectiveCategory === "top10" || effectiveCategory.startsWith("genre:")
-      ? "movies"
-      : effectiveCategory;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [media, setMedia] = useState<FeaturedMedia[]>([]);
@@ -153,10 +152,10 @@ export function FeaturedCarousel({
 
   const currentMedia = media[currentIndex];
 
-  const SLIDE_QUANTITY = 10;
-  const SLIDE_QUANTITY_EDITOR_PICKS_MOVIES = 5;
-  const SLIDE_QUANTITY_EDITOR_PICKS_TV_SHOWS = 5;
+  const SLIDE_QUANTITY = 15;
   const SLIDE_DURATION = 8000;
+  const QUALITY_MIN_SCORE = 6.5;
+  const QUALITY_MIN_VOTES = 500;
 
   // Check for extension on mount
   useEffect(() => {
@@ -215,125 +214,229 @@ export function FeaturedCarousel({
       }
 
       try {
-        setIsLoading(true);
-        if (featuredCategory === "movies" || featuredCategory === "tvshows") {
-          // Discover by watch provider (same params as useDiscoverMedia "provider")
-          const fetchDiscoverByProvider = async (
-            mediaPath: "movie" | "tv",
-            providerId: string,
-          ) => {
-            let listData = await get<any>(`/discover/${mediaPath}`, {
-              language: formattedLanguage,
-              with_watch_providers: providerId,
+        const netflixProviderId = MOVIE_PROVIDERS[0].id;
+
+        const discoverList = async (
+          mediaPath: "movie" | "tv",
+          extra: Record<string, string | number>,
+        ) => {
+          let listData = await get<any>(`/discover/${mediaPath}`, {
+            language: formattedLanguage,
+            watch_region: "US",
+            ...extra,
+          });
+          if (
+            (!listData.results || listData.results.length === 0) &&
+            formattedLanguage !== "en-US"
+          ) {
+            listData = await get<any>(`/discover/${mediaPath}`, {
+              language: "en-US",
               watch_region: "US",
+              ...extra,
             });
-            if (
-              (!listData.results || listData.results.length === 0) &&
-              formattedLanguage !== "en-US"
-            ) {
-              listData = await get<any>(`/discover/${mediaPath}`, {
-                language: "en-US",
-                with_watch_providers: providerId,
-                watch_region: "US",
-              });
-            }
-            return listData.results ?? [];
-          };
-
-          if (featuredCategory === "movies") {
-            const providerId = MOVIE_PROVIDERS[0].id;
-            const results = await fetchDiscoverByProvider("movie", providerId);
-            const moviePromises = results
-              .slice(0, SLIDE_QUANTITY)
-              .map((movie: { id: number }) =>
-                get<any>(`/movie/${movie.id}`, {
-                  language: formattedLanguage,
-                  append_to_response: "external_ids",
-                }),
-              );
-
-            const movieDetails = await Promise.all(moviePromises);
-            setMedia(
-              movieDetails.map((movie) => ({
-                ...movie,
-                type: "movie" as const,
-              })),
-            );
-          } else if (featuredCategory === "tvshows") {
-            const providerId = TV_PROVIDERS[0].id;
-            const results = await fetchDiscoverByProvider("tv", providerId);
-            const showPromises = results
-              .slice(0, SLIDE_QUANTITY)
-              .map((show: { id: number }) =>
-                get<any>(`/tv/${show.id}`, {
-                  language: formattedLanguage,
-                  append_to_response: "external_ids",
-                }),
-              );
-
-            const showDetails = await Promise.all(showPromises);
-            setMedia(
-              showDetails.map((show) => ({
-                ...show,
-                type: "show" as const,
-              })),
-            );
           }
-        } else if (featuredCategory === "editorpicks") {
-          // Shuffle editor picks Ids
-          const allMovieIds = EDITOR_PICKS_MOVIES.map((item) => ({
-            id: item.id,
+          return listData.results ?? [];
+        };
+
+        const endpointList = async (path: string, page = 1) => {
+          let data = await get<any>(path, {
+            language: formattedLanguage,
+            page,
+          });
+          if (
+            (!data.results || data.results.length === 0) &&
+            formattedLanguage !== "en-US"
+          ) {
+            data = await get<any>(path, { language: "en-US", page });
+          }
+          return data.results ?? [];
+        };
+
+        const [
+          netflixMoviesP1,
+          netflixMoviesP2,
+          netflixTvP1,
+          netflixTvP2,
+          nowPlaying,
+          onTheAir,
+          popularMovies,
+          popularTv,
+          topRatedMovies,
+          topRatedTv,
+        ] = await Promise.all([
+          discoverList("movie", {
+            with_watch_providers: netflixProviderId,
+            page: 1,
+          }),
+          discoverList("movie", {
+            with_watch_providers: netflixProviderId,
+            page: 2,
+          }),
+          discoverList("tv", {
+            with_watch_providers: netflixProviderId,
+            page: 1,
+          }),
+          discoverList("tv", {
+            with_watch_providers: netflixProviderId,
+            page: 2,
+          }),
+          endpointList("/movie/now_playing"),
+          endpointList("/tv/on_the_air"),
+          endpointList("/movie/popular"),
+          endpointList("/tv/popular"),
+          endpointList("/movie/top_rated"),
+          endpointList("/tv/top_rated"),
+        ]);
+
+        type MediaPick = { id: number; type: "movie" | "show" };
+        const popularPool: MediaPick[] = popularMovies.map(
+          (m: { id: number }) => ({
+            id: m.id,
             type: "movie" as const,
-          }));
-          const allShowIds = EDITOR_PICKS_TV_SHOWS.map((item) => ({
-            id: item.id,
+          }),
+        );
+        popularPool.push(
+          ...popularTv.map((s: { id: number }) => ({
+            id: s.id,
             type: "show" as const,
-          }));
-
-          // Combine and shuffle
-          const combinedIds = [...allMovieIds, ...allShowIds].sort(
-            () => 0.5 - Math.random(),
-          );
-
-          // Select the quantity
-          const selectedMovieIds = combinedIds
-            .filter((item) => item.type === "movie")
-            .slice(0, SLIDE_QUANTITY_EDITOR_PICKS_MOVIES);
-          const selectedShowIds = combinedIds
-            .filter((item) => item.type === "show")
-            .slice(0, SLIDE_QUANTITY_EDITOR_PICKS_TV_SHOWS);
-
-          // Fetch items
-          const moviePromises = selectedMovieIds.map(({ id }) =>
-            get<any>(`/movie/${id}`, {
-              language: formattedLanguage,
-              append_to_response: "external_ids",
-            }),
-          );
-
-          const showPromises = selectedShowIds.map(({ id }) =>
-            get<any>(`/tv/${id}`, {
-              language: formattedLanguage,
-              append_to_response: "external_ids",
-            }),
-          );
-
-          const [movieResults, showResults] = await Promise.all([
-            Promise.all(moviePromises),
-            Promise.all(showPromises),
-          ]);
-
-          const movies = movieResults.map((movie) => ({
-            ...movie,
+          })),
+        );
+        const topRatedPool: MediaPick[] = topRatedMovies.map(
+          (m: { id: number }) => ({
+            id: m.id,
             type: "movie" as const,
-          }));
-          const shows = showResults.map((show) => ({
-            ...show,
+          }),
+        );
+        topRatedPool.push(
+          ...topRatedTv.map((s: { id: number }) => ({
+            id: s.id,
             type: "show" as const,
-          }));
+          })),
+        );
+        const netflixAndNewPool: MediaPick[] = [
+          ...netflixMoviesP1.map((m: { id: number }) => ({
+            id: m.id,
+            type: "movie" as const,
+          })),
+          ...netflixMoviesP2.map((m: { id: number }) => ({
+            id: m.id,
+            type: "movie" as const,
+          })),
+          ...netflixTvP1.map((s: { id: number }) => ({
+            id: s.id,
+            type: "show" as const,
+          })),
+          ...netflixTvP2.map((s: { id: number }) => ({
+            id: s.id,
+            type: "show" as const,
+          })),
+          ...nowPlaying.map((m: { id: number }) => ({
+            id: m.id,
+            type: "movie" as const,
+          })),
+          ...onTheAir.map((s: { id: number }) => ({
+            id: s.id,
+            type: "show" as const,
+          })),
+        ];
 
-          setMedia([...movies, ...shows]);
+        const uniqueByKey = (items: MediaPick[]) => {
+          const seen = new Set<string>();
+          return items.filter((item) => {
+            const key = `${item.type}-${item.id}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+        };
+        const toKey = (item: MediaPick) => `${item.type}-${item.id}`;
+        const pickFromPool = (
+          pool: MediaPick[],
+          count: number,
+          excluded: Set<string>,
+        ) => {
+          const candidates = shuffleArray(
+            uniqueByKey(pool).filter((item) => !excluded.has(toKey(item))),
+          );
+          const picked = candidates.slice(0, count);
+          picked.forEach((item) => excluded.add(toKey(item)));
+          return picked;
+        };
+
+        // 40% popular, 30% top rated, 30% Netflix/new releases
+        const popularTarget = Math.round(SLIDE_QUANTITY * 0.4);
+        const topRatedTarget = Math.round(SLIDE_QUANTITY * 0.3);
+        const netflixAndNewTarget =
+          SLIDE_QUANTITY - popularTarget - topRatedTarget;
+
+        const selectedKeys = new Set<string>();
+        const selectedPopular = pickFromPool(
+          popularPool,
+          popularTarget,
+          selectedKeys,
+        );
+        const selectedTopRated = pickFromPool(
+          topRatedPool,
+          topRatedTarget,
+          selectedKeys,
+        );
+        const selectedNetflixAndNew = pickFromPool(
+          netflixAndNewPool,
+          netflixAndNewTarget,
+          selectedKeys,
+        );
+
+        let selected = [
+          ...selectedPopular,
+          ...selectedTopRated,
+          ...selectedNetflixAndNew,
+        ];
+
+        if (selected.length < SLIDE_QUANTITY) {
+          const fallbackPool = uniqueByKey([
+            ...popularPool,
+            ...topRatedPool,
+            ...netflixAndNewPool,
+          ]).filter((item) => !selectedKeys.has(toKey(item)));
+          const fill = shuffleArray(fallbackPool).slice(
+            0,
+            SLIDE_QUANTITY - selected.length,
+          );
+          selected = [...selected, ...fill];
         }
+
+        const detailPromises = selected.map((p) =>
+          p.type === "movie"
+            ? get<any>(`/movie/${p.id}`, {
+                language: formattedLanguage,
+                append_to_response: "external_ids",
+              })
+            : get<any>(`/tv/${p.id}`, {
+                language: formattedLanguage,
+                append_to_response: "external_ids",
+              }),
+        );
+
+        const details = await Promise.all(detailPromises);
+        const featured: FeaturedMedia[] = details.map((item, i) => ({
+          ...item,
+          type: selected[i].type,
+        }));
+
+        const withBackdrop = featured.filter((item) => item.backdrop_path);
+        const sourceForQuality =
+          withBackdrop.length > 0 ? withBackdrop : featured;
+        const qualified = shuffleArray(sourceForQuality)
+          .filter((item) =>
+            meetsMediaQualityThreshold(item, {
+              minScore: QUALITY_MIN_SCORE,
+              minVotes: QUALITY_MIN_VOTES,
+              minYear: QUALITY_MIN_YEAR,
+            }),
+          )
+          .slice(0, SLIDE_QUANTITY);
+
+        setMedia(qualified);
       } catch (error) {
         console.error("Error fetching featured media:", error);
       } finally {
@@ -342,7 +445,7 @@ export function FeaturedCarousel({
     };
 
     fetchFeaturedMedia();
-  }, [featuredCategory, formattedLanguage]);
+  }, [formattedLanguage]);
 
   const handlePrevSlide = () => {
     setContentOpacity(0);
@@ -533,7 +636,7 @@ export function FeaturedCarousel({
       >
         {media.map((item, index) => (
           <div
-            key={item.id}
+            key={`${item.type}-${item.id}`}
             className={`absolute inset-0 transition-opacity duration-1000 ${
               index === currentIndex ? "opacity-100" : "opacity-0"
             }`}
@@ -586,7 +689,7 @@ export function FeaturedCarousel({
       >
         {media.map((item, index) => (
           <button
-            key={`dot-${item.id}`}
+            key={`dot-${item.type}-${item.id}`}
             type="button"
             onClick={() => {
               setContentOpacity(0);

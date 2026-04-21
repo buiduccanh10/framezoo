@@ -19,7 +19,10 @@ import type {
   UseDiscoverMediaReturn,
 } from "@/pages/discover/types/discover";
 import { useLanguageStore } from "@/stores/language";
-import { compareByRatingDesc } from "@/utils/compareByRatingDesc";
+import {
+  DEFAULT_MEDIA_QUALITY_THRESHOLD,
+  filterAndSortByQualityDesc,
+} from "@/utils/compareByRatingDesc";
 import { getTmdbLanguageCode } from "@/utils/language";
 
 // Re-export types for backward compatibility
@@ -197,9 +200,9 @@ export function useDiscoverMedia({
           ...params,
         });
 
-        // For carousel views, we might want to limit the number of results
-        const sortedResults = [...(data.results ?? [])].sort(
-          compareByRatingDesc,
+        const sortedResults = filterAndSortByQualityDesc(
+          data.results ?? [],
+          DEFAULT_MEDIA_QUALITY_THRESHOLD,
         );
         const results = isCarouselView
           ? sortedResults.slice(0, 20)
@@ -261,7 +264,10 @@ export function useDiscoverMedia({
 
       const results = await Promise.all(mediaPromises);
       return filterResultsByReleaseYear({
-        results: [...results].sort(compareByRatingDesc),
+        results: filterAndSortByQualityDesc(
+          results,
+          DEFAULT_MEDIA_QUALITY_THRESHOLD,
+        ),
         hasMore: picks.length > picksToFetch.length,
       });
     } catch (err) {
@@ -520,7 +526,10 @@ export function useDiscoverMedia({
       setMedia((prevMedia) => {
         const mergedMedia =
           page === 1 ? data.results : [...prevMedia, ...data.results];
-        return [...mergedMedia].sort(compareByRatingDesc);
+        return filterAndSortByQualityDesc(
+          mergedMedia,
+          DEFAULT_MEDIA_QUALITY_THRESHOLD,
+        );
       });
       setHasMore(data.hasMore);
     } catch (err) {
@@ -538,7 +547,10 @@ export function useDiscoverMedia({
               page === 1
                 ? fallbackData.results
                 : [...prevMedia, ...fallbackData.results];
-            return [...mergedMedia].sort(compareByRatingDesc);
+            return filterAndSortByQualityDesc(
+              mergedMedia,
+              DEFAULT_MEDIA_QUALITY_THRESHOLD,
+            );
           });
           setHasMore(fallbackData.hasMore);
           setError(null); // Clear error if fallback succeeds

@@ -1,5 +1,5 @@
 import { SimpleCache } from "@/utils/cache";
-import { compareByRatingDesc } from "@/utils/compareByRatingDesc";
+import { compareByRatingAndVoteDesc } from "@/utils/compareByRatingDesc";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import {
@@ -80,7 +80,8 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
 
   const data = await multiSearch(searchQuery);
 
-  const results = [...data].sort(compareByRatingDesc).map((v) => {
+  const rankedResults = [...data].sort(compareByRatingAndVoteDesc);
+  const results = rankedResults.map((v) => {
     const formattedResult = formatTMDBSearchResult(v, v.media_type);
     const mediaItem = formatTMDBMetaToMediaItem(formattedResult);
     return {
