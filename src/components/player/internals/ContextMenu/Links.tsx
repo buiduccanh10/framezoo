@@ -211,6 +211,7 @@ export function SelectableLink(props: {
       clickable={!props.disabled}
       rightSide={rightContent}
       box={props.box}
+      disabled={props.disabled}
     >
       <LinkTitle
         textClass={classNames({

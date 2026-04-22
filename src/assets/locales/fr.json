@@ -626,6 +626,7 @@
           "title": "Échec de la récupération (scrape)"
         },
         "findNextSource": "Trouver la source suivante",
+        "maintain": "Maintenir",
         "noEmbeds": {
           "text": "Nous n'avons pas trouvé de liens, veuillez essayer une autre source.",
           "title": "Pas d'intégrations (embeds) trouvées"

@@ -626,6 +626,7 @@
           "title": "無法刮取"
         },
         "findNextSource": "尋找下一個來源",
+        "maintain": "維持",
         "noEmbeds": {
           "text": "我們無法找到任何嵌入内容，請嘗試其他來源。",
           "title": "未找到嵌入内容"

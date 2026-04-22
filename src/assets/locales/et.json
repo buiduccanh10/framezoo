@@ -626,6 +626,7 @@
           "title": "Ei õnnestunud kraapida"
         },
         "findNextSource": "Otsige üles järgmine allikas",
+        "maintain": "Säilitada",
         "noEmbeds": {
           "text": "Me ei leidnud ühtegi manust, proovige twist allikat.",
           "title": "Ei leitud manuseid"

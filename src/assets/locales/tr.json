@@ -626,6 +626,7 @@
           "title": "Video alınırken sorun oluştu"
         },
         "findNextSource": "Sonraki kaynağı bul",
+        "maintain": "Sürdürmek",
         "noEmbeds": {
           "text": "Herhangi bir video bulamadık, lütfen farklı bir kaynak deneyin.",
           "title": "Video bulunamadı"

@@ -207,6 +207,7 @@ export function SourceSelectionView({
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
   );
+  const sourceMaintainText = t("player.menus.sources.maintain");
 
   const sources = useMemo(() => {
     if (!metaType) return [];
@@ -317,11 +318,20 @@ export function SourceSelectionView({
           return (
             <SelectableLink
               key={v.id}
+              disabled={v.disabled}
               onClick={() => {
+                if (v.disabled) return;
                 onChoose?.(v.id);
                 router.navigate("/source/embeds");
               }}
               selected={isSelected}
+              rightSide={
+                v.disabled ? (
+                  <span className="text-[0.72em] uppercase tracking-wide opacity-70">
+                    {sourceMaintainText}
+                  </span>
+                ) : undefined
+              }
             >
               <div className="flex flex-col">
                 <span>{v.name}</span>

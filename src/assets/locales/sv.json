@@ -626,6 +626,7 @@
           "title": "Misslyckades med att skrapa"
         },
         "findNextSource": "Hitta nästa källa",
+        "maintain": "Upprätthålla",
         "noEmbeds": {
           "text": "Vi kunde inte hitta några inbäddningar, försök med en annan källa.",
           "title": "Inga inbäddningar hittade"

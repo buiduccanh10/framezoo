@@ -170,6 +170,7 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
   const enableLastSuccessfulSource = usePreferencesStore(
     (s) => s.enableLastSuccessfulSource,
   );
+  const sourceMaintainText = t("player.menus.sources.maintain");
 
   const sources = useMemo(() => {
     const metaType = props.media.type;
@@ -255,7 +256,18 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
             {sources.map((v) => (
               <SelectableLink
                 key={v.id}
-                onClick={() => setSelectedSourceId(v.id)}
+                disabled={v.disabled}
+                onClick={() => {
+                  if (v.disabled) return;
+                  setSelectedSourceId(v.id);
+                }}
+                rightSide={
+                  v.disabled ? (
+                    <span className="text-[0.72em] uppercase tracking-wide opacity-70">
+                      {sourceMaintainText}
+                    </span>
+                  ) : undefined
+                }
               >
                 {v.name}
               </SelectableLink>

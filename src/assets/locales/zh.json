@@ -626,6 +626,7 @@
           "title": "刮削失败"
         },
         "findNextSource": "寻找下一个来源",
+        "maintain": "维持",
         "noEmbeds": {
           "text": "我们无法找到任何嵌入内容，请尝试其他片源。",
           "title": "未找到嵌入内容"

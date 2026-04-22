@@ -626,6 +626,7 @@
           "title": "Falha ao raspar"
         },
         "findNextSource": "Encontre a próxima fonte",
+        "maintain": "Manter",
         "noEmbeds": {
           "text": "Não conseguimos encontrar nenhum incorporado, por favor, tente uma fonte diferente.",
           "title": "Nenhum incorporado encontrado"

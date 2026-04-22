@@ -626,6 +626,7 @@
           "title": "No s'ha pogut obtenir"
         },
         "findNextSource": "Trobeu la següent font",
+        "maintain": "Mantenir",
         "noEmbeds": {
           "text": "No hem pogut trobar cap incrustat, proveu una font diferent.",
           "title": "No s'ha trobat cap incrustació"

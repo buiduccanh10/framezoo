@@ -626,6 +626,7 @@
           "title": "Kunne ikke scrape"
         },
         "findNextSource": "Find næste kilde",
+        "maintain": "Opretholde",
         "noEmbeds": {
           "text": "Vi kunne ikke finde nogen embeds, prøv venligst en anden kilde.",
           "title": "Ingen embeds fundet"

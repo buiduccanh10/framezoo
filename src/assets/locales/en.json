@@ -626,6 +626,7 @@
           "title": "Failed to scrape"
         },
         "findNextSource": "Find next source",
+        "maintain": "Maintain",
         "noEmbeds": {
           "text": "We were unable to find any embeds, please try a different source.",
           "title": "No embeds found"

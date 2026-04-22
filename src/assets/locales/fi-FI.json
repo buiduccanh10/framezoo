@@ -626,6 +626,7 @@
           "title": "Raapiminen epäonnistui"
         },
         "findNextSource": "Etsi seuraava lähde",
+        "maintain": "ylläpitää",
         "noEmbeds": {
           "text": "Emme löytäneet upotuksia, kokeile toista lähdettä.",
           "title": "Upotuksia ei löytynyt"

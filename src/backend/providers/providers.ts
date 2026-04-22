@@ -36,57 +36,33 @@ import {
   scrapeVidSrcMovie,
   scrapeVidSrcShow,
 } from "./custom/sources/vidsrcSource";
+import {
+  scrapeVidSrcWtfMovie,
+  scrapeVidSrcWtfShow,
+} from "./custom/sources/vidsrcWtfSource";
 
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
 
-// Custom OPhim source definition
-const ophimSource = {
-  id: "ophim",
-  name: "Server 6",
-  rank: 60,
+// Custom VidSrc.wtf source definition
+const vidsrcWtfSource = {
+  id: "alphaflix-vidsrcwtf",
+  name: "Server 1 🔥",
+  rank: 10,
   disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeOPhimMovie,
-  scrapeShow: scrapeOPhimShow,
-};
-
-// Custom KKPhim source definition
-const kkphimSource = {
-  id: "kkphim",
-  name: "Server 5",
-  rank: 50,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeKKPhimMovie,
-  scrapeShow: scrapeKKPhimShow,
-};
-
-// Custom OpenMovie source definition
-const openMovieSource = {
-  id: "openmovie",
-  name: "Server 2 🔥",
-  rank: 20,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeOpenMovieMovie,
-  scrapeShow: scrapeOpenMovieShow,
+  scrapeMovie: scrapeVidSrcWtfMovie,
+  scrapeShow: scrapeVidSrcWtfShow,
 };
 
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 1 🔥",
-  rank: 10,
+  name: "Server 2 🔥",
+  rank: 20,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -96,11 +72,39 @@ const vidlinkSource = {
   scrapeShow: scrapeVidlinkShow,
 };
 
+// Custom OpenMovie source definition
+const openMovieSource = {
+  id: "openmovie",
+  name: "Server 3 🔥",
+  rank: 30,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeOpenMovieMovie,
+  scrapeShow: scrapeOpenMovieShow,
+};
+
+// Custom VidSrc.ru source definition
+const vidsrcRuSource = {
+  id: "alphaflix-vidsrc-ru",
+  name: "Server 4 🔥",
+  rank: 40,
+  disabled: true,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVidSrcRuMovie,
+  scrapeShow: scrapeVidSrcRuShow,
+};
+
 // Custom VidSrc source definition
 const vidsrcSource = {
   id: "alphaflix-vidsrc",
-  name: "Server 4 🔥",
-  rank: 40,
+  name: "Server 5 🔥",
+  rank: 50,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -110,25 +114,39 @@ const vidsrcSource = {
   scrapeShow: scrapeVidSrcShow,
 };
 
-// Custom VidSrc.ru source definition
-const vidsrcRuSource = {
-  id: "alphaflix-vidsrc-ru",
-  name: "Server 3 🔥",
-  rank: 30,
+// Custom KKPhim source definition
+const kkphimSource = {
+  id: "kkphim",
+  name: "Server 6 (VietSub embed)",
+  rank: 60,
   disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcRuMovie,
-  scrapeShow: scrapeVidSrcRuShow,
+  scrapeMovie: scrapeKKPhimMovie,
+  scrapeShow: scrapeKKPhimShow,
+};
+
+// Custom OPhim source definition
+const ophimSource = {
+  id: "ophim",
+  name: "Server 7 (VietSub embed)",
+  rank: 70,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeOPhimMovie,
+  scrapeShow: scrapeOPhimShow,
 };
 
 // Custom OpenMovie embed definition
 const openMovieEmbed = {
   id: "openmovie-embed",
   name: "OpenMovie Stream",
-  rank: 70,
+  rank: 80,
   disabled: false,
   type: "embed" as const,
   flags: [flags.CORS_ALLOWED],
@@ -152,6 +170,7 @@ export function getProviders() {
       .addSource(ophimSource)
       .addSource(kkphimSource)
       .addSource(vidlinkSource)
+      .addSource(vidsrcWtfSource)
       .addSource(vidsrcSource)
       .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
@@ -169,6 +188,7 @@ export function getProviders() {
       .addSource(ophimSource)
       .addSource(kkphimSource)
       .addSource(vidlinkSource)
+      .addSource(vidsrcWtfSource)
       .addSource(vidsrcSource)
       .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
@@ -186,6 +206,7 @@ export function getProviders() {
     .addSource(ophimSource)
     .addSource(kkphimSource)
     .addSource(vidlinkSource)
+    .addSource(vidsrcWtfSource)
     .addSource(vidsrcSource)
     .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
@@ -202,6 +223,7 @@ export function getAllProviders() {
     .addSource(ophimSource)
     .addSource(kkphimSource)
     .addSource(vidlinkSource)
+    .addSource(vidsrcWtfSource)
     .addSource(vidsrcSource)
     .addSource(vidsrcRuSource)
     .addSource(openMovieSource)

@@ -626,6 +626,7 @@
           "title": "Sikertelen begyűjtés"
         },
         "findNextSource": "Keresse meg a következő forrást",
+        "maintain": "Karbantartás",
         "noEmbeds": {
           "text": "Nem sikerült taláni beágyazásokat, próbálj egy másik forrást.",
           "title": "Beágyazások nem találva"

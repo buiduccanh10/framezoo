@@ -626,6 +626,7 @@
           "title": "Nepodařilo se extrahovat data"
         },
         "findNextSource": "Najděte další zdroj",
+        "maintain": "Udržovat",
         "noEmbeds": {
           "text": "Nepodařilo se nám najít žádný vklad, zkuste prosím jiný zdroj.",
           "title": "Žádné vklady"

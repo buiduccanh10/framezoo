@@ -626,6 +626,7 @@
           "title": "Error al obtener"
         },
         "findNextSource": "Encuentra la siguiente fuente",
+        "maintain": "Mantener",
         "noEmbeds": {
           "text": "No pudimos encontrar ninguna embed, por favor intenta con una fuente diferente.",
           "title": "No se encontraron embeds"
