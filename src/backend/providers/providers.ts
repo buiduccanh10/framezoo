@@ -44,9 +44,9 @@ import {
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
 
-// Custom VidSrc.wtf source definition
-const vidsrcWtfSource = {
-  id: "alphaflix-vidsrcwtf",
+// Custom Vidlink source definition
+const vidlinkSource = {
+  id: "alphaflix-vidlink",
   name: "Server 1 🔥",
   rank: 10,
   disabled: false,
@@ -54,13 +54,13 @@ const vidsrcWtfSource = {
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcWtfMovie,
-  scrapeShow: scrapeVidSrcWtfShow,
+  scrapeMovie: scrapeVidlinkMovie,
+  scrapeShow: scrapeVidlinkShow,
 };
 
-// Custom Vidlink source definition
-const vidlinkSource = {
-  id: "alphaflix-vidlink",
+// Custom VidSrc.wtf source definition
+const vidsrcWtfSource = {
+  id: "alphaflix-vidsrcwtf",
   name: "Server 2 🔥",
   rank: 20,
   disabled: false,
@@ -68,8 +68,8 @@ const vidlinkSource = {
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidlinkMovie,
-  scrapeShow: scrapeVidlinkShow,
+  scrapeMovie: scrapeVidSrcWtfMovie,
+  scrapeShow: scrapeVidSrcWtfShow,
 };
 
 // Custom OpenMovie source definition
