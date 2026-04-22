@@ -12,6 +12,10 @@ import {
 } from "@/lib/providers";
 
 import {
+  scrape111MoviesMovie,
+  scrape111MoviesShow,
+} from "./custom/sources/111moviesSource";
+import {
   scrapeKKPhimMovie,
   scrapeKKPhimShow,
 } from "./custom/sources/kkphimSource";
@@ -44,10 +48,24 @@ import {
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
 
+// Custom 111Movies source definition
+const movies111Source = {
+  id: "alphaflix-111movies",
+  name: "Server 1 🔥",
+  rank: 5,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrape111MoviesMovie,
+  scrapeShow: scrape111MoviesShow,
+};
+
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 1 🔥",
+  name: "Server 2 🔥",
   rank: 10,
   disabled: false,
   externalSource: false,
@@ -61,7 +79,7 @@ const vidlinkSource = {
 // Custom VidSrc.wtf source definition
 const vidsrcWtfSource = {
   id: "alphaflix-vidsrcwtf",
-  name: "Server 2 🔥",
+  name: "Server 3 🔥",
   rank: 20,
   disabled: false,
   externalSource: false,
@@ -75,7 +93,7 @@ const vidsrcWtfSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "Server 3 🔥",
+  name: "Server 4 🔥",
   rank: 30,
   disabled: false,
   externalSource: false,
@@ -89,7 +107,7 @@ const openMovieSource = {
 // Custom VidSrc.ru source definition
 const vidsrcRuSource = {
   id: "alphaflix-vidsrc-ru",
-  name: "Server 4 🔥",
+  name: "Server 5 🔥",
   rank: 40,
   disabled: true,
   externalSource: false,
@@ -103,7 +121,7 @@ const vidsrcRuSource = {
 // Custom VidSrc source definition
 const vidsrcSource = {
   id: "alphaflix-vidsrc",
-  name: "Server 5 🔥",
+  name: "Server 6 🔥",
   rank: 50,
   disabled: false,
   externalSource: false,
@@ -117,7 +135,7 @@ const vidsrcSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 6 (VietSub embed)",
+  name: "Server 7 (VietSub embed)",
   rank: 60,
   disabled: false,
   externalSource: false,
@@ -131,7 +149,7 @@ const kkphimSource = {
 // Custom OPhim source definition
 const ophimSource = {
   id: "ophim",
-  name: "Server 7 (VietSub embed)",
+  name: "Server 8 (VietSub embed)",
   rank: 70,
   disabled: false,
   externalSource: false,
@@ -174,6 +192,7 @@ export function getProviders() {
       .addSource(vidsrcSource)
       .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
+      .addSource(movies111Source)
       .addEmbed(openMovieEmbed)
       .build();
   }
@@ -192,6 +211,7 @@ export function getProviders() {
       .addSource(vidsrcSource)
       .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
+      .addSource(movies111Source)
       .addEmbed(openMovieEmbed)
       .build();
   }
@@ -210,6 +230,7 @@ export function getProviders() {
     .addSource(vidsrcSource)
     .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
+    .addSource(movies111Source)
     .addEmbed(openMovieEmbed)
     .build();
 }
@@ -227,6 +248,7 @@ export function getAllProviders() {
     .addSource(vidsrcSource)
     .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
+    .addSource(movies111Source)
     .addEmbed(openMovieEmbed)
     .build();
 }
