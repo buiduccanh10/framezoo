@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { downloadCaption } from "@/backend/helpers/subs";
+import { SegmentQualityDebugInfo } from "@/components/player/display/displayInterface";
 import { ScrapeMedia } from "@/lib/providers";
 import { MakeSlice } from "@/stores/player/slices/types";
 import {
@@ -98,6 +99,7 @@ export interface SourceSlice {
   qualities: SourceQuality[];
   audioTracks: AudioTrack[];
   currentQuality: SourceQuality | null;
+  segmentQualityDebug: SegmentQualityDebugInfo | null;
   currentAudioTrack: AudioTrack | null;
   captionList: CaptionListItem[];
   isLoadingExternalSubtitles: boolean;
@@ -237,6 +239,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     total: 0,
   },
   currentQuality: null,
+  segmentQualityDebug: null,
   currentAudioTrack: null,
   status: playerStatus.IDLE,
   meta: null,
@@ -324,6 +327,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.source = stream;
       s.qualities = qualities as SourceQuality[];
       s.currentQuality = loadableStream.quality;
+      s.segmentQualityDebug = null;
       s.captionList = captions;
       s.externalSubtitleRequestId = nextRequestId;
       s.isLoadingExternalSubtitles = true;
@@ -481,6 +485,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         total: 0,
       };
       s.currentQuality = null;
+      s.segmentQualityDebug = null;
       s.currentAudioTrack = null;
       s.status = playerStatus.IDLE;
       s.meta = null;

@@ -75,6 +75,11 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         s.currentQuality = quality;
       });
     });
+    newDisplay.on("segmentqualitydebug", (segmentQualityDebug) => {
+      set((s) => {
+        s.segmentQualityDebug = segmentQualityDebug;
+      });
+    });
     newDisplay.on("audiotracks", (audioTracks) => {
       set((s) => {
         s.audioTracks = audioTracks;

@@ -9,6 +9,7 @@ import {
 import {
   DisplayInterface,
   DisplayInterfaceEvents,
+  SegmentQualityDebugInfo,
 } from "@/components/player/display/displayInterface";
 import { handleBuffered } from "@/components/player/utils/handleBuffered";
 import { getMediaErrorDetails } from "@/components/player/utils/mediaErrorDetails";
@@ -17,6 +18,7 @@ import {
   createMP4ProxyUrl,
   isUrlAlreadyProxied,
 } from "@/components/player/utils/proxy";
+import { extractSegmentResolution } from "@/components/player/utils/segmentResolution";
 import { useLanguageStore } from "@/stores/language";
 import {
   LoadableSource,
@@ -73,6 +75,15 @@ const HLS_START_LOAD_THROTTLE_MS = 2500;
 const HLS_SOURCEBUFFER_RACE_WINDOW_MS = 6000;
 const HLS_SOURCEBUFFER_RACE_THRESHOLD = 3;
 const HLS_RECREATE_COOLDOWN_MS = 12000;
+const SEGMENT_DEBUG_ENABLED = import.meta.env.DEV;
+
+function deriveQualityFromHeight(
+  height: number,
+): SegmentQualityDebugInfo["realQuality"] {
+  if (height >= 900) return "1080";
+  if (height >= 640) return "720";
+  return "unknown";
+}
 
 function hlsLevelToQuality(level?: Level): SourceQuality | null {
   if (!level?.height) return null;
@@ -198,6 +209,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let detachedSourceBufferRaceCount = 0;
   let detachedSourceBufferRaceWindowStart = 0;
   let lastHlsRecreateAt = 0;
+  let lastSegmentQuality: SegmentQualityDebugInfo["realQuality"] | null = null;
+  let lastSegmentResolution: { width: number; height: number } | null = null;
+  let lastSegmentDebugFingerprint = "";
 
   const languagePromises = new Map<
     string,
@@ -370,6 +384,39 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     );
   }
 
+  function reportSegmentQualityDebug(payload: ArrayBuffer) {
+    if (!SEGMENT_DEBUG_ENABLED) return;
+
+    const resolution = extractSegmentResolution(payload);
+    if (resolution) {
+      lastSegmentResolution = resolution;
+      lastSegmentQuality = deriveQualityFromHeight(resolution.height);
+    }
+
+    const realQuality = lastSegmentQuality ?? "unknown";
+    const width = lastSegmentResolution?.width ?? null;
+    const height = lastSegmentResolution?.height ?? null;
+    const fingerprint = `${realQuality}|${width ?? ""}|${height ?? ""}`;
+    if (fingerprint === lastSegmentDebugFingerprint) {
+      return;
+    }
+
+    lastSegmentDebugFingerprint = fingerprint;
+    emit("segmentqualitydebug", {
+      realQuality,
+      width,
+      height,
+      updatedAt: Date.now(),
+    });
+  }
+
+  function resetSegmentQualityDebug() {
+    lastSegmentQuality = null;
+    lastSegmentResolution = null;
+    lastSegmentDebugFingerprint = "";
+    emit("segmentqualitydebug", null);
+  }
+
   function setupQualityForHls(): SourceQuality | null {
     if (videoElement && canPlayHlsNatively(videoElement)) {
       return null;
@@ -414,6 +461,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       qualitySetupRetryTimeout = null;
     }
     clearHlsRecoveryTimeout();
+    resetSegmentQualityDebug();
     if (src.type === "hls") {
       if (canPlayHlsNatively(vid)) {
         vid.src = processCdnLink(src.url);
@@ -558,6 +606,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           clearHlsRecoveryTimeout();
           resetDetachedSourceBufferRaceTracking();
           emit("loading", false);
+        });
+        hls.on(Hls.Events.FRAG_LOADED, (_, data) => {
+          if (hls !== currentHls) return;
+          reportSegmentQualityDebug(data.payload);
         });
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
           if (hls !== currentHls) return;
@@ -817,6 +869,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       qualitySetupRetryTimeout = null;
     }
     clearHlsRecoveryTimeout();
+    resetSegmentQualityDebug();
     lastHlsStartLoadAt = 0;
     resetDetachedSourceBufferRaceTracking();
 

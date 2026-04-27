@@ -9,6 +9,7 @@ export * from "./PlayerLoadingOverlay";
 export * from "./AutoPlayStart";
 export * from "./Volume";
 export * from "./Title";
+export * from "./SegmentQualityDebug";
 export * from "./EpisodeTitle";
 export * from "./Settings";
 export * from "./Episodes";

@@ -34,6 +34,13 @@ export type DisplayError = {
   };
 };
 
+export type SegmentQualityDebugInfo = {
+  realQuality: "1080" | "720" | "unknown";
+  width: number | null;
+  height: number | null;
+  updatedAt: number;
+};
+
 export type DisplayInterfaceEvents = {
   play: void;
   pause: void;
@@ -51,6 +58,7 @@ export type DisplayInterfaceEvents = {
   canairplay: boolean;
   playbackrate: number;
   error: DisplayError;
+  segmentqualitydebug: SegmentQualityDebugInfo | null;
 };
 
 export interface qualityChangeOptions {
