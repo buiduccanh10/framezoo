@@ -39,7 +39,6 @@ function SettingsOverlay({ id }: { id: string }) {
     useState<CaptionListItem | null>(null);
   const [subtitleSelectionMode, setSubtitleSelectionMode] =
     useState<SubtitleSelectionMode>("primary");
-  const [isDualSubEnabled, setIsDualSubEnabled] = useState(false);
   const { width: viewportWidth, height: viewportHeight } = useWindowSize();
   const { isMobile } = useIsMobile();
   const router = useOverlayRouter(id);
@@ -112,8 +111,6 @@ function SettingsOverlay({ id }: { id: string }) {
               onChooseLanguage={setChosenLanguage}
               selectionMode={subtitleSelectionMode}
               onSelectionModeChange={setSubtitleSelectionMode}
-              isDualSubEnabled={isDualSubEnabled}
-              onDualSubToggle={setIsDualSubEnabled}
             />
           </Menu.CardWithScrollable>
         </OverlayPage>
@@ -130,8 +127,6 @@ function SettingsOverlay({ id }: { id: string }) {
               onChooseLanguage={setChosenLanguage}
               selectionMode={subtitleSelectionMode}
               onSelectionModeChange={setSubtitleSelectionMode}
-              isDualSubEnabled={isDualSubEnabled}
-              onDualSubToggle={setIsDualSubEnabled}
             />
           </Menu.CardWithScrollable>
         </OverlayPage>

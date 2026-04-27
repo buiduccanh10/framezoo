@@ -73,7 +73,9 @@ function VideoElement() {
   const display = usePlayerStore((s) => s.display);
   const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
   const language = usePlayerStore((s) => s.caption.selected?.language);
-  const secondarySrtData = usePlayerStore((s) => s.caption.secondary?.srtData);
+  const secondarySrtData = usePlayerStore((s) =>
+    s.caption.dualSubEnabled ? s.caption.secondary?.srtData : undefined,
+  );
   const source = usePlayerStore((s) => s.source);
   const enableNativeSubtitles = usePreferencesStore(
     (s) => s.enableNativeSubtitles,

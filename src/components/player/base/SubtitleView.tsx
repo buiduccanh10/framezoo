@@ -202,6 +202,7 @@ export function SecondarySubtitleRenderer() {
 export function SubtitleView(props: { controlsShown: boolean }) {
   const caption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
+  const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const source = usePlayerStore((s) => s.source);
   const display = usePlayerStore((s) => s.display);
   const isCasting = display?.getType() === "casting";
@@ -228,7 +229,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
           transform: "translateZ(0)",
         }}
       >
-        {secondaryCaption && <SecondarySubtitleRenderer />}
+        {dualSubEnabled && secondaryCaption && <SecondarySubtitleRenderer />}
         {caption && <SubtitleRenderer />}
       </div>
     </Transition>

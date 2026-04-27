@@ -111,6 +111,7 @@ export interface SourceSlice {
   caption: {
     selected: Caption | null;
     secondary: Caption | null;
+    dualSubEnabled: boolean;
     asTrack: boolean;
     translateTask: TranslateTask | null;
   };
@@ -128,6 +129,7 @@ export interface SourceSlice {
   setMeta(meta: PlayerMeta, status?: PlayerStatus): void;
   setCaption(caption: Caption | null): void;
   setSecondaryCaption(caption: Caption | null): void;
+  setDualSubEnabled(enabled: boolean): void;
   setSourceId(id: string | null): void;
   setEmbedId(id: string | null): void;
   enableAutomaticQuality(): void;
@@ -249,6 +251,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   caption: {
     selected: null,
     secondary: null,
+    dualSubEnabled: false,
     asTrack: false,
     translateTask: null,
   },
@@ -312,6 +315,14 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.caption.secondary = caption;
     });
   },
+  setDualSubEnabled(enabled) {
+    set((s) => {
+      s.caption.dualSubEnabled = enabled;
+      if (!enabled) {
+        s.caption.secondary = null;
+      }
+    });
+  },
   setSource(
     stream: SourceSliceSource,
     captions: CaptionListItem[],
@@ -337,6 +348,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       };
       s.caption.selected = null;
       s.caption.secondary = null;
+      s.caption.dualSubEnabled = false;
       s.caption.translateTask = null;
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
@@ -500,6 +512,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.caption = {
         selected: null,
         secondary: null,
+        dualSubEnabled: false,
         asTrack: false,
         translateTask: null,
       };
