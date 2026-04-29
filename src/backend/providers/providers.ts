@@ -16,10 +16,6 @@ import {
   scrape111MoviesShow,
 } from "./custom/sources/111moviesSource";
 import {
-  scrapeIcefyCoreMovie,
-  scrapeIcefyCoreShow,
-} from "./custom/sources/icefyCoreSource";
-import {
   scrapeKKPhimMovie,
   scrapeKKPhimShow,
 } from "./custom/sources/kkphimSource";
@@ -52,25 +48,11 @@ import {
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
 
-// Custom Icefy Core source definition
-const icefyCoreSource = {
-  id: "alphaflix-icefy-core",
-  name: "Server 1 (Icefy Core) 🔥",
-  rank: 5,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeIcefyCoreMovie,
-  scrapeShow: scrapeIcefyCoreShow,
-};
-
 // Custom 111Movies source definition
 const movies111Source = {
   id: "alphaflix-111movies",
-  name: "Server 2 (111Movies) 🔥",
-  rank: 10,
+  name: "Server 1 (111Movies) 🔥",
+  rank: 5,
   disabled: true,
   externalSource: false,
   type: "source" as const,
@@ -83,8 +65,8 @@ const movies111Source = {
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 3 (VidLink) 🔥",
-  rank: 20,
+  name: "Server 2 (VidLink) 🔥",
+  rank: 10,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -97,8 +79,8 @@ const vidlinkSource = {
 // Custom VidSrc.wtf source definition
 const vidsrcWtfSource = {
   id: "alphaflix-vidsrcwtf",
-  name: "Server 4 (VidSrc.wtf) 🔥",
-  rank: 30,
+  name: "Server 3 (VidSrc.wtf) 🔥",
+  rank: 20,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -111,8 +93,8 @@ const vidsrcWtfSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "Server 5 (Vixsrc) 🔥",
-  rank: 40,
+  name: "Server 4 (Vixsrc) 🔥",
+  rank: 30,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -125,9 +107,9 @@ const openMovieSource = {
 // Custom VidSrc.ru source definition
 const vidsrcRuSource = {
   id: "alphaflix-vidsrc-ru",
-  name: "Server 6 (Vidsrc.ru) 🔥",
-  rank: 50,
-  disabled: true,
+  name: "Server 5 (Vidsrc.ru) 🔥",
+  rank: 40,
+  disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -139,8 +121,8 @@ const vidsrcRuSource = {
 // Custom VidSrc source definition
 const vidsrcSource = {
   id: "alphaflix-vidsrc",
-  name: "Server 7 (Vidsrc) 🔥",
-  rank: 60,
+  name: "Server 6 (Vidsrc) 🔥",
+  rank: 50,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -153,8 +135,8 @@ const vidsrcSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 8 (KKPhim)",
-  rank: 70,
+  name: "Server 7 (KKPhim)",
+  rank: 60,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -167,8 +149,8 @@ const kkphimSource = {
 // Custom OPhim source definition
 const ophimSource = {
   id: "ophim",
-  name: "Server 9 (OPhim)",
-  rank: 80,
+  name: "Server 8 (OPhim)",
+  rank: 70,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -182,7 +164,7 @@ const ophimSource = {
 const openMovieEmbed = {
   id: "openmovie-embed",
   name: "OpenMovie Stream",
-  rank: 90,
+  rank: 80,
   disabled: false,
   type: "embed" as const,
   flags: [flags.CORS_ALLOWED],
@@ -207,7 +189,6 @@ export function getProviders() {
       .addSource(kkphimSource)
       .addSource(vidlinkSource)
       .addSource(vidsrcWtfSource)
-      .addSource(icefyCoreSource)
       .addSource(vidsrcSource)
       .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
@@ -227,7 +208,6 @@ export function getProviders() {
       .addSource(kkphimSource)
       .addSource(vidlinkSource)
       .addSource(vidsrcWtfSource)
-      .addSource(icefyCoreSource)
       .addSource(vidsrcSource)
       .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
@@ -247,7 +227,6 @@ export function getProviders() {
     .addSource(kkphimSource)
     .addSource(vidlinkSource)
     .addSource(vidsrcWtfSource)
-    .addSource(icefyCoreSource)
     .addSource(vidsrcSource)
     .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
@@ -266,7 +245,6 @@ export function getAllProviders() {
     .addSource(kkphimSource)
     .addSource(vidlinkSource)
     .addSource(vidsrcWtfSource)
-    .addSource(icefyCoreSource)
     .addSource(vidsrcSource)
     .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
