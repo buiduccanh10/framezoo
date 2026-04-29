@@ -33,6 +33,10 @@ import {
   scrapeVidlinkShow,
 } from "./custom/sources/vidlinkSource";
 import {
+  scrapeVidrockMovie,
+  scrapeVidrockShow,
+} from "./custom/sources/vidrockSource";
+import {
   scrapeVidSrcRuMovie,
   scrapeVidSrcRuShow,
 } from "./custom/sources/vidsrcRuSource";
@@ -48,10 +52,24 @@ import {
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
 
+// Custom Vidrock source definition
+const vidrockSource = {
+  id: "alphaflix-vidrock",
+  name: "Server 1 (Vidrock) 🔥",
+  rank: 1,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVidrockMovie,
+  scrapeShow: scrapeVidrockShow,
+};
+
 // Custom 111Movies source definition
 const movies111Source = {
   id: "alphaflix-111movies",
-  name: "Server 1 (111Movies) 🔥",
+  name: "Server 2 (111Movies) 🔥",
   rank: 5,
   disabled: true,
   externalSource: false,
@@ -65,7 +83,7 @@ const movies111Source = {
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 2 (VidLink) 🔥",
+  name: "Server 3 (VidLink) 🔥",
   rank: 10,
   disabled: false,
   externalSource: false,
@@ -79,7 +97,7 @@ const vidlinkSource = {
 // Custom VidSrc.wtf source definition
 const vidsrcWtfSource = {
   id: "alphaflix-vidsrcwtf",
-  name: "Server 3 (VidSrc.wtf) 🔥",
+  name: "Server 4 (VidSrc.wtf) 🔥",
   rank: 20,
   disabled: false,
   externalSource: false,
@@ -93,7 +111,7 @@ const vidsrcWtfSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "Server 4 (Vixsrc) 🔥",
+  name: "Server 5 (Vixsrc) 🔥",
   rank: 30,
   disabled: false,
   externalSource: false,
@@ -107,7 +125,7 @@ const openMovieSource = {
 // Custom VidSrc.ru source definition
 const vidsrcRuSource = {
   id: "alphaflix-vidsrc-ru",
-  name: "Server 5 (Vidsrc.ru) 🔥",
+  name: "Server 6 (Vidsrc.ru) 🔥",
   rank: 40,
   disabled: true,
   externalSource: false,
@@ -121,7 +139,7 @@ const vidsrcRuSource = {
 // Custom VidSrc source definition
 const vidsrcSource = {
   id: "alphaflix-vidsrc",
-  name: "Server 6 (Vidsrc) 🔥",
+  name: "Server 7 (Vidsrc) 🔥",
   rank: 50,
   disabled: false,
   externalSource: false,
@@ -135,7 +153,7 @@ const vidsrcSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 7 (KKPhim)",
+  name: "Server 8 (KKPhim)",
   rank: 60,
   disabled: false,
   externalSource: false,
@@ -149,7 +167,7 @@ const kkphimSource = {
 // Custom OPhim source definition
 const ophimSource = {
   id: "ophim",
-  name: "Server 8 (OPhim)",
+  name: "Server 9 (OPhim)",
   rank: 70,
   disabled: false,
   externalSource: false,
@@ -185,14 +203,15 @@ export function getProviders() {
       .setTarget(targets.NATIVE)
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
-      .addSource(ophimSource)
-      .addSource(kkphimSource)
+      .addSource(vidrockSource)
+      .addSource(movies111Source)
       .addSource(vidlinkSource)
       .addSource(vidsrcWtfSource)
-      .addSource(vidsrcSource)
-      .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
-      .addSource(movies111Source)
+      .addSource(vidsrcRuSource)
+      .addSource(vidsrcSource)
+      .addSource(kkphimSource)
+      .addSource(ophimSource)
       .addEmbed(openMovieEmbed)
       .build();
   }
@@ -204,14 +223,15 @@ export function getProviders() {
       .setTarget(targets.BROWSER_EXTENSION)
       .enableConsistentIpForRequests()
       .addBuiltinProviders()
-      .addSource(ophimSource)
-      .addSource(kkphimSource)
+      .addSource(vidrockSource)
+      .addSource(movies111Source)
       .addSource(vidlinkSource)
       .addSource(vidsrcWtfSource)
-      .addSource(vidsrcSource)
-      .addSource(vidsrcRuSource)
       .addSource(openMovieSource)
-      .addSource(movies111Source)
+      .addSource(vidsrcRuSource)
+      .addSource(vidsrcSource)
+      .addSource(kkphimSource)
+      .addSource(ophimSource)
       .addEmbed(openMovieEmbed)
       .build();
   }
@@ -223,14 +243,15 @@ export function getProviders() {
     .setProxiedFetcher(makeLoadBalancedSimpleProxyFetcher())
     .setTarget(targets.BROWSER)
     .addBuiltinProviders()
-    .addSource(ophimSource)
-    .addSource(kkphimSource)
+    .addSource(vidrockSource)
+    .addSource(movies111Source)
     .addSource(vidlinkSource)
     .addSource(vidsrcWtfSource)
-    .addSource(vidsrcSource)
-    .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
-    .addSource(movies111Source)
+    .addSource(vidsrcRuSource)
+    .addSource(vidsrcSource)
+    .addSource(kkphimSource)
+    .addSource(ophimSource)
     .addEmbed(openMovieEmbed)
     .build();
 }
@@ -241,14 +262,15 @@ export function getAllProviders() {
     .setTarget(targets.BROWSER_EXTENSION)
     .enableConsistentIpForRequests()
     .addBuiltinProviders()
-    .addSource(ophimSource)
-    .addSource(kkphimSource)
+    .addSource(vidrockSource)
+    .addSource(movies111Source)
     .addSource(vidlinkSource)
     .addSource(vidsrcWtfSource)
-    .addSource(vidsrcSource)
-    .addSource(vidsrcRuSource)
     .addSource(openMovieSource)
-    .addSource(movies111Source)
+    .addSource(vidsrcRuSource)
+    .addSource(vidsrcSource)
+    .addSource(kkphimSource)
+    .addSource(ophimSource)
     .addEmbed(openMovieEmbed)
     .build();
 }
