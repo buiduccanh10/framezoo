@@ -225,6 +225,8 @@ type SourceDefinition = {
   id: string;
   name: string;
   rank?: number;
+  /** When true, automatic scraping skips this source; manual listing/metadata unchanged. */
+  disabled?: boolean;
   type?: "source";
   scrapeMovie?: (ctx: MovieScrapeContext) => Promise<SourcererOutput>;
   scrapeShow?: (ctx: ShowScrapeContext) => Promise<SourcererOutput>;
@@ -374,16 +376,20 @@ class ProviderBuilder {
       embedOrder,
       events,
     }) => {
+      const activeSourceIds = listSources()
+        .filter((s) => !s.disabled)
+        .map((s) => s.id);
       const orderedSourceIds =
         sourceOrder && sourceOrder.length > 0
-          ? sourceOrder
-          : listSources().map((source) => source.id);
+          ? sourceOrder.filter((id) => activeSourceIds.includes(id))
+          : activeSourceIds;
 
       events?.init?.({ sourceIds: orderedSourceIds });
 
       for (const sourceId of orderedSourceIds) {
         const source = sources.find((item) => item.id === sourceId);
         if (!source) continue;
+        if (source.disabled) continue;
 
         const update = (
           status: "failure" | "pending" | "notfound" | "success" | "waiting",

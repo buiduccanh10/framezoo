@@ -243,9 +243,11 @@ export function useScrape() {
         ? playerState.failedEmbedsPerMedia[mediaKey] || {}
         : {};
 
-      // Start with all available sources (filtered by failed ones only)
+      // Omit failed and globally disabled sources (disabled = UI-only unavailable, no scrape)
       let baseSourceOrder = allSources
-        .filter((source) => !failedSources.includes(source.id))
+        .filter(
+          (source) => !failedSources.includes(source.id) && !source.disabled,
+        )
         .map((source) => source.id);
 
       // Apply custom source ordering if enabled

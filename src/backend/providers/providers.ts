@@ -51,9 +51,9 @@ setupM3U8Proxy();
 // Custom 111Movies source definition
 const movies111Source = {
   id: "alphaflix-111movies",
-  name: "Server 1 🔥",
+  name: "Server 1 (111Movies) 🔥",
   rank: 5,
-  disabled: false,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -65,7 +65,7 @@ const movies111Source = {
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 2 🔥",
+  name: "Server 2 (VidLink) 🔥",
   rank: 10,
   disabled: false,
   externalSource: false,
@@ -79,7 +79,7 @@ const vidlinkSource = {
 // Custom VidSrc.wtf source definition
 const vidsrcWtfSource = {
   id: "alphaflix-vidsrcwtf",
-  name: "Server 3 🔥",
+  name: "Server 3 (VidSrc.wtf) 🔥",
   rank: 20,
   disabled: false,
   externalSource: false,
@@ -93,7 +93,7 @@ const vidsrcWtfSource = {
 // Custom OpenMovie source definition
 const openMovieSource = {
   id: "openmovie",
-  name: "Server 4 🔥",
+  name: "Server 4 (Vixsrc) 🔥",
   rank: 30,
   disabled: false,
   externalSource: false,
@@ -107,9 +107,9 @@ const openMovieSource = {
 // Custom VidSrc.ru source definition
 const vidsrcRuSource = {
   id: "alphaflix-vidsrc-ru",
-  name: "Server 5 🔥",
+  name: "Server 5 (Vidsrc.ru) 🔥",
   rank: 40,
-  disabled: true,
+  disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -121,7 +121,7 @@ const vidsrcRuSource = {
 // Custom VidSrc source definition
 const vidsrcSource = {
   id: "alphaflix-vidsrc",
-  name: "Server 6 🔥",
+  name: "Server 6 (Vidsrc) 🔥",
   rank: 50,
   disabled: false,
   externalSource: false,
@@ -135,7 +135,7 @@ const vidsrcSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 7 (VietSub embed)",
+  name: "Server 7 (KKPhim)",
   rank: 60,
   disabled: false,
   externalSource: false,
@@ -149,7 +149,7 @@ const kkphimSource = {
 // Custom OPhim source definition
 const ophimSource = {
   id: "ophim",
-  name: "Server 8 (VietSub embed)",
+  name: "Server 8 (OPhim)",
   rank: 70,
   disabled: false,
   externalSource: false,
