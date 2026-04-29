@@ -6,7 +6,7 @@ import checker from "vite-plugin-checker";
 import path from "path";
 import million from "million/compiler";
 import { handlebars } from "./plugins/handlebars";
-import { PluginOption, loadEnv, splitVendorChunkPlugin } from "vite";
+import { PluginOption, loadEnv } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 
 import tailwind from "tailwindcss";
@@ -117,7 +117,6 @@ export default defineConfig(({ mode }) => {
           },
         },
       }),
-      splitVendorChunkPlugin(),
       visualizer() as PluginOption,
     ],
 
