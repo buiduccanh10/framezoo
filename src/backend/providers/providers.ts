@@ -109,7 +109,7 @@ const vidsrcRuSource = {
   id: "alphaflix-vidsrc-ru",
   name: "Server 5 (Vidsrc.ru) 🔥",
   rank: 40,
-  disabled: false,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
