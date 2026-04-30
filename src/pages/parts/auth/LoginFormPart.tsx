@@ -14,7 +14,7 @@ import { BrandPill } from "@/components/layout/BrandPill";
 import { LargeCard, LargeCardText } from "@/components/layout/LargeCard";
 import { MwLink } from "@/components/text/Link";
 import { useAuth } from "@/hooks/auth/useAuth";
-import { useAuthStore } from "@/stores/auth";
+import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
 
@@ -28,13 +28,13 @@ export function LoginFormPart(props: LoginFormPartProps) {
   const { login, restore, importData } = useAuth();
   const progressItems = useProgressStore((store) => store.items);
   const bookmarkItems = useBookmarkStore((store) => store.bookmarks);
+  const backendUrl = useBackendUrl();
   const { t } = useTranslation();
 
   const [nicknameError, setNicknameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
   const [passkeyResult, executePasskey] = useAsyncFn(async () => {
-    const backendUrl = useAuthStore.getState().backendUrl;
     if (!backendUrl) {
       throw new Error(t("auth.login.noBackendUrl") ?? "No backend URL");
     }
@@ -63,7 +63,7 @@ export function LoginFormPart(props: LoginFormPartProps) {
     await restore(account);
 
     props.onLogin?.();
-  }, [props, login, restore, t, progressItems, bookmarkItems]);
+  }, [props, login, restore, t, progressItems, bookmarkItems, backendUrl]);
 
   const [result, execute] = useAsyncFn(
     async (data: PasswordInputData) => {
