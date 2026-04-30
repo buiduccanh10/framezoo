@@ -30,7 +30,10 @@ export function Button(props: Props) {
         MouseEvent
       >,
     ) => {
-      if (loading) return;
+      if (loading || props.disabled) {
+        event.preventDefault();
+        return;
+      }
       if (href && !onClick) {
         event.preventDefault();
         if (!href.includes("http")) {
@@ -40,7 +43,7 @@ export function Button(props: Props) {
         }
       } else onClick?.(event);
     },
-    [loading, href, onClick, navigate],
+    [loading, props.disabled, href, onClick, navigate],
   );
 
   let colorClasses = "bg-white hover:bg-gray-200 text-black";
@@ -59,10 +62,12 @@ export function Button(props: Props) {
     props.padding ?? "px-4 py-3",
     props.className,
     colorClasses,
-    props.disabled ? "!cursor-not-allowed bg-opacity-60 text-opacity-60" : null,
+    props.disabled || props.loading
+      ? "!cursor-not-allowed bg-opacity-60 text-opacity-60"
+      : null,
   );
 
-  if (props.disabled)
+  if (props.disabled || props.loading)
     classes = classes
       .split(" ")
       .filter(
@@ -112,7 +117,12 @@ export function Button(props: Props) {
     );
 
   return (
-    <button type="button" onClick={cb} className={classes}>
+    <button
+      type="button"
+      onClick={cb}
+      className={classes}
+      disabled={props.disabled || props.loading}
+    >
       {content}
     </button>
   );

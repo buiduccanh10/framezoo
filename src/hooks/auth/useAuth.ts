@@ -252,7 +252,7 @@ export function useAuth() {
             signature,
           },
           publicKey: publicKeyBase64Url,
-          nickname: "",
+          nickname: registerData.nickname ?? "",
           inviteCode: registerData.userData.inviteCode,
           device: await encryptData("Browser", keys.seed),
           profile: registerData.userData.profile,

@@ -111,7 +111,8 @@ export function RegisterPage() {
     if (!passwordData) return;
     register({
       nickname: passwordData.nickname,
-      password: passwordData.password,
+      password: passwordData.credentialId ? undefined : passwordData.password,
+      credentialId: passwordData.credentialId,
       userData: {
         inviteCode: passwordData.inviteCode ?? "",
         profile: data.profile,

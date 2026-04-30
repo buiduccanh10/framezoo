@@ -175,9 +175,10 @@ export function decryptData(data: string, secret: Uint8Array) {
 // Passkey/WebAuthn utilities
 
 export function isPasskeySupported(): boolean {
-  // Passkeys require HTTPS
   const isSecureContext =
-    typeof window !== "undefined" && window.location.protocol === "https:";
+    typeof window !== "undefined" &&
+    window.isSecureContext &&
+    window.location.protocol === "https:";
 
   return (
     isSecureContext &&
@@ -229,9 +230,7 @@ export async function createPasskey(
     throw new Error("Passkeys are not supported in this browser");
   }
 
-  // Generate a random user ID (8 bytes)
-  const userIdBuffer = new Uint8Array(8);
-  crypto.getRandomValues(userIdBuffer);
+  const userIdBuffer = sha256(new TextEncoder().encode(userId)).slice(0, 32);
 
   const challenge = new Uint8Array(32);
   crypto.getRandomValues(challenge);
@@ -254,6 +253,8 @@ export async function createPasskey(
       ],
       authenticatorSelection: {
         authenticatorAttachment: "platform",
+        residentKey: "required",
+        requireResidentKey: true,
         userVerification: "preferred",
       },
       timeout: 60000,

@@ -136,6 +136,7 @@ export function LoginFormPart(props: LoginFormPartProps) {
           onNext={handlePasswordSubmit}
           externalNicknameError={nicknameError}
           externalPasswordError={passwordError}
+          submitLoading={result.loading}
         />
         {isPasskeySupported() && (
           <div className="relative mb-4">
