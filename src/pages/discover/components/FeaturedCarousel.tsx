@@ -1,3 +1,4 @@
+import { useIsRestoring } from "@tanstack/react-query";
 import classNames from "classnames";
 import { t } from "i18next";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -5,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
 import { isExtensionActive } from "@/backend/extension/messaging";
-import { get, getMediaLogo } from "@/backend/metadata/tmdb";
+import { getMediaLogo } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
@@ -16,6 +17,7 @@ import { usePreferencesStore } from "@/stores/preferences";
 import { meetsMediaQualityThreshold } from "@/utils/compareByRatingDesc";
 import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
 import { RandomMovieButton } from "./RandomMovieButton";
 import { MOVIE_PROVIDERS } from "../hooks/useDiscoverMedia";
@@ -149,6 +151,7 @@ export function FeaturedCarousel({
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
   const { width: windowWidth, height: windowHeight } = useWindowSize();
   const [contentOpacity, setContentOpacity] = useState(1);
+  const isRestoring = useIsRestoring();
 
   const currentMedia = media[currentIndex];
 
@@ -202,6 +205,8 @@ export function FeaturedCarousel({
   }, [currentMedia]);
 
   useEffect(() => {
+    if (isRestoring) return;
+
     const fetchFeaturedMedia = async () => {
       setIsLoading(true);
       // Clear all previous data when transitioning
@@ -220,7 +225,7 @@ export function FeaturedCarousel({
           mediaPath: "movie" | "tv",
           extra: Record<string, string | number>,
         ) => {
-          let listData = await get<any>(`/discover/${mediaPath}`, {
+          let listData = await fetchCachedTmdb<any>(`/discover/${mediaPath}`, {
             language: formattedLanguage,
             watch_region: "US",
             ...extra,
@@ -229,7 +234,7 @@ export function FeaturedCarousel({
             (!listData.results || listData.results.length === 0) &&
             formattedLanguage !== "en-US"
           ) {
-            listData = await get<any>(`/discover/${mediaPath}`, {
+            listData = await fetchCachedTmdb<any>(`/discover/${mediaPath}`, {
               language: "en-US",
               watch_region: "US",
               ...extra,
@@ -239,7 +244,7 @@ export function FeaturedCarousel({
         };
 
         const endpointList = async (path: string, page = 1) => {
-          let data = await get<any>(path, {
+          let data = await fetchCachedTmdb<any>(path, {
             language: formattedLanguage,
             page,
           });
@@ -247,7 +252,10 @@ export function FeaturedCarousel({
             (!data.results || data.results.length === 0) &&
             formattedLanguage !== "en-US"
           ) {
-            data = await get<any>(path, { language: "en-US", page });
+            data = await fetchCachedTmdb<any>(path, {
+              language: "en-US",
+              page,
+            });
           }
           return data.results ?? [];
         };
@@ -407,11 +415,11 @@ export function FeaturedCarousel({
 
         const detailPromises = selected.map((p) =>
           p.type === "movie"
-            ? get<any>(`/movie/${p.id}`, {
+            ? fetchCachedTmdb<any>(`/movie/${p.id}`, {
                 language: formattedLanguage,
                 append_to_response: "external_ids",
               })
-            : get<any>(`/tv/${p.id}`, {
+            : fetchCachedTmdb<any>(`/tv/${p.id}`, {
                 language: formattedLanguage,
                 append_to_response: "external_ids",
               }),
@@ -445,7 +453,7 @@ export function FeaturedCarousel({
     };
 
     fetchFeaturedMedia();
-  }, [formattedLanguage]);
+  }, [formattedLanguage, isRestoring]);
 
   const handlePrevSlide = () => {
     setContentOpacity(0);

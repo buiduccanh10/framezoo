@@ -1,7 +1,7 @@
+import { useIsRestoring } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { get } from "@/backend/metadata/tmdb";
 import {
   EDITOR_PICKS_MOVIES,
   EDITOR_PICKS_TV_SHOWS,
@@ -24,6 +24,7 @@ import {
   filterAndSortByQualityDesc,
 } from "@/utils/compareByRatingDesc";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
 // Re-export types for backward compatibility
 export type {
@@ -54,6 +55,7 @@ export function useDiscoverOptions(
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const includeCountries = options?.includeCountries ?? false;
+  const isRestoring = useIsRestoring();
 
   const { t } = useTranslation();
   const userLanguage = useLanguageStore((s) => s.language);
@@ -63,15 +65,19 @@ export function useDiscoverOptions(
 
   useEffect(() => {
     const fetchOptions = async () => {
+      if (isRestoring) return;
+
       setIsLoading(true);
       setError(null);
 
       try {
         const [genresData, countriesData] = await Promise.all([
-          get<any>(`/genre/${mediaType}/list`, {
+          fetchCachedTmdb<any>(`/genre/${mediaType}/list`, {
             language: formattedLanguage,
           }),
-          includeCountries ? get<any[]>("/configuration/countries") : [],
+          includeCountries
+            ? fetchCachedTmdb<any[]>("/configuration/countries")
+            : [],
         ]);
 
         setGenres(
@@ -123,7 +129,14 @@ export function useDiscoverOptions(
     };
 
     fetchOptions();
-  }, [mediaType, formattedLanguage, userLanguage, includeCountries, t]);
+  }, [
+    mediaType,
+    formattedLanguage,
+    userLanguage,
+    includeCountries,
+    isRestoring,
+    t,
+  ]);
 
   return {
     genres,
@@ -157,6 +170,7 @@ export function useDiscoverMedia({
     useState<string>(contentType);
   const [actualContentType, setActualContentType] =
     useState<DiscoverContentType>(contentType);
+  const isRestoring = useIsRestoring();
 
   const { t } = useTranslation();
   const userLanguage = useLanguageStore((s) => s.language);
@@ -195,7 +209,7 @@ export function useDiscoverMedia({
           params.page = page.toString(); // Use the requested page for "view more" pages
         }
 
-        const data = await get<any>(endpoint, {
+        const data = await fetchCachedTmdb<any>(endpoint, {
           language: formattedLanguage,
           ...params,
         });
@@ -251,7 +265,7 @@ export function useDiscoverMedia({
     try {
       const mediaPromises = picksToFetch.map(async (item) => {
         const endpoint = `/${mediaType}/${item.id}`;
-        const data = await get<any>(endpoint, {
+        const data = await fetchCachedTmdb<any>(endpoint, {
           language: formattedLanguage,
           append_to_response: "videos,images",
         });
@@ -290,6 +304,8 @@ export function useDiscoverMedia({
   );
 
   const fetchMedia = useCallback(async () => {
+    if (isRestoring) return;
+
     // Skip fetching recommendations if no ID is provided
     if (contentType === "recommendations" && !id) {
       setIsLoading(false);
@@ -581,9 +597,14 @@ export function useDiscoverMedia({
     t,
     page,
     formattedLanguage,
+    isRestoring,
   ]);
 
   useEffect(() => {
+    if (isRestoring) {
+      setIsLoading(true);
+      return;
+    }
     if (!enabled) {
       setIsLoading(false);
       return;
@@ -594,7 +615,15 @@ export function useDiscoverMedia({
       setCurrentContentType(contentType);
     }
     fetchMedia();
-  }, [fetchMedia, contentType, currentContentType, page, id, enabled]);
+  }, [
+    fetchMedia,
+    contentType,
+    currentContentType,
+    page,
+    id,
+    enabled,
+    isRestoring,
+  ]);
 
   return {
     media,

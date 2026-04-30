@@ -21,6 +21,7 @@ import { useDiscoverStore } from "@/stores/discover";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
+import { isValidTmdbId } from "@/utils/tmdbId";
 
 interface MoreContentProps {
   onShowDetails?: (media: MediaItem) => void;
@@ -53,7 +54,8 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   // Get recommendation sources from progress store
   const recommendationSources = Object.entries(progressStore.items || {})
     .filter(
-      ([_itemId, item]) =>
+      ([itemId, item]) =>
+        isValidTmdbId(itemId) &&
         item.type === (mediaType === "tv" ? "show" : "movie"),
     )
     .map(([itemId, item]) => ({

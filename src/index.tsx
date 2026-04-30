@@ -4,6 +4,8 @@ import "./stores/__old/imports";
 import "@/setup/devtoolsProtection";
 import "@/assets/css/index.css";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { StrictMode, Suspense, useCallback, useState } from "react";
 import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
@@ -32,6 +34,12 @@ import { SettingsSyncer } from "@/stores/subtitles/SettingsSyncer";
 import { ThemeProvider } from "@/stores/theme";
 import { WatchHistorySyncer } from "@/stores/watchHistory/WatchHistorySyncer";
 import { detectRegion, useRegionStore } from "@/utils/detectRegion";
+import {
+  TMDB_METADATA_CACHE_BUSTER,
+  TMDB_METADATA_CACHE_TTL_MS,
+  queryClient,
+  queryPersister,
+} from "@/utils/queryClient";
 
 import {
   extensionInfo,
@@ -232,19 +240,34 @@ root.render(
   <StrictMode>
     <ErrorBoundary>
       <HelmetProvider>
-        <Suspense fallback={<LoadingScreen type="lazy" />}>
-          <ExtensionStatus />
-          <ThemeProvider applyGlobal>
-            <ProgressSyncer />
-            <BookmarkSyncer />
-            <WatchHistorySyncer />
-            <GroupSyncer />
-            <SettingsSyncer />
-            <TheRouter>
-              <MigrationRunner />
-            </TheRouter>
-          </ThemeProvider>
-        </Suspense>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{
+            buster: TMDB_METADATA_CACHE_BUSTER,
+            maxAge: TMDB_METADATA_CACHE_TTL_MS,
+            persister: queryPersister,
+            dehydrateOptions: {
+              shouldDehydrateQuery: (query) =>
+                query.queryKey[0] === "tmdb" &&
+                query.state.status === "success",
+            },
+          }}
+        >
+          <ReactQueryDevtools initialIsOpen={false} />
+          <Suspense fallback={<LoadingScreen type="lazy" />}>
+            <ExtensionStatus />
+            <ThemeProvider applyGlobal>
+              <ProgressSyncer />
+              <BookmarkSyncer />
+              <WatchHistorySyncer />
+              <GroupSyncer />
+              <SettingsSyncer />
+              <TheRouter>
+                <MigrationRunner />
+              </TheRouter>
+            </ThemeProvider>
+          </Suspense>
+        </PersistQueryClientProvider>
       </HelmetProvider>
     </ErrorBoundary>
   </StrictMode>,

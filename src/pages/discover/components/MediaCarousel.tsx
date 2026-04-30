@@ -18,6 +18,7 @@ import {
 import { useDiscoverStore } from "@/stores/discover";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
+import { isValidTmdbId } from "@/utils/tmdbId";
 
 import { CarouselNavButtons } from "./CarouselNavButtons";
 
@@ -115,7 +116,10 @@ export function MediaCarousel({
   // Get progress items for recommendations
   const progressItems = useProgressStore((state) => state.items);
   const recommendationSources = Object.entries(progressItems || {})
-    .filter(([_, item]) => item.type === (isTVShow ? "show" : "movie"))
+    .filter(
+      ([id, item]) =>
+        isValidTmdbId(id) && item.type === (isTVShow ? "show" : "movie"),
+    )
     .map(([id, item]) => ({
       id,
       title: item.title || "",

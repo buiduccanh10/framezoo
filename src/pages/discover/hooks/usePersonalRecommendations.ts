@@ -5,6 +5,7 @@ import type { DiscoverMedia } from "@/pages/discover/types/discover";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
 import { useWatchHistoryStore } from "@/stores/watchHistory";
+import { isValidTmdbId } from "@/utils/tmdbId";
 
 import {
   type BookmarkSource,
@@ -61,28 +62,34 @@ export function usePersonalRecommendations({
   const buildExcludeSet = useCallback(() => {
     const exclude = new Set<string>();
     for (const key of Object.keys(watchHistoryItems)) {
-      if (key.includes("-")) exclude.add(key.split("-")[0]!);
-      else exclude.add(key);
+      const tmdbId = key.includes("-") ? key.split("-")[0]! : key;
+      if (isValidTmdbId(tmdbId)) exclude.add(tmdbId);
     }
-    for (const id of Object.keys(progressItems)) exclude.add(id);
-    for (const id of Object.keys(bookmarks)) exclude.add(id);
+    for (const id of Object.keys(progressItems)) {
+      if (isValidTmdbId(id)) exclude.add(id);
+    }
+    for (const id of Object.keys(bookmarks)) {
+      if (isValidTmdbId(id)) exclude.add(id);
+    }
     return exclude;
   }, [watchHistoryItems, progressItems, bookmarks]);
 
   const fetch = useCallback(async () => {
-    const history: HistorySource[] = getHistorySources(watchHistoryItems);
-    const progress: ProgressSource[] = Object.entries(progressItems).map(
-      ([tmdbId, item]) => ({ tmdbId, type: item.type }),
-    );
-    const bookmarkList: BookmarkSource[] = Object.entries(bookmarks).map(
-      ([tmdbId, item]) => ({
+    const history: HistorySource[] = getHistorySources(
+      watchHistoryItems,
+    ).filter((item) => isValidTmdbId(item.tmdbId));
+    const progress: ProgressSource[] = Object.entries(progressItems)
+      .filter(([tmdbId]) => isValidTmdbId(tmdbId))
+      .map(([tmdbId, item]) => ({ tmdbId, type: item.type }));
+    const bookmarkList: BookmarkSource[] = Object.entries(bookmarks)
+      .filter(([tmdbId]) => isValidTmdbId(tmdbId))
+      .map(([tmdbId, item]) => ({
         tmdbId,
         type: item.type,
         title: item.title,
         year: item.year,
         poster: item.poster,
-      }),
-    );
+      }));
 
     const hasAnySource =
       history.some((h) => h.type === (isTVShow ? "show" : "movie")) ||

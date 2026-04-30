@@ -5,6 +5,7 @@ import type {
   TMDBShowSearchResult,
 } from "@/backend/metadata/types/tmdb";
 import type { DiscoverMedia } from "@/pages/discover/types/discover";
+import { isValidTmdbId } from "@/utils/tmdbId";
 
 // Tuning constants for the recommendation algorithm
 export const MAX_HISTORY_FOR_RELATED = 5;
@@ -105,19 +106,19 @@ export async function fetchPersonalRecommendations(
   const seenSources = new Set<string>();
 
   for (const h of historyFiltered) {
-    if (!seenSources.has(h.tmdbId)) {
+    if (isValidTmdbId(h.tmdbId) && !seenSources.has(h.tmdbId)) {
       seenSources.add(h.tmdbId);
       sourceIds.push(h.tmdbId);
     }
   }
   for (const p of progressFiltered) {
-    if (!seenSources.has(p.tmdbId)) {
+    if (isValidTmdbId(p.tmdbId) && !seenSources.has(p.tmdbId)) {
       seenSources.add(p.tmdbId);
       sourceIds.push(p.tmdbId);
     }
   }
   for (const b of bookmarksFiltered.slice(0, MAX_BOOKMARK_FOR_RELATED)) {
-    if (!seenSources.has(b.tmdbId)) {
+    if (isValidTmdbId(b.tmdbId) && !seenSources.has(b.tmdbId)) {
       seenSources.add(b.tmdbId);
       sourceIds.push(b.tmdbId);
     }
@@ -145,6 +146,7 @@ export async function fetchPersonalRecommendations(
 
   const reminders: DiscoverMedia[] = [];
   for (const b of bookmarksFiltered) {
+    if (!isValidTmdbId(b.tmdbId)) continue;
     if (excludeIds.has(b.tmdbId) || seenIds.has(Number(b.tmdbId))) continue;
     if (reminders.length >= MAX_BOOKMARK_REMINDERS) break;
     seenIds.add(Number(b.tmdbId));

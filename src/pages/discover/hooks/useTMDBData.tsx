@@ -1,9 +1,10 @@
+import { useIsRestoring } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
-import { get } from "@/backend/metadata/tmdb";
 import { Category, Genre, Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 type MediaType = "movie" | "tv";
 
 export function useTMDBData(
@@ -19,6 +20,7 @@ export function useTMDBData(
     [categoryName: string]: Movie[] | TVShow[];
   }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const isRestoring = useIsRestoring();
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
@@ -29,7 +31,7 @@ export function useTMDBData(
         const media: Movie[] | TVShow[] = [];
         // Reduce the number of pages to improve performance
         for (let page = 1; page <= 2; page += 1) {
-          const data = await get<any>(endpoint, {
+          const data = await fetchCachedTmdb<any>(endpoint, {
             language: formattedLanguage,
             page: page.toString(),
             ...(isGenre ? { with_genres: key } : {}),
@@ -58,7 +60,7 @@ export function useTMDBData(
 
   // Fetch media for each genre
   useEffect(() => {
-    if (!shouldLoad || genres.length === 0) return;
+    if (!shouldLoad || isRestoring || genres.length === 0) return;
 
     const fetchMediaForGenres = async () => {
       setIsLoading(true);
@@ -75,11 +77,11 @@ export function useTMDBData(
     };
 
     fetchMediaForGenres();
-  }, [genres, mediaType, fetchMedia, shouldLoad]);
+  }, [genres, mediaType, fetchMedia, shouldLoad, isRestoring]);
 
   // Fetch media for each category
   useEffect(() => {
-    if (!shouldLoad || categories.length === 0) return;
+    if (!shouldLoad || isRestoring || categories.length === 0) return;
 
     const fetchMediaForCategories = async () => {
       setIsLoading(true);
@@ -92,7 +94,7 @@ export function useTMDBData(
     };
 
     fetchMediaForCategories();
-  }, [categories, mediaType, fetchMedia, shouldLoad]);
+  }, [categories, mediaType, fetchMedia, shouldLoad, isRestoring]);
 
   return { genreMedia, categoryMedia, isLoading };
 }
@@ -106,6 +108,7 @@ export function useLazyTMDBData(
 ) {
   const [media, setMedia] = useState<Movie[] | TVShow[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const isRestoring = useIsRestoring();
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
@@ -115,7 +118,7 @@ export function useLazyTMDBData(
         setIsLoading(true);
         const mediaItems: Movie[] | TVShow[] = [];
         // Only fetch one page for better performance
-        const data = await get<any>(endpoint, {
+        const data = await fetchCachedTmdb<any>(endpoint, {
           language: formattedLanguage,
           page: "1",
           ...(isGenre ? { with_genres: key } : {}),
@@ -138,14 +141,14 @@ export function useLazyTMDBData(
   );
 
   useEffect(() => {
-    if (!shouldLoad) return;
+    if (!shouldLoad || isRestoring) return;
 
     if (genre) {
       fetchMedia(`/discover/${mediaType}`, genre.id.toString(), true);
     } else if (category) {
       fetchMedia(category.endpoint, category.name, false);
     }
-  }, [genre, category, mediaType, fetchMedia, shouldLoad]);
+  }, [genre, category, mediaType, fetchMedia, shouldLoad, isRestoring]);
 
   return { media, isLoading };
 }

@@ -7,6 +7,11 @@ import { SimpleCache } from "@/utils/cache";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { MediaItem } from "@/utils/mediaTypes";
 import { getProxyUrls } from "@/utils/proxyUrls";
+import {
+  TMDB_METADATA_CACHE_GC_MS,
+  TMDB_METADATA_CACHE_TTL_MS,
+  queryClient,
+} from "@/utils/queryClient";
 
 import { MWMediaMeta, MWMediaType, MWSeasonMeta } from "./types/mw";
 import {
@@ -209,10 +214,7 @@ function getNextProxy(proxyUrls: string[]): string | undefined {
   return proxy;
 }
 
-export async function get<T>(url: string, params?: object): Promise<T> {
-  const proxyUrls = getProxyUrls();
-  const proxy = getNextProxy(proxyUrls);
-  const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
+function resolveTmdbLanguage(params?: object): string {
   const userLanguage = useLanguageStore.getState().language;
   const requestedLanguage =
     params &&
@@ -221,8 +223,26 @@ export async function get<T>(url: string, params?: object): Promise<T> {
     typeof (params as { language?: unknown }).language === "string"
       ? ((params as { language: string }).language ?? "").trim()
       : "";
-  const formattedLanguage =
-    requestedLanguage || getTmdbLanguageCode(userLanguage);
+  return requestedLanguage || getTmdbLanguageCode(userLanguage);
+}
+
+export async function get<T>(url: string, params?: object): Promise<T> {
+  const formattedLanguage = resolveTmdbLanguage(params);
+
+  return queryClient.ensureQueryData({
+    queryKey: ["tmdb", url, params ?? {}, formattedLanguage],
+    queryFn: () => fetchTmdb<T>(url, params),
+    revalidateIfStale: false,
+    staleTime: TMDB_METADATA_CACHE_TTL_MS,
+    gcTime: TMDB_METADATA_CACHE_GC_MS,
+  });
+}
+
+async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
+  const proxyUrls = getProxyUrls();
+  const proxy = getNextProxy(proxyUrls);
+  const shouldProxyTmdb = usePreferencesStore.getState().proxyTmdb;
+  const formattedLanguage = resolveTmdbLanguage(params);
 
   // Check cache first
   const cacheKey: TMDBCacheKey = {
