@@ -226,10 +226,13 @@ export function SubtitleView(props: { controlsShown: boolean }) {
           bottom: props.controlsShown
             ? "6rem"
             : `${styling.verticalPosition}rem`,
-          transform: "translateZ(0)",
         }}
       >
-        {dualSubEnabled && secondaryCaption && <SecondarySubtitleRenderer />}
+        {dualSubEnabled &&
+          secondaryCaption &&
+          (!caption || secondaryCaption.srtData !== caption.srtData) && (
+            <SecondarySubtitleRenderer />
+          )}
         {caption && <SubtitleRenderer />}
       </div>
     </Transition>

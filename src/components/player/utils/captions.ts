@@ -51,17 +51,13 @@ export function convertSubtitlesToSrt(text: string): string {
 }
 
 export function filterDuplicateCaptionCues(cues: ContentCaption[]) {
-  return cues.reduce((acc: ContentCaption[], cap: ContentCaption) => {
-    const lastCap = acc[acc.length - 1];
-    const isSameAsLast =
-      lastCap?.start === cap.start &&
-      lastCap?.end === cap.end &&
-      lastCap?.content === cap.content;
-    if (lastCap === undefined || !isSameAsLast) {
-      acc.push(cap);
-    }
-    return acc;
-  }, []);
+  const seen = new Set<string>();
+  return cues.filter((cap) => {
+    const key = `${cap.start}|${cap.end}|${cap.content}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
 
 export function parseVttSubtitles(vtt: string) {
@@ -73,7 +69,7 @@ export function parseSubtitles(
   _language?: string,
 ): CaptionCueType[] {
   const vtt = convertSubtitlesToVtt(text);
-  return parseVttSubtitles(vtt);
+  return filterDuplicateCaptionCues(parseVttSubtitles(vtt));
 }
 
 function stringToBase64(input: string): string {
