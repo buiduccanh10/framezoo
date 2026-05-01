@@ -10,6 +10,7 @@ import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { hasAired } from "@/components/player/utils/aired";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
+import { formatDateDDMMYY } from "@/utils/timestamp";
 
 import { EpisodeCarouselProps } from "../../types";
 
@@ -70,6 +71,18 @@ export function EpisodeCarousel({
   }>({});
   const updateItem = useProgressStore((s) => s.updateItem);
   const confirmModal = useModal("season-watch-confirm");
+
+  const hasGenericEpisodeTitle = (
+    episodeName: string | null | undefined,
+    episodeNumber: number,
+  ) => {
+    if (!episodeName) return true;
+    const normalizedName = episodeName.trim().toLowerCase();
+    return (
+      normalizedName === `episode ${episodeNumber}` ||
+      normalizedName === `ep ${episodeNumber}`
+    );
+  };
 
   const handleScroll = (direction: "left" | "right") => {
     if (!carouselRef.current) return;
@@ -714,6 +727,23 @@ export function EpisodeCarousel({
                     episode.id.toString(),
                   ) ?? false)
                 : false;
+              const formattedReleaseDate = formatDateDDMMYY(episode.air_date);
+              const episodeTitle = hasGenericEpisodeTitle(
+                episode.name,
+                episode.episode_number,
+              )
+                ? t("details.episodeNumber", {
+                    number: episode.episode_number,
+                  })
+                : episode.name;
+              const episodeBadgeLabel = showFavorites
+                ? t("media.episodeDisplay", {
+                    season: episode.season_number,
+                    episode: episode.episode_number,
+                  })
+                : t("player.menus.episodes.episodeBadge", {
+                    episode: episode.episode_number,
+                  });
 
               return (
                 <Link
@@ -751,15 +781,11 @@ export function EpisodeCarousel({
                       {/* Episode Number Badge */}
                       <div className="absolute top-2 left-2 flex items-center space-x-2">
                         <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-sm">
-                          {showFavorites
-                            ? `S${episode.season_number}E${episode.episode_number}`
-                            : `${t("media.episodeShort")}${episode.episode_number}`}
+                          {episodeBadgeLabel}
                         </span>
                         {!isAired && (
                           <span className="bg-video-context-hoverColor/50 text-video-context-type-main/80 text-sm px-1 py-0.5 rounded-md">
-                            {episode.air_date
-                              ? `(${t("details.airs")} - ${new Date(episode.air_date).toLocaleDateString()})`
-                              : `(${t("media.unreleased")})`}
+                            {t("media.unreleased")}
                           </span>
                         )}
                       </div>
@@ -811,7 +837,7 @@ export function EpisodeCarousel({
                   >
                     <div className="flex items-start justify-between">
                       <h3 className="font-bold text-white line-clamp-1">
-                        {episode.name}
+                        {episodeTitle}
                       </h3>
                       {isExpanded && isAired && (
                         <div className="flex gap-1">
@@ -848,6 +874,13 @@ export function EpisodeCarousel({
                         </div>
                       )}
                     </div>
+                    <p className="text-xs text-white/60 mt-1">
+                      {formattedReleaseDate
+                        ? t("details.episodeReleaseDate", {
+                            date: formattedReleaseDate,
+                          })
+                        : t("details.episodeReleaseDateUnknown")}
+                    </p>
                     {episode.overview && (
                       <div className="relative">
                         <p
