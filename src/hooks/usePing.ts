@@ -1,12 +1,27 @@
 import { useEffect, useRef } from "react";
 
+import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useAuthStore } from "@/stores/auth";
 import { useBannerStore } from "@/stores/banner";
+
+const PING_INTERVAL_MS = 5000;
+const PUBLIC_ONLINE_SKIP_TICKS = 10; // 50s
+const AUTH_ONLINE_SKIP_TICKS = 36; // 3m
 
 export function useOnlineListener() {
   const updateOnline = useBannerStore((s) => s.updateOnline);
+  const account = useAuthStore((s) => s.account);
+  const backendUrl = useBackendUrl();
   const ref = useRef<boolean>(true);
 
   useEffect(() => {
+    const backendBase = backendUrl?.replace(/\/+$/, "");
+    const isAuthenticated = !!account && !!backendBase;
+    const pingUrl = isAuthenticated ? `${backendBase}/auth/ping` : "/ping.txt";
+    const onlineSkipTicks = isAuthenticated
+      ? AUTH_ONLINE_SKIP_TICKS
+      : PUBLIC_ONLINE_SKIP_TICKS;
+
     let counter = 0;
 
     let abort: null | AbortController = null;
@@ -14,14 +29,21 @@ export function useOnlineListener() {
       // if online try once every 10 iterations intead of every iteration
       counter += 1;
       if (ref.current) {
-        if (counter < 10) return;
+        if (counter < onlineSkipTicks) return;
       }
       counter = 0;
 
       if (abort) abort.abort();
       abort = new AbortController();
       const signal = abort.signal;
-      fetch("/ping.txt", { signal })
+      fetch(pingUrl, {
+        signal,
+        credentials: "include",
+        cache: "no-store",
+        headers: account?.token
+          ? { authorization: `Bearer ${account.token}` }
+          : undefined,
+      })
         .then(() => {
           updateOnline(true);
           ref.current = true;
@@ -31,11 +53,11 @@ export function useOnlineListener() {
           updateOnline(false);
           ref.current = false;
         });
-    }, 5000);
+    }, PING_INTERVAL_MS);
 
     return () => {
       clearInterval(interval);
       if (abort) abort.abort();
     };
-  }, [updateOnline]);
+  }, [account, backendUrl, updateOnline]);
 }
