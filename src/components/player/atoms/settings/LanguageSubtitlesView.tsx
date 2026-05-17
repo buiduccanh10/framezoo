@@ -37,6 +37,27 @@ function inferSubtitleSource(
   return undefined;
 }
 
+function normalizeLabel(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function isGenericLanguageLabel(
+  label: string | undefined,
+  prettyLanguage: string,
+  languageCode: string,
+): boolean {
+  if (!label) return true;
+  const normalized = normalizeLabel(label);
+  const normalizedPrettyLanguage = normalizeLabel(prettyLanguage);
+  const normalizedCode = normalizeLabel(languageCode);
+
+  return (
+    normalized.length === 0 ||
+    normalized === normalizedPrettyLanguage ||
+    normalized === normalizedCode
+  );
+}
+
 export interface LanguageSubtitlesViewProps {
   id: string;
   language: string;
@@ -141,8 +162,20 @@ export function LanguageSubtitlesView({
     const prettyLanguage =
       getPrettyLanguageNameFromLocale(v.language) ||
       t("player.menus.subtitles.unknownLanguage");
+    const displayCandidate =
+      v.display && !isLikelyUrl(v.display) ? v.display.trim() : "";
+    const mediaCandidate =
+      v.media && !isLikelyUrl(v.media) ? v.media.trim() : "";
+    const displayIsGeneric = isGenericLanguageLabel(
+      displayCandidate,
+      prettyLanguage,
+      v.language,
+    );
     const displayTitle =
-      v.display && !isLikelyUrl(v.display) ? v.display : prettyLanguage;
+      (!displayIsGeneric && displayCandidate) ||
+      mediaCandidate ||
+      displayCandidate ||
+      prettyLanguage;
 
     const handleDoubleClick = async () => {
       const copyData = {
@@ -257,9 +290,9 @@ export function LanguageSubtitlesView({
             )
           }
         >
-          <span className="flex items-center">
+          <span className="flex min-w-0 flex-1 items-center">
             <FlagIcon langCode={language} />
-            <span className="ml-3">{languageName}</span>
+            <span className="ml-3 block min-w-0 truncate">{languageName}</span>
           </span>
         </Menu.BackLink>
 

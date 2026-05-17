@@ -143,11 +143,22 @@ export async function scrapeExternalSubtitles(
         priority: 1,
         promise: scrapeOpenSubtitlesCaptions(imdbId, season, episode),
       });
+    }
 
+    if (imdbId || meta.title) {
       sourceDefinitions.push({
         name: "SubSource",
         priority: 2,
-        promise: scrapeSubsourceCaptions(imdbId, season, episode),
+        promise: scrapeSubsourceCaptions(
+          {
+            imdbId,
+            title: meta.title,
+            releaseYear: meta.releaseYear,
+            season,
+          },
+          season,
+          episode,
+        ),
       });
     }
 

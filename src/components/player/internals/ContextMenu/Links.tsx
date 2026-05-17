@@ -55,8 +55,12 @@ export function BackLink(props: {
           </button>
         }
       >
-        <button type="button" onClick={props.onClick}>
-          <span className="line-clamp-1 break-all">{props.children}</span>
+        <button
+          type="button"
+          className="min-w-0 flex-1 text-left"
+          onClick={props.onClick}
+        >
+          <span className="block min-w-0 truncate">{props.children}</span>
         </button>
       </Title>
     );
@@ -70,7 +74,7 @@ export function BackLink(props: {
       >
         <Icon className="text-xl" icon={Icons.ARROW_LEFT} />
       </button>
-      <span className="line-clamp-1 break-all">{props.children}</span>
+      <span className="min-w-0 flex-1">{props.children}</span>
     </Title>
   );
 }

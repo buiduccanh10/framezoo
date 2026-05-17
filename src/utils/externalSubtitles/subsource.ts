@@ -1,10 +1,9 @@
 import { labelToLanguageCode } from "@/lib/providers";
 import { conf } from "@/setup/config";
-import { useLanguageStore } from "@/stores/language";
 import { CaptionListItem } from "@/stores/player/slices/source";
-import { useSubtitleStore } from "@/stores/subtitles";
 
 const SUBSOURCE_API_BASE_URL = "https://api.subsource.net/api/v1";
+const SUBSOURCE_SEASON_API_BASE_URL = "https://api.subsource.net/v1";
 
 type SubsourceSubtitleRecord = {
   subtitleId?: string | number;
@@ -15,10 +14,13 @@ type SubsourceSubtitleRecord = {
   languageCode?: string;
   format?: string;
   releaseInfo?: string[] | string;
+  release_info?: string;
   name?: string;
+  caption?: string;
   download_url?: string;
   downloadUrl?: string;
   url?: string;
+  link?: string;
   hearingImpaired?: boolean | string | number;
   hearing_impaired?: boolean | string | number;
   hi?: boolean | string | number;
@@ -27,6 +29,20 @@ type SubsourceSubtitleRecord = {
 type SubsourceMovieRecord = {
   id?: string | number;
   movieId?: string | number;
+  link?: string;
+  slug?: string;
+};
+
+type SubsourceMovieLookup = {
+  movieId: string;
+  slug: string | null;
+};
+
+type SubsourceLookupInput = {
+  imdbId?: string;
+  title?: string;
+  releaseYear?: number;
+  season?: number;
 };
 
 function asArray<T>(value: unknown): T[] {
@@ -58,69 +74,6 @@ function extractSubsourceArray<T>(data: unknown): T[] {
   }
 
   return [];
-}
-
-function normalizeLanguageToSubsource(language?: string | null): string | null {
-  if (!language) return null;
-
-  const normalized = language.trim().toLowerCase().split("-")[0];
-  const map: Record<string, string> = {
-    en: "english",
-    vi: "vietnamese",
-    fr: "french",
-    de: "german",
-    es: "spanish",
-    it: "italian",
-    pt: "portuguese",
-    ja: "japanese",
-    ko: "korean",
-    zh: "chinese",
-    th: "thai",
-    id: "indonesian",
-    ru: "russian",
-    nl: "dutch",
-    pl: "polish",
-    tr: "turkish",
-    sv: "swedish",
-    da: "danish",
-    fi: "finnish",
-    no: "norwegian",
-    ar: "arabic",
-    hi: "hindi",
-    cs: "czech",
-    ro: "romanian",
-    hu: "hungarian",
-    uk: "ukrainian",
-    he: "hebrew",
-    el: "greek",
-    bg: "bulgarian",
-    hr: "croatian",
-    sr: "serbian",
-    ms: "malay",
-    et: "estonian",
-    lv: "latvian",
-    lt: "lithuanian",
-    sk: "slovak",
-    sl: "slovenian",
-    bn: "bengali",
-    tl: "tagalog",
-    ka: "georgian",
-    is: "icelandic",
-    ca: "catalan",
-    eu: "basque",
-    gl: "galician",
-    ta: "tamil",
-    te: "telugu",
-    ur: "urdu",
-    pa: "punjabi",
-    ne: "nepali",
-    km: "khmer",
-    my: "burmese",
-    mn: "mongolian",
-    fa: "farsi_persian",
-  };
-
-  return map[normalized] ?? null;
 }
 
 function mapSubsourceLanguageToCode(
@@ -156,6 +109,10 @@ function mapSubsourceLanguageToCode(
     norwegian: "no",
     arabic: "ar",
     hindi: "hi",
+    bengali: "bn",
+    greek: "el",
+    farsi_persian: "fa",
+    malay: "ms",
   };
 
   if (map[normalized]) return map[normalized];
@@ -174,8 +131,10 @@ function toSubtitleType(format: unknown, url?: string): string | undefined {
   if (!url) return undefined;
   try {
     const pathname = new URL(url).pathname;
-    const ext = pathname.split(".").pop()?.toLowerCase();
-    return ext || undefined;
+    const fileName = pathname.split("/").pop() ?? "";
+    if (!fileName.includes(".")) return undefined;
+    const ext = fileName.split(".").pop()?.toLowerCase();
+    return ext && ext !== fileName.toLowerCase() ? ext : undefined;
   } catch {
     return undefined;
   }
@@ -191,14 +150,19 @@ function toBooleanFlag(value: unknown): boolean {
   return false;
 }
 
+function extractSubtitleId(subtitle: SubsourceSubtitleRecord): string | null {
+  const rawId =
+    subtitle.subtitleId ?? subtitle.id ?? subtitle.subtitle_id ?? subtitle._id;
+  if (rawId == null) return null;
+  return String(rawId);
+}
+
 function buildSubsourceCaptionId(
   subtitle: SubsourceSubtitleRecord,
   url: string,
   language: string,
 ): string {
-  const rawId =
-    subtitle.subtitleId ?? subtitle.id ?? subtitle.subtitle_id ?? subtitle._id;
-  const subtitleId = rawId != null ? String(rawId) : "unknown";
+  const subtitleId = extractSubtitleId(subtitle) ?? "unknown";
   return `subsource:${subtitleId}:${language}:${url}`;
 }
 
@@ -211,9 +175,26 @@ function buildDisplayLabel(subtitle: SubsourceSubtitleRecord): string {
     return subtitle.releaseInfo;
   }
 
+  if (
+    typeof subtitle.release_info === "string" &&
+    subtitle.release_info.trim()
+  ) {
+    return subtitle.release_info;
+  }
+
   if (subtitle.name && subtitle.name.trim()) return subtitle.name;
 
   return "SubSource";
+}
+
+function buildEpisodeSearchText(subtitle: SubsourceSubtitleRecord): string {
+  const pieces = [
+    buildDisplayLabel(subtitle),
+    subtitle.release_info ?? "",
+    subtitle.caption ?? "",
+  ];
+
+  return pieces.join(" ").toLowerCase();
 }
 
 function hasMatchingEpisodeLabel(
@@ -221,7 +202,7 @@ function hasMatchingEpisodeLabel(
   season: number,
   episode: number,
 ): boolean {
-  const label = buildDisplayLabel(subtitle).toLowerCase();
+  const label = buildEpisodeSearchText(subtitle);
   const patterns = [
     new RegExp(`s0*${season}e0*${episode}(?!\\d)`, "i"),
     new RegExp(`${season}x0*${episode}(?!\\d)`, "i"),
@@ -239,15 +220,48 @@ function hasMatchingEpisodeLabel(
   return seasonPackPattern.test(label);
 }
 
-async function fetchSubsourceMovieId(
+function extractSlugFromMovieRecord(
+  movie: SubsourceMovieRecord,
+): string | null {
+  const directSlug = movie.slug?.trim();
+  if (directSlug) return directSlug;
+
+  const link = movie.link?.trim();
+  if (!link) return null;
+
+  const fromSubtitlesPath = link.match(/subtitles\/([^/?#]+)/i)?.[1];
+  if (fromSubtitlesPath) return fromSubtitlesPath;
+
+  try {
+    const pathname = new URL(link).pathname;
+    const parts = pathname.split("/").filter(Boolean);
+    const subtitleIdx = parts.findIndex((part) => part === "subtitles");
+    if (subtitleIdx >= 0 && parts[subtitleIdx + 1])
+      return parts[subtitleIdx + 1];
+
+    const last = parts[parts.length - 1];
+    if (last) return last;
+  } catch {
+    // Not a URL, continue parsing as raw slug/path.
+  }
+
+  const clean = link.replace(/^\/+|\/+$/g, "");
+  if (!clean) return null;
+
+  const segments = clean.split("/").filter(Boolean);
+  return segments[segments.length - 1] ?? null;
+}
+
+async function searchSubsourceMovie(
   imdbId: string,
   season: number | undefined,
   apiKey: string,
-): Promise<string | null> {
+): Promise<SubsourceMovieRecord[]> {
   const params = new URLSearchParams({
     searchType: "imdb",
     imdb: imdbId,
   });
+
   if (season) params.set("season", String(season));
 
   const response = await fetch(
@@ -266,33 +280,117 @@ async function fetchSubsourceMovieId(
   }
 
   const payload = await response.json();
-  const movies = extractSubsourceArray<SubsourceMovieRecord>(payload);
-  if (movies.length === 0) return null;
+  return extractSubsourceArray<SubsourceMovieRecord>(payload);
+}
 
-  const movieId = movies[0]?.id ?? movies[0]?.movieId;
-  if (movieId == null) return null;
+function buildSubsourceTextQueries(
+  title: string | undefined,
+  releaseYear: number | undefined,
+): string[] {
+  const normalizedTitle = title?.trim().replace(/\s+/g, " ");
+  if (!normalizedTitle) return [];
 
-  return String(movieId);
+  const queries = new Set<string>();
+  queries.add(normalizedTitle);
+  if (releaseYear) queries.add(`${normalizedTitle} ${releaseYear}`);
+
+  const parenthesesRemoved = normalizedTitle.replace(/\([^)]*\)/g, "").trim();
+  if (parenthesesRemoved && parenthesesRemoved !== normalizedTitle) {
+    queries.add(parenthesesRemoved);
+    if (releaseYear) queries.add(`${parenthesesRemoved} ${releaseYear}`);
+  }
+
+  return Array.from(queries);
+}
+
+async function searchSubsourceMovieByText(
+  query: string,
+  season: number | undefined,
+  apiKey: string,
+): Promise<SubsourceMovieRecord[]> {
+  const params = new URLSearchParams({
+    searchType: "text",
+    q: query,
+  });
+  if (season) params.set("season", String(season));
+
+  const response = await fetch(
+    `${SUBSOURCE_API_BASE_URL}/movies/search?${params.toString()}`,
+    {
+      headers: {
+        accept: "application/json",
+        "x-api-key": apiKey,
+        "api-key": apiKey,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `SubSource movies/search(text) returned ${response.status}`,
+    );
+  }
+
+  const payload = await response.json();
+  return extractSubsourceArray<SubsourceMovieRecord>(payload);
+}
+
+async function fetchSubsourceMovieLookup(
+  input: SubsourceLookupInput,
+  apiKey: string,
+): Promise<SubsourceMovieLookup | null> {
+  const { imdbId, title, releaseYear, season } = input;
+  const candidateSeasons =
+    season == null
+      ? [undefined]
+      : ([season, undefined] satisfies Array<number | undefined>);
+
+  const resolveMovieLookup = (
+    movies: SubsourceMovieRecord[],
+  ): SubsourceMovieLookup | null => {
+    if (movies.length === 0) return null;
+    const firstMovie = movies[0];
+    const movieId = firstMovie?.id ?? firstMovie?.movieId;
+    if (movieId == null) return null;
+    return {
+      movieId: String(movieId),
+      slug: extractSlugFromMovieRecord(firstMovie),
+    };
+  };
+
+  if (imdbId) {
+    for (const currentSeason of candidateSeasons) {
+      const movies = await searchSubsourceMovie(imdbId, currentSeason, apiKey);
+      const lookup = resolveMovieLookup(movies);
+      if (lookup) return lookup;
+    }
+  }
+
+  const textQueries = buildSubsourceTextQueries(title, releaseYear);
+  for (const query of textQueries) {
+    for (const currentSeason of candidateSeasons) {
+      const movies = await searchSubsourceMovieByText(
+        query,
+        currentSeason,
+        apiKey,
+      );
+      const lookup = resolveMovieLookup(movies);
+      if (lookup) return lookup;
+    }
+  }
+
+  return null;
 }
 
 async function fetchSubsourceSubtitles(
   movieId: string,
   apiKey: string,
-  preferredLanguage: string | null,
 ): Promise<SubsourceSubtitleRecord[]> {
   const params = new URLSearchParams({
     movieId,
     sort: "popular",
-    limit: "100",
+    limit: "500",
   });
-
-  if (preferredLanguage) {
-    const mappedPreferredLanguage =
-      normalizeLanguageToSubsource(preferredLanguage);
-    if (mappedPreferredLanguage) {
-      params.set("language", mappedPreferredLanguage);
-    }
-  }
 
   const headers = {
     accept: "application/json",
@@ -316,8 +414,71 @@ async function fetchSubsourceSubtitles(
   return extractSubsourceArray<SubsourceSubtitleRecord>(payload);
 }
 
+async function fetchSubsourceSeasonSubtitles(
+  slug: string,
+  season: number,
+): Promise<SubsourceSubtitleRecord[]> {
+  const response = await fetch(
+    `${SUBSOURCE_SEASON_API_BASE_URL}/subtitles/${slug}/season-${season}?sort_by_date=false`,
+    {
+      headers: {
+        accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`SubSource season subtitles returned ${response.status}`);
+  }
+
+  const payload = await response.json();
+  return extractSubsourceArray<SubsourceSubtitleRecord>(payload);
+}
+
+function filterSubtitlesForEpisode(
+  rawSubtitles: SubsourceSubtitleRecord[],
+  season: number,
+  episode: number,
+  seasonScopedSubtitles: SubsourceSubtitleRecord[],
+): SubsourceSubtitleRecord[] {
+  if (seasonScopedSubtitles.length === 0) {
+    const matchedByLabel = rawSubtitles.filter((subtitle) =>
+      hasMatchingEpisodeLabel(subtitle, season, episode),
+    );
+
+    return matchedByLabel.length > 0 ? matchedByLabel : rawSubtitles;
+  }
+
+  const episodeScopedSubtitles = seasonScopedSubtitles.filter((subtitle) =>
+    hasMatchingEpisodeLabel(subtitle, season, episode),
+  );
+
+  const episodeScopedIds = new Set(
+    episodeScopedSubtitles
+      .map((subtitle) => extractSubtitleId(subtitle))
+      .filter((value): value is string => Boolean(value)),
+  );
+
+  if (episodeScopedIds.size > 0) {
+    const matchedById = rawSubtitles.filter((subtitle) => {
+      const id = extractSubtitleId(subtitle);
+      return id != null && episodeScopedIds.has(id);
+    });
+
+    if (matchedById.length > 0) return matchedById;
+  }
+
+  const matchedByLabel = rawSubtitles.filter((subtitle) =>
+    hasMatchingEpisodeLabel(subtitle, season, episode),
+  );
+
+  if (matchedByLabel.length > 0) return matchedByLabel;
+
+  return rawSubtitles;
+}
+
 export async function scrapeSubsourceCaptions(
-  imdbId: string,
+  input: SubsourceLookupInput,
   season?: number,
   episode?: number,
 ): Promise<CaptionListItem[]> {
@@ -330,40 +491,65 @@ export async function scrapeSubsourceCaptions(
       return [];
     }
 
-    const preferredSubtitleLanguage =
-      useSubtitleStore.getState().lastSelectedLanguage ??
-      useLanguageStore.getState().language;
-
-    const movieId = await fetchSubsourceMovieId(imdbId, season, apiKey);
-    if (!movieId) {
-      console.info(`SubSource movie not found for IMDb ID: ${imdbId}`);
+    const movieLookup = await fetchSubsourceMovieLookup(
+      {
+        imdbId: input.imdbId,
+        title: input.title,
+        releaseYear: input.releaseYear,
+        season: season ?? input.season,
+      },
+      apiKey,
+    );
+    if (!movieLookup) {
+      console.info(
+        `SubSource movie not found (imdb=${input.imdbId ?? "n/a"}, title=${input.title ?? "n/a"})`,
+      );
       return [];
     }
 
     const rawSubtitles = await fetchSubsourceSubtitles(
-      movieId,
+      movieLookup.movieId,
       apiKey,
-      preferredSubtitleLanguage,
     );
 
-    const filteredByEpisode =
-      season && episode
-        ? rawSubtitles.filter((subtitle) =>
-            hasMatchingEpisodeLabel(subtitle, season, episode),
-          )
-        : rawSubtitles;
+    let subtitlesForMapping = rawSubtitles;
+    if (season && episode) {
+      let seasonScopedSubtitles: SubsourceSubtitleRecord[] = [];
 
-    const subtitlesForMapping =
-      season && episode && filteredByEpisode.length > 0
-        ? filteredByEpisode
-        : rawSubtitles;
+      if (movieLookup.slug) {
+        try {
+          seasonScopedSubtitles = await fetchSubsourceSeasonSubtitles(
+            movieLookup.slug,
+            season,
+          );
+        } catch (seasonError) {
+          console.warn(
+            `SubSource season endpoint failed for slug ${movieLookup.slug}:`,
+            seasonError,
+          );
+        }
+      }
+
+      subtitlesForMapping = filterSubtitlesForEpisode(
+        rawSubtitles,
+        season,
+        episode,
+        seasonScopedSubtitles,
+      );
+    }
 
     const captions: CaptionListItem[] = [];
     const seen = new Set<string>();
 
     for (const subtitle of subtitlesForMapping) {
+      const subtitleId = extractSubtitleId(subtitle);
       const downloadUrl =
-        subtitle.download_url ?? subtitle.downloadUrl ?? subtitle.url;
+        subtitle.download_url ??
+        subtitle.downloadUrl ??
+        subtitle.url ??
+        (subtitleId
+          ? `${SUBSOURCE_API_BASE_URL}/subtitles/${subtitleId}/download`
+          : undefined);
 
       if (!downloadUrl) continue;
 
@@ -372,8 +558,11 @@ export async function scrapeSubsourceCaptions(
       );
       if (!languageCode) continue;
 
-      const type = toSubtitleType(subtitle.format, downloadUrl);
-      if (type === "zip") continue;
+      const detectedType = toSubtitleType(subtitle.format, downloadUrl);
+      // SubSource download endpoint returns ZIP bundles; we unzip and consume
+      // inner subtitle files, so expose UI type as SRT for consistency.
+      const type = detectedType === "zip" ? "srt" : (detectedType ?? "srt");
+
       const caption: CaptionListItem = {
         id: buildSubsourceCaptionId(subtitle, downloadUrl, languageCode),
         language: languageCode,

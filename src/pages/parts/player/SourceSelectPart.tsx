@@ -156,7 +156,10 @@ function EmbedSelectionView(props: {
 }
 
 // Main source selection view
-export function SourceSelectPart(props: { media: ScrapeMedia }) {
+export function SourceSelectPart(props: {
+  media: ScrapeMedia;
+  preferredSourceId?: string;
+}) {
   const { t } = useTranslation();
   const [selectedSourceId, setSelectedSourceId] = React.useState<string | null>(
     null,
@@ -175,6 +178,14 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
   const sources = useMemo(() => {
     const metaType = props.media.type;
     if (!metaType) return [];
+
+    // For episodic content, always prioritize the source that just worked
+    // on the previous episode to keep server continuity when moving next.
+    const continuitySourceId =
+      metaType === "show"
+        ? props.preferredSourceId || lastSuccessfulSource
+        : lastSuccessfulSource;
+
     const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
       .filter(
@@ -182,10 +193,16 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
       );
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
-      // Even without custom source order, prioritize last successful source if enabled
-      if (enableLastSuccessfulSource && lastSuccessfulSource) {
+      // Even without custom source order, prioritize the continuity source.
+      // For non-show media, keep requiring the settings flag.
+      const shouldPrioritize =
+        metaType === "show"
+          ? !!continuitySourceId
+          : enableLastSuccessfulSource && !!continuitySourceId;
+
+      if (shouldPrioritize && continuitySourceId) {
         const lastSourceIndex = allSources.findIndex(
-          (s) => s.id === lastSuccessfulSource,
+          (s) => s.id === continuitySourceId,
         );
         if (lastSourceIndex !== -1) {
           const lastSource = allSources.splice(lastSourceIndex, 1)[0];
@@ -199,10 +216,15 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
     const orderedSources = [];
     const remainingSources = [...allSources];
 
-    // First, add the last successful source if it exists, is available, and the feature is enabled
-    if (enableLastSuccessfulSource && lastSuccessfulSource) {
+    // First, add continuity source if available.
+    const shouldPrioritize =
+      metaType === "show"
+        ? !!continuitySourceId
+        : enableLastSuccessfulSource && !!continuitySourceId;
+
+    if (shouldPrioritize && continuitySourceId) {
       const lastSourceIndex = remainingSources.findIndex(
-        (s) => s.id === lastSuccessfulSource,
+        (s) => s.id === continuitySourceId,
       );
       if (lastSourceIndex !== -1) {
         orderedSources.push(remainingSources[lastSourceIndex]);
@@ -225,6 +247,7 @@ export function SourceSelectPart(props: { media: ScrapeMedia }) {
     return orderedSources;
   }, [
     props.media.type,
+    props.preferredSourceId,
     preferredSourceOrder,
     enableSourceOrder,
     lastSuccessfulSource,

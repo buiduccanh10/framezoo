@@ -146,9 +146,9 @@ export function TranslateSubtitleView({
           )
         }
       >
-        <span className="flex items-center">
+        <span className="flex min-w-0 flex-1 items-center">
           <FlagIcon langCode={caption.language} />
-          <span className="ml-3">
+          <span className="ml-3 block min-w-0 truncate">
             {t("player.menus.subtitles.translate.title", {
               replace: {
                 language:

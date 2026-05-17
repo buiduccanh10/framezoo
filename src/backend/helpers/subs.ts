@@ -1,7 +1,9 @@
+import { strFromU8, unzipSync } from "fflate";
 import { list } from "subsrt-ts";
 
 import { proxiedFetch } from "@/backend/helpers/fetch";
 import { convertSubtitlesToSrt } from "@/components/player/utils/captions";
+import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { SimpleCache } from "@/utils/cache";
 
@@ -14,6 +16,39 @@ export const subtitleTypeList = list().map((type) => `.${type}`);
 const downloadCache = new SimpleCache<string, string>();
 downloadCache.setCompare((a, b) => a === b);
 const expirySeconds = 24 * 60 * 60;
+
+function isZipArchive(buffer: ArrayBuffer): boolean {
+  if (buffer.byteLength < 4) return false;
+  const bytes = new Uint8Array(buffer, 0, 4);
+  return (
+    bytes[0] === 0x50 &&
+    bytes[1] === 0x4b &&
+    bytes[2] === 0x03 &&
+    bytes[3] === 0x04
+  );
+}
+
+function extractSubtitleTextFromZip(buffer: ArrayBuffer): string | null {
+  try {
+    const files = unzipSync(new Uint8Array(buffer));
+    const entries = Object.entries(files).filter(
+      ([name, content]) => !name.endsWith("/") && content.length > 0,
+    );
+    if (entries.length === 0) return null;
+
+    const preferred = entries.find(([name]) =>
+      subtitleTypeList.some((ext) => name.toLowerCase().endsWith(ext)),
+    );
+    const target = preferred?.[1] ?? entries[0][1];
+    return strFromU8(target);
+  } catch (error) {
+    console.warn(
+      "Failed to extract subtitle ZIP, falling back to raw decode",
+      error,
+    );
+    return null;
+  }
+}
 
 /**
  * Always returns SRT
@@ -48,7 +83,23 @@ export async function downloadCaption(
       });
     }
   } else {
-    const response = await fetch(caption.url);
+    const headers = new Headers();
+    const isSubsourceDownload =
+      caption.source?.toLowerCase().includes("subsource") &&
+      /api\.subsource\.net\/api\/v1\/subtitles\/\d+\/download/.test(
+        caption.url,
+      );
+    if (isSubsourceDownload) {
+      const apiKey = conf().SUBSOURCE_API_KEY;
+      if (apiKey) {
+        headers.set("x-api-key", apiKey);
+        headers.set("api-key", apiKey);
+      }
+    }
+
+    const response = await fetch(caption.url, {
+      headers,
+    });
     const contentType = response.headers.get("content-type") || "";
     const charset = contentType.includes("charset=")
       ? contentType.split("charset=")[1].toLowerCase()
@@ -56,9 +107,15 @@ export async function downloadCaption(
 
     // Get the raw bytes
     const buffer = await response.arrayBuffer();
-    // Decode using the detected charset, defaulting to UTF-8
-    const decoder = new TextDecoder(charset);
-    data = decoder.decode(buffer);
+    if (contentType.includes("application/zip") || isZipArchive(buffer)) {
+      data = extractSubtitleTextFromZip(buffer) ?? undefined;
+    }
+
+    if (!data) {
+      // Decode using the detected charset, defaulting to UTF-8
+      const decoder = new TextDecoder(charset);
+      data = decoder.decode(buffer);
+    }
   }
   if (!data) throw new Error("failed to get caption data");
 

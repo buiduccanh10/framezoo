@@ -7,8 +7,10 @@ export function Title(props: {
   return (
     <div>
       <h3 className="font-bold text-video-context-type-main pb-3 pt-5 border-b border-video-context-border flex justify-between items-center">
-        <div className="flex items-center space-x-3">{props.children}</div>
-        <div>{props.rightSide}</div>
+        <div className="min-w-0 flex flex-1 items-center space-x-3">
+          {props.children}
+        </div>
+        <div className="shrink-0">{props.rightSide}</div>
       </h3>
     </div>
   );

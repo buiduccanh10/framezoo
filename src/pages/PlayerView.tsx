@@ -243,7 +243,10 @@ export function RealPlayerView() {
       ) : null}
       {status === playerStatus.SCRAPING && scrapeMedia ? (
         manualSourceSelection ? (
-          <SourceSelectPart media={scrapeMedia} />
+          <SourceSelectPart
+            media={scrapeMedia}
+            preferredSourceId={preferredSourceId || undefined}
+          />
         ) : (
           <div className="absolute inset-0 pointer-events-none opacity-0 overflow-hidden">
             <ScrapingPart
