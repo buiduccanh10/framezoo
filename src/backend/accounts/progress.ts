@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { getAuthHeaders } from "@/backend/accounts/auth";
+import { getAuthHeaders, withAuthRetry } from "@/backend/accounts/auth";
 import { ProgressResponse } from "@/backend/accounts/user";
 import { AccountWithToken } from "@/stores/auth";
 import { ProgressMediaItem, ProgressUpdateItem } from "@/stores/progress";
@@ -93,16 +93,18 @@ export async function setProgress(
   input: ProgressInput,
   options?: ProgressRequestOptions,
 ) {
-  return ofetch<ProgressResponse>(
-    `/users/${account.userId}/progress/${input.tmdbId}`,
-    {
-      method: "PUT",
-      credentials: "include",
-      headers: getAuthHeaders(account.token),
-      baseURL: url,
-      body: input,
-      keepalive: options?.keepalive,
-    },
+  return withAuthRetry(url, account, (token) =>
+    ofetch<ProgressResponse>(
+      `/users/${account.userId}/progress/${input.tmdbId}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: getAuthHeaders(token),
+        baseURL: url,
+        body: input,
+        keepalive: options?.keepalive,
+      },
+    ),
   );
 }
 
@@ -114,15 +116,17 @@ export async function removeProgress(
   seasonId?: string,
   options?: ProgressRequestOptions,
 ) {
-  await ofetch(`/users/${account.userId}/progress/${id}`, {
-    method: "DELETE",
-    credentials: "include",
-    headers: getAuthHeaders(account.token),
-    baseURL: url,
-    body: {
-      episodeId,
-      seasonId,
-    },
-    keepalive: options?.keepalive,
-  });
+  await withAuthRetry(url, account, (token) =>
+    ofetch(`/users/${account.userId}/progress/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: getAuthHeaders(token),
+      baseURL: url,
+      body: {
+        episodeId,
+        seasonId,
+      },
+      keepalive: options?.keepalive,
+    }),
+  );
 }

@@ -1,5 +1,8 @@
 import { ofetch } from "ofetch";
 
+import { useAuthStore } from "@/stores/auth";
+import type { AccountWithToken } from "@/stores/auth";
+
 export interface SessionResponse {
   id: string;
   user?: string;
@@ -29,6 +32,8 @@ export interface LoginResponse {
   oauth?: OAuthTokenResponse;
 }
 
+let tokenRefreshInFlight: Promise<string | null> | null = null;
+
 export function normalizeAccessToken(
   oauth?: OAuthTokenResponse | null,
 ): string | undefined {
@@ -46,6 +51,15 @@ export function getAuthHeaders(token?: string): Record<string, string> {
   };
 }
 
+export function isAuthErrorStatus(status?: number): boolean {
+  return status === 400 || status === 401 || status === 403;
+}
+
+function getErrorStatus(error: unknown): number | undefined {
+  const anyError = error as any;
+  return anyError?.status ?? anyError?.statusCode ?? anyError?.response?.status;
+}
+
 export async function refreshOAuthToken(
   url: string,
 ): Promise<OAuthTokenResponse> {
@@ -57,6 +71,62 @@ export async function refreshOAuthToken(
     },
     baseURL: url,
   });
+}
+
+export async function refreshAccessTokenForAccount(
+  url: string,
+  account: AccountWithToken,
+): Promise<string | null> {
+  if (!tokenRefreshInFlight) {
+    tokenRefreshInFlight = (async () => {
+      try {
+        const oauth = await refreshOAuthToken(url);
+        const accessToken = normalizeAccessToken(oauth);
+        if (!accessToken) return null;
+
+        const { account: currentAccount, setAccount } = useAuthStore.getState();
+        if (
+          currentAccount &&
+          currentAccount.userId === account.userId &&
+          currentAccount.sessionId === account.sessionId
+        ) {
+          setAccount({
+            ...currentAccount,
+            token: accessToken,
+          });
+        }
+
+        return accessToken;
+      } catch {
+        return null;
+      } finally {
+        tokenRefreshInFlight = null;
+      }
+    })();
+  }
+
+  return tokenRefreshInFlight;
+}
+
+export async function withAuthRetry<T>(
+  url: string,
+  account: AccountWithToken,
+  request: (token?: string) => Promise<T>,
+): Promise<T> {
+  try {
+    return await request(account.token);
+  } catch (error) {
+    if (!isAuthErrorStatus(getErrorStatus(error))) {
+      throw error;
+    }
+
+    const refreshedToken = await refreshAccessTokenForAccount(url, account);
+    if (!refreshedToken) {
+      throw error;
+    }
+
+    return request(refreshedToken);
+  }
 }
 
 export async function accountLogin(
