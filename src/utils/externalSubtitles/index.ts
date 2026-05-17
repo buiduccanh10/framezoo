@@ -3,13 +3,15 @@ import { PlayerMeta } from "@/stores/player/slices/source";
 import type { CaptionListItem } from "@/stores/player/slices/source";
 
 import { scrapeOpenSubtitlesCaptions } from "./opensubtitles";
+import { scrapeSubsourceCaptions } from "./subsource";
 import { scrapeVdrkCaptions } from "./vdrk";
 import { scrapeWyzieCaptions } from "./wyzie";
 
 const EXTERNAL_SUBTITLE_SOURCE_PRIORITY: Record<string, number> = {
   wyzie: 0,
   opensubs: 1,
-  granite: 2,
+  subsource: 2,
+  granite: 3,
 };
 
 function getExternalSubtitleSourcePriority(caption: CaptionListItem) {
@@ -19,6 +21,9 @@ function getExternalSubtitleSourcePriority(caption: CaptionListItem) {
   }
   if (normalizedSource.includes("opensubs")) {
     return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.opensubs;
+  }
+  if (normalizedSource.includes("subsource")) {
+    return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.subsource;
   }
   if (normalizedSource.includes("granite")) {
     return EXTERNAL_SUBTITLE_SOURCE_PRIORITY.granite;
@@ -138,12 +143,18 @@ export async function scrapeExternalSubtitles(
         priority: 1,
         promise: scrapeOpenSubtitlesCaptions(imdbId, season, episode),
       });
+
+      sourceDefinitions.push({
+        name: "SubSource",
+        priority: 2,
+        promise: scrapeSubsourceCaptions(imdbId, season, episode),
+      });
     }
 
     if (tmdbId) {
       sourceDefinitions.push({
         name: "Granite",
-        priority: 2,
+        priority: 3,
         promise: scrapeVdrkCaptions(tmdbId, season, episode),
       });
     }
@@ -183,4 +194,5 @@ export async function scrapeExternalSubtitles(
 // Re-export individual functions for direct access if needed
 export { scrapeWyzieCaptions } from "./wyzie";
 export { scrapeOpenSubtitlesCaptions } from "./opensubtitles";
+export { scrapeSubsourceCaptions } from "./subsource";
 export { scrapeVdrkCaptions } from "./vdrk";

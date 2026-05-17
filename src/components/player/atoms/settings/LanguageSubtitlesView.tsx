@@ -31,6 +31,7 @@ function inferSubtitleSource(
   if (source && source.trim().length > 0) return source;
 
   if (url.includes("sub.wyzie.io")) return "wyzie";
+  if (url.includes("subsource")) return "subsource";
   if (url.includes("opensubtitles")) return "opensubs";
 
   return undefined;
