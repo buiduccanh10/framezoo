@@ -213,8 +213,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2
       wyzie-lib:
-        specifier: 2.4.0
-        version: 2.4.0
+        specifier: 2.5.2
+        version: 2.5.2
       zustand:
         specifier: ^4.5.7
         version: 4.5.7(@types/react@18.3.28)(immer@10.2.0)(react@18.3.1)
@@ -4439,8 +4439,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  wyzie-lib@2.4.0:
-    resolution: {integrity: sha512-2+XuS+XA7EBZJULbEiDeEYiwu7HKgJcHqbphJngl9kUtuzHv9uwhEhYkxjr82ejUGtHElld5zUBIjGtStvBAKg==}
+  wyzie-lib@2.5.2:
+    resolution: {integrity: sha512-wqesyr1w0vegLM3XDLEp3X515bxWT7dSn2crx1xs0mny3m9UP+vdbR/CxtxObeo5uChksT7Pje9ZJCo90++X/g==}
 
   xml-name-validator@5.0.0:
     resolution: {integrity: sha512-EvGK8EJ3DhaHfbRlETOWAS5pO9MZITeauHKJyb8wyajUfQUenkIg2MvLDTZ4T/TgIcm3HU0TFBgWWboAZ30UHg==}
@@ -8839,7 +8839,7 @@ snapshots:
 
   ws@8.19.0: {}
 
-  wyzie-lib@2.4.0: {}
+  wyzie-lib@2.5.2: {}
 
   xml-name-validator@5.0.0: {}
 
