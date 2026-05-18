@@ -14,4 +14,8 @@ window.__CONFIG__ = {
 
   // A comma separated list of disallowed IDs in the case of a DMCA claim - in the format "series-<id>" and "movie-<id>"
   VITE_DISALLOWED_IDS: "",
+
+  // External subtitle providers require public client-side API keys.
+  VITE_WYZIE_API_KEY: null,
+  VITE_SUBSOURCE_API_KEY: null,
 };
