@@ -13,6 +13,8 @@ import { Transition } from "@/components/utils/Transition";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
+const END_OF_VIDEO_TOLERANCE_SECONDS = 0.5;
+
 function getSegmentText(
   type: "intro" | "recap" | "credits" | "preview",
   t: (key: string) => string,
@@ -55,6 +57,15 @@ function shouldShowSkipButton(
   return "none";
 }
 
+function isEndingAtVideoEnd(segment: SegmentData, duration: number): boolean {
+  if (duration <= 0) return false;
+  const bounds = getSegmentBoundsSeconds(segment, duration);
+  if (!bounds) return false;
+
+  const endSeconds = bounds.end ?? duration;
+  return endSeconds >= duration - END_OF_VIDEO_TOLERANCE_SECONDS;
+}
+
 function Button(props: {
   className: string;
   onClick?: () => void;
@@ -89,37 +100,25 @@ function SkipSegmentButton(props: {
   const meta = usePlayerStore((s) => s.meta);
   const { addSkipEvent } = useSkipTracking(20);
 
-  // Only replace with NextEpisodeButton when credits have no end (end_ms === null) – i.e. credits
-  // run to the end of the video. When end_ms is a number, there may be content after (e.g. post-
-  // credits scene), so we show the normal "Skip credits" button that seeks to end_ms.
-  const shouldShowNextEpisodeInsteadOfCredits =
-    meta?.type === "show" &&
-    props.segments.some((segment) => {
-      if (segment.type !== "credits") return false;
-      return segment.end_ms === null;
-    });
+  const endingSegment =
+    meta?.type === "show"
+      ? props.segments.find((segment) => isEndingAtVideoEnd(segment, _duration))
+      : undefined;
 
-  // Find segments that should be shown at the current time (intro, recap; credits excluded when we show NextEpisodeButton)
+  // Find segments that should be shown at the current time.
+  // Segments that run until video end are replaced with NextEpisodeButton.
   const activeSegments = props.segments.filter((segment) => {
-    if (segment.type === "credits" && shouldShowNextEpisodeInsteadOfCredits) {
-      return false;
-    }
+    if (segment === endingSegment) return false;
     const showingState = shouldShowSkipButton(time, segment, _duration);
     return showingState !== "none";
   });
 
-  // NextEpisodeButton only for the "credits to end of video" segment (end_ms === null)
-  const creditsSegment = props.segments.find(
-    (s) => s.type === "credits" && s.end_ms === null,
-  );
-  const creditsBounds = creditsSegment
-    ? getSegmentBoundsSeconds(creditsSegment, _duration)
+  const endingBounds = endingSegment
+    ? getSegmentBoundsSeconds(endingSegment, _duration)
     : null;
-  const inCreditsSegment = creditsBounds != null && time >= creditsBounds.start;
+  const inEndingSegment = endingBounds != null && time >= endingBounds.start;
   const showNextEpisodeButton =
-    shouldShowNextEpisodeInsteadOfCredits &&
-    props.inControl &&
-    inCreditsSegment;
+    props.inControl && endingSegment != null && inEndingSegment;
 
   const handleSkip = useCallback(
     (segment: SegmentData) => {
