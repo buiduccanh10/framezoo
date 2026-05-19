@@ -1,178 +1,160 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { updateSettings } from "@/backend/accounts/settings";
 import { Toggle } from "@/components/buttons/Toggle";
-import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { useProgressBar } from "@/hooks/useProgressBar";
 import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useWatchPartyStore } from "@/stores/watchParty";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 
-function ButtonList(props: {
-  options: number[];
+const MIN_PLAYBACK_SPEED = 0.25;
+const MAX_PLAYBACK_SPEED = 3;
+const PLAYBACK_SPEED_STEP = 0.05;
+const QUICK_PLAYBACK_SPEED_OPTIONS = [1, 1.25, 1.5, 2, 3];
+
+function clampPlaybackSpeed(speed: number) {
+  const snapped = Math.round(speed / PLAYBACK_SPEED_STEP) * PLAYBACK_SPEED_STEP;
+  return Math.min(
+    MAX_PLAYBACK_SPEED,
+    Math.max(MIN_PLAYBACK_SPEED, Number(snapped.toFixed(2))),
+  );
+}
+
+function formatPlaybackSpeed(speed: number) {
+  return `${speed.toFixed(2)}x`;
+}
+
+function PlaybackSpeedControl(props: {
   selected: number;
-  onClick: (v: any) => void;
+  onChange: (v: number) => void;
   disabled?: boolean;
 }) {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [customValue, setCustomValue] = useState<string>("");
-  const [isCustomSpeed, setIsCustomSpeed] = useState(false);
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const speedRange = MAX_PLAYBACK_SPEED - MIN_PLAYBACK_SPEED;
+  const normalizedSelected =
+    (clampPlaybackSpeed(props.selected) - MIN_PLAYBACK_SPEED) / speedRange;
 
-  // Check if current speed is a custom value (not in preset options)
-  useEffect(() => {
-    if (!props.options.includes(props.selected)) {
-      setIsCustomSpeed(true);
-    } else {
-      setIsCustomSpeed(false);
-    }
-  }, [props.selected, props.options]);
-
-  const handleButtonClick = useCallback(
-    (option: number, index: number) => {
-      if (editingIndex === index) {
-        // Already in edit mode, do nothing
-        return;
-      }
-
-      // If clicking the custom speed button, enter edit mode
-      if (isCustomSpeed && option === props.selected) {
-        setEditingIndex(0);
-        setCustomValue(option.toString());
-        return;
-      }
-
-      props.onClick(option);
-      setIsCustomSpeed(false);
-    },
-    [editingIndex, props, isCustomSpeed],
-  );
-
-  const handleDoubleClick = useCallback(
-    (option: number, index: number) => {
+  const commitSlider = useCallback(
+    (percentage: number) => {
       if (props.disabled) return;
-
-      setEditingIndex(index);
-      setCustomValue(option.toString());
+      props.onChange(
+        clampPlaybackSpeed(MIN_PLAYBACK_SPEED + speedRange * percentage),
+      );
     },
-    [props.disabled],
+    [props, speedRange],
   );
 
-  const handleCustomValueChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setCustomValue(e.target.value);
-    },
-    [],
+  const { dragging, dragPercentage, dragMouseDown } = useProgressBar(
+    sliderRef,
+    commitSlider,
+    true,
   );
 
-  const handleCustomValueKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
-        const value = parseFloat(customValue);
-        if (!Number.isNaN(value) && value > 0 && value <= 5) {
-          props.onClick(value);
-          setEditingIndex(null);
-          setIsCustomSpeed(true);
-        }
-      } else if (e.key === "Escape") {
-        setEditingIndex(null);
-      }
-    },
-    [customValue, props],
-  );
-
-  const handleInputBlur = useCallback(() => {
-    setEditingIndex(null);
-  }, []);
-
-  const handleResetCustomSpeed = useCallback(() => {
-    setIsCustomSpeed(false);
-    props.onClick(1); // Reset to default speed (1x)
-  }, [props]);
+  const currentRate = dragging
+    ? clampPlaybackSpeed(
+        MIN_PLAYBACK_SPEED + speedRange * (dragPercentage / 100),
+      )
+    : clampPlaybackSpeed(props.selected);
 
   return (
-    <div className="flex items-center bg-video-context-light/10 p-1 rounded-lg">
-      {isCustomSpeed ? (
-        // Show only the custom speed button when a custom speed is set
+    <div className="space-y-4">
+      <div className="text-center font-semibold text-3xl text-white tracking-tight">
+        {formatPlaybackSpeed(currentRate).toUpperCase()}
+      </div>
+
+      <div className="grid grid-cols-[auto,1fr,auto] items-center gap-3">
         <button
           type="button"
           disabled={props.disabled}
+          onClick={() =>
+            props.onChange(
+              clampPlaybackSpeed(props.selected - PLAYBACK_SPEED_STEP),
+            )
+          }
           className={classNames(
-            "w-full px-2 py-1 rounded-md tabbable relative",
-            "bg-video-context-light/20 text-white",
-            props.disabled ? "opacity-50 cursor-not-allowed" : null,
+            "tabbable w-12 h-12 rounded-full bg-white/15 text-2xl leading-none flex items-center justify-center text-white",
+            props.disabled
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-white/25",
           )}
-          onClick={() => handleButtonClick(props.selected, 0)}
-          onDoubleClick={() => handleDoubleClick(props.selected, 0)}
-          key="custom"
         >
-          {editingIndex === 0 ? (
-            <input
-              type="text"
-              value={customValue}
-              onChange={handleCustomValueChange}
-              onKeyDown={handleCustomValueKeyDown}
-              onBlur={handleInputBlur}
-              className="w-full bg-transparent text-center focus:outline-none"
-              autoFocus
-              aria-label="Custom playback speed"
-            />
-          ) : (
-            <>
-              {`${props.selected}x`}
-              <button
-                type="button"
-                className="absolute right-1 top-1/2 transform -translate-y-1/2 text-xs text-video-context-light/70 hover:text-white"
-                onClick={handleResetCustomSpeed}
-                title="Reset to presets"
-              >
-                <Icon icon={Icons.X} className="text-sm" />
-              </button>
-            </>
-          )}
+          -
         </button>
-      ) : (
-        // Show all preset options when no custom speed is set
-        props.options.map((option, index) => {
-          const isEditing = editingIndex === index;
-          return (
-            <button
-              type="button"
-              disabled={props.disabled}
-              className={classNames(
-                "w-full px-2 py-1 rounded-md tabbable relative",
-                props.selected === option
-                  ? "bg-video-context-light/20 text-white"
-                  : null,
-                props.disabled ? "opacity-50 cursor-not-allowed" : null,
-              )}
-              onClick={() => handleButtonClick(option, index)}
-              onDoubleClick={() => handleDoubleClick(option, index)}
-              key={option}
+
+        <div ref={sliderRef}>
+          <div
+            className="group/progress w-full h-8 flex items-center cursor-pointer"
+            onMouseDown={dragMouseDown}
+            onTouchStart={dragMouseDown}
+          >
+            <div
+              dir="ltr"
+              className={[
+                "relative w-full h-1 bg-video-context-slider bg-opacity-25 rounded-full transition-[height] duration-100 group-hover/progress:h-1.5",
+                dragging ? "!h-1.5" : "",
+              ].join(" ")}
             >
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={customValue}
-                  onChange={handleCustomValueChange}
-                  onKeyDown={handleCustomValueKeyDown}
-                  onBlur={handleInputBlur}
-                  className="w-full bg-transparent text-center focus:outline-none"
-                  autoFocus
-                  aria-label="Custom playback speed"
-                />
-              ) : (
-                `${option}x`
-              )}
-            </button>
-          );
-        })
-      )}
+              <div
+                className="absolute top-0 left-0 h-full rounded-full bg-video-context-sliderFilled flex justify-end items-center"
+                style={{
+                  width: `${Math.max(0, Math.min(1, dragging ? dragPercentage / 100 : normalizedSelected)) * 100}%`,
+                }}
+              >
+                <div className="w-[1rem] min-w-[1rem] h-[1rem] border-[4px] border-video-context-sliderFilled rounded-full transform translate-x-1/2 bg-white transition-[transform] duration-100" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          disabled={props.disabled}
+          onClick={() =>
+            props.onChange(
+              clampPlaybackSpeed(props.selected + PLAYBACK_SPEED_STEP),
+            )
+          }
+          className={classNames(
+            "tabbable w-12 h-12 rounded-full bg-white/15 text-2xl leading-none flex items-center justify-center text-white",
+            props.disabled
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-white/25",
+          )}
+        >
+          +
+        </button>
+      </div>
+
+      <div className="grid grid-cols-5 gap-2">
+        {QUICK_PLAYBACK_SPEED_OPTIONS.map((option) => (
+          <button
+            key={option}
+            type="button"
+            disabled={props.disabled}
+            onClick={() => props.onChange(option)}
+            className={classNames(
+              "tabbable px-2 py-2 rounded-full text-sm text-white/90 bg-video-context-light/10 transition-colors",
+              Math.abs(props.selected - option) < PLAYBACK_SPEED_STEP / 2
+                ? "bg-video-context-light/30 text-white"
+                : "hover:bg-video-context-light/20",
+              props.disabled ? "opacity-50 cursor-not-allowed" : null,
+            )}
+          >
+            {option.toLocaleString("vi-VN", {
+              minimumFractionDigits: option % 1 === 0 ? 1 : 2,
+              maximumFractionDigits: 2,
+            })}
+            x
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -197,22 +179,6 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   const canShowAutoplay =
     !isInWatchParty && allowAutoplay && !enableLowPerformanceMode;
 
-  // Save settings to backend
-  // const saveThumbnailSetting = useCallback(
-  //   async (value: boolean) => {
-  //     if (!account || !backendUrl) return;
-
-  //     try {
-  //       await updateSettings(backendUrl, account, {
-  //         enableThumbnails: value,
-  //       });
-  //     } catch (error) {
-  //       console.error("Failed to save thumbnail setting:", error);
-  //     }
-  //   },
-  //   [account, backendUrl],
-  // );
-
   const saveAutoplaySetting = useCallback(
     async (value: boolean) => {
       if (!account || !backendUrl) return;
@@ -231,17 +197,10 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   const setPlaybackRate = useCallback(
     (v: number) => {
       if (isInWatchParty) return; // Don't allow changes in watch party
-      display?.setPlaybackRate(v);
+      display?.setPlaybackRate(clampPlaybackSpeed(v));
     },
     [display, isInWatchParty],
   );
-
-  // Handle thumbnail toggle with backend save
-  // const handleThumbnailToggle = useCallback(() => {
-  //   const newValue = !enableThumbnails;
-  //   setEnableThumbnails(newValue);
-  //   saveThumbnailSetting(newValue);
-  // }, [enableThumbnails, setEnableThumbnails, saveThumbnailSetting]);
 
   // Handle autoplay toggle with backend save
   const handleAutoplayToggle = useCallback(() => {
@@ -256,8 +215,6 @@ export function PlaybackSettingsView({ id }: { id: string }) {
       display.setPlaybackRate(1);
     }
   }, [isInWatchParty, display, playbackRate]);
-
-  const options = [0.25, 0.5, 1, 1.5, 2];
 
   return (
     <>
@@ -274,10 +231,9 @@ export function PlaybackSettingsView({ id }: { id: string }) {
               </span>
             )}
           </Menu.FieldTitle>
-          <ButtonList
-            options={options}
+          <PlaybackSpeedControl
             selected={isInWatchParty ? 1 : playbackRate}
-            onClick={setPlaybackRate}
+            onChange={setPlaybackRate}
             disabled={isInWatchParty}
           />
         </div>
