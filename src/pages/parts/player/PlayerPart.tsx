@@ -40,6 +40,8 @@ export function PlayerPart(props: PlayerPartProps) {
     status === playerStatus.PLAYING &&
     !isLoading &&
     (isMobile ? showTargets : showTouchTargets);
+  const mobileActionIconClass = "text-[22px] ssm:text-[24px]";
+  const mobileActionButtonClass = "p-2 ssm:p-2.5";
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isPWA = window.matchMedia("(display-mode: standalone)").matches;
@@ -220,63 +222,65 @@ export function PlayerPart(props: PlayerPartProps) {
             )}
           </div>
         </div>
-        <div className="grid grid-cols-[2rem,minmax(0,1fr),2rem] gap-1 ssm:gap-2 lg:hidden">
-          <div />
-          <div className="flex max-w-full items-center justify-center gap-1 ssm:gap-2">
-            {/* Disable PiP for iOS PWA */}
-            {!(isPWA && isIOS) && status === playerStatus.PLAYING && (
-              <Player.Pip
-                iconSizeClass="text-[22px] ssm:text-[24px]"
-                className="p-2 ssm:p-2.5"
-              />
-            )}
-            {status === playerStatus.PLAYING && (
-              <Player.Pause
-                iconSizeClass="text-[22px] ssm:text-[24px]"
-                className="p-2 ssm:p-2.5"
-              />
-            )}
-            {status === playerStatus.PLAYING && (
-              <Player.Volume
-                iconSizeClass="text-[22px] ssm:text-[24px]"
-                className="shrink-0"
-              />
-            )}
-            <Player.Episodes
-              inControl={inControl}
-              compact
-              iconSizeClass="text-[22px] ssm:text-[24px]"
-              className="p-2 ssm:p-2.5"
+        <div className="flex w-full items-center justify-center gap-1 ssm:gap-2 lg:hidden">
+          {/* Disable PiP for iOS PWA */}
+          {!(isPWA && isIOS) && status === playerStatus.PLAYING && (
+            <Player.Pip
+              iconSizeClass={mobileActionIconClass}
+              className={mobileActionButtonClass}
             />
-            {status === playerStatus.PLAYING ? (
-              <div className="hidden ssm:block">
-                <Player.Captions
-                  iconSizeClass="text-[22px] ssm:text-[24px]"
-                  className="p-2 ssm:p-2.5"
+          )}
+          {status === playerStatus.PLAYING && (
+            <Player.Pause
+              iconSizeClass={mobileActionIconClass}
+              className={mobileActionButtonClass}
+            />
+          )}
+          {status === playerStatus.PLAYING && (
+            <Player.Volume
+              iconSizeClass={mobileActionIconClass}
+              className="shrink-0"
+              buttonClassName={mobileActionButtonClass}
+            />
+          )}
+          <Player.Episodes
+            inControl={inControl}
+            compact
+            iconSizeClass={mobileActionIconClass}
+            className={mobileActionButtonClass}
+          />
+          {status === playerStatus.PLAYING ? (
+            <div className="hidden ssm:block">
+              <Player.Captions
+                iconSizeClass={mobileActionIconClass}
+                className={mobileActionButtonClass}
+              />
+            </div>
+          ) : null}
+          <Player.Settings
+            iconSizeClass={mobileActionIconClass}
+            className={mobileActionButtonClass}
+          />
+          {status === playerStatus.PLAYING && (
+            <div
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              className="select-none touch-none"
+              style={{ WebkitTapHighlightColor: "transparent" }}
+            >
+              {isHoldingFullscreen ? (
+                <Player.Widescreen
+                  iconSizeClass={mobileActionIconClass}
+                  className={`${mobileActionButtonClass} text-white`}
                 />
-              </div>
-            ) : null}
-            <Player.Settings
-              iconSizeClass="text-[22px] ssm:text-[24px]"
-              className="p-2 ssm:p-2.5"
-            />
-          </div>
-          <div>
-            {status === playerStatus.PLAYING && !isMobile && (
-              <div
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                className="select-none touch-none"
-                style={{ WebkitTapHighlightColor: "transparent" }}
-              >
-                {isHoldingFullscreen ? (
-                  <Player.Widescreen />
-                ) : (
-                  <Player.Fullscreen />
-                )}
-              </div>
-            )}
-          </div>
+              ) : (
+                <Player.Fullscreen
+                  iconSizeClass={mobileActionIconClass}
+                  className={mobileActionButtonClass}
+                />
+              )}
+            </div>
+          )}
         </div>
       </Player.BottomControls>
 

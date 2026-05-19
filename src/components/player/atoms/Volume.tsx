@@ -14,6 +14,7 @@ import { useVolume } from "../hooks/useVolume";
 interface Props {
   className?: string;
   iconSizeClass?: string;
+  buttonClassName?: string;
 }
 
 export function Volume(props: Props) {
@@ -89,7 +90,7 @@ export function Volume(props: Props) {
     >
       <div className="pointer-events-auto flex cursor-pointer items-center py-0 touch-none">
         <div
-          className={`p-3 text-white ${props.iconSizeClass ?? "text-[32px]"}`}
+          className={`${props.buttonClassName ?? "p-3"} text-white ${props.iconSizeClass ?? "text-[32px]"}`}
           onClick={handleClick}
         >
           <Icon icon={getVolumeIcon(percentage / 100)} />
