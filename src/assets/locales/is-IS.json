@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Engir hópar ennþá",
+          "namePlaceholder": "Nafn hóps",
           "placeholderButton": "Bæta við hóp",
           "removeAll": "Fjarlægðu allt",
           "removeFromGroup": "Fjarlægja úr hópnum"

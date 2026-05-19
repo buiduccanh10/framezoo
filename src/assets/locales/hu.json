@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Még nincsenek csoportok",
+          "namePlaceholder": "Csoport neve",
           "placeholderButton": "Hozzáadás a csoporthoz",
           "removeAll": "Az összes eltávolítása",
           "removeFromGroup": "Eltávolítás a csoportból"

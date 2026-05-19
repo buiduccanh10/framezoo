@@ -47,6 +47,19 @@ interface EpisodeGroup {
 const GENERIC_SEASON_TITLE_PATTERN = /^season\s+\d+$/i;
 const GENERIC_SPECIALS_TITLE_PATTERN = /^specials?$/i;
 
+function hasGenericEpisodeTitle(
+  episodeTitle: string | null | undefined,
+  episodeNumber: number,
+) {
+  if (!episodeTitle) return true;
+
+  const normalizedTitle = episodeTitle.trim().toLowerCase();
+  return (
+    normalizedTitle === `episode ${episodeNumber}` ||
+    normalizedTitle === `ep ${episodeNumber}`
+  );
+}
+
 function createEpisodeGroups(episodes: any[]): EpisodeGroup[] {
   const groups: EpisodeGroup[] = [];
 
@@ -140,6 +153,11 @@ function EpisodeItem({
   seasonNumber,
 }: EpisodeItemProps) {
   const { t } = useTranslation();
+  const episodeTitle = hasGenericEpisodeTitle(episode.title, episode.number)
+    ? t("details.episodeNumber", {
+        number: episode.number,
+      })
+    : episode.title;
   const episodeBadgeLabel = seasonNumber
     ? t("media.episodeDisplay", {
         season: seasonNumber,
@@ -217,7 +235,7 @@ function EpisodeItem({
               <span className="p-0.5 px-2 rounded inline bg-video-context-hoverColor bg-opacity-50">
                 {episodeBadgeLabel}
               </span>
-              <span className="line-clamp-1 break-all">{episode.title}</span>
+              <span className="line-clamp-1 break-all">{episodeTitle}</span>
             </div>
           </Menu.LinkTitle>
         </Menu.Link>
@@ -240,7 +258,7 @@ function EpisodeItem({
           {episode.still_path ? (
             <img
               src={`https://image.tmdb.org/t/p/w300${episode.still_path}`}
-              alt={episode.title}
+              alt={episodeTitle}
               className="w-full h-full object-cover"
             />
           ) : (
@@ -303,7 +321,7 @@ function EpisodeItem({
 
         {/* Content */}
         <div className="p-3 flex-1">
-          <h3 className="font-bold text-white line-clamp-1">{episode.title}</h3>
+          <h3 className="font-bold text-white line-clamp-1">{episodeTitle}</h3>
           {episode.overview && (
             <div className="relative">
               <p
@@ -381,7 +399,7 @@ function EpisodeItem({
             {episode.still_path ? (
               <img
                 src={`https://image.tmdb.org/t/p/w300${episode.still_path}`}
-                alt={episode.title}
+                alt={episodeTitle}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -452,7 +470,7 @@ function EpisodeItem({
         >
           <div className="flex items-start justify-between">
             <h3 className="font-bold text-white line-clamp-1">
-              {episode.title}
+              {episodeTitle}
             </h3>
             {expandedEpisodes[`large-${episode.id}`] && isAired && (
               <div className="flex gap-1">

@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "עדיין אין קבוצות",
+          "namePlaceholder": "שם הקבוצה",
           "placeholderButton": "הוסף לקבוצה",
           "removeAll": "הסר הכל",
           "removeFromGroup": "הסר מהקבוצה"

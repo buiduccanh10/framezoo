@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "មិនទាន់មានក្រុមនៅឡើយទេ",
+          "namePlaceholder": "ឈ្មោះក្រុម",
           "placeholderButton": "បន្ថែមទៅក្រុម",
           "removeAll": "ដក​ចេញ​ទាំង​អស់",
           "removeFromGroup": "ដកចេញពីក្រុម"

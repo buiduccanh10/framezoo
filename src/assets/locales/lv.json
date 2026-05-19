@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Vēl nav grupu",
+          "namePlaceholder": "Grupas nosaukums",
           "placeholderButton": "Pievienot grupai",
           "removeAll": "Noņemt visu",
           "removeFromGroup": "Noņemt no grupas"

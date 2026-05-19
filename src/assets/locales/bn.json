@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "এখনো কোনো দল নেই",
+          "namePlaceholder": "গ্রুপের নাম",
           "placeholderButton": "গ্রুপে যোগ করুন",
           "removeAll": "সব সরান",
           "removeFromGroup": "গ্রুপ থেকে সরান"

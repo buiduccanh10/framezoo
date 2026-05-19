@@ -169,7 +169,9 @@ export function GroupDropdown({
                 value={newGroup}
                 onChange={(e) => setNewGroup(e.target.value)}
                 className="flex-1 px-2 py-1 rounded bg-background-main text-white border border-background-secondary outline-none text-xs min-w-0 placeholder:text-type-secondary"
-                placeholder="Group name"
+                placeholder={t(
+                  "home.bookmarks.groups.dropdown.namePlaceholder",
+                )}
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleCreate(newGroup, selectedIcon);

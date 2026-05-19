@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "ਹਾਲੇ ਕੋਈ ਗਰੁੱਪ ਨਹੀਂ",
+          "namePlaceholder": "ਸਮੂਹ ਦਾ ਨਾਮ",
           "placeholderButton": "ਗਰੁੱਪ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ",
           "removeAll": "ਸਾਰੇ ਹਟਾਓ",
           "removeFromGroup": "ਗਰੁੱਪ ਵਿੱਚੋਂ ਹਟਾਓ"

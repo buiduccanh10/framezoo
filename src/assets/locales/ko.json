@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "아직 그룹이 없습니다.",
+          "namePlaceholder": "그룹 이름",
           "placeholderButton": "그룹에 추가",
           "removeAll": "모두 제거",
           "removeFromGroup": "그룹에서 제거"

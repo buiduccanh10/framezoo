@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Încă nu există grupuri",
+          "namePlaceholder": "Numele grupului",
           "placeholderButton": "Adăugați la grup",
           "removeAll": "Eliminați toate",
           "removeFromGroup": "Eliminați din grup"

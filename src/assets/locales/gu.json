@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "હજુ સુધી કોઈ જૂથ નથી",
+          "namePlaceholder": "જૂથનું નામ",
           "placeholderButton": "જૂથમાં ઉમેરો",
           "removeAll": "બધા દૂર કરો",
           "removeFromGroup": "જૂથમાંથી દૂર કરો"

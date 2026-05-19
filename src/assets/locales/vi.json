@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Chưa có nhóm nào",
+          "namePlaceholder": "Tên nhóm",
           "placeholderButton": "Thêm vào nhóm",
           "removeAll": "Xóa tất cả",
           "removeFromGroup": "Xóa khỏi nhóm"

@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Henüz grup yok",
+          "namePlaceholder": "Grup adı",
           "placeholderButton": "Gruba ekle",
           "removeAll": "Tümünü kaldır",
           "removeFromGroup": "Gruptan kaldır"

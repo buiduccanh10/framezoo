@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Zatím žádné skupiny",
+          "namePlaceholder": "Název skupiny",
           "placeholderButton": "Přidat do skupiny",
           "removeAll": "Odebrat vše",
           "removeFromGroup": "Odebrat ze skupiny"

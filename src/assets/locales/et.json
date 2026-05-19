@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Gruppe pole veel",
+          "namePlaceholder": "Grupi nimi",
           "placeholderButton": "Lisa gruppi",
           "removeAll": "Eemalda kõik",
           "removeFromGroup": "Eemalda grupist"

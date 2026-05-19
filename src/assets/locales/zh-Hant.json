@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "還沒有群組",
+          "namePlaceholder": "團體名稱",
           "placeholderButton": "新增到群組",
           "removeAll": "全部刪除",
           "removeFromGroup": "從群組中刪除"

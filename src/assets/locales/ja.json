@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "まだグループがありません",
+          "namePlaceholder": "グループ名",
           "placeholderButton": "グループに追加",
           "removeAll": "すべて削除する",
           "removeFromGroup": "グループから削除"

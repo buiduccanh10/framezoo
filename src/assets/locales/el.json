@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Δεν υπάρχουν ακόμη ομάδες",
+          "namePlaceholder": "Όνομα ομάδας",
           "placeholderButton": "Προσθήκη στην ομάδα",
           "removeAll": "Κατάργηση όλων",
           "removeFromGroup": "Αφαίρεση από την ομάδα"

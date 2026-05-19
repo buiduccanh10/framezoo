@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "还没有群组",
+          "namePlaceholder": "团体名称",
           "placeholderButton": "添加到群组",
           "removeAll": "全部删除",
           "removeFromGroup": "从组中删除"

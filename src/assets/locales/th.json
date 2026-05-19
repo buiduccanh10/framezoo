@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "ยังไม่มีกลุ่ม",
+          "namePlaceholder": "ชื่อกลุ่ม",
           "placeholderButton": "เพิ่มเข้ากลุ่ม",
           "removeAll": "ลบทั้งหมด",
           "removeFromGroup": "ลบออกจากกลุ่ม"

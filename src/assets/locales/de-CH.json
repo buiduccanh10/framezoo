@@ -274,6 +274,7 @@
       "groups": {
         "dropdown": {
           "empty": "Noch keine Gruppen",
+          "namePlaceholder": "Gruppenname",
           "placeholderButton": "Zur Gruppe hinzufügen",
           "removeAll": "Alles entfernen",
           "removeFromGroup": "Aus der Gruppe entfernen"
