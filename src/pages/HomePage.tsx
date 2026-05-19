@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { To, useNavigate } from "react-router-dom";
@@ -75,6 +75,16 @@ export function HomePage() {
   const homeSectionOrder = usePreferencesStore(
     (state) => state.homeSectionOrder,
   );
+  const [featuredContentReady, setFeaturedContentReady] =
+    useState(!enableFeatured);
+
+  useEffect(() => {
+    setFeaturedContentReady(!enableFeatured);
+  }, [enableFeatured]);
+
+  const handleFeaturedContentReady = useCallback(() => {
+    setFeaturedContentReady(true);
+  }, []);
 
   const handleClick = (path: To) => {
     window.scrollTo(0, 0);
@@ -88,7 +98,7 @@ export function HomePage() {
     });
   };
 
-  const renderHomeSections = () => {
+  const _renderHomeSections = () => {
     const sections = homeSectionOrder.map((section) => {
       switch (section) {
         case "watching":
@@ -138,6 +148,14 @@ export function HomePage() {
     );
   };
 
+  const shouldRenderDiscoverContent =
+    enableDiscover &&
+    !search &&
+    !enableLowPerformanceMode &&
+    (!enableFeatured || featuredContentReady);
+  const shouldShowDiscoverButton =
+    !enableDiscover && !search && !enableLowPerformanceMode;
+
   return (
     <HomeLayout showBg={showBg}>
       <div className="mb-2">
@@ -155,6 +173,7 @@ export function HomePage() {
           <FeaturedCarousel
             forcedCategory="movies"
             onShowDetails={handleShowDetails}
+            onInitialContentReady={handleFeaturedContentReady}
             searching={s.searching}
             shorter
           >
@@ -218,9 +237,9 @@ export function HomePage() {
         {/* there... perfect. */}
 
         {/* Discover section or discover button */}
-        {enableDiscover && !search && !enableLowPerformanceMode ? (
+        {shouldRenderDiscoverContent ? (
           <DiscoverContent />
-        ) : (
+        ) : shouldShowDiscoverButton ? (
           <div className="flex flex-col justify-center items-center h-40 space-y-4">
             <div className="flex flex-col items-center justify-center">
               {!search && !enableLowPerformanceMode && (
@@ -233,7 +252,7 @@ export function HomePage() {
               )}
             </div>
           </div>
-        )}
+        ) : null}
       </WideContainer>
     </HomeLayout>
   );

@@ -41,6 +41,7 @@ export interface FeaturedMedia extends Partial<Movie & TVShow> {
 
 interface FeaturedCarouselProps {
   onShowDetails: (media: FeaturedMedia) => void;
+  onInitialContentReady?: () => void;
   children?: ReactNode;
   searching?: boolean;
   shorter?: boolean;
@@ -63,6 +64,42 @@ function shuffleArray<T>(items: T[]): T[] {
 }
 
 const QUALITY_MIN_YEAR = new Date().getFullYear() - 12;
+
+function selectFeaturedSlides(
+  featured: FeaturedMedia[],
+  limit: number,
+): FeaturedMedia[] {
+  const withBackdrop = featured.filter((item) => item.backdrop_path);
+  const sourceForQuality = withBackdrop.length > 0 ? withBackdrop : featured;
+  const qualityMatches = shuffleArray(sourceForQuality)
+    .filter((item) =>
+      meetsMediaQualityThreshold(item, {
+        minScore: 6.5,
+        minVotes: 500,
+        minYear: QUALITY_MIN_YEAR,
+      }),
+    )
+    .slice(0, limit);
+
+  if (qualityMatches.length > 0) {
+    return qualityMatches;
+  }
+
+  return shuffleArray(sourceForQuality).slice(0, limit);
+}
+
+function shouldLoadSlideImage(
+  index: number,
+  currentIndex: number,
+  totalSlides: number,
+): boolean {
+  if (totalSlides <= 3) return true;
+
+  const directDistance = Math.abs(index - currentIndex);
+  const wrappedDistance = totalSlides - directDistance;
+
+  return Math.min(directDistance, wrappedDistance) <= 1;
+}
 
 function FeaturedCarouselSkeleton({ shorter }: { shorter?: boolean }) {
   return (
@@ -124,6 +161,7 @@ function FeaturedCarouselSkeleton({ shorter }: { shorter?: boolean }) {
 
 export function FeaturedCarousel({
   onShowDetails,
+  onInitialContentReady,
   children,
   searching,
   shorter,
@@ -152,13 +190,14 @@ export function FeaturedCarousel({
   const { width: windowWidth, height: windowHeight } = useWindowSize();
   const [contentOpacity, setContentOpacity] = useState(1);
   const isRestoring = useIsRestoring();
+  const hasReportedInitialContent = useRef(false);
 
   const currentMedia = media[currentIndex];
 
   const SLIDE_QUANTITY = 15;
+  const INITIAL_DETAIL_BATCH = 6;
+  const INITIAL_SLIDE_QUANTITY = 4;
   const SLIDE_DURATION = 8000;
-  const QUALITY_MIN_SCORE = 6.5;
-  const QUALITY_MIN_VOTES = 500;
 
   // Check for extension on mount
   useEffect(() => {
@@ -207,7 +246,16 @@ export function FeaturedCarousel({
   useEffect(() => {
     if (isRestoring) return;
 
+    let isCancelled = false;
+
+    const reportInitialContentReady = () => {
+      if (hasReportedInitialContent.current) return;
+      hasReportedInitialContent.current = true;
+      onInitialContentReady?.();
+    };
+
     const fetchFeaturedMedia = async () => {
+      hasReportedInitialContent.current = false;
       setIsLoading(true);
       // Clear all previous data when transitioning
       setLogoUrl(undefined);
@@ -259,6 +307,21 @@ export function FeaturedCarousel({
           }
           return data.results ?? [];
         };
+
+        const fetchDetails = async (picks: MediaPick[]) =>
+          Promise.all(
+            picks.map((pick) =>
+              pick.type === "movie"
+                ? fetchCachedTmdb<any>(`/movie/${pick.id}`, {
+                    language: formattedLanguage,
+                    append_to_response: "external_ids",
+                  })
+                : fetchCachedTmdb<any>(`/tv/${pick.id}`, {
+                    language: formattedLanguage,
+                    append_to_response: "external_ids",
+                  }),
+            ),
+          );
 
         const [
           netflixMoviesP1,
@@ -413,47 +476,69 @@ export function FeaturedCarousel({
           selected = [...selected, ...fill];
         }
 
-        const detailPromises = selected.map((p) =>
-          p.type === "movie"
-            ? fetchCachedTmdb<any>(`/movie/${p.id}`, {
-                language: formattedLanguage,
-                append_to_response: "external_ids",
-              })
-            : fetchCachedTmdb<any>(`/tv/${p.id}`, {
-                language: formattedLanguage,
-                append_to_response: "external_ids",
-              }),
+        const shuffledSelection = shuffleArray(selected);
+        const initialSelection = shuffledSelection.slice(
+          0,
+          INITIAL_DETAIL_BATCH,
+        );
+        const remainingSelection =
+          shuffledSelection.slice(INITIAL_DETAIL_BATCH);
+
+        const initialDetails = await fetchDetails(initialSelection);
+        const initialFeatured: FeaturedMedia[] = initialDetails.map(
+          (item, index) => ({
+            ...item,
+            type: initialSelection[index].type,
+          }),
+        );
+        const initialSlides = selectFeaturedSlides(
+          initialFeatured,
+          INITIAL_SLIDE_QUANTITY,
         );
 
-        const details = await Promise.all(detailPromises);
-        const featured: FeaturedMedia[] = details.map((item, i) => ({
+        if (!isCancelled && initialSlides.length > 0) {
+          setMedia(initialSlides);
+          setIsLoading(false);
+          reportInitialContentReady();
+        }
+
+        const remainingDetails =
+          remainingSelection.length > 0
+            ? await fetchDetails(remainingSelection)
+            : [];
+
+        if (isCancelled) return;
+
+        const allDetails = [...initialDetails, ...remainingDetails];
+        const allSelections = [...initialSelection, ...remainingSelection];
+        const featured: FeaturedMedia[] = allDetails.map((item, index) => ({
           ...item,
-          type: selected[i].type,
+          type: allSelections[index].type,
         }));
 
-        const withBackdrop = featured.filter((item) => item.backdrop_path);
-        const sourceForQuality =
-          withBackdrop.length > 0 ? withBackdrop : featured;
-        const qualified = shuffleArray(sourceForQuality)
-          .filter((item) =>
-            meetsMediaQualityThreshold(item, {
-              minScore: QUALITY_MIN_SCORE,
-              minVotes: QUALITY_MIN_VOTES,
-              minYear: QUALITY_MIN_YEAR,
-            }),
-          )
-          .slice(0, SLIDE_QUANTITY);
-
-        setMedia(qualified);
-      } catch (error) {
-        console.error("Error fetching featured media:", error);
-      } finally {
+        setMedia(selectFeaturedSlides(featured, SLIDE_QUANTITY));
         setIsLoading(false);
+        reportInitialContentReady();
+      } catch (error) {
+        if (isCancelled) return;
+        console.error("Error fetching featured media:", error);
+        setMedia([]);
+        setIsLoading(false);
+        reportInitialContentReady();
+      } finally {
+        if (!isCancelled && !hasReportedInitialContent.current) {
+          setIsLoading(false);
+          reportInitialContentReady();
+        }
       }
     };
 
     fetchFeaturedMedia();
-  }, [formattedLanguage, isRestoring]);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [formattedLanguage, isRestoring, onInitialContentReady]);
 
   const handlePrevSlide = () => {
     setContentOpacity(0);
@@ -650,9 +735,14 @@ export function FeaturedCarousel({
             }`}
           >
             <LazyImage
-              src={`https://image.tmdb.org/t/p/original${item.backdrop_path}`}
+              src={
+                shouldLoadSlideImage(index, currentIndex, media.length)
+                  ? `https://image.tmdb.org/t/p/original${item.backdrop_path}`
+                  : undefined
+              }
               alt={item.title || item.name || ""}
               className="absolute inset-0 w-full h-full object-cover object-top"
+              loading={index === currentIndex ? "eager" : "lazy"}
               style={{
                 maskImage:
                   "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
