@@ -27,6 +27,8 @@ interface LazyMediaCarouselProps {
   forcedGenreId?: string;
   forcedGenreName?: string;
   hideRelatedButtons?: boolean;
+  releaseYear?: string;
+  originCountry?: string;
 }
 
 export function LazyMediaCarousel({
@@ -43,6 +45,8 @@ export function LazyMediaCarousel({
   forcedGenreId,
   forcedGenreName,
   hideRelatedButtons = false,
+  releaseYear,
+  originCountry,
 }: LazyMediaCarouselProps) {
   const { ref, hasIntersected } = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
@@ -69,6 +73,8 @@ export function LazyMediaCarousel({
           forcedGenreId={forcedGenreId}
           forcedGenreName={forcedGenreName}
           hideRelatedButtons={hideRelatedButtons}
+          releaseYear={releaseYear}
+          originCountry={originCountry}
         />
       ) : (
         // Placeholder with similar height to prevent layout shift

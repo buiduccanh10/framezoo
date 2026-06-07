@@ -42,6 +42,8 @@ interface MediaCarouselProps {
   forcedGenreId?: string;
   forcedGenreName?: string;
   hideRelatedButtons?: boolean;
+  releaseYear?: string;
+  originCountry?: string;
 }
 
 function MoreCard({ link }: { link: string }) {
@@ -89,6 +91,8 @@ export function MediaCarousel({
   forcedGenreId,
   forcedGenreName,
   hideRelatedButtons = false,
+  releaseYear,
+  originCountry,
 }: MediaCarouselProps) {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
@@ -241,6 +245,8 @@ export function MediaCarousel({
       mediaTitle: selectedRecommendationTitle,
       isCarouselView: true,
       enabled: discoverMediaEnabled,
+      releaseYear: releaseYear || undefined,
+      originCountry: originCountry || undefined,
     });
 
   // Hide section if there's an error or no content (after loading is complete)

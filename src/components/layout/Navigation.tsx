@@ -81,16 +81,13 @@ export function Navigation(props: NavigationProps) {
         // eslint-disable-next-line no-console
         console.log("[PWA] Calling prompt() for install");
         await installPromptEvent.prompt();
-        await installPromptEvent.userChoice?.then?.(
-          // eslint-disable-next-line no-console
-          (choiceResult: any) =>
-            console.log("[PWA] User choice", {
-              outcome: choiceResult?.outcome,
-              platform: choiceResult?.platform,
-            }),
+        await installPromptEvent.userChoice?.then?.((choiceResult: any) =>
+          console.log("[PWA] User choice", {
+            outcome: choiceResult?.outcome,
+            platform: choiceResult?.platform,
+          }),
         );
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error("[PWA] Error during install prompt", error);
       } finally {
         setInstallPromptEvent(null);

@@ -17,6 +17,8 @@ import {
 export interface UsePersonalRecommendationsOptions {
   isTVShow: boolean;
   enabled?: boolean;
+  releaseYear?: string;
+  originCountry?: string;
 }
 
 export interface UsePersonalRecommendationsReturn {
@@ -49,6 +51,8 @@ function getHistorySources(
 export function usePersonalRecommendations({
   isTVShow,
   enabled = true,
+  releaseYear,
+  originCountry,
 }: UsePersonalRecommendationsOptions): UsePersonalRecommendationsReturn {
   const { t } = useTranslation();
   const [media, setMedia] = useState<DiscoverMedia[]>([]);
@@ -107,13 +111,28 @@ export function usePersonalRecommendations({
 
     try {
       const excludeIds = buildExcludeSet();
-      const results = await fetchPersonalRecommendations(
+      let results = await fetchPersonalRecommendations(
         isTVShow,
         history,
         progress,
         bookmarkList,
         excludeIds,
       );
+
+      if (releaseYear) {
+        results = results.filter((item) => {
+          const date = isTVShow ? item.first_air_date : item.release_date;
+          return date?.startsWith(`${releaseYear}-`);
+        });
+      }
+
+      if (originCountry) {
+        results = results.filter((item: any) => {
+          const countries: string[] | undefined = item.origin_country;
+          return countries?.includes(originCountry);
+        });
+      }
+
       setMedia(results);
     } catch (err) {
       setError((err as Error).message);
@@ -121,7 +140,15 @@ export function usePersonalRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [isTVShow, watchHistoryItems, progressItems, bookmarks, buildExcludeSet]);
+  }, [
+    isTVShow,
+    watchHistoryItems,
+    progressItems,
+    bookmarks,
+    buildExcludeSet,
+    releaseYear,
+    originCountry,
+  ]);
 
   useEffect(() => {
     if (enabled) fetch();

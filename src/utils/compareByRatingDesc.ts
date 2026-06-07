@@ -24,8 +24,8 @@ export interface MediaQualityThreshold {
 
 const CURRENT_YEAR = new Date().getFullYear();
 export const DEFAULT_MEDIA_QUALITY_THRESHOLD: MediaQualityThreshold = {
-  minScore: 6.5,
-  minVotes: 500,
+  minScore: 5.5,
+  minVotes: 200,
   minYear: CURRENT_YEAR - 12,
 };
 

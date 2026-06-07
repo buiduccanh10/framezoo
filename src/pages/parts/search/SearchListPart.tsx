@@ -7,7 +7,8 @@ import { searchForMedia } from "@/backend/metadata/search";
 import { MWQuery } from "@/backend/metadata/types/mw";
 import { ActionPillButton } from "@/components/buttons/ActionPillButton";
 import { IconPatch } from "@/components/buttons/IconPatch";
-import { Icons } from "@/components/Icon";
+import { Dropdown, OptionItem } from "@/components/form/Dropdown";
+import { Icon, Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
@@ -63,9 +64,27 @@ function SearchSuffix(props: { failed?: boolean; results?: number }) {
 export function SearchListPart({
   searchQuery,
   onShowDetails,
+  filterCountry,
+  filterYear,
+  onCountryChange,
+  onYearChange,
+  countryOptions,
+  yearOptions,
+  countryLabel,
+  selectedCountryOption,
+  selectedYearOption,
 }: {
   searchQuery: string;
   onShowDetails?: (media: MediaItem) => void;
+  filterCountry?: string;
+  filterYear?: string;
+  onCountryChange?: (country: string) => void;
+  onYearChange?: (year: string) => void;
+  countryOptions: OptionItem[];
+  yearOptions: OptionItem[];
+  countryLabel: string;
+  selectedCountryOption: OptionItem;
+  selectedYearOption: OptionItem;
 }) {
   const { t } = useTranslation();
 
@@ -106,15 +125,23 @@ export function SearchListPart({
   );
 
   const filteredResults = useMemo(() => {
-    if (selectedGenreId === ALL_GENRES_FILTER_ID) {
-      return results;
+    let filtered = results;
+
+    if (selectedGenreId !== ALL_GENRES_FILTER_ID) {
+      const selectedGenreNumber = Number(selectedGenreId);
+      filtered = filtered.filter((result) =>
+        (result.genreIds ?? []).includes(selectedGenreNumber),
+      );
     }
 
-    const selectedGenreNumber = Number(selectedGenreId);
-    return results.filter((result) =>
-      (result.genreIds ?? []).includes(selectedGenreNumber),
-    );
-  }, [results, selectedGenreId]);
+    if (filterYear) {
+      filtered = filtered.filter(
+        (item) => item.year?.toString() === filterYear,
+      );
+    }
+
+    return filtered;
+  }, [results, selectedGenreId, filterYear]);
 
   useEffect(() => {
     async function runSearch(query: MWQuery) {
@@ -152,38 +179,94 @@ export function SearchListPart({
             icon={Icons.SEARCH}
           />
 
-          {genreFilterOptions.length > 0 ? (
-            <div className="mb-5">
-              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
-                <button
-                  type="button"
-                  className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 ${
-                    selectedGenreId === ALL_GENRES_FILTER_ID
-                      ? "bg-type-logo text-white"
-                      : "bg-pill-background/60 text-type-secondary hover:bg-pill-backgroundHover"
-                  }`}
-                  onClick={() => setSelectedGenreId(ALL_GENRES_FILTER_ID)}
-                >
-                  {t("home.search.genreFilterAll")}
-                </button>
-
-                {genreFilterOptions.map((genre) => (
+          <div className="mb-5">
+            <div className="relative flex items-center">
+              <div className="overflow-x-auto scrollbar-thin flex-1 min-w-0">
+                <div className="flex items-center gap-2 pb-1">
                   <button
-                    key={genre.id}
                     type="button"
-                    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 ${
-                      selectedGenreId === genre.id
+                    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 shrink-0 ${
+                      selectedGenreId === ALL_GENRES_FILTER_ID
                         ? "bg-type-logo text-white"
                         : "bg-pill-background/60 text-type-secondary hover:bg-pill-backgroundHover"
                     }`}
-                    onClick={() => setSelectedGenreId(genre.id)}
+                    onClick={() => setSelectedGenreId(ALL_GENRES_FILTER_ID)}
                   >
-                    {genre.name}
+                    {t("home.search.genreFilterAll")}
                   </button>
-                ))}
+
+                  {genreFilterOptions.map((genre) => (
+                    <button
+                      key={genre.id}
+                      type="button"
+                      className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 shrink-0 ${
+                        selectedGenreId === genre.id
+                          ? "bg-type-logo text-white"
+                          : "bg-pill-background/60 text-type-secondary hover:bg-pill-backgroundHover"
+                      }`}
+                      onClick={() => setSelectedGenreId(genre.id)}
+                    >
+                      {genre.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="sticky right-0 z-10 shrink-0 flex items-center gap-2 bg-background-main pl-3">
+                <div className="w-px h-6 bg-white/10 shrink-0" />
+
+                <div className="relative whitespace-nowrap shrink-0">
+                  <Dropdown
+                    selectedItem={selectedCountryOption}
+                    setSelectedItem={(item) => onCountryChange?.(item.id)}
+                    options={countryOptions}
+                    customButton={
+                      <button
+                        type="button"
+                        className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                      >
+                        <span>
+                          {filterCountry
+                            ? `${countryLabel}: ${selectedCountryOption.name}`
+                            : countryLabel}
+                        </span>
+                        <Icon
+                          icon={Icons.UP_DOWN_ARROW}
+                          className="text-xs text-dropdown-secondary"
+                        />
+                      </button>
+                    }
+                  />
+                </div>
+
+                <div className="relative whitespace-nowrap shrink-0">
+                  <Dropdown
+                    selectedItem={selectedYearOption}
+                    setSelectedItem={(item) => onYearChange?.(item.id)}
+                    options={yearOptions}
+                    customButton={
+                      <button
+                        type="button"
+                        className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                      >
+                        <span>
+                          {filterYear
+                            ? `${t("home.bookmarks.edit.yearLabel")}: ${filterYear}`
+                            : t("home.bookmarks.edit.yearLabel")}
+                        </span>
+                        <Icon
+                          icon={Icons.UP_DOWN_ARROW}
+                          className="text-xs text-dropdown-secondary"
+                        />
+                      </button>
+                    }
+                    preventWrap
+                    className="!my-0"
+                  />
+                </div>
               </div>
             </div>
-          ) : null}
+          </div>
 
           <MediaGrid>
             {filteredResults.map((v) => (

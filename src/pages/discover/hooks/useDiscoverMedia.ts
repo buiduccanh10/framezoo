@@ -239,20 +239,26 @@ export function useDiscoverMedia({
 
   const filterResultsByReleaseYear = useCallback(
     (data: { results: DiscoverMedia[]; hasMore: boolean }) => {
-      if (!releaseYear) {
-        return data;
-      }
+      let results = data.results;
 
-      return {
-        ...data,
-        results: data.results.filter((item) => {
+      if (releaseYear) {
+        results = results.filter((item) => {
           const releaseDate =
             mediaType === "movie" ? item.release_date : item.first_air_date;
           return releaseDate?.startsWith(`${releaseYear}-`);
-        }),
-      };
+        });
+      }
+
+      if (originCountry) {
+        results = results.filter((item: any) => {
+          const countries: string[] | undefined = item.origin_country;
+          return countries?.includes(originCountry);
+        });
+      }
+
+      return { ...data, results };
     },
-    [mediaType, releaseYear],
+    [mediaType, releaseYear, originCountry],
   );
 
   const fetchEditorPicks = useCallback(async () => {

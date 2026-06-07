@@ -14,6 +14,8 @@ interface PersonalRecommendationsCarouselProps {
     [key: string]: HTMLDivElement | null;
   }>;
   onShowDetails?: (media: MediaItem) => void;
+  releaseYear?: string;
+  originCountry?: string;
 }
 
 function getPosterUrl(posterPath: string): string {
@@ -45,13 +47,20 @@ export function PersonalRecommendationsCarousel({
   isTVShow,
   carouselRefs,
   onShowDetails,
+  releaseYear,
+  originCountry,
 }: PersonalRecommendationsCarouselProps) {
   const { isMobile } = useIsMobile();
   const isScrollingRef = useRef(false);
   const browser = !!window.chrome;
 
   const { media, isLoading, sectionTitle, hasRecommendations } =
-    usePersonalRecommendations({ isTVShow, enabled: true });
+    usePersonalRecommendations({
+      isTVShow,
+      enabled: true,
+      releaseYear,
+      originCountry,
+    });
 
   const categorySlug = `for-you-${isTVShow ? "tv" : "movie"}`;
 

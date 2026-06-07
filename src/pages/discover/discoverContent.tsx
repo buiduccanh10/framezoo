@@ -1,10 +1,11 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
 import { WideContainer } from "@/components/layout/WideContainer";
+import { WatchingCarousel } from "@/pages/parts/home/WatchingCarousel";
 import { useDiscoverStore } from "@/stores/discover";
 import type { Category } from "@/stores/discover";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
@@ -18,13 +19,33 @@ import { PersonalRecommendationsCarousel } from "./components/PersonalRecommenda
 import { ScrollToTopButton } from "./components/ScrollToTopButton";
 import { useDiscoverOptions } from "./hooks/useDiscoverMedia";
 
-export function DiscoverContent() {
+interface DiscoverContentProps {
+  filterCountry?: string;
+  filterYear?: string;
+  onFilterCountryChange?: (country: string) => void;
+  onFilterYearChange?: (year: string) => void;
+}
+
+export function DiscoverContent({
+  filterCountry: externalCountry,
+  filterYear: externalYear,
+  onFilterCountryChange,
+  onFilterYearChange,
+}: DiscoverContentProps) {
   const { selectedCategory, setSelectedCategory } = useDiscoverStore();
   const { genres: movieGenres } = useDiscoverOptions("movie");
   const navigate = useNavigate();
   const { showModal } = useOverlayStack();
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const progressItems = useProgressStore((state) => state.items);
+  const [internalCountry, setInternalCountry] = useState("");
+  const [internalYear, setInternalYear] = useState("");
+
+  const filterCountry =
+    externalCountry !== undefined ? externalCountry : internalCountry;
+  const filterYear = externalYear !== undefined ? externalYear : internalYear;
+  const handleCountryChange = onFilterCountryChange || setInternalCountry;
+  const handleYearChange = onFilterYearChange || setInternalYear;
 
   useEffect(() => {
     if (selectedCategory === "editorpicks") {
@@ -62,6 +83,11 @@ export function DiscoverContent() {
     ([_, item]) => item.type === "show",
   );
 
+  const filtersProps = {
+    releaseYear: filterYear || undefined,
+    originCountry: filterCountry || undefined,
+  };
+
   // Render Movies content with lazy loading
   const renderMoviesContent = () => {
     const carousels = [];
@@ -76,6 +102,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
+        {...filtersProps}
       />,
     );
 
@@ -88,6 +115,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
+        {...filtersProps}
       />,
     );
 
@@ -101,6 +129,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
+        {...filtersProps}
       />,
     );
 
@@ -111,6 +140,7 @@ export function DiscoverContent() {
         isTVShow={false}
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
+        {...filtersProps}
       />,
     );
 
@@ -126,6 +156,7 @@ export function DiscoverContent() {
           moreContent
           showRecommendations
           priority={carousels.length < 2} // First 2 carousels load immediately
+          {...filtersProps}
         />,
       );
     }
@@ -153,6 +184,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
+        {...filtersProps}
       />,
     );
 
@@ -179,6 +211,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
+        {...filtersProps}
       />,
     );
 
@@ -199,6 +232,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
+        {...filtersProps}
       />,
     );
 
@@ -211,6 +245,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
+        {...filtersProps}
       />,
     );
 
@@ -224,6 +259,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
+        {...filtersProps}
       />,
     );
 
@@ -234,6 +270,7 @@ export function DiscoverContent() {
         isTVShow
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
+        {...filtersProps}
       />,
     );
 
@@ -249,6 +286,7 @@ export function DiscoverContent() {
           moreContent
           showRecommendations
           priority={carousels.length < 2} // First 2 carousels load immediately
+          {...filtersProps}
         />,
       );
     }
@@ -263,6 +301,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
+        {...filtersProps}
       />,
     );
 
@@ -276,6 +315,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
+        {...filtersProps}
       />,
     );
 
@@ -289,6 +329,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority={carousels.length < 2}
+        {...filtersProps}
       />,
     );
 
@@ -305,6 +346,7 @@ export function DiscoverContent() {
         onShowDetails={handleShowDetails}
         moreContent
         priority
+        {...filtersProps}
       />
     );
   };
@@ -324,15 +366,25 @@ export function DiscoverContent() {
         forcedGenreId={selectedGenreId}
         forcedGenreName={selectedGenreName}
         hideRelatedButtons
+        {...filtersProps}
       />
     );
   };
 
   return (
     <div className="relative min-h-screen">
+      <WatchingCarousel
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />
+
       <DiscoverNavigation
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
+        selectedCountry={filterCountry}
+        selectedYear={filterYear}
+        onCountryChange={handleCountryChange}
+        onYearChange={handleYearChange}
       />
 
       <WideContainer ultraWide classNames="!px-0">

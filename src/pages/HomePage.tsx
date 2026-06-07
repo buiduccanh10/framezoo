@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { To, useNavigate } from "react-router-dom";
 
 import { ActionPillButton } from "@/components/buttons/ActionPillButton";
+import { OptionItem } from "@/components/form/Dropdown";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useRandomTranslation } from "@/hooks/useRandomTranslation";
@@ -11,6 +12,7 @@ import { useSearchQuery } from "@/hooks/useSearchQuery";
 import { FeaturedCarousel } from "@/pages/discover/components/FeaturedCarousel";
 import type { FeaturedMedia } from "@/pages/discover/components/FeaturedCarousel";
 import DiscoverContent from "@/pages/discover/discoverContent";
+import { useDiscoverOptions } from "@/pages/discover/hooks/useDiscoverMedia";
 import { HomeLayout } from "@/pages/layouts/HomeLayout";
 import { BookmarksCarousel } from "@/pages/parts/home/BookmarksCarousel";
 import { BookmarksPart } from "@/pages/parts/home/BookmarksPart";
@@ -75,6 +77,34 @@ export function HomePage() {
   const homeSectionOrder = usePreferencesStore(
     (state) => state.homeSectionOrder,
   );
+  const [filterCountry, setFilterCountry] = useState("");
+  const [filterYear, setFilterYear] = useState("");
+
+  const { countries } = useDiscoverOptions("movie", {
+    includeCountries: true,
+  });
+  const countryLabel = t("discover.filters.country", {
+    defaultValue: "Country",
+  });
+  const countryOptions: OptionItem[] = [
+    { id: "", name: countryLabel },
+    ...countries,
+  ];
+  const selectedCountryOption =
+    countryOptions.find((o) => o.id === filterCountry) || countryOptions[0];
+  const yearOptions: OptionItem[] = (() => {
+    const currentYear = new Date().getFullYear();
+    return [
+      { id: "", name: t("home.bookmarks.edit.yearLabel") },
+      ...Array.from({ length: currentYear - 1899 }, (_, i) => {
+        const year = (currentYear - i).toString();
+        return { id: year, name: year };
+      }),
+    ];
+  })();
+  const selectedYearOption =
+    yearOptions.find((o) => o.id === filterYear) || yearOptions[0];
+
   const [featuredContentReady, setFeaturedContentReady] =
     useState(!enableFeatured);
 
@@ -206,6 +236,15 @@ export function HomePage() {
               <SearchListPart
                 searchQuery={search}
                 onShowDetails={handleShowDetails}
+                filterCountry={filterCountry}
+                filterYear={filterYear}
+                onCountryChange={setFilterCountry}
+                onYearChange={setFilterYear}
+                countryOptions={countryOptions}
+                yearOptions={yearOptions}
+                countryLabel={countryLabel}
+                selectedCountryOption={selectedCountryOption}
+                selectedYearOption={selectedYearOption}
               />
             )
           )}
@@ -238,7 +277,12 @@ export function HomePage() {
 
         {/* Discover section or discover button */}
         {shouldRenderDiscoverContent ? (
-          <DiscoverContent />
+          <DiscoverContent
+            filterCountry={filterCountry}
+            filterYear={filterYear}
+            onFilterCountryChange={setFilterCountry}
+            onFilterYearChange={setFilterYear}
+          />
         ) : shouldShowDiscoverButton ? (
           <div className="flex flex-col justify-center items-center h-40 space-y-4">
             <div className="flex flex-col items-center justify-center">
