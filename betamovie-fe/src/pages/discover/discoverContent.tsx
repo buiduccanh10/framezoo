@@ -222,6 +222,20 @@ export function DiscoverContent({
   const renderTVShowsContent = () => {
     const carousels = [];
 
+    // Popular
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-popular"
+        content={{ type: "popular" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority
+        {...filtersProps}
+      />,
+    );
+
     // Provider TV Shows
     carousels.push(
       <LazyMediaCarousel
@@ -310,20 +324,6 @@ export function DiscoverContent({
       <LazyMediaCarousel
         key="tv-top-rated"
         content={{ type: "topRated" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
-        {...filtersProps}
-      />,
-    );
-
-    // Popular
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-popular"
-        content={{ type: "popular" }}
         isTVShow
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}

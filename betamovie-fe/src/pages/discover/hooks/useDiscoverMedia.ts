@@ -21,6 +21,7 @@ import type {
 import { useLanguageStore } from "@/stores/language";
 import {
   DEFAULT_MEDIA_QUALITY_THRESHOLD,
+  filterAndSortByLatestDesc,
   filterAndSortByQualityDesc,
 } from "@/utils/compareByRatingDesc";
 import { getTmdbLanguageCode } from "@/utils/language";
@@ -189,6 +190,53 @@ export function useDiscoverMedia({
     [originCountry],
   );
   const hasOriginCountryFilter = Boolean(originCountry);
+  const shouldPrioritizeLatestActivity = useCallback(
+    (type: DiscoverContentType) =>
+      mediaType === "tv" &&
+      (type === "latest" || type === "latesttv" || type === "onTheAir"),
+    [mediaType],
+  );
+  const sortDiscoverResults = useCallback(
+    (items: DiscoverMedia[], type: DiscoverContentType) =>
+      shouldPrioritizeLatestActivity(type)
+        ? filterAndSortByLatestDesc(items, DEFAULT_MEDIA_QUALITY_THRESHOLD)
+        : filterAndSortByQualityDesc(items, DEFAULT_MEDIA_QUALITY_THRESHOLD),
+    [shouldPrioritizeLatestActivity],
+  );
+  const hydrateLatestTVResults = useCallback(
+    async (items: DiscoverMedia[], type: DiscoverContentType) => {
+      if (!shouldPrioritizeLatestActivity(type) || items.length === 0) {
+        return items;
+      }
+
+      const hydratedItems = await Promise.all(
+        items.map(async (item) => {
+          try {
+            const details = await fetchCachedTmdb<{
+              last_air_date?: string | null;
+              last_episode_to_air?: {
+                air_date?: string | null;
+              } | null;
+            }>(`/tv/${item.id}`, {
+              language: formattedLanguage,
+            });
+
+            return {
+              ...item,
+              last_air_date: details.last_air_date ?? item.last_air_date,
+              last_episode_to_air:
+                details.last_episode_to_air ?? item.last_episode_to_air,
+            };
+          } catch {
+            return item;
+          }
+        }),
+      );
+
+      return hydratedItems;
+    },
+    [formattedLanguage, shouldPrioritizeLatestActivity],
+  );
 
   // Reset media when content type or media type changes
   useEffect(() => {
@@ -200,7 +248,11 @@ export function useDiscoverMedia({
   }, [contentType, currentContentType]);
 
   const fetchTMDBMedia = useCallback(
-    async (endpoint: string, params: Record<string, any> = {}) => {
+    async (
+      endpoint: string,
+      params: Record<string, any> = {},
+      sortType: DiscoverContentType = contentType,
+    ) => {
       try {
         // For carousel views, we only need one page of results
         if (isCarouselView) {
@@ -214,10 +266,11 @@ export function useDiscoverMedia({
           ...params,
         });
 
-        const sortedResults = filterAndSortByQualityDesc(
+        const hydratedResults = await hydrateLatestTVResults(
           data.results ?? [],
-          DEFAULT_MEDIA_QUALITY_THRESHOLD,
+          sortType,
         );
+        const sortedResults = sortDiscoverResults(hydratedResults, sortType);
         const results = isCarouselView
           ? sortedResults.slice(0, 20)
           : sortedResults;
@@ -234,7 +287,15 @@ export function useDiscoverMedia({
         throw err;
       }
     },
-    [formattedLanguage, page, mediaType, isCarouselView],
+    [
+      contentType,
+      formattedLanguage,
+      hydrateLatestTVResults,
+      isCarouselView,
+      mediaType,
+      page,
+      sortDiscoverResults,
+    ],
   );
 
   const filterResultsByReleaseYear = useCallback(
@@ -367,7 +428,7 @@ export function useDiscoverMedia({
 
         case "onTheAir":
           if (mediaType === "tv") {
-            data = await fetchTMDBMedia("/tv/on_the_air");
+            data = await fetchTMDBMedia("/tv/on_the_air", {}, "onTheAir");
             setSectionTitle(t("discover.carousel.title.onTheAir"));
           } else {
             throw new Error("onTheAir is only available for TV shows");
@@ -506,6 +567,7 @@ export function useDiscoverMedia({
                     ...originCountryParams,
                   }
                 : undefined,
+            mediaType === "tv" ? "latest" : contentType,
           );
           setSectionTitle(t("discover.carousel.title.latestReleases"));
           break;
@@ -527,12 +589,16 @@ export function useDiscoverMedia({
         case "latesttv":
           data =
             releaseYear || hasOriginCountryFilter
-              ? await fetchTMDBMedia("/discover/tv", {
-                  sort_by: "first_air_date.desc",
-                  ...releaseYearParams,
-                  ...originCountryParams,
-                })
-              : await fetchTMDBMedia("/tv/on_the_air");
+              ? await fetchTMDBMedia(
+                  "/discover/tv",
+                  {
+                    sort_by: "first_air_date.desc",
+                    ...releaseYearParams,
+                    ...originCountryParams,
+                  },
+                  "latesttv",
+                )
+              : await fetchTMDBMedia("/tv/on_the_air", {}, "latesttv");
           setSectionTitle(t("discover.carousel.title.latestTVReleases"));
           break;
 
@@ -548,10 +614,7 @@ export function useDiscoverMedia({
       setMedia((prevMedia) => {
         const mergedMedia =
           page === 1 ? data.results : [...prevMedia, ...data.results];
-        return filterAndSortByQualityDesc(
-          mergedMedia,
-          DEFAULT_MEDIA_QUALITY_THRESHOLD,
-        );
+        return sortDiscoverResults(mergedMedia, contentType);
       });
       setHasMore(data.hasMore);
     } catch (err) {
@@ -569,10 +632,7 @@ export function useDiscoverMedia({
               page === 1
                 ? fallbackData.results
                 : [...prevMedia, ...fallbackData.results];
-            return filterAndSortByQualityDesc(
-              mergedMedia,
-              DEFAULT_MEDIA_QUALITY_THRESHOLD,
-            );
+            return sortDiscoverResults(mergedMedia, fallbackType);
           });
           setHasMore(fallbackData.hasMore);
           setError(null); // Clear error if fallback succeeds
@@ -604,6 +664,7 @@ export function useDiscoverMedia({
     page,
     formattedLanguage,
     isRestoring,
+    sortDiscoverResults,
   ]);
 
   useEffect(() => {
