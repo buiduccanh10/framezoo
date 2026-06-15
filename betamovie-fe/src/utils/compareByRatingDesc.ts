@@ -40,6 +40,17 @@ function extractYear(value?: string | Date | null): number | null {
   return Number.isFinite(parsedYear) ? parsedYear : null;
 }
 
+function extractTimestamp(value?: string | Date | null): number | null {
+  if (!value) return null;
+  if (value instanceof Date) {
+    const timestamp = value.getTime();
+    return Number.isFinite(timestamp) ? timestamp : null;
+  }
+
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : null;
+}
+
 export function getReferenceYear(item: RatedMediaItem): number | null {
   const seasonYears =
     item.seasons
@@ -58,6 +69,26 @@ export function getReferenceYear(item: RatedMediaItem): number | null {
 
   if (candidateYears.length === 0) return null;
   return Math.max(...candidateYears);
+}
+
+export function getReferenceTimestamp(item: RatedMediaItem): number | null {
+  const seasonTimestamps =
+    item.seasons
+      ?.map((season) => extractTimestamp(season.air_date))
+      .filter((timestamp): timestamp is number => timestamp !== null) ?? [];
+
+  const candidateTimestamps = [
+    extractTimestamp(item.last_episode_to_air?.air_date),
+    extractTimestamp(item.last_air_date),
+    seasonTimestamps.length ? Math.max(...seasonTimestamps) : null,
+    extractTimestamp(item.air_date),
+    extractTimestamp(item.release_date),
+    extractTimestamp(item.first_air_date),
+    extractTimestamp(item.original_release_date),
+  ].filter((timestamp): timestamp is number => timestamp !== null);
+
+  if (candidateTimestamps.length === 0) return null;
+  return Math.max(...candidateTimestamps);
 }
 
 export function meetsMediaQualityThreshold(
@@ -125,6 +156,17 @@ export function compareByRatingDesc(a: RatedMediaItem, b: RatedMediaItem) {
   return (b.vote_average ?? 0) - (a.vote_average ?? 0);
 }
 
+export function compareByLatestReleaseDesc(
+  a: RatedMediaItem,
+  b: RatedMediaItem,
+) {
+  const timestampDiff =
+    (getReferenceTimestamp(b) ?? 0) - (getReferenceTimestamp(a) ?? 0);
+  if (timestampDiff !== 0) return timestampDiff;
+
+  return compareByRatingDesc(a, b);
+}
+
 export function filterAndSortByQualityDesc<T extends RatedMediaItem>(
   items: T[],
   threshold: MediaQualityThreshold = DEFAULT_MEDIA_QUALITY_THRESHOLD,
@@ -132,4 +174,13 @@ export function filterAndSortByQualityDesc<T extends RatedMediaItem>(
   return [...items]
     .filter((item) => meetsMediaQualityThreshold(item, threshold))
     .sort(compareByRatingDesc);
+}
+
+export function filterAndSortByLatestDesc<T extends RatedMediaItem>(
+  items: T[],
+  threshold: MediaQualityThreshold = DEFAULT_MEDIA_QUALITY_THRESHOLD,
+): T[] {
+  return [...items]
+    .filter((item) => meetsMediaQualityThreshold(item, threshold))
+    .sort(compareByLatestReleaseDesc);
 }

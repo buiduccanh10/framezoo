@@ -28,8 +28,8 @@ export function DiscoverNavigation({
     includeCountries: true,
   });
   const navigationItems: Array<{ id: Category; label: string }> = [
-    { id: "movies", label: t("discover.tabs.movies") },
     { id: "tvshows", label: t("discover.tabs.tvshows") },
+    { id: "movies", label: t("discover.tabs.movies") },
     { id: "top10", label: t("discover.tabs.top10") },
     ...genres.map((genre) => ({
       id: `genre:${genre.id}` as const,

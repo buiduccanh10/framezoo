@@ -201,7 +201,6 @@ export function HomePage() {
         {/* Page Header */}
         {enableFeatured ? (
           <FeaturedCarousel
-            forcedCategory="movies"
             onShowDetails={handleShowDetails}
             onInitialContentReady={handleFeaturedContentReady}
             searching={s.searching}

@@ -39,6 +39,10 @@ export interface DiscoverMedia {
   backdrop_path: string;
   release_date?: string;
   first_air_date?: string;
+  last_air_date?: string | null;
+  last_episode_to_air?: {
+    air_date?: string | null;
+  } | null;
   overview: string;
   vote_average: number;
   vote_count: number;

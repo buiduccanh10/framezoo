@@ -14,21 +14,21 @@ import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
-import { meetsMediaQualityThreshold } from "@/utils/compareByRatingDesc";
+import { filterAndSortByQualityDesc } from "@/utils/compareByRatingDesc";
 import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
 import { RandomMovieButton } from "./RandomMovieButton";
-import { MOVIE_PROVIDERS } from "../hooks/useDiscoverMedia";
 
 export interface FeaturedMedia extends Partial<Movie & TVShow> {
   children?: ReactNode;
-  backdrop_path: string;
+  backdrop_path?: string;
   overview: string;
   title?: string;
   name?: string;
   type: "movie" | "show";
+  source?: "latest" | "popular";
   vote_average?: number;
   vote_count?: number;
   number_of_seasons?: number;
@@ -45,8 +45,7 @@ interface FeaturedCarouselProps {
   children?: ReactNode;
   searching?: boolean;
   shorter?: boolean;
-  /** @deprecated Ignored; featured slides are always a random Netflix + new releases mix. */
-  forcedCategory?: string;
+  forcedCategory?: "movies" | "tvshows";
 }
 
 interface IMDbRatingData {
@@ -55,37 +54,82 @@ interface IMDbRatingData {
 }
 
 function shuffleArray<T>(items: T[]): T[] {
-  const arr = [...items];
-  for (let i = arr.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  const shuffled = [...items];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [
+      shuffled[randomIndex],
+      shuffled[index],
+    ];
   }
-  return arr;
+
+  return shuffled;
 }
 
-const QUALITY_MIN_YEAR = new Date().getFullYear() - 12;
+function mixBalancedRandom<T extends { type: "movie" | "show" }>(
+  shows: T[],
+  movies: T[],
+): T[] {
+  const showQueue = shuffleArray(shows);
+  const movieQueue = shuffleArray(movies);
+  const mixed: T[] = [];
+
+  while (showQueue.length > 0 || movieQueue.length > 0) {
+    const lastTwoTypes = mixed.slice(-2).map((item) => item.type);
+    const shouldForceMovie =
+      lastTwoTypes.length === 2 &&
+      lastTwoTypes.every((type) => type === "show") &&
+      movieQueue.length > 0;
+    const shouldForceShow =
+      lastTwoTypes.length === 2 &&
+      lastTwoTypes.every((type) => type === "movie") &&
+      showQueue.length > 0;
+
+    if (shouldForceMovie) {
+      mixed.push(movieQueue.shift()!);
+      continue;
+    }
+
+    if (shouldForceShow) {
+      mixed.push(showQueue.shift()!);
+      continue;
+    }
+
+    if (showQueue.length === 0) {
+      mixed.push(movieQueue.shift()!);
+      continue;
+    }
+
+    if (movieQueue.length === 0) {
+      mixed.push(showQueue.shift()!);
+      continue;
+    }
+
+    if (Math.random() < 0.5) {
+      mixed.push(showQueue.shift()!);
+    } else {
+      mixed.push(movieQueue.shift()!);
+    }
+  }
+
+  return mixed;
+}
 
 function selectFeaturedSlides(
   featured: FeaturedMedia[],
   limit: number,
 ): FeaturedMedia[] {
-  const withBackdrop = featured.filter((item) => item.backdrop_path);
-  const sourceForQuality = withBackdrop.length > 0 ? withBackdrop : featured;
-  const qualityMatches = shuffleArray(sourceForQuality)
-    .filter((item) =>
-      meetsMediaQualityThreshold(item, {
-        minScore: 6.5,
-        minVotes: 500,
-        minYear: QUALITY_MIN_YEAR,
-      }),
-    )
-    .slice(0, limit);
+  const withImages = featured.filter((item) =>
+    Boolean(getSlideImagePath(item)),
+  );
+  const source = withImages.length > 0 ? withImages : featured;
 
-  if (qualityMatches.length > 0) {
-    return qualityMatches;
-  }
+  return source.slice(0, limit);
+}
 
-  return shuffleArray(sourceForQuality).slice(0, limit);
+function getSlideImagePath(item: FeaturedMedia): string | undefined {
+  return item.backdrop_path || item.poster_path;
 }
 
 function shouldLoadSlideImage(
@@ -165,6 +209,7 @@ export function FeaturedCarousel({
   children,
   searching,
   shorter,
+  forcedCategory,
 }: FeaturedCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -198,6 +243,9 @@ export function FeaturedCarousel({
   const INITIAL_DETAIL_BATCH = 6;
   const INITIAL_SLIDE_QUANTITY = 4;
   const SLIDE_DURATION = 8000;
+  const BASE_POOL_SIZE_PER_TYPE = 6;
+  const EXTRA_POOL_SIZE_PER_TYPE = 4;
+  const FEATURED_CANDIDATE_PAGES = 2;
 
   // Check for extension on mount
   useEffect(() => {
@@ -267,30 +315,6 @@ export function FeaturedCarousel({
       }
 
       try {
-        const netflixProviderId = MOVIE_PROVIDERS[0].id;
-
-        const discoverList = async (
-          mediaPath: "movie" | "tv",
-          extra: Record<string, string | number>,
-        ) => {
-          let listData = await fetchCachedTmdb<any>(`/discover/${mediaPath}`, {
-            language: formattedLanguage,
-            watch_region: "US",
-            ...extra,
-          });
-          if (
-            (!listData.results || listData.results.length === 0) &&
-            formattedLanguage !== "en-US"
-          ) {
-            listData = await fetchCachedTmdb<any>(`/discover/${mediaPath}`, {
-              language: "en-US",
-              watch_region: "US",
-              ...extra,
-            });
-          }
-          return listData.results ?? [];
-        };
-
         const endpointList = async (path: string, page = 1) => {
           let data = await fetchCachedTmdb<any>(path, {
             language: formattedLanguage,
@@ -308,6 +332,16 @@ export function FeaturedCarousel({
           return data.results ?? [];
         };
 
+        type MediaPick = {
+          id: number;
+          type: "movie" | "show";
+          source: "latest" | "popular";
+          vote_average?: number;
+          vote_count?: number;
+          release_date?: string;
+          first_air_date?: string;
+        };
+
         const fetchDetails = async (picks: MediaPick[]) =>
           Promise.all(
             picks.map((pick) =>
@@ -323,94 +357,6 @@ export function FeaturedCarousel({
             ),
           );
 
-        const [
-          netflixMoviesP1,
-          netflixMoviesP2,
-          netflixTvP1,
-          netflixTvP2,
-          nowPlaying,
-          onTheAir,
-          popularMovies,
-          popularTv,
-          topRatedMovies,
-          topRatedTv,
-        ] = await Promise.all([
-          discoverList("movie", {
-            with_watch_providers: netflixProviderId,
-            page: 1,
-          }),
-          discoverList("movie", {
-            with_watch_providers: netflixProviderId,
-            page: 2,
-          }),
-          discoverList("tv", {
-            with_watch_providers: netflixProviderId,
-            page: 1,
-          }),
-          discoverList("tv", {
-            with_watch_providers: netflixProviderId,
-            page: 2,
-          }),
-          endpointList("/movie/now_playing"),
-          endpointList("/tv/on_the_air"),
-          endpointList("/movie/popular"),
-          endpointList("/tv/popular"),
-          endpointList("/movie/top_rated"),
-          endpointList("/tv/top_rated"),
-        ]);
-
-        type MediaPick = { id: number; type: "movie" | "show" };
-        const popularPool: MediaPick[] = popularMovies.map(
-          (m: { id: number }) => ({
-            id: m.id,
-            type: "movie" as const,
-          }),
-        );
-        popularPool.push(
-          ...popularTv.map((s: { id: number }) => ({
-            id: s.id,
-            type: "show" as const,
-          })),
-        );
-        const topRatedPool: MediaPick[] = topRatedMovies.map(
-          (m: { id: number }) => ({
-            id: m.id,
-            type: "movie" as const,
-          }),
-        );
-        topRatedPool.push(
-          ...topRatedTv.map((s: { id: number }) => ({
-            id: s.id,
-            type: "show" as const,
-          })),
-        );
-        const netflixAndNewPool: MediaPick[] = [
-          ...netflixMoviesP1.map((m: { id: number }) => ({
-            id: m.id,
-            type: "movie" as const,
-          })),
-          ...netflixMoviesP2.map((m: { id: number }) => ({
-            id: m.id,
-            type: "movie" as const,
-          })),
-          ...netflixTvP1.map((s: { id: number }) => ({
-            id: s.id,
-            type: "show" as const,
-          })),
-          ...netflixTvP2.map((s: { id: number }) => ({
-            id: s.id,
-            type: "show" as const,
-          })),
-          ...nowPlaying.map((m: { id: number }) => ({
-            id: m.id,
-            type: "movie" as const,
-          })),
-          ...onTheAir.map((s: { id: number }) => ({
-            id: s.id,
-            type: "show" as const,
-          })),
-        ];
-
         const uniqueByKey = (items: MediaPick[]) => {
           const seen = new Set<string>();
           return items.filter((item) => {
@@ -420,74 +366,103 @@ export function FeaturedCarousel({
             return true;
           });
         };
-        const toKey = (item: MediaPick) => `${item.type}-${item.id}`;
-        const pickFromPool = (
-          pool: MediaPick[],
-          count: number,
-          excluded: Set<string>,
-        ) => {
-          const candidates = shuffleArray(
-            uniqueByKey(pool).filter((item) => !excluded.has(toKey(item))),
+        const endpointPages = async (path: string) => {
+          const pageResults = await Promise.all(
+            Array.from({ length: FEATURED_CANDIDATE_PAGES }, (_, index) =>
+              endpointList(path, index + 1),
+            ),
           );
-          const picked = candidates.slice(0, count);
-          picked.forEach((item) => excluded.add(toKey(item)));
-          return picked;
+
+          return pageResults.flat();
         };
-
-        // 40% popular, 30% top rated, 30% Netflix/new releases
-        const popularTarget = Math.round(SLIDE_QUANTITY * 0.4);
-        const topRatedTarget = Math.round(SLIDE_QUANTITY * 0.3);
-        const netflixAndNewTarget =
-          SLIDE_QUANTITY - popularTarget - topRatedTarget;
-
-        const selectedKeys = new Set<string>();
-        const selectedPopular = pickFromPool(
-          popularPool,
-          popularTarget,
-          selectedKeys,
+        const toMoviePick = (
+          movie: {
+            id: number;
+            vote_average?: number;
+            vote_count?: number;
+            release_date?: string;
+          },
+          source: "latest" | "popular",
+        ): MediaPick => ({
+          id: movie.id,
+          type: "movie",
+          source,
+          vote_average: movie.vote_average,
+          vote_count: movie.vote_count,
+          release_date: movie.release_date,
+        });
+        const toShowPick = (
+          show: {
+            id: number;
+            vote_average?: number;
+            vote_count?: number;
+            first_air_date?: string;
+          },
+          source: "latest" | "popular",
+        ): MediaPick => ({
+          id: show.id,
+          type: "show",
+          source,
+          vote_average: show.vote_average,
+          vote_count: show.vote_count,
+          first_air_date: show.first_air_date,
+        });
+        const selectFeaturedPool = (items: MediaPick[], limit: number) => {
+          const filteredItems = filterAndSortByQualityDesc(uniqueByKey(items));
+          return filteredItems.slice(0, limit);
+        };
+        const [nowPlaying, popularTv] = await Promise.all([
+          endpointPages("/movie/now_playing"),
+          endpointPages("/tv/popular"),
+        ]);
+        const movieFeaturedPool = selectFeaturedPool(
+          nowPlaying.map(
+            (show: {
+              id: number;
+              vote_average?: number;
+              vote_count?: number;
+              release_date?: string;
+            }) => toMoviePick(show, "latest"),
+          ),
+          BASE_POOL_SIZE_PER_TYPE + EXTRA_POOL_SIZE_PER_TYPE,
         );
-        const selectedTopRated = pickFromPool(
-          topRatedPool,
-          topRatedTarget,
-          selectedKeys,
+        const tvFeaturedPool = selectFeaturedPool(
+          popularTv.map(
+            (show: {
+              id: number;
+              vote_average?: number;
+              vote_count?: number;
+              first_air_date?: string;
+            }) => toShowPick(show, "popular"),
+          ),
+          BASE_POOL_SIZE_PER_TYPE + EXTRA_POOL_SIZE_PER_TYPE,
         );
-        const selectedNetflixAndNew = pickFromPool(
-          netflixAndNewPool,
-          netflixAndNewTarget,
-          selectedKeys,
-        );
-
-        let selected = [
-          ...selectedPopular,
-          ...selectedTopRated,
-          ...selectedNetflixAndNew,
-        ];
-
-        if (selected.length < SLIDE_QUANTITY) {
-          const fallbackPool = uniqueByKey([
-            ...popularPool,
-            ...topRatedPool,
-            ...netflixAndNewPool,
-          ]).filter((item) => !selectedKeys.has(toKey(item)));
-          const fill = shuffleArray(fallbackPool).slice(
-            0,
-            SLIDE_QUANTITY - selected.length,
-          );
-          selected = [...selected, ...fill];
-        }
-
-        const shuffledSelection = shuffleArray(selected);
-        const initialSelection = shuffledSelection.slice(
+        const topTvPopular = tvFeaturedPool.slice(0, BASE_POOL_SIZE_PER_TYPE);
+        const extraTvPopular = tvFeaturedPool.slice(BASE_POOL_SIZE_PER_TYPE);
+        const topLatestMovies = movieFeaturedPool.slice(
           0,
-          INITIAL_DETAIL_BATCH,
+          BASE_POOL_SIZE_PER_TYPE,
         );
-        const remainingSelection =
-          shuffledSelection.slice(INITIAL_DETAIL_BATCH);
+        const extraLatestMovies = movieFeaturedPool.slice(
+          BASE_POOL_SIZE_PER_TYPE,
+        );
+        const rankedSelection =
+          forcedCategory === "movies"
+            ? shuffleArray(movieFeaturedPool)
+            : forcedCategory === "tvshows"
+              ? shuffleArray(tvFeaturedPool)
+              : uniqueByKey([
+                  ...mixBalancedRandom(topTvPopular, topLatestMovies),
+                  ...mixBalancedRandom(extraTvPopular, extraLatestMovies),
+                ]);
+        const initialSelection = rankedSelection.slice(0, INITIAL_DETAIL_BATCH);
+        const remainingSelection = rankedSelection.slice(INITIAL_DETAIL_BATCH);
 
         const initialDetails = await fetchDetails(initialSelection);
         const initialFeatured: FeaturedMedia[] = initialDetails.map(
           (item, index) => ({
             ...item,
+            source: initialSelection[index].source,
             type: initialSelection[index].type,
           }),
         );
@@ -513,6 +488,7 @@ export function FeaturedCarousel({
         const allSelections = [...initialSelection, ...remainingSelection];
         const featured: FeaturedMedia[] = allDetails.map((item, index) => ({
           ...item,
+          source: allSelections[index].source,
           type: allSelections[index].type,
         }));
 
@@ -538,7 +514,7 @@ export function FeaturedCarousel({
     return () => {
       isCancelled = true;
     };
-  }, [formattedLanguage, isRestoring, onInitialContentReady]);
+  }, [forcedCategory, formattedLanguage, isRestoring, onInitialContentReady]);
 
   const handlePrevSlide = () => {
     setContentOpacity(0);
@@ -727,31 +703,36 @@ export function FeaturedCarousel({
           searchClasses,
         )}
       >
-        {media.map((item, index) => (
-          <div
-            key={`${item.type}-${item.id}`}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <LazyImage
-              src={
-                shouldLoadSlideImage(index, currentIndex, media.length)
-                  ? `https://image.tmdb.org/t/p/original${item.backdrop_path}`
-                  : undefined
-              }
-              alt={item.title || item.name || ""}
-              className="absolute inset-0 w-full h-full object-cover object-top"
-              loading={index === currentIndex ? "eager" : "lazy"}
-              style={{
-                maskImage:
-                  "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
-                WebkitMaskImage:
-                  "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
-              }}
-            />
-          </div>
-        ))}
+        {media.map((item, index) => {
+          const imagePath = getSlideImagePath(item);
+
+          return (
+            <div
+              key={`${item.type}-${item.id}`}
+              className={`absolute inset-0 transition-opacity duration-1000 ${
+                index === currentIndex ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <LazyImage
+                src={
+                  shouldLoadSlideImage(index, currentIndex, media.length) &&
+                  imagePath
+                    ? `https://image.tmdb.org/t/p/original${imagePath}`
+                    : undefined
+                }
+                alt={item.title || item.name || ""}
+                className="absolute inset-0 w-full h-full object-cover object-top"
+                loading={index === currentIndex ? "eager" : "lazy"}
+                style={{
+                  maskImage:
+                    "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+                  WebkitMaskImage:
+                    "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+                }}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {/* Navigation Buttons */}
