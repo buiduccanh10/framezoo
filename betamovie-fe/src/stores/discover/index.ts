@@ -26,7 +26,7 @@ interface DiscoverState {
 export const useDiscoverStore = create<DiscoverState>()(
   persist(
     (set) => ({
-      selectedCategory: "movies",
+      selectedCategory: "tvshows",
       lastView: null,
       setSelectedCategory: (category) => set({ selectedCategory: category }),
       setLastView: (view) => set({ lastView: view }),
@@ -34,6 +34,23 @@ export const useDiscoverStore = create<DiscoverState>()(
     }),
     {
       name: "__MW::discover",
+      version: 1,
+      migrate: (persistedState: unknown, version: number) => {
+        if (!persistedState || typeof persistedState !== "object") {
+          return persistedState;
+        }
+
+        const state = persistedState as Partial<DiscoverState>;
+
+        if (version < 1 && state.selectedCategory === "movies") {
+          return {
+            ...state,
+            selectedCategory: "tvshows",
+          };
+        }
+
+        return state;
+      },
     },
   ),
 );
