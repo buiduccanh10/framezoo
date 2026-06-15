@@ -10,7 +10,10 @@ import {
 } from "react-router-dom";
 
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
-import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
+import {
+  decodeTMDBId,
+  generateQuickSearchMediaUrl,
+} from "@/backend/metadata/tmdb";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
@@ -33,7 +36,10 @@ import { RegisterPage } from "@/pages/Register";
 import { WatchHistory } from "@/pages/watchHistory/WatchHistory";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
-import { useClearModalsOnNavigation } from "@/stores/interface/overlayStack";
+import {
+  useClearModalsOnNavigation,
+  useOverlayStack,
+} from "@/stores/interface/overlayStack";
 import { LanguageProvider } from "@/stores/language";
 
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
@@ -97,6 +103,35 @@ function App() {
   useOnlineListener();
   useGlobalKeyboardEvents();
   useClearModalsOnNavigation();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const showModal = useOverlayStack((s) => s.showModal);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const detailParam = searchParams.get("detail");
+    if (detailParam) {
+      const decoded = decodeTMDBId(detailParam);
+      if (decoded) {
+        showModal("details", {
+          id: Number(decoded.id),
+          type: decoded.type === "movie" ? "movie" : "show",
+        });
+
+        // Remove the query parameter from URL to keep it clean
+        searchParams.delete("detail");
+        const newSearch = searchParams.toString();
+        navigate(
+          {
+            pathname: location.pathname,
+            search: newSearch ? `?${newSearch}` : "",
+          },
+          { replace: true },
+        );
+      }
+    }
+  }, [location.search, location.pathname, navigate, showModal]);
   const maintenance = false; // Shows maintance page
   const [showDowntime, setShowDowntime] = useState(maintenance);
 

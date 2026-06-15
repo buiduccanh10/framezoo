@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
 import { BackendSelector } from "@/components/form/BackendSelector";
@@ -17,8 +17,12 @@ import { useAuthStore } from "@/stores/auth";
 import { usePreviewThemeStore } from "@/stores/theme";
 
 export function LoginPage() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const state = location.state as
+    | { from?: { pathname: string; search?: string; hash?: string } }
+    | undefined;
   const setPreviewTheme = usePreviewThemeStore((s) => s.setPreviewTheme);
   const setBackendUrl = useAuthStore((s) => s.setBackendUrl);
   const config = conf();
@@ -96,7 +100,10 @@ export function LoginPage() {
       ) : (
         <LoginFormPart
           onLogin={() => {
-            navigate("/");
+            const destination = state?.from
+              ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
+              : "/";
+            navigate(destination, { replace: true });
           }}
         />
       )}
