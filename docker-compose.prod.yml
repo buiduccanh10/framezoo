@@ -1,8 +1,97 @@
 services:
-  pstream-frontend:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$PG_USER -d $$PG_DB']
+      interval: 5s
+      retries: 10
+      timeout: 2s
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DB}
+    env_file:
+      - ${ENV_FILE_PATH:-.env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - betamovie-prod-network
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - betamovie-prod-network
+    volumes:
+      - redis-data:/data
+
+  preview-service:
+    build:
+      context: ./betamovie-be/preview-service
+    restart: always
+    environment:
+      PORT: 3100
+      PREVIEW_DATA_DIR: /data/previews
+      PREVIEW_INTERVAL_SECONDS: ${PREVIEW_INTERVAL_SECONDS:-10}
+      PREVIEW_FRAME_WIDTH: ${PREVIEW_FRAME_WIDTH:-320}
+      PREVIEW_TILE_COLS: ${PREVIEW_TILE_COLS:-5}
+      PREVIEW_TILE_ROWS: ${PREVIEW_TILE_ROWS:-5}
+      PREVIEW_MAX_FRAMES: ${PREVIEW_MAX_FRAMES:-48}
+      PREVIEW_FFMPEG_CONCURRENCY: ${PREVIEW_FFMPEG_CONCURRENCY:-4}
+      PREVIEW_COMMAND_TIMEOUT_MS: ${PREVIEW_COMMAND_TIMEOUT_MS:-90000}
+    volumes:
+      - preview-data:/data/previews
+    networks:
+      - betamovie-prod-network
+
+  betamovie-be:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: betamovie-be/Dockerfile
+    restart: always
+    env_file:
+      - ${ENV_FILE_PATH:-.env}
+    environment:
+      DATABASE_URL: ${DATABASE_URL_DOCKER}
+      META_NAME: ${META_NAME}
+      META_DESCRIPTION: ${META_DESCRIPTION}
+      CRYPTO_SECRET: ${CRYPTO_SECRET}
+      TMDB_API_KEY: ${TMDB_API_KEY}
+      CAPTCHA: ${CAPTCHA}
+      CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
+      NODE_ENV: ${NODE_ENV:-production}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      VIRTUAL_HOST: backend.alphaflix.io.vn
+      VIRTUAL_PORT: 3000
+      VIRTUAL_PROTO: http
+      VIRTUAL_PATH: /
+      LETSENCRYPT_HOST: backend.alphaflix.io.vn
+      LETSENCRYPT_EMAIL: buiduccanh10@gmail.com
+      NGINX_PROXY_READ_TIMEOUT: 30s
+      NGINX_PROXY_CONNECT_TIMEOUT: 10s
+      NGINX_PROXY_SEND_TIMEOUT: 30s
+      PREVIEW_SERVICE_URL: http://preview-service:3100
+      PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      preview-service:
+        condition: service_started
+    networks:
+      - betamovie-prod-network
+      - betakiot_proxy_network
+
+  betamovie-fe:
+    build:
+      context: .
+      dockerfile: betamovie-fe/Dockerfile
       args:
         BACKEND_URL: ${VITE_BACKEND_URL}
         CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
@@ -14,7 +103,7 @@ services:
         WYZIE_API_KEY: ${VITE_WYZIE_API_KEY}
         SUBSOURCE_API_KEY: ${VITE_SUBSOURCE_API_KEY}
         ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
-    hostname: pstream-frontend
+    hostname: betamovie-fe
     expose:
       - '80'
     ports:
@@ -31,14 +120,24 @@ services:
       - NGINX_PROXY_SEND_TIMEOUT=30s
     env_file:
       - ${ENV_FILE_PATH:-.env}
+    depends_on:
+      betamovie-be:
+        condition: service_started
     networks:
-      - pstream-prod-network
+      - betamovie-prod-network
       - betakiot_proxy_network
     restart: always
 
-
 networks:
-  pstream-prod-network:
+  betamovie-prod-network:
     driver: bridge
   betakiot_proxy_network:
     external: true
+
+volumes:
+  postgres-data:
+    name: betamovie_backend_postgres-data
+  redis-data:
+    name: betamovie_backend_redis-data
+  preview-data:
+    name: betamovie_backend_preview-data

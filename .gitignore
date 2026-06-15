@@ -2,16 +2,30 @@
 
 # dependencies
 node_modules
+.pnpm-store
 /.pnp
 .pnp.js
 
 # testing
 /coverage
+/test-results
 
 # production
 /dist
 dev-dist
 /stats.html
+betamovie-fe/dist
+betamovie-fe/dev-dist
+betamovie-fe/stats.html
+betamovie-be/dist
+betamovie-be/.data
+betamovie-be/.nitro
+betamovie-be/.output
+betamovie-be/generated
+betamovie-be/.metrics.json
+betamovie-be/.metrics_daily.json
+betamovie-be/.metrics_weekly.json
+betamovie-be/.metrics_monthly.json
 
 # misc
 .DS_Store
@@ -19,6 +33,12 @@ dev-dist
 .env.development.local
 .env.test.local
 .env.production.local
+betamovie-fe/.env.local
+betamovie-fe/.env.development.local
+betamovie-fe/.env.test.local
+betamovie-fe/.env.production.local
+betamovie-be/.env
+betamovie-be/.DS_Store
 
 npm-debug.log*
 
