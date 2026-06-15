@@ -228,7 +228,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       data.title,
     );
     const middlePart = conf().NORMAL_ROUTER ? "" : "/#";
-    const shareUrl = `${window.location.origin}${middlePart}/media/${urlId}`;
+    const shareUrl = `${window.location.origin}${middlePart}/discover?detail=${urlId}`;
 
     // Check if the device is iOS and share API is available
     if (/iPad|iPhone|iPod/i.test(navigator.userAgent) && navigator.share) {
