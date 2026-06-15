@@ -1,3 +1,8 @@
+import {
+  createHttpStatusError,
+  getAuthHeaders,
+  withAuthRetry,
+} from "@/backend/accounts/auth";
 import { AccountWithToken } from "@/stores/auth";
 
 interface PlayerState {
@@ -71,6 +76,32 @@ interface RoomStatusesResponse {
   >;
 }
 
+async function fetchPlayerStatusResponse(
+  backendUrl: string,
+  account: AccountWithToken | null,
+  input: RequestInfo | URL,
+  init?: RequestInit,
+) {
+  return withAuthRetry(backendUrl, account, async (token) => {
+    const headers = new Headers(init?.headers);
+    Object.entries(getAuthHeaders(token)).forEach(([key, value]) => {
+      headers.set(key, value);
+    });
+
+    const response = await fetch(input, {
+      ...init,
+      credentials: "include",
+      headers,
+    });
+
+    if (!response.ok) {
+      throw createHttpStatusError(response.status, response.statusText);
+    }
+
+    return response;
+  });
+}
+
 /**
  * Send player status update to the backend
  */
@@ -83,19 +114,18 @@ export async function sendPlayerStatus(
     throw new Error("Backend URL not set");
   }
 
-  const response = await fetch(`${backendUrl}/api/player/status`, {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(account?.token ? { Authorization: `Bearer ${account.token}` } : {}),
+  const response = await fetchPlayerStatusResponse(
+    backendUrl,
+    account,
+    `${backendUrl}/api/player/status`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to send player status: ${response.statusText}`);
-  }
+  );
 
   return response.json();
 }
@@ -113,21 +143,13 @@ export async function getUserPlayerStatus(
     throw new Error("Backend URL not set");
   }
 
-  const response = await fetch(
+  const response = await fetchPlayerStatusResponse(
+    backendUrl,
+    account,
     `${backendUrl}/api/player/status?userId=${encodeURIComponent(
       userId,
     )}&roomCode=${encodeURIComponent(roomCode)}`,
-    {
-      credentials: "include",
-      headers: account?.token
-        ? { Authorization: `Bearer ${account.token}` }
-        : {},
-    },
   );
-
-  if (!response.ok) {
-    throw new Error(`Failed to get user player status: ${response.statusText}`);
-  }
 
   return response.json();
 }
@@ -144,19 +166,11 @@ export async function getRoomStatuses(
     throw new Error("Backend URL not set");
   }
 
-  const response = await fetch(
+  const response = await fetchPlayerStatusResponse(
+    backendUrl,
+    account,
     `${backendUrl}/api/player/status?roomCode=${encodeURIComponent(roomCode)}`,
-    {
-      credentials: "include",
-      headers: account?.token
-        ? { Authorization: `Bearer ${account.token}` }
-        : {},
-    },
   );
-
-  if (!response.ok) {
-    throw new Error(`Failed to get room statuses: ${response.statusText}`);
-  }
 
   return response.json();
 }

@@ -32,6 +32,11 @@ export interface LoginResponse {
   oauth?: OAuthTokenResponse;
 }
 
+type RetryableAccount = Pick<
+  AccountWithToken,
+  "sessionId" | "userId" | "token"
+>;
+
 let tokenRefreshInFlight: Promise<string | null> | null = null;
 
 export function normalizeAccessToken(
@@ -55,9 +60,31 @@ export function isAuthErrorStatus(status?: number): boolean {
   return status === 400 || status === 401 || status === 403;
 }
 
+export function createHttpStatusError(status: number, statusText?: string) {
+  const error = new Error(
+    statusText || `Request failed with status ${status}`,
+  ) as Error & { status: number };
+  error.status = status;
+  return error;
+}
+
 function getErrorStatus(error: unknown): number | undefined {
   const anyError = error as any;
   return anyError?.status ?? anyError?.statusCode ?? anyError?.response?.status;
+}
+
+function isMatchingAccount(
+  currentAccount: AccountWithToken,
+  account?: RetryableAccount | null,
+) {
+  if (!account) {
+    return true;
+  }
+
+  return (
+    currentAccount.userId === account.userId &&
+    currentAccount.sessionId === account.sessionId
+  );
 }
 
 export async function refreshOAuthToken(
@@ -75,7 +102,7 @@ export async function refreshOAuthToken(
 
 export async function refreshAccessTokenForAccount(
   url: string,
-  account: AccountWithToken,
+  account?: RetryableAccount | null,
 ): Promise<string | null> {
   if (!tokenRefreshInFlight) {
     tokenRefreshInFlight = (async () => {
@@ -85,11 +112,7 @@ export async function refreshAccessTokenForAccount(
         if (!accessToken) return null;
 
         const { account: currentAccount, setAccount } = useAuthStore.getState();
-        if (
-          currentAccount &&
-          currentAccount.userId === account.userId &&
-          currentAccount.sessionId === account.sessionId
-        ) {
+        if (currentAccount && isMatchingAccount(currentAccount, account)) {
           setAccount({
             ...currentAccount,
             token: accessToken,
@@ -110,11 +133,11 @@ export async function refreshAccessTokenForAccount(
 
 export async function withAuthRetry<T>(
   url: string,
-  account: AccountWithToken,
+  account: RetryableAccount | null | undefined,
   request: (token?: string) => Promise<T>,
 ): Promise<T> {
   try {
-    return await request(account.token);
+    return await request(account?.token);
   } catch (error) {
     if (!isAuthErrorStatus(getErrorStatus(error))) {
       throw error;

@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { getAuthHeaders } from "@/backend/accounts/auth";
+import { getAuthHeaders, withAuthRetry } from "@/backend/accounts/auth";
 import { AccountWithToken } from "@/stores/auth";
 
 import { BookmarkInput } from "./bookmarks";
@@ -13,13 +13,15 @@ export function importProgress(
   account: AccountWithToken,
   progressItems: ProgressInput[],
 ) {
-  return ofetch<void>(`/users/${account.userId}/progress/import`, {
-    method: "PUT",
-    credentials: "include",
-    body: progressItems,
-    baseURL: url,
-    headers: getAuthHeaders(account.token),
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<void>(`/users/${account.userId}/progress/import`, {
+      method: "PUT",
+      credentials: "include",
+      body: progressItems,
+      baseURL: url,
+      headers: getAuthHeaders(token),
+    }),
+  );
 }
 
 export function importBookmarks(
@@ -27,13 +29,15 @@ export function importBookmarks(
   account: AccountWithToken,
   bookmarks: BookmarkInput[],
 ) {
-  return ofetch<void>(`/users/${account.userId}/bookmarks`, {
-    method: "PUT",
-    credentials: "include",
-    body: bookmarks,
-    baseURL: url,
-    headers: getAuthHeaders(account.token),
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<void>(`/users/${account.userId}/bookmarks`, {
+      method: "PUT",
+      credentials: "include",
+      body: bookmarks,
+      baseURL: url,
+      headers: getAuthHeaders(token),
+    }),
+  );
 }
 
 export function importGroupOrder(
@@ -41,13 +45,15 @@ export function importGroupOrder(
   account: AccountWithToken,
   groupOrder: string[],
 ) {
-  return ofetch<void>(`/users/${account.userId}/group-order`, {
-    method: "PUT",
-    credentials: "include",
-    body: groupOrder,
-    baseURL: url,
-    headers: getAuthHeaders(account.token),
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<void>(`/users/${account.userId}/group-order`, {
+      method: "PUT",
+      credentials: "include",
+      body: groupOrder,
+      baseURL: url,
+      headers: getAuthHeaders(token),
+    }),
+  );
 }
 
 export function importWatchHistory(
@@ -55,13 +61,15 @@ export function importWatchHistory(
   account: AccountWithToken,
   watchHistoryItems: WatchHistoryInput[],
 ) {
-  return ofetch<void>(`/users/${account.userId}/watch-history/import`, {
-    method: "PUT",
-    credentials: "include",
-    body: watchHistoryItems,
-    baseURL: url,
-    headers: getAuthHeaders(account.token),
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<void>(`/users/${account.userId}/watch-history/import`, {
+      method: "PUT",
+      credentials: "include",
+      body: watchHistoryItems,
+      baseURL: url,
+      headers: getAuthHeaders(token),
+    }),
+  );
 }
 
 export function importSettings(
@@ -69,11 +77,13 @@ export function importSettings(
   account: AccountWithToken,
   settings: SettingsInput,
 ) {
-  return ofetch<void>(`/users/${account.userId}/settings`, {
-    method: "PUT",
-    credentials: "include",
-    body: settings,
-    baseURL: url,
-    headers: getAuthHeaders(account.token),
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<void>(`/users/${account.userId}/settings`, {
+      method: "PUT",
+      credentials: "include",
+      body: settings,
+      baseURL: url,
+      headers: getAuthHeaders(token),
+    }),
+  );
 }
