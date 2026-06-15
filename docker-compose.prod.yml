@@ -136,5 +136,8 @@ networks:
 
 volumes:
   postgres-data:
+    name: betamovie_backend_postgres-data
   redis-data:
+    name: betamovie_backend_redis-data
   preview-data:
+    name: betamovie_backend_preview-data
