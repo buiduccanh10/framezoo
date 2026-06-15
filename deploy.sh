@@ -1,10 +1,13 @@
 #!/usr/bin/env sh
 set -eu
 
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+cd "$SCRIPT_DIR"
+
 ACTION="${1:-all}"
 COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
 ENV_FILE_PATH="${ENV_FILE_PATH:-.env}"
-PROJECT_NAME="${PROJECT_NAME:-$(basename "$(pwd)")}"
+PROJECT_NAME="${PROJECT_NAME:-$(basename "$SCRIPT_DIR")}"
 
 if [ ! -f "$COMPOSE_FILE" ]; then
   echo "Compose file not found: $COMPOSE_FILE"
@@ -22,6 +25,9 @@ compose() {
 
 case "$ACTION" in
   all)
+    echo "Deploy root: $SCRIPT_DIR"
+    echo "Compose file: $COMPOSE_FILE"
+    echo "Project name: $PROJECT_NAME"
     compose pull --ignore-pull-failures || true
     compose build --pull
     compose up -d --remove-orphans

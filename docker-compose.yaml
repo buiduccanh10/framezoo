@@ -1,23 +1,114 @@
-version: "3.8"
-
 services:
-  movieweb:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$PG_USER -d $$PG_DB']
+      interval: 5s
+      retries: 10
+      timeout: 2s
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DB}
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - betamovie-network
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    networks:
+      - betamovie-network
+    volumes:
+      - redis-data:/data
+
+  preview-service:
+    build:
+      context: ./betamovie-be/preview-service
+    restart: unless-stopped
+    environment:
+      PORT: 3100
+      PREVIEW_DATA_DIR: /data/previews
+      PREVIEW_INTERVAL_SECONDS: ${PREVIEW_INTERVAL_SECONDS:-10}
+      PREVIEW_FRAME_WIDTH: ${PREVIEW_FRAME_WIDTH:-320}
+      PREVIEW_TILE_COLS: ${PREVIEW_TILE_COLS:-5}
+      PREVIEW_TILE_ROWS: ${PREVIEW_TILE_ROWS:-5}
+      PREVIEW_MAX_FRAMES: ${PREVIEW_MAX_FRAMES:-48}
+      PREVIEW_FFMPEG_CONCURRENCY: ${PREVIEW_FFMPEG_CONCURRENCY:-4}
+      PREVIEW_COMMAND_TIMEOUT_MS: ${PREVIEW_COMMAND_TIMEOUT_MS:-90000}
+    volumes:
+      - preview-data:/data/previews
+    networks:
+      - betamovie-network
+
+  betamovie-be:
     build:
       context: .
-      # args:
-      #   PWA_ENABLED: "false"
-      #   GA_ID: ""
-      #   APP_DOMAIN: ""
-      #   OPENSEARCH_ENABLED: "false"
-      #   CORS_PROXY_URL: ""
-      #   DMCA_EMAIL: ""
-      #   NORMAL_ROUTER: "false"
-      #   BACKEND_URL: ""
-      #   HAS_ONBOARDING: "false"
-      #   ONBOARDING_CHROME_EXTENSION_INSTALL_LINK: ""
-      #   ONBOARDING_PROXY_INSTALL_LINK: ""
-      #   DISALLOWED_IDS: ""
-      #   CDN_REPLACEMENTS: ""
-    ports:
-      - "80:80"
+      dockerfile: betamovie-be/Dockerfile
     restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL_DOCKER:?database URL required}
+      META_NAME: ${META_NAME}
+      META_DESCRIPTION: ${META_DESCRIPTION}
+      CRYPTO_SECRET: ${CRYPTO_SECRET:?crypto secret required}
+      TMDB_API_KEY: ${TMDB_API_KEY:?TMDB API key required}
+      CAPTCHA: ${CAPTCHA}
+      CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
+      NODE_ENV: ${NODE_ENV:-production}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      PREVIEW_SERVICE_URL: http://preview-service:3100
+      PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      preview-service:
+        condition: service_started
+    networks:
+      - betamovie-network
+
+  betamovie-fe:
+    build:
+      context: .
+      dockerfile: betamovie-fe/Dockerfile
+      args:
+        BACKEND_URL: ${VITE_BACKEND_URL:-http://localhost:3000}
+        CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
+        APP_DOMAIN: ${VITE_APP_DOMAIN:-http://localhost}
+        PWA_ENABLED: ${VITE_PWA_ENABLED:-false}
+        OPENSEARCH_ENABLED: ${VITE_OPENSEARCH_ENABLED:-false}
+        TMDB_EMBED_API_URL: ${VITE_TMDB_EMBED_API_URL:-/tmdb-api}
+        TIDB_API_KEY: ${VITE_TIDB_API_KEY}
+        WYZIE_API_KEY: ${VITE_WYZIE_API_KEY}
+        SUBSOURCE_API_KEY: ${VITE_SUBSOURCE_API_KEY}
+        ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
+    ports:
+      - '80:80'
+    depends_on:
+      betamovie-be:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - betamovie-network
+
+networks:
+  betamovie-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  preview-data:

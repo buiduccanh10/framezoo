@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "user_group_order" ALTER COLUMN "updated_at" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "watch_history" ALTER COLUMN "duration" SET DATA TYPE DOUBLE PRECISION,
+ALTER COLUMN "watched" SET DATA TYPE DOUBLE PRECISION;
