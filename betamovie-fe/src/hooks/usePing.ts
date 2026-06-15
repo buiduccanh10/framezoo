@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
 
+import {
+  createHttpStatusError,
+  getAuthHeaders,
+  withAuthRetry,
+} from "@/backend/accounts/auth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
 import { useBannerStore } from "@/stores/banner";
@@ -36,14 +41,29 @@ export function useOnlineListener() {
       if (abort) abort.abort();
       abort = new AbortController();
       const signal = abort.signal;
-      fetch(pingUrl, {
-        signal,
-        credentials: "include",
-        cache: "no-store",
-        headers: account?.token
-          ? { authorization: `Bearer ${account.token}` }
-          : undefined,
-      })
+      (isAuthenticated
+        ? withAuthRetry(backendBase, account, async (token) => {
+            const response = await fetch(pingUrl, {
+              signal,
+              credentials: "include",
+              cache: "no-store",
+              headers: getAuthHeaders(token),
+            });
+
+            if (!response.ok) {
+              throw createHttpStatusError(response.status, response.statusText);
+            }
+          })
+        : fetch(pingUrl, {
+            signal,
+            credentials: "include",
+            cache: "no-store",
+          }).then((response) => {
+            if (!response.ok) {
+              throw createHttpStatusError(response.status, response.statusText);
+            }
+          })
+      )
         .then(() => {
           updateOnline(true);
           ref.current = true;

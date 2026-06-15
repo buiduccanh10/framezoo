@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { getAuthHeaders } from "@/backend/accounts/auth";
+import { getAuthHeaders, withAuthRetry } from "@/backend/accounts/auth";
 import { AccountWithToken } from "@/stores/auth";
 import { KeyboardShortcuts } from "@/utils/keyboardShortcuts";
 
@@ -95,20 +95,24 @@ export function updateSettings(
   account: AccountWithToken,
   settings: SettingsInput,
 ) {
-  return ofetch<SettingsResponse>(`/users/${account.userId}/settings`, {
-    method: "PUT",
-    credentials: "include",
-    body: settings,
-    baseURL: url,
-    headers: getAuthHeaders(account.token),
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<SettingsResponse>(`/users/${account.userId}/settings`, {
+      method: "PUT",
+      credentials: "include",
+      body: settings,
+      baseURL: url,
+      headers: getAuthHeaders(token),
+    }),
+  );
 }
 
 export function getSettings(url: string, account: AccountWithToken) {
-  return ofetch<SettingsResponse>(`/users/${account.userId}/settings`, {
-    method: "GET",
-    credentials: "include",
-    baseURL: url,
-    headers: getAuthHeaders(account.token),
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<SettingsResponse>(`/users/${account.userId}/settings`, {
+      method: "GET",
+      credentials: "include",
+      baseURL: url,
+      headers: getAuthHeaders(token),
+    }),
+  );
 }

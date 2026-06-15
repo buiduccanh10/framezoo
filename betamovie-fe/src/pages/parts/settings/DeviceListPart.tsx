@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
@@ -31,13 +31,13 @@ export function Device(props: {
 }) {
   const { t } = useTranslation();
   const url = useBackendUrl();
-  const token = useAuthStore((s) => s.account?.token);
+  const account = useAuthStore((s) => s.account);
   const [result, exec] = useAsyncFn(async () => {
-    if (!token) throw new Error("No token present");
+    if (!account) throw new Error("No account present");
     if (!url) throw new Error("No backend set");
-    await Promise.all(props.ids.map((id) => removeSession(url, token, id)));
+    await Promise.all(props.ids.map((id) => removeSession(url, account, id)));
     props.onRemove?.();
-  }, [url, token, props.ids]);
+  }, [url, account, props.ids]);
 
   return (
     <SettingsCard
@@ -86,53 +86,53 @@ export function DeviceListPart(props: {
   const sessions = props.sessions;
   const currentSessionId = useAuthStore((s) => s.account?.sessionId);
 
-  const getDeviceLabel = (
-    session: SessionResponse,
-    deviceSeed: string,
-  ): string => {
-    let decryptedName: string | null = null;
-    try {
-      decryptedName = decryptData(session.device, base64ToBuffer(deviceSeed));
-    } catch (error) {
-      console.warn(
-        `Failed to decrypt device name for session ${session.id}:`,
-        error,
-      );
-    }
+  const getDeviceLabel = useCallback(
+    (session: SessionResponse, deviceSeed: string): string => {
+      let decryptedName: string | null = null;
+      try {
+        decryptedName = decryptData(session.device, base64ToBuffer(deviceSeed));
+      } catch (error) {
+        console.warn(
+          `Failed to decrypt device name for session ${session.id}:`,
+          error,
+        );
+      }
 
-    const ua = session.userAgent ?? "";
-    const isMobile = /Mobile|Android|iPhone|iPad/i.test(ua);
+      const ua = session.userAgent ?? "";
+      const isMobile = /Mobile|Android|iPhone|iPad/i.test(ua);
 
-    let os = "Unknown OS";
-    if (/Windows NT 10\.0/.test(ua)) os = "Windows 10";
-    else if (/Windows NT 11\.0/.test(ua)) os = "Windows 11";
-    else if (/Mac OS X 10[._]\d+/.test(ua) || /Macintosh/.test(ua))
-      os = "macOS";
-    else if (/Android/.test(ua)) os = "Android";
-    else if (/iPhone|iPad|iPod/.test(ua)) os = "iOS";
-    else if (/Linux/.test(ua)) os = "Linux";
+      let os = "Unknown OS";
+      if (/Windows NT 10\.0/.test(ua)) os = "Windows 10";
+      else if (/Windows NT 11\.0/.test(ua)) os = "Windows 11";
+      else if (/Mac OS X 10[._]\d+/.test(ua) || /Macintosh/.test(ua))
+        os = "macOS";
+      else if (/Android/.test(ua)) os = "Android";
+      else if (/iPhone|iPad|iPod/.test(ua)) os = "iOS";
+      else if (/Linux/.test(ua)) os = "Linux";
 
-    let browser = "Browser";
-    if (/Edg\//.test(ua)) browser = "Edge";
-    else if (/OPR\//.test(ua) || /Opera/.test(ua)) browser = "Opera";
-    else if (/Chrome\//.test(ua) && !/Edg\//.test(ua)) browser = "Chrome";
-    else if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) browser = "Safari";
-    else if (/Firefox\//.test(ua)) browser = "Firefox";
+      let browser = "Browser";
+      if (/Edg\//.test(ua)) browser = "Edge";
+      else if (/OPR\//.test(ua) || /Opera/.test(ua)) browser = "Opera";
+      else if (/Chrome\//.test(ua) && !/Edg\//.test(ua)) browser = "Chrome";
+      else if (/Safari\//.test(ua) && !/Chrome\//.test(ua)) browser = "Safari";
+      else if (/Firefox\//.test(ua)) browser = "Firefox";
 
-    const baseLabel = isMobile
-      ? `${browser} · ${os} (mobile)`
-      : `${browser} · ${os}`;
+      const baseLabel = isMobile
+        ? `${browser} · ${os} (mobile)`
+        : `${browser} · ${os}`;
 
-    if (decryptedName && decryptedName !== "Browser") {
-      return `${decryptedName} · ${baseLabel}`;
-    }
+      if (decryptedName && decryptedName !== "Browser") {
+        return `${decryptedName} · ${baseLabel}`;
+      }
 
-    if (!ua && !decryptedName) {
-      return t("settings.account.devices.unknownDevice");
-    }
+      if (!ua && !decryptedName) {
+        return t("settings.account.devices.unknownDevice");
+      }
 
-    return baseLabel;
-  };
+      return baseLabel;
+    },
+    [t],
+  );
 
   const deviceListSorted = useMemo(() => {
     if (!seed) return [];
@@ -180,7 +180,7 @@ export function DeviceListPart(props: {
       return a.name.localeCompare(b.name);
     });
     return list;
-  }, [seed, sessions, currentSessionId, t]);
+  }, [seed, sessions, currentSessionId, getDeviceLabel]);
   if (!seed) return null;
 
   return (

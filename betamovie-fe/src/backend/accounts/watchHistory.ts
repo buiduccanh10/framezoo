@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { getAuthHeaders } from "@/backend/accounts/auth";
+import { getAuthHeaders, withAuthRetry } from "@/backend/accounts/auth";
 import { AccountWithToken } from "@/stores/auth";
 import {
   WatchHistoryItem,
@@ -89,15 +89,17 @@ export async function setWatchHistory(
   account: AccountWithToken,
   input: WatchHistoryInput,
 ) {
-  return ofetch<WatchHistoryResponse>(
-    `/users/${account.userId}/watch-history/${input.tmdbId}`,
-    {
-      method: "PUT",
-      credentials: "include",
-      headers: getAuthHeaders(account.token),
-      baseURL: url,
-      body: input,
-    },
+  return withAuthRetry(url, account, (token) =>
+    ofetch<WatchHistoryResponse>(
+      `/users/${account.userId}/watch-history/${input.tmdbId}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: getAuthHeaders(token),
+        baseURL: url,
+        body: input,
+      },
+    ),
   );
 }
 
@@ -108,14 +110,16 @@ export async function removeWatchHistory(
   episodeId?: string,
   seasonId?: string,
 ) {
-  await ofetch(`/users/${account.userId}/watch-history/${id}`, {
-    method: "DELETE",
-    credentials: "include",
-    headers: getAuthHeaders(account.token),
-    baseURL: url,
-    body: {
-      episodeId,
-      seasonId,
-    },
-  });
+  await withAuthRetry(url, account, (token) =>
+    ofetch(`/users/${account.userId}/watch-history/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: getAuthHeaders(token),
+      baseURL: url,
+      body: {
+        episodeId,
+        seasonId,
+      },
+    }),
+  );
 }

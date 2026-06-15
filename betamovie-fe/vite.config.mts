@@ -110,7 +110,10 @@ export default defineConfig(({ mode }) => {
         overlay: {
           position: "tr",
         },
-        typescript: true,
+        typescript: {
+          root: __dirname,
+          tsconfigPath: "tsconfig.json",
+        },
         eslint: {
           useFlatConfig: true,
           lintCommand: 'eslint "src/**/*.{ts,tsx}"',

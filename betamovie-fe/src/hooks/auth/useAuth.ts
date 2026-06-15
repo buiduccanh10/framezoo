@@ -167,11 +167,7 @@ export function useAuth() {
   const logout = useCallback(async () => {
     if (!currentAccount || !backendUrl) return;
     try {
-      await removeSession(
-        backendUrl,
-        currentAccount.token,
-        currentAccount.sessionId,
-      );
+      await removeSession(backendUrl, currentAccount, currentAccount.sessionId);
     } catch {
       // we dont care about failing to delete session
     }
@@ -181,11 +177,7 @@ export function useAuth() {
   const disconnectFromBackend = useCallback(async () => {
     if (!currentAccount || !backendUrl) return;
     try {
-      await removeSession(
-        backendUrl,
-        currentAccount.token,
-        currentAccount.sessionId,
-      );
+      await removeSession(backendUrl, currentAccount, currentAccount.sessionId);
     } catch {
       // we dont care about failing to delete session
     }

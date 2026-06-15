@@ -1,6 +1,6 @@
 import { ofetch } from "ofetch";
 
-import { getAuthHeaders } from "@/backend/accounts/auth";
+import { getAuthHeaders, withAuthRetry } from "@/backend/accounts/auth";
 import { BookmarkResponse } from "@/backend/accounts/user";
 import { AccountWithToken } from "@/stores/auth";
 import { BookmarkMediaItem } from "@/stores/bookmarks";
@@ -41,15 +41,17 @@ export async function addBookmark(
   account: AccountWithToken,
   input: BookmarkInput,
 ) {
-  return ofetch<BookmarkResponse>(
-    `/users/${account.userId}/bookmarks/${input.tmdbId}`,
-    {
-      method: "POST",
-      credentials: "include",
-      headers: getAuthHeaders(account.token),
-      baseURL: url,
-      body: input,
-    },
+  return withAuthRetry(url, account, (token) =>
+    ofetch<BookmarkResponse>(
+      `/users/${account.userId}/bookmarks/${input.tmdbId}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: getAuthHeaders(token),
+        baseURL: url,
+        body: input,
+      },
+    ),
   );
 }
 
@@ -58,13 +60,12 @@ export async function removeBookmark(
   account: AccountWithToken,
   id: string,
 ) {
-  return ofetch<{ tmdbId: string }>(
-    `/users/${account.userId}/bookmarks/${id}`,
-    {
+  return withAuthRetry(url, account, (token) =>
+    ofetch<{ tmdbId: string }>(`/users/${account.userId}/bookmarks/${id}`, {
       method: "DELETE",
       credentials: "include",
-      headers: getAuthHeaders(account.token),
+      headers: getAuthHeaders(token),
       baseURL: url,
-    },
+    }),
   );
 }

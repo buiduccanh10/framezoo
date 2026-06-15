@@ -1,6 +1,10 @@
 import { ofetch } from "ofetch";
 
-import { SessionResponse, getAuthHeaders } from "@/backend/accounts/auth";
+import {
+  SessionResponse,
+  getAuthHeaders,
+  withAuthRetry,
+} from "@/backend/accounts/auth";
 import { AccountWithToken } from "@/stores/auth";
 import { BookmarkMediaItem } from "@/stores/bookmarks";
 import { ProgressMediaItem } from "@/stores/progress";
@@ -199,15 +203,17 @@ export async function editUser(
   account: AccountWithToken,
   object: UserEdit,
 ): Promise<{ user: UserResponse; session: SessionResponse }> {
-  return ofetch<{ user: UserResponse; session: SessionResponse }>(
-    `/users/${account.userId}`,
-    {
-      method: "PATCH",
-      credentials: "include",
-      headers: getAuthHeaders(account.token),
-      body: object,
-      baseURL: url,
-    },
+  return withAuthRetry(url, account, (token) =>
+    ofetch<{ user: UserResponse; session: SessionResponse }>(
+      `/users/${account.userId}`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: getAuthHeaders(token),
+        body: object,
+        baseURL: url,
+      },
+    ),
   );
 }
 
@@ -215,38 +221,43 @@ export async function deleteUser(
   url: string,
   account: AccountWithToken,
 ): Promise<UserResponse> {
-  return ofetch<UserResponse>(`/users/${account.userId}`, {
-    method: "DELETE",
-    credentials: "include",
-    headers: getAuthHeaders(account.token),
-    baseURL: url,
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<UserResponse>(`/users/${account.userId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: getAuthHeaders(token),
+      baseURL: url,
+    }),
+  );
 }
 
 export async function getBookmarks(url: string, account: AccountWithToken) {
-  return ofetch<BookmarkResponse[]>(`/users/${account.userId}/bookmarks`, {
-    credentials: "include",
-    headers: getAuthHeaders(account.token),
-    baseURL: url,
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<BookmarkResponse[]>(`/users/${account.userId}/bookmarks`, {
+      credentials: "include",
+      headers: getAuthHeaders(token),
+      baseURL: url,
+    }),
+  );
 }
 
 export async function getProgress(url: string, account: AccountWithToken) {
-  return ofetch<ProgressResponse[]>(`/users/${account.userId}/progress`, {
-    credentials: "include",
-    headers: getAuthHeaders(account.token),
-    baseURL: url,
-  });
+  return withAuthRetry(url, account, (token) =>
+    ofetch<ProgressResponse[]>(`/users/${account.userId}/progress`, {
+      credentials: "include",
+      headers: getAuthHeaders(token),
+      baseURL: url,
+    }),
+  );
 }
 
 export async function getWatchHistory(url: string, account: AccountWithToken) {
-  return ofetch<WatchHistoryResponse[]>(
-    `/users/${account.userId}/watch-history`,
-    {
+  return withAuthRetry(url, account, (token) =>
+    ofetch<WatchHistoryResponse[]>(`/users/${account.userId}/watch-history`, {
       credentials: "include",
-      headers: getAuthHeaders(account.token),
+      headers: getAuthHeaders(token),
       baseURL: url,
-    },
+    }),
   );
 }
 export async function checkUserExists(
