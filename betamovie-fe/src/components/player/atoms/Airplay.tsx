@@ -3,7 +3,12 @@ import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { usePlayerStore } from "@/stores/player/store";
 import { isSafari } from "@/utils/detectFeatures";
 
-export function Airplay() {
+interface AirplayProps {
+  iconSizeClass?: string;
+  className?: string;
+}
+
+export function Airplay(props: AirplayProps) {
   const canAirplay = usePlayerStore((s) => s.interface.canAirplay);
   const display = usePlayerStore((s) => s.display);
   const source = usePlayerStore((s) => s.source);
@@ -29,6 +34,8 @@ export function Airplay() {
 
   return (
     <VideoPlayerButton
+      className={props.className}
+      iconSizeClass={props.iconSizeClass}
       onClick={() => display?.startAirplay()}
       icon={Icons.AIRPLAY}
     />

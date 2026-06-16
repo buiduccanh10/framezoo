@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "ต้องมีรหัสคำเชิญ",
     "login": {
       "description": "โปรดป้อนสหัสผ่านของคุณเพื่อเข้าสู่ระบบ",
+      "failedToReachServer": "ไม่สามารถเข้าถึงเซิร์ฟเวอร์",
       "nicknameLabel": "ชื่อเล่น",
       "nicknameNotFound": "ไม่พบชื่อเล่น",
       "nicknamePlaceholder": "ป้อนชื่อเล่นของคุณ",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "วิธีติดตั้ง BetaMovie เป็นแอป:\n\n1. แตะปุ่มแชร์ (สี่เหลี่ยมที่มีลูกศร)\n2. เลือก 'เพิ่มไปที่หน้าจอหลัก'\n3. แตะเพิ่ม"
     },
     "menu": {
+      "accountMenu": "เปิดเมนูบัญชี",
       "desktop": "การตั้งค่าแอพ",
       "logout": "ออกจากระบบ",
       "register": "เชื่อมต่อกับคลาวด์",

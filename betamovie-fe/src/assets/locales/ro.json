@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Codul de invitație este obligatoriu",
     "login": {
       "description": "Vă rugăm să introduceți fraza de acces pentru a vă conecta la contul dvs",
+      "failedToReachServer": "Nu s-a putut ajunge la server",
       "nicknameLabel": "Pseudonim",
       "nicknameNotFound": "Pseudomul nu a fost găsit",
       "nicknamePlaceholder": "Introduceți porecla",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Pentru a instala AlphaFlix ca aplicație:\n\n1. Atingeți butonul Partajare (pătrat cu o săgeată).\n2. Alegeți „Adăugați la ecranul de pornire”.\n3. Atingeți Adăugați."
     },
     "menu": {
+      "accountMenu": "Deschide meniul cont",
       "desktop": "Setările aplicației",
       "logout": "Deconectați-vă",
       "register": "Sincronizare în Cloud",

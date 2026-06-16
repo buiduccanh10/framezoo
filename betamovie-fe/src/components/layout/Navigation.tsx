@@ -199,53 +199,55 @@ export function Navigation(props: NavigationProps) {
       >
         <div className={classNames("fixed left-0 right-0 flex items-center")}>
           <div className="px-7 py-5 relative z-[60] flex flex-1 items-center justify-between">
-            <div className="flex items-center space-x-1.5 ssm:space-x-3 pointer-events-auto">
+            <div className="pointer-events-auto flex items-center gap-3 ssm:gap-4">
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <Link
-                    className="block tabbable rounded-full text-xs ssm:text-base"
+                    className="block shrink-0 tabbable rounded-full text-xs ssm:text-base"
                     to="/discover"
                     onClick={() => window.scrollTo(0, 0)}
                   >
                     <BrandPill clickable header />
                   </Link>
                 )}
-              {!enableLowPerformanceMode &&
-                location.pathname !== "/login" &&
-                location.pathname !== "/register" &&
-                location.pathname !== "/settings" &&
-                (location.pathname === "/discover" ? (
-                  <Link
-                    to="/browse"
-                    onClick={() => window.scrollTo(0, 0)}
-                    className="text-lg text-white tabbable rounded-full backdrop-blur-lg"
-                  >
-                    <IconPatch
-                      icon={Icons.SEARCH}
-                      clickable
-                      downsized
-                      navigation
-                    />
-                  </Link>
-                ) : (
-                  <Link
-                    to="/discover"
-                    onClick={() => window.scrollTo(0, 0)}
-                    className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
-                  >
-                    <IconPatch
-                      icon={Icons.RISING_STAR}
-                      clickable
-                      downsized
-                      navigation
-                    />
-                  </Link>
-                ))}
-              {location.pathname !== "/login" &&
-                location.pathname !== "/settings" &&
-                location.pathname !== "/register" && (
-                  <WatchPartyInputLink triggerVariant="icon" />
-                )}
+              <div className="flex items-center gap-2.5 ssm:gap-3">
+                {!enableLowPerformanceMode &&
+                  location.pathname !== "/login" &&
+                  location.pathname !== "/register" &&
+                  location.pathname !== "/settings" &&
+                  (location.pathname === "/discover" ? (
+                    <Link
+                      to="/browse"
+                      onClick={() => window.scrollTo(0, 0)}
+                      className="shrink-0 text-lg text-white tabbable rounded-full backdrop-blur-lg"
+                    >
+                      <IconPatch
+                        icon={Icons.SEARCH}
+                        clickable
+                        downsized
+                        navigation
+                      />
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/discover"
+                      onClick={() => window.scrollTo(0, 0)}
+                      className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg"
+                    >
+                      <IconPatch
+                        icon={Icons.RISING_STAR}
+                        clickable
+                        downsized
+                        navigation
+                      />
+                    </Link>
+                  ))}
+                {location.pathname !== "/login" &&
+                  location.pathname !== "/settings" &&
+                  location.pathname !== "/register" && (
+                    <WatchPartyInputLink triggerVariant="icon" />
+                  )}
+              </div>
 
               {/* {location.pathname !== "/login" &&
                 location.pathname !== "/settings" &&

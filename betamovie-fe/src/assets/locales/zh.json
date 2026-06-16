@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "需要邀请码",
     "login": {
       "description": "请输入助记词以登录您的账户",
+      "failedToReachServer": "无法到达服务器",
       "nicknameLabel": "昵称",
       "nicknameNotFound": "未找到昵称",
       "nicknamePlaceholder": "输入您的昵称",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "要将 BetaMovie 安装为应用程序：\n\n1. 点击共享按钮（带箭头的方块）。\n2. 选择“添加到主屏幕”。\n3. 点击添加。"
     },
     "menu": {
+      "accountMenu": "开设账户菜单",
       "desktop": "应用程序设置",
       "logout": "登出",
       "register": "同步到云端",

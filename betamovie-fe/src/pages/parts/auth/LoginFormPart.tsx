@@ -34,6 +34,44 @@ export function LoginFormPart(props: LoginFormPartProps) {
   const [nicknameError, setNicknameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
+  const getFriendlyLoginError = (error: unknown): string => {
+    const anyErr = error as any;
+    const status =
+      anyErr?.status ?? anyErr?.statusCode ?? anyErr?.response?.status;
+    const message = String(
+      anyErr?.data?.message ??
+        anyErr?.response?._data?.message ??
+        anyErr?.response?.statusText ??
+        anyErr?.message ??
+        "",
+    ).toLowerCase();
+
+    if (message.includes("no backend url")) {
+      return t("auth.login.noBackendUrl") ?? "No backend URL";
+    }
+
+    if (
+      status === 400 ||
+      status === 401 ||
+      status === 403 ||
+      message.includes("user cannot be found") ||
+      message.includes("invalid signature") ||
+      message.includes("invalid challenge") ||
+      message.includes("challenge code expired") ||
+      message.includes("invalid request body") ||
+      message.includes("unauthorized") ||
+      message.includes("forbidden") ||
+      message.includes("failed to authenticate with passkey") ||
+      message.includes("notallowederror")
+    ) {
+      const validationMessage =
+        t("auth.login.validationError") ?? "Incorrect or incomplete password";
+      return validationMessage;
+    }
+
+    return t("auth.login.failedToReachServer") ?? "Failed to reach server";
+  };
+
   const [passkeyResult, executePasskey] = useAsyncFn(async () => {
     if (!backendUrl) {
       throw new Error(t("auth.login.noBackendUrl") ?? "No backend URL");
@@ -125,6 +163,8 @@ export function LoginFormPart(props: LoginFormPartProps) {
     execute(data);
   };
 
+  const globalError = result.error || passkeyResult.error;
+
   return (
     <LargeCard top={<BrandPill backgroundClass="bg-[#161527]" />}>
       <LargeCardText title={t("auth.login.title")}>
@@ -162,11 +202,9 @@ export function LoginFormPart(props: LoginFormPartProps) {
             </Button>
           </div>
         )}
-        {(result.error || passkeyResult.error) &&
-        !result.loading &&
-        !passkeyResult.loading ? (
+        {globalError && !result.loading && !passkeyResult.loading ? (
           <p className="text-authentication-errorText">
-            {result.error?.message || passkeyResult.error?.message}
+            {getFriendlyLoginError(globalError)}
           </p>
         ) : null}
       </div>

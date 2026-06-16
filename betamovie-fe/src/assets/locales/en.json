@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Invite code is required",
     "login": {
       "description": "Please enter your nickname and password to login to your account",
+      "failedToReachServer": "Failed to reach server",
       "nicknameLabel": "Nickname",
       "nicknameNotFound": "Nickname not found",
       "nicknamePlaceholder": "Enter your nickname",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "To install AlphaFlix as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
     },
     "menu": {
+      "accountMenu": "Open account menu",
       "desktop": "App Settings",
       "logout": "Log out",
       "register": "Sync to Cloud",

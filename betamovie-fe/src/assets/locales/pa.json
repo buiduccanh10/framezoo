@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "ਸੱਦਾ ਕੋਡ ਲੋੜੀਂਦਾ ਹੈ",
     "login": {
       "description": "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਲੌਗਇਨ ਕਰਨ ਲਈ ਆਪਣਾ ਗੁਪਤਕੋਡ ਦਾਖਲ ਕਰੋ",
+      "failedToReachServer": "ਸਰਵਰ ਤੱਕ ਪਹੁੰਚਣ ਵਿੱਚ ਅਸਫਲ",
       "nicknameLabel": "ਉਪਨਾਮ",
       "nicknameNotFound": "ਉਪਨਾਮ ਨਹੀਂ ਮਿਲਿਆ",
       "nicknamePlaceholder": "ਆਪਣਾ ਉਪਨਾਮ ਦਰਜ ਕਰੋ",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "ਇੱਕ ਐਪ ਦੇ ਤੌਰ ਤੇ AlphaFlix ਨੂੰ ਸਥਾਪਿਤ ਕਰਨ ਲਈ:\n\n1. ਸ਼ੇਅਰ ਬਟਨ (ਇੱਕ ਤੀਰ ਨਾਲ ਵਰਗ) 'ਤੇ ਟੈਪ ਕਰੋ।\n2. 'ਐਡ ਟੂ ਹੋਮ ਸਕ੍ਰੀਨ' ਚੁਣੋ।\n3. ਜੋੜੋ 'ਤੇ ਟੈਪ ਕਰੋ।"
     },
     "menu": {
+      "accountMenu": "ਖਾਤਾ ਮੀਨੂ ਖੋਲ੍ਹੋ",
       "desktop": "ਐਪ ਸੈਟਿੰਗਾਂ",
       "logout": "ਲਾੱਗ ਆਊਟ",
       "register": "ਕਲਾਉਡ ਨਾਲ ਸਿੰਕ ਕਰੋ",

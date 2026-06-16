@@ -44,17 +44,46 @@ export function OverlayPortal(props: {
   const close = props.close;
   const zIndex = props.zIndex ?? 999;
 
+  const resolvePortalElement = useCallback(() => {
+    const fullscreenElement =
+      document.fullscreenElement ||
+      (document as Document & { webkitFullscreenElement?: Element | null })
+        .webkitFullscreenElement ||
+      null;
+
+    if (fullscreenElement) {
+      return fullscreenElement;
+    }
+
+    return ref.current?.closest(".popout-location") ?? document.body;
+  }, []);
+
   useEffect(() => {
-    const element = ref.current?.closest(".popout-location");
-    setPortalElement(element ?? document.body);
+    const syncPortalElement = () => {
+      setPortalElement(resolvePortalElement());
+    };
+
+    syncPortalElement();
+    document.addEventListener("fullscreenchange", syncPortalElement);
+    document.addEventListener(
+      "webkitfullscreenchange",
+      syncPortalElement as EventListener,
+    );
 
     // Ensure DOM is ready before enabling focus trap
     const timer = setTimeout(() => {
       setIsReady(true);
     }, 100); // Increased delay to ensure DOM is fully rendered
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("fullscreenchange", syncPortalElement);
+      document.removeEventListener(
+        "webkitfullscreenchange",
+        syncPortalElement as EventListener,
+      );
+    };
+  }, [resolvePortalElement]);
 
   // Add global error handler for unhandled promise rejections
   useEffect(() => {

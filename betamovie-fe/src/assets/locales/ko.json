@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "초대 코드가 필요합니다",
     "login": {
       "description": "계정에 로그인하기위해 암호문을 입력하세요",
+      "failedToReachServer": "서버에 연결하지 못했습니다.",
       "nicknameLabel": "별명",
       "nicknameNotFound": "닉네임을 찾을 수 없습니다",
       "nicknamePlaceholder": "닉네임을 입력하세요",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "AlphaFlix를 앱으로 설치하려면:\n\n1. 공유 버튼(화살표가 있는 사각형)을 탭합니다.\n2. '홈 화면에 추가'를 선택하세요.\n3. 추가를 탭합니다."
     },
     "menu": {
+      "accountMenu": "계정 메뉴 열기",
       "desktop": "앱 설정",
       "logout": "로그아웃",
       "register": "클라우드 동기화",
