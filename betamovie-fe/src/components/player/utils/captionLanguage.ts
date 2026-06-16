@@ -12,14 +12,17 @@ function sanitizeLanguageLabel(value: string): string {
     .toLowerCase()
     .replaceAll("_", "-")
     .replace(/\([^)]*\)/g, " ")
-    .replace(/\s*hi\d*$/i, "")
+    .replace(/(?:[\s.-]+hi\d*)$/i, "")
     .replace(/\d+$/, "")
     .replace(/\s+/g, " ")
     .trim();
 }
 
 export function canonicalizeLanguageCode(value: string): string {
-  const normalized = sanitizeLanguageLabel(value);
+  const resolved = labelToLanguageCode(value);
+  if (!resolved) return "unknown";
+
+  const normalized = sanitizeLanguageLabel(resolved);
   const base = normalized.split("-")[0];
 
   for (const [canonical, aliases] of Object.entries(LANGUAGE_ALIASES)) {
@@ -34,12 +37,8 @@ export function canonicalizeLanguageCode(value: string): string {
 export function normalizeCaptionLanguage(value?: string | null): string | null {
   if (!value) return null;
 
-  const sanitized = sanitizeLanguageLabel(value);
-  if (!sanitized) return null;
-
-  const fromLabel = labelToLanguageCode(sanitized);
-
-  return canonicalizeLanguageCode(fromLabel || sanitized);
+  const canonical = canonicalizeLanguageCode(value);
+  return canonical === "unknown" ? null : canonical;
 }
 
 export function getLanguageCandidates(language: string): string[] {
@@ -80,4 +79,28 @@ export function getCaptionLanguageGroupKey(
   }
 
   return "unknown";
+}
+
+export function inferCaptionLanguageFromItems(
+  captions: Array<Pick<CaptionListItem, "language" | "display">>,
+): string | null {
+  const candidates = Array.from(new Set<string>());
+
+  captions.forEach((caption) => {
+    const fromLanguage = normalizeCaptionLanguage(caption.language);
+    if (fromLanguage) {
+      candidates.push(fromLanguage);
+    }
+
+    const fromDisplay = normalizeCaptionLanguage(caption.display);
+    if (fromDisplay) {
+      candidates.push(fromDisplay);
+    }
+  });
+
+  const uniqueCandidates = Array.from(new Set(candidates));
+
+  if (uniqueCandidates.length !== 1) return null;
+
+  return uniqueCandidates[0];
 }
