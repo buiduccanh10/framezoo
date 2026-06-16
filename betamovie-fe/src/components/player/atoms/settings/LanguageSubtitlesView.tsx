@@ -13,7 +13,10 @@ import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import { CaptionOption, type SubtitleSelectionMode } from "./CaptionsView";
 import { useCaptionMatchScore } from "../../hooks/useCaptionMatchScore";
-import { getCaptionLanguageGroupKey } from "../../utils/captionLanguage";
+import {
+  getCaptionLanguageGroupKey,
+  inferCaptionLanguageFromItems,
+} from "../../utils/captionLanguage";
 
 function isLikelyUrl(value: string): boolean {
   try {
@@ -135,6 +138,11 @@ export function LanguageSubtitlesView({
       ),
     [captions, language],
   );
+  const headerLanguage = useMemo(() => {
+    if (language !== "unknown") return language;
+
+    return inferCaptionLanguageFromItems(languageCaptions) ?? language;
+  }, [language, languageCaptions]);
 
   const [downloadReq, startDownload] = useAsyncFn(
     async (captionId: string) => {
@@ -266,7 +274,7 @@ export function LanguageSubtitlesView({
   };
 
   const languageName =
-    getPrettyLanguageNameFromLocale(language) ||
+    getPrettyLanguageNameFromLocale(headerLanguage) ||
     t("player.menus.subtitles.unknownLanguage");
 
   return (
@@ -291,7 +299,7 @@ export function LanguageSubtitlesView({
           }
         >
           <span className="flex min-w-0 flex-1 items-center">
-            <FlagIcon langCode={language} />
+            <FlagIcon langCode={headerLanguage} />
             <span className="ml-3 block min-w-0 truncate">{languageName}</span>
           </span>
         </Menu.BackLink>
