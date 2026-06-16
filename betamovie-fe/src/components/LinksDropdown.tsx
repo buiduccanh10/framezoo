@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -287,6 +287,7 @@ export function WatchPartyInputLink({
 export function LinksDropdown(props: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const nickname = useAuthStore((s) => s.account?.nickname);
   const deviceName = useAuthStore((s) => s.account?.deviceName);
   const seed = useAuthStore((s) => s.account?.seed);
@@ -297,14 +298,21 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
   const { logout } = useAuth();
 
   useEffect(() => {
-    function onWindowClick(evt: MouseEvent) {
-      if ((evt.target as HTMLElement).closest(".is-dropdown")) return;
+    if (!open) return;
+
+    function onPointerDown(evt: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        dropdownRef.current.contains(evt.target as Node)
+      ) {
+        return;
+      }
       setOpen(false);
     }
 
-    window.addEventListener("click", onWindowClick);
-    return () => window.removeEventListener("click", onWindowClick);
-  }, []);
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, [open]);
 
   const toggleOpen = useCallback(() => {
     setOpen((s) => !s);
@@ -313,15 +321,17 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
   const isDesktopApp = useIsDesktopApp();
 
   return (
-    <div className="relative is-dropdown">
-      <div
+    <div ref={dropdownRef} className="relative">
+      <button
+        type="button"
         className={classNames(
           "cursor-pointer tabbable rounded-full flex gap-2 text-white items-center py-2 px-3 bg-pill-background hover:bg-pill-backgroundHover backdrop-blur-lg transition-all duration-100 hover:scale-105",
           open ? "bg-opacity-100" : "bg-opacity-50",
         )}
-        tabIndex={0}
         onClick={toggleOpen}
-        onKeyUp={(evt) => evt.key === "Enter" && toggleOpen()}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label={t("navigation.menu.accountMenu")}
       >
         {props.children}
         <Icon
@@ -331,9 +341,9 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           )}
           icon={Icons.CHEVRON_DOWN}
         />
-      </div>
+      </button>
       <Transition animation="slide-down" show={open}>
-        <div className="rounded-xl absolute w-64 bg-dropdown-altBackground top-full mt-3 right-0">
+        <div className="absolute top-full right-0 z-10 mt-3 w-64 rounded-xl bg-dropdown-altBackground">
           {deviceName && bufferSeed ? (
             <DropdownLink className="text-white" href="/settings">
               <UserAvatar />
@@ -346,7 +356,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
                     "Failed to decrypt device name in LinksDropdown, using fallback:",
                     error,
                   );
-                  return t("settings.account.unknownDevice");
+                  return t("settings.account.devices.unknownDevice");
                 }
               })()}
             </DropdownLink>

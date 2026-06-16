@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "دعوتی کوڈ درکار ہے",
     "login": {
       "description": "Please enter your passphrase to login to your account",
+      "failedToReachServer": "سرور تک پہنچنے میں ناکام",
       "nicknameLabel": "عرفی نام",
       "nicknameNotFound": "عرفی نام نہیں ملا",
       "nicknamePlaceholder": "اپنا عرفی نام درج کریں۔",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "BetaMovie کو بطور ایپ انسٹال کرنے کے لیے:\n\n1. شیئر بٹن کو تھپتھپائیں (تیر کے ساتھ مربع)۔\n2. 'ہوم اسکرین میں شامل کریں' کو منتخب کریں۔\n3. شامل کریں پر ٹیپ کریں۔"
     },
     "menu": {
+      "accountMenu": "اکاؤنٹ مینو کھولیں۔",
       "desktop": "ایپ کی ترتیبات",
       "logout": "لاگ آؤٹ کریں۔",
       "register": "کلاؤڈ سے مطابقت پذیری کریں۔",

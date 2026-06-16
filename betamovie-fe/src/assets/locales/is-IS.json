@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Boðskóði er nauðsynlegur",
     "login": {
       "description": "Vinsamlegast sláðu inn lykilorðið þitt til þess að skrá þig inn í reikningin þinn",
+      "failedToReachServer": "Ekki tókst að ná í netþjón",
       "nicknameLabel": "Gælunafn",
       "nicknameNotFound": "Gælunafn fannst ekki",
       "nicknamePlaceholder": "Sláðu inn gælunafnið þitt",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Til að setja upp AlphaFlix sem app:\n\n1. Pikkaðu á Share hnappinn (ferningur með ör).\n2. Veldu 'Bæta við heimaskjá'.\n3. Pikkaðu á Bæta við."
     },
     "menu": {
+      "accountMenu": "Opnaðu reikningsvalmynd",
       "desktop": "App Stillingar",
       "logout": "Skrá út",
       "register": "Samstilla við ský",

@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Cal un codi d'invitació",
     "login": {
       "description": "Introduïu el vostre àlies i contrasenya per iniciar sessió al vostre compte",
+      "failedToReachServer": "No s'ha pogut arribar al servidor",
       "nicknameLabel": "Pseudònim",
       "nicknameNotFound": "No s'ha trobat el sobrenom",
       "nicknamePlaceholder": "Introduïu el vostre àlies",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Per instal·lar AlphaFlix com a aplicació:\n\n1. Toqueu el botó Compartir (quadrat amb una fletxa).\n2. Trieu \"Afegeix a la pantalla d'inici\".\n3. Toqueu Afegeix."
     },
     "menu": {
+      "accountMenu": "Obre el menú del compte",
       "desktop": "Configuració de l'aplicació",
       "logout": "Tanca la sessió",
       "register": "Sincronitza amb el núvol",

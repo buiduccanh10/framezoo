@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Kutsekood on kohustuslik",
     "login": {
       "description": "Palun sisestage paroolifraas, et logida kontosse sisse",
+      "failedToReachServer": "Serveriga ei õnnestunud ühendust saada",
       "nicknameLabel": "Hüüdnimi",
       "nicknameNotFound": "Hüüdnime ei leitud",
       "nicknamePlaceholder": "Sisestage oma hüüdnimi",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "AlphaFlixi installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa."
     },
     "menu": {
+      "accountMenu": "Ava konto menüü",
       "desktop": "Rakenduse seaded",
       "logout": "Logi välja",
       "register": "Sünkrooni pilvega",

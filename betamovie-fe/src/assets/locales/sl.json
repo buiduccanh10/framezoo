@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Koda za povabilo je obvezna",
     "login": {
       "description": "Vnesite frazo za prijavo v račun",
+      "failedToReachServer": "Doseganje strežnika ni uspelo",
       "nicknameLabel": "Vzdevek",
       "nicknameNotFound": "Vzdevka ni bilo mogoče najti",
       "nicknamePlaceholder": "Vnesite svoj vzdevek",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Če želite namestiti AlphaFlix kot aplikacijo:\n\n1. Tapnite gumb Skupna raba (kvadrat s puščico).\n2. Izberite »Dodaj na začetni zaslon«.\n3. Tapnite Dodaj."
     },
     "menu": {
+      "accountMenu": "Odprite meni računa",
       "desktop": "Nastavitve aplikacije",
       "logout": "Odjava",
       "register": "Sinhronizacija z oblakom",

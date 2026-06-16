@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Uitnodigingscode is vereist",
     "login": {
       "description": "Vul je wachtwoord in",
+      "failedToReachServer": "Kan de server niet bereiken",
       "nicknameLabel": "Bijnaam",
       "nicknameNotFound": "Bijnaam niet gevonden",
       "nicknamePlaceholder": "Voer uw bijnaam in",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "AlphaFlix als app installeren:\n\n1. Tik op de knop Delen (vierkant met een pijl).\n2. Kies 'Toevoegen aan startscherm'.\n3. Tik op Toevoegen."
     },
     "menu": {
+      "accountMenu": "Accountmenu openen",
       "desktop": "App-instellingen",
       "logout": "Log uit",
       "register": "Synchroniseren met de Cloud",

@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Kod zaproszenia jest wymagany",
     "login": {
       "description": "Proszę wpisać frazę, aby zalogować się na swoje konto",
+      "failedToReachServer": "Nie udało się połączyć z serwerem",
       "nicknameLabel": "Przydomek",
       "nicknameNotFound": "Nie znaleziono pseudonimu",
       "nicknamePlaceholder": "Wpisz swój pseudonim",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Aby zainstalować AlphaFlix jako aplikację:\n\n1. Naciśnij przycisk Udostępnij (kwadrat ze strzałką).\n2. Wybierz opcję „Dodaj do ekranu głównego”.\n3. Stuknij Dodaj."
     },
     "menu": {
+      "accountMenu": "Otwórz menu konta",
       "desktop": "Ustawienia aplikacji",
       "logout": "Wyloguj się",
       "register": "Synchronizuj z Chmurą",

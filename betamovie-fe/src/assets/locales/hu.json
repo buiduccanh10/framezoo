@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Meghívó kód szükséges",
     "login": {
       "description": "Kérlek írd be a szósorozatodat, hogy bejelentkezz a fiókodba",
+      "failedToReachServer": "Nem sikerült elérni a szervert",
       "nicknameLabel": "Becenév",
       "nicknameNotFound": "A becenév nem található",
       "nicknamePlaceholder": "Írja be a becenevét",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Az AlphaFlix alkalmazásként történő telepítése:\n\n1. Érintse meg a Megosztás gombot (négyzet nyíllal).\n2. Válassza a \"Hozzáadás a kezdőképernyőhöz\" lehetőséget.\n3. Érintse meg a Hozzáadás gombot."
     },
     "menu": {
+      "accountMenu": "Nyissa meg a fiók menüt",
       "desktop": "Alkalmazásbeállítások",
       "logout": "Kijelentkezés",
       "register": "Szinkronizálás a felhővel",

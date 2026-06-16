@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Kutsuavain vaaditaan",
     "login": {
       "description": "Anna tunnuslauseesi kirjautuaksesi tilillesi",
+      "failedToReachServer": "Palvelimeen ei saada yhteyttä",
       "nicknameLabel": "Lempinimi",
       "nicknameNotFound": "Lempinimeä ei löydy",
       "nicknamePlaceholder": "Kirjoita lempinimesi",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "AlphaFlixin asentaminen sovelluksena:\n\n1. Napauta Jaa-painiketta (neliö nuolella).\n2. Valitse Lisää aloitusnäyttöön.\n3. Napauta Lisää."
     },
     "menu": {
+      "accountMenu": "Avaa tilivalikko",
       "desktop": "Sovellusasetukset",
       "logout": "Kirjaudu ulos",
       "register": "Synkronoi pilveen",

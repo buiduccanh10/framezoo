@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Nepieciešams ielūguma kods",
     "login": {
       "description": "Lūdzu ievadi paroles frāzi lai ieietu kontā",
+      "failedToReachServer": "Neizdevās sasniegt serveri",
       "nicknameLabel": "Segvārds",
       "nicknameNotFound": "Segvārds nav atrasts",
       "nicknamePlaceholder": "Ievadiet savu segvārdu",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Lai instalētu AlphaFlix kā lietotni:\n\n1. Pieskarieties pogai Kopīgot (kvadrāts ar bultiņu).\n2. Izvēlieties \"Pievienot sākuma ekrānam\".\n3. Pieskarieties Pievienot."
     },
     "menu": {
+      "accountMenu": "Atveriet konta izvēlni",
       "desktop": "Lietotņu iestatījumi",
       "logout": "Iziet",
       "register": "Sinhronizēt ar mākoni",

@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "קוד הזמנה נדרש",
     "login": {
       "description": "אנא הזן את ביטוי הסיסמה שלך כדי להתחבר לחשבונך",
+      "failedToReachServer": "הגישה לשרת נכשלה",
       "nicknameLabel": "כינוי",
       "nicknameNotFound": "כינוי לא נמצא",
       "nicknamePlaceholder": "הזן את הכינוי שלך",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "כדי להתקין את AlphaFlix כאפליקציה:\n\n1. הקש על כפתור השיתוף (ריבוע עם חץ).\n2. בחר 'הוסף למסך הבית'.\n3. הקש על הוסף."
     },
     "menu": {
+      "accountMenu": "פתח את תפריט החשבון",
       "desktop": "הגדרות אפליקציה",
       "logout": "להתנתק",
       "register": "סנכרון לענן",

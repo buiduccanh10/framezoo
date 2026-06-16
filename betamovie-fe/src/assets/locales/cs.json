@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Zvací kód je vyžadován",
     "login": {
       "description": "Pro přihlášení ke svému účtu zadejte svou přístupovou frázi",
+      "failedToReachServer": "Nepodařilo se připojit k serveru",
       "nicknameLabel": "Přezdívka",
       "nicknameNotFound": "Přezdívka nenalezena",
       "nicknamePlaceholder": "Zadejte svou přezdívku",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Instalace AlphaFlix jako aplikace:\n\n1. Klepněte na tlačítko Sdílet (čtverec se šipkou).\n2. Zvolte 'Přidat na domovskou obrazovku'.\n3. Klepněte na Přidat."
     },
     "menu": {
+      "accountMenu": "Otevřete nabídku účtu",
       "desktop": "Nastavení aplikace",
       "logout": "Odhlásit se",
       "register": "Synchronizovat do Cloudu",

@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Einladungscode ist erforderlich",
     "login": {
       "description": "Gebe deine Passphrase ein, um dich in deinem Konto anzumelden",
+      "failedToReachServer": "Server konnte nicht erreicht werden",
       "nicknameLabel": "Spitzname",
       "nicknameNotFound": "Spitzname nicht gefunden",
       "nicknamePlaceholder": "Geben Sie Ihren Spitznamen ein",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "So installieren Sie AlphaFlix als App:\n\n1. Tippen Sie auf die Schaltfläche „Teilen“ (Quadrat mit einem Pfeil).\n2. Wählen Sie „Zum Startbildschirm hinzufügen“.\n3. Tippen Sie auf Hinzufügen."
     },
     "menu": {
+      "accountMenu": "Kontomenü öffnen",
       "desktop": "App-Einstellungen",
       "logout": "Abmelden",
       "register": "Mit der Cloud synchronisieren",

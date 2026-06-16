@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Davet kodu gerekli",
     "login": {
       "description": "Hesabınıza giriş yapmak için lütfen şifreleme anahtarınızı girin",
+      "failedToReachServer": "Sunucuya ulaşılamadı",
       "nicknameLabel": "Takma ad",
       "nicknameNotFound": "Takma ad bulunamadı",
       "nicknamePlaceholder": "Takma adınızı girin",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "BetaMovie'yi uygulama olarak yüklemek için:\n\n1. Paylaş düğmesine dokunun (oklu kare).\n2. 'Ana Ekrana Ekle'yi seçin.\n3. Ekle'ye dokunun."
     },
     "menu": {
+      "accountMenu": "Hesap menüsünü aç",
       "desktop": "Uygulama Ayarları",
       "logout": "Çıkış yap",
       "register": "Buluta eşitle",

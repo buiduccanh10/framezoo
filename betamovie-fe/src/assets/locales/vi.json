@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Vui lòng nhập mã mời",
     "login": {
       "description": "Hãy nhập biệt danh và mật khẩu của bạn để đăng nhập vào tài khoản",
+      "failedToReachServer": "Không thể truy cập máy chủ",
       "nicknameLabel": "Biệt danh",
       "nicknameNotFound": "Không tìm thấy biệt danh",
       "nicknamePlaceholder": "Nhập biệt danh của bạn",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Để cài BetaMovie như ứng dụng:\n\n1. Nhấn nút Chia sẻ (biểu tượng hình vuông có mũi tên).\n2. Chọn \"Thêm vào Màn hình chính\" / \"Add to Home Screen\".\n3. Nhấn Thêm."
     },
     "menu": {
+      "accountMenu": "Mở menu tài khoản",
       "desktop": "Cài đặt ứng dụng",
       "logout": "Đăng xuất",
       "register": "Đồng bộ hóa với đám mây",

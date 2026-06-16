@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "આમંત્રણ કોડ જરૂરી છે",
     "login": {
       "description": "તમારા એકાઉન્ટમાં લૉગિન કરવા માટે કૃપા કરીને તમારો પાસફ્રેઝ દાખલ કરો",
+      "failedToReachServer": "સર્વર સુધી પહોંચવામાં નિષ્ફળ",
       "nicknameLabel": "ઉપનામ",
       "nicknameNotFound": "ઉપનામ મળ્યું નથી",
       "nicknamePlaceholder": "તમારું ઉપનામ દાખલ કરો",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "એક એપ્લિકેશન તરીકે AlphaFlix ઇન્સ્ટોલ કરવા માટે:\n\n1. શેર બટનને ટેપ કરો (એરો સાથે ચોરસ).\n2. 'Add to Home Screen' પસંદ કરો.\n3. ઉમેરો ટેપ કરો."
     },
     "menu": {
+      "accountMenu": "એકાઉન્ટ મેનૂ ખોલો",
       "desktop": "એપ્લિકેશન સેટિંગ્સ",
       "logout": "લૉગ આઉટ",
       "register": "Cloud સાથે સમન્વયિત કરો",

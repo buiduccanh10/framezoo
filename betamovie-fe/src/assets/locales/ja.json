@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "招待コードは必須です",
     "login": {
       "description": "ログインするにはパスフレーズを入力してください",
+      "failedToReachServer": "サーバーに到達できませんでした",
       "nicknameLabel": "ニックネーム",
       "nicknameNotFound": "ニックネームが見つかりません",
       "nicknamePlaceholder": "ニックネームを入力してください",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "AlphaFlix をアプリとしてインストールするには:\n\n1. [共有] ボタン (矢印のある四角形) をタップします。\n2.「ホーム画面に追加」を選択します。\n3. 「追加」をタップします。"
     },
     "menu": {
+      "accountMenu": "アカウントメニューを開く",
       "desktop": "アプリの設定",
       "logout": "退室",
       "register": "クラウドに同期して",

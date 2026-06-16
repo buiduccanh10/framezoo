@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "رمز الدعوة مطلوب",
     "login": {
       "description": "رجاءً ضع جملة المرور لتسجيل الدخول إلى حسابك",
+      "failedToReachServer": "فشل في الوصول إلى الخادم",
       "nicknameLabel": "كنية",
       "nicknameNotFound": "لم يتم العثور على اللقب",
       "nicknamePlaceholder": "أدخل لقبك",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "لتثبيت AlphaFlix كتطبيق:\n\n1. اضغط على زر المشاركة (مربع به سهم).\n2. اختر \"إضافة إلى الشاشة الرئيسية\".\n3. اضغط على إضافة."
     },
     "menu": {
+      "accountMenu": "فتح قائمة الحساب",
       "desktop": "إعدادات التطبيق",
       "logout": "تسجيل الخروج",
       "register": "مزامنة إلى التخزين السحابي",

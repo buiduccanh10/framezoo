@@ -35,6 +35,7 @@
     "inviteCodeRequiredError": "Invitationskode er påkrævet",
     "login": {
       "description": "Indtast din adgangssætning for at logge ind på din profil",
+      "failedToReachServer": "Kunne ikke nå serveren",
       "nicknameLabel": "Kaldenavn",
       "nicknameNotFound": "Kaldenavn blev ikke fundet",
       "nicknamePlaceholder": "Indtast dit kaldenavn",
@@ -502,6 +503,7 @@
       "iosSafariGuide": "Sådan installerer du AlphaFlix som en app:\n\n1. Tryk på knappen Del (firkantet med en pil).\n2. Vælg 'Tilføj til startskærmen'.\n3. Tryk på Tilføj."
     },
     "menu": {
+      "accountMenu": "Åbn kontomenuen",
       "desktop": "App-indstillinger",
       "logout": "Log ud",
       "register": "Synkroniser til Cloud",
