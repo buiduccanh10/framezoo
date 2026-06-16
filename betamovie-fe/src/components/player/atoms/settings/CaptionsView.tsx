@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { convert } from "subsrt-ts";
 
 import { subtitleTypeList } from "@/backend/helpers/subs";
-import { FileDropHandler } from "@/components/DropFile";
+import { useFileDrop } from "@/components/DropFile";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
@@ -483,7 +483,7 @@ export function CaptionsView({
   const { disable, selectBestCaptionFromLastUsedLanguage, disableSecondary } =
     useCaptions();
   const [isRandomSelecting, setIsRandomSelecting] = useState(false);
-  const [dragging, setDragging] = useState(false);
+  const scrollableContainerRef = useRef<HTMLDivElement>(null);
 
   const handleRandomSelect = async () => {
     if (isRandomSelecting) return; // Prevent multiple simultaneous calls
@@ -674,9 +674,37 @@ export function CaptionsView({
     reader.readAsText(firstFile, "utf-8");
   }
 
+  const { dragging, fileDropProps } = useFileDrop({
+    onDrop,
+  });
+
+  useEffect(() => {
+    const active =
+      scrollableContainerRef.current?.querySelector<HTMLElement>(
+        "[data-active-link]",
+      );
+
+    if (!active || !scrollableContainerRef.current) return;
+
+    const boxRect = scrollableContainerRef.current.getBoundingClientRect();
+    const activeLinkRect = active.getBoundingClientRect();
+    const activeYPos = activeLinkRect.top - boxRect.top;
+
+    scrollableContainerRef.current.scrollTo({
+      top: activeYPos - boxRect.height / 2 + activeLinkRect.height / 2,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, [
+    selectedCaption?.id,
+    secondaryCaption?.id,
+    selectionMode,
+    currentTranslateTask,
+  ]);
+
   return (
     <>
-      <div>
+      <div className="px-6">
         <div
           className={classNames(
             "absolute inset-0 flex items-center justify-center text-white z-10 pointer-events-none transition-opacity duration-300",
@@ -706,12 +734,13 @@ export function CaptionsView({
           </Menu.Title>
         )}
       </div>
-      <FileDropHandler
-        className={`transition duration-300 ${dragging ? "opacity-20" : ""}`}
-        onDraggingChange={(isDragging) => {
-          setDragging(isDragging);
-        }}
-        onDrop={(event) => onDrop(event)}
+      <div
+        ref={scrollableContainerRef}
+        className={classNames(
+          "px-6 !pt-1 mt-2 pb-3 h-full space-y-1 overflow-y-auto overflow-x-hidden scrollbar-none transition duration-300",
+          dragging ? "opacity-20" : "",
+        )}
+        {...fileDropProps}
       >
         {/* Secondary subtitle hint — shown when dual sub is active */}
         {isDualSubEnabled && selectionMode === "secondary" && (
@@ -800,7 +829,7 @@ export function CaptionsView({
           </div>
         )}
 
-        <Menu.ScrollToActiveSection className="!pt-1 mt-2 pb-3">
+        <div>
           {/* Off button */}
           <CaptionOption onClick={() => disable()} selected={!selectedCaption}>
             {t("player.menus.subtitles.offChoice")}
@@ -1006,8 +1035,8 @@ export function CaptionsView({
                 );
               },
             )}
-        </Menu.ScrollToActiveSection>
-      </FileDropHandler>
+        </div>
+      </div>
     </>
   );
 }

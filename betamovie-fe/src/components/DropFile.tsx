@@ -8,7 +8,17 @@ interface FileDropHandlerProps {
   onDraggingChange: (isDragging: boolean) => void;
 }
 
-export function FileDropHandler(props: FileDropHandlerProps) {
+interface FileDropBindingProps {
+  onDragEnter: (event: DragEvent<HTMLDivElement>) => void;
+  onDragLeave: (event: DragEvent<HTMLDivElement>) => void;
+  onDragOver: (event: DragEvent<HTMLDivElement>) => void;
+  onDrop: (event: DragEvent<HTMLDivElement>) => void;
+}
+
+export function useFileDrop(props: {
+  onDrop: (event: DragEvent<HTMLDivElement>) => void;
+  onDraggingChange?: (isDragging: boolean) => void;
+}) {
   const [dragging, setDragging] = useState(false);
 
   const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
@@ -34,17 +44,27 @@ export function FileDropHandler(props: FileDropHandlerProps) {
   };
 
   useEffect(() => {
-    props.onDraggingChange(dragging);
+    props.onDraggingChange?.(dragging);
   }, [dragging, props]);
 
+  const fileDropProps: FileDropBindingProps = {
+    onDragEnter: handleDragEnter,
+    onDragLeave: handleDragLeave,
+    onDragOver: handleDragOver,
+    onDrop: handleDrop,
+  };
+
+  return {
+    dragging,
+    fileDropProps,
+  };
+}
+
+export function FileDropHandler(props: FileDropHandlerProps) {
+  const { fileDropProps } = useFileDrop(props);
+
   return (
-    <div
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      className={props.className}
-    >
+    <div {...fileDropProps} className={props.className}>
       {props.children}
     </div>
   );
