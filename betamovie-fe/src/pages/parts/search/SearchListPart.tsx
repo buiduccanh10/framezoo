@@ -181,7 +181,7 @@ export function SearchListPart({
 
           <div className="mb-5">
             <div className="relative flex items-center">
-              <div className="overflow-x-auto scrollbar-thin flex-1 min-w-0">
+              <div className="overflow-x-auto scrollbar-none flex-1 min-w-0">
                 <div className="flex items-center gap-2 pb-1">
                   <button
                     type="button"
@@ -212,7 +212,7 @@ export function SearchListPart({
                 </div>
               </div>
 
-              <div className="sticky right-0 z-10 shrink-0 flex items-center gap-2 bg-background-main pl-3">
+              <div className="sticky right-0 z-10 flex shrink-0 items-center gap-2 bg-transparent pl-3">
                 <div className="w-px h-6 bg-white/10 shrink-0" />
 
                 <div className="relative whitespace-nowrap shrink-0">
@@ -220,10 +220,11 @@ export function SearchListPart({
                     selectedItem={selectedCountryOption}
                     setSelectedItem={(item) => onCountryChange?.(item.id)}
                     options={countryOptions}
+                    className="!my-0"
                     customButton={
                       <button
                         type="button"
-                        className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                        className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
                       >
                         <span>
                           {filterCountry
@@ -247,7 +248,7 @@ export function SearchListPart({
                     customButton={
                       <button
                         type="button"
-                        className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                        className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
                       >
                         <span>
                           {filterYear

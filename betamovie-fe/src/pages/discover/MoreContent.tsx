@@ -425,7 +425,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                   customButton={
                     <button
                       type="button"
-                      className="px-3 py-1 text-sm bg-mediaCard-hoverBackground hover:bg-mediaCard-background rounded-full transition-colors flex items-center gap-1"
+                      className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
                     >
                       <span>...</span>
                       <Icon
@@ -455,7 +455,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                 customButton={
                   <button
                     type="button"
-                    className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                    className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
                   >
                     <span>
                       {selectedOriginCountry
@@ -489,7 +489,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                   customButton={
                     <button
                       type="button"
-                      className="px-3 py-1 text-sm bg-mediaCard-hoverBackground rounded-full hover:bg-mediaCard-background transition-colors flex items-center gap-1"
+                      className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
                     >
                       <span>
                         {selectedReleaseYear
