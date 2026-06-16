@@ -168,7 +168,10 @@ export function PlayerPart(props: PlayerPartProps) {
           <div className="flex lg:hidden items-center justify-end">
             {status === playerStatus.PLAYING ? (
               <>
-                <Player.Airplay />
+                <Player.Airplay
+                  iconSizeClass={mobileActionIconClass}
+                  className={mobileActionButtonClass}
+                />
                 <Player.Chromecast />
               </>
             ) : null}
