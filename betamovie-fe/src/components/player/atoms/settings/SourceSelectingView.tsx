@@ -9,6 +9,10 @@ import {
 } from "@/components/player/hooks/useSourceSelection";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
+import {
+  getOpenMovieProviderFromStreamId,
+  getOpenMovieVariantLabelFromStreamId,
+} from "@/components/player/utils/openMovieVariant";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -79,12 +83,12 @@ export function EmbedOption(props: {
       props.embedId === "openmovie-embed" &&
       props.url?.startsWith("openmovie://")
     ) {
-      if (activeStreamId?.startsWith("openmovie-")) {
+      const activeProvider = getOpenMovieProviderFromStreamId(activeStreamId);
+      if (activeProvider) {
         try {
           const encoded = props.url.replace("openmovie://", "");
           const info = JSON.parse(decodeURIComponent(encoded));
-          const parts = activeStreamId.split("-");
-          return parts[1] === info.provider;
+          return activeProvider === info.provider;
         } catch {
           return false;
         }
@@ -305,14 +309,8 @@ export function SourceSelectionView({
           let subSourceLabel = null;
 
           if (isSelected && v.id === "openmovie") {
-            if (activeStreamId?.startsWith("openmovie-")) {
-              const parts = activeStreamId.split("-");
-              if (parts.length >= 2) {
-                const provider = parts[1];
-                subSourceLabel =
-                  provider.charAt(0).toUpperCase() + provider.slice(1);
-              }
-            }
+            subSourceLabel =
+              getOpenMovieVariantLabelFromStreamId(activeStreamId);
           }
 
           return (
