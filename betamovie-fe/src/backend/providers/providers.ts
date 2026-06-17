@@ -153,7 +153,7 @@ const vidsrcSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 8 (KKPhim)",
+  name: "Server 8 (KKPhim Vietsub + Lồng tiếng)",
   rank: 8,
   disabled: false,
   externalSource: false,

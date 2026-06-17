@@ -6,6 +6,10 @@ import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
+import {
+  formatKkphimSourceName,
+  getOpenMovieVariantLabelFromStreamId,
+} from "@/components/player/utils/openMovieVariant";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { qualityToString } from "@/stores/player/utils/qualities";
@@ -28,6 +32,7 @@ export function SettingsMenu({ id }: { id: string }) {
   const currentEmbedId = usePlayerStore(
     (s) => (s as any).embedId as string | null,
   );
+  const activeStreamId = usePlayerStore((s) => s.source?.id);
   const sourceName = useMemo(() => {
     if (!currentSourceId) return "...";
     const source = getCachedMetadata().find(
@@ -35,11 +40,26 @@ export function SettingsMenu({ id }: { id: string }) {
     );
     return source?.name ?? "...";
   }, [currentSourceId]);
+  const kkphimVariantLabel = useMemo(() => {
+    if (currentSourceId !== "kkphim") {
+      return null;
+    }
+
+    return getOpenMovieVariantLabelFromStreamId(activeStreamId);
+  }, [activeStreamId, currentSourceId]);
+  const sourceDisplayName = useMemo(() => {
+    if (currentSourceId !== "kkphim") {
+      return sourceName;
+    }
+
+    return formatKkphimSourceName(sourceName, kkphimVariantLabel);
+  }, [currentSourceId, kkphimVariantLabel, sourceName]);
   const embedName = useMemo(() => {
+    if (currentSourceId === "kkphim") return undefined;
     if (!currentEmbedId) return undefined;
     const meta = getCachedMetadata().find((s) => s.id === currentEmbedId);
     return meta?.name;
-  }, [currentEmbedId]);
+  }, [currentEmbedId, currentSourceId]);
   const { toggleLastUsed } = useCaptions();
 
   const selectedLanguagePretty = selectedCaptionLanguage
@@ -76,10 +96,12 @@ export function SettingsMenu({ id }: { id: string }) {
         <Menu.ChevronLink
           box
           onClick={() => router.navigate("/source")}
-          rightText={sourceName}
+          rightText={kkphimVariantLabel ?? sourceDisplayName}
         >
           {t("player.menus.settings.sourceItem")}
-          <span className="text-type-secondary text-sm">{sourceName}</span>
+          <span className="text-type-secondary text-sm">
+            {sourceDisplayName}
+          </span>
           {embedName && (
             <span className="text-type-secondary text-xs">{embedName}</span>
           )}

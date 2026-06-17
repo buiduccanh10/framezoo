@@ -33,29 +33,6 @@ interface KKPhimApiResponse {
   streams: KKPhimStream[];
 }
 
-function buildContextQuery(
-  ctx: MovieScrapeContext | ShowScrapeContext,
-): string {
-  const query = new URLSearchParams();
-
-  if (
-    typeof ctx.media?.title === "string" &&
-    ctx.media.title.trim().length > 0
-  ) {
-    query.set("title", ctx.media.title.trim());
-  }
-
-  if (
-    typeof ctx.media?.releaseYear === "number" &&
-    Number.isFinite(ctx.media.releaseYear)
-  ) {
-    query.set("releaseYear", String(ctx.media.releaseYear));
-  }
-
-  const queryString = query.toString();
-  return queryString ? `?${queryString}` : "";
-}
-
 function encodeStreamInfo(stream: KKPhimStream): string {
   const info = {
     name: stream.name,
@@ -124,7 +101,7 @@ export async function scrapeKKPhimMovie(
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const apiUrl = `${KKPHIM_API_BASE}/movie/${ctx.media.tmdbId}${buildContextQuery(ctx)}`;
+  const apiUrl = `${KKPHIM_API_BASE}/movie/${ctx.media.tmdbId}`;
 
   try {
     const data = await ctx.fetcher<KKPhimApiResponse>(apiUrl, {
@@ -166,7 +143,7 @@ export async function scrapeKKPhimShow(
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const apiUrl = `${KKPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}${buildContextQuery(ctx)}`;
+  const apiUrl = `${KKPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
 
   try {
     const data = await ctx.fetcher<KKPhimApiResponse>(apiUrl, {

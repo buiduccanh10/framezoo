@@ -47,6 +47,8 @@ export {
   TV_PROVIDERS,
 };
 
+const POPULAR_CAROUSEL_PAGE_COUNT = 2;
+
 export function useDiscoverOptions(
   mediaType: MediaType,
   options?: { includeCountries?: boolean },
@@ -254,20 +256,43 @@ export function useDiscoverMedia({
       sortType: DiscoverContentType = contentType,
     ) => {
       try {
-        // For carousel views, we only need one page of results
-        if (isCarouselView) {
-          params.page = "1"; // Always use first page for carousels
-        } else {
-          params.page = page.toString(); // Use the requested page for "view more" pages
-        }
-
-        const data = await fetchCachedTmdb<any>(endpoint, {
+        const shouldExpandPopularCarouselPool =
+          isCarouselView && sortType === "popular";
+        const firstPage = isCarouselView ? 1 : page;
+        const firstPageData = await fetchCachedTmdb<any>(endpoint, {
           language: formattedLanguage,
           ...params,
+          page: firstPage.toString(),
         });
 
+        const totalPages = firstPageData.total_pages ?? 1;
+        const pageResults = [firstPageData];
+
+        if (shouldExpandPopularCarouselPool && totalPages > 1) {
+          const maxPage = Math.min(POPULAR_CAROUSEL_PAGE_COUNT, totalPages);
+          const extraPages = await Promise.all(
+            Array.from({ length: maxPage - 1 }, (_, index) =>
+              fetchCachedTmdb<any>(endpoint, {
+                language: formattedLanguage,
+                ...params,
+                page: (index + 2).toString(),
+              }),
+            ),
+          );
+          pageResults.push(...extraPages);
+        }
+
+        const mergedResults = pageResults.flatMap(
+          (pageData) => pageData.results ?? [],
+        );
+        const uniqueResults = Array.from(
+          new Map(
+            mergedResults.map((item: DiscoverMedia) => [item.id, item]),
+          ).values(),
+        );
+
         const hydratedResults = await hydrateLatestTVResults(
-          data.results ?? [],
+          uniqueResults,
           sortType,
         );
         const sortedResults = sortDiscoverResults(hydratedResults, sortType);
@@ -280,7 +305,9 @@ export function useDiscoverMedia({
             ...item,
             type: mediaType === "movie" ? "movie" : "show",
           })),
-          hasMore: page < data.total_pages,
+          hasMore: isCarouselView
+            ? totalPages > POPULAR_CAROUSEL_PAGE_COUNT
+            : page < totalPages,
         };
       } catch (err) {
         console.error("Error fetching TMDB media:", err);

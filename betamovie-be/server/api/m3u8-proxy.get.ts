@@ -604,6 +604,116 @@ const buildProxyUrl = (
   );
 };
 
+const isKkPhimPlaylist = (playlistUrl: string, headers: Record<string, string>) => {
+  const referer = readHeaderCaseInsensitive(headers, 'referer').toLowerCase();
+
+  try {
+    const parsed = new URL(playlistUrl);
+    if (/kkphimplayer\d*\.com$/i.test(parsed.hostname)) {
+      return true;
+    }
+  } catch {
+    // Ignore parse failures and fall back to referer matching.
+  }
+
+  return referer.includes('phimapi.com');
+};
+
+const isKkPhimAdSegmentUrl = (segmentUrl: string) => {
+  if (/(?:^|\/)convertv[^/]*\//i.test(segmentUrl)) {
+    return true;
+  }
+
+  return /(?:^|\/)v\d+\/[0-9a-f]{16,}\/segment_\d+\.ts(?:$|[?#])/i.test(segmentUrl);
+};
+
+const stripKkPhimAdSegments = (
+  manifest: string,
+  playlistUrl: string,
+  headers: Record<string, string>
+) => {
+  if (!isKkPhimPlaylist(playlistUrl, headers)) {
+    return manifest;
+  }
+
+  const lines = manifest.split(/\r?\n/);
+  const filtered: string[] = [];
+  let removedSegments = 0;
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      filtered.push(line);
+      continue;
+    }
+
+    if (trimmed.startsWith('#EXTINF:')) {
+      const nextLine = lines[index + 1] ?? '';
+      const nextTrimmed = nextLine.trim();
+
+      if (nextTrimmed && !nextTrimmed.startsWith('#')) {
+        let resolvedSegmentUrl = nextTrimmed;
+        try {
+          resolvedSegmentUrl = new URL(nextTrimmed, playlistUrl).toString();
+        } catch {
+          // Keep raw value for regex matching.
+        }
+
+        if (isKkPhimAdSegmentUrl(resolvedSegmentUrl)) {
+          while (filtered.length > 0 && filtered[filtered.length - 1].trim() === '#EXT-X-DISCONTINUITY') {
+            filtered.pop();
+          }
+
+          removedSegments += 1;
+          index += 1;
+
+          while (index + 1 < lines.length && lines[index + 1].trim() === '#EXT-X-DISCONTINUITY') {
+            index += 1;
+          }
+
+          continue;
+        }
+      }
+    }
+
+    filtered.push(line);
+  }
+
+  if (!removedSegments) {
+    return manifest;
+  }
+
+  const normalized: string[] = [];
+  for (const line of filtered) {
+    const trimmed = line.trim();
+    if (
+      trimmed === '#EXT-X-DISCONTINUITY' &&
+      (normalized.length === 0 ||
+        normalized[normalized.length - 1].trim() === '#EXT-X-DISCONTINUITY')
+    ) {
+      continue;
+    }
+
+    normalized.push(line);
+  }
+
+  while (normalized.length > 0 && normalized[0].trim() === '#EXT-X-DISCONTINUITY') {
+    normalized.shift();
+  }
+
+  while (
+    normalized.length > 0 &&
+    normalized[normalized.length - 1].trim() === '#EXT-X-DISCONTINUITY'
+  ) {
+    normalized.pop();
+  }
+
+  logInfo(`Stripped ${removedSegments} KKPhim ad segment(s) from playlist: ${playlistUrl}`);
+  return normalized.join('\n');
+};
+
 const rewriteM3U8 = (
   manifest: string,
   playlistUrl: string,
@@ -612,7 +722,7 @@ const rewriteM3U8 = (
   headers: Record<string, string>,
   internalToken?: string
 ) => {
-  const lines = manifest.split(/\r?\n/);
+  const lines = stripKkPhimAdSegments(manifest, playlistUrl, headers).split(/\r?\n/);
   const rewritten = lines.map(line => {
     const trimmed = line.trim();
     if (!trimmed) return line;
