@@ -1,5 +1,5 @@
 import { useIsRestoring } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -174,6 +174,7 @@ export function useDiscoverMedia({
   const [actualContentType, setActualContentType] =
     useState<DiscoverContentType>(contentType);
   const isRestoring = useIsRestoring();
+  const lastFetchedRef = useRef<string>("");
 
   const { t } = useTranslation();
   const userLanguage = useLanguageStore((s) => s.language);
@@ -420,6 +421,12 @@ export function useDiscoverMedia({
       return;
     }
 
+    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}`;
+    if (lastFetchedRef.current === currentFetchKey) {
+      return;
+    }
+    lastFetchedRef.current = currentFetchKey;
+
     setIsLoading(true);
     setError(null);
 
@@ -641,12 +648,22 @@ export function useDiscoverMedia({
       setMedia((prevMedia) => {
         const mergedMedia =
           page === 1 ? data.results : [...prevMedia, ...data.results];
-        return sortDiscoverResults(mergedMedia, contentType);
+
+        // Deduplicate items by ID
+        const seen = new Set();
+        const uniqueMedia = mergedMedia.filter((item) => {
+          const duplicate = seen.has(item.id);
+          seen.add(item.id);
+          return !duplicate;
+        });
+
+        return sortDiscoverResults(uniqueMedia, contentType);
       });
       setHasMore(data.hasMore);
     } catch (err) {
       console.error("Error fetching media:", err);
       setError((err as Error).message);
+      lastFetchedRef.current = ""; // Clear ref on error to allow retries
 
       // Try fallback content type if available
       if (fallbackType && fallbackType !== contentType) {
@@ -659,13 +676,23 @@ export function useDiscoverMedia({
               page === 1
                 ? fallbackData.results
                 : [...prevMedia, ...fallbackData.results];
-            return sortDiscoverResults(mergedMedia, fallbackType);
+
+            // Deduplicate items by ID
+            const seen = new Set();
+            const uniqueMedia = mergedMedia.filter((item) => {
+              const duplicate = seen.has(item.id);
+              seen.add(item.id);
+              return !duplicate;
+            });
+
+            return sortDiscoverResults(uniqueMedia, fallbackType);
           });
           setHasMore(fallbackData.hasMore);
           setError(null); // Clear error if fallback succeeds
         } catch (fallbackErr) {
           console.error("Error fetching fallback media:", fallbackErr);
           setError((fallbackErr as Error).message);
+          lastFetchedRef.current = ""; // Clear ref on error to allow retries
         }
       }
     } finally {
@@ -678,6 +705,7 @@ export function useDiscoverMedia({
     fallbackType,
     releaseYear,
     releaseYearParams,
+    originCountry,
     originCountryParams,
     hasOriginCountryFilter,
     genreName,
@@ -707,6 +735,7 @@ export function useDiscoverMedia({
     if (contentType !== currentContentType || page === 1) {
       setMedia([]);
       setCurrentContentType(contentType);
+      lastFetchedRef.current = ""; // Reset ref on reset to allow loading page 1
     }
     fetchMedia();
   }, [
