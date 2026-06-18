@@ -136,7 +136,11 @@ function extractChunkUrlFromHtml(html: string): string | null {
 }
 
 async function fetchChunkSource(chunkUrl: string): Promise<string | null> {
-  if (cachedChunk && cachedChunk.url === chunkUrl && Date.now() - cachedChunk.fetchedAt < CHUNK_CACHE_TTL_MS) {
+  if (
+    cachedChunk &&
+    cachedChunk.url === chunkUrl &&
+    Date.now() - cachedChunk.fetchedAt < CHUNK_CACHE_TTL_MS
+  ) {
     return cachedChunk.source;
   }
 
@@ -168,7 +172,9 @@ async function fetchChunkSource(chunkUrl: string): Promise<string | null> {
 function inferBasePath(refs: Array<{ current: any }>, triggerUrl?: string): string | null {
   const fromRef = refs
     .map(ref => ref?.current)
-    .find(value => typeof value === 'string' && value.includes('/') && !/^https?:\/\//i.test(value));
+    .find(
+      value => typeof value === 'string' && value.includes('/') && !/^https?:\/\//i.test(value)
+    );
   if (typeof fromRef === 'string' && fromRef.trim()) {
     return fromRef.trim().replace(/^\/+|\/+$/g, '');
   }
@@ -177,10 +183,13 @@ function inferBasePath(refs: Array<{ current: any }>, triggerUrl?: string): stri
   try {
     const parsed = new URL(triggerUrl);
     const parts = parsed.pathname.replace(/^\/+/, '').split('/').filter(Boolean);
-    if (parts.length < 3) return null;
+    if (parts.length < 2) return null;
     const maybeSuffix = parts[parts.length - 1]?.toLowerCase();
-    if (!['sr', 'ns', 'ne'].includes(maybeSuffix)) return null;
-    parts.pop();
+    if (['sr', 'ns', 'ne'].includes(maybeSuffix) && parts.length >= 3) {
+      parts.pop();
+      parts.pop();
+      return parts.join('/');
+    }
     parts.pop();
     return parts.join('/');
   } catch {
@@ -203,12 +212,38 @@ function inferApiHeaders(refs: Array<{ current: any }>): Record<string, string> 
         value &&
         typeof value === 'object' &&
         !Array.isArray(value) &&
-        typeof value['Content-Type'] === 'string'
+        Object.values(value).some(headerValue => typeof headerValue === 'string')
     );
   if (fromRef) {
     return { ...(fromRef as Record<string, string>) };
   }
   return { 'Content-Type': 'application/atom+xml' };
+}
+
+function extractServerEntries(payloadText: string): ServerEntry[] | null {
+  if (!payloadText) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(payloadText) as unknown;
+    if (!Array.isArray(parsed)) {
+      return null;
+    }
+
+    const servers = parsed.filter((entry): entry is ServerEntry =>
+      Boolean(
+        entry &&
+        typeof entry === 'object' &&
+        typeof (entry as ServerEntry).data === 'string' &&
+        (entry as ServerEntry).data?.trim()
+      )
+    );
+
+    return servers.length ? servers : null;
+  } catch {
+    return null;
+  }
 }
 
 async function resolveServersViaSandbox(
@@ -291,7 +326,8 @@ async function resolveServersViaSandbox(
     clearTimeout: clearTimeoutWrapped,
     setInterval: setIntervalWrapped,
     clearInterval: clearIntervalWrapped,
-    requestAnimationFrame: (cb: (time: number) => void) => setTimeoutWrapped(() => cb(Date.now()), 10),
+    requestAnimationFrame: (cb: (time: number) => void) =>
+      setTimeoutWrapped(() => cb(Date.now()), 10),
     cancelAnimationFrame: (id: any) => clearTimeoutWrapped(id),
     addEventListener: () => undefined,
     removeEventListener: () => undefined,
@@ -332,7 +368,10 @@ async function resolveServersViaSandbox(
     },
     chrome: {
       runtime: {},
-      cast: { media: { DEFAULT_MEDIA_RECEIVER_APP_ID: 'x' }, AutoJoinPolicy: { ORIGIN_SCOPED: 'x' } },
+      cast: {
+        media: { DEFAULT_MEDIA_RECEIVER_APP_ID: 'x' },
+        AutoJoinPolicy: { ORIGIN_SCOPED: 'x' },
+      },
     },
     fetch: async (url: string, init: RequestInit = {}) => {
       const absolute = new URL(String(url), SITE_ORIGIN).toString();
@@ -341,26 +380,25 @@ async function resolveServersViaSandbox(
         throw new Error(`Failed to fetch ${absolute}`);
       }
 
-      if (!settled && String(init.method || 'GET').toUpperCase() === 'POST') {
+      if (!settled) {
         const contentType = response.headers.get('content-type') || '';
         if (contentType.includes('application/json')) {
-          const text = await response.clone().text().catch(() => '');
-          try {
-            const parsed = JSON.parse(text) as any;
-            if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0]?.data === 'string') {
+          const text = await response
+            .clone()
+            .text()
+            .catch(() => '');
+          const servers = extractServerEntries(text);
+          if (servers?.length) {
+            const basePath = inferBasePath(refs, absolute);
+            if (basePath) {
               settled = true;
-              const basePath = inferBasePath(refs, absolute);
-              if (basePath) {
-                resolveDone?.({
-                  basePath,
-                  method: inferMethod(refs),
-                  headers: inferApiHeaders(refs),
-                  servers: parsed,
-                });
-              }
+              resolveDone?.({
+                basePath,
+                method: inferMethod(refs),
+                headers: inferApiHeaders(refs),
+                servers,
+              });
             }
-          } catch {
-            // ignore non-json payloads
           }
         }
       }
@@ -506,7 +544,11 @@ function extractFirstMediaLine(playlist: string): string | null {
   return null;
 }
 
-async function verifyPlayableStream(streamUrl: string, referer: string, origin: string): Promise<boolean> {
+async function verifyPlayableStream(
+  streamUrl: string,
+  referer: string,
+  origin: string
+): Promise<boolean> {
   const playlistResponse = await withTimeout(streamUrl, {
     headers: {
       Accept: 'application/vnd.apple.mpegurl,application/x-mpegURL,*/*',
