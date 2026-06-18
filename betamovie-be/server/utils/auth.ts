@@ -4,6 +4,7 @@ const { sign, verify } = jwt;
 import { randomUUID } from 'crypto';
 import type { H3Event } from 'h3';
 import type { JwtPayload } from 'jsonwebtoken';
+import type { CookieSerializeOptions } from 'cookie-es';
 
 const SESSION_COOKIE_NAME = process.env.SESSION_COOKIE_NAME || 'bm_session';
 const REFRESH_COOKIE_NAME = process.env.REFRESH_COOKIE_NAME || 'bm_refresh';
@@ -71,6 +72,37 @@ export function useAuth() {
     const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
     return isHttps || (process.env.NODE_ENV === 'production' && !isLocalhost);
   };
+
+  const getCookieSameSite = (event: H3Event): CookieSerializeOptions['sameSite'] => {
+    const requestOrigin = getRequestHeader(event, 'origin');
+    if (!requestOrigin) {
+      return 'lax';
+    }
+
+    try {
+      const requestOriginHost = new URL(requestOrigin).origin;
+      const serverOrigin = getRequestURL(event).origin;
+
+      if (requestOriginHost !== serverOrigin && isSecureCookieRequest(event)) {
+        return 'none';
+      }
+    } catch {
+      // Fall through to the default policy when origin parsing fails.
+    }
+
+    return 'lax';
+  };
+
+  const getCookieOptions = (
+    event: H3Event,
+    maxAge: number
+  ): Pick<CookieSerializeOptions, 'httpOnly' | 'sameSite' | 'secure' | 'path' | 'maxAge'> => ({
+    httpOnly: true,
+    sameSite: getCookieSameSite(event),
+    secure: isSecureCookieRequest(event),
+    path: '/',
+    maxAge,
+  });
 
   const getAccessToken = (event: H3Event) => {
     // Prefer cookie first so stale Authorization headers from FE don't break auth.
@@ -296,23 +328,11 @@ export function useAuth() {
   };
 
   const setSessionCookie = (event: H3Event, token: string) => {
-    setCookie(event, SESSION_COOKIE_NAME, token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: isSecureCookieRequest(event),
-      path: '/',
-      maxAge: ACCESS_TOKEN_EXPIRY_SECONDS,
-    });
+    setCookie(event, SESSION_COOKIE_NAME, token, getCookieOptions(event, ACCESS_TOKEN_EXPIRY_SECONDS));
   };
 
   const setRefreshCookie = (event: H3Event, token: string) => {
-    setCookie(event, REFRESH_COOKIE_NAME, token, {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: isSecureCookieRequest(event),
-      path: '/',
-      maxAge: SESSION_EXPIRY_SECONDS,
-    });
+    setCookie(event, REFRESH_COOKIE_NAME, token, getCookieOptions(event, SESSION_EXPIRY_SECONDS));
   };
 
   const setAuthCookies = (event: H3Event, tokens: SessionTokenBundle) => {
