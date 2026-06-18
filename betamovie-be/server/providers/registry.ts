@@ -83,13 +83,13 @@ const movies111Provider: StreamProvider = {
  * Registry of all available stream providers
  */
 const providers: Map<string, StreamProvider> = new Map([
-  // ['111movies', movies111Provider],
+  ['111movies', movies111Provider],
   ['vidlink', vidlinkProvider],
   ['vixsrc', vixsrcProvider],
   ['vidsrcwtf', vidsrcWtfProvider],
   ['vidrock', vidrockProvider],
   ['vidsrc', vidsrcProvider],
-  // ['vidsrc-ru', vidsrcRuProvider],
+  ['vidsrc-ru', vidsrcRuProvider],
   ['kkphim', kkphimProvider],
   ['ophim', ophimProvider],
   // Add more providers here in the future
