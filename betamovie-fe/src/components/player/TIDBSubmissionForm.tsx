@@ -9,6 +9,7 @@ import { Modal, useModal } from "@/components/overlays/Modal";
 import { SegmentData } from "@/components/player/hooks/useSkipTime";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Heading3, Paragraph } from "@/components/utils/Text";
+import { useTIDBSubmissionAvailability } from "@/hooks/useTIDBSubmissionAvailability";
 import { conf } from "@/setup/config";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -83,6 +84,7 @@ export function TIDBSubmissionForm({
   const config = conf();
   const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
   const tidbKey = config.TIDB_API_KEY || tidbKeyFromStore;
+  const { canSubmit } = useTIDBSubmissionAvailability();
   const submissionModal = useModal("tidb-submission");
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -120,7 +122,7 @@ export function TIDBSubmissionForm({
       return;
     }
 
-    if (!tidbKey) {
+    if (!canSubmit) {
       alert(t("player.skipTime.feedback.modal.error.tidbKey"));
       return;
     }

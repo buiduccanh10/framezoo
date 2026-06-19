@@ -6,10 +6,9 @@ import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { TIDBSubmissionForm } from "@/components/player/TIDBSubmissionForm";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
-import { conf } from "@/setup/config";
+import { useTIDBSubmissionAvailability } from "@/hooks/useTIDBSubmissionAvailability";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
 export function SkipSegmentsView({ id }: { id: string }) {
@@ -18,8 +17,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
   const display = usePlayerStore((s) => s.display);
   const videoDuration = usePlayerStore((s) => s.progress.duration);
   const segments = useSkipTime();
-  const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
-  const tidbKey = conf().TIDB_API_KEY ?? tidbKeyFromStore;
+  const { canSubmit: canSubmitToTIDB } = useTIDBSubmissionAvailability();
   const { setCurrentOverlay } = useOverlayStack();
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
 
@@ -63,7 +61,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
       </Menu.BackLink>
       <Menu.Section>
         <div className="flex gap-2 mb-4">
-          {tidbKey ? (
+          {canSubmitToTIDB ? (
             <Button
               theme="purple"
               className="flex-1"
@@ -129,7 +127,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
         </div>
       </Menu.Section>
 
-      {showSubmissionForm && tidbKey && (
+      {showSubmissionForm && canSubmitToTIDB && (
         <TIDBSubmissionForm
           segment={segmentData}
           onSuccess={() => {
