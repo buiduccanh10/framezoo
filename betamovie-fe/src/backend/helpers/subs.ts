@@ -2,7 +2,7 @@ import { strFromU8, unzipSync } from "fflate";
 import { list } from "subsrt-ts";
 
 import { proxiedFetch } from "@/backend/helpers/fetch";
-import { convertSubtitlesToSrt } from "@/components/player/utils/captions";
+import { normalizeSubtitleToVtt } from "@/components/player/utils/captions";
 import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { SimpleCache } from "@/utils/cache";
@@ -51,9 +51,9 @@ function extractSubtitleTextFromZip(buffer: ArrayBuffer): string | null {
 }
 
 /**
- * Always returns SRT
+ * Always returns canonical WebVTT.
  */
-export async function downloadCaption(
+export async function downloadCaptionAsVtt(
   caption: CaptionListItem,
 ): Promise<string> {
   const cached = downloadCache.get(caption.url);
@@ -119,7 +119,7 @@ export async function downloadCaption(
   }
   if (!data) throw new Error("failed to get caption data");
 
-  const output = convertSubtitlesToSrt(data);
+  const output = normalizeSubtitleToVtt(data);
   downloadCache.set(caption.url, output, expirySeconds);
   return output;
 }

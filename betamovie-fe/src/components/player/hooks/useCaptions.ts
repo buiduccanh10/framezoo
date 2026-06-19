@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import subsrt from "subsrt-ts";
 
-import { downloadCaption, downloadWebVTT } from "@/backend/helpers/subs";
+import { downloadCaptionAsVtt, downloadWebVTT } from "@/backend/helpers/subs";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFit";
 import { useLanguageStore } from "@/stores/language";
@@ -234,12 +234,12 @@ export function useCaptions() {
         id: caption.id,
         language: caption.language,
         url: caption.url,
-        srtData: "",
+        vttData: "",
       };
 
       if (!caption.hls) {
-        const srtData = await downloadCaption(caption);
-        captionToSet.srtData = srtData;
+        const vttData = await downloadCaptionAsVtt(caption);
+        captionToSet.vttData = vttData;
       } else {
         // request a language change to hls, so it can load the subtitles
         await setSubtitlePreference?.(caption.language);
@@ -264,8 +264,8 @@ export function useCaptions() {
 
         const filtered = filterDuplicateCaptionCues(vttCaptions);
 
-        const srtData = subsrt.build(filtered, { format: "srt" });
-        captionToSet.srtData = srtData;
+        const vttData = subsrt.build(filtered, { format: "vtt" });
+        captionToSet.vttData = vttData;
       }
 
       setDirectCaption(captionToSet, caption);
@@ -287,12 +287,12 @@ export function useCaptions() {
         id: caption.id,
         language: caption.language,
         url: caption.url,
-        srtData: "",
+        vttData: "",
       };
 
       if (!caption.hls) {
-        const srtData = await downloadCaption(caption);
-        captionToSet.srtData = srtData;
+        const vttData = await downloadCaptionAsVtt(caption);
+        captionToSet.vttData = vttData;
       } else {
         await setSubtitlePreference?.(caption.language);
         const track = getSubtitleTracks?.().find(
@@ -316,8 +316,8 @@ export function useCaptions() {
 
         const filtered = filterDuplicateCaptionCues(vttCaptions);
 
-        const srtData = subsrt.build(filtered, { format: "srt" });
-        captionToSet.srtData = srtData;
+        const vttData = subsrt.build(filtered, { format: "vtt" });
+        captionToSet.vttData = vttData;
       }
 
       setSecondaryCaption(captionToSet);

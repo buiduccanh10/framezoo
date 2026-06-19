@@ -9,7 +9,6 @@ import {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { convert } from "subsrt-ts";
 
 import { subtitleTypeList } from "@/backend/helpers/subs";
 import { useFileDrop } from "@/components/DropFile";
@@ -21,7 +20,8 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import {
   captionIsVisible,
-  parseSubtitles,
+  normalizeSubtitleToVtt,
+  parseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -327,10 +327,10 @@ export function CustomCaptionOption() {
       }
 
       try {
-        const converted = convert(event.target.result, "srt");
+        const converted = normalizeSubtitleToVtt(event.target.result);
         setCaption({
           language: "custom",
-          srtData: converted,
+          vttData: converted,
           id: "custom-caption",
         });
         setCustomSubs();
@@ -419,12 +419,11 @@ export function PasteCaptionOption(props: { selected?: boolean }) {
 
       const subtitleText = await response.text();
 
-      // Convert to SRT format
-      const converted = convert(subtitleText, "srt");
+      const converted = normalizeSubtitleToVtt(subtitleText);
 
       setCaption({
         language: parsedData.language,
-        srtData: converted,
+        vttData: converted,
         id: "pasted-caption",
       });
       setCustomSubs();
@@ -496,7 +495,7 @@ export function CaptionsView({
   };
   const setCaption = usePlayerStore((s) => s.setCaption);
   const videoTime = usePlayerStore((s) => s.progress.time);
-  const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
+  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
@@ -628,13 +627,13 @@ export function CaptionsView({
 
   // Get current subtitle text preview
   const currentSubtitleText = useMemo(() => {
-    if (!srtData || !selectedCaption) return null;
-    const parsedCaptions = parseSubtitles(srtData, selectedLanguage);
+    if (!vttData || !selectedCaption) return null;
+    const parsedCaptions = parseCanonicalVtt(vttData);
     const visibleCaption = parsedCaptions.find(({ start, end }) =>
       captionIsVisible(start, end, delay, videoTime),
     );
     return visibleCaption?.content;
-  }, [srtData, selectedLanguage, delay, videoTime, selectedCaption]);
+  }, [vttData, delay, videoTime, selectedCaption]);
 
   function onDrop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -654,11 +653,11 @@ export function CaptionsView({
       }
 
       try {
-        const converted = convert(e.target.result, "srt");
+        const converted = normalizeSubtitleToVtt(e.target.result);
 
         setCaption({
           language: "custom",
-          srtData: converted,
+          vttData: converted,
           id: "custom-caption",
         });
         setCustomSubs();

@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 
 import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
-import { convertSubtitlesToObjectUrl } from "@/components/player/utils/captions";
+import { buildVttObjectUrl } from "@/components/player/utils/captions";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -67,23 +67,23 @@ function useObjectUrl(cb: () => string | null, deps: any[]) {
 
 function VideoElement() {
   const preloadMode: "auto" | "metadata" = isSafari ? "auto" : "metadata";
+  const inactiveTrackMode: TextTrackMode = isSafari ? "disabled" : "hidden";
 
   const videoEl = useRef<HTMLVideoElement>(null);
   const trackEl = useRef<HTMLTrackElement>(null);
   const display = usePlayerStore((s) => s.display);
-  const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
+  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const language = usePlayerStore((s) => s.caption.selected?.language);
-  const secondarySrtData = usePlayerStore((s) =>
-    s.caption.dualSubEnabled ? s.caption.secondary?.srtData : undefined,
+  const secondaryVttData = usePlayerStore((s) =>
+    s.caption.dualSubEnabled ? s.caption.secondary?.vttData : undefined,
   );
   const source = usePlayerStore((s) => s.source);
   const enableNativeSubtitles = usePreferencesStore(
     (s) => s.enableNativeSubtitles,
   );
   const trackObjectUrl = useObjectUrl(
-    () =>
-      srtData ? convertSubtitlesToObjectUrl(srtData, secondarySrtData) : null,
-    [srtData, secondarySrtData],
+    () => (vttData ? buildVttObjectUrl(vttData, secondaryVttData) : null),
+    [vttData, secondaryVttData],
   );
 
   const asTrack = usePlayerStore((s) => s.caption.asTrack);
@@ -100,19 +100,35 @@ function VideoElement() {
 
   // Control track visibility based on setting
   useEffect(() => {
+    const video = videoEl.current;
     const track = trackEl.current;
-    if (!track) return;
+    if (!video) return;
 
     const setMode = () => {
-      track.track.mode = shouldUseNativeTrack ? "showing" : "hidden";
+      const textTracks = video.textTracks;
+      for (let i = 0; i < textTracks.length; i++) {
+        if (textTracks[i].kind === "subtitles") {
+          textTracks[i].mode = "disabled";
+        }
+      }
+
+      if (track) {
+        track.track.mode = shouldUseNativeTrack ? "showing" : inactiveTrackMode;
+      }
     };
 
     setMode();
-    track.addEventListener("load", setMode);
+    track?.addEventListener("load", setMode);
     return () => {
-      track.removeEventListener("load", setMode);
+      track?.removeEventListener("load", setMode);
+      const textTracks = video.textTracks;
+      for (let i = 0; i < textTracks.length; i++) {
+        if (textTracks[i].kind === "subtitles") {
+          textTracks[i].mode = "disabled";
+        }
+      }
     };
-  }, [shouldUseNativeTrack, trackObjectUrl]);
+  }, [inactiveTrackMode, shouldUseNativeTrack, trackObjectUrl]);
 
   // Attach track when native subtitles are enabled
   // SubtitleView handles showing custom captions when native subtitles is disabled
@@ -120,12 +136,13 @@ function VideoElement() {
   if (trackObjectUrl) {
     subtitleTrack = (
       <track
+        key={trackObjectUrl}
         ref={trackEl}
         label="AlphaFlix Captions"
         kind="subtitles"
         srcLang={language || "en"}
         src={trackObjectUrl}
-        default
+        default={shouldUseNativeTrack}
       />
     );
   }

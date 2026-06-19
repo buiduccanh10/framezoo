@@ -26,7 +26,7 @@ export function makeQueId(index: number, start: number, end: number): string {
   return `${index}-${start}-${end}`;
 }
 
-export function convertSubtitlesToVtt(text: string): string {
+export function normalizeSubtitleToVtt(text: string): string {
   const textTrimmed = text.trim();
   if (textTrimmed === "") {
     throw new Error("Given text is empty");
@@ -36,18 +36,6 @@ export function convertSubtitlesToVtt(text: string): string {
     throw new Error("Invalid subtitle format");
   }
   return vtt;
-}
-
-export function convertSubtitlesToSrt(text: string): string {
-  const textTrimmed = text.trim();
-  if (textTrimmed === "") {
-    throw new Error("Given text is empty");
-  }
-  const srt = convert(textTrimmed, "srt");
-  if (detect(srt) === "") {
-    throw new Error("Invalid subtitle format");
-  }
-  return srt;
 }
 
 export function filterDuplicateCaptionCues(cues: ContentCaption[]) {
@@ -64,31 +52,18 @@ export function parseVttSubtitles(vtt: string) {
   return parse(vtt).filter((cue) => cue.type === "caption") as CaptionCueType[];
 }
 
-export function parseSubtitles(
-  text: string,
-  _language?: string,
-): CaptionCueType[] {
-  const vtt = convertSubtitlesToVtt(text);
+export function parseCanonicalVtt(vttText: string): CaptionCueType[] {
+  const vtt = normalizeSubtitleToVtt(vttText);
   return filterDuplicateCaptionCues(parseVttSubtitles(vtt));
 }
 
-function stringToBase64(input: string): string {
-  return btoa(String.fromCodePoint(...new TextEncoder().encode(input)));
-}
-
-export function convertSubtitlesToSrtDataurl(text: string): string {
-  return `data:application/x-subrip;base64,${stringToBase64(
-    convertSubtitlesToSrt(text),
-  )}`;
-}
-
-export function convertSubtitlesToObjectUrl(
-  text: string,
-  secondaryText?: string,
+export function buildVttObjectUrl(
+  vttText: string,
+  secondaryVttText?: string,
 ): string {
-  let vtt = convertSubtitlesToVtt(text);
-  if (secondaryText) {
-    const secondaryVtt = convertSubtitlesToVtt(secondaryText);
+  let vtt = normalizeSubtitleToVtt(vttText);
+  if (secondaryVttText) {
+    const secondaryVtt = normalizeSubtitleToVtt(secondaryVttText);
     vtt = vtt + "\n\n" + secondaryVtt.replace(/^WEBVTT(?:[\r\n]+)?/i, "");
   }
   return URL.createObjectURL(

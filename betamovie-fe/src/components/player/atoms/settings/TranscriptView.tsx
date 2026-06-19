@@ -9,7 +9,7 @@ import { Link } from "@/components/player/internals/ContextMenu/Links";
 import {
   captionIsVisible,
   makeQueId,
-  parseSubtitles,
+  parseCanonicalVtt,
   sanitize,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -23,8 +23,7 @@ export function TranscriptView({ id }: { id: string }) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const display = usePlayerStore((s) => s.display);
-  const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
-  const language = usePlayerStore((s) => s.caption.selected?.language);
+  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const delay = useSubtitleStore((s) => s.delay);
   const { duration: timeDuration, time } = usePlayerStore((s) => s.progress);
 
@@ -34,8 +33,8 @@ export function TranscriptView({ id }: { id: string }) {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const parsedCaptions = useMemo(
-    () => (srtData ? parseSubtitles(srtData, language) : []),
-    [srtData, language],
+    () => (vttData ? parseCanonicalVtt(vttData) : []),
+    [vttData],
   );
 
   const showHours = useMemo(() => {

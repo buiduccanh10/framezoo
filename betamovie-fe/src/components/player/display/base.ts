@@ -218,6 +218,32 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     (value: void | PromiseLike<void>) => void
   >();
 
+  function disableVideoSubtitleTextTracks() {
+    if (!videoElement) return;
+    const tracks = videoElement.textTracks;
+    for (let i = 0; i < tracks.length; i++) {
+      if (tracks[i].kind === "subtitles" || tracks[i].kind === "captions") {
+        tracks[i].mode = "disabled";
+      }
+    }
+  }
+
+  function suppressHlsSubtitleRendering(clearPreference = false) {
+    if (!hls) {
+      disableVideoSubtitleTextTracks();
+      return;
+    }
+
+    // We only borrow HLS subtitle tracks to fetch playlist details/fragments for custom rendering.
+    hls.subtitleDisplay = false;
+    if (clearPreference) {
+      hls.setSubtitleOption({ id: -1 });
+    } else if (hls.subtitleTrack !== -1) {
+      hls.subtitleTrack = -1;
+    }
+    disableVideoSubtitleTextTracks();
+  }
+
   function getBufferedAhead(): number {
     if (!videoElement) return 0;
     const currentTime = videoElement.currentTime ?? 0;
@@ -499,6 +525,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
           },
           renderTextTracksNatively: false,
         });
+        hls.subtitleDisplay = false;
         const currentHls = hls;
         const exceptions = [
           "Failed to execute 'appendBuffer' on 'SourceBuffer': This SourceBuffer has been removed from the parent media source.",
@@ -872,6 +899,7 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     resetSegmentQualityDebug();
     lastHlsStartLoadAt = 0;
     resetDetachedSourceBufferRaceTracking();
+    suppressHlsSubtitleRendering(true);
 
     if (videoElement) {
       videoElement.removeAttribute("src");
@@ -1230,9 +1258,14 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       return hls?.subtitleTracks ?? [];
     },
     async setSubtitlePreference(lang) {
+      suppressHlsSubtitleRendering();
+
       // default subtitles are already loaded by hls.js
       const track = hls?.subtitleTracks.find((t) => t.lang === lang);
-      if (track?.details !== undefined) return Promise.resolve();
+      if (track?.details !== undefined) {
+        suppressHlsSubtitleRendering(true);
+        return Promise.resolve();
+      }
 
       // need to wait a moment before hls loads the subtitles
       const promise = new Promise<void>((resolve, reject) => {
@@ -1246,7 +1279,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
         }, 5000);
       });
       hls?.setSubtitleOption({ lang });
-      return promise;
+      return promise.finally(() => {
+        suppressHlsSubtitleRendering(true);
+      });
     },
     changeAudioTrack(track) {
       if (!hls) return;

@@ -1,8 +1,8 @@
-import { downloadCaption } from "@/backend/helpers/subs";
+import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import type { SegmentData } from "@/components/player/hooks/useSkipTime";
 import type { CaptionListItem } from "@/stores/player/slices/source";
 
-import { type CaptionCueType, parseSubtitles } from "./captions";
+import { type CaptionCueType, parseCanonicalVtt } from "./captions";
 
 export type CaptionFitConfidence = "high" | "medium" | "low";
 
@@ -214,8 +214,8 @@ export async function scoreCaptionSourceFit(
 
   const promise = (async () => {
     try {
-      const srtData = await downloadCaption(caption);
-      const cues = parseSubtitles(srtData);
+      const vttData = await downloadCaptionAsVtt(caption);
+      const cues = parseCanonicalVtt(vttData);
       const score = computeCaptionSourceFitScore(cues, context);
       scoreCache.set(cacheKey, {
         value: score,
