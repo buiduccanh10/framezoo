@@ -52,12 +52,12 @@ class Translator {
   private abortSignal?: AbortSignal;
 
   constructor(
-    srtData: string,
+    vttData: string,
     targetLang: string,
     service: TranslateService,
     abortSignal?: AbortSignal,
   ) {
-    this.captions = subsrt.parse(srtData);
+    this.captions = subsrt.parse(vttData);
     this.targetLang = targetLang;
     this.service = service;
     this.serviceCfg = service.getConfig();
@@ -219,7 +219,7 @@ class Translator {
     }
 
     console.timeEnd("translation");
-    return subsrt.build(this.captions, { format: "srt" });
+    return subsrt.build(this.captions, { format: "vtt" });
   }
 }
 
@@ -237,7 +237,7 @@ export async function translate(
   }
 
   const translator = new Translator(
-    caption.srtData,
+    caption.vttData,
     targetLang,
     service,
     abortSignal,

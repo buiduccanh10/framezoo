@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { downloadCaption } from "@/backend/helpers/subs";
+import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { SegmentQualityDebugInfo } from "@/components/player/display/displayInterface";
 import { ScrapeMedia } from "@/lib/providers";
 import { MakeSlice } from "@/stores/player/slices/types";
@@ -56,7 +56,7 @@ export interface Caption {
   id: string;
   language: string;
   url?: string;
-  srtData: string;
+  vttData: string;
 }
 
 export interface CaptionListItem {
@@ -626,11 +626,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     }
 
     try {
-      const srtData = await downloadCaption(targetCaption);
+      const vttData = await downloadCaptionAsVtt(targetCaption);
       if (abortController.signal.aborted) {
         return;
       }
-      if (!srtData) {
+      if (!vttData) {
         throw new Error("Fetching failed");
       }
       set((s) => {
@@ -638,7 +638,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         s.caption.translateTask.fetchedTargetCaption = {
           id: targetCaption.id,
           language: targetCaption.language,
-          srtData,
+          vttData,
         };
       });
       store = get();
@@ -665,7 +665,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         const translatedCaption: Caption = {
           id: `${targetCaption.id}-translated-${targetLanguage}`,
           language: targetLanguage,
-          srtData: result,
+          vttData: result,
         };
         s.caption.translateTask.done = true;
         s.caption.translateTask.translatedCaption = translatedCaption;

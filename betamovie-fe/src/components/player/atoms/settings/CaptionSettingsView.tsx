@@ -16,7 +16,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import {
   captionIsVisible,
-  parseSubtitles,
+  parseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -494,8 +494,7 @@ export function CaptionSettingsView({
   const setDelay = subtitleStore.setDelay;
   const updateStyling = subtitleStore.updateStyling;
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
-  const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
-  const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
+  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const videoTime = usePlayerStore((s) => s.progress.time);
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const enableNativeSubtitles = preferencesStore.enableNativeSubtitles;
@@ -514,13 +513,13 @@ export function CaptionSettingsView({
   };
 
   const currentSubtitleText = useMemo(() => {
-    if (!srtData || !selectedCaption) return null;
-    const parsedCaptions = parseSubtitles(srtData, selectedLanguage);
+    if (!vttData || !selectedCaption) return null;
+    const parsedCaptions = parseCanonicalVtt(vttData);
     const visibleCaption = parsedCaptions.find(({ start, end }) =>
       captionIsVisible(start, end, delay, videoTime),
     );
     return visibleCaption?.content;
-  }, [srtData, selectedCaption, selectedLanguage, delay, videoTime]);
+  }, [vttData, selectedCaption, delay, videoTime]);
 
   const resetSubStyling = () => {
     subtitleStore.updateStyling({

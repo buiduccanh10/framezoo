@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import {
   captionIsVisible,
   makeQueId,
-  parseSubtitles,
+  parseCanonicalVtt,
   sanitize,
 } from "@/components/player/utils/captions";
 import { Transition } from "@/components/utils/Transition";
@@ -123,15 +123,14 @@ export function CaptionCue({
 
 export function SubtitleRenderer() {
   const videoTime = usePlayerStore((s) => s.progress.time);
-  const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
-  const language = usePlayerStore((s) => s.caption.selected?.language);
+  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.delay);
 
   const parsedCaptions = useMemo(
-    () => (srtData ? parseSubtitles(srtData, language) : []),
-    [srtData, language],
+    () => (vttData ? parseCanonicalVtt(vttData) : []),
+    [vttData],
   );
 
   const visibleCaptions = useMemo(
@@ -158,15 +157,14 @@ export function SubtitleRenderer() {
 
 export function SecondarySubtitleRenderer() {
   const videoTime = usePlayerStore((s) => s.progress.time);
-  const srtData = usePlayerStore((s) => s.caption.secondary?.srtData);
-  const language = usePlayerStore((s) => s.caption.secondary?.language);
+  const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.delay);
 
   const parsedCaptions = useMemo(
-    () => (srtData ? parseSubtitles(srtData, language) : []),
-    [srtData, language],
+    () => (vttData ? parseCanonicalVtt(vttData) : []),
+    [vttData],
   );
 
   const visibleCaptions = useMemo(
@@ -177,7 +175,7 @@ export function SecondarySubtitleRenderer() {
     [parsedCaptions, videoTime, delay],
   );
 
-  if (!srtData) return null;
+  if (!vttData) return null;
 
   const secondaryStyling = {
     ...styling,
@@ -230,7 +228,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
       >
         {dualSubEnabled &&
           secondaryCaption &&
-          (!caption || secondaryCaption.srtData !== caption.srtData) && (
+          (!caption || secondaryCaption.vttData !== caption.vttData) && (
             <SecondarySubtitleRenderer />
           )}
         {caption && <SubtitleRenderer />}

@@ -76,7 +76,7 @@ export interface DisplayMeta {
 
 export interface DisplayCaption {
   id: string;
-  srtData: string;
+  vttData: string;
   language: string;
   url?: string;
 }

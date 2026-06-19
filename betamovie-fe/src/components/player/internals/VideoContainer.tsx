@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 
 import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
-import { convertSubtitlesToObjectUrl } from "@/components/player/utils/captions";
+import { buildVttObjectUrl } from "@/components/player/utils/captions";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -72,19 +72,18 @@ function VideoElement() {
   const videoEl = useRef<HTMLVideoElement>(null);
   const trackEl = useRef<HTMLTrackElement>(null);
   const display = usePlayerStore((s) => s.display);
-  const srtData = usePlayerStore((s) => s.caption.selected?.srtData);
+  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const language = usePlayerStore((s) => s.caption.selected?.language);
-  const secondarySrtData = usePlayerStore((s) =>
-    s.caption.dualSubEnabled ? s.caption.secondary?.srtData : undefined,
+  const secondaryVttData = usePlayerStore((s) =>
+    s.caption.dualSubEnabled ? s.caption.secondary?.vttData : undefined,
   );
   const source = usePlayerStore((s) => s.source);
   const enableNativeSubtitles = usePreferencesStore(
     (s) => s.enableNativeSubtitles,
   );
   const trackObjectUrl = useObjectUrl(
-    () =>
-      srtData ? convertSubtitlesToObjectUrl(srtData, secondarySrtData) : null,
-    [srtData, secondarySrtData],
+    () => (vttData ? buildVttObjectUrl(vttData, secondaryVttData) : null),
+    [vttData, secondaryVttData],
   );
 
   const asTrack = usePlayerStore((s) => s.caption.asTrack);
