@@ -71,6 +71,7 @@ export function useCaptions() {
     (s) => s.display?.setSubtitlePreference,
   );
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
+  const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const enableNativeSubtitles = usePreferencesStore(
     (s) => s.enableNativeSubtitles,
   );
@@ -205,15 +206,17 @@ export function useCaptions() {
 
       setLanguage(caption.language);
 
-      // Use native tracks for MP4 streams instead of custom rendering
-      if (source?.type === "file" && enableNativeSubtitles) {
+      // Preserve an existing native-track request when the subtitle finished
+      // loading after the user already entered native fullscreen / native PiP.
+      if (
+        captionAsTrack ||
+        (source?.type === "file" && enableNativeSubtitles)
+      ) {
         setCaptionAsTrack(true);
-      } else {
-        // For HLS sources or when native subtitles are disabled, use custom rendering
-        setCaptionAsTrack(false);
       }
     },
     [
+      captionAsTrack,
       setIsOpenSubtitles,
       setLanguage,
       setCaption,

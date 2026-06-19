@@ -17,6 +17,8 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     if (!newDisplay) {
       set((s) => {
         s.display = null;
+        s.interface.pictureInPictureMode = null;
+        s.interface.documentPictureInPictureWindow = null;
       });
       return;
     }
@@ -93,6 +95,15 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     newDisplay.on("needstrack", (needsTrack) => {
       set((s) => {
         s.caption.asTrack = needsTrack;
+      });
+    });
+    newDisplay.on("pictureinpicture", (pictureInPicture) => {
+      set((s) => {
+        s.interface.pictureInPictureMode = pictureInPicture.mode;
+        s.interface.documentPictureInPictureWindow =
+          pictureInPicture.mode === "document"
+            ? (pictureInPicture.documentWindow as any)
+            : null;
       });
     });
     newDisplay.on("canairplay", (canAirplay) => {

@@ -2,6 +2,7 @@ import { Icons } from "@/components/Icon";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { usePlayerStore } from "@/stores/player/store";
 import {
+  canDocumentPictureInPicture,
   canPictureInPicture,
   canWebkitPictureInPicture,
 } from "@/utils/detectFeatures";
@@ -9,7 +10,13 @@ import {
 export function Pip(props: { iconSizeClass?: string; className?: string }) {
   const display = usePlayerStore((s) => s.display);
 
-  if (!canPictureInPicture() && !canWebkitPictureInPicture()) return null;
+  if (
+    !canDocumentPictureInPicture() &&
+    !canPictureInPicture() &&
+    !canWebkitPictureInPicture()
+  ) {
+    return null;
+  }
 
   return (
     <VideoPlayerButton

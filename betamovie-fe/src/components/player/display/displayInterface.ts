@@ -41,6 +41,13 @@ export type SegmentQualityDebugInfo = {
   updatedAt: number;
 };
 
+export type PictureInPictureMode = "native" | "document" | null;
+export type PictureInPictureState = {
+  active: boolean;
+  mode: PictureInPictureMode;
+  documentWindow: Window | null;
+};
+
 export type DisplayInterfaceEvents = {
   play: void;
   pause: void;
@@ -55,6 +62,7 @@ export type DisplayInterfaceEvents = {
   audiotracks: AudioTrack[];
   changedaudiotrack: AudioTrack | null;
   needstrack: boolean;
+  pictureinpicture: PictureInPictureState;
   canairplay: boolean;
   playbackrate: number;
   error: DisplayError;

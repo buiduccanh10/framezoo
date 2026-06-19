@@ -9,8 +9,10 @@ import {
 import {
   DisplayInterface,
   DisplayInterfaceEvents,
+  PictureInPictureMode,
   SegmentQualityDebugInfo,
 } from "@/components/player/display/displayInterface";
+import { ensureDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { handleBuffered } from "@/components/player/utils/handleBuffered";
 import { getMediaErrorDetails } from "@/components/player/utils/mediaErrorDetails";
 import {
@@ -28,6 +30,7 @@ import {
 import { processCdnLink } from "@/utils/cdn";
 import {
   canChangeVolume,
+  canDocumentPictureInPicture,
   canFullscreen,
   canFullscreenAnyElement,
   canPictureInPicture,
@@ -212,11 +215,63 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let lastSegmentQuality: SegmentQualityDebugInfo["realQuality"] | null = null;
   let lastSegmentResolution: { width: number; height: number } | null = null;
   let lastSegmentDebugFingerprint = "";
+  let pictureInPictureMode: PictureInPictureMode = null;
+  let documentPictureInPictureWindow: Window | null = null;
+  let documentPictureInPictureCloseHandler: (() => void) | null = null;
+  let isNativeVideoFullscreen = false;
 
   const languagePromises = new Map<
     string,
     (value: void | PromiseLike<void>) => void
   >();
+
+  function emitPictureInPictureState(
+    mode: PictureInPictureMode,
+    pipWindow: Window | null = null,
+  ) {
+    pictureInPictureMode = mode;
+    isPictureInPicture = mode !== null;
+    emit("pictureinpicture", {
+      active: isPictureInPicture,
+      mode,
+      documentWindow: pipWindow,
+    });
+  }
+
+  function updateNativeTrackRequirement() {
+    emit(
+      "needstrack",
+      isNativeVideoFullscreen || pictureInPictureMode === "native",
+    );
+  }
+
+  function cleanupDocumentPictureInPictureWindow() {
+    const pipWindow = documentPictureInPictureWindow;
+    const closeHandler = documentPictureInPictureCloseHandler;
+
+    if (pipWindow && closeHandler) {
+      pipWindow.removeEventListener("pagehide", closeHandler);
+    }
+
+    documentPictureInPictureWindow = null;
+    documentPictureInPictureCloseHandler = null;
+    emitPictureInPictureState(null);
+    updateNativeTrackRequirement();
+  }
+
+  function closeDocumentPictureInPictureWindow() {
+    const pipWindow =
+      documentPictureInPictureWindow ??
+      window.documentPictureInPicture?.window ??
+      null;
+
+    if (!pipWindow || pipWindow.closed) {
+      cleanupDocumentPictureInPictureWindow();
+      return;
+    }
+
+    pipWindow.close();
+  }
 
   function disableVideoSubtitleTextTracks() {
     if (!videoElement) return;
@@ -745,12 +800,67 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     const webkitPlayer = videoElement as any;
     const isInWebkitPip =
       webkitPlayer.webkitPresentationMode === "picture-in-picture";
-    isPictureInPicture = isInWebkitPip;
-    // Use native tracks in WebKit PiP mode for iOS compatibility
-    emit("needstrack", isInWebkitPip);
+    emitPictureInPictureState(isInWebkitPip ? "native" : null);
+    updateNativeTrackRequirement();
 
     // On iOS, entering PiP may allow autoplay that was previously blocked
     if (isInWebkitPip && videoElement.paused && shouldAutoplayAfterLoad) {
+      tryAutoplayWhenReady();
+    }
+  }
+
+  async function enterDocumentPictureInPicture() {
+    if (!videoElement || !window.documentPictureInPicture) return;
+
+    if (document.pictureInPictureElement) {
+      try {
+        await document.exitPictureInPicture();
+      } catch {
+        // Fall through and still try the document PiP path.
+      }
+    }
+
+    const existingWindow =
+      documentPictureInPictureWindow ??
+      window.documentPictureInPicture.window ??
+      null;
+    if (existingWindow && !existingWindow.closed) {
+      closeDocumentPictureInPictureWindow();
+      return;
+    }
+
+    const fallbackWidth =
+      containerElement?.clientWidth ?? videoElement.clientWidth ?? 720;
+    const fallbackHeight =
+      containerElement?.clientHeight ?? videoElement.clientHeight ?? 405;
+    const aspectRatio =
+      videoElement.videoWidth && videoElement.videoHeight
+        ? videoElement.videoWidth / videoElement.videoHeight
+        : fallbackWidth / Math.max(fallbackHeight, 1);
+    const requestedWidth = Math.max(320, Math.round(fallbackWidth));
+    const requestedHeight = Math.max(
+      180,
+      Math.round(requestedWidth / Math.max(aspectRatio, 0.1)),
+    );
+
+    const pipWindow = await window.documentPictureInPicture.requestWindow({
+      width: requestedWidth,
+      height: requestedHeight,
+    });
+
+    ensureDocumentPictureInPictureRoots(pipWindow);
+
+    const handlePageHide = () => {
+      cleanupDocumentPictureInPictureWindow();
+    };
+
+    pipWindow.addEventListener("pagehide", handlePageHide);
+    documentPictureInPictureWindow = pipWindow;
+    documentPictureInPictureCloseHandler = handlePageHide;
+    emitPictureInPictureState("document", pipWindow);
+    updateNativeTrackRequirement();
+
+    if (videoElement.paused && shouldAutoplayAfterLoad) {
       tryAutoplayWhenReady();
     }
   }
@@ -848,13 +958,15 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     });
     videoElement.addEventListener("webkitbeginfullscreen", () => {
       isFullscreen = true;
+      isNativeVideoFullscreen = true;
       emit("fullscreen", isFullscreen);
-      emit("needstrack", true);
+      updateNativeTrackRequirement();
     });
     videoElement.addEventListener("webkitendfullscreen", () => {
       isFullscreen = false;
+      isNativeVideoFullscreen = false;
       emit("fullscreen", isFullscreen);
-      if (!isFullscreen) emit("needstrack", false);
+      updateNativeTrackRequirement();
     });
     videoElement.addEventListener(
       "webkitplaybacktargetavailabilitychanged",
@@ -867,6 +979,14 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     videoElement.addEventListener(
       "webkitpresentationmodechanged",
       webkitPresentationModeChange,
+    );
+    videoElement.addEventListener(
+      "enterpictureinpicture",
+      pictureInPictureChange,
+    );
+    videoElement.addEventListener(
+      "leavepictureinpicture",
+      pictureInPictureChange,
     );
     videoElement.addEventListener("ratechange", () => {
       if (videoElement) emit("playbackrate", videoElement.playbackRate);
@@ -936,7 +1056,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       !!document.fullscreenElement || // other browsers
       !!(document as any).webkitFullscreenElement; // safari
     emit("fullscreen", isFullscreen);
-    if (!isFullscreen) emit("needstrack", false);
+    if (!isFullscreen) {
+      isNativeVideoFullscreen = false;
+    }
+    updateNativeTrackRequirement();
 
     // On iOS, entering fullscreen may allow autoplay that was previously blocked
     if (
@@ -951,13 +1074,16 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   fscreen.addEventListener("fullscreenchange", fullscreenChange);
 
   function pictureInPictureChange() {
-    isPictureInPicture = !!document.pictureInPictureElement;
-    // Use native tracks in PiP mode for better compatibility with iOS and other platforms
-    emit("needstrack", isPictureInPicture);
+    if (pictureInPictureMode === "document") return;
+
+    const isInNativePictureInPicture =
+      document.pictureInPictureElement === videoElement;
+    emitPictureInPictureState(isInNativePictureInPicture ? "native" : null);
+    updateNativeTrackRequirement();
 
     // Entering PiP may allow autoplay that was previously blocked
     if (
-      isPictureInPicture &&
+      isInNativePictureInPicture &&
       videoElement &&
       videoElement.paused &&
       shouldAutoplayAfterLoad
@@ -966,9 +1092,6 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     }
   }
 
-  document.addEventListener("enterpictureinpicture", pictureInPictureChange);
-  document.addEventListener("leavepictureinpicture", pictureInPictureChange);
-
   return {
     on,
     off,
@@ -976,16 +1099,9 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       return "web";
     },
     destroy: () => {
+      closeDocumentPictureInPictureWindow();
       destroyVideoElement();
       fscreen.removeEventListener("fullscreenchange", fullscreenChange);
-      document.removeEventListener(
-        "enterpictureinpicture",
-        pictureInPictureChange,
-      );
-      document.removeEventListener(
-        "leavepictureinpicture",
-        pictureInPictureChange,
-      );
     },
     load(ops) {
       if (!ops.source) unloadSource();
@@ -1022,6 +1138,21 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     },
 
     processVideoElement(video) {
+      if (videoElement === video) {
+        this.setVolume(lastVolume);
+        return;
+      }
+
+      if (videoElement) {
+        const currentTime = videoElement.currentTime;
+        if (Number.isFinite(currentTime) && currentTime > 0) {
+          startAt = currentTime;
+          lastValidTime = currentTime;
+          emit("time", currentTime);
+        }
+        shouldAutoplayAfterLoad = !videoElement.paused;
+      }
+
       destroyVideoElement();
       videoElement = video;
       setSource();
@@ -1085,7 +1216,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       if (isFullscreen) {
         isFullscreen = false;
         emit("fullscreen", isFullscreen);
-        emit("needstrack", false);
+        isNativeVideoFullscreen = false;
+        updateNativeTrackRequirement();
         if (!fscreen.fullscreenElement) return;
         fscreen.exitFullscreen();
         return;
@@ -1107,28 +1239,42 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
               tracks[i].mode = "showing";
             }
           }
-          emit("needstrack", true);
+          isNativeVideoFullscreen = true;
+          updateNativeTrackRequirement();
           (videoElement as any).webkitEnterFullscreen();
         }
       }
     },
     togglePictureInPicture() {
-      if (!videoElement) return;
-      if (canWebkitPictureInPicture()) {
-        const webkitPlayer = videoElement as any;
-        webkitPlayer.webkitSetPresentationMode(
-          webkitPlayer.webkitPresentationMode === "picture-in-picture"
-            ? "inline"
-            : "picture-in-picture",
-        );
-      }
-      if (canPictureInPicture()) {
-        if (videoElement !== document.pictureInPictureElement) {
-          videoElement.requestPictureInPicture();
-        } else {
-          document.exitPictureInPicture();
+      void (async () => {
+        if (!videoElement) return;
+
+        if (canDocumentPictureInPicture()) {
+          try {
+            await enterDocumentPictureInPicture();
+            return;
+          } catch {
+            // Fall through to native PiP if Document PiP is unavailable at runtime.
+          }
         }
-      }
+
+        if (canWebkitPictureInPicture()) {
+          const webkitPlayer = videoElement as any;
+          webkitPlayer.webkitSetPresentationMode(
+            webkitPlayer.webkitPresentationMode === "picture-in-picture"
+              ? "inline"
+              : "picture-in-picture",
+          );
+          return;
+        }
+        if (canPictureInPicture()) {
+          if (videoElement !== document.pictureInPictureElement) {
+            await videoElement.requestPictureInPicture();
+          } else {
+            await document.exitPictureInPicture();
+          }
+        }
+      })();
     },
     startAirplay() {
       const videoPlayer = videoElement as any;
