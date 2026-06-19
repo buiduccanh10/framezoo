@@ -6,10 +6,9 @@ import { Icon, Icons } from "@/components/Icon";
 import { SegmentData } from "@/components/player/hooks/useSkipTime";
 import { TIDBSubmissionForm } from "@/components/player/TIDBSubmissionForm";
 import { Transition } from "@/components/utils/Transition";
-import { conf } from "@/setup/config";
+import { useTIDBSubmissionAvailability } from "@/hooks/useTIDBSubmissionAvailability";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 
 interface ThumbsFeedbackProps {
   controlsShowing: boolean;
@@ -27,8 +26,7 @@ export function ThumbsFeedback({
 }: ThumbsFeedbackProps) {
   const { t } = useTranslation();
   const time = usePlayerStore((s) => s.progress.time);
-  const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
-  const tidbKey = conf().TIDB_API_KEY ?? tidbKeyFromStore;
+  const { canSubmit: canSubmitToTIDB } = useTIDBSubmissionAvailability();
 
   // State for feedback
   const [showSubmissionModal, setShowSubmissionModal] = useState(false);
@@ -89,7 +87,7 @@ export function ThumbsFeedback({
   }, [onAction]);
 
   // Don't show thumbs feedback if TIDB API key is not set
-  if (!tidbKey || tidbKey.trim() === "") {
+  if (!canSubmitToTIDB) {
     return null;
   }
 

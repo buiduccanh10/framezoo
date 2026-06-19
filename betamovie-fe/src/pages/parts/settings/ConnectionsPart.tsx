@@ -6,6 +6,7 @@ import { SettingsCard } from "@/components/layout/SettingsCard";
 import { MwLink } from "@/components/text/Link";
 import { AuthInputBox } from "@/components/text-inputs/AuthInputBox";
 import { Heading1 } from "@/components/utils/Text";
+import { useTIDBSubmissionAvailability } from "@/hooks/useTIDBSubmissionAvailability";
 import { conf } from "@/setup/config";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -18,6 +19,7 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
   const { t } = useTranslation();
   const config = conf();
   const preferences = usePreferencesStore();
+  const { hasBackendKey } = useTIDBSubmissionAvailability();
   const initializedRef = useRef(false);
 
   // Enable TIDB key when component loads
@@ -28,7 +30,7 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
     }
   }, [tidbKey, preferences.tidbKey, setTIDBKey]);
 
-  const isEnvSet = !!config.TIDB_API_KEY;
+  const isServerManaged = !!config.TIDB_API_KEY || hasBackendKey;
   return (
     <SettingsCard>
       <div className="my-3">
@@ -42,13 +44,13 @@ export function TIDBEdit({ tidbKey, setTIDBKey }: TIDBKeyProps) {
           {t("settings.connections.tidb.tokenLabel")}
         </p>
         <div className="flex items-center w-full">
-          {isEnvSet ? (
+          {isServerManaged ? (
             <div className="flex-grow p-4 rounded-lg bg-authentication-inputBg border border-type-success/50 text-type-success flex items-center gap-2">
               <Icon icon={Icons.CHECKMARK} />
               <span>
                 {t(
                   "settings.connections.tidb.envSet",
-                  "API Key is set via environment variable",
+                  "API key is provided by server configuration",
                 )}
               </span>
             </div>
