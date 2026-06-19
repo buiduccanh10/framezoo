@@ -2,6 +2,20 @@ import { detect } from "detect-browser";
 import fscreen from "fscreen";
 import Hls from "hls.js";
 
+declare global {
+  interface Window {
+    documentPictureInPicture?: {
+      window?: Window | null;
+      requestWindow(options?: {
+        width?: number;
+        height?: number;
+        disallowReturnToOpener?: boolean;
+        preferInitialWindowPlacement?: boolean;
+      }): Promise<Window>;
+    };
+  }
+}
+
 export const isSafari = /^((?!chrome|android).)*safari/i.test(
   navigator.userAgent,
 );
@@ -45,6 +59,10 @@ export function canFullscreen(): boolean {
 
 export function canPictureInPicture(): boolean {
   return "pictureInPictureEnabled" in document;
+}
+
+export function canDocumentPictureInPicture(): boolean {
+  return typeof window.documentPictureInPicture?.requestWindow === "function";
 }
 
 export function canWebkitPictureInPicture(): boolean {

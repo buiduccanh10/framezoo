@@ -21,6 +21,8 @@ export interface InterfaceSlice {
     hovering: PlayerHoverState;
     lastHoveringState: PlayerHoverState;
     canAirplay: boolean;
+    pictureInPictureMode: "native" | "document" | null;
+    documentPictureInPictureWindow: Window | null;
     isCasting: boolean;
     hideNextEpisodeBtn: boolean;
     shouldStartFromBeginning: boolean;
@@ -65,6 +67,8 @@ export const createInterfaceSlice: MakeSlice<InterfaceSlice> = (set, get) => ({
     volumeChangedWithKeybindDebounce: null,
     timeFormat: VideoPlayerTimeFormat.REGULAR,
     canAirplay: false,
+    pictureInPictureMode: null,
+    documentPictureInPictureWindow: null,
     hideNextEpisodeBtn: false,
     shouldStartFromBeginning: false,
     skipNextSavedProgressResume: false,

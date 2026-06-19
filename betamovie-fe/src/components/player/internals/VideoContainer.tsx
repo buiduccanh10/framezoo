@@ -1,7 +1,9 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
 import { buildVttObjectUrl } from "@/components/player/utils/captions";
+import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
@@ -69,7 +71,9 @@ function VideoElement() {
   const preloadMode: "auto" | "metadata" = isSafari ? "auto" : "metadata";
   const inactiveTrackMode: TextTrackMode = isSafari ? "disabled" : "hidden";
 
-  const videoEl = useRef<HTMLVideoElement>(null);
+  const videoEl = useRef<HTMLVideoElement | null>(null);
+  const [videoElementNode, setVideoElementNode] =
+    useState<HTMLVideoElement | null>(null);
   const trackEl = useRef<HTMLTrackElement>(null);
   const display = usePlayerStore((s) => s.display);
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
@@ -78,6 +82,12 @@ function VideoElement() {
     s.caption.dualSubEnabled ? s.caption.secondary?.vttData : undefined,
   );
   const source = usePlayerStore((s) => s.source);
+  const pictureInPictureMode = usePlayerStore(
+    (s) => s.interface.pictureInPictureMode,
+  );
+  const documentPictureInPictureWindow = usePlayerStore(
+    (s) => s.interface.documentPictureInPictureWindow,
+  );
   const enableNativeSubtitles = usePreferencesStore(
     (s) => s.enableNativeSubtitles,
   );
@@ -87,43 +97,71 @@ function VideoElement() {
   );
 
   const asTrack = usePlayerStore((s) => s.caption.asTrack);
+  const documentPictureInPictureRoots =
+    pictureInPictureMode === "document"
+      ? getDocumentPictureInPictureRoots(documentPictureInPictureWindow)
+      : null;
   // Use native tracks when the setting is enabled or when requested (e.g. mobile fullscreen)
   const shouldUseNativeTrack =
-    (enableNativeSubtitles || asTrack) && source !== null;
+    pictureInPictureMode !== "document" &&
+    (enableNativeSubtitles || asTrack) &&
+    source !== null;
+
+  const handleVideoRef = useCallback((node: HTMLVideoElement | null) => {
+    videoEl.current = node;
+    setVideoElementNode(node);
+  }, []);
 
   // report video element to display interface
   useEffect(() => {
-    if (display && videoEl.current) {
-      display.processVideoElement(videoEl.current);
+    if (display && videoElementNode) {
+      display.processVideoElement(videoElementNode);
     }
-  }, [display, videoEl]);
+  }, [display, videoElementNode]);
 
   // Control track visibility based on setting
   useEffect(() => {
     const video = videoEl.current;
     const track = trackEl.current;
     if (!video) return;
+    let rafId: number | null = null;
 
     const setMode = () => {
       const textTracks = video.textTracks;
       for (let i = 0; i < textTracks.length; i++) {
-        if (textTracks[i].kind === "subtitles") {
-          textTracks[i].mode = "disabled";
+        if (
+          textTracks[i].kind === "subtitles" ||
+          textTracks[i].kind === "captions"
+        ) {
+          textTracks[i].mode = shouldUseNativeTrack
+            ? "showing"
+            : inactiveTrackMode;
         }
       }
 
-      if (track) {
+      if (track && track.track) {
         track.track.mode = shouldUseNativeTrack ? "showing" : inactiveTrackMode;
       }
     };
 
     setMode();
+    if (trackObjectUrl && shouldUseNativeTrack) {
+      rafId = requestAnimationFrame(() => {
+        setMode();
+      });
+    }
     track?.addEventListener("load", setMode);
     return () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
       track?.removeEventListener("load", setMode);
       const textTracks = video.textTracks;
       for (let i = 0; i < textTracks.length; i++) {
-        if (textTracks[i].kind === "subtitles") {
+        if (
+          textTracks[i].kind === "subtitles" ||
+          textTracks[i].kind === "captions"
+        ) {
           textTracks[i].mode = "disabled";
         }
       }
@@ -147,19 +185,33 @@ function VideoElement() {
     );
   }
 
-  return (
+  const videoElement = (
     <video
       id="video-element"
       className="absolute inset-0 w-full h-screen bg-black"
       autoPlay
       playsInline
-      ref={videoEl}
+      ref={handleVideoRef}
       preload={preloadMode}
       onContextMenu={(e) => e.preventDefault()}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "black",
+        objectFit: "contain",
+      }}
     >
       {subtitleTrack}
     </video>
   );
+
+  if (documentPictureInPictureRoots?.videoRoot) {
+    return createPortal(videoElement, documentPictureInPictureRoots.videoRoot);
+  }
+
+  return videoElement;
 }
 
 export function VideoContainer() {
