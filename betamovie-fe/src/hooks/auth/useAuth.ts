@@ -2,8 +2,8 @@ import { useCallback } from "react";
 
 import {
   SessionResponse,
-  normalizeAccessToken,
-  refreshOAuthToken,
+  isAuthErrorStatus,
+  withAuthRetry,
 } from "@/backend/accounts/auth";
 import { bookmarkMediaToInput } from "@/backend/accounts/bookmarks";
 import {
@@ -311,41 +311,38 @@ export function useAuth() {
 
       let activeAccount = account;
 
-      const refreshTokenIfPossible = async () => {
-        try {
-          const oauth = await refreshOAuthToken(backendUrl);
-          const accessToken = normalizeAccessToken(oauth);
-          if (!accessToken) return false;
-
-          activeAccount = {
-            ...activeAccount,
-            token: accessToken,
-          };
-          setAccount(activeAccount);
-          return true;
-        } catch {
-          return false;
-        }
-      };
-
       let user: { user: UserResponse; session: SessionResponse };
 
       try {
-        user = await getUser(backendUrl, activeAccount.token);
+        user = await withAuthRetry(backendUrl, activeAccount, (token) =>
+          getUser(backendUrl, token),
+        );
+        activeAccount = useAuthStore.getState().account ?? activeAccount;
       } catch (err) {
         const anyError: any = err;
-        if (
-          anyError?.response?.status === 401 ||
-          anyError?.response?.status === 403 ||
-          anyError?.response?.status === 400
-        ) {
-          const refreshed = await refreshTokenIfPossible();
-          if (!refreshed) {
-            await logout();
-            return;
-          }
+        const status =
+          anyError?.response?.status ??
+          anyError?.status ??
+          anyError?.statusCode;
 
-          user = await getUser(backendUrl, activeAccount.token);
+        if (isAuthErrorStatus(status)) {
+          try {
+            // Keep local auth state intact on restore failure and retry with
+            // cookie-only auth before surfacing an error to the loading screen.
+            user = await getUser(backendUrl);
+          } catch (cookieErr) {
+            const cookieStatus =
+              (cookieErr as any)?.response?.status ??
+              (cookieErr as any)?.status ??
+              (cookieErr as any)?.statusCode;
+
+            if (isAuthErrorStatus(cookieStatus)) {
+              throw cookieErr;
+            }
+
+            console.error(cookieErr);
+            throw cookieErr;
+          }
         } else {
           console.error(err);
           throw err;
@@ -377,7 +374,7 @@ export function useAuth() {
         groupOrder,
       );
     },
-    [backendUrl, syncData, logout],
+    [backendUrl, syncData],
   );
   return {
     loggedIn,
