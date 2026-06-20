@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken';
 const { sign, verify } = jwt;
 import { randomUUID } from 'crypto';
 import type { H3Event } from 'h3';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type H3EventCompat = any;
 import type { JwtPayload } from 'jsonwebtoken';
 import type { CookieSerializeOptions } from 'cookie-es';
 
@@ -14,7 +17,10 @@ const parsePositiveInt = (value: string | undefined, fallback: number) => {
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 };
 
-const ACCESS_TOKEN_EXPIRY_SECONDS = parsePositiveInt(process.env.ACCESS_TOKEN_EXPIRY_SECONDS, 5 * 60);
+const ACCESS_TOKEN_EXPIRY_SECONDS = parsePositiveInt(
+  process.env.ACCESS_TOKEN_EXPIRY_SECONDS,
+  5 * 60
+);
 const REFRESH_TOKEN_EXPIRY_SECONDS = parsePositiveInt(
   process.env.REFRESH_TOKEN_EXPIRY_SECONDS,
   30 * 24 * 60 * 60
@@ -66,14 +72,14 @@ export function useAuth() {
     return cryptoSecret;
   };
 
-  const isSecureCookieRequest = (event: H3Event) => {
+  const isSecureCookieRequest = (event: H3EventCompat) => {
     const isHttps = getRequestProtocol(event, { xForwardedProto: true }) === 'https';
     const host = getRequestHost(event, { xForwardedHost: true }).split(':')[0];
     const isLocalhost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
     return isHttps || (process.env.NODE_ENV === 'production' && !isLocalhost);
   };
 
-  const getCookieSameSite = (event: H3Event): CookieSerializeOptions['sameSite'] => {
+  const getCookieSameSite = (event: H3EventCompat): CookieSerializeOptions['sameSite'] => {
     const requestOrigin = getRequestHeader(event, 'origin');
     if (!requestOrigin) {
       return 'lax';
@@ -94,7 +100,7 @@ export function useAuth() {
   };
 
   const getCookieOptions = (
-    event: H3Event,
+    event: H3EventCompat,
     maxAge: number
   ): Pick<CookieSerializeOptions, 'httpOnly' | 'sameSite' | 'secure' | 'path' | 'maxAge'> => ({
     httpOnly: true,
@@ -104,7 +110,7 @@ export function useAuth() {
     maxAge,
   });
 
-  const getAccessToken = (event: H3Event) => {
+  const getAccessToken = (event: H3EventCompat) => {
     // Prefer cookie first so stale Authorization headers from FE don't break auth.
     const cookieToken = getCookie(event, SESSION_COOKIE_NAME);
     if (cookieToken) {
@@ -119,7 +125,8 @@ export function useAuth() {
     return null;
   };
 
-  const getRefreshTokenForEvent = (event: H3Event) => getCookie(event, REFRESH_COOKIE_NAME) || null;
+  const getRefreshTokenForEvent = (event: H3EventCompat) =>
+    getCookie(event, REFRESH_COOKIE_NAME) || null;
 
   const getSession = async (id: string) => {
     const session = await prisma.sessions.findUnique({
@@ -237,26 +244,55 @@ export function useAuth() {
     return { sid: payload.sid, typ: payload.typ as 'access' | undefined };
   };
 
-  const verifyRefreshToken = (token: string): RefreshTokenPayload | null => {
-    const payload = verifyJwtPayload(token);
-    if (!payload) return null;
+  const verifyJwtPayloadWithReason = (
+    token: string
+  ): { payload: JwtPayload | null; error?: string } => {
+    try {
+      const cryptoSecret = getCryptoSecret();
+      const payload = verify(token, cryptoSecret, {
+        algorithms: ['HS256'],
+      });
+
+      if (typeof payload === 'string') {
+        return { payload: null, error: 'payload_is_string' };
+      }
+      return { payload: payload as JwtPayload };
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      return { payload: null, error: errMsg };
+    }
+  };
+
+  const verifyRefreshTokenWithReason = (
+    token: string
+  ): { payload: RefreshTokenPayload | null; error?: string } => {
+    const { payload, error } = verifyJwtPayloadWithReason(token);
+    if (!payload) {
+      return { payload: null, error };
+    }
 
     if (payload.typ !== 'refresh') {
-      return null;
+      return { payload: null, error: `invalid_token_type: ${payload.typ}` };
     }
 
     const sid = typeof payload.sid === 'string' ? payload.sid : '';
     const jti = typeof payload.jti === 'string' ? payload.jti : '';
 
     if (!sid || !jti) {
-      return null;
+      return { payload: null, error: 'missing_sid_or_jti_in_payload' };
     }
 
     return {
-      sid,
-      typ: 'refresh',
-      jti,
+      payload: {
+        sid,
+        typ: 'refresh',
+        jti,
+      },
     };
+  };
+
+  const verifyRefreshToken = (token: string): RefreshTokenPayload | null => {
+    return verifyRefreshTokenWithReason(token).payload;
   };
 
   // Backward-compatible alias.
@@ -284,24 +320,42 @@ export function useAuth() {
     };
   };
 
-  const rotateRefreshToken = async (refreshToken: string) => {
-    const payload = verifyRefreshToken(refreshToken);
-    if (!payload) return null;
+  const rotateRefreshToken = async (
+    refreshToken: string,
+    options?: { rotate?: boolean }
+  ): Promise<{
+    success: boolean;
+    reason?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    session?: any;
+    tokens?: SessionTokenBundle;
+  }> => {
+    const shouldRotate = options?.rotate ?? true;
+
+    const { payload, error } = verifyRefreshTokenWithReason(refreshToken);
+    if (!payload) {
+      return { success: false, reason: error ?? 'invalid_token_payload' };
+    }
 
     const session = await getSession(payload.sid);
-    if (!session) return null;
+    if (!session) {
+      return { success: false, reason: 'session_not_found_or_expired' };
+    }
 
     if (!session.refresh_jti || session.refresh_jti !== payload.jti) {
-      return null;
+      return {
+        success: false,
+        reason: `jti_mismatch: expected ${session.refresh_jti || 'null'}, got ${payload.jti}`,
+      };
     }
 
     if (!session.refresh_expires_at || new Date(session.refresh_expires_at) < new Date()) {
-      return null;
+      return { success: false, reason: 'refresh_token_expired' };
     }
 
     const now = new Date();
     const expiryDate = new Date(now.getTime() + SESSION_EXPIRY_MS);
-    const newRefreshJti = randomUUID();
+    const newRefreshJti = shouldRotate ? randomUUID() : session.refresh_jti;
 
     const updatedSession = await prisma.sessions.update({
       where: { id: session.id },
@@ -322,25 +376,31 @@ export function useAuth() {
     };
 
     return {
+      success: true,
       session: updatedSession,
       tokens,
     };
   };
 
-  const setSessionCookie = (event: H3Event, token: string) => {
-    setCookie(event, SESSION_COOKIE_NAME, token, getCookieOptions(event, ACCESS_TOKEN_EXPIRY_SECONDS));
+  const setSessionCookie = (event: H3EventCompat, token: string) => {
+    setCookie(
+      event,
+      SESSION_COOKIE_NAME,
+      token,
+      getCookieOptions(event, ACCESS_TOKEN_EXPIRY_SECONDS)
+    );
   };
 
-  const setRefreshCookie = (event: H3Event, token: string) => {
+  const setRefreshCookie = (event: H3EventCompat, token: string) => {
     setCookie(event, REFRESH_COOKIE_NAME, token, getCookieOptions(event, SESSION_EXPIRY_SECONDS));
   };
 
-  const setAuthCookies = (event: H3Event, tokens: SessionTokenBundle) => {
+  const setAuthCookies = (event: H3EventCompat, tokens: SessionTokenBundle) => {
     setSessionCookie(event, tokens.accessToken);
     setRefreshCookie(event, tokens.refreshToken);
   };
 
-  const clearSessionCookie = (event: H3Event) => {
+  const clearSessionCookie = (event: H3EventCompat) => {
     deleteCookie(event, SESSION_COOKIE_NAME, {
       path: '/',
     });
@@ -350,18 +410,21 @@ export function useAuth() {
     });
   };
 
-  const tryRefreshSessionFromEvent = async (event: H3Event) => {
+  const tryRefreshSessionFromEvent = async (event: H3EventCompat) => {
     const refreshToken = getRefreshTokenForEvent(event);
     if (!refreshToken) return null;
 
-    const rotated = await rotateRefreshToken(refreshToken);
-    if (!rotated) return null;
+    const rotated = await rotateRefreshToken(refreshToken, { rotate: false });
+    if (!rotated.success) {
+      console.warn(`[auth] tryRefreshSessionFromEvent failed: ${rotated.reason}`);
+      return null;
+    }
 
     setAuthCookies(event, rotated.tokens);
     return rotated.session;
   };
 
-  const resolveCurrentSessionFromEvent = async (event: H3Event) => {
+  const resolveCurrentSessionFromEvent = async (event: H3EventCompat) => {
     const accessToken = getAccessToken(event);
     let tokenState: 'missing' | 'invalid' | 'expired_or_missing_session' = 'missing';
 
@@ -408,7 +471,7 @@ export function useAuth() {
     return resolveCurrentSessionFromEvent(event);
   };
 
-  const getCurrentSessionForEvent = async (event: H3Event) => {
+  const getCurrentSessionForEvent = async (event: H3EventCompat) => {
     return resolveCurrentSessionFromEvent(event);
   };
 
