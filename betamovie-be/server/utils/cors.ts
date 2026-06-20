@@ -1,5 +1,8 @@
 import type { H3Event } from 'h3';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type H3EventCompat = any;
+
 const DEFAULT_DEV_ORIGINS = new Set(['http://localhost:5173', 'http://127.0.0.1:5173']);
 
 const normalizeOrigin = (value: string) => {
@@ -23,7 +26,7 @@ const parseAllowedOrigins = () => {
 
 const allowedOrigins = parseAllowedOrigins();
 
-export const resolveCorsOrigin = (event: H3Event) => {
+export const resolveCorsOrigin = (event: H3EventCompat) => {
   const requestOrigin = getRequestHeader(event, 'origin');
   if (!requestOrigin) {
     return null;
@@ -45,7 +48,7 @@ export const resolveCorsOrigin = (event: H3Event) => {
 };
 
 export const applyCorsHeaders = (
-  event: H3Event,
+  event: H3EventCompat,
   methods = 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   headers = 'Content-Type, Authorization, X-Requested-With'
 ) => {

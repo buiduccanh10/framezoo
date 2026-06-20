@@ -1,7 +1,10 @@
 import type { H3Event } from 'h3';
 import { useAuth } from '~/utils/auth';
 
-const parseTokenRequest = async (event: H3Event) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type H3EventCompat = any;
+
+const parseTokenRequest = async (event: H3EventCompat) => {
   const contentType = (getRequestHeader(event, 'content-type') || '').toLowerCase();
 
   if (contentType.includes('application/x-www-form-urlencoded')) {
@@ -43,12 +46,12 @@ export default defineEventHandler(async event => {
     });
   }
 
-  const rotated = await auth.rotateRefreshToken(token);
-  if (!rotated) {
+  const rotated = await auth.rotateRefreshToken(token, { rotate: true });
+  if (!rotated.success) {
     throw createError({
       statusCode: 401,
       statusMessage: 'invalid_grant',
-      message: 'Invalid or expired refresh token',
+      message: `Invalid or expired refresh token: ${rotated.reason}`,
     });
   }
 
