@@ -15,8 +15,6 @@ services:
       - ${ENV_FILE_PATH:-.env}
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
     networks:
       - betamovie-prod-network
 
@@ -75,8 +73,6 @@ services:
       NGINX_PROXY_SEND_TIMEOUT: 30s
       PREVIEW_SERVICE_URL: http://preview-service:3100
       PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
-    ports:
-      - '3000:3000'
     depends_on:
       postgres:
         condition: service_healthy
@@ -104,10 +100,6 @@ services:
         SUBSOURCE_API_KEY: ${VITE_SUBSOURCE_API_KEY}
         ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
     hostname: betamovie-fe
-    expose:
-      - '80'
-    ports:
-      - '4080:80'
     environment:
       - VIRTUAL_HOST=alphaflix.io.vn
       - VIRTUAL_PORT=80
