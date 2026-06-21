@@ -111,7 +111,8 @@ export function normalizeBackendSkipSegments(source: unknown): SegmentData[] {
   const output: SegmentData[] = [];
   for (const item of source) {
     if (!item || typeof item !== "object") continue;
-    const type = (item as Record<string, unknown>).type;
+    let type = (item as Record<string, unknown>).type;
+    if (type === "outro") type = "credits";
     if (
       type !== "intro" &&
       type !== "recap" &&
@@ -120,7 +121,7 @@ export function normalizeBackendSkipSegments(source: unknown): SegmentData[] {
     ) {
       continue;
     }
-    const normalized = normalizeSegment(type, item);
+    const normalized = normalizeSegment(type as SegmentData["type"], item);
     if (normalized) output.push(normalized);
   }
   return output;
@@ -156,9 +157,9 @@ export function useSkipTime() {
         tmdbId: meta.tmdbId,
       });
       if (meta.type === "show") {
-        if (meta.season?.number)
+        if (meta.season?.number != null)
           query.set("season", String(meta.season.number));
-        if (meta.episode?.number)
+        if (meta.episode?.number != null)
           query.set("episode", String(meta.episode.number));
       }
       if (meta.imdbId) query.set("imdbId", meta.imdbId);

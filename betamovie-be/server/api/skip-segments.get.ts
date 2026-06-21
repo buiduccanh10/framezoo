@@ -115,6 +115,7 @@ const normalizeTheIntroDbSegments = (data: unknown): SegmentData[] => {
   pushNormalizedSegments(segments, 'intro', payload.intro);
   pushNormalizedSegments(segments, 'recap', payload.recap);
   pushNormalizedSegments(segments, 'credits', payload.credits);
+  pushNormalizedSegments(segments, 'credits', payload.outro);
   pushNormalizedSegments(segments, 'preview', payload.preview);
   return segments;
 };
