@@ -1,8 +1,9 @@
 import classNames from "classnames";
+import { useEffect, useState } from "react";
 
 import { UserIcon, UserIcons } from "../UserIcon";
 
-const icons = [
+const classicIcons = [
   UserIcons.CAT,
   UserIcons.WEED,
   UserIcons.USER_GROUP,
@@ -29,6 +30,9 @@ const icons = [
   UserIcons.BRUSH,
   UserIcons.BELL,
   UserIcons.THUMBS_UP,
+];
+
+const emojiIcons = [
   UserIcons.CAT_FACE,
   UserIcons.DOG_FACE,
   UserIcons.FOX_FACE,
@@ -56,18 +60,62 @@ const icons = [
   UserIcons.SLEEPY_FACE,
   UserIcons.ANGEL_FACE,
 ];
-export const initialIcon = icons[0];
+
+type IconTab = "classic" | "emoji";
+
+export const initialIcon = classicIcons[0];
+
+function getTabForIcon(icon: UserIcons): IconTab {
+  return emojiIcons.includes(icon) ? "emoji" : "classic";
+}
 
 export function IconPicker(props: {
   label: string;
   value: UserIcons;
   onInput: (v: UserIcons) => void;
 }) {
+  const [activeTab, setActiveTab] = useState<IconTab>(() =>
+    getTabForIcon(props.value),
+  );
+
+  useEffect(() => {
+    setActiveTab(getTabForIcon(props.value));
+  }, [props.value]);
+
+  const icons = activeTab === "classic" ? classicIcons : emojiIcons;
+
   return (
     <div className="space-y-3">
       {props.label ? (
         <p className="font-bold text-white">{props.label}</p>
       ) : null}
+
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          className={classNames(
+            "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+            activeTab === "classic"
+              ? "bg-buttons-purple text-white"
+              : "bg-authentication-inputBg text-type-dimmed hover:text-white",
+          )}
+          onClick={() => setActiveTab("classic")}
+        >
+          Classic
+        </button>
+        <button
+          type="button"
+          className={classNames(
+            "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+            activeTab === "emoji"
+              ? "bg-buttons-purple text-white"
+              : "bg-authentication-inputBg text-type-dimmed hover:text-white",
+          )}
+          onClick={() => setActiveTab("emoji")}
+        >
+          Emoji
+        </button>
+      </div>
 
       <div className="grid grid-cols-6 gap-3">
         {icons.map((icon) => {
