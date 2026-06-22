@@ -49,6 +49,20 @@ export {
 
 const POPULAR_CAROUSEL_PAGE_COUNT = 2;
 
+function appendUniqueMedia(
+  existingItems: DiscoverMedia[],
+  incomingItems: DiscoverMedia[],
+) {
+  const seen = new Set(existingItems.map((item) => item.id));
+  const appendedItems = incomingItems.filter((item) => {
+    if (seen.has(item.id)) return false;
+    seen.add(item.id);
+    return true;
+  });
+
+  return [...existingItems, ...appendedItems];
+}
+
 export function useDiscoverOptions(
   mediaType: MediaType,
   options?: { includeCountries?: boolean },
@@ -163,6 +177,7 @@ export function useDiscoverMedia({
   mediaTitle,
   isCarouselView = false,
   enabled = true,
+  prioritizeLatestOrder = false,
 }: UseDiscoverMediaProps): UseDiscoverMediaReturn {
   const [media, setMedia] = useState<DiscoverMedia[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -195,9 +210,10 @@ export function useDiscoverMedia({
   const hasOriginCountryFilter = Boolean(originCountry);
   const shouldPrioritizeLatestActivity = useCallback(
     (type: DiscoverContentType) =>
-      mediaType === "tv" &&
-      (type === "latest" || type === "latesttv" || type === "onTheAir"),
-    [mediaType],
+      prioritizeLatestOrder ||
+      (mediaType === "tv" &&
+        (type === "latest" || type === "latesttv" || type === "onTheAir")),
+    [mediaType, prioritizeLatestOrder],
   );
   const sortDiscoverResults = useCallback(
     (items: DiscoverMedia[], type: DiscoverContentType) =>
@@ -421,7 +437,7 @@ export function useDiscoverMedia({
       return;
     }
 
-    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}`;
+    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}-${prioritizeLatestOrder ? "latest" : "default"}`;
     if (lastFetchedRef.current === currentFetchKey) {
       return;
     }
@@ -646,18 +662,11 @@ export function useDiscoverMedia({
     try {
       const data = await attemptFetch(contentType);
       setMedia((prevMedia) => {
-        const mergedMedia =
-          page === 1 ? data.results : [...prevMedia, ...data.results];
+        if (page === 1) {
+          return data.results;
+        }
 
-        // Deduplicate items by ID
-        const seen = new Set();
-        const uniqueMedia = mergedMedia.filter((item) => {
-          const duplicate = seen.has(item.id);
-          seen.add(item.id);
-          return !duplicate;
-        });
-
-        return sortDiscoverResults(uniqueMedia, contentType);
+        return appendUniqueMedia(prevMedia, data.results);
       });
       setHasMore(data.hasMore);
     } catch (err) {
@@ -672,20 +681,11 @@ export function useDiscoverMedia({
           const fallbackData = await attemptFetch(fallbackType);
           setActualContentType(fallbackType); // Set actual content type to fallback
           setMedia((prevMedia) => {
-            const mergedMedia =
-              page === 1
-                ? fallbackData.results
-                : [...prevMedia, ...fallbackData.results];
+            if (page === 1) {
+              return fallbackData.results;
+            }
 
-            // Deduplicate items by ID
-            const seen = new Set();
-            const uniqueMedia = mergedMedia.filter((item) => {
-              const duplicate = seen.has(item.id);
-              seen.add(item.id);
-              return !duplicate;
-            });
-
-            return sortDiscoverResults(uniqueMedia, fallbackType);
+            return appendUniqueMedia(prevMedia, fallbackData.results);
           });
           setHasMore(fallbackData.hasMore);
           setError(null); // Clear error if fallback succeeds
@@ -719,7 +719,7 @@ export function useDiscoverMedia({
     page,
     formattedLanguage,
     isRestoring,
-    sortDiscoverResults,
+    prioritizeLatestOrder,
   ]);
 
   useEffect(() => {

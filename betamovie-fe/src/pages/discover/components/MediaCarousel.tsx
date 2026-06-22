@@ -7,6 +7,7 @@ import { useWindowSize } from "react-use";
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaCard } from "@/components/media/MediaCard";
+import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
@@ -44,6 +45,8 @@ interface MediaCarouselProps {
   hideRelatedButtons?: boolean;
   releaseYear?: string;
   originCountry?: string;
+  sectionTitleOverride?: string;
+  prioritizeLatestOrder?: boolean;
 }
 
 function MoreCard({ link }: { link: string }) {
@@ -93,6 +96,8 @@ export function MediaCarousel({
   hideRelatedButtons = false,
   releaseYear,
   originCountry,
+  sectionTitleOverride,
+  prioritizeLatestOrder = false,
 }: MediaCarouselProps) {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
@@ -247,7 +252,9 @@ export function MediaCarousel({
       enabled: discoverMediaEnabled,
       releaseYear: releaseYear || undefined,
       originCountry: originCountry || undefined,
+      prioritizeLatestOrder,
     });
+  const resolvedSectionTitle = sectionTitleOverride || sectionTitle;
 
   // Hide section if there's an error or no content (after loading is complete)
   const shouldHide = !isLoading && (error || media.length === 0);
@@ -257,9 +264,9 @@ export function MediaCarousel({
     return relatedButtons?.find(
       (btn) =>
         btn.name === selectedGenre?.name ||
-        btn.name === sectionTitle.split(" on ")[1],
+        btn.name === resolvedSectionTitle.split(" on ")[1],
     );
-  }, [relatedButtons, selectedGenre?.name, sectionTitle]);
+  }, [relatedButtons, resolvedSectionTitle, selectedGenre?.name]);
 
   // Convert buttons to dropdown options
   const dropdownOptions: OptionItem[] = React.useMemo(() => {
@@ -295,7 +302,7 @@ export function MediaCarousel({
     }
   }, [showRecommendations, recommendationSources, selectedRecommendationId]);
 
-  const categorySlug = `${sectionTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${isTVShow ? "tv" : "movie"}`;
+  const categorySlug = `${resolvedSectionTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${isTVShow ? "tv" : "movie"}`;
   const isScrollingRef = useRef(false);
 
   const handleWheel = React.useCallback(
@@ -371,7 +378,7 @@ export function MediaCarousel({
         <div className="flex flex-col pl-2 lg:pl-[68px]">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl cursor-default font-bold text-white md:text-2xl pl-0 text-balance">
-              {sectionTitle}
+              {resolvedSectionTitle}
             </h2>
             {showRecommendations &&
               recommendationSources &&
@@ -553,8 +560,7 @@ export function MediaCarousel({
                   key={item.id}
                   className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
                 >
-                  <MediaCard
-                    linkable
+                  <WatchedMediaCard
                     key={item.id}
                     media={{
                       id: item.id.toString(),

@@ -48,15 +48,18 @@ export function DiscoverContent({
   const handleYearChange = onFilterYearChange || setInternalYear;
 
   useEffect(() => {
-    if (selectedCategory === "editorpicks") {
-      setSelectedCategory("top10");
+    if (selectedCategory === "editorpicks" || selectedCategory === "top10") {
+      setSelectedCategory("popular");
     }
   }, [selectedCategory, setSelectedCategory]);
 
   // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
   const isTVShowsTab = selectedCategory === "tvshows";
-  const isTop10Tab = selectedCategory === "top10";
+  const isPopularTab =
+    selectedCategory === "popular" ||
+    selectedCategory === "top10" ||
+    selectedCategory === "editorpicks";
   const isGenreTab = selectedCategory.startsWith("genre:");
   const selectedGenreId = isGenreTab
     ? selectedCategory.replace("genre:", "")
@@ -336,18 +339,41 @@ export function DiscoverContent({
     return carousels;
   };
 
-  const renderTop10Content = () => {
+  const renderPopularContent = () => {
+    const popularLabel = t("discover.carousel.title.popular");
+
     return (
-      <LazyMediaCarousel
-        key="movie-top10-nav"
-        content={{ type: "top10", fallback: "popular" }}
-        isTVShow={false}
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority
-        {...filtersProps}
-      />
+      <>
+        <LazyMediaCarousel
+          key="movie-popular-nav"
+          content={{ type: "popular" }}
+          isTVShow={false}
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          priority
+          sectionTitleOverride={t("discover.carousel.title.movies", {
+            category: popularLabel,
+          })}
+          prioritizeLatestOrder
+          {...filtersProps}
+        />
+
+        <LazyMediaCarousel
+          key="tv-popular-nav"
+          content={{ type: "popular" }}
+          isTVShow
+          carouselRefs={carouselRefs}
+          onShowDetails={handleShowDetails}
+          moreContent
+          priority
+          sectionTitleOverride={t("discover.carousel.title.tvshows", {
+            category: popularLabel,
+          })}
+          prioritizeLatestOrder
+          {...filtersProps}
+        />
+      </>
     );
   };
 
@@ -398,9 +424,9 @@ export function DiscoverContent({
           {renderTVShowsContent()}
         </div>
 
-        {/* Top 10 Movies Tab */}
-        <div style={{ display: isTop10Tab ? "block" : "none" }}>
-          {renderTop10Content()}
+        {/* Popular Tab */}
+        <div style={{ display: isPopularTab ? "block" : "none" }}>
+          {renderPopularContent()}
         </div>
 
         {/* Genre Movies Tab */}
@@ -413,7 +439,7 @@ export function DiscoverContent({
       <div
         className={classNames(
           "flex justify-center mt-8 mb-12",
-          isMoviesTab || isTop10Tab || isGenreTab ? "block" : "hidden",
+          isMoviesTab || isPopularTab || isGenreTab ? "block" : "hidden",
         )}
       >
         <Button theme="purple" onClick={() => navigate("/discover/all")}>
