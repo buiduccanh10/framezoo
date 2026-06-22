@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "הוסף לרשימה",
     "airs": "עולה לאוויר",
     "collection": {
       "movie": "סֶרֶט",
@@ -416,6 +417,84 @@
       "sectionTitle": "צפה בהיסטוריה"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "העתק קישור לשיתוף",
+      "create": "צור רשימה",
+      "delete": "לִמְחוֹק",
+      "edit": "לַעֲרוֹך",
+      "editItems": "ערוך פריטים",
+      "open": "לִפְתוֹחַ",
+      "save": "שמור שינויים",
+      "saveMembership": "שמור שינויים"
+    },
+    "delete": {
+      "confirm": "למחוק את \"{{name}}\"? לא ניתן לבטל זאת."
+    },
+    "empty": {
+      "description": "צור את הרשימה הראשונה שלך כדי להתחיל לקבץ כותרות.",
+      "title": "עדיין אין רשימות"
+    },
+    "errors": {
+      "load": "טעינת הרשימות שלך נכשלה."
+    },
+    "form": {
+      "createDescription": "התחל רשימה חדשה למועדפים, צפייה חוזרת או כל דבר אחר שתרצה לשתף.",
+      "createTitle": "צור רשימה",
+      "description": "תֵאוּר",
+      "descriptionHelp": "הערה אופציונלית שתעזור לך לזכור מה שייך לרשימה זו.",
+      "descriptionPlaceholder": "בשביל מה הרשימה הזו?",
+      "editDescription": "עדכן את השם, התיאור או הנראות של רשימה זו.",
+      "editTitle": "ערוך רשימה",
+      "errors": {
+        "nameRequired": "נדרש שם רשימה",
+        "submitFailed": "שמירת הרשימה נכשלה."
+      },
+      "name": "שם רשימה",
+      "namePlaceholder": "מדע בדיוני סוף שבוע",
+      "public": "רשימה ציבורית",
+      "publicHelp": "כל מי שיש לו את הקישור יכול לצפות ברשימה הזו."
+    },
+    "items": {
+      "empty": "רשימה זו ריקה."
+    },
+    "meta": {
+      "itemCount": "{{count}} פריט",
+      "itemCount_plural": "{{count}} פריטים",
+      "updatedAt": "עודכן {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "לְבַטֵל",
+        "create": "צור רשימה",
+        "save": "שמור שינויים"
+      },
+      "description": "בחר אילו רשימות צריכות לכלול {{title}}.",
+      "empty": {
+        "description": "צור רשימה כדי לשמור כותרת זו.",
+        "title": "עדיין אין רשימות"
+      },
+      "errors": {
+        "create": "יצירת הרשימה נכשלה.",
+        "save": "נכשל עדכון החברות ברשימה."
+      },
+      "title": "הוסף לרשימה"
+    },
+    "page": {
+      "title": "רשימות"
+    },
+    "public": {
+      "notFoundDescription": "קישור שיתוף זה חסר או אינו זמין עוד.",
+      "notFoundTitle": "רשימה לא נמצאה",
+      "pageTitle": "רשימה משותפת",
+      "privateDescription": "הבעלים לא שיתף את הרשימה הזו באופן ציבורי.",
+      "privateTitle": "רשימה זו היא פרטית"
+    },
+    "visibility": {
+      "private": "פְּרָטִי",
+      "public": "פּוּמְבֵּי"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "פ",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "פתח את תפריט החשבון",
       "desktop": "הגדרות אפליקציה",
+      "lists": "רשימות",
       "logout": "להתנתק",
       "register": "סנכרון לענן",
       "settings": "הגדרות"

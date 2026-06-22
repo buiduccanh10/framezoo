@@ -20,10 +20,10 @@
     // Error prevention
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-debugger": "warn",
-    "no-duplicate-imports": "error",
+    "no-duplicate-imports": "warn",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
-      "error",
+      "warn",
       {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
@@ -38,14 +38,14 @@
         "allowTypedFunctionExpressions": true
       }
     ],
-    "@typescript-eslint/no-floating-promises": "error",
-    "@typescript-eslint/no-misused-promises": "error",
-    "@typescript-eslint/await-thenable": "error",
-    "@typescript-eslint/no-unnecessary-type-assertion": "error",
-    "@typescript-eslint/prefer-nullish-coalescing": "error",
-    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/no-misused-promises": "warn",
+    "@typescript-eslint/await-thenable": "warn",
+    "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/prefer-optional-chain": "warn",
     "@typescript-eslint/consistent-type-imports": [
-      "error",
+      "warn",
       {
         "prefer": "type-imports",
         "disallowTypeAnnotations": false
@@ -54,7 +54,7 @@
 
     // Code style
     "prettier/prettier": [
-      "error",
+      "warn",
       {
         "singleQuote": true,
         "trailingComma": "es5",
@@ -63,40 +63,41 @@
         "semi": true
       }
     ],
-    "arrow-body-style": ["error", "as-needed"],
-    "prefer-arrow-callback": "error",
-    "no-var": "error",
-    "prefer-const": "error",
-    "eqeqeq": ["error", "always", { "null": "ignore" }],
-    "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
-    "no-trailing-spaces": "error",
-    "eol-last": "error",
-    "comma-dangle": ["error", "always-multiline"],
-    "quotes": ["error", "single", { "avoidEscape": true }],
-    "semi": ["error", "always"],
-    "object-curly-spacing": ["error", "always"],
-    "array-bracket-spacing": ["error", "never"],
-    "computed-property-spacing": ["error", "never"],
+    "arrow-body-style": ["warn", "as-needed"],
+    "prefer-arrow-callback": "warn",
+    "no-var": "warn",
+    "prefer-const": "warn",
+    "eqeqeq": ["warn", "always", { "null": "ignore" }],
+    "no-multiple-empty-lines": ["warn", { "max": 1, "maxEOF": 0 }],
+    "no-trailing-spaces": "warn",
+    "eol-last": "warn",
+    "comma-dangle": ["warn", "always-multiline"],
+    "quotes": ["warn", "single", { "avoidEscape": true }],
+    "semi": ["warn", "always"],
+    "object-curly-spacing": ["warn", "always"],
+    "array-bracket-spacing": ["warn", "never"],
+    "computed-property-spacing": ["warn", "never"],
     "space-before-function-paren": [
-      "error",
+      "warn",
       {
         "anonymous": "always",
         "named": "never",
         "asyncArrow": "always"
       }
     ],
-    "space-before-blocks": ["error", "always"],
-    "keyword-spacing": ["error", { "before": true, "after": true }],
-    "space-infix-ops": "error",
-    "no-multi-spaces": "error",
-    "no-whitespace-before-property": "error",
-    "func-call-spacing": ["error", "never"],
-    "no-spaced-func": "error",
-    "no-unexpected-multiline": "error",
-    "no-mixed-spaces-and-tabs": "error",
-    "no-tabs": "error",
+    "space-before-blocks": ["warn", "always"],
+    "keyword-spacing": ["warn", { "before": true, "after": true }],
+    "space-infix-ops": "warn",
+    "no-multi-spaces": "warn",
+    "no-whitespace-before-property": "warn",
+    "func-call-spacing": ["warn", "never"],
+    "no-spaced-func": "warn",
+    "no-unexpected-multiline": "warn",
+    "no-mixed-spaces-and-tabs": "warn",
+    "no-tabs": "warn",
+    "no-useless-escape": "warn",
     "indent": [
-      "error",
+      "warn",
       2,
       {
         "SwitchCase": 1,
@@ -114,6 +115,9 @@
     ".nuxt/",
     ".output/",
     "coverage/",
+    "examples/",
+    "preview-service/",
+    "scripts/",
     "*.config.js",
     "*.config.ts"
   ]

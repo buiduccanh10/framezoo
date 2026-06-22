@@ -21,6 +21,7 @@ function formatSeries(series?: ShowProgressResult | null) {
 
 export interface WatchedMediaCardProps {
   media: MediaItem;
+  linkable?: boolean;
   closable?: boolean;
   onClose?: () => void;
   onShowDetails?: (media: MediaItem) => void;
@@ -48,7 +49,7 @@ export function WatchedMediaCard(props: WatchedMediaCardProps) {
     <MediaCard
       media={props.media}
       series={formatSeries(itemToDisplay)}
-      linkable
+      linkable={props.linkable ?? true}
       percentage={percentage}
       onClose={props.onClose}
       closable={props.closable}

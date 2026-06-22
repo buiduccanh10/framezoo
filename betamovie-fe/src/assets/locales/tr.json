@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Listeye Ekle",
     "airs": "Fiyaka",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "İzleme Geçmişi"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Paylaşım bağlantısını kopyala",
+      "create": "Liste oluştur",
+      "delete": "Silmek",
+      "edit": "Düzenlemek",
+      "editItems": "Öğeleri düzenle",
+      "open": "Açık",
+      "save": "Değişiklikleri kaydet",
+      "saveMembership": "Değişiklikleri kaydet"
+    },
+    "delete": {
+      "confirm": "\"{{name}}\" silinsin mi? Bu geri alınamaz."
+    },
+    "empty": {
+      "description": "Başlıkları gruplandırmaya başlamak için ilk listenizi oluşturun.",
+      "title": "Henüz liste yok"
+    },
+    "errors": {
+      "load": "Listeleriniz yüklenemedi."
+    },
+    "form": {
+      "createDescription": "Favoriler, yeniden izlenenler veya paylaşmak istediğiniz diğer şeyler için yeni bir liste başlatın.",
+      "createTitle": "Liste oluştur",
+      "description": "Tanım",
+      "descriptionHelp": "Bu listeye neyin ait olduğunu hatırlamanıza yardımcı olacak isteğe bağlı not.",
+      "descriptionPlaceholder": "Bu liste ne için?",
+      "editDescription": "Bu listenin adını, açıklamasını veya görünürlüğünü güncelleyin.",
+      "editTitle": "Listeyi düzenle",
+      "errors": {
+        "nameRequired": "Liste adı gerekli",
+        "submitFailed": "Liste kaydedilemedi."
+      },
+      "name": "Liste adı",
+      "namePlaceholder": "Hafta sonu bilim kurgu",
+      "public": "Genel liste",
+      "publicHelp": "Bağlantıya sahip olan herkes bu listeyi görüntüleyebilir."
+    },
+    "items": {
+      "empty": "Bu liste boş."
+    },
+    "meta": {
+      "itemCount": "{{count}} öğe",
+      "itemCount_plural": "{{count}} öğe",
+      "updatedAt": "{{date}} tarihinde güncellendi"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "İptal etmek",
+        "create": "Liste oluştur",
+        "save": "Değişiklikleri kaydet"
+      },
+      "description": "Hangi listelerin {{title}} içermesi gerektiğini seçin.",
+      "empty": {
+        "description": "Bu başlığı kaydetmek için bir liste oluşturun.",
+        "title": "Henüz liste yok"
+      },
+      "errors": {
+        "create": "Liste oluşturulamadı.",
+        "save": "Liste üyeliği güncellenemedi."
+      },
+      "title": "Listeye Ekle"
+    },
+    "page": {
+      "title": "Listeler"
+    },
+    "public": {
+      "notFoundDescription": "Bu paylaşım bağlantısı eksik veya artık mevcut değil.",
+      "notFoundTitle": "Liste bulunamadı",
+      "pageTitle": "Paylaşılan liste",
+      "privateDescription": "Sahibi bu listeyi herkese açık olarak paylaşmadı.",
+      "privateTitle": "Bu liste özeldir"
+    },
+    "visibility": {
+      "private": "Özel",
+      "public": "Halk"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} B{{episode}}",
     "episodeShort": "B",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Hesap menüsünü aç",
       "desktop": "Uygulama Ayarları",
+      "lists": "Listeler",
       "logout": "Çıkış yap",
       "register": "Buluta eşitle",
       "settings": "Ayarlar"

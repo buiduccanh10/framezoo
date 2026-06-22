@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "أضف إلى القائمة",
     "airs": "يصدر",
     "collection": {
       "movie": "فيلم",
@@ -416,6 +417,84 @@
       "sectionTitle": "شاهد التاريخ"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "انسخ رابط المشاركة",
+      "create": "إنشاء قائمة",
+      "delete": "يمسح",
+      "edit": "يحرر",
+      "editItems": "تحرير العناصر",
+      "open": "يفتح",
+      "save": "حفظ التغييرات",
+      "saveMembership": "حفظ التغييرات"
+    },
+    "delete": {
+      "confirm": "هل تريد حذف \"{{name}}\"؟ لا يمكن التراجع عن هذا."
+    },
+    "empty": {
+      "description": "قم بإنشاء قائمتك الأولى لبدء تجميع العناوين.",
+      "title": "لا توجد قوائم حتى الآن"
+    },
+    "errors": {
+      "load": "فشل في تحميل القوائم الخاصة بك."
+    },
+    "form": {
+      "createDescription": "ابدأ قائمة جديدة للمفضلات أو عمليات إعادة المشاهدة أو أي شيء آخر تريد مشاركته.",
+      "createTitle": "إنشاء قائمة",
+      "description": "وصف",
+      "descriptionHelp": "ملاحظة اختيارية لمساعدتك على تذكر ما ينتمي إلى هذه القائمة.",
+      "descriptionPlaceholder": "ما الهدف من هذه القائمة؟",
+      "editDescription": "قم بتحديث الاسم أو الوصف أو الرؤية لهذه القائمة.",
+      "editTitle": "تحرير القائمة",
+      "errors": {
+        "nameRequired": "اسم القائمة مطلوب",
+        "submitFailed": "فشل حفظ القائمة."
+      },
+      "name": "اسم القائمة",
+      "namePlaceholder": "الخيال العلمي في عطلة نهاية الأسبوع",
+      "public": "قائمة عامة",
+      "publicHelp": "يمكن لأي شخص لديه الرابط عرض هذه القائمة."
+    },
+    "items": {
+      "empty": "هذه القائمة فارغة."
+    },
+    "meta": {
+      "itemCount": "{{count}} العنصر",
+      "itemCount_plural": "{{count}} العناصر",
+      "updatedAt": "تم التحديث {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "يلغي",
+        "create": "إنشاء قائمة",
+        "save": "حفظ التغييرات"
+      },
+      "description": "اختر القوائم التي يجب أن تتضمن {{title}}.",
+      "empty": {
+        "description": "أنشئ قائمة لحفظ هذا العنوان.",
+        "title": "لا توجد قوائم حتى الآن"
+      },
+      "errors": {
+        "create": "فشل في إنشاء القائمة.",
+        "save": "فشل تحديث عضوية القائمة."
+      },
+      "title": "أضف إلى القائمة"
+    },
+    "page": {
+      "title": "القوائم"
+    },
+    "public": {
+      "notFoundDescription": "رابط المشاركة هذا مفقود أو لم يعد متوفرًا.",
+      "notFoundTitle": "لم يتم العثور على القائمة",
+      "pageTitle": "القائمة المشتركة",
+      "privateDescription": "لم يقم المالك بمشاركة هذه القائمة علنًا.",
+      "privateTitle": "هذه القائمة خاصة"
+    },
+    "visibility": {
+      "private": "خاص",
+      "public": "عام"
+    }
+  },
   "media": {
     "episodeDisplay": "\"موسم{{season}} حلقة{{episode}}\"",
     "episodeShort": "ح",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "فتح قائمة الحساب",
       "desktop": "إعدادات التطبيق",
+      "lists": "القوائم",
       "logout": "تسجيل الخروج",
       "register": "مزامنة إلى التخزين السحابي",
       "settings": "الإعدادات"

@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Lägg till i listan",
     "airs": "Sänds",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Titta på Historia"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopiera delningslänk",
+      "create": "Skapa lista",
+      "delete": "Radera",
+      "edit": "Redigera",
+      "editItems": "Redigera objekt",
+      "open": "Öppna",
+      "save": "Spara ändringar",
+      "saveMembership": "Spara ändringar"
+    },
+    "delete": {
+      "confirm": "Ta bort \"{{name}}\"? Detta kan inte ångras."
+    },
+    "empty": {
+      "description": "Skapa din första lista för att börja gruppera titlar.",
+      "title": "Inga listor ännu"
+    },
+    "errors": {
+      "load": "Det gick inte att läsa in dina listor."
+    },
+    "form": {
+      "createDescription": "Starta en ny lista för favoriter, omvisningar eller något annat du vill dela.",
+      "createTitle": "Skapa lista",
+      "description": "Beskrivning",
+      "descriptionHelp": "Valfri notering som hjälper dig att komma ihåg vad som hör till den här listan.",
+      "descriptionPlaceholder": "Vad är den här listan till för?",
+      "editDescription": "Uppdatera namn, beskrivning eller synlighet för den här listan.",
+      "editTitle": "Redigera lista",
+      "errors": {
+        "nameRequired": "Listnamn krävs",
+        "submitFailed": "Det gick inte att spara listan."
+      },
+      "name": "Listans namn",
+      "namePlaceholder": "Helgens sci-fi",
+      "public": "Offentlig lista",
+      "publicHelp": "Alla som har länken kan se den här listan."
+    },
+    "items": {
+      "empty": "Den här listan är tom."
+    },
+    "meta": {
+      "itemCount": "{{count}} objekt",
+      "itemCount_plural": "{{count}} objekt",
+      "updatedAt": "Uppdaterad {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Avboka",
+        "create": "Skapa lista",
+        "save": "Spara ändringar"
+      },
+      "description": "Välj vilka listor som ska innehålla {{title}}.",
+      "empty": {
+        "description": "Skapa en lista för att spara denna titel.",
+        "title": "Inga listor ännu"
+      },
+      "errors": {
+        "create": "Det gick inte att skapa listan.",
+        "save": "Det gick inte att uppdatera listmedlemskapet."
+      },
+      "title": "Lägg till i listan"
+    },
+    "page": {
+      "title": "Listor"
+    },
+    "public": {
+      "notFoundDescription": "Denna delningslänk saknas eller är inte längre tillgänglig.",
+      "notFoundTitle": "Listan hittades inte",
+      "pageTitle": "Delad lista",
+      "privateDescription": "Ägaren har inte delat den här listan offentligt.",
+      "privateTitle": "Denna lista är privat"
+    },
+    "visibility": {
+      "private": "Privat",
+      "public": "Offentlig"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "A",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Öppna kontomenyn",
       "desktop": "Appinställningar",
+      "lists": "Listor",
       "logout": "Logga ut",
       "register": "Synkronisera till molnet",
       "settings": "Inställningar"

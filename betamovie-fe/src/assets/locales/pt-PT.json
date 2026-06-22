@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Adicionar à lista",
     "airs": "Ares",
     "collection": {
       "movie": "Filme",
@@ -416,6 +417,84 @@
       "sectionTitle": "Histórico de exibição"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copiar link de compartilhamento",
+      "create": "Criar lista",
+      "delete": "Excluir",
+      "edit": "Editar",
+      "editItems": "Editar itens",
+      "open": "Abrir",
+      "save": "Salvar alterações",
+      "saveMembership": "Salvar alterações"
+    },
+    "delete": {
+      "confirm": "Excluir \"{{name}}\"? Isto não pode ser desfeito."
+    },
+    "empty": {
+      "description": "Crie sua primeira lista para começar a agrupar títulos.",
+      "title": "Ainda não há listas"
+    },
+    "errors": {
+      "load": "Falha ao carregar suas listas."
+    },
+    "form": {
+      "createDescription": "Comece uma nova lista de favoritos, rewatches ou qualquer outra coisa que você queira compartilhar.",
+      "createTitle": "Criar lista",
+      "description": "Descrição",
+      "descriptionHelp": "Nota opcional para ajudá-lo a lembrar o que pertence a esta lista.",
+      "descriptionPlaceholder": "Para que serve esta lista?",
+      "editDescription": "Atualize o nome, a descrição ou a visibilidade desta lista.",
+      "editTitle": "Editar lista",
+      "errors": {
+        "nameRequired": "O nome da lista é obrigatório",
+        "submitFailed": "Falha ao salvar a lista."
+      },
+      "name": "Nome da lista",
+      "namePlaceholder": "Ficção científica de fim de semana",
+      "public": "Lista pública",
+      "publicHelp": "Qualquer pessoa com o link pode visualizar esta lista."
+    },
+    "items": {
+      "empty": "Esta lista está vazia."
+    },
+    "meta": {
+      "itemCount": "{{count}} item",
+      "itemCount_plural": "{{count}} itens",
+      "updatedAt": "Atualizado em {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancelar",
+        "create": "Criar lista",
+        "save": "Salvar alterações"
+      },
+      "description": "Escolha quais listas devem incluir {{title}}.",
+      "empty": {
+        "description": "Crie uma lista para salvar este título.",
+        "title": "Ainda não há listas"
+      },
+      "errors": {
+        "create": "Falha ao criar lista.",
+        "save": "Falha ao atualizar a associação à lista."
+      },
+      "title": "Adicionar à lista"
+    },
+    "page": {
+      "title": "Listas"
+    },
+    "public": {
+      "notFoundDescription": "Este link de compartilhamento está faltando ou não está mais disponível.",
+      "notFoundTitle": "Lista não encontrada",
+      "pageTitle": "Lista compartilhada",
+      "privateDescription": "O proprietário não compartilhou esta lista publicamente.",
+      "privateTitle": "Esta lista é privada"
+    },
+    "visibility": {
+      "private": "Privado",
+      "public": "Público"
+    }
+  },
   "media": {
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Abra o menu da conta",
       "desktop": "Configurações do aplicativo",
+      "lists": "Listas",
       "logout": "Sair",
       "register": "Sincronizar com a nuvem",
       "settings": "Configurações"

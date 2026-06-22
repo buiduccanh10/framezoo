@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Lisa loendisse",
     "airs": "Õhud",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Vaata ajalugu"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopeeri jagamislink",
+      "create": "Loo nimekiri",
+      "delete": "Kustuta",
+      "edit": "Muuda",
+      "editItems": "Muuda üksusi",
+      "open": "Avatud",
+      "save": "Salvestage muudatused",
+      "saveMembership": "Salvestage muudatused"
+    },
+    "delete": {
+      "confirm": "Kas kustutada \"{{name}}\"? Seda ei saa tagasi võtta."
+    },
+    "empty": {
+      "description": "Pealkirjade rühmitamise alustamiseks looge oma esimene loend.",
+      "title": "Nimekirju veel pole"
+    },
+    "errors": {
+      "load": "Teie loendite laadimine ebaõnnestus."
+    },
+    "form": {
+      "createDescription": "Looge uus lemmikute loend, kordusvaatamine või muu, mida soovite jagada.",
+      "createTitle": "Loo nimekiri",
+      "description": "Kirjeldus",
+      "descriptionHelp": "Valikuline märkus, mis aitab teil sellesse loendisse kuuluvaid meelde jätta.",
+      "descriptionPlaceholder": "Mille jaoks see nimekiri on?",
+      "editDescription": "Värskendage selle loendi nime, kirjeldust või nähtavust.",
+      "editTitle": "Muuda loendit",
+      "errors": {
+        "nameRequired": "Loendi nimi on kohustuslik",
+        "submitFailed": "Loendi salvestamine ebaõnnestus."
+      },
+      "name": "Loendi nimi",
+      "namePlaceholder": "Nädalavahetuse ulme",
+      "public": "Avalik nimekiri",
+      "publicHelp": "Igaüks, kellel on link, saab seda loendit vaadata."
+    },
+    "items": {
+      "empty": "See nimekiri on tühi."
+    },
+    "meta": {
+      "itemCount": "{{count}} üksus",
+      "itemCount_plural": "{{count}} üksust",
+      "updatedAt": "Värskendatud {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Tühista",
+        "create": "Loo nimekiri",
+        "save": "Salvestage muudatused"
+      },
+      "description": "Valige, millised loendid peaksid sisaldama {{title}}.",
+      "empty": {
+        "description": "Selle pealkirja salvestamiseks looge loend.",
+        "title": "Nimekirju veel pole"
+      },
+      "errors": {
+        "create": "Loendi loomine ebaõnnestus.",
+        "save": "Loendi liikmesuse värskendamine ebaõnnestus."
+      },
+      "title": "Lisa loendisse"
+    },
+    "page": {
+      "title": "Loendid"
+    },
+    "public": {
+      "notFoundDescription": "See jagamise link puudub või pole enam saadaval.",
+      "notFoundTitle": "Nimekirja ei leitud",
+      "pageTitle": "Jagatud loend",
+      "privateDescription": "Omanik pole seda loendit avalikult jaganud.",
+      "privateTitle": "See nimekiri on privaatne"
+    },
+    "visibility": {
+      "private": "Privaatne",
+      "public": "Avalik"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Ava konto menüü",
       "desktop": "Rakenduse seaded",
+      "lists": "Loendid",
       "logout": "Logi välja",
       "register": "Sünkrooni pilvega",
       "settings": "Sätted"

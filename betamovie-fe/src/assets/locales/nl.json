@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Toevoegen aan lijst",
     "airs": "Luchten",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Bekijk Geschiedenis"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopieer de deellink",
+      "create": "Lijst maken",
+      "delete": "Verwijderen",
+      "edit": "Bewerking",
+      "editItems": "Artikelen bewerken",
+      "open": "Open",
+      "save": "Wijzigingen opslaan",
+      "saveMembership": "Wijzigingen opslaan"
+    },
+    "delete": {
+      "confirm": "\"{{name}}\" verwijderen? Dit kan niet ongedaan worden gemaakt."
+    },
+    "empty": {
+      "description": "Maak uw eerste lijst om titels te groeperen.",
+      "title": "Nog geen lijsten"
+    },
+    "errors": {
+      "load": "Kan uw lijsten niet laden."
+    },
+    "form": {
+      "createDescription": "Maak een nieuwe lijst aan voor favorieten, rewatches of iets anders dat je wilt delen.",
+      "createTitle": "Lijst maken",
+      "description": "Beschrijving",
+      "descriptionHelp": "Optionele opmerking om u te helpen herinneren wat er in deze lijst thuishoort.",
+      "descriptionPlaceholder": "Waar is deze lijst voor?",
+      "editDescription": "Update de naam, beschrijving of zichtbaarheid voor deze lijst.",
+      "editTitle": "Lijst bewerken",
+      "errors": {
+        "nameRequired": "Lijstnaam is vereist",
+        "submitFailed": "Kan de lijst niet opslaan."
+      },
+      "name": "Lijstnaam",
+      "namePlaceholder": "Weekend sciencefiction",
+      "public": "Openbare lijst",
+      "publicHelp": "Iedereen met de link kan deze lijst bekijken."
+    },
+    "items": {
+      "empty": "Deze lijst is leeg."
+    },
+    "meta": {
+      "itemCount": "{{count}} artikel",
+      "itemCount_plural": "{{count}} artikelen",
+      "updatedAt": "Bijgewerkt {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Annuleren",
+        "create": "Lijst maken",
+        "save": "Wijzigingen opslaan"
+      },
+      "description": "Kies welke lijsten {{title}} moeten bevatten.",
+      "empty": {
+        "description": "Maak een lijst om deze titel op te slaan.",
+        "title": "Nog geen lijsten"
+      },
+      "errors": {
+        "create": "Kan lijst niet maken.",
+        "save": "Kan het lijstlidmaatschap niet updaten."
+      },
+      "title": "Toevoegen aan lijst"
+    },
+    "page": {
+      "title": "Lijsten"
+    },
+    "public": {
+      "notFoundDescription": "Deze deellink ontbreekt of is niet langer beschikbaar.",
+      "notFoundTitle": "Lijst niet gevonden",
+      "pageTitle": "Gedeelde lijst",
+      "privateDescription": "De eigenaar heeft deze lijst niet openbaar gedeeld.",
+      "privateTitle": "Deze lijst is privé"
+    },
+    "visibility": {
+      "private": "Privé",
+      "public": "Openbaar"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} A{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Accountmenu openen",
       "desktop": "App-instellingen",
+      "lists": "Lijsten",
       "logout": "Log uit",
       "register": "Synchroniseren met de Cloud",
       "settings": "Instellingen"

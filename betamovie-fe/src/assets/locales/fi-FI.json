@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Lisää listaan",
     "airs": "Esitetään",
     "collection": {
       "movie": "Elokuva",
@@ -416,6 +417,84 @@
       "sectionTitle": "Katso historia"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopioi jakolinkki",
+      "create": "Luo luettelo",
+      "delete": "Poistaa",
+      "edit": "Muokata",
+      "editItems": "Muokkaa kohteita",
+      "open": "Avata",
+      "save": "Tallenna muutokset",
+      "saveMembership": "Tallenna muutokset"
+    },
+    "delete": {
+      "confirm": "Poistetaanko \"{{name}}\"? Tätä ei voi kumota."
+    },
+    "empty": {
+      "description": "Luo ensimmäinen luettelo aloittaaksesi nimikkeiden ryhmittelyn.",
+      "title": "Ei vielä listoja"
+    },
+    "errors": {
+      "load": "Listojen lataaminen epäonnistui."
+    },
+    "form": {
+      "createDescription": "Aloita uusi luettelo suosikeista, uudelleenkatseluista tai kaikesta muusta, jonka haluat jakaa.",
+      "createTitle": "Luo luettelo",
+      "description": "Kuvaus",
+      "descriptionHelp": "Valinnainen huomautus, joka auttaa sinua muistamaan, mitä tähän luetteloon kuuluu.",
+      "descriptionPlaceholder": "Mitä varten tämä lista on?",
+      "editDescription": "Päivitä tämän luettelon nimi, kuvaus tai näkyvyys.",
+      "editTitle": "Muokkaa luetteloa",
+      "errors": {
+        "nameRequired": "Luettelon nimi vaaditaan",
+        "submitFailed": "Listan tallentaminen epäonnistui."
+      },
+      "name": "Listan nimi",
+      "namePlaceholder": "Viikonlopun scifiä",
+      "public": "Julkinen lista",
+      "publicHelp": "Kaikki linkin saaneet voivat tarkastella tätä luetteloa."
+    },
+    "items": {
+      "empty": "Tämä lista on tyhjä."
+    },
+    "meta": {
+      "itemCount": "{{count}} kohde",
+      "itemCount_plural": "{{count}} kohdetta",
+      "updatedAt": "Päivitetty {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Peruuttaa",
+        "create": "Luo luettelo",
+        "save": "Tallenna muutokset"
+      },
+      "description": "Valitse, mitkä luettelot sisältävät {{title}}.",
+      "empty": {
+        "description": "Luo luettelo tämän otsikon tallentamiseksi.",
+        "title": "Ei vielä listoja"
+      },
+      "errors": {
+        "create": "Listan luominen epäonnistui.",
+        "save": "Listan jäsenyyden päivittäminen epäonnistui."
+      },
+      "title": "Lisää listaan"
+    },
+    "page": {
+      "title": "Luettelot"
+    },
+    "public": {
+      "notFoundDescription": "Tämä jakolinkki puuttuu tai ei ole enää saatavilla.",
+      "notFoundTitle": "Listaa ei löydy",
+      "pageTitle": "Jaettu luettelo",
+      "privateDescription": "Omistaja ei ole jakanut tätä luetteloa julkisesti.",
+      "privateTitle": "Tämä lista on yksityinen"
+    },
+    "visibility": {
+      "private": "Yksityinen",
+      "public": "Julkinen"
+    }
+  },
   "media": {
     "episodeDisplay": "K{{season}} J{{episode}}",
     "episodeShort": "J",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Avaa tilivalikko",
       "desktop": "Sovellusasetukset",
+      "lists": "Luettelot",
       "logout": "Kirjaudu ulos",
       "register": "Synkronoi pilveen",
       "settings": "Asetukset"

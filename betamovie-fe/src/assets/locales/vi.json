@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Thêm vào danh sách",
     "airs": "Phát sóng",
     "collection": {
       "movie": "Phim điện ảnh",
@@ -416,6 +417,84 @@
       "sectionTitle": "Lịch sử xem"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Sao chép liên kết chia sẻ",
+      "create": "Tạo danh sách",
+      "delete": "Xóa bỏ",
+      "edit": "Chỉnh sửa",
+      "editItems": "Chỉnh sửa mục",
+      "open": "Mở",
+      "save": "Lưu thay đổi",
+      "saveMembership": "Lưu thay đổi"
+    },
+    "delete": {
+      "confirm": "Xóa \"{{name}}\"? Điều này không thể hoàn tác được."
+    },
+    "empty": {
+      "description": "Tạo danh sách đầu tiên của bạn để bắt đầu nhóm các tiêu đề.",
+      "title": "Chưa có danh sách nào"
+    },
+    "errors": {
+      "load": "Không thể tải danh sách của bạn."
+    },
+    "form": {
+      "createDescription": "Bắt đầu danh sách mới cho các mục yêu thích, video xem lại hoặc bất kỳ nội dung nào khác mà bạn muốn chia sẻ.",
+      "createTitle": "Tạo danh sách",
+      "description": "Sự miêu tả",
+      "descriptionHelp": "Ghi chú tùy chọn để giúp bạn nhớ những gì thuộc danh sách này.",
+      "descriptionPlaceholder": "Danh sách này dùng để làm gì?",
+      "editDescription": "Cập nhật tên, mô tả hoặc khả năng hiển thị cho danh sách này.",
+      "editTitle": "Chỉnh sửa danh sách",
+      "errors": {
+        "nameRequired": "Tên danh sách là bắt buộc",
+        "submitFailed": "Không lưu được danh sách."
+      },
+      "name": "Tên danh sách",
+      "namePlaceholder": "khoa học viễn tưởng cuối tuần",
+      "public": "Danh sách công khai",
+      "publicHelp": "Bất kỳ ai có liên kết đều có thể xem danh sách này."
+    },
+    "items": {
+      "empty": "Danh sách này trống."
+    },
+    "meta": {
+      "itemCount": "{{count}} mục",
+      "itemCount_plural": "{{count}} mục",
+      "updatedAt": "Đã cập nhật {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Hủy bỏ",
+        "create": "Tạo danh sách",
+        "save": "Lưu thay đổi"
+      },
+      "description": "Chọn danh sách nào sẽ bao gồm {{title}}.",
+      "empty": {
+        "description": "Tạo một danh sách để lưu tiêu đề này.",
+        "title": "Chưa có danh sách nào"
+      },
+      "errors": {
+        "create": "Không tạo được danh sách.",
+        "save": "Không cập nhật được danh sách thành viên."
+      },
+      "title": "Thêm vào danh sách"
+    },
+    "page": {
+      "title": "Danh sách"
+    },
+    "public": {
+      "notFoundDescription": "Liên kết chia sẻ này bị thiếu hoặc không còn tồn tại.",
+      "notFoundTitle": "Không tìm thấy danh sách",
+      "pageTitle": "Danh sách chia sẻ",
+      "privateDescription": "Chủ sở hữu chưa chia sẻ danh sách này một cách công khai.",
+      "privateTitle": "Danh sách này là riêng tư"
+    },
+    "visibility": {
+      "private": "Riêng tư",
+      "public": "Công khai"
+    }
+  },
   "media": {
     "episodeDisplay": "M{{season}} T{{episode}}",
     "episodeShort": "T",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Mở menu tài khoản",
       "desktop": "Cài đặt ứng dụng",
+      "lists": "Danh sách",
       "logout": "Đăng xuất",
       "register": "Đồng bộ hóa với đám mây",
       "settings": "Cài đặt"

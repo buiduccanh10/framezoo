@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Add to List",
     "airs": "Airs",
     "collection": {
       "movie": "Movie",
@@ -406,6 +407,84 @@
       "sectionTitle": "Watch History"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copy share link",
+      "create": "Create list",
+      "delete": "Delete",
+      "edit": "Edit",
+      "editItems": "Edit items",
+      "open": "Open",
+      "save": "Save changes",
+      "saveMembership": "Save changes"
+    },
+    "delete": {
+      "confirm": "Delete \"{{name}}\"? This cannot be undone."
+    },
+    "empty": {
+      "description": "Create your first list to start grouping titles.",
+      "title": "No lists yet"
+    },
+    "errors": {
+      "load": "Failed to load your lists."
+    },
+    "form": {
+      "createDescription": "Start a new list for favorites, rewatches, or anything else you want to share.",
+      "createTitle": "Create list",
+      "description": "Description",
+      "descriptionHelp": "Optional note to help you remember what belongs in this list.",
+      "descriptionPlaceholder": "What's this list for?",
+      "editDescription": "Update the name, description, or visibility for this list.",
+      "editTitle": "Edit list",
+      "errors": {
+        "nameRequired": "List name is required",
+        "submitFailed": "Failed to save list."
+      },
+      "name": "List name",
+      "namePlaceholder": "Weekend sci-fi",
+      "public": "Public list",
+      "publicHelp": "Anyone with the link can view this list."
+    },
+    "items": {
+      "empty": "This list is empty."
+    },
+    "meta": {
+      "itemCount": "{{count}} item",
+      "itemCount_plural": "{{count}} items",
+      "updatedAt": "Updated {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancel",
+        "create": "Create list",
+        "save": "Save changes"
+      },
+      "description": "Choose which lists should include {{title}}.",
+      "empty": {
+        "description": "Create a list to save this title.",
+        "title": "No lists yet"
+      },
+      "errors": {
+        "create": "Failed to create list.",
+        "save": "Failed to update list membership."
+      },
+      "title": "Add to List"
+    },
+    "page": {
+      "title": "Lists"
+    },
+    "public": {
+      "notFoundDescription": "This share link is missing or no longer available.",
+      "notFoundTitle": "List not found",
+      "pageTitle": "Shared list",
+      "privateDescription": "The owner has not shared this list publicly.",
+      "privateTitle": "This list is private"
+    },
+    "visibility": {
+      "private": "Private",
+      "public": "Public"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
@@ -501,6 +580,7 @@
     "menu": {
       "accountMenu": "Open account menu",
       "desktop": "App Settings",
+      "lists": "Lists",
       "logout": "Log out",
       "register": "Sync to Cloud",
       "settings": "Settings"

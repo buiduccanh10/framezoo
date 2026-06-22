@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "યાદીમાં ઉમેરો",
     "airs": "પ્રસારણ",
     "collection": {
       "movie": "મૂવી",
@@ -416,6 +417,84 @@
       "sectionTitle": "ઇતિહાસ જુઓ"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "શેર લિંક કૉપિ કરો",
+      "create": "યાદી બનાવો",
+      "delete": "કાઢી નાખો",
+      "edit": "સંપાદિત કરો",
+      "editItems": "આઇટમ્સ સંપાદિત કરો",
+      "open": "ખોલો",
+      "save": "ફેરફારો સાચવો",
+      "saveMembership": "ફેરફારો સાચવો"
+    },
+    "delete": {
+      "confirm": "\"{{name}}\" ને કાઢી નાખીએ? આ પૂર્વવત્ કરી શકાતું નથી."
+    },
+    "empty": {
+      "description": "શીર્ષકોને જૂથબદ્ધ કરવાનું શરૂ કરવા માટે તમારી પ્રથમ સૂચિ બનાવો.",
+      "title": "હજુ સુધી કોઈ યાદી નથી"
+    },
+    "errors": {
+      "load": "તમારી સૂચિઓ લોડ કરવામાં નિષ્ફળ."
+    },
+    "form": {
+      "createDescription": "મનપસંદ, ફરીથી ઘડિયાળો અથવા તમે શેર કરવા માંગો છો તે કંઈપણ માટે નવી સૂચિ શરૂ કરો.",
+      "createTitle": "યાદી બનાવો",
+      "description": "વર્ણન",
+      "descriptionHelp": "આ સૂચિમાં શું છે તે યાદ રાખવામાં તમને મદદ કરવા માટે વૈકલ્પિક નોંધ.",
+      "descriptionPlaceholder": "આ યાદી શેના માટે છે?",
+      "editDescription": "આ સૂચિ માટે નામ, વર્ણન અથવા દૃશ્યતા અપડેટ કરો.",
+      "editTitle": "સૂચિ સંપાદિત કરો",
+      "errors": {
+        "nameRequired": "સૂચિનું નામ આવશ્યક છે",
+        "submitFailed": "સૂચિ સાચવવામાં નિષ્ફળ."
+      },
+      "name": "સૂચિનું નામ",
+      "namePlaceholder": "સપ્તાહાંત સાય-ફાઇ",
+      "public": "જાહેર યાદી",
+      "publicHelp": "લિંક ધરાવનાર કોઈપણ આ સૂચિ જોઈ શકે છે."
+    },
+    "items": {
+      "empty": "આ યાદી ખાલી છે."
+    },
+    "meta": {
+      "itemCount": "{{count}} આઇટમ",
+      "itemCount_plural": "{{count}} આઇટમ્સ",
+      "updatedAt": "અપડેટ કરેલ {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "રદ કરો",
+        "create": "યાદી બનાવો",
+        "save": "ફેરફારો સાચવો"
+      },
+      "description": "કઈ યાદીઓમાં {{title}} નો સમાવેશ થવો જોઈએ તે પસંદ કરો.",
+      "empty": {
+        "description": "આ શીર્ષક સાચવવા માટે એક યાદી બનાવો.",
+        "title": "હજુ સુધી કોઈ યાદી નથી"
+      },
+      "errors": {
+        "create": "સૂચિ બનાવવામાં નિષ્ફળ.",
+        "save": "સૂચિ સભ્યપદ અપડેટ કરવામાં નિષ્ફળ."
+      },
+      "title": "યાદીમાં ઉમેરો"
+    },
+    "page": {
+      "title": "યાદીઓ"
+    },
+    "public": {
+      "notFoundDescription": "આ શેર લિંક ખૂટે છે અથવા હવે ઉપલબ્ધ નથી.",
+      "notFoundTitle": "યાદી મળી નથી",
+      "pageTitle": "શેર કરેલ સૂચિ",
+      "privateDescription": "માલિકે આ સૂચિ સાર્વજનિક રૂપે શેર કરી નથી.",
+      "privateTitle": "આ યાદી ખાનગી છે"
+    },
+    "visibility": {
+      "private": "ખાનગી",
+      "public": "જાહેર"
+    }
+  },
   "media": {
     "episodeDisplay": "સિઝન{{season}} એપિસોડ{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "એકાઉન્ટ મેનૂ ખોલો",
       "desktop": "એપ્લિકેશન સેટિંગ્સ",
+      "lists": "યાદીઓ",
       "logout": "લૉગ આઉટ",
       "register": "Cloud સાથે સમન્વયિત કરો",
       "settings": "સેટિંગ્સ"

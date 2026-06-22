@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Ajouter à la liste",
     "airs": "Airs",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Regarder l'historique"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copier le lien de partage",
+      "create": "Créer une liste",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "editItems": "Modifier les éléments",
+      "open": "Ouvrir",
+      "save": "Enregistrer les modifications",
+      "saveMembership": "Enregistrer les modifications"
+    },
+    "delete": {
+      "confirm": "Supprimer « {{name}} » ? Cela ne peut pas être annulé."
+    },
+    "empty": {
+      "description": "Créez votre première liste pour commencer à regrouper les titres.",
+      "title": "Aucune liste pour l'instant"
+    },
+    "errors": {
+      "load": "Échec du chargement de vos listes."
+    },
+    "form": {
+      "createDescription": "Créez une nouvelle liste de favoris, de reprises ou de tout ce que vous souhaitez partager.",
+      "createTitle": "Créer une liste",
+      "description": "Description",
+      "descriptionHelp": "Note facultative pour vous aider à vous rappeler ce qui appartient à cette liste.",
+      "descriptionPlaceholder": "A quoi sert cette liste ?",
+      "editDescription": "Mettez à jour le nom, la description ou la visibilité de cette liste.",
+      "editTitle": "Modifier la liste",
+      "errors": {
+        "nameRequired": "Le nom de la liste est obligatoire",
+        "submitFailed": "Échec de l'enregistrement de la liste."
+      },
+      "name": "Nom de la liste",
+      "namePlaceholder": "Science-fiction du week-end",
+      "public": "Liste publique",
+      "publicHelp": "Toute personne disposant du lien peut consulter cette liste."
+    },
+    "items": {
+      "empty": "Cette liste est vide."
+    },
+    "meta": {
+      "itemCount": "{{count}} article",
+      "itemCount_plural": "{{count}} articles",
+      "updatedAt": "{{date}} mis à jour"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Annuler",
+        "create": "Créer une liste",
+        "save": "Enregistrer les modifications"
+      },
+      "description": "Choisissez les listes qui doivent inclure {{title}}.",
+      "empty": {
+        "description": "Créez une liste pour enregistrer ce titre.",
+        "title": "Aucune liste pour l'instant"
+      },
+      "errors": {
+        "create": "Échec de la création de la liste.",
+        "save": "Échec de la mise à jour de l'adhésion à la liste."
+      },
+      "title": "Ajouter à la liste"
+    },
+    "page": {
+      "title": "Listes"
+    },
+    "public": {
+      "notFoundDescription": "Ce lien de partage est manquant ou n'est plus disponible.",
+      "notFoundTitle": "Liste introuvable",
+      "pageTitle": "Liste partagée",
+      "privateDescription": "Le propriétaire n'a pas partagé cette liste publiquement.",
+      "privateTitle": "Cette liste est privée"
+    },
+    "visibility": {
+      "private": "Privé",
+      "public": "Publique"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Menu Ouvrir un compte",
       "desktop": "Paramètres de l'application",
+      "lists": "Listes",
       "logout": "Se déconnecter",
       "register": "Synchroniser au Cloud",
       "settings": "Paramètres"

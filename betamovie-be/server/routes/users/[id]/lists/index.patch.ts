@@ -1,6 +1,7 @@
 import { useAuth } from '#imports';
 import { z } from 'zod';
 import { prisma } from '#imports';
+import { randomUUID } from 'crypto';
 
 const listItemSchema = z.object({
   tmdb_id: z.string(),
@@ -50,11 +51,15 @@ export default defineEventHandler(async event => {
   }
 
   const result = await prisma.$transaction(async tx => {
-    if (
-      validatedBody.name ||
+    const shouldUpdateMetadata =
+      validatedBody.name !== undefined ||
       validatedBody.description !== undefined ||
-      validatedBody.public !== undefined
-    ) {
+      validatedBody.public !== undefined;
+    const shouldUpdateMembership =
+      (validatedBody.addItems?.length ?? 0) > 0 ||
+      (validatedBody.removeItems?.length ?? 0) > 0;
+
+    if (shouldUpdateMetadata) {
       await tx.lists.update({
         where: { id: list.id },
         data: {
@@ -62,6 +67,7 @@ export default defineEventHandler(async event => {
           description:
             validatedBody.description !== undefined ? validatedBody.description : list.description,
           public: validatedBody.public ?? list.public,
+          updated_at: new Date(),
         },
       });
     }
@@ -76,6 +82,7 @@ export default defineEventHandler(async event => {
       if (itemsToAdd.length > 0) {
         await tx.list_items.createMany({
           data: itemsToAdd.map(item => ({
+            id: randomUUID(),
             list_id: list.id,
             tmdb_id: item.tmdb_id,
             type: item.type,
@@ -92,6 +99,15 @@ export default defineEventHandler(async event => {
         where: {
           list_id: list.id,
           tmdb_id: { in: tmdbIdsToRemove },
+        },
+      });
+    }
+
+    if (!shouldUpdateMetadata && shouldUpdateMembership) {
+      await tx.lists.update({
+        where: { id: list.id },
+        data: {
+          updated_at: new Date(),
         },
       });
     }

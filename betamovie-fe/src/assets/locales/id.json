@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Tambahkan ke Daftar",
     "airs": "mengudara",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Tonton Sejarah"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Salin tautan berbagi",
+      "create": "Buat daftar",
+      "delete": "Menghapus",
+      "edit": "Sunting",
+      "editItems": "Sunting item",
+      "open": "Membuka",
+      "save": "Simpan perubahan",
+      "saveMembership": "Simpan perubahan"
+    },
+    "delete": {
+      "confirm": "Hapus \"{{name}}\"? Hal ini tidak dapat dibatalkan."
+    },
+    "empty": {
+      "description": "Buat daftar pertama Anda untuk mulai mengelompokkan judul.",
+      "title": "Belum ada daftar"
+    },
+    "errors": {
+      "load": "Gagal memuat daftar Anda."
+    },
+    "form": {
+      "createDescription": "Mulai daftar baru untuk favorit, tontonan ulang, atau apa pun yang ingin Anda bagikan.",
+      "createTitle": "Buat daftar",
+      "description": "Keterangan",
+      "descriptionHelp": "Catatan opsional untuk membantu Anda mengingat apa yang termasuk dalam daftar ini.",
+      "descriptionPlaceholder": "Untuk apa daftar ini?",
+      "editDescription": "Perbarui nama, deskripsi, atau visibilitas daftar ini.",
+      "editTitle": "Sunting daftar",
+      "errors": {
+        "nameRequired": "Nama daftar wajib diisi",
+        "submitFailed": "Gagal menyimpan daftar."
+      },
+      "name": "Nama daftar",
+      "namePlaceholder": "Fiksi ilmiah akhir pekan",
+      "public": "Daftar publik",
+      "publicHelp": "Siapa pun yang memiliki tautan dapat melihat daftar ini."
+    },
+    "items": {
+      "empty": "Daftar ini kosong."
+    },
+    "meta": {
+      "itemCount": "{{count}} barang",
+      "itemCount_plural": "{{count}} barang",
+      "updatedAt": "Diperbarui {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Membatalkan",
+        "create": "Buat daftar",
+        "save": "Simpan perubahan"
+      },
+      "description": "Pilih daftar mana yang harus menyertakan {{title}}.",
+      "empty": {
+        "description": "Buat daftar untuk menyimpan judul ini.",
+        "title": "Belum ada daftar"
+      },
+      "errors": {
+        "create": "Gagal membuat daftar.",
+        "save": "Gagal memperbarui keanggotaan daftar."
+      },
+      "title": "Tambahkan ke Daftar"
+    },
+    "page": {
+      "title": "Daftar"
+    },
+    "public": {
+      "notFoundDescription": "Tautan berbagi ini tidak ada atau tidak tersedia lagi.",
+      "notFoundTitle": "Daftar tidak ditemukan",
+      "pageTitle": "Daftar bersama",
+      "privateDescription": "Pemiliknya belum membagikan daftar ini secara publik.",
+      "privateTitle": "Daftar ini bersifat pribadi"
+    },
+    "visibility": {
+      "private": "Pribadi",
+      "public": "Publik"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Buka menu akun",
       "desktop": "Pengaturan Aplikasi",
+      "lists": "Daftar",
       "logout": "Keluar",
       "register": "Sinkronkan ke Cloud",
       "settings": "Pengaturan"

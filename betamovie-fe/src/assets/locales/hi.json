@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "सूची में शामिल",
     "airs": "एयर्स",
     "collection": {
       "movie": "चलचित्र",
@@ -416,6 +417,84 @@
       "sectionTitle": "इतिहास देखें"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "कॉपी शेयर लिंक",
+      "create": "सूची बनाएं",
+      "delete": "मिटाना",
+      "edit": "संपादन करना",
+      "editItems": "आइटम संपादित करें",
+      "open": "खुला",
+      "save": "परिवर्तनों को सुरक्षित करें",
+      "saveMembership": "परिवर्तनों को सुरक्षित करें"
+    },
+    "delete": {
+      "confirm": "\"{{name}}\" हटाएं? इसे असंपादित नहीं किया जा सकता है।"
+    },
+    "empty": {
+      "description": "शीर्षकों का समूहीकरण शुरू करने के लिए अपनी पहली सूची बनाएं।",
+      "title": "अभी तक कोई सूची नहीं"
+    },
+    "errors": {
+      "load": "आपकी सूचियाँ लोड करने में विफल."
+    },
+    "form": {
+      "createDescription": "पसंदीदा, दोबारा देखे जाने या जो कुछ भी आप साझा करना चाहते हैं, उसके लिए एक नई सूची शुरू करें।",
+      "createTitle": "सूची बनाएं",
+      "description": "विवरण",
+      "descriptionHelp": "इस सूची में क्या है यह याद रखने में आपकी सहायता के लिए वैकल्पिक नोट।",
+      "descriptionPlaceholder": "यह सूची किस लिए है?",
+      "editDescription": "इस सूची के लिए नाम, विवरण या दृश्यता अपडेट करें।",
+      "editTitle": "संपादन सूची",
+      "errors": {
+        "nameRequired": "सूची का नाम आवश्यक है",
+        "submitFailed": "सूची सहेजने में विफल."
+      },
+      "name": "नाम की सूचि",
+      "namePlaceholder": "सप्ताहांत विज्ञान कथा",
+      "public": "सार्वजनिक सूची",
+      "publicHelp": "लिंक वाला कोई भी व्यक्ति इस सूची को देख सकता है।"
+    },
+    "items": {
+      "empty": "यह सूची खाली है."
+    },
+    "meta": {
+      "itemCount": "{{count}} आइटम",
+      "itemCount_plural": "{{count}} आइटम",
+      "updatedAt": "अपडेट किया गया{{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "रद्द करना",
+        "create": "सूची बनाएं",
+        "save": "परिवर्तनों को सुरक्षित करें"
+      },
+      "description": "चुनें कि किन सूचियों में {{title}} शामिल होना चाहिए।",
+      "empty": {
+        "description": "इस शीर्षक को सहेजने के लिए एक सूची बनाएं.",
+        "title": "अभी तक कोई सूची नहीं"
+      },
+      "errors": {
+        "create": "सूची बनाने में विफल.",
+        "save": "सूची सदस्यता अद्यतन करने में विफल."
+      },
+      "title": "सूची में शामिल"
+    },
+    "page": {
+      "title": "सूचियों"
+    },
+    "public": {
+      "notFoundDescription": "यह शेयर लिंक गायब है या अब उपलब्ध नहीं है।",
+      "notFoundTitle": "सूची नहीं मिली",
+      "pageTitle": "साझा सूची",
+      "privateDescription": "स्वामी ने इस सूची को सार्वजनिक रूप से साझा नहीं किया है.",
+      "privateTitle": "यह सूची निजी है"
+    },
+    "visibility": {
+      "private": "निजी",
+      "public": "जनता"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "खाता मेनू खोलें",
       "desktop": "ऐप सेटिंग्स",
+      "lists": "सूचियों",
       "logout": "लॉग आउट",
       "register": "क्लाउड से सिंक करें",
       "settings": "सेटिंग्स"

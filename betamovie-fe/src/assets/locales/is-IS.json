@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Bæta við lista",
     "airs": "Airs",
     "collection": {
       "movie": "Kvikmynd",
@@ -416,6 +417,84 @@
       "sectionTitle": "Horfðu á History"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Afritaðu deilingartengil",
+      "create": "Búðu til lista",
+      "delete": "Eyða",
+      "edit": "Breyta",
+      "editItems": "Breyta hlutum",
+      "open": "Opið",
+      "save": "Vista breytingar",
+      "saveMembership": "Vista breytingar"
+    },
+    "delete": {
+      "confirm": "Eyða „{{name}}“? Þetta er ekki hægt að afturkalla."
+    },
+    "empty": {
+      "description": "Búðu til fyrsta listann þinn til að byrja að flokka titla.",
+      "title": "Engir listar ennþá"
+    },
+    "errors": {
+      "load": "Mistókst að hlaða listanum þínum."
+    },
+    "form": {
+      "createDescription": "Byrjaðu nýjan lista yfir eftirlæti, enduráhorf eða eitthvað annað sem þú vilt deila.",
+      "createTitle": "Búðu til lista",
+      "description": "Lýsing",
+      "descriptionHelp": "Valfrjáls athugasemd til að hjálpa þér að muna hvað tilheyrir þessum lista.",
+      "descriptionPlaceholder": "Til hvers er þessi listi?",
+      "editDescription": "Uppfærðu nafn, lýsingu eða sýnileika fyrir þennan lista.",
+      "editTitle": "Breyta lista",
+      "errors": {
+        "nameRequired": "Nafn lista er áskilið",
+        "submitFailed": "Ekki tókst að vista lista."
+      },
+      "name": "Nafn lista",
+      "namePlaceholder": "Sci-fi um helgina",
+      "public": "Opinber listi",
+      "publicHelp": "Allir með hlekkinn geta skoðað þennan lista."
+    },
+    "items": {
+      "empty": "Þessi listi er tómur."
+    },
+    "meta": {
+      "itemCount": "{{count}} atriði",
+      "itemCount_plural": "{{count}} atriði",
+      "updatedAt": "Uppfært {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Hætta við",
+        "create": "Búðu til lista",
+        "save": "Vista breytingar"
+      },
+      "description": "Veldu hvaða listar eiga að innihalda {{title}}.",
+      "empty": {
+        "description": "Búðu til lista til að vista þennan titil.",
+        "title": "Engir listar ennþá"
+      },
+      "errors": {
+        "create": "Mistókst að búa til lista.",
+        "save": "Mistókst að uppfæra listaaðild."
+      },
+      "title": "Bæta við lista"
+    },
+    "page": {
+      "title": "Listar"
+    },
+    "public": {
+      "notFoundDescription": "Þessi deilingartengil vantar eða er ekki lengur tiltækur.",
+      "notFoundTitle": "Listi fannst ekki",
+      "pageTitle": "Sameiginlegur listi",
+      "privateDescription": "Eigandinn hefur ekki deilt þessum lista opinberlega.",
+      "privateTitle": "Þessi listi er persónulegur"
+    },
+    "visibility": {
+      "private": "Einkamál",
+      "public": "Opinber"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} Þ{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Opnaðu reikningsvalmynd",
       "desktop": "App Stillingar",
+      "lists": "Listar",
       "logout": "Skrá út",
       "register": "Samstilla við ský",
       "settings": "Stillingar"

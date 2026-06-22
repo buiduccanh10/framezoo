@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "添加到列表",
     "airs": "空氣",
     "collection": {
       "movie": "電影",
@@ -416,6 +417,84 @@
       "sectionTitle": "觀看歷史"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "複製分享連結",
+      "create": "創建列表",
+      "delete": "刪除",
+      "edit": "編輯",
+      "editItems": "編輯項目",
+      "open": "打開",
+      "save": "儲存變更",
+      "saveMembership": "儲存變更"
+    },
+    "delete": {
+      "confirm": "刪除“{{name}}”？此操作無法撤銷。"
+    },
+    "empty": {
+      "description": "建立您的第一個清單以開始對標題進行分組。",
+      "title": "還沒有列表"
+    },
+    "errors": {
+      "load": "無法載入您的清單。"
+    },
+    "form": {
+      "createDescription": "為最喜歡的、重看的或任何您想分享的其他內容建立一個新清單。",
+      "createTitle": "創建列表",
+      "description": "描述",
+      "descriptionHelp": "可選註釋可協助您記住此清單中的內容。",
+      "descriptionPlaceholder": "這份清單有什麼用？",
+      "editDescription": "更新此清單的名稱、描述或可見性。",
+      "editTitle": "編輯列表",
+      "errors": {
+        "nameRequired": "名單名稱為必填項",
+        "submitFailed": "保存清單失敗。"
+      },
+      "name": "名單名稱",
+      "namePlaceholder": "週末科幻",
+      "public": "公開名單",
+      "publicHelp": "知道該連結的任何人都可以查看此列表。"
+    },
+    "items": {
+      "empty": "該列表是空的。"
+    },
+    "meta": {
+      "itemCount": "{{count}} 項目",
+      "itemCount_plural": "{{count}} 項",
+      "updatedAt": "已更新 {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "取消",
+        "create": "創建列表",
+        "save": "儲存變更"
+      },
+      "description": "選擇哪些清單應包含 {{title}}。",
+      "empty": {
+        "description": "建立一個清單來保存該標題。",
+        "title": "還沒有列表"
+      },
+      "errors": {
+        "create": "建立清單失敗。",
+        "save": "無法更新清單成員資格。"
+      },
+      "title": "添加到列表"
+    },
+    "page": {
+      "title": "清單"
+    },
+    "public": {
+      "notFoundDescription": "此共享連結遺失或不再可用。",
+      "notFoundTitle": "未找到列表",
+      "pageTitle": "共享清單",
+      "privateDescription": "所有者尚未公開分享此清單。",
+      "privateTitle": "該清單是私人的"
+    },
+    "visibility": {
+      "private": "私人的",
+      "public": "民眾"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "開設帳戶菜單",
       "desktop": "應用程式設定",
+      "lists": "清單",
       "logout": "登出",
       "register": "同步到雲端",
       "settings": "設定"

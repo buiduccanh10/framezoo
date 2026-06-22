@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Aggiungi alla lista",
     "airs": "In onda",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Guarda Storia"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copia il collegamento di condivisione",
+      "create": "Crea elenco",
+      "delete": "Eliminare",
+      "edit": "Modificare",
+      "editItems": "Modifica elementi",
+      "open": "Aprire",
+      "save": "Salva modifiche",
+      "saveMembership": "Salva modifiche"
+    },
+    "delete": {
+      "confirm": "Eliminare \"{{name}}\"? Questa operazione non può essere annullata."
+    },
+    "empty": {
+      "description": "Crea il tuo primo elenco per iniziare a raggruppare i titoli.",
+      "title": "Nessuna lista ancora"
+    },
+    "errors": {
+      "load": "Impossibile caricare gli elenchi."
+    },
+    "form": {
+      "createDescription": "Inizia un nuovo elenco di preferiti, rewatch o qualsiasi altra cosa tu voglia condividere.",
+      "createTitle": "Crea elenco",
+      "description": "Descrizione",
+      "descriptionHelp": "Nota facoltativa per aiutarti a ricordare cosa appartiene a questo elenco.",
+      "descriptionPlaceholder": "A cosa serve questa lista?",
+      "editDescription": "Aggiorna il nome, la descrizione o la visibilità di questo elenco.",
+      "editTitle": "Modifica elenco",
+      "errors": {
+        "nameRequired": "Il nome dell'elenco è obbligatorio",
+        "submitFailed": "Impossibile salvare l'elenco."
+      },
+      "name": "Nome dell'elenco",
+      "namePlaceholder": "Fine settimana di fantascienza",
+      "public": "Elenco pubblico",
+      "publicHelp": "Chiunque abbia il collegamento può visualizzare questo elenco."
+    },
+    "items": {
+      "empty": "Questo elenco è vuoto."
+    },
+    "meta": {
+      "itemCount": "{{count}} elemento",
+      "itemCount_plural": "{{count}} elementi",
+      "updatedAt": "Aggiornato {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancellare",
+        "create": "Crea elenco",
+        "save": "Salva modifiche"
+      },
+      "description": "Scegli quali elenchi devono includere {{title}}.",
+      "empty": {
+        "description": "Crea un elenco per salvare questo titolo.",
+        "title": "Nessuna lista ancora"
+      },
+      "errors": {
+        "create": "Impossibile creare l'elenco.",
+        "save": "Impossibile aggiornare l'appartenenza all'elenco."
+      },
+      "title": "Aggiungi alla lista"
+    },
+    "page": {
+      "title": "Elenchi"
+    },
+    "public": {
+      "notFoundDescription": "Questo collegamento di condivisione è mancante o non più disponibile.",
+      "notFoundTitle": "Elenco non trovato",
+      "pageTitle": "Elenco condiviso",
+      "privateDescription": "Il proprietario non ha condiviso questo elenco pubblicamente.",
+      "privateTitle": "Questo elenco è privato"
+    },
+    "visibility": {
+      "private": "Privato",
+      "public": "Pubblico"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Apri il menu dell'account",
       "desktop": "Impostazioni dell'app",
+      "lists": "Elenchi",
       "logout": "Esci",
       "register": "Sincronizza al Cloud",
       "settings": "Impostazioni"

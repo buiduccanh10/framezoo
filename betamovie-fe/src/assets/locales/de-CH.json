@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Zur Liste hinzufügen",
     "airs": "Loft",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Sehen Sie sich den Verlauf an"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Teilen-Link kopieren",
+      "create": "Liste erstellen",
+      "delete": "Löschen",
+      "edit": "Bearbeiten",
+      "editItems": "Elemente bearbeiten",
+      "open": "Offen",
+      "save": "Änderungen speichern",
+      "saveMembership": "Änderungen speichern"
+    },
+    "delete": {
+      "confirm": "„{{name}}“ löschen? Dies kann nicht rückgängig gemacht werden."
+    },
+    "empty": {
+      "description": "Erstellen Sie Ihre erste Liste, um mit der Gruppierung von Titeln zu beginnen.",
+      "title": "Noch keine Listen"
+    },
+    "errors": {
+      "load": "Ihre Listen konnten nicht geladen werden."
+    },
+    "form": {
+      "createDescription": "Erstellen Sie eine neue Liste für Favoriten, Wiederholungen oder alles andere, was Sie teilen möchten.",
+      "createTitle": "Liste erstellen",
+      "description": "Beschreibung",
+      "descriptionHelp": "Optionaler Hinweis, der Ihnen hilft, sich daran zu erinnern, was in diese Liste gehört.",
+      "descriptionPlaceholder": "Wozu dient diese Liste?",
+      "editDescription": "Aktualisieren Sie den Namen, die Beschreibung oder die Sichtbarkeit für diese Liste.",
+      "editTitle": "Liste bearbeiten",
+      "errors": {
+        "nameRequired": "Listenname ist erforderlich",
+        "submitFailed": "Liste konnte nicht gespeichert werden."
+      },
+      "name": "Listenname",
+      "namePlaceholder": "Wochenend-Science-Fiction",
+      "public": "Öffentliche Liste",
+      "publicHelp": "Jeder, der über den Link verfügt, kann diese Liste anzeigen."
+    },
+    "items": {
+      "empty": "Diese Liste ist leer."
+    },
+    "meta": {
+      "itemCount": "{{count}} Artikel",
+      "itemCount_plural": "{{count}} Artikel",
+      "updatedAt": "Aktualisiert {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Stornieren",
+        "create": "Liste erstellen",
+        "save": "Änderungen speichern"
+      },
+      "description": "Wählen Sie aus, welche Listen {{title}} enthalten sollen.",
+      "empty": {
+        "description": "Erstellen Sie eine Liste, um diesen Titel zu speichern.",
+        "title": "Noch keine Listen"
+      },
+      "errors": {
+        "create": "Liste konnte nicht erstellt werden.",
+        "save": "Die Listenmitgliedschaft konnte nicht aktualisiert werden."
+      },
+      "title": "Zur Liste hinzufügen"
+    },
+    "page": {
+      "title": "Listen"
+    },
+    "public": {
+      "notFoundDescription": "Dieser Freigabelink fehlt oder ist nicht mehr verfügbar.",
+      "notFoundTitle": "Liste nicht gefunden",
+      "pageTitle": "Geteilte Liste",
+      "privateDescription": "Der Eigentümer hat diese Liste nicht öffentlich geteilt.",
+      "privateTitle": "Diese Liste ist privat"
+    },
+    "visibility": {
+      "private": "Privat",
+      "public": "Öffentlich"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Kontomenü öffnen",
       "desktop": "App-Einstellungen",
+      "lists": "Listen",
       "logout": "Abmälde",
       "register": "Synchronisiert zo der Wolche",
       "settings": "Ischtelige"

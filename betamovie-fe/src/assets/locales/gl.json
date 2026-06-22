@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Engadir á Lista",
     "airs": "Aire",
     "collection": {
       "movie": "Película",
@@ -416,6 +417,84 @@
       "sectionTitle": "Historial de visualizacións"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copiar a ligazón para compartir",
+      "create": "Crear lista",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "editItems": "Editar elementos",
+      "open": "Aberto",
+      "save": "Garda os cambios",
+      "saveMembership": "Garda os cambios"
+    },
+    "delete": {
+      "confirm": "Queres eliminar \"{{name}}\"? Isto non se pode desfacer."
+    },
+    "empty": {
+      "description": "Crea a túa primeira lista para comezar a agrupar títulos.",
+      "title": "Aínda non hai listas"
+    },
+    "errors": {
+      "load": "Produciuse un erro ao cargar as túas listas."
+    },
+    "form": {
+      "createDescription": "Comeza unha nova lista de favoritos, revisións ou calquera outra cousa que queiras compartir.",
+      "createTitle": "Crear lista",
+      "description": "Descrición",
+      "descriptionHelp": "Nota opcional para axudarche a lembrar o que pertence a esta lista.",
+      "descriptionPlaceholder": "Para que serve esta lista?",
+      "editDescription": "Actualiza o nome, a descrición ou a visibilidade desta lista.",
+      "editTitle": "Editar lista",
+      "errors": {
+        "nameRequired": "O nome da lista é necesario",
+        "submitFailed": "Produciuse un erro ao gardar a lista."
+      },
+      "name": "Nome da lista",
+      "namePlaceholder": "Fin de semana de ciencia ficción",
+      "public": "Lista pública",
+      "publicHelp": "Calquera persoa que teña a ligazón pode ver esta lista."
+    },
+    "items": {
+      "empty": "Esta lista está baleira."
+    },
+    "meta": {
+      "itemCount": "{{count}} elemento",
+      "itemCount_plural": "{{count}} elementos",
+      "updatedAt": "Actualizado {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancelar",
+        "create": "Crear lista",
+        "save": "Garda os cambios"
+      },
+      "description": "Escolle as listas que deben incluír {{title}}.",
+      "empty": {
+        "description": "Crea unha lista para gardar este título.",
+        "title": "Aínda non hai listas"
+      },
+      "errors": {
+        "create": "Produciuse un erro ao crear a lista.",
+        "save": "Produciuse un erro ao actualizar a subscrición á lista."
+      },
+      "title": "Engadir á Lista"
+    },
+    "page": {
+      "title": "Listas"
+    },
+    "public": {
+      "notFoundDescription": "Falta esta ligazón para compartir ou xa non está dispoñible.",
+      "notFoundTitle": "Non se atopou a lista",
+      "pageTitle": "Lista compartida",
+      "privateDescription": "O propietario non compartiu esta lista publicamente.",
+      "privateTitle": "Esta lista é privada"
+    },
+    "visibility": {
+      "private": "Privado",
+      "public": "Público"
+    }
+  },
   "media": {
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Abrir o menú da conta",
       "desktop": "Configuración da aplicación",
+      "lists": "Listas",
       "logout": "Cerrar sesión",
       "register": "Sincronizar coa nube",
       "settings": "Configuración"

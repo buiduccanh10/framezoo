@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Tilføj til liste",
     "airs": "Airs",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Se historie"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopiér delelink",
+      "create": "Opret liste",
+      "delete": "Slet",
+      "edit": "Redigere",
+      "editItems": "Rediger elementer",
+      "open": "Åben",
+      "save": "Gem ændringer",
+      "saveMembership": "Gem ændringer"
+    },
+    "delete": {
+      "confirm": "Vil du slette \"{{name}}\"? Dette kan ikke fortrydes."
+    },
+    "empty": {
+      "description": "Opret din første liste for at begynde at gruppere titler.",
+      "title": "Ingen lister endnu"
+    },
+    "errors": {
+      "load": "Kunne ikke indlæse dine lister."
+    },
+    "form": {
+      "createDescription": "Start en ny liste over favoritter, genvisninger eller andet, du vil dele.",
+      "createTitle": "Opret liste",
+      "description": "Beskrivelse",
+      "descriptionHelp": "Valgfri note for at hjælpe dig med at huske, hvad der hører til denne liste.",
+      "descriptionPlaceholder": "Hvad er denne liste til?",
+      "editDescription": "Opdater navnet, beskrivelsen eller synligheden for denne liste.",
+      "editTitle": "Rediger liste",
+      "errors": {
+        "nameRequired": "Listenavn er påkrævet",
+        "submitFailed": "Listen kunne ikke gemmes."
+      },
+      "name": "Listenavn",
+      "namePlaceholder": "Weekend sci-fi",
+      "public": "Offentlig liste",
+      "publicHelp": "Alle med linket kan se denne liste."
+    },
+    "items": {
+      "empty": "Denne liste er tom."
+    },
+    "meta": {
+      "itemCount": "{{count}} element",
+      "itemCount_plural": "{{count}} elementer",
+      "updatedAt": "Opdateret {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Ophæve",
+        "create": "Opret liste",
+        "save": "Gem ændringer"
+      },
+      "description": "Vælg, hvilke lister der skal indeholde {{title}}.",
+      "empty": {
+        "description": "Opret en liste for at gemme denne titel.",
+        "title": "Ingen lister endnu"
+      },
+      "errors": {
+        "create": "Listen kunne ikke oprettes.",
+        "save": "Listemedlemskabet kunne ikke opdateres."
+      },
+      "title": "Tilføj til liste"
+    },
+    "page": {
+      "title": "Lister"
+    },
+    "public": {
+      "notFoundDescription": "Dette delelink mangler eller er ikke længere tilgængeligt.",
+      "notFoundTitle": "Listen blev ikke fundet",
+      "pageTitle": "Delt liste",
+      "privateDescription": "Ejeren har ikke delt denne liste offentligt.",
+      "privateTitle": "Denne liste er privat"
+    },
+    "visibility": {
+      "private": "Privat",
+      "public": "Offentlig"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Åbn kontomenuen",
       "desktop": "App-indstillinger",
+      "lists": "Lister",
       "logout": "Log ud",
       "register": "Synkroniser til Cloud",
       "settings": "Indstillinger"
