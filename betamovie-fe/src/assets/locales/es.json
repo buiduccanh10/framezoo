@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Actualizar ahora",
         "available": "Una nueva versión de la aplicación está lista.",
+        "later": "Más tarde",
         "updating": "Actualizando..."
       },
       "offline": "Verifica tu conexión a internet"
@@ -788,6 +789,7 @@
       "credits": "Saltar créditos",
       "endOfVideo": "Fin",
       "endsAt": "Termina en {{time}}",
+      "submissionUnavailableMessage": "El envío de segmentos no está disponible en este servidor.",
       "feedback": {
         "modal": {
           "cancel": "Cancelar",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versión",
         "notLoggedIn": "No has iniciado sesión",
         "userId": "ID de usuario",
         "userIdDescription": "Utilice esto como código de invitación para su registro de amigo."

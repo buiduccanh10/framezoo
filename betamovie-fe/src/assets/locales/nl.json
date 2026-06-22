@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Nu bijwerken",
         "available": "Er is een nieuwe app-versie klaar.",
+        "later": "Later",
         "updating": "Updaten..."
       },
       "offline": "Controleer je internetverbinding"
@@ -788,6 +789,7 @@
       "credits": "Credits overslaan",
       "endOfVideo": "Einde",
       "endsAt": "Eindigt op {{time}}",
+      "submissionUnavailableMessage": "Segmentinzending is niet beschikbaar op deze server.",
       "feedback": {
         "modal": {
           "cancel": "Annuleren",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versie",
         "notLoggedIn": "U bent niet ingelogd",
         "userId": "Gebruiker ID",
         "userIdDescription": "Gebruik dit als uitnodigingscode voor uw vriendenregister"

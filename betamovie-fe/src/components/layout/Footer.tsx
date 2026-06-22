@@ -29,6 +29,7 @@ export function Footer() {
 export function FooterView(props: {
   children: React.ReactNode;
   className?: string;
+  showFooter?: boolean;
 }) {
   return (
     <div
@@ -37,7 +38,7 @@ export function FooterView(props: {
       )}
     >
       <div style={{ flex: "1 0 auto" }}>{props.children}</div>
-      <Footer />
+      {props.showFooter === false ? null : <Footer />}
     </div>
   );
 }

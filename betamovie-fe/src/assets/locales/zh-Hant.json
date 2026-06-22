@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "立即更新",
         "available": "新的應用程式版本已準備就緒。",
+        "later": "之後",
         "updating": "更新中..."
       },
       "offline": "請檢查您的網絡連接"
@@ -788,6 +789,7 @@
       "credits": "跳過製作人員名單",
       "endOfVideo": "結尾",
       "endsAt": "結束於 {{time}}",
+      "submissionUnavailableMessage": "分段提交在此伺服器上不可用。",
       "feedback": {
         "modal": {
           "cancel": "取消",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "版本",
         "notLoggedIn": "您尚未登錄",
         "userId": "使用者ID",
         "userIdDescription": "使用此作為您的好友註冊的邀請碼"

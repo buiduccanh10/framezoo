@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Värskendage kohe",
         "available": "Rakenduse uus versioon on valmis.",
+        "later": "Hiljem",
         "updating": "Värskendamine..."
       },
       "offline": "Kontrollige oma Interneti-ühendust"
@@ -788,6 +789,7 @@
       "credits": "Jäta krediiti vahele",
       "endOfVideo": "Lõpp",
       "endsAt": "Lõpeb {{time}}",
+      "submissionUnavailableMessage": "Segmendi esitamine pole selles serveris saadaval.",
       "feedback": {
         "modal": {
           "cancel": "Tühista",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versioon",
         "notLoggedIn": "Sa pole sisse loginud",
         "userId": "Kasutaja ID",
         "userIdDescription": "Kasutage seda oma sõbraregistri kutsekoodina"

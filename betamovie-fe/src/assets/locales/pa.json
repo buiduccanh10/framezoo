@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "ਹੁਣੇ ਅੱਪਡੇਟ ਕਰੋ",
         "available": "ਐਪ ਦਾ ਨਵਾਂ ਸੰਸਕਰਣ ਤਿਆਰ ਹੈ।",
+        "later": "ਬਾਅਦ ਵਿੱਚ",
         "updating": "ਅੱਪਡੇਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ..."
       },
       "offline": "ਆਪਣੇ ਇੰਟਰਨੈਟ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ"
@@ -788,6 +789,7 @@
       "credits": "ਕ੍ਰੈਡਿਟ ਛੱਡੋ",
       "endOfVideo": "ਅੰਤ",
       "endsAt": "{{time}} 'ਤੇ ਸਮਾਪਤ ਹੁੰਦਾ ਹੈ",
+      "submissionUnavailableMessage": "ਖੰਡ ਸਪੁਰਦਗੀ ਇਸ ਸਰਵਰ 'ਤੇ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।",
       "feedback": {
         "modal": {
           "cancel": "ਰੱਦ ਕਰੋ",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "ਸੰਸਕਰਣ",
         "notLoggedIn": "ਤੁਸੀਂ ਲੌਗਇਨ ਨਹੀਂ ਹੋ",
         "userId": "ਯੂਜਰ ਆਈਡੀ",
         "userIdDescription": "ਇਸ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਰਜਿਸਟਰ ਲਈ ਸੱਦਾ ਕੋਡ ਵਜੋਂ ਵਰਤੋ"

@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Opdater nu",
         "available": "En ny appversion er klar.",
+        "later": "Senere",
         "updating": "Opdaterer..."
       },
       "offline": "Kontroller din internetforbindelse, fjollehoved!"
@@ -788,6 +789,7 @@
       "credits": "Spring over kreditter",
       "endOfVideo": "Ende",
       "endsAt": "Slutter kl. {{time}}",
+      "submissionUnavailableMessage": "Segmentindsendelse er ikke tilgængelig på denne server.",
       "feedback": {
         "modal": {
           "cancel": "Ophæve",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Version",
         "notLoggedIn": "Du er ikke logget ind",
         "userId": "Bruger ID",
         "userIdDescription": "Brug denne som invitationskode til dit venneregister"

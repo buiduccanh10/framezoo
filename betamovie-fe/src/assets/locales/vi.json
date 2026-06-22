@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Cập nhật ngay",
         "available": "Đã có phiên bản mới của ứng dụng.",
+        "later": "Để sau",
         "updating": "Đang cập nhật..."
       },
       "offline": "Hãy kiểm tra kết nối Internet của bạn"
@@ -788,6 +789,7 @@
       "credits": "Bỏ qua",
       "endOfVideo": "Kết thúc",
       "endsAt": "Kết thúc lúc {{time}}",
+      "submissionUnavailableMessage": "Máy chủ này hiện chưa hỗ trợ gửi phân đoạn.",
       "feedback": {
         "modal": {
           "cancel": "Hủy",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Phiên bản",
         "notLoggedIn": "Bạn chưa đăng nhập",
         "userId": "ID người dùng",
         "userIdDescription": "Sử dụng mã này làm mã mời khi bạn bè đăng ký"

@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Aktualizujte nyní",
         "available": "Nová verze aplikace je připravena.",
+        "later": "Později",
         "updating": "Aktualizace..."
       },
       "offline": "Zkontrolujte své internetové připojení"
@@ -788,6 +789,7 @@
       "credits": "Přeskočit kredity",
       "endOfVideo": "Konec",
       "endsAt": "Končí v {{time}}",
+      "submissionUnavailableMessage": "Odeslání segmentu není na tomto serveru dostupné.",
       "feedback": {
         "modal": {
           "cancel": "Zrušit",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Verze",
         "notLoggedIn": "Nejste přihlášen",
         "userId": "Uživatelské ID",
         "userIdDescription": "Použijte jej jako zvací kód pro registraci přátel"

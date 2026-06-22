@@ -70,7 +70,7 @@ export function LoginPage() {
   };
 
   return (
-    <SubPageLayout>
+    <SubPageLayout showFooter={false}>
       <PageTitle subpage k="global.pages.login" />
       {showBackendSelection &&
       (availableBackends.length > 1 || !defaultBackend) ? (

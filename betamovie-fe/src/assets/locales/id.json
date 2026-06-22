@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Perbarui sekarang",
         "available": "Versi aplikasi baru sudah siap.",
+        "later": "Nanti",
         "updating": "Memperbarui..."
       },
       "offline": "Periksa koneksi internet Anda"
@@ -788,6 +789,7 @@
       "credits": "Lewati Kredit",
       "endOfVideo": "Akhir",
       "endsAt": "Berakhir pada {{time}}",
+      "submissionUnavailableMessage": "Pengiriman segmen tidak tersedia di server ini.",
       "feedback": {
         "modal": {
           "cancel": "Membatalkan",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versi",
         "notLoggedIn": "Anda belum masuk ke akun anda",
         "userId": "ID pengguna",
         "userIdDescription": "Gunakan ini sebagai kode undangan untuk daftar teman Anda"

@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Atjauniniet tūlīt",
         "available": "Jauna lietotnes versija ir gatava.",
+        "later": "Vēlāk",
         "updating": "Notiek atjaunināšana..."
       },
       "offline": "Pārbaudiet interneta savienojumu"
@@ -788,6 +789,7 @@
       "credits": "Izlaist kredītus",
       "endOfVideo": "Beigas",
       "endsAt": "Beidzas {{time}}",
+      "submissionUnavailableMessage": "Segmentu iesniegšana šajā serverī nav pieejama.",
       "feedback": {
         "modal": {
           "cancel": "Atcelt",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versija",
         "notLoggedIn": "Jūs neesat pievienojies",
         "userId": "Lietotāja ID",
         "userIdDescription": "Izmantojiet šo kā ielūguma kodu drauga reģistrācijai"

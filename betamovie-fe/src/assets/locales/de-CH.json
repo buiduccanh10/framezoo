@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Jetzt aktualisieren",
         "available": "Eine neue App-Version ist fertig.",
+        "later": "Später",
         "updating": "Aktualisierung..."
       },
       "offline": "Check mol dini Internet verbendig, silly goose! 🦢"
@@ -788,6 +789,7 @@
       "credits": "Credits überspringen",
       "endOfVideo": "Ende",
       "endsAt": "Endet um {{time}}",
+      "submissionUnavailableMessage": "Die Segmentübermittlung ist auf diesem Server nicht verfügbar.",
       "feedback": {
         "modal": {
           "cancel": "Stornieren",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Version",
         "notLoggedIn": "Du besch net agmäldet",
         "userId": "Nutzer-ID",
         "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister"

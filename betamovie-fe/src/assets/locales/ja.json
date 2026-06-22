@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "今すぐアップデートしてください",
         "available": "新しいアプリのバージョンが準備できました。",
+        "later": "後で",
         "updating": "更新中..."
       },
       "offline": "インターネット接続を確認してください、愚かなガチョウ! 🦢"
@@ -788,6 +789,7 @@
       "credits": "クレジットをスキップする",
       "endOfVideo": "終わり",
       "endsAt": "{{time}} に終了",
+      "submissionUnavailableMessage": "このサーバーではセグメントの送信は利用できません。",
       "feedback": {
         "modal": {
           "cancel": "キャンセル",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "バージョン",
         "notLoggedIn": "ログインしていません",
         "userId": "ユーザーID",
         "userIdDescription": "これを友達登録の招待コードとして使用してください"

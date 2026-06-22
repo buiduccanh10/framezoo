@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Uppdatera nu",
         "available": "En ny appversion är klar.",
+        "later": "Senare",
         "updating": "Uppdaterar..."
       },
       "offline": "Kontrollera din internetanslutning, tokiga gås! 🦢"
@@ -788,6 +789,7 @@
       "credits": "Hoppa över krediter",
       "endOfVideo": "Avsluta",
       "endsAt": "Slutar kl. {{time}}",
+      "submissionUnavailableMessage": "Segmentinlämning är inte tillgängligt på den här servern.",
       "feedback": {
         "modal": {
           "cancel": "Avboka",
@@ -1097,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Version",
         "notLoggedIn": "Du är inte inloggad",
         "userId": "Användar-ID",
         "userIdDescription": "Använd denna som inbjudningskod för ditt vänregister"
