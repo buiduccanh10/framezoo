@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "今すぐアップデートしてください",
+        "available": "新しいアプリのバージョンが準備できました。",
+        "updating": "更新中..."
+      },
       "offline": "インターネット接続を確認してください、愚かなガチョウ! 🦢"
     },
     "install": {

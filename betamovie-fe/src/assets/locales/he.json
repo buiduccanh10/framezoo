@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "עדכן עכשיו",
+        "available": "גרסת אפליקציה חדשה מוכנה.",
+        "updating": "עִדכּוּן..."
+      },
       "offline": "תבדוק את חיבור האינטרנט שלך"
     },
     "install": {

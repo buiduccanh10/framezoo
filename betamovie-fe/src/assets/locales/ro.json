@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Actualizați acum",
+        "available": "O nouă versiune a aplicației este gata.",
+        "updating": "Se actualizează..."
+      },
       "offline": "Verificați-vă conexiunea de internet"
     },
     "install": {

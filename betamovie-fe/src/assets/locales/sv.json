@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Uppdatera nu",
+        "available": "En ny appversion är klar.",
+        "updating": "Uppdaterar..."
+      },
       "offline": "Kontrollera din internetanslutning, tokiga gås! 🦢"
     },
     "install": {

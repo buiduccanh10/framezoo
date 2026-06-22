@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Värskendage kohe",
+        "available": "Rakenduse uus versioon on valmis.",
+        "updating": "Värskendamine..."
+      },
       "offline": "Kontrollige oma Interneti-ühendust"
     },
     "install": {

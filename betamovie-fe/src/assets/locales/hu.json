@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Frissítse most",
+        "available": "Elkészült az alkalmazás új verziója.",
+        "updating": "Frissítés..."
+      },
       "offline": "Nézd meg az internet kapcsolatodat, drágaságom!"
     },
     "install": {

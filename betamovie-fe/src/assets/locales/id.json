@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Perbarui sekarang",
+        "available": "Versi aplikasi baru sudah siap.",
+        "updating": "Memperbarui..."
+      },
       "offline": "Periksa koneksi internet Anda"
     },
     "install": {

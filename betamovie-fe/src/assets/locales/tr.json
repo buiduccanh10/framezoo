@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Şimdi güncelle",
+        "available": "Yeni bir uygulama sürümü hazır.",
+        "updating": "Güncelleniyor..."
+      },
       "offline": "İnternet bağlantınızı kontrol ediniz"
     },
     "install": {

@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "立即更新",
+        "available": "新的应用程序版本已准备就绪。",
+        "updating": "更新中..."
+      },
       "offline": "请检查您的互联网连接"
     },
     "install": {
