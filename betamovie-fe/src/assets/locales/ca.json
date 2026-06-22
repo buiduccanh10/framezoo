@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Actualitza ara",
+        "available": "Una nova versió de l'aplicació està preparada.",
+        "updating": "S'està actualitzant..."
+      },
       "offline": "Comproveu la connexió a internet"
     },
     "install": {

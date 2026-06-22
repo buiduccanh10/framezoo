@@ -58,10 +58,12 @@ export default defineConfig(({ mode }) => {
       }),
       VitePWA({
         disable: env.VITE_PWA_ENABLED !== "true",
-        registerType: "autoUpdate",
+        registerType: "prompt",
         workbox: {
           maximumFileSizeToCacheInBytes: 4000000, // 4mb
           globIgnores: ["!assets/**/*"],
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
         },
         includeAssets: [
           "favicon.ico",

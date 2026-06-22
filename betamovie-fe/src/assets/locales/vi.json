@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Cập nhật ngay",
+        "available": "Đã có phiên bản mới của ứng dụng.",
+        "updating": "Đang cập nhật..."
+      },
       "offline": "Hãy kiểm tra kết nối Internet của bạn"
     },
     "install": {

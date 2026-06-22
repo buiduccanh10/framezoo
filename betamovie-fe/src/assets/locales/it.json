@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Aggiorna ora",
+        "available": "Una nuova versione dell'app è pronta.",
+        "updating": "Aggiornamento..."
+      },
       "offline": "Controlla la tua connessione internet, stupida oca! 🦢"
     },
     "install": {

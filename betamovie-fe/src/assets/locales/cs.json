@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Aktualizujte nyní",
+        "available": "Nová verze aplikace je připravena.",
+        "updating": "Aktualizace..."
+      },
       "offline": "Zkontrolujte své internetové připojení"
     },
     "install": {

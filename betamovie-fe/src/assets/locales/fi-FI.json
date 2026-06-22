@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Päivitä nyt",
+        "available": "Uusi sovellusversio on valmis.",
+        "updating": "Päivitetään..."
+      },
       "offline": "Tarkista Internet-yhteytesi"
     },
     "install": {

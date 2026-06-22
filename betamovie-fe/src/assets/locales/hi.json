@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "अभी अद्यतन करें",
+        "available": "ऐप का नया संस्करण तैयार है.",
+        "updating": "अद्यतन किया जा रहा है..."
+      },
       "offline": "अपना इंटरनेट संपर्क जांचे"
     },
     "install": {

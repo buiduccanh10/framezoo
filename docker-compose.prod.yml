@@ -92,7 +92,7 @@ services:
         BACKEND_URL: ${VITE_BACKEND_URL}
         CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
         APP_DOMAIN: https://alphaflix.io.vn
-        PWA_ENABLED: "true"
+        PWA_ENABLED: ${VITE_PWA_ENABLED:-true}
         OPENSEARCH_ENABLED: "true"
         TMDB_EMBED_API_URL: /tmdb-api
         TIDB_API_KEY: ${VITE_TIDB_API_KEY}

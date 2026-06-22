@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Opdater nu",
+        "available": "En ny appversion er klar.",
+        "updating": "Opdaterer..."
+      },
       "offline": "Kontroller din internetforbindelse, fjollehoved!"
     },
     "install": {

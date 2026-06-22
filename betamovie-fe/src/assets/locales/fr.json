@@ -496,6 +496,11 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Mettre à jour maintenant",
+        "available": "Une nouvelle version de l'application est prête.",
+        "updating": "Mise à jour..."
+      },
       "offline": "Veuillez vérifier votre connexion internet"
     },
     "install": {
