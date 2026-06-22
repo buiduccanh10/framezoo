@@ -789,6 +789,7 @@
       "credits": "跳過製作人員名單",
       "endOfVideo": "結尾",
       "endsAt": "結束於 {{time}}",
+      "submissionUnavailableMessage": "分段提交在此伺服器上不可用。",
       "feedback": {
         "modal": {
           "cancel": "取消",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "版本",
         "notLoggedIn": "您尚未登錄",
         "userId": "使用者ID",
         "userIdDescription": "使用此作為您的好友註冊的邀請碼"

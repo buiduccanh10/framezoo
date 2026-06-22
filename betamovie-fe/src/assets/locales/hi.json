@@ -789,6 +789,7 @@
       "credits": "क्रेडिट छोड़ें",
       "endOfVideo": "अंत",
       "endsAt": "{{time}} पर समाप्त होता है",
+      "submissionUnavailableMessage": "इस सर्वर पर सेगमेंट सबमिशन उपलब्ध नहीं है.",
       "feedback": {
         "modal": {
           "cancel": "रद्द करना",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "संस्करण",
         "notLoggedIn": "आपने लॉग - इन नहीं किया",
         "userId": "उपयोगकर्ता पहचान",
         "userIdDescription": "इसे अपने मित्र रजिस्टर के लिए आमंत्रण कोड के रूप में उपयोग करें"

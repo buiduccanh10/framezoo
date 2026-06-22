@@ -789,6 +789,7 @@
       "credits": "ક્રેડિટ્સ છોડો",
       "endOfVideo": "અંત",
       "endsAt": "{{time}} વાગ્યે સમાપ્ત થાય છે",
+      "submissionUnavailableMessage": "સેગમેન્ટ સબમિશન આ સર્વર પર ઉપલબ્ધ નથી.",
       "feedback": {
         "modal": {
           "cancel": "રદ કરો",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "સંસ્કરણ",
         "notLoggedIn": "તમે લૉગ ઇન નથી",
         "userId": "વપરાશકર્તા ID",
         "userIdDescription": "તમારા મિત્ર રજીસ્ટર માટે આમંત્રિત કોડ તરીકે આનો ઉપયોગ કરો"

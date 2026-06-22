@@ -789,6 +789,7 @@
       "credits": "Pomiń kredyty",
       "endOfVideo": "Koniec",
       "endsAt": "Kończy się o {{time}}",
+      "submissionUnavailableMessage": "Przesyłanie segmentów nie jest dostępne na tym serwerze.",
       "feedback": {
         "modal": {
           "cancel": "Anulować",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Wersja",
         "notLoggedIn": "Nie jesteś zalogowany",
         "userId": "Identyfikator użytkownika",
         "userIdDescription": "Użyj tego jako kodu zaproszenia do rejestracji znajomego"

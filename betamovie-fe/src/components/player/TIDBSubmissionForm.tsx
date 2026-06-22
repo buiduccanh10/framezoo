@@ -12,7 +12,6 @@ import { Heading3, Paragraph } from "@/components/utils/Text";
 import { useTIDBSubmissionAvailability } from "@/hooks/useTIDBSubmissionAvailability";
 import { conf } from "@/setup/config";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { submitIntro } from "@/utils/tidb";
 
 import { IconPatch } from "../buttons/IconPatch";
@@ -82,8 +81,7 @@ export function TIDBSubmissionForm({
   const { t } = useTranslation();
   const meta = usePlayerStore((s) => s.meta);
   const config = conf();
-  const tidbKeyFromStore = usePreferencesStore((s) => s.tidbKey);
-  const tidbKey = config.TIDB_API_KEY || tidbKeyFromStore;
+  const tidbKey = config.TIDB_API_KEY || null;
   const { canSubmit } = useTIDBSubmissionAvailability();
   const submissionModal = useModal("tidb-submission");
   const formRef = useRef<HTMLFormElement>(null);

@@ -789,6 +789,7 @@
       "credits": "Passer les crédits",
       "endOfVideo": "Fin",
       "endsAt": "Se termine à {{time}}",
+      "submissionUnavailableMessage": "La soumission de segments n'est pas disponible sur ce serveur.",
       "feedback": {
         "modal": {
           "cancel": "Annuler",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Version",
         "notLoggedIn": "Vous n'êtes pas connecté",
         "userId": "ID de l'utilisateur",
         "userIdDescription": "Utilisez-le comme code d'invitation pour votre inscription d'ami"

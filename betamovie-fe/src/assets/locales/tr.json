@@ -789,6 +789,7 @@
       "credits": "Kredileri Atla",
       "endOfVideo": "Son",
       "endsAt": "{{time}} tarihinde bitiyor",
+      "submissionUnavailableMessage": "Segment gönderimi bu sunucuda mevcut değil.",
       "feedback": {
         "modal": {
           "cancel": "İptal etmek",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Sürüm",
         "notLoggedIn": "Giriş yapmadınız",
         "userId": "Kullanıcı Kimliği",
         "userIdDescription": "Bunu arkadaş kaydınız için davet kodu olarak kullanın"

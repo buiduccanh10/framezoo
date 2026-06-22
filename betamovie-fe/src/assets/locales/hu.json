@@ -789,6 +789,7 @@
       "credits": "Kredit átugrása",
       "endOfVideo": "Vége",
       "endsAt": "Vége: {{time}}",
+      "submissionUnavailableMessage": "A szegmensküldés nem érhető el ezen a szerveren.",
       "feedback": {
         "modal": {
           "cancel": "Mégsem",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Változat",
         "notLoggedIn": "Nem vagy bejelentkezve",
         "userId": "Felhasználó ID",
         "userIdDescription": "Használja ezt meghívókódként az ismerősei regisztrációjához"

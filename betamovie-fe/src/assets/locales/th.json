@@ -789,6 +789,7 @@
       "credits": "ข้ามเครดิต",
       "endOfVideo": "จบ",
       "endsAt": "สิ้นสุดที่ {{time}}",
+      "submissionUnavailableMessage": "การส่งกลุ่มไม่พร้อมใช้งานบนเซิร์ฟเวอร์นี้",
       "feedback": {
         "modal": {
           "cancel": "ยกเลิก",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "เวอร์ชัน",
         "notLoggedIn": "คุณไม่ได้เข้าสู่ระบบ",
         "userId": "รหัสผู้ใช้",
         "userIdDescription": "ใช้รหัสนี้เป็นรหัสเชิญสำหรับการลงทะเบียนเพื่อนของคุณ"

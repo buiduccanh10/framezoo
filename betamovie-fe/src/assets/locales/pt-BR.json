@@ -789,6 +789,7 @@
       "credits": "Pular créditos",
       "endOfVideo": "Fim",
       "endsAt": "Termina em {{time}}",
+      "submissionUnavailableMessage": "O envio de segmentos não está disponível neste servidor.",
       "feedback": {
         "modal": {
           "cancel": "Cancelar",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versão",
         "notLoggedIn": "Você não está logado",
         "userId": "ID do usuário",
         "userIdDescription": "Use isto como código de convite para o registro de seu amigo"

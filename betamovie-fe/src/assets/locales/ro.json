@@ -789,6 +789,7 @@
       "credits": "Omite credite",
       "endOfVideo": "Sfârşit",
       "endsAt": "Se încheie la {{time}}",
+      "submissionUnavailableMessage": "Trimiterea segmentelor nu este disponibilă pe acest server.",
       "feedback": {
         "modal": {
           "cancel": "Anula",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versiune",
         "notLoggedIn": "Nu sunteți autentificat",
         "userId": "ID-ul utilizatorului",
         "userIdDescription": "Folosește-l ca cod de invitație pentru înregistrarea prietenilor tăi"

@@ -789,6 +789,7 @@
       "credits": "Preskoči kredite",
       "endOfVideo": "Konec",
       "endsAt": "Konča se ob {{time}}",
+      "submissionUnavailableMessage": "Predložitev segmenta ni na voljo na tem strežniku.",
       "feedback": {
         "modal": {
           "cancel": "Prekliči",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Različica",
         "notLoggedIn": "Niste prijavljeni",
         "userId": "ID uporabnika",
         "userIdDescription": "Uporabite to kot kodo povabila za vašo registracijo prijateljev"

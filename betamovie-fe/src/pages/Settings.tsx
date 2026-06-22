@@ -34,7 +34,6 @@ import { DeviceListPart } from "@/pages/parts/settings/DeviceListPart";
 import { RegisterCalloutPart } from "@/pages/parts/settings/RegisterCalloutPart";
 import { SidebarPart } from "@/pages/parts/settings/SidebarPart";
 import { PageTitle } from "@/pages/parts/util/PageTitle";
-import { conf } from "@/setup/config";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { useBannerSize } from "@/stores/banner";
 import { useLanguageStore } from "@/stores/language";
@@ -171,7 +170,9 @@ export function AccountSettings(props: {
 export function SettingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const shouldShowConnections = !conf().TIDB_API_KEY || import.meta.env.DEV;
+  // TIDB segment submissions are now handled by the backend, so the legacy
+  // client-side "Connections" settings section stays hidden.
+  const shouldShowConnections = false;
   const validCategories = useMemo(
     () => [
       "settings-account",

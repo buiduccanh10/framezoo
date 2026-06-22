@@ -779,6 +779,7 @@
       "credits": "Skip Credits",
       "endOfVideo": "End",
       "endsAt": "Ends at {{time}}",
+      "submissionUnavailableMessage": "Segment submission is not available on this server.",
       "feedback": {
         "modal": {
           "cancel": "Cancel",
@@ -1088,6 +1089,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Version",
         "notLoggedIn": "You are not logged in",
         "userId": "User ID",
         "userIdDescription": "Use this as invite code for your friend register"

@@ -789,6 +789,7 @@
       "credits": "រំលងឥណទាន",
       "endOfVideo": "ចប់",
       "endsAt": "បញ្ចប់នៅម៉ោង {{time}}",
+      "submissionUnavailableMessage": "ការបញ្ជូនផ្នែកមិនមាននៅលើម៉ាស៊ីនមេនេះទេ។",
       "feedback": {
         "modal": {
           "cancel": "បោះបង់",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "កំណែ",
         "notLoggedIn": "អ្នកមិនបានចូលទេ។",
         "userId": "លេខសម្គាល់អ្នកប្រើប្រាស់",
         "userIdDescription": "ប្រើវាជាលេខកូដអញ្ជើញសម្រាប់ការចុះឈ្មោះមិត្តរបស់អ្នក។"

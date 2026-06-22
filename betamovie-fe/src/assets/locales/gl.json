@@ -789,6 +789,7 @@
       "credits": "Saltar créditos",
       "endOfVideo": "Fin",
       "endsAt": "Remata ás {{time}}",
+      "submissionUnavailableMessage": "O envío de segmentos non está dispoñible neste servidor.",
       "feedback": {
         "modal": {
           "cancel": "Cancelar",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Versión",
         "notLoggedIn": "Non iniciache sesión",
         "userId": "ID do usuario",
         "userIdDescription": "Use isto como código de invitación para o rexistro de amigos"

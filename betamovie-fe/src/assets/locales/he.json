@@ -789,6 +789,7 @@
       "credits": "דלג על קרדיטים",
       "endOfVideo": "סוֹף",
       "endsAt": "מסתיים ב-{{time}}",
+      "submissionUnavailableMessage": "שליחת הפלחים אינה זמינה בשרת זה.",
       "feedback": {
         "modal": {
           "cancel": "לְבַטֵל",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "גִרְסָה",
         "notLoggedIn": "אתה לא מחובר",
         "userId": "זהות המשתמש",
         "userIdDescription": "השתמש בזה כקוד הזמנה לרישום החברים שלך"

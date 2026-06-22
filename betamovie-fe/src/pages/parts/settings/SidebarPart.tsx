@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Icons } from "@/components/Icon";
 import { SidebarLink, SidebarSection } from "@/components/layout/Sidebar";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { conf } from "@/setup/config";
 
 export function SidebarPart(props: {
   selectedCategory: string | null;
@@ -15,6 +16,7 @@ export function SidebarPart(props: {
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
   const [activeLink, setActiveLink] = useState("");
+  const appVersion = conf().APP_VERSION;
 
   const settingLinks = useMemo(
     () => [
@@ -150,6 +152,14 @@ export function SidebarPart(props: {
             </SidebarLink>
           ))}
         </SidebarSection>
+        <div className="mt-6 rounded-lg border border-settings-card-border bg-settings-card-background bg-opacity-[0.15] px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-settings-sidebar-type-secondary">
+            {t("settings.sidebar.info.appVersion")}
+          </p>
+          <p className="mt-1 break-all text-sm text-white">
+            {appVersion ? `v${appVersion}` : "N/A"}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -71,7 +71,7 @@ export function SkipSegmentsView({ id }: { id: string }) {
             </Button>
           ) : (
             <div className="flex-1 text-center text-sm text-type-secondary p-3 bg-video-context-light bg-opacity-10 rounded-lg">
-              {t("player.skipTime.connectApiKeyMessage")}
+              {t("player.skipTime.submissionUnavailableMessage")}
             </div>
           )}
         </div>

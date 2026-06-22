@@ -789,6 +789,7 @@
       "credits": "Slepptu inneign",
       "endOfVideo": "Enda",
       "endsAt": "Lýkur kl. {{time}}",
+      "submissionUnavailableMessage": "Hlutasending er ekki tiltæk á þessum þjóni.",
       "feedback": {
         "modal": {
           "cancel": "Hætta við",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Útgáfa",
         "notLoggedIn": "Þú ert ekki skrátt inn",
         "userId": "Notanda kóði",
         "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína"

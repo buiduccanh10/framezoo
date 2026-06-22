@@ -789,6 +789,7 @@
       "credits": "Bỏ qua",
       "endOfVideo": "Kết thúc",
       "endsAt": "Kết thúc lúc {{time}}",
+      "submissionUnavailableMessage": "Máy chủ này hiện chưa hỗ trợ gửi phân đoạn.",
       "feedback": {
         "modal": {
           "cancel": "Hủy",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "Phiên bản",
         "notLoggedIn": "Bạn chưa đăng nhập",
         "userId": "ID người dùng",
         "userIdDescription": "Sử dụng mã này làm mã mời khi bạn bè đăng ký"

@@ -789,6 +789,7 @@
       "credits": "از اعتبارات بگذرید",
       "endOfVideo": "پایان",
       "endsAt": "پایان در {{time}}",
+      "submissionUnavailableMessage": "ارسال بخش در این سرور در دسترس نیست.",
       "feedback": {
         "modal": {
           "cancel": "لغو کنید",
@@ -1098,6 +1099,7 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "نسخه",
         "notLoggedIn": "شما وارد نشده اید",
         "userId": "شناسه کاربری",
         "userIdDescription": "از این به عنوان کد دعوت برای ثبت نام دوستان خود استفاده کنید"
