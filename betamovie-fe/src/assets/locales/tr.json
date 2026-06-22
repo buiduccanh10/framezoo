@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Şimdi güncelle",
         "available": "Yeni bir uygulama sürümü hazır.",
+        "later": "Daha sonra",
         "updating": "Güncelleniyor..."
       },
       "offline": "İnternet bağlantınızı kontrol ediniz"

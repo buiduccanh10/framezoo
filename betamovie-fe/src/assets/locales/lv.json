@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Atjauniniet tūlīt",
         "available": "Jauna lietotnes versija ir gatava.",
+        "later": "Vēlāk",
         "updating": "Notiek atjaunināšana..."
       },
       "offline": "Pārbaudiet interneta savienojumu"

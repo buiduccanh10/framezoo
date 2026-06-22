@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Värskendage kohe",
         "available": "Rakenduse uus versioon on valmis.",
+        "later": "Hiljem",
         "updating": "Värskendamine..."
       },
       "offline": "Kontrollige oma Interneti-ühendust"

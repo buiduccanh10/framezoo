@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Frissítse most",
         "available": "Elkészült az alkalmazás új verziója.",
+        "later": "Később",
         "updating": "Frissítés..."
       },
       "offline": "Nézd meg az internet kapcsolatodat, drágaságom!"

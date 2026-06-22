@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Perbarui sekarang",
         "available": "Versi aplikasi baru sudah siap.",
+        "later": "Nanti",
         "updating": "Memperbarui..."
       },
       "offline": "Periksa koneksi internet Anda"

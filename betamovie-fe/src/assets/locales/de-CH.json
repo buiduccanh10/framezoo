@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Jetzt aktualisieren",
         "available": "Eine neue App-Version ist fertig.",
+        "later": "Später",
         "updating": "Aktualisierung..."
       },
       "offline": "Check mol dini Internet verbendig, silly goose! 🦢"

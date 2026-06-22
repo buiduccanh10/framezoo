@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Uppfærðu núna",
         "available": "Ný app útgáfa er tilbúin.",
+        "later": "Seinna",
         "updating": "Uppfærir..."
       },
       "offline": "Athugaðu net tengingu þína"

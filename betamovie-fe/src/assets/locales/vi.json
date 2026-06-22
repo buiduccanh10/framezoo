@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Cập nhật ngay",
         "available": "Đã có phiên bản mới của ứng dụng.",
+        "later": "Để sau",
         "updating": "Đang cập nhật..."
       },
       "offline": "Hãy kiểm tra kết nối Internet của bạn"

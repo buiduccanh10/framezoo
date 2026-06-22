@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Aggiorna ora",
         "available": "Una nuova versione dell'app è pronta.",
+        "later": "Dopo",
         "updating": "Aggiornamento..."
       },
       "offline": "Controlla la tua connessione internet, stupida oca! 🦢"

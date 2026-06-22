@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Uppdatera nu",
         "available": "En ny appversion är klar.",
+        "later": "Senare",
         "updating": "Uppdaterar..."
       },
       "offline": "Kontrollera din internetanslutning, tokiga gås! 🦢"

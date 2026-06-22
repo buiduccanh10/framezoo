@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Actualitza ara",
         "available": "Una nova versió de l'aplicació està preparada.",
+        "later": "Més tard",
         "updating": "S'està actualitzant..."
       },
       "offline": "Comprova la teva connexió a Internet, tonto! 🦢"

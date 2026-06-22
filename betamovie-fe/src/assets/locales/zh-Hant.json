@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "立即更新",
         "available": "新的應用程式版本已準備就緒。",
+        "later": "之後",
         "updating": "更新中..."
       },
       "offline": "請檢查您的網絡連接"

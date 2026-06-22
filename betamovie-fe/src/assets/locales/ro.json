@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Actualizați acum",
         "available": "O nouă versiune a aplicației este gata.",
+        "later": "Mai târziu",
         "updating": "Se actualizează..."
       },
       "offline": "Verificați-vă conexiunea de internet"

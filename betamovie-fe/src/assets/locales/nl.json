@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Nu bijwerken",
         "available": "Er is een nieuwe app-versie klaar.",
+        "later": "Later",
         "updating": "Updaten..."
       },
       "offline": "Controleer je internetverbinding"

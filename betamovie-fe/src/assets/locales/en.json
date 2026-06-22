@@ -373,21 +373,15 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "day": {
         "default": "What would you like to watch this afternoon?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -400,15 +394,11 @@
       },
       "morning": {
         "default": "What would you like to watch this morning?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "night": {
         "default": "What would you like to watch tonight?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       }
     },
     "watchHistory": {
@@ -499,6 +489,7 @@
       "appUpdate": {
         "action": "Update now",
         "available": "A new app version is ready.",
+        "later": "Later",
         "updating": "Updating..."
       },
       "offline": "Check your internet connection, silly goose! 🦢"

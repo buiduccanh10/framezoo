@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Päivitä nyt",
         "available": "Uusi sovellusversio on valmis.",
+        "later": "Myöhemmin",
         "updating": "Päivitetään..."
       },
       "offline": "Tarkista Internet-yhteytesi"

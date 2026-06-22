@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Actualizar ahora",
         "available": "Una nueva versión de la aplicación está lista.",
+        "later": "Más tarde",
         "updating": "Actualizando..."
       },
       "offline": "Verifica tu conexión a internet"

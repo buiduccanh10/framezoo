@@ -499,6 +499,7 @@
       "appUpdate": {
         "action": "Opdater nu",
         "available": "En ny appversion er klar.",
+        "later": "Senere",
         "updating": "Opdaterer..."
       },
       "offline": "Kontroller din internetforbindelse, fjollehoved!"

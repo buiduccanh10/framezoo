@@ -12,9 +12,12 @@ export function Banner(props: {
   type: "error" | "info";
   id: string;
   persistDismiss?: boolean;
+  dismissButtonClassName?: string;
+  onDismiss?: () => void;
 }) {
   const [ref] = useRegisterBanner<HTMLDivElement>(props.id);
   const hideBanner = useBannerStore((s) => s.hideBanner);
+  const { t } = useTranslation();
   const styles = {
     error: "bg-[#C93957] text-white",
     info: "bg-[#126FD3] text-white",
@@ -37,16 +40,30 @@ export function Banner(props: {
       <div
         className={[
           styles[props.type],
-          "flex items-center justify-center p-1",
+          "relative flex items-start justify-center px-3 py-2 sm:items-center sm:px-4",
         ].join(" ")}
       >
-        <div className="flex items-center space-x-3">
-          <Icon icon={icons[props.type]} />
-          <div>{props.children}</div>
+        <div className="flex w-full justify-center">
+          <div className="flex w-full max-w-screen-lg items-start gap-3 pr-8 sm:items-center sm:pr-10">
+            <span className="mt-0.5 shrink-0 sm:mt-0">
+              <Icon icon={icons[props.type]} />
+            </span>
+            <div className="min-w-0 flex-1">{props.children}</div>
+          </div>
         </div>
-        <span
-          className="absolute right-4 hover:cursor-pointer"
+        <button
+          type="button"
+          aria-label={t("overlays.close")}
+          className={[
+            "absolute right-1 top-1 flex h-10 w-10 items-center justify-center text-white/85 transition-colors hover:text-white",
+            props.dismissButtonClassName ?? "",
+          ].join(" ")}
           onClick={() => {
+            if (props.onDismiss) {
+              props.onDismiss();
+              return;
+            }
+
             hideBanner(props.id, props.persistDismiss !== false);
             if (props.persistDismiss !== false) {
               localStorage.setItem(`hideBanner-${props.id}`, "true");
@@ -54,7 +71,7 @@ export function Banner(props: {
           }}
         >
           <Icon icon={Icons.X} />
-        </span>
+        </button>
       </div>
     </div>
   );
@@ -70,7 +87,7 @@ export function BannerLocation(props: { location?: string }) {
   const showBanner = useBannerStore((s) => s.showBanner);
   const hasUpdate = useAppUpdateStore((s) => s.hasUpdate);
   const isUpdatingApp = useAppUpdateStore((s) => s.isUpdating);
-  const clearUpdate = useAppUpdateStore((s) => s.clearUpdate);
+  const snoozeUpdate = useAppUpdateStore((s) => s.snoozeUpdate);
   const loc = props.location ?? null;
 
   useEffect(() => {
@@ -112,30 +129,40 @@ export function BannerLocation(props: { location?: string }) {
         </Banner>
       ) : null}
       {hasUpdate ? (
-        <Banner id="app-update-available" type="info" persistDismiss={false}>
-          <div className="flex flex-wrap items-center gap-3 pr-8">
-            <span>{t("navigation.banner.appUpdate.available")}</span>
-            <button
-              type="button"
-              className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold text-white transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-70"
-              onClick={() => {
-                void requestAppUpdate();
-              }}
-              disabled={isUpdatingApp}
-            >
-              {isUpdatingApp
-                ? t("navigation.banner.appUpdate.updating")
-                : t("navigation.banner.appUpdate.action")}
-            </button>
-            {!isUpdatingApp ? (
+        <Banner
+          id="app-update-available"
+          type="info"
+          persistDismiss={false}
+          dismissButtonClassName="hidden sm:flex"
+          onDismiss={() => snoozeUpdate()}
+        >
+          <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+            <span className="text-sm font-medium leading-5">
+              {t("navigation.banner.appUpdate.available")}
+            </span>
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
-                className="text-xs font-medium text-white/80 transition-colors hover:text-white"
-                onClick={() => clearUpdate()}
+                className="min-h-11 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-70 sm:min-h-0 sm:px-3 sm:py-1 sm:text-xs"
+                onClick={() => {
+                  void requestAppUpdate();
+                }}
+                disabled={isUpdatingApp}
               >
-                {t("overlays.close")}
+                {isUpdatingApp
+                  ? t("navigation.banner.appUpdate.updating")
+                  : t("navigation.banner.appUpdate.action")}
               </button>
-            ) : null}
+              {!isUpdatingApp ? (
+                <button
+                  type="button"
+                  className="min-h-11 rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white sm:hidden"
+                  onClick={() => snoozeUpdate()}
+                >
+                  {t("navigation.banner.appUpdate.later")}
+                </button>
+              ) : null}
+            </div>
           </div>
         </Banner>
       ) : null}
