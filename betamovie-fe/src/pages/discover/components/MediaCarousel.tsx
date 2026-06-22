@@ -7,6 +7,7 @@ import { useWindowSize } from "react-use";
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaCard } from "@/components/media/MediaCard";
+import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
@@ -553,8 +554,7 @@ export function MediaCarousel({
                   key={item.id}
                   className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
                 >
-                  <MediaCard
-                    linkable
+                  <WatchedMediaCard
                     key={item.id}
                     media={{
                       id: item.id.toString(),

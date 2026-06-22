@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 
 import { MediaCard } from "@/components/media/MediaCard";
+import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import type { DiscoverMedia } from "@/pages/discover/types/discover";
 import { MediaItem } from "@/utils/mediaTypes";
@@ -132,8 +133,7 @@ export function PersonalRecommendationsCarousel({
                   key={item.id}
                   className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
                 >
-                  <MediaCard
-                    linkable
+                  <WatchedMediaCard
                     media={discoverMediaToCardMedia(item, isTVShow)}
                     onShowDetails={onShowDetails}
                   />

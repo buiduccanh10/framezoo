@@ -7,8 +7,8 @@ import { Button } from "@/components/buttons/Button";
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { WideContainer } from "@/components/layout/WideContainer";
-import { MediaCard } from "@/components/media/MediaCard";
 import { MediaGrid } from "@/components/media/MediaGrid";
+import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { Heading1 } from "@/components/utils/Text";
 import {
   DiscoverContentType,
@@ -544,10 +544,9 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
                     e.preventDefault()
                   }
                 >
-                  <MediaCard
+                  <WatchedMediaCard
                     media={mediaItem}
                     onShowDetails={handleShowDetails}
-                    linkable
                   />
                 </div>
               );
