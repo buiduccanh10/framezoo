@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Adaugă la listă",
     "airs": "Aeruri",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Vizionați Istoria"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copiați linkul de distribuire",
+      "create": "Creați o listă",
+      "delete": "Şterge",
+      "edit": "Edita",
+      "editItems": "Editați articole",
+      "open": "Deschide",
+      "save": "Salvați modificările",
+      "saveMembership": "Salvați modificările"
+    },
+    "delete": {
+      "confirm": "Ștergeți „{{name}}”? Acest lucru nu poate fi anulat."
+    },
+    "empty": {
+      "description": "Creați prima dvs. listă pentru a începe să grupați titlurile.",
+      "title": "Nu există liste încă"
+    },
+    "errors": {
+      "load": "Nu s-au încărcat listele dvs."
+    },
+    "form": {
+      "createDescription": "Începeți o nouă listă pentru favorite, revizionări sau orice altceva pe care doriți să le partajați.",
+      "createTitle": "Creați o listă",
+      "description": "Descriere",
+      "descriptionHelp": "Notă opțională pentru a vă ajuta să vă amintiți ce aparține acestei liste.",
+      "descriptionPlaceholder": "Pentru ce este această listă?",
+      "editDescription": "Actualizați numele, descrierea sau vizibilitatea pentru această listă.",
+      "editTitle": "Editați lista",
+      "errors": {
+        "nameRequired": "Numele listei este obligatoriu",
+        "submitFailed": "Nu s-a putut salva lista."
+      },
+      "name": "Numele listei",
+      "namePlaceholder": "Sci-Fi de weekend",
+      "public": "Lista publică",
+      "publicHelp": "Oricine are linkul poate vizualiza această listă."
+    },
+    "items": {
+      "empty": "Această listă este goală."
+    },
+    "meta": {
+      "itemCount": "{{count}} articol",
+      "itemCount_plural": "{{count}} articole",
+      "updatedAt": "Actualizat {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Anula",
+        "create": "Creați o listă",
+        "save": "Salvați modificările"
+      },
+      "description": "Alegeți ce liste trebuie să includă {{title}}.",
+      "empty": {
+        "description": "Creați o listă pentru a salva acest titlu.",
+        "title": "Nu există liste încă"
+      },
+      "errors": {
+        "create": "Nu s-a putut crea lista.",
+        "save": "Nu s-a putut actualiza calitatea de membru al listei."
+      },
+      "title": "Adaugă la listă"
+    },
+    "page": {
+      "title": "Liste"
+    },
+    "public": {
+      "notFoundDescription": "Acest link de distribuire lipsește sau nu mai este disponibil.",
+      "notFoundTitle": "Lista nu a fost găsită",
+      "pageTitle": "Listă comună",
+      "privateDescription": "Proprietarul nu a distribuit această listă în mod public.",
+      "privateTitle": "Această listă este privată"
+    },
+    "visibility": {
+      "private": "Privat",
+      "public": "Public"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Deschide meniul cont",
       "desktop": "Setările aplicației",
+      "lists": "Liste",
       "logout": "Deconectați-vă",
       "register": "Sincronizare în Cloud",
       "settings": "Setări"

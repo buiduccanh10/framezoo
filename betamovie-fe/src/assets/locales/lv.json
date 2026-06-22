@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Pievienot sarakstam",
     "airs": "Airs",
     "collection": {
       "movie": "Filma",
@@ -416,6 +417,84 @@
       "sectionTitle": "Skatīties vēsturi"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopēt kopīgošanas saiti",
+      "create": "Izveidot sarakstu",
+      "delete": "Dzēst",
+      "edit": "Rediģēt",
+      "editItems": "Rediģēt vienumus",
+      "open": "Atvērt",
+      "save": "Saglabāt izmaiņas",
+      "saveMembership": "Saglabāt izmaiņas"
+    },
+    "delete": {
+      "confirm": "Vai dzēst \"{{name}}\"? Šo darbību nevar atsaukt."
+    },
+    "empty": {
+      "description": "Izveidojiet savu pirmo sarakstu, lai sāktu nosaukumu grupēšanu.",
+      "title": "Vēl nav neviena saraksta"
+    },
+    "errors": {
+      "load": "Neizdevās ielādēt jūsu sarakstus."
+    },
+    "form": {
+      "createDescription": "Sāciet jaunu sarakstu ar izlasēm, atkārtotiem skatījumiem vai jebko citu, ko vēlaties kopīgot.",
+      "createTitle": "Izveidot sarakstu",
+      "description": "Apraksts",
+      "descriptionHelp": "Izvēles piezīme, lai palīdzētu jums atcerēties, kas ietilpst šajā sarakstā.",
+      "descriptionPlaceholder": "Kam domāts šis saraksts?",
+      "editDescription": "Atjauniniet šī saraksta nosaukumu, aprakstu vai redzamību.",
+      "editTitle": "Rediģēt sarakstu",
+      "errors": {
+        "nameRequired": "Jānorāda saraksta nosaukums",
+        "submitFailed": "Neizdevās saglabāt sarakstu."
+      },
+      "name": "Saraksta nosaukums",
+      "namePlaceholder": "Nedēļas nogales sci-fi",
+      "public": "Publisks saraksts",
+      "publicHelp": "Ikviens, kam ir saite, var skatīt šo sarakstu."
+    },
+    "items": {
+      "empty": "Šis saraksts ir tukšs."
+    },
+    "meta": {
+      "itemCount": "{{count}} vienums",
+      "itemCount_plural": "{{count}} vienumi",
+      "updatedAt": "Atjaunināts {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Atcelt",
+        "create": "Izveidot sarakstu",
+        "save": "Saglabāt izmaiņas"
+      },
+      "description": "Izvēlieties, kuros sarakstos jāiekļauj {{title}}.",
+      "empty": {
+        "description": "Izveidojiet sarakstu, lai saglabātu šo nosaukumu.",
+        "title": "Vēl nav neviena saraksta"
+      },
+      "errors": {
+        "create": "Neizdevās izveidot sarakstu.",
+        "save": "Neizdevās atjaunināt dalību sarakstā."
+      },
+      "title": "Pievienot sarakstam"
+    },
+    "page": {
+      "title": "Saraksti"
+    },
+    "public": {
+      "notFoundDescription": "Šīs kopīgošanas saites trūkst vai tā vairs nav pieejama.",
+      "notFoundTitle": "Saraksts nav atrasts",
+      "pageTitle": "Kopīgots saraksts",
+      "privateDescription": "Īpašnieks nav kopīgojis šo sarakstu publiski.",
+      "privateTitle": "Šis saraksts ir privāts"
+    },
+    "visibility": {
+      "private": "Privāts",
+      "public": "Publisks"
+    }
+  },
   "media": {
     "episodeDisplay": "Sezona{{season}} Episode{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Atveriet konta izvēlni",
       "desktop": "Lietotņu iestatījumi",
+      "lists": "Saraksti",
       "logout": "Iziet",
       "register": "Sinhronizēt ar mākoni",
       "settings": "Iestādijumi"

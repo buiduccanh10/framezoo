@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "リストに追加",
     "airs": "エアーズ",
     "collection": {
       "movie": "映画",
@@ -416,6 +417,84 @@
       "sectionTitle": "視聴履歴"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "共有リンクをコピーする",
+      "create": "リストの作成",
+      "delete": "消去",
+      "edit": "編集",
+      "editItems": "項目を編集する",
+      "open": "開ける",
+      "save": "変更を保存する",
+      "saveMembership": "変更を保存する"
+    },
+    "delete": {
+      "confirm": "「{{name}}」を削除しますか?これを元に戻すことはできません。"
+    },
+    "empty": {
+      "description": "タイトルのグループ化を開始するには、最初のリストを作成します。",
+      "title": "まだリストはありません"
+    },
+    "errors": {
+      "load": "リストのロードに失敗しました。"
+    },
+    "form": {
+      "createDescription": "お気に入り、再視聴、その他共有したいもののための新しいリストを開始します。",
+      "createTitle": "リストの作成",
+      "description": "説明",
+      "descriptionHelp": "このリストに何が含まれているかを思い出すのに役立つオプションのメモ。",
+      "descriptionPlaceholder": "このリストは何のためにあるのでしょうか?",
+      "editDescription": "このリストの名前、説明、または表示を更新します。",
+      "editTitle": "リストの編集",
+      "errors": {
+        "nameRequired": "リスト名は必須です",
+        "submitFailed": "リストの保存に失敗しました。"
+      },
+      "name": "リスト名",
+      "namePlaceholder": "週末のSF",
+      "public": "公開リスト",
+      "publicHelp": "リンクを知っている人は誰でもこのリストを表示できます。"
+    },
+    "items": {
+      "empty": "このリストは空です。"
+    },
+    "meta": {
+      "itemCount": "{{count}} アイテム",
+      "itemCount_plural": "{{count}} 個のアイテム",
+      "updatedAt": "{{date}} を更新しました"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "キャンセル",
+        "create": "リストの作成",
+        "save": "変更を保存する"
+      },
+      "description": "どのリストに {{title}} を含めるかを選択します。",
+      "empty": {
+        "description": "このタイトルを保存するリストを作成します。",
+        "title": "まだリストはありません"
+      },
+      "errors": {
+        "create": "リストの作成に失敗しました。",
+        "save": "リストのメンバーシップを更新できませんでした。"
+      },
+      "title": "リストに追加"
+    },
+    "page": {
+      "title": "リスト"
+    },
+    "public": {
+      "notFoundDescription": "この共有リンクは見つからないか、もう利用できません。",
+      "notFoundTitle": "リストが見つかりません",
+      "pageTitle": "共有リスト",
+      "privateDescription": "所有者はこのリストを公に共有していません。",
+      "privateTitle": "このリストは非公開です"
+    },
+    "visibility": {
+      "private": "プライベート",
+      "public": "公共"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "アカウントメニューを開く",
       "desktop": "アプリの設定",
+      "lists": "リスト",
       "logout": "退室",
       "register": "クラウドに同期して",
       "settings": "設定"

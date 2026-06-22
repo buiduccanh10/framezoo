@@ -27,6 +27,8 @@ import { MoreContent } from "@/pages/discover/MoreContent";
 import MaintenancePage from "@/pages/errors/MaintenancePage";
 import { NotFoundPage } from "@/pages/errors/NotFoundPage";
 import { HomePage } from "@/pages/HomePage";
+import { ListsPage } from "@/pages/lists/ListsPage";
+import { PublicListPage } from "@/pages/lists/PublicListPage";
 import { LoginPage } from "@/pages/Login";
 import { Marked } from "@/pages/marked/Marked";
 import { MigrationPage } from "@/pages/migration/Migration";
@@ -212,6 +214,8 @@ function App() {
             <Route path="/discover/all" element={<DiscoverMore />} />
             {/* Bookmarks page */}
             <Route path="/bookmarks" element={<AllBookmarks />} />
+            <Route path="/lists" element={<ListsPage />} />
+            <Route path="/lists/:id" element={<PublicListPage />} />
             <Route path="/marked" element={<Marked />} />
             {/* Watch History page */}
             <Route path="/watch-history" element={<WatchHistory />} />

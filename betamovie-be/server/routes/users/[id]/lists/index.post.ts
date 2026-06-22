@@ -1,5 +1,6 @@
 import { useAuth } from '#imports';
 import { prisma } from '~/utils/prisma';
+import { randomUUID } from 'crypto';
 import { z } from 'zod';
 
 const listItemSchema = z.object({
@@ -40,18 +41,22 @@ export default defineEventHandler(async event => {
   const validatedBody = createListSchema.parse(parsedBody);
 
   const result = await prisma.$transaction(async tx => {
+    const now = new Date();
     const newList = await tx.lists.create({
       data: {
+        id: randomUUID(),
         user_id: userId,
         name: validatedBody.name,
         description: validatedBody.description || null,
         public: validatedBody.public || false,
+        updated_at: now,
       },
     });
 
     if (validatedBody.items && validatedBody.items.length > 0) {
       await tx.list_items.createMany({
         data: validatedBody.items.map(item => ({
+          id: randomUUID(),
           list_id: newList.id,
           tmdb_id: item.tmdb_id,
           type: item.type, // Type is mapped here

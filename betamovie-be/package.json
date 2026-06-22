@@ -2,14 +2,14 @@
   "name": "betamovie-be",
   "private": true,
   "version": "2.1.5",
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@11.8.0",
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
     "prepare": "prisma generate && nitro prepare",
     "preview": "node .output/server/index.mjs",
     "seed": "tsx prisma/seed.ts",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.mts,.js,.mjs"
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.mts,.js,.mjs --quiet"
   },
   "devDependencies": {
     "@types/node": "^25.9.3",

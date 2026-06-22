@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Přidat do seznamu",
     "airs": "Airs",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Historie sledování"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopírovat odkaz na sdílení",
+      "create": "Vytvořte seznam",
+      "delete": "Vymazat",
+      "edit": "Upravit",
+      "editItems": "Upravit položky",
+      "open": "OTEVŘENO",
+      "save": "Uložit změny",
+      "saveMembership": "Uložit změny"
+    },
+    "delete": {
+      "confirm": "Smazat „{{name}}“? Toto nelze vrátit zpět."
+    },
+    "empty": {
+      "description": "Vytvořte svůj první seznam a začněte seskupovat tituly.",
+      "title": "Zatím žádné seznamy"
+    },
+    "errors": {
+      "load": "Nepodařilo se načíst vaše seznamy."
+    },
+    "form": {
+      "createDescription": "Vytvořte nový seznam oblíbených položek, přehrání nebo čehokoli jiného, ​​co chcete sdílet.",
+      "createTitle": "Vytvořte seznam",
+      "description": "Popis",
+      "descriptionHelp": "Nepovinná poznámka, která vám pomůže zapamatovat si, co patří do tohoto seznamu.",
+      "descriptionPlaceholder": "K čemu je tento seznam?",
+      "editDescription": "Aktualizujte název, popis nebo viditelnost tohoto seznamu.",
+      "editTitle": "Upravit seznam",
+      "errors": {
+        "nameRequired": "Název seznamu je povinný",
+        "submitFailed": "Seznam se nepodařilo uložit."
+      },
+      "name": "Název seznamu",
+      "namePlaceholder": "Víkendové sci-fi",
+      "public": "Veřejný seznam",
+      "publicHelp": "Tento seznam může zobrazit kdokoli s odkazem."
+    },
+    "items": {
+      "empty": "Tento seznam je prázdný."
+    },
+    "meta": {
+      "itemCount": "{{count}} položka",
+      "itemCount_plural": "{{count}} položek",
+      "updatedAt": "Aktualizováno {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Zrušit",
+        "create": "Vytvořte seznam",
+        "save": "Uložit změny"
+      },
+      "description": "Vyberte, které seznamy mají obsahovat {{title}}.",
+      "empty": {
+        "description": "Vytvořte seznam pro uložení tohoto titulu.",
+        "title": "Zatím žádné seznamy"
+      },
+      "errors": {
+        "create": "Seznam se nepodařilo vytvořit.",
+        "save": "Aktualizace členství v seznamu se nezdařila."
+      },
+      "title": "Přidat do seznamu"
+    },
+    "page": {
+      "title": "Seznamy"
+    },
+    "public": {
+      "notFoundDescription": "Tento odkaz na sdílení chybí nebo již není dostupný.",
+      "notFoundTitle": "Seznam nenalezen",
+      "pageTitle": "Sdílený seznam",
+      "privateDescription": "Vlastník tento seznam veřejně nesdílí.",
+      "privateTitle": "Tento seznam je soukromý"
+    },
+    "visibility": {
+      "private": "Soukromé",
+      "public": "Veřejnost"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Otevřete nabídku účtu",
       "desktop": "Nastavení aplikace",
+      "lists": "Seznamy",
       "logout": "Odhlásit se",
       "register": "Synchronizovat do Cloudu",
       "settings": "Nastavení"

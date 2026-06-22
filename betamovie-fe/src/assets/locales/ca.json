@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Afegeix a la llista",
     "airs": "Airs",
     "collection": {
       "movie": "Pel·lícula",
@@ -416,6 +417,84 @@
       "sectionTitle": "Historial de visualitzacions"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copia l'enllaç per compartir",
+      "create": "Crear llista",
+      "delete": "Suprimeix",
+      "edit": "Edita",
+      "editItems": "Edita elements",
+      "open": "Obert",
+      "save": "Desa els canvis",
+      "saveMembership": "Desa els canvis"
+    },
+    "delete": {
+      "confirm": "Vols suprimir \"{{name}}\"? Això no es pot desfer."
+    },
+    "empty": {
+      "description": "Creeu la vostra primera llista per començar a agrupar títols.",
+      "title": "Encara no hi ha llistes"
+    },
+    "errors": {
+      "load": "No s'han pogut carregar les vostres llistes."
+    },
+    "form": {
+      "createDescription": "Inicieu una nova llista de favorits, revisions o qualsevol altra cosa que vulgueu compartir.",
+      "createTitle": "Crear llista",
+      "description": "Descripció",
+      "descriptionHelp": "Nota opcional per ajudar-vos a recordar el que pertany a aquesta llista.",
+      "descriptionPlaceholder": "Per a què serveix aquesta llista?",
+      "editDescription": "Actualitza el nom, la descripció o la visibilitat d'aquesta llista.",
+      "editTitle": "Edita la llista",
+      "errors": {
+        "nameRequired": "El nom de la llista és obligatori",
+        "submitFailed": "No s'ha pogut desar la llista."
+      },
+      "name": "Nom de la llista",
+      "namePlaceholder": "Cap de setmana de ciència-ficció",
+      "public": "Llista pública",
+      "publicHelp": "Qualsevol persona amb l'enllaç pot veure aquesta llista."
+    },
+    "items": {
+      "empty": "Aquesta llista és buida."
+    },
+    "meta": {
+      "itemCount": "{{count}} element",
+      "itemCount_plural": "{{count}} elements",
+      "updatedAt": "Actualitzat {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancel·la",
+        "create": "Crear llista",
+        "save": "Desa els canvis"
+      },
+      "description": "Trieu quines llistes han d'incloure {{title}}.",
+      "empty": {
+        "description": "Crea una llista per desar aquest títol.",
+        "title": "Encara no hi ha llistes"
+      },
+      "errors": {
+        "create": "No s'ha pogut crear la llista.",
+        "save": "No s'ha pogut actualitzar la pertinença a la llista."
+      },
+      "title": "Afegeix a la llista"
+    },
+    "page": {
+      "title": "Llistes"
+    },
+    "public": {
+      "notFoundDescription": "Falta aquest enllaç per compartir o ja no està disponible.",
+      "notFoundTitle": "No s'ha trobat la llista",
+      "pageTitle": "Llista compartida",
+      "privateDescription": "El propietari no ha compartit aquesta llista públicament.",
+      "privateTitle": "Aquesta llista és privada"
+    },
+    "visibility": {
+      "private": "Privat",
+      "public": "Públic"
+    }
+  },
   "media": {
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Obre el menú del compte",
       "desktop": "Configuració de l'aplicació",
+      "lists": "Llistes",
       "logout": "Tanca la sessió",
       "register": "Sincronitza al núvol",
       "settings": "Configuració"

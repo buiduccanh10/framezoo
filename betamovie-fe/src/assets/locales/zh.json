@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "添加到列表",
     "airs": "空气",
     "collection": {
       "movie": "电影",
@@ -416,6 +417,84 @@
       "sectionTitle": "观看历史"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "复制分享链接",
+      "create": "创建列表",
+      "delete": "删除",
+      "edit": "编辑",
+      "editItems": "编辑项目",
+      "open": "打开",
+      "save": "保存更改",
+      "saveMembership": "保存更改"
+    },
+    "delete": {
+      "confirm": "删除“{{name}}”？此操作无法撤消。"
+    },
+    "empty": {
+      "description": "创建您的第一个列表以开始对标题进行分组。",
+      "title": "还没有列表"
+    },
+    "errors": {
+      "load": "无法加载您的列表。"
+    },
+    "form": {
+      "createDescription": "为最喜欢的、重看的或任何您想分享的其他内容创建一个新列表。",
+      "createTitle": "创建列表",
+      "description": "描述",
+      "descriptionHelp": "可选注释可帮助您记住此列表中的内容。",
+      "descriptionPlaceholder": "这份清单有什么用？",
+      "editDescription": "更新此列表的名称、描述或可见性。",
+      "editTitle": "编辑列表",
+      "errors": {
+        "nameRequired": "名单名称为必填项",
+        "submitFailed": "保存列表失败。"
+      },
+      "name": "名单名称",
+      "namePlaceholder": "周末科幻",
+      "public": "公开名单",
+      "publicHelp": "知道该链接的任何人都可以查看此列表。"
+    },
+    "items": {
+      "empty": "该列表是空的。"
+    },
+    "meta": {
+      "itemCount": "{{count}} 项目",
+      "itemCount_plural": "{{count}} 项",
+      "updatedAt": "已更新 {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "取消",
+        "create": "创建列表",
+        "save": "保存更改"
+      },
+      "description": "选择哪些列表应包含 {{title}}。",
+      "empty": {
+        "description": "创建一个列表来保存该标题。",
+        "title": "还没有列表"
+      },
+      "errors": {
+        "create": "创建列表失败。",
+        "save": "无法更新列表成员资格。"
+      },
+      "title": "添加到列表"
+    },
+    "page": {
+      "title": "列表"
+    },
+    "public": {
+      "notFoundDescription": "此共享链接丢失或不再可用。",
+      "notFoundTitle": "未找到列表",
+      "pageTitle": "共享列表",
+      "privateDescription": "所有者尚未公开分享此列表。",
+      "privateTitle": "该列表是私人的"
+    },
+    "visibility": {
+      "private": "私人的",
+      "public": "民众"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "开设账户菜单",
       "desktop": "应用程序设置",
+      "lists": "列表",
       "logout": "登出",
       "register": "同步到云端",
       "settings": "设置"

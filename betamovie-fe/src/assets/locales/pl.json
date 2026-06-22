@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Dodaj do listy",
     "airs": "Powietrze",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Obejrzyj Historia"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Skopiuj link do udostępniania",
+      "create": "Utwórz listę",
+      "delete": "Usuwać",
+      "edit": "Redagować",
+      "editItems": "Edytuj elementy",
+      "open": "Otwarte",
+      "save": "Zapisz zmiany",
+      "saveMembership": "Zapisz zmiany"
+    },
+    "delete": {
+      "confirm": "Usunąć „{{name}}”? Tego nie można cofnąć."
+    },
+    "empty": {
+      "description": "Utwórz pierwszą listę, aby rozpocząć grupowanie tytułów.",
+      "title": "Nie ma jeszcze list"
+    },
+    "errors": {
+      "load": "Nie udało się załadować Twoich list."
+    },
+    "form": {
+      "createDescription": "Utwórz nową listę ulubionych, powtórek i czegokolwiek innego, czym chcesz się podzielić.",
+      "createTitle": "Utwórz listę",
+      "description": "Opis",
+      "descriptionHelp": "Opcjonalna notatka, która pomoże Ci zapamiętać, co należy do tej listy.",
+      "descriptionPlaceholder": "Po co ta lista?",
+      "editDescription": "Zaktualizuj nazwę, opis lub widoczność tej listy.",
+      "editTitle": "Edytuj listę",
+      "errors": {
+        "nameRequired": "Nazwa listy jest wymagana",
+        "submitFailed": "Nie udało się zapisać listy."
+      },
+      "name": "Nazwa listy",
+      "namePlaceholder": "Weekendowe science-fiction",
+      "public": "Lista publiczna",
+      "publicHelp": "Każda osoba posiadająca link może wyświetlić tę listę."
+    },
+    "items": {
+      "empty": "Ta lista jest pusta."
+    },
+    "meta": {
+      "itemCount": "{{count}} element",
+      "itemCount_plural": "{{count}} elementy",
+      "updatedAt": "Zaktualizowano {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Anulować",
+        "create": "Utwórz listę",
+        "save": "Zapisz zmiany"
+      },
+      "description": "Wybierz, które listy powinny zawierać {{title}}.",
+      "empty": {
+        "description": "Utwórz listę, aby zapisać ten tytuł.",
+        "title": "Nie ma jeszcze list"
+      },
+      "errors": {
+        "create": "Nie udało się utworzyć listy.",
+        "save": "Nie udało się zaktualizować członkostwa na liście."
+      },
+      "title": "Dodaj do listy"
+    },
+    "page": {
+      "title": "Listy"
+    },
+    "public": {
+      "notFoundDescription": "Brakuje tego linku do udostępniania lub jest on już niedostępny.",
+      "notFoundTitle": "Nie znaleziono listy",
+      "pageTitle": "Udostępniona lista",
+      "privateDescription": "Właściciel nie udostępnił tej listy publicznie.",
+      "privateTitle": "Ta lista jest prywatna"
+    },
+    "visibility": {
+      "private": "Prywatny",
+      "public": "Publiczny"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} - O{{episode}}",
     "episodeShort": "O",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Otwórz menu konta",
       "desktop": "Ustawienia aplikacji",
+      "lists": "Listy",
       "logout": "Wyloguj się",
       "register": "Synchronizuj z Chmurą",
       "settings": "Ustawienia"

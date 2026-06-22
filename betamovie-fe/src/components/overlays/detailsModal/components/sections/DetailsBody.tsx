@@ -1,11 +1,14 @@
 import classNames from "classnames";
 import { t } from "i18next";
+import { useState } from "react";
 
 import { Button } from "@/components/buttons/Button";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { GroupDropdown } from "@/components/form/GroupDropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaBookmarkButton } from "@/components/media/MediaBookmark";
+import { ManageMediaListsModal } from "@/components/overlays/ManageMediaListsModal";
+import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 
 import { DetailsBodyProps } from "../../types";
@@ -21,6 +24,8 @@ export function DetailsBody({
   seasons,
   imdbData,
 }: DetailsBodyProps) {
+  const [showListModal, setShowListModal] = useState(false);
+  const loggedIn = !!useAuthStore((state) => state.account);
   const addBookmarkWithGroups = useBookmarkStore(
     (s) => s.addBookmarkWithGroups,
   );
@@ -177,6 +182,20 @@ export function DetailsBody({
                 type: data.type || "movie",
               }}
             />
+            {loggedIn && data.id && data.type ? (
+              <button
+                type="button"
+                onClick={() => setShowListModal(true)}
+                className="p-2 opacity-75 transition-opacity duration-300 hover:scale-110 hover:cursor-pointer hover:opacity-95"
+                aria-label={t("details.addToList")}
+                title={t("details.addToList")}
+              >
+                <IconPatch
+                  icon={Icons.FILE}
+                  className="transition-transform duration-300 hover:scale-110 hover:cursor-pointer"
+                />
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={onShareClick}
@@ -200,6 +219,18 @@ export function DetailsBody({
           onRemoveGroup={handleRemoveGroup}
         />
       </div>
+
+      {loggedIn && data.id && data.type ? (
+        <ManageMediaListsModal
+          open={showListModal}
+          onClose={() => setShowListModal(false)}
+          media={{
+            tmdbId: data.id.toString(),
+            title: data.title,
+            type: data.type,
+          }}
+        />
+      ) : null}
     </div>
   );
 }

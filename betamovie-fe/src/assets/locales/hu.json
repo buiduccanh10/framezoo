@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Hozzáadás a listához",
     "airs": "Megjelenés",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Nézze meg az előzményeket"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Megosztási link másolása",
+      "create": "Lista létrehozása",
+      "delete": "Töröl",
+      "edit": "Szerkesztés",
+      "editItems": "Elemek szerkesztése",
+      "open": "Nyitott",
+      "save": "Módosítások mentése",
+      "saveMembership": "Módosítások mentése"
+    },
+    "delete": {
+      "confirm": "Törli a következőt: \"{{name}}\"? Ezt nem lehet visszavonni."
+    },
+    "empty": {
+      "description": "A címek csoportosításának megkezdéséhez hozza létre az első listát.",
+      "title": "Még nincsenek listák"
+    },
+    "errors": {
+      "load": "Nem sikerült betölteni a listákat."
+    },
+    "form": {
+      "createDescription": "Hozz létre egy új listát a kedvencekről, az újranézésekről vagy bármi másról, amit meg szeretnél osztani.",
+      "createTitle": "Lista létrehozása",
+      "description": "Leírás",
+      "descriptionHelp": "Opcionális megjegyzés, amely segít megjegyezni, mi tartozik ehhez a listához.",
+      "descriptionPlaceholder": "Mire való ez a lista?",
+      "editDescription": "Frissítse a lista nevét, leírását vagy láthatóságát.",
+      "editTitle": "Lista szerkesztése",
+      "errors": {
+        "nameRequired": "A lista neve kötelező",
+        "submitFailed": "Nem sikerült menteni a listát."
+      },
+      "name": "Lista neve",
+      "namePlaceholder": "Hétvégi sci-fi",
+      "public": "Nyilvános lista",
+      "publicHelp": "A link birtokában bárki megtekintheti ezt a listát."
+    },
+    "items": {
+      "empty": "Ez a lista üres."
+    },
+    "meta": {
+      "itemCount": "{{count}} elem",
+      "itemCount_plural": "{{count}} elem",
+      "updatedAt": "Frissítve {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Mégse",
+        "create": "Lista létrehozása",
+        "save": "Módosítások mentése"
+      },
+      "description": "Válassza ki, hogy mely listákon szerepeljen a {{title}}.",
+      "empty": {
+        "description": "Hozzon létre egy listát a cím mentéséhez.",
+        "title": "Még nincsenek listák"
+      },
+      "errors": {
+        "create": "Nem sikerült létrehozni a listát.",
+        "save": "Nem sikerült frissíteni a listatagságot."
+      },
+      "title": "Hozzáadás a listához"
+    },
+    "page": {
+      "title": "Listák"
+    },
+    "public": {
+      "notFoundDescription": "Ez a megosztási link hiányzik vagy már nem érhető el.",
+      "notFoundTitle": "A lista nem található",
+      "pageTitle": "Megosztott lista",
+      "privateDescription": "A tulajdonos nem osztotta meg nyilvánosan ezt a listát.",
+      "privateTitle": "Ez a lista privát"
+    },
+    "visibility": {
+      "private": "Magán",
+      "public": "Nyilvános"
+    }
+  },
   "media": {
     "episodeDisplay": "{{season}}. évad - {{episode}}. rész",
     "episodeShort": "rész",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Nyissa meg a fiók menüt",
       "desktop": "Alkalmazásbeállítások",
+      "lists": "Listák",
       "logout": "Kijelentkezés",
       "register": "Szinkronizálás a felhővel",
       "settings": "Beállítások"

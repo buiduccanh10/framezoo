@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "목록에 추가",
     "airs": "방송",
     "collection": {
       "movie": "영화",
@@ -416,6 +417,84 @@
       "sectionTitle": "시청 기록"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "공유 링크 복사",
+      "create": "목록 만들기",
+      "delete": "삭제",
+      "edit": "편집하다",
+      "editItems": "항목 편집",
+      "open": "열려 있는",
+      "save": "변경사항 저장",
+      "saveMembership": "변경사항 저장"
+    },
+    "delete": {
+      "confirm": "'{{name}}'을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다."
+    },
+    "empty": {
+      "description": "제목 그룹화를 시작하려면 첫 번째 목록을 만드세요.",
+      "title": "아직 목록이 없습니다"
+    },
+    "errors": {
+      "load": "목록을 로드하지 못했습니다."
+    },
+    "form": {
+      "createDescription": "즐겨찾기, 다시 보기 또는 공유하고 싶은 항목에 대한 새 목록을 시작하세요.",
+      "createTitle": "목록 만들기",
+      "description": "설명",
+      "descriptionHelp": "이 목록에 속하는 내용을 기억하는 데 도움이 되는 선택적 참고 사항입니다.",
+      "descriptionPlaceholder": "이 목록은 무엇을 위한 것인가요?",
+      "editDescription": "이 목록의 이름, 설명 또는 공개 상태를 업데이트하세요.",
+      "editTitle": "목록 편집",
+      "errors": {
+        "nameRequired": "목록 이름은 필수 항목입니다.",
+        "submitFailed": "목록을 저장하지 못했습니다."
+      },
+      "name": "목록 이름",
+      "namePlaceholder": "주말 SF",
+      "public": "공개 목록",
+      "publicHelp": "링크가 있는 사람은 누구나 이 목록을 볼 수 있습니다."
+    },
+    "items": {
+      "empty": "이 목록은 비어 있습니다."
+    },
+    "meta": {
+      "itemCount": "{{count}} 항목",
+      "itemCount_plural": "{{count}} 항목",
+      "updatedAt": "{{date}} 업데이트됨"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "취소",
+        "create": "목록 만들기",
+        "save": "변경사항 저장"
+      },
+      "description": "{{title}}을(를) 포함해야 하는 목록을 선택하세요.",
+      "empty": {
+        "description": "이 제목을 저장하려면 목록을 만드세요.",
+        "title": "아직 목록이 없습니다"
+      },
+      "errors": {
+        "create": "목록을 생성하지 못했습니다.",
+        "save": "목록 구성원을 업데이트하지 못했습니다."
+      },
+      "title": "목록에 추가"
+    },
+    "page": {
+      "title": "기울기"
+    },
+    "public": {
+      "notFoundDescription": "이 공유 링크가 없거나 더 이상 사용할 수 없습니다.",
+      "notFoundTitle": "목록을 찾을 수 없습니다",
+      "pageTitle": "공유 목록",
+      "privateDescription": "소유자는 이 목록을 공개적으로 공유하지 않았습니다.",
+      "privateTitle": "이 목록은 비공개입니다."
+    },
+    "visibility": {
+      "private": "사적인",
+      "public": "공공의"
+    }
+  },
   "media": {
     "episodeDisplay": "시즌{{season}} {{episode}}화",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "계정 메뉴 열기",
       "desktop": "앱 설정",
+      "lists": "기울기",
       "logout": "로그아웃",
       "register": "클라우드 동기화",
       "settings": "설정"

@@ -19,6 +19,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useGroupOrderStore } from "@/stores/groupOrder";
 import { useLanguageStore } from "@/stores/language";
+import { StoredList, useListStore } from "@/stores/lists";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -34,6 +35,7 @@ export function useAuthData() {
   const clearProgress = useProgressStore((s) => s.clear);
   const clearWatchHistory = useWatchHistoryStore((s) => s.clear);
   const clearGroupOrder = useGroupOrderStore((s) => s.clear);
+  const clearLists = useListStore((s) => s.clear);
   const setTheme = useThemeStore((s) => s.setTheme);
   const setAppLanguage = useLanguageStore((s) => s.setLanguage);
   const importSubtitleLanguage = useSubtitleStore(
@@ -46,6 +48,7 @@ export function useAuthData() {
   const replaceBookmarks = useBookmarkStore((s) => s.replaceBookmarks);
   const replaceItems = useProgressStore((s) => s.replaceItems);
   const replaceWatchHistory = useWatchHistoryStore((s) => s.replaceItems);
+  const replaceLists = useListStore((s) => s.replaceLists);
 
   const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
@@ -137,6 +140,7 @@ export function useAuthData() {
     clearProgress();
     clearWatchHistory();
     clearGroupOrder();
+    clearLists();
     setFebboxKey(null);
   }, [
     removeAccount,
@@ -144,6 +148,7 @@ export function useAuthData() {
     clearProgress,
     clearWatchHistory,
     clearGroupOrder,
+    clearLists,
     setFebboxKey,
   ]);
 
@@ -154,12 +159,14 @@ export function useAuthData() {
       progress: ProgressResponse[],
       bookmarks: BookmarkResponse[],
       watchHistory: WatchHistoryResponse[],
+      lists: Record<string, StoredList>,
       settings: SettingsResponse,
       groupOrder: { groupOrder: string[] },
     ) => {
       replaceBookmarks(bookmarkResponsesToEntries(bookmarks));
       replaceItems(progressResponsesToEntries(progress));
       replaceWatchHistory(watchHistoryResponsesToEntries(watchHistory));
+      replaceLists(lists);
 
       if (groupOrder?.groupOrder) {
         useGroupOrderStore.getState().setGroupOrder(groupOrder.groupOrder);
@@ -305,6 +312,7 @@ export function useAuthData() {
       replaceBookmarks,
       replaceItems,
       replaceWatchHistory,
+      replaceLists,
       setAppLanguage,
       importSubtitleLanguage,
       setTheme,

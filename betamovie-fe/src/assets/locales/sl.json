@@ -96,6 +96,7 @@
     }
   },
   "details": {
+    "addToList": "Dodaj na seznam",
     "airs": "Zraki",
     "collection": {
       "movie": "Film",
@@ -416,6 +417,84 @@
       "sectionTitle": "Zgodovina ogledov"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopiraj povezavo za skupno rabo",
+      "create": "Ustvari seznam",
+      "delete": "Izbriši",
+      "edit": "Uredi",
+      "editItems": "Uredite predmete",
+      "open": "Odpri",
+      "save": "Shranite spremembe",
+      "saveMembership": "Shranite spremembe"
+    },
+    "delete": {
+      "confirm": "Želite izbrisati »{{name}}«? Tega ni mogoče razveljaviti."
+    },
+    "empty": {
+      "description": "Ustvarite svoj prvi seznam, da začnete združevati naslove.",
+      "title": "Seznamov še ni"
+    },
+    "errors": {
+      "load": "Vaših seznamov ni bilo mogoče naložiti."
+    },
+    "form": {
+      "createDescription": "Ustvarite nov seznam za priljubljene, ponovne oglede ali kar koli drugega, kar želite deliti.",
+      "createTitle": "Ustvari seznam",
+      "description": "Opis",
+      "descriptionHelp": "Neobvezna opomba, ki vam pomaga zapomniti, kaj sodi na ta seznam.",
+      "descriptionPlaceholder": "Čemu je ta seznam?",
+      "editDescription": "Posodobite ime, opis ali vidnost tega seznama.",
+      "editTitle": "Uredi seznam",
+      "errors": {
+        "nameRequired": "Ime seznama je obvezno",
+        "submitFailed": "Seznama ni bilo mogoče shraniti."
+      },
+      "name": "Ime seznama",
+      "namePlaceholder": "Vikend sci-fi",
+      "public": "Javni seznam",
+      "publicHelp": "Vsakdo s povezavo si lahko ogleda ta seznam."
+    },
+    "items": {
+      "empty": "Ta seznam je prazen."
+    },
+    "meta": {
+      "itemCount": "{{count}} predmet",
+      "itemCount_plural": "{{count}} elementov",
+      "updatedAt": "Posodobljeno {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Prekliči",
+        "create": "Ustvari seznam",
+        "save": "Shranite spremembe"
+      },
+      "description": "Izberite, kateri seznami naj vključujejo {{title}}.",
+      "empty": {
+        "description": "Ustvarite seznam, da shranite ta naslov.",
+        "title": "Seznamov še ni"
+      },
+      "errors": {
+        "create": "Seznama ni bilo mogoče ustvariti.",
+        "save": "Članstva na seznamu ni bilo mogoče posodobiti."
+      },
+      "title": "Dodaj na seznam"
+    },
+    "page": {
+      "title": "Seznami"
+    },
+    "public": {
+      "notFoundDescription": "Ta povezava za skupno rabo manjka ali ni več na voljo.",
+      "notFoundTitle": "Seznama ni mogoče najti",
+      "pageTitle": "Skupni seznam",
+      "privateDescription": "Lastnik tega seznama ni javno delil.",
+      "privateTitle": "Ta seznam je zaseben"
+    },
+    "visibility": {
+      "private": "Zasebno",
+      "public": "Javno"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
@@ -511,6 +590,7 @@
     "menu": {
       "accountMenu": "Odprite meni računa",
       "desktop": "Nastavitve aplikacije",
+      "lists": "Seznami",
       "logout": "Odjava",
       "register": "Sinhronizacija z oblakom",
       "settings": "Nastavitve"
