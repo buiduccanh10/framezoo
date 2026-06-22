@@ -95,7 +95,7 @@ services:
         PWA_ENABLED: ${VITE_PWA_ENABLED:-true}
         OPENSEARCH_ENABLED: "true"
         TMDB_EMBED_API_URL: /tmdb-api
-        TIDB_API_KEY: ${VITE_TIDB_API_KEY}
+        TIDB_API_KEY: ${VITE_TIDB_API_KEY:-}
         WYZIE_API_KEY: ${VITE_WYZIE_API_KEY}
         SUBSOURCE_API_KEY: ${VITE_SUBSOURCE_API_KEY}
         ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
@@ -128,8 +128,11 @@ networks:
 
 volumes:
   postgres-data:
+    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: betamovie_backend_postgres-data
   redis-data:
+    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: betamovie_backend_redis-data
   preview-data:
+    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: betamovie_backend_preview-data
