@@ -6,6 +6,7 @@ export type GenreCategory = `genre:${string}`;
 export type Category =
   | "movies"
   | "tvshows"
+  | "popular"
   | "editorpicks"
   | "top10"
   | GenreCategory;
@@ -34,22 +35,30 @@ export const useDiscoverStore = create<DiscoverState>()(
     }),
     {
       name: "__MW::discover",
-      version: 1,
+      version: 2,
       migrate: (persistedState: unknown, version: number) => {
         if (!persistedState || typeof persistedState !== "object") {
           return persistedState;
         }
 
         const state = persistedState as Partial<DiscoverState>;
+        let selectedCategory = state.selectedCategory;
 
-        if (version < 1 && state.selectedCategory === "movies") {
-          return {
-            ...state,
-            selectedCategory: "tvshows",
-          };
+        if (version < 1 && selectedCategory === "movies") {
+          selectedCategory = "tvshows";
         }
 
-        return state;
+        if (
+          version < 2 &&
+          (selectedCategory === "top10" || selectedCategory === "editorpicks")
+        ) {
+          selectedCategory = "popular";
+        }
+
+        return {
+          ...state,
+          selectedCategory,
+        };
       },
     },
   ),

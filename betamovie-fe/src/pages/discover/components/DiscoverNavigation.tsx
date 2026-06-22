@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import classNames from "classnames";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
@@ -27,17 +28,63 @@ export function DiscoverNavigation({
   const { genres, countries } = useDiscoverOptions("movie", {
     includeCountries: true,
   });
-  const navigationItems: Array<{ id: Category; label: string }> = [
-    { id: "tvshows", label: t("discover.tabs.tvshows") },
-    { id: "movies", label: t("discover.tabs.movies") },
-    { id: "top10", label: t("discover.tabs.top10") },
-    ...genres.map((genre) => ({
-      id: `genre:${genre.id}` as const,
-      label: genre.name,
-    })),
-  ];
+  const primaryNavigationItems = useMemo<
+    Array<{ id: Category; label: string }>
+  >(
+    () => [
+      { id: "tvshows", label: t("discover.tabs.tvshows") },
+      { id: "movies", label: t("discover.tabs.movies") },
+      { id: "popular", label: t("discover.carousel.title.popular") },
+    ],
+    [t],
+  );
+  const genreNavigationItems = useMemo<Array<{ id: Category; label: string }>>(
+    () =>
+      genres.map((genre) => ({
+        id: `genre:${genre.id}` as const,
+        label: genre.name,
+      })),
+    [genres],
+  );
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isNavScrolled, setIsNavScrolled] = useState(false);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      setIsNavScrolled(container.scrollLeft > 8);
+    };
+
+    handleScroll();
+    container.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const getButtonClassName = (id: Category, sticky = false) =>
+    classNames(
+      "shrink-0 rounded-full cursor-pointer flex items-center transition-all duration-200 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 active:outline-none",
+      isPrimaryItem(id)
+        ? sticky && isNavScrolled
+          ? "px-2.5 py-1.5 text-base md:text-lg font-bold"
+          : "px-3 py-2 text-lg md:text-xl font-bold"
+        : "px-4 py-2 text-sm md:text-base font-medium bg-mediaCard-hoverBackground",
+      selectedCategory === id
+        ? isPrimaryItem(id)
+          ? sticky && isNavScrolled
+            ? "text-type-link"
+            : "scale-105 text-type-link"
+          : "bg-mediaCard-hoverBackground text-type-link"
+        : isPrimaryItem(id)
+          ? "text-type-secondary"
+          : "bg-mediaCard-hoverBackground text-type-secondary hover:text-type-primary",
+    );
   const isPrimaryItem = (id: Category) =>
-    id === "movies" || id === "tvshows" || id === "top10";
+    id === "movies" || id === "tvshows" || id === "popular";
 
   const countryLabel = t("discover.filters.country", {
     defaultValue: "Country",
@@ -63,36 +110,48 @@ export function DiscoverNavigation({
 
   return (
     <div className="pb-4 w-full max-w-screen-xl mx-auto">
-      <div className="relative flex items-center px-2 md:px-0">
-        <div className="overflow-x-auto scrollbar-none flex-1 min-w-0">
-          <div className="flex items-center gap-2 whitespace-nowrap">
-            {navigationItems.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`shrink-0 rounded-full cursor-pointer flex items-center transition-all duration-200 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0 active:outline-none ${
-                  isPrimaryItem(item.id)
-                    ? "px-3 py-2 text-lg md:text-xl font-bold"
-                    : "px-4 py-2 text-sm md:text-base font-medium bg-mediaCard-hoverBackground"
-                } ${
-                  selectedCategory === item.id
-                    ? isPrimaryItem(item.id)
-                      ? "scale-105 text-type-link"
-                      : "bg-mediaCard-hoverBackground text-type-link"
-                    : isPrimaryItem(item.id)
-                      ? "text-type-secondary"
-                      : "bg-mediaCard-hoverBackground text-type-secondary hover:text-type-primary"
-                }`}
-                style={{ WebkitTapHighlightColor: "transparent" }}
-                onClick={() => onCategoryChange(item.id)}
-              >
-                {item.label}
-              </button>
+      <div className="relative flex items-center gap-2 px-2 md:px-0">
+        <div
+          ref={scrollContainerRef}
+          className="overflow-x-auto scrollbar-none flex-1 min-w-0"
+        >
+          <div className="flex items-center gap-2 whitespace-nowrap pr-2">
+            <div
+              className={classNames(
+                "sticky left-0 z-20 flex shrink-0 items-center gap-2 pr-3",
+                isNavScrolled &&
+                  "bg-background-main/95 backdrop-blur-sm after:pointer-events-none after:absolute after:inset-y-0 after:-right-5 after:w-5 after:bg-gradient-to-r after:from-background-main after:to-transparent",
+              )}
+            >
+              {primaryNavigationItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={getButtonClassName(item.id, true)}
+                  style={{ WebkitTapHighlightColor: "transparent" }}
+                  onClick={() => onCategoryChange(item.id)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            {genreNavigationItems.map((item) => (
+              <div key={item.id} className="relative shrink-0">
+                <button
+                  type="button"
+                  className={getButtonClassName(item.id)}
+                  style={{ WebkitTapHighlightColor: "transparent" }}
+                  onClick={() => onCategoryChange(item.id)}
+                >
+                  {item.label}
+                </button>
+              </div>
             ))}
           </div>
         </div>
 
-        <div className="sticky right-0 z-10 flex shrink-0 items-center gap-2 bg-transparent pl-3">
+        <div className="relative z-20 flex shrink-0 items-center gap-2 bg-background-main pl-3">
           <div className="w-px h-6 bg-white/10 shrink-0" />
 
           <div className="relative whitespace-nowrap shrink-0">

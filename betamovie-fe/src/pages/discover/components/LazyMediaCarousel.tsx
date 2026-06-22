@@ -29,6 +29,8 @@ interface LazyMediaCarouselProps {
   hideRelatedButtons?: boolean;
   releaseYear?: string;
   originCountry?: string;
+  sectionTitleOverride?: string;
+  prioritizeLatestOrder?: boolean;
 }
 
 export function LazyMediaCarousel({
@@ -47,6 +49,8 @@ export function LazyMediaCarousel({
   hideRelatedButtons = false,
   releaseYear,
   originCountry,
+  sectionTitleOverride,
+  prioritizeLatestOrder = false,
 }: LazyMediaCarouselProps) {
   const { ref, hasIntersected } = useIntersectionObserver<HTMLDivElement>({
     threshold: 0.1,
@@ -75,6 +79,8 @@ export function LazyMediaCarousel({
           hideRelatedButtons={hideRelatedButtons}
           releaseYear={releaseYear}
           originCountry={originCountry}
+          sectionTitleOverride={sectionTitleOverride}
+          prioritizeLatestOrder={prioritizeLatestOrder}
         />
       ) : (
         // Placeholder with similar height to prevent layout shift

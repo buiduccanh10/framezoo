@@ -177,6 +177,7 @@ export function useDiscoverMedia({
   mediaTitle,
   isCarouselView = false,
   enabled = true,
+  prioritizeLatestOrder = false,
 }: UseDiscoverMediaProps): UseDiscoverMediaReturn {
   const [media, setMedia] = useState<DiscoverMedia[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -209,9 +210,10 @@ export function useDiscoverMedia({
   const hasOriginCountryFilter = Boolean(originCountry);
   const shouldPrioritizeLatestActivity = useCallback(
     (type: DiscoverContentType) =>
-      mediaType === "tv" &&
-      (type === "latest" || type === "latesttv" || type === "onTheAir"),
-    [mediaType],
+      prioritizeLatestOrder ||
+      (mediaType === "tv" &&
+        (type === "latest" || type === "latesttv" || type === "onTheAir")),
+    [mediaType, prioritizeLatestOrder],
   );
   const sortDiscoverResults = useCallback(
     (items: DiscoverMedia[], type: DiscoverContentType) =>
@@ -435,7 +437,7 @@ export function useDiscoverMedia({
       return;
     }
 
-    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}`;
+    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}-${prioritizeLatestOrder ? "latest" : "default"}`;
     if (lastFetchedRef.current === currentFetchKey) {
       return;
     }
@@ -717,6 +719,7 @@ export function useDiscoverMedia({
     page,
     formattedLanguage,
     isRestoring,
+    prioritizeLatestOrder,
   ]);
 
   useEffect(() => {
