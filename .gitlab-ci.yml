@@ -18,7 +18,7 @@ variables:
 
 .default_ssh_setup: &default_ssh_setup
   before_script:
-    - apk add --no-cache openssh-client git
+    - apk add --no-cache openssh-client git curl
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - eval "$(ssh-agent -s)"
@@ -45,6 +45,8 @@ deploy:betamovie:
   image: alpine:3.19
   timeout: 30m
   extends: [.default_ssh_setup]
+  variables:
+    GIT_STRATEGY: fetch
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: on_success
@@ -69,4 +71,11 @@ deploy:betamovie:
 
       echo "Building prod stack from ${DEPLOY_PATH}..."
       printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-        "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./deploy.sh all"
+        "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; SKIP_CLOUDFLARE_PURGE='true' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./deploy.sh all"
+
+      echo "Purging Cloudflare cache..."
+      ENV_TMP_LOCAL="$(mktemp /tmp/${CI_PROJECT_NAME}_env_local.XXXXXX)"
+      trap 'rm -f "$ENV_TMP_LOCAL"' EXIT
+      printf '%s' "$ENV_FILE" > "$ENV_TMP_LOCAL"
+      chmod 600 "$ENV_TMP_LOCAL"
+      ./scripts/purge-cloudflare-cache.sh "$ENV_TMP_LOCAL"
