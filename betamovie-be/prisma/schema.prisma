@@ -51,12 +51,6 @@ model lists {
   @@index([user_id], map: "lists_user_id_index")
 }
 
-model mikro_orm_migrations {
-  id          Int       @id @default(autoincrement())
-  name        String?   @db.VarChar(255)
-  executed_at DateTime? @default(now()) @db.Timestamptz(6)
-}
-
 model progress_items {
   id             String   @id @db.Uuid
   tmdb_id        String   @db.VarChar(255)
