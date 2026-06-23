@@ -116,19 +116,25 @@ export function BannerLocation(props: { location?: string }) {
   const bannerId = config.BANNER_ID || "custom-message";
   const hasCustomBanner = banners.some((b) => b.id === bannerId);
 
+  const showOffline = !isOnline && !ignoredBannerIds.includes("offline");
+  const showCustom = hasCustomBanner && !!customMessage;
+  const showUpdate = !!hasUpdate;
+
+  if (!showOffline && !showCustom && !showUpdate) return null;
+
   return (
     <div>
-      {!isOnline && !ignoredBannerIds.includes("offline") ? (
+      {showOffline ? (
         <Banner id="offline" type="error">
           {t("navigation.banner.offline")}
         </Banner>
       ) : null}
-      {hasCustomBanner && customMessage ? (
+      {showCustom ? (
         <Banner id={bannerId} type="info">
           {customMessage}
         </Banner>
       ) : null}
-      {hasUpdate ? (
+      {showUpdate ? (
         <Banner
           id="app-update-available"
           type="info"
