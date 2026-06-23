@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import { useEffect, useState } from "react";
 import { useIdle } from "react-use";
 
@@ -91,7 +92,8 @@ export function PauseOverlay() {
         const data = await getMediaDetails(meta.tmdbId, type, false);
         if (mounted && data) {
           const genres = (data.genres ?? []).map(
-            (g: { name: string }) => g.name,
+            (g: { id: number; name: string }) =>
+              t(`tmdb.genres.${g.id}`, { defaultValue: g.name }),
           );
           // Use episode rating for shows (never fall back to show rating)
           const finalVoteAverage = isShowWithEpisode
