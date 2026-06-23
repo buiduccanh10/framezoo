@@ -189,6 +189,10 @@ interface TMDBCacheKey {
   language: string;
 }
 
+export type TMDBSearchMediaResult =
+  | TMDBMovieSearchResult
+  | TMDBShowSearchResult;
+
 const tmdbCache = new SimpleCache<TMDBCacheKey, any>();
 tmdbCache.setCompare((a, b) => {
   return (
@@ -224,6 +228,15 @@ function resolveTmdbLanguage(params?: object): string {
       ? ((params as { language: string }).language ?? "").trim()
       : "";
   return requestedLanguage || getTmdbLanguageCode(userLanguage);
+}
+
+function shouldFilterTmdbContent(url: string): boolean {
+  const normalizedUrl = url.replace(/^\/+/, "").toLowerCase();
+  return !(
+    normalizedUrl.startsWith("search/") ||
+    /^movie\/\d+$/.test(normalizedUrl) ||
+    /^tv\/\d+$/.test(normalizedUrl)
+  );
 }
 
 export async function get<T>(url: string, params?: object): Promise<T> {
@@ -312,28 +325,71 @@ async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
     }
   }
 
-  // Filter out Vietnamese and Indian movies/shows
-  if (result && typeof result === "object" && "results" in result) {
-    const res = result as { results?: any[] };
-    if (Array.isArray(res.results)) {
-      const excludedLanguages = [
-        "vi", // Vietnamese
-        "hi",
-        "te",
-        "ta",
-        "ml",
-        "kn",
-        "bn",
-        "pa",
-        "gu",
-        "mr",
-        "ur", // Indian languages
-      ];
-      const excludedCountries = ["VN", "IN"];
+  if (shouldFilterTmdbContent(url)) {
+    // Filter out Vietnamese and Indian movies/shows
+    if (result && typeof result === "object" && "results" in result) {
+      const res = result as { results?: any[] };
+      if (Array.isArray(res.results)) {
+        const excludedLanguages = [
+          "vi", // Vietnamese
+          "hi",
+          "te",
+          "ta",
+          "ml",
+          "kn",
+          "bn",
+          "pa",
+          "gu",
+          "mr",
+          "ur", // Indian languages
+        ];
+        const excludedCountries = ["VN", "IN"];
 
-      res.results = res.results.filter((item) => {
-        // Skip filtering for people
-        if (item.media_type === "person") return true;
+        res.results = res.results.filter((item) => {
+          // Skip filtering for people
+          if (item.media_type === "person") return true;
+
+          const isExcludedLanguage =
+            item.original_language &&
+            excludedLanguages.includes(item.original_language);
+
+          const isExcludedCountry =
+            item.origin_country &&
+            Array.isArray(item.origin_country) &&
+            item.origin_country.some((c: string) =>
+              excludedCountries.includes(c),
+            );
+
+          return !(isExcludedLanguage || isExcludedCountry);
+        });
+      }
+    }
+
+    // Filter out Vietnamese and Indian movies/shows for single items
+    if (
+      result &&
+      typeof result === "object" &&
+      !("results" in result) &&
+      !("episodes" in result) &&
+      !("cast" in result)
+    ) {
+      const item = result as any;
+      // We only want to filter media items, not people or other resources
+      if (item.original_language || item.origin_country) {
+        const excludedLanguages = [
+          "vi", // Vietnamese
+          "hi",
+          "te",
+          "ta",
+          "ml",
+          "kn",
+          "bn",
+          "pa",
+          "gu",
+          "mr",
+          "ur", // Indian languages
+        ];
+        const excludedCountries = ["VN", "IN"];
 
         const isExcludedLanguage =
           item.original_language &&
@@ -346,48 +402,9 @@ async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
             excludedCountries.includes(c),
           );
 
-        return !(isExcludedLanguage || isExcludedCountry);
-      });
-    }
-  }
-
-  // Filter out Vietnamese and Indian movies/shows for single items
-  if (
-    result &&
-    typeof result === "object" &&
-    !("results" in result) &&
-    !("episodes" in result) &&
-    !("cast" in result)
-  ) {
-    const item = result as any;
-    // We only want to filter media items, not people or other resources
-    if (item.original_language || item.origin_country) {
-      const excludedLanguages = [
-        "vi", // Vietnamese
-        "hi",
-        "te",
-        "ta",
-        "ml",
-        "kn",
-        "bn",
-        "pa",
-        "gu",
-        "mr",
-        "ur", // Indian languages
-      ];
-      const excludedCountries = ["VN", "IN"];
-
-      const isExcludedLanguage =
-        item.original_language &&
-        excludedLanguages.includes(item.original_language);
-
-      const isExcludedCountry =
-        item.origin_country &&
-        Array.isArray(item.origin_country) &&
-        item.origin_country.some((c: string) => excludedCountries.includes(c));
-
-      if (isExcludedLanguage || isExcludedCountry) {
-        throw new Error("Content filtered by region/language settings");
+        if (isExcludedLanguage || isExcludedCountry) {
+          throw new Error("Content filtered by region/language settings");
+        }
       }
     }
   }
@@ -399,11 +416,13 @@ async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
 
 export async function multiSearch(
   query: string,
+  language?: string,
 ): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
   const data = await get<TMDBSearchResult>("search/multi", {
     query,
     include_adult: false,
     page: 1,
+    ...(language ? { language } : {}),
   });
   // filter out results that aren't movies or shows
   const results = data.results.filter(
@@ -416,6 +435,7 @@ export async function multiSearch(
 
 export async function searchMovies(
   query: string,
+  language?: string,
 ): Promise<TMDBMovieSearchResult[]> {
   const data = await get<{
     results: TMDBMovieSearchResult[];
@@ -423,6 +443,7 @@ export async function searchMovies(
     query,
     include_adult: false,
     page: 1,
+    ...(language ? { language } : {}),
   });
   return data.results.map((result) => ({
     ...result,
@@ -432,6 +453,7 @@ export async function searchMovies(
 
 export async function searchTVShows(
   query: string,
+  language?: string,
 ): Promise<TMDBShowSearchResult[]> {
   const data = await get<{
     results: TMDBShowSearchResult[];
@@ -439,6 +461,7 @@ export async function searchTVShows(
     query,
     include_adult: false,
     page: 1,
+    ...(language ? { language } : {}),
   });
   return data.results.map((result) => ({
     ...result,
@@ -446,10 +469,16 @@ export async function searchTVShows(
   }));
 }
 
+export async function searchMedia(
+  query: string,
+): Promise<TMDBSearchMediaResult[]> {
+  return multiSearch(query);
+}
+
 export async function generateQuickSearchMediaUrl(
   query: string,
 ): Promise<string | undefined> {
-  const data = await multiSearch(query);
+  const data = await searchMedia(query);
   if (data.length === 0) return undefined;
   const result = data[0];
   const title =

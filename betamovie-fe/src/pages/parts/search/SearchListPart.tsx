@@ -18,6 +18,10 @@ import { MediaItem } from "@/utils/mediaTypes";
 
 const ALL_GENRES_FILTER_ID = "all";
 
+function normalizeCountryCode(value?: string) {
+  return value?.trim().toUpperCase() ?? "";
+}
+
 function SearchSuffix(props: { failed?: boolean; results?: number }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -125,23 +129,27 @@ export function SearchListPart({
   );
 
   const filteredResults = useMemo(() => {
-    let filtered = results;
+    const selectedGenreNumber =
+      selectedGenreId === ALL_GENRES_FILTER_ID ? null : Number(selectedGenreId);
+    const normalizedCountry = normalizeCountryCode(filterCountry);
+    const normalizedYear = filterYear?.trim() ?? "";
 
-    if (selectedGenreId !== ALL_GENRES_FILTER_ID) {
-      const selectedGenreNumber = Number(selectedGenreId);
-      filtered = filtered.filter((result) =>
-        (result.genreIds ?? []).includes(selectedGenreNumber),
-      );
-    }
+    return results.filter((item) => {
+      const matchesGenre =
+        selectedGenreNumber === null
+          ? true
+          : (item.genreIds ?? []).includes(selectedGenreNumber);
+      const matchesYear =
+        normalizedYear === "" || item.year?.toString() === normalizedYear;
+      const matchesCountry =
+        normalizedCountry === "" ||
+        (item.originCountryCodes ?? []).some(
+          (code) => normalizeCountryCode(code) === normalizedCountry,
+        );
 
-    if (filterYear) {
-      filtered = filtered.filter(
-        (item) => item.year?.toString() === filterYear,
-      );
-    }
-
-    return filtered;
-  }, [results, selectedGenreId, filterYear]);
+      return matchesGenre && matchesYear && matchesCountry;
+    });
+  }, [results, selectedGenreId, filterYear, filterCountry]);
 
   useEffect(() => {
     async function runSearch(query: MWQuery) {
@@ -172,113 +180,111 @@ export function SearchListPart({
 
   return (
     <div>
-      {filteredResults.length > 0 ? (
-        <div>
-          <SectionHeading
-            title={t("home.search.sectionTitle")}
-            icon={Icons.SEARCH}
-          />
+      <SectionHeading
+        title={t("home.search.sectionTitle")}
+        icon={Icons.SEARCH}
+      />
 
-          <div className="mb-5">
-            <div className="relative flex items-center">
-              <div className="overflow-x-auto scrollbar-none flex-1 min-w-0">
-                <div className="flex items-center gap-2 pb-1">
-                  <button
-                    type="button"
-                    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 shrink-0 ${
-                      selectedGenreId === ALL_GENRES_FILTER_ID
-                        ? "bg-type-logo text-white"
-                        : "bg-pill-background/60 text-type-secondary hover:bg-pill-backgroundHover"
-                    }`}
-                    onClick={() => setSelectedGenreId(ALL_GENRES_FILTER_ID)}
-                  >
-                    {t("home.search.genreFilterAll")}
-                  </button>
+      <div className="mb-5">
+        <div className="relative flex items-center">
+          <div className="overflow-x-auto scrollbar-none flex-1 min-w-0">
+            <div className="flex items-center gap-2 pb-1">
+              <button
+                type="button"
+                className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 shrink-0 ${
+                  selectedGenreId === ALL_GENRES_FILTER_ID
+                    ? "bg-type-logo text-white"
+                    : "bg-pill-background/60 text-type-secondary hover:bg-pill-backgroundHover"
+                }`}
+                onClick={() => setSelectedGenreId(ALL_GENRES_FILTER_ID)}
+              >
+                {t("home.search.genreFilterAll")}
+              </button>
 
-                  {genreFilterOptions.map((genre) => (
-                    <button
-                      key={genre.id}
-                      type="button"
-                      className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 shrink-0 ${
-                        selectedGenreId === genre.id
-                          ? "bg-type-logo text-white"
-                          : "bg-pill-background/60 text-type-secondary hover:bg-pill-backgroundHover"
-                      }`}
-                      onClick={() => setSelectedGenreId(genre.id)}
-                    >
-                      {genre.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="sticky right-0 z-10 flex shrink-0 items-center gap-2 bg-transparent pl-3">
-                <div className="w-px h-6 bg-white/10 shrink-0" />
-
-                <div className="relative whitespace-nowrap shrink-0">
-                  <Dropdown
-                    selectedItem={selectedCountryOption}
-                    setSelectedItem={(item) => onCountryChange?.(item.id)}
-                    options={countryOptions}
-                    className="!my-0"
-                    customButton={
-                      <button
-                        type="button"
-                        className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
-                      >
-                        <span>
-                          {filterCountry
-                            ? `${countryLabel}: ${selectedCountryOption.name}`
-                            : countryLabel}
-                        </span>
-                        <Icon
-                          icon={Icons.UP_DOWN_ARROW}
-                          className="text-xs text-dropdown-secondary"
-                        />
-                      </button>
-                    }
-                  />
-                </div>
-
-                <div className="relative whitespace-nowrap shrink-0">
-                  <Dropdown
-                    selectedItem={selectedYearOption}
-                    setSelectedItem={(item) => onYearChange?.(item.id)}
-                    options={yearOptions}
-                    customButton={
-                      <button
-                        type="button"
-                        className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
-                      >
-                        <span>
-                          {filterYear
-                            ? `${t("home.bookmarks.edit.yearLabel")}: ${filterYear}`
-                            : t("home.bookmarks.edit.yearLabel")}
-                        </span>
-                        <Icon
-                          icon={Icons.UP_DOWN_ARROW}
-                          className="text-xs text-dropdown-secondary"
-                        />
-                      </button>
-                    }
-                    preventWrap
-                    className="!my-0"
-                  />
-                </div>
-              </div>
+              {genreFilterOptions.map((genre) => (
+                <button
+                  key={genre.id}
+                  type="button"
+                  className={`whitespace-nowrap rounded-full px-4 py-2 text-sm transition-[background,transform] duration-100 hover:scale-105 shrink-0 ${
+                    selectedGenreId === genre.id
+                      ? "bg-type-logo text-white"
+                      : "bg-pill-background/60 text-type-secondary hover:bg-pill-backgroundHover"
+                  }`}
+                  onClick={() => setSelectedGenreId(genre.id)}
+                >
+                  {genre.name}
+                </button>
+              ))}
             </div>
           </div>
 
-          <MediaGrid>
-            {filteredResults.map((v) => (
-              <WatchedMediaCard
-                key={v.id.toString()}
-                media={v}
-                onShowDetails={onShowDetails}
+          <div className="sticky right-0 z-10 flex shrink-0 items-center gap-2 bg-transparent pl-3">
+            <div className="w-px h-6 bg-white/10 shrink-0" />
+
+            <div className="relative whitespace-nowrap shrink-0">
+              <Dropdown
+                selectedItem={selectedCountryOption}
+                setSelectedItem={(item) => onCountryChange?.(item.id)}
+                options={countryOptions}
+                className="!my-0"
+                customButton={
+                  <button
+                    type="button"
+                    className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
+                  >
+                    <span>
+                      {filterCountry
+                        ? `${countryLabel}: ${selectedCountryOption.name}`
+                        : countryLabel}
+                    </span>
+                    <Icon
+                      icon={Icons.UP_DOWN_ARROW}
+                      className="text-xs text-dropdown-secondary"
+                    />
+                  </button>
+                }
               />
-            ))}
-          </MediaGrid>
+            </div>
+
+            <div className="relative whitespace-nowrap shrink-0">
+              <Dropdown
+                selectedItem={selectedYearOption}
+                setSelectedItem={(item) => onYearChange?.(item.id)}
+                options={yearOptions}
+                customButton={
+                  <button
+                    type="button"
+                    className="flex items-center gap-1 rounded-full bg-mediaCard-hoverBackground px-4 py-2 text-sm font-medium text-type-secondary transition-colors hover:bg-mediaCard-background md:text-base"
+                  >
+                    <span>
+                      {filterYear
+                        ? `${t("home.bookmarks.edit.yearLabel")}: ${filterYear}`
+                        : t("home.bookmarks.edit.yearLabel")}
+                    </span>
+                    <Icon
+                      icon={Icons.UP_DOWN_ARROW}
+                      className="text-xs text-dropdown-secondary"
+                    />
+                  </button>
+                }
+                preventWrap
+                className="!my-0"
+              />
+            </div>
+          </div>
         </div>
+      </div>
+
+      {filteredResults.length > 0 ? (
+        <MediaGrid>
+          {filteredResults.map((v) => (
+            <WatchedMediaCard
+              key={v.id.toString()}
+              media={v}
+              onShowDetails={onShowDetails}
+            />
+          ))}
+        </MediaGrid>
       ) : null}
 
       <SearchSuffix results={filteredResults.length} />

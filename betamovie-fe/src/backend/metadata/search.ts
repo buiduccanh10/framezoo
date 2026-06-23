@@ -1,5 +1,6 @@
+import { useLanguageStore } from "@/stores/language";
 import { SimpleCache } from "@/utils/cache";
-import { compareByRatingAndVoteDesc } from "@/utils/compareByRatingDesc";
+import { getTmdbLanguageCode } from "@/utils/language";
 import { MediaItem } from "@/utils/mediaTypes";
 
 import {
@@ -7,26 +8,71 @@ import {
   formatTMDBSearchResult,
   getMediaDetails,
   getMediaPoster,
-  multiSearch,
+  searchMedia,
 } from "./tmdb";
 import { TMDBContentTypes } from "./types/tmdb";
+import type { TMDBMovieData, TMDBShowData } from "./types/tmdb";
 
 export interface MWQuery {
   searchQuery: string;
 }
 
-const cache = new SimpleCache<MWQuery, MediaItem[]>();
+interface SearchCacheKey extends MWQuery {
+  language: string;
+  version: number;
+}
+
+const SEARCH_CACHE_VERSION = 2;
+
+const cache = new SimpleCache<SearchCacheKey, MediaItem[]>();
 cache.setCompare((a, b) => {
-  return a.searchQuery.trim() === b.searchQuery.trim();
+  return (
+    a.version === b.version &&
+    a.searchQuery.trim() === b.searchQuery.trim() &&
+    a.language === b.language
+  );
 });
 cache.initialize();
 
 // detect "tmdb:123456" or "tmdb:123456:movie" or "tmdb:123456:tv"
 const tmdbIdPattern = /^tmdb:(\d+)(?::(movie|tv))?$/i;
 
+function getCountryCodesFromDetails(
+  details: TMDBMovieData | TMDBShowData,
+  type: TMDBContentTypes,
+): string[] {
+  if (type === TMDBContentTypes.MOVIE) {
+    return (
+      details.production_countries
+        ?.map((country) => country.iso_3166_1)
+        .filter(Boolean) ?? []
+    );
+  }
+
+  return (details as TMDBShowData).origin_country ?? [];
+}
+
+function getCountryCodesFromSearchResult(result: {
+  media_type: TMDBContentTypes;
+  origin_country?: string[];
+}): string[] {
+  if (result.media_type === TMDBContentTypes.TV) {
+    return result.origin_country ?? [];
+  }
+
+  return [];
+}
+
 export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
-  if (cache.has(query)) return cache.get(query) as MediaItem[];
   const { searchQuery } = query;
+  const language = getTmdbLanguageCode(useLanguageStore.getState().language);
+  const cacheKey = {
+    searchQuery,
+    language,
+    version: SEARCH_CACHE_VERSION,
+  };
+
+  if (cache.has(cacheKey)) return cache.get(cacheKey) as MediaItem[];
 
   // Check if query is a TMDB ID
   const tmdbMatch = searchQuery.match(tmdbIdPattern);
@@ -69,8 +115,14 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
               };
 
         const mediaItem = formatTMDBMetaToMediaItem(mediaResult);
-        const result = [{ ...mediaItem, genreIds }];
-        cache.set(query, result, 3600);
+        const result = [
+          {
+            ...mediaItem,
+            genreIds,
+            originCountryCodes: getCountryCodesFromDetails(details, type),
+          },
+        ];
+        cache.set(cacheKey, result, 3600);
         return result;
       }
     } catch (error) {
@@ -78,19 +130,33 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
     }
   }
 
-  const data = await multiSearch(searchQuery);
+  const data = await searchMedia(searchQuery);
+  const results = await Promise.all(
+    data.map(async (v) => {
+      let countryCodes = getCountryCodesFromSearchResult(v);
 
-  const rankedResults = [...data].sort(compareByRatingAndVoteDesc);
-  const results = rankedResults.map((v) => {
-    const formattedResult = formatTMDBSearchResult(v, v.media_type);
-    const mediaItem = formatTMDBMetaToMediaItem(formattedResult);
-    return {
-      ...mediaItem,
-      genreIds: v.genre_ids,
-    };
-  });
+      try {
+        const details = (await getMediaDetails(
+          v.id.toString(),
+          v.media_type,
+          false,
+        )) as TMDBMovieData | TMDBShowData;
+        countryCodes = getCountryCodesFromDetails(details, v.media_type);
+      } catch {
+        // Keep fallback country codes from the search payload when details fail.
+      }
+
+      const formattedResult = formatTMDBSearchResult(v, v.media_type);
+      const mediaItem = formatTMDBMetaToMediaItem(formattedResult);
+      return {
+        ...mediaItem,
+        genreIds: v.genre_ids,
+        originCountryCodes: countryCodes,
+      };
+    }),
+  );
 
   // cache results for 1 hour
-  cache.set(query, results, 3600);
+  cache.set(cacheKey, results, 3600);
   return results;
 }

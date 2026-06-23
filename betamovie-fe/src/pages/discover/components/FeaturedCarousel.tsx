@@ -14,7 +14,6 @@ import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
-import { filterAndSortByQualityDesc } from "@/utils/compareByRatingDesc";
 import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
@@ -53,63 +52,19 @@ interface IMDbRatingData {
   votes: number;
 }
 
-function shuffleArray<T>(items: T[]): T[] {
-  const shuffled = [...items];
-
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const randomIndex = Math.floor(Math.random() * (index + 1));
-    [shuffled[index], shuffled[randomIndex]] = [
-      shuffled[randomIndex],
-      shuffled[index],
-    ];
-  }
-
-  return shuffled;
-}
-
-function mixBalancedRandom<T extends { type: "movie" | "show" }>(
+function mergeFeaturedPools<T extends { type: "movie" | "show" }>(
   shows: T[],
   movies: T[],
 ): T[] {
-  const showQueue = shuffleArray(shows);
-  const movieQueue = shuffleArray(movies);
   const mixed: T[] = [];
+  const maxLength = Math.max(shows.length, movies.length);
 
-  while (showQueue.length > 0 || movieQueue.length > 0) {
-    const lastTwoTypes = mixed.slice(-2).map((item) => item.type);
-    const shouldForceMovie =
-      lastTwoTypes.length === 2 &&
-      lastTwoTypes.every((type) => type === "show") &&
-      movieQueue.length > 0;
-    const shouldForceShow =
-      lastTwoTypes.length === 2 &&
-      lastTwoTypes.every((type) => type === "movie") &&
-      showQueue.length > 0;
-
-    if (shouldForceMovie) {
-      mixed.push(movieQueue.shift()!);
-      continue;
+  for (let index = 0; index < maxLength; index += 1) {
+    if (shows[index]) {
+      mixed.push(shows[index]);
     }
-
-    if (shouldForceShow) {
-      mixed.push(showQueue.shift()!);
-      continue;
-    }
-
-    if (showQueue.length === 0) {
-      mixed.push(movieQueue.shift()!);
-      continue;
-    }
-
-    if (movieQueue.length === 0) {
-      mixed.push(showQueue.shift()!);
-      continue;
-    }
-
-    if (Math.random() < 0.5) {
-      mixed.push(showQueue.shift()!);
-    } else {
-      mixed.push(movieQueue.shift()!);
+    if (movies[index]) {
+      mixed.push(movies[index]);
     }
   }
 
@@ -243,9 +198,7 @@ export function FeaturedCarousel({
   const INITIAL_DETAIL_BATCH = 6;
   const INITIAL_SLIDE_QUANTITY = 4;
   const SLIDE_DURATION = 8000;
-  const BASE_POOL_SIZE_PER_TYPE = 6;
-  const EXTRA_POOL_SIZE_PER_TYPE = 4;
-  const FEATURED_CANDIDATE_PAGES = 2;
+  const FEATURED_POOL_SIZE_PER_TYPE = 10;
 
   // Check for extension on mount
   useEffect(() => {
@@ -366,15 +319,6 @@ export function FeaturedCarousel({
             return true;
           });
         };
-        const endpointPages = async (path: string) => {
-          const pageResults = await Promise.all(
-            Array.from({ length: FEATURED_CANDIDATE_PAGES }, (_, index) =>
-              endpointList(path, index + 1),
-            ),
-          );
-
-          return pageResults.flat();
-        };
         const toMoviePick = (
           movie: {
             id: number;
@@ -408,12 +352,11 @@ export function FeaturedCarousel({
           first_air_date: show.first_air_date,
         });
         const selectFeaturedPool = (items: MediaPick[], limit: number) => {
-          const filteredItems = filterAndSortByQualityDesc(uniqueByKey(items));
-          return filteredItems.slice(0, limit);
+          return uniqueByKey(items).slice(0, limit);
         };
         const [nowPlaying, popularTv] = await Promise.all([
-          endpointPages("/movie/now_playing"),
-          endpointPages("/tv/popular"),
+          endpointList("/movie/now_playing"),
+          endpointList("/tv/popular"),
         ]);
         const movieFeaturedPool = selectFeaturedPool(
           nowPlaying.map(
@@ -424,7 +367,7 @@ export function FeaturedCarousel({
               release_date?: string;
             }) => toMoviePick(show, "latest"),
           ),
-          BASE_POOL_SIZE_PER_TYPE + EXTRA_POOL_SIZE_PER_TYPE,
+          FEATURED_POOL_SIZE_PER_TYPE,
         );
         const tvFeaturedPool = selectFeaturedPool(
           popularTv.map(
@@ -435,26 +378,14 @@ export function FeaturedCarousel({
               first_air_date?: string;
             }) => toShowPick(show, "popular"),
           ),
-          BASE_POOL_SIZE_PER_TYPE + EXTRA_POOL_SIZE_PER_TYPE,
-        );
-        const topTvPopular = tvFeaturedPool.slice(0, BASE_POOL_SIZE_PER_TYPE);
-        const extraTvPopular = tvFeaturedPool.slice(BASE_POOL_SIZE_PER_TYPE);
-        const topLatestMovies = movieFeaturedPool.slice(
-          0,
-          BASE_POOL_SIZE_PER_TYPE,
-        );
-        const extraLatestMovies = movieFeaturedPool.slice(
-          BASE_POOL_SIZE_PER_TYPE,
+          FEATURED_POOL_SIZE_PER_TYPE,
         );
         const rankedSelection =
           forcedCategory === "movies"
-            ? shuffleArray(movieFeaturedPool)
+            ? movieFeaturedPool
             : forcedCategory === "tvshows"
-              ? shuffleArray(tvFeaturedPool)
-              : uniqueByKey([
-                  ...mixBalancedRandom(topTvPopular, topLatestMovies),
-                  ...mixBalancedRandom(extraTvPopular, extraLatestMovies),
-                ]);
+              ? tvFeaturedPool
+              : mergeFeaturedPools(tvFeaturedPool, movieFeaturedPool);
         const initialSelection = rankedSelection.slice(0, INITIAL_DETAIL_BATCH);
         const remainingSelection = rankedSelection.slice(INITIAL_DETAIL_BATCH);
 

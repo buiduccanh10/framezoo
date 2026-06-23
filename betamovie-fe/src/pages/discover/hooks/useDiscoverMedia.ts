@@ -19,11 +19,6 @@ import type {
   UseDiscoverMediaReturn,
 } from "@/pages/discover/types/discover";
 import { useLanguageStore } from "@/stores/language";
-import {
-  DEFAULT_MEDIA_QUALITY_THRESHOLD,
-  filterAndSortByLatestDesc,
-  filterAndSortByQualityDesc,
-} from "@/utils/compareByRatingDesc";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
@@ -46,8 +41,6 @@ export {
   MOVIE_PROVIDERS,
   TV_PROVIDERS,
 };
-
-const POPULAR_CAROUSEL_PAGE_COUNT = 2;
 
 function appendUniqueMedia(
   existingItems: DiscoverMedia[],
@@ -177,7 +170,6 @@ export function useDiscoverMedia({
   mediaTitle,
   isCarouselView = false,
   enabled = true,
-  prioritizeLatestOrder = false,
 }: UseDiscoverMediaProps): UseDiscoverMediaReturn {
   const [media, setMedia] = useState<DiscoverMedia[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -208,54 +200,6 @@ export function useDiscoverMedia({
     [originCountry],
   );
   const hasOriginCountryFilter = Boolean(originCountry);
-  const shouldPrioritizeLatestActivity = useCallback(
-    (type: DiscoverContentType) =>
-      prioritizeLatestOrder ||
-      (mediaType === "tv" &&
-        (type === "latest" || type === "latesttv" || type === "onTheAir")),
-    [mediaType, prioritizeLatestOrder],
-  );
-  const sortDiscoverResults = useCallback(
-    (items: DiscoverMedia[], type: DiscoverContentType) =>
-      shouldPrioritizeLatestActivity(type)
-        ? filterAndSortByLatestDesc(items, DEFAULT_MEDIA_QUALITY_THRESHOLD)
-        : filterAndSortByQualityDesc(items, DEFAULT_MEDIA_QUALITY_THRESHOLD),
-    [shouldPrioritizeLatestActivity],
-  );
-  const hydrateLatestTVResults = useCallback(
-    async (items: DiscoverMedia[], type: DiscoverContentType) => {
-      if (!shouldPrioritizeLatestActivity(type) || items.length === 0) {
-        return items;
-      }
-
-      const hydratedItems = await Promise.all(
-        items.map(async (item) => {
-          try {
-            const details = await fetchCachedTmdb<{
-              last_air_date?: string | null;
-              last_episode_to_air?: {
-                air_date?: string | null;
-              } | null;
-            }>(`/tv/${item.id}`, {
-              language: formattedLanguage,
-            });
-
-            return {
-              ...item,
-              last_air_date: details.last_air_date ?? item.last_air_date,
-              last_episode_to_air:
-                details.last_episode_to_air ?? item.last_episode_to_air,
-            };
-          } catch {
-            return item;
-          }
-        }),
-      );
-
-      return hydratedItems;
-    },
-    [formattedLanguage, shouldPrioritizeLatestActivity],
-  );
 
   // Reset media when content type or media type changes
   useEffect(() => {
@@ -267,79 +211,34 @@ export function useDiscoverMedia({
   }, [contentType, currentContentType]);
 
   const fetchTMDBMedia = useCallback(
-    async (
-      endpoint: string,
-      params: Record<string, any> = {},
-      sortType: DiscoverContentType = contentType,
-    ) => {
+    async (endpoint: string, params: Record<string, any> = {}) => {
       try {
-        const shouldExpandPopularCarouselPool =
-          isCarouselView && sortType === "popular";
-        const firstPage = isCarouselView ? 1 : page;
-        const firstPageData = await fetchCachedTmdb<any>(endpoint, {
+        const requestPage = isCarouselView ? 1 : page;
+        const data = await fetchCachedTmdb<any>(endpoint, {
           language: formattedLanguage,
           ...params,
-          page: firstPage.toString(),
+          page: requestPage.toString(),
         });
 
-        const totalPages = firstPageData.total_pages ?? 1;
-        const pageResults = [firstPageData];
-
-        if (shouldExpandPopularCarouselPool && totalPages > 1) {
-          const maxPage = Math.min(POPULAR_CAROUSEL_PAGE_COUNT, totalPages);
-          const extraPages = await Promise.all(
-            Array.from({ length: maxPage - 1 }, (_, index) =>
-              fetchCachedTmdb<any>(endpoint, {
-                language: formattedLanguage,
-                ...params,
-                page: (index + 2).toString(),
-              }),
-            ),
-          );
-          pageResults.push(...extraPages);
-        }
-
-        const mergedResults = pageResults.flatMap(
-          (pageData) => pageData.results ?? [],
+        const totalPages = data.total_pages ?? 1;
+        const results = (data.results ?? []).slice(
+          0,
+          isCarouselView ? 20 : undefined,
         );
-        const uniqueResults = Array.from(
-          new Map(
-            mergedResults.map((item: DiscoverMedia) => [item.id, item]),
-          ).values(),
-        );
-
-        const hydratedResults = await hydrateLatestTVResults(
-          uniqueResults,
-          sortType,
-        );
-        const sortedResults = sortDiscoverResults(hydratedResults, sortType);
-        const results = isCarouselView
-          ? sortedResults.slice(0, 20)
-          : sortedResults;
 
         return {
           results: results.map((item: any) => ({
             ...item,
             type: mediaType === "movie" ? "movie" : "show",
           })),
-          hasMore: isCarouselView
-            ? totalPages > POPULAR_CAROUSEL_PAGE_COUNT
-            : page < totalPages,
+          hasMore: requestPage < totalPages,
         };
       } catch (err) {
         console.error("Error fetching TMDB media:", err);
         throw err;
       }
     },
-    [
-      contentType,
-      formattedLanguage,
-      hydrateLatestTVResults,
-      isCarouselView,
-      mediaType,
-      page,
-      sortDiscoverResults,
-    ],
+    [formattedLanguage, isCarouselView, mediaType, page],
   );
 
   const filterResultsByReleaseYear = useCallback(
@@ -389,10 +288,7 @@ export function useDiscoverMedia({
 
       const results = await Promise.all(mediaPromises);
       return filterResultsByReleaseYear({
-        results: filterAndSortByQualityDesc(
-          results,
-          DEFAULT_MEDIA_QUALITY_THRESHOLD,
-        ),
+        results,
         hasMore: picks.length > picksToFetch.length,
       });
     } catch (err) {
@@ -437,7 +333,7 @@ export function useDiscoverMedia({
       return;
     }
 
-    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}-${prioritizeLatestOrder ? "latest" : "default"}`;
+    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}`;
     if (lastFetchedRef.current === currentFetchKey) {
       return;
     }
@@ -478,7 +374,7 @@ export function useDiscoverMedia({
 
         case "onTheAir":
           if (mediaType === "tv") {
-            data = await fetchTMDBMedia("/tv/on_the_air", {}, "onTheAir");
+            data = await fetchTMDBMedia("/tv/on_the_air");
             setSectionTitle(t("discover.carousel.title.onTheAir"));
           } else {
             throw new Error("onTheAir is only available for TV shows");
@@ -617,7 +513,6 @@ export function useDiscoverMedia({
                     ...originCountryParams,
                   }
                 : undefined,
-            mediaType === "tv" ? "latest" : contentType,
           );
           setSectionTitle(t("discover.carousel.title.latestReleases"));
           break;
@@ -639,16 +534,12 @@ export function useDiscoverMedia({
         case "latesttv":
           data =
             releaseYear || hasOriginCountryFilter
-              ? await fetchTMDBMedia(
-                  "/discover/tv",
-                  {
-                    sort_by: "first_air_date.desc",
-                    ...releaseYearParams,
-                    ...originCountryParams,
-                  },
-                  "latesttv",
-                )
-              : await fetchTMDBMedia("/tv/on_the_air", {}, "latesttv");
+              ? await fetchTMDBMedia("/discover/tv", {
+                  sort_by: "first_air_date.desc",
+                  ...releaseYearParams,
+                  ...originCountryParams,
+                })
+              : await fetchTMDBMedia("/tv/on_the_air");
           setSectionTitle(t("discover.carousel.title.latestTVReleases"));
           break;
 
@@ -719,7 +610,6 @@ export function useDiscoverMedia({
     page,
     formattedLanguage,
     isRestoring,
-    prioritizeLatestOrder,
   ]);
 
   useEffect(() => {

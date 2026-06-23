@@ -46,7 +46,6 @@ interface MediaCarouselProps {
   releaseYear?: string;
   originCountry?: string;
   sectionTitleOverride?: string;
-  prioritizeLatestOrder?: boolean;
 }
 
 function MoreCard({ link }: { link: string }) {
@@ -97,7 +96,6 @@ export function MediaCarousel({
   releaseYear,
   originCountry,
   sectionTitleOverride,
-  prioritizeLatestOrder = false,
 }: MediaCarouselProps) {
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
@@ -252,7 +250,6 @@ export function MediaCarousel({
       enabled: discoverMediaEnabled,
       releaseYear: releaseYear || undefined,
       originCountry: originCountry || undefined,
-      prioritizeLatestOrder,
     });
   const resolvedSectionTitle = sectionTitleOverride || sectionTitle;
 
