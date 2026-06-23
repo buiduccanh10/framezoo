@@ -1,14 +1,17 @@
 import { ReactNode } from "react";
 import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import { allThemes } from "@themes/all";
 import {
   primaryOptions,
   secondaryOptions,
   tertiaryOptions,
 } from "@themes/custom";
+import { defaultTheme } from "@themes/default";
 
 export interface ThemeStore {
   theme: string | null;
@@ -80,9 +83,35 @@ export function ThemeProvider(props: {
   const previewTheme = usePreviewThemeStore((s) => s.previewTheme);
   const theme = useThemeStore((s) => s.theme);
   const customTheme = useThemeStore((s) => s.customTheme);
+  const location = useLocation();
+
+  const isPlayerRoute = location.pathname.startsWith("/media");
 
   const themeToDisplay = previewTheme ?? theme;
   const themeSelector = themeToDisplay ? `theme-${themeToDisplay}` : undefined;
+
+  let themeColor = "#000000";
+  try {
+    if (themeToDisplay === "custom" && customTheme) {
+      const selectedThemeId = customTheme.tertiary;
+      const themeObj =
+        allThemes.find((t: any) => t.name === selectedThemeId) || defaultTheme;
+      themeColor =
+        themeObj.extend?.colors?.background?.accentA ||
+        defaultTheme.extend.colors.background.accentA;
+    } else if (themeToDisplay) {
+      const themeObj =
+        allThemes.find((t: any) => t.name === themeToDisplay) || defaultTheme;
+      themeColor =
+        themeObj.extend?.colors?.background?.accentA ||
+        defaultTheme.extend.colors.background.accentA;
+    }
+  } catch (e) {
+    console.error("Failed to resolve theme color:", e);
+  }
+
+  // Force black color for player routes
+  const displayThemeColor = isPlayerRoute ? "#000000" : themeColor;
 
   let styleContent = "";
   if (themeToDisplay === "custom" && customTheme) {
@@ -112,6 +141,8 @@ export function ThemeProvider(props: {
       {props.applyGlobal ? (
         <Helmet>
           <body className={themeSelector} />
+          <meta name="theme-color" content={displayThemeColor} />
+          <style>{`html, body { background-color: ${displayThemeColor} !important; }`}</style>
         </Helmet>
       ) : null}
       {props.children}

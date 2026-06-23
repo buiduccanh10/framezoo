@@ -26,6 +26,7 @@ body[data-no-scroll] {
 }
 
 #root {
+  @apply bg-background-main;
   padding: 0.05px;
   min-height: 100vh;
   min-height: 100dvh;
