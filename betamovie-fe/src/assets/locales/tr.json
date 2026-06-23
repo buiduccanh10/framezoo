@@ -456,7 +456,8 @@
       "publicHelp": "Bağlantıya sahip olan herkes bu listeyi görüntüleyebilir."
     },
     "items": {
-      "empty": "Bu liste boş."
+      "empty": "Bu liste boş.",
+      "emptyHelp": "Listeye Ekle ile herhangi bir filmden veya program kartından başlık ekleyin, ardından diziyi yönetmek için buraya geri dönün."
     },
     "meta": {
       "itemCount": "{{count}} öğe",
@@ -481,9 +482,24 @@
       "title": "Listeye Ekle"
     },
     "page": {
+      "description": "Özel tutabileceğiniz veya bir bağlantıyla paylaşabileceğiniz favorileri, tema gecelerini ve bir sonraki izle seçimlerini seçin.",
+      "editingHint": "Bir kartı bu listeden kaldırmak için üzerindeki kapat düğmesini tıklayın.",
+      "eyebrow": "Koleksiyonlar",
+      "itemsEyebrow": "Bu listedeki başlıklar",
+      "itemsHint": "Göz atmak için soldaki listeyi seçin, ardından temizlemek istediğinizde düzenleme modunu kullanın.",
+      "publicCountPlural": "{{count}} herkese açık listeler",
+      "publicCountSingular": "1 genel liste",
+      "searchEmptyDescription": "Başka bir ad deneyin veya aramanızı temizleyin.",
+      "searchEmptyTitle": "Eşleşen liste yok",
+      "searchPlaceholder": "Arama listeleri",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Yakın zamanda güncellendi",
+      "summaryPlural": "{{count}} listeler",
+      "summarySingular": "1 liste",
       "title": "Listeler"
     },
     "public": {
+      "descriptionFallback": "BetaMovie'de seçilmiş ortak bir koleksiyon.",
       "notFoundDescription": "Bu paylaşım bağlantısı eksik veya artık mevcut değil.",
       "notFoundTitle": "Liste bulunamadı",
       "pageTitle": "Paylaşılan liste",

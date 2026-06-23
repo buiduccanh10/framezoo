@@ -456,7 +456,8 @@
       "publicHelp": "Alle med linket kan se denne liste."
     },
     "items": {
-      "empty": "Denne liste er tom."
+      "empty": "Denne liste er tom.",
+      "emptyHelp": "Tilføj titler fra et hvilket som helst film- eller showkort med Tilføj til liste, og vend derefter tilbage hertil for at administrere rækken."
     },
     "meta": {
       "itemCount": "{{count}} element",
@@ -481,9 +482,24 @@
       "title": "Tilføj til liste"
     },
     "page": {
+      "description": "Udstyr favoritter, temaaftener og se-næste-valg, du kan holde private eller dele med et link.",
+      "editingHint": "Klik på lukkeknappen på et kort for at fjerne det fra denne liste.",
+      "eyebrow": "Samlinger",
+      "itemsEyebrow": "Titler på denne liste",
+      "itemsHint": "Vælg en liste til venstre for at gennemse den, og brug derefter redigeringstilstand, når du vil rydde op i den.",
+      "publicCountPlural": "{{count}} offentlige lister",
+      "publicCountSingular": "1 offentlig liste",
+      "searchEmptyDescription": "Prøv et andet navn, eller ryd din søgning.",
+      "searchEmptyTitle": "Ingen matchende lister",
+      "searchPlaceholder": "Søg lister",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "For nylig opdateret",
+      "summaryPlural": "{{count}} lister",
+      "summarySingular": "1 liste",
       "title": "Lister"
     },
     "public": {
+      "descriptionFallback": "En delt samling kurateret i BetaMovie.",
       "notFoundDescription": "Dette delelink mangler eller er ikke længere tilgængeligt.",
       "notFoundTitle": "Listen blev ikke fundet",
       "pageTitle": "Delt liste",

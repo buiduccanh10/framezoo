@@ -456,7 +456,8 @@
       "publicHelp": "Tento seznam může zobrazit kdokoli s odkazem."
     },
     "items": {
-      "empty": "Tento seznam je prázdný."
+      "empty": "Tento seznam je prázdný.",
+      "emptyHelp": "Přidejte tituly z libovolného filmu nebo karty show pomocí Přidat do seznamu a poté se sem vraťte a spravujte sestavu."
     },
     "meta": {
       "itemCount": "{{count}} položka",
@@ -481,9 +482,24 @@
       "title": "Přidat do seznamu"
     },
     "page": {
+      "description": "Vytvářejte oblíbené položky, tematické večery a výběry, které můžete sledovat jako další, které můžete ponechat v soukromí nebo sdílet pomocí odkazu.",
+      "editingHint": "Kliknutím na tlačítko Zavřít na kartě ji odstraníte z tohoto seznamu.",
+      "eyebrow": "Sbírky",
+      "itemsEyebrow": "Tituly v tomto seznamu",
+      "itemsHint": "Chcete-li procházet seznam nalevo, vyberte jej, a když jej chcete vyčistit, použijte režim úprav.",
+      "publicCountPlural": "{{count}} veřejných seznamů",
+      "publicCountSingular": "1 veřejný seznam",
+      "searchEmptyDescription": "Zkuste jiné jméno nebo vymažte vyhledávání.",
+      "searchEmptyTitle": "Žádné odpovídající seznamy",
+      "searchPlaceholder": "Hledat seznamy",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nedávno aktualizováno",
+      "summaryPlural": "{{count}} seznamů",
+      "summarySingular": "1 seznam",
       "title": "Seznamy"
     },
     "public": {
+      "descriptionFallback": "Sdílená sbírka vytvořená v BetaMovie.",
       "notFoundDescription": "Tento odkaz na sdílení chybí nebo již není dostupný.",
       "notFoundTitle": "Seznam nenalezen",
       "pageTitle": "Sdílený seznam",

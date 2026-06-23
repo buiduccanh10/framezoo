@@ -456,7 +456,8 @@
       "publicHelp": "Oricine are linkul poate vizualiza această listă."
     },
     "items": {
-      "empty": "Această listă este goală."
+      "empty": "Această listă este goală.",
+      "emptyHelp": "Adăugați titluri din orice film sau card de emisiune cu Adăugare la listă, apoi reveniți aici pentru a gestiona gama."
     },
     "meta": {
       "itemCount": "{{count}} articol",
@@ -481,9 +482,24 @@
       "title": "Adaugă la listă"
     },
     "page": {
+      "description": "Alegeți favoritele, nopțile tematice și urmăriți alegerile următoare pe care le puteți păstra private sau le puteți partaja printr-un link.",
+      "editingHint": "Faceți clic pe butonul de închidere de pe un card pentru a-l elimina din această listă.",
+      "eyebrow": "Colecții",
+      "itemsEyebrow": "Titluri din această listă",
+      "itemsHint": "Selectați o listă din stânga pentru a o răsfoi, apoi utilizați modul de editare când doriți să o curățați.",
+      "publicCountPlural": "{{count}} liste publice",
+      "publicCountSingular": "1 listă publică",
+      "searchEmptyDescription": "Încercați alt nume sau ștergeți căutarea.",
+      "searchEmptyTitle": "Nu există liste care se potrivesc",
+      "searchPlaceholder": "Căutați liste",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Actualizat recent",
+      "summaryPlural": "{{count}} liste",
+      "summarySingular": "1 lista",
       "title": "Liste"
     },
     "public": {
+      "descriptionFallback": "O colecție comună organizată în BetaMovie.",
       "notFoundDescription": "Acest link de distribuire lipsește sau nu mai este disponibil.",
       "notFoundTitle": "Lista nu a fost găsită",
       "pageTitle": "Listă comună",

@@ -456,7 +456,8 @@
       "publicHelp": "Siapa pun yang memiliki tautan dapat melihat daftar ini."
     },
     "items": {
-      "empty": "Daftar ini kosong."
+      "empty": "Daftar ini kosong.",
+      "emptyHelp": "Tambahkan judul dari film atau kartu acara apa pun dengan Tambahkan ke Daftar, lalu kembali ke sini untuk mengelola daftarnya."
     },
     "meta": {
       "itemCount": "{{count}} barang",
@@ -481,9 +482,24 @@
       "title": "Tambahkan ke Daftar"
     },
     "page": {
+      "description": "Susun favorit, tema malam, dan pilihan tontonan berikutnya yang dapat Anda rahasiakan atau bagikan melalui tautan.",
+      "editingHint": "Klik tombol tutup pada kartu untuk menghapusnya dari daftar ini.",
+      "eyebrow": "Koleksi",
+      "itemsEyebrow": "Judul dalam daftar ini",
+      "itemsHint": "Pilih daftar di sebelah kiri untuk menelusurinya, lalu gunakan mode edit saat Anda ingin membersihkannya.",
+      "publicCountPlural": "{{count}} daftar publik",
+      "publicCountSingular": "1 daftar publik",
+      "searchEmptyDescription": "Coba nama lain atau hapus pencarian Anda.",
+      "searchEmptyTitle": "Tidak ada daftar yang cocok",
+      "searchPlaceholder": "Daftar pencarian",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Baru-baru ini diperbarui",
+      "summaryPlural": "{{count}} daftar",
+      "summarySingular": "1 daftar",
       "title": "Daftar"
     },
     "public": {
+      "descriptionFallback": "Koleksi bersama yang dikurasi di BetaMovie.",
       "notFoundDescription": "Tautan berbagi ini tidak ada atau tidak tersedia lagi.",
       "notFoundTitle": "Daftar tidak ditemukan",
       "pageTitle": "Daftar bersama",

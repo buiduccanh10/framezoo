@@ -456,7 +456,8 @@
       "publicHelp": "A link birtokában bárki megtekintheti ezt a listát."
     },
     "items": {
-      "empty": "Ez a lista üres."
+      "empty": "Ez a lista üres.",
+      "emptyHelp": "Adjon hozzá címeket bármelyik filmről vagy műsorkártyáról a Hozzáadás a listához funkcióval, majd térjen vissza ide a felállás kezeléséhez."
     },
     "meta": {
       "itemCount": "{{count}} elem",
@@ -481,9 +482,24 @@
       "title": "Hozzáadás a listához"
     },
     "page": {
+      "description": "Válogass kedvenceket, tematikus esteket és nézd meg a következő válogatásokat, amelyeket privátban tarthatsz, vagy megoszthatsz egy linkkel.",
+      "editingHint": "Kattintson a bezárás gombra egy kártyán a listából való eltávolításához.",
+      "eyebrow": "Gyűjtemények",
+      "itemsEyebrow": "Címek ebben a listában",
+      "itemsHint": "Válasszon ki egy listát a bal oldalon a böngészéshez, majd használja a szerkesztési módot, amikor meg szeretné tisztítani.",
+      "publicCountPlural": "{{count}} nyilvános listák",
+      "publicCountSingular": "1 nyilvános lista",
+      "searchEmptyDescription": "Próbálkozzon másik névvel, vagy törölje a keresést.",
+      "searchEmptyTitle": "Nincsenek megfelelő listák",
+      "searchPlaceholder": "Listák keresése",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nemrég frissítve",
+      "summaryPlural": "{{count}} listák",
+      "summarySingular": "1 lista",
       "title": "Listák"
     },
     "public": {
+      "descriptionFallback": "Megosztott gyűjtemény a BetaMovie-ban.",
       "notFoundDescription": "Ez a megosztási link hiányzik vagy már nem érhető el.",
       "notFoundTitle": "A lista nem található",
       "pageTitle": "Megosztott lista",

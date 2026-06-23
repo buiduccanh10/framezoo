@@ -456,7 +456,8 @@
       "publicHelp": "Cualquiera que tenga el enlace puede ver esta lista."
     },
     "items": {
-      "empty": "Esta lista está vacía."
+      "empty": "Esta lista está vacía.",
+      "emptyHelp": "Agregue títulos de cualquier película o tarjeta de programa con Agregar a la lista, luego regrese aquí para administrar la programación."
     },
     "meta": {
       "itemCount": "{{count}} elemento",
@@ -481,9 +482,24 @@
       "title": "Añadir a la lista"
     },
     "page": {
+      "description": "Selecciona favoritos, noches temáticas y selecciones para ver a continuación que puedes mantener en privado o compartir con un enlace.",
+      "editingHint": "Haga clic en el botón cerrar de una tarjeta para eliminarla de esta lista.",
+      "eyebrow": "Colecciones",
+      "itemsEyebrow": "Títulos en esta lista",
+      "itemsHint": "Seleccione una lista a la izquierda para explorarla, luego use el modo de edición cuando desee limpiarla.",
+      "publicCountPlural": "{{count}} listas públicas",
+      "publicCountSingular": "1 lista pública",
+      "searchEmptyDescription": "Pruebe con otro nombre o borre su búsqueda.",
+      "searchEmptyTitle": "No hay listas coincidentes",
+      "searchPlaceholder": "Listas de búsqueda",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Actualizado recientemente",
+      "summaryPlural": "{{count}} listas",
+      "summarySingular": "1 lista",
       "title": "Liza"
     },
     "public": {
+      "descriptionFallback": "Una colección compartida curada en BetaMovie.",
       "notFoundDescription": "Este enlace para compartir falta o ya no está disponible.",
       "notFoundTitle": "Lista no encontrada",
       "pageTitle": "Lista compartida",

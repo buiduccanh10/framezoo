@@ -456,7 +456,8 @@
       "publicHelp": "Toute personne disposant du lien peut consulter cette liste."
     },
     "items": {
-      "empty": "Cette liste est vide."
+      "empty": "Cette liste est vide.",
+      "emptyHelp": "Ajoutez des titres de n'importe quel film ou affichez une carte avec Ajouter à la liste, puis revenez ici pour gérer la programmation."
     },
     "meta": {
       "itemCount": "{{count}} article",
@@ -481,9 +482,24 @@
       "title": "Ajouter à la liste"
     },
     "page": {
+      "description": "Organisez vos favoris, vos soirées à thème et regardez les prochains choix que vous pouvez garder privés ou partager avec un lien.",
+      "editingHint": "Cliquez sur le bouton de fermeture d'une carte pour la supprimer de cette liste.",
+      "eyebrow": "Collections",
+      "itemsEyebrow": "Titres dans cette liste",
+      "itemsHint": "Sélectionnez une liste sur la gauche pour la parcourir, puis utilisez le mode édition lorsque vous souhaitez la nettoyer.",
+      "publicCountPlural": "{{count}} listes publiques",
+      "publicCountSingular": "1 liste publique",
+      "searchEmptyDescription": "Essayez un autre nom ou effacez votre recherche.",
+      "searchEmptyTitle": "Aucune liste correspondante",
+      "searchPlaceholder": "Rechercher des listes",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Récemment mis à jour",
+      "summaryPlural": "{{count}} listes",
+      "summarySingular": "1 liste",
       "title": "Listes"
     },
     "public": {
+      "descriptionFallback": "Une collection partagée organisée dans BetaMovie.",
       "notFoundDescription": "Ce lien de partage est manquant ou n'est plus disponible.",
       "notFoundTitle": "Liste introuvable",
       "pageTitle": "Liste partagée",

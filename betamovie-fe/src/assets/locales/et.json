@@ -456,7 +456,8 @@
       "publicHelp": "Igaüks, kellel on link, saab seda loendit vaadata."
     },
     "items": {
-      "empty": "See nimekiri on tühi."
+      "empty": "See nimekiri on tühi.",
+      "emptyHelp": "Lisage pealkirjad mis tahes filmilt või saatekaardilt valikuga Lisa loendisse, seejärel tulge siia tagasi, et loendit hallata."
     },
     "meta": {
       "itemCount": "{{count}} üksus",
@@ -481,9 +482,24 @@
       "title": "Lisa loendisse"
     },
     "page": {
+      "description": "Kureerige lemmikuid, teemaõhtuid ja vaadake järgmisi valikuid, mida saate privaatsena hoida või lingiga jagada.",
+      "editingHint": "Klõpsake kaardi sulgemisnupul, et see loendist eemaldada.",
+      "eyebrow": "Kollektsioonid",
+      "itemsEyebrow": "Pealkirjad selles loendis",
+      "itemsHint": "Valige selle sirvimiseks vasakpoolne loend, seejärel kasutage redigeerimisrežiimi, kui soovite seda puhastada.",
+      "publicCountPlural": "{{count}} avalikku loendit",
+      "publicCountSingular": "1 avalik nimekiri",
+      "searchEmptyDescription": "Proovige teist nime või tühjendage otsing.",
+      "searchEmptyTitle": "Sobivaid loendeid pole",
+      "searchPlaceholder": "Otsi loendeid",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Hiljuti värskendatud",
+      "summaryPlural": "{{count}} nimekirjad",
+      "summarySingular": "1 nimekiri",
       "title": "Loendid"
     },
     "public": {
+      "descriptionFallback": "BetaMovie's kureeritud jagatud kollektsioon.",
       "notFoundDescription": "See jagamise link puudub või pole enam saadaval.",
       "notFoundTitle": "Nimekirja ei leitud",
       "pageTitle": "Jagatud loend",

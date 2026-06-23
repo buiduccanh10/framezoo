@@ -456,7 +456,8 @@
       "publicHelp": "링크가 있는 사람은 누구나 이 목록을 볼 수 있습니다."
     },
     "items": {
-      "empty": "이 목록은 비어 있습니다."
+      "empty": "이 목록은 비어 있습니다.",
+      "emptyHelp": "목록에 추가를 사용하여 영화나 프로그램 카드의 제목을 추가한 다음 여기로 돌아와 라인업을 관리하세요."
     },
     "meta": {
       "itemCount": "{{count}} 항목",
@@ -481,9 +482,24 @@
       "title": "목록에 추가"
     },
     "page": {
+      "description": "즐겨찾는 작품, 테마 나이트, 다음 시청작을 선별하여 비공개로 유지하거나 링크를 통해 공유할 수 있습니다.",
+      "editingHint": "이 목록에서 카드를 제거하려면 카드에 있는 닫기 버튼을 클릭하세요.",
+      "eyebrow": "컬렉션",
+      "itemsEyebrow": "이 목록의 제목",
+      "itemsHint": "왼쪽 목록을 선택하여 찾아본 다음, 정리하고 싶을 때 편집 모드를 사용하세요.",
+      "publicCountPlural": "{{count}} 공개 목록",
+      "publicCountSingular": "공개 목록 1개",
+      "searchEmptyDescription": "다른 이름을 시도하거나 검색 내용을 지우세요.",
+      "searchEmptyTitle": "일치하는 목록이 없습니다.",
+      "searchPlaceholder": "목록 검색",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "최근 업데이트됨",
+      "summaryPlural": "{{count}} 목록",
+      "summarySingular": "목록 1개",
       "title": "기울기"
     },
     "public": {
+      "descriptionFallback": "BetaMovie에서 선별된 공유 컬렉션입니다.",
       "notFoundDescription": "이 공유 링크가 없거나 더 이상 사용할 수 없습니다.",
       "notFoundTitle": "목록을 찾을 수 없습니다",
       "pageTitle": "공유 목록",
