@@ -148,7 +148,7 @@ export function Navigation(props: NavigationProps) {
       >
         <div
           className={classNames(
-            "fixed left-0 right-0 top-0 flex items-center", // border-b border-utils-divider border-opacity-50
+            "absolute left-0 right-0 top-0 flex items-center", // border-b border-utils-divider border-opacity-50
             "transition-[background-color,backdrop-filter] duration-300 ease-in-out",
             props.doBackground
               ? props.clearBackground
@@ -197,7 +197,7 @@ export function Navigation(props: NavigationProps) {
           top: `${bannerHeight}px`,
         }}
       >
-        <div className={classNames("fixed left-0 right-0 flex items-center")}>
+        <div className={classNames("absolute left-0 right-0 flex items-center")}>
           <div className="px-7 py-5 relative z-[60] flex flex-1 items-center justify-between">
             <div className="pointer-events-auto flex items-center gap-3 ssm:gap-4">
               {location.pathname !== "/login" &&
