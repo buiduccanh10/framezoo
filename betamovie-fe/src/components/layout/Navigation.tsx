@@ -197,7 +197,9 @@ export function Navigation(props: NavigationProps) {
           top: `${bannerHeight}px`,
         }}
       >
-        <div className={classNames("absolute left-0 right-0 flex items-center")}>
+        <div
+          className={classNames("absolute left-0 right-0 flex items-center")}
+        >
           <div className="px-7 py-5 relative z-[60] flex flex-1 items-center justify-between">
             <div className="pointer-events-auto flex items-center gap-3 ssm:gap-4">
               {location.pathname !== "/login" &&
