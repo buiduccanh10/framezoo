@@ -30,10 +30,172 @@ interface DropdownProps {
   preventWrap?: boolean;
 }
 
+const VIEWPORT_PADDING = 16;
+
+function getMenuLeftOffset(
+  containerRect: DOMRect,
+  menuWidth: number,
+  forcedSide?: "left" | "right",
+) {
+  const fitsOnLeft =
+    containerRect.left + menuWidth <= window.innerWidth - VIEWPORT_PADDING;
+  const fitsOnRight = containerRect.right - menuWidth >= VIEWPORT_PADDING;
+  const resolvedSide =
+    forcedSide ??
+    (fitsOnLeft
+      ? "left"
+      : fitsOnRight
+        ? "right"
+        : window.innerWidth - containerRect.left >= containerRect.right
+          ? "left"
+          : "right");
+
+  const desiredLeft =
+    resolvedSide === "right" ? containerRect.width - menuWidth : 0;
+  const minLeft = VIEWPORT_PADDING - containerRect.left;
+  const maxLeft =
+    window.innerWidth - VIEWPORT_PADDING - containerRect.left - menuWidth;
+
+  if (maxLeft < minLeft) {
+    return minLeft;
+  }
+
+  return Math.min(Math.max(desiredLeft, minLeft), maxLeft);
+}
+
+interface DropdownMenuProps {
+  open: boolean;
+  direction: "up" | "down";
+  side?: "left" | "right";
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  estimatedMenuWidth: number;
+  menuClassName?: string;
+  customMenu?: React.ReactNode;
+  options: Array<OptionItem>;
+  preventWrap?: boolean;
+  initialLeft: number;
+}
+
+function DropdownMenu({
+  open,
+  direction,
+  side,
+  containerRef,
+  estimatedMenuWidth,
+  menuClassName,
+  customMenu,
+  options,
+  preventWrap,
+  initialLeft,
+}: DropdownMenuProps) {
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  const [menuLeft, setMenuLeft] = useState(initialLeft);
+
+  const resolveMenuPosition = useCallback(
+    (fallbackWidth?: number) => {
+      if (!containerRef.current) return;
+
+      const menuWidth =
+        menuRef.current?.getBoundingClientRect().width ||
+        fallbackWidth ||
+        estimatedMenuWidth;
+
+      const nextLeft = getMenuLeftOffset(
+        containerRef.current.getBoundingClientRect(),
+        menuWidth,
+        side,
+      );
+
+      setMenuLeft((currentLeft) =>
+        Math.abs(currentLeft - nextLeft) < 1 ? currentLeft : nextLeft,
+      );
+    },
+    [containerRef, estimatedMenuWidth, side],
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    setMenuLeft(initialLeft);
+  }, [initialLeft, open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const updatePosition = () => resolveMenuPosition();
+    const animationFrame = window.requestAnimationFrame(updatePosition);
+
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+
+    let resizeObserver: ResizeObserver | undefined;
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(updatePosition);
+
+      if (containerRef.current) {
+        resizeObserver.observe(containerRef.current);
+      }
+
+      if (menuRef.current) {
+        resizeObserver.observe(menuRef.current);
+      }
+    }
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+      resizeObserver?.disconnect();
+    };
+  }, [containerRef, open, resolveMenuPosition]);
+
+  return (
+    <div
+      ref={menuRef}
+      className={`absolute z-[40] max-w-[calc(100vw-2rem)] ${
+        direction === "up" ? "bottom-full mb-4" : "top-full mt-1"
+      }`}
+      style={{ left: open ? menuLeft : initialLeft }}
+    >
+      <Transition
+        animation="slide-down"
+        show={open}
+        className={`min-w-[20px] w-fit max-w-[calc(100vw-2rem)] max-h-60 overflow-auto rounded-xl bg-dropdown-background py-1 text-white shadow-lg ring-1 ring-black ring-opacity-5 scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary focus:outline-none ${
+          menuClassName ?? ""
+        }`}
+      >
+        {customMenu ? (
+          <Listbox.Options static as={Fragment}>
+            {customMenu}
+          </Listbox.Options>
+        ) : (
+          <Listbox.Options static>
+            {options.map((opt) => (
+              <Listbox.Option
+                className={({ active }) =>
+                  `cursor-pointer flex gap-4 items-center relative select-none py-2 px-4 mx-1 rounded-lg ${
+                    active
+                      ? "bg-background-secondaryHover text-type-link"
+                      : "text-type-secondary"
+                  } ${preventWrap ? "whitespace-nowrap" : ""}`
+                }
+                key={opt.id}
+                value={opt}
+              >
+                {opt.leftIcon ? opt.leftIcon : null}
+                {opt.name}
+              </Listbox.Option>
+            ))}
+          </Listbox.Options>
+        )}
+      </Transition>
+    </div>
+  );
+}
+
 export function Dropdown(props: DropdownProps) {
   const { direction = "down", customButton, customMenu } = props;
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [autoSide, setAutoSide] = useState<"left" | "right">("left");
+  const [initialMenuLeft, setInitialMenuLeft] = useState(0);
   const estimatedMenuWidth = useMemo(() => {
     const longestOption = props.options.reduce(
       (max, option) => Math.max(max, option.name.length),
@@ -42,35 +204,24 @@ export function Dropdown(props: DropdownProps) {
     return Math.min(420, Math.max(180, longestOption * 9 + 64));
   }, [props.options]);
 
-  const resolveAutoSide = useCallback(() => {
-    if (props.side || !containerRef.current) return;
+  const resolveInitialMenuPosition = useCallback(() => {
+    if (!containerRef.current) return;
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const spaceToRight = window.innerWidth - rect.left;
-    const spaceToLeft = rect.right;
+    const nextLeft = getMenuLeftOffset(
+      containerRef.current.getBoundingClientRect(),
+      estimatedMenuWidth,
+      props.side,
+    );
 
-    if (spaceToRight >= estimatedMenuWidth) {
-      setAutoSide("left");
-      return;
-    }
-
-    if (spaceToLeft >= estimatedMenuWidth) {
-      setAutoSide("right");
-      return;
-    }
-
-    setAutoSide(spaceToRight >= spaceToLeft ? "left" : "right");
+    setInitialMenuLeft(nextLeft);
   }, [props.side, estimatedMenuWidth]);
 
   useEffect(() => {
-    resolveAutoSide();
-    if (props.side) return;
-
-    window.addEventListener("resize", resolveAutoSide);
-    return () => window.removeEventListener("resize", resolveAutoSide);
-  }, [props.side, resolveAutoSide]);
-
-  const effectiveSide = props.side ?? autoSide;
+    resolveInitialMenuPosition();
+    window.addEventListener("resize", resolveInitialMenuPosition);
+    return () =>
+      window.removeEventListener("resize", resolveInitialMenuPosition);
+  }, [resolveInitialMenuPosition]);
 
   return (
     <div
@@ -81,12 +232,12 @@ export function Dropdown(props: DropdownProps) {
         {({ open }) => (
           <>
             {customButton ? (
-              <div onMouseDownCapture={resolveAutoSide}>
+              <div onMouseDownCapture={resolveInitialMenuPosition}>
                 <Listbox.Button as={Fragment}>{customButton}</Listbox.Button>
               </div>
             ) : (
               <Listbox.Button
-                onMouseDown={resolveAutoSide}
+                onMouseDown={resolveInitialMenuPosition}
                 className="relative z-[30] w-full rounded-xl bg-dropdown-background hover:bg-dropdown-hoverBackground py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none tabbable cursor-pointer"
               >
                 <span className="flex gap-4 items-center truncate">
@@ -103,38 +254,18 @@ export function Dropdown(props: DropdownProps) {
                 </span>
               </Listbox.Button>
             )}
-            <Transition
-              animation="slide-down"
-              show={open}
-              className={`absolute z-[40] min-w-[20px] w-fit max-h-60 overflow-auto rounded-xl bg-dropdown-background py-1 text-white shadow-lg ring-1 ring-black ring-opacity-5 scrollbar-thin scrollbar-track-background-secondary scrollbar-thumb-type-secondary focus:outline-none ${
-                direction === "up" ? "bottom-full mb-4" : "top-full mt-1"
-              } ${effectiveSide === "right" ? "right-0" : "left-0"} ${props.menuClassName ?? ""}`}
-            >
-              {customMenu ? (
-                <Listbox.Options static as={Fragment}>
-                  {customMenu}
-                </Listbox.Options>
-              ) : (
-                <Listbox.Options static>
-                  {props.options.map((opt) => (
-                    <Listbox.Option
-                      className={({ active }) =>
-                        `cursor-pointer flex gap-4 items-center relative select-none py-2 px-4 mx-1 rounded-lg ${
-                          active
-                            ? "bg-background-secondaryHover text-type-link"
-                            : "text-type-secondary"
-                        } ${props.preventWrap ? "whitespace-nowrap" : ""}`
-                      }
-                      key={opt.id}
-                      value={opt}
-                    >
-                      {opt.leftIcon ? opt.leftIcon : null}
-                      {opt.name}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              )}
-            </Transition>
+            <DropdownMenu
+              open={open}
+              direction={direction}
+              side={props.side}
+              containerRef={containerRef}
+              estimatedMenuWidth={estimatedMenuWidth}
+              menuClassName={props.menuClassName}
+              customMenu={customMenu}
+              options={props.options}
+              preventWrap={props.preventWrap}
+              initialLeft={initialMenuLeft}
+            />
           </>
         )}
       </Listbox>
