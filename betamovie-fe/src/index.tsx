@@ -256,16 +256,16 @@ root.render(
           <ReactQueryDevtools initialIsOpen={false} />
           <Suspense fallback={<LoadingScreen type="lazy" />}>
             <ExtensionStatus />
-            <ThemeProvider applyGlobal>
-              <ProgressSyncer />
-              <BookmarkSyncer />
-              <WatchHistorySyncer />
-              <GroupSyncer />
-              <SettingsSyncer />
-              <TheRouter>
+            <TheRouter>
+              <ThemeProvider applyGlobal>
+                <ProgressSyncer />
+                <BookmarkSyncer />
+                <WatchHistorySyncer />
+                <GroupSyncer />
+                <SettingsSyncer />
                 <MigrationRunner />
-              </TheRouter>
-            </ThemeProvider>
+              </ThemeProvider>
+            </TheRouter>
           </Suspense>
         </PersistQueryClientProvider>
       </HelmetProvider>
