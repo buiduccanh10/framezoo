@@ -29,7 +29,6 @@ export interface UseDiscoverMediaProps {
   mediaTitle?: string;
   isCarouselView?: boolean;
   enabled?: boolean;
-  prioritizeLatestOrder?: boolean;
 }
 
 export interface DiscoverMedia {

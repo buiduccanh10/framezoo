@@ -18,6 +18,10 @@ import { MediaItem } from "@/utils/mediaTypes";
 
 const ALL_GENRES_FILTER_ID = "all";
 
+function normalizeCountryCode(value?: string) {
+  return value?.trim().toUpperCase() ?? "";
+}
+
 function SearchSuffix(props: { failed?: boolean; results?: number }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -125,23 +129,27 @@ export function SearchListPart({
   );
 
   const filteredResults = useMemo(() => {
-    let filtered = results;
+    const selectedGenreNumber =
+      selectedGenreId === ALL_GENRES_FILTER_ID ? null : Number(selectedGenreId);
+    const normalizedCountry = normalizeCountryCode(filterCountry);
+    const normalizedYear = filterYear?.trim() ?? "";
 
-    if (selectedGenreId !== ALL_GENRES_FILTER_ID) {
-      const selectedGenreNumber = Number(selectedGenreId);
-      filtered = filtered.filter((result) =>
-        (result.genreIds ?? []).includes(selectedGenreNumber),
-      );
-    }
+    return results.filter((item) => {
+      const matchesGenre =
+        selectedGenreNumber === null
+          ? true
+          : (item.genreIds ?? []).includes(selectedGenreNumber);
+      const matchesYear =
+        normalizedYear === "" || item.year?.toString() === normalizedYear;
+      const matchesCountry =
+        normalizedCountry === "" ||
+        (item.originCountryCodes ?? []).some(
+          (code) => normalizeCountryCode(code) === normalizedCountry,
+        );
 
-    if (filterYear) {
-      filtered = filtered.filter(
-        (item) => item.year?.toString() === filterYear,
-      );
-    }
-
-    return filtered;
-  }, [results, selectedGenreId, filterYear]);
+      return matchesGenre && matchesYear && matchesCountry;
+    });
+  }, [results, selectedGenreId, filterYear, filterCountry]);
 
   useEffect(() => {
     async function runSearch(query: MWQuery) {

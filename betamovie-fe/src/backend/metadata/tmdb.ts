@@ -13,7 +13,6 @@ import {
   queryClient,
 } from "@/utils/queryClient";
 
-import { compareSearchRankables } from "./searchRanking";
 import { MWMediaMeta, MWMediaType, MWSeasonMeta } from "./types/mw";
 import {
   ExternalIdMovieSearchResult,
@@ -190,14 +189,9 @@ interface TMDBCacheKey {
   language: string;
 }
 
-export type TMDBSearchMediaResult = (
+export type TMDBSearchMediaResult =
   | TMDBMovieSearchResult
-  | TMDBShowSearchResult
-) & {
-  titleVariants: string[];
-  bestSourceRank: number;
-  hasPrimaryLanguageResult: boolean;
-};
+  | TMDBShowSearchResult;
 
 const tmdbCache = new SimpleCache<TMDBCacheKey, any>();
 tmdbCache.setCompare((a, b) => {
@@ -243,19 +237,6 @@ function shouldFilterTmdbContent(url: string): boolean {
     /^movie\/\d+$/.test(normalizedUrl) ||
     /^tv\/\d+$/.test(normalizedUrl)
   );
-}
-
-function getSearchResultTitleVariants(
-  result: TMDBMovieSearchResult | TMDBShowSearchResult,
-): string[] {
-  const variants =
-    result.media_type === TMDBContentTypes.MOVIE
-      ? [result.title, result.original_title]
-      : [result.name, result.original_name];
-
-  return [
-    ...new Set(variants.map((variant) => variant?.trim()).filter(Boolean)),
-  ];
 }
 
 export async function get<T>(url: string, params?: object): Promise<T> {
@@ -491,77 +472,7 @@ export async function searchTVShows(
 export async function searchMedia(
   query: string,
 ): Promise<TMDBSearchMediaResult[]> {
-  const primaryLanguage = resolveTmdbLanguage();
-  const searchLanguages = [...new Set([primaryLanguage, "en-US"])];
-
-  const searchResponses = await Promise.all(
-    searchLanguages.flatMap((language) => [
-      searchMovies(query, language).then((results) => ({
-        language,
-        isPrimaryLanguage: language === primaryLanguage,
-        results,
-      })),
-      searchTVShows(query, language).then((results) => ({
-        language,
-        isPrimaryLanguage: language === primaryLanguage,
-        results,
-      })),
-    ]),
-  );
-
-  const mergedResults = new Map<
-    string,
-    {
-      preferredResult: TMDBMovieSearchResult | TMDBShowSearchResult;
-      titleVariants: Set<string>;
-      bestSourceRank: number;
-      hasPrimaryLanguageResult: boolean;
-    }
-  >();
-
-  for (const response of searchResponses) {
-    for (const [index, result] of response.results.entries()) {
-      const key = `${result.media_type}:${result.id}`;
-      const existing = mergedResults.get(key);
-
-      if (!existing) {
-        mergedResults.set(key, {
-          preferredResult: result,
-          titleVariants: new Set(getSearchResultTitleVariants(result)),
-          bestSourceRank: index,
-          hasPrimaryLanguageResult: response.isPrimaryLanguage,
-        });
-        continue;
-      }
-
-      if (response.isPrimaryLanguage && !existing.hasPrimaryLanguageResult) {
-        existing.preferredResult = result;
-      }
-
-      for (const variant of getSearchResultTitleVariants(result)) {
-        existing.titleVariants.add(variant);
-      }
-
-      existing.bestSourceRank = Math.min(existing.bestSourceRank, index);
-      existing.hasPrimaryLanguageResult ||= response.isPrimaryLanguage;
-    }
-  }
-
-  return [...mergedResults.values()]
-    .map(
-      ({
-        preferredResult,
-        titleVariants,
-        bestSourceRank,
-        hasPrimaryLanguageResult,
-      }) => ({
-        ...preferredResult,
-        titleVariants: [...titleVariants],
-        bestSourceRank,
-        hasPrimaryLanguageResult,
-      }),
-    )
-    .sort((a, b) => compareSearchRankables(query, a, b));
+  return multiSearch(query);
 }
 
 export async function generateQuickSearchMediaUrl(

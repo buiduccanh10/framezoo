@@ -355,7 +355,6 @@ export function DiscoverContent({
           sectionTitleOverride={t("discover.carousel.title.movies", {
             category: popularLabel,
           })}
-          prioritizeLatestOrder
           {...filtersProps}
         />
 
@@ -370,7 +369,6 @@ export function DiscoverContent({
           sectionTitleOverride={t("discover.carousel.title.tvshows", {
             category: popularLabel,
           })}
-          prioritizeLatestOrder
           {...filtersProps}
         />
       </>
