@@ -1218,7 +1218,8 @@
   },
   "tmdb": {
     "genres": {
-      "10759": "Action & Adventure"
+      "10759": "Action & Adventure",
+      "10765": "Sci-Fi & Fantasy"
     }
   },
   "watchParty": {

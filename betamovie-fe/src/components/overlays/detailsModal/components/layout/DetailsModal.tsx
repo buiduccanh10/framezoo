@@ -132,6 +132,12 @@ export function DetailsModal({
   }, [shouldShow, modalData, _data]);
 
   useEffect(() => {
+    if (!isShown) {
+      setDetailsData(null);
+    }
+  }, [isShown]);
+
+  useEffect(() => {
     if (isShown && !modalData?.id && !_data?.id && !isLoading) {
       hide();
     }
@@ -179,7 +185,11 @@ export function DetailsModal({
                 {isLoading || !detailsData ? (
                   <DetailsSkeleton />
                 ) : (
-                  <DetailsContent data={detailsData} minimal={minimal} />
+                  <DetailsContent
+                    key={`${detailsData.type}-${detailsData.id}`}
+                    data={detailsData}
+                    minimal={minimal}
+                  />
                 )}
               </div>
             </Flare.Child>

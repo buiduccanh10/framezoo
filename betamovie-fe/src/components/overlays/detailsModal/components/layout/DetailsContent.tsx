@@ -408,7 +408,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
                         opacity: 0,
                       }}
                     >
-                      {genre.name}
+                      {t(`tmdb.genres.${genre.id}`, {
+                        defaultValue: genre.name,
+                      })}
                     </span>
                   ))}
                 </div>
