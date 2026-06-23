@@ -1,6 +1,6 @@
 import { useAuth } from '~/utils/auth';
 import { z } from 'zod';
-import { bookmarks } from '@prisma/client';
+import type { bookmarks } from '~~/prisma/client';
 
 const bookmarkMetaSchema = z.object({
   title: z.string(),

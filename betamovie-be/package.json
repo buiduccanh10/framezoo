@@ -2,11 +2,12 @@
   "name": "betamovie-be",
   "private": true,
   "version": "2.1.5",
+  "type": "module",
   "packageManager": "pnpm@11.8.0",
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
-    "prepare": "prisma generate && nitro prepare",
+    "prepare": "nitro prepare && prisma generate && nitro prepare",
     "preview": "node .output/server/index.mjs",
     "seed": "tsx prisma/seed.ts",
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.mts,.js,.mjs --quiet"
@@ -21,12 +22,12 @@
     "h3": "1.15.11",
     "nitropack": "^2.13.4",
     "prettier": "^3.8.4",
-    "prisma": "^6.19.3",
+    "prisma": "^7.8.0",
     "tsx": "^4.22.4"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^6.19.3",
-    "@prisma/client": "^6.19.3",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "bcryptjs": "^3.0.3",
     "cheerio": "^1.2.0",
     "dotenv": "^17.4.2",
@@ -37,8 +38,5 @@
     "tweetnacl": "^1.0.3",
     "whatwg-url": "^16.0.1",
     "zod": "^4.4.3"
-  },
-  "prisma": {
-    "seed": "pnpm run seed"
   }
 }

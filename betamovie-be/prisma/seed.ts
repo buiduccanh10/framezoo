@@ -1,17 +1,31 @@
-import { PrismaClient } from '@prisma/client';
 import { pbkdf2Sync } from 'crypto';
 import nacl from 'tweetnacl';
+import { createPrismaClient } from './client';
 
-const prisma = new PrismaClient();
+const prisma = createPrismaClient();
 
 function toBase64Url(input: Uint8Array): string {
   const base64 = Buffer.from(input).toString('base64');
   return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 }
 
+function getSeedConfig() {
+  const adminId = process.env.SEED_ADMIN_ID?.trim();
+  const passphrase = process.env.SEED_ADMIN_PASSPHRASE?.trim();
+
+  if (!adminId) {
+    throw new Error('SEED_ADMIN_ID is required');
+  }
+
+  if (!passphrase) {
+    throw new Error('SEED_ADMIN_PASSPHRASE is required');
+  }
+
+  return { adminId, passphrase };
+}
+
 async function main() {
-  const adminId = '00000000-0000-0000-0000-000000000001';
-  const passphrase = 'buiduccanh27102002';
+  const { adminId, passphrase } = getSeedConfig();
 
   // PBKDF2 (HMAC-SHA256) -> 32-byte seed, iterations = 2048, salt = "mnemonic"
   const seed = pbkdf2Sync(passphrase, 'mnemonic', 2048, 32, 'sha256');
