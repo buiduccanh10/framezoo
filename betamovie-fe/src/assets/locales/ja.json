@@ -456,7 +456,8 @@
       "publicHelp": "リンクを知っている人は誰でもこのリストを表示できます。"
     },
     "items": {
-      "empty": "このリストは空です。"
+      "empty": "このリストは空です。",
+      "emptyHelp": "「リストに追加」で映画や番組カードからタイトルを追加し、ここに戻ってラインナップを管理します。"
     },
     "meta": {
       "itemCount": "{{count}} アイテム",
@@ -481,9 +482,24 @@
       "title": "リストに追加"
     },
     "page": {
+      "description": "お気に入り、テーマナイト、次に見るおすすめを厳選し、非公開にしたり、リンクで共有したりできます。",
+      "editingHint": "このリストからカードを削除するには、カードの閉じるボタンをクリックします。",
+      "eyebrow": "コレクション",
+      "itemsEyebrow": "このリストのタイトル",
+      "itemsHint": "左側のリストを選択して参照し、クリーンアップする場合は編集モードを使用します。",
+      "publicCountPlural": "{{count}} 公開リスト",
+      "publicCountSingular": "1 つの公開リスト",
+      "searchEmptyDescription": "別の名前を試すか、検索をクリアしてください。",
+      "searchEmptyTitle": "一致するリストはありません",
+      "searchPlaceholder": "検索リスト",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "最近更新された",
+      "summaryPlural": "{{count}} リスト",
+      "summarySingular": "1 リスト",
       "title": "リスト"
     },
     "public": {
+      "descriptionFallback": "BetaMovie で厳選された共有コレクション。",
       "notFoundDescription": "この共有リンクは見つからないか、もう利用できません。",
       "notFoundTitle": "リストが見つかりません",
       "pageTitle": "共有リスト",

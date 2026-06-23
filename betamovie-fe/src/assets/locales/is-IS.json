@@ -456,7 +456,8 @@
       "publicHelp": "Allir með hlekkinn geta skoðað þennan lista."
     },
     "items": {
-      "empty": "Þessi listi er tómur."
+      "empty": "Þessi listi er tómur.",
+      "emptyHelp": "Bættu við titlum úr hvaða kvikmynd eða sýningarspjaldi sem er með Bæta við lista og komdu svo aftur hingað til að stjórna uppstillingunni."
     },
     "meta": {
       "itemCount": "{{count}} atriði",
@@ -481,9 +482,24 @@
       "title": "Bæta við lista"
     },
     "page": {
+      "description": "Settu saman eftirlæti, þemakvöld og horfðu á næsta val sem þú getur haldið persónulegum eða deilt með tengli.",
+      "editingHint": "Smelltu á lokahnappinn á kortinu til að fjarlægja það af þessum lista.",
+      "eyebrow": "Söfn",
+      "itemsEyebrow": "Titlar á þessum lista",
+      "itemsHint": "Veldu lista til vinstri til að skoða hann, notaðu síðan breytingastillingu þegar þú vilt hreinsa hann upp.",
+      "publicCountPlural": "{{count}} opinberir listar",
+      "publicCountSingular": "1 opinber listi",
+      "searchEmptyDescription": "Prófaðu annað nafn eða hreinsaðu leitina.",
+      "searchEmptyTitle": "Engir samsvarandi listar",
+      "searchPlaceholder": "Leita í listum",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nýlega uppfært",
+      "summaryPlural": "{{count}} listar",
+      "summarySingular": "1 listi",
       "title": "Listar"
     },
     "public": {
+      "descriptionFallback": "Sameiginlegt safn í BetaMovie.",
       "notFoundDescription": "Þessi deilingartengil vantar eða er ekki lengur tiltækur.",
       "notFoundTitle": "Listi fannst ekki",
       "pageTitle": "Sameiginlegur listi",

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -15,6 +15,13 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import { HydratedListItem, StoredList } from "@/stores/lists";
 
+function formatLongDate(value: number) {
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
+
 function VisibilityBadge({ isPublic }: { isPublic: boolean }) {
   const { t } = useTranslation();
 
@@ -25,6 +32,14 @@ function VisibilityBadge({ isPublic }: { isPublic: boolean }) {
         className="text-[10px]"
       />
       {isPublic ? t("lists.visibility.public") : t("lists.visibility.private")}
+    </span>
+  );
+}
+
+function MetaPill(props: { children: ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-sm text-white/80">
+      {props.children}
     </span>
   );
 }
@@ -117,26 +132,46 @@ export function PublicListPage() {
           </div>
         ) : (
           <>
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <Heading1 className="mb-4 text-3xl">{list.name}</Heading1>
-                <div className="flex flex-wrap items-center gap-3">
-                  <VisibilityBadge isPublic={list.public} />
-                  <span className="text-sm text-type-secondary">
-                    {t("lists.meta.itemCount", { count: list.items.length })}
-                  </span>
-                </div>
-                {list.description ? (
-                  <p className="mt-4 max-w-3xl text-type-secondary">
-                    {list.description}
+            <div className="rounded-[2rem] border border-white/10 bg-background-main p-6 md:p-8">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="max-w-3xl">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-type-logo/80">
+                    {t("lists.public.pageTitle")}
                   </p>
-                ) : null}
+                  <Heading1 className="mb-0 mt-3 text-3xl md:text-4xl">
+                    {list.name}
+                  </Heading1>
+
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <VisibilityBadge isPublic={list.public} />
+                    <MetaPill>
+                      {t("lists.meta.itemCount", { count: list.items.length })}
+                    </MetaPill>
+                    <MetaPill>
+                      {t("lists.meta.updatedAt", {
+                        date: formatLongDate(list.updatedAt),
+                      })}
+                    </MetaPill>
+                  </div>
+
+                  <p className="mt-4 max-w-3xl text-type-secondary">
+                    {list.description || t("lists.public.descriptionFallback")}
+                  </p>
+                </div>
+
+                <Button
+                  href="/discover"
+                  theme="secondary"
+                  padding="px-4 py-2 text-sm md:text-base"
+                >
+                  {t("home.search.discover")}
+                </Button>
               </div>
             </div>
 
-            <div className="mt-10">
+            <div className="mt-8">
               {items.length === 0 ? (
-                <div className="rounded-2xl bg-background-main/60 px-6 py-12 text-center text-type-secondary">
+                <div className="rounded-[1.5rem] border border-dashed border-white/10 bg-background-main/60 px-6 py-12 text-center text-type-secondary">
                   {t("lists.items.empty")}
                 </div>
               ) : (

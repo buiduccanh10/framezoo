@@ -456,7 +456,8 @@
       "publicHelp": "Bất kỳ ai có liên kết đều có thể xem danh sách này."
     },
     "items": {
-      "empty": "Danh sách này trống."
+      "empty": "Danh sách này trống.",
+      "emptyHelp": "Thêm tiêu đề từ bất kỳ phim hoặc thẻ chương trình nào bằng Thêm vào danh sách, sau đó quay lại đây để quản lý danh sách."
     },
     "meta": {
       "itemCount": "{{count}} mục",
@@ -481,9 +482,24 @@
       "title": "Thêm vào danh sách"
     },
     "page": {
+      "description": "Tuyển chọn các video yêu thích, đêm chủ đề và các lựa chọn xem tiếp theo mà bạn có thể giữ ở chế độ riêng tư hoặc chia sẻ bằng một liên kết.",
+      "editingHint": "Nhấp vào nút đóng trên thẻ để xóa thẻ đó khỏi danh sách này.",
+      "eyebrow": "Bộ sưu tập",
+      "itemsEyebrow": "Tiêu đề trong danh sách này",
+      "itemsHint": "Chọn danh sách ở bên trái để duyệt qua, sau đó sử dụng chế độ chỉnh sửa khi bạn muốn dọn dẹp danh sách đó.",
+      "publicCountPlural": "{{count}} danh sách công khai",
+      "publicCountSingular": "1 danh sách công khai",
+      "searchEmptyDescription": "Hãy thử tên khác hoặc xóa tìm kiếm của bạn.",
+      "searchEmptyTitle": "Không có danh sách phù hợp",
+      "searchPlaceholder": "Danh sách tìm kiếm",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Đã cập nhật gần đây",
+      "summaryPlural": "{{count}} danh sách",
+      "summarySingular": "1 danh sách",
       "title": "Danh sách"
     },
     "public": {
+      "descriptionFallback": "Một bộ sưu tập được chia sẻ được quản lý trong BetaMovie.",
       "notFoundDescription": "Liên kết chia sẻ này bị thiếu hoặc không còn tồn tại.",
       "notFoundTitle": "Không tìm thấy danh sách",
       "pageTitle": "Danh sách chia sẻ",

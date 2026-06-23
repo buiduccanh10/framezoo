@@ -456,7 +456,8 @@
       "publicHelp": "Qualquer pessoa com o link pode visualizar esta lista."
     },
     "items": {
-      "empty": "Esta lista está vazia."
+      "empty": "Esta lista está vazia.",
+      "emptyHelp": "Adicione títulos de qualquer filme ou cartão de programa com Adicionar à lista e volte aqui para gerenciar a programação."
     },
     "meta": {
       "itemCount": "{{count}} item",
@@ -481,9 +482,24 @@
       "title": "Adicionar à lista"
     },
     "page": {
+      "description": "Selecione favoritos, noites temáticas e opções para assistir a seguir que você pode manter privadas ou compartilhar com um link.",
+      "editingHint": "Clique no botão Fechar em um cartão para removê-lo desta lista.",
+      "eyebrow": "Coleções",
+      "itemsEyebrow": "Títulos nesta lista",
+      "itemsHint": "Selecione uma lista à esquerda para navegar e use o modo de edição quando quiser limpá-la.",
+      "publicCountPlural": "{{count}} listas públicas",
+      "publicCountSingular": "1 lista pública",
+      "searchEmptyDescription": "Tente outro nome ou limpe sua pesquisa.",
+      "searchEmptyTitle": "Nenhuma lista correspondente",
+      "searchPlaceholder": "Listas de pesquisa",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Atualizado recentemente",
+      "summaryPlural": "{{count}} listas",
+      "summarySingular": "1 lista",
       "title": "Listas"
     },
     "public": {
+      "descriptionFallback": "Uma coleção compartilhada com curadoria do BetaMovie.",
       "notFoundDescription": "Este link de compartilhamento está faltando ou não está mais disponível.",
       "notFoundTitle": "Lista não encontrada",
       "pageTitle": "Lista compartilhada",

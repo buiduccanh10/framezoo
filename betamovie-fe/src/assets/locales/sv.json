@@ -456,7 +456,8 @@
       "publicHelp": "Alla som har länken kan se den här listan."
     },
     "items": {
-      "empty": "Den här listan är tom."
+      "empty": "Den här listan är tom.",
+      "emptyHelp": "Lägg till titlar från valfri film eller visa kort med Lägg till i lista och kom sedan tillbaka hit för att hantera sortimentet."
     },
     "meta": {
       "itemCount": "{{count}} objekt",
@@ -481,9 +482,24 @@
       "title": "Lägg till i listan"
     },
     "page": {
+      "description": "Skapa favoriter, temakvällar och se-nästa-val som du kan hålla privat eller dela med en länk.",
+      "editingHint": "Klicka på stängknappen på ett kort för att ta bort det från den här listan.",
+      "eyebrow": "Samlingar",
+      "itemsEyebrow": "Titlar i denna lista",
+      "itemsHint": "Välj en lista till vänster för att bläddra i den och använd sedan redigeringsläget när du vill rensa upp den.",
+      "publicCountPlural": "{{count}} offentliga listor",
+      "publicCountSingular": "1 offentlig lista",
+      "searchEmptyDescription": "Försök med ett annat namn eller rensa sökningen.",
+      "searchEmptyTitle": "Inga matchande listor",
+      "searchPlaceholder": "Sök listor",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nyligen uppdaterad",
+      "summaryPlural": "{{count}} listor",
+      "summarySingular": "1 lista",
       "title": "Listor"
     },
     "public": {
+      "descriptionFallback": "En delad samling kurerad i BetaMovie.",
       "notFoundDescription": "Denna delningslänk saknas eller är inte längre tillgänglig.",
       "notFoundTitle": "Listan hittades inte",
       "pageTitle": "Delad lista",

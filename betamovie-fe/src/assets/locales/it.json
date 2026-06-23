@@ -456,7 +456,8 @@
       "publicHelp": "Chiunque abbia il collegamento può visualizzare questo elenco."
     },
     "items": {
-      "empty": "Questo elenco è vuoto."
+      "empty": "Questo elenco è vuoto.",
+      "emptyHelp": "Aggiungi titoli da qualsiasi scheda di film o programma con Aggiungi all'elenco, quindi torna qui per gestire la scaletta."
     },
     "meta": {
       "itemCount": "{{count}} elemento",
@@ -481,9 +482,24 @@
       "title": "Aggiungi alla lista"
     },
     "page": {
+      "description": "Seleziona i preferiti, le serate a tema e le scelte da guardare in seguito che puoi mantenere privati ​​o condividere con un collegamento.",
+      "editingHint": "Fare clic sul pulsante di chiusura su una carta per rimuoverla dall'elenco.",
+      "eyebrow": "Collezioni",
+      "itemsEyebrow": "Titoli in questo elenco",
+      "itemsHint": "Seleziona un elenco a sinistra per sfogliarlo, quindi utilizza la modalità di modifica quando desideri ripulirlo.",
+      "publicCountPlural": "{{count}} elenchi pubblici",
+      "publicCountSingular": "1 elenco pubblico",
+      "searchEmptyDescription": "Prova un altro nome o cancella la ricerca.",
+      "searchEmptyTitle": "Nessun elenco corrispondente",
+      "searchPlaceholder": "Elenchi di ricerca",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Aggiornato di recente",
+      "summaryPlural": "{{count}} elenchi",
+      "summarySingular": "1 elenco",
       "title": "Elenchi"
     },
     "public": {
+      "descriptionFallback": "Una raccolta condivisa curata in BetaMovie.",
       "notFoundDescription": "Questo collegamento di condivisione è mancante o non più disponibile.",
       "notFoundTitle": "Elenco non trovato",
       "pageTitle": "Elenco condiviso",

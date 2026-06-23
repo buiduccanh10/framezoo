@@ -456,7 +456,8 @@
       "publicHelp": "Calquera persoa que teña a ligazón pode ver esta lista."
     },
     "items": {
-      "empty": "Esta lista está baleira."
+      "empty": "Esta lista está baleira.",
+      "emptyHelp": "Engade títulos de calquera película ou tarxeta de programa con Engadir á lista e, a continuación, volve aquí para xestionar a programación."
     },
     "meta": {
       "itemCount": "{{count}} elemento",
@@ -481,9 +482,24 @@
       "title": "Engadir á Lista"
     },
     "page": {
+      "description": "Selecciona favoritos, noites temáticas e mira as seguintes opcións que podes manter en privado ou compartir cunha ligazón.",
+      "editingHint": "Fai clic no botón de pechar nunha tarxeta para eliminala desta lista.",
+      "eyebrow": "Coleccións",
+      "itemsEyebrow": "Títulos nesta lista",
+      "itemsHint": "Selecciona unha lista da esquerda para buscala e, a continuación, usa o modo de edición cando queiras limpala.",
+      "publicCountPlural": "{{count}} listas públicas",
+      "publicCountSingular": "1 lista pública",
+      "searchEmptyDescription": "Proba con outro nome ou borra a busca.",
+      "searchEmptyTitle": "Non hai listas coincidentes",
+      "searchPlaceholder": "Listas de busca",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Actualizado recentemente",
+      "summaryPlural": "{{count}} listas",
+      "summarySingular": "1 lista",
       "title": "Listas"
     },
     "public": {
+      "descriptionFallback": "Unha colección compartida seleccionada en BetaMovie.",
       "notFoundDescription": "Falta esta ligazón para compartir ou xa non está dispoñible.",
       "notFoundTitle": "Non se atopou a lista",
       "pageTitle": "Lista compartida",

@@ -456,7 +456,8 @@
       "publicHelp": "Kaikki linkin saaneet voivat tarkastella tätä luetteloa."
     },
     "items": {
-      "empty": "Tämä lista on tyhjä."
+      "empty": "Tämä lista on tyhjä.",
+      "emptyHelp": "Lisää nimikkeitä mistä tahansa elokuvasta tai ohjelmakortista Lisää luetteloon -toiminnolla ja palaa sitten tänne hallitsemaan kokoonpanoa."
     },
     "meta": {
       "itemCount": "{{count}} kohde",
@@ -481,9 +482,24 @@
       "title": "Lisää listaan"
     },
     "page": {
+      "description": "Kurkkaa suosikkeja, teemailtoja ja katso seuraavaksi - voit pitää yksityisiä tai jakaa linkin kautta.",
+      "editingHint": "Napsauta kortin sulkemispainiketta poistaaksesi sen tästä luettelosta.",
+      "eyebrow": "Kokoelmat",
+      "itemsEyebrow": "Tämän listan otsikot",
+      "itemsHint": "Valitse vasemmalla oleva luettelo selataksesi sitä ja käytä sitten muokkaustilaa, kun haluat puhdistaa sen.",
+      "publicCountPlural": "{{count}} julkista luetteloa",
+      "publicCountSingular": "1 julkinen lista",
+      "searchEmptyDescription": "Kokeile toista nimeä tai tyhjennä haku.",
+      "searchEmptyTitle": "Ei vastaavia luetteloita",
+      "searchPlaceholder": "Hae luetteloita",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Äskettäin päivitetty",
+      "summaryPlural": "{{count}} luetteloita",
+      "summarySingular": "1 luettelo",
       "title": "Luettelot"
     },
     "public": {
+      "descriptionFallback": "Jaettu kokoelma, joka on kuratoitu BetaMoviessa.",
       "notFoundDescription": "Tämä jakolinkki puuttuu tai ei ole enää saatavilla.",
       "notFoundTitle": "Listaa ei löydy",
       "pageTitle": "Jaettu luettelo",

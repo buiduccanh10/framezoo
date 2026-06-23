@@ -456,7 +456,8 @@
       "publicHelp": "知道該連結的任何人都可以查看此列表。"
     },
     "items": {
-      "empty": "該列表是空的。"
+      "empty": "該列表是空的。",
+      "emptyHelp": "使用“添加到列表”添加任何電影或放映卡的標題，然後返回此處管理陣容。"
     },
     "meta": {
       "itemCount": "{{count}} 項目",
@@ -481,9 +482,24 @@
       "title": "添加到列表"
     },
     "page": {
+      "description": "策劃您最喜歡的節目、主題之夜和下一個觀看精選，您可以將其保密或透過連結分享。",
+      "editingHint": "單擊卡片上的關閉按鈕可將其從此清單中刪除。",
+      "eyebrow": "收藏",
+      "itemsEyebrow": "此清單中的標題",
+      "itemsHint": "選擇左側的清單進行瀏覽，然後在需要清理時使用編輯模式。",
+      "publicCountPlural": "{{count}} 公共列表",
+      "publicCountSingular": "1 公開名單",
+      "searchEmptyDescription": "嘗試其他名稱或清除搜尋。",
+      "searchEmptyTitle": "沒有符合的列表",
+      "searchPlaceholder": "搜尋列表",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "最近更新",
+      "summaryPlural": "{{count}} 列表",
+      "summarySingular": "1 列表",
       "title": "清單"
     },
     "public": {
+      "descriptionFallback": "BetaMovie 中策劃的共享合集。",
       "notFoundDescription": "此共享連結遺失或不再可用。",
       "notFoundTitle": "未找到列表",
       "pageTitle": "共享清單",

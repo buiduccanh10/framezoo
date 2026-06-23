@@ -446,7 +446,8 @@
       "publicHelp": "Anyone with the link can view this list."
     },
     "items": {
-      "empty": "This list is empty."
+      "empty": "This list is empty.",
+      "emptyHelp": "Add titles from any movie or show card with Add to List, then come back here to manage the lineup."
     },
     "meta": {
       "itemCount": "{{count}} item",
@@ -471,9 +472,24 @@
       "title": "Add to List"
     },
     "page": {
+      "description": "Curate favorites, theme nights, and watch-next picks you can keep private or share with a link.",
+      "editingHint": "Click the close button on a card to remove it from this list.",
+      "eyebrow": "Collections",
+      "itemsEyebrow": "Titles in this list",
+      "itemsHint": "Select a list on the left to browse it, then use edit mode when you want to clean it up.",
+      "publicCountPlural": "{{count}} public lists",
+      "publicCountSingular": "1 public list",
+      "searchEmptyDescription": "Try another name or clear your search.",
+      "searchEmptyTitle": "No matching lists",
+      "searchPlaceholder": "Search lists",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Recently updated",
+      "summaryPlural": "{{count}} lists",
+      "summarySingular": "1 list",
       "title": "Lists"
     },
     "public": {
+      "descriptionFallback": "A shared collection curated in BetaMovie.",
       "notFoundDescription": "This share link is missing or no longer available.",
       "notFoundTitle": "List not found",
       "pageTitle": "Shared list",

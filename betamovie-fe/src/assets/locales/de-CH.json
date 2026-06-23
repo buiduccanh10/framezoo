@@ -456,7 +456,8 @@
       "publicHelp": "Jeder, der über den Link verfügt, kann diese Liste anzeigen."
     },
     "items": {
-      "empty": "Diese Liste ist leer."
+      "empty": "Diese Liste ist leer.",
+      "emptyHelp": "Fügen Sie Titel aus jedem Film oder jeder Showkarte mit „Zur Liste hinzufügen“ hinzu und kehren Sie dann hierher zurück, um die Liste zu verwalten."
     },
     "meta": {
       "itemCount": "{{count}} Artikel",
@@ -481,9 +482,24 @@
       "title": "Zur Liste hinzufügen"
     },
     "page": {
+      "description": "Stellen Sie Favoriten, Themenabende und „Nächstes ansehen“-Angebote zusammen, die Sie privat halten oder über einen Link teilen können.",
+      "editingHint": "Klicken Sie auf einer Karte auf die Schaltfläche „Schließen“, um sie aus dieser Liste zu entfernen.",
+      "eyebrow": "Sammlungen",
+      "itemsEyebrow": "Titel in dieser Liste",
+      "itemsHint": "Wählen Sie links eine Liste aus, um sie zu durchsuchen, und verwenden Sie dann den Bearbeitungsmodus, wenn Sie sie bereinigen möchten.",
+      "publicCountPlural": "{{count}} öffentliche Listen",
+      "publicCountSingular": "1 öffentliche Liste",
+      "searchEmptyDescription": "Versuchen Sie es mit einem anderen Namen oder löschen Sie Ihre Suche.",
+      "searchEmptyTitle": "Keine passenden Listen",
+      "searchPlaceholder": "Suchlisten",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Kürzlich aktualisiert",
+      "summaryPlural": "{{count}} Listen",
+      "summarySingular": "1 Liste",
       "title": "Listen"
     },
     "public": {
+      "descriptionFallback": "Eine in BetaMovie kuratierte gemeinsame Sammlung.",
       "notFoundDescription": "Dieser Freigabelink fehlt oder ist nicht mehr verfügbar.",
       "notFoundTitle": "Liste nicht gefunden",
       "pageTitle": "Geteilte Liste",

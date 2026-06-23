@@ -456,7 +456,8 @@
       "publicHelp": "כל מי שיש לו את הקישור יכול לצפות ברשימה הזו."
     },
     "items": {
-      "empty": "רשימה זו ריקה."
+      "empty": "רשימה זו ריקה.",
+      "emptyHelp": "הוסף כותרות מכל סרט או כרטיס הצגה עם הוסף לרשימה, ואז חזור לכאן כדי לנהל את ההרכב."
     },
     "meta": {
       "itemCount": "{{count}} פריט",
@@ -481,9 +482,24 @@
       "title": "הוסף לרשימה"
     },
     "page": {
+      "description": "אצור מועדפים, ערבי נושא ובחירות לצפייה הבאה שתוכל לשמור על פרטיות או לשתף באמצעות קישור.",
+      "editingHint": "לחץ על לחצן הסגירה בכרטיס כדי להסיר אותו מרשימה זו.",
+      "eyebrow": "אוספים",
+      "itemsEyebrow": "כותרות ברשימה זו",
+      "itemsHint": "בחר רשימה בצד שמאל כדי לעיין בה, ולאחר מכן השתמש במצב עריכה כשתרצה לנקות אותה.",
+      "publicCountPlural": "{{count}} רשימות ציבוריות",
+      "publicCountSingular": "רשימה ציבורית אחת",
+      "searchEmptyDescription": "נסה שם אחר או נקה את החיפוש.",
+      "searchEmptyTitle": "אין רשימות מתאימות",
+      "searchPlaceholder": "חפש רשימות",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "עודכן לאחרונה",
+      "summaryPlural": "{{count}} רשימות",
+      "summarySingular": "רשימה 1",
       "title": "רשימות"
     },
     "public": {
+      "descriptionFallback": "אוסף משותף שנאסף ב-BetaMovie.",
       "notFoundDescription": "קישור שיתוף זה חסר או אינו זמין עוד.",
       "notFoundTitle": "רשימה לא נמצאה",
       "pageTitle": "רשימה משותפת",

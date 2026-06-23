@@ -456,7 +456,8 @@
       "publicHelp": "Vsakdo s povezavo si lahko ogleda ta seznam."
     },
     "items": {
-      "empty": "Ta seznam je prazen."
+      "empty": "Ta seznam je prazen.",
+      "emptyHelp": "Dodajte naslove iz katerega koli filma ali kartice s predstavo z možnostjo Dodaj na seznam, nato se vrnite sem in upravljajte izbor."
     },
     "meta": {
       "itemCount": "{{count}} predmet",
@@ -481,9 +482,24 @@
       "title": "Dodaj na seznam"
     },
     "page": {
+      "description": "Pripravite priljubljene, tematske večere in izbire za naslednji ogled, ki jih lahko ohranite zasebne ali jih delite s povezavo.",
+      "editingHint": "Kliknite gumb za zapiranje na kartici, da jo odstranite s tega seznama.",
+      "eyebrow": "Zbirke",
+      "itemsEyebrow": "Naslovi na tem seznamu",
+      "itemsHint": "Izberite seznam na levi, da ga prebrskate, nato pa uporabite način urejanja, ko ga želite počistiti.",
+      "publicCountPlural": "{{count}} javnih seznamov",
+      "publicCountSingular": "1 javni seznam",
+      "searchEmptyDescription": "Poskusite z drugim imenom ali počistite iskanje.",
+      "searchEmptyTitle": "Ni ustreznih seznamov",
+      "searchPlaceholder": "Iskalni seznami",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nedavno posodobljeno",
+      "summaryPlural": "{{count}} seznamov",
+      "summarySingular": "1 seznam",
       "title": "Seznami"
     },
     "public": {
+      "descriptionFallback": "Skupna zbirka, kurirana v BetaMovie.",
       "notFoundDescription": "Ta povezava za skupno rabo manjka ali ni več na voljo.",
       "notFoundTitle": "Seznama ni mogoče najti",
       "pageTitle": "Skupni seznam",

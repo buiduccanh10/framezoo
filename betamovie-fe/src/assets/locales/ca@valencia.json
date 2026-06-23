@@ -456,7 +456,8 @@
       "publicHelp": "Qualsevol persona amb l'enllaç pot veure aquesta llista."
     },
     "items": {
-      "empty": "Aquesta llista és buida."
+      "empty": "Aquesta llista és buida.",
+      "emptyHelp": "Afegeix títols de qualsevol pel·lícula o targeta de programa amb Afegeix a la llista i, a continuació, torna aquí per gestionar la programació."
     },
     "meta": {
       "itemCount": "{{count}} element",
@@ -481,9 +482,24 @@
       "title": "Afegeix a la llista"
     },
     "page": {
+      "description": "Seleccioneu els preferits, les nits temàtiques i les seleccions següents que podeu mantenir en privat o compartir amb un enllaç.",
+      "editingHint": "Feu clic al botó de tancament d'una targeta per eliminar-la d'aquesta llista.",
+      "eyebrow": "Col·leccions",
+      "itemsEyebrow": "Títols d'aquesta llista",
+      "itemsHint": "Seleccioneu una llista a l'esquerra per explorar-la i, a continuació, utilitzeu el mode d'edició quan vulgueu netejar-la.",
+      "publicCountPlural": "{{count}} llistes públiques",
+      "publicCountSingular": "1 llista pública",
+      "searchEmptyDescription": "Prova amb un altre nom o esborra la cerca.",
+      "searchEmptyTitle": "No hi ha llistes coincidents",
+      "searchPlaceholder": "Cerca llistes",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Actualitzat recentment",
+      "summaryPlural": "{{count}} llistes",
+      "summarySingular": "1 llista",
       "title": "Llistes"
     },
     "public": {
+      "descriptionFallback": "Una col·lecció compartida comissariada a BetaMovie.",
       "notFoundDescription": "Falta aquest enllaç per compartir o ja no està disponible.",
       "notFoundTitle": "No s'ha trobat la llista",
       "pageTitle": "Llista compartida",

@@ -456,7 +456,8 @@
       "publicHelp": "Ikviens, kam ir saite, var skatīt šo sarakstu."
     },
     "items": {
-      "empty": "Šis saraksts ir tukšs."
+      "empty": "Šis saraksts ir tukšs.",
+      "emptyHelp": "Pievienojiet nosaukumus no jebkuras filmas vai pārraides kartītes, izmantojot funkciju Pievienot sarakstam, un pēc tam atgriezieties šeit, lai pārvaldītu sarakstu."
     },
     "meta": {
       "itemCount": "{{count}} vienums",
@@ -481,9 +482,24 @@
       "title": "Pievienot sarakstam"
     },
     "page": {
+      "description": "Atlasiet izlases, tematiskos vakarus un skatieties nākamos piedāvājumus, kurus varat paturēt privāti vai kopīgot, izmantojot saiti.",
+      "editingHint": "Noklikšķiniet uz kartes aizvēršanas pogas, lai to noņemtu no šī saraksta.",
+      "eyebrow": "Kolekcijas",
+      "itemsEyebrow": "Nosaukumi šajā sarakstā",
+      "itemsHint": "Kreisajā pusē atlasiet sarakstu, lai to pārlūkotu, un pēc tam izmantojiet rediģēšanas režīmu, kad vēlaties to tīrīt.",
+      "publicCountPlural": "{{count}} publiskie saraksti",
+      "publicCountSingular": "1 publisks saraksts",
+      "searchEmptyDescription": "Izmēģiniet citu nosaukumu vai notīriet meklēšanu.",
+      "searchEmptyTitle": "Nav atbilstošu sarakstu",
+      "searchPlaceholder": "Meklēt sarakstus",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nesen atjaunināts",
+      "summaryPlural": "{{count}} sarakstus",
+      "summarySingular": "1 saraksts",
       "title": "Saraksti"
     },
     "public": {
+      "descriptionFallback": "Koplietojama kolekcija, kas kurēta pakalpojumā BetaMovie.",
       "notFoundDescription": "Šīs kopīgošanas saites trūkst vai tā vairs nav pieejama.",
       "notFoundTitle": "Saraksts nav atrasts",
       "pageTitle": "Kopīgots saraksts",

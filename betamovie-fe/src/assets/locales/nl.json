@@ -456,7 +456,8 @@
       "publicHelp": "Iedereen met de link kan deze lijst bekijken."
     },
     "items": {
-      "empty": "Deze lijst is leeg."
+      "empty": "Deze lijst is leeg.",
+      "emptyHelp": "Voeg titels uit elke film of showkaart toe met Toevoegen aan lijst en kom dan hier terug om de line-up te beheren."
     },
     "meta": {
       "itemCount": "{{count}} artikel",
@@ -481,9 +482,24 @@
       "title": "Toevoegen aan lijst"
     },
     "page": {
+      "description": "Beheer favorieten, thema-avonden en bekijk de volgende keuzes die u privé kunt houden of kunt delen via een link.",
+      "editingHint": "Klik op de sluitknop op een kaart om deze uit deze lijst te verwijderen.",
+      "eyebrow": "Collecties",
+      "itemsEyebrow": "Titels in deze lijst",
+      "itemsHint": "Selecteer een lijst aan de linkerkant om er doorheen te bladeren en gebruik vervolgens de bewerkingsmodus als u deze wilt opschonen.",
+      "publicCountPlural": "{{count}} openbare lijsten",
+      "publicCountSingular": "1 openbare lijst",
+      "searchEmptyDescription": "Probeer een andere naam of wis uw zoekopdracht.",
+      "searchEmptyTitle": "Geen overeenkomende lijsten",
+      "searchPlaceholder": "Zoeklijsten",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Onlangs bijgewerkt",
+      "summaryPlural": "{{count}} lijsten",
+      "summarySingular": "1 lijst",
       "title": "Lijsten"
     },
     "public": {
+      "descriptionFallback": "Een gedeelde collectie samengesteld in BetaMovie.",
       "notFoundDescription": "Deze deellink ontbreekt of is niet langer beschikbaar.",
       "notFoundTitle": "Lijst niet gevonden",
       "pageTitle": "Gedeelde lijst",
