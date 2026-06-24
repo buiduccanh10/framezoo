@@ -60,6 +60,7 @@ overrides:
   'dompurify@<=3.4.10': '>=3.4.11'
   'undici@<6.27.0': '>=6.27.0'
   '@hono/node-server@<1.19.13': ^1.19.13
+  'jsdom>undici': '^7.28.0'
 
 minimumReleaseAgeExclude:
   - '@hono/node-server@1.19.13'
