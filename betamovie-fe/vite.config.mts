@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
     envDir: workspaceRoot,
     base: env.VITE_BASE_URL || "/",
     plugins: [
-      million.vite({ auto: true, mute: true }),
+      million.vite({ auto: true, log: false }),
       handlebars({
         vars: {
           opensearchEnabled: env.VITE_OPENSEARCH_ENABLED === "true",
@@ -39,23 +39,7 @@ export default defineConfig(({ mode }) => {
           env,
         },
       }),
-      react({
-        babel: {
-          presets: [
-            "@babel/preset-typescript",
-            [
-              "@babel/preset-env",
-              {
-                modules: false,
-                useBuiltIns: "entry",
-                corejs: {
-                  version: "3.34",
-                },
-              },
-            ],
-          ],
-        },
-      }),
+      react(),
       VitePWA({
         disable: env.VITE_PWA_ENABLED !== "true",
         registerType: "prompt",
@@ -129,7 +113,7 @@ export default defineConfig(({ mode }) => {
 
     build: {
       sourcemap: mode !== "production",
-      rollupOptions: {
+      rolldownOptions: {
         output: {
           manualChunks(id: string) {
             if (
@@ -182,6 +166,18 @@ export default defineConfig(({ mode }) => {
 
     test: {
       environment: "jsdom",
+      execArgv: ["--no-webstorage"],
+      server: {
+        deps: {
+          inline: [
+            "@csstools/css-calc",
+            "@asamuzakjp/css-color",
+            "@csstools/css-color-parser",
+            "@csstools/css-parser-algorithms",
+            "@csstools/css-tokenizer",
+          ],
+        },
+      },
     },
   };
 });

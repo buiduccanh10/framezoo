@@ -1,7 +1,7 @@
 {
   "name": "betamovie",
   "private": true,
-  "packageManager": "pnpm@11.8.0",
+  "packageManager": "pnpm@11.9.0",
   "scripts": {
     "dev": "pnpm --filter betamovie-fe dev",
     "dev:fe": "pnpm --filter betamovie-fe dev",
