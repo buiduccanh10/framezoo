@@ -5,6 +5,8 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
+import { getIMDbMetadata } from "@/backend/metadata/imdb";
+import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
 import { getMediaLogo } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Button } from "@/components/buttons/Button";
@@ -14,6 +16,7 @@ import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { getRTIcon } from "@/utils/rottenTomatoes";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
 import { RandomMovieButton } from "./RandomMovieButton";
@@ -43,6 +46,18 @@ interface FeaturedCarouselProps {
   searching?: boolean;
   shorter?: boolean;
   forcedCategory?: "movies" | "tvshows";
+}
+
+interface FeaturedIMDbData {
+  rating: number;
+  votes: number;
+}
+
+interface FeaturedRTData {
+  title: string;
+  tomatoIcon: "certified_fresh" | "fresh" | "rotten";
+  tomatoScore: number;
+  url: string;
 }
 
 function mergeFeaturedPools<T extends { type: "movie" | "show" }>(
@@ -165,10 +180,16 @@ export function FeaturedCarousel({
   const [isLoading, setIsLoading] = useState(true);
 
   const [logoUrl, setLogoUrl] = useState<string | undefined>();
+  const [imdbData, setImdbData] = useState<FeaturedIMDbData | null>(null);
+  const [rtData, setRtData] = useState<FeaturedRTData | null>(null);
+  const [isLoadingImdb, setIsLoadingImdb] = useState(false);
+  const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const logoFetchController = useRef<AbortController | null>(null);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
+  const imdbCacheRef = useRef<Record<string, FeaturedIMDbData | null>>({});
+  const rtCacheRef = useRef<Record<string, FeaturedRTData | null>>({});
   const navigate = useNavigate();
 
   const enableImageLogos = usePreferencesStore(
@@ -508,6 +529,138 @@ export function FeaturedCarousel({
     };
   }, [currentIndex, media]);
 
+  useEffect(() => {
+    let isCancelled = false;
+    const mediaId = currentMedia?.id;
+    const mediaType = currentMedia?.type;
+    const mediaTitle = currentMedia?.title || currentMedia?.name;
+    const mediaImdbId = currentMedia?.external_ids?.imdb_id;
+    const mediaReleaseDate =
+      currentMedia?.release_date || currentMedia?.first_air_date;
+
+    if (!mediaId || !mediaType) {
+      setImdbData(null);
+      setRtData(null);
+      setIsLoadingImdb(false);
+      setIsLoadingRt(false);
+      return () => {
+        isCancelled = true;
+      };
+    }
+
+    const cacheKey = `${mediaType}-${mediaId}`;
+
+    const fetchImdbData = async () => {
+      if (!mediaImdbId) {
+        setImdbData(null);
+        setIsLoadingImdb(false);
+        return;
+      }
+
+      if (
+        Object.prototype.hasOwnProperty.call(imdbCacheRef.current, cacheKey)
+      ) {
+        setImdbData(imdbCacheRef.current[cacheKey]);
+        setIsLoadingImdb(false);
+        return;
+      }
+
+      setImdbData(null);
+      setIsLoadingImdb(true);
+
+      try {
+        const imdbMetadata = await getIMDbMetadata(
+          mediaImdbId,
+          undefined,
+          undefined,
+          formattedLanguage,
+        );
+
+        if (isCancelled) return;
+
+        const normalizedImdbData =
+          imdbMetadata &&
+          typeof imdbMetadata.imdb_rating === "number" &&
+          typeof imdbMetadata.votes === "number"
+            ? {
+                rating: imdbMetadata.imdb_rating,
+                votes: imdbMetadata.votes,
+              }
+            : null;
+
+        imdbCacheRef.current[cacheKey] = normalizedImdbData;
+        setImdbData(normalizedImdbData);
+      } catch (error) {
+        if (!isCancelled) {
+          imdbCacheRef.current[cacheKey] = null;
+          setImdbData(null);
+        }
+        console.error("Failed to fetch featured IMDb data:", error);
+      } finally {
+        if (!isCancelled) {
+          setIsLoadingImdb(false);
+        }
+      }
+    };
+
+    const fetchRtData = async () => {
+      if (!mediaTitle) {
+        setRtData(null);
+        setIsLoadingRt(false);
+        return;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(rtCacheRef.current, cacheKey)) {
+        setRtData(rtCacheRef.current[cacheKey]);
+        setIsLoadingRt(false);
+        return;
+      }
+
+      setRtData(null);
+      setIsLoadingRt(true);
+
+      try {
+        const rtMetadata = await getRottenTomatoesMetadata(
+          mediaTitle,
+          mediaReleaseDate
+            ? new Date(mediaReleaseDate).getFullYear()
+            : undefined,
+        );
+
+        if (isCancelled) return;
+
+        rtCacheRef.current[cacheKey] = rtMetadata;
+        setRtData(rtMetadata);
+      } catch (error) {
+        if (!isCancelled) {
+          rtCacheRef.current[cacheKey] = null;
+          setRtData(null);
+        }
+        console.error("Failed to fetch featured Rotten Tomatoes data:", error);
+      } finally {
+        if (!isCancelled) {
+          setIsLoadingRt(false);
+        }
+      }
+    };
+
+    void fetchImdbData();
+    void fetchRtData();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [
+    currentMedia?.id,
+    currentMedia?.type,
+    currentMedia?.title,
+    currentMedia?.name,
+    currentMedia?.external_ids?.imdb_id,
+    currentMedia?.release_date,
+    currentMedia?.first_air_date,
+    formattedLanguage,
+  ]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -548,6 +701,9 @@ export function FeaturedCarousel({
   }
 
   const mediaTitle = currentMedia.title || currentMedia.name;
+  const mediaYear = currentMedia.release_date || currentMedia.first_air_date;
+  const inlineLoadingClass =
+    "h-4 w-14 rounded bg-white/10 animate-pulse inline-block";
 
   let searchClasses = "";
   if (searching) searchClasses = "opacity-0 transition-opacity duration-300";
@@ -697,23 +853,65 @@ export function FeaturedCarousel({
             )}
             {/* TMDB Rating and Year/Seasons */}
             <div className="flex items-center gap-2 text-sm text-white/80 mb-4">
-              {currentMedia?.vote_average && (
+              {typeof currentMedia?.vote_average === "number" && (
                 <div className="flex items-center gap-1">
                   <Icon icon={Icons.TMDB} />
                   <span>{currentMedia.vote_average.toFixed(1)}</span>
-                  {currentMedia.vote_count && (
+                  {typeof currentMedia.vote_count === "number" && (
                     <span className="text-white/60">
                       ({currentMedia.vote_count.toLocaleString()})
                     </span>
                   )}
                 </div>
               )}
-              {currentMedia?.release_date && (
+
+              {(isLoadingImdb || imdbData) && (
                 <>
                   <span className="text-white/60">•</span>
-                  <span>
-                    {new Date(currentMedia.release_date).getFullYear()}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <Icon icon={Icons.IMDB} className="text-yellow-400" />
+                    {isLoadingImdb ? (
+                      <span className={inlineLoadingClass} />
+                    ) : (
+                      <span>{imdbData?.rating.toFixed(1)}</span>
+                    )}
+                    {!isLoadingImdb && typeof imdbData?.votes === "number" && (
+                      <span className="text-white/60">
+                        ({imdbData.votes.toLocaleString()})
+                      </span>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {(isLoadingRt || rtData) && (
+                <>
+                  <span className="text-white/60">•</span>
+                  <div className="flex items-center gap-1">
+                    {rtData ? (
+                      <img
+                        src={getRTIcon(rtData.tomatoIcon)}
+                        alt="Tomatometer"
+                        className="h-4 w-4"
+                      />
+                    ) : (
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-[#fa320a]">
+                        RT
+                      </span>
+                    )}
+                    {isLoadingRt ? (
+                      <span className={inlineLoadingClass} />
+                    ) : (
+                      <span>{rtData?.tomatoScore}%</span>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {mediaYear && (
+                <>
+                  <span className="text-white/60">•</span>
+                  <span>{new Date(mediaYear).getFullYear()}</span>
                 </>
               )}
               {currentMedia?.type === "show" &&
