@@ -62,13 +62,13 @@ const releaseDir = path.join(desktopDir, 'release');
 console.log(`\nCopying packaged builds (v${version}) from ${releaseDir} to ${downloadsDir}...`);
 
 const filesToCopy = [
-  `BetaMovie-${version}-arm64.dmg`,
-  `BetaMovie-${version}-x64.dmg`,
-  `BetaMovie-${version}-universal.dmg`,
-  `BetaMovie-${version}-x64.exe`,
-  `BetaMovie-${version}-arm64.exe`,
-  `BetaMovie-${version}-x64.zip`,
-  `BetaMovie-${version}-arm64.zip`
+  `AlphaFlix-${version}-arm64.dmg`,
+  `AlphaFlix-${version}-x64.dmg`,
+  `AlphaFlix-${version}-universal.dmg`,
+  `AlphaFlix-${version}-x64.exe`,
+  `AlphaFlix-${version}-arm64.exe`,
+  `AlphaFlix-${version}-x64.zip`,
+  `AlphaFlix-${version}-arm64.zip`
 ];
 
 let copiedCount = 0;

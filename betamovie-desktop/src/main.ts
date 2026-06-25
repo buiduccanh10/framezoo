@@ -8,8 +8,8 @@ import {
 } from "electron";
 import path from "node:path";
 
-const APP_ID = "com.betamovie.desktop";
-const APP_NAME = "BetaMovie";
+const APP_ID = "com.alphaflix.desktop";
+const APP_NAME = "AlphaFlix";
 const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";

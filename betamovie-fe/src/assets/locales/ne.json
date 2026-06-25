@@ -499,7 +499,7 @@
       "title": "सूचीहरू"
     },
     "public": {
-      "descriptionFallback": "BetaMovie मा क्युरेट गरिएको साझा संग्रह।",
+      "descriptionFallback": "AlphaFlix मा क्युरेट गरिएको साझा संग्रह।",
       "notFoundDescription": "यो साझेदारी लिङ्क हराइरहेको छ वा अब उपलब्ध छैन।",
       "notFoundTitle": "सूची फेला परेन",
       "pageTitle": "साझा सूची",

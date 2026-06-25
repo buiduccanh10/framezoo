@@ -499,7 +499,7 @@
       "title": "Listar"
     },
     "public": {
-      "descriptionFallback": "Sameiginlegt safn í BetaMovie.",
+      "descriptionFallback": "Sameiginlegt safn í AlphaFlix.",
       "notFoundDescription": "Þessi deilingartengil vantar eða er ekki lengur tiltækur.",
       "notFoundTitle": "Listi fannst ekki",
       "pageTitle": "Sameiginlegur listi",

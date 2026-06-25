@@ -32,8 +32,8 @@
     "wait-on": "^9.0.3"
   },
   "build": {
-    "appId": "com.betamovie.desktop",
-    "productName": "BetaMovie",
+    "appId": "com.alphaflix.desktop",
+    "productName": "AlphaFlix",
     "artifactName": "${productName}-${version}-${arch}.${ext}",
     "asar": true,
     "directories": {
@@ -49,7 +49,7 @@
       "README.txt"
     ],
     "extraMetadata": {
-      "description": "BetaMovie desktop app"
+      "description": "AlphaFlix desktop app"
     },
     "mac": {
       "target": [

@@ -499,7 +499,7 @@
       "title": "Lister"
     },
     "public": {
-      "descriptionFallback": "En delt samling kurateret i BetaMovie.",
+      "descriptionFallback": "En delt samling kurateret i AlphaFlix.",
       "notFoundDescription": "Dette delelink mangler eller er ikke længere tilgængeligt.",
       "notFoundTitle": "Listen blev ikke fundet",
       "pageTitle": "Delt liste",

@@ -489,7 +489,7 @@
       "title": "Lists"
     },
     "public": {
-      "descriptionFallback": "A shared collection curated in BetaMovie.",
+      "descriptionFallback": "A shared collection curated in AlphaFlix.",
       "notFoundDescription": "This share link is missing or no longer available.",
       "notFoundTitle": "List not found",
       "pageTitle": "Shared list",

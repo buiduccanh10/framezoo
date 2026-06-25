@@ -499,7 +499,7 @@
       "title": "Danh sách"
     },
     "public": {
-      "descriptionFallback": "Một bộ sưu tập được chia sẻ được quản lý trong BetaMovie.",
+      "descriptionFallback": "Một bộ sưu tập được chia sẻ được quản lý trong AlphaFlix.",
       "notFoundDescription": "Liên kết chia sẻ này bị thiếu hoặc không còn tồn tại.",
       "notFoundTitle": "Không tìm thấy danh sách",
       "pageTitle": "Danh sách chia sẻ",
@@ -601,7 +601,7 @@
     },
     "install": {
       "genericGuide": "Trình duyệt của bạn không hỗ trợ hộp thoại cài đặt PWA tự động.\nBạn có thể cài bằng cách dùng menu trình duyệt (ví dụ: \"Install app\", \"Create shortcut\", hoặc \"Add to Dock/Home Screen\").",
-      "iosSafariGuide": "Để cài BetaMovie như ứng dụng:\n\n1. Nhấn nút Chia sẻ (biểu tượng hình vuông có mũi tên).\n2. Chọn \"Thêm vào Màn hình chính\" / \"Add to Home Screen\".\n3. Nhấn Thêm."
+      "iosSafariGuide": "Để cài AlphaFlix như ứng dụng:\n\n1. Nhấn nút Chia sẻ (biểu tượng hình vuông có mũi tên).\n2. Chọn \"Thêm vào Màn hình chính\" / \"Add to Home Screen\".\n3. Nhấn Thêm."
     },
     "menu": {
       "accountMenu": "Mở menu tài khoản",

@@ -499,7 +499,7 @@
       "title": "Listeler"
     },
     "public": {
-      "descriptionFallback": "BetaMovie'de seçilmiş ortak bir koleksiyon.",
+      "descriptionFallback": "AlphaFlix'de seçilmiş ortak bir koleksiyon.",
       "notFoundDescription": "Bu paylaşım bağlantısı eksik veya artık mevcut değil.",
       "notFoundTitle": "Liste bulunamadı",
       "pageTitle": "Paylaşılan liste",
@@ -601,7 +601,7 @@
     },
     "install": {
       "genericGuide": "Tarayıcınız otomatik PWA yükleme istemini desteklemiyor.\nYine de tarayıcı menüsünü kullanarak yükleme yapabilirsiniz (örneğin: 'Uygulamayı yükle', 'Kısayol oluştur' veya 'Dock'a/Ana Ekrana Ekle').",
-      "iosSafariGuide": "BetaMovie'yi uygulama olarak yüklemek için:\n\n1. Paylaş düğmesine dokunun (oklu kare).\n2. 'Ana Ekrana Ekle'yi seçin.\n3. Ekle'ye dokunun."
+      "iosSafariGuide": "AlphaFlix'yi uygulama olarak yüklemek için:\n\n1. Paylaş düğmesine dokunun (oklu kare).\n2. 'Ana Ekrana Ekle'yi seçin.\n3. Ekle'ye dokunun."
     },
     "menu": {
       "accountMenu": "Hesap menüsünü aç",

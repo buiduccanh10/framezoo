@@ -499,7 +499,7 @@
       "title": "তালিকা"
     },
     "public": {
-      "descriptionFallback": "BetaMovie-এ কিউরেট করা একটি শেয়ার করা সংগ্রহ।",
+      "descriptionFallback": "AlphaFlix-এ কিউরেট করা একটি শেয়ার করা সংগ্রহ।",
       "notFoundDescription": "এই শেয়ার লিঙ্ক অনুপস্থিত বা আর উপলব্ধ নেই.",
       "notFoundTitle": "তালিকা পাওয়া যায়নি",
       "pageTitle": "ভাগ করা তালিকা",

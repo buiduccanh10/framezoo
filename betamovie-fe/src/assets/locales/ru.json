@@ -499,7 +499,7 @@
       "title": "Списки"
     },
     "public": {
-      "descriptionFallback": "Общая коллекция, созданная в BetaMovie.",
+      "descriptionFallback": "Общая коллекция, созданная в AlphaFlix.",
       "notFoundDescription": "Эта ссылка для общего доступа отсутствует или больше не доступна.",
       "notFoundTitle": "Список не найден",
       "pageTitle": "Общий список",
