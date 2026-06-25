@@ -499,7 +499,7 @@
       "title": "Listor"
     },
     "public": {
-      "descriptionFallback": "En delad samling kurerad i BetaMovie.",
+      "descriptionFallback": "En delad samling kurerad i AlphaFlix.",
       "notFoundDescription": "Denna delningslänk saknas eller är inte längre tillgänglig.",
       "notFoundTitle": "Listan hittades inte",
       "pageTitle": "Delad lista",

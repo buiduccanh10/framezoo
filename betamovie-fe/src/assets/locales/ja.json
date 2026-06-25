@@ -499,7 +499,7 @@
       "title": "リスト"
     },
     "public": {
-      "descriptionFallback": "BetaMovie で厳選された共有コレクション。",
+      "descriptionFallback": "AlphaFlix で厳選された共有コレクション。",
       "notFoundDescription": "この共有リンクは見つからないか、もう利用できません。",
       "notFoundTitle": "リストが見つかりません",
       "pageTitle": "共有リスト",

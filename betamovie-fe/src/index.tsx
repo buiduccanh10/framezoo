@@ -220,7 +220,7 @@ function TheRouter(props: { children: ReactNode }) {
 function ExtensionStatus() {
   const { t } = useTranslation();
   const [state] = useAsyncFn(async () => {
-    if (!isExtensionActiveCached) {
+    if (!isExtensionActiveCached()) {
       return extensionInfo();
     }
   });

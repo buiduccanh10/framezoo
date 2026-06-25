@@ -499,7 +499,7 @@
       "title": "Listák"
     },
     "public": {
-      "descriptionFallback": "Megosztott gyűjtemény a BetaMovie-ban.",
+      "descriptionFallback": "Megosztott gyűjtemény a AlphaFlix-ban.",
       "notFoundDescription": "Ez a megosztási link hiányzik vagy már nem érhető el.",
       "notFoundTitle": "A lista nem található",
       "pageTitle": "Megosztott lista",

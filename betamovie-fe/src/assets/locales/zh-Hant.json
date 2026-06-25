@@ -499,7 +499,7 @@
       "title": "清單"
     },
     "public": {
-      "descriptionFallback": "BetaMovie 中策劃的共享合集。",
+      "descriptionFallback": "AlphaFlix 中策劃的共享合集。",
       "notFoundDescription": "此共享連結遺失或不再可用。",
       "notFoundTitle": "未找到列表",
       "pageTitle": "共享清單",
@@ -601,7 +601,7 @@
     },
     "install": {
       "genericGuide": "您的瀏覽器不支援自動 PWA 安裝提示。\n您仍然可以使用瀏覽器選單進行安裝（例如：「安裝應用程式」、「建立捷徑」或「新增至 Dock/主畫面」）。",
-      "iosSafariGuide": "要將 BetaMovie 安裝為應用程式：\n\n1. 點選共享按鈕（有箭頭的方塊）。\n2. 選擇「新增至主畫面」。\n3. 點選新增。"
+      "iosSafariGuide": "要將 AlphaFlix 安裝為應用程式：\n\n1. 點選共享按鈕（有箭頭的方塊）。\n2. 選擇「新增至主畫面」。\n3. 點選新增。"
     },
     "menu": {
       "accountMenu": "開設帳戶菜單",

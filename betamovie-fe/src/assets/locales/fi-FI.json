@@ -499,7 +499,7 @@
       "title": "Luettelot"
     },
     "public": {
-      "descriptionFallback": "Jaettu kokoelma, joka on kuratoitu BetaMoviessa.",
+      "descriptionFallback": "Jaettu kokoelma, joka on kuratoitu AlphaFlixssa.",
       "notFoundDescription": "Tämä jakolinkki puuttuu tai ei ole enää saatavilla.",
       "notFoundTitle": "Listaa ei löydy",
       "pageTitle": "Jaettu luettelo",

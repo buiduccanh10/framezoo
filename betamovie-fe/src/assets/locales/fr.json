@@ -499,7 +499,7 @@
       "title": "Listes"
     },
     "public": {
-      "descriptionFallback": "Une collection partagée organisée dans BetaMovie.",
+      "descriptionFallback": "Une collection partagée organisée dans AlphaFlix.",
       "notFoundDescription": "Ce lien de partage est manquant ou n'est plus disponible.",
       "notFoundTitle": "Liste introuvable",
       "pageTitle": "Liste partagée",

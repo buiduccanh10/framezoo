@@ -6,6 +6,7 @@ import {
   withAuthRetry,
 } from "@/backend/accounts/auth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useAuthStore } from "@/stores/auth";
 import { useBannerStore } from "@/stores/banner";
 
@@ -17,12 +18,17 @@ export function useOnlineListener() {
   const updateOnline = useBannerStore((s) => s.updateOnline);
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
+  const isDesktopApp = useIsDesktopApp();
   const ref = useRef<boolean>(true);
 
   useEffect(() => {
     const backendBase = backendUrl?.replace(/\/+$/, "");
     const isAuthenticated = !!account && !!backendBase;
-    const pingUrl = isAuthenticated ? `${backendBase}/auth/ping` : "/ping.txt";
+    const pingUrl = isAuthenticated
+      ? `${backendBase}/auth/ping`
+      : isDesktopApp && backendBase
+        ? `${backendBase}/meta`
+        : "/ping.txt";
     const onlineSkipTicks = isAuthenticated
       ? AUTH_ONLINE_SKIP_TICKS
       : PUBLIC_ONLINE_SKIP_TICKS;
@@ -58,6 +64,12 @@ export function useOnlineListener() {
             signal,
             credentials: "include",
             cache: "no-store",
+            headers:
+              isDesktopApp && backendBase
+                ? {
+                    accept: "application/json",
+                  }
+                : undefined,
           }).then((response) => {
             if (!response.ok) {
               throw createHttpStatusError(response.status, response.statusText);
@@ -79,5 +91,5 @@ export function useOnlineListener() {
       clearInterval(interval);
       if (abort) abort.abort();
     };
-  }, [account, backendUrl, updateOnline]);
+  }, [account, backendUrl, isDesktopApp, updateOnline]);
 }

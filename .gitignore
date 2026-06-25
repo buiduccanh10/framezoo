@@ -21,6 +21,9 @@ betamovie-be/dist
 betamovie-be/.data
 betamovie-be/.nitro
 betamovie-be/.output
+betamovie-desktop/dist
+betamovie-desktop/renderer
+betamovie-desktop/release
 betamovie-be/generated
 betamovie-be/.metrics.json
 betamovie-be/.metrics_daily.json
@@ -39,6 +42,7 @@ betamovie-fe/.env.test.local
 betamovie-fe/.env.production.local
 betamovie-be/.env
 betamovie-be/.DS_Store
+betamovie-desktop/.DS_Store
 
 npm-debug.log*
 

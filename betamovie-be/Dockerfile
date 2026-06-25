@@ -14,6 +14,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile --ignore-scripts --filter betamovie-be...
 
 COPY betamovie-be ./betamovie-be
+COPY betamovie-desktop/package.json ./betamovie-desktop/package.json
 
 # prisma.config.ts reads DATABASE_URL; generate does not connect
 RUN DATABASE_URL="${DATABASE_URL:-postgresql://prisma:prisma@127.0.0.1:5432/prisma}" \

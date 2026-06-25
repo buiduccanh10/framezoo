@@ -1,3 +1,5 @@
+import { conf } from "@/setup/config";
+
 import {
   type MovieScrapeContext,
   NotFoundError,
@@ -8,7 +10,7 @@ import {
 
 const getBaseUrl = () => {
   const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+    conf().BACKEND_URL?.replace(/\/+$/, "") || "http://localhost:3000";
   return `${backendUrl}/api/embed`;
 };
 

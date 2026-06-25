@@ -499,7 +499,7 @@
       "title": "Loendid"
     },
     "public": {
-      "descriptionFallback": "BetaMovie's kureeritud jagatud kollektsioon.",
+      "descriptionFallback": "AlphaFlix's kureeritud jagatud kollektsioon.",
       "notFoundDescription": "See jagamise link puudub või pole enam saadaval.",
       "notFoundTitle": "Nimekirja ei leitud",
       "pageTitle": "Jagatud loend",

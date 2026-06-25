@@ -75,11 +75,27 @@ function coerceUndefined(value: string | null | undefined): string | undefined {
   return value;
 }
 
-// loads from different locations, in order: environment (VITE_{KEY}), window (public/config.js)
-function getKeyValue(key: keyof Config): string | undefined {
-  const windowValue = (window as any)?.__CONFIG__?.[`VITE_${key}`];
+function isDesktopAppRuntime() {
+  return (
+    typeof window !== "undefined" &&
+    Boolean((window as any).__ALPHAFLIX_DESKTOP__)
+  );
+}
 
-  return coerceUndefined(env[key]) ?? coerceUndefined(windowValue) ?? undefined;
+// Desktop preload overrides build-time env so Electron keeps its injected backend URL.
+function getKeyValue(key: keyof Config): string | undefined {
+  const windowValue =
+    typeof window !== "undefined"
+      ? (window as any)?.__CONFIG__?.[`VITE_${key}`]
+      : undefined;
+  const envValue = coerceUndefined(env[key]);
+  const runtimeValue = coerceUndefined(windowValue);
+
+  if (isDesktopAppRuntime() && runtimeValue) {
+    return runtimeValue;
+  }
+
+  return envValue ?? runtimeValue ?? undefined;
 }
 
 function getKey(key: keyof Config): string | null;

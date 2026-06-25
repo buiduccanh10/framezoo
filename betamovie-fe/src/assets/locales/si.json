@@ -499,7 +499,7 @@
       "title": "ලැයිස්තු"
     },
     "public": {
-      "descriptionFallback": "BetaMovie හි බෙදාගත් එකතුවකි.",
+      "descriptionFallback": "AlphaFlix හි බෙදාගත් එකතුවකි.",
       "notFoundDescription": "මෙම බෙදාගැනීමේ සබැඳිය අස්ථානගත වී හෝ තවදුරටත් ලබා ගත නොහැක.",
       "notFoundTitle": "ලැයිස්තුව හමු නොවීය",
       "pageTitle": "බෙදාගත් ලැයිස්තුව",

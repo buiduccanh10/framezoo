@@ -73,6 +73,8 @@ services:
       NGINX_PROXY_SEND_TIMEOUT: 30s
       PREVIEW_SERVICE_URL: http://preview-service:3100
       PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
+    volumes:
+      - downloads-data:/data/downloads
     depends_on:
       postgres:
         condition: service_healthy
@@ -136,3 +138,7 @@ volumes:
   preview-data:
     external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: betamovie_backend_preview-data
+  downloads-data:
+    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
+    name: betamovie_backend_downloads-data
+

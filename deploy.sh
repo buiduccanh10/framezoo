@@ -28,6 +28,14 @@ if [ "$EXTERNAL_LEGACY_VOLUMES" = "false" ] \
   EXTERNAL_LEGACY_VOLUMES=true
 fi
 
+if [ "$EXTERNAL_LEGACY_VOLUMES" = "true" ]; then
+  if ! docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
+    echo "Creating missing production downloads volume: betamovie_backend_downloads-data"
+    docker volume create betamovie_backend_downloads-data >/dev/null
+  fi
+fi
+
+
 compose() {
   ENV_FILE_PATH="$ENV_FILE_PATH" EXTERNAL_LEGACY_VOLUMES="$EXTERNAL_LEGACY_VOLUMES" docker compose --project-name "$PROJECT_NAME" --env-file "$ENV_FILE_PATH" -f "$COMPOSE_FILE" "$@"
 }
@@ -49,6 +57,18 @@ case "$ACTION" in
     compose pull --ignore-pull-failures || true
     compose build --pull
     compose up -d --remove-orphans
+
+    # Sync files from host downloads/ folder into the docker volume
+    if [ -d "downloads" ] && [ "$(ls -A downloads)" ]; then
+      echo "Syncing downloads from host to Docker volume..."
+      # Determine which volume is active
+      VOLUME_NAME="betamovie_downloads-data"
+      if docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
+        VOLUME_NAME="betamovie_backend_downloads-data"
+      fi
+      docker run --rm -v "$VOLUME_NAME":/data -v "$SCRIPT_DIR/downloads":/src alpine sh -c "cp -r /src/. /data/" >/dev/null
+    fi
+
     purge_cloudflare_cache
     ;;
   up)

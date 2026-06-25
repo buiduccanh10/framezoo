@@ -22,6 +22,14 @@ const isExtensionReady = new Promise<void>((resolve) => {
 
 let activeExtension = false;
 
+function isDesktopBridgeAvailable() {
+  return Boolean(
+    typeof window !== "undefined" &&
+    (window as any).__ALPHAFLIX_DESKTOP__ &&
+    typeof (window as any).electronAPI?.sendExtensionMessage === "function",
+  );
+}
+
 async function sendMessage<MessageKey extends keyof MessagesMetadata>(
   message: MessageKey,
   payload: MessagesMetadata[MessageKey]["req"] | undefined = undefined,
@@ -30,6 +38,21 @@ async function sendMessage<MessageKey extends keyof MessagesMetadata>(
   await isExtensionReady;
   return new Promise<MessagesMetadata[MessageKey]["res"] | null>((resolve) => {
     if (timeout >= 0) setTimeout(() => resolve(null), timeout);
+
+    if (isDesktopBridgeAvailable()) {
+      (window as any).electronAPI
+        .sendExtensionMessage(message, payload)
+        .then((res: MessagesMetadata[MessageKey]["res"]) => {
+          activeExtension = true;
+          resolve(res);
+        })
+        .catch(() => {
+          activeExtension = false;
+          resolve(null);
+        });
+      return;
+    }
+
     sendToBackgroundViaRelay<
       MessagesMetadata[MessageKey]["req"],
       MessagesMetadata[MessageKey]["res"]
@@ -74,7 +97,7 @@ export async function extensionInfo(): Promise<
 }
 
 export function isExtensionActiveCached(): boolean {
-  return activeExtension;
+  return activeExtension || isDesktopBridgeAvailable();
 }
 
 export async function isExtensionActive(): Promise<boolean> {

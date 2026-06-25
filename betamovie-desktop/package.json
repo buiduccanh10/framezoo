@@ -1,0 +1,97 @@
+{
+  "name": "betamovie-desktop",
+  "private": true,
+  "version": "6.0.1",
+  "main": "dist/main.cjs",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "dev": "concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
+    "dev:renderer": "pnpm --dir ../betamovie-fe dev --host 127.0.0.1 --port 5174",
+    "dev:shell": "tsup --watch",
+    "dev:electron": "wait-on dist/main.cjs tcp:127.0.0.1:5174 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5174 electronmon dist/main.cjs",
+    "build": "rimraf renderer dist && pnpm run build:renderer && pnpm run build:shell",
+    "build:renderer": "cross-env VITE_BASE_URL=./ VITE_PWA_ENABLED=false VITE_ENABLE_DEVTOOLS_PROTECTION=false pnpm --dir ../betamovie-fe exec vite build --emptyOutDir --outDir ../betamovie-desktop/renderer",
+    "build:shell": "tsup",
+    "package:dir": "pnpm run build && electron-builder --dir",
+    "package:release": "pnpm run build && electron-builder",
+    "package:release:mac": "pnpm run build && electron-builder --mac dmg",
+    "package:release:mac:arm64": "pnpm run build && electron-builder --mac dmg --arm64",
+    "package:release:mac:x64": "pnpm run build && electron-builder --mac dmg --x64",
+    "package:release:mac:universal": "pnpm run build && electron-builder --mac dmg --universal"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^42.5.0",
+    "electron-builder": "^26.0.12",
+    "electronmon": "^2.0.4",
+    "rimraf": "^6.1.3",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "wait-on": "^9.0.3"
+  },
+  "build": {
+    "appId": "com.alphaflix.desktop",
+    "productName": "AlphaFlix",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "asar": true,
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "extraFiles": [
+      "README.txt"
+    ],
+    "extraMetadata": {
+      "description": "AlphaFlix desktop app"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.entertainment",
+      "icon": "build/icon.png",
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 170
+        },
+        {
+          "x": 410,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 270,
+          "y": 270,
+          "type": "file",
+          "path": "README.txt"
+        }
+      ],
+      "writeUpdateInfo": false
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "build/icon.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "build/icon.png"
+    }
+  }
+}
