@@ -58,9 +58,9 @@ build:desktop:
     # Sync downloads folder directly to VPS to avoid 413 payload limit in GitLab artifacts
     - |
       if [ -d "downloads" ] && [ "$(ls -A downloads)" ]; then
-        echo "Syncing downloads folder directly to VPS (${DEPLOY_PATH:-/home/betamovie}/downloads)..."
-        ssh -p "${VPS_PORT:-22}" "${VPS_USER:-betakiot}@${VPS_HOST}" "mkdir -p '${DEPLOY_PATH:-/home/betamovie}/downloads'"
-        scp -P "${VPS_PORT:-22}" -r downloads/. "${VPS_USER:-betakiot}@${VPS_HOST}:${DEPLOY_PATH:-/home/betamovie}/downloads/"
+        echo "Syncing downloads folder directly to VPS (${DEPLOY_PATH:-/home/betamovie})..."
+        ssh -p "${VPS_PORT:-22}" "${VPS_USER:-betakiot}@${VPS_HOST}" "mkdir -p '${DEPLOY_PATH:-/home/betamovie}'"
+        scp -P "${VPS_PORT:-22}" -r downloads "${VPS_USER:-betakiot}@${VPS_HOST}:${DEPLOY_PATH:-/home/betamovie}/"
       fi
 
 deploy:betamovie:
