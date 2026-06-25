@@ -57,6 +57,18 @@ case "$ACTION" in
     compose pull --ignore-pull-failures || true
     compose build --pull
     compose up -d --remove-orphans
+
+    # Sync files from host downloads/ folder into the docker volume
+    if [ -d "downloads" ] && [ "$(ls -A downloads)" ]; then
+      echo "Syncing downloads from host to Docker volume..."
+      # Determine which volume is active
+      VOLUME_NAME="betamovie_downloads-data"
+      if docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
+        VOLUME_NAME="betamovie_backend_downloads-data"
+      fi
+      docker run --rm -v "$VOLUME_NAME":/data -v "$SCRIPT_DIR/downloads":/src alpine sh -c "cp -r /src/. /data/" >/dev/null
+    fi
+
     purge_cloudflare_cache
     ;;
   up)

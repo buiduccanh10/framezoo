@@ -6,6 +6,24 @@ const rootDir = path.resolve(__dirname, '..');
 const desktopDir = path.join(rootDir, 'betamovie-desktop');
 const downloadsDir = path.join(rootDir, 'downloads');
 
+// Load environment variables from root .env file if it exists to pass VITE_BACKEND_URL to builds
+const envPath = path.join(rootDir, '.env');
+if (fs.existsSync(envPath)) {
+  console.log('Loading environment variables from root .env file...');
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  for (const line of envContent.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const firstEqual = trimmed.indexOf('=');
+    if (firstEqual === -1) continue;
+    const key = trimmed.slice(0, firstEqual).trim();
+    const val = trimmed.slice(firstEqual + 1).trim().replace(/^['"]|['"]$/g, '');
+    if (!process.env[key]) {
+      process.env[key] = val;
+    }
+  }
+}
+
 // 1. Create downloads folder in root if it doesn't exist
 if (!fs.existsSync(downloadsDir)) {
   fs.mkdirSync(downloadsDir, { recursive: true });
@@ -22,8 +40,8 @@ const targets = [
   { name: 'macOS Apple Silicon (arm64)', command: 'npx electron-builder --mac dmg --arm64' },
   { name: 'macOS Intel (x64)', command: 'npx electron-builder --mac dmg --x64' },
   { name: 'macOS Universal', command: 'npx electron-builder --mac dmg --universal' },
-  { name: 'Windows x64', command: 'npx electron-builder --win nsis --x64' },
-  { name: 'Windows ARM64', command: 'npx electron-builder --win nsis --arm64' }
+  { name: 'Windows x64', command: 'npx electron-builder --win --x64' },
+  { name: 'Windows ARM64', command: 'npx electron-builder --win --arm64' }
 ];
 
 for (const target of targets) {
@@ -48,7 +66,9 @@ const filesToCopy = [
   `BetaMovie-${version}-x64.dmg`,
   `BetaMovie-${version}-universal.dmg`,
   `BetaMovie-${version}-x64.exe`,
-  `BetaMovie-${version}-arm64.exe`
+  `BetaMovie-${version}-arm64.exe`,
+  `BetaMovie-${version}-x64.zip`,
+  `BetaMovie-${version}-arm64.zip`
 ];
 
 let copiedCount = 0;
@@ -62,6 +82,14 @@ for (const file of filesToCopy) {
   } else {
     console.warn(`Warning: Built file ${file} was not found in release directory.`);
   }
+}
+
+// Also copy the README.txt guide
+const readmeSrc = path.join(desktopDir, 'README.txt');
+const readmeDest = path.join(downloadsDir, 'README.txt');
+if (fs.existsSync(readmeSrc)) {
+  console.log('Copying README.txt...');
+  fs.copyFileSync(readmeSrc, readmeDest);
 }
 
 console.log(`Successfully built and copied ${copiedCount} files to the downloads folder.`);

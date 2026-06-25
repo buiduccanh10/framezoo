@@ -5,7 +5,12 @@ import { getQuery, sendRedirect, sendStream, setHeader } from 'h3';
 
 import { version as desktopVersion } from '../../../betamovie-desktop/package.json';
 
-type DownloadOptionId = 'mac-arm64' | 'mac-x64' | 'mac-universal' | 'win-x64' | 'win-arm64';
+type DownloadOptionId =
+  | "mac-arm64"
+  | "mac-x64"
+  | "mac-universal"
+  | "win-x64"
+  | "win-arm64";
 
 type DownloadOptionConfig = {
   id: DownloadOptionId;
@@ -17,39 +22,39 @@ type DownloadOptionConfig = {
 
 const DOWNLOAD_OPTIONS: DownloadOptionConfig[] = [
   {
-    id: 'mac-arm64',
-    label: 'macOS Apple Silicon',
-    description: 'Best for M-series Macs',
+    id: "mac-arm64",
+    label: "macOS Apple Silicon",
+    description: "Best for M-series Macs",
     fileName: `BetaMovie-${desktopVersion}-arm64.dmg`,
-    urlEnv: 'APP_DOWNLOAD_MAC_ARM64_URL',
+    urlEnv: "APP_DOWNLOAD_MAC_ARM64_URL",
   },
   {
-    id: 'mac-x64',
-    label: 'macOS Intel',
-    description: 'Best for Intel Macs',
+    id: "mac-x64",
+    label: "macOS Intel",
+    description: "Best for Intel Macs",
     fileName: `BetaMovie-${desktopVersion}-x64.dmg`,
-    urlEnv: 'APP_DOWNLOAD_MAC_X64_URL',
+    urlEnv: "APP_DOWNLOAD_MAC_X64_URL",
   },
   {
-    id: 'mac-universal',
-    label: 'macOS Universal',
-    description: 'Works on both Apple Silicon and Intel Macs',
+    id: "mac-universal",
+    label: "macOS Universal",
+    description: "Works on both Apple Silicon and Intel Macs",
     fileName: `BetaMovie-${desktopVersion}-universal.dmg`,
-    urlEnv: 'APP_DOWNLOAD_MAC_UNIVERSAL_URL',
+    urlEnv: "APP_DOWNLOAD_MAC_UNIVERSAL_URL",
   },
   {
-    id: 'win-x64',
-    label: 'Windows x64',
-    description: 'Best for 64-bit Windows PCs',
+    id: "win-x64",
+    label: "Windows x64",
+    description: "Best for 64-bit Windows PCs",
     fileName: `BetaMovie-${desktopVersion}-x64.exe`,
-    urlEnv: 'APP_DOWNLOAD_WIN_X64_URL',
+    urlEnv: "APP_DOWNLOAD_WIN_X64_URL",
   },
   {
-    id: 'win-arm64',
-    label: 'Windows ARM64',
-    description: 'Best for Snapdragon/ARM Windows PCs',
+    id: "win-arm64",
+    label: "Windows ARM64",
+    description: "Best for Snapdragon/ARM Windows PCs",
     fileName: `BetaMovie-${desktopVersion}-arm64.exe`,
-    urlEnv: 'APP_DOWNLOAD_WIN_ARM64_URL',
+    urlEnv: "APP_DOWNLOAD_WIN_ARM64_URL",
   },
 ];
 

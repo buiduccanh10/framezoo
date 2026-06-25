@@ -45,6 +45,9 @@
       "renderer/**/*",
       "package.json"
     ],
+    "extraFiles": [
+      "README.txt"
+    ],
     "extraMetadata": {
       "description": "BetaMovie desktop app"
     },
@@ -57,11 +60,30 @@
       "darkModeSupport": true
     },
     "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 170
+        },
+        {
+          "x": 410,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 270,
+          "y": 270,
+          "type": "file",
+          "path": "README.txt"
+        }
+      ],
       "writeUpdateInfo": false
     },
     "win": {
       "target": [
-        "nsis"
+        "nsis",
+        "zip"
       ],
       "icon": "build/icon.png"
     },
