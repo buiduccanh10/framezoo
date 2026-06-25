@@ -3,6 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCopyToClipboard } from "react-use";
 
+import { getIMDbMetadata } from "@/backend/metadata/imdb";
+import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
 import { TMDBIdToUrlId, getSeasonDetails } from "@/backend/metadata/tmdb";
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
@@ -13,11 +15,13 @@ import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
-import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
-import { scrapeRottenTomatoes } from "@/utils/rottenTomatoesScraper";
 
-import { DetailsContentProps } from "../../types";
+import {
+  DetailsContentProps,
+  DetailsIMDbData,
+  DetailsRTData,
+} from "../../types";
 import { EpisodeCarousel } from "../carousels/EpisodeCarousel";
 import { CastCarousel } from "../carousels/PeopleCarousel";
 import { SimilarMediaCarousel } from "../carousels/SimilarMediaCarousel";
@@ -29,10 +33,10 @@ import { DetailsInfo } from "../sections/DetailsInfo";
 
 export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const navigate = useNavigate();
-  const [imdbData, setImdbData] = useState<any>(null);
-  const [rtData, setRtData] = useState<any>(null);
-
-  const [, setIsLoadingImdb] = useState(false);
+  const [imdbData, setImdbData] = useState<DetailsIMDbData | null>(null);
+  const [rtData, setRtData] = useState<DetailsRTData | null>(null);
+  const [isLoadingImdb, setIsLoadingImdb] = useState(false);
+  const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showCollection, setShowCollection] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
@@ -141,28 +145,32 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   }, []);
 
   useEffect(() => {
-    const fetchExternalData = async () => {
-      if (!data.imdbId) return;
+    let isCancelled = false;
+
+    const fetchImdbData = async () => {
+      if (!data.imdbId) {
+        setImdbData(null);
+        setIsLoadingImdb(false);
+        return;
+      }
 
       setIsLoadingImdb(true);
       try {
-        // Get the user's selected language and format it properly
         const userLanguage = useLanguageStore.getState().language;
         const formattedLanguage = getTmdbLanguageCode(userLanguage);
-
-        // Fetch IMDb data
-        const imdbMetadata = await scrapeIMDb(
+        const imdbMetadata = await getIMDbMetadata(
           data.imdbId,
           undefined,
           undefined,
           formattedLanguage,
-          data.type,
         );
-        // Transform the data to match the expected format
+
+        if (isCancelled) return;
+
         if (
-          (typeof imdbMetadata.imdb_rating === "number" &&
-            typeof imdbMetadata.votes === "number") ||
-          imdbMetadata.trailer_url
+          imdbMetadata &&
+          typeof imdbMetadata.imdb_rating === "number" &&
+          typeof imdbMetadata.votes === "number"
         ) {
           setImdbData({
             rating: imdbMetadata.imdb_rating,
@@ -172,25 +180,55 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         } else {
           setImdbData(null);
         }
-
-        // Fetch Rotten Tomatoes data
-        if (data.type === "movie") {
-          const rtMetadata = await scrapeRottenTomatoes(
-            data.title,
-            data.releaseDate
-              ? new Date(data.releaseDate).getFullYear()
-              : undefined,
-          );
-          setRtData(rtMetadata);
-        }
       } catch (error) {
-        console.error("Failed to fetch external data:", error);
+        if (!isCancelled) {
+          setImdbData(null);
+        }
+        console.error("Failed to fetch IMDb data:", error);
       } finally {
-        setIsLoadingImdb(false);
+        if (!isCancelled) {
+          setIsLoadingImdb(false);
+        }
       }
     };
 
-    fetchExternalData();
+    const fetchRtData = async () => {
+      if (data.type !== "movie" && data.type !== "show") {
+        setRtData(null);
+        setIsLoadingRt(false);
+        return;
+      }
+
+      setIsLoadingRt(true);
+      try {
+        const rtMetadata = await getRottenTomatoesMetadata(
+          data.title,
+          data.releaseDate
+            ? new Date(data.releaseDate).getFullYear()
+            : undefined,
+        );
+
+        if (!isCancelled) {
+          setRtData(rtMetadata);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setRtData(null);
+        }
+        console.error("Failed to fetch Rotten Tomatoes data:", error);
+      } finally {
+        if (!isCancelled) {
+          setIsLoadingRt(false);
+        }
+      }
+    };
+
+    void fetchImdbData();
+    void fetchRtData();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [data.imdbId, data.title, data.releaseDate, data.type]);
 
   const handlePlayClick = () => {
@@ -383,6 +421,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
             data.type === "show" ? data.seasonData?.seasons.length : undefined
           }
           imdbData={imdbData}
+          rtData={rtData}
+          isLoadingImdb={isLoadingImdb}
+          isLoadingRt={isLoadingRt}
         />
 
         {/* Two Column Layout - Stacked on Mobile */}
@@ -464,6 +505,8 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
               data={data}
               imdbData={imdbData}
               rtData={rtData}
+              isLoadingImdb={isLoadingImdb}
+              isLoadingRt={isLoadingRt}
               provider={undefined}
               onCollectionClick={() => setShowCollection(true)}
             />

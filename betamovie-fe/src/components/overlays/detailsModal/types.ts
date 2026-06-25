@@ -68,6 +68,19 @@ export interface DetailsContentProps {
   minimal?: boolean;
 }
 
+export interface DetailsIMDbData {
+  rating: number;
+  votes: number;
+  trailer_url?: string;
+}
+
+export interface DetailsRTData {
+  title: string;
+  tomatoIcon: "certified_fresh" | "fresh" | "rotten";
+  tomatoScore: number;
+  url: string;
+}
+
 export interface TrailerOverlayProps {
   trailerUrl: string;
   onClose: () => void;
@@ -117,17 +130,18 @@ export interface DetailsBodyProps {
   voteCount?: number;
   releaseDate?: string;
   seasons?: number;
-  imdbData?: {
-    rating: number;
-    votes: number;
-    trailer_url?: string;
-  };
+  imdbData?: DetailsIMDbData | null;
+  rtData?: DetailsRTData | null;
+  isLoadingImdb?: boolean;
+  isLoadingRt?: boolean;
 }
 
 export interface DetailsInfoProps {
   data: DetailsContent;
-  imdbData?: any;
-  rtData?: any;
+  imdbData?: DetailsIMDbData | null;
+  rtData?: DetailsRTData | null;
+  isLoadingImdb?: boolean;
+  isLoadingRt?: boolean;
   provider?: string;
   onCollectionClick?: () => void;
 }
@@ -135,8 +149,10 @@ export interface DetailsInfoProps {
 export interface DetailsRatingsProps {
   voteAverage?: number;
   voteCount?: number;
-  imdbData?: any;
-  rtData?: any;
+  imdbData?: DetailsIMDbData | null;
+  rtData?: DetailsRTData | null;
+  isLoadingImdb?: boolean;
+  isLoadingRt?: boolean;
   mediaId?: number;
   mediaType?: "movie" | "show";
   imdbId?: string;
