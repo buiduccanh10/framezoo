@@ -43,13 +43,13 @@ audit:betamovie:
 
 build:desktop:
   stage: build-app
-  image: node:22-slim
+  image: electronuserland/builder:22-wine
   variables:
     GIT_STRATEGY: fetch
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
   script:
-    - apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+    - which git || (apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*)
     - corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
     # Create the env file from GitLab CI/CD variables so build uses prod configs
     - echo "$ENV_FILE" > .env
@@ -85,16 +85,16 @@ deploy:betamovie:
       DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
       DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
 
-      # Sync downloads folder (built artifacts from build-app stage) to VPS
+      echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
+      ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+        "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; [ -f deploy.sh ] || { echo 'deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x deploy.sh"
+
+      # Sync downloads folder (built artifacts from build-app stage) to VPS (done AFTER git clean to avoid deletion)
       if [ -d "downloads" ] && [ "$(ls -A downloads)" ]; then
         echo "Syncing downloads folder to VPS (${DEPLOY_PATH}/downloads)..."
         ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${DEPLOY_PATH}/downloads'"
         scp -P "${VPS_PORT:-22}" -r downloads/. "${DEPLOY_TARGET}:${DEPLOY_PATH}/downloads/"
       fi
-
-      echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
-      ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-        "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; [ -f deploy.sh ] || { echo 'deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x deploy.sh"
 
       echo "Building prod stack from ${DEPLOY_PATH}..."
       printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
