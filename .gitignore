@@ -52,3 +52,7 @@ package-lock.json
 
 # config
 .env
+
+# build artifacts
+/downloads
+
