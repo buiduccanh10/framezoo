@@ -70,7 +70,42 @@ function readEnv(key: string): string | null {
   return value ? value : null;
 }
 
-function resolveTargetUrl(option: DownloadOptionConfig): string | null {
+function getAvailableFileName(option: DownloadOptionConfig, downloadDir: string | null): string | null {
+  if (!downloadDir) return null;
+
+  let candidates: string[] = [];
+  if (option.id.startsWith('mac-')) {
+    const arch = option.id.substring(4);
+    candidates = [
+      `AlphaFlix-${desktopVersion}-${arch}-mac.zip`,
+      `AlphaFlix-${desktopVersion}-${arch}-mac.dmg`,
+      `AlphaFlix-${desktopVersion}-${arch}.dmg`
+    ];
+  } else if (option.id.startsWith('win-')) {
+    const arch = option.id.substring(4);
+    candidates = [
+      `AlphaFlix-${desktopVersion}-${arch}.exe`,
+      `AlphaFlix-${desktopVersion}-${arch}.zip`
+    ];
+  }
+
+  for (const candidate of candidates) {
+    const filePath = path.join(downloadDir, candidate);
+    if (fs.existsSync(filePath)) {
+      return candidate;
+    }
+  }
+
+  return null;
+}
+
+function getFileName(option: DownloadOptionConfig, downloadDir: string | null): string {
+  const existingName = getAvailableFileName(option, downloadDir);
+  if (existingName) return existingName;
+  return option.fileName;
+}
+
+function resolveTargetUrl(option: DownloadOptionConfig, downloadDir: string | null): string | null {
   const directUrl = readEnv(option.urlEnv);
   if (directUrl) return directUrl;
 
@@ -78,17 +113,18 @@ function resolveTargetUrl(option: DownloadOptionConfig): string | null {
   if (!baseUrl) return null;
 
   const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-  return new URL(option.fileName, normalizedBaseUrl).toString();
+  const fileName = getFileName(option, downloadDir);
+  return new URL(fileName, normalizedBaseUrl).toString();
 }
 
 function isOptionAvailable(option: DownloadOptionConfig, downloadDir: string | null): boolean {
   if (downloadDir) {
-    const filePath = path.join(downloadDir, option.fileName);
-    if (fs.existsSync(filePath)) {
+    const existingName = getAvailableFileName(option, downloadDir);
+    if (existingName) {
       return true;
     }
   }
-  return resolveTargetUrl(option) !== null;
+  return resolveTargetUrl(option, downloadDir) !== null;
 }
 
 function resolveManifest(downloadDir: string | null): DownloadOptionResponse[] {
@@ -137,9 +173,10 @@ export default defineEventHandler(async event => {
 
     // 1. Try serving from local volume
     if (downloadDir) {
-      const filePath = path.join(downloadDir, config.fileName);
+      const fileName = getFileName(config, downloadDir);
+      const filePath = path.join(downloadDir, fileName);
       if (fs.existsSync(filePath)) {
-        setHeader(event, 'Content-Disposition', `attachment; filename="${config.fileName}"`);
+        setHeader(event, 'Content-Disposition', `attachment; filename="${fileName}"`);
         setHeader(event, 'Content-Type', 'application/octet-stream');
         setHeader(event, 'Content-Length', fs.statSync(filePath).size);
         return sendStream(event, createReadStream(filePath));
@@ -147,7 +184,7 @@ export default defineEventHandler(async event => {
     }
 
     // 2. Fallback to redirect URLs if not found in volume
-    const targetUrl = resolveTargetUrl(config);
+    const targetUrl = resolveTargetUrl(config, downloadDir);
     if (!targetUrl) {
       throw createError({
         statusCode: 404,
