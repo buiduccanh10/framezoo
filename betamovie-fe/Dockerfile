@@ -4,8 +4,8 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY betamovie-fe/package.json ./betamovie-fe/package.json
+COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter betamovie-fe...
 
 ARG PWA_ENABLED="true"
