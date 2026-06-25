@@ -702,8 +702,15 @@ export function FeaturedCarousel({
 
   const mediaTitle = currentMedia.title || currentMedia.name;
   const mediaYear = currentMedia.release_date || currentMedia.first_air_date;
+  const tmdbVoteAverage = currentMedia.vote_average;
   const inlineLoadingClass =
     "h-4 w-14 rounded bg-white/10 animate-pulse inline-block";
+  const hasTmdbRating = typeof tmdbVoteAverage === "number";
+  const hasImdbRating = isLoadingImdb || Boolean(imdbData);
+  const hasRtRating = isLoadingRt || Boolean(rtData);
+  const hasMediaYear = typeof mediaYear === "string";
+  const hasSeasonCount =
+    currentMedia?.type === "show" && Boolean(currentMedia?.number_of_seasons);
 
   let searchClasses = "";
   if (searching) searchClasses = "opacity-0 transition-opacity duration-300";
@@ -852,11 +859,11 @@ export function FeaturedCarousel({
               </h1>
             )}
             {/* TMDB Rating and Year/Seasons */}
-            <div className="flex items-center gap-2 text-sm text-white/80 mb-4">
-              {typeof currentMedia?.vote_average === "number" && (
-                <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/80 mb-4">
+              {hasTmdbRating && (
+                <div className="flex items-center gap-1 whitespace-nowrap">
                   <Icon icon={Icons.TMDB} />
-                  <span>{currentMedia.vote_average.toFixed(1)}</span>
+                  <span>{tmdbVoteAverage.toFixed(1)}</span>
                   {typeof currentMedia.vote_count === "number" && (
                     <span className="text-white/60">
                       ({currentMedia.vote_count.toLocaleString()})
@@ -865,9 +872,9 @@ export function FeaturedCarousel({
                 </div>
               )}
 
-              {(isLoadingImdb || imdbData) && (
-                <>
-                  <span className="text-white/60">•</span>
+              {hasImdbRating && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  {hasTmdbRating && <span className="text-white/60">•</span>}
                   <div className="flex items-center gap-1">
                     <Icon icon={Icons.IMDB} className="text-yellow-400" />
                     {isLoadingImdb ? (
@@ -881,12 +888,14 @@ export function FeaturedCarousel({
                       </span>
                     )}
                   </div>
-                </>
+                </div>
               )}
 
-              {(isLoadingRt || rtData) && (
-                <>
-                  <span className="text-white/60">•</span>
+              {hasRtRating && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  {(hasTmdbRating || hasImdbRating) && (
+                    <span className="text-white/60">•</span>
+                  )}
                   <div className="flex items-center gap-1">
                     {rtData ? (
                       <img
@@ -905,24 +914,28 @@ export function FeaturedCarousel({
                       <span>{rtData?.tomatoScore}%</span>
                     )}
                   </div>
-                </>
+                </div>
               )}
 
-              {mediaYear && (
-                <>
-                  <span className="text-white/60">•</span>
-                  <span>{new Date(mediaYear).getFullYear()}</span>
-                </>
-              )}
-              {currentMedia?.type === "show" &&
-                currentMedia?.number_of_seasons && (
-                  <>
+              {hasMediaYear && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  {(hasTmdbRating || hasImdbRating || hasRtRating) && (
                     <span className="text-white/60">•</span>
-                    <span>
-                      {currentMedia.number_of_seasons} {t("details.seasons")}
-                    </span>
-                  </>
-                )}
+                  )}
+                  <span>{new Date(mediaYear).getFullYear()}</span>
+                </div>
+              )}
+              {hasSeasonCount && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  {(hasTmdbRating ||
+                    hasImdbRating ||
+                    hasRtRating ||
+                    hasMediaYear) && <span className="text-white/60">•</span>}
+                  <span>
+                    {currentMedia.number_of_seasons} {t("details.seasons")}
+                  </span>
+                </div>
+              )}
             </div>
             <p className="text-lg text-white mb-6 line-clamp-3 md:line-clamp-4">
               {currentMedia.overview}
