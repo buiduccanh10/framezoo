@@ -43,6 +43,12 @@ if (process.platform === 'darwin') {
     { name: 'macOS Intel (x64)', command: 'npx electron-builder --mac dmg --x64' },
     { name: 'macOS Universal', command: 'npx electron-builder --mac dmg --universal' }
   );
+} else if (process.platform === 'linux') {
+  // Build macOS zip targets on Linux CI
+  targets.push(
+    { name: 'macOS Apple Silicon (arm64) Zip', command: 'npx electron-builder --mac zip --arm64' },
+    { name: 'macOS Intel (x64) Zip', command: 'npx electron-builder --mac zip --x64' }
+  );
 }
 // Windows targets can be built on macOS, Linux, and Windows
 targets.push(
@@ -70,9 +76,14 @@ console.log(`\nCopying packaged builds (v${version}) from ${releaseDir} to ${dow
 const filesToCopy = [];
 if (process.platform === 'darwin') {
   filesToCopy.push(
-    `AlphaFlix-${version}-arm64.dmg`,
-    `AlphaFlix-${version}-x64.dmg`,
-    `AlphaFlix-${version}-universal.dmg`
+    `AlphaFlix-${version}-arm64-mac.dmg`,
+    `AlphaFlix-${version}-x64-mac.dmg`,
+    `AlphaFlix-${version}-universal-mac.dmg`
+  );
+} else if (process.platform === 'linux') {
+  filesToCopy.push(
+    `AlphaFlix-${version}-arm64-mac.zip`,
+    `AlphaFlix-${version}-x64-mac.zip`
   );
 }
 filesToCopy.push(

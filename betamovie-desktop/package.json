@@ -55,6 +55,7 @@
       "target": [
         "dmg"
       ],
+      "artifactName": "${productName}-${version}-${arch}-mac.${ext}",
       "category": "public.app-category.entertainment",
       "icon": "build/icon.png",
       "darkModeSupport": true
