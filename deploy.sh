@@ -28,6 +28,14 @@ if [ "$EXTERNAL_LEGACY_VOLUMES" = "false" ] \
   EXTERNAL_LEGACY_VOLUMES=true
 fi
 
+if [ "$EXTERNAL_LEGACY_VOLUMES" = "true" ]; then
+  if ! docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
+    echo "Creating missing production downloads volume: betamovie_backend_downloads-data"
+    docker volume create betamovie_backend_downloads-data >/dev/null
+  fi
+fi
+
+
 compose() {
   ENV_FILE_PATH="$ENV_FILE_PATH" EXTERNAL_LEGACY_VOLUMES="$EXTERNAL_LEGACY_VOLUMES" docker compose --project-name "$PROJECT_NAME" --env-file "$ENV_FILE_PATH" -f "$COMPOSE_FILE" "$@"
 }

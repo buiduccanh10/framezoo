@@ -70,6 +70,8 @@ services:
       PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
     ports:
       - '3000:3000'
+    volumes:
+      - downloads-data:/data/downloads
     depends_on:
       postgres:
         condition: service_healthy
@@ -112,3 +114,6 @@ volumes:
   postgres-data:
   redis-data:
   preview-data:
+  downloads-data:
+    name: betamovie_downloads-data
+

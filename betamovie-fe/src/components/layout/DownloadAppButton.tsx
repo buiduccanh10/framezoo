@@ -6,6 +6,7 @@ import {
   AppDownloadManifest,
   getAppDownloadManifest,
 } from "@/backend/download";
+import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
 import { Transition } from "@/components/utils/Transition";
@@ -98,12 +99,18 @@ export function DownloadAppButton() {
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto"
+        className="text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto shrink-0"
         aria-label={t("navigation.download.label", {
           defaultValue: "Download app",
         })}
       >
-        <Icon icon={Icons.DOWNLOAD} className="text-xl" />
+        <IconPatch
+          icon={Icons.DOWNLOAD}
+          clickable
+          downsized
+          navigation
+          active={open}
+        />
       </button>
 
       <Transition animation="slide-down" show={open}>

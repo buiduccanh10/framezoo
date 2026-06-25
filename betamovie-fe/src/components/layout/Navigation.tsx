@@ -129,8 +129,8 @@ export function Navigation(props: NavigationProps) {
         <div
           className={classNames("absolute left-0 right-0 flex items-center")}
         >
-          <div className="px-7 py-5 relative z-[60] flex flex-1 items-center justify-between">
-            <div className="pointer-events-auto flex items-center gap-3 ssm:gap-4">
+          <div className="px-4 py-5 xs:px-6 ssm:px-7 relative z-[60] flex flex-1 items-center">
+            <div className="pointer-events-auto flex flex-1 items-center gap-1.5 xs:gap-2 ssm:gap-3">
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <Link
@@ -141,48 +141,55 @@ export function Navigation(props: NavigationProps) {
                     <BrandPill clickable header />
                   </Link>
                 )}
-              <div className="flex items-center gap-2.5 ssm:gap-3">
-                {!enableLowPerformanceMode &&
-                  location.pathname !== "/login" &&
-                  location.pathname !== "/register" &&
-                  location.pathname !== "/settings" &&
-                  (location.pathname === "/discover" ? (
-                    <Link
-                      to="/browse"
-                      onClick={() => window.scrollTo(0, 0)}
-                      className="shrink-0 text-lg text-white tabbable rounded-full backdrop-blur-lg"
-                    >
-                      <IconPatch
-                        icon={Icons.SEARCH}
-                        clickable
-                        downsized
-                        navigation
-                      />
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/discover"
-                      onClick={() => window.scrollTo(0, 0)}
-                      className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg"
-                    >
-                      <IconPatch
-                        icon={Icons.RISING_STAR}
-                        clickable
-                        downsized
-                        navigation
-                      />
-                    </Link>
-                  ))}
-                {location.pathname !== "/login" &&
-                  location.pathname !== "/settings" &&
-                  location.pathname !== "/register" && (
-                    <WatchPartyInputLink triggerVariant="icon" />
-                  )}
-                {location.pathname !== "/login" &&
-                  location.pathname !== "/settings" &&
-                  location.pathname !== "/register" && <DownloadAppButton />}
-              </div>
-              {/* <a
+              {!enableLowPerformanceMode &&
+                location.pathname !== "/login" &&
+                location.pathname !== "/register" &&
+                location.pathname !== "/settings" &&
+                (location.pathname === "/discover" ? (
+                  <Link
+                    to="/browse"
+                    onClick={() => window.scrollTo(0, 0)}
+                    className="shrink-0 text-lg text-white tabbable rounded-full backdrop-blur-lg"
+                  >
+                    <IconPatch
+                      icon={Icons.SEARCH}
+                      clickable
+                      downsized
+                      navigation
+                    />
+                  </Link>
+                ) : (
+                  <Link
+                    to="/discover"
+                    onClick={() => window.scrollTo(0, 0)}
+                    className="shrink-0 text-xl text-white tabbable rounded-full backdrop-blur-lg"
+                  >
+                    <IconPatch
+                      icon={Icons.RISING_STAR}
+                      clickable
+                      downsized
+                      navigation
+                    />
+                  </Link>
+                ))}
+              {location.pathname !== "/login" &&
+                location.pathname !== "/settings" &&
+                location.pathname !== "/register" && (
+                  <WatchPartyInputLink triggerVariant="icon" />
+                )}
+              {location.pathname !== "/login" &&
+                location.pathname !== "/settings" &&
+                location.pathname !== "/register" && <DownloadAppButton />}
+              {location.pathname !== "/login" &&
+                location.pathname !== "/register" && (
+                  <div className="relative pointer-events-auto ml-auto">
+                    <LinksDropdown>
+                      {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
+                    </LinksDropdown>
+                  </div>
+                )}
+            </div>
+            {/* <a
                 onClick={() => openNotifications()}
                 rel="noreferrer"
                 className="text-xl text-white tabbable rounded-full backdrop-blur-lg relative"
@@ -199,15 +206,6 @@ export function Navigation(props: NavigationProps) {
                   ) : null;
                 })()}
               </a> */}
-            </div>
-            {location.pathname !== "/login" &&
-              location.pathname !== "/register" && (
-                <div className="relative pointer-events-auto">
-                  <LinksDropdown>
-                    {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
-                  </LinksDropdown>
-                </div>
-              )}
           </div>
         </div>
       </div>
