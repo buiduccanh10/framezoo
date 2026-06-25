@@ -5,7 +5,6 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
-import { isExtensionActive } from "@/backend/extension/messaging";
 import { getMediaLogo } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Button } from "@/components/buttons/Button";
@@ -14,7 +13,6 @@ import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
 import { usePreferencesStore } from "@/stores/preferences";
-import { scrapeIMDb } from "@/utils/imdbScraper";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
@@ -45,11 +43,6 @@ interface FeaturedCarouselProps {
   searching?: boolean;
   shorter?: boolean;
   forcedCategory?: "movies" | "tvshows";
-}
-
-interface IMDbRatingData {
-  rating: number;
-  votes: number;
 }
 
 function mergeFeaturedPools<T extends { type: "movie" | "show" }>(
@@ -174,10 +167,6 @@ export function FeaturedCarousel({
   const [logoUrl, setLogoUrl] = useState<string | undefined>();
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
-  const [imdbRatings, setImdbRatings] = useState<
-    Record<string, IMDbRatingData>
-  >({});
-  const hasExtension = useRef<boolean>(false);
   const logoFetchController = useRef<AbortController | null>(null);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
@@ -200,50 +189,6 @@ export function FeaturedCarousel({
   const SLIDE_DURATION = 8000;
   const FEATURED_POOL_SIZE_PER_TYPE = 10;
 
-  // Check for extension on mount
-  useEffect(() => {
-    isExtensionActive().then((active) => {
-      hasExtension.current = active;
-    });
-  }, []);
-
-  // Fetch IMDb ratings when media changes
-  useEffect(() => {
-    const fetchImdbRatings = async () => {
-      if (!hasExtension.current || !currentMedia?.external_ids?.imdb_id) return;
-
-      try {
-        const imdbData = await scrapeIMDb(
-          currentMedia.external_ids.imdb_id,
-          undefined,
-          undefined,
-          undefined,
-          currentMedia.type,
-        );
-        // Only update if we have both rating and votes as non-null numbers
-        if (
-          typeof imdbData.imdb_rating === "number" &&
-          typeof imdbData.votes === "number"
-        ) {
-          const ratingData: IMDbRatingData = {
-            rating: imdbData.imdb_rating,
-            votes: imdbData.votes,
-          };
-          setImdbRatings((prev) => ({
-            ...prev,
-            [currentMedia.external_ids!.imdb_id!]: ratingData,
-          }));
-        }
-      } catch (error) {
-        console.error("Error fetching IMDb ratings:", error);
-      }
-    };
-
-    if (currentMedia) {
-      fetchImdbRatings();
-    }
-  }, [currentMedia]);
-
   useEffect(() => {
     if (isRestoring) return;
 
@@ -260,7 +205,6 @@ export function FeaturedCarousel({
       setIsLoading(true);
       // Clear all previous data when transitioning
       setLogoUrl(undefined);
-      setImdbRatings({});
       setCurrentIndex(0);
       setContentOpacity(1);
       if (logoFetchController.current) {
@@ -449,7 +393,6 @@ export function FeaturedCarousel({
 
   const handlePrevSlide = () => {
     setContentOpacity(0);
-    setImdbRatings({});
 
     // Wait for fade out, then change index and fade in
     setTimeout(() => {
@@ -472,7 +415,6 @@ export function FeaturedCarousel({
 
   const handleNextSlide = () => {
     setContentOpacity(0);
-    setImdbRatings({});
 
     // Wait for fade out, then change index and fade in
     setTimeout(() => {
@@ -579,7 +521,6 @@ export function FeaturedCarousel({
     if (isAutoPlaying && media.length > 0) {
       autoPlayInterval.current = setInterval(() => {
         setContentOpacity(0);
-        setImdbRatings({});
 
         // Wait for fade out, then change index and fade in
         setTimeout(() => {
@@ -767,27 +708,6 @@ export function FeaturedCarousel({
                   )}
                 </div>
               )}
-              {currentMedia?.external_ids?.imdb_id &&
-                imdbRatings[currentMedia.external_ids.imdb_id] && (
-                  <>
-                    <span className="text-white/60">•</span>
-                    <div className="flex items-center gap-1">
-                      <Icon icon={Icons.IMDB} className="text-yellow-400" />
-                      <span>
-                        {imdbRatings[
-                          currentMedia.external_ids.imdb_id
-                        ].rating.toFixed(1)}
-                      </span>
-                      <span className="text-white/60">
-                        (
-                        {imdbRatings[
-                          currentMedia.external_ids.imdb_id
-                        ].votes.toLocaleString()}
-                        )
-                      </span>
-                    </div>
-                  </>
-                )}
               {currentMedia?.release_date && (
                 <>
                   <span className="text-white/60">•</span>

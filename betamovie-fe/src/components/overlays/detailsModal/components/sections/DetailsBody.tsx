@@ -10,6 +10,7 @@ import { MediaBookmarkButton } from "@/components/media/MediaBookmark";
 import { ManageMediaListsModal } from "@/components/overlays/ManageMediaListsModal";
 import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
+import { getRTIcon } from "@/utils/rottenTomatoes";
 
 import { DetailsBodyProps } from "../../types";
 
@@ -23,6 +24,9 @@ export function DetailsBody({
   releaseDate,
   seasons,
   imdbData,
+  rtData,
+  isLoadingImdb,
+  isLoadingRt,
 }: DetailsBodyProps) {
   const [showListModal, setShowListModal] = useState(false);
   const loggedIn = !!useAuthStore((state) => state.account);
@@ -84,33 +88,65 @@ export function DetailsBody({
     return new Date(dateString).getFullYear();
   };
 
+  const inlineLoadingClass =
+    "h-4 w-14 rounded bg-white/10 animate-pulse inline-block";
+
   return (
     <div className="space-y-4">
       {/* TMDB Rating and Year/Seasons */}
       <div className="flex flex-wrap items-center gap-2 text-sm text-white/80">
         {/* Ratings Group */}
         <div className="flex items-center gap-2">
-          {voteAverage && (
+          {typeof voteAverage === "number" && (
             <div className="flex items-center gap-1">
               <Icon icon={Icons.TMDB} />
               <span>{voteAverage.toFixed(1)}</span>
-              {voteCount && (
+              {typeof voteCount === "number" && (
                 <span className="text-white/60">
                   ({voteCount.toLocaleString()})
                 </span>
               )}
             </div>
           )}
-          {imdbData?.rating && (
+
+          {(isLoadingImdb || imdbData) && (
             <>
               <span className="text-white/60">•</span>
               <div className="flex items-center gap-1">
                 <Icon icon={Icons.IMDB} className="text-yellow-400" />
-                <span>{imdbData.rating.toFixed(1)}</span>
-                {imdbData.votes && (
+                {isLoadingImdb ? (
+                  <span className={inlineLoadingClass} />
+                ) : (
+                  <span>{imdbData?.rating.toFixed(1)}</span>
+                )}
+                {!isLoadingImdb && typeof imdbData?.votes === "number" && (
                   <span className="text-white/60">
                     ({imdbData.votes.toLocaleString()})
                   </span>
+                )}
+              </div>
+            </>
+          )}
+
+          {(isLoadingRt || rtData) && (
+            <>
+              <span className="text-white/60">•</span>
+              <div className="flex items-center gap-1">
+                {rtData ? (
+                  <img
+                    src={getRTIcon(rtData.tomatoIcon)}
+                    alt="Tomatometer"
+                    className="h-4 w-4"
+                  />
+                ) : (
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-[#fa320a]">
+                    RT
+                  </span>
+                )}
+                {isLoadingRt ? (
+                  <span className={inlineLoadingClass} />
+                ) : (
+                  <span>{rtData?.tomatoScore}%</span>
                 )}
               </div>
             </>

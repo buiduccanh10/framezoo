@@ -11,6 +11,8 @@ export function DetailsInfo({
   data,
   imdbData,
   rtData,
+  isLoadingImdb,
+  isLoadingRt,
   provider,
   onCollectionClick,
 }: DetailsInfoProps) {
@@ -151,6 +153,8 @@ export function DetailsInfo({
         <DetailsRatings
           imdbData={imdbData}
           rtData={rtData}
+          isLoadingImdb={isLoadingImdb}
+          isLoadingRt={isLoadingRt}
           mediaId={data.id}
           mediaType={data.type}
           imdbId={data.imdbId}
