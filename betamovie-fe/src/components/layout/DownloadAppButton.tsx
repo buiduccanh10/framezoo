@@ -11,10 +11,12 @@ import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
 import { Transition } from "@/components/utils/Transition";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 
 export function DownloadAppButton() {
   const { t } = useTranslation();
   const backendUrl = useBackendUrl();
+  const isDesktopApp = useIsDesktopApp();
   const [open, setOpen] = useState(false);
   const [manifest, setManifest] = useState<AppDownloadManifest | null>(null);
   const [loading, setLoading] = useState(false);
@@ -92,7 +94,7 @@ export function DownloadAppButton() {
     };
   }, [open, backendUrl, t]);
 
-  if (!backendUrl) return null;
+  if (!backendUrl || isDesktopApp) return null;
 
   return (
     <div ref={dropdownRef} className="relative pointer-events-auto">

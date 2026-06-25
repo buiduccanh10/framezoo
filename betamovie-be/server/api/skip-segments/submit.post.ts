@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { $fetch } from 'ofetch';
 
 const THE_INTRODB_SUBMIT_URL = 'https://api.theintrodb.org/v1/submit';
 

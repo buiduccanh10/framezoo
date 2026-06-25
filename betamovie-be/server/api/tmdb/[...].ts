@@ -1,4 +1,5 @@
 import { joinURL } from 'ufo';
+import { $fetch } from 'ofetch';
 
 const ONE_HOUR_SECONDS = 60 * 60;
 const ONE_MONTH_SECONDS = 30 * 24 * 60 * 60;

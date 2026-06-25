@@ -49,6 +49,12 @@ build:desktop:
     GIT_STRATEGY: fetch
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - betamovie-fe/**/*
+        - betamovie-desktop/package.json
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
   script:
     - corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
     # Create the env file from GitLab CI/CD variables so build uses prod configs

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { $fetch } from 'ofetch';
 
 const INTRODB_SEGMENTS_URL = 'https://api.introdb.app/segments';
 const THE_INTRODB_MEDIA_URL = 'https://api.theintrodb.org/v2/media';
