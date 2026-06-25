@@ -6,8 +6,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable && apk add --no-cache curl
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 COPY betamovie-be/package.json ./betamovie-be/package.json
+COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # betamovie-be prepare runs prisma generate; install without lifecycle until sources exist
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \

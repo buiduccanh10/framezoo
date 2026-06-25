@@ -1,5 +1,5 @@
 {
-  "packageManager": "pnpm@11.8.0",
+  "packageManager": "pnpm@11.9.0",
   "name": "betamovie-fe",
   "version": "5.3.7",
   "private": true,

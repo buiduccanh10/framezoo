@@ -13,6 +13,6 @@ export default defineConfig({
     url: process.env.DATABASE_URL || defaultDatabaseUrl,
   },
   migrations: {
-    seed: 'pnpm run seed',
+    seed: 'tsx prisma/seed.ts',
   },
 });
