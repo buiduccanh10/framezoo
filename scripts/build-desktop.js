@@ -36,13 +36,19 @@ execSync('pnpm run build', { cwd: desktopDir, stdio: 'inherit' });
 // 3. Package desktop application for macOS and Windows sequentially to avoid CLI flag conflicts
 console.log('Packaging desktop applications for macOS and Windows...');
 
-const targets = [
-  { name: 'macOS Apple Silicon (arm64)', command: 'npx electron-builder --mac dmg --arm64' },
-  { name: 'macOS Intel (x64)', command: 'npx electron-builder --mac dmg --x64' },
-  { name: 'macOS Universal', command: 'npx electron-builder --mac dmg --universal' },
+const targets = [];
+if (process.platform === 'darwin') {
+  targets.push(
+    { name: 'macOS Apple Silicon (arm64)', command: 'npx electron-builder --mac dmg --arm64' },
+    { name: 'macOS Intel (x64)', command: 'npx electron-builder --mac dmg --x64' },
+    { name: 'macOS Universal', command: 'npx electron-builder --mac dmg --universal' }
+  );
+}
+// Windows targets can be built on macOS, Linux, and Windows
+targets.push(
   { name: 'Windows x64', command: 'npx electron-builder --win --x64' },
   { name: 'Windows ARM64', command: 'npx electron-builder --win --arm64' }
-];
+);
 
 for (const target of targets) {
   console.log(`\n--- Building target: ${target.name} ---`);
@@ -61,15 +67,20 @@ const version = packageJson.version;
 const releaseDir = path.join(desktopDir, 'release');
 console.log(`\nCopying packaged builds (v${version}) from ${releaseDir} to ${downloadsDir}...`);
 
-const filesToCopy = [
-  `AlphaFlix-${version}-arm64.dmg`,
-  `AlphaFlix-${version}-x64.dmg`,
-  `AlphaFlix-${version}-universal.dmg`,
+const filesToCopy = [];
+if (process.platform === 'darwin') {
+  filesToCopy.push(
+    `AlphaFlix-${version}-arm64.dmg`,
+    `AlphaFlix-${version}-x64.dmg`,
+    `AlphaFlix-${version}-universal.dmg`
+  );
+}
+filesToCopy.push(
   `AlphaFlix-${version}-x64.exe`,
   `AlphaFlix-${version}-arm64.exe`,
   `AlphaFlix-${version}-x64.zip`,
   `AlphaFlix-${version}-arm64.zip`
-];
+);
 
 let copiedCount = 0;
 for (const file of filesToCopy) {
