@@ -116,6 +116,11 @@ if (fs.existsSync(readmeSrc)) {
 
 console.log(`Successfully built and copied ${copiedCount} files to the downloads folder.`);
 
+if (copiedCount === 0) {
+  console.error('Error: No files were successfully built and copied! Failing build.');
+  process.exit(1);
+}
+
 // 6. Sync to Docker volume if Docker is available
 try {
   console.log('\nChecking for Docker volumes to sync...');
