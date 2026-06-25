@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import {
   SessionResponse,
   isAuthErrorStatus,
+  normalizeAccessToken,
   withAuthRetry,
 } from "@/backend/accounts/auth";
 import { bookmarkMediaToInput } from "@/backend/accounts/bookmarks";
@@ -111,7 +112,10 @@ export function useAuth() {
           device: await encryptData("Browser", keys.seed),
         });
 
-        const user = await getUser(backendUrl);
+        const user = await getUser(
+          backendUrl,
+          normalizeAccessToken(loginResult.oauth),
+        );
         const seedBase64 = bytesToBase64(keys.seed);
 
         return userDataLogin(loginResult, user.user, user.session, seedBase64);
@@ -148,7 +152,10 @@ export function useAuth() {
           device: await encryptData("Browser", keys.seed),
         });
 
-        const user = await getUser(backendUrl);
+        const user = await getUser(
+          backendUrl,
+          normalizeAccessToken(loginResult.oauth),
+        );
         const seedBase64 = bytesToBase64(keys.seed);
 
         // Store credential mapping if we have a credential ID

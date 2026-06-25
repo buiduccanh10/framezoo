@@ -5,10 +5,11 @@ import {
   type SourcererOutput,
   type StreamPreview,
 } from "@/lib/providers";
+import { conf } from "@/setup/config";
 
 const getBaseUrl = () => {
   const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+    conf().BACKEND_URL?.replace(/\/+$/, "") || "http://localhost:3000";
   return `${backendUrl}/api/embed`;
 };
 

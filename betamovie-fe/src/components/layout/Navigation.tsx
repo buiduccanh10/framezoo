@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
@@ -14,6 +13,7 @@ import { useBannerSize } from "@/stores/banner";
 import { usePreferencesStore } from "@/stores/preferences";
 
 import { BrandPill } from "./BrandPill";
+import { DownloadAppButton } from "./DownloadAppButton";
 
 export interface NavigationProps {
   bg?: boolean;
@@ -26,11 +26,7 @@ export function Navigation(props: NavigationProps) {
   const bannerHeight = useBannerSize();
   const location = useLocation();
   const { loggedIn } = useAuth();
-  const { t } = useTranslation();
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [installPromptEvent, setInstallPromptEvent] = useState<any | null>(
-    null,
-  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,73 +36,6 @@ export function Navigation(props: NavigationProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Capture PWA install prompt so we can trigger it from a button (mobile & desktop)
-  useEffect(() => {
-    const handleBeforeInstallPrompt = (event: any) => {
-      // Debug: log when Chrome fires the PWA install prompt
-      // This helps verify installability in production.
-      // eslint-disable-next-line no-console
-      console.log("[PWA] beforeinstallprompt fired", {
-        time: new Date().toISOString(),
-        platform: (event as any).platforms,
-      });
-      event.preventDefault();
-      setInstallPromptEvent(event);
-    };
-
-    window.addEventListener(
-      "beforeinstallprompt",
-      handleBeforeInstallPrompt as any,
-    );
-
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt as any,
-      );
-    };
-  }, []);
-
-  const handleInstallClick = async () => {
-    // Debug: log click and whether we currently have a saved install event
-    // eslint-disable-next-line no-console
-    console.log("[PWA] Install button clicked", {
-      hasEvent: !!installPromptEvent,
-      time: new Date().toISOString(),
-    });
-
-    if (installPromptEvent) {
-      try {
-        // eslint-disable-next-line no-console
-        console.log("[PWA] Calling prompt() for install");
-        await installPromptEvent.prompt();
-        await installPromptEvent.userChoice?.then?.((choiceResult: any) =>
-          console.log("[PWA] User choice", {
-            outcome: choiceResult?.outcome,
-            platform: choiceResult?.platform,
-          }),
-        );
-      } catch (error) {
-        console.error("[PWA] Error during install prompt", error);
-      } finally {
-        setInstallPromptEvent(null);
-      }
-      return;
-    }
-
-    const ua = navigator.userAgent || "";
-    const isIOS = /iPhone|iPad|iPod/i.test(ua);
-    const isSafari =
-      /Safari/i.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
-
-    if (isIOS && isSafari) {
-      alert(t("navigation.install.iosSafariGuide"));
-      return;
-    }
-
-    alert(t("navigation.install.genericGuide"));
-  };
 
   // Calculate mask length based on scroll position
   const getMaskLength = () => {
@@ -249,24 +178,10 @@ export function Navigation(props: NavigationProps) {
                   location.pathname !== "/register" && (
                     <WatchPartyInputLink triggerVariant="icon" />
                   )}
+                {location.pathname !== "/login" &&
+                  location.pathname !== "/settings" &&
+                  location.pathname !== "/register" && <DownloadAppButton />}
               </div>
-
-              {/* {location.pathname !== "/login" &&
-                location.pathname !== "/settings" &&
-                location.pathname !== "/register" && (
-                  <button
-                    type="button"
-                    onClick={handleInstallClick}
-                    className="text-xl text-white tabbable rounded-full backdrop-blur-lg"
-                  >
-                    <IconPatch
-                      icon={Icons.DOWNLOAD}
-                      clickable
-                      downsized
-                      navigation
-                    />
-                  </button>
-                )} */}
               {/* <a
                 onClick={() => openNotifications()}
                 rel="noreferrer"

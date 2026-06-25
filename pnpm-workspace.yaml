@@ -1,6 +1,7 @@
 packages:
   - betamovie-fe
   - betamovie-be
+  - betamovie-desktop
 
 shamefullyHoist: true
 strictPeerDependencies: false
@@ -10,6 +11,7 @@ allowBuilds:
   '@prisma/client': true
   '@prisma/engines': true
   core-js: true
+  electron-winstaller: true
   esbuild: true
   prisma: true
   unrs-resolver: true

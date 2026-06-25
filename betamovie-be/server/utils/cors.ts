@@ -3,7 +3,29 @@ import type { H3Event } from 'h3';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type H3EventCompat = any;
 
-const DEFAULT_DEV_ORIGINS = new Set(['http://localhost:5173', 'http://127.0.0.1:5173']);
+const DEFAULT_DEV_ORIGINS = new Set([
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174',
+  'http://localhost:5174',
+]);
+
+const isLocalDevelopmentOrigin = (value: string) => {
+  if (value === 'null') {
+    return true;
+  }
+
+  try {
+    const { hostname } = new URL(value);
+    return (
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '::1'
+    );
+  } catch {
+    return false;
+  }
+};
 
 const normalizeOrigin = (value: string) => {
   try {
@@ -38,9 +60,12 @@ export const resolveCorsOrigin = (event: H3EventCompat) => {
     return normalizedRequestOrigin;
   }
 
-  // Safe local fallback for developer setups where NODE_ENV is production-like
-  // but no explicit CORS allowlist is configured.
-  if (allowedOrigins.size === 0 && DEFAULT_DEV_ORIGINS.has(normalizedRequestOrigin)) {
+  // Allow local dev origins even when a frontend allowlist is present.
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    (DEFAULT_DEV_ORIGINS.has(normalizedRequestOrigin) ||
+      isLocalDevelopmentOrigin(normalizedRequestOrigin))
+  ) {
     return normalizedRequestOrigin;
   }
 

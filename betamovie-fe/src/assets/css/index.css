@@ -31,6 +31,18 @@ body[data-no-scroll] {
   min-height: 100vh;
   min-height: 100dvh;
   width: 100%;
+  box-sizing: border-box;
+}
+
+html[data-desktop-app="true"],
+html[data-desktop-app="true"] body {
+  scrollbar-width: none;
+}
+
+html[data-desktop-app="true"]::-webkit-scrollbar,
+html[data-desktop-app="true"] body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 body[data-no-select] {
