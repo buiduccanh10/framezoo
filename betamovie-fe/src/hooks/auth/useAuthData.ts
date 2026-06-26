@@ -4,6 +4,7 @@ import {
   LoginResponse,
   SessionResponse,
   normalizeAccessToken,
+  normalizeRefreshToken,
 } from "@/backend/accounts/auth";
 import { SettingsResponse } from "@/backend/accounts/settings";
 import {
@@ -119,6 +120,7 @@ export function useAuthData() {
       seed: string,
     ) => {
       const accessToken = normalizeAccessToken(loginResponse.oauth);
+      const refreshToken = normalizeRefreshToken(loginResponse.oauth);
       const account = {
         userId: user.id,
         sessionId: loginResponse.session.id,
@@ -126,6 +128,7 @@ export function useAuthData() {
         profile: user.profile,
         nickname: user.nickname,
         token: accessToken,
+        refreshToken,
         seed,
       };
       setAccount(account);

@@ -34,7 +34,7 @@ export interface LoginResponse {
 
 type RetryableAccount = Pick<
   AccountWithToken,
-  "sessionId" | "userId" | "token"
+  "sessionId" | "userId" | "token" | "refreshToken"
 >;
 
 let tokenRefreshInFlight: Promise<string | null> | null = null;
@@ -44,6 +44,13 @@ export function normalizeAccessToken(
 ): string | undefined {
   if (!oauth) return undefined;
   return oauth.accessToken || oauth.access_token;
+}
+
+export function normalizeRefreshToken(
+  oauth?: OAuthTokenResponse | null,
+): string | undefined {
+  if (!oauth) return undefined;
+  return oauth.refreshToken || oauth.refresh_token;
 }
 
 export function getAuthHeaders(token?: string): Record<string, string> {
@@ -89,12 +96,14 @@ function isMatchingAccount(
 
 export async function refreshOAuthToken(
   url: string,
+  refreshToken?: string,
 ): Promise<OAuthTokenResponse> {
   return ofetch<OAuthTokenResponse>("/oauth/token", {
     method: "POST",
     credentials: "include",
     body: {
       grant_type: "refresh_token",
+      ...(refreshToken ? { refresh_token: refreshToken } : {}),
     },
     baseURL: url,
   });
@@ -107,8 +116,9 @@ export async function refreshAccessTokenForAccount(
   if (!tokenRefreshInFlight) {
     tokenRefreshInFlight = (async () => {
       try {
-        const oauth = await refreshOAuthToken(url);
+        const oauth = await refreshOAuthToken(url, account?.refreshToken);
         const accessToken = normalizeAccessToken(oauth);
+        const refreshToken = normalizeRefreshToken(oauth);
         if (!accessToken) return null;
 
         const { account: currentAccount, setAccount } = useAuthStore.getState();
@@ -116,6 +126,7 @@ export async function refreshAccessTokenForAccount(
           setAccount({
             ...currentAccount,
             token: accessToken,
+            refreshToken: refreshToken ?? currentAccount.refreshToken,
           });
         }
 
