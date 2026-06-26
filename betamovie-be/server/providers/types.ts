@@ -7,6 +7,7 @@ export interface StreamPreview {
 export interface StreamLookupContext {
   title?: string;
   releaseYear?: number;
+  country?: string;
 }
 
 export interface Stream {

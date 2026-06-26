@@ -252,15 +252,20 @@ export default defineEventHandler(async event => {
           ? Number.parseInt(String(streamQuery.releaseYear), 10)
           : Number.NaN;
       const releaseYear = Number.isFinite(releaseYearRaw) ? releaseYearRaw : undefined;
+      const country =
+        typeof streamQuery.country === 'string' && streamQuery.country.trim().length > 0
+          ? streamQuery.country.trim()
+          : undefined;
       const contextCacheKey = `stream-meta:${providerName}:${type}:${tmdbId}${type === 'tv' ? `:${season}:${episode}` : ''}`;
 
-      if (title || releaseYear) {
+      if (title || releaseYear || country) {
         await storage
           .setItem(
             contextCacheKey,
             {
               title,
               releaseYear,
+              country,
             },
             { ttl: 60 * 60 }
           )
@@ -297,6 +302,7 @@ export default defineEventHandler(async event => {
         {
           title,
           releaseYear,
+          country,
         }
       );
 

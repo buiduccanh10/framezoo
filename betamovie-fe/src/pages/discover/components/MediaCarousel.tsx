@@ -253,8 +253,20 @@ export function MediaCarousel({
     });
   const resolvedSectionTitle = sectionTitleOverride || sectionTitle;
 
+  // Deduplicate media by ID to prevent duplicate React keys
+  const uniqueMedia = React.useMemo(() => {
+    const seen = new Set();
+    return media.filter((item) => {
+      if (!item?.id) return false;
+      const idStr = item.id.toString();
+      if (seen.has(idStr)) return false;
+      seen.add(idStr);
+      return true;
+    });
+  }, [media]);
+
   // Hide section if there's an error or no content (after loading is complete)
-  const shouldHide = !isLoading && (error || media.length === 0);
+  const shouldHide = !isLoading && (error || uniqueMedia.length === 0);
 
   // Find active button
   const activeButton = React.useMemo(() => {
@@ -548,8 +560,8 @@ export function MediaCarousel({
         >
           <div className="lg:w-12" />
 
-          {media.length > 0
-            ? media.map((item) => (
+          {uniqueMedia.length > 0
+            ? uniqueMedia.map((item) => (
                 <div
                   onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
                     e.preventDefault()

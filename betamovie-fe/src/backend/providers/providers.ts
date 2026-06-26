@@ -25,10 +25,6 @@ import {
   scrapeOpenMovieShow,
 } from "./custom/sources/openMovieSource";
 import {
-  scrapeOPhimMovie,
-  scrapeOPhimShow,
-} from "./custom/sources/ophimSource";
-import {
   scrapeVidlinkMovie,
   scrapeVidlinkShow,
 } from "./custom/sources/vidlinkSource";
@@ -164,20 +160,6 @@ const kkphimSource = {
   scrapeShow: scrapeKKPhimShow,
 };
 
-// Custom OPhim source definition
-const ophimSource = {
-  id: "ophim",
-  name: "Server 9 (OPhim)",
-  rank: 9,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeOPhimMovie,
-  scrapeShow: scrapeOPhimShow,
-};
-
 // Custom OpenMovie embed definition
 const openMovieEmbed = {
   id: "openmovie-embed",
@@ -211,7 +193,6 @@ export function getProviders() {
       .addSource(vidsrcRuSource)
       .addSource(vidsrcSource)
       .addSource(kkphimSource)
-      .addSource(ophimSource)
       .addEmbed(openMovieEmbed)
       .build();
   }
@@ -231,7 +212,6 @@ export function getProviders() {
       .addSource(vidsrcRuSource)
       .addSource(vidsrcSource)
       .addSource(kkphimSource)
-      .addSource(ophimSource)
       .addEmbed(openMovieEmbed)
       .build();
   }
@@ -251,7 +231,6 @@ export function getProviders() {
     .addSource(vidsrcRuSource)
     .addSource(vidsrcSource)
     .addSource(kkphimSource)
-    .addSource(ophimSource)
     .addEmbed(openMovieEmbed)
     .build();
 }
@@ -270,7 +249,6 @@ export function getAllProviders() {
     .addSource(vidsrcRuSource)
     .addSource(vidsrcSource)
     .addSource(kkphimSource)
-    .addSource(ophimSource)
     .addEmbed(openMovieEmbed)
     .build();
 }

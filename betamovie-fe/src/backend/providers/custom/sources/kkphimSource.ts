@@ -1,3 +1,4 @@
+import { get as fetchTmdb } from "@/backend/metadata/tmdb";
 import {
   type MovieScrapeContext,
   NotFoundError,
@@ -32,6 +33,34 @@ interface KKPhimApiResponse {
   count: number;
   providerTimings: Record<string, number>;
   streams: KKPhimStream[];
+}
+
+function buildContextQuery(
+  ctx: MovieScrapeContext | ShowScrapeContext,
+  viTitle: string,
+  country: string,
+): string {
+  const query = new URLSearchParams();
+
+  if (viTitle && viTitle.trim().length > 0) {
+    query.set("title", viTitle.trim());
+  }
+
+  if (
+    typeof ctx.media?.releaseYear === "number" &&
+    Number.isFinite(ctx.media.releaseYear)
+  ) {
+    query.set("releaseYear", String(ctx.media.releaseYear));
+  } else if (ctx.media?.year) {
+    query.set("releaseYear", String(ctx.media.year));
+  }
+
+  if (country && country.trim().length > 0) {
+    query.set("country", country.trim());
+  }
+
+  const queryString = query.toString();
+  return queryString ? `?${queryString}` : "";
 }
 
 function encodeStreamInfo(stream: KKPhimStream): string {
@@ -102,7 +131,25 @@ export async function scrapeKKPhimMovie(
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const apiUrl = `${KKPHIM_API_BASE}/movie/${ctx.media.tmdbId}`;
+  let viTitle = ctx.media.title;
+  let country = "";
+
+  try {
+    const details = await fetchTmdb<any>(`/movie/${ctx.media.tmdbId}`, {
+      language: "vi-VN",
+    });
+    if (details) {
+      viTitle = details.title || viTitle;
+      country =
+        details.origin_country?.[0] ||
+        details.production_countries?.[0]?.iso_3166_1 ||
+        "";
+    }
+  } catch (err) {
+    console.error("[KKPhim] Failed to fetch TMDB details in vi-VN:", err);
+  }
+
+  const apiUrl = `${KKPHIM_API_BASE}/movie/${ctx.media.tmdbId}${buildContextQuery(ctx, viTitle, country)}`;
 
   try {
     const data = await ctx.fetcher<KKPhimApiResponse>(apiUrl, {
@@ -144,7 +191,22 @@ export async function scrapeKKPhimShow(
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const apiUrl = `${KKPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
+  let viTitle = ctx.media.title;
+  let country = "";
+
+  try {
+    const details = await fetchTmdb<any>(`/tv/${ctx.media.tmdbId}`, {
+      language: "vi-VN",
+    });
+    if (details) {
+      viTitle = details.name || viTitle;
+      country = details.origin_country?.[0] || "";
+    }
+  } catch (err) {
+    console.error("[KKPhim] Failed to fetch TMDB details in vi-VN:", err);
+  }
+
+  const apiUrl = `${KKPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}${buildContextQuery(ctx, viTitle, country)}`;
 
   try {
     const data = await ctx.fetcher<KKPhimApiResponse>(apiUrl, {

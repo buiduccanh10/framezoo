@@ -6,7 +6,6 @@ import { getVidsrcRuStreams } from './vidsrc-ru';
 import { getVidsrcWtfStreams } from './vidsrcwtf';
 import { getVidrockStreams } from './vidrock';
 import { getKKPhimStreams } from './kkphim';
-import { getOPhimStreams } from './ophim';
 import { get111MoviesStreams } from './111movies';
 
 export interface StreamProvider {
@@ -67,12 +66,6 @@ const kkphimProvider: StreamProvider = {
   getStreams: getKKPhimStreams,
 };
 
-const ophimProvider: StreamProvider = {
-  name: 'ophim',
-  type: 'direct',
-  getStreams: getOPhimStreams,
-};
-
 const movies111Provider: StreamProvider = {
   name: '111movies',
   type: 'direct',
@@ -91,7 +84,6 @@ const providers: Map<string, StreamProvider> = new Map([
   ['vidsrc', vidsrcProvider],
   ['vidsrc-ru', vidsrcRuProvider],
   ['kkphim', kkphimProvider],
-  ['ophim', ophimProvider],
   // Add more providers here in the future
   // ["torrent-provider", torrentProvider],
 ]);
