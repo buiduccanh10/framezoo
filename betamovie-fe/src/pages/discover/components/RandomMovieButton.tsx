@@ -5,6 +5,7 @@ import { get } from "@/backend/metadata/tmdb";
 import { Movie } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 
 interface TMDBMovieResponse {
   results: Movie[];
@@ -111,7 +112,7 @@ export function RandomMovieButton() {
             </div>
           ) : (
             <img
-              src="/lightbar-images/dice.svg"
+              src={resolvePublicUrl("/lightbar-images/dice.svg")}
               alt="Dice"
               className="w-6 h-6"
             />

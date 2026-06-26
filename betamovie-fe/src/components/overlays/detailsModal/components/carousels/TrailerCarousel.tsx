@@ -3,6 +3,11 @@ import { useTranslation } from "react-i18next";
 
 import { getMediaVideos } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes, TMDBVideo } from "@/backend/metadata/types/tmdb";
+import { resolvePublicUrl } from "@/utils/publicUrl";
+
+const THUMBNAIL_PLACEHOLDER =
+  resolvePublicUrl("/thumbnail-placeholder.png") ??
+  "/thumbnail-placeholder.png";
 
 interface TrailerCarouselProps {
   mediaId: string;
@@ -72,7 +77,7 @@ export function TrailerCarousel({
 
           if (isImdbTrailer) {
             // Use IMDb thumbnail if available, otherwise use a generic trailer placeholder
-            thumbnailUrl = video.thumbnail || "/thumbnail-placeholder.png";
+            thumbnailUrl = video.thumbnail || THUMBNAIL_PLACEHOLDER;
           } else {
             // Use YouTube thumbnail for TMDB videos
             thumbnailUrl = `https://img.youtube.com/vi/${video.key}/hqdefault.jpg`;

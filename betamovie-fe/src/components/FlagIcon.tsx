@@ -1,6 +1,7 @@
 import classNames from "classnames";
 
 import { getCountryCodeForLocale } from "@/utils/language";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 import "flag-icons/css/flag-icons.min.css";
 
 export interface FlagIconProps {
@@ -9,34 +10,35 @@ export interface FlagIconProps {
 }
 
 export function FlagIcon(props: FlagIconProps) {
+  const flagSrc = (path: string) => resolvePublicUrl(path) ?? path;
   let countryCode: string | null = props.country ?? null;
   if (props.langCode) countryCode = getCountryCodeForLocale(props.langCode);
 
   if (props.langCode === "tok")
     return (
       <div className="w-8 h-6 rounded bg-[#c8e1ed] flex justify-center items-center">
-        <img src="/flags/tokiPona.svg" className="w-7 h-5" />
+        <img src={flagSrc("/flags/tokiPona.svg")} className="w-7 h-5" />
       </div>
     );
 
   if (props.langCode === "pirate")
     return (
       <div className="w-8 h-6 rounded bg-[#2E3439] flex justify-center items-center">
-        <img src="/flags/skull.svg" className="w-4 h-4" />
+        <img src={flagSrc("/flags/skull.svg")} className="w-4 h-4" />
       </div>
     );
 
   if (props.langCode === "cat")
     return (
       <div className="w-8 h-6 rounded bg-[#505050] flex justify-center items-center">
-        <img src="/flags/cat.png" className="w-4 h-4" />
+        <img src={flagSrc("/flags/cat.png")} className="w-4 h-4" />
       </div>
     );
 
   if (props.langCode === "uwu")
     return (
       <div className="w-8 h-6 rounded bg-[#222] flex justify-center items-center">
-        <img src="/flags/uwu.png" className="w-6 h-6" />
+        <img src={flagSrc("/flags/uwu.png")} className="w-6 h-6" />
       </div>
     );
 
@@ -68,7 +70,7 @@ export function FlagIcon(props: FlagIconProps) {
   if (props.langCode === "gl-ES")
     return (
       <div className="w-8 h-6 rounded bg-[#2E3439] flex justify-center items-center">
-        <img src="/flags/galicia.svg" className="rounded" />
+        <img src={flagSrc("/flags/galicia.svg")} className="rounded" />
       </div>
     );
 

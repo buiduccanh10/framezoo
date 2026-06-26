@@ -9,6 +9,7 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useAuthStore } from "@/stores/auth";
 import { useBannerStore } from "@/stores/banner";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 
 const PING_INTERVAL_MS = 5000;
 const PUBLIC_ONLINE_SKIP_TICKS = 10; // 50s
@@ -28,7 +29,7 @@ export function useOnlineListener() {
       ? `${backendBase}/auth/ping`
       : isDesktopApp && backendBase
         ? `${backendBase}/meta`
-        : "/ping.txt";
+        : (resolvePublicUrl("/ping.txt") ?? "/ping.txt");
     const onlineSkipTicks = isAuthenticated
       ? AUTH_ONLINE_SKIP_TICKS
       : PUBLIC_ONLINE_SKIP_TICKS;

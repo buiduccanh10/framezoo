@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import "./Lightbar.css";
 
+import { resolvePublicUrl } from "@/utils/publicUrl";
+
 interface LightbarOptions {
   imgSrc?: string;
   horizontalMotion?: boolean;
@@ -37,7 +39,7 @@ class Particle {
   ) {
     if (options.imgSrc) {
       this.image = new Image();
-      this.image.src = options.imgSrc;
+      this.image.src = resolvePublicUrl(options.imgSrc) ?? options.imgSrc;
     }
 
     this.options = options;
