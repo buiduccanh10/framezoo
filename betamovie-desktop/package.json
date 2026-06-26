@@ -10,7 +10,7 @@
     "dev:shell": "tsup --watch",
     "dev:electron": "wait-on dist/main.cjs tcp:127.0.0.1:5174 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5174 electronmon dist/main.cjs",
     "build": "rimraf renderer dist && pnpm run build:renderer && pnpm run build:shell",
-    "build:renderer": "cross-env VITE_BASE_URL=./ VITE_PWA_ENABLED=false VITE_ENABLE_DEVTOOLS_PROTECTION=false pnpm --dir ../betamovie-fe exec vite build --emptyOutDir --outDir ../betamovie-desktop/renderer",
+    "build:renderer": "cross-env VITE_BASE_URL=./ VITE_PWA_ENABLED=false VITE_ENABLE_DEVTOOLS_PROTECTION=true pnpm --dir ../betamovie-fe exec vite build --emptyOutDir --outDir ../betamovie-desktop/renderer",
     "build:shell": "tsup",
     "package:dir": "pnpm run build && electron-builder --dir",
     "package:release": "pnpm run build && electron-builder",

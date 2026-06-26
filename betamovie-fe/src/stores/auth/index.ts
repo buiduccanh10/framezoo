@@ -15,6 +15,7 @@ export type AccountWithToken = Account & {
   sessionId: string;
   userId: string;
   token?: string;
+  refreshToken?: string;
   seed: string;
   deviceName: string;
 };

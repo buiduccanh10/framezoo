@@ -5,6 +5,7 @@ import {
   ipcMain,
   session,
   shell,
+  type Input,
 } from "electron";
 import path from "node:path";
 
@@ -13,6 +14,7 @@ const APP_NAME = "AlphaFlix";
 const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";
+const ENABLE_DEVTOOLS = Boolean(RENDERER_DEV_URL);
 
 let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
@@ -51,6 +53,15 @@ function matchesRule(hostname: string, domains: string[]) {
       hostname === normalized || hostname.endsWith(`.${normalized}`)
     );
   });
+}
+
+function isDevtoolsShortcut(input: Input) {
+  const key = input.key.toLowerCase();
+  const macShortcut = input.meta && input.alt && ["i", "j", "c"].includes(key);
+  const winShortcut =
+    input.control && input.shift && ["i", "j", "c"].includes(key);
+
+  return key === "f12" || macShortcut || winShortcut;
 }
 
 function serializeHeaders(headers: Headers) {
@@ -261,7 +272,20 @@ function createMainWindow() {
       nodeIntegration: false,
       sandbox: false,
       webSecurity: false,
+      devTools: ENABLE_DEVTOOLS,
     },
+  });
+
+  mainWindow.webContents.on("before-input-event", (event, input) => {
+    if (!ENABLE_DEVTOOLS && isDevtoolsShortcut(input)) {
+      event.preventDefault();
+    }
+  });
+
+  mainWindow.webContents.on("devtools-opened", () => {
+    if (ENABLE_DEVTOOLS) return;
+    mainWindow?.webContents.closeDevTools();
+    mainWindow?.reload();
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
