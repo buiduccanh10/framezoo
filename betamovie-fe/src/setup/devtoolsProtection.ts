@@ -4,21 +4,8 @@ const DETECTION_INTERVAL_MS = 1000;
 const DEVTOOLS_PAUSE_THRESHOLD_MS = 150;
 const RELOAD_COOLDOWN_MS = 2000;
 
-function parseBooleanEnv(value: string | undefined, defaultValue: boolean) {
-  if (value == null) return defaultValue;
-
-  const normalized = value.trim().toLowerCase();
-
-  if (["1", "true", "yes", "on"].includes(normalized)) return true;
-  if (["0", "false", "no", "off"].includes(normalized)) return false;
-
-  return defaultValue;
-}
-
-const DEVTOOLS_PROTECTION_ENABLED = parseBooleanEnv(
-  import.meta.env.VITE_ENABLE_DEVTOOLS_PROTECTION,
-  import.meta.env.PROD,
-);
+const DEVTOOLS_PROTECTION_ENABLED =
+  import.meta.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
 
 let lastReloadAt = 0;
 
