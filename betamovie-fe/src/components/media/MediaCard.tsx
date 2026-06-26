@@ -12,6 +12,7 @@ import { useSearchQuery } from "@/hooks/useSearchQuery";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePreferencesStore } from "@/stores/preferences";
 import { MediaItem } from "@/utils/mediaTypes";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 
 import { MediaBookmarkButton } from "./MediaBookmark";
 import { IconPatch } from "../buttons/IconPatch";
@@ -148,6 +149,9 @@ function MediaCardContent({
 
   const [searchQuery] = useSearchQuery();
   const enableMinimalCards = usePreferencesStore((s) => s.enableMinimalCards);
+  const posterUrl = media.poster
+    ? (resolvePublicUrl(media.poster) ?? media.poster)
+    : (resolvePublicUrl("/placeholder.png") ?? "/placeholder.png");
 
   // Simple intersection observer for lazy loading images
   const { targetRef, isIntersecting } = useIntersectionObserver({
@@ -204,11 +208,7 @@ function MediaCardContent({
               enableMinimalCards ? "" : "mb-4",
             )}
             style={{
-              backgroundImage: isIntersecting
-                ? media.poster
-                  ? `url(${media.poster})`
-                  : "url(/placeholder.png)"
-                : "",
+              backgroundImage: isIntersecting ? `url(${posterUrl})` : "",
             }}
           >
             {series ? (

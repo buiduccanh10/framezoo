@@ -3,6 +3,7 @@ import React, { ImgHTMLAttributes, useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import { Icon, Icons } from "@/components/Icon";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 
 export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string;
@@ -22,16 +23,18 @@ export function LazyImage({
   style,
   ...props
 }: ImageProps) {
+  const resolvedSrc = resolvePublicUrl(src);
+  const resolvedFallbackSrc = resolvePublicUrl(fallbackSrc);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
+  const [currentSrc, setCurrentSrc] = useState<string | undefined>(resolvedSrc);
 
   useEffect(() => {
     // Reset state when src changes
     setIsLoaded(false);
     setHasError(false);
-    setCurrentSrc(src);
-  }, [src]);
+    setCurrentSrc(resolvedSrc);
+  }, [resolvedSrc]);
 
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     setIsLoaded(true);
@@ -39,8 +42,8 @@ export function LazyImage({
   };
 
   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    if (fallbackSrc && currentSrc !== fallbackSrc) {
-      setCurrentSrc(fallbackSrc);
+    if (resolvedFallbackSrc && currentSrc !== resolvedFallbackSrc) {
+      setCurrentSrc(resolvedFallbackSrc);
       setHasError(false);
     } else {
       setHasError(true);
