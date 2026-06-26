@@ -33,9 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 11.9.0
+      - run: corepack enable
+      - run: corepack prepare pnpm@${PNPM_VERSION} --activate
       - uses: actions/setup-node@v5
         with:
           node-version: 22
