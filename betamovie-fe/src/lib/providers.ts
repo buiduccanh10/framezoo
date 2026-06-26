@@ -1,6 +1,8 @@
 import { getTag } from "@sozialhelden/ietf-language-tags";
 import { iso6393To1 } from "iso-639-3";
 
+import { getBackendAuthHeaders } from "@/utils/backendAuth";
+
 type AnyRecord = Record<string, any>;
 
 export type Qualities = "360" | "480" | "720" | "1080" | "4k" | "unknown";
@@ -206,7 +208,12 @@ export function makeStandardFetcher(fetchImpl: typeof fetch) {
     url: string,
     init?: RequestInit,
   ): Promise<T> {
-    const response = await fetchImpl(url, init);
+    const response = await fetchImpl(url, {
+      ...init,
+      credentials:
+        init?.credentials ?? (url.startsWith("/api/") ? "include" : undefined),
+      headers: getBackendAuthHeaders(url, init?.headers),
+    });
     if (!response.ok) {
       throw new Error(
         `Request failed: ${response.status} ${response.statusText}`,

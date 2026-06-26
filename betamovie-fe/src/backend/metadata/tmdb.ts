@@ -310,14 +310,12 @@ async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
   if (!result!) {
     try {
       result = await mwFetch<T>(encodeURI(url), {
-        headers: tmdbHeaders,
         baseURL: tmdbBaseUrl1,
         params: allParams,
         signal: abortOnTimeout(5000),
       });
     } catch {
       result = await mwFetch<T>(encodeURI(url), {
-        headers: tmdbHeaders,
         baseURL: tmdbBaseUrl2,
         params: allParams,
         signal: abortOnTimeout(30000),
