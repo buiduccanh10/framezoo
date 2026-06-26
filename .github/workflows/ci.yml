@@ -32,14 +32,15 @@ jobs:
     name: Audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
-      - run: corepack enable
-      - run: corepack prepare pnpm@${PNPM_VERSION} --activate
       - run: pnpm config set store-dir .pnpm-store
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm audit
@@ -53,7 +54,7 @@ jobs:
       image: electronuserland/builder:22-wine
       options: --user root
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install tools
         run: apt-get update && apt-get install -y git curl openssh-client
       - run: corepack enable
@@ -104,7 +105,7 @@ jobs:
     timeout-minutes: 30
     needs: build-desktop
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install tools
         run: sudo apt-get update && sudo apt-get install -y openssh-client curl
       - name: Start SSH agent
