@@ -599,6 +599,12 @@
       },
       "offline": "Athugaðu net tengingu þína"
     },
+    "download": {
+      "empty": "Engin niðurhal er stillt ennþá.",
+      "failed": "Mistókst að hlaða niðurhalsvalkostum.",
+      "label": "Sækja app",
+      "unavailable": "Engin bakenda vefslóð er stillt."
+    },
     "install": {
       "genericGuide": "Vafrinn þinn styður ekki sjálfvirka PWA uppsetningarkvaðningu.\nÞú getur samt sett upp með því að nota vafravalmyndina (til dæmis: 'Setja upp app', 'Búa til flýtileið' eða 'Bæta við bryggju/heimaskjá').",
       "iosSafariGuide": "Til að setja upp AlphaFlix sem app:\n\n1. Pikkaðu á Share hnappinn (ferningur með ör).\n2. Veldu 'Bæta við heimaskjá'.\n3. Pikkaðu á Bæta við."

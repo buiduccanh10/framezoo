@@ -599,6 +599,12 @@
       },
       "offline": "İnternet bağlantınızı kontrol ediniz"
     },
+    "download": {
+      "empty": "Henüz hiçbir indirme işlemi yapılandırılmadı.",
+      "failed": "İndirme seçenekleri yüklenemedi.",
+      "label": "Uygulamayı indir",
+      "unavailable": "Hiçbir arka uç URL'si yapılandırılmadı."
+    },
     "install": {
       "genericGuide": "Tarayıcınız otomatik PWA yükleme istemini desteklemiyor.\nYine de tarayıcı menüsünü kullanarak yükleme yapabilirsiniz (örneğin: 'Uygulamayı yükle', 'Kısayol oluştur' veya 'Dock'a/Ana Ekrana Ekle').",
       "iosSafariGuide": "AlphaFlix'yi uygulama olarak yüklemek için:\n\n1. Paylaş düğmesine dokunun (oklu kare).\n2. 'Ana Ekrana Ekle'yi seçin.\n3. Ekle'ye dokunun."

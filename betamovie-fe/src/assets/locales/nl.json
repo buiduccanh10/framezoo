@@ -599,6 +599,12 @@
       },
       "offline": "Controleer je internetverbinding"
     },
+    "download": {
+      "empty": "Er zijn nog geen downloads geconfigureerd.",
+      "failed": "Kan downloadopties niet laden.",
+      "label": "App downloaden",
+      "unavailable": "Er is geen backend-URL geconfigureerd."
+    },
     "install": {
       "genericGuide": "Uw browser ondersteunt geen automatische PWA-installatieprompt.\nJe kunt nog steeds installeren via het browsermenu (bijvoorbeeld: 'App installeren', 'Snelkoppeling maken' of 'Toevoegen aan Dock/Startscherm').",
       "iosSafariGuide": "AlphaFlix als app installeren:\n\n1. Tik op de knop Delen (vierkant met een pijl).\n2. Kies 'Toevoegen aan startscherm'.\n3. Tik op Toevoegen."

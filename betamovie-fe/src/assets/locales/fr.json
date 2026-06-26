@@ -599,6 +599,12 @@
       },
       "offline": "Veuillez vérifier votre connexion internet"
     },
+    "download": {
+      "empty": "Aucun téléchargement n'est encore configuré.",
+      "failed": "Échec du chargement des options de téléchargement.",
+      "label": "Télécharger l'application",
+      "unavailable": "Aucune URL backend n’est configurée."
+    },
     "install": {
       "genericGuide": "Votre navigateur ne prend pas en charge l'invite d'installation automatique de PWA.\nVous pouvez toujours effectuer l'installation à l'aide du menu du navigateur (par exemple : « Installer l'application », « Créer un raccourci » ou « Ajouter au Dock/à l'écran d'accueil »).",
       "iosSafariGuide": "Pour installer AlphaFlix en tant qu'application :\n\n1. Appuyez sur le bouton Partager (carré avec une flèche).\n2. Choisissez « Ajouter à l'écran d'accueil ».\n3. Appuyez sur Ajouter."

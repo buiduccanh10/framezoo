@@ -599,6 +599,12 @@
       },
       "offline": "Zkontrolujte své internetové připojení"
     },
+    "download": {
+      "empty": "Zatím nejsou nakonfigurována žádná stahování.",
+      "failed": "Nepodařilo se načíst možnosti stahování.",
+      "label": "Stáhněte si aplikaci",
+      "unavailable": "Není nakonfigurována žádná koncová adresa URL."
+    },
     "install": {
       "genericGuide": "Váš prohlížeč nepodporuje automatickou výzvu k instalaci PWA.\nStále můžete instalovat pomocí nabídky prohlížeče (například: „Instalovat aplikaci“, „Vytvořit zástupce“ nebo „Přidat do doku/domovské obrazovky“).",
       "iosSafariGuide": "Instalace AlphaFlix jako aplikace:\n\n1. Klepněte na tlačítko Sdílet (čtverec se šipkou).\n2. Zvolte 'Přidat na domovskou obrazovku'.\n3. Klepněte na Přidat."

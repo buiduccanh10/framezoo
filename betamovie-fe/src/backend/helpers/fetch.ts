@@ -2,6 +2,7 @@ import { ofetch } from "ofetch";
 
 import { getApiToken, setApiToken } from "@/backend/helpers/providerApi";
 import { getLoadbalancedProxyUrl } from "@/backend/providers/fetchers";
+import { getBackendAuthHeaders } from "@/utils/backendAuth";
 
 type P<T> = Parameters<typeof ofetch<T, any>>;
 type R<T> = ReturnType<typeof ofetch<T, any>>;
@@ -20,7 +21,10 @@ export function makeUrl(url: string, data: Record<string, string>) {
 }
 
 export function mwFetch<T>(url: string, ops: P<T>[1] = {}): R<T> {
-  return baseFetch<T>(url, ops);
+  return baseFetch<T>(url, {
+    ...ops,
+    headers: getBackendAuthHeaders(url, ops.headers, ops.baseURL),
+  });
 }
 
 export async function singularProxiedFetch<T>(

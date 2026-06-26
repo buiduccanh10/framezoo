@@ -599,6 +599,12 @@
       },
       "offline": "Kontrollera din internetanslutning, tokiga gås! 🦢"
     },
+    "download": {
+      "empty": "Inga nedladdningar är konfigurerade än.",
+      "failed": "Det gick inte att ladda nedladdningsalternativ.",
+      "label": "Ladda ner app",
+      "unavailable": "Ingen backend-URL är konfigurerad."
+    },
     "install": {
       "genericGuide": "Din webbläsare stöder inte en automatisk PWA-installationsuppmaning.\nDu kan fortfarande installera med hjälp av webbläsarmenyn (till exempel: 'Installera app', 'Skapa genväg' eller 'Lägg till i docka/startskärm').",
       "iosSafariGuide": "Så här installerar du AlphaFlix som en app:\n\n1. Tryck på knappen Dela (fyrkant med en pil).\n2. Välj \"Lägg till på startskärmen\".\n3. Tryck på Lägg till."

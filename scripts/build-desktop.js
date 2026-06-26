@@ -29,6 +29,13 @@ if (!fs.existsSync(downloadsDir)) {
   fs.mkdirSync(downloadsDir, { recursive: true });
 }
 
+// Remove stale release artifacts so the downloads dir only contains the latest build set.
+for (const entry of fs.readdirSync(downloadsDir)) {
+  if (entry.startsWith('AlphaFlix-') || entry === 'README.txt') {
+    fs.rmSync(path.join(downloadsDir, entry), { recursive: true, force: true });
+  }
+}
+
 // 2. Build desktop renderer and shell code
 console.log('Building desktop renderer and shell...');
 execSync('pnpm run build', { cwd: desktopDir, stdio: 'inherit' });
@@ -50,10 +57,10 @@ if (process.platform === 'darwin') {
     { name: 'macOS Intel (x64) Zip', command: 'npx electron-builder --mac zip --x64' }
   );
 }
-// Windows targets can be built on macOS, Linux, and Windows
+// Windows zip targets can be built on macOS, Linux, and Windows
 targets.push(
-  { name: 'Windows x64', command: 'npx electron-builder --win --x64' },
-  { name: 'Windows ARM64', command: 'npx electron-builder --win --arm64' }
+  { name: 'Windows x64', command: 'npx electron-builder --win zip --x64' },
+  { name: 'Windows ARM64', command: 'npx electron-builder --win zip --arm64' }
 );
 
 for (const target of targets) {
@@ -87,8 +94,6 @@ if (process.platform === 'darwin') {
   );
 }
 filesToCopy.push(
-  `AlphaFlix-${version}-x64.exe`,
-  `AlphaFlix-${version}-arm64.exe`,
   `AlphaFlix-${version}-x64.zip`,
   `AlphaFlix-${version}-arm64.zip`
 );
@@ -137,7 +142,10 @@ try {
     console.log(`Syncing files to Docker volume "${volumeName}"...`);
     // Resolve absolute path to downloads folder for Docker mount
     const absDownloadsDir = path.resolve(downloadsDir);
-    execSync(`docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "cp -r /src/. /data/"`, { stdio: 'inherit' });
+    execSync(
+      `docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "rm -f /data/AlphaFlix-* /data/README.txt && cp -r /src/. /data/"`,
+      { stdio: 'inherit' }
+    );
     console.log('Successfully synced files to Docker volume.');
   } else {
     console.log('No matching Docker downloads volume found to sync. Local files are preserved.');

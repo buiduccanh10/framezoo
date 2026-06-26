@@ -12,7 +12,6 @@ import { Spinner } from "@/components/layout/Spinner";
 import { Transition } from "@/components/utils/Transition";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
-import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useAuthStore } from "@/stores/auth";
 
 function Divider() {
@@ -318,8 +317,6 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
     setOpen((s) => !s);
   }, []);
 
-  const isDesktopApp = useIsDesktopApp();
-
   return (
     <div ref={dropdownRef} className="relative">
       <button
@@ -366,18 +363,6 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
             </DropdownLink>
           )}
           <Divider />
-          {isDesktopApp && (
-            <DropdownLink
-              onClick={() =>
-                window.dispatchEvent(
-                  new CustomEvent("alphaflix-desktop-settings"),
-                )
-              }
-              icon={Icons.GEAR}
-            >
-              {t("navigation.menu.desktop")}
-            </DropdownLink>
-          )}
           <DropdownLink href="/watch-history" icon={Icons.CLOCK}>
             {t("home.watchHistory.sectionTitle")}
           </DropdownLink>

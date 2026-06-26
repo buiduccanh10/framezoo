@@ -599,6 +599,12 @@
       },
       "offline": "Comproveu la connexió a internet"
     },
+    "download": {
+      "empty": "Encara no s'ha configurat cap baixada.",
+      "failed": "No s'han pogut carregar les opcions de baixada.",
+      "label": "Descarrega l'aplicació",
+      "unavailable": "No s'ha configurat cap URL de fons."
+    },
     "install": {
       "genericGuide": "El vostre navegador no admet una sol·licitud d'instal·lació automàtica de PWA.\nEncara podeu instal·lar-lo mitjançant el menú del navegador (per exemple: \"Instal·la l'aplicació\", \"Crea una drecera\" o \"Afegeix al Dock/Pantalla d'inici\").",
       "iosSafariGuide": "Per instal·lar AlphaFlix com a aplicació:\n\n1. Toqueu el botó Compartir (quadrat amb una fletxa).\n2. Trieu \"Afegeix a la pantalla d'inici\".\n3. Toqueu Afegeix."

@@ -599,6 +599,12 @@
       },
       "offline": "Pārbaudiet interneta savienojumu"
     },
+    "download": {
+      "empty": "Vēl nav konfigurēta neviena lejupielāde.",
+      "failed": "Neizdevās ielādēt lejupielādes opcijas.",
+      "label": "Lejupielādēt lietotni",
+      "unavailable": "Aizmugursistēmas URL nav konfigurēts."
+    },
     "install": {
       "genericGuide": "Jūsu pārlūkprogramma neatbalsta automātisku PWA instalēšanas uzvedni.\nJūs joprojām varat instalēt, izmantojot pārlūkprogrammas izvēlni (piemēram, “Instalēt lietotni”, “Izveidot saīsni” vai “Pievienot dokam/sākuma ekrānam”).",
       "iosSafariGuide": "Lai instalētu AlphaFlix kā lietotni:\n\n1. Pieskarieties pogai Kopīgot (kvadrāts ar bultiņu).\n2. Izvēlieties \"Pievienot sākuma ekrānam\".\n3. Pieskarieties Pievienot."

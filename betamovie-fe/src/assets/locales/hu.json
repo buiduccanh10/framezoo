@@ -599,6 +599,12 @@
       },
       "offline": "Nézd meg az internet kapcsolatodat, drágaságom!"
     },
+    "download": {
+      "empty": "Még nincsenek letöltések konfigurálva.",
+      "failed": "Nem sikerült betölteni a letöltési lehetőségeket.",
+      "label": "Töltse le az alkalmazást",
+      "unavailable": "Nincs beállítva háttér-URL."
+    },
     "install": {
       "genericGuide": "Az Ön böngészője nem támogatja az automatikus PWA-telepítést.\nTovábbra is telepítheti a böngésző menüjét (például: „Alkalmazás telepítése”, „Parancsikon létrehozása” vagy „Hozzáadás a dokkolóhoz/Kezdőképernyőhöz”).",
       "iosSafariGuide": "Az AlphaFlix alkalmazásként történő telepítése:\n\n1. Érintse meg a Megosztás gombot (négyzet nyíllal).\n2. Válassza a \"Hozzáadás a kezdőképernyőhöz\" lehetőséget.\n3. Érintse meg a Hozzáadás gombot."

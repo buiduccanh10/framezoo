@@ -599,6 +599,12 @@
       },
       "offline": "Hãy kiểm tra kết nối Internet của bạn"
     },
+    "download": {
+      "empty": "Chưa có nội dung tải xuống nào được định cấu hình.",
+      "failed": "Không tải được các tùy chọn tải xuống.",
+      "label": "Tải xuống ứng dụng",
+      "unavailable": "Không có URL phụ trợ nào được định cấu hình."
+    },
     "install": {
       "genericGuide": "Trình duyệt của bạn không hỗ trợ hộp thoại cài đặt PWA tự động.\nBạn có thể cài bằng cách dùng menu trình duyệt (ví dụ: \"Install app\", \"Create shortcut\", hoặc \"Add to Dock/Home Screen\").",
       "iosSafariGuide": "Để cài AlphaFlix như ứng dụng:\n\n1. Nhấn nút Chia sẻ (biểu tượng hình vuông có mũi tên).\n2. Chọn \"Thêm vào Màn hình chính\" / \"Add to Home Screen\".\n3. Nhấn Thêm."
