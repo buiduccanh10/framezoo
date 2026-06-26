@@ -20,5 +20,8 @@ export default defineConfig({
   },
   define: {
     "process.env.VITE_BACKEND_URL": JSON.stringify(process.env.VITE_BACKEND_URL || ""),
+    "process.env.VITE_ENABLE_DEVTOOLS_PROTECTION": JSON.stringify(
+      process.env.VITE_ENABLE_DEVTOOLS_PROTECTION || "",
+    ),
   },
 });

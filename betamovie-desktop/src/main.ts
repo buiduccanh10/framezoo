@@ -14,7 +14,10 @@ const APP_NAME = "AlphaFlix";
 const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";
-const ENABLE_DEVTOOLS = Boolean(RENDERER_DEV_URL);
+
+const DEVTOOLS_PROTECTION_ENABLED =
+  process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
+const ENABLE_DEVTOOLS = !DEVTOOLS_PROTECTION_ENABLED;
 
 let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
