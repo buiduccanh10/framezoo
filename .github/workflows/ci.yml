@@ -94,8 +94,8 @@ jobs:
         run: |
           set -eu
           if [ -d downloads ] && [ "$(ls -A downloads)" ]; then
-            ssh -p "${VPS_PORT:-22}" "${VPS_USER:-betakiot}@${VPS_HOST}" "mkdir -p '${DEPLOY_PATH:-/home/betamovie}'"
-            scp -P "${VPS_PORT:-22}" -r downloads "${VPS_USER:-betakiot}@${VPS_HOST}:${DEPLOY_PATH:-/home/betamovie}/"
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${VPS_PORT:-22}" "${VPS_USER:-betakiot}@${VPS_HOST}" "mkdir -p '${DEPLOY_PATH:-/home/betamovie}'"
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "${VPS_PORT:-22}" -r downloads "${VPS_USER:-betakiot}@${VPS_HOST}:${DEPLOY_PATH:-/home/betamovie}/"
           fi
 
   deploy:
@@ -146,8 +146,8 @@ jobs:
           DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
           DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
 
-          echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
-          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+          echo "Syncing monorepo on VPS (${DEPLOY_PATH})...."
+          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
             "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; [ -f deploy.sh ] || { echo 'deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x deploy.sh"
 
           ENV_TMP_LOCAL="$(mktemp /tmp/betamovie_env_local.XXXXXX)"
@@ -156,7 +156,7 @@ jobs:
           chmod 600 "$ENV_TMP_LOCAL"
 
           echo "Building prod stack from ${DEPLOY_PATH}..."
-          printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+          printf '%s' "$ENV_FILE" | ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
             "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; SKIP_CLOUDFLARE_PURGE='true' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./deploy.sh all"
 
           echo "Purging Cloudflare cache..."
