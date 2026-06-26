@@ -599,6 +599,12 @@
       },
       "offline": "Kontroller din internetforbindelse, fjollehoved!"
     },
+    "download": {
+      "empty": "Ingen downloads er konfigureret endnu.",
+      "failed": "Kunne ikke indlæse downloadindstillinger.",
+      "label": "Download app",
+      "unavailable": "Ingen backend-URL er konfigureret."
+    },
     "install": {
       "genericGuide": "Din browser understøtter ikke en automatisk PWA-installationsprompt.\nDu kan stadig installere ved hjælp af browsermenuen (for eksempel: 'Installer app', 'Opret genvej' eller 'Tilføj til dock/startskærm').",
       "iosSafariGuide": "Sådan installerer du AlphaFlix som en app:\n\n1. Tryk på knappen Del (firkantet med en pil).\n2. Vælg 'Tilføj til startskærmen'.\n3. Tryk på Tilføj."

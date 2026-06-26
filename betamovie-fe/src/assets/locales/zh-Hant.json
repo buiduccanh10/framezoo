@@ -599,6 +599,12 @@
       },
       "offline": "請檢查您的網絡連接"
     },
+    "download": {
+      "empty": "尚未配置下載。",
+      "failed": "無法載入下載選項。",
+      "label": "下載應用程式",
+      "unavailable": "未配置後端 URL。"
+    },
     "install": {
       "genericGuide": "您的瀏覽器不支援自動 PWA 安裝提示。\n您仍然可以使用瀏覽器選單進行安裝（例如：「安裝應用程式」、「建立捷徑」或「新增至 Dock/主畫面」）。",
       "iosSafariGuide": "要將 AlphaFlix 安裝為應用程式：\n\n1. 點選共享按鈕（有箭頭的方塊）。\n2. 選擇「新增至主畫面」。\n3. 點選新增。"

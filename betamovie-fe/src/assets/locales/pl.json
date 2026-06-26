@@ -599,6 +599,12 @@
       },
       "offline": "Sprawdź swoje połączenie internetowe, głupolku!"
     },
+    "download": {
+      "empty": "Żadne pobieranie nie zostało jeszcze skonfigurowane.",
+      "failed": "Nie udało się załadować opcji pobierania.",
+      "label": "Pobierz aplikację",
+      "unavailable": "Nie skonfigurowano adresu URL zaplecza."
+    },
     "install": {
       "genericGuide": "Twoja przeglądarka nie obsługuje automatycznego monitu o instalację PWA.\nNadal możesz przeprowadzić instalację za pomocą menu przeglądarki (na przykład: „Zainstaluj aplikację”, „Utwórz skrót” lub „Dodaj do Docka/Ekranu głównego”).",
       "iosSafariGuide": "Aby zainstalować AlphaFlix jako aplikację:\n\n1. Naciśnij przycisk Udostępnij (kwadrat ze strzałką).\n2. Wybierz opcję „Dodaj do ekranu głównego”.\n3. Stuknij Dodaj."

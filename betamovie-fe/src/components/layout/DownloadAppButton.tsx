@@ -102,9 +102,7 @@ export function DownloadAppButton() {
         type="button"
         onClick={() => setOpen((value) => !value)}
         className="text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto shrink-0"
-        aria-label={t("navigation.download.label", {
-          defaultValue: "Download app",
-        })}
+        aria-label={t("navigation.download.label")}
       >
         <IconPatch
           icon={Icons.DOWNLOAD}
@@ -160,9 +158,7 @@ export function DownloadAppButton() {
             </div>
           ) : (
             <div className="px-3 py-4 text-sm text-dropdown-text">
-              {t("navigation.download.empty", {
-                defaultValue: "No downloads are configured yet.",
-              })}
+              {t("navigation.download.empty")}
             </div>
           )}
         </div>

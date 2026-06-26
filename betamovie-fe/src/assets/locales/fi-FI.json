@@ -599,6 +599,12 @@
       },
       "offline": "Tarkista Internet-yhteytesi"
     },
+    "download": {
+      "empty": "Latauksia ei ole vielä määritetty.",
+      "failed": "Latausvaihtoehtojen lataaminen epäonnistui.",
+      "label": "Lataa sovellus",
+      "unavailable": "Tausta-URL-osoitetta ei ole määritetty."
+    },
     "install": {
       "genericGuide": "Selaimesi ei tue automaattista PWA-asennuskehotetta.\nVoit silti asentaa selaimen valikon kautta (esimerkiksi \"Asenna sovellus\", \"Luo pikakuvake\" tai \"Lisää telakkaan/aloitusnäyttöön\").",
       "iosSafariGuide": "AlphaFlixin asentaminen sovelluksena:\n\n1. Napauta Jaa-painiketta (neliö nuolella).\n2. Valitse Lisää aloitusnäyttöön.\n3. Napauta Lisää."

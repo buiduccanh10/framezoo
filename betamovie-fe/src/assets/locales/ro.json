@@ -599,6 +599,12 @@
       },
       "offline": "Verificați-vă conexiunea de internet"
     },
+    "download": {
+      "empty": "Nu sunt încă configurate descărcări.",
+      "failed": "Opțiunile de descărcare nu au putut fi încărcate.",
+      "label": "Descărcați aplicația",
+      "unavailable": "Nu este configurată nicio adresă URL de backend."
+    },
     "install": {
       "genericGuide": "Browserul dvs. nu acceptă o solicitare automată de instalare PWA.\nPuteți instala în continuare utilizând meniul browserului (de exemplu: „Instalați aplicația”, „Creați o comandă rapidă” sau „Adăugați la Dock/Ecranul de pornire”).",
       "iosSafariGuide": "Pentru a instala AlphaFlix ca aplicație:\n\n1. Atingeți butonul Partajare (pătrat cu o săgeată).\n2. Alegeți „Adăugați la ecranul de pornire”.\n3. Atingeți Adăugați."

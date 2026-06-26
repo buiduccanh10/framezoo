@@ -599,6 +599,12 @@
       },
       "offline": "Controlla la tua connessione internet, stupida oca! 🦢"
     },
+    "download": {
+      "empty": "Nessun download è stato ancora configurato.",
+      "failed": "Impossibile caricare le opzioni di download.",
+      "label": "Scarica l'app",
+      "unavailable": "Nessun URL di backend configurato."
+    },
     "install": {
       "genericGuide": "Il tuo browser non supporta una richiesta di installazione PWA automatica.\nPuoi comunque eseguire l'installazione utilizzando il menu del browser (ad esempio: \"Installa app\", \"Crea collegamento\" o \"Aggiungi al Dock/Schermata iniziale\").",
       "iosSafariGuide": "Per installare AlphaFlix come app:\n\n1. Tocca il pulsante Condividi (quadrato con una freccia).\n2. Scegli \"Aggiungi alla schermata iniziale\".\n3. Tocca Aggiungi."

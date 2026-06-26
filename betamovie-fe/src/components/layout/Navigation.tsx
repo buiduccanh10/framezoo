@@ -129,8 +129,8 @@ export function Navigation(props: NavigationProps) {
         <div
           className={classNames("absolute left-0 right-0 flex items-center")}
         >
-          <div className="px-4 py-5 xs:px-6 ssm:px-7 relative z-[60] flex flex-1 items-center">
-            <div className="pointer-events-auto flex flex-1 items-center gap-1.5 xs:gap-2 ssm:gap-3">
+          <div className="px-1 py-5 sm:px-4 md:px-6 lg:px-7 relative z-[60] flex flex-1 items-center">
+            <div className="pointer-events-auto flex flex-1 items-center justify-center gap-1 sm:gap-2 md:gap-3 md:justify-start">
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
                   <Link
@@ -182,7 +182,7 @@ export function Navigation(props: NavigationProps) {
                 location.pathname !== "/register" && <DownloadAppButton />}
               {location.pathname !== "/login" &&
                 location.pathname !== "/register" && (
-                  <div className="relative pointer-events-auto ml-auto">
+                  <div className="relative pointer-events-auto ml-0 md:ml-auto">
                     <LinksDropdown>
                       {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
                     </LinksDropdown>

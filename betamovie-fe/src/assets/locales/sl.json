@@ -599,6 +599,12 @@
       },
       "offline": "Preverite vašo internetno povezavo"
     },
+    "download": {
+      "empty": "Noben prenos še ni konfiguriran.",
+      "failed": "Nalaganje možnosti prenosa ni uspelo.",
+      "label": "Prenesite aplikacijo",
+      "unavailable": "Noben zaledni URL ni konfiguriran."
+    },
     "install": {
       "genericGuide": "Vaš brskalnik ne podpira samodejnega poziva za namestitev PWA.\nŠe vedno lahko namestite z uporabo menija brskalnika (na primer: »Namesti aplikacijo«, »Ustvari bližnjico« ali »Dodaj na dok/začetni zaslon«).",
       "iosSafariGuide": "Če želite namestiti AlphaFlix kot aplikacijo:\n\n1. Tapnite gumb Skupna raba (kvadrat s puščico).\n2. Izberite »Dodaj na začetni zaslon«.\n3. Tapnite Dodaj."

@@ -589,6 +589,12 @@
       },
       "offline": "Check your internet connection, silly goose! 🦢"
     },
+    "download": {
+      "empty": "No downloads are configured yet.",
+      "failed": "Failed to load download options.",
+      "label": "Download app",
+      "unavailable": "No backend URL is configured."
+    },
     "install": {
       "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
       "iosSafariGuide": "To install AlphaFlix as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."

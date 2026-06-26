@@ -599,6 +599,12 @@
       },
       "offline": "Check mol dini Internet verbendig, silly goose! 🦢"
     },
+    "download": {
+      "empty": "Es sind noch keine Downloads konfiguriert.",
+      "failed": "Download-Optionen konnten nicht geladen werden.",
+      "label": "App herunterladen",
+      "unavailable": "Es ist keine Backend-URL konfiguriert."
+    },
     "install": {
       "genericGuide": "Ihr Browser unterstützt keine automatische PWA-Installationsaufforderung.\nSie können die Installation weiterhin über das Browsermenü durchführen (z. B. „App installieren“, „Verknüpfung erstellen“ oder „Zum Dock/Startbildschirm hinzufügen“).",
       "iosSafariGuide": "So installieren Sie AlphaFlix als App:\n\n1. Tippen Sie auf die Schaltfläche „Teilen“ (Quadrat mit einem Pfeil).\n2. Wählen Sie „Zum Startbildschirm hinzufügen“.\n3. Tippen Sie auf Hinzufügen."

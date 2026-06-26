@@ -599,6 +599,12 @@
       },
       "offline": "Periksa koneksi internet Anda"
     },
+    "download": {
+      "empty": "Belum ada unduhan yang dikonfigurasi.",
+      "failed": "Gagal memuat opsi unduhan.",
+      "label": "Unduh aplikasi",
+      "unavailable": "Tidak ada URL backend yang dikonfigurasi."
+    },
     "install": {
       "genericGuide": "Browser Anda tidak mendukung perintah pemasangan PWA otomatis.\nAnda masih dapat menginstal menggunakan menu browser (misalnya: 'Instal aplikasi', 'Buat pintasan', atau 'Tambahkan ke Dock/Layar Beranda').",
       "iosSafariGuide": "Untuk menginstal AlphaFlix sebagai aplikasi:\n\n1. Ketuk tombol Bagikan (persegi dengan panah).\n2. Pilih 'Tambahkan ke Layar Beranda'.\n3. Ketuk Tambah."
