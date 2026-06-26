@@ -24,7 +24,7 @@ let autoSelectionRequestId = 0;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
-const AUTO_SUBTITLE_DISABLED_SOURCE_IDS = new Set(["kkphim", "ophim"]);
+const AUTO_SUBTITLE_DISABLED_SOURCE_IDS = new Set(["kkphim"]);
 
 function resolvePreferredAutoSubtitleLanguage(
   lastSelectedLanguage: string | null,

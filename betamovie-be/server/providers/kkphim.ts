@@ -1,6 +1,23 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import type { Stream, StreamLookupContext } from './types';
 
+interface TmdbMetadata {
+  titles: string[];
+  year?: number;
+}
+
+interface KKPhimSearchItem {
+  name: string;
+  origin_name: string;
+  slug: string;
+  year?: number;
+  tmdb?: {
+    type?: 'movie' | 'tv' | null;
+    id?: string | number | null;
+    season?: number | null;
+  };
+}
+
 interface KKPhimEpisodeData {
   name: string;
   slug: string;
@@ -16,6 +33,8 @@ interface KKPhimServerData {
 interface KKPhimDetailMovie {
   name: string;
   origin_name: string;
+  country: string;
+  type: string;
   slug?: string;
   year?: number;
   tmdb?: {
@@ -51,6 +70,7 @@ const ORIGIN = new URL(KKPHIM_API_BASE).origin;
 const MODERN_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 const REQUEST_TIMEOUT_MS = Number(process.env.KKPHIM_REQUEST_TIMEOUT_MS ?? 10_000);
+const TMDB_TIMEOUT_MS = Number(process.env.KKPHIM_TMDB_TIMEOUT_MS ?? 6_000);
 const LIST_SCAN_MAX_PAGES = Number(process.env.KKPHIM_LIST_SCAN_MAX_PAGES ?? 80);
 const SLUG_CACHE_TTL = Number(process.env.KKPHIM_SLUG_CACHE_TTL ?? 24 * 60 * 60);
 
@@ -61,6 +81,18 @@ const normalizeText = (value: string): string =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
+
+const cleanTitleForMatch = (value: string): string =>
+  normalizeText(value)
+    .replace(/\b(phan|season)\s*\d+\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+const parseYear = (value?: string): number | undefined => {
+  if (!value || value.length < 4) return undefined;
+  const parsed = Number.parseInt(value.slice(0, 4), 10);
+  return Number.isFinite(parsed) ? parsed : undefined;
+};
 
 const parseSeasonFromText = (value?: string): number | null => {
   if (!value) return null;
@@ -319,13 +351,237 @@ const findFromLatestListByTmdb = async (
   return null;
 };
 
+const fetchTmdbMetadata = async (
+  tmdbId: string,
+  mediaType: 'movie' | 'tv',
+  context?: StreamLookupContext
+): Promise<TmdbMetadata & { country?: string }> => {
+  const titleFromContext = typeof context?.title === 'string' ? context.title.trim() : '';
+  const yearFromContext =
+    typeof context?.releaseYear === 'number' && Number.isFinite(context.releaseYear)
+      ? context.releaseYear
+      : undefined;
+  const countryFromContext = typeof context?.country === 'string' ? context.country.trim() : '';
+
+  const config = useRuntimeConfig();
+  const tmdbKey = (
+    (config.tmdbApiKey as string | undefined) ||
+    process.env.TMDB_API_KEY ||
+    ''
+  ).trim();
+  if (tmdbKey) {
+    const endpoint = `https://api.themoviedb.org/3/${mediaType}/${encodeURIComponent(tmdbId)}`;
+    const query = new URLSearchParams({ language: 'vi-VN' });
+    const headers: Record<string, string> = {
+      Accept: 'application/json',
+      'User-Agent': MODERN_UA,
+    };
+
+    if (tmdbKey.length > 50) {
+      headers.Authorization = `Bearer ${tmdbKey}`;
+    } else {
+      query.set('api_key', tmdbKey);
+    }
+
+    const payload = await fetchJson<any>(`${endpoint}?${query.toString()}`, TMDB_TIMEOUT_MS);
+    if (payload) {
+      const titles = [
+        payload.title,
+        payload.name,
+        payload.original_title,
+        payload.original_name,
+        titleFromContext,
+      ]
+        .filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+        .map(value => value.trim());
+
+      const uniqueTitles = Array.from(new Set(titles));
+      const year = parseYear(payload.release_date || payload.first_air_date) || yearFromContext;
+      const country =
+        payload.origin_country?.[0] ||
+        payload.production_countries?.[0]?.iso_3166_1 ||
+        countryFromContext;
+
+      return { titles: uniqueTitles, year, country };
+    }
+  }
+
+  const titles = [titleFromContext].filter(Boolean);
+  return {
+    titles,
+    year: yearFromContext,
+    country: countryFromContext,
+  };
+};
+
+const mapIsoCountryToKkphimSlug = (isoCode?: string): string | null => {
+  if (!isoCode) return null;
+  const normalized = isoCode.trim().toUpperCase();
+
+  if (normalized === 'KR') return 'han-quoc';
+  if (normalized === 'VN') return 'viet-nam';
+  if (normalized === 'CN') return 'trung-quoc';
+  if (normalized === 'TW') return 'dai-loan';
+  if (normalized === 'JP') return 'nhat-ban';
+  if (normalized === 'TH') return 'thai-lan';
+  if (normalized === 'IN') return 'an-do';
+  if (normalized === 'HK') return 'hong-kong';
+
+  const auMyCodes = ['US', 'GB', 'CA', 'FR', 'DE', 'IT', 'ES', 'AU', 'NZ', 'RU'];
+  if (auMyCodes.includes(normalized)) {
+    return 'au-my';
+  }
+
+  return null;
+};
+
+const buildSearchTerms = (meta: TmdbMetadata, tmdbId: string): string[] => {
+  const terms = new Set<string>();
+
+  for (const title of meta.titles) {
+    terms.add(title);
+  }
+
+  if (meta.titles.length > 0) {
+    terms.add(meta.titles[0].replace(/[:|].*$/, '').trim());
+  }
+
+  terms.add(tmdbId);
+
+  return Array.from(terms).filter(term => term.length > 0);
+};
+
+const isTitleMatch = (candidate: KKPhimSearchItem, meta: TmdbMetadata) => {
+  const candidateTitles = [candidate.name, candidate.origin_name]
+    .filter((value): value is string => Boolean(value?.trim()))
+    .map(cleanTitleForMatch);
+
+  if (candidateTitles.length === 0 || meta.titles.length === 0) {
+    return false;
+  }
+
+  for (const title of meta.titles) {
+    const normalizedTarget = cleanTitleForMatch(title);
+    if (!normalizedTarget) continue;
+
+    for (const candidateTitle of candidateTitles) {
+      if (candidateTitle.includes(normalizedTarget) || normalizedTarget.includes(candidateTitle)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+};
+
+const findByTitleSearch = async (
+  tmdbId: string,
+  mediaType: 'movie' | 'tv',
+  season?: number | null,
+  context?: StreamLookupContext,
+  storage?: StorageLike
+): Promise<KKPhimDetailResponse | null> => {
+  const tmdbMeta = await fetchTmdbMetadata(tmdbId, mediaType, context);
+  const searchTerms = buildSearchTerms(tmdbMeta, tmdbId);
+
+  let titleFallback: KKPhimDetailResponse | null = null;
+  let seasonFallback: KKPhimDetailResponse | null = null;
+
+  for (const term of searchTerms) {
+    const searchUrl = `${KKPHIM_API_BASE}/v1/api/tim-kiem?keyword=${encodeURIComponent(term)}`;
+    const searchPayload = await fetchJson<{ data?: { items?: KKPhimSearchItem[] } }>(searchUrl);
+    const items = searchPayload?.data?.items || [];
+
+    for (const item of items) {
+      const itemTmdbId = item.tmdb?.id ? String(item.tmdb.id) : null;
+      if (itemTmdbId && itemTmdbId !== tmdbId) {
+        continue;
+      }
+
+      const detail = await fetchDetailBySlug(item.slug);
+      if (!detail?.movie || !Array.isArray(detail.episodes)) {
+        continue;
+      }
+
+      // 1. Strict year matching
+      const tmdbYear = tmdbMeta.year;
+      const candidateYear = detail.movie.year || item.year;
+      if (tmdbYear && candidateYear && Math.abs(candidateYear - tmdbYear) > 1) {
+        continue;
+      }
+
+      // 2. Strict media type validation
+      const resolvedType = detail.movie.tmdb?.type;
+      if (resolvedType && resolvedType !== mediaType) {
+        continue;
+      }
+      const kkphimType = detail.movie.type;
+      if (kkphimType) {
+        if (mediaType === 'movie' && (kkphimType === 'series' || kkphimType === 'tvshows')) {
+          continue;
+        }
+        if (mediaType === 'tv' && kkphimType === 'single') {
+          continue;
+        }
+      }
+
+      // 3. Strict country validation
+      const targetCountrySlug = mapIsoCountryToKkphimSlug(tmdbMeta.country);
+      if (targetCountrySlug && Array.isArray(detail.movie.country)) {
+        const hasCountryMatch = detail.movie.country.some((c: any) => c.slug === targetCountrySlug);
+        if (!hasCountryMatch) {
+          continue;
+        }
+      }
+
+      const detailTmdbId = detail.movie.tmdb?.id ? String(detail.movie.tmdb.id) : null;
+      if (detailTmdbId && detailTmdbId === tmdbId) {
+        if (mediaType === 'tv' && typeof season === 'number') {
+          const seasonFromDetail = detail.movie.tmdb?.season;
+          if (typeof seasonFromDetail === 'number' && seasonFromDetail !== season) {
+            if (!seasonFallback) {
+              seasonFallback = detail;
+            }
+            continue;
+          }
+        }
+
+        if (storage && detail.movie.slug) {
+          const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
+          await storage
+            .setItem(cacheKey, detail.movie.slug, { ttl: SLUG_CACHE_TTL })
+            .catch(() => null);
+        }
+        return detail;
+      }
+
+      if (!titleFallback && isTitleMatch(item, tmdbMeta)) {
+        if (mediaType === 'movie') {
+          if (!tmdbMeta.year || !item.year || item.year === tmdbMeta.year) {
+            titleFallback = detail;
+          }
+        } else {
+          const seasonFromTitle =
+            parseSeasonFromText(item.name) || parseSeasonFromText(item.origin_name);
+          if (!season || !seasonFromTitle || seasonFromTitle === season) {
+            titleFallback = detail;
+          }
+        }
+      }
+    }
+  }
+
+  return titleFallback ?? seasonFallback ?? null;
+};
+
 const findKKPhimDetail = async (
   tmdbId: string,
   mediaType: 'movie' | 'tv',
   season?: number | null,
-  _context?: StreamLookupContext,
+  context?: StreamLookupContext,
   storage?: StorageLike
 ): Promise<KKPhimDetailResponse | null> => {
+  // 1. Direct TMDB ID lookup (fastest, most reliable).
   const detail = await fetchDetailByTmdb(tmdbId, mediaType);
   if (detail && matchesRequestedSeason(season, detail.movie)) {
     if (storage && detail.movie?.slug) {
@@ -335,8 +591,16 @@ const findKKPhimDetail = async (
     return detail;
   }
 
-  // Keep the fallback TMDB-only to avoid drifting back to fuzzy title matching.
-  return findFromLatestListByTmdb(tmdbId, mediaType, season, storage);
+  // 2. Run list scan (TMDB ID) and title search in parallel.
+  const [listSettled, titleSettled] = await Promise.allSettled([
+    findFromLatestListByTmdb(tmdbId, mediaType, season, storage),
+    findByTitleSearch(tmdbId, mediaType, season, context, storage),
+  ]);
+
+  const listResult = listSettled.status === 'fulfilled' ? listSettled.value : null;
+  const titleResult = titleSettled.status === 'fulfilled' ? titleSettled.value : null;
+
+  return listResult ?? titleResult ?? null;
 };
 
 export async function getKKPhimStreams(
