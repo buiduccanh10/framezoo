@@ -46,14 +46,14 @@ const DOWNLOAD_OPTIONS: DownloadOptionConfig[] = [
     id: "win-x64",
     label: "Windows x64",
     description: "Best for 64-bit Windows PCs",
-    fileName: `AlphaFlix-${desktopVersion}-x64.exe`,
+    fileName: `AlphaFlix-${desktopVersion}-x64.zip`,
     urlEnv: "APP_DOWNLOAD_WIN_X64_URL",
   },
   {
     id: "win-arm64",
     label: "Windows ARM64",
     description: "Best for Snapdragon/ARM Windows PCs",
-    fileName: `AlphaFlix-${desktopVersion}-arm64.exe`,
+    fileName: `AlphaFlix-${desktopVersion}-arm64.zip`,
     urlEnv: "APP_DOWNLOAD_WIN_ARM64_URL",
   },
 ];
@@ -77,15 +77,15 @@ function getAvailableFileName(option: DownloadOptionConfig, downloadDir: string 
   if (option.id.startsWith('mac-')) {
     const arch = option.id.substring(4);
     candidates = [
-      `AlphaFlix-${desktopVersion}-${arch}-mac.zip`,
       `AlphaFlix-${desktopVersion}-${arch}-mac.dmg`,
+      `AlphaFlix-${desktopVersion}-${arch}-mac.zip`,
       `AlphaFlix-${desktopVersion}-${arch}.dmg`
     ];
   } else if (option.id.startsWith('win-')) {
     const arch = option.id.substring(4);
     candidates = [
-      `AlphaFlix-${desktopVersion}-${arch}.exe`,
-      `AlphaFlix-${desktopVersion}-${arch}.zip`
+      `AlphaFlix-${desktopVersion}-${arch}.zip`,
+      `AlphaFlix-${desktopVersion}-${arch}.exe`
     ];
   }
 

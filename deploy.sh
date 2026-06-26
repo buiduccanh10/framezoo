@@ -66,7 +66,7 @@ case "$ACTION" in
       if docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
         VOLUME_NAME="betamovie_backend_downloads-data"
       fi
-      docker run --rm -v "$VOLUME_NAME":/data -v "$SCRIPT_DIR/downloads":/src alpine sh -c "cp -r /src/. /data/" >/dev/null
+      docker run --rm -v "$VOLUME_NAME":/data -v "$SCRIPT_DIR/downloads":/src alpine sh -c "rm -f /data/AlphaFlix-* /data/README.txt && cp -r /src/. /data/" >/dev/null
     fi
 
     purge_cloudflare_cache

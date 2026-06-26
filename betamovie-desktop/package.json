@@ -1,7 +1,7 @@
 {
   "name": "betamovie-desktop",
   "private": true,
-  "version": "6.0.1",
+  "version": "6.0.2",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.9.0",
   "scripts": {
@@ -45,9 +45,6 @@
       "renderer/**/*",
       "package.json"
     ],
-    "extraFiles": [
-      "README.txt"
-    ],
     "extraMetadata": {
       "description": "AlphaFlix desktop app"
     },
@@ -56,6 +53,9 @@
         "dmg"
       ],
       "artifactName": "${productName}-${version}-${arch}-mac.${ext}",
+      "extraDistFiles": [
+        "README.txt"
+      ],
       "category": "public.app-category.entertainment",
       "icon": "build/icon.png",
       "darkModeSupport": true
@@ -83,8 +83,10 @@
     },
     "win": {
       "target": [
-        "nsis",
         "zip"
+      ],
+      "extraFiles": [
+        "README.txt"
       ],
       "icon": "build/icon.png"
     },
