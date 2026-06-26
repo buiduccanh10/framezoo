@@ -40,7 +40,6 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
-      - run: pnpm config set store-dir .pnpm-store
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm audit
 
