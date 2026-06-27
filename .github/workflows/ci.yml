@@ -53,11 +53,32 @@ jobs:
       options: --user root
     steps:
       - uses: actions/checkout@v5
+      - name: Check for desktop/frontend changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            desktop:
+              - 'betamovie-fe/**'
+              - 'betamovie-desktop/package.json'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+
       - name: Install tools
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
         run: apt-get update && apt-get install -y git curl openssh-client
-      - run: corepack enable
-      - run: corepack prepare pnpm@${PNPM_VERSION} --activate
+
+      - name: Enable Corepack
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
+        run: corepack enable
+
+      - name: Prepare PNPM
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
+        run: corepack prepare pnpm@${PNPM_VERSION} --activate
+
       - name: Write env file
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
@@ -66,9 +87,17 @@ jobs:
             exit 1
           fi
           printf '%s' "$ENV_FILE" > .env
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm build:desktop:all
+
+      - name: Install dependencies
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build Desktop
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
+        run: pnpm build:desktop:all
+
       - name: Start SSH agent
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
         env:
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
         run: |
@@ -76,7 +105,9 @@ jobs:
           echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
           echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
           echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+
       - name: Trust VPS host
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
@@ -84,7 +115,9 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+
       - name: Sync downloads to VPS
+        if: github.event_name == 'workflow_dispatch' || steps.filter.outputs.desktop == 'true'
         env:
           VPS_HOST: ${{ secrets.VPS_HOST }}
           VPS_PORT: ${{ secrets.VPS_PORT }}
@@ -147,7 +180,7 @@ jobs:
 
           echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
           ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-            "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; [ -f betamovie-be/scripts/deploy.sh ] || { echo 'betamovie-be/scripts/deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x betamovie-be/scripts/deploy.sh"
+            "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; [ -f scripts/deploy.sh ] || { echo 'scripts/deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; chmod +x scripts/deploy.sh"
 
           ENV_TMP_LOCAL="$(mktemp /tmp/betamovie_env_local.XXXXXX)"
           trap 'rm -f "$ENV_TMP_LOCAL"' EXIT
@@ -156,7 +189,7 @@ jobs:
 
           echo "Building prod stack from ${DEPLOY_PATH}..."
           printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; SKIP_CLOUDFLARE_PURGE='true' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./betamovie-be/scripts/deploy.sh all"
+            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; SKIP_CLOUDFLARE_PURGE='true' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh all"
 
           echo "Purging Cloudflare cache..."
           ./scripts/purge-cloudflare-cache.sh "$ENV_TMP_LOCAL"
