@@ -37,13 +37,20 @@ export default defineEventHandler(async event => {
 
   // Verify challenge with the public key from database
   const challenge = useChallenge();
-  await challenge.verifyChallengeCode(
-    body.challenge.code,
-    user.public_key,
-    body.challenge.signature,
-    'login',
-    'mnemonic'
-  );
+  try {
+    await challenge.verifyChallengeCode(
+      body.challenge.code,
+      user.public_key,
+      body.challenge.signature,
+      'login',
+      'mnemonic'
+    );
+  } catch (err: any) {
+    throw createError({
+      statusCode: 401,
+      message: err.message || 'Invalid signature',
+    });
+  }
 
   // Update last logged in
   await prisma.users.update({
