@@ -1,4 +1,5 @@
 import { JSDOM, VirtualConsole } from 'jsdom';
+import { webcrypto } from 'node:crypto';
 
 const FETCH_TIMEOUT_MS = 15000;
 const TOKEN_TTL_MS = 10 * 60 * 1000;
@@ -44,7 +45,7 @@ function clearCachedToken(cacheKey: string) {
 }
 
 function createCanvasContextStub() {
-  return {
+  const baseStub: Record<string, any> = {
     fillRect() {},
     clearRect() {},
     getImageData() {
@@ -75,7 +76,29 @@ function createCanvasContextStub() {
     transform() {},
     rect() {},
     clip() {},
+    // WebGL stubs
+    getParameter(p: number) {
+      if (p === 37445) return 'Google Inc. (Apple)'; // UNMASKED_VENDOR_WEBGL
+      if (p === 37446) return 'ANGLE (Apple, Apple M1, OpenGL 4.1)'; // UNMASKED_RENDERER_WEBGL
+      return 'WebKit WebGL';
+    },
+    getExtension() {
+      return null;
+    },
+    getShaderPrecisionFormat() {
+      return { rangeMin: 127, rangeMax: 127, precision: 23 };
+    },
+    canvas: {},
   };
+
+  return new Proxy(baseStub, {
+    get(target, prop) {
+      if (prop in target) {
+        return target[prop as string];
+      }
+      return () => {};
+    },
+  });
 }
 
 function installCanvasStub(window: Window & typeof globalThis) {
@@ -154,6 +177,103 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
       window.TextDecoder = TextDecoder;
       window.atob = (input: string) => Buffer.from(input, 'base64').toString('binary');
       window.btoa = (input: string) => Buffer.from(input, 'binary').toString('base64');
+
+      // Native Node Web Crypto integration (standard and robust WebCrypto support)
+      // Bound to preserve context across JSDOM / Node VM context boundary
+      const boundSubtle: Record<string, any> = {};
+      const subtleProto = Object.getPrototypeOf(webcrypto.subtle) || {};
+      for (const key of Object.getOwnPropertyNames(subtleProto)) {
+        if (key === 'constructor') continue;
+        try {
+          const val = (webcrypto.subtle as any)[key];
+          if (typeof val === 'function') {
+            boundSubtle[key] = val.bind(webcrypto.subtle);
+          }
+        } catch {
+          // ignore
+        }
+      }
+      for (const key of Object.keys(webcrypto.subtle)) {
+        try {
+          const val = (webcrypto.subtle as any)[key];
+          if (typeof val === 'function') {
+            boundSubtle[key] = val.bind(webcrypto.subtle);
+          } else {
+            boundSubtle[key] = val;
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      const boundCrypto = {
+        subtle: boundSubtle,
+        getRandomValues: webcrypto.getRandomValues.bind(webcrypto),
+        randomUUID: webcrypto.randomUUID ? webcrypto.randomUUID.bind(webcrypto) : undefined,
+      };
+
+      Object.defineProperty(window, 'crypto', {
+        value: boundCrypto,
+        writable: true,
+        configurable: true,
+      });
+
+      // matchMedia mock
+      window.matchMedia = window.matchMedia || function() {
+        return {
+          matches: false,
+          addListener() {},
+          removeListener() {},
+          addEventListener() {},
+          removeEventListener() {},
+          dispatchEvent() { return false; },
+        };
+      };
+
+      // requestAnimationFrame mock
+      window.requestAnimationFrame = window.requestAnimationFrame || function(callback) {
+        return setTimeout(() => callback(Date.now()), 16);
+      };
+      window.cancelAnimationFrame = window.cancelAnimationFrame || function(id) {
+        clearTimeout(id);
+      };
+
+      // AudioContext / webkitAudioContext mocks
+      class AudioContextMock {
+        createOscillator() {
+          return {
+            type: 'sine',
+            connect() {},
+            start() {},
+            stop() {},
+          };
+        }
+        createDynamicsCompressor() {
+          return {
+            threshold: { value: -24 },
+            knee: { value: 30 },
+            ratio: { value: 12 },
+            attack: { value: 0.003 },
+            release: { value: 0.25 },
+            connect() {},
+          };
+        }
+        destination = {};
+      }
+      Object.defineProperty(window, 'AudioContext', { value: AudioContextMock, writable: true, configurable: true });
+      Object.defineProperty(window, 'webkitAudioContext', { value: AudioContextMock, writable: true, configurable: true });
+
+      // Fonts API mock
+      Object.defineProperty(window.document, 'fonts', {
+        value: {
+          ready: Promise.resolve(),
+          forEach() {},
+          addEventListener() {},
+          removeEventListener() {},
+        },
+        writable: true,
+        configurable: true,
+      });
     },
   });
 
