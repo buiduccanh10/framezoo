@@ -46,10 +46,11 @@ function appendUniqueMedia(
   existingItems: DiscoverMedia[],
   incomingItems: DiscoverMedia[],
 ) {
-  const seen = new Set(existingItems.map((item) => item.id));
+  const seen = new Set(existingItems.map((item) => item.id.toString()));
   const appendedItems = incomingItems.filter((item) => {
-    if (seen.has(item.id)) return false;
-    seen.add(item.id);
+    const idStr = item.id.toString();
+    if (seen.has(idStr)) return false;
+    seen.add(idStr);
     return true;
   });
 
@@ -554,7 +555,7 @@ export function useDiscoverMedia({
       const data = await attemptFetch(contentType);
       setMedia((prevMedia) => {
         if (page === 1) {
-          return data.results;
+          return appendUniqueMedia([], data.results);
         }
 
         return appendUniqueMedia(prevMedia, data.results);
@@ -573,7 +574,7 @@ export function useDiscoverMedia({
           setActualContentType(fallbackType); // Set actual content type to fallback
           setMedia((prevMedia) => {
             if (page === 1) {
-              return fallbackData.results;
+              return appendUniqueMedia([], fallbackData.results);
             }
 
             return appendUniqueMedia(prevMedia, fallbackData.results);
