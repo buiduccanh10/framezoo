@@ -35,7 +35,16 @@ export function useSimilarMedia({
 
     try {
       const tmdbResults = await getRelatedMedia(mediaId, type, limit);
-      setMedia(tmdbResults);
+      const seen = new Set<string>();
+      const uniqueResults = tmdbResults.filter((item) => {
+        const idStr = item.id.toString();
+        if (seen.has(idStr)) return false;
+        seen.add(idStr);
+        return true;
+      });
+      setMedia(
+        uniqueResults as TMDBMovieSearchResult[] | TMDBShowSearchResult[],
+      );
     } catch (err) {
       console.error("Failed to load similar media:", err);
 
@@ -44,7 +53,7 @@ export function useSimilarMedia({
     } finally {
       setIsLoading(false);
     }
-  }, [mediaId, type, isTVShow, limit, enabled]);
+  }, [mediaId, type, limit, enabled]);
 
   useEffect(() => {
     fetch();

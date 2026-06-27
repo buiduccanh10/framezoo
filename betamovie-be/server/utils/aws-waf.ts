@@ -55,6 +55,16 @@ function createCanvasContextStub() {
     createImageData() {
       return [];
     },
+    createLinearGradient() {
+      return {
+        addColorStop() {},
+      };
+    },
+    createRadialGradient() {
+      return {
+        addColorStop() {},
+      };
+    },
     setTransform() {},
     drawImage() {},
     save() {},
@@ -204,12 +214,16 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
           }
         }
       });
-      Object.defineProperty(window, 'location', {
-        get() {
-          return safeLocation;
-        },
-        configurable: true
-      });
+      try {
+        Object.defineProperty(window, 'location', {
+          get() {
+            return safeLocation;
+          },
+          configurable: true
+        });
+      } catch (err: any) {
+        console.warn('[AWS WAF] Could not proxy window.location:', err.message);
+      }
 
 
       // Native Node Web Crypto integration (standard and robust WebCrypto support)
@@ -324,7 +338,8 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
 
     return token;
   } finally {
-    dom.window.close();
+    // Commented out to prevent async timers from crashing Node on a null-document state
+    // dom.window.close();
   }
 }
 
