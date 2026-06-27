@@ -32,13 +32,20 @@ export default defineEventHandler(async event => {
   }
 
   const challenge = useChallenge();
-  await challenge.verifyChallengeCode(
-    body.challenge.code,
-    body.publicKey,
-    body.challenge.signature,
-    'registration',
-    'mnemonic'
-  );
+  try {
+    await challenge.verifyChallengeCode(
+      body.challenge.code,
+      body.publicKey,
+      body.challenge.signature,
+      'registration',
+      'mnemonic'
+    );
+  } catch (err: any) {
+    throw createError({
+      statusCode: 400,
+      message: err.message || 'Invalid challenge',
+    });
+  }
 
   // Check if nickname is already taken
   const existingNickname = await prisma.users.findUnique({
