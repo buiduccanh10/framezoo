@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
@@ -28,6 +29,17 @@ interface MoreContentProps {
 }
 
 export function MoreContent({ onShowDetails }: MoreContentProps) {
+  const { mediaType = "movie", contentType, id, category } = useParams();
+  const [searchParams] = useSearchParams();
+  const selectedReleaseYear = searchParams.get("year") || "";
+  const selectedOriginCountry = searchParams.get("country") || "";
+
+  const key = `${mediaType}-${contentType || ""}-${id || ""}-${category || ""}-${selectedReleaseYear}-${selectedOriginCountry}`;
+
+  return <MoreContentInner key={key} onShowDetails={onShowDetails} />;
+}
+
+function MoreContentInner({ onShowDetails }: MoreContentProps) {
   const { mediaType = "movie", contentType, id, category } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProvider, setSelectedProvider] = useState<OptionItem | null>(
@@ -190,6 +202,64 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   const handleLoadMore = async () => {
     setCurrentPage((prev) => prev + 1);
   };
+
+  // Dynamically calculate columns based on width
+  const columns = useMemo(() => {
+    if (windowWidth >= 3840) return 10;
+    if (windowWidth >= 2650) return 8;
+    if (windowWidth >= 1280) return 6;
+    if (windowWidth >= 768) return 4;
+    if (windowWidth >= 640) return 3;
+    return 2;
+  }, [windowWidth]);
+
+  // Chunk the flat mediaItems array into rows
+  const rows = useMemo(() => {
+    const chunked: (typeof mediaItems)[] = [];
+    for (let i = 0; i < mediaItems.length; i += columns) {
+      chunked.push(mediaItems.slice(i, i + columns));
+    }
+    return chunked;
+  }, [mediaItems, columns]);
+
+  const parentRef = useRef<HTMLDivElement>(null);
+  const [scrollMargin, setScrollMargin] = useState(0);
+
+  // Recalculate scrollMargin when mediaItems are fetched or container changes
+  useEffect(() => {
+    const measureOffset = () => {
+      if (parentRef.current) {
+        setScrollMargin(parentRef.current.offsetTop);
+      }
+    };
+
+    measureOffset();
+    // Also measure on next frame to ensure layouts have settled
+    const rafId = requestAnimationFrame(measureOffset);
+
+    return () => cancelAnimationFrame(rafId);
+  }, [mediaItems, windowWidth]);
+
+  const rowVirtualizer = useWindowVirtualizer({
+    count: rows.length,
+    estimateSize: () => 380, // estimated height of one row
+    scrollMargin,
+    overscan: 3,
+  });
+
+  const virtualRows = rowVirtualizer.getVirtualItems();
+  const lastVirtualRow = virtualRows[virtualRows.length - 1];
+
+  // Infinite Scroll Trigger
+  useEffect(() => {
+    if (!lastVirtualRow) return;
+    if (lastVirtualRow.index >= rows.length - 2) {
+      if (hasMore && !isLoading) {
+        handleLoadMore();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastVirtualRow?.index, rows.length, hasMore, isLoading]);
 
   // Set initial provider/genre/recommendation selection
   useEffect(() => {
@@ -511,62 +581,84 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
         )}
 
         <div
+          ref={parentRef}
           className={`transition-opacity duration-300 ease-in-out ${
             isContentVisible ? "opacity-100" : "opacity-0"
           }`}
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            width: "100%",
+            position: "relative",
+          }}
         >
-          <MediaGrid>
-            {mediaItems.map((item) => {
-              const isTVShow = Boolean(item.first_air_date);
-              const releaseDate = isTVShow
-                ? item.first_air_date
-                : item.release_date;
-              const year = releaseDate
-                ? parseInt(releaseDate.split("-")[0], 10)
-                : undefined;
+          {virtualRows.map((virtualRow) => {
+            const rowItems = rows[virtualRow.index];
+            if (!rowItems) return null;
 
-              const mediaItem: MediaItem = {
-                id: item.id.toString(),
-                title: item.title || item.name || "",
-                poster: item.poster_path
-                  ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
-                  : "/placeholder.png",
-                type: isTVShow ? "show" : "movie",
-                year,
-                release_date: releaseDate ? new Date(releaseDate) : undefined,
-              };
-
-              return (
-                <div
-                  key={item.id}
-                  style={{ userSelect: "none" }}
-                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                    e.preventDefault()
-                  }
-                >
-                  <WatchedMediaCard
-                    media={mediaItem}
-                    onShowDetails={handleShowDetails}
-                  />
-                </div>
-              );
-            })}
-          </MediaGrid>
-
-          {hasMore && (
-            <div className="flex justify-center mt-8">
-              <Button
-                theme="purple"
-                onClick={handleLoadMore}
-                disabled={isLoading}
+            return (
+              <div
+                key={virtualRow.key}
+                data-index={virtualRow.index}
+                ref={rowVirtualizer.measureElement}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  transform: `translateY(${virtualRow.start - rowVirtualizer.options.scrollMargin}px)`,
+                }}
               >
-                {isLoading
-                  ? t("discover.page.loading")
-                  : t("discover.page.loadMore")}
-              </Button>
-            </div>
-          )}
+                <MediaGrid>
+                  {rowItems.map((item) => {
+                    const isTVShow = Boolean(item.first_air_date);
+                    const releaseDate = isTVShow
+                      ? item.first_air_date
+                      : item.release_date;
+                    const year = releaseDate
+                      ? parseInt(releaseDate.split("-")[0], 10)
+                      : undefined;
+
+                    const mediaItem: MediaItem = {
+                      id: item.id.toString(),
+                      title: item.title || item.name || "",
+                      poster: item.poster_path
+                        ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
+                        : "/placeholder.png",
+                      type: isTVShow ? "show" : "movie",
+                      year,
+                      release_date: releaseDate
+                        ? new Date(releaseDate)
+                        : undefined,
+                    };
+
+                    return (
+                      <div
+                        key={item.id}
+                        style={{ userSelect: "none" }}
+                        onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                          e.preventDefault()
+                        }
+                      >
+                        <WatchedMediaCard
+                          media={mediaItem}
+                          onShowDetails={handleShowDetails}
+                        />
+                      </div>
+                    );
+                  })}
+                </MediaGrid>
+              </div>
+            );
+          })}
         </div>
+
+        {isLoading && currentPage > 1 && (
+          <div className="flex justify-center mt-8">
+            <Button theme="purple" disabled>
+              {t("discover.page.loading")}
+            </Button>
+          </div>
+        )}
       </WideContainer>
     </SubPageLayout>
   );
