@@ -96,13 +96,13 @@ deploy:betamovie:
 
       echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
       ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-        "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; [ -f betamovie-be/scripts/deploy.sh ] || { echo 'betamovie-be/scripts/deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; chmod +x betamovie-be/scripts/deploy.sh"
+        "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; [ -f scripts/deploy.sh ] || { echo 'scripts/deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; chmod +x scripts/deploy.sh"
 
 
 
       echo "Building prod stack from ${DEPLOY_PATH}..."
       printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-        "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; SKIP_CLOUDFLARE_PURGE='true' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./betamovie-be/scripts/deploy.sh all"
+        "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; SKIP_CLOUDFLARE_PURGE='true' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh all"
 
       echo "Purging Cloudflare cache..."
       ENV_TMP_LOCAL="$(mktemp /tmp/${CI_PROJECT_NAME}_env_local.XXXXXX)"
