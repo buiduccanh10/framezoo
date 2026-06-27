@@ -56,7 +56,7 @@ jobs:
       - name: Configure Git safe directory
         run: git config --global --add safe.directory '*'
       - name: Check for desktop/frontend changes
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
