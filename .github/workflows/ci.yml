@@ -53,6 +53,8 @@ jobs:
       options: --user root
     steps:
       - uses: actions/checkout@v5
+      - name: Configure Git safe directory
+        run: git config --global --add safe.directory '*'
       - name: Check for desktop/frontend changes
         uses: dorny/paths-filter@v3
         id: filter
