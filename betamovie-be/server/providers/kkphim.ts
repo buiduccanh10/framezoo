@@ -71,8 +71,12 @@ const MODERN_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 const REQUEST_TIMEOUT_MS = Number(process.env.KKPHIM_REQUEST_TIMEOUT_MS ?? 10_000);
 const TMDB_TIMEOUT_MS = Number(process.env.KKPHIM_TMDB_TIMEOUT_MS ?? 6_000);
-const LIST_SCAN_MAX_PAGES = Number(process.env.KKPHIM_LIST_SCAN_MAX_PAGES ?? 80);
+const LIST_SCAN_MAX_PAGES = Number(process.env.KKPHIM_LIST_SCAN_MAX_PAGES ?? 20);
 const SLUG_CACHE_TTL = Number(process.env.KKPHIM_SLUG_CACHE_TTL ?? 24 * 60 * 60);
+const NEGATIVE_CACHE_TTL = Number(process.env.KKPHIM_NEGATIVE_CACHE_TTL ?? 5 * 60);
+const TMDB_META_CACHE_TTL = Number(process.env.KKPHIM_TMDB_META_CACHE_TTL ?? 60 * 60);
+const LIST_SCAN_BATCH_SIZE = Number(process.env.KKPHIM_LIST_SCAN_BATCH_SIZE ?? 5);
+const TITLE_SEARCH_DETAIL_CONCURRENCY = Number(process.env.KKPHIM_TITLE_SEARCH_DETAIL_CONCURRENCY ?? 3);
 
 const normalizeText = (value: string): string =>
   value
@@ -294,67 +298,109 @@ const fetchDetailByTmdb = async (
 const buildSlugCacheKey = (tmdbId: string, mediaType: 'movie' | 'tv', season?: number | null) =>
   `kkphim:slug:${mediaType}:${tmdbId}:${typeof season === 'number' ? season : 0}`;
 
-const findFromLatestListByTmdb = async (
+const buildNegativeCacheKey = (tmdbId: string, mediaType: 'movie' | 'tv', season?: number | null) =>
+  `kkphim:notfound:${mediaType}:${tmdbId}:${typeof season === 'number' ? season : 0}`;
+
+const buildTmdbMetaCacheKey = (tmdbId: string, mediaType: 'movie' | 'tv') =>
+  `kkphim:tmdb-meta:${mediaType}:${tmdbId}`;
+
+// ── Cached slug lookup (fast path) ──────────────────────────────────────
+const findByCachedSlug = async (
   tmdbId: string,
   mediaType: 'movie' | 'tv',
   season?: number | null,
   storage?: StorageLike
 ): Promise<KKPhimDetailResponse | null> => {
+  if (!storage) return null;
+
   const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
-  if (storage) {
-    const cachedSlug = await storage.getItem<string>(cacheKey).catch(() => null);
-    if (cachedSlug) {
-      const cachedDetail = await fetchDetailBySlug(cachedSlug);
-      if (cachedDetail && matchesRequestedSeason(season, cachedDetail.movie)) {
-        return cachedDetail;
-      }
-    }
-  }
+  const cachedSlug = await storage.getItem<string>(cacheKey).catch(() => null);
+  if (!cachedSlug) return null;
 
-  for (let page = 1; page <= LIST_SCAN_MAX_PAGES; page += 1) {
-    const listUrl = `${KKPHIM_API_BASE}/danh-sach/phim-moi-cap-nhat?page=${page}`;
-    const listPayload = await fetchJson<{ items?: KKPhimListItem[] }>(listUrl);
-    const items = listPayload?.items || [];
-
-    if (!items.length) {
-      break;
-    }
-
-    const matchedItem = items.find(item => {
-      const sameTmdb = String(item?.tmdb?.id ?? '') === tmdbId;
-      if (!sameTmdb) return false;
-
-      const sameType = !item?.tmdb?.type || item.tmdb.type === mediaType;
-      if (!sameType) {
-        return false;
-      }
-
-      return matchesRequestedSeason(season, item);
-    });
-
-    if (!matchedItem?.slug) {
-      continue;
-    }
-
-    const detail = await fetchDetailBySlug(matchedItem.slug);
-    if (!detail) {
-      continue;
-    }
-
-    if (storage) {
-      await storage.setItem(cacheKey, matchedItem.slug, { ttl: SLUG_CACHE_TTL }).catch(() => null);
-    }
-
+  console.log(`[KKPhim] Slug cache hit: ${cachedSlug} for ${mediaType}/${tmdbId}`);
+  const detail = await fetchDetailBySlug(cachedSlug);
+  if (detail && matchesRequestedSeason(season, detail.movie)) {
     return detail;
   }
 
   return null;
 };
 
+// ── List scan with batch parallel pages ─────────────────────────────────
+const findFromLatestListByTmdb = async (
+  tmdbId: string,
+  mediaType: 'movie' | 'tv',
+  season?: number | null,
+  storage?: StorageLike
+): Promise<KKPhimDetailResponse | null> => {
+  for (let batchStart = 1; batchStart <= LIST_SCAN_MAX_PAGES; batchStart += LIST_SCAN_BATCH_SIZE) {
+    const batchEnd = Math.min(batchStart + LIST_SCAN_BATCH_SIZE - 1, LIST_SCAN_MAX_PAGES);
+    const pageNumbers = Array.from(
+      { length: batchEnd - batchStart + 1 },
+      (_, i) => batchStart + i
+    );
+
+    // Fetch batch of pages in parallel
+    const pageResults = await Promise.all(
+      pageNumbers.map(async page => {
+        const listUrl = `${KKPHIM_API_BASE}/danh-sach/phim-moi-cap-nhat?page=${page}`;
+        const payload = await fetchJson<{ items?: KKPhimListItem[] }>(listUrl);
+        return { page, items: payload?.items || [] };
+      })
+    );
+
+    let hasEmptyPage = false;
+
+    // Process pages in order to maintain deterministic results
+    for (const { items } of pageResults) {
+      if (!items.length) {
+        hasEmptyPage = true;
+        break;
+      }
+
+      const matchedItem = items.find(item => {
+        const sameTmdb = String(item?.tmdb?.id ?? '') === tmdbId;
+        if (!sameTmdb) return false;
+
+        const sameType = !item?.tmdb?.type || item.tmdb.type === mediaType;
+        if (!sameType) {
+          return false;
+        }
+
+        return matchesRequestedSeason(season, item);
+      });
+
+      if (!matchedItem?.slug) {
+        continue;
+      }
+
+      const detail = await fetchDetailBySlug(matchedItem.slug);
+      if (!detail) {
+        continue;
+      }
+
+      if (storage) {
+        const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
+        await storage.setItem(cacheKey, matchedItem.slug, { ttl: SLUG_CACHE_TTL }).catch(() => null);
+      }
+
+      return detail;
+    }
+
+    if (hasEmptyPage) {
+      break;
+    }
+  }
+
+  return null;
+};
+
+// ── TMDB metadata with caching ──────────────────────────────────────────
 const fetchTmdbMetadata = async (
   tmdbId: string,
   mediaType: 'movie' | 'tv',
-  context?: StreamLookupContext
+  context?: StreamLookupContext,
+  storage?: StorageLike
 ): Promise<TmdbMetadata & { country?: string }> => {
   const titleFromContext = typeof context?.title === 'string' ? context.title.trim() : '';
   const yearFromContext =
@@ -362,6 +408,26 @@ const fetchTmdbMetadata = async (
       ? context.releaseYear
       : undefined;
   const countryFromContext = typeof context?.country === 'string' ? context.country.trim() : '';
+
+  // Check TMDB metadata cache first
+  if (storage) {
+    const metaCacheKey = buildTmdbMetaCacheKey(tmdbId, mediaType);
+    const cached = await storage
+      .getItem<TmdbMetadata & { country?: string }>(metaCacheKey)
+      .catch(() => null);
+    if (cached && Array.isArray(cached.titles) && cached.titles.length > 0) {
+      // Merge context data into cached result
+      const mergedTitles = [...cached.titles];
+      if (titleFromContext && !mergedTitles.includes(titleFromContext)) {
+        mergedTitles.push(titleFromContext);
+      }
+      return {
+        titles: mergedTitles,
+        year: cached.year || yearFromContext,
+        country: cached.country || countryFromContext,
+      };
+    }
+  }
 
   const config = useRuntimeConfig();
   const tmdbKey = (
@@ -402,7 +468,17 @@ const fetchTmdbMetadata = async (
         payload.production_countries?.[0]?.iso_3166_1 ||
         countryFromContext;
 
-      return { titles: uniqueTitles, year, country };
+      const result = { titles: uniqueTitles, year, country };
+
+      // Cache the TMDB metadata
+      if (storage) {
+        const metaCacheKey = buildTmdbMetaCacheKey(tmdbId, mediaType);
+        await storage
+          .setItem(metaCacheKey, result, { ttl: TMDB_META_CACHE_TTL })
+          .catch(() => null);
+      }
+
+      return result;
     }
   }
 
@@ -474,6 +550,59 @@ const isTitleMatch = (candidate: KKPhimSearchItem, meta: TmdbMetadata) => {
   return false;
 };
 
+// ── Pre-filter and validate a search candidate ──────────────────────────
+const validateCandidate = (
+  detail: KKPhimDetailResponse,
+  item: KKPhimSearchItem,
+  tmdbId: string,
+  mediaType: 'movie' | 'tv',
+  tmdbMeta: TmdbMetadata & { country?: string }
+): { valid: boolean; tmdbMatch: boolean } => {
+  if (!detail?.movie || !Array.isArray(detail.episodes)) {
+    return { valid: false, tmdbMatch: false };
+  }
+
+  // 1. Strict year matching
+  const tmdbYear = tmdbMeta.year;
+  const candidateYear = detail.movie.year || item.year;
+  if (tmdbYear && candidateYear && Math.abs(candidateYear - tmdbYear) > 1) {
+    return { valid: false, tmdbMatch: false };
+  }
+
+  // 2. Strict media type validation
+  const resolvedType = detail.movie.tmdb?.type;
+  if (resolvedType && resolvedType !== mediaType) {
+    return { valid: false, tmdbMatch: false };
+  }
+  const kkphimType = detail.movie.type;
+  if (kkphimType) {
+    if (mediaType === 'movie' && (kkphimType === 'series' || kkphimType === 'tvshows')) {
+      return { valid: false, tmdbMatch: false };
+    }
+    if (mediaType === 'tv' && kkphimType === 'single') {
+      return { valid: false, tmdbMatch: false };
+    }
+  }
+
+  // 3. Strict country validation
+  const targetCountrySlug = mapIsoCountryToKkphimSlug(tmdbMeta.country);
+  if (targetCountrySlug && Array.isArray(detail.movie.country)) {
+    const hasCountryMatch = detail.movie.country.some((c: any) => c.slug === targetCountrySlug);
+    if (!hasCountryMatch) {
+      return { valid: false, tmdbMatch: false };
+    }
+  }
+
+  // Check TMDB ID match
+  const detailTmdbId = detail.movie.tmdb?.id ? String(detail.movie.tmdb.id) : null;
+  if (detailTmdbId && detailTmdbId === tmdbId) {
+    return { valid: true, tmdbMatch: true };
+  }
+
+  return { valid: true, tmdbMatch: false };
+};
+
+// ── Title search with parallel candidate detail fetching ────────────────
 const findByTitleSearch = async (
   tmdbId: string,
   mediaType: 'movie' | 'tv',
@@ -481,7 +610,7 @@ const findByTitleSearch = async (
   context?: StreamLookupContext,
   storage?: StorageLike
 ): Promise<KKPhimDetailResponse | null> => {
-  const tmdbMeta = await fetchTmdbMetadata(tmdbId, mediaType, context);
+  const tmdbMeta = await fetchTmdbMetadata(tmdbId, mediaType, context, storage);
   const searchTerms = buildSearchTerms(tmdbMeta, tmdbId);
 
   let titleFallback: KKPhimDetailResponse | null = null;
@@ -492,79 +621,104 @@ const findByTitleSearch = async (
     const searchPayload = await fetchJson<{ data?: { items?: KKPhimSearchItem[] } }>(searchUrl);
     const items = searchPayload?.data?.items || [];
 
+    // Pre-filter: separate items with matching TMDB ID (priority) from others
+    const tmdbMatchItems: KKPhimSearchItem[] = [];
+    const otherItems: KKPhimSearchItem[] = [];
+
     for (const item of items) {
       const itemTmdbId = item.tmdb?.id ? String(item.tmdb.id) : null;
       if (itemTmdbId && itemTmdbId !== tmdbId) {
-        continue;
+        continue; // Different TMDB ID — skip entirely
       }
+      if (itemTmdbId === tmdbId) {
+        tmdbMatchItems.push(item);
+      } else {
+        otherItems.push(item);
+      }
+    }
 
-      const detail = await fetchDetailBySlug(item.slug);
-      if (!detail?.movie || !Array.isArray(detail.episodes)) {
-        continue;
-      }
+    // Process TMDB-matched items first (fetch details in parallel, limited concurrency)
+    if (tmdbMatchItems.length > 0) {
+      const detailResults = await Promise.all(
+        tmdbMatchItems.slice(0, TITLE_SEARCH_DETAIL_CONCURRENCY).map(async item => {
+          const detail = await fetchDetailBySlug(item.slug);
+          return { item, detail };
+        })
+      );
 
-      // 1. Strict year matching
-      const tmdbYear = tmdbMeta.year;
-      const candidateYear = detail.movie.year || item.year;
-      if (tmdbYear && candidateYear && Math.abs(candidateYear - tmdbYear) > 1) {
-        continue;
-      }
+      for (const { item, detail } of detailResults) {
+        if (!detail) continue;
 
-      // 2. Strict media type validation
-      const resolvedType = detail.movie.tmdb?.type;
-      if (resolvedType && resolvedType !== mediaType) {
-        continue;
-      }
-      const kkphimType = detail.movie.type;
-      if (kkphimType) {
-        if (mediaType === 'movie' && (kkphimType === 'series' || kkphimType === 'tvshows')) {
-          continue;
-        }
-        if (mediaType === 'tv' && kkphimType === 'single') {
-          continue;
-        }
-      }
+        const { valid, tmdbMatch } = validateCandidate(detail, item, tmdbId, mediaType, tmdbMeta);
+        if (!valid) continue;
 
-      // 3. Strict country validation
-      const targetCountrySlug = mapIsoCountryToKkphimSlug(tmdbMeta.country);
-      if (targetCountrySlug && Array.isArray(detail.movie.country)) {
-        const hasCountryMatch = detail.movie.country.some((c: any) => c.slug === targetCountrySlug);
-        if (!hasCountryMatch) {
-          continue;
-        }
-      }
-
-      const detailTmdbId = detail.movie.tmdb?.id ? String(detail.movie.tmdb.id) : null;
-      if (detailTmdbId && detailTmdbId === tmdbId) {
-        if (mediaType === 'tv' && typeof season === 'number') {
-          const seasonFromDetail = detail.movie.tmdb?.season;
-          if (typeof seasonFromDetail === 'number' && seasonFromDetail !== season) {
-            if (!seasonFallback) {
-              seasonFallback = detail;
+        if (tmdbMatch) {
+          if (mediaType === 'tv' && typeof season === 'number') {
+            const seasonFromDetail = detail.movie?.tmdb?.season;
+            if (typeof seasonFromDetail === 'number' && seasonFromDetail !== season) {
+              if (!seasonFallback) {
+                seasonFallback = detail;
+              }
+              continue;
             }
-            continue;
           }
-        }
 
-        if (storage && detail.movie.slug) {
-          const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
-          await storage
-            .setItem(cacheKey, detail.movie.slug, { ttl: SLUG_CACHE_TTL })
-            .catch(() => null);
+          if (storage && detail.movie?.slug) {
+            const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
+            await storage
+              .setItem(cacheKey, detail.movie.slug, { ttl: SLUG_CACHE_TTL })
+              .catch(() => null);
+          }
+          return detail;
         }
-        return detail;
       }
+    }
 
-      if (!titleFallback && isTitleMatch(item, tmdbMeta)) {
-        if (mediaType === 'movie') {
-          if (!tmdbMeta.year || !item.year || item.year === tmdbMeta.year) {
-            titleFallback = detail;
+    // Process remaining items (title fallback) — fetch details in parallel batches
+    if (!titleFallback && otherItems.length > 0) {
+      const candidatesToCheck = otherItems.slice(0, TITLE_SEARCH_DETAIL_CONCURRENCY);
+      const detailResults = await Promise.all(
+        candidatesToCheck.map(async item => {
+          const detail = await fetchDetailBySlug(item.slug);
+          return { item, detail };
+        })
+      );
+
+      for (const { item, detail } of detailResults) {
+        if (!detail) continue;
+
+        const { valid, tmdbMatch } = validateCandidate(detail, item, tmdbId, mediaType, tmdbMeta);
+        if (!valid) continue;
+
+        if (tmdbMatch) {
+          if (mediaType === 'tv' && typeof season === 'number') {
+            const seasonFromDetail = detail.movie?.tmdb?.season;
+            if (typeof seasonFromDetail === 'number' && seasonFromDetail !== season) {
+              if (!seasonFallback) seasonFallback = detail;
+              continue;
+            }
           }
-        } else {
-          const seasonFromTitle =
-            parseSeasonFromText(item.name) || parseSeasonFromText(item.origin_name);
-          if (!season || !seasonFromTitle || seasonFromTitle === season) {
-            titleFallback = detail;
+
+          if (storage && detail.movie?.slug) {
+            const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
+            await storage
+              .setItem(cacheKey, detail.movie.slug, { ttl: SLUG_CACHE_TTL })
+              .catch(() => null);
+          }
+          return detail;
+        }
+
+        if (!titleFallback && isTitleMatch(item, tmdbMeta)) {
+          if (mediaType === 'movie') {
+            if (!tmdbMeta.year || !item.year || item.year === tmdbMeta.year) {
+              titleFallback = detail;
+            }
+          } else {
+            const seasonFromTitle =
+              parseSeasonFromText(item.name) || parseSeasonFromText(item.origin_name);
+            if (!season || !seasonFromTitle || seasonFromTitle === season) {
+              titleFallback = detail;
+            }
           }
         }
       }
@@ -574,6 +728,7 @@ const findByTitleSearch = async (
   return titleFallback ?? seasonFallback ?? null;
 };
 
+// ── Main orchestrator with all strategies in parallel ───────────────────
 const findKKPhimDetail = async (
   tmdbId: string,
   mediaType: 'movie' | 'tv',
@@ -581,26 +736,58 @@ const findKKPhimDetail = async (
   context?: StreamLookupContext,
   storage?: StorageLike
 ): Promise<KKPhimDetailResponse | null> => {
-  // 1. Direct TMDB ID lookup (fastest, most reliable).
-  const detail = await fetchDetailByTmdb(tmdbId, mediaType);
-  if (detail && matchesRequestedSeason(season, detail.movie)) {
-    if (storage && detail.movie?.slug) {
-      const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
-      await storage.setItem(cacheKey, detail.movie.slug, { ttl: SLUG_CACHE_TTL }).catch(() => null);
+  // 0. Check negative cache — avoid repeating expensive lookups for missing content
+  if (storage) {
+    const negativeCacheKey = buildNegativeCacheKey(tmdbId, mediaType, season);
+    const isNegativelyCached = await storage.getItem<boolean>(negativeCacheKey).catch(() => null);
+    if (isNegativelyCached) {
+      console.log(`[KKPhim] Negative cache hit for ${mediaType}/${tmdbId} — skipping search`);
+      return null;
     }
-    return detail;
   }
 
-  // 2. Run list scan (TMDB ID) and title search in parallel.
-  const [listSettled, titleSettled] = await Promise.allSettled([
+  // 1. Fast path: check slug cache first (1 request instead of full search)
+  const cachedResult = await findByCachedSlug(tmdbId, mediaType, season, storage);
+  if (cachedResult) {
+    return cachedResult;
+  }
+
+  // 2. Run all 3 strategies in parallel: TMDB direct + list scan + title search
+  const [tmdbSettled, listSettled, titleSettled] = await Promise.allSettled([
+    fetchDetailByTmdb(tmdbId, mediaType),
     findFromLatestListByTmdb(tmdbId, mediaType, season, storage),
     findByTitleSearch(tmdbId, mediaType, season, context, storage),
   ]);
 
+  const tmdbResult = tmdbSettled.status === 'fulfilled' ? tmdbSettled.value : null;
   const listResult = listSettled.status === 'fulfilled' ? listSettled.value : null;
   const titleResult = titleSettled.status === 'fulfilled' ? titleSettled.value : null;
 
-  return listResult ?? titleResult ?? null;
+  // Prioritize: TMDB direct (most reliable) > list scan > title search
+  let result: KKPhimDetailResponse | null = null;
+
+  if (tmdbResult && matchesRequestedSeason(season, tmdbResult.movie)) {
+    result = tmdbResult;
+  } else {
+    result = listResult ?? titleResult ?? null;
+  }
+
+  // Cache the slug for future fast lookups
+  if (result?.movie?.slug && storage) {
+    const cacheKey = buildSlugCacheKey(tmdbId, mediaType, season);
+    await storage.setItem(cacheKey, result.movie.slug, { ttl: SLUG_CACHE_TTL }).catch(() => null);
+  }
+
+  // Negative cache if not found
+  if (!result && storage) {
+    const negativeCacheKey = buildNegativeCacheKey(tmdbId, mediaType, season);
+    await storage
+      .setItem(negativeCacheKey, true, { ttl: NEGATIVE_CACHE_TTL })
+      .catch(() => null);
+    console.log(`[KKPhim] Caching negative result for ${mediaType}/${tmdbId} (TTL: ${NEGATIVE_CACHE_TTL}s)`);
+  }
+
+  return result;
 };
 
 export async function getKKPhimStreams(
@@ -612,7 +799,11 @@ export async function getKKPhimStreams(
   context?: StreamLookupContext
 ): Promise<Stream[]> {
   try {
+    const startTime = Date.now();
     const detail = await findKKPhimDetail(tmdbId, mediaType, seasonNum, context, storage);
+    const elapsed = Date.now() - startTime;
+    console.log(`[KKPhim] findKKPhimDetail completed in ${elapsed}ms for ${mediaType}/${tmdbId}`);
+
     const servers =
       detail?.episodes?.filter(
         server => Array.isArray(server.server_data) && server.server_data.length > 0

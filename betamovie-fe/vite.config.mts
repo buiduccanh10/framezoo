@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
     envDir: workspaceRoot,
     base: env.VITE_BASE_URL || "/",
     plugins: [
-      million.vite({ auto: true, log: false }),
+      million.vite({ auto: { mute: true } as any, log: false }),
       handlebars({
         vars: {
           opensearchEnabled: env.VITE_OPENSEARCH_ENABLED === "true",
