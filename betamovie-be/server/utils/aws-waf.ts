@@ -178,6 +178,40 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
       window.atob = (input: string) => Buffer.from(input, 'base64').toString('binary');
       window.btoa = (input: string) => Buffer.from(input, 'binary').toString('base64');
 
+      // Safe window.location proxy to prevent crashes after close()
+      const originalLocation = window.location;
+      const safeLocation = new Proxy(originalLocation, {
+        get(target, prop) {
+          try {
+            if (!window.document) {
+              if (prop === 'href') return url;
+              if (prop === 'origin') return new URL(url).origin;
+              if (prop === 'protocol') return new URL(url).protocol;
+              if (prop === 'host') return new URL(url).host;
+              if (prop === 'hostname') return new URL(url).hostname;
+              if (prop === 'port') return new URL(url).port;
+              if (prop === 'pathname') return new URL(url).pathname;
+              if (prop === 'search') return new URL(url).search;
+              if (prop === 'hash') return new URL(url).hash;
+              if (prop === 'toString') return () => url;
+            }
+            return (target as any)[prop];
+          } catch {
+            if (prop === 'href') return url;
+            if (prop === 'origin') return new URL(url).origin;
+            if (prop === 'toString') return () => url;
+            return undefined;
+          }
+        }
+      });
+      Object.defineProperty(window, 'location', {
+        get() {
+          return safeLocation;
+        },
+        configurable: true
+      });
+
+
       // Native Node Web Crypto integration (standard and robust WebCrypto support)
       // Bound to preserve context across JSDOM / Node VM context boundary
       const boundSubtle: Record<string, any> = {};
