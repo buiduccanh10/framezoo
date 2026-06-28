@@ -171,6 +171,7 @@ export function useDiscoverMedia({
   mediaTitle,
   isCarouselView = false,
   enabled = true,
+  timeWindow,
 }: UseDiscoverMediaProps): UseDiscoverMediaReturn {
   const [media, setMedia] = useState<DiscoverMedia[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -334,7 +335,7 @@ export function useDiscoverMedia({
       return;
     }
 
-    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}`;
+    const currentFetchKey = `${contentType}-${mediaType}-${id || ""}-${page}-${releaseYear || ""}-${originCountry || ""}-${timeWindow || ""}`;
     if (lastFetchedRef.current === currentFetchKey) {
       return;
     }
@@ -461,7 +462,9 @@ export function useDiscoverMedia({
           break;
 
         case "trending":
-          data = await fetchTMDBMedia(`/trending/${mediaType}/week`);
+          data = await fetchTMDBMedia(
+            `/trending/${mediaType}/${timeWindow || "day"}`,
+          );
           setSectionTitle(t("discover.carousel.title.trending"));
           break;
 
@@ -611,6 +614,7 @@ export function useDiscoverMedia({
     page,
     formattedLanguage,
     isRestoring,
+    timeWindow,
   ]);
 
   useEffect(() => {

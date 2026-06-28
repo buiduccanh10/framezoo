@@ -130,6 +130,8 @@
     "carousel": {
       "change": "পরিবর্তন",
       "more": "আরো দেখুন",
+      "today": "আজ",
+      "thisWeek": "এই সপ্তাহে",
       "title": {
         "4kReleases": "4K রিলিজ",
         "editorPicksMovies": "সম্পাদক মুভি বাছাই",

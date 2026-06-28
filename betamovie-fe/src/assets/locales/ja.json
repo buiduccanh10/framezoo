@@ -130,6 +130,8 @@
     "carousel": {
       "change": "変化",
       "more": "もっと見る",
+      "today": "今日",
+      "thisWeek": "今週",
       "title": {
         "4kReleases": "4K リリース",
         "editorPicksMovies": "編集者が選ぶ映画",

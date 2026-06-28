@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Değiştirmek",
       "more": "Daha fazlasını görüntüle",
+      "today": "Bugün",
+      "thisWeek": "Bu hafta",
       "title": {
         "4kReleases": "4K Yayınları",
         "editorPicksMovies": "Editörün Filmleri Seçmesi",

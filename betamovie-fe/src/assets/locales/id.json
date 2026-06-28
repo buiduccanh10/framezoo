@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Mengubah",
       "more": "Lihat lebih banyak",
+      "today": "Hari ini",
+      "thisWeek": "Minggu ini",
       "title": {
         "4kReleases": "Rilis 4K",
         "editorPicksMovies": "Editor Memilih Film",

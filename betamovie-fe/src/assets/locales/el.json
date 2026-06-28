@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Αλλαγή",
       "more": "Δείτε περισσότερα",
+      "today": "Σήμερα",
+      "thisWeek": "Αυτή την εβδομάδα",
       "title": {
         "4kReleases": "Εκδόσεις 4K",
         "editorPicksMovies": "Ο συντάκτης επιλέγει ταινίες",

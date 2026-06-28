@@ -130,6 +130,8 @@
     "carousel": {
       "change": "परिवर्तन गर्नुहोस्",
       "more": "अझ धेरै हेर्नुहोस्",
+      "today": "आज",
+      "thisWeek": "यो हप्ता",
       "title": {
         "4kReleases": "4K रिलीज",
         "editorPicksMovies": "सम्पादकले चलचित्रहरू छान्छन्",

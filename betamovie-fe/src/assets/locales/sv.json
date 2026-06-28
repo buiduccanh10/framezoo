@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Ändra",
       "more": "Visa mer",
+      "today": "I dag",
+      "thisWeek": "Denna vecka",
       "title": {
         "4kReleases": "4K Releaserna",
         "editorPicksMovies": "Redaktören väljer filmer",

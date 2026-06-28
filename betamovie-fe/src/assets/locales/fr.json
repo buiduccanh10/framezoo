@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Changer",
       "more": "Voir plus",
+      "today": "Aujourd'hui",
+      "thisWeek": "Cette semaine",
       "title": {
         "4kReleases": "Sorties 4K",
         "editorPicksMovies": "Films sélectionnés",

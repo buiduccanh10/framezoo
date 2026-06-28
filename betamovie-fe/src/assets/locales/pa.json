@@ -130,6 +130,8 @@
     "carousel": {
       "change": "ਬਦਲੋ",
       "more": "ਹੋਰ ਵੇਖੋ",
+      "today": "ਅੱਜ",
+      "thisWeek": "ਇਸ ਹਫ਼ਤੇ",
       "title": {
         "4kReleases": "4K ਰੀਲੀਜ਼",
         "editorPicksMovies": "ਸੰਪਾਦਕ ਫਿਲਮਾਂ ਦੀ ਚੋਣ ਕਰਦਾ ਹੈ",

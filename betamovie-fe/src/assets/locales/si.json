@@ -130,6 +130,8 @@
     "carousel": {
       "change": "වෙනස් කරන්න",
       "more": "තව බලන්න",
+      "today": "අද",
+      "thisWeek": "මෙම සතිය",
       "title": {
         "4kReleases": "4K නිකුත් කිරීම්",
         "editorPicksMovies": "සංස්කාරක චිත්‍රපට තෝරා ගනී",

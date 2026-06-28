@@ -130,6 +130,8 @@
     "carousel": {
       "change": "เปลี่ยน",
       "more": "ดูเพิ่มเติม",
+      "today": "วันนี้",
+      "thisWeek": "สัปดาห์นี้",
       "title": {
         "4kReleases": "การเผยแพร่ 4K",
         "editorPicksMovies": "บรรณาธิการเลือกภาพยนตร์",

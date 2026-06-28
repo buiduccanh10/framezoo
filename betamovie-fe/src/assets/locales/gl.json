@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Cambiar",
       "more": "Ver máis",
+      "today": "Hoxe",
+      "thisWeek": "Esta semana",
       "title": {
         "4kReleases": "Lanzamentos 4K",
         "editorPicksMovies": "O editor escolle películas",

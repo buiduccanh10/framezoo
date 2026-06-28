@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Schimba",
       "more": "Vezi mai multe",
+      "today": "Astăzi",
+      "thisWeek": "În această săptămână",
       "title": {
         "4kReleases": "Lansări 4K",
         "editorPicksMovies": "Editorul alege filme",

@@ -130,6 +130,8 @@
     "carousel": {
       "change": "تغییر دهید",
       "more": "مشاهده بیشتر",
+      "today": "امروز",
+      "thisWeek": "این هفته",
       "title": {
         "4kReleases": "4K منتشر شد",
         "editorPicksMovies": "ویرایشگر فیلم ها را انتخاب می کند",

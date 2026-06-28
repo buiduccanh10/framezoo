@@ -130,6 +130,8 @@
     "carousel": {
       "change": "spremeniti",
       "more": "Prikaži več",
+      "today": "Danes",
+      "thisWeek": "Ta teden",
       "title": {
         "4kReleases": "Izdaje 4K",
         "editorPicksMovies": "Urednik izbere filme",

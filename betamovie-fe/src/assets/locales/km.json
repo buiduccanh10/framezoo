@@ -130,6 +130,8 @@
     "carousel": {
       "change": "ផ្លាស់ប្តូរ",
       "more": "មើលច្រើនទៀត",
+      "today": "ថ្ងៃនេះ",
+      "thisWeek": "សប្តាហ៍នេះ។",
       "title": {
         "4kReleases": "ការចេញផ្សាយ 4K",
         "editorPicksMovies": "កម្មវិធីនិពន្ធជ្រើសរើសភាពយន្ត",

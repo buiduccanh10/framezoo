@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Thay đổi",
       "more": "Xem thêm",
+      "today": "Hôm nay",
+      "thisWeek": "Tuần này",
       "title": {
         "4kReleases": "Phát hành 4K",
         "editorPicksMovies": "Phim điện ảnh biên tập viên chọn",

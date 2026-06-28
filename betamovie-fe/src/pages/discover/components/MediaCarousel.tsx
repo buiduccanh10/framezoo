@@ -1,4 +1,5 @@
 import { Listbox } from "@headlessui/react";
+import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -115,6 +116,7 @@ export function MediaCarousel({
   const [selectedGenre, setSelectedGenre] = React.useState<OptionItem | null>(
     null,
   );
+  const [timeWindow, setTimeWindow] = useState<"day" | "week">("day");
 
   // Get available providers and genres
   const mediaType: MediaType = isTVShow ? "tv" : "movie";
@@ -250,6 +252,7 @@ export function MediaCarousel({
       enabled: discoverMediaEnabled,
       releaseYear: releaseYear || undefined,
       originCountry: originCountry || undefined,
+      timeWindow: contentType === "trending" ? timeWindow : undefined,
     });
   const resolvedSectionTitle = sectionTitleOverride || sectionTitle;
 
@@ -349,20 +352,24 @@ export function MediaCarousel({
     const baseLink = `/discover/more`;
     const resolvedGenreId = forcedGenreId || selectedGenreId;
 
+    let targetLink = "";
     if (resolvedGenreId) {
-      return `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
+      targetLink = `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
+    } else if (showProviders && selectedProviderId) {
+      targetLink = `${baseLink}/provider/${selectedProviderId}/${mediaType}`;
+    } else if (showGenres && selectedGenreId) {
+      targetLink = `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
+    } else if (showRecommendations && selectedRecommendationId) {
+      targetLink = `${baseLink}/recommendations/${selectedRecommendationId}/${mediaType}`;
+    } else {
+      targetLink = `${baseLink}/${actualContentType}/${mediaType}`;
     }
 
-    if (showProviders && selectedProviderId) {
-      return `${baseLink}/provider/${selectedProviderId}/${mediaType}`;
+    if (actualContentType === "trending") {
+      targetLink = `${targetLink}?timeWindow=${timeWindow}`;
     }
-    if (showGenres && selectedGenreId) {
-      return `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
-    }
-    if (showRecommendations && selectedRecommendationId) {
-      return `${baseLink}/recommendations/${selectedRecommendationId}/${mediaType}`;
-    }
-    return `${baseLink}/${actualContentType}/${mediaType}`;
+
+    return targetLink;
   }, [
     moreLink,
     showProviders,
@@ -374,6 +381,7 @@ export function MediaCarousel({
     selectedRecommendationId,
     mediaType,
     actualContentType,
+    timeWindow,
   ]);
 
   // Hide the entire section if there's an error or no content
@@ -389,6 +397,36 @@ export function MediaCarousel({
             <h2 className="text-2xl cursor-default font-bold text-white md:text-2xl pl-0 text-balance">
               {resolvedSectionTitle}
             </h2>
+            {contentType === "trending" && (
+              <div className="inline-flex items-center rounded-full bg-mediaCard-hoverBackground p-1">
+                <button
+                  type="button"
+                  onClick={() => setTimeWindow("day")}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    timeWindow === "day"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.today", { defaultValue: "Today" })}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTimeWindow("week")}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    timeWindow === "week"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.thisWeek", {
+                    defaultValue: "This Week",
+                  })}
+                </button>
+              </div>
+            )}
             {showRecommendations &&
               recommendationSources &&
               recommendationSources.length > 0 && (

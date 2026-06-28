@@ -130,6 +130,8 @@
     "carousel": {
       "change": "تبدیلی",
       "more": "مزید دیکھیں",
+      "today": "آج",
+      "thisWeek": "اس ہفتے",
       "title": {
         "4kReleases": "4K ریلیز",
         "editorPicksMovies": "ایڈیٹر فلمیں چنتا ہے۔",
