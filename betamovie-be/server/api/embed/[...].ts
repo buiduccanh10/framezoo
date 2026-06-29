@@ -247,6 +247,10 @@ export default defineEventHandler(async event => {
         typeof streamQuery.title === 'string' && streamQuery.title.trim().length > 0
           ? streamQuery.title.trim()
           : undefined;
+      const originName =
+        typeof streamQuery.originName === 'string' && streamQuery.originName.trim().length > 0
+          ? streamQuery.originName.trim()
+          : undefined;
       const releaseYearRaw =
         typeof streamQuery.releaseYear === 'string' || typeof streamQuery.releaseYear === 'number'
           ? Number.parseInt(String(streamQuery.releaseYear), 10)
@@ -258,12 +262,13 @@ export default defineEventHandler(async event => {
           : undefined;
       const contextCacheKey = `stream-meta:${providerName}:${type}:${tmdbId}${type === 'tv' ? `:${season}:${episode}` : ''}`;
 
-      if (title || releaseYear || country) {
+      if (title || originName || releaseYear || country) {
         await storage
           .setItem(
             contextCacheKey,
             {
               title,
+              originName,
               releaseYear,
               country,
             },
@@ -301,6 +306,7 @@ export default defineEventHandler(async event => {
         storage,
         {
           title,
+          originName,
           releaseYear,
           country,
         }
