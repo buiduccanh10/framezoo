@@ -1,4 +1,3 @@
-import { get as fetchTmdb } from "@/backend/metadata/tmdb";
 import {
   type MovieScrapeContext,
   NotFoundError,
@@ -33,57 +32,6 @@ interface KKPhimApiResponse {
   count: number;
   providerTimings: Record<string, number>;
   streams: KKPhimStream[];
-}
-
-async function fetchTmdbLocalizedDetails(
-  path: string,
-): Promise<{ viDetails: any | null; enDetails: any | null }> {
-  const [viResult, enResult] = await Promise.allSettled([
-    fetchTmdb<any>(path, {
-      language: "vi-VN",
-    }),
-    fetchTmdb<any>(path, {
-      language: "en-US",
-    }),
-  ]);
-
-  return {
-    viDetails: viResult.status === "fulfilled" ? viResult.value : null,
-    enDetails: enResult.status === "fulfilled" ? enResult.value : null,
-  };
-}
-
-function buildContextQuery(
-  ctx: MovieScrapeContext | ShowScrapeContext,
-  viTitle: string,
-  originName: string,
-  country: string,
-): string {
-  const query = new URLSearchParams();
-
-  if (viTitle && viTitle.trim().length > 0) {
-    query.set("title", viTitle.trim());
-  }
-
-  if (originName && originName.trim().length > 0) {
-    query.set("originName", originName.trim());
-  }
-
-  if (
-    typeof ctx.media?.releaseYear === "number" &&
-    Number.isFinite(ctx.media.releaseYear)
-  ) {
-    query.set("releaseYear", String(ctx.media.releaseYear));
-  } else if (ctx.media?.year) {
-    query.set("releaseYear", String(ctx.media.year));
-  }
-
-  if (country && country.trim().length > 0) {
-    query.set("country", country.trim());
-  }
-
-  const queryString = query.toString();
-  return queryString ? `?${queryString}` : "";
 }
 
 function encodeStreamInfo(stream: KKPhimStream): string {
@@ -153,34 +101,7 @@ export async function scrapeKKPhimMovie(
   ctx: MovieScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
-
-  let viTitle = ctx.media.title;
-  let originName = "";
-  let country = "";
-
-  try {
-    const { viDetails, enDetails } = await fetchTmdbLocalizedDetails(
-      `/movie/${ctx.media.tmdbId}`,
-    );
-    if (viDetails || enDetails) {
-      viTitle = viDetails?.title || enDetails?.title || viTitle;
-      originName =
-        enDetails?.title ||
-        viDetails?.original_title ||
-        enDetails?.original_title ||
-        "";
-      country =
-        viDetails?.origin_country?.[0] ||
-        viDetails?.production_countries?.[0]?.iso_3166_1 ||
-        enDetails?.origin_country?.[0] ||
-        enDetails?.production_countries?.[0]?.iso_3166_1 ||
-        "";
-    }
-  } catch (err) {
-    console.error("[KKPhim] Failed to fetch TMDB movie aliases:", err);
-  }
-
-  const apiUrl = `${KKPHIM_API_BASE}/movie/${ctx.media.tmdbId}${buildContextQuery(ctx, viTitle, originName, country)}`;
+  const apiUrl = `${KKPHIM_API_BASE}/movie/${ctx.media.tmdbId}`;
 
   try {
     const data = await ctx.fetcher<KKPhimApiResponse>(apiUrl, {
@@ -221,30 +142,7 @@ export async function scrapeKKPhimShow(
   ctx: ShowScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
-
-  let viTitle = ctx.media.title;
-  let originName = "";
-  let country = "";
-
-  try {
-    const { viDetails, enDetails } = await fetchTmdbLocalizedDetails(
-      `/tv/${ctx.media.tmdbId}`,
-    );
-    if (viDetails || enDetails) {
-      viTitle = viDetails?.name || enDetails?.name || viTitle;
-      originName =
-        enDetails?.name ||
-        viDetails?.original_name ||
-        enDetails?.original_name ||
-        "";
-      country =
-        viDetails?.origin_country?.[0] || enDetails?.origin_country?.[0] || "";
-    }
-  } catch (err) {
-    console.error("[KKPhim] Failed to fetch TMDB show aliases:", err);
-  }
-
-  const apiUrl = `${KKPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}${buildContextQuery(ctx, viTitle, originName, country)}`;
+  const apiUrl = `${KKPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
 
   try {
     const data = await ctx.fetcher<KKPhimApiResponse>(apiUrl, {
