@@ -75,7 +75,6 @@ export function useSettingsState(
   enableMinimalCards: boolean,
   forceCompactEpisodeView: boolean,
   enableLowPerformanceMode: boolean,
-  enableNativeSubtitles: boolean,
   enableHoldToBoost: boolean,
   homeSectionOrder: string[],
   manualSourceSelection: boolean,
@@ -243,12 +242,6 @@ export function useSettingsState(
     enableLowPerformanceModeChanged,
   ] = useDerived(enableLowPerformanceMode);
   const [
-    enableNativeSubtitlesState,
-    setEnableNativeSubtitlesState,
-    resetEnableNativeSubtitles,
-    enableNativeSubtitlesChanged,
-  ] = useDerived(enableNativeSubtitles);
-  const [
     enableHoldToBoostState,
     setEnableHoldToBoostState,
     resetEnableHoldToBoost,
@@ -324,7 +317,6 @@ export function useSettingsState(
     resetEnableMinimalCards();
     resetForceCompactEpisodeView();
     resetEnableLowPerformanceMode();
-    resetEnableNativeSubtitles();
     resetEnableHoldToBoost();
     resetHomeSectionOrder();
     resetManualSourceSelection();
@@ -366,7 +358,6 @@ export function useSettingsState(
     enableMinimalCardsChanged ||
     forceCompactEpisodeViewChanged ||
     enableLowPerformanceModeChanged ||
-    enableNativeSubtitlesChanged ||
     enableHoldToBoostChanged ||
     homeSectionOrderChanged ||
     manualSourceSelectionChanged ||
@@ -532,11 +523,6 @@ export function useSettingsState(
       state: enableLowPerformanceModeState,
       set: setEnableLowPerformanceModeState,
       changed: enableLowPerformanceModeChanged,
-    },
-    enableNativeSubtitles: {
-      state: enableNativeSubtitlesState,
-      set: setEnableNativeSubtitlesState,
-      changed: enableNativeSubtitlesChanged,
     },
     enableHoldToBoost: {
       state: enableHoldToBoostState,

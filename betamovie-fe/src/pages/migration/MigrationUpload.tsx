@@ -455,11 +455,6 @@ export function MigrationUploadPage() {
             uploadedData.settings.enableLowPerformanceMode,
           );
         }
-        if (uploadedData.settings.enableNativeSubtitles !== undefined) {
-          preferencesStore.setEnableNativeSubtitles(
-            uploadedData.settings.enableNativeSubtitles,
-          );
-        }
         if (uploadedData.settings.enableHoldToBoost !== undefined) {
           preferencesStore.setEnableHoldToBoost(
             uploadedData.settings.enableHoldToBoost,

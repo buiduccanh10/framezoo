@@ -62,7 +62,6 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
     debridToken: store.debridToken,
     debridService: store.debridService,
     enableLowPerformanceMode: store.enableLowPerformanceMode,
-    enableNativeSubtitles: store.enableNativeSubtitles,
     enableHoldToBoost: store.enableHoldToBoost,
     homeSectionOrder: store.homeSectionOrder,
     enableDoubleClickToSeek: store.enableDoubleClickToSeek,

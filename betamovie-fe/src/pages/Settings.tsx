@@ -504,14 +504,6 @@ export function SettingsPage() {
     (s) => s.setEnableLowPerformanceMode,
   );
 
-  // These are commented because the NativeSubtitlesPart is accessable though the atoms caption style menu and not on the settings page.
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
-  // const setEnableNativeSubtitles = usePreferencesStore(
-  //   (s) => s.setEnableNativeSubtitles,
-  // );
-
   const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
   const setEnableHoldToBoost = usePreferencesStore(
     (s) => s.setEnableHoldToBoost,
@@ -748,7 +740,6 @@ export function SettingsPage() {
     enableMinimalCards,
     forceCompactEpisodeView,
     enableLowPerformanceMode,
-    enableNativeSubtitles,
     enableHoldToBoost,
     homeSectionOrder,
     manualSourceSelection,

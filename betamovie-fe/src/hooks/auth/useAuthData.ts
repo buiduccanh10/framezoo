@@ -86,9 +86,6 @@ export function useAuthData() {
   const setEnableLowPerformanceMode = usePreferencesStore(
     (s) => s.setEnableLowPerformanceMode,
   );
-  const setEnableNativeSubtitles = usePreferencesStore(
-    (s) => s.setEnableNativeSubtitles,
-  );
   const setEnableHoldToBoost = usePreferencesStore(
     (s) => s.setEnableHoldToBoost,
   );
@@ -271,10 +268,6 @@ export function useAuthData() {
         setEnableLowPerformanceMode(settings.enableLowPerformanceMode);
       }
 
-      if (settings.enableNativeSubtitles !== undefined) {
-        setEnableNativeSubtitles(settings.enableNativeSubtitles);
-      }
-
       if (settings.enableHoldToBoost !== undefined) {
         setEnableHoldToBoost(settings.enableHoldToBoost);
       }
@@ -340,7 +333,6 @@ export function useAuthData() {
       setdebridToken,
       setdebridService,
       setEnableLowPerformanceMode,
-      setEnableNativeSubtitles,
       setEnableHoldToBoost,
       setHomeSectionOrder,
       setManualSourceSelection,

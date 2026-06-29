@@ -38,7 +38,6 @@ export interface SettingsInput {
   enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
-  enableNativeSubtitles?: boolean;
   enableHoldToBoost?: boolean;
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
@@ -78,7 +77,6 @@ export interface SettingsResponse {
   enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;
   enableLowPerformanceMode?: boolean;
-  enableNativeSubtitles?: boolean;
   enableHoldToBoost?: boolean;
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;

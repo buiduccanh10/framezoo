@@ -61,12 +61,6 @@ export function KeyboardEvents() {
     }),
     [storedKeyboardShortcuts],
   );
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
-  const setEnableNativeSubtitles = usePreferencesStore(
-    (s) => s.setEnableNativeSubtitles,
-  );
   const enableNumberKeySeeking = usePreferencesStore(
     (s) => s.enableNumberKeySeeking,
   );
@@ -315,8 +309,6 @@ export function KeyboardEvents() {
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
-    enableNativeSubtitles,
-    setEnableNativeSubtitles,
     enableNumberKeySeeking,
   });
 
@@ -352,8 +344,6 @@ export function KeyboardEvents() {
       navigateToNextEpisode,
       navigateToPreviousEpisode,
       keyboardShortcuts,
-      enableNativeSubtitles,
-      setEnableNativeSubtitles,
       enableNumberKeySeeking,
     };
   }, [
@@ -382,8 +372,6 @@ export function KeyboardEvents() {
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
-    enableNativeSubtitles,
-    setEnableNativeSubtitles,
     enableNumberKeySeeking,
   ]);
 
@@ -752,20 +740,6 @@ export function KeyboardEvents() {
           dataRef.current.setShowDelayIndicator(false);
           dataRef.current.setCurrentOverlay(null);
         }, 3000);
-      }
-
-      // Toggle native subtitles - customizable
-      const toggleNativeSubtitles =
-        dataRef.current.keyboardShortcuts[ShortcutId.TOGGLE_NATIVE_SUBTITLES];
-      if (
-        toggleNativeSubtitles?.key &&
-        matchesShortcut(evt, toggleNativeSubtitles)
-      ) {
-        evt.preventDefault();
-        evt.stopPropagation();
-        dataRef.current.setEnableNativeSubtitles(
-          !dataRef.current.enableNativeSubtitles,
-        );
       }
     };
 

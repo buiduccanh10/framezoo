@@ -32,7 +32,6 @@ export interface PreferencesStore {
   debridService: string;
   tidbKey: string | null;
   enableLowPerformanceMode: boolean;
-  enableNativeSubtitles: boolean;
   enableHoldToBoost: boolean;
   homeSectionOrder: string[];
   manualSourceSelection: boolean;
@@ -66,7 +65,6 @@ export interface PreferencesStore {
   setdebridService(v: string): void;
   setTIDBKey(v: string | null): void;
   setEnableLowPerformanceMode(v: boolean): void;
-  setEnableNativeSubtitles(v: boolean): void;
   setEnableHoldToBoost(v: boolean): void;
   setHomeSectionOrder(v: string[]): void;
   setManualSourceSelection(v: boolean): void;
@@ -104,7 +102,6 @@ export const usePreferencesStore = create(
       debridService: "realdebrid",
       tidbKey: null,
       enableLowPerformanceMode: false,
-      enableNativeSubtitles: false,
       enableHoldToBoost: true,
       homeSectionOrder: ["watching", "bookmarks"],
       manualSourceSelection: false,
@@ -238,11 +235,7 @@ export const usePreferencesStore = create(
           }
         });
       },
-      setEnableNativeSubtitles(v) {
-        set((s) => {
-          s.enableNativeSubtitles = v;
-        });
-      },
+
       setEnableHoldToBoost(v) {
         set((s) => {
           s.enableHoldToBoost = v;
