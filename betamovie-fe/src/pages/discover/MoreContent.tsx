@@ -1,6 +1,5 @@
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import classNames from "classnames";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
@@ -217,64 +216,40 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
   const handleLoadMore = async () => {
     setCurrentPage((prev) => prev + 1);
   };
-
-  // Dynamically calculate columns based on width
-  const columns = useMemo(() => {
-    if (windowWidth >= 3840) return 10;
-    if (windowWidth >= 2650) return 8;
-    if (windowWidth >= 1280) return 6;
-    if (windowWidth >= 768) return 4;
-    if (windowWidth >= 640) return 3;
-    return 2;
-  }, [windowWidth]);
-
-  // Chunk the flat mediaItems array into rows
-  const rows = useMemo(() => {
-    const chunked: (typeof mediaItems)[] = [];
-    for (let i = 0; i < mediaItems.length; i += columns) {
-      chunked.push(mediaItems.slice(i, i + columns));
-    }
-    return chunked;
-  }, [mediaItems, columns]);
-
-  const parentRef = useRef<HTMLDivElement>(null);
-  const [scrollMargin, setScrollMargin] = useState(0);
-
-  // Recalculate scrollMargin when mediaItems are fetched or container changes
-  useEffect(() => {
-    const measureOffset = () => {
-      if (parentRef.current) {
-        setScrollMargin(parentRef.current.offsetTop);
-      }
-    };
-
-    measureOffset();
-    // Also measure on next frame to ensure layouts have settled
-    const rafId = requestAnimationFrame(measureOffset);
-
-    return () => cancelAnimationFrame(rafId);
-  }, [mediaItems, windowWidth]);
-
-  const rowVirtualizer = useWindowVirtualizer({
-    count: rows.length,
-    estimateSize: () => 380, // estimated height of one row
-    scrollMargin,
-    overscan: 3,
-  });
-
-  const virtualRows = rowVirtualizer.getVirtualItems();
-  const lastVirtualRow = virtualRows[virtualRows.length - 1];
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   // Infinite Scroll Trigger
   useEffect(() => {
-    if (!lastVirtualRow) return;
-    if (lastVirtualRow.index >= rows.length - 2) {
-      if (hasMore && !isLoading) {
-        handleLoadMore();
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastVirtualRow?.index, rows.length, hasMore, isLoading]);
+    const target = loadMoreRef.current;
+
+    if (!target || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && !isLoading) {
+          handleLoadMore();
+        }
+      },
+      {
+        rootMargin: "600px 0px",
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMore, isLoading]);
+
+  useEffect(() => {
+    if (actualContentType !== "trending") return;
+    if (searchParams.get("timeWindow")) return;
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("timeWindow", "day");
+    setSearchParams(nextParams, { replace: true });
+  }, [actualContentType, searchParams, setSearchParams]);
 
   // Set initial provider/genre/recommendation selection
   useEffect(() => {
@@ -638,75 +613,49 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
         )}
 
         <div
-          ref={parentRef}
           className={`transition-opacity duration-300 ease-in-out ${
             isContentVisible ? "opacity-100" : "opacity-0"
           }`}
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: "100%",
-            position: "relative",
-          }}
         >
-          {virtualRows.map((virtualRow) => {
-            const rowItems = rows[virtualRow.index];
-            if (!rowItems) return null;
+          <MediaGrid>
+            {mediaItems.map((item) => {
+              const isTVShow = Boolean(item.first_air_date);
+              const releaseDate = isTVShow
+                ? item.first_air_date
+                : item.release_date;
+              const year = releaseDate
+                ? parseInt(releaseDate.split("-")[0], 10)
+                : undefined;
 
-            return (
-              <div
-                key={virtualRow.key}
-                data-index={virtualRow.index}
-                ref={rowVirtualizer.measureElement}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  transform: `translateY(${virtualRow.start - rowVirtualizer.options.scrollMargin}px)`,
-                }}
-              >
-                <MediaGrid>
-                  {rowItems.map((item) => {
-                    const isTVShow = Boolean(item.first_air_date);
-                    const releaseDate = isTVShow
-                      ? item.first_air_date
-                      : item.release_date;
-                    const year = releaseDate
-                      ? parseInt(releaseDate.split("-")[0], 10)
-                      : undefined;
+              const mediaItem: MediaItem = {
+                id: item.id.toString(),
+                title: item.title || item.name || "",
+                poster: item.poster_path
+                  ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
+                  : "/placeholder.png",
+                type: isTVShow ? "show" : "movie",
+                year,
+                release_date: releaseDate ? new Date(releaseDate) : undefined,
+              };
 
-                    const mediaItem: MediaItem = {
-                      id: item.id.toString(),
-                      title: item.title || item.name || "",
-                      poster: item.poster_path
-                        ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
-                        : "/placeholder.png",
-                      type: isTVShow ? "show" : "movie",
-                      year,
-                      release_date: releaseDate
-                        ? new Date(releaseDate)
-                        : undefined,
-                    };
+              return (
+                <div
+                  key={item.id}
+                  style={{ userSelect: "none" }}
+                  onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
+                    e.preventDefault()
+                  }
+                >
+                  <WatchedMediaCard
+                    media={mediaItem}
+                    onShowDetails={handleShowDetails}
+                  />
+                </div>
+              );
+            })}
+          </MediaGrid>
 
-                    return (
-                      <div
-                        key={item.id}
-                        style={{ userSelect: "none" }}
-                        onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
-                          e.preventDefault()
-                        }
-                      >
-                        <WatchedMediaCard
-                          media={mediaItem}
-                          onShowDetails={handleShowDetails}
-                        />
-                      </div>
-                    );
-                  })}
-                </MediaGrid>
-              </div>
-            );
-          })}
+          {hasMore && <div ref={loadMoreRef} className="h-1 w-full" />}
         </div>
 
         {isLoading && currentPage > 1 && (
