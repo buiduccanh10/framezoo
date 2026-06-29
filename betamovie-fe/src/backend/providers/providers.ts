@@ -53,7 +53,7 @@ const vidlinkSource = {
   id: "alphaflix-vidlink",
   name: "Server 1 (VidLink) 🔥",
   rank: 1,
-  disabled: true,
+  disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -76,11 +76,25 @@ const openMovieSource = {
   scrapeShow: scrapeOpenMovieShow,
 };
 
+// Custom KKPhim source definition
+const kkphimSource = {
+  id: "kkphim",
+  name: "Server 3 (KKPhim Vietsub + Lồng tiếng) 🔥",
+  rank: 3,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeKKPhimMovie,
+  scrapeShow: scrapeKKPhimShow,
+};
+
 // Custom Vidrock source definition
 const vidrockSource = {
   id: "alphaflix-vidrock",
-  name: "Server 3 (Vidrock) 🔥",
-  rank: 3,
+  name: "Server 4 (Vidrock)",
+  rank: 4,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -93,8 +107,8 @@ const vidrockSource = {
 // Custom VidSrc.wtf source definition
 const vidsrcWtfSource = {
   id: "alphaflix-vidsrcwtf",
-  name: "Server 4 (VidSrc.wtf) 🔥",
-  rank: 4,
+  name: "Server 5 (VidSrc.wtf)",
+  rank: 5,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -107,8 +121,8 @@ const vidsrcWtfSource = {
 // Custom 111Movies source definition
 const movies111Source = {
   id: "alphaflix-111movies",
-  name: "Server 5 (111Movies) 🔥",
-  rank: 5,
+  name: "Server 6 (111Movies)",
+  rank: 6,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -121,8 +135,8 @@ const movies111Source = {
 // Custom VidSrc.ru source definition
 const vidsrcRuSource = {
   id: "alphaflix-vidsrc-ru",
-  name: "Server 6 (Vidsrc.ru) 🔥",
-  rank: 6,
+  name: "Server 7 (Vidsrc.ru)",
+  rank: 7,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -135,8 +149,8 @@ const vidsrcRuSource = {
 // Custom VidSrc source definition
 const vidsrcSource = {
   id: "alphaflix-vidsrc",
-  name: "Server 7 (Vidsrc) 🔥",
-  rank: 7,
+  name: "Server 8 (Vidsrc)",
+  rank: 8,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -144,20 +158,6 @@ const vidsrcSource = {
   mediaTypes: ["movie" as const, "show" as const],
   scrapeMovie: scrapeVidSrcMovie,
   scrapeShow: scrapeVidSrcShow,
-};
-
-// Custom KKPhim source definition
-const kkphimSource = {
-  id: "kkphim",
-  name: "Server 8 (KKPhim Vietsub + Lồng tiếng)",
-  rank: 8,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeKKPhimMovie,
-  scrapeShow: scrapeKKPhimShow,
 };
 
 // Custom OpenMovie embed definition

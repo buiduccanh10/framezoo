@@ -315,7 +315,8 @@ export default defineEventHandler(async event => {
       const origin = getRequestURL(event).origin;
       const streams = streamsRaw.map((s: any) => {
         const headers = s?.headers ?? {};
-        const proxiedUrl = `${origin}/api/m3u8-proxy?url=${encodeURIComponent(
+        const proxyPath = s?.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
+        const proxiedUrl = `${origin}${proxyPath}?url=${encodeURIComponent(
           s.url
         )}&headers=${encodeURIComponent(JSON.stringify(headers))}`;
         const preview = buildStreamPreview({
@@ -409,6 +410,26 @@ export default defineEventHandler(async event => {
       timeout: 30000,
       responseType: 'arrayBuffer',
     }).then((ab: ArrayBuffer) => Buffer.from(ab));
+  }
+
+  if (path === 'api/media-proxy') {
+    const origin = getRequestURL(event).origin;
+    const internalUrl = new URL(joinURL(origin, '/api/media-proxy'));
+
+    for (const [key, value] of Object.entries(query)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          internalUrl.searchParams.append(key, String(item));
+        }
+        continue;
+      }
+
+      if (value !== undefined && value !== null) {
+        internalUrl.searchParams.set(key, String(value));
+      }
+    }
+
+    return sendRedirect(event, internalUrl.toString(), 307);
   }
 
   if (path === 'api/preview-proxy') {

@@ -1,15 +1,53 @@
 /**
  * Vidlink streaming provider integration.
  * Uses vidlink's wasm runtime to derive secure token (getAdv) from TMDB id,
- * then resolves the final HLS master playlist from /api/b/* endpoints.
+ * then resolves either legacy HLS playlists or the newer signed MP4 qualities
+ * returned from /api/b/* endpoints.
  */
 
 import type { Stream } from './types';
 
-interface StreamData {
-  masterPlaylistUrl: string;
+interface ResolvedStreamData {
+  streamType: 'hls' | 'file';
+  resourceUrl: string;
   referer: string;
   origin: string;
+  quality: string;
+  subtitle: string;
+}
+
+interface LegacyCachedStreamData {
+  masterPlaylistUrl?: string;
+  referer?: string;
+  origin?: string;
+}
+
+interface VidlinkCaption {
+  file?: string;
+  url?: string;
+  src?: string;
+  label?: string;
+  language?: string;
+  lang?: string;
+}
+
+interface VidlinkQualitySource {
+  type?: string;
+  url?: string;
+  src?: string;
+}
+
+interface VidlinkApiPayload {
+  playlist?: string;
+  captions?: VidlinkCaption[];
+  stream?: {
+    type?: string;
+    url?: string;
+    hls?: string;
+    playlist?: string;
+    captions?: VidlinkCaption[];
+    qualities?: Record<string, VidlinkQualitySource>;
+  };
 }
 
 type StorageLike = ReturnType<typeof useStorage>;
@@ -175,35 +213,6 @@ function buildStreamCacheKey(
     : `vidlink:tv:${contentId}:${seasonNum}:${episodeNum}`;
 }
 
-async function getCachedStream(cacheKey: string, storage: StorageLike): Promise<StreamData | null> {
-  try {
-    const cached = await storage.getItem<StreamData>(cacheKey);
-    return cached || null;
-  } catch {
-    return null;
-  }
-}
-
-async function setCachedStream(
-  cacheKey: string,
-  value: StreamData,
-  storage: StorageLike
-): Promise<void> {
-  try {
-    await storage.setItem(cacheKey, value, { ttl: STREAM_CACHE_TTL });
-  } catch (error) {
-    console.warn('[Vidlink] Failed to cache stream:', error);
-  }
-}
-
-async function removeCachedStream(cacheKey: string, storage: StorageLike): Promise<void> {
-  try {
-    await storage.removeItem(cacheKey);
-  } catch {
-    // Ignore cache removal failures.
-  }
-}
-
 function buildVidlinkApiUrl(
   contentType: 'movie' | 'tv',
   token: string,
@@ -217,17 +226,29 @@ function buildVidlinkApiUrl(
   return `${BASE_ORIGIN}/api/b/tv/${encodeURIComponent(token)}/${seasonNum}/${episodeNum}?multiLang=0`;
 }
 
-function normalizeM3u8Url(rawUrl: string): string | null {
+function normalizeHttpUrl(rawUrl: string): string | null {
   const value = String(rawUrl || '').trim();
-  if (!value || /\s/.test(value)) return null;
+  if (!value || /\s/.test(value)) {
+    return null;
+  }
+
+  const normalized = value.startsWith('//') ? `https:${value}` : value;
 
   try {
-    const parsed = new URL(value);
-    const normalized = parsed.toString();
-    return /\.m3u8(?:$|[?#])/i.test(normalized) ? normalized : null;
+    const parsed = new URL(normalized);
+    return /^https?:$/i.test(parsed.protocol) ? parsed.toString() : null;
   } catch {
     return null;
   }
+}
+
+function normalizeM3u8Url(rawUrl: string): string | null {
+  const normalized = normalizeHttpUrl(rawUrl);
+  return normalized && /\.m3u8(?:$|[?#])/i.test(normalized) ? normalized : null;
+}
+
+function normalizeCaptionUrl(rawUrl: string): string | null {
+  return normalizeHttpUrl(rawUrl);
 }
 
 function extractFirstMediaLine(playlist: string): string | null {
@@ -238,7 +259,52 @@ function extractFirstMediaLine(playlist: string): string | null {
   return null;
 }
 
-function resolvePlaylistStreamData(rawPlaylistUrl: string): StreamData | null {
+function qualityScore(quality: string): number {
+  const match = quality.match(/(\d{3,4})/);
+  return match ? Number.parseInt(match[1], 10) : 0;
+}
+
+function toQualityLabel(rawQuality: string): string {
+  const value = String(rawQuality || '').trim();
+  if (!value) {
+    return 'unknown';
+  }
+
+  const match = value.match(/(\d{3,4})/);
+  if (match) {
+    return `${match[1]}p`;
+  }
+
+  return value;
+}
+
+function getCaptionCandidates(payload: VidlinkApiPayload): VidlinkCaption[] {
+  const streamCaptions = Array.isArray(payload?.stream?.captions) ? payload.stream.captions : [];
+  const rootCaptions = Array.isArray(payload?.captions) ? payload.captions : [];
+  return [...streamCaptions, ...rootCaptions];
+}
+
+function extractSubtitleUrl(payload: VidlinkApiPayload): string {
+  const candidates = getCaptionCandidates(payload)
+    .map(item => ({
+      url: normalizeCaptionUrl(item.file || item.url || item.src || ''),
+      label: `${item.label || ''} ${item.language || ''} ${item.lang || ''}`.toLowerCase(),
+    }))
+    .filter((item): item is { url: string; label: string } => Boolean(item.url));
+
+  if (!candidates.length) {
+    return '';
+  }
+
+  const preferred =
+    candidates.find(item => /(english|\ben\b|\beng\b)/i.test(item.label)) || candidates[0];
+  return preferred.url;
+}
+
+function resolvePlaylistStreamData(
+  rawPlaylistUrl: string,
+  subtitle: string
+): ResolvedStreamData | null {
   const normalizedUrl = normalizeM3u8Url(rawPlaylistUrl);
   if (!normalizedUrl) return null;
 
@@ -274,11 +340,11 @@ function resolvePlaylistStreamData(rawPlaylistUrl: string): StreamData | null {
           try {
             origin = new URL(refererHeader).origin;
           } catch {
-            // keep fallback origin
+            // Keep fallback origin.
           }
         }
       } catch {
-        // keep default headers
+        // Keep default headers.
       }
     }
 
@@ -296,21 +362,71 @@ function resolvePlaylistStreamData(rawPlaylistUrl: string): StreamData | null {
           resolvedUrl = directNormalized;
         }
       } catch {
-        // keep original normalized URL
+        // Keep original normalized URL.
       }
     }
   } catch {
-    // keep normalized URL/default headers
+    // Keep normalized URL/default headers.
   }
 
   return {
-    masterPlaylistUrl: resolvedUrl,
+    streamType: 'hls',
+    resourceUrl: resolvedUrl,
     referer,
     origin,
+    quality: '1080p',
+    subtitle,
   };
 }
 
-async function verifyPlayableStream(streamData: StreamData): Promise<boolean> {
+function extractHlsCandidates(payload: VidlinkApiPayload, subtitle: string): ResolvedStreamData[] {
+  const candidates = [
+    payload?.stream?.playlist,
+    payload?.stream?.hls,
+    payload?.playlist,
+    payload?.stream?.type === 'hls' ? payload?.stream?.url : '',
+  ]
+    .filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+    .map(url => resolvePlaylistStreamData(url, subtitle))
+    .filter((item): item is ResolvedStreamData => Boolean(item));
+
+  return candidates;
+}
+
+function extractFileCandidates(payload: VidlinkApiPayload, subtitle: string): ResolvedStreamData[] {
+  const qualities = payload?.stream?.qualities;
+  if (!qualities || typeof qualities !== 'object') {
+    return [];
+  }
+
+  const candidates = Object.entries(qualities)
+    .map(([quality, item]) => {
+      const itemType = typeof item?.type === 'string' ? item.type.toLowerCase() : '';
+      const resourceUrl = normalizeHttpUrl(item?.url || item?.src || '');
+      if (!resourceUrl) {
+        return null;
+      }
+
+      if (itemType && itemType !== 'mp4') {
+        return null;
+      }
+
+      return {
+        streamType: 'file',
+        resourceUrl,
+        referer: REFERER,
+        origin: BASE_ORIGIN,
+        quality: toQualityLabel(quality),
+        subtitle,
+      } satisfies ResolvedStreamData;
+    })
+    .filter((item): item is ResolvedStreamData => Boolean(item));
+
+  candidates.sort((a, b) => qualityScore(b.quality) - qualityScore(a.quality));
+  return candidates;
+}
+
+async function verifyPlayableHlsStream(streamData: ResolvedStreamData): Promise<boolean> {
   const requestHeaders = {
     Accept: 'application/vnd.apple.mpegurl,application/x-mpegURL,*/*',
     Referer: streamData.referer,
@@ -318,7 +434,7 @@ async function verifyPlayableStream(streamData: StreamData): Promise<boolean> {
     'User-Agent': MODERN_UA,
   };
 
-  const playlistResponse = await fetch(streamData.masterPlaylistUrl, {
+  const playlistResponse = await fetch(streamData.resourceUrl, {
     headers: requestHeaders,
   }).catch(() => null);
   if (!playlistResponse?.ok) {
@@ -335,7 +451,7 @@ async function verifyPlayableStream(streamData: StreamData): Promise<boolean> {
     return false;
   }
 
-  let segmentUrl = new URL(firstLine, streamData.masterPlaylistUrl).toString();
+  let segmentUrl = new URL(firstLine, streamData.resourceUrl).toString();
   if (/\.m3u8(?:$|[?#])/i.test(segmentUrl)) {
     const childResponse = await fetch(segmentUrl, {
       headers: requestHeaders,
@@ -367,20 +483,135 @@ async function verifyPlayableStream(streamData: StreamData): Promise<boolean> {
   return Boolean(bytes && bytes.byteLength > 0);
 }
 
-async function extractStreamFromApi(
+function normalizeCachedStreamData(
+  cached: unknown
+): ResolvedStreamData[] | null {
+  if (Array.isArray(cached)) {
+    const items = cached.filter((item): item is ResolvedStreamData => {
+      return (
+        item != null &&
+        typeof item === 'object' &&
+        (item as ResolvedStreamData).streamType !== undefined &&
+        typeof (item as ResolvedStreamData).resourceUrl === 'string'
+      );
+    });
+
+    return items.length ? items : null;
+  }
+
+  if (cached && typeof cached === 'object' && typeof (cached as LegacyCachedStreamData).masterPlaylistUrl === 'string') {
+    const legacy = cached as LegacyCachedStreamData;
+    return [
+      {
+        streamType: 'hls',
+        resourceUrl: legacy.masterPlaylistUrl || '',
+        referer: legacy.referer || REFERER,
+        origin: legacy.origin || BASE_ORIGIN,
+        quality: '1080p',
+        subtitle: '',
+      },
+    ];
+  }
+
+  return null;
+}
+
+async function getCachedStreams(
+  cacheKey: string,
+  storage: StorageLike
+): Promise<ResolvedStreamData[] | null> {
+  try {
+    return normalizeCachedStreamData(await storage.getItem(cacheKey));
+  } catch {
+    return null;
+  }
+}
+
+async function setCachedStreams(
+  cacheKey: string,
+  value: ResolvedStreamData[],
+  storage: StorageLike
+): Promise<void> {
+  try {
+    await storage.setItem(cacheKey, value, { ttl: STREAM_CACHE_TTL });
+  } catch (error) {
+    console.warn('[Vidlink] Failed to cache stream:', error);
+  }
+}
+
+async function removeCachedStream(cacheKey: string, storage: StorageLike): Promise<void> {
+  try {
+    await storage.removeItem(cacheKey);
+  } catch {
+    // Ignore cache removal failures.
+  }
+}
+
+async function validateCachedStreams(
+  streams: ResolvedStreamData[]
+): Promise<ResolvedStreamData[]> {
+  const validated: ResolvedStreamData[] = [];
+
+  for (const stream of streams) {
+    if (stream.streamType === 'file') {
+      validated.push(stream);
+      continue;
+    }
+
+    if (await verifyPlayableHlsStream(stream)) {
+      validated.push(stream);
+    }
+  }
+
+  return validated;
+}
+
+async function extractStreamsFromPayload(
+  payload: VidlinkApiPayload,
+  contentId: string
+): Promise<ResolvedStreamData[]> {
+  const subtitle = extractSubtitleUrl(payload);
+
+  const hlsCandidates = extractHlsCandidates(payload, subtitle);
+  if (hlsCandidates.length) {
+    const playableHls: ResolvedStreamData[] = [];
+    for (const candidate of hlsCandidates) {
+      if (await verifyPlayableHlsStream(candidate)) {
+        playableHls.push(candidate);
+      }
+    }
+
+    if (playableHls.length) {
+      return playableHls;
+    }
+
+    console.warn(`[Vidlink] Rejected non-playable HLS stream for TMDB ${contentId}`);
+  }
+
+  const fileCandidates = extractFileCandidates(payload, subtitle);
+  if (fileCandidates.length) {
+    return fileCandidates;
+  }
+
+  console.warn(`[Vidlink] Missing playable stream payload for TMDB ${contentId}`);
+  return [];
+}
+
+async function extractStreamsFromApi(
   contentType: 'movie' | 'tv',
   contentId: string,
   seasonNum?: number | null,
   episodeNum?: number | null,
   storage?: StorageLike
-): Promise<StreamData | null> {
+): Promise<ResolvedStreamData[]> {
   if (storage) {
     const cacheKey = buildStreamCacheKey(contentType, contentId, seasonNum, episodeNum);
-    const cached = await getCachedStream(cacheKey, storage);
-    if (cached && (await verifyPlayableStream(cached))) {
-      return cached;
-    }
-    if (cached) {
+    const cached = await getCachedStreams(cacheKey, storage);
+    if (cached?.length) {
+      const validatedCached = await validateCachedStreams(cached);
+      if (validatedCached.length) {
+        return validatedCached;
+      }
       await removeCachedStream(cacheKey, storage);
     }
   }
@@ -391,7 +622,7 @@ async function extractStreamFromApi(
 
   if (!token) {
     console.warn(`[Vidlink] getAdv returned empty token for TMDB ${contentId}`);
-    return null;
+    return [];
   }
 
   const apiUrl = buildVidlinkApiUrl(contentType, token, seasonNum, episodeNum);
@@ -406,44 +637,31 @@ async function extractStreamFromApi(
 
   if (!response.ok) {
     console.warn(`[Vidlink] API returned ${response.status} for ${apiUrl}`);
-    return null;
+    return [];
   }
 
   const rawPayload = await response.text();
   if (!rawPayload) {
     console.warn(`[Vidlink] Empty payload from API for TMDB ${contentId}`);
-    return null;
+    return [];
   }
 
-  let parsedPayload: any;
+  let parsedPayload: VidlinkApiPayload;
   try {
     parsedPayload = JSON.parse(rawPayload);
   } catch {
     console.warn(`[Vidlink] Invalid JSON payload for TMDB ${contentId}`);
-    return null;
+    return [];
   }
 
-  const playlistUrl =
-    parsedPayload?.stream?.playlist || parsedPayload?.stream?.hls || parsedPayload?.playlist;
-
-  if (!playlistUrl || typeof playlistUrl !== 'string') {
-    console.warn(`[Vidlink] Missing playlist URL for TMDB ${contentId}`);
-    return null;
-  }
-
-  const result = resolvePlaylistStreamData(playlistUrl);
-  if (!result) {
-    console.warn(`[Vidlink] Invalid playlist URL for TMDB ${contentId}`);
-    return null;
-  }
-  if (!(await verifyPlayableStream(result))) {
-    console.warn(`[Vidlink] Rejected non-playable stream for TMDB ${contentId}`);
-    return null;
+  const result = await extractStreamsFromPayload(parsedPayload, contentId);
+  if (!result.length) {
+    return [];
   }
 
   if (storage) {
     const cacheKey = buildStreamCacheKey(contentType, contentId, seasonNum, episodeNum);
-    await setCachedStream(cacheKey, result, storage);
+    await setCachedStreams(cacheKey, result, storage);
   }
 
   return result;
@@ -458,32 +676,35 @@ export async function getVidlinkStreams(
   _context?: { title?: string; releaseYear?: number }
 ): Promise<Stream[]> {
   try {
-    const streamData = await extractStreamFromApi(
+    const streams = await extractStreamsFromApi(
       mediaType,
       tmdbId,
       seasonNum,
       episodeNum,
       storage
     );
-    if (!streamData) {
+    if (!streams.length) {
       return [];
     }
 
-    return [
-      {
-        name: 'Vidlink - Auto',
-        title: 'Vidlink - High Quality',
-        url: streamData.masterPlaylistUrl,
-        subtitle: '',
-        quality: '1080p',
-        provider: 'vidlink',
-        headers: {
-          Referer: streamData.referer,
-          'User-Agent': MODERN_UA,
-          Origin: streamData.origin,
-        },
+    return streams.map(stream => ({
+      name:
+        stream.streamType === 'hls' ? 'Vidlink - Auto' : `Vidlink - ${stream.quality}`,
+      title:
+        stream.streamType === 'hls'
+          ? 'Vidlink - HLS'
+          : `Vidlink - ${stream.quality} MP4`,
+      url: stream.resourceUrl,
+      subtitle: stream.subtitle,
+      quality: stream.quality,
+      provider: 'vidlink',
+      streamType: stream.streamType,
+      headers: {
+        Referer: stream.referer,
+        'User-Agent': MODERN_UA,
+        Origin: stream.origin,
       },
-    ];
+    }));
   } catch (error: any) {
     console.error(`[Vidlink] Error: ${error.message || String(error)}`);
     return [];

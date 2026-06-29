@@ -156,8 +156,9 @@ export default defineEventHandler(async event => {
       });
     }
 
+    const proxyPath = stream.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
     sourceUrl =
-      `${PREVIEW_BACKEND_INTERNAL_BASE_URL}/api/m3u8-proxy?url=${encodeURIComponent(stream.url)}` +
+      `${PREVIEW_BACKEND_INTERNAL_BASE_URL}${proxyPath}?url=${encodeURIComponent(stream.url)}` +
       `&headers=${encodeURIComponent(JSON.stringify(stream.headers || {}))}`;
     sourceUrl = withInternalToken(sourceUrl);
 

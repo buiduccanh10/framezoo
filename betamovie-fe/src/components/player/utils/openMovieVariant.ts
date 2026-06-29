@@ -14,6 +14,46 @@ export function getOpenMovieProviderFromStreamId(
   return provider || null;
 }
 
+export function isOpenMovieHlsUrl(url: string): boolean {
+  return (
+    url.includes("m3u8") ||
+    url.includes("/api/streams/") ||
+    url.includes("/m3u8-proxy") ||
+    url.includes(".m3u8")
+  );
+}
+
+export function normalizeOpenMovieQuality(
+  quality: string | null | undefined,
+): string {
+  const qualityMap: Record<string, string> = {
+    "2160p": "4k",
+    "1440p": "1440",
+    "1080p": "1080",
+    "720p": "720",
+    "480p": "480",
+    "360p": "360",
+  };
+
+  if (!quality) {
+    return "unknown";
+  }
+
+  return qualityMap[quality] || quality.replace("p", "") || "unknown";
+}
+
+export function buildOpenMovieStreamId({
+  provider,
+  url,
+  quality,
+}: {
+  provider: string;
+  url: string;
+  quality: string | null | undefined;
+}): string {
+  return `openmovie-${provider}-${isOpenMovieHlsUrl(url) ? "hls" : "file"}-${normalizeOpenMovieQuality(quality)}`;
+}
+
 export function formatOpenMovieVariantLabel(provider: string): string {
   const normalized = provider.trim().toLowerCase();
 
