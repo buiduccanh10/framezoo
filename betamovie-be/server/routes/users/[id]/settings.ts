@@ -22,7 +22,6 @@ const userSettingsSchema = z.object({
   debridToken: z.string().nullable().optional(),
   debridService: z.string().nullable().optional(),
   tidbKey: z.string().nullable().optional(),
-  enableThumbnails: z.boolean().optional().default(true),
   enableAutoplay: z.boolean().optional().default(true),
   enableSkipCredits: z.boolean().optional().default(true),
   enableDiscover: z.boolean().optional().default(true),
@@ -88,7 +87,6 @@ export default defineEventHandler(async event => {
         debridToken: settings?.debrid_token || null,
         debridService: settings?.debrid_service || null,
         tidbKey: settings?.tidb_key || null,
-        enableThumbnails: settings?.enable_thumbnails ?? true,
         enableAutoplay: settings?.enable_autoplay ?? true,
         enableSkipCredits: settings?.enable_skip_credits ?? true,
         enableDiscover: settings?.enable_discover ?? true,
@@ -141,7 +139,6 @@ export default defineEventHandler(async event => {
         debrid_token: validatedBody.debridToken ?? null,
         debrid_service: validatedBody.debridService ?? null,
         tidb_key: validatedBody.tidbKey ?? null,
-        enable_thumbnails: validatedBody.enableThumbnails,
         enable_autoplay: validatedBody.enableAutoplay,
         enable_skip_credits: validatedBody.enableSkipCredits,
         enable_discover: validatedBody.enableDiscover,
@@ -185,8 +182,6 @@ export default defineEventHandler(async event => {
         updateData.debrid_service = createData.debrid_service;
       if (Object.prototype.hasOwnProperty.call(body, 'tidbKey'))
         updateData.tidb_key = createData.tidb_key;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableThumbnails'))
-        updateData.enable_thumbnails = createData.enable_thumbnails;
       if (Object.prototype.hasOwnProperty.call(body, 'enableAutoplay'))
         updateData.enable_autoplay = createData.enable_autoplay;
       if (Object.prototype.hasOwnProperty.call(body, 'enableSkipCredits'))
@@ -261,7 +256,6 @@ export default defineEventHandler(async event => {
         debridToken: settings.debrid_token,
         debridService: settings.debrid_service,
         tidbKey: settings.tidb_key,
-        enableThumbnails: settings.enable_thumbnails,
         enableAutoplay: settings.enable_autoplay,
         enableSkipCredits: settings.enable_skip_credits,
         enableDiscover: settings.enable_discover,

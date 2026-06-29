@@ -103,7 +103,6 @@ model user_settings {
   enable_image_logos                   Boolean  @default(true)
   enable_skip_credits                  Boolean  @default(true)
   enable_source_order                  Boolean  @default(false)
-  enable_thumbnails                    Boolean  @default(true)
   proxy_tmdb                           Boolean  @default(false)
   source_order                         String[] @default([])
   disabled_embeds                      String[] @default([])

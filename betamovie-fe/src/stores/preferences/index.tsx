@@ -8,7 +8,6 @@ import {
 } from "@/utils/keyboardShortcuts";
 
 export interface PreferencesStore {
-  enableThumbnails: boolean;
   enableAutoplay: boolean;
   enableSkipCredits: boolean;
   enableAutoSkipSegments: boolean;
@@ -41,7 +40,6 @@ export interface PreferencesStore {
   enablePauseOverlay: boolean;
   keyboardShortcuts: KeyboardShortcuts;
 
-  setEnableThumbnails(v: boolean): void;
   setEnableAutoplay(v: boolean): void;
   setEnableSkipCredits(v: boolean): void;
   setEnableAutoSkipSegments(v: boolean): void;
@@ -78,7 +76,6 @@ export interface PreferencesStore {
 export const usePreferencesStore = create(
   persist(
     immer<PreferencesStore>((set) => ({
-      enableThumbnails: true,
       enableAutoplay: true,
       enableSkipCredits: true,
       enableAutoSkipSegments: false,
@@ -110,11 +107,7 @@ export const usePreferencesStore = create(
       enableNumberKeySeeking: true,
       enablePauseOverlay: false,
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
-      setEnableThumbnails(v) {
-        set((s) => {
-          s.enableThumbnails = v;
-        });
-      },
+
       setEnableAutoplay(v) {
         set((s) => {
           s.enableAutoplay = v;
@@ -230,7 +223,6 @@ export const usePreferencesStore = create(
           s.enableLowPerformanceMode = v;
           // When enabling performance mode, disable bandwidth-heavy features
           if (v) {
-            s.enableThumbnails = false;
             s.enableAutoplay = false;
           }
         });

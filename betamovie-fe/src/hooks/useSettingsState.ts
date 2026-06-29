@@ -56,7 +56,6 @@ export function useSettingsState(
         icon: string;
       }
     | undefined,
-  enableThumbnails: boolean,
   enableAutoplay: boolean,
   enableSkipCredits: boolean,
   enableAutoSkipSegments: boolean,
@@ -131,12 +130,7 @@ export function useSettingsState(
     useDerived(nickname);
   const [profileState, setProfileState, resetProfile, profileChanged] =
     useDerived(profile);
-  const [
-    enableThumbnailsState,
-    setEnableThumbnailsState,
-    resetEnableThumbnails,
-    enableThumbnailsChanged,
-  ] = useDerived(enableThumbnails);
+
   const [
     enableAutoplayState,
     setEnableAutoplayState,
@@ -298,7 +292,7 @@ export function useSettingsState(
     resetDeviceName();
     resetNickname();
     resetProfile();
-    resetEnableThumbnails();
+
     resetEnableAutoplay();
     resetEnableSkipCredits();
     resetEnableAutoSkipSegments();
@@ -339,7 +333,6 @@ export function useSettingsState(
     debridServiceChanged ||
     tidbKeyChanged ||
     profileChanged ||
-    enableThumbnailsChanged ||
     enableAutoplayChanged ||
     enableSkipCreditsChanged ||
     enableAutoSkipSegmentsChanged ||
@@ -429,11 +422,7 @@ export function useSettingsState(
       set: setProfileState,
       changed: profileChanged,
     },
-    enableThumbnails: {
-      state: enableThumbnailsState,
-      set: setEnableThumbnailsState,
-      changed: enableThumbnailsChanged,
-    },
+
     enableAutoplay: {
       state: enableAutoplayState,
       set: setEnableAutoplayState,

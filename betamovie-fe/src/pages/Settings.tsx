@@ -414,9 +414,6 @@ export function SettingsPage() {
   const tidbKey = usePreferencesStore((s) => s.tidbKey);
   const setTIDBKey = usePreferencesStore((s) => s.setTIDBKey);
 
-  const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
-  const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
-
   const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
 
@@ -583,9 +580,7 @@ export function SettingsPage() {
         if (settings.debridService) {
           setdebridService(settings.debridService);
         }
-        if (settings.enableThumbnails !== undefined) {
-          setEnableThumbnails(settings.enableThumbnails);
-        }
+
         if (settings.enableAutoplay !== undefined) {
           setEnableAutoplay(settings.enableAutoplay);
         }
@@ -681,7 +676,7 @@ export function SettingsPage() {
     setFebboxKey,
     setdebridToken,
     setdebridService,
-    setEnableThumbnails,
+
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
@@ -721,7 +716,7 @@ export function SettingsPage() {
     debridService,
     tidbKey,
     account ? account.profile : undefined,
-    enableThumbnails,
+
     enableAutoplay,
     enableSkipCredits,
     enableAutoSkipSegments,
@@ -793,7 +788,6 @@ export function SettingsPage() {
         state.febboxKey.changed ||
         state.debridToken.changed ||
         state.debridService.changed ||
-        state.enableThumbnails.changed ||
         state.enableAutoplay.changed ||
         state.enableSkipCredits.changed ||
         state.enableAutoSkipSegments.changed ||
@@ -825,7 +819,7 @@ export function SettingsPage() {
           febboxKey: state.febboxKey.state,
           debridToken: state.debridToken.state,
           debridService: state.debridService.state,
-          enableThumbnails: state.enableThumbnails.state,
+
           enableAutoplay: state.enableAutoplay.state,
           enableSkipCredits: state.enableSkipCredits.state,
           enableAutoSkipSegments: state.enableAutoSkipSegments.state,
@@ -876,7 +870,6 @@ export function SettingsPage() {
       }
     }
 
-    setEnableThumbnails(state.enableThumbnails.state);
     setEnableAutoplay(state.enableAutoplay.state);
     setEnableSkipCredits(state.enableSkipCredits.state);
     setEnableAutoSkipSegments(state.enableAutoSkipSegments.state);
@@ -939,7 +932,7 @@ export function SettingsPage() {
     setPendingBackendChange,
     state,
     setBackendUrl,
-    setEnableThumbnails,
+
     setFebboxKey,
     setdebridToken,
     setdebridService,
@@ -1031,8 +1024,6 @@ export function SettingsPage() {
             <PreferencesPart
               language={state.appLanguage.state}
               setLanguage={state.appLanguage.set}
-              enableThumbnails={state.enableThumbnails.state}
-              setEnableThumbnails={state.enableThumbnails.set}
               enableAutoplay={state.enableAutoplay.state}
               setEnableAutoplay={state.enableAutoplay.set}
               enableSkipCredits={state.enableSkipCredits.state}

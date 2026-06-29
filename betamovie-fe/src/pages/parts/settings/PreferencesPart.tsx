@@ -19,8 +19,6 @@ import { getLocaleInfo, sortLangCodes } from "@/utils/language";
 export function PreferencesPart(props: {
   language: string;
   setLanguage: (l: string) => void;
-  enableThumbnails: boolean;
-  setEnableThumbnails: (v: boolean) => void;
   enableAutoplay: boolean;
   setEnableAutoplay: (v: boolean) => void;
   enableSkipCredits: boolean;
@@ -99,34 +97,6 @@ export function PreferencesPart(props: {
               selectedItem={selected || options[0]}
               setSelectedItem={(opt) => props.setLanguage(opt.id)}
             />
-          </div>
-
-          {/* Thumbnail Preference */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.preferences.thumbnail")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.preferences.thumbnailDescription")}
-            </p>
-            <div
-              onClick={() => {
-                if (!props.enableLowPerformanceMode) {
-                  props.setEnableThumbnails(!props.enableThumbnails);
-                }
-              }}
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                props.enableLowPerformanceMode
-                  ? "cursor-not-allowed opacity-50 pointer-events-none"
-                  : "cursor-pointer opacity-100 pointer-events-auto",
-              )}
-            >
-              <Toggle enabled={props.enableThumbnails} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.preferences.thumbnailLabel")}
-              </p>
-            </div>
           </div>
 
           {/* Autoplay Preference */}

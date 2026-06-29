@@ -51,7 +51,6 @@ export function useAuthData() {
   const replaceWatchHistory = useWatchHistoryStore((s) => s.replaceItems);
   const replaceLists = useListStore((s) => s.replaceLists);
 
-  const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
   const setEnableSkipCredits = usePreferencesStore(
     (s) => s.setEnableSkipCredits,
@@ -188,10 +187,6 @@ export function useAuthData() {
         setProxySet(settings.proxyUrls);
       }
 
-      if (settings.enableThumbnails !== undefined) {
-        setEnableThumbnails(settings.enableThumbnails);
-      }
-
       if (settings.enableAutoplay !== undefined) {
         setEnableAutoplay(settings.enableAutoplay);
       }
@@ -313,7 +308,7 @@ export function useAuthData() {
       importSubtitleLanguage,
       setTheme,
       setProxySet,
-      setEnableThumbnails,
+
       setEnableAutoplay,
       setEnableSkipCredits,
       setEnableDiscover,

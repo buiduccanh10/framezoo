@@ -19,7 +19,6 @@ export interface SettingsInput {
   debridToken?: string | null;
   debridService?: string;
   tidbKey?: string | null;
-  enableThumbnails?: boolean;
   enableAutoplay?: boolean;
   enableSkipCredits?: boolean;
   enableAutoSkipSegments?: boolean;
@@ -58,7 +57,6 @@ export interface SettingsResponse {
   debridToken?: string | null;
   debridService?: string;
   tidbKey?: string | null;
-  enableThumbnails?: boolean;
   enableAutoplay?: boolean;
   enableSkipCredits?: boolean;
   enableAutoSkipSegments?: boolean;

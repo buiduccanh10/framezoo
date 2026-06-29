@@ -2,7 +2,6 @@ import { startTransition, useEffect } from "react";
 
 import { ThumbnailImage } from "@/stores/player/slices/thumbnails";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 
 function parseTimestamp(input: string): number | null {
   const match = input
@@ -85,12 +84,11 @@ export function ThumbnailScraper() {
   const previewVtt = usePlayerStore((s) =>
     s.source?.preview?.kind === "vtt" ? s.source.preview.vtt : null,
   );
-  const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
 
   useEffect(() => {
     resetImages();
 
-    if (!enableThumbnails || !previewVtt) return undefined;
+    if (!previewVtt) return undefined;
 
     const controller = new AbortController();
 
@@ -125,7 +123,7 @@ export function ThumbnailScraper() {
     return () => {
       controller.abort();
     };
-  }, [enableThumbnails, previewVtt, resetImages, setImages]);
+  }, [previewVtt, resetImages, setImages]);
 
   return null;
 }

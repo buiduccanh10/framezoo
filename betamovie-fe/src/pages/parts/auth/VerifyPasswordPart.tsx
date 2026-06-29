@@ -44,7 +44,6 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
   const applicationTheme = useThemeStore((store) => store.theme);
 
   const preferences = usePreferencesStore((store) => ({
-    enableThumbnails: store.enableThumbnails,
     enableAutoplay: store.enableAutoplay,
     enableSkipCredits: store.enableSkipCredits,
     enableDiscover: store.enableDiscover,

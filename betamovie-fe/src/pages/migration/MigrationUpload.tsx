@@ -376,11 +376,6 @@ export function MigrationUploadPage() {
             uploadedData.settings.debridService,
           );
         }
-        if (uploadedData.settings.enableThumbnails !== undefined) {
-          preferencesStore.setEnableThumbnails(
-            uploadedData.settings.enableThumbnails,
-          );
-        }
         if (uploadedData.settings.enableAutoplay !== undefined) {
           preferencesStore.setEnableAutoplay(
             uploadedData.settings.enableAutoplay,
