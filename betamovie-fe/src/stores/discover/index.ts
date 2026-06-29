@@ -11,7 +11,7 @@ export type Category =
   | "top10"
   | GenreCategory;
 
-interface DiscoverView {
+export interface DiscoverView {
   url: string;
   scrollPosition: number;
 }

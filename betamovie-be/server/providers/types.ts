@@ -18,6 +18,7 @@ export interface Stream {
   subtitle: string;
   quality: string;
   provider: string;
+  streamType?: 'hls' | 'file';
   preview?: StreamPreview;
   headers: {
     Referer: string;

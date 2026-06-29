@@ -1,6 +1,7 @@
 import { joinURL } from 'ufo';
 import { createHash } from 'node:crypto';
-import { getProvider, getAllProviders } from '~/providers/registry';
+import { getProvider } from '~/providers/registry';
+import { getProviderMetadata } from '~/providers/metadata';
 import { request, Pool } from 'undici';
 import { buildStreamPreview } from '~/utils/preview';
 import { applyCorsHeaders } from '~/utils/cors';
@@ -315,7 +316,8 @@ export default defineEventHandler(async event => {
       const origin = getRequestURL(event).origin;
       const streams = streamsRaw.map((s: any) => {
         const headers = s?.headers ?? {};
-        const proxiedUrl = `${origin}/api/m3u8-proxy?url=${encodeURIComponent(
+        const proxyPath = s?.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
+        const proxiedUrl = `${origin}${proxyPath}?url=${encodeURIComponent(
           s.url
         )}&headers=${encodeURIComponent(JSON.stringify(headers))}`;
         const preview = buildStreamPreview({
@@ -369,13 +371,9 @@ export default defineEventHandler(async event => {
   // Handle /api/providers internally
   if (path === 'api/providers') {
     logInfo(`[Embed Proxy] Handling providers list internally`);
-    const providers = getAllProviders();
     setCORSHeaders(event);
     return {
-      providers: providers.map(p => ({
-        name: p.name,
-        type: p.type,
-      })),
+      providers: getProviderMetadata(),
     };
   }
 
@@ -409,6 +407,26 @@ export default defineEventHandler(async event => {
       timeout: 30000,
       responseType: 'arrayBuffer',
     }).then((ab: ArrayBuffer) => Buffer.from(ab));
+  }
+
+  if (path === 'api/media-proxy') {
+    const origin = getRequestURL(event).origin;
+    const internalUrl = new URL(joinURL(origin, '/api/media-proxy'));
+
+    for (const [key, value] of Object.entries(query)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          internalUrl.searchParams.append(key, String(item));
+        }
+        continue;
+      }
+
+      if (value !== undefined && value !== null) {
+        internalUrl.searchParams.set(key, String(value));
+      }
+    }
+
+    return sendRedirect(event, internalUrl.toString(), 307);
   }
 
   if (path === 'api/preview-proxy') {

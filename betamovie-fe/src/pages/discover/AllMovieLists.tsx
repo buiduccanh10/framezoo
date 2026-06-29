@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Icon, Icons } from "@/components/Icon";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { Heading1 } from "@/components/utils/Text";
+import { getDiscoverBackUrl } from "@/pages/discover/utils/navigation";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import { useDiscoverStore } from "@/stores/discover";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
@@ -26,12 +27,21 @@ export function DiscoverMore() {
   };
 
   const handleBack = () => {
-    if (lastView) {
-      navigate(lastView.url);
-      window.scrollTo(0, lastView.scrollPosition);
-    } else {
-      navigate(-1);
+    const backUrl = getDiscoverBackUrl(lastView);
+    if (backUrl && lastView) {
+      navigate(backUrl);
+      requestAnimationFrame(() => {
+        window.scrollTo(0, lastView.scrollPosition);
+      });
+      return;
     }
+
+    if (lastView) {
+      navigate("/discover");
+      return;
+    }
+
+    navigate(-1);
   };
 
   return (

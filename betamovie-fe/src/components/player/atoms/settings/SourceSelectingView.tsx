@@ -10,7 +10,7 @@ import {
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import {
-  getOpenMovieProviderFromStreamId,
+  buildOpenMovieStreamId,
   getOpenMovieVariantLabelFromStreamId,
 } from "@/components/player/utils/openMovieVariant";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -83,15 +83,20 @@ export function EmbedOption(props: {
       props.embedId === "openmovie-embed" &&
       props.url?.startsWith("openmovie://")
     ) {
-      const activeProvider = getOpenMovieProviderFromStreamId(activeStreamId);
-      if (activeProvider) {
-        try {
-          const encoded = props.url.replace("openmovie://", "");
-          const info = JSON.parse(decodeURIComponent(encoded));
-          return activeProvider === info.provider;
-        } catch {
-          return false;
-        }
+      try {
+        const encoded = props.url.replace("openmovie://", "");
+        const info = JSON.parse(decodeURIComponent(encoded));
+        return (
+          !!activeStreamId &&
+          activeStreamId ===
+            buildOpenMovieStreamId({
+              provider: info.provider,
+              url: info.url,
+              quality: info.quality,
+            })
+        );
+      } catch {
+        return false;
       }
     }
     return props.embedId === currentEmbedId;

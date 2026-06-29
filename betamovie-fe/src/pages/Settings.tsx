@@ -12,6 +12,7 @@ import { getSessions, updateSession } from "@/backend/accounts/sessions";
 import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
 import { getAllProviders } from "@/backend/providers/providers";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
@@ -168,6 +169,7 @@ export function AccountSettings(props: {
 }
 
 export function SettingsPage() {
+  useProviderMetadataVersion();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   // TIDB segment submissions are now handled by the backend, so the legacy
