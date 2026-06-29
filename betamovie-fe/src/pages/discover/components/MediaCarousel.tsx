@@ -2,7 +2,7 @@ import { Listbox } from "@headlessui/react";
 import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
@@ -49,12 +49,12 @@ interface MediaCarouselProps {
   sectionTitleOverride?: string;
 }
 
-function MoreCard({ link }: { link: string }) {
+function MoreCard({ link, onClick }: { link: string; onClick?: () => void }) {
   const { t } = useTranslation();
 
   return (
     <div className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto">
-      <Link to={link} className="block">
+      <Link to={link} onClick={onClick} className="block">
         <Flare.Base className="group -m-[0.705em] hover:scale-95 transition-all rounded-xl bg-background-main duration-300 hover:bg-mediaCard-hoverBackground tabbable">
           <Flare.Light
             flareSize={300}
@@ -101,6 +101,7 @@ export function MediaCarousel({
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
   const { setLastView } = useDiscoverStore();
+  const location = useLocation();
   const { isMobile } = useIsMobile();
   const browser = !!window.chrome;
 
@@ -340,10 +341,10 @@ export function MediaCarousel({
 
   const handleMoreClick = React.useCallback(() => {
     setLastView({
-      url: window.location.pathname,
+      url: `${location.pathname}${location.search}`,
       scrollPosition: window.scrollY,
     });
-  }, [setLastView]);
+  }, [location.pathname, location.search, setLastView]);
 
   // Generate more link
   const generatedMoreLink = React.useMemo(() => {
@@ -648,7 +649,7 @@ export function MediaCarousel({
                 ))}
 
           {moreContent && generatedMoreLink && (
-            <MoreCard link={generatedMoreLink} />
+            <MoreCard link={generatedMoreLink} onClick={handleMoreClick} />
           )}
 
           <div className="lg:w-12" />

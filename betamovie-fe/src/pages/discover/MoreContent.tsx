@@ -18,6 +18,7 @@ import {
   useDiscoverMedia,
   useDiscoverOptions,
 } from "@/pages/discover/hooks/useDiscoverMedia";
+import { getDiscoverBackUrl } from "@/pages/discover/utils/navigation";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import { useDiscoverStore } from "@/stores/discover";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
@@ -185,12 +186,21 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
   );
 
   const handleBack = () => {
-    if (lastView) {
-      navigate(lastView.url);
-      window.scrollTo(0, lastView.scrollPosition);
-    } else {
-      navigate(-1);
+    const backUrl = getDiscoverBackUrl(lastView);
+    if (backUrl && lastView) {
+      navigate(backUrl);
+      requestAnimationFrame(() => {
+        window.scrollTo(0, lastView.scrollPosition);
+      });
+      return;
     }
+
+    if (lastView) {
+      navigate("/discover");
+      return;
+    }
+
+    navigate(-1);
   };
 
   const handleShowDetails = async (media: MediaItem) => {
