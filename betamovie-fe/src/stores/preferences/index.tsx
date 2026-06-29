@@ -21,7 +21,6 @@ export interface PreferencesStore {
   sourceOrder: string[];
   enableSourceOrder: boolean;
   lastSuccessfulSource: string | null;
-  enableLastSuccessfulSource: boolean;
   embedOrder: string[];
   enableEmbedOrder: boolean;
   proxyTmdb: boolean;
@@ -53,7 +52,6 @@ export interface PreferencesStore {
   setSourceOrder(v: string[]): void;
   setEnableSourceOrder(v: boolean): void;
   setLastSuccessfulSource(v: string | null): void;
-  setEnableLastSuccessfulSource(v: boolean): void;
   setEmbedOrder(v: string[]): void;
   setEnableEmbedOrder(v: boolean): void;
   setProxyTmdb(v: boolean): void;
@@ -89,7 +87,6 @@ export const usePreferencesStore = create(
       sourceOrder: [],
       enableSourceOrder: false,
       lastSuccessfulSource: null,
-      enableLastSuccessfulSource: false,
       embedOrder: [],
       enableEmbedOrder: false,
       proxyTmdb: false,
@@ -171,11 +168,6 @@ export const usePreferencesStore = create(
       setLastSuccessfulSource(v) {
         set((s) => {
           s.lastSuccessfulSource = v;
-        });
-      },
-      setEnableLastSuccessfulSource(v) {
-        set((s) => {
-          s.enableLastSuccessfulSource = v;
         });
       },
       setEmbedOrder(v) {

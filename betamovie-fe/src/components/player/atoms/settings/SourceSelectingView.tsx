@@ -210,9 +210,6 @@ export function SourceSelectionView({
   const lastSuccessfulSource = usePreferencesStore(
     (s) => s.lastSuccessfulSource,
   );
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
   );
@@ -227,8 +224,8 @@ export function SourceSelectionView({
       );
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
-      // Even without custom source order, prioritize last successful source if enabled
-      if (enableLastSuccessfulSource && lastSuccessfulSource) {
+      // Even without custom source order, prioritize last successful source
+      if (lastSuccessfulSource) {
         const lastSourceIndex = allSources.findIndex(
           (s) => s.id === lastSuccessfulSource,
         );
@@ -244,8 +241,8 @@ export function SourceSelectionView({
     const orderedSources = [];
     const remainingSources = [...allSources];
 
-    // First, add the last successful source if it exists, is available, and the feature is enabled
-    if (enableLastSuccessfulSource && lastSuccessfulSource) {
+    // First, add the last successful source if it exists and is available
+    if (lastSuccessfulSource) {
       const lastSourceIndex = remainingSources.findIndex(
         (s) => s.id === lastSuccessfulSource,
       );
@@ -268,13 +265,7 @@ export function SourceSelectionView({
     orderedSources.push(...remainingSources);
 
     return orderedSources;
-  }, [
-    metaType,
-    preferredSourceOrder,
-    enableSourceOrder,
-    lastSuccessfulSource,
-    enableLastSuccessfulSource,
-  ]);
+  }, [metaType, preferredSourceOrder, enableSourceOrder, lastSuccessfulSource]);
 
   const handleFindNextSource = () => {
     if (!currentSourceId) return;

@@ -444,13 +444,6 @@ export function SettingsPage() {
     (s) => s.setLastSuccessfulSource,
   );
 
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
-  const setEnableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setEnableLastSuccessfulSource,
-  );
-
   // These are commented because the EmbedOrderPart is on the admin page and not on the settings page.
   const embedOrder = usePreferencesStore((s) => s.embedOrder);
   // const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
@@ -614,9 +607,7 @@ export function SettingsPage() {
         if (settings.lastSuccessfulSource !== undefined) {
           setLastSuccessfulSource(settings.lastSuccessfulSource);
         }
-        if (settings.enableLastSuccessfulSource !== undefined) {
-          setEnableLastSuccessfulSource(settings.enableLastSuccessfulSource);
-        }
+
         if (settings.proxyTmdb !== undefined) {
           setProxyTmdb(settings.proxyTmdb);
         }
@@ -687,7 +678,7 @@ export function SettingsPage() {
     setSourceOrder,
     setEnableSourceOrder,
     setLastSuccessfulSource,
-    setEnableLastSuccessfulSource,
+
     setProxyTmdb,
     setEnableCarouselView,
     setEnableMinimalCards,
@@ -726,7 +717,7 @@ export function SettingsPage() {
     sourceOrder,
     enableSourceOrder,
     lastSuccessfulSource,
-    enableLastSuccessfulSource,
+
     embedOrder,
     enableEmbedOrder,
     proxyTmdb,
@@ -798,7 +789,6 @@ export function SettingsPage() {
         state.sourceOrder.changed ||
         state.enableSourceOrder.changed ||
         state.lastSuccessfulSource.changed ||
-        state.enableLastSuccessfulSource.changed ||
         state.proxyTmdb.changed ||
         state.enableCarouselView.changed ||
         state.enableMinimalCards.changed ||
@@ -830,7 +820,7 @@ export function SettingsPage() {
           sourceOrder: state.sourceOrder.state,
           enableSourceOrder: state.enableSourceOrder.state,
           lastSuccessfulSource: state.lastSuccessfulSource.state,
-          enableLastSuccessfulSource: state.enableLastSuccessfulSource.state,
+
           proxyTmdb: state.proxyTmdb.state,
           enableCarouselView: state.enableCarouselView.state,
           enableMinimalCards: state.enableMinimalCards.state,
@@ -880,7 +870,7 @@ export function SettingsPage() {
     setSourceOrder(state.sourceOrder.state);
     setEnableSourceOrder(state.enableSourceOrder.state);
     setLastSuccessfulSource(state.lastSuccessfulSource.state);
-    setEnableLastSuccessfulSource(state.enableLastSuccessfulSource.state);
+
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
@@ -947,7 +937,7 @@ export function SettingsPage() {
     setSourceOrder,
     setEnableSourceOrder,
     setLastSuccessfulSource,
-    setEnableLastSuccessfulSource,
+
     setAppLanguage,
     setTheme,
     setSubStyling,
@@ -1034,12 +1024,6 @@ export function SettingsPage() {
               setSourceOrder={state.sourceOrder.set}
               enableSourceOrder={state.enableSourceOrder.state}
               setenableSourceOrder={state.enableSourceOrder.set}
-              enableLastSuccessfulSource={
-                state.enableLastSuccessfulSource.state
-              }
-              setEnableLastSuccessfulSource={
-                state.enableLastSuccessfulSource.set
-              }
               enableLowPerformanceMode={state.enableLowPerformanceMode.state}
               setEnableLowPerformanceMode={state.enableLowPerformanceMode.set}
               enableHoldToBoost={state.enableHoldToBoost.state}

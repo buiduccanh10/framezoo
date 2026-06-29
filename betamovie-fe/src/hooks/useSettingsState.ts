@@ -65,7 +65,6 @@ export function useSettingsState(
   sourceOrder: string[],
   enableSourceOrder: boolean,
   lastSuccessfulSource: string | null,
-  enableLastSuccessfulSource: boolean,
   embedOrder: string[],
   enableEmbedOrder: boolean,
   proxyTmdb: boolean,
@@ -191,12 +190,7 @@ export function useSettingsState(
     resetLastSuccessfulSource,
     lastSuccessfulSourceChanged,
   ] = useDerived(lastSuccessfulSource);
-  const [
-    enableLastSuccessfulSourceState,
-    setEnableLastSuccessfulSourceState,
-    resetEnableLastSuccessfulSource,
-    enableLastSuccessfulSourceChanged,
-  ] = useDerived(enableLastSuccessfulSource);
+
   const [
     embedOrderState,
     setEmbedOrderState,
@@ -303,7 +297,7 @@ export function useSettingsState(
     resetSourceOrder();
     resetEnableSourceOrder();
     resetLastSuccessfulSource();
-    resetEnableLastSuccessfulSource();
+
     resetEmbedOrder();
     resetEnableEmbedOrder();
     resetProxyTmdb();
@@ -343,7 +337,6 @@ export function useSettingsState(
     sourceOrderChanged ||
     enableSourceOrderChanged ||
     lastSuccessfulSourceChanged ||
-    enableLastSuccessfulSourceChanged ||
     embedOrderChanged ||
     enableEmbedOrderChanged ||
     proxyTmdbChanged ||
@@ -473,11 +466,7 @@ export function useSettingsState(
       set: setLastSuccessfulSourceState,
       changed: lastSuccessfulSourceChanged,
     },
-    enableLastSuccessfulSource: {
-      state: enableLastSuccessfulSourceState,
-      set: setEnableLastSuccessfulSourceState,
-      changed: enableLastSuccessfulSourceChanged,
-    },
+
     proxyTmdb: {
       state: proxyTmdbState,
       set: setProxyTmdbState,

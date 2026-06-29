@@ -29,8 +29,6 @@ export function PreferencesPart(props: {
   setSourceOrder: (v: string[]) => void;
   enableSourceOrder: boolean;
   setenableSourceOrder: (v: boolean) => void;
-  enableLastSuccessfulSource: boolean;
-  setEnableLastSuccessfulSource: (v: boolean) => void;
   enableLowPerformanceMode: boolean;
   setEnableLowPerformanceMode: (v: boolean) => void;
   enableHoldToBoost: boolean;
@@ -295,29 +293,6 @@ export function PreferencesPart(props: {
                 <Toggle enabled={props.enableAutoResumeOnPlaybackError} />
                 <p className="flex-1 text-white font-bold">
                   {t("settings.preferences.autoResumeOnPlaybackErrorLabel")}
-                </p>
-              </div>
-            </div>
-
-            {/* Last Successful Source Preference */}
-            <div>
-              <p className="text-white font-bold mb-3">
-                {t("settings.preferences.lastSuccessfulSource")}
-              </p>
-              <p className="max-w-[25rem] font-medium">
-                {t("settings.preferences.lastSuccessfulSourceDescription")}
-              </p>
-              <div
-                onClick={() =>
-                  props.setEnableLastSuccessfulSource(
-                    !props.enableLastSuccessfulSource,
-                  )
-                }
-                className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-              >
-                <Toggle enabled={props.enableLastSuccessfulSource} />
-                <p className="flex-1 text-white font-bold">
-                  {t("settings.preferences.lastSuccessfulSourceEnableLabel")}
                 </p>
               </div>
             </div>

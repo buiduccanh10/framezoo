@@ -429,11 +429,6 @@ export function MigrationUploadPage() {
             uploadedData.settings.lastSuccessfulSource,
           );
         }
-        if (uploadedData.settings.enableLastSuccessfulSource !== undefined) {
-          preferencesStore.setEnableLastSuccessfulSource(
-            uploadedData.settings.enableLastSuccessfulSource,
-          );
-        }
         if (uploadedData.settings.embedOrder !== undefined) {
           preferencesStore.setEmbedOrder(uploadedData.settings.embedOrder);
         }

@@ -174,9 +174,6 @@ export function SourceSelectPart(props: {
   const lastSuccessfulSource = usePreferencesStore(
     (s) => s.lastSuccessfulSource,
   );
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
   const sourceMaintainText = t("player.menus.sources.maintain");
 
   const sources = useMemo(() => {
@@ -198,11 +195,7 @@ export function SourceSelectPart(props: {
 
     if (!enableSourceOrder || preferredSourceOrder.length === 0) {
       // Even without custom source order, prioritize the continuity source.
-      // For non-show media, keep requiring the settings flag.
-      const shouldPrioritize =
-        metaType === "show"
-          ? !!continuitySourceId
-          : enableLastSuccessfulSource && !!continuitySourceId;
+      const shouldPrioritize = !!continuitySourceId;
 
       if (shouldPrioritize && continuitySourceId) {
         const lastSourceIndex = allSources.findIndex(
@@ -221,10 +214,7 @@ export function SourceSelectPart(props: {
     const remainingSources = [...allSources];
 
     // First, add continuity source if available.
-    const shouldPrioritize =
-      metaType === "show"
-        ? !!continuitySourceId
-        : enableLastSuccessfulSource && !!continuitySourceId;
+    const shouldPrioritize = !!continuitySourceId;
 
     if (shouldPrioritize && continuitySourceId) {
       const lastSourceIndex = remainingSources.findIndex(
@@ -255,7 +245,6 @@ export function SourceSelectPart(props: {
     preferredSourceOrder,
     enableSourceOrder,
     lastSuccessfulSource,
-    enableLastSuccessfulSource,
   ]);
 
   if (selectedSourceId) {

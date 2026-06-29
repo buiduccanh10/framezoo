@@ -32,7 +32,6 @@ export interface SettingsInput {
   sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;
   lastSuccessfulSource?: string | null;
-  enableLastSuccessfulSource?: boolean;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;
@@ -70,7 +69,6 @@ export interface SettingsResponse {
   sourceOrder?: string[] | null;
   enableSourceOrder?: boolean;
   lastSuccessfulSource?: string | null;
-  enableLastSuccessfulSource?: boolean;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;

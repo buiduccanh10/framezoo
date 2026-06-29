@@ -74,9 +74,7 @@ export function useAuthData() {
   const setLastSuccessfulSource = usePreferencesStore(
     (s) => s.setLastSuccessfulSource,
   );
-  const setEnableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setEnableLastSuccessfulSource,
-  );
+
   const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
   const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
 
@@ -231,10 +229,6 @@ export function useAuthData() {
         setLastSuccessfulSource(settings.lastSuccessfulSource);
       }
 
-      if (settings.enableLastSuccessfulSource !== undefined) {
-        setEnableLastSuccessfulSource(settings.enableLastSuccessfulSource);
-      }
-
       if (settings.embedOrder !== undefined) {
         setEmbedOrder(settings.embedOrder ?? []);
       }
@@ -320,7 +314,7 @@ export function useAuthData() {
       setSourceOrder,
       setEnableSourceOrder,
       setLastSuccessfulSource,
-      setEnableLastSuccessfulSource,
+
       setEmbedOrder,
       setEnableEmbedOrder,
       setProxyTmdb,
