@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { getAllProviders, getProviders } from "@/backend/providers/providers";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { SortableList } from "@/components/form/SortableList";
@@ -21,6 +22,7 @@ export function EmbedOrderPart({
   setEnableEmbedOrder,
 }: EmbedOrderPartProps) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
 
   const allEmbeds = getAllProviders().listEmbeds();
 

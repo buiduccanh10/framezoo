@@ -1,6 +1,7 @@
 import { joinURL } from 'ufo';
 import { createHash } from 'node:crypto';
-import { getProvider, getAllProviders } from '~/providers/registry';
+import { getProvider } from '~/providers/registry';
+import { getProviderMetadata } from '~/providers/metadata';
 import { request, Pool } from 'undici';
 import { buildStreamPreview } from '~/utils/preview';
 import { applyCorsHeaders } from '~/utils/cors';
@@ -370,13 +371,9 @@ export default defineEventHandler(async event => {
   // Handle /api/providers internally
   if (path === 'api/providers') {
     logInfo(`[Embed Proxy] Handling providers list internally`);
-    const providers = getAllProviders();
     setCORSHeaders(event);
     return {
-      providers: providers.map(p => ({
-        name: p.name,
-        type: p.type,
-      })),
+      providers: getProviderMetadata(),
     };
   }
 

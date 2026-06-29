@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { getAllProviders, getProviders } from "@/backend/providers/providers";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { FlagIcon } from "@/components/FlagIcon";
@@ -44,6 +45,7 @@ export function PreferencesPart(props: {
   setEnableAutoResumeOnPlaybackError: (v: boolean) => void;
 }) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const { showModal } = useOverlayStack();
   const [isSourceListExpanded, setIsSourceListExpanded] = useState(false);
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));

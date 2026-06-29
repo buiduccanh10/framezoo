@@ -10,6 +10,7 @@ import { DetailedMeta, getMetaFromId } from "@/backend/metadata/getmeta";
 import { decodeTMDBId } from "@/backend/metadata/tmdb";
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import { getProviders } from "@/backend/providers/providers";
+import { loadProviderMetadata } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { Icons } from "@/components/Icon";
 import { IconPill } from "@/components/layout/IconPill";
@@ -47,11 +48,11 @@ export function MetaPart(props: MetaPartProps) {
       if (!info.hasPermission) throw new Error("extension-no-permission");
     }
 
+    await loadProviderMetadata();
+
     // use providers metadata
-    setCachedMetadata([
-      ...getProviders().listSources(),
-      ...getProviders().listEmbeds(),
-    ]);
+    const providers = getProviders();
+    setCachedMetadata([...providers.listSources(), ...providers.listEmbeds()]);
 
     // get media meta data
     let data: ReturnType<typeof decodeTMDBId> = null;

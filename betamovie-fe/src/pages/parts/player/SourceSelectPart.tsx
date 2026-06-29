@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getCachedMetadata } from "@/backend/helpers/providerApi";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Loading } from "@/components/layout/Loading";
 import {
   useEmbedScraping,
@@ -20,6 +21,7 @@ function EmbedOption(props: {
   routerId: string;
 }) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const unknownEmbedName = t("player.menus.sources.unknownOption");
 
   const embedName = useMemo(() => {
@@ -82,6 +84,7 @@ function EmbedSelectionView(props: {
   onBack: () => void;
 }) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const { run, notfound, loading, items, errored } = useSourceScraping(
     props.sourceId,
     props.routerId,
@@ -161,6 +164,7 @@ export function SourceSelectPart(props: {
   preferredSourceId?: string;
 }) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const [selectedSourceId, setSelectedSourceId] = React.useState<string | null>(
     null,
   );

@@ -44,7 +44,7 @@ import {
   scrapeVidSrcWtfMovie,
   scrapeVidSrcWtfShow,
 } from "./custom/sources/vidsrcWtfSource";
-
+import { applyProviderMetadataOverride } from "./runtimeMetadata";
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
 
@@ -172,83 +172,75 @@ const openMovieEmbed = {
   scrape: scrapeOpenMovieEmbed,
 };
 
+const sourceDefinitions = [
+  vidrockSource,
+  movies111Source,
+  vidlinkSource,
+  vidsrcWtfSource,
+  openMovieSource,
+  vidsrcRuSource,
+  vidsrcSource,
+  kkphimSource,
+];
+
+const embedDefinitions = [openMovieEmbed];
+
 function isDesktopApp(): boolean {
   return Boolean(typeof window !== "undefined" && window.__ALPHAFLIX_DESKTOP__);
+}
+
+function withConfiguredProviders(builder: ReturnType<typeof buildProviders>) {
+  sourceDefinitions.forEach((source) => {
+    builder.addSource(applyProviderMetadataOverride(source));
+  });
+  embedDefinitions.forEach((embed) => {
+    builder.addEmbed(applyProviderMetadataOverride(embed));
+  });
+
+  return builder;
 }
 
 export function getProviders() {
   // Desktop app has extension built in and can play MKV; use NATIVE target.
   if (isDesktopApp()) {
-    return buildProviders()
-      .setFetcher(makeStandardFetcher(fetch))
-      .setProxiedFetcher(makeExtensionFetcher())
-      .setTarget(targets.NATIVE)
-      .enableConsistentIpForRequests()
-      .addBuiltinProviders()
-      .addSource(vidrockSource)
-      .addSource(movies111Source)
-      .addSource(vidlinkSource)
-      .addSource(vidsrcWtfSource)
-      .addSource(openMovieSource)
-      .addSource(vidsrcRuSource)
-      .addSource(vidsrcSource)
-      .addSource(kkphimSource)
-      .addEmbed(openMovieEmbed)
-      .build();
+    return withConfiguredProviders(
+      buildProviders()
+        .setFetcher(makeStandardFetcher(fetch))
+        .setProxiedFetcher(makeExtensionFetcher())
+        .setTarget(targets.NATIVE)
+        .enableConsistentIpForRequests()
+        .addBuiltinProviders(),
+    ).build();
   }
 
   if (isExtensionActiveCached()) {
-    return buildProviders()
-      .setFetcher(makeStandardFetcher(fetch))
-      .setProxiedFetcher(makeExtensionFetcher())
-      .setTarget(targets.BROWSER_EXTENSION)
-      .enableConsistentIpForRequests()
-      .addBuiltinProviders()
-      .addSource(vidrockSource)
-      .addSource(movies111Source)
-      .addSource(vidlinkSource)
-      .addSource(vidsrcWtfSource)
-      .addSource(openMovieSource)
-      .addSource(vidsrcRuSource)
-      .addSource(vidsrcSource)
-      .addSource(kkphimSource)
-      .addEmbed(openMovieEmbed)
-      .build();
+    return withConfiguredProviders(
+      buildProviders()
+        .setFetcher(makeStandardFetcher(fetch))
+        .setProxiedFetcher(makeExtensionFetcher())
+        .setTarget(targets.BROWSER_EXTENSION)
+        .enableConsistentIpForRequests()
+        .addBuiltinProviders(),
+    ).build();
   }
 
   setupM3U8Proxy();
 
-  return buildProviders()
-    .setFetcher(makeStandardFetcher(fetch))
-    .setProxiedFetcher(makeLoadBalancedSimpleProxyFetcher())
-    .setTarget(targets.BROWSER)
-    .addBuiltinProviders()
-    .addSource(vidrockSource)
-    .addSource(movies111Source)
-    .addSource(vidlinkSource)
-    .addSource(vidsrcWtfSource)
-    .addSource(openMovieSource)
-    .addSource(vidsrcRuSource)
-    .addSource(vidsrcSource)
-    .addSource(kkphimSource)
-    .addEmbed(openMovieEmbed)
-    .build();
+  return withConfiguredProviders(
+    buildProviders()
+      .setFetcher(makeStandardFetcher(fetch))
+      .setProxiedFetcher(makeLoadBalancedSimpleProxyFetcher())
+      .setTarget(targets.BROWSER)
+      .addBuiltinProviders(),
+  ).build();
 }
 
 export function getAllProviders() {
-  return buildProviders()
-    .setFetcher(makeStandardFetcher(fetch))
-    .setTarget(targets.BROWSER_EXTENSION)
-    .enableConsistentIpForRequests()
-    .addBuiltinProviders()
-    .addSource(vidrockSource)
-    .addSource(movies111Source)
-    .addSource(vidlinkSource)
-    .addSource(vidsrcWtfSource)
-    .addSource(openMovieSource)
-    .addSource(vidsrcRuSource)
-    .addSource(vidsrcSource)
-    .addSource(kkphimSource)
-    .addEmbed(openMovieEmbed)
-    .build();
+  return withConfiguredProviders(
+    buildProviders()
+      .setFetcher(makeStandardFetcher(fetch))
+      .setTarget(targets.BROWSER_EXTENSION)
+      .enableConsistentIpForRequests()
+      .addBuiltinProviders(),
+  ).build();
 }
