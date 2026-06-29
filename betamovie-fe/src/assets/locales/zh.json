@@ -130,6 +130,8 @@
     "carousel": {
       "change": "改变",
       "more": "查看更多",
+      "today": "今天",
+      "thisWeek": "本星期",
       "title": {
         "4kReleases": "4K 发布",
         "editorPicksMovies": "编辑精选电影",

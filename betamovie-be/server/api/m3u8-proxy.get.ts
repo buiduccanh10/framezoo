@@ -619,13 +619,8 @@ const isKkPhimPlaylist = (playlistUrl: string, headers: Record<string, string>) 
   return referer.includes('phimapi.com');
 };
 
-const isKkPhimAdSegmentUrl = (segmentUrl: string) => {
-  if (/(?:^|\/)convertv[^/]*\//i.test(segmentUrl)) {
-    return true;
-  }
-
-  return /(?:^|\/)v\d+\/[0-9a-f]{16,}\/segment_\d+\.ts(?:$|[?#])/i.test(segmentUrl);
-};
+const isKkPhimVideoAdSegmentUrl = (segmentUrl: string) =>
+  /(?:^|\/)v\d+\/[0-9a-f]{16,}\/segment_\d+\.ts(?:$|[?#])/i.test(segmentUrl);
 
 const stripKkPhimAdSegments = (
   manifest: string,
@@ -661,7 +656,9 @@ const stripKkPhimAdSegments = (
           // Keep raw value for regex matching.
         }
 
-        if (isKkPhimAdSegmentUrl(resolvedSegmentUrl)) {
+        // `convertv*` segments are still the main episode video with a baked-in banner,
+        // so stripping them would remove story content and cause a visible jump.
+        if (isKkPhimVideoAdSegmentUrl(resolvedSegmentUrl)) {
           while (filtered.length > 0 && filtered[filtered.length - 1].trim() === '#EXT-X-DISCONTINUITY') {
             filtered.pop();
           }
@@ -710,7 +707,7 @@ const stripKkPhimAdSegments = (
     normalized.pop();
   }
 
-  logInfo(`Stripped ${removedSegments} KKPhim ad segment(s) from playlist: ${playlistUrl}`);
+  logInfo(`Stripped ${removedSegments} KKPhim video-ad segment(s) from playlist: ${playlistUrl}`);
   return normalized.join('\n');
 };
 

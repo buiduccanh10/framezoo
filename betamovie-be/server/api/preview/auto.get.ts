@@ -138,11 +138,15 @@ export default defineEventHandler(async event => {
   if (!sourceUrl) {
     const contextCacheKey = `stream-meta:${providerName}:${mediaType}:${tmdbId}${mediaType === 'tv' ? `:${season}:${episode}` : ''}`;
     const streamContext = await storage
-      .getItem<{ title?: string; releaseYear?: number }>(contextCacheKey)
+      .getItem<{ title?: string; originName?: string; releaseYear?: number; country?: string }>(
+        contextCacheKey
+      )
       .catch(() => null);
     const streams = await provider.getStreams(tmdbId, mediaType, season, episode, storage, {
       title: streamContext?.title,
+      originName: streamContext?.originName,
       releaseYear: streamContext?.releaseYear,
+      country: streamContext?.country,
     });
     const stream = streams[0];
     if (!stream?.url) {

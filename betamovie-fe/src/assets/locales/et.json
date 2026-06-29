@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Muuda",
       "more": "Vaata rohkem",
+      "today": "Täna",
+      "thisWeek": "Sellel nädalal",
       "title": {
         "4kReleases": "4K väljalasked",
         "editorPicksMovies": "Toimetaja valib filmid",

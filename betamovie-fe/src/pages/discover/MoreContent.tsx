@@ -1,4 +1,5 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import classNames from "classnames";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -92,6 +93,9 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
       .get("country")
       ?.toUpperCase()
       .match(/^[A-Z]{2}$/)?.[0] || "";
+  const selectedTimeWindow = (
+    searchParams.get("timeWindow") === "week" ? "week" : "day"
+  ) as "day" | "week";
   const countryLabel = t("discover.filters.country", {
     defaultValue: "Country",
   });
@@ -144,6 +148,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     providerName: selectedProvider?.name,
     mediaTitle: selectedRecommendationSource?.title,
     isCarouselView: false,
+    timeWindow: selectedTimeWindow,
   });
 
   // Handle content visibility
@@ -355,9 +360,51 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     <SubPageLayout>
       <WideContainer>
         <div className="flex items-center justify-between gap-8">
-          <Heading1 className="text-2xl font-bold text-white">
-            {sectionTitle}
-          </Heading1>
+          <div className="flex items-center gap-4">
+            <Heading1 className="text-2xl font-bold text-white">
+              {sectionTitle}
+            </Heading1>
+            {actualContentType === "trending" && (
+              <div className="inline-flex items-center rounded-full bg-mediaCard-hoverBackground p-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    const nextParams = new URLSearchParams(searchParams);
+                    nextParams.set("timeWindow", "day");
+                    setSearchParams(nextParams);
+                  }}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    selectedTimeWindow === "day"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.today", { defaultValue: "Today" })}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    const nextParams = new URLSearchParams(searchParams);
+                    nextParams.set("timeWindow", "week");
+                    setSearchParams(nextParams);
+                  }}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    selectedTimeWindow === "week"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.thisWeek", {
+                    defaultValue: "This Week",
+                  })}
+                </button>
+              </div>
+            )}
+          </div>
           {contentType === "recommendations" && (
             <div className="relative pr-4 whitespace-nowrap">
               <Dropdown

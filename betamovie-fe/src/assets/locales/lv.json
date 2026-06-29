@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Mainīt",
       "more": "Skatīt vairāk",
+      "today": "Šodien",
+      "thisWeek": "Šonedēļ",
       "title": {
         "4kReleases": "4K izlaidumi",
         "editorPicksMovies": "Redaktors izvēlas filmas",

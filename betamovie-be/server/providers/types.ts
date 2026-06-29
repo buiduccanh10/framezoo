@@ -6,6 +6,7 @@ export interface StreamPreview {
 
 export interface StreamLookupContext {
   title?: string;
+  originName?: string;
   releaseYear?: number;
   country?: string;
 }

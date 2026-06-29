@@ -2,12 +2,12 @@ import { joinURL } from 'ufo';
 import { $fetch } from 'ofetch';
 
 const ONE_HOUR_SECONDS = 60 * 60;
-const ONE_MONTH_SECONDS = 30 * 24 * 60 * 60;
+const ONE_DAY_SECONDS = 24 * 60 * 60;
 const toPositiveTtl = (value: number, fallback: number) =>
   Number.isFinite(value) && value > 0 ? Math.floor(value) : fallback;
 
 const TMDB_PROXY_METADATA_CACHE_TTL = Number(
-  process.env.TMDB_PROXY_METADATA_CACHE_TTL || ONE_MONTH_SECONDS
+  process.env.TMDB_PROXY_METADATA_CACHE_TTL || ONE_DAY_SECONDS
 );
 const TMDB_PROXY_DETAIL_CACHE_TTL = Number(
   process.env.TMDB_PROXY_DETAIL_CACHE_TTL || ONE_HOUR_SECONDS
@@ -16,8 +16,7 @@ const TMDB_PROXY_SORT_SOURCE_PAGE_COUNT = toPositiveTtl(
   Number(process.env.TMDB_PROXY_SORT_SOURCE_PAGE_COUNT || 100),
   100
 );
-const TMDB_MIN_VOTE_COUNT = 100;
-const TMDB_BAYESIAN_WEIGHT = 100;
+
 const TMDB_DETAIL_PATH_PATTERNS = [
   /^movie\/\d+$/i,
   /^tv\/\d+$/i,
@@ -27,7 +26,6 @@ const TMDB_DETAIL_PATH_PATTERNS = [
 const TMDB_SORTABLE_PATH_PATTERNS = [
   /^discover\/(?:movie|tv)$/i,
   /^search\/(?:movie|tv|multi)$/i,
-  /^trending\/(?:movie|tv)\/(?:day|week)$/i,
   /^(?:movie|tv)\/(?:popular|top_rated|now_playing|on_the_air|airing_today|upcoming)$/i,
   /^(?:movie|tv)\/\d+\/recommendations$/i,
 ];
@@ -42,7 +40,7 @@ type TmdbResultsPayload = {
 
 const resolveTmdbCacheTtl = (path: string) => {
   const normalizedPath = path.replace(/^\/+|\/+$/g, '').toLowerCase();
-  const metadataTtl = toPositiveTtl(TMDB_PROXY_METADATA_CACHE_TTL, ONE_MONTH_SECONDS);
+  const metadataTtl = toPositiveTtl(TMDB_PROXY_METADATA_CACHE_TTL, ONE_DAY_SECONDS);
   const detailTtl = toPositiveTtl(TMDB_PROXY_DETAIL_CACHE_TTL, ONE_HOUR_SECONDS);
 
   if (TMDB_DETAIL_PATH_PATTERNS.some(pattern => pattern.test(normalizedPath))) {
@@ -119,46 +117,11 @@ const isMovieOrTvResult = (item: unknown): item is SortableMediaItem => {
   );
 };
 
-const meetsTmdbQualityThreshold = (item: SortableMediaItem) => {
-  if (!isMovieOrTvResult(item)) return true;
 
-  const voteCount = Number(item.vote_count) || 0;
-
-  return voteCount >= TMDB_MIN_VOTE_COUNT;
-};
-
-const filterTmdbResultsByQuality = (items: SortableMediaItem[]) =>
-  items.filter(meetsTmdbQualityThreshold);
-
-const getGlobalAverageVote = (items: SortableMediaItem[]) => {
-  const scores = items
-    .map((item) => Number(item.vote_average) || 0)
-    .filter((score) => score > 0);
-
-  if (scores.length === 0) return 0;
-
-  return scores.reduce((sum, score) => sum + score, 0) / scores.length;
-};
-
-const getBayesianWeightedRating = (
-  item: SortableMediaItem,
-  globalAverage: number,
-) => {
-  const votes = Number(item.vote_count) || 0;
-  const rating = Number(item.vote_average) || 0;
-
-  if (votes <= 0) return 0;
-
-  return (
-    (votes / (votes + TMDB_BAYESIAN_WEIGHT)) * rating +
-    (TMDB_BAYESIAN_WEIGHT / (votes + TMDB_BAYESIAN_WEIGHT)) * globalAverage
-  );
-};
 
 const compareSortableMediaItems = (
   a: SortableMediaItem,
   b: SortableMediaItem,
-  globalAverage: number,
 ) => {
   const isMediaA = isMovieOrTvResult(a);
   const isMediaB = isMovieOrTvResult(b);
@@ -172,16 +135,11 @@ const compareSortableMediaItems = (
   const yearDiff = getReferenceYear(b) - getReferenceYear(a);
   if (yearDiff !== 0) return yearDiff;
 
-  const bayesianDiff =
-    getBayesianWeightedRating(b, globalAverage) -
-    getBayesianWeightedRating(a, globalAverage);
-  if (bayesianDiff !== 0) return bayesianDiff;
+  const voteAverageDiff = (Number(b.vote_average) || 0) - (Number(a.vote_average) || 0);
+  if (voteAverageDiff !== 0) return voteAverageDiff;
 
   const voteCountDiff = (Number(b.vote_count) || 0) - (Number(a.vote_count) || 0);
   if (voteCountDiff !== 0) return voteCountDiff;
-
-  const voteAverageDiff = (Number(b.vote_average) || 0) - (Number(a.vote_average) || 0);
-  if (voteAverageDiff !== 0) return voteAverageDiff;
 
   const popularityDiff = (Number(b.popularity) || 0) - (Number(a.popularity) || 0);
   if (popularityDiff !== 0) return popularityDiff;
@@ -190,8 +148,7 @@ const compareSortableMediaItems = (
 };
 
 const sortTmdbResults = (items: SortableMediaItem[]) => {
-  const globalAverage = getGlobalAverageVote(items);
-  return [...items].sort((a, b) => compareSortableMediaItems(a, b, globalAverage));
+  return [...items].sort((a, b) => compareSortableMediaItems(a, b));
 };
 
 const isSortableTmdbPath = (path: string) => {
@@ -223,8 +180,7 @@ const sortAndPaginateTmdbResults = async (
   }
 
   if (!shouldAggregateTmdbResults(path, firstPayload)) {
-    const filteredResults = filterTmdbResultsByQuality(firstPayload.results ?? []);
-    const sortedResults = sortTmdbResults(filteredResults);
+    const sortedResults = sortTmdbResults(firstPayload.results ?? []);
 
     return {
       ...firstPayload,
@@ -240,8 +196,7 @@ const sortAndPaginateTmdbResults = async (
   );
 
   if (requestedPage > sourcePageCount) {
-    const filteredResults = filterTmdbResultsByQuality(firstPayload.results ?? []);
-    const sortedResults = sortTmdbResults(filteredResults);
+    const sortedResults = sortTmdbResults(firstPayload.results ?? []);
 
     return {
       ...firstPayload,
@@ -257,10 +212,9 @@ const sortAndPaginateTmdbResults = async (
   );
   const additionalPayloads = await Promise.all(additionalPages.map(pageNumber => fetchPage(pageNumber)));
   const pageSize = firstPayload.results?.length || 20;
-  const mergedFilteredResults = filterTmdbResultsByQuality(
+  const mergedResults = sortTmdbResults(
     [firstPayload, ...additionalPayloads].flatMap(payload => payload.results ?? [])
   );
-  const mergedResults = sortTmdbResults(mergedFilteredResults);
   const totalPages = Math.max(1, Math.ceil(mergedResults.length / pageSize));
   const startIndex = (requestedPage - 1) * pageSize;
 

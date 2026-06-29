@@ -130,6 +130,8 @@
     "carousel": {
       "change": "બદલો",
       "more": "વધુ જુઓ",
+      "today": "આજે",
+      "thisWeek": "આ અઠવાડિયે",
       "title": {
         "4kReleases": "4K રિલીઝ",
         "editorPicksMovies": "એડિટર મૂવીઝ પસંદ કરે છે",

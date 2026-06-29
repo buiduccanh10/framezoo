@@ -130,6 +130,8 @@
     "carousel": {
       "change": "промяна",
       "more": "Вижте повече",
+      "today": "Днес",
+      "thisWeek": "Тази седмица",
       "title": {
         "4kReleases": "4K издания",
         "editorPicksMovies": "Редакторът избира филми",

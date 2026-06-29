@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Breyta",
       "more": "Skoða meira",
+      "today": "Í dag",
+      "thisWeek": "Í þessari viku",
       "title": {
         "4kReleases": "4K útgáfur",
         "editorPicksMovies": "Ritstjóri velur kvikmyndir",

@@ -95,6 +95,20 @@ export function DiscoverContent({
   const renderMoviesContent = () => {
     const carousels = [];
 
+    // Trending Movies
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-trending"
+        content={{ type: "trending" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+        {...filtersProps}
+      />,
+    );
+
     // Provider Movies
     carousels.push(
       <LazyMediaCarousel
@@ -105,6 +119,20 @@ export function DiscoverContent({
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
+        {...filtersProps}
+      />,
+    );
+
+    // Top Rated
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
         {...filtersProps}
       />,
     );
@@ -204,12 +232,19 @@ export function DiscoverContent({
     //   />,
     // );
 
-    // Top Rated
+    return carousels;
+  };
+
+  // Render TV Shows content with lazy loading
+  const renderTVShowsContent = () => {
+    const carousels = [];
+
+    // Trending TV Shows
     carousels.push(
       <LazyMediaCarousel
-        key="movie-top-rated"
-        content={{ type: "topRated" }}
-        isTVShow={false}
+        key="tv-trending"
+        content={{ type: "trending" }}
+        isTVShow
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
         moreContent
@@ -218,26 +253,19 @@ export function DiscoverContent({
       />,
     );
 
-    return carousels;
-  };
-
-  // Render TV Shows content with lazy loading
-  const renderTVShowsContent = () => {
-    const carousels = [];
-
     // Popular
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-popular"
-        content={{ type: "popular" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority
-        {...filtersProps}
-      />,
-    );
+    // carousels.push(
+    //   <LazyMediaCarousel
+    //     key="tv-popular"
+    //     content={{ type: "popular" }}
+    //     isTVShow
+    //     carouselRefs={carouselRefs}
+    //     onShowDetails={handleShowDetails}
+    //     moreContent
+    //     priority
+    //     {...filtersProps}
+    //   />,
+    // );
 
     // Provider TV Shows
     carousels.push(
@@ -249,6 +277,20 @@ export function DiscoverContent({
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
+        {...filtersProps}
+      />,
+    );
+
+    // Top Rated
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
         {...filtersProps}
       />,
     );
@@ -318,20 +360,6 @@ export function DiscoverContent({
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
-        {...filtersProps}
-      />,
-    );
-
-    // Top Rated
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-top-rated"
-        content={{ type: "topRated" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
         {...filtersProps}
       />,
     );

@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Přeměna",
       "more": "Zobrazit více",
+      "today": "Dnes",
+      "thisWeek": "Tento týden",
       "title": {
         "4kReleases": "4K vydání",
         "editorPicksMovies": "Editor vybírá filmy",

@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Canviar",
       "more": "Veure més",
+      "today": "Avui",
+      "thisWeek": "Aquesta setmana",
       "title": {
         "4kReleases": "Llançaments 4K",
         "editorPicksMovies": "L'editor tria pel·lícules",

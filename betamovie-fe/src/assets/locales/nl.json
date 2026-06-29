@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Wijziging",
       "more": "Bekijk meer",
+      "today": "Vandaag",
+      "thisWeek": "Deze week",
       "title": {
         "4kReleases": "4K-releases",
         "editorPicksMovies": "Editor kiest films",

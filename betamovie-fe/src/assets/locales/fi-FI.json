@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Muuttaa",
       "more": "Katso lisää",
+      "today": "Tänään",
+      "thisWeek": "Tällä viikolla",
       "title": {
         "4kReleases": "4K-julkaisut",
         "editorPicksMovies": "Toimittaja valitsee elokuvia",

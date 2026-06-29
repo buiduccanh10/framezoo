@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Módosítás",
       "more": "Mutass többet",
+      "today": "Ma",
+      "thisWeek": "Ezen a héten",
       "title": {
         "4kReleases": "4K kiadások",
         "editorPicksMovies": "Szerkesztői válogatás filmekből",

@@ -319,12 +319,12 @@ export function FeaturedCarousel({
         const selectFeaturedPool = (items: MediaPick[], limit: number) => {
           return uniqueByKey(items).slice(0, limit);
         };
-        const [nowPlaying, popularTv] = await Promise.all([
-          endpointList("/movie/now_playing"),
-          endpointList("/tv/popular"),
+        const [trendingMovies, trendingTv] = await Promise.all([
+          endpointList("/trending/movie/day"),
+          endpointList("/trending/tv/day"),
         ]);
         const movieFeaturedPool = selectFeaturedPool(
-          nowPlaying.map(
+          trendingMovies.map(
             (show: {
               id: number;
               vote_average?: number;
@@ -335,7 +335,7 @@ export function FeaturedCarousel({
           FEATURED_POOL_SIZE_PER_TYPE,
         );
         const tvFeaturedPool = selectFeaturedPool(
-          popularTv.map(
+          trendingTv.map(
             (show: {
               id: number;
               vote_average?: number;

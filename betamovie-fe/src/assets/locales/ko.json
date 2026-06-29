@@ -130,6 +130,8 @@
     "carousel": {
       "change": "변화",
       "more": "더 보기",
+      "today": "오늘",
+      "thisWeek": "이번 주",
       "title": {
         "4kReleases": "4K 릴리스",
         "editorPicksMovies": "편집자 추천 영화",

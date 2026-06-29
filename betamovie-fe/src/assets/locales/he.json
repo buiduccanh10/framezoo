@@ -130,6 +130,8 @@
     "carousel": {
       "change": "שנה",
       "more": "הצג עוד",
+      "today": "הַיוֹם",
+      "thisWeek": "השבוע",
       "title": {
         "4kReleases": "השקות ב-4K",
         "editorPicksMovies": "סרטים שנבחרו על ידי העורך",

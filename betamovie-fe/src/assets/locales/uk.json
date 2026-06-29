@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Зміна",
       "more": "Переглянути більше",
+      "today": "Сьогодні",
+      "thisWeek": "Цей тиждень",
       "title": {
         "4kReleases": "Випуски 4K",
         "editorPicksMovies": "Редактор вибирає фільми",

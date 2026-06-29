@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Изменять",
       "more": "Посмотреть больше",
+      "today": "Сегодня",
+      "thisWeek": "На этой неделе",
       "title": {
         "4kReleases": "4K-релизы",
         "editorPicksMovies": "Редактор выбирает фильмы",

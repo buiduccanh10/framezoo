@@ -130,6 +130,8 @@
     "carousel": {
       "change": "Change",
       "more": "View more",
+      "today": "Today",
+      "thisWeek": "This Week",
       "title": {
         "4kReleases": "4K Releases",
         "editorPicksMovies": "Editor Picks Movies",
