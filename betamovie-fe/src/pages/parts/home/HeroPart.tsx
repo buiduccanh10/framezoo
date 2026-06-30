@@ -62,11 +62,10 @@ export function HeroPart({
 
   // Navbar height is 80px (h-20)
   const navbarHeight = 80;
-  // On desktop: inline with navbar (same top position + 14px adjustment)
-  // On mobile: below navbar (navbar height + banner)
+  // Keep the sticky search below the nav on desktop so it doesn't cover nav items.
   const topOffset = isMobile
     ? navbarHeight + bannerSize + (isIOSPWA ? 34 : 0)
-    : bannerSize + 14;
+    : navbarHeight + bannerSize + 14;
 
   const time = getTimeOfDay(new Date());
   const title = randomT(`home.titles.${time}`);

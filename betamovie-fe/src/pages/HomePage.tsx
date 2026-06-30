@@ -85,11 +85,25 @@ export function HomePage() {
 
   return (
     <HomeLayout showBg={showBg}>
-      <div className="mb-2">
+      <div className="browse-page mb-2">
         <Helmet>
           <style type="text/css">{`
-            html, body {
+            html,
+            body {
               scrollbar-gutter: stable;
+              scrollbar-width: none;
+              -ms-overflow-style: none;
+            }
+
+            html::-webkit-scrollbar,
+            body::-webkit-scrollbar,
+            .browse-page *::-webkit-scrollbar {
+              display: none;
+            }
+
+            .browse-page * {
+              scrollbar-width: none;
+              -ms-overflow-style: none;
             }
           `}</style>
           <title>{t("global.name")}</title>
