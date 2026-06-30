@@ -12,7 +12,6 @@ import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
 import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
-import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { getTmdbLanguageCode } from "@/utils/language";
@@ -52,9 +51,6 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const logoRef = useRef<HTMLDivElement>(null);
   const progress = useProgressStore((s) => s.items);
   const updateItem = useProgressStore((s) => s.updateItem);
-  const enableImageLogos = usePreferencesStore(
-    (state) => state.enableImageLogos,
-  );
 
   // Check if movie is watched (>90% progress)
   const isMovieWatched = useMemo(() => {
@@ -355,7 +351,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       >
         {/* Title/Logo positioned on backdrop */}
         <div ref={logoRef} className="absolute inset-x-0 bottom-20 z-30 px-6">
-          {data.logoUrl && enableImageLogos ? (
+          {data.logoUrl ? (
             <LazyImage
               src={data.logoUrl}
               alt={data.title}

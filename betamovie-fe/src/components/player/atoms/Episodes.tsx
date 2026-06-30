@@ -27,7 +27,6 @@ import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
 import { concurrentMap } from "@/utils/async";
 import { scrollToElement } from "@/utils/scroll";
@@ -714,9 +713,7 @@ export function EpisodesView({
   const descriptionRefs = useRef<{
     [key: string]: HTMLParagraphElement | null;
   }>({});
-  const forceCompactEpisodeView = usePreferencesStore(
-    (s) => s.forceCompactEpisodeView,
-  );
+  const forceCompactEpisodeView = false;
   const seasonEpisodes = useMemo(
     () => loadingState.value?.season.episodes ?? [],
     [loadingState.value],
@@ -1231,9 +1228,7 @@ function EpisodesOverlay({
     [router],
   );
 
-  const forceCompactEpisodeView = usePreferencesStore(
-    (s) => s.forceCompactEpisodeView,
-  );
+  const forceCompactEpisodeView = false;
 
   return (
     <Overlay id={id}>

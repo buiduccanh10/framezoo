@@ -386,36 +386,6 @@ export function MigrationUploadPage() {
             uploadedData.settings.enableSkipCredits,
           );
         }
-        if (uploadedData.settings.enableDiscover !== undefined) {
-          preferencesStore.setEnableDiscover(
-            uploadedData.settings.enableDiscover,
-          );
-        }
-        if (uploadedData.settings.enableFeatured !== undefined) {
-          preferencesStore.setEnableFeatured(
-            uploadedData.settings.enableFeatured,
-          );
-        }
-        if (uploadedData.settings.enableDetailsModal !== undefined) {
-          preferencesStore.setEnableDetailsModal(
-            uploadedData.settings.enableDetailsModal,
-          );
-        }
-        if (uploadedData.settings.enableImageLogos !== undefined) {
-          preferencesStore.setEnableImageLogos(
-            uploadedData.settings.enableImageLogos,
-          );
-        }
-        if (uploadedData.settings.enableCarouselView !== undefined) {
-          preferencesStore.setEnableCarouselView(
-            uploadedData.settings.enableCarouselView,
-          );
-        }
-        if (uploadedData.settings.forceCompactEpisodeView !== undefined) {
-          preferencesStore.setForceCompactEpisodeView(
-            uploadedData.settings.forceCompactEpisodeView,
-          );
-        }
         if (uploadedData.settings.lastSuccessfulSource !== undefined) {
           preferencesStore.setLastSuccessfulSource(
             uploadedData.settings.lastSuccessfulSource,
@@ -431,11 +401,6 @@ export function MigrationUploadPage() {
         }
         if (uploadedData.settings.proxyTmdb !== undefined) {
           preferencesStore.setProxyTmdb(uploadedData.settings.proxyTmdb);
-        }
-        if (uploadedData.settings.homeSectionOrder !== undefined) {
-          preferencesStore.setHomeSectionOrder(
-            uploadedData.settings.homeSectionOrder,
-          );
         }
         if (uploadedData.settings.manualSourceSelection !== undefined) {
           preferencesStore.setManualSourceSelection(

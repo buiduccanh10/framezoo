@@ -1,18 +1,9 @@
 import classNames from "classnames";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@/components/buttons/Button";
-import { Toggle } from "@/components/buttons/Toggle";
-import { SortableList } from "@/components/form/SortableList";
 import { Icon, Icons } from "@/components/Icon";
-import { EditGroupOrderModal } from "@/components/overlays/EditGroupOrderModal";
-import { useModal } from "@/components/overlays/Modal";
 import { Heading1 } from "@/components/utils/Text";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
-import { useAuthStore } from "@/stores/auth";
-import { useBookmarkStore } from "@/stores/bookmarks";
-import { useGroupOrderStore } from "@/stores/groupOrder";
 import {
   primaryOptions,
   secondaryOptions,
@@ -279,34 +270,6 @@ export function AppearancePart(props: {
   active: string;
   inUse: string;
   setTheme: (theme: string) => void;
-
-  enableDiscover: boolean;
-  setEnableDiscover: (v: boolean) => void;
-
-  enableFeatured: boolean;
-  setEnableFeatured: (v: boolean) => void;
-
-  enableDetailsModal: boolean;
-  setEnableDetailsModal: (v: boolean) => void;
-
-  enableImageLogos: boolean;
-  setEnableImageLogos: (v: boolean) => void;
-
-  enablePauseOverlay: boolean;
-  setEnablePauseOverlay: (v: boolean) => void;
-
-  enableCarouselView: boolean;
-  setEnableCarouselView: (v: boolean) => void;
-
-  enableMinimalCards: boolean;
-  setEnableMinimalCards: (v: boolean) => void;
-
-  forceCompactEpisodeView: boolean;
-  setForceCompactEpisodeView: (v: boolean) => void;
-
-  homeSectionOrder: string[];
-  setHomeSectionOrder: (v: string[]) => void;
-
   customTheme: {
     primary: string;
     secondary: string;
@@ -327,28 +290,6 @@ export function AppearancePart(props: {
   const activeThemeRef = useRef<HTMLDivElement>(null);
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
-
-  // Group order modal
-  const bookmarks = useBookmarkStore((s) => s.bookmarks);
-  const setGroupOrder = useGroupOrderStore((s) => s.setGroupOrder);
-  const editGroupOrderModal = useModal("bookmark-edit-order-settings");
-  const backendUrl = useBackendUrl();
-  const account = useAuthStore((s) => s.account);
-
-  // Check if there are groups
-  const hasGroups = useMemo(() => {
-    const groups = new Set<string>();
-
-    Object.values(bookmarks).forEach((bookmark) => {
-      if (Array.isArray(bookmark.group)) {
-        bookmark.group.forEach((group) => groups.add(group));
-      }
-    });
-
-    groups.add("bookmarks");
-
-    return groups.size > 1;
-  }, [bookmarks]);
 
   const checkScrollPosition = () => {
     const container = carouselRef.current;
@@ -391,344 +332,94 @@ export function AppearancePart(props: {
     }
   }, [props.active]);
 
-  const handleEditGroupOrder = () => {
-    editGroupOrderModal.show();
-  };
-
-  const handleCancelGroupOrder = () => {
-    editGroupOrderModal.hide();
-  };
-
-  const handleSaveGroupOrder = (newOrder: string[]) => {
-    setGroupOrder(newOrder);
-    editGroupOrderModal.hide();
-
-    // Save to backend
-    if (backendUrl && account) {
-      useGroupOrderStore
-        .getState()
-        .saveGroupOrderToBackend(backendUrl, account);
-    }
-  };
-
   return (
     <div className="space-y-12">
       <Heading1 border>{t("settings.appearance.title")}</Heading1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* First Column - Preferences */}
-        <div className="space-y-8">
-          {/* Discover */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.discover")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.appearance.options.discoverDescription")}
-            </p>
-            <div
-              onClick={() => {
-                const newDiscoverValue = !props.enableDiscover;
-                props.setEnableDiscover(newDiscoverValue);
-                if (!newDiscoverValue) {
-                  props.setEnableFeatured(false);
-                }
-              }}
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-            >
-              <Toggle enabled={props.enableDiscover} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.appearance.options.discoverLabel")}
-              </p>
-            </div>
-          </div>
-          {/* Featured Carousel */}
-          {props.enableDiscover && (
-            <div className="pt-4 pl-4 border-l-8 border-dropdown-background">
-              <p className="text-white font-bold mb-3">
-                {t("settings.appearance.options.featured")}
-              </p>
-              <p className="max-w-[25rem] font-medium">
-                {t("settings.appearance.options.featuredDescription")}
-              </p>
-              <div
-                onClick={() => props.setEnableFeatured(!props.enableFeatured)}
-                className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-              >
-                <Toggle enabled={props.enableFeatured} />
-                <p className="flex-1 text-white font-bold">
-                  {t("settings.appearance.options.featuredLabel")}
-                </p>
-              </div>
-            </div>
+      <div className="space-y-8">
+        <div
+          ref={carouselRef}
+          className={classNames(
+            "grid grid-cols-2 gap-4 max-w-[600px] max-h-[36rem] md:max-h-[64rem] overflow-y-auto",
+            "vertical-carousel-container",
+            {
+              "hide-top-gradient": isAtTop,
+              "hide-bottom-gradient": isAtBottom,
+            },
           )}
-          {/* Detials Modal */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.modal")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.appearance.options.modalDescription")}
-            </p>
-            <div
-              onClick={() =>
-                props.setEnableDetailsModal(!props.enableDetailsModal)
-              }
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-            >
-              <Toggle enabled={props.enableDetailsModal} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.appearance.options.modalLabel")}
-              </p>
-            </div>
-          </div>
-          {/* Image Logos */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.logos")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.appearance.options.logosDescription")}
-            </p>
-            <p className="max-w-[25rem] font-medium pt-2 items-center flex gap-4">
-              <Icon icon={Icons.CIRCLE_EXCLAMATION} className="" />
-
-              {t("settings.appearance.options.logosNotice")}
-            </p>
-            <div
-              onClick={() => props.setEnableImageLogos(!props.enableImageLogos)}
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-            >
-              <Toggle enabled={props.enableImageLogos} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.appearance.options.logosLabel")}
-              </p>
-            </div>
-          </div>
-
-          {/* Pause Overlay */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.pauseOverlay")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.appearance.options.pauseOverlayDescription")}
-            </p>
-            <div
-              onClick={() =>
-                props.setEnablePauseOverlay(!props.enablePauseOverlay)
-              }
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-            >
-              <Toggle enabled={props.enablePauseOverlay} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.appearance.options.pauseOverlayLabel")}
-              </p>
-            </div>
-          </div>
-
-          {/* Carousel View */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.carouselView")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.appearance.options.carouselViewDescription")}
-            </p>
-            <div
-              onClick={() =>
-                props.setEnableCarouselView(!props.enableCarouselView)
-              }
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                "cursor-pointer opacity-100 pointer-events-auto",
-              )}
-            >
-              <Toggle enabled={props.enableCarouselView} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.appearance.options.carouselViewLabel")}
-              </p>
-            </div>
-          </div>
-
-          {/* Minimal Cards */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.minimalCards")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.appearance.options.minimalCardsDescription")}
-            </p>
-            <div
-              onClick={() =>
-                props.setEnableMinimalCards(!props.enableMinimalCards)
-              }
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                "cursor-pointer opacity-100 pointer-events-auto",
-              )}
-            >
-              <Toggle enabled={props.enableMinimalCards} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.appearance.options.minimalCardsLabel")}
-              </p>
-            </div>
-          </div>
-
-          {/* Force Compact Episode View */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.forceCompactEpisodeView")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t(
-                "settings.appearance.options.forceCompactEpisodeViewDescription",
-              )}
-            </p>
-            <div
-              onClick={() =>
-                props.setForceCompactEpisodeView(!props.forceCompactEpisodeView)
-              }
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-            >
-              <Toggle enabled={props.forceCompactEpisodeView} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.appearance.options.forceCompactEpisodeViewLabel")}
-              </p>
-            </div>
-          </div>
-
-          {/* Home Section Order */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.appearance.options.homeSectionOrder")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.appearance.options.homeSectionOrderDescription")}
-            </p>
-            <div className="my-4 max-w-[25rem]">
-              <SortableList
-                items={props.homeSectionOrder.map((section) => ({
-                  id: section,
-                  name: t(`settings.appearance.sections.${section}`),
-                }))}
-                setItems={(items) => {
-                  const newOrder = items.map((item) => item.id);
-                  props.setHomeSectionOrder(newOrder);
-                }}
+        >
+          {availableThemes.map((v) => (
+            <div key={v.id} ref={props.active === v.id ? activeThemeRef : null}>
+              <ThemePreview
+                selector={v.selector}
+                active={props.active === v.id}
+                inUse={props.inUse === v.id}
+                name={t(v.key)}
+                onClick={() => props.setTheme(v.id)}
               />
             </div>
-            {hasGroups && (
-              <div className="mt-4 max-w-[25rem]">
-                <Button
-                  theme="secondary"
-                  onClick={handleEditGroupOrder}
-                  className="w-full"
-                >
-                  {t("settings.appearance.options.homeSectionOrderGroups")}
-                </Button>
-              </div>
-            )}
-          </div>
+          ))}
         </div>
 
-        {/* Second Column - Themes */}
-        <div className="space-y-8">
-          <div
-            ref={carouselRef}
-            className={classNames(
-              "grid grid-cols-2 gap-4 max-w-[600px] max-h-[36rem] md:max-h-[64rem] overflow-y-auto",
-              "vertical-carousel-container",
-              {
-                "hide-top-gradient": isAtTop,
-                "hide-bottom-gradient": isAtBottom,
-              },
-            )}
-          >
-            {availableThemes.map((v) => (
-              <div
-                key={v.id}
-                ref={props.active === v.id ? activeThemeRef : null}
-              >
-                <ThemePreview
-                  selector={v.selector}
-                  active={props.active === v.id}
-                  inUse={props.inUse === v.id}
-                  name={t(v.key)}
-                  onClick={() => props.setTheme(v.id)}
-                />
-              </div>
-            ))}
-          </div>
-
-          {props.active === "custom" && (
-            <div className="animate-fade-in space-y-6 pt-4 border-t border-utils-divider">
-              <div>
-                <p className="text-white font-bold mb-3">
-                  {t("settings.appearance.customParts.primary")}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {primaryOptions.map((opt) => (
-                    <ColorOption
-                      key={opt.id}
-                      active={customTheme.primary === opt.id}
-                      colors={opt.colors}
-                      onClick={() =>
-                        setCustomTheme({ ...customTheme, primary: opt.id })
-                      }
-                      title={t(`settings.appearance.themes.${opt.id}`)}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-white font-bold mb-3">
-                  {t("settings.appearance.customParts.secondary")}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {secondaryOptions.map((opt) => (
-                    <ColorOption
-                      key={opt.id}
-                      active={customTheme.secondary === opt.id}
-                      colors={opt.colors}
-                      onClick={() =>
-                        setCustomTheme({ ...customTheme, secondary: opt.id })
-                      }
-                      title={t(`settings.appearance.themes.${opt.id}`)}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="text-white font-bold mb-3">
-                  {t("settings.appearance.customParts.tertiary")}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {tertiaryOptions.map((opt) => (
-                    <ColorOption
-                      key={opt.id}
-                      active={customTheme.tertiary === opt.id}
-                      colors={opt.colors}
-                      onClick={() =>
-                        setCustomTheme({ ...customTheme, tertiary: opt.id })
-                      }
-                      title={t(`settings.appearance.themes.${opt.id}`)}
-                    />
-                  ))}
-                </div>
+        {props.active === "custom" && (
+          <div className="animate-fade-in space-y-6 pt-4 border-t border-utils-divider">
+            <div>
+              <p className="text-white font-bold mb-3">
+                {t("settings.appearance.customParts.primary")}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {primaryOptions.map((opt) => (
+                  <ColorOption
+                    key={opt.id}
+                    active={customTheme.primary === opt.id}
+                    colors={opt.colors}
+                    onClick={() =>
+                      setCustomTheme({ ...customTheme, primary: opt.id })
+                    }
+                    title={t(`settings.appearance.themes.${opt.id}`)}
+                  />
+                ))}
               </div>
             </div>
-          )}
-        </div>
+            <div>
+              <p className="text-white font-bold mb-3">
+                {t("settings.appearance.customParts.secondary")}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {secondaryOptions.map((opt) => (
+                  <ColorOption
+                    key={opt.id}
+                    active={customTheme.secondary === opt.id}
+                    colors={opt.colors}
+                    onClick={() =>
+                      setCustomTheme({ ...customTheme, secondary: opt.id })
+                    }
+                    title={t(`settings.appearance.themes.${opt.id}`)}
+                  />
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-white font-bold mb-3">
+                {t("settings.appearance.customParts.tertiary")}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {tertiaryOptions.map((opt) => (
+                  <ColorOption
+                    key={opt.id}
+                    active={customTheme.tertiary === opt.id}
+                    colors={opt.colors}
+                    onClick={() =>
+                      setCustomTheme({ ...customTheme, tertiary: opt.id })
+                    }
+                    title={t(`settings.appearance.themes.${opt.id}`)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Edit Group Order Modal */}
-      <EditGroupOrderModal
-        id={editGroupOrderModal.id}
-        isShown={editGroupOrderModal.isShown}
-        onCancel={handleCancelGroupOrder}
-        onSave={handleSaveGroupOrder}
-      />
     </div>
   );
 }

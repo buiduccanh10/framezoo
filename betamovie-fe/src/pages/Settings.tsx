@@ -437,42 +437,8 @@ export function SettingsPage() {
 
   // const setDisabledEmbeds = usePreferencesStore((s) => s.setDisabledEmbeds);
 
-  const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
-  const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
-
-  const enableFeatured = usePreferencesStore((s) => s.enableFeatured);
-  const setEnableFeatured = usePreferencesStore((s) => s.setEnableFeatured);
-
-  const enableDetailsModal = usePreferencesStore((s) => s.enableDetailsModal);
-  const setEnableDetailsModal = usePreferencesStore(
-    (s) => s.setEnableDetailsModal,
-  );
-
-  const enableImageLogos = usePreferencesStore((s) => s.enableImageLogos);
-  const setEnableImageLogos = usePreferencesStore((s) => s.setEnableImageLogos);
-
   const proxyTmdb = usePreferencesStore((s) => s.proxyTmdb);
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-
-  const enableCarouselView = usePreferencesStore((s) => s.enableCarouselView);
-  const setEnableCarouselView = usePreferencesStore(
-    (s) => s.setEnableCarouselView,
-  );
-
-  const enableMinimalCards = usePreferencesStore((s) => s.enableMinimalCards);
-  const setEnableMinimalCards = usePreferencesStore(
-    (s) => s.setEnableMinimalCards,
-  );
-
-  const forceCompactEpisodeView = usePreferencesStore(
-    (s) => s.forceCompactEpisodeView,
-  );
-  const setForceCompactEpisodeView = usePreferencesStore(
-    (s) => s.setForceCompactEpisodeView,
-  );
-
-  const homeSectionOrder = usePreferencesStore((s) => s.homeSectionOrder);
-  const setHomeSectionOrder = usePreferencesStore((s) => s.setHomeSectionOrder);
 
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
@@ -493,11 +459,6 @@ export function SettingsPage() {
   );
   const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
     (s) => s.setEnableAutoResumeOnPlaybackError,
-  );
-
-  const enablePauseOverlay = usePreferencesStore((s) => s.enablePauseOverlay);
-  const setEnablePauseOverlay = usePreferencesStore(
-    (s) => s.setEnablePauseOverlay,
   );
   const setEnableNumberKeySeeking = usePreferencesStore(
     (s) => s.setEnableNumberKeySeeking,
@@ -555,36 +516,9 @@ export function SettingsPage() {
         if (settings.enableAutoSkipSegments !== undefined) {
           setEnableAutoSkipSegments(settings.enableAutoSkipSegments);
         }
-        if (settings.enableDiscover !== undefined) {
-          setEnableDiscover(settings.enableDiscover);
-        }
-        if (settings.enableFeatured !== undefined) {
-          setEnableFeatured(settings.enableFeatured);
-        }
-        if (settings.enableDetailsModal !== undefined) {
-          setEnableDetailsModal(settings.enableDetailsModal);
-        }
-        if (settings.enableImageLogos !== undefined) {
-          setEnableImageLogos(settings.enableImageLogos);
-        }
 
         if (settings.proxyTmdb !== undefined) {
           setProxyTmdb(settings.proxyTmdb);
-        }
-        if (settings.enableCarouselView !== undefined) {
-          setEnableCarouselView(settings.enableCarouselView);
-        }
-        if (settings.enableMinimalCards !== undefined) {
-          setEnableMinimalCards(settings.enableMinimalCards);
-        }
-        if (settings.forceCompactEpisodeView !== undefined) {
-          setForceCompactEpisodeView(settings.forceCompactEpisodeView);
-        }
-        if (
-          settings.homeSectionOrder !== undefined &&
-          Array.isArray(settings.homeSectionOrder)
-        ) {
-          setHomeSectionOrder(settings.homeSectionOrder);
         }
         if (settings.manualSourceSelection !== undefined) {
           setManualSourceSelection(settings.manualSourceSelection);
@@ -596,9 +530,6 @@ export function SettingsPage() {
           setEnableAutoResumeOnPlaybackError(
             settings.enableAutoResumeOnPlaybackError,
           );
-        }
-        if (settings.enablePauseOverlay !== undefined) {
-          setEnablePauseOverlay(settings.enablePauseOverlay);
         }
         if (settings.enableNumberKeySeeking !== undefined) {
           setEnableNumberKeySeeking(settings.enableNumberKeySeeking);
@@ -625,19 +556,10 @@ export function SettingsPage() {
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
-    setEnableDiscover,
-    setEnableFeatured,
-    setEnableDetailsModal,
-    setEnableImageLogos,
     setProxyTmdb,
-    setEnableCarouselView,
-    setEnableMinimalCards,
-    setForceCompactEpisodeView,
-    setHomeSectionOrder,
     setManualSourceSelection,
     setEnableDoubleClickToSeek,
     setEnableAutoResumeOnPlaybackError,
-    setEnablePauseOverlay,
     setEnableNumberKeySeeking,
     setCustomTheme,
   ]);
@@ -659,21 +581,12 @@ export function SettingsPage() {
     enableAutoplay,
     enableSkipCredits,
     enableAutoSkipSegments,
-    enableDiscover,
-    enableFeatured,
-    enableDetailsModal,
     embedOrder,
     enableEmbedOrder,
     proxyTmdb,
-    enableImageLogos,
-    enableCarouselView,
-    enableMinimalCards,
-    forceCompactEpisodeView,
-    homeSectionOrder,
     manualSourceSelection,
     enableDoubleClickToSeek,
     enableAutoResumeOnPlaybackError,
-    enablePauseOverlay,
     customThemeBaseline ?? customTheme,
   );
 
@@ -708,19 +621,10 @@ export function SettingsPage() {
         state.enableAutoplay.changed ||
         state.enableSkipCredits.changed ||
         state.enableAutoSkipSegments.changed ||
-        state.enableDiscover.changed ||
-        state.enableFeatured.changed ||
-        state.enableDetailsModal.changed ||
-        state.enableImageLogos.changed ||
         state.proxyTmdb.changed ||
-        state.enableCarouselView.changed ||
-        state.enableMinimalCards.changed ||
-        state.forceCompactEpisodeView.changed ||
-        state.homeSectionOrder.changed ||
         state.manualSourceSelection.changed ||
         state.enableDoubleClickToSeek.changed ||
         state.enableAutoResumeOnPlaybackError.changed ||
-        state.enablePauseOverlay.changed ||
         state.customTheme.changed
       ) {
         await updateSettings(backendUrl, account, {
@@ -734,21 +638,12 @@ export function SettingsPage() {
           enableAutoplay: state.enableAutoplay.state,
           enableSkipCredits: state.enableSkipCredits.state,
           enableAutoSkipSegments: state.enableAutoSkipSegments.state,
-          enableDiscover: state.enableDiscover.state,
-          enableFeatured: state.enableFeatured.state,
-          enableDetailsModal: state.enableDetailsModal.state,
-          enableImageLogos: state.enableImageLogos.state,
 
           proxyTmdb: state.proxyTmdb.state,
-          enableCarouselView: state.enableCarouselView.state,
-          enableMinimalCards: state.enableMinimalCards.state,
-          forceCompactEpisodeView: state.forceCompactEpisodeView.state,
-          homeSectionOrder: state.homeSectionOrder.state,
           manualSourceSelection: state.manualSourceSelection.state,
           enableDoubleClickToSeek: state.enableDoubleClickToSeek.state,
           enableAutoResumeOnPlaybackError:
             state.enableAutoResumeOnPlaybackError.state,
-          enablePauseOverlay: state.enablePauseOverlay.state,
           customTheme: state.customTheme.state,
         });
       }
@@ -779,10 +674,6 @@ export function SettingsPage() {
     setEnableAutoplay(state.enableAutoplay.state);
     setEnableSkipCredits(state.enableSkipCredits.state);
     setEnableAutoSkipSegments(state.enableAutoSkipSegments.state);
-    setEnableDiscover(state.enableDiscover.state);
-    setEnableFeatured(state.enableFeatured.state);
-    setEnableDetailsModal(state.enableDetailsModal.state);
-    setEnableImageLogos(state.enableImageLogos.state);
 
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
@@ -793,16 +684,11 @@ export function SettingsPage() {
     setdebridService(state.debridService.state);
     setTIDBKey(state.tidbKey.state);
     setProxyTmdb(state.proxyTmdb.state);
-    setEnableCarouselView(state.enableCarouselView.state);
-    setEnableMinimalCards(state.enableMinimalCards.state);
-    setForceCompactEpisodeView(state.forceCompactEpisodeView.state);
-    setHomeSectionOrder(state.homeSectionOrder.state);
     setManualSourceSelection(state.manualSourceSelection.state);
     setEnableDoubleClickToSeek(state.enableDoubleClickToSeek.state);
     setEnableAutoResumeOnPlaybackError(
       state.enableAutoResumeOnPlaybackError.state,
     );
-    setEnablePauseOverlay(state.enablePauseOverlay.state);
     setCustomTheme(state.customTheme.state);
     setCustomThemeBaseline(state.customTheme.state);
 
@@ -840,10 +726,6 @@ export function SettingsPage() {
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
-    setEnableDiscover,
-    setEnableFeatured,
-    setEnableDetailsModal,
-    setEnableImageLogos,
     setAppLanguage,
     setTheme,
     setSubStyling,
@@ -852,14 +734,9 @@ export function SettingsPage() {
     updateProfile,
     updateNickname,
     setProxyTmdb,
-    setEnableCarouselView,
-    setEnableMinimalCards,
-    setForceCompactEpisodeView,
-    setHomeSectionOrder,
     setManualSourceSelection,
     setEnableDoubleClickToSeek,
     setEnableAutoResumeOnPlaybackError,
-    setEnablePauseOverlay,
     setCustomTheme,
   ]);
   return (
@@ -945,24 +822,6 @@ export function SettingsPage() {
               active={previewTheme ?? "default"}
               inUse={activeTheme ?? "default"}
               setTheme={setThemeWithPreview}
-              enableDiscover={state.enableDiscover.state}
-              setEnableDiscover={state.enableDiscover.set}
-              enableFeatured={state.enableFeatured.state}
-              setEnableFeatured={state.enableFeatured.set}
-              enableDetailsModal={state.enableDetailsModal.state}
-              setEnableDetailsModal={state.enableDetailsModal.set}
-              enableImageLogos={state.enableImageLogos.state}
-              setEnableImageLogos={state.enableImageLogos.set}
-              enableCarouselView={state.enableCarouselView.state}
-              setEnableCarouselView={state.enableCarouselView.set}
-              enableMinimalCards={state.enableMinimalCards.state}
-              setEnableMinimalCards={state.enableMinimalCards.set}
-              forceCompactEpisodeView={state.forceCompactEpisodeView.state}
-              setForceCompactEpisodeView={state.forceCompactEpisodeView.set}
-              homeSectionOrder={state.homeSectionOrder.state}
-              setHomeSectionOrder={state.homeSectionOrder.set}
-              enablePauseOverlay={state.enablePauseOverlay.state}
-              setEnablePauseOverlay={state.enablePauseOverlay.set}
               customTheme={state.customTheme.state}
               setCustomTheme={state.customTheme.set}
             />

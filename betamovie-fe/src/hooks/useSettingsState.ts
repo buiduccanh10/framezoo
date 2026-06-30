@@ -59,21 +59,12 @@ export function useSettingsState(
   enableAutoplay: boolean,
   enableSkipCredits: boolean,
   enableAutoSkipSegments: boolean,
-  enableDiscover: boolean,
-  enableFeatured: boolean,
-  enableDetailsModal: boolean,
   embedOrder: string[],
   enableEmbedOrder: boolean,
   proxyTmdb: boolean,
-  enableImageLogos: boolean,
-  enableCarouselView: boolean,
-  enableMinimalCards: boolean,
-  forceCompactEpisodeView: boolean,
-  homeSectionOrder: string[],
   manualSourceSelection: boolean,
   enableDoubleClickToSeek: boolean,
   enableAutoResumeOnPlaybackError: boolean,
-  enablePauseOverlay: boolean,
   customTheme: {
     primary: string;
     secondary: string;
@@ -144,31 +135,6 @@ export function useSettingsState(
     enableAutoSkipSegmentsChanged,
   ] = useDerived(enableAutoSkipSegments);
   const [
-    enableDiscoverState,
-    setEnableDiscoverState,
-    resetEnableDiscover,
-    enableDiscoverChanged,
-  ] = useDerived(enableDiscover);
-  const [
-    enableFeaturedState,
-    setEnableFeaturedState,
-    resetEnableFeatured,
-    enableFeaturedChanged,
-  ] = useDerived(enableFeatured);
-  const [
-    enableDetailsModalState,
-    setEnableDetailsModalState,
-    resetEnableDetailsModal,
-    enableDetailsModalChanged,
-  ] = useDerived(enableDetailsModal);
-  const [
-    enableImageLogosState,
-    setEnableImageLogosState,
-    resetEnableImageLogos,
-    enableImageLogosChanged,
-  ] = useDerived(enableImageLogos);
-
-  const [
     embedOrderState,
     setEmbedOrderState,
     resetEmbedOrder,
@@ -182,30 +148,6 @@ export function useSettingsState(
   ] = useDerived(enableEmbedOrder);
   const [proxyTmdbState, setProxyTmdbState, resetProxyTmdb, proxyTmdbChanged] =
     useDerived(proxyTmdb);
-  const [
-    enableCarouselViewState,
-    setEnableCarouselViewState,
-    resetEnableCarouselView,
-    enableCarouselViewChanged,
-  ] = useDerived(enableCarouselView);
-  const [
-    enableMinimalCardsState,
-    setEnableMinimalCardsState,
-    resetEnableMinimalCards,
-    enableMinimalCardsChanged,
-  ] = useDerived(enableMinimalCards);
-  const [
-    forceCompactEpisodeViewState,
-    setForceCompactEpisodeViewState,
-    resetForceCompactEpisodeView,
-    forceCompactEpisodeViewChanged,
-  ] = useDerived(forceCompactEpisodeView);
-  const [
-    homeSectionOrderState,
-    setHomeSectionOrderState,
-    resetHomeSectionOrder,
-    homeSectionOrderChanged,
-  ] = useDerived(homeSectionOrder);
   const [
     manualSourceSelectionState,
     setManualSourceSelectionState,
@@ -224,12 +166,6 @@ export function useSettingsState(
     resetEnableAutoResumeOnPlaybackError,
     enableAutoResumeOnPlaybackErrorChanged,
   ] = useDerived(enableAutoResumeOnPlaybackError);
-  const [
-    enablePauseOverlayState,
-    setEnablePauseOverlayState,
-    resetEnablePauseOverlay,
-    enablePauseOverlayChanged,
-  ] = useDerived(enablePauseOverlay);
   const [
     customThemeState,
     setCustomThemeState,
@@ -255,22 +191,13 @@ export function useSettingsState(
     resetEnableAutoplay();
     resetEnableSkipCredits();
     resetEnableAutoSkipSegments();
-    resetEnableDiscover();
-    resetEnableFeatured();
-    resetEnableDetailsModal();
-    resetEnableImageLogos();
 
     resetEmbedOrder();
     resetEnableEmbedOrder();
     resetProxyTmdb();
-    resetEnableCarouselView();
-    resetEnableMinimalCards();
-    resetForceCompactEpisodeView();
-    resetHomeSectionOrder();
     resetManualSourceSelection();
     resetEnableDoubleClickToSeek();
     resetEnableAutoResumeOnPlaybackError();
-    resetEnablePauseOverlay();
     resetCustomTheme();
   }
 
@@ -290,21 +217,12 @@ export function useSettingsState(
     enableAutoplayChanged ||
     enableSkipCreditsChanged ||
     enableAutoSkipSegmentsChanged ||
-    enableDiscoverChanged ||
-    enableFeaturedChanged ||
-    enableDetailsModalChanged ||
-    enableImageLogosChanged ||
     embedOrderChanged ||
     enableEmbedOrderChanged ||
     proxyTmdbChanged ||
-    enableCarouselViewChanged ||
-    enableMinimalCardsChanged ||
-    forceCompactEpisodeViewChanged ||
-    homeSectionOrderChanged ||
     manualSourceSelectionChanged ||
     enableDoubleClickToSeekChanged ||
     enableAutoResumeOnPlaybackErrorChanged ||
-    enablePauseOverlayChanged ||
     customThemeChanged;
 
   return {
@@ -386,26 +304,6 @@ export function useSettingsState(
       set: setEnableAutoSkipSegmentsState,
       changed: enableAutoSkipSegmentsChanged,
     },
-    enableDiscover: {
-      state: enableDiscoverState,
-      set: setEnableDiscoverState,
-      changed: enableDiscoverChanged,
-    },
-    enableFeatured: {
-      state: enableFeaturedState,
-      set: setEnableFeaturedState,
-      changed: enableFeaturedChanged,
-    },
-    enableDetailsModal: {
-      state: enableDetailsModalState,
-      set: setEnableDetailsModalState,
-      changed: enableDetailsModalChanged,
-    },
-    enableImageLogos: {
-      state: enableImageLogosState,
-      set: setEnableImageLogosState,
-      changed: enableImageLogosChanged,
-    },
     proxyTmdb: {
       state: proxyTmdbState,
       set: setProxyTmdbState,
@@ -421,26 +319,6 @@ export function useSettingsState(
       set: setEnableEmbedOrderState,
       changed: enableEmbedOrderChanged,
     },
-    enableCarouselView: {
-      state: enableCarouselViewState,
-      set: setEnableCarouselViewState,
-      changed: enableCarouselViewChanged,
-    },
-    enableMinimalCards: {
-      state: enableMinimalCardsState,
-      set: setEnableMinimalCardsState,
-      changed: enableMinimalCardsChanged,
-    },
-    forceCompactEpisodeView: {
-      state: forceCompactEpisodeViewState,
-      set: setForceCompactEpisodeViewState,
-      changed: forceCompactEpisodeViewChanged,
-    },
-    homeSectionOrder: {
-      state: homeSectionOrderState,
-      set: setHomeSectionOrderState,
-      changed: homeSectionOrderChanged,
-    },
     manualSourceSelection: {
       state: manualSourceSelectionState,
       set: setManualSourceSelectionState,
@@ -455,11 +333,6 @@ export function useSettingsState(
       state: enableAutoResumeOnPlaybackErrorState,
       set: setEnableAutoResumeOnPlaybackErrorState,
       changed: enableAutoResumeOnPlaybackErrorChanged,
-    },
-    enablePauseOverlay: {
-      state: enablePauseOverlayState,
-      set: setEnablePauseOverlayState,
-      changed: enablePauseOverlayChanged,
     },
     customTheme: {
       state: customThemeState,

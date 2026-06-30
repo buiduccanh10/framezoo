@@ -24,22 +24,14 @@ const userSettingsSchema = z.object({
   tidbKey: z.string().nullable().optional(),
   enableAutoplay: z.boolean().optional().default(true),
   enableSkipCredits: z.boolean().optional().default(false),
-  enableDiscover: z.boolean().optional().default(true),
-  enableFeatured: z.boolean().optional().default(false),
-  enableDetailsModal: z.boolean().optional().default(false),
-  enableImageLogos: z.boolean().optional().default(true),
-  enableCarouselView: z.boolean().optional().default(false),
-  forceCompactEpisodeView: z.boolean().optional().default(false),
   disabledSources: z.array(z.string()).optional().default([]),
   embedOrder: z.array(z.string()).optional().default([]),
   enableEmbedOrder: z.boolean().optional().default(false),
   disabledEmbeds: z.array(z.string()).optional().default([]),
   proxyTmdb: z.boolean().optional().default(false),
-  homeSectionOrder: z.array(z.string()).optional().default([]),
   manualSourceSelection: z.boolean().optional().default(false),
   enableDoubleClickToSeek: z.boolean().optional().default(true),
   enableAutoResumeOnPlaybackError: z.boolean().optional().default(false),
-  enablePauseOverlay: z.boolean().optional().default(false),
 });
 
 export default defineEventHandler(async event => {
@@ -85,22 +77,14 @@ export default defineEventHandler(async event => {
         tidbKey: settings?.tidb_key || null,
         enableAutoplay: settings?.enable_autoplay ?? true,
         enableSkipCredits: settings?.enable_skip_credits ?? false,
-        enableDiscover: settings?.enable_discover ?? true,
-        enableFeatured: settings?.enable_featured ?? false,
-        enableDetailsModal: settings?.enable_details_modal ?? false,
-        enableImageLogos: settings?.enable_image_logos ?? true,
-        enableCarouselView: settings?.enable_carousel_view ?? false,
-        forceCompactEpisodeView: settings?.force_compact_episode_view ?? false,
         disabledSources: settings?.disabled_sources || [],
         embedOrder: settings?.embed_order || [],
         enableEmbedOrder: settings?.enable_embed_order ?? false,
         disabledEmbeds: settings?.disabled_embeds || [],
         proxyTmdb: settings?.proxy_tmdb ?? false,
-        homeSectionOrder: settings?.home_section_order || [],
         manualSourceSelection: settings?.manual_source_selection ?? false,
         enableDoubleClickToSeek: settings?.enable_double_click_to_seek ?? true,
         enableAutoResumeOnPlaybackError: settings?.enable_auto_resume_on_playback_error ?? false,
-        enablePauseOverlay: settings?.enable_pause_overlay ?? false,
       };
     } catch (error) {
       log.error('Failed to get user settings', {
@@ -133,22 +117,14 @@ export default defineEventHandler(async event => {
         tidb_key: validatedBody.tidbKey ?? null,
         enable_autoplay: validatedBody.enableAutoplay,
         enable_skip_credits: validatedBody.enableSkipCredits,
-        enable_discover: validatedBody.enableDiscover,
-        enable_featured: validatedBody.enableFeatured,
-        enable_details_modal: validatedBody.enableDetailsModal,
-        enable_image_logos: validatedBody.enableImageLogos,
-        enable_carousel_view: validatedBody.enableCarouselView,
-        force_compact_episode_view: validatedBody.forceCompactEpisodeView,
         disabled_sources: validatedBody.disabledSources || [],
         embed_order: validatedBody.embedOrder || [],
         enable_embed_order: validatedBody.enableEmbedOrder,
         disabled_embeds: validatedBody.disabledEmbeds || [],
         proxy_tmdb: validatedBody.proxyTmdb,
-        home_section_order: validatedBody.homeSectionOrder || [],
         manual_source_selection: validatedBody.manualSourceSelection,
         enable_double_click_to_seek: validatedBody.enableDoubleClickToSeek,
         enable_auto_resume_on_playback_error: validatedBody.enableAutoResumeOnPlaybackError,
-        enable_pause_overlay: validatedBody.enablePauseOverlay,
       };
 
       const updateData: Partial<typeof createData> = {};
@@ -174,18 +150,6 @@ export default defineEventHandler(async event => {
         updateData.enable_autoplay = createData.enable_autoplay;
       if (Object.prototype.hasOwnProperty.call(body, 'enableSkipCredits'))
         updateData.enable_skip_credits = createData.enable_skip_credits;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableDiscover'))
-        updateData.enable_discover = createData.enable_discover;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableFeatured'))
-        updateData.enable_featured = createData.enable_featured;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableDetailsModal'))
-        updateData.enable_details_modal = createData.enable_details_modal;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableImageLogos'))
-        updateData.enable_image_logos = createData.enable_image_logos;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableCarouselView'))
-        updateData.enable_carousel_view = createData.enable_carousel_view;
-      if (Object.prototype.hasOwnProperty.call(body, 'forceCompactEpisodeView'))
-        updateData.force_compact_episode_view = createData.force_compact_episode_view;
       if (Object.prototype.hasOwnProperty.call(body, 'disabledSources'))
         updateData.disabled_sources = createData.disabled_sources;
       if (Object.prototype.hasOwnProperty.call(body, 'embedOrder'))
@@ -196,8 +160,6 @@ export default defineEventHandler(async event => {
         updateData.disabled_embeds = createData.disabled_embeds;
       if (Object.prototype.hasOwnProperty.call(body, 'proxyTmdb'))
         updateData.proxy_tmdb = createData.proxy_tmdb;
-      if (Object.prototype.hasOwnProperty.call(body, 'homeSectionOrder'))
-        updateData.home_section_order = createData.home_section_order;
       if (Object.prototype.hasOwnProperty.call(body, 'manualSourceSelection'))
         updateData.manual_source_selection = createData.manual_source_selection;
       if (Object.prototype.hasOwnProperty.call(body, 'enableDoubleClickToSeek'))
@@ -205,8 +167,6 @@ export default defineEventHandler(async event => {
       if (Object.prototype.hasOwnProperty.call(body, 'enableAutoResumeOnPlaybackError'))
         updateData.enable_auto_resume_on_playback_error =
           createData.enable_auto_resume_on_playback_error;
-      if (Object.prototype.hasOwnProperty.call(body, 'enablePauseOverlay'))
-        updateData.enable_pause_overlay = createData.enable_pause_overlay;
 
       log.info('Preparing to upsert settings', {
         userId,
@@ -238,22 +198,14 @@ export default defineEventHandler(async event => {
         tidbKey: settings.tidb_key,
         enableAutoplay: settings.enable_autoplay,
         enableSkipCredits: settings.enable_skip_credits,
-        enableDiscover: settings.enable_discover,
-        enableFeatured: settings.enable_featured,
-        enableDetailsModal: settings.enable_details_modal,
-        enableImageLogos: settings.enable_image_logos,
-        enableCarouselView: settings.enable_carousel_view,
-        forceCompactEpisodeView: settings.force_compact_episode_view,
         disabledSources: settings.disabled_sources,
         embedOrder: settings.embed_order,
         enableEmbedOrder: settings.enable_embed_order,
         disabledEmbeds: settings.disabled_embeds,
         proxyTmdb: settings.proxy_tmdb,
-        homeSectionOrder: settings.home_section_order,
         manualSourceSelection: settings.manual_source_selection,
         enableDoubleClickToSeek: settings.enable_double_click_to_seek,
         enableAutoResumeOnPlaybackError: settings.enable_auto_resume_on_playback_error,
-        enablePauseOverlay: settings.enable_pause_overlay,
       };
     } catch (error) {
       log.error('Failed to update user settings', {

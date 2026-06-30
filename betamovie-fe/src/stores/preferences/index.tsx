@@ -11,13 +11,6 @@ export interface PreferencesStore {
   enableAutoplay: boolean;
   enableSkipCredits: boolean;
   enableAutoSkipSegments: boolean;
-  enableDiscover: boolean;
-  enableFeatured: boolean;
-  enableDetailsModal: boolean;
-  enableImageLogos: boolean;
-  enableCarouselView: boolean;
-  enableMinimalCards: boolean;
-  forceCompactEpisodeView: boolean;
   lastSuccessfulSource: string | null;
   embedOrder: string[];
   enableEmbedOrder: boolean;
@@ -27,24 +20,15 @@ export interface PreferencesStore {
   debridToken: string | null;
   debridService: string;
   tidbKey: string | null;
-  homeSectionOrder: string[];
   manualSourceSelection: boolean;
   enableDoubleClickToSeek: boolean;
   enableAutoResumeOnPlaybackError: boolean;
   enableNumberKeySeeking: boolean;
-  enablePauseOverlay: boolean;
   keyboardShortcuts: KeyboardShortcuts;
 
   setEnableAutoplay(v: boolean): void;
   setEnableSkipCredits(v: boolean): void;
   setEnableAutoSkipSegments(v: boolean): void;
-  setEnableDiscover(v: boolean): void;
-  setEnableFeatured(v: boolean): void;
-  setEnableDetailsModal(v: boolean): void;
-  setEnableImageLogos(v: boolean): void;
-  setEnableCarouselView(v: boolean): void;
-  setEnableMinimalCards(v: boolean): void;
-  setForceCompactEpisodeView(v: boolean): void;
   setLastSuccessfulSource(v: string | null): void;
   setEmbedOrder(v: string[]): void;
   setEnableEmbedOrder(v: boolean): void;
@@ -54,12 +38,10 @@ export interface PreferencesStore {
   setdebridToken(v: string | null): void;
   setdebridService(v: string): void;
   setTIDBKey(v: string | null): void;
-  setHomeSectionOrder(v: string[]): void;
   setManualSourceSelection(v: boolean): void;
   setEnableDoubleClickToSeek(v: boolean): void;
   setEnableAutoResumeOnPlaybackError(v: boolean): void;
   setEnableNumberKeySeeking(v: boolean): void;
-  setEnablePauseOverlay(v: boolean): void;
   setKeyboardShortcuts(v: KeyboardShortcuts): void;
 }
 
@@ -69,13 +51,6 @@ export const usePreferencesStore = create(
       enableAutoplay: true,
       enableSkipCredits: false,
       enableAutoSkipSegments: false,
-      enableDiscover: true,
-      enableFeatured: false,
-      enableDetailsModal: false,
-      enableImageLogos: true,
-      enableCarouselView: false,
-      enableMinimalCards: false,
-      forceCompactEpisodeView: false,
       lastSuccessfulSource: null,
       embedOrder: [],
       enableEmbedOrder: false,
@@ -85,12 +60,10 @@ export const usePreferencesStore = create(
       debridToken: null,
       debridService: "realdebrid",
       tidbKey: null,
-      homeSectionOrder: ["watching", "bookmarks"],
       manualSourceSelection: false,
       enableDoubleClickToSeek: true,
       enableAutoResumeOnPlaybackError: true,
       enableNumberKeySeeking: true,
-      enablePauseOverlay: false,
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
 
       setEnableAutoplay(v) {
@@ -106,41 +79,6 @@ export const usePreferencesStore = create(
       setEnableAutoSkipSegments(v) {
         set((s) => {
           s.enableAutoSkipSegments = v;
-        });
-      },
-      setEnableDiscover(v) {
-        set((s) => {
-          s.enableDiscover = v;
-        });
-      },
-      setEnableFeatured(v) {
-        set((s) => {
-          s.enableFeatured = v;
-        });
-      },
-      setEnableDetailsModal(v) {
-        set((s) => {
-          s.enableDetailsModal = v;
-        });
-      },
-      setEnableImageLogos(v) {
-        set((s) => {
-          s.enableImageLogos = v;
-        });
-      },
-      setEnableCarouselView(v) {
-        set((s) => {
-          s.enableCarouselView = v;
-        });
-      },
-      setEnableMinimalCards(v) {
-        set((s) => {
-          s.enableMinimalCards = v;
-        });
-      },
-      setForceCompactEpisodeView(v) {
-        set((s) => {
-          s.forceCompactEpisodeView = v;
         });
       },
       setLastSuccessfulSource(v) {
@@ -188,11 +126,6 @@ export const usePreferencesStore = create(
           s.tidbKey = v;
         });
       },
-      setHomeSectionOrder(v) {
-        set((s) => {
-          s.homeSectionOrder = v.length > 0 ? v : ["watching", "bookmarks"];
-        });
-      },
       setManualSourceSelection(v) {
         set((s) => {
           s.manualSourceSelection = v;
@@ -211,11 +144,6 @@ export const usePreferencesStore = create(
       setEnableNumberKeySeeking(v) {
         set((s) => {
           s.enableNumberKeySeeking = v;
-        });
-      },
-      setEnablePauseOverlay(v) {
-        set((s) => {
-          s.enablePauseOverlay = v;
         });
       },
       setKeyboardShortcuts(v) {

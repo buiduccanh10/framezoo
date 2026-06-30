@@ -55,25 +55,11 @@ export function useAuthData() {
   const setEnableSkipCredits = usePreferencesStore(
     (s) => s.setEnableSkipCredits,
   );
-  const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
-  const setEnableFeatured = usePreferencesStore((s) => s.setEnableFeatured);
-  const setEnableDetailsModal = usePreferencesStore(
-    (s) => s.setEnableDetailsModal,
-  );
-  const setEnableImageLogos = usePreferencesStore((s) => s.setEnableImageLogos);
-  const setEnableCarouselView = usePreferencesStore(
-    (s) => s.setEnableCarouselView,
-  );
-  const setForceCompactEpisodeView = usePreferencesStore(
-    (s) => s.setForceCompactEpisodeView,
-  );
 
   const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
   const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
 
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-
-  const setHomeSectionOrder = usePreferencesStore((s) => s.setHomeSectionOrder);
   const setEnableDoubleClickToSeek = usePreferencesStore(
     (s) => s.setEnableDoubleClickToSeek,
   );
@@ -88,9 +74,6 @@ export function useAuthData() {
   );
   const setKeyboardShortcuts = usePreferencesStore(
     (s) => s.setKeyboardShortcuts,
-  );
-  const setEnableMinimalCards = usePreferencesStore(
-    (s) => s.setEnableMinimalCards,
   );
 
   const login = useCallback(
@@ -180,30 +163,6 @@ export function useAuthData() {
         setEnableSkipCredits(settings.enableSkipCredits);
       }
 
-      if (settings.enableDiscover !== undefined) {
-        setEnableDiscover(settings.enableDiscover);
-      }
-
-      if (settings.enableFeatured !== undefined) {
-        setEnableFeatured(settings.enableFeatured);
-      }
-
-      if (settings.enableDetailsModal !== undefined) {
-        setEnableDetailsModal(settings.enableDetailsModal);
-      }
-
-      if (settings.enableImageLogos !== undefined) {
-        setEnableImageLogos(settings.enableImageLogos);
-      }
-
-      if (settings.enableCarouselView !== undefined) {
-        setEnableCarouselView(settings.enableCarouselView);
-      }
-
-      if (settings.forceCompactEpisodeView !== undefined) {
-        setForceCompactEpisodeView(settings.forceCompactEpisodeView);
-      }
-
       if (settings.embedOrder !== undefined) {
         setEmbedOrder(settings.embedOrder ?? []);
       }
@@ -228,12 +187,6 @@ export function useAuthData() {
         setdebridService(settings.debridService);
       }
 
-      if (settings.homeSectionOrder !== undefined) {
-        setHomeSectionOrder(
-          settings.homeSectionOrder ?? ["watching", "bookmarks"],
-        );
-      }
-
       if (settings.manualSourceSelection !== undefined) {
         setManualSourceSelection(settings.manualSourceSelection);
       }
@@ -255,10 +208,6 @@ export function useAuthData() {
       if (settings.keyboardShortcuts !== undefined) {
         setKeyboardShortcuts(settings.keyboardShortcuts);
       }
-
-      if (settings.enableMinimalCards !== undefined) {
-        setEnableMinimalCards(settings.enableMinimalCards);
-      }
     },
     [
       replaceBookmarks,
@@ -272,26 +221,17 @@ export function useAuthData() {
 
       setEnableAutoplay,
       setEnableSkipCredits,
-      setEnableDiscover,
-      setEnableFeatured,
-      setEnableDetailsModal,
-      setEnableImageLogos,
-      setEnableCarouselView,
-      setForceCompactEpisodeView,
-
       setEmbedOrder,
       setEnableEmbedOrder,
       setProxyTmdb,
       setFebboxKey,
       setdebridToken,
       setdebridService,
-      setHomeSectionOrder,
       setManualSourceSelection,
       setEnableDoubleClickToSeek,
       setEnableAutoResumeOnPlaybackError,
       setEnableNumberKeySeeking,
       setKeyboardShortcuts,
-      setEnableMinimalCards,
     ],
   );
 
