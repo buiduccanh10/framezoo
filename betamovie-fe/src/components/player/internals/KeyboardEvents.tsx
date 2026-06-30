@@ -49,7 +49,6 @@ export function KeyboardEvents() {
   const setShowDelayIndicator = useSubtitleStore(
     (s) => s.setShowDelayIndicator,
   );
-  const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
   const storedKeyboardShortcuts = usePreferencesStore(
     (s) => s.keyboardShortcuts,
   );
@@ -60,12 +59,6 @@ export function KeyboardEvents() {
       ...storedKeyboardShortcuts,
     }),
     [storedKeyboardShortcuts],
-  );
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
-  const setEnableNativeSubtitles = usePreferencesStore(
-    (s) => s.setEnableNativeSubtitles,
   );
   const enableNumberKeySeeking = usePreferencesStore(
     (s) => s.enableNumberKeySeeking,
@@ -311,12 +304,9 @@ export function KeyboardEvents() {
     speedIndicatorTimeoutRef,
     boostTimeoutRef,
     isPendingBoostRef,
-    enableHoldToBoost,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
-    enableNativeSubtitles,
-    setEnableNativeSubtitles,
     enableNumberKeySeeking,
   });
 
@@ -348,12 +338,9 @@ export function KeyboardEvents() {
       speedIndicatorTimeoutRef,
       boostTimeoutRef,
       isPendingBoostRef,
-      enableHoldToBoost,
       navigateToNextEpisode,
       navigateToPreviousEpisode,
       keyboardShortcuts,
-      enableNativeSubtitles,
-      setEnableNativeSubtitles,
       enableNumberKeySeeking,
     };
   }, [
@@ -378,12 +365,9 @@ export function KeyboardEvents() {
     isInWatchParty,
     setSpeedBoosted,
     setShowSpeedIndicator,
-    enableHoldToBoost,
     navigateToNextEpisode,
     navigateToPreviousEpisode,
     keyboardShortcuts,
-    enableNativeSubtitles,
-    setEnableNativeSubtitles,
     enableNumberKeySeeking,
   ]);
 
@@ -431,12 +415,11 @@ export function KeyboardEvents() {
         if (next) dataRef.current.display?.setPlaybackRate(next);
       }
 
-      // Handle spacebar press for play/pause and hold for 2x speed - disabled in watch party or when hold to boost is disabled
+      // Handle spacebar press for play/pause and hold for 2x speed - disabled in watch party
       // Space is locked, always check it
       if (
         k === LOCKED_SHORTCUTS.PLAY_PAUSE_SPACE &&
-        !dataRef.current.isInWatchParty &&
-        dataRef.current.enableHoldToBoost
+        !dataRef.current.isInWatchParty
       ) {
         // Skip if it's a repeated event
         if (evt.repeat) {
@@ -498,11 +481,11 @@ export function KeyboardEvents() {
         }, 300); // 300ms delay before boost takes effect
       }
 
-      // Handle spacebar press for simple play/pause when hold to boost is disabled or in watch party mode
+      // Handle spacebar press for simple play/pause in watch party mode
       // Space is locked, always check it
       if (
         k === LOCKED_SHORTCUTS.PLAY_PAUSE_SPACE &&
-        (!dataRef.current.enableHoldToBoost || dataRef.current.isInWatchParty)
+        dataRef.current.isInWatchParty
       ) {
         // Skip if it's a repeated event
         if (evt.repeat) {
@@ -753,31 +736,13 @@ export function KeyboardEvents() {
           dataRef.current.setCurrentOverlay(null);
         }, 3000);
       }
-
-      // Toggle native subtitles - customizable
-      const toggleNativeSubtitles =
-        dataRef.current.keyboardShortcuts[ShortcutId.TOGGLE_NATIVE_SUBTITLES];
-      if (
-        toggleNativeSubtitles?.key &&
-        matchesShortcut(evt, toggleNativeSubtitles)
-      ) {
-        evt.preventDefault();
-        evt.stopPropagation();
-        dataRef.current.setEnableNativeSubtitles(
-          !dataRef.current.enableNativeSubtitles,
-        );
-      }
     };
 
     const keyupEventHandler = (evt: KeyboardEvent) => {
       const k = evt.key;
 
-      // Handle spacebar release - only handle speed boost logic when not in watch party and hold to boost is enabled
-      if (
-        k === " " &&
-        !dataRef.current.isInWatchParty &&
-        dataRef.current.enableHoldToBoost
-      ) {
+      // Handle spacebar release - only handle speed boost logic when not in watch party
+      if (k === " " && !dataRef.current.isInWatchParty) {
         // If we haven't applied the boost yet but were about to, cancel it
         if (dataRef.current.isPendingBoostRef.current) {
           dataRef.current.isPendingBoostRef.current = false;

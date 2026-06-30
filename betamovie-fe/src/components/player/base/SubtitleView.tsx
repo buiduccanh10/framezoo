@@ -10,7 +10,6 @@ import {
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { Transition } from "@/components/utils/Transition";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
 
 export const wordOverrides: Record<string, string> = {
@@ -246,22 +245,15 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   const documentPictureInPictureWindow = usePlayerStore(
     (s) => s.interface.documentPictureInPictureWindow,
   );
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
-
-  const asTrack = usePlayerStore((s) => s.caption.asTrack);
   const documentPictureInPictureRoots =
     pictureInPictureMode === "document"
       ? getDocumentPictureInPictureRoots(documentPictureInPictureWindow)
       : null;
   const shouldUseDocumentPictureInPictureCaptionStyle =
     pictureInPictureMode === "document";
-  // Hide custom captions when native subtitles are enabled or when asTrack is true (e.g. mobile fullscreen)
+  // Hide custom captions when native subtitles are automatically used (e.g. in normal mode)
   const shouldUseNativeTrack =
-    pictureInPictureMode !== "document" &&
-    (enableNativeSubtitles || asTrack) &&
-    source !== null;
+    pictureInPictureMode !== "document" && source !== null;
   if (shouldUseNativeTrack || (!caption && !secondaryCaption) || isCasting)
     return null;
 

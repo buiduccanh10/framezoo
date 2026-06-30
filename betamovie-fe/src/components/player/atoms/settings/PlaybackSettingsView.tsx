@@ -1,16 +1,12 @@
 import classNames from "classnames";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-import { updateSettings } from "@/backend/accounts/settings";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Menu } from "@/components/player/internals/ContextMenu";
-import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
-import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useWatchPartyStore } from "@/stores/watchParty";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 
@@ -166,33 +162,10 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   const display = usePlayerStore((s) => s.display);
   // const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
   // const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
-  const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
-  const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
-  const enableLowPerformanceMode = usePreferencesStore(
-    (s) => s.enableLowPerformanceMode,
-  );
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
 
-  const account = useAuthStore((s) => s.account);
-  const backendUrl = useBackendUrl();
-  const allowAutoplay = useMemo(() => isAutoplayAllowed(), []);
-  const canShowAutoplay =
-    !isInWatchParty && allowAutoplay && !enableLowPerformanceMode;
-
-  const saveAutoplaySetting = useCallback(
-    async (value: boolean) => {
-      if (!account || !backendUrl) return;
-
-      try {
-        await updateSettings(backendUrl, account, {
-          enableAutoplay: value,
-        });
-      } catch (error) {
-        console.error("Failed to save autoplay setting:", error);
-      }
-    },
-    [account, backendUrl],
-  );
+  const autoplayEnabled = isAutoplayAllowed();
+  const canShowAutoplay = !isInWatchParty;
 
   const setPlaybackRate = useCallback(
     (v: number) => {
@@ -201,13 +174,6 @@ export function PlaybackSettingsView({ id }: { id: string }) {
     },
     [display, isInWatchParty],
   );
-
-  // Handle autoplay toggle with backend save
-  const handleAutoplayToggle = useCallback(() => {
-    const newValue = !enableAutoplay;
-    setEnableAutoplay(newValue);
-    saveAutoplaySetting(newValue);
-  }, [enableAutoplay, setEnableAutoplay, saveAutoplaySetting]);
 
   // Force 1x speed in watch party
   useEffect(() => {
@@ -241,29 +207,10 @@ export function PlaybackSettingsView({ id }: { id: string }) {
       <Menu.Section>
         <div className="space-y-4 mt-3">
           {canShowAutoplay && (
-            <Menu.Link
-              rightSide={
-                <Toggle
-                  enabled={enableAutoplay}
-                  onClick={handleAutoplayToggle}
-                />
-              }
-            >
+            <Menu.Link rightSide={<Toggle enabled={autoplayEnabled} />}>
               {t("settings.preferences.autoplayLabel")}
             </Menu.Link>
           )}
-          {/* {!enableLowPerformanceMode && (
-            <Menu.Link
-              rightSide={
-                <Toggle
-                  enabled={enableThumbnails}
-                  onClick={handleThumbnailToggle}
-                />
-              }
-            >
-              {t("settings.preferences.thumbnailLabel")}
-            </Menu.Link>
-          )} */}
         </div>
       </Menu.Section>
     </>

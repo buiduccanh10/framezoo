@@ -14,8 +14,6 @@ export default defineNitroConfig({
     tasks: true,
   },
   scheduledTasks: {
-    // TMDB Crawler - Every 6 hours
-    '0 */6 * * *': ['jobs:tmdb-crawler'],
     // Daily cron jobs (midnight)
     '0 0 * * *': ['jobs:clear-metrics:daily'],
     // Weekly cron jobs (Sunday midnight)

@@ -14,7 +14,6 @@ import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
-import { usePreferencesStore } from "@/stores/preferences";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { getRTIcon } from "@/utils/rottenTomatoes";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
@@ -192,9 +191,6 @@ export function FeaturedCarousel({
   const rtCacheRef = useRef<Record<string, FeaturedRTData | null>>({});
   const navigate = useNavigate();
 
-  const enableImageLogos = usePreferencesStore(
-    (state) => state.enableImageLogos,
-  );
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
   const { width: windowWidth, height: windowHeight } = useWindowSize();
@@ -846,7 +842,7 @@ export function FeaturedCarousel({
       >
         <div className="container mx-auto px-8 lg:px-4 flex justify-between items-end w-full">
           <div className="max-w-3xl">
-            {logoUrl && enableImageLogos ? (
+            {logoUrl ? (
               <LazyImage
                 src={logoUrl}
                 alt={mediaTitle}

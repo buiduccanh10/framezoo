@@ -6,7 +6,6 @@ import { buildVttObjectUrl } from "@/components/player/utils/captions";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { isSafari } from "@/utils/detectFeatures";
 
 import { useInitializeSource } from "../hooks/useInitializePlayer";
@@ -88,24 +87,18 @@ function VideoElement() {
   const documentPictureInPictureWindow = usePlayerStore(
     (s) => s.interface.documentPictureInPictureWindow,
   );
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
   const trackObjectUrl = useObjectUrl(
     () => (vttData ? buildVttObjectUrl(vttData, secondaryVttData) : null),
     [vttData, secondaryVttData],
   );
 
-  const asTrack = usePlayerStore((s) => s.caption.asTrack);
   const documentPictureInPictureRoots =
     pictureInPictureMode === "document"
       ? getDocumentPictureInPictureRoots(documentPictureInPictureWindow)
       : null;
-  // Use native tracks when the setting is enabled or when requested (e.g. mobile fullscreen)
+  // Use native tracks automatically for non-document PiP
   const shouldUseNativeTrack =
-    pictureInPictureMode !== "document" &&
-    (enableNativeSubtitles || asTrack) &&
-    source !== null;
+    pictureInPictureMode !== "document" && source !== null;
 
   const handleVideoRef = useCallback((node: HTMLVideoElement | null) => {
     videoEl.current = node;

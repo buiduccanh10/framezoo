@@ -22,30 +22,16 @@ const userSettingsSchema = z.object({
   debridToken: z.string().nullable().optional(),
   debridService: z.string().nullable().optional(),
   tidbKey: z.string().nullable().optional(),
-  enableThumbnails: z.boolean().optional().default(true),
   enableAutoplay: z.boolean().optional().default(true),
-  enableSkipCredits: z.boolean().optional().default(true),
-  enableDiscover: z.boolean().optional().default(true),
-  enableFeatured: z.boolean().optional().default(false),
-  enableDetailsModal: z.boolean().optional().default(false),
-  enableImageLogos: z.boolean().optional().default(true),
-  enableCarouselView: z.boolean().optional().default(false),
-  forceCompactEpisodeView: z.boolean().optional().default(false),
-  sourceOrder: z.array(z.string()).optional().default([]),
-  enableSourceOrder: z.boolean().optional().default(false),
+  enableSkipCredits: z.boolean().optional().default(false),
   disabledSources: z.array(z.string()).optional().default([]),
   embedOrder: z.array(z.string()).optional().default([]),
   enableEmbedOrder: z.boolean().optional().default(false),
   disabledEmbeds: z.array(z.string()).optional().default([]),
   proxyTmdb: z.boolean().optional().default(false),
-  enableLowPerformanceMode: z.boolean().optional().default(false),
-  enableNativeSubtitles: z.boolean().optional().default(false),
-  enableHoldToBoost: z.boolean().optional().default(false),
-  homeSectionOrder: z.array(z.string()).optional().default([]),
   manualSourceSelection: z.boolean().optional().default(false),
-  enableDoubleClickToSeek: z.boolean().optional().default(false),
+  enableDoubleClickToSeek: z.boolean().optional().default(true),
   enableAutoResumeOnPlaybackError: z.boolean().optional().default(false),
-  enablePauseOverlay: z.boolean().optional().default(false),
 });
 
 export default defineEventHandler(async event => {
@@ -89,30 +75,16 @@ export default defineEventHandler(async event => {
         debridToken: settings?.debrid_token || null,
         debridService: settings?.debrid_service || null,
         tidbKey: settings?.tidb_key || null,
-        enableThumbnails: settings?.enable_thumbnails ?? true,
         enableAutoplay: settings?.enable_autoplay ?? true,
-        enableSkipCredits: settings?.enable_skip_credits ?? true,
-        enableDiscover: settings?.enable_discover ?? true,
-        enableFeatured: settings?.enable_featured ?? false,
-        enableDetailsModal: settings?.enable_details_modal ?? false,
-        enableImageLogos: settings?.enable_image_logos ?? true,
-        enableCarouselView: settings?.enable_carousel_view ?? false,
-        forceCompactEpisodeView: settings?.force_compact_episode_view ?? false,
-        sourceOrder: settings?.source_order || [],
-        enableSourceOrder: settings?.enable_source_order ?? false,
+        enableSkipCredits: settings?.enable_skip_credits ?? false,
         disabledSources: settings?.disabled_sources || [],
         embedOrder: settings?.embed_order || [],
         enableEmbedOrder: settings?.enable_embed_order ?? false,
         disabledEmbeds: settings?.disabled_embeds || [],
         proxyTmdb: settings?.proxy_tmdb ?? false,
-        enableLowPerformanceMode: settings?.enable_low_performance_mode ?? false,
-        enableNativeSubtitles: settings?.enable_native_subtitles ?? false,
-        enableHoldToBoost: settings?.enable_hold_to_boost ?? false,
-        homeSectionOrder: settings?.home_section_order || [],
         manualSourceSelection: settings?.manual_source_selection ?? false,
-        enableDoubleClickToSeek: settings?.enable_double_click_to_seek ?? false,
+        enableDoubleClickToSeek: settings?.enable_double_click_to_seek ?? true,
         enableAutoResumeOnPlaybackError: settings?.enable_auto_resume_on_playback_error ?? false,
-        enablePauseOverlay: settings?.enable_pause_overlay ?? false,
       };
     } catch (error) {
       log.error('Failed to get user settings', {
@@ -143,30 +115,16 @@ export default defineEventHandler(async event => {
         debrid_token: validatedBody.debridToken ?? null,
         debrid_service: validatedBody.debridService ?? null,
         tidb_key: validatedBody.tidbKey ?? null,
-        enable_thumbnails: validatedBody.enableThumbnails,
         enable_autoplay: validatedBody.enableAutoplay,
         enable_skip_credits: validatedBody.enableSkipCredits,
-        enable_discover: validatedBody.enableDiscover,
-        enable_featured: validatedBody.enableFeatured,
-        enable_details_modal: validatedBody.enableDetailsModal,
-        enable_image_logos: validatedBody.enableImageLogos,
-        enable_carousel_view: validatedBody.enableCarouselView,
-        force_compact_episode_view: validatedBody.forceCompactEpisodeView,
-        source_order: validatedBody.sourceOrder || [],
-        enable_source_order: validatedBody.enableSourceOrder,
         disabled_sources: validatedBody.disabledSources || [],
         embed_order: validatedBody.embedOrder || [],
         enable_embed_order: validatedBody.enableEmbedOrder,
         disabled_embeds: validatedBody.disabledEmbeds || [],
         proxy_tmdb: validatedBody.proxyTmdb,
-        enable_low_performance_mode: validatedBody.enableLowPerformanceMode,
-        enable_native_subtitles: validatedBody.enableNativeSubtitles,
-        enable_hold_to_boost: validatedBody.enableHoldToBoost,
-        home_section_order: validatedBody.homeSectionOrder || [],
         manual_source_selection: validatedBody.manualSourceSelection,
         enable_double_click_to_seek: validatedBody.enableDoubleClickToSeek,
         enable_auto_resume_on_playback_error: validatedBody.enableAutoResumeOnPlaybackError,
-        enable_pause_overlay: validatedBody.enablePauseOverlay,
       };
 
       const updateData: Partial<typeof createData> = {};
@@ -188,28 +146,10 @@ export default defineEventHandler(async event => {
         updateData.debrid_service = createData.debrid_service;
       if (Object.prototype.hasOwnProperty.call(body, 'tidbKey'))
         updateData.tidb_key = createData.tidb_key;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableThumbnails'))
-        updateData.enable_thumbnails = createData.enable_thumbnails;
       if (Object.prototype.hasOwnProperty.call(body, 'enableAutoplay'))
         updateData.enable_autoplay = createData.enable_autoplay;
       if (Object.prototype.hasOwnProperty.call(body, 'enableSkipCredits'))
         updateData.enable_skip_credits = createData.enable_skip_credits;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableDiscover'))
-        updateData.enable_discover = createData.enable_discover;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableFeatured'))
-        updateData.enable_featured = createData.enable_featured;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableDetailsModal'))
-        updateData.enable_details_modal = createData.enable_details_modal;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableImageLogos'))
-        updateData.enable_image_logos = createData.enable_image_logos;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableCarouselView'))
-        updateData.enable_carousel_view = createData.enable_carousel_view;
-      if (Object.prototype.hasOwnProperty.call(body, 'forceCompactEpisodeView'))
-        updateData.force_compact_episode_view = createData.force_compact_episode_view;
-      if (Object.prototype.hasOwnProperty.call(body, 'sourceOrder'))
-        updateData.source_order = createData.source_order;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableSourceOrder'))
-        updateData.enable_source_order = createData.enable_source_order;
       if (Object.prototype.hasOwnProperty.call(body, 'disabledSources'))
         updateData.disabled_sources = createData.disabled_sources;
       if (Object.prototype.hasOwnProperty.call(body, 'embedOrder'))
@@ -220,14 +160,6 @@ export default defineEventHandler(async event => {
         updateData.disabled_embeds = createData.disabled_embeds;
       if (Object.prototype.hasOwnProperty.call(body, 'proxyTmdb'))
         updateData.proxy_tmdb = createData.proxy_tmdb;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableLowPerformanceMode'))
-        updateData.enable_low_performance_mode = createData.enable_low_performance_mode;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableNativeSubtitles'))
-        updateData.enable_native_subtitles = createData.enable_native_subtitles;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableHoldToBoost'))
-        updateData.enable_hold_to_boost = createData.enable_hold_to_boost;
-      if (Object.prototype.hasOwnProperty.call(body, 'homeSectionOrder'))
-        updateData.home_section_order = createData.home_section_order;
       if (Object.prototype.hasOwnProperty.call(body, 'manualSourceSelection'))
         updateData.manual_source_selection = createData.manual_source_selection;
       if (Object.prototype.hasOwnProperty.call(body, 'enableDoubleClickToSeek'))
@@ -235,8 +167,6 @@ export default defineEventHandler(async event => {
       if (Object.prototype.hasOwnProperty.call(body, 'enableAutoResumeOnPlaybackError'))
         updateData.enable_auto_resume_on_playback_error =
           createData.enable_auto_resume_on_playback_error;
-      if (Object.prototype.hasOwnProperty.call(body, 'enablePauseOverlay'))
-        updateData.enable_pause_overlay = createData.enable_pause_overlay;
 
       log.info('Preparing to upsert settings', {
         userId,
@@ -266,30 +196,16 @@ export default defineEventHandler(async event => {
         debridToken: settings.debrid_token,
         debridService: settings.debrid_service,
         tidbKey: settings.tidb_key,
-        enableThumbnails: settings.enable_thumbnails,
         enableAutoplay: settings.enable_autoplay,
         enableSkipCredits: settings.enable_skip_credits,
-        enableDiscover: settings.enable_discover,
-        enableFeatured: settings.enable_featured,
-        enableDetailsModal: settings.enable_details_modal,
-        enableImageLogos: settings.enable_image_logos,
-        enableCarouselView: settings.enable_carousel_view,
-        forceCompactEpisodeView: settings.force_compact_episode_view,
-        sourceOrder: settings.source_order,
-        enableSourceOrder: settings.enable_source_order,
         disabledSources: settings.disabled_sources,
         embedOrder: settings.embed_order,
         enableEmbedOrder: settings.enable_embed_order,
         disabledEmbeds: settings.disabled_embeds,
         proxyTmdb: settings.proxy_tmdb,
-        enableLowPerformanceMode: settings.enable_low_performance_mode,
-        enableNativeSubtitles: settings.enable_native_subtitles,
-        enableHoldToBoost: settings.enable_hold_to_boost,
-        homeSectionOrder: settings.home_section_order,
         manualSourceSelection: settings.manual_source_selection,
         enableDoubleClickToSeek: settings.enable_double_click_to_seek,
         enableAutoResumeOnPlaybackError: settings.enable_auto_resume_on_playback_error,
-        enablePauseOverlay: settings.enable_pause_overlay,
       };
     } catch (error) {
       log.error('Failed to update user settings', {

@@ -7,7 +7,6 @@ import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFi
 import { useLanguageStore } from "@/stores/language";
 import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
@@ -72,9 +71,6 @@ export function useCaptions() {
   );
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
 
   const captions = useMemo(
@@ -206,12 +202,7 @@ export function useCaptions() {
 
       setLanguage(caption.language);
 
-      // Preserve an existing native-track request when the subtitle finished
-      // loading after the user already entered native fullscreen / native PiP.
-      if (
-        captionAsTrack ||
-        (source?.type === "file" && enableNativeSubtitles)
-      ) {
+      if (captionAsTrack || source?.type === "file") {
         setCaptionAsTrack(true);
       }
     },
@@ -223,7 +214,6 @@ export function useCaptions() {
       resetSubtitleSpecificSettings,
       source,
       setCaptionAsTrack,
-      enableNativeSubtitles,
       selectedCaption,
     ],
   );

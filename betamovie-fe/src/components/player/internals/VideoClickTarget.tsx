@@ -7,7 +7,6 @@ import { useShouldShowVideoElement } from "@/components/player/internals/VideoCo
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { PlayerHoverState } from "@/stores/player/slices/interface";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 export function VideoClickTarget(props: { showingControls: boolean }) {
@@ -24,10 +23,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   const hovering = usePlayerStore((s) => s.interface.hovering);
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
-  const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
-  const enableDoubleClickToSeek = usePreferencesStore(
-    (s) => s.enableDoubleClickToSeek,
-  );
+  const enableDoubleClickToSeek = true;
 
   const [_, cancel, reset] = useTimeoutFn(() => {
     updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
@@ -164,8 +160,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       if (
         ((e.pointerType === "mouse" && e.button === 0) ||
           e.pointerType === "touch") &&
-        !isInWatchParty &&
-        enableHoldToBoost
+        !isInWatchParty
       ) {
         if (isPaused) return; // Don't boost if video is paused
 
@@ -206,7 +201,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       setShowSpeedIndicator,
       setCurrentOverlay,
       isInWatchParty,
-      enableHoldToBoost,
     ],
   );
 
@@ -222,7 +216,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
 
       if (
         isHoldingRef.current &&
-        enableHoldToBoost &&
         ((e.pointerType === "mouse" && e.button === 0) ||
           e.pointerType === "touch")
       ) {
@@ -255,7 +248,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       setShowSpeedIndicator,
       setCurrentOverlay,
       isPendingBoost,
-      enableHoldToBoost,
     ],
   );
 

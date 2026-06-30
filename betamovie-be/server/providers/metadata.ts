@@ -8,16 +8,16 @@ export interface ProviderMetadataItem {
 
 const providerMetadata: ProviderMetadataItem[] = [
   {
-    id: 'alphaflix-vidlink',
+    id: 'openmovie',
     type: 'source',
-    name: 'Server 1 (VidLink) 🔥',
+    name: 'Server 1 (Vixsrc) 🔥',
     rank: 1,
     disabled: false,
   },
   {
-    id: 'openmovie',
+    id: 'alphaflix-vidlink',
     type: 'source',
-    name: 'Server 2 (Vixsrc) 🔥',
+    name: 'Server 2 (VidLink) 🔥',
     rank: 2,
     disabled: false,
   },
