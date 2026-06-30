@@ -11,7 +11,6 @@ import {
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { ScrapeMedia } from "@/lib/providers";
-import { usePreferencesStore } from "@/stores/preferences";
 
 // Embed option component
 function EmbedOption(props: {
@@ -169,38 +168,23 @@ export function SourceSelectPart(props: {
     null,
   );
   const routerId = "manualSourceSelect";
-  const lastSuccessfulSource = usePreferencesStore(
-    (s) => s.lastSuccessfulSource,
-  );
   const sourceMaintainText = t("player.menus.sources.maintain");
 
   const sources = useMemo(() => {
     const metaType = props.media.type;
     if (!metaType) return [];
-
-    // For episodic content, always prioritize the source that just worked
-    // on the previous episode to keep server continuity when moving next.
-    const continuitySourceId =
-      metaType === "show"
-        ? props.preferredSourceId || lastSuccessfulSource
-        : lastSuccessfulSource;
     const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
       .filter(
         (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
+      )
+      .sort(
+        (left, right) =>
+          (left.rank ?? 0) - (right.rank ?? 0) ||
+          left.name.localeCompare(right.name),
       );
-
-    if (continuitySourceId) {
-      const lastSourceIndex = allSources.findIndex(
-        (s) => s.id === continuitySourceId,
-      );
-      if (lastSourceIndex !== -1) {
-        const lastSource = allSources.splice(lastSourceIndex, 1)[0];
-        return [lastSource, ...allSources];
-      }
-    }
     return allSources;
-  }, [props.media.type, props.preferredSourceId, lastSuccessfulSource]);
+  }, [props.media.type]);
 
   if (selectedSourceId) {
     return (

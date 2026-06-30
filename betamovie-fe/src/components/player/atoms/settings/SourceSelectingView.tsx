@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getCachedMetadata } from "@/backend/helpers/providerApi";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Loading } from "@/components/layout/Loading";
 import {
   useEmbedScraping,
@@ -119,6 +120,7 @@ export function EmbedOption(props: {
 
 export function EmbedSelectionView({ sourceId, id }: EmbedSelectionViewProps) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const router = useOverlayRouter(id);
   const { run, watching, notfound, loading, items, errored } =
     useSourceScraping(sourceId, id);
@@ -200,14 +202,12 @@ export function SourceSelectionView({
   onChoose,
 }: SourceSelectionViewProps) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const router = useOverlayRouter(id);
   const metaType = usePlayerStore((s) => s.meta?.type);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const setResumeFromSourceId = usePlayerStore((s) => s.setResumeFromSourceId);
   const setStatus = usePlayerStore((s) => s.setStatus);
-  const lastSuccessfulSource = usePreferencesStore(
-    (s) => s.lastSuccessfulSource,
-  );
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
   );
@@ -219,19 +219,15 @@ export function SourceSelectionView({
       .filter((v) => v.type === "source")
       .filter(
         (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
+      )
+      .sort(
+        (left, right) =>
+          (left.rank ?? 0) - (right.rank ?? 0) ||
+          left.name.localeCompare(right.name),
       );
 
-    if (lastSuccessfulSource) {
-      const lastSourceIndex = allSources.findIndex(
-        (s) => s.id === lastSuccessfulSource,
-      );
-      if (lastSourceIndex !== -1) {
-        const lastSource = allSources.splice(lastSourceIndex, 1)[0];
-        return [lastSource, ...allSources];
-      }
-    }
     return allSources;
-  }, [metaType, lastSuccessfulSource]);
+  }, [metaType]);
 
   const handleFindNextSource = () => {
     if (!currentSourceId) return;
