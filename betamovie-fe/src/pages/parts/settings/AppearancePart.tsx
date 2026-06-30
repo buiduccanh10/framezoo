@@ -340,7 +340,7 @@ export function AppearancePart(props: {
         <div
           ref={carouselRef}
           className={classNames(
-            "grid grid-cols-2 gap-4 max-w-[600px] max-h-[36rem] md:max-h-[64rem] overflow-y-auto",
+            "grid w-full grid-cols-[repeat(auto-fit,minmax(10.5rem,1fr))] gap-4 max-h-[36rem] overflow-y-auto md:grid-cols-[repeat(auto-fit,minmax(11.5rem,1fr))] md:max-h-[64rem]",
             "vertical-carousel-container",
             {
               "hide-top-gradient": isAtTop,

@@ -1,15 +1,61 @@
 import classNames from "classnames";
+import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Dropdown } from "@/components/form/Dropdown";
+import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Heading1 } from "@/components/utils/Text";
 import { appLanguageOptions } from "@/setup/i18n";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getLocaleInfo, sortLangCodes } from "@/utils/language";
+
+function PreferenceCard(props: {
+  title: string;
+  description: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <SettingsCard
+      className={classNames("flex flex-col gap-5 self-start", props.className)}
+    >
+      <div className="space-y-3">
+        <p className="text-white font-bold">{props.title}</p>
+        <p className="max-w-[32rem] font-medium">{props.description}</p>
+      </div>
+      <div className="space-y-4">{props.children}</div>
+    </SettingsCard>
+  );
+}
+
+function PreferenceToggleRow(props: {
+  enabled: boolean;
+  label: string;
+  onClick?: () => void;
+  locked?: boolean;
+  dimmed?: boolean;
+}) {
+  return (
+    <div
+      onClick={props.locked ? undefined : props.onClick}
+      className={classNames(
+        "bg-dropdown-background select-none flex items-center gap-3 rounded-lg px-4 py-3",
+        props.locked
+          ? props.dimmed
+            ? "cursor-not-allowed opacity-50 pointer-events-none"
+            : "cursor-default pointer-events-none"
+          : "cursor-pointer hover:bg-dropdown-hoverBackground",
+      )}
+    >
+      <Toggle enabled={props.enabled} />
+      <p className="flex-1 text-white font-bold">{props.label}</p>
+    </div>
+  );
+}
 
 export function PreferencesPart(props: {
   language: string;
@@ -49,174 +95,127 @@ export function PreferencesPart(props: {
   return (
     <div className="space-y-12">
       <Heading1 border>{t("settings.preferences.title")}</Heading1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Column */}
-        <div className="space-y-8">
-          {/* Language Preference */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.preferences.language")}
-            </p>
-            <p className="max-w-[20rem] font-medium">
-              {t("settings.preferences.languageDescription")}
-            </p>
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+        <div className="space-y-6">
+          <PreferenceCard
+            title={t("settings.preferences.language")}
+            description={t("settings.preferences.languageDescription")}
+          >
             <Dropdown
               className="w-full"
               options={options}
               selectedItem={selected || options[0]}
               setSelectedItem={(opt) => props.setLanguage(opt.id)}
             />
-          </div>
+          </PreferenceCard>
 
-          {/* Autoplay Preference */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.preferences.autoplay")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.preferences.autoplayDescription")}
-            </p>
-            <div
-              className={classNames(
-                "bg-dropdown-background select-none my-4 space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                allowAutoplay
-                  ? "cursor-default opacity-100 pointer-events-none"
-                  : "cursor-not-allowed opacity-50 pointer-events-none",
-              )}
-            >
-              <Toggle enabled={autoplayEnabled} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.preferences.autoplayLabel")}
-              </p>
-            </div>
+          <PreferenceCard
+            title={t("settings.preferences.autoplay")}
+            description={t("settings.preferences.autoplayDescription")}
+          >
+            <PreferenceToggleRow
+              enabled={autoplayEnabled}
+              label={t("settings.preferences.autoplayLabel")}
+              locked
+              dimmed={!allowAutoplay}
+            />
 
-            {/* Skip End Credits Preference */}
             {autoplayEnabled && (
-              <div className="pt-4 pl-4 border-l-8 border-dropdown-background">
-                <p className="text-white font-bold mb-3">
-                  {t("settings.preferences.skipCredits")}
-                </p>
-                <p className="max-w-[25rem] font-medium">
-                  {t("settings.preferences.skipCreditsDescription")}
-                </p>
-                <div
-                  onClick={() =>
-                    props.setEnableSkipCredits(!props.enableSkipCredits)
-                  }
-                  className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-                >
-                  <Toggle enabled={props.enableSkipCredits} />
-                  <p className="flex-1 text-white font-bold">
-                    {t("settings.preferences.skipCreditsLabel")}
+              <div className="space-y-5 rounded-xl border border-settings-card-border/60 bg-settings-card-background/30 p-4">
+                <div className="space-y-3">
+                  <p className="text-white font-bold">
+                    {t("settings.preferences.skipCredits")}
                   </p>
+                  <p className="font-medium">
+                    {t("settings.preferences.skipCreditsDescription")}
+                  </p>
+                  <PreferenceToggleRow
+                    enabled={props.enableSkipCredits}
+                    label={t("settings.preferences.skipCreditsLabel")}
+                    onClick={() =>
+                      props.setEnableSkipCredits(!props.enableSkipCredits)
+                    }
+                  />
                 </div>
 
-                {/* Auto Skip Segments Preference */}
-                <div className="pt-4 mt-4">
-                  <p className="text-white font-bold mb-3">
+                <div className="space-y-3">
+                  <p className="text-white font-bold">
                     {t("settings.preferences.autoSkipSegments")}
                   </p>
-                  <p className="max-w-[25rem] font-medium">
+                  <p className="font-medium">
                     {t("settings.preferences.autoSkipSegmentsDescription")}
                   </p>
-                  <div
+                  <PreferenceToggleRow
+                    enabled={props.enableAutoSkipSegments}
+                    label={t("settings.preferences.autoSkipSegmentsLabel")}
                     onClick={() =>
                       props.setEnableAutoSkipSegments(
                         !props.enableAutoSkipSegments,
                       )
                     }
-                    className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-                  >
-                    <Toggle enabled={props.enableAutoSkipSegments} />
-                    <p className="flex-1 text-white font-bold">
-                      {t("settings.preferences.autoSkipSegmentsLabel")}
-                    </p>
-                  </div>
+                  />
                 </div>
               </div>
             )}
-          </div>
+          </PreferenceCard>
 
-          {/* Double Click to Seek Preference */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.preferences.doubleClickToSeek")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.preferences.doubleClickToSeekDescription")}
-            </p>
-            <div className="bg-dropdown-background select-none my-4 space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg pointer-events-none">
-              <Toggle enabled />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.preferences.doubleClickToSeekLabel")}
-              </p>
-            </div>
-          </div>
-
-          {/* Keyboard Shortcuts Preference */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.preferences.keyboardShortcuts")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.preferences.keyboardShortcutsDescription")}
-            </p>
-          </div>
-          <Button
-            theme="secondary"
-            onClick={() => showModal("keyboard-commands-edit")}
+          <PreferenceCard
+            title={t("settings.preferences.doubleClickToSeek")}
+            description={t("settings.preferences.doubleClickToSeekDescription")}
           >
-            {t("settings.preferences.keyboardShortcutsLabel")}
-          </Button>
+            <PreferenceToggleRow
+              enabled
+              label={t("settings.preferences.doubleClickToSeekLabel")}
+              locked
+            />
+          </PreferenceCard>
         </div>
 
-        {/* Column */}
-        <div id="source-order" className="space-y-8">
-          <div className="flex flex-col gap-3">
-            {/* Manual Source Selection */}
-            <div>
-              <p className="text-white font-bold mb-3">
-                {t("settings.preferences.manualSource")}
-              </p>
-              <p className="max-w-[25rem] font-medium">
-                {t("settings.preferences.manualSourceDescription")}
-              </p>
-              <div
+        <div className="space-y-6">
+          <div id="source-order">
+            <PreferenceCard
+              title={t("settings.preferences.manualSource")}
+              description={t("settings.preferences.manualSourceDescription")}
+            >
+              <PreferenceToggleRow
+                enabled={props.manualSourceSelection}
+                label={t("settings.preferences.manualSourceLabel")}
                 onClick={() =>
                   props.setManualSourceSelection(!props.manualSourceSelection)
                 }
-                className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-              >
-                <Toggle enabled={props.manualSourceSelection} />
-                <p className="flex-1 text-white font-bold">
-                  {t("settings.preferences.manualSourceLabel")}
-                </p>
-              </div>
-            </div>
-
-            {/* Auto Resume on Playback Error */}
-            <div>
-              <p className="text-white font-bold mb-3">
-                {t("settings.preferences.autoResumeOnPlaybackError")}
-              </p>
-              <p className="max-w-[25rem] font-medium">
-                {t("settings.preferences.autoResumeOnPlaybackErrorDescription")}
-              </p>
-              <div
-                onClick={() =>
-                  props.setEnableAutoResumeOnPlaybackError(
-                    !props.enableAutoResumeOnPlaybackError,
-                  )
-                }
-                className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-              >
-                <Toggle enabled={props.enableAutoResumeOnPlaybackError} />
-                <p className="flex-1 text-white font-bold">
-                  {t("settings.preferences.autoResumeOnPlaybackErrorLabel")}
-                </p>
-              </div>
-            </div>
+              />
+            </PreferenceCard>
           </div>
+
+          <PreferenceCard
+            title={t("settings.preferences.autoResumeOnPlaybackError")}
+            description={t(
+              "settings.preferences.autoResumeOnPlaybackErrorDescription",
+            )}
+          >
+            <PreferenceToggleRow
+              enabled={props.enableAutoResumeOnPlaybackError}
+              label={t("settings.preferences.autoResumeOnPlaybackErrorLabel")}
+              onClick={() =>
+                props.setEnableAutoResumeOnPlaybackError(
+                  !props.enableAutoResumeOnPlaybackError,
+                )
+              }
+            />
+          </PreferenceCard>
+
+          <PreferenceCard
+            title={t("settings.preferences.keyboardShortcuts")}
+            description={t("settings.preferences.keyboardShortcutsDescription")}
+          >
+            <Button
+              className="w-full sm:w-auto"
+              theme="secondary"
+              onClick={() => showModal("keyboard-commands-edit")}
+            >
+              {t("settings.preferences.keyboardShortcutsLabel")}
+            </Button>
+          </PreferenceCard>
         </div>
       </div>
     </div>
