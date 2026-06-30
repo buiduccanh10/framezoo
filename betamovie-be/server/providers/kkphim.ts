@@ -74,7 +74,7 @@ const SEED_CACHE_TTL = Number(process.env.KKPHIM_SEED_CACHE_TTL ?? 60 * 60);
 const SEARCH_PAGE_LIMIT = Number(process.env.KKPHIM_SEARCH_PAGE_LIMIT ?? 20);
 const SEARCH_MAX_PAGES = Number(process.env.KKPHIM_SEARCH_MAX_PAGES ?? 2);
 const SLUG_CACHE_KEY_VERSION = 'v2';
-const NEGATIVE_CACHE_KEY_VERSION = 'v4';
+const NEGATIVE_CACHE_KEY_VERSION = 'v5';
 const SEED_CACHE_KEY_VERSION = 'v1';
 
 const normalizeText = (value: string): string =>
@@ -264,14 +264,25 @@ const resolveCandidateSeason = (
         name?: string;
         origin_name?: string;
         slug?: string;
+        tmdb?: KKPhimTmdbRef;
       }
     | undefined
   >
-): number | null =>
-  resolveSeasonNumber(
-    undefined,
-    ...candidates.flatMap(candidate => [candidate?.name, candidate?.origin_name, candidate?.slug])
-  );
+): number | null => {
+  for (const candidate of candidates) {
+    const resolved = resolveSeasonNumber(
+      candidate?.tmdb?.season,
+      candidate?.name,
+      candidate?.origin_name,
+      candidate?.slug
+    );
+    if (resolved != null) {
+      return resolved;
+    }
+  }
+
+  return null;
+};
 
 const hasRequestedSeason = (
   requestedSeason: number | null | undefined,
@@ -280,6 +291,7 @@ const hasRequestedSeason = (
         name?: string;
         origin_name?: string;
         slug?: string;
+        tmdb?: KKPhimTmdbRef;
       }
     | undefined
   >
@@ -461,6 +473,7 @@ const isAcceptableTvDetail = (
     name?: string;
     origin_name?: string;
     slug?: string;
+    tmdb?: KKPhimTmdbRef;
   }
 ): boolean => {
   if (!detail?.movie || !hasCompatibleType(detail.movie, 'tv')) {
