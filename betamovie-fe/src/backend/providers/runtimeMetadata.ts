@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { MetaOutput } from "@/lib/providers";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { getBackendAuthHeaders } from "@/utils/backendAuth";
 
 export type ProviderMetadataOverride = {
   id: string;
@@ -101,6 +102,7 @@ async function fetchProviderMetadataFrom(
 ): Promise<ProviderMetadataOverride[]> {
   const response = await fetch(`${backendUrl}/api/providers`, {
     credentials: "include",
+    headers: getBackendAuthHeaders(`${backendUrl}/api/providers`),
   });
 
   if (!response.ok) {

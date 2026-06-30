@@ -1,16 +1,35 @@
 import { jwtDecode } from "jwt-decode";
 
+import { getProviders } from "@/backend/providers/providers";
 import { MetaOutput } from "@/lib/providers";
 
 let metaDataCache: MetaOutput[] | null = null;
 let token: null | string = null;
 
+function sortMetadata(data: MetaOutput[]): MetaOutput[] {
+  return [...data].sort((left, right) => {
+    if (left.type !== right.type) {
+      return left.type === "source" ? -1 : 1;
+    }
+
+    const rankDiff = (left.rank ?? 0) - (right.rank ?? 0);
+    if (rankDiff !== 0) return rankDiff;
+
+    return left.name.localeCompare(right.name);
+  });
+}
+
 export function setCachedMetadata(data: MetaOutput[]) {
-  metaDataCache = data;
+  metaDataCache = sortMetadata(data);
 }
 
 export function getCachedMetadata(): MetaOutput[] {
   return metaDataCache ?? [];
+}
+
+export function refreshCachedMetadata() {
+  const providers = getProviders();
+  setCachedMetadata([...providers.listSources(), ...providers.listEmbeds()]);
 }
 
 export function setApiToken(newToken: string) {
