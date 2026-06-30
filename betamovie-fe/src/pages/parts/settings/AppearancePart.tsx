@@ -307,8 +307,6 @@ export function AppearancePart(props: {
   homeSectionOrder: string[];
   setHomeSectionOrder: (v: string[]) => void;
 
-  enableLowPerformanceMode: boolean;
-
   customTheme: {
     primary: string;
     secondary: string;
@@ -351,36 +349,6 @@ export function AppearancePart(props: {
 
     return groups.size > 1;
   }, [bookmarks]);
-
-  const {
-    enableLowPerformanceMode,
-    setEnableDiscover,
-    setEnableFeatured,
-    setEnableDetailsModal,
-    setEnableImageLogos,
-    setEnablePauseOverlay,
-    setForceCompactEpisodeView,
-  } = props;
-
-  // Apply low performance mode restrictions
-  useEffect(() => {
-    if (enableLowPerformanceMode) {
-      setEnableDiscover(false);
-      setEnableFeatured(false);
-      setEnableDetailsModal(false);
-      setEnableImageLogos(false);
-      setEnablePauseOverlay(false);
-      setForceCompactEpisodeView(true);
-    }
-  }, [
-    enableLowPerformanceMode,
-    setEnableDiscover,
-    setEnableFeatured,
-    setEnableDetailsModal,
-    setEnableImageLogos,
-    setEnablePauseOverlay,
-    setForceCompactEpisodeView,
-  ]);
 
   const checkScrollPosition = () => {
     const container = carouselRef.current;
@@ -460,20 +428,13 @@ export function AppearancePart(props: {
             </p>
             <div
               onClick={() => {
-                if (!props.enableLowPerformanceMode) {
-                  const newDiscoverValue = !props.enableDiscover;
-                  props.setEnableDiscover(newDiscoverValue);
-                  if (!newDiscoverValue) {
-                    props.setEnableFeatured(false);
-                  }
+                const newDiscoverValue = !props.enableDiscover;
+                props.setEnableDiscover(newDiscoverValue);
+                if (!newDiscoverValue) {
+                  props.setEnableFeatured(false);
                 }
               }}
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                props.enableLowPerformanceMode
-                  ? "cursor-not-allowed opacity-50 pointer-events-none"
-                  : "cursor-pointer opacity-100 pointer-events-auto",
-              )}
+              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
             >
               <Toggle enabled={props.enableDiscover} />
               <p className="flex-1 text-white font-bold">
@@ -482,7 +443,7 @@ export function AppearancePart(props: {
             </div>
           </div>
           {/* Featured Carousel */}
-          {props.enableDiscover && !props.enableLowPerformanceMode && (
+          {props.enableDiscover && (
             <div className="pt-4 pl-4 border-l-8 border-dropdown-background">
               <p className="text-white font-bold mb-3">
                 {t("settings.appearance.options.featured")}
@@ -511,15 +472,9 @@ export function AppearancePart(props: {
             </p>
             <div
               onClick={() =>
-                !props.enableLowPerformanceMode &&
                 props.setEnableDetailsModal(!props.enableDetailsModal)
               }
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                props.enableLowPerformanceMode
-                  ? "cursor-not-allowed opacity-50 pointer-events-none"
-                  : "cursor-pointer opacity-100 pointer-events-auto",
-              )}
+              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
             >
               <Toggle enabled={props.enableDetailsModal} />
               <p className="flex-1 text-white font-bold">
@@ -541,16 +496,8 @@ export function AppearancePart(props: {
               {t("settings.appearance.options.logosNotice")}
             </p>
             <div
-              onClick={() =>
-                !props.enableLowPerformanceMode &&
-                props.setEnableImageLogos(!props.enableImageLogos)
-              }
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                props.enableLowPerformanceMode
-                  ? "cursor-not-allowed opacity-50 pointer-events-none"
-                  : "cursor-pointer opacity-100 pointer-events-auto",
-              )}
+              onClick={() => props.setEnableImageLogos(!props.enableImageLogos)}
+              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
             >
               <Toggle enabled={props.enableImageLogos} />
               <p className="flex-1 text-white font-bold">
@@ -569,15 +516,9 @@ export function AppearancePart(props: {
             </p>
             <div
               onClick={() =>
-                !props.enableLowPerformanceMode &&
                 props.setEnablePauseOverlay(!props.enablePauseOverlay)
               }
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                props.enableLowPerformanceMode
-                  ? "cursor-not-allowed opacity-50 pointer-events-none"
-                  : "cursor-pointer opacity-100 pointer-events-auto",
-              )}
+              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
             >
               <Toggle enabled={props.enablePauseOverlay} />
               <p className="flex-1 text-white font-bold">
@@ -646,15 +587,9 @@ export function AppearancePart(props: {
             </p>
             <div
               onClick={() =>
-                !props.enableLowPerformanceMode &&
                 props.setForceCompactEpisodeView(!props.forceCompactEpisodeView)
               }
-              className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
-                props.enableLowPerformanceMode
-                  ? "cursor-not-allowed opacity-50 pointer-events-none"
-                  : "cursor-pointer opacity-100 pointer-events-auto",
-              )}
+              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
             >
               <Toggle enabled={props.forceCompactEpisodeView} />
               <p className="flex-1 text-white font-bold">

@@ -29,7 +29,6 @@ export interface PreferencesStore {
   debridToken: string | null;
   debridService: string;
   tidbKey: string | null;
-  enableLowPerformanceMode: boolean;
   enableHoldToBoost: boolean;
   homeSectionOrder: string[];
   manualSourceSelection: boolean;
@@ -60,7 +59,6 @@ export interface PreferencesStore {
   setdebridToken(v: string | null): void;
   setdebridService(v: string): void;
   setTIDBKey(v: string | null): void;
-  setEnableLowPerformanceMode(v: boolean): void;
   setEnableHoldToBoost(v: boolean): void;
   setHomeSectionOrder(v: string[]): void;
   setManualSourceSelection(v: boolean): void;
@@ -95,7 +93,6 @@ export const usePreferencesStore = create(
       debridToken: null,
       debridService: "realdebrid",
       tidbKey: null,
-      enableLowPerformanceMode: false,
       enableHoldToBoost: true,
       homeSectionOrder: ["watching", "bookmarks"],
       manualSourceSelection: false,
@@ -210,16 +207,6 @@ export const usePreferencesStore = create(
           s.tidbKey = v;
         });
       },
-      setEnableLowPerformanceMode(v) {
-        set((s) => {
-          s.enableLowPerformanceMode = v;
-          // When enabling performance mode, disable bandwidth-heavy features
-          if (v) {
-            s.enableAutoplay = false;
-          }
-        });
-      },
-
       setEnableHoldToBoost(v) {
         set((s) => {
           s.enableHoldToBoost = v;

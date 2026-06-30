@@ -487,13 +487,6 @@ export function SettingsPage() {
     (s) => s.setForceCompactEpisodeView,
   );
 
-  const enableLowPerformanceMode = usePreferencesStore(
-    (s) => s.enableLowPerformanceMode,
-  );
-  const setEnableLowPerformanceMode = usePreferencesStore(
-    (s) => s.setEnableLowPerformanceMode,
-  );
-
   const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
   const setEnableHoldToBoost = usePreferencesStore(
     (s) => s.setEnableHoldToBoost,
@@ -620,9 +613,6 @@ export function SettingsPage() {
         if (settings.forceCompactEpisodeView !== undefined) {
           setForceCompactEpisodeView(settings.forceCompactEpisodeView);
         }
-        if (settings.enableLowPerformanceMode !== undefined) {
-          setEnableLowPerformanceMode(settings.enableLowPerformanceMode);
-        }
         if (settings.enableHoldToBoost !== undefined) {
           setEnableHoldToBoost(settings.enableHoldToBoost);
         }
@@ -683,7 +673,6 @@ export function SettingsPage() {
     setEnableCarouselView,
     setEnableMinimalCards,
     setForceCompactEpisodeView,
-    setEnableLowPerformanceMode,
     setEnableHoldToBoost,
     setHomeSectionOrder,
     setManualSourceSelection,
@@ -725,7 +714,6 @@ export function SettingsPage() {
     enableCarouselView,
     enableMinimalCards,
     forceCompactEpisodeView,
-    enableLowPerformanceMode,
     enableHoldToBoost,
     homeSectionOrder,
     manualSourceSelection,
@@ -793,7 +781,6 @@ export function SettingsPage() {
         state.enableCarouselView.changed ||
         state.enableMinimalCards.changed ||
         state.forceCompactEpisodeView.changed ||
-        state.enableLowPerformanceMode.changed ||
         state.enableHoldToBoost.changed ||
         state.homeSectionOrder.changed ||
         state.manualSourceSelection.changed ||
@@ -825,7 +812,6 @@ export function SettingsPage() {
           enableCarouselView: state.enableCarouselView.state,
           enableMinimalCards: state.enableMinimalCards.state,
           forceCompactEpisodeView: state.forceCompactEpisodeView.state,
-          enableLowPerformanceMode: state.enableLowPerformanceMode.state,
           enableHoldToBoost: state.enableHoldToBoost.state,
           homeSectionOrder: state.homeSectionOrder.state,
           manualSourceSelection: state.manualSourceSelection.state,
@@ -884,7 +870,6 @@ export function SettingsPage() {
     setEnableCarouselView(state.enableCarouselView.state);
     setEnableMinimalCards(state.enableMinimalCards.state);
     setForceCompactEpisodeView(state.forceCompactEpisodeView.state);
-    setEnableLowPerformanceMode(state.enableLowPerformanceMode.state);
     setEnableHoldToBoost(state.enableHoldToBoost.state);
     setHomeSectionOrder(state.homeSectionOrder.state);
     setManualSourceSelection(state.manualSourceSelection.state);
@@ -949,7 +934,6 @@ export function SettingsPage() {
     setEnableCarouselView,
     setEnableMinimalCards,
     setForceCompactEpisodeView,
-    setEnableLowPerformanceMode,
     setEnableHoldToBoost,
     setHomeSectionOrder,
     setManualSourceSelection,
@@ -1024,8 +1008,6 @@ export function SettingsPage() {
               setSourceOrder={state.sourceOrder.set}
               enableSourceOrder={state.enableSourceOrder.state}
               setenableSourceOrder={state.enableSourceOrder.set}
-              enableLowPerformanceMode={state.enableLowPerformanceMode.state}
-              setEnableLowPerformanceMode={state.enableLowPerformanceMode.set}
               enableHoldToBoost={state.enableHoldToBoost.state}
               setEnableHoldToBoost={state.enableHoldToBoost.set}
               manualSourceSelection={state.manualSourceSelection.state}
@@ -1065,7 +1047,6 @@ export function SettingsPage() {
               setForceCompactEpisodeView={state.forceCompactEpisodeView.set}
               homeSectionOrder={state.homeSectionOrder.state}
               setHomeSectionOrder={state.homeSectionOrder.set}
-              enableLowPerformanceMode={state.enableLowPerformanceMode.state}
               enablePauseOverlay={state.enablePauseOverlay.state}
               setEnablePauseOverlay={state.enablePauseOverlay.set}
               customTheme={state.customTheme.state}

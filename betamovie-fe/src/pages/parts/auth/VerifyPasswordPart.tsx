@@ -60,7 +60,6 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
     febboxKey: store.febboxKey,
     debridToken: store.debridToken,
     debridService: store.debridService,
-    enableLowPerformanceMode: store.enableLowPerformanceMode,
     enableHoldToBoost: store.enableHoldToBoost,
     homeSectionOrder: store.homeSectionOrder,
     enableDoubleClickToSeek: store.enableDoubleClickToSeek,

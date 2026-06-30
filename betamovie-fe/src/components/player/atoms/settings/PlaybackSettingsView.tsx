@@ -168,16 +168,12 @@ export function PlaybackSettingsView({ id }: { id: string }) {
   // const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
   const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
-  const enableLowPerformanceMode = usePreferencesStore(
-    (s) => s.enableLowPerformanceMode,
-  );
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
 
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
   const allowAutoplay = useMemo(() => isAutoplayAllowed(), []);
-  const canShowAutoplay =
-    !isInWatchParty && allowAutoplay && !enableLowPerformanceMode;
+  const canShowAutoplay = !isInWatchParty && allowAutoplay;
 
   const saveAutoplaySetting = useCallback(
     async (value: boolean) => {
@@ -252,18 +248,6 @@ export function PlaybackSettingsView({ id }: { id: string }) {
               {t("settings.preferences.autoplayLabel")}
             </Menu.Link>
           )}
-          {/* {!enableLowPerformanceMode && (
-            <Menu.Link
-              rightSide={
-                <Toggle
-                  enabled={enableThumbnails}
-                  onClick={handleThumbnailToggle}
-                />
-              }
-            >
-              {t("settings.preferences.thumbnailLabel")}
-            </Menu.Link>
-          )} */}
         </div>
       </Menu.Section>
     </>

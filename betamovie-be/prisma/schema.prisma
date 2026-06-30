@@ -111,7 +111,6 @@ model user_settings {
   enable_double_click_to_seek          Boolean  @default(false)
   enable_embed_order                   Boolean  @default(false)
   enable_hold_to_boost                 Boolean  @default(false)
-  enable_low_performance_mode          Boolean  @default(false)
   force_compact_episode_view           Boolean  @default(false)
   home_section_order                   String[] @default([])
   manual_source_selection              Boolean  @default(false)

@@ -71,9 +71,6 @@ export function HomePage() {
   const enableCarouselView = usePreferencesStore(
     (state) => state.enableCarouselView,
   );
-  const enableLowPerformanceMode = usePreferencesStore(
-    (state) => state.enableLowPerformanceMode,
-  );
   const homeSectionOrder = usePreferencesStore(
     (state) => state.homeSectionOrder,
   );
@@ -179,12 +176,8 @@ export function HomePage() {
   };
 
   const shouldRenderDiscoverContent =
-    enableDiscover &&
-    !search &&
-    !enableLowPerformanceMode &&
-    (!enableFeatured || featuredContentReady);
-  const shouldShowDiscoverButton =
-    !enableDiscover && !search && !enableLowPerformanceMode;
+    enableDiscover && !search && (!enableFeatured || featuredContentReady);
+  const shouldShowDiscoverButton = !enableDiscover && !search;
 
   return (
     <HomeLayout showBg={showBg}>
@@ -256,8 +249,7 @@ export function HomePage() {
       {/* Under user content */}
       <WideContainer ultraWide classNames="!px-3 md:!px-9">
         {/* Empty text */}
-        {!(showBookmarks || showWatching) &&
-        (!enableDiscover || enableLowPerformanceMode) ? (
+        {!(showBookmarks || showWatching) && !enableDiscover ? (
           <div className="flex flex-col translate-y-[-30px] items-center justify-center pt-20">
             <p className="text-[18.5px] pb-3">{emptyText}</p>
           </div>
@@ -285,7 +277,7 @@ export function HomePage() {
         ) : shouldShowDiscoverButton ? (
           <div className="flex flex-col justify-center items-center h-40 space-y-4">
             <div className="flex flex-col items-center justify-center">
-              {!search && !enableLowPerformanceMode && (
+              {!search && (
                 <ActionPillButton
                   className="px-py p-[0.35em] mt-3 rounded-xl text-type-dimmed box-content text-[18px] bg-largeCard-background justify-center items-center"
                   onClick={() => handleClick("/discover")}

@@ -440,11 +440,6 @@ export function MigrationUploadPage() {
         if (uploadedData.settings.proxyTmdb !== undefined) {
           preferencesStore.setProxyTmdb(uploadedData.settings.proxyTmdb);
         }
-        if (uploadedData.settings.enableLowPerformanceMode !== undefined) {
-          preferencesStore.setEnableLowPerformanceMode(
-            uploadedData.settings.enableLowPerformanceMode,
-          );
-        }
         if (uploadedData.settings.enableHoldToBoost !== undefined) {
           preferencesStore.setEnableHoldToBoost(
             uploadedData.settings.enableHoldToBoost,

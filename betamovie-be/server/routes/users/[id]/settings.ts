@@ -37,7 +37,6 @@ const userSettingsSchema = z.object({
   enableEmbedOrder: z.boolean().optional().default(false),
   disabledEmbeds: z.array(z.string()).optional().default([]),
   proxyTmdb: z.boolean().optional().default(false),
-  enableLowPerformanceMode: z.boolean().optional().default(false),
   enableHoldToBoost: z.boolean().optional().default(false),
   homeSectionOrder: z.array(z.string()).optional().default([]),
   manualSourceSelection: z.boolean().optional().default(false),
@@ -102,7 +101,6 @@ export default defineEventHandler(async event => {
         enableEmbedOrder: settings?.enable_embed_order ?? false,
         disabledEmbeds: settings?.disabled_embeds || [],
         proxyTmdb: settings?.proxy_tmdb ?? false,
-        enableLowPerformanceMode: settings?.enable_low_performance_mode ?? false,
         enableHoldToBoost: settings?.enable_hold_to_boost ?? false,
         homeSectionOrder: settings?.home_section_order || [],
         manualSourceSelection: settings?.manual_source_selection ?? false,
@@ -154,7 +152,6 @@ export default defineEventHandler(async event => {
         enable_embed_order: validatedBody.enableEmbedOrder,
         disabled_embeds: validatedBody.disabledEmbeds || [],
         proxy_tmdb: validatedBody.proxyTmdb,
-        enable_low_performance_mode: validatedBody.enableLowPerformanceMode,
         enable_hold_to_boost: validatedBody.enableHoldToBoost,
         home_section_order: validatedBody.homeSectionOrder || [],
         manual_source_selection: validatedBody.manualSourceSelection,
@@ -212,8 +209,6 @@ export default defineEventHandler(async event => {
         updateData.disabled_embeds = createData.disabled_embeds;
       if (Object.prototype.hasOwnProperty.call(body, 'proxyTmdb'))
         updateData.proxy_tmdb = createData.proxy_tmdb;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableLowPerformanceMode'))
-        updateData.enable_low_performance_mode = createData.enable_low_performance_mode;
       if (Object.prototype.hasOwnProperty.call(body, 'enableHoldToBoost'))
         updateData.enable_hold_to_boost = createData.enable_hold_to_boost;
       if (Object.prototype.hasOwnProperty.call(body, 'homeSectionOrder'))
@@ -271,7 +266,6 @@ export default defineEventHandler(async event => {
         enableEmbedOrder: settings.enable_embed_order,
         disabledEmbeds: settings.disabled_embeds,
         proxyTmdb: settings.proxy_tmdb,
-        enableLowPerformanceMode: settings.enable_low_performance_mode,
         enableHoldToBoost: settings.enable_hold_to_boost,
         homeSectionOrder: settings.home_section_order,
         manualSourceSelection: settings.manual_source_selection,

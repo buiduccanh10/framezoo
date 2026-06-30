@@ -80,9 +80,6 @@ export function useAuthData() {
 
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
 
-  const setEnableLowPerformanceMode = usePreferencesStore(
-    (s) => s.setEnableLowPerformanceMode,
-  );
   const setEnableHoldToBoost = usePreferencesStore(
     (s) => s.setEnableHoldToBoost,
   );
@@ -253,10 +250,6 @@ export function useAuthData() {
         setdebridService(settings.debridService);
       }
 
-      if (settings.enableLowPerformanceMode !== undefined) {
-        setEnableLowPerformanceMode(settings.enableLowPerformanceMode);
-      }
-
       if (settings.enableHoldToBoost !== undefined) {
         setEnableHoldToBoost(settings.enableHoldToBoost);
       }
@@ -321,7 +314,6 @@ export function useAuthData() {
       setFebboxKey,
       setdebridToken,
       setdebridService,
-      setEnableLowPerformanceMode,
       setEnableHoldToBoost,
       setHomeSectionOrder,
       setManualSourceSelection,

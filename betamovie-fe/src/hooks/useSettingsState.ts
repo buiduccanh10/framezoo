@@ -72,7 +72,6 @@ export function useSettingsState(
   enableCarouselView: boolean,
   enableMinimalCards: boolean,
   forceCompactEpisodeView: boolean,
-  enableLowPerformanceMode: boolean,
   enableHoldToBoost: boolean,
   homeSectionOrder: string[],
   manualSourceSelection: boolean,
@@ -224,12 +223,6 @@ export function useSettingsState(
     forceCompactEpisodeViewChanged,
   ] = useDerived(forceCompactEpisodeView);
   const [
-    enableLowPerformanceModeState,
-    setEnableLowPerformanceModeState,
-    resetEnableLowPerformanceMode,
-    enableLowPerformanceModeChanged,
-  ] = useDerived(enableLowPerformanceMode);
-  const [
     enableHoldToBoostState,
     setEnableHoldToBoostState,
     resetEnableHoldToBoost,
@@ -304,7 +297,6 @@ export function useSettingsState(
     resetEnableCarouselView();
     resetEnableMinimalCards();
     resetForceCompactEpisodeView();
-    resetEnableLowPerformanceMode();
     resetEnableHoldToBoost();
     resetHomeSectionOrder();
     resetManualSourceSelection();
@@ -343,7 +335,6 @@ export function useSettingsState(
     enableCarouselViewChanged ||
     enableMinimalCardsChanged ||
     forceCompactEpisodeViewChanged ||
-    enableLowPerformanceModeChanged ||
     enableHoldToBoostChanged ||
     homeSectionOrderChanged ||
     manualSourceSelectionChanged ||
@@ -496,11 +487,6 @@ export function useSettingsState(
       state: forceCompactEpisodeViewState,
       set: setForceCompactEpisodeViewState,
       changed: forceCompactEpisodeViewChanged,
-    },
-    enableLowPerformanceMode: {
-      state: enableLowPerformanceModeState,
-      set: setEnableLowPerformanceModeState,
-      changed: enableLowPerformanceModeChanged,
     },
     enableHoldToBoost: {
       state: enableHoldToBoostState,
