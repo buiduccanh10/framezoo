@@ -32,6 +32,7 @@ export function PreferencesPart(props: {
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
 
   const allowAutoplay = isAutoplayAllowed();
+  const autoplayEnabled = allowAutoplay;
 
   const options = appLanguageOptions
     .sort((a, b) => sorted.indexOf(a.code) - sorted.indexOf(b.code))
@@ -76,26 +77,21 @@ export function PreferencesPart(props: {
               {t("settings.preferences.autoplayDescription")}
             </p>
             <div
-              onClick={() =>
-                allowAutoplay
-                  ? props.setEnableAutoplay(!props.enableAutoplay)
-                  : null
-              }
               className={classNames(
-                "bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
+                "bg-dropdown-background select-none my-4 space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg",
                 allowAutoplay
-                  ? "cursor-pointer opacity-100 pointer-events-auto"
+                  ? "cursor-default opacity-100 pointer-events-none"
                   : "cursor-not-allowed opacity-50 pointer-events-none",
               )}
             >
-              <Toggle enabled={props.enableAutoplay && allowAutoplay} />
+              <Toggle enabled={autoplayEnabled} />
               <p className="flex-1 text-white font-bold">
                 {t("settings.preferences.autoplayLabel")}
               </p>
             </div>
 
             {/* Skip End Credits Preference */}
-            {props.enableAutoplay && allowAutoplay && (
+            {autoplayEnabled && (
               <div className="pt-4 pl-4 border-l-8 border-dropdown-background">
                 <p className="text-white font-bold mb-3">
                   {t("settings.preferences.skipCredits")}

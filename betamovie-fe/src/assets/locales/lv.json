@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Automātiskā atskaņošana",
-      "autoplayDescription": "Automātiski atskaņojiet nākamo sērijas sēriju pēc beigām. To var iespējot lietotāji ar pārlūkprogrammas paplašinājumu, pielāgotu starpniekserveri vai noklusējuma iestatījumiem, ja to atļauj saimniekdators.",
+      "autoplayDescription": "Automātiski atskaņojiet nākamo sērijas sēriju pēc beigām.",
       "autoplayLabel": "Automātiskā atskaņošana",
       "autoResumeOnPlaybackError": "Automātiski atsākt atskaņošanas kļūdu",
       "autoResumeOnPlaybackErrorDescription": "Automātiski turpiniet meklēt citus avotus, ja atskaņošanas laikā neizdodas pašreizējais avots. Ja tas ir atspējots, tiks parādīts kļūdas ekrāns ar manuālas atsākšanas opciju.",

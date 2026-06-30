@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Reproducció automàtica",
-      "autoplayDescription": "Reprodueix automàticament el següent episodi d'una sèrie després d'arribar al final. Els usuaris poden activar-lo amb l'extensió del navegador, un servidor intermediari personalitzat o amb la configuració predeterminada si l'amfitrió ho permet.",
+      "autoplayDescription": "Reprodueix automàticament el següent episodi d'una sèrie després d'arribar al final.",
       "autoplayLabel": "Reproducció automàtica",
       "autoResumeOnPlaybackError": "Reprèn automàticament en cas d'error de reproducció",
       "autoResumeOnPlaybackErrorDescription": "Continueu cercant altres fonts automàticament quan la font actual falla durant la reproducció. Si està desactivat, veureu una pantalla d'error amb una opció de reinici manual.",

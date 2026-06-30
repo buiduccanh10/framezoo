@@ -67,7 +67,7 @@ export const usePreferencesStore = create(
   persist(
     immer<PreferencesStore>((set) => ({
       enableAutoplay: true,
-      enableSkipCredits: true,
+      enableSkipCredits: false,
       enableAutoSkipSegments: false,
       enableDiscover: true,
       enableFeatured: false,

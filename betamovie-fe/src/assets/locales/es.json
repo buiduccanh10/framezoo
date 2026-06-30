@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Reproducción automática",
-      "autoplayDescription": "Reproduce automáticamente el siguiente episodio de una serie después de llegar al final. Lo pueden habilitar los usuarios con la extensión del navegador, un proxy personalizado o con la configuración predeterminada si el host lo permite.",
+      "autoplayDescription": "Reproduce automáticamente el siguiente episodio de una serie después de llegar al final.",
       "autoplayLabel": "Reproducción automática",
       "autoResumeOnPlaybackError": "Reanudación automática en caso de error de reproducción",
       "autoResumeOnPlaybackErrorDescription": "Continúe buscando automáticamente otras fuentes cuando la fuente actual falle durante la reproducción. Si está deshabilitado, verá una pantalla de error con una opción de reanudación manual.",

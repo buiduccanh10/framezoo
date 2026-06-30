@@ -8,8 +8,8 @@ import {
   SourceSliceSource,
   selectQuality,
 } from "@/stores/player/utils/qualities";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useQualityStore } from "@/stores/quality";
+import { isAutoplayAllowed } from "@/utils/autoplay";
 import googletranslate from "@/utils/translation/googletranslate";
 import { translate } from "@/utils/translation/index";
 import { ValuesOf } from "@/utils/typeguard";
@@ -370,7 +370,6 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const store = get();
     if (!store.source) return;
     const qualityPreferences = useQualityStore.getState();
-    const playbackPreferences = usePreferencesStore.getState();
     const loadableStream = selectQuality(store.source, {
       automaticQuality: qualityPreferences.quality.automaticQuality,
       lastChosenQuality: qualityPreferences.quality.lastChosenQuality,
@@ -384,7 +383,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       startAt,
       automaticQuality: qualityPreferences.quality.automaticQuality,
       preferredQuality: qualityPreferences.quality.lastChosenQuality,
-      autoplay: playbackPreferences.enableAutoplay,
+      autoplay: isAutoplayAllowed(),
     });
   },
   switchQuality(quality) {

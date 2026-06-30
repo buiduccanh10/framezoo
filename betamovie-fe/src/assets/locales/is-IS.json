@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Sjálfvirk spilun",
-      "autoplayDescription": "Spilaðu næsta þátt í röð sjálfkrafa eftir að lokinni er náð. Notendur geta virkjað með vafraviðbótinni, sérsniðnum umboðsþjóni eða með sjálfgefna uppsetningu ef gestgjafinn leyfir.",
+      "autoplayDescription": "Spilaðu næsta þátt í röð sjálfkrafa eftir að lokinni er náð.",
       "autoplayLabel": "Sjálfvirk spilun",
       "autoResumeOnPlaybackError": "Sjálfvirk áframhald við spilunarvillu",
       "autoResumeOnPlaybackErrorDescription": "Haltu sjálfkrafa áfram að leita að öðrum heimildum þegar núverandi uppspretta bilar meðan á spilun stendur. Ef það er óvirkt muntu sjá villuskjá með handvirkum endurupptökuvalkosti.",

@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Automatisch afspelen",
-      "autoplayDescription": "Speel automatisch de volgende aflevering in een serie af nadat het einde is bereikt. Kan ingeschakeld worden door gebruikers met de browserextensie, een eigen proxy, of met de standaardinstellingen als dit toegestaan is door de host.",
+      "autoplayDescription": "Speel automatisch de volgende aflevering in een serie af nadat het einde is bereikt.",
       "autoplayLabel": "Automatisch afspelen",
       "autoResumeOnPlaybackError": "Automatisch hervatten bij afspeelfout",
       "autoResumeOnPlaybackErrorDescription": "Ga automatisch verder met zoeken naar andere bronnen wanneer de huidige bron uitvalt tijdens het afspelen. Indien uitgeschakeld, ziet u een foutscherm met een optie voor handmatig hervatten.",

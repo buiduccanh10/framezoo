@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Autómatikus lejátszás",
-      "autoplayDescription": "Automatikusan lejátsza a következő részt, amikor a mostani véget ért. Engedélyezhetik a bővitmény felhasználói, egy egyéni proxy, vagy az alapbeállítással, ha engedi a hoszt.",
+      "autoplayDescription": "Automatikusan lejátsza a következő részt, amikor a mostani véget ért.",
       "autoplayLabel": "Automatikus lejátszás",
       "autoResumeOnPlaybackError": "Automatikus folytatás lejátszáskor hiba",
       "autoResumeOnPlaybackErrorDescription": "Automatikusan folytassa a többi forrás keresését, ha az aktuális forrás lejátszás közben meghiúsul. Ha le van tiltva, hibaképernyő jelenik meg kézi folytatási lehetőséggel.",

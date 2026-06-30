@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Redare automată",
-      "autoplayDescription": "Redați automat următorul episod dintr-o serie după ce ajungeți la final. Poate fi activat de utilizatorii cu extensia de browser, un proxy personalizat sau cu configurarea implicită, dacă este permis de gazdă.",
+      "autoplayDescription": "Redați automat următorul episod dintr-o serie după ce ajungeți la final.",
       "autoplayLabel": "Redare automată",
       "autoResumeOnPlaybackError": "Reluare automată la eroare de redare",
       "autoResumeOnPlaybackErrorDescription": "Continuați automat căutarea altor surse atunci când sursa curentă eșuează în timpul redării. Dacă este dezactivată, veți vedea un ecran de eroare cu o opțiune de reluare manuală.",

@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "자동재생",
-      "autoplayDescription": "시리즈가 끝나면 자동으로 다음 에피소드를 재생합니다. 브라우저 확장, 사용자 정의 프록시 또는 호스트에서 허용하는 경우 기본 설정을 사용하여 사용자가 활성화할 수 있습니다.",
+      "autoplayDescription": "시리즈가 끝나면 자동으로 다음 에피소드를 재생합니다.",
       "autoplayLabel": "자동재생",
       "autoResumeOnPlaybackError": "재생 오류 시 자동 재개",
       "autoResumeOnPlaybackErrorDescription": "재생 중에 현재 소스에 오류가 발생하면 자동으로 다른 소스를 계속 검색합니다. 비활성화된 경우 수동 재개 옵션이 포함된 오류 화면이 표시됩니다.",

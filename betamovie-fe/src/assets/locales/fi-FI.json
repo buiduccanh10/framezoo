@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Automaattinen toisto",
-      "autoplayDescription": "Toista automaattisesti sarjan seuraava jakso sen päätyttyä. Käyttäjät voivat ottaa sen käyttöön selainlaajennuksella, mukautetulla välityspalvelimella tai oletusasetuksella, jos isäntä sen sallii.",
+      "autoplayDescription": "Toista automaattisesti sarjan seuraava jakso sen päätyttyä.",
       "autoplayLabel": "Automaattinen toisto",
       "autoResumeOnPlaybackError": "Toiston automaattinen jatkaminen virhe",
       "autoResumeOnPlaybackErrorDescription": "Jatka automaattisesti muiden lähteiden etsimistä, kun nykyinen lähde epäonnistuu toiston aikana. Jos se ei ole käytössä, näet virhenäytön, jossa on manuaalinen jatkamisvaihtoehto.",

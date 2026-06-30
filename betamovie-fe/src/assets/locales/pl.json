@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Autoodtwarzanie",
-      "autoplayDescription": "Automatycznie odtwórz następny odcinek zbliżając się do końca obecnego. Może zostać włączone przez użytkownika w rozszerzeniu, niestandardowym proxy lub domyślną konfiguracją, jeśli dozwolone.",
+      "autoplayDescription": "Automatycznie odtwórz następny odcinek zbliżając się do końca obecnego.",
       "autoplayLabel": "Autoodtwarzanie",
       "autoResumeOnPlaybackError": "Automatyczne wznowienie po błędzie odtwarzania",
       "autoResumeOnPlaybackErrorDescription": "Automatycznie kontynuuj wyszukiwanie innych źródeł, jeśli bieżące źródło ulegnie awarii podczas odtwarzania. Jeśli ta opcja jest wyłączona, pojawi się ekran błędu z opcją ręcznego wznowienia.",

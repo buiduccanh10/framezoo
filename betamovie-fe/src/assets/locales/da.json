@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Autoplay",
-      "autoplayDescription": "Afspil automatisk den næste episode i en serie, når den er slut. Kan aktiveres af brugere med browserudvidelsen, en brugerdefineret proxy eller med standardopsætningen, hvis hosten tillader det.",
+      "autoplayDescription": "Afspil automatisk den næste episode i en serie, når den er slut.",
       "autoplayLabel": "Autoplay",
       "autoResumeOnPlaybackError": "Automatisk genoptagelse ved afspilningsfejl",
       "autoResumeOnPlaybackErrorDescription": "Fortsæt automatisk med at søge efter andre kilder, når den aktuelle kilde fejler under afspilning. Hvis den er deaktiveret, vil du se en fejlskærm med mulighed for manuel genoptagelse.",

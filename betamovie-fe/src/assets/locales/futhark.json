@@ -1029,7 +1029,7 @@
     },
     "preferences": {
       "autoplay": "ᚨᚢᛏᛟᛈᛚᚨᛁ",
-      "autoplayDescription": "ᚨᚢᛏᛟᛗᚨᛏᛁᚲᚨᛚᛚᛁ ᛈᛚᚨᛁ ᚦᛖ ᚾᛖᚲᛊᛏ ᛖᛈᛁᛊᛟᛞᛖ ᛁᚾ ᚨ ᛊᛖᚱᛁᛖᛊ ᚨᚠᛏᛖᚱ ᚱᛖᚲᚺᛁᛜ ᚦᛖ ᛖᚾᛞ. ᚲᚨᚾ ᛒᛖ ᛖᚾᚨᛒᛚᛖᛞ ᛒᛁ ᚢᛊᛖᚱᛊ ᚹᛁᚦ ᚦᛖ ᛒᚱᛟᚹᛊᛖᚱ ᛖᚲᛊᛏᛖᚾᛊᛟᚾ, ᚨ ᚲᚢᛊᛏᛟᛗ ᛈᚱᛟᚲᛊᛁ, ᛟᚱ ᚹᛁᚦ ᚦᛖ ᛞᛖᚠᚨᚢᛚᛏ ᛊᛖᛏᚢᛈ ᛁᚠ ᚨᛚᛚᛟᚹᛖᛞ ᛒᛁ ᚦᛖ ᚺᛟᛊᛏ.",
+      "autoplayDescription": "ᚨᚢᛏᛟᛗᚨᛏᛁᚲᚨᛚᛚᛁ ᛈᛚᚨᛁ ᚦᛖ ᚾᛖᚲᛊᛏ ᛖᛈᛁᛊᛟᛞᛖ ᛁᚾ ᚨ ᛊᛖᚱᛁᛖᛊ ᚨᚠᛏᛖᚱ ᚱᛖᚲᚺᛁᛜ ᚦᛖ ᛖᚾᛞ.",
       "autoplayLabel": "ᚨᚢᛏᛟᛈᛚᚨᛁ",
       "autoResumeOnPlaybackError": "Auto resume on playback error",
       "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",

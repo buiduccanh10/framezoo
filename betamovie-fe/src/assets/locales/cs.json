@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Automatické přehrávání",
-      "autoplayDescription": "Automaticky přehrát další epizodu v sérii po dosažení konce. Mohou být povoleny uživateli s rozšířením prohlížeče, vlastním proxy serverem nebo s výchozím nastavením, pokud to hostitel povolí.",
+      "autoplayDescription": "Automaticky přehrát další epizodu v sérii po dosažení konce.",
       "autoplayLabel": "Automatické přehrávání",
       "autoResumeOnPlaybackError": "Automatické obnovení při chybě přehrávání",
       "autoResumeOnPlaybackErrorDescription": "Automaticky pokračovat v hledání dalších zdrojů, když aktuální zdroj během přehrávání selže. Pokud je zakázáno, zobrazí se chybová obrazovka s možností ručního obnovení.",

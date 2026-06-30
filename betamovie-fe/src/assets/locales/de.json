@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Automatische Wiedergabe",
-      "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt. Kann von Benutzern mit der Browsererweiterung, einem benutzerdefinierten Proxy oder mit der Standardkonfiguration aktiviert werden, sofern der Host dies zulässt.",
+      "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt.",
       "autoplayLabel": "Automatische Wiedergabe",
       "autoResumeOnPlaybackError": "Automatische Fortsetzung bei Wiedergabefehler",
       "autoResumeOnPlaybackErrorDescription": "Automatische Suche nach anderen Quellen fortsetzen, wenn die aktuelle Quelle während der Wiedergabe ausfällt. Wenn diese Option deaktiviert ist, wird ein Fehlerbildschirm mit einer manuellen Fortsetzungsoption angezeigt.",

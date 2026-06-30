@@ -101,7 +101,7 @@ model user_settings {
   enable_discover                      Boolean  @default(true)
   enable_featured                      Boolean  @default(false)
   enable_image_logos                   Boolean  @default(true)
-  enable_skip_credits                  Boolean  @default(true)
+  enable_skip_credits                  Boolean  @default(false)
   proxy_tmdb                           Boolean  @default(false)
   disabled_embeds                      String[] @default([])
   disabled_sources                     String[] @default([])

@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Autouppspelning",
-      "autoplayDescription": "Spela automatiskt nästa avsnitt i en serie efter att ha nått slutet. Kan aktiveras av användare med webbläsartillägget, en anpassad proxy eller med standardinställningen om värden tillåter det.",
+      "autoplayDescription": "Spela automatiskt nästa avsnitt i en serie efter att ha nått slutet.",
       "autoplayLabel": "Autouppspelning",
       "autoResumeOnPlaybackError": "Återuppta automatiskt vid uppspelningsfel",
       "autoResumeOnPlaybackErrorDescription": "Fortsätt automatiskt att söka efter andra källor när den aktuella källan misslyckas under uppspelning. Om det är inaktiverat ser du en felskärm med ett alternativ för manuellt återuppta.",

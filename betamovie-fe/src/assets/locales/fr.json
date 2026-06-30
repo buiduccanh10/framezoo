@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Lecture automatique",
-      "autoplayDescription": "Permet de lire automatiquement le prochain épisode d’une série une fois l’épisode actuel terminé. Disponible pour les utilisateurs via une extension navigateur, un proxy personnalisé, ou via la configuration par défaut si elle est autorisée par l’hébergeur.",
+      "autoplayDescription": "Permet de lire automatiquement le prochain épisode d’une série une fois l’épisode actuel terminé.",
       "autoplayLabel": "Lecture automatique",
       "autoResumeOnPlaybackError": "Reprise automatique en cas d'erreur de lecture",
       "autoResumeOnPlaybackErrorDescription": "Continuez automatiquement la recherche d'autres sources lorsque la source actuelle échoue pendant la lecture. S'il est désactivé, vous verrez un écran d'erreur avec une option de reprise manuelle.",

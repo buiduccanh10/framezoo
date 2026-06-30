@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Tự động phát",
-      "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc. Người dùng có thể bật bằng tiện ích mở rộng trình duyệt, proxy tùy chỉnh hoặc bằng thiết lập mặc định nếu được máy chủ cho phép.",
+      "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc, nếu máy chủ cho phép tự động phát.",
       "autoplayLabel": "Tự động phát",
       "autoResumeOnPlaybackError": "Tự động tiếp tục khi lỗi phát lại",
       "autoResumeOnPlaybackErrorDescription": "Tự động tiếp tục tìm kiếm các nguồn khác khi nguồn hiện tại thất bại trong quá trình phát lại. Nếu bị tắt, bạn sẽ thấy màn hình lỗi với tùy chọn tiếp tục thủ công.",

@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Samodejno predvajanje",
-      "autoplayDescription": "Samodejno predvajanje naslednje epizode v seriji, ko dosežete konec. Uporabniki ga lahko omogočijo z razširitvijo brskalnika, proxyjem po meri ali s privzeto nastavitvijo, če to dovoljuje gostitelj.",
+      "autoplayDescription": "Samodejno predvajanje naslednje epizode v seriji, ko dosežete konec.",
       "autoplayLabel": "Samodejno predvajanje",
       "autoResumeOnPlaybackError": "Samodejno nadaljevanje ob napaki pri predvajanju",
       "autoResumeOnPlaybackErrorDescription": "Samodejno nadaljevanje iskanja drugih virov, ko trenutni vir med predvajanjem odpove. Če je onemogočeno, boste videli zaslon z napako z možnostjo ročnega nadaljevanja.",

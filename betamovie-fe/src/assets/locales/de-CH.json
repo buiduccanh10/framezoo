@@ -1152,7 +1152,7 @@
     },
     "preferences": {
       "autoplay": "Autoplay",
-      "autoplayDescription": "Spelt automatisch die nöchscht Episode inere Serie ab, sobald s‘Endo erreicht esch. Chan aktiviert werde vo Notzer met dr Browser-Erwiterig, eme eigene Proxy oder mit dr Standart-Irechtig, wenn s‘vom Host erlaubt isch.",
+      "autoplayDescription": "Spelt automatisch die nöchscht Episode inere Serie ab, sobald s‘Endo erreicht esch.",
       "autoplayLabel": "Autoplay",
       "autoResumeOnPlaybackError": "Automatische Fortsetzung bei Wiedergabefehler",
       "autoResumeOnPlaybackErrorDescription": "Automatische Suche nach anderen Quellen fortsetzen, wenn die aktuelle Quelle während der Wiedergabe ausfällt. Wenn diese Option deaktiviert ist, wird ein Fehlerbildschirm mit einer manuellen Fortsetzungsoption angezeigt.",
