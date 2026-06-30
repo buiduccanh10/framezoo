@@ -30,17 +30,14 @@ const userSettingsSchema = z.object({
   enableImageLogos: z.boolean().optional().default(true),
   enableCarouselView: z.boolean().optional().default(false),
   forceCompactEpisodeView: z.boolean().optional().default(false),
-  sourceOrder: z.array(z.string()).optional().default([]),
-  enableSourceOrder: z.boolean().optional().default(false),
   disabledSources: z.array(z.string()).optional().default([]),
   embedOrder: z.array(z.string()).optional().default([]),
   enableEmbedOrder: z.boolean().optional().default(false),
   disabledEmbeds: z.array(z.string()).optional().default([]),
   proxyTmdb: z.boolean().optional().default(false),
-  enableHoldToBoost: z.boolean().optional().default(false),
   homeSectionOrder: z.array(z.string()).optional().default([]),
   manualSourceSelection: z.boolean().optional().default(false),
-  enableDoubleClickToSeek: z.boolean().optional().default(false),
+  enableDoubleClickToSeek: z.boolean().optional().default(true),
   enableAutoResumeOnPlaybackError: z.boolean().optional().default(false),
   enablePauseOverlay: z.boolean().optional().default(false),
 });
@@ -94,17 +91,14 @@ export default defineEventHandler(async event => {
         enableImageLogos: settings?.enable_image_logos ?? true,
         enableCarouselView: settings?.enable_carousel_view ?? false,
         forceCompactEpisodeView: settings?.force_compact_episode_view ?? false,
-        sourceOrder: settings?.source_order || [],
-        enableSourceOrder: settings?.enable_source_order ?? false,
         disabledSources: settings?.disabled_sources || [],
         embedOrder: settings?.embed_order || [],
         enableEmbedOrder: settings?.enable_embed_order ?? false,
         disabledEmbeds: settings?.disabled_embeds || [],
         proxyTmdb: settings?.proxy_tmdb ?? false,
-        enableHoldToBoost: settings?.enable_hold_to_boost ?? false,
         homeSectionOrder: settings?.home_section_order || [],
         manualSourceSelection: settings?.manual_source_selection ?? false,
-        enableDoubleClickToSeek: settings?.enable_double_click_to_seek ?? false,
+        enableDoubleClickToSeek: settings?.enable_double_click_to_seek ?? true,
         enableAutoResumeOnPlaybackError: settings?.enable_auto_resume_on_playback_error ?? false,
         enablePauseOverlay: settings?.enable_pause_overlay ?? false,
       };
@@ -145,14 +139,11 @@ export default defineEventHandler(async event => {
         enable_image_logos: validatedBody.enableImageLogos,
         enable_carousel_view: validatedBody.enableCarouselView,
         force_compact_episode_view: validatedBody.forceCompactEpisodeView,
-        source_order: validatedBody.sourceOrder || [],
-        enable_source_order: validatedBody.enableSourceOrder,
         disabled_sources: validatedBody.disabledSources || [],
         embed_order: validatedBody.embedOrder || [],
         enable_embed_order: validatedBody.enableEmbedOrder,
         disabled_embeds: validatedBody.disabledEmbeds || [],
         proxy_tmdb: validatedBody.proxyTmdb,
-        enable_hold_to_boost: validatedBody.enableHoldToBoost,
         home_section_order: validatedBody.homeSectionOrder || [],
         manual_source_selection: validatedBody.manualSourceSelection,
         enable_double_click_to_seek: validatedBody.enableDoubleClickToSeek,
@@ -195,10 +186,6 @@ export default defineEventHandler(async event => {
         updateData.enable_carousel_view = createData.enable_carousel_view;
       if (Object.prototype.hasOwnProperty.call(body, 'forceCompactEpisodeView'))
         updateData.force_compact_episode_view = createData.force_compact_episode_view;
-      if (Object.prototype.hasOwnProperty.call(body, 'sourceOrder'))
-        updateData.source_order = createData.source_order;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableSourceOrder'))
-        updateData.enable_source_order = createData.enable_source_order;
       if (Object.prototype.hasOwnProperty.call(body, 'disabledSources'))
         updateData.disabled_sources = createData.disabled_sources;
       if (Object.prototype.hasOwnProperty.call(body, 'embedOrder'))
@@ -209,8 +196,6 @@ export default defineEventHandler(async event => {
         updateData.disabled_embeds = createData.disabled_embeds;
       if (Object.prototype.hasOwnProperty.call(body, 'proxyTmdb'))
         updateData.proxy_tmdb = createData.proxy_tmdb;
-      if (Object.prototype.hasOwnProperty.call(body, 'enableHoldToBoost'))
-        updateData.enable_hold_to_boost = createData.enable_hold_to_boost;
       if (Object.prototype.hasOwnProperty.call(body, 'homeSectionOrder'))
         updateData.home_section_order = createData.home_section_order;
       if (Object.prototype.hasOwnProperty.call(body, 'manualSourceSelection'))
@@ -259,14 +244,11 @@ export default defineEventHandler(async event => {
         enableImageLogos: settings.enable_image_logos,
         enableCarouselView: settings.enable_carousel_view,
         forceCompactEpisodeView: settings.force_compact_episode_view,
-        sourceOrder: settings.source_order,
-        enableSourceOrder: settings.enable_source_order,
         disabledSources: settings.disabled_sources,
         embedOrder: settings.embed_order,
         enableEmbedOrder: settings.enable_embed_order,
         disabledEmbeds: settings.disabled_embeds,
         proxyTmdb: settings.proxy_tmdb,
-        enableHoldToBoost: settings.enable_hold_to_boost,
         homeSectionOrder: settings.home_section_order,
         manualSourceSelection: settings.manual_source_selection,
         enableDoubleClickToSeek: settings.enable_double_click_to_seek,

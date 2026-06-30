@@ -29,13 +29,9 @@ export interface SettingsInput {
   enableCarouselView?: boolean;
   enableMinimalCards?: boolean;
   forceCompactEpisodeView?: boolean;
-  sourceOrder?: string[] | null;
-  enableSourceOrder?: boolean;
-  lastSuccessfulSource?: string | null;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;
-  enableHoldToBoost?: boolean;
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
@@ -65,13 +61,9 @@ export interface SettingsResponse {
   enableCarouselView?: boolean;
   enableMinimalCards?: boolean;
   forceCompactEpisodeView?: boolean;
-  sourceOrder?: string[] | null;
-  enableSourceOrder?: boolean;
-  lastSuccessfulSource?: string | null;
   embedOrder?: string[] | null;
   enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;
-  enableHoldToBoost?: boolean;
   homeSectionOrder?: string[] | null;
   manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;

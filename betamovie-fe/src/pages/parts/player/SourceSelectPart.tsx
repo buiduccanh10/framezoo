@@ -169,8 +169,6 @@ export function SourceSelectPart(props: {
     null,
   );
   const routerId = "manualSourceSelect";
-  const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
-  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
   const lastSuccessfulSource = usePreferencesStore(
     (s) => s.lastSuccessfulSource,
   );
@@ -186,66 +184,23 @@ export function SourceSelectPart(props: {
       metaType === "show"
         ? props.preferredSourceId || lastSuccessfulSource
         : lastSuccessfulSource;
-
     const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
       .filter(
         (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
       );
 
-    if (!enableSourceOrder || preferredSourceOrder.length === 0) {
-      // Even without custom source order, prioritize the continuity source.
-      const shouldPrioritize = !!continuitySourceId;
-
-      if (shouldPrioritize && continuitySourceId) {
-        const lastSourceIndex = allSources.findIndex(
-          (s) => s.id === continuitySourceId,
-        );
-        if (lastSourceIndex !== -1) {
-          const lastSource = allSources.splice(lastSourceIndex, 1)[0];
-          return [lastSource, ...allSources];
-        }
-      }
-      return allSources;
-    }
-
-    // Sort sources according to preferred order, but prioritize last successful source
-    const orderedSources = [];
-    const remainingSources = [...allSources];
-
-    // First, add continuity source if available.
-    const shouldPrioritize = !!continuitySourceId;
-
-    if (shouldPrioritize && continuitySourceId) {
-      const lastSourceIndex = remainingSources.findIndex(
+    if (continuitySourceId) {
+      const lastSourceIndex = allSources.findIndex(
         (s) => s.id === continuitySourceId,
       );
       if (lastSourceIndex !== -1) {
-        orderedSources.push(remainingSources[lastSourceIndex]);
-        remainingSources.splice(lastSourceIndex, 1);
+        const lastSource = allSources.splice(lastSourceIndex, 1)[0];
+        return [lastSource, ...allSources];
       }
     }
-
-    // Add sources in preferred order
-    for (const sourceId of preferredSourceOrder) {
-      const sourceIndex = remainingSources.findIndex((s) => s.id === sourceId);
-      if (sourceIndex !== -1) {
-        orderedSources.push(remainingSources[sourceIndex]);
-        remainingSources.splice(sourceIndex, 1);
-      }
-    }
-
-    // Add remaining sources that weren't in the preferred order
-    orderedSources.push(...remainingSources);
-
-    return orderedSources;
-  }, [
-    props.media.type,
-    props.preferredSourceId,
-    preferredSourceOrder,
-    enableSourceOrder,
-    lastSuccessfulSource,
-  ]);
+    return allSources;
+  }, [props.media.type, props.preferredSourceId, lastSuccessfulSource]);
 
   if (selectedSourceId) {
     return (

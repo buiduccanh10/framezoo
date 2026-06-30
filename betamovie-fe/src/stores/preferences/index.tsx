@@ -18,8 +18,6 @@ export interface PreferencesStore {
   enableCarouselView: boolean;
   enableMinimalCards: boolean;
   forceCompactEpisodeView: boolean;
-  sourceOrder: string[];
-  enableSourceOrder: boolean;
   lastSuccessfulSource: string | null;
   embedOrder: string[];
   enableEmbedOrder: boolean;
@@ -29,7 +27,6 @@ export interface PreferencesStore {
   debridToken: string | null;
   debridService: string;
   tidbKey: string | null;
-  enableHoldToBoost: boolean;
   homeSectionOrder: string[];
   manualSourceSelection: boolean;
   enableDoubleClickToSeek: boolean;
@@ -48,8 +45,6 @@ export interface PreferencesStore {
   setEnableCarouselView(v: boolean): void;
   setEnableMinimalCards(v: boolean): void;
   setForceCompactEpisodeView(v: boolean): void;
-  setSourceOrder(v: string[]): void;
-  setEnableSourceOrder(v: boolean): void;
   setLastSuccessfulSource(v: string | null): void;
   setEmbedOrder(v: string[]): void;
   setEnableEmbedOrder(v: boolean): void;
@@ -59,7 +54,6 @@ export interface PreferencesStore {
   setdebridToken(v: string | null): void;
   setdebridService(v: string): void;
   setTIDBKey(v: string | null): void;
-  setEnableHoldToBoost(v: boolean): void;
   setHomeSectionOrder(v: string[]): void;
   setManualSourceSelection(v: boolean): void;
   setEnableDoubleClickToSeek(v: boolean): void;
@@ -82,8 +76,6 @@ export const usePreferencesStore = create(
       enableCarouselView: false,
       enableMinimalCards: false,
       forceCompactEpisodeView: false,
-      sourceOrder: [],
-      enableSourceOrder: false,
       lastSuccessfulSource: null,
       embedOrder: [],
       enableEmbedOrder: false,
@@ -93,10 +85,9 @@ export const usePreferencesStore = create(
       debridToken: null,
       debridService: "realdebrid",
       tidbKey: null,
-      enableHoldToBoost: true,
       homeSectionOrder: ["watching", "bookmarks"],
       manualSourceSelection: false,
-      enableDoubleClickToSeek: false,
+      enableDoubleClickToSeek: true,
       enableAutoResumeOnPlaybackError: true,
       enableNumberKeySeeking: true,
       enablePauseOverlay: false,
@@ -152,16 +143,6 @@ export const usePreferencesStore = create(
           s.forceCompactEpisodeView = v;
         });
       },
-      setSourceOrder(v) {
-        set((s) => {
-          s.sourceOrder = v;
-        });
-      },
-      setEnableSourceOrder(v) {
-        set((s) => {
-          s.enableSourceOrder = v;
-        });
-      },
       setLastSuccessfulSource(v) {
         set((s) => {
           s.lastSuccessfulSource = v;
@@ -205,11 +186,6 @@ export const usePreferencesStore = create(
       setTIDBKey(v) {
         set((s) => {
           s.tidbKey = v;
-        });
-      },
-      setEnableHoldToBoost(v) {
-        set((s) => {
-          s.enableHoldToBoost = v;
         });
       },
       setHomeSectionOrder(v) {

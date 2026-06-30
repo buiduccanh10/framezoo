@@ -11,7 +11,6 @@ import {
 import { getSessions, updateSession } from "@/backend/accounts/sessions";
 import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
-import { getAllProviders } from "@/backend/providers/providers";
 import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { SearchBarInput } from "@/components/form/SearchBar";
@@ -429,21 +428,6 @@ export function SettingsPage() {
     (s) => s.setEnableAutoSkipSegments,
   );
 
-  const sourceOrder = usePreferencesStore((s) => s.sourceOrder);
-  const setSourceOrder = usePreferencesStore((s) => s.setSourceOrder);
-
-  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
-  const setEnableSourceOrder = usePreferencesStore(
-    (s) => s.setEnableSourceOrder,
-  );
-
-  const lastSuccessfulSource = usePreferencesStore(
-    (s) => s.lastSuccessfulSource,
-  );
-  const setLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setLastSuccessfulSource,
-  );
-
   // These are commented because the EmbedOrderPart is on the admin page and not on the settings page.
   const embedOrder = usePreferencesStore((s) => s.embedOrder);
   // const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
@@ -485,11 +469,6 @@ export function SettingsPage() {
   );
   const setForceCompactEpisodeView = usePreferencesStore(
     (s) => s.setForceCompactEpisodeView,
-  );
-
-  const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
-  const setEnableHoldToBoost = usePreferencesStore(
-    (s) => s.setEnableHoldToBoost,
   );
 
   const homeSectionOrder = usePreferencesStore((s) => s.homeSectionOrder);
@@ -588,18 +567,6 @@ export function SettingsPage() {
         if (settings.enableImageLogos !== undefined) {
           setEnableImageLogos(settings.enableImageLogos);
         }
-        if (
-          settings.sourceOrder !== undefined &&
-          Array.isArray(settings.sourceOrder)
-        ) {
-          setSourceOrder(settings.sourceOrder);
-        }
-        if (settings.enableSourceOrder !== undefined) {
-          setEnableSourceOrder(settings.enableSourceOrder);
-        }
-        if (settings.lastSuccessfulSource !== undefined) {
-          setLastSuccessfulSource(settings.lastSuccessfulSource);
-        }
 
         if (settings.proxyTmdb !== undefined) {
           setProxyTmdb(settings.proxyTmdb);
@@ -612,9 +579,6 @@ export function SettingsPage() {
         }
         if (settings.forceCompactEpisodeView !== undefined) {
           setForceCompactEpisodeView(settings.forceCompactEpisodeView);
-        }
-        if (settings.enableHoldToBoost !== undefined) {
-          setEnableHoldToBoost(settings.enableHoldToBoost);
         }
         if (
           settings.homeSectionOrder !== undefined &&
@@ -665,15 +629,10 @@ export function SettingsPage() {
     setEnableFeatured,
     setEnableDetailsModal,
     setEnableImageLogos,
-    setSourceOrder,
-    setEnableSourceOrder,
-    setLastSuccessfulSource,
-
     setProxyTmdb,
     setEnableCarouselView,
     setEnableMinimalCards,
     setForceCompactEpisodeView,
-    setEnableHoldToBoost,
     setHomeSectionOrder,
     setManualSourceSelection,
     setEnableDoubleClickToSeek,
@@ -703,10 +662,6 @@ export function SettingsPage() {
     enableDiscover,
     enableFeatured,
     enableDetailsModal,
-    sourceOrder,
-    enableSourceOrder,
-    lastSuccessfulSource,
-
     embedOrder,
     enableEmbedOrder,
     proxyTmdb,
@@ -714,7 +669,6 @@ export function SettingsPage() {
     enableCarouselView,
     enableMinimalCards,
     forceCompactEpisodeView,
-    enableHoldToBoost,
     homeSectionOrder,
     manualSourceSelection,
     enableDoubleClickToSeek,
@@ -722,22 +676,6 @@ export function SettingsPage() {
     enablePauseOverlay,
     customThemeBaseline ?? customTheme,
   );
-
-  const availableSources = useMemo(() => {
-    const sources = getAllProviders().listSources();
-    const sourceIDs = sources.map((s) => s.id);
-    const stateSources = state.sourceOrder.state || [];
-
-    // Filter out sources that are not in `stateSources` and are in `sources`
-    const updatedSources = stateSources.filter((ss) => sourceIDs.includes(ss));
-
-    // Add sources from `sources` that are not in `stateSources`
-    const missingSources = sources
-      .filter((s) => !stateSources.includes(s.id))
-      .map((s) => s.id);
-
-    return [...updatedSources, ...missingSources];
-  }, [state.sourceOrder.state]);
 
   useEffect(() => {
     setPreviewTheme(activeTheme ?? "default");
@@ -774,14 +712,10 @@ export function SettingsPage() {
         state.enableFeatured.changed ||
         state.enableDetailsModal.changed ||
         state.enableImageLogos.changed ||
-        state.sourceOrder.changed ||
-        state.enableSourceOrder.changed ||
-        state.lastSuccessfulSource.changed ||
         state.proxyTmdb.changed ||
         state.enableCarouselView.changed ||
         state.enableMinimalCards.changed ||
         state.forceCompactEpisodeView.changed ||
-        state.enableHoldToBoost.changed ||
         state.homeSectionOrder.changed ||
         state.manualSourceSelection.changed ||
         state.enableDoubleClickToSeek.changed ||
@@ -804,15 +738,11 @@ export function SettingsPage() {
           enableFeatured: state.enableFeatured.state,
           enableDetailsModal: state.enableDetailsModal.state,
           enableImageLogos: state.enableImageLogos.state,
-          sourceOrder: state.sourceOrder.state,
-          enableSourceOrder: state.enableSourceOrder.state,
-          lastSuccessfulSource: state.lastSuccessfulSource.state,
 
           proxyTmdb: state.proxyTmdb.state,
           enableCarouselView: state.enableCarouselView.state,
           enableMinimalCards: state.enableMinimalCards.state,
           forceCompactEpisodeView: state.forceCompactEpisodeView.state,
-          enableHoldToBoost: state.enableHoldToBoost.state,
           homeSectionOrder: state.homeSectionOrder.state,
           manualSourceSelection: state.manualSourceSelection.state,
           enableDoubleClickToSeek: state.enableDoubleClickToSeek.state,
@@ -853,15 +783,11 @@ export function SettingsPage() {
     setEnableFeatured(state.enableFeatured.state);
     setEnableDetailsModal(state.enableDetailsModal.state);
     setEnableImageLogos(state.enableImageLogos.state);
-    setSourceOrder(state.sourceOrder.state);
-    setEnableSourceOrder(state.enableSourceOrder.state);
-    setLastSuccessfulSource(state.lastSuccessfulSource.state);
 
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
     setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
-    setEnableSourceOrder(state.enableSourceOrder.state);
     setFebboxKey(state.febboxKey.state);
     setdebridToken(state.debridToken.state);
     setdebridService(state.debridService.state);
@@ -870,7 +796,6 @@ export function SettingsPage() {
     setEnableCarouselView(state.enableCarouselView.state);
     setEnableMinimalCards(state.enableMinimalCards.state);
     setForceCompactEpisodeView(state.forceCompactEpisodeView.state);
-    setEnableHoldToBoost(state.enableHoldToBoost.state);
     setHomeSectionOrder(state.homeSectionOrder.state);
     setManualSourceSelection(state.manualSourceSelection.state);
     setEnableDoubleClickToSeek(state.enableDoubleClickToSeek.state);
@@ -919,10 +844,6 @@ export function SettingsPage() {
     setEnableFeatured,
     setEnableDetailsModal,
     setEnableImageLogos,
-    setSourceOrder,
-    setEnableSourceOrder,
-    setLastSuccessfulSource,
-
     setAppLanguage,
     setTheme,
     setSubStyling,
@@ -934,7 +855,6 @@ export function SettingsPage() {
     setEnableCarouselView,
     setEnableMinimalCards,
     setForceCompactEpisodeView,
-    setEnableHoldToBoost,
     setHomeSectionOrder,
     setManualSourceSelection,
     setEnableDoubleClickToSeek,
@@ -1004,12 +924,6 @@ export function SettingsPage() {
               setEnableSkipCredits={state.enableSkipCredits.set}
               enableAutoSkipSegments={state.enableAutoSkipSegments.state}
               setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
-              sourceOrder={availableSources}
-              setSourceOrder={state.sourceOrder.set}
-              enableSourceOrder={state.enableSourceOrder.state}
-              setenableSourceOrder={state.enableSourceOrder.set}
-              enableHoldToBoost={state.enableHoldToBoost.state}
-              setEnableHoldToBoost={state.enableHoldToBoost.set}
               manualSourceSelection={state.manualSourceSelection.state}
               setManualSourceSelection={state.manualSourceSelection.set}
               enableDoubleClickToSeek={state.enableDoubleClickToSeek.state}

@@ -416,14 +416,6 @@ export function MigrationUploadPage() {
             uploadedData.settings.forceCompactEpisodeView,
           );
         }
-        if (uploadedData.settings.sourceOrder !== undefined) {
-          preferencesStore.setSourceOrder(uploadedData.settings.sourceOrder);
-        }
-        if (uploadedData.settings.enableSourceOrder !== undefined) {
-          preferencesStore.setEnableSourceOrder(
-            uploadedData.settings.enableSourceOrder,
-          );
-        }
         if (uploadedData.settings.lastSuccessfulSource !== undefined) {
           preferencesStore.setLastSuccessfulSource(
             uploadedData.settings.lastSuccessfulSource,
@@ -439,11 +431,6 @@ export function MigrationUploadPage() {
         }
         if (uploadedData.settings.proxyTmdb !== undefined) {
           preferencesStore.setProxyTmdb(uploadedData.settings.proxyTmdb);
-        }
-        if (uploadedData.settings.enableHoldToBoost !== undefined) {
-          preferencesStore.setEnableHoldToBoost(
-            uploadedData.settings.enableHoldToBoost,
-          );
         }
         if (uploadedData.settings.homeSectionOrder !== undefined) {
           preferencesStore.setHomeSectionOrder(

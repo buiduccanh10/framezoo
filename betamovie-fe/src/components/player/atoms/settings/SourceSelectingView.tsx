@@ -205,8 +205,6 @@ export function SourceSelectionView({
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const setResumeFromSourceId = usePlayerStore((s) => s.setResumeFromSourceId);
   const setStatus = usePlayerStore((s) => s.setStatus);
-  const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
-  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
   const lastSuccessfulSource = usePreferencesStore(
     (s) => s.lastSuccessfulSource,
   );
@@ -223,49 +221,17 @@ export function SourceSelectionView({
         (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
       );
 
-    if (!enableSourceOrder || preferredSourceOrder.length === 0) {
-      // Even without custom source order, prioritize last successful source
-      if (lastSuccessfulSource) {
-        const lastSourceIndex = allSources.findIndex(
-          (s) => s.id === lastSuccessfulSource,
-        );
-        if (lastSourceIndex !== -1) {
-          const lastSource = allSources.splice(lastSourceIndex, 1)[0];
-          return [lastSource, ...allSources];
-        }
-      }
-      return allSources;
-    }
-
-    // Sort sources according to preferred order, but prioritize last successful source
-    const orderedSources = [];
-    const remainingSources = [...allSources];
-
-    // First, add the last successful source if it exists and is available
     if (lastSuccessfulSource) {
-      const lastSourceIndex = remainingSources.findIndex(
+      const lastSourceIndex = allSources.findIndex(
         (s) => s.id === lastSuccessfulSource,
       );
       if (lastSourceIndex !== -1) {
-        orderedSources.push(remainingSources[lastSourceIndex]);
-        remainingSources.splice(lastSourceIndex, 1);
+        const lastSource = allSources.splice(lastSourceIndex, 1)[0];
+        return [lastSource, ...allSources];
       }
     }
-
-    // Add sources in preferred order
-    for (const sourceId of preferredSourceOrder) {
-      const sourceIndex = remainingSources.findIndex((s) => s.id === sourceId);
-      if (sourceIndex !== -1) {
-        orderedSources.push(remainingSources[sourceIndex]);
-        remainingSources.splice(sourceIndex, 1);
-      }
-    }
-
-    // Add remaining sources that weren't in the preferred order
-    orderedSources.push(...remainingSources);
-
-    return orderedSources;
-  }, [metaType, preferredSourceOrder, enableSourceOrder, lastSuccessfulSource]);
+    return allSources;
+  }, [metaType, lastSuccessfulSource]);
 
   const handleFindNextSource = () => {
     if (!currentSourceId) return;

@@ -24,7 +24,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   const hovering = usePlayerStore((s) => s.interface.hovering);
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
-  const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
   const enableDoubleClickToSeek = usePreferencesStore(
     (s) => s.enableDoubleClickToSeek,
   );
@@ -164,8 +163,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       if (
         ((e.pointerType === "mouse" && e.button === 0) ||
           e.pointerType === "touch") &&
-        !isInWatchParty &&
-        enableHoldToBoost
+        !isInWatchParty
       ) {
         if (isPaused) return; // Don't boost if video is paused
 
@@ -206,7 +204,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       setShowSpeedIndicator,
       setCurrentOverlay,
       isInWatchParty,
-      enableHoldToBoost,
     ],
   );
 
@@ -222,7 +219,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
 
       if (
         isHoldingRef.current &&
-        enableHoldToBoost &&
         ((e.pointerType === "mouse" && e.button === 0) ||
           e.pointerType === "touch")
       ) {
@@ -255,7 +251,6 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       setShowSpeedIndicator,
       setCurrentOverlay,
       isPendingBoost,
-      enableHoldToBoost,
     ],
   );
 

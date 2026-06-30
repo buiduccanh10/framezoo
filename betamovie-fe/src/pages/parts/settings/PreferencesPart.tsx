@@ -1,15 +1,10 @@
 import classNames from "classnames";
-import { useMemo, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
-import { getAllProviders, getProviders } from "@/backend/providers/providers";
-import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Dropdown } from "@/components/form/Dropdown";
-import { SortableList } from "@/components/form/SortableList";
-import { Icon, Icons } from "@/components/Icon";
 import { Heading1 } from "@/components/utils/Text";
 import { appLanguageOptions } from "@/setup/i18n";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
@@ -25,12 +20,6 @@ export function PreferencesPart(props: {
   setEnableSkipCredits: (v: boolean) => void;
   enableAutoSkipSegments: boolean;
   setEnableAutoSkipSegments: (v: boolean) => void;
-  sourceOrder: string[];
-  setSourceOrder: (v: string[]) => void;
-  enableSourceOrder: boolean;
-  setenableSourceOrder: (v: boolean) => void;
-  enableHoldToBoost: boolean;
-  setEnableHoldToBoost: (v: boolean) => void;
   manualSourceSelection: boolean;
   setManualSourceSelection: (v: boolean) => void;
   enableDoubleClickToSeek: boolean;
@@ -39,9 +28,7 @@ export function PreferencesPart(props: {
   setEnableAutoResumeOnPlaybackError: (v: boolean) => void;
 }) {
   const { t } = useTranslation();
-  useProviderMetadataVersion();
   const { showModal } = useOverlayStack();
-  const [isSourceListExpanded, setIsSourceListExpanded] = useState(false);
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
 
   const allowAutoplay = isAutoplayAllowed();
@@ -57,17 +44,6 @@ export function PreferencesPart(props: {
   const selected = options.find(
     (item) => item.id === getLocaleInfo(props.language)?.code,
   );
-
-  const allSources = getAllProviders().listSources();
-
-  const sourceItems = useMemo(() => {
-    const currentDeviceSources = getProviders().listSources();
-    return props.sourceOrder.map((id) => ({
-      id,
-      name: allSources.find((s) => s.id === id)?.name || id,
-      disabled: !currentDeviceSources.find((s) => s.id === id),
-    }));
-  }, [props.sourceOrder, allSources]);
 
   return (
     <div className="space-y-12">
@@ -165,27 +141,6 @@ export function PreferencesPart(props: {
             )}
           </div>
 
-          {/* Hold to Boost Preference */}
-          <div>
-            <p className="text-white font-bold mb-3">
-              {t("settings.preferences.holdToBoost")}
-            </p>
-            <p className="max-w-[25rem] font-medium">
-              {t("settings.preferences.holdToBoostDescription")}
-            </p>
-            <div
-              onClick={() =>
-                props.setEnableHoldToBoost(!props.enableHoldToBoost)
-              }
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-            >
-              <Toggle enabled={props.enableHoldToBoost} />
-              <p className="flex-1 text-white font-bold">
-                {t("settings.preferences.holdToBoostLabel")}
-              </p>
-            </div>
-          </div>
-
           {/* Double Click to Seek Preference */}
           <div>
             <p className="text-white font-bold mb-3">
@@ -270,78 +225,6 @@ export function PreferencesPart(props: {
                 </p>
               </div>
             </div>
-
-            <p className="text-white font-bold">
-              {t("settings.preferences.sourceOrder")}
-            </p>
-            <div className="max-w-[25rem] font-medium">
-              <Trans
-                i18nKey="settings.preferences.sourceOrderDescription"
-                components={{
-                  bold: <span className="text-type-link font-bold" />,
-                }}
-              />
-              <div
-                onClick={() =>
-                  props.setenableSourceOrder(!props.enableSourceOrder)
-                }
-                className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-              >
-                <Toggle enabled={props.enableSourceOrder} />
-                <p className="flex-1 text-white font-bold">
-                  {t("settings.preferences.sourceOrderEnableLabel")}
-                </p>
-              </div>
-            </div>
-
-            {props.enableSourceOrder && (
-              <div className="w-full flex flex-col gap-4">
-                <div
-                  className={classNames(
-                    "overflow-hidden transition-all duration-300",
-                    sourceItems.length > 10 && !isSourceListExpanded
-                      ? "max-h-[400px]"
-                      : "max-h-none",
-                  )}
-                >
-                  <SortableList
-                    items={sourceItems}
-                    setItems={(items) =>
-                      props.setSourceOrder(items.map((item) => item.id))
-                    }
-                  />
-                </div>
-                {sourceItems.length > 10 && (
-                  <Button
-                    className="max-w-[25rem]"
-                    theme="secondary"
-                    onClick={() =>
-                      setIsSourceListExpanded(!isSourceListExpanded)
-                    }
-                  >
-                    {isSourceListExpanded
-                      ? t("settings.preferences.showLess")
-                      : t("settings.preferences.showMore")}
-                    <Icon
-                      icon={
-                        isSourceListExpanded
-                          ? Icons.CHEVRON_UP
-                          : Icons.CHEVRON_DOWN
-                      }
-                    />
-                  </Button>
-                )}
-                <Button
-                  className="max-w-[25rem]"
-                  theme="secondary"
-                  onClick={() =>
-                    props.setSourceOrder(allSources.map((s) => s.id))
-                  }
-                >
-                  {t("settings.reset")}
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>

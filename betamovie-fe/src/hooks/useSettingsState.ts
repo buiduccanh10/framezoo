@@ -62,9 +62,6 @@ export function useSettingsState(
   enableDiscover: boolean,
   enableFeatured: boolean,
   enableDetailsModal: boolean,
-  sourceOrder: string[],
-  enableSourceOrder: boolean,
-  lastSuccessfulSource: string | null,
   embedOrder: string[],
   enableEmbedOrder: boolean,
   proxyTmdb: boolean,
@@ -72,7 +69,6 @@ export function useSettingsState(
   enableCarouselView: boolean,
   enableMinimalCards: boolean,
   forceCompactEpisodeView: boolean,
-  enableHoldToBoost: boolean,
   homeSectionOrder: string[],
   manualSourceSelection: boolean,
   enableDoubleClickToSeek: boolean,
@@ -171,24 +167,6 @@ export function useSettingsState(
     resetEnableImageLogos,
     enableImageLogosChanged,
   ] = useDerived(enableImageLogos);
-  const [
-    sourceOrderState,
-    setSourceOrderState,
-    resetSourceOrder,
-    sourceOrderChanged,
-  ] = useDerived(sourceOrder);
-  const [
-    enableSourceOrderState,
-    setEnableSourceOrderState,
-    resetEnableSourceOrder,
-    enableSourceOrderChanged,
-  ] = useDerived(enableSourceOrder);
-  const [
-    lastSuccessfulSourceState,
-    setLastSuccessfulSourceState,
-    resetLastSuccessfulSource,
-    lastSuccessfulSourceChanged,
-  ] = useDerived(lastSuccessfulSource);
 
   const [
     embedOrderState,
@@ -222,12 +200,6 @@ export function useSettingsState(
     resetForceCompactEpisodeView,
     forceCompactEpisodeViewChanged,
   ] = useDerived(forceCompactEpisodeView);
-  const [
-    enableHoldToBoostState,
-    setEnableHoldToBoostState,
-    resetEnableHoldToBoost,
-    enableHoldToBoostChanged,
-  ] = useDerived(enableHoldToBoost);
   const [
     homeSectionOrderState,
     setHomeSectionOrderState,
@@ -287,9 +259,6 @@ export function useSettingsState(
     resetEnableFeatured();
     resetEnableDetailsModal();
     resetEnableImageLogos();
-    resetSourceOrder();
-    resetEnableSourceOrder();
-    resetLastSuccessfulSource();
 
     resetEmbedOrder();
     resetEnableEmbedOrder();
@@ -297,7 +266,6 @@ export function useSettingsState(
     resetEnableCarouselView();
     resetEnableMinimalCards();
     resetForceCompactEpisodeView();
-    resetEnableHoldToBoost();
     resetHomeSectionOrder();
     resetManualSourceSelection();
     resetEnableDoubleClickToSeek();
@@ -326,16 +294,12 @@ export function useSettingsState(
     enableFeaturedChanged ||
     enableDetailsModalChanged ||
     enableImageLogosChanged ||
-    sourceOrderChanged ||
-    enableSourceOrderChanged ||
-    lastSuccessfulSourceChanged ||
     embedOrderChanged ||
     enableEmbedOrderChanged ||
     proxyTmdbChanged ||
     enableCarouselViewChanged ||
     enableMinimalCardsChanged ||
     forceCompactEpisodeViewChanged ||
-    enableHoldToBoostChanged ||
     homeSectionOrderChanged ||
     manualSourceSelectionChanged ||
     enableDoubleClickToSeekChanged ||
@@ -442,22 +406,6 @@ export function useSettingsState(
       set: setEnableImageLogosState,
       changed: enableImageLogosChanged,
     },
-    sourceOrder: {
-      state: sourceOrderState,
-      set: setSourceOrderState,
-      changed: sourceOrderChanged,
-    },
-    enableSourceOrder: {
-      state: enableSourceOrderState,
-      set: setEnableSourceOrderState,
-      changed: enableSourceOrderChanged,
-    },
-    lastSuccessfulSource: {
-      state: lastSuccessfulSourceState,
-      set: setLastSuccessfulSourceState,
-      changed: lastSuccessfulSourceChanged,
-    },
-
     proxyTmdb: {
       state: proxyTmdbState,
       set: setProxyTmdbState,
@@ -487,11 +435,6 @@ export function useSettingsState(
       state: forceCompactEpisodeViewState,
       set: setForceCompactEpisodeViewState,
       changed: forceCompactEpisodeViewChanged,
-    },
-    enableHoldToBoost: {
-      state: enableHoldToBoostState,
-      set: setEnableHoldToBoostState,
-      changed: enableHoldToBoostChanged,
     },
     homeSectionOrder: {
       state: homeSectionOrderState,

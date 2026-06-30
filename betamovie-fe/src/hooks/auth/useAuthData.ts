@@ -67,22 +67,12 @@ export function useAuthData() {
   const setForceCompactEpisodeView = usePreferencesStore(
     (s) => s.setForceCompactEpisodeView,
   );
-  const setSourceOrder = usePreferencesStore((s) => s.setSourceOrder);
-  const setEnableSourceOrder = usePreferencesStore(
-    (s) => s.setEnableSourceOrder,
-  );
-  const setLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setLastSuccessfulSource,
-  );
 
   const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
   const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
 
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
 
-  const setEnableHoldToBoost = usePreferencesStore(
-    (s) => s.setEnableHoldToBoost,
-  );
   const setHomeSectionOrder = usePreferencesStore((s) => s.setHomeSectionOrder);
   const setEnableDoubleClickToSeek = usePreferencesStore(
     (s) => s.setEnableDoubleClickToSeek,
@@ -214,18 +204,6 @@ export function useAuthData() {
         setForceCompactEpisodeView(settings.forceCompactEpisodeView);
       }
 
-      if (settings.sourceOrder !== undefined) {
-        setSourceOrder(settings.sourceOrder ?? []);
-      }
-
-      if (settings.enableSourceOrder !== undefined) {
-        setEnableSourceOrder(settings.enableSourceOrder);
-      }
-
-      if (settings.lastSuccessfulSource !== undefined) {
-        setLastSuccessfulSource(settings.lastSuccessfulSource);
-      }
-
       if (settings.embedOrder !== undefined) {
         setEmbedOrder(settings.embedOrder ?? []);
       }
@@ -248,10 +226,6 @@ export function useAuthData() {
 
       if (settings.debridService !== undefined) {
         setdebridService(settings.debridService);
-      }
-
-      if (settings.enableHoldToBoost !== undefined) {
-        setEnableHoldToBoost(settings.enableHoldToBoost);
       }
 
       if (settings.homeSectionOrder !== undefined) {
@@ -304,9 +278,6 @@ export function useAuthData() {
       setEnableImageLogos,
       setEnableCarouselView,
       setForceCompactEpisodeView,
-      setSourceOrder,
-      setEnableSourceOrder,
-      setLastSuccessfulSource,
 
       setEmbedOrder,
       setEnableEmbedOrder,
@@ -314,7 +285,6 @@ export function useAuthData() {
       setFebboxKey,
       setdebridToken,
       setdebridService,
-      setEnableHoldToBoost,
       setHomeSectionOrder,
       setManualSourceSelection,
       setEnableDoubleClickToSeek,

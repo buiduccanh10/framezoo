@@ -203,8 +203,6 @@ export function useScrape() {
     clearTimeoutTimer,
   } = useBaseScrape();
 
-  const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
-  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
   const lastSuccessfulSource = usePreferencesStore(
     (s) => s.lastSuccessfulSource,
   );
@@ -251,26 +249,8 @@ export function useScrape() {
         )
         .map((source) => source.id);
 
-      // Apply custom source ordering if enabled
-      if (enableSourceOrder && (preferredSourceOrder || []).length > 0) {
-        const orderedSources: string[] = [];
-        const remainingSources = [...baseSourceOrder];
-
-        // Add sources in preferred order
-        for (const sourceId of preferredSourceOrder) {
-          const sourceIndex = remainingSources.indexOf(sourceId);
-          if (sourceIndex !== -1) {
-            orderedSources.push(sourceId);
-            remainingSources.splice(sourceIndex, 1);
-          }
-        }
-
-        // Add remaining sources
-        baseSourceOrder = [...orderedSources, ...remainingSources];
-      }
-
       // If we have a last successful source, prioritize it
-      // BUT only if we're not resuming from a specific source (to preserve custom order)
+      // BUT only if we're not resuming from a specific source
       if (lastSuccessfulSource && !startFromSourceId) {
         const lastSourceIndex = baseSourceOrder.indexOf(lastSuccessfulSource);
         if (lastSourceIndex !== -1) {
@@ -336,8 +316,6 @@ export function useScrape() {
       discoverEmbedsEvent,
       getResult,
       startScrape,
-      preferredSourceOrder,
-      enableSourceOrder,
       lastSuccessfulSource,
       preferredEmbedOrder,
       enableEmbedOrder,
