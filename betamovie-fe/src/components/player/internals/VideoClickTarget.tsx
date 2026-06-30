@@ -7,7 +7,6 @@ import { useShouldShowVideoElement } from "@/components/player/internals/VideoCo
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { PlayerHoverState } from "@/stores/player/slices/interface";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 export function VideoClickTarget(props: { showingControls: boolean }) {
@@ -24,9 +23,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   const hovering = usePlayerStore((s) => s.interface.hovering);
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
-  const enableDoubleClickToSeek = usePreferencesStore(
-    (s) => s.enableDoubleClickToSeek,
-  );
+  const enableDoubleClickToSeek = true;
 
   const [_, cancel, reset] = useTimeoutFn(() => {
     updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);

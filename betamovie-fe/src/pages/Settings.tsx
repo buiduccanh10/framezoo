@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
@@ -447,9 +448,6 @@ export function SettingsPage() {
     (s) => s.setManualSourceSelection,
   );
 
-  const enableDoubleClickToSeek = usePreferencesStore(
-    (s) => s.enableDoubleClickToSeek,
-  );
   const setEnableDoubleClickToSeek = usePreferencesStore(
     (s) => s.setEnableDoubleClickToSeek,
   );
@@ -585,7 +583,7 @@ export function SettingsPage() {
     enableEmbedOrder,
     proxyTmdb,
     manualSourceSelection,
-    enableDoubleClickToSeek,
+    true,
     enableAutoResumeOnPlaybackError,
     customThemeBaseline ?? customTheme,
   );
@@ -741,114 +739,138 @@ export function SettingsPage() {
   ]);
   return (
     <SubPageLayout>
+      <Helmet>
+        <style type="text/css">{`
+          html,
+          body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+
+          html::-webkit-scrollbar,
+          body::-webkit-scrollbar,
+          .settings-page *::-webkit-scrollbar {
+            display: none;
+          }
+
+          .settings-page * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+        `}</style>
+      </Helmet>
       <PageTitle subpage k="global.pages.settings" />
-      <SettingsLayout
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        onSearchUnFocus={handleSearchUnFocus}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        onCategoryChange={handleCategoryChange}
-        className="space-y-28"
-        showConnections={shouldShowConnections}
-      >
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-account") && (
-          <div id="settings-account">
-            <Heading1 border className="!mb-0">
-              {t("settings.account.title")}
-            </Heading1>
-            {user.account && state.profile.state ? (
-              <AccountSettings
-                account={user.account}
-                deviceName={state.deviceName.state}
-                setDeviceName={state.deviceName.set}
-                nickname={state.nickname.state}
-                setNickname={state.nickname.set}
-                colorA={state.profile.state.colorA}
-                setColorA={(v) => {
-                  state.profile.set((s) =>
-                    s ? { ...s, colorA: v } : undefined,
-                  );
-                }}
-                colorB={state.profile.state.colorB}
-                setColorB={(v) =>
-                  state.profile.set((s) =>
-                    s ? { ...s, colorB: v } : undefined,
-                  )
-                }
-                userIcon={state.profile.state.icon as any}
-                setUserIcon={(v) =>
-                  state.profile.set((s) => (s ? { ...s, icon: v } : undefined))
-                }
-              />
-            ) : (
-              <RegisterCalloutPart />
-            )}
-          </div>
-        )}
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-preferences") && (
-          <div id="settings-preferences">
-            <PreferencesPart
-              language={state.appLanguage.state}
-              setLanguage={state.appLanguage.set}
-              enableAutoplay={state.enableAutoplay.state}
-              setEnableAutoplay={state.enableAutoplay.set}
-              enableSkipCredits={state.enableSkipCredits.state}
-              setEnableSkipCredits={state.enableSkipCredits.set}
-              enableAutoSkipSegments={state.enableAutoSkipSegments.state}
-              setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
-              manualSourceSelection={state.manualSourceSelection.state}
-              setManualSourceSelection={state.manualSourceSelection.set}
-              enableDoubleClickToSeek={state.enableDoubleClickToSeek.state}
-              setEnableDoubleClickToSeek={state.enableDoubleClickToSeek.set}
-              enableAutoResumeOnPlaybackError={
-                state.enableAutoResumeOnPlaybackError.state
-              }
-              setEnableAutoResumeOnPlaybackError={
-                state.enableAutoResumeOnPlaybackError.set
-              }
-            />
-          </div>
-        )}
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-appearance") && (
-          <div id="settings-appearance">
-            <AppearancePart
-              active={previewTheme ?? "default"}
-              inUse={activeTheme ?? "default"}
-              setTheme={setThemeWithPreview}
-              customTheme={state.customTheme.state}
-              setCustomTheme={state.customTheme.set}
-            />
-          </div>
-        )}
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-captions") && (
-          <div id="settings-captions">
-            <CaptionsPart
-              styling={state.subtitleStyling.state}
-              setStyling={state.subtitleStyling.set}
-            />
-          </div>
-        )}
-        {shouldShowConnections &&
-          (searchQuery.trim() ||
+      <div className="settings-page">
+        <SettingsLayout
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          onSearchUnFocus={handleSearchUnFocus}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          onCategoryChange={handleCategoryChange}
+          className="space-y-28"
+          showConnections={shouldShowConnections}
+        >
+          {(searchQuery.trim() ||
             !selectedCategory ||
-            selectedCategory === "settings-connection") && (
-            <div id="settings-connection">
-              <ConnectionsPart
-                tidbKey={state.tidbKey.state}
-                setTIDBKey={state.tidbKey.set}
+            selectedCategory === "settings-account") && (
+            <div id="settings-account">
+              <Heading1 border className="!mb-0">
+                {t("settings.account.title")}
+              </Heading1>
+              {user.account && state.profile.state ? (
+                <AccountSettings
+                  account={user.account}
+                  deviceName={state.deviceName.state}
+                  setDeviceName={state.deviceName.set}
+                  nickname={state.nickname.state}
+                  setNickname={state.nickname.set}
+                  colorA={state.profile.state.colorA}
+                  setColorA={(v) => {
+                    state.profile.set((s) =>
+                      s ? { ...s, colorA: v } : undefined,
+                    );
+                  }}
+                  colorB={state.profile.state.colorB}
+                  setColorB={(v) =>
+                    state.profile.set((s) =>
+                      s ? { ...s, colorB: v } : undefined,
+                    )
+                  }
+                  userIcon={state.profile.state.icon as any}
+                  setUserIcon={(v) =>
+                    state.profile.set((s) =>
+                      s ? { ...s, icon: v } : undefined,
+                    )
+                  }
+                />
+              ) : (
+                <RegisterCalloutPart />
+              )}
+            </div>
+          )}
+          {(searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-preferences") && (
+            <div id="settings-preferences">
+              <PreferencesPart
+                language={state.appLanguage.state}
+                setLanguage={state.appLanguage.set}
+                enableAutoplay={state.enableAutoplay.state}
+                setEnableAutoplay={state.enableAutoplay.set}
+                enableSkipCredits={state.enableSkipCredits.state}
+                setEnableSkipCredits={state.enableSkipCredits.set}
+                enableAutoSkipSegments={state.enableAutoSkipSegments.state}
+                setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
+                manualSourceSelection={state.manualSourceSelection.state}
+                setManualSourceSelection={state.manualSourceSelection.set}
+                enableDoubleClickToSeek
+                setEnableDoubleClickToSeek={() => undefined}
+                enableAutoResumeOnPlaybackError={
+                  state.enableAutoResumeOnPlaybackError.state
+                }
+                setEnableAutoResumeOnPlaybackError={
+                  state.enableAutoResumeOnPlaybackError.set
+                }
               />
             </div>
           )}
-      </SettingsLayout>
+          {(searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-appearance") && (
+            <div id="settings-appearance">
+              <AppearancePart
+                active={previewTheme ?? "default"}
+                inUse={activeTheme ?? "default"}
+                setTheme={setThemeWithPreview}
+                customTheme={state.customTheme.state}
+                setCustomTheme={state.customTheme.set}
+              />
+            </div>
+          )}
+          {(searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-captions") && (
+            <div id="settings-captions">
+              <CaptionsPart
+                styling={state.subtitleStyling.state}
+                setStyling={state.subtitleStyling.set}
+              />
+            </div>
+          )}
+          {shouldShowConnections &&
+            (searchQuery.trim() ||
+              !selectedCategory ||
+              selectedCategory === "settings-connection") && (
+              <div id="settings-connection">
+                <ConnectionsPart
+                  tidbKey={state.tidbKey.state}
+                  setTIDBKey={state.tidbKey.set}
+                />
+              </div>
+            )}
+        </SettingsLayout>
+      </div>
       <Transition
         animation="fade"
         show={state.changed}

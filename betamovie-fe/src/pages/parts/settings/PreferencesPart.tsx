@@ -145,13 +145,8 @@ export function PreferencesPart(props: {
             <p className="max-w-[25rem] font-medium">
               {t("settings.preferences.doubleClickToSeekDescription")}
             </p>
-            <div
-              onClick={() =>
-                props.setEnableDoubleClickToSeek(!props.enableDoubleClickToSeek)
-              }
-              className="bg-dropdown-background hover:bg-dropdown-hoverBackground select-none my-4 cursor-pointer space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg"
-            >
-              <Toggle enabled={props.enableDoubleClickToSeek} />
+            <div className="bg-dropdown-background select-none my-4 space-x-3 flex items-center max-w-[25rem] py-3 px-4 rounded-lg pointer-events-none">
+              <Toggle enabled />
               <p className="flex-1 text-white font-bold">
                 {t("settings.preferences.doubleClickToSeekLabel")}
               </p>
