@@ -45,9 +45,11 @@ import {
 import { LanguageProvider } from "@/stores/language";
 
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
+const DesktopPipPage = lazyWithPreload(() => import("@/pages/DesktopPip"));
 const SettingsPage = lazyWithPreload(() => import("@/pages/Settings"));
 
 PlayerView.preload();
+DesktopPipPage.preload();
 SettingsPage.preload();
 
 function LegacyUrlView({ children }: { children: ReactElement }) {
@@ -160,6 +162,14 @@ function App() {
       {!showDowntime && (
         <Routes>
           {/* Functional routes */}
+          <Route
+            path="/desktop-pip"
+            element={
+              <Suspense fallback={null}>
+                <DesktopPipPage />
+              </Suspense>
+            }
+          />
           <Route path="/s/:query" element={<QuickSearch />} />
           <Route path="/search/:type" element={<Navigate to="/browse" />} />
           <Route path="/search/:type/:query?" element={<QueryView />} />

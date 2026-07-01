@@ -309,7 +309,10 @@ export function SubtitleView(props: { controlsShown: boolean }) {
     );
   }
 
-  if (pictureInPictureMode === "document") {
+  if (
+    pictureInPictureMode === "document" ||
+    pictureInPictureMode === "desktop"
+  ) {
     return null;
   }
 
