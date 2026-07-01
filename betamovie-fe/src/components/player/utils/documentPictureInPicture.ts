@@ -1,11 +1,13 @@
 const STYLE_MARKER_ATTR = "data-betamovie-document-pip-styles";
 const ROOT_ID = "betamovie-document-pip-root";
 const VIDEO_ROOT_ID = "betamovie-document-pip-video-root";
+const OVERLAY_ROOT_ID = "betamovie-document-pip-overlay-root";
 const SUBTITLE_ROOT_ID = "betamovie-document-pip-subtitle-root";
 
 export interface DocumentPictureInPictureRoots {
   root: HTMLDivElement;
   videoRoot: HTMLDivElement;
+  overlayRoot: HTMLDivElement;
   subtitleRoot: HTMLDivElement;
 }
 
@@ -99,6 +101,13 @@ export function ensureDocumentPictureInPictureRoots(
     inset: "0",
     backgroundColor: "black",
   });
+  const overlayRoot = ensureRootElement(documentRef, OVERLAY_ROOT_ID, {
+    position: "absolute",
+    inset: "0",
+    overflow: "hidden",
+    pointerEvents: "auto",
+    zIndex: "2",
+  });
   const subtitleRoot = ensureRootElement(documentRef, SUBTITLE_ROOT_ID, {
     position: "absolute",
     inset: "0",
@@ -110,13 +119,17 @@ export function ensureDocumentPictureInPictureRoots(
   if (root.firstElementChild !== videoRoot) {
     root.appendChild(videoRoot);
   }
-  if (root.lastElementChild !== subtitleRoot) {
+  if (overlayRoot.parentElement !== root) {
+    root.appendChild(overlayRoot);
+  }
+  if (subtitleRoot.parentElement !== root) {
     root.appendChild(subtitleRoot);
   }
 
   return {
     root,
     videoRoot,
+    overlayRoot,
     subtitleRoot,
   };
 }

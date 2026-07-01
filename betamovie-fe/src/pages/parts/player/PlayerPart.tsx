@@ -12,6 +12,7 @@ import {
   SegmentData,
   useSkipTime,
 } from "@/components/player/hooks/useSkipTime";
+import { DocumentPipOverlay } from "@/components/player/internals/DocumentPipOverlay";
 import { PauseOverlay } from "@/components/player/overlays/PauseOverlay";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
@@ -124,6 +125,7 @@ export function PlayerPart(props: PlayerPartProps) {
       <Player.EpisodesRouter onChange={props.onMetaChange} />
       <Player.SettingsRouter />
       <Player.SubtitleView controlsShown={showTargets} />
+      <DocumentPipOverlay />
       <PlayerLoadingOverlay />
 
       {status === playerStatus.PLAYING ? (
