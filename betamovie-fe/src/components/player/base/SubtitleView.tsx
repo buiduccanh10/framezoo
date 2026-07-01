@@ -235,6 +235,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   const caption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
+  const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const source = usePlayerStore((s) => s.source);
   const display = usePlayerStore((s) => s.display);
   const isCasting = display?.getType() === "casting";
@@ -251,9 +252,10 @@ export function SubtitleView(props: { controlsShown: boolean }) {
       : null;
   const shouldUseDocumentPictureInPictureCaptionStyle =
     pictureInPictureMode === "document";
-  // Hide custom captions when native subtitles are automatically used (e.g. in normal mode)
+  // Hide custom captions only when the display explicitly requires
+  // native subtitle tracks (e.g. native fullscreen / native PiP).
   const shouldUseNativeTrack =
-    pictureInPictureMode !== "document" && source !== null;
+    pictureInPictureMode !== "document" && captionAsTrack && source !== null;
   if (shouldUseNativeTrack || (!caption && !secondaryCaption) || isCasting)
     return null;
 

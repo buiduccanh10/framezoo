@@ -16,8 +16,11 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { CaptionCue } from "@/components/player/Player";
 import { Heading1 } from "@/components/utils/Text";
 import { Transition } from "@/components/utils/Transition";
-import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
-import { isFirefox } from "@/utils/detectFeatures";
+import {
+  DEFAULT_SUBTITLE_STYLING,
+  SubtitleStyling,
+  useSubtitleStore,
+} from "@/stores/subtitles";
 
 export function CaptionPreview(props: {
   fullscreen?: boolean;
@@ -116,17 +119,7 @@ export function CaptionsPart(props: {
 
   const resetSubStyling = () => {
     subtitleStore.resetStyling();
-    props.setStyling({
-      color: "#ffffff",
-      backgroundOpacity: 0,
-      size: 1.65,
-      backgroundBlur: 0.5,
-      backgroundBlurEnabled: !isFirefox,
-      bold: false,
-      verticalPosition: 1,
-      fontStyle: "default",
-      borderThickness: 1,
-    });
+    props.setStyling({ ...DEFAULT_SUBTITLE_STYLING });
   };
 
   return (

@@ -80,6 +80,7 @@ function VideoElement() {
   const secondaryVttData = usePlayerStore((s) =>
     s.caption.dualSubEnabled ? s.caption.secondary?.vttData : undefined,
   );
+  const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const source = usePlayerStore((s) => s.source);
   const pictureInPictureMode = usePlayerStore(
     (s) => s.interface.pictureInPictureMode,
@@ -96,9 +97,10 @@ function VideoElement() {
     pictureInPictureMode === "document"
       ? getDocumentPictureInPictureRoots(documentPictureInPictureWindow)
       : null;
-  // Use native tracks automatically for non-document PiP
+  // Use native tracks only when the display explicitly requires them
+  // (e.g. native fullscreen / native PiP on some platforms).
   const shouldUseNativeTrack =
-    pictureInPictureMode !== "document" && source !== null;
+    pictureInPictureMode !== "document" && captionAsTrack && source !== null;
 
   const handleVideoRef = useCallback((node: HTMLVideoElement | null) => {
     videoEl.current = node;
