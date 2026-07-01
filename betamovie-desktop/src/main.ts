@@ -303,7 +303,7 @@ function createDesktopPipWindow() {
     skipTaskbar: true,
     autoHideMenuBar: true,
     show: false,
-    parent: mainWindow ?? undefined,
+    fullscreenable: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
       contextIsolation: true,
@@ -318,6 +318,7 @@ function createDesktopPipWindow() {
   desktopPipWindow.setAlwaysOnTop(true, "screen-saver");
   desktopPipWindow.setVisibleOnAllWorkspaces(true, {
     visibleOnFullScreen: true,
+    skipTransformProcessType: true,
   });
   desktopPipWindow.setAspectRatio(16 / 9);
   desktopPipWindow.setWindowButtonVisibility(false);
