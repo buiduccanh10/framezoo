@@ -5,12 +5,16 @@ import {
   canDocumentPictureInPicture,
   canPictureInPicture,
   canWebkitPictureInPicture,
+  isDesktopAppRuntime,
 } from "@/utils/detectFeatures";
 
 export function Pip(props: { iconSizeClass?: string; className?: string }) {
   const display = usePlayerStore((s) => s.display);
 
+  const canUseDesktopPip = isDesktopAppRuntime();
+
   if (
+    !canUseDesktopPip &&
     !canDocumentPictureInPicture() &&
     !canPictureInPicture() &&
     !canWebkitPictureInPicture()

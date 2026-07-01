@@ -104,14 +104,16 @@ export function CaptionCue({
         padding: "0.18em 0.7em",
         textAlign: "center" as const,
         lineHeight: 1.35,
-        color: "#fff",
+        color: "var(--betamovie-pip-subtitle-color, #fff)",
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif',
         fontSize: "clamp(18px, 4.2vh, 30px)",
-        backgroundColor: "rgba(0,0,0,0.78)",
+        backgroundColor:
+          "var(--betamovie-pip-subtitle-background, rgba(0,0,0,0.78))",
         backdropFilter: "none",
-        fontWeight: 500,
-        textShadow: "0 2px 4px rgba(0,0,0,0.92)",
+        fontWeight: "var(--betamovie-pip-subtitle-font-weight, 500)",
+        textShadow:
+          "var(--betamovie-pip-subtitle-text-shadow, 0 2px 4px rgba(0,0,0,0.92))",
       }
     : null;
 
@@ -275,7 +277,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
           color: "white",
           bottom:
             pictureInPictureMode === "document"
-              ? "8%"
+              ? "var(--betamovie-document-pip-subtitle-bottom, 1.15rem)"
               : props.controlsShown
                 ? "6rem"
                 : `${styling.verticalPosition}rem`,
@@ -309,7 +311,10 @@ export function SubtitleView(props: { controlsShown: boolean }) {
     );
   }
 
-  if (pictureInPictureMode === "document") {
+  if (
+    pictureInPictureMode === "document" ||
+    pictureInPictureMode === "desktop"
+  ) {
     return null;
   }
 

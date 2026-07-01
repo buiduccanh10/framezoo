@@ -8,18 +8,22 @@ import {
   type Input,
 } from "electron";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 const APP_ID = "com.alphaflix.desktop";
 const APP_NAME = "AlphaFlix";
 const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";
+const DESKTOP_PIP_ROUTE = "/desktop-pip";
 
 const DEVTOOLS_PROTECTION_ENABLED =
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
 const ENABLE_DEVTOOLS = !DEVTOOLS_PROTECTION_ENABLED;
 
 let mainWindow: BrowserWindow | null = null;
+let desktopPipWindow: BrowserWindow | null = null;
+let desktopPipState: Record<string, unknown> | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
 type ExtensionMessageName =
@@ -259,6 +263,101 @@ function getRendererEntryPath() {
   return path.join(__dirname, "..", "renderer", "index.html");
 }
 
+function getDesktopPipUrl() {
+  if (RENDERER_DEV_URL) {
+    return `${RENDERER_DEV_URL.replace(/\/$/, "")}/#${DESKTOP_PIP_ROUTE}`;
+  }
+
+  return `${pathToFileURL(getRendererEntryPath()).toString()}#${DESKTOP_PIP_ROUTE}`;
+}
+
+function notifyMainWindowDesktopPipClosed() {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+  mainWindow.webContents.send("desktop:pip-closed");
+}
+
+function sendDesktopPipState() {
+  if (!desktopPipWindow || desktopPipWindow.isDestroyed() || !desktopPipState) {
+    return;
+  }
+
+  desktopPipWindow.webContents.send("desktop:pip-state", desktopPipState);
+}
+
+function createDesktopPipWindow() {
+  if (desktopPipWindow && !desktopPipWindow.isDestroyed()) {
+    return desktopPipWindow;
+  }
+
+  desktopPipWindow = new BrowserWindow({
+    width: 420,
+    height: 236,
+    minWidth: 320,
+    minHeight: 180,
+    maxWidth: 1280,
+    maxHeight: 720,
+    backgroundColor: "#000000",
+    alwaysOnTop: true,
+    frame: false,
+    resizable: true,
+    skipTaskbar: true,
+    autoHideMenuBar: true,
+    show: false,
+    parent: mainWindow ?? undefined,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.cjs"),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: false,
+      webSecurity: false,
+      devTools: ENABLE_DEVTOOLS,
+      backgroundThrottling: false,
+    },
+  });
+
+  desktopPipWindow.setAlwaysOnTop(true, "screen-saver");
+  desktopPipWindow.setVisibleOnAllWorkspaces(true, {
+    visibleOnFullScreen: true,
+  });
+  desktopPipWindow.setAspectRatio(16 / 9);
+  desktopPipWindow.setWindowButtonVisibility(false);
+
+  desktopPipWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//i.test(url)) {
+      void shell.openExternal(url);
+      return { action: "deny" };
+    }
+
+    return { action: "allow" };
+  });
+
+  desktopPipWindow.webContents.on("will-navigate", (event, url) => {
+    const currentUrl = desktopPipWindow?.webContents.getURL();
+    if (url !== currentUrl && /^https?:\/\//i.test(url)) {
+      event.preventDefault();
+      void shell.openExternal(url);
+    }
+  });
+
+  desktopPipWindow.webContents.on("did-finish-load", () => {
+    sendDesktopPipState();
+  });
+
+  desktopPipWindow.once("ready-to-show", () => {
+    desktopPipWindow?.show();
+  });
+
+  desktopPipWindow.on("closed", () => {
+    desktopPipWindow = null;
+    desktopPipState = null;
+    notifyMainWindowDesktopPipClosed();
+  });
+
+  void desktopPipWindow.loadURL(getDesktopPipUrl());
+
+  return desktopPipWindow;
+}
+
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: APP_NAME,
@@ -323,6 +422,9 @@ function createMainWindow() {
   }
 
   mainWindow.on("closed", () => {
+    if (desktopPipWindow && !desktopPipWindow.isDestroyed()) {
+      desktopPipWindow.close();
+    }
     mainWindow = null;
   });
 }
@@ -352,9 +454,68 @@ function registerIpcHandlers() {
 
     return true;
   });
+
+  ipcMain.handle("desktop:pip-open", async (_event, nextState: any) => {
+    desktopPipState = nextState ?? null;
+    if (!desktopPipState) return false;
+
+    const pipWindow = createDesktopPipWindow();
+    sendDesktopPipState();
+    if (pipWindow.isMinimized()) {
+      pipWindow.restore();
+    }
+    if (typeof pipWindow.showInactive === "function") {
+      pipWindow.showInactive();
+    } else {
+      pipWindow.show();
+    }
+    return true;
+  });
+
+  ipcMain.handle("desktop:pip-update", async (_event, nextState: any) => {
+    desktopPipState = nextState ?? null;
+    sendDesktopPipState();
+    return Boolean(desktopPipWindow && !desktopPipWindow.isDestroyed());
+  });
+
+  ipcMain.handle("desktop:pip-close", async () => {
+    desktopPipState = null;
+
+    if (!desktopPipWindow || desktopPipWindow.isDestroyed()) {
+      notifyMainWindowDesktopPipClosed();
+      return false;
+    }
+
+    desktopPipWindow.close();
+    return true;
+  });
+
+  ipcMain.handle("desktop:pip-get-state", async () => {
+    return desktopPipState;
+  });
+
+  ipcMain.handle("desktop:pip-action", async (_event, action: any) => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    mainWindow.webContents.send("desktop:pip-action", action);
+    return true;
+  });
+
+  ipcMain.handle("desktop:focus-main-window", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
+    }
+    mainWindow.show();
+    mainWindow.focus();
+    return true;
+  });
 }
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
+app.commandLine.appendSwitch(
+  "enable-features",
+  "DocumentPictureInPictureAPI",
+);
 app.setName(APP_NAME);
 
 if (process.platform === "win32") {

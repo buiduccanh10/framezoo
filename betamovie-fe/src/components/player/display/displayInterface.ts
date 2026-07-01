@@ -41,7 +41,7 @@ export type SegmentQualityDebugInfo = {
   updatedAt: number;
 };
 
-export type PictureInPictureMode = "native" | "document" | null;
+export type PictureInPictureMode = "native" | "document" | "desktop" | null;
 export type PictureInPictureState = {
   active: boolean;
   mode: PictureInPictureMode;

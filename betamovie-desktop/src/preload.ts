@@ -28,6 +28,51 @@ contextBridge.exposeInMainWorld("electronAPI", {
   showDesktopSettingsPlaceholder() {
     return ipcRenderer.invoke("desktop:show-settings-placeholder");
   },
+  openDesktopPipWindow(state: unknown) {
+    return ipcRenderer.invoke("desktop:pip-open", state);
+  },
+  updateDesktopPipWindow(state: unknown) {
+    return ipcRenderer.invoke("desktop:pip-update", state);
+  },
+  closeDesktopPipWindow() {
+    return ipcRenderer.invoke("desktop:pip-close");
+  },
+  getDesktopPipWindowState() {
+    return ipcRenderer.invoke("desktop:pip-get-state");
+  },
+  focusMainWindow() {
+    return ipcRenderer.invoke("desktop:focus-main-window");
+  },
+  sendDesktopPipAction(action: unknown) {
+    return ipcRenderer.invoke("desktop:pip-action", action);
+  },
+  onDesktopPipState(listener: (state: unknown) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
+      listener(state);
+    };
+    ipcRenderer.on("desktop:pip-state", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:pip-state", handler);
+    };
+  },
+  onDesktopPipClosed(listener: () => void) {
+    const handler = () => {
+      listener();
+    };
+    ipcRenderer.on("desktop:pip-closed", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:pip-closed", handler);
+    };
+  },
+  onDesktopPipAction(listener: (action: unknown) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, action: unknown) => {
+      listener(action);
+    };
+    ipcRenderer.on("desktop:pip-action", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:pip-action", handler);
+    };
+  },
 });
 
 window.addEventListener("DOMContentLoaded", () => {

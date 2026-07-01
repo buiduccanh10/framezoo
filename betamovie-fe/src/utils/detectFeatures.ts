@@ -4,6 +4,8 @@ import Hls from "hls.js";
 
 declare global {
   interface Window {
+    __ALPHAFLIX_DESKTOP__?: boolean;
+    __BETAMOVIE_DESKTOP__?: boolean;
     documentPictureInPicture?: {
       window?: Window | null;
       requestWindow(options?: {
@@ -55,6 +57,10 @@ export function canWebkitFullscreen(): boolean {
 
 export function canFullscreen(): boolean {
   return canFullscreenAnyElement() || canWebkitFullscreen();
+}
+
+export function isDesktopAppRuntime(): boolean {
+  return Boolean(window.__ALPHAFLIX_DESKTOP__ || window.__BETAMOVIE_DESKTOP__);
 }
 
 export function canPictureInPicture(): boolean {

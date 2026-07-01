@@ -97,6 +97,7 @@ function VideoElement() {
     pictureInPictureMode === "document"
       ? getDocumentPictureInPictureRoots(documentPictureInPictureWindow)
       : null;
+  const shouldHideMainVideoForDesktopPip = pictureInPictureMode === "desktop";
   // Use native tracks only when the display explicitly requires them
   // (e.g. native fullscreen / native PiP on some platforms).
   const shouldUseNativeTrack =
@@ -181,25 +182,31 @@ function VideoElement() {
   }
 
   const videoElement = (
-    <video
-      id="video-element"
-      className="absolute inset-0 w-full h-screen bg-black"
-      autoPlay
-      playsInline
-      ref={handleVideoRef}
-      preload={preloadMode}
-      onContextMenu={(e) => e.preventDefault()}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "black",
-        objectFit: "contain",
-      }}
-    >
-      {subtitleTrack}
-    </video>
+    <>
+      <video
+        id="video-element"
+        className="absolute inset-0 w-full h-screen bg-black"
+        autoPlay
+        playsInline
+        ref={handleVideoRef}
+        preload={preloadMode}
+        onContextMenu={(e) => e.preventDefault()}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "black",
+          objectFit: "contain",
+          opacity: shouldHideMainVideoForDesktopPip ? 0 : 1,
+        }}
+      >
+        {subtitleTrack}
+      </video>
+      {shouldHideMainVideoForDesktopPip ? (
+        <div className="pointer-events-none absolute inset-0 bg-black" />
+      ) : null}
+    </>
   );
 
   if (documentPictureInPictureRoots?.videoRoot) {

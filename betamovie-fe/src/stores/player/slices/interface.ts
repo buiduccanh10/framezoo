@@ -21,7 +21,7 @@ export interface InterfaceSlice {
     hovering: PlayerHoverState;
     lastHoveringState: PlayerHoverState;
     canAirplay: boolean;
-    pictureInPictureMode: "native" | "document" | null;
+    pictureInPictureMode: "native" | "document" | "desktop" | null;
     documentPictureInPictureWindow: Window | null;
     isCasting: boolean;
     hideNextEpisodeBtn: boolean;
