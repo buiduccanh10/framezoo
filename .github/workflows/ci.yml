@@ -62,7 +62,7 @@ jobs:
           filters: |
             desktop:
               - 'betamovie-fe/**'
-              - 'betamovie-desktop/package.json'
+              - 'betamovie-desktop/**'
               - 'package.json'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'

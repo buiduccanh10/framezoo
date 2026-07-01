@@ -51,7 +51,7 @@ build:desktop:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - betamovie-fe/**/*
-        - betamovie-desktop/package.json
+        - betamovie-desktop/**/*
         - package.json
         - pnpm-lock.yaml
         - pnpm-workspace.yaml
