@@ -52,7 +52,6 @@ export function useCaptions() {
 
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
-  const source = usePlayerStore((s) => s.source);
   const sourceId = usePlayerStore((s) => s.sourceId);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
@@ -202,7 +201,9 @@ export function useCaptions() {
 
       setLanguage(caption.language);
 
-      if (captionAsTrack || source?.type === "file") {
+      // Preserve an existing native-track request when the subtitle finishes
+      // loading after the player has already entered a mode that needs tracks.
+      if (captionAsTrack) {
         setCaptionAsTrack(true);
       }
     },
@@ -212,7 +213,6 @@ export function useCaptions() {
       setLanguage,
       setCaption,
       resetSubtitleSpecificSettings,
-      source,
       setCaptionAsTrack,
       selectedCaption,
     ],

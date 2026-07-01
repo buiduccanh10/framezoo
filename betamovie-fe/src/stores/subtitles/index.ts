@@ -76,6 +76,49 @@ export interface SubtitleStore {
   setShowDelayIndicator: (show: boolean) => void;
 }
 
+export const DEFAULT_SUBTITLE_STYLING: SubtitleStyling = {
+  color: "#ffffff",
+  backgroundOpacity: 0,
+  size: 1.65,
+  backgroundBlur: 0.5,
+  backgroundBlurEnabled: !isFirefox,
+  bold: false,
+  verticalPosition: 1,
+  fontStyle: "default",
+  borderThickness: 1,
+};
+
+const LEGACY_PLAYER_RESET_SUBTITLE_STYLING: SubtitleStyling = {
+  color: "#ffffff",
+  backgroundOpacity: 0.25,
+  size: 0.75,
+  backgroundBlur: 0.25,
+  backgroundBlurEnabled: !isFirefox,
+  bold: false,
+  verticalPosition: 1,
+  fontStyle: "default",
+  borderThickness: 1,
+};
+
+function matchesSubtitleStyling(
+  styling: Partial<SubtitleStyling> | undefined,
+  target: SubtitleStyling,
+) {
+  if (!styling) return false;
+
+  return (
+    styling.color === target.color &&
+    styling.backgroundOpacity === target.backgroundOpacity &&
+    styling.size === target.size &&
+    styling.backgroundBlur === target.backgroundBlur &&
+    styling.backgroundBlurEnabled === target.backgroundBlurEnabled &&
+    styling.bold === target.bold &&
+    styling.verticalPosition === target.verticalPosition &&
+    styling.fontStyle === target.fontStyle &&
+    styling.borderThickness === target.borderThickness
+  );
+}
+
 export const useSubtitleStore = create(
   persist(
     immer<SubtitleStore>((set) => ({
@@ -87,17 +130,7 @@ export const useSubtitleStore = create(
       isOpenSubtitles: false,
       overrideCasing: false,
       delay: 0,
-      styling: {
-        color: "#ffffff",
-        backgroundOpacity: 0,
-        size: 1.65,
-        backgroundBlur: 0.5,
-        backgroundBlurEnabled: !isFirefox,
-        bold: false,
-        verticalPosition: 1,
-        fontStyle: "default",
-        borderThickness: 1,
-      },
+      styling: { ...DEFAULT_SUBTITLE_STYLING },
       showDelayIndicator: false,
       resetSubtitleSpecificSettings() {
         set((s) => {
@@ -140,17 +173,7 @@ export const useSubtitleStore = create(
       },
       resetStyling() {
         set((s) => {
-          s.styling = {
-            color: "#ffffff",
-            backgroundOpacity: 0,
-            size: 1.65,
-            backgroundBlur: 0.5,
-            backgroundBlurEnabled: !isFirefox,
-            bold: false,
-            verticalPosition: 1,
-            fontStyle: "default",
-            borderThickness: 1,
-          };
+          s.styling = { ...DEFAULT_SUBTITLE_STYLING };
         });
       },
       setLanguage(lang) {
@@ -194,7 +217,7 @@ export const useSubtitleStore = create(
     })),
     {
       name: "__MW::subtitles",
-      version: 2,
+      version: 3,
       migrate: (persistedState: unknown, version: number) => {
         if (!persistedState || typeof persistedState !== "object") {
           return persistedState;
@@ -216,6 +239,16 @@ export const useSubtitleStore = create(
           if (state.styling.backgroundOpacity === 0.5) {
             state.styling.backgroundOpacity = 0;
           }
+        }
+
+        if (
+          version < 3 &&
+          matchesSubtitleStyling(
+            state.styling,
+            LEGACY_PLAYER_RESET_SUBTITLE_STYLING,
+          )
+        ) {
+          state.styling = { ...DEFAULT_SUBTITLE_STYLING };
         }
 
         return state;

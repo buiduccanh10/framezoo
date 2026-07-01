@@ -22,8 +22,11 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
-import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
-import { isFirefox } from "@/utils/detectFeatures";
+import {
+  DEFAULT_SUBTITLE_STYLING,
+  SubtitleStyling,
+  useSubtitleStore,
+} from "@/stores/subtitles";
 
 export function ColorOption(props: {
   color: string;
@@ -514,17 +517,7 @@ export function CaptionSettingsView({
   }, [vttData, selectedCaption, delay, videoTime]);
 
   const resetSubStyling = () => {
-    subtitleStore.updateStyling({
-      color: "#ffffff",
-      backgroundOpacity: 0.25,
-      size: 0.75,
-      backgroundBlur: 0.25,
-      backgroundBlurEnabled: !isFirefox,
-      bold: false,
-      verticalPosition: 1,
-      fontStyle: "default",
-      borderThickness: 1,
-    });
+    subtitleStore.updateStyling(DEFAULT_SUBTITLE_STYLING);
   };
 
   return (
