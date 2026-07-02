@@ -469,8 +469,9 @@ export function useCaptions() {
     const isCustomCaption =
       selectedCaption.id === "custom-caption" ||
       selectedCaption.id === "pasted-caption";
+    const isPersistedCaption = selectedCaption.persisted;
 
-    if (isCustomCaption) return;
+    if (isCustomCaption || isPersistedCaption) return;
 
     const isSelectedCaptionStillAvailable = captions.some(
       (caption) =>
@@ -522,7 +523,8 @@ export function useCaptions() {
     const isCustomCaption =
       secondaryCaption.id === "custom-caption" ||
       secondaryCaption.id === "pasted-caption";
-    if (isCustomCaption) return;
+    const isPersistedCaption = secondaryCaption.persisted;
+    if (isCustomCaption || isPersistedCaption) return;
 
     const isSecondaryCaptionStillAvailable = captions.some(
       (caption) => caption.id === secondaryCaption.id,
