@@ -16,6 +16,7 @@ const TMDB_PROXY_SORT_SOURCE_PAGE_COUNT = toPositiveTtl(
   Number(process.env.TMDB_PROXY_SORT_SOURCE_PAGE_COUNT || 100),
   100
 );
+const TMDB_PROXY_CACHE_VERSION = 'v2';
 
 const TMDB_DETAIL_PATH_PATTERNS = [
   /^movie\/\d+$/i,
@@ -23,9 +24,9 @@ const TMDB_DETAIL_PATH_PATTERNS = [
   /^tv\/\d+\/season\/\d+$/i,
   /^tv\/\d+\/season\/\d+\/episode\/\d+$/i,
 ];
+// Keep TMDB's native text relevance for search endpoints.
 const TMDB_SORTABLE_PATH_PATTERNS = [
   /^discover\/(?:movie|tv)$/i,
-  /^search\/(?:movie|tv|multi)$/i,
   /^(?:movie|tv)\/(?:popular|top_rated|now_playing|on_the_air|airing_today|upcoming)$/i,
   /^(?:movie|tv)\/\d+\/recommendations$/i,
 ];
@@ -247,7 +248,7 @@ export default defineEventHandler(async event => {
   // --- Caching Logic ---
   const storage = useStorage('cache');
   const queryStr = JSON.stringify(query);
-  const cacheKey = `tmdb:request:${path}:${Buffer.from(queryStr).toString('base64')}`;
+  const cacheKey = `tmdb:${TMDB_PROXY_CACHE_VERSION}:request:${path}:${Buffer.from(queryStr).toString('base64')}`;
   const cacheTtl = resolveTmdbCacheTtl(path);
 
   try {
