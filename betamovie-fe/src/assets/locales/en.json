@@ -99,6 +99,7 @@
     "addToList": "Add to List",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Bookmark All",
       "movie": "Movie",
       "movies": "Movies",
       "rating": "Rating",

@@ -275,7 +275,7 @@ export function CollectionOverlay({
                               icon={Icons.BOOKMARK_OUTLINE}
                               className="text-xs"
                             />
-                            <span>Bookmark All</span>
+                            <span>{t("details.collection.bookmarkAll")}</span>
                           </button>
                         </>
                       )}

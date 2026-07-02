@@ -3,6 +3,12 @@ export interface RottenTomatoesMovie {
   tomatoIcon: 'certified_fresh' | 'fresh' | 'rotten';
   tomatoScore: number;
   url: string;
+  popcornIcon?: 'upright' | 'spilled' | 'empty';
+  popcornScore?: number;
+  popcornAverageRating?: number | null;
+  popcornBandedRatingCount?: string | null;
+  popcornReviewCount?: number | null;
+  popcornUrl?: string | null;
 }
 
 interface SearchResultMovie {
@@ -13,6 +19,21 @@ interface SearchResultMovie {
     value: number;
     state: RottenTomatoesMovie['tomatoIcon'];
   };
+}
+
+interface MediaScorecardScore {
+  averageRating?: string;
+  bandedRatingCount?: string;
+  reviewCount?: number;
+  score?: string;
+  sentiment?: string;
+  certified?: boolean;
+  reviewsPageUrl?: string;
+}
+
+interface MediaScorecardPayload {
+  audienceScore?: MediaScorecardScore;
+  criticsScore?: MediaScorecardScore;
 }
 
 const USER_AGENT =
@@ -73,6 +94,54 @@ function toAbsoluteRtUrl(url: string): string | null {
   } catch {
     return null;
   }
+}
+
+function parseEmbeddedJson<T>(html: string, scriptId: string): T | null {
+  const match = html.match(
+    new RegExp(
+      `<script[^>]+id=["']${scriptId}["'][^>]*>\\s*([\\s\\S]*?)\\s*<\\/script>`,
+      'i',
+    ),
+  );
+  if (!match?.[1]) return null;
+
+  try {
+    return JSON.parse(match[1]) as T;
+  } catch {
+    return null;
+  }
+}
+
+function parseScore(value?: string): number | null {
+  if (!value) return null;
+  const parsed = parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseAverageRating(value?: string): number | null {
+  if (!value) return null;
+  const parsed = parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function toTomatoIcon(
+  score: number | null,
+  sentiment?: string,
+  certified?: boolean,
+): RottenTomatoesMovie['tomatoIcon'] {
+  if (certified && (score ?? 0) >= 75) {
+    return 'certified_fresh';
+  }
+
+  return sentiment?.toUpperCase() === 'POSITIVE' ? 'fresh' : 'rotten';
+}
+
+function toPopcornIcon(
+  score: number | null,
+  sentiment?: string,
+): NonNullable<RottenTomatoesMovie['popcornIcon']> {
+  if (score === null) return 'empty';
+  return sentiment?.toUpperCase() === 'POSITIVE' ? 'upright' : 'spilled';
 }
 
 function matchAttribute(row: string, attributes: string[]): string | null {
@@ -144,10 +213,70 @@ export async function scrapeRottenTomatoes(title: string, year?: number): Promis
 
   if (!match) return null;
 
+  let tomatoScore = match.tomatometer.value;
+  let tomatoIcon = match.tomatometer.state;
+  let popcornIcon: RottenTomatoesMovie['popcornIcon'];
+  let popcornScore: number | undefined;
+  let popcornAverageRating: number | null = null;
+  let popcornBandedRatingCount: string | null = null;
+  let popcornReviewCount: number | null = null;
+  let popcornUrl: string | null = null;
+
+  try {
+    const detailResponse = await fetch(match.url, {
+      headers: {
+        'User-Agent': USER_AGENT,
+      },
+    });
+
+    if (detailResponse.ok) {
+      const detailHtml = await detailResponse.text();
+      const scorecard = parseEmbeddedJson<MediaScorecardPayload>(
+        detailHtml,
+        'media-scorecard-json',
+      );
+
+      const criticsScore = scorecard?.criticsScore;
+      const audienceScore = scorecard?.audienceScore;
+
+      const parsedTomatoScore = parseScore(criticsScore?.score);
+      if (parsedTomatoScore !== null) {
+        tomatoScore = parsedTomatoScore;
+        tomatoIcon = toTomatoIcon(
+          parsedTomatoScore,
+          criticsScore?.sentiment,
+          criticsScore?.certified,
+        );
+      }
+
+      const parsedPopcornScore = parseScore(audienceScore?.score);
+      if (parsedPopcornScore !== null) {
+        popcornScore = parsedPopcornScore;
+      }
+
+      popcornIcon = toPopcornIcon(parsedPopcornScore, audienceScore?.sentiment);
+      popcornAverageRating = parseAverageRating(audienceScore?.averageRating);
+      popcornBandedRatingCount = audienceScore?.bandedRatingCount ?? null;
+      popcornReviewCount =
+        typeof audienceScore?.reviewCount === 'number'
+          ? audienceScore.reviewCount
+          : null;
+      popcornUrl = toAbsoluteRtUrl(audienceScore?.reviewsPageUrl ?? '');
+    }
+  } catch {
+    // Keep Tomatometer-only fallback when detail scraping fails.
+  }
+
   return {
     title: match.name,
-    tomatoIcon: match.tomatometer.state,
-    tomatoScore: match.tomatometer.value,
+    tomatoIcon,
+    tomatoScore,
     url: match.url,
+    ...(popcornIcon ? { popcornIcon } : {}),
+    ...(popcornScore !== undefined ? { popcornScore } : {}),
+    ...(popcornAverageRating !== null ? { popcornAverageRating } : {}),
+    ...(popcornBandedRatingCount ? { popcornBandedRatingCount } : {}),
+    ...(popcornReviewCount !== null ? { popcornReviewCount } : {}),
+    ...(popcornUrl ? { popcornUrl } : {}),
   };
 }

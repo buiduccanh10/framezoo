@@ -99,6 +99,7 @@
     "addToList": "Lägg till i listan",
     "airs": "Sänds",
     "collection": {
+      "bookmarkAll": "Bokmärk alla",
       "movie": "Film",
       "movies": "Filmer",
       "rating": "Gradering",

@@ -99,6 +99,7 @@
     "addToList": "Hozzáadás a listához",
     "airs": "Megjelenés",
     "collection": {
+      "bookmarkAll": "Összes könyvjelzővel",
       "movie": "Film",
       "movies": "Filmek",
       "rating": "Értékelés",

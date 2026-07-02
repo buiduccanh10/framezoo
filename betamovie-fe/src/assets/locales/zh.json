@@ -99,6 +99,7 @@
     "addToList": "添加到列表",
     "airs": "空气",
     "collection": {
+      "bookmarkAll": "全部添加书签",
       "movie": "电影",
       "movies": "电影",
       "rating": "等级",

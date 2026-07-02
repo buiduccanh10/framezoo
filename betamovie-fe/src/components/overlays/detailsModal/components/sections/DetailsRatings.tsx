@@ -1,7 +1,7 @@
 import { t } from "i18next";
 
 import { Icon, Icons } from "@/components/Icon";
-import { getRTIcon } from "@/utils/rottenTomatoes";
+import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
 
 import { DetailsRatingsProps } from "../../types";
 
@@ -48,28 +48,53 @@ export function DetailsRatings({
           </a>
         )}
         {isLoadingRt ? (
-          <div className="w-8 h-8 rounded-md bg-white/10 animate-pulse" />
+          <>
+            <div className="w-8 h-8 rounded-md bg-white/10 animate-pulse" />
+            <div className="w-8 h-8 rounded-md bg-white/10 animate-pulse" />
+          </>
         ) : (
-          rtData && (
-            <a
-              href={rtData.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
-              style={{
-                animationDelay: "180ms",
-                transform: "scale(0)",
-                opacity: 0,
-              }}
-              title="Rotten Tomatoes"
-            >
-              <img
-                src={getRTIcon(rtData.tomatoIcon)}
-                alt="Tomatometer"
-                className="w-8 h-8"
-              />
-            </a>
-          )
+          <>
+            {rtData && (
+              <a
+                href={rtData.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
+                style={{
+                  animationDelay: "180ms",
+                  transform: "scale(0)",
+                  opacity: 0,
+                }}
+                title="Rotten Tomatoes"
+              >
+                <img
+                  src={getRTIcon(rtData.tomatoIcon)}
+                  alt="Tomatometer"
+                  className="w-8 h-8"
+                />
+              </a>
+            )}
+            {typeof rtData?.popcornScore === "number" && (
+              <a
+                href={rtData.popcornUrl ?? rtData.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
+                style={{
+                  animationDelay: "240ms",
+                  transform: "scale(0)",
+                  opacity: 0,
+                }}
+                title="Popcornmeter"
+              >
+                <img
+                  src={getRTAudienceIcon(rtData.popcornIcon ?? "empty")}
+                  alt="Popcornmeter"
+                  className="w-8 h-8"
+                />
+              </a>
+            )}
+          </>
         )}
       </div>
     </div>

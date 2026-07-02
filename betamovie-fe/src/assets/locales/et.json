@@ -99,6 +99,7 @@
     "addToList": "Lisa loendisse",
     "airs": "Õhud",
     "collection": {
+      "bookmarkAll": "Lisa kõik järjehoidjatesse",
       "movie": "Film",
       "movies": "Filmid",
       "rating": "Hinnang",

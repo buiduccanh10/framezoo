@@ -99,6 +99,7 @@
     "addToList": "Lisää listaan",
     "airs": "Esitetään",
     "collection": {
+      "bookmarkAll": "Merkitse kaikki",
       "movie": "Elokuva",
       "movies": "Elokuvat",
       "rating": "Luokitus",

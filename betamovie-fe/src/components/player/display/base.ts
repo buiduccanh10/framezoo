@@ -50,6 +50,7 @@ import { makeEmitter } from "@/utils/events";
 const levelConversionMap: Record<number, SourceQuality> = {
   360: "360",
   1080: "1080",
+  1440: "1440",
   720: "720",
   480: "480",
   2160: "4k",
@@ -58,6 +59,7 @@ const levelConversionMap: Record<number, SourceQuality> = {
 // Define quality thresholds for mapping non-standard resolutions
 const qualityThresholds = [
   { minHeight: 1800, quality: "4k" as SourceQuality },
+  { minHeight: 1300, quality: "1440" as SourceQuality },
   { minHeight: 800, quality: "1080" as SourceQuality },
   { minHeight: 600, quality: "720" as SourceQuality },
   { minHeight: 420, quality: "480" as SourceQuality },
@@ -100,6 +102,8 @@ type DesktopElectronApi = {
 function deriveQualityFromHeight(
   height: number,
 ): SegmentQualityDebugInfo["realQuality"] {
+  if (height >= 1800) return "4k";
+  if (height >= 1300) return "1440";
   if (height >= 900) return "1080";
   if (height >= 640) return "720";
   return "unknown";
