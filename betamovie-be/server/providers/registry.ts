@@ -7,6 +7,7 @@ import { getVidsrcWtfStreams } from './vidsrcwtf';
 import { getVidrockStreams } from './vidrock';
 import { getKKPhimStreams } from './kkphim';
 import { get111MoviesStreams } from './111movies';
+import { getVidkingStreams } from './vidking';
 
 export interface StreamProvider {
   name: string;
@@ -72,11 +73,18 @@ const movies111Provider: StreamProvider = {
   getStreams: get111MoviesStreams,
 };
 
+const vidkingProvider: StreamProvider = {
+  name: 'vidking',
+  type: 'direct',
+  getStreams: getVidkingStreams,
+};
+
 /**
  * Registry of all available stream providers
  */
 const providers: Map<string, StreamProvider> = new Map([
   ['111movies', movies111Provider],
+  ['vidking', vidkingProvider],
   ['vidlink', vidlinkProvider],
   ['vixsrc', vixsrcProvider],
   ['vidsrcwtf', vidsrcWtfProvider],
