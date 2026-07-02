@@ -10,7 +10,7 @@ const providerMetadata: ProviderMetadataItem[] = [
   {
     id: 'alphaflix-vidking',
     type: 'source',
-    name: 'Server 1 (Vidking)',
+    name: 'Server 1 (Vidking) 🔥',
     rank: 1,
     disabled: false,
   },
