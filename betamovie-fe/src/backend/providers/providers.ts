@@ -25,6 +25,10 @@ import {
   scrapeOpenMovieShow,
 } from "./custom/sources/openMovieSource";
 import {
+  scrapeVidkingMovie,
+  scrapeVidkingShow,
+} from "./custom/sources/vidkingSource";
+import {
   scrapeVidlinkMovie,
   scrapeVidlinkShow,
 } from "./custom/sources/vidlinkSource";
@@ -160,6 +164,20 @@ const vidsrcSource = {
   scrapeShow: scrapeVidSrcShow,
 };
 
+// Custom Vidking source definition
+const vidkingSource = {
+  id: "alphaflix-vidking",
+  name: "Server 9 (Vidking)",
+  rank: 9,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVidkingMovie,
+  scrapeShow: scrapeVidkingShow,
+};
+
 // Custom OpenMovie embed definition
 const openMovieEmbed = {
   id: "openmovie-embed",
@@ -180,6 +198,7 @@ const sourceDefinitions = [
   openMovieSource,
   vidsrcRuSource,
   vidsrcSource,
+  vidkingSource,
   kkphimSource,
 ];
 

@@ -64,6 +64,13 @@ const providerMetadata: ProviderMetadataItem[] = [
     disabled: false,
   },
   {
+    id: 'alphaflix-vidking',
+    type: 'source',
+    name: 'Server 9 (Vidking)',
+    rank: 9,
+    disabled: false,
+  },
+  {
     id: 'openmovie-embed',
     type: 'embed',
     name: 'OpenMovie Stream',
