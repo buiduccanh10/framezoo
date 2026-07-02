@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Icon, Icons } from "@/components/Icon";
 import { Flare } from "@/components/utils/Flare";
 import { Transition } from "@/components/utils/Transition";
@@ -5,6 +7,7 @@ import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { useSubtitleStore } from "@/stores/subtitles";
 
 export function SubtitleDelayPopout() {
+  const { t } = useTranslation();
   const showDelayIndicator = useSubtitleStore((s) => s.showDelayIndicator);
   const currentOverlay = useOverlayStack((s) => s.currentOverlay);
   const delay = useSubtitleStore((s) => s.delay);
@@ -27,7 +30,8 @@ export function SubtitleDelayPopout() {
           <Icon className="text-2xl" icon={Icons.CAPTIONS} />
           <div className="w-full flex items-center justify-between">
             <span className="text-sm">
-              Subtitle delay: {delay > 0 ? "+" : ""}
+              {t("player.menus.subtitles.settings.delay")}:{" "}
+              {delay > 0 ? "+" : ""}
               {delay.toFixed(1)}s
             </span>
           </div>

@@ -99,6 +99,7 @@
     "addToList": "Dodaj do listy",
     "airs": "Powietrze",
     "collection": {
+      "bookmarkAll": "Dodaj do zakładek Wszystko",
       "movie": "Film",
       "movies": "Kino",
       "rating": "Ocena",

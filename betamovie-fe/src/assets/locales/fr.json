@@ -99,6 +99,7 @@
     "addToList": "Ajouter à la liste",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Tout ajouter aux favoris",
       "movie": "Film",
       "movies": "Films",
       "rating": "Notation",

@@ -99,6 +99,7 @@
     "addToList": "Añadir a la lista",
     "airs": "aires",
     "collection": {
+      "bookmarkAll": "Marcar todo",
       "movie": "Película",
       "movies": "Cine",
       "rating": "Clasificación",

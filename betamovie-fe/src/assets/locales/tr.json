@@ -99,6 +99,7 @@
     "addToList": "Listeye Ekle",
     "airs": "Fiyaka",
     "collection": {
+      "bookmarkAll": "Tümünü Yer İşaretlerine Ekle",
       "movie": "Film",
       "movies": "Filmler",
       "rating": "Derecelendirme",

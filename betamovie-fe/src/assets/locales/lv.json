@@ -99,6 +99,7 @@
     "addToList": "Pievienot sarakstam",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Atzīmēt visu",
       "movie": "Filma",
       "movies": "Filmas",
       "rating": "Vērtējums",

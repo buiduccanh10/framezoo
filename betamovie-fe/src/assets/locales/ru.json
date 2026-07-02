@@ -99,6 +99,7 @@
     "addToList": "Добавить в список",
     "airs": "Арии",
     "collection": {
+      "bookmarkAll": "Добавить все в закладки",
       "movie": "Фильм",
       "movies": "Фильмы",
       "rating": "Рейтинг",
