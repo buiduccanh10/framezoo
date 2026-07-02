@@ -7,6 +7,7 @@ import {
 
 const allowedQualitiesMap: Record<SourceQuality, SourceQuality> = {
   "4k": "4k",
+  "1440": "1440",
   "1080": "1080",
   "480": "480",
   "360": "360",
