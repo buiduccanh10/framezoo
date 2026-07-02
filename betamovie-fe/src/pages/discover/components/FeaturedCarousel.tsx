@@ -15,7 +15,7 @@ import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
-import { getRTIcon } from "@/utils/rottenTomatoes";
+import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
 import { RandomMovieButton } from "./RandomMovieButton";
@@ -56,6 +56,8 @@ interface FeaturedRTData {
   title: string;
   tomatoIcon: "certified_fresh" | "fresh" | "rotten";
   tomatoScore: number;
+  popcornIcon?: "upright" | "spilled" | "empty";
+  popcornScore?: number;
   url: string;
 }
 
@@ -704,6 +706,8 @@ export function FeaturedCarousel({
   const hasTmdbRating = typeof tmdbVoteAverage === "number";
   const hasImdbRating = isLoadingImdb || Boolean(imdbData);
   const hasRtRating = isLoadingRt || Boolean(rtData);
+  const hasAudienceRating =
+    isLoadingRt || typeof rtData?.popcornScore === "number";
   const hasMediaYear = typeof mediaYear === "string";
   const hasSeasonCount =
     currentMedia?.type === "show" && Boolean(currentMedia?.number_of_seasons);
@@ -913,9 +917,32 @@ export function FeaturedCarousel({
                 </div>
               )}
 
-              {hasMediaYear && (
+              {hasAudienceRating && (
                 <div className="flex items-center gap-2 whitespace-nowrap">
                   {(hasTmdbRating || hasImdbRating || hasRtRating) && (
+                    <span className="text-white/60">•</span>
+                  )}
+                  <div className="flex items-center gap-1">
+                    <img
+                      src={getRTAudienceIcon(rtData?.popcornIcon ?? "empty")}
+                      alt="Popcornmeter"
+                      className="h-4 w-4"
+                    />
+                    {isLoadingRt ? (
+                      <span className={inlineLoadingClass} />
+                    ) : (
+                      <span>{rtData?.popcornScore}%</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {hasMediaYear && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  {(hasTmdbRating ||
+                    hasImdbRating ||
+                    hasRtRating ||
+                    hasAudienceRating) && (
                     <span className="text-white/60">•</span>
                   )}
                   <span>{new Date(mediaYear).getFullYear()}</span>
@@ -926,6 +953,7 @@ export function FeaturedCarousel({
                   {(hasTmdbRating ||
                     hasImdbRating ||
                     hasRtRating ||
+                    hasAudienceRating ||
                     hasMediaYear) && <span className="text-white/60">•</span>}
                   <span>
                     {currentMedia.number_of_seasons} {t("details.seasons")}

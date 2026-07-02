@@ -7,6 +7,12 @@ export interface RottenTomatoesMovie {
   tomatoIcon: "certified_fresh" | "fresh" | "rotten";
   tomatoScore: number;
   url: string;
+  popcornIcon?: "upright" | "spilled" | "empty";
+  popcornScore?: number;
+  popcornAverageRating?: number | null;
+  popcornBandedRatingCount?: string | null;
+  popcornReviewCount?: number | null;
+  popcornUrl?: string | null;
 }
 
 export async function getRottenTomatoesMetadata(
