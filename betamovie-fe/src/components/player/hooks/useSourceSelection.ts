@@ -24,7 +24,6 @@ export function useEmbedScraping(
   embedId: string,
 ) {
   const setSource = usePlayerStore((s) => s.setSource);
-  const setCaption = usePlayerStore((s) => s.setCaption);
   const setSourceId = usePlayerStore((s) => s.setSourceId);
   const setEmbedId = usePlayerStore((s) => (s as any).setEmbedId);
   const meta = usePlayerStore((s) => s.meta);
@@ -64,7 +63,6 @@ export function useEmbedScraping(
     if (isExtensionActiveCached()) await prepareStream(result.stream[0]);
     setSourceId(sourceId);
     setEmbedId(embedId);
-    setCaption(null);
     setSource(
       convertRunoutputToSource({ stream: result.stream[0] }),
       convertProviderCaption(result.stream[0].captions),
@@ -73,15 +71,7 @@ export function useEmbedScraping(
     // Save the last successful source when manually selected
     setLastSuccessfulSource(sourceId);
     router.close();
-  }, [
-    embedId,
-    sourceId,
-    meta,
-    router,
-    report,
-    setCaption,
-    setLastSuccessfulSource,
-  ]);
+  }, [embedId, sourceId, meta, router, report, setLastSuccessfulSource]);
 
   return {
     run,
@@ -94,7 +84,6 @@ export function useEmbedScraping(
 export function useSourceScraping(sourceId: string | null, routerId: string) {
   const meta = usePlayerStore((s) => s.meta);
   const setSource = usePlayerStore((s) => s.setSource);
-  const setCaption = usePlayerStore((s) => s.setCaption);
   const setSourceId = usePlayerStore((s) => s.setSourceId);
   const setEmbedId = usePlayerStore((s) => (s as any).setEmbedId);
   const progressItems = useProgressStore((s) => s.items);
@@ -133,7 +122,6 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
     if (result.stream && result.stream.length > 0) {
       if (isExtensionActiveCached()) await prepareStream(result.stream[0]);
       setEmbedId(null);
-      setCaption(null);
       setSource(
         convertRunoutputToSource({ stream: result.stream[0] }),
         convertProviderCaption(result.stream[0].captions),
@@ -179,7 +167,6 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       ]);
       setSourceId(sourceId);
       setEmbedId(result.embeds[0].embedId);
-      setCaption(null);
       if (isExtensionActiveCached()) await prepareStream(embedResult.stream[0]);
       setSource(
         convertRunoutputToSource({ stream: embedResult.stream[0] }),
@@ -191,7 +178,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       router.close();
     }
     return result.embeds;
-  }, [sourceId, meta, router, setCaption, setLastSuccessfulSource]);
+  }, [sourceId, meta, router, setLastSuccessfulSource]);
 
   return {
     run,

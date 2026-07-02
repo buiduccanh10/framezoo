@@ -22,7 +22,7 @@ interface SearchCacheKey extends MWQuery {
   version: number;
 }
 
-const SEARCH_CACHE_VERSION = 2;
+const SEARCH_CACHE_VERSION = 3;
 
 const cache = new SimpleCache<SearchCacheKey, MediaItem[]>();
 cache.setCompare((a, b) => {
@@ -130,7 +130,7 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
     }
   }
 
-  const data = await searchMedia(searchQuery);
+  const data = await searchMedia(searchQuery, language);
   const results = await Promise.all(
     data.map(async (v) => {
       let countryCodes = getCountryCodesFromSearchResult(v);

@@ -57,6 +57,7 @@ export interface Caption {
   language: string;
   url?: string;
   vttData: string;
+  persisted?: boolean;
 }
 
 export interface CaptionListItem {
@@ -108,6 +109,7 @@ export interface SourceSlice {
     completed: number;
     total: number;
   };
+  externalSubtitleMediaKey: string | null;
   caption: {
     selected: Caption | null;
     secondary: Caption | null;
@@ -228,6 +230,65 @@ function sortCaptionList(captions: CaptionListItem[]) {
   });
 }
 
+function mergeCaptionLists(
+  primaryCaptions: CaptionListItem[],
+  extraCaptions: CaptionListItem[],
+) {
+  const seen = new Set<string>();
+  const merged: CaptionListItem[] = [];
+
+  [...primaryCaptions, ...extraCaptions].forEach((caption) => {
+    const key = getCaptionIdentityKey(caption);
+    if (seen.has(key)) return;
+    seen.add(key);
+    merged.push(caption);
+  });
+
+  return sortCaptionList(merged);
+}
+
+function isCustomCaptionId(captionId: string) {
+  return captionId === "custom-caption" || captionId === "pasted-caption";
+}
+
+function hasCompletedExternalSubtitleLoad(
+  isLoadingExternalSubtitles: boolean,
+  externalSubtitleLoadProgress: { completed: number; total: number },
+) {
+  return (
+    !isLoadingExternalSubtitles &&
+    externalSubtitleLoadProgress.total > 0 &&
+    externalSubtitleLoadProgress.completed >= externalSubtitleLoadProgress.total
+  );
+}
+
+function canPreserveCaption(caption: Caption | null) {
+  if (!caption) return false;
+  if (isCustomCaptionId(caption.id)) return true;
+  return caption.vttData.trim().length > 0;
+}
+
+function captionExistsInList(
+  caption: Caption | null,
+  captionList: CaptionListItem[],
+) {
+  if (!caption) return false;
+  return captionList.some((listItem) => listItem.id === caption.id);
+}
+
+function toPersistedCaption(
+  caption: Caption | null,
+  captionList: CaptionListItem[],
+) {
+  if (!caption) return null;
+  if (isCustomCaptionId(caption.id)) return caption;
+
+  return {
+    ...caption,
+    persisted: !captionExistsInList(caption, captionList),
+  };
+}
+
 export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   source: null,
   sourceId: null,
@@ -241,6 +302,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     completed: 0,
     total: 0,
   },
+  externalSubtitleMediaKey: null,
   currentQuality: null,
   segmentQualityDebug: null,
   currentAudioTrack: null,
@@ -284,6 +346,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.sourceId = null;
       s.interface.hideNextEpisodeBtn = false;
       if (newStatus) s.status = newStatus;
+      if (newMediaKey !== oldMediaKey) {
+        s.externalSubtitleMediaKey = null;
+      }
 
       // Clear failed sources/embeds for the new media when media changes
       // Since we're doing per-episode tracking, we clear whenever media key changes
@@ -329,6 +394,31 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     captions: CaptionListItem[],
     startAt: number,
   ) {
+    const store = get();
+    const currentMediaKey = getMediaKey(store.meta);
+    const shouldReuseLoadedExternalSubtitles =
+      !!currentMediaKey &&
+      currentMediaKey === store.externalSubtitleMediaKey &&
+      hasCompletedExternalSubtitleLoad(
+        store.isLoadingExternalSubtitles,
+        store.externalSubtitleLoadProgress,
+      );
+    const existingExternalCaptions = shouldReuseLoadedExternalSubtitles
+      ? store.captionList.filter((caption) => caption.opensubtitles)
+      : [];
+    const mergedCaptions = shouldReuseLoadedExternalSubtitles
+      ? mergeCaptionLists(captions, existingExternalCaptions)
+      : captions;
+    const preservedSelectedCaption =
+      shouldReuseLoadedExternalSubtitles &&
+      canPreserveCaption(store.caption.selected)
+        ? toPersistedCaption(store.caption.selected, mergedCaptions)
+        : null;
+    const preservedSecondaryCaption =
+      shouldReuseLoadedExternalSubtitles &&
+      canPreserveCaption(store.caption.secondary)
+        ? toPersistedCaption(store.caption.secondary, mergedCaptions)
+        : null;
     let qualities: string[] = [];
     if (stream.type === "file") qualities = Object.keys(stream.qualities);
     const qualityPreferences = useQualityStore.getState();
@@ -340,31 +430,42 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.qualities = qualities as SourceQuality[];
       s.currentQuality = loadableStream.quality;
       s.segmentQualityDebug = null;
-      s.captionList = captions;
+      s.captionList = mergedCaptions;
       s.externalSubtitleRequestId = nextRequestId;
-      s.isLoadingExternalSubtitles = true;
-      s.externalSubtitleLoadProgress = {
-        completed: 0,
-        total: 0,
-      };
-      s.caption.selected = null;
-      s.caption.secondary = null;
-      s.caption.dualSubEnabled = false;
+      s.isLoadingExternalSubtitles = !shouldReuseLoadedExternalSubtitles;
+      s.externalSubtitleLoadProgress = shouldReuseLoadedExternalSubtitles
+        ? store.externalSubtitleLoadProgress
+        : {
+            completed: 0,
+            total: 0,
+          };
+      s.caption.selected = preservedSelectedCaption;
+      s.caption.secondary = preservedSecondaryCaption;
+      s.caption.dualSubEnabled =
+        !!preservedSelectedCaption &&
+        !!preservedSecondaryCaption &&
+        store.caption.dualSubEnabled;
       s.caption.translateTask = null;
+      s.externalSubtitleMediaKey = shouldReuseLoadedExternalSubtitles
+        ? currentMediaKey
+        : null;
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
       s.audioTracks = [];
       s.currentAudioTrack = null;
     });
-    const store = get();
-    const requestId = store.externalSubtitleRequestId;
-    store.redisplaySource(startAt);
+    const nextStore = get();
+    const requestId = nextStore.externalSubtitleRequestId;
+    nextStore.redisplaySource(startAt);
+    nextStore.display?.setCaption(preservedSelectedCaption);
 
     // Trigger external subtitle scraping after stream is loaded
     // This runs asynchronously so it doesn't block the stream loading
-    setTimeout(() => {
-      store.addExternalSubtitles(requestId);
-    }, 100);
+    if (!shouldReuseLoadedExternalSubtitles) {
+      setTimeout(() => {
+        nextStore.addExternalSubtitles(requestId);
+      }, 100);
+    }
   },
   redisplaySource(startAt: number) {
     const store = get();
@@ -496,6 +597,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         completed: 0,
         total: 0,
       };
+      s.externalSubtitleMediaKey = null;
       s.currentQuality = null;
       s.segmentQualityDebug = null;
       s.currentAudioTrack = null;
@@ -522,6 +624,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const store = get();
     if (!store.meta) return;
     const activeRequestId = requestId ?? store.externalSubtitleRequestId;
+    const mediaKey = getMediaKey(store.meta);
 
     set((s) => {
       if (s.externalSubtitleRequestId === activeRequestId) {
@@ -530,6 +633,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           completed: 0,
           total: 0,
         };
+        s.externalSubtitleMediaKey = mediaKey;
       }
     });
 
