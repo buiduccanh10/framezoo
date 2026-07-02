@@ -533,9 +533,9 @@ async function resolveStreamsFromPayload(payload: VidkingPayload): Promise<Resol
       continue;
     }
 
-    if (!(await verifyPlayableManifest(masterPlaylistUrl))) {
-      continue;
-    }
+    // if (!(await verifyPlayableManifest(masterPlaylistUrl))) {
+    //   continue;
+    // }
 
     dedupe.add(dedupeKey);
     resolved.push({
