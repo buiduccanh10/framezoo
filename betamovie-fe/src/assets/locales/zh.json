@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "立即更新",
         "available": "新的应用程序版本已准备就绪。",
+        "download": "下载更新",
         "later": "之后",
+        "restart": "重启即可更新",
         "updating": "更新中..."
       },
       "offline": "请检查您的互联网连接"

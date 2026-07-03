@@ -1,5 +1,9 @@
 import { registerSW } from "virtual:pwa-register";
 
+import {
+  DesktopAppUpdateState,
+  getDesktopUpdateElectronApi,
+} from "@/desktop/electron";
 import { APP_VERSION } from "@/setup/constants";
 import { useAppUpdateStore } from "@/stores/appUpdate";
 import { TMDB_METADATA_CACHE_KEY, queryClient } from "@/utils/queryClient";
@@ -11,6 +15,7 @@ let lastKnownServiceWorkerToken: string | null = null;
 let latestDiscoveredUpdateToken: string | null = null;
 let hasAttachedReminderListeners = false;
 type UpdateServiceWorker = (reloadPage?: boolean) => Promise<void>;
+let hasInitializedDesktopAppUpdate = false;
 
 async function clearAppClientCaches() {
   queryClient.clear();
@@ -79,7 +84,9 @@ async function resolvePendingUpdateToken() {
 
 async function markAppUpdateAvailable() {
   const updateToken = await resolvePendingUpdateToken();
-  useAppUpdateStore.getState().markUpdateAvailable(updateToken);
+  useAppUpdateStore.getState().markUpdateAvailable({
+    updateToken,
+  });
 }
 
 function syncAppUpdateVisibility() {
@@ -101,7 +108,7 @@ async function hardRefreshToLatestBuild() {
   if (isReloadingForUpdate) return;
   isReloadingForUpdate = true;
 
-  useAppUpdateStore.getState().setIsUpdating(true);
+  useAppUpdateStore.getState().setUpdateProgress(100);
   await clearAppClientCaches();
 
   const nextUrl = new URL(window.location.href);
@@ -111,8 +118,94 @@ async function hardRefreshToLatestBuild() {
 
 let updateServiceWorker: UpdateServiceWorker | null = null;
 
+function isDesktopAppRuntime() {
+  return typeof window !== "undefined" && Boolean(window.__ALPHAFLIX_DESKTOP__);
+}
+
+function applyDesktopUpdateState(state: DesktopAppUpdateState) {
+  const store = useAppUpdateStore.getState();
+
+  switch (state.status) {
+    case "idle":
+      store.clearUpdate();
+      return;
+    case "checking":
+      store.markChecking();
+      return;
+    case "available":
+      store.markUpdateAvailable({
+        updateToken: state.updateToken ?? state.updateVersion ?? APP_VERSION,
+        updateVersion: state.updateVersion,
+      });
+      return;
+    case "downloading":
+      store.setUpdateProgress(state.progressPercent ?? 0);
+      return;
+    case "downloaded":
+      store.markUpdateDownloaded({
+        updateToken: state.updateToken ?? state.updateVersion ?? APP_VERSION,
+        updateVersion: state.updateVersion,
+      });
+      return;
+    case "error":
+      store.markUpdateError(state.errorMessage);
+      return;
+  }
+}
+
+function initializeDesktopAppUpdate() {
+  if (hasInitializedDesktopAppUpdate || !isDesktopAppRuntime()) return;
+
+  const electronApi = getDesktopUpdateElectronApi();
+  if (!electronApi) return;
+
+  hasInitializedDesktopAppUpdate = true;
+  attachAppUpdateReminderListeners();
+
+  void electronApi.getAppUpdateState().then(applyDesktopUpdateState);
+  electronApi.onAppUpdateState(applyDesktopUpdateState);
+
+  window.setTimeout(() => {
+    void electronApi.checkForAppUpdate();
+  }, 5000);
+}
+
+export async function checkForAppUpdate() {
+  if (isDesktopAppRuntime()) {
+    const electronApi = getDesktopUpdateElectronApi();
+    if (!electronApi) return false;
+
+    useAppUpdateStore.getState().markChecking();
+    return electronApi.checkForAppUpdate();
+  }
+
+  return false;
+}
+
 export async function requestAppUpdate() {
-  useAppUpdateStore.getState().setIsUpdating(true);
+  if (isDesktopAppRuntime()) {
+    const electronApi = getDesktopUpdateElectronApi();
+    if (!electronApi) return;
+
+    const { status } = useAppUpdateStore.getState();
+    if (status === "downloaded") {
+      useAppUpdateStore.getState().setUpdateProgress(100);
+      await electronApi.installAppUpdate();
+      return;
+    }
+
+    if (status !== "available" && status !== "error") {
+      useAppUpdateStore.getState().markChecking();
+      await electronApi.checkForAppUpdate();
+      return;
+    }
+
+    useAppUpdateStore.getState().setUpdateProgress(0);
+    await electronApi.downloadAppUpdate();
+    return;
+  }
+
+  useAppUpdateStore.getState().setUpdateProgress(100);
 
   if (!updateServiceWorker) {
     await hardRefreshToLatestBuild();
@@ -130,39 +223,43 @@ export async function requestAppUpdate() {
   }
 }
 
-updateServiceWorker = registerSW({
-  immediate: true,
-  onNeedRefresh() {
-    void markAppUpdateAvailable();
-  },
-  onNeedReload() {
-    void hardRefreshToLatestBuild();
-  },
-  onRegisteredSW(swUrl, r) {
-    if (!r) return;
-    registeredServiceWorkerUrl = swUrl;
-    attachAppUpdateReminderListeners();
-    void fetchServiceWorkerToken(swUrl).then((token) => {
-      if (!token) return;
-      lastKnownServiceWorkerToken = token;
-    });
+if (isDesktopAppRuntime()) {
+  initializeDesktopAppUpdate();
+} else {
+  updateServiceWorker = registerSW({
+    immediate: true,
+    onNeedRefresh() {
+      void markAppUpdateAvailable();
+    },
+    onNeedReload() {
+      void hardRefreshToLatestBuild();
+    },
+    onRegisteredSW(swUrl, r) {
+      if (!r) return;
+      registeredServiceWorkerUrl = swUrl;
+      attachAppUpdateReminderListeners();
+      void fetchServiceWorkerToken(swUrl).then((token) => {
+        if (!token) return;
+        lastKnownServiceWorkerToken = token;
+      });
 
-    setInterval(async () => {
-      if (!(!r.installing && navigator)) return;
+      setInterval(async () => {
+        if (!(!r.installing && navigator)) return;
 
-      if ("connection" in navigator && !navigator.onLine) return;
+        if ("connection" in navigator && !navigator.onLine) return;
 
-      const serviceWorkerToken = await fetchServiceWorkerToken(swUrl);
+        const serviceWorkerToken = await fetchServiceWorkerToken(swUrl);
 
-      if (serviceWorkerToken) {
-        if (!lastKnownServiceWorkerToken) {
-          lastKnownServiceWorkerToken = serviceWorkerToken;
-        } else if (serviceWorkerToken !== lastKnownServiceWorkerToken) {
-          latestDiscoveredUpdateToken = serviceWorkerToken;
+        if (serviceWorkerToken) {
+          if (!lastKnownServiceWorkerToken) {
+            lastKnownServiceWorkerToken = serviceWorkerToken;
+          } else if (serviceWorkerToken !== lastKnownServiceWorkerToken) {
+            latestDiscoveredUpdateToken = serviceWorkerToken;
+          }
         }
-      }
 
-      await r.update();
-    }, intervalMS);
-  },
-});
+        await r.update();
+      }, intervalMS);
+    },
+  });
+}

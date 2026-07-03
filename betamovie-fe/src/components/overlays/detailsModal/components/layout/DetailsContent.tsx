@@ -6,6 +6,7 @@ import { useCopyToClipboard } from "react-use";
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
 import { TMDBIdToUrlId, getSeasonDetails } from "@/backend/metadata/tmdb";
+import { getNetworkContent } from "@/backend/metadata/traktApi";
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
@@ -34,6 +35,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const navigate = useNavigate();
   const [imdbData, setImdbData] = useState<DetailsIMDbData | null>(null);
   const [rtData, setRtData] = useState<DetailsRTData | null>(null);
+  const [providerData, setProviderData] = useState<string | undefined>(
+    undefined,
+  );
   const [isLoadingImdb, setIsLoadingImdb] = useState(false);
   const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
@@ -139,6 +143,45 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       return () => resizeObserver.disconnect();
     }
   }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const fetchNetworkData = async () => {
+      if (!conf().USE_TRAKT || !data.id || !data.type) {
+        setProviderData(undefined);
+        return;
+      }
+
+      try {
+        const networkData = await getNetworkContent(
+          data.id.toString(),
+          data.type,
+        );
+        if (
+          !isCancelled &&
+          networkData &&
+          networkData.platforms &&
+          networkData.platforms.length > 0
+        ) {
+          setProviderData(networkData.platforms[0]);
+        } else if (!isCancelled) {
+          setProviderData(undefined);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setProviderData(undefined);
+        }
+        console.error("Failed to fetch network data:", error);
+      }
+    };
+
+    void fetchNetworkData();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [data.id, data.type]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -503,7 +546,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
               rtData={rtData}
               isLoadingImdb={isLoadingImdb}
               isLoadingRt={isLoadingRt}
-              provider={undefined}
+              provider={providerData}
               onCollectionClick={() => setShowCollection(true)}
             />
           </div>

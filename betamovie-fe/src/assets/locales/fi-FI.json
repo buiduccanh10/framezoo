@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Päivitä nyt",
         "available": "Uusi sovellusversio on valmis.",
+        "download": "Lataa päivitys",
         "later": "Myöhemmin",
+        "restart": "Käynnistä uudelleen päivittääksesi",
         "updating": "Päivitetään..."
       },
       "offline": "Tarkista Internet-yhteytesi"

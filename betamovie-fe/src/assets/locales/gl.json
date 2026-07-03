@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Actualiza agora",
         "available": "Unha nova versión da aplicación está lista.",
+        "download": "Download update",
         "later": "Máis tarde",
+        "restart": "Restart to update",
         "updating": "Actualizando..."
       },
       "offline": "Verifica a túa conexión a internet"

@@ -8,11 +8,13 @@ import { useWindowSize } from "react-use";
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
 import { getMediaLogo } from "@/backend/metadata/tmdb";
+import { getDiscoverContent } from "@/backend/metadata/traktApi";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
+import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
@@ -317,32 +319,64 @@ export function FeaturedCarousel({
         const selectFeaturedPool = (items: MediaPick[], limit: number) => {
           return uniqueByKey(items).slice(0, limit);
         };
-        const [trendingMovies, trendingTv] = await Promise.all([
-          endpointList("/trending/movie/day"),
-          endpointList("/trending/tv/day"),
-        ]);
-        const movieFeaturedPool = selectFeaturedPool(
-          trendingMovies.map(
-            (show: {
-              id: number;
-              vote_average?: number;
-              vote_count?: number;
-              release_date?: string;
-            }) => toMoviePick(show, "latest"),
-          ),
-          FEATURED_POOL_SIZE_PER_TYPE,
-        );
-        const tvFeaturedPool = selectFeaturedPool(
-          trendingTv.map(
-            (show: {
-              id: number;
-              vote_average?: number;
-              vote_count?: number;
-              first_air_date?: string;
-            }) => toShowPick(show, "popular"),
-          ),
-          FEATURED_POOL_SIZE_PER_TYPE,
-        );
+        let movieFeaturedPool: MediaPick[] = [];
+        let tvFeaturedPool: MediaPick[] = [];
+
+        if (conf().USE_TRAKT) {
+          try {
+            const discoverData = await getDiscoverContent();
+            movieFeaturedPool = selectFeaturedPool(
+              (discoverData?.movie_tmdb_ids ?? []).map((id) =>
+                toMoviePick({ id }, "latest"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+            tvFeaturedPool = selectFeaturedPool(
+              (discoverData?.tv_tmdb_ids ?? []).map((id) =>
+                toShowPick({ id }, "popular"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+          } catch (error) {
+            console.warn("Failed to fetch Trakt discover content:", error);
+          }
+        }
+
+        if (movieFeaturedPool.length === 0 || tvFeaturedPool.length === 0) {
+          const [trendingMovies, trendingTv] = await Promise.all([
+            endpointList("/trending/movie/day"),
+            endpointList("/trending/tv/day"),
+          ]);
+
+          if (movieFeaturedPool.length === 0) {
+            movieFeaturedPool = selectFeaturedPool(
+              trendingMovies.map(
+                (show: {
+                  id: number;
+                  vote_average?: number;
+                  vote_count?: number;
+                  release_date?: string;
+                }) => toMoviePick(show, "latest"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+          }
+
+          if (tvFeaturedPool.length === 0) {
+            tvFeaturedPool = selectFeaturedPool(
+              trendingTv.map(
+                (show: {
+                  id: number;
+                  vote_average?: number;
+                  vote_count?: number;
+                  first_air_date?: string;
+                }) => toShowPick(show, "popular"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+          }
+        }
+
         const rankedSelection =
           forcedCategory === "movies"
             ? movieFeaturedPool

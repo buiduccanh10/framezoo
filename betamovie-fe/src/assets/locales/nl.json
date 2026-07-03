@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Nu bijwerken",
         "available": "Er is een nieuwe app-versie klaar.",
+        "download": "Update downloaden",
         "later": "Later",
+        "restart": "Start opnieuw op om te updaten",
         "updating": "Updaten..."
       },
       "offline": "Controleer je internetverbinding"

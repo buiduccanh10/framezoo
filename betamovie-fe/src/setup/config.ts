@@ -14,6 +14,7 @@ interface Config {
   TRACK_SCRIPT: string; // like <script src="https://umami.com/script.js"></script>
   BANNER_MESSAGE: string;
   BANNER_ID: string;
+  USE_TRAKT: boolean;
 
   SHOW_SUPPORT_BAR: boolean;
   SUPPORT_BAR_VALUE: string;
@@ -38,6 +39,7 @@ export interface RuntimeConfig {
   TRACK_SCRIPT: string | null;
   BANNER_MESSAGE: string | null;
   BANNER_ID: string | null;
+  USE_TRAKT: boolean;
 
   SHOW_SUPPORT_BAR: boolean;
   SUPPORT_BAR_VALUE: string;
@@ -61,6 +63,7 @@ const env: Record<keyof Config, undefined | string> = {
   TRACK_SCRIPT: import.meta.env.VITE_TRACK_SCRIPT,
   BANNER_MESSAGE: import.meta.env.VITE_BANNER_MESSAGE,
   BANNER_ID: import.meta.env.VITE_BANNER_ID,
+  USE_TRAKT: import.meta.env.VITE_USE_TRAKT,
 
   SHOW_SUPPORT_BAR: import.meta.env.VITE_SHOW_SUPPORT_BAR,
   SUPPORT_BAR_VALUE: import.meta.env.VITE_SUPPORT_BAR_VALUE,
@@ -156,6 +159,7 @@ export function conf(): RuntimeConfig {
     TRACK_SCRIPT: getKey("TRACK_SCRIPT"),
     BANNER_MESSAGE: getKey("BANNER_MESSAGE"),
     BANNER_ID: getKey("BANNER_ID"),
+    USE_TRAKT: getKey("USE_TRAKT", "false") === "true",
 
     SHOW_SUPPORT_BAR: getKey("SHOW_SUPPORT_BAR", "false") === "true",
     SUPPORT_BAR_VALUE: getKey("SUPPORT_BAR_VALUE") ?? "",

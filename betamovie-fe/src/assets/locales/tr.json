@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Şimdi güncelle",
         "available": "Yeni bir uygulama sürümü hazır.",
+        "download": "Güncellemeyi indir",
         "later": "Daha sonra",
+        "restart": "Güncellemek için yeniden başlatın",
         "updating": "Güncelleniyor..."
       },
       "offline": "İnternet bağlantınızı kontrol ediniz"

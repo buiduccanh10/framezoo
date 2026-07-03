@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Aggiorna ora",
         "available": "Una nuova versione dell'app è pronta.",
+        "download": "Scarica l'aggiornamento",
         "later": "Dopo",
+        "restart": "Riavvia per aggiornare",
         "updating": "Aggiornamento..."
       },
       "offline": "Controlla la tua connessione internet, stupida oca! 🦢"

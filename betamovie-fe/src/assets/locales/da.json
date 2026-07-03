@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Opdater nu",
         "available": "En ny appversion er klar.",
+        "download": "Download opdatering",
         "later": "Senere",
+        "restart": "Genstart for at opdatere",
         "updating": "Opdaterer..."
       },
       "offline": "Kontroller din internetforbindelse, fjollehoved!"

@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Mettre à jour maintenant",
         "available": "Une nouvelle version de l'application est prête.",
+        "download": "Télécharger la mise à jour",
         "later": "Plus tard",
+        "restart": "Redémarrer pour mettre à jour",
         "updating": "Mise à jour..."
       },
       "offline": "Veuillez vérifier votre connexion internet"

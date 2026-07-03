@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Värskendage kohe",
         "available": "Rakenduse uus versioon on valmis.",
+        "download": "Laadige värskendus alla",
         "later": "Hiljem",
+        "restart": "Värskendamiseks taaskäivitage",
         "updating": "Värskendamine..."
       },
       "offline": "Kontrollige oma Interneti-ühendust"

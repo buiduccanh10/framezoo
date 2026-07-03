@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Frissítse most",
         "available": "Elkészült az alkalmazás új verziója.",
+        "download": "Frissítés letöltése",
         "later": "Később",
+        "restart": "Indítsa újra a frissítéshez",
         "updating": "Frissítés..."
       },
       "offline": "Nézd meg az internet kapcsolatodat, drágaságom!"
