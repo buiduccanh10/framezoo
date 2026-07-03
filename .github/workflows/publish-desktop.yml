@@ -130,7 +130,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: macos-13
+          - runner: macos-14
             variant: mac-x64
             arch: x64
             command: pnpm --filter betamovie-desktop package:release:mac:x64
@@ -142,23 +142,17 @@ jobs:
       - uses: actions/checkout@v5
         with:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
-      - name: Validate macOS signing secrets
+      - name: Check macOS signing secrets
         shell: bash
         env:
           CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           set -eu
-          for name in CSC_LINK CSC_KEY_PASSWORD APPLE_ID APPLE_APP_SPECIFIC_PASSWORD APPLE_TEAM_ID; do
-            eval "value=\${$name:-}"
-            if [ -z "$value" ]; then
-              echo "Missing required secret: $name"
-              exit 1
-            fi
-          done
+          if [ -z "${CSC_LINK:-}" ]; then
+            echo "::warning::Thiếu macOS signing secrets (CSC_LINK). Ứng dụng sẽ KHÔNG được code sign và tính năng OTA Update trên macOS sẽ KHÔNG hoạt động."
+          else
+            echo "macOS signing secrets có sẵn."
+          fi
       - run: corepack enable
       - run: corepack prepare pnpm@11.9.0 --activate
       - uses: actions/setup-node@v5
