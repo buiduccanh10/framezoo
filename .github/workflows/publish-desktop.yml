@@ -181,7 +181,13 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        run: ${{ matrix.command }}
+        run: |
+          if [ -z "$CSC_LINK" ]; then unset CSC_LINK; fi
+          if [ -z "$CSC_KEY_PASSWORD" ]; then unset CSC_KEY_PASSWORD; fi
+          if [ -z "$APPLE_ID" ]; then unset APPLE_ID; fi
+          if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
+          if [ -z "$APPLE_TEAM_ID" ]; then unset APPLE_TEAM_ID; fi
+          ${{ matrix.command }}
       - name: Upload desktop artifacts
         uses: actions/upload-artifact@v4
         with:
