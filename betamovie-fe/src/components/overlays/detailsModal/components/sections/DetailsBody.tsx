@@ -1,13 +1,16 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { getReleaseDetails } from "@/backend/metadata/traktApi";
+import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
 import { Button } from "@/components/buttons/Button";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { GroupDropdown } from "@/components/form/GroupDropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaBookmarkButton } from "@/components/media/MediaBookmark";
 import { ManageMediaListsModal } from "@/components/overlays/ManageMediaListsModal";
+import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { formatCompactCount } from "@/utils/formatNumber";
@@ -30,6 +33,9 @@ export function DetailsBody({
   isLoadingRt,
 }: DetailsBodyProps) {
   const [showListModal, setShowListModal] = useState(false);
+  const [releaseInfo, setReleaseInfo] = useState<TraktReleaseResponse | null>(
+    null,
+  );
   const loggedIn = !!useAuthStore((state) => state.account);
   const addBookmarkWithGroups = useBookmarkStore(
     (s) => s.addBookmarkWithGroups,
@@ -89,6 +95,71 @@ export function DetailsBody({
     return new Date(dateString).getFullYear();
   };
 
+  useEffect(() => {
+    let isCancelled = false;
+
+    const fetchReleaseInfo = async () => {
+      if (!conf().USE_TRAKT || !data.id || data.type !== "movie") {
+        setReleaseInfo(null);
+        return;
+      }
+
+      try {
+        const info = await getReleaseDetails(data.id.toString());
+        if (!isCancelled) {
+          setReleaseInfo(info);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setReleaseInfo(null);
+        }
+        console.error("Failed to fetch release info:", error);
+      }
+    };
+
+    void fetchReleaseInfo();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [data.id, data.type]);
+
+  const getQualityIndicator = () => {
+    if (!releaseInfo || data.type === "show") return null;
+
+    const now = new Date();
+    const hasDigitalRelease = Boolean(releaseInfo.digital_release_date);
+    const hasTheatricalRelease = Boolean(releaseInfo.theatrical_release_date);
+
+    if (hasDigitalRelease) {
+      const digitalReleaseDate = new Date(releaseInfo.digital_release_date!);
+      if (now >= digitalReleaseDate) {
+        return (
+          <div className="rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm">
+            <span className="text-green-400">HD</span>
+          </div>
+        );
+      }
+    }
+
+    if (hasTheatricalRelease) {
+      const theatricalReleaseDate = new Date(
+        releaseInfo.theatrical_release_date!,
+      );
+
+      if (now >= theatricalReleaseDate) {
+        return (
+          <div className="rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm">
+            <span className="text-yellow-400">CAM</span>
+          </div>
+        );
+      }
+    }
+
+    return null;
+  };
+
+  const qualityIndicator = getQualityIndicator();
   const inlineLoadingClass =
     "h-4 w-14 rounded bg-white/10 animate-pulse inline-block";
   const metadataItemClass = "flex items-center gap-1 whitespace-nowrap";
@@ -99,6 +170,13 @@ export function DetailsBody({
     <div className="space-y-4">
       {/* TMDB Rating and Year/Seasons */}
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[11px] text-white/80 sm:text-sm">
+        {qualityIndicator ? (
+          <div className="flex items-center gap-2">
+            {qualityIndicator}
+            <span className={metadataSeparatorClass}>•</span>
+          </div>
+        ) : null}
+
         {/* Ratings Group */}
         <div className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
           {typeof voteAverage === "number" && (
