@@ -42,6 +42,7 @@ fi
 
 rm -f "$NEXT_LINK_PATH"
 ln -s "releases/${VERSION}" "$NEXT_LINK_PATH"
+rm -f "$CHANNEL_PATH"
 mv -f "$NEXT_LINK_PATH" "$CHANNEL_PATH"
 
 rm -f "$STAGING_BUNDLE"
