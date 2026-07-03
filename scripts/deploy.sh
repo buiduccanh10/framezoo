@@ -59,17 +59,6 @@ case "$ACTION" in
     compose build --pull
     compose up -d --remove-orphans
 
-    # Sync files from host downloads/ folder into the docker volume
-    if [ -d "downloads" ] && [ "$(ls -A downloads)" ]; then
-      echo "Syncing downloads from host to Docker volume..."
-      # Determine which volume is active
-      VOLUME_NAME="betamovie_downloads-data"
-      if docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
-        VOLUME_NAME="betamovie_backend_downloads-data"
-      fi
-      docker run --rm -v "$VOLUME_NAME":/data -v "$REPO_ROOT/downloads":/src alpine sh -c "rm -f /data/AlphaFlix-* /data/README.txt && cp -r /src/. /data/" >/dev/null
-    fi
-
     purge_cloudflare_cache
     ;;
   up)
@@ -87,11 +76,14 @@ case "$ACTION" in
   ps)
     compose ps
     ;;
+  publish-desktop)
+    compose --profile desktop-publisher run --rm desktop-publisher
+    ;;
   purge-cdn)
     purge_cloudflare_cache
     ;;
   *)
-    echo "Usage: ./deploy.sh {all|up|down|restart|logs|ps|purge-cdn}"
+    echo "Usage: ./deploy.sh {all|up|down|restart|logs|ps|publish-desktop|purge-cdn}"
     exit 1
     ;;
 esac

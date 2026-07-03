@@ -1,14 +1,14 @@
 import { ofetch } from "ofetch";
 
 export interface AppDownloadOption {
-  id: "mac-arm64" | "mac-x64" | "mac-universal";
+  id: "mac-arm64" | "mac-x64" | "mac-universal" | "win-x64" | "win-arm64";
   label: string;
   description: string;
   url: string;
 }
 
 export interface AppDownloadManifest {
-  version: string;
+  version: string | null;
   options: AppDownloadOption[];
 }
 

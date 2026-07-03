@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Update now",
         "available": "A new app version is ready.",
+        "download": "Download update",
         "later": "Later",
+        "restart": "Restart to update",
         "updating": "Updating..."
       },
       "offline": "Check your internet connection, silly goose! 🦢"

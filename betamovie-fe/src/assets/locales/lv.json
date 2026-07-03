@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Atjauniniet tūlīt",
         "available": "Jauna lietotnes versija ir gatava.",
+        "download": "Lejupielādēt atjauninājumu",
         "later": "Vēlāk",
+        "restart": "Restartējiet, lai atjauninātu",
         "updating": "Notiek atjaunināšana..."
       },
       "offline": "Pārbaudiet interneta savienojumu"

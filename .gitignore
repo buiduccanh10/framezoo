@@ -55,4 +55,4 @@ package-lock.json
 
 # build artifacts
 /downloads
-
+/desktop-publish-staging

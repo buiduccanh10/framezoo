@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Zaktualizuj teraz",
         "available": "Nowa wersja aplikacji jest już gotowa.",
+        "download": "Pobierz aktualizację",
         "later": "Później",
+        "restart": "Uruchom ponownie, aby zaktualizować",
         "updating": "Aktualizowanie..."
       },
       "offline": "Sprawdź swoje połączenie internetowe, głupolku!"

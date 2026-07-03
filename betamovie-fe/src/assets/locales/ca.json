@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Actualitza ara",
         "available": "Una nova versió de l'aplicació està preparada.",
+        "download": "Descarrega l'actualització",
         "later": "Més tard",
+        "restart": "Reinicieu per actualitzar",
         "updating": "S'està actualitzant..."
       },
       "offline": "Comproveu la connexió a internet"

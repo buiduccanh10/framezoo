@@ -7,6 +7,7 @@ import {
   shell,
   type Input,
 } from "electron";
+import { autoUpdater } from "electron-updater";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -16,6 +17,9 @@ const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";
 const DESKTOP_PIP_ROUTE = "/desktop-pip";
+const DESKTOP_APP_UPDATE_CHANNEL =
+  process.env.BETAMOVIE_DESKTOP_UPDATE_CHANNEL ?? "stable";
+const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 
 const DEVTOOLS_PROTECTION_ENABLED =
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
@@ -25,6 +29,32 @@ let mainWindow: BrowserWindow | null = null;
 let desktopPipWindow: BrowserWindow | null = null;
 let desktopPipState: Record<string, unknown> | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
+let hasInitializedDesktopAppUpdater = false;
+let desktopAppUpdateInterval: NodeJS.Timeout | null = null;
+
+type DesktopAppUpdateStatus =
+  | "idle"
+  | "checking"
+  | "available"
+  | "downloading"
+  | "downloaded"
+  | "error";
+
+type DesktopAppUpdateState = {
+  status: DesktopAppUpdateStatus;
+  updateToken: string | null;
+  updateVersion: string | null;
+  progressPercent: number | null;
+  errorMessage: string | null;
+};
+
+let desktopAppUpdateState: DesktopAppUpdateState = {
+  status: "idle",
+  updateToken: null,
+  updateVersion: null,
+  progressPercent: null,
+  errorMessage: null,
+};
 
 type ExtensionMessageName =
   | "hello"
@@ -42,6 +72,41 @@ const streamRules = new Map<number, StreamRule>();
 
 function getWindowIconPath() {
   return path.join(__dirname, "..", "build", "icon.png");
+}
+
+function getConfiguredBackendUrl() {
+  return (
+    process.env.BETAMOVIE_BACKEND_URL ??
+    process.env.VITE_BACKEND_URL ??
+    DEFAULT_BACKEND_URL
+  );
+}
+
+function getDesktopUpdateFeedSlug() {
+  const arch = process.arch === "arm64" ? "arm64" : "x64";
+  return `${process.platform === "darwin" ? "mac" : "win"}-${arch}`;
+}
+
+function getDesktopUpdateFeedUrl() {
+  const backendUrl = new URL(getConfiguredBackendUrl());
+  return new URL(
+    `/desktop-updates/${DESKTOP_APP_UPDATE_CHANNEL}/${getDesktopUpdateFeedSlug()}/`,
+    backendUrl,
+  ).toString();
+}
+
+function isDesktopAppUpdaterSupported() {
+  return process.platform === "darwin" || process.platform === "win32";
+}
+
+function setDesktopAppUpdateState(
+  nextState: Partial<DesktopAppUpdateState>,
+) {
+  desktopAppUpdateState = {
+    ...desktopAppUpdateState,
+    ...nextState,
+  };
+  sendDesktopAppUpdateState();
 }
 
 function normalizeWindowTitle(title: string) {
@@ -284,6 +349,147 @@ function sendDesktopPipState() {
   desktopPipWindow.webContents.send("desktop:pip-state", desktopPipState);
 }
 
+function sendDesktopAppUpdateState() {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+  mainWindow.webContents.send("desktop:app-update-state", desktopAppUpdateState);
+}
+
+async function checkForDesktopAppUpdate() {
+  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
+
+  setDesktopAppUpdateState({
+    status: "checking",
+    progressPercent: null,
+    errorMessage: null,
+  });
+
+  try {
+    await autoUpdater.checkForUpdates();
+    return true;
+  } catch (error) {
+    setDesktopAppUpdateState({
+      status: "error",
+      progressPercent: null,
+      errorMessage: error instanceof Error ? error.message : "Unknown update error",
+    });
+    return false;
+  }
+}
+
+async function downloadDesktopAppUpdate() {
+  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
+
+  setDesktopAppUpdateState({
+    status: "downloading",
+    progressPercent: 0,
+    errorMessage: null,
+  });
+
+  try {
+    await autoUpdater.downloadUpdate();
+    return true;
+  } catch (error) {
+    setDesktopAppUpdateState({
+      status: "available",
+      progressPercent: null,
+      errorMessage:
+        error instanceof Error ? error.message : "Failed to download update",
+    });
+    return false;
+  }
+}
+
+function installDesktopAppUpdate() {
+  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
+  if (desktopAppUpdateState.status !== "downloaded") return false;
+
+  autoUpdater.quitAndInstall(false, true);
+  return true;
+}
+
+function initializeDesktopAppUpdater() {
+  if (hasInitializedDesktopAppUpdater) return;
+  hasInitializedDesktopAppUpdater = true;
+
+  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) {
+    return;
+  }
+
+  autoUpdater.autoDownload = false;
+  autoUpdater.autoInstallOnAppQuit = false;
+  autoUpdater.setFeedURL({
+    provider: "generic",
+    url: getDesktopUpdateFeedUrl(),
+  });
+
+  autoUpdater.on("checking-for-update", () => {
+    setDesktopAppUpdateState({
+      status: "checking",
+      progressPercent: null,
+      errorMessage: null,
+    });
+  });
+
+  autoUpdater.on("update-available", (info: any) => {
+    setDesktopAppUpdateState({
+      status: "available",
+      updateToken: info?.version ?? app.getVersion(),
+      updateVersion: info?.version ?? app.getVersion(),
+      progressPercent: null,
+      errorMessage: null,
+    });
+  });
+
+  autoUpdater.on("update-not-available", () => {
+    setDesktopAppUpdateState({
+      status: "idle",
+      updateToken: null,
+      updateVersion: null,
+      progressPercent: null,
+      errorMessage: null,
+    });
+  });
+
+  autoUpdater.on("download-progress", (progress: any) => {
+    setDesktopAppUpdateState({
+      status: "downloading",
+      progressPercent:
+        typeof progress?.percent === "number" ? progress.percent : null,
+      errorMessage: null,
+    });
+  });
+
+  autoUpdater.on("update-downloaded", (info: any) => {
+    setDesktopAppUpdateState({
+      status: "downloaded",
+      updateToken: info?.version ?? desktopAppUpdateState.updateToken,
+      updateVersion: info?.version ?? desktopAppUpdateState.updateVersion,
+      progressPercent: 100,
+      errorMessage: null,
+    });
+  });
+
+  autoUpdater.on("error", (error) => {
+    setDesktopAppUpdateState({
+      status:
+        desktopAppUpdateState.updateToken &&
+        desktopAppUpdateState.status !== "idle"
+          ? "available"
+          : "error",
+      progressPercent: null,
+      errorMessage: error?.message ?? "Desktop update failed",
+    });
+  });
+
+  setTimeout(() => {
+    void checkForDesktopAppUpdate();
+  }, 5000);
+
+  desktopAppUpdateInterval = setInterval(() => {
+    void checkForDesktopAppUpdate();
+  }, DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS);
+}
+
 function createDesktopPipWindow() {
   if (desktopPipWindow && !desktopPipWindow.isDestroyed()) {
     return desktopPipWindow;
@@ -416,10 +622,14 @@ function createMainWindow() {
   if (RENDERER_DEV_URL) {
     void mainWindow.loadURL(RENDERER_DEV_URL);
     mainWindow.webContents.once("did-finish-load", () => {
+      sendDesktopAppUpdateState();
       mainWindow?.webContents.openDevTools({ mode: "detach" });
     });
   } else {
     void mainWindow.loadFile(getRendererEntryPath());
+    mainWindow.webContents.on("did-finish-load", () => {
+      sendDesktopAppUpdateState();
+    });
   }
 
   mainWindow.on("closed", () => {
@@ -431,6 +641,22 @@ function createMainWindow() {
 }
 
 function registerIpcHandlers() {
+  ipcMain.handle("desktop:app-update-get-state", async () => {
+    return desktopAppUpdateState;
+  });
+
+  ipcMain.handle("desktop:app-update-check", async () => {
+    return checkForDesktopAppUpdate();
+  });
+
+  ipcMain.handle("desktop:app-update-download", async () => {
+    return downloadDesktopAppUpdate();
+  });
+
+  ipcMain.handle("desktop:app-update-install", async () => {
+    return installDesktopAppUpdate();
+  });
+
   ipcMain.handle(
     "desktop:extension-message",
     async (_event, message: ExtensionMessageName, payload?: any) => {
@@ -540,6 +766,7 @@ if (!hasSingleInstanceLock) {
     registerIpcHandlers();
     registerHeaderInterceptors();
     createMainWindow();
+    initializeDesktopAppUpdater();
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -553,4 +780,10 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on("before-quit", () => {
+  if (!desktopAppUpdateInterval) return;
+  clearInterval(desktopAppUpdateInterval);
+  desktopAppUpdateInterval = null;
 });

@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Jetzt aktualisieren",
         "available": "Eine neue App-Version ist fertig.",
+        "download": "Update herunterladen",
         "later": "Später",
+        "restart": "Starten Sie neu, um zu aktualisieren",
         "updating": "Aktualisierung..."
       },
       "offline": "Internetverbindung ist instabil"

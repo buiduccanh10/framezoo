@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Uppdatera nu",
         "available": "En ny appversion är klar.",
+        "download": "Ladda ner uppdatering",
         "later": "Senare",
+        "restart": "Starta om för att uppdatera",
         "updating": "Uppdaterar..."
       },
       "offline": "Kontrollera din internetanslutning, tokiga gås! 🦢"

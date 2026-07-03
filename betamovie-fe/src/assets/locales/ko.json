@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "지금 업데이트",
         "available": "새로운 앱 버전이 준비되었습니다.",
+        "download": "업데이트 다운로드",
         "later": "나중에",
+        "restart": "업데이트하려면 다시 시작하세요.",
         "updating": "업데이트 중..."
       },
       "offline": "인터넷 연결을 확인해주세요"

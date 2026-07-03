@@ -19,6 +19,18 @@ contextBridge.exposeInMainWorld("__CONFIG__", runtimeConfig);
 contextBridge.exposeInMainWorld("__ALPHAFLIX_DESKTOP__", true);
 
 contextBridge.exposeInMainWorld("electronAPI", {
+  getAppUpdateState() {
+    return ipcRenderer.invoke("desktop:app-update-get-state");
+  },
+  checkForAppUpdate() {
+    return ipcRenderer.invoke("desktop:app-update-check");
+  },
+  downloadAppUpdate() {
+    return ipcRenderer.invoke("desktop:app-update-download");
+  },
+  installAppUpdate() {
+    return ipcRenderer.invoke("desktop:app-update-install");
+  },
   sendExtensionMessage(name: string, payload?: unknown) {
     return ipcRenderer.invoke("desktop:extension-message", name, payload);
   },
@@ -71,6 +83,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("desktop:pip-action", handler);
     return () => {
       ipcRenderer.removeListener("desktop:pip-action", handler);
+    };
+  },
+  onAppUpdateState(listener: (state: unknown) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
+      listener(state);
+    };
+    ipcRenderer.on("desktop:app-update-state", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:app-update-state", handler);
     };
   },
 });

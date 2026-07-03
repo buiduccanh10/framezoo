@@ -106,6 +106,18 @@ services:
     networks:
       - betamovie-network
 
+  desktop-publisher:
+    profiles:
+      - desktop-publisher
+    image: node:22-alpine
+    working_dir: /workspace
+    command: ["/bin/sh", "/workspace/scripts/publish-desktop-bundle.sh"]
+    restart: "no"
+    volumes:
+      - ./scripts:/workspace/scripts:ro
+      - ./desktop-publish-staging:/staging
+      - downloads-data:/data/downloads
+
 networks:
   betamovie-network:
     driver: bridge
@@ -116,4 +128,3 @@ volumes:
   preview-data:
   downloads-data:
     name: betamovie_downloads-data
-

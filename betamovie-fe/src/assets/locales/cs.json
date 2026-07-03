@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Aktualizujte nyní",
         "available": "Nová verze aplikace je připravena.",
+        "download": "Stáhnout aktualizaci",
         "later": "Později",
+        "restart": "Pro aktualizaci restartujte",
         "updating": "Aktualizace..."
       },
       "offline": "Zkontrolujte své internetové připojení"

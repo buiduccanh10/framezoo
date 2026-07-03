@@ -1,5 +1,6 @@
 import { create } from "zustand";
 
+import { DesktopAppUpdateStatus } from "@/desktop/electron";
 import { APP_VERSION } from "@/setup/constants";
 
 const APP_UPDATE_REMINDER_STORAGE_KEY = "app-update-reminder";
@@ -13,12 +14,25 @@ interface AppUpdateReminder {
 interface AppUpdateState {
   hasUpdate: boolean;
   isUpdating: boolean;
+  status: DesktopAppUpdateStatus;
   updateToken: string | null;
-  markUpdateAvailable: (updateToken?: string) => void;
+  updateVersion: string | null;
+  progressPercent: number | null;
+  errorMessage: string | null;
+  markChecking: () => void;
+  markUpdateAvailable: (payload?: {
+    updateToken?: string;
+    updateVersion?: string | null;
+  }) => void;
+  markUpdateDownloaded: (payload?: {
+    updateToken?: string;
+    updateVersion?: string | null;
+  }) => void;
+  setUpdateProgress: (progressPercent: number) => void;
+  markUpdateError: (errorMessage?: string | null) => void;
   clearUpdate: () => void;
   snoozeUpdate: () => void;
   syncUpdateVisibility: () => void;
-  setIsUpdating: (isUpdating: boolean) => void;
 }
 
 let reminderTimer: number | null = null;
@@ -92,14 +106,65 @@ function scheduleReminderCheck(updateToken: string, remindAt: number) {
 export const useAppUpdateStore = create<AppUpdateState>((set, get) => ({
   hasUpdate: false,
   isUpdating: false,
+  status: "idle",
   updateToken: null,
-  markUpdateAvailable: (updateToken) => {
+  updateVersion: null,
+  progressPercent: null,
+  errorMessage: null,
+  markChecking: () => {
+    clearReminderTimer();
+    writeUpdateReminder(null);
+    set({
+      hasUpdate: false,
+      isUpdating: true,
+      status: "checking",
+      progressPercent: null,
+      errorMessage: null,
+    });
+  },
+  markUpdateAvailable: (payload) => {
     clearReminderTimer();
     set({
-      updateToken: updateToken ?? APP_VERSION,
+      updateToken: payload?.updateToken ?? APP_VERSION,
+      updateVersion: payload?.updateVersion ?? null,
+      status: "available",
+      progressPercent: null,
+      errorMessage: null,
       isUpdating: false,
     });
     get().syncUpdateVisibility();
+  },
+  markUpdateDownloaded: (payload) => {
+    clearReminderTimer();
+    set({
+      updateToken: payload?.updateToken ?? APP_VERSION,
+      updateVersion: payload?.updateVersion ?? null,
+      status: "downloaded",
+      progressPercent: 100,
+      errorMessage: null,
+      isUpdating: false,
+    });
+    get().syncUpdateVisibility();
+  },
+  setUpdateProgress: (progressPercent) => {
+    clearReminderTimer();
+    set({
+      hasUpdate: false,
+      isUpdating: true,
+      status: "downloading",
+      progressPercent,
+      errorMessage: null,
+    });
+  },
+  markUpdateError: (errorMessage) => {
+    clearReminderTimer();
+    set({
+      hasUpdate: false,
+      isUpdating: false,
+      status: "error",
+      progressPercent: null,
+      errorMessage: errorMessage ?? null,
+    });
   },
   clearUpdate: () => {
     clearReminderTimer();
@@ -107,11 +172,15 @@ export const useAppUpdateStore = create<AppUpdateState>((set, get) => ({
     set({
       hasUpdate: false,
       isUpdating: false,
+      status: "idle",
       updateToken: null,
+      updateVersion: null,
+      progressPercent: null,
+      errorMessage: null,
     });
   },
   snoozeUpdate: () => {
-    const { updateToken } = get();
+    const { updateToken, updateVersion, status } = get();
 
     if (!updateToken) {
       set({
@@ -130,12 +199,20 @@ export const useAppUpdateStore = create<AppUpdateState>((set, get) => ({
     set({
       hasUpdate: false,
       isUpdating: false,
+      status,
+      updateVersion,
     });
   },
   syncUpdateVisibility: () => {
-    const { updateToken, isUpdating } = get();
+    const { updateToken, isUpdating, status } = get();
 
     if (!updateToken || isUpdating) return;
+    if (status !== "available" && status !== "downloaded") {
+      set({
+        hasUpdate: false,
+      });
+      return;
+    }
 
     const reminder = readUpdateReminder();
 
@@ -162,15 +239,6 @@ export const useAppUpdateStore = create<AppUpdateState>((set, get) => ({
     set({
       hasUpdate: false,
       isUpdating: false,
-    });
-  },
-  setIsUpdating: (isUpdating) => {
-    if (isUpdating) {
-      clearReminderTimer();
-    }
-
-    set({
-      isUpdating,
     });
   },
 }));

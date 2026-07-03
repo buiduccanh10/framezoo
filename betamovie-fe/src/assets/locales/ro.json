@@ -597,7 +597,9 @@
       "appUpdate": {
         "action": "Actualizați acum",
         "available": "O nouă versiune a aplicației este gata.",
+        "download": "Descărcați actualizarea",
         "later": "Mai târziu",
+        "restart": "Reporniți pentru a actualiza",
         "updating": "Se actualizează..."
       },
       "offline": "Verificați-vă conexiunea de internet"
