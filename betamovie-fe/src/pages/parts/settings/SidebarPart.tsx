@@ -26,16 +26,10 @@ export function SidebarPart(props: {
   const isCheckingForUpdate = useAppUpdateStore((s) => s.isUpdating);
   const desktopUpdateActionLabel =
     appUpdateStatus === "downloaded"
-      ? t("navigation.banner.appUpdate.restart", {
-          defaultValue: "Restart to update",
-        })
+      ? t("navigation.banner.appUpdate.restart")
       : appUpdateStatus === "available"
-        ? t("navigation.banner.appUpdate.download", {
-            defaultValue: "Download update",
-          })
-        : t("settings.sidebar.info.checkForUpdates", {
-            defaultValue: "Check for updates",
-          });
+        ? t("navigation.banner.appUpdate.download")
+        : t("settings.sidebar.info.checkForUpdates");
 
   const settingLinks = useMemo(
     () => [
