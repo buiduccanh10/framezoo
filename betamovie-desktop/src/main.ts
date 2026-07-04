@@ -9,6 +9,10 @@ import {
 } from "electron";
 import { autoUpdater } from "electron-updater";
 import path from "node:path";
+import fs from "node:fs";
+import os from "node:os";
+import https from "node:https";
+import { spawn } from "node:child_process";
 import { pathToFileURL } from "node:url";
 
 const APP_ID = "com.alphaflix.desktop";
@@ -386,6 +390,75 @@ async function downloadDesktopAppUpdate() {
   });
 
   try {
+    if (process.platform === "darwin") {
+      const version = desktopAppUpdateState.updateVersion;
+      if (!version) throw new Error("No update version available");
+
+      const arch = process.arch === "arm64" ? "arm64" : "x64";
+      const zipFileName = `AlphaFlix-${version}-${arch}-mac.zip`;
+      const downloadUrl = `${getDesktopUpdateFeedUrl()}${zipFileName}`;
+
+      const tempZipPath = path.join(os.tmpdir(), "AlphaFlix-update.zip");
+
+      await new Promise<void>((resolve, reject) => {
+        const file = fs.createWriteStream(tempZipPath);
+        https.get(downloadUrl, (response) => {
+          if (response.statusCode !== 200 && response.statusCode !== 302) {
+            reject(new Error(`Failed to download update: ${response.statusCode}`));
+            return;
+          }
+
+          if (response.statusCode === 302 && response.headers.location) {
+            // Handle redirect if any
+            https.get(response.headers.location, handleDownload).on("error", handleError);
+          } else {
+            handleDownload(response);
+          }
+
+          function handleDownload(res: any) {
+            const totalBytes = parseInt(res.headers["content-length"] || "0", 10);
+            let downloadedBytes = 0;
+
+            res.on("data", (chunk: any) => {
+              downloadedBytes += chunk.length;
+              if (totalBytes > 0) {
+                const percent = Math.round((downloadedBytes / totalBytes) * 100);
+                setDesktopAppUpdateState({
+                  status: "downloading",
+                  progressPercent: percent,
+                  errorMessage: null,
+                });
+              }
+            });
+
+            res.pipe(file);
+
+            file.on("finish", () => {
+              file.close();
+              resolve();
+            });
+          }
+
+          function handleError(err: Error) {
+            fs.unlink(tempZipPath, () => {});
+            reject(err);
+          }
+        }).on("error", (err) => {
+          fs.unlink(tempZipPath, () => {});
+          reject(err);
+        });
+      });
+
+      setDesktopAppUpdateState({
+        status: "downloaded",
+        updateToken: version,
+        updateVersion: version,
+        progressPercent: 100,
+        errorMessage: null,
+      });
+      return true;
+    }
+
     await autoUpdater.downloadUpdate();
     return true;
   } catch (error) {
@@ -402,6 +475,37 @@ async function downloadDesktopAppUpdate() {
 function installDesktopAppUpdate() {
   if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
   if (desktopAppUpdateState.status !== "downloaded") return false;
+
+  if (process.platform === "darwin") {
+    const zipPath = path.join(os.tmpdir(), "AlphaFlix-update.zip");
+    const scriptPath = path.join(os.tmpdir(), "AlphaFlix-updater.sh");
+    
+    let appPath = process.execPath;
+    if (appPath.includes(".app/Contents/MacOS/")) {
+      appPath = appPath.substring(0, appPath.indexOf(".app") + 4);
+    } else {
+      appPath = "/Applications/AlphaFlix.app";
+    }
+
+    const scriptContent = `#!/bin/bash
+sleep 2
+rm -rf "${appPath}"
+unzip -q "${zipPath}" -d "${path.dirname(appPath)}"
+xattr -cr "${appPath}"
+codesign --force --deep -s - "${appPath}"
+open "${appPath}"
+`;
+    
+    fs.writeFileSync(scriptPath, scriptContent, { mode: 0o755 });
+    
+    spawn("bash", [scriptPath], {
+      detached: true,
+      stdio: "ignore"
+    }).unref();
+    
+    app.quit();
+    return true;
+  }
 
   autoUpdater.quitAndInstall(true, true);
   return true;
