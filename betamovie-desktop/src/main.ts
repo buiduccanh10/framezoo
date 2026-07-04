@@ -403,7 +403,7 @@ function installDesktopAppUpdate() {
   if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
   if (desktopAppUpdateState.status !== "downloaded") return false;
 
-  autoUpdater.quitAndInstall(false, true);
+  autoUpdater.quitAndInstall(true, true);
   return true;
 }
 
