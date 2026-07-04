@@ -1203,7 +1203,8 @@
         "appVersion": "Versija",
         "notLoggedIn": "Jūs neesat pievienojies",
         "userId": "Lietotāja ID",
-        "userIdDescription": "Izmantojiet šo kā ielūguma kodu drauga reģistrācijai"
+        "userIdDescription": "Izmantojiet šo kā ielūguma kodu drauga reģistrācijai",
+        "checkForUpdates": "Pārbaudiet atjauninājumus"
       }
     },
     "subtitles": {

@@ -1203,7 +1203,8 @@
         "appVersion": "ਸੰਸਕਰਣ",
         "notLoggedIn": "ਤੁਸੀਂ ਲੌਗਇਨ ਨਹੀਂ ਹੋ",
         "userId": "ਯੂਜਰ ਆਈਡੀ",
-        "userIdDescription": "ਇਸ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਰਜਿਸਟਰ ਲਈ ਸੱਦਾ ਕੋਡ ਵਜੋਂ ਵਰਤੋ"
+        "userIdDescription": "ਇਸ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਰਜਿਸਟਰ ਲਈ ਸੱਦਾ ਕੋਡ ਵਜੋਂ ਵਰਤੋ",
+        "checkForUpdates": "ਅੱਪਡੇਟ ਲਈ ਚੈੱਕ ਕਰੋ"
       }
     },
     "subtitles": {

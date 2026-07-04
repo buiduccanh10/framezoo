@@ -1203,7 +1203,8 @@
         "appVersion": "버전",
         "notLoggedIn": "로그인하지 않으셨습니다",
         "userId": "유저 ID",
-        "userIdDescription": "친구등록 초대코드로 사용하세요"
+        "userIdDescription": "친구등록 초대코드로 사용하세요",
+        "checkForUpdates": "업데이트 확인"
       }
     },
     "subtitles": {

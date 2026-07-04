@@ -1203,7 +1203,8 @@
         "appVersion": "Version",
         "notLoggedIn": "You are not logged in",
         "userId": "User ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Use this as invite code for your friend register",
+        "checkForUpdates": "Check for updates"
       }
     },
     "subtitles": {

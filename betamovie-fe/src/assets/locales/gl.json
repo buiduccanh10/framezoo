@@ -597,9 +597,9 @@
       "appUpdate": {
         "action": "Actualiza agora",
         "available": "Unha nova versión da aplicación está lista.",
-        "download": "Download update",
+        "download": "Descargar actualización",
         "later": "Máis tarde",
-        "restart": "Restart to update",
+        "restart": "Reinicia para actualizar",
         "updating": "Actualizando..."
       },
       "offline": "Verifica a túa conexión a internet"
@@ -1203,7 +1203,8 @@
         "appVersion": "Versión",
         "notLoggedIn": "Non iniciache sesión",
         "userId": "ID do usuario",
-        "userIdDescription": "Use isto como código de invitación para o rexistro de amigos"
+        "userIdDescription": "Use isto como código de invitación para o rexistro de amigos",
+        "checkForUpdates": "Comproba se hai actualizacións"
       }
     },
     "subtitles": {

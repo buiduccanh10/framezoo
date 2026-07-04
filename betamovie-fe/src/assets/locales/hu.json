@@ -1203,7 +1203,8 @@
         "appVersion": "Változat",
         "notLoggedIn": "Nem vagy bejelentkezve",
         "userId": "Felhasználó ID",
-        "userIdDescription": "Használja ezt meghívókódként az ismerősei regisztrációjához"
+        "userIdDescription": "Használja ezt meghívókódként az ismerősei regisztrációjához",
+        "checkForUpdates": "Ellenőrizze a frissítéseket"
       }
     },
     "subtitles": {

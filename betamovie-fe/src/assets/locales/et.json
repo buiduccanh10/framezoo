@@ -1203,7 +1203,8 @@
         "appVersion": "Versioon",
         "notLoggedIn": "Sa pole sisse loginud",
         "userId": "Kasutaja ID",
-        "userIdDescription": "Kasutage seda oma sõbraregistri kutsekoodina"
+        "userIdDescription": "Kasutage seda oma sõbraregistri kutsekoodina",
+        "checkForUpdates": "Kontrollige värskendusi"
       }
     },
     "subtitles": {

@@ -1203,7 +1203,8 @@
         "appVersion": "Versió",
         "notLoggedIn": "No heu iniciat sessió",
         "userId": "ID d'usuari",
-        "userIdDescription": "Utilitzeu-lo com a codi d'invitació per al vostre registre d'amics"
+        "userIdDescription": "Utilitzeu-lo com a codi d'invitació per al vostre registre d'amics",
+        "checkForUpdates": "Comproveu si hi ha actualitzacions"
       }
     },
     "subtitles": {

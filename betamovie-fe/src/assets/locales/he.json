@@ -1203,7 +1203,8 @@
         "appVersion": "גִרְסָה",
         "notLoggedIn": "אתה לא מחובר",
         "userId": "זהות המשתמש",
-        "userIdDescription": "השתמש בזה כקוד הזמנה לרישום החברים שלך"
+        "userIdDescription": "השתמש בזה כקוד הזמנה לרישום החברים שלך",
+        "checkForUpdates": "בדוק אם יש עדכונים"
       }
     },
     "subtitles": {

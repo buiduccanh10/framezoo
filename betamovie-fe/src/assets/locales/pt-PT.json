@@ -1203,7 +1203,8 @@
         "appVersion": "Versão",
         "notLoggedIn": "Não está autenticado",
         "userId": "ID de utilizador",
-        "userIdDescription": "Use isto como código de convite para o registro de seu amigo"
+        "userIdDescription": "Use isto como código de convite para o registro de seu amigo",
+        "checkForUpdates": "Verifique se há atualizações"
       }
     },
     "subtitles": {

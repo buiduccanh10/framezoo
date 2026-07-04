@@ -1203,7 +1203,8 @@
         "appVersion": "Versiune",
         "notLoggedIn": "Nu sunteți autentificat",
         "userId": "ID-ul utilizatorului",
-        "userIdDescription": "Folosește-l ca cod de invitație pentru înregistrarea prietenilor tăi"
+        "userIdDescription": "Folosește-l ca cod de invitație pentru înregistrarea prietenilor tăi",
+        "checkForUpdates": "Verificați actualizările"
       }
     },
     "subtitles": {

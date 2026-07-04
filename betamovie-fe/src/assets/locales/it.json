@@ -1203,7 +1203,8 @@
         "appVersion": "Versione",
         "notLoggedIn": "Non sei loggato",
         "userId": "ID utente",
-        "userIdDescription": "Usalo come codice di invito per il registro dei tuoi amici"
+        "userIdDescription": "Usalo come codice di invito per il registro dei tuoi amici",
+        "checkForUpdates": "Controlla gli aggiornamenti"
       }
     },
     "subtitles": {
