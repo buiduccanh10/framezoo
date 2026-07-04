@@ -1203,7 +1203,8 @@
         "appVersion": "Wersja",
         "notLoggedIn": "Nie jesteś zalogowany",
         "userId": "Identyfikator użytkownika",
-        "userIdDescription": "Użyj tego jako kodu zaproszenia do rejestracji znajomego"
+        "userIdDescription": "Użyj tego jako kodu zaproszenia do rejestracji znajomego",
+        "checkForUpdates": "Sprawdź aktualizacje"
       }
     },
     "subtitles": {

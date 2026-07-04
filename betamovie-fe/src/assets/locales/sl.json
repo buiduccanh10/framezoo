@@ -1203,7 +1203,8 @@
         "appVersion": "Različica",
         "notLoggedIn": "Niste prijavljeni",
         "userId": "ID uporabnika",
-        "userIdDescription": "Uporabite to kot kodo povabila za vašo registracijo prijateljev"
+        "userIdDescription": "Uporabite to kot kodo povabila za vašo registracijo prijateljev",
+        "checkForUpdates": "Preverite posodobitve"
       }
     },
     "subtitles": {

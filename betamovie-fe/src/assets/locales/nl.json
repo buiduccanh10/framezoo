@@ -1203,7 +1203,8 @@
         "appVersion": "Versie",
         "notLoggedIn": "U bent niet ingelogd",
         "userId": "Gebruiker ID",
-        "userIdDescription": "Gebruik dit als uitnodigingscode voor uw vriendenregister"
+        "userIdDescription": "Gebruik dit als uitnodigingscode voor uw vriendenregister",
+        "checkForUpdates": "Controleer op updates"
       }
     },
     "subtitles": {

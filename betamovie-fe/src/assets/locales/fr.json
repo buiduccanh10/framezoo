@@ -1203,7 +1203,8 @@
         "appVersion": "Version",
         "notLoggedIn": "Vous n'êtes pas connecté",
         "userId": "ID de l'utilisateur",
-        "userIdDescription": "Utilisez-le comme code d'invitation pour votre inscription d'ami"
+        "userIdDescription": "Utilisez-le comme code d'invitation pour votre inscription d'ami",
+        "checkForUpdates": "Vérifier les mises à jour"
       }
     },
     "subtitles": {

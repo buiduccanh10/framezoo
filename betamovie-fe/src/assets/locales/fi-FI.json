@@ -1203,7 +1203,8 @@
         "appVersion": "Versio",
         "notLoggedIn": "Et ole kirjautunut sisään",
         "userId": "Käyttäjätunnus",
-        "userIdDescription": "Käytä tätä kutsukoodina ystävärekisteriin"
+        "userIdDescription": "Käytä tätä kutsukoodina ystävärekisteriin",
+        "checkForUpdates": "Tarkista päivitykset"
       }
     },
     "subtitles": {

@@ -1203,7 +1203,8 @@
         "appVersion": "Version",
         "notLoggedIn": "Du bist nicht angemeldet",
         "userId": "Nutzer-ID",
-        "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister"
+        "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister",
+        "checkForUpdates": "Suchen Sie nach Updates"
       }
     },
     "subtitles": {

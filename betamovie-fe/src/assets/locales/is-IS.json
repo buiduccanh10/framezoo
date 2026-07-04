@@ -1203,7 +1203,8 @@
         "appVersion": "Útgáfa",
         "notLoggedIn": "Þú ert ekki skrátt inn",
         "userId": "Notanda kóði",
-        "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína"
+        "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína",
+        "checkForUpdates": "Leitaðu að uppfærslum"
       }
     },
     "subtitles": {

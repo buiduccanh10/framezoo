@@ -1203,7 +1203,8 @@
         "appVersion": "Sürüm",
         "notLoggedIn": "Giriş yapmadınız",
         "userId": "Kullanıcı Kimliği",
-        "userIdDescription": "Bunu arkadaş kaydınız için davet kodu olarak kullanın"
+        "userIdDescription": "Bunu arkadaş kaydınız için davet kodu olarak kullanın",
+        "checkForUpdates": "Güncellemeleri kontrol edin"
       }
     },
     "subtitles": {

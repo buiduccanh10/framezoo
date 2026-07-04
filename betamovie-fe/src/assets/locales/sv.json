@@ -1203,7 +1203,8 @@
         "appVersion": "Version",
         "notLoggedIn": "Du är inte inloggad",
         "userId": "Användar-ID",
-        "userIdDescription": "Använd denna som inbjudningskod för ditt vänregister"
+        "userIdDescription": "Använd denna som inbjudningskod för ditt vänregister",
+        "checkForUpdates": "Sök efter uppdateringar"
       }
     },
     "subtitles": {
