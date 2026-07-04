@@ -1200,11 +1200,12 @@
     },
     "sidebar": {
       "info": {
-        "appVersion": "Version",
+        "appVersion": "App Version",
         "notLoggedIn": "You are not logged in",
         "userId": "User ID",
         "userIdDescription": "Use this as invite code for your friend register",
-        "checkForUpdates": "Check for updates"
+        "checkForUpdates": "Check for updates",
+        "upToDate": "You are currently on the latest version"
       }
     },
     "subtitles": {
