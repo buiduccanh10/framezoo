@@ -171,7 +171,7 @@ jobs:
             exit 1
           fi
           printf '%s' "$ENV_FILE" > .env
-          printf '%s' "$ENV_FILE" > ../betamovie-fe/.env
+          printf '%s' "$ENV_FILE" > betamovie-fe/.env
           
           BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$BACKEND_URL" ]; then
@@ -248,7 +248,7 @@ jobs:
             exit 1
           fi
           printf '%s' "$ENV_FILE" > .env
-          printf '%s' "$ENV_FILE" > ../betamovie-fe/.env
+          printf '%s' "$ENV_FILE" > betamovie-fe/.env
           
           BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$BACKEND_URL" ]; then
