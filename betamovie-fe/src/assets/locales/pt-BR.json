@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Você não está logado",
         "userId": "ID do usuário",
         "userIdDescription": "Use isto como código de convite para o registro de seu amigo",
-        "checkForUpdates": "Verifique se há atualizações"
+        "checkForUpdates": "Verifique se há atualizações",
+        "upToDate": "Você está atualmente na versão mais recente"
       }
     },
     "subtitles": {

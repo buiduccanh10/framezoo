@@ -188,7 +188,11 @@ export function SidebarPart(props: {
                     return;
                   }
 
-                  void checkForAppUpdate();
+                  void checkForAppUpdate().then((hasUpdate) => {
+                    if (!hasUpdate) {
+                      window.alert(t("settings.sidebar.info.upToDate"));
+                    }
+                  });
                 }}
               >
                 {desktopUpdateActionLabel}

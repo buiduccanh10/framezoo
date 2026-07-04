@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Bạn chưa đăng nhập",
         "userId": "ID người dùng",
         "userIdDescription": "Sử dụng mã này làm mã mời khi bạn bè đăng ký",
-        "checkForUpdates": "Kiểm tra bản cập nhật"
+        "checkForUpdates": "Kiểm tra bản cập nhật",
+        "upToDate": "Bạn đang dùng phiên bản mới nhất"
       }
     },
     "subtitles": {

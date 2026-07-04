@@ -1204,7 +1204,8 @@
         "notLoggedIn": "તમે લૉગ ઇન નથી",
         "userId": "વપરાશકર્તા ID",
         "userIdDescription": "તમારા મિત્ર રજીસ્ટર માટે આમંત્રિત કોડ તરીકે આનો ઉપયોગ કરો",
-        "checkForUpdates": "અપડેટ્સ માટે તપાસો"
+        "checkForUpdates": "અપડેટ્સ માટે તપાસો",
+        "upToDate": "તમે હાલમાં નવીનતમ સંસ્કરણ પર છો"
       }
     },
     "subtitles": {

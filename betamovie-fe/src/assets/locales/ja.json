@@ -1204,7 +1204,8 @@
         "notLoggedIn": "ログインしていません",
         "userId": "ユーザーID",
         "userIdDescription": "これを友達登録の招待コードとして使用してください",
-        "checkForUpdates": "アップデートを確認する"
+        "checkForUpdates": "アップデートを確認する",
+        "upToDate": "現在最新バージョンを使用しています"
       }
     },
     "subtitles": {

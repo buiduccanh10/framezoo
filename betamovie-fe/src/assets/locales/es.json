@@ -1204,7 +1204,8 @@
         "notLoggedIn": "No has iniciado sesión",
         "userId": "ID de usuario",
         "userIdDescription": "Utilice esto como código de invitación para su registro de amigo.",
-        "checkForUpdates": "Buscar actualizaciones"
+        "checkForUpdates": "Buscar actualizaciones",
+        "upToDate": "Actualmente estás en la última versión."
       }
     },
     "subtitles": {

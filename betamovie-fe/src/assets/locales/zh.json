@@ -1204,7 +1204,8 @@
         "notLoggedIn": "您尚未登录",
         "userId": "用户 ID",
         "userIdDescription": "使用此作为您的好友注册的邀请码",
-        "checkForUpdates": "检查更新"
+        "checkForUpdates": "检查更新",
+        "upToDate": "您目前使用的是最新版本"
       }
     },
     "subtitles": {

@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Nu sunteți autentificat",
         "userId": "ID-ul utilizatorului",
         "userIdDescription": "Folosește-l ca cod de invitație pentru înregistrarea prietenilor tăi",
-        "checkForUpdates": "Verificați actualizările"
+        "checkForUpdates": "Verificați actualizările",
+        "upToDate": "În prezent sunteți la cea mai recentă versiune"
       }
     },
     "subtitles": {

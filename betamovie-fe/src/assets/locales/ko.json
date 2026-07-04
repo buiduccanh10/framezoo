@@ -1204,7 +1204,8 @@
         "notLoggedIn": "로그인하지 않으셨습니다",
         "userId": "유저 ID",
         "userIdDescription": "친구등록 초대코드로 사용하세요",
-        "checkForUpdates": "업데이트 확인"
+        "checkForUpdates": "업데이트 확인",
+        "upToDate": "현재 최신 버전을 사용 중입니다."
       }
     },
     "subtitles": {

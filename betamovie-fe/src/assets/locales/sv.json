@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Du är inte inloggad",
         "userId": "Användar-ID",
         "userIdDescription": "Använd denna som inbjudningskod för ditt vänregister",
-        "checkForUpdates": "Sök efter uppdateringar"
+        "checkForUpdates": "Sök efter uppdateringar",
+        "upToDate": "Du använder för närvarande den senaste versionen"
       }
     },
     "subtitles": {

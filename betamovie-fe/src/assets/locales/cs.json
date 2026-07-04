@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Nejste přihlášen",
         "userId": "Uživatelské ID",
         "userIdDescription": "Použijte jej jako zvací kód pro registraci přátel",
-        "checkForUpdates": "Zkontrolujte aktualizace"
+        "checkForUpdates": "Zkontrolujte aktualizace",
+        "upToDate": "Momentálně používáte nejnovější verzi"
       }
     },
     "subtitles": {

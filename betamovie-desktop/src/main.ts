@@ -369,7 +369,11 @@ async function checkForDesktopAppUpdate() {
 
   try {
     await autoUpdater.checkForUpdates();
-    return true;
+    return (
+      desktopAppUpdateState.status === "available" ||
+      desktopAppUpdateState.status === "downloading" ||
+      desktopAppUpdateState.status === "downloaded"
+    );
   } catch (error) {
     setDesktopAppUpdateState({
       status: "error",

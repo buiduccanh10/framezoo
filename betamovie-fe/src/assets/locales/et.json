@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Sa pole sisse loginud",
         "userId": "Kasutaja ID",
         "userIdDescription": "Kasutage seda oma sõbraregistri kutsekoodina",
-        "checkForUpdates": "Kontrollige värskendusi"
+        "checkForUpdates": "Kontrollige värskendusi",
+        "upToDate": "Kasutate praegu uusimat versiooni"
       }
     },
     "subtitles": {
