@@ -1204,7 +1204,8 @@
         "notLoggedIn": "U bent niet ingelogd",
         "userId": "Gebruiker ID",
         "userIdDescription": "Gebruik dit als uitnodigingscode voor uw vriendenregister",
-        "checkForUpdates": "Controleer op updates"
+        "checkForUpdates": "Controleer op updates",
+        "upToDate": "U gebruikt momenteel de nieuwste versie"
       }
     },
     "subtitles": {

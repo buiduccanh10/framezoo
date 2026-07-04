@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Anda belum masuk ke akun anda",
         "userId": "ID pengguna",
         "userIdDescription": "Gunakan ini sebagai kode undangan untuk daftar teman Anda",
-        "checkForUpdates": "Periksa pembaruan"
+        "checkForUpdates": "Periksa pembaruan",
+        "upToDate": "Anda saat ini menggunakan versi terbaru"
       }
     },
     "subtitles": {

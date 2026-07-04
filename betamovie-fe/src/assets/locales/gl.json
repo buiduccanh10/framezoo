@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Non iniciache sesión",
         "userId": "ID do usuario",
         "userIdDescription": "Use isto como código de invitación para o rexistro de amigos",
-        "checkForUpdates": "Comproba se hai actualizacións"
+        "checkForUpdates": "Comproba se hai actualizacións",
+        "upToDate": "Actualmente estás na última versión"
       }
     },
     "subtitles": {

@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Non sei loggato",
         "userId": "ID utente",
         "userIdDescription": "Usalo come codice di invito per il registro dei tuoi amici",
-        "checkForUpdates": "Controlla gli aggiornamenti"
+        "checkForUpdates": "Controlla gli aggiornamenti",
+        "upToDate": "Attualmente sei sull'ultima versione"
       }
     },
     "subtitles": {

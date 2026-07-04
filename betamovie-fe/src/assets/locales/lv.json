@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Jūs neesat pievienojies",
         "userId": "Lietotāja ID",
         "userIdDescription": "Izmantojiet šo kā ielūguma kodu drauga reģistrācijai",
-        "checkForUpdates": "Pārbaudiet atjauninājumus"
+        "checkForUpdates": "Pārbaudiet atjauninājumus",
+        "upToDate": "Jūs pašlaik izmantojat jaunāko versiju"
       }
     },
     "subtitles": {

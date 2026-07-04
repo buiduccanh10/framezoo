@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Giriş yapmadınız",
         "userId": "Kullanıcı Kimliği",
         "userIdDescription": "Bunu arkadaş kaydınız için davet kodu olarak kullanın",
-        "checkForUpdates": "Güncellemeleri kontrol edin"
+        "checkForUpdates": "Güncellemeleri kontrol edin",
+        "upToDate": "Şu anda en son sürümdesiniz"
       }
     },
     "subtitles": {

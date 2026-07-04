@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Vous n'êtes pas connecté",
         "userId": "ID de l'utilisateur",
         "userIdDescription": "Utilisez-le comme code d'invitation pour votre inscription d'ami",
-        "checkForUpdates": "Vérifier les mises à jour"
+        "checkForUpdates": "Vérifier les mises à jour",
+        "upToDate": "Vous êtes actuellement sur la dernière version"
       }
     },
     "subtitles": {

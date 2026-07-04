@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Þú ert ekki skrátt inn",
         "userId": "Notanda kóði",
         "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína",
-        "checkForUpdates": "Leitaðu að uppfærslum"
+        "checkForUpdates": "Leitaðu að uppfærslum",
+        "upToDate": "Þú ert núna á nýjustu útgáfunni"
       }
     },
     "subtitles": {

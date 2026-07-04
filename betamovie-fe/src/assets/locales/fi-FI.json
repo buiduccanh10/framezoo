@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Et ole kirjautunut sisään",
         "userId": "Käyttäjätunnus",
         "userIdDescription": "Käytä tätä kutsukoodina ystävärekisteriin",
-        "checkForUpdates": "Tarkista päivitykset"
+        "checkForUpdates": "Tarkista päivitykset",
+        "upToDate": "Käytät tällä hetkellä uusinta versiota"
       }
     },
     "subtitles": {

@@ -1204,7 +1204,8 @@
         "notLoggedIn": "אתה לא מחובר",
         "userId": "זהות המשתמש",
         "userIdDescription": "השתמש בזה כקוד הזמנה לרישום החברים שלך",
-        "checkForUpdates": "בדוק אם יש עדכונים"
+        "checkForUpdates": "בדוק אם יש עדכונים",
+        "upToDate": "אתה נמצא כרגע בגרסה העדכנית ביותר"
       }
     },
     "subtitles": {

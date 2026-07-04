@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Du er ikke logget ind",
         "userId": "Bruger ID",
         "userIdDescription": "Brug denne som invitationskode til dit venneregister",
-        "checkForUpdates": "Se efter opdateringer"
+        "checkForUpdates": "Se efter opdateringer",
+        "upToDate": "Du er i øjeblikket på den seneste version"
       }
     },
     "subtitles": {

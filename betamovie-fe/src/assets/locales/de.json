@@ -1204,7 +1204,8 @@
         "notLoggedIn": "Du bist nicht angemeldet",
         "userId": "Nutzer-ID",
         "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister",
-        "checkForUpdates": "Suchen Sie nach Updates"
+        "checkForUpdates": "Suchen Sie nach Updates",
+        "upToDate": "Sie befinden sich derzeit auf der neuesten Version"
       }
     },
     "subtitles": {

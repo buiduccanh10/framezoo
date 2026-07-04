@@ -1204,7 +1204,8 @@
         "notLoggedIn": "أنت لم تسجل دخولك بعد",
         "userId": "معرِّف المستخدم",
         "userIdDescription": "استخدم هذا كرمز دعوة لتسجيل صديقك",
-        "checkForUpdates": "التحقق من وجود تحديثات"
+        "checkForUpdates": "التحقق من وجود تحديثات",
+        "upToDate": "أنت حاليا على الإصدار الأحدث"
       }
     },
     "subtitles": {
