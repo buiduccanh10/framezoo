@@ -1,10 +1,7 @@
 import type { Stream, StreamLookupContext } from './types';
 import { getVixsrcStreams } from './vixsrc';
 import { getVidlinkStreams } from './vidlink';
-import { getVidSrcStreams } from './vidsrc';
-import { getVidsrcRuStreams } from './vidsrc-ru';
-import { getVidsrcWtfStreams } from './vidsrcwtf';
-import { getVidrockStreams } from './vidrock';
+import { getVidSrcToStreams } from './vidsrc-to';
 import { getKKPhimStreams } from './kkphim';
 import { get111MoviesStreams } from './111movies';
 import { getVidkingStreams } from './vidking';
@@ -37,28 +34,9 @@ const vidlinkProvider: StreamProvider = {
   getStreams: getVidlinkStreams,
 };
 
-const vidsrcProvider: StreamProvider = {
-  name: 'vidsrc',
-  type: 'direct',
-  getStreams: getVidSrcStreams,
-};
-
-const vidsrcRuProvider: StreamProvider = {
-  name: 'vidsrc-ru',
-  type: 'direct',
-  getStreams: getVidsrcRuStreams,
-};
-
-const vidsrcWtfProvider: StreamProvider = {
-  name: 'vidsrcwtf',
-  type: 'direct',
-  getStreams: getVidsrcWtfStreams,
-};
-
-const vidrockProvider: StreamProvider = {
-  name: 'vidrock',
-  type: 'direct',
-  getStreams: getVidrockStreams,
+const vidsrcToProvider: StreamProvider = {
+  name: 'vidsrcto',
+  getStreams: getVidSrcToStreams,
 };
 
 const kkphimProvider: StreamProvider = {
@@ -87,10 +65,7 @@ const providers: Map<string, StreamProvider> = new Map([
   ['vidking', vidkingProvider],
   ['vidlink', vidlinkProvider],
   ['vixsrc', vixsrcProvider],
-  ['vidsrcwtf', vidsrcWtfProvider],
-  ['vidrock', vidrockProvider],
-  ['vidsrc', vidsrcProvider],
-  ['vidsrc-ru', vidsrcRuProvider],
+  ['vidsrcto', vidsrcToProvider],
   ['kkphim', kkphimProvider],
   // Add more providers here in the future
   // ["torrent-provider", torrentProvider],
