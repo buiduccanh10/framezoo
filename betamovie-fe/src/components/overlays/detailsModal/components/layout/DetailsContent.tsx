@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCopyToClipboard } from "react-use";
+import { useCopyToClipboard, useIntersection } from "react-use";
 
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
@@ -10,7 +10,6 @@ import { getNetworkContent } from "@/backend/metadata/traktApi";
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
-import { LazyImage } from "@/components/utils/Image";
 import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
@@ -28,8 +27,35 @@ import { SimilarMediaCarousel } from "../carousels/SimilarMediaCarousel";
 import { TrailerCarousel } from "../carousels/TrailerCarousel";
 import { CollectionOverlay } from "../overlays/CollectionOverlay";
 import { TrailerOverlay } from "../overlays/TrailerOverlay";
+import { DetailsBackdrop } from "../sections/DetailsBackdrop";
 import { DetailsBody } from "../sections/DetailsBody";
 import { DetailsInfo } from "../sections/DetailsInfo";
+
+export function LazyCarouselWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const intersection = useIntersection(ref, {
+    root: null,
+    rootMargin: "500px",
+    threshold: 0,
+  });
+  const [hasRendered, setHasRendered] = useState(false);
+
+  useEffect(() => {
+    if (intersection?.isIntersecting) {
+      setHasRendered(true);
+    }
+  }, [intersection]);
+
+  return (
+    <div ref={ref} className="min-h-[200px]">
+      {hasRendered ? children : null}
+    </div>
+  );
+}
 
 export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const navigate = useNavigate();
@@ -51,8 +77,6 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   );
   const [, copyToClipboard] = useCopyToClipboard();
   const [hasCopiedShare, setHasCopiedShare] = useState(false);
-  const [logoHeight, setLogoHeight] = useState<number>(0);
-  const logoRef = useRef<HTMLDivElement>(null);
   const progress = useProgressStore((s) => s.items);
   const updateItem = useProgressStore((s) => s.updateItem);
 
@@ -107,15 +131,8 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       }
     };
 
-    if (data.type === "show") {
-      if (selectedSeason !== -1) {
-        fetchSeason(selectedSeason);
-      } else if (data.seasonData?.seasons) {
-        // Fetch all seasons for favorites
-        data.seasonData.seasons.forEach((season) => {
-          fetchSeason(season.season_number);
-        });
-      }
+    if (data.type === "show" && selectedSeason !== -1) {
+      fetchSeason(selectedSeason);
     }
   }, [
     data.id,
@@ -129,20 +146,6 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const allEpisodes = useMemo(() => {
     return Object.values(fetchedSeasons).flat();
   }, [fetchedSeasons]);
-
-  // Add effect to measure logo height
-  useEffect(() => {
-    if (logoRef.current) {
-      const resizeObserver = new ResizeObserver((entries) => {
-        for (const entry of entries) {
-          setLogoHeight(entry.contentRect.height);
-        }
-      });
-
-      resizeObserver.observe(logoRef.current);
-      return () => resizeObserver.disconnect();
-    }
-  }, []);
 
   useEffect(() => {
     let isCancelled = false;
@@ -176,10 +179,13 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       }
     };
 
-    void fetchNetworkData();
+    const timer = setTimeout(() => {
+      void fetchNetworkData();
+    }, 300);
 
     return () => {
       isCancelled = true;
+      clearTimeout(timer);
     };
   }, [data.id, data.type]);
 
@@ -262,11 +268,14 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       }
     };
 
-    void fetchImdbData();
-    void fetchRtData();
+    const timer = setTimeout(() => {
+      void fetchImdbData();
+      void fetchRtData();
+    }, 300);
 
     return () => {
       isCancelled = true;
+      clearTimeout(timer);
     };
   }, [data.imdbId, data.title, data.releaseDate, data.type]);
 
@@ -386,65 +395,11 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       )}
 
       {/* Backdrop */}
-      <div
-        className="relative -mt-12 z-20"
-        style={{
-          height: `${Math.max(500, logoHeight + 400)}px`,
-        }}
-      >
-        {/* Title/Logo positioned on backdrop */}
-        <div ref={logoRef} className="absolute inset-x-0 bottom-20 z-30 px-6">
-          {data.logoUrl ? (
-            <LazyImage
-              src={data.logoUrl}
-              alt={data.title}
-              className="max-w-[16rem] md:max-w-[20rem] lg:max-w-[30rem] max-h-[12rem] object-contain drop-shadow-lg bg-transparent"
-              style={{ background: "none" }}
-            />
-          ) : (
-            <h3 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
-              {data.title}
-            </h3>
-          )}
-        </div>
-        {data.backdrop ? (
-          <LazyImage
-            src={data.backdrop}
-            alt={data.title}
-            className="absolute inset-0 w-full h-full object-cover object-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
-            style={{
-              maskImage:
-                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-              WebkitMaskImage:
-                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-              zIndex: -1,
-            }}
-          />
-        ) : (
-          <div
-            className="absolute inset-0 bg-cover bg-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
-            style={{
-              maskImage:
-                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-              WebkitMaskImage:
-                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-              zIndex: -1,
-            }}
-          />
-        )}
-
-        {/* Focus Vignette / Edge Blur Overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none backdrop-blur-md bg-black/10"
-          style={{
-            maskImage:
-              "radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 1) 100%)",
-            WebkitMaskImage:
-              "radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 1) 100%)",
-            zIndex: -1,
-          }}
-        />
-      </div>
+      <DetailsBackdrop
+        title={data.title}
+        logoUrl={data.logoUrl}
+        backdrop={data.backdrop}
+      />
 
       {/* Content */}
       <div className="px-6 pb-6 mt-[-70px] flex-grow relative z-30">
@@ -554,70 +509,78 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
 
         {/* Episodes Carousel for TV Shows */}
         {data.type === "show" && data.seasonData && !minimal && (
-          <EpisodeCarousel
-            episodes={allEpisodes}
-            showProgress={showProgress}
-            progress={progress}
-            selectedSeason={selectedSeason}
-            onSeasonChange={setSelectedSeason}
-            seasons={data.seasonData.seasons}
-            mediaId={data.id}
-            mediaTitle={data.title}
-            mediaPosterUrl={data.posterUrl}
-            totalEpisodes={data.episodes}
-          />
+          <LazyCarouselWrapper>
+            <EpisodeCarousel
+              episodes={allEpisodes}
+              showProgress={showProgress}
+              progress={progress}
+              selectedSeason={selectedSeason}
+              onSeasonChange={setSelectedSeason}
+              seasons={data.seasonData.seasons}
+              mediaId={data.id}
+              mediaTitle={data.title}
+              mediaPosterUrl={data.posterUrl}
+              totalEpisodes={data.episodes}
+            />
+          </LazyCarouselWrapper>
         )}
 
         {/* Cast Carousel */}
         {data.id && (
-          <CastCarousel
-            mediaId={data.id.toString()}
-            mediaType={
-              data.type === "movie"
-                ? TMDBContentTypes.MOVIE
-                : TMDBContentTypes.TV
-            }
-          />
+          <LazyCarouselWrapper>
+            <CastCarousel
+              mediaId={data.id.toString()}
+              mediaType={
+                data.type === "movie"
+                  ? TMDBContentTypes.MOVIE
+                  : TMDBContentTypes.TV
+              }
+            />
+          </LazyCarouselWrapper>
         )}
 
         {/* Trailer Carousel */}
         {data.id && (
-          <TrailerCarousel
-            mediaId={data.id.toString()}
-            mediaType={
-              data.type === "movie"
-                ? TMDBContentTypes.MOVIE
-                : TMDBContentTypes.TV
-            }
-            imdbData={imdbData}
-            onTrailerClick={(videoKey, isImdbTrailer) => {
-              let trailerUrl: string;
-              if (isImdbTrailer) {
-                // IMDb trailer is already a full URL
-                trailerUrl = videoKey;
-              } else {
-                // TMDB trailer needs to be converted to YouTube embed URL
-                trailerUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
+          <LazyCarouselWrapper>
+            <TrailerCarousel
+              mediaId={data.id.toString()}
+              mediaType={
+                data.type === "movie"
+                  ? TMDBContentTypes.MOVIE
+                  : TMDBContentTypes.TV
               }
-              setShowTrailer(true);
-              setImdbData((prev: any) => ({
-                ...prev,
-                trailer_url: trailerUrl,
-              }));
-            }}
-          />
+              imdbData={imdbData}
+              onTrailerClick={(videoKey, isImdbTrailer) => {
+                let trailerUrl: string;
+                if (isImdbTrailer) {
+                  // IMDb trailer is already a full URL
+                  trailerUrl = videoKey;
+                } else {
+                  // TMDB trailer needs to be converted to YouTube embed URL
+                  trailerUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
+                }
+                setShowTrailer(true);
+                setImdbData((prev: any) => ({
+                  ...prev,
+                  trailer_url: trailerUrl,
+                }));
+              }}
+            />
+          </LazyCarouselWrapper>
         )}
 
         {/* Similar Media Carousel */}
         {data.id && (
-          <SimilarMediaCarousel
-            mediaId={data.id.toString()}
-            mediaType={
-              data.type === "movie"
-                ? TMDBContentTypes.MOVIE
-                : TMDBContentTypes.TV
-            }
-          />
+          <LazyCarouselWrapper>
+            <SimilarMediaCarousel
+              mediaId={data.id.toString()}
+              mediaType={
+                data.type === "movie"
+                  ? TMDBContentTypes.MOVIE
+                  : TMDBContentTypes.TV
+              }
+            />
+          </LazyCarouselWrapper>
         )}
       </div>
     </div>
