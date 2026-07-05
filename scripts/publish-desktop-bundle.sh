@@ -47,3 +47,8 @@ mv -f "$NEXT_LINK_PATH" "$CHANNEL_PATH"
 
 rm -f "$STAGING_BUNDLE"
 echo "Published desktop release ${VERSION} to channel ${CHANNEL}"
+
+KEEP=3
+echo "Cleaning up old releases, keeping the newest ${KEEP}..."
+ls -dt "$RELEASES_ROOT"/*/ 2>/dev/null | tail -n +$((KEEP + 1)) | xargs -r rm -rf
+echo "Cleanup finished."
