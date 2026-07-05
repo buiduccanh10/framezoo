@@ -13,6 +13,7 @@ body {
   font-size: 1.0248em;
   /* Use clip instead of hidden so position:sticky still works (e.g. Settings sidebar) */
   overflow-x: clip;
+  scroll-behavior: smooth;
 }
 
 html[data-full],
