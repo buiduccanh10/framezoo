@@ -40,6 +40,7 @@ export function DiscoverContent({
   const progressItems = useProgressStore((state) => state.items);
   const [internalCountry, setInternalCountry] = useState("");
   const [internalYear, setInternalYear] = useState("");
+  const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set());
 
   const filterCountry =
     externalCountry !== undefined ? externalCountry : internalCountry;
@@ -52,6 +53,14 @@ export function DiscoverContent({
       setSelectedCategory("popular");
     }
   }, [selectedCategory, setSelectedCategory]);
+
+  useEffect(() => {
+    setVisitedTabs((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(selectedCategory);
+      return newSet;
+    });
+  }, [selectedCategory]);
 
   // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
@@ -442,22 +451,29 @@ export function DiscoverContent({
       <WideContainer ultraWide classNames="!px-0">
         {/* Movies Tab */}
         <div style={{ display: isMoviesTab ? "block" : "none" }}>
-          {renderMoviesContent()}
+          {(isMoviesTab || visitedTabs.has("movies")) && renderMoviesContent()}
         </div>
 
         {/* TV Shows Tab */}
         <div style={{ display: isTVShowsTab ? "block" : "none" }}>
-          {renderTVShowsContent()}
+          {(isTVShowsTab || visitedTabs.has("tvshows")) &&
+            renderTVShowsContent()}
         </div>
 
         {/* Popular Tab */}
         <div style={{ display: isPopularTab ? "block" : "none" }}>
-          {renderPopularContent()}
+          {(isPopularTab ||
+            visitedTabs.has("popular") ||
+            visitedTabs.has("top10") ||
+            visitedTabs.has("editorpicks")) &&
+            renderPopularContent()}
         </div>
 
         {/* Genre Movies Tab */}
         <div style={{ display: isGenreTab ? "block" : "none" }}>
-          {renderSelectedGenreContent()}
+          {(isGenreTab ||
+            (selectedGenreId && visitedTabs.has(`genre:${selectedGenreId}`))) &&
+            renderSelectedGenreContent()}
         </div>
       </WideContainer>
 
