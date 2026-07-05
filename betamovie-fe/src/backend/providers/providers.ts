@@ -33,21 +33,9 @@ import {
   scrapeVidlinkShow,
 } from "./custom/sources/vidlinkSource";
 import {
-  scrapeVidrockMovie,
-  scrapeVidrockShow,
-} from "./custom/sources/vidrockSource";
-import {
-  scrapeVidSrcRuMovie,
-  scrapeVidSrcRuShow,
-} from "./custom/sources/vidsrcRuSource";
-import {
-  scrapeVidSrcMovie,
-  scrapeVidSrcShow,
-} from "./custom/sources/vidsrcSource";
-import {
-  scrapeVidSrcWtfMovie,
-  scrapeVidSrcWtfShow,
-} from "./custom/sources/vidsrcWtfSource";
+  scrapeVidSrcToMovie,
+  scrapeVidSrcToShow,
+} from "./custom/sources/vidsrcToSource";
 import { applyProviderMetadataOverride } from "./runtimeMetadata";
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
@@ -94,34 +82,6 @@ const kkphimSource = {
   scrapeShow: scrapeKKPhimShow,
 };
 
-// Custom Vidrock source definition
-const vidrockSource = {
-  id: "alphaflix-vidrock",
-  name: "Server 4 (Vidrock)",
-  rank: 4,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidrockMovie,
-  scrapeShow: scrapeVidrockShow,
-};
-
-// Custom VidSrc.wtf source definition
-const vidsrcWtfSource = {
-  id: "alphaflix-vidsrcwtf",
-  name: "Server 5 (VidSrc.wtf)",
-  rank: 5,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcWtfMovie,
-  scrapeShow: scrapeVidSrcWtfShow,
-};
-
 // Custom 111Movies source definition
 const movies111Source = {
   id: "alphaflix-111movies",
@@ -136,32 +96,18 @@ const movies111Source = {
   scrapeShow: scrape111MoviesShow,
 };
 
-// Custom VidSrc.ru source definition
-const vidsrcRuSource = {
-  id: "alphaflix-vidsrc-ru",
-  name: "Server 7 (Vidsrc.ru)",
-  rank: 7,
+// Custom VidSrc.to source definition
+const vidsrcToSource = {
+  id: "alphaflix-vidsrcto",
+  name: "Server 10 (Vidsrc.to)",
+  rank: 10,
   disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcRuMovie,
-  scrapeShow: scrapeVidSrcRuShow,
-};
-
-// Custom VidSrc source definition
-const vidsrcSource = {
-  id: "alphaflix-vidsrc",
-  name: "Server 8 (Vidsrc)",
-  rank: 8,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcMovie,
-  scrapeShow: scrapeVidSrcShow,
+  scrapeMovie: scrapeVidSrcToMovie,
+  scrapeShow: scrapeVidSrcToShow,
 };
 
 // Custom Vidking source definition
@@ -191,13 +137,10 @@ const openMovieEmbed = {
 };
 
 const sourceDefinitions = [
-  vidrockSource,
   movies111Source,
   vidlinkSource,
-  vidsrcWtfSource,
   openMovieSource,
-  vidsrcRuSource,
-  vidsrcSource,
+  vidsrcToSource,
   vidkingSource,
   kkphimSource,
 ];
