@@ -149,7 +149,7 @@ export const useAppUpdateStore = create<AppUpdateState>((set, get) => ({
   setUpdateProgress: (progressPercent) => {
     clearReminderTimer();
     set({
-      hasUpdate: false,
+      hasUpdate: true,
       isUpdating: true,
       status: "downloading",
       progressPercent,
