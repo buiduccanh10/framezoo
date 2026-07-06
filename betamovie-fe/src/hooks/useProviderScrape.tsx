@@ -2,7 +2,10 @@ import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { prepareStream } from "@/backend/extension/streams";
-import { getCachedMetadata } from "@/backend/helpers/providerApi";
+import {
+  getCachedMetadata,
+  refreshCachedMetadata,
+} from "@/backend/helpers/providerApi";
 import { getProviders } from "@/backend/providers/providers";
 import { loadProviderMetadata } from "@/backend/providers/runtimeMetadata";
 import { FullScraperEvents, RunOutput, ScrapeMedia } from "@/lib/providers";
@@ -52,10 +55,9 @@ function useBaseScrape() {
       evt.sourceIds
         .map((v) => {
           const source = getCachedMetadata().find((s) => s.id === v);
-          if (!source) throw new Error("invalid source id");
           const out: ScrapingSegment = {
-            name: source.name,
-            id: source.id,
+            name: source?.name ?? v,
+            id: source?.id ?? v,
             status: "waiting",
             percentage: 0,
           };
@@ -129,10 +131,9 @@ function useBaseScrape() {
           const source = getCachedMetadata().find(
             (src) => src.id === v.embedScraperId,
           );
-          if (!source) throw new Error("invalid source id");
           const out: ScrapingSegment = {
             embedId: v.embedScraperId,
-            name: source.name,
+            name: source?.name ?? v.embedScraperId,
             id: v.id,
             status: "waiting",
             percentage: 0,
@@ -143,7 +144,7 @@ function useBaseScrape() {
       });
       setSourceOrder((s) => {
         const source = s.find((v) => v.id === evt.sourceId);
-        if (!source) throw new Error("invalid source id");
+        if (!source) return [...s];
         source.children = evt.embeds.map((v) => v.id);
         return [...s];
       });
@@ -217,6 +218,7 @@ export function useScrape() {
       preferredSourceId?: string,
     ) => {
       await loadProviderMetadata();
+      refreshCachedMetadata();
 
       const providerInstance = getProviders();
       const allSources = providerInstance.listSources();

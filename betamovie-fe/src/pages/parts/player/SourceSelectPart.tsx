@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useRef } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getCachedMetadata } from "@/backend/helpers/providerApi";
@@ -23,24 +23,22 @@ function EmbedOption(props: {
   useProviderMetadataVersion();
   const unknownEmbedName = t("player.menus.sources.unknownOption");
 
-  const embedName = useMemo(() => {
-    // For OpenMovie embeds, parse the stream name from the encoded URL
-    if (
-      props.embedId === "openmovie-embed" &&
-      props.url?.startsWith("openmovie://")
-    ) {
-      try {
-        const encoded = props.url.replace("openmovie://", "");
-        const info = JSON.parse(decodeURIComponent(encoded));
-        return info.title || info.name || "OpenMovie Stream";
-      } catch {
-        // Fall through to default
-      }
+  let embedName = unknownEmbedName;
+  if (
+    props.embedId === "openmovie-embed" &&
+    props.url?.startsWith("openmovie://")
+  ) {
+    try {
+      const encoded = props.url.replace("openmovie://", "");
+      const info = JSON.parse(decodeURIComponent(encoded));
+      embedName = info.title || info.name || "OpenMovie Stream";
+    } catch {
+      // Fall through to default
     }
-    if (!props.embedId) return unknownEmbedName;
+  } else if (props.embedId) {
     const sourceMeta = getCachedMetadata().find((s) => s.id === props.embedId);
-    return sourceMeta?.name ?? unknownEmbedName;
-  }, [props.embedId, props.url, unknownEmbedName]);
+    embedName = sourceMeta?.name ?? unknownEmbedName;
+  }
 
   const { run, errored, loading, notFound } = useEmbedScraping(
     props.routerId,
@@ -89,11 +87,9 @@ function EmbedSelectionView(props: {
     props.routerId,
   );
 
-  const sourceName = useMemo(() => {
-    if (!props.sourceId) return "...";
-    const sourceMeta = getCachedMetadata().find((s) => s.id === props.sourceId);
-    return sourceMeta?.name ?? "...";
-  }, [props.sourceId]);
+  const sourceName = props.sourceId
+    ? (getCachedMetadata().find((s) => s.id === props.sourceId)?.name ?? "...")
+    : "...";
 
   const lastSourceId = useRef<string | null>(null);
   useEffect(() => {
@@ -170,21 +166,20 @@ export function SourceSelectPart(props: {
   const routerId = "manualSourceSelect";
   const sourceMaintainText = t("player.menus.sources.maintain");
 
-  const sources = useMemo(() => {
-    const metaType = props.media.type;
-    if (!metaType) return [];
-    const allSources = getCachedMetadata()
-      .filter((v) => v.type === "source")
-      .filter(
-        (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
-      )
-      .sort(
-        (left, right) =>
-          (left.rank ?? 0) - (right.rank ?? 0) ||
-          left.name.localeCompare(right.name),
-      );
-    return allSources;
-  }, [props.media.type]);
+  const metaType = props.media.type;
+  const sources = !metaType
+    ? []
+    : getCachedMetadata()
+        .filter((v) => v.type === "source")
+        .filter(
+          (v) =>
+            !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
+        )
+        .sort(
+          (left, right) =>
+            (left.rank ?? 0) - (right.rank ?? 0) ||
+            left.name.localeCompare(right.name),
+        );
 
   if (selectedSourceId) {
     return (
