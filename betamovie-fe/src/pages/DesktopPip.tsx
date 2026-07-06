@@ -41,6 +41,9 @@ type DesktopElectronApi = {
 const dragRegionStyle = { ["WebkitAppRegion" as any]: "drag" };
 const noDragRegionStyle = { ["WebkitAppRegion" as any]: "no-drag" };
 const CONTROL_AUTOHIDE_MS = 2200;
+const DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS = 0.12;
+const DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS = 0.35;
+const DESKTOP_PIP_SYNC_RATE_ADJUSTMENT = 0.08;
 
 function getDesktopElectronApi(): DesktopElectronApi | null {
   const electronApi = (window as any).electronAPI;
@@ -59,6 +62,14 @@ function clampTime(time: number, duration: number) {
   }
 
   return Math.max(0, Math.min(time, duration));
+}
+
+function clampPlaybackRate(playbackRate: number) {
+  if (!Number.isFinite(playbackRate) || playbackRate <= 0) {
+    return 1;
+  }
+
+  return Math.max(0.25, Math.min(playbackRate, 4));
 }
 
 function areDesktopPipCaptionsEqual(
@@ -409,6 +420,8 @@ export default function DesktopPipPage() {
       const displayInterface = displayRef.current;
       const sourceSignature = getSourceSignature(nextState);
       const sourceChanged = sourceSignature !== sourceSignatureRef.current;
+      const targetPlaybackRate = clampPlaybackRate(nextState.playbackRate || 1);
+      let shouldRestorePlaybackRate = sourceChanged || nextState.paused;
 
       document.title = nextState.title || "AlphaFlix PiP";
 
@@ -423,15 +436,33 @@ export default function DesktopPipPage() {
           autoplay: !nextState.paused,
         });
       } else {
-        const drift = Math.abs(
-          (videoElementNode.currentTime ?? 0) - nextState.time,
-        );
-        if (nextState.paused || drift > 0.75) {
+        const currentTime = videoElementNode.currentTime ?? 0;
+        const drift = nextState.time - currentTime;
+        const absoluteDrift = Math.abs(drift);
+
+        if (
+          nextState.paused ||
+          absoluteDrift >= DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS
+        ) {
           displayInterface.setTime(nextState.time);
+          shouldRestorePlaybackRate = true;
+        } else if (absoluteDrift >= DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS) {
+          const correction = Math.min(
+            DESKTOP_PIP_SYNC_RATE_ADJUSTMENT,
+            Math.max(0.02, absoluteDrift * 0.2),
+          );
+          displayInterface.setPlaybackRate(
+            clampPlaybackRate(
+              targetPlaybackRate + Math.sign(drift) * correction,
+            ),
+          );
+          shouldRestorePlaybackRate = false;
         }
       }
 
-      displayInterface.setPlaybackRate(nextState.playbackRate || 1);
+      if (shouldRestorePlaybackRate) {
+        displayInterface.setPlaybackRate(targetPlaybackRate);
+      }
       void displayInterface.setVolume(0);
 
       if (nextState.paused) {
