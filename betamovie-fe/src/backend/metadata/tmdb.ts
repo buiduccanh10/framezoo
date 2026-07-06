@@ -575,6 +575,43 @@ type MediaDetailReturn<T extends TMDBContentTypes> =
       ? TMDBShowData
       : never;
 
+type MediaDetailSupplementalReturn<T extends TMDBContentTypes> =
+  T extends TMDBContentTypes.MOVIE
+    ? Pick<TMDBMovieData, "external_ids" | "release_dates">
+    : T extends TMDBContentTypes.TV
+      ? Pick<TMDBShowData, "external_ids" | "content_ratings">
+      : never;
+
+export async function getMediaBaseDetails<
+  T extends TMDBContentTypes,
+  TReturn = MediaDetailReturn<T>,
+>(id: string, type: T): Promise<TReturn> {
+  if (type === TMDBContentTypes.MOVIE) {
+    return get<TReturn>(`/movie/${id}`);
+  }
+  if (type === TMDBContentTypes.TV) {
+    return get<TReturn>(`/tv/${id}`);
+  }
+  throw new Error("Invalid media type");
+}
+
+export async function getMediaDetailSupplemental<
+  T extends TMDBContentTypes,
+  TReturn = MediaDetailSupplementalReturn<T>,
+>(id: string, type: T): Promise<TReturn> {
+  if (type === TMDBContentTypes.MOVIE) {
+    return get<TReturn>(`/movie/${id}`, {
+      append_to_response: "external_ids,release_dates",
+    });
+  }
+  if (type === TMDBContentTypes.TV) {
+    return get<TReturn>(`/tv/${id}`, {
+      append_to_response: "external_ids,content_ratings",
+    });
+  }
+  throw new Error("Invalid media type");
+}
+
 export async function getEpisodeDetails(
   showId: string,
   seasonNumber: number,
@@ -721,7 +758,7 @@ export async function getPosterForMedia(
   try {
     const tmdbType =
       type === "movie" ? TMDBContentTypes.MOVIE : TMDBContentTypes.TV;
-    const details = await getMediaDetails(tmdbId, tmdbType, false);
+    const details = await getMediaBaseDetails(tmdbId, tmdbType);
     const posterPath =
       (details as TMDBMovieData | TMDBShowData).poster_path ?? null;
     return getMediaPoster(posterPath);

@@ -608,6 +608,28 @@
       "empty": "હજુ સુધી કોઈ ડાઉનલોડ્સ ગોઠવેલ નથી.",
       "failed": "ડાઉનલોડ વિકલ્પો લોડ કરવામાં નિષ્ફળ.",
       "label": "એપ્લિકેશન ડાઉનલોડ કરો",
+      "options": {
+        "mac-arm64": {
+          "description": "M-સિરીઝ Macs માટે શ્રેષ્ઠ",
+          "label": "macOS એપલ સિલિકોન"
+        },
+        "mac-universal": {
+          "description": "Apple Silicon અને Intel Macs બંને પર કામ કરે છે",
+          "label": "macOS યુનિવર્સલ"
+        },
+        "mac-x64": {
+          "description": "Intel Macs માટે શ્રેષ્ઠ",
+          "label": "macOS ઇન્ટેલ"
+        },
+        "win-arm64": {
+          "description": "સ્નેપડ્રેગન/એઆરએમ વિન્ડોઝ પીસી માટે શ્રેષ્ઠ",
+          "label": "વિન્ડોઝ ARM64"
+        },
+        "win-x64": {
+          "description": "64-બીટ વિન્ડોઝ પીસી માટે શ્રેષ્ઠ",
+          "label": "વિન્ડોઝ x64"
+        }
+      },
       "unavailable": "કોઈ બેકએન્ડ URL ગોઠવેલ નથી."
     },
     "install": {

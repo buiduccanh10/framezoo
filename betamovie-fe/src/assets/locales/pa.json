@@ -608,6 +608,28 @@
       "empty": "ਅਜੇ ਤੱਕ ਕੋਈ ਵੀ ਡਾਊਨਲੋਡ ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤੇ ਗਏ ਹਨ।",
       "failed": "ਡਾਊਨਲੋਡ ਵਿਕਲਪਾਂ ਨੂੰ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫਲ।",
       "label": "ਐਪ ਡਾਊਨਲੋਡ ਕਰੋ",
+      "options": {
+        "mac-arm64": {
+          "description": "ਐਮ-ਸੀਰੀਜ਼ ਮੈਕ ਲਈ ਵਧੀਆ",
+          "label": "macOS ਐਪਲ ਸਿਲੀਕਾਨ"
+        },
+        "mac-universal": {
+          "description": "Apple Silicon ਅਤੇ Intel Macs ਦੋਵਾਂ 'ਤੇ ਕੰਮ ਕਰਦਾ ਹੈ",
+          "label": "ਮੈਕੋਸ ਯੂਨੀਵਰਸਲ"
+        },
+        "mac-x64": {
+          "description": "Intel Macs ਲਈ ਵਧੀਆ",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "ਸਨੈਪਡ੍ਰੈਗਨ/ਏਆਰਐਮ ਵਿੰਡੋਜ਼ ਪੀਸੀ ਲਈ ਵਧੀਆ",
+          "label": "ਵਿੰਡੋਜ਼ ARM64"
+        },
+        "win-x64": {
+          "description": "64-ਬਿੱਟ ਵਿੰਡੋਜ਼ ਪੀਸੀ ਲਈ ਵਧੀਆ",
+          "label": "ਵਿੰਡੋਜ਼ x64"
+        }
+      },
       "unavailable": "ਕੋਈ ਬੈਕਐਂਡ URL ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤਾ ਗਿਆ ਹੈ।"
     },
     "install": {

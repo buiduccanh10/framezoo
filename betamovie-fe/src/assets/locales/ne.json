@@ -608,6 +608,28 @@
       "empty": "कुनै डाउनलोडहरू अझै कन्फिगर गरिएको छैन।",
       "failed": "डाउनलोड विकल्पहरू लोड गर्न असफल भयो।",
       "label": "एप डाउनलोड गर्नुहोस्",
+      "options": {
+        "mac-arm64": {
+          "description": "M-श्रृङ्खला म्याकहरूको लागि उत्तम",
+          "label": "macOS एप्पल सिलिकन"
+        },
+        "mac-universal": {
+          "description": "दुबै Apple Silicon र Intel Macs मा काम गर्दछ",
+          "label": "macOS विश्वव्यापी"
+        },
+        "mac-x64": {
+          "description": "Intel Macs को लागि उत्तम",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Snapdragon/ARM Windows PC को लागि उत्तम",
+          "label": "विन्डोज ARM64"
+        },
+        "win-x64": {
+          "description": "64-बिट विन्डोज पीसीहरूको लागि उत्तम",
+          "label": "विन्डोज x64"
+        }
+      },
       "unavailable": "कुनै ब्याकइन्ड URL कन्फिगर गरिएको छैन।"
     },
     "install": {

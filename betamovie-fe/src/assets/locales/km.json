@@ -608,6 +608,28 @@
       "empty": "មិនទាន់មានការកំណត់រចនាសម្ព័ន្ធការទាញយកនៅឡើយទេ។",
       "failed": "បរាជ័យក្នុងការផ្ទុកជម្រើសទាញយក។",
       "label": "ទាញយកកម្មវិធី",
+      "options": {
+        "mac-arm64": {
+          "description": "ល្អបំផុតសម្រាប់ Macs ស៊េរី M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "ដំណើរការលើទាំង Apple Silicon និង Intel Macs",
+          "label": "macOS សកល"
+        },
+        "mac-x64": {
+          "description": "ល្អបំផុតសម្រាប់ Intel Macs",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "ល្អបំផុតសម្រាប់ Snapdragon/ARM Windows PCs",
+          "label": "វីនដូ ARM64"
+        },
+        "win-x64": {
+          "description": "ល្អបំផុតសម្រាប់កុំព្យូទ័រ Windows 64 ប៊ីត",
+          "label": "វីនដូ x64"
+        }
+      },
       "unavailable": "មិន​មាន URL ខាងក្រោយ​ត្រូវ​បាន​កំណត់​រចនាសម្ព័ន្ធ​ទេ។"
     },
     "install": {

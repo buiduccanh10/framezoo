@@ -608,6 +608,28 @@
       "empty": "עדיין לא הוגדרו הורדות.",
       "failed": "טעינת אפשרויות ההורדה נכשלה.",
       "label": "הורד אפליקציה",
+      "options": {
+        "mac-arm64": {
+          "description": "הטוב ביותר עבור מחשבי Mac מסדרת M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "עובד גם על Apple Silicon וגם על מחשבי Mac של אינטל",
+          "label": "macOS אוניברסלי"
+        },
+        "mac-x64": {
+          "description": "הטוב ביותר עבור מחשבי מקינטוש של אינטל",
+          "label": "macOS אינטל"
+        },
+        "win-arm64": {
+          "description": "הטוב ביותר עבור מחשבי Snapdragon/ARM Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "הטוב ביותר עבור מחשבי Windows 64 סיביות",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "לא מוגדרת כתובת אתר אחורי."
     },
     "install": {

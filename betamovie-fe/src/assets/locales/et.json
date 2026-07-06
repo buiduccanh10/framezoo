@@ -608,6 +608,28 @@
       "empty": "Ühtegi allalaadimist pole veel konfigureeritud.",
       "failed": "Allalaadimisvalikute laadimine ebaõnnestus.",
       "label": "Laadige rakendus alla",
+      "options": {
+        "mac-arm64": {
+          "description": "Parim M-seeria Macidele",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Töötab nii Apple Silicon kui ka Intel Maciga",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Parim Intel Maci jaoks",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Parim Snapdragon/ARM Windowsi arvutite jaoks",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Parim 64-bitiste Windowsi arvutite jaoks",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Taustaprogrammi URL-i pole seadistatud."
     },
     "install": {

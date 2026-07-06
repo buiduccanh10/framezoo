@@ -608,6 +608,28 @@
       "empty": "Żadne pobieranie nie zostało jeszcze skonfigurowane.",
       "failed": "Nie udało się załadować opcji pobierania.",
       "label": "Pobierz aplikację",
+      "options": {
+        "mac-arm64": {
+          "description": "Najlepsze dla komputerów Mac z serii M",
+          "label": "MacOS Apple Silikon"
+        },
+        "mac-universal": {
+          "description": "Działa zarówno na komputerach Mac Apple Silicon, jak i Intel",
+          "label": "Uniwersalny system macOS"
+        },
+        "mac-x64": {
+          "description": "Najlepsze dla komputerów Mac z procesorem Intel",
+          "label": "MacOS Intela"
+        },
+        "win-arm64": {
+          "description": "Najlepsze dla komputerów z systemem Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Najlepsze dla 64-bitowych komputerów z systemem Windows",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Nie skonfigurowano adresu URL zaplecza."
     },
     "install": {

@@ -608,6 +608,28 @@
       "empty": "ダウンロードはまだ構成されていません。",
       "failed": "ダウンロード オプションの読み込みに失敗しました。",
       "label": "アプリをダウンロード",
+      "options": {
+        "mac-arm64": {
+          "description": "M シリーズ Mac に最適",
+          "label": "macOS アップルシリコン"
+        },
+        "mac-universal": {
+          "description": "Apple SiliconとIntel Macの両方で動作します",
+          "label": "macOS ユニバーサル"
+        },
+        "mac-x64": {
+          "description": "Intel Macに最適",
+          "label": "macOS インテル"
+        },
+        "win-arm64": {
+          "description": "Snapdragon/ARM Windows PC に最適",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "64 ビット Windows PC に最適",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "バックエンド URL が構成されていません。"
     },
     "install": {
