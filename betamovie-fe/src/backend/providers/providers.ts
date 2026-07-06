@@ -43,9 +43,9 @@ setupM3U8Proxy();
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 1 (VidLink) 🔥",
-  rank: 1,
-  disabled: false,
+  name: "Server 3 (VidLink) 🔥",
+  rank: 3,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -59,7 +59,7 @@ const openMovieSource = {
   id: "openmovie",
   name: "Server 2 (Vixsrc) 🔥",
   rank: 2,
-  disabled: false,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -71,9 +71,9 @@ const openMovieSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 3 (KKPhim Vietsub + Lồng tiếng) 🔥",
-  rank: 3,
-  disabled: false,
+  name: "Server 4 (KKPhim Vietsub + Lồng tiếng) 🔥",
+  rank: 4,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -87,7 +87,7 @@ const movies111Source = {
   id: "alphaflix-111movies",
   name: "Server 6 (111Movies)",
   rank: 6,
-  disabled: false,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -99,9 +99,9 @@ const movies111Source = {
 // Custom VidSrc.to source definition
 const vidsrcToSource = {
   id: "alphaflix-vidsrcto",
-  name: "Server 10 (Vidsrc.to)",
-  rank: 10,
-  disabled: false,
+  name: "Server 5 (Vidsrc.to)",
+  rank: 5,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -113,9 +113,9 @@ const vidsrcToSource = {
 // Custom Vidking source definition
 const vidkingSource = {
   id: "alphaflix-vidking",
-  name: "Server 9 (Vidking)",
-  rank: 9,
-  disabled: false,
+  name: "Server 1 (Vidking) 🔥",
+  rank: 1,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -129,7 +129,7 @@ const openMovieEmbed = {
   id: "openmovie-embed",
   name: "OpenMovie Stream",
   rank: 80,
-  disabled: false,
+  disabled: true,
   type: "embed" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: undefined as undefined,
@@ -153,10 +153,16 @@ function isDesktopApp(): boolean {
 
 function withConfiguredProviders(builder: ReturnType<typeof buildProviders>) {
   sourceDefinitions.forEach((source) => {
-    builder.addSource(applyProviderMetadataOverride(source));
+    const overridden = applyProviderMetadataOverride(source);
+    if (overridden) {
+      builder.addSource(overridden);
+    }
   });
   embedDefinitions.forEach((embed) => {
-    builder.addEmbed(applyProviderMetadataOverride(embed));
+    const overridden = applyProviderMetadataOverride(embed);
+    if (overridden) {
+      builder.addEmbed(overridden);
+    }
   });
 
   return builder;
