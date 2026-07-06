@@ -608,6 +608,28 @@
       "empty": "Henüz hiçbir indirme işlemi yapılandırılmadı.",
       "failed": "İndirme seçenekleri yüklenemedi.",
       "label": "Uygulamayı indir",
+      "options": {
+        "mac-arm64": {
+          "description": "M serisi Mac'ler için en iyisi",
+          "label": "macOS Apple Silikon"
+        },
+        "mac-universal": {
+          "description": "Hem Apple Silicon hem de Intel Mac'lerde çalışır",
+          "label": "macOS Evrensel"
+        },
+        "mac-x64": {
+          "description": "Intel Mac'ler için en iyisi",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Snapdragon/ARM Windows PC'ler için en iyisi",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "64 bit Windows PC'ler için en iyisi",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Hiçbir arka uç URL'si yapılandırılmadı."
     },
     "install": {

@@ -608,6 +608,28 @@
       "empty": "Nu sunt încă configurate descărcări.",
       "failed": "Opțiunile de descărcare nu au putut fi încărcate.",
       "label": "Descărcați aplicația",
+      "options": {
+        "mac-arm64": {
+          "description": "Cel mai bun pentru Mac-urile din seria M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Funcționează atât pe Apple Silicon, cât și pe Mac-uri Intel",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Cel mai bun pentru Mac-uri Intel",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Cel mai bun pentru computerele Snapdragon/ARM Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Cel mai bun pentru computerele Windows pe 64 de biți",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Nu este configurată nicio adresă URL de backend."
     },
     "install": {

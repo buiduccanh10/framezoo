@@ -608,6 +608,28 @@
       "empty": "Noben prenos še ni konfiguriran.",
       "failed": "Nalaganje možnosti prenosa ni uspelo.",
       "label": "Prenesite aplikacijo",
+      "options": {
+        "mac-arm64": {
+          "description": "Najboljše za Mace serije M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Deluje na Apple Silicon in Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Najboljše za računalnike Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Najboljše za računalnike Snapdragon/ARM Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Najboljše za 64-bitne računalnike z operacijskim sistemom Windows",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Noben zaledni URL ni konfiguriran."
     },
     "install": {

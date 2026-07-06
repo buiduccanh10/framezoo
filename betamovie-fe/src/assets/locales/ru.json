@@ -608,6 +608,28 @@
       "empty": "Загрузки пока не настроены.",
       "failed": "Не удалось загрузить параметры загрузки.",
       "label": "Скачать приложение",
+      "options": {
+        "mac-arm64": {
+          "description": "Лучшее для компьютеров Mac серии M",
+          "label": "macOS Apple Кремний"
+        },
+        "mac-universal": {
+          "description": "Работает как на Apple Silicon, так и на Intel Mac.",
+          "label": "macOS универсальный"
+        },
+        "mac-x64": {
+          "description": "Лучшее для компьютеров Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Лучше всего подходит для ПК с ОС Snapdragon/ARM под управлением Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Лучше всего подходит для ПК с 64-битной ОС Windows.",
+          "label": "Windows х64"
+        }
+      },
       "unavailable": "Внутренний URL-адрес не настроен."
     },
     "install": {

@@ -608,6 +608,28 @@
       "empty": "Aucun téléchargement n'est encore configuré.",
       "failed": "Échec du chargement des options de téléchargement.",
       "label": "Télécharger l'application",
+      "options": {
+        "mac-arm64": {
+          "description": "Idéal pour les Mac de la série M",
+          "label": "macOS Apple Silicium"
+        },
+        "mac-universal": {
+          "description": "Fonctionne sur les Mac Apple Silicon et Intel",
+          "label": "macOS Universel"
+        },
+        "mac-x64": {
+          "description": "Idéal pour les Mac Intel",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Idéal pour les PC Windows Snapdragon/ARM",
+          "label": "WindowsARM64"
+        },
+        "win-x64": {
+          "description": "Idéal pour les PC Windows 64 bits",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Aucune URL backend n’est configurée."
     },
     "install": {

@@ -608,6 +608,28 @@
       "empty": "Belum ada unduhan yang dikonfigurasi.",
       "failed": "Gagal memuat opsi unduhan.",
       "label": "Unduh aplikasi",
+      "options": {
+        "mac-arm64": {
+          "description": "Terbaik untuk Mac seri M",
+          "label": "macOS Apple Silikon"
+        },
+        "mac-universal": {
+          "description": "Bekerja pada Apple Silicon dan Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Terbaik untuk Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Terbaik untuk PC Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Terbaik untuk PC Windows 64-bit",
+          "label": "jendelax64"
+        }
+      },
       "unavailable": "Tidak ada URL backend yang dikonfigurasi."
     },
     "install": {

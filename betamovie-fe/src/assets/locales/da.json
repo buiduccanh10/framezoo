@@ -608,6 +608,28 @@
       "empty": "Ingen downloads er konfigureret endnu.",
       "failed": "Kunne ikke indlæse downloadindstillinger.",
       "label": "Download app",
+      "options": {
+        "mac-arm64": {
+          "description": "Bedst til Macs i M-serien",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Virker på både Apple Silicon og Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Bedst til Intel Macs",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Bedst til Snapdragon/ARM Windows-pc'er",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Bedst til 64-bit Windows-pc'er",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Ingen backend-URL er konfigureret."
     },
     "install": {

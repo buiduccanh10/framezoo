@@ -608,6 +608,28 @@
       "empty": "لم يتم تكوين أي تنزيلات حتى الآن.",
       "failed": "فشل في تحميل خيارات التنزيل.",
       "label": "تنزيل التطبيق",
+      "options": {
+        "mac-arm64": {
+          "description": "الأفضل لأجهزة Mac من السلسلة M",
+          "label": "ماك أو إس أبل سيليكون"
+        },
+        "mac-universal": {
+          "description": "يعمل على كل من أجهزة Apple Silicon وIntel Mac",
+          "label": "ماك العالمي"
+        },
+        "mac-x64": {
+          "description": "الأفضل لأجهزة إنتل ماك",
+          "label": "ماك إنتل"
+        },
+        "win-arm64": {
+          "description": "الأفضل لأجهزة الكمبيوتر التي تعمل بنظام Windows Snapdragon/ARM",
+          "label": "ويندوز أرم64"
+        },
+        "win-x64": {
+          "description": "الأفضل لأجهزة الكمبيوتر التي تعمل بنظام Windows 64 بت",
+          "label": "ويندوز x64"
+        }
+      },
       "unavailable": "لم يتم تكوين عنوان URL للواجهة الخلفية."
     },
     "install": {
