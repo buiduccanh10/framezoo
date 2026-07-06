@@ -608,6 +608,28 @@
       "empty": "ยังไม่มีการกำหนดค่าการดาวน์โหลด",
       "failed": "โหลดตัวเลือกการดาวน์โหลดไม่สำเร็จ",
       "label": "ดาวน์โหลดแอป",
+      "options": {
+        "mac-arm64": {
+          "description": "ดีที่สุดสำหรับ Mac ซีรีส์ M",
+          "label": "macOS แอปเปิล ซิลิคอน"
+        },
+        "mac-universal": {
+          "description": "ทำงานได้ทั้งบน Apple Silicon และ Intel Mac",
+          "label": "macOS สากล"
+        },
+        "mac-x64": {
+          "description": "ดีที่สุดสำหรับ Intel Mac",
+          "label": "macOS อินเทล"
+        },
+        "win-arm64": {
+          "description": "ดีที่สุดสำหรับพีซีที่ใช้ Snapdragon/ARM Windows",
+          "label": "วินโดว์ ARM64"
+        },
+        "win-x64": {
+          "description": "ดีที่สุดสำหรับพีซี Windows 64 บิต",
+          "label": "วินโดว์ x64"
+        }
+      },
       "unavailable": "ไม่มีการกำหนดค่า URL แบ็กเอนด์"
     },
     "install": {

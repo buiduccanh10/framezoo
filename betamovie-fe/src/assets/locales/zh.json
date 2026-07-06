@@ -608,6 +608,28 @@
       "empty": "尚未配置下载。",
       "failed": "无法加载下载选项。",
       "label": "下载应用程序",
+      "options": {
+        "mac-arm64": {
+          "description": "最适合 M 系列 Mac",
+          "label": "macOS 苹果芯片"
+        },
+        "mac-universal": {
+          "description": "适用于 Apple Silicon 和 Intel Mac",
+          "label": "macOS 通用"
+        },
+        "mac-x64": {
+          "description": "最适合英特尔 Mac 电脑",
+          "label": "macOS 英特尔"
+        },
+        "win-arm64": {
+          "description": "最适合 Snapdragon/ARM Windows PC",
+          "label": "视窗ARM64"
+        },
+        "win-x64": {
+          "description": "最适合 64 位 Windows PC",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "未配置后端 URL。"
     },
     "install": {

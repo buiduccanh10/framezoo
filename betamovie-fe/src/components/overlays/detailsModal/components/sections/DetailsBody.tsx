@@ -9,6 +9,10 @@ import { IconPatch } from "@/components/buttons/IconPatch";
 import { GroupDropdown } from "@/components/form/GroupDropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaBookmarkButton } from "@/components/media/MediaBookmark";
+import {
+  ReleaseQualityBadge,
+  getReleaseQualityVariant,
+} from "@/components/media/ReleaseQualityBadge";
 import { ManageMediaListsModal } from "@/components/overlays/ManageMediaListsModal";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
@@ -124,42 +128,8 @@ export function DetailsBody({
     };
   }, [data.id, data.type]);
 
-  const getQualityIndicator = () => {
-    if (!releaseInfo || data.type === "show") return null;
-
-    const now = new Date();
-    const hasDigitalRelease = Boolean(releaseInfo.digital_release_date);
-    const hasTheatricalRelease = Boolean(releaseInfo.theatrical_release_date);
-
-    if (hasDigitalRelease) {
-      const digitalReleaseDate = new Date(releaseInfo.digital_release_date!);
-      if (now >= digitalReleaseDate) {
-        return (
-          <div className="rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm">
-            <span className="text-green-400">HD</span>
-          </div>
-        );
-      }
-    }
-
-    if (hasTheatricalRelease) {
-      const theatricalReleaseDate = new Date(
-        releaseInfo.theatrical_release_date!,
-      );
-
-      if (now >= theatricalReleaseDate) {
-        return (
-          <div className="rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm">
-            <span className="text-yellow-400">CAM</span>
-          </div>
-        );
-      }
-    }
-
-    return null;
-  };
-
-  const qualityIndicator = getQualityIndicator();
+  const qualityVariant =
+    data.type === "movie" ? getReleaseQualityVariant(releaseInfo) : null;
   const inlineLoadingClass =
     "h-4 w-14 rounded bg-white/10 animate-pulse inline-block";
   const metadataItemClass = "flex items-center gap-1 whitespace-nowrap";
@@ -170,9 +140,9 @@ export function DetailsBody({
     <div className="space-y-4">
       {/* TMDB Rating and Year/Seasons */}
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[11px] text-white/80 sm:text-sm">
-        {qualityIndicator ? (
+        {qualityVariant ? (
           <div className="flex items-center gap-2">
-            {qualityIndicator}
+            <ReleaseQualityBadge variant={qualityVariant} />
             <span className={metadataSeparatorClass}>•</span>
           </div>
         ) : null}

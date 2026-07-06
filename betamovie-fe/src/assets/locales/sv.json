@@ -608,6 +608,28 @@
       "empty": "Inga nedladdningar är konfigurerade än.",
       "failed": "Det gick inte att ladda nedladdningsalternativ.",
       "label": "Ladda ner app",
+      "options": {
+        "mac-arm64": {
+          "description": "Bäst för Mac-datorer i M-serien",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Fungerar på både Apple Silicon och Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Bäst för Intel Mac-datorer",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Bäst för Snapdragon/ARM Windows-datorer",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Bäst för 64-bitars Windows-datorer",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Ingen backend-URL är konfigurerad."
     },
     "install": {

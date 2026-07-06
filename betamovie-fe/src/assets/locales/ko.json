@@ -608,6 +608,28 @@
       "empty": "아직 구성된 다운로드가 없습니다.",
       "failed": "다운로드 옵션을 로드하지 못했습니다.",
       "label": "앱 다운로드",
+      "options": {
+        "mac-arm64": {
+          "description": "M 시리즈 Mac에 가장 적합",
+          "label": "macOS 애플 실리콘"
+        },
+        "mac-universal": {
+          "description": "Apple Silicon과 Intel Mac 모두에서 작동",
+          "label": "macOS 유니버설"
+        },
+        "mac-x64": {
+          "description": "Intel Mac에 가장 적합",
+          "label": "macOS 인텔"
+        },
+        "win-arm64": {
+          "description": "Snapdragon/ARM Windows PC에 가장 적합",
+          "label": "윈도우 ARM64"
+        },
+        "win-x64": {
+          "description": "64비트 Windows PC에 가장 적합",
+          "label": "윈도우 x64"
+        }
+      },
       "unavailable": "백엔드 URL이 구성되지 않았습니다."
     },
     "install": {

@@ -608,6 +608,28 @@
       "empty": "No downloads are configured yet.",
       "failed": "Failed to load download options.",
       "label": "Download app",
+      "options": {
+        "mac-arm64": {
+          "description": "Best for M-series Macs",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Works on both Apple Silicon and Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Best for Intel Macs",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Best for Snapdragon/ARM Windows PCs",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Best for 64-bit Windows PCs",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "No backend URL is configured."
     },
     "install": {

@@ -608,6 +608,28 @@
       "empty": "هنوز هیچ دانلودی پیکربندی نشده است.",
       "failed": "گزینه های دانلود بارگیری نشد.",
       "label": "دانلود برنامه",
+      "options": {
+        "mac-arm64": {
+          "description": "بهترین برای مک های سری M",
+          "label": "macOS اپل سیلیکون"
+        },
+        "mac-universal": {
+          "description": "هم روی Apple Silicon و هم اینتل مک کار می کند",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "بهترین برای مک های اینتل",
+          "label": "macOS اینتل"
+        },
+        "win-arm64": {
+          "description": "بهترین برای رایانه های شخصی Snapdragon/ARM ویندوز",
+          "label": "ویندوز ARM64"
+        },
+        "win-x64": {
+          "description": "بهترین برای رایانه های شخصی ویندوز 64 بیتی",
+          "label": "ویندوز x64"
+        }
+      },
       "unavailable": "هیچ URL باطنی پیکربندی نشده است."
     },
     "install": {

@@ -608,6 +608,28 @@
       "empty": "Er zijn nog geen downloads geconfigureerd.",
       "failed": "Kan downloadopties niet laden.",
       "label": "App downloaden",
+      "options": {
+        "mac-arm64": {
+          "description": "Beste voor Macs uit de M-serie",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Werkt op zowel Apple Silicon- als Intel Macs",
+          "label": "macOS universeel"
+        },
+        "mac-x64": {
+          "description": "Beste voor Intel Mac's",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Beste voor Snapdragon/ARM Windows-pc's",
+          "label": "Windows-ARM64"
+        },
+        "win-x64": {
+          "description": "Beste voor 64-bit Windows-pc's",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Er is geen backend-URL geconfigureerd."
     },
     "install": {

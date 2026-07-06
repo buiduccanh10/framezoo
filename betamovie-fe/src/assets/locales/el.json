@@ -608,6 +608,28 @@
       "empty": "Δεν έχουν διαμορφωθεί ακόμη λήψεις.",
       "failed": "Η φόρτωση των επιλογών λήψης απέτυχε.",
       "label": "Κατεβάστε την εφαρμογή",
+      "options": {
+        "mac-arm64": {
+          "description": "Το καλύτερο για Mac της σειράς M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Λειτουργεί τόσο σε Apple Silicon όσο και σε Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Το καλύτερο για Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Το καλύτερο για υπολογιστές με Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Το καλύτερο για υπολογιστές με Windows 64-bit",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Δεν έχει διαμορφωθεί καμία διεύθυνση URL υποστήριξης."
     },
     "install": {

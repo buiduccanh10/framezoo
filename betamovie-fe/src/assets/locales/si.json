@@ -608,6 +608,28 @@
       "empty": "තවමත් බාගැනීම් කිසිවක් වින්‍යාස කර නොමැත.",
       "failed": "බාගැනීම් විකල්ප පූරණය කිරීමට අසමත් විය.",
       "label": "යෙදුම බාගන්න",
+      "options": {
+        "mac-arm64": {
+          "description": "M-series Macs සඳහා හොඳම",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Apple Silicon සහ Intel Macs දෙකෙහිම ක්‍රියා කරයි",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Intel Macs සඳහා හොඳම",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Snapdragon/ARM Windows පරිගණක සඳහා හොඳම",
+          "label": "වින්ඩෝස් ARM64"
+        },
+        "win-x64": {
+          "description": "64-bit Windows පරිගණක සඳහා හොඳම",
+          "label": "වින්ඩෝස් x64"
+        }
+      },
       "unavailable": "පසුබිම් URL එකක් වින්‍යාස කර නොමැත."
     },
     "install": {

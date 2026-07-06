@@ -608,6 +608,28 @@
       "empty": "Все още няма конфигурирани изтегляния.",
       "failed": "Неуспешно зареждане на опциите за изтегляне.",
       "label": "Изтеглете приложението",
+      "options": {
+        "mac-arm64": {
+          "description": "Най-доброто за M-серия Mac",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Работи както на Apple Silicon, така и на Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Най-доброто за Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Най-доброто за компютри с Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Най-доброто за 64-битови компютри с Windows",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Не е конфигуриран бекенд URL адрес."
     },
     "install": {

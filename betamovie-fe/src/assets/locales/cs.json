@@ -608,6 +608,28 @@
       "empty": "Zatím nejsou nakonfigurována žádná stahování.",
       "failed": "Nepodařilo se načíst možnosti stahování.",
       "label": "Stáhněte si aplikaci",
+      "options": {
+        "mac-arm64": {
+          "description": "Nejlepší pro počítače Mac řady M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Funguje na počítačích Apple Silicon i Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Nejlepší pro Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Nejlepší pro počítače Snapdragon/ARM s Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Nejlepší pro 64bitové počítače se systémem Windows",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Není nakonfigurována žádná koncová adresa URL."
     },
     "install": {

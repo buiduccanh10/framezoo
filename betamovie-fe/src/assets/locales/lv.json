@@ -608,6 +608,28 @@
       "empty": "Vēl nav konfigurēta neviena lejupielāde.",
       "failed": "Neizdevās ielādēt lejupielādes opcijas.",
       "label": "Lejupielādēt lietotni",
+      "options": {
+        "mac-arm64": {
+          "description": "Vispiemērotākais M sērijas Mac datoriem",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Darbojas gan Apple Silicon, gan Intel Mac datoros",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Vispiemērotākais Intel Mac datoriem",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Vislabāk Snapdragon/ARM Windows datoriem",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Vispiemērotākais 64 bitu Windows datoriem",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Aizmugursistēmas URL nav konfigurēts."
     },
     "install": {

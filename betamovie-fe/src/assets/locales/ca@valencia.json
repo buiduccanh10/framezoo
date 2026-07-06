@@ -608,6 +608,28 @@
       "empty": "Encara no s'ha configurat cap baixada.",
       "failed": "No s'han pogut carregar les opcions de baixada.",
       "label": "Descarrega l'aplicació",
+      "options": {
+        "mac-arm64": {
+          "description": "El millor per a Mac de la sèrie M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Funciona tant amb Apple Silicon com amb Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "El millor per a Mac Intel",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "El millor per a ordinadors Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "El millor per a ordinadors amb Windows de 64 bits",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "No s'ha configurat cap URL de fons."
     },
     "install": {
