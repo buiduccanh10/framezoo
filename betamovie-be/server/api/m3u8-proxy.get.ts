@@ -582,11 +582,14 @@ const toTsProxyIdentity = (url: string, headers: Record<string, string>) => {
 
 const isProbablyM3U8 = (contentType: string | null, bodyStart: string) => {
   const ct = (contentType || '').toLowerCase();
-  if (ct.includes('application/vnd.apple.mpegurl')) return true;
-  if (ct.includes('application/x-mpegurl')) return true;
-  if (ct.includes('audio/mpegurl')) return true;
-  if (ct.includes('vnd.apple.mpegurl')) return true;
-  return bodyStart.startsWith('#EXTM3U');
+  const hasM3u8Header =
+    ct.includes('application/vnd.apple.mpegurl') ||
+    ct.includes('application/x-mpegurl') ||
+    ct.includes('audio/mpegurl') ||
+    ct.includes('vnd.apple.mpegurl');
+
+  const cleanStart = bodyStart.replace(/^\ufeff/, '').trimStart();
+  return cleanStart.startsWith('#EXTM3U') || (hasM3u8Header && cleanStart.startsWith('#'));
 };
 
 const buildProxyUrl = (
@@ -594,13 +597,15 @@ const buildProxyUrl = (
   proxyPath: string,
   targetUrl: string,
   headers: Record<string, string>,
-  internalToken?: string
+  internalToken?: string,
+  isSegment?: boolean
 ) => {
   return (
     `${origin}${proxyPath}` +
     `?url=${encodeURIComponent(targetUrl)}` +
     `&headers=${encodeURIComponent(JSON.stringify(headers))}` +
-    (internalToken ? `&internalToken=${encodeURIComponent(internalToken)}` : '')
+    (internalToken ? `&internalToken=${encodeURIComponent(internalToken)}` : '') +
+    (isSegment ? '&isSegment=true' : '')
   );
 };
 
@@ -619,13 +624,8 @@ const isKkPhimPlaylist = (playlistUrl: string, headers: Record<string, string>) 
   return referer.includes('phimapi.com');
 };
 
-const isKkPhimAdSegmentUrl = (segmentUrl: string) => {
-  if (/(?:^|\/)convertv[^/]*\//i.test(segmentUrl)) {
-    return true;
-  }
-
-  return /(?:^|\/)v\d+\/[0-9a-f]{16,}\/segment_\d+\.ts(?:$|[?#])/i.test(segmentUrl);
-};
+const isKkPhimVideoAdSegmentUrl = (segmentUrl: string) =>
+  /(?:^|\/)v\d+\/[0-9a-f]{16,}\/segment_\d+\.ts(?:$|[?#])/i.test(segmentUrl);
 
 const stripKkPhimAdSegments = (
   manifest: string,
@@ -661,7 +661,9 @@ const stripKkPhimAdSegments = (
           // Keep raw value for regex matching.
         }
 
-        if (isKkPhimAdSegmentUrl(resolvedSegmentUrl)) {
+        // `convertv*` segments are still the main episode video with a baked-in banner,
+        // so stripping them would remove story content and cause a visible jump.
+        if (isKkPhimVideoAdSegmentUrl(resolvedSegmentUrl)) {
           while (filtered.length > 0 && filtered[filtered.length - 1].trim() === '#EXT-X-DISCONTINUITY') {
             filtered.pop();
           }
@@ -710,7 +712,7 @@ const stripKkPhimAdSegments = (
     normalized.pop();
   }
 
-  logInfo(`Stripped ${removedSegments} KKPhim ad segment(s) from playlist: ${playlistUrl}`);
+  logInfo(`Stripped ${removedSegments} KKPhim video-ad segment(s) from playlist: ${playlistUrl}`);
   return normalized.join('\n');
 };
 
@@ -732,7 +734,8 @@ const rewriteM3U8 = (
       return line.replace(/URI=\"([^\"]+)\"/g, (_m, uri) => {
         try {
           const abs = new URL(uri, playlistUrl).toString();
-          const proxied = buildProxyUrl(origin, proxyPath, abs, headers, internalToken);
+          const isPlaylist = /\.m3u8(?:$|[?#])/i.test(abs) || abs.includes('type=hls');
+          const proxied = buildProxyUrl(origin, proxyPath, abs, headers, internalToken, !isPlaylist);
           return `URI=\"${proxied}\"`;
         } catch {
           return `URI=\"${uri}\"`;
@@ -743,7 +746,8 @@ const rewriteM3U8 = (
     // Bare URL line (variant playlist or segment)
     try {
       const abs = new URL(trimmed, playlistUrl).toString();
-      return buildProxyUrl(origin, proxyPath, abs, headers, internalToken);
+      const isPlaylist = /\.m3u8(?:$|[?#])/i.test(abs) || abs.includes('type=hls');
+      return buildProxyUrl(origin, proxyPath, abs, headers, internalToken, !isPlaylist);
     } catch {
       return line;
     }
@@ -786,7 +790,7 @@ export default defineEventHandler(async event => {
   const headers = parseProxyHeaders(query.headers);
   const isGetRequest = event.method === 'GET';
   const segmentNumber = extractSegmentNumber(url);
-  const isSegmentRequest = isLikelySegmentRequest(url, segmentNumber);
+  const isSegmentRequest = query.isSegment === 'true' || isLikelySegmentRequest(url, segmentNumber);
   const storage = isGetRequest && isSegmentRequest ? useStorage('cache') : null;
   const stickyIdentity =
     segmentNumber != null && storage ? buildSegmentSkipStickyIdentity(url, headers) : '';
@@ -904,7 +908,7 @@ export default defineEventHandler(async event => {
     const contentTypeHeader = response.headers['content-type'];
     return Array.isArray(contentTypeHeader)
       ? contentTypeHeader[0]
-      : contentTypeHeader || 'application/vnd.apple.mpegurl';
+      : contentTypeHeader || 'application/octet-stream';
   };
 
   let contentType = resolveContentType(upstreamResponse);
@@ -1124,7 +1128,7 @@ export default defineEventHandler(async event => {
     }
   }
 
-  if (storage && bytes.length <= 2 * 1024 * 1024) {
+  if (storage && bytes.length <= 5 * 1024 * 1024 && !isWeakSegment) {
     const ttl = 15 * 60; // 15 minutes
     const cacheStoreKey = toSegmentCacheKey(resolvedOffset, resolvedQuality);
 

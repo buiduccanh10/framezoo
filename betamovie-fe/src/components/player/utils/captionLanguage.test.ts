@@ -14,7 +14,12 @@ describe("caption language normalization", () => {
     expect(labelToLanguageCode("English")).toBe("en");
     expect(labelToLanguageCode("Spanish (Latin America)")).toBe("es-419");
     expect(labelToLanguageCode("Brazilian Portuguese")).toBe("pt-br");
+    expect(labelToLanguageCode("Portuguese-BR")).toBe("pt-br");
     expect(labelToLanguageCode("pob")).toBe("pt-br");
+    expect(labelToLanguageCode("Hungarian")).toBe("hu");
+    expect(labelToLanguageCode("Slovenian")).toBe("sl");
+    expect(labelToLanguageCode("Slovene")).toBe("sl");
+    expect(labelToLanguageCode("Chinese-Bilingual")).toBe("zh");
   });
 
   it("rejects invalid shorthand codes instead of inventing bogus ones", () => {

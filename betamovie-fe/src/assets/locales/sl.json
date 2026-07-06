@@ -99,6 +99,7 @@
     "addToList": "Dodaj na seznam",
     "airs": "Zraki",
     "collection": {
+      "bookmarkAll": "Dodaj vse med zaznamke",
       "movie": "Film",
       "movies": "Filmi",
       "rating": "Ocena",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "spremeniti",
       "more": "Prikaži več",
+      "today": "Danes",
+      "thisWeek": "Ta teden",
       "title": {
         "4kReleases": "Izdaje 4K",
         "editorPicksMovies": "Urednik izbere filme",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Posodobite zdaj",
         "available": "Nova različica aplikacije je pripravljena.",
+        "download": "Prenesite posodobitev",
         "later": "Kasneje",
+        "restart": "Znova zaženite za posodobitev",
         "updating": "Posodabljanje ..."
       },
       "offline": "Preverite vašo internetno povezavo"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Samodejno predvajanje",
-      "autoplayDescription": "Samodejno predvajanje naslednje epizode v seriji, ko dosežete konec. Uporabniki ga lahko omogočijo z razširitvijo brskalnika, proxyjem po meri ali s privzeto nastavitvijo, če to dovoljuje gostitelj.",
+      "autoplayDescription": "Samodejno predvajanje naslednje epizode v seriji, ko dosežete konec.",
       "autoplayLabel": "Samodejno predvajanje",
       "autoResumeOnPlaybackError": "Samodejno nadaljevanje ob napaki pri predvajanju",
       "autoResumeOnPlaybackErrorDescription": "Samodejno nadaljevanje iskanja drugih virov, ko trenutni vir med predvajanjem odpove. Če je onemogočeno, boste videli zaslon z napako z možnostjo ročnega nadaljevanja.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Preurejanje vdelav",
       "embedOrderDescription": "Povlecite in spustite, da spremenite vrstni red vdelav. To bo določilo vrstni red, v katerem se preverjajo vdelani mediji, ki jih poskušate gledati. <br><br> <strong>(Privzeti vrstni red je najboljši za večino uporabnikov)</strong>",
       "embedOrderEnableLabel": "Vrstni red vdelave po meri",
-      "holdToBoost": "Držite za povečanje hitrosti",
-      "holdToBoostDescription": "Držite preslednico ali se dotaknite in zadržite zaslon, da začasno povečate hitrost predvajanja na 2x. Spustite za vrnitev na prejšnjo hitrost.",
-      "holdToBoostLabel": "Omogoči zadržanje za povečanje",
       "keyboardShortcuts": "Bližnjice na tipkovnici",
       "keyboardShortcutsDescription": "Prilagodite bližnjice na tipkovnici za aplikacijo. Držite `, če želite kadar koli prikazati to pomoč",
       "keyboardShortcutsLabel": "Prilagodite bližnjice na tipkovnici",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Preskoči končne zasluge",
       "skipCreditsDescription": "Ko je omogočeno, samodejno predvaja naslednjo epizodo pri 99-odstotni dokončanosti, da preskoči končno odjavo. Ko je onemogočeno, počakajte, da se epizoda v celoti zaključi.",
       "skipCreditsLabel": "Preskoči končne špice",
-      "sourceOrder": "Preurejanje virov",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Izvorni vrstni red po meri",
       "thumbnail": "Naloži predoglede",
       "thumbnailDescription": "Videoposnetki večinoma nimajo predogledov. To nastavitev lahko omogočite in jih ustvarite sproti, vendar lahko zaradi tega videoposnetek postane počasnejši.",
       "thumbnailLabel": "Naloži predoglede",
@@ -1204,7 +1203,9 @@
         "appVersion": "Različica",
         "notLoggedIn": "Niste prijavljeni",
         "userId": "ID uporabnika",
-        "userIdDescription": "Uporabite to kot kodo povabila za vašo registracijo prijateljev"
+        "userIdDescription": "Uporabite to kot kodo povabila za vašo registracijo prijateljev",
+        "checkForUpdates": "Preverite posodobitve",
+        "upToDate": "Trenutno uporabljate najnovejšo različico"
       }
     },
     "subtitles": {

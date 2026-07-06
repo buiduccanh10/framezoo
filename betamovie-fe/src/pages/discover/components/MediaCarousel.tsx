@@ -1,7 +1,8 @@
 import { Listbox } from "@headlessui/react";
+import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useWindowSize } from "react-use";
 
 import { Dropdown, OptionItem } from "@/components/form/Dropdown";
@@ -48,12 +49,12 @@ interface MediaCarouselProps {
   sectionTitleOverride?: string;
 }
 
-function MoreCard({ link }: { link: string }) {
+function MoreCard({ link, onClick }: { link: string; onClick?: () => void }) {
   const { t } = useTranslation();
 
   return (
     <div className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto">
-      <Link to={link} className="block">
+      <Link to={link} onClick={onClick} className="block">
         <Flare.Base className="group -m-[0.705em] hover:scale-95 transition-all rounded-xl bg-background-main duration-300 hover:bg-mediaCard-hoverBackground tabbable">
           <Flare.Light
             flareSize={300}
@@ -100,6 +101,7 @@ export function MediaCarousel({
   const { t } = useTranslation();
   const { width: windowWidth } = useWindowSize();
   const { setLastView } = useDiscoverStore();
+  const location = useLocation();
   const { isMobile } = useIsMobile();
   const browser = !!window.chrome;
 
@@ -115,6 +117,7 @@ export function MediaCarousel({
   const [selectedGenre, setSelectedGenre] = React.useState<OptionItem | null>(
     null,
   );
+  const [timeWindow, setTimeWindow] = useState<"day" | "week">("day");
 
   // Get available providers and genres
   const mediaType: MediaType = isTVShow ? "tv" : "movie";
@@ -250,11 +253,24 @@ export function MediaCarousel({
       enabled: discoverMediaEnabled,
       releaseYear: releaseYear || undefined,
       originCountry: originCountry || undefined,
+      timeWindow: contentType === "trending" ? timeWindow : undefined,
     });
   const resolvedSectionTitle = sectionTitleOverride || sectionTitle;
 
+  // Deduplicate media by ID to prevent duplicate React keys
+  const uniqueMedia = React.useMemo(() => {
+    const seen = new Set();
+    return media.filter((item) => {
+      if (!item?.id) return false;
+      const idStr = item.id.toString();
+      if (seen.has(idStr)) return false;
+      seen.add(idStr);
+      return true;
+    });
+  }, [media]);
+
   // Hide section if there's an error or no content (after loading is complete)
-  const shouldHide = !isLoading && (error || media.length === 0);
+  const shouldHide = !isLoading && (error || uniqueMedia.length === 0);
 
   // Find active button
   const activeButton = React.useMemo(() => {
@@ -325,10 +341,10 @@ export function MediaCarousel({
 
   const handleMoreClick = React.useCallback(() => {
     setLastView({
-      url: window.location.pathname,
+      url: `${location.pathname}${location.search}`,
       scrollPosition: window.scrollY,
     });
-  }, [setLastView]);
+  }, [location.pathname, location.search, setLastView]);
 
   // Generate more link
   const generatedMoreLink = React.useMemo(() => {
@@ -337,20 +353,24 @@ export function MediaCarousel({
     const baseLink = `/discover/more`;
     const resolvedGenreId = forcedGenreId || selectedGenreId;
 
+    let targetLink = "";
     if (resolvedGenreId) {
-      return `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
+      targetLink = `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
+    } else if (showProviders && selectedProviderId) {
+      targetLink = `${baseLink}/provider/${selectedProviderId}/${mediaType}`;
+    } else if (showGenres && selectedGenreId) {
+      targetLink = `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
+    } else if (showRecommendations && selectedRecommendationId) {
+      targetLink = `${baseLink}/recommendations/${selectedRecommendationId}/${mediaType}`;
+    } else {
+      targetLink = `${baseLink}/${actualContentType}/${mediaType}`;
     }
 
-    if (showProviders && selectedProviderId) {
-      return `${baseLink}/provider/${selectedProviderId}/${mediaType}`;
+    if (actualContentType === "trending") {
+      targetLink = `${targetLink}?timeWindow=${timeWindow}`;
     }
-    if (showGenres && selectedGenreId) {
-      return `${baseLink}/genre/${resolvedGenreId}/${mediaType}`;
-    }
-    if (showRecommendations && selectedRecommendationId) {
-      return `${baseLink}/recommendations/${selectedRecommendationId}/${mediaType}`;
-    }
-    return `${baseLink}/${actualContentType}/${mediaType}`;
+
+    return targetLink;
   }, [
     moreLink,
     showProviders,
@@ -362,6 +382,7 @@ export function MediaCarousel({
     selectedRecommendationId,
     mediaType,
     actualContentType,
+    timeWindow,
   ]);
 
   // Hide the entire section if there's an error or no content
@@ -377,6 +398,36 @@ export function MediaCarousel({
             <h2 className="text-2xl cursor-default font-bold text-white md:text-2xl pl-0 text-balance">
               {resolvedSectionTitle}
             </h2>
+            {contentType === "trending" && (
+              <div className="inline-flex items-center rounded-full bg-mediaCard-hoverBackground p-1">
+                <button
+                  type="button"
+                  onClick={() => setTimeWindow("day")}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    timeWindow === "day"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.today", { defaultValue: "Today" })}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTimeWindow("week")}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    timeWindow === "week"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.thisWeek", {
+                    defaultValue: "This Week",
+                  })}
+                </button>
+              </div>
+            )}
             {showRecommendations &&
               recommendationSources &&
               recommendationSources.length > 0 && (
@@ -548,8 +599,8 @@ export function MediaCarousel({
         >
           <div className="lg:w-12" />
 
-          {media.length > 0
-            ? media.map((item) => (
+          {uniqueMedia.length > 0
+            ? uniqueMedia.map((item) => (
                 <div
                   onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
                     e.preventDefault()
@@ -598,7 +649,7 @@ export function MediaCarousel({
                 ))}
 
           {moreContent && generatedMoreLink && (
-            <MoreCard link={generatedMoreLink} />
+            <MoreCard link={generatedMoreLink} onClick={handleMoreClick} />
           )}
 
           <div className="lg:w-12" />

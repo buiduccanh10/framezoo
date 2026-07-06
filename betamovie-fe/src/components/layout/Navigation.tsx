@@ -10,7 +10,6 @@ import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
 import { useBannerSize } from "@/stores/banner";
-import { usePreferencesStore } from "@/stores/preferences";
 
 import { BrandPill } from "./BrandPill";
 import { DownloadAppButton } from "./DownloadAppButton";
@@ -48,10 +47,6 @@ export function Navigation(props: NavigationProps) {
     return minLength + (maxLength - minLength) * (1 - scrollFactor);
   };
 
-  const enableLowPerformanceMode = usePreferencesStore(
-    (s) => s.enableLowPerformanceMode,
-  );
-
   return (
     <>
       {/* lightbar */}
@@ -63,7 +58,7 @@ export function Navigation(props: NavigationProps) {
           }}
         >
           <div className="absolute inset-x-0 -mt-[22%] flex items-center sm:mt-0">
-            <Lightbar noParticles={enableLowPerformanceMode} />
+            <Lightbar />
           </div>
         </div>
       ) : null}
@@ -141,8 +136,7 @@ export function Navigation(props: NavigationProps) {
                     <BrandPill clickable header />
                   </Link>
                 )}
-              {!enableLowPerformanceMode &&
-                location.pathname !== "/login" &&
+              {location.pathname !== "/login" &&
                 location.pathname !== "/register" &&
                 location.pathname !== "/settings" &&
                 (location.pathname === "/discover" ? (

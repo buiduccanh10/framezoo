@@ -166,13 +166,6 @@ const getShortcutGroups = (
             "global.keyboardShortcuts.shortcuts.syncSubtitlesLater",
           ),
         },
-        {
-          id: ShortcutId.TOGGLE_NATIVE_SUBTITLES,
-          config: shortcuts[ShortcutId.TOGGLE_NATIVE_SUBTITLES],
-          description: t(
-            "global.keyboardShortcuts.shortcuts.toggleNativeSubtitles",
-          ),
-        },
       ],
     },
     {

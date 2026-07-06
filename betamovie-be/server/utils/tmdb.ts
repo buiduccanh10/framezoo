@@ -39,18 +39,35 @@ const tmdbFetch = (path: string, query: any) => {
  * This replaces the tmdb-ts library for better control over the requests.
  */
 export const tmdb = {
+  fetch: (path: string, query: any) => tmdbFetch(path, query),
   genres: {
     movies: (query: any) => tmdbFetch('/genre/movie/list', query),
     tvShows: (query: any) => tmdbFetch('/genre/tv/list', query),
   },
   movies: {
+    details: (movieId: string | number, query: any) =>
+      tmdbFetch(`/movie/${movieId}`, query),
+    discover: (query: any) => tmdbFetch('/discover/movie', query),
+    nowPlaying: (query: any) => tmdbFetch('/movie/now_playing', query),
     popular: (query: any) => tmdbFetch('/movie/popular', query),
     topRated: (query: any) => tmdbFetch('/movie/top_rated', query),
+    releaseDates: (movieId: string | number, query: any) =>
+      tmdbFetch(`/movie/${movieId}/release_dates`, query),
+    watchProviders: (movieId: string | number, query: any) =>
+      tmdbFetch(`/movie/${movieId}/watch/providers`, query),
   },
   tvShows: {
+    discover: (query: any) => tmdbFetch('/discover/tv', query),
     popular: (query: any) => tmdbFetch('/tv/popular', query),
     topRated: (query: any) => tmdbFetch('/tv/top_rated', query),
     details: (tvId: string | number, query: any) => tmdbFetch(`/tv/${tvId}`, query),
+    onTheAir: (query: any) => tmdbFetch('/tv/on_the_air', query),
+    watchProviders: (tvId: string | number, query: any) =>
+      tmdbFetch(`/tv/${tvId}/watch/providers`, query),
+  },
+  search: {
+    movies: (query: any) => tmdbFetch('/search/movie', query),
+    tvShows: (query: any) => tmdbFetch('/search/tv', query),
   },
   trending: {
     movies: (timeWindow: string, query: any) => tmdbFetch(`/trending/movie/${timeWindow}`, query),

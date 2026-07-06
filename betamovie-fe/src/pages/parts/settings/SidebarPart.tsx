@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@/components/buttons/Button";
 import { Icons } from "@/components/Icon";
 import { SidebarLink, SidebarSection } from "@/components/layout/Sidebar";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { conf } from "@/setup/config";
+import { checkForAppUpdate, requestAppUpdate } from "@/setup/pwa";
+import { useAppUpdateStore } from "@/stores/appUpdate";
 
 export function SidebarPart(props: {
   selectedCategory: string | null;
@@ -15,8 +19,17 @@ export function SidebarPart(props: {
 }) {
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
+  const isDesktopApp = useIsDesktopApp();
   const [activeLink, setActiveLink] = useState("");
   const appVersion = conf().APP_VERSION;
+  const appUpdateStatus = useAppUpdateStore((s) => s.status);
+  const isCheckingForUpdate = useAppUpdateStore((s) => s.isUpdating);
+  const desktopUpdateActionLabel =
+    appUpdateStatus === "downloaded"
+      ? t("navigation.banner.appUpdate.restart")
+      : appUpdateStatus === "available"
+        ? t("navigation.banner.appUpdate.download")
+        : t("settings.sidebar.info.checkForUpdates");
 
   const settingLinks = useMemo(
     () => [
@@ -159,6 +172,33 @@ export function SidebarPart(props: {
           <p className="mt-1 break-all text-sm text-white">
             {appVersion ? `v${appVersion}` : "N/A"}
           </p>
+          {isDesktopApp ? (
+            <div className="mt-3">
+              <Button
+                theme="secondary"
+                padding="px-3 py-2"
+                className="w-full text-sm"
+                loading={isCheckingForUpdate}
+                onClick={() => {
+                  if (
+                    appUpdateStatus === "available" ||
+                    appUpdateStatus === "downloaded"
+                  ) {
+                    void requestAppUpdate();
+                    return;
+                  }
+
+                  void checkForAppUpdate().then((hasUpdate) => {
+                    if (!hasUpdate) {
+                      window.alert(t("settings.sidebar.info.upToDate"));
+                    }
+                  });
+                }}
+              >
+                {desktopUpdateActionLabel}
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

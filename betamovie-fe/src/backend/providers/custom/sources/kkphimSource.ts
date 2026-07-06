@@ -101,7 +101,6 @@ export async function scrapeKKPhimMovie(
   ctx: MovieScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
-
   const apiUrl = `${KKPHIM_API_BASE}/movie/${ctx.media.tmdbId}`;
 
   try {
@@ -143,7 +142,6 @@ export async function scrapeKKPhimShow(
   ctx: ShowScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
-
   const apiUrl = `${KKPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
 
   try {

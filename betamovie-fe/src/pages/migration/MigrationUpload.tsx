@@ -376,11 +376,6 @@ export function MigrationUploadPage() {
             uploadedData.settings.debridService,
           );
         }
-        if (uploadedData.settings.enableThumbnails !== undefined) {
-          preferencesStore.setEnableThumbnails(
-            uploadedData.settings.enableThumbnails,
-          );
-        }
         if (uploadedData.settings.enableAutoplay !== undefined) {
           preferencesStore.setEnableAutoplay(
             uploadedData.settings.enableAutoplay,
@@ -391,52 +386,9 @@ export function MigrationUploadPage() {
             uploadedData.settings.enableSkipCredits,
           );
         }
-        if (uploadedData.settings.enableDiscover !== undefined) {
-          preferencesStore.setEnableDiscover(
-            uploadedData.settings.enableDiscover,
-          );
-        }
-        if (uploadedData.settings.enableFeatured !== undefined) {
-          preferencesStore.setEnableFeatured(
-            uploadedData.settings.enableFeatured,
-          );
-        }
-        if (uploadedData.settings.enableDetailsModal !== undefined) {
-          preferencesStore.setEnableDetailsModal(
-            uploadedData.settings.enableDetailsModal,
-          );
-        }
-        if (uploadedData.settings.enableImageLogos !== undefined) {
-          preferencesStore.setEnableImageLogos(
-            uploadedData.settings.enableImageLogos,
-          );
-        }
-        if (uploadedData.settings.enableCarouselView !== undefined) {
-          preferencesStore.setEnableCarouselView(
-            uploadedData.settings.enableCarouselView,
-          );
-        }
-        if (uploadedData.settings.forceCompactEpisodeView !== undefined) {
-          preferencesStore.setForceCompactEpisodeView(
-            uploadedData.settings.forceCompactEpisodeView,
-          );
-        }
-        if (uploadedData.settings.sourceOrder !== undefined) {
-          preferencesStore.setSourceOrder(uploadedData.settings.sourceOrder);
-        }
-        if (uploadedData.settings.enableSourceOrder !== undefined) {
-          preferencesStore.setEnableSourceOrder(
-            uploadedData.settings.enableSourceOrder,
-          );
-        }
         if (uploadedData.settings.lastSuccessfulSource !== undefined) {
           preferencesStore.setLastSuccessfulSource(
             uploadedData.settings.lastSuccessfulSource,
-          );
-        }
-        if (uploadedData.settings.enableLastSuccessfulSource !== undefined) {
-          preferencesStore.setEnableLastSuccessfulSource(
-            uploadedData.settings.enableLastSuccessfulSource,
           );
         }
         if (uploadedData.settings.embedOrder !== undefined) {
@@ -449,26 +401,6 @@ export function MigrationUploadPage() {
         }
         if (uploadedData.settings.proxyTmdb !== undefined) {
           preferencesStore.setProxyTmdb(uploadedData.settings.proxyTmdb);
-        }
-        if (uploadedData.settings.enableLowPerformanceMode !== undefined) {
-          preferencesStore.setEnableLowPerformanceMode(
-            uploadedData.settings.enableLowPerformanceMode,
-          );
-        }
-        if (uploadedData.settings.enableNativeSubtitles !== undefined) {
-          preferencesStore.setEnableNativeSubtitles(
-            uploadedData.settings.enableNativeSubtitles,
-          );
-        }
-        if (uploadedData.settings.enableHoldToBoost !== undefined) {
-          preferencesStore.setEnableHoldToBoost(
-            uploadedData.settings.enableHoldToBoost,
-          );
-        }
-        if (uploadedData.settings.homeSectionOrder !== undefined) {
-          preferencesStore.setHomeSectionOrder(
-            uploadedData.settings.homeSectionOrder,
-          );
         }
         if (uploadedData.settings.manualSourceSelection !== undefined) {
           preferencesStore.setManualSourceSelection(

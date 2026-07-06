@@ -21,7 +21,13 @@ import {
   isUrlAlreadyProxied,
 } from "@/components/player/utils/proxy";
 import { extractSegmentResolution } from "@/components/player/utils/segmentResolution";
+import {
+  DesktopPipAction,
+  DesktopPipState,
+  getDesktopPipStateFromPlayerState,
+} from "@/desktop/pip";
 import { useLanguageStore } from "@/stores/language";
+import { usePlayerStore } from "@/stores/player/store";
 import {
   LoadableSource,
   SourceQuality,
@@ -37,12 +43,14 @@ import {
   canPlayHlsNatively,
   canWebkitFullscreen,
   canWebkitPictureInPicture,
+  isDesktopAppRuntime,
 } from "@/utils/detectFeatures";
 import { makeEmitter } from "@/utils/events";
 
 const levelConversionMap: Record<number, SourceQuality> = {
   360: "360",
   1080: "1080",
+  1440: "1440",
   720: "720",
   480: "480",
   2160: "4k",
@@ -51,6 +59,7 @@ const levelConversionMap: Record<number, SourceQuality> = {
 // Define quality thresholds for mapping non-standard resolutions
 const qualityThresholds = [
   { minHeight: 1800, quality: "4k" as SourceQuality },
+  { minHeight: 1300, quality: "1440" as SourceQuality },
   { minHeight: 800, quality: "1080" as SourceQuality },
   { minHeight: 600, quality: "720" as SourceQuality },
   { minHeight: 420, quality: "480" as SourceQuality },
@@ -79,10 +88,22 @@ const HLS_SOURCEBUFFER_RACE_WINDOW_MS = 6000;
 const HLS_SOURCEBUFFER_RACE_THRESHOLD = 3;
 const HLS_RECREATE_COOLDOWN_MS = 12000;
 const SEGMENT_DEBUG_ENABLED = import.meta.env.DEV;
+const DESKTOP_PIP_SYNC_DEBOUNCE_MS = 150;
+
+type DesktopElectronApi = {
+  openDesktopPipWindow(state: DesktopPipState): Promise<boolean>;
+  updateDesktopPipWindow(state: DesktopPipState): Promise<boolean>;
+  closeDesktopPipWindow(): Promise<boolean>;
+  sendDesktopPipAction(action: DesktopPipAction): Promise<boolean>;
+  onDesktopPipClosed(listener: () => void): () => void;
+  onDesktopPipAction(listener: (action: DesktopPipAction) => void): () => void;
+};
 
 function deriveQualityFromHeight(
   height: number,
 ): SegmentQualityDebugInfo["realQuality"] {
+  if (height >= 1800) return "4k";
+  if (height >= 1300) return "1440";
   if (height >= 900) return "1080";
   if (height >= 640) return "720";
   return "unknown";
@@ -188,7 +209,15 @@ function isDetachedSourceBufferRace(data: ErrorData) {
   );
 }
 
-export function makeVideoElementDisplayInterface(): DisplayInterface {
+function getDesktopElectronApi(): DesktopElectronApi | null {
+  const electronApi = (window as any).electronAPI;
+  if (!electronApi) return null;
+  return electronApi as DesktopElectronApi;
+}
+
+export function makeVideoElementDisplayInterface(options?: {
+  desktopPipMirror?: boolean;
+}): DisplayInterface {
   const { emit, on, off } = makeEmitter<DisplayInterfaceEvents>();
   let source: LoadableSource | null = null;
   let hls: Hls | null = null;
@@ -218,6 +247,10 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   let pictureInPictureMode: PictureInPictureMode = null;
   let documentPictureInPictureWindow: Window | null = null;
   let documentPictureInPictureCloseHandler: (() => void) | null = null;
+  let desktopPipSyncUnsubscribe: (() => void) | null = null;
+  let desktopPipClosedUnsubscribe: (() => void) | null = null;
+  let desktopPipActionUnsubscribe: (() => void) | null = null;
+  let desktopPipSyncTimeout: NodeJS.Timeout | null = null;
   let isNativeVideoFullscreen = false;
 
   const languagePromises = new Map<
@@ -242,6 +275,120 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     emit(
       "needstrack",
       isNativeVideoFullscreen || pictureInPictureMode === "native",
+    );
+  }
+
+  function clearDesktopPipSyncTimeout() {
+    if (!desktopPipSyncTimeout) return;
+    clearTimeout(desktopPipSyncTimeout);
+    desktopPipSyncTimeout = null;
+  }
+
+  function stopDesktopPipSync() {
+    clearDesktopPipSyncTimeout();
+    if (desktopPipSyncUnsubscribe) {
+      desktopPipSyncUnsubscribe();
+      desktopPipSyncUnsubscribe = null;
+    }
+  }
+
+  function handleDesktopPipClosed() {
+    if (pictureInPictureMode !== "desktop") return;
+    stopDesktopPipSync();
+    emitPictureInPictureState(null);
+    updateNativeTrackRequirement();
+  }
+
+  function buildDesktopPipState(): DesktopPipState | null {
+    if (options?.desktopPipMirror) return null;
+
+    const state = getDesktopPipStateFromPlayerState(usePlayerStore.getState());
+    if (!state) return null;
+
+    return {
+      ...state,
+      time: videoElement?.currentTime ?? state.time,
+      paused: videoElement?.paused ?? state.paused,
+      playbackRate: videoElement?.playbackRate ?? state.playbackRate,
+    };
+  }
+
+  function pushDesktopPipState() {
+    const desktopApi = getDesktopElectronApi();
+    if (!desktopApi || pictureInPictureMode !== "desktop") return;
+
+    const state = buildDesktopPipState();
+    if (!state) {
+      void desktopApi.closeDesktopPipWindow();
+      handleDesktopPipClosed();
+      return;
+    }
+
+    void desktopApi.updateDesktopPipWindow(state);
+  }
+
+  function scheduleDesktopPipSync() {
+    if (options?.desktopPipMirror || pictureInPictureMode !== "desktop") return;
+    if (desktopPipSyncTimeout) return;
+
+    desktopPipSyncTimeout = setTimeout(() => {
+      desktopPipSyncTimeout = null;
+      pushDesktopPipState();
+    }, DESKTOP_PIP_SYNC_DEBOUNCE_MS);
+  }
+
+  function startDesktopPipSync() {
+    if (options?.desktopPipMirror || desktopPipSyncUnsubscribe) return;
+
+    desktopPipSyncUnsubscribe = usePlayerStore.subscribe(() => {
+      scheduleDesktopPipSync();
+    });
+  }
+
+  function handleDesktopPipAction(action: DesktopPipAction) {
+    if (options?.desktopPipMirror) return;
+
+    switch (action.type) {
+      case "togglePlayback": {
+        if (videoElement?.paused) {
+          videoElement.play();
+        } else {
+          videoElement?.pause();
+        }
+        return;
+      }
+      case "seekBy": {
+        const nextTime = (videoElement?.currentTime ?? 0) + action.delta;
+        const duration = videoElement?.duration ?? Number.POSITIVE_INFINITY;
+        const clampedTime = Math.max(0, Math.min(nextTime, duration));
+        if (Number.isFinite(clampedTime)) {
+          if (videoElement) {
+            videoElement.currentTime = clampedTime;
+          }
+          emit("time", clampedTime);
+        }
+        return;
+      }
+      case "seekTo": {
+        const duration = videoElement?.duration ?? Number.POSITIVE_INFINITY;
+        const clampedTime = Math.max(0, Math.min(action.time, duration));
+        if (Number.isFinite(clampedTime)) {
+          if (videoElement) {
+            videoElement.currentTime = clampedTime;
+          }
+          emit("time", clampedTime);
+        }
+      }
+    }
+  }
+
+  function bindDesktopPipActions() {
+    if (options?.desktopPipMirror || desktopPipActionUnsubscribe) return;
+    const desktopApi = getDesktopElectronApi();
+    if (!desktopApi) return;
+
+    desktopPipActionUnsubscribe = desktopApi.onDesktopPipAction(
+      handleDesktopPipAction,
     );
   }
 
@@ -1074,7 +1221,11 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
   fscreen.addEventListener("fullscreenchange", fullscreenChange);
 
   function pictureInPictureChange() {
-    if (pictureInPictureMode === "document") return;
+    if (
+      pictureInPictureMode === "document" ||
+      pictureInPictureMode === "desktop"
+    )
+      return;
 
     const isInNativePictureInPicture =
       document.pictureInPictureElement === videoElement;
@@ -1099,6 +1250,18 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
       return "web";
     },
     destroy: () => {
+      if (pictureInPictureMode === "desktop") {
+        void getDesktopElectronApi()?.closeDesktopPipWindow();
+      }
+      if (desktopPipActionUnsubscribe) {
+        desktopPipActionUnsubscribe();
+        desktopPipActionUnsubscribe = null;
+      }
+      if (desktopPipClosedUnsubscribe) {
+        desktopPipClosedUnsubscribe();
+        desktopPipClosedUnsubscribe = null;
+      }
+      stopDesktopPipSync();
       closeDocumentPictureInPictureWindow();
       destroyVideoElement();
       fscreen.removeEventListener("fullscreenchange", fullscreenChange);
@@ -1138,6 +1301,8 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     },
 
     processVideoElement(video) {
+      bindDesktopPipActions();
+
       if (videoElement === video) {
         this.setVolume(lastVolume);
         return;
@@ -1248,6 +1413,33 @@ export function makeVideoElementDisplayInterface(): DisplayInterface {
     togglePictureInPicture() {
       void (async () => {
         if (!videoElement) return;
+
+        if (!options?.desktopPipMirror && isDesktopAppRuntime()) {
+          const desktopApi = getDesktopElectronApi();
+          if (desktopApi) {
+            if (pictureInPictureMode === "desktop") {
+              await desktopApi.closeDesktopPipWindow();
+              handleDesktopPipClosed();
+              return;
+            }
+
+            const state = buildDesktopPipState();
+            if (state) {
+              const opened = await desktopApi.openDesktopPipWindow(state);
+              if (opened) {
+                if (!desktopPipClosedUnsubscribe) {
+                  desktopPipClosedUnsubscribe = desktopApi.onDesktopPipClosed(
+                    handleDesktopPipClosed,
+                  );
+                }
+                startDesktopPipSync();
+                emitPictureInPictureState("desktop");
+                updateNativeTrackRequirement();
+                return;
+              }
+            }
+          }
+        }
 
         if (canDocumentPictureInPicture()) {
           try {

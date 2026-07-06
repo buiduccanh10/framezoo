@@ -99,6 +99,7 @@
     "addToList": "Añadir a la lista",
     "airs": "aires",
     "collection": {
+      "bookmarkAll": "Marcar todo",
       "movie": "Película",
       "movies": "Cine",
       "rating": "Clasificación",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Cambiar",
       "more": "Ver más",
+      "today": "Hoy",
+      "thisWeek": "Esta semana",
       "title": {
         "4kReleases": "Lanzamientos 4K",
         "editorPicksMovies": "El editor elige películas",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Actualizar ahora",
         "available": "Una nueva versión de la aplicación está lista.",
+        "download": "Descargar actualización",
         "later": "Más tarde",
+        "restart": "Reiniciar para actualizar",
         "updating": "Actualizando..."
       },
       "offline": "Verifica tu conexión a internet"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Reproducción automática",
-      "autoplayDescription": "Reproduce automáticamente el siguiente episodio de una serie después de llegar al final. Lo pueden habilitar los usuarios con la extensión del navegador, un proxy personalizado o con la configuración predeterminada si el host lo permite.",
+      "autoplayDescription": "Reproduce automáticamente el siguiente episodio de una serie después de llegar al final.",
       "autoplayLabel": "Reproducción automática",
       "autoResumeOnPlaybackError": "Reanudación automática en caso de error de reproducción",
       "autoResumeOnPlaybackErrorDescription": "Continúe buscando automáticamente otras fuentes cuando la fuente actual falle durante la reproducción. Si está deshabilitado, verá una pantalla de error con una opción de reanudación manual.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Reordenar incrustaciones",
       "embedOrderDescription": "Arrastre y suelte para reordenar las incrustaciones. Esto determinará el orden en el que se verifican las incrustaciones de los medios que estás intentando ver. <br><br> <strong>(El orden predeterminado es el mejor para la mayoría de los usuarios)</strong>",
       "embedOrderEnableLabel": "Orden de inserción personalizada",
-      "holdToBoost": "Mantenga presionado para aumentar la velocidad",
-      "holdToBoostDescription": "Mantenga presionada la barra espaciadora o toque y mantenga presionada la pantalla para aumentar temporalmente la velocidad de reproducción a 2x. Suelte para volver a la velocidad anterior.",
-      "holdToBoostLabel": "Habilitar retención para impulsar",
       "keyboardShortcuts": "Atajos de teclado",
       "keyboardShortcutsDescription": "Personaliza los atajos de teclado para la aplicación. Mantenga presionado ` para mostrar esta ayuda en cualquier momento",
       "keyboardShortcutsLabel": "Personalizar atajos de teclado",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Saltar créditos finales",
       "skipCreditsDescription": "Cuando está habilitado, reproduce automáticamente el siguiente episodio al 99% de finalización para omitir los créditos finales. Cuando esté deshabilitado, espere hasta que el episodio se complete por completo.",
       "skipCreditsLabel": "Saltar créditos finales",
-      "sourceOrder": "Reordenar fuentes",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Orden de origen personalizado",
       "thumbnail": "Generar miniaturas",
       "thumbnailDescription": "La mayor parte del tiempo, los videos no tienen miniaturas. Puedes activar esta configuración para generarlas sobre la marcha, pero pueden realentizar tu video.",
       "thumbnailLabel": "Generar miniaturas",
@@ -1204,7 +1203,9 @@
         "appVersion": "Versión",
         "notLoggedIn": "No has iniciado sesión",
         "userId": "ID de usuario",
-        "userIdDescription": "Utilice esto como código de invitación para su registro de amigo."
+        "userIdDescription": "Utilice esto como código de invitación para su registro de amigo.",
+        "checkForUpdates": "Buscar actualizaciones",
+        "upToDate": "Actualmente estás en la última versión."
       }
     },
     "subtitles": {

@@ -56,32 +56,15 @@ export function useSettingsState(
         icon: string;
       }
     | undefined,
-  enableThumbnails: boolean,
   enableAutoplay: boolean,
   enableSkipCredits: boolean,
   enableAutoSkipSegments: boolean,
-  enableDiscover: boolean,
-  enableFeatured: boolean,
-  enableDetailsModal: boolean,
-  sourceOrder: string[],
-  enableSourceOrder: boolean,
-  lastSuccessfulSource: string | null,
-  enableLastSuccessfulSource: boolean,
   embedOrder: string[],
   enableEmbedOrder: boolean,
   proxyTmdb: boolean,
-  enableImageLogos: boolean,
-  enableCarouselView: boolean,
-  enableMinimalCards: boolean,
-  forceCompactEpisodeView: boolean,
-  enableLowPerformanceMode: boolean,
-  enableNativeSubtitles: boolean,
-  enableHoldToBoost: boolean,
-  homeSectionOrder: string[],
   manualSourceSelection: boolean,
   enableDoubleClickToSeek: boolean,
   enableAutoResumeOnPlaybackError: boolean,
-  enablePauseOverlay: boolean,
   customTheme: {
     primary: string;
     secondary: string;
@@ -132,12 +115,7 @@ export function useSettingsState(
     useDerived(nickname);
   const [profileState, setProfileState, resetProfile, profileChanged] =
     useDerived(profile);
-  const [
-    enableThumbnailsState,
-    setEnableThumbnailsState,
-    resetEnableThumbnails,
-    enableThumbnailsChanged,
-  ] = useDerived(enableThumbnails);
+
   const [
     enableAutoplayState,
     setEnableAutoplayState,
@@ -157,54 +135,6 @@ export function useSettingsState(
     enableAutoSkipSegmentsChanged,
   ] = useDerived(enableAutoSkipSegments);
   const [
-    enableDiscoverState,
-    setEnableDiscoverState,
-    resetEnableDiscover,
-    enableDiscoverChanged,
-  ] = useDerived(enableDiscover);
-  const [
-    enableFeaturedState,
-    setEnableFeaturedState,
-    resetEnableFeatured,
-    enableFeaturedChanged,
-  ] = useDerived(enableFeatured);
-  const [
-    enableDetailsModalState,
-    setEnableDetailsModalState,
-    resetEnableDetailsModal,
-    enableDetailsModalChanged,
-  ] = useDerived(enableDetailsModal);
-  const [
-    enableImageLogosState,
-    setEnableImageLogosState,
-    resetEnableImageLogos,
-    enableImageLogosChanged,
-  ] = useDerived(enableImageLogos);
-  const [
-    sourceOrderState,
-    setSourceOrderState,
-    resetSourceOrder,
-    sourceOrderChanged,
-  ] = useDerived(sourceOrder);
-  const [
-    enableSourceOrderState,
-    setEnableSourceOrderState,
-    resetEnableSourceOrder,
-    enableSourceOrderChanged,
-  ] = useDerived(enableSourceOrder);
-  const [
-    lastSuccessfulSourceState,
-    setLastSuccessfulSourceState,
-    resetLastSuccessfulSource,
-    lastSuccessfulSourceChanged,
-  ] = useDerived(lastSuccessfulSource);
-  const [
-    enableLastSuccessfulSourceState,
-    setEnableLastSuccessfulSourceState,
-    resetEnableLastSuccessfulSource,
-    enableLastSuccessfulSourceChanged,
-  ] = useDerived(enableLastSuccessfulSource);
-  const [
     embedOrderState,
     setEmbedOrderState,
     resetEmbedOrder,
@@ -218,48 +148,6 @@ export function useSettingsState(
   ] = useDerived(enableEmbedOrder);
   const [proxyTmdbState, setProxyTmdbState, resetProxyTmdb, proxyTmdbChanged] =
     useDerived(proxyTmdb);
-  const [
-    enableCarouselViewState,
-    setEnableCarouselViewState,
-    resetEnableCarouselView,
-    enableCarouselViewChanged,
-  ] = useDerived(enableCarouselView);
-  const [
-    enableMinimalCardsState,
-    setEnableMinimalCardsState,
-    resetEnableMinimalCards,
-    enableMinimalCardsChanged,
-  ] = useDerived(enableMinimalCards);
-  const [
-    forceCompactEpisodeViewState,
-    setForceCompactEpisodeViewState,
-    resetForceCompactEpisodeView,
-    forceCompactEpisodeViewChanged,
-  ] = useDerived(forceCompactEpisodeView);
-  const [
-    enableLowPerformanceModeState,
-    setEnableLowPerformanceModeState,
-    resetEnableLowPerformanceMode,
-    enableLowPerformanceModeChanged,
-  ] = useDerived(enableLowPerformanceMode);
-  const [
-    enableNativeSubtitlesState,
-    setEnableNativeSubtitlesState,
-    resetEnableNativeSubtitles,
-    enableNativeSubtitlesChanged,
-  ] = useDerived(enableNativeSubtitles);
-  const [
-    enableHoldToBoostState,
-    setEnableHoldToBoostState,
-    resetEnableHoldToBoost,
-    enableHoldToBoostChanged,
-  ] = useDerived(enableHoldToBoost);
-  const [
-    homeSectionOrderState,
-    setHomeSectionOrderState,
-    resetHomeSectionOrder,
-    homeSectionOrderChanged,
-  ] = useDerived(homeSectionOrder);
   const [
     manualSourceSelectionState,
     setManualSourceSelectionState,
@@ -278,12 +166,6 @@ export function useSettingsState(
     resetEnableAutoResumeOnPlaybackError,
     enableAutoResumeOnPlaybackErrorChanged,
   ] = useDerived(enableAutoResumeOnPlaybackError);
-  const [
-    enablePauseOverlayState,
-    setEnablePauseOverlayState,
-    resetEnablePauseOverlay,
-    enablePauseOverlayChanged,
-  ] = useDerived(enablePauseOverlay);
   const [
     customThemeState,
     setCustomThemeState,
@@ -305,32 +187,17 @@ export function useSettingsState(
     resetDeviceName();
     resetNickname();
     resetProfile();
-    resetEnableThumbnails();
+
     resetEnableAutoplay();
     resetEnableSkipCredits();
     resetEnableAutoSkipSegments();
-    resetEnableDiscover();
-    resetEnableFeatured();
-    resetEnableDetailsModal();
-    resetEnableImageLogos();
-    resetSourceOrder();
-    resetEnableSourceOrder();
-    resetLastSuccessfulSource();
-    resetEnableLastSuccessfulSource();
+
     resetEmbedOrder();
     resetEnableEmbedOrder();
     resetProxyTmdb();
-    resetEnableCarouselView();
-    resetEnableMinimalCards();
-    resetForceCompactEpisodeView();
-    resetEnableLowPerformanceMode();
-    resetEnableNativeSubtitles();
-    resetEnableHoldToBoost();
-    resetHomeSectionOrder();
     resetManualSourceSelection();
     resetEnableDoubleClickToSeek();
     resetEnableAutoResumeOnPlaybackError();
-    resetEnablePauseOverlay();
     resetCustomTheme();
   }
 
@@ -347,32 +214,15 @@ export function useSettingsState(
     debridServiceChanged ||
     tidbKeyChanged ||
     profileChanged ||
-    enableThumbnailsChanged ||
     enableAutoplayChanged ||
     enableSkipCreditsChanged ||
     enableAutoSkipSegmentsChanged ||
-    enableDiscoverChanged ||
-    enableFeaturedChanged ||
-    enableDetailsModalChanged ||
-    enableImageLogosChanged ||
-    sourceOrderChanged ||
-    enableSourceOrderChanged ||
-    lastSuccessfulSourceChanged ||
-    enableLastSuccessfulSourceChanged ||
     embedOrderChanged ||
     enableEmbedOrderChanged ||
     proxyTmdbChanged ||
-    enableCarouselViewChanged ||
-    enableMinimalCardsChanged ||
-    forceCompactEpisodeViewChanged ||
-    enableLowPerformanceModeChanged ||
-    enableNativeSubtitlesChanged ||
-    enableHoldToBoostChanged ||
-    homeSectionOrderChanged ||
     manualSourceSelectionChanged ||
     enableDoubleClickToSeekChanged ||
     enableAutoResumeOnPlaybackErrorChanged ||
-    enablePauseOverlayChanged ||
     customThemeChanged;
 
   return {
@@ -438,11 +288,7 @@ export function useSettingsState(
       set: setProfileState,
       changed: profileChanged,
     },
-    enableThumbnails: {
-      state: enableThumbnailsState,
-      set: setEnableThumbnailsState,
-      changed: enableThumbnailsChanged,
-    },
+
     enableAutoplay: {
       state: enableAutoplayState,
       set: setEnableAutoplayState,
@@ -457,46 +303,6 @@ export function useSettingsState(
       state: enableAutoSkipSegmentsState,
       set: setEnableAutoSkipSegmentsState,
       changed: enableAutoSkipSegmentsChanged,
-    },
-    enableDiscover: {
-      state: enableDiscoverState,
-      set: setEnableDiscoverState,
-      changed: enableDiscoverChanged,
-    },
-    enableFeatured: {
-      state: enableFeaturedState,
-      set: setEnableFeaturedState,
-      changed: enableFeaturedChanged,
-    },
-    enableDetailsModal: {
-      state: enableDetailsModalState,
-      set: setEnableDetailsModalState,
-      changed: enableDetailsModalChanged,
-    },
-    enableImageLogos: {
-      state: enableImageLogosState,
-      set: setEnableImageLogosState,
-      changed: enableImageLogosChanged,
-    },
-    sourceOrder: {
-      state: sourceOrderState,
-      set: setSourceOrderState,
-      changed: sourceOrderChanged,
-    },
-    enableSourceOrder: {
-      state: enableSourceOrderState,
-      set: setEnableSourceOrderState,
-      changed: enableSourceOrderChanged,
-    },
-    lastSuccessfulSource: {
-      state: lastSuccessfulSourceState,
-      set: setLastSuccessfulSourceState,
-      changed: lastSuccessfulSourceChanged,
-    },
-    enableLastSuccessfulSource: {
-      state: enableLastSuccessfulSourceState,
-      set: setEnableLastSuccessfulSourceState,
-      changed: enableLastSuccessfulSourceChanged,
     },
     proxyTmdb: {
       state: proxyTmdbState,
@@ -513,41 +319,6 @@ export function useSettingsState(
       set: setEnableEmbedOrderState,
       changed: enableEmbedOrderChanged,
     },
-    enableCarouselView: {
-      state: enableCarouselViewState,
-      set: setEnableCarouselViewState,
-      changed: enableCarouselViewChanged,
-    },
-    enableMinimalCards: {
-      state: enableMinimalCardsState,
-      set: setEnableMinimalCardsState,
-      changed: enableMinimalCardsChanged,
-    },
-    forceCompactEpisodeView: {
-      state: forceCompactEpisodeViewState,
-      set: setForceCompactEpisodeViewState,
-      changed: forceCompactEpisodeViewChanged,
-    },
-    enableLowPerformanceMode: {
-      state: enableLowPerformanceModeState,
-      set: setEnableLowPerformanceModeState,
-      changed: enableLowPerformanceModeChanged,
-    },
-    enableNativeSubtitles: {
-      state: enableNativeSubtitlesState,
-      set: setEnableNativeSubtitlesState,
-      changed: enableNativeSubtitlesChanged,
-    },
-    enableHoldToBoost: {
-      state: enableHoldToBoostState,
-      set: setEnableHoldToBoostState,
-      changed: enableHoldToBoostChanged,
-    },
-    homeSectionOrder: {
-      state: homeSectionOrderState,
-      set: setHomeSectionOrderState,
-      changed: homeSectionOrderChanged,
-    },
     manualSourceSelection: {
       state: manualSourceSelectionState,
       set: setManualSourceSelectionState,
@@ -562,11 +333,6 @@ export function useSettingsState(
       state: enableAutoResumeOnPlaybackErrorState,
       set: setEnableAutoResumeOnPlaybackErrorState,
       changed: enableAutoResumeOnPlaybackErrorChanged,
-    },
-    enablePauseOverlay: {
-      state: enablePauseOverlayState,
-      set: setEnablePauseOverlayState,
-      changed: enablePauseOverlayChanged,
     },
     customTheme: {
       state: customThemeState,

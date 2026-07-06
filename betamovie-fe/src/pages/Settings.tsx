@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
@@ -11,7 +12,7 @@ import {
 import { getSessions, updateSession } from "@/backend/accounts/sessions";
 import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
-import { getAllProviders } from "@/backend/providers/providers";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
@@ -168,6 +169,7 @@ export function AccountSettings(props: {
 }
 
 export function SettingsPage() {
+  useProviderMetadataVersion();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   // TIDB segment submissions are now handled by the backend, so the legacy
@@ -412,9 +414,6 @@ export function SettingsPage() {
   const tidbKey = usePreferencesStore((s) => s.tidbKey);
   const setTIDBKey = usePreferencesStore((s) => s.setTIDBKey);
 
-  const enableThumbnails = usePreferencesStore((s) => s.enableThumbnails);
-  const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
-
   const enableAutoplay = usePreferencesStore((s) => s.enableAutoplay);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
 
@@ -430,28 +429,6 @@ export function SettingsPage() {
     (s) => s.setEnableAutoSkipSegments,
   );
 
-  const sourceOrder = usePreferencesStore((s) => s.sourceOrder);
-  const setSourceOrder = usePreferencesStore((s) => s.setSourceOrder);
-
-  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
-  const setEnableSourceOrder = usePreferencesStore(
-    (s) => s.setEnableSourceOrder,
-  );
-
-  const lastSuccessfulSource = usePreferencesStore(
-    (s) => s.lastSuccessfulSource,
-  );
-  const setLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setLastSuccessfulSource,
-  );
-
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
-  const setEnableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setEnableLastSuccessfulSource,
-  );
-
   // These are commented because the EmbedOrderPart is on the admin page and not on the settings page.
   const embedOrder = usePreferencesStore((s) => s.embedOrder);
   // const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
@@ -461,62 +438,8 @@ export function SettingsPage() {
 
   // const setDisabledEmbeds = usePreferencesStore((s) => s.setDisabledEmbeds);
 
-  const enableDiscover = usePreferencesStore((s) => s.enableDiscover);
-  const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
-
-  const enableFeatured = usePreferencesStore((s) => s.enableFeatured);
-  const setEnableFeatured = usePreferencesStore((s) => s.setEnableFeatured);
-
-  const enableDetailsModal = usePreferencesStore((s) => s.enableDetailsModal);
-  const setEnableDetailsModal = usePreferencesStore(
-    (s) => s.setEnableDetailsModal,
-  );
-
-  const enableImageLogos = usePreferencesStore((s) => s.enableImageLogos);
-  const setEnableImageLogos = usePreferencesStore((s) => s.setEnableImageLogos);
-
   const proxyTmdb = usePreferencesStore((s) => s.proxyTmdb);
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-
-  const enableCarouselView = usePreferencesStore((s) => s.enableCarouselView);
-  const setEnableCarouselView = usePreferencesStore(
-    (s) => s.setEnableCarouselView,
-  );
-
-  const enableMinimalCards = usePreferencesStore((s) => s.enableMinimalCards);
-  const setEnableMinimalCards = usePreferencesStore(
-    (s) => s.setEnableMinimalCards,
-  );
-
-  const forceCompactEpisodeView = usePreferencesStore(
-    (s) => s.forceCompactEpisodeView,
-  );
-  const setForceCompactEpisodeView = usePreferencesStore(
-    (s) => s.setForceCompactEpisodeView,
-  );
-
-  const enableLowPerformanceMode = usePreferencesStore(
-    (s) => s.enableLowPerformanceMode,
-  );
-  const setEnableLowPerformanceMode = usePreferencesStore(
-    (s) => s.setEnableLowPerformanceMode,
-  );
-
-  // These are commented because the NativeSubtitlesPart is accessable though the atoms caption style menu and not on the settings page.
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
-  // const setEnableNativeSubtitles = usePreferencesStore(
-  //   (s) => s.setEnableNativeSubtitles,
-  // );
-
-  const enableHoldToBoost = usePreferencesStore((s) => s.enableHoldToBoost);
-  const setEnableHoldToBoost = usePreferencesStore(
-    (s) => s.setEnableHoldToBoost,
-  );
-
-  const homeSectionOrder = usePreferencesStore((s) => s.homeSectionOrder);
-  const setHomeSectionOrder = usePreferencesStore((s) => s.setHomeSectionOrder);
 
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
@@ -525,9 +448,6 @@ export function SettingsPage() {
     (s) => s.setManualSourceSelection,
   );
 
-  const enableDoubleClickToSeek = usePreferencesStore(
-    (s) => s.enableDoubleClickToSeek,
-  );
   const setEnableDoubleClickToSeek = usePreferencesStore(
     (s) => s.setEnableDoubleClickToSeek,
   );
@@ -537,11 +457,6 @@ export function SettingsPage() {
   );
   const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
     (s) => s.setEnableAutoResumeOnPlaybackError,
-  );
-
-  const enablePauseOverlay = usePreferencesStore((s) => s.enablePauseOverlay);
-  const setEnablePauseOverlay = usePreferencesStore(
-    (s) => s.setEnablePauseOverlay,
   );
   const setEnableNumberKeySeeking = usePreferencesStore(
     (s) => s.setEnableNumberKeySeeking,
@@ -589,9 +504,7 @@ export function SettingsPage() {
         if (settings.debridService) {
           setdebridService(settings.debridService);
         }
-        if (settings.enableThumbnails !== undefined) {
-          setEnableThumbnails(settings.enableThumbnails);
-        }
+
         if (settings.enableAutoplay !== undefined) {
           setEnableAutoplay(settings.enableAutoplay);
         }
@@ -601,56 +514,9 @@ export function SettingsPage() {
         if (settings.enableAutoSkipSegments !== undefined) {
           setEnableAutoSkipSegments(settings.enableAutoSkipSegments);
         }
-        if (settings.enableDiscover !== undefined) {
-          setEnableDiscover(settings.enableDiscover);
-        }
-        if (settings.enableFeatured !== undefined) {
-          setEnableFeatured(settings.enableFeatured);
-        }
-        if (settings.enableDetailsModal !== undefined) {
-          setEnableDetailsModal(settings.enableDetailsModal);
-        }
-        if (settings.enableImageLogos !== undefined) {
-          setEnableImageLogos(settings.enableImageLogos);
-        }
-        if (
-          settings.sourceOrder !== undefined &&
-          Array.isArray(settings.sourceOrder)
-        ) {
-          setSourceOrder(settings.sourceOrder);
-        }
-        if (settings.enableSourceOrder !== undefined) {
-          setEnableSourceOrder(settings.enableSourceOrder);
-        }
-        if (settings.lastSuccessfulSource !== undefined) {
-          setLastSuccessfulSource(settings.lastSuccessfulSource);
-        }
-        if (settings.enableLastSuccessfulSource !== undefined) {
-          setEnableLastSuccessfulSource(settings.enableLastSuccessfulSource);
-        }
+
         if (settings.proxyTmdb !== undefined) {
           setProxyTmdb(settings.proxyTmdb);
-        }
-        if (settings.enableCarouselView !== undefined) {
-          setEnableCarouselView(settings.enableCarouselView);
-        }
-        if (settings.enableMinimalCards !== undefined) {
-          setEnableMinimalCards(settings.enableMinimalCards);
-        }
-        if (settings.forceCompactEpisodeView !== undefined) {
-          setForceCompactEpisodeView(settings.forceCompactEpisodeView);
-        }
-        if (settings.enableLowPerformanceMode !== undefined) {
-          setEnableLowPerformanceMode(settings.enableLowPerformanceMode);
-        }
-        if (settings.enableHoldToBoost !== undefined) {
-          setEnableHoldToBoost(settings.enableHoldToBoost);
-        }
-        if (
-          settings.homeSectionOrder !== undefined &&
-          Array.isArray(settings.homeSectionOrder)
-        ) {
-          setHomeSectionOrder(settings.homeSectionOrder);
         }
         if (settings.manualSourceSelection !== undefined) {
           setManualSourceSelection(settings.manualSourceSelection);
@@ -662,9 +528,6 @@ export function SettingsPage() {
           setEnableAutoResumeOnPlaybackError(
             settings.enableAutoResumeOnPlaybackError,
           );
-        }
-        if (settings.enablePauseOverlay !== undefined) {
-          setEnablePauseOverlay(settings.enablePauseOverlay);
         }
         if (settings.enableNumberKeySeeking !== undefined) {
           setEnableNumberKeySeeking(settings.enableNumberKeySeeking);
@@ -687,29 +550,14 @@ export function SettingsPage() {
     setFebboxKey,
     setdebridToken,
     setdebridService,
-    setEnableThumbnails,
+
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
-    setEnableDiscover,
-    setEnableFeatured,
-    setEnableDetailsModal,
-    setEnableImageLogos,
-    setSourceOrder,
-    setEnableSourceOrder,
-    setLastSuccessfulSource,
-    setEnableLastSuccessfulSource,
     setProxyTmdb,
-    setEnableCarouselView,
-    setEnableMinimalCards,
-    setForceCompactEpisodeView,
-    setEnableLowPerformanceMode,
-    setEnableHoldToBoost,
-    setHomeSectionOrder,
     setManualSourceSelection,
     setEnableDoubleClickToSeek,
     setEnableAutoResumeOnPlaybackError,
-    setEnablePauseOverlay,
     setEnableNumberKeySeeking,
     setCustomTheme,
   ]);
@@ -727,50 +575,18 @@ export function SettingsPage() {
     debridService,
     tidbKey,
     account ? account.profile : undefined,
-    enableThumbnails,
+
     enableAutoplay,
     enableSkipCredits,
     enableAutoSkipSegments,
-    enableDiscover,
-    enableFeatured,
-    enableDetailsModal,
-    sourceOrder,
-    enableSourceOrder,
-    lastSuccessfulSource,
-    enableLastSuccessfulSource,
     embedOrder,
     enableEmbedOrder,
     proxyTmdb,
-    enableImageLogos,
-    enableCarouselView,
-    enableMinimalCards,
-    forceCompactEpisodeView,
-    enableLowPerformanceMode,
-    enableNativeSubtitles,
-    enableHoldToBoost,
-    homeSectionOrder,
     manualSourceSelection,
-    enableDoubleClickToSeek,
+    true,
     enableAutoResumeOnPlaybackError,
-    enablePauseOverlay,
     customThemeBaseline ?? customTheme,
   );
-
-  const availableSources = useMemo(() => {
-    const sources = getAllProviders().listSources();
-    const sourceIDs = sources.map((s) => s.id);
-    const stateSources = state.sourceOrder.state || [];
-
-    // Filter out sources that are not in `stateSources` and are in `sources`
-    const updatedSources = stateSources.filter((ss) => sourceIDs.includes(ss));
-
-    // Add sources from `sources` that are not in `stateSources`
-    const missingSources = sources
-      .filter((s) => !stateSources.includes(s.id))
-      .map((s) => s.id);
-
-    return [...updatedSources, ...missingSources];
-  }, [state.sourceOrder.state]);
 
   useEffect(() => {
     setPreviewTheme(activeTheme ?? "default");
@@ -800,29 +616,13 @@ export function SettingsPage() {
         state.febboxKey.changed ||
         state.debridToken.changed ||
         state.debridService.changed ||
-        state.enableThumbnails.changed ||
         state.enableAutoplay.changed ||
         state.enableSkipCredits.changed ||
         state.enableAutoSkipSegments.changed ||
-        state.enableDiscover.changed ||
-        state.enableFeatured.changed ||
-        state.enableDetailsModal.changed ||
-        state.enableImageLogos.changed ||
-        state.sourceOrder.changed ||
-        state.enableSourceOrder.changed ||
-        state.lastSuccessfulSource.changed ||
-        state.enableLastSuccessfulSource.changed ||
         state.proxyTmdb.changed ||
-        state.enableCarouselView.changed ||
-        state.enableMinimalCards.changed ||
-        state.forceCompactEpisodeView.changed ||
-        state.enableLowPerformanceMode.changed ||
-        state.enableHoldToBoost.changed ||
-        state.homeSectionOrder.changed ||
         state.manualSourceSelection.changed ||
         state.enableDoubleClickToSeek.changed ||
         state.enableAutoResumeOnPlaybackError.changed ||
-        state.enablePauseOverlay.changed ||
         state.customTheme.changed
       ) {
         await updateSettings(backendUrl, account, {
@@ -832,30 +632,16 @@ export function SettingsPage() {
           febboxKey: state.febboxKey.state,
           debridToken: state.debridToken.state,
           debridService: state.debridService.state,
-          enableThumbnails: state.enableThumbnails.state,
+
           enableAutoplay: state.enableAutoplay.state,
           enableSkipCredits: state.enableSkipCredits.state,
           enableAutoSkipSegments: state.enableAutoSkipSegments.state,
-          enableDiscover: state.enableDiscover.state,
-          enableFeatured: state.enableFeatured.state,
-          enableDetailsModal: state.enableDetailsModal.state,
-          enableImageLogos: state.enableImageLogos.state,
-          sourceOrder: state.sourceOrder.state,
-          enableSourceOrder: state.enableSourceOrder.state,
-          lastSuccessfulSource: state.lastSuccessfulSource.state,
-          enableLastSuccessfulSource: state.enableLastSuccessfulSource.state,
+
           proxyTmdb: state.proxyTmdb.state,
-          enableCarouselView: state.enableCarouselView.state,
-          enableMinimalCards: state.enableMinimalCards.state,
-          forceCompactEpisodeView: state.forceCompactEpisodeView.state,
-          enableLowPerformanceMode: state.enableLowPerformanceMode.state,
-          enableHoldToBoost: state.enableHoldToBoost.state,
-          homeSectionOrder: state.homeSectionOrder.state,
           manualSourceSelection: state.manualSourceSelection.state,
           enableDoubleClickToSeek: state.enableDoubleClickToSeek.state,
           enableAutoResumeOnPlaybackError:
             state.enableAutoResumeOnPlaybackError.state,
-          enablePauseOverlay: state.enablePauseOverlay.state,
           customTheme: state.customTheme.state,
         });
       }
@@ -883,40 +669,24 @@ export function SettingsPage() {
       }
     }
 
-    setEnableThumbnails(state.enableThumbnails.state);
     setEnableAutoplay(state.enableAutoplay.state);
     setEnableSkipCredits(state.enableSkipCredits.state);
     setEnableAutoSkipSegments(state.enableAutoSkipSegments.state);
-    setEnableDiscover(state.enableDiscover.state);
-    setEnableFeatured(state.enableFeatured.state);
-    setEnableDetailsModal(state.enableDetailsModal.state);
-    setEnableImageLogos(state.enableImageLogos.state);
-    setSourceOrder(state.sourceOrder.state);
-    setEnableSourceOrder(state.enableSourceOrder.state);
-    setLastSuccessfulSource(state.lastSuccessfulSource.state);
-    setEnableLastSuccessfulSource(state.enableLastSuccessfulSource.state);
+
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
     setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
-    setEnableSourceOrder(state.enableSourceOrder.state);
     setFebboxKey(state.febboxKey.state);
     setdebridToken(state.debridToken.state);
     setdebridService(state.debridService.state);
     setTIDBKey(state.tidbKey.state);
     setProxyTmdb(state.proxyTmdb.state);
-    setEnableCarouselView(state.enableCarouselView.state);
-    setEnableMinimalCards(state.enableMinimalCards.state);
-    setForceCompactEpisodeView(state.forceCompactEpisodeView.state);
-    setEnableLowPerformanceMode(state.enableLowPerformanceMode.state);
-    setEnableHoldToBoost(state.enableHoldToBoost.state);
-    setHomeSectionOrder(state.homeSectionOrder.state);
     setManualSourceSelection(state.manualSourceSelection.state);
     setEnableDoubleClickToSeek(state.enableDoubleClickToSeek.state);
     setEnableAutoResumeOnPlaybackError(
       state.enableAutoResumeOnPlaybackError.state,
     );
-    setEnablePauseOverlay(state.enablePauseOverlay.state);
     setCustomTheme(state.customTheme.state);
     setCustomThemeBaseline(state.customTheme.state);
 
@@ -946,7 +716,7 @@ export function SettingsPage() {
     setPendingBackendChange,
     state,
     setBackendUrl,
-    setEnableThumbnails,
+
     setFebboxKey,
     setdebridToken,
     setdebridService,
@@ -954,14 +724,6 @@ export function SettingsPage() {
     setEnableAutoplay,
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
-    setEnableDiscover,
-    setEnableFeatured,
-    setEnableDetailsModal,
-    setEnableImageLogos,
-    setSourceOrder,
-    setEnableSourceOrder,
-    setLastSuccessfulSource,
-    setEnableLastSuccessfulSource,
     setAppLanguage,
     setTheme,
     setSubStyling,
@@ -970,163 +732,145 @@ export function SettingsPage() {
     updateProfile,
     updateNickname,
     setProxyTmdb,
-    setEnableCarouselView,
-    setEnableMinimalCards,
-    setForceCompactEpisodeView,
-    setEnableLowPerformanceMode,
-    setEnableHoldToBoost,
-    setHomeSectionOrder,
     setManualSourceSelection,
     setEnableDoubleClickToSeek,
     setEnableAutoResumeOnPlaybackError,
-    setEnablePauseOverlay,
     setCustomTheme,
   ]);
   return (
     <SubPageLayout>
+      <Helmet>
+        <style type="text/css">{`
+          html,
+          body {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+
+          html::-webkit-scrollbar,
+          body::-webkit-scrollbar,
+          .settings-page *::-webkit-scrollbar {
+            display: none;
+          }
+
+          .settings-page * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+        `}</style>
+      </Helmet>
       <PageTitle subpage k="global.pages.settings" />
-      <SettingsLayout
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        onSearchUnFocus={handleSearchUnFocus}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        onCategoryChange={handleCategoryChange}
-        className="space-y-28"
-        showConnections={shouldShowConnections}
-      >
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-account") && (
-          <div id="settings-account">
-            <Heading1 border className="!mb-0">
-              {t("settings.account.title")}
-            </Heading1>
-            {user.account && state.profile.state ? (
-              <AccountSettings
-                account={user.account}
-                deviceName={state.deviceName.state}
-                setDeviceName={state.deviceName.set}
-                nickname={state.nickname.state}
-                setNickname={state.nickname.set}
-                colorA={state.profile.state.colorA}
-                setColorA={(v) => {
-                  state.profile.set((s) =>
-                    s ? { ...s, colorA: v } : undefined,
-                  );
-                }}
-                colorB={state.profile.state.colorB}
-                setColorB={(v) =>
-                  state.profile.set((s) =>
-                    s ? { ...s, colorB: v } : undefined,
-                  )
-                }
-                userIcon={state.profile.state.icon as any}
-                setUserIcon={(v) =>
-                  state.profile.set((s) => (s ? { ...s, icon: v } : undefined))
-                }
-              />
-            ) : (
-              <RegisterCalloutPart />
-            )}
-          </div>
-        )}
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-preferences") && (
-          <div id="settings-preferences">
-            <PreferencesPart
-              language={state.appLanguage.state}
-              setLanguage={state.appLanguage.set}
-              enableThumbnails={state.enableThumbnails.state}
-              setEnableThumbnails={state.enableThumbnails.set}
-              enableAutoplay={state.enableAutoplay.state}
-              setEnableAutoplay={state.enableAutoplay.set}
-              enableSkipCredits={state.enableSkipCredits.state}
-              setEnableSkipCredits={state.enableSkipCredits.set}
-              enableAutoSkipSegments={state.enableAutoSkipSegments.state}
-              setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
-              sourceOrder={availableSources}
-              setSourceOrder={state.sourceOrder.set}
-              enableSourceOrder={state.enableSourceOrder.state}
-              setenableSourceOrder={state.enableSourceOrder.set}
-              enableLastSuccessfulSource={
-                state.enableLastSuccessfulSource.state
-              }
-              setEnableLastSuccessfulSource={
-                state.enableLastSuccessfulSource.set
-              }
-              enableLowPerformanceMode={state.enableLowPerformanceMode.state}
-              setEnableLowPerformanceMode={state.enableLowPerformanceMode.set}
-              enableHoldToBoost={state.enableHoldToBoost.state}
-              setEnableHoldToBoost={state.enableHoldToBoost.set}
-              manualSourceSelection={state.manualSourceSelection.state}
-              setManualSourceSelection={state.manualSourceSelection.set}
-              enableDoubleClickToSeek={state.enableDoubleClickToSeek.state}
-              setEnableDoubleClickToSeek={state.enableDoubleClickToSeek.set}
-              enableAutoResumeOnPlaybackError={
-                state.enableAutoResumeOnPlaybackError.state
-              }
-              setEnableAutoResumeOnPlaybackError={
-                state.enableAutoResumeOnPlaybackError.set
-              }
-            />
-          </div>
-        )}
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-appearance") && (
-          <div id="settings-appearance">
-            <AppearancePart
-              active={previewTheme ?? "default"}
-              inUse={activeTheme ?? "default"}
-              setTheme={setThemeWithPreview}
-              enableDiscover={state.enableDiscover.state}
-              setEnableDiscover={state.enableDiscover.set}
-              enableFeatured={state.enableFeatured.state}
-              setEnableFeatured={state.enableFeatured.set}
-              enableDetailsModal={state.enableDetailsModal.state}
-              setEnableDetailsModal={state.enableDetailsModal.set}
-              enableImageLogos={state.enableImageLogos.state}
-              setEnableImageLogos={state.enableImageLogos.set}
-              enableCarouselView={state.enableCarouselView.state}
-              setEnableCarouselView={state.enableCarouselView.set}
-              enableMinimalCards={state.enableMinimalCards.state}
-              setEnableMinimalCards={state.enableMinimalCards.set}
-              forceCompactEpisodeView={state.forceCompactEpisodeView.state}
-              setForceCompactEpisodeView={state.forceCompactEpisodeView.set}
-              homeSectionOrder={state.homeSectionOrder.state}
-              setHomeSectionOrder={state.homeSectionOrder.set}
-              enableLowPerformanceMode={state.enableLowPerformanceMode.state}
-              enablePauseOverlay={state.enablePauseOverlay.state}
-              setEnablePauseOverlay={state.enablePauseOverlay.set}
-              customTheme={state.customTheme.state}
-              setCustomTheme={state.customTheme.set}
-            />
-          </div>
-        )}
-        {(searchQuery.trim() ||
-          !selectedCategory ||
-          selectedCategory === "settings-captions") && (
-          <div id="settings-captions">
-            <CaptionsPart
-              styling={state.subtitleStyling.state}
-              setStyling={state.subtitleStyling.set}
-            />
-          </div>
-        )}
-        {shouldShowConnections &&
-          (searchQuery.trim() ||
+      <div className="settings-page">
+        <SettingsLayout
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          onSearchUnFocus={handleSearchUnFocus}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          onCategoryChange={handleCategoryChange}
+          className="space-y-28"
+          showConnections={shouldShowConnections}
+        >
+          {(searchQuery.trim() ||
             !selectedCategory ||
-            selectedCategory === "settings-connection") && (
-            <div id="settings-connection">
-              <ConnectionsPart
-                tidbKey={state.tidbKey.state}
-                setTIDBKey={state.tidbKey.set}
+            selectedCategory === "settings-account") && (
+            <div id="settings-account">
+              <Heading1 border className="!mb-0">
+                {t("settings.account.title")}
+              </Heading1>
+              {user.account && state.profile.state ? (
+                <AccountSettings
+                  account={user.account}
+                  deviceName={state.deviceName.state}
+                  setDeviceName={state.deviceName.set}
+                  nickname={state.nickname.state}
+                  setNickname={state.nickname.set}
+                  colorA={state.profile.state.colorA}
+                  setColorA={(v) => {
+                    state.profile.set((s) =>
+                      s ? { ...s, colorA: v } : undefined,
+                    );
+                  }}
+                  colorB={state.profile.state.colorB}
+                  setColorB={(v) =>
+                    state.profile.set((s) =>
+                      s ? { ...s, colorB: v } : undefined,
+                    )
+                  }
+                  userIcon={state.profile.state.icon as any}
+                  setUserIcon={(v) =>
+                    state.profile.set((s) =>
+                      s ? { ...s, icon: v } : undefined,
+                    )
+                  }
+                />
+              ) : (
+                <RegisterCalloutPart />
+              )}
+            </div>
+          )}
+          {(searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-preferences") && (
+            <div id="settings-preferences">
+              <PreferencesPart
+                language={state.appLanguage.state}
+                setLanguage={state.appLanguage.set}
+                enableAutoplay={state.enableAutoplay.state}
+                setEnableAutoplay={state.enableAutoplay.set}
+                enableSkipCredits={state.enableSkipCredits.state}
+                setEnableSkipCredits={state.enableSkipCredits.set}
+                enableAutoSkipSegments={state.enableAutoSkipSegments.state}
+                setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
+                manualSourceSelection={state.manualSourceSelection.state}
+                setManualSourceSelection={state.manualSourceSelection.set}
+                enableDoubleClickToSeek
+                setEnableDoubleClickToSeek={() => undefined}
+                enableAutoResumeOnPlaybackError={
+                  state.enableAutoResumeOnPlaybackError.state
+                }
+                setEnableAutoResumeOnPlaybackError={
+                  state.enableAutoResumeOnPlaybackError.set
+                }
               />
             </div>
           )}
-      </SettingsLayout>
+          {(searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-appearance") && (
+            <div id="settings-appearance">
+              <AppearancePart
+                active={previewTheme ?? "default"}
+                inUse={activeTheme ?? "default"}
+                setTheme={setThemeWithPreview}
+                customTheme={state.customTheme.state}
+                setCustomTheme={state.customTheme.set}
+              />
+            </div>
+          )}
+          {(searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-captions") && (
+            <div id="settings-captions">
+              <CaptionsPart
+                styling={state.subtitleStyling.state}
+                setStyling={state.subtitleStyling.set}
+              />
+            </div>
+          )}
+          {shouldShowConnections &&
+            (searchQuery.trim() ||
+              !selectedCategory ||
+              selectedCategory === "settings-connection") && (
+              <div id="settings-connection">
+                <ConnectionsPart
+                  tidbKey={state.tidbKey.state}
+                  setTIDBKey={state.tidbKey.set}
+                />
+              </div>
+            )}
+        </SettingsLayout>
+      </div>
       <Transition
         animation="fade"
         show={state.changed}

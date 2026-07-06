@@ -99,6 +99,7 @@
     "addToList": "ਸੂਚੀ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ",
     "airs": "ਏਅਰਸ",
     "collection": {
+      "bookmarkAll": "ਸਭ ਨੂੰ ਬੁੱਕਮਾਰਕ ਕਰੋ",
       "movie": "ਮੂਵੀ",
       "movies": "ਫਿਲਮਾਂ",
       "rating": "ਰੇਟਿੰਗ",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "ਬਦਲੋ",
       "more": "ਹੋਰ ਵੇਖੋ",
+      "today": "ਅੱਜ",
+      "thisWeek": "ਇਸ ਹਫ਼ਤੇ",
       "title": {
         "4kReleases": "4K ਰੀਲੀਜ਼",
         "editorPicksMovies": "ਸੰਪਾਦਕ ਫਿਲਮਾਂ ਦੀ ਚੋਣ ਕਰਦਾ ਹੈ",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "ਹੁਣੇ ਅੱਪਡੇਟ ਕਰੋ",
         "available": "ਐਪ ਦਾ ਨਵਾਂ ਸੰਸਕਰਣ ਤਿਆਰ ਹੈ।",
+        "download": "ਅੱਪਡੇਟ ਡਾਊਨਲੋਡ ਕਰੋ",
         "later": "ਬਾਅਦ ਵਿੱਚ",
+        "restart": "ਅੱਪਡੇਟ ਕਰਨ ਲਈ ਮੁੜ-ਚਾਲੂ ਕਰੋ",
         "updating": "ਅੱਪਡੇਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ..."
       },
       "offline": "ਆਪਣੇ ਇੰਟਰਨੈਟ ਕਨੈਕਸ਼ਨ ਦੀ ਜਾਂਚ ਕਰੋ"
@@ -1164,9 +1169,6 @@
       "embedOrder": "ਏਮਬੈੱਡਾਂ ਨੂੰ ਮੁੜ ਕ੍ਰਮਬੱਧ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ",
       "embedOrderDescription": "ਏਮਬੈੱਡਾਂ ਨੂੰ ਮੁੜ ਕ੍ਰਮਬੱਧ ਕਰਨ ਲਈ ਖਿੱਚੋ ਅਤੇ ਛੱਡੋ। ਇਹ ਉਸ ਕ੍ਰਮ ਨੂੰ ਨਿਰਧਾਰਤ ਕਰੇਗਾ ਜਿਸ ਵਿੱਚ ਤੁਸੀਂ ਮੀਡੀਆ ਨੂੰ ਦੇਖਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਰਹੇ ਹੋ, ਲਈ ਏਮਬੈੱਡਾਂ ਦੀ ਜਾਂਚ ਕੀਤੀ ਜਾਂਦੀ ਹੈ। <br>PH_1__ <strong>(ਡਿਫੌਲਟ ਆਰਡਰ ਜ਼ਿਆਦਾਤਰ ਉਪਭੋਗਤਾਵਾਂ ਲਈ ਵਧੀਆ ਹੈ)</strong>",
       "embedOrderEnableLabel": "ਕਸਟਮ ਏਮਬੇਡ ਆਰਡਰ",
-      "holdToBoost": "ਗਤੀ ਵਧਾਉਣ ਲਈ ਹੋਲਡ ਕਰੋ",
-      "holdToBoostDescription": "ਪਲੇਬੈਕ ਸਪੀਡ ਨੂੰ ਅਸਥਾਈ ਤੌਰ 'ਤੇ 2x ਤੱਕ ਵਧਾਉਣ ਲਈ ਸਪੇਸਬਾਰ ਨੂੰ ਫੜੋ ਜਾਂ ਸਕ੍ਰੀਨ ਨੂੰ ਛੋਹਵੋ ਅਤੇ ਹੋਲਡ ਕਰੋ। ਪਿਛਲੀ ਗਤੀ 'ਤੇ ਵਾਪਸ ਜਾਣ ਲਈ ਛੱਡੋ।",
-      "holdToBoostLabel": "ਹੁਲਾਰਾ ਦੇਣ ਲਈ ਹੋਲਡ ਚਾਲੂ ਕਰੋ",
       "keyboardShortcuts": "ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ",
       "keyboardShortcutsDescription": "ਐਪਲੀਕੇਸ਼ਨ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟਾਂ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ। ਕਿਸੇ ਵੀ ਸਮੇਂ ਇਸ ਮਦਦ ਨੂੰ ਦਿਖਾਉਣ ਲਈ ' ਨੂੰ ਦਬਾ ਕੇ ਰੱਖੋ",
       "keyboardShortcutsLabel": "ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟਾਂ ਨੂੰ ਅਨੁਕੂਲਿਤ ਕਰੋ",
@@ -1186,9 +1188,6 @@
       "skipCredits": "ਅੰਤ ਕ੍ਰੈਡਿਟ ਛੱਡੋ",
       "skipCreditsDescription": "ਜਦੋਂ ਸਮਰਥਿਤ ਹੋਵੇ, ਤਾਂ ਅੰਤਮ ਕ੍ਰੈਡਿਟ ਛੱਡਣ ਲਈ 99% ਪੂਰਾ ਹੋਣ 'ਤੇ ਆਪਣੇ ਆਪ ਅਗਲਾ ਐਪੀਸੋਡ ਚਲਾਓ। ਅਯੋਗ ਹੋਣ 'ਤੇ, ਐਪੀਸੋਡ ਪੂਰੀ ਤਰ੍ਹਾਂ ਪੂਰਾ ਹੋਣ ਤੱਕ ਉਡੀਕ ਕਰੋ।",
       "skipCreditsLabel": "ਅੰਤਮ ਕ੍ਰੈਡਿਟ ਛੱਡੋ",
-      "sourceOrder": "ਸਰੋਤਾਂ ਨੂੰ ਮੁੜ ਕ੍ਰਮਬੱਧ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "ਕਸਟਮ ਸਰੋਤ ਆਰਡਰ",
       "thumbnail": "ਥੰਬਨੇਲ ਬਣਾਓ",
       "thumbnailDescription": "ਬਹੁਤੀ ਵਾਰ, ਵੀਡੀਓਜ਼ ਵਿੱਚ ਥੰਬਨੇਲ ਨਹੀਂ ਹੁੰਦੇ ਹਨ. ਤੁਸੀਂ ਇਸ ਸੈਟਿੰਗ ਨੂੰ ਫਲਾਈ 'ਤੇ ਤਿਆਰ ਕਰਨ ਲਈ ਸਮਰੱਥ ਕਰ ਸਕਦੇ ਹੋ ਪਰ ਉਹ ਤੁਹਾਡੇ ਵੀਡੀਓ ਨੂੰ ਹੌਲੀ ਕਰ ਸਕਦੇ ਹਨ.",
       "thumbnailLabel": "ਥੰਬਨੇਲ ਬਣਾਓ",
@@ -1204,7 +1203,9 @@
         "appVersion": "ਸੰਸਕਰਣ",
         "notLoggedIn": "ਤੁਸੀਂ ਲੌਗਇਨ ਨਹੀਂ ਹੋ",
         "userId": "ਯੂਜਰ ਆਈਡੀ",
-        "userIdDescription": "ਇਸ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਰਜਿਸਟਰ ਲਈ ਸੱਦਾ ਕੋਡ ਵਜੋਂ ਵਰਤੋ"
+        "userIdDescription": "ਇਸ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਰਜਿਸਟਰ ਲਈ ਸੱਦਾ ਕੋਡ ਵਜੋਂ ਵਰਤੋ",
+        "checkForUpdates": "ਅੱਪਡੇਟ ਲਈ ਚੈੱਕ ਕਰੋ",
+        "upToDate": "ਤੁਸੀਂ ਇਸ ਸਮੇਂ ਨਵੀਨਤਮ ਸੰਸਕਰਣ 'ਤੇ ਹੋ"
       }
     },
     "subtitles": {

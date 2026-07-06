@@ -29,6 +29,7 @@ export interface UseDiscoverMediaProps {
   mediaTitle?: string;
   isCarouselView?: boolean;
   enabled?: boolean;
+  timeWindow?: "day" | "week";
 }
 
 export interface DiscoverMedia {

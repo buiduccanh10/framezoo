@@ -99,6 +99,7 @@
     "addToList": "Adaugă la listă",
     "airs": "Aeruri",
     "collection": {
+      "bookmarkAll": "Marcați toate",
       "movie": "Film",
       "movies": "Filme",
       "rating": "Evaluare",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Schimba",
       "more": "Vezi mai multe",
+      "today": "Astăzi",
+      "thisWeek": "În această săptămână",
       "title": {
         "4kReleases": "Lansări 4K",
         "editorPicksMovies": "Editorul alege filme",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Actualizați acum",
         "available": "O nouă versiune a aplicației este gata.",
+        "download": "Descărcați actualizarea",
         "later": "Mai târziu",
+        "restart": "Reporniți pentru a actualiza",
         "updating": "Se actualizează..."
       },
       "offline": "Verificați-vă conexiunea de internet"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Redare automată",
-      "autoplayDescription": "Redați automat următorul episod dintr-o serie după ce ajungeți la final. Poate fi activat de utilizatorii cu extensia de browser, un proxy personalizat sau cu configurarea implicită, dacă este permis de gazdă.",
+      "autoplayDescription": "Redați automat următorul episod dintr-o serie după ce ajungeți la final.",
       "autoplayLabel": "Redare automată",
       "autoResumeOnPlaybackError": "Reluare automată la eroare de redare",
       "autoResumeOnPlaybackErrorDescription": "Continuați automat căutarea altor surse atunci când sursa curentă eșuează în timpul redării. Dacă este dezactivată, veți vedea un ecran de eroare cu o opțiune de reluare manuală.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Reordonarea înglobărilor",
       "embedOrderDescription": "Trageți și plasați pentru a reordona încorporațiile. Aceasta va determina ordinea în care sunt verificate încorporațiile pentru media pe care încercați să vizionați. <br><br> <strong>(Comanda implicită este cea mai bună pentru majoritatea utilizatorilor)</strong>",
       "embedOrderEnableLabel": "Comanda de încorporare personalizată",
-      "holdToBoost": "Țineți apăsat pentru a crește viteza",
-      "holdToBoostDescription": "Țineți apăsată bara de spațiu sau atingeți lung ecranul pentru a crește temporar viteza de redare la 2x. Eliberați pentru a reveni la viteza anterioară.",
-      "holdToBoostLabel": "Activați menținerea pentru a crește",
       "keyboardShortcuts": "Comenzi rapide de la tastatură",
       "keyboardShortcutsDescription": "Personalizați comenzile rapide de la tastatură pentru aplicație. Țineți apăsat ` pentru a afișa acest ajutor oricând",
       "keyboardShortcutsLabel": "Personalizați comenzile rapide de la tastatură",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Omite creditele de sfârșit",
       "skipCreditsDescription": "Când este activat, redați automat următorul episod la 99% de finalizare pentru a sări peste creditele de final. Când este dezactivat, așteptați până când episodul este complet finalizat.",
       "skipCreditsLabel": "Omite creditele finale",
-      "sourceOrder": "Reordonarea surselor",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Comanda sursă personalizată",
       "thumbnail": "Generați pictograme",
       "thumbnailDescription": "De cele mai multe ori videoclipurile nu au pictograme. Puteți activa această setare pentru a le genera din mers, dar vă pot încetini videoclipul.",
       "thumbnailLabel": "Generați pictograme",
@@ -1204,7 +1203,9 @@
         "appVersion": "Versiune",
         "notLoggedIn": "Nu sunteți autentificat",
         "userId": "ID-ul utilizatorului",
-        "userIdDescription": "Folosește-l ca cod de invitație pentru înregistrarea prietenilor tăi"
+        "userIdDescription": "Folosește-l ca cod de invitație pentru înregistrarea prietenilor tăi",
+        "checkForUpdates": "Verificați actualizările",
+        "upToDate": "În prezent sunteți la cea mai recentă versiune"
       }
     },
     "subtitles": {

@@ -22,9 +22,11 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
-import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
-import { isFirefox } from "@/utils/detectFeatures";
+import {
+  DEFAULT_SUBTITLE_STYLING,
+  SubtitleStyling,
+  useSubtitleStore,
+} from "@/stores/subtitles";
 
 export function ColorOption(props: {
   color: string;
@@ -486,7 +488,7 @@ export function CaptionSettingsView({
   const router = useOverlayRouter(id);
   const { isMobile } = useIsMobile();
   const subtitleStore = useSubtitleStore();
-  const preferencesStore = usePreferencesStore();
+
   const styling = subtitleStore.styling;
   const overrideCasing = subtitleStore.overrideCasing;
   const delay = subtitleStore.delay;
@@ -496,17 +498,10 @@ export function CaptionSettingsView({
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const videoTime = usePlayerStore((s) => s.progress.time);
-  const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
-  const enableNativeSubtitles = preferencesStore.enableNativeSubtitles;
 
   useEffect(() => {
     subtitleStore.updateStyling(styling);
   }, [styling, subtitleStore]);
-
-  // Sync preferences with player store
-  useEffect(() => {
-    setCaptionAsTrack(enableNativeSubtitles);
-  }, [enableNativeSubtitles, setCaptionAsTrack]);
 
   const handleStylingChange = (newStyling: SubtitleStyling) => {
     updateStyling(newStyling);
@@ -522,17 +517,7 @@ export function CaptionSettingsView({
   }, [vttData, selectedCaption, delay, videoTime]);
 
   const resetSubStyling = () => {
-    subtitleStore.updateStyling({
-      color: "#ffffff",
-      backgroundOpacity: 0.25,
-      size: 0.75,
-      backgroundBlur: 0.25,
-      backgroundBlurEnabled: !isFirefox,
-      bold: false,
-      verticalPosition: 1,
-      fontStyle: "default",
-      borderThickness: 1,
-    });
+    subtitleStore.updateStyling(DEFAULT_SUBTITLE_STYLING);
   };
 
   return (
@@ -545,291 +530,245 @@ export function CaptionSettingsView({
         {t("player.menus.subtitles.settings.backlink")}
       </Menu.BackLink>
       <Menu.Section className="space-y-6 pb-5">
-        {!enableNativeSubtitles ? (
-          <>
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t("player.menus.subtitles.useNativeSubtitles")}
-              </Menu.FieldTitle>
-              <div className="flex justify-center items-center">
-                <Toggle
-                  enabled={enableNativeSubtitles}
-                  onClick={() =>
-                    preferencesStore.setEnableNativeSubtitles(
-                      !enableNativeSubtitles,
-                    )
-                  }
-                />
+        <>
+          <CaptionDelay
+            label={t("player.menus.subtitles.settings.delay")}
+            max={120}
+            min={-120}
+            onChange={(v) => setDelay(v)}
+            value={delay}
+            textTransformer={(s) => `${s}s`}
+            decimalsAllowed={1}
+          />
+          {isMobile && selectedCaption && (
+            <div className="p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center">
+              <div className="text-sm text-video-context-type-secondary mb-1">
+                {t("player.menus.subtitles.previewLabel")}
+              </div>
+              <div className="text-base font-medium min-h-[3rem] flex items-center justify-center">
+                {currentSubtitleText ? (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: currentSubtitleText.replaceAll(
+                        /\r?\n/g,
+                        "<br />",
+                      ),
+                    }}
+                  />
+                ) : (
+                  <span className="text-video-context-type-secondary italic">
+                    ...{" "}
+                  </span>
+                )}
               </div>
             </div>
-            <span className="text-xs text-type-secondary">
-              {t("player.menus.subtitles.useNativeSubtitlesDescription")}
-            </span>
-            <CaptionDelay
-              label={t("player.menus.subtitles.settings.delay")}
-              max={120}
-              min={-120}
-              onChange={(v) => setDelay(v)}
-              value={delay}
-              textTransformer={(s) => `${s}s`}
-              decimalsAllowed={1}
-            />
-            {isMobile && selectedCaption && (
-              <div className="p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center">
-                <div className="text-sm text-video-context-type-secondary mb-1">
-                  {t("player.menus.subtitles.previewLabel")}
-                </div>
-                <div className="text-base font-medium min-h-[3rem] flex items-center justify-center">
-                  {currentSubtitleText ? (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: currentSubtitleText.replaceAll(
-                          /\r?\n/g,
-                          "<br />",
-                        ),
-                      }}
-                    />
-                  ) : (
-                    <span className="text-video-context-type-secondary italic">
-                      ...{" "}
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t("player.menus.subtitles.settings.fixCapitals")}
-              </Menu.FieldTitle>
-              <div className="flex justify-center items-center">
-                <Toggle
-                  enabled={overrideCasing}
-                  onClick={() => setOverrideCasing(!overrideCasing)}
-                />
-              </div>
-            </div>
-            <Menu.Divider />
-            <CaptionSetting
-              label={t("settings.subtitles.backgroundLabel")}
-              max={100}
-              min={0}
-              onChange={(v) =>
-                handleStylingChange({ ...styling, backgroundOpacity: v / 100 })
-              }
-              value={styling.backgroundOpacity * 100}
-              textTransformer={(s) => `${s}%`}
-            />
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t("settings.subtitles.backgroundBlurEnabledLabel")}
-              </Menu.FieldTitle>
-              <div className="flex justify-center items-center">
-                <Toggle
-                  enabled={styling.backgroundBlurEnabled}
-                  onClick={() =>
-                    handleStylingChange({
-                      ...styling,
-                      backgroundBlurEnabled: !styling.backgroundBlurEnabled,
-                    })
-                  }
-                />
-              </div>
-            </div>
-            <span className="text-xs text-type-secondary">
-              {t("settings.subtitles.backgroundBlurEnabledDescription")}
-            </span>
-            {styling.backgroundBlurEnabled && (
-              <CaptionSetting
-                label={t("settings.subtitles.backgroundBlurLabel")}
-                max={100}
-                min={0}
-                onChange={(v) =>
-                  handleStylingChange({ ...styling, backgroundBlur: v / 100 })
-                }
-                value={styling.backgroundBlur * 100}
-                textTransformer={(s) => `${s}%`}
+          )}
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("player.menus.subtitles.settings.fixCapitals")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center">
+              <Toggle
+                enabled={overrideCasing}
+                onClick={() => setOverrideCasing(!overrideCasing)}
               />
-            )}
-            <CaptionSetting
-              label={t("settings.subtitles.textSizeLabel")}
-              max={200}
-              min={1}
-              textTransformer={(s) => `${s}%`}
-              onChange={(v) =>
-                handleStylingChange({ ...styling, size: v / 100 })
-              }
-              value={styling.size * 100}
-            />
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t("settings.subtitles.textStyle.title") || "Font Style"}
-              </Menu.FieldTitle>
-              <Dropdown
-                options={[
-                  {
-                    id: "default",
-                    name: t("settings.subtitles.textStyle.default"),
-                  },
-                  {
-                    id: "raised",
-                    name: t("settings.subtitles.textStyle.raised"),
-                  },
-                  {
-                    id: "depressed",
-                    name: t("settings.subtitles.textStyle.depressed"),
-                  },
-                  {
-                    id: "Border",
-                    name: t("settings.subtitles.textStyle.Border"),
-                  },
-                  {
-                    id: "dropShadow",
-                    name: t("settings.subtitles.textStyle.dropShadow"),
-                  },
-                ]}
-                selectedItem={{
-                  id: styling.fontStyle,
-                  name:
-                    t(`settings.subtitles.textStyle.${styling.fontStyle}`) ||
-                    styling.fontStyle,
-                }}
-                setSelectedItem={(item) =>
+            </div>
+          </div>
+          <Menu.Divider />
+          <CaptionSetting
+            label={t("settings.subtitles.backgroundLabel")}
+            max={100}
+            min={0}
+            onChange={(v) =>
+              handleStylingChange({ ...styling, backgroundOpacity: v / 100 })
+            }
+            value={styling.backgroundOpacity * 100}
+            textTransformer={(s) => `${s}%`}
+          />
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.backgroundBlurEnabledLabel")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center">
+              <Toggle
+                enabled={styling.backgroundBlurEnabled}
+                onClick={() =>
                   handleStylingChange({
                     ...styling,
-                    fontStyle: item.id,
+                    backgroundBlurEnabled: !styling.backgroundBlurEnabled,
                   })
                 }
               />
             </div>
-            {styling.fontStyle === "Border" && (
-              <CaptionSetting
-                label={t("settings.subtitles.BorderThicknessLabel")}
-                max={10}
-                min={0}
-                onChange={(v) =>
-                  handleStylingChange({ ...styling, borderThickness: v })
+          </div>
+          <span className="text-xs text-type-secondary">
+            {t("settings.subtitles.backgroundBlurEnabledDescription")}
+          </span>
+          {styling.backgroundBlurEnabled && (
+            <CaptionSetting
+              label={t("settings.subtitles.backgroundBlurLabel")}
+              max={100}
+              min={0}
+              onChange={(v) =>
+                handleStylingChange({ ...styling, backgroundBlur: v / 100 })
+              }
+              value={styling.backgroundBlur * 100}
+              textTransformer={(s) => `${s}%`}
+            />
+          )}
+          <CaptionSetting
+            label={t("settings.subtitles.textSizeLabel")}
+            max={200}
+            min={1}
+            textTransformer={(s) => `${s}%`}
+            onChange={(v) => handleStylingChange({ ...styling, size: v / 100 })}
+            value={styling.size * 100}
+          />
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.textStyle.title") || "Font Style"}
+            </Menu.FieldTitle>
+            <Dropdown
+              options={[
+                {
+                  id: "default",
+                  name: t("settings.subtitles.textStyle.default"),
+                },
+                {
+                  id: "raised",
+                  name: t("settings.subtitles.textStyle.raised"),
+                },
+                {
+                  id: "depressed",
+                  name: t("settings.subtitles.textStyle.depressed"),
+                },
+                {
+                  id: "Border",
+                  name: t("settings.subtitles.textStyle.Border"),
+                },
+                {
+                  id: "dropShadow",
+                  name: t("settings.subtitles.textStyle.dropShadow"),
+                },
+              ]}
+              selectedItem={{
+                id: styling.fontStyle,
+                name:
+                  t(`settings.subtitles.textStyle.${styling.fontStyle}`) ||
+                  styling.fontStyle,
+              }}
+              setSelectedItem={(item) =>
+                handleStylingChange({
+                  ...styling,
+                  fontStyle: item.id,
+                })
+              }
+            />
+          </div>
+          {styling.fontStyle === "Border" && (
+            <CaptionSetting
+              label={t("settings.subtitles.BorderThicknessLabel")}
+              max={10}
+              min={0}
+              onChange={(v) =>
+                handleStylingChange({ ...styling, borderThickness: v })
+              }
+              value={styling.borderThickness}
+              textTransformer={(s) => `${s}px`}
+              decimalsAllowed={1}
+            />
+          )}
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.textBoldLabel")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center">
+              <Toggle
+                enabled={styling.bold}
+                onClick={() =>
+                  handleStylingChange({ ...styling, bold: !styling.bold })
                 }
-                value={styling.borderThickness}
-                textTransformer={(s) => `${s}px`}
-                decimalsAllowed={1}
               />
-            )}
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t("settings.subtitles.textBoldLabel")}
-              </Menu.FieldTitle>
-              <div className="flex justify-center items-center">
-                <Toggle
-                  enabled={styling.bold}
-                  onClick={() =>
-                    handleStylingChange({ ...styling, bold: !styling.bold })
-                  }
-                />
-              </div>
             </div>
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t("settings.subtitles.colorLabel")}
-              </Menu.FieldTitle>
-              <div className="flex justify-center items-center space-x-2">
-                {colors.map((color) => (
-                  <ColorOption
-                    key={color}
-                    color={color}
-                    active={styling.color === color}
-                    onClick={() => handleStylingChange({ ...styling, color })}
-                  />
-                ))}
-                <div className="relative inline-block">
-                  <input
-                    type="color"
-                    value={styling.color}
-                    onChange={(e) => {
-                      const color = e.target.value;
-                      handleStylingChange({ ...styling, color });
-                    }}
-                    className="absolute opacity-0 cursor-pointer w-10 h-10"
-                  />
-                  <div style={{ color: styling.color }}>
-                    <Icon icon={Icons.BRUSH} className="text-2xl" />
-                  </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.colorLabel")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center space-x-2">
+              {colors.map((color) => (
+                <ColorOption
+                  key={color}
+                  color={color}
+                  active={styling.color === color}
+                  onClick={() => handleStylingChange({ ...styling, color })}
+                />
+              ))}
+              <div className="relative inline-block">
+                <input
+                  type="color"
+                  value={styling.color}
+                  onChange={(e) => {
+                    const color = e.target.value;
+                    handleStylingChange({ ...styling, color });
+                  }}
+                  className="absolute opacity-0 cursor-pointer w-10 h-10"
+                />
+                <div style={{ color: styling.color }}>
+                  <Icon icon={Icons.BRUSH} className="text-2xl" />
                 </div>
               </div>
             </div>
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t("settings.subtitles.verticalPositionLabel")}
-              </Menu.FieldTitle>
-              <div className="flex justify-center items-center space-x-2">
-                <button
-                  type="button"
-                  className={classNames(
-                    "px-3 py-1 rounded transition-colors duration-100",
-                    styling.verticalPosition === 1
-                      ? "bg-video-context-buttonFocus"
-                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
-                  )}
-                  onClick={() =>
-                    handleStylingChange({
-                      ...styling,
-                      verticalPosition: 1,
-                    })
-                  }
-                >
-                  {t("settings.subtitles.low")}
-                </button>
-                <button
-                  type="button"
-                  className={classNames(
-                    "px-3 py-1 rounded transition-colors duration-100",
-                    styling.verticalPosition === 3
-                      ? "bg-video-context-buttonFocus"
-                      : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
-                  )}
-                  onClick={() =>
-                    handleStylingChange({
-                      ...styling,
-                      verticalPosition: 3,
-                    })
-                  }
-                >
-                  {t("settings.subtitles.high")}
-                </button>
-              </div>
-            </div>
-            <Button
-              className="w-full md:w-auto"
-              theme="secondary"
-              onClick={resetSubStyling}
-            >
-              {t("settings.reset")}
-            </Button>
-          </>
-        ) : (
-          <>
-            <div className="flex justify-between items-center">
-              <Menu.FieldTitle>
-                {t(
-                  "player.menus.subtitles.settings.useNativeSubtitles",
-                  "Use native video subtitles",
+          </div>
+          <div className="flex justify-between items-center">
+            <Menu.FieldTitle>
+              {t("settings.subtitles.verticalPositionLabel")}
+            </Menu.FieldTitle>
+            <div className="flex justify-center items-center space-x-2">
+              <button
+                type="button"
+                className={classNames(
+                  "px-3 py-1 rounded transition-colors duration-100",
+                  styling.verticalPosition === 1
+                    ? "bg-video-context-buttonFocus"
+                    : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
                 )}
-              </Menu.FieldTitle>
-              <div className="flex justify-center items-center">
-                <Toggle
-                  enabled={enableNativeSubtitles}
-                  onClick={() =>
-                    preferencesStore.setEnableNativeSubtitles(
-                      !enableNativeSubtitles,
-                    )
-                  }
-                />
-              </div>
+                onClick={() =>
+                  handleStylingChange({
+                    ...styling,
+                    verticalPosition: 1,
+                  })
+                }
+              >
+                {t("settings.subtitles.low")}
+              </button>
+              <button
+                type="button"
+                className={classNames(
+                  "px-3 py-1 rounded transition-colors duration-100",
+                  styling.verticalPosition === 3
+                    ? "bg-video-context-buttonFocus"
+                    : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
+                )}
+                onClick={() =>
+                  handleStylingChange({
+                    ...styling,
+                    verticalPosition: 3,
+                  })
+                }
+              >
+                {t("settings.subtitles.high")}
+              </button>
             </div>
-            <span className="text-xs text-type-secondary">
-              {t("player.menus.subtitles.useNativeSubtitlesDescription")}
-            </span>
-          </>
-        )}
+          </div>
+          <Button
+            className="w-full md:w-auto"
+            theme="secondary"
+            onClick={resetSubStyling}
+          >
+            {t("settings.reset")}
+          </Button>
+        </>
       </Menu.Section>
     </>
   );

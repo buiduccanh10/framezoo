@@ -99,6 +99,7 @@
     "addToList": "Adicionar à lista",
     "airs": "Ares",
     "collection": {
+      "bookmarkAll": "Marcar tudo",
       "movie": "Filme",
       "movies": "Filmes",
       "rating": "Avaliação",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Mudar",
       "more": "Ver mais",
+      "today": "Hoje",
+      "thisWeek": "Essa semana",
       "title": {
         "4kReleases": "Lançamentos em 4K",
         "editorPicksMovies": "Editor escolhe filmes",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Atualizar agora",
         "available": "Uma nova versão do aplicativo está pronta.",
+        "download": "Baixar atualização",
         "later": "Mais tarde",
+        "restart": "Reinicie para atualizar",
         "updating": "Atualizando..."
       },
       "offline": "Verifique a sua conexão à internet"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Reprodução automática",
-      "autoplayDescription": "Reproduza automaticamente o próximo episódio de uma série após chegar ao final. Pode ser habilitado por usuários com a extensão do navegador, um proxy personalizado ou com a configuração padrão, se permitido pelo host.",
+      "autoplayDescription": "Reproduza automaticamente o próximo episódio de uma série após chegar ao final.",
       "autoplayLabel": "Reprodução automática",
       "autoResumeOnPlaybackError": "Retomada automática em caso de erro de reprodução",
       "autoResumeOnPlaybackErrorDescription": "Continue procurando automaticamente outras fontes quando a fonte atual falhar durante a reprodução. Se desativado, você verá uma tela de erro com uma opção de retomada manual.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Reordenando incorporações",
       "embedOrderDescription": "Arraste e solte para reordenar as incorporações. Isso determinará a ordem em que as incorporações serão verificadas na mídia que você está tentando assistir. <br><br> <strong>(A ordem padrão é melhor para a maioria dos usuários)</strong>",
       "embedOrderEnableLabel": "Ordem de incorporação personalizada",
-      "holdToBoost": "Segure para aumentar a velocidade",
-      "holdToBoostDescription": "Segure a barra de espaço ou toque e segure a tela para aumentar temporariamente a velocidade de reprodução para 2x. Solte para retornar à velocidade anterior.",
-      "holdToBoostLabel": "Ative a espera para aumentar",
       "keyboardShortcuts": "Atalhos de teclado",
       "keyboardShortcutsDescription": "Personalize os atalhos de teclado do aplicativo. Segure ` para mostrar esta ajuda a qualquer momento",
       "keyboardShortcutsLabel": "Personalize atalhos de teclado",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Pular créditos finais",
       "skipCreditsDescription": "Quando ativado, reproduz automaticamente o próximo episódio com 99% de conclusão para pular os créditos finais. Quando desativado, espere até que o episódio seja totalmente concluído.",
       "skipCreditsLabel": "Pular créditos finais",
-      "sourceOrder": "Reordenando fontes",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Ordem de origem personalizada",
       "thumbnail": "Gerar miniaturas",
       "thumbnailDescription": "Na maioria das vezes, os vídeos não possuem miniaturas. Você pode ativar esta configuração para gerá-los dinamicamente, mas eles podem tornar seu vídeo mais lento.",
       "thumbnailLabel": "Gerar miniaturas",
@@ -1204,7 +1203,9 @@
         "appVersion": "Versão",
         "notLoggedIn": "Não está autenticado",
         "userId": "ID de utilizador",
-        "userIdDescription": "Use isto como código de convite para o registro de seu amigo"
+        "userIdDescription": "Use isto como código de convite para o registro de seu amigo",
+        "checkForUpdates": "Verifique se há atualizações",
+        "upToDate": "Você está atualmente na versão mais recente"
       }
     },
     "subtitles": {

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
+import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { conf } from "@/setup/config";
 import { requestAppUpdate } from "@/setup/pwa";
 import { useAppUpdateStore } from "@/stores/appUpdate";
@@ -80,6 +81,7 @@ export function Banner(props: {
 export function BannerLocation(props: { location?: string }) {
   const { t } = useTranslation();
   const isOnline = useBannerStore((s) => s.isOnline);
+  const isDesktopApp = useIsDesktopApp();
   const setLocation = useBannerStore((s) => s.setLocation);
   const ignoredBannerIds = useBannerStore((s) => s.ignoredBannerIds);
   const currentLocation = useBannerStore((s) => s.location);
@@ -87,6 +89,8 @@ export function BannerLocation(props: { location?: string }) {
   const showBanner = useBannerStore((s) => s.showBanner);
   const hasUpdate = useAppUpdateStore((s) => s.hasUpdate);
   const isUpdatingApp = useAppUpdateStore((s) => s.isUpdating);
+  const updateStatus = useAppUpdateStore((s) => s.status);
+  const updateProgressPercent = useAppUpdateStore((s) => s.progressPercent);
   const snoozeUpdate = useAppUpdateStore((s) => s.snoozeUpdate);
   const loc = props.location ?? null;
 
@@ -115,6 +119,12 @@ export function BannerLocation(props: { location?: string }) {
   const customMessage = config.BANNER_MESSAGE;
   const bannerId = config.BANNER_ID || "custom-message";
   const hasCustomBanner = banners.some((b) => b.id === bannerId);
+  const appUpdateActionLabel =
+    updateStatus === "downloaded"
+      ? t("navigation.banner.appUpdate.restart")
+      : isDesktopApp
+        ? t("navigation.banner.appUpdate.download")
+        : t("navigation.banner.appUpdate.action");
 
   return (
     <div>
@@ -150,8 +160,11 @@ export function BannerLocation(props: { location?: string }) {
                 disabled={isUpdatingApp}
               >
                 {isUpdatingApp
-                  ? t("navigation.banner.appUpdate.updating")
-                  : t("navigation.banner.appUpdate.action")}
+                  ? updateProgressPercent != null &&
+                    updateStatus === "downloading"
+                    ? `${t("navigation.banner.appUpdate.updating")} ${Math.round(updateProgressPercent)}%`
+                    : t("navigation.banner.appUpdate.updating")
+                  : appUpdateActionLabel}
               </button>
               {!isUpdatingApp ? (
                 <button

@@ -1,6 +1,7 @@
 import { joinURL } from 'ufo';
 import { createHash } from 'node:crypto';
-import { getProvider, getAllProviders } from '~/providers/registry';
+import { getProvider } from '~/providers/registry';
+import { getProviderMetadata } from '~/providers/metadata';
 import { request, Pool } from 'undici';
 import { buildStreamPreview } from '~/utils/preview';
 import { applyCorsHeaders } from '~/utils/cors';
@@ -247,20 +248,30 @@ export default defineEventHandler(async event => {
         typeof streamQuery.title === 'string' && streamQuery.title.trim().length > 0
           ? streamQuery.title.trim()
           : undefined;
+      const originName =
+        typeof streamQuery.originName === 'string' && streamQuery.originName.trim().length > 0
+          ? streamQuery.originName.trim()
+          : undefined;
       const releaseYearRaw =
         typeof streamQuery.releaseYear === 'string' || typeof streamQuery.releaseYear === 'number'
           ? Number.parseInt(String(streamQuery.releaseYear), 10)
           : Number.NaN;
       const releaseYear = Number.isFinite(releaseYearRaw) ? releaseYearRaw : undefined;
+      const country =
+        typeof streamQuery.country === 'string' && streamQuery.country.trim().length > 0
+          ? streamQuery.country.trim()
+          : undefined;
       const contextCacheKey = `stream-meta:${providerName}:${type}:${tmdbId}${type === 'tv' ? `:${season}:${episode}` : ''}`;
 
-      if (title || releaseYear) {
+      if (title || originName || releaseYear || country) {
         await storage
           .setItem(
             contextCacheKey,
             {
               title,
+              originName,
               releaseYear,
+              country,
             },
             { ttl: 60 * 60 }
           )
@@ -296,14 +307,17 @@ export default defineEventHandler(async event => {
         storage,
         {
           title,
+          originName,
           releaseYear,
+          country,
         }
       );
 
       const origin = getRequestURL(event).origin;
       const streams = streamsRaw.map((s: any) => {
         const headers = s?.headers ?? {};
-        const proxiedUrl = `${origin}/api/m3u8-proxy?url=${encodeURIComponent(
+        const proxyPath = s?.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
+        const proxiedUrl = `${origin}${proxyPath}?url=${encodeURIComponent(
           s.url
         )}&headers=${encodeURIComponent(JSON.stringify(headers))}`;
         const preview = buildStreamPreview({
@@ -357,13 +371,9 @@ export default defineEventHandler(async event => {
   // Handle /api/providers internally
   if (path === 'api/providers') {
     logInfo(`[Embed Proxy] Handling providers list internally`);
-    const providers = getAllProviders();
     setCORSHeaders(event);
     return {
-      providers: providers.map(p => ({
-        name: p.name,
-        type: p.type,
-      })),
+      providers: getProviderMetadata(),
     };
   }
 
@@ -397,6 +407,26 @@ export default defineEventHandler(async event => {
       timeout: 30000,
       responseType: 'arrayBuffer',
     }).then((ab: ArrayBuffer) => Buffer.from(ab));
+  }
+
+  if (path === 'api/media-proxy') {
+    const origin = getRequestURL(event).origin;
+    const internalUrl = new URL(joinURL(origin, '/api/media-proxy'));
+
+    for (const [key, value] of Object.entries(query)) {
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          internalUrl.searchParams.append(key, String(item));
+        }
+        continue;
+      }
+
+      if (value !== undefined && value !== null) {
+        internalUrl.searchParams.set(key, String(value));
+      }
+    }
+
+    return sendRedirect(event, internalUrl.toString(), 307);
   }
 
   if (path === 'api/preview-proxy') {

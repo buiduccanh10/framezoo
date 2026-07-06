@@ -1,16 +1,20 @@
 import classNames from "classnames";
 import { t } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { getReleaseDetails } from "@/backend/metadata/traktApi";
+import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
 import { Button } from "@/components/buttons/Button";
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { GroupDropdown } from "@/components/form/GroupDropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { MediaBookmarkButton } from "@/components/media/MediaBookmark";
 import { ManageMediaListsModal } from "@/components/overlays/ManageMediaListsModal";
+import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
-import { getRTIcon } from "@/utils/rottenTomatoes";
+import { formatCompactCount } from "@/utils/formatNumber";
+import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
 
 import { DetailsBodyProps } from "../../types";
 
@@ -29,6 +33,9 @@ export function DetailsBody({
   isLoadingRt,
 }: DetailsBodyProps) {
   const [showListModal, setShowListModal] = useState(false);
+  const [releaseInfo, setReleaseInfo] = useState<TraktReleaseResponse | null>(
+    null,
+  );
   const loggedIn = !!useAuthStore((state) => state.account);
   const addBookmarkWithGroups = useBookmarkStore(
     (s) => s.addBookmarkWithGroups,
@@ -88,87 +95,184 @@ export function DetailsBody({
     return new Date(dateString).getFullYear();
   };
 
+  useEffect(() => {
+    let isCancelled = false;
+
+    const fetchReleaseInfo = async () => {
+      if (!conf().USE_TRAKT || !data.id || data.type !== "movie") {
+        setReleaseInfo(null);
+        return;
+      }
+
+      try {
+        const info = await getReleaseDetails(data.id.toString());
+        if (!isCancelled) {
+          setReleaseInfo(info);
+        }
+      } catch (error) {
+        if (!isCancelled) {
+          setReleaseInfo(null);
+        }
+        console.error("Failed to fetch release info:", error);
+      }
+    };
+
+    void fetchReleaseInfo();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [data.id, data.type]);
+
+  const getQualityIndicator = () => {
+    if (!releaseInfo || data.type === "show") return null;
+
+    const now = new Date();
+    const hasDigitalRelease = Boolean(releaseInfo.digital_release_date);
+    const hasTheatricalRelease = Boolean(releaseInfo.theatrical_release_date);
+
+    if (hasDigitalRelease) {
+      const digitalReleaseDate = new Date(releaseInfo.digital_release_date!);
+      if (now >= digitalReleaseDate) {
+        return (
+          <div className="rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm">
+            <span className="text-green-400">HD</span>
+          </div>
+        );
+      }
+    }
+
+    if (hasTheatricalRelease) {
+      const theatricalReleaseDate = new Date(
+        releaseInfo.theatrical_release_date!,
+      );
+
+      if (now >= theatricalReleaseDate) {
+        return (
+          <div className="rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm">
+            <span className="text-yellow-400">CAM</span>
+          </div>
+        );
+      }
+    }
+
+    return null;
+  };
+
+  const qualityIndicator = getQualityIndicator();
   const inlineLoadingClass =
     "h-4 w-14 rounded bg-white/10 animate-pulse inline-block";
+  const metadataItemClass = "flex items-center gap-1 whitespace-nowrap";
+  const metadataCountClass = "text-[10px] text-white/60 sm:text-xs";
+  const metadataSeparatorClass = "text-white/60";
 
   return (
     <div className="space-y-4">
       {/* TMDB Rating and Year/Seasons */}
-      <div className="flex flex-wrap items-center gap-2 text-sm text-white/80">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[11px] text-white/80 sm:text-sm">
+        {qualityIndicator ? (
+          <div className="flex items-center gap-2">
+            {qualityIndicator}
+            <span className={metadataSeparatorClass}>•</span>
+          </div>
+        ) : null}
+
         {/* Ratings Group */}
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1.5">
           {typeof voteAverage === "number" && (
-            <div className="flex items-center gap-1">
+            <div className={metadataItemClass}>
               <Icon icon={Icons.TMDB} />
               <span>{voteAverage.toFixed(1)}</span>
               {typeof voteCount === "number" && (
-                <span className="text-white/60">
-                  ({voteCount.toLocaleString()})
+                <span className={metadataCountClass}>
+                  <span className="sm:hidden">
+                    ({formatCompactCount(voteCount)})
+                  </span>
+                  <span className="hidden sm:inline">
+                    ({voteCount.toLocaleString()})
+                  </span>
                 </span>
               )}
             </div>
           )}
 
           {(isLoadingImdb || imdbData) && (
-            <>
-              <span className="text-white/60">•</span>
-              <div className="flex items-center gap-1">
-                <Icon icon={Icons.IMDB} className="text-yellow-400" />
-                {isLoadingImdb ? (
-                  <span className={inlineLoadingClass} />
-                ) : (
-                  <span>{imdbData?.rating.toFixed(1)}</span>
-                )}
-                {!isLoadingImdb && typeof imdbData?.votes === "number" && (
-                  <span className="text-white/60">
+            <div className={metadataItemClass}>
+              <span className={metadataSeparatorClass}>•</span>
+              <Icon icon={Icons.IMDB} className="text-yellow-400" />
+              {isLoadingImdb ? (
+                <span className={inlineLoadingClass} />
+              ) : (
+                <span>{imdbData?.rating.toFixed(1)}</span>
+              )}
+              {!isLoadingImdb && typeof imdbData?.votes === "number" && (
+                <span className={metadataCountClass}>
+                  <span className="sm:hidden">
+                    ({formatCompactCount(imdbData.votes)})
+                  </span>
+                  <span className="hidden sm:inline">
                     ({imdbData.votes.toLocaleString()})
                   </span>
-                )}
-              </div>
-            </>
+                </span>
+              )}
+            </div>
           )}
 
           {(isLoadingRt || rtData) && (
-            <>
-              <span className="text-white/60">•</span>
-              <div className="flex items-center gap-1">
-                {rtData ? (
-                  <img
-                    src={getRTIcon(rtData.tomatoIcon)}
-                    alt="Tomatometer"
-                    className="h-4 w-4"
-                  />
-                ) : (
-                  <span className="text-[11px] font-semibold uppercase tracking-wide text-[#fa320a]">
-                    RT
-                  </span>
-                )}
-                {isLoadingRt ? (
-                  <span className={inlineLoadingClass} />
-                ) : (
-                  <span>{rtData?.tomatoScore}%</span>
-                )}
-              </div>
-            </>
+            <div className={metadataItemClass}>
+              <span className={metadataSeparatorClass}>•</span>
+              {rtData ? (
+                <img
+                  src={getRTIcon(rtData.tomatoIcon)}
+                  alt="Tomatometer"
+                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                />
+              ) : (
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-[#fa320a]">
+                  RT
+                </span>
+              )}
+              {isLoadingRt ? (
+                <span className={inlineLoadingClass} />
+              ) : (
+                <span>{rtData?.tomatoScore}%</span>
+              )}
+            </div>
+          )}
+
+          {(isLoadingRt || typeof rtData?.popcornScore === "number") && (
+            <div className={metadataItemClass}>
+              <span className={metadataSeparatorClass}>•</span>
+              <img
+                src={getRTAudienceIcon(rtData?.popcornIcon ?? "empty")}
+                alt="Popcornmeter"
+                className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+              />
+              {isLoadingRt ? (
+                <span className={inlineLoadingClass} />
+              ) : (
+                <span>{rtData?.popcornScore}%</span>
+              )}
+            </div>
           )}
         </div>
 
         {/* Release Date and Seasons Group */}
         {(releaseDate || seasons) && (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
             {releaseDate && (
-              <>
-                <span className="text-white/60">•</span>
+              <div className={metadataItemClass}>
+                <span className={metadataSeparatorClass}>•</span>
                 <span>{formatDate(releaseDate)}</span>
-              </>
+              </div>
             )}
             {seasons && (
-              <>
-                <span className="text-white/60">•</span>
+              <div className={metadataItemClass}>
+                <span className={metadataSeparatorClass}>•</span>
                 <span>
                   {seasons} {t("details.seasons")}
                 </span>
-              </>
+              </div>
             )}
           </div>
         )}

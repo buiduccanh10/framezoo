@@ -7,7 +7,6 @@ import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFi
 import { useLanguageStore } from "@/stores/language";
 import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
@@ -24,7 +23,7 @@ let autoSelectionRequestId = 0;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
-const AUTO_SUBTITLE_DISABLED_SOURCE_IDS = new Set(["kkphim", "ophim"]);
+const AUTO_SUBTITLE_DISABLED_SOURCE_IDS = new Set(["kkphim"]);
 
 function resolvePreferredAutoSubtitleLanguage(
   lastSelectedLanguage: string | null,
@@ -53,7 +52,6 @@ export function useCaptions() {
 
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
-  const source = usePlayerStore((s) => s.source);
   const sourceId = usePlayerStore((s) => s.sourceId);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
@@ -72,9 +70,6 @@ export function useCaptions() {
   );
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
 
   const captions = useMemo(
@@ -206,12 +201,9 @@ export function useCaptions() {
 
       setLanguage(caption.language);
 
-      // Preserve an existing native-track request when the subtitle finished
-      // loading after the user already entered native fullscreen / native PiP.
-      if (
-        captionAsTrack ||
-        (source?.type === "file" && enableNativeSubtitles)
-      ) {
+      // Preserve an existing native-track request when the subtitle finishes
+      // loading after the player has already entered a mode that needs tracks.
+      if (captionAsTrack) {
         setCaptionAsTrack(true);
       }
     },
@@ -221,9 +213,7 @@ export function useCaptions() {
       setLanguage,
       setCaption,
       resetSubtitleSpecificSettings,
-      source,
       setCaptionAsTrack,
-      enableNativeSubtitles,
       selectedCaption,
     ],
   );
@@ -479,8 +469,9 @@ export function useCaptions() {
     const isCustomCaption =
       selectedCaption.id === "custom-caption" ||
       selectedCaption.id === "pasted-caption";
+    const isPersistedCaption = selectedCaption.persisted;
 
-    if (isCustomCaption) return;
+    if (isCustomCaption || isPersistedCaption) return;
 
     const isSelectedCaptionStillAvailable = captions.some(
       (caption) =>
@@ -532,7 +523,8 @@ export function useCaptions() {
     const isCustomCaption =
       secondaryCaption.id === "custom-caption" ||
       secondaryCaption.id === "pasted-caption";
-    if (isCustomCaption) return;
+    const isPersistedCaption = secondaryCaption.persisted;
+    if (isCustomCaption || isPersistedCaption) return;
 
     const isSecondaryCaptionStillAvailable = captions.some(
       (caption) => caption.id === secondaryCaption.id,

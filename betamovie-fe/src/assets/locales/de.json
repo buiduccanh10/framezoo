@@ -99,6 +99,7 @@
     "addToList": "Zur Liste hinzufügen",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Alle als Lesezeichen speichern",
       "movie": "Film",
       "movies": "Filme",
       "rating": "Bewertung",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Ändern",
       "more": "Mehr anzeigen",
+      "today": "Heute",
+      "thisWeek": "Diese Woche",
       "title": {
         "4kReleases": "4K-Veröffentlichungen",
         "editorPicksMovies": "Redaktionstipps Filme",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Jetzt aktualisieren",
         "available": "Eine neue App-Version ist fertig.",
+        "download": "Update herunterladen",
         "later": "Später",
+        "restart": "Starten Sie neu, um zu aktualisieren",
         "updating": "Aktualisierung..."
       },
       "offline": "Internetverbindung ist instabil"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Automatische Wiedergabe",
-      "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt. Kann von Benutzern mit der Browsererweiterung, einem benutzerdefinierten Proxy oder mit der Standardkonfiguration aktiviert werden, sofern der Host dies zulässt.",
+      "autoplayDescription": "Nach Erreichen des Serienendes wird automatisch die nächste Folge abgespielt.",
       "autoplayLabel": "Automatische Wiedergabe",
       "autoResumeOnPlaybackError": "Automatische Fortsetzung bei Wiedergabefehler",
       "autoResumeOnPlaybackErrorDescription": "Automatische Suche nach anderen Quellen fortsetzen, wenn die aktuelle Quelle während der Wiedergabe ausfällt. Wenn diese Option deaktiviert ist, wird ein Fehlerbildschirm mit einer manuellen Fortsetzungsoption angezeigt.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Einbettungen neu anordnen",
       "embedOrderDescription": "Per Drag-and-Drop können Sie Einbettungen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der Einbettungen für die Medien überprüft werden, die Sie ansehen möchten. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten)</strong>",
       "embedOrderEnableLabel": "Benutzerdefinierte Einbettungsreihenfolge",
-      "holdToBoost": "Halten Sie gedrückt, um die Geschwindigkeit zu erhöhen",
-      "holdToBoostDescription": "Halten Sie die Leertaste gedrückt oder berühren und halten Sie den Bildschirm, um die Wiedergabegeschwindigkeit vorübergehend auf das Zweifache zu erhöhen. Lassen Sie los, um zur vorherigen Geschwindigkeit zurückzukehren.",
-      "holdToBoostLabel": "Aktivieren Sie „Hold to Boost“.",
       "keyboardShortcuts": "Tastaturkürzel",
       "keyboardShortcutsDescription": "Passen Sie die Tastaturkürzel für die Anwendung an. Halten Sie ` gedrückt, um diese Hilfe jederzeit anzuzeigen",
       "keyboardShortcutsLabel": "Passen Sie Tastaturkürzel an",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Abspann überspringen",
       "skipCreditsDescription": "Wenn aktiviert, wird die nächste Episode automatisch abgespielt, wenn 99 % der Episode abgeschlossen sind, um den Abspann zu überspringen. Wenn deaktiviert, wird gewartet, bis die Episode vollständig abgeschlossen ist.",
       "skipCreditsLabel": "Abspann überspringen",
-      "sourceOrder": "Quellen neu anordnen",
-      "sourceOrderDescription": "Per Drag & Drop können Sie Quellen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der die Quellen für die Medien, die Sie ansehen möchten, geprüft werden. Ist eine Quelle ausgegraut, bedeutet dies, dass die <bold>Erweiterung</bold> für diese Quelle erforderlich ist. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten geeignet)</strong>",
-      "sourceOrderEnableLabel": "Benutzerdefinierte Quellreihenfolge",
       "thumbnail": "Miniaturansichten generieren",
       "thumbnailDescription": "Meistens haben Videos keine Miniaturansicht. Du kannst diese Einstellung anmachen, um sie automatisch zu generieren, aber sie können dein Video langsamer machen.",
       "thumbnailLabel": "Miniaturansichten generieren",
@@ -1204,7 +1203,9 @@
         "appVersion": "Version",
         "notLoggedIn": "Du bist nicht angemeldet",
         "userId": "Nutzer-ID",
-        "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister"
+        "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister",
+        "checkForUpdates": "Suchen Sie nach Updates",
+        "upToDate": "Sie befinden sich derzeit auf der neuesten Version"
       }
     },
     "subtitles": {

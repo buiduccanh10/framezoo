@@ -99,6 +99,7 @@
     "addToList": "યાદીમાં ઉમેરો",
     "airs": "પ્રસારણ",
     "collection": {
+      "bookmarkAll": "બધાને બુકમાર્ક કરો",
       "movie": "મૂવી",
       "movies": "મૂવીઝ",
       "rating": "રેટિંગ",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "બદલો",
       "more": "વધુ જુઓ",
+      "today": "આજે",
+      "thisWeek": "આ અઠવાડિયે",
       "title": {
         "4kReleases": "4K રિલીઝ",
         "editorPicksMovies": "એડિટર મૂવીઝ પસંદ કરે છે",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "હમણાં અપડેટ કરો",
         "available": "એપ્લિકેશનનું નવું સંસ્કરણ તૈયાર છે.",
+        "download": "અપડેટ ડાઉનલોડ કરો",
         "later": "બાદમાં",
+        "restart": "અપડેટ કરવા માટે પુનઃપ્રારંભ કરો",
         "updating": "અપડેટ કરી રહ્યું છે..."
       },
       "offline": "તમારું ઇન્ટરનેટ કનેક્શન તપાસો"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "ઑટોપ્લે",
-      "autoplayDescription": "અંત સુધી પહોંચ્યા પછી શ્રેણીમાં આગલો એપિસોડ આપમેળે ચલાવો. બ્રાઉઝર એક્સ્ટેંશન, કસ્ટમ પ્રોક્સી અથવા જો હોસ્ટ દ્વારા મંજૂરી આપવામાં આવે તો ડિફોલ્ટ સેટઅપ સાથે વપરાશકર્તાઓ દ્વારા સક્ષમ કરી શકાય છે.",
+      "autoplayDescription": "અંત સુધી પહોંચ્યા પછી શ્રેણીમાં આગલો એપિસોડ આપમેળે ચલાવો.",
       "autoplayLabel": "ઑટોપ્લે",
       "autoResumeOnPlaybackError": "પ્લેબેક ભૂલ પર સ્વતઃ ફરી શરૂ કરો",
       "autoResumeOnPlaybackErrorDescription": "જ્યારે વર્તમાન સ્ત્રોત પ્લેબેક દરમિયાન નિષ્ફળ જાય ત્યારે આપમેળે અન્ય સ્ત્રોતો શોધવાનું ચાલુ રાખો. જો અક્ષમ હોય, તો તમને મેન્યુઅલ રેઝ્યૂમે વિકલ્પ સાથે એક ભૂલ સ્ક્રીન દેખાશે.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "એમ્બેડને ફરીથી ગોઠવી રહ્યાં છીએ",
       "embedOrderDescription": "એમ્બેડ્સને ફરીથી ગોઠવવા માટે ખેંચો અને છોડો. તમે જે મીડિયા જોવાનો પ્રયાસ કરી રહ્યાં છો તેના માટે એમ્બેડ કયા ક્રમમાં તપાસવામાં આવે છે તે આ નિર્ધારિત કરશે. <br>PH_1__ <strong>(મોટા ભાગના વપરાશકર્તાઓ માટે ડિફોલ્ટ ઓર્ડર શ્રેષ્ઠ છે)</strong>",
       "embedOrderEnableLabel": "કસ્ટમ એમ્બેડ ઓર્ડર",
-      "holdToBoost": "ઝડપ વધારવા માટે પકડી રાખો",
-      "holdToBoostDescription": "સ્પેસબારને પકડી રાખો અથવા અસ્થાયી રૂપે પ્લેબેક ગતિને 2x સુધી વધારવા માટે સ્ક્રીનને ટચ કરો અને પકડી રાખો. પાછલી ઝડપ પર પાછા આવવા માટે છોડો.",
-      "holdToBoostLabel": "બુસ્ટ કરવા માટે હોલ્ડને સક્ષમ કરો",
       "keyboardShortcuts": "કીબોર્ડ શૉર્ટકટ્સ",
       "keyboardShortcutsDescription": "એપ્લિકેશન માટે કીબોર્ડ શોર્ટકટ્સ કસ્ટમાઇઝ કરો. કોઈપણ સમયે આ મદદ બતાવવા માટે `ને પકડી રાખો",
       "keyboardShortcutsLabel": "કીબોર્ડ શૉર્ટકટ્સ કસ્ટમાઇઝ કરો",
@@ -1186,9 +1188,6 @@
       "skipCredits": "એન્ડ ક્રેડિટ્સ છોડો",
       "skipCreditsDescription": "જ્યારે સક્ષમ હોય, ત્યારે અંતિમ ક્રેડિટ્સ છોડવા માટે આપમેળે આગલો એપિસોડ 99% પૂર્ણ થવા પર ચલાવો. જ્યારે અક્ષમ હોય, ત્યારે એપિસોડ સંપૂર્ણપણે પૂર્ણ થાય ત્યાં સુધી રાહ જુઓ.",
       "skipCreditsLabel": "અંતિમ ક્રેડિટ્સ છોડો",
-      "sourceOrder": "પુનઃક્રમાંકિત સ્ત્રોત",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "કસ્ટમ સ્ત્રોત ઓર્ડર",
       "thumbnail": "થંબનેલ્સ બનાવો",
       "thumbnailDescription": "મોટાભાગે, વીડિયોમાં થંબનેલ્સ હોતા નથી. તમે આ સેટિંગને ફ્લાય પર જનરેટ કરવા માટે સક્ષમ કરી શકો છો પરંતુ તે તમારા વિડિઓને ધીમું બનાવી શકે છે.",
       "thumbnailLabel": "થંબનેલ્સ બનાવો",
@@ -1204,7 +1203,9 @@
         "appVersion": "સંસ્કરણ",
         "notLoggedIn": "તમે લૉગ ઇન નથી",
         "userId": "વપરાશકર્તા ID",
-        "userIdDescription": "તમારા મિત્ર રજીસ્ટર માટે આમંત્રિત કોડ તરીકે આનો ઉપયોગ કરો"
+        "userIdDescription": "તમારા મિત્ર રજીસ્ટર માટે આમંત્રિત કોડ તરીકે આનો ઉપયોગ કરો",
+        "checkForUpdates": "અપડેટ્સ માટે તપાસો",
+        "upToDate": "તમે હાલમાં નવીનતમ સંસ્કરણ પર છો"
       }
     },
     "subtitles": {

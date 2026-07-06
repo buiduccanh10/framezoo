@@ -1,7 +1,6 @@
 import c from "classnames";
 import { ReactNode, useEffect, useRef } from "react";
 
-import { usePreferencesStore } from "../../stores/preferences";
 import "./Flare.css";
 
 export interface FlareProps {
@@ -39,8 +38,6 @@ function Child(props: { className?: string; children?: ReactNode }) {
 }
 
 function Light(props: FlareProps) {
-  const { enableLowPerformanceMode } = usePreferencesStore();
-
   const outerRef = useRef<HTMLDivElement>(null);
   const size = props.flareSize ?? SIZE_DEFAULT;
   const cssVar = props.cssColorVar ?? CSS_VAR_DEFAULT;
@@ -48,9 +45,6 @@ function Light(props: FlareProps) {
   const spread = props.gradientSpread ?? 70;
 
   useEffect(() => {
-    // Only add mouse listener if not in low performance mode
-    if (enableLowPerformanceMode) return;
-
     function mouseMove(e: MouseEvent) {
       if (!outerRef.current) return;
       const rect = outerRef.current.getBoundingClientRect();
@@ -67,12 +61,7 @@ function Light(props: FlareProps) {
     document.addEventListener("mousemove", mouseMove);
 
     return () => document.removeEventListener("mousemove", mouseMove);
-  }, [size, enableLowPerformanceMode]);
-
-  // Disable flare effect when low performance mode is enabled
-  if (enableLowPerformanceMode) {
-    return null;
-  }
+  }, [size]);
 
   return (
     <div

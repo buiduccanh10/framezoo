@@ -10,7 +10,6 @@ import {
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { Transition } from "@/components/utils/Transition";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
 
 export const wordOverrides: Record<string, string> = {
@@ -105,14 +104,16 @@ export function CaptionCue({
         padding: "0.18em 0.7em",
         textAlign: "center" as const,
         lineHeight: 1.35,
-        color: "#fff",
+        color: "var(--betamovie-pip-subtitle-color, #fff)",
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif',
         fontSize: "clamp(18px, 4.2vh, 30px)",
-        backgroundColor: "rgba(0,0,0,0.78)",
+        backgroundColor:
+          "var(--betamovie-pip-subtitle-background, rgba(0,0,0,0.78))",
         backdropFilter: "none",
-        fontWeight: 500,
-        textShadow: "0 2px 4px rgba(0,0,0,0.92)",
+        fontWeight: "var(--betamovie-pip-subtitle-font-weight, 500)",
+        textShadow:
+          "var(--betamovie-pip-subtitle-text-shadow, 0 2px 4px rgba(0,0,0,0.92))",
       }
     : null;
 
@@ -236,6 +237,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   const caption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
+  const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const source = usePlayerStore((s) => s.source);
   const display = usePlayerStore((s) => s.display);
   const isCasting = display?.getType() === "casting";
@@ -246,22 +248,16 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   const documentPictureInPictureWindow = usePlayerStore(
     (s) => s.interface.documentPictureInPictureWindow,
   );
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
-
-  const asTrack = usePlayerStore((s) => s.caption.asTrack);
   const documentPictureInPictureRoots =
     pictureInPictureMode === "document"
       ? getDocumentPictureInPictureRoots(documentPictureInPictureWindow)
       : null;
   const shouldUseDocumentPictureInPictureCaptionStyle =
     pictureInPictureMode === "document";
-  // Hide custom captions when native subtitles are enabled or when asTrack is true (e.g. mobile fullscreen)
+  // Hide custom captions only when the display explicitly requires
+  // native subtitle tracks (e.g. native fullscreen / native PiP).
   const shouldUseNativeTrack =
-    pictureInPictureMode !== "document" &&
-    (enableNativeSubtitles || asTrack) &&
-    source !== null;
+    pictureInPictureMode !== "document" && captionAsTrack && source !== null;
   if (shouldUseNativeTrack || (!caption && !secondaryCaption) || isCasting)
     return null;
 
@@ -281,7 +277,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
           color: "white",
           bottom:
             pictureInPictureMode === "document"
-              ? "8%"
+              ? "var(--betamovie-document-pip-subtitle-bottom, 1.15rem)"
               : props.controlsShown
                 ? "6rem"
                 : `${styling.verticalPosition}rem`,
@@ -315,7 +311,10 @@ export function SubtitleView(props: { controlsShown: boolean }) {
     );
   }
 
-  if (pictureInPictureMode === "document") {
+  if (
+    pictureInPictureMode === "document" ||
+    pictureInPictureMode === "desktop"
+  ) {
     return null;
   }
 

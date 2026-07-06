@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import classNames from "classnames";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
@@ -16,6 +17,7 @@ import {
   useDiscoverMedia,
   useDiscoverOptions,
 } from "@/pages/discover/hooks/useDiscoverMedia";
+import { getDiscoverBackUrl } from "@/pages/discover/utils/navigation";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import { useDiscoverStore } from "@/stores/discover";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
@@ -28,6 +30,17 @@ interface MoreContentProps {
 }
 
 export function MoreContent({ onShowDetails }: MoreContentProps) {
+  const { mediaType = "movie", contentType, id, category } = useParams();
+  const [searchParams] = useSearchParams();
+  const selectedReleaseYear = searchParams.get("year") || "";
+  const selectedOriginCountry = searchParams.get("country") || "";
+
+  const key = `${mediaType}-${contentType || ""}-${id || ""}-${category || ""}-${selectedReleaseYear}-${selectedOriginCountry}`;
+
+  return <MoreContentInner key={key} onShowDetails={onShowDetails} />;
+}
+
+function MoreContentInner({ onShowDetails }: MoreContentProps) {
   const { mediaType = "movie", contentType, id, category } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProvider, setSelectedProvider] = useState<OptionItem | null>(
@@ -80,6 +93,9 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
       .get("country")
       ?.toUpperCase()
       .match(/^[A-Z]{2}$/)?.[0] || "";
+  const selectedTimeWindow = (
+    searchParams.get("timeWindow") === "week" ? "week" : "day"
+  ) as "day" | "week";
   const countryLabel = t("discover.filters.country", {
     defaultValue: "Country",
   });
@@ -132,6 +148,7 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
     providerName: selectedProvider?.name,
     mediaTitle: selectedRecommendationSource?.title,
     isCarouselView: false,
+    timeWindow: selectedTimeWindow,
   });
 
   // Handle content visibility
@@ -168,12 +185,21 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   );
 
   const handleBack = () => {
-    if (lastView) {
-      navigate(lastView.url);
-      window.scrollTo(0, lastView.scrollPosition);
-    } else {
-      navigate(-1);
+    const backUrl = getDiscoverBackUrl(lastView);
+    if (backUrl && lastView) {
+      navigate(backUrl);
+      requestAnimationFrame(() => {
+        window.scrollTo(0, lastView.scrollPosition);
+      });
+      return;
     }
+
+    if (lastView) {
+      navigate("/discover");
+      return;
+    }
+
+    navigate(-1);
   };
 
   const handleShowDetails = async (media: MediaItem) => {
@@ -190,6 +216,40 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
   const handleLoadMore = async () => {
     setCurrentPage((prev) => prev + 1);
   };
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  // Infinite Scroll Trigger
+  useEffect(() => {
+    const target = loadMoreRef.current;
+
+    if (!target || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && !isLoading) {
+          handleLoadMore();
+        }
+      },
+      {
+        rootMargin: "600px 0px",
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMore, isLoading]);
+
+  useEffect(() => {
+    if (actualContentType !== "trending") return;
+    if (searchParams.get("timeWindow")) return;
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("timeWindow", "day");
+    setSearchParams(nextParams, { replace: true });
+  }, [actualContentType, searchParams, setSearchParams]);
 
   // Set initial provider/genre/recommendation selection
   useEffect(() => {
@@ -285,9 +345,51 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
     <SubPageLayout>
       <WideContainer>
         <div className="flex items-center justify-between gap-8">
-          <Heading1 className="text-2xl font-bold text-white">
-            {sectionTitle}
-          </Heading1>
+          <div className="flex items-center gap-4">
+            <Heading1 className="text-2xl font-bold text-white">
+              {sectionTitle}
+            </Heading1>
+            {actualContentType === "trending" && (
+              <div className="inline-flex items-center rounded-full bg-mediaCard-hoverBackground p-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    const nextParams = new URLSearchParams(searchParams);
+                    nextParams.set("timeWindow", "day");
+                    setSearchParams(nextParams);
+                  }}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    selectedTimeWindow === "day"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.today", { defaultValue: "Today" })}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentPage(1);
+                    const nextParams = new URLSearchParams(searchParams);
+                    nextParams.set("timeWindow", "week");
+                    setSearchParams(nextParams);
+                  }}
+                  className={classNames(
+                    "rounded-full px-3 py-1 text-xs font-semibold transition-all duration-300",
+                    selectedTimeWindow === "week"
+                      ? "bg-mediaCard-background text-white shadow-sm"
+                      : "text-type-secondary hover:text-white",
+                  )}
+                >
+                  {t("discover.carousel.thisWeek", {
+                    defaultValue: "This Week",
+                  })}
+                </button>
+              </div>
+            )}
+          </div>
           {contentType === "recommendations" && (
             <div className="relative pr-4 whitespace-nowrap">
               <Dropdown
@@ -553,20 +655,16 @@ export function MoreContent({ onShowDetails }: MoreContentProps) {
             })}
           </MediaGrid>
 
-          {hasMore && (
-            <div className="flex justify-center mt-8">
-              <Button
-                theme="purple"
-                onClick={handleLoadMore}
-                disabled={isLoading}
-              >
-                {isLoading
-                  ? t("discover.page.loading")
-                  : t("discover.page.loadMore")}
-              </Button>
-            </div>
-          )}
+          {hasMore && <div ref={loadMoreRef} className="h-1 w-full" />}
         </div>
+
+        {isLoading && currentPage > 1 && (
+          <div className="flex justify-center mt-8">
+            <Button theme="purple" disabled>
+              {t("discover.page.loading")}
+            </Button>
+          </div>
+        )}
       </WideContainer>
     </SubPageLayout>
   );

@@ -99,6 +99,7 @@
     "addToList": "Add to List",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Bookmark All",
       "movie": "Movie",
       "movies": "Movies",
       "rating": "Rating",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Change",
       "more": "View more",
+      "today": "Today",
+      "thisWeek": "This Week",
       "title": {
         "4kReleases": "4K Releases",
         "editorPicksMovies": "Editor Picks Movies",
@@ -374,15 +377,21 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": ["Happy 69 day 😘!"]
+        "extra": [
+          "Happy 69 day 😘!"
+        ]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": ["Happy 4/20 🥳!"]
+        "extra": [
+          "Happy 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "What would you like to watch this afternoon?",
-        "extra": ["Viva la AlphaFlix!"]
+        "extra": [
+          "Viva la AlphaFlix!"
+        ]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -395,11 +404,15 @@
       },
       "morning": {
         "default": "What would you like to watch this morning?",
-        "extra": ["Viva la AlphaFlix!"]
+        "extra": [
+          "Viva la AlphaFlix!"
+        ]
       },
       "night": {
         "default": "What would you like to watch tonight?",
-        "extra": ["Viva la AlphaFlix!"]
+        "extra": [
+          "Viva la AlphaFlix!"
+        ]
       }
     },
     "watchHistory": {
@@ -584,7 +597,9 @@
       "appUpdate": {
         "action": "Update now",
         "available": "A new app version is ready.",
+        "download": "Download update",
         "later": "Later",
+        "restart": "Restart to update",
         "updating": "Updating..."
       },
       "offline": "Check your internet connection, silly goose! 🦢"
@@ -1140,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Autoplay",
-      "autoplayDescription": "Automatically play the next episode in a series after reaching the end. Can be enabled by users with the browser extension, a custom proxy, or with the default setup if allowed by the host.",
+      "autoplayDescription": "Automatically play the next episode in a series after reaching the end when autoplay is allowed by the host.",
       "autoplayLabel": "Autoplay",
       "autoResumeOnPlaybackError": "Auto resume on playback error",
       "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
@@ -1154,9 +1169,6 @@
       "embedOrder": "Reordering embeds",
       "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
       "embedOrderEnableLabel": "Custom embed order",
-      "holdToBoost": "Hold to boost speed",
-      "holdToBoostDescription": "Hold spacebar or touch and hold the screen to temporarily increase playback speed to 2x. Release to return to previous speed.",
-      "holdToBoostLabel": "Enable hold to boost",
       "keyboardShortcuts": "Keyboard Shortcuts",
       "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
       "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
@@ -1176,9 +1188,6 @@
       "skipCredits": "Skip End Credits",
       "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
       "skipCreditsLabel": "Skip end credits",
-      "sourceOrder": "Reordering sources",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Custom source order",
       "thumbnail": "Generate thumbnails",
       "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
       "thumbnailLabel": "Generate thumbnails",
@@ -1191,10 +1200,12 @@
     },
     "sidebar": {
       "info": {
-        "appVersion": "Version",
+        "appVersion": "App Version",
         "notLoggedIn": "You are not logged in",
         "userId": "User ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Use this as invite code for your friend register",
+        "checkForUpdates": "Check for updates",
+        "upToDate": "You are currently on the latest version"
       }
     },
     "subtitles": {

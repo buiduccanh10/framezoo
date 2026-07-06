@@ -25,30 +25,18 @@ import {
   scrapeOpenMovieShow,
 } from "./custom/sources/openMovieSource";
 import {
-  scrapeOPhimMovie,
-  scrapeOPhimShow,
-} from "./custom/sources/ophimSource";
+  scrapeVidkingMovie,
+  scrapeVidkingShow,
+} from "./custom/sources/vidkingSource";
 import {
   scrapeVidlinkMovie,
   scrapeVidlinkShow,
 } from "./custom/sources/vidlinkSource";
 import {
-  scrapeVidrockMovie,
-  scrapeVidrockShow,
-} from "./custom/sources/vidrockSource";
-import {
-  scrapeVidSrcRuMovie,
-  scrapeVidSrcRuShow,
-} from "./custom/sources/vidsrcRuSource";
-import {
-  scrapeVidSrcMovie,
-  scrapeVidSrcShow,
-} from "./custom/sources/vidsrcSource";
-import {
-  scrapeVidSrcWtfMovie,
-  scrapeVidSrcWtfShow,
-} from "./custom/sources/vidsrcWtfSource";
-
+  scrapeVidSrcToMovie,
+  scrapeVidSrcToShow,
+} from "./custom/sources/vidsrcToSource";
+import { applyProviderMetadataOverride } from "./runtimeMetadata";
 // Initialize M3U8 proxy on module load
 setupM3U8Proxy();
 
@@ -57,7 +45,7 @@ const vidlinkSource = {
   id: "alphaflix-vidlink",
   name: "Server 1 (VidLink) 🔥",
   rank: 1,
-  disabled: true,
+  disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -80,81 +68,11 @@ const openMovieSource = {
   scrapeShow: scrapeOpenMovieShow,
 };
 
-// Custom Vidrock source definition
-const vidrockSource = {
-  id: "alphaflix-vidrock",
-  name: "Server 3 (Vidrock) 🔥",
-  rank: 3,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidrockMovie,
-  scrapeShow: scrapeVidrockShow,
-};
-
-// Custom VidSrc.wtf source definition
-const vidsrcWtfSource = {
-  id: "alphaflix-vidsrcwtf",
-  name: "Server 4 (VidSrc.wtf) 🔥",
-  rank: 4,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcWtfMovie,
-  scrapeShow: scrapeVidSrcWtfShow,
-};
-
-// Custom 111Movies source definition
-const movies111Source = {
-  id: "alphaflix-111movies",
-  name: "Server 5 (111Movies) 🔥",
-  rank: 5,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrape111MoviesMovie,
-  scrapeShow: scrape111MoviesShow,
-};
-
-// Custom VidSrc.ru source definition
-const vidsrcRuSource = {
-  id: "alphaflix-vidsrc-ru",
-  name: "Server 6 (Vidsrc.ru) 🔥",
-  rank: 6,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcRuMovie,
-  scrapeShow: scrapeVidSrcRuShow,
-};
-
-// Custom VidSrc source definition
-const vidsrcSource = {
-  id: "alphaflix-vidsrc",
-  name: "Server 7 (Vidsrc) 🔥",
-  rank: 7,
-  disabled: false,
-  externalSource: false,
-  type: "source" as const,
-  flags: [flags.CORS_ALLOWED],
-  mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeVidSrcMovie,
-  scrapeShow: scrapeVidSrcShow,
-};
-
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 8 (KKPhim Vietsub + Lồng tiếng)",
-  rank: 8,
+  name: "Server 3 (KKPhim Vietsub + Lồng tiếng) 🔥",
+  rank: 3,
   disabled: false,
   externalSource: false,
   type: "source" as const,
@@ -164,18 +82,46 @@ const kkphimSource = {
   scrapeShow: scrapeKKPhimShow,
 };
 
-// Custom OPhim source definition
-const ophimSource = {
-  id: "ophim",
-  name: "Server 9 (OPhim)",
+// Custom 111Movies source definition
+const movies111Source = {
+  id: "alphaflix-111movies",
+  name: "Server 6 (111Movies)",
+  rank: 6,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrape111MoviesMovie,
+  scrapeShow: scrape111MoviesShow,
+};
+
+// Custom VidSrc.to source definition
+const vidsrcToSource = {
+  id: "alphaflix-vidsrcto",
+  name: "Server 10 (Vidsrc.to)",
+  rank: 10,
+  disabled: false,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVidSrcToMovie,
+  scrapeShow: scrapeVidSrcToShow,
+};
+
+// Custom Vidking source definition
+const vidkingSource = {
+  id: "alphaflix-vidking",
+  name: "Server 9 (Vidking)",
   rank: 9,
   disabled: false,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: ["movie" as const, "show" as const],
-  scrapeMovie: scrapeOPhimMovie,
-  scrapeShow: scrapeOPhimShow,
+  scrapeMovie: scrapeVidkingMovie,
+  scrapeShow: scrapeVidkingShow,
 };
 
 // Custom OpenMovie embed definition
@@ -190,87 +136,73 @@ const openMovieEmbed = {
   scrape: scrapeOpenMovieEmbed,
 };
 
+const sourceDefinitions = [
+  movies111Source,
+  vidlinkSource,
+  openMovieSource,
+  vidsrcToSource,
+  vidkingSource,
+  kkphimSource,
+];
+
+const embedDefinitions = [openMovieEmbed];
+
 function isDesktopApp(): boolean {
   return Boolean(typeof window !== "undefined" && window.__ALPHAFLIX_DESKTOP__);
+}
+
+function withConfiguredProviders(builder: ReturnType<typeof buildProviders>) {
+  sourceDefinitions.forEach((source) => {
+    builder.addSource(applyProviderMetadataOverride(source));
+  });
+  embedDefinitions.forEach((embed) => {
+    builder.addEmbed(applyProviderMetadataOverride(embed));
+  });
+
+  return builder;
 }
 
 export function getProviders() {
   // Desktop app has extension built in and can play MKV; use NATIVE target.
   if (isDesktopApp()) {
-    return buildProviders()
-      .setFetcher(makeStandardFetcher(fetch))
-      .setProxiedFetcher(makeExtensionFetcher())
-      .setTarget(targets.NATIVE)
-      .enableConsistentIpForRequests()
-      .addBuiltinProviders()
-      .addSource(vidrockSource)
-      .addSource(movies111Source)
-      .addSource(vidlinkSource)
-      .addSource(vidsrcWtfSource)
-      .addSource(openMovieSource)
-      .addSource(vidsrcRuSource)
-      .addSource(vidsrcSource)
-      .addSource(kkphimSource)
-      .addSource(ophimSource)
-      .addEmbed(openMovieEmbed)
-      .build();
+    return withConfiguredProviders(
+      buildProviders()
+        .setFetcher(makeStandardFetcher(fetch))
+        .setProxiedFetcher(makeExtensionFetcher())
+        .setTarget(targets.NATIVE)
+        .enableConsistentIpForRequests()
+        .addBuiltinProviders(),
+    ).build();
   }
 
   if (isExtensionActiveCached()) {
-    return buildProviders()
-      .setFetcher(makeStandardFetcher(fetch))
-      .setProxiedFetcher(makeExtensionFetcher())
-      .setTarget(targets.BROWSER_EXTENSION)
-      .enableConsistentIpForRequests()
-      .addBuiltinProviders()
-      .addSource(vidrockSource)
-      .addSource(movies111Source)
-      .addSource(vidlinkSource)
-      .addSource(vidsrcWtfSource)
-      .addSource(openMovieSource)
-      .addSource(vidsrcRuSource)
-      .addSource(vidsrcSource)
-      .addSource(kkphimSource)
-      .addSource(ophimSource)
-      .addEmbed(openMovieEmbed)
-      .build();
+    return withConfiguredProviders(
+      buildProviders()
+        .setFetcher(makeStandardFetcher(fetch))
+        .setProxiedFetcher(makeExtensionFetcher())
+        .setTarget(targets.BROWSER_EXTENSION)
+        .enableConsistentIpForRequests()
+        .addBuiltinProviders(),
+    ).build();
   }
 
   setupM3U8Proxy();
 
-  return buildProviders()
-    .setFetcher(makeStandardFetcher(fetch))
-    .setProxiedFetcher(makeLoadBalancedSimpleProxyFetcher())
-    .setTarget(targets.BROWSER)
-    .addBuiltinProviders()
-    .addSource(vidrockSource)
-    .addSource(movies111Source)
-    .addSource(vidlinkSource)
-    .addSource(vidsrcWtfSource)
-    .addSource(openMovieSource)
-    .addSource(vidsrcRuSource)
-    .addSource(vidsrcSource)
-    .addSource(kkphimSource)
-    .addSource(ophimSource)
-    .addEmbed(openMovieEmbed)
-    .build();
+  return withConfiguredProviders(
+    buildProviders()
+      .setFetcher(makeStandardFetcher(fetch))
+      .setProxiedFetcher(makeLoadBalancedSimpleProxyFetcher())
+      .setTarget(targets.BROWSER)
+      .addBuiltinProviders(),
+  ).build();
 }
 
 export function getAllProviders() {
-  return buildProviders()
-    .setFetcher(makeStandardFetcher(fetch))
-    .setTarget(targets.BROWSER_EXTENSION)
-    .enableConsistentIpForRequests()
-    .addBuiltinProviders()
-    .addSource(vidrockSource)
-    .addSource(movies111Source)
-    .addSource(vidlinkSource)
-    .addSource(vidsrcWtfSource)
-    .addSource(openMovieSource)
-    .addSource(vidsrcRuSource)
-    .addSource(vidsrcSource)
-    .addSource(kkphimSource)
-    .addSource(ophimSource)
-    .addEmbed(openMovieEmbed)
-    .build();
+  return withConfiguredProviders(
+    buildProviders()
+      .setFetcher(makeStandardFetcher(fetch))
+      .setTarget(targets.BROWSER_EXTENSION)
+      .enableConsistentIpForRequests()
+      .addBuiltinProviders(),
+  ).build();
 }

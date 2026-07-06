@@ -40,6 +40,7 @@ export function DiscoverContent({
   const progressItems = useProgressStore((state) => state.items);
   const [internalCountry, setInternalCountry] = useState("");
   const [internalYear, setInternalYear] = useState("");
+  const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set());
 
   const filterCountry =
     externalCountry !== undefined ? externalCountry : internalCountry;
@@ -52,6 +53,14 @@ export function DiscoverContent({
       setSelectedCategory("popular");
     }
   }, [selectedCategory, setSelectedCategory]);
+
+  useEffect(() => {
+    setVisitedTabs((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(selectedCategory);
+      return newSet;
+    });
+  }, [selectedCategory]);
 
   // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
@@ -95,6 +104,20 @@ export function DiscoverContent({
   const renderMoviesContent = () => {
     const carousels = [];
 
+    // Trending Movies
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-trending"
+        content={{ type: "trending" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
+        {...filtersProps}
+      />,
+    );
+
     // Provider Movies
     carousels.push(
       <LazyMediaCarousel
@@ -105,6 +128,20 @@ export function DiscoverContent({
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
+        {...filtersProps}
+      />,
+    );
+
+    // Top Rated
+    carousels.push(
+      <LazyMediaCarousel
+        key="movie-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow={false}
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
         {...filtersProps}
       />,
     );
@@ -204,12 +241,19 @@ export function DiscoverContent({
     //   />,
     // );
 
-    // Top Rated
+    return carousels;
+  };
+
+  // Render TV Shows content with lazy loading
+  const renderTVShowsContent = () => {
+    const carousels = [];
+
+    // Trending TV Shows
     carousels.push(
       <LazyMediaCarousel
-        key="movie-top-rated"
-        content={{ type: "topRated" }}
-        isTVShow={false}
+        key="tv-trending"
+        content={{ type: "trending" }}
+        isTVShow
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
         moreContent
@@ -218,26 +262,19 @@ export function DiscoverContent({
       />,
     );
 
-    return carousels;
-  };
-
-  // Render TV Shows content with lazy loading
-  const renderTVShowsContent = () => {
-    const carousels = [];
-
     // Popular
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-popular"
-        content={{ type: "popular" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority
-        {...filtersProps}
-      />,
-    );
+    // carousels.push(
+    //   <LazyMediaCarousel
+    //     key="tv-popular"
+    //     content={{ type: "popular" }}
+    //     isTVShow
+    //     carouselRefs={carouselRefs}
+    //     onShowDetails={handleShowDetails}
+    //     moreContent
+    //     priority
+    //     {...filtersProps}
+    //   />,
+    // );
 
     // Provider TV Shows
     carousels.push(
@@ -249,6 +286,20 @@ export function DiscoverContent({
         onShowDetails={handleShowDetails}
         showProviders
         moreContent
+        {...filtersProps}
+      />,
+    );
+
+    // Top Rated
+    carousels.push(
+      <LazyMediaCarousel
+        key="tv-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority={carousels.length < 2}
         {...filtersProps}
       />,
     );
@@ -318,20 +369,6 @@ export function DiscoverContent({
         onShowDetails={handleShowDetails}
         showGenres
         moreContent
-        {...filtersProps}
-      />,
-    );
-
-    // Top Rated
-    carousels.push(
-      <LazyMediaCarousel
-        key="tv-top-rated"
-        content={{ type: "topRated" }}
-        isTVShow
-        carouselRefs={carouselRefs}
-        onShowDetails={handleShowDetails}
-        moreContent
-        priority={carousels.length < 2}
         {...filtersProps}
       />,
     );
@@ -414,22 +451,29 @@ export function DiscoverContent({
       <WideContainer ultraWide classNames="!px-0">
         {/* Movies Tab */}
         <div style={{ display: isMoviesTab ? "block" : "none" }}>
-          {renderMoviesContent()}
+          {(isMoviesTab || visitedTabs.has("movies")) && renderMoviesContent()}
         </div>
 
         {/* TV Shows Tab */}
         <div style={{ display: isTVShowsTab ? "block" : "none" }}>
-          {renderTVShowsContent()}
+          {(isTVShowsTab || visitedTabs.has("tvshows")) &&
+            renderTVShowsContent()}
         </div>
 
         {/* Popular Tab */}
         <div style={{ display: isPopularTab ? "block" : "none" }}>
-          {renderPopularContent()}
+          {(isPopularTab ||
+            visitedTabs.has("popular") ||
+            visitedTabs.has("top10") ||
+            visitedTabs.has("editorpicks")) &&
+            renderPopularContent()}
         </div>
 
         {/* Genre Movies Tab */}
         <div style={{ display: isGenreTab ? "block" : "none" }}>
-          {renderSelectedGenreContent()}
+          {(isGenreTab ||
+            (selectedGenreId && visitedTabs.has(`genre:${selectedGenreId}`))) &&
+            renderSelectedGenreContent()}
         </div>
       </WideContainer>
 

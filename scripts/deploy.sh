@@ -2,12 +2,13 @@
 set -eu
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
-cd "$SCRIPT_DIR"
+REPO_ROOT="$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_ROOT"
 
 ACTION="${1:-all}"
 COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
 ENV_FILE_PATH="${ENV_FILE_PATH:-.env}"
-PROJECT_NAME="${PROJECT_NAME:-$(basename "$SCRIPT_DIR")}"
+PROJECT_NAME="${PROJECT_NAME:-$(basename "$REPO_ROOT")}"
 EXTERNAL_LEGACY_VOLUMES="${EXTERNAL_LEGACY_VOLUMES:-false}"
 SKIP_CLOUDFLARE_PURGE="${SKIP_CLOUDFLARE_PURGE:-false}"
 
@@ -46,28 +47,17 @@ purge_cloudflare_cache() {
     return 0
   fi
 
-  "$SCRIPT_DIR/scripts/purge-cloudflare-cache.sh" "$ENV_FILE_PATH"
+  "$REPO_ROOT/scripts/purge-cloudflare-cache.sh" "$ENV_FILE_PATH"
 }
 
 case "$ACTION" in
   all)
-    echo "Deploy root: $SCRIPT_DIR"
+    echo "Deploy root: $REPO_ROOT"
     echo "Compose file: $COMPOSE_FILE"
     echo "Project name: $PROJECT_NAME"
     compose pull --ignore-pull-failures || true
     compose build --pull
     compose up -d --remove-orphans
-
-    # Sync files from host downloads/ folder into the docker volume
-    if [ -d "downloads" ] && [ "$(ls -A downloads)" ]; then
-      echo "Syncing downloads from host to Docker volume..."
-      # Determine which volume is active
-      VOLUME_NAME="betamovie_downloads-data"
-      if docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
-        VOLUME_NAME="betamovie_backend_downloads-data"
-      fi
-      docker run --rm -v "$VOLUME_NAME":/data -v "$SCRIPT_DIR/downloads":/src alpine sh -c "rm -f /data/AlphaFlix-* /data/README.txt && cp -r /src/. /data/" >/dev/null
-    fi
 
     purge_cloudflare_cache
     ;;
@@ -86,11 +76,14 @@ case "$ACTION" in
   ps)
     compose ps
     ;;
+  publish-desktop)
+    compose --profile desktop-publisher run --rm desktop-publisher
+    ;;
   purge-cdn)
     purge_cloudflare_cache
     ;;
   *)
-    echo "Usage: ./deploy.sh {all|up|down|restart|logs|ps|purge-cdn}"
+    echo "Usage: ./deploy.sh {all|up|down|restart|logs|ps|publish-desktop|purge-cdn}"
     exit 1
     ;;
 esac

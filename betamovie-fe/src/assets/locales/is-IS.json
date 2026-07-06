@@ -99,6 +99,7 @@
     "addToList": "Bæta við lista",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Bókamerki allt",
       "movie": "Kvikmynd",
       "movies": "Kvikmyndir",
       "rating": "Einkunn",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Breyta",
       "more": "Skoða meira",
+      "today": "Í dag",
+      "thisWeek": "Í þessari viku",
       "title": {
         "4kReleases": "4K útgáfur",
         "editorPicksMovies": "Ritstjóri velur kvikmyndir",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Uppfærðu núna",
         "available": "Ný app útgáfa er tilbúin.",
+        "download": "Sækja uppfærslu",
         "later": "Seinna",
+        "restart": "Endurræstu til að uppfæra",
         "updating": "Uppfærir..."
       },
       "offline": "Athugaðu net tengingu þína"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Sjálfvirk spilun",
-      "autoplayDescription": "Spilaðu næsta þátt í röð sjálfkrafa eftir að lokinni er náð. Notendur geta virkjað með vafraviðbótinni, sérsniðnum umboðsþjóni eða með sjálfgefna uppsetningu ef gestgjafinn leyfir.",
+      "autoplayDescription": "Spilaðu næsta þátt í röð sjálfkrafa eftir að lokinni er náð.",
       "autoplayLabel": "Sjálfvirk spilun",
       "autoResumeOnPlaybackError": "Sjálfvirk áframhald við spilunarvillu",
       "autoResumeOnPlaybackErrorDescription": "Haltu sjálfkrafa áfram að leita að öðrum heimildum þegar núverandi uppspretta bilar meðan á spilun stendur. Ef það er óvirkt muntu sjá villuskjá með handvirkum endurupptökuvalkosti.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Endurröðun innfellinga",
       "embedOrderDescription": "Dragðu og slepptu til að endurraða innfellingum. Þetta mun ákvarða í hvaða röð innfellingar eru merktar fyrir miðilinn sem þú ert að reyna að horfa á. <br><br> <strong>(sjálfgefin röð er best fyrir flesta notendur)</strong>",
       "embedOrderEnableLabel": "Sérsniðin innfelld röð",
-      "holdToBoost": "Haltu til að auka hraðann",
-      "holdToBoostDescription": "Haltu bilstönginni eða snertu og haltu skjánum til að auka spilunarhraðann tímabundið í 2x. Slepptu til að fara aftur í fyrri hraða.",
-      "holdToBoostLabel": "Virkjaðu bið til að auka",
       "keyboardShortcuts": "Flýtivísar",
       "keyboardShortcutsDescription": "Sérsníddu flýtilykla fyrir forritið. Haltu ` til að sýna þessa hjálp hvenær sem er",
       "keyboardShortcutsLabel": "Sérsníddu flýtilykla",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Slepptu lokaeiningar",
       "skipCreditsDescription": "Þegar það er virkt skaltu spila næsta þátt sjálfkrafa þegar 99% er lokið til að sleppa lokaeiningum. Þegar það er óvirkt skaltu bíða þar til þættinum er að fullu lokið.",
       "skipCreditsLabel": "Slepptu lokaeiningum",
-      "sourceOrder": "Endurröðun heimilda",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Sérsniðin upprunaröð",
       "thumbnail": "Búa til smámyndir",
       "thumbnailDescription": "Oftast, hafa myndbönd ekki smámyndir. Þú getur látið þessa stillingu gera þær en það gæti gert myndbandið þitt hægara.",
       "thumbnailLabel": "Gera smámyndir",
@@ -1204,7 +1203,9 @@
         "appVersion": "Útgáfa",
         "notLoggedIn": "Þú ert ekki skrátt inn",
         "userId": "Notanda kóði",
-        "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína"
+        "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína",
+        "checkForUpdates": "Leitaðu að uppfærslum",
+        "upToDate": "Þú ert núna á nýjustu útgáfunni"
       }
     },
     "subtitles": {

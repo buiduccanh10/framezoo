@@ -6,7 +6,6 @@ import { buildVttObjectUrl } from "@/components/player/utils/captions";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { isSafari } from "@/utils/detectFeatures";
 
 import { useInitializeSource } from "../hooks/useInitializePlayer";
@@ -81,6 +80,7 @@ function VideoElement() {
   const secondaryVttData = usePlayerStore((s) =>
     s.caption.dualSubEnabled ? s.caption.secondary?.vttData : undefined,
   );
+  const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const source = usePlayerStore((s) => s.source);
   const pictureInPictureMode = usePlayerStore(
     (s) => s.interface.pictureInPictureMode,
@@ -88,24 +88,20 @@ function VideoElement() {
   const documentPictureInPictureWindow = usePlayerStore(
     (s) => s.interface.documentPictureInPictureWindow,
   );
-  const enableNativeSubtitles = usePreferencesStore(
-    (s) => s.enableNativeSubtitles,
-  );
   const trackObjectUrl = useObjectUrl(
     () => (vttData ? buildVttObjectUrl(vttData, secondaryVttData) : null),
     [vttData, secondaryVttData],
   );
 
-  const asTrack = usePlayerStore((s) => s.caption.asTrack);
   const documentPictureInPictureRoots =
     pictureInPictureMode === "document"
       ? getDocumentPictureInPictureRoots(documentPictureInPictureWindow)
       : null;
-  // Use native tracks when the setting is enabled or when requested (e.g. mobile fullscreen)
+  const shouldHideMainVideoForDesktopPip = pictureInPictureMode === "desktop";
+  // Use native tracks only when the display explicitly requires them
+  // (e.g. native fullscreen / native PiP on some platforms).
   const shouldUseNativeTrack =
-    pictureInPictureMode !== "document" &&
-    (enableNativeSubtitles || asTrack) &&
-    source !== null;
+    pictureInPictureMode !== "document" && captionAsTrack && source !== null;
 
   const handleVideoRef = useCallback((node: HTMLVideoElement | null) => {
     videoEl.current = node;
@@ -186,25 +182,31 @@ function VideoElement() {
   }
 
   const videoElement = (
-    <video
-      id="video-element"
-      className="absolute inset-0 w-full h-screen bg-black"
-      autoPlay
-      playsInline
-      ref={handleVideoRef}
-      preload={preloadMode}
-      onContextMenu={(e) => e.preventDefault()}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "black",
-        objectFit: "contain",
-      }}
-    >
-      {subtitleTrack}
-    </video>
+    <>
+      <video
+        id="video-element"
+        className="absolute inset-0 w-full h-screen bg-black"
+        autoPlay
+        playsInline
+        ref={handleVideoRef}
+        preload={preloadMode}
+        onContextMenu={(e) => e.preventDefault()}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "black",
+          objectFit: "contain",
+          opacity: shouldHideMainVideoForDesktopPip ? 0 : 1,
+        }}
+      >
+        {subtitleTrack}
+      </video>
+      {shouldHideMainVideoForDesktopPip ? (
+        <div className="pointer-events-none absolute inset-0 bg-black" />
+      ) : null}
+    </>
   );
 
   if (documentPictureInPictureRoots?.videoRoot) {

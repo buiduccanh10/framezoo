@@ -138,11 +138,15 @@ export default defineEventHandler(async event => {
   if (!sourceUrl) {
     const contextCacheKey = `stream-meta:${providerName}:${mediaType}:${tmdbId}${mediaType === 'tv' ? `:${season}:${episode}` : ''}`;
     const streamContext = await storage
-      .getItem<{ title?: string; releaseYear?: number }>(contextCacheKey)
+      .getItem<{ title?: string; originName?: string; releaseYear?: number; country?: string }>(
+        contextCacheKey
+      )
       .catch(() => null);
     const streams = await provider.getStreams(tmdbId, mediaType, season, episode, storage, {
       title: streamContext?.title,
+      originName: streamContext?.originName,
       releaseYear: streamContext?.releaseYear,
+      country: streamContext?.country,
     });
     const stream = streams[0];
     if (!stream?.url) {
@@ -152,8 +156,9 @@ export default defineEventHandler(async event => {
       });
     }
 
+    const proxyPath = stream.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
     sourceUrl =
-      `${PREVIEW_BACKEND_INTERNAL_BASE_URL}/api/m3u8-proxy?url=${encodeURIComponent(stream.url)}` +
+      `${PREVIEW_BACKEND_INTERNAL_BASE_URL}${proxyPath}?url=${encodeURIComponent(stream.url)}` +
       `&headers=${encodeURIComponent(JSON.stringify(stream.headers || {}))}`;
     sourceUrl = withInternalToken(sourceUrl);
 

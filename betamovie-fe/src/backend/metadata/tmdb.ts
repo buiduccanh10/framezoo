@@ -13,6 +13,7 @@ import {
   queryClient,
 } from "@/utils/queryClient";
 
+import { mergeAndRankSearchResults } from "./searchRanking";
 import { MWMediaMeta, MWMediaType, MWSeasonMeta } from "./types/mw";
 import {
   ExternalIdMovieSearchResult,
@@ -192,6 +193,8 @@ interface TMDBCacheKey {
 export type TMDBSearchMediaResult =
   | TMDBMovieSearchResult
   | TMDBShowSearchResult;
+
+const ENGLISH_TMDB_LANGUAGE = "en-US";
 
 const tmdbCache = new SimpleCache<TMDBCacheKey, any>();
 tmdbCache.setCompare((a, b) => {
@@ -412,7 +415,7 @@ async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
   return result;
 }
 
-export async function multiSearch(
+async function multiSearchByLanguage(
   query: string,
   language?: string,
 ): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
@@ -431,7 +434,7 @@ export async function multiSearch(
   return results;
 }
 
-export async function searchMovies(
+async function searchMoviesByLanguage(
   query: string,
   language?: string,
 ): Promise<TMDBMovieSearchResult[]> {
@@ -449,7 +452,7 @@ export async function searchMovies(
   }));
 }
 
-export async function searchTVShows(
+async function searchTVShowsByLanguage(
   query: string,
   language?: string,
 ): Promise<TMDBShowSearchResult[]> {
@@ -467,10 +470,85 @@ export async function searchTVShows(
   }));
 }
 
+function getPreferredSearchLanguage(language?: string): string {
+  if (language?.trim()) {
+    return getTmdbLanguageCode(language);
+  }
+
+  return getTmdbLanguageCode(useLanguageStore.getState().language);
+}
+
+function shouldUseEnglishFallback(language: string): boolean {
+  return !language.toLowerCase().startsWith("en");
+}
+
+export async function multiSearch(
+  query: string,
+  language?: string,
+): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
+  const primaryLanguage = getPreferredSearchLanguage(language);
+
+  if (!shouldUseEnglishFallback(primaryLanguage)) {
+    return multiSearchByLanguage(query, primaryLanguage);
+  }
+
+  const [primaryResults, englishResults] = await Promise.all([
+    multiSearchByLanguage(query, primaryLanguage),
+    multiSearchByLanguage(query, ENGLISH_TMDB_LANGUAGE),
+  ]);
+
+  return mergeAndRankSearchResults(query, primaryResults, englishResults);
+}
+
+export async function searchMovies(
+  query: string,
+  language?: string,
+): Promise<TMDBMovieSearchResult[]> {
+  const primaryLanguage = getPreferredSearchLanguage(language);
+
+  if (!shouldUseEnglishFallback(primaryLanguage)) {
+    return searchMoviesByLanguage(query, primaryLanguage);
+  }
+
+  const [primaryResults, englishResults] = await Promise.all([
+    searchMoviesByLanguage(query, primaryLanguage),
+    searchMoviesByLanguage(query, ENGLISH_TMDB_LANGUAGE),
+  ]);
+
+  return mergeAndRankSearchResults(
+    query,
+    primaryResults,
+    englishResults,
+  ) as TMDBMovieSearchResult[];
+}
+
+export async function searchTVShows(
+  query: string,
+  language?: string,
+): Promise<TMDBShowSearchResult[]> {
+  const primaryLanguage = getPreferredSearchLanguage(language);
+
+  if (!shouldUseEnglishFallback(primaryLanguage)) {
+    return searchTVShowsByLanguage(query, primaryLanguage);
+  }
+
+  const [primaryResults, englishResults] = await Promise.all([
+    searchTVShowsByLanguage(query, primaryLanguage),
+    searchTVShowsByLanguage(query, ENGLISH_TMDB_LANGUAGE),
+  ]);
+
+  return mergeAndRankSearchResults(
+    query,
+    primaryResults,
+    englishResults,
+  ) as TMDBShowSearchResult[];
+}
+
 export async function searchMedia(
   query: string,
+  language?: string,
 ): Promise<TMDBSearchMediaResult[]> {
-  return multiSearch(query);
+  return multiSearch(query, language);
 }
 
 export async function generateQuickSearchMediaUrl(

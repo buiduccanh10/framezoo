@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getCachedMetadata } from "@/backend/helpers/providerApi";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Loading } from "@/components/layout/Loading";
 import {
   useEmbedScraping,
@@ -10,7 +11,6 @@ import {
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { ScrapeMedia } from "@/lib/providers";
-import { usePreferencesStore } from "@/stores/preferences";
 
 // Embed option component
 function EmbedOption(props: {
@@ -20,6 +20,7 @@ function EmbedOption(props: {
   routerId: string;
 }) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const unknownEmbedName = t("player.menus.sources.unknownOption");
 
   const embedName = useMemo(() => {
@@ -82,6 +83,7 @@ function EmbedSelectionView(props: {
   onBack: () => void;
 }) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const { run, notfound, loading, items, errored } = useSourceScraping(
     props.sourceId,
     props.routerId,
@@ -161,98 +163,28 @@ export function SourceSelectPart(props: {
   preferredSourceId?: string;
 }) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const [selectedSourceId, setSelectedSourceId] = React.useState<string | null>(
     null,
   );
   const routerId = "manualSourceSelect";
-  const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
-  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
-  const lastSuccessfulSource = usePreferencesStore(
-    (s) => s.lastSuccessfulSource,
-  );
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
   const sourceMaintainText = t("player.menus.sources.maintain");
 
   const sources = useMemo(() => {
     const metaType = props.media.type;
     if (!metaType) return [];
-
-    // For episodic content, always prioritize the source that just worked
-    // on the previous episode to keep server continuity when moving next.
-    const continuitySourceId =
-      metaType === "show"
-        ? props.preferredSourceId || lastSuccessfulSource
-        : lastSuccessfulSource;
-
     const allSources = getCachedMetadata()
       .filter((v) => v.type === "source")
       .filter(
         (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
+      )
+      .sort(
+        (left, right) =>
+          (left.rank ?? 0) - (right.rank ?? 0) ||
+          left.name.localeCompare(right.name),
       );
-
-    if (!enableSourceOrder || preferredSourceOrder.length === 0) {
-      // Even without custom source order, prioritize the continuity source.
-      // For non-show media, keep requiring the settings flag.
-      const shouldPrioritize =
-        metaType === "show"
-          ? !!continuitySourceId
-          : enableLastSuccessfulSource && !!continuitySourceId;
-
-      if (shouldPrioritize && continuitySourceId) {
-        const lastSourceIndex = allSources.findIndex(
-          (s) => s.id === continuitySourceId,
-        );
-        if (lastSourceIndex !== -1) {
-          const lastSource = allSources.splice(lastSourceIndex, 1)[0];
-          return [lastSource, ...allSources];
-        }
-      }
-      return allSources;
-    }
-
-    // Sort sources according to preferred order, but prioritize last successful source
-    const orderedSources = [];
-    const remainingSources = [...allSources];
-
-    // First, add continuity source if available.
-    const shouldPrioritize =
-      metaType === "show"
-        ? !!continuitySourceId
-        : enableLastSuccessfulSource && !!continuitySourceId;
-
-    if (shouldPrioritize && continuitySourceId) {
-      const lastSourceIndex = remainingSources.findIndex(
-        (s) => s.id === continuitySourceId,
-      );
-      if (lastSourceIndex !== -1) {
-        orderedSources.push(remainingSources[lastSourceIndex]);
-        remainingSources.splice(lastSourceIndex, 1);
-      }
-    }
-
-    // Add sources in preferred order
-    for (const sourceId of preferredSourceOrder) {
-      const sourceIndex = remainingSources.findIndex((s) => s.id === sourceId);
-      if (sourceIndex !== -1) {
-        orderedSources.push(remainingSources[sourceIndex]);
-        remainingSources.splice(sourceIndex, 1);
-      }
-    }
-
-    // Add remaining sources that weren't in the preferred order
-    orderedSources.push(...remainingSources);
-
-    return orderedSources;
-  }, [
-    props.media.type,
-    props.preferredSourceId,
-    preferredSourceOrder,
-    enableSourceOrder,
-    lastSuccessfulSource,
-    enableLastSuccessfulSource,
-  ]);
+    return allSources;
+  }, [props.media.type]);
 
   if (selectedSourceId) {
     return (

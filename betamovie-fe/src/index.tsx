@@ -45,6 +45,7 @@ import {
   extensionInfo,
   isExtensionActiveCached,
 } from "./backend/extension/messaging";
+import { ProviderMetadataBootstrap } from "./backend/providers/ProviderMetadataBootstrap";
 import { initializeChromecast } from "./setup/chromecast";
 import { initializeImageFadeIn } from "./setup/imageFadeIn";
 import { initializeOldStores } from "./stores/__old/migrations";
@@ -258,6 +259,7 @@ root.render(
             <ExtensionStatus />
             <TheRouter>
               <ThemeProvider applyGlobal>
+                <ProviderMetadataBootstrap />
                 <ProgressSyncer />
                 <BookmarkSyncer />
                 <WatchHistorySyncer />

@@ -1,11 +1,12 @@
+import { conf } from "@/setup/config";
+
 import {
   type MovieScrapeContext,
   NotFoundError,
   type ShowScrapeContext,
   type SourcererOutput,
   type StreamPreview,
-} from "@/lib/providers";
-import { conf } from "@/setup/config";
+} from "../../../../lib/providers";
 
 const getBaseUrl = () => {
   const backendUrl =
@@ -13,9 +14,9 @@ const getBaseUrl = () => {
   return `${backendUrl}/api/embed`;
 };
 
-const VIDROCK_API_BASE = `${getBaseUrl()}/api/streams/vidrock`;
+const VIDSRCTO_API_BASE = `${getBaseUrl()}/api/streams/vidsrcto`;
 
-interface VidrockStream {
+interface VidSrcToStream {
   name: string;
   title: string;
   url: string;
@@ -25,13 +26,13 @@ interface VidrockStream {
   preview?: StreamPreview;
 }
 
-interface VidrockApiResponse {
+interface VidSrcToApiResponse {
   success: boolean;
   tmdbId: string;
   imdbId: string | null;
   count: number;
   providerTimings: Record<string, number>;
-  streams: VidrockStream[];
+  streams: VidSrcToStream[];
 }
 
 function getCandidateIds(media: Record<string, any>): string[] {
@@ -47,7 +48,7 @@ function getCandidateIds(media: Record<string, any>): string[] {
   return Array.from(new Set([tmdbId, imdbId].filter(Boolean)));
 }
 
-function mapStreamsToEmbeds(streams: VidrockStream[]) {
+function mapStreamsToEmbeds(streams: VidSrcToStream[]) {
   return streams.map((stream) => {
     const baseUrl = getBaseUrl();
     const fixedUrl = fixStreamUrl(stream.url, baseUrl);
@@ -64,7 +65,7 @@ function mapStreamsToEmbeds(streams: VidrockStream[]) {
   });
 }
 
-function encodeStreamInfo(stream: VidrockStream): string {
+function encodeStreamInfo(stream: VidSrcToStream): string {
   const info = {
     name: stream.name,
     title: stream.title,
@@ -127,7 +128,7 @@ function fixSubtitleUrl(
   return fixed;
 }
 
-export async function scrapeVidrockMovie(
+export async function scrapeVidSrcToMovie(
   ctx: MovieScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
@@ -135,8 +136,8 @@ export async function scrapeVidrockMovie(
 
   try {
     for (const mediaId of candidateIds) {
-      const apiUrl = `${VIDROCK_API_BASE}/movie/${mediaId}`;
-      const data = await ctx.fetcher<VidrockApiResponse>(apiUrl, {
+      const apiUrl = `${VIDSRCTO_API_BASE}/movie/${mediaId}`;
+      const data = await ctx.fetcher<VidSrcToApiResponse>(apiUrl, {
         credentials: "include",
       });
 
@@ -149,15 +150,15 @@ export async function scrapeVidrockMovie(
         embeds: mapStreamsToEmbeds(data.streams),
       };
     }
-    throw new NotFoundError("No streams found on Vidrock");
+    throw new NotFoundError("No streams found on VidSrc.to");
   } catch (err) {
-    console.error("[Vidrock] Scrape failed:", err);
+    console.error("[VidSrc.to] Scrape failed:", err);
     if (err instanceof NotFoundError) throw err;
-    throw new NotFoundError("Failed to fetch streams from Vidrock");
+    throw new NotFoundError("Failed to fetch streams from VidSrc.to");
   }
 }
 
-export async function scrapeVidrockShow(
+export async function scrapeVidSrcToShow(
   ctx: ShowScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
@@ -165,8 +166,8 @@ export async function scrapeVidrockShow(
 
   try {
     for (const mediaId of candidateIds) {
-      const apiUrl = `${VIDROCK_API_BASE}/tv/${mediaId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
-      const data = await ctx.fetcher<VidrockApiResponse>(apiUrl, {
+      const apiUrl = `${VIDSRCTO_API_BASE}/tv/${mediaId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
+      const data = await ctx.fetcher<VidSrcToApiResponse>(apiUrl, {
         credentials: "include",
       });
 
@@ -179,10 +180,10 @@ export async function scrapeVidrockShow(
         embeds: mapStreamsToEmbeds(data.streams),
       };
     }
-    throw new NotFoundError("No streams found on Vidrock");
+    throw new NotFoundError("No streams found on VidSrc.to");
   } catch (err) {
-    console.error("[Vidrock] Show scrape failed:", err);
+    console.error("[VidSrc.to] Show scrape failed:", err);
     if (err instanceof NotFoundError) throw err;
-    throw new NotFoundError("Failed to fetch streams from Vidrock");
+    throw new NotFoundError("Failed to fetch streams from VidSrc.to");
   }
 }

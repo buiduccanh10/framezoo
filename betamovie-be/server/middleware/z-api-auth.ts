@@ -2,10 +2,12 @@ import { useAuth } from '~/utils/auth';
 
 const PUBLIC_API_PREFIXES = [
   '/api/m3u8-proxy',
+  '/api/media-proxy',
   '/api/preview-proxy',
   '/api/preview/auto',
   '/api/preview/file',
   '/api/embed/api/m3u8-proxy',
+  '/api/embed/api/media-proxy',
   '/api/embed/api/preview-proxy',
   '/api/embed/api/preview/auto',
   '/api/embed/api/preview/file',

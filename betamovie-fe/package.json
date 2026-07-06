@@ -1,7 +1,7 @@
 {
   "packageManager": "pnpm@11.9.0",
   "name": "betamovie-fe",
-  "version": "6.0.2",
+  "version": "6.1.9",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -44,6 +44,7 @@
     "@tanstack/react-query": "^5.101.0",
     "@tanstack/react-query-devtools": "^5.101.0",
     "@tanstack/react-query-persist-client": "^5.101.0",
+    "@tanstack/react-virtual": "^3.14.3",
     "@types/node-forge": "^1.3.14",
     "bcryptjs": "^3.0.3",
     "classnames": "^2.5.1",
@@ -62,7 +63,6 @@
     "iso-639-3": "^3.0.1",
     "jwt-decode": "^4.0.0",
     "lodash.merge": "^4.6.2",
-    "million": "^3.1.11",
     "nanoid": "^5.1.11",
     "node-forge": "^1.4.0",
     "ofetch": "^1.5.1",

@@ -99,6 +99,7 @@
     "addToList": "فہرست میں شامل کریں۔",
     "airs": "ایئرز",
     "collection": {
+      "bookmarkAll": "سبھی کو بُک مارک کریں۔",
       "movie": "فلم",
       "movies": "فلمیں",
       "rating": "درجہ بندی",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "تبدیلی",
       "more": "مزید دیکھیں",
+      "today": "آج",
+      "thisWeek": "اس ہفتے",
       "title": {
         "4kReleases": "4K ریلیز",
         "editorPicksMovies": "ایڈیٹر فلمیں چنتا ہے۔",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "ابھی اپ ڈیٹ کریں۔",
         "available": "ایپ کا نیا ورژن تیار ہے۔",
+        "download": "اپ ڈیٹ ڈاؤن لوڈ کریں۔",
         "later": "بعد میں",
+        "restart": "اپ ڈیٹ کرنے کے لیے دوبارہ شروع کریں۔",
         "updating": "اپ ڈیٹ ہو رہا ہے..."
       },
       "offline": "اپنا انٹرنیٹ کنیکشن چیک کریں، بے وقوف ہنس! 🦢"
@@ -1164,9 +1169,6 @@
       "embedOrder": "ایمبیڈز کو دوبارہ ترتیب دینا",
       "embedOrderDescription": "ایمبیڈس کو دوبارہ ترتیب دینے کے لیے گھسیٹیں اور چھوڑیں۔ یہ اس ترتیب کا تعین کرے گا جس میں آپ جس میڈیا کو دیکھنے کی کوشش کر رہے ہیں اس کے لیے ایمبیڈز کو چیک کیا جاتا ہے۔ <br>PH_1__ <strong>(زیادہ تر صارفین کے لئے پہلے سے طے شدہ آرڈر بہترین ہے)</strong>",
       "embedOrderEnableLabel": "حسب ضرورت ایمبیڈ آرڈر",
-      "holdToBoost": "رفتار بڑھانے کے لیے پکڑو",
-      "holdToBoostDescription": "اسپیس بار کو تھامیں یا پلے بیک کی رفتار کو عارضی طور پر 2x تک بڑھانے کے لیے اسکرین کو ٹچ اور تھامیں۔ پچھلی رفتار پر واپس جانے کے لیے ریلیز کریں۔",
-      "holdToBoostLabel": "فروغ دینے کے لیے ہولڈ کو فعال کریں۔",
       "keyboardShortcuts": "کی بورڈ شارٹ کٹس",
       "keyboardShortcutsDescription": "ایپلیکیشن کے لیے کی بورڈ شارٹ کٹس کو حسب ضرورت بنائیں۔ کسی بھی وقت یہ مدد دکھانے کے لیے ` کو دبائے رکھیں",
       "keyboardShortcutsLabel": "کی بورڈ شارٹ کٹس کو حسب ضرورت بنائیں",
@@ -1186,9 +1188,6 @@
       "skipCredits": "اینڈ کریڈٹس کو چھوڑیں۔",
       "skipCreditsDescription": "فعال ہونے پر، اختتامی کریڈٹس کو چھوڑنے کے لیے خود بخود اگلا ایپی سوڈ 99% مکمل ہونے پر چلائیں۔ غیر فعال ہونے پر، قسط مکمل ہونے تک انتظار کریں۔",
       "skipCreditsLabel": "اختتامی کریڈٹ کو چھوڑیں۔",
-      "sourceOrder": "ذرائع کو دوبارہ ترتیب دینا",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "کسٹم سورس آرڈر",
       "thumbnail": "تھمب نیلز بنائیں",
       "thumbnailDescription": "زیادہ تر وقت، ویڈیوز میں تھمب نیلز نہیں ہوتے ہیں۔ آپ اس ترتیب کو فلائی پر تیار کرنے کے لیے فعال کر سکتے ہیں لیکن وہ آپ کی ویڈیو کو سست بنا سکتے ہیں۔",
       "thumbnailLabel": "تھمب نیلز بنائیں",
@@ -1204,7 +1203,9 @@
         "appVersion": "ورژن",
         "notLoggedIn": "آپ لاگ ان نہیں ہیں۔",
         "userId": "یوزر آئی ڈی",
-        "userIdDescription": "اسے اپنے دوست کے رجسٹر کے لیے دعوتی کوڈ کے طور پر استعمال کریں۔"
+        "userIdDescription": "اسے اپنے دوست کے رجسٹر کے لیے دعوتی کوڈ کے طور پر استعمال کریں۔",
+        "checkForUpdates": "اپ ڈیٹس کے لیے چیک کریں۔",
+        "upToDate": "آپ فی الحال تازہ ترین ورژن پر ہیں۔"
       }
     },
     "subtitles": {

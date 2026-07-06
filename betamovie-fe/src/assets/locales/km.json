@@ -99,6 +99,7 @@
     "addToList": "បន្ថែមទៅបញ្ជី",
     "airs": "ខ្យល់",
     "collection": {
+      "bookmarkAll": "ចំណាំទាំងអស់។",
       "movie": "ភាពយន្ត",
       "movies": "ភាពយន្ត",
       "rating": "ការវាយតម្លៃ",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "ផ្លាស់ប្តូរ",
       "more": "មើលច្រើនទៀត",
+      "today": "ថ្ងៃនេះ",
+      "thisWeek": "សប្តាហ៍នេះ។",
       "title": {
         "4kReleases": "ការចេញផ្សាយ 4K",
         "editorPicksMovies": "កម្មវិធីនិពន្ធជ្រើសរើសភាពយន្ត",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "ធ្វើបច្ចុប្បន្នភាពឥឡូវនេះ",
         "available": "កំណែកម្មវិធីថ្មីរួចរាល់ហើយ។",
+        "download": "ទាញយកបច្ចុប្បន្នភាព",
         "later": "ពេលក្រោយ",
+        "restart": "ចាប់ផ្តើមឡើងវិញដើម្បីធ្វើបច្ចុប្បន្នភាព",
         "updating": "កំពុងធ្វើបច្ចុប្បន្នភាព..."
       },
       "offline": "ពិនិត្យការតភ្ជាប់អ៊ីនធឺណិតរបស់អ្នក, goose ឆ្កួត! 🦢"
@@ -1164,9 +1169,6 @@
       "embedOrder": "តម្រៀបការបង្កប់ឡើងវិញ",
       "embedOrderDescription": "អូសហើយទម្លាក់ដើម្បីតម្រៀបការបង្កប់ឡើងវិញ។ វានឹងកំណត់លំដាប់ដែលការបង្កប់ត្រូវបានពិនិត្យសម្រាប់មេឌៀដែលអ្នកកំពុងព្យាយាមមើល។ <br><br> <strong>(ការបញ្ជាទិញលំនាំដើមគឺល្អបំផុតសម្រាប់អ្នកប្រើប្រាស់ភាគច្រើន)</strong>",
       "embedOrderEnableLabel": "លំដាប់បង្កប់ផ្ទាល់ខ្លួន",
-      "holdToBoost": "សង្កត់ដើម្បីបង្កើនល្បឿន",
-      "holdToBoostDescription": "សង្កត់របារដកឃ្លា ឬប៉ះអេក្រង់ឱ្យជាប់ ដើម្បីបង្កើនល្បឿនចាក់ឡើងវិញជាបណ្តោះអាសន្នដល់ 2x។ លែងដើម្បីត្រឡប់ទៅល្បឿនមុន។",
-      "holdToBoostLabel": "បើកការសង្កត់ដើម្បីជំរុញ",
       "keyboardShortcuts": "ផ្លូវកាត់ក្តារចុច",
       "keyboardShortcutsDescription": "ប្ដូរផ្លូវកាត់ក្តារចុចតាមបំណងសម្រាប់កម្មវិធី។ សង្កត់ ` ដើម្បីបង្ហាញជំនួយនេះគ្រប់ពេល",
       "keyboardShortcutsLabel": "ប្ដូរផ្លូវកាត់ក្តារចុចតាមបំណង",
@@ -1186,9 +1188,6 @@
       "skipCredits": "រំលងឥណទានបញ្ចប់",
       "skipCreditsDescription": "នៅពេលបើកដំណើរការ ចាក់វគ្គបន្ទាប់ដោយស្វ័យប្រវត្តិនៅពេលបញ្ចប់ 99% ដើម្បីរំលងក្រេឌីតចុងក្រោយ។ នៅពេលបិទ សូមរង់ចាំរហូតដល់វគ្គនេះត្រូវបានបញ្ចប់ទាំងស្រុង។",
       "skipCreditsLabel": "រំលងឥណទានបញ្ចប់",
-      "sourceOrder": "តម្រៀបប្រភពឡើងវិញ",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "ការបញ្ជាទិញប្រភពផ្ទាល់ខ្លួន",
       "thumbnail": "បង្កើតរូបភាពតូចៗ",
       "thumbnailDescription": "ភាគច្រើន វីដេអូមិនមានរូបភាពតូចទេ។ អ្នកអាចបើកការកំណត់នេះដើម្បីបង្កើតពួកវាភ្លាមៗ ប៉ុន្តែពួកវាអាចធ្វើឱ្យវីដេអូរបស់អ្នកយឺតជាង។",
       "thumbnailLabel": "បង្កើតរូបភាពតូចៗ",
@@ -1204,7 +1203,9 @@
         "appVersion": "កំណែ",
         "notLoggedIn": "អ្នកមិនបានចូលទេ។",
         "userId": "លេខសម្គាល់អ្នកប្រើប្រាស់",
-        "userIdDescription": "ប្រើវាជាលេខកូដអញ្ជើញសម្រាប់ការចុះឈ្មោះមិត្តរបស់អ្នក។"
+        "userIdDescription": "ប្រើវាជាលេខកូដអញ្ជើញសម្រាប់ការចុះឈ្មោះមិត្តរបស់អ្នក។",
+        "checkForUpdates": "ពិនិត្យមើលបច្ចុប្បន្នភាព",
+        "upToDate": "បច្ចុប្បន្ន​អ្នក​ស្ថិត​នៅ​លើ​កំណែ​ចុងក្រោយ​បង្អស់"
       }
     },
     "subtitles": {

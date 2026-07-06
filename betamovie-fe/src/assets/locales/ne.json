@@ -99,6 +99,7 @@
     "addToList": "सूचीमा थप्नुहोस्",
     "airs": "प्रसारण",
     "collection": {
+      "bookmarkAll": "सबैलाई बुकमार्क गर्नुहोस्",
       "movie": "चलचित्र",
       "movies": "चलचित्रहरू",
       "rating": "मूल्याङ्कन",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "परिवर्तन गर्नुहोस्",
       "more": "अझ धेरै हेर्नुहोस्",
+      "today": "आज",
+      "thisWeek": "यो हप्ता",
       "title": {
         "4kReleases": "4K रिलीज",
         "editorPicksMovies": "सम्पादकले चलचित्रहरू छान्छन्",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "अहिले अपडेट गर्नुहोस्",
         "available": "एउटा नयाँ एप संस्करण तयार छ।",
+        "download": "अपडेट डाउनलोड गर्नुहोस्",
         "later": "पछि",
+        "restart": "अपडेट गर्न पुन: सुरु गर्नुहोस्",
         "updating": "अद्यावधिक गर्दै..."
       },
       "offline": "आफ्नो इन्टरनेट जाँच गर्नुहोस्"
@@ -1164,9 +1169,6 @@
       "embedOrder": "इम्बेडहरू पुन: क्रमबद्ध गर्दै",
       "embedOrderDescription": "इम्बेडहरू पुन: क्रमबद्ध गर्न तान्नुहोस् र छोड्नुहोस्। यसले तपाईँले हेर्न प्रयास गरिरहनुभएको मिडियाको लागि इम्बेडहरू जाँच गरिएको क्रम निर्धारण गर्नेछ। <br>PH_1__ <strong> (पूर्वनिर्धारित अर्डर धेरै प्रयोगकर्ताहरूको लागि उत्तम हो)</strong>",
       "embedOrderEnableLabel": "कस्टम इम्बेड अर्डर",
-      "holdToBoost": "गति बढाउन होल्ड गर्नुहोस्",
-      "holdToBoostDescription": "स्पेसबार होल्ड गर्नुहोस् वा स्क्रिनलाई छोएर होल्ड गर्नुहोस् अस्थायी रूपमा प्लेब्याक गति 2x मा बढाउन। अघिल्लो गतिमा फर्कन रिलीज गर्नुहोस्।",
-      "holdToBoostLabel": "बढावा दिन होल्ड सक्षम गर्नुहोस्",
       "keyboardShortcuts": "किबोर्ड सर्टकटहरू",
       "keyboardShortcutsDescription": "अनुप्रयोगको लागि किबोर्ड सर्टकटहरू अनुकूलित गर्नुहोस्। कुनै पनि समयमा यो मद्दत देखाउनको लागि होल्ड गर्नुहोस्",
       "keyboardShortcutsLabel": "किबोर्ड सर्टकटहरू अनुकूलित गर्नुहोस्",
@@ -1186,9 +1188,6 @@
       "skipCredits": "अन्त्य क्रेडिटहरू छोड्नुहोस्",
       "skipCreditsDescription": "सक्षम हुँदा, अन्तिम क्रेडिटहरू छोड्नको लागि 99% पूरा भएपछि स्वचालित रूपमा अर्को एपिसोड प्ले गर्नुहोस्। असक्षम हुँदा, एपिसोड पूर्ण रूपमा पूरा नभएसम्म पर्खनुहोस्।",
       "skipCreditsLabel": "अन्तिम क्रेडिटहरू छोड्नुहोस्",
-      "sourceOrder": "स्रोतहरू पुन: क्रमबद्ध गर्दै",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "कस्टम स्रोत अर्डर",
       "thumbnail": "थम्बनेलहरू बनाउनुहोस्",
       "thumbnailDescription": "अधिकांश समय, भिडियोहरूमा थम्बनेलहरू हुँदैनन्। तपाईंले वर्तमानमा नै तिनीहरूलाई उत्पन्न गर्न यो सेटिङ सक्षम गर्न सक्नुहुन्छ तर तिनीहरूले तपाईंको भिडियोलाई सुस्त बनाउन सक्छन्।",
       "thumbnailLabel": "थम्बनेलहरू बनाउनुहोस्",
@@ -1204,7 +1203,9 @@
         "appVersion": "संस्करण",
         "notLoggedIn": "तपाईं लग्द इन हुनुहुन्न",
         "userId": "प्रयोगकर्ता ID",
-        "userIdDescription": "तपाईंको साथी दर्ताको लागि निमन्त्रणा कोडको रूपमा यसलाई प्रयोग गर्नुहोस्"
+        "userIdDescription": "तपाईंको साथी दर्ताको लागि निमन्त्रणा कोडको रूपमा यसलाई प्रयोग गर्नुहोस्",
+        "checkForUpdates": "अपडेटहरूको लागि जाँच गर्नुहोस्",
+        "upToDate": "तपाईं हाल नवीनतम संस्करणमा हुनुहुन्छ"
       }
     },
     "subtitles": {

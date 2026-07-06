@@ -99,6 +99,7 @@
     "addToList": "Engadir á Lista",
     "airs": "Aire",
     "collection": {
+      "bookmarkAll": "Marcar todo",
       "movie": "Película",
       "movies": "Películas",
       "rating": "Valoración",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Cambiar",
       "more": "Ver máis",
+      "today": "Hoxe",
+      "thisWeek": "Esta semana",
       "title": {
         "4kReleases": "Lanzamentos 4K",
         "editorPicksMovies": "O editor escolle películas",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Actualiza agora",
         "available": "Unha nova versión da aplicación está lista.",
+        "download": "Descargar actualización",
         "later": "Máis tarde",
+        "restart": "Reinicia para actualizar",
         "updating": "Actualizando..."
       },
       "offline": "Verifica a túa conexión a internet"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Reprodución automática",
-      "autoplayDescription": "Reproduce automaticamente o seguinte episodio dunha serie despois de chegar ao final. Pódense activar os usuarios coa extensión do navegador, un proxy personalizado ou coa configuración predeterminada se o host permite.",
+      "autoplayDescription": "Reproduce automaticamente o seguinte episodio dunha serie despois de chegar ao final.",
       "autoplayLabel": "Reprodución automática",
       "autoResumeOnPlaybackError": "Reanudación automática ante un erro de reprodución",
       "autoResumeOnPlaybackErrorDescription": "Continúa buscando automaticamente outras fontes cando a fonte actual falla durante a reprodución. Se está desactivado, verá unha pantalla de erro cunha opción de currículo manual.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Reordenando incrustacións",
       "embedOrderDescription": "Arrastra e solta para reordenar as insercións. Isto determinará a orde na que se verifican as insercións dos medios que estás tentando ver. <br><br> <strong>(A orde predeterminada é a mellor para a maioría dos usuarios)</strong>",
       "embedOrderEnableLabel": "Orde de inserción personalizada",
-      "holdToBoost": "Mantén premido para aumentar a velocidade",
-      "holdToBoostDescription": "Mantén premida a barra de espazo ou mantén premida a pantalla para aumentar temporalmente a velocidade de reprodución a 2 veces. Soltar para volver á velocidade anterior.",
-      "holdToBoostLabel": "Activa o mantemento para aumentar",
       "keyboardShortcuts": "Atallos de teclado",
       "keyboardShortcutsDescription": "Personaliza os atallos de teclado para a aplicación. Mantén premido ` para mostrar esta axuda en calquera momento",
       "keyboardShortcutsLabel": "Personaliza os atallos do teclado",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Saltar créditos finais",
       "skipCreditsDescription": "Cando estea activado, reproduce automaticamente o seguinte episodio ao completar o 99 % para saltar os créditos finais. Cando estea desactivado, agarda ata que se complete o episodio.",
       "skipCreditsLabel": "Saltar créditos finais",
-      "sourceOrder": "Reordenación de fontes",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Pedido de orixe personalizado",
       "thumbnail": "Xerar miniaturas",
       "thumbnailDescription": "Na maioría das veces, os videos non teñen miniaturas. Podes activar esta configuración para xeralas ao momento, pero podes realentizar o video.",
       "thumbnailLabel": "Xerar miniaturas",
@@ -1204,7 +1203,9 @@
         "appVersion": "Versión",
         "notLoggedIn": "Non iniciache sesión",
         "userId": "ID do usuario",
-        "userIdDescription": "Use isto como código de invitación para o rexistro de amigos"
+        "userIdDescription": "Use isto como código de invitación para o rexistro de amigos",
+        "checkForUpdates": "Comproba se hai actualizacións",
+        "upToDate": "Actualmente estás na última versión"
       }
     },
     "subtitles": {

@@ -4,7 +4,6 @@ import loadVersion from "vite-plugin-package-version";
 import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
 import path from "path";
-import million from "million/compiler";
 import { handlebars } from "./plugins/handlebars";
 import { PluginOption, loadEnv } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -28,7 +27,6 @@ export default defineConfig(({ mode }) => {
     envDir: workspaceRoot,
     base: env.VITE_BASE_URL || "/",
     plugins: [
-      million.vite({ auto: true, log: false }),
       handlebars({
         vars: {
           opensearchEnabled: env.VITE_OPENSEARCH_ENABLED === "true",

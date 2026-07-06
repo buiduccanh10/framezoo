@@ -99,6 +99,7 @@
     "addToList": "Přidat do seznamu",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Přidat do záložek vše",
       "movie": "Film",
       "movies": "Filmy",
       "rating": "Hodnocení",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Přeměna",
       "more": "Zobrazit více",
+      "today": "Dnes",
+      "thisWeek": "Tento týden",
       "title": {
         "4kReleases": "4K vydání",
         "editorPicksMovies": "Editor vybírá filmy",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Aktualizujte nyní",
         "available": "Nová verze aplikace je připravena.",
+        "download": "Stáhnout aktualizaci",
         "later": "Později",
+        "restart": "Pro aktualizaci restartujte",
         "updating": "Aktualizace..."
       },
       "offline": "Zkontrolujte své internetové připojení"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Automatické přehrávání",
-      "autoplayDescription": "Automaticky přehrát další epizodu v sérii po dosažení konce. Mohou být povoleny uživateli s rozšířením prohlížeče, vlastním proxy serverem nebo s výchozím nastavením, pokud to hostitel povolí.",
+      "autoplayDescription": "Automaticky přehrát další epizodu v sérii po dosažení konce.",
       "autoplayLabel": "Automatické přehrávání",
       "autoResumeOnPlaybackError": "Automatické obnovení při chybě přehrávání",
       "autoResumeOnPlaybackErrorDescription": "Automaticky pokračovat v hledání dalších zdrojů, když aktuální zdroj během přehrávání selže. Pokud je zakázáno, zobrazí se chybová obrazovka s možností ručního obnovení.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Změna pořadí vložení",
       "embedOrderDescription": "Přetažením změníte pořadí vložení. Tím určíte pořadí, ve kterém jsou vložení kontrolována pro média, která se pokoušíte sledovat. <br><br> <strong>(Výchozí pořadí je nejlepší pro většinu uživatelů)</strong>",
       "embedOrderEnableLabel": "Vlastní pořadí vložení",
-      "holdToBoost": "Podržením zvýšíte rychlost",
-      "holdToBoostDescription": "Podržením mezerníku nebo dotykem a podržením obrazovky dočasně zvýšíte rychlost přehrávání na 2x. Uvolněním se vrátíte na předchozí rychlost.",
-      "holdToBoostLabel": "Aktivujte podržení pro posílení",
       "keyboardShortcuts": "Klávesové zkratky",
       "keyboardShortcutsDescription": "Přizpůsobte si klávesové zkratky pro aplikaci. Podržením ` tuto nápovědu kdykoli zobrazíte",
       "keyboardShortcutsLabel": "Přizpůsobte si klávesové zkratky",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Přeskočit závěrečné titulky",
       "skipCreditsDescription": "Je-li povoleno, automaticky přehraje další epizodu na 99% dokončení, aby se přeskočily závěrečné titulky. Je-li zakázáno, počkejte, dokud nebude epizoda zcela dokončena.",
       "skipCreditsLabel": "Přeskočit závěrečné titulky",
-      "sourceOrder": "Změna pořadí zdrojů",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Vlastní pořadí zdrojů",
       "thumbnail": "Generovat miniatury",
       "thumbnailDescription": "Videa většinou nemají miniatury. Toto nastavení můžete povolit, ale mohou zpomalit vaše video.",
       "thumbnailLabel": "Generovat miniatury",
@@ -1204,7 +1203,9 @@
         "appVersion": "Verze",
         "notLoggedIn": "Nejste přihlášen",
         "userId": "Uživatelské ID",
-        "userIdDescription": "Použijte jej jako zvací kód pro registraci přátel"
+        "userIdDescription": "Použijte jej jako zvací kód pro registraci přátel",
+        "checkForUpdates": "Zkontrolujte aktualizace",
+        "upToDate": "Momentálně používáte nejnovější verzi"
       }
     },
     "subtitles": {

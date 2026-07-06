@@ -13,9 +13,9 @@ const getBaseUrl = () => {
   return `${backendUrl}/api/embed`;
 };
 
-const OPHIM_API_BASE = `${getBaseUrl()}/api/streams/ophim`;
+const VIDKING_API_BASE = `${getBaseUrl()}/api/streams/vidking`;
 
-interface OPhimStream {
+interface VidkingStream {
   name: string;
   title: string;
   url: string;
@@ -25,39 +25,16 @@ interface OPhimStream {
   preview?: StreamPreview;
 }
 
-interface OPhimApiResponse {
+interface VidkingApiResponse {
   success: boolean;
   tmdbId: string;
   imdbId: string | null;
   count: number;
   providerTimings: Record<string, number>;
-  streams: OPhimStream[];
+  streams: VidkingStream[];
 }
 
-function buildContextQuery(
-  ctx: MovieScrapeContext | ShowScrapeContext,
-): string {
-  const query = new URLSearchParams();
-
-  if (
-    typeof ctx.media?.title === "string" &&
-    ctx.media.title.trim().length > 0
-  ) {
-    query.set("title", ctx.media.title.trim());
-  }
-
-  if (
-    typeof ctx.media?.releaseYear === "number" &&
-    Number.isFinite(ctx.media.releaseYear)
-  ) {
-    query.set("releaseYear", String(ctx.media.releaseYear));
-  }
-
-  const queryString = query.toString();
-  return queryString ? `?${queryString}` : "";
-}
-
-function encodeStreamInfo(stream: OPhimStream): string {
+function encodeStreamInfo(stream: VidkingStream): string {
   const info = {
     name: stream.name,
     title: stream.title,
@@ -120,86 +97,73 @@ function fixSubtitleUrl(
   return fixed;
 }
 
-export async function scrapeOPhimMovie(
+function mapStreamsToEmbeds(streams: VidkingStream[]) {
+  return streams.map((stream) => {
+    const baseUrl = getBaseUrl();
+    const fixedUrl = fixStreamUrl(stream.url, baseUrl);
+    const fixedSubtitle = fixSubtitleUrl(stream.subtitle, baseUrl);
+
+    return {
+      embedId: "openmovie-embed",
+      url: encodeStreamInfo({
+        ...stream,
+        url: fixedUrl,
+        subtitle: fixedSubtitle,
+      }),
+    };
+  });
+}
+
+export async function scrapeVidkingMovie(
   ctx: MovieScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const apiUrl = `${OPHIM_API_BASE}/movie/${ctx.media.tmdbId}${buildContextQuery(ctx)}`;
+  const apiUrl = `${VIDKING_API_BASE}/movie/${ctx.media.tmdbId}`;
 
   try {
-    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl, {
+    const data = await ctx.fetcher<VidkingApiResponse>(apiUrl, {
       credentials: "include",
     });
 
     if (!data.success || !data.streams?.length) {
-      throw new NotFoundError("No streams found on OPhim");
+      throw new NotFoundError("No streams found on Vidking");
     }
-
-    const embeds = data.streams.map((stream) => {
-      const baseUrl = getBaseUrl();
-      const fixedUrl = fixStreamUrl(stream.url, baseUrl);
-      const fixedSubtitle = fixSubtitleUrl(stream.subtitle, baseUrl);
-
-      return {
-        embedId: "openmovie-embed",
-        url: encodeStreamInfo({
-          ...stream,
-          url: fixedUrl,
-          subtitle: fixedSubtitle,
-        }),
-      };
-    });
 
     ctx.progress(100);
     return {
-      embeds,
+      embeds: mapStreamsToEmbeds(data.streams),
     };
   } catch (err) {
-    console.error("[OPhim] Scrape failed:", err);
+    console.error("[Vidking] Scrape failed:", err);
     if (err instanceof NotFoundError) throw err;
-    throw new NotFoundError("Failed to fetch streams from OPhim");
+    throw new NotFoundError("Failed to fetch streams from Vidking");
   }
 }
 
-export async function scrapeOPhimShow(
+export async function scrapeVidkingShow(
   ctx: ShowScrapeContext,
 ): Promise<SourcererOutput> {
   ctx.progress(10);
 
-  const apiUrl = `${OPHIM_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}${buildContextQuery(ctx)}`;
+  const apiUrl = `${VIDKING_API_BASE}/tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
 
   try {
-    const data = await ctx.fetcher<OPhimApiResponse>(apiUrl, {
+    const data = await ctx.fetcher<VidkingApiResponse>(apiUrl, {
       credentials: "include",
     });
 
     if (!data.success || !data.streams?.length) {
-      throw new NotFoundError("No streams found on OPhim");
+      throw new NotFoundError("No streams found on Vidking");
     }
-
-    const embeds = data.streams.map((stream) => {
-      const baseUrl = getBaseUrl();
-      const fixedUrl = fixStreamUrl(stream.url, baseUrl);
-      const fixedSubtitle = fixSubtitleUrl(stream.subtitle, baseUrl);
-
-      return {
-        embedId: "openmovie-embed",
-        url: encodeStreamInfo({
-          ...stream,
-          url: fixedUrl,
-          subtitle: fixedSubtitle,
-        }),
-      };
-    });
 
     ctx.progress(100);
     return {
-      embeds,
+      embeds: mapStreamsToEmbeds(data.streams),
     };
   } catch (err) {
-    console.error("[OPhim] Show scrape failed:", err);
+    console.error("[Vidking] Show scrape failed:", err);
     if (err instanceof NotFoundError) throw err;
-    throw new NotFoundError("Failed to fetch streams from OPhim");
+    throw new NotFoundError("Failed to fetch streams from Vidking");
   }
 }

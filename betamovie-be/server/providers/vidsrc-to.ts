@@ -8,9 +8,6 @@ interface StreamData {
 
 type StorageLike = ReturnType<typeof useStorage>;
 
-const VIDSRC_BASE_URL = process.env.VIDSRC_BASE_URL || 'https://vidsrc-embed.ru';
-const VIDSRC_HOST_URL = process.env.VIDSRC_HOST_URL || 'https://cloudnestra.com';
-const VIDSRC_ORIGIN = new URL(VIDSRC_BASE_URL).origin;
 const VIDSRC_HLS_ORIGIN = process.env.VIDSRC_HLS_ORIGIN || 'tmstr4.shadowlandschronicles.com';
 const MODERN_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
@@ -18,7 +15,8 @@ const REQUEST_TIMEOUT_MS = Number(process.env.VIDSRC_REQUEST_TIMEOUT_MS || 12_00
 const STREAM_CACHE_TTL = Number(process.env.VIDSRC_CACHE_TTL || 5 * 60);
 const IMDB_CACHE_TTL = Number(process.env.VIDSRC_IMDB_CACHE_TTL || 24 * 60 * 60);
 
-const IFRAME2_SRC_RE = /id=["']player_iframe["'][^>]*\s+src=["'](?<url>[^"']+)["']/i;
+const IFRAME1_SRC_RE = /<iframe[^>]+src=["']([^"']+)["']/i;
+const IFRAME2_SRC_RE = /<iframe[^>]+id=["']player_iframe["'][^>]+src=["']([^"']+)["']/i;
 const IFRAME3_SRC_RE = /src:\s*['"](?<url>\/prorcp\/[^'"]+)['"]/i;
 const PARAMS_RE = /<div id="(?<id>[^"]+)" style="display:none;">(?<content>[^<]+)<\/div>/;
 const FILE_RE = /player_parent.*?file:\s*['"](?<url>[^'"]+)['"].*?cuid/is;
@@ -73,11 +71,11 @@ const buildStreamCacheKey = (
   episodeNum?: number | null
 ) =>
   mediaType === 'movie'
-    ? `vidsrc:movie:${tmdbId}`
-    : `vidsrc:tv:${tmdbId}:${seasonNum}:${episodeNum}`;
+    ? `vidsrcto:movie:${tmdbId}`
+    : `vidsrcto:tv:${tmdbId}:${seasonNum}:${episodeNum}`;
 
 const buildImdbCacheKey = (mediaType: 'movie' | 'tv', tmdbId: string) =>
-  `vidsrc:imdb:${mediaType}:${tmdbId}`;
+  `vidsrcto:imdb:${mediaType}:${tmdbId}`;
 
 async function getCached<T>(storage: StorageLike | undefined, key: string): Promise<T | null> {
   if (!storage) return null;
@@ -170,6 +168,16 @@ function normalizeStreamUrl(rawValue: string): string | null {
   return null;
 }
 
+async function fetchToken(host: string): Promise<string | null> {
+  try {
+    const response = await withTimeout(`https://${host}/generate.php`);
+    if (!response.ok) return null;
+    return (await response.text()).trim();
+  } catch {
+    return null;
+  }
+}
+
 async function resolveImdbId(
   tmdbId: string,
   mediaType: 'movie' | 'tv',
@@ -235,61 +243,72 @@ async function extractVidSrcStream(
     return null;
   }
 
+  // Use vidsrc.to base URL instead of vidsrc-embed.ru
+  const vidsrcToBaseUrl = process.env.VIDSRCTO_BASE_URL || 'https://vidsrc.to';
+  
   const firstUrl =
     mediaType === 'movie'
-      ? `${VIDSRC_ORIGIN}/embed/movie/${encodeURIComponent(imdbId)}`
-      : `${VIDSRC_ORIGIN}/embed/tv/${encodeURIComponent(imdbId)}/${seasonNum}-${episodeNum}`;
+      ? `${vidsrcToBaseUrl}/embed/movie/${encodeURIComponent(imdbId)}`
+      : `${vidsrcToBaseUrl}/embed/tv/${encodeURIComponent(imdbId)}/${seasonNum}-${episodeNum}`;
 
-  const firstHtml = await fetchText(firstUrl, {
-    Referer: `${VIDSRC_ORIGIN}/`,
-    Origin: VIDSRC_ORIGIN,
-  });
+  const firstHtml = await fetchText(firstUrl, {});
   if (!firstHtml) {
     return null;
   }
 
-  const secondRelative = firstHtml.match(IFRAME2_SRC_RE)?.groups?.url;
-  if (!secondRelative) {
-    return null;
-  }
-
-  const secondUrl = resolveUrl(secondRelative, firstUrl);
+  const iframe1Match = firstHtml.match(IFRAME1_SRC_RE);
+  if (!iframe1Match) return null;
+  const secondUrl = iframe1Match[1].startsWith('//') ? 'https:' + iframe1Match[1] : iframe1Match[1];
   const secondOrigin = new URL(secondUrl).origin;
+
   const secondHtml = await fetchText(secondUrl, {
     Referer: firstUrl,
-    Origin: secondOrigin,
   });
-  if (!secondHtml) {
-    return null;
+  if (!secondHtml) return null;
+
+  const iframe2Match = secondHtml.match(IFRAME2_SRC_RE);
+  if (!iframe2Match) return null;
+  let thirdUrl = iframe2Match[1];
+  if (thirdUrl.startsWith('//')) {
+    thirdUrl = 'https:' + thirdUrl;
   }
 
-  const thirdRelative = secondHtml.match(IFRAME3_SRC_RE)?.groups?.url;
-  if (!thirdRelative) {
-    return null;
-  }
-
-  const thirdUrl = resolveUrl(thirdRelative, VIDSRC_HOST_URL);
   const thirdHtml = await fetchText(thirdUrl, {
     Referer: secondUrl,
-    Origin: VIDSRC_HOST_URL,
   });
-  if (!thirdHtml) {
-    return null;
-  }
+  if (!thirdHtml) return null;
 
-  const streamUrl = extractDecodedUrl(thirdHtml);
-  if (!streamUrl) {
-    return null;
+  const thirdRelative = thirdHtml.match(IFRAME3_SRC_RE)?.groups?.url;
+  if (!thirdRelative) return null;
+
+  const fourthUrl = resolveUrl(thirdRelative, thirdUrl);
+  const fourthOrigin = new URL(thirdUrl).origin;
+
+  const fourthHtml = await fetchText(fourthUrl, {
+    Referer: thirdUrl,
+  });
+  if (!fourthHtml) return null;
+
+  let streamUrl = extractDecodedUrl(fourthHtml);
+  if (!streamUrl) return null;
+
+  // Handle token replacement if needed
+  if (streamUrl.includes('__TOKEN__')) {
+    const host = new URL(streamUrl).host;
+    const token = await fetchToken(host);
+    if (token) {
+      streamUrl = streamUrl.replace('__TOKEN__', token);
+    }
   }
 
   return {
     masterPlaylistUrl: streamUrl,
-    referer: secondUrl,
-    origin: secondOrigin,
+    referer: thirdUrl,
+    origin: fourthOrigin,
   };
 }
 
-export async function getVidSrcStreams(
+export async function getVidSrcToStreams(
   tmdbId: string,
   mediaType: 'movie' | 'tv' = 'movie',
   seasonNum?: number | null,
@@ -323,12 +342,12 @@ export async function getVidSrcStreams(
 
     return [
       {
-        name: 'VidSrc - Auto',
-        title: 'VidSrc - High Quality',
+        name: 'VidSrc.to - Auto',
+        title: 'VidSrc.to - High Quality',
         url: streamData.masterPlaylistUrl,
         subtitle: '',
         quality: '1080p',
-        provider: 'vidsrc',
+        provider: 'vidsrcto',
         headers: {
           Referer: streamData.referer,
           Origin: streamData.origin,
@@ -337,7 +356,7 @@ export async function getVidSrcStreams(
       },
     ];
   } catch (error: any) {
-    console.error(`[VidSrc] Error: ${error?.message || String(error)}`);
+    console.error(`[VidSrc.to] Error: ${error?.message || String(error)}`);
     return [];
   }
 }

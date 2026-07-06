@@ -99,6 +99,7 @@
     "addToList": "Lisää listaan",
     "airs": "Esitetään",
     "collection": {
+      "bookmarkAll": "Merkitse kaikki",
       "movie": "Elokuva",
       "movies": "Elokuvat",
       "rating": "Luokitus",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Muuttaa",
       "more": "Katso lisää",
+      "today": "Tänään",
+      "thisWeek": "Tällä viikolla",
       "title": {
         "4kReleases": "4K-julkaisut",
         "editorPicksMovies": "Toimittaja valitsee elokuvia",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Päivitä nyt",
         "available": "Uusi sovellusversio on valmis.",
+        "download": "Lataa päivitys",
         "later": "Myöhemmin",
+        "restart": "Käynnistä uudelleen päivittääksesi",
         "updating": "Päivitetään..."
       },
       "offline": "Tarkista Internet-yhteytesi"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Automaattinen toisto",
-      "autoplayDescription": "Toista automaattisesti sarjan seuraava jakso sen päätyttyä. Käyttäjät voivat ottaa sen käyttöön selainlaajennuksella, mukautetulla välityspalvelimella tai oletusasetuksella, jos isäntä sen sallii.",
+      "autoplayDescription": "Toista automaattisesti sarjan seuraava jakso sen päätyttyä.",
       "autoplayLabel": "Automaattinen toisto",
       "autoResumeOnPlaybackError": "Toiston automaattinen jatkaminen virhe",
       "autoResumeOnPlaybackErrorDescription": "Jatka automaattisesti muiden lähteiden etsimistä, kun nykyinen lähde epäonnistuu toiston aikana. Jos se ei ole käytössä, näet virhenäytön, jossa on manuaalinen jatkamisvaihtoehto.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Upotusten järjestys uudelleen",
       "embedOrderDescription": "Järjestä upotukset uudelleen vetämällä ja pudottamalla. Tämä määrittää järjestyksen, jossa upotukset tarkistetaan katsottavan median osalta. <br><br> <strong>(Oletusjärjestys on paras useimmille käyttäjille)</strong>",
       "embedOrderEnableLabel": "Mukautettu upotusjärjestys",
-      "holdToBoost": "Pidä painettuna lisätäksesi nopeutta",
-      "holdToBoostDescription": "Pidä välilyöntinäppäintä painettuna tai kosketa ja pidä näyttöä painettuna lisätäksesi toistonopeuden tilapäisesti 2x. Vapauta palataksesi edelliseen nopeuteen.",
-      "holdToBoostLabel": "Ota pito käyttöön tehostaaksesi",
       "keyboardShortcuts": "Pikanäppäimet",
       "keyboardShortcutsDescription": "Mukauta sovelluksen pikanäppäimiä. Pidä ` painettuna näyttääksesi tämän ohjeen milloin tahansa",
       "keyboardShortcutsLabel": "Mukauta pikanäppäimiä",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Ohita lopputekstit",
       "skipCreditsDescription": "Kun tämä on käytössä, toista seuraava jakso automaattisesti 99-prosenttisesti valmiiksi ohittaaksesi lopputekstit. Kun se on poistettu käytöstä, odota, kunnes jakso on valmis.",
       "skipCreditsLabel": "Ohita lopputekstit",
-      "sourceOrder": "Lähteiden uudelleenjärjestäminen",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Mukautettu lähdejärjestys",
       "thumbnail": "Luo pikkukuvia",
       "thumbnailDescription": "Useimmiten videoissa ei ole pikkukuvia. Voit ottaa tämän asetuksen käyttöön luodaksesi niitä lennossa, mutta ne voivat hidastaa videotasi.",
       "thumbnailLabel": "Luo pikkukuvia",
@@ -1204,7 +1203,9 @@
         "appVersion": "Versio",
         "notLoggedIn": "Et ole kirjautunut sisään",
         "userId": "Käyttäjätunnus",
-        "userIdDescription": "Käytä tätä kutsukoodina ystävärekisteriin"
+        "userIdDescription": "Käytä tätä kutsukoodina ystävärekisteriin",
+        "checkForUpdates": "Tarkista päivitykset",
+        "upToDate": "Käytät tällä hetkellä uusinta versiota"
       }
     },
     "subtitles": {

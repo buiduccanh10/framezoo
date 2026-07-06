@@ -99,6 +99,7 @@
     "addToList": "ලැයිස්තුවට එක් කරන්න",
     "airs": "ගුවන්",
     "collection": {
+      "bookmarkAll": "සියල්ල පිටු සලකුණු කරන්න",
       "movie": "චිත්රපටය",
       "movies": "චිත්රපට",
       "rating": "ශ්රේණිගත කිරීම",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "වෙනස් කරන්න",
       "more": "තව බලන්න",
+      "today": "අද",
+      "thisWeek": "මෙම සතිය",
       "title": {
         "4kReleases": "4K නිකුත් කිරීම්",
         "editorPicksMovies": "සංස්කාරක චිත්‍රපට තෝරා ගනී",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "දැන් යාවත්කාලීන කරන්න",
         "available": "නව යෙදුම් අනුවාදයක් සූදානම්.",
+        "download": "යාවත්කාලීන බාගත කරන්න",
         "later": "පසුව",
+        "restart": "යාවත්කාලීන කිරීමට නැවත ආරම්භ කරන්න",
         "updating": "යාවත්කාලීන කරමින්..."
       },
       "offline": "ඔබේ අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කරන්න, මෝඩ පාත්තයා! 🦢"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "ස්වයංක්‍රීය ධාවනය",
-      "autoplayDescription": "අවසානයට ළඟා වූ පසු මාලාවක ඊළඟ කථාංගය ස්වයංක්‍රීයව වාදනය කරන්න. බ්‍රවුසර දිගුව, අභිරුචි ප්‍රොක්සියක් හෝ ධාරකය විසින් අවසර දෙනු ලැබුවහොත් පෙරනිමි සැකසුම සහිත පරිශීලකයින්ට සබල කළ හැක.",
+      "autoplayDescription": "අවසානයට ළඟා වූ පසු මාලාවක ඊළඟ කථාංගය ස්වයංක්‍රීයව වාදනය කරන්න.",
       "autoplayLabel": "ස්වයංක්‍රීය ධාවනය",
       "autoResumeOnPlaybackError": "නැවත ධාවනය දෝෂයක් මත ස්වයංක්‍රීයව නැවත ආරම්භ කිරීම",
       "autoResumeOnPlaybackErrorDescription": "නැවත ධාවනය අතරතුර වත්මන් මූලාශ්‍රය අසාර්ථක වූ විට ස්වයංක්‍රීයව වෙනත් මූලාශ්‍ර සෙවීම දිගටම කරගෙන යන්න. අබල කර ඇත්නම්, ඔබට අතින් නැවත ආරම්භ කිරීමේ විකල්පයක් සහිත දෝෂ තිරයක් පෙනෙනු ඇත.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "කාවැද්දීම නැවත සකස් කිරීම",
       "embedOrderDescription": "කාවැද්දීම නැවත සකස් කිරීමට ඇද දමන්න. ඔබ නැරඹීමට උත්සාහ කරන මාධ්‍ය සඳහා කාවැද්දීම් පරීක්ෂා කරන අනුපිළිවෙල මෙය තීරණය කරනු ඇත. <br><br> <strong>(පෙරනිමි ඇණවුම බොහෝ පරිශීලකයින් සඳහා හොඳම වේ)</strong>",
       "embedOrderEnableLabel": "අභිරුචි කාවැද්දූ ඇණවුම",
-      "holdToBoost": "වේගය වැඩි කිරීමට අල්ලාගෙන සිටින්න",
-      "holdToBoostDescription": "පසුධාවන වේගය 2x දක්වා තාවකාලිකව වැඩි කිරීමට spacebar හෝ ස්පර්ශ කර තිරය අල්ලාගෙන සිටින්න. පෙර වේගයට ආපසු යාමට මුදා හරින්න.",
-      "holdToBoostLabel": "වැඩි කිරීමට රඳවා තබා ගැනීම සබල කරන්න",
       "keyboardShortcuts": "යතුරුපුවරු කෙටිමං",
       "keyboardShortcutsDescription": "යෙදුම සඳහා යතුරුපුවරු කෙටිමං අභිරුචිකරණය කරන්න. ඕනෑම වේලාවක මෙම උදවු පෙන්වීමට ` අල්ලාගෙන සිටින්න",
       "keyboardShortcutsLabel": "යතුරුපුවරු කෙටිමං අභිරුචිකරණය කරන්න",
@@ -1186,9 +1188,6 @@
       "skipCredits": "අවසන් ණය මඟ හරින්න",
       "skipCreditsDescription": "සබල කළ විට, අවසන් ණය මඟ හැරීමට 99% සම්පූර්ණ වූ විට ස්වයංක්‍රීයව ඊළඟ කථාංගය වාදනය කරන්න. අබල කළ විට, කථාංගය සම්පූර්ණයෙන් අවසන් වන තෙක් රැඳී සිටින්න.",
       "skipCreditsLabel": "අවසන් ණය මඟ හරින්න",
-      "sourceOrder": "මූලාශ්‍ර නැවත සකස් කිරීම",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "අභිරුචි මූලාශ්‍ර ඇණවුම",
       "thumbnail": "සිඟිති රූ ජනනය කරන්න",
       "thumbnailDescription": "ගොඩක් වෙලාවට වීඩියෝ වල thumbnails නෑ. ඔබට ඒවා පියාසර කිරීමේදී උත්පාදනය කිරීමට මෙම සැකසීම සබල කළ හැකි නමුත් ඒවාට ඔබේ වීඩියෝව මන්දගාමී කළ හැක.",
       "thumbnailLabel": "සිඟිති රූ ජනනය කරන්න",
@@ -1204,7 +1203,9 @@
         "appVersion": "අනුවාදය",
         "notLoggedIn": "ඔබ පුරනය වී නොමැත",
         "userId": "පරිශීලක ID",
-        "userIdDescription": "මෙය ඔබගේ මිතුරු ලියාපදිංචිය සඳහා ආරාධනා කේතයක් ලෙස භාවිතා කරන්න"
+        "userIdDescription": "මෙය ඔබගේ මිතුරු ලියාපදිංචිය සඳහා ආරාධනා කේතයක් ලෙස භාවිතා කරන්න",
+        "checkForUpdates": "යාවත්කාලීන සඳහා පරීක්ෂා කරන්න",
+        "upToDate": "ඔබ දැනට නවතම අනුවාදයේ සිටී"
       }
     },
     "subtitles": {

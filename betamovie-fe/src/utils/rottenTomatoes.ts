@@ -14,3 +14,18 @@ export function getRTIcon(
       return resolvePublicUrl("/tomatoes/Rotten.svg")!;
   }
 }
+
+export function getRTAudienceIcon(
+  type: "upright" | "spilled" | "empty",
+): string {
+  switch (type) {
+    case "upright":
+      return resolvePublicUrl("/tomatoes/Popcorn_Fresh.svg")!;
+    case "spilled":
+      return resolvePublicUrl("/tomatoes/Popcorn_Rotten.svg")!;
+    case "empty":
+      return resolvePublicUrl("/tomatoes/Popcorn_Empty.svg")!;
+    default:
+      return resolvePublicUrl("/tomatoes/Popcorn_Empty.svg")!;
+  }
+}

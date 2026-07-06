@@ -51,48 +51,15 @@ export function useAuthData() {
   const replaceWatchHistory = useWatchHistoryStore((s) => s.replaceItems);
   const replaceLists = useListStore((s) => s.replaceLists);
 
-  const setEnableThumbnails = usePreferencesStore((s) => s.setEnableThumbnails);
   const setEnableAutoplay = usePreferencesStore((s) => s.setEnableAutoplay);
   const setEnableSkipCredits = usePreferencesStore(
     (s) => s.setEnableSkipCredits,
   );
-  const setEnableDiscover = usePreferencesStore((s) => s.setEnableDiscover);
-  const setEnableFeatured = usePreferencesStore((s) => s.setEnableFeatured);
-  const setEnableDetailsModal = usePreferencesStore(
-    (s) => s.setEnableDetailsModal,
-  );
-  const setEnableImageLogos = usePreferencesStore((s) => s.setEnableImageLogos);
-  const setEnableCarouselView = usePreferencesStore(
-    (s) => s.setEnableCarouselView,
-  );
-  const setForceCompactEpisodeView = usePreferencesStore(
-    (s) => s.setForceCompactEpisodeView,
-  );
-  const setSourceOrder = usePreferencesStore((s) => s.setSourceOrder);
-  const setEnableSourceOrder = usePreferencesStore(
-    (s) => s.setEnableSourceOrder,
-  );
-  const setLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setLastSuccessfulSource,
-  );
-  const setEnableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setEnableLastSuccessfulSource,
-  );
+
   const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
   const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
 
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-
-  const setEnableLowPerformanceMode = usePreferencesStore(
-    (s) => s.setEnableLowPerformanceMode,
-  );
-  const setEnableNativeSubtitles = usePreferencesStore(
-    (s) => s.setEnableNativeSubtitles,
-  );
-  const setEnableHoldToBoost = usePreferencesStore(
-    (s) => s.setEnableHoldToBoost,
-  );
-  const setHomeSectionOrder = usePreferencesStore((s) => s.setHomeSectionOrder);
   const setEnableDoubleClickToSeek = usePreferencesStore(
     (s) => s.setEnableDoubleClickToSeek,
   );
@@ -107,9 +74,6 @@ export function useAuthData() {
   );
   const setKeyboardShortcuts = usePreferencesStore(
     (s) => s.setKeyboardShortcuts,
-  );
-  const setEnableMinimalCards = usePreferencesStore(
-    (s) => s.setEnableMinimalCards,
   );
 
   const login = useCallback(
@@ -191,56 +155,12 @@ export function useAuthData() {
         setProxySet(settings.proxyUrls);
       }
 
-      if (settings.enableThumbnails !== undefined) {
-        setEnableThumbnails(settings.enableThumbnails);
-      }
-
       if (settings.enableAutoplay !== undefined) {
         setEnableAutoplay(settings.enableAutoplay);
       }
 
       if (settings.enableSkipCredits !== undefined) {
         setEnableSkipCredits(settings.enableSkipCredits);
-      }
-
-      if (settings.enableDiscover !== undefined) {
-        setEnableDiscover(settings.enableDiscover);
-      }
-
-      if (settings.enableFeatured !== undefined) {
-        setEnableFeatured(settings.enableFeatured);
-      }
-
-      if (settings.enableDetailsModal !== undefined) {
-        setEnableDetailsModal(settings.enableDetailsModal);
-      }
-
-      if (settings.enableImageLogos !== undefined) {
-        setEnableImageLogos(settings.enableImageLogos);
-      }
-
-      if (settings.enableCarouselView !== undefined) {
-        setEnableCarouselView(settings.enableCarouselView);
-      }
-
-      if (settings.forceCompactEpisodeView !== undefined) {
-        setForceCompactEpisodeView(settings.forceCompactEpisodeView);
-      }
-
-      if (settings.sourceOrder !== undefined) {
-        setSourceOrder(settings.sourceOrder ?? []);
-      }
-
-      if (settings.enableSourceOrder !== undefined) {
-        setEnableSourceOrder(settings.enableSourceOrder);
-      }
-
-      if (settings.lastSuccessfulSource !== undefined) {
-        setLastSuccessfulSource(settings.lastSuccessfulSource);
-      }
-
-      if (settings.enableLastSuccessfulSource !== undefined) {
-        setEnableLastSuccessfulSource(settings.enableLastSuccessfulSource);
       }
 
       if (settings.embedOrder !== undefined) {
@@ -267,24 +187,6 @@ export function useAuthData() {
         setdebridService(settings.debridService);
       }
 
-      if (settings.enableLowPerformanceMode !== undefined) {
-        setEnableLowPerformanceMode(settings.enableLowPerformanceMode);
-      }
-
-      if (settings.enableNativeSubtitles !== undefined) {
-        setEnableNativeSubtitles(settings.enableNativeSubtitles);
-      }
-
-      if (settings.enableHoldToBoost !== undefined) {
-        setEnableHoldToBoost(settings.enableHoldToBoost);
-      }
-
-      if (settings.homeSectionOrder !== undefined) {
-        setHomeSectionOrder(
-          settings.homeSectionOrder ?? ["watching", "bookmarks"],
-        );
-      }
-
       if (settings.manualSourceSelection !== undefined) {
         setManualSourceSelection(settings.manualSourceSelection);
       }
@@ -306,10 +208,6 @@ export function useAuthData() {
       if (settings.keyboardShortcuts !== undefined) {
         setKeyboardShortcuts(settings.keyboardShortcuts);
       }
-
-      if (settings.enableMinimalCards !== undefined) {
-        setEnableMinimalCards(settings.enableMinimalCards);
-      }
     },
     [
       replaceBookmarks,
@@ -320,35 +218,20 @@ export function useAuthData() {
       importSubtitleLanguage,
       setTheme,
       setProxySet,
-      setEnableThumbnails,
+
       setEnableAutoplay,
       setEnableSkipCredits,
-      setEnableDiscover,
-      setEnableFeatured,
-      setEnableDetailsModal,
-      setEnableImageLogos,
-      setEnableCarouselView,
-      setForceCompactEpisodeView,
-      setSourceOrder,
-      setEnableSourceOrder,
-      setLastSuccessfulSource,
-      setEnableLastSuccessfulSource,
       setEmbedOrder,
       setEnableEmbedOrder,
       setProxyTmdb,
       setFebboxKey,
       setdebridToken,
       setdebridService,
-      setEnableLowPerformanceMode,
-      setEnableNativeSubtitles,
-      setEnableHoldToBoost,
-      setHomeSectionOrder,
       setManualSourceSelection,
       setEnableDoubleClickToSeek,
       setEnableAutoResumeOnPlaybackError,
       setEnableNumberKeySeeking,
       setKeyboardShortcuts,
-      setEnableMinimalCards,
     ],
   );
 

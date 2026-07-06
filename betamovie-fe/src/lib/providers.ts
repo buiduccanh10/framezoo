@@ -5,7 +5,14 @@ import { getBackendAuthHeaders } from "@/utils/backendAuth";
 
 type AnyRecord = Record<string, any>;
 
-export type Qualities = "360" | "480" | "720" | "1080" | "4k" | "unknown";
+export type Qualities =
+  | "360"
+  | "480"
+  | "720"
+  | "1080"
+  | "1440"
+  | "4k"
+  | "unknown";
 
 export type Caption = {
   id: string;
@@ -591,6 +598,8 @@ const languageAliases: Record<string, string> = {
   hebrew: "he",
   hi: "hi",
   hindi: "hi",
+  hu: "hu",
+  hungarian: "hu",
   id: "id",
   indonesian: "id",
   it: "it",
@@ -612,11 +621,15 @@ const languageAliases: Record<string, string> = {
   portuguese: "pt",
   pt: "pt",
   "brazilian portuguese": "pt-br",
+  "portuguese br": "pt-br",
   "portuguese brazil": "pt-br",
   pob: "pt-br",
   ru: "ru",
   rus: "ru",
   russian: "ru",
+  sl: "sl",
+  slovene: "sl",
+  slovenian: "sl",
   sv: "sv",
   swedish: "sv",
   th: "th",
@@ -630,6 +643,8 @@ const languageAliases: Record<string, string> = {
   vietnamese: "vi",
   zh: "zh",
   chinese: "zh",
+  "bilingual chinese": "zh",
+  "chinese bilingual": "zh",
   "chinese simplified": "zh-cn",
   "simplified chinese": "zh-cn",
   "chinese traditional": "zh-tw",
@@ -640,8 +655,9 @@ function normalizeLanguageLookupLabel(label: string): string {
   return label
     .trim()
     .toLowerCase()
-    .replace(/[_/]+/g, " ")
+    .replace(/[_/-]+/g, " ")
     .replace(/[()]+/g, " ")
+    .replace(/\bbilingual\b/g, " ")
     .replace(/(?:[\s.-]+hi\d*)$/i, "")
     .replace(/\d+$/, "")
     .replace(/\s+/g, " ")

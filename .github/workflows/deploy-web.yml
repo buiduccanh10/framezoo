@@ -1,0 +1,97 @@
+name: Deploy Web
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-web-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PNPM_VERSION: "11.9.0"
+
+jobs:
+  audit:
+    name: Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: corepack enable
+      - run: corepack prepare pnpm@${PNPM_VERSION} --activate
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm audit
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: audit
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y openssh-client curl
+      - name: Start SSH agent
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+      - name: Trust VPS host
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+      - name: Sync repo and deploy
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_BRANCH: ${{ secrets.DEPLOY_BRANCH }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_PROJECT_NAME: ${{ secrets.DEPLOY_PROJECT_NAME }}
+        run: |
+          set -eu
+
+          if [ -z "${ENV_FILE:-}" ]; then
+            echo "ENV_FILE secret is empty."
+            exit 1
+          fi
+
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_BRANCH="${DEPLOY_BRANCH:-main}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
+
+          echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+            "set -eu; cd '${DEPLOY_PATH}'; [ -d .git ] || { echo 'Git repository not found at ${DEPLOY_PATH}'; exit 1; }; if [ ! -w .git ]; then echo 'No write permission on .git, trying sudo chown...'; sudo -n chown -R \$(id -un):\$(id -gn) . || { echo 'Cannot write .git and sudo is unavailable. Run once on VPS: sudo chown -R ${DEPLOY_USER}:${DEPLOY_USER} ${DEPLOY_PATH}'; exit 1; }; fi; CURRENT_URL=\$(git remote get-url origin 2>/dev/null || echo ''); case \"\$CURRENT_URL\" in https://github.com/*) echo 'Converting HTTPS origin to SSH...'; NEW_URL=\$(echo \"\$CURRENT_URL\" | sed 's|^https://github.com/|git@github.com:|'); git remote set-url origin \"\$NEW_URL\"; ;; esac; git fetch origin '${DEPLOY_BRANCH}'; (git checkout '${DEPLOY_BRANCH}' || git checkout -b '${DEPLOY_BRANCH}' 'origin/${DEPLOY_BRANCH}'); git pull --ff-only origin '${DEPLOY_BRANCH}'; git clean -fd; [ -f scripts/deploy.sh ] || { echo 'scripts/deploy.sh not found at ${DEPLOY_PATH}'; exit 1; }; [ -f docker-compose.prod.yml ] || { echo 'docker-compose.prod.yml not found at ${DEPLOY_PATH}'; exit 1; }; chmod +x scripts/deploy.sh"
+
+          ENV_TMP_LOCAL="$(mktemp /tmp/betamovie_env_local.XXXXXX)"
+          trap 'rm -f "$ENV_TMP_LOCAL"' EXIT
+          printf '%s' "$ENV_FILE" > "$ENV_TMP_LOCAL"
+          chmod 600 "$ENV_TMP_LOCAL"
+
+          echo "Building prod stack from ${DEPLOY_PATH}..."
+          printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; SKIP_CLOUDFLARE_PURGE='true' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh all"
+
+          echo "Purging Cloudflare cache..."
+          ./scripts/purge-cloudflare-cache.sh "$ENV_TMP_LOCAL"

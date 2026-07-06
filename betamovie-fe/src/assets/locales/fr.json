@@ -99,6 +99,7 @@
     "addToList": "Ajouter à la liste",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Tout ajouter aux favoris",
       "movie": "Film",
       "movies": "Films",
       "rating": "Notation",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Changer",
       "more": "Voir plus",
+      "today": "Aujourd'hui",
+      "thisWeek": "Cette semaine",
       "title": {
         "4kReleases": "Sorties 4K",
         "editorPicksMovies": "Films sélectionnés",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Mettre à jour maintenant",
         "available": "Une nouvelle version de l'application est prête.",
+        "download": "Télécharger la mise à jour",
         "later": "Plus tard",
+        "restart": "Redémarrer pour mettre à jour",
         "updating": "Mise à jour..."
       },
       "offline": "Veuillez vérifier votre connexion internet"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Lecture automatique",
-      "autoplayDescription": "Permet de lire automatiquement le prochain épisode d’une série une fois l’épisode actuel terminé. Disponible pour les utilisateurs via une extension navigateur, un proxy personnalisé, ou via la configuration par défaut si elle est autorisée par l’hébergeur.",
+      "autoplayDescription": "Permet de lire automatiquement le prochain épisode d’une série une fois l’épisode actuel terminé.",
       "autoplayLabel": "Lecture automatique",
       "autoResumeOnPlaybackError": "Reprise automatique en cas d'erreur de lecture",
       "autoResumeOnPlaybackErrorDescription": "Continuez automatiquement la recherche d'autres sources lorsque la source actuelle échoue pendant la lecture. S'il est désactivé, vous verrez un écran d'erreur avec une option de reprise manuelle.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Réorganisation des intégrations",
       "embedOrderDescription": "Faites glisser et déposez pour réorganiser les intégrations. Cela déterminera l'ordre dans lequel les intégrations sont vérifiées pour les médias que vous essayez de regarder. <br><br> <strong>(L'ordre par défaut convient le mieux à la plupart des utilisateurs)</strong>",
       "embedOrderEnableLabel": "Ordre d'intégration personnalisé",
-      "holdToBoost": "Maintenez pour augmenter la vitesse",
-      "holdToBoostDescription": "Maintenez la barre d'espace ou touchez et maintenez l'écran pour augmenter temporairement la vitesse de lecture à 2x. Relâchez pour revenir à la vitesse précédente.",
-      "holdToBoostLabel": "Activer le maintien pour booster",
       "keyboardShortcuts": "Raccourcis clavier",
       "keyboardShortcutsDescription": "Personnalisez les raccourcis clavier de l'application. Maintenez ` pour afficher cette aide à tout moment",
       "keyboardShortcutsLabel": "Personnaliser les raccourcis clavier",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Passer le générique de fin",
       "skipCreditsDescription": "Lorsque cette option est activée, l’épisode suivant se lance automatiquement à 99% pour passer le générique de fin. Lorsqu’elle est désactivée, la lecture attend la fin complète de l’épisode.",
       "skipCreditsLabel": "Passer le générique de fin",
-      "sourceOrder": "Modifier l’ordre des sources",
-      "sourceOrderDescription": "Faites glisser et déposez pour réorganiser les sources. Cela déterminera l’ordre dans lequel les sources seront vérifiées pour le contenu que vous souhaitez regarder. Si une source est grisée, cela signifie que l’<bold>extension</bold> est requise pour y accéder. <br><br> <strong>(L’ordre par défaut convient à la plupart des utilisateurs)</strong>",
-      "sourceOrderEnableLabel": "Modifier l’ordre des sources",
       "thumbnail": "Générer les miniatures",
       "thumbnailDescription": "La plupart du temps, les vidéos n'ont pas de miniatures. Vous pouvez activer ce paramètre pour les générer à la volée, mais ils peuvent ralentir votre vidéo.",
       "thumbnailLabel": "Générer les miniatures",
@@ -1204,7 +1203,9 @@
         "appVersion": "Version",
         "notLoggedIn": "Vous n'êtes pas connecté",
         "userId": "ID de l'utilisateur",
-        "userIdDescription": "Utilisez-le comme code d'invitation pour votre inscription d'ami"
+        "userIdDescription": "Utilisez-le comme code d'invitation pour votre inscription d'ami",
+        "checkForUpdates": "Vérifier les mises à jour",
+        "upToDate": "Vous êtes actuellement sur la dernière version"
       }
     },
     "subtitles": {

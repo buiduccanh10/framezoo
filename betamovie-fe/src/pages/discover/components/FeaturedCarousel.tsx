@@ -8,15 +8,16 @@ import { useWindowSize } from "react-use";
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
 import { getMediaLogo } from "@/backend/metadata/tmdb";
+import { getDiscoverContent } from "@/backend/metadata/traktApi";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
+import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
-import { usePreferencesStore } from "@/stores/preferences";
 import { getTmdbLanguageCode } from "@/utils/language";
-import { getRTIcon } from "@/utils/rottenTomatoes";
+import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
 import { RandomMovieButton } from "./RandomMovieButton";
@@ -57,6 +58,8 @@ interface FeaturedRTData {
   title: string;
   tomatoIcon: "certified_fresh" | "fresh" | "rotten";
   tomatoScore: number;
+  popcornIcon?: "upright" | "spilled" | "empty";
+  popcornScore?: number;
   url: string;
 }
 
@@ -192,9 +195,6 @@ export function FeaturedCarousel({
   const rtCacheRef = useRef<Record<string, FeaturedRTData | null>>({});
   const navigate = useNavigate();
 
-  const enableImageLogos = usePreferencesStore(
-    (state) => state.enableImageLogos,
-  );
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
   const { width: windowWidth, height: windowHeight } = useWindowSize();
@@ -319,32 +319,64 @@ export function FeaturedCarousel({
         const selectFeaturedPool = (items: MediaPick[], limit: number) => {
           return uniqueByKey(items).slice(0, limit);
         };
-        const [nowPlaying, popularTv] = await Promise.all([
-          endpointList("/movie/now_playing"),
-          endpointList("/tv/popular"),
-        ]);
-        const movieFeaturedPool = selectFeaturedPool(
-          nowPlaying.map(
-            (show: {
-              id: number;
-              vote_average?: number;
-              vote_count?: number;
-              release_date?: string;
-            }) => toMoviePick(show, "latest"),
-          ),
-          FEATURED_POOL_SIZE_PER_TYPE,
-        );
-        const tvFeaturedPool = selectFeaturedPool(
-          popularTv.map(
-            (show: {
-              id: number;
-              vote_average?: number;
-              vote_count?: number;
-              first_air_date?: string;
-            }) => toShowPick(show, "popular"),
-          ),
-          FEATURED_POOL_SIZE_PER_TYPE,
-        );
+        let movieFeaturedPool: MediaPick[] = [];
+        let tvFeaturedPool: MediaPick[] = [];
+
+        if (conf().USE_TRAKT) {
+          try {
+            const discoverData = await getDiscoverContent();
+            movieFeaturedPool = selectFeaturedPool(
+              (discoverData?.movie_tmdb_ids ?? []).map((id) =>
+                toMoviePick({ id }, "latest"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+            tvFeaturedPool = selectFeaturedPool(
+              (discoverData?.tv_tmdb_ids ?? []).map((id) =>
+                toShowPick({ id }, "popular"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+          } catch (error) {
+            console.warn("Failed to fetch Trakt discover content:", error);
+          }
+        }
+
+        if (movieFeaturedPool.length === 0 || tvFeaturedPool.length === 0) {
+          const [trendingMovies, trendingTv] = await Promise.all([
+            endpointList("/trending/movie/day"),
+            endpointList("/trending/tv/day"),
+          ]);
+
+          if (movieFeaturedPool.length === 0) {
+            movieFeaturedPool = selectFeaturedPool(
+              trendingMovies.map(
+                (show: {
+                  id: number;
+                  vote_average?: number;
+                  vote_count?: number;
+                  release_date?: string;
+                }) => toMoviePick(show, "latest"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+          }
+
+          if (tvFeaturedPool.length === 0) {
+            tvFeaturedPool = selectFeaturedPool(
+              trendingTv.map(
+                (show: {
+                  id: number;
+                  vote_average?: number;
+                  vote_count?: number;
+                  first_air_date?: string;
+                }) => toShowPick(show, "popular"),
+              ),
+              FEATURED_POOL_SIZE_PER_TYPE,
+            );
+          }
+        }
+
         const rankedSelection =
           forcedCategory === "movies"
             ? movieFeaturedPool
@@ -708,6 +740,8 @@ export function FeaturedCarousel({
   const hasTmdbRating = typeof tmdbVoteAverage === "number";
   const hasImdbRating = isLoadingImdb || Boolean(imdbData);
   const hasRtRating = isLoadingRt || Boolean(rtData);
+  const hasAudienceRating =
+    isLoadingRt || typeof rtData?.popcornScore === "number";
   const hasMediaYear = typeof mediaYear === "string";
   const hasSeasonCount =
     currentMedia?.type === "show" && Boolean(currentMedia?.number_of_seasons);
@@ -846,7 +880,7 @@ export function FeaturedCarousel({
       >
         <div className="container mx-auto px-8 lg:px-4 flex justify-between items-end w-full">
           <div className="max-w-3xl">
-            {logoUrl && enableImageLogos ? (
+            {logoUrl ? (
               <LazyImage
                 src={logoUrl}
                 alt={mediaTitle}
@@ -917,9 +951,32 @@ export function FeaturedCarousel({
                 </div>
               )}
 
-              {hasMediaYear && (
+              {hasAudienceRating && (
                 <div className="flex items-center gap-2 whitespace-nowrap">
                   {(hasTmdbRating || hasImdbRating || hasRtRating) && (
+                    <span className="text-white/60">•</span>
+                  )}
+                  <div className="flex items-center gap-1">
+                    <img
+                      src={getRTAudienceIcon(rtData?.popcornIcon ?? "empty")}
+                      alt="Popcornmeter"
+                      className="h-4 w-4"
+                    />
+                    {isLoadingRt ? (
+                      <span className={inlineLoadingClass} />
+                    ) : (
+                      <span>{rtData?.popcornScore}%</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {hasMediaYear && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  {(hasTmdbRating ||
+                    hasImdbRating ||
+                    hasRtRating ||
+                    hasAudienceRating) && (
                     <span className="text-white/60">•</span>
                   )}
                   <span>{new Date(mediaYear).getFullYear()}</span>
@@ -930,6 +987,7 @@ export function FeaturedCarousel({
                   {(hasTmdbRating ||
                     hasImdbRating ||
                     hasRtRating ||
+                    hasAudienceRating ||
                     hasMediaYear) && <span className="text-white/60">•</span>}
                   <span>
                     {currentMedia.number_of_seasons} {t("details.seasons")}

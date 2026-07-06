@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getCachedMetadata } from "@/backend/helpers/providerApi";
+import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Loading } from "@/components/layout/Loading";
 import {
   useEmbedScraping,
@@ -10,7 +11,7 @@ import {
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import {
-  getOpenMovieProviderFromStreamId,
+  buildOpenMovieStreamId,
   getOpenMovieVariantLabelFromStreamId,
 } from "@/components/player/utils/openMovieVariant";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -83,15 +84,20 @@ export function EmbedOption(props: {
       props.embedId === "openmovie-embed" &&
       props.url?.startsWith("openmovie://")
     ) {
-      const activeProvider = getOpenMovieProviderFromStreamId(activeStreamId);
-      if (activeProvider) {
-        try {
-          const encoded = props.url.replace("openmovie://", "");
-          const info = JSON.parse(decodeURIComponent(encoded));
-          return activeProvider === info.provider;
-        } catch {
-          return false;
-        }
+      try {
+        const encoded = props.url.replace("openmovie://", "");
+        const info = JSON.parse(decodeURIComponent(encoded));
+        return (
+          !!activeStreamId &&
+          activeStreamId ===
+            buildOpenMovieStreamId({
+              provider: info.provider,
+              url: info.url,
+              quality: info.quality,
+            })
+        );
+      } catch {
+        return false;
       }
     }
     return props.embedId === currentEmbedId;
@@ -114,6 +120,7 @@ export function EmbedOption(props: {
 
 export function EmbedSelectionView({ sourceId, id }: EmbedSelectionViewProps) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const router = useOverlayRouter(id);
   const { run, watching, notfound, loading, items, errored } =
     useSourceScraping(sourceId, id);
@@ -195,19 +202,12 @@ export function SourceSelectionView({
   onChoose,
 }: SourceSelectionViewProps) {
   const { t } = useTranslation();
+  useProviderMetadataVersion();
   const router = useOverlayRouter(id);
   const metaType = usePlayerStore((s) => s.meta?.type);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
   const setResumeFromSourceId = usePlayerStore((s) => s.setResumeFromSourceId);
   const setStatus = usePlayerStore((s) => s.setStatus);
-  const preferredSourceOrder = usePreferencesStore((s) => s.sourceOrder);
-  const enableSourceOrder = usePreferencesStore((s) => s.enableSourceOrder);
-  const lastSuccessfulSource = usePreferencesStore(
-    (s) => s.lastSuccessfulSource,
-  );
-  const enableLastSuccessfulSource = usePreferencesStore(
-    (s) => s.enableLastSuccessfulSource,
-  );
   const manualSourceSelection = usePreferencesStore(
     (s) => s.manualSourceSelection,
   );
@@ -219,57 +219,15 @@ export function SourceSelectionView({
       .filter((v) => v.type === "source")
       .filter(
         (v) => !Array.isArray(v.mediaTypes) || v.mediaTypes.includes(metaType),
+      )
+      .sort(
+        (left, right) =>
+          (left.rank ?? 0) - (right.rank ?? 0) ||
+          left.name.localeCompare(right.name),
       );
 
-    if (!enableSourceOrder || preferredSourceOrder.length === 0) {
-      // Even without custom source order, prioritize last successful source if enabled
-      if (enableLastSuccessfulSource && lastSuccessfulSource) {
-        const lastSourceIndex = allSources.findIndex(
-          (s) => s.id === lastSuccessfulSource,
-        );
-        if (lastSourceIndex !== -1) {
-          const lastSource = allSources.splice(lastSourceIndex, 1)[0];
-          return [lastSource, ...allSources];
-        }
-      }
-      return allSources;
-    }
-
-    // Sort sources according to preferred order, but prioritize last successful source
-    const orderedSources = [];
-    const remainingSources = [...allSources];
-
-    // First, add the last successful source if it exists, is available, and the feature is enabled
-    if (enableLastSuccessfulSource && lastSuccessfulSource) {
-      const lastSourceIndex = remainingSources.findIndex(
-        (s) => s.id === lastSuccessfulSource,
-      );
-      if (lastSourceIndex !== -1) {
-        orderedSources.push(remainingSources[lastSourceIndex]);
-        remainingSources.splice(lastSourceIndex, 1);
-      }
-    }
-
-    // Add sources in preferred order
-    for (const sourceId of preferredSourceOrder) {
-      const sourceIndex = remainingSources.findIndex((s) => s.id === sourceId);
-      if (sourceIndex !== -1) {
-        orderedSources.push(remainingSources[sourceIndex]);
-        remainingSources.splice(sourceIndex, 1);
-      }
-    }
-
-    // Add remaining sources that weren't in the preferred order
-    orderedSources.push(...remainingSources);
-
-    return orderedSources;
-  }, [
-    metaType,
-    preferredSourceOrder,
-    enableSourceOrder,
-    lastSuccessfulSource,
-    enableLastSuccessfulSource,
-  ]);
+    return allSources;
+  }, [metaType]);
 
   const handleFindNextSource = () => {
     if (!currentSourceId) return;

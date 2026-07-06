@@ -99,6 +99,7 @@
     "addToList": "Dodaj do listy",
     "airs": "Powietrze",
     "collection": {
+      "bookmarkAll": "Dodaj do zakładek Wszystko",
       "movie": "Film",
       "movies": "Kino",
       "rating": "Ocena",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Zmiana",
       "more": "Zobacz więcej",
+      "today": "Dzisiaj",
+      "thisWeek": "W tym tygodniu",
       "title": {
         "4kReleases": "Wydania 4K",
         "editorPicksMovies": "Redaktor wybiera filmy",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Zaktualizuj teraz",
         "available": "Nowa wersja aplikacji jest już gotowa.",
+        "download": "Pobierz aktualizację",
         "later": "Później",
+        "restart": "Uruchom ponownie, aby zaktualizować",
         "updating": "Aktualizowanie..."
       },
       "offline": "Sprawdź swoje połączenie internetowe, głupolku!"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Autoodtwarzanie",
-      "autoplayDescription": "Automatycznie odtwórz następny odcinek zbliżając się do końca obecnego. Może zostać włączone przez użytkownika w rozszerzeniu, niestandardowym proxy lub domyślną konfiguracją, jeśli dozwolone.",
+      "autoplayDescription": "Automatycznie odtwórz następny odcinek zbliżając się do końca obecnego.",
       "autoplayLabel": "Autoodtwarzanie",
       "autoResumeOnPlaybackError": "Automatyczne wznowienie po błędzie odtwarzania",
       "autoResumeOnPlaybackErrorDescription": "Automatycznie kontynuuj wyszukiwanie innych źródeł, jeśli bieżące źródło ulegnie awarii podczas odtwarzania. Jeśli ta opcja jest wyłączona, pojawi się ekran błędu z opcją ręcznego wznowienia.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Zmiana kolejności osadzania",
       "embedOrderDescription": "Przeciągnij i upuść, aby zmienić kolejność osadzonych elementów. To określi kolejność sprawdzania osadzonych multimediów, które próbujesz oglądać. <br><br> <strong>(Domyślna kolejność jest najlepsza dla większości użytkowników)</strong>",
       "embedOrderEnableLabel": "Niestandardowa kolejność osadzania",
-      "holdToBoost": "Przytrzymaj, aby zwiększyć prędkość",
-      "holdToBoostDescription": "Przytrzymaj spację lub dotknij i przytrzymaj ekran, aby tymczasowo zwiększyć prędkość odtwarzania do 2x. Zwolnij, aby powrócić do poprzedniej prędkości.",
-      "holdToBoostLabel": "Włącz przytrzymanie, aby zwiększyć",
       "keyboardShortcuts": "Skróty klawiaturowe",
       "keyboardShortcutsDescription": "Dostosuj skróty klawiaturowe dla aplikacji. Przytrzymaj `, aby wyświetlić tę pomoc w dowolnym momencie",
       "keyboardShortcutsLabel": "Dostosuj skróty klawiaturowe",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Pomiń napisy końcowe",
       "skipCreditsDescription": "Gdy włączone automatycznie odtwarza następny odcinek, gdy obecny jest w 99% obejrzany. Gdy wyłączone odtwarzanie nastąpi gdy cały odcinek jest skończony.",
       "skipCreditsLabel": "Pomiń napisy końcowe",
-      "sourceOrder": "Zmiana kolejności źródeł",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Niestandardowa kolejność źródeł",
       "thumbnail": "Generuj miniatury",
       "thumbnailDescription": "W większości przypadków filmy nie mają miniatur. Możesz włączyć to ustawienie, aby generować je na bieżąco, ale może to spowolnić wideo.",
       "thumbnailLabel": "Generuj miniatury",
@@ -1204,7 +1203,9 @@
         "appVersion": "Wersja",
         "notLoggedIn": "Nie jesteś zalogowany",
         "userId": "Identyfikator użytkownika",
-        "userIdDescription": "Użyj tego jako kodu zaproszenia do rejestracji znajomego"
+        "userIdDescription": "Użyj tego jako kodu zaproszenia do rejestracji znajomego",
+        "checkForUpdates": "Sprawdź aktualizacje",
+        "upToDate": "Obecnie korzystasz z najnowszej wersji"
       }
     },
     "subtitles": {

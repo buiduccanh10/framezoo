@@ -1,0 +1,355 @@
+name: Publish Desktop
+
+on:
+  workflow_run:
+    workflows:
+      - Deploy Web
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref or SHA to publish
+        required: false
+        default: main
+        type: string
+
+concurrency:
+  group: publish-desktop-${{ github.event.workflow_run.head_branch || github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    outputs:
+      checkout_ref: ${{ steps.detect.outputs.checkout_ref }}
+      published_at: ${{ steps.detect.outputs.published_at }}
+      should_publish: ${{ steps.detect.outputs.should_publish }}
+    env:
+      TARGET_REF: ${{ github.event.workflow_run.head_sha || inputs.ref || github.sha }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TARGET_REF }}
+          fetch-depth: 0
+      - name: Detect desktop-related changes
+        id: detect
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const currentSha = process.env.TARGET_REF;
+            const publishedAt = new Date().toISOString();
+            const desktopPatterns = [
+              /^betamovie-fe\//,
+              /^betamovie-desktop\//,
+              /^package\.json$/,
+              /^pnpm-lock\.yaml$/,
+              /^pnpm-workspace\.yaml$/,
+            ];
+
+            core.setOutput("checkout_ref", currentSha);
+            core.setOutput("published_at", publishedAt);
+
+            if (context.eventName === "workflow_dispatch") {
+              core.setOutput("should_publish", "true");
+              await core.summary
+                .addHeading("Desktop publish")
+                .addRaw(`Manual publish for \`${currentSha}\`.`)
+                .write();
+              return;
+            }
+
+            const currentRun = context.payload.workflow_run;
+            const runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+              owner,
+              repo,
+              workflow_id: "deploy-web.yml",
+              branch: currentRun.head_branch,
+              per_page: 100,
+            });
+            const previousRun = runs.find(
+              (run) =>
+                run.id !== currentRun.id &&
+                run.conclusion === "success" &&
+                run.head_sha !== currentSha,
+            );
+
+            if (!previousRun) {
+              core.setOutput("should_publish", "true");
+              await core.summary
+                .addHeading("Desktop publish")
+                .addRaw("No previous successful web deploy found on this branch. Publishing desktop bundle.")
+                .write();
+              return;
+            }
+
+            const compare = await github.rest.repos.compareCommitsWithBasehead({
+              owner,
+              repo,
+              basehead: `${previousRun.head_sha}...${currentSha}`,
+            });
+            const changedFiles = (compare.data.files ?? []).map((file) => file.filename);
+            const shouldPublish = changedFiles.some((file) =>
+              desktopPatterns.some((pattern) => pattern.test(file)),
+            );
+
+            core.setOutput("should_publish", shouldPublish ? "true" : "false");
+            await core.summary
+              .addHeading("Desktop publish diff")
+              .addRaw(`Base: \`${previousRun.head_sha}\``, true)
+              .addRaw(`Head: \`${currentSha}\``, true)
+              .addRaw(
+                shouldPublish
+                  ? "Desktop-related changes detected."
+                  : "No desktop/frontend/runtime package changes detected.",
+                true,
+              )
+              .addList(changedFiles.length > 0 ? changedFiles : ["No files returned by compare API."])
+              .write();
+      - name: Skip marker
+        if: steps.detect.outputs.should_publish != 'true'
+        run: echo "No desktop-related changes. Skipping publish."
+
+  build-macos:
+    name: Build macOS (${{ matrix.variant }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    needs: prepare
+    if: needs.prepare.outputs.should_publish == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-14
+            variant: mac-x64
+            arch: x64
+            command: pnpm --filter betamovie-desktop package:release:mac:x64
+          - runner: macos-14
+            variant: mac-arm64
+            arch: arm64
+            command: pnpm --filter betamovie-desktop package:release:mac:arm64
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare.outputs.checkout_ref }}
+      - name: Check macOS signing secrets
+        shell: bash
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+        run: |
+          set -eu
+          if [ -z "${CSC_LINK:-}" ]; then
+            echo "::warning::Thiếu macOS signing secrets (CSC_LINK). Ứng dụng sẽ KHÔNG được code sign và tính năng OTA Update trên macOS sẽ KHÔNG hoạt động."
+          else
+            echo "macOS signing secrets có sẵn."
+          fi
+      - run: corepack enable
+      - run: corepack prepare pnpm@11.9.0 --activate
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Write env file
+        shell: bash
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          set -eu
+          if [ -z "${ENV_FILE:-}" ]; then
+            echo "ENV_FILE secret is empty."
+            exit 1
+          fi
+          printf '%s' "$ENV_FILE" > .env
+          printf '%s' "$ENV_FILE" > betamovie-fe/.env
+          
+          BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
+          if [ -n "$BACKEND_URL" ]; then
+            echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
+          fi
+          
+          DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
+          if [ -n "$DEVTOOLS" ]; then
+            echo "VITE_ENABLE_DEVTOOLS_PROTECTION=$DEVTOOLS" >> "$GITHUB_ENV"
+          fi
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build desktop artifacts
+        shell: bash
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          if [ -z "$CSC_LINK" ]; then unset CSC_LINK; fi
+          if [ -z "$CSC_KEY_PASSWORD" ]; then unset CSC_KEY_PASSWORD; fi
+          if [ -z "$APPLE_ID" ]; then unset APPLE_ID; fi
+          if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
+          if [ -z "$APPLE_TEAM_ID" ]; then unset APPLE_TEAM_ID; fi
+          ${{ matrix.command }}
+      - name: Upload desktop artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.variant }}
+          if-no-files-found: error
+          path: |
+            betamovie-desktop/release/latest-mac.yml
+            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.dmg
+            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip
+            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip.blockmap
+
+  build-windows:
+    name: Build Windows (${{ matrix.variant }})
+    runs-on: windows-latest
+    timeout-minutes: 90
+    needs: prepare
+    if: needs.prepare.outputs.should_publish == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: win-x64
+            command: pnpm --filter betamovie-desktop package:release:win:x64
+            arch: x64
+          - variant: win-arm64
+            command: pnpm --filter betamovie-desktop package:release:win:arm64
+            arch: arm64
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare.outputs.checkout_ref }}
+      - run: corepack enable
+      - run: corepack prepare pnpm@11.9.0 --activate
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Write env file
+        shell: bash
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          set -eu
+          if [ -z "${ENV_FILE:-}" ]; then
+            echo "ENV_FILE secret is empty."
+            exit 1
+          fi
+          printf '%s' "$ENV_FILE" > .env
+          printf '%s' "$ENV_FILE" > betamovie-fe/.env
+          
+          BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
+          if [ -n "$BACKEND_URL" ]; then
+            echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
+          fi
+          
+          DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
+          if [ -n "$DEVTOOLS" ]; then
+            echo "VITE_ENABLE_DEVTOOLS_PROTECTION=$DEVTOOLS" >> "$GITHUB_ENV"
+          fi
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build desktop artifacts
+        shell: bash
+        run: ${{ matrix.command }}
+      - name: Upload desktop artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ matrix.variant }}
+          if-no-files-found: error
+          path: |
+            betamovie-desktop/release/latest.yml
+            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe
+            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe.blockmap
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs:
+      - prepare
+      - build-macos
+      - build-windows
+    if: needs.prepare.outputs.should_publish == 'true'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare.outputs.checkout_ref }}
+      - run: corepack enable
+      - run: corepack prepare pnpm@11.9.0 --activate
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Download packaged artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: desktop-artifacts
+      - name: Build release bundle
+        shell: bash
+        run: |
+          set -eu
+          node scripts/create-desktop-release-bundle.js \
+            --input-root desktop-artifacts \
+            --output-dir desktop-release-bundle \
+            --channel stable \
+            --published-at "${{ needs.prepare.outputs.published_at }}"
+          node scripts/verify-desktop-release-bundle.js desktop-release-bundle
+          tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
+      - name: Install SSH tools
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+      - name: Start SSH agent
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+      - name: Trust VPS host
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+      - name: Upload bundle and publish on VPS
+        shell: bash
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          DEPLOY_PROJECT_NAME: ${{ secrets.DEPLOY_PROJECT_NAME }}
+        run: |
+          set -eu
+
+          if [ -z "${ENV_FILE:-}" ]; then
+            echo "ENV_FILE secret is empty."
+            exit 1
+          fi
+
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
+          STAGING_PATH="${DEPLOY_PATH}/desktop-publish-staging"
+
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${STAGING_PATH}'"
+          scp -P "${VPS_PORT:-22}" desktop-release-bundle.tar.gz "${DEPLOY_TARGET}:${STAGING_PATH}/desktop-release-bundle.tar.gz"
+
+          printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"

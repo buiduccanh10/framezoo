@@ -35,13 +35,13 @@ export type DisplayError = {
 };
 
 export type SegmentQualityDebugInfo = {
-  realQuality: "1080" | "720" | "unknown";
+  realQuality: "4k" | "1440" | "1080" | "720" | "unknown";
   width: number | null;
   height: number | null;
   updatedAt: number;
 };
 
-export type PictureInPictureMode = "native" | "document" | null;
+export type PictureInPictureMode = "native" | "document" | "desktop" | null;
 export type PictureInPictureState = {
   active: boolean;
   mode: PictureInPictureMode;

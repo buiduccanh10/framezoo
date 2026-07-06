@@ -99,6 +99,7 @@
     "addToList": "Tambahkan ke Daftar",
     "airs": "mengudara",
     "collection": {
+      "bookmarkAll": "Tandai Semua",
       "movie": "Film",
       "movies": "Film",
       "rating": "Peringkat",
@@ -130,6 +131,8 @@
     "carousel": {
       "change": "Mengubah",
       "more": "Lihat lebih banyak",
+      "today": "Hari ini",
+      "thisWeek": "Minggu ini",
       "title": {
         "4kReleases": "Rilis 4K",
         "editorPicksMovies": "Editor Memilih Film",
@@ -594,7 +597,9 @@
       "appUpdate": {
         "action": "Perbarui sekarang",
         "available": "Versi aplikasi baru sudah siap.",
+        "download": "Unduh pembaruan",
         "later": "Nanti",
+        "restart": "Mulai ulang untuk memperbarui",
         "updating": "Memperbarui..."
       },
       "offline": "Periksa koneksi internet Anda"
@@ -1150,7 +1155,7 @@
     },
     "preferences": {
       "autoplay": "Putar otomatis",
-      "autoplayDescription": "Memutar episode berikutnya secara otomatis dalam sebuah serial setelah mencapai akhir. Dapat diaktifkan oleh pengguna dengan ekstensi browser, proxy khusus, atau dengan pengaturan default jika diizinkan oleh host.",
+      "autoplayDescription": "Memutar episode berikutnya secara otomatis dalam sebuah serial setelah mencapai akhir.",
       "autoplayLabel": "Putar otomatis",
       "autoResumeOnPlaybackError": "Lanjutkan otomatis pada kesalahan pemutaran",
       "autoResumeOnPlaybackErrorDescription": "Secara otomatis melanjutkan pencarian sumber lain ketika sumber saat ini gagal selama pemutaran. Jika dinonaktifkan, Anda akan melihat layar kesalahan dengan opsi melanjutkan manual.",
@@ -1164,9 +1169,6 @@
       "embedOrder": "Menyusun ulang penyematan",
       "embedOrderDescription": "Seret dan lepas untuk menyusun ulang penyematan. Ini akan menentukan urutan pemeriksaan penyematan untuk media yang ingin Anda tonton. <br><br> <strong>(Urutan default adalah yang terbaik untuk sebagian besar pengguna)</strong>",
       "embedOrderEnableLabel": "Pesanan penyematan khusus",
-      "holdToBoost": "Tahan untuk meningkatkan kecepatan",
-      "holdToBoostDescription": "Tahan bilah spasi atau sentuh dan tahan layar untuk meningkatkan kecepatan pemutaran sementara hingga 2x. Lepaskan untuk kembali ke kecepatan sebelumnya.",
-      "holdToBoostLabel": "Aktifkan tahan untuk meningkatkan",
       "keyboardShortcuts": "Pintasan Papan Ketik",
       "keyboardShortcutsDescription": "Sesuaikan pintasan keyboard untuk aplikasi. Tahan ` untuk menampilkan bantuan ini kapan saja",
       "keyboardShortcutsLabel": "Sesuaikan Pintasan Keyboard",
@@ -1186,9 +1188,6 @@
       "skipCredits": "Lewati Kredit Akhir",
       "skipCreditsDescription": "Jika diaktifkan, putar episode berikutnya secara otomatis dengan penyelesaian 99% untuk melewati kredit akhir. Jika dinonaktifkan, tunggu hingga episode selesai sepenuhnya.",
       "skipCreditsLabel": "Lewati kredit akhir",
-      "sourceOrder": "Menyusun ulang sumber",
-      "sourceOrderDescription": "Drag and drop to reorder sources. This will determine the order in which sources are checked for the media you are trying to watch. If a source is greyed out, it means the <bold>extension</bold> is required for that source. <br><br> <strong>(The default order is best for most users)</strong>",
-      "sourceOrderEnableLabel": "Urutan sumber khusus",
       "thumbnail": "Hasilkan thumbnail",
       "thumbnailDescription": "Seringkali, video tidak memiliki thumbnail. Anda dapat mengaktifkan pengaturan ini untuk membuatnya dengan cepat, tetapi pengaturan ini dapat membuat video Anda lebih lambat.",
       "thumbnailLabel": "Hasilkan thumbnail",
@@ -1204,7 +1203,9 @@
         "appVersion": "Versi",
         "notLoggedIn": "Anda belum masuk ke akun anda",
         "userId": "ID pengguna",
-        "userIdDescription": "Gunakan ini sebagai kode undangan untuk daftar teman Anda"
+        "userIdDescription": "Gunakan ini sebagai kode undangan untuk daftar teman Anda",
+        "checkForUpdates": "Periksa pembaruan",
+        "upToDate": "Anda saat ini menggunakan versi terbaru"
       }
     },
     "subtitles": {
