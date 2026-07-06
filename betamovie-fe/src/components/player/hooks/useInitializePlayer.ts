@@ -20,6 +20,7 @@ export function useInitializePlayer() {
 
 export function useInitializeSource() {
   const source = usePlayerStore((s) => s.source);
+  const sourceId = usePlayerStore((s) => s.sourceId);
   const sourceIdentifier = useMemo(
     () => (source ? JSON.stringify(source) : null),
     [source],
@@ -30,9 +31,9 @@ export function useInitializeSource() {
   const hasInitializedRef = useRef(false);
 
   useEffect(() => {
-    if (sourceIdentifier && !hasInitializedRef.current) {
+    if (sourceIdentifier && sourceId && !hasInitializedRef.current) {
       hasInitializedRef.current = true;
       selectLastUsedLanguageIfEnabled();
     }
-  }, [sourceIdentifier, selectLastUsedLanguageIfEnabled]);
+  }, [sourceIdentifier, sourceId, selectLastUsedLanguageIfEnabled]);
 }
