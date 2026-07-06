@@ -89,6 +89,7 @@ const HLS_SOURCEBUFFER_RACE_THRESHOLD = 3;
 const HLS_RECREATE_COOLDOWN_MS = 12000;
 const SEGMENT_DEBUG_ENABLED = import.meta.env.DEV;
 const DESKTOP_PIP_SYNC_DEBOUNCE_MS = 150;
+const DESKTOP_PIP_SYNC_HEARTBEAT_MS = 250;
 
 type DesktopElectronApi = {
   openDesktopPipWindow(state: DesktopPipState): Promise<boolean>;
@@ -251,6 +252,7 @@ export function makeVideoElementDisplayInterface(options?: {
   let desktopPipClosedUnsubscribe: (() => void) | null = null;
   let desktopPipActionUnsubscribe: (() => void) | null = null;
   let desktopPipSyncTimeout: NodeJS.Timeout | null = null;
+  let desktopPipSyncInterval: NodeJS.Timeout | null = null;
   let isNativeVideoFullscreen = false;
 
   const languagePromises = new Map<
@@ -284,8 +286,15 @@ export function makeVideoElementDisplayInterface(options?: {
     desktopPipSyncTimeout = null;
   }
 
+  function clearDesktopPipSyncInterval() {
+    if (!desktopPipSyncInterval) return;
+    clearInterval(desktopPipSyncInterval);
+    desktopPipSyncInterval = null;
+  }
+
   function stopDesktopPipSync() {
     clearDesktopPipSyncTimeout();
+    clearDesktopPipSyncInterval();
     if (desktopPipSyncUnsubscribe) {
       desktopPipSyncUnsubscribe();
       desktopPipSyncUnsubscribe = null;
@@ -343,6 +352,9 @@ export function makeVideoElementDisplayInterface(options?: {
     desktopPipSyncUnsubscribe = usePlayerStore.subscribe(() => {
       scheduleDesktopPipSync();
     });
+    desktopPipSyncInterval = setInterval(() => {
+      pushDesktopPipState();
+    }, DESKTOP_PIP_SYNC_HEARTBEAT_MS);
   }
 
   function handleDesktopPipAction(action: DesktopPipAction) {

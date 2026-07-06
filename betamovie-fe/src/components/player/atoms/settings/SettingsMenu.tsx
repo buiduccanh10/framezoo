@@ -35,13 +35,10 @@ export function SettingsMenu({ id }: { id: string }) {
     (s) => (s as any).embedId as string | null,
   );
   const activeStreamId = usePlayerStore((s) => s.source?.id);
-  const sourceName = useMemo(() => {
-    if (!currentSourceId) return "...";
-    const source = getCachedMetadata().find(
-      (src) => src.id === currentSourceId,
-    );
-    return source?.name ?? "...";
-  }, [currentSourceId]);
+  const sourceName = currentSourceId
+    ? (getCachedMetadata().find((src) => src.id === currentSourceId)?.name ??
+      "...")
+    : "...";
   const kkphimVariantLabel = useMemo(() => {
     if (currentSourceId !== "kkphim") {
       return null;
@@ -56,12 +53,10 @@ export function SettingsMenu({ id }: { id: string }) {
 
     return formatKkphimSourceName(sourceName, kkphimVariantLabel);
   }, [currentSourceId, kkphimVariantLabel, sourceName]);
-  const embedName = useMemo(() => {
-    if (currentSourceId === "kkphim") return undefined;
-    if (!currentEmbedId) return undefined;
-    const meta = getCachedMetadata().find((s) => s.id === currentEmbedId);
-    return meta?.name;
-  }, [currentEmbedId, currentSourceId]);
+  const embedName =
+    currentSourceId === "kkphim" || !currentEmbedId
+      ? undefined
+      : getCachedMetadata().find((s) => s.id === currentEmbedId)?.name;
   const { toggleLastUsed } = useCaptions();
 
   const selectedLanguagePretty = selectedCaptionLanguage

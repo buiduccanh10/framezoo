@@ -1,0 +1,286 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "parent_pipeline" && $CI_COMMIT_BRANCH == "main"'
+    - when: never
+
+stages:
+  - prepare
+  - build
+  - publish
+
+variables:
+  GIT_STRATEGY: none
+  PNPM_VERSION: "11.9.0"
+
+.default_ssh_setup: &default_ssh_setup
+  before_script:
+    - which apk && apk add --no-cache openssh-client git curl tar || (apt-get update && apt-get install -y openssh-client git curl tar && rm -rf /var/lib/apt/lists/*)
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - eval "$(ssh-agent -s)"
+    - echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
+    - ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+
+prepare:desktop:
+  stage: prepare
+  image: node:22-alpine
+  variables:
+    GIT_STRATEGY: fetch
+  script:
+    - |
+      set -eu
+
+      CHECKOUT_REF="${PARENT_COMMIT_SHA:-$CI_COMMIT_SHA}"
+      PUBLISHED_AT="${DESKTOP_PUBLISHED_AT:-${PARENT_PIPELINE_CREATED_AT:-${CI_PIPELINE_CREATED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}}}"
+
+      {
+        printf 'DESKTOP_CHECKOUT_REF=%s\n' "$CHECKOUT_REF"
+        printf 'DESKTOP_PUBLISHED_AT=%s\n' "$PUBLISHED_AT"
+        printf 'DESKTOP_SHOULD_PUBLISH=true\n'
+      } > desktop-publish.env
+
+      echo "Desktop publish prepared for ${CHECKOUT_REF}"
+  artifacts:
+    reports:
+      dotenv: desktop-publish.env
+    paths:
+      - desktop-publish.env
+    expire_in: 1 day
+
+build:desktop:macos:
+  stage: build
+  image: electronuserland/builder:22-wine
+  needs:
+    - job: prepare:desktop
+      artifacts: true
+  variables:
+    GIT_STRATEGY: fetch
+  script:
+    - |
+      set -eu
+
+      if [ -z "${ENV_FILE:-}" ]; then
+        echo "ENV_FILE is empty. Please set ENV_FILE in GitLab CI/CD variables."
+        exit 1
+      fi
+
+      corepack enable
+      corepack prepare pnpm@${PNPM_VERSION} --activate
+
+      printf '%s' "$ENV_FILE" > .env
+      printf '%s' "$ENV_FILE" > betamovie-fe/.env
+
+      BACKEND_URL="$(grep -E '^VITE_BACKEND_URL=' .env | head -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)"
+      if [ -n "$BACKEND_URL" ]; then
+        export VITE_BACKEND_URL="$BACKEND_URL"
+      fi
+
+      DEVTOOLS="$(grep -E '^VITE_ENABLE_DEVTOOLS_PROTECTION=' .env | head -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)"
+      if [ -n "$DEVTOOLS" ]; then
+        export VITE_ENABLE_DEVTOOLS_PROTECTION="$DEVTOOLS"
+      fi
+
+      pnpm install --frozen-lockfile
+
+      ARTIFACT_ROOT="desktop-artifacts"
+      RELEASE_DIR="betamovie-desktop/release"
+
+      clean_release_dir() {
+        rm -rf "$RELEASE_DIR"
+        mkdir -p "$RELEASE_DIR"
+      }
+
+      require_files() {
+        variant="$1"
+        shift
+        target="$ARTIFACT_ROOT/$variant"
+        mkdir -p "$target"
+
+        for pattern in "$@"; do
+          found=false
+          for file in $RELEASE_DIR/$pattern; do
+            if [ ! -e "$file" ]; then
+              continue
+            fi
+
+            cp "$file" "$target/"
+            found=true
+          done
+
+          if [ "$found" = false ]; then
+            echo "Missing required desktop artifact for ${variant}: ${pattern}"
+            exit 1
+          fi
+        done
+      }
+
+      copy_optional() {
+        variant="$1"
+        pattern="$2"
+        target="$ARTIFACT_ROOT/$variant"
+        mkdir -p "$target"
+
+        for file in $RELEASE_DIR/$pattern; do
+          if [ -e "$file" ]; then
+            cp "$file" "$target/"
+          fi
+        done
+      }
+
+      rm -rf "$ARTIFACT_ROOT"
+
+      pnpm --filter betamovie-desktop build
+
+      clean_release_dir
+      pnpm --filter betamovie-desktop exec electron-builder --mac zip --arm64
+      require_files "mac-arm64" "latest-mac.yml" "AlphaFlix-*-arm64-mac.zip" "AlphaFlix-*-arm64-mac.zip.blockmap"
+      copy_optional "mac-arm64" "AlphaFlix-*-arm64-mac.dmg"
+
+      clean_release_dir
+      pnpm --filter betamovie-desktop exec electron-builder --mac zip --x64
+      require_files "mac-x64" "latest-mac.yml" "AlphaFlix-*-x64-mac.zip" "AlphaFlix-*-x64-mac.zip.blockmap"
+      copy_optional "mac-x64" "AlphaFlix-*-x64-mac.dmg"
+
+      find "$ARTIFACT_ROOT" -maxdepth 2 -type f | sort
+  artifacts:
+    paths:
+      - desktop-artifacts/mac-arm64/
+      - desktop-artifacts/mac-x64/
+    expire_in: 1 day
+
+build:desktop:windows:
+  stage: build
+  image: electronuserland/builder:22-wine
+  needs:
+    - job: prepare:desktop
+      artifacts: true
+  variables:
+    GIT_STRATEGY: fetch
+  script:
+    - |
+      set -eu
+
+      if [ -z "${ENV_FILE:-}" ]; then
+        echo "ENV_FILE is empty. Please set ENV_FILE in GitLab CI/CD variables."
+        exit 1
+      fi
+
+      corepack enable
+      corepack prepare pnpm@${PNPM_VERSION} --activate
+
+      printf '%s' "$ENV_FILE" > .env
+      printf '%s' "$ENV_FILE" > betamovie-fe/.env
+
+      BACKEND_URL="$(grep -E '^VITE_BACKEND_URL=' .env | head -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)"
+      if [ -n "$BACKEND_URL" ]; then
+        export VITE_BACKEND_URL="$BACKEND_URL"
+      fi
+
+      DEVTOOLS="$(grep -E '^VITE_ENABLE_DEVTOOLS_PROTECTION=' .env | head -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)"
+      if [ -n "$DEVTOOLS" ]; then
+        export VITE_ENABLE_DEVTOOLS_PROTECTION="$DEVTOOLS"
+      fi
+
+      pnpm install --frozen-lockfile
+
+      ARTIFACT_ROOT="desktop-artifacts"
+      RELEASE_DIR="betamovie-desktop/release"
+
+      clean_release_dir() {
+        rm -rf "$RELEASE_DIR"
+        mkdir -p "$RELEASE_DIR"
+      }
+
+      require_files() {
+        variant="$1"
+        shift
+        target="$ARTIFACT_ROOT/$variant"
+        mkdir -p "$target"
+
+        for pattern in "$@"; do
+          found=false
+          for file in $RELEASE_DIR/$pattern; do
+            if [ ! -e "$file" ]; then
+              continue
+            fi
+
+            cp "$file" "$target/"
+            found=true
+          done
+
+          if [ "$found" = false ]; then
+            echo "Missing required desktop artifact for ${variant}: ${pattern}"
+            exit 1
+          fi
+        done
+      }
+
+      rm -rf "$ARTIFACT_ROOT"
+
+      pnpm --filter betamovie-desktop build
+
+      clean_release_dir
+      pnpm --filter betamovie-desktop exec electron-builder --win nsis --x64
+      require_files "win-x64" "latest.yml" "AlphaFlix-*-x64.exe" "AlphaFlix-*-x64.exe.blockmap"
+
+      clean_release_dir
+      pnpm --filter betamovie-desktop exec electron-builder --win nsis --arm64
+      require_files "win-arm64" "latest.yml" "AlphaFlix-*-arm64.exe" "AlphaFlix-*-arm64.exe.blockmap"
+
+      find "$ARTIFACT_ROOT" -maxdepth 2 -type f | sort
+  artifacts:
+    paths:
+      - desktop-artifacts/win-x64/
+      - desktop-artifacts/win-arm64/
+    expire_in: 1 day
+
+publish:desktop:
+  stage: publish
+  image: node:22-alpine
+  timeout: 45m
+  extends: [.default_ssh_setup]
+  variables:
+    GIT_STRATEGY: fetch
+  needs:
+    - job: prepare:desktop
+      artifacts: true
+    - job: build:desktop:macos
+      artifacts: true
+    - job: build:desktop:windows
+      artifacts: true
+  script:
+    - |
+      set -eu
+
+      if [ -z "${ENV_FILE:-}" ]; then
+        echo "ENV_FILE is empty. Please set ENV_FILE in GitLab CI/CD variables."
+        exit 1
+      fi
+
+      if [ ! -d "desktop-artifacts" ]; then
+        echo "desktop-artifacts is missing. Ensure desktop build jobs completed successfully."
+        exit 1
+      fi
+
+      PUBLISHED_AT="${DESKTOP_PUBLISHED_AT:-${PARENT_PIPELINE_CREATED_AT:-${CI_PIPELINE_CREATED_AT:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}}}"
+
+      node scripts/create-desktop-release-bundle.js \
+        --input-root desktop-artifacts \
+        --output-dir desktop-release-bundle \
+        --channel stable \
+        --published-at "$PUBLISHED_AT"
+
+      node scripts/verify-desktop-release-bundle.js desktop-release-bundle
+      tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
+
+      DEPLOY_USER="${VPS_USER:-betakiot}"
+      DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+      DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+      DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
+      STAGING_PATH="${DEPLOY_PATH}/desktop-publish-staging"
+
+      ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${STAGING_PATH}'"
+      scp -P "${VPS_PORT:-22}" desktop-release-bundle.tar.gz "${DEPLOY_TARGET}:${STAGING_PATH}/desktop-release-bundle.tar.gz"
+
+      printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
+        "set -eu; ENV_TMP=\$(mktemp /tmp/${CI_PROJECT_NAME}_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"

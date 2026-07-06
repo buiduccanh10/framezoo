@@ -2,11 +2,13 @@ import { useAsyncFn } from "react-use";
 
 import { isExtensionActiveCached } from "@/backend/extension/messaging";
 import { prepareStream } from "@/backend/extension/streams";
+import { refreshCachedMetadata } from "@/backend/helpers/providerApi";
 import {
   scrapeSourceOutputToProviderMetric,
   useReportProviders,
 } from "@/backend/helpers/report";
 import { getProviders } from "@/backend/providers/providers";
+import { loadProviderMetadata } from "@/backend/providers/runtimeMetadata";
 import { convertProviderCaption } from "@/components/player/utils/captions";
 import { convertRunoutputToSource } from "@/components/player/utils/convertRunoutputToSource";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -37,6 +39,8 @@ export function useEmbedScraping(
   const [request, run] = useAsyncFn(async () => {
     let result: EmbedOutput | undefined;
     if (!meta) return;
+    await loadProviderMetadata();
+    refreshCachedMetadata();
     try {
       result = await getProviders().runEmbedScraper({
         id: embedId,
@@ -95,6 +99,8 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
 
   const [request, run] = useAsyncFn(async () => {
     if (!sourceId || !meta) return null;
+    await loadProviderMetadata();
+    refreshCachedMetadata();
     setEmbedId(null);
     const scrapeMedia = metaToScrapeMedia(meta);
 
@@ -122,12 +128,12 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
     if (result.stream && result.stream.length > 0) {
       if (isExtensionActiveCached()) await prepareStream(result.stream[0]);
       setEmbedId(null);
+      setSourceId(sourceId);
       setSource(
         convertRunoutputToSource({ stream: result.stream[0] }),
         convertProviderCaption(result.stream[0].captions),
         getSavedProgressTime(progressItems, meta),
       );
-      setSourceId(sourceId);
       // Save the last successful source when manually selected
       setLastSuccessfulSource(sourceId);
       router.close();

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { PROVIDER_METADATA_CACHE_UPDATED_EVENT } from "@/backend/providers/metadataEvents";
 import type { MetaOutput } from "@/lib/providers";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
@@ -198,10 +199,27 @@ export function subscribeProviderMetadata(listener: () => void) {
 export function useProviderMetadataVersion(): number {
   const [version, setVersion] = useState(providerMetadataVersion);
 
-  useEffect(
-    () => subscribeProviderMetadata(() => setVersion(providerMetadataVersion)),
-    [],
-  );
+  useEffect(() => {
+    const unsubscribe = subscribeProviderMetadata(() =>
+      setVersion(providerMetadataVersion),
+    );
+    const handleCacheUpdate = () => {
+      setVersion((currentVersion) => currentVersion + 1);
+    };
+
+    window.addEventListener(
+      PROVIDER_METADATA_CACHE_UPDATED_EVENT,
+      handleCacheUpdate,
+    );
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener(
+        PROVIDER_METADATA_CACHE_UPDATED_EVENT,
+        handleCacheUpdate,
+      );
+    };
+  }, []);
 
   return version;
 }

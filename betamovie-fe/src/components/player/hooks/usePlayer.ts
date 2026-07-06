@@ -54,8 +54,8 @@ export function usePlayer() {
         startAtOverride ?? getSavedProgressTime(progressStore.items, meta);
       setCaption(null);
       setEmbedId(null);
-      setSource(source, captions, start);
       setSourceId(sourceId);
+      setSource(source, captions, start);
       setStatus(playerStatus.PLAYING);
       init();
     },

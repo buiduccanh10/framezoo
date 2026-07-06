@@ -1,5 +1,6 @@
 import { jwtDecode } from "jwt-decode";
 
+import { PROVIDER_METADATA_CACHE_UPDATED_EVENT } from "@/backend/providers/metadataEvents";
 import { getProviders } from "@/backend/providers/providers";
 import { MetaOutput } from "@/lib/providers";
 
@@ -21,6 +22,9 @@ function sortMetadata(data: MetaOutput[]): MetaOutput[] {
 
 export function setCachedMetadata(data: MetaOutput[]) {
   metaDataCache = sortMetadata(data);
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(PROVIDER_METADATA_CACHE_UPDATED_EVENT));
+  }
 }
 
 export function getCachedMetadata(): MetaOutput[] {
