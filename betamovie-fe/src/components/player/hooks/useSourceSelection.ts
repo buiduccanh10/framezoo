@@ -128,12 +128,12 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
     if (result.stream && result.stream.length > 0) {
       if (isExtensionActiveCached()) await prepareStream(result.stream[0]);
       setEmbedId(null);
+      setSourceId(sourceId);
       setSource(
         convertRunoutputToSource({ stream: result.stream[0] }),
         convertProviderCaption(result.stream[0].captions),
         getSavedProgressTime(progressItems, meta),
       );
-      setSourceId(sourceId);
       // Save the last successful source when manually selected
       setLastSuccessfulSource(sourceId);
       router.close();
