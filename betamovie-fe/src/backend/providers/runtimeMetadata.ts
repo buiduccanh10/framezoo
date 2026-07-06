@@ -172,12 +172,14 @@ export function applyProviderMetadataOverride<
     rank?: number;
     disabled?: boolean;
   },
->(provider: T): T {
+>(provider: T): T | null {
+  if (!providerMetadataLoaded) return null;
+
   const override = providerMetadataById.get(provider.id);
 
-  if (!override) return provider;
+  if (!override) return null;
   if (override.type && provider.type && override.type !== provider.type) {
-    return provider;
+    return null;
   }
 
   return {
