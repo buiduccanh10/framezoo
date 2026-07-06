@@ -12,7 +12,10 @@ const RELEASE_VARIANTS = {
     label: "macOS Apple Silicon",
     description: "Best for M-series Macs",
     feedFileName: "latest-mac.yml",
-    downloadPattern: /^AlphaFlix-(.+)-arm64-mac\.dmg$/,
+    downloadPattern: [
+      /^AlphaFlix-(.+)-arm64-mac\.dmg$/,
+      /^AlphaFlix-(.+)-arm64-mac\.zip$/,
+    ],
     artifactPattern: /^AlphaFlix-(.+)-arm64-mac\.zip$/,
     blockmapPattern: /^AlphaFlix-(.+)-arm64-mac\.zip\.blockmap$/,
   },
@@ -23,7 +26,10 @@ const RELEASE_VARIANTS = {
     label: "macOS Intel",
     description: "Best for Intel Macs",
     feedFileName: "latest-mac.yml",
-    downloadPattern: /^AlphaFlix-(.+)-x64-mac\.dmg$/,
+    downloadPattern: [
+      /^AlphaFlix-(.+)-x64-mac\.dmg$/,
+      /^AlphaFlix-(.+)-x64-mac\.zip$/,
+    ],
     artifactPattern: /^AlphaFlix-(.+)-x64-mac\.zip$/,
     blockmapPattern: /^AlphaFlix-(.+)-x64-mac\.zip\.blockmap$/,
   },
@@ -34,7 +40,10 @@ const RELEASE_VARIANTS = {
     label: "macOS Universal",
     description: "Works on both Apple Silicon and Intel Macs",
     feedFileName: "latest-mac.yml",
-    downloadPattern: /^AlphaFlix-(.+)-universal-mac\.dmg$/,
+    downloadPattern: [
+      /^AlphaFlix-(.+)-universal-mac\.dmg$/,
+      /^AlphaFlix-(.+)-universal-mac\.zip$/,
+    ],
     artifactPattern: /^AlphaFlix-(.+)-universal-mac\.zip$/,
     blockmapPattern: /^AlphaFlix-(.+)-universal-mac\.zip\.blockmap$/,
   },
@@ -101,6 +110,17 @@ function findMatchingFile(inputDir, pattern) {
   return null;
 }
 
+function findMatchingFileFromPatterns(inputDir, patterns) {
+  for (const pattern of patterns) {
+    const match = findMatchingFile(inputDir, pattern);
+    if (match) {
+      return match;
+    }
+  }
+
+  return null;
+}
+
 function assert(condition, message) {
   if (!condition) {
     throw new Error(message);
@@ -112,7 +132,10 @@ function collectVariantFiles(inputDir, variantId) {
   assert(descriptor, `Unknown desktop release variant: ${variantId}`);
   assert(fs.existsSync(inputDir), `Missing artifact directory: ${inputDir}`);
 
-  const downloadFile = findMatchingFile(inputDir, descriptor.downloadPattern);
+  const downloadPatterns = Array.isArray(descriptor.downloadPattern)
+    ? descriptor.downloadPattern
+    : [descriptor.downloadPattern];
+  const downloadFile = findMatchingFileFromPatterns(inputDir, downloadPatterns);
   assert(downloadFile, `Missing download artifact for ${variantId}`);
 
   const feedPath = path.join(inputDir, descriptor.feedFileName);

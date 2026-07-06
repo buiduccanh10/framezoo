@@ -12,7 +12,7 @@ const providerMetadata: ProviderMetadataItem[] = [
     type: 'source',
     name: 'Server 1 (Vidking) 🔥',
     rank: 1,
-    disabled: true,
+    disabled: false,
   },
   {
     id: 'openmovie',
