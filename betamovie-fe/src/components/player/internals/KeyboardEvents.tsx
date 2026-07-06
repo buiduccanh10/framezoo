@@ -741,7 +741,6 @@ export function KeyboardEvents() {
           dataRef.current.setIsRolling(false);
         }, 1e3);
       }
-
     };
 
     const keyupEventHandler = (evt: KeyboardEvent) => {
