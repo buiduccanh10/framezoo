@@ -24,7 +24,9 @@ function createLogger(scope: string): Logger {
     };
 
     if (process.env.NODE_ENV === 'production') {
-      console.log(JSON.stringify(logData));
+      if (level !== 'debug') {
+        console.log(JSON.stringify(logData));
+      }
     }
   };
 
