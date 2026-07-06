@@ -98,6 +98,8 @@ deploy:betamovie:
 
 trigger:desktop:publish:
   stage: desktop
+  inherit:
+    variables: false
   needs:
     - job: deploy:betamovie
   variables:
