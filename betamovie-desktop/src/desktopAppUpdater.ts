@@ -1,0 +1,322 @@
+import { app } from "electron";
+import { autoUpdater } from "electron-updater";
+import { spawn } from "node:child_process";
+import fs from "node:fs";
+import https from "node:https";
+import os from "node:os";
+import path from "node:path";
+import type {
+  CreateDesktopAppUpdaterOptions,
+  DesktopAppUpdateState,
+} from "./types";
+
+const INITIAL_DESKTOP_APP_UPDATE_STATE: DesktopAppUpdateState = {
+  status: "idle",
+  updateToken: null,
+  updateVersion: null,
+  progressPercent: null,
+  errorMessage: null,
+};
+
+export function createDesktopAppUpdater(
+  options: CreateDesktopAppUpdaterOptions,
+) {
+  const tempFilePrefix = options.appName.replace(/\s+/g, "") || "DesktopApp";
+  let hasInitialized = false;
+  let updateInterval: NodeJS.Timeout | null = null;
+  let state: DesktopAppUpdateState = { ...INITIAL_DESKTOP_APP_UPDATE_STATE };
+
+  function getFeedSlug() {
+    const arch = process.arch === "arm64" ? "arm64" : "x64";
+    return `${process.platform === "darwin" ? "mac" : "win"}-${arch}`;
+  }
+
+  function getFeedUrl() {
+    const backendUrl = new URL(options.getBackendUrl());
+    return new URL(
+      `/desktop-updates/${options.updateChannel}/${getFeedSlug()}/`,
+      backendUrl,
+    ).toString();
+  }
+
+  function isSupported() {
+    return process.platform === "darwin" || process.platform === "win32";
+  }
+
+  function setState(nextState: Partial<DesktopAppUpdateState>) {
+    state = {
+      ...state,
+      ...nextState,
+    };
+    options.onStateChange?.({ ...state });
+  }
+
+  async function checkForUpdate() {
+    if (!app.isPackaged || !isSupported()) return false;
+
+    setState({
+      status: "checking",
+      progressPercent: null,
+      errorMessage: null,
+    });
+
+    try {
+      await autoUpdater.checkForUpdates();
+      return (
+        state.status === "available" ||
+        state.status === "downloading" ||
+        state.status === "downloaded"
+      );
+    } catch (error) {
+      setState({
+        status: "error",
+        progressPercent: null,
+        errorMessage:
+          error instanceof Error ? error.message : "Unknown update error",
+      });
+      return false;
+    }
+  }
+
+  async function downloadUpdate() {
+    if (!app.isPackaged || !isSupported()) return false;
+
+    setState({
+      status: "downloading",
+      progressPercent: 0,
+      errorMessage: null,
+    });
+
+    try {
+      if (process.platform === "darwin") {
+        const version = state.updateVersion;
+        if (!version) throw new Error("No update version available");
+
+        const arch = process.arch === "arm64" ? "arm64" : "x64";
+        const zipFileName = `${options.appName}-${version}-${arch}-mac.zip`;
+        const downloadUrl = `${getFeedUrl()}${zipFileName}`;
+        const tempZipPath = path.join(os.tmpdir(), `${tempFilePrefix}-update.zip`);
+
+        await new Promise<void>((resolve, reject) => {
+          const file = fs.createWriteStream(tempZipPath);
+
+          https
+            .get(downloadUrl, (response) => {
+              if (response.statusCode !== 200 && response.statusCode !== 302) {
+                reject(
+                  new Error(
+                    `Failed to download update: ${response.statusCode}`,
+                  ),
+                );
+                return;
+              }
+
+              if (response.statusCode === 302 && response.headers.location) {
+                https
+                  .get(response.headers.location, handleDownload)
+                  .on("error", handleError);
+              } else {
+                handleDownload(response);
+              }
+
+              function handleDownload(res: NodeJS.ReadableStream & {
+                headers: Record<string, string | string[] | undefined>;
+              }) {
+                const totalBytes = parseInt(
+                  String(res.headers["content-length"] ?? "0"),
+                  10,
+                );
+                let downloadedBytes = 0;
+
+                res.on("data", (chunk: Buffer) => {
+                  downloadedBytes += chunk.length;
+                  if (totalBytes > 0) {
+                    const percent = Math.round(
+                      (downloadedBytes / totalBytes) * 100,
+                    );
+                    setState({
+                      status: "downloading",
+                      progressPercent: percent,
+                      errorMessage: null,
+                    });
+                  }
+                });
+
+                res.pipe(file);
+
+                file.on("finish", () => {
+                  file.close();
+                  resolve();
+                });
+              }
+
+              function handleError(error: Error) {
+                fs.unlink(tempZipPath, () => {});
+                reject(error);
+              }
+            })
+            .on("error", (error) => {
+              fs.unlink(tempZipPath, () => {});
+              reject(error);
+            });
+        });
+
+        setState({
+          status: "downloaded",
+          updateToken: version,
+          updateVersion: version,
+          progressPercent: 100,
+          errorMessage: null,
+        });
+        return true;
+      }
+
+      await autoUpdater.downloadUpdate();
+      return true;
+    } catch (error) {
+      setState({
+        status: "available",
+        progressPercent: null,
+        errorMessage:
+          error instanceof Error ? error.message : "Failed to download update",
+      });
+      return false;
+    }
+  }
+
+  function installUpdate() {
+    if (!app.isPackaged || !isSupported()) return false;
+    if (state.status !== "downloaded") return false;
+
+    if (process.platform === "darwin") {
+      const zipPath = path.join(os.tmpdir(), `${tempFilePrefix}-update.zip`);
+      const scriptPath = path.join(os.tmpdir(), `${tempFilePrefix}-updater.sh`);
+
+      let appPath = process.execPath;
+      if (appPath.includes(".app/Contents/MacOS/")) {
+        appPath = appPath.substring(0, appPath.indexOf(".app") + 4);
+      } else {
+        appPath = `/Applications/${options.appName}.app`;
+      }
+
+      const scriptContent = `#!/bin/bash
+sleep 2
+rm -rf "${appPath}"
+unzip -q "${zipPath}" -d "${path.dirname(appPath)}"
+xattr -cr "${appPath}"
+codesign --force --deep -s - "${appPath}"
+open "${appPath}"
+`;
+
+      fs.writeFileSync(scriptPath, scriptContent, { mode: 0o755 });
+
+      spawn("bash", [scriptPath], {
+        detached: true,
+        stdio: "ignore",
+      }).unref();
+
+      app.quit();
+      return true;
+    }
+
+    autoUpdater.quitAndInstall(true, true);
+    return true;
+  }
+
+  function initialize() {
+    if (hasInitialized) return;
+    hasInitialized = true;
+
+    if (!app.isPackaged || !isSupported()) {
+      return;
+    }
+
+    autoUpdater.autoDownload = false;
+    autoUpdater.autoInstallOnAppQuit = false;
+    autoUpdater.setFeedURL({
+      provider: "generic",
+      url: getFeedUrl(),
+    });
+
+    autoUpdater.on("checking-for-update", () => {
+      setState({
+        status: "checking",
+        progressPercent: null,
+        errorMessage: null,
+      });
+    });
+
+    autoUpdater.on("update-available", (info: any) => {
+      setState({
+        status: "available",
+        updateToken: info?.version ?? app.getVersion(),
+        updateVersion: info?.version ?? app.getVersion(),
+        progressPercent: null,
+        errorMessage: null,
+      });
+    });
+
+    autoUpdater.on("update-not-available", () => {
+      setState({
+        status: "idle",
+        updateToken: null,
+        updateVersion: null,
+        progressPercent: null,
+        errorMessage: null,
+      });
+    });
+
+    autoUpdater.on("download-progress", (progress: any) => {
+      setState({
+        status: "downloading",
+        progressPercent:
+          typeof progress?.percent === "number" ? progress.percent : null,
+        errorMessage: null,
+      });
+    });
+
+    autoUpdater.on("update-downloaded", (info: any) => {
+      setState({
+        status: "downloaded",
+        updateToken: info?.version ?? state.updateToken,
+        updateVersion: info?.version ?? state.updateVersion,
+        progressPercent: 100,
+        errorMessage: null,
+      });
+    });
+
+    autoUpdater.on("error", (error) => {
+      setState({
+        status:
+          state.updateToken && state.status !== "idle" ? "available" : "error",
+        progressPercent: null,
+        errorMessage: error?.message ?? "Desktop update failed",
+      });
+    });
+
+    setTimeout(() => {
+      void checkForUpdate();
+    }, 5000);
+
+    updateInterval = setInterval(() => {
+      void checkForUpdate();
+    }, options.checkIntervalMs);
+  }
+
+  function dispose() {
+    if (!updateInterval) return;
+    clearInterval(updateInterval);
+    updateInterval = null;
+  }
+
+  return {
+    checkForUpdate,
+    dispose,
+    downloadUpdate,
+    getState() {
+      return { ...state };
+    },
+    initialize,
+    installUpdate,
+  };
+}
