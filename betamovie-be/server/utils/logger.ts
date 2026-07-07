@@ -14,11 +14,6 @@ interface Logger {
 
 function createLogger(scope: string): Logger {
   const log = (level: LogLevel, message: string, context?: LogContext) => {
-    const isProduction = process.env.NODE_ENV === 'production';
-    if (isProduction && level === 'debug') {
-      return;
-    }
-
     const timestamp = new Date().toISOString();
     const logData = {
       timestamp,
@@ -28,7 +23,11 @@ function createLogger(scope: string): Logger {
       ...context,
     };
 
-    console.log(JSON.stringify(logData));
+    if (process.env.NODE_ENV === 'production') {
+      if (level !== 'debug') {
+        console.log(JSON.stringify(logData));
+      }
+    }
   };
 
   return {
