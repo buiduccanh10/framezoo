@@ -279,8 +279,7 @@ export default defineEventHandler(async event => {
       }
 
       // Check cache first
-      const providerCacheVersion = providerName === 'vidking' ? ':v7' : '';
-      const cacheKey = `streams:${providerName}${providerCacheVersion}:${type}:${tmdbId}${type === 'tv' ? `:${season}:${episode}` : ''}`;
+      const cacheKey = `streams:${providerName}:${type}:${tmdbId}${type === 'tv' ? `:${season}:${episode}` : ''}`;
       const cached = await storage
         .getItem<{
           success: boolean;

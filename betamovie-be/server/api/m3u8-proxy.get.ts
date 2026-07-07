@@ -121,12 +121,7 @@ const SEGMENT_QUALITY_STICKY_SECONDS = Math.max(
 );
 const M3U8_1080_PATH_TOKEN = '/MTA4MA==/';
 const M3U8_720_PATH_TOKEN = '/NzIw/';
-const SEGMENT_QUALITY_REPLACEMENTS = [
-  { from: M3U8_1080_PATH_TOKEN, to: M3U8_720_PATH_TOKEN },
-  { from: '/1080p/', to: '/720p/' },
-  { from: '/1080/', to: '/720/' },
-] as const;
-const SEGMENT_CACHE_KEY_VERSION = 'v5';
+const SEGMENT_CACHE_KEY_VERSION = 'v4';
 const SEGMENT_PATH_HINT_RE = /\.(?:ts|m4s|m4v|mp4|aac|vtt)(?:$|[?#])/i;
 
 interface SegmentSkipStickyState {
@@ -348,23 +343,6 @@ const replaceSegmentQualityToken = (
   return replaced === rawUrl ? null : replaced;
 };
 
-const replaceSegmentQuality = (rawUrl: string): string | null => {
-  for (const replacement of SEGMENT_QUALITY_REPLACEMENTS) {
-    const replaced = replaceSegmentQualityToken(rawUrl, replacement.from, replacement.to);
-    if (replaced) {
-      return replaced;
-    }
-  }
-
-  return null;
-};
-
-const has1080QualityToken = (rawUrl: string) =>
-  SEGMENT_QUALITY_REPLACEMENTS.some(replacement => rawUrl.includes(replacement.from));
-
-const has720QualityToken = (rawUrl: string) =>
-  SEGMENT_QUALITY_REPLACEMENTS.some(replacement => rawUrl.includes(replacement.to));
-
 const extractSegmentNumber = (rawUrl: string): number | null => {
   const directMatch = rawUrl.match(SEGMENT_NUMBER_RE);
   if (directMatch?.[1]) {
@@ -465,15 +443,11 @@ const shouldTrySegmentSkipFallback = (headers: Record<string, string>, bytes: Bu
   return SEGMENT_SKIP_REFERER_HOSTS.some(host => normalizedReferer.includes(host));
 };
 
-const requestSegmentWithRetry = async (
-  url: string,
-  headers: Record<string, string>,
-  maxAttempts: number = SEGMENT_RETRY_ATTEMPTS
-) => {
+const requestSegmentWithRetry = async (url: string, headers: Record<string, string>) => {
   const pool = getProxyPool(url);
   let response: Awaited<ReturnType<typeof request>> | null = null;
 
-  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+  for (let attempt = 1; attempt <= SEGMENT_RETRY_ATTEMPTS; attempt += 1) {
     try {
       response = await request(url, {
         method: 'GET',
@@ -483,7 +457,7 @@ const requestSegmentWithRetry = async (
         headersTimeout: 5000,
       });
     } catch (error) {
-      if (attempt < maxAttempts) {
+      if (attempt < SEGMENT_RETRY_ATTEMPTS) {
         logWarn(`Segment request attempt ${attempt} failed, retrying: ${url}`);
         continue;
       }
@@ -494,7 +468,7 @@ const requestSegmentWithRetry = async (
       return response;
     }
 
-    if (attempt < maxAttempts && shouldRetryStatus(response.statusCode)) {
+    if (attempt < SEGMENT_RETRY_ATTEMPTS && shouldRetryStatus(response.statusCode)) {
       await response.body.dump().catch(() => null);
       logWarn(`Segment status ${response.statusCode} on attempt ${attempt}, retrying: ${url}`);
       continue;
@@ -504,9 +478,6 @@ const requestSegmentWithRetry = async (
 
   return response;
 };
-
-const getInitialSegmentAttemptLimit = (rawUrl: string, quality: '1080' | '720') =>
-  quality === '1080' && has1080QualityToken(rawUrl) ? 1 : SEGMENT_RETRY_ATTEMPTS;
 
 const readResponseBytes = async (
   response: Awaited<ReturnType<typeof request>>,
@@ -877,11 +848,11 @@ export default defineEventHandler(async event => {
   const activeQualitySticky =
     qualityStickyState && !qualityStickyExpired && qualityStickyState.quality === '720';
   const qualityMappedUrl = activeQualitySticky
-    ? replaceSegmentQuality(url) || ''
+    ? replaceSegmentQualityToken(url, M3U8_1080_PATH_TOKEN, M3U8_720_PATH_TOKEN) || ''
     : '';
   let resolvedUrl = stickyMappedUrl || qualityMappedUrl || url;
   let resolvedOffset = stickyMappedUrl ? activeStickyOffset : 0;
-  let resolvedQuality: '1080' | '720' = has720QualityToken(resolvedUrl) ? '720' : '1080';
+  let resolvedQuality: '1080' | '720' = resolvedUrl.includes(M3U8_720_PATH_TOKEN) ? '720' : '1080';
 
   const tsProxyIdentity = toTsProxyIdentity(url, headers);
   const toSegmentCacheKey = (offset: number, quality: '1080' | '720') => {
@@ -905,18 +876,10 @@ export default defineEventHandler(async event => {
     }
   }
 
-  let upstreamResponse = await requestSegmentWithRetry(
-    resolvedUrl,
-    headers,
-    getInitialSegmentAttemptLimit(resolvedUrl, resolvedQuality)
-  ).catch(() => null);
+  let upstreamResponse = await requestSegmentWithRetry(resolvedUrl, headers).catch(() => null);
   if ((!upstreamResponse || upstreamResponse.statusCode !== 200) && resolvedOffset > 0) {
     // Sticky offset can become stale; fall back to original segment before failing the request.
-    upstreamResponse = await requestSegmentWithRetry(
-      url,
-      headers,
-      getInitialSegmentAttemptLimit(url, '1080')
-    ).catch(() => null);
+    upstreamResponse = await requestSegmentWithRetry(url, headers).catch(() => null);
     resolvedUrl = url;
     resolvedOffset = 0;
     resolvedQuality = '1080';
@@ -925,11 +888,7 @@ export default defineEventHandler(async event => {
     }
   }
   if ((!upstreamResponse || upstreamResponse.statusCode !== 200) && resolvedQuality === '720') {
-    upstreamResponse = await requestSegmentWithRetry(
-      url,
-      headers,
-      getInitialSegmentAttemptLimit(url, '1080')
-    ).catch(() => null);
+    upstreamResponse = await requestSegmentWithRetry(url, headers).catch(() => null);
     resolvedUrl = url;
     resolvedOffset = 0;
     resolvedQuality = '1080';
@@ -957,8 +916,12 @@ export default defineEventHandler(async event => {
 
   // If it's a playlist, rewrite internal URLs to go through this proxy too
   let bytes = await readResponseBytes(upstreamResponse, resolvedUrl, 'upstream');
-  if (!bytes && resolvedQuality === '1080' && has1080QualityToken(url)) {
-    const downgradedUrl = replaceSegmentQuality(resolvedUrl || url);
+  if (!bytes && resolvedQuality === '1080' && url.includes(M3U8_1080_PATH_TOKEN)) {
+    const downgradedUrl = replaceSegmentQualityToken(
+      resolvedUrl || url,
+      M3U8_1080_PATH_TOKEN,
+      M3U8_720_PATH_TOKEN
+    );
     if (downgradedUrl && downgradedUrl !== resolvedUrl) {
       const downgradedResponse = await requestSegmentWithRetry(downgradedUrl, headers).catch(
         () => null
@@ -1019,14 +982,12 @@ export default defineEventHandler(async event => {
 
   // UX-first recovery: while staying on 720 sticky, probe 1080 every request and switch back immediately
   // once continuity and segment health are acceptable.
-  if (activeQualitySticky && resolvedQuality === '720' && has1080QualityToken(url)) {
+  if (activeQualitySticky && resolvedQuality === '720' && url.includes(M3U8_1080_PATH_TOKEN)) {
     const recover1080Url =
       resolvedOffset > 0 ? buildAdvancedSegmentUrl(url, resolvedOffset) || url : url;
-    const recoverResponse = await requestSegmentWithRetry(
-      recover1080Url,
-      headers,
-      getInitialSegmentAttemptLimit(recover1080Url, '1080')
-    ).catch(() => null);
+    const recoverResponse = await requestSegmentWithRetry(recover1080Url, headers).catch(
+      () => null
+    );
     if (recoverResponse?.statusCode === 200) {
       const recoverType = resolveContentType(recoverResponse);
       const recoverBytes =
@@ -1048,8 +1009,12 @@ export default defineEventHandler(async event => {
     }
   }
 
-  if (resolvedQuality === '1080' && isWeakSegment && has1080QualityToken(url)) {
-    const downgradedUrl = replaceSegmentQuality(resolvedUrl || url);
+  if (resolvedQuality === '1080' && isWeakSegment && url.includes(M3U8_1080_PATH_TOKEN)) {
+    const downgradedUrl = replaceSegmentQualityToken(
+      resolvedUrl || url,
+      M3U8_1080_PATH_TOKEN,
+      M3U8_720_PATH_TOKEN
+    );
     if (downgradedUrl && downgradedUrl !== resolvedUrl) {
       const downgradedResponse = await requestSegmentWithRetry(downgradedUrl, headers).catch(
         () => null
@@ -1082,7 +1047,7 @@ export default defineEventHandler(async event => {
   if (shouldTrySegmentSkipFallback(headers, bytes)) {
     const qualityBaseUrl =
       resolvedQuality === '720'
-        ? replaceSegmentQuality(url) || url
+        ? replaceSegmentQualityToken(url, M3U8_1080_PATH_TOKEN, M3U8_720_PATH_TOKEN) || url
         : url;
     for (const advanceBy of buildAdvanceOrder()) {
       const nextOffset = resolvedOffset + advanceBy;
