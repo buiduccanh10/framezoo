@@ -26,7 +26,7 @@ export function DetailsRatings({
       <div className="flex gap-3 mt-2">
         {provider ? (
           <div
-            className="flex h-8 w-8 items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards]"
+            className="flex h-8 w-8 items-center justify-center transition-transform hover:scale-110 animate-[scaleIn_0.6s_ease-out_forwards] bg-white rounded-md"
             style={{
               animationDelay: "0ms",
               transform: "scale(0)",
@@ -37,7 +37,7 @@ export function DetailsRatings({
             <img
               src={getProviderImage(provider)}
               alt={provider}
-              className="h-8 w-8 rounded-md"
+              className="h-full w-full rounded-md object-contain"
             />
           </div>
         ) : null}
