@@ -2,6 +2,7 @@ import { t } from "i18next";
 
 import { PROVIDER_TO_IMAGE_MAP } from "@/backend/metadata/traktApi";
 import { Icon, Icons } from "@/components/Icon";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
 
 import { DetailsRatingsProps } from "../../types";
@@ -18,7 +19,7 @@ export function DetailsRatings({
     const imageKey =
       PROVIDER_TO_IMAGE_MAP[providerName] ||
       providerName.toLowerCase().replace(/\s+/g, "");
-    return `/platforms/${imageKey}.png`;
+    return resolvePublicUrl(`/platforms/${imageKey}.png`);
   };
 
   return (
