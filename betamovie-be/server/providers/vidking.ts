@@ -32,6 +32,7 @@ interface ResolvedStreamData {
   quality: string;
   subtitle: string;
   serverName?: string;
+  playable?: boolean;
 }
 
 interface SeedResponse {
@@ -263,6 +264,10 @@ function sortResolvedStreams(streams: ResolvedStreamData[]): ResolvedStreamData[
     const qualityDelta = qualityScore(right.quality) - qualityScore(left.quality);
     if (qualityDelta !== 0) {
       return qualityDelta;
+    }
+
+    if (left.playable !== right.playable) {
+      return left.playable ? -1 : 1;
     }
 
     return (left.serverName || '').localeCompare(right.serverName || '');
@@ -606,6 +611,56 @@ async function verifyPlayablePlaylist(
 ): Promise<boolean> {
   const segmentUrl = await resolveSegmentProbeUrl(url, referer, origin);
   return segmentUrl ? await fetchSegmentProbe(segmentUrl, referer, origin) : false;
+}
+
+async function markPlayableDuplicateQualityStreams(
+  streams: ResolvedStreamData[]
+): Promise<ResolvedStreamData[]> {
+  const qualityGroups = streams.reduce<Map<string, ResolvedStreamData[]>>((acc, stream) => {
+    if (stream.quality === 'Auto') {
+      return acc;
+    }
+
+    const current = acc.get(stream.quality) || [];
+    current.push(stream);
+    acc.set(stream.quality, current);
+    return acc;
+  }, new Map());
+
+  const duplicateStreams = [...qualityGroups.values()].flatMap(group =>
+    group.length > 1 ? group : []
+  );
+  if (!duplicateStreams.length) {
+    return streams;
+  }
+
+  const verificationMap = new Map<string, boolean>();
+  const verificationResults = await Promise.allSettled(
+    duplicateStreams.map(async stream => ({
+      key: `${stream.quality}:${stream.masterPlaylistUrl}`,
+      playable: await verifyPlayablePlaylist(stream.masterPlaylistUrl, stream.referer, stream.origin),
+    }))
+  );
+
+  for (const result of verificationResults) {
+    if (result.status !== 'fulfilled') {
+      continue;
+    }
+
+    verificationMap.set(result.value.key, result.value.playable);
+  }
+
+  return streams.map(stream => {
+    const verificationKey = `${stream.quality}:${stream.masterPlaylistUrl}`;
+    if (!verificationMap.has(verificationKey)) {
+      return stream;
+    }
+
+    return {
+      ...stream,
+      playable: verificationMap.get(verificationKey) === true,
+    };
+  });
 }
 
 function rotateLeft32(value: number, bits: number): number {
@@ -1170,7 +1225,7 @@ async function resolveVidkingStreams(
     }
   }
 
-  return merged;
+  return await markPlayableDuplicateQualityStreams(merged);
 }
 
 export async function getVidkingStreams(

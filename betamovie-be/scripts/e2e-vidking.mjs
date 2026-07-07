@@ -56,9 +56,16 @@ const requiredQualities = getArgs('require-quality')
   .flatMap(value => value.split(','))
   .map(normalizeQuality)
   .filter(Boolean);
+const requiredPlayableQualities = getArgs('require-playable-quality')
+  .flatMap(value => value.split(','))
+  .map(normalizeQuality)
+  .filter(Boolean);
 const FETCH_TIMEOUT_MS = Number.parseInt(getArg('timeout-ms') || '', 10) || 15_000;
 const SEGMENT_TIMEOUT_MS = Number.parseInt(getArg('segment-timeout-ms') || '', 10) || 12_000;
 const MAX_MEDIA_LINES_TO_PROBE = Number.parseInt(getArg('max-media-lines') || '', 10) || 4;
+const FETCH_ATTEMPTS = Number.parseInt(getArg('fetch-attempts') || '', 10) || 2;
+const SEGMENT_ATTEMPTS = Number.parseInt(getArg('segment-attempts') || '', 10) || 2;
+const MIN_PLAYABLE_STREAMS = Number.parseInt(getArg('min-playable-streams') || '', 10) || 1;
 
 required('id', id);
 
@@ -104,6 +111,36 @@ async function fetchWithTimeout(url, init = {}, timeoutMs = FETCH_TIMEOUT_MS) {
   }
 }
 
+async function fetchWithRetry(
+  url,
+  init = {},
+  timeoutMs = FETCH_TIMEOUT_MS,
+  attempts = FETCH_ATTEMPTS
+) {
+  let lastError = null;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetchWithTimeout(url, init, timeoutMs);
+      if (response.ok || (response.status !== 429 && response.status < 500) || attempt === attempts) {
+        return response;
+      }
+    } catch (error) {
+      lastError = error;
+      if (attempt === attempts) {
+        throw error;
+      }
+      continue;
+    }
+  }
+
+  if (lastError) {
+    throw lastError;
+  }
+
+  return null;
+}
+
 function extractMediaLines(manifest) {
   return manifest
     .split(/\r?\n/)
@@ -111,8 +148,38 @@ function extractMediaLines(manifest) {
     .filter(line => line && !line.startsWith('#') && !line.startsWith('<'));
 }
 
+function isLikelyHtmlPayload(bytes) {
+  const preview = Buffer.from(bytes).subarray(0, 256).toString('utf8').toLowerCase();
+  return preview.includes('<!doctype') || preview.includes('<html') || preview.includes('<body');
+}
+
+function isLikelyJsonErrorPayload(bytes) {
+  const preview = Buffer.from(bytes).subarray(0, 256).toString('utf8').toLowerCase().trimStart();
+  return preview.startsWith('{') && (preview.includes('"error"') || preview.includes('"message"'));
+}
+
+function isLikelyTransportStream(bytes) {
+  const buffer = Buffer.from(bytes);
+  return buffer.length >= 188 * 3 && buffer[0] === 0x47 && buffer[188] === 0x47 && buffer[376] === 0x47;
+}
+
+function isLikelyMp4Segment(bytes) {
+  const buffer = Buffer.from(bytes);
+  if (buffer.length < 12) return false;
+  const boxType = String.fromCharCode(buffer[4], buffer[5], buffer[6], buffer[7]);
+  return boxType === 'ftyp' || boxType === 'styp' || boxType === 'moof';
+}
+
+function isLikelyPlayableSegmentPayload(bytes) {
+  const buffer = Buffer.from(bytes);
+  if (!buffer.length) return false;
+  if (isLikelyTransportStream(buffer) || isLikelyMp4Segment(buffer)) return true;
+  if (isLikelyHtmlPayload(buffer) || isLikelyJsonErrorPayload(buffer)) return false;
+  return buffer.length >= 1_024;
+}
+
 async function fetchManifest(url) {
-  const response = await fetchWithTimeout(url, { headers: { Accept: '*/*' } }).catch(() => null);
+  const response = await fetchWithRetry(url, { headers: { Accept: '*/*' } }).catch(() => null);
   if (!response?.ok) {
     return null;
   }
@@ -122,56 +189,100 @@ async function fetchManifest(url) {
 }
 
 async function fetchSegmentPreview(url) {
-  const response = await fetchWithTimeout(
+  const response = await fetchWithRetry(
     url,
     {
       headers: { Accept: '*/*', Range: 'bytes=0-4095' },
     },
-    SEGMENT_TIMEOUT_MS
+    SEGMENT_TIMEOUT_MS,
+    SEGMENT_ATTEMPTS
   ).catch(() => null);
   if (!response?.ok) {
-    return null;
+    return {
+      ok: false,
+      reason: response ? `http-${response.status}` : 'segment-fetch-failed',
+    };
   }
 
   const buffer = await response.arrayBuffer().catch(() => null);
-  return buffer?.byteLength ? { response, buffer } : null;
+  if (!buffer?.byteLength) {
+    return {
+      ok: false,
+      reason: 'empty-segment-body',
+    };
+  }
+
+  if (!isLikelyPlayableSegmentPayload(buffer)) {
+    return {
+      ok: false,
+      reason: 'non-media-segment-payload',
+      response,
+      buffer,
+    };
+  }
+
+  return {
+    ok: true,
+    response,
+    buffer,
+  };
 }
 
 async function resolvePlayableStreamLeaf(playlistUrl, depth = 0, seen = new Set()) {
   if (depth > 4 || seen.has(playlistUrl)) {
-    return null;
+    return {
+      ok: false,
+      reason: depth > 4 ? 'playlist-max-depth' : 'playlist-cycle',
+    };
   }
 
   seen.add(playlistUrl);
   const manifest = await fetchManifest(playlistUrl);
   if (!manifest) {
-    return null;
+    return {
+      ok: false,
+      reason: 'manifest-unavailable',
+    };
   }
 
+  let lastReason = 'playlist-without-media-lines';
   for (const line of extractMediaLines(manifest.text).slice(0, MAX_MEDIA_LINES_TO_PROBE)) {
-    const candidateUrl = withToken(new URL(line, playlistUrl).toString());
+    let candidateUrl = '';
+    try {
+      candidateUrl = withToken(new URL(line, playlistUrl).toString());
+    } catch {
+      lastReason = 'invalid-media-url';
+      continue;
+    }
+
     if (/\.m3u8(?:$|[?#])/i.test(line)) {
       const nested = await resolvePlayableStreamLeaf(candidateUrl, depth + 1, seen);
-      if (nested) {
+      if (nested.ok) {
         return nested;
       }
+      lastReason = nested.reason;
       continue;
     }
 
     const preview = await fetchSegmentPreview(candidateUrl);
-    if (!preview) {
+    if (!preview.ok) {
+      lastReason = preview.reason;
       continue;
     }
 
     return {
+      ok: true,
       playlistUrl,
       firstSegmentUrl: candidateUrl,
       segmentResponse: preview.response,
-      segmentBuffer: preview.buffer,
+      segmentBuffer: Buffer.from(preview.buffer),
     };
   }
 
-  return null;
+  return {
+    ok: false,
+    reason: lastReason,
+  };
 }
 
 function streamProbePriority(stream) {
@@ -185,12 +296,27 @@ function streamProbePriority(stream) {
   return 6;
 }
 
-const streamResponse = await fetchWithTimeout(streamEndpointWithToken, {
-  headers: { Accept: 'application/json' },
-});
+function describeStream(stream) {
+  return {
+    title: String(stream?.title || stream?.name || '').trim(),
+    quality: normalizeQuality(stream?.quality),
+    url: String(stream?.url || ''),
+  };
+}
 
-if (!streamResponse.ok) {
-  console.error(`HTTP ${streamResponse.status} from ${streamEndpointWithToken}`);
+let streamResponse;
+try {
+  streamResponse = await fetchWithRetry(streamEndpointWithToken, {
+    headers: { Accept: 'application/json' },
+  });
+} catch (error) {
+  console.error(`Request failed for ${streamEndpointWithToken}`);
+  console.error(String(error));
+  process.exit(1);
+}
+
+if (!streamResponse?.ok) {
+  console.error(`HTTP ${streamResponse?.status || 0} from ${streamEndpointWithToken}`);
   process.exit(1);
 }
 
@@ -216,44 +342,79 @@ if (requiredQualities.length) {
   if (missingQualities.length) {
     console.error(`Missing required qualities: ${missingQualities.join(', ')}`);
     console.error(`Available qualities: ${uniqueQualities.join(', ') || 'n/a'}`);
-    console.error(
-      JSON.stringify(
-        returnedStreams.map(stream => ({
-          title: String(stream?.title || stream?.name || '').trim(),
-          quality: normalizeQuality(stream?.quality),
-          url: String(stream?.url || ''),
-        })),
-        null,
-        2
-      )
-    );
+    console.error(JSON.stringify(returnedStreams.map(describeStream), null, 2));
     process.exit(1);
   }
 }
 
-let playable = null;
+const probeResults = [];
+const playableResults = [];
 
 for (const stream of probeCandidates) {
   const candidateUrl = withToken(String(stream?.url || ''));
-  if (!candidateUrl) continue;
-
-  const resolvedLeaf = await resolvePlayableStreamLeaf(candidateUrl);
-  if (!resolvedLeaf) {
+  if (!candidateUrl) {
+    probeResults.push({
+      ...describeStream(stream),
+      ok: false,
+      reason: 'missing-stream-url',
+    });
     continue;
   }
 
-  playable = {
-    stream,
+  const resolvedLeaf = await resolvePlayableStreamLeaf(candidateUrl);
+  if (!resolvedLeaf.ok) {
+    probeResults.push({
+      ...describeStream(stream),
+      ok: false,
+      reason: resolvedLeaf.reason,
+    });
+    continue;
+  }
+
+  const playable = {
     ...resolvedLeaf,
+    stream,
   };
-  break;
+  playableResults.push(playable);
+  probeResults.push({
+    ...describeStream(stream),
+    ok: true,
+    playlistUrl: playable.playlistUrl,
+    firstSegmentUrl: playable.firstSegmentUrl,
+    firstSegmentBytes: playable.segmentBuffer.byteLength,
+    firstSegmentContentType: playable.segmentResponse.headers.get('content-type') || '',
+  });
+
+  const playableQualities = [...new Set(playableResults.map(result => normalizeQuality(result.stream?.quality)))];
+  const missingPlayableQualities = requiredPlayableQualities.filter(
+    quality => !playableQualities.includes(quality)
+  );
+  if (!missingPlayableQualities.length && playableResults.length >= MIN_PLAYABLE_STREAMS) {
+    break;
+  }
 }
 
-if (!playable) {
-  console.error('No playable playlist returned from backend provider');
-  console.error(JSON.stringify(streamPayload));
+const playableQualities = [...new Set(playableResults.map(result => normalizeQuality(result.stream?.quality)))];
+const missingPlayableQualities = requiredPlayableQualities.filter(
+  quality => !playableQualities.includes(quality)
+);
+
+if (!playableResults.length || playableResults.length < MIN_PLAYABLE_STREAMS || missingPlayableQualities.length) {
+  if (missingPlayableQualities.length) {
+    console.error(`Missing required playable qualities: ${missingPlayableQualities.join(', ')}`);
+  }
+  if (playableResults.length < MIN_PLAYABLE_STREAMS) {
+    console.error(
+      `Playable stream count ${playableResults.length} is below required minimum ${MIN_PLAYABLE_STREAMS}`
+    );
+  }
+  console.error(`Available qualities: ${uniqueQualities.join(', ') || 'n/a'}`);
+  console.error(`Playable qualities: ${playableQualities.join(', ') || 'n/a'}`);
+  console.error(JSON.stringify(probeResults, null, 2));
   process.exit(1);
 }
+
+const primaryPlayable = playableResults[0];
 
 console.log(`[PASS] ${type.toUpperCase()} ${id}`);
 console.log(`stream endpoint: ${streamEndpointWithToken}`);
@@ -261,10 +422,16 @@ console.log(`qualities: ${uniqueQualities.join(', ') || 'n/a'}`);
 if (requiredQualities.length) {
   console.log(`required qualities: ${requiredQualities.join(', ')}`);
 }
-console.log(`playable stream: ${String(playable.stream?.title || playable.stream?.name || '').trim()}`);
-console.log(`playlist: ${playable.playlistUrl}`);
-console.log(`first segment uri: ${playable.firstSegmentUrl}`);
+if (requiredPlayableQualities.length) {
+  console.log(`required playable qualities: ${requiredPlayableQualities.join(', ')}`);
+}
+console.log(`playable stream count: ${playableResults.length}`);
+console.log(`playable qualities: ${playableQualities.join(', ') || 'n/a'}`);
+console.log(`playable stream: ${String(primaryPlayable.stream?.title || primaryPlayable.stream?.name || '').trim()}`);
+console.log(`playlist: ${primaryPlayable.playlistUrl}`);
+console.log(`first segment uri: ${primaryPlayable.firstSegmentUrl}`);
 console.log(
-  `first segment content-type: ${playable.segmentResponse.headers.get('content-type') || ''}`
+  `first segment content-type: ${primaryPlayable.segmentResponse.headers.get('content-type') || ''}`
 );
-console.log(`first segment bytes: ${playable.segmentBuffer.byteLength}`);
+console.log(`first segment bytes: ${primaryPlayable.segmentBuffer.byteLength}`);
+console.log(`probe results: ${JSON.stringify(probeResults, null, 2)}`);
