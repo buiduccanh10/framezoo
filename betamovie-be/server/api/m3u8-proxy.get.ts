@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { sendStream } from 'h3';
 import { request, Pool } from 'undici';
 import { applyCorsHeaders } from '~/utils/cors';
 
@@ -119,10 +120,18 @@ const SEGMENT_QUALITY_STICKY_SECONDS = Math.max(
   60,
   Number.parseInt(process.env.M3U8_SEGMENT_QUALITY_STICKY_SECONDS || '1800', 10) || 1800
 );
+const DEFAULT_SEGMENT_BODY_TIMEOUT_MS = Math.max(
+  0,
+  Number.parseInt(process.env.M3U8_SEGMENT_BODY_TIMEOUT_MS || '15000', 10) || 15000
+);
 const M3U8_1080_PATH_TOKEN = '/MTA4MA==/';
 const M3U8_720_PATH_TOKEN = '/NzIw/';
 const SEGMENT_CACHE_KEY_VERSION = 'v4';
 const SEGMENT_PATH_HINT_RE = /\.(?:ts|m4s|m4v|mp4|aac|vtt)(?:$|[?#])/i;
+const VIDEASY_PASSTHROUGH_REFERER_HOSTS = ['player.videasy.to', 'player.videasy.net'] as const;
+const VIDEASY_PASSTHROUGH_UPSTREAM_HOSTS = ['ironwallnet.net'] as const;
+
+const isSuccessfulSegmentStatus = (statusCode: number) => statusCode === 200 || statusCode === 206;
 
 interface SegmentSkipStickyState {
   offset: number;
@@ -144,6 +153,25 @@ interface PtsRange {
 }
 
 const shouldRetryStatus = (statusCode: number) => statusCode === 429 || statusCode >= 500;
+
+const normalizeHostname = (value: string) => value.trim().toLowerCase().replace(/\.+$/, '');
+
+const readUrlHostname = (value: string) => {
+  if (!value) return '';
+  try {
+    return normalizeHostname(new URL(value).hostname);
+  } catch {
+    return '';
+  }
+};
+
+const hostnameMatches = (hostname: string, allowedHosts: readonly string[]) => {
+  if (!hostname) return false;
+  return allowedHosts.some(allowedHost => {
+    const normalizedAllowedHost = normalizeHostname(allowedHost);
+    return hostname === normalizedAllowedHost || hostname.endsWith(`.${normalizedAllowedHost}`);
+  });
+};
 
 const readHeaderCaseInsensitive = (headers: Record<string, string>, key: string) => {
   const target = key.toLowerCase();
@@ -443,17 +471,23 @@ const shouldTrySegmentSkipFallback = (headers: Record<string, string>, bytes: Bu
   return SEGMENT_SKIP_REFERER_HOSTS.some(host => normalizedReferer.includes(host));
 };
 
-const requestSegmentWithRetry = async (url: string, headers: Record<string, string>) => {
+const requestSegmentWithRetry = async (
+  url: string,
+  headers: Record<string, string>,
+  rangeHeader?: string,
+  bodyTimeoutMs: number = DEFAULT_SEGMENT_BODY_TIMEOUT_MS
+) => {
   const pool = getProxyPool(url);
   let response: Awaited<ReturnType<typeof request>> | null = null;
+  const requestHeaders = rangeHeader ? { ...headers, Range: rangeHeader } : headers;
 
   for (let attempt = 1; attempt <= SEGMENT_RETRY_ATTEMPTS; attempt += 1) {
     try {
       response = await request(url, {
         method: 'GET',
-        headers,
+        headers: requestHeaders,
         dispatcher: pool,
-        bodyTimeout: 15000,
+        bodyTimeout: bodyTimeoutMs,
         headersTimeout: 5000,
       });
     } catch (error) {
@@ -464,7 +498,7 @@ const requestSegmentWithRetry = async (url: string, headers: Record<string, stri
       throw error;
     }
 
-    if (response.statusCode === 200) {
+    if (isSuccessfulSegmentStatus(response.statusCode)) {
       return response;
     }
 
@@ -477,6 +511,38 @@ const requestSegmentWithRetry = async (url: string, headers: Record<string, stri
   }
 
   return response;
+};
+
+const shouldPassthroughSegmentStream = (
+  targetUrl: string,
+  headers: Record<string, string>,
+  isSegmentRequest: boolean
+) => {
+  if (!isSegmentRequest) {
+    return false;
+  }
+
+  const refererHost = readUrlHostname(readHeaderCaseInsensitive(headers, 'referer'));
+  const originHost = readUrlHostname(readHeaderCaseInsensitive(headers, 'origin'));
+  const upstreamHost = readUrlHostname(targetUrl);
+
+  return (
+    hostnameMatches(refererHost, VIDEASY_PASSTHROUGH_REFERER_HOSTS) ||
+    hostnameMatches(originHost, VIDEASY_PASSTHROUGH_REFERER_HOSTS) ||
+    hostnameMatches(upstreamHost, VIDEASY_PASSTHROUGH_UPSTREAM_HOSTS)
+  );
+};
+
+const setHeaderFromUpstream = (
+  event: any,
+  upstreamHeaders: Record<string, string | string[] | undefined>,
+  headerName: string
+) => {
+  const value = upstreamHeaders[headerName];
+  const normalizedValue = Array.isArray(value) ? value[0] : value;
+  if (normalizedValue) {
+    setHeader(event, headerName, normalizedValue);
+  }
 };
 
 const readResponseBytes = async (
@@ -791,7 +857,8 @@ export default defineEventHandler(async event => {
   const isGetRequest = event.method === 'GET';
   const segmentNumber = extractSegmentNumber(url);
   const isSegmentRequest = query.isSegment === 'true' || isLikelySegmentRequest(url, segmentNumber);
-  const storage = isGetRequest && isSegmentRequest ? useStorage('cache') : null;
+  const requestedRange = isSegmentRequest ? getRequestHeader(event, 'range') || '' : '';
+  const storage = isGetRequest && isSegmentRequest && !requestedRange ? useStorage('cache') : null;
   const stickyIdentity =
     segmentNumber != null && storage ? buildSegmentSkipStickyIdentity(url, headers) : '';
   const stickyKey =
@@ -853,6 +920,12 @@ export default defineEventHandler(async event => {
   let resolvedUrl = stickyMappedUrl || qualityMappedUrl || url;
   let resolvedOffset = stickyMappedUrl ? activeStickyOffset : 0;
   let resolvedQuality: '1080' | '720' = resolvedUrl.includes(M3U8_720_PATH_TOKEN) ? '720' : '1080';
+  const shouldPassthroughSegment = shouldPassthroughSegmentStream(
+    resolvedUrl,
+    headers,
+    isSegmentRequest
+  );
+  const segmentBodyTimeoutMs = shouldPassthroughSegment ? 0 : DEFAULT_SEGMENT_BODY_TIMEOUT_MS;
 
   const tsProxyIdentity = toTsProxyIdentity(url, headers);
   const toSegmentCacheKey = (offset: number, quality: '1080' | '720') => {
@@ -876,10 +949,20 @@ export default defineEventHandler(async event => {
     }
   }
 
-  let upstreamResponse = await requestSegmentWithRetry(resolvedUrl, headers).catch(() => null);
-  if ((!upstreamResponse || upstreamResponse.statusCode !== 200) && resolvedOffset > 0) {
+  let upstreamResponse = await requestSegmentWithRetry(
+    resolvedUrl,
+    headers,
+    requestedRange,
+    segmentBodyTimeoutMs
+  ).catch(() => null);
+  if ((!upstreamResponse || !isSuccessfulSegmentStatus(upstreamResponse.statusCode)) && resolvedOffset > 0) {
     // Sticky offset can become stale; fall back to original segment before failing the request.
-    upstreamResponse = await requestSegmentWithRetry(url, headers).catch(() => null);
+    upstreamResponse = await requestSegmentWithRetry(
+      url,
+      headers,
+      requestedRange,
+      segmentBodyTimeoutMs
+    ).catch(() => null);
     resolvedUrl = url;
     resolvedOffset = 0;
     resolvedQuality = '1080';
@@ -887,8 +970,16 @@ export default defineEventHandler(async event => {
       void storage.removeItem(stickyKey).catch(() => null);
     }
   }
-  if ((!upstreamResponse || upstreamResponse.statusCode !== 200) && resolvedQuality === '720') {
-    upstreamResponse = await requestSegmentWithRetry(url, headers).catch(() => null);
+  if (
+    (!upstreamResponse || !isSuccessfulSegmentStatus(upstreamResponse.statusCode)) &&
+    resolvedQuality === '720'
+  ) {
+    upstreamResponse = await requestSegmentWithRetry(
+      url,
+      headers,
+      requestedRange,
+      segmentBodyTimeoutMs
+    ).catch(() => null);
     resolvedUrl = url;
     resolvedOffset = 0;
     resolvedQuality = '1080';
@@ -897,7 +988,7 @@ export default defineEventHandler(async event => {
     }
   }
 
-  if (!upstreamResponse || upstreamResponse.statusCode !== 200) {
+  if (!upstreamResponse || !isSuccessfulSegmentStatus(upstreamResponse.statusCode)) {
     throw createError({
       statusCode: upstreamResponse?.statusCode || 502,
       statusMessage: 'Upstream error',
@@ -913,6 +1004,22 @@ export default defineEventHandler(async event => {
 
   let contentType = resolveContentType(upstreamResponse);
   setHeader(event, 'content-type', contentType);
+
+  if (shouldPassthroughSegment) {
+    setResponseStatus(event, upstreamResponse.statusCode);
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'accept-ranges');
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'cache-control');
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'content-disposition');
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'content-length');
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'content-range');
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'etag');
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'expires');
+    setHeaderFromUpstream(event, upstreamResponse.headers, 'last-modified');
+    setHeader(event, 'x-cache', 'MISS');
+    setCacheHeaders(event, true);
+    event.node.res.flushHeaders?.();
+    return sendStream(event, upstreamResponse.body as any);
+  }
 
   // If it's a playlist, rewrite internal URLs to go through this proxy too
   let bytes = await readResponseBytes(upstreamResponse, resolvedUrl, 'upstream');
@@ -976,6 +1083,22 @@ export default defineEventHandler(async event => {
     return rewritten;
   }
 
+  if (requestedRange) {
+    const contentRangeHeader = upstreamResponse.headers['content-range'];
+    const normalizedContentRange = Array.isArray(contentRangeHeader)
+      ? contentRangeHeader[0]
+      : contentRangeHeader;
+
+    setResponseStatus(event, upstreamResponse.statusCode);
+    setHeader(event, 'accept-ranges', 'bytes');
+    if (normalizedContentRange) {
+      setHeader(event, 'content-range', normalizedContentRange);
+    }
+    setHeader(event, 'x-cache', 'MISS');
+    setCacheHeaders(event, true);
+    return bytes;
+  }
+
   const previousContinuityAnchorPts = qualityStickyLastEndPts ?? stickyLastEndPts ?? null;
   const continuityAnchorPts = previousContinuityAnchorPts ?? servedPts?.max ?? null;
   let isWeakSegment = isWeakSegmentPayload(bytes, servedPts);
@@ -988,7 +1111,7 @@ export default defineEventHandler(async event => {
     const recoverResponse = await requestSegmentWithRetry(recover1080Url, headers).catch(
       () => null
     );
-    if (recoverResponse?.statusCode === 200) {
+    if (recoverResponse && isSuccessfulSegmentStatus(recoverResponse.statusCode)) {
       const recoverType = resolveContentType(recoverResponse);
       const recoverBytes =
         (await readResponseBytes(recoverResponse, recover1080Url, 'quality recovery', false)) ||
@@ -1019,7 +1142,7 @@ export default defineEventHandler(async event => {
       const downgradedResponse = await requestSegmentWithRetry(downgradedUrl, headers).catch(
         () => null
       );
-      if (downgradedResponse?.statusCode === 200) {
+      if (downgradedResponse && isSuccessfulSegmentStatus(downgradedResponse.statusCode)) {
         const downgradedType = resolveContentType(downgradedResponse);
         const downgradedBytes =
           (await readResponseBytes(downgradedResponse, downgradedUrl, 'quality fallback')) ||
@@ -1060,7 +1183,7 @@ export default defineEventHandler(async event => {
       }
 
       const candidate = await requestSegmentWithRetry(nextUrl, headers).catch(() => null);
-      if (!candidate || candidate.statusCode !== 200) {
+      if (!candidate || !isSuccessfulSegmentStatus(candidate.statusCode)) {
         continue;
       }
 

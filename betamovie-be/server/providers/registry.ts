@@ -5,6 +5,7 @@ import { getVidSrcToStreams } from './vidsrc-to';
 import { getKKPhimStreams } from './kkphim';
 import { get111MoviesStreams } from './111movies';
 import { getVidkingStreams } from './vidking';
+import { getVideasyStreams } from './videasy';
 
 export interface StreamProvider {
   name: string;
@@ -57,11 +58,18 @@ const vidkingProvider: StreamProvider = {
   getStreams: getVidkingStreams,
 };
 
+const videasyProvider: StreamProvider = {
+  name: 'videasy',
+  type: 'direct',
+  getStreams: getVideasyStreams,
+};
+
 /**
  * Registry of all available stream providers
  */
 const providers: Map<string, StreamProvider> = new Map([
   ['111movies', movies111Provider],
+  ['videasy', videasyProvider],
   ['vidking', vidkingProvider],
   ['vidlink', vidlinkProvider],
   ['vixsrc', vixsrcProvider],

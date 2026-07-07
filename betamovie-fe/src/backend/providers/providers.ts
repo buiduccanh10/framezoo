@@ -25,6 +25,10 @@ import {
   scrapeOpenMovieShow,
 } from "./custom/sources/openMovieSource";
 import {
+  scrapeVideasyMovie,
+  scrapeVideasyShow,
+} from "./custom/sources/videasySource";
+import {
   scrapeVidkingMovie,
   scrapeVidkingShow,
 } from "./custom/sources/vidkingSource";
@@ -124,6 +128,20 @@ const vidkingSource = {
   scrapeShow: scrapeVidkingShow,
 };
 
+// Custom Videasy source definition
+const videasySource = {
+  id: "alphaflix-videasy",
+  name: "Server 7 (Videasy) 🔥",
+  rank: 7,
+  disabled: true,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVideasyMovie,
+  scrapeShow: scrapeVideasyShow,
+};
+
 // Custom OpenMovie embed definition
 const openMovieEmbed = {
   id: "openmovie-embed",
@@ -138,6 +156,7 @@ const openMovieEmbed = {
 
 const sourceDefinitions = [
   movies111Source,
+  videasySource,
   vidlinkSource,
   openMovieSource,
   vidsrcToSource,
