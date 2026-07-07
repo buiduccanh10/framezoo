@@ -1,0 +1,44 @@
+{
+  "name": "betamovie-be",
+  "dockerComposeFile": [
+    "../docker-compose.yaml",
+    "docker-compose.devcontainer.yml"
+  ],
+  "service": "betamovie-be",
+  "runServices": [
+    "postgres",
+    "redis",
+    "preview-service",
+    "betamovie-be"
+  ],
+  "workspaceFolder": "/workspaces/betamovie",
+  "shutdownAction": "none",
+  "remoteUser": "node",
+  "updateRemoteUserUID": true,
+  "initializeCommand": "bash .devcontainer/initialize.sh",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+  "forwardPorts": [
+    3000,
+    3100
+  ],
+  "portsAttributes": {
+    "3000": {
+      "label": "betamovie-be"
+    },
+    "3100": {
+      "label": "preview-service",
+      "onAutoForward": "silent"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "Prisma.prisma",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  }
+}

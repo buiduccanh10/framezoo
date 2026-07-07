@@ -1,0 +1,36 @@
+services:
+  betamovie-be:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep infinity
+    init: true
+    working_dir: /workspaces/betamovie
+    volumes:
+      - .:/workspaces/betamovie:cached
+      - pnpm-store:/pnpm/store
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: ${DATABASE_URL_DOCKER:?database URL required}
+      DATABASE_URL_DOCKER: ${DATABASE_URL_DOCKER:?database URL required}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174}
+      META_NAME: ${META_NAME:-AlphaFlix}
+      META_DESCRIPTION: ${META_DESCRIPTION:-}
+      CRYPTO_SECRET: ${CRYPTO_SECRET:?crypto secret required}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_URL: redis://redis:6379
+      PREVIEW_SERVICE_URL: http://preview-service:3100
+      PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
+      VITE_APP_DOMAIN: ${VITE_APP_DOMAIN:-http://localhost:5173}
+      VITE_BACKEND_URL: ${VITE_BACKEND_URL:-http://localhost:3000}
+      VITE_PWA_ENABLED: ${VITE_PWA_ENABLED:-false}
+      VITE_OPENSEARCH_ENABLED: ${VITE_OPENSEARCH_ENABLED:-false}
+      VITE_ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
+      TSC_WATCHFILE: UseFsEventsWithFallbackDynamicPolling
+
+volumes:
+  pnpm-store:
