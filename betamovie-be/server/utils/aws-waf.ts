@@ -121,6 +121,32 @@ function installCanvasStub(window: Window & typeof globalThis) {
       return createCanvasContextStub();
     },
   });
+
+  Object.defineProperty(prototype, 'toDataURL', {
+    configurable: true,
+    value() {
+      return 'data:image/png;base64,';
+    },
+  });
+
+  Object.defineProperty(prototype, 'toBlob', {
+    configurable: true,
+    value(callback: BlobCallback) {
+      callback?.(new window.Blob([], { type: 'image/png' }));
+    },
+  });
+}
+
+function getCookieValue(cookieHeader: string, name: string): string | null {
+  const cookiePrefix = `${name}=`;
+
+  for (const part of cookieHeader.split(/;\s*/)) {
+    if (part.startsWith(cookiePrefix)) {
+      return part.slice(cookiePrefix.length);
+    }
+  }
+
+  return null;
 }
 
 function withTokenHeaders(headers: HeaderMap, token: string): HeaderMap {
@@ -157,6 +183,21 @@ async function waitForAwsWafIntegration(dom: JSDOM): Promise<void> {
   }
 
   throw new Error('AWS WAF integration did not initialize in time');
+}
+
+async function waitForAwsWafTokenCookie(dom: JSDOM): Promise<string> {
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < CHALLENGE_TIMEOUT_MS) {
+    const token = getCookieValue(dom.window.document.cookie, 'aws-waf-token');
+    if (token) {
+      return token;
+    }
+
+    await new Promise(resolve => setTimeout(resolve, CHALLENGE_POLL_INTERVAL_MS));
+  }
+
+  throw new Error('AWS WAF token cookie was not written in time');
 }
 
 async function solveChallengeToken(challengeHtml: string, url: string): Promise<string> {
@@ -221,8 +262,8 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
           },
           configurable: true
         });
-      } catch (err: any) {
-        console.warn('[AWS WAF] Could not proxy window.location:', err.message);
+      } catch {
+        // JSDOM exposes window.location as non-configurable. Ignore and continue.
       }
 
 
@@ -327,16 +368,20 @@ async function solveChallengeToken(challengeHtml: string, url: string): Promise<
 
   try {
     await waitForAwsWafIntegration(dom);
+    dom.window.AwsWafIntegration.saveReferrer?.();
 
-    const token = await dom.window.AwsWafIntegration.getToken({
-      timeoutMs: CHALLENGE_TIMEOUT_MS,
-    });
-
-    if (typeof token !== 'string' || token.length === 0) {
-      throw new Error('AWS WAF challenge returned an empty token');
+    const shouldForceRefresh = await dom.window.AwsWafIntegration.checkForceRefresh?.();
+    if (shouldForceRefresh) {
+      await dom.window.AwsWafIntegration.forceRefreshToken?.({
+        timeoutMs: CHALLENGE_TIMEOUT_MS,
+      });
+    } else {
+      await dom.window.AwsWafIntegration.getToken({
+        timeoutMs: CHALLENGE_TIMEOUT_MS,
+      });
     }
 
-    return token;
+    return await waitForAwsWafTokenCookie(dom);
   } finally {
     // Commented out to prevent async timers from crashing Node on a null-document state
     // dom.window.close();
