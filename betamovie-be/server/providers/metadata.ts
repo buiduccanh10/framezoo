@@ -12,14 +12,14 @@ const providerMetadata: ProviderMetadataItem[] = [
     type: 'source',
     name: 'Server 2 (Videasy) 🔥',
     rank: 2,
-    disabled: true,
+    disabled: false,
   },
   {
     id: 'alphaflix-vidking',
     type: 'source',
     name: 'Server 1 (Vidking) 🔥',
     rank: 1,
-    disabled: true,
+    disabled: false,
   },
   {
     id: 'openmovie',
