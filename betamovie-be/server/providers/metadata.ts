@@ -8,6 +8,13 @@ export interface ProviderMetadataItem {
 
 const providerMetadata: ProviderMetadataItem[] = [
   {
+    id: 'alphaflix-videasy',
+    type: 'source',
+    name: 'Server 2 (Videasy) 🔥',
+    rank: 2,
+    disabled: false,
+  },
+  {
     id: 'alphaflix-vidking',
     type: 'source',
     name: 'Server 1 (Vidking) 🔥',
@@ -17,36 +24,36 @@ const providerMetadata: ProviderMetadataItem[] = [
   {
     id: 'openmovie',
     type: 'source',
-    name: 'Server 2 (Vixsrc) 🔥',
-    rank: 2,
+    name: 'Server 3 (Vixsrc) 🔥',
+    rank: 3,
     disabled: false,
   },
   {
     id: 'alphaflix-vidlink',
     type: 'source',
-    name: 'Server 3 (VidLink) 🔥',
-    rank: 3,
+    name: 'Server 4 (VidLink) 🔥',
+    rank: 4,
     disabled: false,
   },
   {
     id: 'kkphim',
     type: 'source',
-    name: 'Server 4 (KKPhim Vietsub + Lồng tiếng) 🔥',
-    rank: 4,
+    name: 'Server 5 (Vietsub, lồng tiếng) 🔥',
+    rank: 5,
     disabled: false,
   },
 
   {
     id: 'alphaflix-vidsrcto',
     type: 'source',
-    name: 'Server 5 (Vidsrc.to)',
+    name: 'Server 6 (Vidsrc.to)',
     rank: 5,
     disabled: false,
   },
   {
     id: 'alphaflix-111movies',
     type: 'source',
-    name: 'Server 6 (111Movies)',
+    name: 'Server 7 (111Movies)',
     rank: 6,
     disabled: false,
   },
