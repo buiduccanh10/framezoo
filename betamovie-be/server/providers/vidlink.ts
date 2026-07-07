@@ -73,6 +73,11 @@ const MODERN_UA =
 const STREAM_CACHE_TTL_MS = 5 * 60 * 1000;
 const STREAM_CACHE_TTL = Math.floor(STREAM_CACHE_TTL_MS / 1000);
 const WASM_BOOT_WAIT_MS = Number(process.env.VIDLINK_BOOT_WAIT_MS || 500);
+const TEXTUAL_CONTENT_TYPE_RE =
+  /^(?:text\/|application\/(?:json|javascript|xml|xhtml\+xml)|image\/svg\+xml)/i;
+const BINARY_CONTENT_TYPE_RE =
+  /^(?:video\/|audio\/|application\/(?:octet-stream|mp4|mp2t|vnd\.apple\.mpegurl|x-mpegurl))/i;
+const ISOBMFF_BOX_MARKERS = ['ftyp', 'moof', 'styp', 'sidx', 'mdat'] as const;
 
 let wasmReady = false;
 let bootPromise: Promise<void> | null = null;
@@ -259,6 +264,89 @@ function extractFirstMediaLine(playlist: string): string | null {
   return null;
 }
 
+function getResponseContentType(response: Response): string {
+  return response.headers.get('content-type')?.split(';', 1)[0]?.trim().toLowerCase() || '';
+}
+
+function decodeSample(bytes: Uint8Array, length = 256): string {
+  return new TextDecoder('utf-8', { fatal: false }).decode(bytes.slice(0, length)).trim();
+}
+
+function looksLikeTextPayload(bytes: Uint8Array): boolean {
+  if (!bytes.length) {
+    return false;
+  }
+
+  const sample = decodeSample(bytes).split('\0').join('').toLowerCase();
+  if (!sample) {
+    return false;
+  }
+
+  return (
+    sample.startsWith('<!doctype') ||
+    sample.startsWith('<html') ||
+    sample.startsWith('<?xml') ||
+    sample.startsWith('{"') ||
+    sample.startsWith('{ "') ||
+    sample.startsWith('[') ||
+    sample.includes('<html') ||
+    sample.includes('stream unavailable') ||
+    sample.includes('forbidden') ||
+    sample.includes('access denied')
+  );
+}
+
+function looksLikeTransportStream(bytes: Uint8Array): boolean {
+  if (bytes.length < 188) {
+    return bytes[0] === 0x47;
+  }
+
+  const syncOffsets = [0, 188, 376].filter(offset => offset < bytes.length);
+  return syncOffsets.length >= 2 && syncOffsets.every(offset => bytes[offset] === 0x47);
+}
+
+function looksLikeIsobmff(bytes: Uint8Array): boolean {
+  if (bytes.length < 8) {
+    return false;
+  }
+
+  for (let offset = 0; offset <= Math.min(bytes.length - 8, 64); offset += 1) {
+    const marker = String.fromCharCode(
+      bytes[offset + 4] || 0,
+      bytes[offset + 5] || 0,
+      bytes[offset + 6] || 0,
+      bytes[offset + 7] || 0
+    );
+    if ((ISOBMFF_BOX_MARKERS as readonly string[]).includes(marker)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isBinaryMediaPayload(response: Response, bytes: ArrayBuffer): boolean {
+  if (!bytes.byteLength) {
+    return false;
+  }
+
+  const contentType = getResponseContentType(response);
+  if (contentType && TEXTUAL_CONTENT_TYPE_RE.test(contentType)) {
+    return false;
+  }
+
+  const view = new Uint8Array(bytes);
+  if (looksLikeTextPayload(view)) {
+    return false;
+  }
+
+  if (looksLikeTransportStream(view) || looksLikeIsobmff(view)) {
+    return true;
+  }
+
+  return !contentType || BINARY_CONTENT_TYPE_RE.test(contentType);
+}
+
 function qualityScore(quality: string): number {
   const match = quality.match(/(\d{3,4})/);
   return match ? Number.parseInt(match[1], 10) : 0;
@@ -420,7 +508,7 @@ function extractFileCandidates(payload: VidlinkApiPayload, subtitle: string): Re
         subtitle,
       } satisfies ResolvedStreamData;
     })
-    .filter((item): item is ResolvedStreamData => Boolean(item));
+    .filter((item): item is NonNullable<typeof item> => Boolean(item));
 
   candidates.sort((a, b) => qualityScore(b.quality) - qualityScore(a.quality));
   return candidates;
@@ -461,6 +549,10 @@ async function verifyPlayableHlsStream(streamData: ResolvedStreamData): Promise<
     }
 
     const childText = await childResponse.text().catch(() => '');
+    if (!childText || !childText.includes('#EXTM3U')) {
+      return false;
+    }
+
     const childFirstLine = extractFirstMediaLine(childText);
     if (!childFirstLine) {
       return false;
@@ -480,7 +572,33 @@ async function verifyPlayableHlsStream(streamData: ResolvedStreamData): Promise<
   }
 
   const bytes = await segmentResponse.arrayBuffer().catch(() => null);
-  return Boolean(bytes && bytes.byteLength > 0);
+  return Boolean(bytes && isBinaryMediaPayload(segmentResponse, bytes));
+}
+
+async function verifyPlayableFileStream(streamData: ResolvedStreamData): Promise<boolean> {
+  const response = await fetch(streamData.resourceUrl, {
+    headers: {
+      Accept: 'video/*,*/*',
+      Referer: streamData.referer,
+      Origin: streamData.origin,
+      'User-Agent': MODERN_UA,
+      Range: 'bytes=0-65535',
+    },
+  }).catch(() => null);
+  if (!response?.ok) {
+    return false;
+  }
+
+  const bytes = await response.arrayBuffer().catch(() => null);
+  return Boolean(bytes && isBinaryMediaPayload(response, bytes));
+}
+
+async function verifyPlayableStream(streamData: ResolvedStreamData): Promise<boolean> {
+  if (streamData.streamType === 'file') {
+    return verifyPlayableFileStream(streamData);
+  }
+
+  return verifyPlayableHlsStream(streamData);
 }
 
 function normalizeCachedStreamData(
@@ -553,12 +671,7 @@ async function validateCachedStreams(
   const validated: ResolvedStreamData[] = [];
 
   for (const stream of streams) {
-    if (stream.streamType === 'file') {
-      validated.push(stream);
-      continue;
-    }
-
-    if (await verifyPlayableHlsStream(stream)) {
+    if (await verifyPlayableStream(stream)) {
       validated.push(stream);
     }
   }
@@ -576,7 +689,7 @@ async function extractStreamsFromPayload(
   if (hlsCandidates.length) {
     const playableHls: ResolvedStreamData[] = [];
     for (const candidate of hlsCandidates) {
-      if (await verifyPlayableHlsStream(candidate)) {
+      if (await verifyPlayableStream(candidate)) {
         playableHls.push(candidate);
       }
     }
@@ -590,7 +703,18 @@ async function extractStreamsFromPayload(
 
   const fileCandidates = extractFileCandidates(payload, subtitle);
   if (fileCandidates.length) {
-    return fileCandidates;
+    const playableFiles: ResolvedStreamData[] = [];
+    for (const candidate of fileCandidates) {
+      if (await verifyPlayableStream(candidate)) {
+        playableFiles.push(candidate);
+      }
+    }
+
+    if (playableFiles.length) {
+      return playableFiles;
+    }
+
+    console.warn(`[Vidlink] Rejected non-playable file stream for TMDB ${contentId}`);
   }
 
   console.warn(`[Vidlink] Missing playable stream payload for TMDB ${contentId}`);
