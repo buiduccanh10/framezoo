@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -71,42 +72,49 @@ export function LoginPage() {
 
   return (
     <SubPageLayout showFooter={false}>
+      <Helmet>
+        <body className="md:overflow-hidden" />
+      </Helmet>
       <PageTitle subpage k="global.pages.login" />
-      {showBackendSelection &&
-      (availableBackends.length > 1 || !defaultBackend) ? (
-        <LargeCard>
-          <LargeCardText title={t("auth.backendSelection.title")}>
-            {t("auth.backendSelection.description")}
-          </LargeCardText>
-          <BackendSelector
-            selectedUrl={selectedBackendUrl ?? defaultBackend}
-            onSelect={handleBackendSelect}
-            availableUrls={availableBackends}
-            showCustom
-          />
-          <LargeCardButtons>
-            <span className="text-type-danger font-medium text-center">
-              {t("settings.connections.server.notice")}
-            </span>
-            <Button
-              theme="purple"
-              onClick={handleContinue}
-              disabled={!selectedBackendUrl && !defaultBackend}
-            >
-              {t("auth.register.information.next")}
-            </Button>
-          </LargeCardButtons>
-        </LargeCard>
-      ) : (
-        <LoginFormPart
-          onLogin={() => {
-            const destination = state?.from
-              ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
-              : "/";
-            navigate(destination, { replace: true });
-          }}
-        />
-      )}
+      <div className="flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-6">
+        <div className="w-full">
+          {showBackendSelection &&
+          (availableBackends.length > 1 || !defaultBackend) ? (
+            <LargeCard>
+              <LargeCardText title={t("auth.backendSelection.title")}>
+                {t("auth.backendSelection.description")}
+              </LargeCardText>
+              <BackendSelector
+                selectedUrl={selectedBackendUrl ?? defaultBackend}
+                onSelect={handleBackendSelect}
+                availableUrls={availableBackends}
+                showCustom
+              />
+              <LargeCardButtons>
+                <span className="text-type-danger font-medium text-center">
+                  {t("settings.connections.server.notice")}
+                </span>
+                <Button
+                  theme="purple"
+                  onClick={handleContinue}
+                  disabled={!selectedBackendUrl && !defaultBackend}
+                >
+                  {t("auth.register.information.next")}
+                </Button>
+              </LargeCardButtons>
+            </LargeCard>
+          ) : (
+            <LoginFormPart
+              onLogin={() => {
+                const destination = state?.from
+                  ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
+                  : "/";
+                navigate(destination, { replace: true });
+              }}
+            />
+          )}
+        </div>
+      </div>
     </SubPageLayout>
   );
 }

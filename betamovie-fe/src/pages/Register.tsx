@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -128,43 +129,53 @@ export function RegisterPage() {
 
   return (
     <CaptchaProvider siteKey={siteKey}>
-      <SubPageLayout>
+      <SubPageLayout showFooter={false}>
+        <Helmet>
+          <body className="md:overflow-hidden" />
+        </Helmet>
         <PageTitle subpage k="global.pages.register" />
-        {step === -1 && (availableBackends.length > 1 || !defaultBackend) ? (
-          <LargeCard>
-            <LargeCardText title={t("auth.backendSelection.title")}>
-              {t("auth.backendSelection.description")}
-            </LargeCardText>
-            <BackendSelector
-              selectedUrl={selectedBackendUrl}
-              onSelect={handleBackendSelect}
-              availableUrls={availableBackends}
-              showCustom
-            />
-            <LargeCardButtons>
-              <span className="text-type-danger font-medium text-center">
-                {t("settings.connections.server.notice")}
-              </span>
-              <Button
-                theme="purple"
-                onClick={() => {
-                  if (selectedBackendUrl) {
-                    setStep(1);
-                  }
-                }}
-                disabled={!selectedBackendUrl}
-              >
-                {t("auth.register.information.next")}
-              </Button>
-            </LargeCardButtons>
-          </LargeCard>
-        ) : null}
+        <div className="flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-6">
+          <div className="w-full">
+            {step === -1 &&
+            (availableBackends.length > 1 || !defaultBackend) ? (
+              <LargeCard>
+                <LargeCardText title={t("auth.backendSelection.title")}>
+                  {t("auth.backendSelection.description")}
+                </LargeCardText>
+                <BackendSelector
+                  selectedUrl={selectedBackendUrl}
+                  onSelect={handleBackendSelect}
+                  availableUrls={availableBackends}
+                  showCustom
+                />
+                <LargeCardButtons>
+                  <span className="text-type-danger font-medium text-center">
+                    {t("settings.connections.server.notice")}
+                  </span>
+                  <Button
+                    theme="purple"
+                    onClick={() => {
+                      if (selectedBackendUrl) {
+                        setStep(1);
+                      }
+                    }}
+                    disabled={!selectedBackendUrl}
+                  >
+                    {t("auth.register.information.next")}
+                  </Button>
+                </LargeCardButtons>
+              </LargeCard>
+            ) : null}
 
-        {step === 1 ? (
-          <PasswordInputPart forLogin={false} onNext={handlePasswordNext} />
-        ) : null}
+            {step === 1 ? (
+              <PasswordInputPart forLogin={false} onNext={handlePasswordNext} />
+            ) : null}
 
-        {step === 2 ? <AccountCreatePart onNext={handleAccountNext} /> : null}
+            {step === 2 ? (
+              <AccountCreatePart onNext={handleAccountNext} />
+            ) : null}
+          </div>
+        </div>
       </SubPageLayout>
     </CaptchaProvider>
   );
