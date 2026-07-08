@@ -10,6 +10,7 @@ import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { hasAired } from "@/components/player/utils/aired";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
+import { measureInlineExpandableText } from "@/utils/inlineExpandText";
 import { formatDateDDMMYY } from "@/utils/timestamp";
 
 import { EpisodeCarouselProps } from "../../types";
@@ -60,6 +61,9 @@ export function EpisodeCarousel({
   const [truncatedEpisodes, setTruncatedEpisodes] = useState<{
     [key: number]: boolean;
   }>({});
+  const [collapsedEpisodeTexts, setCollapsedEpisodeTexts] = useState<{
+    [key: number]: string;
+  }>({});
   const [showFavorites, setShowFavorites] = useState(false);
   const [favoriteEpisodes, setFavoriteEpisodes] = useState<any[]>([]);
   const [selectedEpisodeGroupIndex, setSelectedEpisodeGroupIndex] = useState(0);
@@ -67,7 +71,7 @@ export function EpisodeCarousel({
   const carouselRef = useRef<HTMLDivElement>(null);
   const activeEpisodeRef = useRef<HTMLAnchorElement>(null);
   const descriptionRefs = useRef<{
-    [key: number]: HTMLParagraphElement | null;
+    [key: number]: HTMLElement | null;
   }>({});
   const updateItem = useProgressStore((s) => s.updateItem);
   const confirmModal = useModal("season-watch-confirm");
@@ -420,28 +424,34 @@ export function EpisodeCarousel({
     }));
   };
 
-  const isTextTruncated = (element: HTMLElement | null) => {
-    if (!element) return false;
-    return element.scrollHeight > element.clientHeight;
-  };
-
   // Add a new effect to reset states when season changes
   useEffect(() => {
     setExpandedEpisodes({});
     setTruncatedEpisodes({});
+    setCollapsedEpisodeTexts({});
   }, [selectedSeason, selectedEpisodeGroupIndex, showFavorites]);
 
   // Check truncation after render and when expanded state changes
   useEffect(() => {
     const checkTruncation = () => {
       const newTruncatedState: { [key: number]: boolean } = {};
+      const newCollapsedTextState: { [key: number]: string } = {};
       displayedEpisodes.forEach((episode) => {
-        if (!expandedEpisodes[episode.id]) {
-          const element = descriptionRefs.current[episode.id];
-          newTruncatedState[episode.id] = isTextTruncated(element);
-        }
+        if (expandedEpisodes[episode.id] || !episode.overview) return;
+
+        const element = descriptionRefs.current[episode.id];
+        if (!element) return;
+
+        const result = measureInlineExpandableText(
+          element,
+          episode.overview,
+          t("player.menus.episodes.showMore"),
+        );
+        newTruncatedState[episode.id] = result.isTruncated;
+        newCollapsedTextState[episode.id] = result.text;
       });
       setTruncatedEpisodes(newTruncatedState);
+      setCollapsedEpisodeTexts(newCollapsedTextState);
     };
 
     checkTruncation();
@@ -883,29 +893,42 @@ export function EpisodeCarousel({
                     </p>
                     {episode.overview && (
                       <div className="relative">
-                        <p
-                          ref={(el) => {
-                            descriptionRefs.current[episode.id] = el;
-                          }}
-                          className={classNames(
-                            "text-sm text-white/80 mt-1.5 transition-all duration-200",
-                            !isExpanded
-                              ? "line-clamp-2"
-                              : "max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2",
-                          )}
-                        >
-                          {episode.overview}
-                        </p>
-                        {!isExpanded && truncatedEpisodes[episode.id] && (
-                          <button
-                            type="button"
-                            onClick={(e) =>
-                              toggleEpisodeExpansion(episode.id, e)
-                            }
-                            className="text-sm text-white/60 hover:text-white transition-opacity duration-200 opacity-0 animate-fade-in"
+                        {!isExpanded ? (
+                          <div
+                            ref={(el) => {
+                              descriptionRefs.current[episode.id] = el;
+                            }}
+                            className="mt-1.5 max-h-10 overflow-hidden text-sm leading-5 text-white/80 transition-all duration-200"
                           >
-                            {t("player.menus.episodes.showMore")}
-                          </button>
+                            <span>
+                              {truncatedEpisodes[episode.id]
+                                ? collapsedEpisodeTexts[episode.id]
+                                : episode.overview}
+                            </span>
+                            {truncatedEpisodes[episode.id] ? (
+                              <>
+                                ...{" "}
+                                <button
+                                  type="button"
+                                  onClick={(e) =>
+                                    toggleEpisodeExpansion(episode.id, e)
+                                  }
+                                  className="inline text-sm leading-5 text-white/60 transition-colors duration-200 hover:text-white"
+                                >
+                                  {t("player.menus.episodes.showMore")}
+                                </button>
+                              </>
+                            ) : null}
+                          </div>
+                        ) : (
+                          <p
+                            ref={(el) => {
+                              descriptionRefs.current[episode.id] = el;
+                            }}
+                            className="text-sm text-white/80 mt-1.5 max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2 transition-all duration-200"
+                          >
+                            {episode.overview}
+                          </p>
                         )}
                         {isExpanded && (
                           <button

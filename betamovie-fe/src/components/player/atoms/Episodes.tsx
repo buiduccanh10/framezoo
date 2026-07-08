@@ -29,6 +29,7 @@ import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useProgressStore } from "@/stores/progress";
 import { concurrentMap } from "@/utils/async";
+import { measureInlineExpandableText } from "@/utils/inlineExpandText";
 import { scrollToElement } from "@/utils/scroll";
 
 import { hasAired } from "../utils/aired";
@@ -126,8 +127,9 @@ interface EpisodeItemProps {
   onToggleExpansion?: (episodeId: string, event: React.MouseEvent) => void;
   expandedEpisodes?: { [key: string]: boolean };
   truncatedEpisodes?: { [key: string]: boolean };
+  collapsedEpisodeTexts?: { [key: string]: string };
   descriptionRefs?: React.MutableRefObject<{
-    [key: string]: HTMLParagraphElement | null;
+    [key: string]: HTMLElement | null;
   }>;
   forceCompactEpisodeView?: boolean;
   seasonNumber?: number;
@@ -147,6 +149,7 @@ function EpisodeItem({
   onToggleExpansion,
   expandedEpisodes = {},
   truncatedEpisodes = {},
+  collapsedEpisodeTexts = {},
   descriptionRefs,
   forceCompactEpisodeView = false,
   seasonNumber,
@@ -323,33 +326,47 @@ function EpisodeItem({
           <h3 className="font-bold text-white line-clamp-1">{episodeTitle}</h3>
           {episode.overview && (
             <div className="relative">
-              <p
-                ref={(el) => {
-                  if (descriptionRefs) {
-                    descriptionRefs.current[`medium-${episode.id}`] = el;
-                  }
-                }}
-                className={classNames(
-                  "text-sm text-white/80 mt-1.5 transition-all duration-200",
-                  !expandedEpisodes[`medium-${episode.id}`]
-                    ? "line-clamp-2"
-                    : "max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2",
-                )}
-              >
-                {episode.overview}
-              </p>
-              {!expandedEpisodes[`medium-${episode.id}`] &&
-                truncatedEpisodes[`medium-${episode.id}`] && (
-                  <button
-                    type="button"
-                    onClick={(e) =>
-                      onToggleExpansion?.(`medium-${episode.id}`, e)
+              {!expandedEpisodes[`medium-${episode.id}`] ? (
+                <div
+                  ref={(el) => {
+                    if (descriptionRefs) {
+                      descriptionRefs.current[`medium-${episode.id}`] = el;
                     }
-                    className="text-sm text-white/60 hover:text-white transition-opacity duration-200 opacity-0 animate-fade-in"
-                  >
-                    {t("player.menus.episodes.showMore")}
-                  </button>
-                )}
+                  }}
+                  className="mt-1.5 max-h-10 overflow-hidden text-sm leading-5 text-white/80 transition-all duration-200"
+                >
+                  <span>
+                    {truncatedEpisodes[`medium-${episode.id}`]
+                      ? collapsedEpisodeTexts[`medium-${episode.id}`]
+                      : episode.overview}
+                  </span>
+                  {truncatedEpisodes[`medium-${episode.id}`] ? (
+                    <>
+                      ...{" "}
+                      <button
+                        type="button"
+                        onClick={(e) =>
+                          onToggleExpansion?.(`medium-${episode.id}`, e)
+                        }
+                        className="inline text-sm leading-5 text-white/60 transition-colors duration-200 hover:text-white"
+                      >
+                        {t("player.menus.episodes.showMore")}
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+              ) : (
+                <p
+                  ref={(el) => {
+                    if (descriptionRefs) {
+                      descriptionRefs.current[`medium-${episode.id}`] = el;
+                    }
+                  }}
+                  className="text-sm text-white/80 mt-1.5 max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2 transition-all duration-200"
+                >
+                  {episode.overview}
+                </p>
+              )}
               {expandedEpisodes[`medium-${episode.id}`] && (
                 <button
                   type="button"
@@ -506,33 +523,47 @@ function EpisodeItem({
           </div>
           {episode.overview && (
             <div className="relative">
-              <p
-                ref={(el) => {
-                  if (descriptionRefs) {
-                    descriptionRefs.current[`large-${episode.id}`] = el;
-                  }
-                }}
-                className={classNames(
-                  "text-sm text-white/80 mt-1.5 transition-all duration-200",
-                  !expandedEpisodes[`large-${episode.id}`]
-                    ? "line-clamp-2"
-                    : "max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2",
-                )}
-              >
-                {episode.overview}
-              </p>
-              {!expandedEpisodes[`large-${episode.id}`] &&
-                truncatedEpisodes[`large-${episode.id}`] && (
-                  <button
-                    type="button"
-                    onClick={(e) =>
-                      onToggleExpansion?.(`large-${episode.id}`, e)
+              {!expandedEpisodes[`large-${episode.id}`] ? (
+                <div
+                  ref={(el) => {
+                    if (descriptionRefs) {
+                      descriptionRefs.current[`large-${episode.id}`] = el;
                     }
-                    className="text-sm text-white/60 hover:text-white transition-opacity duration-200 opacity-0 animate-fade-in"
-                  >
-                    {t("player.menus.episodes.showMore")}
-                  </button>
-                )}
+                  }}
+                  className="mt-1.5 max-h-10 overflow-hidden text-sm leading-5 text-white/80 transition-all duration-200"
+                >
+                  <span>
+                    {truncatedEpisodes[`large-${episode.id}`]
+                      ? collapsedEpisodeTexts[`large-${episode.id}`]
+                      : episode.overview}
+                  </span>
+                  {truncatedEpisodes[`large-${episode.id}`] ? (
+                    <>
+                      ...{" "}
+                      <button
+                        type="button"
+                        onClick={(e) =>
+                          onToggleExpansion?.(`large-${episode.id}`, e)
+                        }
+                        className="inline text-sm leading-5 text-white/60 transition-colors duration-200 hover:text-white"
+                      >
+                        {t("player.menus.episodes.showMore")}
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+              ) : (
+                <p
+                  ref={(el) => {
+                    if (descriptionRefs) {
+                      descriptionRefs.current[`large-${episode.id}`] = el;
+                    }
+                  }}
+                  className="text-sm text-white/80 mt-1.5 max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent pr-2 transition-all duration-200"
+                >
+                  {episode.overview}
+                </p>
+              )}
               {expandedEpisodes[`large-${episode.id}`] && (
                 <button
                   type="button"
@@ -709,9 +740,12 @@ export function EpisodesView({
   const [truncatedEpisodes, setTruncatedEpisodes] = useState<{
     [key: string]: boolean;
   }>({});
+  const [collapsedEpisodeTexts, setCollapsedEpisodeTexts] = useState<{
+    [key: string]: string;
+  }>({});
   const [selectedEpisodeGroupIndex, setSelectedEpisodeGroupIndex] = useState(0);
   const descriptionRefs = useRef<{
-    [key: string]: HTMLParagraphElement | null;
+    [key: string]: HTMLElement | null;
   }>({});
   const forceCompactEpisodeView = false;
   const seasonEpisodes = useMemo(
@@ -730,11 +764,6 @@ export function EpisodesView({
     const startIndex = selectedEpisodeGroupIndex * EPISODE_GROUP_SIZE;
     return seasonEpisodes.slice(startIndex, startIndex + EPISODE_GROUP_SIZE);
   }, [seasonEpisodes, selectedEpisodeGroupIndex, shouldGroupEpisodes]);
-
-  const isTextTruncated = (element: HTMLElement | null) => {
-    if (!element) return false;
-    return element.scrollHeight > element.clientHeight;
-  };
 
   useEffect(() => {
     setSelectedEpisodeGroupIndex(0);
@@ -769,21 +798,39 @@ export function EpisodesView({
   useEffect(() => {
     const checkTruncation = () => {
       const newTruncatedState: { [key: string]: boolean } = {};
+      const newCollapsedTextState: { [key: string]: string } = {};
       if (!loadingState.value) return;
 
       visibleSeasonEpisodes.forEach((ep) => {
         // Check medium view
         if (!expandedEpisodes[`medium-${ep.id}`]) {
           const mediumElement = descriptionRefs.current[`medium-${ep.id}`];
-          newTruncatedState[`medium-${ep.id}`] = isTextTruncated(mediumElement);
+          if (mediumElement) {
+            const result = measureInlineExpandableText(
+              mediumElement,
+              ep.overview ?? "",
+              t("player.menus.episodes.showMore"),
+            );
+            newTruncatedState[`medium-${ep.id}`] = result.isTruncated;
+            newCollapsedTextState[`medium-${ep.id}`] = result.text;
+          }
         }
         // Check large view
         if (!expandedEpisodes[`large-${ep.id}`]) {
           const largeElement = descriptionRefs.current[`large-${ep.id}`];
-          newTruncatedState[`large-${ep.id}`] = isTextTruncated(largeElement);
+          if (largeElement) {
+            const result = measureInlineExpandableText(
+              largeElement,
+              ep.overview ?? "",
+              t("player.menus.episodes.showMore"),
+            );
+            newTruncatedState[`large-${ep.id}`] = result.isTruncated;
+            newCollapsedTextState[`large-${ep.id}`] = result.text;
+          }
         }
       });
       setTruncatedEpisodes(newTruncatedState);
+      setCollapsedEpisodeTexts(newCollapsedTextState);
     };
 
     // Initial check
@@ -802,7 +849,7 @@ export function EpisodesView({
       clearTimeout(timeoutId);
       window.removeEventListener("resize", handleResize);
     };
-  }, [expandedEpisodes, loadingState.value, visibleSeasonEpisodes]);
+  }, [expandedEpisodes, loadingState.value, t, visibleSeasonEpisodes]);
 
   const toggleEpisodeExpansion = (
     episodeId: string,
@@ -1069,6 +1116,7 @@ export function EpisodesView({
                     onToggleExpansion={toggleEpisodeExpansion}
                     expandedEpisodes={expandedEpisodes}
                     truncatedEpisodes={truncatedEpisodes}
+                    collapsedEpisodeTexts={collapsedEpisodeTexts}
                     descriptionRefs={descriptionRefs}
                     forceCompactEpisodeView={forceCompactEpisodeView}
                     seasonNumber={ep.seasonNumber}
@@ -1157,6 +1205,7 @@ export function EpisodesView({
                       onToggleExpansion={toggleEpisodeExpansion}
                       expandedEpisodes={expandedEpisodes}
                       truncatedEpisodes={truncatedEpisodes}
+                      collapsedEpisodeTexts={collapsedEpisodeTexts}
                       descriptionRefs={descriptionRefs}
                       forceCompactEpisodeView={forceCompactEpisodeView}
                     />
