@@ -22,6 +22,8 @@ interface VideasyStream {
   subtitle?: string;
   quality: string;
   provider: string;
+  headers?: Record<string, string>;
+  streamType?: "hls" | "file" | "dash";
   variantId?: string;
   variantLabel?: string;
   preview?: StreamPreview;
@@ -67,6 +69,8 @@ function encodeStreamInfo(stream: VideasyStream): string {
     subtitle: stream.subtitle,
     quality: stream.quality,
     provider: stream.provider,
+    headers: stream.headers,
+    streamType: stream.streamType,
     variantId: stream.variantId,
     variantLabel: stream.variantLabel,
     preview: stream.preview,

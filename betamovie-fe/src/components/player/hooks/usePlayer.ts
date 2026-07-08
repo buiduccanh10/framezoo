@@ -12,7 +12,7 @@ import { getSavedProgressTime } from "@/stores/progress/selectors";
 
 export interface Source {
   url: string;
-  type: "hls" | "mp4";
+  type: "hls" | "mp4" | "dash";
 }
 
 export function usePlayer() {

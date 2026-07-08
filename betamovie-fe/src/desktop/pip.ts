@@ -71,7 +71,7 @@ export function getDesktopPipSourceSnapshot(
 ): LoadableSource | null {
   if (!source) return null;
 
-  if (source.type === "hls") {
+  if (source.type === "hls" || source.type === "dash") {
     return {
       type: source.type,
       url: source.url,
