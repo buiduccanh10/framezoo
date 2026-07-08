@@ -46,12 +46,17 @@ export function buildOpenMovieStreamId({
   provider,
   url,
   quality,
+  variantId,
 }: {
   provider: string;
   url: string;
   quality: string | null | undefined;
+  variantId?: string | null;
 }): string {
-  return `openmovie-${provider}-${isOpenMovieHlsUrl(url) ? "hls" : "file"}-${normalizeOpenMovieQuality(quality)}`;
+  const streamVariantId = (variantId || provider || "")
+    .trim()
+    .replace(/\s+/g, "-");
+  return `openmovie-${streamVariantId}-${isOpenMovieHlsUrl(url) ? "hls" : "file"}-${normalizeOpenMovieQuality(quality)}`;
 }
 
 export function formatOpenMovieVariantLabel(provider: string): string {

@@ -93,6 +93,7 @@ export function EmbedOption(props: {
               provider: info.provider,
               url: info.url,
               quality: info.quality,
+              variantId: info.variantId,
             })
         );
       } catch {
