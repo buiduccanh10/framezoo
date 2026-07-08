@@ -112,6 +112,7 @@ export function makeChromecastDisplayInterface(
 
     let type = "video/mp4";
     if (source.type === "hls") type = "application/x-mpegurl";
+    if (source.type === "dash") type = "application/dash+xml";
 
     const metaData = new chrome.cast.media.GenericMediaMetadata();
     metaData.title = meta.title;
@@ -132,6 +133,8 @@ export function makeChromecastDisplayInterface(
       if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
         contentUrl = createM3U8ProxyUrl(source.url, allHeaders);
       }
+    } else if (source.type === "dash") {
+      contentUrl = source.url;
     }
     // Handle MP4 streams with headers
     else if (source.type === "mp4" && hasHeaders) {

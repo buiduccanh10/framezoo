@@ -316,19 +316,26 @@ export default defineEventHandler(async event => {
       const origin = getRequestURL(event).origin;
       const streams = streamsRaw.map((s: any) => {
         const headers = s?.headers ?? {};
-        const proxyPath = s?.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
-        const proxiedUrl = `${origin}${proxyPath}?url=${encodeURIComponent(
-          s.url
-        )}&headers=${encodeURIComponent(JSON.stringify(headers))}`;
-        const preview = buildStreamPreview({
-          origin,
-          provider: providerName,
-          mediaType: type as 'movie' | 'tv',
-          tmdbId,
-          season,
-          episode,
-          headers,
-        });
+        const proxiedUrl =
+          s?.streamType === 'dash'
+            ? s.url
+            : s?.streamType === 'file'
+              ? s.url
+              : `${origin}/api/m3u8-proxy?url=${encodeURIComponent(s.url)}&headers=${encodeURIComponent(
+                  JSON.stringify(headers)
+                )}`;
+        const preview =
+          s?.streamType === 'dash' || s?.streamType === 'file'
+            ? undefined
+            : buildStreamPreview({
+                origin,
+                provider: providerName,
+                mediaType: type as 'movie' | 'tv',
+                tmdbId,
+                season,
+                episode,
+                headers,
+              });
 
         return {
           ...s,

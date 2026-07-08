@@ -34,10 +34,11 @@ interface ResolvedStreamData {
   origin: string;
   quality: string;
   subtitle: string;
-  streamType: 'hls' | 'file';
+  streamType: 'hls' | 'file' | 'dash';
   serverName: string;
   serverRank: number;
   variantId: string;
+  verified: boolean;
 }
 
 interface SeedResponse {
@@ -59,13 +60,13 @@ const MODERN_UA =
   process.env.VIDEASY_USER_AGENT ||
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36';
 const REQUEST_TIMEOUT_MS = Number(process.env.VIDEASY_REQUEST_TIMEOUT_MS || 18_000);
-const VERIFY_STREAMS = process.env.VIDEASY_VERIFY_STREAMS === '1';
+const VERIFY_STREAMS = process.env.VIDEASY_VERIFY_STREAMS !== '0';
 const SERVER_RESOLVE_CONCURRENCY = Math.max(
   1,
   Number.parseInt(process.env.VIDEASY_SERVER_CONCURRENCY || '4', 10) || 4
 );
 const STREAM_CACHE_TTL = Number(process.env.VIDEASY_CACHE_TTL || 5 * 60);
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 6;
 const SEED_CACHE_VERSION = 1;
 const SEED_CACHE_EARLY_EXPIRY_MS = 5_000;
 const STALE_SEED_STORAGE_TTL_SECONDS = Math.max(
@@ -73,6 +74,7 @@ const STALE_SEED_STORAGE_TTL_SECONDS = Math.max(
   Number.parseInt(process.env.VIDEASY_STALE_SEED_STORAGE_TTL || '3600', 10) || 3600
 );
 const PAYLOAD_MAGIC_PREFIX = Uint8Array.from([109, 118, 109, 49]);
+const DASH_SIGNING_PARAM_NAMES = new Set(['Policy', 'Signature', 'Key-Pair-Id', 'Expires']);
 const ROUND_CONSTANTS = [
   1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221,
   3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580,
@@ -93,7 +95,7 @@ const SERVER_ENDPOINTS: readonly VideasyServerEndpoint[] = [
   { name: 'Neon', endpoint: 'neon2/sources-with-title' },
   { name: 'Sage', endpoint: 'ym/sources-with-title' },
   { name: 'Jett', endpoint: 'jett/sources-with-title' },
-  { name: 'Cypher', endpoint: 'downloader2/sources-with-title' },
+  { name: 'Cypher', endpoint: 'mbx/sources-with-title' },
   { name: 'Breach', endpoint: 'm4uhd/sources-with-title' },
   { name: 'Vyse', endpoint: 'hdmovie/sources-with-title' },
   { name: 'Killjoy', endpoint: 'meine/sources-with-title', language: 'german' },
@@ -233,7 +235,7 @@ function slugifyVariantPart(value: string): string {
 function buildVariantId(
   serverName: string,
   quality: string,
-  streamType: 'hls' | 'file',
+  streamType: 'hls' | 'file' | 'dash',
   resourceUrl: string
 ): string {
   const serverSlug = slugifyVariantPart(serverName) || 'server';
@@ -623,6 +625,89 @@ async function fetchManifestText(url: string): Promise<string | null> {
   return body.trimStart().startsWith('#EXTM3U') ? body : null;
 }
 
+async function fetchDashManifestText(url: string): Promise<string | null> {
+  const response = await withTimeout(
+    url,
+    {
+      headers: buildRequestHeaders('application/dash+xml,application/xml,text/xml,text/plain,*/*'),
+    },
+    REQUEST_TIMEOUT_MS
+  ).catch(() => null);
+
+  if (!response?.ok) {
+    return null;
+  }
+
+  const body = await response.text().catch(() => '');
+  return /<\s*MPD\b/i.test(body) ? body : null;
+}
+
+function appendDashSigningQuery(targetUrl: string, manifestUrl: string): string {
+  try {
+    const manifest = new URL(manifestUrl);
+    const target = new URL(targetUrl, manifest);
+
+    for (const [key, value] of manifest.searchParams.entries()) {
+      if (!DASH_SIGNING_PARAM_NAMES.has(key) || target.searchParams.has(key)) {
+        continue;
+      }
+
+      target.searchParams.append(key, value);
+    }
+
+    return target.toString();
+  } catch {
+    return targetUrl;
+  }
+}
+
+function fillDashTemplate(
+  template: string,
+  representationId: string,
+  startNumber: number
+): string {
+  return template
+    .replace(/\$RepresentationID\$/g, representationId)
+    .replace(/\$Number(?:%0(\d+)d)?\$/g, (_match, width) =>
+      width ? String(startNumber).padStart(Number.parseInt(width, 10) || 1, '0') : String(startNumber)
+    );
+}
+
+function buildDashVerificationSegmentUrl(manifest: string, manifestUrl: string): string | null {
+  const representationId =
+    manifest.match(/<Representation\b[^>]*\bheight="(\d+)"[^>]*\bid="([^"]+)"/i)?.[2] ||
+    manifest.match(/<Representation\b[^>]*\bid="([^"]+)"[^>]*\bheight="(\d+)"/i)?.[1] ||
+    manifest.match(/<Representation\b[^>]*\bid="([^"]+)"/i)?.[1] ||
+    '';
+
+  const segmentTemplateAttrs = manifest.match(/<SegmentTemplate\b([^>]*)>/i)?.[1] || '';
+  const initialization = segmentTemplateAttrs.match(/\binitialization="([^"]+)"/i)?.[1] || '';
+  const media = segmentTemplateAttrs.match(/\bmedia="([^"]+)"/i)?.[1] || '';
+  const startNumber = Number.parseInt(
+    segmentTemplateAttrs.match(/\bstartNumber="(\d+)"/i)?.[1] || '1',
+    10
+  );
+  const template = initialization || media;
+
+  if (!template) {
+    return null;
+  }
+
+  const baseUrlValue = manifest.match(/<BaseURL>([^<]+)<\/BaseURL>/i)?.[1]?.trim() || '';
+  const templateUrl = fillDashTemplate(
+    template,
+    representationId,
+    Number.isFinite(startNumber) ? startNumber : 1
+  );
+
+  try {
+    const resolvedBase = baseUrlValue ? new URL(baseUrlValue, manifestUrl).toString() : manifestUrl;
+    return appendDashSigningQuery(new URL(templateUrl, resolvedBase).toString(), manifestUrl);
+  } catch {
+    return null;
+  }
+}
+
 function sampleText(bytes: Uint8Array): string {
   return new TextDecoder('utf-8', { fatal: false })
     .decode(bytes.slice(0, 256))
@@ -783,6 +868,44 @@ async function verifyPlayableFile(url: string): Promise<boolean> {
   );
 }
 
+async function verifyPlayableDashStream(url: string): Promise<boolean> {
+  const manifest = await fetchDashManifestText(url);
+  if (!manifest) {
+    return false;
+  }
+
+  const segmentUrl = buildDashVerificationSegmentUrl(manifest, url);
+  if (!segmentUrl) {
+    return true;
+  }
+
+  const response = await withTimeout(
+    segmentUrl,
+    {
+      headers: buildRequestHeaders('*/*', {
+        Range: 'bytes=0-65535',
+      }),
+    },
+    REQUEST_TIMEOUT_MS
+  ).catch(() => null);
+
+  if (!response || !isSuccessfulMediaStatus(response.status)) {
+    return false;
+  }
+
+  const bytes = new Uint8Array(await response.arrayBuffer().catch(() => new ArrayBuffer(0)));
+  if (!bytes.byteLength || looksLikeTextPayload(bytes)) {
+    return false;
+  }
+
+  const contentType = getContentType(response);
+  return (
+    looksLikeIsobmff(bytes) ||
+    !contentType ||
+    /^(?:video\/|audio\/|application\/(?:dash\+xml|octet-stream|mp4))/i.test(contentType)
+  );
+}
+
 function pickSubtitleUrl(subtitles: VideasySubtitleEntry[] | undefined): string {
   const candidates = Array.isArray(subtitles) ? subtitles : [];
   const preferred =
@@ -823,18 +946,18 @@ async function resolveStreamsFromPayload(
     (payload.sources || []).map(async source => {
       const resourceUrl = normalizeHttpUrl(String(source?.url || source?.file || ''));
       const streamType = inferStreamType(source);
-      if (!resourceUrl || !streamType || streamType === 'dash') {
+      if (!resourceUrl || !streamType) {
         return null;
       }
 
+      let verified = true;
       if (VERIFY_STREAMS) {
-        const playable =
+        verified =
           streamType === 'hls'
             ? await verifyPlayableHlsStream(resourceUrl)
-            : await verifyPlayableFile(resourceUrl);
-        if (!playable) {
-          return null;
-        }
+            : streamType === 'dash'
+              ? await verifyPlayableDashStream(resourceUrl)
+              : await verifyPlayableFile(resourceUrl);
       }
 
       const quality = normalizeQuality(source?.quality);
@@ -854,6 +977,7 @@ async function resolveStreamsFromPayload(
         serverName,
         serverRank,
         variantId: buildVariantId(serverName, quality, streamType, resourceUrl),
+        verified,
       } satisfies ResolvedStreamData;
     })
   );
@@ -863,6 +987,7 @@ async function resolveStreamsFromPayload(
     .sort(
       (left, right) =>
         left.serverRank - right.serverRank ||
+        Number(right.verified) - Number(left.verified) ||
         qualityScore(right.quality) - qualityScore(left.quality)
     );
 }
@@ -995,6 +1120,7 @@ async function resolveVideasyStreams(
     .sort(
       (left, right) =>
         left.serverRank - right.serverRank ||
+        Number(right.verified) - Number(left.verified) ||
         qualityScore(right.quality) - qualityScore(left.quality)
     );
 }
@@ -1027,14 +1153,13 @@ export async function getVideasyStreams(
     }
 
     return streamData.map(stream => ({
-      name:
-        stream.streamType === 'hls'
-          ? `Videasy - ${stream.serverName} - ${stream.quality}`
-          : `Videasy - ${stream.serverName} - ${stream.quality}`,
+      name: `Videasy - ${stream.serverName} - ${stream.quality}`,
       title:
-        stream.streamType === 'hls'
-          ? `Videasy - ${stream.serverName} - ${stream.quality}`
-          : `Videasy - ${stream.serverName} - ${stream.quality} File`,
+        stream.streamType === 'dash'
+          ? `Videasy - ${stream.serverName} - ${stream.quality} DASH`
+          : stream.streamType === 'file'
+            ? `Videasy - ${stream.serverName} - ${stream.quality} File`
+            : `Videasy - ${stream.serverName} - ${stream.quality}`,
       url: stream.resourceUrl,
       subtitle: stream.subtitle,
       quality: stream.quality,

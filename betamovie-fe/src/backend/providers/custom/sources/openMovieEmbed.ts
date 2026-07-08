@@ -13,6 +13,8 @@ interface OpenMovieStreamInfo {
   subtitle?: string;
   quality: string;
   provider: string;
+  headers?: Record<string, string>;
+  streamType?: "hls" | "file" | "dash";
   variantId?: string;
   variantLabel?: string;
   preview?: StreamPreview;
@@ -39,6 +41,15 @@ function isHlsUrl(url: string): boolean {
   );
 }
 
+function isDashUrl(url: string): boolean {
+  return (
+    url.includes(".mpd") ||
+    url.includes("/dash/") ||
+    url.includes("/mpd-proxy") ||
+    url.includes("application/dash+xml")
+  );
+}
+
 export async function scrapeOpenMovieEmbed(
   ctx: EmbedScrapeContext,
 ): Promise<EmbedOutput> {
@@ -48,7 +59,13 @@ export async function scrapeOpenMovieEmbed(
     throw new NotFoundError("No stream URL found");
   }
 
-  const isHls = isHlsUrl(streamInfo.url);
+  const inferredType =
+    streamInfo.streamType ||
+    (isDashUrl(streamInfo.url)
+      ? "dash"
+      : isHlsUrl(streamInfo.url)
+        ? "hls"
+        : "file");
 
   const qualityMap: Record<string, string> = {
     "2160p": "4k",
@@ -70,8 +87,13 @@ export async function scrapeOpenMovieEmbed(
   return {
     stream: [
       {
-        id: `openmovie-${streamVariantId}-${isHls ? "hls" : "file"}-${quality}`,
-        type: isHls ? ("hls" as const) : ("file" as const),
+        id: `openmovie-${streamVariantId}-${inferredType}-${quality}`,
+        type:
+          inferredType === "dash"
+            ? ("dash" as const)
+            : inferredType === "hls"
+              ? ("hls" as const)
+              : ("file" as const),
         flags: [flags.CORS_ALLOWED],
         captions: streamInfo.subtitle
           ? [
@@ -86,10 +108,12 @@ export async function scrapeOpenMovieEmbed(
           : [],
         skipValidation: true,
         preview: streamInfo.preview,
-        ...(isHls ? { playlist: streamInfo.url } : {}),
+        headers: streamInfo.headers,
+        ...(inferredType === "hls" ? { playlist: streamInfo.url } : {}),
+        ...(inferredType === "dash" ? { manifest: streamInfo.url } : {}),
         qualities: {
           [quality]: {
-            type: isHls ? ("hls" as const) : ("mp4" as const),
+            type: inferredType === "hls" ? ("hls" as const) : ("mp4" as const),
             url: streamInfo.url,
           },
         },
