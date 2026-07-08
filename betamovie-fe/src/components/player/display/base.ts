@@ -959,8 +959,17 @@ export function makeVideoElementDisplayInterface(options?: {
 
       player.updateSettings({
         streaming: {
-          buffer: { fastSwitchEnabled: true },
+          buffer: {
+            fastSwitchEnabled: true,
+            bufferTimeAtTopQuality: 30,
+            bufferTimeAtTopQualityLongForm: 60,
+          },
           abr: { autoSwitchBitrate: { video: true, audio: true } },
+          gaps: {
+            jumpGaps: true,
+            jumpLargeGaps: true,
+            smallGapLimit: 5,
+          },
         },
       });
 
