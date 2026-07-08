@@ -18,6 +18,8 @@ export interface Stream {
   subtitle: string;
   quality: string;
   provider: string;
+  variantId?: string;
+  variantLabel?: string;
   streamType?: 'hls' | 'file';
   preview?: StreamPreview;
   headers: {

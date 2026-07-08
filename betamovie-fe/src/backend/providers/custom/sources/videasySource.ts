@@ -22,6 +22,8 @@ interface VideasyStream {
   subtitle?: string;
   quality: string;
   provider: string;
+  variantId?: string;
+  variantLabel?: string;
   preview?: StreamPreview;
 }
 
@@ -65,6 +67,8 @@ function encodeStreamInfo(stream: VideasyStream): string {
     subtitle: stream.subtitle,
     quality: stream.quality,
     provider: stream.provider,
+    variantId: stream.variantId,
+    variantLabel: stream.variantLabel,
     preview: stream.preview,
   };
   return `openmovie://${encodeURIComponent(JSON.stringify(info))}`;
