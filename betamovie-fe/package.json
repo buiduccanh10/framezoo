@@ -1,7 +1,7 @@
 {
   "packageManager": "pnpm@11.9.0",
   "name": "betamovie-fe",
-  "version": "6.2.8",
+  "version": "6.3.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -49,6 +49,7 @@
     "bcryptjs": "^3.0.3",
     "classnames": "^2.5.1",
     "core-js": "^3.49.0",
+    "dashjs": "^5.2.0",
     "detect-browser": "^5.3.0",
     "disable-devtool": "^0.3.9",
     "dompurify": "^3.4.10",

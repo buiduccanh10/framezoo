@@ -24,6 +24,7 @@ import {
   DesktopPipAction,
   DesktopPipCaption,
   DesktopPipState,
+  setPersistedDesktopPipWindowSize,
 } from "@/desktop/pip";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
@@ -608,6 +609,40 @@ export default function DesktopPipPage() {
       window.removeEventListener("pointercancel", handlePointerRelease);
     };
   }, [isScrubbing, revealControls]);
+
+  useEffect(() => {
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const persistWindowSize = () => {
+      setPersistedDesktopPipWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    const schedulePersistWindowSize = () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+
+      resizeTimeout = setTimeout(() => {
+        resizeTimeout = null;
+        persistWindowSize();
+      }, 120);
+    };
+
+    persistWindowSize();
+    window.addEventListener("resize", schedulePersistWindowSize);
+    window.addEventListener("beforeunload", persistWindowSize);
+
+    return () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      persistWindowSize();
+      window.removeEventListener("resize", schedulePersistWindowSize);
+      window.removeEventListener("beforeunload", persistWindowSize);
+    };
+  }, []);
 
   useEffect(() => {
     const electronApi = getDesktopElectronApi();

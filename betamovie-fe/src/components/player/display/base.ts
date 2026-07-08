@@ -1,3 +1,9 @@
+import * as dashjs from "dashjs";
+import type {
+  MediaInfo as DashMediaInfo,
+  MediaPlayerClass as DashPlayer,
+  Representation as DashRepresentation,
+} from "dashjs";
 import fscreen from "fscreen";
 import Hls, { ErrorData, ErrorDetails, Level } from "hls.js";
 
@@ -24,7 +30,11 @@ import { extractSegmentResolution } from "@/components/player/utils/segmentResol
 import {
   DesktopPipAction,
   DesktopPipState,
+  PipWindowSize,
   getDesktopPipStateFromPlayerState,
+  getPersistedDesktopPipWindowSize,
+  getPersistedDocumentPipWindowSize,
+  setPersistedDocumentPipWindowSize,
 } from "@/desktop/pip";
 import { useLanguageStore } from "@/stores/language";
 import { usePlayerStore } from "@/stores/player/store";
@@ -65,6 +75,12 @@ const qualityThresholds = [
   { minHeight: 420, quality: "480" as SourceQuality },
   { minHeight: 0, quality: "360" as SourceQuality },
 ];
+const DASH_SIGNING_PARAM_NAMES = [
+  "Policy",
+  "Signature",
+  "Key-Pair-Id",
+  "Expires",
+] as const;
 const MIN_AUTOPLAY_BUFFER_SECONDS = 3;
 const RECOVERABLE_HLS_BUFFER_ERRORS = new Set<string>([
   ErrorDetails.BUFFER_STALLED_ERROR,
@@ -92,7 +108,10 @@ const DESKTOP_PIP_SYNC_DEBOUNCE_MS = 150;
 const DESKTOP_PIP_SYNC_HEARTBEAT_MS = 250;
 
 type DesktopElectronApi = {
-  openDesktopPipWindow(state: DesktopPipState): Promise<boolean>;
+  openDesktopPipWindow(
+    state: DesktopPipState,
+    windowSize?: PipWindowSize | null,
+  ): Promise<boolean>;
   updateDesktopPipWindow(state: DesktopPipState): Promise<boolean>;
   closeDesktopPipWindow(): Promise<boolean>;
   sendDesktopPipAction(action: DesktopPipAction): Promise<boolean>;
@@ -131,6 +150,90 @@ function hlsLevelsToQualities(levels: Level[]): SourceQuality[] {
   return levels
     .map((v) => hlsLevelToQuality(v))
     .filter((v): v is SourceQuality => !!v);
+}
+
+function stripDashQualityMarker(url: string): string {
+  return url.split("#")[0];
+}
+
+function getDashSelectedRepresentationId(url: string): string | null {
+  const match = url.match(/#q=([^#]+)$/);
+  if (!match?.[1] || match[1] === "auto") {
+    return null;
+  }
+
+  try {
+    return decodeURIComponent(match[1]);
+  } catch {
+    return match[1];
+  }
+}
+
+function buildDashRequestInterceptor(manifestUrl: string) {
+  let manifest: URL;
+  try {
+    manifest = new URL(manifestUrl);
+  } catch {
+    return null;
+  }
+
+  const signedParams = DASH_SIGNING_PARAM_NAMES.flatMap((name) => {
+    const value = manifest.searchParams.get(name);
+    return value ? [`${name}=${value}`] : [];
+  });
+  const hasRequiredSigning =
+    signedParams.some((entry) => entry.startsWith("Signature=")) &&
+    signedParams.some((entry) => entry.startsWith("Key-Pair-Id="));
+  if (!hasRequiredSigning) {
+    return null;
+  }
+
+  const signedQuery = signedParams.join("&");
+  return (request: { url: string }) => {
+    try {
+      const target = new URL(request.url);
+      if (
+        target.host === manifest.host &&
+        !target.searchParams.has("Signature")
+      ) {
+        request.url += `${request.url.includes("?") ? "&" : "?"}${signedQuery}`;
+      }
+    } catch {
+      // Ignore malformed URLs from dash.js internals.
+    }
+    return Promise.resolve(request);
+  };
+}
+
+function patchDashManifestCodecs(response: { data?: unknown }) {
+  try {
+    if (typeof response.data === "string" && response.data.includes("<MPD")) {
+      response.data = response.data.replace(
+        /codecs="(hev1|hvc1)"/g,
+        'codecs="$1.1.6.L123.90"',
+      );
+    }
+  } catch {
+    // Ignore manifest patch failures.
+  }
+
+  return Promise.resolve(response);
+}
+
+function dashRepresentationToQuality(
+  width: number,
+  height: number,
+): SourceQuality {
+  if (width >= 3840 || height >= 2160) return "4k";
+  if (width >= 2560 || height >= 1440) return "1440";
+  if (width >= 1920 || height >= 1080) return "1080";
+  if (width >= 1280 || height >= 720) return "720";
+  if (width >= 854 || height >= 480) return "480";
+  return "360";
+}
+
+function getDashAudioTrackLabel(track: DashMediaInfo): string {
+  return track.labels?.[0]?.text || track.lang || "Unknown";
 }
 
 // Sort levels by quality (height) to ensure we can select the best one
@@ -222,6 +325,7 @@ export function makeVideoElementDisplayInterface(options?: {
   const { emit, on, off } = makeEmitter<DisplayInterfaceEvents>();
   let source: LoadableSource | null = null;
   let hls: Hls | null = null;
+  let dashPlayer: DashPlayer | null = null;
   let videoElement: HTMLVideoElement | null = null;
   let containerElement: HTMLElement | null = null;
   let isFullscreen = false;
@@ -238,6 +342,9 @@ export function makeVideoElementDisplayInterface(options?: {
   let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
   let qualitySetupRetryTimeout: NodeJS.Timeout | null = null; // Retry manual quality setup after manifest load
   let hlsRecoveryTimeout: NodeJS.Timeout | null = null; // Throttle recovery attempts for transient HLS failures
+  let dashRepresentationIdsByQuality: Partial<Record<SourceQuality, string>> =
+    {};
+  let dashAudioTracksById: Record<string, DashMediaInfo> = {};
   let lastHlsStartLoadAt = 0;
   let detachedSourceBufferRaceCount = 0;
   let detachedSourceBufferRaceWindowStart = 0;
@@ -248,6 +355,8 @@ export function makeVideoElementDisplayInterface(options?: {
   let pictureInPictureMode: PictureInPictureMode = null;
   let documentPictureInPictureWindow: Window | null = null;
   let documentPictureInPictureCloseHandler: (() => void) | null = null;
+  let documentPictureInPictureResizeHandler: (() => void) | null = null;
+  let documentPictureInPictureResizeTimeout: NodeJS.Timeout | null = null;
   let desktopPipSyncUnsubscribe: (() => void) | null = null;
   let desktopPipClosedUnsubscribe: (() => void) | null = null;
   let desktopPipActionUnsubscribe: (() => void) | null = null;
@@ -407,13 +516,28 @@ export function makeVideoElementDisplayInterface(options?: {
   function cleanupDocumentPictureInPictureWindow() {
     const pipWindow = documentPictureInPictureWindow;
     const closeHandler = documentPictureInPictureCloseHandler;
+    const resizeHandler = documentPictureInPictureResizeHandler;
 
     if (pipWindow && closeHandler) {
       pipWindow.removeEventListener("pagehide", closeHandler);
     }
+    if (pipWindow && resizeHandler) {
+      pipWindow.removeEventListener("resize", resizeHandler);
+    }
+    if (documentPictureInPictureResizeTimeout) {
+      clearTimeout(documentPictureInPictureResizeTimeout);
+      documentPictureInPictureResizeTimeout = null;
+    }
+    if (pipWindow && !pipWindow.closed) {
+      setPersistedDocumentPipWindowSize({
+        width: pipWindow.innerWidth,
+        height: pipWindow.innerHeight,
+      });
+    }
 
     documentPictureInPictureWindow = null;
     documentPictureInPictureCloseHandler = null;
+    documentPictureInPictureResizeHandler = null;
     emitPictureInPictureState(null);
     updateNativeTrackRequirement();
   }
@@ -624,6 +748,121 @@ export function makeVideoElementDisplayInterface(options?: {
     );
   }
 
+  function reportDashAudioTracks() {
+    if (!dashPlayer) return;
+
+    const currentLanguage = useLanguageStore.getState().language;
+    const tracks = dashPlayer.getTracksFor("audio") || [];
+    if (!tracks.length) {
+      emit("audiotracks", []);
+      emit("changedaudiotrack", null);
+      dashAudioTracksById = {};
+      return;
+    }
+
+    dashAudioTracksById = {};
+    const audioTracks = tracks.map((track, index) => {
+      const id = `${track.lang || "und"}_${index}`;
+      dashAudioTracksById[id] = track;
+      return {
+        id,
+        label: getDashAudioTrackLabel(track),
+        language: track.lang ?? "unknown",
+      };
+    });
+
+    emit("audiotracks", audioTracks);
+
+    const currentTrack = dashPlayer.getCurrentTrackFor("audio");
+    let selectedTrack = currentTrack
+      ? audioTracks.find((track, index) => {
+          const candidate = tracks[index];
+          return (
+            candidate?.index === currentTrack.index &&
+            candidate?.lang === currentTrack.lang
+          );
+        }) || null
+      : null;
+
+    if (!selectedTrack) {
+      selectedTrack =
+        audioTracks.find((track) => track.language === currentLanguage) ||
+        audioTracks[0] ||
+        null;
+    }
+
+    if (!selectedTrack) {
+      emit("changedaudiotrack", null);
+      return;
+    }
+
+    const dashTrack = dashAudioTracksById[selectedTrack.id];
+    if (!currentTrack && dashTrack) {
+      try {
+        dashPlayer.setCurrentTrack(dashTrack);
+      } catch {
+        // Ignore initial dash track selection failures.
+      }
+    }
+
+    emit("changedaudiotrack", selectedTrack);
+  }
+
+  function applyDashQualitySelection(explicitRepresentationId?: string) {
+    if (!dashPlayer) return;
+
+    const representations = dashPlayer.getRepresentationsByType("video") || [];
+    if (!representations.length) {
+      emit("qualities", ["unknown"]);
+      emit("changedquality", "unknown");
+      return;
+    }
+
+    const uniqueQualities: SourceQuality[] = [];
+    dashRepresentationIdsByQuality = {};
+
+    [...representations]
+      .sort((left, right) => (right.height || 0) - (left.height || 0))
+      .forEach((representation) => {
+        const quality = dashRepresentationToQuality(
+          representation.width || 0,
+          representation.height || 0,
+        );
+        if (!dashRepresentationIdsByQuality[quality]) {
+          dashRepresentationIdsByQuality[quality] = representation.id;
+        }
+        if (!uniqueQualities.includes(quality)) {
+          uniqueQualities.push(quality);
+        }
+      });
+
+    emit("qualities", uniqueQualities);
+
+    const representationId =
+      explicitRepresentationId ||
+      (!automaticQuality && preferenceQuality
+        ? (dashRepresentationIdsByQuality[preferenceQuality] ?? null)
+        : null);
+
+    if (representationId) {
+      dashPlayer.updateSettings({
+        streaming: { abr: { autoSwitchBitrate: { video: false } } },
+      });
+      dashPlayer.setRepresentationForTypeById("video", representationId);
+      const selectedQuality =
+        (Object.entries(dashRepresentationIdsByQuality).find(
+          ([, id]) => id === representationId,
+        )?.[0] as SourceQuality | undefined) ?? null;
+      emit("changedquality", selectedQuality);
+      return;
+    }
+
+    dashPlayer.updateSettings({
+      streaming: { abr: { autoSwitchBitrate: { video: true } } },
+    });
+    emit("changedquality", null);
+  }
+
   function reportSegmentQualityDebug(payload: ArrayBuffer) {
     if (!SEGMENT_DEBUG_ENABLED) return;
 
@@ -694,6 +933,16 @@ export function makeVideoElementDisplayInterface(options?: {
       hls.destroy();
       hls = null;
     }
+    if (dashPlayer) {
+      try {
+        dashPlayer.reset();
+      } catch {
+        // Ignore dash teardown failures.
+      }
+      dashPlayer = null;
+    }
+    dashRepresentationIdsByQuality = {};
+    dashAudioTracksById = {};
     lastHlsStartLoadAt = 0;
     resetDetachedSourceBufferRaceTracking();
     if (qualitySetupRetryTimeout) {
@@ -702,6 +951,84 @@ export function makeVideoElementDisplayInterface(options?: {
     }
     clearHlsRecoveryTimeout();
     resetSegmentQualityDebug();
+    if (src.type === "dash") {
+      const manifestUrl = stripDashQualityMarker(processCdnLink(src.url));
+      const selectedRepresentationId =
+        getDashSelectedRepresentationId(src.url) ?? undefined;
+      const player = dashjs.MediaPlayer().create();
+
+      player.updateSettings({
+        streaming: {
+          buffer: { fastSwitchEnabled: true },
+          abr: { autoSwitchBitrate: { video: true, audio: true } },
+        },
+      });
+
+      const requestInterceptor = buildDashRequestInterceptor(manifestUrl);
+      if (requestInterceptor) {
+        player.addRequestInterceptor(requestInterceptor as any);
+      }
+      player.addResponseInterceptor(patchDashManifestCodecs as any);
+
+      const handleStreamInitialized = () => {
+        applyDashQualitySelection(selectedRepresentationId);
+        reportDashAudioTracks();
+      };
+      const handleDashError = (event: any) => {
+        emit("error", {
+          type: "dash",
+          errorName:
+            event?.error?.name ||
+            event?.error?.code?.toString?.() ||
+            "DashError",
+          message:
+            event?.error?.message ||
+            event?.event?.message ||
+            "Failed to load DASH stream",
+        });
+      };
+      const handleDashQualityRendered = (event: {
+        mediaType?: string;
+        newRepresentation?: DashRepresentation;
+      }) => {
+        if (event.mediaType !== "video" || !event.newRepresentation) return;
+
+        emit(
+          "changedquality",
+          dashRepresentationToQuality(
+            event.newRepresentation.width || 0,
+            event.newRepresentation.height || 0,
+          ),
+        );
+      };
+      const handleDashTrackChanged = () => {
+        reportDashAudioTracks();
+      };
+
+      player.on(
+        dashjs.MediaPlayer.events.STREAM_INITIALIZED,
+        handleStreamInitialized,
+      );
+      player.on(dashjs.MediaPlayer.events.ERROR, handleDashError);
+      player.on(dashjs.MediaPlayer.events.PLAYBACK_ERROR, handleDashError);
+      player.on(
+        dashjs.MediaPlayer.events.QUALITY_CHANGE_RENDERED,
+        handleDashQualityRendered,
+      );
+      player.on(
+        dashjs.MediaPlayer.events.TRACK_CHANGE_RENDERED,
+        handleDashTrackChanged,
+      );
+
+      player.initialize(
+        vid,
+        manifestUrl,
+        true,
+        startAt > 1 ? startAt : undefined,
+      );
+      dashPlayer = player;
+      return;
+    }
     if (src.type === "hls") {
       if (canPlayHlsNatively(vid)) {
         vid.src = processCdnLink(src.url);
@@ -992,15 +1319,16 @@ export function makeVideoElementDisplayInterface(options?: {
       containerElement?.clientWidth ?? videoElement.clientWidth ?? 720;
     const fallbackHeight =
       containerElement?.clientHeight ?? videoElement.clientHeight ?? 405;
+    const persistedWindowSize = getPersistedDocumentPipWindowSize();
     const aspectRatio =
       videoElement.videoWidth && videoElement.videoHeight
         ? videoElement.videoWidth / videoElement.videoHeight
         : fallbackWidth / Math.max(fallbackHeight, 1);
-    const requestedWidth = Math.max(320, Math.round(fallbackWidth));
-    const requestedHeight = Math.max(
-      180,
-      Math.round(requestedWidth / Math.max(aspectRatio, 0.1)),
-    );
+    const requestedWidth =
+      persistedWindowSize?.width ?? Math.max(320, Math.round(fallbackWidth));
+    const requestedHeight =
+      persistedWindowSize?.height ??
+      Math.max(180, Math.round(requestedWidth / Math.max(aspectRatio, 0.1)));
 
     const pipWindow = await window.documentPictureInPicture.requestWindow({
       width: requestedWidth,
@@ -1012,10 +1340,29 @@ export function makeVideoElementDisplayInterface(options?: {
     const handlePageHide = () => {
       cleanupDocumentPictureInPictureWindow();
     };
+    const handleResize = () => {
+      if (documentPictureInPictureResizeTimeout) {
+        clearTimeout(documentPictureInPictureResizeTimeout);
+      }
+
+      documentPictureInPictureResizeTimeout = setTimeout(() => {
+        documentPictureInPictureResizeTimeout = null;
+        setPersistedDocumentPipWindowSize({
+          width: pipWindow.innerWidth,
+          height: pipWindow.innerHeight,
+        });
+      }, 120);
+    };
 
     pipWindow.addEventListener("pagehide", handlePageHide);
+    pipWindow.addEventListener("resize", handleResize);
     documentPictureInPictureWindow = pipWindow;
     documentPictureInPictureCloseHandler = handlePageHide;
+    documentPictureInPictureResizeHandler = handleResize;
+    setPersistedDocumentPipWindowSize({
+      width: pipWindow.innerWidth,
+      height: pipWindow.innerHeight,
+    });
     emitPictureInPictureState("document", pipWindow);
     updateNativeTrackRequirement();
 
@@ -1188,6 +1535,16 @@ export function makeVideoElementDisplayInterface(options?: {
       hls.destroy();
       hls = null;
     }
+    if (dashPlayer) {
+      try {
+        dashPlayer.reset();
+      } catch {
+        // Ignore dash teardown failures.
+      }
+      dashPlayer = null;
+    }
+    dashRepresentationIdsByQuality = {};
+    dashAudioTracksById = {};
     // Reset the last valid duration and time when unloading source
     lastValidDuration = 0;
     lastValidTime = 0;
@@ -1290,7 +1647,14 @@ export function makeVideoElementDisplayInterface(options?: {
       setSource();
     },
     changeQuality(newAutomaticQuality, newPreferredQuality) {
-      if (source?.type !== "hls") return;
+      if (!source || (source.type !== "hls" && source.type !== "dash")) return;
+
+      if (source.type === "dash") {
+        automaticQuality = newAutomaticQuality;
+        preferenceQuality = newPreferredQuality;
+        applyDashQualitySelection();
+        return;
+      }
 
       // Clear any pending quality change to prevent race conditions
       if (qualityChangeTimeout) {
@@ -1437,7 +1801,10 @@ export function makeVideoElementDisplayInterface(options?: {
 
             const state = buildDesktopPipState();
             if (state) {
-              const opened = await desktopApi.openDesktopPipWindow(state);
+              const opened = await desktopApi.openDesktopPipWindow(
+                state,
+                getPersistedDesktopPipWindowSize(),
+              );
               if (opened) {
                 if (!desktopPipClosedUnsubscribe) {
                   desktopPipClosedUnsubscribe = desktopApi.onDesktopPipClosed(
@@ -1634,17 +2001,25 @@ export function makeVideoElementDisplayInterface(options?: {
       });
     },
     changeAudioTrack(track) {
-      if (!hls) return;
-      const audioTrack = hls?.audioTracks.find(
-        (t) => t.id.toString() === track.id,
-      );
-      if (!audioTrack) return;
-      hls.audioTrack = hls.audioTracks.indexOf(audioTrack);
-      emit("changedaudiotrack", {
-        id: audioTrack.id.toString(),
-        label: audioTrack.name,
-        language: audioTrack.lang ?? "unknown",
-      });
+      if (hls) {
+        const audioTrack = hls.audioTracks.find(
+          (t) => t.id.toString() === track.id,
+        );
+        if (!audioTrack) return;
+        hls.audioTrack = hls.audioTracks.indexOf(audioTrack);
+        emit("changedaudiotrack", {
+          id: audioTrack.id.toString(),
+          label: audioTrack.name,
+          language: audioTrack.lang ?? "unknown",
+        });
+        return;
+      }
+
+      if (!dashPlayer) return;
+      const dashTrack = dashAudioTracksById[track.id];
+      if (!dashTrack) return;
+      dashPlayer.setCurrentTrack(dashTrack);
+      emit("changedaudiotrack", track);
     },
   };
 }

@@ -20,7 +20,7 @@ export interface Stream {
   provider: string;
   variantId?: string;
   variantLabel?: string;
-  streamType?: 'hls' | 'file';
+  streamType?: 'hls' | 'file' | 'dash';
   preview?: StreamPreview;
   headers: {
     Referer: string;

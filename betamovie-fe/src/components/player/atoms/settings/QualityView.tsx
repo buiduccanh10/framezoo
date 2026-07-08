@@ -54,8 +54,8 @@ export function QualityView({ id }: { id: string }) {
   const lastChosenQuality = useQualityStore((s) => s.quality.lastChosenQuality);
   const autoQuality = useQualityStore((s) => s.quality.automaticQuality);
 
-  // Auto quality only makes sense for HLS sources
-  const supportsAutoQuality = sourceType === "hls";
+  // Auto quality makes sense for adaptive streams.
+  const supportsAutoQuality = sourceType === "hls" || sourceType === "dash";
 
   const change = useCallback(
     (q: SourceQuality) => {

@@ -40,8 +40,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   showDesktopSettingsPlaceholder() {
     return ipcRenderer.invoke("desktop:show-settings-placeholder");
   },
-  openDesktopPipWindow(state: unknown) {
-    return ipcRenderer.invoke("desktop:pip-open", state);
+  openDesktopPipWindow(state: unknown, windowSize?: unknown) {
+    return ipcRenderer.invoke("desktop:pip-open", state, windowSize);
   },
   updateDesktopPipWindow(state: unknown) {
     return ipcRenderer.invoke("desktop:pip-update", state);
