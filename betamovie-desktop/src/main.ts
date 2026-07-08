@@ -411,9 +411,15 @@ function registerIpcHandlers() {
     return true;
   });
 
-  ipcMain.handle("desktop:pip-open", async (_event, nextState: any) => {
-    return desktopPipController.open(nextState ?? null);
-  });
+  ipcMain.handle(
+    "desktop:pip-open",
+    async (_event, nextState: any, nextWindowSize: any) => {
+      return desktopPipController.open(
+        nextState ?? null,
+        nextWindowSize ?? null,
+      );
+    },
+  );
 
   ipcMain.handle("desktop:pip-update", async (_event, nextState: any) => {
     return desktopPipController.update(nextState ?? null);

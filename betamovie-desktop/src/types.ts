@@ -36,6 +36,11 @@ export type CreateDesktopAppUpdaterOptions = {
 
 export type DesktopPipState = Record<string, unknown> | null;
 
+export interface DesktopPipWindowSize {
+  width: number;
+  height: number;
+}
+
 export type CreateDesktopPipControllerOptions = {
   desktopPipRoute: string;
   enableDevTools: boolean;
