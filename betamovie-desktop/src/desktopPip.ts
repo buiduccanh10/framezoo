@@ -3,7 +3,39 @@ import { pathToFileURL } from "node:url";
 import type {
   CreateDesktopPipControllerOptions,
   DesktopPipState,
+  DesktopPipWindowSize,
 } from "./types";
+
+const DESKTOP_PIP_DEFAULT_WIDTH = 420;
+const DESKTOP_PIP_DEFAULT_HEIGHT = 236;
+const DESKTOP_PIP_MIN_WIDTH = 320;
+const DESKTOP_PIP_MIN_HEIGHT = 180;
+const DESKTOP_PIP_MAX_WIDTH = 1280;
+const DESKTOP_PIP_MAX_HEIGHT = 720;
+
+function normalizeWindowSize(
+  value: DesktopPipWindowSize | null | undefined,
+): DesktopPipWindowSize | null {
+  if (!value) return null;
+
+  const width = Number(value.width);
+  const height = Number(value.height);
+  if (!Number.isFinite(width) || !Number.isFinite(height)) {
+    return null;
+  }
+
+  return {
+    width: Math.round(
+      Math.min(DESKTOP_PIP_MAX_WIDTH, Math.max(DESKTOP_PIP_MIN_WIDTH, width)),
+    ),
+    height: Math.round(
+      Math.min(
+        DESKTOP_PIP_MAX_HEIGHT,
+        Math.max(DESKTOP_PIP_MIN_HEIGHT, height),
+      ),
+    ),
+  };
+}
 
 export function createDesktopPipController(
   options: CreateDesktopPipControllerOptions,
@@ -27,18 +59,20 @@ export function createDesktopPipController(
     pipWindow.webContents.send("desktop:pip-state", pipState);
   }
 
-  function createWindow() {
+  function createWindow(windowSize?: DesktopPipWindowSize | null) {
     if (pipWindow && !pipWindow.isDestroyed()) {
       return pipWindow;
     }
 
+    const normalizedWindowSize = normalizeWindowSize(windowSize);
+
     pipWindow = new BrowserWindow({
-      width: 420,
-      height: 236,
-      minWidth: 320,
-      minHeight: 180,
-      maxWidth: 1280,
-      maxHeight: 720,
+      width: normalizedWindowSize?.width ?? DESKTOP_PIP_DEFAULT_WIDTH,
+      height: normalizedWindowSize?.height ?? DESKTOP_PIP_DEFAULT_HEIGHT,
+      minWidth: DESKTOP_PIP_MIN_WIDTH,
+      minHeight: DESKTOP_PIP_MIN_HEIGHT,
+      maxWidth: DESKTOP_PIP_MAX_WIDTH,
+      maxHeight: DESKTOP_PIP_MAX_HEIGHT,
       backgroundColor: "#000000",
       alwaysOnTop: true,
       frame: false,
@@ -116,11 +150,14 @@ export function createDesktopPipController(
     getState() {
       return pipState;
     },
-    open(nextState: DesktopPipState) {
+    open(
+      nextState: DesktopPipState,
+      nextWindowSize?: DesktopPipWindowSize | null,
+    ) {
       pipState = nextState ?? null;
       if (!pipState) return false;
 
-      const window = createWindow();
+      const window = createWindow(nextWindowSize);
       sendState();
 
       if (window.isMinimized()) {

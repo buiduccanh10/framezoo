@@ -11,6 +11,11 @@ export interface DesktopPipCaption {
   language: string;
 }
 
+export interface PipWindowSize {
+  width: number;
+  height: number;
+}
+
 export interface DesktopPipState {
   source: LoadableSource | null;
   time: number;
@@ -35,6 +40,129 @@ export type DesktopPipAction =
       type: "seekTo";
       time: number;
     };
+
+const DOCUMENT_PIP_WINDOW_SIZE_STORAGE_KEY = "__MW::documentPipWindowSize";
+const DESKTOP_PIP_WINDOW_SIZE_STORAGE_KEY = "__MW::desktopPipWindowSize";
+const DOCUMENT_PIP_MIN_WIDTH = 320;
+const DOCUMENT_PIP_MIN_HEIGHT = 180;
+const DESKTOP_PIP_MIN_WIDTH = 320;
+const DESKTOP_PIP_MIN_HEIGHT = 180;
+const DESKTOP_PIP_MAX_WIDTH = 1280;
+const DESKTOP_PIP_MAX_HEIGHT = 720;
+
+function normalizePipWindowSize(
+  value: unknown,
+  options: {
+    minWidth: number;
+    minHeight: number;
+    maxWidth?: number;
+    maxHeight?: number;
+  },
+): PipWindowSize | null {
+  if (!value || typeof value !== "object") return null;
+
+  const width = Number((value as PipWindowSize).width);
+  const height = Number((value as PipWindowSize).height);
+  if (!Number.isFinite(width) || !Number.isFinite(height)) {
+    return null;
+  }
+
+  return {
+    width: Math.round(
+      Math.min(
+        options.maxWidth ?? Number.POSITIVE_INFINITY,
+        Math.max(options.minWidth, width),
+      ),
+    ),
+    height: Math.round(
+      Math.min(
+        options.maxHeight ?? Number.POSITIVE_INFINITY,
+        Math.max(options.minHeight, height),
+      ),
+    ),
+  };
+}
+
+function getPersistedPipWindowSize(
+  storageKey: string,
+  options: {
+    minWidth: number;
+    minHeight: number;
+    maxWidth?: number;
+    maxHeight?: number;
+  },
+): PipWindowSize | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const rawValue = window.localStorage.getItem(storageKey);
+    if (!rawValue) return null;
+
+    return normalizePipWindowSize(JSON.parse(rawValue), options);
+  } catch {
+    return null;
+  }
+}
+
+function persistPipWindowSize(
+  storageKey: string,
+  size: PipWindowSize,
+  options: {
+    minWidth: number;
+    minHeight: number;
+    maxWidth?: number;
+    maxHeight?: number;
+  },
+): PipWindowSize | null {
+  if (typeof window === "undefined") return null;
+
+  const normalizedSize = normalizePipWindowSize(size, options);
+  if (!normalizedSize) return null;
+
+  try {
+    window.localStorage.setItem(storageKey, JSON.stringify(normalizedSize));
+  } catch {
+    // Ignore storage write failures and keep runtime behavior unchanged.
+  }
+
+  return normalizedSize;
+}
+
+export function getPersistedDocumentPipWindowSize(): PipWindowSize | null {
+  return getPersistedPipWindowSize(DOCUMENT_PIP_WINDOW_SIZE_STORAGE_KEY, {
+    minWidth: DOCUMENT_PIP_MIN_WIDTH,
+    minHeight: DOCUMENT_PIP_MIN_HEIGHT,
+  });
+}
+
+export function setPersistedDocumentPipWindowSize(
+  size: PipWindowSize,
+): PipWindowSize | null {
+  return persistPipWindowSize(DOCUMENT_PIP_WINDOW_SIZE_STORAGE_KEY, size, {
+    minWidth: DOCUMENT_PIP_MIN_WIDTH,
+    minHeight: DOCUMENT_PIP_MIN_HEIGHT,
+  });
+}
+
+export function getPersistedDesktopPipWindowSize(): PipWindowSize | null {
+  return getPersistedPipWindowSize(DESKTOP_PIP_WINDOW_SIZE_STORAGE_KEY, {
+    minWidth: DESKTOP_PIP_MIN_WIDTH,
+    minHeight: DESKTOP_PIP_MIN_HEIGHT,
+    maxWidth: DESKTOP_PIP_MAX_WIDTH,
+    maxHeight: DESKTOP_PIP_MAX_HEIGHT,
+  });
+}
+
+export function setPersistedDesktopPipWindowSize(
+  size: PipWindowSize,
+): PipWindowSize | null {
+  return persistPipWindowSize(DESKTOP_PIP_WINDOW_SIZE_STORAGE_KEY, size, {
+    minWidth: DESKTOP_PIP_MIN_WIDTH,
+    minHeight: DESKTOP_PIP_MIN_HEIGHT,
+    maxWidth: DESKTOP_PIP_MAX_WIDTH,
+    maxHeight: DESKTOP_PIP_MAX_HEIGHT,
+  });
+}
 
 function toDesktopPipCaption(
   caption: Caption | null,

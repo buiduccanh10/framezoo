@@ -30,7 +30,11 @@ import { extractSegmentResolution } from "@/components/player/utils/segmentResol
 import {
   DesktopPipAction,
   DesktopPipState,
+  PipWindowSize,
   getDesktopPipStateFromPlayerState,
+  getPersistedDesktopPipWindowSize,
+  getPersistedDocumentPipWindowSize,
+  setPersistedDocumentPipWindowSize,
 } from "@/desktop/pip";
 import { useLanguageStore } from "@/stores/language";
 import { usePlayerStore } from "@/stores/player/store";
@@ -104,7 +108,10 @@ const DESKTOP_PIP_SYNC_DEBOUNCE_MS = 150;
 const DESKTOP_PIP_SYNC_HEARTBEAT_MS = 250;
 
 type DesktopElectronApi = {
-  openDesktopPipWindow(state: DesktopPipState): Promise<boolean>;
+  openDesktopPipWindow(
+    state: DesktopPipState,
+    windowSize?: PipWindowSize | null,
+  ): Promise<boolean>;
   updateDesktopPipWindow(state: DesktopPipState): Promise<boolean>;
   closeDesktopPipWindow(): Promise<boolean>;
   sendDesktopPipAction(action: DesktopPipAction): Promise<boolean>;
@@ -348,6 +355,8 @@ export function makeVideoElementDisplayInterface(options?: {
   let pictureInPictureMode: PictureInPictureMode = null;
   let documentPictureInPictureWindow: Window | null = null;
   let documentPictureInPictureCloseHandler: (() => void) | null = null;
+  let documentPictureInPictureResizeHandler: (() => void) | null = null;
+  let documentPictureInPictureResizeTimeout: NodeJS.Timeout | null = null;
   let desktopPipSyncUnsubscribe: (() => void) | null = null;
   let desktopPipClosedUnsubscribe: (() => void) | null = null;
   let desktopPipActionUnsubscribe: (() => void) | null = null;
@@ -507,13 +516,28 @@ export function makeVideoElementDisplayInterface(options?: {
   function cleanupDocumentPictureInPictureWindow() {
     const pipWindow = documentPictureInPictureWindow;
     const closeHandler = documentPictureInPictureCloseHandler;
+    const resizeHandler = documentPictureInPictureResizeHandler;
 
     if (pipWindow && closeHandler) {
       pipWindow.removeEventListener("pagehide", closeHandler);
     }
+    if (pipWindow && resizeHandler) {
+      pipWindow.removeEventListener("resize", resizeHandler);
+    }
+    if (documentPictureInPictureResizeTimeout) {
+      clearTimeout(documentPictureInPictureResizeTimeout);
+      documentPictureInPictureResizeTimeout = null;
+    }
+    if (pipWindow && !pipWindow.closed) {
+      setPersistedDocumentPipWindowSize({
+        width: pipWindow.innerWidth,
+        height: pipWindow.innerHeight,
+      });
+    }
 
     documentPictureInPictureWindow = null;
     documentPictureInPictureCloseHandler = null;
+    documentPictureInPictureResizeHandler = null;
     emitPictureInPictureState(null);
     updateNativeTrackRequirement();
   }
@@ -1295,15 +1319,16 @@ export function makeVideoElementDisplayInterface(options?: {
       containerElement?.clientWidth ?? videoElement.clientWidth ?? 720;
     const fallbackHeight =
       containerElement?.clientHeight ?? videoElement.clientHeight ?? 405;
+    const persistedWindowSize = getPersistedDocumentPipWindowSize();
     const aspectRatio =
       videoElement.videoWidth && videoElement.videoHeight
         ? videoElement.videoWidth / videoElement.videoHeight
         : fallbackWidth / Math.max(fallbackHeight, 1);
-    const requestedWidth = Math.max(320, Math.round(fallbackWidth));
-    const requestedHeight = Math.max(
-      180,
-      Math.round(requestedWidth / Math.max(aspectRatio, 0.1)),
-    );
+    const requestedWidth =
+      persistedWindowSize?.width ?? Math.max(320, Math.round(fallbackWidth));
+    const requestedHeight =
+      persistedWindowSize?.height ??
+      Math.max(180, Math.round(requestedWidth / Math.max(aspectRatio, 0.1)));
 
     const pipWindow = await window.documentPictureInPicture.requestWindow({
       width: requestedWidth,
@@ -1315,10 +1340,29 @@ export function makeVideoElementDisplayInterface(options?: {
     const handlePageHide = () => {
       cleanupDocumentPictureInPictureWindow();
     };
+    const handleResize = () => {
+      if (documentPictureInPictureResizeTimeout) {
+        clearTimeout(documentPictureInPictureResizeTimeout);
+      }
+
+      documentPictureInPictureResizeTimeout = setTimeout(() => {
+        documentPictureInPictureResizeTimeout = null;
+        setPersistedDocumentPipWindowSize({
+          width: pipWindow.innerWidth,
+          height: pipWindow.innerHeight,
+        });
+      }, 120);
+    };
 
     pipWindow.addEventListener("pagehide", handlePageHide);
+    pipWindow.addEventListener("resize", handleResize);
     documentPictureInPictureWindow = pipWindow;
     documentPictureInPictureCloseHandler = handlePageHide;
+    documentPictureInPictureResizeHandler = handleResize;
+    setPersistedDocumentPipWindowSize({
+      width: pipWindow.innerWidth,
+      height: pipWindow.innerHeight,
+    });
     emitPictureInPictureState("document", pipWindow);
     updateNativeTrackRequirement();
 
@@ -1757,7 +1801,10 @@ export function makeVideoElementDisplayInterface(options?: {
 
             const state = buildDesktopPipState();
             if (state) {
-              const opened = await desktopApi.openDesktopPipWindow(state);
+              const opened = await desktopApi.openDesktopPipWindow(
+                state,
+                getPersistedDesktopPipWindowSize(),
+              );
               if (opened) {
                 if (!desktopPipClosedUnsubscribe) {
                   desktopPipClosedUnsubscribe = desktopApi.onDesktopPipClosed(
