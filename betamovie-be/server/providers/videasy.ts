@@ -35,6 +35,9 @@ interface ResolvedStreamData {
   quality: string;
   subtitle: string;
   streamType: 'hls' | 'file';
+  serverName: string;
+  serverRank: number;
+  variantId: string;
 }
 
 interface SeedResponse {
@@ -56,9 +59,19 @@ const MODERN_UA =
   process.env.VIDEASY_USER_AGENT ||
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36';
 const REQUEST_TIMEOUT_MS = Number(process.env.VIDEASY_REQUEST_TIMEOUT_MS || 18_000);
+const VERIFY_STREAMS = process.env.VIDEASY_VERIFY_STREAMS === '1';
+const SERVER_RESOLVE_CONCURRENCY = Math.max(
+  1,
+  Number.parseInt(process.env.VIDEASY_SERVER_CONCURRENCY || '4', 10) || 4
+);
 const STREAM_CACHE_TTL = Number(process.env.VIDEASY_CACHE_TTL || 5 * 60);
-const CACHE_VERSION = 1;
+const CACHE_VERSION = 3;
+const SEED_CACHE_VERSION = 1;
 const SEED_CACHE_EARLY_EXPIRY_MS = 5_000;
+const STALE_SEED_STORAGE_TTL_SECONDS = Math.max(
+  60,
+  Number.parseInt(process.env.VIDEASY_STALE_SEED_STORAGE_TTL || '3600', 10) || 3600
+);
 const PAYLOAD_MAGIC_PREFIX = Uint8Array.from([109, 118, 109, 49]);
 const ROUND_CONSTANTS = [
   1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221,
@@ -69,7 +82,13 @@ const MIXED_STATE_SIZE = 61;
 const MIXED_STATE_ROUNDS = 8;
 const GOLDEN_RATIO_32 = 2654435769;
 
-const SERVER_ENDPOINTS = [
+type VideasyServerEndpoint = {
+  readonly name: string;
+  readonly endpoint: string;
+  readonly language?: string;
+};
+
+const SERVER_ENDPOINTS: readonly VideasyServerEndpoint[] = [
   { name: 'Yoru', endpoint: 'cdn/sources-with-title' },
   { name: 'Neon', endpoint: 'neon2/sources-with-title' },
   { name: 'Sage', endpoint: 'ym/sources-with-title' },
@@ -81,7 +100,7 @@ const SERVER_ENDPOINTS = [
   { name: 'Fade', endpoint: 'hdmovie/sources-with-title' },
   { name: 'Omen', endpoint: 'lamovie/sources-with-title' },
   { name: 'Raze', endpoint: 'superflix/sources-with-title' },
-] as const;
+];
 
 const seedCache = new Map<string, SeedCacheEntry>();
 
@@ -201,6 +220,44 @@ function normalizeQuality(rawQuality: string | undefined): string {
 
   const match = value.match(/(\d{3,4})/);
   return match ? `${match[1]}p` : value;
+}
+
+function slugifyVariantPart(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function buildVariantId(
+  serverName: string,
+  quality: string,
+  streamType: 'hls' | 'file',
+  resourceUrl: string
+): string {
+  const serverSlug = slugifyVariantPart(serverName) || 'server';
+  return `videasy-${serverSlug}-${streamType}-${quality.toLowerCase()}-${fnvHash(resourceUrl).toString(16)}`;
+}
+
+async function mapWithConcurrency<T, R>(
+  items: readonly T[],
+  concurrency: number,
+  mapper: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+  const results = new Array<R>(items.length);
+  let cursor = 0;
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+      while (cursor < items.length) {
+        const index = cursor++;
+        results[index] = await mapper(items[index], index);
+      }
+    })
+  );
+
+  return results;
 }
 
 function qualityScore(quality: string): number {
@@ -400,16 +457,68 @@ function getSeedCacheKey(tmdbId: string): string {
   return `${API_ORIGIN}|${tmdbId}`;
 }
 
+function getSeedStorageKey(tmdbId: string): string {
+  return `videasy:seed:v${SEED_CACHE_VERSION}:${tmdbId}`;
+}
+
+function getSeedStorage(): StorageLike | null {
+  try {
+    return useStorage('cache');
+  } catch {
+    return null;
+  }
+}
+
+async function getStoredSeed(tmdbId: string): Promise<SeedCacheEntry | null> {
+  const storage = getSeedStorage();
+  if (!storage) {
+    return null;
+  }
+
+  try {
+    return (await storage.getItem<SeedCacheEntry>(getSeedStorageKey(tmdbId))) || null;
+  } catch {
+    return null;
+  }
+}
+
+async function setStoredSeed(tmdbId: string, value: SeedCacheEntry, ttlMs: number): Promise<void> {
+  const storage = getSeedStorage();
+  if (!storage) {
+    return;
+  }
+
+  try {
+    await storage.setItem(getSeedStorageKey(tmdbId), value as any, {
+      ttl: Math.max(Math.ceil(ttlMs / 1000), STALE_SEED_STORAGE_TTL_SECONDS),
+    });
+  } catch {
+    // Ignore cache failures.
+  }
+}
+
 function clearSeedCache(tmdbId: string): void {
   seedCache.delete(getSeedCacheKey(tmdbId));
+
+  const storage = getSeedStorage();
+  if (!storage) {
+    return;
+  }
+
+  void storage.removeItem(getSeedStorageKey(tmdbId)).catch(() => null);
 }
 
 async function getSeed(tmdbId: string, forceRefresh = false): Promise<string | null> {
   const cacheKey = getSeedCacheKey(tmdbId);
   const now = Date.now();
-  const cached = seedCache.get(cacheKey);
+  const memoryCached = seedCache.get(cacheKey);
+  const storedCached = !forceRefresh && !memoryCached ? await getStoredSeed(tmdbId) : null;
+  const cached = memoryCached || storedCached;
 
   if (!forceRefresh && cached && cached.expiresAt - SEED_CACHE_EARLY_EXPIRY_MS > now) {
+    if (!memoryCached) {
+      seedCache.set(cacheKey, cached);
+    }
     return cached.seed;
   }
 
@@ -418,20 +527,22 @@ async function getSeed(tmdbId: string, forceRefresh = false): Promise<string | n
   );
   const seed = String(payload?.seed || '').trim();
   if (!seed) {
-    return null;
+    return cached?.seed || null;
   }
 
   const ttlMs = Number.isFinite(payload?.ttlMs) ? Number(payload?.ttlMs) : 30_000;
-  seedCache.set(cacheKey, {
+  const entry = {
     seed,
     expiresAt: now + Math.max(ttlMs, 1_000),
-  });
+  } satisfies SeedCacheEntry;
+  seedCache.set(cacheKey, entry);
+  await setStoredSeed(tmdbId, entry, ttlMs);
 
   return seed;
 }
 
 function buildSourceApiUrl(
-  server: (typeof SERVER_ENDPOINTS)[number],
+  server: VideasyServerEndpoint,
   metadata: VideasyMetadata,
   mediaType: 'movie' | 'tv',
   tmdbId: string,
@@ -469,7 +580,9 @@ function getManifestLines(manifest: string): string[] {
 }
 
 function firstManifestUri(manifest: string): string {
-  return getManifestLines(manifest).find(line => !line.startsWith('#') && !line.startsWith('<')) || '';
+  return (
+    getManifestLines(manifest).find(line => !line.startsWith('#') && !line.startsWith('<')) || ''
+  );
 }
 
 function nextUriAfterTag(manifest: string, tagPrefix: string): string {
@@ -699,45 +812,59 @@ function inferStreamType(source: VideasySourceEntry): 'hls' | 'file' | 'dash' | 
   return 'file';
 }
 
-async function resolveStreamsFromPayload(payload: VideasyPayload): Promise<ResolvedStreamData[]> {
+async function resolveStreamsFromPayload(
+  payload: VideasyPayload,
+  serverName: string,
+  serverRank: number
+): Promise<ResolvedStreamData[]> {
   const subtitle = pickSubtitleUrl(payload.subtitles);
   const dedupe = new Set<string>();
-  const resolved: ResolvedStreamData[] = [];
+  const resolved = await Promise.all(
+    (payload.sources || []).map(async source => {
+      const resourceUrl = normalizeHttpUrl(String(source?.url || source?.file || ''));
+      const streamType = inferStreamType(source);
+      if (!resourceUrl || !streamType || streamType === 'dash') {
+        return null;
+      }
 
-  for (const source of payload.sources || []) {
-    const resourceUrl = normalizeHttpUrl(String(source?.url || source?.file || ''));
-    const streamType = inferStreamType(source);
-    if (!resourceUrl || !streamType || streamType === 'dash') {
-      continue;
-    }
+      if (VERIFY_STREAMS) {
+        const playable =
+          streamType === 'hls'
+            ? await verifyPlayableHlsStream(resourceUrl)
+            : await verifyPlayableFile(resourceUrl);
+        if (!playable) {
+          return null;
+        }
+      }
 
-    const playable =
-      streamType === 'hls'
-        ? await verifyPlayableHlsStream(resourceUrl)
-        : await verifyPlayableFile(resourceUrl);
-    if (!playable) {
-      continue;
-    }
+      const quality = normalizeQuality(source?.quality);
+      const dedupeKey = `${serverName}:${streamType}:${quality}:${resourceUrl}`;
+      if (dedupe.has(dedupeKey)) {
+        return null;
+      }
 
-    const quality = normalizeQuality(source?.quality);
-    const dedupeKey = `${streamType}:${quality}:${resourceUrl}`;
-    if (dedupe.has(dedupeKey)) {
-      continue;
-    }
+      dedupe.add(dedupeKey);
+      return {
+        resourceUrl,
+        referer: REFERER,
+        origin: SITE_ORIGIN,
+        quality,
+        subtitle,
+        streamType,
+        serverName,
+        serverRank,
+        variantId: buildVariantId(serverName, quality, streamType, resourceUrl),
+      } satisfies ResolvedStreamData;
+    })
+  );
 
-    dedupe.add(dedupeKey);
-    resolved.push({
-      resourceUrl,
-      referer: REFERER,
-      origin: SITE_ORIGIN,
-      quality,
-      subtitle,
-      streamType,
-    });
-  }
-
-  resolved.sort((left, right) => qualityScore(right.quality) - qualityScore(left.quality));
-  return resolved;
+  return resolved
+    .filter((stream): stream is ResolvedStreamData => Boolean(stream))
+    .sort(
+      (left, right) =>
+        left.serverRank - right.serverRank ||
+        qualityScore(right.quality) - qualityScore(left.quality)
+    );
 }
 
 function decryptPayload(
@@ -778,7 +905,7 @@ async function fetchEncryptedPayload(
 }
 
 async function fetchServerPayload(
-  server: (typeof SERVER_ENDPOINTS)[number],
+  server: VideasyServerEndpoint,
   metadata: VideasyMetadata,
   tmdbId: string,
   mediaType: 'movie' | 'tv',
@@ -839,30 +966,37 @@ async function resolveVideasyStreams(
     return [];
   }
 
-  for (const server of SERVER_ENDPOINTS) {
-    try {
-      const payload = await fetchServerPayload(
-        server,
-        metadata,
-        tmdbId,
-        mediaType,
-        seasonNum,
-        episodeNum
-      );
-      if (!payload?.sources?.length) {
-        continue;
-      }
+  const resolved = await mapWithConcurrency(
+    SERVER_ENDPOINTS,
+    SERVER_RESOLVE_CONCURRENCY,
+    async (server, serverRank) => {
+      try {
+        const payload = await fetchServerPayload(
+          server,
+          metadata,
+          tmdbId,
+          mediaType,
+          seasonNum,
+          episodeNum
+        );
+        if (!payload?.sources?.length) {
+          return [] as ResolvedStreamData[];
+        }
 
-      const streams = await resolveStreamsFromPayload(payload);
-      if (streams.length) {
-        return streams;
+        return await resolveStreamsFromPayload(payload, server.name, serverRank);
+      } catch {
+        return [] as ResolvedStreamData[];
       }
-    } catch {
-      // Try the next server.
     }
-  }
+  );
 
-  return [];
+  return resolved
+    .flat()
+    .sort(
+      (left, right) =>
+        left.serverRank - right.serverRank ||
+        qualityScore(right.quality) - qualityScore(left.quality)
+    );
 }
 
 export async function getVideasyStreams(
@@ -894,15 +1028,19 @@ export async function getVideasyStreams(
 
     return streamData.map(stream => ({
       name:
-        stream.streamType === 'hls' ? `Videasy - ${stream.quality}` : `Videasy - ${stream.quality}`,
+        stream.streamType === 'hls'
+          ? `Videasy - ${stream.serverName} - ${stream.quality}`
+          : `Videasy - ${stream.serverName} - ${stream.quality}`,
       title:
         stream.streamType === 'hls'
-          ? `Videasy - ${stream.quality}`
-          : `Videasy - ${stream.quality} File`,
+          ? `Videasy - ${stream.serverName} - ${stream.quality}`
+          : `Videasy - ${stream.serverName} - ${stream.quality} File`,
       url: stream.resourceUrl,
       subtitle: stream.subtitle,
       quality: stream.quality,
       provider: 'videasy',
+      variantId: stream.variantId,
+      variantLabel: stream.serverName,
       streamType: stream.streamType,
       headers: {
         Referer: stream.referer,

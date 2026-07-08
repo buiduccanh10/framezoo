@@ -1,7 +1,7 @@
 {
   "name": "betamovie-desktop",
   "private": true,
-  "version": "6.2.7",
+  "version": "6.2.8",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.9.0",
   "scripts": {

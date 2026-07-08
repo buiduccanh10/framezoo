@@ -13,6 +13,8 @@ interface OpenMovieStreamInfo {
   subtitle?: string;
   quality: string;
   provider: string;
+  variantId?: string;
+  variantLabel?: string;
   preview?: StreamPreview;
 }
 
@@ -61,11 +63,14 @@ export async function scrapeOpenMovieEmbed(
     qualityMap[streamInfo.quality] ||
     streamInfo.quality?.replace("p", "") ||
     "unknown";
+  const streamVariantId = (streamInfo.variantId || streamInfo.provider || "")
+    .trim()
+    .replace(/\s+/g, "-");
 
   return {
     stream: [
       {
-        id: `openmovie-${streamInfo.provider}-${isHls ? "hls" : "file"}-${quality}`,
+        id: `openmovie-${streamVariantId}-${isHls ? "hls" : "file"}-${quality}`,
         type: isHls ? ("hls" as const) : ("file" as const),
         flags: [flags.CORS_ALLOWED],
         captions: streamInfo.subtitle

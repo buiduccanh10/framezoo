@@ -31,6 +31,9 @@ interface ResolvedStreamData {
   origin: string;
   quality: string;
   subtitle: string;
+  serverName: string;
+  serverRank: number;
+  variantId: string;
 }
 
 interface SeedResponse {
@@ -52,9 +55,19 @@ const MODERN_UA =
   process.env.VIDKING_USER_AGENT ||
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36';
 const REQUEST_TIMEOUT_MS = Number(process.env.VIDKING_REQUEST_TIMEOUT_MS || 18_000);
+const VERIFY_STREAMS = process.env.VIDKING_VERIFY_STREAMS === '1';
+const SERVER_RESOLVE_CONCURRENCY = Math.max(
+  1,
+  Number.parseInt(process.env.VIDKING_SERVER_CONCURRENCY || '4', 10) || 4
+);
 const STREAM_CACHE_TTL = Number(process.env.VIDKING_CACHE_TTL || 5 * 60);
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 5;
+const SEED_CACHE_VERSION = 1;
 const SEED_CACHE_EARLY_EXPIRY_MS = 5_000;
+const STALE_SEED_STORAGE_TTL_SECONDS = Math.max(
+  60,
+  Number.parseInt(process.env.VIDKING_STALE_SEED_STORAGE_TTL || '3600', 10) || 3600
+);
 const PAYLOAD_MAGIC_PREFIX = Uint8Array.from([109, 118, 109, 49]);
 const ROUND_CONSTANTS = [
   1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221,
@@ -191,6 +204,39 @@ function normalizeQuality(rawQuality: string | undefined): string {
 
   const match = value.match(/(\d{3,4})/);
   return match ? `${match[1]}p` : value;
+}
+
+function slugifyVariantPart(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function buildVariantId(serverName: string, quality: string, masterPlaylistUrl: string): string {
+  const serverSlug = slugifyVariantPart(serverName) || 'server';
+  return `vidking-${serverSlug}-${quality.toLowerCase()}-${fnvHash(masterPlaylistUrl).toString(16)}`;
+}
+
+async function mapWithConcurrency<T, R>(
+  items: readonly T[],
+  concurrency: number,
+  mapper: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+  const results = new Array<R>(items.length);
+  let cursor = 0;
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+      while (cursor < items.length) {
+        const index = cursor++;
+        results[index] = await mapper(items[index], index);
+      }
+    })
+  );
+
+  return results;
 }
 
 function qualityScore(quality: string): number {
@@ -383,16 +429,72 @@ function getSeedCacheKey(tmdbId: string): string {
   return `${API_ORIGIN}|${tmdbId}`;
 }
 
+function getSeedStorageKey(tmdbId: string): string {
+  return `vidking:seed:v${SEED_CACHE_VERSION}:${tmdbId}`;
+}
+
+function getSeedStorage(): StorageLike | null {
+  try {
+    return useStorage('cache');
+  } catch {
+    return null;
+  }
+}
+
+async function getStoredSeed(tmdbId: string): Promise<SeedCacheEntry | null> {
+  const storage = getSeedStorage();
+  if (!storage) {
+    return null;
+  }
+
+  try {
+    return (await storage.getItem<SeedCacheEntry>(getSeedStorageKey(tmdbId))) || null;
+  } catch {
+    return null;
+  }
+}
+
+async function setStoredSeed(
+  tmdbId: string,
+  value: SeedCacheEntry,
+  ttlMs: number
+): Promise<void> {
+  const storage = getSeedStorage();
+  if (!storage) {
+    return;
+  }
+
+  try {
+    await storage.setItem(getSeedStorageKey(tmdbId), value as any, {
+      ttl: Math.max(Math.ceil(ttlMs / 1000), STALE_SEED_STORAGE_TTL_SECONDS),
+    });
+  } catch {
+    // Ignore cache failures.
+  }
+}
+
 function clearSeedCache(tmdbId: string): void {
   seedCache.delete(getSeedCacheKey(tmdbId));
+
+  const storage = getSeedStorage();
+  if (!storage) {
+    return;
+  }
+
+  void storage.removeItem(getSeedStorageKey(tmdbId)).catch(() => null);
 }
 
 async function getSeed(tmdbId: string, forceRefresh = false): Promise<string | null> {
   const cacheKey = getSeedCacheKey(tmdbId);
   const now = Date.now();
-  const cached = seedCache.get(cacheKey);
+  const memoryCached = seedCache.get(cacheKey);
+  const storedCached = !forceRefresh && !memoryCached ? await getStoredSeed(tmdbId) : null;
+  const cached = memoryCached || storedCached;
 
   if (!forceRefresh && cached && cached.expiresAt - SEED_CACHE_EARLY_EXPIRY_MS > now) {
+    if (!memoryCached) {
+      seedCache.set(cacheKey, cached);
+    }
     return cached.seed;
   }
 
@@ -401,14 +503,16 @@ async function getSeed(tmdbId: string, forceRefresh = false): Promise<string | n
   );
   const seed = String(payload?.seed || '').trim();
   if (!seed) {
-    return null;
+    return cached?.seed || null;
   }
 
   const ttlMs = Number.isFinite(payload?.ttlMs) ? Number(payload?.ttlMs) : 30_000;
-  seedCache.set(cacheKey, {
+  const entry = {
     seed,
     expiresAt: now + Math.max(ttlMs, 1_000),
-  });
+  } satisfies SeedCacheEntry;
+  seedCache.set(cacheKey, entry);
+  await setStoredSeed(tmdbId, entry, ttlMs);
 
   return seed;
 }
@@ -464,39 +568,50 @@ function pickSubtitleUrl(subtitles: VidkingSubtitleEntry[] | undefined): string 
   return normalizeHttpUrl(String(preferred?.url || preferred?.file || '').trim()) || '';
 }
 
-async function resolveStreamsFromPayload(payload: VidkingPayload): Promise<ResolvedStreamData[]> {
+async function resolveStreamsFromPayload(
+  payload: VidkingPayload,
+  serverName: string,
+  serverRank: number
+): Promise<ResolvedStreamData[]> {
   const subtitle = pickSubtitleUrl(payload.subtitles);
   const dedupe = new Set<string>();
-  const resolved: ResolvedStreamData[] = [];
+  const resolved = await Promise.all(
+    (payload.sources || []).map(async source => {
+      const masterPlaylistUrl = normalizeM3u8Url(String(source?.url || ''));
+      if (!masterPlaylistUrl) {
+        return null;
+      }
 
-  for (const source of payload.sources || []) {
-    const masterPlaylistUrl = normalizeM3u8Url(String(source?.url || ''));
-    if (!masterPlaylistUrl) {
-      continue;
-    }
+      if (VERIFY_STREAMS && !(await verifyPlayableManifest(masterPlaylistUrl))) {
+        return null;
+      }
 
-    if (!(await verifyPlayableManifest(masterPlaylistUrl))) {
-      continue;
-    }
+      const quality = normalizeQuality(source?.quality);
+      const dedupeKey = `${serverName}:${quality}:${masterPlaylistUrl}`;
+      if (dedupe.has(dedupeKey)) {
+        return null;
+      }
 
-    const quality = normalizeQuality(source?.quality);
-    const dedupeKey = `${quality}:${masterPlaylistUrl}`;
-    if (dedupe.has(dedupeKey)) {
-      continue;
-    }
+      dedupe.add(dedupeKey);
+      return {
+        masterPlaylistUrl,
+        referer: REFERER,
+        origin: SITE_ORIGIN,
+        quality,
+        subtitle,
+        serverName,
+        serverRank,
+        variantId: buildVariantId(serverName, quality, masterPlaylistUrl),
+      } satisfies ResolvedStreamData;
+    })
+  );
 
-    dedupe.add(dedupeKey);
-    resolved.push({
-      masterPlaylistUrl,
-      referer: REFERER,
-      origin: SITE_ORIGIN,
-      quality,
-      subtitle,
-    });
-  }
-
-  resolved.sort((left, right) => qualityScore(right.quality) - qualityScore(left.quality));
-  return resolved;
+  return resolved
+    .filter((stream): stream is ResolvedStreamData => Boolean(stream))
+    .sort(
+      (left, right) =>
+        left.serverRank - right.serverRank || qualityScore(right.quality) - qualityScore(left.quality)
+    );
 }
 
 function decryptPayload(
@@ -598,30 +713,34 @@ async function resolveVidkingStreams(
     return [];
   }
 
-  for (const server of SERVER_ENDPOINTS) {
-    try {
-      const payload = await fetchServerPayload(
-        server,
-        metadata,
-        tmdbId,
-        mediaType,
-        seasonNum,
-        episodeNum
-      );
-      if (!payload?.sources?.length) {
-        continue;
-      }
+  const resolved = await mapWithConcurrency(
+    SERVER_ENDPOINTS,
+    SERVER_RESOLVE_CONCURRENCY,
+    async (server, serverRank) => {
+      try {
+        const payload = await fetchServerPayload(
+          server,
+          metadata,
+          tmdbId,
+          mediaType,
+          seasonNum,
+          episodeNum
+        );
+        if (!payload?.sources?.length) {
+          return [] as ResolvedStreamData[];
+        }
 
-      const streams = await resolveStreamsFromPayload(payload);
-      if (streams.length) {
-        return streams;
+        return await resolveStreamsFromPayload(payload, server.name, serverRank);
+      } catch {
+        return [] as ResolvedStreamData[];
       }
-    } catch {
-      // Try the next server.
     }
-  }
+  );
 
-  return [];
+  return resolved.flat().sort(
+    (left, right) =>
+      left.serverRank - right.serverRank || qualityScore(right.quality) - qualityScore(left.quality)
+  );
 }
 
 export async function getVidkingStreams(
@@ -652,12 +771,14 @@ export async function getVidkingStreams(
     }
 
     return streamData.map(stream => ({
-      name: `Vidking - ${stream.quality}`,
-      title: `Vidking - ${stream.quality}`,
+      name: `Vidking - ${stream.serverName} - ${stream.quality}`,
+      title: `Vidking - ${stream.serverName} - ${stream.quality}`,
       url: stream.masterPlaylistUrl,
       subtitle: stream.subtitle,
       quality: stream.quality,
       provider: 'vidking',
+      variantId: stream.variantId,
+      variantLabel: stream.serverName,
       streamType: 'hls',
       headers: {
         Referer: stream.referer,
