@@ -100,6 +100,7 @@ services:
         TIDB_API_KEY: ${VITE_TIDB_API_KEY:-}
         WYZIE_API_KEY: ${VITE_WYZIE_API_KEY}
         SUBSOURCE_API_KEY: ${VITE_SUBSOURCE_API_KEY}
+        USE_TRAKT: ${VITE_USE_TRAKT:-true}
         ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
     hostname: betamovie-fe
     environment:
