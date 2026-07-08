@@ -87,10 +87,9 @@ function isDesktopAppRuntime() {
 
 // Desktop preload overrides build-time env so Electron keeps its injected backend URL.
 function getKeyValue(key: keyof Config): string | undefined {
-  const windowValue =
-    typeof window !== "undefined"
-      ? (window as any)?.__CONFIG__?.[`VITE_${key}`]
-      : undefined;
+  const windowConfig =
+    typeof window !== "undefined" ? (window as any)?.__CONFIG__ : undefined;
+  const windowValue = windowConfig?.[`VITE_${key}`] ?? windowConfig?.[key];
   const envValue = coerceUndefined(env[key]);
   const runtimeValue = coerceUndefined(windowValue);
 
