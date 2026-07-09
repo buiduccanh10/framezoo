@@ -23,10 +23,20 @@ export function isOpenMovieHlsUrl(url: string): boolean {
   );
 }
 
+export function isOpenMovieDashUrl(url: string): boolean {
+  return (
+    url.includes(".mpd") ||
+    url.includes("/dash/") ||
+    url.includes("/mpd-proxy") ||
+    url.includes("#q=")
+  );
+}
+
 export function normalizeOpenMovieQuality(
   quality: string | null | undefined,
 ): string {
   const qualityMap: Record<string, string> = {
+    "4K": "4k",
     "2160p": "4k",
     "1440p": "1440",
     "1080p": "1080",
@@ -56,7 +66,12 @@ export function buildOpenMovieStreamId({
   const streamVariantId = (variantId || provider || "")
     .trim()
     .replace(/\s+/g, "-");
-  return `openmovie-${streamVariantId}-${isOpenMovieHlsUrl(url) ? "hls" : "file"}-${normalizeOpenMovieQuality(quality)}`;
+  const streamType = isOpenMovieDashUrl(url)
+    ? "dash"
+    : isOpenMovieHlsUrl(url)
+      ? "hls"
+      : "file";
+  return `openmovie-${streamVariantId}-${streamType}-${normalizeOpenMovieQuality(quality)}`;
 }
 
 export function formatOpenMovieVariantLabel(provider: string): string {

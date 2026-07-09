@@ -66,7 +66,7 @@ const SERVER_RESOLVE_CONCURRENCY = Math.max(
   Number.parseInt(process.env.VIDEASY_SERVER_CONCURRENCY || '4', 10) || 4
 );
 const STREAM_CACHE_TTL = Number(process.env.VIDEASY_CACHE_TTL || 5 * 60);
-const CACHE_VERSION = 6;
+const CACHE_VERSION = 7;
 const SEED_CACHE_VERSION = 1;
 const SEED_CACHE_EARLY_EXPIRY_MS = 5_000;
 const STALE_SEED_STORAGE_TTL_SECONDS = Math.max(
@@ -224,6 +224,18 @@ function normalizeQuality(rawQuality: string | undefined): string {
   return match ? `${match[1]}p` : value;
 }
 
+function qualityLabelFromHeight(height: number): string {
+  if (!Number.isFinite(height) || height <= 0) {
+    return 'auto';
+  }
+  if (height >= 1800) return '4K';
+  if (height >= 1300) return '1440p';
+  if (height >= 900) return '1080p';
+  if (height >= 640) return '720p';
+  if (height >= 420) return '480p';
+  return '360p';
+}
+
 function slugifyVariantPart(value: string): string {
   return value
     .trim()
@@ -263,8 +275,16 @@ async function mapWithConcurrency<T, R>(
 }
 
 function qualityScore(quality: string): number {
+  if (/4k/i.test(quality)) return 2160;
   const match = quality.match(/(\d{3,4})/);
-  return match ? Number.parseInt(match[1], 10) : 0;
+  if (match) return Number.parseInt(match[1], 10);
+  return /^auto$/i.test(quality) ? -1 : 0;
+}
+
+function streamTypePriority(streamType: ResolvedStreamData['streamType']): number {
+  if (streamType === 'hls') return 3;
+  if (streamType === 'file') return 2;
+  return 1;
 }
 
 function rotateLeft32(value: number, bits: number): number {
@@ -581,6 +601,23 @@ function getManifestLines(manifest: string): string[] {
     .filter(Boolean);
 }
 
+function parseTagAttributes(rawTag: string): Record<string, string> {
+  const attributes: Record<string, string> = {};
+  const pattern = /([A-Z0-9-]+)=("[^"]*"|[^,]*)/gi;
+
+  for (const match of rawTag.matchAll(pattern)) {
+    const key = String(match[1] || '').trim();
+    const value = String(match[2] || '')
+      .trim()
+      .replace(/^"|"$/g, '');
+    if (key) {
+      attributes[key] = value;
+    }
+  }
+
+  return attributes;
+}
+
 function firstManifestUri(manifest: string): string {
   return (
     getManifestLines(manifest).find(line => !line.startsWith('#') && !line.startsWith('<')) || ''
@@ -604,6 +641,129 @@ function nextUriAfterTag(manifest: string, tagPrefix: string): string {
   }
 
   return '';
+}
+
+function resolveManifestUri(uri: string, manifestUrl: string): string | null {
+  const value = String(uri || '').trim();
+  if (!value) {
+    return null;
+  }
+
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(value) || value.startsWith('//')) {
+    return normalizeHttpUrl(value.startsWith('//') ? `https:${value}` : value);
+  }
+
+  if (/^[a-z0-9.-]+\.[a-z]{2,}(?:\/|$)/i.test(value)) {
+    return normalizeHttpUrl(`https://${value}`);
+  }
+
+  try {
+    return normalizeHttpUrl(new URL(value, manifestUrl).toString());
+  } catch {
+    return null;
+  }
+}
+
+function buildDashRepresentationUrl(manifestUrl: string, representationId: string): string {
+  try {
+    const target = new URL(manifestUrl);
+    target.hash = `q=${encodeURIComponent(representationId)}`;
+    return target.toString();
+  } catch {
+    return `${manifestUrl}#q=${encodeURIComponent(representationId)}`;
+  }
+}
+
+async function expandHlsVariants(
+  manifestUrl: string
+): Promise<Array<{ resourceUrl: string; quality: string }>> {
+  const manifest = await fetchManifestText(manifestUrl);
+  if (!manifest) {
+    return [];
+  }
+
+  const lines = getManifestLines(manifest);
+  const variants: Array<{ resourceUrl: string; quality: string }> = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (!line.startsWith('#EXT-X-STREAM-INF:')) {
+      continue;
+    }
+
+    const uri = lines[index + 1];
+    if (!uri || uri.startsWith('#')) {
+      continue;
+    }
+
+    const resourceUrl = resolveManifestUri(uri, manifestUrl);
+    if (!resourceUrl) {
+      continue;
+    }
+
+    const attributes = parseTagAttributes(line.slice('#EXT-X-STREAM-INF:'.length));
+    const resolution = String(attributes.RESOLUTION || '');
+    const height = Number.parseInt(resolution.split('x')[1] || '0', 10);
+    const quality = normalizeQuality(attributes.NAME || qualityLabelFromHeight(height));
+    variants.push({ resourceUrl, quality });
+  }
+
+  const dedupe = new Set<string>();
+  return variants
+    .sort((left, right) => qualityScore(right.quality) - qualityScore(left.quality))
+    .filter(variant => {
+      const key = variant.quality.toLowerCase();
+      if (dedupe.has(key)) {
+        return false;
+      }
+      dedupe.add(key);
+      return true;
+    });
+}
+
+async function expandDashVariants(
+  manifestUrl: string
+): Promise<Array<{ resourceUrl: string; quality: string }>> {
+  const manifest = await fetchDashManifestText(manifestUrl);
+  if (!manifest) {
+    return [];
+  }
+
+  const variants = [...manifest.matchAll(/<Representation\b([^>]+)>/gi)]
+    .map(match => parseTagAttributes(match[1] || ''))
+    .filter(attributes =>
+      /^video\//i.test(String(attributes.mimeType || attributes.MIMETYPE || ''))
+    )
+    .map(attributes => {
+      const representationId = String(attributes.id || attributes.ID || '').trim();
+      const height = Number.parseInt(String(attributes.height || attributes.HEIGHT || '0'), 10);
+      const bandwidth = Number.parseInt(
+        String(attributes.bandwidth || attributes.BANDWIDTH || '0'),
+        10
+      );
+      return {
+        resourceUrl: buildDashRepresentationUrl(manifestUrl, representationId),
+        quality: qualityLabelFromHeight(height),
+        bandwidth,
+      };
+    })
+    .filter(variant => variant.resourceUrl && variant.quality !== 'auto');
+
+  const dedupe = new Set<string>();
+  return variants
+    .sort(
+      (left, right) =>
+        qualityScore(right.quality) - qualityScore(left.quality) || right.bandwidth - left.bandwidth
+    )
+    .filter(variant => {
+      const key = variant.quality.toLowerCase();
+      if (dedupe.has(key)) {
+        return false;
+      }
+      dedupe.add(key);
+      return true;
+    })
+    .map(({ resourceUrl, quality }) => ({ resourceUrl, quality }));
 }
 
 async function fetchManifestText(url: string): Promise<string | null> {
@@ -661,15 +821,13 @@ function appendDashSigningQuery(targetUrl: string, manifestUrl: string): string 
   }
 }
 
-function fillDashTemplate(
-  template: string,
-  representationId: string,
-  startNumber: number
-): string {
+function fillDashTemplate(template: string, representationId: string, startNumber: number): string {
   return template
     .replace(/\$RepresentationID\$/g, representationId)
     .replace(/\$Number(?:%0(\d+)d)?\$/g, (_match, width) =>
-      width ? String(startNumber).padStart(Number.parseInt(width, 10) || 1, '0') : String(startNumber)
+      width
+        ? String(startNumber).padStart(Number.parseInt(width, 10) || 1, '0')
+        : String(startNumber)
     );
 }
 
@@ -779,7 +937,7 @@ async function verifyPlayableHlsStream(url: string): Promise<boolean> {
 
   const childManifestLine = nextUriAfterTag(manifest, '#EXT-X-STREAM-INF');
   if (childManifestLine) {
-    const childUrl = normalizeHttpUrl(new URL(childManifestLine, url).toString());
+    const childUrl = resolveManifestUri(childManifestLine, url);
     if (!childUrl) {
       return false;
     }
@@ -798,7 +956,7 @@ async function verifyPlayableHlsStream(url: string): Promise<boolean> {
     return false;
   }
 
-  const segmentUrl = normalizeHttpUrl(new URL(segmentLine, mediaPlaylistUrl).toString());
+  const segmentUrl = resolveManifestUri(segmentLine, mediaPlaylistUrl);
   if (!segmentUrl) {
     return false;
   }
@@ -935,13 +1093,33 @@ function inferStreamType(source: VideasySourceEntry): 'hls' | 'file' | 'dash' | 
   return 'file';
 }
 
+function dedupeResolvedStreams(streams: ResolvedStreamData[]): ResolvedStreamData[] {
+  const dedupe = new Set<string>();
+
+  return [...streams]
+    .sort(
+      (left, right) =>
+        left.serverRank - right.serverRank ||
+        qualityScore(right.quality) - qualityScore(left.quality) ||
+        Number(right.verified) - Number(left.verified) ||
+        streamTypePriority(right.streamType) - streamTypePriority(left.streamType)
+    )
+    .filter(stream => {
+      const key = `${stream.serverName.toLowerCase()}:${stream.quality.toLowerCase()}`;
+      if (dedupe.has(key)) {
+        return false;
+      }
+      dedupe.add(key);
+      return true;
+    });
+}
+
 async function resolveStreamsFromPayload(
   payload: VideasyPayload,
   serverName: string,
   serverRank: number
 ): Promise<ResolvedStreamData[]> {
   const subtitle = pickSubtitleUrl(payload.subtitles);
-  const dedupe = new Set<string>();
   const resolved = await Promise.all(
     (payload.sources || []).map(async source => {
       const resourceUrl = normalizeHttpUrl(String(source?.url || source?.file || ''));
@@ -960,36 +1138,56 @@ async function resolveStreamsFromPayload(
               : await verifyPlayableFile(resourceUrl);
       }
 
-      const quality = normalizeQuality(source?.quality);
-      const dedupeKey = `${serverName}:${streamType}:${quality}:${resourceUrl}`;
-      if (dedupe.has(dedupeKey)) {
-        return null;
-      }
+      const expandedVariants =
+        streamType === 'hls'
+          ? await expandHlsVariants(resourceUrl)
+          : streamType === 'dash'
+            ? await expandDashVariants(resourceUrl)
+            : [];
+      const fallbackQuality = normalizeQuality(source?.quality);
+      const variants = expandedVariants.length
+        ? expandedVariants.map(variant => ({
+            resourceUrl: variant.resourceUrl,
+            quality: variant.quality,
+            streamType,
+          }))
+        : [
+            {
+              resourceUrl,
+              quality: fallbackQuality,
+              streamType,
+            },
+          ];
 
-      dedupe.add(dedupeKey);
-      return {
-        resourceUrl,
+      return variants.map(variant => ({
+        resourceUrl: variant.resourceUrl,
         referer: REFERER,
         origin: SITE_ORIGIN,
-        quality,
+        quality: variant.quality,
         subtitle,
-        streamType,
+        streamType: variant.streamType,
         serverName,
         serverRank,
-        variantId: buildVariantId(serverName, quality, streamType, resourceUrl),
+        variantId: buildVariantId(
+          serverName,
+          variant.quality,
+          variant.streamType,
+          variant.resourceUrl
+        ),
         verified,
-      } satisfies ResolvedStreamData;
+      })) satisfies ResolvedStreamData[];
     })
   );
 
-  return resolved
-    .filter((stream): stream is ResolvedStreamData => Boolean(stream))
-    .sort(
-      (left, right) =>
-        left.serverRank - right.serverRank ||
-        Number(right.verified) - Number(left.verified) ||
-        qualityScore(right.quality) - qualityScore(left.quality)
-    );
+  return dedupeResolvedStreams(
+    resolved.flat().filter((stream): stream is ResolvedStreamData => Boolean(stream))
+  ).sort(
+    (left, right) =>
+      left.serverRank - right.serverRank ||
+      qualityScore(right.quality) - qualityScore(left.quality) ||
+      Number(right.verified) - Number(left.verified) ||
+      streamTypePriority(right.streamType) - streamTypePriority(left.streamType)
+  );
 }
 
 function decryptPayload(
@@ -1117,11 +1315,13 @@ async function resolveVideasyStreams(
 
   return resolved
     .flat()
+    .filter((stream): stream is ResolvedStreamData => Boolean(stream))
     .sort(
       (left, right) =>
         left.serverRank - right.serverRank ||
+        qualityScore(right.quality) - qualityScore(left.quality) ||
         Number(right.verified) - Number(left.verified) ||
-        qualityScore(right.quality) - qualityScore(left.quality)
+        streamTypePriority(right.streamType) - streamTypePriority(left.streamType)
     );
 }
 
@@ -1154,12 +1354,7 @@ export async function getVideasyStreams(
 
     return streamData.map(stream => ({
       name: `Videasy - ${stream.serverName} - ${stream.quality}`,
-      title:
-        stream.streamType === 'dash'
-          ? `Videasy - ${stream.serverName} - ${stream.quality} DASH`
-          : stream.streamType === 'file'
-            ? `Videasy - ${stream.serverName} - ${stream.quality} File`
-            : `Videasy - ${stream.serverName} - ${stream.quality}`,
+      title: `Videasy - ${stream.serverName} - ${stream.quality}`,
       url: stream.resourceUrl,
       subtitle: stream.subtitle,
       quality: stream.quality,
