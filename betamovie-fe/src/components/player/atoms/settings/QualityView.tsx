@@ -6,7 +6,10 @@ import { Trans } from "react-i18next";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
+import { getOpenMovieMenuQualities } from "@/components/player/utils/openMovieQualityMenu";
+import { getOpenMovieQualityFromStreamId } from "@/components/player/utils/openMovieVariant";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { getMediaKey } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import {
   SourceQuality,
@@ -42,7 +45,10 @@ function useIsIosHls() {
 export function QualityView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
   const isIosHls = useIsIosHls();
+  const meta = usePlayerStore((s) => s.meta);
   const sourceType = usePlayerStore((s) => s.source?.type);
+  const sourceId = usePlayerStore((s) => s.sourceId);
+  const streamId = usePlayerStore((s) => s.source?.id);
   const availableQualities = usePlayerStore((s) => s.qualities);
   const currentQuality = usePlayerStore((s) => s.currentQuality);
   const switchQuality = usePlayerStore((s) => s.switchQuality);
@@ -56,6 +62,21 @@ export function QualityView({ id }: { id: string }) {
 
   // Auto quality makes sense for adaptive streams.
   const supportsAutoQuality = sourceType === "hls" || sourceType === "dash";
+  const mediaKey = useMemo(() => getMediaKey(meta), [meta]);
+  const syncedQualities = useMemo(
+    () => getOpenMovieMenuQualities(sourceId, mediaKey, streamId),
+    [mediaKey, sourceId, streamId],
+  );
+  const syncedSelectedQuality = useMemo(() => {
+    const quality = getOpenMovieQualityFromStreamId(streamId);
+    if (quality && quality !== "unknown") {
+      return quality as SourceQuality;
+    }
+
+    return currentQuality;
+  }, [currentQuality, streamId]);
+  const hasSyncedQualityMenu =
+    syncedQualities.length > 1 && syncedSelectedQuality !== null;
 
   const change = useCallback(
     (q: SourceQuality) => {
@@ -77,7 +98,7 @@ export function QualityView({ id }: { id: string }) {
     }
 
     const fallbackQuality =
-      currentQuality ??
+      (hasSyncedQualityMenu ? syncedSelectedQuality : currentQuality) ??
       getPreferredQuality(availableQualities, {
         automaticQuality: false,
         lastChosenQuality,
@@ -92,13 +113,20 @@ export function QualityView({ id }: { id: string }) {
     autoQuality,
     enableAutomaticQuality,
     currentQuality,
+    hasSyncedQualityMenu,
     availableQualities,
     lastChosenQuality,
     setLastChosenQuality,
+    syncedSelectedQuality,
     switchQuality,
   ]);
 
   const visibleQualities = allQualities.filter((quality) => {
+    if (hasSyncedQualityMenu) {
+      return (
+        syncedQualities.includes(quality) || quality === syncedSelectedQuality
+      );
+    }
     if (alwaysVisibleQualities[quality]) return true;
     if (availableQualities.includes(quality)) return true;
     return false;
@@ -113,11 +141,23 @@ export function QualityView({ id }: { id: string }) {
         {visibleQualities.map((v) => (
           <SelectableLink
             key={v}
-            selected={v === currentQuality}
-            onClick={
-              availableQualities.includes(v) ? () => change(v) : undefined
+            selected={
+              hasSyncedQualityMenu
+                ? v === syncedSelectedQuality
+                : v === currentQuality
             }
-            disabled={!availableQualities.includes(v)}
+            onClick={
+              hasSyncedQualityMenu
+                ? undefined
+                : availableQualities.includes(v)
+                  ? () => change(v)
+                  : undefined
+            }
+            disabled={
+              hasSyncedQualityMenu
+                ? v !== syncedSelectedQuality
+                : !availableQualities.includes(v)
+            }
           >
             {qualityToString(v)}
           </SelectableLink>

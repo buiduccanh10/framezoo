@@ -14,6 +14,21 @@ export function getOpenMovieProviderFromStreamId(
   return provider || null;
 }
 
+export function getOpenMovieQualityFromStreamId(
+  streamId: string | null | undefined,
+): string | null {
+  if (!streamId?.startsWith("openmovie-")) {
+    return null;
+  }
+
+  const parts = streamId.split("-");
+  if (parts.length < 4) {
+    return null;
+  }
+
+  return parts[parts.length - 1] || null;
+}
+
 export function isOpenMovieHlsUrl(url: string): boolean {
   return (
     url.includes("m3u8") ||
