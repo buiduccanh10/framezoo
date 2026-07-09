@@ -608,6 +608,28 @@
       "empty": "Nenhum download está configurado ainda.",
       "failed": "Falha ao carregar as opções de download.",
       "label": "Baixar aplicativo",
+      "options": {
+        "mac-arm64": {
+          "description": "Melhor para Macs da série M",
+          "label": "macOS Apple Silício"
+        },
+        "mac-universal": {
+          "description": "Funciona em Macs Apple Silicon e Intel",
+          "label": "MacOS Universais"
+        },
+        "mac-x64": {
+          "description": "Melhor para Macs Intel",
+          "label": "MacOS Intel"
+        },
+        "win-arm64": {
+          "description": "Melhor para PCs Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Melhor para PCs com Windows de 64 bits",
+          "label": "Janelas x64"
+        }
+      },
       "unavailable": "Nenhum URL de back-end está configurado."
     },
     "install": {

@@ -34,6 +34,16 @@ export function convertRunoutputToSource(out: {
       preview: out.stream.preview,
     };
   }
+  if (out.stream.type === "dash") {
+    return {
+      id: out.stream.id,
+      type: "dash",
+      url: out.stream.manifest,
+      headers: out.stream.headers,
+      preferredHeaders: out.stream.preferredHeaders,
+      preview: out.stream.preview,
+    };
+  }
   if (out.stream.type === "file") {
     const qualities: Partial<Record<SourceQuality, SourceFileStream>> = {};
     Object.entries(out.stream.qualities).forEach((entry) => {

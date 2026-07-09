@@ -24,6 +24,7 @@ import {
   DesktopPipAction,
   DesktopPipCaption,
   DesktopPipState,
+  setPersistedDesktopPipWindowSize,
 } from "@/desktop/pip";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
@@ -41,6 +42,9 @@ type DesktopElectronApi = {
 const dragRegionStyle = { ["WebkitAppRegion" as any]: "drag" };
 const noDragRegionStyle = { ["WebkitAppRegion" as any]: "no-drag" };
 const CONTROL_AUTOHIDE_MS = 2200;
+const DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS = 0.12;
+const DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS = 0.35;
+const DESKTOP_PIP_SYNC_RATE_ADJUSTMENT = 0.08;
 
 function getDesktopElectronApi(): DesktopElectronApi | null {
   const electronApi = (window as any).electronAPI;
@@ -59,6 +63,14 @@ function clampTime(time: number, duration: number) {
   }
 
   return Math.max(0, Math.min(time, duration));
+}
+
+function clampPlaybackRate(playbackRate: number) {
+  if (!Number.isFinite(playbackRate) || playbackRate <= 0) {
+    return 1;
+  }
+
+  return Math.max(0.25, Math.min(playbackRate, 4));
 }
 
 function areDesktopPipCaptionsEqual(
@@ -305,7 +317,7 @@ const DesktopPipProgressBar = memo(function DesktopPipProgressBarInner(props: {
       }`}
       style={noDragRegionStyle}
     >
-      <div className="rounded-[18px] border border-white/14 bg-black/24 px-3 py-2.5 shadow-2xl backdrop-blur-xl">
+      <div className="bg-transparent py-2.5 shadow-2xl backdrop-blur-xl">
         <div className="grid grid-cols-[auto,1fr,auto] items-center gap-2.5">
           <span className="min-w-[42px] text-right text-[11px] font-medium tabular-nums text-white/76">
             {formatSeconds(effectiveTime, timeHasHours)}
@@ -409,6 +421,8 @@ export default function DesktopPipPage() {
       const displayInterface = displayRef.current;
       const sourceSignature = getSourceSignature(nextState);
       const sourceChanged = sourceSignature !== sourceSignatureRef.current;
+      const targetPlaybackRate = clampPlaybackRate(nextState.playbackRate || 1);
+      let shouldRestorePlaybackRate = sourceChanged || nextState.paused;
 
       document.title = nextState.title || "AlphaFlix PiP";
 
@@ -423,15 +437,33 @@ export default function DesktopPipPage() {
           autoplay: !nextState.paused,
         });
       } else {
-        const drift = Math.abs(
-          (videoElementNode.currentTime ?? 0) - nextState.time,
-        );
-        if (nextState.paused || drift > 0.75) {
+        const currentTime = videoElementNode.currentTime ?? 0;
+        const drift = nextState.time - currentTime;
+        const absoluteDrift = Math.abs(drift);
+
+        if (
+          nextState.paused ||
+          absoluteDrift >= DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS
+        ) {
           displayInterface.setTime(nextState.time);
+          shouldRestorePlaybackRate = true;
+        } else if (absoluteDrift >= DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS) {
+          const correction = Math.min(
+            DESKTOP_PIP_SYNC_RATE_ADJUSTMENT,
+            Math.max(0.02, absoluteDrift * 0.2),
+          );
+          displayInterface.setPlaybackRate(
+            clampPlaybackRate(
+              targetPlaybackRate + Math.sign(drift) * correction,
+            ),
+          );
+          shouldRestorePlaybackRate = false;
         }
       }
 
-      displayInterface.setPlaybackRate(nextState.playbackRate || 1);
+      if (shouldRestorePlaybackRate) {
+        displayInterface.setPlaybackRate(targetPlaybackRate);
+      }
       void displayInterface.setVolume(0);
 
       if (nextState.paused) {
@@ -577,6 +609,40 @@ export default function DesktopPipPage() {
       window.removeEventListener("pointercancel", handlePointerRelease);
     };
   }, [isScrubbing, revealControls]);
+
+  useEffect(() => {
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const persistWindowSize = () => {
+      setPersistedDesktopPipWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    const schedulePersistWindowSize = () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+
+      resizeTimeout = setTimeout(() => {
+        resizeTimeout = null;
+        persistWindowSize();
+      }, 120);
+    };
+
+    persistWindowSize();
+    window.addEventListener("resize", schedulePersistWindowSize);
+    window.addEventListener("beforeunload", persistWindowSize);
+
+    return () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      persistWindowSize();
+      window.removeEventListener("resize", schedulePersistWindowSize);
+      window.removeEventListener("beforeunload", persistWindowSize);
+    };
+  }, []);
 
   useEffect(() => {
     const electronApi = getDesktopElectronApi();

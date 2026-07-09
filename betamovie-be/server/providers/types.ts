@@ -18,7 +18,9 @@ export interface Stream {
   subtitle: string;
   quality: string;
   provider: string;
-  streamType?: 'hls' | 'file';
+  variantId?: string;
+  variantLabel?: string;
+  streamType?: 'hls' | 'file' | 'dash';
   preview?: StreamPreview;
   headers: {
     Referer: string;

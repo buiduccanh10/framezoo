@@ -608,6 +608,28 @@
       "empty": "Latauksia ei ole vielä määritetty.",
       "failed": "Latausvaihtoehtojen lataaminen epäonnistui.",
       "label": "Lataa sovellus",
+      "options": {
+        "mac-arm64": {
+          "description": "Paras M-sarjan Maceille",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Toimii sekä Apple Silicon- että Intel Mac -tietokoneissa",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Paras Intel Macille",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Paras Snapdragon/ARM Windows-tietokoneille",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Paras 64-bittisille Windows-tietokoneille",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Tausta-URL-osoitetta ei ole määritetty."
     },
     "install": {

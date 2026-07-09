@@ -226,6 +226,7 @@ export interface TMDBMovieData {
       release_dates: Array<{
         certification: string;
         release_date: string;
+        type?: number;
       }>;
     }>;
   };

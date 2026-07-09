@@ -47,12 +47,17 @@ type HlsStream = BaseStream & {
   playlist: string;
 };
 
+type DashStream = BaseStream & {
+  type: "dash";
+  manifest: string;
+};
+
 type FileStream = BaseStream & {
   type: "file";
   qualities: Record<string, { type: "mp4"; url: string }>;
 };
 
-export type Stream = HlsStream | FileStream;
+export type Stream = HlsStream | DashStream | FileStream;
 
 export type MovieMedia = {
   type: "movie";

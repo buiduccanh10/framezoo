@@ -608,6 +608,28 @@
       "empty": "Engin niðurhal er stillt ennþá.",
       "failed": "Mistókst að hlaða niðurhalsvalkostum.",
       "label": "Sækja app",
+      "options": {
+        "mac-arm64": {
+          "description": "Best fyrir M-seríu Macs",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Virkar bæði á Apple Silicon og Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Best fyrir Intel Mac tölvur",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Best fyrir Snapdragon/ARM Windows tölvur",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Best fyrir 64-bita Windows tölvur",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Engin bakenda vefslóð er stillt."
     },
     "install": {

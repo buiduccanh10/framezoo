@@ -25,6 +25,10 @@ import {
   scrapeOpenMovieShow,
 } from "./custom/sources/openMovieSource";
 import {
+  scrapeVideasyMovie,
+  scrapeVideasyShow,
+} from "./custom/sources/videasySource";
+import {
   scrapeVidkingMovie,
   scrapeVidkingShow,
 } from "./custom/sources/vidkingSource";
@@ -43,9 +47,9 @@ setupM3U8Proxy();
 // Custom Vidlink source definition
 const vidlinkSource = {
   id: "alphaflix-vidlink",
-  name: "Server 1 (VidLink) 🔥",
-  rank: 1,
-  disabled: false,
+  name: "Server 3 (VidLink) 🔥",
+  rank: 3,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -59,7 +63,7 @@ const openMovieSource = {
   id: "openmovie",
   name: "Server 2 (Vixsrc) 🔥",
   rank: 2,
-  disabled: false,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -71,9 +75,9 @@ const openMovieSource = {
 // Custom KKPhim source definition
 const kkphimSource = {
   id: "kkphim",
-  name: "Server 3 (KKPhim Vietsub + Lồng tiếng) 🔥",
-  rank: 3,
-  disabled: false,
+  name: "Server 4 (KKPhim Vietsub + Lồng tiếng) 🔥",
+  rank: 4,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -87,7 +91,7 @@ const movies111Source = {
   id: "alphaflix-111movies",
   name: "Server 6 (111Movies)",
   rank: 6,
-  disabled: false,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -99,9 +103,9 @@ const movies111Source = {
 // Custom VidSrc.to source definition
 const vidsrcToSource = {
   id: "alphaflix-vidsrcto",
-  name: "Server 10 (Vidsrc.to)",
-  rank: 10,
-  disabled: false,
+  name: "Server 5 (Vidsrc.to)",
+  rank: 5,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -113,9 +117,9 @@ const vidsrcToSource = {
 // Custom Vidking source definition
 const vidkingSource = {
   id: "alphaflix-vidking",
-  name: "Server 9 (Vidking)",
-  rank: 9,
-  disabled: false,
+  name: "Server 1 (Vidking) 🔥",
+  rank: 1,
+  disabled: true,
   externalSource: false,
   type: "source" as const,
   flags: [flags.CORS_ALLOWED],
@@ -124,12 +128,26 @@ const vidkingSource = {
   scrapeShow: scrapeVidkingShow,
 };
 
+// Custom Videasy source definition
+const videasySource = {
+  id: "alphaflix-videasy",
+  name: "Server 7 (Videasy) 🔥",
+  rank: 7,
+  disabled: true,
+  externalSource: false,
+  type: "source" as const,
+  flags: [flags.CORS_ALLOWED],
+  mediaTypes: ["movie" as const, "show" as const],
+  scrapeMovie: scrapeVideasyMovie,
+  scrapeShow: scrapeVideasyShow,
+};
+
 // Custom OpenMovie embed definition
 const openMovieEmbed = {
   id: "openmovie-embed",
   name: "OpenMovie Stream",
   rank: 80,
-  disabled: false,
+  disabled: true,
   type: "embed" as const,
   flags: [flags.CORS_ALLOWED],
   mediaTypes: undefined as undefined,
@@ -138,6 +156,7 @@ const openMovieEmbed = {
 
 const sourceDefinitions = [
   movies111Source,
+  videasySource,
   vidlinkSource,
   openMovieSource,
   vidsrcToSource,
@@ -153,10 +172,16 @@ function isDesktopApp(): boolean {
 
 function withConfiguredProviders(builder: ReturnType<typeof buildProviders>) {
   sourceDefinitions.forEach((source) => {
-    builder.addSource(applyProviderMetadataOverride(source));
+    const overridden = applyProviderMetadataOverride(source);
+    if (overridden) {
+      builder.addSource(overridden);
+    }
   });
   embedDefinitions.forEach((embed) => {
-    builder.addEmbed(applyProviderMetadataOverride(embed));
+    const overridden = applyProviderMetadataOverride(embed);
+    if (overridden) {
+      builder.addEmbed(overridden);
+    }
   });
 
   return builder;

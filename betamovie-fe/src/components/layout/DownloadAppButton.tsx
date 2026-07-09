@@ -13,6 +13,13 @@ import { Transition } from "@/components/utils/Transition";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 
+function getDownloadOptionTranslationKey(
+  optionId: AppDownloadManifest["options"][number]["id"],
+  field: "label" | "description",
+) {
+  return `navigation.download.options.${optionId}.${field}`;
+}
+
 export function DownloadAppButton() {
   const { t } = useTranslation();
   const backendUrl = useBackendUrl();
@@ -148,9 +155,21 @@ export function DownloadAppButton() {
                 >
                   <Icon icon={Icons.DOWNLOAD} className="mt-0.5 text-lg" />
                   <div className="min-w-0">
-                    <div className="font-medium text-white">{option.label}</div>
+                    <div className="font-medium text-white">
+                      {t(getDownloadOptionTranslationKey(option.id, "label"), {
+                        defaultValue: option.label,
+                      })}
+                    </div>
                     <div className="text-xs text-dropdown-text">
-                      {option.description}
+                      {t(
+                        getDownloadOptionTranslationKey(
+                          option.id,
+                          "description",
+                        ),
+                        {
+                          defaultValue: option.description,
+                        },
+                      )}
                     </div>
                   </div>
                 </a>

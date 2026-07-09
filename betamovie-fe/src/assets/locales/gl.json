@@ -608,6 +608,28 @@
       "empty": "Aínda non hai descargas configuradas.",
       "failed": "Produciuse un erro ao cargar as opcións de descarga.",
       "label": "Descargar aplicación",
+      "options": {
+        "mac-arm64": {
+          "description": "O mellor para Macs da serie M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Funciona tanto en Apple Silicon como en Mac Intel",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "O mellor para Macs Intel",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "O mellor para ordenadores con Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "O mellor para ordenadores con Windows de 64 bits",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Non hai ningún URL de backend configurado."
     },
     "install": {

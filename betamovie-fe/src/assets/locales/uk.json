@@ -608,6 +608,28 @@
       "empty": "Завантаження ще не налаштовано.",
       "failed": "Не вдалося завантажити параметри завантаження.",
       "label": "Завантажити програму",
+      "options": {
+        "mac-arm64": {
+          "description": "Найкраще для Mac серії M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Працює як на Apple Silicon, так і на Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Найкраще для Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Найкраще для ПК з Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Найкраще для 64-розрядних ПК з Windows",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "URL-адреса серверної частини не налаштована."
     },
     "install": {

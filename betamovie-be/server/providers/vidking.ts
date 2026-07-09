@@ -26,11 +26,15 @@ interface VidkingPayload {
 }
 
 interface ResolvedStreamData {
-  masterPlaylistUrl: string;
+  resourceUrl: string;
   referer: string;
   origin: string;
   quality: string;
   subtitle: string;
+  serverName: string;
+  serverRank: number;
+  variantId: string;
+  verified: boolean;
 }
 
 interface SeedResponse {
@@ -52,9 +56,19 @@ const MODERN_UA =
   process.env.VIDKING_USER_AGENT ||
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36';
 const REQUEST_TIMEOUT_MS = Number(process.env.VIDKING_REQUEST_TIMEOUT_MS || 18_000);
+const VERIFY_STREAMS = process.env.VIDKING_VERIFY_STREAMS === '1';
+const SERVER_RESOLVE_CONCURRENCY = Math.max(
+  1,
+  Number.parseInt(process.env.VIDKING_SERVER_CONCURRENCY || '4', 10) || 4
+);
 const STREAM_CACHE_TTL = Number(process.env.VIDKING_CACHE_TTL || 5 * 60);
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 6;
+const SEED_CACHE_VERSION = 1;
 const SEED_CACHE_EARLY_EXPIRY_MS = 5_000;
+const STALE_SEED_STORAGE_TTL_SECONDS = Math.max(
+  60,
+  Number.parseInt(process.env.VIDKING_STALE_SEED_STORAGE_TTL || '3600', 10) || 3600
+);
 const PAYLOAD_MAGIC_PREFIX = Uint8Array.from([109, 118, 109, 49]);
 const ROUND_CONSTANTS = [
   1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221,
@@ -193,9 +207,56 @@ function normalizeQuality(rawQuality: string | undefined): string {
   return match ? `${match[1]}p` : value;
 }
 
+function qualityLabelFromHeight(height: number): string {
+  if (!Number.isFinite(height) || height <= 0) {
+    return 'auto';
+  }
+  if (height >= 1800) return '4K';
+  if (height >= 1300) return '1440p';
+  if (height >= 900) return '1080p';
+  if (height >= 640) return '720p';
+  if (height >= 420) return '480p';
+  return '360p';
+}
+
+function slugifyVariantPart(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function buildVariantId(serverName: string, quality: string, masterPlaylistUrl: string): string {
+  const serverSlug = slugifyVariantPart(serverName) || 'server';
+  return `vidking-${serverSlug}-${quality.toLowerCase()}-${fnvHash(masterPlaylistUrl).toString(16)}`;
+}
+
+async function mapWithConcurrency<T, R>(
+  items: readonly T[],
+  concurrency: number,
+  mapper: (item: T, index: number) => Promise<R>
+): Promise<R[]> {
+  const results = new Array<R>(items.length);
+  let cursor = 0;
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+      while (cursor < items.length) {
+        const index = cursor++;
+        results[index] = await mapper(items[index], index);
+      }
+    })
+  );
+
+  return results;
+}
+
 function qualityScore(quality: string): number {
+  if (/4k/i.test(quality)) return 2160;
   const match = quality.match(/(\d{3,4})/);
-  return match ? Number.parseInt(match[1], 10) : 0;
+  if (match) return Number.parseInt(match[1], 10);
+  return /^auto$/i.test(quality) ? -1 : 0;
 }
 
 function rotateLeft32(value: number, bits: number): number {
@@ -383,16 +444,68 @@ function getSeedCacheKey(tmdbId: string): string {
   return `${API_ORIGIN}|${tmdbId}`;
 }
 
+function getSeedStorageKey(tmdbId: string): string {
+  return `vidking:seed:v${SEED_CACHE_VERSION}:${tmdbId}`;
+}
+
+function getSeedStorage(): StorageLike | null {
+  try {
+    return useStorage('cache');
+  } catch {
+    return null;
+  }
+}
+
+async function getStoredSeed(tmdbId: string): Promise<SeedCacheEntry | null> {
+  const storage = getSeedStorage();
+  if (!storage) {
+    return null;
+  }
+
+  try {
+    return (await storage.getItem<SeedCacheEntry>(getSeedStorageKey(tmdbId))) || null;
+  } catch {
+    return null;
+  }
+}
+
+async function setStoredSeed(tmdbId: string, value: SeedCacheEntry, ttlMs: number): Promise<void> {
+  const storage = getSeedStorage();
+  if (!storage) {
+    return;
+  }
+
+  try {
+    await storage.setItem(getSeedStorageKey(tmdbId), value as any, {
+      ttl: Math.max(Math.ceil(ttlMs / 1000), STALE_SEED_STORAGE_TTL_SECONDS),
+    });
+  } catch {
+    // Ignore cache failures.
+  }
+}
+
 function clearSeedCache(tmdbId: string): void {
   seedCache.delete(getSeedCacheKey(tmdbId));
+
+  const storage = getSeedStorage();
+  if (!storage) {
+    return;
+  }
+
+  void storage.removeItem(getSeedStorageKey(tmdbId)).catch(() => null);
 }
 
 async function getSeed(tmdbId: string, forceRefresh = false): Promise<string | null> {
   const cacheKey = getSeedCacheKey(tmdbId);
   const now = Date.now();
-  const cached = seedCache.get(cacheKey);
+  const memoryCached = seedCache.get(cacheKey);
+  const storedCached = !forceRefresh && !memoryCached ? await getStoredSeed(tmdbId) : null;
+  const cached = memoryCached || storedCached;
 
   if (!forceRefresh && cached && cached.expiresAt - SEED_CACHE_EARLY_EXPIRY_MS > now) {
+    if (!memoryCached) {
+      seedCache.set(cacheKey, cached);
+    }
     return cached.seed;
   }
 
@@ -401,14 +514,16 @@ async function getSeed(tmdbId: string, forceRefresh = false): Promise<string | n
   );
   const seed = String(payload?.seed || '').trim();
   if (!seed) {
-    return null;
+    return cached?.seed || null;
   }
 
   const ttlMs = Number.isFinite(payload?.ttlMs) ? Number(payload?.ttlMs) : 30_000;
-  seedCache.set(cacheKey, {
+  const entry = {
     seed,
     expiresAt: now + Math.max(ttlMs, 1_000),
-  });
+  } satisfies SeedCacheEntry;
+  seedCache.set(cacheKey, entry);
+  await setStoredSeed(tmdbId, entry, ttlMs);
 
   return seed;
 }
@@ -436,7 +551,31 @@ function buildSourceApiUrl(
   return url.toString();
 }
 
-async function verifyPlayableManifest(url: string): Promise<boolean> {
+function getManifestLines(manifest: string): string[] {
+  return manifest
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
+}
+
+function parseTagAttributes(rawTag: string): Record<string, string> {
+  const attributes: Record<string, string> = {};
+  const pattern = /([A-Z0-9-]+)=("[^"]*"|[^,]*)/gi;
+
+  for (const match of rawTag.matchAll(pattern)) {
+    const key = String(match[1] || '').trim();
+    const value = String(match[2] || '')
+      .trim()
+      .replace(/^"|"$/g, '');
+    if (key) {
+      attributes[key] = value;
+    }
+  }
+
+  return attributes;
+}
+
+async function fetchManifestText(url: string): Promise<string | null> {
   const response = await withTimeout(
     url,
     {
@@ -448,11 +587,83 @@ async function verifyPlayableManifest(url: string): Promise<boolean> {
   ).catch(() => null);
 
   if (!response?.ok) {
-    return false;
+    return null;
   }
 
   const body = await response.text().catch(() => '');
-  return body.trimStart().startsWith('#EXTM3U');
+  return body.trimStart().startsWith('#EXTM3U') ? body : null;
+}
+
+async function verifyPlayableManifest(url: string): Promise<boolean> {
+  return Boolean(await fetchManifestText(url));
+}
+
+function resolveManifestUri(uri: string, manifestUrl: string): string | null {
+  const value = String(uri || '').trim();
+  if (!value) {
+    return null;
+  }
+
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(value) || value.startsWith('//')) {
+    return normalizeHttpUrl(value.startsWith('//') ? `https:${value}` : value);
+  }
+
+  if (/^[a-z0-9.-]+\.[a-z]{2,}(?:\/|$)/i.test(value)) {
+    return normalizeHttpUrl(`https://${value}`);
+  }
+
+  try {
+    return normalizeHttpUrl(new URL(value, manifestUrl).toString());
+  } catch {
+    return null;
+  }
+}
+
+async function expandHlsVariants(
+  manifestUrl: string
+): Promise<Array<{ resourceUrl: string; quality: string }>> {
+  const manifest = await fetchManifestText(manifestUrl);
+  if (!manifest) {
+    return [];
+  }
+
+  const lines = getManifestLines(manifest);
+  const variants: Array<{ resourceUrl: string; quality: string }> = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    if (!line.startsWith('#EXT-X-STREAM-INF:')) {
+      continue;
+    }
+
+    const uri = lines[index + 1];
+    if (!uri || uri.startsWith('#')) {
+      continue;
+    }
+
+    const resourceUrl = resolveManifestUri(uri, manifestUrl);
+    if (!resourceUrl) {
+      continue;
+    }
+
+    const attributes = parseTagAttributes(line.slice('#EXT-X-STREAM-INF:'.length));
+    const resolution = String(attributes.RESOLUTION || '');
+    const height = Number.parseInt(resolution.split('x')[1] || '0', 10);
+    const quality = normalizeQuality(attributes.NAME || qualityLabelFromHeight(height));
+    variants.push({ resourceUrl, quality });
+  }
+
+  const dedupe = new Set<string>();
+  return variants
+    .sort((left, right) => qualityScore(right.quality) - qualityScore(left.quality))
+    .filter(variant => {
+      const key = variant.quality.toLowerCase();
+      if (dedupe.has(key)) {
+        return false;
+      }
+      dedupe.add(key);
+      return true;
+    });
 }
 
 function pickSubtitleUrl(subtitles: VidkingSubtitleEntry[] | undefined): string {
@@ -464,39 +675,58 @@ function pickSubtitleUrl(subtitles: VidkingSubtitleEntry[] | undefined): string 
   return normalizeHttpUrl(String(preferred?.url || preferred?.file || '').trim()) || '';
 }
 
-async function resolveStreamsFromPayload(payload: VidkingPayload): Promise<ResolvedStreamData[]> {
+async function resolveStreamsFromPayload(
+  payload: VidkingPayload,
+  serverName: string,
+  serverRank: number
+): Promise<ResolvedStreamData[]> {
   const subtitle = pickSubtitleUrl(payload.subtitles);
+  const resolved = await Promise.all(
+    (payload.sources || []).map(async source => {
+      const masterPlaylistUrl = normalizeM3u8Url(String(source?.url || ''));
+      if (!masterPlaylistUrl) {
+        return null;
+      }
+
+      const verified = VERIFY_STREAMS ? await verifyPlayableManifest(masterPlaylistUrl) : true;
+      const expandedVariants = await expandHlsVariants(masterPlaylistUrl);
+      const fallbackQuality = normalizeQuality(source?.quality);
+      const variants = expandedVariants.length
+        ? expandedVariants
+        : [{ resourceUrl: masterPlaylistUrl, quality: fallbackQuality }];
+
+      return variants.map(variant => ({
+        resourceUrl: variant.resourceUrl,
+        referer: REFERER,
+        origin: SITE_ORIGIN,
+        quality: variant.quality,
+        subtitle,
+        serverName,
+        serverRank,
+        variantId: buildVariantId(serverName, variant.quality, variant.resourceUrl),
+        verified,
+      })) satisfies ResolvedStreamData[];
+    })
+  );
+
   const dedupe = new Set<string>();
-  const resolved: ResolvedStreamData[] = [];
-
-  for (const source of payload.sources || []) {
-    const masterPlaylistUrl = normalizeM3u8Url(String(source?.url || ''));
-    if (!masterPlaylistUrl) {
-      continue;
-    }
-
-    if (!(await verifyPlayableManifest(masterPlaylistUrl))) {
-      continue;
-    }
-
-    const quality = normalizeQuality(source?.quality);
-    const dedupeKey = `${quality}:${masterPlaylistUrl}`;
-    if (dedupe.has(dedupeKey)) {
-      continue;
-    }
-
-    dedupe.add(dedupeKey);
-    resolved.push({
-      masterPlaylistUrl,
-      referer: REFERER,
-      origin: SITE_ORIGIN,
-      quality,
-      subtitle,
+  return resolved
+    .flat()
+    .filter((stream): stream is ResolvedStreamData => Boolean(stream))
+    .sort(
+      (left, right) =>
+        left.serverRank - right.serverRank ||
+        qualityScore(right.quality) - qualityScore(left.quality) ||
+        Number(right.verified) - Number(left.verified)
+    )
+    .filter(stream => {
+      const key = `${stream.serverName.toLowerCase()}:${stream.quality.toLowerCase()}`;
+      if (dedupe.has(key)) {
+        return false;
+      }
+      dedupe.add(key);
+      return true;
     });
-  }
-
-  resolved.sort((left, right) => qualityScore(right.quality) - qualityScore(left.quality));
-  return resolved;
 }
 
 function decryptPayload(
@@ -598,30 +828,38 @@ async function resolveVidkingStreams(
     return [];
   }
 
-  for (const server of SERVER_ENDPOINTS) {
-    try {
-      const payload = await fetchServerPayload(
-        server,
-        metadata,
-        tmdbId,
-        mediaType,
-        seasonNum,
-        episodeNum
-      );
-      if (!payload?.sources?.length) {
-        continue;
-      }
+  const resolved = await mapWithConcurrency(
+    SERVER_ENDPOINTS,
+    SERVER_RESOLVE_CONCURRENCY,
+    async (server, serverRank) => {
+      try {
+        const payload = await fetchServerPayload(
+          server,
+          metadata,
+          tmdbId,
+          mediaType,
+          seasonNum,
+          episodeNum
+        );
+        if (!payload?.sources?.length) {
+          return [] as ResolvedStreamData[];
+        }
 
-      const streams = await resolveStreamsFromPayload(payload);
-      if (streams.length) {
-        return streams;
+        return await resolveStreamsFromPayload(payload, server.name, serverRank);
+      } catch {
+        return [] as ResolvedStreamData[];
       }
-    } catch {
-      // Try the next server.
     }
-  }
+  );
 
-  return [];
+  return resolved
+    .flat()
+    .sort(
+      (left, right) =>
+        left.serverRank - right.serverRank ||
+        qualityScore(right.quality) - qualityScore(left.quality) ||
+        Number(right.verified) - Number(left.verified)
+    );
 }
 
 export async function getVidkingStreams(
@@ -652,12 +890,14 @@ export async function getVidkingStreams(
     }
 
     return streamData.map(stream => ({
-      name: `Vidking - ${stream.quality}`,
-      title: `Vidking - ${stream.quality}`,
-      url: stream.masterPlaylistUrl,
+      name: `Vidking - ${stream.serverName} - ${stream.quality}`,
+      title: `Vidking - ${stream.serverName} - ${stream.quality}`,
+      url: stream.resourceUrl,
       subtitle: stream.subtitle,
       quality: stream.quality,
       provider: 'vidking',
+      variantId: stream.variantId,
+      variantLabel: stream.serverName,
       streamType: 'hls',
       headers: {
         Referer: stream.referer,

@@ -7,15 +7,24 @@ import { useWindowSize } from "react-use";
 
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
-import { getMediaLogo } from "@/backend/metadata/tmdb";
-import { getDiscoverContent } from "@/backend/metadata/traktApi";
-import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
+import { TMDBIdToUrlId, getMediaLogo } from "@/backend/metadata/tmdb";
+import { MWMediaType } from "@/backend/metadata/types/mw";
+import {
+  TMDBContentTypes,
+  type TMDBMovieData,
+} from "@/backend/metadata/types/tmdb";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
+import {
+  ReleaseQualityBadge,
+  type ReleaseQualityVariant,
+  getReleaseQualityVariantFromTmdbReleaseDates,
+} from "@/components/media/ReleaseQualityBadge";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
-import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
+import { getProgressPercentage, useProgressStore } from "@/stores/progress";
+import { shouldShowProgress } from "@/stores/progress/utils";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
@@ -38,6 +47,7 @@ export interface FeaturedMedia extends Partial<Movie & TVShow> {
   external_ids?: {
     imdb_id?: string;
   };
+  release_dates?: TMDBMovieData["release_dates"];
 }
 
 interface FeaturedCarouselProps {
@@ -196,6 +206,7 @@ export function FeaturedCarousel({
   const navigate = useNavigate();
 
   const userLanguage = useLanguageStore((s) => s.language);
+  const progressItems = useProgressStore((s) => s.items);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
   const { width: windowWidth, height: windowHeight } = useWindowSize();
   const [contentOpacity, setContentOpacity] = useState(1);
@@ -266,7 +277,7 @@ export function FeaturedCarousel({
               pick.type === "movie"
                 ? fetchCachedTmdb<any>(`/movie/${pick.id}`, {
                     language: formattedLanguage,
-                    append_to_response: "external_ids",
+                    append_to_response: "external_ids,release_dates",
                   })
                 : fetchCachedTmdb<any>(`/tv/${pick.id}`, {
                     language: formattedLanguage,
@@ -319,63 +330,34 @@ export function FeaturedCarousel({
         const selectFeaturedPool = (items: MediaPick[], limit: number) => {
           return uniqueByKey(items).slice(0, limit);
         };
-        let movieFeaturedPool: MediaPick[] = [];
-        let tvFeaturedPool: MediaPick[] = [];
+        const [trendingMovies, trendingTv] = await Promise.all([
+          endpointList("/trending/movie/day"),
+          endpointList("/trending/tv/day"),
+        ]);
 
-        if (conf().USE_TRAKT) {
-          try {
-            const discoverData = await getDiscoverContent();
-            movieFeaturedPool = selectFeaturedPool(
-              (discoverData?.movie_tmdb_ids ?? []).map((id) =>
-                toMoviePick({ id }, "latest"),
-              ),
-              FEATURED_POOL_SIZE_PER_TYPE,
-            );
-            tvFeaturedPool = selectFeaturedPool(
-              (discoverData?.tv_tmdb_ids ?? []).map((id) =>
-                toShowPick({ id }, "popular"),
-              ),
-              FEATURED_POOL_SIZE_PER_TYPE,
-            );
-          } catch (error) {
-            console.warn("Failed to fetch Trakt discover content:", error);
-          }
-        }
+        const movieFeaturedPool = selectFeaturedPool(
+          trendingMovies.map(
+            (show: {
+              id: number;
+              vote_average?: number;
+              vote_count?: number;
+              release_date?: string;
+            }) => toMoviePick(show, "latest"),
+          ),
+          FEATURED_POOL_SIZE_PER_TYPE,
+        );
 
-        if (movieFeaturedPool.length === 0 || tvFeaturedPool.length === 0) {
-          const [trendingMovies, trendingTv] = await Promise.all([
-            endpointList("/trending/movie/day"),
-            endpointList("/trending/tv/day"),
-          ]);
-
-          if (movieFeaturedPool.length === 0) {
-            movieFeaturedPool = selectFeaturedPool(
-              trendingMovies.map(
-                (show: {
-                  id: number;
-                  vote_average?: number;
-                  vote_count?: number;
-                  release_date?: string;
-                }) => toMoviePick(show, "latest"),
-              ),
-              FEATURED_POOL_SIZE_PER_TYPE,
-            );
-          }
-
-          if (tvFeaturedPool.length === 0) {
-            tvFeaturedPool = selectFeaturedPool(
-              trendingTv.map(
-                (show: {
-                  id: number;
-                  vote_average?: number;
-                  vote_count?: number;
-                  first_air_date?: string;
-                }) => toShowPick(show, "popular"),
-              ),
-              FEATURED_POOL_SIZE_PER_TYPE,
-            );
-          }
-        }
+        const tvFeaturedPool = selectFeaturedPool(
+          trendingTv.map(
+            (show: {
+              id: number;
+              vote_average?: number;
+              vote_count?: number;
+              first_air_date?: string;
+            }) => toShowPick(show, "popular"),
+          ),
+          FEATURED_POOL_SIZE_PER_TYPE,
+        );
 
         const rankedSelection =
           forcedCategory === "movies"
@@ -745,6 +727,53 @@ export function FeaturedCarousel({
   const hasMediaYear = typeof mediaYear === "string";
   const hasSeasonCount =
     currentMedia?.type === "show" && Boolean(currentMedia?.number_of_seasons);
+  const progressItem = currentMedia?.id
+    ? progressItems[currentMedia.id.toString()]
+    : undefined;
+  const showProgress = progressItem ? shouldShowProgress(progressItem) : null;
+  const progressPercentage = showProgress?.show
+    ? getProgressPercentage(
+        showProgress.progress.watched,
+        showProgress.progress.duration,
+      )
+    : undefined;
+  const playButtonLabel =
+    showProgress &&
+    currentMedia.type === "show" &&
+    showProgress.season &&
+    showProgress.episode
+      ? `${t("details.resume")} S${showProgress.season.number}:E${showProgress.episode.number}`
+      : currentMedia.type === "movie"
+        ? !currentMedia.release_date ||
+          new Date(currentMedia.release_date) > new Date()
+          ? t("media.unreleased")
+          : showProgress
+            ? t("details.resume")
+            : t("details.play")
+        : showProgress
+          ? t("details.resume")
+          : t("details.play");
+  const playUrlId =
+    currentMedia.id && mediaTitle
+      ? TMDBIdToUrlId(
+          currentMedia.type === "movie"
+            ? MWMediaType.MOVIE
+            : MWMediaType.SERIES,
+          currentMedia.id.toString(),
+          mediaTitle,
+        )
+      : null;
+  const releaseQuality: ReleaseQualityVariant | null =
+    currentMedia?.type === "movie"
+      ? getReleaseQualityVariantFromTmdbReleaseDates(currentMedia.release_dates)
+      : null;
+  const hasMetadataAfterQualityBadge =
+    hasTmdbRating ||
+    hasImdbRating ||
+    hasRtRating ||
+    hasAudienceRating ||
+    hasMediaYear ||
+    hasSeasonCount;
 
   let searchClasses = "";
   if (searching) searchClasses = "opacity-0 transition-opacity duration-300";
@@ -894,6 +923,18 @@ export function FeaturedCarousel({
             )}
             {/* TMDB Rating and Year/Seasons */}
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/80 mb-4">
+              {releaseQuality && (
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  <ReleaseQualityBadge
+                    variant={releaseQuality}
+                    className="bg-black/30"
+                  />
+                  {hasMetadataAfterQualityBadge && (
+                    <span className="text-white/60">•</span>
+                  )}
+                </div>
+              )}
+
               {hasTmdbRating && (
                 <div className="flex items-center gap-1 whitespace-nowrap">
                   <Icon icon={Icons.TMDB} />
@@ -999,37 +1040,75 @@ export function FeaturedCarousel({
               {currentMedia.overview}
             </p>
             <div
-              className="flex gap-4 justify-center items-center sm:justify-start"
+              className="w-full max-w-md"
               onMouseEnter={() => setIsAutoPlaying(false)}
               onMouseLeave={() => setIsAutoPlaying(true)}
             >
-              <Button
-                onClick={() =>
-                  navigate(
-                    `/media/tmdb-${currentMedia.type}-${currentMedia.id}-${mediaTitle?.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
-                  )
-                }
-                theme="secondary"
-                className="w-full sm:w-auto text-base"
-              >
-                <Icon icon={Icons.PLAY} className="text-white" />
-                <span className="text-white whitespace-nowrap">
-                  {t("discover.featured.playNow")}
-                </span>
-              </Button>
-              <Button
-                onClick={() => onShowDetails(currentMedia)}
-                theme="secondary"
-                className="w-full sm:w-auto text-base"
-              >
-                <Icon
-                  icon={Icons.CIRCLE_QUESTION}
-                  className="text-white scale-100"
-                />
-                <span className="text-white whitespace-nowrap">
-                  {t("discover.featured.moreInfo")}
-                </span>
-              </Button>
+              <div className="flex gap-4 justify-center items-center sm:justify-start">
+                <Button
+                  onClick={() => {
+                    if (!playUrlId) return;
+
+                    if (
+                      currentMedia.type === "show" &&
+                      showProgress?.season?.id &&
+                      showProgress?.episode?.id
+                    ) {
+                      navigate(
+                        `/media/${playUrlId}/${showProgress.season.id}/${showProgress.episode.id}`,
+                      );
+                      return;
+                    }
+
+                    navigate(`/media/${playUrlId}`);
+                  }}
+                  theme="purple"
+                  className="w-full sm:w-auto text-base"
+                  disabled={!playUrlId}
+                >
+                  <Icon icon={Icons.PLAY} className="text-white" />
+                  <span className="text-white whitespace-nowrap">
+                    {playButtonLabel}
+                  </span>
+                </Button>
+                <Button
+                  onClick={() => onShowDetails(currentMedia)}
+                  theme="secondary"
+                  className="w-full sm:w-auto text-base"
+                >
+                  <Icon
+                    icon={Icons.CIRCLE_QUESTION}
+                    className="text-white scale-100"
+                  />
+                  <span className="text-white whitespace-nowrap">
+                    {t("discover.featured.moreInfo")}
+                  </span>
+                </Button>
+              </div>
+
+              {progressPercentage !== undefined ? (
+                <div className="mt-3 w-full">
+                  <div className="mb-2 flex items-center justify-between gap-3 text-xs font-medium text-white/80">
+                    <span className="truncate">
+                      {currentMedia.type === "show" &&
+                      showProgress?.season &&
+                      showProgress.episode
+                        ? t("media.episodeDisplay", {
+                            season: showProgress.season.number,
+                            episode: showProgress.episode.number,
+                          })
+                        : t("details.resume")}
+                    </span>
+                    <span>{Math.round(progressPercentage)}%</span>
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-progress-background/25">
+                    <div
+                      className="h-full rounded-full bg-progress-filled transition-[width] duration-300"
+                      style={{ width: `${progressPercentage}%` }}
+                    />
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="hidden lg:block">

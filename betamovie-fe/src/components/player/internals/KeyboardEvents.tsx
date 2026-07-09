@@ -508,6 +508,45 @@ export function KeyboardEvents() {
         dataRef.current.display?.[action]();
       }
 
+      // Subtitle sync - customizable
+      // Handled before evt.repeat check so users can hold the key to adjust continuously
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_EARLIER],
+        )
+      ) {
+        const currentDelay = useSubtitleStore.getState().delay;
+        dataRef.current.setDelay(currentDelay - 0.5);
+        dataRef.current.setShowDelayIndicator(true);
+        dataRef.current.setCurrentOverlay("subtitle");
+
+        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
+        subtitleDebounce.current = setTimeout(() => {
+          dataRef.current.setShowDelayIndicator(false);
+          dataRef.current.setCurrentOverlay(null);
+        }, 3000);
+        return;
+      }
+      if (
+        matchesShortcut(
+          evt,
+          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_LATER],
+        )
+      ) {
+        const currentDelay = useSubtitleStore.getState().delay;
+        dataRef.current.setDelay(currentDelay + 0.5);
+        dataRef.current.setShowDelayIndicator(true);
+        dataRef.current.setCurrentOverlay("subtitle");
+
+        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
+        subtitleDebounce.current = setTimeout(() => {
+          dataRef.current.setShowDelayIndicator(false);
+          dataRef.current.setCurrentOverlay(null);
+        }, 3000);
+        return;
+      }
+
       // Video progress - handle skip shortcuts
       // Skip repeated key events to prevent multiple skips
       if (evt.repeat) return;
@@ -701,40 +740,6 @@ export function KeyboardEvents() {
           document.body.removeAttribute("data-no-scroll");
           dataRef.current.setIsRolling(false);
         }, 1e3);
-      }
-
-      // Subtitle sync - customizable
-      if (
-        matchesShortcut(
-          evt,
-          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_EARLIER],
-        )
-      ) {
-        dataRef.current.setDelay(dataRef.current.delay - 0.5);
-        dataRef.current.setShowDelayIndicator(true);
-        dataRef.current.setCurrentOverlay("subtitle");
-
-        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
-        subtitleDebounce.current = setTimeout(() => {
-          dataRef.current.setShowDelayIndicator(false);
-          dataRef.current.setCurrentOverlay(null);
-        }, 3000);
-      }
-      if (
-        matchesShortcut(
-          evt,
-          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_LATER],
-        )
-      ) {
-        dataRef.current.setDelay(dataRef.current.delay + 0.5);
-        dataRef.current.setShowDelayIndicator(true);
-        dataRef.current.setCurrentOverlay("subtitle");
-
-        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
-        subtitleDebounce.current = setTimeout(() => {
-          dataRef.current.setShowDelayIndicator(false);
-          dataRef.current.setCurrentOverlay(null);
-        }, 3000);
       }
     };
 

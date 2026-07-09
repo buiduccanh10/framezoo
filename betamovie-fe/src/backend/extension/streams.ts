@@ -14,6 +14,9 @@ function extractDomainsFromStream(stream: Stream): string[] {
   if (stream.type === "hls") {
     return [extractDomain(stream.playlist)].filter((v): v is string => !!v);
   }
+  if (stream.type === "dash") {
+    return [extractDomain(stream.manifest)].filter((v): v is string => !!v);
+  }
   if (stream.type === "file") {
     return Object.values(stream.qualities)
       .map((v) => extractDomain(v.url))

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { PROVIDER_METADATA_CACHE_UPDATED_EVENT } from "@/backend/providers/metadataEvents";
 import type { MetaOutput } from "@/lib/providers";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
@@ -137,6 +138,8 @@ export async function loadProviderMetadata(force = false): Promise<void> {
     }
 
     let lastError: unknown = null;
+    const hadExistingMetadata =
+      providerMetadataLoaded || providerMetadataById.size > 0;
     for (const backendUrl of backendCandidates) {
       try {
         const metadata = await fetchProviderMetadataFrom(backendUrl);
@@ -148,8 +151,10 @@ export async function loadProviderMetadata(force = false): Promise<void> {
       }
     }
 
-    setProviderMetadata([]);
-    providerMetadataLoaded = false;
+    if (!hadExistingMetadata) {
+      setProviderMetadata([]);
+      providerMetadataLoaded = false;
+    }
     if (lastError) {
       console.warn(
         "[ProviderMetadata] Failed to load remote metadata",
@@ -171,12 +176,14 @@ export function applyProviderMetadataOverride<
     rank?: number;
     disabled?: boolean;
   },
->(provider: T): T {
+>(provider: T): T | null {
+  if (!providerMetadataLoaded) return null;
+
   const override = providerMetadataById.get(provider.id);
 
-  if (!override) return provider;
+  if (!override) return null;
   if (override.type && provider.type && override.type !== provider.type) {
-    return provider;
+    return null;
   }
 
   return {
@@ -195,13 +202,34 @@ export function subscribeProviderMetadata(listener: () => void) {
   };
 }
 
+export function hasLoadedProviderMetadata(): boolean {
+  return providerMetadataLoaded;
+}
+
 export function useProviderMetadataVersion(): number {
   const [version, setVersion] = useState(providerMetadataVersion);
 
-  useEffect(
-    () => subscribeProviderMetadata(() => setVersion(providerMetadataVersion)),
-    [],
-  );
+  useEffect(() => {
+    const unsubscribe = subscribeProviderMetadata(() =>
+      setVersion(providerMetadataVersion),
+    );
+    const handleCacheUpdate = () => {
+      setVersion((currentVersion) => currentVersion + 1);
+    };
+
+    window.addEventListener(
+      PROVIDER_METADATA_CACHE_UPDATED_EVENT,
+      handleCacheUpdate,
+    );
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener(
+        PROVIDER_METADATA_CACHE_UPDATED_EVENT,
+        handleCacheUpdate,
+      );
+    };
+  }, []);
 
   return version;
 }

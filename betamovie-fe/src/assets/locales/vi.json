@@ -608,6 +608,28 @@
       "empty": "Chưa có nội dung tải xuống nào được định cấu hình.",
       "failed": "Không tải được các tùy chọn tải xuống.",
       "label": "Tải xuống ứng dụng",
+      "options": {
+        "mac-arm64": {
+          "description": "Tốt nhất cho máy Mac dòng M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Hoạt động trên cả máy Mac Apple Silicon và Intel",
+          "label": "macOS phổ thông"
+        },
+        "mac-x64": {
+          "description": "Tốt nhất cho máy Mac Intel",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Tốt nhất cho PC Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Tốt nhất cho PC Windows 64-bit",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Không có URL phụ trợ nào được định cấu hình."
     },
     "install": {

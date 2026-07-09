@@ -608,6 +608,28 @@
       "empty": "Még nincsenek letöltések konfigurálva.",
       "failed": "Nem sikerült betölteni a letöltési lehetőségeket.",
       "label": "Töltse le az alkalmazást",
+      "options": {
+        "mac-arm64": {
+          "description": "A legjobb az M-sorozatú Mac-ekhez",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Apple Silicon és Intel Mac gépeken is működik",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "A legjobb Intel Mac gépekhez",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "A legjobb Snapdragon/ARM Windows PC-khez",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "A legjobb 64 bites Windows PC-khez",
+          "label": "Windows x64"
+        }
+      },
       "unavailable": "Nincs beállítva háttér-URL."
     },
     "install": {

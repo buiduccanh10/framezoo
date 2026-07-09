@@ -608,6 +608,28 @@
       "empty": "ابھی تک کوئی ڈاؤن لوڈز کنفیگر نہیں ہوئے ہیں۔",
       "failed": "ڈاؤن لوڈ کے اختیارات لوڈ کرنے میں ناکام۔",
       "label": "ایپ ڈاؤن لوڈ کریں۔",
+      "options": {
+        "mac-arm64": {
+          "description": "ایم سیریز میکس کے لیے بہترین",
+          "label": "میکوس ایپل سلیکن"
+        },
+        "mac-universal": {
+          "description": "Apple Silicon اور Intel Macs دونوں پر کام کرتا ہے۔",
+          "label": "میکوس یونیورسل"
+        },
+        "mac-x64": {
+          "description": "Intel Macs کے لیے بہترین",
+          "label": "میکوس انٹیل"
+        },
+        "win-arm64": {
+          "description": "Snapdragon/ARM Windows PCs کے لیے بہترین",
+          "label": "ونڈوز ARM64"
+        },
+        "win-x64": {
+          "description": "64 بٹ ونڈوز پی سی کے لیے بہترین",
+          "label": "ونڈوز ایکس 64"
+        }
+      },
       "unavailable": "کوئی بیک اینڈ یو آر ایل کنفیگر نہیں ہے۔"
     },
     "install": {

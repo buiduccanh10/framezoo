@@ -12,7 +12,7 @@ import { getSavedProgressTime } from "@/stores/progress/selectors";
 
 export interface Source {
   url: string;
-  type: "hls" | "mp4";
+  type: "hls" | "mp4" | "dash";
 }
 
 export function usePlayer() {
@@ -54,8 +54,8 @@ export function usePlayer() {
         startAtOverride ?? getSavedProgressTime(progressStore.items, meta);
       setCaption(null);
       setEmbedId(null);
-      setSource(source, captions, start);
       setSourceId(sourceId);
+      setSource(source, captions, start);
       setStatus(playerStatus.PLAYING);
       init();
     },

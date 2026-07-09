@@ -7,13 +7,10 @@ import {
   shell,
   type Input,
 } from "electron";
-import { autoUpdater } from "electron-updater";
 import path from "node:path";
-import fs from "node:fs";
-import os from "node:os";
-import https from "node:https";
-import { spawn } from "node:child_process";
-import { pathToFileURL } from "node:url";
+import { createDesktopAppUpdater } from "./desktopAppUpdater";
+import { createDesktopPipController } from "./desktopPip";
+import type { ExtensionMessageName, StreamRule } from "./types";
 
 const APP_ID = "com.alphaflix.desktop";
 const APP_NAME = "AlphaFlix";
@@ -30,52 +27,20 @@ const DEVTOOLS_PROTECTION_ENABLED =
 const ENABLE_DEVTOOLS = !DEVTOOLS_PROTECTION_ENABLED;
 
 let mainWindow: BrowserWindow | null = null;
-let desktopPipWindow: BrowserWindow | null = null;
-let desktopPipState: Record<string, unknown> | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
-let hasInitializedDesktopAppUpdater = false;
-let desktopAppUpdateInterval: NodeJS.Timeout | null = null;
-
-type DesktopAppUpdateStatus =
-  | "idle"
-  | "checking"
-  | "available"
-  | "downloading"
-  | "downloaded"
-  | "error";
-
-type DesktopAppUpdateState = {
-  status: DesktopAppUpdateStatus;
-  updateToken: string | null;
-  updateVersion: string | null;
-  progressPercent: number | null;
-  errorMessage: string | null;
-};
-
-let desktopAppUpdateState: DesktopAppUpdateState = {
-  status: "idle",
-  updateToken: null,
-  updateVersion: null,
-  progressPercent: null,
-  errorMessage: null,
-};
-
-type ExtensionMessageName =
-  | "hello"
-  | "makeRequest"
-  | "prepareStream"
-  | "openPage";
-
-type StreamRule = {
-  targetDomains: string[];
-  requestHeaders?: Record<string, string>;
-  responseHeaders?: Record<string, string>;
-};
 
 const streamRules = new Map<number, StreamRule>();
 
 function getWindowIconPath() {
   return path.join(__dirname, "..", "build", "icon.png");
+}
+
+function getPreloadPath() {
+  return path.join(__dirname, "preload.cjs");
+}
+
+function getRendererEntryPath() {
+  return path.join(__dirname, "..", "renderer", "index.html");
 }
 
 function getConfiguredBackendUrl() {
@@ -84,33 +49,6 @@ function getConfiguredBackendUrl() {
     process.env.VITE_BACKEND_URL ??
     DEFAULT_BACKEND_URL
   );
-}
-
-function getDesktopUpdateFeedSlug() {
-  const arch = process.arch === "arm64" ? "arm64" : "x64";
-  return `${process.platform === "darwin" ? "mac" : "win"}-${arch}`;
-}
-
-function getDesktopUpdateFeedUrl() {
-  const backendUrl = new URL(getConfiguredBackendUrl());
-  return new URL(
-    `/desktop-updates/${DESKTOP_APP_UPDATE_CHANNEL}/${getDesktopUpdateFeedSlug()}/`,
-    backendUrl,
-  ).toString();
-}
-
-function isDesktopAppUpdaterSupported() {
-  return process.platform === "darwin" || process.platform === "win32";
-}
-
-function setDesktopAppUpdateState(
-  nextState: Partial<DesktopAppUpdateState>,
-) {
-  desktopAppUpdateState = {
-    ...desktopAppUpdateState,
-    ...nextState,
-  };
-  sendDesktopAppUpdateState();
 }
 
 function normalizeWindowTitle(title: string) {
@@ -125,9 +63,7 @@ function normalizeWindowTitle(title: string) {
 function matchesRule(hostname: string, domains: string[]) {
   return domains.some((domain) => {
     const normalized = domain.toLowerCase();
-    return (
-      hostname === normalized || hostname.endsWith(`.${normalized}`)
-    );
+    return hostname === normalized || hostname.endsWith(`.${normalized}`);
   });
 }
 
@@ -328,349 +264,36 @@ function registerHeaderInterceptors() {
   });
 }
 
-function getRendererEntryPath() {
-  return path.join(__dirname, "..", "renderer", "index.html");
-}
-
-function getDesktopPipUrl() {
-  if (RENDERER_DEV_URL) {
-    return `${RENDERER_DEV_URL.replace(/\/$/, "")}/#${DESKTOP_PIP_ROUTE}`;
-  }
-
-  return `${pathToFileURL(getRendererEntryPath()).toString()}#${DESKTOP_PIP_ROUTE}`;
-}
-
 function notifyMainWindowDesktopPipClosed() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
   mainWindow.webContents.send("desktop:pip-closed");
 }
 
-function sendDesktopPipState() {
-  if (!desktopPipWindow || desktopPipWindow.isDestroyed() || !desktopPipState) {
-    return;
-  }
+const desktopAppUpdater = createDesktopAppUpdater({
+  appName: APP_NAME,
+  checkIntervalMs: DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS,
+  getBackendUrl: getConfiguredBackendUrl,
+  onStateChange: () => {
+    sendDesktopAppUpdateState();
+  },
+  updateChannel: DESKTOP_APP_UPDATE_CHANNEL,
+});
 
-  desktopPipWindow.webContents.send("desktop:pip-state", desktopPipState);
-}
+const desktopPipController = createDesktopPipController({
+  desktopPipRoute: DESKTOP_PIP_ROUTE,
+  enableDevTools: ENABLE_DEVTOOLS,
+  onClosed: notifyMainWindowDesktopPipClosed,
+  preloadPath: getPreloadPath(),
+  rendererDevUrl: RENDERER_DEV_URL,
+  rendererEntryPath: getRendererEntryPath(),
+});
 
 function sendDesktopAppUpdateState() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  mainWindow.webContents.send("desktop:app-update-state", desktopAppUpdateState);
-}
-
-async function checkForDesktopAppUpdate() {
-  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
-
-  setDesktopAppUpdateState({
-    status: "checking",
-    progressPercent: null,
-    errorMessage: null,
-  });
-
-  try {
-    await autoUpdater.checkForUpdates();
-    return (
-      desktopAppUpdateState.status === "available" ||
-      desktopAppUpdateState.status === "downloading" ||
-      desktopAppUpdateState.status === "downloaded"
-    );
-  } catch (error) {
-    setDesktopAppUpdateState({
-      status: "error",
-      progressPercent: null,
-      errorMessage: error instanceof Error ? error.message : "Unknown update error",
-    });
-    return false;
-  }
-}
-
-async function downloadDesktopAppUpdate() {
-  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
-
-  setDesktopAppUpdateState({
-    status: "downloading",
-    progressPercent: 0,
-    errorMessage: null,
-  });
-
-  try {
-    if (process.platform === "darwin") {
-      const version = desktopAppUpdateState.updateVersion;
-      if (!version) throw new Error("No update version available");
-
-      const arch = process.arch === "arm64" ? "arm64" : "x64";
-      const zipFileName = `AlphaFlix-${version}-${arch}-mac.zip`;
-      const downloadUrl = `${getDesktopUpdateFeedUrl()}${zipFileName}`;
-
-      const tempZipPath = path.join(os.tmpdir(), "AlphaFlix-update.zip");
-
-      await new Promise<void>((resolve, reject) => {
-        const file = fs.createWriteStream(tempZipPath);
-        https.get(downloadUrl, (response) => {
-          if (response.statusCode !== 200 && response.statusCode !== 302) {
-            reject(new Error(`Failed to download update: ${response.statusCode}`));
-            return;
-          }
-
-          if (response.statusCode === 302 && response.headers.location) {
-            // Handle redirect if any
-            https.get(response.headers.location, handleDownload).on("error", handleError);
-          } else {
-            handleDownload(response);
-          }
-
-          function handleDownload(res: any) {
-            const totalBytes = parseInt(res.headers["content-length"] || "0", 10);
-            let downloadedBytes = 0;
-
-            res.on("data", (chunk: any) => {
-              downloadedBytes += chunk.length;
-              if (totalBytes > 0) {
-                const percent = Math.round((downloadedBytes / totalBytes) * 100);
-                setDesktopAppUpdateState({
-                  status: "downloading",
-                  progressPercent: percent,
-                  errorMessage: null,
-                });
-              }
-            });
-
-            res.pipe(file);
-
-            file.on("finish", () => {
-              file.close();
-              resolve();
-            });
-          }
-
-          function handleError(err: Error) {
-            fs.unlink(tempZipPath, () => {});
-            reject(err);
-          }
-        }).on("error", (err) => {
-          fs.unlink(tempZipPath, () => {});
-          reject(err);
-        });
-      });
-
-      setDesktopAppUpdateState({
-        status: "downloaded",
-        updateToken: version,
-        updateVersion: version,
-        progressPercent: 100,
-        errorMessage: null,
-      });
-      return true;
-    }
-
-    await autoUpdater.downloadUpdate();
-    return true;
-  } catch (error) {
-    setDesktopAppUpdateState({
-      status: "available",
-      progressPercent: null,
-      errorMessage:
-        error instanceof Error ? error.message : "Failed to download update",
-    });
-    return false;
-  }
-}
-
-function installDesktopAppUpdate() {
-  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) return false;
-  if (desktopAppUpdateState.status !== "downloaded") return false;
-
-  if (process.platform === "darwin") {
-    const zipPath = path.join(os.tmpdir(), "AlphaFlix-update.zip");
-    const scriptPath = path.join(os.tmpdir(), "AlphaFlix-updater.sh");
-    
-    let appPath = process.execPath;
-    if (appPath.includes(".app/Contents/MacOS/")) {
-      appPath = appPath.substring(0, appPath.indexOf(".app") + 4);
-    } else {
-      appPath = "/Applications/AlphaFlix.app";
-    }
-
-    const scriptContent = `#!/bin/bash
-sleep 2
-rm -rf "${appPath}"
-unzip -q "${zipPath}" -d "${path.dirname(appPath)}"
-xattr -cr "${appPath}"
-codesign --force --deep -s - "${appPath}"
-open "${appPath}"
-`;
-    
-    fs.writeFileSync(scriptPath, scriptContent, { mode: 0o755 });
-    
-    spawn("bash", [scriptPath], {
-      detached: true,
-      stdio: "ignore"
-    }).unref();
-    
-    app.quit();
-    return true;
-  }
-
-  autoUpdater.quitAndInstall(true, true);
-  return true;
-}
-
-function initializeDesktopAppUpdater() {
-  if (hasInitializedDesktopAppUpdater) return;
-  hasInitializedDesktopAppUpdater = true;
-
-  if (!app.isPackaged || !isDesktopAppUpdaterSupported()) {
-    return;
-  }
-
-  autoUpdater.autoDownload = false;
-  autoUpdater.autoInstallOnAppQuit = false;
-  autoUpdater.setFeedURL({
-    provider: "generic",
-    url: getDesktopUpdateFeedUrl(),
-  });
-
-  autoUpdater.on("checking-for-update", () => {
-    setDesktopAppUpdateState({
-      status: "checking",
-      progressPercent: null,
-      errorMessage: null,
-    });
-  });
-
-  autoUpdater.on("update-available", (info: any) => {
-    setDesktopAppUpdateState({
-      status: "available",
-      updateToken: info?.version ?? app.getVersion(),
-      updateVersion: info?.version ?? app.getVersion(),
-      progressPercent: null,
-      errorMessage: null,
-    });
-  });
-
-  autoUpdater.on("update-not-available", () => {
-    setDesktopAppUpdateState({
-      status: "idle",
-      updateToken: null,
-      updateVersion: null,
-      progressPercent: null,
-      errorMessage: null,
-    });
-  });
-
-  autoUpdater.on("download-progress", (progress: any) => {
-    setDesktopAppUpdateState({
-      status: "downloading",
-      progressPercent:
-        typeof progress?.percent === "number" ? progress.percent : null,
-      errorMessage: null,
-    });
-  });
-
-  autoUpdater.on("update-downloaded", (info: any) => {
-    setDesktopAppUpdateState({
-      status: "downloaded",
-      updateToken: info?.version ?? desktopAppUpdateState.updateToken,
-      updateVersion: info?.version ?? desktopAppUpdateState.updateVersion,
-      progressPercent: 100,
-      errorMessage: null,
-    });
-  });
-
-  autoUpdater.on("error", (error) => {
-    setDesktopAppUpdateState({
-      status:
-        desktopAppUpdateState.updateToken &&
-        desktopAppUpdateState.status !== "idle"
-          ? "available"
-          : "error",
-      progressPercent: null,
-      errorMessage: error?.message ?? "Desktop update failed",
-    });
-  });
-
-  setTimeout(() => {
-    void checkForDesktopAppUpdate();
-  }, 5000);
-
-  desktopAppUpdateInterval = setInterval(() => {
-    void checkForDesktopAppUpdate();
-  }, DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS);
-}
-
-function createDesktopPipWindow() {
-  if (desktopPipWindow && !desktopPipWindow.isDestroyed()) {
-    return desktopPipWindow;
-  }
-
-  desktopPipWindow = new BrowserWindow({
-    width: 420,
-    height: 236,
-    minWidth: 320,
-    minHeight: 180,
-    maxWidth: 1280,
-    maxHeight: 720,
-    backgroundColor: "#000000",
-    alwaysOnTop: true,
-    frame: false,
-    resizable: true,
-    skipTaskbar: true,
-    autoHideMenuBar: true,
-    show: false,
-    fullscreenable: false,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.cjs"),
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: false,
-      webSecurity: false,
-      devTools: ENABLE_DEVTOOLS,
-      backgroundThrottling: false,
-    },
-  });
-
-  desktopPipWindow.setAlwaysOnTop(true, "screen-saver");
-  desktopPipWindow.setVisibleOnAllWorkspaces(true, {
-    visibleOnFullScreen: true,
-    skipTransformProcessType: true,
-  });
-  desktopPipWindow.setAspectRatio(16 / 9);
-  desktopPipWindow.setWindowButtonVisibility(false);
-
-  desktopPipWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (/^https?:\/\//i.test(url)) {
-      void shell.openExternal(url);
-      return { action: "deny" };
-    }
-
-    return { action: "allow" };
-  });
-
-  desktopPipWindow.webContents.on("will-navigate", (event, url) => {
-    const currentUrl = desktopPipWindow?.webContents.getURL();
-    if (url !== currentUrl && /^https?:\/\//i.test(url)) {
-      event.preventDefault();
-      void shell.openExternal(url);
-    }
-  });
-
-  desktopPipWindow.webContents.on("did-finish-load", () => {
-    sendDesktopPipState();
-  });
-
-  desktopPipWindow.once("ready-to-show", () => {
-    desktopPipWindow?.show();
-  });
-
-  desktopPipWindow.on("closed", () => {
-    desktopPipWindow = null;
-    desktopPipState = null;
-    notifyMainWindowDesktopPipClosed();
-  });
-
-  void desktopPipWindow.loadURL(getDesktopPipUrl());
-
-  return desktopPipWindow;
+  mainWindow.webContents.send(
+    "desktop:app-update-state",
+    desktopAppUpdater.getState(),
+  );
 }
 
 function createMainWindow() {
@@ -684,7 +307,7 @@ function createMainWindow() {
     autoHideMenuBar: true,
     icon: getWindowIconPath(),
     webPreferences: {
-      preload: path.join(__dirname, "preload.cjs"),
+      preload: getPreloadPath(),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
@@ -741,28 +364,26 @@ function createMainWindow() {
   }
 
   mainWindow.on("closed", () => {
-    if (desktopPipWindow && !desktopPipWindow.isDestroyed()) {
-      desktopPipWindow.close();
-    }
+    desktopPipController.close();
     mainWindow = null;
   });
 }
 
 function registerIpcHandlers() {
   ipcMain.handle("desktop:app-update-get-state", async () => {
-    return desktopAppUpdateState;
+    return desktopAppUpdater.getState();
   });
 
   ipcMain.handle("desktop:app-update-check", async () => {
-    return checkForDesktopAppUpdate();
+    return desktopAppUpdater.checkForUpdate();
   });
 
   ipcMain.handle("desktop:app-update-download", async () => {
-    return downloadDesktopAppUpdate();
+    return desktopAppUpdater.downloadUpdate();
   });
 
   ipcMain.handle("desktop:app-update-install", async () => {
-    return installDesktopAppUpdate();
+    return desktopAppUpdater.installUpdate();
   });
 
   ipcMain.handle(
@@ -790,43 +411,30 @@ function registerIpcHandlers() {
     return true;
   });
 
-  ipcMain.handle("desktop:pip-open", async (_event, nextState: any) => {
-    desktopPipState = nextState ?? null;
-    if (!desktopPipState) return false;
-
-    const pipWindow = createDesktopPipWindow();
-    sendDesktopPipState();
-    if (pipWindow.isMinimized()) {
-      pipWindow.restore();
-    }
-    if (typeof pipWindow.showInactive === "function") {
-      pipWindow.showInactive();
-    } else {
-      pipWindow.show();
-    }
-    return true;
-  });
+  ipcMain.handle(
+    "desktop:pip-open",
+    async (_event, nextState: any, nextWindowSize: any) => {
+      return desktopPipController.open(
+        nextState ?? null,
+        nextWindowSize ?? null,
+      );
+    },
+  );
 
   ipcMain.handle("desktop:pip-update", async (_event, nextState: any) => {
-    desktopPipState = nextState ?? null;
-    sendDesktopPipState();
-    return Boolean(desktopPipWindow && !desktopPipWindow.isDestroyed());
+    return desktopPipController.update(nextState ?? null);
   });
 
   ipcMain.handle("desktop:pip-close", async () => {
-    desktopPipState = null;
-
-    if (!desktopPipWindow || desktopPipWindow.isDestroyed()) {
+    const didClose = desktopPipController.close();
+    if (!didClose) {
       notifyMainWindowDesktopPipClosed();
-      return false;
     }
-
-    desktopPipWindow.close();
-    return true;
+    return didClose;
   });
 
   ipcMain.handle("desktop:pip-get-state", async () => {
-    return desktopPipState;
+    return desktopPipController.getState();
   });
 
   ipcMain.handle("desktop:pip-action", async (_event, action: any) => {
@@ -874,7 +482,7 @@ if (!hasSingleInstanceLock) {
     registerIpcHandlers();
     registerHeaderInterceptors();
     createMainWindow();
-    initializeDesktopAppUpdater();
+    desktopAppUpdater.initialize();
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {
@@ -891,7 +499,5 @@ app.on("window-all-closed", () => {
 });
 
 app.on("before-quit", () => {
-  if (!desktopAppUpdateInterval) return;
-  clearInterval(desktopAppUpdateInterval);
-  desktopAppUpdateInterval = null;
+  desktopAppUpdater.dispose();
 });
