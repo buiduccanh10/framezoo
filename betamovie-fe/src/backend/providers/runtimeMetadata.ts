@@ -138,6 +138,8 @@ export async function loadProviderMetadata(force = false): Promise<void> {
     }
 
     let lastError: unknown = null;
+    const hadExistingMetadata =
+      providerMetadataLoaded || providerMetadataById.size > 0;
     for (const backendUrl of backendCandidates) {
       try {
         const metadata = await fetchProviderMetadataFrom(backendUrl);
@@ -149,8 +151,10 @@ export async function loadProviderMetadata(force = false): Promise<void> {
       }
     }
 
-    setProviderMetadata([]);
-    providerMetadataLoaded = false;
+    if (!hadExistingMetadata) {
+      setProviderMetadata([]);
+      providerMetadataLoaded = false;
+    }
     if (lastError) {
       console.warn(
         "[ProviderMetadata] Failed to load remote metadata",
@@ -196,6 +200,10 @@ export function subscribeProviderMetadata(listener: () => void) {
   return () => {
     subscribers.delete(listener);
   };
+}
+
+export function hasLoadedProviderMetadata(): boolean {
+  return providerMetadataLoaded;
 }
 
 export function useProviderMetadataVersion(): number {
