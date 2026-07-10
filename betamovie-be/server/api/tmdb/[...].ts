@@ -12,11 +12,7 @@ const TMDB_PROXY_METADATA_CACHE_TTL = Number(
 const TMDB_PROXY_DETAIL_CACHE_TTL = Number(
   process.env.TMDB_PROXY_DETAIL_CACHE_TTL || ONE_HOUR_SECONDS
 );
-const TMDB_PROXY_SORT_SOURCE_PAGE_COUNT = toPositiveTtl(
-  Number(process.env.TMDB_PROXY_SORT_SOURCE_PAGE_COUNT || 100),
-  100
-);
-const TMDB_PROXY_CACHE_VERSION = 'v2';
+const TMDB_PROXY_CACHE_VERSION = 'v3';
 
 const TMDB_DETAIL_PATH_PATTERNS = [
   /^movie\/\d+$/i,
@@ -24,21 +20,6 @@ const TMDB_DETAIL_PATH_PATTERNS = [
   /^tv\/\d+\/season\/\d+$/i,
   /^tv\/\d+\/season\/\d+\/episode\/\d+$/i,
 ];
-// Keep TMDB's native text relevance for search endpoints.
-const TMDB_SORTABLE_PATH_PATTERNS = [
-  /^discover\/(?:movie|tv)$/i,
-  /^(?:movie|tv)\/(?:popular|top_rated|now_playing|on_the_air|airing_today|upcoming)$/i,
-  /^(?:movie|tv)\/\d+\/recommendations$/i,
-];
-
-type SortableMediaItem = Record<string, any>;
-type TmdbResultsPayload = {
-  page?: number;
-  results?: SortableMediaItem[];
-  total_pages?: number;
-  total_results?: number;
-};
-
 const resolveTmdbCacheTtl = (path: string) => {
   const normalizedPath = path.replace(/^\/+|\/+$/g, '').toLowerCase();
   const metadataTtl = toPositiveTtl(TMDB_PROXY_METADATA_CACHE_TTL, ONE_DAY_SECONDS);
@@ -49,183 +30,6 @@ const resolveTmdbCacheTtl = (path: string) => {
   }
 
   return metadataTtl;
-};
-
-const normalizeTmdbPath = (path: string) => path.replace(/^\/+|\/+$/g, '').toLowerCase();
-
-const toPositiveInteger = (value: unknown, fallback: number) => {
-  if (typeof value === 'number' && Number.isFinite(value) && value > 0) {
-    return Math.floor(value);
-  }
-
-  if (typeof value === 'string') {
-    const parsed = Number.parseInt(value, 10);
-    if (Number.isFinite(parsed) && parsed > 0) {
-      return parsed;
-    }
-  }
-
-  return fallback;
-};
-
-const extractYear = (value: unknown): number | null => {
-  if (value instanceof Date) {
-    const year = value.getFullYear();
-    return Number.isFinite(year) ? year : null;
-  }
-
-  if (typeof value !== 'string') return null;
-
-  const parsedYear = Number.parseInt(value.slice(0, 4), 10);
-  return Number.isFinite(parsedYear) ? parsedYear : null;
-};
-
-const getReferenceYear = (item: SortableMediaItem): number => {
-  const seasonYears = Array.isArray(item.seasons)
-    ? item.seasons
-        .map((season: SortableMediaItem) => extractYear(season?.air_date))
-        .filter((year): year is number => year !== null)
-    : [];
-
-  const candidateYears = [
-    extractYear(item.last_episode_to_air?.air_date),
-    extractYear(item.last_air_date),
-    seasonYears.length ? Math.max(...seasonYears) : null,
-    extractYear(item.air_date),
-    extractYear(item.release_date),
-    extractYear(item.first_air_date),
-    extractYear(item.original_release_date),
-  ].filter((year): year is number => year !== null);
-
-  return candidateYears.length > 0 ? Math.max(...candidateYears) : 0;
-};
-
-const isMovieOrTvResult = (item: unknown): item is SortableMediaItem => {
-  if (!item || typeof item !== 'object') return false;
-
-  const candidate = item as SortableMediaItem;
-  if (candidate.media_type === 'person') return false;
-  if (candidate.media_type === 'movie' || candidate.media_type === 'tv') {
-    return true;
-  }
-
-  return (
-    'vote_average' in candidate ||
-    'vote_count' in candidate ||
-    'release_date' in candidate ||
-    'first_air_date' in candidate ||
-    'last_air_date' in candidate
-  );
-};
-
-
-
-const compareSortableMediaItems = (
-  a: SortableMediaItem,
-  b: SortableMediaItem,
-) => {
-  const isMediaA = isMovieOrTvResult(a);
-  const isMediaB = isMovieOrTvResult(b);
-
-  if (isMediaA !== isMediaB) {
-    return isMediaA ? -1 : 1;
-  }
-
-  if (!isMediaA && !isMediaB) return 0;
-
-  const yearDiff = getReferenceYear(b) - getReferenceYear(a);
-  if (yearDiff !== 0) return yearDiff;
-
-  const voteAverageDiff = (Number(b.vote_average) || 0) - (Number(a.vote_average) || 0);
-  if (voteAverageDiff !== 0) return voteAverageDiff;
-
-  const voteCountDiff = (Number(b.vote_count) || 0) - (Number(a.vote_count) || 0);
-  if (voteCountDiff !== 0) return voteCountDiff;
-
-  const popularityDiff = (Number(b.popularity) || 0) - (Number(a.popularity) || 0);
-  if (popularityDiff !== 0) return popularityDiff;
-
-  return (Number(b.id) || 0) - (Number(a.id) || 0);
-};
-
-const sortTmdbResults = (items: SortableMediaItem[]) => {
-  return [...items].sort((a, b) => compareSortableMediaItems(a, b));
-};
-
-const isSortableTmdbPath = (path: string) => {
-  const normalizedPath = normalizeTmdbPath(path);
-  return TMDB_SORTABLE_PATH_PATTERNS.some(pattern => pattern.test(normalizedPath));
-};
-
-const hasSortableResultsPayload = (payload: unknown): payload is TmdbResultsPayload =>
-  Boolean(payload) &&
-  typeof payload === 'object' &&
-  'results' in payload &&
-  Array.isArray((payload as TmdbResultsPayload).results);
-
-const shouldAggregateTmdbResults = (path: string, payload: TmdbResultsPayload) =>
-  isSortableTmdbPath(path) &&
-  Array.isArray(payload.results) &&
-  payload.results.length > 0 &&
-  toPositiveInteger(payload.total_pages, 1) > 1 &&
-  TMDB_PROXY_SORT_SOURCE_PAGE_COUNT > 1;
-
-const sortAndPaginateTmdbResults = async (
-  path: string,
-  requestedPage: number,
-  firstPayload: TmdbResultsPayload,
-  fetchPage: (pageNumber: number) => Promise<TmdbResultsPayload>
-) => {
-  if (!hasSortableResultsPayload(firstPayload) || !isSortableTmdbPath(path)) {
-    return firstPayload;
-  }
-
-  if (!shouldAggregateTmdbResults(path, firstPayload)) {
-    const sortedResults = sortTmdbResults(firstPayload.results ?? []);
-
-    return {
-      ...firstPayload,
-      page: requestedPage,
-      total_results: sortedResults.length,
-      results: sortedResults,
-    };
-  }
-
-  const sourcePageCount = Math.min(
-    toPositiveInteger(firstPayload.total_pages, 1),
-    TMDB_PROXY_SORT_SOURCE_PAGE_COUNT
-  );
-
-  if (requestedPage > sourcePageCount) {
-    const sortedResults = sortTmdbResults(firstPayload.results ?? []);
-
-    return {
-      ...firstPayload,
-      page: requestedPage,
-      total_pages: sourcePageCount,
-      total_results: sortedResults.length,
-      results: sortedResults,
-    };
-  }
-
-  const additionalPages = Array.from({ length: sourcePageCount }, (_, index) => index + 1).filter(
-    pageNumber => pageNumber !== requestedPage
-  );
-  const additionalPayloads = await Promise.all(additionalPages.map(pageNumber => fetchPage(pageNumber)));
-  const pageSize = firstPayload.results?.length || 20;
-  const mergedResults = sortTmdbResults(
-    [firstPayload, ...additionalPayloads].flatMap(payload => payload.results ?? [])
-  );
-  const totalPages = Math.max(1, Math.ceil(mergedResults.length / pageSize));
-  const startIndex = (requestedPage - 1) * pageSize;
-
-  return {
-    ...firstPayload,
-    page: requestedPage,
-    total_pages: totalPages,
-    total_results: mergedResults.length,
-    results: mergedResults.slice(startIndex, startIndex + pageSize),
-  };
 };
 
 export default defineEventHandler(async event => {
@@ -242,7 +46,11 @@ export default defineEventHandler(async event => {
   const query = getQuery(event);
   const targetUrl = joinURL('https://api.tmdb.org/3', path);
 
-  const tmdbKey = ((config.tmdbApiKey as string | undefined) || process.env.TMDB_API_KEY || '').trim();
+  const tmdbKey = (
+    (config.tmdbApiKey as string | undefined) ||
+    process.env.TMDB_API_KEY ||
+    ''
+  ).trim();
   const tmdbProxy = (config.tmdbProxyUrl as string)?.trim();
 
   // --- Caching Logic ---
@@ -296,7 +104,7 @@ export default defineEventHandler(async event => {
     };
   };
 
-  const shouldAttachPageParam = 'page' in finalQuery || isSortableTmdbPath(path);
+  const shouldAttachPageParam = 'page' in finalQuery;
   const fetchTmdbPage = async (pageNumber?: number) => {
     const queryParams = { ...finalQuery };
     if (shouldAttachPageParam && typeof pageNumber === 'number') {
@@ -321,16 +129,7 @@ export default defineEventHandler(async event => {
       console.log(`[TMDB Proxy] Forwarding Direct: ${targetUrl}`);
     }
 
-    const requestedPage = toPositiveInteger(query.page, 1);
-    const firstPayload = (await fetchTmdbPage(
-      shouldAttachPageParam ? requestedPage : undefined
-    )) as TmdbResultsPayload;
-    const data = await sortAndPaginateTmdbResults(
-      path,
-      requestedPage,
-      firstPayload,
-      pageNumber => fetchTmdbPage(pageNumber) as Promise<TmdbResultsPayload>
-    );
+    const data = await fetchTmdbPage();
 
     // Cache TMDB metadata long; keep detail endpoints shorter.
     try {

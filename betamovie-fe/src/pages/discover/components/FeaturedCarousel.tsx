@@ -38,7 +38,7 @@ export interface FeaturedMedia extends Partial<Movie & TVShow> {
   title?: string;
   name?: string;
   type: "movie" | "show";
-  source?: "latest" | "popular";
+  source?: "day" | "week";
   vote_average?: number;
   vote_count?: number;
   number_of_seasons?: number;
@@ -56,7 +56,6 @@ interface FeaturedCarouselProps {
   children?: ReactNode;
   searching?: boolean;
   shorter?: boolean;
-  forcedCategory?: "movies" | "tvshows";
 }
 
 interface FeaturedIMDbData {
@@ -71,25 +70,6 @@ interface FeaturedRTData {
   popcornIcon?: "upright" | "spilled" | "empty";
   popcornScore?: number;
   url: string;
-}
-
-function mergeFeaturedPools<T extends { type: "movie" | "show" }>(
-  shows: T[],
-  movies: T[],
-): T[] {
-  const mixed: T[] = [];
-  const maxLength = Math.max(shows.length, movies.length);
-
-  for (let index = 0; index < maxLength; index += 1) {
-    if (shows[index]) {
-      mixed.push(shows[index]);
-    }
-    if (movies[index]) {
-      mixed.push(movies[index]);
-    }
-  }
-
-  return mixed;
 }
 
 function selectFeaturedSlides(
@@ -185,7 +165,6 @@ export function FeaturedCarousel({
   children,
   searching,
   shorter,
-  forcedCategory,
 }: FeaturedCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -197,12 +176,14 @@ export function FeaturedCarousel({
   const [rtData, setRtData] = useState<FeaturedRTData | null>(null);
   const [isLoadingImdb, setIsLoadingImdb] = useState(false);
   const [isLoadingRt, setIsLoadingRt] = useState(false);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const logoFetchController = useRef<AbortController | null>(null);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
   const imdbCacheRef = useRef<Record<string, FeaturedIMDbData | null>>({});
   const rtCacheRef = useRef<Record<string, FeaturedRTData | null>>({});
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
+  const touchEndYRef = useRef<number | null>(null);
   const navigate = useNavigate();
 
   const userLanguage = useLanguageStore((s) => s.language);
@@ -219,7 +200,7 @@ export function FeaturedCarousel({
   const INITIAL_DETAIL_BATCH = 6;
   const INITIAL_SLIDE_QUANTITY = 4;
   const SLIDE_DURATION = 8000;
-  const FEATURED_POOL_SIZE_PER_TYPE = 10;
+  const FEATURED_POOL_SIZE = 20;
 
   useEffect(() => {
     if (isRestoring) return;
@@ -244,8 +225,8 @@ export function FeaturedCarousel({
       }
 
       try {
-        const endpointList = async (path: string, page = 1) => {
-          let data = await fetchCachedTmdb<any>(path, {
+        const endpointList = async <T,>(path: string, page = 1) => {
+          let data = await fetchCachedTmdb<{ results?: T[] }>(path, {
             language: formattedLanguage,
             page,
           });
@@ -253,7 +234,7 @@ export function FeaturedCarousel({
             (!data.results || data.results.length === 0) &&
             formattedLanguage !== "en-US"
           ) {
-            data = await fetchCachedTmdb<any>(path, {
+            data = await fetchCachedTmdb<{ results?: T[] }>(path, {
               language: "en-US",
               page,
             });
@@ -264,7 +245,15 @@ export function FeaturedCarousel({
         type MediaPick = {
           id: number;
           type: "movie" | "show";
-          source: "latest" | "popular";
+          source: "day" | "week";
+          vote_average?: number;
+          vote_count?: number;
+          release_date?: string;
+          first_air_date?: string;
+        };
+        type TrendingAllItem = {
+          id: number;
+          media_type?: string;
           vote_average?: number;
           vote_count?: number;
           release_date?: string;
@@ -295,76 +284,56 @@ export function FeaturedCarousel({
             return true;
           });
         };
-        const toMoviePick = (
-          movie: {
-            id: number;
-            vote_average?: number;
-            vote_count?: number;
-            release_date?: string;
-          },
-          source: "latest" | "popular",
-        ): MediaPick => ({
-          id: movie.id,
-          type: "movie",
-          source,
-          vote_average: movie.vote_average,
-          vote_count: movie.vote_count,
-          release_date: movie.release_date,
-        });
-        const toShowPick = (
-          show: {
-            id: number;
-            vote_average?: number;
-            vote_count?: number;
-            first_air_date?: string;
-          },
-          source: "latest" | "popular",
-        ): MediaPick => ({
-          id: show.id,
-          type: "show",
-          source,
-          vote_average: show.vote_average,
-          vote_count: show.vote_count,
-          first_air_date: show.first_air_date,
-        });
+        const toMediaPick = (
+          item: TrendingAllItem,
+          source: "day" | "week",
+        ): MediaPick | null => {
+          if (item.media_type === "movie") {
+            return {
+              id: item.id,
+              type: "movie",
+              source,
+              vote_average: item.vote_average,
+              vote_count: item.vote_count,
+              release_date: item.release_date,
+            };
+          }
+
+          if (item.media_type === "tv") {
+            return {
+              id: item.id,
+              type: "show",
+              source,
+              vote_average: item.vote_average,
+              vote_count: item.vote_count,
+              first_air_date: item.first_air_date,
+            };
+          }
+
+          return null;
+        };
         const selectFeaturedPool = (items: MediaPick[], limit: number) => {
           return uniqueByKey(items).slice(0, limit);
         };
-        const [trendingMovies, trendingTv] = await Promise.all([
-          endpointList("/trending/movie/day"),
-          endpointList("/trending/tv/day"),
+        const mapTrendingItems = (
+          items: TrendingAllItem[],
+          source: "day" | "week",
+        ) =>
+          items
+            .map((item) => toMediaPick(item, source))
+            .filter((item): item is MediaPick => item !== null);
+        const [trendingDay, trendingWeek] = await Promise.all([
+          endpointList<TrendingAllItem>("/trending/all/day"),
+          endpointList<TrendingAllItem>("/trending/all/week"),
         ]);
 
-        const movieFeaturedPool = selectFeaturedPool(
-          trendingMovies.map(
-            (show: {
-              id: number;
-              vote_average?: number;
-              vote_count?: number;
-              release_date?: string;
-            }) => toMoviePick(show, "latest"),
-          ),
-          FEATURED_POOL_SIZE_PER_TYPE,
+        const rankedSelection = selectFeaturedPool(
+          [
+            ...mapTrendingItems(trendingDay, "day"),
+            ...mapTrendingItems(trendingWeek, "week"),
+          ],
+          FEATURED_POOL_SIZE,
         );
-
-        const tvFeaturedPool = selectFeaturedPool(
-          trendingTv.map(
-            (show: {
-              id: number;
-              vote_average?: number;
-              vote_count?: number;
-              first_air_date?: string;
-            }) => toShowPick(show, "popular"),
-          ),
-          FEATURED_POOL_SIZE_PER_TYPE,
-        );
-
-        const rankedSelection =
-          forcedCategory === "movies"
-            ? movieFeaturedPool
-            : forcedCategory === "tvshows"
-              ? tvFeaturedPool
-              : mergeFeaturedPools(tvFeaturedPool, movieFeaturedPool);
         const initialSelection = rankedSelection.slice(0, INITIAL_DETAIL_BATCH);
         const remainingSelection = rankedSelection.slice(INITIAL_DETAIL_BATCH);
 
@@ -424,7 +393,7 @@ export function FeaturedCarousel({
     return () => {
       isCancelled = true;
     };
-  }, [forcedCategory, formattedLanguage, isRestoring, onInitialContentReady]);
+  }, [formattedLanguage, isRestoring, onInitialContentReady]);
 
   const handlePrevSlide = () => {
     setContentOpacity(0);
@@ -471,29 +440,53 @@ export function FeaturedCarousel({
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
+    touchStartXRef.current = e.targetTouches[0]?.clientX ?? null;
+    touchStartYRef.current = e.targetTouches[0]?.clientY ?? null;
+    touchEndXRef.current = null;
+    touchEndYRef.current = null;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
+    touchEndXRef.current = e.targetTouches[0]?.clientX ?? null;
+    touchEndYRef.current = e.targetTouches[0]?.clientY ?? null;
   };
 
   const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (
+      touchStartXRef.current === null ||
+      touchStartYRef.current === null ||
+      touchEndXRef.current === null ||
+      touchEndYRef.current === null
+    ) {
+      return;
+    }
 
-    const distance = touchStart - touchEnd;
+    const distanceX = touchStartXRef.current - touchEndXRef.current;
+    const distanceY = touchStartYRef.current - touchEndYRef.current;
     const minSwipeDistance = 50;
 
-    if (Math.abs(distance) > minSwipeDistance) {
-      if (distance > 0) {
+    if (
+      Math.abs(distanceX) > minSwipeDistance &&
+      Math.abs(distanceX) > Math.abs(distanceY)
+    ) {
+      if (distanceX > 0) {
         handleNextSlide();
       } else {
         handlePrevSlide();
       }
     }
 
-    setTouchStart(null);
-    setTouchEnd(null);
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+    touchEndXRef.current = null;
+    touchEndYRef.current = null;
+  };
+
+  const handleTouchCancel = () => {
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+    touchEndXRef.current = null;
+    touchEndYRef.current = null;
   };
 
   // Fetch clear logo when current media changes
@@ -791,9 +784,11 @@ export function FeaturedCarousel({
               : "h-[100vh]"
             : "h-[40rem] md:h-[100vh]",
       )}
+      style={{ touchAction: "pan-y" }}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
     >
       <div
         className={classNames(
