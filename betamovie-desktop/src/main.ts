@@ -3,9 +3,11 @@ import {
   BrowserWindow,
   dialog,
   ipcMain,
+  Menu,
   session,
   shell,
   type Input,
+  type MenuItemConstructorOptions,
 } from "electron";
 import path from "node:path";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
@@ -21,6 +23,7 @@ const DESKTOP_PIP_ROUTE = "/desktop-pip";
 const DESKTOP_APP_UPDATE_CHANNEL =
   process.env.BETAMOVIE_DESKTOP_UPDATE_CHANNEL ?? "stable";
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
+const DESKTOP_SETTINGS_ROUTE = "/settings";
 
 const DEVTOOLS_PROTECTION_ENABLED =
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
@@ -30,6 +33,10 @@ let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
 const streamRules = new Map<number, StreamRule>();
+
+function supportsDesktopAppUpdates() {
+  return process.platform === "darwin" || process.platform === "win32";
+}
 
 function getWindowIconPath() {
   return path.join(__dirname, "..", "build", "icon.png");
@@ -269,12 +276,77 @@ function notifyMainWindowDesktopPipClosed() {
   mainWindow.webContents.send("desktop:pip-closed");
 }
 
+function focusMainWindow(window: BrowserWindow) {
+  if (window.isMinimized()) {
+    window.restore();
+  }
+
+  window.show();
+  window.focus();
+}
+
+async function navigateMainWindowToRoute(route: string) {
+  const window = getOrCreateMainWindow();
+  focusMainWindow(window);
+
+  const navigateScript = `
+    (() => {
+      const route = ${JSON.stringify(route)};
+      const useNormalRouter = window.__CONFIG__?.VITE_NORMAL_ROUTER === "true";
+
+      if (useNormalRouter) {
+        if (window.location.pathname !== route) {
+          window.history.pushState({}, "", route);
+          window.dispatchEvent(new PopStateEvent("popstate"));
+        }
+        return;
+      }
+
+      if (window.location.hash !== "#" + route) {
+        window.location.hash = route;
+      }
+    })();
+  `;
+
+  const applyRoute = () => {
+    void window.webContents.executeJavaScript(navigateScript, true);
+  };
+
+  if (window.webContents.isLoadingMainFrame()) {
+    window.webContents.once("did-finish-load", applyRoute);
+    return;
+  }
+
+  applyRoute();
+}
+
+async function showDesktopSettings() {
+  await navigateMainWindowToRoute(DESKTOP_SETTINGS_ROUTE);
+}
+
+async function showDesktopMessageBox(options: {
+  type: "info" | "error";
+  title: string;
+  message: string;
+  detail?: string;
+}) {
+  const parentWindow =
+    mainWindow && !mainWindow.isDestroyed() ? mainWindow : undefined;
+  if (parentWindow) {
+    await dialog.showMessageBox(parentWindow, options);
+    return;
+  }
+
+  await dialog.showMessageBox(options);
+}
+
 const desktopAppUpdater = createDesktopAppUpdater({
   appName: APP_NAME,
   checkIntervalMs: DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS,
   getBackendUrl: getConfiguredBackendUrl,
   onStateChange: () => {
     sendDesktopAppUpdateState();
+    installApplicationMenu();
   },
   updateChannel: DESKTOP_APP_UPDATE_CHANNEL,
 });
@@ -296,6 +368,232 @@ function sendDesktopAppUpdateState() {
   );
 }
 
+async function handleDesktopAppUpdateMenuAction() {
+  const updateState = desktopAppUpdater.getState();
+
+  if (updateState.status === "downloaded") {
+    desktopAppUpdater.installUpdate();
+    return;
+  }
+
+  if (updateState.status === "available") {
+    const didStartDownload = await desktopAppUpdater.downloadUpdate();
+
+    if (!didStartDownload) {
+      const nextState = desktopAppUpdater.getState();
+      await showDesktopMessageBox({
+        type: "error",
+        title: "Desktop update failed",
+        message:
+          nextState.errorMessage ??
+          "Unable to download the latest desktop update.",
+      });
+    }
+    return;
+  }
+
+  if (updateState.status === "checking" || updateState.status === "downloading") {
+    return;
+  }
+
+  const hasUpdate = await desktopAppUpdater.checkForUpdate();
+  const nextState = desktopAppUpdater.getState();
+
+  if (hasUpdate) return;
+
+  if (nextState.status === "error") {
+    await showDesktopMessageBox({
+      type: "error",
+      title: "Desktop update failed",
+      message:
+        nextState.errorMessage ?? "Unable to check for desktop updates right now.",
+    });
+    return;
+  }
+
+  await showDesktopMessageBox({
+    type: "info",
+    title: "AlphaFlix is up to date",
+    message: `You are already on the latest desktop version (v${app.getVersion()}).`,
+  });
+}
+
+function getDesktopUpdateMenuItem(): MenuItemConstructorOptions {
+  const updateState = desktopAppUpdater.getState();
+  const canUseUpdates = app.isPackaged && supportsDesktopAppUpdates();
+  let label = "Check for Updates…";
+  let enabled = canUseUpdates;
+
+  switch (updateState.status) {
+    case "checking":
+      label = "Checking for Updates…";
+      enabled = false;
+      break;
+    case "available":
+      label = updateState.updateVersion
+        ? `Download Update v${updateState.updateVersion}`
+        : "Download Update";
+      break;
+    case "downloading":
+      label =
+        typeof updateState.progressPercent === "number"
+          ? `Downloading Update… ${Math.round(updateState.progressPercent)}%`
+          : "Downloading Update…";
+      enabled = false;
+      break;
+    case "downloaded":
+      label = updateState.updateVersion
+        ? `Restart to Update to v${updateState.updateVersion}`
+        : "Restart to Update";
+      break;
+    case "error":
+      label = "Retry Update Check";
+      break;
+    default:
+      break;
+  }
+
+  return {
+    label,
+    enabled,
+    click: () => {
+      void handleDesktopAppUpdateMenuAction();
+    },
+  };
+}
+
+function buildApplicationMenu() {
+  const settingsMenuItem: MenuItemConstructorOptions = {
+    label: "Settings…",
+    accelerator: "CmdOrCtrl+,",
+    click: () => {
+      void showDesktopSettings();
+    },
+  };
+
+  const helpSubmenu: MenuItemConstructorOptions[] = [
+    getDesktopUpdateMenuItem(),
+    {
+      label: `Version ${app.getVersion()}`,
+      enabled: false,
+    },
+  ];
+
+  const template: MenuItemConstructorOptions[] =
+    process.platform === "darwin"
+      ? [
+          {
+            label: APP_NAME,
+            submenu: [
+              { role: "about" },
+              { type: "separator" },
+              settingsMenuItem,
+              getDesktopUpdateMenuItem(),
+              { type: "separator" },
+              { role: "services" },
+              { type: "separator" },
+              { role: "hide" },
+              { role: "hideOthers" },
+              { role: "unhide" },
+              { type: "separator" },
+              { role: "quit" },
+            ],
+          },
+          {
+            label: "File",
+            submenu: [settingsMenuItem, { type: "separator" }, { role: "close" }],
+          },
+          {
+            label: "Edit",
+            submenu: [
+              { role: "undo" },
+              { role: "redo" },
+              { type: "separator" },
+              { role: "cut" },
+              { role: "copy" },
+              { role: "paste" },
+              { role: "selectAll" },
+            ],
+          },
+          {
+            label: "View",
+            submenu: [
+              { role: "reload" },
+              { role: "forceReload" },
+              ...(ENABLE_DEVTOOLS ? ([{ role: "toggleDevTools" }] as const) : []),
+              { type: "separator" },
+              { role: "resetZoom" },
+              { role: "zoomIn" },
+              { role: "zoomOut" },
+              { type: "separator" },
+              { role: "togglefullscreen" },
+            ],
+          },
+          {
+            label: "Window",
+            submenu: [{ role: "minimize" }, { role: "zoom" }, { role: "front" }],
+          },
+          {
+            label: "Help",
+            submenu: helpSubmenu,
+          },
+        ]
+      : [
+          {
+            label: "File",
+            submenu: [
+              settingsMenuItem,
+              getDesktopUpdateMenuItem(),
+              { type: "separator" },
+              { role: "quit" },
+            ],
+          },
+          {
+            label: "Edit",
+            submenu: [
+              { role: "undo" },
+              { role: "redo" },
+              { type: "separator" },
+              { role: "cut" },
+              { role: "copy" },
+              { role: "paste" },
+              { role: "selectAll" },
+            ],
+          },
+          {
+            label: "View",
+            submenu: [
+              { role: "reload" },
+              { role: "forceReload" },
+              ...(ENABLE_DEVTOOLS ? ([{ role: "toggleDevTools" }] as const) : []),
+              { type: "separator" },
+              { role: "resetZoom" },
+              { role: "zoomIn" },
+              { role: "zoomOut" },
+              { type: "separator" },
+              { role: "togglefullscreen" },
+            ],
+          },
+          {
+            label: "Help",
+            submenu: [{ role: "about" }, { type: "separator" }, ...helpSubmenu],
+          },
+        ];
+
+  return Menu.buildFromTemplate(template);
+}
+
+function installApplicationMenu() {
+  const applicationMenu = buildApplicationMenu();
+  Menu.setApplicationMenu(applicationMenu);
+
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.setMenu(applicationMenu);
+    mainWindow.setAutoHideMenuBar(process.platform === "darwin");
+    mainWindow.setMenuBarVisibility(process.platform !== "darwin");
+  }
+}
+
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: APP_NAME,
@@ -304,7 +602,7 @@ function createMainWindow() {
     minWidth: 1100,
     minHeight: 700,
     backgroundColor: "#09090b",
-    autoHideMenuBar: true,
+    autoHideMenuBar: process.platform === "darwin",
     icon: getWindowIconPath(),
     webPreferences: {
       preload: getPreloadPath(),
@@ -367,6 +665,17 @@ function createMainWindow() {
     desktopPipController.close();
     mainWindow = null;
   });
+
+  installApplicationMenu();
+  return mainWindow;
+}
+
+function getOrCreateMainWindow() {
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    return createMainWindow();
+  }
+
+  return mainWindow;
 }
 
 function registerIpcHandlers() {
@@ -400,14 +709,7 @@ function registerIpcHandlers() {
   });
 
   ipcMain.handle("desktop:show-settings-placeholder", async () => {
-    if (!mainWindow) return false;
-
-    await dialog.showMessageBox(mainWindow, {
-      type: "info",
-      title: "Desktop settings",
-      message: "Desktop-specific settings are not implemented yet.",
-    });
-
+    await showDesktopSettings();
     return true;
   });
 
@@ -445,11 +747,7 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:focus-main-window", async () => {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore();
-    }
-    mainWindow.show();
-    mainWindow.focus();
+    focusMainWindow(mainWindow);
     return true;
   });
 }
@@ -481,6 +779,7 @@ if (!hasSingleInstanceLock) {
   app.whenReady().then(() => {
     registerIpcHandlers();
     registerHeaderInterceptors();
+    installApplicationMenu();
     createMainWindow();
     desktopAppUpdater.initialize();
 
