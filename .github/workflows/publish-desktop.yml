@@ -20,6 +20,9 @@ concurrency:
   group: publish-desktop-${{ github.event.workflow_run.head_branch || github.ref_name }}
   cancel-in-progress: true
 
+env:
+  DESKTOP_REMOTE_STAGING_KEY: ${{ github.run_id }}-${{ github.run_attempt }}
+
 permissions:
   actions: read
   contents: read
@@ -199,16 +202,52 @@ jobs:
           if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
           if [ -z "$APPLE_TEAM_ID" ]; then unset APPLE_TEAM_ID; fi
           ${{ matrix.command }}
-      - name: Upload desktop artifacts
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ matrix.variant }}
-          if-no-files-found: error
-          path: |
-            betamovie-desktop/release/latest-mac.yml
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.dmg
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip.blockmap
+      - name: Stage desktop artifacts
+        shell: bash
+        run: |
+          set -eu
+          ARTIFACT_DIR="desktop-artifacts/${{ matrix.variant }}"
+          rm -rf "$ARTIFACT_DIR"
+          mkdir -p "$ARTIFACT_DIR"
+          cp betamovie-desktop/release/latest-mac.yml "$ARTIFACT_DIR"/
+          cp betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.dmg "$ARTIFACT_DIR"/
+          cp betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip "$ARTIFACT_DIR"/
+          cp betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip.blockmap "$ARTIFACT_DIR"/
+      - name: Start SSH agent
+        shell: bash
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+      - name: Trust VPS host
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+      - name: Upload staged desktop artifacts to VPS
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -eu
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
+          REMOTE_VARIANT_DIR="${REMOTE_ROOT}/${{ matrix.variant }}"
+
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_VARIANT_DIR}' && mkdir -p '${REMOTE_VARIANT_DIR}'"
+          scp -P "${VPS_PORT:-22}" desktop-artifacts/${{ matrix.variant }}/* "${DEPLOY_TARGET}:${REMOTE_VARIANT_DIR}/"
 
   build-windows:
     name: Build Windows (${{ matrix.variant }})
@@ -264,15 +303,51 @@ jobs:
       - name: Build desktop artifacts
         shell: bash
         run: ${{ matrix.command }}
-      - name: Upload desktop artifacts
-        uses: actions/upload-artifact@v5
-        with:
-          name: ${{ matrix.variant }}
-          if-no-files-found: error
-          path: |
-            betamovie-desktop/release/latest.yml
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe.blockmap
+      - name: Stage desktop artifacts
+        shell: bash
+        run: |
+          set -eu
+          ARTIFACT_DIR="desktop-artifacts/${{ matrix.variant }}"
+          rm -rf "$ARTIFACT_DIR"
+          mkdir -p "$ARTIFACT_DIR"
+          cp betamovie-desktop/release/latest.yml "$ARTIFACT_DIR"/
+          cp betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe "$ARTIFACT_DIR"/
+          cp betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe.blockmap "$ARTIFACT_DIR"/
+      - name: Start SSH agent
+        shell: bash
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+      - name: Trust VPS host
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+      - name: Upload staged desktop artifacts to VPS
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -eu
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
+          REMOTE_VARIANT_DIR="${REMOTE_ROOT}/${{ matrix.variant }}"
+
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_VARIANT_DIR}' && mkdir -p '${REMOTE_VARIANT_DIR}'"
+          scp -P "${VPS_PORT:-22}" desktop-artifacts/${{ matrix.variant }}/* "${DEPLOY_TARGET}:${REMOTE_VARIANT_DIR}/"
 
   publish:
     name: Publish
@@ -289,24 +364,6 @@ jobs:
           ref: ${{ needs.prepare.outputs.checkout_ref }}
       - run: corepack enable
       - run: corepack prepare pnpm@11.9.0 --activate
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-      - name: Download packaged artifacts
-        uses: actions/download-artifact@v5
-        with:
-          path: desktop-artifacts
-      - name: Build release bundle
-        shell: bash
-        run: |
-          set -eu
-          node scripts/create-desktop-release-bundle.js \
-            --input-root desktop-artifacts \
-            --output-dir desktop-release-bundle \
-            --channel stable \
-            --published-at "${{ needs.prepare.outputs.published_at }}"
-          node scripts/verify-desktop-release-bundle.js desktop-release-bundle
-          tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
       - name: Install SSH tools
         run: sudo apt-get update && sudo apt-get install -y openssh-client
       - name: Start SSH agent
@@ -325,6 +382,39 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Download staged desktop artifacts from VPS
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -eu
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
+
+          mkdir -p desktop-artifacts
+          for variant in mac-x64 mac-arm64 win-x64 win-arm64; do
+            mkdir -p "desktop-artifacts/${variant}"
+            scp -P "${VPS_PORT:-22}" "${DEPLOY_TARGET}:${REMOTE_ROOT}/${variant}/"* "desktop-artifacts/${variant}/"
+          done
+      - name: Build release bundle
+        shell: bash
+        run: |
+          set -eu
+          node scripts/create-desktop-release-bundle.js \
+            --input-root desktop-artifacts \
+            --output-dir desktop-release-bundle \
+            --channel stable \
+            --published-at "${{ needs.prepare.outputs.published_at }}"
+          node scripts/verify-desktop-release-bundle.js desktop-release-bundle
+          tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
       - name: Upload bundle and publish on VPS
         shell: bash
         env:
@@ -353,3 +443,19 @@ jobs:
 
           printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
             "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"
+      - name: Cleanup remote staged artifacts
+        if: always()
+        continue-on-error: true
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -eu
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_ROOT}'"
