@@ -4,18 +4,31 @@ import {
   DesktopAppUpdateState,
   getDesktopUpdateElectronApi,
 } from "@/desktop/electron";
-import { APP_VERSION } from "@/setup/constants";
+import { APP_BUILD_ID, APP_VERSION } from "@/setup/constants";
 import { useAppUpdateStore } from "@/stores/appUpdate";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 import { TMDB_METADATA_CACHE_KEY, queryClient } from "@/utils/queryClient";
 
 const intervalMS = 60 * 60 * 1000;
+const webVersionCheckIntervalMS = 5 * 60 * 1000;
+const versionManifestPath = "/version.json";
 let isReloadingForUpdate = false;
 let registeredServiceWorkerUrl: string | null = null;
+let registeredServiceWorker: ServiceWorkerRegistration | null = null;
 let lastKnownServiceWorkerToken: string | null = null;
 let latestDiscoveredUpdateToken: string | null = null;
 let hasAttachedReminderListeners = false;
 type UpdateServiceWorker = (reloadPage?: boolean) => Promise<void>;
 let hasInitializedDesktopAppUpdate = false;
+
+interface WebBuildManifest {
+  version: string | null;
+  buildId: string | null;
+}
+
+function getCurrentBuildToken() {
+  return [APP_VERSION, APP_BUILD_ID].filter(Boolean).join("::");
+}
 
 async function clearAppClientCaches() {
   queryClient.clear();
@@ -35,6 +48,19 @@ async function clearAppClientCaches() {
     );
   } catch (error) {
     console.warn("[PWA] Failed to clear Cache Storage", error);
+  }
+}
+
+async function unregisterServiceWorkers() {
+  if (!("serviceWorker" in navigator)) return;
+
+  try {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(
+      registrations.map((registration) => registration.unregister()),
+    );
+  } catch (error) {
+    console.warn("[PWA] Failed to unregister service workers", error);
   }
 }
 
@@ -63,6 +89,72 @@ async function fetchServiceWorkerToken(swUrl: string) {
   } catch {
     return null;
   }
+}
+
+function getVersionManifestUrl() {
+  return resolvePublicUrl(versionManifestPath) ?? versionManifestPath;
+}
+
+function normalizeWebBuildManifest(payload: unknown): WebBuildManifest | null {
+  if (!payload || typeof payload !== "object") return null;
+
+  const maybeManifest = payload as {
+    version?: unknown;
+    buildId?: unknown;
+  };
+  const version =
+    typeof maybeManifest.version === "string" ? maybeManifest.version : null;
+  const buildId =
+    typeof maybeManifest.buildId === "string" ? maybeManifest.buildId : null;
+
+  if (!version && !buildId) return null;
+  return {
+    version,
+    buildId,
+  };
+}
+
+function getWebBuildToken(manifest: WebBuildManifest) {
+  return (
+    [manifest.version, manifest.buildId].filter(Boolean).join("::") || null
+  );
+}
+
+async function fetchLatestWebBuildManifest() {
+  try {
+    const resp = await fetch(getVersionManifestUrl(), {
+      cache: "no-store",
+      headers: {
+        "cache-control": "no-cache",
+        pragma: "no-cache",
+      },
+    });
+    if (!resp.ok) return null;
+
+    const payload = (await resp.json()) as unknown;
+    return normalizeWebBuildManifest(payload);
+  } catch {
+    return null;
+  }
+}
+
+async function checkForWebBuildUpdate() {
+  if (typeof window === "undefined" || isDesktopAppRuntime()) return false;
+
+  const latestBuild = await fetchLatestWebBuildManifest();
+  if (!latestBuild) return false;
+
+  const latestBuildToken = getWebBuildToken(latestBuild);
+  if (!latestBuildToken || latestBuildToken === getCurrentBuildToken()) {
+    return false;
+  }
+
+  latestDiscoveredUpdateToken = latestBuildToken;
+  useAppUpdateStore.getState().markUpdateAvailable({
+    updateToken: latestBuildToken,
+    updateVersion: latestBuild.version,
+  });
+  return true;
 }
 
 async function resolvePendingUpdateToken() {
@@ -97,19 +189,31 @@ function attachAppUpdateReminderListeners() {
   if (hasAttachedReminderListeners || typeof window === "undefined") return;
   hasAttachedReminderListeners = true;
 
-  window.addEventListener("focus", syncAppUpdateVisibility);
+  window.addEventListener("focus", () => {
+    syncAppUpdateVisibility();
+    void checkForWebBuildUpdate();
+  });
+  window.addEventListener("online", () => {
+    void checkForWebBuildUpdate();
+  });
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible") return;
     syncAppUpdateVisibility();
+    void checkForWebBuildUpdate();
   });
 }
 
-async function hardRefreshToLatestBuild() {
+async function hardRefreshToLatestBuild(options?: {
+  unregisterCurrentServiceWorkers?: boolean;
+}) {
   if (isReloadingForUpdate) return;
   isReloadingForUpdate = true;
 
   useAppUpdateStore.getState().setUpdateProgress(100);
   await clearAppClientCaches();
+  if (options?.unregisterCurrentServiceWorkers) {
+    await unregisterServiceWorkers();
+  }
 
   const nextUrl = new URL(window.location.href);
   nextUrl.searchParams.set("__app_update", Date.now().toString());
@@ -179,7 +283,7 @@ export async function checkForAppUpdate() {
     return electronApi.checkForAppUpdate();
   }
 
-  return false;
+  return checkForWebBuildUpdate();
 }
 
 export async function requestAppUpdate() {
@@ -208,18 +312,32 @@ export async function requestAppUpdate() {
   useAppUpdateStore.getState().setUpdateProgress(100);
 
   if (!updateServiceWorker) {
-    await hardRefreshToLatestBuild();
+    await hardRefreshToLatestBuild({
+      unregisterCurrentServiceWorkers: true,
+    });
     return;
   }
 
   try {
+    await registeredServiceWorker?.update();
+    const registration = await navigator.serviceWorker?.getRegistration?.();
+
+    if (!registration?.waiting && latestDiscoveredUpdateToken) {
+      await hardRefreshToLatestBuild({
+        unregisterCurrentServiceWorkers: true,
+      });
+      return;
+    }
+
     await updateServiceWorker(true);
     window.setTimeout(() => {
       void hardRefreshToLatestBuild();
     }, 3000);
   } catch (error) {
     console.error("[PWA] Failed to activate the waiting service worker", error);
-    await hardRefreshToLatestBuild();
+    await hardRefreshToLatestBuild({
+      unregisterCurrentServiceWorkers: true,
+    });
   }
 }
 
@@ -237,16 +355,20 @@ if (isDesktopAppRuntime()) {
     onRegisteredSW(swUrl, r) {
       if (!r) return;
       registeredServiceWorkerUrl = swUrl;
+      registeredServiceWorker = r;
       attachAppUpdateReminderListeners();
       void fetchServiceWorkerToken(swUrl).then((token) => {
         if (!token) return;
         lastKnownServiceWorkerToken = token;
       });
+      void checkForWebBuildUpdate();
 
       setInterval(async () => {
         if (!(!r.installing && navigator)) return;
 
         if ("connection" in navigator && !navigator.onLine) return;
+
+        await checkForWebBuildUpdate();
 
         const serviceWorkerToken = await fetchServiceWorkerToken(swUrl);
 
@@ -260,6 +382,10 @@ if (isDesktopAppRuntime()) {
 
         await r.update();
       }, intervalMS);
+
+      setInterval(() => {
+        void checkForWebBuildUpdate();
+      }, webVersionCheckIntervalMS);
     },
   });
 }

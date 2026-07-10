@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import loadVersion from "vite-plugin-package-version";
 import { VitePWA } from "vite-plugin-pwa";
 import checker from "vite-plugin-checker";
+import { readFileSync } from "fs";
 import path from "path";
 import { handlebars } from "./plugins/handlebars";
 import { PluginOption, loadEnv } from "vite";
@@ -20,12 +21,44 @@ const captioningPackages = [
   "fuse",
 ];
 
+function emitVersionManifest(version: string, buildId: string): PluginOption {
+  return {
+    name: "emit-version-manifest",
+    generateBundle() {
+      this.emitFile({
+        type: "asset",
+        fileName: "version.json",
+        source: JSON.stringify(
+          {
+            version,
+            buildId,
+          },
+          null,
+          2,
+        ),
+      });
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const workspaceRoot = path.resolve(__dirname, "..");
   const env = loadEnv(mode, workspaceRoot);
+  const packageJson = JSON.parse(
+    readFileSync(path.resolve(__dirname, "package.json"), "utf8"),
+  ) as { version?: string };
+  const appVersion = packageJson.version ?? "0.0.0";
+  const appBuildId =
+    env.VITE_APP_BUILD_ID ||
+    process.env.GITHUB_SHA ||
+    process.env.SOURCE_VERSION ||
+    new Date().toISOString();
   return {
     envDir: workspaceRoot,
     base: env.VITE_BASE_URL || "/",
+    define: {
+      __APP_BUILD_ID__: JSON.stringify(appBuildId),
+    },
     plugins: [
       handlebars({
         vars: {
@@ -43,7 +76,7 @@ export default defineConfig(({ mode }) => {
         registerType: "prompt",
         workbox: {
           maximumFileSizeToCacheInBytes: 4000000, // 4mb
-          globIgnores: ["!assets/**/*"],
+          globIgnores: ["!assets/**/*", "version.json"],
           cleanupOutdatedCaches: true,
           clientsClaim: true,
         },
@@ -89,6 +122,7 @@ export default defineConfig(({ mode }) => {
           ],
         },
       }),
+      emitVersionManifest(appVersion, appBuildId),
       loadVersion(),
       checker({
         overlay: {
