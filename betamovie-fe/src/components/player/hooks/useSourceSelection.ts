@@ -11,9 +11,13 @@ import { getProviders } from "@/backend/providers/providers";
 import { loadProviderMetadata } from "@/backend/providers/runtimeMetadata";
 import { convertProviderCaption } from "@/components/player/utils/captions";
 import { convertRunoutputToSource } from "@/components/player/utils/convertRunoutputToSource";
+import {
+  cacheSourceEmbeds,
+  clearCachedSourceEmbeds,
+} from "@/components/player/utils/openMovieQualityMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { EmbedOutput, NotFoundError, SourcererOutput } from "@/lib/providers";
-import { metaToScrapeMedia } from "@/stores/player/slices/source";
+import { getMediaKey, metaToScrapeMedia } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
@@ -99,6 +103,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
 
   const [request, run] = useAsyncFn(async () => {
     if (!sourceId || !meta) return null;
+    const mediaKey = getMediaKey(meta);
     await loadProviderMetadata();
     refreshCachedMetadata();
     setEmbedId(null);
@@ -126,6 +131,7 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
     ]);
 
     if (result.stream && result.stream.length > 0) {
+      clearCachedSourceEmbeds(sourceId, mediaKey);
       if (isExtensionActiveCached()) await prepareStream(result.stream[0]);
       setEmbedId(null);
       setSourceId(sourceId);
@@ -138,6 +144,9 @@ export function useSourceScraping(sourceId: string | null, routerId: string) {
       setLastSuccessfulSource(sourceId);
       router.close();
       return null;
+    }
+    if (mediaKey && result.embeds.length > 0) {
+      cacheSourceEmbeds(sourceId, mediaKey, result.embeds);
     }
     if (result.embeds.length === 1) {
       let embedResult: EmbedOutput | undefined;

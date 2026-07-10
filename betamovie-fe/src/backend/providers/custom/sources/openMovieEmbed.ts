@@ -68,6 +68,7 @@ export async function scrapeOpenMovieEmbed(
         : "file");
 
   const qualityMap: Record<string, string> = {
+    "4K": "4k",
     "2160p": "4k",
     "1440p": "1440",
     "1080p": "1080",

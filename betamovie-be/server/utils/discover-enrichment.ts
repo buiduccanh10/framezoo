@@ -221,19 +221,30 @@ const getReleaseDateByTypes = (
   payload: TmdbMovieReleasePayload,
   types: number[],
 ) => {
-  const preferredRegion =
-    payload.results?.find(region => region.iso_3166_1 === DEFAULT_REGION) ||
-    payload.results?.find(region => region.iso_3166_1 === 'GB') ||
-    payload.results?.[0];
+  const getMatchingDates = (
+    regions:
+      | TmdbMovieReleasePayload['results']
+      | undefined,
+  ) => {
+    if (!regions?.length) return [];
 
-  if (!preferredRegion?.release_dates?.length) return undefined;
+    return regions
+      .flatMap(region => region.release_dates ?? [])
+      .filter(entry => entry.release_date && typeof entry.type === 'number' && types.includes(entry.type))
+      .map(entry => entry.release_date as string)
+      .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+  };
 
-  const matchingDates = preferredRegion.release_dates
-    .filter(entry => entry.release_date && typeof entry.type === 'number' && types.includes(entry.type))
-    .map(entry => entry.release_date as string)
-    .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+  const preferredRegions = payload.results?.filter(
+    region => region.iso_3166_1 === DEFAULT_REGION || region.iso_3166_1 === 'GB'
+  );
+  const preferredDates = getMatchingDates(preferredRegions);
 
-  return matchingDates[0];
+  if (preferredDates.length > 0) {
+    return preferredDates[0];
+  }
+
+  return getMatchingDates(payload.results)[0];
 };
 
 const buildLatest4KFeed = async () => {

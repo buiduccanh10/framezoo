@@ -5,12 +5,33 @@ import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
 
 export type ReleaseQualityVariant = "CAM" | "HD";
 
+type TMDBMovieReleaseDates = NonNullable<TMDBMovieData["release_dates"]>;
+type TMDBMovieReleaseRegion = TMDBMovieReleaseDates["results"][number];
+type TMDBMovieReleaseEntry = TMDBMovieReleaseRegion["release_dates"][number];
+
 const HD_QUALITY_PATTERN =
   /(?:2160|1080|720|4k|uhd|bluray|brrip|bdrip|web[ .-]?dl|webrip|hdrip|hdtv|dvdrip|remux)/i;
 const CAM_QUALITY_PATTERN =
   /(?:^|[^a-z])(cam|hdcam|hdts|telesync|telecine|ts|tc|screener)(?:$|[^a-z])/i;
 const THEATRICAL_RELEASE_TYPES = new Set([2, 3]);
 const DIGITAL_RELEASE_TYPES = new Set([4, 5]);
+
+function getQualityVariantFromLabel(
+  quality?: string | null,
+): ReleaseQualityVariant | null {
+  const normalizedQuality = quality?.trim();
+  if (!normalizedQuality) return null;
+
+  if (CAM_QUALITY_PATTERN.test(normalizedQuality)) {
+    return "CAM";
+  }
+
+  if (HD_QUALITY_PATTERN.test(normalizedQuality)) {
+    return "HD";
+  }
+
+  return null;
+}
 
 function getReleaseVariantFromDates(
   theatricalReleaseDate?: string,
@@ -33,28 +54,41 @@ function getReleaseVariantFromDates(
   return null;
 }
 
-function getTmdbReleaseDateByTypes(
-  releaseDates: TMDBMovieData["release_dates"],
+function getMatchingReleaseDates(
+  regions: TMDBMovieReleaseRegion[] | undefined,
   types: Set<number>,
-) {
-  const preferredRegion =
-    releaseDates?.results?.find((region) => region.iso_3166_1 === "US") ||
-    releaseDates?.results?.find((region) => region.iso_3166_1 === "GB") ||
-    releaseDates?.results?.[0];
+): string[] {
+  if (!regions?.length) return [];
 
-  if (!preferredRegion?.release_dates?.length) return undefined;
-
-  const matchingDates = preferredRegion.release_dates
+  return regions
+    .flatMap((region: TMDBMovieReleaseRegion) => region.release_dates)
     .filter(
-      (entry) =>
+      (entry: TMDBMovieReleaseEntry) =>
         entry.release_date &&
         typeof entry.type === "number" &&
         types.has(entry.type),
     )
-    .map((entry) => entry.release_date)
+    .map((entry: TMDBMovieReleaseEntry) => entry.release_date)
     .sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+}
 
-  return matchingDates[0];
+function getTmdbReleaseDateByTypes(
+  releaseDates: TMDBMovieData["release_dates"],
+  types: Set<number>,
+) {
+  const preferredRegions = releaseDates?.results?.filter(
+    (region) => region.iso_3166_1 === "US" || region.iso_3166_1 === "GB",
+  );
+  const preferredMatchingDates = getMatchingReleaseDates(
+    preferredRegions,
+    types,
+  );
+
+  if (preferredMatchingDates.length > 0) {
+    return preferredMatchingDates[0];
+  }
+
+  return getMatchingReleaseDates(releaseDates?.results, types)[0];
 }
 
 export function getReleaseQualityVariant(
@@ -62,21 +96,15 @@ export function getReleaseQualityVariant(
 ): ReleaseQualityVariant | null {
   if (!releaseInfo) return null;
 
-  const normalizedQuality = releaseInfo.quality?.trim();
-  if (normalizedQuality) {
-    if (CAM_QUALITY_PATTERN.test(normalizedQuality)) {
-      return "CAM";
-    }
-
-    if (HD_QUALITY_PATTERN.test(normalizedQuality)) {
-      return "HD";
-    }
-  }
-
-  return getReleaseVariantFromDates(
+  const dateBasedVariant = getReleaseVariantFromDates(
     releaseInfo.theatrical_release_date,
     releaseInfo.digital_release_date,
   );
+  if (dateBasedVariant === "HD") {
+    return "HD";
+  }
+
+  return getQualityVariantFromLabel(releaseInfo.quality) ?? dateBasedVariant;
 }
 
 export function getReleaseQualityVariantFromTmdbReleaseDates(

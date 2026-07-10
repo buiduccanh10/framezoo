@@ -3,7 +3,10 @@ import { useEffect, useRef } from "react";
 import { refreshCachedMetadata } from "@/backend/helpers/providerApi";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 
-import { loadProviderMetadata } from "./runtimeMetadata";
+import {
+  hasLoadedProviderMetadata,
+  loadProviderMetadata,
+} from "./runtimeMetadata";
 
 const PROVIDER_REFRESH_STALE_MS = 5 * 60 * 1000;
 
@@ -17,6 +20,7 @@ export function ProviderMetadataBootstrap() {
       const now = Date.now();
       if (
         !force &&
+        hasLoadedProviderMetadata() &&
         lastRefreshAtRef.current > 0 &&
         now - lastRefreshAtRef.current < PROVIDER_REFRESH_STALE_MS
       ) {
