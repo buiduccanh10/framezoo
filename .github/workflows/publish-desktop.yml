@@ -246,37 +246,8 @@ jobs:
           REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
           REMOTE_VARIANT_DIR="${REMOTE_ROOT}/${{ matrix.variant }}"
 
-          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_VARIANT_DIR}' && mkdir -p '${REMOTE_VARIANT_DIR}' '${REMOTE_ROOT}/scripts'"
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_VARIANT_DIR}' && mkdir -p '${REMOTE_VARIANT_DIR}'"
           scp -P "${VPS_PORT:-22}" desktop-artifacts/${{ matrix.variant }}/* "${DEPLOY_TARGET}:${REMOTE_VARIANT_DIR}/"
-          scp -P "${VPS_PORT:-22}" \
-            scripts/create-desktop-release-bundle.js \
-            scripts/verify-desktop-release-bundle.js \
-            scripts/desktop-release.js \
-            "${DEPLOY_TARGET}:${REMOTE_ROOT}/scripts/"
-      - name: Try publish staged desktop release on VPS
-        shell: bash
-        env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_PORT: ${{ secrets.VPS_PORT }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-          DEPLOY_PROJECT_NAME: ${{ secrets.DEPLOY_PROJECT_NAME }}
-        run: |
-          set -eu
-
-          if [ -z "${ENV_FILE:-}" ]; then
-            echo "ENV_FILE secret is empty."
-            exit 1
-          fi
-
-          DEPLOY_USER="${VPS_USER:-betakiot}"
-          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
-          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
-          DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
-
-          printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; RUN_KEY='${DESKTOP_REMOTE_STAGING_KEY}' PUBLISHED_AT='${{ needs.prepare.outputs.published_at }}' DESKTOP_PUBLISH_CHANNEL='stable' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" /bin/sh ./scripts/try-publish-desktop-staged-run.sh"
 
   build-windows:
     name: Build Windows (${{ matrix.variant }})
@@ -375,14 +346,76 @@ jobs:
           REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
           REMOTE_VARIANT_DIR="${REMOTE_ROOT}/${{ matrix.variant }}"
 
-          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_VARIANT_DIR}' && mkdir -p '${REMOTE_VARIANT_DIR}' '${REMOTE_ROOT}/scripts'"
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_VARIANT_DIR}' && mkdir -p '${REMOTE_VARIANT_DIR}'"
           scp -P "${VPS_PORT:-22}" desktop-artifacts/${{ matrix.variant }}/* "${DEPLOY_TARGET}:${REMOTE_VARIANT_DIR}/"
-          scp -P "${VPS_PORT:-22}" \
-            scripts/create-desktop-release-bundle.js \
-            scripts/verify-desktop-release-bundle.js \
-            scripts/desktop-release.js \
-            "${DEPLOY_TARGET}:${REMOTE_ROOT}/scripts/"
-      - name: Try publish staged desktop release on VPS
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    needs:
+      - prepare
+      - build-macos
+      - build-windows
+    if: needs.prepare.outputs.should_publish == 'true'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.prepare.outputs.checkout_ref }}
+      - run: corepack enable
+      - run: corepack prepare pnpm@11.9.0 --activate
+      - name: Install SSH tools
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+      - name: Start SSH agent
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "$VPS_SSH_KEY" | tr -d '\r' | ssh-add -
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+      - name: Trust VPS host
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -p "${VPS_PORT:-22}" "$VPS_HOST" >> ~/.ssh/known_hosts
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Download staged desktop artifacts from VPS
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -eu
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
+
+          mkdir -p desktop-artifacts
+          for variant in mac-x64 mac-arm64 win-x64 win-arm64; do
+            mkdir -p "desktop-artifacts/${variant}"
+            scp -P "${VPS_PORT:-22}" "${DEPLOY_TARGET}:${REMOTE_ROOT}/${variant}/"* "desktop-artifacts/${variant}/"
+          done
+      - name: Build release bundle
+        shell: bash
+        run: |
+          set -eu
+          node scripts/create-desktop-release-bundle.js \
+            --input-root desktop-artifacts \
+            --output-dir desktop-release-bundle \
+            --channel stable \
+            --published-at "${{ needs.prepare.outputs.published_at }}"
+          node scripts/verify-desktop-release-bundle.js desktop-release-bundle
+          tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
+      - name: Upload bundle and publish on VPS
         shell: bash
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
@@ -403,6 +436,26 @@ jobs:
           DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
           DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
           DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
+          STAGING_PATH="${DEPLOY_PATH}/desktop-publish-staging"
+
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${STAGING_PATH}'"
+          scp -P "${VPS_PORT:-22}" desktop-release-bundle.tar.gz "${DEPLOY_TARGET}:${STAGING_PATH}/desktop-release-bundle.tar.gz"
 
           printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; RUN_KEY='${DESKTOP_REMOTE_STAGING_KEY}' PUBLISHED_AT='${{ needs.prepare.outputs.published_at }}' DESKTOP_PUBLISH_CHANNEL='stable' PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" /bin/sh ./scripts/try-publish-desktop-staged-run.sh"
+            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"
+      - name: Cleanup remote staged artifacts
+        if: always()
+        continue-on-error: true
+        shell: bash
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -eu
+          DEPLOY_USER="${VPS_USER:-betakiot}"
+          DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
+          REMOTE_ROOT="${DEPLOY_PATH}/desktop-publish-staging/runs/${DESKTOP_REMOTE_STAGING_KEY}"
+          ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "rm -rf '${REMOTE_ROOT}'"
