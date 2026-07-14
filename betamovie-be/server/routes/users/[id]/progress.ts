@@ -54,46 +54,50 @@ export default defineEventHandler(async event => {
       updatedAt: item.updated_at.toISOString(),
     }));
 
-    const storage = useStorage('cache');
-    const keys = await storage.getKeys(`progress_queue:${userId}:`);
-    for (const key of keys) {
-      const queuedData: any = await storage.getItem(key);
-      if (!queuedData) continue;
+    try {
+      const storage = useStorage('cache');
+      const keys = await storage.getKeys(`progress_queue:${userId}:`);
+      for (const key of keys) {
+        const queuedData: any = await storage.getItem(key);
+        if (!queuedData) continue;
 
-      const { tmdbId, seasonId, episodeId, seasonNumber, episodeNumber, duration, watched, meta, updatedAt } = queuedData;
+        const { tmdbId, seasonId, episodeId, seasonNumber, episodeNumber, duration, watched, meta, updatedAt } = queuedData;
 
-      const normSeasonId = seasonId === 'none' ? null : seasonId;
-      const normEpisodeId = episodeId === 'none' ? null : episodeId;
+        const normSeasonId = seasonId === 'none' ? null : seasonId;
+        const normEpisodeId = episodeId === 'none' ? null : episodeId;
 
-      const existingIndex = results.findIndex(
-        r => r.tmdbId === tmdbId && r.season.id === normSeasonId && r.episode.id === normEpisodeId
-      );
+        const existingIndex = results.findIndex(
+          r => r.tmdbId === tmdbId && r.season.id === normSeasonId && r.episode.id === normEpisodeId
+        );
 
-      const mappedItem = {
-        id: existingIndex >= 0 ? results[existingIndex].id : '',
-        tmdbId,
-        episode: {
-          id: normEpisodeId,
-          number: episodeNumber,
-        },
-        season: {
-          id: normSeasonId,
-          number: seasonNumber,
-        },
-        meta,
-        duration: duration.toString(),
-        watched: watched.toString(),
-        updatedAt,
-      };
+        const mappedItem = {
+          id: existingIndex >= 0 ? results[existingIndex].id : '',
+          tmdbId,
+          episode: {
+            id: normEpisodeId,
+            number: episodeNumber,
+          },
+          season: {
+            id: normSeasonId,
+            number: seasonNumber,
+          },
+          meta,
+          duration: duration.toString(),
+          watched: watched.toString(),
+          updatedAt,
+        };
 
-      if (existingIndex >= 0) {
-        // Only overwrite if queued data is newer
-        if (new Date(updatedAt).getTime() > new Date(results[existingIndex].updatedAt).getTime()) {
-          results[existingIndex] = mappedItem;
+        if (existingIndex >= 0) {
+          // Only overwrite if queued data is newer
+          if (new Date(updatedAt).getTime() > new Date(results[existingIndex].updatedAt).getTime()) {
+            results[existingIndex] = mappedItem;
+          }
+        } else {
+          results.push(mappedItem);
         }
-      } else {
-        results.push(mappedItem);
       }
+    } catch (err) {
+      console.warn('Failed to retrieve progress from cache', err);
     }
 
     return results;
