@@ -32,7 +32,7 @@ async function getAccountNumber() {
       return total.toString();
     }
     return "0";
-  } catch (error) {
+  } catch {
     return "N/A";
   }
 }
@@ -56,7 +56,7 @@ async function getAllAccounts() {
       return match[1];
     }
     return "0";
-  } catch (error) {
+  } catch {
     return "N/A";
   }
 }
