@@ -3,7 +3,7 @@ services:
     image: postgres:15-alpine
     restart: always
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $$PG_USER -d $$PG_DB']
+      test: ["CMD-SHELL", "pg_isready -U $$PG_USER -d $$PG_DB"]
       interval: 5s
       retries: 10
       timeout: 2s
@@ -40,6 +40,7 @@ services:
       PREVIEW_MAX_FRAMES: ${PREVIEW_MAX_FRAMES:-48}
       PREVIEW_FFMPEG_CONCURRENCY: ${PREVIEW_FFMPEG_CONCURRENCY:-4}
       PREVIEW_COMMAND_TIMEOUT_MS: ${PREVIEW_COMMAND_TIMEOUT_MS:-90000}
+      PREVIEW_LOG_LEVEL: ${PREVIEW_LOG_LEVEL:-info}
     volumes:
       - preview-data:/data/previews
     networks:
@@ -62,6 +63,9 @@ services:
       CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
       NODE_ENV: ${NODE_ENV:-production}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      PROXY_REQUIRE_UPSTREAM_ALLOWLIST: "true"
+      PROXY_ALLOWED_UPSTREAM_HOSTS: ${PROXY_ALLOWED_UPSTREAM_HOSTS:-}
+      RATE_LIMIT_FAIL_CLOSED: "true"
       VIRTUAL_HOST: backend.alphaflix.io.vn
       VIRTUAL_PORT: 3000
       VIRTUAL_PROTO: http

@@ -1,6 +1,15 @@
 import { Readable } from 'node:stream';
 import { sendStream, setResponseStatus } from 'h3';
 import { applyCorsHeaders } from '~/utils/cors';
+import {
+  acquireProxySlot,
+  assertSafeUpstreamUrl,
+  fetchSafeUpstream,
+  getProxyResponseLimit,
+  limitNodeReadable,
+  normalizeProxyHeaders,
+  requireProxyAccess,
+} from '~/utils/proxySecurity';
 
 const MODERN_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
@@ -53,6 +62,7 @@ const setCorsHeaders = (event: any) => {
   applyCorsHeaders(event, 'GET, OPTIONS, HEAD', '*');
 };
 
+// Universal route keeps the explicit HEAD handling reachable in Nitro.
 export default defineEventHandler(async event => {
   if (event.method === 'OPTIONS') {
     setCorsHeaders(event);
@@ -79,15 +89,21 @@ export default defineEventHandler(async event => {
 
   let normalizedUrl: string;
   try {
-    normalizedUrl = new URL(targetUrl).toString();
+    normalizedUrl = await assertSafeUpstreamUrl(targetUrl);
   } catch {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid URL parameter',
+      statusMessage: 'Unsafe URL parameter',
     });
   }
 
-  const proxyHeaders = parseProxyHeaders(query.headers);
+  const proxyHeaders = normalizeProxyHeaders(parseProxyHeaders(query.headers));
+  await requireProxyAccess(event, {
+    kind: 'media',
+    targetUrl: normalizedUrl,
+    headers: proxyHeaders,
+  });
+
   const requestHeaders: Record<string, string> = {
     Accept: getRequestHeader(event, 'accept') || '*/*',
     'Accept-Encoding': 'identity',
@@ -108,34 +124,72 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const response = await fetch(normalizedUrl, {
-    method: event.method,
-    headers: requestHeaders,
-    redirect: 'follow',
-  }).catch(error => {
+  const releaseProxySlot = acquireProxySlot();
+  const responseNode = event.node.res;
+  let streaming = false;
+
+  try {
+    const response = await fetchSafeUpstream(normalizedUrl, {
+      method: event.method,
+      headers: requestHeaders,
+    });
+
+    setResponseStatus(event, response.status, response.statusText);
+    setCorsHeaders(event);
+
+    for (const headerName of PASSTHROUGH_RESPONSE_HEADERS) {
+      const value = response.headers.get(headerName);
+      if (value) {
+        setHeader(event, headerName, value);
+      }
+    }
+
+    const maxBytes = getProxyResponseLimit('media');
+    const contentLength = Number(response.headers.get('content-length') || 0);
+    if (contentLength > maxBytes) {
+      throw createError({
+        statusCode: 413,
+        statusMessage: 'Upstream response exceeds the configured size limit',
+      });
+    }
+
+    if (!response.headers.get('content-type')) {
+      setHeader(event, 'content-type', 'application/octet-stream');
+    }
+
+    if (event.method === 'HEAD' || !response.body) {
+      if (event.method === 'HEAD') {
+        const contentLength = response.headers.get('content-length');
+        if (contentLength) {
+          responseNode?.setHeader('content-length', contentLength);
+        }
+        await response.body?.cancel().catch(() => null);
+        responseNode?.end();
+      }
+      return null;
+    }
+
+    streaming = true;
+    if (responseNode?.once) {
+      responseNode.once('finish', releaseProxySlot);
+      responseNode.once('close', releaseProxySlot);
+    }
+    return sendStream(
+      event,
+      limitNodeReadable(Readable.fromWeb(response.body as any), maxBytes) as any
+    );
+  } catch (error) {
+    console.warn('[media-proxy] upstream request failed', error);
+    if (error && typeof error === 'object' && 'statusCode' in error) {
+      throw error;
+    }
     throw createError({
       statusCode: 502,
-      statusMessage: `Failed to proxy media: ${error?.message || String(error)}`,
+      statusMessage: 'Failed to proxy media',
     });
-  });
-
-  setResponseStatus(event, response.status, response.statusText);
-  setCorsHeaders(event);
-
-  for (const headerName of PASSTHROUGH_RESPONSE_HEADERS) {
-    const value = response.headers.get(headerName);
-    if (value) {
-      setHeader(event, headerName, value);
+  } finally {
+    if (!streaming) {
+      releaseProxySlot();
     }
   }
-
-  if (!response.headers.get('content-type')) {
-    setHeader(event, 'content-type', 'application/octet-stream');
-  }
-
-  if (event.method === 'HEAD' || !response.body) {
-    return null;
-  }
-
-  return sendStream(event, Readable.fromWeb(response.body as any));
 });

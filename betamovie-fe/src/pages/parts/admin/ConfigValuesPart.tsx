@@ -11,7 +11,9 @@ async function getAccountNumber() {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/metrics`);
+    const response = await fetch(`${BACKEND_URL}/metrics`, {
+      credentials: "include",
+    });
     if (!response.ok) {
       return "N/A";
     }
@@ -32,7 +34,7 @@ async function getAccountNumber() {
       return total.toString();
     }
     return "0";
-  } catch (error) {
+  } catch {
     return "N/A";
   }
 }
@@ -43,7 +45,9 @@ async function getAllAccounts() {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/metrics`);
+    const response = await fetch(`${BACKEND_URL}/metrics`, {
+      credentials: "include",
+    });
     if (!response.ok) {
       return "N/A";
     }
@@ -56,7 +60,7 @@ async function getAllAccounts() {
       return match[1];
     }
     return "0";
-  } catch (error) {
+  } catch {
     return "N/A";
   }
 }

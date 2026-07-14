@@ -42,11 +42,13 @@ const PREVIEW_WARMUP_TV_EPISODES_PER_SHOW = Math.max(
   Number(process.env.PREVIEW_WARMUP_TV_EPISODES_PER_SHOW || 2)
 );
 const EMBED_BASE_URL = process.env.CRAWLER_EMBED_BASE_URL || 'http://127.0.0.1:3000';
+const INTERNAL_API_TOKEN = process.env.INTERNAL_API_TOKEN?.trim() || '';
 const TMDB_CATALOG_CACHE_TTL = Number(process.env.TMDB_CATALOG_CACHE_TTL || 30 * 24 * 60 * 60);
 
 const ts = () => new Date().toISOString();
 const log = (msg: string) => console.log(`[${ts()}] [TMDB Crawler] ${msg}`);
-const logWarn = (msg: string, err?: unknown) => console.warn(`[${ts()}] [TMDB Crawler] ${msg}`, err);
+const logWarn = (msg: string, err?: unknown) =>
+  console.warn(`[${ts()}] [TMDB Crawler] ${msg}`, err);
 
 const resolveUrl = (base: string, value: string) => {
   try {
@@ -125,12 +127,20 @@ const fetchText = async (url: string) => {
 };
 const isLikelyM3U8 = (value: string) => /\.m3u8(\?|$)/i.test(value);
 
-const fetchWithTimeout = async (url: string, timeoutMs: number) => {
+const fetchWithTimeout = async (
+  url: string,
+  timeoutMs: number,
+  init: RequestInit = {}
+) => {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    return await fetch(url, { method: 'GET', signal: controller.signal });
+    return await fetch(url, {
+      ...init,
+      method: init.method || 'GET',
+      signal: controller.signal,
+    });
   } finally {
     clearTimeout(timer);
   }
@@ -151,7 +161,10 @@ const warmTsProxyFromPlaylist = async (localProxyUrl: string, maxSegments: numbe
   }
 
   const playlistResponse = await fetchText(root.toString());
-  if (!/mpegurl|m3u8/i.test(playlistResponse.contentType) && !playlistResponse.text.includes('#EXTM3U')) {
+  if (
+    !/mpegurl|m3u8/i.test(playlistResponse.contentType) &&
+    !playlistResponse.text.includes('#EXTM3U')
+  ) {
     return 0;
   }
 
@@ -209,8 +222,7 @@ const warmTsProxyFromPlaylist = async (localProxyUrl: string, maxSegments: numbe
 
 const warmMovieStreamCache = async (movieIds: number[]) => {
   const uniqueIds = toUniqueIds(movieIds);
-  const picked =
-    STREAM_WARMUP_LIMIT > 0 ? uniqueIds.slice(0, STREAM_WARMUP_LIMIT) : uniqueIds;
+  const picked = STREAM_WARMUP_LIMIT > 0 ? uniqueIds.slice(0, STREAM_WARMUP_LIMIT) : uniqueIds;
   if (!picked.length) return;
 
   log(`Starting stream prewarm for ${picked.length} titles`);
@@ -220,6 +232,9 @@ const warmMovieStreamCache = async (movieIds: number[]) => {
       const payload = await $fetch<StreamsPayload>(streamsUrl, {
         method: 'GET',
         timeout: 20000,
+        headers: INTERNAL_API_TOKEN
+          ? { 'x-internal-token': INTERNAL_API_TOKEN }
+          : undefined,
       });
 
       const proxyUrl = (payload?.streams || [])
@@ -246,8 +261,7 @@ const warmMoviePreviewCache = async (movieIds: number[]) => {
   }
 
   const uniqueIds = toUniqueIds(movieIds);
-  const picked =
-    PREVIEW_WARMUP_LIMIT > 0 ? uniqueIds.slice(0, PREVIEW_WARMUP_LIMIT) : uniqueIds;
+  const picked = PREVIEW_WARMUP_LIMIT > 0 ? uniqueIds.slice(0, PREVIEW_WARMUP_LIMIT) : uniqueIds;
   if (!picked.length) return;
 
   const providers = PREVIEW_WARMUP_PROVIDERS.length ? PREVIEW_WARMUP_PROVIDERS : ['vixsrc'];
@@ -262,7 +276,11 @@ const warmMoviePreviewCache = async (movieIds: number[]) => {
         `?provider=${encodeURIComponent(provider)}&type=movie&tmdbId=${tmdbId}`;
 
       try {
-        const response = await fetchWithTimeout(previewUrl, PREVIEW_WARMUP_TIMEOUT_MS);
+        const response = await fetchWithTimeout(previewUrl, PREVIEW_WARMUP_TIMEOUT_MS, {
+          headers: INTERNAL_API_TOKEN
+            ? { 'x-internal-token': INTERNAL_API_TOKEN }
+            : undefined,
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
@@ -365,9 +383,7 @@ const warmTvPreviewCache = async (showIds: number[], language: string) => {
 
   const uniqueIds = toUniqueIds(showIds);
   const picked =
-    PREVIEW_WARMUP_TV_SHOW_LIMIT > 0
-      ? uniqueIds.slice(0, PREVIEW_WARMUP_TV_SHOW_LIMIT)
-      : uniqueIds;
+    PREVIEW_WARMUP_TV_SHOW_LIMIT > 0 ? uniqueIds.slice(0, PREVIEW_WARMUP_TV_SHOW_LIMIT) : uniqueIds;
   if (!picked.length) return;
 
   const providers = PREVIEW_WARMUP_PROVIDERS.length ? PREVIEW_WARMUP_PROVIDERS : ['vixsrc'];
@@ -391,7 +407,11 @@ const warmTvPreviewCache = async (showIds: number[], language: string) => {
           `&season=${candidate.season}&episode=${candidate.episode}`;
 
         try {
-          const response = await fetchWithTimeout(previewUrl, PREVIEW_WARMUP_TIMEOUT_MS);
+          const response = await fetchWithTimeout(previewUrl, PREVIEW_WARMUP_TIMEOUT_MS, {
+            headers: INTERNAL_API_TOKEN
+              ? { 'x-internal-token': INTERNAL_API_TOKEN }
+              : undefined,
+          });
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
           }

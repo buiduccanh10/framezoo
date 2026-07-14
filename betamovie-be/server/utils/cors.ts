@@ -35,6 +35,19 @@ const normalizeOrigin = (value: string) => {
   }
 };
 
+const DEFAULT_ALLOWED_HEADERS = [
+  'Content-Type',
+  'Authorization',
+  'X-Requested-With',
+  'X-Proxy-Capability',
+  'Range',
+  'If-Range',
+  'X-Token',
+];
+const ALLOWED_HEADER_NAMES = new Map(
+  DEFAULT_ALLOWED_HEADERS.map(header => [header.toLowerCase(), header])
+);
+
 const parseAllowedOrigins = () => {
   const raw = process.env.CORS_ALLOWED_ORIGINS || process.env.FRONTEND_ORIGIN || '';
   const parsed = raw
@@ -75,7 +88,7 @@ export const resolveCorsOrigin = (event: H3EventCompat) => {
 export const applyCorsHeaders = (
   event: H3EventCompat,
   methods = 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  headers = 'Content-Type, Authorization, X-Requested-With'
+  headers = 'Content-Type, Authorization, X-Requested-With, X-Proxy-Capability'
 ) => {
   const origin = resolveCorsOrigin(event);
   if (!origin) {
@@ -85,9 +98,13 @@ export const applyCorsHeaders = (
   const requestedHeaders = getRequestHeader(event, 'access-control-request-headers');
   const resolvedHeaders =
     headers === '*'
-      ? requestedHeaders && requestedHeaders.trim().length > 0
+      ? requestedHeaders
         ? requestedHeaders
-        : 'Content-Type, Authorization, X-Requested-With'
+            .split(',')
+            .map(header => ALLOWED_HEADER_NAMES.get(header.trim().toLowerCase()))
+            .filter((header): header is string => Boolean(header))
+            .join(', ') || DEFAULT_ALLOWED_HEADERS.join(', ')
+        : DEFAULT_ALLOWED_HEADERS.join(', ')
       : headers;
 
   setResponseHeaders(event, {

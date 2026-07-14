@@ -102,6 +102,7 @@ PREVIEW_TILE_ROWS=5
 PREVIEW_MAX_FRAMES=48
 PREVIEW_FFMPEG_CONCURRENCY=4
 PREVIEW_COMMAND_TIMEOUT_MS=30000
+PREVIEW_LOG_LEVEL=info
 
 # Global template used for all providers
 PREVIEW_VTT_TEMPLATE=https://cdn.example.com/previews/{mediaPath}/thumbnails.vtt

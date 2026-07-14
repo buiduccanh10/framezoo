@@ -31,6 +31,7 @@ const season = Number.parseInt(getArg('season') || '', 10);
 const episode = Number.parseInt(getArg('episode') || '', 10);
 const backendBase = (getArg('backend-base') || 'http://127.0.0.1:3000').replace(/\/+$/, '');
 const internalToken = (getArg('internal-token') || process.env.INTERNAL_API_TOKEN || '').trim();
+const internalHeaders = internalToken ? { 'x-internal-token': internalToken } : {};
 
 required('id', id);
 
@@ -49,19 +50,6 @@ const streamEndpoint =
     ? `${backendBase}/api/embed/api/streams/kkphim/movie/${encodeURIComponent(id)}`
     : `${backendBase}/api/embed/api/streams/kkphim/tv/${encodeURIComponent(id)}/${season}/${episode}`;
 
-const streamEndpointWithToken = internalToken
-  ? `${streamEndpoint}?internalToken=${encodeURIComponent(internalToken)}`
-  : streamEndpoint;
-
-const addInternalToken = rawUrl => {
-  if (!internalToken) return rawUrl;
-  const parsed = new URL(rawUrl);
-  if (!parsed.searchParams.get('internalToken')) {
-    parsed.searchParams.set('internalToken', internalToken);
-  }
-  return parsed.toString();
-};
-
 const firstMediaLine = manifest =>
   manifest
     .split(/\r?\n/)
@@ -78,10 +66,7 @@ const decodeMaybe = value => {
 
 const isKkPhimAdSegment = value => {
   const normalized = decodeMaybe(value);
-  return (
-    /(?:^|\/)convertv\d*\//i.test(normalized) ||
-    /(?:^|\/)v\d+\/[0-9a-f]{16,}\/segment_\d+\.ts(?:$|[?#])/i.test(normalized)
-  );
+  return /(?:^|\/)v\d+\/[0-9a-f]{16,}\/segment_\d+\.ts(?:$|[?#])/i.test(normalized);
 };
 
 const parsePlaylistEntries = manifest => {
@@ -145,12 +130,12 @@ const groupContiguousAdBlocks = entries => {
   return blocks;
 };
 
-const streamResponse = await fetch(streamEndpointWithToken, {
-  headers: { Accept: 'application/json' },
+const streamResponse = await fetch(streamEndpoint, {
+  headers: { Accept: 'application/json', ...internalHeaders },
 });
 
 if (!streamResponse.ok) {
-  console.error(`HTTP ${streamResponse.status} from ${streamEndpointWithToken}`);
+  console.error(`HTTP ${streamResponse.status} from ${streamEndpoint}`);
   process.exit(1);
 }
 
@@ -162,8 +147,7 @@ if (!streamPayload?.success || !streamPayload?.count || typeof proxiedMasterUrl 
   process.exit(1);
 }
 
-const proxiedMasterWithToken = addInternalToken(proxiedMasterUrl);
-const masterResponse = await fetch(proxiedMasterWithToken, { headers: { Accept: '*/*' } });
+const masterResponse = await fetch(proxiedMasterUrl, { headers: { Accept: '*/*' } });
 if (!masterResponse.ok) {
   console.error(`Master playlist request failed: HTTP ${masterResponse.status}`);
   process.exit(1);
@@ -181,7 +165,7 @@ if (!proxiedMediaLine) {
   process.exit(1);
 }
 
-const proxiedMediaUrl = addInternalToken(new URL(proxiedMediaLine, proxiedMasterWithToken).toString());
+const proxiedMediaUrl = new URL(proxiedMediaLine, proxiedMasterUrl).toString();
 const proxiedMediaResponse = await fetch(proxiedMediaUrl, { headers: { Accept: '*/*' } });
 if (!proxiedMediaResponse.ok) {
   console.error(`Proxied media playlist request failed: HTTP ${proxiedMediaResponse.status}`);
@@ -258,7 +242,7 @@ if (!firstPostAdSegment) {
   process.exit(1);
 }
 
-const firstPostAdResponse = await fetch(addInternalToken(firstPostAdSegment.url), {
+const firstPostAdResponse = await fetch(firstPostAdSegment.url, {
   headers: { Accept: '*/*', Range: 'bytes=0-4095' },
 });
 if (!firstPostAdResponse.ok) {
@@ -279,7 +263,7 @@ const formatTime = seconds => {
 };
 
 console.log(`[PASS] KKPhim inserted ad-video filter (${type.toUpperCase()} ${id})`);
-console.log(`stream endpoint: ${streamEndpointWithToken}`);
+console.log(`stream endpoint: ${streamEndpoint}`);
 console.log(`upstream media playlist: ${rawMediaUrl}`);
 rawAdBlocks.forEach((block, index) => {
   const first = block[0];

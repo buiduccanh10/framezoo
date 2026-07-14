@@ -13,6 +13,7 @@ const PREVIEW_TILE_ROWS = Number(process.env.PREVIEW_TILE_ROWS || 5);
 const PREVIEW_MAX_FRAMES = Number(process.env.PREVIEW_MAX_FRAMES || 120);
 const PREVIEW_FFMPEG_CONCURRENCY = Number(process.env.PREVIEW_FFMPEG_CONCURRENCY || 4);
 const COMMAND_TIMEOUT_MS = Number(process.env.PREVIEW_COMMAND_TIMEOUT_MS || 90 * 1000);
+const LOG_LEVEL = String(process.env.PREVIEW_LOG_LEVEL || 'info').toLowerCase();
 const HLS_INPUT_ARGS = [
   '-protocol_whitelist',
   'file,http,https,tcp,tls,crypto,data',
@@ -23,6 +24,69 @@ const HLS_INPUT_ARGS = [
 ];
 
 const pending = new Map();
+let requestSequence = 0;
+
+const LOG_LEVELS = {
+  debug: 10,
+  info: 20,
+  warn: 30,
+  error: 40,
+};
+
+const log = (level, event, details = {}) => {
+  if ((LOG_LEVELS[level] || LOG_LEVELS.info) < (LOG_LEVELS[LOG_LEVEL] || LOG_LEVELS.info)) {
+    return;
+  }
+
+  const payload = {
+    timestamp: new Date().toISOString(),
+    service: 'preview-service',
+    level,
+    event,
+    ...details,
+  };
+
+  const output = JSON.stringify(payload);
+  if (level === 'error') {
+    console.error(output);
+  } else if (level === 'warn') {
+    console.warn(output);
+  } else {
+    console.log(output);
+  }
+};
+
+const logInfo = (event, details) => log('info', event, details);
+const logDebug = (event, details) => log('debug', event, details);
+const logWarn = (event, details) => log('warn', event, details);
+const logError = (event, details) => log('error', event, details);
+
+const errorDetails = error => ({
+  name: error instanceof Error ? error.name : 'Error',
+  message: String(error instanceof Error ? error.message : error).replace(
+    /https?:\/\/[^\s'"]+/g,
+    '<url>'
+  ),
+});
+
+const describeUrl = sourceUrl => {
+  try {
+    const parsed = new URL(sourceUrl);
+    return `${parsed.protocol}//${parsed.host}${parsed.pathname}`;
+  } catch {
+    return '<invalid-url>';
+  }
+};
+
+const nextRequestId = req => {
+  const forwardedId = req.headers['x-request-id'];
+  if (typeof forwardedId === 'string' && forwardedId.length <= 120) {
+    return forwardedId.replace(/[^a-zA-Z0-9._:-]/g, '_');
+  }
+
+  requestSequence += 1;
+  return `preview-${Date.now()}-${requestSequence}`;
+};
 
 const isLikelyHlsInput = sourceUrl => {
   try {
@@ -58,12 +122,22 @@ const formatTimestamp = seconds => {
 
 const run = (command, args) =>
   new Promise((resolve, reject) => {
+    const startedAt = Date.now();
+    logDebug('command.start', {
+      command,
+      timeoutMs: COMMAND_TIMEOUT_MS,
+    });
     const child = spawn(command, args, { stdio: ['ignore', 'pipe', 'pipe'] });
     let stdout = '';
     let stderr = '';
     const timeout = setTimeout(() => {
       child.kill('SIGKILL');
-      reject(new Error(`${command} timed out`));
+      const error = new Error(`${command} timed out`);
+      logWarn('command.timeout', {
+        command,
+        durationMs: Date.now() - startedAt,
+      });
+      reject(error);
     }, COMMAND_TIMEOUT_MS);
 
     child.stdout.on('data', chunk => {
@@ -76,17 +150,33 @@ const run = (command, args) =>
 
     child.on('error', error => {
       clearTimeout(timeout);
+      logError('command.error', {
+        command,
+        durationMs: Date.now() - startedAt,
+        error: errorDetails(error),
+      });
       reject(error);
     });
 
     child.on('close', code => {
       clearTimeout(timeout);
       if (code === 0) {
+        logDebug('command.complete', {
+          command,
+          durationMs: Date.now() - startedAt,
+        });
         resolve({ stdout, stderr });
         return;
       }
 
-      reject(new Error(`${command} exited with code ${code}: ${stderr || stdout}`));
+      const error = new Error(`${command} exited with code ${code}: ${stderr || stdout}`);
+      logError('command.failed', {
+        command,
+        code,
+        durationMs: Date.now() - startedAt,
+        error: errorDetails(error),
+      });
+      reject(error);
     });
   });
 
@@ -165,13 +255,23 @@ const probeImageSize = async imagePath => {
 };
 
 const resolvePreviewInputUrl = async sourceUrl => {
+  logDebug('manifest.fetch.start', {
+    source: describeUrl(sourceUrl),
+  });
   const response = await fetch(sourceUrl);
   if (!response.ok) {
+    logWarn('manifest.fetch.failed', {
+      source: describeUrl(sourceUrl),
+      status: response.status,
+    });
     return sourceUrl;
   }
 
   const manifest = await response.text();
   if (!manifest.includes('#EXTM3U') || !manifest.includes('#EXT-X-STREAM-INF')) {
+    logDebug('manifest.media_playlist', {
+      source: describeUrl(sourceUrl),
+    });
     return sourceUrl;
   }
 
@@ -200,6 +300,9 @@ const resolvePreviewInputUrl = async sourceUrl => {
   }
 
   if (!variants.length) {
+    logDebug('manifest.master_without_variants', {
+      source: describeUrl(sourceUrl),
+    });
     return sourceUrl;
   }
 
@@ -209,7 +312,13 @@ const resolvePreviewInputUrl = async sourceUrl => {
     return a.bandwidth - b.bandwidth;
   });
 
-  return variants[0].url;
+  const selectedUrl = variants[0].url;
+  logInfo('manifest.variant_selected', {
+    source: describeUrl(sourceUrl),
+    variant: describeUrl(selectedUrl),
+    variants: variants.length,
+  });
+  return selectedUrl;
 };
 
 const createFramePlan = duration => {
@@ -291,17 +400,34 @@ const generateSprites = async ({ key, sourceUrl }) => {
   const safe = safeKey(key);
   const outputDir = join(DATA_DIR, safe);
   const readyFile = join(outputDir, 'index.vtt');
+  const startedAt = Date.now();
+
+  logInfo('preview.generate.request', {
+    key: safe,
+    source: describeUrl(sourceUrl),
+  });
 
   if ((await fileExists(readyFile)) && (await canUseCachedPreview(outputDir))) {
+    logInfo('preview.generate.cache_hit', {
+      key: safe,
+      durationMs: Date.now() - startedAt,
+    });
     return { key: safe, ready: true, cached: true };
   }
 
   if (pending.has(safe)) {
+    logInfo('preview.generate.join_pending', {
+      key: safe,
+    });
     return pending.get(safe);
   }
 
   const task = (async () => {
     const workDir = join(DATA_DIR, `${safe}.tmp-${Date.now()}`);
+    logInfo('preview.generate.start', {
+      key: safe,
+      workDir: basename(workDir),
+    });
     await rm(workDir, { recursive: true, force: true });
     await ensureDir(workDir);
 
@@ -309,6 +435,14 @@ const generateSprites = async ({ key, sourceUrl }) => {
       const previewInputUrl = await resolvePreviewInputUrl(sourceUrl);
       const duration = await probeDuration(previewInputUrl);
       const framePlan = createFramePlan(duration);
+      logInfo('preview.frames.plan', {
+        key: safe,
+        source: describeUrl(previewInputUrl),
+        durationSeconds: framePlan.duration,
+        frameCount: framePlan.frameCount,
+        intervalSeconds: framePlan.intervalSeconds,
+        concurrency: PREVIEW_FFMPEG_CONCURRENCY,
+      });
 
       const generatedFiles = await runWithConcurrency(
         framePlan.timestamps,
@@ -326,6 +460,11 @@ const generateSprites = async ({ key, sourceUrl }) => {
         .filter(Boolean)
         .map(filePath => basename(filePath))
         .sort();
+      logInfo('preview.frames.complete', {
+        key: safe,
+        generated: frameFiles.length,
+        failed: framePlan.timestamps.length - frameFiles.length,
+      });
 
       if (!frameFiles.length) {
         throw new Error('No preview frames were generated');
@@ -409,9 +548,20 @@ const generateSprites = async ({ key, sourceUrl }) => {
       await rm(outputDir, { recursive: true, force: true });
       await rename(workDir, outputDir);
 
+      logInfo('preview.generate.complete', {
+        key: safe,
+        frames: frameFiles.length,
+        sprites: spriteFiles.length,
+        durationMs: Date.now() - startedAt,
+      });
       return { key: safe, ready: true, cached: false };
     } catch (error) {
       await rm(workDir, { recursive: true, force: true }).catch(() => undefined);
+      logError('preview.generate.failed', {
+        key: safe,
+        durationMs: Date.now() - startedAt,
+        error: errorDetails(error),
+      });
       throw error;
     } finally {
       pending.delete(safe);
@@ -434,6 +584,32 @@ const readBody = req =>
   });
 
 const server = createServer(async (req, res) => {
+  const requestId = nextRequestId(req);
+  const startedAt = Date.now();
+  const requestUrl = req.url || '';
+  res.setHeader('x-request-id', requestId);
+  res.once('finish', () => {
+    logInfo('request.complete', {
+      requestId,
+      method: req.method,
+      path: (() => {
+        try {
+          return new URL(requestUrl, `http://${req.headers.host || 'localhost'}`).pathname;
+        } catch {
+          return requestUrl;
+        }
+      })(),
+      status: res.statusCode,
+      durationMs: Date.now() - startedAt,
+    });
+  });
+
+  logDebug('request.start', {
+    requestId,
+    method: req.method,
+    path: requestUrl.split('?')[0],
+  });
+
   try {
     if (!req.url) {
       sendError(res, 400, 'Missing request URL');
@@ -459,6 +635,12 @@ const server = createServer(async (req, res) => {
       }
 
       const result = await generateSprites({ key, sourceUrl });
+      logInfo('request.generate.result', {
+        requestId,
+        key: safeKey(key),
+        cached: result.cached,
+        ready: result.ready,
+      });
       json(res, 200, result);
       return;
     }
@@ -476,14 +658,30 @@ const server = createServer(async (req, res) => {
       const filePath = join(DATA_DIR, key, file);
       const exists = await fileExists(filePath);
       if (!exists) {
+        logWarn('preview.file.missing', {
+          requestId,
+          key,
+          file,
+        });
         sendError(res, 404, 'File not found');
         return;
       }
 
       if (file === 'index.vtt' && !(await canUseCachedPreview(join(DATA_DIR, key)))) {
+        logWarn('preview.file.stale', {
+          requestId,
+          key,
+          file,
+        });
         sendError(res, 404, 'Cached preview is stale');
         return;
       }
+
+      logDebug('preview.file.serve', {
+        requestId,
+        key,
+        file,
+      });
 
       const contentType = file.endsWith('.vtt')
         ? 'text/vtt; charset=utf-8'
@@ -508,12 +706,32 @@ const server = createServer(async (req, res) => {
 
     sendError(res, 404, 'Not found');
   } catch (error) {
+    logError('request.failed', {
+      requestId,
+      method: req.method,
+      path: requestUrl.split('?')[0],
+      error: errorDetails(error),
+    });
     sendError(res, 500, error instanceof Error ? error.message : 'Unknown error');
   }
 });
 
 await ensureDir(DATA_DIR);
+logInfo('service.start', {
+  port: PORT,
+  dataDir: DATA_DIR,
+  logLevel: LOG_LEVEL,
+  intervalSeconds: PREVIEW_INTERVAL_SECONDS,
+  frameWidth: PREVIEW_FRAME_WIDTH,
+  tileCols: PREVIEW_TILE_COLS,
+  tileRows: PREVIEW_TILE_ROWS,
+  maxFrames: PREVIEW_MAX_FRAMES,
+  ffmpegConcurrency: PREVIEW_FFMPEG_CONCURRENCY,
+  commandTimeoutMs: COMMAND_TIMEOUT_MS,
+});
 
 server.listen(PORT, () => {
-  console.log(`[preview-service] listening on ${PORT}`);
+  logInfo('service.ready', {
+    port: PORT,
+  });
 });

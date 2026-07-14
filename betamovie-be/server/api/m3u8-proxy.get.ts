@@ -1,46 +1,18 @@
 import { createHash } from 'node:crypto';
 import { sendStream } from 'h3';
-import { request, Pool } from 'undici';
+import { request } from 'undici';
 import { applyCorsHeaders } from '~/utils/cors';
-
-const proxyPoolsByOrigin = new Map<string, Pool>();
-const MAX_PROXY_POOLS = Math.max(
-  8,
-  Number.parseInt(process.env.M3U8_PROXY_MAX_POOLS || '64', 10) || 64
-);
-
-// Connection pool for undici (HTTP/1.1 keep-alive), re-used per origin.
-const getProxyPool = (url: string) => {
-  try {
-    const urlObj = new URL(url);
-    const cachedPool = proxyPoolsByOrigin.get(urlObj.origin);
-    if (cachedPool) {
-      return cachedPool;
-    }
-
-    const pool = new Pool(urlObj.origin, {
-      connections: 100,
-      pipelining: 10,
-      keepAliveTimeout: 60 * 1000,
-      keepAliveMaxTimeout: 10 * 60 * 1000,
-    });
-
-    proxyPoolsByOrigin.set(urlObj.origin, pool);
-
-    if (proxyPoolsByOrigin.size > MAX_PROXY_POOLS) {
-      const oldestOrigin = proxyPoolsByOrigin.keys().next().value;
-      if (oldestOrigin && oldestOrigin !== urlObj.origin) {
-        const oldestPool = proxyPoolsByOrigin.get(oldestOrigin);
-        proxyPoolsByOrigin.delete(oldestOrigin);
-        void oldestPool?.close().catch(() => null);
-      }
-    }
-
-    return pool;
-  } catch {
-    return undefined;
-  }
-};
+import {
+  acquireProxySlot,
+  assertSafeUpstreamUrl,
+  buildProxyRequestUrl,
+  getProxyResponseLimit,
+  getProxyPoolForUrl,
+  limitNodeReadable,
+  normalizeProxyHeaders,
+  readResponseBytesLimited,
+  requireProxyAccess,
+} from '~/utils/proxySecurity';
 
 const parseProxyHeaders = (rawHeaders: unknown): Record<string, string> => {
   if (typeof rawHeaders !== 'string') return {};
@@ -67,14 +39,22 @@ const logWarn = (message: string, ...args: any[]) => {
   console.warn(`[m3u8-proxy] ${message}`, ...args);
 };
 
+const safeUrlForLog = (value: string) => {
+  try {
+    const parsed = new URL(value);
+    return `${parsed.origin}${parsed.pathname}`;
+  } catch {
+    return '[invalid-url]';
+  }
+};
+
 const hashKey = (input: string) => createHash('sha256').update(input).digest('hex');
 const SEGMENT_RETRY_ATTEMPTS = Math.max(
   1,
   Number.parseInt(process.env.M3U8_SEGMENT_RETRY_ATTEMPTS || '2', 10) || 2
 );
-const SEGMENT_SKIP_FALLBACK_ENABLED = String(
-  process.env.M3U8_SEGMENT_SKIP_FALLBACK_ENABLED || 'true'
-).toLowerCase() !== 'false';
+const SEGMENT_SKIP_FALLBACK_ENABLED =
+  String(process.env.M3U8_SEGMENT_SKIP_FALLBACK_ENABLED || 'true').toLowerCase() !== 'false';
 const SEGMENT_SKIP_MIN_BYTES = Math.max(
   1,
   Number.parseInt(process.env.M3U8_SEGMENT_SKIP_MIN_BYTES || '25000', 10) || 25000
@@ -85,14 +65,9 @@ const SEGMENT_SKIP_MAX_ADVANCE = Math.max(
 );
 const SEGMENT_SKIP_PREFERRED_ADVANCE = Math.min(
   SEGMENT_SKIP_MAX_ADVANCE,
-  Math.max(
-    1,
-    Number.parseInt(process.env.M3U8_SEGMENT_SKIP_PREFERRED_ADVANCE || '1', 10) || 1
-  )
+  Math.max(1, Number.parseInt(process.env.M3U8_SEGMENT_SKIP_PREFERRED_ADVANCE || '1', 10) || 1)
 );
-const SEGMENT_SKIP_REFERER_HOSTS = (
-  process.env.M3U8_SEGMENT_SKIP_REFERER_HOSTS || '111movies.net'
-)
+const SEGMENT_SKIP_REFERER_HOSTS = (process.env.M3U8_SEGMENT_SKIP_REFERER_HOSTS || '111movies.net')
   .split(',')
   .map(value => value.trim().toLowerCase())
   .filter(Boolean);
@@ -205,9 +180,7 @@ const isPtsContinuityAcceptable = (anchorPts: number | null, candidate: PtsRange
 };
 
 const isWeakSegmentPayload = (bytes: Buffer, pts: PtsRange | null) =>
-  bytes.length <= SEGMENT_SKIP_MIN_BYTES ||
-  !pts ||
-  pts.max - pts.min < SEGMENT_MIN_VALID_PTS_SPAN;
+  bytes.length <= SEGMENT_SKIP_MIN_BYTES || !pts || pts.max - pts.min < SEGMENT_MIN_VALID_PTS_SPAN;
 
 const extractPtsRange = (bytes: Buffer): PtsRange | null => {
   const packetSize = 188;
@@ -261,11 +234,7 @@ const extractPtsRange = (bytes: Buffer): PtsRange | null => {
     const p3 = bytes[payloadOffset + 12];
     const p4 = bytes[payloadOffset + 13];
     const pts =
-      (p0 & 0x0e) * 536_870_912 +
-      (p1 << 22) +
-      ((p2 & 0xfe) << 14) +
-      (p3 << 7) +
-      ((p4 & 0xfe) >> 1);
+      (p0 & 0x0e) * 536_870_912 + (p1 << 22) + ((p2 & 0xfe) << 14) + (p3 << 7) + ((p4 & 0xfe) >> 1);
 
     if (pts < minPts) minPts = pts;
     if (pts > maxPts) maxPts = pts;
@@ -477,7 +446,7 @@ const requestSegmentWithRetry = async (
   rangeHeader?: string,
   bodyTimeoutMs: number = DEFAULT_SEGMENT_BODY_TIMEOUT_MS
 ) => {
-  const pool = getProxyPool(url);
+  const pool = getProxyPoolForUrl(url);
   let response: Awaited<ReturnType<typeof request>> | null = null;
   const requestHeaders = rangeHeader ? { ...headers, Range: rangeHeader } : headers;
 
@@ -492,7 +461,7 @@ const requestSegmentWithRetry = async (
       });
     } catch (error) {
       if (attempt < SEGMENT_RETRY_ATTEMPTS) {
-        logWarn(`Segment request attempt ${attempt} failed, retrying: ${url}`);
+        logWarn(`Segment request attempt ${attempt} failed, retrying: ${safeUrlForLog(url)}`);
         continue;
       }
       throw error;
@@ -504,7 +473,9 @@ const requestSegmentWithRetry = async (
 
     if (attempt < SEGMENT_RETRY_ATTEMPTS && shouldRetryStatus(response.statusCode)) {
       await response.body.dump().catch(() => null);
-      logWarn(`Segment status ${response.statusCode} on attempt ${attempt}, retrying: ${url}`);
+      logWarn(
+        `Segment status ${response.statusCode} on attempt ${attempt}, retrying: ${safeUrlForLog(url)}`
+      );
       continue;
     }
     return response;
@@ -552,10 +523,13 @@ const readResponseBytes = async (
   warn = true
 ) => {
   try {
-    return Buffer.from(await response.body.arrayBuffer());
+    return await readResponseBytesLimited(response.body, getProxyResponseLimit('m3u8'));
   } catch (error) {
+    if ((error as { statusCode?: number })?.statusCode === 413) {
+      throw error;
+    }
     if (warn) {
-      logWarn(`Failed to read ${label} response body: ${url}`, error);
+      logWarn(`Failed to read ${label} response body: ${safeUrlForLog(url)}`, error);
     }
     return null;
   }
@@ -663,16 +637,10 @@ const buildProxyUrl = (
   proxyPath: string,
   targetUrl: string,
   headers: Record<string, string>,
-  internalToken?: string,
   isSegment?: boolean
 ) => {
-  return (
-    `${origin}${proxyPath}` +
-    `?url=${encodeURIComponent(targetUrl)}` +
-    `&headers=${encodeURIComponent(JSON.stringify(headers))}` +
-    (internalToken ? `&internalToken=${encodeURIComponent(internalToken)}` : '') +
-    (isSegment ? '&isSegment=true' : '')
-  );
+  const proxyUrl = buildProxyRequestUrl(origin, proxyPath, 'm3u8', targetUrl, headers);
+  return isSegment ? `${proxyUrl}&isSegment=true` : proxyUrl;
 };
 
 const isKkPhimPlaylist = (playlistUrl: string, headers: Record<string, string>) => {
@@ -730,7 +698,10 @@ const stripKkPhimAdSegments = (
         // `convertv*` segments are still the main episode video with a baked-in banner,
         // so stripping them would remove story content and cause a visible jump.
         if (isKkPhimVideoAdSegmentUrl(resolvedSegmentUrl)) {
-          while (filtered.length > 0 && filtered[filtered.length - 1].trim() === '#EXT-X-DISCONTINUITY') {
+          while (
+            filtered.length > 0 &&
+            filtered[filtered.length - 1].trim() === '#EXT-X-DISCONTINUITY'
+          ) {
             filtered.pop();
           }
 
@@ -778,7 +749,11 @@ const stripKkPhimAdSegments = (
     normalized.pop();
   }
 
-  logInfo(`Stripped ${removedSegments} KKPhim video-ad segment(s) from playlist: ${playlistUrl}`);
+  logInfo(
+    `Stripped ${removedSegments} KKPhim video-ad segment(s) from playlist: ${safeUrlForLog(
+      playlistUrl
+    )}`
+  );
   return normalized.join('\n');
 };
 
@@ -787,8 +762,7 @@ const rewriteM3U8 = (
   playlistUrl: string,
   origin: string,
   proxyPath: string,
-  headers: Record<string, string>,
-  internalToken?: string
+  headers: Record<string, string>
 ) => {
   const lines = stripKkPhimAdSegments(manifest, playlistUrl, headers).split(/\r?\n/);
   const rewritten = lines.map(line => {
@@ -801,7 +775,7 @@ const rewriteM3U8 = (
         try {
           const abs = new URL(uri, playlistUrl).toString();
           const isPlaylist = /\.m3u8(?:$|[?#])/i.test(abs) || abs.includes('type=hls');
-          const proxied = buildProxyUrl(origin, proxyPath, abs, headers, internalToken, !isPlaylist);
+          const proxied = buildProxyUrl(origin, proxyPath, abs, headers, !isPlaylist);
           return `URI=\"${proxied}\"`;
         } catch {
           return `URI=\"${uri}\"`;
@@ -813,7 +787,7 @@ const rewriteM3U8 = (
     try {
       const abs = new URL(trimmed, playlistUrl).toString();
       const isPlaylist = /\.m3u8(?:$|[?#])/i.test(abs) || abs.includes('type=hls');
-      return buildProxyUrl(origin, proxyPath, abs, headers, internalToken, !isPlaylist);
+      return buildProxyUrl(origin, proxyPath, abs, headers, !isPlaylist);
     } catch {
       return line;
     }
@@ -848,36 +822,46 @@ export default defineEventHandler(async event => {
 
   const query = getQuery(event);
   const url = typeof query.url === 'string' ? query.url : '';
-  const internalToken = typeof query.internalToken === 'string' ? query.internalToken : undefined;
   if (!url) {
     throw createError({ statusCode: 400, statusMessage: 'Missing url' });
   }
 
-  const headers = parseProxyHeaders(query.headers);
+  let normalizedUrl: string;
+  try {
+    normalizedUrl = await assertSafeUpstreamUrl(url);
+  } catch {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Unsafe upstream URL',
+    });
+  }
+
+  const headers = normalizeProxyHeaders(parseProxyHeaders(query.headers));
+  await requireProxyAccess(event, {
+    kind: 'm3u8',
+    targetUrl: normalizedUrl,
+    headers,
+  });
+
   const isGetRequest = event.method === 'GET';
-  const segmentNumber = extractSegmentNumber(url);
-  const isSegmentRequest = query.isSegment === 'true' || isLikelySegmentRequest(url, segmentNumber);
+  const segmentNumber = extractSegmentNumber(normalizedUrl);
+  const isSegmentRequest =
+    query.isSegment === 'true' || isLikelySegmentRequest(normalizedUrl, segmentNumber);
   const requestedRange = isSegmentRequest ? getRequestHeader(event, 'range') || '' : '';
   const storage = isGetRequest && isSegmentRequest && !requestedRange ? useStorage('cache') : null;
   const stickyIdentity =
-    segmentNumber != null && storage ? buildSegmentSkipStickyIdentity(url, headers) : '';
+    segmentNumber != null && storage ? buildSegmentSkipStickyIdentity(normalizedUrl, headers) : '';
   const stickyKey =
-    stickyIdentity && storage
-      ? `m3u8-proxy:segment-skip:sticky:v1:${hashKey(stickyIdentity)}`
-      : '';
+    stickyIdentity && storage ? `m3u8-proxy:segment-skip:sticky:v1:${hashKey(stickyIdentity)}` : '';
   const stickyState = stickyKey
-    ? await storage
-        .getItem<SegmentSkipStickyState>(stickyKey)
-        .catch(() => null)
+    ? await storage.getItem<SegmentSkipStickyState>(stickyKey).catch(() => null)
     : null;
   const qualityStickyKey =
     stickyIdentity && storage
       ? `m3u8-proxy:segment-quality:sticky:v1:${hashKey(stickyIdentity)}`
       : '';
   const qualityStickyState = qualityStickyKey
-    ? await storage
-        .getItem<SegmentQualityStickyState>(qualityStickyKey)
-        .catch(() => null)
+    ? await storage.getItem<SegmentQualityStickyState>(qualityStickyKey).catch(() => null)
     : null;
   const now = Date.now();
   const stickyExpired = Boolean(stickyState?.stickyUntil && stickyState.stickyUntil <= now);
@@ -911,13 +895,13 @@ export default defineEventHandler(async event => {
       : null;
 
   const stickyMappedUrl =
-    activeStickyOffset > 0 ? buildAdvancedSegmentUrl(url, activeStickyOffset) || '' : '';
+    activeStickyOffset > 0 ? buildAdvancedSegmentUrl(normalizedUrl, activeStickyOffset) || '' : '';
   const activeQualitySticky =
     qualityStickyState && !qualityStickyExpired && qualityStickyState.quality === '720';
   const qualityMappedUrl = activeQualitySticky
     ? replaceSegmentQualityToken(url, M3U8_1080_PATH_TOKEN, M3U8_720_PATH_TOKEN) || ''
     : '';
-  let resolvedUrl = stickyMappedUrl || qualityMappedUrl || url;
+  let resolvedUrl = stickyMappedUrl || qualityMappedUrl || normalizedUrl;
   let resolvedOffset = stickyMappedUrl ? activeStickyOffset : 0;
   let resolvedQuality: '1080' | '720' = resolvedUrl.includes(M3U8_720_PATH_TOKEN) ? '720' : '1080';
   const shouldPassthroughSegment = shouldPassthroughSegmentStream(
@@ -949,21 +933,31 @@ export default defineEventHandler(async event => {
     }
   }
 
+  const releaseProxySlot = acquireProxySlot();
+  const response = event.node.res;
+  if (response?.once) {
+    response.once('finish', releaseProxySlot);
+    response.once('close', releaseProxySlot);
+  }
+
   let upstreamResponse = await requestSegmentWithRetry(
     resolvedUrl,
     headers,
     requestedRange,
     segmentBodyTimeoutMs
   ).catch(() => null);
-  if ((!upstreamResponse || !isSuccessfulSegmentStatus(upstreamResponse.statusCode)) && resolvedOffset > 0) {
+  if (
+    (!upstreamResponse || !isSuccessfulSegmentStatus(upstreamResponse.statusCode)) &&
+    resolvedOffset > 0
+  ) {
     // Sticky offset can become stale; fall back to original segment before failing the request.
     upstreamResponse = await requestSegmentWithRetry(
-      url,
+      normalizedUrl,
       headers,
       requestedRange,
       segmentBodyTimeoutMs
     ).catch(() => null);
-    resolvedUrl = url;
+    resolvedUrl = normalizedUrl;
     resolvedOffset = 0;
     resolvedQuality = '1080';
     if (stickyKey && storage) {
@@ -975,12 +969,12 @@ export default defineEventHandler(async event => {
     resolvedQuality === '720'
   ) {
     upstreamResponse = await requestSegmentWithRetry(
-      url,
+      normalizedUrl,
       headers,
       requestedRange,
       segmentBodyTimeoutMs
     ).catch(() => null);
-    resolvedUrl = url;
+    resolvedUrl = normalizedUrl;
     resolvedOffset = 0;
     resolvedQuality = '1080';
     if (qualityStickyKey && storage) {
@@ -1006,6 +1000,14 @@ export default defineEventHandler(async event => {
   setHeader(event, 'content-type', contentType);
 
   if (shouldPassthroughSegment) {
+    const contentLength = Number(upstreamResponse.headers['content-length'] || 0);
+    if (contentLength > getProxyResponseLimit('m3u8')) {
+      await upstreamResponse.body.dump().catch(() => null);
+      throw createError({
+        statusCode: 413,
+        statusMessage: 'Upstream response exceeds the configured size limit',
+      });
+    }
     setResponseStatus(event, upstreamResponse.statusCode);
     setHeaderFromUpstream(event, upstreamResponse.headers, 'accept-ranges');
     setHeaderFromUpstream(event, upstreamResponse.headers, 'cache-control');
@@ -1018,7 +1020,10 @@ export default defineEventHandler(async event => {
     setHeader(event, 'x-cache', 'MISS');
     setCacheHeaders(event, true);
     event.node.res.flushHeaders?.();
-    return sendStream(event, upstreamResponse.body as any);
+    return sendStream(
+      event,
+      limitNodeReadable(upstreamResponse.body as any, getProxyResponseLimit('m3u8')) as any
+    );
   }
 
   // If it's a playlist, rewrite internal URLs to go through this proxy too
@@ -1072,7 +1077,7 @@ export default defineEventHandler(async event => {
     const manifest = bytes.toString('utf8');
     const origin = getRequestURL(event).origin;
     const proxyPath = '/api/m3u8-proxy';
-    const rewritten = rewriteM3U8(manifest, url, origin, proxyPath, headers, internalToken);
+    const rewritten = rewriteM3U8(manifest, normalizedUrl, origin, proxyPath, headers);
 
     const duration = Date.now() - startTime;
     // logInfo(`✓ Playlist served (${duration}ms), size: ${manifest.length} bytes`);
@@ -1188,7 +1193,10 @@ export default defineEventHandler(async event => {
       }
 
       const candidateType = resolveContentType(candidate);
-      const candidateBytes = Buffer.from(await candidate.body.arrayBuffer().catch(() => new ArrayBuffer(0)));
+      const candidateBytes = await readResponseBytesLimited(
+        candidate.body,
+        getProxyResponseLimit('m3u8')
+      ).catch(() => Buffer.alloc(0));
       if (!candidateBytes.length || !isLikelyTsPayload(candidateBytes)) {
         continue;
       }

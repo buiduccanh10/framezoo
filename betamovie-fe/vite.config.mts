@@ -198,7 +198,6 @@ export default defineConfig(({ mode }) => {
 
     test: {
       environment: "jsdom",
-      execArgv: ["--no-webstorage"],
       server: {
         deps: {
           inline: [

@@ -217,7 +217,7 @@ export default defineEventHandler(async event => {
         throw createError({
           statusCode: 400,
           message: 'Invalid settings data',
-          cause: error.errors,
+          cause: error.issues,
         });
       }
 
