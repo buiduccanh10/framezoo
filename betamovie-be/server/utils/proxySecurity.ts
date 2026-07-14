@@ -709,7 +709,7 @@ export const getProxyPoolForUrl = (rawUrl: string) => {
 };
 
 export const acquireProxySlot = () => {
-  const maxConcurrent = getPositiveInt(process.env.PROXY_MAX_CONCURRENT_REQUESTS, 64);
+  const maxConcurrent = getPositiveInt(process.env.PROXY_MAX_CONCURRENT_REQUESTS, 2048);
 
   if (activeProxyRequests >= maxConcurrent) {
     throw createError({
