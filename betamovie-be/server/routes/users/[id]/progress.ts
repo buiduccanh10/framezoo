@@ -37,15 +37,15 @@ export default defineEventHandler(async event => {
       where: { user_id: userId },
     });
 
-    return items.map(item => ({
+    const results = items.map(item => ({
       id: item.id,
       tmdbId: item.tmdb_id,
       episode: {
-        id: item.episode_id || null,
+        id: item.episode_id === '\n' ? null : (item.episode_id || null),
         number: item.episode_number || null,
       },
       season: {
-        id: item.season_id || null,
+        id: item.season_id === '\n' ? null : (item.season_id || null),
         number: item.season_number || null,
       },
       meta: item.meta,
@@ -53,6 +53,50 @@ export default defineEventHandler(async event => {
       watched: item.watched.toString(),
       updatedAt: item.updated_at.toISOString(),
     }));
+
+    const storage = useStorage('cache');
+    const keys = await storage.getKeys(`progress_queue:${userId}:`);
+    for (const key of keys) {
+      const queuedData: any = await storage.getItem(key);
+      if (!queuedData) continue;
+
+      const { tmdbId, seasonId, episodeId, seasonNumber, episodeNumber, duration, watched, meta, updatedAt } = queuedData;
+
+      const normSeasonId = seasonId === 'none' ? null : seasonId;
+      const normEpisodeId = episodeId === 'none' ? null : episodeId;
+
+      const existingIndex = results.findIndex(
+        r => r.tmdbId === tmdbId && r.season.id === normSeasonId && r.episode.id === normEpisodeId
+      );
+
+      const mappedItem = {
+        id: existingIndex >= 0 ? results[existingIndex].id : '',
+        tmdbId,
+        episode: {
+          id: normEpisodeId,
+          number: episodeNumber,
+        },
+        season: {
+          id: normSeasonId,
+          number: seasonNumber,
+        },
+        meta,
+        duration: duration.toString(),
+        watched: watched.toString(),
+        updatedAt,
+      };
+
+      if (existingIndex >= 0) {
+        // Only overwrite if queued data is newer
+        if (new Date(updatedAt).getTime() > new Date(results[existingIndex].updatedAt).getTime()) {
+          results[existingIndex] = mappedItem;
+        }
+      } else {
+        results.push(mappedItem);
+      }
+    }
+
+    return results;
   }
 
   if (method === 'DELETE' && event.path.endsWith('/progress/cleanup')) {
