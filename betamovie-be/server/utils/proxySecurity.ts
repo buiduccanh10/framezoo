@@ -406,51 +406,6 @@ const normalizeHostname = (hostname: string) =>
     .replace(/\.+$/, '')
     .toLowerCase();
 
-const DEFAULT_PROXY_ALLOWED_UPSTREAM_HOSTS = [
-  'vixsrc.to',
-  'vidlink.pro',
-  'vidsrc.to',
-  'vidking.net',
-  'videasy.to',
-  'videasy.net',
-  'ironwallnet.net',
-  'phimapi.com',
-  '111movies.net',
-];
-
-const isUpstreamAllowlistRequired = () => {
-  const configured = process.env.PROXY_REQUIRE_UPSTREAM_ALLOWLIST;
-  if (configured !== undefined) {
-    return configured.toLowerCase() === 'true';
-  }
-
-  return process.env.NODE_ENV === 'production';
-};
-
-const getConfiguredUpstreamHosts = () => {
-  const configured = (process.env.PROXY_ALLOWED_UPSTREAM_HOSTS || '').trim();
-  if (!configured && !isUpstreamAllowlistRequired()) {
-    return [];
-  }
-
-  return (configured || DEFAULT_PROXY_ALLOWED_UPSTREAM_HOSTS.join(','))
-    .split(',')
-    .map(value => value.trim().toLowerCase().replace(/^\*\./, '').replace(/\.+$/, ''))
-    .filter(Boolean);
-};
-
-export const isAllowedProxyUpstreamHost = (hostname: string) => {
-  const allowedHosts = getConfiguredUpstreamHosts();
-  if (!allowedHosts.length) {
-    return !isUpstreamAllowlistRequired();
-  }
-
-  const normalizedHostname = normalizeHostname(hostname);
-  return allowedHosts.some(
-    allowedHost =>
-      normalizedHostname === allowedHost || normalizedHostname.endsWith(`.${allowedHost}`)
-  );
-};
 
 export const assertSafeUpstreamUrl = async (rawUrl: string) => {
   let parsed: URL;
@@ -467,9 +422,6 @@ export const assertSafeUpstreamUrl = async (rawUrl: string) => {
     throw new Error('Upstream URL credentials are not allowed');
   }
   const hostname = normalizeHostname(parsed.hostname);
-  if (!isAllowedProxyUpstreamHost(hostname)) {
-    throw new Error('Upstream host is not allowlisted');
-  }
 
   if (
     hostname === 'localhost' ||
