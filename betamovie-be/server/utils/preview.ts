@@ -1,3 +1,5 @@
+import { buildProxyRequestUrl } from '~/utils/proxySecurity';
+
 type PreviewHeaders = Record<string, string>;
 
 export interface StreamPreview {
@@ -18,6 +20,8 @@ interface BuildStreamPreviewOptions {
 
 const TEMPLATE_TOKEN_RE = /\{([a-zA-Z0-9_]+)\}/g;
 const PREVIEW_IMAGE_EXT_RE = /\.(?:avif|webp|png|jpe?g)(?:[?#].*)?$/i;
+const PREVIEW_ASSET_FILE_RE = /^[a-zA-Z0-9._-]{1,160}\.(?:avif|webp|png|jpe?g)$/i;
+const PREVIEW_ASSET_KEY_RE = /^[a-zA-Z0-9._:-]{1,200}$/;
 
 const upperProvider = (provider: string) => provider.replace(/[^a-z0-9]+/gi, '_').toUpperCase();
 
@@ -31,7 +35,11 @@ const toPadded = (value?: number | null) =>
 
 const trimTrailingSlash = (value: string) => value.replace(/\/+$/, '');
 
-const resolveTemplateUrl = (template: string, baseUrl: string | null, tokens: Record<string, string>) => {
+const resolveTemplateUrl = (
+  template: string,
+  baseUrl: string | null,
+  tokens: Record<string, string>
+) => {
   const interpolated = template.replace(TEMPLATE_TOKEN_RE, (_match, token) => tokens[token] || '');
   if (!interpolated) {
     return '';
@@ -53,11 +61,7 @@ const resolveTemplateUrl = (template: string, baseUrl: string | null, tokens: Re
 };
 
 const buildProxyUrl = (origin: string, targetUrl: string, headers: PreviewHeaders) => {
-  return (
-    `${origin}/api/preview-proxy` +
-    `?url=${encodeURIComponent(targetUrl)}` +
-    `&headers=${encodeURIComponent(JSON.stringify(headers))}`
-  );
+  return buildProxyRequestUrl(origin, '/api/preview-proxy', 'preview', targetUrl, headers);
 };
 
 export const buildPreviewAssetKey = ({
@@ -72,9 +76,11 @@ export const buildPreviewAssetKey = ({
   return parts.join(':');
 };
 
-const buildGeneratedPreviewUrl = (
-  origin: string,
-  params: Pick<BuildStreamPreviewOptions, 'provider' | 'mediaType' | 'tmdbId' | 'season' | 'episode'>
+export const buildPreviewAutoResource = (
+  params: Pick<
+    BuildStreamPreviewOptions,
+    'provider' | 'mediaType' | 'tmdbId' | 'season' | 'episode'
+  >
 ) => {
   const query = new URLSearchParams({
     provider: params.provider,
@@ -90,7 +96,75 @@ const buildGeneratedPreviewUrl = (
     query.set('episode', String(params.episode));
   }
 
-  return `${origin}/api/preview/auto?${query.toString()}`;
+  return query.toString();
+};
+
+export const buildPreviewFileResource = (key: string, file: string) => `${key}|${file}`;
+
+export const isValidPreviewAssetKey = (key: string) => PREVIEW_ASSET_KEY_RE.test(key);
+
+export const isValidPreviewAssetFile = (file: string) => PREVIEW_ASSET_FILE_RE.test(file);
+
+export const parsePreviewFileResource = (resource: string) => {
+  const separator = resource.indexOf('|');
+  if (separator <= 0 || separator === resource.length - 1) {
+    return null;
+  }
+
+  const key = resource.slice(0, separator);
+  const file = resource.slice(separator + 1);
+  if (!isValidPreviewAssetKey(key) || !isValidPreviewAssetFile(file)) {
+    return null;
+  }
+
+  return { key, file };
+};
+
+export const parsePreviewAutoResource = (resource: string) => {
+  const params = new URLSearchParams(resource);
+  const provider = params.get('provider') || '';
+  const mediaType =
+    params.get('type') === 'tv' ? 'tv' : params.get('type') === 'movie' ? 'movie' : '';
+  const tmdbId = params.get('tmdbId') || '';
+  const seasonValue = params.get('season');
+  const episodeValue = params.get('episode');
+  const season = seasonValue === null ? null : Number.parseInt(seasonValue, 10);
+  const episode = episodeValue === null ? null : Number.parseInt(episodeValue, 10);
+
+  if (
+    !provider ||
+    !mediaType ||
+    !tmdbId ||
+    (seasonValue !== null && !Number.isInteger(season)) ||
+    (episodeValue !== null && !Number.isInteger(episode))
+  ) {
+    return null;
+  }
+
+  return {
+    provider,
+    mediaType,
+    tmdbId,
+    season,
+    episode,
+  } as const;
+};
+
+const buildGeneratedPreviewUrl = (
+  origin: string,
+  params: Pick<
+    BuildStreamPreviewOptions,
+    'provider' | 'mediaType' | 'tmdbId' | 'season' | 'episode'
+  >
+) => {
+  return buildProxyRequestUrl(
+    origin,
+    '/api/preview/auto',
+    'preview-auto',
+    '',
+    {},
+    buildPreviewAutoResource(params)
+  );
 };
 
 export const buildStreamPreview = ({
@@ -145,7 +219,9 @@ export const buildStreamPreview = ({
   }
 
   const spriteTemplate = getTemplate('PREVIEW_SPRITE_TEMPLATE', provider);
-  const upstreamSpriteUrl = spriteTemplate ? resolveTemplateUrl(spriteTemplate, baseUrl, tokens) : '';
+  const upstreamSpriteUrl = spriteTemplate
+    ? resolveTemplateUrl(spriteTemplate, baseUrl, tokens)
+    : '';
 
   return {
     kind: 'vtt',

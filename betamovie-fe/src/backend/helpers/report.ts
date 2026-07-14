@@ -61,6 +61,7 @@ export async function reportProviders(items: ProviderMetric[]): Promise<void> {
   if (!metricsEndpoint) return;
   return ofetch(metricsEndpoint, {
     method: "POST",
+    credentials: "include",
     body: {
       items,
       tool: getScrapeTool(),
@@ -174,6 +175,7 @@ export function reportCaptchaSolve(success: boolean) {
   if (!captchaMetricsEndpoint) return;
   ofetch(captchaMetricsEndpoint, {
     method: "POST",
+    credentials: "include",
     body: {
       success,
     },

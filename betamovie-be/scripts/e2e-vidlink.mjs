@@ -31,6 +31,7 @@ const season = Number.parseInt(getArg('season') || '', 10);
 const episode = Number.parseInt(getArg('episode') || '', 10);
 const backendBase = (getArg('backend-base') || 'http://127.0.0.1:3000').replace(/\/+$/, '');
 const internalToken = (getArg('internal-token') || process.env.INTERNAL_API_TOKEN || '').trim();
+const internalHeaders = internalToken ? { 'x-internal-token': internalToken } : {};
 
 required('id', id);
 
@@ -48,19 +49,6 @@ const streamEndpoint =
   type === 'movie'
     ? `${backendBase}/api/embed/api/streams/vidlink/movie/${encodeURIComponent(id)}`
     : `${backendBase}/api/embed/api/streams/vidlink/tv/${encodeURIComponent(id)}/${season}/${episode}`;
-
-const streamEndpointWithToken = internalToken
-  ? `${streamEndpoint}?internalToken=${encodeURIComponent(internalToken)}`
-  : streamEndpoint;
-
-const withToken = rawUrl => {
-  if (!internalToken) return rawUrl;
-  const parsed = new URL(rawUrl);
-  if (!parsed.searchParams.get('internalToken')) {
-    parsed.searchParams.set('internalToken', internalToken);
-  }
-  return parsed.toString();
-};
 
 const firstMediaLine = manifest =>
   manifest
@@ -147,12 +135,12 @@ const isBinaryMediaResponse = async response => {
   );
 };
 
-const streamResponse = await fetch(streamEndpointWithToken, {
-  headers: { Accept: 'application/json' },
+const streamResponse = await fetch(streamEndpoint, {
+  headers: { Accept: 'application/json', ...internalHeaders },
 });
 
 if (!streamResponse.ok) {
-  console.error(`HTTP ${streamResponse.status} from ${streamEndpointWithToken}`);
+  console.error(`HTTP ${streamResponse.status} from ${streamEndpoint}`);
   process.exit(1);
 }
 
@@ -167,7 +155,7 @@ if (!streamPayload?.success || !streamPayload?.count || !returnedStreams.length)
 let verified = null;
 
 for (const stream of returnedStreams) {
-  const candidateUrl = withToken(String(stream?.url || ''));
+  const candidateUrl = String(stream?.url || '').trim();
   if (!candidateUrl) continue;
 
   if (stream?.streamType === 'file') {
@@ -205,7 +193,7 @@ for (const stream of returnedStreams) {
     continue;
   }
 
-  let segmentUrl = withToken(new URL(firstLine, candidateUrl).toString());
+  let segmentUrl = new URL(firstLine, candidateUrl).toString();
   if (/\.m3u8(?:$|[?#])/i.test(segmentUrl)) {
     const childResponse = await fetch(segmentUrl, {
       headers: { Accept: '*/*' },
@@ -224,7 +212,7 @@ for (const stream of returnedStreams) {
       continue;
     }
 
-    segmentUrl = withToken(new URL(childLine, segmentUrl).toString());
+    segmentUrl = new URL(childLine, segmentUrl).toString();
   }
 
   const segmentResponse = await fetch(segmentUrl, {
@@ -251,7 +239,7 @@ if (!verified) {
 }
 
 console.log(`[PASS] ${type.toUpperCase()} ${id}`);
-console.log(`stream endpoint: ${streamEndpointWithToken}`);
+console.log(`stream endpoint: ${streamEndpoint}`);
 console.log(`streams returned: ${returnedStreams.length}`);
 console.log(`verified mode: ${verified.mode}`);
 console.log(`verified quality: ${verified.quality || 'n/a'}`);

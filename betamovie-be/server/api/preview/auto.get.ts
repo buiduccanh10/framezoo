@@ -1,23 +1,26 @@
-import { buildPreviewAssetKey } from '~/utils/preview';
+import {
+  buildPreviewAssetKey,
+  buildPreviewAutoResource,
+  buildPreviewFileResource,
+  parsePreviewAutoResource,
+} from '~/utils/preview';
 import { getProvider } from '~/providers/registry';
 import { applyCorsHeaders } from '~/utils/cors';
+import {
+  acquireProxySlot,
+  assertSafeUpstreamUrl,
+  buildProxyRequestUrl,
+  fetchWithTimeout,
+  getProxyResponseLimit,
+  getProxyUpstreamTimeoutMs,
+  readWebResponseBytesLimited,
+  requireProxyAccess,
+} from '~/utils/proxySecurity';
 
 const PREVIEW_SERVICE_URL = process.env.PREVIEW_SERVICE_URL || 'http://127.0.0.1:3100';
 const PREVIEW_BACKEND_INTERNAL_BASE_URL =
   process.env.PREVIEW_BACKEND_INTERNAL_BASE_URL || 'http://127.0.0.1:3000';
 const PREVIEW_SERVICE_TIMEOUT_MS = Number(process.env.PREVIEW_SERVICE_TIMEOUT_MS || 130_000);
-const INTERNAL_API_TOKEN = process.env.INTERNAL_API_TOKEN?.trim() || '';
-
-const withInternalToken = (url: string) => {
-  if (!INTERNAL_API_TOKEN) return url;
-  try {
-    const parsed = new URL(url);
-    parsed.searchParams.set('internalToken', INTERNAL_API_TOKEN);
-    return parsed.toString();
-  } catch {
-    return url;
-  }
-};
 
 const setPreviewHeaders = (event: any) => {
   applyCorsHeaders(event, 'GET, OPTIONS, HEAD', '*');
@@ -29,11 +32,10 @@ const fetchGeneratedVtt = async (key: string) => {
   const fileTimeout = setTimeout(() => fileAbort.abort(), PREVIEW_SERVICE_TIMEOUT_MS);
 
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${PREVIEW_SERVICE_URL}/files/${encodeURIComponent(key)}/index.vtt`,
-      {
-        signal: fileAbort.signal,
-      }
+      { method: 'GET', signal: fileAbort.signal },
+      Math.min(PREVIEW_SERVICE_TIMEOUT_MS, getProxyUpstreamTimeoutMs())
     );
 
     if (!response.ok) {
@@ -43,9 +45,10 @@ const fetchGeneratedVtt = async (key: string) => {
       };
     }
 
+    const bytes = await readWebResponseBytesLimited(response, getProxyResponseLimit('preview'));
     return {
       ok: true as const,
-      payload: await response.text(),
+      payload: bytes.toString('utf8'),
     };
   } finally {
     clearTimeout(fileTimeout);
@@ -76,7 +79,14 @@ const rewriteGeneratedVtt = (payload: string, origin: string, key: string) => {
       }
 
       const [, fileName, fragment = ''] = match;
-      const proxied = `${origin}/api/preview/file?key=${encodeURIComponent(key)}&file=${encodeURIComponent(fileName)}`;
+      const proxied = buildProxyRequestUrl(
+        origin,
+        '/api/preview/file',
+        'preview-file',
+        '',
+        {},
+        buildPreviewFileResource(key, fileName)
+      );
       return line.replace(trimmed, `${proxied}${fragment}`);
     })
     .join('\n');
@@ -89,13 +99,34 @@ export default defineEventHandler(async event => {
   }
 
   const query = getQuery(event);
-  const providerName = typeof query.provider === 'string' ? query.provider : '';
-  const mediaType = query.type === 'tv' ? 'tv' : query.type === 'movie' ? 'movie' : '';
-  const tmdbId = typeof query.tmdbId === 'string' ? query.tmdbId : '';
-  const season = typeof query.season === 'string' ? Number.parseInt(query.season, 10) : null;
-  const episode = typeof query.episode === 'string' ? Number.parseInt(query.episode, 10) : null;
+  const resource = typeof query.resource === 'string' ? query.resource : '';
+  const parsedResource = resource ? parsePreviewAutoResource(resource) : null;
+  const providerName =
+    parsedResource?.provider || (typeof query.provider === 'string' ? query.provider : '');
+  const mediaType =
+    parsedResource?.mediaType ||
+    (query.type === 'tv' ? 'tv' : query.type === 'movie' ? 'movie' : '');
+  const tmdbId = parsedResource?.tmdbId || (typeof query.tmdbId === 'string' ? query.tmdbId : '');
+  const season =
+    parsedResource?.season ??
+    (typeof query.season === 'string' ? Number.parseInt(query.season, 10) : null);
+  const episode =
+    parsedResource?.episode ??
+    (typeof query.episode === 'string' ? Number.parseInt(query.episode, 10) : null);
 
-  if (!providerName || !mediaType || !tmdbId) {
+  if (
+    !providerName ||
+    providerName.length > 64 ||
+    !mediaType ||
+    !/^\d{1,20}$/.test(tmdbId) ||
+    (mediaType === 'tv' &&
+      (!Number.isInteger(season) ||
+        !Number.isInteger(episode) ||
+        season < 1 ||
+        episode < 1 ||
+        season > 1000 ||
+        episode > 1000))
+  ) {
     throw createError({ statusCode: 400, statusMessage: 'Missing provider, type, or tmdbId' });
   }
 
@@ -117,6 +148,18 @@ export default defineEventHandler(async event => {
     episode,
   });
   const origin = getRequestURL(event).origin;
+  await requireProxyAccess(event, {
+    kind: 'preview-auto',
+    resource:
+      resource ||
+      buildPreviewAutoResource({
+        provider: providerName,
+        mediaType,
+        tmdbId,
+        season,
+        episode,
+      }),
+  });
 
   const existingVtt = await fetchGeneratedVtt(key);
   if (existingVtt.ok) {
@@ -126,91 +169,116 @@ export default defineEventHandler(async event => {
     return rewrittenVtt;
   }
 
-  let sourceUrl = await storage.getItem<string>(`preview-source:${key}`).catch(() => null);
-  if (sourceUrl) {
-    const normalized = withInternalToken(sourceUrl);
-    if (normalized !== sourceUrl) {
-      sourceUrl = normalized;
+  const releaseProxySlot = acquireProxySlot();
+  try {
+    let sourceUrl = await storage.getItem<string>(`preview-source:${key}`).catch(() => null);
+    if (sourceUrl) {
+      try {
+        const parsed = new URL(sourceUrl);
+        if (!parsed.searchParams.get('capability')) {
+          sourceUrl = null;
+          await storage.removeItem(`preview-source:${key}`).catch(() => null);
+        }
+      } catch {
+        sourceUrl = null;
+        await storage.removeItem(`preview-source:${key}`).catch(() => null);
+      }
+    }
+
+    if (!sourceUrl) {
+      const contextCacheKey = `stream-meta:${providerName}:${mediaType}:${tmdbId}${mediaType === 'tv' ? `:${season}:${episode}` : ''}`;
+      const streamContext = await storage
+        .getItem<{
+          title?: string;
+          originName?: string;
+          releaseYear?: number;
+          country?: string;
+        }>(contextCacheKey)
+        .catch(() => null);
+      const streams = await provider.getStreams(tmdbId, mediaType, season, episode, storage, {
+        title: streamContext?.title,
+        originName: streamContext?.originName,
+        releaseYear: streamContext?.releaseYear,
+        country: streamContext?.country,
+      });
+      const stream = streams[0];
+      if (!stream?.url) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'No stream available to generate preview',
+        });
+      }
+
+      const proxyPath = stream.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
+      const proxyKind = stream.streamType === 'file' ? 'media' : 'm3u8';
+      const safeStreamUrl = await assertSafeUpstreamUrl(stream.url).catch(() => {
+        throw createError({
+          statusCode: 502,
+          statusMessage: 'Provider returned an unsafe stream URL',
+        });
+      });
+      sourceUrl = buildProxyRequestUrl(
+        PREVIEW_BACKEND_INTERNAL_BASE_URL,
+        proxyPath,
+        proxyKind,
+        safeStreamUrl,
+        stream.headers || {}
+      );
+
       await storage.setItem(`preview-source:${key}`, sourceUrl, { ttl: 60 * 60 }).catch(() => null);
     }
-  }
 
-  if (!sourceUrl) {
-    const contextCacheKey = `stream-meta:${providerName}:${mediaType}:${tmdbId}${mediaType === 'tv' ? `:${season}:${episode}` : ''}`;
-    const streamContext = await storage
-      .getItem<{ title?: string; originName?: string; releaseYear?: number; country?: string }>(
-        contextCacheKey
-      )
-      .catch(() => null);
-    const streams = await provider.getStreams(tmdbId, mediaType, season, episode, storage, {
-      title: streamContext?.title,
-      originName: streamContext?.originName,
-      releaseYear: streamContext?.releaseYear,
-      country: streamContext?.country,
-    });
-    const stream = streams[0];
-    if (!stream?.url) {
+    let generateResponse: Response;
+    const generateAbort = new AbortController();
+    const generateTimeout = setTimeout(() => generateAbort.abort(), PREVIEW_SERVICE_TIMEOUT_MS);
+    try {
+      generateResponse = await fetch(`${PREVIEW_SERVICE_URL}/generate`, {
+        method: 'POST',
+        signal: generateAbort.signal,
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          key,
+          sourceUrl,
+        }),
+      });
+    } catch (error: any) {
+      await storage.removeItem(`preview-source:${key}`).catch(() => null);
       throw createError({
-        statusCode: 404,
-        statusMessage: 'No stream available to generate preview',
+        statusCode: 502,
+        statusMessage: 'Preview generator unavailable',
+      });
+    } finally {
+      clearTimeout(generateTimeout);
+    }
+
+    if (!generateResponse.ok) {
+      await storage.removeItem(`preview-source:${key}`).catch(() => null);
+      const errorText = await readWebResponseBytesLimited(generateResponse, 64 * 1024)
+        .then(bytes => bytes.toString('utf8'))
+        .catch(() => '');
+      throw createError({
+        statusCode: 502,
+        statusMessage: 'Preview generator failed',
       });
     }
 
-    const proxyPath = stream.streamType === 'file' ? '/api/media-proxy' : '/api/m3u8-proxy';
-    sourceUrl =
-      `${PREVIEW_BACKEND_INTERNAL_BASE_URL}${proxyPath}?url=${encodeURIComponent(stream.url)}` +
-      `&headers=${encodeURIComponent(JSON.stringify(stream.headers || {}))}`;
-    sourceUrl = withInternalToken(sourceUrl);
+    const generatedVtt = await fetchGeneratedVtt(key);
+    if (!generatedVtt.ok) {
+      await storage.removeItem(`preview-source:${key}`).catch(() => null);
+      throw createError({
+        statusCode: generatedVtt.status || 502,
+        statusMessage: 'Preview VTT file is not available',
+      });
+    }
 
-    await storage.setItem(`preview-source:${key}`, sourceUrl, { ttl: 60 * 60 }).catch(() => null);
-  }
+    const rewrittenVtt = rewriteGeneratedVtt(generatedVtt.payload, origin, key);
 
-  let generateResponse: Response;
-  const generateAbort = new AbortController();
-  const generateTimeout = setTimeout(() => generateAbort.abort(), PREVIEW_SERVICE_TIMEOUT_MS);
-  try {
-    generateResponse = await fetch(`${PREVIEW_SERVICE_URL}/generate`, {
-      method: 'POST',
-      signal: generateAbort.signal,
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        key,
-        sourceUrl,
-      }),
-    });
-  } catch (error: any) {
-    await storage.removeItem(`preview-source:${key}`).catch(() => null);
-    throw createError({
-      statusCode: 502,
-      statusMessage: `Preview generator unavailable: ${error?.message || String(error)}`,
-    });
+    setHeader(event, 'content-type', 'text/vtt; charset=utf-8');
+    setPreviewHeaders(event);
+    return rewrittenVtt;
   } finally {
-    clearTimeout(generateTimeout);
+    releaseProxySlot();
   }
-
-  if (!generateResponse.ok) {
-    await storage.removeItem(`preview-source:${key}`).catch(() => null);
-    const errorText = await generateResponse.text().catch(() => '');
-    throw createError({
-      statusCode: 502,
-      statusMessage: `Preview generator failed: ${errorText || generateResponse.statusText}`,
-    });
-  }
-
-  const generatedVtt = await fetchGeneratedVtt(key);
-  if (!generatedVtt.ok) {
-    await storage.removeItem(`preview-source:${key}`).catch(() => null);
-    throw createError({
-      statusCode: generatedVtt.status || 502,
-      statusMessage: 'Preview VTT file is not available',
-    });
-  }
-
-  const rewrittenVtt = rewriteGeneratedVtt(generatedVtt.payload, origin, key);
-
-  setHeader(event, 'content-type', 'text/vtt; charset=utf-8');
-  setPreviewHeaders(event);
-  return rewrittenVtt;
 });

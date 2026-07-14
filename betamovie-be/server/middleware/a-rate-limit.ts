@@ -1,11 +1,15 @@
+import Redis from 'ioredis';
+import { getProxyCapabilityKindForPath, isValidInternalApiRequest } from '~/utils/proxySecurity';
+
 interface MemoryCacheEntry {
   count: number;
   expiry: number;
 }
 
 const memoryCache = new Map<string, MemoryCacheEntry>();
+let redisClient: Redis | null = null;
+let redisDisabledUntil = 0;
 
-// Clean up memory cache periodically
 setInterval(() => {
   const now = Date.now();
   for (const [key, value] of memoryCache.entries()) {
@@ -15,82 +19,153 @@ setInterval(() => {
   }
 }, 60_000).unref?.();
 
+const isCapabilityPath = (path: string) => (path.split('?')[0] || '') === '/api/proxy/capability';
+
+const getPositiveInt = (value: string | undefined, fallback: number) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
+};
+
+const DEFAULT_PROXY_RATE_LIMITS: Record<string, number> = {
+  m3u8: 240,
+  media: 30,
+  preview: 120,
+  'preview-auto': 30,
+  'preview-file': 120,
+  embed: 120,
+  vixsrc: 120,
+};
+
+const getRateLimitConfig = (path: string) => {
+  if (isCapabilityPath(path)) {
+    return {
+      scope: 'capability',
+      windowMs: getPositiveInt(process.env.PROXY_CAPABILITY_RATE_LIMIT_WINDOW_MS, 60_000),
+      maxRequests: getPositiveInt(process.env.PROXY_CAPABILITY_RATE_LIMIT_MAX_REQUESTS, 30),
+      isProxyLimited: true,
+    };
+  }
+
+  const kind = getProxyCapabilityKindForPath(path);
+  if (kind) {
+    const envPrefix = `PROXY_${kind.replace(/-/g, '_').toUpperCase()}_RATE_LIMIT`;
+    return {
+      scope: `proxy:${kind}`,
+      windowMs: getPositiveInt(
+        process.env[`${envPrefix}_WINDOW_MS`] || process.env.PROXY_RATE_LIMIT_WINDOW_MS,
+        60_000
+      ),
+      maxRequests: getPositiveInt(
+        process.env[`${envPrefix}_MAX_REQUESTS`] || process.env.PROXY_RATE_LIMIT_MAX_REQUESTS,
+        DEFAULT_PROXY_RATE_LIMITS[kind] || 100
+      ),
+      isProxyLimited: true,
+    };
+  }
+
+  return {
+    scope: 'api',
+    windowMs: getPositiveInt(process.env.RATE_LIMIT_WINDOW_MS, 60_000),
+    maxRequests: getPositiveInt(process.env.RATE_LIMIT_MAX_REQUESTS, 100),
+    isProxyLimited: false,
+  };
+};
+
+const getRedisClient = () => {
+  if (redisClient) return redisClient;
+
+  const redisUrl =
+    process.env.REDIS_URL ||
+    `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || '6379'}`;
+  redisClient = new Redis(redisUrl, {
+    lazyConnect: true,
+    maxRetriesPerRequest: 1,
+    enableOfflineQueue: false,
+    retryStrategy: () => null,
+  });
+  redisClient.on('error', () => {});
+  return redisClient;
+};
+
+const incrementRedisCounter = async (key: string, ttlMs: number) => {
+  if (Date.now() < redisDisabledUntil) {
+    throw new Error('Redis rate limit temporarily disabled');
+  }
+
+  const result = await getRedisClient().eval(
+    'local count = redis.call("INCR", KEYS[1]); if count == 1 then redis.call("PEXPIRE", KEYS[1], ARGV[1]); end; return count;',
+    1,
+    key,
+    String(ttlMs)
+  );
+  return Number(result);
+};
+
+const incrementMemoryCounter = (key: string, windowMs: number) => {
+  const now = Date.now();
+  const entry = memoryCache.get(key);
+  const count = entry && entry.expiry > now ? entry.count + 1 : 1;
+  memoryCache.set(key, {
+    count,
+    expiry: now + windowMs,
+  });
+  return count;
+};
+
 export default defineEventHandler(async event => {
   if (event.method === 'OPTIONS') {
     return;
   }
 
   const path = event.path || '';
-  if (
-    path.startsWith('/healthcheck') ||
-    path.startsWith('/metrics') ||
-    path.startsWith('/favicon.ico')
-  ) {
+  if (path.startsWith('/healthcheck') || path.startsWith('/favicon.ico')) {
+    return;
+  }
+  if (!path.startsWith('/metrics') && isValidInternalApiRequest(event)) {
     return;
   }
 
-  const ip = getRequestIP(event, { xForwardedFor: true }) || '127.0.0.1';
-
-  // Read configurations
-  const windowMs = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 60_000);
-  const maxRequests = Number(process.env.RATE_LIMIT_MAX_REQUESTS ?? 100);
-
+  const trustProxy = String(process.env.TRUST_PROXY).toLowerCase() === 'true';
+  const ip = getRequestIP(event, { xForwardedFor: trustProxy }) || '127.0.0.1';
+  const { scope, windowMs, maxRequests, isProxyLimited } = getRateLimitConfig(path);
   const currentBucket = Math.floor(Date.now() / windowMs);
-  const cacheKey = `rate-limit:${ip}:${currentBucket}`;
+  const cacheKey = `rate-limit:${scope}:${ip}:${currentBucket}`;
+  const resetTime = Math.ceil(((currentBucket + 1) * windowMs) / 1000);
 
-  const storage = useStorage('cache');
-  let count = 0;
-  let usingRedis = true;
-
+  let count: number;
   try {
-    const cached = await storage.getItem<number>(cacheKey);
-    count = cached || 0;
-  } catch (err) {
-    usingRedis = false;
-    const now = Date.now();
-    const entry = memoryCache.get(cacheKey);
-    if (entry && entry.expiry > now) {
-      count = entry.count;
-    } else {
-      count = 0;
-    }
-  }
+    count = await incrementRedisCounter(cacheKey, windowMs);
+  } catch {
+    redisDisabledUntil = Date.now() + 10_000;
+    const failedClient = redisClient;
+    redisClient = null;
+    failedClient?.disconnect();
 
-  const resetTime = Math.ceil((currentBucket + 1) * windowMs / 1000);
-
-  if (count >= maxRequests) {
-    const retryAfter = Math.max(1, Math.ceil(resetTime - Date.now() / 1000));
-
-    setHeader(event, 'X-RateLimit-Limit', String(maxRequests));
-    setHeader(event, 'X-RateLimit-Remaining', '0');
-    setHeader(event, 'X-RateLimit-Reset', String(resetTime));
-    setHeader(event, 'Retry-After', retryAfter);
-
-    throw createError({
-      statusCode: 429,
-      statusMessage: 'Too Many Requests',
-    });
-  }
-
-  count += 1;
-
-  if (usingRedis) {
-    try {
-      await storage.setItem(cacheKey, count, { ttl: windowMs / 1000 });
-    } catch {
-      memoryCache.set(cacheKey, {
-        count,
-        expiry: Date.now() + windowMs,
+    const failClosed =
+      String(
+        process.env.RATE_LIMIT_FAIL_CLOSED ||
+          (process.env.NODE_ENV === 'production' ? 'true' : 'false')
+      ).toLowerCase() === 'true';
+    if (isProxyLimited && failClosed) {
+      throw createError({
+        statusCode: 503,
+        statusMessage: 'Rate limit service unavailable',
       });
     }
-  } else {
-    memoryCache.set(cacheKey, {
-      count,
-      expiry: Date.now() + windowMs,
-    });
+
+    count = incrementMemoryCounter(cacheKey, windowMs);
   }
 
   setHeader(event, 'X-RateLimit-Limit', String(maxRequests));
   setHeader(event, 'X-RateLimit-Remaining', String(Math.max(0, maxRequests - count)));
   setHeader(event, 'X-RateLimit-Reset', String(resetTime));
+
+  if (count > maxRequests) {
+    const retryAfter = Math.max(1, Math.ceil(resetTime - Date.now() / 1000));
+    setHeader(event, 'Retry-After', retryAfter);
+    throw createError({
+      statusCode: 429,
+      statusMessage: 'Too Many Requests',
+    });
+  }
 });

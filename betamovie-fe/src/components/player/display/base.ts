@@ -1856,7 +1856,7 @@ export function makeVideoElementDisplayInterface(options?: {
         }
       })();
     },
-    startAirplay() {
+    async startAirplay() {
       const videoPlayer = videoElement as any;
       if (!videoPlayer || !videoPlayer.webkitShowPlaybackTargetPicker) return;
 
@@ -1884,7 +1884,7 @@ export function makeVideoElementDisplayInterface(options?: {
 
         // Don't create proxy URL if it's already using the proxy
         if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
-          proxiedUrl = createM3U8ProxyUrl(source.url, allHeaders);
+          proxiedUrl = await createM3U8ProxyUrl(source.url, allHeaders);
         } else {
           proxiedUrl = source.url; // Already proxied or no headers needed
         }

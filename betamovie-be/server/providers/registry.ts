@@ -37,6 +37,7 @@ const vidlinkProvider: StreamProvider = {
 
 const vidsrcToProvider: StreamProvider = {
   name: 'vidsrcto',
+  type: 'direct',
   getStreams: getVidSrcToStreams,
 };
 

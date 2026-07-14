@@ -31,6 +31,7 @@ const season = Number.parseInt(getArg('season') || '', 10);
 const episode = Number.parseInt(getArg('episode') || '', 10);
 const backendBase = (getArg('backend-base') || 'http://127.0.0.1:3000').replace(/\/+$/, '');
 const internalToken = (getArg('internal-token') || process.env.INTERNAL_API_TOKEN || '').trim();
+const internalHeaders = internalToken ? { 'x-internal-token': internalToken } : {};
 
 required('id', id);
 
@@ -49,19 +50,6 @@ const streamEndpoint =
     ? `${backendBase}/api/embed/api/streams/vidking/movie/${encodeURIComponent(id)}`
     : `${backendBase}/api/embed/api/streams/vidking/tv/${encodeURIComponent(id)}/${season}/${episode}`;
 
-const streamEndpointWithToken = internalToken
-  ? `${streamEndpoint}?internalToken=${encodeURIComponent(internalToken)}`
-  : streamEndpoint;
-
-function withToken(rawUrl) {
-  if (!internalToken) return rawUrl;
-  const parsed = new URL(rawUrl);
-  if (!parsed.searchParams.get('internalToken')) {
-    parsed.searchParams.set('internalToken', internalToken);
-  }
-  return parsed.toString();
-}
-
 function firstMediaLine(manifest) {
   return manifest
     .split(/\r?\n/)
@@ -69,12 +57,12 @@ function firstMediaLine(manifest) {
     .find(line => line && !line.startsWith('#') && !line.startsWith('<'));
 }
 
-const streamResponse = await fetch(streamEndpointWithToken, {
-  headers: { Accept: 'application/json' },
+const streamResponse = await fetch(streamEndpoint, {
+  headers: { Accept: 'application/json', ...internalHeaders },
 });
 
 if (!streamResponse.ok) {
-  console.error(`HTTP ${streamResponse.status} from ${streamEndpointWithToken}`);
+  console.error(`HTTP ${streamResponse.status} from ${streamEndpoint}`);
   process.exit(1);
 }
 
@@ -96,7 +84,7 @@ let segmentResponse = null;
 let segmentBuffer = null;
 
 for (const stream of returnedStreams) {
-  const candidateUrl = withToken(String(stream?.url || ''));
+  const candidateUrl = String(stream?.url || '').trim();
   if (!candidateUrl) continue;
 
   const playlistResponse = await fetch(candidateUrl, { headers: { Accept: '*/*' } }).catch(
@@ -116,7 +104,7 @@ for (const stream of returnedStreams) {
     continue;
   }
 
-  const candidateSegmentUrl = withToken(new URL(segmentLine, candidateUrl).toString());
+  const candidateSegmentUrl = new URL(segmentLine, candidateUrl).toString();
   const candidateSegmentResponse = await fetch(candidateSegmentUrl, {
     headers: { Accept: '*/*', Range: 'bytes=0-4095' },
   }).catch(() => null);
@@ -143,7 +131,7 @@ if (!playablePlaylistUrl || !segmentResponse || !segmentBuffer) {
 }
 
 console.log(`[PASS] ${type.toUpperCase()} ${id}`);
-console.log(`stream endpoint: ${streamEndpointWithToken}`);
+console.log(`stream endpoint: ${streamEndpoint}`);
 console.log(`qualities: ${qualities.join(', ') || 'n/a'}`);
 console.log(`playlist: ${playablePlaylistUrl}`);
 console.log(`first segment uri: ${firstSegmentUrl}`);

@@ -1,21 +1,16 @@
 import { createHash } from 'node:crypto';
-import { request, Pool } from 'undici';
+import { request } from 'undici';
 import { buildPreviewCacheKey, rewriteVttPayload } from '~/utils/preview';
 import { applyCorsHeaders } from '~/utils/cors';
-
-const getProxyPool = (url: string) => {
-  try {
-    const urlObj = new URL(url);
-    return new Pool(urlObj.origin, {
-      connections: 50,
-      pipelining: 4,
-      keepAliveTimeout: 60 * 1000,
-      keepAliveMaxTimeout: 10 * 60 * 1000,
-    });
-  } catch {
-    return undefined;
-  }
-};
+import {
+  acquireProxySlot,
+  assertSafeUpstreamUrl,
+  getProxyResponseLimit,
+  getProxyPoolForUrl,
+  normalizeProxyHeaders,
+  readResponseBytesLimited,
+  requireProxyAccess,
+} from '~/utils/proxySecurity';
 
 const parseProxyHeaders = (rawHeaders: unknown): Record<string, string> => {
   if (typeof rawHeaders !== 'string') return {};
@@ -74,14 +69,30 @@ export default defineEventHandler(async event => {
   }
 
   const query = getQuery(event);
-  const targetUrl = typeof query.url === 'string' ? query.url : '';
+  const targetUrl = typeof query.url === 'string' ? query.url.trim() : '';
   if (!targetUrl) {
     throw createError({ statusCode: 400, statusMessage: 'Missing url' });
   }
 
-  const headers = parseProxyHeaders(query.headers);
+  let normalizedUrl: string;
+  try {
+    normalizedUrl = await assertSafeUpstreamUrl(targetUrl);
+  } catch {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Unsafe upstream URL',
+    });
+  }
+
+  const headers = normalizeProxyHeaders(parseProxyHeaders(query.headers));
+  await requireProxyAccess(event, {
+    kind: 'preview',
+    targetUrl: normalizedUrl,
+    headers,
+  });
+
   const storage = useStorage('cache');
-  const cacheIdentity = buildPreviewCacheKey(targetUrl, headers);
+  const cacheIdentity = buildPreviewCacheKey(normalizedUrl, headers);
   const cacheKey = `preview-proxy:v1:${hashKey(cacheIdentity)}`;
 
   const cached = await storage
@@ -95,59 +106,71 @@ export default defineEventHandler(async event => {
     return Buffer.from(cached.bodyBase64, 'base64');
   }
 
-  const pool = getProxyPool(targetUrl);
-  const upstreamResponse = await request(targetUrl, {
-    method: 'GET',
-    headers,
-    dispatcher: pool,
-    bodyTimeout: 15000,
-    headersTimeout: 5000,
-  });
-
-  if (upstreamResponse.statusCode !== 200) {
-    throw createError({
-      statusCode: upstreamResponse.statusCode,
-      statusMessage: 'Upstream error',
+  const releaseProxySlot = acquireProxySlot();
+  try {
+    const pool = getProxyPoolForUrl(normalizedUrl);
+    const upstreamResponse = await request(normalizedUrl, {
+      method: 'GET',
+      headers,
+      dispatcher: pool,
+      bodyTimeout: 15000,
+      headersTimeout: 5000,
     });
-  }
 
-  const contentTypeHeader = upstreamResponse.headers['content-type'];
-  const contentType = Array.isArray(contentTypeHeader)
-    ? contentTypeHeader[0]
-    : contentTypeHeader || 'application/octet-stream';
-  const bytes = Buffer.from(await upstreamResponse.body.arrayBuffer());
-  const origin = getRequestURL(event).origin;
+    if (upstreamResponse.statusCode !== 200) {
+      throw createError({
+        statusCode: upstreamResponse.statusCode,
+        statusMessage: 'Upstream error',
+      });
+    }
 
-  if (isVttLike(targetUrl, contentType, bytes)) {
-    const rewritten = rewriteVttPayload(bytes.toString('utf8'), targetUrl, origin, headers);
-    const body = Buffer.from(rewritten, 'utf8');
-    await storage
-      .setItem(
-        cacheKey,
-        { contentType: 'text/vtt; charset=utf-8', bodyBase64: body.toString('base64'), isImage: false },
-        { ttl: 60 * 60 }
-      )
-      .catch(() => null);
+    const contentTypeHeader = upstreamResponse.headers['content-type'];
+    const contentType = Array.isArray(contentTypeHeader)
+      ? contentTypeHeader[0]
+      : contentTypeHeader || 'application/octet-stream';
+    const bytes = await readResponseBytesLimited(
+      upstreamResponse.body,
+      getProxyResponseLimit('preview')
+    );
+    const origin = getRequestURL(event).origin;
 
-    setHeader(event, 'content-type', 'text/vtt; charset=utf-8');
+    if (isVttLike(normalizedUrl, contentType, bytes)) {
+      const rewritten = rewriteVttPayload(bytes.toString('utf8'), normalizedUrl, origin, headers);
+      const body = Buffer.from(rewritten, 'utf8');
+      await storage
+        .setItem(
+          cacheKey,
+          {
+            contentType: 'text/vtt; charset=utf-8',
+            bodyBase64: body.toString('base64'),
+            isImage: false,
+          },
+          { ttl: 60 * 60 }
+        )
+        .catch(() => null);
+
+      setHeader(event, 'content-type', 'text/vtt; charset=utf-8');
+      setHeader(event, 'x-cache', 'MISS');
+      setProxyHeaders(event, false);
+      return body;
+    }
+
+    const imageLike = isImageLike(normalizedUrl, contentType);
+    if (imageLike && bytes.length <= 5 * 1024 * 1024) {
+      await storage
+        .setItem(
+          cacheKey,
+          { contentType, bodyBase64: bytes.toString('base64'), isImage: true },
+          { ttl: 15 * 60 }
+        )
+        .catch(() => null);
+    }
+
+    setHeader(event, 'content-type', contentType);
     setHeader(event, 'x-cache', 'MISS');
-    setProxyHeaders(event, false);
-    return body;
+    setProxyHeaders(event, imageLike);
+    return bytes;
+  } finally {
+    releaseProxySlot();
   }
-
-  const imageLike = isImageLike(targetUrl, contentType);
-  if (imageLike && bytes.length <= 5 * 1024 * 1024) {
-    await storage
-      .setItem(
-        cacheKey,
-        { contentType, bodyBase64: bytes.toString('base64'), isImage: true },
-        { ttl: 15 * 60 }
-      )
-      .catch(() => null);
-  }
-
-  setHeader(event, 'content-type', contentType);
-  setHeader(event, 'x-cache', 'MISS');
-  setProxyHeaders(event, imageLike);
-  return bytes;
 });

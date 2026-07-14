@@ -190,7 +190,7 @@ export default defineEventHandler(async event => {
       throw createError({
         statusCode: 400,
         message: 'Invalid progress data',
-        cause: error.errors,
+        cause: error.issues,
       });
     }
 

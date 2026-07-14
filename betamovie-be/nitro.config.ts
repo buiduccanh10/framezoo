@@ -6,6 +6,18 @@ config({
 });
 import { version } from './server/utils/config';
 //https://nitro.unjs.io/config
+const createRedisStorage = (defaultHost: string) => ({
+  driver: 'redis' as const,
+  url:
+    process.env.REDIS_URL ||
+    `redis://${process.env.REDIS_HOST || defaultHost}:${process.env.REDIS_PORT || '6379'}`,
+  connectTimeout: Number(process.env.REDIS_CONNECT_TIMEOUT_MS) || 250,
+  maxRetriesPerRequest: 1,
+  enableOfflineQueue: false,
+  retryStrategy: () => null,
+  lazyConnect: true,
+});
+
 export default defineNitroConfig({
   srcDir: 'server',
   compatibilityDate: '2025-03-05',
@@ -22,18 +34,10 @@ export default defineNitroConfig({
     '0 0 1 * *': ['jobs:clear-metrics:monthly'],
   },
   storage: {
-    cache: {
-      driver: 'redis',
-      host: process.env.REDIS_HOST || 'redis',
-      port: Number(process.env.REDIS_PORT) || 6379,
-    },
+    cache: createRedisStorage('redis'),
   },
   devStorage: {
-    cache: {
-      driver: 'redis',
-      host: process.env.REDIS_HOST || 'localhost',
-      port: Number(process.env.REDIS_PORT) || 6379,
-    },
+    cache: createRedisStorage('localhost'),
   },
 
   runtimeConfig: {
