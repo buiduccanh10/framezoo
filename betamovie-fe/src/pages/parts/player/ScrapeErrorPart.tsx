@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
-import {
-  isExtensionActiveCached,
-  sendPage,
-} from "@/backend/extension/messaging";
+import { sendPage } from "@/backend/extension/messaging";
 import { Button } from "@/components/buttons/Button";
 import { Icons } from "@/components/Icon";
 import { IconPill } from "@/components/layout/IconPill";

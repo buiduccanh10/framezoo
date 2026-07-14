@@ -47,7 +47,7 @@ export function PassphraseGeneratePart(props: PassphraseGeneratePartProps) {
       if (credentialId) {
         props.onPasskeyNext?.(credentialId);
       }
-    } catch (error) {
+    } catch {
       // Error is handled by passkeyResult.error
     }
   }, [createPasskeyFn, props]);

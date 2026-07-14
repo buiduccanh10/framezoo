@@ -425,7 +425,7 @@ export function MigrationUploadPage() {
       }
 
       setStatus("success");
-    } catch (e) {
+    } catch {
       setStatus("error");
     }
   }, [

@@ -85,7 +85,7 @@ export async function getTurnstileToken(
         if (widgetId && (window as any).turnstile) {
           try {
             (window as any).turnstile.remove(widgetId);
-          } catch (e) {
+          } catch {
             // Ignore errors during cleanup
           }
         }
