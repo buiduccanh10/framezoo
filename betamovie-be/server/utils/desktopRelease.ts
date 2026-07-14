@@ -172,7 +172,8 @@ function resolveKnownFeedAlias(
   manifest: DesktopReleaseManifest,
   fileName: string,
 ) {
-  if (fileName === "latest.yml") {
+  const baseName = path.basename(fileName);
+  if (baseName === "latest.yml") {
     return (
       manifest.files.find((file) => file.kind === "ota-feed" && file.id === "win-x64-feed") ??
       manifest.files.find(
@@ -182,7 +183,7 @@ function resolveKnownFeedAlias(
     );
   }
 
-  if (fileName === "latest-mac.yml") {
+  if (baseName === "latest-mac.yml") {
     return (
       manifest.files.find(
         (file) => file.kind === "ota-feed" && file.id === "mac-arm64-feed",
