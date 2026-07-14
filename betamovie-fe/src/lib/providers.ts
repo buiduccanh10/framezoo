@@ -122,6 +122,10 @@ export interface ProviderControls {
   listSources: () => MetaOutput[];
   listEmbeds: () => MetaOutput[];
   runAll: (options: BuildOptions) => Promise<RunOutput | null>;
+  warmSources: (options: {
+    media: ScrapeMedia;
+    sourceIds: string[];
+  }) => Promise<void>;
   runSourceScraper: (options: {
     id: string;
     media: ScrapeMedia;
@@ -161,6 +165,54 @@ export class NotFoundError extends Error {
     super(message);
     this.name = "NotFoundError";
   }
+}
+
+const SOURCE_TIMEOUT_MS = 30_000;
+const EMBED_TIMEOUT_MS = 15_000;
+const WARMUP_CONCURRENCY = 2;
+
+class ScraperTimeoutError extends Error {
+  constructor(label: string, timeoutMs: number) {
+    super(`${label} timed out after ${timeoutMs}ms`);
+    this.name = "ScraperTimeoutError";
+  }
+}
+
+function withScraperTimeout<T>(
+  task: Promise<T>,
+  label: string,
+  timeoutMs: number,
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return new Promise<T>((resolve, reject) => {
+    timer = setTimeout(() => {
+      reject(new ScraperTimeoutError(label, timeoutMs));
+    }, timeoutMs);
+
+    task.then(resolve, reject);
+  }).finally(() => {
+    if (timer) clearTimeout(timer);
+  });
+}
+
+async function runWithConcurrency<T>(
+  items: T[],
+  concurrency: number,
+  task: (item: T) => Promise<void>,
+) {
+  const queue = [...items];
+  const workerCount = Math.min(Math.max(1, concurrency), queue.length);
+
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (queue.length > 0) {
+        const item = queue.shift();
+        if (item === undefined) return;
+        await task(item);
+      }
+    }),
+  );
 }
 
 export const flags = {
@@ -445,13 +497,21 @@ class ProviderBuilder {
             if (!source.scrapeMovie)
               throw new NotFoundError("Source cannot scrape movies");
             sourceResult = normalizeSourcererOutput(
-              await source.scrapeMovie(ctx),
+              await withScraperTimeout(
+                source.scrapeMovie(ctx),
+                `Source ${sourceId}`,
+                SOURCE_TIMEOUT_MS,
+              ),
             );
           } else if (media?.type === "show") {
             if (!source.scrapeShow)
               throw new NotFoundError("Source cannot scrape shows");
             sourceResult = normalizeSourcererOutput(
-              await source.scrapeShow(ctx),
+              await withScraperTimeout(
+                source.scrapeShow(ctx),
+                `Source ${sourceId}`,
+                SOURCE_TIMEOUT_MS,
+              ),
             );
           } else {
             throw new NotFoundError("Unsupported media type");
@@ -499,7 +559,11 @@ class ProviderBuilder {
 
               try {
                 const embedResult = normalizeEmbedOutput(
-                  await runEmbedScraper({ id: embed.embedId, url: embed.url }),
+                  await withScraperTimeout(
+                    runEmbedScraper({ id: embed.embedId, url: embed.url }),
+                    `Embed ${embed.embedId}`,
+                    EMBED_TIMEOUT_MS,
+                  ),
                 );
                 if (embedResult.stream.length > 0) {
                   events?.update?.({
@@ -550,10 +614,40 @@ class ProviderBuilder {
       return null;
     };
 
+    const warmSources: ProviderControls["warmSources"] = async ({
+      media,
+      sourceIds,
+    }) => {
+      const activeSourceIds = new Set(
+        listSources()
+          .filter((source) => !source.disabled)
+          .map((source) => source.id),
+      );
+      const uniqueSourceIds = Array.from(
+        new Set(sourceIds.filter((id) => activeSourceIds.has(id))),
+      );
+
+      await runWithConcurrency(
+        uniqueSourceIds,
+        WARMUP_CONCURRENCY,
+        async (sourceId) => {
+          try {
+            await runAll({
+              media,
+              sourceOrder: [sourceId],
+            });
+          } catch (error) {
+            console.warn(`[Providers] Warm-up failed for ${sourceId}`, error);
+          }
+        },
+      );
+    };
+
     return {
       listSources,
       listEmbeds,
       runAll,
+      warmSources,
       runSourceScraper,
       runEmbedScraper,
     };
