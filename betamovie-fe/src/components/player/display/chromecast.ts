@@ -104,7 +104,7 @@ export function makeChromecastDisplayInterface(
     };
   }
 
-  function setupSource() {
+  async function setupSource() {
     if (!source) {
       ops.controller?.stop();
       return;
@@ -131,7 +131,7 @@ export function makeChromecastDisplayInterface(
     // Handle HLS streams
     if (source.type === "hls") {
       if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
-        contentUrl = createM3U8ProxyUrl(source.url, allHeaders);
+        contentUrl = await createM3U8ProxyUrl(source.url, allHeaders);
       }
     } else if (source.type === "dash") {
       contentUrl = source.url;

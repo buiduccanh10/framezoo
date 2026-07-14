@@ -3,7 +3,7 @@ services:
     image: postgres:15-alpine
     restart: unless-stopped
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $$PG_USER -d $$PG_DB']
+      test: ["CMD-SHELL", "pg_isready -U $$PG_USER -d $$PG_DB"]
       interval: 5s
       retries: 10
       timeout: 2s
@@ -16,7 +16,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
     networks:
       - betamovie-network
 
@@ -24,7 +24,7 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     ports:
-      - '6379:6379'
+      - "6379:6379"
     networks:
       - betamovie-network
     volumes:
@@ -65,11 +65,13 @@ services:
       CAPTCHA: ${CAPTCHA}
       CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
       NODE_ENV: ${NODE_ENV:-production}
-      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      REDIS_URL: redis://redis:6379
+      PROXY_REQUIRE_UPSTREAM_ALLOWLIST: ${PROXY_REQUIRE_UPSTREAM_ALLOWLIST:-false}
+      RATE_LIMIT_FAIL_CLOSED: ${RATE_LIMIT_FAIL_CLOSED:-false}
       PREVIEW_SERVICE_URL: http://preview-service:3100
       PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
       - downloads-data:/data/downloads
     depends_on:
@@ -98,7 +100,7 @@ services:
         SUBSOURCE_API_KEY: ${VITE_SUBSOURCE_API_KEY}
         ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
     ports:
-      - '80:80'
+      - "80:80"
     depends_on:
       betamovie-be:
         condition: service_started

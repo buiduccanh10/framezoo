@@ -3,6 +3,7 @@ import path from "node:path";
 
 export const DEFAULT_DESKTOP_UPDATE_CHANNEL = "stable";
 const DESKTOP_UPDATES_DIRNAME = "desktop-updates";
+const DESKTOP_UPDATE_CHANNEL_RE = /^[a-z0-9][a-z0-9_-]{0,31}$/i;
 
 export type DesktopDownloadOptionId =
   | "mac-arm64"
@@ -18,6 +19,10 @@ export type DesktopReleaseFileKind =
   | "ota-feed"
   | "blockmap"
   | "artifact";
+
+export function isSafeDesktopUpdateChannel(channel: string) {
+  return DESKTOP_UPDATE_CHANNEL_RE.test(channel.trim());
+}
 
 export interface DesktopReleaseFile {
   id: string;
@@ -59,7 +64,14 @@ export function getDesktopDownloadDir() {
 export function getDesktopUpdateChannelDir(
   channel: string = DEFAULT_DESKTOP_UPDATE_CHANNEL,
 ) {
-  return path.join(getDesktopDownloadDir(), DESKTOP_UPDATES_DIRNAME, channel);
+  const normalizedChannel = channel.trim();
+  return path.join(
+    getDesktopDownloadDir(),
+    DESKTOP_UPDATES_DIRNAME,
+    isSafeDesktopUpdateChannel(normalizedChannel)
+      ? normalizedChannel
+      : DEFAULT_DESKTOP_UPDATE_CHANNEL,
+  );
 }
 
 export function getDesktopUpdateManifestPath(
@@ -103,6 +115,7 @@ function isDesktopReleaseManifest(
 export function readDesktopReleaseManifest(
   channel: string = DEFAULT_DESKTOP_UPDATE_CHANNEL,
 ): DesktopReleaseManifest | null {
+  if (!isSafeDesktopUpdateChannel(channel.trim())) return null;
   const manifestPath = getDesktopUpdateManifestPath(channel);
   if (!fs.existsSync(manifestPath)) return null;
 
@@ -140,6 +153,7 @@ export function resolveDesktopReleaseFilePath(
   channel: string,
   relativeFilePath: string,
 ) {
+  if (!isSafeDesktopUpdateChannel(channel.trim())) return null;
   const channelDir = getDesktopUpdateChannelDir(channel);
   const resolvedPath = path.resolve(channelDir, relativeFilePath);
   const relativeFromRoot = path.relative(channelDir, resolvedPath);
@@ -187,6 +201,7 @@ export function resolveDesktopUpdateRequest(
   channel: string,
   requestPath: string,
 ) {
+  if (!isSafeDesktopUpdateChannel(channel.trim())) return null;
   const normalizedPath = requestPath.replace(/^\/+/, "");
   const directPath = resolveDesktopReleaseFilePath(channel, normalizedPath);
 

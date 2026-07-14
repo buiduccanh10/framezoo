@@ -34,13 +34,24 @@ export default defineEventHandler(async event => {
 
       const validated = bookmarkRequestSchema.parse(body);
       const meta = bookmarkMetaSchema.parse(validated.meta || body);
-      const group = validated.group ? (Array.isArray(validated.group) ? validated.group : [validated.group]) : [];
+      const group = validated.group
+        ? Array.isArray(validated.group)
+          ? validated.group
+          : [validated.group]
+        : [];
       const favoriteEpisodes = validated.favoriteEpisodes || [];
 
       const bookmark = await prisma.bookmarks.upsert({
         where: { tmdb_id_user_id: { tmdb_id: tmdbId, user_id: session.user } },
         update: { meta, group, favorite_episodes: favoriteEpisodes, updated_at: new Date() },
-        create: { user_id: session.user, tmdb_id: tmdbId, meta, group, favorite_episodes: favoriteEpisodes, updated_at: new Date() },
+        create: {
+          user_id: session.user,
+          tmdb_id: tmdbId,
+          meta,
+          group,
+          favorite_episodes: favoriteEpisodes,
+          updated_at: new Date(),
+        },
       });
 
       log.info('Bookmark created successfully', { userId, tmdbId });
@@ -52,17 +63,28 @@ export default defineEventHandler(async event => {
         updatedAt: bookmark.updated_at,
       };
     } catch (error) {
-      log.error('Failed to create bookmark', { userId, tmdbId, error: error instanceof Error ? error.message : String(error) });
-      if (error instanceof z.ZodError) throw createError({ statusCode: 400, message: JSON.stringify(error.errors, null, 2) });
+      log.error('Failed to create bookmark', {
+        userId,
+        tmdbId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      if (error instanceof z.ZodError)
+        throw createError({ statusCode: 400, message: JSON.stringify(error.issues, null, 2) });
       throw error;
     }
   } else if (event.method === 'DELETE') {
     log.info('Deleting bookmark', { userId, tmdbId });
     try {
-      await prisma.bookmarks.delete({ where: { tmdb_id_user_id: { tmdb_id: tmdbId, user_id: session.user } } });
+      await prisma.bookmarks.delete({
+        where: { tmdb_id_user_id: { tmdb_id: tmdbId, user_id: session.user } },
+      });
       log.info('Bookmark deleted successfully', { userId, tmdbId });
     } catch (error) {
-      log.error('Failed to delete bookmark', { userId, tmdbId, error: error instanceof Error ? error.message : String(error) });
+      log.error('Failed to delete bookmark', {
+        userId,
+        tmdbId,
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
     return { success: true, tmdbId };
   }

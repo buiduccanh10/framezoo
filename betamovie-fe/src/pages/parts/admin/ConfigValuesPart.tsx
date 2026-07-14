@@ -11,7 +11,9 @@ async function getAccountNumber() {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/metrics`);
+    const response = await fetch(`${BACKEND_URL}/metrics`, {
+      credentials: "include",
+    });
     if (!response.ok) {
       return "N/A";
     }
@@ -43,7 +45,9 @@ async function getAllAccounts() {
   }
 
   try {
-    const response = await fetch(`${BACKEND_URL}/metrics`);
+    const response = await fetch(`${BACKEND_URL}/metrics`, {
+      credentials: "include",
+    });
     if (!response.ok) {
       return "N/A";
     }

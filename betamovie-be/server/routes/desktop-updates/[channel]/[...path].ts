@@ -5,6 +5,7 @@ import { getRouterParam, sendStream, setHeader } from "h3";
 
 import {
   DEFAULT_DESKTOP_UPDATE_CHANNEL,
+  isSafeDesktopUpdateChannel,
   resolveDesktopUpdateRequest,
 } from "../../../utils/desktopRelease";
 
@@ -30,6 +31,13 @@ export default defineEventHandler(async event => {
   const channel =
     getRouterParam(event, "channel")?.trim() || DEFAULT_DESKTOP_UPDATE_CHANNEL;
   const requestedPath = getRouterParam(event, "path")?.trim();
+
+  if (!isSafeDesktopUpdateChannel(channel)) {
+    throw createError({
+      statusCode: 404,
+      message: "Update file not found",
+    });
+  }
 
   if (!requestedPath) {
     throw createError({

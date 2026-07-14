@@ -1,17 +1,13 @@
 import { useAuth } from '~/utils/auth';
+import {
+  getProxyCapabilityKindForPath,
+  getProxyCapabilityToken,
+  isValidInternalApiRequest,
+  isProxyCapabilityPath,
+  verifyProxyCapabilityToken,
+} from '~/utils/proxySecurity';
 
-const PUBLIC_API_PREFIXES = [
-  '/api/m3u8-proxy',
-  '/api/media-proxy',
-  '/api/preview-proxy',
-  '/api/preview/auto',
-  '/api/preview/file',
-  '/api/embed/api/m3u8-proxy',
-  '/api/embed/api/media-proxy',
-  '/api/embed/api/preview-proxy',
-  '/api/embed/api/preview/auto',
-  '/api/embed/api/preview/file',
-];
+const PUBLIC_API_PATHS = new Set(['/api/providers']);
 
 export default defineEventHandler(async event => {
   if (!event.path.startsWith('/api/')) {
@@ -23,20 +19,28 @@ export default defineEventHandler(async event => {
     return;
   }
 
-  if (PUBLIC_API_PREFIXES.some(prefix => event.path.startsWith(prefix))) {
+  // Provider metadata is required before login to bootstrap the player.
+  if (PUBLIC_API_PATHS.has(event.path)) {
     return;
   }
 
-  const internalApiToken = process.env.INTERNAL_API_TOKEN?.trim();
-  const tokenFromHeader = getRequestHeader(event, 'x-internal-token')?.trim();
-  const query = getQuery(event);
-  const tokenFromQuery = typeof query.internalToken === 'string' ? query.internalToken.trim() : '';
+  // Capability issuance is intentionally public for anonymous playback.
+  // The issuer applies SSRF, header, TTL, and rate-limit controls.
+  if (isProxyCapabilityPath(event.path)) {
+    return;
+  }
 
-  if (
-    internalApiToken &&
-    ((tokenFromHeader && tokenFromHeader === internalApiToken) ||
-      (tokenFromQuery && tokenFromQuery === internalApiToken))
-  ) {
+  const proxyKind = getProxyCapabilityKindForPath(event.path);
+  if (proxyKind) {
+    if (isValidInternalApiRequest(event)) {
+      return;
+    }
+
+    const capability = getProxyCapabilityToken(event);
+    if (capability && verifyProxyCapabilityToken(capability, proxyKind)) {
+      return;
+    }
+  } else if (isValidInternalApiRequest(event)) {
     return;
   }
 

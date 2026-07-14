@@ -2,9 +2,24 @@ import { joinURL } from 'ufo';
 import { createHash } from 'node:crypto';
 import { getProvider } from '~/providers/registry';
 import { getProviderMetadata } from '~/providers/metadata';
-import { request, Pool } from 'undici';
-import { buildStreamPreview } from '~/utils/preview';
+import { request } from 'undici';
+import {
+  buildPreviewAutoResource,
+  buildPreviewFileResource,
+  buildStreamPreview,
+  parsePreviewAutoResource,
+  parsePreviewFileResource,
+} from '~/utils/preview';
 import { applyCorsHeaders } from '~/utils/cors';
+import {
+  assertSafeUpstreamUrl,
+  buildProxyRequestUrl,
+  getProxyResponseLimit,
+  getProxyPoolForUrl,
+  normalizeProxyHeaders,
+  readResponseBytesLimited,
+  requireProxyAccess,
+} from '~/utils/proxySecurity';
 
 const timestamp = () => new Date().toISOString();
 const logInfo = (message: string, ...args: any[]) => {
@@ -19,21 +34,6 @@ const logError = (message: string, ...args: any[]) => {
 
 const internalFetch = <T = unknown>(url: string, options: Record<string, any>) =>
   ($fetch as any)(url, options) as Promise<T>;
-
-// Connection pool for undici (faster than fetch) - dynamic per URL
-const getProxyPool = (url: string) => {
-  try {
-    const urlObj = new URL(url);
-    return new Pool(urlObj.origin, {
-      connections: 100,
-      pipelining: 10,
-      keepAliveTimeout: 60 * 1000,
-      keepAliveMaxTimeout: 10 * 60 * 1000,
-    });
-  } catch {
-    return undefined;
-  }
-};
 
 const readProxyHeader = (headers: Record<string, string>, name: string) =>
   headers[name] || headers[name.toLowerCase()] || headers[name.toUpperCase()] || '';
@@ -170,6 +170,15 @@ const buildInternalAuthHeaders = (event: any) => {
   }
   if (cookie) {
     headers.cookie = cookie;
+  }
+
+  const internalToken = getRequestHeader(event, 'x-internal-token');
+  const capability = getRequestHeader(event, 'x-proxy-capability');
+  if (internalToken) {
+    headers['x-internal-token'] = internalToken;
+  }
+  if (capability) {
+    headers['x-proxy-capability'] = capability;
   }
 
   return headers;
@@ -314,35 +323,34 @@ export default defineEventHandler(async event => {
       );
 
       const origin = getRequestURL(event).origin;
-      const streams = streamsRaw.map((s: any) => {
-        const headers = s?.headers ?? {};
-        const proxiedUrl =
-          s?.streamType === 'dash'
-            ? s.url
-            : s?.streamType === 'file'
-              ? s.url
-              : `${origin}/api/m3u8-proxy?url=${encodeURIComponent(s.url)}&headers=${encodeURIComponent(
-                  JSON.stringify(headers)
-                )}`;
-        const preview =
-          s?.streamType === 'dash' || s?.streamType === 'file'
-            ? undefined
-            : buildStreamPreview({
-                origin,
-                provider: providerName,
-                mediaType: type as 'movie' | 'tv',
-                tmdbId,
-                season,
-                episode,
-                headers,
-              });
+      const streams = await Promise.all(
+        streamsRaw.map(async (s: any) => {
+          const headers = s?.headers ?? {};
+          let proxiedUrl = s.url;
+          if (s?.streamType !== 'dash' && s?.streamType !== 'file') {
+            const safeUrl = await assertSafeUpstreamUrl(s.url);
+            proxiedUrl = buildProxyRequestUrl(origin, '/api/m3u8-proxy', 'm3u8', safeUrl, headers);
+          }
+          const preview =
+            s?.streamType === 'dash' || s?.streamType === 'file'
+              ? undefined
+              : buildStreamPreview({
+                  origin,
+                  provider: providerName,
+                  mediaType: type as 'movie' | 'tv',
+                  tmdbId,
+                  season,
+                  episode,
+                  headers,
+                });
 
-        return {
-          ...s,
-          url: proxiedUrl,
-          preview,
-        };
-      });
+          return {
+            ...s,
+            url: proxiedUrl,
+            preview,
+          };
+        })
+      );
 
       const result = {
         success: true,
@@ -369,7 +377,6 @@ export default defineEventHandler(async event => {
       throw createError({
         statusCode: 500,
         statusMessage: 'Failed to fetch streams',
-        data: error.message,
       });
     }
   }
@@ -404,63 +411,151 @@ export default defineEventHandler(async event => {
   // --- m3u8-proxy compat handler (internal) ---
   // Some clients call /api/embed/api/m3u8-proxy; handle it here to avoid any upstream.
   if (path === 'api/m3u8-proxy') {
-    // Delegate to internal /api/m3u8-proxy endpoint to share rewrite logic.
     const origin = getRequestURL(event).origin;
-    const internalUrl = joinURL(origin, '/api/m3u8-proxy');
-    return await internalFetch<ArrayBuffer>(internalUrl, {
-      method: 'GET',
-      query,
-      headers: internalAuthHeaders,
-      timeout: 30000,
-      responseType: 'arrayBuffer',
-    }).then((ab: ArrayBuffer) => Buffer.from(ab));
+    const targetUrl = typeof query.url === 'string' ? query.url.trim() : '';
+    if (!targetUrl) {
+      throw createError({ statusCode: 400, statusMessage: 'Missing url' });
+    }
+
+    let normalizedTargetUrl: string;
+    try {
+      normalizedTargetUrl = await assertSafeUpstreamUrl(targetUrl);
+    } catch {
+      throw createError({ statusCode: 400, statusMessage: 'Unsafe upstream URL' });
+    }
+
+    const headers = normalizeProxyHeaders(parseProxyHeaders(query.headers));
+    await requireProxyAccess(event, {
+      kind: 'm3u8',
+      targetUrl: normalizedTargetUrl,
+      headers,
+    });
+
+    return sendRedirect(
+      event,
+      buildProxyRequestUrl(origin, '/api/m3u8-proxy', 'm3u8', normalizedTargetUrl, headers),
+      307
+    );
   }
 
   if (path === 'api/media-proxy') {
     const origin = getRequestURL(event).origin;
-    const internalUrl = new URL(joinURL(origin, '/api/media-proxy'));
-
-    for (const [key, value] of Object.entries(query)) {
-      if (Array.isArray(value)) {
-        for (const item of value) {
-          internalUrl.searchParams.append(key, String(item));
-        }
-        continue;
-      }
-
-      if (value !== undefined && value !== null) {
-        internalUrl.searchParams.set(key, String(value));
-      }
+    const targetUrl = typeof query.url === 'string' ? query.url.trim() : '';
+    if (!targetUrl) {
+      throw createError({ statusCode: 400, statusMessage: 'Missing url' });
     }
 
-    return sendRedirect(event, internalUrl.toString(), 307);
+    let normalizedTargetUrl: string;
+    try {
+      normalizedTargetUrl = await assertSafeUpstreamUrl(targetUrl);
+    } catch {
+      throw createError({ statusCode: 400, statusMessage: 'Unsafe upstream URL' });
+    }
+
+    const headers = normalizeProxyHeaders(parseProxyHeaders(query.headers));
+    await requireProxyAccess(event, {
+      kind: 'media',
+      targetUrl: normalizedTargetUrl,
+      headers,
+    });
+
+    return sendRedirect(
+      event,
+      buildProxyRequestUrl(origin, '/api/media-proxy', 'media', normalizedTargetUrl, headers),
+      307
+    );
   }
 
   if (path === 'api/preview-proxy') {
     const origin = getRequestURL(event).origin;
-    const internalUrl = joinURL(origin, '/api/preview-proxy');
-    return await internalFetch<ArrayBuffer>(internalUrl, {
-      method: 'GET',
-      query,
-      headers: internalAuthHeaders,
-      timeout: 30000,
-      responseType: 'arrayBuffer',
-    }).then((ab: ArrayBuffer) => Buffer.from(ab));
+    const targetUrl = typeof query.url === 'string' ? query.url.trim() : '';
+    if (!targetUrl) {
+      throw createError({ statusCode: 400, statusMessage: 'Missing url' });
+    }
+
+    let normalizedTargetUrl: string;
+    try {
+      normalizedTargetUrl = await assertSafeUpstreamUrl(targetUrl);
+    } catch {
+      throw createError({ statusCode: 400, statusMessage: 'Unsafe upstream URL' });
+    }
+
+    const headers = normalizeProxyHeaders(parseProxyHeaders(query.headers));
+    await requireProxyAccess(event, {
+      kind: 'preview',
+      targetUrl: normalizedTargetUrl,
+      headers,
+    });
+
+    return sendRedirect(
+      event,
+      buildProxyRequestUrl(origin, '/api/preview-proxy', 'preview', normalizedTargetUrl, headers),
+      307
+    );
   }
 
-  if (path === 'api/preview/auto' || path === 'api/preview/file') {
+  if (path === 'api/preview/auto') {
     const origin = getRequestURL(event).origin;
-    const internalUrl = joinURL(
-      origin,
-      path === 'api/preview/auto' ? '/api/preview/auto' : '/api/preview/file'
+    const rawResource = typeof query.resource === 'string' ? query.resource : '';
+    const parsedResource = rawResource ? parsePreviewAutoResource(rawResource) : null;
+    const provider =
+      parsedResource?.provider || (typeof query.provider === 'string' ? query.provider : '');
+    const mediaType =
+      parsedResource?.mediaType ||
+      (query.type === 'tv' ? 'tv' : query.type === 'movie' ? 'movie' : '');
+    const tmdbId =
+      parsedResource?.tmdbId || (typeof query.tmdbId === 'string' ? query.tmdbId : '');
+    const season =
+      parsedResource?.season ??
+      (typeof query.season === 'string' ? Number.parseInt(query.season, 10) : null);
+    const episode =
+      parsedResource?.episode ??
+      (typeof query.episode === 'string' ? Number.parseInt(query.episode, 10) : null);
+    const resource =
+      rawResource ||
+      buildPreviewAutoResource({
+        provider,
+        mediaType: mediaType as 'movie' | 'tv',
+        tmdbId,
+        season,
+        episode,
+      });
+    await requireProxyAccess(event, {
+      kind: 'preview-auto',
+      resource,
+    });
+
+    return sendRedirect(
+      event,
+      buildProxyRequestUrl(origin, '/api/preview/auto', 'preview-auto', '', {}, resource),
+      307
     );
-    return await internalFetch<ArrayBuffer>(internalUrl, {
-      method: 'GET',
-      query,
-      headers: internalAuthHeaders,
-      timeout: 30000,
-      responseType: 'arrayBuffer',
-    }).then((ab: ArrayBuffer) => Buffer.from(ab));
+  }
+
+  if (path === 'api/preview/file') {
+    const origin = getRequestURL(event).origin;
+    const rawResource = typeof query.resource === 'string' ? query.resource : '';
+    const parsedResource = rawResource ? parsePreviewFileResource(rawResource) : null;
+    const key =
+      parsedResource?.key || (rawResource ? '' : typeof query.key === 'string' ? query.key : '');
+    const file =
+      parsedResource?.file ||
+      (rawResource ? '' : typeof query.file === 'string' ? query.file : '');
+    if (!key || !file) {
+      throw createError({ statusCode: 400, statusMessage: 'Missing key or file' });
+    }
+
+    const resource = rawResource || buildPreviewFileResource(key, file);
+    await requireProxyAccess(event, {
+      kind: 'preview-file',
+      resource,
+    });
+
+    return sendRedirect(
+      event,
+      buildProxyRequestUrl(origin, '/api/preview/file', 'preview-file', '', {}, resource),
+      307
+    );
   }
 
   // --- ts-proxy / proxy handlers (internal, no upstream) ---
@@ -483,8 +578,26 @@ export default defineEventHandler(async event => {
       throw createError({ statusCode: 400, statusMessage: 'Missing url' });
     }
 
+    let normalizedTarget: string;
+    try {
+      normalizedTarget = await assertSafeUpstreamUrl(target);
+    } catch {
+      throw createError({ statusCode: 400, statusMessage: 'Unsafe upstream URL' });
+    }
+
+    const customHeaders = normalizeProxyHeaders(parseProxyHeaders(query.headers));
+    await requireProxyAccess(event, {
+      kind: 'embed',
+      targetUrl: normalizedTarget,
+      headers: customHeaders,
+    });
+
     const storage = useStorage('cache');
-    const tsProxyIdentity = toTsProxyIdentity(query as Record<string, any>);
+    const tsProxyIdentity = toTsProxyIdentity({
+      ...query,
+      url: normalizedTarget,
+      headers: JSON.stringify(customHeaders),
+    } as Record<string, any>);
     const tsProxyKeyRaw = `embed:ts-proxy:v3:${path}:${tsProxyIdentity}`;
     const tsProxyCacheKey = `embed:ts-proxy:v3:${hashKey(tsProxyKeyRaw)}`;
 
@@ -500,11 +613,9 @@ export default defineEventHandler(async event => {
       return Buffer.from(cachedSegment.bodyBase64, 'base64');
     }
 
-    const customHeaders = parseProxyHeaders(query.headers);
-
     // Use undici for faster proxy with connection pooling
-    const pool = getProxyPool(target);
-    const upstreamResponse = await request(target, {
+    const pool = getProxyPoolForUrl(normalizedTarget);
+    const upstreamResponse = await request(normalizedTarget, {
       method: 'GET',
       headers: customHeaders,
       dispatcher: pool,
@@ -523,10 +634,19 @@ export default defineEventHandler(async event => {
     const contentType = Array.isArray(contentTypeHeader)
       ? contentTypeHeader[0]
       : contentTypeHeader || 'application/octet-stream';
-    const bytes = Buffer.from(await upstreamResponse.body.arrayBuffer());
+    const maxBytes = getProxyResponseLimit('embed');
+    const contentLength = Number(upstreamResponse.headers['content-length'] || 0);
+    if (contentLength > maxBytes) {
+      await upstreamResponse.body.dump().catch(() => null);
+      throw createError({
+        statusCode: 413,
+        statusMessage: 'Upstream response exceeds the configured size limit',
+      });
+    }
+    const bytes = await readResponseBytesLimited(upstreamResponse.body, maxBytes);
 
     // Cache TS/segments (max 2MB, 15 min TTL for better UX)
-    if (bytes.length <= 2 * 1024 * 1024) {
+    if (bytes.length <= Math.min(2 * 1024 * 1024, maxBytes)) {
       const ttl = hasSegmentHint ? 15 * 60 : 45; // Increased from 10 to 15 minutes
       await storage
         .setItem(tsProxyCacheKey, { contentType, bodyBase64: bytes.toString('base64') }, { ttl })
