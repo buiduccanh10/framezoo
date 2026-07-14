@@ -141,18 +141,6 @@ export default defineEventHandler(async event => {
     redisClient = null;
     failedClient?.disconnect();
 
-    const failClosed =
-      String(
-        process.env.RATE_LIMIT_FAIL_CLOSED ||
-          (process.env.NODE_ENV === 'production' ? 'true' : 'false')
-      ).toLowerCase() === 'true';
-    if (isProxyLimited && failClosed) {
-      throw createError({
-        statusCode: 503,
-        statusMessage: 'Rate limit service unavailable',
-      });
-    }
-
     count = incrementMemoryCounter(cacheKey, windowMs);
   }
 
