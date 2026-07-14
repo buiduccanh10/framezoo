@@ -144,6 +144,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Unauthorized' });
   }
 
+  const storage = useStorage('cache');
+
   if (method === 'PUT') {
     const body = await readBody(event);
     let parsedBody;
@@ -152,69 +154,60 @@ export default defineEventHandler(async (event) => {
     } catch (error) {
       throw createError({ statusCode: 400, message: error.message });
     }
-    const { meta, tmdbId, duration, watched, seasonId, episodeId, seasonNumber, episodeNumber, updatedAt } = parsedBody;
+    const { meta, duration, watched, seasonId, episodeId, seasonNumber, episodeNumber, updatedAt } = parsedBody;
 
     const now = coerceDateTime(updatedAt);
     const { seasonId: normSeasonId, episodeId: normEpisodeId } = normalizeIds(meta.type, seasonId, episodeId);
 
-    const existing = await prisma.progress_items.findUnique({
-      where: { tmdb_id_user_id_season_id_episode_id: { tmdb_id: tmdbId, user_id: userId, season_id: normSeasonId, episode_id: normEpisodeId } },
-    });
-
-    if (existing && now.getTime() < new Date(existing.updated_at).getTime()) {
-      return formatProgressItem(existing);
-    }
-
-    if (existing && hasSameProgressPayload(existing, duration, watched, meta)) {
-      return formatProgressItem(existing);
-    }
-
-    const shouldSave = await shouldSaveProgress(userId, tmdbId, parsedBody);
-    if (!shouldSave) {
-      return existing
-        ? formatProgressItem(existing)
-        : formatUnsavedProgressItem(userId, tmdbId, parsedBody, now);
-    }
-
-    const data = {
-      duration: BigInt(duration),
-      watched: BigInt(watched),
+    const queueKey = `progress_queue:${userId}:${tmdbId}:${normSeasonId || 'none'}:${normEpisodeId || 'none'}`;
+    const dataToQueue = {
+      tmdbId,
+      userId,
+      seasonId: normSeasonId,
+      episodeId: normEpisodeId,
+      seasonNumber: seasonNumber || null,
+      episodeNumber: episodeNumber || null,
+      duration,
+      watched,
       meta,
-      updated_at: now,
+      updatedAt: now.toISOString(),
     };
 
-    const progressItem = existing
-      ? await prisma.progress_items.update({ where: { id: existing.id }, data })
-      : await prisma.progress_items.create({
-          data: {
-            id: randomUUID(),
-            tmdb_id: tmdbId,
-            user_id: userId,
-            season_id: normSeasonId,
-            episode_id: normEpisodeId,
-            season_number: seasonNumber || null,
-            episode_number: episodeNumber || null,
-            ...data,
-          },
-        });
+    await storage.setItem(queueKey, dataToQueue);
 
-    return formatProgressItem(progressItem);
+    return formatUnsavedProgressItem(userId, tmdbId, parsedBody, now);
   }
 
   if (method === 'DELETE') {
     const body = await readBody(event).catch(() => ({}));
     const where: any = { user_id: userId, tmdb_id: tmdbId };
 
-    if (body.seasonId) where.season_id = body.seasonId;
-    else if (body.meta?.type === 'movie') where.season_id = '\n';
+    const { seasonId: normSeasonId, episodeId: normEpisodeId } = normalizeIds(body.meta?.type || 'show', body.seasonId, body.episodeId);
 
-    if (body.episodeId) where.episode_id = body.episodeId;
-    else if (body.meta?.type === 'movie') where.episode_id = '\n';
+    if (normSeasonId) where.season_id = normSeasonId;
+    if (normEpisodeId) where.episode_id = normEpisodeId;
 
     const items = await prisma.progress_items.findMany({ where });
-    if (items.length === 0) return { count: 0, tmdbId, episodeId: body.episodeId, seasonId: body.seasonId };
+    if (items.length > 0) {
+      await prisma.progress_items.deleteMany({ where });
+    }
 
-    await prisma.progress_items.deleteMany({ where });
+    // Also delete any queued items for this movie/episode
+    const queueKeyPrefix = `progress_queue:${userId}:${tmdbId}:${normSeasonId || '*'}:${normEpisodeId || '*'}`;
+    const keys = await storage.getKeys(queueKeyPrefix.replace(/\*/g, ''));
+    // Since unstorage getKeys matches prefixes, we just filter the keys manually to be safe
+    for (const key of keys) {
+      const parts = key.split(':');
+      // parts = ['progress_queue', userId, tmdbId, seasonId, episodeId]
+      const kSeasonId = parts[3];
+      const kEpisodeId = parts[4];
+      const matchSeason = normSeasonId ? kSeasonId === normSeasonId : true;
+      const matchEpisode = normEpisodeId ? kEpisodeId === normEpisodeId : true;
+      if (matchSeason && matchEpisode) {
+        await storage.removeItem(key);
+      }
+    }
+
     return { count: items.length, tmdbId, episodeId: body.episodeId, seasonId: body.seasonId };
   }
 
