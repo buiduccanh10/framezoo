@@ -15,12 +15,11 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@themes/*": ["../themes/*"],
+      "@/*": ["./src/*"],
+      "@themes/*": ["./themes/*"],
       "@sozialhelden/ietf-language-tags": [
-        "../node_modules/@sozialhelden/ietf-language-tags/dist/cjs"
+        "./node_modules/@sozialhelden/ietf-language-tags/dist/cjs"
       ]
     },
     "typeRoots": ["node_modules/@types"]
