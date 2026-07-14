@@ -40,6 +40,7 @@ services:
       PREVIEW_MAX_FRAMES: ${PREVIEW_MAX_FRAMES:-48}
       PREVIEW_FFMPEG_CONCURRENCY: ${PREVIEW_FFMPEG_CONCURRENCY:-4}
       PREVIEW_COMMAND_TIMEOUT_MS: ${PREVIEW_COMMAND_TIMEOUT_MS:-90000}
+      PREVIEW_LOG_LEVEL: ${PREVIEW_LOG_LEVEL:-info}
     volumes:
       - preview-data:/data/previews
     networks:
