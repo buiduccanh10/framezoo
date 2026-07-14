@@ -96,7 +96,7 @@ function computeSha256(filePath) {
 }
 
 function findMatchingFile(inputDir, pattern) {
-  const entries = fs.readdirSync(inputDir);
+  const entries = fs.readdirSync(inputDir).sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }));
   for (const entry of entries) {
     const match = entry.match(pattern);
     if (match) {
