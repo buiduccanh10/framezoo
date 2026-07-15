@@ -205,13 +205,20 @@ const readPreviewMetadata = async outputDir => {
 const canUseCachedPreview = async outputDir => {
   const metadata = await readPreviewMetadata(outputDir);
   const cachedFrames = Number.parseInt(String(metadata?.frames || ''), 10);
+  const plannedFrames = Number.parseInt(String(metadata?.plannedFrames || ''), 10);
   const cachedMaxFrames = Number.parseInt(String(metadata?.maxFrames || ''), 10);
 
   if (!Number.isFinite(cachedFrames) || cachedFrames <= 0) {
     return false;
   }
 
-  return cachedMaxFrames === PREVIEW_MAX_FRAMES || cachedFrames >= PREVIEW_MAX_FRAMES;
+  return (
+    metadata?.complete === true &&
+    Number.isFinite(plannedFrames) &&
+    plannedFrames > 0 &&
+    cachedFrames === plannedFrames &&
+    cachedMaxFrames === PREVIEW_MAX_FRAMES
+  );
 };
 
 const probeDuration = async sourceUrl => {
@@ -444,27 +451,37 @@ const generateSprites = async ({ key, sourceUrl }) => {
         concurrency: PREVIEW_FFMPEG_CONCURRENCY,
       });
 
-      const generatedFiles = await runWithConcurrency(
+      const generatedFrames = await runWithConcurrency(
         framePlan.timestamps,
         PREVIEW_FFMPEG_CONCURRENCY,
-        async (timestampSeconds, index) =>
-          extractFrameAtTimestamp({
+        async (timestampSeconds, index) => {
+          const filePath = await extractFrameAtTimestamp({
             sourceUrl: previewInputUrl,
             workDir,
             index,
             timestampSeconds,
-          })
+          });
+
+          return filePath ? { filePath, index, timestampSeconds } : null;
+        }
       );
 
-      const frameFiles = generatedFiles
-        .filter(Boolean)
-        .map(filePath => basename(filePath))
-        .sort();
+      const failedFrames = generatedFrames.filter(frame => !frame).length;
       logInfo('preview.frames.complete', {
         key: safe,
-        generated: frameFiles.length,
-        failed: framePlan.timestamps.length - frameFiles.length,
+        generated: generatedFrames.length - failedFrames,
+        planned: framePlan.timestamps.length,
+        failed: failedFrames,
       });
+
+      if (failedFrames > 0) {
+        throw new Error(
+          `Preview frame generation incomplete: ${framePlan.timestamps.length - failedFrames}/${framePlan.timestamps.length} frames`
+        );
+      }
+
+      const frames = generatedFrames.filter(frame => frame).sort((a, b) => a.index - b.index);
+      const frameFiles = frames.map(frame => basename(frame.filePath));
 
       if (!frameFiles.length) {
         throw new Error('No preview frames were generated');
@@ -503,12 +520,10 @@ const generateSprites = async ({ key, sourceUrl }) => {
       const effectiveDuration = framePlan.duration;
       const vttLines = ['WEBVTT', ''];
 
-      for (let index = 0; index < frameFiles.length; index += 1) {
-        const start = framePlan.timestamps[index];
+      for (let index = 0; index < frames.length; index += 1) {
+        const start = frames[index].timestampSeconds;
         const end =
-          index + 1 < framePlan.timestamps.length
-            ? framePlan.timestamps[index + 1]
-            : effectiveDuration;
+          index + 1 < frames.length ? frames[index + 1].timestampSeconds : effectiveDuration;
         const spriteIndex = Math.floor(index / batchSize);
         const tileIndex = index % batchSize;
         const col = tileIndex % PREVIEW_TILE_COLS;
@@ -536,6 +551,8 @@ const generateSprites = async ({ key, sourceUrl }) => {
               rows: PREVIEW_TILE_ROWS,
             },
             frames: frameFiles.length,
+            plannedFrames: framePlan.timestamps.length,
+            complete: true,
             maxFrames: PREVIEW_MAX_FRAMES,
             generatedAt: new Date().toISOString(),
           },
