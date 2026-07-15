@@ -33,7 +33,6 @@ const DEFAULT_PROXY_RATE_LIMITS: Record<string, number> = {
   'preview-auto': 30,
   'preview-file': 120,
   embed: 120,
-  vixsrc: 120,
 };
 
 const getRateLimitConfig = (path: string) => {

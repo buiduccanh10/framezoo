@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { sendStream } from 'h3';
+import { sendStream, type H3Event } from 'h3';
 import { request } from 'undici';
 import { applyCorsHeaders } from '~/utils/cors';
 import {
@@ -811,7 +811,7 @@ const setCacheHeaders = (event: any, isSegment: boolean = false) => {
   }
 };
 
-export default defineEventHandler(async event => {
+export const handleM3u8Proxy = async (event: H3Event) => {
   const startTime = Date.now();
 
   // Handle OPTIONS for CORS
@@ -1276,4 +1276,6 @@ export default defineEventHandler(async event => {
   const duration = Date.now() - startTime;
   // logInfo(`✓ Proxy completed (${duration}ms)`);
   return bytes;
-});
+};
+
+export default defineEventHandler(handleM3u8Proxy);
