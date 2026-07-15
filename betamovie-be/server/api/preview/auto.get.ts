@@ -20,7 +20,7 @@ import {
 const PREVIEW_SERVICE_URL = process.env.PREVIEW_SERVICE_URL || 'http://127.0.0.1:3100';
 const PREVIEW_BACKEND_INTERNAL_BASE_URL =
   process.env.PREVIEW_BACKEND_INTERNAL_BASE_URL || 'http://127.0.0.1:3000';
-const PREVIEW_SERVICE_TIMEOUT_MS = Number(process.env.PREVIEW_SERVICE_TIMEOUT_MS || 130_000);
+const PREVIEW_SERVICE_TIMEOUT_MS = Number(process.env.PREVIEW_SERVICE_TIMEOUT_MS || 300_000);
 
 const setPreviewHeaders = (event: any) => {
   applyCorsHeaders(event, 'GET, OPTIONS, HEAD', '*');
