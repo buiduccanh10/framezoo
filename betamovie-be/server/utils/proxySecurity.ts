@@ -19,8 +19,7 @@ export type ProxyCapabilityKind =
   | 'preview'
   | 'preview-auto'
   | 'preview-file'
-  | 'embed'
-  | 'vixsrc';
+  | 'embed';
 
 export type ProxyCapabilityPayload = JwtPayload & {
   typ: 'proxy-capability';
@@ -227,9 +226,6 @@ export const getProxyCapabilityKindForPath = (path: string): ProxyCapabilityKind
   if (normalizedPath === '/api/preview/file' || normalizedPath === '/api/embed/api/preview/file') {
     return 'preview-file';
   }
-  if (normalizedPath === '/api/proxy/vixsrc' || normalizedPath.startsWith('/api/proxy/vixsrc/')) {
-    return 'vixsrc';
-  }
   if (
     normalizedPath === '/api/embed/ts-proxy' ||
     normalizedPath.startsWith('/api/embed/ts-proxy/') ||
@@ -405,7 +401,6 @@ const normalizeHostname = (hostname: string) =>
     .replace(/^\[|\]$/g, '')
     .replace(/\.+$/, '')
     .toLowerCase();
-
 
 export const assertSafeUpstreamUrl = async (rawUrl: string) => {
   let parsed: URL;
@@ -734,7 +729,7 @@ export const getProxyResponseLimit = (kind: ProxyCapabilityKind) => {
       ? 16 * 1024 * 1024
       : kind === 'media'
         ? 2 * 1024 * 1024 * 1024
-        : kind === 'embed' || kind === 'vixsrc'
+        : kind === 'embed'
           ? 16 * 1024 * 1024
           : 10 * 1024 * 1024;
 
@@ -746,9 +741,7 @@ export const getProxyResponseLimit = (kind: ProxyCapabilityKind) => {
           ? 'MEDIA_PROXY_MAX_RESPONSE_BYTES'
           : kind === 'embed'
             ? 'EMBED_PROXY_MAX_RESPONSE_BYTES'
-            : kind === 'vixsrc'
-              ? 'VIXSRC_PROXY_MAX_RESPONSE_BYTES'
-              : 'PREVIEW_PROXY_MAX_RESPONSE_BYTES'
+            : 'PREVIEW_PROXY_MAX_RESPONSE_BYTES'
     ],
     fallback
   );

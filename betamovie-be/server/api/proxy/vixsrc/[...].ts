@@ -1,3 +1,0 @@
-import { handleVixsrcProxy } from '~/utils/vixsrcProxy';
-
-export default defineEventHandler(handleVixsrcProxy);
