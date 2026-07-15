@@ -21,6 +21,10 @@ import {
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import {
+  createM3U8ProxyUrl,
+  isUrlAlreadyProxied,
+} from "@/components/player/utils/proxy";
+import {
   DesktopPipAction,
   DesktopPipCaption,
   DesktopPipState,
@@ -55,6 +59,36 @@ function getDesktopElectronApi(): DesktopElectronApi | null {
 function getSourceSignature(state: DesktopPipState | null): string {
   if (!state?.source) return "";
   return JSON.stringify(state.source);
+}
+
+async function resolveDesktopPipSource(
+  source: DesktopPipState["source"],
+): Promise<DesktopPipState["source"]> {
+  if (!source || source.type !== "hls") return source;
+
+  const headers = {
+    ...source.preferredHeaders,
+    ...source.headers,
+  };
+  if (Object.keys(headers).length === 0 || isUrlAlreadyProxied(source.url)) {
+    return source;
+  }
+
+  try {
+    const proxiedUrl = await createM3U8ProxyUrl(source.url, headers);
+    if (proxiedUrl !== source.url && isUrlAlreadyProxied(proxiedUrl)) {
+      return {
+        ...source,
+        url: proxiedUrl,
+        headers: undefined,
+        preferredHeaders: undefined,
+      };
+    }
+  } catch (error) {
+    console.warn("Failed to prepare Desktop PiP HLS source", error);
+  }
+
+  return source;
 }
 
 function clampTime(time: number, duration: number) {
@@ -388,6 +422,8 @@ export default function DesktopPipPage() {
   const [isScrubbing, setIsScrubbing] = useState(false);
   const displayRef = useRef<DisplayInterface | null>(null);
   const sourceSignatureRef = useRef("");
+  const pendingSourceSignatureRef = useRef("");
+  const sourceLoadRequestRef = useRef(0);
   const controlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const videoTimeRef = useRef(0);
 
@@ -422,53 +458,89 @@ export default function DesktopPipPage() {
       const sourceSignature = getSourceSignature(nextState);
       const sourceChanged = sourceSignature !== sourceSignatureRef.current;
       const targetPlaybackRate = clampPlaybackRate(nextState.playbackRate || 1);
-      let shouldRestorePlaybackRate = sourceChanged || nextState.paused;
 
       document.title = nextState.title || "AlphaFlix PiP";
 
       if (sourceChanged) {
         sourceSignatureRef.current = sourceSignature;
+        pendingSourceSignatureRef.current = sourceSignature;
+        const requestId = ++sourceLoadRequestRef.current;
         videoTimeRef.current = nextState.time;
-        displayInterface.load({
-          source: nextState.source,
-          startAt: nextState.time,
-          automaticQuality: false,
-          preferredQuality: null,
-          autoplay: !nextState.paused,
-        });
-      } else {
-        const currentTime = videoElementNode.currentTime ?? 0;
-        const drift = nextState.time - currentTime;
-        const absoluteDrift = Math.abs(drift);
+        void resolveDesktopPipSource(nextState.source).then((source) => {
+          if (
+            requestId !== sourceLoadRequestRef.current ||
+            sourceSignatureRef.current !== sourceSignature ||
+            !displayRef.current
+          ) {
+            return;
+          }
 
-        if (
-          nextState.paused ||
-          absoluteDrift >= DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS
-        ) {
-          displayInterface.setTime(nextState.time);
-          shouldRestorePlaybackRate = true;
-        } else if (absoluteDrift >= DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS) {
-          const correction = Math.min(
-            DESKTOP_PIP_SYNC_RATE_ADJUSTMENT,
-            Math.max(0.02, absoluteDrift * 0.2),
-          );
-          displayInterface.setPlaybackRate(
-            clampPlaybackRate(
-              targetPlaybackRate + Math.sign(drift) * correction,
-            ),
-          );
-          shouldRestorePlaybackRate = false;
-        }
+          pendingSourceSignatureRef.current = "";
+          displayInterface.load({
+            source,
+            startAt: nextState.time,
+            automaticQuality: false,
+            preferredQuality: null,
+            autoplay: !nextState.paused,
+          });
+        });
+        return;
       }
 
-      if (shouldRestorePlaybackRate) {
+      if (pendingSourceSignatureRef.current === sourceSignature) {
+        return;
+      }
+
+      const hasTimeline =
+        Number.isFinite(videoElementNode.duration) &&
+        videoElementNode.duration > 0 &&
+        videoElementNode.readyState >= HTMLMediaElement.HAVE_METADATA;
+      if (!hasTimeline) {
+        return;
+      }
+
+      const hasCurrentFrame =
+        videoElementNode.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA;
+      const canSyncPlayback =
+        nextState.paused ||
+        videoElementNode.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA;
+      if (!hasCurrentFrame || !canSyncPlayback) {
+        return;
+      }
+
+      const currentTime = videoElementNode.currentTime ?? 0;
+      const drift = nextState.time - currentTime;
+      const absoluteDrift = Math.abs(drift);
+
+      if (absoluteDrift >= DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS) {
+        displayInterface.setTime(nextState.time);
+        displayInterface.setPlaybackRate(targetPlaybackRate);
+      } else if (
+        !nextState.paused &&
+        absoluteDrift >= DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS
+      ) {
+        const correction = Math.min(
+          DESKTOP_PIP_SYNC_RATE_ADJUSTMENT,
+          Math.max(0.02, absoluteDrift * 0.2),
+        );
+        displayInterface.setPlaybackRate(
+          clampPlaybackRate(targetPlaybackRate + Math.sign(drift) * correction),
+        );
+      } else if (
+        Math.abs(videoElementNode.playbackRate - targetPlaybackRate) > 0.01
+      ) {
         displayInterface.setPlaybackRate(targetPlaybackRate);
       }
-      void displayInterface.setVolume(0);
 
       if (nextState.paused) {
-        displayInterface.pause();
-      } else {
+        if (!videoElementNode.paused) {
+          displayInterface.pause();
+        }
+      } else if (
+        videoElementNode.paused &&
+        !videoElementNode.ended &&
+        hasCurrentFrame
+      ) {
         displayInterface.play();
       }
     },
