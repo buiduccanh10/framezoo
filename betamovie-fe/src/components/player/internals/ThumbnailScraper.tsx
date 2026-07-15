@@ -3,6 +3,10 @@ import { startTransition, useEffect } from "react";
 import { ThumbnailImage } from "@/stores/player/slices/thumbnails";
 import { usePlayerStore } from "@/stores/player/store";
 
+const PREVIEW_RETRY_DELAYS_MS = [
+  3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 30_000, 30_000, 30_000, 30_000,
+];
+
 function parseTimestamp(input: string): number | null {
   const match = input
     .trim()
@@ -78,6 +82,41 @@ function parsePreviewVtt(vtt: string, baseUrl: string): ThumbnailImage[] {
   return thumbnails.sort((a, b) => a.at - b.at);
 }
 
+function isGeneratedPreviewUrl(url: string): boolean {
+  return /\/(?:embed\/api\/)?preview\/auto(?:[/?]|$)/i.test(url);
+}
+
+function isRetryablePreviewStatus(status: number, generated: boolean): boolean {
+  return (
+    status === 408 ||
+    status === 425 ||
+    status === 429 ||
+    status >= 500 ||
+    (generated && status === 404)
+  );
+}
+
+function waitForRetry(delayMs: number, signal: AbortSignal): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (signal.aborted) {
+      resolve(false);
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      signal.removeEventListener("abort", abort);
+      resolve(true);
+    }, delayMs);
+
+    function abort() {
+      window.clearTimeout(timeoutId);
+      resolve(false);
+    }
+
+    signal.addEventListener("abort", abort, { once: true });
+  });
+}
+
 export function ThumbnailScraper() {
   const resetImages = usePlayerStore((s) => s.thumbnails.resetImages);
   const setImages = usePlayerStore((s) => s.thumbnails.setImages);
@@ -91,29 +130,62 @@ export function ThumbnailScraper() {
     if (!previewVtt) return undefined;
 
     const controller = new AbortController();
+    const generatedPreview = isGeneratedPreviewUrl(previewVtt);
 
     const loadPreview = async () => {
-      try {
-        const response = await fetch(previewVtt, {
-          signal: controller.signal,
-          credentials: "include",
-        });
-        if (!response.ok) {
-          throw new Error(
-            `Preview request failed: ${response.status} ${response.statusText}`,
-          );
+      let lastError: unknown = null;
+
+      for (
+        let attempt = 0;
+        attempt <= PREVIEW_RETRY_DELAYS_MS.length;
+        attempt += 1
+      ) {
+        try {
+          const response = await fetch(previewVtt, {
+            signal: controller.signal,
+            credentials: "include",
+            cache: "no-store",
+          });
+          if (!response.ok) {
+            const error = new Error(
+              `Preview request failed: ${response.status} ${response.statusText}`,
+            ) as Error & { status?: number };
+            error.status = response.status;
+            throw error;
+          }
+
+          const vtt = await response.text();
+          if (controller.signal.aborted) return;
+
+          const images = parsePreviewVtt(vtt, previewVtt);
+          if (generatedPreview && images.length === 0) {
+            throw new Error("Preview VTT has no thumbnail cues");
+          }
+
+          startTransition(() => {
+            setImages(images);
+          });
+          return;
+        } catch (error) {
+          if (controller.signal.aborted) return;
+          lastError = error;
+
+          const status =
+            error instanceof Error && "status" in error
+              ? Number(error.status)
+              : null;
+          const retryable =
+            status === null ||
+            isRetryablePreviewStatus(status, generatedPreview);
+          const delayMs = PREVIEW_RETRY_DELAYS_MS[attempt];
+
+          if (!retryable || delayMs === undefined) break;
+          if (!(await waitForRetry(delayMs, controller.signal))) return;
         }
+      }
 
-        const vtt = await response.text();
-        if (controller.signal.aborted) return;
-
-        const images = parsePreviewVtt(vtt, previewVtt);
-        startTransition(() => {
-          setImages(images);
-        });
-      } catch (error) {
-        if (controller.signal.aborted) return;
-        console.warn("Failed to load preview VTT", error);
+      if (!controller.signal.aborted) {
+        console.warn("Failed to load preview VTT", lastError);
         resetImages();
       }
     };
