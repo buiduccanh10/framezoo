@@ -2,7 +2,13 @@ import { createServer } from 'node:http';
 import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { spawn } from 'node:child_process';
+import { availableParallelism } from 'node:os';
 import { join, basename } from 'node:path';
+
+const positiveInt = (value, fallback) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
+};
 
 const PORT = Number(process.env.PORT || 3100);
 const DATA_DIR = process.env.PREVIEW_DATA_DIR || '/data/previews';
@@ -11,7 +17,19 @@ const PREVIEW_FRAME_WIDTH = Number(process.env.PREVIEW_FRAME_WIDTH || 320);
 const PREVIEW_TILE_COLS = Number(process.env.PREVIEW_TILE_COLS || 5);
 const PREVIEW_TILE_ROWS = Number(process.env.PREVIEW_TILE_ROWS || 5);
 const PREVIEW_MAX_FRAMES = Number(process.env.PREVIEW_MAX_FRAMES || 120);
-const PREVIEW_FFMPEG_CONCURRENCY = Number(process.env.PREVIEW_FFMPEG_CONCURRENCY || 4);
+const PREVIEW_FFMPEG_CONCURRENCY_REQUESTED = positiveInt(process.env.PREVIEW_FFMPEG_CONCURRENCY, 4);
+const PREVIEW_FFMPEG_MAX_CONCURRENCY = positiveInt(process.env.PREVIEW_FFMPEG_MAX_CONCURRENCY, 4);
+const PREVIEW_CPU_PARALLELISM = Math.max(1, availableParallelism());
+const PREVIEW_FFMPEG_CONCURRENCY = Math.max(
+  1,
+  Math.min(
+    PREVIEW_FFMPEG_CONCURRENCY_REQUESTED,
+    PREVIEW_FFMPEG_MAX_CONCURRENCY,
+    PREVIEW_CPU_PARALLELISM
+  )
+);
+const PREVIEW_FFMPEG_THREADS = positiveInt(process.env.PREVIEW_FFMPEG_THREADS, 1);
+const PREVIEW_GENERATION_CONCURRENCY = positiveInt(process.env.PREVIEW_GENERATION_CONCURRENCY, 1);
 const COMMAND_TIMEOUT_MS = Number(process.env.PREVIEW_COMMAND_TIMEOUT_MS || 90 * 1000);
 const LOG_LEVEL = String(process.env.PREVIEW_LOG_LEVEL || 'info').toLowerCase();
 const HLS_INPUT_ARGS = [
@@ -24,6 +42,8 @@ const HLS_INPUT_ARGS = [
 ];
 
 const pending = new Map();
+const generationWaiters = [];
+let activeGenerations = 0;
 let requestSequence = 0;
 
 const LOG_LEVELS = {
@@ -364,6 +384,8 @@ const extractFrameAtTimestamp = async ({ sourceUrl, workDir, index, timestampSec
         ...hlsFormatArgs(sourceUrl),
         '-i',
         sourceUrl,
+        '-threads',
+        String(PREVIEW_FFMPEG_THREADS),
         '-frames:v',
         '1',
         '-an',
@@ -403,6 +425,27 @@ const runWithConcurrency = async (items, limit, worker) => {
   return results;
 };
 
+const acquireGenerationSlot = () =>
+  new Promise(resolve => {
+    if (activeGenerations < PREVIEW_GENERATION_CONCURRENCY) {
+      activeGenerations += 1;
+      resolve();
+      return;
+    }
+
+    generationWaiters.push(resolve);
+  });
+
+const releaseGenerationSlot = () => {
+  const next = generationWaiters.shift();
+  if (next) {
+    next();
+    return;
+  }
+
+  activeGenerations = Math.max(0, activeGenerations - 1);
+};
+
 const generateSprites = async ({ key, sourceUrl }) => {
   const safe = safeKey(key);
   const outputDir = join(DATA_DIR, safe);
@@ -430,15 +473,17 @@ const generateSprites = async ({ key, sourceUrl }) => {
   }
 
   const task = (async () => {
+    await acquireGenerationSlot();
     const workDir = join(DATA_DIR, `${safe}.tmp-${Date.now()}`);
-    logInfo('preview.generate.start', {
-      key: safe,
-      workDir: basename(workDir),
-    });
-    await rm(workDir, { recursive: true, force: true });
-    await ensureDir(workDir);
 
     try {
+      logInfo('preview.generate.start', {
+        key: safe,
+        workDir: basename(workDir),
+      });
+      await rm(workDir, { recursive: true, force: true });
+      await ensureDir(workDir);
+
       const previewInputUrl = await resolvePreviewInputUrl(sourceUrl);
       const duration = await probeDuration(previewInputUrl);
       const framePlan = createFramePlan(duration);
@@ -448,7 +493,9 @@ const generateSprites = async ({ key, sourceUrl }) => {
         durationSeconds: framePlan.duration,
         frameCount: framePlan.frameCount,
         intervalSeconds: framePlan.intervalSeconds,
+        requestedConcurrency: PREVIEW_FFMPEG_CONCURRENCY_REQUESTED,
         concurrency: PREVIEW_FFMPEG_CONCURRENCY,
+        cpuParallelism: PREVIEW_CPU_PARALLELISM,
       });
 
       const generatedFrames = await runWithConcurrency(
@@ -581,6 +628,7 @@ const generateSprites = async ({ key, sourceUrl }) => {
       });
       throw error;
     } finally {
+      releaseGenerationSlot();
       pending.delete(safe);
     }
   })();
@@ -694,12 +742,6 @@ const server = createServer(async (req, res) => {
         return;
       }
 
-      logDebug('preview.file.serve', {
-        requestId,
-        key,
-        file,
-      });
-
       const contentType = file.endsWith('.vtt')
         ? 'text/vtt; charset=utf-8'
         : file.endsWith('.jpg') || file.endsWith('.jpeg')
@@ -709,6 +751,13 @@ const server = createServer(async (req, res) => {
             : file.endsWith('.webp')
               ? 'image/webp'
               : 'application/octet-stream';
+
+      logInfo('preview.file.serve', {
+        requestId,
+        key,
+        file,
+        contentType,
+      });
 
       res.writeHead(200, {
         'content-type': contentType,
@@ -743,7 +792,12 @@ logInfo('service.start', {
   tileCols: PREVIEW_TILE_COLS,
   tileRows: PREVIEW_TILE_ROWS,
   maxFrames: PREVIEW_MAX_FRAMES,
+  cpuParallelism: PREVIEW_CPU_PARALLELISM,
+  requestedFfmpegConcurrency: PREVIEW_FFMPEG_CONCURRENCY_REQUESTED,
+  maxFfmpegConcurrency: PREVIEW_FFMPEG_MAX_CONCURRENCY,
   ffmpegConcurrency: PREVIEW_FFMPEG_CONCURRENCY,
+  ffmpegThreads: PREVIEW_FFMPEG_THREADS,
+  generationConcurrency: PREVIEW_GENERATION_CONCURRENCY,
   commandTimeoutMs: COMMAND_TIMEOUT_MS,
 });
 
