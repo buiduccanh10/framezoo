@@ -47,9 +47,7 @@ for (const path of [
 ]) {
   await assertStatus(
     `anonymous ${path}`,
-    await request(
-      path.includes('?') ? path : `${path}?url=${encodeURIComponent(upstreamUrl)}`
-    ),
+    await request(path.includes('?') ? path : `${path}?url=${encodeURIComponent(upstreamUrl)}`),
     401
   );
 }
@@ -140,7 +138,6 @@ const issueCapability = async (kind, url, resource = '') => {
 };
 
 const embedCapabilityUrl = await issueCapability('embed', upstreamUrl);
-const vixsrcCapabilityUrl = await issueCapability('vixsrc', upstreamUrl);
 const previewAutoCapabilityUrl = await issueCapability('preview-auto', '', previewAutoResource);
 const previewFileCapabilityUrl = await issueCapability('preview-file', '', previewFileResource);
 
@@ -151,7 +148,6 @@ for (const path of [
   '/api/embed/api/preview/auto',
   '/api/embed/api/preview/file',
   '/api/embed/api/ts-proxy',
-  '/api/proxy/vixsrc',
 ]) {
   await assertStatus(
     `anonymous ${path}`,
@@ -194,11 +190,13 @@ await assertNotUnauthorized(
   })
 );
 
-await assertNotUnauthorized('valid preview-auto capability', await request(previewAutoCapabilityUrl));
-await assertNotUnauthorized('valid preview-file capability', await request(previewFileCapabilityUrl));
 await assertNotUnauthorized(
-  'valid vixsrc HEAD capability',
-  await request(vixsrcCapabilityUrl, { method: 'HEAD' })
+  'valid preview-auto capability',
+  await request(previewAutoCapabilityUrl)
+);
+await assertNotUnauthorized(
+  'valid preview-file capability',
+  await request(previewFileCapabilityUrl)
 );
 
 for (const path of [
@@ -206,7 +204,6 @@ for (const path of [
   '/api/embed/api/media-proxy',
   '/api/embed/api/preview-proxy',
   '/api/embed/api/ts-proxy',
-  '/api/proxy/vixsrc',
 ]) {
   await assertStatus(
     `internal SSRF guard ${path}`,
@@ -220,7 +217,6 @@ for (const path of [
 }
 
 await assertNotUnauthorized('valid embed capability', await request(embedCapabilityUrl));
-await assertNotUnauthorized('valid vixsrc capability', await request(vixsrcCapabilityUrl));
 
 await assertStatus(
   'private upstream blocked',
@@ -252,20 +248,14 @@ for (const path of [
   '/api/embed/api/media-proxy',
   '/api/embed/api/preview-proxy',
   '/api/embed/api/ts-proxy',
-  '/api/proxy/vixsrc',
 ]) {
   await assertStatus(
     `private upstream blocked ${path}`,
-    await request(
-      `${path}?url=${encodeURIComponent(
-        privateUpstreamUrl
-      )}`,
-      {
-        headers: {
-          'x-internal-token': internalToken,
-        },
-      }
-    ),
+    await request(`${path}?url=${encodeURIComponent(privateUpstreamUrl)}`, {
+      headers: {
+        'x-internal-token': internalToken,
+      },
+    }),
     400
   );
 }

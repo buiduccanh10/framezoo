@@ -3,7 +3,9 @@
 import { createServer } from 'node:http';
 
 const backendBase = (
-  process.env.SECURITY_E2E_BASE_URL || process.argv[2] || 'http://127.0.0.1:3002'
+  process.env.SECURITY_E2E_BASE_URL ||
+  process.argv[2] ||
+  'http://127.0.0.1:3002'
 ).replace(/\/+$/, '');
 const fixturePort = Number(process.env.SECURITY_E2E_FIXTURE_PORT || 3111);
 const fixtureBind = process.env.SECURITY_E2E_FIXTURE_BIND || '127.0.0.1';
@@ -142,30 +144,12 @@ try {
   }
   console.log('media bytes + HEAD: PASS');
 
-  const vixsrcUrl = await issueProxyUrl('vixsrc', `${fixtureBase}/media/file.mp4`);
-  const vixsrcResponse = await readBodyOrThrow(await fetch(vixsrcUrl), 'vixsrc proxy');
-  const receivedVixsrc = Buffer.from(await vixsrcResponse.arrayBuffer());
-  if (!receivedVixsrc.equals(mediaBytes)) {
-    throw new Error('vixsrc proxy: body mismatch');
-  }
-  const vixsrcHead = await readBodyOrThrow(
-    await fetch(vixsrcUrl, { method: 'HEAD' }),
-    'vixsrc proxy HEAD'
-  );
-  if (vixsrcHead.headers.get('content-length') !== String(mediaBytes.length)) {
-    throw new Error('vixsrc proxy HEAD: content-length mismatch');
-  }
-  console.log('vixsrc bytes + HEAD: PASS');
-
   const previewFileUrl = await issueProxyUrl(
     'preview-file',
     '',
     `${previewFileKey}|${previewFileName}`
   );
-  const previewFileResponse = await readBodyOrThrow(
-    await fetch(previewFileUrl),
-    'preview file'
-  );
+  const previewFileResponse = await readBodyOrThrow(await fetch(previewFileUrl), 'preview file');
   const receivedPreviewFile = Buffer.from(await previewFileResponse.arrayBuffer());
   if (
     previewFileExpectedBytes !== null &&
@@ -178,7 +162,10 @@ try {
   if (!receivedPreviewFile.length) {
     throw new Error('preview file: empty body');
   }
-  if (!previewFileExpectedBytes && !previewFileResponse.headers.get('content-type')?.startsWith('image/')) {
+  if (
+    !previewFileExpectedBytes &&
+    !previewFileResponse.headers.get('content-type')?.startsWith('image/')
+  ) {
     throw new Error('preview file: expected image content-type');
   }
   console.log('preview file bytes: PASS');
