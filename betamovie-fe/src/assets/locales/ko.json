@@ -246,6 +246,8 @@
         "skipForward5": "5초 앞으로 건너뛰기",
         "syncSubtitlesEarlier": "자막을 더 일찍 동기화합니다(-0.5초)",
         "syncSubtitlesLater": "나중에 자막 동기화(+0.5초)",
+        "previousSubtitleCue": "이전 자막 큐",
+        "nextSubtitleCue": "다음 자막 큐",
         "toggleCaptions": "캡션 전환",
         "toggleFullscreen": "전체 화면 전환",
         "toggleNativeSubtitles": "기본 자막 전환"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "자막 커스텀",
           "delay": "자막 딜레이",
-          "fixCapitals": "대문자 표기 수정"
+          "fixCapitals": "대문자 표기 수정",
+          "timeline": "자막 타임라인",
+          "timelineHint": "현재 비디오 시간과 동기화할 자막 신호를 선택하세요.",
+          "timelineEmpty": "사용할 수 있는 자막 신호가 없습니다."
         },
         "title": "자막",
         "transcriptChoice": "성적 증명서",

@@ -246,6 +246,8 @@
         "skipForward5": "快轉 5 秒",
         "syncSubtitlesEarlier": "提前同步字幕（-0.5s）",
         "syncSubtitlesLater": "稍後同步字幕（+0.5 秒）",
+        "previousSubtitleCue": "上一個字幕提示",
+        "nextSubtitleCue": "下一個字幕提示",
         "toggleCaptions": "切換字幕",
         "toggleFullscreen": "切換全螢幕",
         "toggleNativeSubtitles": "切換原生字幕"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "自訂字幕",
           "delay": "字幕延遲",
-          "fixCapitals": "修復大小寫"
+          "fixCapitals": "修復大小寫",
+          "timeline": "字幕時間軸",
+          "timelineHint": "選擇一個字幕提示以將其與當前視訊時間同步。",
+          "timelineEmpty": "沒有可用的字幕提示。"
         },
         "title": "字幕",
         "transcriptChoice": "成績單",

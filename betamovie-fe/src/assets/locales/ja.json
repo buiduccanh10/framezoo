@@ -246,6 +246,8 @@
         "skipForward5": "5 秒スキップします",
         "syncSubtitlesEarlier": "字幕をより早く同期します (-0.5 秒)",
         "syncSubtitlesLater": "字幕を後で同期する (+0.5 秒)",
+        "previousSubtitleCue": "前の字幕キュー",
+        "nextSubtitleCue": "次の字幕キュー",
         "toggleCaptions": "キャプションの切り替え",
         "toggleFullscreen": "全画面表示の切り替え",
         "toggleNativeSubtitles": "ネイティブ字幕の切り替え"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "カスタム字幕",
           "delay": "字幕の遅延",
-          "fixCapitals": "大文字を修正する"
+          "fixCapitals": "大文字を修正する",
+          "timeline": "字幕タイムライン",
+          "timelineHint": "現在のビデオ時間と同期する字幕キューを選択します。",
+          "timelineEmpty": "利用可能な字幕キューはありません。"
         },
         "title": "字幕",
         "transcriptChoice": "成績証明書",

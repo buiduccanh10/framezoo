@@ -246,6 +246,8 @@
         "skipForward5": "Spring 5 seconden vooruit",
         "syncSubtitlesEarlier": "Ondertitels eerder synchroniseren (-0,5s)",
         "syncSubtitlesLater": "Ondertitels later synchroniseren (+0,5s)",
+        "previousSubtitleCue": "Vorige ondertitelsignaal",
+        "nextSubtitleCue": "Volgende ondertitelsignaal",
         "toggleCaptions": "Schakel bijschriften in",
         "toggleFullscreen": "Schakel volledig scherm in",
         "toggleNativeSubtitles": "Schakel native ondertitels in"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Aangepaste ondertiteling",
           "delay": "Ondertiteling vertraging",
-          "fixCapitals": "Hoofdlettergebruik corrigeren"
+          "fixCapitals": "Hoofdlettergebruik corrigeren",
+          "timeline": "Tijdlijn van ondertiteling",
+          "timelineHint": "Kies een ondertitelcue om deze te synchroniseren met de huidige videotijd.",
+          "timelineEmpty": "Er zijn geen ondertitelsignalen beschikbaar."
         },
         "title": "Ondertiteling",
         "transcriptChoice": "Afschrift",

@@ -244,8 +244,10 @@
         "skipForward1": "Tua tiến 1 giây",
         "skipForward10": "Tua tiến 10 giây",
         "skipForward5": "Tua tiến 5 giây",
-        "syncSubtitlesEarlier": "Đồng bộ phụ đề sớm hơn (-0.5 giây)",
-        "syncSubtitlesLater": "Đồng bộ phụ đề muộn hơn (+0.5 giây)",
+        "syncSubtitlesEarlier": "Mốc phụ đề trước",
+        "syncSubtitlesLater": "Mốc phụ đề tiếp theo",
+        "previousSubtitleCue": "Mốc phụ đề trước",
+        "nextSubtitleCue": "Mốc phụ đề tiếp theo",
         "toggleCaptions": "Bật/tắt phụ đề",
         "toggleFullscreen": "Bật/tắt toàn màn hình",
         "toggleNativeSubtitles": "Bật/tắt phụ đề gốc"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Phụ đề tùy chỉnh",
           "delay": "Độ trễ phụ đề",
-          "fixCapitals": "Sửa lỗi viết hoa"
+          "fixCapitals": "Sửa lỗi viết hoa",
+          "timeline": "Dòng thời gian phụ đề",
+          "timelineHint": "Chọn gợi ý phụ đề để đồng bộ hóa với thời gian video hiện tại.",
+          "timelineEmpty": "Không có tín hiệu phụ đề có sẵn."
         },
         "title": "Phụ đề",
         "transcriptChoice": "Bản ghi âm",

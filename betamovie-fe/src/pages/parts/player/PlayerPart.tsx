@@ -305,7 +305,7 @@ export function PlayerPart(props: PlayerPartProps) {
       </Player.BottomControls>
 
       <Player.VolumeChangedPopout />
-      <Player.SubtitleDelayPopout />
+      <Player.SubtitleCuePopout />
       <Player.SpeedChangedPopout />
       <Player.TIDBSubmissionSuccessPopout />
       <Player.UnreleasedEpisodeOverlay />

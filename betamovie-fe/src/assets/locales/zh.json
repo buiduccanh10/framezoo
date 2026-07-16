@@ -246,6 +246,8 @@
         "skipForward5": "快进 5 秒",
         "syncSubtitlesEarlier": "提前同步字幕（-0.5s）",
         "syncSubtitlesLater": "稍后同步字幕（+0.5 秒）",
+        "previousSubtitleCue": "上一个字幕提示",
+        "nextSubtitleCue": "下一个字幕提示",
         "toggleCaptions": "切换字幕",
         "toggleFullscreen": "切换全屏",
         "toggleNativeSubtitles": "切换原生字幕"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "自定义字幕",
           "delay": "字幕偏移",
-          "fixCapitals": "修正大小写"
+          "fixCapitals": "修正大小写",
+          "timeline": "字幕时间线",
+          "timelineHint": "选择一个字幕提示以将其与当前视频时间同步。",
+          "timelineEmpty": "没有可用的字幕提示。"
         },
         "title": "字幕",
         "transcriptChoice": "成绩单",

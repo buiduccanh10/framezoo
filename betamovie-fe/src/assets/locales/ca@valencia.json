@@ -246,6 +246,8 @@
         "skipForward5": "Saltar endavant 5 segons",
         "syncSubtitlesEarlier": "Sincronitza els subtítols abans (-0,5 s)",
         "syncSubtitlesLater": "Sincronitza els subtítols més tard (+0,5 s)",
+        "previousSubtitleCue": "Taula de subtítols anterior",
+        "nextSubtitleCue": "Següent senyal de subtítols",
         "toggleCaptions": "Commuta els subtítols",
         "toggleFullscreen": "Commuta la pantalla completa",
         "toggleNativeSubtitles": "Commuta els subtítols nadius"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Subtítols personalitzats",
           "delay": "Retard dels subtítols",
-          "fixCapitals": "Corregir les majúscules"
+          "fixCapitals": "Corregir les majúscules",
+          "timeline": "Cronologia dels subtítols",
+          "timelineHint": "Trieu una indicació de subtítols per sincronitzar-la amb l'hora del vídeo actual.",
+          "timelineEmpty": "No hi ha cap indicació de subtítols disponible."
         },
         "title": "Subtítols",
         "transcriptChoice": "Transcripció",

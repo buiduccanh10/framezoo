@@ -246,6 +246,8 @@
         "skipForward5": "Pāriet uz priekšu 5 sekundes",
         "syncSubtitlesEarlier": "Sinhronizēt subtitrus agrāk (-0,5 s)",
         "syncSubtitlesLater": "Sinhronizēt subtitrus vēlāk (+0,5 s)",
+        "previousSubtitleCue": "Iepriekšējais subtitru signāls",
+        "nextSubtitleCue": "Nākamais subtitru signāls",
         "toggleCaptions": "Pārslēgt parakstus",
         "toggleFullscreen": "Pārslēgt pilnekrāna režīmu",
         "toggleNativeSubtitles": "Pārslēgt vietējos subtitrus"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Pielāgoti subtitri",
           "delay": "Subtitru aizkave",
-          "fixCapitals": "Labojiet lielo burtu lietojumu"
+          "fixCapitals": "Labojiet lielo burtu lietojumu",
+          "timeline": "Subtitru laika skala",
+          "timelineHint": "Izvēlieties subtitru signālu, lai to sinhronizētu ar pašreizējo video laiku.",
+          "timelineEmpty": "Subtitru norādes nav pieejamas."
         },
         "title": "Subtitri",
         "transcriptChoice": "Atšifrējums",
