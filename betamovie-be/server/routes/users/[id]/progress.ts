@@ -42,11 +42,11 @@ export default defineEventHandler(async event => {
       tmdbId: item.tmdb_id,
       episode: {
         id: item.episode_id === '\n' ? null : (item.episode_id || null),
-        number: item.episode_number || null,
+        number: item.episode_number ?? null,
       },
       season: {
         id: item.season_id === '\n' ? null : (item.season_id || null),
-        number: item.season_number || null,
+        number: item.season_number ?? null,
       },
       meta: item.meta,
       duration: item.duration.toString(),

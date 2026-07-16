@@ -11,6 +11,7 @@ import { hasAired } from "@/components/player/utils/aired";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { measureInlineExpandableText } from "@/utils/inlineExpandText";
+import { formatSeasonTitle } from "@/utils/season";
 import { formatDateDDMMYY } from "@/utils/timestamp";
 
 import { EpisodeCarouselProps } from "../../types";
@@ -50,6 +51,7 @@ export function EpisodeCarousel({
   mediaTitle,
   mediaPosterUrl,
   totalEpisodes,
+  boundaryRef,
 }: EpisodeCarouselProps) {
   const [showEpisodeMenu, setShowEpisodeMenu] = useState(false);
   const [customSeason, setCustomSeason] = useState("");
@@ -562,8 +564,11 @@ export function EpisodeCarousel({
                       type="number"
                       value={customSeason}
                       onChange={(e) => setCustomSeason(e.target.value)}
-                      min="1"
-                      max={seasons.length}
+                      min="0"
+                      max={Math.max(
+                        0,
+                        ...seasons.map((season) => season.season_number),
+                      )}
                       className="w-full px-3 py-2 bg-white/5 rounded-xl text-white focus:outline-none focus:border-white/30"
                       placeholder={t("details.season")}
                     />
@@ -605,6 +610,7 @@ export function EpisodeCarousel({
             <Dropdown
               className="my-0"
               menuClassName="max-h-72 whitespace-nowrap"
+              boundaryRef={boundaryRef}
               options={episodeGroups.map((group) => ({
                 id: group.index.toString(),
                 name: group.label,
@@ -657,6 +663,8 @@ export function EpisodeCarousel({
           )}
 
           <Dropdown
+            preventWrap
+            boundaryRef={boundaryRef}
             options={[
               // Add favorites option if there are favorite episodes
               ...(favoriteEpisodeIds.length > 0
@@ -670,14 +678,26 @@ export function EpisodeCarousel({
               // Add regular seasons
               ...seasons.map((season) => ({
                 id: season.season_number.toString(),
-                name: `${t("details.season")} ${season.season_number}`,
+                name: formatSeasonTitle(
+                  season.name,
+                  season.season_number,
+                  t,
+                  "season",
+                ),
               })),
             ]}
             selectedItem={{
               id: showFavorites ? "favorites" : selectedSeason.toString(),
               name: showFavorites
                 ? `${t("player.menus.episodes.favorites")} (${favoriteEpisodeIds.length})`
-                : `${t("details.season")} ${selectedSeason}`,
+                : formatSeasonTitle(
+                    seasons.find(
+                      (season) => season.season_number === selectedSeason,
+                    )?.name,
+                    selectedSeason,
+                    t,
+                    "season",
+                  ),
             }}
             setSelectedItem={handleSeasonOrFavoritesChange}
           />

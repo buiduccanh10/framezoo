@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { TFunction } from "i18next";
 import {
   ReactNode,
   useCallback,
@@ -31,6 +30,7 @@ import { useProgressStore } from "@/stores/progress";
 import { concurrentMap } from "@/utils/async";
 import { measureInlineExpandableText } from "@/utils/inlineExpandText";
 import { scrollToElement } from "@/utils/scroll";
+import { formatSeasonTitle } from "@/utils/season";
 
 import { hasAired } from "../utils/aired";
 
@@ -43,9 +43,6 @@ interface EpisodeGroup {
   startEpisodeNumber: number;
   endEpisodeNumber: number;
 }
-
-const GENERIC_SEASON_TITLE_PATTERN = /^season\s+\d+$/i;
-const GENERIC_SPECIALS_TITLE_PATTERN = /^specials?$/i;
 
 function hasGenericEpisodeTitle(
   episodeTitle: string | null | undefined,
@@ -79,30 +76,6 @@ function createEpisodeGroups(episodes: any[]): EpisodeGroup[] {
   }
 
   return groups;
-}
-
-function formatSeasonTitle(
-  title: string | undefined,
-  seasonNumber: number | undefined,
-  t: TFunction,
-) {
-  const trimmedTitle = title?.trim();
-
-  if (
-    seasonNumber === 0 ||
-    (trimmedTitle && GENERIC_SPECIALS_TITLE_PATTERN.test(trimmedTitle))
-  ) {
-    return t("player.menus.episodes.specials");
-  }
-
-  if (
-    seasonNumber &&
-    (!trimmedTitle || GENERIC_SEASON_TITLE_PATTERN.test(trimmedTitle))
-  ) {
-    return `${t("details.season")} ${seasonNumber}`;
-  }
-
-  return trimmedTitle || t("player.menus.episodes.loadingTitle");
 }
 
 function CenteredText(props: { children: React.ReactNode }) {

@@ -28,6 +28,7 @@ interface DropdownProps {
   className?: string;
   menuClassName?: string;
   preventWrap?: boolean;
+  boundaryRef?: React.RefObject<HTMLElement | null>;
 }
 
 const VIEWPORT_PADDING = 16;
@@ -35,11 +36,14 @@ const VIEWPORT_PADDING = 16;
 function getMenuLeftOffset(
   containerRect: DOMRect,
   menuWidth: number,
+  boundaryRect?: DOMRect,
   forcedSide?: "left" | "right",
 ) {
-  const fitsOnLeft =
-    containerRect.left + menuWidth <= window.innerWidth - VIEWPORT_PADDING;
-  const fitsOnRight = containerRect.right - menuWidth >= VIEWPORT_PADDING;
+  const boundaryLeft = boundaryRect?.left ?? VIEWPORT_PADDING;
+  const boundaryRight =
+    boundaryRect?.right ?? window.innerWidth - VIEWPORT_PADDING;
+  const fitsOnLeft = containerRect.left + menuWidth <= boundaryRight;
+  const fitsOnRight = containerRect.right - menuWidth >= boundaryLeft;
   const resolvedSide =
     forcedSide ??
     (fitsOnLeft
@@ -52,9 +56,8 @@ function getMenuLeftOffset(
 
   const desiredLeft =
     resolvedSide === "right" ? containerRect.width - menuWidth : 0;
-  const minLeft = VIEWPORT_PADDING - containerRect.left;
-  const maxLeft =
-    window.innerWidth - VIEWPORT_PADDING - containerRect.left - menuWidth;
+  const minLeft = boundaryLeft - containerRect.left;
+  const maxLeft = boundaryRight - containerRect.left - menuWidth;
 
   if (maxLeft < minLeft) {
     return minLeft;
@@ -73,6 +76,7 @@ interface DropdownMenuProps {
   customMenu?: React.ReactNode;
   options: Array<OptionItem>;
   preventWrap?: boolean;
+  boundaryRef?: React.RefObject<HTMLElement | null>;
   initialLeft: number;
 }
 
@@ -86,6 +90,7 @@ function DropdownMenu({
   customMenu,
   options,
   preventWrap,
+  boundaryRef,
   initialLeft,
 }: DropdownMenuProps) {
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -103,6 +108,7 @@ function DropdownMenu({
       const nextLeft = getMenuLeftOffset(
         containerRef.current.getBoundingClientRect(),
         menuWidth,
+        boundaryRef?.current?.getBoundingClientRect(),
         side,
       );
 
@@ -110,7 +116,7 @@ function DropdownMenu({
         Math.abs(currentLeft - nextLeft) < 1 ? currentLeft : nextLeft,
       );
     },
-    [containerRef, estimatedMenuWidth, side],
+    [boundaryRef, containerRef, estimatedMenuWidth, side],
   );
 
   useEffect(() => {
@@ -138,6 +144,10 @@ function DropdownMenu({
       if (menuRef.current) {
         resizeObserver.observe(menuRef.current);
       }
+
+      if (boundaryRef?.current) {
+        resizeObserver.observe(boundaryRef.current);
+      }
     }
 
     return () => {
@@ -146,7 +156,7 @@ function DropdownMenu({
       window.removeEventListener("scroll", updatePosition, true);
       resizeObserver?.disconnect();
     };
-  }, [containerRef, open, resolveMenuPosition]);
+  }, [boundaryRef, containerRef, open, resolveMenuPosition]);
 
   return (
     <div
@@ -154,7 +164,7 @@ function DropdownMenu({
       className={`absolute z-[40] max-w-[calc(100vw-2rem)] ${
         direction === "up" ? "bottom-full mb-4" : "top-full mt-1"
       }`}
-      style={{ left: open ? menuLeft : initialLeft }}
+      style={{ left: menuLeft }}
     >
       <Transition
         animation="slide-down"
@@ -210,11 +220,12 @@ export function Dropdown(props: DropdownProps) {
     const nextLeft = getMenuLeftOffset(
       containerRef.current.getBoundingClientRect(),
       estimatedMenuWidth,
+      props.boundaryRef?.current?.getBoundingClientRect(),
       props.side,
     );
 
     setInitialMenuLeft(nextLeft);
-  }, [props.side, estimatedMenuWidth]);
+  }, [estimatedMenuWidth, props.boundaryRef, props.side]);
 
   useEffect(() => {
     resolveInitialMenuPosition();
@@ -232,12 +243,22 @@ export function Dropdown(props: DropdownProps) {
         {({ open }) => (
           <>
             {customButton ? (
-              <div onMouseDownCapture={resolveInitialMenuPosition}>
+              <div
+                onPointerDownCapture={() => {
+                  if (!open) {
+                    resolveInitialMenuPosition();
+                  }
+                }}
+              >
                 <Listbox.Button as={Fragment}>{customButton}</Listbox.Button>
               </div>
             ) : (
               <Listbox.Button
-                onMouseDown={resolveInitialMenuPosition}
+                onPointerDownCapture={() => {
+                  if (!open) {
+                    resolveInitialMenuPosition();
+                  }
+                }}
                 className="relative z-[30] w-full rounded-xl bg-dropdown-background hover:bg-dropdown-hoverBackground py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none tabbable cursor-pointer"
               >
                 <span className="flex gap-4 items-center truncate">
@@ -264,6 +285,7 @@ export function Dropdown(props: DropdownProps) {
               customMenu={customMenu}
               options={props.options}
               preventWrap={props.preventWrap}
+              boundaryRef={props.boundaryRef}
               initialLeft={initialMenuLeft}
             />
           </>

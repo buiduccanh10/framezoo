@@ -1,3 +1,5 @@
+import type { RefObject } from "react";
+
 import { ShowProgressResult } from "@/stores/progress/utils";
 
 export interface DetailsContent {
@@ -125,6 +127,7 @@ export interface EpisodeCarouselProps {
   mediaTitle?: string;
   mediaPosterUrl?: string;
   totalEpisodes?: number;
+  boundaryRef?: RefObject<HTMLElement | null>;
 }
 
 export interface DetailsBodyProps {
