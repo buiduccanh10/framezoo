@@ -43,6 +43,7 @@ import {
   SourceQuality,
   getPreferredQuality,
 } from "@/stores/player/utils/qualities";
+import { useSubtitleStore } from "@/stores/subtitles";
 import { processCdnLink } from "@/utils/cdn";
 import {
   canChangeVolume,
@@ -420,7 +421,10 @@ export function makeVideoElementDisplayInterface(options?: {
   function buildDesktopPipState(): DesktopPipState | null {
     if (options?.desktopPipMirror) return null;
 
-    const state = getDesktopPipStateFromPlayerState(usePlayerStore.getState());
+    const state = getDesktopPipStateFromPlayerState(
+      usePlayerStore.getState(),
+      useSubtitleStore.getState().delay,
+    );
     if (!state) return null;
 
     return {
@@ -458,9 +462,16 @@ export function makeVideoElementDisplayInterface(options?: {
   function startDesktopPipSync() {
     if (options?.desktopPipMirror || desktopPipSyncUnsubscribe) return;
 
-    desktopPipSyncUnsubscribe = usePlayerStore.subscribe(() => {
+    const unsubscribePlayerStore = usePlayerStore.subscribe(() => {
       scheduleDesktopPipSync();
     });
+    const unsubscribeSubtitleStore = useSubtitleStore.subscribe(() => {
+      scheduleDesktopPipSync();
+    });
+    desktopPipSyncUnsubscribe = () => {
+      unsubscribePlayerStore();
+      unsubscribeSubtitleStore();
+    };
     desktopPipSyncInterval = setInterval(() => {
       pushDesktopPipState();
     }, DESKTOP_PIP_SYNC_HEARTBEAT_MS);
