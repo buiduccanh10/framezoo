@@ -8,6 +8,27 @@ import { CaptionListItem } from "@/stores/player/slices/source";
 export type CaptionCueType = ContentCaption;
 export const sanitize = DOMPurify.sanitize;
 
+const CAPTION_HTML_OPTIONS = {
+  ALLOWED_TAGS: ["c", "b", "i", "u", "span", "ruby", "rt", "br"],
+  ADD_TAGS: ["v", "lang"],
+  ALLOWED_ATTR: ["title", "lang"],
+};
+
+export function captionHtml(content?: string): string {
+  return sanitize(
+    (content || "").replaceAll(/\r?\n/g, "<br />"),
+    CAPTION_HTML_OPTIONS,
+  );
+}
+
+export function captionPlainText(content?: string): string {
+  return (content || "")
+    .replaceAll(/<[^>]*>/g, "")
+    .replaceAll(/\r?\n/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function captionIsVisible(
   start: number,
   end: number,
@@ -49,6 +70,21 @@ export function getCaptionTimelineNavigationIndex(
 
   const nextIndex = currentIndex + direction;
   return nextIndex < 0 || nextIndex >= cueCount ? currentIndex : nextIndex;
+}
+
+export function getCaptionTimelineWindow(
+  currentIndex: number | null,
+  cueCount: number,
+  radius = 6,
+): { start: number; end: number } {
+  if (currentIndex === null || cueCount === 0) {
+    return { start: 0, end: 0 };
+  }
+
+  return {
+    start: Math.max(0, currentIndex - radius),
+    end: Math.min(cueCount, currentIndex + radius + 1),
+  };
 }
 
 export function getCaptionCueForNavigation(
