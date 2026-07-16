@@ -9,11 +9,13 @@ import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import {
   type CaptionCueType,
+  captionHtml,
+  captionPlainText,
   getCaptionCueForNavigation,
   getCaptionDelayForCue,
   getCaptionTimelineIndex,
+  getCaptionTimelineWindow,
   parseCanonicalVtt,
-  sanitize,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
@@ -24,6 +26,9 @@ import {
   useSubtitleStore,
 } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
+
+const VISIBLE_CUE_COUNT = 13;
+const CUE_SWIPE_THRESHOLD = 32;
 
 export function ColorOption(props: {
   color: string;
@@ -51,27 +56,6 @@ export function ColorOption(props: {
   );
 }
 
-const CAPTION_HTML_OPTIONS = {
-  ALLOWED_TAGS: ["c", "b", "i", "u", "span", "ruby", "rt", "br"],
-  ADD_TAGS: ["v", "lang"],
-  ALLOWED_ATTR: ["title", "lang"],
-};
-
-function captionHtml(content?: string) {
-  return sanitize(
-    (content || "").replaceAll(/\r?\n/g, "<br />"),
-    CAPTION_HTML_OPTIONS,
-  );
-}
-
-function captionPlainText(content?: string) {
-  return (content || "")
-    .replaceAll(/<[^>]*>/g, "")
-    .replaceAll(/\r?\n/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 export function SubtitleCueTimeline(props: {
   label: string;
   hint: string;
@@ -82,11 +66,15 @@ export function SubtitleCueTimeline(props: {
   onSelectCue: (cue: CaptionCueType) => void;
   onReset: () => void;
 }) {
-  const VISIBLE_COUNT = 13;
-
   const activeIndex = useMemo(
     () => getCaptionTimelineIndex(props.cues, props.delay, props.videoTime),
     [props.cues, props.delay, props.videoTime],
+  );
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
+  const suppressMarkerClickRef = useRef(false);
+  const wheelDeltaRef = useRef(0);
+  const wheelResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
   );
 
   const handleNav = useCallback(
@@ -106,11 +94,88 @@ export function SubtitleCueTimeline(props: {
 
   const handleSelectCueAtIndex = useCallback(
     (cueIndex: number) => {
+      if (suppressMarkerClickRef.current) {
+        suppressMarkerClickRef.current = false;
+        return;
+      }
       if (cueIndex < 0 || cueIndex >= props.cues.length) return;
       props.onSelectCue(props.cues[cueIndex]);
     },
     [props],
   );
+
+  const handlePointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+
+      pointerStartRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+      event.currentTarget.setPointerCapture?.(event.pointerId);
+    },
+    [],
+  );
+
+  const handlePointerUp = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const start = pointerStartRef.current;
+      pointerStartRef.current = null;
+      if (!start) return;
+
+      const deltaX = event.clientX - start.x;
+      const deltaY = event.clientY - start.y;
+      if (
+        Math.abs(deltaX) < CUE_SWIPE_THRESHOLD ||
+        Math.abs(deltaX) <= Math.abs(deltaY)
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      suppressMarkerClickRef.current = true;
+      handleNav(deltaX < 0 ? 1 : -1);
+      window.setTimeout(() => {
+        suppressMarkerClickRef.current = false;
+      }, 350);
+    },
+    [handleNav],
+  );
+
+  const handlePointerCancel = useCallback(() => {
+    pointerStartRef.current = null;
+  }, []);
+
+  const handleWheel = useCallback(
+    (event: React.WheelEvent<HTMLDivElement>) => {
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+
+      event.preventDefault();
+      wheelDeltaRef.current += event.deltaX;
+      if (Math.abs(wheelDeltaRef.current) < CUE_SWIPE_THRESHOLD) return;
+
+      const direction = wheelDeltaRef.current > 0 ? 1 : -1;
+      wheelDeltaRef.current = 0;
+      handleNav(direction);
+
+      if (wheelResetTimeoutRef.current) {
+        clearTimeout(wheelResetTimeoutRef.current);
+      }
+      wheelResetTimeoutRef.current = setTimeout(() => {
+        wheelDeltaRef.current = 0;
+        wheelResetTimeoutRef.current = null;
+      }, 150);
+    },
+    [handleNav],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (wheelResetTimeoutRef.current) {
+        clearTimeout(wheelResetTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
@@ -124,13 +189,12 @@ export function SubtitleCueTimeline(props: {
   }, [onReset]);
 
   // Keep the active cue centered while showing six cues on either side.
-  const renderRadius = Math.floor(VISIBLE_COUNT / 2);
-  const renderStart =
-    activeIndex !== null ? Math.max(0, activeIndex - renderRadius) : 0;
-  const renderEnd =
-    activeIndex !== null
-      ? Math.min(props.cues.length, activeIndex + renderRadius + 1)
-      : 0;
+  const renderRadius = Math.floor(VISIBLE_CUE_COUNT / 2);
+  const { start: renderStart, end: renderEnd } = getCaptionTimelineWindow(
+    activeIndex,
+    props.cues.length,
+    renderRadius,
+  );
 
   const previewCue = activeIndex !== null ? props.cues[activeIndex] : undefined;
 
@@ -166,13 +230,17 @@ export function SubtitleCueTimeline(props: {
           <Icon icon={Icons.CHEVRON_LEFT} />
         </button>
 
-        {/* Viewport — only shows VISIBLE_COUNT markers */}
+        {/* Viewport — only shows VISIBLE_CUE_COUNT markers */}
         <div
           role="group"
           tabIndex={0}
           aria-label={props.label}
           onKeyDown={handleKeyDown}
-          className="relative h-14 flex-1 touch-none select-none overflow-hidden outline-none"
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
+          onWheel={handleWheel}
+          className="relative h-14 flex-1 touch-none select-none overflow-hidden cursor-grab outline-none active:cursor-grabbing"
         >
           {/* Background track line */}
           <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-video-context-slider bg-opacity-25" />
@@ -182,9 +250,9 @@ export function SubtitleCueTimeline(props: {
             const cueIndex = renderStart + i;
             const isActive = cueIndex === activeIndex;
             const plainText = captionPlainText(cue.content);
-            // activeIndex sits at 50%, each step is 100/VISIBLE_COUNT wide
+            // activeIndex sits at 50%, each step is 100/VISIBLE_CUE_COUNT wide
             const offset = cueIndex - (activeIndex ?? 0);
-            const left = 50 + offset * (100 / VISIBLE_COUNT);
+            const left = 50 + offset * (100 / VISIBLE_CUE_COUNT);
 
             return (
               <button
