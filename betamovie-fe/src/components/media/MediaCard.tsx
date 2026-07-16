@@ -1,13 +1,14 @@
 // I'm sorry this is so confusing 😭
 
 import classNames from "classnames";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { mediaItemToId } from "@/backend/metadata/tmdb";
 import { DotList } from "@/components/text/DotList";
 import { Flare } from "@/components/utils/Flare";
+import { LazyImage } from "@/components/utils/Image";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { MediaItem } from "@/utils/mediaTypes";
@@ -16,37 +17,6 @@ import { resolvePublicUrl } from "@/utils/publicUrl";
 import { MediaBookmarkButton } from "./MediaBookmark";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
-
-// Simple Intersection Observer Hook
-function useIntersectionObserver(options: IntersectionObserverInit = {}) {
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const targetRef = useRef<Element | null>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsIntersecting(entry.isIntersecting);
-      },
-      {
-        ...options,
-        rootMargin: options.rootMargin || "300px",
-      },
-    );
-
-    const currentTarget = targetRef.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
-    }
-
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [options]);
-
-  return { targetRef, isIntersecting };
-}
 
 // Skeleton Component
 export function MediaCardSkeleton() {
@@ -145,17 +115,12 @@ function MediaCardContent({
     ? (resolvePublicUrl(media.poster) ?? media.poster)
     : (resolvePublicUrl("/placeholder.png") ?? "/placeholder.png");
 
-  // Simple intersection observer for lazy loading images
-  const { targetRef, isIntersecting } = useIntersectionObserver({
-    rootMargin: "300px",
-  });
-
   // Show skeleton if forced or if media hasn't loaded yet (empty title/poster)
   const shouldShowSkeleton = forceSkeleton || (!media.title && !media.poster);
 
   if (shouldShowSkeleton) {
     return (
-      <div ref={targetRef as React.RefObject<HTMLDivElement>}>
+      <div>
         <MediaCardSkeleton />
       </div>
     );
@@ -170,7 +135,7 @@ function MediaCardContent({
   }
 
   return (
-    <div ref={targetRef as React.RefObject<HTMLDivElement>}>
+    <div>
       <Flare.Base
         className={`group -m-[0.705em] rounded-xl bg-background-main transition-colors duration-300 focus:relative focus:z-10 ${
           canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
@@ -193,16 +158,20 @@ function MediaCardContent({
         >
           <div
             className={classNames(
-              "relative pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground bg-cover bg-center transition-[border-radius] duration-300",
+              "relative pb-[150%] w-full overflow-hidden rounded-xl bg-mediaCard-hoverBackground transition-[border-radius] duration-300",
               {
                 "group-hover:rounded-lg": canLink,
               },
               "mb-4",
             )}
-            style={{
-              backgroundImage: isIntersecting ? `url(${posterUrl})` : "",
-            }}
           >
+            <LazyImage
+              src={posterUrl}
+              alt={media.title}
+              fallbackSrc={resolvePublicUrl("/placeholder.png")}
+              className="absolute inset-0 w-full object-cover"
+            />
+
             {series ? (
               <div
                 className={[

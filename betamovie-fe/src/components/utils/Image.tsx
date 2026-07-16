@@ -25,6 +25,9 @@ export function LazyImage({
 }: ImageProps) {
   const resolvedSrc = resolvePublicUrl(src);
   const resolvedFallbackSrc = resolvePublicUrl(fallbackSrc);
+  const hasPositioningClass = /\b(absolute|fixed|sticky)\b/.test(
+    className ?? "",
+  );
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState<string | undefined>(resolvedSrc);
@@ -55,7 +58,7 @@ export function LazyImage({
   return (
     <div
       className={classNames(
-        "relative",
+        !hasPositioningClass && "relative",
         // Optional placeholder background until loaded
         !isLoaded && showSkeleton
           ? "bg-mediaCard-hoverBackground"
@@ -83,6 +86,7 @@ export function LazyImage({
           alt={alt || ""}
           loading={loading}
           decoding={decoding}
+          fetchPriority="low"
           onLoad={handleLoad}
           onError={handleError}
           className={classNames("block", className)}

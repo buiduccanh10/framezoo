@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { getMediaVideos } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes, TMDBVideo } from "@/backend/metadata/types/tmdb";
+import { LazyImage } from "@/components/utils/Image";
 import { resolvePublicUrl } from "@/utils/publicUrl";
 
 const THUMBNAIL_PLACEHOLDER =
@@ -13,6 +14,7 @@ interface TrailerCarouselProps {
   mediaId: string;
   mediaType: TMDBContentTypes;
   imdbData?: any;
+  onLoadingChange?: (isLoading: boolean) => void;
   onTrailerClick: (videoKey: string, isImdbTrailer?: boolean) => void;
 }
 
@@ -20,15 +22,22 @@ export function TrailerCarousel({
   mediaId,
   mediaType,
   imdbData,
+  onLoadingChange,
   onTrailerClick,
 }: TrailerCarouselProps) {
   const { t } = useTranslation();
   const [videos, setVideos] = useState<TMDBVideo[]>([]);
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadVideos() {
+      onLoadingChange?.(true);
+      setVideos([]);
       try {
         const mediaVideos = await getMediaVideos(mediaId, mediaType);
+        if (isCancelled) return;
+
         // Sort by official status and then by type (Trailer first, then Teaser)
         const sortedVideos = mediaVideos.sort((a, b) => {
           if (a.official !== b.official) return b.official ? 1 : -1;
@@ -38,10 +47,19 @@ export function TrailerCarousel({
         setVideos(sortedVideos);
       } catch (err) {
         console.error("Failed to load videos:", err);
+      } finally {
+        if (!isCancelled) {
+          onLoadingChange?.(false);
+        }
       }
     }
-    loadVideos();
-  }, [mediaId, mediaType]);
+
+    void loadVideos();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [mediaId, mediaType, onLoadingChange]);
 
   // Combine TMDB videos and IMDb trailer
   const allTrailers = [
@@ -91,11 +109,11 @@ export function TrailerCarousel({
               className="flex-shrink-0 hover:opacity-80 transition-opacity rounded-lg overflow-hidden"
             >
               <div className="relative h-52 w-96 overflow-hidden bg-black/60">
-                <img
+                <LazyImage
                   src={thumbnailUrl}
                   alt={video.name}
+                  fallbackSrc={THUMBNAIL_PLACEHOLDER}
                   className="h-full w-full object-cover"
-                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent" />
                 <div className="absolute top-3 left-3 right-3">

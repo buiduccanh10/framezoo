@@ -10,21 +10,34 @@ import {
   TMDBContentTypes,
   TMDBCrewMember,
 } from "@/backend/metadata/types/tmdb";
+import { LazyImage } from "@/components/utils/Image";
 
 interface CastCarouselProps {
   mediaId: string;
   mediaType: TMDBContentTypes;
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
-export function CastCarousel({ mediaId, mediaType }: CastCarouselProps) {
+export function CastCarousel({
+  mediaId,
+  mediaType,
+  onLoadingChange,
+}: CastCarouselProps) {
   const { t } = useTranslation();
   const [cast, setCast] = useState<TMDBCastMember[]>([]);
   const [director, setDirector] = useState<TMDBCrewMember | null>(null);
 
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadCast() {
+      onLoadingChange?.(true);
+      setCast([]);
+      setDirector(null);
       try {
         const credits = await getMediaCredits(mediaId, mediaType);
+        if (isCancelled) return;
+
         // Find the director
         const foundDirector = credits.crew.find(
           (member) => member.job === "Director" && member.profile_path,
@@ -38,10 +51,19 @@ export function CastCarousel({ mediaId, mediaType }: CastCarouselProps) {
         setCast(castWithImages);
       } catch (err) {
         console.error("Failed to load cast:", err);
+      } finally {
+        if (!isCancelled) {
+          onLoadingChange?.(false);
+        }
       }
     }
-    loadCast();
-  }, [mediaId, mediaType]);
+
+    void loadCast();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [mediaId, mediaType, onLoadingChange]);
 
   if (cast.length === 0 && !director) return null;
 
@@ -56,9 +78,10 @@ export function CastCarousel({ mediaId, mediaType }: CastCarouselProps) {
             className="flex flex-col items-center space-y-2 flex-shrink-0 hover:opacity-80 transition-opacity"
           >
             <div className="relative h-32 w-32 overflow-hidden rounded-full">
-              <img
+              <LazyImage
                 src={getPersonProfileImage(director.profile_path)}
                 alt={director.name}
+                fallbackSrc="/placeholder.png"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -77,9 +100,10 @@ export function CastCarousel({ mediaId, mediaType }: CastCarouselProps) {
             className="flex flex-col items-center space-y-2 flex-shrink-0 hover:opacity-80 transition-opacity"
           >
             <div className="relative h-32 w-32 overflow-hidden rounded-full">
-              <img
+              <LazyImage
                 src={getPersonProfileImage(member.profile_path)}
                 alt={member.name}
+                fallbackSrc="/placeholder.png"
                 className="h-full w-full object-cover"
               />
             </div>

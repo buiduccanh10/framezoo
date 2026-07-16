@@ -10,7 +10,7 @@ export default defineTask({
     try {
       const storage = useStorage('cache');
       const keys = await storage.getKeys('progress_queue:');
-      
+
       if (keys.length === 0) {
         return { result: 'success', synced: 0 };
       }
@@ -29,7 +29,7 @@ export default defineTask({
         const { tmdbId, userId, seasonId, episodeId, seasonNumber, episodeNumber, duration, watched, meta, updatedAt } = data as any;
         const normSeasonId = seasonId === 'none' ? null : seasonId;
         const normEpisodeId = episodeId === 'none' ? null : episodeId;
-        
+
         const now = new Date(updatedAt);
 
         const existing = await prisma.progress_items.findUnique({
@@ -58,19 +58,19 @@ export default defineTask({
                 user_id: userId,
                 season_id: normSeasonId,
                 episode_id: normEpisodeId,
-                season_number: seasonNumber || null,
-                episode_number: episodeNumber || null,
+                season_number: seasonNumber ?? null,
+                episode_number: episodeNumber ?? null,
                 ...dbData,
               },
             });
           }
           syncedCount++;
         }
-        
+
         // Remove key only after we verified it was saved (or decided it should be ignored)
         await storage.removeItem(key);
       }
-      
+
       console.log(`[sync-progress] Successfully processed ${keys.length} items, synced ${syncedCount} to DB.`);
       return { result: 'success', processed: keys.length, synced: syncedCount };
     } catch (err: any) {

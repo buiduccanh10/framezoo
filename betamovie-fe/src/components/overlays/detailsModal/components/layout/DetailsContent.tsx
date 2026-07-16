@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCopyToClipboard, useIntersection } from "react-use";
 
@@ -33,8 +33,14 @@ import { DetailsInfo } from "../sections/DetailsInfo";
 
 export function LazyCarouselWrapper({
   children,
+  skeleton,
+  isLoading = false,
+  keepChildrenMounted = false,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
+  skeleton: ReactNode;
+  isLoading?: boolean;
+  keepChildrenMounted?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const intersection = useIntersection(ref, {
@@ -52,7 +58,107 @@ export function LazyCarouselWrapper({
 
   return (
     <div ref={ref} className="min-h-[200px]">
-      {hasRendered ? children : null}
+      {!hasRendered ? (
+        skeleton
+      ) : isLoading && !keepChildrenMounted ? (
+        skeleton
+      ) : (
+        <>
+          {children}
+          {isLoading && keepChildrenMounted ? skeleton : null}
+        </>
+      )}
+    </div>
+  );
+}
+
+type CarouselSkeletonVariant = "episodes" | "cast" | "trailers" | "similar";
+
+function CarouselSkeleton({ variant }: { variant: CarouselSkeletonVariant }) {
+  if (variant === "episodes") {
+    return (
+      <div
+        className="mt-6 space-y-4 animate-pulse"
+        aria-hidden="true"
+        data-testid="details-episodes-skeleton"
+      >
+        <div className="flex items-center gap-3">
+          <div className="h-6 w-28 rounded bg-white/10" />
+          <div className="h-5 w-20 rounded bg-white/10" />
+          <div className="ml-auto h-9 w-28 rounded-lg bg-white/10" />
+        </div>
+        <div className="flex gap-4 overflow-hidden pb-4 lg:px-12">
+          {Array.from({ length: 4 }, (_, index) => (
+            <div key={index} className="w-64 flex-shrink-0 space-y-3">
+              <div className="h-[158px] w-full rounded-xl bg-white/10" />
+              <div className="h-4 w-3/4 rounded bg-white/10" />
+              <div className="h-3 w-1/2 rounded bg-white/10" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "cast") {
+    return (
+      <div
+        className="space-y-4 pt-8 animate-pulse"
+        aria-hidden="true"
+        data-testid="details-cast-skeleton"
+      >
+        <div className="flex gap-4 overflow-hidden pb-4">
+          {Array.from({ length: 6 }, (_, index) => (
+            <div key={index} className="w-32 flex-shrink-0 space-y-2">
+              <div className="h-32 w-32 rounded-full bg-white/10" />
+              <div className="mx-auto h-4 w-24 rounded bg-white/10" />
+              <div className="mx-auto h-3 w-16 rounded bg-white/10" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "trailers") {
+    return (
+      <div
+        className="space-y-4 pt-8 animate-pulse"
+        aria-hidden="true"
+        data-testid="details-trailers-skeleton"
+      >
+        <div className="h-6 w-32 rounded bg-white/10" />
+        <div className="flex gap-4 overflow-hidden pb-4">
+          {Array.from({ length: 3 }, (_, index) => (
+            <div
+              key={index}
+              className="h-52 w-96 flex-shrink-0 rounded-lg bg-white/10"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="space-y-4 pt-8 animate-pulse"
+      aria-hidden="true"
+      data-testid="details-similar-skeleton"
+    >
+      <div className="h-6 w-32 rounded bg-white/10" />
+      <div className="flex gap-4 overflow-hidden pb-4">
+        {Array.from({ length: 5 }, (_, index) => (
+          <div
+            key={index}
+            className="w-40 flex-shrink-0 space-y-3 md:w-[11.5rem]"
+          >
+            <div className="aspect-[2/3] rounded-xl bg-white/10" />
+            <div className="h-4 w-full rounded bg-white/10" />
+            <div className="h-3 w-2/3 rounded bg-white/10" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -68,6 +174,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showCollection, setShowCollection] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [fetchedSeasons, setFetchedSeasons] = useState<Record<number, any[]>>(
     {},
@@ -75,6 +182,8 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [loadingSeasons, setLoadingSeasons] = useState<Record<number, boolean>>(
     {},
   );
+  const [isLoadingCast, setIsLoadingCast] = useState(false);
+  const [isLoadingTrailers, setIsLoadingTrailers] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
   const [hasCopiedShare, setHasCopiedShare] = useState(false);
   const progress = useProgressStore((s) => s.items);
@@ -146,6 +255,8 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const allEpisodes = useMemo(() => {
     return Object.values(fetchedSeasons).flat();
   }, [fetchedSeasons]);
+  const isLoadingSelectedSeason =
+    data.type === "show" && Boolean(loadingSeasons[selectedSeason]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -402,7 +513,10 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       />
 
       {/* Content */}
-      <div className="px-6 pb-6 mt-[-70px] flex-grow relative z-30">
+      <div
+        ref={contentRef}
+        className="px-6 pb-6 mt-[-70px] flex-grow relative z-30"
+      >
         <DetailsBody
           data={data}
           onPlayClick={handlePlayClick}
@@ -411,9 +525,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
           voteAverage={data.voteAverage}
           voteCount={data.voteCount}
           releaseDate={data.releaseDate}
-          seasons={
-            data.type === "show" ? data.seasonData?.seasons.length : undefined
-          }
+          seasons={data.type === "show" ? data.seasons : undefined}
           imdbData={imdbData}
           rtData={rtData}
           isLoadingImdb={isLoadingImdb}
@@ -509,7 +621,10 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
 
         {/* Episodes Carousel for TV Shows */}
         {data.type === "show" && data.seasonData && !minimal && (
-          <LazyCarouselWrapper>
+          <LazyCarouselWrapper
+            isLoading={isLoadingSelectedSeason}
+            skeleton={<CarouselSkeleton variant="episodes" />}
+          >
             <EpisodeCarousel
               episodes={allEpisodes}
               showProgress={showProgress}
@@ -521,13 +636,18 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
               mediaTitle={data.title}
               mediaPosterUrl={data.posterUrl}
               totalEpisodes={data.episodes}
+              boundaryRef={contentRef}
             />
           </LazyCarouselWrapper>
         )}
 
         {/* Cast Carousel */}
         {data.id && (
-          <LazyCarouselWrapper>
+          <LazyCarouselWrapper
+            isLoading={isLoadingCast}
+            keepChildrenMounted
+            skeleton={<CarouselSkeleton variant="cast" />}
+          >
             <CastCarousel
               mediaId={data.id.toString()}
               mediaType={
@@ -535,13 +655,18 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
                   ? TMDBContentTypes.MOVIE
                   : TMDBContentTypes.TV
               }
+              onLoadingChange={setIsLoadingCast}
             />
           </LazyCarouselWrapper>
         )}
 
         {/* Trailer Carousel */}
         {data.id && (
-          <LazyCarouselWrapper>
+          <LazyCarouselWrapper
+            isLoading={isLoadingTrailers}
+            keepChildrenMounted
+            skeleton={<CarouselSkeleton variant="trailers" />}
+          >
             <TrailerCarousel
               mediaId={data.id.toString()}
               mediaType={
@@ -550,6 +675,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
                   : TMDBContentTypes.TV
               }
               imdbData={imdbData}
+              onLoadingChange={setIsLoadingTrailers}
               onTrailerClick={(videoKey, isImdbTrailer) => {
                 let trailerUrl: string;
                 if (isImdbTrailer) {
@@ -571,7 +697,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
 
         {/* Similar Media Carousel */}
         {data.id && (
-          <LazyCarouselWrapper>
+          <LazyCarouselWrapper
+            skeleton={<CarouselSkeleton variant="similar" />}
+          >
             <SimilarMediaCarousel
               mediaId={data.id.toString()}
               mediaType={
