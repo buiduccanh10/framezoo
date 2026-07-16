@@ -244,8 +244,10 @@
         "skipForward1": "Skip forward 1 second",
         "skipForward10": "Skip forward 10 seconds",
         "skipForward5": "Skip forward 5 seconds",
-        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
-        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "syncSubtitlesEarlier": "Previous subtitle cue",
+        "syncSubtitlesLater": "Next subtitle cue",
+        "previousSubtitleCue": "Previous subtitle cue",
+        "nextSubtitleCue": "Next subtitle cue",
         "toggleCaptions": "Toggle captions",
         "toggleFullscreen": "Toggle fullscreen",
         "toggleNativeSubtitles": "Toggle native subtitles"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Custom subtitles",
           "delay": "Subtitle delay",
-          "fixCapitals": "Fix capitalization"
+          "fixCapitals": "Fix capitalization",
+          "timeline": "Subtitle timeline",
+          "timelineHint": "Choose a subtitle cue to sync it with the current video time.",
+          "timelineEmpty": "No subtitle cues available."
         },
         "title": "Subtitles",
         "transcriptChoice": "Transcript",

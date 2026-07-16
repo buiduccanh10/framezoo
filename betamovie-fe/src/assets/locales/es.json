@@ -246,6 +246,8 @@
         "skipForward5": "Saltar 5 segundos hacia adelante",
         "syncSubtitlesEarlier": "Sincronizar subtítulos antes (-0,5 s)",
         "syncSubtitlesLater": "Sincronizar subtítulos más tarde (+0,5 s)",
+        "previousSubtitleCue": "Señal de subtítulo anterior",
+        "nextSubtitleCue": "Siguiente señal de subtítulo",
         "toggleCaptions": "Alternar subtítulos",
         "toggleFullscreen": "Alternar pantalla completa",
         "toggleNativeSubtitles": "Alternar subtítulos nativos"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Subtítulos personalizados",
           "delay": "Retraso de subtítulos",
-          "fixCapitals": "Arreglar capitalización"
+          "fixCapitals": "Arreglar capitalización",
+          "timeline": "Línea de tiempo de subtítulos",
+          "timelineHint": "Elija una señal de subtítulo para sincronizarla con la hora del video actual.",
+          "timelineEmpty": "No hay pistas de subtítulos disponibles."
         },
         "title": "Subtítulos",
         "transcriptChoice": "Transcripción",

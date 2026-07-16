@@ -246,6 +246,8 @@
         "skipForward5": "រំលងទៅមុខ 5 វិនាទី",
         "syncSubtitlesEarlier": "ធ្វើសមកាលកម្មចំណងជើងរងមុន (-0.5s)",
         "syncSubtitlesLater": "ធ្វើសមកាលកម្មចំណងជើងរងនៅពេលក្រោយ (+0.5s)",
+        "previousSubtitleCue": "ចំណងជើងរងពីមុន",
+        "nextSubtitleCue": "ចំណងជើងរងបន្ទាប់",
         "toggleCaptions": "បិទ/បើក​ចំណងជើង",
         "toggleFullscreen": "បិទ/បើកពេញអេក្រង់",
         "toggleNativeSubtitles": "បិទ/បើក​ចំណង​ជើង​រង​ដើម"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "ចំណងជើងរងផ្ទាល់ខ្លួន",
           "delay": "ការពន្យារពេលចំណងជើងរង",
-          "fixCapitals": "ជួសជុលអក្សរធំ"
+          "fixCapitals": "ជួសជុលអក្សរធំ",
+          "timeline": "ចំណងជើងរង",
+          "timelineHint": "ជ្រើសរើសចំណងជើងរងដើម្បីធ្វើសមកាលកម្មវាជាមួយនឹងពេលវេលាវីដេអូបច្ចុប្បន្ន។",
+          "timelineEmpty": "មិនមានសញ្ញាចំណងជើងរង"
         },
         "title": "ចំណងជើងរង",
         "transcriptChoice": "ប្រតិចារិក",

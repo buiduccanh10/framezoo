@@ -53,6 +53,17 @@ export interface SubtitleStyling {
   borderThickness: number;
 }
 
+export interface SubtitleCuePopupData {
+  direction: -1 | 1;
+  start: number;
+  content: string;
+}
+
+interface SubtitleCuePopupStore {
+  popup: SubtitleCuePopupData | null;
+  setPopup(popup: SubtitleCuePopupData | null): void;
+}
+
 export interface SubtitleStore {
   lastSync: {
     lastSelectedLanguage: string | null;
@@ -63,7 +74,6 @@ export interface SubtitleStore {
   styling: SubtitleStyling;
   overrideCasing: boolean;
   delay: number;
-  showDelayIndicator: boolean;
   updateStyling(newStyling: Partial<SubtitleStyling>): void;
   resetStyling(): void;
   setLanguage(language: string | null): void;
@@ -73,7 +83,6 @@ export interface SubtitleStore {
   setDelay(delay: number): void;
   importSubtitleLanguage(lang: string | null): void;
   resetSubtitleSpecificSettings(): void;
-  setShowDelayIndicator: (show: boolean) => void;
 }
 
 export const DEFAULT_SUBTITLE_STYLING: SubtitleStyling = {
@@ -131,7 +140,6 @@ export const useSubtitleStore = create(
       overrideCasing: false,
       delay: 0,
       styling: { ...DEFAULT_SUBTITLE_STYLING },
-      showDelayIndicator: false,
       resetSubtitleSpecificSettings() {
         set((s) => {
           s.delay = 0;
@@ -200,18 +208,13 @@ export const useSubtitleStore = create(
       },
       setDelay(delay) {
         set((s) => {
-          s.delay = Math.max(Math.min(500, delay), -500);
+          s.delay = Number.isFinite(delay) ? delay : 0;
         });
       },
       importSubtitleLanguage(lang) {
         set((s) => {
           s.lastSelectedLanguage = lang;
           s.lastSync.lastSelectedLanguage = lang;
-        });
-      },
-      setShowDelayIndicator(show: boolean) {
-        set((s) => {
-          s.showDelayIndicator = show;
         });
       },
     })),
@@ -256,4 +259,13 @@ export const useSubtitleStore = create(
       merge: (persisted, current) => merge({}, current, persisted),
     },
   ),
+);
+
+export const useSubtitleCuePopupStore = create<SubtitleCuePopupStore>(
+  (set) => ({
+    popup: null,
+    setPopup(popup) {
+      set({ popup });
+    },
+  }),
 );

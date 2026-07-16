@@ -246,6 +246,8 @@
         "skipForward5": "Vai avanti di 5 secondi",
         "syncSubtitlesEarlier": "Sincronizza i sottotitoli prima (-0,5 s)",
         "syncSubtitlesLater": "Sincronizza i sottotitoli più tardi (+0,5 s)",
+        "previousSubtitleCue": "Segnale del sottotitolo precedente",
+        "nextSubtitleCue": "Segnale del sottotitolo successivo",
         "toggleCaptions": "Attiva/disattiva didascalie",
         "toggleFullscreen": "Attiva/disattiva lo schermo intero",
         "toggleNativeSubtitles": "Attiva/disattiva i sottotitoli nativi"
@@ -619,7 +621,7 @@
         },
         "mac-x64": {
           "description": "Ideale per Mac Intel",
-          "label": "macOS Intel"
+          "label": "macOSIntel"
         },
         "win-arm64": {
           "description": "Ideale per PC Windows Snapdragon/ARM",
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Sottotitoli personalizzati",
           "delay": "Ritardo dei sottotitoli",
-          "fixCapitals": "Correggi le maiuscole"
+          "fixCapitals": "Correggi le maiuscole",
+          "timeline": "Cronologia dei sottotitoli",
+          "timelineHint": "Scegli un segnale di sottotitolo per sincronizzarlo con il tempo corrente del video.",
+          "timelineEmpty": "Nessun suggerimento per i sottotitoli disponibile."
         },
         "title": "Sottotitoli",
         "transcriptChoice": "Trascrizione",

@@ -246,6 +246,8 @@
         "skipForward5": "5 سیکنڈ آگے بڑھیں۔",
         "syncSubtitlesEarlier": "پہلے کے سب ٹائٹلز کی مطابقت پذیری کریں (-0.5 سیکنڈ)",
         "syncSubtitlesLater": "بعد میں سب ٹائٹلز کی مطابقت پذیری کریں (+0.5s)",
+        "previousSubtitleCue": "پچھلا سب ٹائٹل کیو",
+        "nextSubtitleCue": "اگلا سب ٹائٹل کیو",
         "toggleCaptions": "کیپشنز ٹوگل کریں۔",
         "toggleFullscreen": "پوری اسکرین کو ٹوگل کریں۔",
         "toggleNativeSubtitles": "مقامی سب ٹائٹلز کو ٹوگل کریں۔"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "حسب ضرورت سب ٹائٹلز",
           "delay": "ذیلی عنوان میں تاخیر",
-          "fixCapitals": "بڑے حروف کو درست کریں۔"
+          "fixCapitals": "بڑے حروف کو درست کریں۔",
+          "timeline": "سب ٹائٹل ٹائم لائن",
+          "timelineHint": "اسے موجودہ ویڈیو کے وقت کے ساتھ مطابقت پذیر بنانے کے لیے ایک ذیلی عنوان کا انتخاب کریں۔",
+          "timelineEmpty": "کوئی ذیلی عنوان اشارے دستیاب نہیں ہیں۔"
         },
         "title": "سب ٹائٹلز",
         "transcriptChoice": "نقل",

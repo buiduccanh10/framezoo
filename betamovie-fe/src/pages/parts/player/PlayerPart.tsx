@@ -174,6 +174,7 @@ export function PlayerPart(props: PlayerPartProps) {
             <div className="flex items-center flex-shrink-0">
               <Player.InfoButton />
               <Player.BookmarkButton />
+              <Player.KeyboardCommandsButton />
             </div>
           </div>
           <div className="text-center hidden xl:flex justify-center items-center">
@@ -305,7 +306,7 @@ export function PlayerPart(props: PlayerPartProps) {
       </Player.BottomControls>
 
       <Player.VolumeChangedPopout />
-      <Player.SubtitleDelayPopout />
+      <Player.SubtitleCuePopout />
       <Player.SpeedChangedPopout />
       <Player.TIDBSubmissionSuccessPopout />
       <Player.UnreleasedEpisodeOverlay />

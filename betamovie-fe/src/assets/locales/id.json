@@ -246,6 +246,8 @@
         "skipForward5": "Lewati ke depan 5 detik",
         "syncSubtitlesEarlier": "Sinkronkan subtitle sebelumnya (-0,5 detik)",
         "syncSubtitlesLater": "Sinkronkan subtitle nanti (+0,5 detik)",
+        "previousSubtitleCue": "Isyarat subtitle sebelumnya",
+        "nextSubtitleCue": "Isyarat subtitle berikutnya",
         "toggleCaptions": "Alihkan teks",
         "toggleFullscreen": "Beralih ke layar penuh",
         "toggleNativeSubtitles": "Alihkan subtitle asli"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Subtitle khusus",
           "delay": "Penundaan subtitle",
-          "fixCapitals": "Perbaiki kapitalisasi"
+          "fixCapitals": "Perbaiki kapitalisasi",
+          "timeline": "Garis waktu subtitle",
+          "timelineHint": "Pilih isyarat subtitle untuk menyinkronkannya dengan waktu video saat ini.",
+          "timelineEmpty": "Tidak ada petunjuk subtitle yang tersedia."
         },
         "title": "Subtitle",
         "transcriptChoice": "Salinan",

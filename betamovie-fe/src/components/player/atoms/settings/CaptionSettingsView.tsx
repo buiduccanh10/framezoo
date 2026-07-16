@@ -1,12 +1,5 @@
 import classNames from "classnames";
-import {
-  type PointerEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -15,10 +8,15 @@ import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import {
-  captionIsVisible,
+  type CaptionCueType,
+  captionHtml,
+  captionPlainText,
+  getCaptionCueForNavigation,
+  getCaptionDelayForCue,
+  getCaptionTimelineIndex,
+  getCaptionTimelineWindow,
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
 import { usePlayerStore } from "@/stores/player/store";
@@ -27,6 +25,10 @@ import {
   SubtitleStyling,
   useSubtitleStore,
 } from "@/stores/subtitles";
+import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
+
+const VISIBLE_CUE_COUNT = 13;
+const CUE_SWIPE_THRESHOLD = 32;
 
 export function ColorOption(props: {
   color: string;
@@ -54,243 +56,272 @@ export function ColorOption(props: {
   );
 }
 
-export function CaptionDelay(props: {
-  textTransformer?: (s: string) => string;
-  value: number;
-  onChange?: (val: number) => void;
-  max: number;
+export function SubtitleCueTimeline(props: {
   label: string;
-  min: number;
-  decimalsAllowed?: number;
+  hint: string;
+  emptyLabel: string;
+  cues: CaptionCueType[];
+  delay: number;
+  videoTime: number;
+  onSelectCue: (cue: CaptionCueType) => void;
+  onReset: () => void;
 }) {
-  const { t } = useTranslation();
-  const onChange = props.onChange;
+  const activeIndex = useMemo(
+    () => getCaptionTimelineIndex(props.cues, props.delay, props.videoTime),
+    [props.cues, props.delay, props.videoTime],
+  );
+  const pointerStartRef = useRef<{ x: number; y: number } | null>(null);
+  const suppressMarkerClickRef = useRef(false);
+  const wheelDeltaRef = useRef(0);
+  const wheelResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
+  const handleNav = useCallback(
+    (direction: -1 | 1) => {
+      if (activeIndex === null) return;
+      const cue = getCaptionCueForNavigation(
+        props.cues,
+        props.delay,
+        props.videoTime,
+        direction,
+      );
+      if (!cue) return;
+      props.onSelectCue(cue);
+    },
+    [activeIndex, props],
+  );
 
-  const currentPercentage = (props.value - props.min) / (props.max - props.min);
-  const commit = useCallback(
-    (percentage: number) => {
-      const range = props.max - props.min;
-      const newPercentage = Math.min(Math.max(percentage, 0), 1);
-      props.onChange?.(props.min + range * newPercentage);
+  const handleSelectCueAtIndex = useCallback(
+    (cueIndex: number) => {
+      if (suppressMarkerClickRef.current) {
+        suppressMarkerClickRef.current = false;
+        return;
+      }
+      if (cueIndex < 0 || cueIndex >= props.cues.length) return;
+      props.onSelectCue(props.cues[cueIndex]);
     },
     [props],
   );
 
-  const { dragging, dragPercentage, dragMouseDown } = useProgressBar(
-    ref,
-    commit,
-    true,
-  );
+  const handlePointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
 
-  const [isFocused, setIsFocused] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const stepSize = 1 / 10 ** (props.decimalsAllowed ?? 0);
-  const latestValueRef = useRef(props.value);
-  const holdDelayTimeoutRef = useRef<number | null>(null);
-  const holdIntervalRef = useRef<number | null>(null);
-  const hasRepeatedRef = useRef(false);
-
-  useEffect(() => {
-    latestValueRef.current = props.value;
-  }, [props.value]);
-
-  const stopContinuousChange = useCallback(() => {
-    if (holdDelayTimeoutRef.current !== null) {
-      window.clearTimeout(holdDelayTimeoutRef.current);
-      holdDelayTimeoutRef.current = null;
-    }
-    if (holdIntervalRef.current !== null) {
-      window.clearInterval(holdIntervalRef.current);
-      holdIntervalRef.current = null;
-    }
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      stopContinuousChange();
-    };
-  }, [stopContinuousChange]);
-
-  const applyStepChange = useCallback(
-    (direction: -1 | 1) => {
-      const nextValue = latestValueRef.current + direction * stepSize;
-      latestValueRef.current = nextValue;
-      onChange?.(nextValue);
+      pointerStartRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+      event.currentTarget.setPointerCapture?.(event.pointerId);
     },
-    [onChange, stepSize],
+    [],
   );
 
-  const startContinuousChange = useCallback(
-    (direction: -1 | 1) => {
-      stopContinuousChange();
-      hasRepeatedRef.current = false;
-      holdDelayTimeoutRef.current = window.setTimeout(() => {
-        hasRepeatedRef.current = true;
-        applyStepChange(direction);
-        holdIntervalRef.current = window.setInterval(() => {
-          applyStepChange(direction);
-        }, 60);
-      }, 350);
-    },
-    [applyStepChange, stopContinuousChange],
-  );
+  const handlePointerUp = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const start = pointerStartRef.current;
+      pointerStartRef.current = null;
+      if (!start) return;
 
-  const handleButtonClick = useCallback(
-    (direction: -1 | 1) => {
-      if (hasRepeatedRef.current) {
-        hasRepeatedRef.current = false;
+      const deltaX = event.clientX - start.x;
+      const deltaY = event.clientY - start.y;
+      if (
+        Math.abs(deltaX) < CUE_SWIPE_THRESHOLD ||
+        Math.abs(deltaX) <= Math.abs(deltaY)
+      ) {
         return;
       }
-      applyStepChange(direction);
+
+      event.preventDefault();
+      suppressMarkerClickRef.current = true;
+      handleNav(deltaX < 0 ? 1 : -1);
+      window.setTimeout(() => {
+        suppressMarkerClickRef.current = false;
+      }, 350);
     },
-    [applyStepChange],
+    [handleNav],
   );
 
-  const handlePointerDown = useCallback(
-    (direction: -1 | 1, event: PointerEvent<HTMLButtonElement>) => {
-      if (event.button !== 0) return;
-      event.currentTarget.setPointerCapture?.(event.pointerId);
-      startContinuousChange(direction);
+  const handlePointerCancel = useCallback(() => {
+    pointerStartRef.current = null;
+  }, []);
+
+  const handleWheel = useCallback(
+    (event: React.WheelEvent<HTMLDivElement>) => {
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+
+      event.preventDefault();
+      wheelDeltaRef.current += event.deltaX;
+      if (Math.abs(wheelDeltaRef.current) < CUE_SWIPE_THRESHOLD) return;
+
+      const direction = wheelDeltaRef.current > 0 ? 1 : -1;
+      wheelDeltaRef.current = 0;
+      handleNav(direction);
+
+      if (wheelResetTimeoutRef.current) {
+        clearTimeout(wheelResetTimeoutRef.current);
+      }
+      wheelResetTimeoutRef.current = setTimeout(() => {
+        wheelDeltaRef.current = 0;
+        wheelResetTimeoutRef.current = null;
+      }, 150);
     },
-    [startContinuousChange],
+    [handleNav],
   );
 
   useEffect(() => {
-    function listener(e: KeyboardEvent) {
-      if (e.key === "Enter" && isFocused) {
-        inputRef.current?.blur();
-      }
-    }
-    window.addEventListener("keydown", listener);
     return () => {
-      window.removeEventListener("keydown", listener);
+      if (wheelResetTimeoutRef.current) {
+        clearTimeout(wheelResetTimeoutRef.current);
+      }
     };
-  }, [isFocused]);
+  }, []);
 
-  const inputClasses =
-    "tabbable py-1 bg-video-context-inputBg rounded text-white cursor-text text-center px-4 w-24 h-12";
-  const textTransformer = props.textTransformer ?? ((s) => s);
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    handleNav(event.key === "ArrowLeft" ? -1 : 1);
+  };
+
+  const onReset = props.onReset;
+  const handleReset = useCallback(() => {
+    onReset();
+  }, [onReset]);
+
+  // Keep the active cue centered while showing six cues on either side.
+  const renderRadius = Math.floor(VISIBLE_CUE_COUNT / 2);
+  const { start: renderStart, end: renderEnd } = getCaptionTimelineWindow(
+    activeIndex,
+    props.cues.length,
+    renderRadius,
+  );
+
+  const previewCue = activeIndex !== null ? props.cues[activeIndex] : undefined;
+
+  if (props.cues.length === 0) {
+    return (
+      <div>
+        <Menu.FieldTitle>{props.label}</Menu.FieldTitle>
+        <p className="mt-1 text-xs text-video-context-type-secondary">
+          {props.hint}
+        </p>
+        <div className="mt-3 rounded-lg bg-video-context-light bg-opacity-10 px-3 py-4 text-center text-sm text-video-context-type-secondary">
+          {props.emptyLabel}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
       <Menu.FieldTitle>{props.label}</Menu.FieldTitle>
-      <div className="space-y-3">
-        {/* Slider */}
-        <div ref={ref}>
-          <div
-            className="group/progress w-full h-8 flex items-center cursor-pointer"
-            onMouseDown={dragMouseDown}
-            onTouchStart={dragMouseDown}
-          >
-            <div
-              dir="ltr"
-              className={[
-                "relative w-full h-1 bg-video-context-slider bg-opacity-25 rounded-full transition-[height] duration-100 group-hover/progress:h-1.5",
-                dragging ? "!h-1.5" : "",
-              ].join(" ")}
-            >
-              {/* Actual progress bar */}
-              <div
-                className="absolute top-0 left-0 h-full rounded-full bg-video-context-sliderFilled flex justify-end items-center"
-                style={{
-                  width: `${
-                    Math.max(
-                      0,
-                      Math.min(
-                        1,
-                        dragging ? dragPercentage / 100 : currentPercentage,
-                      ),
-                    ) * 100
-                  }%`,
-                }}
+      <p className="mt-1 text-xs text-video-context-type-secondary">
+        {props.hint}
+      </p>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          data-testid="subtitle-cue-previous"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
+          onClick={() => handleNav(-1)}
+          disabled={activeIndex === null || activeIndex <= 0}
+        >
+          <Icon icon={Icons.CHEVRON_LEFT} />
+        </button>
+
+        {/* Viewport — only shows VISIBLE_CUE_COUNT markers */}
+        <div
+          role="group"
+          tabIndex={0}
+          aria-label={props.label}
+          onKeyDown={handleKeyDown}
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerCancel}
+          onWheel={handleWheel}
+          className="relative h-14 flex-1 touch-none select-none overflow-hidden cursor-grab outline-none active:cursor-grabbing"
+        >
+          {/* Background track line */}
+          <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-video-context-slider bg-opacity-25" />
+
+          {/* Markers — each positioned relative to activeIndex at center */}
+          {props.cues.slice(renderStart, renderEnd).map((cue, i) => {
+            const cueIndex = renderStart + i;
+            const isActive = cueIndex === activeIndex;
+            const plainText = captionPlainText(cue.content);
+            // activeIndex sits at 50%, each step is 100/VISIBLE_CUE_COUNT wide
+            const offset = cueIndex - (activeIndex ?? 0);
+            const left = 50 + offset * (100 / VISIBLE_CUE_COUNT);
+
+            return (
+              <button
+                key={`cue-${cueIndex}`}
+                type="button"
+                data-testid={`subtitle-cue-marker-${cueIndex}`}
+                title={plainText}
+                aria-label={plainText}
+                aria-current={isActive ? "true" : undefined}
+                onClick={() => handleSelectCueAtIndex(cueIndex)}
+                className="absolute top-1/2 flex h-10 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-[left] duration-300 ease-in-out"
+                style={{ left: `${left}%` }}
               >
-                <div
-                  className={[
-                    "w-[1rem] min-w-[1rem] h-[1rem] border-[4px] border-video-context-sliderFilled rounded-full transform translate-x-1/2 bg-white transition-[transform] duration-100",
-                  ].join(" ")}
+                <span
+                  className={classNames(
+                    "h-6 rounded-full transition-all duration-150",
+                    isActive
+                      ? "w-1.5 bg-video-context-sliderFilled"
+                      : "w-1 bg-video-context-slider",
+                  )}
                 />
-              </div>
-            </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          type="button"
+          data-testid="subtitle-cue-next"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
+          onClick={() => handleNav(1)}
+          disabled={
+            activeIndex === null || activeIndex >= props.cues.length - 1
+          }
+        >
+          <Icon icon={Icons.CHEVRON_RIGHT} />
+        </button>
+
+        <button
+          type="button"
+          data-testid="subtitle-cue-reset"
+          aria-label={props.label}
+          title={props.label}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
+          onClick={handleReset}
+          disabled={props.delay === 0}
+        >
+          <Icon icon={Icons.RELOAD} />
+        </button>
+      </div>
+
+      <div className="rounded-xl bg-video-context-light bg-opacity-10 p-3 text-center">
+        {previewCue ? (
+          <div
+            data-testid="subtitle-cue-preview-time"
+            className="mb-1 text-xs text-video-context-type-secondary"
+          >
+            {formatSeconds(
+              previewCue.start / 1000,
+              durationExceedsHour(previewCue.start / 1000),
+            )}
           </div>
-        </div>
-
-        {/* Control buttons and value display */}
-        <div className="flex items-center gap-2">
-          {/* Left arrow button - full width */}
-          <button
-            type="button"
-            onPointerDown={(e) => handlePointerDown(-1, e)}
-            onPointerUp={stopContinuousChange}
-            onPointerCancel={stopContinuousChange}
-            onLostPointerCapture={stopContinuousChange}
-            onClick={() => handleButtonClick(-1)}
-            className="flex-1 flex-col tabbable py-2 h-12 hover:text-white transition-colors duration-100 flex justify-center items-center hover:bg-video-context-buttonOverInputHover rounded bg-video-context-inputBg"
-          >
-            <Icon icon={Icons.CHEVRON_LEFT} />
-            <span className="text-xs">
-              {t("player.menus.subtitles.delayLate")}
-            </span>
-          </button>
-
-          {/* Value display/input */}
-          {isFocused ? (
-            <input
-              className={inputClasses}
-              value={inputValue}
-              autoFocus
-              onFocus={(e) => {
-                (e.target as HTMLInputElement).select();
-              }}
-              onBlur={(e) => {
-                setIsFocused(false);
-                const num = Number((e.target as HTMLInputElement).value);
-                if (!Number.isNaN(num))
-                  props.onChange?.(
-                    (props.decimalsAllowed ?? 0) === 0 ? Math.round(num) : num,
-                  );
-              }}
-              ref={inputRef}
-              onChange={(e) =>
-                setInputValue((e.target as HTMLInputElement).value)
-              }
-            />
-          ) : (
-            <button
-              className={inputClasses}
-              type="button"
-              tabIndex={0}
-              onClick={() => {
-                setInputValue(props.value.toFixed(props.decimalsAllowed ?? 0));
-                setIsFocused(true);
-              }}
-            >
-              {textTransformer(
-                props.value.toFixed(props.decimalsAllowed ?? 0) === "-0.0"
-                  ? "0.0"
-                  : props.value.toFixed(props.decimalsAllowed ?? 0),
-              )}
-            </button>
-          )}
-
-          {/* Right arrow button - full width */}
-          <button
-            type="button"
-            onPointerDown={(e) => handlePointerDown(1, e)}
-            onPointerUp={stopContinuousChange}
-            onPointerCancel={stopContinuousChange}
-            onLostPointerCapture={stopContinuousChange}
-            onClick={() => handleButtonClick(1)}
-            className="flex-1 flex-col tabbable py-2 h-12 hover:text-white transition-colors duration-100 flex justify-center items-center hover:bg-video-context-buttonOverInputHover rounded bg-video-context-inputBg"
-          >
-            <Icon icon={Icons.CHEVRON_RIGHT} />
-            <span className="text-xs">
-              {t("player.menus.subtitles.delayEarly")}
-            </span>
-          </button>
-        </div>
+        ) : null}
+        <div
+          className="min-h-[3rem] text-base font-medium"
+          dangerouslySetInnerHTML={{
+            __html: captionHtml(previewCue?.content),
+          }}
+        />
       </div>
     </div>
   );
@@ -486,7 +517,6 @@ export function CaptionSettingsView({
 }) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
-  const { isMobile } = useIsMobile();
   const subtitleStore = useSubtitleStore();
 
   const styling = subtitleStore.styling;
@@ -507,14 +537,25 @@ export function CaptionSettingsView({
     updateStyling(newStyling);
   };
 
-  const currentSubtitleText = useMemo(() => {
-    if (!vttData || !selectedCaption) return null;
-    const parsedCaptions = parseCanonicalVtt(vttData);
-    const visibleCaption = parsedCaptions.find(({ start, end }) =>
-      captionIsVisible(start, end, delay, videoTime),
-    );
-    return visibleCaption?.content;
-  }, [vttData, selectedCaption, delay, videoTime]);
+  const parsedCaptions = useMemo(() => {
+    if (!vttData || !selectedCaption) return [];
+    try {
+      return parseCanonicalVtt(vttData);
+    } catch {
+      return [];
+    }
+  }, [vttData, selectedCaption]);
+
+  const handleSelectCue = useCallback(
+    (cue: CaptionCueType) => {
+      setDelay(getCaptionDelayForCue(cue, videoTime));
+    },
+    [setDelay, videoTime],
+  );
+
+  const handleResetTimeline = useCallback(() => {
+    setDelay(0);
+  }, [setDelay]);
 
   const resetSubStyling = () => {
     subtitleStore.updateStyling(DEFAULT_SUBTITLE_STYLING);
@@ -531,38 +572,16 @@ export function CaptionSettingsView({
       </Menu.BackLink>
       <Menu.Section className="space-y-6 pb-5">
         <>
-          <CaptionDelay
-            label={t("player.menus.subtitles.settings.delay")}
-            max={120}
-            min={-120}
-            onChange={(v) => setDelay(v)}
-            value={delay}
-            textTransformer={(s) => `${s}s`}
-            decimalsAllowed={1}
+          <SubtitleCueTimeline
+            label={t("player.menus.subtitles.settings.timeline")}
+            hint={t("player.menus.subtitles.settings.timelineHint")}
+            emptyLabel={t("player.menus.subtitles.settings.timelineEmpty")}
+            cues={parsedCaptions}
+            delay={delay}
+            videoTime={videoTime}
+            onSelectCue={handleSelectCue}
+            onReset={handleResetTimeline}
           />
-          {isMobile && selectedCaption && (
-            <div className="p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center">
-              <div className="text-sm text-video-context-type-secondary mb-1">
-                {t("player.menus.subtitles.previewLabel")}
-              </div>
-              <div className="text-base font-medium min-h-[3rem] flex items-center justify-center">
-                {currentSubtitleText ? (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: currentSubtitleText.replaceAll(
-                        /\r?\n/g,
-                        "<br />",
-                      ),
-                    }}
-                  />
-                ) : (
-                  <span className="text-video-context-type-secondary italic">
-                    ...{" "}
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
           <div className="flex justify-between items-center">
             <Menu.FieldTitle>
               {t("player.menus.subtitles.settings.fixCapitals")}

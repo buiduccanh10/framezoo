@@ -246,6 +246,8 @@
         "skipForward5": "5 ثانیه به جلو پرش کنید",
         "syncSubtitlesEarlier": "زیرنویس‌ها را زودتر همگام‌سازی کنید (-0.5 ثانیه)",
         "syncSubtitlesLater": "همگام‌سازی زیرنویس‌ها بعدا (+0.5 ثانیه)",
+        "previousSubtitleCue": "نشانه زیرنویس قبلی",
+        "nextSubtitleCue": "نشانه زیرنویس بعدی",
         "toggleCaptions": "زیرنویس‌ها را تغییر دهید",
         "toggleFullscreen": "تمام صفحه را تغییر دهید",
         "toggleNativeSubtitles": "زیرنویس‌های بومی را تغییر دهید"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "زیرنویس سفارشی",
           "delay": "تاخیر زیرنویس",
-          "fixCapitals": "تصحیح حروف اول بزرگ (انگلیسی)"
+          "fixCapitals": "تصحیح حروف اول بزرگ (انگلیسی)",
+          "timeline": "جدول زمانی زیرنویس",
+          "timelineHint": "برای همگام سازی آن با زمان فعلی ویدیو، یک نشانه زیرنویس انتخاب کنید.",
+          "timelineEmpty": "هیچ نشانه زیرنویسی در دسترس نیست."
         },
         "title": "زیرنویس ها",
         "transcriptChoice": "رونوشت",

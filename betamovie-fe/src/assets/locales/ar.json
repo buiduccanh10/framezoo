@@ -246,6 +246,8 @@
         "skipForward5": "انتقل إلى الأمام لمدة 5 ثوان",
         "syncSubtitlesEarlier": "مزامنة الترجمات في وقت سابق (-0.5 ثانية)",
         "syncSubtitlesLater": "مزامنة الترجمات لاحقًا (+0.5 ثانية)",
+        "previousSubtitleCue": "جديلة الترجمة السابقة",
+        "nextSubtitleCue": "جديلة الترجمة التالية",
         "toggleCaptions": "تبديل التسميات التوضيحية",
         "toggleFullscreen": "تبديل ملء الشاشة",
         "toggleNativeSubtitles": "تبديل الترجمات الأصلية"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "ترجمة مخصصة",
           "delay": "تأخير الترجمة",
-          "fixCapitals": "تصحيح تهجئة الحروف"
+          "fixCapitals": "تصحيح تهجئة الحروف",
+          "timeline": "الجدول الزمني للترجمة",
+          "timelineHint": "اختر إشارة الترجمة لمزامنتها مع وقت الفيديو الحالي.",
+          "timelineEmpty": "لا توجد إشارات الترجمة المتاحة."
         },
         "title": "الترجمة",
         "transcriptChoice": "نص",

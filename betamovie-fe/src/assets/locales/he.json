@@ -246,6 +246,8 @@
         "skipForward5": "דלג קדימה 5 שניות",
         "syncSubtitlesEarlier": "סנכרן כתוביות מוקדם יותר (-0.5 שניות)",
         "syncSubtitlesLater": "סנכרן כתוביות מאוחר יותר (+0.5 שניות)",
+        "previousSubtitleCue": "סימן כתוביות קודם",
+        "nextSubtitleCue": "רמז הכתוביות הבא",
         "toggleCaptions": "החלף כתוביות",
         "toggleFullscreen": "החלף מסך מלא",
         "toggleNativeSubtitles": "החלף כתוביות מקוריות"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "כתוביות מותאמות אישית",
           "delay": "עיכוב בכיתוב",
-          "fixCapitals": "תקן שימוש באותיות גדולות"
+          "fixCapitals": "תקן שימוש באותיות גדולות",
+          "timeline": "ציר זמן של כתוביות",
+          "timelineHint": "בחר סימן כתוביות כדי לסנכרן אותו עם זמן הווידאו הנוכחי.",
+          "timelineEmpty": "אין רמזים לכתוביות זמינות."
         },
         "title": "כתוביות",
         "transcriptChoice": "תמלול",

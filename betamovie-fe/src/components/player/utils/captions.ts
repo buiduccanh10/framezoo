@@ -8,6 +8,27 @@ import { CaptionListItem } from "@/stores/player/slices/source";
 export type CaptionCueType = ContentCaption;
 export const sanitize = DOMPurify.sanitize;
 
+const CAPTION_HTML_OPTIONS = {
+  ALLOWED_TAGS: ["c", "b", "i", "u", "span", "ruby", "rt", "br"],
+  ADD_TAGS: ["v", "lang"],
+  ALLOWED_ATTR: ["title", "lang"],
+};
+
+export function captionHtml(content?: string): string {
+  return sanitize(
+    (content || "").replaceAll(/\r?\n/g, "<br />"),
+    CAPTION_HTML_OPTIONS,
+  );
+}
+
+export function captionPlainText(content?: string): string {
+  return (content || "")
+    .replaceAll(/<[^>]*>/g, "")
+    .replaceAll(/\r?\n/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export function captionIsVisible(
   start: number,
   end: number,
@@ -20,6 +41,74 @@ export function captionIsVisible(
     Math.max(0, delayedStart) <= currentTime &&
     Math.max(0, delayedEnd) >= currentTime
   );
+}
+
+export function getCaptionTimelineIndex(
+  cues: CaptionCueType[],
+  delay: number,
+  currentTime: number,
+): number | null {
+  if (cues.length === 0) return null;
+
+  const visibleIndex = cues.findIndex(({ start, end }) =>
+    captionIsVisible(start, end, delay, currentTime),
+  );
+  if (visibleIndex !== -1) return visibleIndex;
+
+  const nextIndex = cues.findIndex(
+    ({ start }) => start / 1000 + delay > currentTime,
+  );
+  return nextIndex === -1 ? cues.length - 1 : Math.max(0, nextIndex - 1);
+}
+
+export function getCaptionTimelineNavigationIndex(
+  currentIndex: number | null,
+  direction: -1 | 1,
+  cueCount: number,
+): number | null {
+  if (currentIndex === null || cueCount === 0) return null;
+
+  const nextIndex = currentIndex + direction;
+  return nextIndex < 0 || nextIndex >= cueCount ? currentIndex : nextIndex;
+}
+
+export function getCaptionTimelineWindow(
+  currentIndex: number | null,
+  cueCount: number,
+  radius = 6,
+): { start: number; end: number } {
+  if (currentIndex === null || cueCount === 0) {
+    return { start: 0, end: 0 };
+  }
+
+  return {
+    start: Math.max(0, currentIndex - radius),
+    end: Math.min(cueCount, currentIndex + radius + 1),
+  };
+}
+
+export function getCaptionCueForNavigation(
+  cues: CaptionCueType[],
+  delay: number,
+  currentTime: number,
+  direction: -1 | 1,
+): CaptionCueType | null {
+  const currentIndex = getCaptionTimelineIndex(cues, delay, currentTime);
+  const nextIndex = getCaptionTimelineNavigationIndex(
+    currentIndex,
+    direction,
+    cues.length,
+  );
+
+  if (nextIndex === null || nextIndex === currentIndex) return null;
+  return cues[nextIndex] ?? null;
+}
+
+export function getCaptionDelayForCue(
+  cue: CaptionCueType,
+  currentTime: number,
+): number {
+  return currentTime - cue.start / 1000;
 }
 
 export function makeQueId(index: number, start: number, end: number): string {

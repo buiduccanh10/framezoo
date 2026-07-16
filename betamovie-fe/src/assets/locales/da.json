@@ -246,6 +246,8 @@
         "skipForward5": "Spring 5 sekunder frem",
         "syncSubtitlesEarlier": "Synkroniser undertekster tidligere (-0,5s)",
         "syncSubtitlesLater": "Synkroniser undertekster senere (+0,5s)",
+        "previousSubtitleCue": "Tidligere undertekst-cue",
+        "nextSubtitleCue": "Næste undertekstord",
         "toggleCaptions": "Skift billedtekster",
         "toggleFullscreen": "Skift fuldskærm",
         "toggleNativeSubtitles": "Skift indbyggede undertekster"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Brugerdefinerede undertekster",
           "delay": "Undertekstforsinkelse",
-          "fixCapitals": "Ret store bogstaver"
+          "fixCapitals": "Ret store bogstaver",
+          "timeline": "Undertekst tidslinje",
+          "timelineHint": "Vælg et undertekstsignal for at synkronisere det med det aktuelle videotidspunkt.",
+          "timelineEmpty": "Der er ingen tilgængelige undertekster."
         },
         "title": "Undertekster",
         "transcriptChoice": "Afskrift",
