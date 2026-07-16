@@ -10,6 +10,8 @@ export interface VideoPlayerButtonProps {
   iconSizeClass?: string;
   className?: string;
   activeClass?: string;
+  "aria-label"?: string;
+  title?: string;
 }
 
 export const VideoPlayerButton = forwardRef<
@@ -21,6 +23,8 @@ export const VideoPlayerButton = forwardRef<
       ref={ref}
       type="button"
       onClick={(e) => props.onClick?.(e.currentTarget as HTMLButtonElement)}
+      aria-label={props["aria-label"]}
+      title={props.title}
       className={classNames([
         "tabbable p-3 rounded-full hover:bg-video-buttonBackground hover:bg-opacity-50 transition-transform duration-100 flex items-center justify-center",
         props.activeClass ??
