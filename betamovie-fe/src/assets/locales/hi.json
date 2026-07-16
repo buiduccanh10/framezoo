@@ -246,6 +246,8 @@
         "skipForward5": "5 सेकंड आगे बढ़ें",
         "syncSubtitlesEarlier": "उपशीर्षक पहले सिंक करें (-0.5s)",
         "syncSubtitlesLater": "उपशीर्षक बाद में सिंक करें (+0.5 सेकंड)",
+        "previousSubtitleCue": "पिछला उपशीर्षक संकेत",
+        "nextSubtitleCue": "अगला उपशीर्षक संकेत",
         "toggleCaptions": "कैप्शन टॉगल करें",
         "toggleFullscreen": "संपूर्ण स्क्रीन टॉगल करें",
         "toggleNativeSubtitles": "मूल उपशीर्षक टॉगल करें"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "कस्टम उपशीर्षक",
           "delay": "उपशीर्षक विलंब",
-          "fixCapitals": "पूंजीकरण ठीक करें"
+          "fixCapitals": "पूंजीकरण ठीक करें",
+          "timeline": "उपशीर्षक समयरेखा",
+          "timelineHint": "वर्तमान वीडियो समय के साथ समन्वयित करने के लिए एक उपशीर्षक संकेत चुनें।",
+          "timelineEmpty": "कोई उपशीर्षक संकेत उपलब्ध नहीं है."
         },
         "title": "उपशीर्षक",
         "transcriptChoice": "प्रतिलिपि",

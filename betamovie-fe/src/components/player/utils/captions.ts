@@ -22,6 +22,59 @@ export function captionIsVisible(
   );
 }
 
+export function getCaptionTimelineIndex(
+  cues: CaptionCueType[],
+  delay: number,
+  currentTime: number,
+): number | null {
+  if (cues.length === 0) return null;
+
+  const visibleIndex = cues.findIndex(({ start, end }) =>
+    captionIsVisible(start, end, delay, currentTime),
+  );
+  if (visibleIndex !== -1) return visibleIndex;
+
+  const nextIndex = cues.findIndex(
+    ({ start }) => start / 1000 + delay > currentTime,
+  );
+  return nextIndex === -1 ? cues.length - 1 : Math.max(0, nextIndex - 1);
+}
+
+export function getCaptionTimelineNavigationIndex(
+  currentIndex: number | null,
+  direction: -1 | 1,
+  cueCount: number,
+): number | null {
+  if (currentIndex === null || cueCount === 0) return null;
+
+  const nextIndex = currentIndex + direction;
+  return nextIndex < 0 || nextIndex >= cueCount ? currentIndex : nextIndex;
+}
+
+export function getCaptionCueForNavigation(
+  cues: CaptionCueType[],
+  delay: number,
+  currentTime: number,
+  direction: -1 | 1,
+): CaptionCueType | null {
+  const currentIndex = getCaptionTimelineIndex(cues, delay, currentTime);
+  const nextIndex = getCaptionTimelineNavigationIndex(
+    currentIndex,
+    direction,
+    cues.length,
+  );
+
+  if (nextIndex === null || nextIndex === currentIndex) return null;
+  return cues[nextIndex] ?? null;
+}
+
+export function getCaptionDelayForCue(
+  cue: CaptionCueType,
+  currentTime: number,
+): number {
+  return currentTime - cue.start / 1000;
+}
+
 export function makeQueId(index: number, start: number, end: number): string {
   return `${index}-${start}-${end}`;
 }

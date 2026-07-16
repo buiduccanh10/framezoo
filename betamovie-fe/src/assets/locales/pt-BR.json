@@ -246,6 +246,8 @@
         "skipForward5": "Avançar 5 segundos",
         "syncSubtitlesEarlier": "Sincronize as legendas mais cedo (-0,5s)",
         "syncSubtitlesLater": "Sincronize as legendas mais tarde (+0,5s)",
+        "previousSubtitleCue": "Dica de legenda anterior",
+        "nextSubtitleCue": "Próxima sugestão de legenda",
         "toggleCaptions": "Alternar legendas",
         "toggleFullscreen": "Alternar tela cheia",
         "toggleNativeSubtitles": "Alternar legendas nativas"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Legendas personalizadas",
           "delay": "Atraso da legenda",
-          "fixCapitals": "Corrigir letras maiúsculas"
+          "fixCapitals": "Corrigir letras maiúsculas",
+          "timeline": "Linha do tempo das legendas",
+          "timelineHint": "Escolha uma sugestão de legenda para sincronizá-la com o horário atual do vídeo.",
+          "timelineEmpty": "Nenhuma sugestão de legenda disponível."
         },
         "title": "Legendas",
         "transcriptChoice": "Transcrição",

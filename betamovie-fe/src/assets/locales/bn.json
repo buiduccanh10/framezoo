@@ -246,6 +246,8 @@
         "skipForward5": "5 সেকেন্ড এগিয়ে যান",
         "syncSubtitlesEarlier": "আগে সাবটাইটেল সিঙ্ক করুন (-0.5s)",
         "syncSubtitlesLater": "পরে সাবটাইটেল সিঙ্ক করুন (+0.5s)",
+        "previousSubtitleCue": "পূর্ববর্তী সাবটাইটেল ক্যু",
+        "nextSubtitleCue": "পরবর্তী সাবটাইটেল ক্যু",
         "toggleCaptions": "ক্যাপশন টগল করুন",
         "toggleFullscreen": "ফুলস্ক্রিন টগল করুন",
         "toggleNativeSubtitles": "নেটিভ সাবটাইটেল টগল করুন"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "কাস্টম সাবটাইটেল",
           "delay": "সাবটাইটেল বিলম্ব",
-          "fixCapitals": "মূলধন ঠিক করুন"
+          "fixCapitals": "মূলধন ঠিক করুন",
+          "timeline": "সাবটাইটেল টাইমলাইন",
+          "timelineHint": "বর্তমান ভিডিও সময়ের সাথে সিঙ্ক করতে একটি সাবটাইটেল কিউ বেছে নিন।",
+          "timelineEmpty": "কোন সাবটাইটেল সংকেত উপলব্ধ."
         },
         "title": "সাবটাইটেল",
         "transcriptChoice": "প্রতিলিপি",

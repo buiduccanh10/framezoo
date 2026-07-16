@@ -38,8 +38,8 @@ export enum ShortcutId {
   // Subtitles/Accessibility
   TOGGLE_CAPTIONS = "toggleCaptions",
   RANDOM_CAPTION = "randomCaption",
-  SYNC_SUBTITLES_EARLIER = "syncSubtitlesEarlier",
-  SYNC_SUBTITLES_LATER = "syncSubtitlesLater",
+  PREVIOUS_SUBTITLE_CUE = "syncSubtitlesEarlier",
+  NEXT_SUBTITLE_CUE = "syncSubtitlesLater",
 
   // Interface
   BARREL_ROLL = "barrelRoll",
@@ -65,8 +65,8 @@ export const DEFAULT_KEYBOARD_SHORTCUTS: KeyboardShortcuts = {
   [ShortcutId.TOGGLE_FULLSCREEN]: { key: "F" },
   [ShortcutId.TOGGLE_CAPTIONS]: { key: "C" },
   [ShortcutId.RANDOM_CAPTION]: { modifier: "Shift", key: "C" },
-  [ShortcutId.SYNC_SUBTITLES_EARLIER]: { key: "[" },
-  [ShortcutId.SYNC_SUBTITLES_LATER]: { key: "]" },
+  [ShortcutId.PREVIOUS_SUBTITLE_CUE]: { key: "[" },
+  [ShortcutId.NEXT_SUBTITLE_CUE]: { key: "]" },
   [ShortcutId.BARREL_ROLL]: { key: "R" },
 };
 

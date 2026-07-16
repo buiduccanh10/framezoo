@@ -246,6 +246,8 @@
         "skipForward5": "Hyppää eteenpäin 5 sekuntia",
         "syncSubtitlesEarlier": "Synkronoi tekstitykset aikaisemmin (-0,5 s)",
         "syncSubtitlesLater": "Synkronoi tekstitykset myöhemmin (+0,5 s)",
+        "previousSubtitleCue": "Edellinen tekstitysvihje",
+        "nextSubtitleCue": "Seuraava tekstitys",
         "toggleCaptions": "Tekstitykset päälle/pois",
         "toggleFullscreen": "Koko näyttö päälle/pois",
         "toggleNativeSubtitles": "Vaihda alkuperäiset tekstitykset"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Mukautetut tekstitykset",
           "delay": "Tekstityksen viive",
-          "fixCapitals": "Korjaa isot kirjaimet"
+          "fixCapitals": "Korjaa isot kirjaimet",
+          "timeline": "Tekstityksen aikajana",
+          "timelineHint": "Valitse tekstitysvippi synkronoidaksesi sen nykyisen videoajan kanssa.",
+          "timelineEmpty": "Tekstitysvihjeitä ei ole saatavilla."
         },
         "title": "Tekstitykset",
         "transcriptChoice": "Transkriptio",

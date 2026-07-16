@@ -15,7 +15,7 @@ export * from "./Settings";
 export * from "./Episodes";
 export * from "./Airplay";
 export * from "./VolumeChangedPopout";
-export * from "./SubtitleDelayPopout";
+export * from "./SubtitleCuePopout";
 export * from "./NextEpisodeButton";
 export * from "./Chromecast";
 export * from "./CastingNotification";

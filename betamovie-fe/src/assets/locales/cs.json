@@ -246,6 +246,8 @@
         "skipForward5": "Přeskočte o 5 sekund dopředu",
         "syncSubtitlesEarlier": "Synchronizovat titulky dříve (-0,5 s)",
         "syncSubtitlesLater": "Synchronizovat titulky později (+0,5 s)",
+        "previousSubtitleCue": "Předchozí nápověda pro titulky",
+        "nextSubtitleCue": "Další narážka na titulky",
         "toggleCaptions": "Přepnout titulky",
         "toggleFullscreen": "Přepnout na celou obrazovku",
         "toggleNativeSubtitles": "Přepnout nativní titulky"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "Vlastní titulky",
           "delay": "Posunutí titulků",
-          "fixCapitals": "Opravit velká písmena"
+          "fixCapitals": "Opravit velká písmena",
+          "timeline": "Časová osa titulků",
+          "timelineHint": "Vyberte cue titulků, které chcete synchronizovat s aktuálním časem videa.",
+          "timelineEmpty": "Nejsou k dispozici žádné titulky."
         },
         "title": "Titulky",
         "transcriptChoice": "Přepis",

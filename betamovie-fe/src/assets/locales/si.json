@@ -246,6 +246,8 @@
         "skipForward5": "තත්පර 5ක් ඉදිරියට යන්න",
         "syncSubtitlesEarlier": "උපසිරැසි කලින් සමමුහුර්ත කරන්න (-0.5s)",
         "syncSubtitlesLater": "උපසිරැසි පසුව සමමුහුර්ත කරන්න (+0.5s)",
+        "previousSubtitleCue": "පෙර උපසිරැසි ඉඟිය",
+        "nextSubtitleCue": "ඊළඟ උපසිරැසි ඉඟිය",
         "toggleCaptions": "සිරස්තල ටොගල් කරන්න",
         "toggleFullscreen": "සම්පූර්ණ තිරය ටොගල් කරන්න",
         "toggleNativeSubtitles": "ස්වදේශීය උපසිරැසි ටොගල් කරන්න"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "අභිරුචි උපසිරැසි",
           "delay": "උපසිරැසි ප්‍රමාදය",
-          "fixCapitals": "ප්රාග්ධනීකරණය නිවැරදි කරන්න"
+          "fixCapitals": "ප්රාග්ධනීකරණය නිවැරදි කරන්න",
+          "timeline": "උපසිරැසි කාලරාමුව",
+          "timelineHint": "වත්මන් වීඩියෝ වේලාව සමඟ එය සමමුහුර්ත කිරීමට උපසිරැසි ඉඟියක් තෝරන්න.",
+          "timelineEmpty": "උපසිරැසි ඉඟි නොමැත."
         },
         "title": "උපසිරැසි",
         "transcriptChoice": "පිටපත",

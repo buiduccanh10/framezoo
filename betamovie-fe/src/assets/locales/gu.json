@@ -246,6 +246,8 @@
         "skipForward5": "5 સેકન્ડ આગળ જાઓ",
         "syncSubtitlesEarlier": "પહેલાના સબટાઈટલને સમન્વયિત કરો (-0.5 સે)",
         "syncSubtitlesLater": "પછીથી સબટાઈટલ સમન્વયિત કરો (+0.5s)",
+        "previousSubtitleCue": "પાછલા ઉપશીર્ષક સંકેત",
+        "nextSubtitleCue": "આગામી ઉપશીર્ષક સંકેત",
         "toggleCaptions": "કૅપ્શન્સ ટૉગલ કરો",
         "toggleFullscreen": "પૂર્ણસ્ક્રીન ટૉગલ કરો",
         "toggleNativeSubtitles": "મૂળ ઉપશીર્ષકો ટૉગલ કરો"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "કસ્ટમ સબટાઈટલ",
           "delay": "ઉપશીર્ષક વિલંબ",
-          "fixCapitals": "મૂડીકરણ ઠીક કરો"
+          "fixCapitals": "મૂડીકરણ ઠીક કરો",
+          "timeline": "ઉપશીર્ષક સમયરેખા",
+          "timelineHint": "તેને વર્તમાન વિડિયો સમય સાથે સમન્વયિત કરવા માટે સબટાઈટલ ક્યૂ પસંદ કરો.",
+          "timelineEmpty": "કોઈ ઉપશીર્ષક સંકેતો ઉપલબ્ધ નથી."
         },
         "title": "સબટાઈટલ",
         "transcriptChoice": "ટ્રાન્સક્રિપ્ટ",

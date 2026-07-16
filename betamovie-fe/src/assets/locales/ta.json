@@ -246,6 +246,8 @@
         "skipForward5": "5 வினாடிகள் முன்னோக்கி செல்லவும்",
         "syncSubtitlesEarlier": "முந்தைய வசனங்களை ஒத்திசைக்கவும் (-0.5வி)",
         "syncSubtitlesLater": "வசனங்களை பின்னர் ஒத்திசைக்கவும் (+0.5வி)",
+        "previousSubtitleCue": "முந்தைய வசன குறிப்பு",
+        "nextSubtitleCue": "அடுத்த வசன குறிப்பு",
         "toggleCaptions": "தலைப்புகளை நிலைமாற்று",
         "toggleFullscreen": "முழுத்திரையை நிலைமாற்று",
         "toggleNativeSubtitles": "சொந்த வசனங்களை நிலைமாற்று"
@@ -808,7 +810,10 @@
         "settings": {
           "backlink": "தனிப்பட்ட வசன வரிகள்",
           "delay": "வசன வரி தாமதம்",
-          "fixCapitals": "Capitals யை சரி செய்யவும்"
+          "fixCapitals": "Capitals யை சரி செய்யவும்",
+          "timeline": "வசன காலவரிசை",
+          "timelineHint": "தற்போதைய வீடியோ நேரத்துடன் ஒத்திசைக்க வசன குறிப்பைத் தேர்வு செய்யவும்.",
+          "timelineEmpty": "வசன குறிப்புகள் எதுவும் இல்லை."
         },
         "title": "வசன வரிகள்",
         "transcriptChoice": "டிரான்ஸ்கிரிப்ட்",
