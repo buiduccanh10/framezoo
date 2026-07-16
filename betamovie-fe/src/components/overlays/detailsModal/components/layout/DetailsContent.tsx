@@ -68,6 +68,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [showCollection, setShowCollection] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [fetchedSeasons, setFetchedSeasons] = useState<Record<number, any[]>>(
     {},
@@ -402,7 +403,10 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       />
 
       {/* Content */}
-      <div className="px-6 pb-6 mt-[-70px] flex-grow relative z-30">
+      <div
+        ref={contentRef}
+        className="px-6 pb-6 mt-[-70px] flex-grow relative z-30"
+      >
         <DetailsBody
           data={data}
           onPlayClick={handlePlayClick}
@@ -411,9 +415,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
           voteAverage={data.voteAverage}
           voteCount={data.voteCount}
           releaseDate={data.releaseDate}
-          seasons={
-            data.type === "show" ? data.seasonData?.seasons.length : undefined
-          }
+          seasons={data.type === "show" ? data.seasons : undefined}
           imdbData={imdbData}
           rtData={rtData}
           isLoadingImdb={isLoadingImdb}
@@ -521,6 +523,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
               mediaTitle={data.title}
               mediaPosterUrl={data.posterUrl}
               totalEpisodes={data.episodes}
+              boundaryRef={contentRef}
             />
           </LazyCarouselWrapper>
         )}
