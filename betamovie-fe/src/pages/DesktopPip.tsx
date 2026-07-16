@@ -129,6 +129,7 @@ function shouldReplacePipState(
     previousState.paused !== nextState.paused ||
     previousState.playbackRate !== nextState.playbackRate ||
     previousState.title !== nextState.title ||
+    previousState.delay !== nextState.delay ||
     previousState.dualSubEnabled !== nextState.dualSubEnabled ||
     !areDesktopPipCaptionsEqual(previousState.caption, nextState.caption) ||
     !areDesktopPipCaptionsEqual(
@@ -174,13 +175,14 @@ function areVisibleCaptionCuesEqual(
 const DesktopPipCaptionTrack = memo(
   function DesktopPipCaptionTrackInner(props: {
     caption: DesktopPipCaption | null;
+    delay: number;
     display: DisplayInterface | null;
     initialTime: number;
     secondary?: boolean;
   }) {
     const styling = useSubtitleStore((s) => s.styling);
     const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
-    const delay = useSubtitleStore((s) => s.delay);
+    const delay = Number.isFinite(props.delay) ? props.delay : 0;
 
     const parsedCaptions = useMemo(
       () =>
@@ -827,6 +829,7 @@ export default function DesktopPipPage() {
           <DesktopPipCaptionTrack
             display={display}
             caption={pipState.secondaryCaption}
+            delay={pipState.delay}
             initialTime={videoTimeRef.current}
             secondary
           />
@@ -834,6 +837,7 @@ export default function DesktopPipPage() {
         <DesktopPipCaptionTrack
           display={display}
           caption={pipState?.caption ?? null}
+          delay={pipState?.delay ?? 0}
           initialTime={videoTimeRef.current}
         />
       </div>

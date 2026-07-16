@@ -6,6 +6,7 @@ import { buildVttObjectUrl } from "@/components/player/utils/captions";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { useSubtitleStore } from "@/stores/subtitles";
 import { isSafari } from "@/utils/detectFeatures";
 
 import { useInitializeSource } from "../hooks/useInitializePlayer";
@@ -81,6 +82,7 @@ function VideoElement() {
     s.caption.dualSubEnabled ? s.caption.secondary?.vttData : undefined,
   );
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
+  const subtitleDelay = useSubtitleStore((s) => s.delay);
   const source = usePlayerStore((s) => s.source);
   const pictureInPictureMode = usePlayerStore(
     (s) => s.interface.pictureInPictureMode,
@@ -89,8 +91,11 @@ function VideoElement() {
     (s) => s.interface.documentPictureInPictureWindow,
   );
   const trackObjectUrl = useObjectUrl(
-    () => (vttData ? buildVttObjectUrl(vttData, secondaryVttData) : null),
-    [vttData, secondaryVttData],
+    () =>
+      vttData
+        ? buildVttObjectUrl(vttData, secondaryVttData, subtitleDelay)
+        : null,
+    [vttData, secondaryVttData, subtitleDelay],
   );
 
   const documentPictureInPictureRoots =

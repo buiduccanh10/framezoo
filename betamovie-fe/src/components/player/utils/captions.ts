@@ -146,13 +146,92 @@ export function parseCanonicalVtt(vttText: string): CaptionCueType[] {
   return filterDuplicateCaptionCues(parseVttSubtitles(vtt));
 }
 
+const VTT_TIMING_LINE_RE =
+  /^\s*((?:\d+:)?\d{1,2}:\d{2}\.\d{3})\s+-->\s+((?:\d+:)?\d{1,2}:\d{2}\.\d{3})(.*)$/;
+
+function parseVttTimestamp(timestamp: string): number {
+  const parts = timestamp.split(":");
+  const secondsPart = parts.pop() ?? "0";
+  const [seconds, milliseconds] = secondsPart.split(".");
+  const numericParts = parts.map(Number);
+
+  if (
+    numericParts.some((part) => !Number.isFinite(part)) ||
+    !Number.isFinite(Number(seconds)) ||
+    !Number.isFinite(Number(milliseconds))
+  ) {
+    return Number.NaN;
+  }
+
+  const minutes = numericParts.pop() ?? 0;
+  const hours = numericParts.pop() ?? 0;
+  return (
+    hours * 60 * 60 * 1000 +
+    minutes * 60 * 1000 +
+    Number(seconds) * 1000 +
+    Number(milliseconds)
+  );
+}
+
+function formatVttTimestamp(milliseconds: number): string {
+  const totalMilliseconds = Math.max(0, Math.round(milliseconds));
+  const hours = Math.floor(totalMilliseconds / 3_600_000);
+  const minutes = Math.floor((totalMilliseconds % 3_600_000) / 60_000);
+  const seconds = Math.floor((totalMilliseconds % 60_000) / 1000);
+  const remainder = totalMilliseconds % 1000;
+
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${remainder
+    .toString()
+    .padStart(3, "0")}`;
+}
+
+export function shiftVttTimestamps(vttText: string, delay: number): string {
+  const normalizedVtt = normalizeSubtitleToVtt(vttText);
+  const delayMilliseconds = Number.isFinite(delay)
+    ? Math.round(delay * 1000)
+    : 0;
+
+  if (delayMilliseconds === 0) return normalizedVtt;
+
+  return normalizedVtt
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) => {
+      const lines = block.split(/\r?\n/);
+      const timingLineIndex = lines.findIndex((line) =>
+        VTT_TIMING_LINE_RE.test(line),
+      );
+      if (timingLineIndex === -1) return block;
+
+      const timingLine = lines[timingLineIndex];
+      const match = VTT_TIMING_LINE_RE.exec(timingLine);
+      if (!match) return block;
+
+      const start = parseVttTimestamp(match[1]);
+      const end = parseVttTimestamp(match[2]);
+      if (!Number.isFinite(start) || !Number.isFinite(end)) return block;
+
+      const shiftedStart = Math.max(0, start + delayMilliseconds);
+      const shiftedEnd = Math.max(0, end + delayMilliseconds);
+      if (shiftedEnd <= shiftedStart) return null;
+
+      lines[timingLineIndex] =
+        `${formatVttTimestamp(shiftedStart)} --> ${formatVttTimestamp(shiftedEnd)}${match[3]}`;
+      return lines.join("\n");
+    })
+    .filter((block): block is string => block !== null)
+    .join("\n\n");
+}
+
 export function buildVttObjectUrl(
   vttText: string,
   secondaryVttText?: string,
+  delay = 0,
 ): string {
-  let vtt = normalizeSubtitleToVtt(vttText);
+  let vtt = shiftVttTimestamps(vttText, delay);
   if (secondaryVttText) {
-    const secondaryVtt = normalizeSubtitleToVtt(secondaryVttText);
+    const secondaryVtt = shiftVttTimestamps(secondaryVttText, delay);
     vtt = vtt + "\n\n" + secondaryVtt.replace(/^WEBVTT(?:[\r\n]+)?/i, "");
   }
   return URL.createObjectURL(
