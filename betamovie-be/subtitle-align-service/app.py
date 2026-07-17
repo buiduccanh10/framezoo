@@ -9,9 +9,13 @@ import tempfile
 import threading
 import unicodedata
 from difflib import SequenceMatcher
-from typing import Any
+from typing import Any, Callable
+import json
+import queue
+import asyncio
 
 from fastapi import FastAPI, Header, HTTPException
+from fastapi.responses import StreamingResponse
 from faster_whisper import WhisperModel
 from pydantic import BaseModel, Field
 
@@ -213,8 +217,15 @@ def extract_audio(source_url: str, window: WindowRequest) -> bytes:
     return result.stdout
 
 
-def transcribe_window(source_url: str, window: WindowRequest) -> list[dict[str, Any]]:
+def transcribe_window(source_url: str, window: WindowRequest, progress_callback: Callable[[float], None] | None = None) -> list[dict[str, Any]]:
+    if progress_callback:
+        progress_callback(0.05)
+        
     audio = extract_audio(source_url, window)
+    
+    if progress_callback:
+        progress_callback(0.4)
+        
     whisper = get_model()
 
     with tempfile.NamedTemporaryFile(suffix=".wav") as audio_file:
@@ -229,6 +240,11 @@ def transcribe_window(source_url: str, window: WindowRequest) -> list[dict[str, 
         )
         output = []
         for segment in segments:
+            if progress_callback:
+                p = min(1.0, float(segment.end) / (window.durationMs / 1000.0))
+                progress = 0.4 + (p * 0.55)
+                progress_callback(progress)
+
             text = normalize_text(segment.text or "")
             if not text:
                 continue
@@ -265,6 +281,8 @@ def transcribe_window(source_url: str, window: WindowRequest) -> list[dict[str, 
                     "words": words,
                 }
             )
+        if progress_callback:
+            progress_callback(0.95)
 
     return output
 
@@ -737,33 +755,65 @@ def health() -> dict[str, Any]:
 
 
 @app.post("/v1/transcribe-windows")
-def transcribe_windows(
+async def transcribe_windows(
     payload: AlignRequest,
     internal_token: str | None = Header(default=None, alias="x-internal-token"),
-) -> dict[str, Any]:
+):
     if INTERNAL_TOKEN and internal_token != INTERNAL_TOKEN:
         raise HTTPException(status_code=401, detail="Invalid internal token")
 
     try:
-        cues = parse_vtt(payload.subtitleVtt)
-        transcripts = [
-            transcribe_window(payload.sourceUrl, window)
-            for window in payload.windows
-        ]
-        result = align_cues(cues, transcripts, payload.windows)
-        return {
-            **result,
-            "windows": [
-                {
-                    "startMs": window.startMs,
-                    "durationMs": window.durationMs,
-                }
-                for window in payload.windows
-            ],
-            "model": MODEL_NAME,
-        }
-    except Exception as error:
-        raise HTTPException(
-            status_code=502,
-            detail=str(error)[-500:],
-        ) from error
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = asyncio.get_event_loop()
+
+    q = asyncio.Queue()
+
+    def worker():
+        try:
+            cues = parse_vtt(payload.subtitleVtt)
+            transcripts = []
+            total_duration = sum(window.durationMs for window in payload.windows)
+            processed_duration = 0.0
+
+            for window in payload.windows:
+                def callback(progress: float):
+                    current = processed_duration + (progress * window.durationMs)
+                    percent = min(99, int((current / max(1, total_duration)) * 100))
+                    print(f"DEBUG CALLBACK: progress={progress} percent={percent}")
+                    loop.call_soon_threadsafe(q.put_nowait, {"type": "progress", "percent": percent})
+
+                transcript = transcribe_window(payload.sourceUrl, window, callback)
+                transcripts.append(transcript)
+                processed_duration += window.durationMs
+
+            result = align_cues(cues, transcripts, payload.windows)
+            final_result = {
+                **result,
+                "windows": [
+                    {
+                        "startMs": window.startMs,
+                        "durationMs": window.durationMs,
+                    }
+                    for window in payload.windows
+                ],
+                "model": MODEL_NAME,
+            }
+            loop.call_soon_threadsafe(q.put_nowait, {"type": "result", "data": final_result})
+        except Exception as error:
+            loop.call_soon_threadsafe(q.put_nowait, {"type": "error", "error": str(error)[-500:]})
+        finally:
+            loop.call_soon_threadsafe(q.put_nowait, None)
+
+    t = threading.Thread(target=worker)
+    t.start()
+
+    async def generate():
+        while True:
+            msg = await q.get()
+            print(f"DEBUG GENERATE YIELDING: {msg}")
+            if msg is None:
+                break
+            yield f"data: {json.dumps(msg)}\n\n"
+
+    return StreamingResponse(generate(), media_type="text/event-stream")

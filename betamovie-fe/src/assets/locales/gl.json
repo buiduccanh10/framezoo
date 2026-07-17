@@ -812,6 +812,8 @@
           "backlink": "Subtítulos personalizados",
           "delay": "Retardo dos subtítulos",
           "fixCapitals": "Arreglar capitalización",
+          "syncingProgress": "Sincronizando... ({{progress}}%)",
+          "syncApplied": "Aplicouse a sincronización automática.",
           "timeline": "Cronoloxía dos subtítulos",
           "timelineHint": "Escolle unha pista de subtítulos para sincronizala coa hora actual do vídeo.",
           "timelineEmpty": "Non hai pistas de subtítulos dispoñibles."

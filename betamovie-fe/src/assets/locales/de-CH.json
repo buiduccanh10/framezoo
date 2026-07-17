@@ -812,6 +812,8 @@
           "backlink": "Eigeni Ontertetel",
           "delay": "Ontertitelverzögerig",
           "fixCapitals": "Grossschribig korrigiere",
+          "syncingProgress": "Synchronisierung... ({{progress}}%)",
+          "syncApplied": "Automatische Synchronisierung angewendet.",
           "timeline": "Untertitel-Zeitleiste",
           "timelineHint": "Wählen Sie einen Untertitel-Cue, um ihn mit der aktuellen Videozeit zu synchronisieren.",
           "timelineEmpty": "Keine Untertitelhinweise verfügbar."

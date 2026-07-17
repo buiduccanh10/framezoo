@@ -812,6 +812,8 @@
           "backlink": "Subtitluri personalizate",
           "delay": "Intârziera subtitlurilor",
           "fixCapitals": "Fixați capitalizația",
+          "syncingProgress": "Se sincronizează... ({{progress}}%)",
+          "syncApplied": "Sincronizarea automată a fost aplicată.",
           "timeline": "Cronologia subtitrarilor",
           "timelineHint": "Alegeți un semnal de subtitrare pentru a-l sincroniza cu ora video curentă.",
           "timelineEmpty": "Nu există indicii de subtitrare disponibile."

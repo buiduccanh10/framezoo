@@ -812,6 +812,8 @@
           "backlink": "Podnapisi po meri",
           "delay": "Zamik podnapisov",
           "fixCapitals": "Popravi velike začetnice",
+          "syncingProgress": "Sinhronizacija ... ({{progress}}%)",
+          "syncApplied": "Uporabljena je samodejna sinhronizacija.",
           "timeline": "Časovnica podnapisov",
           "timelineHint": "Izberite iztočnico za podnapise, da jo sinhronizirate s trenutnim časom videa.",
           "timelineEmpty": "Podnapisi niso na voljo."

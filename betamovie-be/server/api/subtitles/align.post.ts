@@ -218,43 +218,79 @@ const resolveAlignmentSource = async (input: AlignInput): Promise<ResolvedAlignm
   };
 };
 
-const fetchAlignment = async (
+const fetchAlignmentStream = async (
   sourceUrl: string,
   subtitleVtt: string,
-  windows: AlignWindow[]
-): Promise<AlignResponse> => {
+  windows: AlignWindow[],
+  onResult: (result: AlignResponse) => void
+): Promise<ReadableStream> => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), ALIGN_SERVICE_TIMEOUT_MS);
-  try {
-    const headers: Record<string, string> = {
-      'content-type': 'application/json',
-    };
-    if (ALIGN_SERVICE_INTERNAL_TOKEN) {
-      headers['x-internal-token'] = ALIGN_SERVICE_INTERNAL_TOKEN;
-    }
 
-    const response = await fetch(`${ALIGN_SERVICE_URL}/v1/transcribe-windows`, {
-      method: 'POST',
-      signal: controller.signal,
-      headers,
-      body: JSON.stringify({
-        sourceUrl,
-        subtitleVtt,
-        windows,
-      }),
-    });
-    const payload = await response.json().catch(() => null);
-    if (!response.ok) {
-      throw new Error(
-        typeof payload?.detail === 'string'
-          ? payload.detail
-          : `Subtitle align service returned ${response.status}`
-      );
-    }
-    return payload as AlignResponse;
-  } finally {
-    clearTimeout(timeout);
+  const headers: Record<string, string> = {
+    'content-type': 'application/json',
+  };
+  if (ALIGN_SERVICE_INTERNAL_TOKEN) {
+    headers['x-internal-token'] = ALIGN_SERVICE_INTERNAL_TOKEN;
   }
+
+  const response = await fetch(`${ALIGN_SERVICE_URL}/v1/transcribe-windows`, {
+    method: 'POST',
+    signal: controller.signal,
+    headers,
+    body: JSON.stringify({
+      sourceUrl,
+      subtitleVtt,
+      windows,
+    }),
+  });
+
+  if (!response.ok) {
+    clearTimeout(timeout);
+    const text = await response.text().catch(() => '');
+    throw new Error(`Subtitle align service returned ${response.status}: ${text}`);
+  }
+
+  if (!response.body) {
+    clearTimeout(timeout);
+    throw new Error('No response body from subtitle align service');
+  }
+
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const reader = response.body.getReader();
+
+  // Background stream processor
+  (async () => {
+    const decoder = new TextDecoder();
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split('\n');
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.substring(6));
+              if (data.type === 'result' && data.data) {
+                onResult(data.data as AlignResponse);
+              }
+            } catch {}
+          }
+        }
+        await writer.write(value);
+      }
+    } catch (e) {
+      console.error('Error proxying alignment stream:', e);
+    } finally {
+      clearTimeout(timeout);
+      await writer.close().catch(() => null);
+    }
+  })();
+
+  return readable;
 };
 
 export default defineEventHandler(async event => {
@@ -315,37 +351,38 @@ export default defineEventHandler(async event => {
   const cacheKey = buildCacheKey(input);
   const storage = useStorage('cache');
 
+  setResponseHeader(event, 'content-type', 'text/event-stream');
+  setResponseHeader(event, 'cache-control', 'no-cache, no-transform');
+  setResponseHeader(event, 'connection', 'keep-alive');
+  setResponseHeader(event, 'x-accel-buffering', 'no');
+
   if (!input.force) {
     const cached = await storage.getItem<AlignResponse>(cacheKey).catch(() => null);
     if (cached) {
-      return { ...cached, cached: true };
+      return `data: ${JSON.stringify({ type: 'result', data: { ...cached, cached: true } })}\n\n`;
     }
   }
 
-  const pending = inFlight.get(cacheKey);
-  if (pending) return pending;
-
-  const task = (async () => {
-    const result = await fetchAlignment(internalSourceUrl, input.subtitleVtt, windows);
-    const response: AlignResponse = {
-      ...result,
-      windows,
-      model: result.model || ALIGN_MODEL,
-      cached: false,
-    };
-    await storage.setItem(cacheKey, response, { ttl: ALIGN_CACHE_TTL_SECONDS }).catch(() => null);
-    return response;
-  })();
-
-  inFlight.set(cacheKey, task);
   try {
-    return await task;
+    const stream = await fetchAlignmentStream(
+      internalSourceUrl,
+      input.subtitleVtt,
+      windows,
+      (result) => {
+        const response: AlignResponse = {
+          ...result,
+          windows,
+          model: result.model || ALIGN_MODEL,
+          cached: false,
+        };
+        storage.setItem(cacheKey, response, { ttl: ALIGN_CACHE_TTL_SECONDS }).catch(() => null);
+      }
+    );
+    return sendStream(event, stream);
   } catch (error) {
     throw createError({
       statusCode: 502,
       statusMessage: error instanceof Error ? error.message : 'Subtitle align service unavailable',
     });
-  } finally {
-    inFlight.delete(cacheKey);
   }
 });

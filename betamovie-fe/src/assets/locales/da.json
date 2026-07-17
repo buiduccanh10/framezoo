@@ -812,6 +812,8 @@
           "backlink": "Brugerdefinerede undertekster",
           "delay": "Undertekstforsinkelse",
           "fixCapitals": "Ret store bogstaver",
+          "syncingProgress": "Synkroniserer... ({{progress}}%)",
+          "syncApplied": "Automatisk synkronisering anvendt.",
           "timeline": "Undertekst tidslinje",
           "timelineHint": "Vælg et undertekstsignal for at synkronisere det med det aktuelle videotidspunkt.",
           "timelineEmpty": "Der er ingen tilgængelige undertekster."
