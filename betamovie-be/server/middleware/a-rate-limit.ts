@@ -36,6 +36,18 @@ const DEFAULT_PROXY_RATE_LIMITS: Record<string, number> = {
 };
 
 const getRateLimitConfig = (path: string) => {
+  if (path === '/api/subtitles/align') {
+    return {
+      scope: 'subtitle-align',
+      windowMs: getPositiveInt(process.env.SUBTITLE_ALIGN_RATE_LIMIT_WINDOW_MS, 60_000),
+      maxRequests: getPositiveInt(
+        process.env.SUBTITLE_ALIGN_RATE_LIMIT_MAX_REQUESTS,
+        10
+      ),
+      isProxyLimited: false,
+    };
+  }
+
   if (isCapabilityPath(path)) {
     return {
       scope: 'capability',
