@@ -812,6 +812,8 @@
           "backlink": "Subtitle khusus",
           "delay": "Penundaan subtitle",
           "fixCapitals": "Perbaiki kapitalisasi",
+          "syncingProgress": "Menyinkronkan... ({{progress}}%)",
+          "syncApplied": "Sinkronisasi otomatis diterapkan.",
           "timeline": "Garis waktu subtitle",
           "timelineHint": "Pilih isyarat subtitle untuk menyinkronkannya dengan waktu video saat ini.",
           "timelineEmpty": "Tidak ada petunjuk subtitle yang tersedia."

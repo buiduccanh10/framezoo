@@ -812,6 +812,8 @@
           "backlink": "Pielāgoti subtitri",
           "delay": "Subtitru aizkave",
           "fixCapitals": "Labojiet lielo burtu lietojumu",
+          "syncingProgress": "Notiek sinhronizācija... ({{progress}}%)",
+          "syncApplied": "Lietota automātiskā sinhronizācija.",
           "timeline": "Subtitru laika skala",
           "timelineHint": "Izvēlieties subtitru signālu, lai to sinhronizētu ar pašreizējo video laiku.",
           "timelineEmpty": "Subtitru norādes nav pieejamas."

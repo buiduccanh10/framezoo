@@ -812,6 +812,8 @@
           "backlink": "Własne napisy",
           "delay": "Opóźnienie napisów",
           "fixCapitals": "Popraw kapitalizację",
+          "syncingProgress": "Synchronizowanie... ({{progress}}%)",
+          "syncApplied": "Zastosowano automatyczną synchronizację.",
           "timeline": "Oś czasu napisów",
           "timelineHint": "Wybierz wskazówkę napisów, aby zsynchronizować ją z bieżącym czasem wideo.",
           "timelineEmpty": "Brak dostępnych wskazówek dotyczących napisów."

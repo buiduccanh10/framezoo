@@ -812,6 +812,8 @@
           "backlink": "Aangepaste ondertiteling",
           "delay": "Ondertiteling vertraging",
           "fixCapitals": "Hoofdlettergebruik corrigeren",
+          "syncingProgress": "Synchroniseren... ({{progress}}%)",
+          "syncApplied": "Automatische synchronisatie toegepast.",
           "timeline": "Tijdlijn van ondertiteling",
           "timelineHint": "Kies een ondertitelcue om deze te synchroniseren met de huidige videotijd.",
           "timelineEmpty": "Er zijn geen ondertitelsignalen beschikbaar."

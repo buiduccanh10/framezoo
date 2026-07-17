@@ -114,6 +114,7 @@ export function resolveSubtitleSyncSource(
 
 export async function requestSubtitleSync(
   request: SubtitleSyncRequest,
+  onProgress?: (percent: number) => void,
 ): Promise<SubtitleSyncResult> {
   const backendUrl = conf().BACKEND_URL?.replace(/\/+$/, "");
   if (!backendUrl) {
@@ -128,24 +129,58 @@ export async function requestSubtitleSync(
     }),
     body: JSON.stringify(request),
   });
-  const payload = (await response.json().catch(() => null)) as
-    | SubtitleSyncResult
-    | { statusMessage?: string; message?: string }
-    | null;
 
   if (!response.ok) {
+    const text = await response.text().catch(() => "");
     throw new Error(
-      payload &&
-        "statusMessage" in payload &&
-        typeof payload.statusMessage === "string"
-        ? payload.statusMessage
-        : payload && "message" in payload && typeof payload.message === "string"
-          ? payload.message
-          : `Subtitle sync failed with status ${response.status}`,
+      `Subtitle sync failed with status ${response.status}: ${text}`,
     );
   }
 
-  return payload as SubtitleSyncResult;
+  if (!response.body) {
+    throw new Error("No response body from subtitle sync backend");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let result: SubtitleSyncResult | null = null;
+  let buffer = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
+
+      for (const line of lines) {
+        if (line.startsWith("data: ")) {
+          try {
+            const data = JSON.parse(line.substring(6));
+            if (data.type === "progress") {
+              onProgress?.(data.percent);
+            } else if (data.type === "result" && data.data) {
+              result = data.data as SubtitleSyncResult;
+            } else if (data.type === "error") {
+              throw new Error(data.error);
+            }
+          } catch (e) {
+            // ignore JSON parse errors for corrupted lines
+          }
+        }
+      }
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  if (!result) {
+    throw new Error("Subtitle sync did not return a result");
+  }
+
+  return result;
 }
 
 export function getSubtitleSyncMediaKey(

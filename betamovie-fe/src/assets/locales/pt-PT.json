@@ -812,6 +812,8 @@
           "backlink": "Legendas personalizadas",
           "delay": "Atraso das legendas",
           "fixCapitals": "Corrigir maiúsculas",
+          "syncingProgress": "Sincronizando... ({{progress}}%)",
+          "syncApplied": "Sincronização automática aplicada.",
           "timeline": "Linha do tempo das legendas",
           "timelineHint": "Escolha uma sugestão de legenda para sincronizá-la com o horário atual do vídeo.",
           "timelineEmpty": "Nenhuma sugestão de legenda disponível."

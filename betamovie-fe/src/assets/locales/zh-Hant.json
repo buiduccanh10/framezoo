@@ -812,6 +812,8 @@
           "backlink": "自訂字幕",
           "delay": "字幕延遲",
           "fixCapitals": "修復大小寫",
+          "syncingProgress": "正在同步... ({{progress}}%)",
+          "syncApplied": "已應用自動同步。",
           "timeline": "字幕時間軸",
           "timelineHint": "選擇一個字幕提示以將其與當前視訊時間同步。",
           "timelineEmpty": "沒有可用的字幕提示。"

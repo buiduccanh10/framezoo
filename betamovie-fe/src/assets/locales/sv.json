@@ -812,6 +812,8 @@
           "backlink": "Anpassade undertexter",
           "delay": "Undertexts fördrivning",
           "fixCapitals": "Reparera kapitalisering",
+          "syncingProgress": "Synkronisera... ({{progress}}%)",
+          "syncApplied": "Automatisk synkronisering tillämpas.",
           "timeline": "Undertext tidslinje",
           "timelineHint": "Välj en undertextsignal för att synkronisera den med den aktuella videotiden.",
           "timelineEmpty": "Inga undertexter tillgängliga."
