@@ -19,7 +19,7 @@ const ALIGN_MODEL = process.env.SUBTITLE_ALIGN_MODEL || 'small';
 const ALIGN_CACHE_TTL_SECONDS = 24 * 60 * 60;
 const ALIGN_MAX_BODY_BYTES = 1_500_000;
 const ALIGN_WINDOW_MS = 60_000;
-const ALIGN_CACHE_VERSION = 'v7';
+const ALIGN_CACHE_VERSION = 'v1';
 
 const alignSchema = z.object({
   mediaKey: z.string().trim().min(1).max(300),
