@@ -28,6 +28,7 @@ MAX_OFFSET_MS = 120_000
 ALIGNMENT_STEP_MS = 50
 SPEECH_PADDING_MS = 150
 INTERNAL_TOKEN = os.getenv("ALIGN_INTERNAL_TOKEN", "").strip()
+ASR_ONSET_DELAY_MS = int(os.getenv("ALIGN_ASR_ONSET_DELAY_MS", "0"))
 PROVIDER_AD_RE = re.compile(
     r"(?:https?://|www\.|[\w-]+\.(?:com|net|org)\b|opensubtitles|"
     r"download subtitles|subtitles? for any video|tryray|osdb|"
@@ -555,7 +556,50 @@ def speech_align(
         overlap = sum(item["overlapMs"] for item in matched)
         matched_score = sum(item["score"] for item in matched) / len(matched)
         coverage = overlap / max(total_speech_duration, 1)
-        score = 0.8 * matched_score + 0.2 * min(coverage, 1.0)
+
+        # Count how many dialogue cues fall within the window at this
+        # offset.  An offset that places more subtitle cues in the
+        # analysis window is a stronger signal than one where only a
+        # handful of cues barely fit the window boundary (which is
+        # more likely a coincidental false peak).  Use the ratio of
+        # in-window cues to detected speech segments as a density
+        # bonus – a value > 1 means more cues are available than
+        # speech segments, indicating a dialogue-rich region.
+        cues_visible = 0
+        for _, cue in cues_in_window:
+            shifted_start = cue["startMs"] + delay_ms
+            shifted_end = cue["endMs"] + delay_ms
+            if shifted_end > window.startMs and shifted_start < window_end:
+                cues_visible += 1
+
+        # A higher cues_visible relative to speech segments is a
+        # positive signal: the offset places us in a dialogue-dense
+        # region where the VTT has enough cues to plausibly explain
+        # the observed speech.  Cap at 1.0 but allow lower values to
+        # penalise offsets with suspiciously few in-window cues.
+        cue_density = min(cues_visible / max(len(speech_segments), 1), 1.0)
+
+        # When only a small fraction of the total dialogue cues fall
+        # within the window AND the match rate is very high (nearly
+        # all visible cues were matched), the alignment is likely a
+        # coincidental false peak rather than the true offset.  For
+        # example, if 4 out of 10 dialogue cues happen to fit the
+        # window boundary and all 4 match perfectly, while the correct
+        # offset would place 7+ cues in-window with a looser fit.
+        total_dialogue_cues = len(cues_in_window)
+        match_ratio = len(matched) / max(cues_visible, 1)
+        visibility_ratio = cues_visible / max(total_dialogue_cues, 1)
+        thinness_penalty = 1.0
+        if match_ratio > 0.85 and visibility_ratio < 0.65:
+            # Scale down: the fewer cues visible relative to total,
+            # the stronger the penalty.
+            thinness_penalty = 0.6 + 0.4 * visibility_ratio
+
+        score = (
+            0.7 * matched_score * thinness_penalty
+            + 0.15 * min(coverage, 1.0)
+            + 0.15 * cue_density
+        )
         candidate = {
             "offsetMs": delay_ms,
             "score": score,
@@ -564,6 +608,7 @@ def speech_align(
             "firstCuePosition": matched[0]["cuePosition"],
             "overlapMs": overlap,
             "matches": matched,
+            "cuesVisible": cues_visible,
         }
         candidates.append(candidate)
 
@@ -586,6 +631,7 @@ def speech_align(
             candidate["score"],
             candidate["longestRun"],
             candidate["matchedCueCount"],
+            candidate["cuesVisible"],
             candidate["overlapMs"],
             -abs(candidate["offsetMs"]),
         ),
@@ -649,7 +695,7 @@ def align_cues(
             "reason": "No matching subtitle cues found in the reference windows",
         }
 
-    offsets = [result["offsetMs"] for result in results]
+    offsets = [result["offsetMs"] - ASR_ONSET_DELAY_MS for result in results]
     drift_ms = (
         abs(offsets[0] - offsets[1]) if len(offsets) >= 2 else None
     )

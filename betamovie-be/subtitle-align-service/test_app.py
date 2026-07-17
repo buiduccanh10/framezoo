@@ -57,6 +57,8 @@ except ModuleNotFoundError:
     import app
     from app import align_cues, parse_vtt, speech_align
 
+app.ASR_ONSET_DELAY_MS = 0  # Disable delay offset compensation for clean unit tests
+
 
 def window(start_ms=0, duration_ms=60_000):
     return SimpleNamespace(startMs=start_ms, durationMs=duration_ms)
@@ -628,6 +630,86 @@ Unrelated line two
         result = align_cues(cues, [transcript], [window()])
 
         self.assertEqual(result["confidence"], "rejected")
+
+    def test_sparse_asr_avoids_false_peak_at_window_boundary(self):
+        """When the ASR produces only a few speech segments, a wrong offset
+        can score higher because a small set of cues coincidentally aligns
+        with near-perfect IoU at the window boundary.  The algorithm should
+        prefer the offset that places more dialogue cues in the window
+        (indicating a dialogue-rich region) over one with fewer but
+        perfectly-overlapping cues."""
+        cues = parse_vtt(
+            """\
+WEBVTT
+
+00:00:06.000 --> 00:00:12.074
+Do you want subtitles for any video? tryray.app
+
+00:00:36.870 --> 00:00:39.330
+MỌI NHÂN VẬT, ĐỊA ĐIỂM, TỔ CHỨC
+
+00:00:39.414 --> 00:00:42.041
+KHÁN GIẢ CÂN NHẮC VÌ CẢNH PHIM CÓ THỂ GÂY KHÓ CHỊU.
+
+00:00:49.299 --> 00:00:50.717
+Thằng ranh!
+
+00:00:50.800 --> 00:00:52.302
+Biến đi!
+
+00:00:52.385 --> 00:00:53.887
+Mày giết cô ấy.
+
+00:00:53.970 --> 00:00:54.888
+Mày đang làm gì thế?
+
+00:00:55.388 --> 00:00:57.015
+Mày giết cô ấy.
+
+00:00:57.098 --> 00:00:59.726
+Thằng ranh này cũng có ánh mắt của kẻ giết người đấy.
+
+00:01:01.394 --> 00:01:03.146
+Tự tay anh sẽ xử lý đám rác đó.
+
+00:01:03.230 --> 00:01:05.607
+Cho Do Chul bị kết án mười năm tù
+
+00:01:05.690 --> 00:01:09.027
+vì tội tấn công tình dục và sát hại trẻ vị thành niên
+
+00:01:09.110 --> 00:01:11.488
+sẽ được ra tù từ hôm nay.
+"""
+        )
+        # Four speech segments that coincidentally match cues 9-12 at
+        # offset -30.5s, but the correct offset is ~-24s where cues
+        # 7-10 match the same speech with looser IoU.
+        transcript = [
+            worded_segment(
+                30_900, 32_600, "Korean speech",
+                [(30_900, 32_600, "speech")],
+            ),
+            worded_segment(
+                32_700, 35_100, "Korean speech",
+                [(32_700, 35_100, "speech")],
+            ),
+            worded_segment(
+                35_200, 38_500, "Korean speech",
+                [(35_200, 38_500, "speech")],
+            ),
+            worded_segment(
+                38_600, 41_000, "Korean speech",
+                [(38_600, 41_000, "speech")],
+            ),
+        ]
+
+        result = align_cues(cues, [transcript], [window(30_000)])
+
+        # The correct offset should be around -24s, NOT -30.5s.
+        self.assertNotEqual(result["confidence"], "rejected")
+        self.assertGreaterEqual(result["offsetMs"], -26_000)
+        self.assertLessEqual(result["offsetMs"], -22_000)
 
 
 def cues_to_vtt(cues):
