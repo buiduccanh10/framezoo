@@ -8,6 +8,10 @@ import {
   sanitize,
 } from "@/components/player/utils/captions";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
+import {
+  getAppliedSubtitleSyncOffsetMs,
+  getEffectiveSubtitleDelay,
+} from "@/components/player/utils/subtitleSync";
 import { Transition } from "@/components/utils/Transition";
 import { usePlayerStore } from "@/stores/player/store";
 import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
@@ -158,7 +162,11 @@ export function SubtitleRenderer(props?: {
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
-  const delay = useSubtitleStore((s) => s.delay);
+  const manualDelay = useSubtitleStore((s) => s.delay);
+  const syncOffsetMs = usePlayerStore((s) =>
+    getAppliedSubtitleSyncOffsetMs(s.subtitleSync),
+  );
+  const delay = getEffectiveSubtitleDelay(manualDelay, syncOffsetMs);
 
   const parsedCaptions = useMemo(
     () => (vttData ? parseCanonicalVtt(vttData) : []),
@@ -195,7 +203,11 @@ export function SecondarySubtitleRenderer(props?: {
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
-  const delay = useSubtitleStore((s) => s.delay);
+  const manualDelay = useSubtitleStore((s) => s.delay);
+  const syncOffsetMs = usePlayerStore((s) =>
+    getAppliedSubtitleSyncOffsetMs(s.subtitleSync),
+  );
+  const delay = getEffectiveSubtitleDelay(manualDelay, syncOffsetMs);
 
   const parsedCaptions = useMemo(
     () => (vttData ? parseCanonicalVtt(vttData) : []),

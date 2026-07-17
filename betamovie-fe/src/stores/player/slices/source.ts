@@ -60,6 +60,25 @@ export interface Caption {
   persisted?: boolean;
 }
 
+export type SubtitleSyncStatus =
+  | "idle"
+  | "syncing"
+  | "applied"
+  | "rejected"
+  | "error";
+
+export interface SubtitleSyncState {
+  requestId: number;
+  key: string | null;
+  status: SubtitleSyncStatus;
+  offsetMs: number;
+  confidence: "high" | "medium" | "rejected" | null;
+  matchedCueCount: number;
+  driftMs: number | null;
+  reason: string | null;
+  cached: boolean;
+}
+
 export interface CaptionListItem {
   id: string;
   language: string;
@@ -117,6 +136,7 @@ export interface SourceSlice {
     asTrack: boolean;
     translateTask: TranslateTask | null;
   };
+  subtitleSync: SubtitleSyncState;
   meta: PlayerMeta | null;
   failedSourcesPerMedia: Record<string, string[]>; // mediaKey -> array of failed sourceIds
   failedEmbedsPerMedia: Record<string, Record<string, string[]>>; // mediaKey -> sourceId -> array of failed embedIds
@@ -130,6 +150,15 @@ export interface SourceSlice {
   switchQuality(quality: SourceQuality): void;
   setMeta(meta: PlayerMeta, status?: PlayerStatus): void;
   setCaption(caption: Caption | null): void;
+  beginSubtitleSync(key: string): number;
+  setSubtitleSyncResult(
+    key: string,
+    requestId: number,
+    result: Omit<SubtitleSyncState, "key" | "status" | "requestId"> & {
+      status: SubtitleSyncStatus;
+    },
+  ): void;
+  resetSubtitleSync(): void;
   setSecondaryCaption(caption: Caption | null): void;
   setDualSubEnabled(enabled: boolean): void;
   setSourceId(id: string | null): void;
@@ -318,9 +347,33 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     asTrack: false,
     translateTask: null,
   },
+  subtitleSync: {
+    requestId: 0,
+    key: null,
+    status: "idle",
+    offsetMs: 0,
+    confidence: null,
+    matchedCueCount: 0,
+    driftMs: null,
+    reason: null,
+    cached: false,
+  },
   setSourceId(id) {
     set((s) => {
       s.status = playerStatus.PLAYING;
+      if (s.sourceId !== id) {
+        s.subtitleSync = {
+          requestId: s.subtitleSync.requestId + 1,
+          key: null,
+          status: "idle",
+          offsetMs: 0,
+          confidence: null,
+          matchedCueCount: 0,
+          driftMs: null,
+          reason: null,
+          cached: false,
+        };
+      }
       s.sourceId = id;
       s.embedId = null;
     });
@@ -348,6 +401,17 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (newStatus) s.status = newStatus;
       if (newMediaKey !== oldMediaKey) {
         s.externalSubtitleMediaKey = null;
+        s.subtitleSync = {
+          requestId: s.subtitleSync.requestId + 1,
+          key: null,
+          status: "idle",
+          offsetMs: 0,
+          confidence: null,
+          matchedCueCount: 0,
+          driftMs: null,
+          reason: null,
+          cached: false,
+        };
       }
 
       // Clear failed sources/embeds for the new media when media changes
@@ -373,7 +437,64 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       store.clearTranslateTask();
     }
     set((s) => {
+      if (s.caption.selected?.id !== caption?.id) {
+        s.subtitleSync = {
+          requestId: s.subtitleSync.requestId + 1,
+          key: null,
+          status: "idle",
+          offsetMs: 0,
+          confidence: null,
+          matchedCueCount: 0,
+          driftMs: null,
+          reason: null,
+          cached: false,
+        };
+      }
       s.caption.selected = caption;
+    });
+  },
+  beginSubtitleSync(key) {
+    const requestId = get().subtitleSync.requestId + 1;
+    set((s) => {
+      s.subtitleSync = {
+        requestId,
+        key,
+        status: "syncing",
+        offsetMs: 0,
+        confidence: null,
+        matchedCueCount: 0,
+        driftMs: null,
+        reason: null,
+        cached: false,
+      };
+    });
+    return requestId;
+  },
+  setSubtitleSyncResult(key, requestId, result) {
+    set((s) => {
+      if (s.subtitleSync.key !== key || s.subtitleSync.requestId !== requestId)
+        return;
+      s.subtitleSync = {
+        key,
+        ...result,
+        requestId,
+      };
+    });
+  },
+  resetSubtitleSync() {
+    const requestId = get().subtitleSync.requestId + 1;
+    set((s) => {
+      s.subtitleSync = {
+        requestId,
+        key: null,
+        status: "idle",
+        offsetMs: 0,
+        confidence: null,
+        matchedCueCount: 0,
+        driftMs: null,
+        reason: null,
+        cached: false,
+      };
     });
   },
   setSecondaryCaption(caption) {
@@ -441,6 +562,17 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           };
       s.caption.selected = preservedSelectedCaption;
       s.caption.secondary = preservedSecondaryCaption;
+      s.subtitleSync = {
+        requestId: s.subtitleSync.requestId + 1,
+        key: null,
+        status: "idle",
+        offsetMs: 0,
+        confidence: null,
+        matchedCueCount: 0,
+        driftMs: null,
+        reason: null,
+        cached: false,
+      };
       s.caption.dualSubEnabled =
         !!preservedSelectedCaption &&
         !!preservedSecondaryCaption &&
@@ -617,6 +749,17 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         dualSubEnabled: false,
         asTrack: false,
         translateTask: null,
+      };
+      s.subtitleSync = {
+        requestId: s.subtitleSync.requestId + 1,
+        key: null,
+        status: "idle",
+        offsetMs: 0,
+        confidence: null,
+        matchedCueCount: 0,
+        driftMs: null,
+        reason: null,
+        cached: false,
       };
     });
   },

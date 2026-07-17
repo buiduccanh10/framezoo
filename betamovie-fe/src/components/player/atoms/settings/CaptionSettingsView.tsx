@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import type { TFunction } from "i18next";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -17,8 +18,17 @@ import {
   getCaptionTimelineWindow,
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
+import {
+  getEffectiveSubtitleDelay,
+  getSubtitleSyncCaptionId,
+  getSubtitleSyncKey,
+  getSubtitleSyncMediaKey,
+  requestSubtitleSync,
+  resolveSubtitleSyncSource,
+} from "@/components/player/utils/subtitleSync";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
+import type { SubtitleSyncStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import {
   DEFAULT_SUBTITLE_STYLING,
@@ -521,13 +531,119 @@ export function CaptionSettingsView({
 
   const styling = subtitleStore.styling;
   const overrideCasing = subtitleStore.overrideCasing;
-  const delay = subtitleStore.delay;
+  const manualDelay = subtitleStore.delay;
   const setOverrideCasing = subtitleStore.setOverrideCasing;
   const setDelay = subtitleStore.setDelay;
   const updateStyling = subtitleStore.updateStyling;
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoDuration = usePlayerStore((s) => s.progress.duration);
+  const source = usePlayerStore((s) => s.source);
+  const sourceId = usePlayerStore((s) => s.sourceId);
+  const currentQuality = usePlayerStore((s) => s.currentQuality);
+  const captionList = usePlayerStore((s) => s.captionList);
+  const meta = usePlayerStore((s) => s.meta);
+  const skipSegments = usePlayerStore((s) => s.skipSegments);
+  const subtitleSync = usePlayerStore((s) => s.subtitleSync);
+  const beginSubtitleSync = usePlayerStore((s) => s.beginSubtitleSync);
+  const setSubtitleSyncResult = usePlayerStore((s) => s.setSubtitleSyncResult);
+  const resetSubtitleSync = usePlayerStore((s) => s.resetSubtitleSync);
+  const syncRunRef = useRef(0);
+
+  const subtitleSyncSource = useMemo(
+    () => resolveSubtitleSyncSource(source, currentQuality),
+    [currentQuality, source],
+  );
+  const subtitleSyncKey = useMemo(
+    () =>
+      getSubtitleSyncKey(
+        getSubtitleSyncMediaKey(meta),
+        sourceId,
+        getSubtitleSyncCaptionId(selectedCaption, captionList),
+      ),
+    [captionList, meta, selectedCaption, sourceId],
+  );
+  const syncOffsetMs =
+    subtitleSync.status === "applied" ? subtitleSync.offsetMs : 0;
+  const delay = getEffectiveSubtitleDelay(manualDelay, syncOffsetMs);
+
+  const handleSubtitleSync = useCallback(
+    async (force = false) => {
+      if (
+        !subtitleSyncKey ||
+        !selectedCaption ||
+        !vttData ||
+        !subtitleSyncSource ||
+        !sourceId ||
+        !videoDuration ||
+        subtitleSync.status === "syncing"
+      ) {
+        return;
+      }
+
+      const runId = syncRunRef.current + 1;
+      syncRunRef.current = runId;
+      const requestId = beginSubtitleSync(subtitleSyncKey);
+
+      try {
+        const result = await requestSubtitleSync({
+          mediaKey: getSubtitleSyncMediaKey(meta) as string,
+          sourceId,
+          captionId: selectedCaption.id,
+          sourceType: subtitleSyncSource.type,
+          sourceUrl: subtitleSyncSource.url,
+          sourceHeaders: subtitleSyncSource.headers,
+          subtitleVtt: vttData,
+          videoDurationMs: Math.round(videoDuration * 1000),
+          skipSegments,
+          force,
+        });
+
+        if (syncRunRef.current !== runId) return;
+
+        const rejected = result.confidence === "rejected";
+        setSubtitleSyncResult(subtitleSyncKey, requestId, {
+          status: rejected ? "rejected" : "applied",
+          offsetMs: rejected ? 0 : result.offsetMs,
+          confidence: result.confidence,
+          matchedCueCount: result.matchedCueCount,
+          driftMs: result.driftMs,
+          reason: result.reason ?? null,
+          cached: result.cached ?? false,
+        });
+      } catch (error) {
+        if (syncRunRef.current !== runId) return;
+        setSubtitleSyncResult(subtitleSyncKey, requestId, {
+          status: "error",
+          offsetMs: 0,
+          confidence: null,
+          matchedCueCount: 0,
+          driftMs: null,
+          reason: error instanceof Error ? error.message : null,
+          cached: false,
+        });
+      }
+    },
+    [
+      beginSubtitleSync,
+      meta,
+      selectedCaption,
+      setSubtitleSyncResult,
+      skipSegments,
+      sourceId,
+      subtitleSyncKey,
+      subtitleSyncSource,
+      subtitleSync.status,
+      vttData,
+      videoDuration,
+    ],
+  );
+
+  const handleResetSubtitleSync = useCallback(() => {
+    syncRunRef.current += 1;
+    resetSubtitleSync();
+  }, [resetSubtitleSync]);
 
   useEffect(() => {
     subtitleStore.updateStyling(styling);
@@ -548,9 +664,9 @@ export function CaptionSettingsView({
 
   const handleSelectCue = useCallback(
     (cue: CaptionCueType) => {
-      setDelay(getCaptionDelayForCue(cue, videoTime));
+      setDelay(getCaptionDelayForCue(cue, videoTime) - syncOffsetMs / 1000);
     },
-    [setDelay, videoTime],
+    [setDelay, syncOffsetMs, videoTime],
   );
 
   const handleResetTimeline = useCallback(() => {
@@ -560,6 +676,15 @@ export function CaptionSettingsView({
   const resetSubStyling = () => {
     subtitleStore.updateStyling(DEFAULT_SUBTITLE_STYLING);
   };
+
+  const syncButtonLabel = getSubtitleSyncButtonLabel(t, subtitleSync.status);
+  const canSyncSubtitles =
+    !!subtitleSyncKey &&
+    !!selectedCaption &&
+    !!vttData &&
+    !!subtitleSyncSource &&
+    !!sourceId &&
+    videoDuration > 0;
 
   return (
     <>
@@ -572,6 +697,66 @@ export function CaptionSettingsView({
       </Menu.BackLink>
       <Menu.Section className="space-y-6 pb-5">
         <>
+          <div className="space-y-3 rounded-xl bg-video-context-light bg-opacity-10 p-4">
+            <div>
+              <Menu.FieldTitle>
+                {t(
+                  "player.menus.subtitles.settings.syncTitle",
+                  "Sync subtitles with video",
+                )}
+              </Menu.FieldTitle>
+              <p className="mt-1 text-xs text-video-context-type-secondary">
+                {t(
+                  "player.menus.subtitles.settings.syncHint",
+                  "Analyze a short video window near the beginning. This can take a few minutes.",
+                )}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                className="flex-1 md:flex-none"
+                theme="purple"
+                loading={subtitleSync.status === "syncing"}
+                disabled={!canSyncSubtitles}
+                onClick={() =>
+                  void handleSubtitleSync(
+                    subtitleSync.status !== "idle" &&
+                      subtitleSync.status !== "syncing",
+                  )
+                }
+              >
+                {syncButtonLabel}
+              </Button>
+              {subtitleSync.status !== "idle" ? (
+                <Button
+                  className="flex-1 md:flex-none"
+                  theme="secondary"
+                  disabled={subtitleSync.status === "syncing"}
+                  onClick={handleResetSubtitleSync}
+                >
+                  {t("player.menus.subtitles.settings.resetSync", "Reset sync")}
+                </Button>
+              ) : null}
+            </div>
+            {subtitleSync.status !== "idle" ? (
+              <p
+                className={classNames(
+                  "text-xs",
+                  subtitleSync.status === "applied"
+                    ? "text-video-context-type-accent"
+                    : subtitleSync.status === "syncing"
+                      ? "text-video-context-type-secondary"
+                      : "text-video-context-error",
+                )}
+              >
+                {getSubtitleSyncStatusText(t, subtitleSync.status, {
+                  offsetMs: subtitleSync.offsetMs,
+                  matchedCueCount: subtitleSync.matchedCueCount,
+                  reason: subtitleSync.reason,
+                })}
+              </p>
+            ) : null}
+          </div>
           <SubtitleCueTimeline
             label={t("player.menus.subtitles.settings.timeline")}
             hint={t("player.menus.subtitles.settings.timelineHint")}
@@ -790,5 +975,58 @@ export function CaptionSettingsView({
         </>
       </Menu.Section>
     </>
+  );
+}
+
+function getSubtitleSyncButtonLabel(t: TFunction, status: SubtitleSyncStatus) {
+  if (status === "syncing") {
+    return t("player.menus.subtitles.settings.syncing", "Syncing subtitles...");
+  }
+  if (status === "idle") {
+    return t(
+      "player.menus.subtitles.settings.sync",
+      "Sync subtitles with video",
+    );
+  }
+  return t("player.menus.subtitles.settings.syncAgain", "Sync again");
+}
+
+function getSubtitleSyncStatusText(
+  t: TFunction,
+  status: SubtitleSyncStatus,
+  details: {
+    offsetMs: number;
+    matchedCueCount: number;
+    reason: string | null;
+  },
+) {
+  if (status === "syncing") {
+    return t(
+      "player.menus.subtitles.settings.syncingHint",
+      "Analyzing reference windows...",
+    );
+  }
+  if (status === "applied") {
+    return t("player.menus.subtitles.settings.syncApplied", {
+      defaultValue: `Applied ${details.offsetMs >= 0 ? "+" : ""}${details.offsetMs} ms (${details.matchedCueCount} cues)`,
+      offsetMs: `${details.offsetMs >= 0 ? "+" : ""}${details.offsetMs}`,
+      matchedCueCount: details.matchedCueCount,
+    });
+  }
+  if (status === "rejected") {
+    return (
+      details.reason ||
+      t(
+        "player.menus.subtitles.settings.syncRejected",
+        "Could not verify subtitle timing. Subtitle was not changed.",
+      )
+    );
+  }
+  return (
+    details.reason ||
+    t(
+      "player.menus.subtitles.settings.syncError",
+      "Subtitle sync failed. Subtitle was not changed.",
+    )
   );
 }
