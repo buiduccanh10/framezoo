@@ -812,6 +812,7 @@
           "backlink": "Sottotitoli personalizzati",
           "delay": "Ritardo dei sottotitoli",
           "fixCapitals": "Correggi le maiuscole",
+          "autoSync": "Sincronizzazione automatica dei sottotitoli",
           "syncingProgress": "Sincronizzazione... ({{progress}}%)",
           "syncApplied": "Sincronizzazione automatica applicata.",
           "timeline": "Cronologia dei sottotitoli",

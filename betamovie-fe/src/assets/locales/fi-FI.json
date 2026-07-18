@@ -812,6 +812,7 @@
           "backlink": "Mukautetut tekstitykset",
           "delay": "Tekstityksen viive",
           "fixCapitals": "Korjaa isot kirjaimet",
+          "autoSync": "Tekstitysten automaattinen synkronointi",
           "syncingProgress": "Synkronoidaan... ({{progress}}%)",
           "syncApplied": "Automaattinen synkronointi käytössä.",
           "timeline": "Tekstityksen aikajana",

@@ -812,6 +812,7 @@
           "backlink": "Sous-titres personnalisés",
           "delay": "Délai des sous-titres",
           "fixCapitals": "Correction des majuscules",
+          "autoSync": "Synchronisation automatique des sous-titres",
           "syncingProgress": "Synchronisation... ({{progress}}%)",
           "syncApplied": "Synchronisation automatique appliquée.",
           "timeline": "Chronologie des sous-titres",

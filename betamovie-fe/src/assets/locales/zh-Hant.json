@@ -812,6 +812,7 @@
           "backlink": "自訂字幕",
           "delay": "字幕延遲",
           "fixCapitals": "修復大小寫",
+          "autoSync": "自動同步字幕",
           "syncingProgress": "正在同步... ({{progress}}%)",
           "syncApplied": "已應用自動同步。",
           "timeline": "字幕時間軸",

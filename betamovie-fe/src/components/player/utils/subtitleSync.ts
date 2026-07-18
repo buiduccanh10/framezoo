@@ -126,6 +126,7 @@ export async function requestSubtitleSync(
     credentials: "include",
     headers: getBackendAuthHeaders(`${backendUrl}/api/subtitles/align`, {
       "content-type": "application/json",
+      accept: "text/event-stream",
     }),
     body: JSON.stringify(request),
   });

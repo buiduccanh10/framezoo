@@ -812,6 +812,7 @@
           "backlink": "कस्टम उपशीर्षक",
           "delay": "उपशीर्षक विलंब",
           "fixCapitals": "पूंजीकरण ठीक करें",
+          "autoSync": "ऑटो सिंक उपशीर्षक",
           "syncingProgress": "सिंक हो रहा है... ({{progress}}%)",
           "syncApplied": "ऑटो-सिंक लागू किया गया.",
           "timeline": "उपशीर्षक समयरेखा",

@@ -812,6 +812,7 @@
           "backlink": "Kohandatud subtiitrid",
           "delay": "Subtiitrite viivitus",
           "fixCapitals": "Parandage suurtähtede kasutamine",
+          "autoSync": "Subtiitrite automaatne sünkroonimine",
           "syncingProgress": "Sünkroonimine... ({{progress}}%)",
           "syncApplied": "Automaatne sünkroonimine on rakendatud.",
           "timeline": "Subtiitrite ajaskaala",

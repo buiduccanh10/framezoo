@@ -812,6 +812,7 @@
           "backlink": "Subtítols personalitzats",
           "delay": "Retard dels subtítols",
           "fixCapitals": "Corregir les majúscules",
+          "autoSync": "Sincronització automàtica de subtítols",
           "syncingProgress": "S'està sincronitzant... ({{progress}}%)",
           "syncApplied": "S'ha aplicat la sincronització automàtica.",
           "timeline": "Cronologia dels subtítols",
