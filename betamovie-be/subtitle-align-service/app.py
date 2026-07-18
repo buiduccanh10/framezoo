@@ -35,7 +35,7 @@ MAX_SUBTITLE_BYTES = 1_000_000
 MAX_OFFSET_MS = 120_000
 ALIGNMENT_STEP_MS = 50
 SPEECH_PADDING_MS = 150
-INTERNAL_TOKEN = os.getenv("ALIGN_INTERNAL_TOKEN", "").strip()
+INTERNAL_TOKEN = os.getenv("INTERNAL_API_TOKEN", "").strip()
 ASR_ONSET_DELAY_MS = int(os.getenv("ALIGN_ASR_ONSET_DELAY_MS", "0"))
 PROVIDER_AD_RE = re.compile(
     r"(?:https?://|www\.|[\w-]+\.(?:com|net|org)\b|opensubtitles|"

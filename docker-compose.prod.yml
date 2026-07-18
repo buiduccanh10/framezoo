@@ -59,7 +59,7 @@ services:
       ALIGN_MODEL_DIR: /models
       ALIGN_CPU_THREADS: ${SUBTITLE_ALIGN_CPU_THREADS:-2}
       ALIGN_FFMPEG_TIMEOUT_SECONDS: ${SUBTITLE_ALIGN_FFMPEG_TIMEOUT_SECONDS:-120}
-      ALIGN_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:-}
     volumes:
       - subtitle-align-models:/models
     healthcheck:
