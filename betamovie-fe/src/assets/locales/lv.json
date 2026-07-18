@@ -813,7 +813,7 @@
           "delay": "Subtitru aizkave",
           "fixCapitals": "Labojiet lielo burtu lietojumu",
           "autoSync": "Automātiski sinhronizēt subtitrus",
-          "syncingProgress": "Notiek sinhronizācija... ({{progress}}%)",
+          "syncingProgress": "Notiek sinhronizācija... ({{progress}}%) (šis process var ilgt 2–3 minūtes)",
           "syncApplied": "Lietota automātiskā sinhronizācija.",
           "timeline": "Subtitru laika skala",
           "timelineHint": "Izvēlieties subtitru signālu, lai to sinhronizētu ar pašreizējo video laiku.",

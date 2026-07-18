@@ -813,7 +813,7 @@
           "delay": "Atraso da legenda",
           "fixCapitals": "Corrigir letras maiúsculas",
           "autoSync": "Sincronização automática de legendas",
-          "syncingProgress": "Sincronizando... ({{progress}}%)",
+          "syncingProgress": "Sincronizando... ({{progress}}%) (este processo pode levar de 2 a 3 minutos)",
           "syncApplied": "Sincronização automática aplicada.",
           "timeline": "Linha do tempo das legendas",
           "timelineHint": "Escolha uma sugestão de legenda para sincronizá-la com o horário atual do vídeo.",

@@ -813,7 +813,7 @@
           "delay": "字幕の遅延",
           "fixCapitals": "大文字を修正する",
           "autoSync": "自動同期字幕",
-          "syncingProgress": "同期中... ({{progress}}%)",
+          "syncingProgress": "同期中... ({{progress}}%) (このプロセスには 2 ～ 3 分かかる場合があります)",
           "syncApplied": "自動同期が適用されました。",
           "timeline": "字幕タイムライン",
           "timelineHint": "現在のビデオ時間と同期する字幕キューを選択します。",

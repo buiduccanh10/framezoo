@@ -27,10 +27,19 @@ const GOOGLE_LANG_MAP = {
 };
 
 function parseArgs(argv) {
-  const args = { cmd: "audit", locale: null, write: false };
-  for (const arg of argv) {
+  const args = { cmd: "audit", locale: null, write: false, forceKeys: [] };
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
     if (arg === "audit" || arg === "translate") args.cmd = arg;
     else if (arg.startsWith("--locale=")) args.locale = arg.slice("--locale=".length);
+    else if (arg.startsWith("--force-keys=")) args.forceKeys = arg.slice("--force-keys=".length).split(",").map((k) => k.trim()).filter(Boolean);
+    else if (arg === "--force-keys") {
+      const next = argv[i + 1];
+      if (next && !next.startsWith("--")) {
+        args.forceKeys = next.split(",").map((k) => k.trim()).filter(Boolean);
+        i++;
+      }
+    }
     else if (arg === "--write") args.write = true;
   }
   return args;
@@ -133,10 +142,10 @@ async function translateText(source, targetLang) {
       const translated = data?.[0]?.map((x) => x?.[0] ?? "").join("") ?? "";
       if (translated) return translated;
     } catch {
-      if (attempt < 3) await new Promise((r) => setTimeout(r, 250 * attempt));
+      if (attempt < 3) await new Promise((r) => setTimeout(r, 2000 * attempt));
     }
   }
-  return source;
+  return null;
 }
 
 function localeToGoogle(locale) {
@@ -223,8 +232,18 @@ async function main() {
     const candidates = [];
 
     for (const [k, enVal] of enLeaves.entries()) {
+      const forceTranslate = args.forceKeys.includes(k);
       const cur = leaves.get(k);
-      if (typeof enVal !== "string" || typeof cur !== "string") continue;
+
+      if (typeof enVal !== "string") continue;
+
+      if (forceTranslate) {
+        if (!shouldTranslate(enVal)) continue;
+        candidates.push([k, enVal]);
+        continue;
+      }
+
+      if (typeof cur !== "string") continue;
       if (cur !== enVal) continue;
       if (!shouldTranslate(cur)) continue;
       candidates.push([k, cur]);
@@ -238,14 +257,22 @@ async function main() {
     for (const [k, source] of candidates) {
       const { masked, saved } = maskPlaceholders(source);
       const translated = await translateText(masked, targetLang);
-      const restored = unmaskPlaceholders(translated, saved);
-      setByPath(localeJson, k, restored);
+      
+      if (translated !== null) {
+        const restored = unmaskPlaceholders(translated, saved);
+        setByPath(localeJson, k, restored);
+      } else {
+        console.error(`  - Failed to translate ${k} for ${locale}`);
+      }
 
       done += 1;
       const percent = Math.round((done / candidates.length) * 100);
       if (done % 25 === 0 || done === candidates.length) {
         console.log(`  - ${locale}: ${done}/${candidates.length} (${percent}%)`);
       }
+      
+      // Sleep to avoid rate limit
+      await new Promise(r => setTimeout(r, 1000));
     }
 
     if (args.write) {

@@ -813,7 +813,7 @@
           "delay": "Altyazı gecikmesi",
           "fixCapitals": "Büyük harf kullanımını düzelt",
           "autoSync": "Altyazıları otomatik senkronize et",
-          "syncingProgress": "Senkronize ediliyor... (%{{progress}})",
+          "syncingProgress": "Senkronizasyon yapılıyor... (%{{progress}}) (bu işlem 2-3 dakika sürebilir)",
           "syncApplied": "Otomatik senkronizasyon uygulandı.",
           "timeline": "Altyazı zaman çizelgesi",
           "timelineHint": "Geçerli video zamanıyla senkronize etmek için bir altyazı işareti seçin.",

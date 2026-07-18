@@ -813,7 +813,7 @@
           "delay": "Retardo dos subtítulos",
           "fixCapitals": "Arreglar capitalización",
           "autoSync": "Sincronización automática de subtítulos",
-          "syncingProgress": "Sincronizando... ({{progress}}%)",
+          "syncingProgress": "Sincronizando... ({{progress}}%) (este proceso pode tardar entre 2 e 3 minutos)",
           "syncApplied": "Aplicouse a sincronización automática.",
           "timeline": "Cronoloxía dos subtítulos",
           "timelineHint": "Escolle unha pista de subtítulos para sincronizala coa hora actual do vídeo.",

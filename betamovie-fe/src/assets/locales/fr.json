@@ -813,7 +813,7 @@
           "delay": "Délai des sous-titres",
           "fixCapitals": "Correction des majuscules",
           "autoSync": "Synchronisation automatique des sous-titres",
-          "syncingProgress": "Synchronisation... ({{progress}}%)",
+          "syncingProgress": "Synchronisation... ({{progress}}%) (ce processus peut prendre 2 à 3 minutes)",
           "syncApplied": "Synchronisation automatique appliquée.",
           "timeline": "Chronologie des sous-titres",
           "timelineHint": "Choisissez un repère de sous-titre pour le synchroniser avec l'heure actuelle de la vidéo.",

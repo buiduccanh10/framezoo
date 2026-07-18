@@ -813,7 +813,7 @@
           "delay": "Intârziera subtitlurilor",
           "fixCapitals": "Fixați capitalizația",
           "autoSync": "Sincronizare automată a subtitrărilor",
-          "syncingProgress": "Se sincronizează... ({{progress}}%)",
+          "syncingProgress": "Se sincronizează... ({{progress}}%) (acest proces poate dura 2-3 minute)",
           "syncApplied": "Sincronizarea automată a fost aplicată.",
           "timeline": "Cronologia subtitrarilor",
           "timelineHint": "Alegeți un semnal de subtitrare pentru a-l sincroniza cu ora video curentă.",
