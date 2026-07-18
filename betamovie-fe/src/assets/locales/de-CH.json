@@ -813,7 +813,7 @@
           "delay": "Ontertitelverzögerig",
           "fixCapitals": "Grossschribig korrigiere",
           "autoSync": "Untertitel automatisch synchronisieren",
-          "syncingProgress": "Synchronisierung... ({{progress}}%)",
+          "syncingProgress": "Synchronisierung... ({{progress}}%) (dieser Vorgang kann 2-3 Minuten dauern)",
           "syncApplied": "Automatische Synchronisierung angewendet.",
           "timeline": "Untertitel-Zeitleiste",
           "timelineHint": "Wählen Sie einen Untertitel-Cue, um ihn mit der aktuellen Videozeit zu synchronisieren.",

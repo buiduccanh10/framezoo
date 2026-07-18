@@ -813,7 +813,7 @@
           "delay": "Ondertiteling vertraging",
           "fixCapitals": "Hoofdlettergebruik corrigeren",
           "autoSync": "Ondertitels automatisch synchroniseren",
-          "syncingProgress": "Synchroniseren... ({{progress}}%)",
+          "syncingProgress": "Synchroniseren... ({{progress}}%) (dit proces kan 2-3 minuten duren)",
           "syncApplied": "Automatische synchronisatie toegepast.",
           "timeline": "Tijdlijn van ondertiteling",
           "timelineHint": "Kies een ondertitelcue om deze te synchroniseren met de huidige videotijd.",

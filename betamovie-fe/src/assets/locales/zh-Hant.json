@@ -813,7 +813,7 @@
           "delay": "字幕延遲",
           "fixCapitals": "修復大小寫",
           "autoSync": "自動同步字幕",
-          "syncingProgress": "正在同步... ({{progress}}%)",
+          "syncingProgress": "正在同步... ({{progress}}%)（此過程可能需要 2-3 分鐘）",
           "syncApplied": "已應用自動同步。",
           "timeline": "字幕時間軸",
           "timelineHint": "選擇一個字幕提示以將其與當前視訊時間同步。",

@@ -813,7 +813,7 @@
           "delay": "Độ trễ phụ đề",
           "fixCapitals": "Sửa lỗi viết hoa",
           "autoSync": "Tự động đồng bộ phụ đề",
-          "syncingProgress": "Đang đồng bộ... ({{progress}}%)",
+          "syncingProgress": "Đang đồng bộ hóa... ({{progress}}%) (quá trình này có thể mất 2-3 phút)",
           "syncApplied": "Đã áp dụng tự động đồng bộ.",
           "timeline": "Dòng thời gian phụ đề",
           "timelineHint": "Chọn gợi ý phụ đề để đồng bộ hóa với thời gian video hiện tại.",

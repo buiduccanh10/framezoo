@@ -813,7 +813,7 @@
           "delay": "Undertexts fördrivning",
           "fixCapitals": "Reparera kapitalisering",
           "autoSync": "Autosynkronisera undertexter",
-          "syncingProgress": "Synkronisera... ({{progress}}%)",
+          "syncingProgress": "Synkronisera... ({{progress}}%) (denna process kan ta 2-3 minuter)",
           "syncApplied": "Automatisk synkronisering tillämpas.",
           "timeline": "Undertext tidslinje",
           "timelineHint": "Välj en undertextsignal för att synkronisera den med den aktuella videotiden.",

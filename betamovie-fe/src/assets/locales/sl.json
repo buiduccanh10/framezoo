@@ -813,7 +813,7 @@
           "delay": "Zamik podnapisov",
           "fixCapitals": "Popravi velike začetnice",
           "autoSync": "Samodejna sinhronizacija podnapisov",
-          "syncingProgress": "Sinhronizacija ... ({{progress}}%)",
+          "syncingProgress": "Sinhronizacija ... ({{progress}}%) (ta postopek lahko traja 2-3 minute)",
           "syncApplied": "Uporabljena je samodejna sinhronizacija.",
           "timeline": "Časovnica podnapisov",
           "timelineHint": "Izberite iztočnico za podnapise, da jo sinhronizirate s trenutnim časom videa.",
