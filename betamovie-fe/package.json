@@ -1,7 +1,7 @@
 {
   "packageManager": "pnpm@11.9.0",
   "name": "betamovie-fe",
-  "version": "6.4.1",
+  "version": "6.4.2",
   "private": true,
   "scripts": {
     "dev": "vite",
