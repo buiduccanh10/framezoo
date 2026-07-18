@@ -812,6 +812,9 @@
           "backlink": "Mukautetut tekstitykset",
           "delay": "Tekstityksen viive",
           "fixCapitals": "Korjaa isot kirjaimet",
+          "autoSync": "Tekstitysten automaattinen synkronointi",
+          "syncingProgress": "Synkronoidaan... ({{progress}}%) (prosessi voi kestää 2–3 minuuttia)",
+          "syncApplied": "Automaattinen synkronointi käytössä.",
           "timeline": "Tekstityksen aikajana",
           "timelineHint": "Valitse tekstitysvippi synkronoidaksesi sen nykyisen videoajan kanssa.",
           "timelineEmpty": "Tekstitysvihjeitä ei ole saatavilla."

@@ -812,6 +812,9 @@
           "backlink": "Egyéni feliratok",
           "delay": "Felirat késleltetése",
           "fixCapitals": "Kapitalizáció javítása",
+          "autoSync": "Feliratok automatikus szinkronizálása",
+          "syncingProgress": "Szinkronizálás... ({{progress}}%) (a folyamat 2-3 percig is eltarthat)",
+          "syncApplied": "Automatikus szinkronizálás alkalmazva.",
           "timeline": "Felirat idővonala",
           "timelineHint": "Válasszon egy feliratot, hogy szinkronizálja az aktuális videóidővel.",
           "timelineEmpty": "Nem állnak rendelkezésre feliratok."

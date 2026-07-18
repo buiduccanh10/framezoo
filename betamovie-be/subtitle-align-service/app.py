@@ -1,0 +1,830 @@
+from __future__ import annotations
+
+import html
+import os
+import re
+import statistics
+import subprocess
+import tempfile
+import threading
+import unicodedata
+from difflib import SequenceMatcher
+from typing import Any, Callable
+import json
+import sys
+
+def _log(msg: str) -> None:
+    print(msg, file=sys.stderr, flush=True)
+import queue
+import asyncio
+
+from fastapi import FastAPI, Header, HTTPException
+from fastapi.responses import StreamingResponse
+from faster_whisper import WhisperModel
+from pydantic import BaseModel, Field
+
+
+MODEL_NAME = os.getenv("ALIGN_MODEL", "small")
+MODEL_DIR = os.getenv("ALIGN_MODEL_DIR", "/models")
+CPU_THREADS = max(1, int(os.getenv("ALIGN_CPU_THREADS", "4")))
+FFMPEG_TIMEOUT_SECONDS = max(
+    30, int(os.getenv("ALIGN_FFMPEG_TIMEOUT_SECONDS", "120"))
+)
+MAX_WINDOW_MS = 60_000
+MAX_SUBTITLE_BYTES = 1_000_000
+MAX_OFFSET_MS = 120_000
+ALIGNMENT_STEP_MS = 50
+SPEECH_PADDING_MS = 150
+INTERNAL_TOKEN = os.getenv("INTERNAL_API_TOKEN", "").strip()
+ASR_ONSET_DELAY_MS = int(os.getenv("ALIGN_ASR_ONSET_DELAY_MS", "0"))
+PROVIDER_AD_RE = re.compile(
+    r"(?:https?://|www\.|[\w-]+\.(?:com|net|org)\b|opensubtitles|"
+    r"download subtitles|subtitles? for any video|tryray|osdb|"
+    r"watch online movies|"
+    r"subtitles provided by)",
+    re.IGNORECASE,
+)
+
+app = FastAPI(title="Betamovie Subtitle Align Service", version="1.0.0")
+model_lock = threading.Lock()
+model: WhisperModel | None = None
+
+
+class WindowRequest(BaseModel):
+    startMs: int = Field(ge=0)
+    durationMs: int = Field(gt=0, le=MAX_WINDOW_MS)
+
+
+class AlignRequest(BaseModel):
+    sourceUrl: str = Field(min_length=1, max_length=8192)
+    subtitleVtt: str = Field(min_length=1, max_length=MAX_SUBTITLE_BYTES)
+    windows: list[WindowRequest] = Field(min_length=1, max_length=3)
+
+
+def get_model() -> WhisperModel:
+    global model
+    if model is not None:
+        return model
+
+    with model_lock:
+        if model is None:
+            model = WhisperModel(
+                MODEL_NAME,
+                device="cpu",
+                compute_type="int8",
+                cpu_threads=CPU_THREADS,
+                download_root=MODEL_DIR,
+            )
+    return model
+
+
+def parse_timestamp(raw: str) -> int:
+    value = raw.strip().replace(",", ".")
+    parts = value.split(":")
+    if len(parts) == 2:
+        hours = 0
+        minutes, seconds = parts
+    elif len(parts) == 3:
+        hours, minutes, seconds = parts
+    else:
+        raise ValueError("Invalid subtitle timestamp")
+
+    seconds_value = float(seconds)
+    return round(
+        (int(hours) * 3600 + int(minutes) * 60 + seconds_value) * 1000
+    )
+
+
+TIMING_RE = re.compile(
+    r"^\s*((?:\d+:)?\d{1,2}:\d{2}[.,]\d{3})\s+-->\s+"
+    r"((?:\d+:)?\d{1,2}:\d{2}[.,]\d{3})"
+)
+TAG_RE = re.compile(r"<[^>]+>")
+WHITESPACE_RE = re.compile(r"\s+")
+
+
+def normalize_text(raw: str) -> str:
+    value = html.unescape(raw.replace("\\N", " "))
+    value = TAG_RE.sub(" ", value).casefold()
+    chars = []
+    for char in value:
+        category = unicodedata.category(char)
+        if category.startswith("P") or category.startswith("S"):
+            chars.append(" ")
+        else:
+            chars.append(char)
+    return WHITESPACE_RE.sub(" ", "".join(chars)).strip()
+
+
+def tokenize(raw: str) -> list[str]:
+    return [token for token in normalize_text(raw).split(" ") if token]
+
+
+def parse_vtt(vtt: str) -> list[dict[str, Any]]:
+    cues: list[dict[str, Any]] = []
+    blocks = re.split(r"\r?\n\s*\r?\n", vtt.strip())
+
+    for block in blocks:
+        lines = block.splitlines()
+        timing_index = next(
+            (index for index, line in enumerate(lines) if TIMING_RE.match(line)),
+            None,
+        )
+        if timing_index is None:
+            continue
+
+        match = TIMING_RE.match(lines[timing_index])
+        if not match:
+            continue
+
+        try:
+            start_ms = parse_timestamp(match.group(1))
+            end_ms = parse_timestamp(match.group(2))
+        except ValueError:
+            continue
+
+        raw_text = " ".join(lines[timing_index + 1 :]).strip()
+        text = normalize_text(raw_text)
+        if end_ms <= start_ms or not text:
+            continue
+
+        cues.append(
+            {
+                "startMs": start_ms,
+                "endMs": end_ms,
+                "text": text,
+                "rawText": raw_text,
+                "tokens": text.split(" "),
+            }
+        )
+
+    return sorted(cues, key=lambda cue: (cue["startMs"], cue["endMs"]))
+
+
+def is_hls_url(source_url: str) -> bool:
+    lowered = source_url.lower()
+    return ".m3u8" in lowered or "/api/m3u8-proxy" in lowered
+
+
+def extract_audio(source_url: str, window: WindowRequest) -> bytes:
+    command = ["ffmpeg", "-hide_banner", "-loglevel", "error"]
+    if is_hls_url(source_url):
+        command.extend(
+            [
+                "-protocol_whitelist",
+                "file,http,https,tcp,tls,crypto,data",
+                "-allowed_extensions",
+                "ALL",
+                "-extension_picky",
+                "0",
+                "-f",
+                "hls",
+            ]
+        )
+
+    command.extend(
+        [
+            # Seek before opening the HLS input for speed. ffmpeg's accurate_seek (default) 
+            # will discard the audio before the precise seek point, keeping timestamps aligned.
+            "-ss",
+            f"{window.startMs / 1000:.3f}",
+            "-i",
+            source_url,
+            "-t",
+            f"{window.durationMs / 1000:.3f}",
+            "-vn",
+            "-ac",
+            "1",
+            "-ar",
+            "16000",
+            "-f",
+            "wav",
+            "pipe:1",
+        ]
+    )
+
+    try:
+        result = subprocess.run(
+            command,
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=FFMPEG_TIMEOUT_SECONDS,
+        )
+    except subprocess.TimeoutExpired as error:
+        raise RuntimeError("ffmpeg timed out while extracting subtitle audio") from error
+
+    if result.returncode != 0 or not result.stdout:
+        error = result.stderr.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(f"ffmpeg failed to extract subtitle audio: {error[-500:]}")
+
+    return result.stdout
+
+
+def transcribe_window(source_url: str, window: WindowRequest, progress_callback: Callable[[float], None] | None = None) -> list[dict[str, Any]]:
+    if progress_callback:
+        progress_callback(0.05)
+        
+    audio = extract_audio(source_url, window)
+    
+    if progress_callback:
+        progress_callback(0.4)
+        
+    whisper = get_model()
+
+    with tempfile.NamedTemporaryFile(suffix=".wav") as audio_file:
+        audio_file.write(audio)
+        audio_file.flush()
+        segments, _ = whisper.transcribe(
+            audio_file.name,
+            beam_size=5,
+            word_timestamps=True,
+            vad_filter=True,
+            condition_on_previous_text=False,
+        )
+        output = []
+        for segment in segments:
+            if progress_callback:
+                p = min(1.0, float(segment.end) / (window.durationMs / 1000.0))
+                progress = 0.4 + (p * 0.55)
+                progress_callback(progress)
+
+            text = normalize_text(segment.text or "")
+            if not text:
+                continue
+
+            start_ms = window.startMs + round(max(0.0, float(segment.start)) * 1000)
+            end_ms = window.startMs + round(
+                max(float(segment.start), float(segment.end)) * 1000
+            )
+            words = []
+            for word in segment.words or []:
+                if word.start is None or word.end is None:
+                    continue
+                word_text = normalize_text(word.word or "")
+                if not word_text:
+                    continue
+                word_start_ms = window.startMs + round(max(0.0, float(word.start)) * 1000)
+                word_end_ms = window.startMs + round(
+                    max(float(word.start), float(word.end)) * 1000
+                )
+                if word_end_ms > word_start_ms:
+                    words.append(
+                        {
+                            "startMs": word_start_ms,
+                            "endMs": word_end_ms,
+                            "text": word_text,
+                        }
+                    )
+            output.append(
+                {
+                    "startMs": start_ms,
+                    "endMs": end_ms,
+                    "text": text,
+                    "tokens": text.split(" "),
+                    "words": words,
+                }
+            )
+        if progress_callback:
+            progress_callback(0.95)
+
+    return output
+
+
+def overlap_ms(
+    first_start: int,
+    first_end: int,
+    second_start: int,
+    second_end: int,
+) -> int:
+    return max(0, min(first_end, second_end) - max(first_start, second_start))
+
+
+def median_offset(offsets: list[int]) -> int:
+    return round(statistics.median(offsets))
+
+
+def text_similarity(left: list[str], right: list[str]) -> float:
+    if not left or not right:
+        return 0.0
+
+    left_text = " ".join(left)
+    right_text = " ".join(right)
+    sequence_score = SequenceMatcher(None, left_text, right_text).ratio()
+    left_set = set(left)
+    right_set = set(right)
+    token_score = len(left_set & right_set) / max(len(left_set | right_set), 1)
+    return max(sequence_score, token_score)
+
+
+def text_align(
+    cues: list[dict[str, Any]],
+    transcript: list[dict[str, Any]],
+    window: WindowRequest,
+) -> dict[str, Any] | None:
+    window_end = window.startMs + window.durationMs
+    window_cues = [
+        cue
+        for cue in cues
+        if cue["endMs"] > window.startMs and cue["startMs"] < window_end
+    ]
+    window_segments = [
+        segment
+        for segment in transcript
+        if segment["endMs"] > window.startMs and segment["startMs"] < window_end
+    ]
+    if not window_cues or not window_segments:
+        return None
+
+    matches: list[dict[str, Any]] = []
+    transcript_index = 0
+
+    for cue in window_cues:
+        best: dict[str, Any] | None = None
+        max_end = min(len(window_segments), transcript_index + 4)
+        for start_index in range(transcript_index, max_end):
+            combined_tokens: list[str] = []
+            for end_index in range(start_index, min(len(window_segments), start_index + 3)):
+                combined_tokens.extend(window_segments[end_index]["tokens"])
+                score = text_similarity(cue["tokens"], combined_tokens)
+                candidate = {
+                    "score": score,
+                    "startMs": window_segments[start_index]["startMs"],
+                    "endIndex": end_index,
+                    "tokenCount": len(cue["tokens"]),
+                }
+                if best is None or candidate["score"] > best["score"]:
+                    best = candidate
+
+        if best and best["score"] >= 0.48:
+            matches.append(
+                {
+                    "offsetMs": best["startMs"] - cue["startMs"],
+                    "score": best["score"],
+                    "tokenCount": best["tokenCount"],
+                }
+            )
+            transcript_index = best["endIndex"] + 1
+
+    if not matches:
+        return None
+
+    offsets = [match["offsetMs"] for match in matches]
+    center = median_offset(offsets)
+    inliers = [
+        match
+        for match in matches
+        if abs(match["offsetMs"] - center) <= 600
+    ]
+    matched_tokens = sum(match["tokenCount"] for match in inliers)
+
+    if len(inliers) < 3 and matched_tokens < 8:
+        return None
+
+    score = sum(match["score"] for match in inliers) / len(inliers)
+    confidence = "high" if len(inliers) >= 5 and score >= 0.62 else "medium"
+    return {
+        "offsetMs": center,
+        "score": round(score, 4),
+        "confidence": confidence,
+        "matchedCueCount": len(inliers),
+        "matchedTokens": matched_tokens,
+        "method": "text",
+    }
+
+
+def merge_intervals(intervals: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    merged: list[tuple[int, int]] = []
+    for start, end in sorted(intervals):
+        if end <= start:
+            continue
+        if not merged or start > merged[-1][1]:
+            merged.append((start, end))
+        else:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], end))
+    return merged
+
+def is_non_dialogue_cue(cue: dict[str, Any]) -> bool:
+    text = cue["text"].strip()
+    if PROVIDER_AD_RE.search(text):
+        return True
+
+    raw_text = cue.get("rawText", text).strip()
+    letters = [char for char in raw_text if char.isalpha()]
+    if not letters or not all(char.isupper() for char in letters):
+        return False
+
+    # Ignore likely title cards/disclaimers, but keep uppercase dialogue that
+    # has a spoken sentence ending or an explicit dialogue dash.
+    return not text.startswith(("-", "–")) and not text.endswith(
+        ("!", "?", ".", "…", "。", "！", "？")
+    )
+
+
+def interval_iou(
+    first_start: int,
+    first_end: int,
+    second_start: int,
+    second_end: int,
+) -> float:
+    overlap = overlap_ms(first_start, first_end, second_start, second_end)
+    union = max(first_end, second_end) - min(first_start, second_start)
+    return overlap / max(union, 1)
+
+
+def speech_align(
+    cues: list[dict[str, Any]],
+    transcript: list[dict[str, Any]],
+    window: WindowRequest,
+) -> dict[str, Any] | None:
+    window_end = window.startMs + window.durationMs
+    speech_segments = []
+    speech_intervals = []
+    for segment in transcript:
+        segment_start = max(window.startMs, segment["startMs"])
+        segment_end = min(window_end, segment["endMs"])
+        if segment_end <= segment_start:
+            continue
+
+        speech_segments.append(
+            {
+                "startMs": segment_start,
+                "endMs": segment_end,
+            }
+        )
+
+        words = segment.get("words") or []
+        padded_start = max(
+            window.startMs, segment["startMs"] - SPEECH_PADDING_MS
+        )
+        padded_end = min(window_end, segment["endMs"] + SPEECH_PADDING_MS)
+        segment_duration = max(1, segment["endMs"] - segment["startMs"])
+        word_duration = sum(
+            max(0, word["endMs"] - word["startMs"]) for word in words
+        )
+        word_coverage = word_duration / segment_duration
+
+        if words and word_coverage >= 0.2:
+            speech_intervals.extend(
+                (
+                    max(window.startMs, word["startMs"] - SPEECH_PADDING_MS),
+                    min(window_end, word["endMs"] + SPEECH_PADDING_MS),
+                )
+                for word in words
+                if word["endMs"] > window.startMs and word["startMs"] < window_end
+            )
+        else:
+            speech_intervals.append((padded_start, padded_end))
+
+    speech = merge_intervals(speech_intervals)
+    cues_in_window = [
+        (index, cue)
+        for index, cue in enumerate(cues)
+        if cue["endMs"] > window.startMs - MAX_OFFSET_MS
+        and cue["startMs"] < window_end + MAX_OFFSET_MS
+        and not is_non_dialogue_cue(cue)
+    ]
+    if not speech or not cues_in_window:
+        return None
+
+    if len(speech_segments) < 2:
+        _log(f"[ALIGN] speech_align: only {len(speech_segments)} segment(s), skipping (need ≥2)")
+        return None
+
+    total_speech_duration = sum(end - start for start, end in speech)
+
+    def _score_offset(delay_ms: int) -> dict[str, Any] | None:
+        """Score a single candidate offset."""
+        matched: list[dict[str, Any]] = []
+        cue_cursor = 0
+        for speech_segment in speech_segments:
+            best_match: dict[str, Any] | None = None
+            max_cue_index = min(len(cues_in_window), cue_cursor + 8)
+            speech_start = speech_segment["startMs"]
+            speech_end = speech_segment["endMs"]
+            segment_duration = max(1, speech_end - speech_start)
+
+            for cue_position in range(cue_cursor, max_cue_index):
+                cue_index, cue = cues_in_window[cue_position]
+                start_ms = cue["startMs"] + delay_ms
+                end_ms = cue["endMs"] + delay_ms
+                if end_ms <= window.startMs or start_ms >= window_end:
+                    continue
+
+                cue_duration = max(1, end_ms - start_ms)
+                ov = overlap_ms(start_ms, end_ms, speech_start, speech_end)
+                if ov < max(200, round(segment_duration * 0.15)):
+                    continue
+
+                precision = ov / cue_duration
+                iou = interval_iou(start_ms, end_ms, speech_start, speech_end)
+                
+                # Heavily penalize start time differences. 
+                # Translated subtitles often merge sentences, but the START of the sentence
+                # should align closely with the start of the speech segment.
+                start_diff = abs(start_ms - speech_start)
+                boundary_fit = max(0.0, 1.0 - start_diff / 1500.0)
+                
+                match_score = (
+                    0.2 * iou
+                    + 0.2 * precision
+                    + 0.6 * boundary_fit
+                )
+                candidate = {
+                    "cueIndex": cue_index,
+                    "cuePosition": cue_position,
+                    "cueStartMs": cue["startMs"],
+                    "speechStartMs": speech_start,
+                    "startMs": start_ms,
+                    "endMs": end_ms,
+                    "overlapMs": ov,
+                    "score": match_score,
+                }
+                if best_match is None or candidate["score"] > best_match["score"]:
+                    best_match = candidate
+
+            if best_match is not None:
+                matched.append(best_match)
+                cue_cursor = best_match["cuePosition"] + 1
+
+        if not matched:
+            return None
+
+        # Compute longest consecutive cue run
+        longest_run = 0
+        current_run = 0
+        previous_index: int | None = None
+        for item in matched:
+            if previous_index is not None and item["cueIndex"] == previous_index + 1:
+                current_run += 1
+            else:
+                current_run = 1
+            longest_run = max(longest_run, current_run)
+            previous_index = item["cueIndex"]
+
+        total_overlap = sum(item["overlapMs"] for item in matched)
+        matched_score = sum(item["score"] for item in matched) / len(matched)
+        coverage = total_overlap / max(total_speech_duration, 1)
+
+        # early_anchor_bonus: Strongly prefer offsets that successfully align the VERY FIRST
+        # parts of the spoken dialogue. If a video is a different cut, the offset will
+        # drift later in the video, but Auto Sync should fundamentally anchor the beginning.
+        early_anchor_bonus = 0.0
+        if matched:
+            first_speech_start = matched[0]["speechStartMs"]
+            if first_speech_start < 20000:
+                # Max bonus if it matches the first 2 seconds, decaying to 0 at 20 seconds
+                early_anchor_bonus = max(0.0, 1.0 - (first_speech_start / 20000.0))
+
+        # Simplified scoring: consecutive runs are the strongest signal
+        # for correct alignment, especially with translated subtitles
+        run_bonus = min(longest_run / max(len(speech_segments), 1), 1.0)
+        score = (
+            0.25 * matched_score
+            + 0.15 * min(coverage, 1.0)
+            + 0.35 * run_bonus
+            + 0.25 * early_anchor_bonus
+        )
+
+        return {
+            "offsetMs": delay_ms,
+            "score": score,
+            "matchedCueCount": len(matched),
+            "longestRun": longest_run,
+            "firstCuePosition": matched[0]["cuePosition"],
+            "overlapMs": total_overlap,
+            "matches": matched,
+        }
+
+    # === Pass 1: Coarse scan (200ms steps) ===
+    coarse_step = 200
+    coarse_candidates: list[dict[str, Any]] = []
+    for delay_ms in range(-MAX_OFFSET_MS, MAX_OFFSET_MS + 1, coarse_step):
+        result = _score_offset(delay_ms)
+        if result and result["matchedCueCount"] >= 2:
+            coarse_candidates.append(result)
+
+    if not coarse_candidates:
+        return None
+
+    # Sort by score descending, take top-10 for refinement
+    coarse_candidates.sort(
+        key=lambda c: (c["score"], c["longestRun"], c["matchedCueCount"]),
+        reverse=True,
+    )
+    top_candidates = coarse_candidates[:10]
+
+    # === Pass 2: Fine scan (10ms steps) around top candidates ===
+    fine_step = 10
+    search_radius = 200
+    all_candidates: list[dict[str, Any]] = []
+    
+    seen_offsets: set[int] = set()
+    for coarse in top_candidates:
+        base_offset = coarse["offsetMs"]
+        for delay_ms in range(base_offset - search_radius, base_offset + search_radius + 1, fine_step):
+            if delay_ms in seen_offsets:
+                continue
+            seen_offsets.add(delay_ms)
+            if abs(delay_ms) > MAX_OFFSET_MS:
+                continue
+            result = _score_offset(delay_ms)
+            if result and result["matchedCueCount"] >= 2:
+                all_candidates.append(result)
+
+    if not all_candidates:
+        return None
+
+    # Final ranking: prioritize score (which now includes early anchor bonus), then longest run
+    all_candidates.sort(
+        key=lambda c: (
+            c["score"],
+            c["longestRun"],
+            c["matchedCueCount"],
+            c["overlapMs"],
+            -abs(c["offsetMs"]),
+        ),
+        reverse=True,
+    )
+    best = all_candidates[0]
+
+    return {
+        "offsetMs": median_offset(
+            [
+                item["speechStartMs"] - item["cueStartMs"]
+                for item in best.get("matches", [])
+            ]
+        )
+        if best.get("matches")
+        else best["offsetMs"],
+        "score": round(best["score"], 4),
+        "confidence": "medium",
+        "matchedCueCount": best["matchedCueCount"],
+        "matchedTokens": 0,
+        "method": "speech",
+        "matchedCueStartsMs": [
+            item["cueStartMs"] for item in best.get("matches", [])
+        ],
+    }
+
+
+def align_window(
+    cues: list[dict[str, Any]],
+    transcript: list[dict[str, Any]],
+    window: WindowRequest,
+) -> dict[str, Any] | None:
+    _log(f"[ALIGN] Window: startMs={window.startMs}, durationMs={window.durationMs}")
+    _log(f"[ALIGN] Transcript segments: {len(transcript)}")
+    for i, seg in enumerate(transcript[:10]):
+        _log(f"  ASR[{i}]: {seg['startMs']}ms-{seg['endMs']}ms text='{seg.get('text', '')[:60]}'")
+    _log(f"[ALIGN] Subtitle cues: {len(cues)}")
+    for i, cue in enumerate(cues[:15]):
+        _log(f"  CUE[{i}]: {cue['startMs']}ms-{cue['endMs']}ms text='{cue.get('text', '')[:60]}'")
+
+    text_result = text_align(cues, transcript, window)
+    if text_result:
+        _log(f"[ALIGN] text_align result: offsetMs={text_result['offsetMs']}, score={text_result['score']}, method={text_result['method']}")
+        return text_result
+    _log("[ALIGN] text_align returned None, trying speech_align...")
+
+    speech_result = speech_align(cues, transcript, window)
+    if speech_result:
+        _log(f"[ALIGN] speech_align result: offsetMs={speech_result['offsetMs']}, score={speech_result['score']}, matchedCueCount={speech_result['matchedCueCount']}, matchedCueStartsMs={speech_result.get('matchedCueStartsMs', [])}")
+    else:
+        _log("[ALIGN] speech_align returned None")
+    return speech_result
+
+
+class VirtualWindow:
+    def __init__(self, startMs: int, durationMs: int):
+        self.startMs = startMs
+        self.durationMs = durationMs
+
+def align_cues(
+    cues: list[dict[str, Any]],
+    transcripts: list[list[dict[str, Any]]],
+    windows: list[WindowRequest],
+) -> dict[str, Any]:
+    if not windows or not transcripts:
+        return {
+            "offsetMs": 0,
+            "windowOffsetsMs": [],
+            "driftMs": None,
+            "confidence": "rejected",
+            "matchedCueCount": 0,
+            "scores": [],
+            "methods": [],
+            "reason": "No windows provided",
+        }
+
+    merged_transcript = []
+    for t in transcripts:
+        merged_transcript.extend(t)
+
+    min_start = min(w.startMs for w in windows)
+    max_end = max(w.startMs + w.durationMs for w in windows)
+    v_window = VirtualWindow(min_start, max_end - min_start)
+
+    result = align_window(cues, merged_transcript, v_window)  # type: ignore
+
+    if not result:
+        return {
+            "offsetMs": 0,
+            "windowOffsetsMs": [],
+            "driftMs": None,
+            "confidence": "rejected",
+            "matchedCueCount": 0,
+            "scores": [],
+            "methods": [],
+            "reason": "No matching subtitle cues found in the combined reference windows",
+        }
+
+    offset = result["offsetMs"] - ASR_ONSET_DELAY_MS
+    return {
+        "offsetMs": offset,
+        "windowOffsetsMs": [offset],
+        "driftMs": 0,
+        "confidence": result["confidence"],
+        "matchedCueCount": result["matchedCueCount"],
+        "scores": [result["score"]],
+        "methods": [result["method"]],
+    }
+
+
+@app.on_event("startup")
+def load_model() -> None:
+    get_model()
+
+
+@app.get("/health")
+def health() -> dict[str, Any]:
+    return {
+        "ok": True,
+        "model": MODEL_NAME,
+        "device": "cpu",
+        "computeType": "int8",
+        "ready": model is not None,
+    }
+
+
+@app.post("/v1/transcribe-windows")
+async def transcribe_windows(
+    payload: AlignRequest,
+    internal_token: str | None = Header(default=None, alias="x-internal-token"),
+):
+    if INTERNAL_TOKEN and internal_token != INTERNAL_TOKEN:
+        raise HTTPException(status_code=401, detail="Invalid internal token")
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = asyncio.get_event_loop()
+
+    q = asyncio.Queue()
+
+    def worker():
+        try:
+            cues = parse_vtt(payload.subtitleVtt)
+            transcripts = []
+            total_duration = sum(window.durationMs for window in payload.windows)
+            processed_duration = 0.0
+
+            for window in payload.windows:
+                def callback(progress: float):
+                    current = processed_duration + (progress * window.durationMs)
+                    percent = min(99, int((current / max(1, total_duration)) * 100))
+                    loop.call_soon_threadsafe(q.put_nowait, {"type": "progress", "percent": percent})
+
+                transcript = transcribe_window(payload.sourceUrl, window, callback)
+                transcripts.append(transcript)
+                processed_duration += window.durationMs
+
+            result = align_cues(cues, transcripts, payload.windows)
+            final_result = {
+                **result,
+                "windows": [
+                    {
+                        "startMs": window.startMs,
+                        "durationMs": window.durationMs,
+                    }
+                    for window in payload.windows
+                ],
+                "model": MODEL_NAME,
+            }
+            loop.call_soon_threadsafe(q.put_nowait, {"type": "result", "data": final_result})
+        except Exception as error:
+            loop.call_soon_threadsafe(q.put_nowait, {"type": "error", "error": str(error)[-500:]})
+        finally:
+            loop.call_soon_threadsafe(q.put_nowait, None)
+
+    t = threading.Thread(target=worker)
+    t.start()
+
+    async def generate():
+        while True:
+            msg = await q.get()
+            if msg is None:
+                break
+            yield f"data: {json.dumps(msg)}\n\n"
+
+    return StreamingResponse(generate(), media_type="text/event-stream")

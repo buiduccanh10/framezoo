@@ -812,6 +812,9 @@
           "backlink": "Kohandatud subtiitrid",
           "delay": "Subtiitrite viivitus",
           "fixCapitals": "Parandage suurtähtede kasutamine",
+          "autoSync": "Subtiitrite automaatne sünkroonimine",
+          "syncingProgress": "Sünkroonimine... ({{progress}}%) (see protsess võib võtta 2–3 minutit)",
+          "syncApplied": "Automaatne sünkroonimine on rakendatud.",
           "timeline": "Subtiitrite ajaskaala",
           "timelineHint": "Valige subtiitrite vihje, et sünkroonida see praeguse video ajaga.",
           "timelineEmpty": "Subtiitrite vihjeid pole saadaval."

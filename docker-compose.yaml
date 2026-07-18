@@ -52,6 +52,28 @@ services:
     networks:
       - betamovie-network
 
+  subtitle-align-service:
+    build:
+      context: ./betamovie-be/subtitle-align-service
+    restart: unless-stopped
+    environment:
+      PORT: 3200
+      ALIGN_MODEL: ${SUBTITLE_ALIGN_MODEL:-medium}
+      ALIGN_MODEL_DIR: /models
+      ALIGN_CPU_THREADS: ${SUBTITLE_ALIGN_CPU_THREADS:-2}
+      ALIGN_FFMPEG_TIMEOUT_SECONDS: ${SUBTITLE_ALIGN_FFMPEG_TIMEOUT_SECONDS:-120}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:-}
+      ALIGN_ASR_ONSET_DELAY_MS: ${ALIGN_ASR_ONSET_DELAY_MS:--300}
+    volumes:
+      - subtitle-align-models:/models
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:3200/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+    networks:
+      - betamovie-network
+
   betamovie-be:
     build:
       context: .
@@ -74,6 +96,14 @@ services:
       PREVIEW_SERVICE_TIMEOUT_MS: ${PREVIEW_SERVICE_TIMEOUT_MS:-300000}
       PREVIEW_SERVICE_URL: http://preview-service:3100
       PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
+      SUBTITLE_ALIGN_ENABLED: ${SUBTITLE_ALIGN_ENABLED:-true}
+      SUBTITLE_ALIGN_SERVICE_URL: http://subtitle-align-service:3200
+      SUBTITLE_ALIGN_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
+      SUBTITLE_ALIGN_SERVICE_TIMEOUT_MS: ${SUBTITLE_ALIGN_SERVICE_TIMEOUT_MS:-180000}
+      SUBTITLE_ALIGN_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
+      SUBTITLE_ALIGN_MODEL: ${SUBTITLE_ALIGN_MODEL:-small}
+      SUBTITLE_ALIGN_RATE_LIMIT_WINDOW_MS: ${SUBTITLE_ALIGN_RATE_LIMIT_WINDOW_MS:-60000}
+      SUBTITLE_ALIGN_RATE_LIMIT_MAX_REQUESTS: ${SUBTITLE_ALIGN_RATE_LIMIT_MAX_REQUESTS:-10}
     ports:
       - "3000:3000"
     volumes:
@@ -84,6 +114,8 @@ services:
       redis:
         condition: service_started
       preview-service:
+        condition: service_started
+      subtitle-align-service:
         condition: service_started
     networks:
       - betamovie-network
@@ -132,5 +164,6 @@ volumes:
   postgres-data:
   redis-data:
   preview-data:
+  subtitle-align-models:
   downloads-data:
     name: betamovie_downloads-data

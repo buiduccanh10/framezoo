@@ -812,6 +812,9 @@
           "backlink": "Eigene Untertitel",
           "delay": "Untertitelverzögerung",
           "fixCapitals": "Großschreibung korrigieren",
+          "autoSync": "Untertitel automatisch synchronisieren",
+          "syncingProgress": "Synchronisierung... ({{progress}}%) (dieser Vorgang kann 2-3 Minuten dauern)",
+          "syncApplied": "Automatische Synchronisierung angewendet.",
           "timeline": "Untertitel-Zeitleiste",
           "timelineHint": "Wählen Sie einen Untertitel-Cue, um ihn mit der aktuellen Videozeit zu synchronisieren.",
           "timelineEmpty": "Keine Untertitelhinweise verfügbar."

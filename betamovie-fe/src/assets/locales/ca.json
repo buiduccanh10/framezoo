@@ -812,6 +812,9 @@
           "backlink": "Subtítols personalitzats",
           "delay": "Retard dels subtítols",
           "fixCapitals": "Corregeix les majúscules/minúscules",
+          "autoSync": "Sincronització automàtica de subtítols",
+          "syncingProgress": "S'està sincronitzant... ({{progress}}%) (aquest procés pot trigar entre 2 i 3 minuts)",
+          "syncApplied": "S'ha aplicat la sincronització automàtica.",
           "timeline": "Cronologia dels subtítols",
           "timelineHint": "Trieu una indicació de subtítols per sincronitzar-la amb l'hora del vídeo actual.",
           "timelineEmpty": "No hi ha cap indicació de subtítols disponible."

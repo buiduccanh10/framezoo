@@ -812,6 +812,9 @@
           "backlink": "Sérsniðir textar",
           "delay": "Texta seinkun",
           "fixCapitals": "Lagaðu hástafi",
+          "autoSync": "Sjálfvirk samstilling texta",
+          "syncingProgress": "Samstillir... ({{progress}}%) (þetta ferli getur tekið 2-3 mínútur)",
+          "syncApplied": "Sjálfvirk samstilling beitt.",
           "timeline": "Tímalína texta",
           "timelineHint": "Veldu textamerki til að samstilla hann við núverandi myndbandstíma.",
           "timelineEmpty": "Engar vísbendingar um texta tiltækar."

@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import type { TFunction } from "i18next";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -6,6 +7,7 @@ import { Button } from "@/components/buttons/Button";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Dropdown } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
+import { Progress } from "@/components/layout/Progress";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import {
   type CaptionCueType,
@@ -17,8 +19,17 @@ import {
   getCaptionTimelineWindow,
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
+import {
+  getEffectiveSubtitleDelay,
+  getSubtitleSyncCaptionId,
+  getSubtitleSyncKey,
+  getSubtitleSyncMediaKey,
+  requestSubtitleSync,
+  resolveSubtitleSyncSource,
+} from "@/components/player/utils/subtitleSync";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
+import type { SubtitleSyncStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import {
   DEFAULT_SUBTITLE_STYLING,
@@ -65,7 +76,12 @@ export function SubtitleCueTimeline(props: {
   videoTime: number;
   onSelectCue: (cue: CaptionCueType) => void;
   onReset: () => void;
+  syncStatus?: SubtitleSyncStatus;
+  syncProgress?: number;
+  canSync?: boolean;
+  onToggleSync?: () => void;
 }) {
+  const { t } = useTranslation();
   const activeIndex = useMemo(
     () => getCaptionTimelineIndex(props.cues, props.delay, props.videoTime),
     [props.cues, props.delay, props.videoTime],
@@ -201,10 +217,37 @@ export function SubtitleCueTimeline(props: {
   if (props.cues.length === 0) {
     return (
       <div>
-        <Menu.FieldTitle>{props.label}</Menu.FieldTitle>
-        <p className="mt-1 text-xs text-video-context-type-secondary">
-          {props.hint}
-        </p>
+        <div className="flex justify-between items-start">
+          <div>
+            <Menu.FieldTitle>{props.label}</Menu.FieldTitle>
+            <p className="mt-1 text-xs text-video-context-type-secondary">
+              {props.hint}
+            </p>
+          </div>
+          {props.onToggleSync ? (
+            <button
+              type="button"
+              data-testid="subtitle-sync-toggle"
+              title={t("player.menus.subtitles.settings.autoSync")}
+              className={classNames(
+                "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 transition-colors disabled:opacity-50",
+                props.syncStatus === "applied"
+                  ? "text-video-context-type-accent bg-opacity-20 hover:bg-opacity-30"
+                  : props.syncStatus === "syncing"
+                    ? "text-video-context-type-primary animate-pulse cursor-wait"
+                    : "text-video-context-type-primary hover:bg-opacity-20",
+              )}
+              onClick={props.onToggleSync}
+              disabled={
+                !props.canSync &&
+                props.syncStatus !== "applied" &&
+                props.syncStatus !== "syncing"
+              }
+            >
+              <Icon icon={Icons.WAND} />
+            </button>
+          ) : null}
+        </div>
         <div className="mt-3 rounded-lg bg-video-context-light bg-opacity-10 px-3 py-4 text-center text-sm text-video-context-type-secondary">
           {props.emptyLabel}
         </div>
@@ -214,97 +257,148 @@ export function SubtitleCueTimeline(props: {
 
   return (
     <div>
-      <Menu.FieldTitle>{props.label}</Menu.FieldTitle>
-      <p className="mt-1 text-xs text-video-context-type-secondary">
-        {props.hint}
-      </p>
-
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          data-testid="subtitle-cue-previous"
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
-          onClick={() => handleNav(-1)}
-          disabled={activeIndex === null || activeIndex <= 0}
-        >
-          <Icon icon={Icons.CHEVRON_LEFT} />
-        </button>
-
-        {/* Viewport — only shows VISIBLE_CUE_COUNT markers */}
-        <div
-          role="group"
-          tabIndex={0}
-          aria-label={props.label}
-          onKeyDown={handleKeyDown}
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerCancel}
-          onWheel={handleWheel}
-          className="relative h-14 flex-1 touch-none select-none overflow-hidden cursor-grab outline-none active:cursor-grabbing"
-        >
-          {/* Background track line */}
-          <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-video-context-slider bg-opacity-25" />
-
-          {/* Markers — each positioned relative to activeIndex at center */}
-          {props.cues.slice(renderStart, renderEnd).map((cue, i) => {
-            const cueIndex = renderStart + i;
-            const isActive = cueIndex === activeIndex;
-            const plainText = captionPlainText(cue.content);
-            // activeIndex sits at 50%, each step is 100/VISIBLE_CUE_COUNT wide
-            const offset = cueIndex - (activeIndex ?? 0);
-            const left = 50 + offset * (100 / VISIBLE_CUE_COUNT);
-
-            return (
-              <button
-                key={`cue-${cueIndex}`}
-                type="button"
-                data-testid={`subtitle-cue-marker-${cueIndex}`}
-                title={plainText}
-                aria-label={plainText}
-                aria-current={isActive ? "true" : undefined}
-                onClick={() => handleSelectCueAtIndex(cueIndex)}
-                className="absolute top-1/2 flex h-10 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-[left] duration-300 ease-in-out"
-                style={{ left: `${left}%` }}
-              >
-                <span
-                  className={classNames(
-                    "h-6 rounded-full transition-all duration-150",
-                    isActive
-                      ? "w-1.5 bg-video-context-sliderFilled"
-                      : "w-1 bg-video-context-slider",
-                  )}
-                />
-              </button>
-            );
-          })}
+      <div className="flex justify-between items-start">
+        <div>
+          <Menu.FieldTitle>{props.label}</Menu.FieldTitle>
+          <p className="mt-1 text-xs text-video-context-type-secondary">
+            {props.hint}
+          </p>
         </div>
-
-        <button
-          type="button"
-          data-testid="subtitle-cue-next"
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
-          onClick={() => handleNav(1)}
-          disabled={
-            activeIndex === null || activeIndex >= props.cues.length - 1
-          }
-        >
-          <Icon icon={Icons.CHEVRON_RIGHT} />
-        </button>
-
-        <button
-          type="button"
-          data-testid="subtitle-cue-reset"
-          aria-label={props.label}
-          title={props.label}
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
-          onClick={handleReset}
-          disabled={props.delay === 0}
-        >
-          <Icon icon={Icons.RELOAD} />
-        </button>
+        {props.onToggleSync ? (
+          <button
+            type="button"
+            data-testid="subtitle-sync-toggle"
+            title={t("player.menus.subtitles.settings.autoSync")}
+            className={classNames(
+              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 transition-colors disabled:opacity-50",
+              props.syncStatus === "applied"
+                ? "text-video-context-type-accent bg-opacity-20 hover:bg-opacity-30"
+                : props.syncStatus === "syncing"
+                  ? "text-video-context-type-primary animate-pulse cursor-wait"
+                  : "text-video-context-type-primary hover:bg-opacity-20",
+            )}
+            onClick={props.onToggleSync}
+            disabled={
+              !props.canSync &&
+              props.syncStatus !== "applied" &&
+              props.syncStatus !== "syncing"
+            }
+          >
+            <Icon icon={Icons.WAND} />
+          </button>
+        ) : null}
       </div>
 
-      <div className="rounded-xl bg-video-context-light bg-opacity-10 p-3 text-center">
+      {props.syncStatus === "syncing" ? (
+        <div className="my-4 space-y-2">
+          <div className="flex justify-between text-xs text-video-context-type-secondary">
+            <span>
+              {t("player.menus.subtitles.settings.syncingProgress", {
+                progress: props.syncProgress ?? 0,
+              })}
+            </span>
+          </div>
+          <Progress
+            progress={props.syncProgress ?? 0}
+            className="bg-video-context-slider bg-opacity-25"
+            indicatorClassName="bg-video-context-sliderFilled"
+          />
+        </div>
+      ) : props.syncStatus === "applied" ? null : (
+        <div className="flex items-center gap-2 mt-3">
+          <button
+            type="button"
+            data-testid="subtitle-cue-previous"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
+            onClick={() => handleNav(-1)}
+            disabled={activeIndex === null || activeIndex <= 0}
+          >
+            <Icon icon={Icons.CHEVRON_LEFT} />
+          </button>
+
+          {/* Viewport — only shows VISIBLE_CUE_COUNT markers */}
+          <div
+            role="group"
+            tabIndex={0}
+            aria-label={props.label}
+            onKeyDown={handleKeyDown}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
+            onWheel={handleWheel}
+            className="relative h-14 flex-1 touch-none select-none overflow-hidden cursor-grab outline-none active:cursor-grabbing"
+          >
+            {/* Background track line */}
+            <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-video-context-slider bg-opacity-25" />
+
+            {/* Markers — each positioned relative to activeIndex at center */}
+            {props.cues.slice(renderStart, renderEnd).map((cue, i) => {
+              const cueIndex = renderStart + i;
+              const isActive = cueIndex === activeIndex;
+              const plainText = captionPlainText(cue.content);
+              // activeIndex sits at 50%, each step is 100/VISIBLE_CUE_COUNT wide
+              const offset = cueIndex - (activeIndex ?? 0);
+              const left = 50 + offset * (100 / VISIBLE_CUE_COUNT);
+
+              return (
+                <button
+                  key={`cue-${cueIndex}`}
+                  type="button"
+                  data-testid={`subtitle-cue-marker-${cueIndex}`}
+                  title={plainText}
+                  aria-label={plainText}
+                  aria-current={isActive ? "true" : undefined}
+                  onClick={() => handleSelectCueAtIndex(cueIndex)}
+                  className="absolute top-1/2 flex h-10 w-3 -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-[left] duration-300 ease-in-out"
+                  style={{ left: `${left}%` }}
+                >
+                  <span
+                    className={classNames(
+                      "h-6 rounded-full transition-all duration-150",
+                      isActive
+                        ? "w-1.5 bg-video-context-sliderFilled"
+                        : "w-1 bg-video-context-slider",
+                    )}
+                  />
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            type="button"
+            data-testid="subtitle-cue-next"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
+            onClick={() => handleNav(1)}
+            disabled={
+              activeIndex === null || activeIndex >= props.cues.length - 1
+            }
+          >
+            <Icon icon={Icons.CHEVRON_RIGHT} />
+          </button>
+
+          <button
+            type="button"
+            data-testid="subtitle-cue-reset"
+            aria-label={props.label}
+            title={props.label}
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 text-video-context-type-primary transition-colors hover:bg-opacity-20 disabled:opacity-50"
+            onClick={handleReset}
+            disabled={props.delay === 0}
+          >
+            <Icon icon={Icons.RELOAD} />
+          </button>
+        </div>
+      )}
+
+      <div
+        className={classNames(
+          "rounded-xl bg-video-context-light bg-opacity-10 p-3 text-center",
+          props.syncStatus !== "syncing" && props.syncStatus !== "applied"
+            ? "mt-3"
+            : "",
+        )}
+      >
         {previewCue ? (
           <div
             data-testid="subtitle-cue-preview-time"
@@ -521,13 +615,131 @@ export function CaptionSettingsView({
 
   const styling = subtitleStore.styling;
   const overrideCasing = subtitleStore.overrideCasing;
-  const delay = subtitleStore.delay;
+  const manualDelay = subtitleStore.delay;
   const setOverrideCasing = subtitleStore.setOverrideCasing;
   const setDelay = subtitleStore.setDelay;
   const updateStyling = subtitleStore.updateStyling;
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoDuration = usePlayerStore((s) => s.progress.duration);
+  const source = usePlayerStore((s) => s.source);
+  const sourceId = usePlayerStore((s) => s.sourceId);
+  const currentQuality = usePlayerStore((s) => s.currentQuality);
+  const captionList = usePlayerStore((s) => s.captionList);
+  const meta = usePlayerStore((s) => s.meta);
+  const skipSegments = usePlayerStore((s) => s.skipSegments);
+  const subtitleSync = usePlayerStore((s) => s.subtitleSync);
+  const beginSubtitleSync = usePlayerStore((s) => s.beginSubtitleSync);
+  const setSubtitleSyncResult = usePlayerStore((s) => s.setSubtitleSyncResult);
+  const setSubtitleSyncProgress = usePlayerStore(
+    (s) => s.setSubtitleSyncProgress,
+  );
+  const resetSubtitleSync = usePlayerStore((s) => s.resetSubtitleSync);
+  const syncRunRef = useRef(0);
+
+  const subtitleSyncSource = useMemo(
+    () => resolveSubtitleSyncSource(source, currentQuality),
+    [currentQuality, source],
+  );
+  const subtitleSyncKey = useMemo(
+    () =>
+      getSubtitleSyncKey(
+        getSubtitleSyncMediaKey(meta),
+        sourceId,
+        getSubtitleSyncCaptionId(selectedCaption, captionList),
+      ),
+    [captionList, meta, selectedCaption, sourceId],
+  );
+  const syncOffsetMs =
+    subtitleSync.status === "applied" ? subtitleSync.offsetMs : 0;
+  const delay = getEffectiveSubtitleDelay(manualDelay, syncOffsetMs);
+  const syncProgress = subtitleSync.progress;
+
+  const handleSubtitleSync = useCallback(
+    async (force = false) => {
+      if (
+        !subtitleSyncKey ||
+        !selectedCaption ||
+        !vttData ||
+        !subtitleSyncSource ||
+        !sourceId ||
+        !videoDuration ||
+        subtitleSync.status === "syncing"
+      ) {
+        return;
+      }
+
+      const runId = syncRunRef.current + 1;
+      syncRunRef.current = runId;
+      const requestId = beginSubtitleSync(subtitleSyncKey);
+
+      try {
+        const result = await requestSubtitleSync(
+          {
+            mediaKey: getSubtitleSyncMediaKey(meta) as string,
+            sourceId,
+            captionId: selectedCaption.id,
+            sourceType: subtitleSyncSource.type,
+            sourceUrl: subtitleSyncSource.url,
+            sourceHeaders: subtitleSyncSource.headers,
+            subtitleVtt: vttData,
+            videoDurationMs: Math.round(videoDuration * 1000),
+            skipSegments,
+            force,
+          },
+          (percent) => {
+            if (syncRunRef.current === runId) {
+              setSubtitleSyncProgress(subtitleSyncKey, requestId, percent);
+            }
+          },
+        );
+
+        if (syncRunRef.current !== runId) return;
+
+        const rejected = result.confidence === "rejected";
+        setSubtitleSyncResult(subtitleSyncKey, requestId, {
+          status: rejected ? "rejected" : "applied",
+          offsetMs: rejected ? 0 : result.offsetMs,
+          confidence: result.confidence,
+          matchedCueCount: result.matchedCueCount,
+          driftMs: result.driftMs,
+          reason: result.reason ?? null,
+          cached: result.cached ?? false,
+        });
+      } catch (error) {
+        if (syncRunRef.current !== runId) return;
+        setSubtitleSyncResult(subtitleSyncKey, requestId, {
+          status: "error",
+          offsetMs: 0,
+          confidence: null,
+          matchedCueCount: 0,
+          driftMs: null,
+          reason: error instanceof Error ? error.message : null,
+          cached: false,
+        });
+      }
+    },
+    [
+      beginSubtitleSync,
+      meta,
+      selectedCaption,
+      setSubtitleSyncResult,
+      setSubtitleSyncProgress,
+      skipSegments,
+      sourceId,
+      subtitleSyncKey,
+      subtitleSyncSource,
+      subtitleSync.status,
+      vttData,
+      videoDuration,
+    ],
+  );
+
+  const handleResetSubtitleSync = useCallback(() => {
+    syncRunRef.current += 1;
+    resetSubtitleSync();
+  }, [resetSubtitleSync]);
 
   useEffect(() => {
     subtitleStore.updateStyling(styling);
@@ -548,9 +760,9 @@ export function CaptionSettingsView({
 
   const handleSelectCue = useCallback(
     (cue: CaptionCueType) => {
-      setDelay(getCaptionDelayForCue(cue, videoTime));
+      setDelay(getCaptionDelayForCue(cue, videoTime) - syncOffsetMs / 1000);
     },
-    [setDelay, videoTime],
+    [setDelay, syncOffsetMs, videoTime],
   );
 
   const handleResetTimeline = useCallback(() => {
@@ -560,6 +772,14 @@ export function CaptionSettingsView({
   const resetSubStyling = () => {
     subtitleStore.updateStyling(DEFAULT_SUBTITLE_STYLING);
   };
+
+  const canSyncSubtitles =
+    !!subtitleSyncKey &&
+    !!selectedCaption &&
+    !!vttData &&
+    !!subtitleSyncSource &&
+    !!sourceId &&
+    videoDuration > 0;
 
   return (
     <>
@@ -581,6 +801,21 @@ export function CaptionSettingsView({
             videoTime={videoTime}
             onSelectCue={handleSelectCue}
             onReset={handleResetTimeline}
+            syncStatus={subtitleSync.status}
+            syncProgress={syncProgress}
+            canSync={Boolean(
+              subtitleSyncKey && subtitleSyncSource && videoDuration,
+            )}
+            onToggleSync={() => {
+              if (
+                subtitleSync.status === "applied" ||
+                subtitleSync.status === "syncing"
+              ) {
+                handleResetSubtitleSync();
+              } else {
+                void handleSubtitleSync(true);
+              }
+            }}
           />
           <div className="flex justify-between items-center">
             <Menu.FieldTitle>

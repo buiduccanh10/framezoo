@@ -12,6 +12,10 @@ import {
   parseCanonicalVtt,
   sanitize,
 } from "@/components/player/utils/captions";
+import {
+  getAppliedSubtitleSyncOffsetMs,
+  getEffectiveSubtitleDelay,
+} from "@/components/player/utils/subtitleSync";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -24,7 +28,11 @@ export function TranscriptView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
   const display = usePlayerStore((s) => s.display);
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
-  const delay = useSubtitleStore((s) => s.delay);
+  const manualDelay = useSubtitleStore((s) => s.delay);
+  const syncOffsetMs = usePlayerStore((s) =>
+    getAppliedSubtitleSyncOffsetMs(s.subtitleSync),
+  );
+  const delay = getEffectiveSubtitleDelay(manualDelay, syncOffsetMs);
   const { duration: timeDuration, time } = usePlayerStore((s) => s.progress);
 
   const [searchQuery, setSearchQuery] = useState("");

@@ -812,6 +812,9 @@
           "backlink": "Vlastní titulky",
           "delay": "Posunutí titulků",
           "fixCapitals": "Opravit velká písmena",
+          "autoSync": "Automatická synchronizace titulků",
+          "syncingProgress": "Synchronizace... ({{progress}}%) (tento proces může trvat 2–3 minuty)",
+          "syncApplied": "Byla použita automatická synchronizace.",
           "timeline": "Časová osa titulků",
           "timelineHint": "Vyberte cue titulků, které chcete synchronizovat s aktuálním časem videa.",
           "timelineEmpty": "Nejsou k dispozici žádné titulky."
