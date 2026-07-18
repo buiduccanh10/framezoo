@@ -11,6 +11,10 @@ import unicodedata
 from difflib import SequenceMatcher
 from typing import Any, Callable
 import json
+import sys
+
+def _log(msg: str) -> None:
+    print(msg, file=sys.stderr, flush=True)
 import queue
 import asyncio
 
@@ -54,7 +58,7 @@ class WindowRequest(BaseModel):
 class AlignRequest(BaseModel):
     sourceUrl: str = Field(min_length=1, max_length=8192)
     subtitleVtt: str = Field(min_length=1, max_length=MAX_SUBTITLE_BYTES)
-    windows: list[WindowRequest] = Field(min_length=1, max_length=2)
+    windows: list[WindowRequest] = Field(min_length=1, max_length=3)
 
 
 def get_model() -> WhisperModel:
@@ -180,12 +184,12 @@ def extract_audio(source_url: str, window: WindowRequest) -> bytes:
 
     command.extend(
         [
-            "-i",
-            source_url,
-            # Seek after opening the HLS input. Input-side seeking can land on
-            # an earlier segment boundary and shift every ASR timestamp.
+            # Seek before opening the HLS input for speed. ffmpeg's accurate_seek (default) 
+            # will discard the audio before the precise seek point, keeping timestamps aligned.
             "-ss",
             f"{window.startMs / 1000:.3f}",
+            "-i",
+            source_url,
             "-t",
             f"{window.durationMs / 1000:.3f}",
             "-vn",
@@ -460,9 +464,6 @@ def speech_align(
         )
         word_coverage = word_duration / segment_duration
 
-        # Whisper can return a long segment with sparse or broken word timing.
-        # Keeping only those words creates artificial silent gaps and false
-        # subtitle offsets.
         if words and word_coverage >= 0.2:
             speech_intervals.extend(
                 (
@@ -486,28 +487,14 @@ def speech_align(
     if not speech or not cues_in_window:
         return None
 
-    # A sparse VAD result can collapse an entire dialogue burst into one long
-    # segment. In that case, matching the nearest cue start is more stable
-    # than optimizing overlap against one oversized interval.
-    if len(speech_segments) == 1:
-        speech_start = speech_segments[0]["startMs"]
-        _, nearest_cue = min(
-            cues_in_window,
-            key=lambda item: abs(item[1]["startMs"] - speech_start),
-        )
-        offset_ms = speech_start - nearest_cue["startMs"]
-        return {
-            "offsetMs": offset_ms,
-            "score": 0.5,
-            "confidence": "medium",
-            "matchedCueCount": 1,
-            "matchedTokens": 0,
-            "method": "speech",
-        }
+    if len(speech_segments) < 2:
+        _log(f"[ALIGN] speech_align: only {len(speech_segments)} segment(s), skipping (need ≥2)")
+        return None
 
     total_speech_duration = sum(end - start for start, end in speech)
-    candidates: list[dict[str, Any]] = []
-    for delay_ms in range(-MAX_OFFSET_MS, MAX_OFFSET_MS + 1, ALIGNMENT_STEP_MS):
+
+    def _score_offset(delay_ms: int) -> dict[str, Any] | None:
+        """Score a single candidate offset."""
         matched: list[dict[str, Any]] = []
         cue_cursor = 0
         for speech_segment in speech_segments:
@@ -525,20 +512,23 @@ def speech_align(
                     continue
 
                 cue_duration = max(1, end_ms - start_ms)
-                overlap = overlap_ms(start_ms, end_ms, speech_start, speech_end)
-                if overlap < max(200, round(segment_duration * 0.15)):
+                ov = overlap_ms(start_ms, end_ms, speech_start, speech_end)
+                if ov < max(200, round(segment_duration * 0.15)):
                     continue
 
-                precision = overlap / cue_duration
+                precision = ov / cue_duration
                 iou = interval_iou(start_ms, end_ms, speech_start, speech_end)
-                boundary_fit = 1 - min(
-                    abs(start_ms - speech_start),
-                    abs(end_ms - speech_end),
-                ) / max(cue_duration, segment_duration, 1)
+                
+                # Heavily penalize start time differences. 
+                # Translated subtitles often merge sentences, but the START of the sentence
+                # should align closely with the start of the speech segment.
+                start_diff = abs(start_ms - speech_start)
+                boundary_fit = max(0.0, 1.0 - start_diff / 1500.0)
+                
                 match_score = (
-                    0.55 * iou
-                    + 0.3 * precision
-                    + 0.15 * max(0.0, boundary_fit)
+                    0.2 * iou
+                    + 0.2 * precision
+                    + 0.6 * boundary_fit
                 )
                 candidate = {
                     "cueIndex": cue_index,
@@ -547,7 +537,7 @@ def speech_align(
                     "speechStartMs": speech_start,
                     "startMs": start_ms,
                     "endMs": end_ms,
-                    "overlapMs": overlap,
+                    "overlapMs": ov,
                     "score": match_score,
                 }
                 if best_match is None or candidate["score"] > best_match["score"]:
@@ -558,8 +548,9 @@ def speech_align(
                 cue_cursor = best_match["cuePosition"] + 1
 
         if not matched:
-            continue
+            return None
 
+        # Compute longest consecutive cue run
         longest_run = 0
         current_run = 0
         previous_index: int | None = None
@@ -571,94 +562,91 @@ def speech_align(
             longest_run = max(longest_run, current_run)
             previous_index = item["cueIndex"]
 
-        overlap = sum(item["overlapMs"] for item in matched)
+        total_overlap = sum(item["overlapMs"] for item in matched)
         matched_score = sum(item["score"] for item in matched) / len(matched)
-        coverage = overlap / max(total_speech_duration, 1)
+        coverage = total_overlap / max(total_speech_duration, 1)
 
-        # Count how many dialogue cues fall within the window at this
-        # offset.  An offset that places more subtitle cues in the
-        # analysis window is a stronger signal than one where only a
-        # handful of cues barely fit the window boundary (which is
-        # more likely a coincidental false peak).  Use the ratio of
-        # in-window cues to detected speech segments as a density
-        # bonus – a value > 1 means more cues are available than
-        # speech segments, indicating a dialogue-rich region.
-        cues_visible = 0
-        for _, cue in cues_in_window:
-            shifted_start = cue["startMs"] + delay_ms
-            shifted_end = cue["endMs"] + delay_ms
-            if shifted_end > window.startMs and shifted_start < window_end:
-                cues_visible += 1
+        # early_anchor_bonus: Strongly prefer offsets that successfully align the VERY FIRST
+        # parts of the spoken dialogue. If a video is a different cut, the offset will
+        # drift later in the video, but Auto Sync should fundamentally anchor the beginning.
+        early_anchor_bonus = 0.0
+        if matched:
+            first_speech_start = matched[0]["speechStartMs"]
+            if first_speech_start < 20000:
+                # Max bonus if it matches the first 2 seconds, decaying to 0 at 20 seconds
+                early_anchor_bonus = max(0.0, 1.0 - (first_speech_start / 20000.0))
 
-        # A higher cues_visible relative to speech segments is a
-        # positive signal: the offset places us in a dialogue-dense
-        # region where the VTT has enough cues to plausibly explain
-        # the observed speech.  Cap at 1.0 but allow lower values to
-        # penalise offsets with suspiciously few in-window cues.
-        cue_density = min(cues_visible / max(len(speech_segments), 1), 1.0)
-
-        # When only a small fraction of the total dialogue cues fall
-        # within the window AND the match rate is very high (nearly
-        # all visible cues were matched), the alignment is likely a
-        # coincidental false peak rather than the true offset.  For
-        # example, if 4 out of 10 dialogue cues happen to fit the
-        # window boundary and all 4 match perfectly, while the correct
-        # offset would place 7+ cues in-window with a looser fit.
-        total_dialogue_cues = len(cues_in_window)
-        match_ratio = len(matched) / max(cues_visible, 1)
-        visibility_ratio = cues_visible / max(total_dialogue_cues, 1)
-        thinness_penalty = 1.0
-        if match_ratio > 0.85 and visibility_ratio < 0.65:
-            # Scale down: the fewer cues visible relative to total,
-            # the stronger the penalty.
-            thinness_penalty = 0.6 + 0.4 * visibility_ratio
-
+        # Simplified scoring: consecutive runs are the strongest signal
+        # for correct alignment, especially with translated subtitles
+        run_bonus = min(longest_run / max(len(speech_segments), 1), 1.0)
         score = (
-            0.7 * matched_score * thinness_penalty
+            0.25 * matched_score
             + 0.15 * min(coverage, 1.0)
-            + 0.15 * cue_density
+            + 0.35 * run_bonus
+            + 0.25 * early_anchor_bonus
         )
-        candidate = {
+
+        return {
             "offsetMs": delay_ms,
             "score": score,
             "matchedCueCount": len(matched),
             "longestRun": longest_run,
             "firstCuePosition": matched[0]["cuePosition"],
-            "overlapMs": overlap,
+            "overlapMs": total_overlap,
             "matches": matched,
-            "cuesVisible": cues_visible,
         }
-        candidates.append(candidate)
 
-    has_word_timing = any(segment.get("words") for segment in transcript)
-    # With multiple ASR segments, one overlapping cue is an ambiguous peak
-    # and must not decide the global offset. A single-segment window keeps the
-    # nearest-cue fallback above for sparse speech.
-    minimum_matches = 2 if has_word_timing else 3
-    candidates = [
-        candidate
-        for candidate in candidates
-        if candidate["matchedCueCount"] >= minimum_matches
-    ]
+    # === Pass 1: Coarse scan (200ms steps) ===
+    coarse_step = 200
+    coarse_candidates: list[dict[str, Any]] = []
+    for delay_ms in range(-MAX_OFFSET_MS, MAX_OFFSET_MS + 1, coarse_step):
+        result = _score_offset(delay_ms)
+        if result and result["matchedCueCount"] >= 2:
+            coarse_candidates.append(result)
 
-    # Do not prefer the earliest subtitle sequence. Different subtitle cuts
-    # can contain an earlier, equally plausible dialogue run; choose the
-    # sequence that best explains the observed speech timing instead.
-    candidates.sort(
-        key=lambda candidate: (
-            candidate["score"],
-            candidate["longestRun"],
-            candidate["matchedCueCount"],
-            candidate["cuesVisible"],
-            candidate["overlapMs"],
-            -abs(candidate["offsetMs"]),
+    if not coarse_candidates:
+        return None
+
+    # Sort by score descending, take top-10 for refinement
+    coarse_candidates.sort(
+        key=lambda c: (c["score"], c["longestRun"], c["matchedCueCount"]),
+        reverse=True,
+    )
+    top_candidates = coarse_candidates[:10]
+
+    # === Pass 2: Fine scan (10ms steps) around top candidates ===
+    fine_step = 10
+    search_radius = 200
+    all_candidates: list[dict[str, Any]] = []
+    
+    seen_offsets: set[int] = set()
+    for coarse in top_candidates:
+        base_offset = coarse["offsetMs"]
+        for delay_ms in range(base_offset - search_radius, base_offset + search_radius + 1, fine_step):
+            if delay_ms in seen_offsets:
+                continue
+            seen_offsets.add(delay_ms)
+            if abs(delay_ms) > MAX_OFFSET_MS:
+                continue
+            result = _score_offset(delay_ms)
+            if result and result["matchedCueCount"] >= 2:
+                all_candidates.append(result)
+
+    if not all_candidates:
+        return None
+
+    # Final ranking: prioritize score (which now includes early anchor bonus), then longest run
+    all_candidates.sort(
+        key=lambda c: (
+            c["score"],
+            c["longestRun"],
+            c["matchedCueCount"],
+            c["overlapMs"],
+            -abs(c["offsetMs"]),
         ),
         reverse=True,
     )
-    best = candidates[0] if candidates else None
-
-    if not best:
-        return None
+    best = all_candidates[0]
 
     return {
         "offsetMs": median_offset(
@@ -685,23 +673,39 @@ def align_window(
     transcript: list[dict[str, Any]],
     window: WindowRequest,
 ) -> dict[str, Any] | None:
-    return text_align(cues, transcript, window) or speech_align(
-        cues, transcript, window
-    )
+    _log(f"[ALIGN] Window: startMs={window.startMs}, durationMs={window.durationMs}")
+    _log(f"[ALIGN] Transcript segments: {len(transcript)}")
+    for i, seg in enumerate(transcript[:10]):
+        _log(f"  ASR[{i}]: {seg['startMs']}ms-{seg['endMs']}ms text='{seg.get('text', '')[:60]}'")
+    _log(f"[ALIGN] Subtitle cues: {len(cues)}")
+    for i, cue in enumerate(cues[:15]):
+        _log(f"  CUE[{i}]: {cue['startMs']}ms-{cue['endMs']}ms text='{cue.get('text', '')[:60]}'")
 
+    text_result = text_align(cues, transcript, window)
+    if text_result:
+        _log(f"[ALIGN] text_align result: offsetMs={text_result['offsetMs']}, score={text_result['score']}, method={text_result['method']}")
+        return text_result
+    _log("[ALIGN] text_align returned None, trying speech_align...")
+
+    speech_result = speech_align(cues, transcript, window)
+    if speech_result:
+        _log(f"[ALIGN] speech_align result: offsetMs={speech_result['offsetMs']}, score={speech_result['score']}, matchedCueCount={speech_result['matchedCueCount']}, matchedCueStartsMs={speech_result.get('matchedCueStartsMs', [])}")
+    else:
+        _log("[ALIGN] speech_align returned None")
+    return speech_result
+
+
+class VirtualWindow:
+    def __init__(self, startMs: int, durationMs: int):
+        self.startMs = startMs
+        self.durationMs = durationMs
 
 def align_cues(
     cues: list[dict[str, Any]],
     transcripts: list[list[dict[str, Any]]],
     windows: list[WindowRequest],
 ) -> dict[str, Any]:
-    results = []
-    for window, transcript in zip(windows, transcripts):
-        result = align_window(cues, transcript, window)
-        if result:
-            results.append(result)
-
-    if not results:
+    if not windows or not transcripts:
         return {
             "offsetMs": 0,
             "windowOffsetsMs": [],
@@ -710,32 +714,41 @@ def align_cues(
             "matchedCueCount": 0,
             "scores": [],
             "methods": [],
-            "reason": "No matching subtitle cues found in the reference windows",
+            "reason": "No windows provided",
         }
 
-    offsets = [result["offsetMs"] - ASR_ONSET_DELAY_MS for result in results]
-    drift_ms = (
-        abs(offsets[0] - offsets[1]) if len(offsets) >= 2 else None
-    )
+    merged_transcript = []
+    for t in transcripts:
+        merged_transcript.extend(t)
 
-    offset_ms = median_offset(offsets)
-    confidence = "high" if len(results) == 2 and all(
-        result["confidence"] == "high" for result in results
-    ) else "medium"
-    response = {
-        "offsetMs": offset_ms,
-        "windowOffsetsMs": offsets,
-        "driftMs": drift_ms,
-        "confidence": confidence,
-        "matchedCueCount": sum(
-            result["matchedCueCount"] for result in results
-        ),
-        "scores": [result["score"] for result in results],
-        "methods": [result["method"] for result in results],
+    min_start = min(w.startMs for w in windows)
+    max_end = max(w.startMs + w.durationMs for w in windows)
+    v_window = VirtualWindow(min_start, max_end - min_start)
+
+    result = align_window(cues, merged_transcript, v_window)  # type: ignore
+
+    if not result:
+        return {
+            "offsetMs": 0,
+            "windowOffsetsMs": [],
+            "driftMs": None,
+            "confidence": "rejected",
+            "matchedCueCount": 0,
+            "scores": [],
+            "methods": [],
+            "reason": "No matching subtitle cues found in the combined reference windows",
+        }
+
+    offset = result["offsetMs"] - ASR_ONSET_DELAY_MS
+    return {
+        "offsetMs": offset,
+        "windowOffsetsMs": [offset],
+        "driftMs": 0,
+        "confidence": result["confidence"],
+        "matchedCueCount": result["matchedCueCount"],
+        "scores": [result["score"]],
+        "methods": [result["method"]],
     }
-    if drift_ms is not None and drift_ms > 350:
-        response["reason"] = "Reference windows had drift; applied median offset"
-    return response
 
 
 @app.on_event("startup")
@@ -780,7 +793,6 @@ async def transcribe_windows(
                 def callback(progress: float):
                     current = processed_duration + (progress * window.durationMs)
                     percent = min(99, int((current / max(1, total_duration)) * 100))
-                    print(f"DEBUG CALLBACK: progress={progress} percent={percent}")
                     loop.call_soon_threadsafe(q.put_nowait, {"type": "progress", "percent": percent})
 
                 transcript = transcribe_window(payload.sourceUrl, window, callback)
@@ -811,7 +823,6 @@ async def transcribe_windows(
     async def generate():
         while True:
             msg = await q.get()
-            print(f"DEBUG GENERATE YIELDING: {msg}")
             if msg is None:
                 break
             yield f"data: {json.dumps(msg)}\n\n"
