@@ -16,10 +16,8 @@ const ALIGN_BACKEND_INTERNAL_BASE_URL =
 const ALIGN_SERVICE_TIMEOUT_MS = Number(process.env.SUBTITLE_ALIGN_SERVICE_TIMEOUT_MS || 180_000);
 const ALIGN_SERVICE_INTERNAL_TOKEN = process.env.SUBTITLE_ALIGN_INTERNAL_TOKEN?.trim() || '';
 const ALIGN_MODEL = process.env.SUBTITLE_ALIGN_MODEL || 'small';
-const ALIGN_CACHE_TTL_SECONDS = 24 * 60 * 60;
 const ALIGN_MAX_BODY_BYTES = 1_500_000;
 const ALIGN_WINDOW_MS = 60_000;
-const ALIGN_CACHE_VERSION = 'v1';
 
 const alignSchema = z.object({
   mediaKey: z.string().trim().min(1).max(300),
@@ -112,51 +110,38 @@ const chooseWindows = (
   rawSegments: AlignInput['skipSegments']
 ): AlignWindow[] => {
   const durationMs = Math.round(videoDurationMs);
-  const windowMs = Math.min(ALIGN_WINDOW_MS, durationMs);
-  if (windowMs <= 0) return [];
+  const windowMs = 60_000;
+  if (durationMs <= windowMs) {
+    return [{ startMs: 0, durationMs }];
+  }
 
   const excluded = rawSegments
     .map(normalizeSegment)
     .filter(({ startMs, endMs }) => startMs !== null && endMs !== null && endMs > startMs);
+  
   const introEnd = excluded
     .filter(({ type }) => type === 'intro' || type === 'recap')
     .filter(({ startMs }) => startMs !== null && startMs < 300_000)
     .reduce((max, segment) => Math.max(max, segment.endMs || 0), 0);
 
-  const firstCandidate = Math.max(30_000, introEnd + 2_000);
-  // Use one short reference near the beginning. Later windows can belong to a
-  // different cut and make an otherwise useful initial offset worse.
-  const candidates = [firstCandidate];
+  // Lấy 2 windows liên tiếp (0-60s và 60-120s) để có đủ dialogue cho alignment
+  // Phần lớn phim ít dialogue ở phút đầu, nhưng dialogue dày từ phút 1-2
+  const firstStart = introEnd || 0;
   const windows: AlignWindow[] = [];
 
-  for (const candidate of candidates) {
-    const startMs = movePastExcludedRange(candidate, windowMs, excluded, durationMs);
-    if (windows.some(window => Math.abs(window.startMs - startMs) < Math.floor(windowMs / 2))) {
-      continue;
-    }
-    windows.push({ startMs, durationMs: windowMs });
+  const start1 = movePastExcludedRange(firstStart, windowMs, excluded, durationMs);
+  windows.push({ startMs: start1, durationMs: windowMs });
+
+  // Window thứ 2: ngay sau window 1
+  const secondStart = start1 + windowMs;
+  if (secondStart + windowMs <= durationMs) {
+    const start2 = movePastExcludedRange(secondStart, windowMs, excluded, durationMs);
+    windows.push({ startMs: start2, durationMs: windowMs });
   }
 
-  if (windows.length === 0) {
-    windows.push({ startMs: 0, durationMs: windowMs });
-  }
   return windows;
 };
 
-const hashSubtitle = (subtitleVtt: string) =>
-  createHash('sha256').update(subtitleVtt).digest('hex');
-
-const cachePart = (value: string) => encodeURIComponent(value);
-
-const buildCacheKey = (input: AlignInput) =>
-  [
-    `subtitle-align:${ALIGN_CACHE_VERSION}`,
-    cachePart(input.mediaKey),
-    cachePart(input.sourceId),
-    cachePart(input.captionId),
-    hashSubtitle(input.subtitleVtt),
-    cachePart(ALIGN_MODEL),
-  ].join(':');
 
 const parseProxyHeaders = (rawHeaders: string | null) => {
   if (!rawHeaders) return {};
@@ -263,13 +248,15 @@ const fetchAlignmentStream = async (
   // Background stream processor
   (async () => {
     const decoder = new TextDecoder();
+    let buffer = '';
     try {
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() ?? '';
         for (const line of lines) {
           if (line.startsWith('data: ')) {
             try {
@@ -348,20 +335,11 @@ export default defineEventHandler(async event => {
     Math.ceil(ALIGN_SERVICE_TIMEOUT_MS / 1000) + 300
   );
   const windows = chooseWindows(input.videoDurationMs, input.skipSegments);
-  const cacheKey = buildCacheKey(input);
-  const storage = useStorage('cache');
 
   setResponseHeader(event, 'content-type', 'text/event-stream');
-  setResponseHeader(event, 'cache-control', 'no-cache, no-transform');
   setResponseHeader(event, 'connection', 'keep-alive');
   setResponseHeader(event, 'x-accel-buffering', 'no');
-
-  if (!input.force) {
-    const cached = await storage.getItem<AlignResponse>(cacheKey).catch(() => null);
-    if (cached) {
-      return `data: ${JSON.stringify({ type: 'result', data: { ...cached, cached: true } })}\n\n`;
-    }
-  }
+  setResponseHeader(event, 'content-encoding', 'identity');
 
   try {
     const stream = await fetchAlignmentStream(
@@ -375,7 +353,6 @@ export default defineEventHandler(async event => {
           model: result.model || ALIGN_MODEL,
           cached: false,
         };
-        storage.setItem(cacheKey, response, { ttl: ALIGN_CACHE_TTL_SECONDS }).catch(() => null);
       }
     );
     return sendStream(event, stream);
