@@ -812,6 +812,7 @@
           "backlink": "Vlastní titulky",
           "delay": "Posunutí titulků",
           "fixCapitals": "Opravit velká písmena",
+          "autoSync": "Automatická synchronizace titulků",
           "syncingProgress": "Synchronizace... ({{progress}}%)",
           "syncApplied": "Byla použita automatická synchronizace.",
           "timeline": "Časová osa titulků",

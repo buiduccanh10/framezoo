@@ -812,6 +812,7 @@
           "backlink": "Kişisel altyazılar",
           "delay": "Altyazı gecikmesi",
           "fixCapitals": "Büyük harf kullanımını düzelt",
+          "autoSync": "Altyazıları otomatik senkronize et",
           "syncingProgress": "Senkronize ediliyor... (%{{progress}})",
           "syncApplied": "Otomatik senkronizasyon uygulandı.",
           "timeline": "Altyazı zaman çizelgesi",

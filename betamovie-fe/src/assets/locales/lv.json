@@ -812,6 +812,7 @@
           "backlink": "Pielāgoti subtitri",
           "delay": "Subtitru aizkave",
           "fixCapitals": "Labojiet lielo burtu lietojumu",
+          "autoSync": "Automātiski sinhronizēt subtitrus",
           "syncingProgress": "Notiek sinhronizācija... ({{progress}}%)",
           "syncApplied": "Lietota automātiskā sinhronizācija.",
           "timeline": "Subtitru laika skala",

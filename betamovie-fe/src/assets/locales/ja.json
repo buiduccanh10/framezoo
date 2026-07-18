@@ -812,6 +812,7 @@
           "backlink": "カスタム字幕",
           "delay": "字幕の遅延",
           "fixCapitals": "大文字を修正する",
+          "autoSync": "自動同期字幕",
           "syncingProgress": "同期中... ({{progress}}%)",
           "syncApplied": "自動同期が適用されました。",
           "timeline": "字幕タイムライン",

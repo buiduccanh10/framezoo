@@ -812,6 +812,7 @@
           "backlink": "자막 커스텀",
           "delay": "자막 딜레이",
           "fixCapitals": "대문자 표기 수정",
+          "autoSync": "자동 동기화 자막",
           "syncingProgress": "동기화 중... ({{progress}}%)",
           "syncApplied": "자동 동기화가 적용되었습니다.",
           "timeline": "자막 타임라인",

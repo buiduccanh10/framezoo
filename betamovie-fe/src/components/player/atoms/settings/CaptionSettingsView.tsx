@@ -228,7 +228,7 @@ export function SubtitleCueTimeline(props: {
             <button
               type="button"
               data-testid="subtitle-sync-toggle"
-              title="Auto sync subtitles"
+              title={t("player.menus.subtitles.settings.autoSync")}
               className={classNames(
                 "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 transition-colors disabled:opacity-50",
                 props.syncStatus === "applied"
@@ -268,7 +268,7 @@ export function SubtitleCueTimeline(props: {
           <button
             type="button"
             data-testid="subtitle-sync-toggle"
-            title="Auto sync subtitles"
+            title={t("player.menus.subtitles.settings.autoSync")}
             className={classNames(
               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-video-context-light bg-opacity-10 transition-colors disabled:opacity-50",
               props.syncStatus === "applied"
@@ -301,6 +301,7 @@ export function SubtitleCueTimeline(props: {
           <Progress
             progress={props.syncProgress ?? 0}
             className="bg-video-context-slider bg-opacity-25"
+            indicatorClassName="bg-video-context-sliderFilled"
           />
         </div>
       ) : props.syncStatus === "applied" ? null : (

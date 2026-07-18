@@ -812,6 +812,7 @@
           "backlink": "Anpassade undertexter",
           "delay": "Undertexts fördrivning",
           "fixCapitals": "Reparera kapitalisering",
+          "autoSync": "Autosynkronisera undertexter",
           "syncingProgress": "Synkronisera... ({{progress}}%)",
           "syncApplied": "Automatisk synkronisering tillämpas.",
           "timeline": "Undertext tidslinje",

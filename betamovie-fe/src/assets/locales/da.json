@@ -812,6 +812,7 @@
           "backlink": "Brugerdefinerede undertekster",
           "delay": "Undertekstforsinkelse",
           "fixCapitals": "Ret store bogstaver",
+          "autoSync": "Automatisk synkronisering af undertekster",
           "syncingProgress": "Synkroniserer... ({{progress}}%)",
           "syncApplied": "Automatisk synkronisering anvendt.",
           "timeline": "Undertekst tidslinje",

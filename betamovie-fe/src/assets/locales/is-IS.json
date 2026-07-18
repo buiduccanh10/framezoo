@@ -812,6 +812,7 @@
           "backlink": "Sérsniðir textar",
           "delay": "Texta seinkun",
           "fixCapitals": "Lagaðu hástafi",
+          "autoSync": "Sjálfvirk samstilling texta",
           "syncingProgress": "Samstillir... ({{progress}}%)",
           "syncApplied": "Sjálfvirk samstilling beitt.",
           "timeline": "Tímalína texta",

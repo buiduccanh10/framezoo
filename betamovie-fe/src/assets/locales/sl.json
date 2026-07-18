@@ -812,6 +812,7 @@
           "backlink": "Podnapisi po meri",
           "delay": "Zamik podnapisov",
           "fixCapitals": "Popravi velike začetnice",
+          "autoSync": "Samodejna sinhronizacija podnapisov",
           "syncingProgress": "Sinhronizacija ... ({{progress}}%)",
           "syncApplied": "Uporabljena je samodejna sinhronizacija.",
           "timeline": "Časovnica podnapisov",

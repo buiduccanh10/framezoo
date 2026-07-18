@@ -812,6 +812,7 @@
           "backlink": "Subtitluri personalizate",
           "delay": "Intârziera subtitlurilor",
           "fixCapitals": "Fixați capitalizația",
+          "autoSync": "Sincronizare automată a subtitrărilor",
           "syncingProgress": "Se sincronizează... ({{progress}}%)",
           "syncApplied": "Sincronizarea automată a fost aplicată.",
           "timeline": "Cronologia subtitrarilor",

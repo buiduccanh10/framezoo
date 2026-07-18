@@ -812,6 +812,7 @@
           "backlink": "Legendas personalizadas",
           "delay": "Atraso da legenda",
           "fixCapitals": "Corrigir letras maiúsculas",
+          "autoSync": "Sincronização automática de legendas",
           "syncingProgress": "Sincronizando... ({{progress}}%)",
           "syncApplied": "Sincronização automática aplicada.",
           "timeline": "Linha do tempo das legendas",

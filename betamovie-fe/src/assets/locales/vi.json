@@ -812,6 +812,7 @@
           "backlink": "Phụ đề tùy chỉnh",
           "delay": "Độ trễ phụ đề",
           "fixCapitals": "Sửa lỗi viết hoa",
+          "autoSync": "Tự động đồng bộ phụ đề",
           "syncingProgress": "Đang đồng bộ... ({{progress}}%)",
           "syncApplied": "Đã áp dụng tự động đồng bộ.",
           "timeline": "Dòng thời gian phụ đề",

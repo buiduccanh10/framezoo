@@ -812,6 +812,7 @@
           "backlink": "Eigene Untertitel",
           "delay": "Untertitelverzögerung",
           "fixCapitals": "Großschreibung korrigieren",
+          "autoSync": "Untertitel automatisch synchronisieren",
           "syncingProgress": "Synchronisierung... ({{progress}}%)",
           "syncApplied": "Automatische Synchronisierung angewendet.",
           "timeline": "Untertitel-Zeitleiste",
