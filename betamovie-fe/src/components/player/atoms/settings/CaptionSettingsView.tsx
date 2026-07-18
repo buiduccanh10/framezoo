@@ -632,6 +632,9 @@ export function CaptionSettingsView({
   const subtitleSync = usePlayerStore((s) => s.subtitleSync);
   const beginSubtitleSync = usePlayerStore((s) => s.beginSubtitleSync);
   const setSubtitleSyncResult = usePlayerStore((s) => s.setSubtitleSyncResult);
+  const setSubtitleSyncProgress = usePlayerStore(
+    (s) => s.setSubtitleSyncProgress,
+  );
   const resetSubtitleSync = usePlayerStore((s) => s.resetSubtitleSync);
   const syncRunRef = useRef(0);
 
@@ -651,7 +654,7 @@ export function CaptionSettingsView({
   const syncOffsetMs =
     subtitleSync.status === "applied" ? subtitleSync.offsetMs : 0;
   const delay = getEffectiveSubtitleDelay(manualDelay, syncOffsetMs);
-  const [syncProgress, setSyncProgress] = useState(0);
+  const syncProgress = subtitleSync.progress;
 
   const handleSubtitleSync = useCallback(
     async (force = false) => {
@@ -687,7 +690,7 @@ export function CaptionSettingsView({
           },
           (percent) => {
             if (syncRunRef.current === runId) {
-              setSyncProgress(percent);
+              setSubtitleSyncProgress(subtitleSyncKey, requestId, percent);
             }
           },
         );
@@ -722,6 +725,7 @@ export function CaptionSettingsView({
       meta,
       selectedCaption,
       setSubtitleSyncResult,
+      setSubtitleSyncProgress,
       skipSegments,
       sourceId,
       subtitleSyncKey,

@@ -71,6 +71,7 @@ export interface SubtitleSyncState {
   requestId: number;
   key: string | null;
   status: SubtitleSyncStatus;
+  progress: number;
   offsetMs: number;
   confidence: "high" | "medium" | "rejected" | null;
   matchedCueCount: number;
@@ -154,9 +155,17 @@ export interface SourceSlice {
   setSubtitleSyncResult(
     key: string,
     requestId: number,
-    result: Omit<SubtitleSyncState, "key" | "status" | "requestId"> & {
+    result: Omit<
+      SubtitleSyncState,
+      "key" | "status" | "requestId" | "progress"
+    > & {
       status: SubtitleSyncStatus;
     },
+  ): void;
+  setSubtitleSyncProgress(
+    key: string,
+    requestId: number,
+    progress: number,
   ): void;
   resetSubtitleSync(): void;
   setSecondaryCaption(caption: Caption | null): void;
@@ -351,6 +360,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     requestId: 0,
     key: null,
     status: "idle",
+    progress: 0,
     offsetMs: 0,
     confidence: null,
     matchedCueCount: 0,
@@ -366,6 +376,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           requestId: s.subtitleSync.requestId + 1,
           key: null,
           status: "idle",
+          progress: 0,
           offsetMs: 0,
           confidence: null,
           matchedCueCount: 0,
@@ -405,6 +416,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           requestId: s.subtitleSync.requestId + 1,
           key: null,
           status: "idle",
+          progress: 0,
           offsetMs: 0,
           confidence: null,
           matchedCueCount: 0,
@@ -442,6 +454,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           requestId: s.subtitleSync.requestId + 1,
           key: null,
           status: "idle",
+          progress: 0,
           offsetMs: 0,
           confidence: null,
           matchedCueCount: 0,
@@ -460,6 +473,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         requestId,
         key,
         status: "syncing",
+        progress: 0,
         offsetMs: 0,
         confidence: null,
         matchedCueCount: 0,
@@ -475,10 +489,18 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (s.subtitleSync.key !== key || s.subtitleSync.requestId !== requestId)
         return;
       s.subtitleSync = {
+        ...s.subtitleSync,
         key,
         ...result,
         requestId,
       };
+    });
+  },
+  setSubtitleSyncProgress(key, requestId, progress) {
+    set((s) => {
+      if (s.subtitleSync.key !== key || s.subtitleSync.requestId !== requestId)
+        return;
+      s.subtitleSync.progress = progress;
     });
   },
   resetSubtitleSync() {
@@ -488,6 +510,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         requestId,
         key: null,
         status: "idle",
+        progress: 0,
         offsetMs: 0,
         confidence: null,
         matchedCueCount: 0,
@@ -566,6 +589,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         requestId: s.subtitleSync.requestId + 1,
         key: null,
         status: "idle",
+        progress: 0,
         offsetMs: 0,
         confidence: null,
         matchedCueCount: 0,
@@ -754,6 +778,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         requestId: s.subtitleSync.requestId + 1,
         key: null,
         status: "idle",
+        progress: 0,
         offsetMs: 0,
         confidence: null,
         matchedCueCount: 0,
