@@ -279,7 +279,10 @@ function isRecoverableHlsBufferIssue(data: ErrorData) {
 }
 
 function isRecoverableHlsNetworkIssue(data: ErrorData) {
-  return !data.fatal && RECOVERABLE_HLS_NETWORK_ERRORS.has(data.details);
+  const is401 = data.response?.code === 401;
+  return (
+    !data.fatal && !is401 && RECOVERABLE_HLS_NETWORK_ERRORS.has(data.details)
+  );
 }
 
 function getHlsErrorMessage(data: ErrorData) {
@@ -1140,10 +1143,12 @@ export function makeVideoElementDisplayInterface(options?: {
             console.error("HLS error", data);
           }
 
+          const is401 = data.response?.code === 401;
+
           // Extract detailed HLS error information
           const hlsErrorInfo = {
             details: data.details,
-            fatal: data.fatal,
+            fatal: data.fatal || is401,
             level: data.level,
             levelDetails: (data as any).levelDetails
               ? {
@@ -1175,10 +1180,12 @@ export function makeVideoElementDisplayInterface(options?: {
           }
 
           if (
-            data.fatal &&
-            src?.url === data.frag?.baseurl &&
+            (data.fatal || is401) &&
             !exceptions.includes(getHlsErrorMessage(data))
           ) {
+            if (is401 && hls) {
+              hls.stopLoad(); // Prevent HLS.js from retrying with expired token
+            }
             emit("error", {
               message: getHlsErrorMessage(data),
               stackTrace: data.error?.stack,
