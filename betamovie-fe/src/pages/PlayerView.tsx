@@ -187,6 +187,18 @@ export function RealPlayerView() {
     [setStatus, setResumeFromSourceIdInStore],
   );
 
+  const handleRetryScraping = useCallback(
+    (sourceIdToRetry: string) => {
+      setResumeFromSourceId(null);
+      setResumeFromSourceIdInStore(null);
+      setPreferredSourceId(sourceIdToRetry);
+      setTimeout(() => {
+        setStatus(playerStatus.SCRAPING);
+      }, 0);
+    },
+    [setStatus, setResumeFromSourceIdInStore],
+  );
+
   // Sync store value to local state when it changes (e.g., from settings)
   // or when status changes to SCRAPING
   useEffect(() => {
@@ -278,6 +290,7 @@ export function RealPlayerView() {
       {status === playerStatus.PLAYBACK_ERROR ? (
         <PlaybackErrorPart
           onResume={handleResumeScraping}
+          onRetry={handleRetryScraping}
           currentSourceId={sourceId}
         />
       ) : null}

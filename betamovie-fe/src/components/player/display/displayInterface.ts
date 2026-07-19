@@ -31,6 +31,9 @@ export type DisplayError = {
     };
     type: string;
     url?: string;
+    response?: {
+      code?: number;
+    };
   };
 };
 

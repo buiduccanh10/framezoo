@@ -17,6 +17,7 @@ import { ErrorCardInModal } from "../errors/ErrorCard";
 
 export interface PlaybackErrorPartProps {
   onResume?: (startFromSourceId: string) => void;
+  onRetry?: (sourceId: string) => void;
   currentSourceId?: string | null;
 }
 
@@ -49,7 +50,11 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
           ? (playbackError.hls?.fatal ?? false)
           : playbackError.type === "htmlvideo";
 
-      if (isFatalError) {
+      const is401Error =
+        playbackError.type === "hls" &&
+        playbackError.hls?.response?.code === 401;
+
+      if (isFatalError && !is401Error) {
         // If there's an active embed, disable that embed instead of the source
         if (currentEmbedId) {
           addFailedEmbed(currentSourceId, currentEmbedId);
@@ -73,7 +78,11 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
         }
       }
 
-      if (!hasOpenedSettings.current && !enableAutoResumeOnPlaybackError) {
+      if (
+        !hasOpenedSettings.current &&
+        !enableAutoResumeOnPlaybackError &&
+        !is401Error
+      ) {
         hasOpenedSettings.current = true;
         // Reset the last successful source when a playback error occurs
         setLastSuccessfulSource(null);
@@ -96,22 +105,25 @@ export function PlaybackErrorPart(props: PlaybackErrorPartProps) {
 
   // Automatically resume scraping from the next source if enabled
   useEffect(() => {
-    if (
-      playbackError &&
-      !hasAutoResumed.current &&
-      enableAutoResumeOnPlaybackError &&
-      props.currentSourceId &&
-      props.onResume
-    ) {
-      hasAutoResumed.current = true;
-      // Immediately call resume without delay since we don't need the overlay
-      props.onResume!(props.currentSourceId!);
+    const is401Error =
+      playbackError?.type === "hls" &&
+      playbackError.hls?.response?.code === 401;
+
+    if (playbackError && !hasAutoResumed.current && props.currentSourceId) {
+      if (is401Error && props.onRetry) {
+        hasAutoResumed.current = true;
+        props.onRetry!(props.currentSourceId!);
+      } else if (enableAutoResumeOnPlaybackError && props.onResume) {
+        hasAutoResumed.current = true;
+        props.onResume!(props.currentSourceId!);
+      }
     }
   }, [
     playbackError,
     enableAutoResumeOnPlaybackError,
     props.currentSourceId,
     props.onResume,
+    props.onRetry,
   ]);
 
   const handleOpenSourcePicker = () => {
