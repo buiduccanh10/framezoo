@@ -1164,6 +1164,7 @@ export function makeVideoElementDisplayInterface(options?: {
               : undefined,
             type: data.type,
             url: (data as any).url,
+            response: data.response ? { code: data.response.code } : undefined,
           };
 
           if (isRecoverableHlsBufferIssue(data)) {
