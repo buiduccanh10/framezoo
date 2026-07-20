@@ -118,7 +118,7 @@ const chooseWindows = (
   const excluded = rawSegments
     .map(normalizeSegment)
     .filter(({ startMs, endMs }) => startMs !== null && endMs !== null && endMs > startMs);
-
+  
   const introEnd = excluded
     .filter(({ type }) => type === 'intro' || type === 'recap')
     .filter(({ startMs }) => startMs !== null && startMs < 300_000)
@@ -141,6 +141,7 @@ const chooseWindows = (
 
   return windows;
 };
+
 
 const parseProxyHeaders = (rawHeaders: string | null) => {
   if (!rawHeaders) return {};
@@ -370,7 +371,7 @@ export default defineEventHandler(async event => {
       internalSourceUrl,
       input.subtitleVtt,
       windows,
-      result => {
+      (result) => {
         const response: AlignResponse = {
           ...result,
           windows,
