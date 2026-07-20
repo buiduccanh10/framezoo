@@ -249,6 +249,12 @@ const fetchAlignmentStream = async (
   const writer = writable.getWriter();
   const reader = response.body.getReader();
   const encoder = new TextEncoder();
+  let streamClosed = false;
+  const heartbeat = setInterval(() => {
+    if (!streamClosed) {
+      void writer.write(encoder.encode(': keep-alive\n\n')).catch(() => null);
+    }
+  }, 15_000);
 
   // Background stream processor
   (async () => {
@@ -291,6 +297,8 @@ const fetchAlignmentStream = async (
         return;
       }
     } finally {
+      streamClosed = true;
+      clearInterval(heartbeat);
       clearTimeout(timeout);
       await writer.close().catch(() => null);
     }

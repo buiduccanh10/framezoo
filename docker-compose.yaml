@@ -58,7 +58,7 @@ services:
     restart: unless-stopped
     environment:
       PORT: 3200
-      ALIGN_MODEL: ${SUBTITLE_ALIGN_MODEL:-medium}
+      ALIGN_MODEL: ${SUBTITLE_ALIGN_MODEL:-small}
       ALIGN_MODEL_DIR: /models
       ALIGN_CPU_THREADS: ${SUBTITLE_ALIGN_CPU_THREADS:-2}
       ALIGN_FFMPEG_TIMEOUT_SECONDS: ${SUBTITLE_ALIGN_FFMPEG_TIMEOUT_SECONDS:-120}
