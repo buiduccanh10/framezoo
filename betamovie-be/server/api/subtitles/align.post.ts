@@ -264,7 +264,9 @@ const fetchAlignmentStream = async (
               if (data.type === 'result' && data.data) {
                 onResult(data.data as AlignResponse);
               }
-            } catch {}
+            } catch {
+              continue;
+            }
           }
         }
         await writer.write(value);
@@ -337,9 +339,8 @@ export default defineEventHandler(async event => {
   const windows = chooseWindows(input.videoDurationMs, input.skipSegments);
 
   setResponseHeader(event, 'content-type', 'text/event-stream');
-  setResponseHeader(event, 'connection', 'keep-alive');
+  setResponseHeader(event, 'cache-control', 'no-cache, no-transform');
   setResponseHeader(event, 'x-accel-buffering', 'no');
-  setResponseHeader(event, 'content-encoding', 'identity');
 
   try {
     const stream = await fetchAlignmentStream(
