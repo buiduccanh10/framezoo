@@ -24,7 +24,10 @@ const tmdbFetch = async (path: string, query: any) => {
     'User-Agent': TMDB_USER_AGENT,
     Accept: 'application/json',
   };
-  const finalQuery = { ...(query || {}) };
+  const finalQuery = {
+    ...(query || {}),
+    include_adult: false,
+  };
 
   if (tmdbKey && tmdbKey.length > 50) {
     headers.Authorization = `Bearer ${tmdbKey}`;
@@ -66,8 +69,7 @@ export const tmdb = {
     tvShows: (query: any) => tmdbFetch('/genre/tv/list', query),
   },
   movies: {
-    details: (movieId: string | number, query: any) =>
-      tmdbFetch(`/movie/${movieId}`, query),
+    details: (movieId: string | number, query: any) => tmdbFetch(`/movie/${movieId}`, query),
     discover: (query: any) => tmdbFetch('/discover/movie', query),
     nowPlaying: (query: any) => tmdbFetch('/movie/now_playing', query),
     popular: (query: any) => tmdbFetch('/movie/popular', query),
