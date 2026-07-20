@@ -13,7 +13,7 @@ import {
 const ALIGN_SERVICE_URL = process.env.SUBTITLE_ALIGN_SERVICE_URL || 'http://127.0.0.1:3200';
 const ALIGN_BACKEND_INTERNAL_BASE_URL =
   process.env.SUBTITLE_ALIGN_BACKEND_INTERNAL_BASE_URL || 'http://127.0.0.1:3000';
-const ALIGN_SERVICE_TIMEOUT_MS = Number(process.env.SUBTITLE_ALIGN_SERVICE_TIMEOUT_MS || 180_000);
+const ALIGN_SERVICE_TIMEOUT_MS = Number(process.env.SUBTITLE_ALIGN_SERVICE_TIMEOUT_MS || 300_000);
 const ALIGN_SERVICE_INTERNAL_TOKEN = process.env.SUBTITLE_ALIGN_INTERNAL_TOKEN?.trim() || '';
 const ALIGN_MODEL = process.env.SUBTITLE_ALIGN_MODEL || 'small';
 const ALIGN_MAX_BODY_BYTES = 1_500_000;
@@ -210,7 +210,11 @@ const fetchAlignmentStream = async (
   onResult: (result: AlignResponse) => void
 ): Promise<ReadableStream> => {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), ALIGN_SERVICE_TIMEOUT_MS);
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, ALIGN_SERVICE_TIMEOUT_MS);
 
   const headers: Record<string, string> = {
     'content-type': 'application/json',
@@ -244,6 +248,7 @@ const fetchAlignmentStream = async (
   const { readable, writable } = new TransformStream();
   const writer = writable.getWriter();
   const reader = response.body.getReader();
+  const encoder = new TextEncoder();
 
   // Background stream processor
   (async () => {
@@ -271,8 +276,20 @@ const fetchAlignmentStream = async (
         }
         await writer.write(value);
       }
-    } catch (e) {
-      console.error('Error proxying alignment stream:', e);
+    } catch (error) {
+      const message = timedOut
+        ? `Subtitle alignment timed out after ${Math.ceil(ALIGN_SERVICE_TIMEOUT_MS / 1000)} seconds`
+        : error instanceof Error
+          ? error.message
+          : 'Subtitle alignment stream failed';
+      console.error('Error proxying alignment stream:', error);
+      try {
+        await writer.write(
+          encoder.encode(`data: ${JSON.stringify({ type: 'error', error: message })}\n\n`)
+        );
+      } catch {
+        return;
+      }
     } finally {
       clearTimeout(timeout);
       await writer.close().catch(() => null);
