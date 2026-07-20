@@ -11,7 +11,8 @@ export const queryClient = new QueryClient({
     queries: {
       staleTime: TMDB_METADATA_CACHE_TTL_MS,
       gcTime: TMDB_METADATA_CACHE_GC_MS,
-      retry: 1,
+      retry: 3,
+      retryDelay: (attemptIndex) => Math.min(2_000 * 2 ** attemptIndex, 8_000),
       refetchOnWindowFocus: false,
     },
   },

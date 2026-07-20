@@ -1,6 +1,15 @@
 import { $fetch } from 'ofetch';
 
-const TMDB_BASE_URL = 'https://api.tmdb.org/3';
+import {
+  isRetryableTmdbError,
+  TMDB_FALLBACK_BASE_URL,
+  TMDB_PRIMARY_BASE_URL,
+  TMDB_RETRY_ATTEMPTS,
+  TMDB_RETRY_DELAY_MS,
+  TMDB_RETRY_STATUS_CODES,
+  TMDB_TIMEOUT_MS,
+} from '~/utils/tmdbConfig';
+
 const TMDB_USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36';
 
@@ -9,7 +18,7 @@ const resolveTmdbKey = () => {
   return ((config.tmdbApiKey as string | undefined) || process.env.TMDB_API_KEY || '').trim();
 };
 
-const tmdbFetch = (path: string, query: any) => {
+const tmdbFetch = async (path: string, query: any) => {
   const tmdbKey = resolveTmdbKey();
   const headers: Record<string, string> = {
     'User-Agent': TMDB_USER_AGENT,
@@ -24,14 +33,26 @@ const tmdbFetch = (path: string, query: any) => {
     finalQuery.api_key = tmdbKey;
   }
 
-  return $fetch(path, {
-    baseURL: TMDB_BASE_URL,
-    headers,
-    query: finalQuery,
-    retry: 3,
-    retryDelay: 2000,
-    timeout: 15000,
-  });
+  const fetchFromHost = (baseURL: string) =>
+    $fetch(path, {
+      baseURL,
+      headers,
+      query: finalQuery,
+      retry: TMDB_RETRY_ATTEMPTS,
+      retryDelay: TMDB_RETRY_DELAY_MS,
+      retryStatusCodes: TMDB_RETRY_STATUS_CODES,
+      timeout: TMDB_TIMEOUT_MS,
+    });
+
+  try {
+    return await fetchFromHost(TMDB_PRIMARY_BASE_URL);
+  } catch (error) {
+    if (!isRetryableTmdbError(error)) {
+      throw error;
+    }
+
+    return fetchFromHost(TMDB_FALLBACK_BASE_URL);
+  }
 };
 
 /**
