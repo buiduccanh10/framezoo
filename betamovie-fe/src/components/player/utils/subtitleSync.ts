@@ -158,17 +158,25 @@ export async function requestSubtitleSync(
 
       for (const line of lines) {
         if (line.startsWith("data: ")) {
+          let data: {
+            type?: string;
+            percent?: number;
+            data?: SubtitleSyncResult;
+            error?: string;
+          };
           try {
-            const data = JSON.parse(line.substring(6));
-            if (data.type === "progress") {
-              onProgress?.(data.percent);
-            } else if (data.type === "result" && data.data) {
-              result = data.data as SubtitleSyncResult;
-            } else if (data.type === "error") {
-              throw new Error(data.error);
-            }
-          } catch (e) {
+            data = JSON.parse(line.substring(6)) as typeof data;
+          } catch {
             // ignore JSON parse errors for corrupted lines
+            continue;
+          }
+
+          if (data.type === "progress") {
+            onProgress?.(data.percent ?? 0);
+          } else if (data.type === "result" && data.data) {
+            result = data.data;
+          } else if (data.type === "error") {
+            throw new Error(data.error || "Subtitle alignment failed");
           }
         }
       }
