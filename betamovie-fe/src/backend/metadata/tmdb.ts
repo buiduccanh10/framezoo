@@ -177,7 +177,7 @@ export function decodeTMDBId(
 }
 
 const tmdbBaseUrl1 = `${conf().BACKEND_URL}/api/tmdb/`;
-const tmdbBaseUrl2 = `${conf().BACKEND_URL}/api/tmdb/`;
+const TMDB_CLIENT_TIMEOUT_MS = 90_000;
 
 const tmdbHeaders = {
   accept: "application/json",
@@ -242,6 +242,8 @@ export async function get<T>(url: string, params?: object): Promise<T> {
     revalidateIfStale: false,
     staleTime: TMDB_METADATA_CACHE_TTL_MS,
     gcTime: TMDB_METADATA_CACHE_GC_MS,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(2_000 * 2 ** attemptIndex, 8_000),
   });
 }
 
@@ -283,7 +285,7 @@ async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
     });
   }
 
-  let result: T;
+  let result!: T;
 
   if (proxy && shouldProxyTmdb) {
     try {
@@ -302,19 +304,11 @@ async function fetchTmdb<T>(url: string, params?: object): Promise<T> {
   }
 
   if (!result!) {
-    try {
-      result = await mwFetch<T>(encodeURI(url), {
-        baseURL: tmdbBaseUrl1,
-        params: allParams,
-        signal: abortOnTimeout(5000),
-      });
-    } catch {
-      result = await mwFetch<T>(encodeURI(url), {
-        baseURL: tmdbBaseUrl2,
-        params: allParams,
-        signal: abortOnTimeout(30000),
-      });
-    }
+    result = await mwFetch<T>(encodeURI(url), {
+      baseURL: tmdbBaseUrl1,
+      params: allParams,
+      signal: abortOnTimeout(TMDB_CLIENT_TIMEOUT_MS),
+    });
   }
 
   // Cache the result for 1 hour (3600 seconds)

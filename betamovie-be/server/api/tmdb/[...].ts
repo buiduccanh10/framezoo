@@ -1,6 +1,18 @@
 import { joinURL } from 'ufo';
 import { $fetch } from 'ofetch';
 
+import {
+  getTmdbErrorStatus,
+  isRetryableTmdbError,
+  isTmdbTimeoutError,
+  TMDB_FALLBACK_BASE_URL,
+  TMDB_PRIMARY_BASE_URL,
+  TMDB_RETRY_ATTEMPTS,
+  TMDB_RETRY_DELAY_MS,
+  TMDB_RETRY_STATUS_CODES,
+  TMDB_TIMEOUT_MS,
+} from '~/utils/tmdbConfig';
+
 const ONE_HOUR_SECONDS = 60 * 60;
 const ONE_DAY_SECONDS = 24 * 60 * 60;
 const toPositiveTtl = (value: number, fallback: number) =>
@@ -44,7 +56,7 @@ export default defineEventHandler(async event => {
   }
 
   const query = getQuery(event);
-  const targetUrl = joinURL('https://api.tmdb.org/3', path);
+  const targetUrl = joinURL(TMDB_PRIMARY_BASE_URL, path);
 
   const tmdbKey = (
     (config.tmdbApiKey as string | undefined) ||
@@ -85,9 +97,12 @@ export default defineEventHandler(async event => {
     finalQuery.api_key = tmdbKey;
   }
 
-  const buildFetchRequest = (queryParams: Record<string, any>) => {
+  const buildFetchRequest = (
+    baseUrl: string,
+    queryParams: Record<string, any>,
+  ) => {
     if (tmdbProxy) {
-      const urlWithQuery = new URL(targetUrl);
+      const urlWithQuery = new URL(joinURL(baseUrl, path));
       Object.entries(queryParams).forEach(([key, val]) => {
         urlWithQuery.searchParams.append(key, String(val));
       });
@@ -99,39 +114,33 @@ export default defineEventHandler(async event => {
     }
 
     return {
-      fetchUrl: targetUrl,
+      fetchUrl: joinURL(baseUrl, path),
       fetchParams: queryParams,
     };
   };
 
   const shouldAttachPageParam = 'page' in finalQuery;
-  const fetchTmdbPage = async (pageNumber?: number) => {
+  const fetchTmdbPage = async (baseUrl: string, pageNumber?: number) => {
     const queryParams = { ...finalQuery };
     if (shouldAttachPageParam && typeof pageNumber === 'number') {
       queryParams.page = pageNumber;
     }
-    const { fetchUrl, fetchParams } = buildFetchRequest(queryParams);
+    const { fetchUrl, fetchParams } = buildFetchRequest(baseUrl, queryParams);
 
     return $fetch(fetchUrl, {
       method: event.method as any,
       query: fetchParams,
       headers,
-      retry: 3,
-      retryDelay: 2000,
-      timeout: 15000,
+      retry: TMDB_RETRY_ATTEMPTS,
+      retryDelay: TMDB_RETRY_DELAY_MS,
+      retryStatusCodes: TMDB_RETRY_STATUS_CODES,
+      timeout: TMDB_TIMEOUT_MS,
     });
   };
 
-  try {
-    if (tmdbProxy) {
-      console.log(`[TMDB Proxy] Forwarding via Proxy: ${tmdbProxy} for ${path}`);
-    } else {
-      console.log(`[TMDB Proxy] Forwarding Direct: ${targetUrl}`);
-    }
+  const fetchFromTmdb = async (baseUrl: string) => {
+    const data = await fetchTmdbPage(baseUrl);
 
-    const data = await fetchTmdbPage();
-
-    // Cache TMDB metadata long; keep detail endpoints shorter.
     try {
       await storage.setItem(cacheKey, data as any, { ttl: cacheTtl });
       console.log(`[TMDB Proxy] Cached response for ${path} (ttl=${cacheTtl}s)`);
@@ -140,18 +149,46 @@ export default defineEventHandler(async event => {
     }
 
     return data;
+  };
+
+  try {
+    console.log(`[TMDB Proxy] Forwarding primary: ${joinURL(TMDB_PRIMARY_BASE_URL, path)}`);
+
+    try {
+      return await fetchFromTmdb(TMDB_PRIMARY_BASE_URL);
+    } catch (primaryError: any) {
+      if (!isRetryableTmdbError(primaryError)) {
+        throw primaryError;
+      }
+
+      console.warn('[TMDB Proxy] Primary host failed; trying fallback host.', {
+        path,
+        status: getTmdbErrorStatus(primaryError),
+        message: primaryError?.message,
+      });
+    }
+
+    console.log(`[TMDB Proxy] Forwarding fallback: ${joinURL(TMDB_FALLBACK_BASE_URL, path)}`);
+    return await fetchFromTmdb(TMDB_FALLBACK_BASE_URL);
   } catch (error: any) {
-    const status = error.response?.status || 500;
+    const upstreamStatus = getTmdbErrorStatus(error);
+    const status = isTmdbTimeoutError(error)
+      ? 504
+      : upstreamStatus || 502;
     const errorData = error.data || error.message;
     console.error(`[TMDB Proxy] Failed to fetch ${targetUrl}:`, {
       status,
+      upstreamStatus,
       message: error.message,
       data: error.data,
     });
 
     throw createError({
       statusCode: status,
-      statusMessage: error.response?.statusText || 'TMDB Fetch Error',
+      statusMessage:
+        status === 504
+          ? 'TMDB upstream timeout'
+          : error.response?.statusText || 'TMDB Fetch Error',
       data: errorData,
     });
   }
