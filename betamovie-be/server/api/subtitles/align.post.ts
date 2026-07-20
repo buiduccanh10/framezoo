@@ -256,7 +256,6 @@ const fetchAlignmentStream = async (
     }
   }, 15_000);
 
-  // Background stream processor
   (async () => {
     const decoder = new TextDecoder();
     let buffer = '';
