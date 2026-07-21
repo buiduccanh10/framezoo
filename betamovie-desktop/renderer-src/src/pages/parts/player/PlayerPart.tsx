@@ -161,7 +161,6 @@ export function PlayerPart(props: PlayerPartProps) {
             <div className="min-w-0 max-w-full flex-1">
               <Player.Title />
             </div>
-            <Player.SegmentQualityDebug />
 
             {isMobile && meta?.type === "show" && (
               <span className="text-type-secondary text-sm whitespace-nowrap flex-shrink-0">
