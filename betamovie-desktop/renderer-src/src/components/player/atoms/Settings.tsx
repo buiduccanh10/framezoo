@@ -41,6 +41,9 @@ function SettingsOverlay({ id }: { id: string }) {
     useState<CaptionListItem | null>(null);
   const [subtitleSelectionMode, setSubtitleSelectionMode] =
     useState<SubtitleSelectionMode>("primary");
+  const [sourceViewState, setSourceViewState] = useState<"addons" | "streams">(
+    "addons",
+  );
   const { width: viewportWidth, height: viewportHeight } = useWindowSize();
   const { isMobile } = useIsMobile();
   const isDesktop = useIsDesktopApp();
@@ -64,12 +67,16 @@ function SettingsOverlay({ id }: { id: string }) {
       setChosenSourceId(null);
       setChosenLanguage(null);
       setSubtitleSelectionMode("primary");
+      setSourceViewState("addons");
     }
     if (router.route === "/") {
       setChosenSourceId(null);
       setChosenLanguage(null);
+      setSourceViewState("addons");
     }
   }, [router.isRouterActive, router.route]);
+
+  const extraWideWidth = Math.min(650, maxOverlayWidth);
 
   return (
     <Overlay id={id}>
@@ -192,7 +199,7 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/source"
-          width={defaultWidth}
+          width={sourceViewState === "streams" ? extraWideWidth : defaultWidth}
           height={defaultHeight}
         >
           {isDesktop && playerMeta ? (
@@ -201,6 +208,7 @@ function SettingsOverlay({ id }: { id: string }) {
               mode="full"
               onCancel={() => router.navigate("/")}
               onSelected={() => router.close()}
+              onStateChange={setSourceViewState}
             />
           ) : (
             <Menu.CardWithScrollable>

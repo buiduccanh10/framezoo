@@ -153,8 +153,9 @@ export function SourceSelectPart(props: {
   mode?: "initial" | "full";
   onCancel?: () => void;
   onSelected?: () => void;
+  onStateChange?: (state: "addons" | "streams") => void;
 }) {
-  const { meta, mode, onCancel, onSelected } = props;
+  const { meta, mode, onCancel, onSelected, onStateChange } = props;
   const addons = useInstalledAddons();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
   const { playMedia } = usePlayer();
@@ -196,6 +197,10 @@ export function SourceSelectPart(props: {
     setAddonError(null);
     setLoadingAddonIds(new Set());
   }, [addonMedia]);
+
+  useEffect(() => {
+    onStateChange?.(selectedAddonId ? "streams" : "addons");
+  }, [selectedAddonId, onStateChange]);
 
   useEffect(() => {
     let cancelled = false;
@@ -331,6 +336,150 @@ export function SourceSelectPart(props: {
   const showBackdrop = isInitialSelection;
   const backgroundImage = meta.backdrop ?? meta.poster;
 
+  const content = (
+    <Menu.CardWithScrollable>
+      {showAddonList && (isInitialSelection || !onCancel) ? (
+        <Menu.Title>Choose an addon</Menu.Title>
+      ) : showAddonList ? (
+        <Menu.BackLink onClick={onCancel}>Nguồn</Menu.BackLink>
+      ) : (
+        <SelectedAddonHeader
+          addon={selectedAddon}
+          onBack={() => {
+            setSelectedAddonId(null);
+            setAddonLoadErrors([]);
+            setAddonError(null);
+          }}
+        />
+      )}
+      <>
+        {showAddonList ? (
+          enabledAddons.length === 0 ? (
+            <Menu.Section>
+              <Menu.TextDisplay noIcon title="Desktop addons">
+                Install an addon from the plus button in the navigation.
+              </Menu.TextDisplay>
+            </Menu.Section>
+          ) : (
+            <Menu.Section>
+              {enabledAddons.map((addon) => {
+                const streamCount =
+                  streamCountByAddon.get(addon.manifest.id) ?? 0;
+                const loading = loadingAddonIds.has(addon.manifest.id);
+                const loadError = addonLoadErrors.find(
+                  (error) => error.addonId === addon.manifest.id,
+                );
+
+                return (
+                  <SelectableLink
+                    key={addon.manifest.id}
+                    rightSide={
+                      <Icon
+                        className="ml-2 text-xl"
+                        icon={Icons.CHEVRON_RIGHT}
+                      />
+                    }
+                    onClick={() => setSelectedAddonId(addon.manifest.id)}
+                  >
+                    <span className="inline-flex h-full min-w-0 items-center gap-3 align-middle">
+                      <AddonIcon
+                        name={addon.manifest.name}
+                        logo={addon.manifest.logo}
+                      />
+                      <span className="flex min-w-0 flex-col">
+                        <span className="truncate text-white">
+                          {addon.manifest.name}
+                        </span>
+                        <span className="truncate text-sm text-video-context-type-main text-opacity-60">
+                          {loadError
+                            ? "Unable to load streams"
+                            : loading
+                              ? "Loading streams..."
+                              : streamCount > 0
+                                ? `${streamCount} stream${
+                                    streamCount === 1 ? "" : "s"
+                                  }`
+                                : "View streams"}
+                        </span>
+                      </span>
+                    </span>
+                  </SelectableLink>
+                );
+              })}
+            </Menu.Section>
+          )
+        ) : selectedAddonLoading ? (
+          <Menu.Section>
+            <Menu.TextDisplay noIcon>
+              <Loading />
+            </Menu.TextDisplay>
+          </Menu.Section>
+        ) : selectedAddonStreams.length === 0 ? (
+          <Menu.Section>
+            <Menu.TextDisplay noIcon title="Desktop addons">
+              {isInitialSelection
+                ? "No torrent streams returned for this addon."
+                : "No addon streams returned for this title."}
+            </Menu.TextDisplay>
+          </Menu.Section>
+        ) : (
+          <Menu.Section>
+            {selectedAddonStreams.map((stream) => {
+              const selected = currentSourceId === stream.id;
+              const size = formatSize(stream.videoSize);
+              const nameLines = streamLines(stream.name);
+              const titleLines = streamLines(stream.title);
+              const fallbackDetails = [
+                size ? `💾 ${size}` : null,
+                stream.fileName ? `⚙ ${stream.fileName}` : null,
+              ].filter(Boolean);
+              const detailsLines =
+                titleLines.length > 0
+                  ? titleLines
+                  : [stream.description, ...fallbackDetails].filter(Boolean);
+
+              return (
+                <Menu.Link
+                  key={stream.id}
+                  active={selected}
+                  clickable={!startingAddonId}
+                  disabled={startingAddonId !== null}
+                  className="items-center gap-4 px-3 py-3"
+                  onClick={() => void selectAddonStream(stream)}
+                >
+                  <div className="grid min-w-0 flex-1 grid-cols-[minmax(10rem,15rem),minmax(0,1fr)] items-center gap-8">
+                    <span className="min-w-0 whitespace-pre-line text-[15px] leading-5 text-white/85">
+                      {nameLines.length > 0
+                        ? nameLines.join("\n")
+                        : stream.addonName}
+                    </span>
+                    <span className="min-w-0 whitespace-pre-line text-[15px] leading-5 text-white/90 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] overflow-hidden">
+                      {detailsLines.join("\n")}
+                    </span>
+                  </div>
+                </Menu.Link>
+              );
+            })}
+          </Menu.Section>
+        )}
+        {addonError ? (
+          <p className="px-1 pt-2 text-sm text-video-context-error">
+            {addonError}
+          </p>
+        ) : null}
+        {selectedAddonError ? (
+          <p className="px-1 pt-2 text-sm text-video-context-error">
+            {selectedAddonError.message}
+          </p>
+        ) : null}
+      </>
+    </Menu.CardWithScrollable>
+  );
+
+  if (mode === "full") {
+    return content;
+  }
+
   return (
     <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
       {showBackdrop ? (
@@ -350,147 +499,7 @@ export function SourceSelectPart(props: {
         </>
       ) : null}
       <div className="pointer-events-auto relative flex h-full w-full items-center justify-center px-6 py-8">
-        <div className="h-[min(58vh,42rem)] w-full max-w-2xl">
-          <Menu.CardWithScrollable>
-            {showAddonList && (isInitialSelection || !onCancel) ? (
-              <Menu.Title>Choose an addon</Menu.Title>
-            ) : showAddonList ? (
-              <Menu.BackLink onClick={onCancel}>Nguồn</Menu.BackLink>
-            ) : (
-              <SelectedAddonHeader
-                addon={selectedAddon}
-                onBack={() => {
-                  setSelectedAddonId(null);
-                  setAddonLoadErrors([]);
-                  setAddonError(null);
-                }}
-              />
-            )}
-            <>
-              {showAddonList ? (
-                enabledAddons.length === 0 ? (
-                  <Menu.Section>
-                    <Menu.TextDisplay noIcon title="Desktop addons">
-                      Install an addon from the plus button in the navigation.
-                    </Menu.TextDisplay>
-                  </Menu.Section>
-                ) : (
-                  <Menu.Section>
-                    {enabledAddons.map((addon) => {
-                      const streamCount =
-                        streamCountByAddon.get(addon.manifest.id) ?? 0;
-                      const loading = loadingAddonIds.has(addon.manifest.id);
-                      const loadError = addonLoadErrors.find(
-                        (error) => error.addonId === addon.manifest.id,
-                      );
-
-                      return (
-                        <SelectableLink
-                          key={addon.manifest.id}
-                          rightSide={
-                            <Icon
-                              className="ml-2 text-xl"
-                              icon={Icons.CHEVRON_RIGHT}
-                            />
-                          }
-                          onClick={() => setSelectedAddonId(addon.manifest.id)}
-                        >
-                          <span className="inline-flex h-full min-w-0 items-center gap-3 align-middle">
-                            <AddonIcon
-                              name={addon.manifest.name}
-                              logo={addon.manifest.logo}
-                            />
-                            <span className="flex min-w-0 flex-col">
-                              <span className="truncate text-white">
-                                {addon.manifest.name}
-                              </span>
-                              <span className="truncate text-sm text-video-context-type-main text-opacity-60">
-                                {loadError
-                                  ? "Unable to load streams"
-                                  : loading
-                                    ? "Loading streams..."
-                                    : streamCount > 0
-                                      ? `${streamCount} stream${
-                                          streamCount === 1 ? "" : "s"
-                                        }`
-                                      : "View streams"}
-                              </span>
-                            </span>
-                          </span>
-                        </SelectableLink>
-                      );
-                    })}
-                  </Menu.Section>
-                )
-              ) : selectedAddonLoading ? (
-                <Menu.Section>
-                  <Menu.TextDisplay noIcon>
-                    <Loading />
-                  </Menu.TextDisplay>
-                </Menu.Section>
-              ) : selectedAddonStreams.length === 0 ? (
-                <Menu.Section>
-                  <Menu.TextDisplay noIcon title="Desktop addons">
-                    {isInitialSelection
-                      ? "No torrent streams returned for this addon."
-                      : "No addon streams returned for this title."}
-                  </Menu.TextDisplay>
-                </Menu.Section>
-              ) : (
-                <Menu.Section>
-                  {selectedAddonStreams.map((stream) => {
-                    const selected = currentSourceId === stream.id;
-                    const size = formatSize(stream.videoSize);
-                    const nameLines = streamLines(stream.name);
-                    const titleLines = streamLines(stream.title);
-                    const fallbackDetails = [
-                      size ? `💾 ${size}` : null,
-                      stream.fileName ? `⚙ ${stream.fileName}` : null,
-                    ].filter(Boolean);
-                    const detailsLines =
-                      titleLines.length > 0
-                        ? titleLines
-                        : [stream.description, ...fallbackDetails].filter(
-                            Boolean,
-                          );
-
-                    return (
-                      <Menu.Link
-                        key={stream.id}
-                        active={selected}
-                        clickable={!startingAddonId}
-                        disabled={startingAddonId !== null}
-                        className="items-center gap-4 px-3 py-3"
-                        onClick={() => void selectAddonStream(stream)}
-                      >
-                        <div className="grid min-w-0 flex-1 grid-cols-[minmax(10rem,15rem),minmax(0,1fr)] items-center gap-8">
-                          <span className="min-w-0 whitespace-pre-line text-[15px] leading-5 text-white/85">
-                            {nameLines.length > 0
-                              ? nameLines.join("\n")
-                              : stream.addonName}
-                          </span>
-                          <span className="min-w-0 whitespace-pre-line text-[15px] leading-5 text-white/90 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] overflow-hidden">
-                            {detailsLines.join("\n")}
-                          </span>
-                        </div>
-                      </Menu.Link>
-                    );
-                  })}
-                </Menu.Section>
-              )}
-              {addonError ? (
-                <p className="px-1 pt-2 text-sm text-video-context-error">
-                  {addonError}
-                </p>
-              ) : null}
-              {selectedAddonError ? (
-                <p className="px-1 pt-2 text-sm text-video-context-error">
-                  {selectedAddonError.message}
-                </p>
-              ) : null}
-            </>
-          </Menu.CardWithScrollable>
-        </div>
+        <div className="h-[min(58vh,42rem)] w-full max-w-2xl">{content}</div>
       </div>
     </div>
   );
