@@ -43,6 +43,7 @@ betamovie-fe/.env.production.local
 betamovie-be/.env
 betamovie-be/.DS_Store
 betamovie-desktop/.DS_Store
+betamovie-desktop/torrent-engine/.venv
 
 npm-debug.log*
 

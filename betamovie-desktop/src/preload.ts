@@ -1,4 +1,9 @@
 import { contextBridge, ipcRenderer } from "electron";
+import type {
+  TorrentSession,
+  TorrentStartRequest,
+  TorrentStatus,
+} from "./types";
 
 type RuntimeConfig = Record<string, string>;
 
@@ -92,6 +97,24 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("desktop:app-update-state", handler);
     return () => {
       ipcRenderer.removeListener("desktop:app-update-state", handler);
+    };
+  },
+  startTorrent(request: TorrentStartRequest): Promise<TorrentSession> {
+    return ipcRenderer.invoke("desktop:torrent-start", request);
+  },
+  stopTorrent(sessionId: string): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:torrent-stop", sessionId);
+  },
+  getTorrentStatus(sessionId: string): Promise<TorrentStatus | null> {
+    return ipcRenderer.invoke("desktop:torrent-get-status", sessionId);
+  },
+  onTorrentStatus(listener: (status: TorrentStatus) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, status: TorrentStatus) => {
+      listener(status);
+    };
+    ipcRenderer.on("desktop:torrent-status", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:torrent-status", handler);
     };
   },
 });
