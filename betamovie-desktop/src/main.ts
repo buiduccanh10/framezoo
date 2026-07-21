@@ -12,7 +12,15 @@ import {
 import path from "node:path";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
 import { createDesktopPipController } from "./desktopPip";
-import type { ExtensionMessageName, StreamRule } from "./types";
+import {
+  createTorrentManagerFromEnvironment,
+  TorrentManager,
+} from "./torrent/manager";
+import type {
+  ExtensionMessageName,
+  StreamRule,
+  TorrentStartRequest,
+} from "./types";
 
 const APP_ID = "com.alphaflix.desktop";
 const APP_NAME = "AlphaFlix";
@@ -24,6 +32,7 @@ const DESKTOP_APP_UPDATE_CHANNEL =
   process.env.BETAMOVIE_DESKTOP_UPDATE_CHANNEL ?? "stable";
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 const DESKTOP_SETTINGS_ROUTE = "/settings";
+const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
 
 const DEVTOOLS_PROTECTION_ENABLED =
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
@@ -33,6 +42,7 @@ let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
 const streamRules = new Map<number, StreamRule>();
+const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
 
 function supportsDesktopAppUpdates() {
   return process.platform === "darwin" || process.platform === "win32";
@@ -156,7 +166,10 @@ async function handleExtensionMessage(
       return { success: true };
     }
 
-    if (typeof payload?.page === "string" && /^https?:\/\//i.test(payload.page)) {
+    if (
+      typeof payload?.page === "string" &&
+      /^https?:\/\//i.test(payload.page)
+    ) {
       await shell.openExternal(payload.page);
       return { success: true };
     }
@@ -182,6 +195,7 @@ async function handleExtensionMessage(
         headers,
         body,
         redirect: "follow",
+        signal: AbortSignal.timeout(EXTENSION_REQUEST_TIMEOUT_MS),
       });
 
       const contentType = response.headers.get("content-type") ?? "";
@@ -368,6 +382,11 @@ function sendDesktopAppUpdateState() {
   );
 }
 
+function sendTorrentStatus(status: unknown) {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+  mainWindow.webContents.send("desktop:torrent-status", status);
+}
+
 async function handleDesktopAppUpdateMenuAction() {
   const updateState = desktopAppUpdater.getState();
 
@@ -392,7 +411,10 @@ async function handleDesktopAppUpdateMenuAction() {
     return;
   }
 
-  if (updateState.status === "checking" || updateState.status === "downloading") {
+  if (
+    updateState.status === "checking" ||
+    updateState.status === "downloading"
+  ) {
     return;
   }
 
@@ -406,7 +428,8 @@ async function handleDesktopAppUpdateMenuAction() {
       type: "error",
       title: "Desktop update failed",
       message:
-        nextState.errorMessage ?? "Unable to check for desktop updates right now.",
+        nextState.errorMessage ??
+        "Unable to check for desktop updates right now.",
     });
     return;
   }
@@ -501,7 +524,11 @@ function buildApplicationMenu() {
           },
           {
             label: "File",
-            submenu: [settingsMenuItem, { type: "separator" }, { role: "close" }],
+            submenu: [
+              settingsMenuItem,
+              { type: "separator" },
+              { role: "close" },
+            ],
           },
           {
             label: "Edit",
@@ -520,7 +547,9 @@ function buildApplicationMenu() {
             submenu: [
               { role: "reload" },
               { role: "forceReload" },
-              ...(ENABLE_DEVTOOLS ? ([{ role: "toggleDevTools" }] as const) : []),
+              ...(ENABLE_DEVTOOLS
+                ? ([{ role: "toggleDevTools" }] as const)
+                : []),
               { type: "separator" },
               { role: "resetZoom" },
               { role: "zoomIn" },
@@ -531,7 +560,11 @@ function buildApplicationMenu() {
           },
           {
             label: "Window",
-            submenu: [{ role: "minimize" }, { role: "zoom" }, { role: "front" }],
+            submenu: [
+              { role: "minimize" },
+              { role: "zoom" },
+              { role: "front" },
+            ],
           },
           {
             label: "Help",
@@ -565,7 +598,9 @@ function buildApplicationMenu() {
             submenu: [
               { role: "reload" },
               { role: "forceReload" },
-              ...(ENABLE_DEVTOOLS ? ([{ role: "toggleDevTools" }] as const) : []),
+              ...(ENABLE_DEVTOOLS
+                ? ([{ role: "toggleDevTools" }] as const)
+                : []),
               { type: "separator" },
               { role: "resetZoom" },
               { role: "zoomIn" },
@@ -750,13 +785,34 @@ function registerIpcHandlers() {
     focusMainWindow(mainWindow);
     return true;
   });
+
+  torrentManager.subscribe(sendTorrentStatus);
+
+  ipcMain.handle(
+    "desktop:torrent-start",
+    async (_event, request: TorrentStartRequest) => {
+      if (!request || typeof request.sourceId !== "string") {
+        throw new Error("invalid torrent start request");
+      }
+      return torrentManager.start(request);
+    },
+  );
+
+  ipcMain.handle("desktop:torrent-stop", async (_event, sessionId: string) => {
+    await torrentManager.stop(sessionId);
+    return true;
+  });
+
+  ipcMain.handle(
+    "desktop:torrent-get-status",
+    async (_event, sessionId: string) => {
+      return torrentManager.getStatus(sessionId);
+    },
+  );
 }
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
-app.commandLine.appendSwitch(
-  "enable-features",
-  "DocumentPictureInPictureAPI",
-);
+app.commandLine.appendSwitch("enable-features", "DocumentPictureInPictureAPI");
 app.setName(APP_NAME);
 
 if (process.platform === "win32") {
@@ -799,4 +855,5 @@ app.on("window-all-closed", () => {
 
 app.on("before-quit", () => {
   desktopAppUpdater.dispose();
+  void torrentManager.dispose();
 });
