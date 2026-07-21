@@ -73,7 +73,7 @@ export function normalizeAddonStreams(
         addonName: addon.manifest.name,
         kind,
         name: stream.name?.trim() || addon.manifest.name,
-        title: stream.title?.trim() || stream.name?.trim() || "Stream",
+        title: stream.title?.trim() ?? "",
         description: stream.description?.trim() || "",
         url,
         infoHash: extractInfoHash(stream),
