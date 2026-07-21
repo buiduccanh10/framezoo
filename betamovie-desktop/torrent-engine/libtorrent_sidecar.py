@@ -102,7 +102,7 @@ class TorrentHttpServer:
     def __init__(self) -> None:
         self.sessions: Dict[str, "TorrentRuntime"] = {}
         self.lock = threading.RLock()
-        self.server = ThreadingHTTPServer(("127.0.0.1", 0), TorrentHttpHandler)
+        self.server = QuietHTTPServer(("127.0.0.1", 0), TorrentHttpHandler)
         self.server.runtime = self  # type: ignore[attr-defined]
         self.thread = threading.Thread(
             target=self.server.serve_forever,
@@ -129,6 +129,15 @@ class TorrentHttpServer:
     def close(self) -> None:
         self.server.shutdown()
         self.server.server_close()
+
+
+class QuietHTTPServer(ThreadingHTTPServer):
+    def handle_error(self, request: Any, client_address: Any) -> None:
+        import sys
+        exc_type, exc_value, _ = sys.exc_info()
+        if isinstance(exc_value, (ConnectionResetError, BrokenPipeError)):
+            return
+        super().handle_error(request, client_address)
 
 
 class TorrentHttpHandler(BaseHTTPRequestHandler):

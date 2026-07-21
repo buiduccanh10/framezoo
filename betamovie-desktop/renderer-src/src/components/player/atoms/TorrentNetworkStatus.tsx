@@ -60,8 +60,8 @@ export function TorrentNetworkStatus(props: {
         icon={Icons.WEB}
       />
       {open ? (
-        <div className="absolute bottom-full right-0 z-[100] mb-2 w-64 rounded-xl border border-dropdown-border bg-dropdown-altBackground p-3 text-xs text-dropdown-text shadow-xl">
-          <div className="mb-2 flex items-center justify-between text-white">
+        <div className="absolute bottom-full right-0 z-[100] mb-2 w-max min-w-[16rem] max-w-[90vw] sm:max-w-md rounded-xl border border-dropdown-border bg-dropdown-altBackground p-3 text-xs text-dropdown-text shadow-xl">
+          <div className="mb-2 flex items-center justify-between gap-4 text-white">
             <span>Torrent network</span>
             <span className="uppercase text-type-link">{status.state}</span>
           </div>
