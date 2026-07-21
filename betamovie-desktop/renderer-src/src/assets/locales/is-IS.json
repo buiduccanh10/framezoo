@@ -1,0 +1,1309 @@
+{
+  "actions": {
+    "cancel": "Hætta við",
+    "confirm": "Staðfesta",
+    "copied": "Afritað",
+    "copy": "Afrita"
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "Virkur",
+      "confirm": "Staðfesta",
+      "customBackend": "Sérsniðin bakendi",
+      "customBackendPlaceholder": "https://",
+      "description": "Veldu hvaða bakendaþjón á að tengjast",
+      "title": "Veldu Account Server"
+    },
+    "createAccount": "Hefurðu ekki reikning ennþá? <0>Búðu til reikning.</0>",
+    "generate": {
+      "custom": "Sérsniðin",
+      "customPassphraseLabel": "Sérsniðið lykilorð",
+      "customPassphrasePlaceholder": "Sláðu inn sérsniðna lykilorðið þitt",
+      "description": "Þitt lykilorð lætur eins og notandanafn og lykilorð. Vertu viss um að halda því öruggu út að þú munt þurfa að nota það til að komast inn í reikningin þinn",
+      "invalidPassphraseCharacters": "Ógildir lykilorðastafir. Aðeins enskir ​​stafir, tölustafir 1-10 og venjuleg tákn eru leyfð.",
+      "next": "Ég hef vistað lykilorðið mitt",
+      "passphraseFrameLabel": "Lykilorð",
+      "passphraseTooShort": "Aðgangsorð verður að vera að minnsta kosti 8 stafir að lengd.",
+      "title": "Þitt lykilorð",
+      "useCustomPassphrase": "Notaðu sérsniðið lykilorð",
+      "usePasskeyInstead": "Notaðu lykilorð í staðinn"
+    },
+    "hasAccount": "Hefurðu reikning nú þegar? <0>Skráðu þig inn hér.</0>",
+    "inviteCodeInvalidError": "Ógildur boðskóði (notandaauðkenni fannst ekki)",
+    "inviteCodeLabel": "Boðskóði",
+    "inviteCodePlaceholder": "Sláðu inn notandaauðkenni vinar",
+    "inviteCodeRequiredError": "Boðskóði er nauðsynlegur",
+    "login": {
+      "description": "Vinsamlegast sláðu inn lykilorðið þitt til þess að skrá þig inn í reikningin þinn",
+      "failedToReachServer": "Ekki tókst að ná í netþjón",
+      "nicknameLabel": "Gælunafn",
+      "nicknameNotFound": "Gælunafn fannst ekki",
+      "nicknamePlaceholder": "Sláðu inn gælunafnið þitt",
+      "nicknameRequired": "Gælunafn er áskilið",
+      "noBackendUrl": "Engin bakenda slóð",
+      "or": "or",
+      "passwordIncorrect": "Lykilorð er rangt",
+      "passwordLabel": "Lykilorð",
+      "passwordPlaceholder": "Sláðu inn lykilorðið þitt",
+      "passwordRequired": "Lykilorð er krafist",
+      "submit": "Skrá inn",
+      "title": "Skráðu þig inn í reikningin þinn",
+      "usePasskey": "Notaðu lykilorð",
+      "validationError": "Vitlaust eða óklárað lykilorð"
+    },
+    "register": {
+      "confirmPasswordLabel": "Staðfestu lykilorð",
+      "confirmPasswordPlaceholder": "Staðfestu lykilorðið þitt",
+      "information": {
+        "color1": "Prófíl litur eitt",
+        "color2": "Prófíl litur tvö",
+        "header": "Sláðu inn nafn fyrir tækið þitt og veldu liti og notanda tákn að þínu vali",
+        "icon": "Notanda tákn",
+        "next": "Næst",
+        "title": "Reiknings upplýsingar"
+      },
+      "nicknameLabel": "Gælunafn",
+      "nicknamePlaceholder": "Veldu einstakt gælunafn",
+      "nicknameTaken": "Gælunafn er þegar tekið",
+      "passwordInput": {
+        "description": "Veldu gælunafn og lykilorð. Lykilorðið þitt virkar sem öruggt lykilorð, svo vertu viss um að muna það!",
+        "title": "Búðu til innskráningu þína"
+      },
+      "passwordLabel": "Lykilorð",
+      "passwordMismatch": "Lykilorð passa ekki saman",
+      "passwordPlaceholder": "Búðu til lykilorð (notað sem lykilorðið þitt)",
+      "passwordWeak": "Lykilorð verður að vera að minnsta kosti 8 stafir með bókstöfum og tölustöfum"
+    },
+    "trust": {
+      "failed": {
+        "text": "Stilltirðu það rétt?",
+        "title": "Náðist ekki í netþjón"
+      },
+      "host": "Þú ert að tengjast við <0>{{hostname}}</0> - vinsamlegast staðfestu að þú treystir því áður en þú býrð til reikning",
+      "no": "Fara til baka",
+      "noHost": "Netjónninn hefur ekki verið stilltur, þess vegna getur þú ekki búið til reikning",
+      "noHostTitle": "Netþjónn ekki stilltur!",
+      "title": "Treystir þú þessum netþjóni?",
+      "yes": "Ég treysti þessum netþjóni"
+    },
+    "verify": {
+      "description": "Vinsamlegst sláðu inn lykilorðið þitt frá því áðan til þess að staðfesta að þú hefur vistað það og til að stofna nýjan reikning",
+      "invalidData": "Gögn eru ekki gild",
+      "noMatch": "Lykilorð passar ekki saman",
+      "recaptchaFailed": "ReCaptcha staðfesting mistókst",
+      "register": "Stofna reikning",
+      "title": "Staðfestu þitt lykilorð"
+    }
+  },
+  "details": {
+    "addToList": "Bæta við lista",
+    "airs": "Airs",
+    "collection": {
+      "bookmarkAll": "Bókamerki allt",
+      "movie": "Kvikmynd",
+      "movies": "Kvikmyndir",
+      "rating": "Einkunn",
+      "releaseDate": "Útgáfudagur",
+      "sortBy": "Raða eftir"
+    },
+    "endsAt": "Lýkur kl. {{time}}",
+    "episode": "Þáttur",
+    "episodeNumber": "Þáttur {{number}}",
+    "episodeReleaseDate": "Útgáfudagur: {{date}}",
+    "episodeReleaseDateUnknown": "Útgáfudagur: Óþekkt",
+    "episodes": "Þættir",
+    "imdb": "Skoðaðu á IMDb",
+    "language": "Tungumál:",
+    "play": "Spila",
+    "rating": "Einkunn:",
+    "releaseDate": "Útgáfudagur:",
+    "resume": "Halda áfram",
+    "runtime": "Runtime:",
+    "season": "Tímabil",
+    "specialSeason": "Sérstakt tímabil",
+    "seasons": "Tímabil/s",
+    "similar": "Svipað",
+    "tmdb": "Skoðaðu á TMDB",
+    "trailers": "Eftirvagnar",
+    "watched": "Horfði á {{watched}} af {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Allir kvikmyndalistar",
+    "carousel": {
+      "change": "Breyta",
+      "more": "Skoða meira",
+      "today": "Í dag",
+      "thisWeek": "Í þessari viku",
+      "title": {
+        "4kReleases": "4K útgáfur",
+        "editorPicksMovies": "Ritstjóri velur kvikmyndir",
+        "editorPicksShows": "Ritstjóri velur sýningar",
+        "forYou": "Fyrir þig",
+        "inCinemas": "Í kvikmyndahúsum",
+        "latestReleases": "Nýjustu útgáfur",
+        "latestTVReleases": "Nýjustu sjónvarpsþættirnir",
+        "movies": "{{category}} Kvikmyndir",
+        "moviesOn": "Kvikmyndir á {{provider}}",
+        "onTheAir": "On The Air",
+        "popular": "Vinsælast",
+        "recommended": "Vegna þess að þú horfðir á: {{title}}",
+        "top10": "Topp 10",
+        "topRated": "Hæsta einkunn",
+        "trending": "Vinsælt núna",
+        "tvshows": "{{category}} þættir",
+        "tvshowsOn": "Sýnir á {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Frekari upplýsingar",
+      "playNow": "Spila núna"
+    },
+    "filters": {
+      "country": "Land"
+    },
+    "page": {
+      "back": "Farðu til baka",
+      "loading": "Hleður...",
+      "loadMore": "Hlaða meira",
+      "title": "Uppgötvaðu kvikmyndir og sjónvarp"
+    },
+    "scrollToTop": "Aftur efst",
+    "tabs": {
+      "movies": "Kvikmyndir",
+      "top10": "Topp 10",
+      "tvshows": "Sjónvarpsþættir"
+    },
+    "viewLists": "Skoða alla kvikmyndalista"
+  },
+  "downtimeNotice": {
+    "badge": "Málefni",
+    "goHome": "Farðu heim",
+    "message": "AlphaFlix er aftur að lenda í vandræðum með sumar veitendur, ef þú finnur ekki eða spilar þátt vinsamlegast breyttu upprunanum. Búast má við að þessi villa verði viðvarandi allan eftirfarandi tíma.",
+    "title": "Mál veitenda"
+  },
+  "errors": {
+    "badge": "Það bilaði",
+    "details": "Villu upplýsingar",
+    "reloadPage": "Endurhlaðaðu vefsíðuna",
+    "showError": "Sýna villu upplýsingar",
+    "title": "Við lentum í villu!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Fyrirvari",
+      "disclaimerText": "AlphaFlix hýsir engar skrár, það tengist eingöngu þjónustu þriðja aðila. Lagleg atriði ættu að vera rædd við skráarhýsinga og veitanda. AlphaFlix er ekki ábyrg fyrir neinum skrám sýndar af myndbands veitöndum."
+    },
+    "links": {
+      "fluxer": "Fluxer",
+      "funding": "Styðjið okkur",
+      "github": "GitHub"
+    },
+    "tagline": "Horfðu á uppáhalds þætti og myndirnar þínar með þessu opna hugbúnaða forriti."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "Hætta við",
+      "clickToEdit": "Smelltu á lykilmerki til að breyta því",
+      "conditions": {
+        "showsOnly": "Sýnir aðeins"
+      },
+      "conflict": "átök",
+      "conflicts": "átök",
+      "detected": "greind",
+      "editInSettings": "Breyttu lyklaborðsskipunum úr stillingum",
+      "groups": {
+        "audioVideo": "Hljóð og mynd",
+        "interface": "Viðmót",
+        "jumpToPosition": "Hoppa í stöðu",
+        "subtitlesAccessibility": "Texti og aðgengi",
+        "videoPlayback": "Myndbandsspilun"
+      },
+      "none": "Engin",
+      "numberKeySeeking": "Leita að framvindu númeralykils",
+      "numberKeySeekingDescription": "Notaðu tölutakkana 0-9 til að leita að ákveðnum stöðum í myndbandinu. 0 fer í byrjun, 1-8 hoppar í 10%-80% og 9 fer í 90%.",
+      "pressKey": "Ýttu á takka...",
+      "resetAllToDefault": "Endurstilla allt í sjálfgefið",
+      "resetToDefault": "Endurstilla sjálfgefið",
+      "save": "Vista",
+      "saveChanges": "Vista breytingar",
+      "shortcuts": {
+        "barrelRoll": "Gerðu tunnurúllu! 🌀",
+        "closeOverlay": "Lokaðu yfirlagi/modal",
+        "decreaseVolume": "Minnka hljóðstyrk",
+        "increaseVolume": "Auka hljóðstyrk",
+        "jumpTo0": "Hoppa í 0% (byrjun)",
+        "jumpTo9": "Fara í 90%",
+        "mute": "Slökkva/kveikja á hljóði",
+        "nextEpisode": "Næsti þáttur",
+        "playPause": "Spila / gera hlé (eða haltu inni í 2x hraða þegar kveikt er á því)",
+        "playPauseAlt": "Spila / gera hlé",
+        "previousEpisode": "Fyrri þáttur",
+        "randomCaption": "Veldu tilviljunarkenndan myndatexta úr síðast notaðu tungumáli",
+        "skipBackward1": "Slepptu 1 sekúndu afturábak",
+        "skipBackward10": "Slepptu 10 sekúndum afturábak",
+        "skipBackward5": "Slepptu afturábak 5 sekúndur",
+        "skipForward1": "Slepptu áfram 1 sekúndu",
+        "skipForward10": "Slepptu 10 sekúndum áfram",
+        "skipForward5": "Slepptu áfram 5 sekúndur",
+        "syncSubtitlesEarlier": "Samstilla texta fyrr (-0,5s)",
+        "syncSubtitlesLater": "Samstilla texta síðar (+0,5s)",
+        "previousSubtitleCue": "Fyrri undirtitill vísbending",
+        "nextSubtitleCue": "Næsta textamerki",
+        "toggleCaptions": "Skiptu um skjátexta",
+        "toggleFullscreen": "Skiptu um allan skjá",
+        "toggleNativeSubtitles": "Skiptu um innfæddan texta"
+      },
+      "subtitle": "Haltu ` til að sýna þessa hjálp hvenær sem er",
+      "title": "Flýtivísar"
+    },
+    "name": "AlphaFlix",
+    "pages": {
+      "discover": "Uppgötvaðu",
+      "login": "Skrá inn",
+      "migration": "Flytja reikning",
+      "pagetitle": "{{title}} - AlphaFlix",
+      "register": "Skrá",
+      "settings": "Stillingar"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "Hætta við",
+        "description": "Breyttu upplýsingum um þetta bókamerki",
+        "groupsLabel": "Hópar",
+        "save": "Vista",
+        "title": "Breyta bókamerki",
+        "titleLabel": "Titill",
+        "titlePlaceholder": "Sláðu inn titil fyrir bókamerkið þitt",
+        "yearLabel": "Ár",
+        "yearPlaceholder": "Sláðu inn ár fyrir bókamerkið þitt"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "Engir hópar ennþá",
+          "namePlaceholder": "Nafn hóps",
+          "placeholderButton": "Bæta við hóp",
+          "removeAll": "Fjarlægðu allt",
+          "removeFromGroup": "Fjarlægja úr hópnum"
+        },
+        "editGroup": {
+          "affectsBookmarks": "Þetta mun hafa áhrif á {{count}} bókamerki",
+          "cancel": "Hætta við",
+          "description": "Breyttu nafni og tákni bókamerkjahópsins þíns",
+          "nameLabel": "Nafn hóps",
+          "namePlaceholder": "Sláðu inn nafn fyrir hópinn þinn",
+          "save": "Vista",
+          "title": "Breyta hópi"
+        },
+        "reorder": {
+          "button": "Endurraða",
+          "cancel": "Hætta við",
+          "description": "Dragðu og slepptu til að endurraða bókamerkjahópunum þínum",
+          "done": "Búið",
+          "save": "Vista",
+          "title": "Breyta hóppöntun"
+        }
+      },
+      "sectionTitle": "Bókamerki",
+      "showAll": "Sýna allt",
+      "sorting": {
+        "options": {
+          "date": "Sjálfgefið (Bætt við dagsetningu)",
+          "titleAsc": "Titill A-Ö",
+          "titleDesc": "Titill Z-A",
+          "yearAsc": "Útgáfudagur Elst-nýjast",
+          "yearDesc": "Útgáfudagur Nýjast-Elst"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "Haltu Áfram Að Horfa",
+      "sorting": {
+        "options": {
+          "date": "Sjálfgefið (Bætt við dagsetningu)",
+          "titleAsc": "Titill A-Ö",
+          "titleDesc": "Titill Z-A",
+          "yearAsc": "Útgáfudagur Elst-nýjast",
+          "yearDesc": "Útgáfudagur Nýjast-Elst"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "Hætta að breyta"
+    },
+    "search": {
+      "allResults": "Þetta er allt sem við höfum!",
+      "discover": "Uppgötvaðu",
+      "discoverMore": "Uppgötvaðu meira",
+      "genreFilterAll": "Allar tegundir",
+      "empty": {
+        "default": "Velkomin, finndu fjölmiðla til að horfa á hér!",
+        "extra": [
+          "Það er ekkert hérna :(",
+          "Svo tómt...",
+          "Þvílík tómleiki.",
+          "Hæ nýr notandi:3"
+        ]
+      },
+      "failed": "Mostókst að finna miðil, reyndu aftur!",
+      "loading": "Hlaðið...",
+      "noResults": "Við gátum ekki fundið neitt!",
+      "placeholder": {
+        "default": "Hvað viltu horfa á?",
+        "extra": [
+          "Hvað viltu kanna?",
+          "Hvað er á áhorfslistanum þínum?",
+          "Hvað er uppáhalds bíómyndin þín?",
+          "Hvað er uppáhalds þáttaröðin þín?",
+          "Hvað er á vaktlistanum þínum í dag?",
+          "Hvernig var dagurinn þinn?",
+          "Slæmt, síðan virkar aldrei...",
+          "Er AlphaFlix ekki bara best?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "Leitar niðurstöður"
+    },
+    "support": {
+      "complete": "lokið",
+      "description": "AlphaFlix er rekið með tapi og við þurfum hjálp til að halda því án auglýsinga! Ef þér finnst gaman að nota AlphaFlix skaltu íhuga að gefa til að hjálpa okkur að standa straum af kostnaði okkar.",
+      "donate": "Gefðu",
+      "explanation": "Ef þú ert ekki að nota viðbótina eða ert ekki með FED API uppsett, gæti verið erfiðara að finna efni! Við viljum laga þetta, en það er miklu erfiðara að útvega efni án dýrra netþjóna. Svo vinsamlegast, ef þú hefur gaman af því að nota AlphaFlix, vinsamlegast íhugaðu að gefa til að hjálpa okkur að standa straum af vaxandi kostnaði okkar.",
+      "explanation2": "Ef þú vilt frekari upplýsingar, vinsamlegast vertu með í okkar",
+      "fluxer": "Fluxer",
+      "label": "Verkefnafjármögnun: ${{current}} / ${{goal}}",
+      "moreInfo": "Frekari upplýsingar",
+      "thankYou": "Þakka þér fyrir stuðninginn!",
+      "title": "AlphaFlix þarf hjálp þína!"
+    },
+    "titles": {
+      "69": {
+        "default": "Til í eitthvað kryddað?",
+        "extra": [
+          "Til hamingju með daginn 69 😘!"
+        ]
+      },
+      "420": {
+        "default": "Hvað myndir þú vilja horfa á þennan 4/20?",
+        "extra": [
+          "Gleðilegan 20/4 🥳!"
+        ]
+      },
+      "day": {
+        "default": "Hvað myndirðu vilja horfa á þetta kvöldið?",
+        "extra": [
+          "Fynnst þér þú vera ævintýralegur? Jurrasic Park gæti verið fullkomna valið."
+        ]
+      },
+      "halloween": {
+        "default": "Hvaða spooky mynd myndir þú vilja horfa á þessa hrekkjavöku?",
+        "extra": [
+          "Gleðilega hrekkjavöku! 🎃👻",
+          "Bú! 👻",
+          "Bragð eða skemmtun! 🍬",
+          "Það er graskerið mikla, Charlie Brown!"
+        ]
+      },
+      "morning": {
+        "default": "Hvað myndirðu vilja horfa á þessum morgni?",
+        "extra": [
+          "Ég heyrði að Before Sunrise sé góð"
+        ]
+      },
+      "night": {
+        "default": "Hvað myndirðu vilja horfa á í nótt?",
+        "extra": [
+          "Þreytt? Ég heyrði að The Exorcist sé góð."
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "Nýlega horft á",
+      "sectionTitle": "Horfðu á History"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Afritaðu deilingartengil",
+      "create": "Búðu til lista",
+      "delete": "Eyða",
+      "edit": "Breyta",
+      "editItems": "Breyta hlutum",
+      "open": "Opið",
+      "save": "Vista breytingar",
+      "saveMembership": "Vista breytingar"
+    },
+    "delete": {
+      "confirm": "Eyða „{{name}}“? Þetta er ekki hægt að afturkalla."
+    },
+    "empty": {
+      "description": "Búðu til fyrsta listann þinn til að byrja að flokka titla.",
+      "title": "Engir listar ennþá"
+    },
+    "errors": {
+      "load": "Mistókst að hlaða listanum þínum."
+    },
+    "form": {
+      "createDescription": "Byrjaðu nýjan lista yfir eftirlæti, enduráhorf eða eitthvað annað sem þú vilt deila.",
+      "createTitle": "Búðu til lista",
+      "description": "Lýsing",
+      "descriptionHelp": "Valfrjáls athugasemd til að hjálpa þér að muna hvað tilheyrir þessum lista.",
+      "descriptionPlaceholder": "Til hvers er þessi listi?",
+      "editDescription": "Uppfærðu nafn, lýsingu eða sýnileika fyrir þennan lista.",
+      "editTitle": "Breyta lista",
+      "errors": {
+        "nameRequired": "Nafn lista er áskilið",
+        "submitFailed": "Ekki tókst að vista lista."
+      },
+      "name": "Nafn lista",
+      "namePlaceholder": "Sci-fi um helgina",
+      "public": "Opinber listi",
+      "publicHelp": "Allir með hlekkinn geta skoðað þennan lista."
+    },
+    "items": {
+      "empty": "Þessi listi er tómur.",
+      "emptyHelp": "Bættu við titlum úr hvaða kvikmynd eða sýningarspjaldi sem er með Bæta við lista og komdu svo aftur hingað til að stjórna uppstillingunni."
+    },
+    "meta": {
+      "itemCount": "{{count}} atriði",
+      "itemCount_plural": "{{count}} atriði",
+      "updatedAt": "Uppfært {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Hætta við",
+        "create": "Búðu til lista",
+        "save": "Vista breytingar"
+      },
+      "description": "Veldu hvaða listar eiga að innihalda {{title}}.",
+      "empty": {
+        "description": "Búðu til lista til að vista þennan titil.",
+        "title": "Engir listar ennþá"
+      },
+      "errors": {
+        "create": "Mistókst að búa til lista.",
+        "save": "Mistókst að uppfæra listaaðild."
+      },
+      "title": "Bæta við lista"
+    },
+    "page": {
+      "description": "Settu saman eftirlæti, þemakvöld og horfðu á næsta val sem þú getur haldið persónulegum eða deilt með tengli.",
+      "editingHint": "Smelltu á lokahnappinn á kortinu til að fjarlægja það af þessum lista.",
+      "eyebrow": "Söfn",
+      "itemsEyebrow": "Titlar á þessum lista",
+      "itemsHint": "Veldu lista til vinstri til að skoða hann, notaðu síðan breytingastillingu þegar þú vilt hreinsa hann upp.",
+      "publicCountPlural": "{{count}} opinberir listar",
+      "publicCountSingular": "1 opinber listi",
+      "searchEmptyDescription": "Prófaðu annað nafn eða hreinsaðu leitina.",
+      "searchEmptyTitle": "Engir samsvarandi listar",
+      "searchPlaceholder": "Leita í listum",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nýlega uppfært",
+      "summaryPlural": "{{count}} listar",
+      "summarySingular": "1 listi",
+      "title": "Listar"
+    },
+    "public": {
+      "descriptionFallback": "Sameiginlegt safn í AlphaFlix.",
+      "notFoundDescription": "Þessi deilingartengil vantar eða er ekki lengur tiltækur.",
+      "notFoundTitle": "Listi fannst ekki",
+      "pageTitle": "Sameiginlegur listi",
+      "privateDescription": "Eigandinn hefur ekki deilt þessum lista opinberlega.",
+      "privateTitle": "Þessi listi er persónulegur"
+    },
+    "visibility": {
+      "private": "Einkamál",
+      "public": "Opinber"
+    }
+  },
+  "media": {
+    "episodeDisplay": "S{{season}} Þ{{episode}}",
+    "episodeShort": "E",
+    "seasonUnwatched": "Ertu viss um að þú viljir merkja tímabilið sem óhorft?",
+    "seasonWatched": "Ertu viss um að þú viljir merkja tímabilið sem horft á?",
+    "types": {
+      "movie": "Mynd",
+      "show": "Þáttur"
+    },
+    "unreleased": "Óútgefið"
+  },
+  "migration": {
+    "back": "Farðu til baka",
+    "download": {
+      "button": {
+        "download": "Sækja gögn",
+        "home": "Farðu heim"
+      },
+      "description": "Þetta mun hlaða niður gögnunum þínum í tækið þitt. Þú getur síðan hlaðið því upp á nýja netþjóninn eða bara geymt það til varðveislu.",
+      "status": {
+        "error": "Mistókst að hlaða niður gögnunum þínum. 😿",
+        "success": "Gögnunum þínum hefur verið hlaðið niður! 🎉"
+      },
+      "title": "Sækja gögn"
+    },
+    "loginRequired": "Þú verður að vera skráður inn til að flytja gögnin þín! Vinsamlegast farðu til baka og skráðu þig inn til að halda áfram.",
+    "preview": {
+      "downloadDescription": "Niðurhal inniheldur:",
+      "items": {
+        "bookmarks": "Bókamerkt miðill",
+        "progress": "Fylgstu með framförum",
+        "settings": "Stillingar og kjörstillingar"
+      },
+      "uploadDescription": "Gögn til að hlaða upp:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "Sækja gögn",
+          "description": "Þetta mun hlaða niður gögnunum þínum í tækið þitt. Þú getur síðan hlaðið því upp á nýja netþjóninn eða bara geymt það til varðveislu.",
+          "quality": "Tæknilegri",
+          "title": "Sækja gögn"
+        },
+        "or": "or",
+        "upload": {
+          "action": "Hlaða upp gögnum",
+          "description": "Hladdu upp áður útfluttu gagnaskránni þinni til að endurheimta bókamerkin þín og framfarir á þessum reikningi.",
+          "quality": "Endurheimta úr öryggisafriti",
+          "title": "Hlaða upp gögnum"
+        }
+      },
+      "title": "Flyttu gögnin þín"
+    },
+    "upload": {
+      "button": {
+        "home": "Halda áfram heim",
+        "import": "Flytja inn gögn",
+        "processing": "Vinnur...",
+        "saveLocal": "Sparaðu á staðnum"
+      },
+      "description": "Hladdu upp áður útfluttu gagnaskránni þinni til að endurheimta bókamerkin þín og framfarir á þessum reikningi.",
+      "exportedOn": "Flutt út þann",
+      "file": {
+        "change": "Breyta skrá",
+        "description": "Veldu skrána sem þú vilt hlaða upp",
+        "select": "Veldu skrá"
+      },
+      "previewTitle": "Forskoðun:",
+      "status": {
+        "error": "Mistókst að hlaða upp gögnunum þínum. 😿",
+        "processing": "Vinnur gögn...",
+        "success": "Gögnunum þínum hefur verið hlaðið upp! 🎉",
+        "successLocal": "Gögnin þín hafa verið vistuð á staðnum! 🎉"
+      },
+      "title": "Hladdu upp gögnum"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "Uppfærðu núna",
+        "available": "Ný app útgáfa er tilbúin.",
+        "download": "Sækja uppfærslu",
+        "later": "Seinna",
+        "restart": "Endurræstu til að uppfæra",
+        "updating": "Uppfærir..."
+      },
+      "offline": "Athugaðu net tengingu þína"
+    },
+    "download": {
+      "empty": "Engin niðurhal er stillt ennþá.",
+      "failed": "Mistókst að hlaða niðurhalsvalkostum.",
+      "label": "Sækja app",
+      "options": {
+        "mac-arm64": {
+          "description": "Best fyrir M-seríu Macs",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Virkar bæði á Apple Silicon og Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Best fyrir Intel Mac tölvur",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Best fyrir Snapdragon/ARM Windows tölvur",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Best fyrir 64-bita Windows tölvur",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "Engin bakenda vefslóð er stillt."
+    },
+    "install": {
+      "genericGuide": "Vafrinn þinn styður ekki sjálfvirka PWA uppsetningarkvaðningu.\nÞú getur samt sett upp með því að nota vafravalmyndina (til dæmis: 'Setja upp app', 'Búa til flýtileið' eða 'Bæta við bryggju/heimaskjá').",
+      "iosSafariGuide": "Til að setja upp AlphaFlix sem app:\n\n1. Pikkaðu á Share hnappinn (ferningur með ör).\n2. Veldu 'Bæta við heimaskjá'.\n3. Pikkaðu á Bæta við."
+    },
+    "menu": {
+      "accountMenu": "Opnaðu reikningsvalmynd",
+      "desktop": "App Stillingar",
+      "lists": "Listar",
+      "logout": "Skrá út",
+      "register": "Samstilla við ský",
+      "settings": "Stillingar"
+    }
+  },
+  "notFound": {
+    "badge": "Ekki fundið",
+    "goHome": "Aftur heim",
+    "message": "Við leituðum alls staðar: undir ruslafötunum, inn í skápnum, á bakvið proxy þjónin en við gátum ekki fundið síðuna sem þú ert að leita af.",
+    "reloadButton": "Reyndu aftur",
+    "title": "Gat ekki fundið síðu"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Hætta við"
+    }
+  },
+  "overlays": {
+    "close": "Loka"
+  },
+  "player": {
+    "back": {
+      "default": "Aftur heim",
+      "short": "Til baka"
+    },
+    "casting": {
+      "device": "tæki",
+      "to": "Sendir út í {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Hleður niður meira vinnsluminni...",
+      "2": "Breytir koffíni í innihald...",
+      "3": "Að kenna hamstinum að hlaupa hraðar...",
+      "4": "Að sannfæra rafeindir um að hreyfast hraðar...",
+      "5": "Næstum það... sagði hver hleðslustangur alltaf...",
+      "6": "Finnur fjarstýringuna... bíddu, rangt vandamál...",
+      "7": "Talið afturábak frá óendanleika...",
+      "8": "Að líkja eftir framtíðinni...",
+      "9": "Er að horfa á kattamyndbönd...",
+      "10": "Afvegaleiddur af GIF-myndum katta...",
+      "11": "Vinsamlegast bíddu á meðan nemandi fyllir á kaffið sitt...",
+      "12": "Er að athuga hvort það sé tengt...",
+      "13": "Að slökkva og kveikja aftur...",
+      "14": "Ekki hræðast...",
+      "15": "Veturinn er að koma...",
+      "16": "Skráir þig inn á Skynet...",
+      "17": "Allur vafrinn þinn er í eigu okkar...",
+      "18": "Er að leita að óendanlega ólíkindadrif...",
+      "19": "Að uppgötva nýjar leiðir til að láta þig bíða...",
+      "20": "Tími þinn er okkur mjög mikilvægur. Vinsamlegast bíddu á meðan við hunsum þig...",
+      "21": "Enn hraðari en Windows Update...",
+      "22": "Af hverju grípurðu ekki samloku?"
+    },
+    "menus": {
+      "audio": {
+        "default": "Sjálfgefið"
+      },
+      "downloads": {
+        "button": "Tilraun til að hlaða niður",
+        "copyHlsPlaylist": "Afrita HLS spilalista hlekk",
+        "disclaimer": "Niðurhalningar eru teknar beint frá heimildini. AlphaFlix hefur engan kraft yfir hvernig niðurhalningarnar eru gefnar.",
+        "downloadSubtitle": "Hlaða niður nú verandi texta",
+        "downloadVideo": "Hlaða niður myndbandi",
+        "hlsDisclaimer": "Niðurhalningar eru teknar beint frá heimildini. AlphaFlix hefur engan kraft yfir hvernig niðurhalningarnar eru gefnar.<br /><br />Vinsamlegast fattaðu að þú ert að niðurhala HLS spilunarlista, <bold>það er ekki mælt með að niðurhala ef þú kannt ekki mikið á háþróað streymis sniði.</bold>. Reyndu aðrar heimildir fyrir önnur sniði.",
+        "hlsDownloader": "Eða farðu á <0>hls niðurhalssíðuna</0> og límdu slóð spilunarlistans að neðan.",
+        "onAndroid": {
+          "1": "Til þess að niðurhala á Android, ýttu á niðurhalningar takkan síðan, á nýju síðunni, <bold>smelltu og haltu niðri</bold> á myndbandinu, veldu síðan <bold>vista</bold>.",
+          "shortTitle": "Hlaða niður / Android",
+          "title": "Að hlaða niður á Android"
+        },
+        "onIos": {
+          "1": "Til þess að niðurhala á iOS, ýttu á niðurhalninga takkan síðan, á nýju síðunni, ýttu á <bold><ios_share /></bold>, síðan <bold>Vista í skrár <ios_files /></bold>.",
+          "shortTitle": "Hlaða niður / iOS",
+          "title": "Að hlaða niður á iOS"
+        },
+        "onPc": {
+          "1": "Á PC, ýttu á niðurhalningar takkan síðan, á nýju síðunni, hægri smelltu á myndbandið og veldu <bold>Vista myndband sem</bold>",
+          "shortTitle": "Hlaða niður / PC",
+          "title": "Að hlaða niður á PC"
+        },
+        "title": "Hlaða niður"
+      },
+      "episodes": {
+        "button": "Þættir",
+        "emptyState": "Það eru engir þættir í þessari seríu, kíktu aftur seinna!",
+        "episodeBadge": "Þ{{episode}}",
+        "favorites": "Uppáhalds",
+        "loadingError": "Villa að hlaða seríu",
+        "loadingList": "Hleðsla...",
+        "loadingTitle": "Hleðsla...",
+        "markAsFavorite": "Merktu sem uppáhalds",
+        "markAsUnwatched": "Merktu sem óhorft",
+        "markAsWatched": "Merktu sem horft er á",
+        "noFavorites": "Engir uppáhalds þættir ennþá. Stjörnuþættir til að bæta þeim við eftirlætin þín!",
+        "showLess": "Sýna minna",
+        "showMore": "Sýna meira",
+        "specials": "Sérstök"
+      },
+      "playback": {
+        "disabled": "(Fötluð í vaktflokki)",
+        "speedBoosted": "2x",
+        "speedLabel": "Spilunarhraði",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Spilunar stillingar"
+      },
+      "quality": {
+        "auto": "Sjálfvirk",
+        "automaticLabel": "Sjálfkrafa gæði",
+        "hint": "Þú getur reynt að <0>skipta um heimild</0>til að fá öðruvísi gæða valkosti.",
+        "iosNoQuality": "Vegna takmörkum á Apple tækjum er ekki hægt að breyta um gæði á iOS með þessari heimild. Þú getur reynt að <0>breyta í aðra heimild</0> til að fá mismunandi gæðastillingar.",
+        "title": "Gæði"
+      },
+      "settings": {
+        "audioItem": "Hljóð",
+        "downloadItem": "Niðurhala",
+        "enableSubtitles": "Virkja texta",
+        "playbackItem": "Spilunar stillingar",
+        "qualityItem": "Gæði",
+        "sourceItem": "Myndbands heimildir",
+        "subtitleItem": "Texta stillingar"
+      },
+      "sources": {
+        "failed": {
+          "text": "Það kom upp villa á meðan við vorum að reyna að finna myndbönd, vinsamlegast reyndu að nota aðra heimild.",
+          "title": "Skröpun mistókst"
+        },
+        "findNextSource": "Finndu næstu heimild",
+        "maintain": "Viðhalda",
+        "noEmbeds": {
+          "text": "Við gátum ekki fundið neina innfellu, vinsamlegast reyndu að nota aðra heimild.",
+          "title": "Engar innifellur fundnar"
+        },
+        "noStream": {
+          "text": "Þessi heimild hefur engin streymi fyrir þessa mynd eða þætti.",
+          "title": "Ekkert streymi"
+        },
+        "title": "Heimildir",
+        "unknownOption": "Óvitað"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Sjálfvirkt val",
+        "autoSelectDifferentChoice": "Pikkaðu aftur til að velja annan texta sjálfkrafa",
+        "clearSecondary": "Hreinsa aukatexti",
+        "customChoice": "Veldu texta frá skrá",
+        "customizeLabel": "Sérsníða",
+        "delayEarly": "Sá yfirskrift",
+        "delayLate": "Heyrði hljóð",
+        "doubleClickToCopy": "Tvísmelltu til að afrita textagögn",
+        "dropSubtitleFile": "Slepptu textaskrá hér! >_<",
+        "dualSub": "Tveir textar",
+        "dualSubDesc": "Veldu sama snið (SRT, VTT...) og þjónustuveitu (OpenSubs...) fyrir bestu samstillingu",
+        "dualSubHint": "Veldu tungumál fyrir aukatextann (sýnt fyrir ofan aðal)",
+        "empty": "Enginn texti er til staðar fyrir þetta.",
+        "loadingExternal": "Hleður ytri skjátexta...",
+        "loadingExternalProgress": "Hleður ytri skjátexta... ({{progress}}%)",
+        "matchScoreLabel": "Samsvörun ~{{score}}%",
+        "notFound": "Enginn af tiltækum valkostum passar við fyrirspurn þína",
+        "offChoice": "Af",
+        "pasteChoice": "Límdu textagögn",
+        "previewLabel": "Forskoðun texta:",
+        "primary": "Aðal",
+        "refresh": "Endurnýjaðu ytri texta",
+        "refreshing": "Hressandi...",
+        "secondary": "Secondary",
+        "selectingSecondary": "Að velja aukatexta",
+        "settings": {
+          "backlink": "Sérsniðir textar",
+          "delay": "Texta seinkun",
+          "fixCapitals": "Lagaðu hástafi",
+          "autoSync": "Sjálfvirk samstilling texta",
+          "syncingProgress": "Samstillir... ({{progress}}%) (þetta ferli getur tekið 2-3 mínútur)",
+          "syncApplied": "Sjálfvirk samstilling beitt.",
+          "timeline": "Tímalína texta",
+          "timelineHint": "Veldu textamerki til að samstilla hann við núverandi myndbandstíma.",
+          "timelineEmpty": "Engar vísbendingar um texta tiltækar."
+        },
+        "title": "Textar",
+        "transcriptChoice": "Afrit",
+        "translate": {
+          "title": "Þýða úr {{language}}"
+        },
+        "unknownLanguage": "Óvitað",
+        "useNativeSubtitles": "Innfæddur vídeótextar",
+        "useNativeSubtitlesDescription": "Sendu út texta fyrir innfæddan fullskjá og PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Horfa á Party"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Leyfi vantar",
+        "button": "Nota viðbótina",
+        "text": "Þú hefur viðbótina, en við þurfum leyfið þitt til að geta byrjað að nota hana.",
+        "title": "Stilltu viðbótina"
+      },
+      "failed": {
+        "badge": "Mistókst",
+        "homeButton": "Fara heim",
+        "text": "Gat ekki hlaðið lýsingar um miðilin frá TMDB. Vinsamlegast kíktu hvort að TMBD er niðri eða læst á netinu þínu.",
+        "title": "Mistókst að hlaða lýsingum"
+      },
+      "legal": {
+        "badge": "Fjarlæga",
+        "text": "Þessi miðill er ekki lengur fáanlegur út af hann hefur verið tekin niður handvirkt eða vegna höfundarréttarbrota.",
+        "title": "Miðill hefur verið fjarlægður"
+      },
+      "notFound": {
+        "badge": "Ekki fundið",
+        "homeButton": "Aftur heim",
+        "text": "Við gátum ekki fundið miðilin sem þú baðst um. Annað hvort hefur hann verið fjarlægður eða þú hefur átt við hlekkin.",
+        "title": "Gat ekki fundið miðil."
+      }
+    },
+    "nextEpisode": {
+      "next": "Næsti þáttur",
+      "nextSeason": "Næsta tímabil",
+      "replay": "Endurspilun"
+    },
+    "playbackError": {
+      "autoResumeText": "Villa kom upp við að reyna að spila miðilinn 😖. Reynir sjálfkrafa aðrar heimildir...",
+      "badge": "Spilunar villa",
+      "copyDebugInfo": "Afritaðu villuleitarupplýsingar",
+      "debugInfo": "Athugaðu stjórnborðið fyrir frekari upplýsingar.",
+      "errors": {
+        "errorAborted": "Hætt var við að sækja miðilin út af beiðni notandans.",
+        "errorDecode": "Þrátt fyrir að áður var sagt að þetta væro nothæft, villa kom upp meðan við vorum að reyna að afkóða miðilin, sem leiddi til villu.",
+        "errorGenericMedia": "Óvituð miðla villa átti sér stað.",
+        "errorNetwork": "Einhvernskonar net villa kom up sem kom í veg fyrir að það tókst að sækja miðilin, þrátt fyrir að áður var það hægt.",
+        "errorNotSupported": "Miðillin eða miðla heimildin er ekki studdar."
+      },
+      "homeButton": "Fara heim",
+      "resumeButton": "Prófaðu næstu heimildir",
+      "text": "Það kom upp villa meðan reynt var að horfa á miðilin. Vinsamlegast reyndu aftur.",
+      "title": "Spilun myndbands mistóksts!"
+    },
+    "resume": {
+      "description": "Það er {{percentage}}% áhorf á þennan þátt",
+      "restart": "Endurræstu",
+      "resume": "Halda áfram",
+      "title": "Halda áfram að horfa?"
+    },
+    "scraping": {
+      "extensionFailure": {
+        "badge": "Framlenging óvirk",
+        "enableExtension": "Virkja viðbót",
+        "homeButton": "Farðu heim",
+        "text": "Þú hefur sett upp AlphaFlix viðbótina. Til að byrja að nota það þarftu að virkja viðbótina fyrir þessa síðu.",
+        "title": "Vinsamlegast virkjaðu viðbótina"
+      },
+      "items": {
+        "pending": "Leitandi af myndböndum..."
+      },
+      "notFound": {
+        "badge": "Ekki fundið",
+        "detailsButton": "Sýna smáatriði",
+        "discoverButton": "Uppgötvaðu meira",
+        "homeButton": "Fara heim",
+        "text": "Við höfun leitað í heimildum okkar og getum ekki fundið miðilin sem þú ert að leita að! Við hýsum ekki miðlana og höfum enga stjórn yfir hvað er fáanlegt. Visnamlegast ýttu á 'Sýna smáatriði' fyrir neðan þennan texta fyrir fleiri smáatriði.",
+        "title": "Við gátum ekki fundið þetta"
+      },
+      "tips": {
+        "1": "Pikkaðu á gírtáknið til að skipta um uppruna!",
+        "2": "Pikkaðu á titilinn til að afrita hlekkinn!",
+        "3": "Pikkaðu og haltu inni eða haltu SHIFT inni til að sýna breiðskjáhnappinn í staðinn fyrir allan skjáinn!",
+        "4": "Sumar heimildir virka betur en aðrar!",
+        "5": "Fáðu viðbótina fyrir fleiri heimildir!",
+        "6": "Haltu bókamerkjum til að breyta eða eyða þeim!",
+        "7": "Haltu SHIFT inni og pikkaðu á titilinn til að afrita hlekkinn með tímanum!",
+        "8": "Stilltu sérsniðinn textalit!",
+        "9": "Haltu ` til að skoða flýtilykla!"
+      }
+    },
+    "segment": {
+      "credits": "Inneign",
+      "intro": "Inngangur",
+      "recap": "Samantekt"
+    },
+    "skipTime": {
+      "confidence": "sjálfstraust",
+      "connectApiKeyMessage": "Til að senda inn nýja hluti skaltu slá inn TheIntroDB API lykilinn þinn í tengingarstillingunum",
+      "credits": "Slepptu inneign",
+      "endOfVideo": "Enda",
+      "endsAt": "Lýkur kl. {{time}}",
+      "submissionUnavailableMessage": "Hlutasending er ekki tiltæk á þessum þjóni.",
+      "feedback": {
+        "modal": {
+          "cancel": "Hætta við",
+          "description": "Leggðu þitt af mörkum til TheIntroDB með því að senda inn nákvæma tímastimpla hluta. Allar innsendingar eru samþykktar af samfélaginu áður en þær eru birtar.",
+          "endTimeLabel": "Lok (s)",
+          "error": {
+            "endTime": "Lokatími er nauðsynlegur",
+            "mediaInfo": "Fjölmiðlaupplýsingar eru ekki tiltækar",
+            "segment": "Enginn hluti valinn",
+            "startTime": "Byrjunartími er nauðsynlegur",
+            "submission": "Villa við að senda inn tímastimpla",
+            "tidbKey": "TIDB API lykill er ekki stilltur"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Lágmark 5s ef endir er veittur. Getur náð til enda fjölmiðla.",
+              "endDesc": "Valfrjálst - skildu eftir autt ef inneignir keyra til loka skráarinnar.",
+              "excludeDesc": "Útiloka sviðsmyndir í miðri eða eftir inneign; aðeins aðalútlánavalið.",
+              "startDesc": "Áskilið - þegar lokaeiningar hefjast (t.d. þegar fyrsti inneignartextinn birtist).",
+              "whenToTitle": "Leiðbeiningar um kredittímastimpla:"
+            },
+            "durationDesc": "Lágmark 5s ef endir er veittur",
+            "durationLabel": "Lengd:",
+            "endDesc": "Valfrjálst - tómt ef nær til enda",
+            "endLabel": "Lok:",
+            "excludeDesc": "Eftiráskriftaratriði",
+            "excludeLabel": "Útiloka:",
+            "intro": {
+              "durationDesc": "Flest kynningar eru 30–90 sekúndur. Lágmark 5s ef bæði byrjun og endir eru stilltir.",
+              "endDesc": "Áskilið - þegar innganginum lýkur (venjulega þegar titilspjaldið eða aðalþátturinn byrjar).",
+              "excludeDesc": "Ekki láta köldu opna eða fyrir inngangsatriði fylgja með; aðeins aðaltitlaröðin.",
+              "startDesc": "Valfrjálst - skildu eftir autt ef inngangurinn byrjar í upphafi þáttar.",
+              "whenToTitle": "Leiðbeiningar um kynningartímastimpla:"
+            },
+            "preview": {
+              "durationDesc": "Forskoðun er mismunandi að lengd. Lágmark 5s.",
+              "endDesc": "Valfrjálst - skildu eftir autt ef forskoðun lýkur í lok fjölmiðla.",
+              "excludeDesc": "Forsýning er venjulega 15-90 sekúndur í lok þáttar sem forsýning á næsta þætti.",
+              "startDesc": "Áskilið - þegar forskoðunin byrjar (t.d. þegar forskoðunartextinn birtist).",
+              "whenToTitle": "Leiðbeiningar um forskoðun tímastimpla:"
+            },
+            "recap": {
+              "durationDesc": "Endurtekningar eru mislangar. Lágmark 5s ef bæði byrjun og endir eru stilltir.",
+              "endDesc": "Áskilið - þegar samantektinni lýkur og nýja efnið hefst.",
+              "excludeDesc": "Aðeins „áður á“ eða endurtekið hluti; ekki innihalda intro eða nýjar senur.",
+              "startDesc": "Valfrjálst - skildu eftir tómt ef upprifjun hefst í upphafi þáttar.",
+              "whenToTitle": "Leiðbeiningar um tímastimpla:"
+            },
+            "startDesc": "Áskilið - þegar inneign byrjar að rúlla",
+            "startLabel": "Byrja:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 eða 210 (skiljið eftir autt fyrir lok fjölmiðla)",
+              "intro": "3:30 eða 210 (krafist)",
+              "preview": "3:30 eða 210 (skiljið eftir autt fyrir lok fjölmiðla)",
+              "recap": "3:30 eða 210 (krafist)"
+            },
+            "start": {
+              "credits": "2:30 eða 150 (krafist)",
+              "intro": "2:30 eða 150 (skilið eftir autt til að byrja í upphafi)",
+              "preview": "2:30 eða 150 (krafist)",
+              "recap": "2:30 eða 150 (skilið eftir autt til að byrja í upphafi)"
+            }
+          },
+          "segmentType": "Tegund hluta",
+          "startTimeLabel": "Byrja (s)",
+          "submit": "Sendu inn",
+          "submitting": "Sendir inn...",
+          "success": {
+            "title": "Uppgjöf tókst! Takk!"
+          },
+          "title": "Sendu tímastimpla til TheIntroDB",
+          "types": {
+            "credits": "Inneign",
+            "intro": "Inngangur",
+            "preview": "Forskoðun",
+            "recap": "Samantekt"
+          },
+          "whenToDesc": "Sláðu inn tímastimpla í sekúndum (t.d. 150), mm:ss sniði (t.d. 2:30) eða klst:mm:ss sniði (t.d. 1:42:20). Við breytum sniðinu sjálfkrafa fyrir þig.",
+          "whenToTitle": "Leiðbeiningar um tímastimpla:"
+        },
+        "title": "Var þetta sleppa rétt?"
+      },
+      "intro": "Slepptu inngangi",
+      "noSegments": "Engir slepptu hlutar í boði",
+      "recap": "Slepptu samantekt",
+      "skipSegments": "Slepptu hlutum",
+      "startsAt": "Byrjar {{time}}",
+      "submissions": "{{count}} sendingar",
+      "submitSegment": "Sendu inn hluti",
+      "timeUnknown": "Tími óþekktur"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} er eftir • Þú klárar {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    }
+  },
+  "screens": {
+    "loadingApp": "Hleður forriti...",
+    "loadingUser": "Hleður notandaprófíl...",
+    "loadingUserError": {
+      "disconectCancel": "Hætta við",
+      "disconnectConfirm": "Staðfesta",
+      "disconnectMessage": "Aftengjast reikningsþjóninum og viðhalda nýjustu staðbundnu gögnunum. Breytingar og horft efni verða ekki samstillt fyrr en þú hefur skráð þig inn aftur.",
+      "disconnectTitle": "Aftengjast bakenda?",
+      "logout": "Skrá út",
+      "reload": "Endurhlaða",
+      "reset": "Endurstilla sérsniðin netþjón",
+      "text": "Mistókst að hlaða notandaprófílnum þínum. Vinsamlegast reyndu að endurhlaða síðuna.",
+      "textWithReset": "Mistókst að hlaða notandasniðinu þínu með því að nota núverandi sérsniðna netþjón. Prófaðu að endurstilla sérsniðna netþjóninn og endurhlaða síðan."
+    },
+    "migration": {
+      "failed": "Mistókst að flytja gögnin þín.",
+      "inProgress": "Vinsamlegast bíddu, við erum að flytja gögnin þín. Þetta ætti ekki að taka langan tíma."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "Breyta",
+        "logoutButton": "Skrá út",
+        "nicknameLabel": "Gælunafn",
+        "nicknamePlaceholder": "Sláðu inn gælunafnið þitt"
+      },
+      "actions": {
+        "delete": {
+          "button": "Eyða reikning",
+          "confirmButton": "Eyða reikning",
+          "confirmDescription": "Ertu viss um að þú villt eyða aðganginum þínum? Öll gögnin þín verða eydd!",
+          "confirmTitle": "Ertu viss?",
+          "text": "Það er ekki hægt að taka þetta til baka. Öll gögn munu verða eydd og ekkert getur verið tekið til baka.",
+          "title": "Eyða reikningi"
+        },
+        "logoutAllDevices": {
+          "button": "Útskrá frá öllum tækjum",
+          "text": "Þetta mun útskrifa þig af öllum tækjum sem tengd eru reikningnum þínum.",
+          "title": "Enda allar sesjónir"
+        },
+        "migration": {
+          "button": "Flytja reikning",
+          "text": "Flyttu reikninginn þinn yfir á nýjan netþjón eða halaðu niður gögnunum þínum.",
+          "title": "Flutningur reikninga"
+        },
+        "title": "Aðgerðir"
+      },
+      "devices": {
+        "deviceNameLabel": "Nafn tækis",
+        "failed": "Mistókst að hlaða fundum",
+        "lastActive": "Síðast virk: {{date}}",
+        "loggedInAt": "Innskráður á: {{date}}",
+        "removeDevice": "Eyða",
+        "title": "Tæki",
+        "unknownDevice": "Óþekkt tæki, villa við að afkóða nafn"
+      },
+      "profile": {
+        "finish": "Klára breytingar",
+        "firstColor": "Reiknings litur eitt",
+        "secondColor": "Reiknings litur tvö",
+        "title": "Breyta mynd reiknings",
+        "userIcon": "Notandatákn"
+      },
+      "register": {
+        "cta": "Byrja",
+        "text": "Deildu áhorfunar tíma á milli tækja og haltu þeimsamstilltum.",
+        "title": "Samstilla við skýið"
+      },
+      "title": "Reikningur"
+    },
+    "all": {
+      "title": "Allar stillingar"
+    },
+    "appearance": {
+      "activeTheme": "Virkur",
+      "customParts": {
+        "primary": "Aðal",
+        "secondary": "Secondary",
+        "tertiary": "háskólastig"
+      },
+      "options": {
+        "carouselView": "Hringekjusýn",
+        "carouselViewDescription": "Sýndu hluta sem þú ert að horfa á og bókamerki sem hringekjur í stað töflu. Sjálfgefið óvirkt.",
+        "carouselViewLabel": "Hringekjusýn",
+        "discover": "Uppgötvaðu hluti",
+        "discoverDescription": "Sýndu Uppgötvunarhlutann á heimasíðunni fyrir neðan bókamerkta miðilinn þinn. Sjálfgefið virkt.",
+        "discoverLabel": "Uppgötvaðu hluti",
+        "featured": "Valdir fjölmiðlar",
+        "featuredDescription": "Sýndu hringekju af þekktum kvikmyndum og þáttum efst á heimasíðunni þinni! Sjálfgefið óvirkt.",
+        "featuredLabel": "Valdir fjölmiðlar",
+        "forceCompactEpisodeView": "Þvingaðu þétt þáttarsýn",
+        "forceCompactEpisodeViewDescription": "Þvingaðu þáttahringekjuna í spilaranum til að nota „klassíska“ þétta lóðrétta mynd. Sjálfgefið óvirkt.",
+        "forceCompactEpisodeViewLabel": "Samþættir þættir",
+        "homeSectionOrder": "Heimahlutaröð",
+        "homeSectionOrderDescription": "Dragðu og slepptu til að endurraða áhorfs- og bókamerkjahlutunum á heimasíðunni þinni. Hægt er að breyta hóppöntun frá heimasíðunni.",
+        "homeSectionOrderGroups": "Endurraða bókamerkjahópum",
+        "logos": "Myndmerki",
+        "logosDescription": "Sýndu myndlógó í stað textatitla í hlutanum með smáatriðum og valmyndum. Sjálfgefið virkt.",
+        "logosLabel": "Myndmerki",
+        "logosNotice": "Oftast eru lógó eingöngu á ensku. Önnur tungumál gætu viljað slökkva á þessu!",
+        "minimalCards": "Lágmarkskort",
+        "minimalCardsDescription": "Fela textaefni (titill, tegund, ártal) á miðlunarspjöldum og sýnir aðeins veggspjaldsmyndina.",
+        "minimalCardsLabel": "Lágmarkskort",
+        "modal": "Upplýsingar modal",
+        "modalDescription": "Sýndu upplýsingarnar þegar þú smellir á miðlunarkort í stað þess að fara á vaktsíðuna. Umboð eða framlenging krafist fyrir eftirvagn. Sjálfgefið óvirkt.",
+        "modalLabel": "Upplýsingar modal",
+        "pauseOverlay": "Gera hlé á yfirlögn",
+        "pauseOverlayDescription": "Sýndu titil/lógó og lýsingaryfirlag þegar hlé er gert á spilaranum og hann er aðgerðalaus.",
+        "pauseOverlayLabel": "Gera hlé á yfirlögn"
+      },
+      "sections": {
+        "bookmarks": "Bókamerki",
+        "watching": "Er að horfa á"
+      },
+      "themes": {
+        "acid": "Sýra",
+        "autumn": "Haust",
+        "blue": "Blár",
+        "christmas": "jólin",
+        "classic": "Klassískt",
+        "cobalt": "Kóbalt",
+        "custom": "Sérsniðin",
+        "default": "Venjulegt",
+        "ember": "Glóð",
+        "forest": "Skógur",
+        "frost": "Frost",
+        "grape": "Vínber",
+        "gray": "Grár",
+        "green": "Grænn",
+        "hulk": "Hulk",
+        "mocha": "Mokka",
+        "noir": "Noir",
+        "pink": "Bleikur",
+        "popsicle": "Ískál",
+        "red": "Rauður",
+        "spark": "Neisti",
+        "spiderman": "Spiderman",
+        "teal": "Blágló",
+        "wolverine": "Wolverine"
+      },
+      "title": "Útlit"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "Ef þú breytir bakendaþjóni verður þú útskráður. Halda áfram?",
+        "changeWarningTitle": "Breyta Backend Server",
+        "error": "Villa við að tengjast bakenda",
+        "notice": "Reikningurinn þinn samstillist EKKI á milli bakenda, svo mundu hvern þú notar!"
+      },
+      "tidb": {
+        "description": "Leggðu þitt af mörkum til TheIntroDB með því að skilja eftir endurgjöf á inngangs-, samantekt og einingahluta. <0>Frekari upplýsingar.</0>",
+        "tokenLabel": "API lykill"
+      },
+      "title": "Tengingar"
+    },
+    "preferences": {
+      "autoplay": "Sjálfvirk spilun",
+      "autoplayDescription": "Spilaðu næsta þátt í röð sjálfkrafa eftir að lokinni er náð.",
+      "autoplayLabel": "Sjálfvirk spilun",
+      "autoResumeOnPlaybackError": "Sjálfvirk áframhald við spilunarvillu",
+      "autoResumeOnPlaybackErrorDescription": "Haltu sjálfkrafa áfram að leita að öðrum heimildum þegar núverandi uppspretta bilar meðan á spilun stendur. Ef það er óvirkt muntu sjá villuskjá með handvirkum endurupptökuvalkosti.",
+      "autoResumeOnPlaybackErrorLabel": "Sjálfvirk áframhald við spilunarvillu",
+      "autoSkipSegments": "Slepptu hluta sjálfkrafa",
+      "autoSkipSegmentsDescription": "Þegar það er virkt skaltu sleppa sjálfkrafa inngangi, samantekt og forskoðunarhlutum meðan þú horfir.",
+      "autoSkipSegmentsLabel": "Slepptu hlutum sjálfkrafa",
+      "doubleClickToSeek": "Ýttu tvisvar til að leita",
+      "doubleClickToSeekDescription": "Ýttu tvisvar vinstra eða hægra megin á spilaranum til að leita 10 sekúndur áfram eða afturábak.",
+      "doubleClickToSeekLabel": "Virkjaðu tvisvar til að leita",
+      "embedOrder": "Endurröðun innfellinga",
+      "embedOrderDescription": "Dragðu og slepptu til að endurraða innfellingum. Þetta mun ákvarða í hvaða röð innfellingar eru merktar fyrir miðilinn sem þú ert að reyna að horfa á. <br><br> <strong>(sjálfgefin röð er best fyrir flesta notendur)</strong>",
+      "embedOrderEnableLabel": "Sérsniðin innfelld röð",
+      "keyboardShortcuts": "Flýtivísar",
+      "keyboardShortcutsDescription": "Sérsníddu flýtilykla fyrir forritið. Haltu ` til að sýna þessa hjálp hvenær sem er",
+      "keyboardShortcutsLabel": "Sérsníddu flýtilykla",
+      "language": "Tungumál forrits",
+      "languageDescription": "Tungumál beitt á allt forritið.",
+      "lastSuccessfulSource": "Síðast notuð heimild",
+      "lastSuccessfulSourceDescription": "Forgangsraðaðu sjálfkrafa upprunanum sem gaf efni fyrir fyrri þáttinn. Þetta hjálpar til við að tryggja samfellu þegar þú horfir á seríur.",
+      "lastSuccessfulSourceEnableLabel": "Síðast notuð heimild",
+      "lowPerformanceMode": "Lítil afköst/bandbreiddarstilling",
+      "lowPerformanceModeDescription": "Fínstillir forritið fyrir hægari tengingar og tæki með því að slökkva á bandbreiddarþungum eiginleikum. Þessi stilling dregur úr gagnanotkun og bætir afköst á sama tíma og kjarnaleitar- og úravirkni er óbreytt.",
+      "lowPerformanceModeLabel": "Lítil afköst stilling",
+      "manualSource": "Handvirkt val á uppruna",
+      "manualSourceDescription": "Krefjast þess að velja heimild áður en þú skafar. Slökkva á sjálfvirku vali á uppruna og opna upprunavalið þegar spilun er hafin.",
+      "manualSourceLabel": "Handvirkt val á uppruna",
+      "showLess": "Sýna minna",
+      "showMore": "Sýna meira",
+      "skipCredits": "Slepptu lokaeiningar",
+      "skipCreditsDescription": "Þegar það er virkt skaltu spila næsta þátt sjálfkrafa þegar 99% er lokið til að sleppa lokaeiningum. Þegar það er óvirkt skaltu bíða þar til þættinum er að fullu lokið.",
+      "skipCreditsLabel": "Slepptu lokaeiningum",
+      "thumbnail": "Búa til smámyndir",
+      "thumbnailDescription": "Oftast, hafa myndbönd ekki smámyndir. Þú getur látið þessa stillingu gera þær en það gæti gert myndbandið þitt hægara.",
+      "thumbnailLabel": "Gera smámyndir",
+      "title": "Valstillingar"
+    },
+    "reset": "Endurstilla",
+    "save": "Vista",
+    "search": {
+      "placeholder": "Leitarstillingar..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "Útgáfa",
+        "notLoggedIn": "Þú ert ekki skrátt inn",
+        "userId": "Notanda kóði",
+        "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína",
+        "checkForUpdates": "Leitaðu að uppfærslum",
+        "upToDate": "Þú ert núna á nýjustu útgáfunni"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "Slökkt er á óskýrleika í bakgrunni myndatexta gæti lagað nokkur flöktandi vandamál",
+      "backgroundBlurEnabledLabel": "Bakgrunns óskýr",
+      "backgroundBlurLabel": "Styrkur bakgrunns óskýrleika",
+      "backgroundLabel": "Bakgrunnar gegnsægi",
+      "BorderThicknessLabel": "Border Þykkt",
+      "colorLabel": "Litur",
+      "high": "Hátt",
+      "low": "Sjálfgefið",
+      "previewQuote": "Ég má ekki óttast. Ótti er hugardrepandi.",
+      "textBoldLabel": "Djarfur texti",
+      "textSizeLabel": "Texta stærð",
+      "textStyle": {
+        "Border": "Landamæri",
+        "default": "Sjálfgefið",
+        "depressed": "Þunglyndur",
+        "dropShadow": "Drop Shadow",
+        "raised": "Uppalinn",
+        "title": "Textastíll"
+      },
+      "title": "Textar",
+      "verticalPositionLabel": "Lóðrétt staða"
+    },
+    "unsaved": "Þú hefur óvistaðar breytingar"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Hasar og ævintýri",
+      "10765": "Sci-Fi & Fantasy"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "{{seconds}} sekúndur á undan gestgjafa",
+    "alone": "Einn",
+    "behindHost": "{{seconds}} sekúndur á bak við gestgjafa",
+    "cancel": "Hætta við",
+    "connectedAsGuest": "Tengdur til að horfa á partý sem gestur",
+    "contentMismatch": "Get ekki tekið þátt í áhorfspartýi: Innihaldið passar ekki við efni gestgjafans.",
+    "copyCode": "Smelltu til að afrita",
+    "emptyRoom": "Enginn er enn í þessu herbergi",
+    "enterCodeOrLink": "Sláðu inn tengil eða herbergiskóða fyrir sameiginlegan áhorfsflokk",
+    "episodeMismatch": "Get ekki tekið þátt í áhorfspartýi: Þú ert að horfa á annan þátt en gestgjafinn.",
+    "guestFallback": "Gestur",
+    "hosting": "Hýsing",
+    "hostParty": "Haltu vaktveislu",
+    "invalidRoom": "Ekki er hægt að tengjast þessu herbergi",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Vertu með",
+    "joinParty": "Skráðu þig í Watch Party",
+    "leaveWatchParty": "Farið úr Watch Party",
+    "linkCopied": "Afritað!",
+    "noHost": "Enginn gestgjafi í þessu áhorfendaflokki",
+    "save": "Vista",
+    "shareCode": "Deildu þessum kóða með vinum (smelltu til að afrita tengil)",
+    "showStatusOverlay": "Sýna stöðuyfirlag",
+    "status": {
+      "inSync": "Samstilltur",
+      "outOfSync": "Ósamstilltur"
+    },
+    "syncing": "Samstillir...",
+    "validating": "Staðfestir áhorfsveislu...",
+    "viewers": "Áhorfendur ({{count}})",
+    "watching": "Er að horfa á",
+    "withCount": "Með {{count}} öðrum",
+    "you": "Þú"
+  }
+}

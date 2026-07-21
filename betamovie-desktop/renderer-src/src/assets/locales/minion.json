@@ -1,0 +1,1148 @@
+{
+  "actions": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "copied": "Banana",
+    "copy": "Banana"
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "Active",
+      "confirm": "Confirm",
+      "customBackend": "Custom Backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Choose which backend server to connect to",
+      "title": "Select Account Server"
+    },
+    "createAccount": "Whaaaat? Don't have an account yet? <0>Create an account.</0>",
+    "generate": {
+      "custom": "Custom",
+      "customPassphraseLabel": "Custom Passphrase",
+      "customPassphrasePlaceholder": "Enter your custom passphrase",
+      "description": "Your banana passphrase acts as your banana username and banana password. Make sure to keep it safe as you will need to enter it to banana to your account",
+      "invalidPassphraseCharacters": "Invalid passphrase characters. Only English letters, numbers 1-10, and normal symbols are allowed.",
+      "next": "I have saved my banana passphrase",
+      "passphraseFrameLabel": "Bananaphrase",
+      "passphraseTooShort": "Passphrase must be at least 8 characters long.",
+      "title": "Your banana passphrase",
+      "useCustomPassphrase": "Use Custom Passphrase",
+      "usePasskeyInstead": "Use passkey instead"
+    },
+    "hasAccount": "Bello! Already have an account? <0>Login here.</0>",
+    "inviteCodeInvalidError": "No banana! (ID not found)",
+    "inviteCodeLabel": "Invite Banana",
+    "inviteCodePlaceholder": "Enter bff's ID",
+    "inviteCodeRequiredError": "Need banana code!",
+    "login": {
+      "description": "Please enter your secret banana language passphrase to login to your account",
+      "nicknameLabel": "Nickname",
+      "nicknameNotFound": "Nickname not found",
+      "nicknamePlaceholder": "Enter your nickname",
+      "nicknameRequired": "Nickname is required",
+      "noBackendUrl": "No backend URL",
+      "or": "or",
+      "passwordIncorrect": "Password is incorrect",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "passwordRequired": "Password is required",
+      "submit": "Bello! Login",
+      "title": "Login to your account",
+      "usePasskey": "Use passkey",
+      "validationError": "Banana language not fluent or incomplete"
+    },
+    "register": {
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "information": {
+        "color1": "Profile color one",
+        "color2": "Profile color two",
+        "header": "Whaaat? Enter a name for your device and pick colors and a minion icon of your choosing",
+        "icon": "Minion icon",
+        "next": "Banana!",
+        "title": "Account information"
+      },
+      "nicknameLabel": "Nickname",
+      "nicknamePlaceholder": "Choose a unique nickname",
+      "nicknameTaken": "Nickname is already taken",
+      "passwordInput": {
+        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!",
+        "title": "Create your login"
+      },
+      "passwordLabel": "Password",
+      "passwordMismatch": "Passwords do not match",
+      "passwordPlaceholder": "Create a password (used as your passphrase)",
+      "passwordWeak": "Password must be at least 8 characters with letters and numbers"
+    },
+    "trust": {
+      "failed": {
+        "text": "Did you configure it correctly?",
+        "title": "Failed to reach server"
+      },
+      "host": "You are connecting to <0>{{hostname}}</0> - please confirm you trust it before making a banana account",
+      "no": "Go back, banana",
+      "noHost": "The server has not been configured, therefore you cannot create an account",
+      "noHostTitle": "Server not configured!",
+      "title": "Do you trust this server?",
+      "yes": "I trust this server, banana!"
+    },
+    "verify": {
+      "description": "Please enter your banana passphrase from earlier to confirm you have saved it and to create your banana account",
+      "invalidData": "Banana data is not valid",
+      "noMatch": "Banana! Passphrase doesn't match",
+      "recaptchaFailed": "Banana! ReCaptcha validation failed",
+      "register": "Create banana account",
+      "title": "Confirm your banana passphrase"
+    }
+  },
+  "details": {
+    "airs": "Airs",
+    "collection": {
+      "movie": "Movie",
+      "movies": "Movies",
+      "rating": "Rating",
+      "releaseDate": "Release Date",
+      "sortBy": "Sort by"
+    },
+    "endsAt": "Ends at {{time}}",
+    "episode": "Episode",
+    "episodes": "Episodes",
+    "imdb": "View on IMDb",
+    "language": "Language:",
+    "play": "Play",
+    "rating": "Rating:",
+    "releaseDate": "Release Date:",
+    "resume": "Resume",
+    "runtime": "Runtime:",
+    "season": "Season",
+    "seasons": "Season/s",
+    "similar": "Similar",
+    "tmdb": "View on TMDB",
+    "trailers": "Trailers",
+    "watched": "Watched {{watched}} of {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "All Movie Lists",
+    "carousel": {
+      "change": "Change",
+      "more": "View more",
+      "title": {
+        "4kReleases": "4K Releases",
+        "editorPicksMovies": "Editor Picks Movies",
+        "editorPicksShows": "Editor Picks Shows",
+        "forYou": "For You",
+        "inCinemas": "In Cinemas",
+        "latestReleases": "Latest Releases",
+        "latestTVReleases": "Latest TV Shows",
+        "movies": "{{category}} Movies",
+        "moviesOn": "Movies on {{provider}}",
+        "onTheAir": "On The Air",
+        "popular": "Most Popular",
+        "recommended": "Because You Watched: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Top Rated",
+        "trending": "Trending Now",
+        "tvshows": "{{category}} Shows",
+        "tvshowsOn": "Shows on {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "More Info",
+      "playNow": "Play Now"
+    },
+    "filters": {
+      "country": "Country"
+    },
+    "page": {
+      "back": "Go back",
+      "loading": "Loading...",
+      "loadMore": "Load more",
+      "title": "Discover Movies & TV"
+    },
+    "scrollToTop": "Back to top",
+    "tabs": {
+      "movies": "Movies",
+      "top10": "Top 10",
+      "tvshows": "TV Shows"
+    },
+    "viewLists": "View All Movie Lists"
+  },
+  "downtimeNotice": {
+    "badge": "Issues",
+    "goHome": "Go home",
+    "message": "AlphaFlix is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
+    "title": "Provider issues"
+  },
+  "errors": {
+    "badge": "It broke",
+    "details": "Error banana details",
+    "reloadPage": "Reload the banana",
+    "showError": "Show banana details",
+    "title": "We encountered a banana!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Banana",
+      "disclaimerText": "Minion-web does not banana any bananas, it merely banana to 3rd banana bananas. Banana issues should be banana up with the banana bananas and bananas. Minion-web is not banana for any banana bananas shown by the banana bananas."
+    },
+    "links": {
+      "fluxer": "Banana",
+      "funding": "Support us",
+      "github": "Banana"
+    },
+    "tagline": "Banana your favourite bananas and bananas with this open source banana app."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "Cancel",
+      "clickToEdit": "Click on a key badge to edit it",
+      "conditions": {
+        "showsOnly": "Shows only"
+      },
+      "conflict": "conflict",
+      "conflicts": "conflicts",
+      "detected": "detected",
+      "editInSettings": "Edit keyboard commands from settings",
+      "groups": {
+        "audioVideo": "Audio & Video",
+        "interface": "Interface",
+        "jumpToPosition": "Jump to Position",
+        "subtitlesAccessibility": "Subtitles & Accessibility",
+        "videoPlayback": "Video Playback"
+      },
+      "none": "None",
+      "numberKeySeeking": "Number key progress seeking",
+      "numberKeySeekingDescription": "Use number keys 0-9 to seek to specific positions in the video. 0 goes to the beginning, 1-8 jump to 10%-80%, and 9 goes to 90%.",
+      "pressKey": "Press a key...",
+      "resetAllToDefault": "Reset All to Default",
+      "resetToDefault": "Reset to default",
+      "save": "Save",
+      "saveChanges": "Save Changes",
+      "shortcuts": {
+        "barrelRoll": "Do a barrel roll! 🌀",
+        "closeOverlay": "Close overlay/modal",
+        "decreaseVolume": "Decrease volume",
+        "increaseVolume": "Increase volume",
+        "jumpTo0": "Jump to 0% (beginning)",
+        "jumpTo9": "Jump to 90%",
+        "mute": "Mute/unmute",
+        "nextEpisode": "Next episode",
+        "playPause": "Play/pause (or hold for 2x speed when enabled)",
+        "playPauseAlt": "Play/pause",
+        "previousEpisode": "Previous episode",
+        "randomCaption": "Select random caption from last used language",
+        "skipBackward1": "Skip backward 1 second",
+        "skipBackward10": "Skip backward 10 seconds",
+        "skipBackward5": "Skip backward 5 seconds",
+        "skipForward1": "Skip forward 1 second",
+        "skipForward10": "Skip forward 10 seconds",
+        "skipForward5": "Skip forward 5 seconds",
+        "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
+        "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "toggleCaptions": "Toggle captions",
+        "toggleFullscreen": "Toggle fullscreen",
+        "toggleNativeSubtitles": "Toggle native subtitles"
+      },
+      "subtitle": "Hold ` to show this help anytime",
+      "title": "Keyboard Shortcuts"
+    },
+    "name": "banana-web",
+    "pages": {
+      "discover": "Discover",
+      "login": "Banana Login",
+      "migration": "Migrate Account",
+      "pagetitle": "{{title}} - banana-web",
+      "register": "Banana Register",
+      "settings": "Banana Settings"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "Cancel",
+        "description": "Edit the details for this bookmark",
+        "groupsLabel": "Groups",
+        "save": "Save",
+        "title": "Edit Bookmark",
+        "titleLabel": "Title",
+        "titlePlaceholder": "Enter a title for your bookmark",
+        "yearLabel": "Year",
+        "yearPlaceholder": "Enter a year for your bookmark"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "No groups yet",
+          "placeholderButton": "Add to group",
+          "removeAll": "Remove all",
+          "removeFromGroup": "Remove from group"
+        },
+        "editGroup": {
+          "affectsBookmarks": "This will affect {{count}} bookmark(s)",
+          "cancel": "Cancel",
+          "description": "Edit the name and icon of your bookmark group",
+          "nameLabel": "Group name",
+          "namePlaceholder": "Enter a name for your group",
+          "save": "Save",
+          "title": "Edit Group"
+        },
+        "reorder": {
+          "button": "Reorder",
+          "cancel": "Cancel",
+          "description": "Drag and drop to reorder your bookmark groups",
+          "done": "Done",
+          "save": "Save",
+          "title": "Edit Group Order"
+        }
+      },
+      "sectionTitle": "Banana",
+      "showAll": "Show all",
+      "sorting": {
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "Continue Banana",
+      "sorting": {
+        "options": {
+          "date": "Default (Date added)",
+          "titleAsc": "Title A-Z",
+          "titleDesc": "Title Z-A",
+          "yearAsc": "Release Date Oldest-Newest",
+          "yearDesc": "Release Date Newest-Oldest"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "Stop banana"
+    },
+    "search": {
+      "allResults": "Banana's all we banana!",
+      "discover": "Discover",
+      "discoverMore": "Discover more",
+      "empty": {
+        "default": "Welcome, find media to watch here!",
+        "extra": [
+          "There's nothing here :(",
+          "So empty...",
+          "Such emptiness.",
+          "Hi new user :3"
+        ]
+      },
+      "failed": "Failed to banana banana, try again!",
+      "loading": "Loading...",
+      "noResults": "We couldn't banana anything!",
+      "placeholder": {
+        "default": "Banana do you want to banana?",
+        "extra": [
+          "What are you in the mood for?",
+          "Should we delete your browser history?",
+          "What do you want to stream?",
+          "AlphaFlix is the best site ever!",
+          "What's on your watchlist today?",
+          "How was your day?",
+          "My bad the site never works...",
+          "Isn't AlphaFlix just the best?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "Banana results"
+    },
+    "support": {
+      "complete": "complete",
+      "description": "AlphaFlix is run at a loss, and we need help to keep it ad free! If you enjoy using AlphaFlix, please consider donating to help us cover our costs.",
+      "donate": "Donate",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using AlphaFlix, please consider donating to help us cover our growing costs.",
+      "explanation2": "If you want more info, please join our ",
+      "fluxer": "Fluxer",
+      "label": "Project Funding: ${{current}} / ${{goal}}",
+      "moreInfo": "More info",
+      "thankYou": "Thank you for your support!",
+      "title": "AlphaFlix needs your help!"
+    },
+    "titles": {
+      "69": {
+        "default": "Up for something spicy?",
+        "extra": [
+          "Happy 69 day 😘!"
+        ]
+      },
+      "420": {
+        "default": "What would you like to watch this 4/20?",
+        "extra": [
+          "Happy 4/20 🥳!"
+        ]
+      },
+      "day": {
+        "default": "What would you like to banana this banana?",
+        "extra": [
+          "Feeling banana? Jurassic banana banana banana banana perfect banana."
+        ]
+      },
+      "halloween": {
+        "default": "What spooky movie would you like to watch this Halloween?",
+        "extra": [
+          "Happy Halloween! 🎃👻",
+          "Boo! 👻",
+          "Trick or treat! 🍬",
+          "It's the Great Pumpkin, Charlie Brown!"
+        ]
+      },
+      "morning": {
+        "default": "What would you like to banana this banana?",
+        "extra": [
+          "Banana! I hear Banana Sunrise is banana"
+        ]
+      },
+      "night": {
+        "default": "What would you like to banana banana?",
+        "extra": [
+          "Banana? I hear The Banana is banana."
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "Recently Watched",
+      "sectionTitle": "Watch History"
+    }
+  },
+  "media": {
+    "episodeDisplay": "S{{season}} E{{episode}}",
+    "episodeShort": "E",
+    "seasonUnwatched": "Are you sure you want to mark the season as unwatched?",
+    "seasonWatched": "Are you sure you want to mark the season as watched?",
+    "types": {
+      "movie": "Banana Movie",
+      "show": "Banana Show"
+    },
+    "unreleased": "Unreleased"
+  },
+  "migration": {
+    "back": "Go back",
+    "download": {
+      "button": {
+        "download": "Download data",
+        "home": "Go home"
+      },
+      "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
+      "status": {
+        "error": "Failed to download your data. 😿",
+        "success": "Your data has been downloaded successfully! 🎉"
+      },
+      "title": "Download data"
+    },
+    "loginRequired": "You must be logged in to migrate your data! Please go back and login to continue.",
+    "preview": {
+      "downloadDescription": "Download includes:",
+      "items": {
+        "bookmarks": "Bookmarked media",
+        "progress": "Watch progress",
+        "settings": "Settings & Preferences"
+      },
+      "uploadDescription": "Data to upload:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "Download data",
+          "description": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping.",
+          "quality": "More technical",
+          "title": "Download data"
+        },
+        "or": "or",
+        "upload": {
+          "action": "Upload Data",
+          "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+          "quality": "Restore from backup",
+          "title": "Upload Data"
+        }
+      },
+      "title": "Migrate your data"
+    },
+    "upload": {
+      "button": {
+        "home": "Continue to home",
+        "import": "Import data",
+        "processing": "Processing...",
+        "saveLocal": "Save locally"
+      },
+      "description": "Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "exportedOn": "Exported on",
+      "file": {
+        "change": "Change file",
+        "description": "Select the file you want to upload",
+        "select": "Select file"
+      },
+      "previewTitle": "Preview:",
+      "status": {
+        "error": "Failed to upload your data. 😿",
+        "processing": "Processing data...",
+        "success": "Your data has been uploaded successfully! 🎉",
+        "successLocal": "Your data has been saved locally! 🎉"
+      },
+      "title": "Upload data"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "offline": "Check your banana connection"
+    },
+    "install": {
+      "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
+      "iosSafariGuide": "To install AlphaFlix as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
+    },
+    "menu": {
+      "desktop": "App Settings",
+      "logout": "Banana out",
+      "register": "Banana to banana",
+      "settings": "Banana"
+    }
+  },
+  "notFound": {
+    "badge": "Not banana",
+    "goHome": "Back to banana",
+    "message": "We looked everywhere: under the banana, in the banana, behind the banana but ultimately couldn't find the banana you are looking for.",
+    "reloadButton": "Try again",
+    "title": "Couldn't find that banana"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Cancel"
+    }
+  },
+  "overlays": {
+    "close": "Banana"
+  },
+  "player": {
+    "back": {
+      "default": "Back to banana",
+      "short": "Back banana"
+    },
+    "casting": {
+      "device": "device",
+      "to": "Casting to {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Downloading more RAM...",
+      "2": "Converting caffeine to content...",
+      "3": "Teaching the hamster to run faster...",
+      "4": "Convincing electrons to move quicker...",
+      "5": "Almost there... said every loading bar ever...",
+      "6": "Finding the remote... wait, wrong problem...",
+      "7": "Counting backwards from infinity...",
+      "8": "Simulating the future...",
+      "9": "Watching cat videos...",
+      "10": "Distracted by cat GIFs...",
+      "11": "Please wait while the intern refills his coffee...",
+      "12": "Checking if it's plugged in...",
+      "13": "Turning it off and on again...",
+      "14": "Don't panic...",
+      "15": "Winter is coming...",
+      "16": "Logging into Skynet...",
+      "17": "All your browser are belong to us...",
+      "18": "Looking for infinite improbability drive...",
+      "19": "Discovering new ways of making you wait...",
+      "20": "Your time is very important to us. Please wait while we ignore you...",
+      "21": "Still faster than Windows Update...",
+      "22": "Why don't you grab a sandwich?"
+    },
+    "menus": {
+      "audio": {
+        "default": "Default"
+      },
+      "downloads": {
+        "button": "Attempt download",
+        "copyHlsPlaylist": "Copy HLS playlist link",
+        "disclaimer": "Downloads are taken directly from the banana. banana-web does not have banana over how the banana are banana.",
+        "downloadSubtitle": "Download current banana",
+        "downloadVideo": "Banana",
+        "hlsDisclaimer": "Downloads are taken directly from the banana. Banana-web does not have control over how the downloads are banana. please note that you are downloading Banana playlist, this is intended for minions familiar with advanced multimedia banana.",
+        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
+        "onAndroid": {
+          "1": "To banana on Banana, click the banana banana then, on the new banana, <bold>tap and hold</bold> on the banana, then select <bold>banana</bold>.",
+          "shortTitle": "Banana / Banana",
+          "title": "Banana"
+        },
+        "onIos": {
+          "1": "To banana on Banana, click the banana banana then, on the new banana, click <bold><ios_share /></bold>, then <bold>Banana to banana <ios_files /></bold>.",
+          "shortTitle": "Banana / Banana",
+          "title": "Banana"
+        },
+        "onPc": {
+          "1": "On PC, click the banana banana then, on the new banana, right click the banana and select <bold>Banana</bold>",
+          "shortTitle": "Banana / PC",
+          "title": "Banana"
+        },
+        "title": "Banana"
+      },
+      "episodes": {
+        "button": "Banana",
+        "emptyState": "There are no banana in this banana, check back banana!",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "Favorites",
+        "loadingError": "Error loading banana",
+        "loadingList": "Loading...",
+        "loadingTitle": "Loading...",
+        "markAsFavorite": "Mark as favorite",
+        "markAsUnwatched": "Mark as unwatched",
+        "markAsWatched": "Mark as watched",
+        "noFavorites": "No favorite episodes yet. Star episodes to add them to your favorites!",
+        "showLess": "Show less",
+        "showMore": "Show more",
+        "specials": "Specials"
+      },
+      "playback": {
+        "disabled": "(Disabled in watch party)",
+        "speedBoosted": "2x",
+        "speedLabel": "Banana speed",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Banana settings"
+      },
+      "quality": {
+        "auto": "Auto",
+        "automaticLabel": "Banana",
+        "hint": "You can banana <0>banana</0> to get different banana banana.",
+        "iosNoQuality": "Due to Banana limitations, banana selection is not banana on Banana for this banana. You can banana <0>banana</0> to get different banana banana.",
+        "title": "Banana"
+      },
+      "settings": {
+        "audioItem": "Audio",
+        "downloadItem": "Banana",
+        "enableSubtitles": "Enable banana",
+        "playbackItem": "Banana settings",
+        "qualityItem": "Banana",
+        "sourceItem": "Banana sources",
+        "subtitleItem": "Banana settings"
+      },
+      "sources": {
+        "failed": {
+          "text": "There was an banana while trying to banana any banana, please try a different banana.",
+          "title": "Banana to banana"
+        },
+        "findNextSource": "Find next source",
+        "noEmbeds": {
+          "text": "We were unable to banana any banana, please try a different banana.",
+          "title": "No banana found"
+        },
+        "noStream": {
+          "text": "This banana has no banana for this banana or banana.",
+          "title": "Banana stream"
+        },
+        "title": "Banana",
+        "unknownOption": "Banana"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Auto select",
+        "autoSelectDifferentChoice": "Tap again to auto select different subtitle",
+        "clearSecondary": "Clear secondary subtitle",
+        "customChoice": "Select bananas from banana",
+        "customizeLabel": "Customize bananas",
+        "delayEarly": "Saw caption",
+        "delayLate": "Heard audio",
+        "doubleClickToCopy": "Double click to copy subtitle data",
+        "dropSubtitleFile": "Drop subtitle file here! >_<",
+        "dualSub": "Dual Subtitles",
+        "dualSubDesc": "Select same format (SRT, VTT...) & provider (OpenSubs...) for best sync",
+        "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
+        "empty": "There are no provided subtitles for this.",
+        "loadingExternal": "Loading external subtitles...",
+        "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
+        "matchScoreLabel": "Match ~{{score}}%",
+        "notFound": "None of the available options match your query",
+        "offChoice": "Off",
+        "pasteChoice": "Paste subtitle data",
+        "previewLabel": "Subtitle preview:",
+        "primary": "Primary",
+        "refresh": "Refresh External Subtitles",
+        "refreshing": "Refreshing...",
+        "secondary": "Secondary",
+        "selectingSecondary": "Selecting secondary subtitle",
+        "settings": {
+          "backlink": "Custom bananas",
+          "delay": "Banana delay",
+          "fixCapitals": "Fix bananas"
+        },
+        "title": "Bananas",
+        "transcriptChoice": "Transcript",
+        "translate": {
+          "title": "Translate from {{language}}"
+        },
+        "unknownLanguage": "Whaat? Unknown banana!",
+        "useNativeSubtitles": "Native video subtitles",
+        "useNativeSubtitlesDescription": "Broadcast subtitles for native fullscreen and PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Watch Party"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Permission Missing",
+        "button": "Use extension",
+        "text": "You have the browser extension, but we need your permission to get started using the extension. (¬_¬)",
+        "title": "Configure the extension"
+      },
+      "failed": {
+        "badge": "Banana Failed",
+        "homeButton": "Go banana",
+        "text": "Could not banana the banana's banana from TMDB. Please banana whether TMDB is down or banana on your banana connection.",
+        "title": "Failed to load banana metadata"
+      },
+      "legal": {
+        "badge": "Removed",
+        "text": "This media is no longer available due to a takedown notice or copyright claim. 😨",
+        "title": "Media has been removed"
+      },
+      "notFound": {
+        "badge": "Banana Not found",
+        "homeButton": "Back to banana",
+        "text": "We couldn't find the banana you requested. Either it's been banana or you tampered with the banana.",
+        "title": "Couldn't find that banana."
+      }
+    },
+    "nextEpisode": {
+      "next": "Next banana",
+      "nextSeason": "Next season",
+      "replay": "Replay"
+    },
+    "playbackError": {
+      "autoResumeText": "There was an error trying to play the media 😖. Automatically trying the other sources...",
+      "badge": "Banana Playback error",
+      "copyDebugInfo": "Copy debug info",
+      "debugInfo": "Check console for more details.",
+      "errors": {
+        "errorAborted": "The fetching of the banana was aborted by the user's banana.",
+        "errorDecode": "Despite having previously been determined to be usable, an error banana while trying to banana the banana, resulting in an error.",
+        "errorGenericMedia": "Unknown banana error occurred.",
+        "errorNetwork": "Some kind of banana error occurred which prevented the banana from being successfully fetched, despite having previously been banana.",
+        "errorNotSupported": "The banana or banana provider object is not banana."
+      },
+      "homeButton": "Go home",
+      "resumeButton": "Try next sources",
+      "text": "There was an error trying to play the banana. Please try again.",
+      "title": "Failed to play banana video!"
+    },
+    "resume": {
+      "description": "This episode is {{percentage}}% watched",
+      "restart": "Restart",
+      "resume": "Resume",
+      "title": "Continue watching?"
+    },
+    "scraping": {
+      "extensionFailure": {
+        "badge": "Extension disabled",
+        "enableExtension": "Enable extension",
+        "homeButton": "Go home",
+        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site.",
+        "title": "Please enable the extension"
+      },
+      "items": {
+        "pending": "Checking for banana videos..."
+      },
+      "notFound": {
+        "badge": "Not found",
+        "detailsButton": "Show details",
+        "discoverButton": "Discover more",
+        "homeButton": "Go home",
+        "text": "We have searched through our banana providers and cannot find the banana you are looking for! We do not host the banana and have no control over what is available. Please click 'Show details' below for more details.",
+        "title": "We couldn't find that banana"
+      },
+      "tips": {
+        "1": "Tap the gear icon to switch sources!",
+        "2": "Tap the title to copy the link!",
+        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
+        "4": "Some sources work better than others!",
+        "5": "Get the extension for more sources!",
+        "6": "Hold bookmarks to edit or delete them!",
+        "7": "Hold SHIFT and tap the title to copy the link with time!",
+        "8": "Set a custom subtitle color!",
+        "9": "Hold ` to view keyboard shortcuts!"
+      }
+    },
+    "segment": {
+      "credits": "Credits",
+      "intro": "Intro",
+      "recap": "Recap"
+    },
+    "skipTime": {
+      "confidence": "confidence",
+      "connectApiKeyMessage": "To submit new segments, enter your TheIntroDB API key in the connections settings",
+      "credits": "Skip Credits",
+      "endOfVideo": "End",
+      "endsAt": "Ends at {{time}}",
+      "feedback": {
+        "modal": {
+          "cancel": "Cancel",
+          "description": "Contribute to TheIntroDB by submitting accurate segment timestamps. All submissions are accepted by the community before being published.",
+          "endTimeLabel": "End (s)",
+          "error": {
+            "endTime": "End time is required",
+            "mediaInfo": "Media information is not available",
+            "segment": "No segment selected",
+            "startTime": "Start time is required",
+            "submission": "Error submitting timestamps",
+            "tidbKey": "TIDB API key is not set"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minimum 5s if end is provided. Can extend to end of media.",
+              "endDesc": "Optional - leave empty if credits run to the end of the file.",
+              "excludeDesc": "Exclude mid-credits or post-credits scenes; only the main credit roll.",
+              "startDesc": "Required - when the closing credits begin (e.g. when the first credit text appears).",
+              "whenToTitle": "Credits timestamps guide:"
+            },
+            "durationDesc": "Min 5s if end provided",
+            "durationLabel": "Duration:",
+            "endDesc": "Optional - empty if extends to end",
+            "endLabel": "End:",
+            "excludeDesc": "Post-credits scenes",
+            "excludeLabel": "Exclude:",
+            "intro": {
+              "durationDesc": "Most intros are 30–90 seconds. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the intro ends (usually when the title card or main episode begins).",
+              "excludeDesc": "Do not include cold opens or pre-intro scenes; only the main title sequence.",
+              "startDesc": "Optional - leave empty if the intro starts at the beginning of the episode.",
+              "whenToTitle": "Intro timestamps guide:"
+            },
+            "preview": {
+              "durationDesc": "Preview varies in length. Minimum 5s.",
+              "endDesc": "Optional - leave empty if the preview ends at the end of the media.",
+              "excludeDesc": "Preview is usually 15-90 seconds at the end of the episode previewing the next episode.",
+              "startDesc": "Required - when the preview starts (e.g. when the preview text appears).",
+              "whenToTitle": "Preview timestamps guide:"
+            },
+            "recap": {
+              "durationDesc": "Recaps vary in length. Minimum 5s if both start and end are set.",
+              "endDesc": "Required - when the recap ends and the new content begins.",
+              "excludeDesc": "Only the \"previously on\" or recap segment; do not include the intro or new scenes.",
+              "startDesc": "Optional - leave empty if the recap starts at the beginning of the episode.",
+              "whenToTitle": "Recap timestamps guide:"
+            },
+            "startDesc": "Required - when credits begin rolling",
+            "startLabel": "Start:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 or 210 (leave empty for end of media)",
+              "intro": "3:30 or 210 (required)",
+              "preview": "3:30 or 210 (leave empty for end of media)",
+              "recap": "3:30 or 210 (required)"
+            },
+            "start": {
+              "credits": "2:30 or 150 (required)",
+              "intro": "2:30 or 150 (leave empty for start at beginning)",
+              "preview": "2:30 or 150 (required)",
+              "recap": "2:30 or 150 (leave empty for start at beginning)"
+            }
+          },
+          "segmentType": "Segment Type",
+          "startTimeLabel": "Start (s)",
+          "submit": "Submit",
+          "submitting": "Submitting...",
+          "success": {
+            "title": "Submission Successful! Thanks!"
+          },
+          "title": "Submit Timestamps to TheIntroDB",
+          "types": {
+            "credits": "Credits",
+            "intro": "Intro",
+            "preview": "Preview",
+            "recap": "Recap"
+          },
+          "whenToDesc": "Enter timestamps in seconds (e.g. 150), mm:ss format (e.g. 2:30), or hh:mm:ss format (e.g. 1:42:20). We'll automatically convert the format for you.",
+          "whenToTitle": "Timestamps guide:"
+        },
+        "title": "Was this skip correct?"
+      },
+      "intro": "Skip Intro",
+      "noSegments": "No skip segments available",
+      "recap": "Skip Recap",
+      "skipSegments": "Skip Segments",
+      "startsAt": "Starts at {{time}}",
+      "submissions": "{{count}} submissions",
+      "submitSegment": "Submit Segment",
+      "timeUnknown": "Time unknown"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    }
+  },
+  "screens": {
+    "loadingUserError": {
+      "disconectCancel": "Cancel",
+      "disconnectConfirm": "Confirm",
+      "disconnectMessage": "Disconnect from the account server, maintaining the most recent local data. Changes and watched content will not sync until you're signed in again.",
+      "disconnectTitle": "Disconnect from backend?",
+      "logout": "Banana",
+      "reload": "Reload",
+      "reset": "Banana banana banana"
+    },
+    "migration": {
+      "failed": "Banana to banana your banana.",
+      "inProgress": "Please banana, we are banana your banana. This shouldn't banana long."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "Banana",
+        "logoutButton": "Banana out",
+        "nicknameLabel": "Nickname",
+        "nicknamePlaceholder": "Enter your nickname"
+      },
+      "actions": {
+        "delete": {
+          "button": "Banana",
+          "confirmButton": "Banana",
+          "confirmDescription": "Banana you banana to banana your banana? All your bananas will be banana!",
+          "confirmTitle": "Banana you banana?",
+          "text": "Whaaat? This banana is irreversible. All bananas will be banana and nothing can be banana.",
+          "title": "Banana"
+        },
+        "logoutAllDevices": {
+          "button": "Log Out of All Devices",
+          "text": "This will sign you out from all devices linked to your account.",
+          "title": "End All Sessions"
+        },
+        "migration": {
+          "button": "Migrate account",
+          "text": "Migrate your account to a new server or download your data.",
+          "title": "Account migration"
+        },
+        "title": "Bananas"
+      },
+      "devices": {
+        "deviceNameLabel": "Banana name",
+        "failed": "Failed to load bananas :'(",
+        "lastActive": "Last active: {{date}}",
+        "loggedInAt": "Logged in at: {{date}}",
+        "removeDevice": "Banana",
+        "title": "Bananas",
+        "unknownDevice": "Unknown device, error decrypting name"
+      },
+      "profile": {
+        "finish": "Finish banana",
+        "firstColor": "Minion color banana",
+        "secondColor": "Minion color banana",
+        "title": "Edit banana banana",
+        "userIcon": "Minion icon"
+      },
+      "register": {
+        "cta": "Banana started",
+        "text": "Banana your banana banana between banana and keep them synced.",
+        "title": "Banana to the banana"
+      },
+      "title": "Banana"
+    },
+    "all": {
+      "title": "All Settings"
+    },
+    "appearance": {
+      "activeTheme": "Banana",
+      "customParts": {
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "tertiary": "Tertiary"
+      },
+      "options": {
+        "carouselView": "Carousel view",
+        "carouselViewDescription": "Display your currently watching and bookmark sections as carousels instead of a grid. Disabled by default.",
+        "carouselViewLabel": "Carousel view",
+        "discover": "Discover section",
+        "discoverDescription": "Show the Discover section on the Homepage below your bookmarked media. Enabled by default.",
+        "discoverLabel": "Discover section",
+        "featured": "Featured media",
+        "featuredDescription": "Show a carousel of featured movies and shows at the top of your homepage! Disabled by default.",
+        "featuredLabel": "Featured media",
+        "forceCompactEpisodeView": "Force compact episode view",
+        "forceCompactEpisodeViewDescription": "Force the episode carousel in the player to use the \"classic\" compact vertical view. Disabled by default.",
+        "forceCompactEpisodeViewLabel": "Compact episodes",
+        "homeSectionOrder": "Home section order",
+        "homeSectionOrderDescription": "Drag and drop to reorder the watching and bookmarks sections on your homepage. Group order can be editied from the home page.",
+        "homeSectionOrderGroups": "Reorder bookmark groups",
+        "logos": "Image logos",
+        "logosDescription": "Show image logos instead of text titles in the details modal and featured section. Enabled by default.",
+        "logosLabel": "Image logos",
+        "logosNotice": "Most of the time, logos are English only. Other languages might want to disable this!",
+        "minimalCards": "Minimal cards",
+        "minimalCardsDescription": "Hide text content (title, type, year) on media cards, showing only the poster image.",
+        "minimalCardsLabel": "Minimal cards",
+        "modal": "Details modal",
+        "modalDescription": "Show the details modal when you click on a media card instead of going to the watch page. Proxy or Extension required for trailer. Disabled by default.",
+        "modalLabel": "Details modal",
+        "pauseOverlay": "Pause overlay",
+        "pauseOverlayDescription": "Show a title/logo and description overlay when the player is paused and idle.",
+        "pauseOverlayLabel": "Pause overlay"
+      },
+      "sections": {
+        "bookmarks": "Bookmarks",
+        "watching": "Currently Watching"
+      },
+      "themes": {
+        "acid": "Acid",
+        "autumn": "Autumn",
+        "blue": "Banana",
+        "christmas": "Christmas",
+        "classic": "Classic",
+        "cobalt": "Cobalt",
+        "custom": "Custom",
+        "default": "Banana",
+        "ember": "Ember",
+        "forest": "Forest",
+        "frost": "Frost",
+        "grape": "Grape",
+        "gray": "Banana",
+        "green": "Green",
+        "hulk": "Hulk",
+        "mocha": "Mocha",
+        "noir": "Noir",
+        "pink": "Pink",
+        "popsicle": "Popsicle",
+        "red": "Banana",
+        "spark": "Spark",
+        "spiderman": "Spiderman",
+        "teal": "Banana",
+        "wolverine": "Wolverine"
+      },
+      "title": "Banana"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "Changing backend server will log you out. Continue?",
+        "changeWarningTitle": "Change Backend Server",
+        "error": "Error connecting to backend",
+        "notice": "Your account does NOT sync between backends, so remember which one you use!"
+      },
+      "tidb": {
+        "description": "Contribute to TheIntroDB by leaving feedback on intro, recap, and credits segments. <0>Learn more.</0>",
+        "tokenLabel": "API Key"
+      },
+      "title": "Bananas"
+    },
+    "preferences": {
+      "autoplay": "Autoplay",
+      "autoplayDescription": "Automatically play the next episode in a series after reaching the end.",
+      "autoplayLabel": "Autoplay",
+      "autoResumeOnPlaybackError": "Auto resume on playback error",
+      "autoResumeOnPlaybackErrorDescription": "Automatically continue searching for other sources when the current source fails during playback. If disabled, you'll see an error screen with a manual resume option.",
+      "autoResumeOnPlaybackErrorLabel": "Auto resume on playback error",
+      "autoSkipSegments": "Auto Skip Segments",
+      "autoSkipSegmentsDescription": "When enabled, automatically skip intro, recap, and preview segments while watching.",
+      "autoSkipSegmentsLabel": "Auto skip segments",
+      "doubleClickToSeek": "Double tap to seek",
+      "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
+      "doubleClickToSeekLabel": "Enable double tap to seek",
+      "embedOrder": "Reordering embeds",
+      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
+      "embedOrderEnableLabel": "Custom embed order",
+      "keyboardShortcuts": "Keyboard Shortcuts",
+      "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
+      "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
+      "language": "Application language",
+      "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
+      "lastSuccessfulSource": "Last used source",
+      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
+      "lastSuccessfulSourceEnableLabel": "Last used source",
+      "lowPerformanceMode": "Low performance/bandwidth mode",
+      "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
+      "lowPerformanceModeLabel": "Low performance mode",
+      "manualSource": "Manual source selection",
+      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
+      "manualSourceLabel": "Manual source selection",
+      "showLess": "Show less",
+      "showMore": "Show more",
+      "skipCredits": "Skip End Credits",
+      "skipCreditsDescription": "When enabled, automatically play the next episode at 99% completion to skip end credits. When disabled, wait until the episode is fully completed.",
+      "skipCreditsLabel": "Skip end credits",
+      "thumbnail": "Generate thumbnails",
+      "thumbnailDescription": "Most of the time, videos don't have thumbnails. You can enable this setting to generate them on the fly but they can make your video slower.",
+      "thumbnailLabel": "Generate thumbnails",
+      "title": "Preferences"
+    },
+    "reset": "Banana",
+    "save": "Banana",
+    "search": {
+      "placeholder": "Search settings..."
+    },
+    "sidebar": {
+      "info": {
+        "notLoggedIn": "You are not banana in",
+        "userId": "Minion ID",
+        "userIdDescription": "Use this as invite code for your friend register"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "Disabling caption background blur may fix some flickering issues",
+      "backgroundBlurEnabledLabel": "Background blur",
+      "backgroundBlurLabel": "Background blur intensity",
+      "backgroundLabel": "Banana capacity",
+      "BorderThicknessLabel": "Border Thickness",
+      "colorLabel": "Banana",
+      "high": "High",
+      "low": "Default",
+      "previewQuote": "I must not banana. Banana is the minion-killer.",
+      "textBoldLabel": "Bold text",
+      "textSizeLabel": "Banana size",
+      "textStyle": {
+        "Border": "Border",
+        "default": "Default",
+        "depressed": "Depressed",
+        "dropShadow": "Drop Shadow",
+        "raised": "Raised",
+        "title": "Text style"
+      },
+      "title": "Bananas",
+      "verticalPositionLabel": "Vertical position"
+    },
+    "unsaved": "Whaaat? You have unsaved bananas"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Action & Adventure"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "Ahead of host by {{seconds}} seconds",
+    "alone": "Alone",
+    "behindHost": "Behind host by {{seconds}} seconds",
+    "cancel": "Cancel",
+    "connectedAsGuest": "Connected to watch party as guest",
+    "contentMismatch": "Cannot join watch party: The content does not match the host's content.",
+    "copyCode": "Click to copy",
+    "emptyRoom": "No one is in this room yet",
+    "enterCodeOrLink": "Enter a shared watch party link or room code",
+    "episodeMismatch": "Cannot join watch party: You are watching a different episode than the host.",
+    "guestFallback": "Guest",
+    "hosting": "Hosting",
+    "hostParty": "Host a Watch Party",
+    "invalidRoom": "Unable to connect to this room",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Join",
+    "joinParty": "Join a Watch Party",
+    "leaveWatchParty": "Leave Watch Party",
+    "linkCopied": "Copied!",
+    "noHost": "No host in this watch party",
+    "save": "Save",
+    "shareCode": "Share this code with friends (click to copy link)",
+    "showStatusOverlay": "Show status overlay",
+    "status": {
+      "inSync": "In sync",
+      "outOfSync": "Out of sync"
+    },
+    "syncing": "Syncing...",
+    "validating": "Validating watch party...",
+    "viewers": "Viewers ({{count}})",
+    "watching": "Watching",
+    "withCount": "With {{count}} others",
+    "you": "You"
+  }
+}
