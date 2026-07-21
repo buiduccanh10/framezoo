@@ -349,7 +349,7 @@ export function SourceSelectPart(props: {
           <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/55 to-black/80" />
         </>
       ) : null}
-      <div className="pointer-events-auto relative z-10 flex h-full w-full items-center justify-center px-6 py-8">
+      <div className="pointer-events-auto relative flex h-full w-full items-center justify-center px-6 py-8">
         <div className="h-[min(58vh,42rem)] w-full max-w-2xl">
           <Menu.CardWithScrollable>
             {showAddonList && (isInitialSelection || !onCancel) ? (

@@ -55,7 +55,7 @@ function LoadingTitle(props: {
       <LazyImage
         src={props.logo}
         alt={props.title}
-        className="w-full h-full object-contain bg-transparent opacity-25 grayscale saturate-0 blur-[1px] brightness-75"
+        className="w-full h-full object-contain bg-transparent opacity-30 grayscale saturate-0"
         showSkeleton={false}
         loading="eager"
         decoding="sync"
@@ -70,7 +70,7 @@ function LoadingTitle(props: {
         <LazyImage
           src={props.logo}
           alt=""
-          className="h-full w-full object-contain bg-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.3)]"
+          className="h-full w-full object-contain bg-transparent"
           showSkeleton={false}
           loading="eager"
           decoding="sync"
@@ -81,42 +81,21 @@ function LoadingTitle(props: {
   );
 }
 
-function LoadingBackdrop(props: {
-  src?: string;
-  alt: string;
-  progress: number;
-}) {
+function LoadingBackdrop(props: { src?: string; alt: string }) {
   if (!props.src) {
     return <div className="absolute inset-0 bg-background-main" />;
   }
-
-  const progressValue = Math.min(100, Math.max(0, props.progress));
 
   return (
     <div className="absolute inset-0 overflow-hidden">
       <LazyImage
         src={props.src}
         alt={props.alt}
-        className="absolute inset-0 h-full w-full object-cover opacity-80 grayscale saturate-0 blur-[1px] brightness-[0.45]"
+        className="absolute inset-0 h-full w-full object-cover"
         showSkeleton={false}
         loading="eager"
         decoding="sync"
       />
-      <div
-        className="absolute inset-0 overflow-hidden transition-[clip-path] duration-300 ease-linear"
-        style={{
-          clipPath: `inset(0 ${100 - progressValue}% 0 0)`,
-        }}
-      >
-        <LazyImage
-          src={props.src}
-          alt=""
-          className="h-full w-full object-cover"
-          showSkeleton={false}
-          loading="eager"
-          decoding="sync"
-        />
-      </div>
     </div>
   );
 }
@@ -319,7 +298,7 @@ export function PlayerLoadingOverlay() {
 
   if (!shouldRender) return null;
 
-  const showLoadingTitle = !backgroundImage;
+  const showLoadingTitle = true;
   const showLogo = Boolean(showLoadingTitle && meta?.logo && !hideLogo);
   const displayTitle = meta?.title || "Loading media";
 
@@ -330,11 +309,7 @@ export function PlayerLoadingOverlay() {
       }`}
     >
       {showBackdropImage ? (
-        <LoadingBackdrop
-          src={backgroundImage}
-          alt={displayTitle}
-          progress={loadingProgress}
-        />
+        <LoadingBackdrop src={backgroundImage} alt={displayTitle} />
       ) : null}
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/5 to-black/45" />
