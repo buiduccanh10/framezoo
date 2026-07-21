@@ -50,6 +50,29 @@ describe("addon stream normalization", () => {
     );
     expect(streams[1].fileName).toBe("movie.mkv");
   });
+
+  it("preserves Peerflix description when title is omitted", () => {
+    const [stream] = normalizeAddonStreams(addon, [
+      {
+        name: "Peerflix 🇪🇸 720p",
+        description:
+          "Reacher - Temporada 1 [HDTV 720p][Cap.101]\n" +
+          "Reacher - Temporada 1 [HDTV 720p][Cap.101].mkv\n" +
+          "👤 2 💾 1.52 GB 🌐 Peerflix",
+        infoHash: "peerflix-hash",
+        fileIdx: 2,
+      },
+    ]);
+
+    expect(stream).toMatchObject({
+      name: "Peerflix 🇪🇸 720p",
+      title: "",
+      description:
+        "Reacher - Temporada 1 [HDTV 720p][Cap.101]\n" +
+        "Reacher - Temporada 1 [HDTV 720p][Cap.101].mkv\n" +
+        "👤 2 💾 1.52 GB 🌐 Peerflix",
+    });
+  });
 });
 
 describe("addon stream loading", () => {
