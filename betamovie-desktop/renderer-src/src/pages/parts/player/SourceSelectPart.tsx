@@ -427,16 +427,23 @@ export function SourceSelectPart(props: {
             {selectedAddonStreams.map((stream) => {
               const selected = currentSourceId === stream.id;
               const size = formatSize(stream.videoSize);
-              const nameLines = streamLines(stream.name);
-              const titleLines = streamLines(stream.title);
+              const nameLines = streamLines(stream.name || stream.addonName);
+              const titleLines = streamLines(stream.title || "");
+              const descLines = stream.description
+                ? streamLines(stream.description)
+                : [];
               const fallbackDetails = [
                 size ? `💾 ${size}` : null,
                 stream.fileName ? `⚙ ${stream.fileName}` : null,
-              ].filter(Boolean);
-              const detailsLines =
-                titleLines.length > 0
-                  ? titleLines
-                  : [stream.description, ...fallbackDetails].filter(Boolean);
+              ].filter(Boolean) as string[];
+
+              const detailsLines = [
+                ...titleLines,
+                ...descLines,
+                ...(titleLines.length === 0 && descLines.length === 0
+                  ? fallbackDetails
+                  : []),
+              ];
 
               return (
                 <Menu.Link
@@ -447,14 +454,21 @@ export function SourceSelectPart(props: {
                   className="items-center gap-4 px-3 py-3"
                   onClick={() => void selectAddonStream(stream)}
                 >
-                  <div className="grid min-w-0 flex-1 grid-cols-[minmax(10rem,15rem),minmax(0,1fr)] items-center gap-8">
-                    <span className="min-w-0 whitespace-pre-line text-[15px] leading-5 text-white/85">
-                      {nameLines.length > 0
-                        ? nameLines.join("\n")
-                        : stream.addonName}
-                    </span>
-                    <span className="min-w-0 whitespace-pre-line text-[15px] leading-5 text-white/90 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] overflow-hidden">
-                      {detailsLines.join("\n")}
+                  <div className="grid min-w-0 flex-1 grid-cols-[minmax(8rem,12rem),minmax(0,1fr)] items-center gap-6">
+                    <div className="flex min-w-0 flex-col">
+                      <span className="min-w-0 whitespace-pre-line text-[15px] font-medium leading-5 text-white/90">
+                        {nameLines.join("\n")}
+                      </span>
+                    </div>
+                    <span className="min-w-0 whitespace-pre-line text-[14px] leading-5 text-white/70 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5] overflow-hidden">
+                      {detailsLines.map((line, i) => (
+                        <span
+                          key={i}
+                          className={`block ${i === 0 ? "text-white/90 font-medium text-[15px]" : ""}`}
+                        >
+                          {line}
+                        </span>
+                      ))}
                     </span>
                   </div>
                 </Menu.Link>
