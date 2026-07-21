@@ -278,7 +278,11 @@ export function ProgressBar() {
                     0,
                     Math.min(
                       1,
-                      dragging ? dragPercentage / 100 : time / duration,
+                      dragging
+                        ? dragPercentage / 100
+                        : duration > 0
+                          ? time / duration
+                          : 0,
                     ),
                   ) * 100
                 }%`,
