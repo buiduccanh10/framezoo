@@ -8,7 +8,6 @@ import { createPlayingSlice } from "@/stores/player/slices/playing";
 import { createProgressSlice } from "@/stores/player/slices/progress";
 import { createSkipSegmentsSlice } from "@/stores/player/slices/skipSegments";
 import { createSourceSlice } from "@/stores/player/slices/source";
-import { createThumbnailSlice } from "@/stores/player/slices/thumbnails";
 import { AllSlices } from "@/stores/player/slices/types";
 
 export const usePlayerStore = create(
@@ -19,7 +18,6 @@ export const usePlayerStore = create(
     ...createSourceSlice(...a),
     ...createDisplaySlice(...a),
     ...createCastingSlice(...a),
-    ...createThumbnailSlice(...a),
     ...createSkipSegmentsSlice(...a),
   })),
 );

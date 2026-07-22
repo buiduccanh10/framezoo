@@ -1,25 +1,11 @@
-import {
-  MouseEvent,
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import {
   getSegmentBoundsSeconds,
   useSkipTime,
 } from "@/components/player/hooks/useSkipTime";
-import { LazyImage } from "@/components/utils/Image";
 import { useProgressBar } from "@/hooks/useProgressBar";
-import {
-  ThumbnailImage,
-  nearestImageAt,
-} from "@/stores/player/slices/thumbnails";
 import { usePlayerStore } from "@/stores/player/store";
-import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
 const SEGMENT_COLORS: Record<
   "intro" | "recap" | "credits" | "preview",
@@ -30,126 +16,6 @@ const SEGMENT_COLORS: Record<
   credits: "rgba(34, 197, 94, 0.75)", // green
   preview: "rgba(234, 179, 8, 0.75)", // yellow
 };
-
-function ThumbnailPreview(props: { thumbnail: ThumbnailImage }) {
-  if (props.thumbnail.data) {
-    return (
-      <LazyImage
-        src={props.thumbnail.data}
-        alt=""
-        className="h-24 border rounded-xl border-gray-800 no-fade"
-        showSkeleton={false}
-        loading="eager"
-        decoding="sync"
-      />
-    );
-  }
-
-  if (props.thumbnail.sprite) {
-    const { sprite } = props.thumbnail;
-    const scale = 96 / sprite.height;
-    const width = Math.max(1, Math.round(sprite.width * scale));
-
-    return (
-      <div
-        className="border rounded-xl border-gray-800 overflow-hidden bg-black"
-        style={{
-          width,
-          height: 96,
-        }}
-      >
-        <img
-          src={sprite.url}
-          alt=""
-          className="block max-w-none no-fade pointer-events-none select-none"
-          style={{
-            transform: `translate(${-sprite.x * scale}px, ${-sprite.y * scale}px) scale(${scale})`,
-            transformOrigin: "top left",
-          }}
-        />
-      </div>
-    );
-  }
-
-  return null;
-}
-
-function ThumbnailDisplay(props: { at: number; show: boolean }) {
-  const thumbnailImages = usePlayerStore((s) => s.thumbnails.images);
-  const currentThumbnail = useMemo(() => {
-    return nearestImageAt(thumbnailImages, props.at)?.image;
-  }, [thumbnailImages, props.at]);
-  const [offsets, setOffsets] = useState({
-    offscreenLeft: 0,
-    offscreenRight: 0,
-  });
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const padding = 32;
-    const left = Math.max(0, (rect.left - padding) * -1);
-    const right = Math.max(0, rect.right + padding - window.innerWidth);
-
-    setOffsets({
-      offscreenLeft: left,
-      offscreenRight: right,
-    });
-  }, [props.at, currentThumbnail]);
-
-  // Keep time label width consistent and avoid recomputing
-  const formattedTime = useMemo(
-    () => formatSeconds(Math.max(props.at, 0), durationExceedsHour(props.at)),
-    [props.at],
-  );
-  const transformX =
-    offsets.offscreenLeft > 0 ? offsets.offscreenLeft : -offsets.offscreenRight;
-
-  if (!props.show) return null;
-
-  return (
-    <div className="flex flex-col items-center -translate-x-1/2 pointer-events-none">
-      <div className="w-screen flex justify-center">
-        <div ref={ref}>
-          <div
-            style={{
-              transform: `translateX(${transformX}px)`,
-            }}
-          >
-            {currentThumbnail ? (
-              <ThumbnailPreview thumbnail={currentThumbnail} />
-            ) : null}
-            <p className="mt-1 mx-auto text-center border rounded-xl border-gray-800 px-3 py-1 backdrop-blur-lg bg-black bg-opacity-20 w-max">
-              {formattedTime}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function useMouseHoverPosition(barRef: RefObject<HTMLDivElement>) {
-  const [mousePos, setMousePos] = useState(-1);
-
-  const mouseMove = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      const bar = barRef.current;
-      if (!bar) return;
-      const rect = barRef.current.getBoundingClientRect();
-      const pos = (e.pageX - rect.left) / barRef.current.offsetWidth;
-      setMousePos(pos * 100);
-    },
-    [setMousePos, barRef],
-  );
-
-  const mouseLeave = useCallback(() => {
-    setMousePos(-1);
-  }, [setMousePos]);
-
-  return { mousePos, mouseMove, mouseLeave };
-}
 
 export function ProgressBar() {
   const { duration, time, buffered } = usePlayerStore((s) => s.progress);
@@ -193,7 +59,6 @@ export function ProgressBar() {
   );
 
   const ref = useRef<HTMLDivElement>(null);
-  const { mouseMove, mouseLeave, mousePos } = useMouseHoverPosition(ref);
 
   const { dragging, dragPercentage, dragMouseDown } = useProgressBar(
     ref,
@@ -207,32 +72,13 @@ export function ProgressBar() {
     setDraggingTime((dragPercentage / 100) * duration);
   }, [setDraggingTime, duration, dragPercentage]);
 
-  const previewPercentage = dragging ? dragPercentage : mousePos;
-  const shouldShowPreview = dragging || mousePos > -1;
-
   return (
     <div className="w-full relative" dir="ltr">
-      <div className="top-0 absolute inset-x-0 z-[70] pointer-events-none">
-        <div
-          className="absolute bottom-0"
-          style={{
-            left: `${previewPercentage}%`,
-          }}
-        >
-          <ThumbnailDisplay
-            at={Math.floor((previewPercentage / 100) * duration)}
-            show={shouldShowPreview}
-          />
-        </div>
-      </div>
-
       <div className="w-full" ref={ref}>
         <div
           className="group w-full h-8 flex items-center cursor-pointer"
           onMouseDown={dragMouseDown}
           onTouchStart={dragMouseDown}
-          onMouseLeave={mouseLeave}
-          onMouseMove={mouseMove}
         >
           <div
             className={[

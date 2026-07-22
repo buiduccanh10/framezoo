@@ -4,10 +4,6 @@ import { createPortal } from "react-dom";
 import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
 import { buildVttObjectUrl } from "@/components/player/utils/captions";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
-import {
-  getAppliedSubtitleSyncOffsetMs,
-  getEffectiveSubtitleDelay,
-} from "@/components/player/utils/subtitleSync";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -86,14 +82,7 @@ function VideoElement() {
     s.caption.dualSubEnabled ? s.caption.secondary?.vttData : undefined,
   );
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
-  const manualSubtitleDelay = useSubtitleStore((s) => s.delay);
-  const subtitleSyncOffsetMs = usePlayerStore((s) =>
-    getAppliedSubtitleSyncOffsetMs(s.subtitleSync),
-  );
-  const subtitleDelay = getEffectiveSubtitleDelay(
-    manualSubtitleDelay,
-    subtitleSyncOffsetMs,
-  );
+  const subtitleDelay = useSubtitleStore((s) => s.delay);
   const source = usePlayerStore((s) => s.source);
   const pictureInPictureMode = usePlayerStore(
     (s) => s.interface.pictureInPictureMode,

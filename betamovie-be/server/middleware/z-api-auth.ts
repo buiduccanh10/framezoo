@@ -7,10 +7,12 @@ import {
   verifyProxyCapabilityToken,
 } from '~/utils/proxySecurity';
 
-const PUBLIC_API_PATHS = new Set(['/api/providers']);
+const PUBLIC_API_PATHS = new Set(['/api/providers', '/api/skip-segments']);
 
 export default defineEventHandler(async event => {
-  if (!event.path.startsWith('/api/')) {
+  const path = event.path.split('?')[0] || '';
+
+  if (!path.startsWith('/api/')) {
     return;
   }
 
@@ -20,17 +22,17 @@ export default defineEventHandler(async event => {
   }
 
   // Provider metadata is required before login to bootstrap the player.
-  if (PUBLIC_API_PATHS.has(event.path)) {
+  if (PUBLIC_API_PATHS.has(path)) {
     return;
   }
 
   // Capability issuance is intentionally public for anonymous playback.
   // The issuer applies SSRF, header, TTL, and rate-limit controls.
-  if (isProxyCapabilityPath(event.path)) {
+  if (isProxyCapabilityPath(path)) {
     return;
   }
 
-  const proxyKind = getProxyCapabilityKindForPath(event.path);
+  const proxyKind = getProxyCapabilityKindForPath(path);
   if (proxyKind) {
     if (isValidInternalApiRequest(event)) {
       return;

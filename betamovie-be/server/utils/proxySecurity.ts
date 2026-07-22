@@ -16,9 +16,6 @@ import { useAuth } from '~/utils/auth';
 export type ProxyCapabilityKind =
   | 'm3u8'
   | 'media'
-  | 'preview'
-  | 'preview-auto'
-  | 'preview-file'
   | 'embed';
 
 export type ProxyCapabilityPayload = JwtPayload & {
@@ -213,18 +210,6 @@ export const getProxyCapabilityKindForPath = (path: string): ProxyCapabilityKind
   }
   if (normalizedPath === '/api/media-proxy' || normalizedPath === '/api/embed/api/media-proxy') {
     return 'media';
-  }
-  if (
-    normalizedPath === '/api/preview-proxy' ||
-    normalizedPath === '/api/embed/api/preview-proxy'
-  ) {
-    return 'preview';
-  }
-  if (normalizedPath === '/api/preview/auto' || normalizedPath === '/api/embed/api/preview/auto') {
-    return 'preview-auto';
-  }
-  if (normalizedPath === '/api/preview/file' || normalizedPath === '/api/embed/api/preview/file') {
-    return 'preview-file';
   }
   if (
     normalizedPath === '/api/embed/ts-proxy' ||
@@ -729,9 +714,7 @@ export const getProxyResponseLimit = (kind: ProxyCapabilityKind) => {
       ? 16 * 1024 * 1024
       : kind === 'media'
         ? 2 * 1024 * 1024 * 1024
-        : kind === 'embed'
-          ? 16 * 1024 * 1024
-          : 10 * 1024 * 1024;
+        : 16 * 1024 * 1024;
 
   return getPositiveInt(
     process.env[
@@ -739,9 +722,7 @@ export const getProxyResponseLimit = (kind: ProxyCapabilityKind) => {
         ? 'M3U8_PROXY_MAX_RESPONSE_BYTES'
         : kind === 'media'
           ? 'MEDIA_PROXY_MAX_RESPONSE_BYTES'
-          : kind === 'embed'
-            ? 'EMBED_PROXY_MAX_RESPONSE_BYTES'
-            : 'PREVIEW_PROXY_MAX_RESPONSE_BYTES'
+          : 'EMBED_PROXY_MAX_RESPONSE_BYTES'
     ],
     fallback
   );

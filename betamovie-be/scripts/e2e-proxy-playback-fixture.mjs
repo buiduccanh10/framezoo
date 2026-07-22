@@ -10,14 +10,8 @@ const backendBase = (
 const fixturePort = Number(process.env.SECURITY_E2E_FIXTURE_PORT || 3111);
 const fixtureBind = process.env.SECURITY_E2E_FIXTURE_BIND || '127.0.0.1';
 const fixtureHost = process.env.SECURITY_E2E_FIXTURE_HOST || '127.0.0.1';
-const previewFileKey = process.env.SECURITY_E2E_PREVIEW_FILE_KEY || 'movie:550';
-const previewFileName = process.env.SECURITY_E2E_PREVIEW_FILE || 'thumb.jpg';
-const previewFileExpectedBytes = process.env.SECURITY_E2E_PREVIEW_FILE_EXPECTED_BYTES
-  ? Number(process.env.SECURITY_E2E_PREVIEW_FILE_EXPECTED_BYTES)
-  : null;
 const segmentBytes = Buffer.from('fixture-ts-segment');
 const mediaBytes = Buffer.from('fixture-media-bytes');
-const imageBytes = Buffer.from('fixture-preview-image');
 
 const fixtureServer = createServer((request, response) => {
   const path = decodeURIComponent(new URL(request.url || '/', 'http://127.0.0.1').pathname);
@@ -46,30 +40,6 @@ const fixtureServer = createServer((request, response) => {
     return;
   }
 
-  if (path === '/preview/thumb.vtt') {
-    response.writeHead(200, { 'content-type': 'text/vtt; charset=utf-8' });
-    response.end('WEBVTT\n\n00:00.000 --> 00:01.000\n./thumb.jpg#xywh=0,0,10,10\n');
-    return;
-  }
-
-  if (path === '/preview/thumb.jpg') {
-    response.writeHead(200, {
-      'content-type': 'image/jpeg',
-      'content-length': String(imageBytes.length),
-    });
-    response.end(imageBytes);
-    return;
-  }
-
-  if (path === '/files/movie:550/thumb.jpg') {
-    response.writeHead(200, {
-      'content-type': 'image/jpeg',
-      'content-length': String(imageBytes.length),
-    });
-    response.end(imageBytes);
-    return;
-  }
-
   response.writeHead(404);
   response.end('not found');
 });
@@ -82,11 +52,11 @@ const readBodyOrThrow = async (response, label) => {
   throw new Error(`${label}: HTTP ${response.status}: ${body.slice(0, 240)}`);
 };
 
-const issueProxyUrl = async (kind, url, resource = '') => {
+const issueProxyUrl = async (kind, url) => {
   const response = await request('/api/proxy/capability', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ kind, url, ...(resource ? { resource } : {}) }),
+    body: JSON.stringify({ kind, url }),
   });
   await readBodyOrThrow(response, `${kind} capability`);
   const payload = await response.json();
@@ -143,53 +113,6 @@ try {
     );
   }
   console.log('media bytes + HEAD: PASS');
-
-  const previewFileUrl = await issueProxyUrl(
-    'preview-file',
-    '',
-    `${previewFileKey}|${previewFileName}`
-  );
-  const previewFileResponse = await readBodyOrThrow(await fetch(previewFileUrl), 'preview file');
-  const receivedPreviewFile = Buffer.from(await previewFileResponse.arrayBuffer());
-  if (
-    previewFileExpectedBytes !== null &&
-    receivedPreviewFile.length !== previewFileExpectedBytes
-  ) {
-    throw new Error(
-      `preview file: byte length mismatch (expected ${previewFileExpectedBytes}, got ${receivedPreviewFile.length})`
-    );
-  }
-  if (!receivedPreviewFile.length) {
-    throw new Error('preview file: empty body');
-  }
-  if (
-    !previewFileExpectedBytes &&
-    !previewFileResponse.headers.get('content-type')?.startsWith('image/')
-  ) {
-    throw new Error('preview file: expected image content-type');
-  }
-  console.log('preview file bytes: PASS');
-
-  const vttUrl = await issueProxyUrl('preview', `${fixtureBase}/preview/thumb.vtt`);
-  const vttResponse = await readBodyOrThrow(await fetch(vttUrl), 'preview VTT');
-  const vtt = await vttResponse.text();
-  const imageLine = vtt
-    .split(/\r?\n/)
-    .map(line => line.trim())
-    .find(line => line && !line.startsWith('WEBVTT') && !line.includes('-->'));
-  if (!imageLine || !imageLine.includes('/api/preview-proxy')) {
-    throw new Error('preview VTT: image URI was not rewritten');
-  }
-
-  const imageResponse = await readBodyOrThrow(
-    await fetch(new URL(imageLine, vttUrl)),
-    'preview image'
-  );
-  const receivedImage = Buffer.from(await imageResponse.arrayBuffer());
-  if (!receivedImage.equals(imageBytes)) {
-    throw new Error('preview image: body mismatch');
-  }
-  console.log('VTT rewrite + preview image: PASS');
 
   console.log('proxy playback fixture passed');
 } finally {

@@ -11,8 +11,6 @@ const upstreamUrl = new URL(
 const privateUpstreamUrl =
   process.env.SECURITY_E2E_PRIVATE_URL || 'http://127.0.0.1:3000/healthcheck';
 const mappedPrivateUpstreamUrl = 'http://[::ffff:7f00:1]/healthcheck';
-const previewAutoResource = 'provider=vidlink&type=movie&tmdbId=550';
-const previewFileResource = 'movie:550|thumb.jpg';
 
 if (!internalToken || !cryptoSecret) {
   throw new Error('INTERNAL_API_TOKEN and CRYPTO_SECRET are required');
@@ -41,9 +39,6 @@ const assertNotUnauthorized = async (label, response) => {
 for (const path of [
   '/api/m3u8-proxy',
   '/api/media-proxy',
-  '/api/preview-proxy',
-  '/api/preview/auto?provider=vidlink&type=movie&tmdbId=550',
-  '/api/preview/file?key=movie%3A550&file=thumb.jpg',
 ]) {
   await assertStatus(
     `anonymous ${path}`,
@@ -138,31 +133,20 @@ const issueCapability = async (kind, url, resource = '') => {
 };
 
 const embedCapabilityUrl = await issueCapability('embed', upstreamUrl);
-const previewAutoCapabilityUrl = await issueCapability('preview-auto', '', previewAutoResource);
-const previewFileCapabilityUrl = await issueCapability('preview-file', '', previewFileResource);
 
 for (const path of [
   '/api/embed/api/m3u8-proxy',
   '/api/embed/api/media-proxy',
-  '/api/embed/api/preview-proxy',
-  '/api/embed/api/preview/auto',
-  '/api/embed/api/preview/file',
   '/api/embed/api/ts-proxy',
 ]) {
   await assertStatus(
     `anonymous ${path}`,
-    await request(
-      path.endsWith('/preview/auto')
-        ? `${path}?provider=vidlink&type=movie&tmdbId=550`
-        : path.endsWith('/preview/file')
-          ? `${path}?key=movie%3A550&file=thumb.jpg`
-          : `${path}?url=${encodeURIComponent(upstreamUrl)}`
-    ),
+    await request(`${path}?url=${encodeURIComponent(upstreamUrl)}`),
     401
   );
 }
 
-for (const path of ['/api/m3u8-proxy', '/api/media-proxy', '/api/preview-proxy']) {
+for (const path of ['/api/m3u8-proxy', '/api/media-proxy']) {
   await assertNotUnauthorized(
     `internal ${path}`,
     await request(`${path}?url=${encodeURIComponent(upstreamUrl)}`, {
@@ -173,36 +157,9 @@ for (const path of ['/api/m3u8-proxy', '/api/media-proxy', '/api/preview-proxy']
   );
 }
 
-await assertNotUnauthorized(
-  'internal /api/preview/auto',
-  await request('/api/preview/auto?provider=vidlink&type=movie&tmdbId=550', {
-    headers: {
-      'x-internal-token': internalToken,
-    },
-  })
-);
-await assertNotUnauthorized(
-  'internal /api/preview/file',
-  await request('/api/preview/file?key=movie%3A550&file=thumb.jpg', {
-    headers: {
-      'x-internal-token': internalToken,
-    },
-  })
-);
-
-await assertNotUnauthorized(
-  'valid preview-auto capability',
-  await request(previewAutoCapabilityUrl)
-);
-await assertNotUnauthorized(
-  'valid preview-file capability',
-  await request(previewFileCapabilityUrl)
-);
-
 for (const path of [
   '/api/embed/api/m3u8-proxy',
   '/api/embed/api/media-proxy',
-  '/api/embed/api/preview-proxy',
   '/api/embed/api/ts-proxy',
 ]) {
   await assertStatus(
@@ -246,7 +203,6 @@ await assertStatus(
 for (const path of [
   '/api/embed/api/m3u8-proxy',
   '/api/embed/api/media-proxy',
-  '/api/embed/api/preview-proxy',
   '/api/embed/api/ts-proxy',
 ]) {
   await assertStatus(

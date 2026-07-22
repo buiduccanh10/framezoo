@@ -9,7 +9,6 @@ import { MediaSession } from "@/components/player/internals/MediaSession";
 import { MetaReporter } from "@/components/player/internals/MetaReporter";
 import { MobileLandscapeLock } from "@/components/player/internals/MobileLandscapeLock";
 import { ProgressSaver } from "@/components/player/internals/ProgressSaver";
-import { ThumbnailScraper } from "@/components/player/internals/ThumbnailScraper";
 import { VideoClickTarget } from "@/components/player/internals/VideoClickTarget";
 import { VideoContainer } from "@/components/player/internals/VideoContainer";
 import { WatchPartyResetter } from "@/components/player/internals/WatchPartyResetter";
@@ -92,7 +91,6 @@ export function Container(props: PlayerProps) {
     <div className="relative">
       <BaseContainer>
         <MetaReporter />
-        <ThumbnailScraper />
         <CastingInternal />
         <VideoContainer />
         <ProgressSaver />
