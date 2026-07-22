@@ -11,6 +11,7 @@ import {
   type Input,
   type MenuItemConstructorOptions,
 } from "electron";
+import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
@@ -64,6 +65,39 @@ const hasSingleInstanceLock = app.requestSingleInstanceLock();
 import { setupFfmpegEnv } from "./ffmpeg";
 
 setupFfmpegEnv();
+
+function setupTorrentEnv() {
+  if (!process.env.BETAMOVIE_TORRENT_DATA_DIR) {
+    const torrentDir = path.join(app.getPath("userData"), "torrents");
+    try {
+      fs.mkdirSync(torrentDir, { recursive: true });
+    } catch {
+      // ignore
+    }
+    process.env.BETAMOVIE_TORRENT_DATA_DIR = torrentDir;
+  }
+}
+
+function getDirectorySize(dirPath: string): number {
+  let size = 0;
+  try {
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dirPath, entry.name);
+      if (entry.isDirectory()) {
+        size += getDirectorySize(fullPath);
+      } else if (entry.isFile()) {
+        const stat = fs.statSync(fullPath);
+        size += stat.size;
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return size;
+}
+
+setupTorrentEnv();
 
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
@@ -867,6 +901,53 @@ function registerIpcHandlers() {
       return torrentManager.getStatus(sessionId);
     },
   );
+
+  ipcMain.handle("desktop:torrent-get-storage-info", async () => {
+    const torrentDir =
+      process.env.BETAMOVIE_TORRENT_DATA_DIR ||
+      path.join(app.getPath("userData"), "torrents");
+    let totalBytes = 0;
+    try {
+      if (fs.existsSync(torrentDir)) {
+        const files = fs.readdirSync(torrentDir);
+        for (const file of files) {
+          const fullPath = path.join(torrentDir, file);
+          const stat = fs.statSync(fullPath);
+          if (stat.isDirectory()) {
+            totalBytes += getDirectorySize(fullPath);
+          } else {
+            totalBytes += stat.size;
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return {
+      path: torrentDir,
+      usedBytes: totalBytes,
+      maxBytes: 5 * 1024 * 1024 * 1024,
+    };
+  });
+
+  ipcMain.handle("desktop:torrent-clear-storage", async () => {
+    const torrentDir =
+      process.env.BETAMOVIE_TORRENT_DATA_DIR ||
+      path.join(app.getPath("userData"), "torrents");
+    try {
+      if (fs.existsSync(torrentDir)) {
+        const entries = fs.readdirSync(torrentDir);
+        for (const entry of entries) {
+          const fullPath = path.join(torrentDir, entry);
+          fs.rmSync(fullPath, { recursive: true, force: true });
+        }
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to clear torrent storage:", err);
+      return false;
+    }
+  });
 }
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");

@@ -1,3 +1,4 @@
+import os
 import sys
 import tempfile
 import threading
@@ -41,6 +42,59 @@ class SidecarStreamTest(unittest.TestCase):
             self.assertIsNotNone(stream)
             self.assertEqual(first_chunk, b"video")
             stream.close()
+
+
+class SidecarStorageTest(unittest.TestCase):
+    def test_enforce_storage_limit_prunes_oldest(self):
+        with tempfile.TemporaryDirectory() as root_dir:
+            dir1 = Path(root_dir) / "torrent-1"
+            dir2 = Path(root_dir) / "torrent-2"
+            dir3 = Path(root_dir) / "torrent-3"
+
+            dir1.mkdir()
+            dir2.mkdir()
+            dir3.mkdir()
+
+            (dir1 / "data.bin").write_bytes(b"A" * 60)
+            (dir2 / "data.bin").write_bytes(b"B" * 60)
+            (dir3 / "data.bin").write_bytes(b"C" * 60)
+
+            # Set distinct mtimes
+            now = time.time()
+            os.utime(dir1, (now - 300, now - 300))
+            os.utime(dir2, (now - 200, now - 200))
+            os.utime(dir3, (now - 100, now - 100))
+
+            # Limit to 100 bytes (total is 180 bytes)
+            sidecar.enforce_storage_limit(root_dir, max_bytes=100)
+
+            self.assertFalse(dir1.exists())  # Oldest pruned
+            self.assertTrue(dir2.exists() or dir3.exists())
+
+    def test_enforce_storage_limit_preserves_active(self):
+        with tempfile.TemporaryDirectory() as root_dir:
+            dir1 = Path(root_dir) / "torrent-1"
+            dir2 = Path(root_dir) / "torrent-2"
+
+            dir1.mkdir()
+            dir2.mkdir()
+
+            (dir1 / "data.bin").write_bytes(b"A" * 60)
+            (dir2 / "data.bin").write_bytes(b"B" * 60)
+
+            now = time.time()
+            os.utime(dir1, (now - 300, now - 300))
+            os.utime(dir2, (now - 100, now - 100))
+
+            # Mark dir1 (oldest) as active
+            sidecar.enforce_storage_limit(
+                root_dir,
+                max_bytes=70,
+                active_paths={str(dir1)},
+            )
+
+            self.assertTrue(dir1.exists())  # Active preserved!
+            self.assertFalse(dir2.exists())  # Inactive pruned!
 
 
 if __name__ == "__main__":
