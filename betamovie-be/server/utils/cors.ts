@@ -17,21 +17,28 @@ const isLocalDevelopmentOrigin = (value: string) => {
 
   try {
     const { hostname } = new URL(value);
-    return (
-      hostname === 'localhost' ||
-      hostname === '127.0.0.1' ||
-      hostname === '::1'
-    );
+    return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1';
   } catch {
     return false;
   }
 };
 
 const normalizeOrigin = (value: string) => {
+  const trimmedValue = value.trim();
+  if (trimmedValue === 'null') {
+    return 'null';
+  }
+
   try {
-    return new URL(value).origin;
+    const parsed = new URL(trimmedValue);
+    if (parsed.origin !== 'null') {
+      return parsed.origin;
+    }
+
+    // Preserve origins from Electron's custom app:// scheme.
+    return `${parsed.protocol}//${parsed.host}`;
   } catch {
-    return value.replace(/\/+$/, '');
+    return trimmedValue.replace(/\/+$/, '');
   }
 };
 
