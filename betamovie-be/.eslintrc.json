@@ -116,7 +116,6 @@
     ".output/",
     "coverage/",
     "examples/",
-    "preview-service/",
     "scripts/",
     "*.config.js",
     "*.config.ts"

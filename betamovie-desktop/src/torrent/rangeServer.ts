@@ -1,6 +1,10 @@
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
-import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import {
+  createServer,
+  type IncomingMessage,
+  type ServerResponse,
+} from "node:http";
 import { extname } from "node:path";
 import { randomUUID } from "node:crypto";
 
@@ -17,13 +21,49 @@ const contentTypes: Record<string, string> = {
 };
 
 function getContentType(filePath: string) {
-  return contentTypes[extname(filePath).toLowerCase()] ?? "application/octet-stream";
+  return (
+    contentTypes[extname(filePath).toLowerCase()] ?? "application/octet-stream"
+  );
 }
 
-function writeCorsHeaders(response: ServerResponse) {
-  response.setHeader("Access-Control-Allow-Origin", "*");
-  response.setHeader("Access-Control-Allow-Headers", "Range, Content-Type");
-  response.setHeader("Access-Control-Expose-Headers", "Accept-Ranges, Content-Length, Content-Range");
+function getCorsOrigin(request: IncomingMessage) {
+  const origin = request.headers.origin;
+  if (!origin) return null;
+  if (origin === "null") return origin;
+
+  try {
+    const parsed = new URL(origin);
+    if (
+      (parsed.protocol === "http:" || parsed.protocol === "https:") &&
+      (parsed.hostname === "localhost" ||
+        parsed.hostname === "127.0.0.1" ||
+        parsed.hostname === "::1")
+    ) {
+      return origin;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function writeCorsHeaders(request: IncomingMessage, response: ServerResponse) {
+  const origin = getCorsOrigin(request);
+  if (origin) {
+    response.setHeader("Access-Control-Allow-Origin", origin);
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Vary", "Origin");
+  }
+  response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS");
+  response.setHeader(
+    "Access-Control-Allow-Headers",
+    "Range, Content-Type, Accept, Origin",
+  );
+  response.setHeader(
+    "Access-Control-Expose-Headers",
+    "Accept-Ranges, Content-Length, Content-Range",
+  );
   response.setHeader("Accept-Ranges", "bytes");
 }
 
@@ -103,7 +143,7 @@ export class TorrentRangeServer {
 
   private async handle(request: IncomingMessage, response: ServerResponse) {
     if (request.method === "OPTIONS") {
-      writeCorsHeaders(response);
+      writeCorsHeaders(request, response);
       response.writeHead(204);
       response.end();
       return;
@@ -112,6 +152,7 @@ export class TorrentRangeServer {
     const match = /^\/torrent\/([^/]+)$/.exec(request.url ?? "");
     const file = match ? this.files.get(match[1]) : undefined;
     if (!file || (request.method !== "GET" && request.method !== "HEAD")) {
+      writeCorsHeaders(request, response);
       response.writeHead(file ? 405 : 404);
       response.end();
       return;
@@ -124,13 +165,16 @@ export class TorrentRangeServer {
       const end = range?.end ?? Math.max(0, fileStats.size - 1);
       const length = Math.max(0, end - start + 1);
 
-      writeCorsHeaders(response);
+      writeCorsHeaders(request, response);
       response.setHeader("Content-Type", file.contentType);
       response.setHeader("Content-Length", length);
 
       if (range) {
         response.statusCode = 206;
-        response.setHeader("Content-Range", `bytes ${start}-${end}/${fileStats.size}`);
+        response.setHeader(
+          "Content-Range",
+          `bytes ${start}-${end}/${fileStats.size}`,
+        );
       } else {
         response.statusCode = 200;
       }
@@ -142,6 +186,7 @@ export class TorrentRangeServer {
 
       createReadStream(file.filePath, { start, end }).pipe(response);
     } catch {
+      writeCorsHeaders(request, response);
       response.writeHead(404);
       response.end();
     }

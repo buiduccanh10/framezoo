@@ -10,10 +10,6 @@ import {
   getCaptionDelayForCue,
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
-import {
-  getAppliedSubtitleSyncOffsetMs,
-  getEffectiveSubtitleDelay,
-} from "@/components/player/utils/subtitleSync";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
@@ -57,9 +53,6 @@ export function KeyboardEvents() {
     useCaptions();
   const setShowVolume = useEmpheralVolumeStore((s) => s.setShowVolume);
   const setDelay = useSubtitleStore((s) => s.setDelay);
-  const subtitleSyncOffsetMs = usePlayerStore((s) =>
-    getAppliedSubtitleSyncOffsetMs(s.subtitleSync),
-  );
   const setSubtitleCuePopup = useSubtitleCuePopupStore((s) => s.setPopup);
   const storedKeyboardShortcuts = usePreferencesStore(
     (s) => s.keyboardShortcuts,
@@ -105,29 +98,20 @@ export function KeyboardEvents() {
 
       const cue = getCaptionCueForNavigation(
         cues,
-        getEffectiveSubtitleDelay(
-          useSubtitleStore.getState().delay,
-          subtitleSyncOffsetMs,
-        ),
+        useSubtitleStore.getState().delay,
         time,
         direction,
       );
       if (!cue) return;
 
-      setDelay(getCaptionDelayForCue(cue, time) - subtitleSyncOffsetMs / 1000);
+      setDelay(getCaptionDelayForCue(cue, time));
       setSubtitleCuePopup({
         direction,
         start: cue.start,
         content: cue.content,
       });
     },
-    [
-      selectedCaptionVttData,
-      subtitleSyncOffsetMs,
-      time,
-      setDelay,
-      setSubtitleCuePopup,
-    ],
+    [selectedCaptionVttData, time, setDelay, setSubtitleCuePopup],
   );
 
   // Episode navigation functions

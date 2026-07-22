@@ -9,13 +9,12 @@ import {
 } from '~/utils/proxySecurity';
 
 const capabilitySchema = z.object({
-  kind: z.enum(['m3u8', 'media', 'preview', 'preview-auto', 'preview-file', 'embed']),
+  kind: z.enum(['m3u8', 'media', 'embed']),
   url: z.string().trim().max(8192).optional(),
   headers: z
     .record(z.string().max(128), z.string().max(2048))
     .refine(value => Object.keys(value).length <= 32, 'Too many headers')
     .optional(),
-  resource: z.string().trim().max(2048).optional(),
 });
 
 export default defineEventHandler(async event => {
@@ -51,7 +50,6 @@ export default defineEventHandler(async event => {
   }
   const kind: ProxyCapabilityKind = input.kind;
   const headers = normalizeProxyHeaders(input.headers || {});
-  const resource = input.resource || '';
   let targetUrl = '';
 
   if (input.url) {
@@ -65,17 +63,10 @@ export default defineEventHandler(async event => {
     }
   }
 
-  if (['m3u8', 'media', 'preview', 'embed'].includes(kind) && !targetUrl) {
+  if (!targetUrl) {
     throw createError({
       statusCode: 400,
       statusMessage: 'URL is required for this capability kind',
-    });
-  }
-
-  if (['preview-auto', 'preview-file'].includes(kind) && !resource) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Resource is required for this capability kind',
     });
   }
 
@@ -85,20 +76,14 @@ export default defineEventHandler(async event => {
       ? '/api/m3u8-proxy'
       : kind === 'media'
         ? '/api/media-proxy'
-        : kind === 'preview'
-          ? '/api/preview-proxy'
-          : kind === 'preview-auto'
-            ? '/api/preview/auto'
-            : kind === 'preview-file'
-              ? '/api/preview/file'
-              : '/api/embed/ts-proxy';
+        : '/api/embed/ts-proxy';
   const ttlSeconds = 15 * 60;
-  const capability = issueProxyCapability(kind, targetUrl, headers, resource, ttlSeconds);
+  const capability = issueProxyCapability(kind, targetUrl, headers, '', ttlSeconds);
 
   setHeader(event, 'cache-control', 'no-store');
   applyCorsHeaders(event, 'POST, OPTIONS');
   return {
     capability,
-    url: buildProxyRequestUrl(origin, path, kind, targetUrl, headers, resource, ttlSeconds),
+    url: buildProxyRequestUrl(origin, path, kind, targetUrl, headers, '', ttlSeconds),
   };
 });

@@ -223,7 +223,10 @@ export async function scoreCaptionSourceFit(
       });
       return score;
     } catch (error) {
-      console.error("Failed to score caption source fit:", error);
+      console.warn(
+        "Skipping caption source fit for unavailable subtitle:",
+        error,
+      );
       scoreCache.set(cacheKey, {
         value: null,
         expiry: now + 60 * 1000,

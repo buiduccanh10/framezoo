@@ -20,6 +20,18 @@ Hello world`;
     expect(cues[0].content).toBe("Hello world");
   });
 
+  it("uses the supplied format hint for non-standard WebVTT headers", () => {
+    const vtt = normalizeSubtitleToVtt(
+      `WEBVTT - generated
+
+00:00:01.000 --> 00:00:02.500
+Hello world`,
+      "vtt",
+    );
+
+    expect(parseCanonicalVtt(vtt)).toHaveLength(1);
+  });
+
   it("deduplicates canonical VTT cues during parse", () => {
     const vtt = `WEBVTT
 

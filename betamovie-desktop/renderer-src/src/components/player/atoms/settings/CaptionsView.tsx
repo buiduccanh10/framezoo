@@ -23,10 +23,6 @@ import {
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
-import {
-  getAppliedSubtitleSyncOffsetMs,
-  getEffectiveSubtitleDelay,
-} from "@/components/player/utils/subtitleSync";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useLanguageStore } from "@/stores/language";
@@ -524,11 +520,7 @@ export function CaptionsView({
   const refreshButtonLabel = isLoadingExternalSubtitles
     ? t("player.menus.subtitles.refreshing")
     : t("player.menus.subtitles.refresh");
-  const manualDelay = useSubtitleStore((s) => s.delay);
-  const subtitleSyncOffsetMs = usePlayerStore((s) =>
-    getAppliedSubtitleSyncOffsetMs(s.subtitleSync),
-  );
-  const delay = getEffectiveSubtitleDelay(manualDelay, subtitleSyncOffsetMs);
+  const delay = useSubtitleStore((s) => s.delay);
   const appLanguage = useLanguageStore((s) => s.language);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
   const matchScore = useCaptionMatchScore();

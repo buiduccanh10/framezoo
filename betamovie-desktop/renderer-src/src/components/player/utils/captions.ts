@@ -13,6 +13,17 @@ const CAPTION_HTML_OPTIONS = {
   ADD_TAGS: ["v", "lang"],
   ALLOWED_ATTR: ["title", "lang"],
 };
+const SUBTITLE_FORMATS = new Set([
+  "sub",
+  "srt",
+  "sbv",
+  "vtt",
+  "lrc",
+  "smi",
+  "ssa",
+  "ass",
+  "json",
+]);
 
 export function captionHtml(content?: string): string {
   return sanitize(
@@ -115,12 +126,16 @@ export function makeQueId(index: number, start: number, end: number): string {
   return `${index}-${start}-${end}`;
 }
 
-export function normalizeSubtitleToVtt(text: string): string {
-  const textTrimmed = text.trim();
+export function normalizeSubtitleToVtt(text: string, format?: string): string {
+  const textTrimmed = text.replace(/^\uFEFF/, "").trim();
   if (textTrimmed === "") {
     throw new Error("Given text is empty");
   }
-  const vtt = convert(textTrimmed, "vtt");
+  const formatHint = format?.trim().toLowerCase().replace(/^\./, "");
+  const vtt =
+    formatHint && SUBTITLE_FORMATS.has(formatHint)
+      ? convert(textTrimmed, { from: formatHint, to: "vtt" })
+      : convert(textTrimmed, "vtt");
   if (detect(vtt) === "") {
     throw new Error("Invalid subtitle format");
   }

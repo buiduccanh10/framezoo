@@ -25,12 +25,6 @@ export type Caption = {
 
 export type StreamHeaders = Record<string, string>;
 
-export type StreamPreview = {
-  kind: "vtt";
-  vtt: string;
-  sprite?: string;
-};
-
 type BaseStream = {
   id?: string;
   captions: Caption[];
@@ -38,7 +32,6 @@ type BaseStream = {
   preferredHeaders?: StreamHeaders;
   flags?: string[];
   skipValidation?: boolean;
-  preview?: StreamPreview;
   [key: string]: any;
 };
 

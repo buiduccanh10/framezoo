@@ -31,6 +31,40 @@ def emit(message: Dict[str, Any]) -> None:
         sys.stdout.write(json.dumps(message, separators=(",", ":")) + "\n")
         sys.stdout.flush()
 
+def get_local_cors_origin(handler: BaseHTTPRequestHandler) -> Optional[str]:
+    origin = handler.headers.get("Origin")
+    if not origin:
+        return None
+    if origin == "null":
+        return origin
+
+    try:
+        parsed = urlparse(origin)
+    except ValueError:
+        return None
+
+    if parsed.scheme not in ("http", "https"):
+        return None
+    if parsed.hostname not in ("localhost", "127.0.0.1", "::1"):
+        return None
+    return origin
+
+def write_cors_headers(handler: BaseHTTPRequestHandler) -> None:
+    origin = get_local_cors_origin(handler)
+    if origin:
+        handler.send_header("Access-Control-Allow-Origin", origin)
+        handler.send_header("Access-Control-Allow-Credentials", "true")
+        handler.send_header("Vary", "Origin")
+    handler.send_header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS")
+    handler.send_header(
+        "Access-Control-Allow-Headers",
+        "Range, Content-Type, Accept, Origin",
+    )
+    handler.send_header(
+        "Access-Control-Expose-Headers",
+        "Accept-Ranges, Content-Length, Content-Range",
+    )
+
 
 def normalized_info_hash(value: Any) -> Optional[str]:
     if not isinstance(value, str):
@@ -143,11 +177,19 @@ class QuietHTTPServer(ThreadingHTTPServer):
 class TorrentHttpHandler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
 
+    def end_headers(self) -> None:
+        write_cors_headers(self)
+        super().end_headers()
+
     def do_GET(self) -> None:
         self.handle_torrent_request(False)
 
     def do_HEAD(self) -> None:
         self.handle_torrent_request(True)
+
+    def do_OPTIONS(self) -> None:
+        self.send_response(204)
+        self.end_headers()
 
     def handle_torrent_request(self, head_only: bool) -> None:
         parts = urlparse(self.path).path.strip("/").split("/")
@@ -449,11 +491,6 @@ class TorrentRuntime:
 
         handler.send_response(status_code)
         handler.send_header("Accept-Ranges", "bytes")
-        handler.send_header("Access-Control-Allow-Origin", "*")
-        handler.send_header(
-            "Access-Control-Expose-Headers",
-            "Accept-Ranges, Content-Length, Content-Range",
-        )
         handler.send_header("Content-Type", content_type)
         handler.send_header("Content-Length", str(length))
         if status_code == 206:
