@@ -100,10 +100,14 @@ export async function downloadCaptionAsVtt(
     const response = await fetch(caption.url, {
       headers,
     });
+    if (!response.ok) {
+      throw new Error(
+        `Caption request failed: ${response.status} ${response.statusText}`,
+      );
+    }
     const contentType = response.headers.get("content-type") || "";
-    const charset = contentType.includes("charset=")
-      ? contentType.split("charset=")[1].toLowerCase()
-      : "utf-8";
+    const charset =
+      /charset=([^;]+)/i.exec(contentType)?.[1]?.trim() || "utf-8";
 
     // Get the raw bytes
     const buffer = await response.arrayBuffer();
@@ -119,7 +123,7 @@ export async function downloadCaptionAsVtt(
   }
   if (!data) throw new Error("failed to get caption data");
 
-  const output = normalizeSubtitleToVtt(data);
+  const output = normalizeSubtitleToVtt(data, caption.type);
   downloadCache.set(caption.url, output, expirySeconds);
   return output;
 }

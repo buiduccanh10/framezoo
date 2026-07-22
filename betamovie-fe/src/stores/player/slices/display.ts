@@ -141,7 +141,6 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.sourceId = null;
       s.interface.shouldStartFromBeginning = false;
       s.interface.skipNextSavedProgressResume = false;
-      s.thumbnails.images = [];
       s.progress.time = 0;
       s.progress.duration = 0;
     });

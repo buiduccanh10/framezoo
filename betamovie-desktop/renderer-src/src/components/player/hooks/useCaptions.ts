@@ -219,49 +219,59 @@ export function useCaptions() {
   );
 
   const selectCaptionById = useCallback(
-    async (captionId: string) => {
+    async (captionId: string): Promise<boolean> => {
       const caption = captions.find((v) => v.id === captionId);
-      if (!caption) return;
+      if (!caption) return false;
 
-      const captionToSet: Caption = {
-        id: caption.id,
-        language: caption.language,
-        url: caption.url,
-        vttData: "",
-      };
+      try {
+        const captionToSet: Caption = {
+          id: caption.id,
+          language: caption.language,
+          url: caption.url,
+          vttData: "",
+        };
 
-      if (!caption.hls) {
-        const vttData = await downloadCaptionAsVtt(caption);
-        captionToSet.vttData = vttData;
-      } else {
-        // request a language change to hls, so it can load the subtitles
-        await setSubtitlePreference?.(caption.language);
-        const track = getSubtitleTracks?.().find(
-          (t) => t.id.toString() === caption.id && t.details !== undefined,
-        );
-        if (!track) return;
+        if (!caption.hls) {
+          const vttData = await downloadCaptionAsVtt(caption);
+          captionToSet.vttData = vttData;
+        } else {
+          // request a language change to hls, so it can load the subtitles
+          await setSubtitlePreference?.(caption.language);
+          const track = getSubtitleTracks?.().find(
+            (t) => t.id.toString() === caption.id && t.details !== undefined,
+          );
+          if (!track) return false;
 
-        const fragments =
-          track.details?.fragments?.filter(
-            (frag) => frag !== null && frag.url !== null,
-          ) ?? [];
+          const fragments =
+            track.details?.fragments?.filter(
+              (frag) => frag !== null && frag.url !== null,
+            ) ?? [];
 
-        const vttCaptions = (
-          await Promise.all(
-            fragments.map(async (frag) => {
-              const vtt = await downloadWebVTT(frag.url);
-              return parseVttSubtitles(vtt);
-            }),
-          )
-        ).flat();
+          const vttCaptions = (
+            await Promise.all(
+              fragments.map(async (frag) => {
+                const vtt = await downloadWebVTT(frag.url);
+                return parseVttSubtitles(vtt);
+              }),
+            )
+          ).flat();
 
-        const filtered = filterDuplicateCaptionCues(vttCaptions);
+          const filtered = filterDuplicateCaptionCues(vttCaptions);
 
-        const vttData = subsrt.build(filtered, { format: "vtt" });
-        captionToSet.vttData = vttData;
+          const vttData = subsrt.build(filtered, { format: "vtt" });
+          captionToSet.vttData = vttData;
+        }
+
+        setDirectCaption(captionToSet, caption);
+        return true;
+      } catch (error) {
+        console.warn("Skipping unavailable caption source", {
+          captionId: caption.id,
+          source: caption.source,
+          error,
+        });
+        return false;
       }
-
-      setDirectCaption(captionToSet, caption);
     },
     [captions, getSubtitleTracks, setSubtitlePreference, setDirectCaption],
   );
@@ -276,44 +286,52 @@ export function useCaptions() {
       const caption = captions.find((v) => v.id === captionId);
       if (!caption) return;
 
-      const captionToSet: Caption = {
-        id: caption.id,
-        language: caption.language,
-        url: caption.url,
-        vttData: "",
-      };
+      try {
+        const captionToSet: Caption = {
+          id: caption.id,
+          language: caption.language,
+          url: caption.url,
+          vttData: "",
+        };
 
-      if (!caption.hls) {
-        const vttData = await downloadCaptionAsVtt(caption);
-        captionToSet.vttData = vttData;
-      } else {
-        await setSubtitlePreference?.(caption.language);
-        const track = getSubtitleTracks?.().find(
-          (t) => t.id.toString() === caption.id && t.details !== undefined,
-        );
-        if (!track) return;
+        if (!caption.hls) {
+          const vttData = await downloadCaptionAsVtt(caption);
+          captionToSet.vttData = vttData;
+        } else {
+          await setSubtitlePreference?.(caption.language);
+          const track = getSubtitleTracks?.().find(
+            (t) => t.id.toString() === caption.id && t.details !== undefined,
+          );
+          if (!track) return;
 
-        const fragments =
-          track.details?.fragments?.filter(
-            (frag) => frag !== null && frag.url !== null,
-          ) ?? [];
+          const fragments =
+            track.details?.fragments?.filter(
+              (frag) => frag !== null && frag.url !== null,
+            ) ?? [];
 
-        const vttCaptions = (
-          await Promise.all(
-            fragments.map(async (frag) => {
-              const vtt = await downloadWebVTT(frag.url);
-              return parseVttSubtitles(vtt);
-            }),
-          )
-        ).flat();
+          const vttCaptions = (
+            await Promise.all(
+              fragments.map(async (frag) => {
+                const vtt = await downloadWebVTT(frag.url);
+                return parseVttSubtitles(vtt);
+              }),
+            )
+          ).flat();
 
-        const filtered = filterDuplicateCaptionCues(vttCaptions);
+          const filtered = filterDuplicateCaptionCues(vttCaptions);
 
-        const vttData = subsrt.build(filtered, { format: "vtt" });
-        captionToSet.vttData = vttData;
+          const vttData = subsrt.build(filtered, { format: "vtt" });
+          captionToSet.vttData = vttData;
+        }
+
+        setSecondaryCaption(captionToSet);
+      } catch (error) {
+        console.warn("Skipping unavailable secondary caption source", {
+          captionId: caption.id,
+          source: caption.source,
+          error,
+        });
       }
-
-      setSecondaryCaption(captionToSet);
     },
     [captions, getSubtitleTracks, setSubtitlePreference, setSecondaryCaption],
   );
@@ -339,10 +357,12 @@ export function useCaptions() {
           mode: "auto",
         });
         if (requestId !== autoSelectionRequestId) return false;
-        const bestCaption = scoredCaptions[0]?.caption;
-        if (!bestCaption) return false;
-        await selectCaptionById(bestCaption.id);
-        return true;
+        for (const candidate of scoredCaptions.filter(
+          (item) => item.score >= 0,
+        )) {
+          if (await selectCaptionById(candidate.caption.id)) return true;
+        }
+        return false;
       };
 
       const hasLanguageMatch = captions.some(
@@ -376,8 +396,7 @@ export function useCaptions() {
         caption = findCaptionByPreferredLanguage("en");
       }
       if (!caption) return false;
-      await selectCaptionById(caption.id);
-      return true;
+      return selectCaptionById(caption.id);
     },
     [
       captions,
@@ -424,8 +443,9 @@ export function useCaptions() {
     if (scoredCaptions.length === 0) return;
 
     const bestAlternativeCaption =
-      scoredCaptions.find((item) => item.caption.id !== selectedCaption?.id)
-        ?.caption ?? scoredCaptions[0]?.caption;
+      scoredCaptions.find(
+        (item) => item.score >= 0 && item.caption.id !== selectedCaption?.id,
+      )?.caption ?? scoredCaptions.find((item) => item.score >= 0)?.caption;
 
     if (!bestAlternativeCaption) return;
     await selectCaptionById(bestAlternativeCaption.id);

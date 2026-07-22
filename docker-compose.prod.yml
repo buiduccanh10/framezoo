@@ -26,51 +26,6 @@ services:
     volumes:
       - redis-data:/data
 
-  preview-service:
-    build:
-      context: ./betamovie-be/preview-service
-    restart: always
-    environment:
-      PORT: 3100
-      PREVIEW_DATA_DIR: /data/previews
-      PREVIEW_INTERVAL_SECONDS: ${PREVIEW_INTERVAL_SECONDS:-10}
-      PREVIEW_FRAME_WIDTH: ${PREVIEW_FRAME_WIDTH:-320}
-      PREVIEW_TILE_COLS: ${PREVIEW_TILE_COLS:-5}
-      PREVIEW_TILE_ROWS: ${PREVIEW_TILE_ROWS:-5}
-      PREVIEW_MAX_FRAMES: ${PREVIEW_MAX_FRAMES:-48}
-      PREVIEW_FFMPEG_CONCURRENCY: ${PREVIEW_FFMPEG_CONCURRENCY:-4}
-      PREVIEW_FFMPEG_MAX_CONCURRENCY: ${PREVIEW_FFMPEG_MAX_CONCURRENCY:-4}
-      PREVIEW_FFMPEG_THREADS: ${PREVIEW_FFMPEG_THREADS:-1}
-      PREVIEW_GENERATION_CONCURRENCY: ${PREVIEW_GENERATION_CONCURRENCY:-1}
-      PREVIEW_COMMAND_TIMEOUT_MS: ${PREVIEW_COMMAND_TIMEOUT_MS:-90000}
-      PREVIEW_LOG_LEVEL: ${PREVIEW_LOG_LEVEL:-info}
-    volumes:
-      - preview-data:/data/previews
-    networks:
-      - betamovie-prod-network
-
-  subtitle-align-service:
-    build:
-      context: ./betamovie-be/subtitle-align-service
-    restart: always
-    environment:
-      PORT: 3200
-      ALIGN_MODEL: ${SUBTITLE_ALIGN_MODEL:-small}
-      ALIGN_MODEL_DIR: /models
-      ALIGN_CPU_THREADS: ${SUBTITLE_ALIGN_CPU_THREADS:-3}
-      ALIGN_FFMPEG_TIMEOUT_SECONDS: ${SUBTITLE_ALIGN_FFMPEG_TIMEOUT_SECONDS:-120}
-      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:-}
-      ALIGN_ASR_ONSET_DELAY_MS: ${ALIGN_ASR_ONSET_DELAY_MS:--300}
-    volumes:
-      - subtitle-align-models:/models
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:3200/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-    networks:
-      - betamovie-prod-network
-
   betamovie-be:
     build:
       context: .
@@ -101,27 +56,12 @@ services:
       NGINX_PROXY_READ_TIMEOUT: 360s
       NGINX_PROXY_CONNECT_TIMEOUT: 10s
       NGINX_PROXY_SEND_TIMEOUT: 360s
-      PREVIEW_SERVICE_TIMEOUT_MS: ${PREVIEW_SERVICE_TIMEOUT_MS:-300000}
-      PREVIEW_SERVICE_URL: http://preview-service:3100
-      PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
-      SUBTITLE_ALIGN_ENABLED: ${SUBTITLE_ALIGN_ENABLED:-true}
-      SUBTITLE_ALIGN_SERVICE_URL: http://subtitle-align-service:3200
-      SUBTITLE_ALIGN_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
-      SUBTITLE_ALIGN_SERVICE_TIMEOUT_MS: ${SUBTITLE_ALIGN_SERVICE_TIMEOUT_MS:-300000}
-      SUBTITLE_ALIGN_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
-      SUBTITLE_ALIGN_MODEL: ${SUBTITLE_ALIGN_MODEL:-small}
-      SUBTITLE_ALIGN_RATE_LIMIT_WINDOW_MS: ${SUBTITLE_ALIGN_RATE_LIMIT_WINDOW_MS:-60000}
-      SUBTITLE_ALIGN_RATE_LIMIT_MAX_REQUESTS: ${SUBTITLE_ALIGN_RATE_LIMIT_MAX_REQUESTS:-10}
     volumes:
       - downloads-data:/data/downloads
     depends_on:
       postgres:
         condition: service_healthy
       redis:
-        condition: service_started
-      preview-service:
-        condition: service_started
-      subtitle-align-service:
         condition: service_started
     networks:
       - betamovie-prod-network
@@ -189,12 +129,6 @@ volumes:
   redis-data:
     external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: betamovie_backend_redis-data
-  preview-data:
-    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
-    name: betamovie_backend_preview-data
-  subtitle-align-models:
-    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
-    name: betamovie_backend_subtitle-align-models
   downloads-data:
     external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: betamovie_backend_downloads-data

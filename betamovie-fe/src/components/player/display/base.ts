@@ -28,10 +28,6 @@ import {
 } from "@/components/player/utils/proxy";
 import { extractSegmentResolution } from "@/components/player/utils/segmentResolution";
 import {
-  getAppliedSubtitleSyncOffsetMs,
-  getEffectiveSubtitleDelay,
-} from "@/components/player/utils/subtitleSync";
-import {
   DesktopPipAction,
   DesktopPipState,
   PipWindowSize,
@@ -430,10 +426,7 @@ export function makeVideoElementDisplayInterface(options?: {
 
     const state = getDesktopPipStateFromPlayerState(
       usePlayerStore.getState(),
-      getEffectiveSubtitleDelay(
-        useSubtitleStore.getState().delay,
-        getAppliedSubtitleSyncOffsetMs(usePlayerStore.getState().subtitleSync),
-      ),
+      useSubtitleStore.getState().delay,
     );
     if (!state) return null;
 
