@@ -42,7 +42,7 @@ function emitVersionManifest(version: string, buildId: string): PluginOption {
 }
 
 export default defineConfig(({ mode }) => {
-  const workspaceRoot = path.resolve(__dirname, "..");
+  const workspaceRoot = path.resolve(__dirname, "../..");
   const env = loadEnv(mode, workspaceRoot);
   const packageJson = JSON.parse(
     readFileSync(path.resolve(__dirname, "..", "package.json"), "utf8"),
