@@ -100,7 +100,7 @@ const RECOVERABLE_HLS_NETWORK_ERRORS = new Set<string>([
   ErrorDetails.LEVEL_LOAD_ERROR,
   ErrorDetails.LEVEL_LOAD_TIMEOUT,
 ]);
-const HLS_START_LOAD_THROTTLE_MS = 2500;
+const HLS_START_LOAD_THROTTLE_MS = 10000;
 const HLS_SOURCEBUFFER_RACE_WINDOW_MS = 6000;
 const HLS_SOURCEBUFFER_RACE_THRESHOLD = 3;
 const HLS_RECREATE_COOLDOWN_MS = 12000;
@@ -342,6 +342,17 @@ export function makeVideoElementDisplayInterface(options?: {
   let lastVolume = 1;
   let lastValidDuration = 0; // Store the last valid duration to prevent reset during source switches
   let lastValidTime = 0; // Store the last valid time to prevent reset during source switches
+
+  function getEffectiveDuration(): number {
+    if (source?.duration && source.duration > 0) {
+      return source.duration;
+    }
+    const vidDuration = videoElement?.duration ?? 0;
+    if (Number.isFinite(vidDuration) && vidDuration > 0) {
+      return vidDuration;
+    }
+    return lastValidDuration;
+  }
   let shouldAutoplayAfterLoad = false; // Flag to track if we should autoplay after loading completes
   let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
   let qualitySetupRetryTimeout: NodeJS.Timeout | null = null; // Retry manual quality setup after manifest load
@@ -494,7 +505,7 @@ export function makeVideoElementDisplayInterface(options?: {
       }
       case "seekBy": {
         const nextTime = (videoElement?.currentTime ?? 0) + action.delta;
-        const duration = videoElement?.duration ?? Number.POSITIVE_INFINITY;
+        const duration = getEffectiveDuration() || Number.POSITIVE_INFINITY;
         const clampedTime = Math.max(0, Math.min(nextTime, duration));
         if (Number.isFinite(clampedTime)) {
           if (videoElement) {
@@ -505,7 +516,7 @@ export function makeVideoElementDisplayInterface(options?: {
         return;
       }
       case "seekTo": {
-        const duration = videoElement?.duration ?? Number.POSITIVE_INFINITY;
+        const duration = getEffectiveDuration() || Number.POSITIVE_INFINITY;
         const clampedTime = Math.max(0, Math.min(action.time, duration));
         if (Number.isFinite(clampedTime)) {
           if (videoElement) {
@@ -725,7 +736,7 @@ export function makeVideoElementDisplayInterface(options?: {
       if (restarted) {
         tryAutoplayWhenReady();
       }
-    }, 1500);
+    }, 12000);
   }
 
   function reportLevels() {
@@ -1053,6 +1064,10 @@ export function makeVideoElementDisplayInterface(options?: {
       return;
     }
     if (src.type === "hls") {
+      if (src.duration && src.duration > 0) {
+        lastValidDuration = src.duration;
+        emit("duration", src.duration);
+      }
       if (canPlayHlsNatively(vid)) {
         vid.src = processCdnLink(src.url);
         vid.currentTime = startAt;
@@ -1475,7 +1490,7 @@ export function makeVideoElementDisplayInterface(options?: {
         emit("changedquality", "unknown");
       }
       // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
-      const duration = videoElement?.duration ?? 0;
+      const duration = getEffectiveDuration();
       if (duration > 0) {
         lastValidDuration = duration;
         emit("duration", duration);
@@ -1543,7 +1558,7 @@ export function makeVideoElementDisplayInterface(options?: {
 
     videoElement.addEventListener("durationchange", () => {
       // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
-      const duration = videoElement?.duration ?? 0;
+      const duration = getEffectiveDuration();
       if (duration > 0) {
         lastValidDuration = duration;
         emit("duration", duration);
@@ -1775,7 +1790,11 @@ export function makeVideoElementDisplayInterface(options?: {
     setTime(t) {
       if (!videoElement) return;
       // clamp time between 0 and max duration
-      let time = Math.min(t, videoElement.duration);
+      const maxDuration =
+        getEffectiveDuration() ||
+        videoElement.duration ||
+        Number.POSITIVE_INFINITY;
+      let time = Math.min(t, maxDuration);
       time = Math.max(0, time);
 
       if (Number.isNaN(time)) return;

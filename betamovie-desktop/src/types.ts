@@ -40,6 +40,8 @@ export interface TorrentSession {
   sessionId: string;
   sourceId: string;
   streamUrl: string;
+  streamType: "hls" | "file";
+  duration?: number | null;
   fileName: string | null;
   infoHash: string | null;
 }

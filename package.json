@@ -7,6 +7,7 @@
     "dev:fe": "pnpm --filter betamovie-fe dev",
     "dev:be": "pnpm --filter betamovie-be dev",
     "dev:desktop": "pnpm --filter betamovie-desktop dev",
+    "dev:torrent": "pnpm --filter betamovie-desktop dev:torrent",
     "dev:all": "pnpm -r --parallel --stream --filter betamovie-fe --filter betamovie-be dev",
     "build": "pnpm run build:fe && pnpm run build:be",
     "build:fe": "pnpm --filter betamovie-fe build",

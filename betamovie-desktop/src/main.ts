@@ -61,6 +61,10 @@ protocol.registerSchemesAsPrivileged([
 let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
+import { setupFfmpegEnv } from "./ffmpeg";
+
+setupFfmpegEnv();
+
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
 

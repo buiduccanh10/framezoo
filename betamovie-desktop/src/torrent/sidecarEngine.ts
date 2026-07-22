@@ -15,7 +15,7 @@ type SidecarResponse = {
   requestId: string;
   ok: boolean;
   error?: string;
-  session?: Partial<TorrentSession> & { streamUrl?: string };
+  session?: Partial<TorrentSession> & { streamUrl?: string; streamType?: string };
 };
 
 type SidecarStatus = {
@@ -64,6 +64,8 @@ export class SidecarTorrentEngine implements TorrentEngine {
         sessionId,
         sourceId: request.sourceId,
         streamUrl: response.session.streamUrl,
+        streamType: (response.session.streamType as "hls" | "file") ?? "file",
+        duration: response.session.duration ?? null,
         fileName: response.session.fileName ?? request.fileName ?? null,
         infoHash: response.session.infoHash ?? request.infoHash ?? null,
       };
@@ -112,6 +114,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
 
     const process = spawn(this.executablePath, [], {
       stdio: ["pipe", "pipe", "pipe"],
+      env: globalThis.process.env,
     });
     this.process = process;
 
@@ -184,7 +187,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
         reject(new Error("torrent sidecar request timed out"));
-      }, 30_000);
+      }, 180_000);
       this.pending.set(requestId, { resolve, reject, timer });
       this.process?.stdin.write(`${JSON.stringify(message)}\n`);
     });
