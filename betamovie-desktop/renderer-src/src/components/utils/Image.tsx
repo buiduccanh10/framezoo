@@ -86,7 +86,6 @@ export function LazyImage({
           alt={alt || ""}
           loading={loading}
           decoding={decoding}
-          fetchPriority="low"
           onLoad={handleLoad}
           onError={handleError}
           className={classNames("block", className)}

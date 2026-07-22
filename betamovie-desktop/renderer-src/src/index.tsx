@@ -8,7 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { StrictMode, Suspense, useCallback, useState } from "react";
 import type { ReactNode } from "react";
-import { createRoot } from "react-dom/client";
+import { type Root, createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, HashRouter } from "react-router-dom";
@@ -234,8 +234,18 @@ function ExtensionStatus() {
   }
   return null;
 }
-const container = document.getElementById("root");
-const root = createRoot(container!);
+type RootContainer = HTMLElement & {
+  __betamovieReactRoot?: Root;
+};
+
+const container = document.getElementById("root") as RootContainer | null;
+
+if (!container) {
+  throw new Error("Missing #root container");
+}
+
+// Keep the root across Vite HMR re-evaluation of this entry module.
+const root = (container.__betamovieReactRoot ??= createRoot(container));
 
 root.render(
   <StrictMode>
