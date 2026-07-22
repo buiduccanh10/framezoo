@@ -18,6 +18,7 @@ export type SourceDashStream = {
 export type LoadableSource = {
   type: StreamType;
   url: string;
+  duration?: number;
   headers?: Stream["headers"];
   preferredHeaders?: Stream["preferredHeaders"];
 };
@@ -27,6 +28,7 @@ export type SourceSliceSource =
       id?: string;
       type: "file";
       qualities: Partial<Record<SourceQuality, SourceFileStream>>;
+      duration?: number;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     }
@@ -34,6 +36,7 @@ export type SourceSliceSource =
       id?: string;
       type: "hls";
       url: string;
+      duration?: number;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     }
@@ -41,6 +44,7 @@ export type SourceSliceSource =
       id?: string;
       type: "dash";
       url: string;
+      duration?: number;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     };

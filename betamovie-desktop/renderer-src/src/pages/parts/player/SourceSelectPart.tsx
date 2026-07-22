@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import { Loading } from "@/components/layout/Loading";
+import { Spinner } from "@/components/layout/Spinner";
 import { usePlayer } from "@/components/player/hooks/usePlayer";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
@@ -257,20 +258,28 @@ export function SourceSelectPart(props: {
             fileName: stream.fileName ?? undefined,
           });
           registerTorrentSession(session.sessionId);
-          playMedia(
-            {
-              id: stream.id,
-              type: "file",
-              qualities: {
-                unknown: {
-                  type: "mp4",
-                  url: session.streamUrl,
+          const isHls = session.streamType === "hls";
+          const duration = session.duration ?? undefined;
+          const mediaSource: SourceSliceSource = isHls
+            ? {
+                id: stream.id,
+                type: "hls",
+                url: session.streamUrl,
+                duration,
+              }
+            : {
+                id: stream.id,
+                type: "file",
+                qualities: {
+                  unknown: {
+                    type: "mp4",
+                    url: session.streamUrl,
+                  },
                 },
-              },
-            },
-            addonCaptions(stream),
-            stream.id,
-          );
+                duration,
+              };
+
+          playMedia(mediaSource, addonCaptions(stream), stream.id);
           onSelected?.();
 
           // Chromium can issue one more Range request for the old source after
@@ -426,6 +435,7 @@ export function SourceSelectPart(props: {
           <Menu.Section>
             {selectedAddonStreams.map((stream) => {
               const selected = currentSourceId === stream.id;
+              const isStartingThisStream = startingAddonId === stream.id;
               const size = formatSize(stream.videoSize);
               const nameLines = streamLines(stream.name || stream.addonName);
               const titleLines = streamLines(stream.title || "");
@@ -448,17 +458,22 @@ export function SourceSelectPart(props: {
               return (
                 <Menu.Link
                   key={stream.id}
-                  active={selected}
+                  active={selected || isStartingThisStream}
                   clickable={!startingAddonId}
-                  disabled={startingAddonId !== null}
+                  disabled={startingAddonId !== null && !isStartingThisStream}
                   className="items-center gap-4 px-3 py-3"
                   onClick={() => void selectAddonStream(stream)}
                 >
                   <div className="grid min-w-0 flex-1 grid-cols-[minmax(8rem,12rem),minmax(0,1fr)] items-center gap-6">
                     <div className="flex min-w-0 flex-col">
-                      <span className="min-w-0 whitespace-pre-line text-[15px] font-medium leading-5 text-white/90">
-                        {nameLines.join("\n")}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {isStartingThisStream ? (
+                          <Spinner className="text-[14px] shrink-0 text-white/90" />
+                        ) : null}
+                        <span className="min-w-0 whitespace-pre-line text-[15px] font-medium leading-5 text-white/90">
+                          {nameLines.join("\n")}
+                        </span>
+                      </div>
                     </div>
                     <span className="min-w-0 whitespace-pre-line text-[14px] leading-5 text-white/70 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5] overflow-hidden">
                       {detailsLines.map((line, i) => (

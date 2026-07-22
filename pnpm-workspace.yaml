@@ -13,6 +13,8 @@ allowBuilds:
   core-js: true
   electron-winstaller: true
   esbuild: true
+  ffmpeg-static: true
+  ffprobe-static: true
   prisma: true
   unrs-resolver: true
 
