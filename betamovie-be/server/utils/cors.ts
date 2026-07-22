@@ -66,8 +66,6 @@ const parseAllowedOrigins = () => {
   return new Set(parsed);
 };
 
-const allowedOrigins = parseAllowedOrigins();
-
 export const resolveCorsOrigin = (event: H3EventCompat) => {
   const requestOrigin = getRequestHeader(event, 'origin');
   if (!requestOrigin) {
@@ -75,16 +73,16 @@ export const resolveCorsOrigin = (event: H3EventCompat) => {
   }
 
   const normalizedRequestOrigin = normalizeOrigin(requestOrigin);
+  const allowedOrigins = parseAllowedOrigins();
 
-  if (allowedOrigins.has(normalizedRequestOrigin)) {
+  if (allowedOrigins.has('*') || allowedOrigins.has(normalizedRequestOrigin)) {
     return normalizedRequestOrigin;
   }
 
   // Allow local dev origins even when a frontend allowlist is present.
   if (
-    process.env.NODE_ENV !== 'production' &&
-    (DEFAULT_DEV_ORIGINS.has(normalizedRequestOrigin) ||
-      isLocalDevelopmentOrigin(normalizedRequestOrigin))
+    DEFAULT_DEV_ORIGINS.has(normalizedRequestOrigin) ||
+    isLocalDevelopmentOrigin(normalizedRequestOrigin)
   ) {
     return normalizedRequestOrigin;
   }
@@ -95,7 +93,7 @@ export const resolveCorsOrigin = (event: H3EventCompat) => {
 export const applyCorsHeaders = (
   event: H3EventCompat,
   methods = 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  headers = 'Content-Type, Authorization, X-Requested-With, X-Proxy-Capability'
+  headers = '*'
 ) => {
   const origin = resolveCorsOrigin(event);
   if (!origin) {
@@ -108,7 +106,7 @@ export const applyCorsHeaders = (
       ? requestedHeaders
         ? requestedHeaders
             .split(',')
-            .map(header => ALLOWED_HEADER_NAMES.get(header.trim().toLowerCase()))
+            .map(header => ALLOWED_HEADER_NAMES.get(header.trim().toLowerCase()) || header.trim())
             .filter((header): header is string => Boolean(header))
             .join(', ') || DEFAULT_ALLOWED_HEADERS.join(', ')
         : DEFAULT_ALLOWED_HEADERS.join(', ')
