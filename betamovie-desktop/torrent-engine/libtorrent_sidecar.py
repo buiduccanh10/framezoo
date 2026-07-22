@@ -967,6 +967,111 @@ def parse_range(
     return start, min(end, size - 1)
 
 
+DEFAULT_MAX_TORRENT_BYTES = 5 * 1024 * 1024 * 1024  # 5 GB
+
+
+def get_torrent_data_dir() -> str:
+    env_dir = os.environ.get("BETAMOVIE_TORRENT_DATA_DIR")
+    if env_dir:
+        os.makedirs(env_dir, exist_ok=True)
+        return os.path.abspath(env_dir)
+    fallback = (
+        os.path.expanduser("~/Library/Application Support/AlphaFlix/torrents")
+        if sys.platform == "darwin"
+        else os.path.join(tempfile.gettempdir(), "betamovie-torrents")
+    )
+    os.makedirs(fallback, exist_ok=True)
+    return os.path.abspath(fallback)
+
+
+def get_dir_size(path: str) -> int:
+    total = 0
+    try:
+        for root, _, files in os.walk(path):
+            for f in files:
+                fp = os.path.join(root, f)
+                if not os.path.islink(fp):
+                    total += os.path.getsize(fp)
+    except Exception:
+        pass
+    return total
+
+
+def enforce_storage_limit(
+    root_dir: str,
+    max_bytes: int = DEFAULT_MAX_TORRENT_BYTES,
+    active_paths: Optional[Set[str]] = None,
+) -> None:
+    if active_paths is None:
+        active_paths = set()
+
+    max_bytes_env = os.environ.get("BETAMOVIE_TORRENT_MAX_SIZE_BYTES")
+    if max_bytes_env:
+        try:
+            max_bytes = int(max_bytes_env)
+        except ValueError:
+            pass
+
+    if not os.path.exists(root_dir):
+        return
+
+    candidate_dirs: List[str] = []
+
+    # 1. Directories inside root_dir
+    try:
+        for entry in os.listdir(root_dir):
+            full_path = os.path.join(root_dir, entry)
+            if os.path.isdir(full_path):
+                candidate_dirs.append(full_path)
+    except Exception:
+        pass
+
+    # 2. Legacy directories in system tempdir
+    temp_dir = tempfile.gettempdir()
+    if os.path.abspath(temp_dir) != os.path.abspath(root_dir):
+        try:
+            for entry in os.listdir(temp_dir):
+                if entry.startswith("betamovie-torrent-"):
+                    full_path = os.path.join(temp_dir, entry)
+                    if os.path.isdir(full_path):
+                        candidate_dirs.append(full_path)
+        except Exception:
+            pass
+
+    norm_active = {os.path.abspath(p) for p in active_paths}
+
+    items: List[Tuple[str, int, float]] = []
+    total_size = 0
+    for d in candidate_dirs:
+        abs_d = os.path.abspath(d)
+        size = get_dir_size(abs_d)
+        total_size += size
+        if abs_d not in norm_active:
+            try:
+                mtime = os.path.getmtime(abs_d)
+            except Exception:
+                mtime = 0
+            items.append((abs_d, size, mtime))
+
+    if total_size <= max_bytes:
+        return
+
+    # Sort inactive folders by mtime ascending (oldest first)
+    items.sort(key=lambda x: x[2])
+
+    for abs_d, size, _ in items:
+        if total_size <= max_bytes:
+            break
+        try:
+            shutil.rmtree(abs_d, ignore_errors=True)
+            total_size -= size
+            sys.stderr.write(
+                f"[sidecar] Pruned old torrent cache: {abs_d} ({size} bytes)\n"
+            )
+        except Exception as err:
+            sys.stderr.write(f"[sidecar] Failed to prune {abs_d}: {err}\n")
+
+
 class LibtorrentEngine:
     def __init__(self) -> None:
         self.session = lt.session(
@@ -986,16 +1091,31 @@ class LibtorrentEngine:
         self.sessions: Dict[str, TorrentRuntime] = {}
         self.lock = threading.RLock()
 
+        try:
+            root = get_torrent_data_dir()
+            enforce_storage_limit(root)
+        except Exception as err:
+            sys.stderr.write(f"[sidecar] Initial storage cleanup error: {err}\n")
+
     def start(
         self,
         session_id: str,
         request: Dict[str, Any],
     ) -> Dict[str, Any]:
         magnet = get_magnet(request)
-        root = os.environ.get("BETAMOVIE_TORRENT_DATA_DIR")
+        root = get_torrent_data_dir()
+        with self.lock:
+            active_paths = {r.save_path for r in self.sessions.values()}
+        try:
+            enforce_storage_limit(root, active_paths=active_paths)
+        except Exception as err:
+            sys.stderr.write(
+                f"[sidecar] Storage limit enforcement error: {err}\n"
+            )
+
         save_path = tempfile.mkdtemp(
             prefix="betamovie-torrent-",
-            dir=root if root and os.path.isdir(root) else None,
+            dir=root,
         )
         params = lt.parse_magnet_uri(magnet)
         params.save_path = save_path
