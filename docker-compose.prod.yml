@@ -91,6 +91,7 @@ services:
       PROXY_REQUIRE_UPSTREAM_ALLOWLIST: "true"
       PROXY_ALLOWED_UPSTREAM_HOSTS: ${PROXY_ALLOWED_UPSTREAM_HOSTS:-}
       RATE_LIMIT_FAIL_CLOSED: "true"
+      CORS_ALLOWED_ORIGINS: https://alphaflix.io.vn,app://renderer
       VIRTUAL_HOST: backend.alphaflix.io.vn
       VIRTUAL_PORT: 3000
       VIRTUAL_PROTO: http
