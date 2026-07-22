@@ -86,6 +86,7 @@ export type CreateDesktopPipControllerOptions = {
   enableDevTools: boolean;
   onClosed?: () => void;
   preloadPath: string;
+  rendererAppUrl?: string;
   rendererDevUrl?: string;
   rendererEntryPath: string;
 };

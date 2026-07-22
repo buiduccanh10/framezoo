@@ -52,6 +52,6 @@ BETAMOVIE_BACKEND_URL=https://your-api.example.com pnpm run dist:desktop
 
 - `window.__ALPHAFLIX_DESKTOP__` is enabled and backed by a minimal Electron IPC bridge.
 - The bridge currently covers the extension-style calls the frontend already expects: `hello`, `makeRequest`, `prepareStream`, and `openPage`.
-- `BrowserWindow.webPreferences.webSecurity` is currently disabled so the packaged app can talk to `betamovie-be` without extra CORS work during this first scaffold.
+- `BrowserWindow.webPreferences.webSecurity` is enabled. Packaged windows use the `app://renderer` origin, so `betamovie-be` must allow that origin in production CORS.
 - Mac signing/notarization and Windows signing are not configured yet.
-- Local desktop-origin CORS support for `betamovie-be` now expects a backend built from the updated workspace code.
+- Local desktop-origin CORS support for `betamovie-be` allows `localhost` and `127.0.0.1` origins in development.

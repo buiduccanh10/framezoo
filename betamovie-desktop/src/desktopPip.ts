@@ -48,6 +48,10 @@ export function createDesktopPipController(
       return `${options.rendererDevUrl.replace(/\/$/, "")}/#${options.desktopPipRoute}`;
     }
 
+    if (options.rendererAppUrl) {
+      return `${options.rendererAppUrl}#${options.desktopPipRoute}`;
+    }
+
     return `${pathToFileURL(options.rendererEntryPath).toString()}#${options.desktopPipRoute}`;
   }
 
@@ -86,7 +90,7 @@ export function createDesktopPipController(
         contextIsolation: true,
         nodeIntegration: false,
         sandbox: false,
-        webSecurity: false,
+        webSecurity: true,
         devTools: options.enableDevTools,
         backgroundThrottling: false,
       },

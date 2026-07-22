@@ -4,12 +4,15 @@ import {
   dialog,
   ipcMain,
   Menu,
+  net,
+  protocol,
   session,
   shell,
   type Input,
   type MenuItemConstructorOptions,
 } from "electron";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
 import { createDesktopPipController } from "./desktopPip";
 import {
@@ -26,6 +29,10 @@ const APP_ID = "com.alphaflix.desktop";
 const APP_NAME = "AlphaFlix";
 const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
+const RENDERER_PROTOCOL = "app";
+const RENDERER_PROTOCOL_HOST = "renderer";
+const ALLOWED_REMOTE_PROTOCOL_HOSTS = new Set(["www.gstatic.com"]);
+const PACKAGED_RENDERER_URL = `${RENDERER_PROTOCOL}://${RENDERER_PROTOCOL_HOST}/index.html`;
 const DESKTOP_BRIDGE_VERSION = "1.0.2";
 const DESKTOP_PIP_ROUTE = "/desktop-pip";
 const DESKTOP_APP_UPDATE_CHANNEL =
@@ -37,6 +44,19 @@ const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
 const DEVTOOLS_PROTECTION_ENABLED =
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
 const ENABLE_DEVTOOLS = !DEVTOOLS_PROTECTION_ENABLED;
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: RENDERER_PROTOCOL,
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      corsEnabled: true,
+      stream: true,
+    },
+  },
+]);
 
 let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
@@ -58,6 +78,39 @@ function getPreloadPath() {
 
 function getRendererEntryPath() {
   return path.join(__dirname, "..", "renderer", "index.html");
+}
+
+function registerRendererProtocol() {
+  protocol.handle(RENDERER_PROTOCOL, async (request) => {
+    try {
+      const url = new URL(request.url);
+      if (ALLOWED_REMOTE_PROTOCOL_HOSTS.has(url.hostname)) {
+        return net.fetch(
+          `https://${url.hostname}${url.pathname}${url.search}`,
+        );
+      }
+
+      if (url.hostname !== RENDERER_PROTOCOL_HOST) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      const rendererRoot = path.resolve(path.dirname(getRendererEntryPath()));
+      const relativePath =
+        decodeURIComponent(url.pathname).replace(/^\/+/, "") || "index.html";
+      const filePath = path.resolve(rendererRoot, relativePath);
+
+      if (
+        filePath !== rendererRoot &&
+        !filePath.startsWith(`${rendererRoot}${path.sep}`)
+      ) {
+        return new Response("Forbidden", { status: 403 });
+      }
+
+      return net.fetch(pathToFileURL(filePath).toString());
+    } catch {
+      return new Response("Bad renderer request", { status: 400 });
+    }
+  });
 }
 
 function getConfiguredBackendUrl() {
@@ -370,6 +423,7 @@ const desktopPipController = createDesktopPipController({
   enableDevTools: ENABLE_DEVTOOLS,
   onClosed: notifyMainWindowDesktopPipClosed,
   preloadPath: getPreloadPath(),
+  rendererAppUrl: PACKAGED_RENDERER_URL,
   rendererDevUrl: RENDERER_DEV_URL,
   rendererEntryPath: getRendererEntryPath(),
 });
@@ -644,7 +698,7 @@ function createMainWindow() {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
-      webSecurity: false,
+      webSecurity: true,
       devTools: ENABLE_DEVTOOLS,
     },
   });
@@ -690,7 +744,7 @@ function createMainWindow() {
       mainWindow?.webContents.openDevTools({ mode: "detach" });
     });
   } else {
-    void mainWindow.loadFile(getRendererEntryPath());
+    void mainWindow.loadURL(PACKAGED_RENDERER_URL);
     mainWindow.webContents.on("did-finish-load", () => {
       sendDesktopAppUpdateState();
     });
@@ -833,6 +887,7 @@ if (!hasSingleInstanceLock) {
   });
 
   app.whenReady().then(() => {
+    registerRendererProtocol();
     registerIpcHandlers();
     registerHeaderInterceptors();
     installApplicationMenu();
