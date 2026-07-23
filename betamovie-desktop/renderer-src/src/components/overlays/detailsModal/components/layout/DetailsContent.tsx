@@ -12,6 +12,10 @@ import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
 import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
+import {
+  PlayerMeta,
+  PlayerNavigationState,
+} from "@/stores/player/slices/source";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { getTmdbLanguageCode } from "@/utils/language";
@@ -73,6 +77,15 @@ export function LazyCarouselWrapper({
 }
 
 type CarouselSkeletonVariant = "episodes" | "cast" | "trailers" | "similar";
+type DetailsEpisode = {
+  id: number;
+  name: string;
+  overview: string;
+  episode_number: number;
+  season_number: number;
+  still_path: string | null;
+  air_date: string;
+};
 
 function CarouselSkeleton({ variant }: { variant: CarouselSkeletonVariant }) {
   if (variant === "episodes") {
@@ -163,6 +176,90 @@ function CarouselSkeleton({ variant }: { variant: CarouselSkeletonVariant }) {
   );
 }
 
+function buildPlayerMeta(
+  data: DetailsContentProps["data"],
+  showProgress: ReturnType<typeof shouldShowProgress> | null,
+  selectedSeason: number,
+  fetchedSeasons: Record<number, DetailsEpisode[]>,
+): PlayerMeta | null {
+  if (
+    !data.id ||
+    !data.title ||
+    (data.type !== "movie" && data.type !== "show")
+  ) {
+    return null;
+  }
+
+  const baseMeta = {
+    title: data.title,
+    releaseYear: data.releaseDate
+      ? new Date(data.releaseDate).getFullYear()
+      : 0,
+    poster: data.posterUrl,
+    backdrop: data.backdrop,
+    logo: data.logoUrl,
+    tmdbId: data.id.toString(),
+    imdbId: data.imdbId,
+    overview: data.overview,
+  };
+
+  if (data.type === "movie") {
+    return {
+      type: "movie",
+      ...baseMeta,
+    };
+  }
+
+  const seasonNumber = showProgress?.season?.number ?? selectedSeason;
+  const seasonInfo = data.seasonData?.seasons.find(
+    (season) => season.season_number === seasonNumber,
+  );
+  const seasonEpisodes =
+    fetchedSeasons[seasonNumber] ?? data.seasonData?.episodes ?? [];
+  const progressEpisode = showProgress?.episode;
+  const selectedEpisode =
+    seasonEpisodes.find(
+      (episode) => episode.id.toString() === progressEpisode?.id,
+    ) ??
+    seasonEpisodes[0] ??
+    (progressEpisode
+      ? {
+          id: Number(progressEpisode.id),
+          name: progressEpisode.title,
+          episode_number: progressEpisode.number,
+          overview: "",
+          still_path: null,
+          air_date: "",
+          season_number: seasonNumber,
+        }
+      : null);
+  const seasonId = showProgress?.season?.id ?? seasonInfo?.id.toString();
+
+  if (!selectedEpisode || !seasonId) return null;
+
+  const episodes =
+    seasonEpisodes.length > 0 ? seasonEpisodes : [selectedEpisode];
+  const toPlayerEpisode = (episode: DetailsEpisode) => ({
+    number: episode.episode_number,
+    title: episode.name,
+    tmdbId: episode.id.toString(),
+    air_date: episode.air_date,
+    overview: episode.overview,
+  });
+
+  return {
+    type: "show",
+    ...baseMeta,
+    episodes: episodes.map(toPlayerEpisode),
+    episode: toPlayerEpisode(selectedEpisode),
+    season: {
+      number: seasonNumber,
+      title: showProgress?.season?.title ?? seasonInfo?.name ?? "",
+      tmdbId: seasonId,
+    },
+  };
+}
+
 export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const navigate = useNavigate();
   const [imdbData, setImdbData] = useState<DetailsIMDbData | null>(null);
@@ -176,9 +273,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [showCollection, setShowCollection] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
-  const [fetchedSeasons, setFetchedSeasons] = useState<Record<number, any[]>>(
-    {},
-  );
+  const [fetchedSeasons, setFetchedSeasons] = useState<
+    Record<number, DetailsEpisode[]>
+  >({});
   const [loadingSeasons, setLoadingSeasons] = useState<Record<number, boolean>>(
     {},
   );
@@ -393,13 +490,25 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const handlePlayClick = () => {
     if (!data.id) return;
 
+    const playerMeta = buildPlayerMeta(
+      data,
+      showProgress,
+      selectedSeason,
+      fetchedSeasons,
+    );
+    const navigationState: PlayerNavigationState | undefined = playerMeta
+      ? { playerMeta }
+      : undefined;
+
     if (data.type === "movie") {
       const urlId = TMDBIdToUrlId(
         MWMediaType.MOVIE,
         data.id.toString(),
         data.title,
       );
-      navigate(`/media/${urlId}`);
+      navigate(`/media/${urlId}`, {
+        state: navigationState,
+      });
     } else if (data.type === "show") {
       const urlId = TMDBIdToUrlId(
         MWMediaType.SERIES,
@@ -409,10 +518,15 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       if (showProgress?.season?.id && showProgress?.episode?.id) {
         navigate(
           `/media/${urlId}/${showProgress.season.id}/${showProgress.episode.id}`,
+          {
+            state: navigationState,
+          },
         );
       } else {
         // Start new show
-        navigate(`/media/${urlId}`);
+        navigate(`/media/${urlId}`, {
+          state: navigationState,
+        });
       }
     }
   };

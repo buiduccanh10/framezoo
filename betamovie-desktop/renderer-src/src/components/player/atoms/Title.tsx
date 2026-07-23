@@ -43,6 +43,15 @@ export function Title() {
     }
   };
 
+  if (!title) {
+    return (
+      <div
+        aria-hidden="true"
+        className="h-4 w-32 animate-pulse rounded bg-white/15"
+      />
+    );
+  }
+
   return (
     <p
       onClick={handleTitleClick}

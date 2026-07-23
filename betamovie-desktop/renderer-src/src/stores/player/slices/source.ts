@@ -52,6 +52,10 @@ export interface PlayerMeta {
   };
 }
 
+export interface PlayerNavigationState {
+  playerMeta?: PlayerMeta;
+}
+
 export interface Caption {
   id: string;
   language: string;
