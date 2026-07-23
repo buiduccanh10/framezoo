@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import glob
 import json
+import math
 import mimetypes
 import os
 import shutil
@@ -14,6 +15,7 @@ import tempfile
 import threading
 import time
 import warnings
+from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any, Dict, List, Optional, Set, Tuple
 from urllib.parse import urlparse
@@ -27,6 +29,9 @@ OUTPUT_LOCK = threading.Lock()
 VIDEO_EXTENSIONS = (".avi", ".m4v", ".mkv", ".mov", ".mp4", ".webm")
 STREAM_CHUNK_SIZE = 1024 * 1024
 RANGE_WAIT_TIMEOUT = 90
+PROBE_WAIT_TIMEOUT = 5
+TRANSCODE_STARTUP_TIMEOUT = 5
+HLS_SEGMENT_DURATION = 2
 RANGE_RETRY_INTERVAL = 0.2
 FILE_OPEN_RETRY_INTERVAL = 0.2
 
@@ -137,7 +142,10 @@ def torrent_hash(info: Any, fallback: Any) -> Optional[str]:
         return None
 
 
-INCOMPATIBLE_AUDIO_CODECS = {"ac3", "eac3", "dts", "dts_hd", "truehd"}
+DIRECT_CONTAINER_FORMATS = {"mov", "mp4"}
+DIRECT_VIDEO_CODECS = {"h264"}
+DIRECT_VIDEO_PIXEL_FORMATS = {"yuv420p", "yuvj420p", "nv12"}
+DIRECT_AUDIO_CODECS = {"aac", "mp3"}
 
 
 def get_ffmpeg_path() -> str:
@@ -148,14 +156,43 @@ def get_ffprobe_path() -> str:
     return os.environ.get("FFPROBE_PATH", "ffprobe")
 
 
-def probe_file_info(input_path: str) -> Tuple[bool, Optional[float]]:
-    """Use ffprobe to check audio codec compatibility and total duration."""
+@dataclass(frozen=True)
+class MediaProbe:
+    available: bool
+    duration: Optional[float]
+    format_name: str
+    video_codec: Optional[str]
+    video_pixel_format: Optional[str]
+    audio_codec: Optional[str]
+    direct_playable: bool
+    transcode_video: bool
+    transcode_audio: bool
+
+
+def unavailable_media_probe() -> MediaProbe:
+    return MediaProbe(
+        available=False,
+        duration=None,
+        format_name="",
+        video_codec=None,
+        video_pixel_format=None,
+        audio_codec=None,
+        direct_playable=False,
+        transcode_video=True,
+        transcode_audio=True,
+    )
+
+
+def probe_file_info(input_path: str) -> MediaProbe:
+    """Probe container/codecs before choosing direct playback or HLS."""
     ffprobe = get_ffprobe_path()
     try:
         result = subprocess.run(
             [
                 ffprobe,
                 "-v", "quiet",
+                "-probesize", "2M",
+                "-analyzeduration", "2M",
                 "-print_format", "json",
                 "-show_format",
                 "-show_streams",
@@ -163,10 +200,10 @@ def probe_file_info(input_path: str) -> Tuple[bool, Optional[float]]:
             ],
             capture_output=True,
             text=True,
-            timeout=30,
+            timeout=PROBE_WAIT_TIMEOUT,
         )
         if result.returncode != 0:
-            return False, None
+            return unavailable_media_probe()
         info = json.loads(result.stdout)
         duration: Optional[float] = None
         duration_str = info.get("format", {}).get("duration")
@@ -187,36 +224,60 @@ def probe_file_info(input_path: str) -> Tuple[bool, Optional[float]]:
                     except ValueError:
                         pass
 
-        audio_streams = [s for s in streams if s.get("codec_type") == "audio"]
-        needs_transcode = False
-        if audio_streams:
-            codec = audio_streams[0].get("codec_name", "").lower()
-            needs_transcode = codec in INCOMPATIBLE_AUDIO_CODECS
+        video_stream = next(
+            (stream for stream in streams if stream.get("codec_type") == "video"),
+            None,
+        )
+        audio_stream = next(
+            (stream for stream in streams if stream.get("codec_type") == "audio"),
+            None,
+        )
+        format_name = str(info.get("format", {}).get("format_name") or "").lower()
+        format_tokens = set(format_name.split(","))
+        video_codec = (
+            str(video_stream.get("codec_name") or "").lower()
+            if video_stream
+            else None
+        )
+        video_pixel_format = (
+            str(video_stream.get("pix_fmt") or "").lower()
+            if video_stream
+            else None
+        )
+        audio_codec = (
+            str(audio_stream.get("codec_name") or "").lower()
+            if audio_stream
+            else None
+        )
+        video_copy_compatible = (
+            video_codec in DIRECT_VIDEO_CODECS
+            and video_pixel_format in DIRECT_VIDEO_PIXEL_FORMATS
+        )
+        direct_playable = (
+            bool(video_stream)
+            and bool(format_tokens & DIRECT_CONTAINER_FORMATS)
+            and video_copy_compatible
+            and (audio_stream is None or audio_codec in DIRECT_AUDIO_CODECS)
+        )
 
-        return needs_transcode, duration
+        return MediaProbe(
+            available=True,
+            duration=duration,
+            format_name=format_name,
+            video_codec=video_codec,
+            video_pixel_format=video_pixel_format,
+            audio_codec=audio_codec,
+            direct_playable=direct_playable,
+            transcode_video=not video_copy_compatible,
+            transcode_audio=(
+                audio_stream is not None
+                and audio_codec not in DIRECT_AUDIO_CODECS
+            ),
+        )
     except Exception as exc:
         sys.stderr.write(f"[ffprobe] probe failed: {exc}\n")
         sys.stderr.flush()
-        return False, None
-
-
-def generate_vod_manifest(duration: float) -> bytes:
-    """Generate a complete VOD HLS manifest for the total duration."""
-    import math
-    segment_duration = 4.0
-    num_segments = math.ceil(duration / segment_duration)
-    lines = [
-        "#EXTM3U",
-        "#EXT-X-VERSION:3",
-        "#EXT-X-TARGETDURATION:5",
-        "#EXT-X-PLAYLIST-TYPE:VOD",
-    ]
-    for i in range(num_segments):
-        seg_dur = min(segment_duration, duration - i * segment_duration)
-        lines.append(f"#EXTINF:{seg_dur:.3f},")
-        lines.append(f"seg_{i:05d}.ts")
-    lines.append("#EXT-X-ENDLIST")
-    return ("\n".join(lines) + "\n").encode("utf-8")
+        return unavailable_media_probe()
 
 
 def get_max_generated_segment(hls_dir: str) -> int:
@@ -240,7 +301,7 @@ def get_max_generated_segment(hls_dir: str) -> int:
 
 
 class FFmpegTranscoder:
-    """Runs FFmpeg to remux video + transcode audio into HLS segments."""
+    """Runs FFmpeg to produce browser-compatible HLS segments."""
 
     def __init__(
         self,
@@ -248,11 +309,15 @@ class FFmpegTranscoder:
         input_url: str,
         hls_dir: str,
         start_time: float = 0.0,
+        transcode_video: bool = False,
+        transcode_audio: bool = True,
     ) -> None:
         self.session_id = session_id
         self.input_url = input_url
         self.hls_dir = hls_dir
         self.start_time = start_time
+        self.transcode_video = transcode_video
+        self.transcode_audio = transcode_audio
         self.process: Optional[subprocess.Popen] = None
         self.is_ready = threading.Event()
         self.is_finished = False
@@ -262,16 +327,54 @@ class FFmpegTranscoder:
     def start(self) -> None:
         os.makedirs(self.hls_dir, exist_ok=True)
         ffmpeg = get_ffmpeg_path()
-        cmd = [ffmpeg, "-y"]
+        cmd = [
+            ffmpeg,
+            "-y",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+        ]
         if self.start_time > 0:
             cmd.extend(["-ss", str(int(self.start_time))])
-        start_seg = int(self.start_time / 4) if self.start_time > 0 else 0
+        start_seg = (
+            int(self.start_time / HLS_SEGMENT_DURATION)
+            if self.start_time > 0
+            else 0
+        )
+        if self.transcode_video:
+            video_args = [
+                "-c:v",
+                "libx264",
+                "-preset",
+                "veryfast",
+                "-tune",
+                "zerolatency",
+                "-pix_fmt",
+                "yuv420p",
+                "-profile:v",
+                "main",
+                "-g",
+                "48",
+                "-keyint_min",
+                "48",
+                "-sc_threshold",
+                "0",
+                "-force_key_frames",
+                f"expr:gte(t,n_forced*{HLS_SEGMENT_DURATION})",
+            ]
+        else:
+            video_args = ["-c:v", "copy"]
+        audio_args = (
+            ["-c:a", "aac", "-b:a", "192k", "-ac", "2"]
+            if self.transcode_audio
+            else ["-c:a", "copy"]
+        )
         cmd.extend([
             "-i", self.input_url,
-            "-c:v", "copy",
-            "-c:a", "aac", "-b:a", "192k", "-ac", "2",
+            *video_args,
+            *audio_args,
             "-f", "hls",
-            "-hls_time", "4",
+            "-hls_time", str(HLS_SEGMENT_DURATION),
             "-hls_list_size", "0",
             "-start_number", str(start_seg),
             "-hls_playlist_type", "event",
@@ -409,7 +512,7 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         # Route: /hls/<sessionId>/<filename>
         if len(parts) == 3 and parts[0] == "hls":
             runtime = self.server.runtime.get(parts[1])
-            if runtime and runtime.transcoder:
+            if runtime and runtime.can_serve_hls():
                 runtime.try_cleanup_torrent()
                 self.serve_hls_file(runtime, parts[2], head_only)
                 return
@@ -438,6 +541,21 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         safe_name = os.path.basename(filename)
         file_path = os.path.join(runtime.hls_dir, safe_name)
         if not os.path.isfile(file_path):
+            if safe_name == "live.m3u8" and runtime.stream_type in {
+                "pending",
+                "hls",
+            }:
+                self.send_hls_response(
+                    (
+                        "#EXTM3U\n"
+                        "#EXT-X-VERSION:3\n"
+                        "#EXT-X-TARGETDURATION:2\n"
+                        "#EXT-X-MEDIA-SEQUENCE:0\n"
+                        "#EXT-X-PLAYLIST-TYPE:EVENT\n"
+                    ).encode("utf-8"),
+                    head_only,
+                )
+                return
             if (
                 safe_name.endswith(".ts")
                 and safe_name.startswith("seg_")
@@ -450,9 +568,11 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
                     max_seg = get_max_generated_segment(runtime.hls_dir)
                     # Only seek if requested segment is far away from current progress.
                     # Nearby pre-fetches (within 30 segments) should NOT kill FFmpeg.
-                    is_nearby = max_seg >= 0 and (max_seg - 5 <= seg_num <= max_seg + 30)
+                    is_nearby = max_seg >= 0 and (
+                        max_seg - 5 <= seg_num <= max_seg + 30
+                    )
                     if not is_nearby:
-                        target_time = float(seg_num * 4)
+                        target_time = float(seg_num * HLS_SEGMENT_DURATION)
                         runtime.seek_transcoder(target_time)
                 except Exception as err:
                     sys.stderr.write(f"[transcode-seek] error: {err}\n")
@@ -470,15 +590,14 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         if safe_name.endswith(".m3u8"):
             content_type = "application/vnd.apple.mpegurl"
             cache_control = "no-cache"
-            if runtime.media_duration and runtime.media_duration > 0:
-                data = generate_vod_manifest(runtime.media_duration)
-            else:
-                try:
-                    with open(file_path, "rb") as f:
-                        data = f.read()
-                except OSError:
-                    self.send_error(500)
-                    return
+            try:
+                # Keep FFmpeg's media sequence/start number. Rebuilding a VOD
+                # manifest from zero can seek a resumed stream back to segment 0.
+                with open(file_path, "rb") as f:
+                    data = f.read()
+            except OSError:
+                self.send_error(500)
+                return
         else:
             content_type = "video/mp2t"
             cache_control = "max-age=3600"
@@ -489,6 +608,20 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
                 self.send_error(500)
                 return
 
+        self.send_hls_response(
+            data,
+            head_only,
+            content_type=content_type,
+            cache_control=cache_control,
+        )
+
+    def send_hls_response(
+        self,
+        data: bytes,
+        head_only: bool,
+        content_type: str = "application/vnd.apple.mpegurl",
+        cache_control: str = "no-cache",
+    ) -> None:
         self.send_response(200)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(data)))
@@ -525,9 +658,13 @@ class TorrentRuntime:
         self.file_size = 0
         self.stream_url = ""
         self.raw_stream_url = ""  # always points to /torrent/ route
+        self.stream_type = "pending"
         self.transcoder: Optional[FFmpegTranscoder] = None
         self.hls_dir = ""
+        self.transcode_video = False
+        self.transcode_audio = True
         self.media_duration: Optional[float] = None
+        self.start_time = self._get_requested_start_time()
         self._torrent_cleaned = False
         self.stop_event = threading.Event()
         self.metadata_ready = threading.Event()
@@ -540,9 +677,22 @@ class TorrentRuntime:
             daemon=True,
         )
 
+    def _get_requested_start_time(self) -> float:
+        value = self.request.get("startAt", 0)
+        try:
+            value = float(value)
+        except (TypeError, ValueError):
+            return 0.0
+        return max(0.0, value) if math.isfinite(value) else 0.0
+
     def start(self) -> None:
         self.raw_stream_url = self.engine.http_server.register(self)
-        self.stream_url = self.raw_stream_url
+        self.stream_url = (
+            self.engine.http_server.base_url
+            + "/hls/"
+            + self.session_id
+            + "/live.m3u8"
+        )
         self.status_thread.start()
         self.metadata_thread = threading.Thread(
             target=self.initialize_metadata,
@@ -554,6 +704,7 @@ class TorrentRuntime:
     def initialize_metadata(self) -> None:
         try:
             self.wait_for_metadata(90)
+            self.probe_and_start_transcode()
         except Exception as error:
             self.metadata_error = str(error)
         finally:
@@ -582,10 +733,14 @@ class TorrentRuntime:
         raise TimeoutError("timed out waiting for torrent metadata")
 
     def probe_and_start_transcode(self) -> None:
-        """Probe audio codecs. If incompatible, start FFmpeg HLS transcoder."""
-        # Wait for the first 2MB to ensure container headers are on disk
+        """Choose direct playback or start browser-compatible HLS."""
+        # Probe quickly. Slow peers must not keep the player on the addon list.
         try:
-            self.wait_for_range(0, 2 * 1024 * 1024)
+            self.wait_for_range(
+                0,
+                2 * 1024 * 1024,
+                timeout=PROBE_WAIT_TIMEOUT,
+            )
         except Exception:
             pass
 
@@ -594,39 +749,68 @@ class TorrentRuntime:
             os.path.join(self.save_path, relative_path),
         )
 
-        needs_transcode, duration = probe_file_info(target_file_path)
-        self.media_duration = duration
+        probe = probe_file_info(target_file_path)
+        self.media_duration = probe.duration
+        if probe.duration and probe.duration > 0:
+            self.start_time = min(
+                self.start_time,
+                max(0.0, probe.duration - 1),
+            )
 
-        if not needs_transcode:
+        sys.stderr.write(
+            "[probe] "
+            + json.dumps(
+                {
+                    "sessionId": self.session_id,
+                    "available": probe.available,
+                    "format": probe.format_name,
+                    "videoCodec": probe.video_codec,
+                    "videoPixelFormat": probe.video_pixel_format,
+                    "audioCodec": probe.audio_codec,
+                    "decision": (
+                        "direct" if probe.direct_playable else "hls"
+                    ),
+                    "transcodeVideo": probe.transcode_video,
+                    "transcodeAudio": probe.transcode_audio,
+                },
+                separators=(",", ":"),
+            )
+            + "\n",
+        )
+        sys.stderr.flush()
+
+        if probe.direct_playable:
+            self.stream_type = "file"
+            self.stream_url = self.raw_stream_url
             return
 
+        self.transcode_video = probe.transcode_video
+        self.transcode_audio = probe.transcode_audio
         self.hls_dir = tempfile.mkdtemp(prefix="betamovie-hls-")
         self.transcoder = FFmpegTranscoder(
             session_id=self.session_id,
             input_url=self.raw_stream_url,
             hls_dir=self.hls_dir,
+            start_time=self.start_time,
+            transcode_video=self.transcode_video,
+            transcode_audio=self.transcode_audio,
         )
-        self.transcoder.start()
-        self.transcoder.wait_for_ready(timeout=90)
-
-        if self.transcoder.error:
-            sys.stderr.write(
-                f"[transcode] error: {self.transcoder.error}\n",
-            )
-            sys.stderr.flush()
-            # Fall back to raw stream
-            self.transcoder.stop()
-            self.transcoder = None
-            self.hls_dir = ""
-            return
-
-        # Switch stream URL to HLS playlist
+        self.stream_type = "hls"
         self.stream_url = (
             self.engine.http_server.base_url
             + "/hls/"
             + self.session_id
             + "/live.m3u8"
         )
+        self.transcoder.start()
+        self.transcoder.wait_for_ready(timeout=TRANSCODE_STARTUP_TIMEOUT)
+
+        if self.transcoder.error:
+            sys.stderr.write(
+                f"[transcode] error: {self.transcoder.error}\n",
+            )
+            sys.stderr.flush()
+            self.metadata_error = self.transcoder.error
 
     def seek_transcoder(self, start_time: float) -> None:
         """Seek FFmpeg transcoder to target start time (in seconds)."""
@@ -638,6 +822,8 @@ class TorrentRuntime:
                 input_url=self.raw_stream_url,
                 hls_dir=self.hls_dir,
                 start_time=start_time,
+                transcode_video=self.transcode_video,
+                transcode_audio=self.transcode_audio,
             )
             self.transcoder.start()
             self.transcoder.wait_for_ready(timeout=15)
@@ -656,12 +842,16 @@ class TorrentRuntime:
                 pass
             shutil.rmtree(self.save_path, ignore_errors=True)
 
+    def can_serve_hls(self) -> bool:
+        return self.stream_type in {"pending", "hls"} and not self.stop_event.is_set()
+
     def session_payload(self) -> Dict[str, Any]:
         return {
             "sessionId": self.session_id,
             "sourceId": self.request.get("sourceId", ""),
             "streamUrl": self.stream_url,
-            "streamType": "hls" if self.transcoder else "file",
+            "streamType": self.stream_type,
+            "startAt": self.start_time,
             "duration": self.media_duration,
             "fileName": (
                 self.file_path.rsplit("/", 1)[-1]
@@ -679,6 +869,8 @@ class TorrentRuntime:
         self.engine.http_server.unregister(self.session_id)
         if self.transcoder:
             self.transcoder.stop()
+        elif self.hls_dir:
+            shutil.rmtree(self.hls_dir, ignore_errors=True)
         if not self._torrent_cleaned:
             try:
                 self.engine.session.remove_torrent(self.handle)
@@ -702,7 +894,10 @@ class TorrentRuntime:
             if total and file_progress >= total
             else ((file_progress / total) * 100.0 if total else 0.0)
         )
-        if self.metadata_error:
+        stream_error = self.metadata_error or (
+            self.transcoder.error if self.transcoder else None
+        )
+        if stream_error:
             lifecycle = "error"
         elif not status.has_metadata:
             lifecycle = "starting"
@@ -724,11 +919,18 @@ class TorrentRuntime:
                 self.info,
                 self.request.get("infoHash"),
             ),
-            "fileName": self.file_path.rsplit("/", 1)[-1] or None,
+            "fileName": (
+                self.file_path.rsplit("/", 1)[-1]
+                or self.request.get("fileName")
+                or None
+            ),
             "downloadedBytes": file_progress,
             "totalBytes": total,
+            "streamType": self.stream_type,
             "streamUrl": self.stream_url or None,
-            "error": self.metadata_error,
+            "startAt": self.start_time,
+            "duration": self.media_duration,
+            "error": stream_error,
             "updatedAt": int(time.time() * 1000),
         }
 
@@ -768,12 +970,17 @@ class TorrentRuntime:
             return set()
         return set(range(first_piece, last_piece + 1))
 
-    def wait_for_range(self, start: int, end: int) -> bool:
+    def wait_for_range(
+        self,
+        start: int,
+        end: int,
+        timeout: float = RANGE_WAIT_TIMEOUT,
+    ) -> bool:
         prefetch_length = max(end - start + 1, 25 * 1024 * 1024)
         required_pieces = self.map_pieces(start, end - start + 1)
         all_pieces = list(self.map_pieces(start, prefetch_length))
 
-        deadline = time.monotonic() + RANGE_WAIT_TIMEOUT
+        deadline = time.monotonic() + timeout
         while time.monotonic() < deadline and not self.stop_event.is_set():
             missing_required = [
                 piece
@@ -1132,17 +1339,8 @@ class LibtorrentEngine:
             self.sessions[session_id] = runtime
         runtime.start()
 
-        # Wait for metadata so we can probe codecs before responding
-        runtime.metadata_complete.wait(timeout=90)
-        if runtime.metadata_error:
-            with self.lock:
-                self.sessions.pop(session_id, None)
-            runtime.stop()
-            raise ValueError(runtime.metadata_error)
-
-        # Probe audio codec and start FFmpeg transcoder if needed
-        runtime.probe_and_start_transcode()
-
+        # Return a pending HLS session immediately. Metadata/probe/transcode
+        # continue in the runtime thread and publish the final stream choice.
         return runtime.session_payload()
 
     def stop(self, session_id: str) -> None:

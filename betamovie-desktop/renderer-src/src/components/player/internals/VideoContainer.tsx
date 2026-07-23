@@ -223,6 +223,20 @@ function VideoElement() {
 
 export function VideoContainer() {
   const show = useShouldShowVideoElement();
+  const display = usePlayerStore((s) => s.display);
+  const status = usePlayerStore((s) => s.status);
+
+  useEffect(() => {
+    if (status === playerStatus.PLAYING) return;
+
+    display?.load({
+      source: null,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+  }, [display, status]);
+
   useDisplayInterface();
   useInitializeSource();
 

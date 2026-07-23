@@ -92,12 +92,18 @@ export class FixtureTorrentEngine implements TorrentEngine {
     }, this.intervalMs);
     this.sessions.set(sessionId, fixtureSession);
     listener(status);
-    listener({ ...status, state: "buffering", peers: 1, updatedAt: Date.now() });
+    listener({
+      ...status,
+      state: "buffering",
+      peers: 1,
+      updatedAt: Date.now(),
+    });
 
     return {
       sessionId,
       sourceId: request.sourceId,
       streamUrl,
+      streamType: "file",
       fileName,
       infoHash,
     };

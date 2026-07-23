@@ -155,6 +155,10 @@
     "productName": "AlphaFlix",
     "artifactName": "${productName}-${version}-${arch}.${ext}",
     "asar": true,
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**",
+      "node_modules/ffprobe-static/**"
+    ],
     "directories": {
       "output": "release",
       "buildResources": "build"
