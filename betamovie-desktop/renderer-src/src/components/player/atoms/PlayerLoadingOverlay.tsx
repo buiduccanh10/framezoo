@@ -81,6 +81,15 @@ function LoadingTitle(props: {
   );
 }
 
+function LoadingTitleSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-10 w-[min(70vw,18rem)] animate-pulse rounded-md bg-white/15 md:h-16 md:w-[min(70vw,30rem)]"
+    />
+  );
+}
+
 function LoadingBackdrop(props: { src?: string; alt: string }) {
   if (!props.src) {
     return <div className="absolute inset-0 bg-background-main" />;
@@ -299,8 +308,8 @@ export function PlayerLoadingOverlay() {
   if (!shouldRender) return null;
 
   const showLoadingTitle = true;
+  const displayTitle = meta?.title;
   const showLogo = Boolean(showLoadingTitle && meta?.logo && !hideLogo);
-  const displayTitle = meta?.title || "Loading media";
 
   return (
     <div
@@ -309,26 +318,30 @@ export function PlayerLoadingOverlay() {
       }`}
     >
       {showBackdropImage ? (
-        <LoadingBackdrop src={backgroundImage} alt={displayTitle} />
+        <LoadingBackdrop src={backgroundImage} alt={displayTitle ?? ""} />
       ) : null}
 
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/5 to-black/45" />
 
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center">
         {showLoadingTitle ? (
-          showLogo ? (
-            <LoadingTitle
-              logo={meta?.logo}
-              title={displayTitle}
-              progress={loadingProgress}
-              onError={() => setHideLogo(true)}
-            />
+          displayTitle ? (
+            showLogo ? (
+              <LoadingTitle
+                logo={meta?.logo}
+                title={displayTitle}
+                progress={loadingProgress}
+                onError={() => setHideLogo(true)}
+              />
+            ) : (
+              <LoadingTitle
+                title={displayTitle}
+                progress={loadingProgress}
+                onError={() => setHideLogo(true)}
+              />
+            )
           ) : (
-            <LoadingTitle
-              title={displayTitle}
-              progress={loadingProgress}
-              onError={() => setHideLogo(true)}
-            />
+            <LoadingTitleSkeleton />
           )
         ) : null}
         <p
