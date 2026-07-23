@@ -286,6 +286,7 @@ export function SourceSelectPart(props: {
                 type: "hls",
                 url: session.streamUrl,
                 duration,
+                isTorrent: true,
               };
 
           playMedia(

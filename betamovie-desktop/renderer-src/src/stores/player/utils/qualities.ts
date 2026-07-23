@@ -19,6 +19,7 @@ export type LoadableSource = {
   type: StreamType;
   url: string;
   duration?: number;
+  isTorrent?: boolean;
   headers?: Stream["headers"];
   preferredHeaders?: Stream["preferredHeaders"];
 };
@@ -37,6 +38,7 @@ export type SourceSliceSource =
       type: "hls";
       url: string;
       duration?: number;
+      isTorrent?: boolean;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     }

@@ -141,6 +141,7 @@ export function RealPlayerView() {
         type: "hls",
         url: torrentStatus.streamUrl,
         duration: torrentStatus.duration ?? undefined,
+        isTorrent: true,
       };
     }
 

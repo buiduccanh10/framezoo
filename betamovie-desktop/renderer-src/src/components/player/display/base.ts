@@ -104,6 +104,7 @@ const HLS_START_LOAD_THROTTLE_MS = 10000;
 const HLS_SOURCEBUFFER_RACE_WINDOW_MS = 6000;
 const HLS_SOURCEBUFFER_RACE_THRESHOLD = 3;
 const HLS_RECREATE_COOLDOWN_MS = 12000;
+const TORRENT_EMPTY_PLAYLIST_RETRY_MS = 1500;
 const VIDEO_ERROR_CONFIRMATION_DELAY_MS = 1500;
 const HLS_RECOVERY_ERROR_CONFIRMATION_DELAY_MS = 13000;
 const SEGMENT_DEBUG_ENABLED = import.meta.env.DEV;
@@ -359,6 +360,7 @@ export function makeVideoElementDisplayInterface(options?: {
   let qualityChangeTimeout: NodeJS.Timeout | null = null; // Timeout for debouncing rapid quality changes
   let qualitySetupRetryTimeout: NodeJS.Timeout | null = null; // Retry manual quality setup after manifest load
   let hlsRecoveryTimeout: NodeJS.Timeout | null = null; // Throttle recovery attempts for transient HLS failures
+  let torrentEmptyPlaylistRetryTimeout: NodeJS.Timeout | null = null;
   let dashRepresentationIdsByQuality: Partial<Record<SourceQuality, string>> =
     {};
   let dashAudioTracksById: Record<string, DashMediaInfo> = {};
@@ -686,6 +688,26 @@ export function makeVideoElementDisplayInterface(options?: {
     }
   }
 
+  function clearTorrentEmptyPlaylistRetry() {
+    if (torrentEmptyPlaylistRetryTimeout) {
+      clearTimeout(torrentEmptyPlaylistRetryTimeout);
+      torrentEmptyPlaylistRetryTimeout = null;
+    }
+  }
+
+  function scheduleTorrentEmptyPlaylistRetry(
+    currentHls: Hls,
+    position: number,
+  ) {
+    if (torrentEmptyPlaylistRetryTimeout) return;
+
+    torrentEmptyPlaylistRetryTimeout = setTimeout(() => {
+      torrentEmptyPlaylistRetryTimeout = null;
+      if (hls !== currentHls) return;
+      hls.startLoad(Math.max(position, 0));
+    }, TORRENT_EMPTY_PLAYLIST_RETRY_MS);
+  }
+
   function clearMediaErrorTimeout() {
     if (mediaErrorTimeout) {
       clearTimeout(mediaErrorTimeout);
@@ -1010,6 +1032,7 @@ export function makeVideoElementDisplayInterface(options?: {
     dashAudioTracksById = {};
     lastHlsStartLoadAt = 0;
     resetDetachedSourceBufferRaceTracking();
+    clearTorrentEmptyPlaylistRetry();
     if (qualitySetupRetryTimeout) {
       clearTimeout(qualitySetupRetryTimeout);
       qualitySetupRetryTimeout = null;
@@ -1151,6 +1174,24 @@ export function makeVideoElementDisplayInterface(options?: {
         ];
         hls?.on(Hls.Events.ERROR, (event, data) => {
           if (hls !== currentHls) return;
+
+          // A torrent HLS session exposes an empty EVENT playlist while
+          // libtorrent/FFmpeg produces the first segment. HLS.js eventually
+          // promotes LEVEL_EMPTY_ERROR to fatal after its own retries, even
+          // though the local stream is still healthy. Keep polling this
+          // specific source; sidecar errors still flow through PlayerView.
+          if (
+            source?.isTorrent &&
+            data.details === ErrorDetails.LEVEL_EMPTY_ERROR
+          ) {
+            emit("loading", true);
+            scheduleTorrentEmptyPlaylistRetry(
+              currentHls,
+              Math.max(startAt, videoElement?.currentTime ?? 0),
+            );
+            return;
+          }
+
           if (isDetachedSourceBufferRace(data)) {
             clearHlsRecoveryTimeout();
             const raceCount = trackDetachedSourceBufferRace();
@@ -1705,6 +1746,7 @@ export function makeVideoElementDisplayInterface(options?: {
       qualitySetupRetryTimeout = null;
     }
     clearHlsRecoveryTimeout();
+    clearTorrentEmptyPlaylistRetry();
     clearMediaErrorTimeout();
     clearVideoErrorListener();
     resetSegmentQualityDebug();
