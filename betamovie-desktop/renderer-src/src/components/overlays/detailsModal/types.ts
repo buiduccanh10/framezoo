@@ -103,8 +103,8 @@ export interface EpisodeCarouselProps {
     season_number: number;
     still_path: string | null;
     air_date: string;
-    vote_average: number;
-    vote_count: number;
+    vote_average?: number;
+    vote_count?: number;
   }>;
   showProgress?: {
     episode?: {

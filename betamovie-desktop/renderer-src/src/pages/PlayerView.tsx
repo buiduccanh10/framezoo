@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { DetailedMeta } from "@/backend/metadata/getmeta";
 import { usePlayer } from "@/components/player/hooks/usePlayer";
@@ -11,7 +11,11 @@ import { PlayerPart } from "@/pages/parts/player/PlayerPart";
 import { ResumePart } from "@/pages/parts/player/ResumePart";
 import { SourceSelectPart } from "@/pages/parts/player/SourceSelectPart";
 import { useLastNonPlayerLink } from "@/stores/history";
-import { PlayerMeta, playerStatus } from "@/stores/player/slices/source";
+import {
+  PlayerMeta,
+  PlayerNavigationState,
+  playerStatus,
+} from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
@@ -20,6 +24,7 @@ import { getSavedProgressItem } from "@/stores/progress/selectors";
 import { BlurEllipsis } from "./layouts/SubPageLayout";
 
 export function RealPlayerView() {
+  const location = useLocation();
   const navigate = useNavigate();
   const params = useParams<{
     media: string;
@@ -28,6 +33,7 @@ export function RealPlayerView() {
   }>();
   const { status, reset, setStatus } = usePlayer();
   const sourceId = usePlayerStore((s) => s.sourceId);
+  const setPlayerStoreMeta = usePlayerStore((s) => s.setMeta);
   const { playerMeta, setPlayerMeta } = usePlayerMeta();
   const backUrl = useLastNonPlayerLink();
   const setLastSuccessfulSource = usePreferencesStore(
@@ -36,6 +42,9 @@ export function RealPlayerView() {
   const router = useOverlayRouter("settings");
   const openedWatchPartyRef = useRef<boolean>(false);
   const progressItems = useProgressStore((s) => s.items);
+  const preloadedMeta = (
+    location.state as PlayerNavigationState | null | undefined
+  )?.playerMeta;
 
   // Reset last successful source when leaving the player
   useEffect(() => {
@@ -104,6 +113,17 @@ export function RealPlayerView() {
     [progressItems],
   );
 
+  useEffect(() => {
+    if (!preloadedMeta) return;
+
+    setPlayerStoreMeta(
+      preloadedMeta,
+      shouldShowResumeScreen(preloadedMeta)
+        ? playerStatus.RESUME
+        : playerStatus.SCRAPING,
+    );
+  }, [preloadedMeta, setPlayerStoreMeta, shouldShowResumeScreen]);
+
   const handleMetaReceived = useCallback(
     (detailedMeta: DetailedMeta, episodeId?: string) => {
       const nextMeta = setPlayerMeta(detailedMeta, episodeId);
@@ -125,7 +145,7 @@ export function RealPlayerView() {
   return (
     <PlayerPart backUrl={backUrl} onMetaChange={metaChange}>
       {status !== playerStatus.PLAYING ? <BlurEllipsis /> : null}
-      {status === playerStatus.IDLE ? (
+      {status === playerStatus.IDLE && !preloadedMeta ? (
         <MetaPart onGetMeta={handleMetaReceived} />
       ) : null}
       {status === playerStatus.RESUME ? (
