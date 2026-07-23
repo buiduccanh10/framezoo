@@ -25,6 +25,8 @@ import {
 import type { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import type { SourceSliceSource } from "@/stores/player/utils/qualities";
+import { useProgressStore } from "@/stores/progress";
+import { getSavedProgressTime } from "@/stores/progress/selectors";
 
 function addonMediaId(meta: PlayerMeta) {
   const imdbId = meta.imdbId?.trim();
@@ -154,11 +156,14 @@ export function SourceSelectPart(props: {
   mode?: "initial" | "full";
   onCancel?: () => void;
   onSelected?: () => void;
+  onLoadingChange?: (loading: boolean) => void;
   onStateChange?: (state: "addons" | "streams") => void;
 }) {
-  const { meta, mode, onCancel, onSelected, onStateChange } = props;
+  const { meta, mode, onCancel, onSelected, onLoadingChange, onStateChange } =
+    props;
   const addons = useInstalledAddons();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
+  const progressItems = useProgressStore((state) => state.items);
   const { playMedia } = usePlayer();
   const [addonStreams, setAddonStreams] = React.useState<AddonStream[]>([]);
   const [addonLoadErrors, setAddonLoadErrors] = React.useState<
@@ -245,29 +250,27 @@ export function SourceSelectPart(props: {
   const selectAddonStream = useCallback(
     async (stream: AddonStream) => {
       setStartingAddonId(stream.id);
+      onLoadingChange?.(true);
       setAddonError(null);
       const previousTorrentSessionId = getActiveTorrentSessionId();
 
       try {
         if (stream.kind === "torrent") {
+          const startAt = getSavedProgressTime(progressItems, meta);
           const session = await startTorrent({
             sourceId: stream.id,
             url: stream.url,
             infoHash: stream.infoHash ?? undefined,
             fileIdx: stream.fileIdx ?? undefined,
             fileName: stream.fileName ?? undefined,
+            startAt,
           });
           registerTorrentSession(session.sessionId);
-          const isHls = session.streamType === "hls";
+          const isDirectFile = session.streamType === "file";
           const duration = session.duration ?? undefined;
-          const mediaSource: SourceSliceSource = isHls
+          const playbackStartAt = session.startAt ?? startAt;
+          const mediaSource: SourceSliceSource = isDirectFile
             ? {
-                id: stream.id,
-                type: "hls",
-                url: session.streamUrl,
-                duration,
-              }
-            : {
                 id: stream.id,
                 type: "file",
                 qualities: {
@@ -277,9 +280,20 @@ export function SourceSelectPart(props: {
                   },
                 },
                 duration,
+              }
+            : {
+                id: stream.id,
+                type: "hls",
+                url: session.streamUrl,
+                duration,
               };
 
-          playMedia(mediaSource, addonCaptions(stream), stream.id);
+          playMedia(
+            mediaSource,
+            addonCaptions(stream),
+            stream.id,
+            playbackStartAt,
+          );
           onSelected?.();
 
           // Chromium can issue one more Range request for the old source after
@@ -306,10 +320,11 @@ export function SourceSelectPart(props: {
           reason instanceof Error ? reason.message : "Unable to start stream",
         );
       } finally {
+        onLoadingChange?.(false);
         setStartingAddonId(null);
       }
     },
-    [onSelected, playMedia],
+    [meta, onLoadingChange, onSelected, playMedia, progressItems],
   );
 
   const enabledAddons = useMemo(
@@ -508,6 +523,8 @@ export function SourceSelectPart(props: {
   if (mode === "full") {
     return content;
   }
+
+  if (startingAddonId) return null;
 
   return (
     <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">

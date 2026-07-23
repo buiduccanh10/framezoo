@@ -5,11 +5,21 @@ import threading
 import time
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from types import MethodType
+from types import ModuleType
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-import libtorrent_sidecar as sidecar
+try:
+    import libtorrent_sidecar as sidecar
+except ModuleNotFoundError as error:
+    if error.name != "libtorrent":
+        raise
+    # Pure helper/transcoder tests do not instantiate the libtorrent engine.
+    sys.modules["libtorrent"] = ModuleType("libtorrent")
+    import libtorrent_sidecar as sidecar
 
 
 class SidecarStreamTest(unittest.TestCase):
@@ -42,6 +52,202 @@ class SidecarStreamTest(unittest.TestCase):
             self.assertIsNotNone(stream)
             self.assertEqual(first_chunk, b"video")
             stream.close()
+
+    def test_probe_transcodes_incompatible_audio(self):
+        result = type(
+            "ProbeResult",
+            (),
+            {
+                "returncode": 0,
+                "stdout": (
+                    '{"format":{"duration":"42.5","format_name":"matroska"},'
+                    '"streams":['
+                    '{"codec_type":"video","codec_name":"h264",'
+                    '"pix_fmt":"yuv420p"},'
+                    '{"codec_type":"audio","codec_name":"eac3"}]}'
+                ),
+            },
+        )()
+
+        with patch.object(sidecar.subprocess, "run", return_value=result):
+            probe = sidecar.probe_file_info("episode.mkv")
+
+        self.assertFalse(probe.direct_playable)
+        self.assertFalse(probe.transcode_video)
+        self.assertTrue(probe.transcode_audio)
+        self.assertEqual(probe.audio_codec, "eac3")
+        self.assertEqual(probe.duration, 42.5)
+
+    def test_probe_allows_direct_mp4(self):
+        result = type(
+            "ProbeResult",
+            (),
+            {
+                "returncode": 0,
+                "stdout": (
+                    '{"format":{"duration":"42.5",'
+                    '"format_name":"mov,mp4,m4a,3gp,3g2,mj2"},'
+                    '"streams":['
+                    '{"codec_type":"video","codec_name":"h264",'
+                    '"pix_fmt":"yuv420p"},'
+                    '{"codec_type":"audio","codec_name":"aac"}]}'
+                ),
+            },
+        )()
+
+        with patch.object(sidecar.subprocess, "run", return_value=result):
+            probe = sidecar.probe_file_info("episode.mp4")
+
+        self.assertTrue(probe.direct_playable)
+        self.assertFalse(probe.transcode_video)
+        self.assertFalse(probe.transcode_audio)
+        self.assertEqual(probe.video_codec, "h264")
+        self.assertEqual(probe.duration, 42.5)
+
+    def test_probe_transcodes_unsupported_video_even_with_aac(self):
+        result = type(
+            "ProbeResult",
+            (),
+            {
+                "returncode": 0,
+                "stdout": (
+                    '{"format":{"format_name":"mov,mp4,m4a,3gp,3g2,mj2"},'
+                    '"streams":['
+                    '{"codec_type":"video","codec_name":"hevc",'
+                    '"pix_fmt":"yuv420p10le"},'
+                    '{"codec_type":"audio","codec_name":"aac"}]}'
+                ),
+            },
+        )()
+
+        with patch.object(sidecar.subprocess, "run", return_value=result):
+            probe = sidecar.probe_file_info("episode.mp4")
+
+        self.assertFalse(probe.direct_playable)
+        self.assertTrue(probe.transcode_video)
+        self.assertFalse(probe.transcode_audio)
+
+    def test_transcoder_builds_audio_transcode_hls_command(self):
+        transcoder = sidecar.FFmpegTranscoder(
+            session_id="session-1",
+            input_url="http://127.0.0.1/torrent/session-1",
+            hls_dir="/tmp/betamovie-hls",
+            start_time=8,
+        )
+
+        with patch.object(sidecar.subprocess, "Popen") as popen:
+            with patch.object(
+                sidecar.FFmpegTranscoder,
+                "_monitor",
+                return_value=None,
+            ):
+                transcoder.start()
+
+        command = popen.call_args.args[0]
+        self.assertEqual(command[0], sidecar.get_ffmpeg_path())
+        self.assertIn("-ss", command)
+        self.assertIn("8", command)
+        self.assertIn("-c:v", command)
+        self.assertIn("copy", command)
+        self.assertIn("-c:a", command)
+        self.assertIn("aac", command)
+        self.assertIn("-hls_time", command)
+        self.assertIn(str(sidecar.HLS_SEGMENT_DURATION), command)
+        self.assertIn("-f", command)
+        self.assertIn("hls", command)
+        self.assertEqual(command[-1], "/tmp/betamovie-hls/live.m3u8")
+
+    def test_runtime_starts_transcoder_at_resume_position(self):
+        runtime = object.__new__(sidecar.TorrentRuntime)
+        runtime.session_id = "session-1"
+        runtime.request = {"startAt": 120.5}
+        runtime.engine = SimpleNamespace(
+            http_server=SimpleNamespace(base_url="http://127.0.0.1:1234"),
+        )
+        runtime.save_path = "/tmp"
+        runtime.file_path = "episode.mkv"
+        runtime.raw_stream_url = "http://127.0.0.1:1234/torrent/session-1"
+        runtime.media_duration = None
+        runtime.hls_dir = ""
+        runtime.transcoder = None
+        runtime.stream_type = "pending"
+        runtime.transcode_video = False
+        runtime.stop_event = threading.Event()
+        runtime._torrent_cleaned = False
+        runtime.start_time = runtime._get_requested_start_time()
+
+        with patch.object(
+            sidecar,
+            "probe_file_info",
+            return_value=sidecar.MediaProbe(
+                available=True,
+                duration=300.0,
+                format_name="matroska",
+                video_codec="h264",
+                video_pixel_format="yuv420p",
+                audio_codec="eac3",
+                direct_playable=False,
+                transcode_video=False,
+                transcode_audio=True,
+            ),
+        ):
+            with patch.object(sidecar, "FFmpegTranscoder") as transcoder_type:
+                transcoder = transcoder_type.return_value
+                transcoder.error = None
+                transcoder.wait_for_ready.return_value = True
+                runtime.probe_and_start_transcode()
+
+        self.assertEqual(
+            transcoder_type.call_args.kwargs["start_time"],
+            120.5,
+        )
+        self.assertEqual(runtime.start_time, 120.5)
+
+    def test_runtime_clamps_resume_position_to_duration(self):
+        runtime = object.__new__(sidecar.TorrentRuntime)
+        runtime.session_id = "session-1"
+        runtime.request = {"startAt": 999}
+        runtime.engine = SimpleNamespace(
+            http_server=SimpleNamespace(base_url="http://127.0.0.1:1234"),
+        )
+        runtime.save_path = "/tmp"
+        runtime.file_path = "episode.mkv"
+        runtime.raw_stream_url = "http://127.0.0.1:1234/torrent/session-1"
+        runtime.media_duration = None
+        runtime.hls_dir = ""
+        runtime.transcoder = None
+        runtime.stream_type = "pending"
+        runtime.transcode_video = False
+        runtime.stop_event = threading.Event()
+        runtime._torrent_cleaned = False
+        runtime.start_time = runtime._get_requested_start_time()
+
+        with patch.object(
+            sidecar,
+            "probe_file_info",
+            return_value=sidecar.MediaProbe(
+                available=True,
+                duration=300.0,
+                format_name="matroska",
+                video_codec="h264",
+                video_pixel_format="yuv420p",
+                audio_codec="eac3",
+                direct_playable=False,
+                transcode_video=False,
+                transcode_audio=True,
+            ),
+        ):
+            with patch.object(sidecar, "FFmpegTranscoder") as transcoder_type:
+                transcoder = transcoder_type.return_value
+                transcoder.error = None
+                transcoder.wait_for_ready.return_value = True
+                runtime.probe_and_start_transcode()
+
+        self.assertEqual(runtime.start_time, 299.0)
+        self.assertEqual(
+            transcoder_type.call_args.kwargs["start_time"],
+            299.0,
+        )
 
 
 class SidecarStorageTest(unittest.TestCase):

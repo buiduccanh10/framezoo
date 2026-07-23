@@ -25,6 +25,7 @@ export interface PlayerPartProps {
   backUrl: string;
   onLoad?: () => void;
   onMetaChange?: (meta: PlayerMeta) => void;
+  sourceLoading?: boolean;
 }
 
 export function PlayerPart(props: PlayerPartProps) {
@@ -127,7 +128,7 @@ export function PlayerPart(props: PlayerPartProps) {
       <Player.SettingsRouter />
       <Player.SubtitleView controlsShown={showTargets} />
       <DocumentPipOverlay />
-      <PlayerLoadingOverlay />
+      <PlayerLoadingOverlay sourceLoading={props.sourceLoading} />
 
       {status === playerStatus.PLAYING ? (
         <Player.CenterControls>
