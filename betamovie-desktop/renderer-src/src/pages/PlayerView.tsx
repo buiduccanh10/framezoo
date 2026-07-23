@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { DetailedMeta } from "@/backend/metadata/getmeta";
 import { usePlayer } from "@/components/player/hooks/usePlayer";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
-import { clearTorrentSession } from "@/desktop/torrentPlaybackStore";
+import {
+  clearTorrentSession,
+  useActiveTorrentStatus,
+} from "@/desktop/torrentPlaybackStore";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { MetaPart } from "@/pages/parts/player/MetaPart";
 import { PlayerPart } from "@/pages/parts/player/PlayerPart";
@@ -17,9 +20,13 @@ import {
   playerStatus,
 } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import type { SourceSliceSource } from "@/stores/player/utils/qualities";
 import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
-import { getSavedProgressItem } from "@/stores/progress/selectors";
+import {
+  getSavedProgressItem,
+  getSavedProgressTime,
+} from "@/stores/progress/selectors";
 
 import { BlurEllipsis } from "./layouts/SubPageLayout";
 
@@ -33,6 +40,9 @@ export function RealPlayerView() {
   }>();
   const { status, reset, setStatus } = usePlayer();
   const sourceId = usePlayerStore((s) => s.sourceId);
+  const source = usePlayerStore((s) => s.source);
+  const captionList = usePlayerStore((s) => s.captionList);
+  const setPlayerSource = usePlayerStore((s) => s.setSource);
   const setPlayerStoreMeta = usePlayerStore((s) => s.setMeta);
   const { playerMeta, setPlayerMeta } = usePlayerMeta();
   const backUrl = useLastNonPlayerLink();
@@ -42,6 +52,9 @@ export function RealPlayerView() {
   const router = useOverlayRouter("settings");
   const openedWatchPartyRef = useRef<boolean>(false);
   const progressItems = useProgressStore((s) => s.items);
+  const torrentStatus = useActiveTorrentStatus();
+  const torrentPromotionRef = useRef<string | null>(null);
+  const [sourceLoading, setSourceLoading] = useState(false);
   const preloadedMeta = (
     location.state as PlayerNavigationState | null | undefined
   )?.playerMeta;
@@ -60,6 +73,7 @@ export function RealPlayerView() {
   });
   useEffect(() => {
     reset();
+    setSourceLoading(false);
     openedWatchPartyRef.current = false;
     return () => {
       reset();
@@ -71,6 +85,83 @@ export function RealPlayerView() {
       void clearTorrentSession();
     };
   }, [paramsData]);
+
+  useEffect(() => {
+    if (!torrentStatus || torrentStatus.sourceId !== sourceId) return;
+
+    if (torrentStatus.state === "error") {
+      if (status !== playerStatus.PLAYBACK_ERROR) {
+        setStatus(playerStatus.PLAYBACK_ERROR);
+      }
+      return;
+    }
+
+    if (
+      !torrentStatus.streamType ||
+      torrentStatus.streamType === "pending" ||
+      !torrentStatus.streamUrl ||
+      !source
+    ) {
+      return;
+    }
+
+    const promotionKey = [
+      torrentStatus.sessionId,
+      torrentStatus.streamType,
+      torrentStatus.streamUrl,
+    ].join(":");
+    if (torrentPromotionRef.current === promotionKey) return;
+
+    let promotedSource: SourceSliceSource;
+    if (torrentStatus.streamType === "file") {
+      const currentUrl =
+        source.type === "file" ? source.qualities.unknown?.url : null;
+      if (currentUrl === torrentStatus.streamUrl) {
+        torrentPromotionRef.current = promotionKey;
+        return;
+      }
+      promotedSource = {
+        id: source.id ?? sourceId ?? undefined,
+        type: "file",
+        qualities: {
+          unknown: {
+            type: "mp4",
+            url: torrentStatus.streamUrl,
+          },
+        },
+        duration: torrentStatus.duration ?? undefined,
+      };
+    } else {
+      if (source.type === "hls" && source.url === torrentStatus.streamUrl) {
+        torrentPromotionRef.current = promotionKey;
+        return;
+      }
+      promotedSource = {
+        id: source.id ?? sourceId ?? undefined,
+        type: "hls",
+        url: torrentStatus.streamUrl,
+        duration: torrentStatus.duration ?? undefined,
+      };
+    }
+
+    torrentPromotionRef.current = promotionKey;
+    setPlayerSource(
+      promotedSource,
+      captionList,
+      torrentStatus.startAt ??
+        (playerMeta ? getSavedProgressTime(progressItems, playerMeta) : 0),
+    );
+  }, [
+    captionList,
+    playerMeta,
+    progressItems,
+    setPlayerSource,
+    source,
+    sourceId,
+    status,
+    setStatus,
+    torrentStatus,
+  ]);
 
   // Auto-open watch party menu if URL contains watchparty parameter
   useEffect(() => {
@@ -143,7 +234,11 @@ export function RealPlayerView() {
   }, [setStatus]);
 
   return (
-    <PlayerPart backUrl={backUrl} onMetaChange={metaChange}>
+    <PlayerPart
+      backUrl={backUrl}
+      onMetaChange={metaChange}
+      sourceLoading={sourceLoading}
+    >
       {status !== playerStatus.PLAYING ? <BlurEllipsis /> : null}
       {status === playerStatus.IDLE && !preloadedMeta ? (
         <MetaPart onGetMeta={handleMetaReceived} />
@@ -160,11 +255,14 @@ export function RealPlayerView() {
       playerMeta ? (
         <SourceSelectPart
           meta={playerMeta}
-          mode={status === playerStatus.PLAYBACK_ERROR ? "full" : "initial"}
+          // Keep the fallback picker inside the player layout. "full" is
+          // reserved for the Settings overlay, which provides its own frame.
+          mode="initial"
           onCancel={() =>
             setStatus(sourceId ? playerStatus.PLAYING : playerStatus.IDLE)
           }
           onSelected={() => setStatus(playerStatus.PLAYING)}
+          onLoadingChange={setSourceLoading}
         />
       ) : null}
     </PlayerPart>

@@ -117,6 +117,34 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       });
     });
     newDisplay.on("error", (err) => {
+      if (get().display !== newDisplay) return;
+
+      const currentState = get();
+      console.warn("[player] display error", {
+        type: err.type,
+        errorName: err.errorName,
+        message: err.message,
+        sourceId: currentState.sourceId,
+        status: currentState.status,
+        hls: err.hls
+          ? {
+              details: err.hls.details,
+              fatal: err.hls.fatal,
+              responseCode: err.hls.response?.code,
+            }
+          : undefined,
+      });
+
+      // Ignore errors emitted while the player is being reset or the source
+      // picker is replacing an old source.
+      if (
+        !currentState.source ||
+        (currentState.status !== playerStatus.PLAYING &&
+          currentState.status !== playerStatus.PLAYBACK_ERROR)
+      ) {
+        return;
+      }
+
       set((s) => {
         s.status = playerStatus.PLAYBACK_ERROR;
         s.interface.error = err;

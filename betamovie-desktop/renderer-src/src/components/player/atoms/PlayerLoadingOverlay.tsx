@@ -109,7 +109,7 @@ function LoadingBackdrop(props: { src?: string; alt: string }) {
   );
 }
 
-export function PlayerLoadingOverlay() {
+export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const { t } = useTranslation();
   const status = usePlayerStore((s) => s.status);
   const meta = usePlayerStore((s) => s.meta);
@@ -127,8 +127,12 @@ export function PlayerLoadingOverlay() {
     return buffered - time <= ACTIVE_SEGMENT_BUFFER_THRESHOLD_SECONDS;
   }, [status, isLoading, time, buffered]);
 
+  const isPreparingSource =
+    props.sourceLoading && status === playerStatus.SCRAPING;
   const showOverlay =
-    status === playerStatus.IDLE || isBufferingCurrentPlaybackSegment;
+    status === playerStatus.IDLE ||
+    isPreparingSource ||
+    isBufferingCurrentPlaybackSegment;
   const bufferedProgress =
     duration > 0 ? Math.min(100, (buffered / duration) * 100) : 0;
   const loadingProgress = torrentStatus
@@ -197,6 +201,7 @@ export function PlayerLoadingOverlay() {
 
   const showBackdropImage =
     status === playerStatus.IDLE ||
+    isPreparingSource ||
     (isBufferingCurrentPlaybackSegment &&
       playbackKey !== null &&
       initialLoadPlaybackKey === playbackKey);

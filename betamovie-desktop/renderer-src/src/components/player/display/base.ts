@@ -104,6 +104,8 @@ const HLS_START_LOAD_THROTTLE_MS = 10000;
 const HLS_SOURCEBUFFER_RACE_WINDOW_MS = 6000;
 const HLS_SOURCEBUFFER_RACE_THRESHOLD = 3;
 const HLS_RECREATE_COOLDOWN_MS = 12000;
+const VIDEO_ERROR_CONFIRMATION_DELAY_MS = 1500;
+const HLS_RECOVERY_ERROR_CONFIRMATION_DELAY_MS = 13000;
 const SEGMENT_DEBUG_ENABLED = import.meta.env.DEV;
 const DESKTOP_PIP_SYNC_DEBOUNCE_MS = 150;
 const DESKTOP_PIP_SYNC_HEARTBEAT_MS = 250;
@@ -367,6 +369,10 @@ export function makeVideoElementDisplayInterface(options?: {
   let lastSegmentQuality: SegmentQualityDebugInfo["realQuality"] | null = null;
   let lastSegmentResolution: { width: number; height: number } | null = null;
   let lastSegmentDebugFingerprint = "";
+  let sourceGeneration = 0;
+  let mediaErrorTimeout: NodeJS.Timeout | null = null;
+  let videoErrorElement: HTMLVideoElement | null = null;
+  let videoErrorListener: (() => void) | null = null;
   let pictureInPictureMode: PictureInPictureMode = null;
   let documentPictureInPictureWindow: Window | null = null;
   let documentPictureInPictureCloseHandler: (() => void) | null = null;
@@ -625,12 +631,31 @@ export function makeVideoElementDisplayInterface(options?: {
     return getBufferedAhead() >= MIN_AUTOPLAY_BUFFER_SECONDS;
   }
 
+  function syncRequestedStartTime() {
+    if (!videoElement || startAt <= 0) return;
+
+    const currentTime = videoElement.currentTime ?? 0;
+    if (
+      Number.isFinite(currentTime) &&
+      Math.abs(currentTime - startAt) <= 0.5
+    ) {
+      return;
+    }
+
+    try {
+      videoElement.currentTime = startAt;
+    } catch {
+      // MediaSource may not accept seeking until metadata is attached.
+    }
+  }
+
   function tryAutoplayWhenReady() {
     if (!videoElement || !shouldAutoplayAfterLoad) return;
 
     // For resumed playback (>0s), allow immediate autoplay attempt.
     // For initial startup, wait until enough data is buffered.
-    const isResumedPlayback = (videoElement.currentTime ?? 0) > 0;
+    const isResumedPlayback =
+      startAt > 0 || (videoElement.currentTime ?? 0) > 0;
     if (!isResumedPlayback && !hasEnoughBufferForPlayback()) return;
 
     const playPromise = videoElement.play();
@@ -659,6 +684,21 @@ export function makeVideoElementDisplayInterface(options?: {
       clearTimeout(hlsRecoveryTimeout);
       hlsRecoveryTimeout = null;
     }
+  }
+
+  function clearMediaErrorTimeout() {
+    if (mediaErrorTimeout) {
+      clearTimeout(mediaErrorTimeout);
+      mediaErrorTimeout = null;
+    }
+  }
+
+  function clearVideoErrorListener() {
+    if (videoErrorElement && videoErrorListener) {
+      videoErrorElement.removeEventListener("error", videoErrorListener);
+    }
+    videoErrorElement = null;
+    videoErrorListener = null;
   }
 
   function startHlsLoadThrottled(atTime: number): boolean {
@@ -1152,6 +1192,14 @@ export function makeVideoElementDisplayInterface(options?: {
           }
 
           const is401 = data.response?.code === 401;
+          const isRecoverableManifestError =
+            data.details === "manifestLoadError" && !data.fatal && !is401;
+          if (isRecoverableManifestError) {
+            emit("loading", true);
+            scheduleHlsRecovery();
+            console.warn("HLS recoverable manifest event", data);
+            return;
+          }
 
           // Extract detailed HLS error information
           const hlsErrorInfo = {
@@ -1201,15 +1249,6 @@ export function makeVideoElementDisplayInterface(options?: {
               type: "hls",
               hls: hlsErrorInfo,
             });
-          } else if (data.details === "manifestLoadError") {
-            // Handle manifest load errors specifically
-            emit("error", {
-              message: "Failed to load HLS manifest",
-              stackTrace: data.error?.stack || "",
-              errorName: data.error?.name || "ManifestLoadError",
-              type: "hls",
-              hls: hlsErrorInfo,
-            });
           }
         });
         hls.on(Hls.Events.STALL_RESOLVED, () => {
@@ -1221,6 +1260,10 @@ export function makeVideoElementDisplayInterface(options?: {
         hls.on(Hls.Events.FRAG_LOADED, (_, data) => {
           if (hls !== currentHls) return;
           reportSegmentQualityDebug(data.payload);
+        });
+        hls.on(Hls.Events.FRAG_BUFFERED, () => {
+          if (hls !== currentHls) return;
+          tryAutoplayWhenReady();
         });
         hls.on(Hls.Events.MANIFEST_LOADED, () => {
           if (hls !== currentHls) return;
@@ -1250,6 +1293,7 @@ export function makeVideoElementDisplayInterface(options?: {
           resetDetachedSourceBufferRaceTracking();
           lastHlsStartLoadAt = Date.now();
           hls.startLoad(startAt);
+          syncRequestedStartTime();
 
           if (isExtensionActiveCached()) {
             hls.on(Hls.Events.LEVEL_LOADED, async (_, data) => {
@@ -1416,7 +1460,10 @@ export function makeVideoElementDisplayInterface(options?: {
 
   function setSource() {
     if (!videoElement || !source) return;
+    clearMediaErrorTimeout();
+    clearVideoErrorListener();
     setupSource(videoElement, source);
+    const generation = sourceGeneration;
 
     videoElement.addEventListener("play", () => {
       emit("play", undefined);
@@ -1429,15 +1476,93 @@ export function makeVideoElementDisplayInterface(options?: {
         emit("loading", true);
       }
     });
-    videoElement.addEventListener("error", () => {
-      const err = videoElement?.error ?? null;
+    const handleVideoError = () => {
+      if (generation !== sourceGeneration || !videoElement) return;
+
+      const video = videoElement;
+      const err = video.error;
+      if (!err) return;
+
       const errorDetails = getMediaErrorDetails(err);
-      emit("error", {
+      const errorTime = video.currentTime;
+      clearMediaErrorTimeout();
+      console.warn("[player] video error observed", {
+        generation,
+        errorCode: err.code,
         errorName: errorDetails.name,
-        key: errorDetails.key,
-        type: "htmlvideo",
+        sourceType: source?.type,
+        currentTime: video.currentTime,
+        readyState: video.readyState,
+        networkState: video.networkState,
+        hlsLevels: hls?.levels.length ?? 0,
       });
-    });
+
+      // HLS.js owns startup errors. The native video element can emit an error
+      // while MSE is being attached or while a transient HLS stall recovers.
+      const isHlsStartupError =
+        source?.type === "hls" &&
+        !!hls &&
+        hls.levels.length === 0 &&
+        video.currentTime === 0 &&
+        getBufferedAhead() === 0;
+      const isHlsRecoveryError =
+        source?.type === "hls" &&
+        !!hls &&
+        (!!hlsRecoveryTimeout ||
+          Date.now() - lastHlsRecreateAt < VIDEO_ERROR_CONFIRMATION_DELAY_MS);
+      if (isHlsStartupError) return;
+
+      emit("loading", true);
+      mediaErrorTimeout = setTimeout(
+        () => {
+          mediaErrorTimeout = null;
+          if (
+            generation !== sourceGeneration ||
+            videoElement !== video ||
+            !video.error
+          ) {
+            return;
+          }
+
+          // Do not replace a still-progressing HLS stream with the source picker.
+          // A fatal error is emitted only after playback has actually stopped.
+          const playbackProgressed =
+            Number.isFinite(errorTime) &&
+            Number.isFinite(video.currentTime) &&
+            video.currentTime > errorTime + 0.25;
+          if (
+            playbackProgressed ||
+            (!video.paused &&
+              video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA)
+          ) {
+            emit("loading", false);
+            return;
+          }
+
+          console.warn("[player] video error confirmed", {
+            generation,
+            errorCode: video.error.code,
+            errorName: errorDetails.name,
+            sourceType: source?.type,
+            currentTime: video.currentTime,
+            readyState: video.readyState,
+            networkState: video.networkState,
+            hlsLevels: hls?.levels.length ?? 0,
+          });
+          emit("error", {
+            errorName: errorDetails.name,
+            key: errorDetails.key,
+            type: "htmlvideo",
+          });
+        },
+        isHlsRecoveryError
+          ? HLS_RECOVERY_ERROR_CONFIRMATION_DELAY_MS
+          : VIDEO_ERROR_CONFIRMATION_DELAY_MS,
+      );
+    };
+    videoElement.addEventListener("error", handleVideoError);
+    videoErrorElement = videoElement;
+    videoErrorListener = handleVideoError;
     videoElement.addEventListener("playing", () => {
       emit("play", undefined);
       if (
@@ -1580,6 +1705,8 @@ export function makeVideoElementDisplayInterface(options?: {
       qualitySetupRetryTimeout = null;
     }
     clearHlsRecoveryTimeout();
+    clearMediaErrorTimeout();
+    clearVideoErrorListener();
     resetSegmentQualityDebug();
     lastHlsStartLoadAt = 0;
     resetDetachedSourceBufferRaceTracking();
@@ -1694,6 +1821,9 @@ export function makeVideoElementDisplayInterface(options?: {
       fscreen.removeEventListener("fullscreenchange", fullscreenChange);
     },
     load(ops) {
+      sourceGeneration += 1;
+      clearMediaErrorTimeout();
+      clearVideoErrorListener();
       const sourceChanged =
         source?.type !== ops.source?.type || source?.url !== ops.source?.url;
       if (!ops.source || sourceChanged) {

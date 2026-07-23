@@ -15,7 +15,10 @@ type SidecarResponse = {
   requestId: string;
   ok: boolean;
   error?: string;
-  session?: Partial<TorrentSession> & { streamUrl?: string; streamType?: string };
+  session?: Partial<TorrentSession> & {
+    streamUrl?: string;
+    streamType?: string;
+  };
 };
 
 type SidecarStatus = {
@@ -64,7 +67,10 @@ export class SidecarTorrentEngine implements TorrentEngine {
         sessionId,
         sourceId: request.sourceId,
         streamUrl: response.session.streamUrl,
-        streamType: (response.session.streamType as "hls" | "file") ?? "file",
+        streamType:
+          (response.session.streamType as "pending" | "hls" | "file") ??
+          "pending",
+        startAt: response.session.startAt ?? request.startAt ?? 0,
         duration: response.session.duration ?? null,
         fileName: response.session.fileName ?? request.fileName ?? null,
         infoHash: response.session.infoHash ?? request.infoHash ?? null,

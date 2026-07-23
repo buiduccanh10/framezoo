@@ -29,6 +29,9 @@ export function usePlayer() {
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,
   );
+  const setSkipNextSavedProgressResume = usePlayerStore(
+    (s) => s.setSkipNextSavedProgressResume,
+  );
   const reset = usePlayerStore((s) => s.reset);
   const meta = usePlayerStore((s) => s.meta);
   const { init } = useInitializePlayer();
@@ -51,12 +54,21 @@ export function usePlayer() {
       startAtOverride?: number,
     ) {
       const start =
-        startAtOverride ?? getSavedProgressTime(progressStore.items, meta);
+        startAtOverride ??
+        (shouldStartFromBeginning
+          ? 0
+          : getSavedProgressTime(progressStore.items, meta));
+      const hasExplicitStart =
+        startAtOverride !== undefined || shouldStartFromBeginning;
       setCaption(null);
       setEmbedId(null);
       setSourceId(sourceId);
       setSource(source, captions, start);
       setStatus(playerStatus.PLAYING);
+      setSkipNextSavedProgressResume(hasExplicitStart);
+      if (shouldStartFromBeginning) {
+        setShouldStartFromBeginning(false);
+      }
       init();
     },
     setScrapeStatus() {
