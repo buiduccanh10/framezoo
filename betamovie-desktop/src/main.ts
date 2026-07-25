@@ -62,10 +62,7 @@ protocol.registerSchemesAsPrivileged([
 let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
-import { setupFfmpegEnv } from "./ffmpeg";
 import { embeddedMpv } from "./embeddedMpv";
-
-setupFfmpegEnv();
 
 function setupTorrentEnv() {
   if (!process.env.BETAMOVIE_TORRENT_DATA_DIR) {

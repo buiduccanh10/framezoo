@@ -114,40 +114,23 @@ export function RealPlayerView() {
     if (torrentPromotionRef.current === promotionKey) return;
 
     let promotedSource: SourceSliceSource;
-    if (torrentStatus.streamType === "file") {
-      const currentUrl =
-        source.type === "file" ? source.qualities.unknown?.url : null;
-      if (currentUrl === torrentStatus.streamUrl) {
-        torrentPromotionRef.current = promotionKey;
-        return;
-      }
-      promotedSource = {
-        id: source.id ?? sourceId ?? undefined,
-        type: "file",
-        qualities: {
-          unknown: {
-            type: "mp4",
-            url: torrentStatus.streamUrl,
-          },
-        },
-        duration: torrentStatus.duration ?? undefined,
-      };
-    } else {
-      if (
-        (source.type === "hls" && source.url === torrentStatus.streamUrl) ||
-        (status === playerStatus.PLAYING && (source as any)?.isTorrent)
-      ) {
-        torrentPromotionRef.current = promotionKey;
-        return;
-      }
-      promotedSource = {
-        id: source.id ?? sourceId ?? undefined,
-        type: "hls",
-        url: torrentStatus.streamUrl,
-        duration: torrentStatus.duration ?? undefined,
-        isTorrent: true,
-      };
+    const currentUrl =
+      source.type === "file" ? source.qualities.unknown?.url : null;
+    if (currentUrl === torrentStatus.streamUrl) {
+      torrentPromotionRef.current = promotionKey;
+      return;
     }
+    promotedSource = {
+      id: source.id ?? sourceId ?? undefined,
+      type: "file",
+      qualities: {
+        unknown: {
+          type: "mp4",
+          url: torrentStatus.streamUrl,
+        },
+      },
+      duration: torrentStatus.duration ?? undefined,
+    };
 
     torrentPromotionRef.current = promotionKey;
     setPlayerSource(
