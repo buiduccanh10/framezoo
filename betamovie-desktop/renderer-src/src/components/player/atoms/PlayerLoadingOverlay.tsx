@@ -129,10 +129,24 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
 
   const isPreparingSource =
     props.sourceLoading && status === playerStatus.SCRAPING;
+
+  const isTorrentPreparing = useMemo(() => {
+    if (!torrentStatus) return false;
+    if (torrentStatus.state === "error") return false;
+    return (
+      torrentStatus.streamType === "pending" ||
+      !torrentStatus.streamUrl ||
+      duration === 0 ||
+      !Number.isFinite(duration) ||
+      (time === 0 && buffered === 0)
+    );
+  }, [torrentStatus, duration, time, buffered]);
+
   const showOverlay =
     status === playerStatus.IDLE ||
     isPreparingSource ||
-    isBufferingCurrentPlaybackSegment;
+    isBufferingCurrentPlaybackSegment ||
+    isTorrentPreparing;
   const bufferedProgress =
     duration > 0 ? Math.min(100, (buffered / duration) * 100) : 0;
   const loadingProgress = torrentStatus
