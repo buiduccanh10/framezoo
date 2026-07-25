@@ -68,7 +68,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
         sourceId: request.sourceId,
         streamUrl: response.session.streamUrl,
         streamType:
-          (response.session.streamType as "pending" | "hls" | "file") ??
+          (response.session.streamType as "pending" | "file") ??
           "pending",
         startAt: response.session.startAt ?? request.startAt ?? 0,
         duration: response.session.duration ?? null,

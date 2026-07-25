@@ -26,7 +26,7 @@ export interface TorrentStatus {
   fileName: string | null;
   downloadedBytes: number;
   totalBytes: number | null;
-  streamType?: "pending" | "hls" | "file";
+  streamType?: "pending" | "file";
   streamUrl: string | null;
   startAt?: number;
   duration?: number | null;
@@ -38,7 +38,7 @@ export interface TorrentSession {
   sessionId: string;
   sourceId: string;
   streamUrl: string;
-  streamType: "pending" | "hls" | "file";
+  streamType: "pending" | "file";
   startAt?: number;
   duration?: number | null;
   fileName: string | null;
