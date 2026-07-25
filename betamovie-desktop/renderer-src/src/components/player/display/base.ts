@@ -1641,15 +1641,8 @@ export function makeVideoElementDisplayInterface(options?: {
 
           if (source?.isTorrent) {
             console.warn(
-              "[player] Torrent video error confirmed, retrying playback instead of quitting to addon screen",
+              "[player] Ignoring HTML5 video error because MPV native player is active for torrent playback",
             );
-            emit("loading", true);
-            if (hls) {
-              scheduleTorrentEmptyPlaylistRetry(
-                hls,
-                Math.max(startAt, videoElement?.currentTime ?? 0),
-              );
-            }
             return;
           }
 

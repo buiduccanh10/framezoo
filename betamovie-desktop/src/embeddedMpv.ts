@@ -258,47 +258,56 @@ export class EmbeddedMpvController {
     }
   }
 
-  private connectSocket(): void {
+  private connectSocket(retries = 15, delay = 200): void {
     if (!this.ipcSocketPath || this.socket) return;
 
-    try {
-      this.socket = net.connect(this.ipcSocketPath, () => {
-        console.log("[embedded-mpv] Connected to MPV IPC socket");
-        // Observe key properties for UI sync
-        this.sendCommand("observe_property", [1, "time-pos"]);
-        this.sendCommand("observe_property", [2, "duration"]);
-        this.sendCommand("observe_property", [3, "pause"]);
-        this.sendCommand("observe_property", [4, "volume"]);
-      });
+    const socketPath = this.ipcSocketPath;
+    const client = net.connect(socketPath, () => {
+      this.socket = client;
+      console.log("[embedded-mpv] Connected to MPV IPC socket");
+      // Observe key properties for UI sync
+      this.sendCommand("observe_property", [1, "time-pos"]);
+      this.sendCommand("observe_property", [2, "duration"]);
+      this.sendCommand("observe_property", [3, "pause"]);
+      this.sendCommand("observe_property", [4, "volume"]);
+    });
 
-      this.socket.on("data", (data) => {
-        this.buffer += data.toString("utf8");
-        const lines = this.buffer.split("\n");
-        this.buffer = lines.pop() || "";
+    client.on("data", (data) => {
+      this.buffer += data.toString("utf8");
+      const lines = this.buffer.split("\n");
+      this.buffer = lines.pop() || "";
 
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed) continue;
-          try {
-            const msg = JSON.parse(trimmed);
-            if (msg.event === "property-change" && this.mainWindow && !this.mainWindow.isDestroyed()) {
-              this.mainWindow.webContents.send("desktop:mpv-status", {
-                name: msg.name,
-                data: msg.data,
-              });
-            }
-          } catch {
-            // ignore JSON parse errors
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        try {
+          const msg = JSON.parse(trimmed);
+          if (
+            msg.event === "property-change" &&
+            this.mainWindow &&
+            !this.mainWindow.isDestroyed()
+          ) {
+            this.mainWindow.webContents.send("desktop:mpv-status", {
+              name: msg.name,
+              data: msg.data,
+            });
           }
+        } catch {
+          // ignore JSON parse errors
         }
-      });
+      }
+    });
 
-      this.socket.on("error", (err) => {
+    client.on("error", (err: any) => {
+      if (this.socket) return;
+      if (retries > 0 && (err.code === "ENOENT" || err.code === "ECONNREFUSED")) {
+        setTimeout(() => {
+          this.connectSocket(retries - 1, delay);
+        }, delay);
+      } else {
         console.warn("[embedded-mpv] Socket error:", err.message);
-      });
-    } catch (err) {
-      console.warn("[embedded-mpv] Socket connection failed:", err);
-    }
+      }
+    });
   }
 
   public updateBounds(bounds: MpvBounds): void {

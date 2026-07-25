@@ -190,14 +190,15 @@ function VideoElement() {
   const torrentStatus = useActiveTorrentStatus();
   const mpvContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const streamUrl = torrentStatus?.streamUrl;
+  const streamType = torrentStatus?.streamType;
+  const directPlay = (torrentStatus as any)?.directPlay;
+
   useEffect(() => {
     const electronAPI = (window as any).electronAPI;
     if (!electronAPI?.attachMpvPlayer) return;
 
-    if (
-      torrentStatus?.streamUrl &&
-      (torrentStatus.streamType === "file" || (torrentStatus as any).directPlay)
-    ) {
+    if (streamUrl && (streamType === "file" || directPlay)) {
       const container = mpvContainerRef.current;
       if (!container) return;
 
@@ -219,7 +220,7 @@ function VideoElement() {
         height: rect.height || window.innerHeight,
       };
 
-      void electronAPI.attachMpvPlayer(torrentStatus.streamUrl, bounds);
+      void electronAPI.attachMpvPlayer(streamUrl, bounds);
 
       const resizeObserver = new ResizeObserver(() => {
         updateBounds();
@@ -236,7 +237,7 @@ function VideoElement() {
     } else {
       void electronAPI.detachMpvPlayer();
     }
-  }, [torrentStatus?.streamUrl, torrentStatus?.streamType]);
+  }, [streamUrl, streamType, directPlay]);
 
   // 2-way sync between MPV IPC status and React Player
   useEffect(() => {
@@ -245,21 +246,30 @@ function VideoElement() {
 
     const unbindStatus = electronAPI.onMpvStatus(
       (status: { name: string; data: any }) => {
-        const vEl = videoEl.current;
-        if (!vEl) return;
+        const activeDisplay = usePlayerStore.getState().display as any;
 
         if (status.name === "time-pos" && typeof status.data === "number") {
-          if (Math.abs(vEl.currentTime - status.data) > 0.5) {
-            vEl.currentTime = status.data;
+          const time = status.data;
+          activeDisplay?.emit("time", time);
+          if (time > 0) {
+            activeDisplay?.emit("loading", false);
+            activeDisplay?.emit("play", undefined);
           }
+        } else if (
+          status.name === "duration" &&
+          typeof status.data === "number" &&
+          status.data > 0
+        ) {
+          activeDisplay?.emit("duration", status.data);
         } else if (
           status.name === "pause" &&
           typeof status.data === "boolean"
         ) {
-          if (status.data && !vEl.paused) {
-            vEl.pause();
-          } else if (!status.data && vEl.paused) {
-            void vEl.play().catch(() => {});
+          if (status.data) {
+            activeDisplay?.emit("pause", undefined);
+          } else {
+            activeDisplay?.emit("play", undefined);
+            activeDisplay?.emit("loading", false);
           }
         }
       },
