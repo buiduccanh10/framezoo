@@ -63,6 +63,7 @@ let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
 import { setupFfmpegEnv } from "./ffmpeg";
+import { embeddedMpv } from "./embeddedMpv";
 
 setupFfmpegEnv();
 
@@ -740,6 +741,8 @@ function createMainWindow() {
       devTools: ENABLE_DEVTOOLS,
     },
   });
+
+  embeddedMpv.init(mainWindow);
 
   mainWindow.webContents.on("before-input-event", (event, input) => {
     if (!ENABLE_DEVTOOLS && isDevtoolsShortcut(input)) {

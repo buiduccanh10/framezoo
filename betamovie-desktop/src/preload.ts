@@ -117,6 +117,27 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:torrent-status", handler);
     };
   },
+  attachMpvPlayer(url: string, bounds: { x: number; y: number; width: number; height: number }) {
+    return ipcRenderer.invoke("desktop:mpv-attach", url, bounds);
+  },
+  updateMpvBounds(bounds: { x: number; y: number; width: number; height: number }) {
+    return ipcRenderer.invoke("desktop:mpv-update-bounds", bounds);
+  },
+  detachMpvPlayer() {
+    return ipcRenderer.invoke("desktop:mpv-detach");
+  },
+  sendMpvCommand(command: string, ...args: any[]) {
+    return ipcRenderer.invoke("desktop:mpv-command", command, ...args);
+  },
+  onMpvStatus(listener: (status: { name: string; data: any }) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, status: { name: string; data: any }) => {
+      listener(status);
+    };
+    ipcRenderer.on("desktop:mpv-status", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:mpv-status", handler);
+    };
+  },
 });
 
 window.addEventListener("DOMContentLoaded", () => {
