@@ -610,6 +610,14 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         if safe_name.endswith(".m3u8"):
             content_type = "application/vnd.apple.mpegurl"
             cache_control = "no-cache"
+            if not runtime.media_duration or runtime.media_duration <= 0:
+                try:
+                    probe = probe_file_info(runtime.raw_stream_url)
+                    if probe.duration and probe.duration > 0:
+                        runtime.media_duration = probe.duration
+                except Exception:
+                    pass
+
             if runtime.media_duration and runtime.media_duration > 0:
                 data = generate_vod_manifest(runtime.media_duration)
             else:
@@ -771,6 +779,24 @@ class TorrentRuntime:
         )
 
         probe = probe_file_info(target_file_path)
+        if not probe.duration or probe.duration <= 0:
+            try:
+                http_probe = probe_file_info(self.raw_stream_url)
+                if http_probe.duration and http_probe.duration > 0:
+                    probe = MediaProbe(
+                        available=probe.available,
+                        duration=http_probe.duration,
+                        format_name=probe.format_name or http_probe.format_name,
+                        video_codec=probe.video_codec or http_probe.video_codec,
+                        video_pixel_format=probe.video_pixel_format or http_probe.video_pixel_format,
+                        audio_codec=probe.audio_codec or http_probe.audio_codec,
+                        direct_playable=probe.direct_playable,
+                        transcode_video=probe.transcode_video,
+                        transcode_audio=probe.transcode_audio,
+                    )
+            except Exception as err:
+                sys.stderr.write(f"[probe-fallback] error: {err}\n")
+
         self.media_duration = probe.duration
         if probe.duration and probe.duration > 0:
             self.start_time = min(
