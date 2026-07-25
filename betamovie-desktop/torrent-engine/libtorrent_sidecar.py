@@ -598,7 +598,7 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
                     sys.stderr.write(f"[transcode-seek] error: {err}\n")
                     sys.stderr.flush()
 
-            deadline = time.monotonic() + 20
+            deadline = time.monotonic() + 45
             while time.monotonic() < deadline and not os.path.isfile(file_path):
                 if runtime.stop_event.is_set():
                     break
@@ -876,18 +876,8 @@ class TorrentRuntime:
             self.transcoder.wait_for_ready(timeout=15)
 
     def try_cleanup_torrent(self) -> None:
-        """Delete torrent data once FFmpeg has fully consumed the file."""
-        if (
-            self.transcoder
-            and self.transcoder.is_finished
-            and not self._torrent_cleaned
-        ):
-            self._torrent_cleaned = True
-            try:
-                self.engine.session.remove_torrent(self.handle)
-            except Exception:
-                pass
-            shutil.rmtree(self.save_path, ignore_errors=True)
+        """Do not delete active torrent files during playback. Storage limit is enforced on startup/new session via enforce_storage_limit."""
+        pass
 
     def can_serve_hls(self) -> bool:
         return self.stream_type in {"pending", "hls"} and not self.stop_event.is_set()

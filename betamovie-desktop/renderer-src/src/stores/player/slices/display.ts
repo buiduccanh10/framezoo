@@ -145,6 +145,13 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         return;
       }
 
+      if ((currentState.source as any)?.isTorrent) {
+        set((s) => {
+          s.mediaPlaying.isLoading = true;
+        });
+        return;
+      }
+
       set((s) => {
         s.status = playerStatus.PLAYBACK_ERROR;
         s.interface.error = err;
