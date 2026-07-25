@@ -156,6 +156,115 @@ def get_ffprobe_path() -> str:
     return os.environ.get("FFPROBE_PATH", "ffprobe")
 
 
+_DETECTED_VIDEO_ENCODER: Optional[Tuple[str, List[str]]] = None
+
+
+def get_best_video_encoder() -> Tuple[str, List[str]]:
+    """Detect available GPU hardware video encoders for Mac/Win/Linux, fallback to CPU."""
+    global _DETECTED_VIDEO_ENCODER
+    if _DETECTED_VIDEO_ENCODER is not None:
+        return _DETECTED_VIDEO_ENCODER
+
+    ffmpeg = get_ffmpeg_path()
+    supported_encoders: Set[str] = set()
+    try:
+        res = subprocess.run(
+            [ffmpeg, "-encoders"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if res.returncode == 0:
+            for line in res.stdout.splitlines():
+                parts = line.strip().split()
+                if len(parts) >= 2 and parts[0].startswith("V"):
+                    supported_encoders.add(parts[1])
+    except Exception:
+        pass
+
+    # Priority 1: macOS Apple Silicon / Intel Mac GPU (VideoToolbox)
+    if sys.platform == "darwin" and "h264_videotoolbox" in supported_encoders:
+        _DETECTED_VIDEO_ENCODER = (
+            "h264_videotoolbox",
+            [
+                "-c:v",
+                "h264_videotoolbox",
+                "-b:v",
+                "4M",
+                "-allow_sw",
+                "1",
+                "-pix_fmt",
+                "yuv420p",
+            ],
+        )
+        return _DETECTED_VIDEO_ENCODER
+
+    # Priority 2: NVIDIA GPU (NVENC)
+    if "h264_nvenc" in supported_encoders:
+        _DETECTED_VIDEO_ENCODER = (
+            "h264_nvenc",
+            [
+                "-c:v",
+                "h264_nvenc",
+                "-preset",
+                "p1",
+                "-tune",
+                "ll",
+                "-pix_fmt",
+                "yuv420p",
+            ],
+        )
+        return _DETECTED_VIDEO_ENCODER
+
+    # Priority 3: Intel GPU / QuickSync (QSV)
+    if "h264_qsv" in supported_encoders:
+        _DETECTED_VIDEO_ENCODER = (
+            "h264_qsv",
+            [
+                "-c:v",
+                "h264_qsv",
+                "-preset",
+                "veryfast",
+                "-pix_fmt",
+                "nv12",
+            ],
+        )
+        return _DETECTED_VIDEO_ENCODER
+
+    # Priority 4: AMD GPU (AMF)
+    if "h264_amf" in supported_encoders:
+        _DETECTED_VIDEO_ENCODER = (
+            "h264_amf",
+            [
+                "-c:v",
+                "h264_amf",
+                "-usage",
+                "ultralowlatency",
+                "-pix_fmt",
+                "yuv420p",
+            ],
+        )
+        return _DETECTED_VIDEO_ENCODER
+
+    # Fallback: CPU Software x264 (limited threads and superfast preset)
+    _DETECTED_VIDEO_ENCODER = (
+        "libx264",
+        [
+            "-c:v",
+            "libx264",
+            "-preset",
+            "superfast",
+            "-threads",
+            "2",
+            "-pix_fmt",
+            "yuv420p",
+            "-profile:v",
+            "main",
+        ],
+    )
+    return _DETECTED_VIDEO_ENCODER
+
+
 @dataclass(frozen=True)
 class MediaProbe:
     available: bool
@@ -362,47 +471,20 @@ class FFmpegTranscoder:
             else 0
         )
         if self.transcode_video:
-            is_mac = sys.platform == "darwin"
-            if is_mac:
-                video_args = [
-                    "-c:v",
-                    "h264_videotoolbox",
-                    "-b:v",
-                    "4M",
-                    "-allow_sw",
-                    "1",
-                    "-pix_fmt",
-                    "yuv420p",
-                    "-g",
-                    "48",
-                    "-keyint_min",
-                    "48",
-                    "-sc_threshold",
-                    "0",
-                    "-force_key_frames",
-                    f"expr:gte(t,n_forced*{HLS_SEGMENT_DURATION})",
-                ]
-            else:
-                video_args = [
-                    "-c:v",
-                    "libx264",
-                    "-preset",
-                    "superfast",
-                    "-threads",
-                    "2",
-                    "-pix_fmt",
-                    "yuv420p",
-                    "-profile:v",
-                    "main",
-                    "-g",
-                    "48",
-                    "-keyint_min",
-                    "48",
-                    "-sc_threshold",
-                    "0",
-                    "-force_key_frames",
-                    f"expr:gte(t,n_forced*{HLS_SEGMENT_DURATION})",
-                ]
+            encoder_name, encoder_flags = get_best_video_encoder()
+            sys.stderr.write(f"[transcode] Selected video encoder: {encoder_name}\n")
+            sys.stderr.flush()
+            video_args = [
+                *encoder_flags,
+                "-g",
+                "48",
+                "-keyint_min",
+                "48",
+                "-sc_threshold",
+                "0",
+                "-force_key_frames",
+                f"expr:gte(t,n_forced*{HLS_SEGMENT_DURATION})",
+            ]
         else:
             video_args = ["-c:v", "copy"]
         audio_args = (
