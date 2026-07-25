@@ -123,9 +123,8 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
 
   const isBufferingCurrentPlaybackSegment = useMemo(() => {
     if (status !== playerStatus.PLAYING || !isLoading) return false;
-    if (!Number.isFinite(time) || !Number.isFinite(buffered)) return true;
-    return buffered - time <= ACTIVE_SEGMENT_BUFFER_THRESHOLD_SECONDS;
-  }, [status, isLoading, time, buffered]);
+    return true;
+  }, [status, isLoading]);
 
   const isPreparingSource =
     props.sourceLoading && status === playerStatus.SCRAPING;

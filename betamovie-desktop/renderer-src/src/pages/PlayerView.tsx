@@ -75,6 +75,7 @@ export function RealPlayerView() {
     reset();
     setSourceLoading(false);
     openedWatchPartyRef.current = false;
+    initializedMetaRef.current = null;
     return () => {
       reset();
     };
@@ -132,7 +133,10 @@ export function RealPlayerView() {
         duration: torrentStatus.duration ?? undefined,
       };
     } else {
-      if (source.type === "hls" && source.url === torrentStatus.streamUrl) {
+      if (
+        (source.type === "hls" && source.url === torrentStatus.streamUrl) ||
+        (status === playerStatus.PLAYING && (source as any)?.isTorrent)
+      ) {
         torrentPromotionRef.current = promotionKey;
         return;
       }
@@ -205,8 +209,14 @@ export function RealPlayerView() {
     [progressItems],
   );
 
+  const initializedMetaRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (!preloadedMeta) return;
+
+    const metaKey = `${preloadedMeta.type}:${preloadedMeta.tmdbId}:${preloadedMeta.season?.tmdbId}:${preloadedMeta.episode?.tmdbId}`;
+    if (initializedMetaRef.current === metaKey) return;
+    initializedMetaRef.current = metaKey;
 
     setPlayerStoreMeta(
       preloadedMeta,

@@ -1301,6 +1301,30 @@ export function makeVideoElementDisplayInterface(options?: {
             (data.fatal || is401) &&
             !exceptions.includes(getHlsErrorMessage(data))
           ) {
+            if (source?.isTorrent && !is401) {
+              console.warn(
+                "[player] Torrent HLS fatal error encountered, retrying instead of quitting to addon screen:",
+                data.details,
+              );
+              emit("loading", true);
+              if (data.type === Hls.ErrorTypes.MEDIA_ERROR && hls) {
+                try {
+                  hls.recoverMediaError();
+                } catch {
+                  scheduleTorrentEmptyPlaylistRetry(
+                    currentHls,
+                    Math.max(startAt, videoElement?.currentTime ?? 0),
+                  );
+                }
+              } else {
+                scheduleTorrentEmptyPlaylistRetry(
+                  currentHls,
+                  Math.max(startAt, videoElement?.currentTime ?? 0),
+                );
+              }
+              return;
+            }
+
             if (is401 && hls) {
               hls.stopLoad(); // Prevent HLS.js from retrying with expired token
             }
@@ -1615,6 +1639,20 @@ export function makeVideoElementDisplayInterface(options?: {
             return;
           }
 
+          if (source?.isTorrent) {
+            console.warn(
+              "[player] Torrent video error confirmed, retrying playback instead of quitting to addon screen",
+            );
+            emit("loading", true);
+            if (hls) {
+              scheduleTorrentEmptyPlaylistRetry(
+                hls,
+                Math.max(startAt, videoElement?.currentTime ?? 0),
+              );
+            }
+            return;
+          }
+
           console.warn("[player] video error confirmed", {
             generation,
             errorCode: video.error.code,
@@ -1672,10 +1710,15 @@ export function makeVideoElementDisplayInterface(options?: {
       // Always emit time updates when seeking to prevent subtitle freezing
       // Also emit when progressing forward or when time changes significantly
       // This prevents time from resetting to 0 during source switches
+      // Ignore transient zero time drops when not seeking and lastValidTime was > 2.0
+      if (!isSeeking && currentTime < 1.0 && lastValidTime > 2.0) {
+        return;
+      }
+
       if (
         currentTime >= lastValidTime ||
         isSeeking ||
-        Math.abs(currentTime - lastValidTime) > 0.1
+        lastValidTime - currentTime < 1.0
       ) {
         lastValidTime = currentTime;
         emit("time", currentTime);
