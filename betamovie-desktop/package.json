@@ -55,8 +55,6 @@
     "dompurify": "^3.4.10",
     "electron-updater": "^6.6.2",
     "fflate": "^0.8.3",
-    "ffmpeg-static": "^5.3.0",
-    "ffprobe-static": "^3.1.0",
     "flag-icons": "^7.5.0",
     "focus-trap-react": "^12.0.2",
     "fscreen": "^1.2.0",
@@ -155,10 +153,7 @@
     "productName": "AlphaFlix",
     "artifactName": "${productName}-${version}-${arch}.${ext}",
     "asar": true,
-    "asarUnpack": [
-      "node_modules/ffmpeg-static/**",
-      "node_modules/ffprobe-static/**"
-    ],
+    "asarUnpack": [],
     "directories": {
       "output": "release",
       "buildResources": "build"

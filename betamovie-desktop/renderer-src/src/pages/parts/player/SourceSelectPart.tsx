@@ -266,28 +266,19 @@ export function SourceSelectPart(props: {
             startAt,
           });
           registerTorrentSession(session.sessionId);
-          const isDirectFile = session.streamType === "file";
           const duration = session.duration ?? undefined;
           const playbackStartAt = session.startAt ?? startAt;
-          const mediaSource: SourceSliceSource = isDirectFile
-            ? {
-                id: stream.id,
-                type: "file",
-                qualities: {
-                  unknown: {
-                    type: "mp4",
-                    url: session.streamUrl,
-                  },
-                },
-                duration,
-              }
-            : {
-                id: stream.id,
-                type: "hls",
+          const mediaSource: SourceSliceSource = {
+            id: stream.id,
+            type: "file",
+            qualities: {
+              unknown: {
+                type: "mp4",
                 url: session.streamUrl,
-                duration,
-                isTorrent: true,
-              };
+              },
+            },
+            duration,
+          };
 
           playMedia(
             mediaSource,
