@@ -1182,7 +1182,9 @@ export function makeVideoElementDisplayInterface(options?: {
           // specific source; sidecar errors still flow through PlayerView.
           if (
             source?.isTorrent &&
-            data.details === ErrorDetails.LEVEL_EMPTY_ERROR
+            (data.details === ErrorDetails.LEVEL_EMPTY_ERROR ||
+              data.details === ErrorDetails.FRAG_LOAD_ERROR ||
+              data.details === ErrorDetails.FRAG_LOAD_TIMEOUT)
           ) {
             emit("loading", true);
             scheduleTorrentEmptyPlaylistRetry(
@@ -1222,8 +1224,27 @@ export function makeVideoElementDisplayInterface(options?: {
 
           if (isRecoverableHlsBufferIssue(data)) {
             emit("loading", true);
-            scheduleHlsRecovery();
+            if (
+              hls &&
+              (data.details === ErrorDetails.BUFFER_SEEK_OVER_HOLE ||
+                data.details === ErrorDetails.BUFFER_STALLED_ERROR ||
+                data.fatal)
+            ) {
+              try {
+                console.warn(
+                  "[player] Executing hls.recoverMediaError() for buffer issue:",
+                  data.details,
+                );
+                hls.recoverMediaError();
+              } catch (recErr) {
+                console.error("[player] hls.recoverMediaError failed:", recErr);
+                scheduleHlsRecovery();
+              }
+            } else {
+              scheduleHlsRecovery();
+            }
             console.warn("HLS buffering event", data);
+            return;
           } else if (isRecoverableHlsNetworkIssue(data)) {
             emit("loading", true);
             scheduleHlsRecovery();
@@ -1550,6 +1571,8 @@ export function makeVideoElementDisplayInterface(options?: {
         source?.type === "hls" &&
         !!hls &&
         (!!hlsRecoveryTimeout ||
+          !!torrentEmptyPlaylistRetryTimeout ||
+          source?.isTorrent ||
           Date.now() - lastHlsRecreateAt < VIDEO_ERROR_CONFIRMATION_DELAY_MS);
       if (isHlsStartupError) return;
 
@@ -1574,8 +1597,20 @@ export function makeVideoElementDisplayInterface(options?: {
           if (
             playbackProgressed ||
             (!video.paused &&
-              video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA)
+              video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) ||
+            ((source?.type === "hls" || source?.isTorrent) &&
+              getBufferedAhead() > 0)
           ) {
+            if (hls && video.error) {
+              try {
+                console.warn(
+                  "[player] Clearing video error state with hls.recoverMediaError()",
+                );
+                hls.recoverMediaError();
+              } catch {
+                // Ignore recovery failure
+              }
+            }
             emit("loading", false);
             return;
           }
