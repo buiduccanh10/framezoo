@@ -362,26 +362,47 @@ class FFmpegTranscoder:
             else 0
         )
         if self.transcode_video:
-            video_args = [
-                "-c:v",
-                "libx264",
-                "-preset",
-                "veryfast",
-                "-tune",
-                "zerolatency",
-                "-pix_fmt",
-                "yuv420p",
-                "-profile:v",
-                "main",
-                "-g",
-                "48",
-                "-keyint_min",
-                "48",
-                "-sc_threshold",
-                "0",
-                "-force_key_frames",
-                f"expr:gte(t,n_forced*{HLS_SEGMENT_DURATION})",
-            ]
+            is_mac = sys.platform == "darwin"
+            if is_mac:
+                video_args = [
+                    "-c:v",
+                    "h264_videotoolbox",
+                    "-b:v",
+                    "4M",
+                    "-allow_sw",
+                    "1",
+                    "-pix_fmt",
+                    "yuv420p",
+                    "-g",
+                    "48",
+                    "-keyint_min",
+                    "48",
+                    "-sc_threshold",
+                    "0",
+                    "-force_key_frames",
+                    f"expr:gte(t,n_forced*{HLS_SEGMENT_DURATION})",
+                ]
+            else:
+                video_args = [
+                    "-c:v",
+                    "libx264",
+                    "-preset",
+                    "superfast",
+                    "-threads",
+                    "2",
+                    "-pix_fmt",
+                    "yuv420p",
+                    "-profile:v",
+                    "main",
+                    "-g",
+                    "48",
+                    "-keyint_min",
+                    "48",
+                    "-sc_threshold",
+                    "0",
+                    "-force_key_frames",
+                    f"expr:gte(t,n_forced*{HLS_SEGMENT_DURATION})",
+                ]
         else:
             video_args = ["-c:v", "copy"]
         audio_args = (
