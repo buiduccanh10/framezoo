@@ -168,6 +168,15 @@
       "renderer/**/*",
       "package.json"
     ],
+    "extraResources": [
+      {
+        "from": "resources/bin/${platform}-${arch}",
+        "to": "bin",
+        "filter": [
+          "*"
+        ]
+      }
+    ],
     "extraMetadata": {
       "description": "AlphaFlix desktop app"
     },

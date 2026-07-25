@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
 import { buildVttObjectUrl } from "@/components/player/utils/captions";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
+import { useActiveTorrentStatus } from "@/desktop/torrentPlaybackStore";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -186,6 +187,128 @@ function VideoElement() {
     );
   }
 
+  const torrentStatus = useActiveTorrentStatus();
+  const mpvContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const electronAPI = (window as any).electronAPI;
+    if (!electronAPI?.attachMpvPlayer) return;
+
+    if (
+      torrentStatus?.streamUrl &&
+      (torrentStatus.streamType === "file" || (torrentStatus as any).directPlay)
+    ) {
+      const container = mpvContainerRef.current;
+      if (!container) return;
+
+      const updateBounds = () => {
+        const currentRect = container.getBoundingClientRect();
+        void electronAPI.updateMpvBounds({
+          x: currentRect.left,
+          y: currentRect.top,
+          width: currentRect.width || window.innerWidth,
+          height: currentRect.height || window.innerHeight,
+        });
+      };
+
+      const rect = container.getBoundingClientRect();
+      const bounds = {
+        x: rect.left,
+        y: rect.top,
+        width: rect.width || window.innerWidth,
+        height: rect.height || window.innerHeight,
+      };
+
+      void electronAPI.attachMpvPlayer(torrentStatus.streamUrl, bounds);
+
+      const resizeObserver = new ResizeObserver(() => {
+        updateBounds();
+      });
+
+      resizeObserver.observe(container);
+      window.addEventListener("resize", updateBounds);
+
+      return () => {
+        window.removeEventListener("resize", updateBounds);
+        resizeObserver.disconnect();
+        void electronAPI.detachMpvPlayer();
+      };
+    } else {
+      void electronAPI.detachMpvPlayer();
+    }
+  }, [torrentStatus?.streamUrl, torrentStatus?.streamType]);
+
+  // 2-way sync between MPV IPC status and React Player
+  useEffect(() => {
+    const electronAPI = (window as any).electronAPI;
+    if (!electronAPI?.onMpvStatus) return;
+
+    const unbindStatus = electronAPI.onMpvStatus(
+      (status: { name: string; data: any }) => {
+        const vEl = videoEl.current;
+        if (!vEl) return;
+
+        if (status.name === "time-pos" && typeof status.data === "number") {
+          if (Math.abs(vEl.currentTime - status.data) > 0.5) {
+            vEl.currentTime = status.data;
+          }
+        } else if (
+          status.name === "pause" &&
+          typeof status.data === "boolean"
+        ) {
+          if (status.data && !vEl.paused) {
+            vEl.pause();
+          } else if (!status.data && vEl.paused) {
+            void vEl.play().catch(() => {});
+          }
+        }
+      },
+    );
+
+    return () => {
+      unbindStatus();
+    };
+  }, []);
+
+  // Forward user control actions (Play/Pause/Seek/Volume) from React player to MPV
+  useEffect(() => {
+    const vEl = videoElementNode;
+    const electronAPI = (window as any).electronAPI;
+    if (!vEl || !electronAPI?.sendMpvCommand) return;
+
+    const handlePlay = () => {
+      void electronAPI.sendMpvCommand("set_property", "pause", false);
+    };
+
+    const handlePause = () => {
+      void electronAPI.sendMpvCommand("set_property", "pause", true);
+    };
+
+    const handleSeeking = () => {
+      void electronAPI.sendMpvCommand("seek", vEl.currentTime, "absolute");
+    };
+
+    const handleVolumeChange = () => {
+      void electronAPI.sendMpvCommand(
+        "set_property",
+        "volume",
+        vEl.volume * 100,
+      );
+    };
+
+    vEl.addEventListener("play", handlePlay);
+    vEl.addEventListener("pause", handlePause);
+    vEl.addEventListener("seeking", handleSeeking);
+    vEl.addEventListener("volumechange", handleVolumeChange);
+
+    return () => {
+      vEl.removeEventListener("play", handlePlay);
+      vEl.removeEventListener("pause", handlePause);
+      vEl.removeEventListener("seeking", handleSeeking);
+      vEl.removeEventListener("volumechange", handleVolumeChange);
+    };
+  }, [videoElementNode]);
+
   const videoElement = (
     <>
       <video
@@ -208,6 +331,11 @@ function VideoElement() {
       >
         {subtitleTrack}
       </video>
+      <div
+        ref={mpvContainerRef}
+        id="mpv-video-container"
+        className="absolute inset-0 w-full h-full pointer-events-none"
+      />
       {shouldHideMainVideoForDesktopPip ? (
         <div className="pointer-events-none absolute inset-0 bg-black" />
       ) : null}

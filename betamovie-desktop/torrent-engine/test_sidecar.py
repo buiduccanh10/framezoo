@@ -69,8 +69,9 @@ class SidecarStreamTest(unittest.TestCase):
             },
         )()
 
-        with patch.object(sidecar.subprocess, "run", return_value=result):
-            probe = sidecar.probe_file_info("episode.mkv")
+        with patch.dict(sidecar.os.environ, {"FORCE_DIRECT_PLAY": "0"}):
+            with patch.object(sidecar.subprocess, "run", return_value=result):
+                probe = sidecar.probe_file_info("episode.mkv")
 
         self.assertFalse(probe.direct_playable)
         self.assertFalse(probe.transcode_video)
@@ -95,8 +96,9 @@ class SidecarStreamTest(unittest.TestCase):
             },
         )()
 
-        with patch.object(sidecar.subprocess, "run", return_value=result):
-            probe = sidecar.probe_file_info("episode.mp4")
+        with patch.dict(sidecar.os.environ, {"FORCE_DIRECT_PLAY": "0"}):
+            with patch.object(sidecar.subprocess, "run", return_value=result):
+                probe = sidecar.probe_file_info("episode.mp4")
 
         self.assertTrue(probe.direct_playable)
         self.assertFalse(probe.transcode_video)
@@ -120,11 +122,36 @@ class SidecarStreamTest(unittest.TestCase):
             },
         )()
 
-        with patch.object(sidecar.subprocess, "run", return_value=result):
-            probe = sidecar.probe_file_info("episode.mp4")
+        with patch.dict(sidecar.os.environ, {"FORCE_DIRECT_PLAY": "0"}):
+            with patch.object(sidecar.subprocess, "run", return_value=result):
+                probe = sidecar.probe_file_info("episode.mp4")
 
         self.assertFalse(probe.direct_playable)
         self.assertTrue(probe.transcode_video)
+        self.assertFalse(probe.transcode_audio)
+
+    def test_probe_force_direct_play(self):
+        result = type(
+            "ProbeResult",
+            (),
+            {
+                "returncode": 0,
+                "stdout": (
+                    '{"format":{"format_name":"matroska"},'
+                    '"streams":['
+                    '{"codec_type":"video","codec_name":"hevc",'
+                    '"pix_fmt":"yuv420p10le"},'
+                    '{"codec_type":"audio","codec_name":"eac3"}]}'
+                ),
+            },
+        )()
+
+        with patch.dict(sidecar.os.environ, {"FORCE_DIRECT_PLAY": "1"}):
+            with patch.object(sidecar.subprocess, "run", return_value=result):
+                probe = sidecar.probe_file_info("episode.mkv")
+
+        self.assertTrue(probe.direct_playable)
+        self.assertFalse(probe.transcode_video)
         self.assertFalse(probe.transcode_audio)
 
     def test_transcoder_builds_audio_transcode_hls_command(self):

@@ -279,16 +279,17 @@ class MediaProbe:
 
 
 def unavailable_media_probe() -> MediaProbe:
+    force_direct = os.environ.get("FORCE_DIRECT_PLAY", "1") == "1"
     return MediaProbe(
-        available=False,
+        available=True if force_direct else False,
         duration=None,
         format_name="",
         video_codec=None,
         video_pixel_format=None,
         audio_codec=None,
-        direct_playable=False,
-        transcode_video=True,
-        transcode_audio=True,
+        direct_playable=True if force_direct else False,
+        transcode_video=False if force_direct else True,
+        transcode_audio=False if force_direct else True,
     )
 
 
@@ -368,6 +369,20 @@ def probe_file_info(input_path: str) -> MediaProbe:
             and video_copy_compatible
             and (audio_stream is None or audio_codec in DIRECT_AUDIO_CODECS)
         )
+
+        force_direct = os.environ.get("FORCE_DIRECT_PLAY", "1") == "1"
+        if force_direct:
+            return MediaProbe(
+                available=True,
+                duration=duration,
+                format_name=format_name,
+                video_codec=video_codec,
+                video_pixel_format=video_pixel_format,
+                audio_codec=audio_codec,
+                direct_playable=True,
+                transcode_video=False,
+                transcode_audio=False,
+            )
 
         return MediaProbe(
             available=True,
