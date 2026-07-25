@@ -300,6 +300,26 @@ def get_max_generated_segment(hls_dir: str) -> int:
         return -1
 
 
+def generate_vod_manifest(
+    duration: float,
+    segment_duration: float = float(HLS_SEGMENT_DURATION),
+) -> bytes:
+    """Generate a complete VOD HLS manifest for the total duration."""
+    num_segments = math.ceil(duration / segment_duration)
+    lines = [
+        "#EXTM3U",
+        "#EXT-X-VERSION:3",
+        "#EXT-X-TARGETDURATION:5",
+        "#EXT-X-PLAYLIST-TYPE:VOD",
+    ]
+    for i in range(num_segments):
+        seg_dur = min(segment_duration, duration - i * segment_duration)
+        lines.append(f"#EXTINF:{seg_dur:.3f},")
+        lines.append(f"seg_{i:05d}.ts")
+    lines.append("#EXT-X-ENDLIST")
+    return ("\n".join(lines) + "\n").encode("utf-8")
+
+
 class FFmpegTranscoder:
     """Runs FFmpeg to produce browser-compatible HLS segments."""
 
@@ -590,14 +610,15 @@ class TorrentHttpHandler(BaseHTTPRequestHandler):
         if safe_name.endswith(".m3u8"):
             content_type = "application/vnd.apple.mpegurl"
             cache_control = "no-cache"
-            try:
-                # Keep FFmpeg's media sequence/start number. Rebuilding a VOD
-                # manifest from zero can seek a resumed stream back to segment 0.
-                with open(file_path, "rb") as f:
-                    data = f.read()
-            except OSError:
-                self.send_error(500)
-                return
+            if runtime.media_duration and runtime.media_duration > 0:
+                data = generate_vod_manifest(runtime.media_duration)
+            else:
+                try:
+                    with open(file_path, "rb") as f:
+                        data = f.read()
+                except OSError:
+                    self.send_error(500)
+                    return
         else:
             content_type = "video/mp2t"
             cache_control = "max-age=3600"
