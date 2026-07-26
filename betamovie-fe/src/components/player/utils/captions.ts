@@ -274,3 +274,135 @@ export function convertProviderCaption(
     encoding: (v as any).encoding,
   }));
 }
+
+export function decodeSubtitleBytes(
+  buffer: ArrayBuffer | Uint8Array,
+  languageHint?: string,
+): string {
+  const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+  if (bytes.length === 0) return "";
+
+  // 1. Check Byte Order Marks (BOM)
+  if (
+    bytes.length >= 3 &&
+    bytes[0] === 0xef &&
+    bytes[1] === 0xbb &&
+    bytes[2] === 0xbf
+  ) {
+    try {
+      return new TextDecoder("utf-8").decode(bytes);
+    } catch {
+      // Ignore
+    }
+  }
+  if (bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0xfe) {
+    try {
+      return new TextDecoder("utf-16le").decode(bytes);
+    } catch {
+      // Ignore
+    }
+  }
+  if (bytes.length >= 2 && bytes[0] === 0xfe && bytes[1] === 0xff) {
+    try {
+      return new TextDecoder("utf-16be").decode(bytes);
+    } catch {
+      // Ignore
+    }
+  }
+
+  // 2. Check for UTF-16LE without BOM (frequent NUL zeros in Latin text)
+  let zeroCount = 0;
+  const sampleLength = Math.min(bytes.length, 500);
+  for (let i = 0; i < sampleLength; i++) {
+    if (bytes[i] === 0) zeroCount++;
+  }
+  if (sampleLength > 10 && zeroCount / sampleLength > 0.3) {
+    try {
+      return new TextDecoder("utf-16le").decode(bytes);
+    } catch {
+      // Ignore
+    }
+  }
+
+  // 3. Try strict UTF-8 (throws if containing legacy ANSI non-UTF8 bytes like Windows-1258)
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    // Not valid UTF-8! Proceed to legacy Windows / ANSI / ISO code page detection
+  }
+
+  // 4. Legacy encoding mapping based on language hint or common patterns
+  const lang = (languageHint || "").toLowerCase().trim();
+  let candidateEncodings: string[] = [
+    "windows-1258",
+    "windows-1252",
+    "iso-8859-1",
+  ];
+
+  if (
+    lang.startsWith("vi") ||
+    lang === "vn" ||
+    lang.includes("viet") ||
+    lang.includes("việt")
+  ) {
+    candidateEncodings = ["windows-1258", "windows-1252", "utf-16le"];
+  } else if (
+    lang.startsWith("ru") ||
+    lang.startsWith("uk") ||
+    lang.startsWith("bg")
+  ) {
+    candidateEncodings = ["windows-1251", "iso-8859-5", "windows-1252"];
+  } else if (
+    lang.startsWith("zh") ||
+    lang === "gb" ||
+    lang.includes("chinese")
+  ) {
+    candidateEncodings = ["gb18030", "big5", "windows-1252"];
+  } else if (lang.startsWith("ja") || lang === "jp" || lang.includes("jap")) {
+    candidateEncodings = ["shift_jis", "euc-jp", "windows-1252"];
+  } else if (lang.startsWith("ko") || lang === "kr" || lang.includes("kor")) {
+    candidateEncodings = ["euc-kr", "windows-1252"];
+  } else if (
+    lang.startsWith("pl") ||
+    lang.startsWith("cs") ||
+    lang.startsWith("sk") ||
+    lang.startsWith("hu") ||
+    lang.startsWith("ro") ||
+    lang.startsWith("hr")
+  ) {
+    candidateEncodings = ["windows-1250", "windows-1252"];
+  } else if (lang.startsWith("ar") || lang.includes("arab")) {
+    candidateEncodings = ["windows-1256", "windows-1252"];
+  } else if (lang.startsWith("he") || lang.includes("heb")) {
+    candidateEncodings = ["windows-1255", "windows-1252"];
+  } else if (lang.startsWith("tr") || lang.includes("turk")) {
+    candidateEncodings = ["windows-1254", "windows-1252"];
+  } else if (lang.startsWith("el") || lang.includes("greek")) {
+    candidateEncodings = ["windows-1253", "windows-1252"];
+  }
+
+  for (const encoding of candidateEncodings) {
+    try {
+      const text = new TextDecoder(encoding).decode(bytes);
+      if (text.includes("\uFFFD")) continue;
+
+      if (encoding === "windows-1258") {
+        const invalidCombiningRegex =
+          /[^aăâeêioôơuưyAĂÂEÊIOÔƠUƯY][\u0300\u0301\u0303\u0309\u0323]/;
+        if (invalidCombiningRegex.test(text)) {
+          continue;
+        }
+      }
+
+      return text;
+    } catch {
+      // Ignore
+    }
+  }
+
+  try {
+    return new TextDecoder("windows-1258").decode(bytes);
+  } catch {
+    return new TextDecoder("utf-8").decode(bytes);
+  }
+}
