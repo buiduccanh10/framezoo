@@ -5,6 +5,56 @@
     "copied": "Kopyalandı",
     "copy": "Kopyala"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Ziyaret etmek",
+      "step1Suffix": "veya güvenilir Addon uyumlu eklenti deponuz.",
+      "step2Prefix": "Bildirim bağlantısını kopyalayın (ör.",
+      "step2Suffix": ").",
+      "step3AddName": "Eklemek",
+      "step3Prefix": "Yukarıdaki kutuya yapıştırın ve ardından tuşuna basın.",
+      "step3Suffix": ".",
+      "title": "Daha fazla eklenti keşfedin:"
+    },
+    "manager": {
+      "add": "Eklemek",
+      "adding": "Ekleniyor...",
+      "ariaClose": "Eklenti yöneticisini kapat",
+      "ariaManage": "Eklentileri yönet",
+      "errorFallback": "Bu eklenti yüklenemiyor.",
+      "manageListButton": "Eklenti listesini yönet",
+      "subtitle": "Torrent ve doğrudan akışlar için bir Addon bildirim URL'si ekleyin.",
+      "title": "Masaüstü Eklentileri"
+    },
+    "page": {
+      "addAddonButton": "Eklenti Ekle",
+      "disabled": "Engelli",
+      "emptyInstalled": "Sistemde henüz eklenti yüklü değil.",
+      "enabled": "Etkinleştirilmiş",
+      "guideHeading": "Eklentileri Keşfedin ve Yükleyin",
+      "guideIntro": "Eklentiler, kişisel eğlence tercihlerinize göre uyarlanmış medya kataloglarına ve akışlara göz atmanıza yardımcı olur:",
+      "installError": "Bu eklenti yüklenemiyor.",
+      "installedHeading": "Yüklü Eklentiler",
+      "processing": "İşleme...",
+      "removeAddon": "Bu eklentiyi kaldır",
+      "step1DescPrefix": "Topluluk kataloğunu şu adreste ziyaret edin:",
+      "step1DescSuffix": "veya benzer standart eklenti sağlayıcıları.",
+      "step1Title": "Eklenti Kataloğunu Keşfedin",
+      "step2DescPrefix": "İstediğiniz eklentiyi seçin, seçenekleri özelleştirin ve bildirim URL'sini kopyalayın (standart örnek:",
+      "step2DescSuffix": ").",
+      "step2Title": "Bildiri Bağlantısını Kopyala",
+      "step3AddName": "Eklemek",
+      "step3DescPrefix": "Bildirim yolunu aşağıdaki alana yapıştırın ve tuşuna basın.",
+      "step3DescSuffix": ". Eklenti, medya kaynaklarını aramak için hemen etkinleştirilecektir.",
+      "step3Title": "Uygulamaya Ekle",
+      "title": "Eklenti Yöneticisi"
+    },
+    "player": {
+      "emptyExplanation": "Henüz hiçbir akış eklentisi kurulmamış veya etkinleştirilmemiştir. Kurulum kılavuzları ve medya kataloğu keşfi için Eklenti Yöneticisi sayfasını ziyaret edin.",
+      "emptyTitle": "Akış eklentisi yok",
+      "manageAddonsButton": "Eklenti Listesini Yönet"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktif",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Hesap menüsünü aç",
+      "addons": "Eklentiler",
       "desktop": "Uygulama Ayarları",
-      "lists": "Listeler",
       "logout": "Çıkış yap",
       "register": "Buluta eşitle",
       "settings": "Ayarlar"

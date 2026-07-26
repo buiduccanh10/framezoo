@@ -5,6 +5,56 @@
     "copied": "コピーしました",
     "copy": "コピー"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "訪問",
+      "step1Suffix": "または信頼できる Addon 互換アドオン リポジトリ。",
+      "step2Prefix": "マニフェストのリンクをコピーします (例:",
+      "step2Suffix": ").",
+      "step3AddName": "追加",
+      "step3Prefix": "上のボックスに貼り付けて、 を押します",
+      "step3Suffix": ".",
+      "title": "さらにアドオンを探索してください:"
+    },
+    "manager": {
+      "add": "追加",
+      "adding": "追加中...",
+      "ariaClose": "アドオンマネージャーを閉じる",
+      "ariaManage": "アドオンの管理",
+      "errorFallback": "このアドオンをインストールできません。",
+      "manageListButton": "アドオンリストの管理",
+      "subtitle": "トレントおよびダイレクト ストリーム用の Addon マニフェスト URL を追加します。",
+      "title": "デスクトップアドオン"
+    },
+    "page": {
+      "addAddonButton": "アドオンを追加する",
+      "disabled": "無効",
+      "emptyInstalled": "システムにはまだアドオンがインストールされていません。",
+      "enabled": "有効",
+      "guideHeading": "アドオンの検出とインストール",
+      "guideIntro": "アドオンを使用すると、個人のエンターテイメントの好みに合わせたメディア カタログやストリームを閲覧できます。",
+      "installError": "このアドオンをインストールできません。",
+      "installedHeading": "インストールされているアドオン",
+      "processing": "処理...",
+      "removeAddon": "このアドオンを削除します",
+      "step1DescPrefix": "次のコミュニティ カタログにアクセスしてください。",
+      "step1DescSuffix": "または同様の標準アドオンプロバイダー。",
+      "step1Title": "アドオンカタログを探索する",
+      "step2DescPrefix": "目的のアドオンを選択し、オプションをカスタマイズし、そのマニフェスト URL をコピーします (標準的な例:",
+      "step2DescSuffix": ").",
+      "step2Title": "マニフェストリンクのコピー",
+      "step3AddName": "追加",
+      "step3DescPrefix": "マニフェストのパスを下のフィールドに貼り付けて押します。",
+      "step3DescSuffix": "。アドオンはすぐにアクティブになり、メディア ソースを検索します。",
+      "step3Title": "アプリケーションに追加",
+      "title": "アドオンマネージャー"
+    },
+    "player": {
+      "emptyExplanation": "ストリーム アドオンはまだインストールまたはアクティブ化されていません。セットアップ ガイドとメディア カタログの検出については、アドオン マネージャーのページにアクセスしてください。",
+      "emptyTitle": "利用可能なストリーム アドオンはありません",
+      "manageAddonsButton": "アドオンリストの管理"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "アクティブ",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "アカウントメニューを開く",
+      "addons": "アドオン",
       "desktop": "アプリの設定",
-      "lists": "リスト",
       "logout": "退室",
       "register": "クラウドに同期して",
       "settings": "設定"

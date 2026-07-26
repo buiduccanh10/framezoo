@@ -5,6 +5,56 @@
     "copied": "Copiado",
     "copy": "Copiar"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Visita",
+      "step1Suffix": "ou seu repositório de complementos compatível com Addon confiável.",
+      "step2Prefix": "Copie o link do manifesto (por exemplo",
+      "step2Suffix": ").",
+      "step3AddName": "Adicionar",
+      "step3Prefix": "Cole na caixa acima e pressione",
+      "step3Suffix": ".",
+      "title": "Explore mais complementos:"
+    },
+    "manager": {
+      "add": "Adicionar",
+      "adding": "Adicionando...",
+      "ariaClose": "Fechar gerenciador de complementos",
+      "ariaManage": "Gerenciar complementos",
+      "errorFallback": "Não foi possível instalar este complemento.",
+      "manageListButton": "Gerenciar lista de complementos",
+      "subtitle": "Adicione um URL de manifesto do Addon para torrent e streams diretos.",
+      "title": "Complementos para área de trabalho"
+    },
+    "page": {
+      "addAddonButton": "Adicionar complemento",
+      "disabled": "Desabilitado",
+      "emptyInstalled": "Nenhum complemento instalado no sistema ainda.",
+      "enabled": "Habilitado",
+      "guideHeading": "Descubra e instale complementos",
+      "guideIntro": "Os complementos ajudam você a navegar em catálogos de mídia e fluxos adaptados às suas preferências pessoais de entretenimento:",
+      "installError": "Não foi possível instalar este complemento.",
+      "installedHeading": "Complementos instalados",
+      "processing": "Processamento...",
+      "removeAddon": "Remover este complemento",
+      "step1DescPrefix": "Visite o catálogo da comunidade em",
+      "step1DescSuffix": "ou provedores de complementos padrão semelhantes.",
+      "step1Title": "Explore o catálogo de complementos",
+      "step2DescPrefix": "Selecione o complemento desejado, personalize as opções e copie o URL do manifesto (exemplo padrão:",
+      "step2DescSuffix": ").",
+      "step2Title": "Copiar link do manifesto",
+      "step3AddName": "Adicionar",
+      "step3DescPrefix": "Cole o caminho do manifesto no campo abaixo e pressione",
+      "step3DescSuffix": ". O complemento será ativado imediatamente para procurar fontes de mídia.",
+      "step3Title": "Adicionar ao aplicativo",
+      "title": "Gerenciador de complementos"
+    },
+    "player": {
+      "emptyExplanation": "Nenhum complemento de stream está instalado ou ativado ainda. Visite a página Gerenciador de complementos para guias de configuração e descoberta de catálogo de mídia.",
+      "emptyTitle": "Nenhum complemento de transmissão disponível",
+      "manageAddonsButton": "Gerenciar lista de complementos"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Ativo",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Abra o menu da conta",
+      "addons": "Complementos",
       "desktop": "Configurações do aplicativo",
-      "lists": "Listas",
       "logout": "Sair",
       "register": "Sincronizar com a nuvem",
       "settings": "Configurações"

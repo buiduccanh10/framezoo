@@ -5,6 +5,56 @@
     "copied": "Zkopírováno",
     "copy": "Zkopírovat"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Návštěva",
+      "step1Suffix": "nebo vaše důvěryhodné úložiště doplňků kompatibilní se Addon.",
+      "step2Prefix": "Zkopírujte odkaz na manifest (např.",
+      "step2Suffix": ").",
+      "step3AddName": "Přidat",
+      "step3Prefix": "Vložte do pole výše a stiskněte",
+      "step3Suffix": ".",
+      "title": "Prozkoumejte další doplňky:"
+    },
+    "manager": {
+      "add": "Přidat",
+      "adding": "Přidávání...",
+      "ariaClose": "Zavřete správce doplňků",
+      "ariaManage": "Spravujte doplňky",
+      "errorFallback": "Tento doplněk nelze nainstalovat.",
+      "manageListButton": "Správa seznamu doplňků",
+      "subtitle": "Přidejte adresu URL manifestu Addon pro torrent a přímé streamy.",
+      "title": "Desktopové doplňky"
+    },
+    "page": {
+      "addAddonButton": "Přidat doplněk",
+      "disabled": "Zakázáno",
+      "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",
+      "enabled": "Povoleno",
+      "guideHeading": "Objevte a nainstalujte doplňky",
+      "guideIntro": "Doplňky vám pomohou procházet katalogy médií a streamy přizpůsobené vašim osobním preferencím v oblasti zábavy:",
+      "installError": "Tento doplněk nelze nainstalovat.",
+      "installedHeading": "Nainstalované doplňky",
+      "processing": "Zpracovává se...",
+      "removeAddon": "Odeberte tento doplněk",
+      "step1DescPrefix": "Navštivte komunitní katalog na",
+      "step1DescSuffix": "nebo podobných standardních poskytovatelů doplňků.",
+      "step1Title": "Prozkoumejte katalog doplňků",
+      "step2DescPrefix": "Vyberte požadovaný doplněk, přizpůsobte možnosti a zkopírujte jeho adresu URL manifestu (standardní příklad:",
+      "step2DescSuffix": ").",
+      "step2Title": "Kopírovat odkaz manifestu",
+      "step3AddName": "Přidat",
+      "step3DescPrefix": "Vložte cestu manifestu do pole níže a stiskněte",
+      "step3DescSuffix": ". Doplněk se okamžitě aktivuje a vyhledá zdroje médií.",
+      "step3Title": "Přidat do aplikace",
+      "title": "Správce doplňků"
+    },
+    "player": {
+      "emptyExplanation": "Zatím není nainstalován ani aktivován žádný doplněk streamu. Navštivte stránku Správce doplňků, kde najdete průvodce nastavením a vyhledání katalogu médií.",
+      "emptyTitle": "Nejsou k dispozici žádné doplňky streamu",
+      "manageAddonsButton": "Správa seznamu doplňků"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktivní",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Otevřete nabídku účtu",
+      "addons": "Addons",
       "desktop": "Nastavení aplikace",
-      "lists": "Seznamy",
       "logout": "Odhlásit se",
       "register": "Synchronizovat do Cloudu",
       "settings": "Nastavení"

@@ -5,6 +5,56 @@
     "copied": "Gekopieerd",
     "copy": "Kopieer"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Bezoek",
+      "step1Suffix": "of uw vertrouwde Addon-compatibele add-on-repository.",
+      "step2Prefix": "Kopieer de manifestlink (bijv.",
+      "step2Suffix": ").",
+      "step3AddName": "Toevoegen",
+      "step3Prefix": "Plak het in het vak erboven en druk vervolgens op",
+      "step3Suffix": ".",
+      "title": "Ontdek meer add-ons:"
+    },
+    "manager": {
+      "add": "Toevoegen",
+      "adding": "Toevoegen...",
+      "ariaClose": "Sluit de add-onbeheerder",
+      "ariaManage": "Beheer add-ons",
+      "errorFallback": "Kan deze add-on niet installeren.",
+      "manageListButton": "Beheer add-onlijst",
+      "subtitle": "Voeg een Addon-manifest-URL toe voor torrent- en directe streams.",
+      "title": "Desktop-add-ons"
+    },
+    "page": {
+      "addAddonButton": "Add-on toevoegen",
+      "disabled": "Gehandicapt",
+      "emptyInstalled": "Er zijn nog geen add-ons in het systeem geïnstalleerd.",
+      "enabled": "Ingeschakeld",
+      "guideHeading": "Ontdek en installeer add-ons",
+      "guideIntro": "Add-ons helpen u door mediacatalogi en streams te bladeren die zijn afgestemd op uw persoonlijke entertainmentvoorkeuren:",
+      "installError": "Kan deze add-on niet installeren.",
+      "installedHeading": "Geïnstalleerde add-ons",
+      "processing": "Verwerken...",
+      "removeAddon": "Verwijder deze add-on",
+      "step1DescPrefix": "Bezoek de communitycatalogus op",
+      "step1DescSuffix": "of vergelijkbare standaard add-on-providers.",
+      "step1Title": "Ontdek de add-oncatalogus",
+      "step2DescPrefix": "Selecteer de gewenste add-on, pas de opties aan en kopieer de manifest-URL (standaardvoorbeeld:",
+      "step2DescSuffix": ").",
+      "step2Title": "Kopieer de manifeste link",
+      "step3AddName": "Toevoegen",
+      "step3DescPrefix": "Plak het manifestpad in het onderstaande veld en druk op",
+      "step3DescSuffix": ". De add-on wordt onmiddellijk geactiveerd om naar mediabronnen te zoeken.",
+      "step3Title": "Toevoegen aan applicatie",
+      "title": "Add-onsbeheerder"
+    },
+    "player": {
+      "emptyExplanation": "Er is nog geen stream-add-on geïnstalleerd of geactiveerd. Bezoek de Addons Manager-pagina voor installatiehandleidingen en het ontdekken van mediacatalogussen.",
+      "emptyTitle": "Er zijn geen stream-add-ons beschikbaar",
+      "manageAddonsButton": "Beheer Add-onlijst"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Actief",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Accountmenu openen",
+      "addons": "Add-ons",
       "desktop": "App-instellingen",
-      "lists": "Lijsten",
       "logout": "Log uit",
       "register": "Synchroniseren met de Cloud",
       "settings": "Instellingen"

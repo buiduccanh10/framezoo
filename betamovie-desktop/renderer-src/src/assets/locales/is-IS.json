@@ -5,6 +5,56 @@
     "copied": "Afritað",
     "copy": "Afrita"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Heimsókn",
+      "step1Suffix": "eða trausta samhæfða viðbótargeymsluna þína.",
+      "step2Prefix": "Afritaðu upplýsingaskráartengilinn (t.d.",
+      "step2Suffix": ").",
+      "step3AddName": "Bæta við",
+      "step3Prefix": "Límdu inn í reitinn hér að ofan og ýttu svo á",
+      "step3Suffix": ".",
+      "title": "Skoðaðu fleiri viðbætur:"
+    },
+    "manager": {
+      "add": "Bæta við",
+      "adding": "Bætir við...",
+      "ariaClose": "Lokaðu viðbótarstjóra",
+      "ariaManage": "Stjórna viðbótum",
+      "errorFallback": "Ekki er hægt að setja upp þessa viðbót.",
+      "manageListButton": "Stjórna viðbótarlista",
+      "subtitle": "Bættu við Addon upplýsingavefslóð fyrir straumstraum og beina strauma.",
+      "title": "Viðbætur fyrir skjáborð"
+    },
+    "page": {
+      "addAddonButton": "Bæta við viðbót",
+      "disabled": "Öryrkjar",
+      "emptyInstalled": "Engar viðbætur uppsettar í kerfinu ennþá.",
+      "enabled": "Virkt",
+      "guideHeading": "Uppgötvaðu og settu upp viðbætur",
+      "guideIntro": "Viðbætur hjálpa þér að fletta í fjölmiðlum og straumum sem eru sérsniðnir að þínum persónulegu afþreyingarvalkostum:",
+      "installError": "Ekki er hægt að setja upp þessa viðbót.",
+      "installedHeading": "Uppsett viðbót",
+      "processing": "Vinnur...",
+      "removeAddon": "Fjarlægðu þessa viðbót",
+      "step1DescPrefix": "Skoðaðu samfélagsskrána á",
+      "step1DescSuffix": "eða svipaðar staðlaðar viðbótarveitur.",
+      "step1Title": "Skoðaðu Addon vörulistann",
+      "step2DescPrefix": "Veldu viðbótina sem þú vilt, sérsníddu valkostina og afritaðu vefslóð hennar (venjulegt dæmi:",
+      "step2DescSuffix": ").",
+      "step2Title": "Afritaðu Manifest Link",
+      "step3AddName": "Bæta við",
+      "step3DescPrefix": "Límdu upplýsingaslóðina inn í reitinn fyrir neðan og ýttu á",
+      "step3DescSuffix": ". Viðbótin mun strax virkjast til að leita að miðlum.",
+      "step3Title": "Bæta við umsókn",
+      "title": "Viðbótarstjóri"
+    },
+    "player": {
+      "emptyExplanation": "Engin straumaviðbót er uppsett eða virkjuð ennþá. Farðu á Addons Manager síðuna til að fá uppsetningarleiðbeiningar og uppgötvun fjölmiðlaskrár.",
+      "emptyTitle": "Engar straumviðbætur tiltækar",
+      "manageAddonsButton": "Stjórna viðbótarlista"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Virkur",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Opnaðu reikningsvalmynd",
+      "addons": "Viðbætur",
       "desktop": "App Stillingar",
-      "lists": "Listar",
       "logout": "Skrá út",
       "register": "Samstilla við ský",
       "settings": "Stillingar"

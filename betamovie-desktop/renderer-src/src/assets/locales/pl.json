@@ -5,6 +5,56 @@
     "copied": "Skopiowano",
     "copy": "Kopiuj"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Odwiedzać",
+      "step1Suffix": "lub zaufane repozytorium dodatków kompatybilne ze Addon.",
+      "step2Prefix": "Skopiuj link do manifestu (np.",
+      "step2Suffix": ").",
+      "step3AddName": "Dodać",
+      "step3Prefix": "Wklej w powyższym polu i naciśnij",
+      "step3Suffix": ".",
+      "title": "Odkryj więcej dodatków:"
+    },
+    "manager": {
+      "add": "Dodać",
+      "adding": "Dodawanie...",
+      "ariaClose": "Zamknij menedżera dodatków",
+      "ariaManage": "Zarządzaj dodatkami",
+      "errorFallback": "Nie można zainstalować tego dodatku.",
+      "manageListButton": "Zarządzaj listą dodatków",
+      "subtitle": "Dodaj adres URL manifestu Addon dla torrentów i strumieni bezpośrednich.",
+      "title": "Dodatki do komputerów stacjonarnych"
+    },
+    "page": {
+      "addAddonButton": "Dodaj dodatek",
+      "disabled": "Wyłączony",
+      "emptyInstalled": "W systemie nie zainstalowano jeszcze żadnych dodatków.",
+      "enabled": "Włączony",
+      "guideHeading": "Odkryj i zainstaluj dodatki",
+      "guideIntro": "Dodatki pomagają przeglądać katalogi multimediów i strumienie dostosowane do Twoich osobistych preferencji rozrywkowych:",
+      "installError": "Nie można zainstalować tego dodatku.",
+      "installedHeading": "Zainstalowane dodatki",
+      "processing": "Przetwarzanie...",
+      "removeAddon": "Usuń ten dodatek",
+      "step1DescPrefix": "Odwiedź katalog społeczności pod adresem",
+      "step1DescSuffix": "lub podobnych standardowych dostawców dodatków.",
+      "step1Title": "Przeglądaj katalog dodatków",
+      "step2DescPrefix": "Wybierz żądany dodatek, dostosuj opcje i skopiuj jego manifest URL (standardowy przykład:",
+      "step2DescSuffix": ").",
+      "step2Title": "Skopiuj link do manifestu",
+      "step3AddName": "Dodać",
+      "step3DescPrefix": "Wklej ścieżkę manifestu w polu poniżej i naciśnij",
+      "step3DescSuffix": ". Dodatek zostanie natychmiast aktywowany w celu wyszukiwania źródeł multimediów.",
+      "step3Title": "Dodaj do aplikacji",
+      "title": "Menedżer dodatków"
+    },
+    "player": {
+      "emptyExplanation": "Żaden dodatek do strumienia nie jest jeszcze zainstalowany ani aktywowany. Odwiedź stronę Menedżera dodatków, aby zapoznać się z przewodnikami konfiguracji i odkrywaniem katalogu multimediów.",
+      "emptyTitle": "Brak dostępnych dodatków do strumienia",
+      "manageAddonsButton": "Zarządzaj listą dodatków"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktywny",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Otwórz menu konta",
+      "addons": "Dodatki",
       "desktop": "Ustawienia aplikacji",
-      "lists": "Listy",
       "logout": "Wyloguj się",
       "register": "Synchronizuj z Chmurą",
       "settings": "Ustawienia"

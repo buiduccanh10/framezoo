@@ -5,6 +5,75 @@
     "copied": "Copied",
     "copy": "Copy"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Visit ",
+      "step1Suffix": " or your trusted community addon catalog.",
+      "step2Prefix": "Copy the manifest link (e.g. ",
+      "step2Suffix": ").",
+      "step3AddName": "Add",
+      "step3Prefix": "Paste into the box above, then press ",
+      "step3Suffix": ".",
+      "title": "Explore more addons:"
+    },
+    "manager": {
+      "add": "Add",
+      "adding": "Adding...",
+      "ariaClose": "Close addon manager",
+      "ariaManage": "Manage addons",
+      "errorFallback": "Unable to install this addon.",
+      "manageListButton": "Manage addon list",
+      "subtitle": "Add an addon manifest URL for torrent and direct streams.",
+      "title": "Desktop Addons"
+    },
+    "page": {
+      "addAddonButton": "Add Addon",
+      "disabled": "Disabled",
+      "emptyInstalled": "No addons installed in the system yet.",
+      "enabled": "Enabled",
+      "guideHeading": "Discover & Install Addons",
+      "guideIntro": "Addons help you browse media catalogs and streams tailored to your personal entertainment preferences:",
+      "installError": "Unable to install this addon.",
+      "installedHeading": "Installed Addons",
+      "processing": "Processing...",
+      "removeAddon": "Remove this addon",
+      "step1DescPrefix": "Visit the community catalog at ",
+      "step1DescSuffix": " or similar standard addon providers.",
+      "step1Title": "Explore Addon Catalog",
+      "step2DescPrefix": "Select your desired addon, customize options, and copy its manifest URL (standard example: ",
+      "step2DescSuffix": ").",
+      "step2Title": "Copy Manifest Link",
+      "step3AddName": "Add",
+      "step3DescPrefix": "Paste the manifest path into the field below and press ",
+      "step3DescSuffix": ". The addon will immediately activate to search for media sources.",
+      "step3Title": "Add to Application",
+      "title": "Addons Manager"
+    },
+    "player": {
+      "chooseAddon": "Choose an addon",
+      "emptyExplanation": "No stream addon is installed or activated yet. Visit the Addons Manager page for setup guides and media catalog discovery.",
+      "emptyTitle": "No stream addons available",
+      "loadingStreams": "Loading streams...",
+      "manageAddonsButton": "Manage Addon List",
+      "noAddonStreams": "No addon streams returned for this title.",
+      "noTorrentStreams": "No torrent streams returned for this addon.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "All Qualities",
+        "other": "Other"
+      },
+      "sources": "Sources",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} streams",
+      "title": "Desktop addons",
+      "unableToLoad": "Unable to load streams",
+      "viewStreams": "View streams"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Active",
@@ -631,8 +700,8 @@
     },
     "menu": {
       "accountMenu": "Open account menu",
+      "addons": "Addons",
       "desktop": "App Settings",
-      "lists": "Lists",
       "logout": "Log out",
       "register": "Sync to Cloud",
       "settings": "Settings"

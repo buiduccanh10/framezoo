@@ -5,6 +5,56 @@
     "copied": "Copiado",
     "copy": "Copiar"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Visita",
+      "step1Suffix": "ou o teu repositorio de complementos de confianza compatible con Addon.",
+      "step2Prefix": "Copia a ligazón do manifesto (p. ex.",
+      "step2Suffix": ").",
+      "step3AddName": "Engadir",
+      "step3Prefix": "Pega na caixa de arriba e, a continuación, prema",
+      "step3Suffix": ".",
+      "title": "Explora máis complementos:"
+    },
+    "manager": {
+      "add": "Engadir",
+      "adding": "Engadindo...",
+      "ariaClose": "Pechar o xestor de complementos",
+      "ariaManage": "Xestionar complementos",
+      "errorFallback": "Non se puido instalar este complemento.",
+      "manageListButton": "Xestionar a lista de complementos",
+      "subtitle": "Engade un URL de manifesto de Addon para transmisións directas e torrent.",
+      "title": "Complementos de escritorio"
+    },
+    "page": {
+      "addAddonButton": "Engadir complemento",
+      "disabled": "Desactivado",
+      "emptyInstalled": "Aínda non hai complementos instalados no sistema.",
+      "enabled": "Activado",
+      "guideHeading": "Descubra e instale complementos",
+      "guideIntro": "Os complementos axúdanche a buscar catálogos multimedia e fluxos adaptados ás túas preferencias persoais de entretemento:",
+      "installError": "Non se puido instalar este complemento.",
+      "installedHeading": "Complementos instalados",
+      "processing": "Procesando...",
+      "removeAddon": "Elimina este complemento",
+      "step1DescPrefix": "Visita o catálogo da comunidade en",
+      "step1DescSuffix": "ou provedores de complementos estándar similares.",
+      "step1Title": "Explore o catálogo de complementos",
+      "step2DescPrefix": "Seleccione o complemento que desexe, personalice as opcións e copie o seu URL de manifesto (exemplo estándar:",
+      "step2DescSuffix": ").",
+      "step2Title": "Copiar a ligazón do manifesto",
+      "step3AddName": "Engadir",
+      "step3DescPrefix": "Pega o camiño do manifesto no campo de abaixo e prema",
+      "step3DescSuffix": ". O complemento activarase inmediatamente para buscar fontes multimedia.",
+      "step3Title": "Engadir á aplicación",
+      "title": "Xestor de complementos"
+    },
+    "player": {
+      "emptyExplanation": "Aínda non hai ningún complemento de fluxo instalado nin activado. Visita a páxina do Xestor de complementos para ver guías de configuración e descubrimento do catálogo multimedia.",
+      "emptyTitle": "Non hai complementos de emisión dispoñibles",
+      "manageAddonsButton": "Xestionar a lista de complementos"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Activo",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Abrir o menú da conta",
+      "addons": "Complementos",
       "desktop": "Configuración da aplicación",
-      "lists": "Listas",
       "logout": "Cerrar sesión",
       "register": "Sincronizar coa nube",
       "settings": "Configuración"

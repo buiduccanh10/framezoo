@@ -5,6 +5,56 @@
     "copied": "Nokopēts",
     "copy": "Kopēt"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Apmeklējiet",
+      "step1Suffix": "vai jūsu uzticamā ar Addon saderīgo papildinājumu krātuvi.",
+      "step2Prefix": "Kopējiet manifesta saiti (piem.",
+      "step2Suffix": ").",
+      "step3AddName": "Pievienot",
+      "step3Prefix": "Ielīmējiet augšpusē esošajā lodziņā un pēc tam nospiediet",
+      "step3Suffix": ".",
+      "title": "Izpētiet citus papildinājumus:"
+    },
+    "manager": {
+      "add": "Pievienot",
+      "adding": "Notiek pievienošana...",
+      "ariaClose": "Aizvērt papildinājumu pārvaldnieku",
+      "ariaManage": "Pārvaldiet papildinājumus",
+      "errorFallback": "Nevar instalēt šo papildinājumu.",
+      "manageListButton": "Pārvaldīt papildinājumu sarakstu",
+      "subtitle": "Pievienojiet Addon manifesta URL torrentiem un tiešajām straumēm.",
+      "title": "Darbvirsmas papildinājumi"
+    },
+    "page": {
+      "addAddonButton": "Pievienojiet papildinājumu",
+      "disabled": "Atspējots",
+      "emptyInstalled": "Sistēmā vēl nav instalēts neviens papildinājums.",
+      "enabled": "Iespējots",
+      "guideHeading": "Atklājiet un instalējiet papildinājumus",
+      "guideIntro": "Papildinājumi palīdz pārlūkot multivides katalogus un straumes, kas pielāgotas jūsu personīgajām izklaides vēlmēm:",
+      "installError": "Nevar instalēt šo papildinājumu.",
+      "installedHeading": "Instalēti papildinājumi",
+      "processing": "Notiek apstrāde...",
+      "removeAddon": "Noņemiet šo papildinājumu",
+      "step1DescPrefix": "Apmeklējiet kopienas katalogu vietnē",
+      "step1DescSuffix": "vai līdzīgi standarta papildinājumu nodrošinātāji.",
+      "step1Title": "Izpētiet Addon katalogu",
+      "step2DescPrefix": "Atlasiet vajadzīgo papildinājumu, pielāgojiet opcijas un kopējiet tā manifesta URL (standarta piemērs:",
+      "step2DescSuffix": ").",
+      "step2Title": "Kopēt manifesta saiti",
+      "step3AddName": "Pievienot",
+      "step3DescPrefix": "Ielīmējiet manifesta ceļu zemāk esošajā laukā un nospiediet",
+      "step3DescSuffix": ". Papildinājums nekavējoties aktivizēsies, lai meklētu multivides avotus.",
+      "step3Title": "Pievienot lietojumprogrammai",
+      "title": "Papildinājumu pārvaldnieks"
+    },
+    "player": {
+      "emptyExplanation": "Vēl nav instalēts vai aktivizēts neviens straumes papildinājums. Apmeklējiet Addons Manager lapu, lai skatītu iestatīšanas rokasgrāmatas un multivides kataloga atklāšanu.",
+      "emptyTitle": "Nav pieejams neviens straumes papildinājums",
+      "manageAddonsButton": "Pārvaldīt papildinājumu sarakstu"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktīvs",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Atveriet konta izvēlni",
+      "addons": "Papildinājumi",
       "desktop": "Lietotņu iestatījumi",
-      "lists": "Saraksti",
       "logout": "Iziet",
       "register": "Sinhronizēt ar mākoni",
       "settings": "Iestādijumi"

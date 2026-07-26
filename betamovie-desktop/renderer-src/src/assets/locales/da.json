@@ -5,6 +5,56 @@
     "copied": "Kopieret",
     "copy": "Kopier"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Besøg",
+      "step1Suffix": "eller dit betroede Addon-kompatible addon-lager.",
+      "step2Prefix": "Kopiér manifestlinket (f.eks.",
+      "step2Suffix": ").",
+      "step3AddName": "Tilføje",
+      "step3Prefix": "Indsæt i boksen ovenfor, og tryk derefter på",
+      "step3Suffix": ".",
+      "title": "Udforsk flere tilføjelser:"
+    },
+    "manager": {
+      "add": "Tilføje",
+      "adding": "Tilføjer...",
+      "ariaClose": "Luk tilføjelsesadministrator",
+      "ariaManage": "Administrer tilføjelser",
+      "errorFallback": "Kan ikke installere denne tilføjelse.",
+      "manageListButton": "Administrer tilføjelsesliste",
+      "subtitle": "Tilføj en Addon-manifest-URL til torrent og direkte streams.",
+      "title": "Desktop tilføjelser"
+    },
+    "page": {
+      "addAddonButton": "Tilføj Addon",
+      "disabled": "Handicappet",
+      "emptyInstalled": "Ingen tilføjelser installeret i systemet endnu.",
+      "enabled": "Aktiveret",
+      "guideHeading": "Opdag og installer tilføjelser",
+      "guideIntro": "Tilføjelser hjælper dig med at gennemse mediekataloger og streams, der er skræddersyet til dine personlige underholdningspræferencer:",
+      "installError": "Kan ikke installere denne tilføjelse.",
+      "installedHeading": "Installerede tilføjelser",
+      "processing": "Forarbejdning...",
+      "removeAddon": "Fjern denne tilføjelse",
+      "step1DescPrefix": "Besøg samfundskataloget på",
+      "step1DescSuffix": "eller lignende standard tilføjelsesudbydere.",
+      "step1Title": "Udforsk Addon-kataloget",
+      "step2DescPrefix": "Vælg din ønskede tilføjelse, tilpas indstillinger, og kopier dens manifest-URL (standardeksempel:",
+      "step2DescSuffix": ").",
+      "step2Title": "Kopiér Manifest Link",
+      "step3AddName": "Tilføje",
+      "step3DescPrefix": "Indsæt manifeststien i feltet nedenfor, og tryk på",
+      "step3DescSuffix": ". Tilføjelsen aktiveres straks for at søge efter mediekilder.",
+      "step3Title": "Tilføj til applikation",
+      "title": "Addons Manager"
+    },
+    "player": {
+      "emptyExplanation": "Ingen stream-tilføjelse er installeret eller aktiveret endnu. Besøg Addons Manager-siden for opsætningsvejledninger og mediekatalogopdagelse.",
+      "emptyTitle": "Ingen tilgængelige stream-tilføjelser",
+      "manageAddonsButton": "Administrer tilføjelsesliste"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktiv",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Åbn kontomenuen",
+      "addons": "Tilføjelser",
       "desktop": "App-indstillinger",
-      "lists": "Lister",
       "logout": "Log ud",
       "register": "Synkroniser til Cloud",
       "settings": "Indstillinger"

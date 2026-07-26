@@ -5,6 +5,56 @@
     "copied": "បានចម្លង",
     "copy": "ចម្លង"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "ទស្សនា",
+      "step1Suffix": "ឬឃ្លាំងបន្ថែម compatible ដែលអាចទុកចិត្តបាន។",
+      "step2Prefix": "ចម្លងតំណ manifest (ឧ.",
+      "step2Suffix": ").",
+      "step3AddName": "បន្ថែម",
+      "step3Prefix": "បិទភ្ជាប់ទៅក្នុងប្រអប់ខាងលើ បន្ទាប់មកចុច",
+      "step3Suffix": ".",
+      "title": "ស្វែងយល់បន្ថែមបន្ថែម៖"
+    },
+    "manager": {
+      "add": "បន្ថែម",
+      "adding": "កំពុង​បន្ថែម...",
+      "ariaClose": "បិទកម្មវិធីគ្រប់គ្រងកម្មវិធីបន្ថែម",
+      "ariaManage": "គ្រប់គ្រង addons",
+      "errorFallback": "មិនអាចដំឡើង addon នេះបានទេ។",
+      "manageListButton": "គ្រប់គ្រងបញ្ជី addon",
+      "subtitle": "បន្ថែម URL បង្ហាញ Addon សម្រាប់ torrent និងការផ្សាយផ្ទាល់។",
+      "title": "កម្មវិធីបន្ថែមលើតុ"
+    },
+    "page": {
+      "addAddonButton": "បន្ថែម Addon",
+      "disabled": "ពិការ",
+      "emptyInstalled": "មិនទាន់មានកម្មវិធីបន្ថែមនៅក្នុងប្រព័ន្ធនៅឡើយទេ។",
+      "enabled": "បានបើក",
+      "guideHeading": "ស្វែងយល់ និងដំឡើង Addons",
+      "guideIntro": "Addons ជួយអ្នកក្នុងការរកមើលកាតាឡុកប្រព័ន្ធផ្សព្វផ្សាយ និងការផ្សាយតាមតម្រូវការកម្សាន្តផ្ទាល់ខ្លួនរបស់អ្នក៖",
+      "installError": "មិនអាចដំឡើង addon នេះបានទេ។",
+      "installedHeading": "បានដំឡើង Addons",
+      "processing": "កំពុងដំណើរការ...",
+      "removeAddon": "យក addon នេះចេញ",
+      "step1DescPrefix": "ទស្សនាកាតាឡុកសហគមន៍នៅ",
+      "step1DescSuffix": "ឬអ្នកផ្តល់បន្ថែមស្តង់ដារស្រដៀងគ្នា។",
+      "step1Title": "រុករកកាតាឡុក Addon",
+      "step2DescPrefix": "ជ្រើសរើស addon ដែលអ្នកចង់បាន ប្ដូរជម្រើសតាមបំណង និងចម្លង URL បង្ហាញរបស់វា (ឧទាហរណ៍ស្តង់ដារ៖",
+      "step2DescSuffix": ").",
+      "step2Title": "ចម្លងតំណ Manifest",
+      "step3AddName": "បន្ថែម",
+      "step3DescPrefix": "បិទភ្ជាប់ផ្លូវ manifest ទៅក្នុងវាលខាងក្រោម ហើយចុច",
+      "step3DescSuffix": ". កម្មវិធីបន្ថែមនឹងដំណើរការភ្លាមៗ ដើម្បីស្វែងរកប្រភពប្រព័ន្ធផ្សព្វផ្សាយ។",
+      "step3Title": "បន្ថែមទៅកម្មវិធី",
+      "title": "អ្នកគ្រប់គ្រង Addons"
+    },
+    "player": {
+      "emptyExplanation": "មិន​ទាន់​មាន​កម្មវិធី​បន្ថែម​ស្ទ្រីម​ត្រូវ​បាន​ដំឡើង ឬ​បើក​ដំណើរការ​នៅ​ឡើយ​ទេ។ ចូលទៅកាន់ទំព័រកម្មវិធីគ្រប់គ្រង Addons សម្រាប់ការណែនាំអំពីការដំឡើង និងការរកឃើញកាតាឡុកប្រព័ន្ធផ្សព្វផ្សាយ។",
+      "emptyTitle": "មិនមានកម្មវិធីបន្ថែមស្ទ្រីមទេ។",
+      "manageAddonsButton": "គ្រប់គ្រងបញ្ជី Addon"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "សកម្ម",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "បើកម៉ឺនុយគណនី",
+      "addons": "សារធាតុបន្ថែម",
       "desktop": "ការកំណត់កម្មវិធី",
-      "lists": "បញ្ជី",
       "logout": "ចេញ",
       "register": "ធ្វើសមកាលកម្មទៅពពក",
       "settings": "ការកំណត់"

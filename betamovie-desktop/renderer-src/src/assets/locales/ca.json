@@ -5,6 +5,56 @@
     "copied": "S'ha copiat",
     "copy": "Copia"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Visita",
+      "step1Suffix": "o el vostre dipòsit de complements de confiança compatible amb Addon.",
+      "step2Prefix": "Copieu l'enllaç del manifest (p. ex.",
+      "step2Suffix": ").",
+      "step3AddName": "Afegeix",
+      "step3Prefix": "Enganxeu-lo al quadre de dalt i, a continuació, premeu",
+      "step3Suffix": ".",
+      "title": "Exploreu més complements:"
+    },
+    "manager": {
+      "add": "Afegeix",
+      "adding": "S'està afegint...",
+      "ariaClose": "Tanqueu el gestor de complements",
+      "ariaManage": "Gestiona els complements",
+      "errorFallback": "No es pot instal·lar aquest complement.",
+      "manageListButton": "Gestioneu la llista de complements",
+      "subtitle": "Afegiu un URL de manifest de Addon per a fluxos directes i torrent.",
+      "title": "Complements d'escriptori"
+    },
+    "page": {
+      "addAddonButton": "Afegeix un complement",
+      "disabled": "Inhabilitat",
+      "emptyInstalled": "Encara no hi ha cap complement instal·lat al sistema.",
+      "enabled": "Habilitat",
+      "guideHeading": "Descobriu i instal·leu complements",
+      "guideIntro": "Els complements us ajuden a navegar per catàlegs de mitjans i fluxos adaptats a les vostres preferències personals d'entreteniment:",
+      "installError": "No es pot instal·lar aquest complement.",
+      "installedHeading": "Complements instal·lats",
+      "processing": "S'està processant...",
+      "removeAddon": "Elimina aquest complement",
+      "step1DescPrefix": "Visiteu el catàleg de la comunitat a",
+      "step1DescSuffix": "o proveïdors de complements estàndard similars.",
+      "step1Title": "Exploreu el catàleg de complements",
+      "step2DescPrefix": "Seleccioneu el complement que vulgueu, personalitzeu les opcions i copieu-ne l'URL del manifest (exemple estàndard:",
+      "step2DescSuffix": ").",
+      "step2Title": "Copia l'enllaç del manifest",
+      "step3AddName": "Afegeix",
+      "step3DescPrefix": "Enganxeu el camí del manifest al camp següent i premeu",
+      "step3DescSuffix": ". El complement s'activarà immediatament per cercar fonts multimèdia.",
+      "step3Title": "Afegeix a l'aplicació",
+      "title": "Gestor de complements"
+    },
+    "player": {
+      "emptyExplanation": "Encara no s'ha instal·lat ni activat cap complement de reproducció. Visiteu la pàgina del Gestor de complements per obtenir guies de configuració i descobriment de catàlegs multimèdia.",
+      "emptyTitle": "No hi ha complements de reproducció disponibles",
+      "manageAddonsButton": "Gestioneu la llista de complements"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Actius",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Obre el menú del compte",
+      "addons": "Complements",
       "desktop": "Configuració de l'aplicació",
-      "lists": "Llistes",
       "logout": "Tanca la sessió",
       "register": "Sincronitza al núvol",
       "settings": "Configuració"
