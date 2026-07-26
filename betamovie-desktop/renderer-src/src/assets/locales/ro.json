@@ -5,6 +5,56 @@
     "copied": "Copiat",
     "copy": "Copiați"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Vizita",
+      "step1Suffix": "sau depozitul dvs. de suplimente de încredere compatibil cu Addon.",
+      "step2Prefix": "Copiați linkul manifest (de ex.",
+      "step2Suffix": ").",
+      "step3AddName": "Adăuga",
+      "step3Prefix": "Lipiți în caseta de mai sus, apoi apăsați",
+      "step3Suffix": ".",
+      "title": "Explorați mai multe suplimente:"
+    },
+    "manager": {
+      "add": "Adăuga",
+      "adding": "Se adaugă...",
+      "ariaClose": "Închideți addon manager",
+      "ariaManage": "Gestionați suplimente",
+      "errorFallback": "Imposibil de instalat acest addon.",
+      "manageListButton": "Gestionați lista de suplimente",
+      "subtitle": "Adăugați o adresă URL manifest Addon pentru fluxuri torrent și directe.",
+      "title": "Suplimente pentru desktop"
+    },
+    "page": {
+      "addAddonButton": "Adăugați Addon",
+      "disabled": "Dezactivat",
+      "emptyInstalled": "Nu există încă suplimente instalate în sistem.",
+      "enabled": "Activat",
+      "guideHeading": "Descoperiți și instalați suplimente",
+      "guideIntro": "Suplimentele vă ajută să răsfoiți cataloage media și fluxuri adaptate preferințelor dvs. personale de divertisment:",
+      "installError": "Imposibil de instalat acest addon.",
+      "installedHeading": "Suplimente instalate",
+      "processing": "Prelucrare...",
+      "removeAddon": "Eliminați acest supliment",
+      "step1DescPrefix": "Vizitați catalogul comunității la",
+      "step1DescSuffix": "sau furnizori de suplimente standard similari.",
+      "step1Title": "Explorați Catalogul de suplimente",
+      "step2DescPrefix": "Selectați suplimentul dorit, personalizați opțiunile și copiați adresa URL a manifestului acestuia (exemplu standard:",
+      "step2DescSuffix": ").",
+      "step2Title": "Copiați linkul manifest",
+      "step3AddName": "Adăuga",
+      "step3DescPrefix": "Lipiți calea manifest în câmpul de mai jos și apăsați",
+      "step3DescSuffix": ". Suplimentul se va activa imediat pentru a căuta surse media.",
+      "step3Title": "Adăugați la aplicație",
+      "title": "Manager de suplimente"
+    },
+    "player": {
+      "emptyExplanation": "Nu este instalat sau activat încă niciun supliment de flux. Vizitați pagina Addons Manager pentru ghiduri de configurare și descoperire a catalogului media.",
+      "emptyTitle": "Nu sunt disponibile suplimente de flux",
+      "manageAddonsButton": "Gestionați lista de suplimente"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Activ",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Deschide meniul cont",
+      "addons": "Suplimente",
       "desktop": "Setările aplicației",
-      "lists": "Liste",
       "logout": "Deconectați-vă",
       "register": "Sincronizare în Cloud",
       "settings": "Setări"

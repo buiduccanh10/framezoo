@@ -5,6 +5,56 @@
     "copied": "Kopiert",
     "copy": "Kopieren"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Besuchen",
+      "step1Suffix": "oder Ihr vertrauenswürdiges kompatibles Add-on-Repository.",
+      "step2Prefix": "Kopieren Sie den Manifest-Link (z. B.",
+      "step2Suffix": ").",
+      "step3AddName": "Hinzufügen",
+      "step3Prefix": "In das Feld oben einfügen und dann drücken",
+      "step3Suffix": ".",
+      "title": "Entdecken Sie weitere Add-ons:"
+    },
+    "manager": {
+      "add": "Hinzufügen",
+      "adding": "Hinzufügen...",
+      "ariaClose": "Schließen Sie den Addon-Manager",
+      "ariaManage": "Add-ons verwalten",
+      "errorFallback": "Dieses Add-on kann nicht installiert werden.",
+      "manageListButton": "Add-on-Liste verwalten",
+      "subtitle": "Fügen Sie eine Addon-Manifest-URL für Torrent- und Direktstreams hinzu.",
+      "title": "Desktop-Add-ons"
+    },
+    "page": {
+      "addAddonButton": "Add-on hinzufügen",
+      "disabled": "Deaktiviert",
+      "emptyInstalled": "Es sind noch keine Add-ons im System installiert.",
+      "enabled": "Ermöglicht",
+      "guideHeading": "Entdecken und installieren Sie Add-ons",
+      "guideIntro": "Mithilfe von Add-ons können Sie Medienkataloge und Streams durchsuchen, die auf Ihre persönlichen Unterhaltungsvorlieben zugeschnitten sind:",
+      "installError": "Dieses Add-on kann nicht installiert werden.",
+      "installedHeading": "Installierte Addons",
+      "processing": "Verarbeitung...",
+      "removeAddon": "Entfernen Sie dieses Add-on",
+      "step1DescPrefix": "Besuchen Sie den Community-Katalog unter",
+      "step1DescSuffix": "oder ähnliche Standard-Add-on-Anbieter.",
+      "step1Title": "Entdecken Sie den Add-on-Katalog",
+      "step2DescPrefix": "Wählen Sie Ihr gewünschtes Add-on aus, passen Sie die Optionen an und kopieren Sie die Manifest-URL (Standardbeispiel:",
+      "step2DescSuffix": ").",
+      "step2Title": "Manifest-Link kopieren",
+      "step3AddName": "Hinzufügen",
+      "step3DescPrefix": "Fügen Sie den Manifestpfad in das Feld unten ein und drücken Sie",
+      "step3DescSuffix": ". Das Add-on wird sofort aktiviert, um nach Medienquellen zu suchen.",
+      "step3Title": "Zur Anwendung hinzufügen",
+      "title": "Addons-Manager"
+    },
+    "player": {
+      "emptyExplanation": "Es ist noch kein Stream-Addon installiert oder aktiviert. Besuchen Sie die Add-ons-Manager-Seite für Einrichtungsanleitungen und Medienkatalog-Erkennung.",
+      "emptyTitle": "Keine Stream-Add-ons verfügbar",
+      "manageAddonsButton": "Add-on-Liste verwalten"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktiv",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Kontomenü öffnen",
+      "addons": "Add-ons",
       "desktop": "App-Einstellungen",
-      "lists": "Listen",
       "logout": "Abmelden",
       "register": "Mit der Cloud synchronisieren",
       "settings": "Einstellungen"

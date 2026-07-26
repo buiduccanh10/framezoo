@@ -5,6 +5,56 @@
     "copied": "Kopirano",
     "copy": "Kopiraj"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Obisk",
+      "step1Suffix": "ali vaše zaupanja vredno skladišče dodatkov, združljivo s Addon.",
+      "step2Prefix": "Kopirajte povezavo manifesta (npr.",
+      "step2Suffix": ").",
+      "step3AddName": "Dodaj",
+      "step3Prefix": "Prilepite v zgornje polje in pritisnite",
+      "step3Suffix": ".",
+      "title": "Raziščite več dodatkov:"
+    },
+    "manager": {
+      "add": "Dodaj",
+      "adding": "Dodajanje ...",
+      "ariaClose": "Zapri upravitelja dodatkov",
+      "ariaManage": "Upravljanje dodatkov",
+      "errorFallback": "Tega dodatka ni mogoče namestiti.",
+      "manageListButton": "Upravljanje seznama dodatkov",
+      "subtitle": "Dodajte URL manifesta Addon za hudournike in neposredne tokove.",
+      "title": "Namizni dodatki"
+    },
+    "page": {
+      "addAddonButton": "Dodaj dodatek",
+      "disabled": "Onemogočen",
+      "emptyInstalled": "V sistemu še ni nameščen noben dodatek.",
+      "enabled": "Omogočeno",
+      "guideHeading": "Odkrijte in namestite dodatke",
+      "guideIntro": "Dodatki vam pomagajo brskati po medijskih katalogih in tokovih, prilagojenih vašim osebnim željam glede zabave:",
+      "installError": "Tega dodatka ni mogoče namestiti.",
+      "installedHeading": "Nameščeni dodatki",
+      "processing": "Obdelava ...",
+      "removeAddon": "Odstranite ta dodatek",
+      "step1DescPrefix": "Obiščite katalog skupnosti na",
+      "step1DescSuffix": "ali podobni ponudniki standardnih dodatkov.",
+      "step1Title": "Raziščite katalog dodatkov",
+      "step2DescPrefix": "Izberite želeni dodatek, prilagodite možnosti in kopirajte URL njegovega manifesta (standardni primer:",
+      "step2DescSuffix": ").",
+      "step2Title": "Kopiraj povezavo do manifesta",
+      "step3AddName": "Dodaj",
+      "step3DescPrefix": "Pot manifesta prilepite v spodnje polje in pritisnite",
+      "step3DescSuffix": ". Dodatek se bo takoj aktiviral za iskanje medijskih virov.",
+      "step3Title": "Dodaj v aplikacijo",
+      "title": "Upravitelj dodatkov"
+    },
+    "player": {
+      "emptyExplanation": "Noben dodatek za tok še ni nameščen ali aktiviran. Obiščite stran upravitelja dodatkov za navodila za namestitev in odkrivanje kataloga medijev.",
+      "emptyTitle": "Na voljo ni nobenih dodatkov za tok",
+      "manageAddonsButton": "Upravljanje seznama dodatkov"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktiven",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Odprite meni računa",
+      "addons": "Dodatki",
       "desktop": "Nastavitve aplikacije",
-      "lists": "Seznami",
       "logout": "Odjava",
       "register": "Sinhronizacija z oblakom",
       "settings": "Nastavitve"

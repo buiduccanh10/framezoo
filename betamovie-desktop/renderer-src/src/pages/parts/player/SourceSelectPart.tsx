@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
+import { Dropdown, type OptionItem } from "@/components/form/Dropdown";
 import { Icon, Icons } from "@/components/Icon";
 import { Loading } from "@/components/layout/Loading";
 import { Spinner } from "@/components/layout/Spinner";
@@ -99,13 +102,27 @@ function formatSize(bytes: number | null) {
   return `${value.toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
 }
 
+function getStreamQuality(stream: AddonStream): string {
+  const text = [stream.name, stream.title, stream.description, stream.fileName]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  if (/\b(4k|2160p|uhd)\b/.test(text)) return "4K";
+  if (/\b(1440p|2k|qhd)\b/.test(text)) return "1440p";
+  if (/\b(1080p|1080i|fhd|full\s*hd)\b/.test(text)) return "1080p";
+  if (/\b(720p|720i|hd)\b/.test(text)) return "720p";
+  if (/\b(480p|480i|360p|240p|sd|dvd|cam|ts)\b/.test(text)) return "480p";
+  return "other";
+}
+
 function AddonIcon(props: { name: string; logo?: string }) {
   if (props.logo) {
     return (
       <LazyImage
         src={props.logo}
         alt=""
-        className="h-10 w-10 shrink-0 rounded-lg bg-black/30 p-1 object-contain"
+        className="h-10 w-10 shrink-0 rounded-lg object-contain"
         showSkeleton={false}
         loading="eager"
         decoding="sync"
@@ -126,25 +143,33 @@ function AddonIcon(props: { name: string; logo?: string }) {
 function SelectedAddonHeader(props: {
   addon: InstalledAddon;
   onBack: () => void;
+  rightSide?: React.ReactNode;
 }) {
   return (
     <div>
-      <h3 className="flex items-center border-b border-video-context-border pb-3 pt-5 font-bold text-video-context-type-main">
-        <button
-          type="button"
-          className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light hover:bg-opacity-10"
-          onClick={props.onBack}
-          aria-label="Back to addons"
-        >
-          <Icon className="text-xl" icon={Icons.ARROW_LEFT} />
-        </button>
-        <div className="flex min-w-0 flex-1 items-center gap-3">
-          <AddonIcon
-            name={props.addon.manifest.name}
-            logo={props.addon.manifest.logo}
-          />
-          <span className="min-w-0 truncate">{props.addon.manifest.name}</span>
+      <h3 className="flex items-center justify-between border-b border-video-context-border pb-3 pt-5 font-bold text-video-context-type-main">
+        <div className="flex min-w-0 flex-1 items-center">
+          <button
+            type="button"
+            className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light hover:bg-opacity-10"
+            onClick={props.onBack}
+            aria-label="Back to addons"
+          >
+            <Icon className="text-xl" icon={Icons.ARROW_LEFT} />
+          </button>
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <AddonIcon
+              name={props.addon.manifest.name}
+              logo={props.addon.manifest.logo}
+            />
+            <span className="min-w-0 truncate">
+              {props.addon.manifest.name}
+            </span>
+          </div>
         </div>
+        {props.rightSide ? (
+          <div className="ml-3 shrink-0">{props.rightSide}</div>
+        ) : null}
       </h3>
     </div>
   );
@@ -161,6 +186,8 @@ export function SourceSelectPart(props: {
 }) {
   const { meta, mode, onCancel, onSelected, onLoadingChange, onStateChange } =
     props;
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const addons = useInstalledAddons();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
   const progressItems = useProgressStore((state) => state.items);
@@ -180,6 +207,22 @@ export function SourceSelectPart(props: {
     null,
   );
   const isInitialSelection = mode === "initial";
+
+  const qualityOptions: OptionItem[] = useMemo(
+    () => [
+      { id: "all", name: t("addons.player.qualities.all", "All Qualities") },
+      { id: "4K", name: t("addons.player.qualities.4k", "4K") },
+      { id: "1440p", name: t("addons.player.qualities.1440p", "1440p") },
+      { id: "1080p", name: t("addons.player.qualities.1080p", "1080p") },
+      { id: "720p", name: t("addons.player.qualities.720p", "720p") },
+      { id: "480p", name: t("addons.player.qualities.480p", "480p / SD") },
+      { id: "other", name: t("addons.player.qualities.other", "Other") },
+    ],
+    [t],
+  );
+  const [selectedQuality, setSelectedQuality] = React.useState<OptionItem>(
+    qualityOptions[0],
+  );
 
   const addonMedia = useMemo(
     () => ({
@@ -202,7 +245,8 @@ export function SourceSelectPart(props: {
     setAddonLoadErrors([]);
     setAddonError(null);
     setLoadingAddonIds(new Set());
-  }, [addonMedia]);
+    setSelectedQuality(qualityOptions[0]);
+  }, [addonMedia, qualityOptions]);
 
   useEffect(() => {
     onStateChange?.(selectedAddonId ? "streams" : "addons");
@@ -324,22 +368,28 @@ export function SourceSelectPart(props: {
     () => addons.filter((addon) => addon.enabled),
     [addons],
   );
+  const filteredAddonStreams = useMemo(() => {
+    if (selectedQuality.id === "all") return addonStreams;
+    return addonStreams.filter(
+      (stream) => getStreamQuality(stream) === selectedQuality.id,
+    );
+  }, [addonStreams, selectedQuality]);
   const selectedAddonStreams = useMemo(() => {
     if (!selectedAddonId) return [];
-    return addonStreams.filter(
+    return filteredAddonStreams.filter(
       (stream) =>
         stream.addonId === selectedAddonId &&
         (!isInitialSelection || stream.kind === "torrent"),
     );
-  }, [addonStreams, isInitialSelection, selectedAddonId]);
+  }, [filteredAddonStreams, isInitialSelection, selectedAddonId]);
   const streamCountByAddon = useMemo(() => {
     const counts = new Map<string, number>();
-    for (const stream of addonStreams) {
+    for (const stream of filteredAddonStreams) {
       if (isInitialSelection && stream.kind !== "torrent") continue;
       counts.set(stream.addonId, (counts.get(stream.addonId) ?? 0) + 1);
     }
     return counts;
-  }, [addonStreams, isInitialSelection]);
+  }, [filteredAddonStreams, isInitialSelection]);
   const selectedAddonError = useMemo(
     () =>
       addonLoadErrors.find((error) => error.addonId === selectedAddonId) ??
@@ -353,12 +403,26 @@ export function SourceSelectPart(props: {
   const showBackdrop = isInitialSelection;
   const backgroundImage = meta.backdrop ?? meta.poster;
 
+  const inlineDropdown = (
+    <Dropdown
+      options={qualityOptions}
+      selectedItem={selectedQuality}
+      setSelectedItem={setSelectedQuality}
+      className="!my-0 text-xs font-normal"
+      side="right"
+    />
+  );
+
   const content = (
     <Menu.CardWithScrollable>
       {showAddonList && (isInitialSelection || !onCancel) ? (
-        <Menu.Title>Choose an addon</Menu.Title>
+        <Menu.Title rightSide={inlineDropdown}>
+          {t("addons.player.chooseAddon", "Choose an addon")}
+        </Menu.Title>
       ) : showAddonList ? (
-        <Menu.BackLink onClick={onCancel}>Nguồn</Menu.BackLink>
+        <Menu.BackLink onClick={onCancel} rightSide={inlineDropdown}>
+          {t("addons.player.sources", "Sources")}
+        </Menu.BackLink>
       ) : (
         <SelectedAddonHeader
           addon={selectedAddon}
@@ -367,14 +431,45 @@ export function SourceSelectPart(props: {
             setAddonLoadErrors([]);
             setAddonError(null);
           }}
+          rightSide={inlineDropdown}
         />
       )}
       <>
         {showAddonList ? (
           enabledAddons.length === 0 ? (
             <Menu.Section>
-              <Menu.TextDisplay noIcon title="Desktop addons">
-                Install an addon from the plus button in the navigation.
+              <Menu.TextDisplay
+                noIcon
+                title={t(
+                  "addons.player.emptyTitle",
+                  "No stream addons available",
+                )}
+              >
+                <div className="flex flex-col items-center gap-4 pt-2 pb-4">
+                  <p className="max-w-md text-sm leading-relaxed text-video-context-type-main text-opacity-80">
+                    {t(
+                      "addons.player.emptyExplanation",
+                      "No stream addon is installed or activated yet. Visit the Addons Manager page for setup guides and media catalog discovery.",
+                    )}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onCancel?.();
+                      navigate("/addons");
+                    }}
+                    className="flex items-center gap-2 rounded-xl bg-buttons-purple px-6 py-3 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-buttons-purpleHover active:scale-95"
+                  >
+                    <Icon icon={Icons.EXTENSION} className="text-lg" />
+                    <span>
+                      {t(
+                        "addons.player.manageAddonsButton",
+                        "Manage Addon List",
+                      )}
+                    </span>
+                    <Icon icon={Icons.CHEVRON_RIGHT} className="ml-1 text-sm" />
+                  </button>
+                </div>
               </Menu.TextDisplay>
             </Menu.Section>
           ) : (
@@ -409,14 +504,27 @@ export function SourceSelectPart(props: {
                         </span>
                         <span className="truncate text-sm text-video-context-type-main text-opacity-60">
                           {loadError
-                            ? "Unable to load streams"
+                            ? t(
+                                "addons.player.unableToLoad",
+                                "Unable to load streams",
+                              )
                             : loading
-                              ? "Loading streams..."
+                              ? t(
+                                  "addons.player.loadingStreams",
+                                  "Loading streams...",
+                                )
                               : streamCount > 0
-                                ? `${streamCount} stream${
-                                    streamCount === 1 ? "" : "s"
-                                  }`
-                                : "View streams"}
+                                ? t(
+                                    streamCount === 1
+                                      ? "addons.player.streamCount"
+                                      : "addons.player.streamCount_plural",
+                                    "{{count}} streams",
+                                    { count: streamCount },
+                                  )
+                                : t(
+                                    "addons.player.viewStreams",
+                                    "View streams",
+                                  )}
                         </span>
                       </span>
                     </span>
@@ -433,10 +541,19 @@ export function SourceSelectPart(props: {
           </Menu.Section>
         ) : selectedAddonStreams.length === 0 ? (
           <Menu.Section>
-            <Menu.TextDisplay noIcon title="Desktop addons">
+            <Menu.TextDisplay
+              noIcon
+              title={t("addons.player.title", "Desktop addons")}
+            >
               {isInitialSelection
-                ? "No torrent streams returned for this addon."
-                : "No addon streams returned for this title."}
+                ? t(
+                    "addons.player.noTorrentStreams",
+                    "No torrent streams returned for this addon.",
+                  )
+                : t(
+                    "addons.player.noAddonStreams",
+                    "No addon streams returned for this title.",
+                  )}
             </Menu.TextDisplay>
           </Menu.Section>
         ) : (

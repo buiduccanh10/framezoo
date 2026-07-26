@@ -5,6 +5,56 @@
     "copied": "Kimásolva",
     "copy": "Másolás"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Látogatás",
+      "step1Suffix": "vagy a megbízható Addon-kompatibilis kiegészítő tárházat.",
+      "step2Prefix": "Másolja ki a jegyzék hivatkozását (pl.",
+      "step2Suffix": ").",
+      "step3AddName": "Hozzáadás",
+      "step3Prefix": "Illessze be a fenti mezőbe, majd nyomja meg",
+      "step3Suffix": ".",
+      "title": "További kiegészítők felfedezése:"
+    },
+    "manager": {
+      "add": "Hozzáadás",
+      "adding": "Hozzáadás...",
+      "ariaClose": "A bővítménykezelő bezárása",
+      "ariaManage": "Kiegészítők kezelése",
+      "errorFallback": "Nem sikerült telepíteni ezt a kiegészítőt.",
+      "manageListButton": "Kiegészítőlista kezelése",
+      "subtitle": "Adjon hozzá egy Addon jegyzék URL-t a torrentekhez és a közvetlen adatfolyamokhoz.",
+      "title": "Asztali kiegészítők"
+    },
+    "page": {
+      "addAddonButton": "Addon hozzáadása",
+      "disabled": "Letiltva",
+      "emptyInstalled": "A rendszerbe még nincs telepítve kiegészítő.",
+      "enabled": "Engedélyezve",
+      "guideHeading": "Fedezze fel és telepítse a kiegészítőket",
+      "guideIntro": "A kiegészítők segítségével böngészhet a médiakatalógusok és a személyes szórakozási preferenciáira szabott adatfolyamok között:",
+      "installError": "Nem sikerült telepíteni ezt a kiegészítőt.",
+      "installedHeading": "Telepített kiegészítők",
+      "processing": "Feldolgozás...",
+      "removeAddon": "Távolítsa el ezt a kiegészítőt",
+      "step1DescPrefix": "Látogassa meg a közösségi katalógust a címen",
+      "step1DescSuffix": "vagy hasonló szabványos kiegészítő szolgáltatók.",
+      "step1Title": "Fedezze fel az Addon katalógust",
+      "step2DescPrefix": "Válassza ki a kívánt bővítményt, testreszabja a beállításokat, és másolja ki a jegyzék URL-jét (standard példa:",
+      "step2DescSuffix": ").",
+      "step2Title": "Manifest Link másolása",
+      "step3AddName": "Hozzáadás",
+      "step3DescPrefix": "Illessze be a jegyzék elérési útját az alábbi mezőbe, és nyomja meg a gombot",
+      "step3DescSuffix": ". A kiegészítő azonnal aktiválódik a médiaforrások kereséséhez.",
+      "step3Title": "Hozzáadás az alkalmazáshoz",
+      "title": "Addons Manager"
+    },
+    "player": {
+      "emptyExplanation": "Még nincs telepítve vagy aktiválva adatfolyam-kiegészítő. Látogassa meg az Addons Manager oldalt a beállítási útmutatókért és a médiakatalógusok felfedezéséhez.",
+      "emptyTitle": "Nem állnak rendelkezésre adatfolyam-kiegészítők",
+      "manageAddonsButton": "Addon List kezelése"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktív",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Nyissa meg a fiók menüt",
+      "addons": "Kiegészítők",
       "desktop": "Alkalmazásbeállítások",
-      "lists": "Listák",
       "logout": "Kijelentkezés",
       "register": "Szinkronizálás a felhővel",
       "settings": "Beállítások"

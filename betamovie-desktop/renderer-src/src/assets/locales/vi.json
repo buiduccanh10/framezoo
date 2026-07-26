@@ -5,6 +5,75 @@
     "copied": "Đã sao chép",
     "copy": "Sao chép"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Truy cập ",
+      "step1Suffix": " hoặc kho tiện ích mở rộng cộng đồng mà bạn tin dùng.",
+      "step2Prefix": "Sao chép liên kết manifest (ví dụ chuẩn: ",
+      "step2Suffix": ").",
+      "step3AddName": "Thêm",
+      "step3Prefix": "Dán vào ô nhập bên trên, rồi ấn nút ",
+      "step3Suffix": ".",
+      "title": "Khám phá nhiều Addons:"
+    },
+    "manager": {
+      "add": "Thêm",
+      "adding": "Đang thêm...",
+      "ariaClose": "Đóng cửa sổ quản lý addon",
+      "ariaManage": "Quản lý Addons",
+      "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
+      "manageListButton": "Quản lý danh sách Addons",
+      "subtitle": "Thêm địa chỉ liên kết manifest addon để phát và xem phim.",
+      "title": "Tiện ích dành cho máy tính để bàn"
+    },
+    "page": {
+      "addAddonButton": "Thêm Addon",
+      "disabled": "Đã tắt",
+      "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
+      "enabled": "Đang bật",
+      "guideHeading": "Khám phá và cài đặt Addons",
+      "guideIntro": "Tiện ích mở rộng (Addons) giúp bạn dễ dàng duyệt nguồn phát đa phương tiện và dữ liệu phim phù hợp theo nhu cầu cá nhân của bạn:",
+      "installError": "Không thể cài đặt tiện ích mở rộng này.",
+      "installedHeading": "Danh sách Addons đã cài đặt",
+      "processing": "Đang xử lý...",
+      "removeAddon": "Xóa addon này",
+      "step1DescPrefix": "Truy cập vào danh mục cộng đồng tại ",
+      "step1DescSuffix": " hoặc các trang cung cấp addons tiêu chuẩn tương tự.",
+      "step1Title": "Khám phá kho Tiện ích",
+      "step2DescPrefix": "Chọn tiện ích mong muốn, tùy chỉnh thông số và sao chép đường dẫn tệp cấu hình (ví dụ chuẩn: ",
+      "step2DescSuffix": ").",
+      "step2Title": "Sao chép liên kết Manifest",
+      "step3AddName": "Thêm",
+      "step3DescPrefix": "Dán đường dẫn manifest vào ô bên dưới và nhấn nút ",
+      "step3DescSuffix": ". Tiện ích sẽ lập tức được kích hoạt để tìm kiếm nguồn phim.",
+      "step3Title": "Thêm vào ứng dụng",
+      "title": "Quản lý Addons"
+    },
+    "player": {
+      "chooseAddon": "Chọn addon",
+      "emptyExplanation": "Bạn chưa có tiện ích mở rộng (Addon) nào được kích hoạt. Hãy chuyển tới trang Quản lý Addons để tham khảo hướng dẫn cài đặt và khám phá nguồn phát.",
+      "emptyTitle": "Chưa có Addon stream nào",
+      "loadingStreams": "Đang tìm luồng...",
+      "manageAddonsButton": "Quản lý danh sách Addons",
+      "noAddonStreams": "Không tìm thấy luồng addon nào cho bộ phim hoặc chương trình này.",
+      "noTorrentStreams": "Không tìm thấy luồng torrent nào từ addon này.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Tất cả chất lượng",
+        "other": "Khác"
+      },
+      "sources": "Nguồn",
+      "streamCount": "{{count}} luồng",
+      "streamCount_plural": "{{count}} luồng",
+      "title": "Desktop addons",
+      "unableToLoad": "Không thể tải danh sách luồng",
+      "viewStreams": "Xem luồng"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Đang hoạt động",
@@ -641,8 +710,8 @@
     },
     "menu": {
       "accountMenu": "Mở menu tài khoản",
+      "addons": "Tiện ích bổ sung",
       "desktop": "Cài đặt ứng dụng",
-      "lists": "Danh sách",
       "logout": "Đăng xuất",
       "register": "Đồng bộ hóa với đám mây",
       "settings": "Cài đặt"

@@ -1,18 +1,16 @@
 import classNames from "classnames";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import { Icon, Icons } from "@/components/Icon";
-import {
-  installAddon,
-  removeAddon,
-  setAddonEnabled,
-  useInstalledAddons,
-} from "@/desktop/addons/store";
+import { installAddon } from "@/desktop/addons/store";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 
 export function AddonManager() {
+  const { t } = useTranslation();
   const isDesktop = useIsDesktopApp();
-  const addons = useInstalledAddons();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,7 +26,9 @@ export function AddonManager() {
       setUrl("");
     } catch (reason) {
       setError(
-        reason instanceof Error ? reason.message : "Unable to add addon",
+        reason instanceof Error
+          ? reason.message
+          : t("addons.manager.errorFallback", "Unable to install this addon."),
       );
     } finally {
       setLoading(false);
@@ -41,8 +41,8 @@ export function AddonManager() {
         type="button"
         className="pointer-events-auto shrink-0 rounded-full text-lg text-white tabbable backdrop-blur-lg"
         onClick={() => setOpen(true)}
-        aria-label="Manage addons"
-        title="Manage addons"
+        aria-label={t("addons.manager.ariaManage", "Manage addons")}
+        title={t("addons.manager.ariaManage", "Manage addons")}
       >
         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-pill-background bg-opacity-50 transition-colors hover:bg-pill-backgroundHover">
           <Icon icon={Icons.EXTENSION} />
@@ -55,29 +55,35 @@ export function AddonManager() {
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl border border-dropdown-border bg-dropdown-altBackground p-5 shadow-2xl"
+            className="w-full max-w-lg rounded-2xl border border-dropdown-border bg-dropdown-altBackground p-6 shadow-2xl"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-white">
-                  Desktop addons
+                <h2 className="text-lg font-bold text-white">
+                  {t("addons.manager.title", "Desktop Addons")}
                 </h2>
-                <p className="mt-1 text-sm text-dropdown-text">
-                  Add a Stremio manifest URL for torrent and direct streams.
+                <p className="mt-1 text-xs text-dropdown-text">
+                  {t(
+                    "addons.manager.subtitle",
+                    "Add an addon manifest URL for torrent and direct streams.",
+                  )}
                 </p>
               </div>
               <button
                 type="button"
                 className="rounded p-2 text-dropdown-text hover:bg-dropdown-contentBackground hover:text-white"
                 onClick={() => setOpen(false)}
-                aria-label="Close addon manager"
+                aria-label={t(
+                  "addons.manager.ariaClose",
+                  "Close addon manager",
+                )}
               >
                 <Icon icon={Icons.X} />
               </button>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2.5">
               <input
                 value={url}
                 onChange={(event) => {
@@ -87,77 +93,91 @@ export function AddonManager() {
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && url.trim()) void add();
                 }}
-                placeholder="https://torrentio.strem.fun/manifest.json"
-                className="min-w-0 flex-1 rounded-lg border border-dropdown-border bg-dropdown-contentBackground px-3 py-2 text-sm text-white outline-none focus:border-type-link"
+                placeholder="https://addon.example.com/manifest.json"
+                className="min-w-0 flex-1 rounded-xl border border-dropdown-border bg-dropdown-contentBackground px-3.5 py-2.5 text-sm text-white placeholder-dropdown-text/60 outline-none transition-colors focus:border-type-link"
                 disabled={loading}
               />
               <button
                 type="button"
                 className={classNames(
-                  "rounded-lg bg-buttons-purple px-4 py-2 text-sm text-white hover:bg-buttons-purpleHover",
-                  (!url.trim() || loading) && "cursor-not-allowed opacity-60",
+                  "rounded-xl bg-buttons-purple px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-buttons-purpleHover hover:scale-105 active:scale-95",
+                  (!url.trim() || loading) &&
+                    "!cursor-not-allowed !scale-100 opacity-60 hover:bg-buttons-purple",
                 )}
                 onClick={() => void add()}
                 disabled={!url.trim() || loading}
               >
-                {loading ? "Loading..." : "Add"}
+                {loading
+                  ? t("addons.manager.adding", "Adding...")
+                  : t("addons.manager.add", "Add")}
               </button>
             </div>
 
             {error ? (
-              <p className="mt-2 text-sm text-red-400">{error}</p>
+              <p className="mt-2 text-sm font-medium text-red-400">{error}</p>
             ) : null}
 
-            <div className="mt-5 space-y-2">
-              {addons.length === 0 ? (
-                <p className="rounded-lg border border-dashed border-dropdown-border p-4 text-sm text-dropdown-text">
-                  No addons installed.
-                </p>
-              ) : (
-                addons.map((addon) => (
-                  <div
-                    key={addon.manifest.id}
-                    className="flex items-center gap-3 rounded-lg border border-dropdown-border bg-dropdown-contentBackground p-3"
+            {/* Step Guide Section */}
+            <div className="mt-6 rounded-xl border border-dropdown-border bg-dropdown-contentBackground/40 p-4">
+              <h3 className="mb-2 text-sm font-semibold text-white flex items-center gap-2">
+                <Icon icon={Icons.EXTENSION} className="text-type-link" />
+                <span>{t("addons.guide.title", "Explore more addons:")}</span>
+              </h3>
+              <ol className="list-decimal space-y-2.5 pl-4 text-xs leading-relaxed text-dropdown-text">
+                <li>
+                  {t("addons.guide.step1Prefix", "Visit ")}
+                  <a
+                    href="https://stremio-addons.net"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold text-type-link hover:underline"
                   >
-                    {addon.manifest.logo ? (
-                      <img
-                        src={addon.manifest.logo}
-                        alt=""
-                        className="h-9 w-9 rounded object-contain"
-                      />
-                    ) : (
-                      <span className="flex h-9 w-9 items-center justify-center rounded bg-pill-background text-lg text-white">
-                        <Icon icon={Icons.WEB} />
-                      </span>
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-white">
-                        {addon.manifest.name}
-                      </p>
-                      <p className="truncate text-xs text-dropdown-text">
-                        {addon.manifestUrl}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      className="rounded px-2 py-1 text-xs text-dropdown-text hover:bg-pill-backgroundHover hover:text-white"
-                      onClick={() =>
-                        setAddonEnabled(addon.manifest.id, !addon.enabled)
-                      }
-                    >
-                      {addon.enabled ? "On" : "Off"}
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded p-2 text-dropdown-text hover:bg-red-500/20 hover:text-red-300"
-                      onClick={() => removeAddon(addon.manifest.id)}
-                      aria-label={`Remove ${addon.manifest.name}`}
-                    >
-                      <Icon icon={Icons.X} />
-                    </button>
-                  </div>
-                ))
-              )}
+                    https://stremio-addons.net
+                  </a>
+                  {t(
+                    "addons.guide.step1Suffix",
+                    " or your trusted community addon catalog.",
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "addons.guide.step2Prefix",
+                    "Copy the manifest link (e.g. ",
+                  )}
+                  <code className="rounded bg-dropdown-contentBackground px-1 py-0.5 text-white/90">
+                    https://addon.example.com/manifest.json
+                  </code>
+                  {t("addons.guide.step2Suffix", ").")}
+                </li>
+                <li>
+                  {t(
+                    "addons.guide.step3Prefix",
+                    "Paste into the box above, then press ",
+                  )}
+                  <span className="font-semibold text-white">
+                    {t("addons.guide.step3AddName", "Add")}
+                  </span>
+                  {t("addons.guide.step3Suffix", ".")}
+                </li>
+              </ol>
+            </div>
+
+            {/* Navigation Button to Manage Addons Page */}
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/addons");
+                }}
+                className="flex items-center gap-2 rounded-xl bg-dropdown-contentBackground px-4 py-2.5 text-sm font-semibold text-white border border-dropdown-border transition-all duration-200 hover:border-type-link hover:bg-pill-backgroundHover"
+              >
+                <Icon icon={Icons.EXTENSION} className="text-base" />
+                <span>
+                  {t("addons.manager.manageListButton", "Manage addon list")}
+                </span>
+                <Icon icon={Icons.CHEVRON_RIGHT} className="text-sm" />
+              </button>
             </div>
           </div>
         </div>

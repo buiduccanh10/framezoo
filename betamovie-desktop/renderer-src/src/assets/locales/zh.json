@@ -5,6 +5,56 @@
     "copied": "已复制",
     "copy": "复制"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "访问",
+      "step1Suffix": "或您值得信赖的 Addon 兼容插件存储库。",
+      "step2Prefix": "复制清单链接（例如",
+      "step2Suffix": ").",
+      "step3AddName": "添加",
+      "step3Prefix": "粘贴到上面的框中，然后按",
+      "step3Suffix": ".",
+      "title": "探索更多插件："
+    },
+    "manager": {
+      "add": "添加",
+      "adding": "添加...",
+      "ariaClose": "关闭插件管理器",
+      "ariaManage": "管理插件",
+      "errorFallback": "无法安装此插件。",
+      "manageListButton": "管理插件列表",
+      "subtitle": "添加 Torrent 和直接流的 Addon 清单 URL。",
+      "title": "桌面插件"
+    },
+    "page": {
+      "addAddonButton": "添加插件",
+      "disabled": "残疾人",
+      "emptyInstalled": "系统中尚未安装任何插件。",
+      "enabled": "启用",
+      "guideHeading": "发现并安装插件",
+      "guideIntro": "插件可帮助您浏览根据您的个人娱乐偏好定制的媒体目录和流：",
+      "installError": "无法安装此插件。",
+      "installedHeading": "已安装的插件",
+      "processing": "加工...",
+      "removeAddon": "删除这个插件",
+      "step1DescPrefix": "访问社区目录：",
+      "step1DescSuffix": "或类似的标准插件提供商。",
+      "step1Title": "探索插件目录",
+      "step2DescPrefix": "选择所需的插件，自定义选项，然后复制其清单 URL（标准示例：",
+      "step2DescSuffix": ").",
+      "step2Title": "复制清单链接",
+      "step3AddName": "添加",
+      "step3DescPrefix": "将清单路径粘贴到下面的字段中，然后按",
+      "step3DescSuffix": "。该插件将立即激活以搜索媒体源。",
+      "step3Title": "添加到应用程序",
+      "title": "插件管理器"
+    },
+    "player": {
+      "emptyExplanation": "尚未安装或激活任何流插件。访问插件管理器页面以获取设置指南和媒体目录发现。",
+      "emptyTitle": "没有可用的流插件",
+      "manageAddonsButton": "管理插件列表"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "积极的",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "开设账户菜单",
+      "addons": "插件",
       "desktop": "应用程序设置",
-      "lists": "列表",
       "logout": "登出",
       "register": "同步到云端",
       "settings": "设置"

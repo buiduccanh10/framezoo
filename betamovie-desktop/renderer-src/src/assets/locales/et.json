@@ -5,6 +5,56 @@
     "copied": "Kopeeritud",
     "copy": "Kopeeri"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Külastage",
+      "step1Suffix": "või teie usaldusväärse Addon-ühilduva lisandmoodulite hoidla.",
+      "step2Prefix": "Kopeerige manifesti link (nt.",
+      "step2Suffix": ").",
+      "step3AddName": "Lisa",
+      "step3Prefix": "Kleepige ülalolevasse kasti ja seejärel vajutage",
+      "step3Suffix": ".",
+      "title": "Uurige rohkem lisandmooduleid:"
+    },
+    "manager": {
+      "add": "Lisa",
+      "adding": "Lisamine...",
+      "ariaClose": "Sule lisandmoodulite haldur",
+      "ariaManage": "Lisandmoodulite haldamine",
+      "errorFallback": "Seda lisandmoodulit ei saa installida.",
+      "manageListButton": "Halda lisandmoodulite loendit",
+      "subtitle": "Lisage Addon manifesti URL torrenti ja otsevoogude jaoks.",
+      "title": "Töölaua lisad"
+    },
+    "page": {
+      "addAddonButton": "Lisage Addon",
+      "disabled": "Keelatud",
+      "emptyInstalled": "Süsteemi pole veel installitud ühtegi lisandmoodulit.",
+      "enabled": "Lubatud",
+      "guideHeading": "Avastage ja installige lisandmooduleid",
+      "guideIntro": "Lisad aitavad teil sirvida meediakatalooge ja vooge, mis on kohandatud teie isiklike meelelahutuseelistustega.",
+      "installError": "Seda lisandmoodulit ei saa installida.",
+      "installedHeading": "Installitud lisad",
+      "processing": "Töötlemine...",
+      "removeAddon": "Eemalda see lisand",
+      "step1DescPrefix": "Külastage kogukonna kataloogi aadressil",
+      "step1DescSuffix": "või sarnased standardsed lisandmoodulite pakkujad.",
+      "step1Title": "Avastage Addoni kataloogi",
+      "step2DescPrefix": "Valige soovitud lisandmoodul, kohandage valikuid ja kopeerige selle manifesti URL (standardnäide:",
+      "step2DescSuffix": ").",
+      "step2Title": "Kopeeri manifesti link",
+      "step3AddName": "Lisa",
+      "step3DescPrefix": "Kleepige manifesti tee allolevale väljale ja vajutage",
+      "step3DescSuffix": ". Lisandmoodul aktiveerub kohe meediumiallikate otsimiseks.",
+      "step3Title": "Lisa rakendusse",
+      "title": "Lisade haldur"
+    },
+    "player": {
+      "emptyExplanation": "Ühtegi voo lisandmoodulit pole veel installitud ega aktiveeritud. Häälestusjuhendite ja meediakataloogi avastamiseks külastage Addons Manageri lehte.",
+      "emptyTitle": "Voo lisandmooduleid pole saadaval",
+      "manageAddonsButton": "Lisandite loendi haldamine"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktiivne",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Ava konto menüü",
+      "addons": "Lisad",
       "desktop": "Rakenduse seaded",
-      "lists": "Loendid",
       "logout": "Logi välja",
       "register": "Sünkrooni pilvega",
       "settings": "Sätted"

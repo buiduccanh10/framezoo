@@ -5,6 +5,56 @@
     "copied": "Copié",
     "copy": "Copier"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Visite",
+      "step1Suffix": "ou votre référentiel de modules complémentaires compatible Addon de confiance.",
+      "step2Prefix": "Copiez le lien du manifeste (par ex.",
+      "step2Suffix": ").",
+      "step3AddName": "Ajouter",
+      "step3Prefix": "Collez dans la case ci-dessus, puis appuyez sur",
+      "step3Suffix": ".",
+      "title": "Explorez plus de modules complémentaires :"
+    },
+    "manager": {
+      "add": "Ajouter",
+      "adding": "Ajout...",
+      "ariaClose": "Fermer le gestionnaire de modules complémentaires",
+      "ariaManage": "Gérer les modules complémentaires",
+      "errorFallback": "Impossible d'installer cet addon.",
+      "manageListButton": "Gérer la liste des modules complémentaires",
+      "subtitle": "Ajoutez une URL manifeste Addon pour les flux torrent et directs.",
+      "title": "Modules complémentaires de bureau"
+    },
+    "page": {
+      "addAddonButton": "Ajouter un module complémentaire",
+      "disabled": "Désactivé",
+      "emptyInstalled": "Aucun module complémentaire n'est encore installé dans le système.",
+      "enabled": "Activé",
+      "guideHeading": "Découvrez et installez des modules complémentaires",
+      "guideIntro": "Les modules complémentaires vous aident à parcourir des catalogues et des flux multimédias adaptés à vos préférences personnelles en matière de divertissement :",
+      "installError": "Impossible d'installer cet addon.",
+      "installedHeading": "Modules complémentaires installés",
+      "processing": "Traitement...",
+      "removeAddon": "Supprimer ce module complémentaire",
+      "step1DescPrefix": "Visitez le catalogue de la communauté sur",
+      "step1DescSuffix": "ou des fournisseurs de modules complémentaires standard similaires.",
+      "step1Title": "Explorer le catalogue de modules complémentaires",
+      "step2DescPrefix": "Sélectionnez le module complémentaire souhaité, personnalisez les options et copiez son URL manifeste (exemple standard :",
+      "step2DescSuffix": ").",
+      "step2Title": "Copier le lien du manifeste",
+      "step3AddName": "Ajouter",
+      "step3DescPrefix": "Collez le chemin du manifeste dans le champ ci-dessous et appuyez sur",
+      "step3DescSuffix": ". L'addon s'activera immédiatement pour rechercher des sources multimédias.",
+      "step3Title": "Ajouter à la candidature",
+      "title": "Gestionnaire de modules complémentaires"
+    },
+    "player": {
+      "emptyExplanation": "Aucun module complémentaire de flux n'est encore installé ou activé. Visitez la page Addons Manager pour les guides de configuration et la découverte du catalogue multimédia.",
+      "emptyTitle": "Aucun module complémentaire de flux disponible",
+      "manageAddonsButton": "Gérer la liste des modules complémentaires"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Actif",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Menu Ouvrir un compte",
+      "addons": "Modules complémentaires",
       "desktop": "Paramètres de l'application",
-      "lists": "Listes",
       "logout": "Se déconnecter",
       "register": "Synchroniser au Cloud",
       "settings": "Paramètres"

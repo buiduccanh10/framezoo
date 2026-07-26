@@ -5,6 +5,56 @@
     "copied": "已複製",
     "copy": "複製"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "訪問",
+      "step1Suffix": "或您值得信賴的 Addon 相容外掛程式儲存庫。",
+      "step2Prefix": "複製清單連結（例如",
+      "step2Suffix": ").",
+      "step3AddName": "添加",
+      "step3Prefix": "貼到上面的框中，然後按",
+      "step3Suffix": ".",
+      "title": "探索更多插件："
+    },
+    "manager": {
+      "add": "添加",
+      "adding": "新增...",
+      "ariaClose": "關閉外掛程式管理器",
+      "ariaManage": "管理插件",
+      "errorFallback": "無法安裝此外掛程式。",
+      "manageListButton": "管理外掛程式列表",
+      "subtitle": "新增 Torrent 和直接流的 Addon 清單 URL。",
+      "title": "桌面插件"
+    },
+    "page": {
+      "addAddonButton": "新增插件",
+      "disabled": "殘障人士",
+      "emptyInstalled": "系統中尚未安裝任何插件。",
+      "enabled": "啟用",
+      "guideHeading": "發現並安裝插件",
+      "guideIntro": "外掛程式可協助您瀏覽根據您的個人娛樂偏好量身訂製的媒體目錄和串流：",
+      "installError": "無法安裝此外掛程式。",
+      "installedHeading": "已安裝的插件",
+      "processing": "加工...",
+      "removeAddon": "刪除這個插件",
+      "step1DescPrefix": "參觀社區目錄：",
+      "step1DescSuffix": "或類似的標準插件提供者。",
+      "step1Title": "探索插件目錄",
+      "step2DescPrefix": "選擇所需的插件，自訂選項，然後複製其清單 URL（標準範例：",
+      "step2DescSuffix": ").",
+      "step2Title": "複製清單連結",
+      "step3AddName": "添加",
+      "step3DescPrefix": "將清單路徑貼到下面的欄位中，然後按",
+      "step3DescSuffix": "。該插件將立即啟動以搜尋媒體來源。",
+      "step3Title": "添加到應用程式",
+      "title": "外掛程式管理器"
+    },
+    "player": {
+      "emptyExplanation": "尚未安裝或啟用任何串流插件。造訪外掛程式管理器頁面以取得設定指南和媒體目錄發現。",
+      "emptyTitle": "沒有可用的串流插件",
+      "manageAddonsButton": "管理外掛程式列表"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "積極的",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "開設帳戶菜單",
+      "addons": "外掛",
       "desktop": "應用程式設定",
-      "lists": "清單",
       "logout": "登出",
       "register": "同步到雲端",
       "settings": "設定"
