@@ -287,6 +287,15 @@ function VideoElement() {
           usePlayerStore.setState((s) => {
             s.mediaPlaying.volume = status.data / 100;
           });
+        } else if (
+          status.name === "paused-for-cache" ||
+          status.name === "seeking"
+        ) {
+          if (status.data === true) {
+            usePlayerStore.setState((s) => {
+              s.mediaPlaying.isLoading = true;
+            });
+          }
         }
       },
     );
@@ -311,6 +320,9 @@ function VideoElement() {
     };
 
     const handleSeeking = () => {
+      usePlayerStore.setState((s) => {
+        s.mediaPlaying.isLoading = true;
+      });
       void electronAPI.sendMpvCommand("seek", vEl.currentTime, "absolute");
     };
 

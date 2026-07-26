@@ -212,12 +212,7 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     isBufferingCurrentPlaybackSegment,
   ]);
 
-  const showBackdropImage =
-    status === playerStatus.IDLE ||
-    isPreparingSource ||
-    (isBufferingCurrentPlaybackSegment &&
-      playbackKey !== null &&
-      initialLoadPlaybackKey === playbackKey);
+  const showBackdropImage = showOverlay;
 
   const loadingMessages = useMemo(
     () =>
