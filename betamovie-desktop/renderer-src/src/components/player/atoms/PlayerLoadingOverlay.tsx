@@ -7,7 +7,6 @@ import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 const MESSAGE_INITIAL_DELAY_MS = 6000;
-const ACTIVE_SEGMENT_BUFFER_THRESHOLD_SECONDS = 0.35;
 
 function getRandomMessage(messages: string[], prev?: string) {
   if (messages.length <= 1) return messages[0] ?? "";
@@ -201,7 +200,9 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
       initialLoadPlaybackKey &&
       playbackKey === initialLoadPlaybackKey &&
       status === playerStatus.PLAYING &&
-      !isBufferingCurrentPlaybackSegment
+      !showOverlay &&
+      duration > 0 &&
+      time > 0
     ) {
       setInitialLoadPlaybackKey(null);
     }
@@ -209,10 +210,16 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     initialLoadPlaybackKey,
     playbackKey,
     status,
-    isBufferingCurrentPlaybackSegment,
+    showOverlay,
+    duration,
+    time,
   ]);
 
-  const showBackdropImage = showOverlay;
+  const showBackdropImage =
+    showOverlay &&
+    (status === playerStatus.IDLE ||
+      isPreparingSource ||
+      (playbackKey !== null && initialLoadPlaybackKey === playbackKey));
 
   const loadingMessages = useMemo(
     () =>
