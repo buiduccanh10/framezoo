@@ -270,6 +270,8 @@ export class EmbeddedMpvController {
       this.sendCommand("observe_property", [2, "duration"]);
       this.sendCommand("observe_property", [3, "pause"]);
       this.sendCommand("observe_property", [4, "volume"]);
+      this.sendCommand("observe_property", [5, "paused-for-cache"]);
+      this.sendCommand("observe_property", [6, "seeking"]);
     });
 
     client.on("data", (data) => {
