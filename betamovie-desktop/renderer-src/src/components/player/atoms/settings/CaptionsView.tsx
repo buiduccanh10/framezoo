@@ -20,6 +20,7 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import {
   captionIsVisible,
+  decodeSubtitleBytes,
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
@@ -321,13 +322,17 @@ export function CustomCaptionOption() {
     const reader = new FileReader();
 
     reader.addEventListener("load", (event) => {
-      if (!event.target || typeof event.target.result !== "string") {
+      if (
+        !event.target?.result ||
+        !(event.target.result instanceof ArrayBuffer)
+      ) {
         setError("Failed to read file");
         return;
       }
 
       try {
-        const converted = normalizeSubtitleToVtt(event.target.result);
+        const decoded = decodeSubtitleBytes(event.target.result, "vi");
+        const converted = normalizeSubtitleToVtt(decoded);
         setCaption({
           language: "custom",
           vttData: converted,
@@ -347,7 +352,7 @@ export function CustomCaptionOption() {
       setError("Failed to read file");
     });
 
-    reader.readAsText(file, "utf-8");
+    reader.readAsArrayBuffer(file);
   };
 
   return (
@@ -648,12 +653,13 @@ export function CaptionsView({
 
     const reader = new FileReader();
     reader.addEventListener("load", (e) => {
-      if (!e.target || typeof e.target.result !== "string") {
+      if (!e.target?.result || !(e.target.result instanceof ArrayBuffer)) {
         return;
       }
 
       try {
-        const converted = normalizeSubtitleToVtt(e.target.result);
+        const decoded = decodeSubtitleBytes(e.target.result, "vi");
+        const converted = normalizeSubtitleToVtt(decoded);
 
         setCaption({
           language: "custom",
@@ -670,7 +676,7 @@ export function CaptionsView({
       // Silently fail on drop - user can use the upload button for better error feedback
     });
 
-    reader.readAsText(firstFile, "utf-8");
+    reader.readAsArrayBuffer(firstFile);
   }
 
   const { dragging, fileDropProps } = useFileDrop({

@@ -17,7 +17,7 @@ export function getProviderMetadata() {
 export function hasLoadedProviderMetadata() {
   return true;
 }
-export async function loadProviderMetadata(...args: any[]) {
+export async function loadProviderMetadata(..._args: any[]) {
   return;
 }
 export function useProviderMetadataVersion() {

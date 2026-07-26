@@ -1,8 +1,11 @@
-import { strFromU8, unzipSync } from "fflate";
+import { unzipSync } from "fflate";
 import { list } from "subsrt-ts";
 
 import { proxiedFetch } from "@/backend/helpers/fetch";
-import { normalizeSubtitleToVtt } from "@/components/player/utils/captions";
+import {
+  decodeSubtitleBytes,
+  normalizeSubtitleToVtt,
+} from "@/components/player/utils/captions";
 import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { SimpleCache } from "@/utils/cache";
@@ -28,7 +31,10 @@ function isZipArchive(buffer: ArrayBuffer): boolean {
   );
 }
 
-function extractSubtitleTextFromZip(buffer: ArrayBuffer): string | null {
+function extractSubtitleTextFromZip(
+  buffer: ArrayBuffer,
+  language?: string,
+): string | null {
   try {
     const files = unzipSync(new Uint8Array(buffer));
     const entries = Object.entries(files).filter(
@@ -40,7 +46,7 @@ function extractSubtitleTextFromZip(buffer: ArrayBuffer): string | null {
       subtitleTypeList.some((ext) => name.toLowerCase().endsWith(ext)),
     );
     const target = preferred?.[1] ?? entries[0][1];
-    return strFromU8(target);
+    return decodeSubtitleBytes(target, language);
   } catch (error) {
     console.warn(
       "Failed to extract subtitle ZIP, falling back to raw decode",
@@ -106,19 +112,15 @@ export async function downloadCaptionAsVtt(
       );
     }
     const contentType = response.headers.get("content-type") || "";
-    const charset =
-      /charset=([^;]+)/i.exec(contentType)?.[1]?.trim() || "utf-8";
 
     // Get the raw bytes
     const buffer = await response.arrayBuffer();
     if (contentType.includes("application/zip") || isZipArchive(buffer)) {
-      data = extractSubtitleTextFromZip(buffer) ?? undefined;
+      data = extractSubtitleTextFromZip(buffer, caption.language) ?? undefined;
     }
 
     if (!data) {
-      // Decode using the detected charset, defaulting to UTF-8
-      const decoder = new TextDecoder(charset);
-      data = decoder.decode(buffer);
+      data = decodeSubtitleBytes(buffer, caption.language);
     }
   }
   if (!data) throw new Error("failed to get caption data");
@@ -136,6 +138,6 @@ export async function downloadWebVTT(url: string): Promise<string> {
   const cached = downloadCache.get(url);
   if (cached) return cached;
 
-  const data = await fetch(url).then((v) => v.text());
-  return data;
+  const buffer = await fetch(url).then((v) => v.arrayBuffer());
+  return decodeSubtitleBytes(buffer);
 }
