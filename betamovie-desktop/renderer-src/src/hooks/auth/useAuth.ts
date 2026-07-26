@@ -19,7 +19,6 @@ import {
 } from "@/backend/accounts/crypto";
 import { getGroupOrder } from "@/backend/accounts/groupOrder";
 import { importBookmarks, importProgress } from "@/backend/accounts/import";
-import { getLists } from "@/backend/accounts/lists";
 import { getLoginChallengeToken, loginAccount } from "@/backend/accounts/login";
 import { progressMediaItemToInputs } from "@/backend/accounts/progress";
 import {
@@ -39,7 +38,6 @@ import { useAuthData } from "@/hooks/auth/useAuthData";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { BookmarkMediaItem } from "@/stores/bookmarks";
-import { useListStore } from "@/stores/lists";
 import { ProgressMediaItem } from "@/stores/progress";
 
 export interface RegistrationData {
@@ -192,7 +190,6 @@ export function useAuth() {
     }
     // Only remove the account, keep all local data
     useAuthStore.getState().removeAccount();
-    useListStore.getState().clear();
   }, [backendUrl, currentAccount]);
 
   const register = useCallback(
@@ -359,12 +356,11 @@ export function useAuth() {
         }
       }
 
-      const [bookmarks, progress, watchHistory, lists, settings, groupOrder] =
+      const [bookmarks, progress, watchHistory, settings, groupOrder] =
         await Promise.all([
           getBookmarks(backendUrl, activeAccount),
           getProgress(backendUrl, activeAccount),
           getWatchHistory(backendUrl, activeAccount),
-          getLists(backendUrl, activeAccount),
           getSettings(backendUrl, activeAccount),
           getGroupOrder(backendUrl, activeAccount),
         ]);
@@ -381,7 +377,6 @@ export function useAuth() {
         progress,
         bookmarks,
         watchHistory,
-        lists,
         settings,
         groupOrder,
       );

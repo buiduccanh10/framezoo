@@ -115,7 +115,6 @@ async function main() {
 
       if (previousId !== adminId) {
         await tx.$executeRaw`UPDATE "bookmarks" SET "user_id" = ${adminId} WHERE "user_id" = ${previousId}`;
-        await tx.$executeRaw`UPDATE "lists" SET "user_id" = ${adminId} WHERE "user_id" = ${previousId}`;
         await tx.$executeRaw`UPDATE "progress_items" SET "user_id" = ${adminId} WHERE "user_id" = ${previousId}`;
         await tx.$executeRaw`UPDATE "sessions" SET "user" = ${adminId} WHERE "user" = ${previousId}`;
         await tx.$executeRaw`UPDATE "watch_history" SET "user_id" = ${adminId} WHERE "user_id" = ${previousId}`;
