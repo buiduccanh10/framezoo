@@ -13,9 +13,7 @@ import {
   ReleaseQualityBadge,
   getReleaseQualityVariant,
 } from "@/components/media/ReleaseQualityBadge";
-import { ManageMediaListsModal } from "@/components/overlays/ManageMediaListsModal";
 import { conf } from "@/setup/config";
-import { useAuthStore } from "@/stores/auth";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { formatCompactCount } from "@/utils/formatNumber";
 import { getRTAudienceIcon, getRTIcon } from "@/utils/rottenTomatoes";
@@ -36,11 +34,9 @@ export function DetailsBody({
   isLoadingImdb,
   isLoadingRt,
 }: DetailsBodyProps) {
-  const [showListModal, setShowListModal] = useState(false);
   const [releaseInfo, setReleaseInfo] = useState<TraktReleaseResponse | null>(
     null,
   );
-  const loggedIn = !!useAuthStore((state) => state.account);
   const addBookmarkWithGroups = useBookmarkStore(
     (s) => s.addBookmarkWithGroups,
   );
@@ -292,20 +288,6 @@ export function DetailsBody({
                 type: data.type || "movie",
               }}
             />
-            {loggedIn && data.id && data.type ? (
-              <button
-                type="button"
-                onClick={() => setShowListModal(true)}
-                className="p-2 opacity-75 transition-opacity duration-300 hover:scale-110 hover:cursor-pointer hover:opacity-95"
-                aria-label={t("details.addToList")}
-                title={t("details.addToList")}
-              >
-                <IconPatch
-                  icon={Icons.FILE}
-                  className="transition-transform duration-300 hover:scale-110 hover:cursor-pointer"
-                />
-              </button>
-            ) : null}
             <button
               type="button"
               onClick={onShareClick}
@@ -329,18 +311,6 @@ export function DetailsBody({
           onRemoveGroup={handleRemoveGroup}
         />
       </div>
-
-      {loggedIn && data.id && data.type ? (
-        <ManageMediaListsModal
-          open={showListModal}
-          onClose={() => setShowListModal(false)}
-          media={{
-            tmdbId: data.id.toString(),
-            title: data.title,
-            type: data.type,
-          }}
-        />
-      ) : null}
     </div>
   );
 }
