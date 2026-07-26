@@ -130,6 +130,7 @@ export function RealPlayerView() {
         },
       },
       duration: torrentStatus.duration ?? undefined,
+      isTorrent: true,
     };
 
     torrentPromotionRef.current = promotionKey;
