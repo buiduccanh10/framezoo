@@ -239,6 +239,8 @@ function VideoElement() {
     }
   }, [streamUrl, streamType, directPlay]);
 
+  const mpvBufferingRef = useRef({ seeking: false, pausedForCache: false });
+
   // 2-way sync between MPV IPC status and React Player
   useEffect(() => {
     const electronAPI = (window as any).electronAPI;
@@ -255,7 +257,11 @@ function VideoElement() {
           }
           usePlayerStore.setState((s) => {
             s.progress.time = status.data;
-            if (status.data > 0) {
+            if (
+              status.data > 0 &&
+              !mpvBufferingRef.current.seeking &&
+              !mpvBufferingRef.current.pausedForCache
+            ) {
               s.mediaPlaying.isLoading = false;
             }
           });
@@ -289,13 +295,26 @@ function VideoElement() {
           });
         } else if (
           status.name === "paused-for-cache" ||
-          status.name === "seeking"
+          status.name === "seeking" ||
+          status.name === "cache-buffering-state"
         ) {
-          if (status.data === true) {
-            usePlayerStore.setState((s) => {
-              s.mediaPlaying.isLoading = true;
-            });
+          if (status.name === "paused-for-cache") {
+            mpvBufferingRef.current.pausedForCache = status.data === true;
+          } else if (
+            status.name === "cache-buffering-state" &&
+            typeof status.data === "number"
+          ) {
+            mpvBufferingRef.current.pausedForCache = status.data < 100;
+          } else if (status.name === "seeking") {
+            mpvBufferingRef.current.seeking = status.data === true;
           }
+
+          const isBuffering =
+            mpvBufferingRef.current.seeking ||
+            mpvBufferingRef.current.pausedForCache;
+          usePlayerStore.setState((s) => {
+            s.mediaPlaying.isLoading = isBuffering;
+          });
         }
       },
     );
@@ -320,6 +339,7 @@ function VideoElement() {
     };
 
     const handleSeeking = () => {
+      mpvBufferingRef.current.seeking = true;
       usePlayerStore.setState((s) => {
         s.mediaPlaying.isLoading = true;
       });
