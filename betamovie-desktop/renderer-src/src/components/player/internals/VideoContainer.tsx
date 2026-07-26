@@ -246,30 +246,21 @@ function VideoElement() {
 
     const unbindStatus = electronAPI.onMpvStatus(
       (status: { name: string; data: any }) => {
-        const activeDisplay = usePlayerStore.getState().display as any;
+        const vEl = videoEl.current;
+        if (!vEl) return;
 
         if (status.name === "time-pos" && typeof status.data === "number") {
-          const time = status.data;
-          activeDisplay?.emit("time", time);
-          if (time > 0) {
-            activeDisplay?.emit("loading", false);
-            activeDisplay?.emit("play", undefined);
+          if (Math.abs(vEl.currentTime - status.data) > 0.5) {
+            vEl.currentTime = status.data;
           }
-        } else if (
-          status.name === "duration" &&
-          typeof status.data === "number" &&
-          status.data > 0
-        ) {
-          activeDisplay?.emit("duration", status.data);
         } else if (
           status.name === "pause" &&
           typeof status.data === "boolean"
         ) {
-          if (status.data) {
-            activeDisplay?.emit("pause", undefined);
-          } else {
-            activeDisplay?.emit("play", undefined);
-            activeDisplay?.emit("loading", false);
+          if (status.data && !vEl.paused) {
+            vEl.pause();
+          } else if (!status.data && vEl.paused) {
+            void vEl.play().catch(() => {});
           }
         }
       },
@@ -326,6 +317,7 @@ function VideoElement() {
         className="absolute inset-0 w-full h-screen bg-black"
         autoPlay
         playsInline
+        muted={!!(streamUrl && (streamType === "file" || directPlay))}
         ref={handleVideoRef}
         preload={preloadMode}
         onContextMenu={(e) => e.preventDefault()}

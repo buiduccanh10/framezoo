@@ -278,6 +278,7 @@ export function SourceSelectPart(props: {
               },
             },
             duration,
+            isTorrent: true,
           };
 
           playMedia(

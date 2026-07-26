@@ -30,6 +30,7 @@ export type SourceSliceSource =
       type: "file";
       qualities: Partial<Record<SourceQuality, SourceFileStream>>;
       duration?: number;
+      isTorrent?: boolean;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];
     }
@@ -131,7 +132,16 @@ export function selectQuality(
     if (quality) {
       const stream = source.qualities[quality];
       if (stream) {
-        return { stream, quality };
+        return {
+          stream: {
+            ...stream,
+            duration: source.duration,
+            isTorrent: source.isTorrent,
+            headers: source.headers,
+            preferredHeaders: source.preferredHeaders,
+          },
+          quality,
+        };
       }
     }
   }
