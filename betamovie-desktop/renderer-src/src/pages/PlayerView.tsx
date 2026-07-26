@@ -113,14 +113,13 @@ export function RealPlayerView() {
     ].join(":");
     if (torrentPromotionRef.current === promotionKey) return;
 
-    let promotedSource: SourceSliceSource;
     const currentUrl =
       source.type === "file" ? source.qualities.unknown?.url : null;
     if (currentUrl === torrentStatus.streamUrl) {
       torrentPromotionRef.current = promotionKey;
       return;
     }
-    promotedSource = {
+    const promotedSource: SourceSliceSource = {
       id: source.id ?? sourceId ?? undefined,
       type: "file",
       qualities: {
