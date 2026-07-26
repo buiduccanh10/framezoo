@@ -5,6 +5,56 @@
     "copied": "הועתק",
     "copy": "להעתיק"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "לְבַקֵר",
+      "step1Suffix": "או מאגר התוספים המהימן שלך התואם Addon.",
+      "step2Prefix": "העתק את קישור המניפסט (למשל",
+      "step2Suffix": ").",
+      "step3AddName": "לְהוֹסִיף",
+      "step3Prefix": "הדבק בתיבה למעלה ולאחר מכן הקש",
+      "step3Suffix": ".",
+      "title": "גלה עוד תוספות:"
+    },
+    "manager": {
+      "add": "לְהוֹסִיף",
+      "adding": "מוֹסִיף...",
+      "ariaClose": "סגור את מנהל ההרחבות",
+      "ariaManage": "נהל תוספות",
+      "errorFallback": "לא ניתן להתקין את התוסף הזה.",
+      "manageListButton": "נהל רשימת תוספות",
+      "subtitle": "הוסף כתובת אתר מניפסט של Addon עבור טורנטים וזרמים ישירים.",
+      "title": "תוספות לשולחן העבודה"
+    },
+    "page": {
+      "addAddonButton": "הוסף Addon",
+      "disabled": "נָכֶה",
+      "emptyInstalled": "עדיין לא הותקנו תוספות במערכת.",
+      "enabled": "מופעל",
+      "guideHeading": "גלה והתקן תוספות",
+      "guideIntro": "תוספות עוזרות לך לדפדף בקטלוגי מדיה ובזרמים המותאמים להעדפות הבידור האישיות שלך:",
+      "installError": "לא ניתן להתקין את התוסף הזה.",
+      "installedHeading": "תוספים מותקנים",
+      "processing": "מעבד...",
+      "removeAddon": "הסר את התוסף הזה",
+      "step1DescPrefix": "בקר בקטלוג הקהילה בכתובת",
+      "step1DescSuffix": "או ספקי תוספים סטנדרטיים דומים.",
+      "step1Title": "חקור את קטלוג Addon",
+      "step2DescPrefix": "בחר את התוסף הרצוי, התאם אישית אפשרויות והעתק את כתובת האתר של המניפסט שלו (דוגמה סטנדרטית:",
+      "step2DescSuffix": ").",
+      "step2Title": "העתק קישור למניפסט",
+      "step3AddName": "לְהוֹסִיף",
+      "step3DescPrefix": "הדבק את נתיב המניפסט בשדה למטה ולחץ",
+      "step3DescSuffix": ". התוסף יופעל מיד כדי לחפש מקורות מדיה.",
+      "step3Title": "הוסף לאפליקציה",
+      "title": "מנהל תוספות"
+    },
+    "player": {
+      "emptyExplanation": "עדיין לא הותקן או הופעל תוסף סטרימינג. בקר בדף Addons Manager לקבלת מדריכי התקנה וגילוי קטלוג מדיה.",
+      "emptyTitle": "אין תוספי סטרימינג זמינים",
+      "manageAddonsButton": "נהל רשימת תוספות"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "פָּעִיל",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "פתח את תפריט החשבון",
+      "addons": "תוספות",
       "desktop": "הגדרות אפליקציה",
-      "lists": "רשימות",
       "logout": "להתנתק",
       "register": "סנכרון לענן",
       "settings": "הגדרות"

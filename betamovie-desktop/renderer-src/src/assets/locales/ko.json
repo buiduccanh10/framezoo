@@ -5,6 +5,56 @@
     "copied": "복사되었습니다",
     "copy": "복사하기"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "방문하다",
+      "step1Suffix": "또는 신뢰할 수 있는 Addon 호환 애드온 저장소.",
+      "step2Prefix": "매니페스트 링크를 복사합니다(예:",
+      "step2Suffix": ").",
+      "step3AddName": "추가하다",
+      "step3Prefix": "위 상자에 붙여넣은 후 다음을 누르세요.",
+      "step3Suffix": ".",
+      "title": "더 많은 애드온 살펴보기:"
+    },
+    "manager": {
+      "add": "추가하다",
+      "adding": "첨가...",
+      "ariaClose": "애드온 관리자 닫기",
+      "ariaManage": "애드온 관리",
+      "errorFallback": "이 애드온을 설치할 수 없습니다.",
+      "manageListButton": "애드온 목록 관리",
+      "subtitle": "토렌트 및 직접 스트림을 위한 Addon 매니페스트 URL을 추가합니다.",
+      "title": "데스크탑 애드온"
+    },
+    "page": {
+      "addAddonButton": "애드온 추가",
+      "disabled": "장애가 있는",
+      "emptyInstalled": "아직 시스템에 애드온이 설치되지 않았습니다.",
+      "enabled": "활성화됨",
+      "guideHeading": "애드온 검색 및 설치",
+      "guideIntro": "애드온을 사용하면 개인 엔터테인먼트 선호도에 맞춰 미디어 카탈로그와 스트림을 검색할 수 있습니다.",
+      "installError": "이 애드온을 설치할 수 없습니다.",
+      "installedHeading": "설치된 애드온",
+      "processing": "처리 중...",
+      "removeAddon": "이 애드온 제거",
+      "step1DescPrefix": "커뮤니티 카탈로그를 방문하세요.",
+      "step1DescSuffix": "또는 유사한 표준 애드온 제공업체.",
+      "step1Title": "애드온 카탈로그 살펴보기",
+      "step2DescPrefix": "원하는 애드온을 선택하고 옵션을 맞춤설정한 후 매니페스트 URL을 복사하세요(표준 예:",
+      "step2DescSuffix": ").",
+      "step2Title": "매니페스트 링크 복사",
+      "step3AddName": "추가하다",
+      "step3DescPrefix": "아래 필드에 매니페스트 경로를 붙여넣고 다음을 누르세요.",
+      "step3DescSuffix": ". 애드온이 즉시 활성화되어 미디어 소스를 검색합니다.",
+      "step3Title": "신청서에 추가",
+      "title": "애드온 관리자"
+    },
+    "player": {
+      "emptyExplanation": "아직 스트림 애드온이 설치되거나 활성화되지 않았습니다. 설정 가이드 및 미디어 카탈로그 검색을 보려면 애드온 관리자 페이지를 방문하세요.",
+      "emptyTitle": "사용 가능한 스트림 애드온이 없습니다.",
+      "manageAddonsButton": "애드온 목록 관리"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "활동적인",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "계정 메뉴 열기",
+      "addons": "애드온",
       "desktop": "앱 설정",
-      "lists": "기울기",
       "logout": "로그아웃",
       "register": "클라우드 동기화",
       "settings": "설정"

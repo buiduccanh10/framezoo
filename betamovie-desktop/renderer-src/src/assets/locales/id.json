@@ -5,6 +5,56 @@
     "copied": "Disalin",
     "copy": "Salin"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Mengunjungi",
+      "step1Suffix": "atau repositori addon tepercaya yang kompatibel dengan Addon.",
+      "step2Prefix": "Salin tautan manifes (mis.",
+      "step2Suffix": ").",
+      "step3AddName": "Menambahkan",
+      "step3Prefix": "Paste ke dalam kotak di atas, lalu tekan",
+      "step3Suffix": ".",
+      "title": "Jelajahi lebih banyak tambahan:"
+    },
+    "manager": {
+      "add": "Menambahkan",
+      "adding": "Menambahkan...",
+      "ariaClose": "Tutup manajer addon",
+      "ariaManage": "Kelola tambahan",
+      "errorFallback": "Tidak dapat memasang addon ini.",
+      "manageListButton": "Kelola daftar tambahan",
+      "subtitle": "Tambahkan URL manifes Addon untuk torrent dan streaming langsung.",
+      "title": "Tambahan Desktop"
+    },
+    "page": {
+      "addAddonButton": "Tambahkan Addon",
+      "disabled": "Dengan disabilitas",
+      "emptyInstalled": "Belum ada tambahan yang terpasang di sistem.",
+      "enabled": "Diaktifkan",
+      "guideHeading": "Temukan & Instal Addons",
+      "guideIntro": "Addons membantu Anda menelusuri katalog dan streaming media yang disesuaikan dengan preferensi hiburan pribadi Anda:",
+      "installError": "Tidak dapat memasang addon ini.",
+      "installedHeading": "Add-on yang diinstal",
+      "processing": "Pengolahan...",
+      "removeAddon": "Hapus tambahan ini",
+      "step1DescPrefix": "Kunjungi katalog komunitas di",
+      "step1DescSuffix": "atau penyedia addon standar serupa.",
+      "step1Title": "Jelajahi Katalog Addon",
+      "step2DescPrefix": "Pilih addon yang Anda inginkan, sesuaikan opsi, dan salin URL manifesnya (contoh standar:",
+      "step2DescSuffix": ").",
+      "step2Title": "Salin Tautan Manifes",
+      "step3AddName": "Menambahkan",
+      "step3DescPrefix": "Tempel jalur manifes ke dalam bidang di bawah dan tekan",
+      "step3DescSuffix": ". Addon akan segera aktif untuk mencari sumber media.",
+      "step3Title": "Tambahkan ke Aplikasi",
+      "title": "Manajer Tambahan"
+    },
+    "player": {
+      "emptyExplanation": "Belum ada addon streaming yang diinstal atau diaktifkan. Kunjungi halaman Addons Manager untuk panduan pengaturan dan penemuan katalog media.",
+      "emptyTitle": "Tidak ada tambahan aliran yang tersedia",
+      "manageAddonsButton": "Kelola Daftar Addon"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktif",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Buka menu akun",
+      "addons": "tambahan",
       "desktop": "Pengaturan Aplikasi",
-      "lists": "Daftar",
       "logout": "Keluar",
       "register": "Sinkronkan ke Cloud",
       "settings": "Pengaturan"

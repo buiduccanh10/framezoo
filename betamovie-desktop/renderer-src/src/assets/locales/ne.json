@@ -5,6 +5,56 @@
     "copied": "कपी भयो",
     "copy": "कपी"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "भ्रमण गर्नुहोस्",
+      "step1Suffix": "वा तपाईंको विश्वसनीय compatible addon भण्डार।",
+      "step2Prefix": "manifest लिङ्क प्रतिलिपि गर्नुहोस् (जस्तै।",
+      "step2Suffix": ").",
+      "step3AddName": "थप्नुहोस्",
+      "step3Prefix": "माथिको बक्समा टाँस्नुहोस्, त्यसपछि थिच्नुहोस्",
+      "step3Suffix": ".",
+      "title": "थप addons अन्वेषण:"
+    },
+    "manager": {
+      "add": "थप्नुहोस्",
+      "adding": "थप्दै...",
+      "ariaClose": "एडअन प्रबन्धक बन्द गर्नुहोस्",
+      "ariaManage": "addons प्रबन्ध गर्नुहोस्",
+      "errorFallback": "यो एडअन स्थापना गर्न असमर्थ।",
+      "manageListButton": "एडअन सूची प्रबन्ध गर्नुहोस्",
+      "subtitle": "टोरेन्ट र प्रत्यक्ष स्ट्रिमहरूको लागि Addon manifest URL थप्नुहोस्।",
+      "title": "डेस्कटप Addons"
+    },
+    "page": {
+      "addAddonButton": "Addon थप्नुहोस्",
+      "disabled": "असक्षम",
+      "emptyInstalled": "प्रणालीमा अहिलेसम्म कुनै एडअन्स स्थापना गरिएको छैन।",
+      "enabled": "सक्षम गरियो",
+      "guideHeading": "Addons पत्ता लगाउनुहोस् र स्थापना गर्नुहोस्",
+      "guideIntro": "Addons ले तपाइँलाई तपाइँको व्यक्तिगत मनोरन्जन प्राथमिकताहरू अनुरूप मिडिया क्याटलगहरू र स्ट्रिमहरू ब्राउज गर्न मद्दत गर्दछ:",
+      "installError": "यो एडअन स्थापना गर्न असमर्थ।",
+      "installedHeading": "स्थापित Addons",
+      "processing": "प्रशोधन गर्दै...",
+      "removeAddon": "यो addon हटाउनुहोस्",
+      "step1DescPrefix": "मा सामुदायिक सूचीमा जानुहोस्",
+      "step1DescSuffix": "वा समान मानक addon प्रदायकहरू।",
+      "step1Title": "एडन क्याटलग अन्वेषण गर्नुहोस्",
+      "step2DescPrefix": "आफ्नो मनपर्ने addon चयन गर्नुहोस्, विकल्पहरू अनुकूलित गर्नुहोस्, र यसको manifest URL प्रतिलिपि गर्नुहोस् (मानक उदाहरण:",
+      "step2DescSuffix": ").",
+      "step2Title": "म्यानिफेस्ट लिङ्क प्रतिलिपि गर्नुहोस्",
+      "step3AddName": "थप्नुहोस्",
+      "step3DescPrefix": "तलको क्षेत्रमा प्रकट मार्ग टाँस्नुहोस् र थिच्नुहोस्",
+      "step3DescSuffix": "। मिडिया स्रोतहरू खोज्नको लागि एडअन तुरुन्तै सक्रिय हुनेछ।",
+      "step3Title": "अनुप्रयोगमा थप्नुहोस्",
+      "title": "Addons प्रबन्धक"
+    },
+    "player": {
+      "emptyExplanation": "कुनै स्ट्रिम एडअन अझै स्थापित वा सक्रिय गरिएको छैन। सेटअप गाइडहरू र मिडिया क्याटलग खोजको लागि Addons प्रबन्धक पृष्ठमा जानुहोस्।",
+      "emptyTitle": "कुनै स्ट्रिम एडअन्स उपलब्ध छैन",
+      "manageAddonsButton": "Addon सूची प्रबन्ध गर्नुहोस्"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "सक्रिय",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "खाता मेनु खोल्नुहोस्",
+      "addons": "Addons",
       "desktop": "एप सेटिङहरू",
-      "lists": "सूचीहरू",
       "logout": "बाहिर निस्कनु",
       "register": "क्लाउडमा सिंक गर्नुहोस्",
       "settings": "सेटिङ"

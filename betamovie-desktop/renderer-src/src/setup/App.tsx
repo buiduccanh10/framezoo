@@ -20,6 +20,7 @@ import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsMod
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
+import { AddonsPage } from "@/pages/addons/AddonsPage";
 import { AllBookmarks } from "@/pages/bookmarks/AllBookmarks";
 import { DiscoverMore } from "@/pages/discover/AllMovieLists";
 import { Discover } from "@/pages/discover/Discover";
@@ -225,6 +226,8 @@ function App() {
             <Route path="/marked" element={<Marked />} />
             {/* Watch History page */}
             <Route path="/watch-history" element={<WatchHistory />} />
+            {/* Addons page */}
+            <Route path="/addons" element={<AddonsPage />} />
             {/* Settings page */}
             <Route
               path="/settings"

@@ -5,6 +5,56 @@
     "copied": "Kopierad",
     "copy": "Kopiera"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Besök",
+      "step1Suffix": "eller ditt betrodda Addon-kompatibla tilläggsförråd.",
+      "step2Prefix": "Kopiera manifestlänken (t.ex.",
+      "step2Suffix": ").",
+      "step3AddName": "Tillägga",
+      "step3Prefix": "Klistra in i rutan ovan och tryck sedan på",
+      "step3Suffix": ".",
+      "title": "Utforska fler tillägg:"
+    },
+    "manager": {
+      "add": "Tillägga",
+      "adding": "Lägger till...",
+      "ariaClose": "Stäng tilläggshanteraren",
+      "ariaManage": "Hantera tillägg",
+      "errorFallback": "Det går inte att installera detta tillägg.",
+      "manageListButton": "Hantera tilläggslista",
+      "subtitle": "Lägg till en Addon-manifest-URL för torrent- och direktströmmar.",
+      "title": "Skrivbordstillägg"
+    },
+    "page": {
+      "addAddonButton": "Lägg till addon",
+      "disabled": "Inaktiverad",
+      "emptyInstalled": "Inga tillägg installerade i systemet ännu.",
+      "enabled": "Aktiverad",
+      "guideHeading": "Upptäck och installera tillägg",
+      "guideIntro": "Tillägg hjälper dig att bläddra i mediekataloger och strömmar som är skräddarsydda för dina personliga underhållningspreferenser:",
+      "installError": "Det går inte att installera detta tillägg.",
+      "installedHeading": "Installerade tillägg",
+      "processing": "Bearbetar...",
+      "removeAddon": "Ta bort detta tillägg",
+      "step1DescPrefix": "Besök samhällskatalogen på",
+      "step1DescSuffix": "eller liknande standardtilläggsleverantörer.",
+      "step1Title": "Utforska Addon-katalogen",
+      "step2DescPrefix": "Välj önskat tillägg, anpassa alternativen och kopiera dess manifest-URL (standardexempel:",
+      "step2DescSuffix": ").",
+      "step2Title": "Kopiera manifestlänk",
+      "step3AddName": "Tillägga",
+      "step3DescPrefix": "Klistra in manifestsökvägen i fältet nedan och tryck",
+      "step3DescSuffix": ". Tillägget aktiveras omedelbart för att söka efter mediekällor.",
+      "step3Title": "Lägg till i applikation",
+      "title": "Tilläggshanterare"
+    },
+    "player": {
+      "emptyExplanation": "Inget stream-tillägg är installerat eller aktiverat ännu. Besök Addons Manager-sidan för installationsguider och mediekatalogupptäckt.",
+      "emptyTitle": "Inga stream-tillägg tillgängliga",
+      "manageAddonsButton": "Hantera tilläggslista"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Aktiv",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Öppna kontomenyn",
+      "addons": "Tillägg",
       "desktop": "Appinställningar",
-      "lists": "Listor",
       "logout": "Logga ut",
       "register": "Synkronisera till molnet",
       "settings": "Inställningar"

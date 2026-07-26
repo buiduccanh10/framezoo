@@ -5,6 +5,56 @@
     "copied": "Copiato",
     "copy": "Copia"
   },
+  "addons": {
+    "guide": {
+      "step1Prefix": "Visita",
+      "step1Suffix": "o il tuo fidato repository di componenti aggiuntivi compatibile con Addon.",
+      "step2Prefix": "Copia il link manifest (ad es.",
+      "step2Suffix": ").",
+      "step3AddName": "Aggiungere",
+      "step3Prefix": "Incolla nella casella in alto, quindi premi",
+      "step3Suffix": ".",
+      "title": "Esplora altri componenti aggiuntivi:"
+    },
+    "manager": {
+      "add": "Aggiungere",
+      "adding": "Aggiunta...",
+      "ariaClose": "Chiudi il gestore dei componenti aggiuntivi",
+      "ariaManage": "Gestisci componenti aggiuntivi",
+      "errorFallback": "Impossibile installare questo componente aggiuntivo.",
+      "manageListButton": "Gestisci l'elenco dei componenti aggiuntivi",
+      "subtitle": "Aggiungi un URL manifest di Addon per torrent e flussi diretti.",
+      "title": "Componenti aggiuntivi per il desktop"
+    },
+    "page": {
+      "addAddonButton": "Aggiungi componente aggiuntivo",
+      "disabled": "Disabilitato",
+      "emptyInstalled": "Nessun componente aggiuntivo ancora installato nel sistema.",
+      "enabled": "Abilitato",
+      "guideHeading": "Scopri e installa componenti aggiuntivi",
+      "guideIntro": "I componenti aggiuntivi ti aiutano a sfogliare cataloghi multimediali e streaming personalizzati in base alle tue preferenze di intrattenimento personali:",
+      "installError": "Impossibile installare questo componente aggiuntivo.",
+      "installedHeading": "Componenti aggiuntivi installati",
+      "processing": "Elaborazione...",
+      "removeAddon": "Rimuovi questo componente aggiuntivo",
+      "step1DescPrefix": "Visita il catalogo della community su",
+      "step1DescSuffix": "o fornitori di componenti aggiuntivi standard simili.",
+      "step1Title": "Esplora il catalogo dei componenti aggiuntivi",
+      "step2DescPrefix": "Seleziona il componente aggiuntivo desiderato, personalizza le opzioni e copia l'URL manifest (esempio standard:",
+      "step2DescSuffix": ").",
+      "step2Title": "Copia collegamento manifest",
+      "step3AddName": "Aggiungere",
+      "step3DescPrefix": "Incolla il percorso manifest nel campo sottostante e premi",
+      "step3DescSuffix": ". Il componente aggiuntivo si attiverà immediatamente per cercare fonti multimediali.",
+      "step3Title": "Aggiungi all'applicazione",
+      "title": "Gestore componenti aggiuntivi"
+    },
+    "player": {
+      "emptyExplanation": "Nessun componente aggiuntivo dello streaming è ancora installato o attivato. Visita la pagina Gestione componenti aggiuntivi per le guide di installazione e la scoperta del catalogo multimediale.",
+      "emptyTitle": "Nessun componente aggiuntivo dello streaming disponibile",
+      "manageAddonsButton": "Gestisci elenco componenti aggiuntivi"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Attivo",
@@ -641,8 +691,8 @@
     },
     "menu": {
       "accountMenu": "Apri il menu dell'account",
+      "addons": "Componenti aggiuntivi",
       "desktop": "Impostazioni dell'app",
-      "lists": "Elenchi",
       "logout": "Esci",
       "register": "Sincronizza al Cloud",
       "settings": "Impostazioni"
