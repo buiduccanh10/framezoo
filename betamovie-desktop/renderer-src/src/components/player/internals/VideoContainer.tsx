@@ -253,6 +253,20 @@ function VideoElement() {
           if (Math.abs(vEl.currentTime - status.data) > 0.5) {
             vEl.currentTime = status.data;
           }
+          usePlayerStore.setState((s) => {
+            s.progress.time = status.data;
+            if (status.data > 0) {
+              s.mediaPlaying.isLoading = false;
+            }
+          });
+        } else if (
+          status.name === "duration" &&
+          typeof status.data === "number" &&
+          status.data > 0
+        ) {
+          usePlayerStore.setState((s) => {
+            s.progress.duration = status.data;
+          });
         } else if (
           status.name === "pause" &&
           typeof status.data === "boolean"
@@ -262,6 +276,17 @@ function VideoElement() {
           } else if (!status.data && vEl.paused) {
             void vEl.play().catch(() => {});
           }
+          usePlayerStore.setState((s) => {
+            s.mediaPlaying.isPaused = status.data;
+            s.mediaPlaying.isPlaying = !status.data;
+          });
+        } else if (
+          status.name === "volume" &&
+          typeof status.data === "number"
+        ) {
+          usePlayerStore.setState((s) => {
+            s.mediaPlaying.volume = status.data / 100;
+          });
         }
       },
     );

@@ -1691,14 +1691,27 @@ export function makeVideoElementDisplayInterface(options?: {
       // Attempt autoplay only when playback is ready.
       tryAutoplayWhenReady();
     });
-    videoElement.addEventListener("waiting", () => emit("loading", true));
-    videoElement.addEventListener("volumechange", () =>
-      emit(
-        "volumechange",
-        videoElement?.muted ? 0 : (videoElement?.volume ?? 0),
-      ),
-    );
+    videoElement.addEventListener("waiting", () => {
+      const isMpv =
+        source?.isTorrent && !!(window as any).electronAPI?.attachMpvPlayer;
+      if (!isMpv) emit("loading", true);
+    });
+    videoElement.addEventListener("volumechange", () => {
+      const isMpv =
+        source?.isTorrent && !!(window as any).electronAPI?.attachMpvPlayer;
+      if (isMpv) {
+        emit("volumechange", videoElement?.volume ?? 1);
+      } else {
+        emit(
+          "volumechange",
+          videoElement?.muted ? 0 : (videoElement?.volume ?? 0),
+        );
+      }
+    });
     videoElement.addEventListener("timeupdate", () => {
+      const isMpv =
+        source?.isTorrent && !!(window as any).electronAPI?.attachMpvPlayer;
+      if (isMpv) return;
       const currentTime = videoElement?.currentTime ?? 0;
       // Always emit time updates when seeking to prevent subtitle freezing
       // Also emit when progressing forward or when time changes significantly
@@ -1726,6 +1739,9 @@ export function makeVideoElementDisplayInterface(options?: {
         emit("qualities", ["unknown"]);
         emit("changedquality", "unknown");
       }
+      const isMpv =
+        source?.isTorrent && !!(window as any).electronAPI?.attachMpvPlayer;
+      if (isMpv) return;
       // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
       const duration = getEffectiveDuration();
       if (duration > 0) {
@@ -1794,6 +1810,9 @@ export function makeVideoElementDisplayInterface(options?: {
     });
 
     videoElement.addEventListener("durationchange", () => {
+      const isMpv =
+        source?.isTorrent && !!(window as any).electronAPI?.attachMpvPlayer;
+      if (isMpv) return;
       // Only emit duration if it's a valid value (> 0) to prevent progress reset during source switches
       const duration = getEffectiveDuration();
       if (duration > 0) {
@@ -2052,7 +2071,11 @@ export function makeVideoElementDisplayInterface(options?: {
       // actually set
       lastVolume = v;
       if (!videoElement) return;
-      videoElement.muted = volume === 0; // Muted attribute is always supported
+      const isMpv =
+        source?.isTorrent && !!(window as any).electronAPI?.attachMpvPlayer;
+      if (!isMpv) {
+        videoElement.muted = volume === 0; // Muted attribute is always supported
+      }
 
       // update state
       const isChangeable = await canChangeVolume();
