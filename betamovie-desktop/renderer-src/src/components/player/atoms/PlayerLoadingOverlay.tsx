@@ -126,7 +126,7 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   }, [status, isLoading]);
 
   const isPreparingSource =
-    props.sourceLoading && status === playerStatus.SCRAPING;
+    props.sourceLoading && status === playerStatus.SOURCE_SELECTION;
 
   const isTorrentPreparing = useMemo(() => {
     if (!torrentStatus) return false;

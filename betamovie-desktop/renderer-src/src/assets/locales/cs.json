@@ -6,16 +6,6 @@
     "copy": "Zkopírovat"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Návštěva",
-      "step1Suffix": "nebo vaše důvěryhodné úložiště doplňků kompatibilní se Addon.",
-      "step2Prefix": "Zkopírujte odkaz na manifest (např.",
-      "step2Suffix": ").",
-      "step3AddName": "Přidat",
-      "step3Prefix": "Vložte do pole výše a stiskněte",
-      "step3Suffix": ".",
-      "title": "Prozkoumejte další doplňky:"
-    },
     "manager": {
       "add": "Přidat",
       "adding": "Přidávání...",
@@ -23,39 +13,28 @@
       "ariaManage": "Spravujte doplňky",
       "errorFallback": "Tento doplněk nelze nainstalovat.",
       "manageListButton": "Správa seznamu doplňků",
-      "subtitle": "Přidejte adresu URL manifestu Addon pro torrent a přímé streamy.",
+      "subtitle": "Volitelný. Přidejte požadovanou adresu URL manifestu. Tato aplikace nesdružuje, nedoporučuje ani nehostuje doplňky.",
       "title": "Desktopové doplňky"
     },
     "page": {
       "addAddonButton": "Přidat doplněk",
+      "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
       "disabled": "Zakázáno",
       "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",
       "enabled": "Povoleno",
-      "guideHeading": "Objevte a nainstalujte doplňky",
-      "guideIntro": "Doplňky vám pomohou procházet katalogy médií a streamy přizpůsobené vašim osobním preferencím v oblasti zábavy:",
       "installError": "Tento doplněk nelze nainstalovat.",
       "installedHeading": "Nainstalované doplňky",
       "processing": "Zpracovává se...",
       "removeAddon": "Odeberte tento doplněk",
-      "step1DescPrefix": "Navštivte komunitní katalog na",
-      "step1DescSuffix": "nebo podobných standardních poskytovatelů doplňků.",
-      "step1Title": "Prozkoumejte katalog doplňků",
-      "step2DescPrefix": "Vyberte požadovaný doplněk, přizpůsobte možnosti a zkopírujte jeho adresu URL manifestu (standardní příklad:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopírovat odkaz manifestu",
-      "step3AddName": "Přidat",
-      "step3DescPrefix": "Vložte cestu manifestu do pole níže a stiskněte",
-      "step3DescSuffix": ". Doplněk se okamžitě aktivuje a vyhledá zdroje médií.",
-      "step3Title": "Přidat do aplikace",
       "title": "Správce doplňků"
     },
     "player": {
       "chooseAddon": "Vyberte si doplněk",
-      "emptyExplanation": "Zatím není nainstalován ani aktivován žádný doplněk streamu. Navštivte stránku Správce doplňků, kde najdete průvodce nastavením a vyhledání katalogu médií.",
+      "emptyExplanation": "Není nainstalován ani povolen žádný doplněk. Přidejte adresu URL manifestu, kterou si vyberete v Doplňcích.",
       "emptyTitle": "Nejsou k dispozici žádné doplňky streamu",
       "loadingStreams": "Načítání streamů...",
       "manageAddonsButton": "Správa seznamu doplňků",
-      "noAddonStreams": "Pro tento titul se nevrátily žádné streamy doplňků.",
+      "noAddonStreams": "Tento doplněk nevrátil žádné streamy.",
       "noTorrentStreams": "Pro tento doplněk se nevrátily žádné torrentové proudy.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Zřeknutí odpovědnosti",
-      "disclaimerText": "AlphaFlix nehostuje žádné soubory, pouze odkazuje na služby třetích stran. Právní záležitosti by měly být řešeny s hostiteli souborů a poskytovateli. AlphaFlix nenese odpovědnost za žádné mediální soubory zobrazené poskytovateli videa."
+      "disclaimerText": "AlphaFlix poskytuje bezpečný, moderní a bezproblémový přehrávač streamů se snadno použitelným rozhraním a vysoce kvalitním přehráváním napříč podporovanými zařízeními. Nehostuje mediální soubory, neprovozuje zdrojový katalog ani nedoporučuje konkrétní doplňky. Volitelné doplňky konfigurují uživatelé, kteří jsou odpovědní za používání zákonných zdrojů."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Podpořte nás",
       "github": "GitHub"
     },
-    "tagline": "Sledujte své oblíbené pořady a filmy s touto aplikací pro streamování s otevřeným zdrojovým kódem."
+    "tagline": "Bezpečný, moderní přehrávač streamů pro bezproblémový a vysoce kvalitní zážitek ze sledování."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Výchozí"
       },
-      "downloads": {
-        "button": "Pokus o stažení",
-        "copyHlsPlaylist": "Kopírovat odkaz na playlist HLS",
-        "disclaimer": "Stahování probíhá přímo u poskytovatele. AlphaFlix nemá kontrolu nad tím, jak jsou stahování poskytovány.",
-        "downloadSubtitle": "Stáhnout aktuální titulky",
-        "downloadVideo": "Stáhnout video",
-        "hlsDisclaimer": "Stahování probíhá přímo u poskytovatele. AlphaFlix nemá kontrolu nad tím, jak jsou stahování poskytovány.<br /><br />Vezměte prosím na vědomí, že stahujete HLS playlist,<bold> který není doporučen stahovat pokud nejste obeznámeni s pokročilým streamováním médií</bold>. Raději skuste jiný zdroj pro jiný formát.",
-        "hlsDownloader": "Nebo přejděte na webovou stránku <0>hls downloader</0> a vložte adresu URL seznamu stop níže.",
-        "onAndroid": {
-          "1": "Na Androidu klikněte na tlačítko stahování, poté na nové stránce <bold>klepněte a podržte</bold> na videu a poté vyberte <bold>uložit</bold>.",
-          "shortTitle": "Stahování / Android",
-          "title": "Stahování na Androidu"
-        },
-        "onIos": {
-          "1": "Na iOS klikněte na tlačítko stahování a poté na nové stránce klikněte na <bold><ios_share /></bold> a poté na <bold>Uložit do souborů <ios_files /></bold>.",
-          "shortTitle": "Stahování / iOS",
-          "title": "Stahování na iOS"
-        },
-        "onPc": {
-          "1": "Na počítači klikněte na tlačítko stahování, poté na nové stránce klikněte pravým tlačítkem na video a vyberte <bold>Uložit video jako</bold>",
-          "shortTitle": "Stahování / počítač",
-          "title": "Stahování na počítači"
-        },
-        "title": "Stáhnout"
-      },
       "episodes": {
         "button": "Epizody",
         "emptyState": "V této sezóně nejsou žádné epizody, vraťte se později!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Zvuk",
-        "downloadItem": "Stáhnout",
         "enableSubtitles": "Zapnout titulky",
         "playbackItem": "Nastavení přehrávání",
         "qualityItem": "Kvalita",
         "sourceItem": "Zdroje videa",
         "subtitleItem": "Nastavení titulků"
-      },
-      "sources": {
-        "failed": {
-          "text": "Při pokusu o nalezení videí došlo k chybě. Zkuste prosím jiný zdroj.",
-          "title": "Nepodařilo se extrahovat data"
-        },
-        "findNextSource": "Najděte další zdroj",
-        "maintain": "Udržovat",
-        "noEmbeds": {
-          "text": "Nepodařilo se nám najít žádný vklad, zkuste prosím jiný zdroj.",
-          "title": "Žádné vklady"
-        },
-        "noStream": {
-          "text": "Tento zdroj nemá pro tento film nebo pořad žádné proudy média.",
-          "title": "Žádný proud média"
-        },
-        "title": "Zdroje",
-        "unknownOption": "Neznámý"
       },
       "subtitles": {
         "autoSelectChoice": "Automatický výběr",
@@ -953,37 +888,6 @@
       "restart": "Restartujte",
       "resume": "Resumé",
       "title": "Pokračovat ve sledování?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Rozšíření zakázáno",
-        "enableExtension": "Povolit rozšíření",
-        "homeButton": "Jít domů",
-        "text": "Nainstalovali jste rozšíření AlphaFlix. Chcete-li jej začít používat, musíte rozšíření pro tento web povolit.",
-        "title": "Povolte prosím rozšíření"
-      },
-      "items": {
-        "pending": "Ověřování videí..."
-      },
-      "notFound": {
-        "badge": "Nenalezeno",
-        "detailsButton": "Zobrazit podrobnosti",
-        "discoverButton": "Objevte více",
-        "homeButton": "Jít domů",
-        "text": "Prohledali jsme naše poskytovatele a nenašli jsme média, která hledáte! Nehostujeme žádné média a nemáme žádnou kontrolu nad tím, co je k dispozici. Pro více podrobností klikněte níže na 'Zobrazit podrobnosti'.",
-        "title": "Nedokázali jsme to najít"
-      },
-      "tips": {
-        "1": "Klepnutím na ikonu ozubeného kola přepnete zdroje!",
-        "2": "Klepnutím na název zkopírujete odkaz!",
-        "3": "Klepnutím a podržením nebo podržením SHIFT zobrazíte širokoúhlé tlačítko místo celé obrazovky!",
-        "4": "Některé zdroje fungují lépe než jiné!",
-        "5": "Získejte rozšíření pro více zdrojů!",
-        "6": "Chcete-li záložky upravit nebo odstranit, podržte je!",
-        "7": "Podržte SHIFT a klepnutím na název zkopírujte odkaz s časem!",
-        "8": "Nastavte si vlastní barvu titulků!",
-        "9": "Podržením ` zobrazíte klávesové zkratky!"
-      }
     },
     "segment": {
       "credits": "Kredity",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Dvojitým klepnutím vyhledáte",
       "doubleClickToSeekDescription": "Dvojitým klepnutím na levou nebo pravou stranu přehrávače přejdete o 10 sekund dopředu nebo dozadu.",
       "doubleClickToSeekLabel": "Povolte vyhledávání dvojitým klepnutím",
-      "embedOrder": "Změna pořadí vložení",
-      "embedOrderDescription": "Přetažením změníte pořadí vložení. Tím určíte pořadí, ve kterém jsou vložení kontrolována pro média, která se pokoušíte sledovat. <br><br> <strong>(Výchozí pořadí je nejlepší pro většinu uživatelů)</strong>",
-      "embedOrderEnableLabel": "Vlastní pořadí vložení",
       "keyboardShortcuts": "Klávesové zkratky",
       "keyboardShortcutsDescription": "Přizpůsobte si klávesové zkratky pro aplikaci. Podržením ` tuto nápovědu kdykoli zobrazíte",
       "keyboardShortcutsLabel": "Přizpůsobte si klávesové zkratky",
       "language": "Jazyk aplikace",
       "languageDescription": "Jazyk aplikován na celou aplikaci.",
-      "lastSuccessfulSource": "Naposledy použitý zdroj",
-      "lastSuccessfulSourceDescription": "Automaticky upřednostněte zdroj, který úspěšně poskytl obsah pro předchozí epizodu. To pomáhá zajistit kontinuitu při sledování seriálů.",
-      "lastSuccessfulSourceEnableLabel": "Naposledy použitý zdroj",
       "lowPerformanceMode": "Nízký výkon/režim šířky pásma",
       "lowPerformanceModeDescription": "Optimalizuje aplikaci pro pomalejší připojení a zařízení vypnutím funkcí náročných na šířku pásma. Tento režim snižuje spotřebu dat a zlepšuje výkon při zachování základní funkce vyhledávání a sledování.",
       "lowPerformanceModeLabel": "Režim nízkého výkonu",
-      "manualSource": "Ruční výběr zdroje",
-      "manualSourceDescription": "Před škrábáním vyžadovat výběr zdroje. Deaktivuje automatický výběr zdroje a otevře výběr zdroje při spuštění přehrávání.",
-      "manualSourceLabel": "Ruční výběr zdroje",
       "showLess": "Ukažte méně",
       "showMore": "Zobrazit více",
       "skipCredits": "Přeskočit závěrečné titulky",

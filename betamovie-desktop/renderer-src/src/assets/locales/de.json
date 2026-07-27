@@ -6,16 +6,6 @@
     "copy": "Kopieren"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Besuchen",
-      "step1Suffix": "oder Ihr vertrauenswürdiges kompatibles Add-on-Repository.",
-      "step2Prefix": "Kopieren Sie den Manifest-Link (z. B.",
-      "step2Suffix": ").",
-      "step3AddName": "Hinzufügen",
-      "step3Prefix": "In das Feld oben einfügen und dann drücken",
-      "step3Suffix": ".",
-      "title": "Entdecken Sie weitere Add-ons:"
-    },
     "manager": {
       "add": "Hinzufügen",
       "adding": "Hinzufügen...",
@@ -23,39 +13,28 @@
       "ariaManage": "Add-ons verwalten",
       "errorFallback": "Dieses Add-on kann nicht installiert werden.",
       "manageListButton": "Add-on-Liste verwalten",
-      "subtitle": "Fügen Sie eine Addon-Manifest-URL für Torrent- und Direktstreams hinzu.",
+      "subtitle": "Optional. Fügen Sie eine von Ihnen ausgewählte Manifest-URL hinzu. Diese App bündelt, empfiehlt oder hostet keine Add-ons.",
       "title": "Desktop-Add-ons"
     },
     "page": {
       "addAddonButton": "Add-on hinzufügen",
+      "description": "Add-ons sind optional. Diese App bündelt, empfiehlt oder hostet kein Add-on.",
       "disabled": "Deaktiviert",
       "emptyInstalled": "Es sind noch keine Add-ons im System installiert.",
       "enabled": "Ermöglicht",
-      "guideHeading": "Entdecken und installieren Sie Add-ons",
-      "guideIntro": "Mithilfe von Add-ons können Sie Medienkataloge und Streams durchsuchen, die auf Ihre persönlichen Unterhaltungsvorlieben zugeschnitten sind:",
       "installError": "Dieses Add-on kann nicht installiert werden.",
       "installedHeading": "Installierte Addons",
       "processing": "Verarbeitung...",
       "removeAddon": "Entfernen Sie dieses Add-on",
-      "step1DescPrefix": "Besuchen Sie den Community-Katalog unter",
-      "step1DescSuffix": "oder ähnliche Standard-Add-on-Anbieter.",
-      "step1Title": "Entdecken Sie den Add-on-Katalog",
-      "step2DescPrefix": "Wählen Sie Ihr gewünschtes Add-on aus, passen Sie die Optionen an und kopieren Sie die Manifest-URL (Standardbeispiel:",
-      "step2DescSuffix": ").",
-      "step2Title": "Manifest-Link kopieren",
-      "step3AddName": "Hinzufügen",
-      "step3DescPrefix": "Fügen Sie den Manifestpfad in das Feld unten ein und drücken Sie",
-      "step3DescSuffix": ". Das Add-on wird sofort aktiviert, um nach Medienquellen zu suchen.",
-      "step3Title": "Zur Anwendung hinzufügen",
       "title": "Addons-Manager"
     },
     "player": {
       "chooseAddon": "Wählen Sie ein Add-on",
-      "emptyExplanation": "Es ist noch kein Stream-Addon installiert oder aktiviert. Besuchen Sie die Add-ons-Manager-Seite für Einrichtungsanleitungen und Medienkatalog-Erkennung.",
+      "emptyExplanation": "Es ist kein Add-on installiert oder aktiviert. Fügen Sie eine Manifest-URL hinzu, die Sie in Add-ons auswählen.",
       "emptyTitle": "Keine Stream-Add-ons verfügbar",
       "loadingStreams": "Streams werden geladen...",
       "manageAddonsButton": "Add-on-Liste verwalten",
-      "noAddonStreams": "Für diesen Titel wurden keine Add-on-Streams zurückgegeben.",
+      "noAddonStreams": "Von diesem Add-on wurden keine Streams zurückgegeben.",
       "noTorrentStreams": "Für dieses Add-on wurden keine Torrent-Streams zurückgegeben.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Hinweis",
-      "disclaimerText": "AlphaFlix hostet keine Dateien, sondern verlinkt lediglich auf Dienste Dritter. Rechtliche Fragen sollten mit den Dateihostern und -anbietern geklärt werden. AlphaFlix übernimmt keine Verantwortung für die von den Videoanbietern angezeigten Mediendateien."
+      "disclaimerText": "AlphaFlix bietet einen sicheren, modernen und nahtlosen Stream-Player mit einer benutzerfreundlichen Oberfläche und hochwertiger Wiedergabe auf allen unterstützten Geräten. Es hostet keine Mediendateien, betreibt keinen Quellkatalog und empfiehlt keine spezifischen Add-ons. Optionale Add-ons werden von Benutzern konfiguriert, die für die Verwendung rechtmäßiger Quellen verantwortlich sind."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Unterstütze uns",
       "github": "GitHub"
     },
-    "tagline": "Schau deine Lieblingsserien und Filme mit dieser quelloffenen Streaming App."
+    "tagline": "Ein sicherer, moderner Stream-Player für ein nahtloses, hochwertiges Seherlebnis."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Standard"
       },
-      "downloads": {
-        "button": "Versuch herunterladen",
-        "copyHlsPlaylist": "HLS-Playlist Link kopieren",
-        "disclaimer": "Videos werden direkt vom Provider heruntergeladen. AlphaFlix hat keinen Einfluss darauf, wie Downloads bereitgestellt werden.",
-        "downloadSubtitle": "Aktuelle Untertitel herunterladen",
-        "downloadVideo": "Video herunterladen",
-        "hlsDisclaimer": "AlphaFlix hat keinen Einfluss darauf, wie Downloads bereitgestellt werden. Downloads werden direkt vom Anbieter bezogen. <br /><br />Bitte beachte, dass du eine HLS-Wiedergabeliste herunterlädst, <bold>dies ist nicht empfohlen für Nutzer die nicht mit Erweiterten Streaming Formaten vertraut sind</bold>. Probiere andere Anbieter für andere Formate.",
-        "hlsDownloader": "Oder gehen Sie auf die <0>hls downloader website</0> und füg dort die URL der Wiedergabeliste von unten ein.",
-        "onAndroid": {
-          "1": "Um auf Android Herunterzuladen, tippe auf den Download-Button, <bold>tippe und halte</bold> auf der neuen Seite auf das Video und wähle <bold>Speichern</bold> aus.",
-          "shortTitle": "Herunterladen / Android",
-          "title": "Auf Android herunterladen"
-        },
-        "onIos": {
-          "1": "Um Auf iOS herunterzuladen, klick auf den Download-Button. Klicke dann auf der neuen Seite auf<bold> <ios_share /></bold>, dann auf <bold>In Dateien sichern <ios_files /></bold>.",
-          "shortTitle": "Herunterladen / iOS",
-          "title": "Auf iOS herunterladen"
-        },
-        "onPc": {
-          "1": "Um am PC herunterzuladen, klicke auf den Download-Button. Klicke dann mit der rechten Maustaste auf das Video und klicke auf <bold>Video speichern als</bold>",
-          "shortTitle": "Herunterladen / PC",
-          "title": "Am PC herunterladen"
-        },
-        "title": "Herunterladen"
-      },
       "episodes": {
         "button": "Folgen",
         "emptyState": "Keine Folgen in dieser Staffel, schau später noch einmal!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Herunterladen",
         "enableSubtitles": "Untettitel aktivieren",
         "playbackItem": "Wiedergabeeinstellungen",
         "qualityItem": "Qualität",
         "sourceItem": "Videoquellen",
         "subtitleItem": "Untertiteleinstellungen"
-      },
-      "sources": {
-        "failed": {
-          "text": "Beim Versuch, Videos zu finden, ist ein Fehler aufgetreten. Bitte versuche es mit einer anderen Quelle.",
-          "title": "Fehler beim Laden"
-        },
-        "findNextSource": "Finden Sie die nächste Quelle",
-        "maintain": "Pflegen",
-        "noEmbeds": {
-          "text": "Es konnten keine Embeds gefunden werden. Bitte versuchen es mit einer anderen Quelle.",
-          "title": "Keine Embeds gefunden"
-        },
-        "noStream": {
-          "text": "Diese Quelle bietet keine Streams für diesen Film oder diese Serie.",
-          "title": "Kein Stream"
-        },
-        "title": "Quellen",
-        "unknownOption": "Unbekannt"
       },
       "subtitles": {
         "autoSelectChoice": "Automatische Auswahl",
@@ -953,37 +888,6 @@
       "restart": "Neustart",
       "resume": "Wieder aufnehmen",
       "title": "Weiter schauen?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Erweiterung deaktiviert",
-        "enableExtension": "Erweiterung aktivieren",
-        "homeButton": "Zur Startseite",
-        "text": "Du hast die AlphaFlixe Erweiterung installiert. Um die Erweiterung zu benutzen, musst du sie für diese Seite aktivieren.",
-        "title": "Bitte aktiviere die Erweiterung"
-      },
-      "items": {
-        "pending": "Suche nach Videos..."
-      },
-      "notFound": {
-        "badge": "Nicht gefunden",
-        "detailsButton": "Details anzeigen",
-        "discoverButton": "Endecke mehr",
-        "homeButton": "Zurück zur Startseite",
-        "text": "Wir haben alle Anbieter durchsucht, konnten aber nicht das Video finden nach dem du suchst! Wir stellen keine eigenen Videos bereit und haben keine Kontrolle darüber, was verfügbar ist. Bitte klicke auf \"Details anzeigen\" für mehr Details.",
-        "title": "Wir konnten das nicht finden"
-      },
-      "tips": {
-        "1": "Klicke auf das Einstellungs-Icon, um die Quelle zu wechseln!",
-        "2": "Klicke auf den Titel, um den Link zu kopieren!",
-        "3": "Halte SHIFT für Breitbildschirm anstelle von Vollbildschirm!",
-        "4": "Manche Quellen funktionieren besser als andere!",
-        "5": "Hohle dir die Erweiterung für mehr Quellen!",
-        "6": "Halte das Lesezeichen gedrückt, um sie zu verwalten oder zu löschen!",
-        "7": "Halte SHIFT gedrückt und klick auf den Titel, um den Link mit der Zeitangabe zu kopieren!",
-        "8": "Lege eine eigene Untertitelfarbe fest!",
-        "9": "Verwende Sie [ und ], um das Timing der Untertitel anzupassen!"
-      }
     },
     "segment": {
       "credits": "Credits",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Doppeltippen, um zu suchen",
       "doubleClickToSeekDescription": "Tippen Sie zweimal auf die linke oder rechte Seite des Players, um 10 Sekunden vorwärts oder rückwärts zu suchen.",
       "doubleClickToSeekLabel": "Aktivieren Sie Doppeltippen zum Suchen",
-      "embedOrder": "Einbettungen neu anordnen",
-      "embedOrderDescription": "Per Drag-and-Drop können Sie Einbettungen neu anordnen. Dadurch wird die Reihenfolge bestimmt, in der Einbettungen für die Medien überprüft werden, die Sie ansehen möchten. <br><br> <strong>(Die Standardreihenfolge ist für die meisten Benutzer am besten)</strong>",
-      "embedOrderEnableLabel": "Benutzerdefinierte Einbettungsreihenfolge",
       "keyboardShortcuts": "Tastaturkürzel",
       "keyboardShortcutsDescription": "Passen Sie die Tastaturkürzel für die Anwendung an. Halten Sie ` gedrückt, um diese Hilfe jederzeit anzuzeigen",
       "keyboardShortcutsLabel": "Passen Sie Tastaturkürzel an",
       "language": "App-Sprache",
       "languageDescription": "Sprache für die ganze App.",
-      "lastSuccessfulSource": "Zuletzt verwendete Quelle",
-      "lastSuccessfulSourceDescription": "Priorisieren Sie automatisch die Quelle, die erfolgreich Inhalte für die vorherige Episode bereitgestellt hat. Dies trägt dazu bei, die Kontinuität beim Ansehen von Serien sicherzustellen.",
-      "lastSuccessfulSourceEnableLabel": "Zuletzt verwendete Quelle",
       "lowPerformanceMode": "Niedrigleistungs-/Bandbreitenmodus",
       "lowPerformanceModeDescription": "Optimiert die Anwendung für langsamere Verbindungen und Geräte, indem bandbreitenintensive Funktionen deaktiviert werden. Dieser Modus reduziert die Datennutzung und verbessert die Leistung, während die Kernfunktionalität der Suche und Überwachung erhalten bleibt.",
       "lowPerformanceModeLabel": "Niedrigleistungsmodus",
-      "manualSource": "Manuelle Quellenauswahl",
-      "manualSourceDescription": "Vor dem Schaben muss eine Quelle ausgewählt werden. Deaktiviert die automatische Quellenauswahl und öffnet die Quellenauswahl beim Starten der Wiedergabe.",
-      "manualSourceLabel": "Manuelle Quellenauswahl",
       "showLess": "Weniger anzeigen",
       "showMore": "Mehr anzeigen",
       "skipCredits": "Abspann überspringen",

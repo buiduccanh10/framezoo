@@ -71,11 +71,5 @@ export function usePlayer() {
       }
       init();
     },
-    setScrapeStatus() {
-      setStatus(playerStatus.SCRAPING);
-    },
-    setScrapeNotFound() {
-      setStatus(playerStatus.SCRAPE_NOT_FOUND);
-    },
   };
 }

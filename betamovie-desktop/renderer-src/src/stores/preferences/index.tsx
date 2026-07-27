@@ -11,16 +11,12 @@ export interface PreferencesStore {
   enableAutoplay: boolean;
   enableSkipCredits: boolean;
   enableAutoSkipSegments: boolean;
-  lastSuccessfulSource: string | null;
-  embedOrder: string[];
-  enableEmbedOrder: boolean;
   proxyTmdb: boolean;
   febboxKey: string | null;
   febboxUseMp4: boolean;
   debridToken: string | null;
   debridService: string;
   tidbKey: string | null;
-  manualSourceSelection: boolean;
   enableDoubleClickToSeek: boolean;
   enableAutoResumeOnPlaybackError: boolean;
   enableNumberKeySeeking: boolean;
@@ -29,16 +25,12 @@ export interface PreferencesStore {
   setEnableAutoplay(v: boolean): void;
   setEnableSkipCredits(v: boolean): void;
   setEnableAutoSkipSegments(v: boolean): void;
-  setLastSuccessfulSource(v: string | null): void;
-  setEmbedOrder(v: string[]): void;
-  setEnableEmbedOrder(v: boolean): void;
   setProxyTmdb(v: boolean): void;
   setFebboxKey(v: string | null): void;
   setFebboxUseMp4(v: boolean): void;
   setdebridToken(v: string | null): void;
   setdebridService(v: string): void;
   setTIDBKey(v: string | null): void;
-  setManualSourceSelection(v: boolean): void;
   setEnableDoubleClickToSeek(v: boolean): void;
   setEnableAutoResumeOnPlaybackError(v: boolean): void;
   setEnableNumberKeySeeking(v: boolean): void;
@@ -51,16 +43,12 @@ export const usePreferencesStore = create(
       enableAutoplay: true,
       enableSkipCredits: false,
       enableAutoSkipSegments: false,
-      lastSuccessfulSource: null,
-      embedOrder: [],
-      enableEmbedOrder: false,
       proxyTmdb: false,
       febboxKey: null,
       febboxUseMp4: false,
       debridToken: null,
       debridService: "realdebrid",
       tidbKey: null,
-      manualSourceSelection: false,
       enableDoubleClickToSeek: true,
       enableAutoResumeOnPlaybackError: true,
       enableNumberKeySeeking: true,
@@ -79,21 +67,6 @@ export const usePreferencesStore = create(
       setEnableAutoSkipSegments(v) {
         set((s) => {
           s.enableAutoSkipSegments = v;
-        });
-      },
-      setLastSuccessfulSource(v) {
-        set((s) => {
-          s.lastSuccessfulSource = v;
-        });
-      },
-      setEmbedOrder(v) {
-        set((s) => {
-          s.embedOrder = v;
-        });
-      },
-      setEnableEmbedOrder(v) {
-        set((s) => {
-          s.enableEmbedOrder = v;
         });
       },
       setProxyTmdb(v) {
@@ -124,11 +97,6 @@ export const usePreferencesStore = create(
       setTIDBKey(v) {
         set((s) => {
           s.tidbKey = v;
-        });
-      },
-      setManualSourceSelection(v) {
-        set((s) => {
-          s.manualSourceSelection = v;
         });
       },
       setEnableDoubleClickToSeek(v) {

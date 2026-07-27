@@ -1,7 +1,6 @@
+import { jwtDecode } from "jwt-decode";
 import { ofetch } from "ofetch";
 
-import { getApiToken, setApiToken } from "@/backend/helpers/providerApi";
-import { getLoadbalancedProxyUrl } from "@/backend/providers/fetchers";
 import { getBackendAuthHeaders } from "@/utils/backendAuth";
 
 type P<T> = Parameters<typeof ofetch<T, any>>;
@@ -11,6 +10,20 @@ const baseFetch = ofetch.create({
   retry: 0,
   credentials: "include",
 });
+let apiToken: string | null = null;
+
+function getValidApiToken() {
+  if (!apiToken) return null;
+  try {
+    const body = jwtDecode(apiToken);
+    if (!body.exp || Date.now() / 1000 < body.exp) {
+      return `jwt|${apiToken}`;
+    }
+  } catch {
+    // Ignore malformed tokens and continue without one.
+  }
+  return null;
+}
 
 export function makeUrl(url: string, data: Record<string, string>) {
   let parsedUrl: string = url;
@@ -56,11 +69,11 @@ export async function singularProxiedFetch<T>(
   });
 
   let headers = ops.headers ?? {};
-  const apiToken = await getApiToken();
-  if (apiToken)
+  const token = getValidApiToken();
+  if (token)
     headers = {
       ...headers,
-      "X-Token": apiToken,
+      "X-Token": token,
     };
 
   return baseFetch<T>(proxyUrl, {
@@ -73,7 +86,9 @@ export async function singularProxiedFetch<T>(
     headers,
     onResponse(context) {
       const tokenHeader = context.response.headers.get("X-Token");
-      if (tokenHeader) setApiToken(tokenHeader);
+      if (tokenHeader) {
+        apiToken = tokenHeader.replace(/^jwt\|/, "");
+      }
 
       if (Array.isArray(ops.onResponse)) {
         ops.onResponse.forEach((hook) => hook(context));
@@ -85,5 +100,5 @@ export async function singularProxiedFetch<T>(
 }
 
 export function proxiedFetch<T>(url: string, ops: P<T>[1] = {}): R<T> {
-  return singularProxiedFetch<T>(getLoadbalancedProxyUrl(), url, ops);
+  return singularProxiedFetch<T>("", url, ops);
 }

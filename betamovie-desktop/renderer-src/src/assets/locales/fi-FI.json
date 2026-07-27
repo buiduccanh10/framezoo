@@ -6,16 +6,6 @@
     "copy": "Kopioi"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Vierailla",
-      "step1Suffix": "tai luotettu Addon-yhteensopiva lisäosavarasto.",
-      "step2Prefix": "Kopioi luettelon linkki (esim.",
-      "step2Suffix": ").",
-      "step3AddName": "Lisätä",
-      "step3Prefix": "Liitä yllä olevaan laatikkoon ja paina sitten",
-      "step3Suffix": ".",
-      "title": "Tutustu muihin lisäosiin:"
-    },
     "manager": {
       "add": "Lisätä",
       "adding": "Lisätään...",
@@ -23,39 +13,28 @@
       "ariaManage": "Hallinnoi lisäosia",
       "errorFallback": "Tätä lisäosaa ei voi asentaa.",
       "manageListButton": "Hallinnoi lisäosien luetteloa",
-      "subtitle": "Lisää Addonn luettelo-URL torrentille ja suorille streameille.",
+      "subtitle": "Valinnainen. Lisää valitsemasi URL-osoite. Tämä sovellus ei niputa, suosittele tai isännöi lisäosia.",
       "title": "Työpöydän lisäosat"
     },
     "page": {
       "addAddonButton": "Lisää Addon",
+      "description": "Lisäosat ovat valinnaisia. Tämä sovellus ei niputa, suosittele tai isännöi mitään lisäosia.",
       "disabled": "Ei käytössä",
       "emptyInstalled": "Järjestelmään ei ole vielä asennettu lisäosia.",
       "enabled": "Käytössä",
-      "guideHeading": "Löydä ja asenna lisäosia",
-      "guideIntro": "Lisäosien avulla voit selata medialuetteloita ja streameja, jotka on räätälöity henkilökohtaisiin viihdemieltymyksiisi:",
       "installError": "Tätä lisäosaa ei voi asentaa.",
       "installedHeading": "Asennetut lisäosat",
       "processing": "Käsitellään...",
       "removeAddon": "Poista tämä lisäosa",
-      "step1DescPrefix": "Vieraile yhteisön luettelossa osoitteessa",
-      "step1DescSuffix": "tai vastaavia tavallisia lisäosien tarjoajia.",
-      "step1Title": "Tutustu Addon-luetteloon",
-      "step2DescPrefix": "Valitse haluamasi lisäosa, mukauta asetuksia ja kopioi sen luettelon URL-osoite (vakioesimerkki:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopioi manifestin linkki",
-      "step3AddName": "Lisätä",
-      "step3DescPrefix": "Liitä luettelopolku alla olevaan kenttään ja paina",
-      "step3DescSuffix": ". Lisäosa aktivoituu välittömästi etsimään medialähteitä.",
-      "step3Title": "Lisää sovellukseen",
       "title": "Lisäosien hallinta"
     },
     "player": {
       "chooseAddon": "Valitse lisäosa",
-      "emptyExplanation": "Stream-lisäosaa ei ole vielä asennettu tai aktivoitu. Käy Addons Manager -sivulla asennusoppaita ja medialuetteloiden löytämistä varten.",
+      "emptyExplanation": "Lisäosaa ei ole asennettu tai otettu käyttöön. Lisää luettelon URL-osoite, jonka valitset Addonsissa.",
       "emptyTitle": "Stream-lisäosia ei ole saatavilla",
       "loadingStreams": "Ladataan streameja...",
       "manageAddonsButton": "Hallinnoi lisäosien luetteloa",
-      "noAddonStreams": "Tälle nimikkeelle ei palautettu lisäosia.",
+      "noAddonStreams": "Tämä lisäosa ei palauttanut yhtään striimiä.",
       "noTorrentStreams": "Tälle lisäosalle ei palautettu torrent-streameja.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Vastuuvapauslauseke",
-      "disclaimerText": "AlphaFlix ei isännöi tiedostoja, se vain linkittää kolmannen osapuolen palveluihin. Lakiasioista tulee ottaa yhteyttä tiedostoisäntään ja palveluntarjoajiin. AlphaFlix ei ole vastuussa videontarjoajien näyttämistä mediatiedostoista."
+      "disclaimerText": "AlphaFlix tarjoaa turvallisen, modernin ja saumattoman suoratoistosoittimen, jossa on helppokäyttöinen käyttöliittymä ja korkealaatuinen toisto tuetuilla laitteilla. Se ei isännöi mediatiedostoja, käytä lähdeluetteloa tai suosittele tiettyjä lisäosia. Valinnaiset lisäosat määrittävät käyttäjät, jotka ovat vastuussa laillisten lähteiden käytöstä."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Tue meitä",
       "github": "GitHub"
     },
-    "tagline": "Katso suosikkiohjelmiasi ja elokuviasi täysin ilmaiseksi ilman mainoksia! "
+    "tagline": "Suojattu, moderni suoratoistosoitin saumattomaan ja laadukkaaseen katselukokemukseen."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Oletus"
       },
-      "downloads": {
-        "button": "Yritä ladata",
-        "copyHlsPlaylist": "Kopioi HLS-soittolistan linkki",
-        "disclaimer": "Lataukset otetaan suoraan palveluntarjoajalta. AlphaFlixillä ei ole valtaa siihen, miten lataukset tarjotaan.",
-        "downloadSubtitle": "Lataa nykyinen tekstitys",
-        "downloadVideo": "Lataa video",
-        "hlsDisclaimer": "Lataukset otetaan suoraan palveluntarjoajalta. AlphaFlix ei voi hallita sitä, miten lataukset tarjotaan.<br /><br />Huomaa, että olet lataamassa HLS-soittolistaa. <bold>Ei suositella lataamista, jos et tunne edistyneitä suoratoistomuotoja</bold>. Kokeile eri lähteitä eri muodoille.",
-        "hlsDownloader": "Tai siirry <0>hls-lataussivustolle</0> ja liitä soittolistan URL-osoite alta.",
-        "onAndroid": {
-          "1": "Lataa Androidilla napsauttamalla latauspainiketta ja uudella sivulla <bold>napauta pitkään</bold> ja valitse sitten <bold>tallenna</bold>.",
-          "shortTitle": "Lataa / Android",
-          "title": "Lataaminen Androidilla"
-        },
-        "onIos": {
-          "1": "Lataa iOS:ssä napsauttamalla latauspainiketta ja valitsemalla uudella sivulla <bold><ios_share /></bold> ja sitten <bold>Tallenna tiedostoihin <ios_files /></bold>.",
-          "shortTitle": "Lataa / iOS",
-          "title": "Lataaminen iOS:ssä"
-        },
-        "onPc": {
-          "1": "Napsauta PC:llä latauspainiketta ja napsauta sitten uudella sivulla videota hiiren kakkospainikkeella ja valitse <bold>Tallenna video nimellä</bold>",
-          "shortTitle": "Lataa / PC",
-          "title": "Lataaminen PC:lle"
-        },
-        "title": "Lataa"
-      },
       "episodes": {
         "button": "Jaksot",
         "emptyState": "Tässä kaudessa ei ole jaksoja – tarkista myöhemmin uudelleen (sori :3)...",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Lataa",
         "enableSubtitles": "Ota tekstitykset käyttöön",
         "playbackItem": "Toistoasetukset",
         "qualityItem": "Laatu",
         "sourceItem": "Lähde",
         "subtitleItem": "Tekstitykset"
-      },
-      "sources": {
-        "failed": {
-          "text": "Videoita etsittäessä tapahtui virhe... Kokeile toista lähdettä?",
-          "title": "Raapiminen epäonnistui"
-        },
-        "findNextSource": "Etsi seuraava lähde",
-        "maintain": "ylläpitää",
-        "noEmbeds": {
-          "text": "Emme löytäneet upotuksia, kokeile toista lähdettä.",
-          "title": "Upotuksia ei löytynyt"
-        },
-        "noStream": {
-          "text": "Tällä lähteellä ei ole streameja tälle elokuvalle tai sarjalle. /ᐠ - ˕ -マ Ⳋ",
-          "title": "Ei striimiä :("
-        },
-        "title": "Lähteet",
-        "unknownOption": "Tuntematon"
       },
       "subtitles": {
         "autoSelectChoice": "Automaattinen valinta",
@@ -953,37 +888,6 @@
       "restart": "Käynnistä uudelleen",
       "resume": "Jatkaa",
       "title": "Jatketaanko katsomista?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Laajennus poistettu käytöstä",
-        "enableExtension": "Ota laajennus käyttöön",
-        "homeButton": "Mene kotiin",
-        "text": "Olet asentanut AlphaFlix-laajennuksen. Jotta voit aloittaa sen käytön, sinun on otettava laajennus käyttöön tälle sivustolle.",
-        "title": "Ota laajennus käyttöön"
-      },
-      "items": {
-        "pending": "Etsitään videoita..."
-      },
-      "notFound": {
-        "badge": "Ei löytynyt",
-        "detailsButton": "Näytä tiedot",
-        "discoverButton": "Tutustu lisää",
-        "homeButton": "Mene kotiin",
-        "text": "Olemme etsineet palveluntarjoajiemme kautta emmekä löydä etsimääsi mediaa! Emme isännöi mediaa, emmekä voi vaikuttaa siihen, mitä on saatavilla. Napsauta alta Näytä tiedot saadaksesi lisätietoja.",
-        "title": "Emme löytäneet sitä"
-      },
-      "tips": {
-        "1": "Vaihda lähdettä napauttamalla rataskuvaketta!",
-        "2": "Kopioi linkki napauttamalla otsikkoa!",
-        "3": "Napauta ja pidä painettuna SHIFT näyttääksesi laajakuvapainikkeen koko näytön sijaan!",
-        "4": "Jotkut lähteet toimivat paremmin kuin toiset!",
-        "5": "Hanki laajennus saadaksesi lisää lähteitä!",
-        "6": "Pidä kirjanmerkkejä painettuna muokataksesi tai poistaaksesi niitä!",
-        "7": "Pidä SHIFT painettuna ja napauta otsikkoa kopioidaksesi linkin ajan kanssa!",
-        "8": "Aseta mukautettu tekstityksen väri!",
-        "9": "Pidä ` painettuna nähdäksesi pikanäppäimet!"
-      }
     },
     "segment": {
       "credits": "Krediitit",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Etsi kaksoisnapauttamalla",
       "doubleClickToSeekDescription": "Kaksoisnapauta soittimen vasenta tai oikeaa reunaa etsiäksesi 10 sekuntia eteen- tai taaksepäin.",
       "doubleClickToSeekLabel": "Ota käyttöön etsiminen kaksoisnapauttamalla",
-      "embedOrder": "Upotusten järjestys uudelleen",
-      "embedOrderDescription": "Järjestä upotukset uudelleen vetämällä ja pudottamalla. Tämä määrittää järjestyksen, jossa upotukset tarkistetaan katsottavan median osalta. <br><br> <strong>(Oletusjärjestys on paras useimmille käyttäjille)</strong>",
-      "embedOrderEnableLabel": "Mukautettu upotusjärjestys",
       "keyboardShortcuts": "Pikanäppäimet",
       "keyboardShortcutsDescription": "Mukauta sovelluksen pikanäppäimiä. Pidä ` painettuna näyttääksesi tämän ohjeen milloin tahansa",
       "keyboardShortcutsLabel": "Mukauta pikanäppäimiä",
       "language": "Sovelluksen kieli",
       "languageDescription": "Kieli sovellettu koko sovellukseen.",
-      "lastSuccessfulSource": "Viimeksi käytetty lähde",
-      "lastSuccessfulSourceDescription": "Priorisoi automaattisesti lähde, joka toimitti sisällön onnistuneesti edelliseen jaksoon. Tämä auttaa varmistamaan jatkuvuuden sarjoja katseltaessa.",
-      "lastSuccessfulSourceEnableLabel": "Viimeksi käytetty lähde",
       "lowPerformanceMode": "Alhainen suorituskyky/kaistanleveystila",
       "lowPerformanceModeDescription": "Optimoi sovelluksen hitaammille yhteyksille ja laitteille poistamalla käytöstä paljon kaistanleveyttä vaativat ominaisuudet. Tämä tila vähentää tiedonsiirtoa ja parantaa suorituskykyä pitäen samalla haku- ja kellotoiminnot ennallaan.",
       "lowPerformanceModeLabel": "Matala suorituskykytila",
-      "manualSource": "Manuaalinen lähteen valinta",
-      "manualSourceDescription": "Vaadi lähteen valitseminen ennen kaapimista. Poistaa automaattisen lähteen valinnan käytöstä ja avaa lähteen valitsimen, kun toisto aloitetaan.",
-      "manualSourceLabel": "Manuaalinen lähteen valinta",
       "showLess": "Näytä vähemmän",
       "showMore": "Näytä lisää",
       "skipCredits": "Ohita lopputekstit",

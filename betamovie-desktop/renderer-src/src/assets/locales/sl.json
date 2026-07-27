@@ -6,16 +6,6 @@
     "copy": "Kopiraj"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Obisk",
-      "step1Suffix": "ali vaše zaupanja vredno skladišče dodatkov, združljivo s Addon.",
-      "step2Prefix": "Kopirajte povezavo manifesta (npr.",
-      "step2Suffix": ").",
-      "step3AddName": "Dodaj",
-      "step3Prefix": "Prilepite v zgornje polje in pritisnite",
-      "step3Suffix": ".",
-      "title": "Raziščite več dodatkov:"
-    },
     "manager": {
       "add": "Dodaj",
       "adding": "Dodajanje ...",
@@ -23,39 +13,28 @@
       "ariaManage": "Upravljanje dodatkov",
       "errorFallback": "Tega dodatka ni mogoče namestiti.",
       "manageListButton": "Upravljanje seznama dodatkov",
-      "subtitle": "Dodajte URL manifesta Addon za hudournike in neposredne tokove.",
+      "subtitle": "Neobvezno. Dodajte URL manifesta, ki ga izberete. Ta aplikacija ne združuje, priporoča ali gosti dodatkov.",
       "title": "Namizni dodatki"
     },
     "page": {
       "addAddonButton": "Dodaj dodatek",
+      "description": "Dodatki niso obvezni. Ta aplikacija ne združuje, priporoča ali gosti nobenega dodatka.",
       "disabled": "Onemogočen",
       "emptyInstalled": "V sistemu še ni nameščen noben dodatek.",
       "enabled": "Omogočeno",
-      "guideHeading": "Odkrijte in namestite dodatke",
-      "guideIntro": "Dodatki vam pomagajo brskati po medijskih katalogih in tokovih, prilagojenih vašim osebnim željam glede zabave:",
       "installError": "Tega dodatka ni mogoče namestiti.",
       "installedHeading": "Nameščeni dodatki",
       "processing": "Obdelava ...",
       "removeAddon": "Odstranite ta dodatek",
-      "step1DescPrefix": "Obiščite katalog skupnosti na",
-      "step1DescSuffix": "ali podobni ponudniki standardnih dodatkov.",
-      "step1Title": "Raziščite katalog dodatkov",
-      "step2DescPrefix": "Izberite želeni dodatek, prilagodite možnosti in kopirajte URL njegovega manifesta (standardni primer:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopiraj povezavo do manifesta",
-      "step3AddName": "Dodaj",
-      "step3DescPrefix": "Pot manifesta prilepite v spodnje polje in pritisnite",
-      "step3DescSuffix": ". Dodatek se bo takoj aktiviral za iskanje medijskih virov.",
-      "step3Title": "Dodaj v aplikacijo",
       "title": "Upravitelj dodatkov"
     },
     "player": {
       "chooseAddon": "Izberite dodatek",
-      "emptyExplanation": "Noben dodatek za tok še ni nameščen ali aktiviran. Obiščite stran upravitelja dodatkov za navodila za namestitev in odkrivanje kataloga medijev.",
+      "emptyExplanation": "Noben dodatek ni nameščen ali omogočen. Dodajte URL manifesta, ki ga izberete v dodatkih.",
       "emptyTitle": "Na voljo ni nobenih dodatkov za tok",
       "loadingStreams": "Nalaganje tokov ...",
       "manageAddonsButton": "Upravljanje seznama dodatkov",
-      "noAddonStreams": "Za ta naslov ni vrnjen noben tok dodatkov.",
+      "noAddonStreams": "Ta dodatek ni vrnil nobenega toka.",
       "noTorrentStreams": "Za ta dodatek ni bil vrnjen noben torrent tok.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Opozorilo",
-      "disclaimerText": "AlphaFlix ne gosti nobenih medijev ali datotek, temveč le povezave do storitev tretjih oseb. Pravna vprašanja je potrebno posredovati gostiteljem in ponudnikom datotek. AlphaFlix ni odgovoren za medijske datoteke, ki jih prikazujejo ponudniki."
+      "disclaimerText": "AlphaFlix ponuja varen, sodoben in brezhiben pretočni predvajalnik z vmesnikom, ki je enostaven za uporabo, in visokokakovostnim predvajanjem v podprtih napravah. Ne gosti medijskih datotek, ne upravlja izvornega kataloga ali priporoča določenih dodatkov. Izbirne dodatke konfigurirajo uporabniki, ki so odgovorni za uporabo zakonitih virov."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Podpri nas",
       "github": "GitHub"
     },
-    "tagline": "Z odprtokodno aplikacijo AlphaFlix si oglejte najljubše oddaje in filme."
+    "tagline": "Varen, sodoben pretočni predvajalnik za brezhibno in visokokakovostno izkušnjo gledanja."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Privzeto"
       },
-      "downloads": {
-        "button": "Poskus prenosa",
-        "copyHlsPlaylist": "Kopiranje povezave do seznama predvajanja HLS",
-        "disclaimer": "Prenosi se opravijo neposredno pri ponudniku vsebin. AlphaFlix nima nadzora nad načinom zagotavljanja prenosov.",
-        "downloadSubtitle": "Prenesi trenutne podnapise",
-        "downloadVideo": "Prenesi video",
-        "hlsDisclaimer": "Prenosi se opravijo neposredno pri ponudniku vsebin. AlphaFlix nima nadzora nad načinom zagotavljanja prenosov. Upoštevajte, da prenašate seznam predvajanja tipa \"HLS\" namenjen uporabnikom, ki poznajo napredno pretakanje večpredstavnostnih vsebin.",
-        "hlsDownloader": "Ali pa pojdite na <0>spletno mesto za prenos hls</0> in prilepite URL seznama predvajanja od spodaj.",
-        "onAndroid": {
-          "1": "Če želite prenesti v sistemu Android, kliknite gumb za prenos, nato na novi strani <bold>tipnite in držite</bold> videoposnetek ter izberite <bold>shrani</bold>.",
-          "shortTitle": "Prenesi / Android",
-          "title": "Prenos v operacijskem sistemu Android"
-        },
-        "onIos": {
-          "1": "Če želite prenesti v sistemu iOS, kliknite gumb za prenos, nato na novi strani kliknite <bold><ios_share /></bold> in nato <bold>Shrani v datoteke <ios_files /></bold>.",
-          "shortTitle": "Prenesu / iOS",
-          "title": "Prenašanje v sistemu iOS"
-        },
-        "onPc": {
-          "1": "V računalniku kliknite gumb za prenos, nato na novi strani desno kliknite videoposnetek in izberite <bold>Shrani videoposnetek kot</bold>",
-          "shortTitle": "Prenesi / Računalnik",
-          "title": "Prenos na računalnik"
-        },
-        "title": "Prenos"
-      },
       "episodes": {
         "button": "Epizode",
         "emptyState": "V tej sezoni ni epizod, oglejte si jo pozneje!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Zvok",
-        "downloadItem": "Prenesi",
         "enableSubtitles": "Vklopi podnapise",
         "playbackItem": "Nastavitve predvajanja",
         "qualityItem": "Kvaliteta",
         "sourceItem": "Viri vsebin",
         "subtitleItem": "Nastavitve podnapisov"
-      },
-      "sources": {
-        "failed": {
-          "text": "Pri iskanju videoposnetkov je prišlo do napake, zato poskusite z drugim virom.",
-          "title": "Neuspešno iskanje"
-        },
-        "findNextSource": "Poiščite naslednji vir",
-        "maintain": "Vzdrževanje",
-        "noEmbeds": {
-          "text": "Nismo našli nobenih integriranih virov, poskusite z drugim virom.",
-          "title": "Ni bilo najdenih nobenih integriranih virov"
-        },
-        "noStream": {
-          "text": "Ta vir nima tokov za ta film ali serijo.",
-          "title": "Ni vira"
-        },
-        "title": "Viri",
-        "unknownOption": "Neznano"
       },
       "subtitles": {
         "autoSelectChoice": "Samodejna izbira",
@@ -953,37 +888,6 @@
       "restart": "Znova zaženite",
       "resume": "Nadaljevanje",
       "title": "Nadaljevanje gledanja?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Razširitev brskalnika je onemogočena",
-        "enableExtension": "Vklopi razširitev brskalnika",
-        "homeButton": "Pojdi domov",
-        "text": "Namestili ste razširitev AlphaFlix. Če jo želite začeti uporabljati, morate razširitev omogočiti za to spletno mesto.",
-        "title": "Prosim vklopite razširitev brskalnika"
-      },
-      "items": {
-        "pending": "Preverjanje videoposnetkov..."
-      },
-      "notFound": {
-        "badge": "Ni najdeno",
-        "detailsButton": "Pokaži podrobnosti",
-        "discoverButton": "Odkrijte več",
-        "homeButton": "Domov",
-        "text": "Iskali smo med našimi ponudniki ampak medija, ki ga iščete, nismo našli! Medijev ne gostimo in nimamo nadzora nad tem, katere vsebine so na voljo. Za več podrobnosti kliknite \"Prikaži podrobnosti\" spodaj.",
-        "title": "Iskanega nismo našli"
-      },
-      "tips": {
-        "1": "Dotaknite se ikone zobnika, da zamenjate vir!",
-        "2": "Dotaknite se naslova, da kopirate povezavo!",
-        "3": "Tapnite in pridržite ali pridržite SHIFT, da prikažete širokozaslonski gumb namesto celozaslonskega!",
-        "4": "Nekateri viri delujejo bolje kot drugi!",
-        "5": "Pridobite razširitev za več virov!",
-        "6": "Držite zaznamke, da jih uredite ali izbrišete!",
-        "7": "Držite SHIFT in tapnite naslov, da kopirate povezavo s časom!",
-        "8": "Nastavite barvo podnapisov po meri!",
-        "9": "Držite ` za ogled bližnjic na tipkovnici!"
-      }
     },
     "segment": {
       "credits": "Krediti",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Za iskanje se dvakrat dotaknite",
       "doubleClickToSeekDescription": "Dvakrat se dotaknite leve ali desne strani predvajalnika za pomik 10 sekund naprej ali nazaj.",
       "doubleClickToSeekLabel": "Omogoči dvojni dotik za iskanje",
-      "embedOrder": "Preurejanje vdelav",
-      "embedOrderDescription": "Povlecite in spustite, da spremenite vrstni red vdelav. To bo določilo vrstni red, v katerem se preverjajo vdelani mediji, ki jih poskušate gledati. <br><br> <strong>(Privzeti vrstni red je najboljši za večino uporabnikov)</strong>",
-      "embedOrderEnableLabel": "Vrstni red vdelave po meri",
       "keyboardShortcuts": "Bližnjice na tipkovnici",
       "keyboardShortcutsDescription": "Prilagodite bližnjice na tipkovnici za aplikacijo. Držite `, če želite kadar koli prikazati to pomoč",
       "keyboardShortcutsLabel": "Prilagodite bližnjice na tipkovnici",
       "language": "Jezik",
       "languageDescription": "Jezik, ki se uporablja za celotno aplikacijo.",
-      "lastSuccessfulSource": "Zadnji uporabljeni vir",
-      "lastSuccessfulSourceDescription": "Samodejno dodeli prednost viru, ki je uspešno zagotovil vsebino za prejšnjo epizodo. To pomaga zagotoviti kontinuiteto med gledanjem serij.",
-      "lastSuccessfulSourceEnableLabel": "Zadnji uporabljeni vir",
       "lowPerformanceMode": "Način nizke zmogljivosti/pasovne širine",
       "lowPerformanceModeDescription": "Optimizira aplikacijo za počasnejše povezave in naprave tako, da onemogoči funkcije, ki zahtevajo veliko pasovno širino. Ta način zmanjša porabo podatkov in izboljša zmogljivost, hkrati pa ohranja osnovno funkcijo iskanja in gledanja nedotaknjeno.",
       "lowPerformanceModeLabel": "Način nizke zmogljivosti",
-      "manualSource": "Ročna izbira vira",
-      "manualSourceDescription": "Pred strganjem zahtevajte izbiro vira. Onemogoči samodejno izbiro vira in odpre izbirnik vira ob začetku predvajanja.",
-      "manualSourceLabel": "Ročna izbira vira",
       "showLess": "Prikaži manj",
       "showMore": "Pokaži več",
       "skipCredits": "Preskoči končne zasluge",

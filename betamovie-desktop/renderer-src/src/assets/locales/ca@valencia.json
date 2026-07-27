@@ -6,16 +6,6 @@
     "copy": "Còpia"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Visita",
-      "step1Suffix": "o el vostre dipòsit de complements de confiança compatible amb Addon.",
-      "step2Prefix": "Copieu l'enllaç del manifest (p. ex.",
-      "step2Suffix": ").",
-      "step3AddName": "Afegeix",
-      "step3Prefix": "Enganxeu-lo al quadre de dalt i, a continuació, premeu",
-      "step3Suffix": ".",
-      "title": "Exploreu més complements:"
-    },
     "manager": {
       "add": "Afegeix",
       "adding": "S'està afegint...",
@@ -23,39 +13,28 @@
       "ariaManage": "Gestiona els complements",
       "errorFallback": "No es pot instal·lar aquest complement.",
       "manageListButton": "Gestioneu la llista de complements",
-      "subtitle": "Afegiu un URL de manifest de Addon per a fluxos directes i torrent.",
+      "subtitle": "Opcional. Afegiu un URL de manifest que trieu. Aquesta aplicació no agrupa, recomana ni allotja complements.",
       "title": "Complements d'escriptori"
     },
     "page": {
       "addAddonButton": "Afegeix un complement",
+      "description": "Els complements són opcionals. Aquesta aplicació no agrupa, recomana ni allotja cap complement.",
       "disabled": "Inhabilitat",
       "emptyInstalled": "Encara no hi ha cap complement instal·lat al sistema.",
       "enabled": "Habilitat",
-      "guideHeading": "Descobriu i instal·leu complements",
-      "guideIntro": "Els complements us ajuden a navegar per catàlegs de mitjans i fluxos adaptats a les vostres preferències personals d'entreteniment:",
       "installError": "No es pot instal·lar aquest complement.",
       "installedHeading": "Complements instal·lats",
       "processing": "S'està processant...",
       "removeAddon": "Elimina aquest complement",
-      "step1DescPrefix": "Visiteu el catàleg de la comunitat a",
-      "step1DescSuffix": "o proveïdors de complements estàndard similars.",
-      "step1Title": "Exploreu el catàleg de complements",
-      "step2DescPrefix": "Seleccioneu el complement que vulgueu, personalitzeu les opcions i copieu-ne l'URL del manifest (exemple estàndard:",
-      "step2DescSuffix": ").",
-      "step2Title": "Copia l'enllaç del manifest",
-      "step3AddName": "Afegeix",
-      "step3DescPrefix": "Enganxeu el camí del manifest al camp següent i premeu",
-      "step3DescSuffix": ". El complement s'activarà immediatament per cercar fonts multimèdia.",
-      "step3Title": "Afegeix a l'aplicació",
       "title": "Gestor de complements"
     },
     "player": {
       "chooseAddon": "Trieu un complement",
-      "emptyExplanation": "Encara no s'ha instal·lat ni activat cap complement de reproducció. Visiteu la pàgina del Gestor de complements per obtenir guies de configuració i descobriment de catàlegs multimèdia.",
+      "emptyExplanation": "No hi ha cap complement instal·lat ni habilitat. Afegiu un URL de manifest que trieu als complements.",
       "emptyTitle": "No hi ha complements de reproducció disponibles",
       "loadingStreams": "S'estan carregant els fluxos...",
       "manageAddonsButton": "Gestioneu la llista de complements",
-      "noAddonStreams": "No s'ha retornat cap flux de complements per a aquest títol.",
+      "noAddonStreams": "Aquest complement no ha retornat cap reproducció.",
       "noTorrentStreams": "No s'ha retornat cap flux de torrent per a aquest complement.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Exempció de responsabilitat",
-      "disclaimerText": "Tingueu en compte: AlphaFlix no allotja cap fitxer; en canvi, només mostra contingut de proveïdors de tercers. Els problemes legals s'han de tractar amb ells."
+      "disclaimerText": "AlphaFlix ofereix un reproductor de reproducció de flux segur, modern i perfecte amb una interfície fàcil d'utilitzar i reproducció d'alta qualitat als dispositius compatibles. No allotja fitxers multimèdia, no opera un catàleg d'origen ni recomana complements específics. Els complements opcionals els configuren els usuaris, que són responsables d'utilitzar fonts lícites."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Doneu-nos suport",
       "github": "GitHub"
     },
-    "tagline": "Mira els teus programes i pel·lícules preferits de forma gratuïta sense anuncis!"
+    "tagline": "Un reproductor de reproducció modern i segur per a una experiència de visualització perfecta i d'alta qualitat."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Per defecte"
       },
-      "downloads": {
-        "button": "Intenta descàrrega",
-        "copyHlsPlaylist": "Copia l'enllaç de la llista de reproducció HLS",
-        "disclaimer": "Les descàrregues es prenen directament del proveïdor. AlphaFlix no té control sobre com es proporcionen les descàrregues.",
-        "downloadSubtitle": "Descarrega el subtítol actual",
-        "downloadVideo": "Descarrega el vídeo",
-        "hlsDisclaimer": "Les descàrregues es prenen directament del proveïdor. AlphaFlix no té control sobre com es proporcionen les baixades.<br /><br />Tingueu en compte que esteu baixant una llista de reproducció HLS, <bold>no es recomana baixar-la si no esteu familiaritzat amb els formats de reproducció avançats</bold>. Proveu diferents fonts per a diferents formats.",
-        "hlsDownloader": "O bé, aneu al lloc web de baixada de <0>hls</0> i enganxeu l'URL de la llista de reproducció a continuació.",
-        "onAndroid": {
-          "1": "Per baixar a Android, fes clic al botó de baixada i, a la pàgina nova, <bold>toca i mantén premut</bold> el vídeo i, a continuació, selecciona <bold>Desa</bold>.",
-          "shortTitle": "Descarregar / Android",
-          "title": "Descàrrega a Android"
-        },
-        "onIos": {
-          "1": "Per baixar-lo a iOS, feu clic al botó de baixada i, a la pàgina nova, feu clic a <bold><ios_share /></bold> i, a continuació, a <bold>Desa als fitxers <ios_files /></bold>.",
-          "shortTitle": "Descarregar / iOS",
-          "title": "Descàrrega a iOS"
-        },
-        "onPc": {
-          "1": "A l'ordinador, feu clic al botó de baixada i, a la pàgina nova, feu clic amb el botó dret al vídeo i seleccioneu <bold>Desa el vídeo com a</bold>",
-          "shortTitle": "Descarregar / PC",
-          "title": "Descàrrega al PC"
-        },
-        "title": "Descarregar"
-      },
       "episodes": {
         "button": "Episodis",
         "emptyState": "No hi ha cap episodi en aquesta temporada, torneu-hi més tard (ho sento :3)...",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Àudio",
-        "downloadItem": "Descarregar",
         "enableSubtitles": "Activa els subtítols",
         "playbackItem": "Configuració de reproducció",
         "qualityItem": "Qualitat",
         "sourceItem": "Font",
         "subtitleItem": "Subtítols"
-      },
-      "sources": {
-        "failed": {
-          "text": "S'ha produït un error en provar de cercar vídeos... Vols provar una font diferent?",
-          "title": "No s'ha pogut raspar"
-        },
-        "findNextSource": "Trobeu la següent font",
-        "maintain": "Mantenir",
-        "noEmbeds": {
-          "text": "No hem pogut trobar cap inserció, proveu amb una font diferent.",
-          "title": "No s'han trobat incrustacions"
-        },
-        "noStream": {
-          "text": "Aquesta font no té reproduccions per a aquesta pel·lícula o programa. /ᐠ - ˕ -マ Ⳋ",
-          "title": "Sense flux :("
-        },
-        "title": "Fonts",
-        "unknownOption": "Desconegut"
       },
       "subtitles": {
         "autoSelectChoice": "Selecció automàtica",
@@ -953,37 +888,6 @@
       "restart": "Reinicieu",
       "resume": "Currículum",
       "title": "Continuar mirant?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Extensió desactivada",
-        "enableExtension": "Activa l'extensió",
-        "homeButton": "Ves a casa",
-        "text": "Heu instal·lat l'extensió AlphaFlix. Per començar a utilitzar-lo, heu d'activar l'extensió per a aquest lloc.",
-        "title": "Activa l'extensió"
-      },
-      "items": {
-        "pending": "S'estan buscant vídeos..."
-      },
-      "notFound": {
-        "badge": "No s'ha trobat",
-        "detailsButton": "Mostra els detalls",
-        "discoverButton": "Descobreix més",
-        "homeButton": "Ves a casa",
-        "text": "Hem cercat entre els nostres proveïdors i no hem trobat els mitjans que busqueu! No allotgem els mitjans de comunicació i no tenim control sobre el que està disponible. Feu clic a \"Mostra els detalls\" a continuació per obtenir més detalls.",
-        "title": "Això no ho hem pogut trobar"
-      },
-      "tips": {
-        "1": "Toca la icona d'engranatge per canviar de font!",
-        "2": "Toca el títol per copiar l'enllaç!",
-        "3": "Mantén premuda la tecla MAJÚS per mostrar el botó de pantalla ampla en lloc de la pantalla completa.",
-        "4": "Algunes fonts funcionen millor que altres!",
-        "5": "Obteniu l'extensió per a més fonts!",
-        "6": "Mantingueu premuts els marcadors per editar-los o suprimir-los!",
-        "7": "Mantingueu premuda MAJÚS i toqueu el títol per copiar l'enllaç amb el temps!",
-        "8": "Estableix un color de subtítols personalitzat!",
-        "9": "Manteniu premut ` per veure les dreceres del teclat!"
-      }
     },
     "segment": {
       "credits": "Crèdits",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Fes doble toc per cercar",
       "doubleClickToSeekDescription": "Fes doble toc al costat esquerre o dret del reproductor per buscar 10 segons cap endavant o cap enrere.",
       "doubleClickToSeekLabel": "Habiliteu doble toc per cercar",
-      "embedOrder": "Reordenant incrustacions",
-      "embedOrderDescription": "Arrossegueu i deixeu anar per reordenar les incrustacions. Això determinarà l'ordre en què es comproven les incrustacions per als mitjans que esteu intentant veure. <br><br> <strong>(L'ordre predeterminat és el millor per a la majoria dels usuaris)</strong>",
-      "embedOrderEnableLabel": "Ordre d'inserció personalitzada",
       "keyboardShortcuts": "Dreceres de teclat",
       "keyboardShortcutsDescription": "Personalitzeu les dreceres de teclat per a l'aplicació. Manteniu premut ` per mostrar aquesta ajuda en qualsevol moment",
       "keyboardShortcutsLabel": "Personalitza les dreceres del teclat",
       "language": "Idioma d'aplicació",
       "languageDescription": "Idioma aplicat a tota l'aplicació, només l'anglès té coses ximples 🙁.",
-      "lastSuccessfulSource": "Darrera font utilitzada",
-      "lastSuccessfulSourceDescription": "Prioritza automàticament la font que ha proporcionat correctament el contingut de l'episodi anterior. Això ajuda a garantir la continuïtat quan es veuen sèries.",
-      "lastSuccessfulSourceEnableLabel": "Darrera font utilitzada",
       "lowPerformanceMode": "Mode de baix rendiment/ample de banda",
       "lowPerformanceModeDescription": "Optimitza l'aplicació per a connexions i dispositius més lents desactivant les funcions d'amplada de banda pesada. Aquest mode redueix l'ús de dades i millora el rendiment alhora que manté intactes les funcions bàsiques de cerca i rellotge.",
       "lowPerformanceModeLabel": "Mode de baix rendiment",
-      "manualSource": "Selecció manual de la font",
-      "manualSourceDescription": "Cal triar una font abans de raspar. Desactiva la selecció automàtica de fonts i obre el selector de fonts quan s'inicia la reproducció.",
-      "manualSourceLabel": "Selecció manual de la font",
       "showLess": "Mostra menys",
       "showMore": "Mostra'n més",
       "skipCredits": "Saltar crèdits finals",

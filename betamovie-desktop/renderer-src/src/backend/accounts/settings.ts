@@ -22,10 +22,7 @@ export interface SettingsInput {
   enableAutoplay?: boolean;
   enableSkipCredits?: boolean;
   enableAutoSkipSegments?: boolean;
-  embedOrder?: string[] | null;
-  enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;
-  manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
   enableAutoResumeOnPlaybackError?: boolean;
   enableNumberKeySeeking?: boolean;
@@ -45,10 +42,7 @@ export interface SettingsResponse {
   enableAutoplay?: boolean;
   enableSkipCredits?: boolean;
   enableAutoSkipSegments?: boolean;
-  embedOrder?: string[] | null;
-  enableEmbedOrder?: boolean;
   proxyTmdb?: boolean;
-  manualSourceSelection?: boolean;
   enableDoubleClickToSeek?: boolean;
   enableAutoResumeOnPlaybackError?: boolean;
   enableNumberKeySeeking?: boolean;

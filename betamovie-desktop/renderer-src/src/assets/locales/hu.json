@@ -6,16 +6,6 @@
     "copy": "Másolás"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Látogatás",
-      "step1Suffix": "vagy a megbízható Addon-kompatibilis kiegészítő tárházat.",
-      "step2Prefix": "Másolja ki a jegyzék hivatkozását (pl.",
-      "step2Suffix": ").",
-      "step3AddName": "Hozzáadás",
-      "step3Prefix": "Illessze be a fenti mezőbe, majd nyomja meg",
-      "step3Suffix": ".",
-      "title": "További kiegészítők felfedezése:"
-    },
     "manager": {
       "add": "Hozzáadás",
       "adding": "Hozzáadás...",
@@ -23,39 +13,28 @@
       "ariaManage": "Kiegészítők kezelése",
       "errorFallback": "Nem sikerült telepíteni ezt a kiegészítőt.",
       "manageListButton": "Kiegészítőlista kezelése",
-      "subtitle": "Adjon hozzá egy Addon jegyzék URL-t a torrentekhez és a közvetlen adatfolyamokhoz.",
+      "subtitle": "Választható. Adjon hozzá egy kiválasztott manifeszt URL-t. Ez az alkalmazás nem köt össze, nem ajánl és nem tárol kiegészítőket.",
       "title": "Asztali kiegészítők"
     },
     "page": {
       "addAddonButton": "Addon hozzáadása",
+      "description": "A kiegészítők nem kötelezőek. Ez az alkalmazás nem köt össze, ajánl vagy fogad semmilyen kiegészítőt.",
       "disabled": "Letiltva",
       "emptyInstalled": "A rendszerbe még nincs telepítve kiegészítő.",
       "enabled": "Engedélyezve",
-      "guideHeading": "Fedezze fel és telepítse a kiegészítőket",
-      "guideIntro": "A kiegészítők segítségével böngészhet a médiakatalógusok és a személyes szórakozási preferenciáira szabott adatfolyamok között:",
       "installError": "Nem sikerült telepíteni ezt a kiegészítőt.",
       "installedHeading": "Telepített kiegészítők",
       "processing": "Feldolgozás...",
       "removeAddon": "Távolítsa el ezt a kiegészítőt",
-      "step1DescPrefix": "Látogassa meg a közösségi katalógust a címen",
-      "step1DescSuffix": "vagy hasonló szabványos kiegészítő szolgáltatók.",
-      "step1Title": "Fedezze fel az Addon katalógust",
-      "step2DescPrefix": "Válassza ki a kívánt bővítményt, testreszabja a beállításokat, és másolja ki a jegyzék URL-jét (standard példa:",
-      "step2DescSuffix": ").",
-      "step2Title": "Manifest Link másolása",
-      "step3AddName": "Hozzáadás",
-      "step3DescPrefix": "Illessze be a jegyzék elérési útját az alábbi mezőbe, és nyomja meg a gombot",
-      "step3DescSuffix": ". A kiegészítő azonnal aktiválódik a médiaforrások kereséséhez.",
-      "step3Title": "Hozzáadás az alkalmazáshoz",
       "title": "Addons Manager"
     },
     "player": {
       "chooseAddon": "Válasszon egy kiegészítőt",
-      "emptyExplanation": "Még nincs telepítve vagy aktiválva adatfolyam-kiegészítő. Látogassa meg az Addons Manager oldalt a beállítási útmutatókért és a médiakatalógusok felfedezéséhez.",
+      "emptyExplanation": "Nincs telepítve vagy engedélyezve kiegészítő. Adjon hozzá egy manifeszt URL-t, amelyet az Addonsban választott.",
       "emptyTitle": "Nem állnak rendelkezésre adatfolyam-kiegészítők",
       "loadingStreams": "Adatfolyamok betöltése...",
       "manageAddonsButton": "Addon List kezelése",
-      "noAddonStreams": "Ehhez a címhez nem érkezett vissza kiegészítő adatfolyam.",
+      "noAddonStreams": "Ez a kiegészítő nem adott vissza adatfolyamot.",
       "noTorrentStreams": "Ehhez a kiegészítőhöz nem érkezett vissza torrentfolyam.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Figyelmeztetés",
-      "disclaimerText": "Felhívjuk figyelmedet, hogy a AlphaFlix nem tárol fájlokat, hanem csak harmadik fél szolgáltatóinak tartalmát jeleníti meg. Jogi kérdésekkel közvetlenül hozzájuk kell fordulni."
+      "disclaimerText": "Az AlphaFlix biztonságos, modern és zökkenőmentes streamlejátszót kínál könnyen használható felülettel és kiváló minőségű lejátszással a támogatott eszközökön. Nem tárol médiafájlokat, nem működtet forráskatalógust, és nem ajánl speciális kiegészítőket. Az opcionális kiegészítőket a felhasználók konfigurálják, akik felelősek a törvényes források használatáért."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Támogass minket",
       "github": "GitHub"
     },
-    "tagline": "Nézd a kedvenc filmeidet és sorozataidat ingyen, örökké reklámmentesen!"
+    "tagline": "Biztonságos, modern streamlejátszó a zökkenőmentes, kiváló minőségű megtekintési élményért."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Alap"
       },
-      "downloads": {
-        "button": "Letöltés megpróbálása",
-        "copyHlsPlaylist": "HLS lejátszási lista link másolása",
-        "disclaimer": "A letöltések közvetlen a szolgáltatótól jönnek. AlphaFlix-nek nincs befolyása, hogy a letöltés hogyan van kínálva.",
-        "downloadSubtitle": "Jelenlegi felirat letöltése",
-        "downloadVideo": "Videó letöltése",
-        "hlsDisclaimer": "A letöltések közvetlen a tartalomszolgáltatótól vannak.AlphaFlix-nek nincsen semmi befolyása, hogy a letöltések hogyan vannak szolgáltatva.<br /><br />Vedd figyelembe, hogy egy HLS lejátszási listát töltesz le, <bold>nem ajánlott letölteni, ha nem vagy ismerős a haladó sztreaming formátumokkal</bold>. Próbálj különböző forrásokat más formátumokért.",
-        "hlsDownloader": "Vagy, menj ide <0>hls downloader website</0> és illeszd be az alábbi lejátszási lista URL-t.",
-        "onAndroid": {
-          "1": "Ha androidion akarsz letölteni, nyomd meg a letöltés gombot, majd az új ablakon, <bold>tartsd lenyomva az ujjad</bold> a videón, majd válaszd ki a <bold>save</bold> opciót.",
-          "shortTitle": "Letöltés / Android",
-          "title": "Letöltés Androidon"
-        },
-        "onIos": {
-          "1": "Ha iOS-en akarsz letölteni, nyomd meg a letöltést, majd az új ablakon nyomd meg ezt a gombot <bold><ios_share /></bold>, majd nyomd a <bold>Save to FIles <ios_files /><bold> gombot.",
-          "shortTitle": "Letöltés / iOS",
-          "title": "Letöltés iOS-en"
-        },
-        "onPc": {
-          "1": "Számítógépen, nyomd meg a letöltés gombot, majd az új ablakban, jobb-klikkelj a videóra, és válaszd ki a <bold>Save video as/Mentés másként</bold> opciót",
-          "shortTitle": "Letöltés / PC",
-          "title": "Letöltés PC-re"
-        },
-        "title": "Letöltés"
-      },
       "episodes": {
         "button": "Részek",
         "emptyState": "Nincsenek epizódok ebben az évadban, nézz vissza később (bocsiiiii)...",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Hang",
-        "downloadItem": "Letöltés",
         "enableSubtitles": "Feliratok engedélyezése",
         "playbackItem": "Lejátszási beállítások",
         "qualityItem": "Minőség",
         "sourceItem": "Forrás",
         "subtitleItem": "Feliratok"
-      },
-      "sources": {
-        "failed": {
-          "text": "Hiba lépett fel a videó keresése közben... Próbálj egy másik forrást?",
-          "title": "Sikertelen begyűjtés"
-        },
-        "findNextSource": "Keresse meg a következő forrást",
-        "maintain": "Karbantartás",
-        "noEmbeds": {
-          "text": "Nem sikerült taláni beágyazásokat, próbálj egy másik forrást.",
-          "title": "Beágyazások nem találva"
-        },
-        "noStream": {
-          "text": "Ennek a forrásnak nincsenek sztreamjei ehhez a sorozathoz, vagy filmhez.",
-          "title": "Nincs sztream"
-        },
-        "title": "Források",
-        "unknownOption": "Ismertelen"
       },
       "subtitles": {
         "autoSelectChoice": "Automatikus kiválasztás",
@@ -953,37 +888,6 @@
       "restart": "Indítsa újra",
       "resume": "Folytatás",
       "title": "Folytatja a nézést?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Bővítmény kikapcsolva",
-        "enableExtension": "Engedélyezd a bővítményt",
-        "homeButton": "Kezdőlapra",
-        "text": "Telepítetted a AlphaFlix bővitményt. Hogy használni tudd, engedélyezned kell a bővítményt ennek az oldalnak.",
-        "title": "Kérlek engedélyezd a bővítményt"
-      },
-      "items": {
-        "pending": "Keresés videókért..."
-      },
-      "notFound": {
-        "badge": "Nem található",
-        "detailsButton": "Részletek mutatása",
-        "discoverButton": "Fedezz fel többet",
-        "homeButton": "Kezdőlapra",
-        "text": "Átnéztük az összes szolgáltatónkat, és nem találtuk a tartalmat amit kerestél! Nem tároljuk/hosztoljuk a médiát, így nincs befolyásunk azon, hogy mi elérjető, és mi nem. Kérlek kattints a 'Részletek mutatása'-ra, további információért.",
-        "title": "Nem találtuk meg azt"
-      },
-      "tips": {
-        "1": "Nyomj a fogaskerékre, hogy forrásokat válts!",
-        "2": "Nyomj a címre, hogy kimásold a linket!",
-        "3": "Koppints, és tartsd, vagy tartsd lenyomva a SHIFT-et a szélesképernyőért, teljes képernyő helyett!",
-        "4": "Néhány forrás jobban működik, mint a többi!",
-        "5": "Töltsd le a bővítményt több forrásért!",
-        "6": "Tartsd a könyvjelzőket lenyomva, hogy szerkezd, vagy töröld őket!",
-        "7": "Tartsd lenyomva a SHIFT-et és nyomj a címre, hogy kimásold a linket idővel együtt!",
-        "8": "Állíts be egy egyéni felirat színt!",
-        "9": "Használd a '[' és a ']' billenytűt, hogy állítsd a felirat időzítést!"
-      }
     },
     "segment": {
       "credits": "Kredit",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Koppintson duplán a kereséshez",
       "doubleClickToSeekDescription": "Koppintson duplán a lejátszó bal vagy jobb oldalán, hogy 10 másodperccel előre vagy hátra léphessen.",
       "doubleClickToSeekLabel": "Dupla koppintás engedélyezése a kereséshez",
-      "embedOrder": "A beágyazások átrendezése",
-      "embedOrderDescription": "Húzza át a beágyazások átrendezéséhez. Ez határozza meg a beágyazások ellenőrzésének sorrendjét a megtekinteni kívánt média számára. <br><br> <strong>(Az alapértelmezett sorrend a legjobb a legtöbb felhasználó számára)</strong>",
-      "embedOrderEnableLabel": "Egyedi beágyazási sorrend",
       "keyboardShortcuts": "Billentyűparancsok",
       "keyboardShortcutsDescription": "Testreszabhatja az alkalmazás billentyűparancsait. Tartsa lenyomva a ` gombot, hogy bármikor megjelenítse ezt a segítséget",
       "keyboardShortcutsLabel": "A billentyűparancsok testreszabása",
       "language": "Applikáció nyelve",
       "languageDescription": "Nyelv használva az egész applikáción keresztül, csak angolban vannak vicci micci cuccok.",
-      "lastSuccessfulSource": "Utoljára használt forrás",
-      "lastSuccessfulSourceDescription": "Automatikusan priorizálja azt a forrást, amely sikeresen biztosította a tartalmat az előző epizódhoz. Ez segít a folyamatosság biztosításában sorozatnézés közben.",
-      "lastSuccessfulSourceEnableLabel": "Utoljára használt forrás",
       "lowPerformanceMode": "Alacsony teljesítmény/sávszélesség mód",
       "lowPerformanceModeDescription": "Optimalizálja az alkalmazást a lassabb kapcsolatokhoz és eszközökhöz a nagy sávszélességet igénylő funkciók letiltásával. Ez a mód csökkenti az adathasználatot és javítja a teljesítményt, miközben érintetlenül hagyja az alapvető keresési és órafunkciókat.",
       "lowPerformanceModeLabel": "Alacsony teljesítményű mód",
-      "manualSource": "Manuális forrásválasztás",
-      "manualSourceDescription": "A kaparás előtt meg kell választani a forrást. Letiltja az automatikus forrásválasztást, és a lejátszás indításakor megnyitja a forrásválasztót.",
-      "manualSourceLabel": "Manuális forrásválasztás",
       "showLess": "Mutass kevesebbet",
       "showMore": "Mutasson többet",
       "skipCredits": "Stáblista átugrása",

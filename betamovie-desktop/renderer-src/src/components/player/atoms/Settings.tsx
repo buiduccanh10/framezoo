@@ -6,13 +6,8 @@ import { OverlayAnchor } from "@/components/overlays/OverlayAnchor";
 import { Overlay } from "@/components/overlays/OverlayDisplay";
 import { OverlayPage } from "@/components/overlays/OverlayPage";
 import { OverlayRouter } from "@/components/overlays/OverlayRouter";
-import {
-  EmbedSelectionView,
-  SourceSelectionView,
-} from "@/components/player/atoms/settings/SourceSelectingView";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { Menu } from "@/components/player/internals/ContextMenu";
-import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { SourceSelectPart } from "@/pages/parts/player/SourceSelectPart";
@@ -35,7 +30,6 @@ import { TranslateSubtitleView } from "./settings/TranslateSubtitleView";
 import { WatchPartyView } from "./settings/WatchPartyView";
 
 function SettingsOverlay({ id }: { id: string }) {
-  const [chosenSourceId, setChosenSourceId] = useState<string | null>(null);
   const [chosenLanguage, setChosenLanguage] = useState<string | null>(null);
   const [captionToTranslate, setCaptionToTranslate] =
     useState<CaptionListItem | null>(null);
@@ -46,7 +40,6 @@ function SettingsOverlay({ id }: { id: string }) {
   );
   const { width: viewportWidth, height: viewportHeight } = useWindowSize();
   const { isMobile } = useIsMobile();
-  const isDesktop = useIsDesktopApp();
   const router = useOverlayRouter(id);
   const playerMeta = usePlayerStore((state) => state.meta);
 
@@ -64,13 +57,11 @@ function SettingsOverlay({ id }: { id: string }) {
   // reset source id and language when going to home or closing overlay
   useEffect(() => {
     if (!router.isRouterActive) {
-      setChosenSourceId(null);
       setChosenLanguage(null);
       setSubtitleSelectionMode("primary");
       setSourceViewState("addons");
     }
     if (router.route === "/") {
-      setChosenSourceId(null);
       setChosenLanguage(null);
       setSourceViewState("addons");
     }
@@ -202,7 +193,7 @@ function SettingsOverlay({ id }: { id: string }) {
           width={sourceViewState === "streams" ? extraWideWidth : defaultWidth}
           height={defaultHeight}
         >
-          {isDesktop && playerMeta ? (
+          {playerMeta ? (
             <SourceSelectPart
               meta={playerMeta}
               mode="full"
@@ -210,21 +201,7 @@ function SettingsOverlay({ id }: { id: string }) {
               onSelected={() => router.close()}
               onStateChange={setSourceViewState}
             />
-          ) : (
-            <Menu.CardWithScrollable>
-              <SourceSelectionView id={id} onChoose={setChosenSourceId} />
-            </Menu.CardWithScrollable>
-          )}
-        </OverlayPage>
-        <OverlayPage
-          id={id}
-          path="/source/embeds"
-          width={defaultWidth}
-          height={defaultHeight}
-        >
-          <Menu.CardWithScrollable>
-            <EmbedSelectionView id={id} sourceId={chosenSourceId} />
-          </Menu.CardWithScrollable>
+          ) : null}
         </OverlayPage>
         <OverlayPage
           id={id}

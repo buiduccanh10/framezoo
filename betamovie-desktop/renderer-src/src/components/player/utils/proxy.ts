@@ -1,4 +1,3 @@
-import { getLoadbalancedM3U8ProxyUrl } from "@/backend/providers/fetchers";
 import { conf } from "@/setup/config";
 import { getM3U8ProxyUrls } from "@/utils/proxyUrls";
 
@@ -37,7 +36,7 @@ export async function createM3U8ProxyUrl(
   }
 
   // Get a random M3U8 proxy URL from the configuration
-  const proxyBaseUrl = getLoadbalancedM3U8ProxyUrl();
+  const proxyBaseUrl = getM3U8ProxyUrls()[0] ?? "";
 
   if (!proxyBaseUrl) {
     console.warn("No M3U8 proxy URLs available in configuration");

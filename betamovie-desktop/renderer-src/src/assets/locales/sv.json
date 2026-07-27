@@ -6,16 +6,6 @@
     "copy": "Kopiera"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Besök",
-      "step1Suffix": "eller ditt betrodda Addon-kompatibla tilläggsförråd.",
-      "step2Prefix": "Kopiera manifestlänken (t.ex.",
-      "step2Suffix": ").",
-      "step3AddName": "Tillägga",
-      "step3Prefix": "Klistra in i rutan ovan och tryck sedan på",
-      "step3Suffix": ".",
-      "title": "Utforska fler tillägg:"
-    },
     "manager": {
       "add": "Tillägga",
       "adding": "Lägger till...",
@@ -23,39 +13,28 @@
       "ariaManage": "Hantera tillägg",
       "errorFallback": "Det går inte att installera detta tillägg.",
       "manageListButton": "Hantera tilläggslista",
-      "subtitle": "Lägg till en Addon-manifest-URL för torrent- och direktströmmar.",
+      "subtitle": "Frivillig. Lägg till en manifest-URL du väljer. Den här appen paketerar inte, rekommenderar eller är värd för tillägg.",
       "title": "Skrivbordstillägg"
     },
     "page": {
       "addAddonButton": "Lägg till addon",
+      "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
       "disabled": "Inaktiverad",
       "emptyInstalled": "Inga tillägg installerade i systemet ännu.",
       "enabled": "Aktiverad",
-      "guideHeading": "Upptäck och installera tillägg",
-      "guideIntro": "Tillägg hjälper dig att bläddra i mediekataloger och strömmar som är skräddarsydda för dina personliga underhållningspreferenser:",
       "installError": "Det går inte att installera detta tillägg.",
       "installedHeading": "Installerade tillägg",
       "processing": "Bearbetar...",
       "removeAddon": "Ta bort detta tillägg",
-      "step1DescPrefix": "Besök samhällskatalogen på",
-      "step1DescSuffix": "eller liknande standardtilläggsleverantörer.",
-      "step1Title": "Utforska Addon-katalogen",
-      "step2DescPrefix": "Välj önskat tillägg, anpassa alternativen och kopiera dess manifest-URL (standardexempel:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopiera manifestlänk",
-      "step3AddName": "Tillägga",
-      "step3DescPrefix": "Klistra in manifestsökvägen i fältet nedan och tryck",
-      "step3DescSuffix": ". Tillägget aktiveras omedelbart för att söka efter mediekällor.",
-      "step3Title": "Lägg till i applikation",
       "title": "Tilläggshanterare"
     },
     "player": {
       "chooseAddon": "Välj ett tillägg",
-      "emptyExplanation": "Inget stream-tillägg är installerat eller aktiverat ännu. Besök Addons Manager-sidan för installationsguider och mediekatalogupptäckt.",
+      "emptyExplanation": "Inget tillägg är installerat eller aktiverat. Lägg till en manifest-URL du väljer i tillägg.",
       "emptyTitle": "Inga stream-tillägg tillgängliga",
       "loadingStreams": "Laddar strömmar...",
       "manageAddonsButton": "Hantera tilläggslista",
-      "noAddonStreams": "Inga tilläggsströmmar returnerade för den här titeln.",
+      "noAddonStreams": "Inga strömmar returnerades av detta tillägg.",
       "noTorrentStreams": "Inga torrentströmmar returnerade för detta tillägg.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Friskriver sig från ansvar",
-      "disclaimerText": "AlphaFlix hostar inga filer utan länkar endast till filer från tredje part. Eventuella juridiska frågor bör tas upp med källorna till materialet. AlphaFlix varken ansvarar eller styr över de mediefiler som visas."
+      "disclaimerText": "AlphaFlix tillhandahåller en säker, modern och sömlös streamspelare med ett lättanvänt gränssnitt och högkvalitativ uppspelning över enheter som stöds. Det är inte värd för mediafiler, driver inte en källkatalog eller rekommenderar specifika tillägg. Valfria tillägg konfigureras av användare som är ansvariga för att använda lagliga källor."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Stöd oss",
       "github": "GitHub"
     },
-    "tagline": "Titta på dina favoritprogram och filmer helt gratis."
+    "tagline": "En säker, modern stream-spelare för en sömlös, högkvalitativ tittarupplevelse."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Standard"
       },
-      "downloads": {
-        "button": "Försök nedladdning",
-        "copyHlsPlaylist": "Kopiera länk till HLS spellista",
-        "disclaimer": "Nedladdningar görs direkt från leverantören. AlphaFlix har ingen kontroll över hur nedladdningarna tillhandahålls.",
-        "downloadSubtitle": "Ladda ned nuvarande undertext",
-        "downloadVideo": "Ladda ner video",
-        "hlsDisclaimer": "Nedladdningar hämtas direkt från leverantören. AlphaFlix har ingen kontroll över hur nedladdningarna tillhandahålls.<br /><br />Observera att du laddar ner en HLS-spellista, <bold>det rekommenderas inte att ladda ner om du inte är bekant med avancerade strömningsformat</bold>. Prova olika källor för olika format.",
-        "hlsDownloader": "Eller gå till <0>hls downloader website</0> och klistra in spelliste-URL\\:en från nedan.",
-        "onAndroid": {
-          "1": "För att ladda ner på Android, klicka på nedladdningsknappen och på den nya sidan <bold>trycker och håller</bold> på videon, välj sedan <bold>spara</bold>.",
-          "shortTitle": "Ladda ner / Android",
-          "title": "Laddar ner på Android"
-        },
-        "onIos": {
-          "1": "För att ladda ner på iOS, klicka på nedladdningsknappen och på den nya sidan klickar du på <bold><ios_share /></bold>, sedan <bold>Spara i filer <ios_files /></bold>.",
-          "shortTitle": "Ladda ner / iOS",
-          "title": "Laddar ner på iOS"
-        },
-        "onPc": {
-          "1": "På PC, klicka på nedladdningsknappen och på den nya sidan högerklickar du sedan på videon och väljer <bold>Spara video som</bold>",
-          "shortTitle": "Ladda ner / PC",
-          "title": "Laddar ner på PC"
-        },
-        "title": "Ladda ner"
-      },
       "episodes": {
         "button": "Avsnitt",
         "emptyState": "Det finns inga avsnitt i denna säsong, kom tillbaka senare!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Ljud",
-        "downloadItem": "Ladda ner",
         "enableSubtitles": "Aktivera Undertexter",
         "playbackItem": "Uppspelningsinställningar",
         "qualityItem": "Kvalitet",
         "sourceItem": "Videokällor",
         "subtitleItem": "Undertexter"
-      },
-      "sources": {
-        "failed": {
-          "text": "Det uppstod ett fel när vi försökte hitta några videor... Testa försök med en annan källa?",
-          "title": "Misslyckades med att skrapa"
-        },
-        "findNextSource": "Hitta nästa källa",
-        "maintain": "Upprätthålla",
-        "noEmbeds": {
-          "text": "Vi kunde inte hitta några inbäddningar, försök med en annan källa.",
-          "title": "Inga inbäddningar hittade"
-        },
-        "noStream": {
-          "text": "Den här källan har ingen ström för denna film eller serie. /ᐠ - ˕ -マ Ⳋ",
-          "title": "Ingen ström :("
-        },
-        "title": "Källor",
-        "unknownOption": "Okänd"
       },
       "subtitles": {
         "autoSelectChoice": "Autoval",
@@ -953,37 +888,6 @@
       "restart": "Starta om",
       "resume": "Återuppta",
       "title": "Fortsätt titta?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Tillägget inaktiverat",
-        "enableExtension": "Aktivera tillägget",
-        "homeButton": "Gå till startsidan",
-        "text": "Du har installerat AlphaFlix-tillägget. För att börja använda det måste du aktivera tillägget för denna webbplats.",
-        "title": "Vänligen aktivera tillägget"
-      },
-      "items": {
-        "pending": "Söker efter videor..."
-      },
-      "notFound": {
-        "badge": "Ej hittad",
-        "detailsButton": "Visa detaljer",
-        "discoverButton": "Upptäck mer",
-        "homeButton": "Till startsidan",
-        "text": "Vi har sökt genom våra leverantörer och kan inte hitta den media du letar efter! Vi hostar inte media och har ingen kontroll över tillgängligheten. Klicka på 'Visa detaljer' nedan för mer information.",
-        "title": "Vi kunde inte hitta det"
-      },
-      "tips": {
-        "1": "Tryck på kugghjulsikonen för att byta källa!",
-        "2": "Tryck på titeln för att kopiera länken!",
-        "3": "Tryck och håll ned eller håll SHIFT för att visa widescreen-knappen istället för fullscreen!",
-        "4": "Vissa källor fungerar bättre än andra!",
-        "5": "Skaffa tillägget för fler källor!",
-        "6": "Håll ned bokmärken för att redigera eller ta bort dem!",
-        "7": "Håll ned SHIFT och tryck på titeln för att kopiera länken med tid!",
-        "8": "Ställ in en anpassad undertextfärg!",
-        "9": "Använd [ och ] för att justera undertextens timing!"
-      }
     },
     "segment": {
       "credits": "Krediter",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Dubbeltryck för att söka",
       "doubleClickToSeekDescription": "Dubbelklicka på spelarens vänstra eller högra sida för att söka 10 sekunder framåt eller bakåt.",
       "doubleClickToSeekLabel": "Aktivera dubbeltryck för att söka",
-      "embedOrder": "Ändra ordning av inbäddningar",
-      "embedOrderDescription": "Dra och släpp för att ändra ordning på inbäddningar. Detta kommer att avgöra i vilken ordning inbäddningar kontrolleras för media du försöker titta på. <br><br> <strong>(Standardordningen är bäst för de flesta användare)</strong>",
-      "embedOrderEnableLabel": "Anpassad inbäddningsordning",
       "keyboardShortcuts": "Kortkommandon",
       "keyboardShortcutsDescription": "Anpassa kortkommandon för programmet. Håll ` för att visa denna hjälp när som helst",
       "keyboardShortcutsLabel": "Anpassa kortkommandon",
       "language": "Applikationsspråk",
       "languageDescription": "Språk tillämpas på hela applikationen, bara engelska har dumma saker 🙁.",
-      "lastSuccessfulSource": "Senast använda källa",
-      "lastSuccessfulSourceDescription": "Prioritera automatiskt källan som framgångsrikt tillhandahållit innehåll för föregående avsnitt. Detta hjälper till att säkerställa kontinuitet när du tittar på serier.",
-      "lastSuccessfulSourceEnableLabel": "Senast använda källa",
       "lowPerformanceMode": "Läge för låg prestanda/bandbredd",
       "lowPerformanceModeDescription": "Optimerar applikationen för långsammare anslutningar och enheter genom att inaktivera bandbreddstunga funktioner. Det här läget minskar dataanvändningen och förbättrar prestandan samtidigt som den centrala sök- och klockfunktionen behålls intakt.",
       "lowPerformanceModeLabel": "Läge med låg prestanda",
-      "manualSource": "Manuellt val av källa",
-      "manualSourceDescription": "Kräv att du väljer en källa innan du skrapar. Inaktiverar automatiskt val av källa och öppnar källväljaren när uppspelning startas.",
-      "manualSourceLabel": "Manuellt val av källa",
       "showLess": "Visa mindre",
       "showMore": "Visa mer",
       "skipCredits": "Hoppa över slutpoäng",

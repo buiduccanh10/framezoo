@@ -5,6 +5,54 @@
     "copied": "Meow",
     "copy": "Meow"
   },
+  "addons": {
+    "manager": {
+      "add": "Add",
+      "adding": "Adding...",
+      "ariaClose": "Close addon manager",
+      "ariaManage": "Manage addons",
+      "errorFallback": "Unable to install this addon.",
+      "manageListButton": "Manage addon list",
+      "subtitle": "Optional. Add a manifest URL you choose. This app does not bundle, recommend, or host addons.",
+      "title": "Desktop Addons"
+    },
+    "page": {
+      "addAddonButton": "Add Addon",
+      "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
+      "disabled": "Disabled",
+      "emptyInstalled": "No addons installed in the system yet.",
+      "enabled": "Enabled",
+      "installError": "Unable to install this addon.",
+      "installedHeading": "Installed Addons",
+      "processing": "Processing...",
+      "removeAddon": "Remove this addon",
+      "title": "Addons Manager"
+    },
+    "player": {
+      "chooseAddon": "Choose an addon",
+      "emptyExplanation": "No addon is installed or enabled. Add a manifest URL you choose in Addons.",
+      "emptyTitle": "No stream addons available",
+      "loadingStreams": "Loading streams...",
+      "manageAddonsButton": "Manage Addon List",
+      "noAddonStreams": "No streams were returned by this addon.",
+      "noTorrentStreams": "No torrent streams returned for this addon.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "All Qualities",
+        "other": "Other"
+      },
+      "sources": "Sources",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} streams",
+      "title": "Desktop addons",
+      "unableToLoad": "Unable to load streams",
+      "viewStreams": "View streams"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Active",
@@ -35,6 +83,7 @@
     "inviteCodeRequiredError": "Meow needs code!",
     "login": {
       "description": "Please enter your secret meow language passphrase to login to your account",
+      "failedToReachServer": "Failed to reach server",
       "nicknameLabel": "Nickname",
       "nicknameNotFound": "Nickname not found",
       "nicknamePlaceholder": "Enter your nickname",
@@ -95,8 +144,10 @@
     }
   },
   "details": {
+    "addToList": "Add to List",
     "airs": "Airs",
     "collection": {
+      "bookmarkAll": "Bookmark All",
       "movie": "Movie",
       "movies": "Movies",
       "rating": "Rating",
@@ -105,6 +156,9 @@
     },
     "endsAt": "Ends at {{time}}",
     "episode": "Episode",
+    "episodeNumber": "Episode {{number}}",
+    "episodeReleaseDate": "Release Date: {{date}}",
+    "episodeReleaseDateUnknown": "Release Date: Unknown",
     "episodes": "Episodes",
     "imdb": "View on IMDb",
     "language": "Language:",
@@ -114,6 +168,7 @@
     "resume": "Resume",
     "runtime": "Runtime:",
     "season": "Season",
+    "specialSeason": "Special season",
     "seasons": "Season/s",
     "similar": "Similar",
     "tmdb": "View on TMDB",
@@ -125,6 +180,8 @@
     "carousel": {
       "change": "Change",
       "more": "View more",
+      "today": "Today",
+      "thisWeek": "This Week",
       "title": {
         "4kReleases": "4K Releases",
         "editorPicksMovies": "Editor Picks Movies",
@@ -182,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Meow",
-      "disclaimerText": "meow-flix does not meow any meows, it merely meow to 3rd meow meows. Meow issues should be meow up with the meow meows and meows. meow-flix is not meow for any meow meows shown by the meow meows."
+      "disclaimerText": "This app is a stream player only. It does not host media, provide source catalogs, or recommend addons. Users are responsible for the sources they configure."
     },
     "links": {
       "fluxer": "Meow",
       "funding": "Support us",
       "github": "Meow"
     },
-    "tagline": "Meow your favorite meows and meows with this open source meow app."
+    "tagline": "A free stream player with no built-in media hosting."
   },
   "global": {
     "keyboardShortcuts": {
@@ -238,6 +295,8 @@
         "skipForward5": "Skip forward 5 seconds",
         "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
         "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "previousSubtitleCue": "Previous subtitle cue",
+        "nextSubtitleCue": "Next subtitle cue",
         "toggleCaptions": "Toggle captions",
         "toggleFullscreen": "Toggle fullscreen",
         "toggleNativeSubtitles": "Toggle native subtitles"
@@ -271,6 +330,7 @@
       "groups": {
         "dropdown": {
           "empty": "No groups yet",
+          "namePlaceholder": "Group name",
           "placeholderButton": "Add to group",
           "removeAll": "Remove all",
           "removeFromGroup": "Remove from group"
@@ -324,6 +384,7 @@
       "allResults": "Meow's all we meow!",
       "discover": "Discover",
       "discoverMore": "Discover more",
+      "genreFilterAll": "All genres",
       "empty": {
         "default": "Welcome, find media to watch here!",
         "extra": [
@@ -410,6 +471,100 @@
       "sectionTitle": "Watch History"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copy share link",
+      "create": "Create list",
+      "delete": "Delete",
+      "edit": "Edit",
+      "editItems": "Edit items",
+      "open": "Open",
+      "save": "Save changes",
+      "saveMembership": "Save changes"
+    },
+    "delete": {
+      "confirm": "Delete \"{{name}}\"? This cannot be undone."
+    },
+    "empty": {
+      "description": "Create your first list to start grouping titles.",
+      "title": "No lists yet"
+    },
+    "errors": {
+      "load": "Failed to load your lists."
+    },
+    "form": {
+      "createDescription": "Start a new list for favorites, rewatches, or anything else you want to share.",
+      "createTitle": "Create list",
+      "description": "Description",
+      "descriptionHelp": "Optional note to help you remember what belongs in this list.",
+      "descriptionPlaceholder": "What's this list for?",
+      "editDescription": "Update the name, description, or visibility for this list.",
+      "editTitle": "Edit list",
+      "errors": {
+        "nameRequired": "List name is required",
+        "submitFailed": "Failed to save list."
+      },
+      "name": "List name",
+      "namePlaceholder": "Weekend sci-fi",
+      "public": "Public list",
+      "publicHelp": "Anyone with the link can view this list."
+    },
+    "items": {
+      "empty": "This list is empty.",
+      "emptyHelp": "Add titles from any movie or show card with Add to List, then come back here to manage the lineup."
+    },
+    "meta": {
+      "itemCount": "{{count}} item",
+      "itemCount_plural": "{{count}} items",
+      "updatedAt": "Updated {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancel",
+        "create": "Create list",
+        "save": "Save changes"
+      },
+      "description": "Choose which lists should include {{title}}.",
+      "empty": {
+        "description": "Create a list to save this title.",
+        "title": "No lists yet"
+      },
+      "errors": {
+        "create": "Failed to create list.",
+        "save": "Failed to update list membership."
+      },
+      "title": "Add to List"
+    },
+    "page": {
+      "description": "Curate favorites, theme nights, and watch-next picks you can keep private or share with a link.",
+      "editingHint": "Click the close button on a card to remove it from this list.",
+      "eyebrow": "Collections",
+      "itemsEyebrow": "Titles in this list",
+      "itemsHint": "Select a list on the left to browse it, then use edit mode when you want to clean it up.",
+      "publicCountPlural": "{{count}} public lists",
+      "publicCountSingular": "1 public list",
+      "searchEmptyDescription": "Try another name or clear your search.",
+      "searchEmptyTitle": "No matching lists",
+      "searchPlaceholder": "Search lists",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Recently updated",
+      "summaryPlural": "{{count}} lists",
+      "summarySingular": "1 list",
+      "title": "Lists"
+    },
+    "public": {
+      "descriptionFallback": "A shared collection curated in AlphaFlix.",
+      "notFoundDescription": "This share link is missing or no longer available.",
+      "notFoundTitle": "List not found",
+      "pageTitle": "Shared list",
+      "privateDescription": "The owner has not shared this list publicly.",
+      "privateTitle": "This list is private"
+    },
+    "visibility": {
+      "private": "Private",
+      "public": "Public"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
@@ -490,13 +645,51 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Update now",
+        "available": "A new app version is ready.",
+        "download": "Download update",
+        "later": "Later",
+        "restart": "Restart to update",
+        "updating": "Updating..."
+      },
       "offline": "Check your meow connection"
+    },
+    "download": {
+      "empty": "No downloads are configured yet.",
+      "failed": "Failed to load download options.",
+      "label": "Download app",
+      "options": {
+        "mac-arm64": {
+          "description": "Best for M-series Macs",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Works on both Apple Silicon and Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Best for Intel Macs",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Best for Snapdragon/ARM Windows PCs",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Best for 64-bit Windows PCs",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "No backend URL is configured."
     },
     "install": {
       "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
       "iosSafariGuide": "To install AlphaFlix as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
     },
     "menu": {
+      "accountMenu": "Open account menu",
+      "addons": "Addons",
       "desktop": "App Settings",
       "logout": "Meow out",
       "register": "Meow to meow",
@@ -555,31 +748,6 @@
       "audio": {
         "default": "Default"
       },
-      "downloads": {
-        "button": "Attempt download",
-        "copyHlsPlaylist": "Copy HLS playlist link",
-        "disclaimer": "Downloads are taken directly from the meow. meow-flix does not have meow over how the meow are meow.",
-        "downloadSubtitle": "Download current meow",
-        "downloadVideo": "Meow",
-        "hlsDisclaimer": "Downloads are taken directly from the meow. Meow-flix does not have control over how the downloads are meow. please note that you are downloading Meow playlist, this is intended for minions familiar with advanced multimedia meow.",
-        "hlsDownloader": "Or, go to the <0>hls downloader website</0> and paste the playlist URL from below.",
-        "onAndroid": {
-          "1": "To meow on Meow, click the meow meow then, on the new meow, <bold>tap and hold</bold> on the meow, then select <bold>meow</bold>.",
-          "shortTitle": "Meow / Meow",
-          "title": "Meow"
-        },
-        "onIos": {
-          "1": "To meow on Meow, click the meow meow then, on the new meow, click <bold><ios_share /></bold>, then <bold>Meow to meow <ios_files /></bold>.",
-          "shortTitle": "Meow / Meow",
-          "title": "Meow"
-        },
-        "onPc": {
-          "1": "On PC, click the meow meow then, on the new meow, right click the meow and select <bold>Meow</bold>",
-          "shortTitle": "Meow / PC",
-          "title": "Meow"
-        },
-        "title": "Meow"
-      },
       "episodes": {
         "button": "Meow",
         "emptyState": "There are no meow in this meow, check back meow!",
@@ -612,29 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Meow",
         "enableSubtitles": "Enable meow",
         "playbackItem": "Meow settings",
         "qualityItem": "Meow",
         "sourceItem": "Meow sources",
         "subtitleItem": "Meow settings"
-      },
-      "sources": {
-        "failed": {
-          "text": "There was an meow while trying to meow any meow, please try a different meow.",
-          "title": "Meow to meow"
-        },
-        "findNextSource": "Find next source",
-        "noEmbeds": {
-          "text": "We were unable to meow any meow, please try a different meow.",
-          "title": "No meow found"
-        },
-        "noStream": {
-          "text": "This meow has no meow for this meow or meow.",
-          "title": "Meow stream"
-        },
-        "title": "Meow",
-        "unknownOption": "Meow"
       },
       "subtitles": {
         "autoSelectChoice": "Auto select",
@@ -665,7 +815,13 @@
         "settings": {
           "backlink": "Custom meows",
           "delay": "Meow delay",
-          "fixCapitals": "Fix meows"
+          "fixCapitals": "Fix meows",
+          "autoSync": "Auto sync subtitles",
+          "syncingProgress": "Syncing... ({{progress}}%) (this process may take 2-3 minutes)",
+          "syncApplied": "Auto-sync applied.",
+          "timeline": "Subtitle timeline",
+          "timelineHint": "Choose a subtitle cue to sync it with the current video time.",
+          "timelineEmpty": "No subtitle cues available."
         },
         "title": "Meows",
         "transcriptChoice": "Transcript",
@@ -733,37 +889,6 @@
       "resume": "Resume",
       "title": "Continue watching?"
     },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Extension disabled",
-        "enableExtension": "Enable extension",
-        "homeButton": "Go home",
-        "text": "You've installed the AlphaFlix extension. To start using it, you need to enable the extension for this site.",
-        "title": "Please enable the extension"
-      },
-      "items": {
-        "pending": "Checking for meow videos..."
-      },
-      "notFound": {
-        "badge": "Not found",
-        "detailsButton": "Show details",
-        "discoverButton": "Discover more",
-        "homeButton": "Go home",
-        "text": "We have searched through our meow providers and cannot find the meow you are looking for! We do not host the meow and have no control over what is available. Please click 'Show details' below for more details.",
-        "title": "We couldn't find that meow"
-      },
-      "tips": {
-        "1": "Tap the gear icon to switch sources!",
-        "2": "Tap the title to copy the link!",
-        "3": "Tap and hold or hold SHIFT to show widescreen button instead of fullscreen!",
-        "4": "Some sources work better than others!",
-        "5": "Get the extension for more sources!",
-        "6": "Hold bookmarks to edit or delete them!",
-        "7": "Hold SHIFT and tap the title to copy the link with time!",
-        "8": "Set a custom subtitle color!",
-        "9": "Hold ` to view keyboard shortcuts!"
-      }
-    },
     "segment": {
       "credits": "Credits",
       "intro": "Intro",
@@ -775,6 +900,7 @@
       "credits": "Skip Credits",
       "endOfVideo": "End",
       "endsAt": "Ends at {{time}}",
+      "submissionUnavailableMessage": "Segment submission is not available on this server.",
       "feedback": {
         "modal": {
           "cancel": "Cancel",
@@ -876,6 +1002,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Loading app...",
+    "loadingUser": "Loading user profile...",
     "loadingUserError": {
       "disconectCancel": "Cancel",
       "disconnectConfirm": "Confirm",
@@ -883,7 +1011,9 @@
       "disconnectTitle": "Disconnect from backend?",
       "logout": "Meow",
       "reload": "Reload",
-      "reset": "Meow meow meow"
+      "reset": "Meow meow meow",
+      "text": "Failed to load your user profile. Please try reloading the page.",
+      "textWithReset": "Failed to load your user profile using the current custom server. Try resetting the custom server and then reload."
     },
     "migration": {
       "failed": "Meow to meow your meow.",
@@ -1040,23 +1170,14 @@
       "doubleClickToSeek": "Double tap to seek",
       "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
       "doubleClickToSeekLabel": "Enable double tap to seek",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
       "keyboardShortcuts": "Keyboard Shortcuts",
       "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
       "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
       "language": "Application language",
       "languageDescription": "Language applied to the entire application, only English has silly stuff 🙁.",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source",
       "lowPerformanceMode": "Low performance/bandwidth mode",
       "lowPerformanceModeDescription": "Optimizes the application for slower connections and devices by disabling bandwidth-heavy features. This mode reduces data usage and improves performance while keeping the core search and watch functionality intact. ",
       "lowPerformanceModeLabel": "Low performance mode",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
       "showLess": "Show less",
       "showMore": "Show more",
       "skipCredits": "Skip End Credits",
@@ -1074,9 +1195,12 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "App Version",
         "notLoggedIn": "You are not meow in",
         "userId": "Minion ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Use this as invite code for your friend register",
+        "checkForUpdates": "Check for updates",
+        "upToDate": "You are currently on the latest version"
       }
     },
     "subtitles": {
@@ -1106,7 +1230,8 @@
   },
   "tmdb": {
     "genres": {
-      "10759": "Action & Adventure"
+      "10759": "Action & Adventure",
+      "10765": "Sci-Fi & Fantasy"
     }
   },
   "watchParty": {

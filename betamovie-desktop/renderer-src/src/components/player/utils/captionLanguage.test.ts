@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { labelToLanguageCode } from "@/lib/providers";
+import { labelToLanguageCode } from "@/lib/language";
 
 import {
   canonicalizeLanguageCode,

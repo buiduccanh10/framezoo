@@ -6,16 +6,6 @@
     "copy": "Kopēt"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Apmeklējiet",
-      "step1Suffix": "vai jūsu uzticamā ar Addon saderīgo papildinājumu krātuvi.",
-      "step2Prefix": "Kopējiet manifesta saiti (piem.",
-      "step2Suffix": ").",
-      "step3AddName": "Pievienot",
-      "step3Prefix": "Ielīmējiet augšpusē esošajā lodziņā un pēc tam nospiediet",
-      "step3Suffix": ".",
-      "title": "Izpētiet citus papildinājumus:"
-    },
     "manager": {
       "add": "Pievienot",
       "adding": "Notiek pievienošana...",
@@ -23,39 +13,28 @@
       "ariaManage": "Pārvaldiet papildinājumus",
       "errorFallback": "Nevar instalēt šo papildinājumu.",
       "manageListButton": "Pārvaldīt papildinājumu sarakstu",
-      "subtitle": "Pievienojiet Addon manifesta URL torrentiem un tiešajām straumēm.",
+      "subtitle": "Pēc izvēles. Pievienojiet izvēlēto manifesta URL. Šī lietotne neapkopo, neiesaka vai mitina papildinājumus.",
       "title": "Darbvirsmas papildinājumi"
     },
     "page": {
       "addAddonButton": "Pievienojiet papildinājumu",
+      "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
       "disabled": "Atspējots",
       "emptyInstalled": "Sistēmā vēl nav instalēts neviens papildinājums.",
       "enabled": "Iespējots",
-      "guideHeading": "Atklājiet un instalējiet papildinājumus",
-      "guideIntro": "Papildinājumi palīdz pārlūkot multivides katalogus un straumes, kas pielāgotas jūsu personīgajām izklaides vēlmēm:",
       "installError": "Nevar instalēt šo papildinājumu.",
       "installedHeading": "Instalēti papildinājumi",
       "processing": "Notiek apstrāde...",
       "removeAddon": "Noņemiet šo papildinājumu",
-      "step1DescPrefix": "Apmeklējiet kopienas katalogu vietnē",
-      "step1DescSuffix": "vai līdzīgi standarta papildinājumu nodrošinātāji.",
-      "step1Title": "Izpētiet Addon katalogu",
-      "step2DescPrefix": "Atlasiet vajadzīgo papildinājumu, pielāgojiet opcijas un kopējiet tā manifesta URL (standarta piemērs:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopēt manifesta saiti",
-      "step3AddName": "Pievienot",
-      "step3DescPrefix": "Ielīmējiet manifesta ceļu zemāk esošajā laukā un nospiediet",
-      "step3DescSuffix": ". Papildinājums nekavējoties aktivizēsies, lai meklētu multivides avotus.",
-      "step3Title": "Pievienot lietojumprogrammai",
       "title": "Papildinājumu pārvaldnieks"
     },
     "player": {
       "chooseAddon": "Izvēlieties papildinājumu",
-      "emptyExplanation": "Vēl nav instalēts vai aktivizēts neviens straumes papildinājums. Apmeklējiet Addons Manager lapu, lai skatītu iestatīšanas rokasgrāmatas un multivides kataloga atklāšanu.",
+      "emptyExplanation": "Nav instalēts vai iespējots neviens papildinājums. Pievienojiet manifesta URL, ko izvēlējāties programmā Addons.",
       "emptyTitle": "Nav pieejams neviens straumes papildinājums",
       "loadingStreams": "Notiek straumju ielāde...",
       "manageAddonsButton": "Pārvaldīt papildinājumu sarakstu",
-      "noAddonStreams": "Šim nosaukumam netika atgriezta neviena papildinājuma straume.",
+      "noAddonStreams": "Šis papildinājums neatgrieza nevienu straumi.",
       "noTorrentStreams": "Šim papildinājumam netika atgriezta neviena torrent straume.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Atruna",
-      "disclaimerText": "AlphaFlix nemitina nekādus failus, tas tikai veido saites uz trešās puses pakalpojumiem. Juridiskie jautājumi ir jārisina ar failu resursdatoriem un nodrošinātājiem. AlphaFlix nav atbildīgs par video pakalpojumu sniedzēju parādītajiem multivides failiem."
+      "disclaimerText": "AlphaFlix nodrošina drošu, modernu un vienmērīgu straumēšanas atskaņotāju ar viegli lietojamu interfeisu un augstas kvalitātes atskaņošanu atbalstītajās ierīcēs. Tajā netiek mitināti multivides faili, netiek izmantots avota katalogs un netiek ieteikti konkrēti papildinājumi. Izvēles papildinājumus konfigurē lietotāji, kuri ir atbildīgi par likumīgu avotu izmantošanu."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Atbalstiet mūs",
       "github": "GitHub"
     },
-    "tagline": "Skatieties savas iecienītākās pārraides un filmas, izmantojot šo atvērtā koda straumēšanas lietotni."
+    "tagline": "Drošs, moderns straumēšanas atskaņotājs nevainojamai augstas kvalitātes skatīšanās pieredzei."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Noklusējums"
       },
-      "downloads": {
-        "button": "Mēģiniet lejupielādēt",
-        "copyHlsPlaylist": "Kopējiet HLS atskaņošanas saraksta saiti",
-        "disclaimer": "Lejupielādes tiek ņemtas tieši no pakalpojumu sniedzēja. AlphaFlix nevar kontrolēt, kā tiek nodrošinātas lejupielādes.",
-        "downloadSubtitle": "Lejupielādēt pašreizējos subtitrus",
-        "downloadVideo": "Lejupielādēt video",
-        "hlsDisclaimer": "Lejupielādes tiek ņemtas tieši no pakalpojumu sniedzēja. AlphaFlix nekontrolē, kā tiek nodrošinātas lejupielādes.<br /><br />Lūdzu, ņemiet vērā, ka jūs lejupielādējat HLS atskaņošanas sarakstu, <bold>to nav ieteicams lejupielādēt, ja neesat pazīstams ar uzlabotajiem straumēšanas formātiem</bold>. Izmēģiniet dažādus avotus dažādiem formātiem.",
-        "hlsDownloader": "Vai arī dodieties uz <0>hls lejupielādētāja vietni</0> un ielīmējiet atskaņošanas saraksta URL no apakšas.",
-        "onAndroid": {
-          "1": "Lai lejupielādētu operētājsistēmā Android, noklikšķiniet uz lejupielādes pogas, pēc tam jaunajā lapā <bold>pieskarieties videoklipam un turiet to</bold>, pēc tam atlasiet <bold>saglabāt</bold>.",
-          "shortTitle": "Lejupielādēt / Android",
-          "title": "Lejupielāde operētājsistēmā Android"
-        },
-        "onIos": {
-          "1": "Lai lejupielādētu operētājsistēmā iOS, noklikšķiniet uz lejupielādes pogas, pēc tam jaunajā lapā noklikšķiniet uz <bold><ios_share /></bold> un pēc tam uz <bold>Saglabāt failos <ios_files /></bold>.",
-          "shortTitle": "Lejupielādēt / iOS",
-          "title": "Lejupielāde operētājsistēmā iOS"
-        },
-        "onPc": {
-          "1": "Datorā noklikšķiniet uz lejupielādes pogas, pēc tam jaunajā lapā ar peles labo pogu noklikšķiniet uz videoklipa un atlasiet <bold>Saglabāt video kā</bold>",
-          "shortTitle": "Lejupielādēt / datorā",
-          "title": "Lejupielāde datorā"
-        },
-        "title": "Lejupladēt"
-      },
       "episodes": {
         "button": "Epizodes",
         "emptyState": "Šajā sezonā nav nevienas sērijas. Pārbaudiet vēlāk!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Lejupladēt",
         "enableSubtitles": "Iespējot subtitrus",
         "playbackItem": "Atskaņošana iestādijumi",
         "qualityItem": "Kvalitāte",
         "sourceItem": "Video avoti",
         "subtitleItem": "Subtitri"
-      },
-      "sources": {
-        "failed": {
-          "text": "Mēģinot atrast videoklipus, radās kļūda. Lūdzu, mēģiniet izmantot citu avotu.",
-          "title": "Neizdevās nokasīt"
-        },
-        "findNextSource": "Atrodiet nākamo avotu",
-        "maintain": "Uzturēt",
-        "noEmbeds": {
-          "text": "Mēs nevarējām atrast nevienu iegulšanu. Lūdzu, mēģiniet izmantot citu avotu.",
-          "title": "Netika atrasta neviena iegulšana"
-        },
-        "noStream": {
-          "text": "Šim avotam nav šīs filmas vai pārraides straumju.",
-          "title": "Nav streama"
-        },
-        "title": "Avoti",
-        "unknownOption": "Nezināms"
       },
       "subtitles": {
         "autoSelectChoice": "Automātiska atlase",
@@ -953,37 +888,6 @@
       "restart": "Restartēt",
       "resume": "Atsākt",
       "title": "Vai turpināt skatīties?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Paplašinājums ir atspējots",
-        "enableExtension": "Iespējot paplašinājumu",
-        "homeButton": "Ejiet mājās",
-        "text": "Jūs esat instalējis AlphaFlix paplašinājumu. Lai sāktu to lietot, jums ir jāiespējo šīs vietnes paplašinājums.",
-        "title": "Lūdzu, iespējojiet paplašinājumu"
-      },
-      "items": {
-        "pending": "Pārbauda priekš video..."
-      },
-      "notFound": {
-        "badge": "Nav atrasts",
-        "detailsButton": "seriāls deteļas",
-        "discoverButton": "Atklājiet vairāk",
-        "homeButton": "Iet majās",
-        "text": "Mēs meklejām cour mūsu piedavatājiem un nevarējām atrast ko tu meklēji! Mēs nehostojam mediju un mums nav kontroles kas ir pieejams. Lūdzu uzpied 'šova deteļas' apakšā priekš vairāk deteļām.",
-        "title": "Mēs nevarējām atrast to"
-      },
-      "tips": {
-        "1": "Pieskarieties zobrata ikonai, lai pārslēgtu avotus!",
-        "2": "Pieskarieties nosaukumam, lai kopētu saiti!",
-        "3": "Pieskarieties un turiet vai turiet taustiņu SHIFT, lai rādītu platekrāna pogu, nevis pilnekrāna pogu!",
-        "4": "Daži avoti darbojas labāk nekā citi!",
-        "5": "Iegūstiet paplašinājumu, lai iegūtu vairāk avotu!",
-        "6": "Turiet grāmatzīmes, lai tās rediģētu vai dzēstu!",
-        "7": "Turiet nospiestu taustiņu SHIFT un pieskarieties nosaukumam, lai kopētu saiti ar laiku!",
-        "8": "Iestatiet pielāgotu subtitru krāsu!",
-        "9": "Turiet nospiestu, lai skatītu īsinājumtaustiņus!"
-      }
     },
     "segment": {
       "credits": "Kredīti",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Veiciet dubultskārienu, lai meklētu",
       "doubleClickToSeekDescription": "Veiciet dubultskārienu atskaņotāja kreisajā vai labajā pusē, lai meklētu 10 sekundes uz priekšu vai atpakaļ.",
       "doubleClickToSeekLabel": "Iespējojiet dubultskārienu, lai meklētu",
-      "embedOrder": "Iegulumu pārkārtošana",
-      "embedOrderDescription": "Velciet un nometiet, lai pārkārtotu iegulšanas. Tas noteiks secību, kādā tiek pārbaudītas iegultās multivides iespējas, kuras mēģināt skatīties. <br><br> <strong>(Noklusējuma secība ir vislabākā lielākajai daļai lietotāju)</strong>",
-      "embedOrderEnableLabel": "Pielāgota iegulšanas secība",
       "keyboardShortcuts": "Tastatūras īsinājumtaustiņi",
       "keyboardShortcutsDescription": "Pielāgojiet lietojumprogrammas īsinājumtaustiņus. Turiet nospiestu, lai jebkurā laikā parādītu šo palīdzību",
       "keyboardShortcutsLabel": "Pielāgojiet īsinājumtaustiņus",
       "language": "Lietojumprogrammas valoda",
       "languageDescription": "Visai lietojumprogrammai tiek piemērota valoda, tikai angļu valodā ir muļķīgas lietas 🙁.",
-      "lastSuccessfulSource": "Pēdējais izmantotais avots",
-      "lastSuccessfulSourceDescription": "Automātiski piešķiriet prioritāti avotam, kas veiksmīgi nodrošināja saturu iepriekšējā sērijā. Tas palīdz nodrošināt nepārtrauktību, skatoties seriālus.",
-      "lastSuccessfulSourceEnableLabel": "Pēdējais izmantotais avots",
       "lowPerformanceMode": "Zemas veiktspējas/joslas platuma režīms",
       "lowPerformanceModeDescription": "Optimizē lietojumprogrammu lēnākiem savienojumiem un ierīcēm, atspējojot lielas joslas platuma funkcijas. Šis režīms samazina datu lietojumu un uzlabo veiktspēju, vienlaikus saglabājot neskartu pamata meklēšanas un pulksteņa funkcionalitāti.",
       "lowPerformanceModeLabel": "Zemas veiktspējas režīms",
-      "manualSource": "Manuāla avota izvēle",
-      "manualSourceDescription": "Pirms skrāpēšanas ir jāizvēlas avots. Atspējo automātisko avota atlasi un atver avota atlasītāju, sākot atskaņošanu.",
-      "manualSourceLabel": "Manuāla avota izvēle",
       "showLess": "Rādīt mazāk",
       "showMore": "Rādīt vairāk",
       "skipCredits": "Izlaist beigu kredītus",

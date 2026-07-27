@@ -6,16 +6,6 @@
     "copy": "Sao chép"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Truy cập ",
-      "step1Suffix": " hoặc kho tiện ích mở rộng cộng đồng mà bạn tin dùng.",
-      "step2Prefix": "Sao chép liên kết manifest (ví dụ chuẩn: ",
-      "step2Suffix": ").",
-      "step3AddName": "Thêm",
-      "step3Prefix": "Dán vào ô nhập bên trên, rồi ấn nút ",
-      "step3Suffix": ".",
-      "title": "Khám phá nhiều Addons:"
-    },
     "manager": {
       "add": "Thêm",
       "adding": "Đang thêm...",
@@ -23,39 +13,28 @@
       "ariaManage": "Quản lý Addons",
       "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
       "manageListButton": "Quản lý danh sách Addons",
-      "subtitle": "Thêm địa chỉ liên kết manifest addon để phát và xem phim.",
+      "subtitle": "Không bắt buộc. Thêm URL tệp kê khai mà bạn chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ các tiện ích bổ sung.",
       "title": "Tiện ích dành cho máy tính để bàn"
     },
     "page": {
       "addAddonButton": "Thêm Addon",
+      "description": "Addons là tùy chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ bất kỳ tiện ích bổ sung nào.",
       "disabled": "Đã tắt",
       "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
       "enabled": "Đang bật",
-      "guideHeading": "Khám phá và cài đặt Addons",
-      "guideIntro": "Tiện ích mở rộng (Addons) giúp bạn dễ dàng duyệt nguồn phát đa phương tiện và dữ liệu phim phù hợp theo nhu cầu cá nhân của bạn:",
       "installError": "Không thể cài đặt tiện ích mở rộng này.",
       "installedHeading": "Danh sách Addons đã cài đặt",
       "processing": "Đang xử lý...",
       "removeAddon": "Xóa addon này",
-      "step1DescPrefix": "Truy cập vào danh mục cộng đồng tại ",
-      "step1DescSuffix": " hoặc các trang cung cấp addons tiêu chuẩn tương tự.",
-      "step1Title": "Khám phá kho Tiện ích",
-      "step2DescPrefix": "Chọn tiện ích mong muốn, tùy chỉnh thông số và sao chép đường dẫn tệp cấu hình (ví dụ chuẩn: ",
-      "step2DescSuffix": ").",
-      "step2Title": "Sao chép liên kết Manifest",
-      "step3AddName": "Thêm",
-      "step3DescPrefix": "Dán đường dẫn manifest vào ô bên dưới và nhấn nút ",
-      "step3DescSuffix": ". Tiện ích sẽ lập tức được kích hoạt để tìm kiếm nguồn phim.",
-      "step3Title": "Thêm vào ứng dụng",
       "title": "Quản lý Addons"
     },
     "player": {
       "chooseAddon": "Chọn addon",
-      "emptyExplanation": "Bạn chưa có tiện ích mở rộng (Addon) nào được kích hoạt. Hãy chuyển tới trang Quản lý Addons để tham khảo hướng dẫn cài đặt và khám phá nguồn phát.",
+      "emptyExplanation": "Không có addon nào được cài đặt hoặc kích hoạt. Thêm URL kê khai bạn chọn trong Addons.",
       "emptyTitle": "Chưa có Addon stream nào",
       "loadingStreams": "Đang tìm luồng...",
       "manageAddonsButton": "Quản lý danh sách Addons",
-      "noAddonStreams": "Không tìm thấy luồng addon nào cho bộ phim hoặc chương trình này.",
+      "noAddonStreams": "Không có luồng nào được trả lại bởi addon này.",
       "noTorrentStreams": "Không tìm thấy luồng torrent nào từ addon này.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Tuyên bố miễn trừ trách nhiệm",
-      "disclaimerText": "AlphaFlix không lưu trữ bất kì file nào, nó chỉ đến những đường dẫn của các dịch vụ bên thứ ba. Bất kỳ vấn đề nào về pháp lý nên được đưa đến chủ sỡ hữu của file hoặc những nhà cung cấp đó. AlphaFlix hoàn toàn không chịu trách nhiệm cho bất kỳ nội dung nào được chiếu từ các nhà cung cấp."
+      "disclaimerText": "AlphaFlix cung cấp trình phát trực tuyến an toàn, hiện đại và liền mạch với giao diện dễ sử dụng và phát lại chất lượng cao trên các thiết bị được hỗ trợ. Nó không lưu trữ các tệp phương tiện, vận hành danh mục nguồn hoặc đề xuất các tiện ích bổ sung cụ thể. Các tiện ích bổ sung tùy chọn được cấu hình bởi người dùng, những người chịu trách nhiệm sử dụng các nguồn hợp pháp."
     },
     "links": {
       "fluxer": "thông lượng",
       "funding": "Hỗ trợ chúng tôi",
       "github": "GitHub"
     },
-    "tagline": "Xem các chương trình và phim yêu thích của bạn miễn phí với không có quảng cáo nào!"
+    "tagline": "Trình phát trực tuyến hiện đại, an toàn mang lại trải nghiệm xem liền mạch, chất lượng cao."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Mặc định"
       },
-      "downloads": {
-        "button": "Thử tải xuống",
-        "copyHlsPlaylist": "Sao chép liên kết danh sách phát HLS",
-        "disclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. AlphaFlix không kiểm soát cách thức cung cấp tải xuống.",
-        "downloadSubtitle": "Tải xuống phụ đề hiện tại",
-        "downloadVideo": "Tải xuống video",
-        "hlsDisclaimer": "Tải xuống được lấy trực tiếp từ nhà cung cấp. AlphaFlix không kiểm soát cách thức cung cấp tải xuống.<br /><br />Lưu ý bạn đang tải xuống danh sách phát HLS, <bold>những người không quen với các định dạng phát trực tuyến nâng cao không nên tải xuống</bold>. Hãy thử các nguồn khác cho các định dạng khác nhau.",
-        "hlsDownloader": "Hoặc truy cập <0>trang web tải xuống hls</0> và dán URL danh sách phát phía dưới.",
-        "onAndroid": {
-          "1": "Để tải xuống trên Android, nhấp vào nút tải xuống sau đó trong trang mới, <bold>nhấn và giữ</bold> vào video, rồi chọn <bold>lưu</bold>.",
-          "shortTitle": "Tải xuống / Android",
-          "title": "Tải xuống trên Android"
-        },
-        "onIos": {
-          "1": "Để tải xuống trên iOS, nhấp vào nút tải xuống sau đó trong trang mới, nhấp <bold><ios_share /></bold>, rồi <bold>Lưu vào Tệp <ios_files /></bold>.",
-          "shortTitle": "Tải xuống / iOS",
-          "title": "Tải xuống trên iOS"
-        },
-        "onPc": {
-          "1": "Trên PC, nhấp vào nút tải xuống sau đó trong trang mới, chuột phải vào video và chọn <bold>Lưu video thành</bold>",
-          "shortTitle": "Tải xuống / PC",
-          "title": "Tải xuống trên PC"
-        },
-        "title": "Tải xuống"
-      },
       "episodes": {
         "button": "Tập phim",
         "emptyState": "Không có tập nào trong mùa này, hãy quay lại sau (xin lỗi :3)...",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Âm thanh",
-        "downloadItem": "Tải xuống",
         "enableSubtitles": "Bật Phụ đề",
         "playbackItem": "Cài đặt phát lại",
         "qualityItem": "Chất lượng",
         "sourceItem": "Nguồn",
         "subtitleItem": "Phụ đề"
-      },
-      "sources": {
-        "failed": {
-          "text": "Đã xảy ra lỗi khi cố gắng tìm video... Hãy thử nguồn khác?",
-          "title": "Tìm kiếm thất bại"
-        },
-        "findNextSource": "Tìm nguồn tiếp theo",
-        "maintain": "Bảo trì",
-        "noEmbeds": {
-          "text": "Chúng tôi không tìm thấy bất kỳ nội dung nhúng nào, vui lòng thử nguồn khác.",
-          "title": "Không tìm thấy mã nhúng"
-        },
-        "noStream": {
-          "text": "Nguồn này không có luồng nào cho bộ phim hoặc chương trình này. /ᐠ - ˕ -マ Ⳋ",
-          "title": "Không có luồng :("
-        },
-        "title": "Nguồn",
-        "unknownOption": "Không rõ"
       },
       "subtitles": {
         "autoSelectChoice": "Tự động chọn",
@@ -953,37 +888,6 @@
       "restart": "Xem lại từ đầu",
       "resume": "Tiếp tục",
       "title": "Tiếp tục xem?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Tiện ích mở rộng đã bị vô hiệu hóa",
-        "enableExtension": "Bật tiện ích mở rộng",
-        "homeButton": "Về trang chính",
-        "text": "Bạn đã cài đặt tiện ích mở rộng AlphaFlix. Để bắt đầu sử dụng, bạn cần bật tiện ích mở rộng cho trang web này.",
-        "title": "Vui lòng bật tiện ích mở rộng"
-      },
-      "items": {
-        "pending": "Đang kiểm tra video..."
-      },
-      "notFound": {
-        "badge": "Không tìm thấy",
-        "detailsButton": "Chi tiết",
-        "discoverButton": "Khám phá thêm",
-        "homeButton": "Về trang chính",
-        "text": "Chúng tôi đã tìm kiếm thông qua các nhà cung cấp của mình và không thể tìm thấy phương tiện truyền thông bạn đang tìm kiếm! Chúng tôi không host các phương tiện truyền thông và không có quyền kiểm soát những gì có sẵn. Vui lòng nhấp vào 'Hiển thị chi tiết' bên dưới để biết thêm chi tiết.",
-        "title": "Chúng tôi không tìm thấy"
-      },
-      "tips": {
-        "1": "Nhấn vào biểu tượng bánh răng để chuyển nguồn!",
-        "2": "Nhấp vào tiêu đề để sao chép liên kết!",
-        "3": "Nhấn và giữ hoặc giữ SHIFT để hiển thị nút toàn màn hình thay vì chế độ toàn màn hình!",
-        "4": "Một số nguồn hoạt động tốt hơn những nguồn khác!",
-        "5": "Tải tiện ích mở rộng để có thêm nhiều nguồn hơn!",
-        "6": "Giữ bookmark để chỉnh sửa hoặc xóa chúng!",
-        "7": "Giữ SHIFT và nhấp vào tiêu đề để sao chép liên kết với thời gian!",
-        "8": "Đặt màu phụ đề tùy chỉnh!",
-        "9": "Giữ ` để xem các phím tắt!"
-      }
     },
     "segment": {
       "credits": "Giới thiệu cuối",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Nhấn đúp để tua",
       "doubleClickToSeekDescription": "Nhấn đúp vào bên trái hoặc bên phải của trình phát để tua lùi hoặc tua đi 10 giây.",
       "doubleClickToSeekLabel": "Bật nhấn đúp để tua",
-      "embedOrder": "Sắp xếp lại mã nhúng",
-      "embedOrderDescription": "Kéo và thả để sắp xếp lại các mã nhúng. Điều này sẽ xác định thứ tự các mã nhúng được kiểm tra cho phương tiện bạn đang cố gắng xem. <br><br> <strong>(Thứ tự mặc định là tốt nhất cho hầu hết người dùng)</strong>",
-      "embedOrderEnableLabel": "Thứ tự mã nhúng tùy chỉnh",
       "keyboardShortcuts": "Phím tắt bàn phím",
       "keyboardShortcutsDescription": "Tùy chỉnh các phím tắt cho ứng dụng. Nhấn giữ ` để xem trợ giúp này bất cứ lúc nào",
       "keyboardShortcutsLabel": "Tùy chỉnh phím tắt bàn phím",
       "language": "Ngôn ngữ ứng dụng",
       "languageDescription": "Ngôn ngữ áp dụng cho toàn bộ ứng dụng, chỉ tiếng Anh mới có những thứ ngớ ngẩn thôi 🙁.",
-      "lastSuccessfulSource": "Nguồn sử dụng lần cuối",
-      "lastSuccessfulSourceDescription": "Tự động ưu tiên nguồn đã cung cấp nội dung thành công cho tập trước đó. Điều này giúp đảm bảo tính liên tục khi xem phim bộ.",
-      "lastSuccessfulSourceEnableLabel": "Nguồn sử dụng lần cuối",
       "lowPerformanceMode": "Chế độ hiệu suất/băng thông thấp",
       "lowPerformanceModeDescription": "Tối ưu hóa ứng dụng cho các kết nối và thiết bị chậm hơn bằng cách tắt các tính năng sử dụng nhiều băng thông. Chế độ này giúp giảm mức sử dụng dữ liệu và cải thiện hiệu suất trong khi vẫn giữ nguyên chức năng tìm kiếm và xem phim. ",
       "lowPerformanceModeLabel": "Chế độ hiệu suất thấp",
-      "manualSource": "Lựa chọn nguồn thủ công",
-      "manualSourceDescription": "Yêu cầu chọn một nguồn trước khi tìm kiếm. Tắt lựa chọn nguồn tự động và mở trình chọn nguồn khi bắt đầu phát lại.",
-      "manualSourceLabel": "Lựa chọn nguồn thủ công",
       "showLess": "Hiện ít hơn",
       "showMore": "Hiện thêm",
       "skipCredits": "Bỏ qua giới thiệu cuối",

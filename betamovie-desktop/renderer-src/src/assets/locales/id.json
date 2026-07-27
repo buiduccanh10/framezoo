@@ -6,16 +6,6 @@
     "copy": "Salin"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Mengunjungi",
-      "step1Suffix": "atau repositori addon tepercaya yang kompatibel dengan Addon.",
-      "step2Prefix": "Salin tautan manifes (mis.",
-      "step2Suffix": ").",
-      "step3AddName": "Menambahkan",
-      "step3Prefix": "Paste ke dalam kotak di atas, lalu tekan",
-      "step3Suffix": ".",
-      "title": "Jelajahi lebih banyak tambahan:"
-    },
     "manager": {
       "add": "Menambahkan",
       "adding": "Menambahkan...",
@@ -23,39 +13,28 @@
       "ariaManage": "Kelola tambahan",
       "errorFallback": "Tidak dapat memasang addon ini.",
       "manageListButton": "Kelola daftar tambahan",
-      "subtitle": "Tambahkan URL manifes Addon untuk torrent dan streaming langsung.",
+      "subtitle": "Opsional. Tambahkan URL manifes yang Anda pilih. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on.",
       "title": "Tambahan Desktop"
     },
     "page": {
       "addAddonButton": "Tambahkan Addon",
+      "description": "Add-on bersifat opsional. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on apa pun.",
       "disabled": "Dengan disabilitas",
       "emptyInstalled": "Belum ada tambahan yang terpasang di sistem.",
       "enabled": "Diaktifkan",
-      "guideHeading": "Temukan & Instal Addons",
-      "guideIntro": "Addons membantu Anda menelusuri katalog dan streaming media yang disesuaikan dengan preferensi hiburan pribadi Anda:",
       "installError": "Tidak dapat memasang addon ini.",
       "installedHeading": "Add-on yang diinstal",
       "processing": "Pengolahan...",
       "removeAddon": "Hapus tambahan ini",
-      "step1DescPrefix": "Kunjungi katalog komunitas di",
-      "step1DescSuffix": "atau penyedia addon standar serupa.",
-      "step1Title": "Jelajahi Katalog Addon",
-      "step2DescPrefix": "Pilih addon yang Anda inginkan, sesuaikan opsi, dan salin URL manifesnya (contoh standar:",
-      "step2DescSuffix": ").",
-      "step2Title": "Salin Tautan Manifes",
-      "step3AddName": "Menambahkan",
-      "step3DescPrefix": "Tempel jalur manifes ke dalam bidang di bawah dan tekan",
-      "step3DescSuffix": ". Addon akan segera aktif untuk mencari sumber media.",
-      "step3Title": "Tambahkan ke Aplikasi",
       "title": "Manajer Tambahan"
     },
     "player": {
       "chooseAddon": "Pilih tambahan",
-      "emptyExplanation": "Belum ada addon streaming yang diinstal atau diaktifkan. Kunjungi halaman Addons Manager untuk panduan pengaturan dan penemuan katalog media.",
+      "emptyExplanation": "Tidak ada addon yang diinstal atau diaktifkan. Tambahkan URL manifes yang Anda pilih di Addons.",
       "emptyTitle": "Tidak ada tambahan aliran yang tersedia",
       "loadingStreams": "Memuat streaming...",
       "manageAddonsButton": "Kelola Daftar Addon",
-      "noAddonStreams": "Tidak ada aliran tambahan yang dikembalikan untuk judul ini.",
+      "noAddonStreams": "Tidak ada aliran yang dikembalikan oleh addon ini.",
       "noTorrentStreams": "Tidak ada aliran torrent yang dikembalikan untuk addon ini.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Sanggahan",
-      "disclaimerText": "AlphaFlix tidak menyimpan berkas media apapun, aplikasi ini hanya menampilkan tautan dari pihak ketiga. Sengketa hukum harus diajukan langsung kepada penyedia pihak ketiga. AlphaFlix tidak bertanggung jawab atas berkas media yang ditampilkan oleh penyedia pihak ketiga."
+      "disclaimerText": "AlphaFlix menyediakan pemutar streaming yang aman, modern, dan lancar dengan antarmuka yang mudah digunakan dan pemutaran berkualitas tinggi di seluruh perangkat yang didukung. Itu tidak meng-host file media, mengoperasikan katalog sumber, atau merekomendasikan add-on tertentu. Add-on opsional dikonfigurasikan oleh pengguna, yang bertanggung jawab untuk menggunakan sumber yang sah."
     },
     "links": {
       "fluxer": "fluks",
       "funding": "Dukung kami",
       "github": "GitHub"
     },
-    "tagline": "Tonton serial televisi dan film favorit anda dengan aplikasi streaming sumber terbuka ini."
+    "tagline": "Pemutar streaming yang aman dan modern untuk pengalaman menonton yang mulus dan berkualitas tinggi."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Bawaan"
       },
-      "downloads": {
-        "button": "Coba unduh",
-        "copyHlsPlaylist": "Salin tautan daftar putar HLS",
-        "disclaimer": "Tautan unduhan diambil langsung dari penyedia pihak ketiga. Aplikasi ini tidak memiliki kendali bagaimana unduhan disediakan.",
-        "downloadSubtitle": "Unduh subtitle saat ini",
-        "downloadVideo": "Unduh media",
-        "hlsDisclaimer": "Unduhan didapatkan langsung dari penyedia. AlphaFlix tidak memiliki kendali bagaimana unduan disediakan.<br /><br />Harap diperhatikan bahwa Anda mengunduh daftar putar HLS, <bold>ini tidak direkomendasikan untuk diunduh jika Anda tidak terbiasa dengan format streaming tingkat lanjut</bold>Coba sumber berbeda untuk format berbeda.",
-        "hlsDownloader": "Atau, buka situs web pengunduh <0>hls</0> dan tempelkan URL daftar putar dari bawah.",
-        "onAndroid": {
-          "1": "Untuk mengunduh di Android, klik tombol unduh, lalu di halaman baru <bold>klik dan tahan</bold> pada video, lalu pilih <bold>simpan</bold>.",
-          "shortTitle": "Unduh / Android",
-          "title": "Unduh di Android"
-        },
-        "onIos": {
-          "1": "Untuk mengunduh di iOS, klik tombol unduh, lalu di halaman baru, klik <bold><ios_share /></bold>, lalu <bold>Save to Files <ios_files /></bold>.",
-          "shortTitle": "Unduh / iOS",
-          "title": "Unduh di iOS"
-        },
-        "onPc": {
-          "1": "Untuk mengunduh di PC, klik tombol unduh, lalu di halaman baru klik kanan video, dan pilih <bold>Save video as</bold>",
-          "shortTitle": "Unduh / PC",
-          "title": "Unduh di PC"
-        },
-        "title": "Unduh"
-      },
       "episodes": {
         "button": "Episode",
         "emptyState": "Tidak ada episode di season ini, periksa kembali nanti!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Unduh",
         "enableSubtitles": "Aktifkan subtitle",
         "playbackItem": "Pengaturan pemutar",
         "qualityItem": "Kualitas",
         "sourceItem": "Sumber media",
         "subtitleItem": "Pengaturan subtitle"
-      },
-      "sources": {
-        "failed": {
-          "text": "Terjadi galat saat mencoba mencari media, mohon pilih sumber lain.",
-          "title": "Gagal memuat data"
-        },
-        "findNextSource": "Temukan sumber berikutnya",
-        "maintain": "Menjaga",
-        "noEmbeds": {
-          "text": "Kami tidak dapat menemukan tautan, mohon pilih sumber lain.",
-          "title": "Tautan tidak ditemukan"
-        },
-        "noStream": {
-          "text": "Sumber ini tidak memiliki media untuk film atau seri yang Anda cari.",
-          "title": "Tidak ada media"
-        },
-        "title": "Sumber",
-        "unknownOption": "Tidak diketahui"
       },
       "subtitles": {
         "autoSelectChoice": "Pilih otomatis",
@@ -953,37 +888,6 @@
       "restart": "Mulai ulang",
       "resume": "Melanjutkan",
       "title": "Lanjutkan menonton?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Ekstensi dinonaktifkan",
-        "enableExtension": "Aktifkan ekstensi",
-        "homeButton": "Pulang",
-        "text": "Anda telah menginstal ekstensi AlphaFlix. Untuk mulai menggunakannya, Anda perlu mengaktifkan ekstensi untuk situs ini.",
-        "title": "Harap aktifkan ekstensi"
-      },
-      "items": {
-        "pending": "Mencari media..."
-      },
-      "notFound": {
-        "badge": "Tidak ditemukan",
-        "detailsButton": "Lihat detail",
-        "discoverButton": "Temukan lebih banyak",
-        "homeButton": "Kembali",
-        "text": "Kami sudah mencari ke semua penyedia yang kami miliki dan gagal menemukan media yang anda cari! Kami tidak menyimpan berkas media dan tidak memiliki kontrol atas apa yang tersedia. Periksa tombol 'Lihat detail' dibawah ini untuk informasi lebih lanjut.",
-        "title": "Kami tidak dapat menemukannya"
-      },
-      "tips": {
-        "1": "Ketuk ikon roda gigi untuk berpindah sumber!",
-        "2": "Ketuk judul untuk menyalin tautan!",
-        "3": "Ketuk dan tahan atau tahan SHIFT untuk menampilkan tombol layar lebar, bukan layar penuh!",
-        "4": "Beberapa sumber bekerja lebih baik daripada yang lain!",
-        "5": "Dapatkan ekstensi untuk lebih banyak sumber!",
-        "6": "Tahan bookmark untuk mengedit atau menghapusnya!",
-        "7": "Tahan SHIFT dan ketuk judul untuk menyalin tautan dengan waktu!",
-        "8": "Tetapkan warna subtitle khusus!",
-        "9": "Tahan ` untuk melihat pintasan keyboard!"
-      }
     },
     "segment": {
       "credits": "Kredit",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Ketuk dua kali untuk mencari",
       "doubleClickToSeekDescription": "Ketuk dua kali di sisi kiri atau kanan pemutar untuk mencari 10 detik maju atau mundur.",
       "doubleClickToSeekLabel": "Aktifkan ketuk dua kali untuk mencari",
-      "embedOrder": "Menyusun ulang penyematan",
-      "embedOrderDescription": "Seret dan lepas untuk menyusun ulang penyematan. Ini akan menentukan urutan pemeriksaan penyematan untuk media yang ingin Anda tonton. <br><br> <strong>(Urutan default adalah yang terbaik untuk sebagian besar pengguna)</strong>",
-      "embedOrderEnableLabel": "Pesanan penyematan khusus",
       "keyboardShortcuts": "Pintasan Papan Ketik",
       "keyboardShortcutsDescription": "Sesuaikan pintasan keyboard untuk aplikasi. Tahan ` untuk menampilkan bantuan ini kapan saja",
       "keyboardShortcutsLabel": "Sesuaikan Pintasan Keyboard",
       "language": "Bahasa aplikasi",
       "languageDescription": "Bahasa diterapkan ke seluruh aplikasi, hanya bahasa Inggris yang memiliki hal-hal konyol 🙁.",
-      "lastSuccessfulSource": "Sumber yang terakhir digunakan",
-      "lastSuccessfulSourceDescription": "Secara otomatis memprioritaskan sumber yang berhasil menyediakan konten untuk episode sebelumnya. Ini membantu memastikan kesinambungan saat menonton serial.",
-      "lastSuccessfulSourceEnableLabel": "Sumber yang terakhir digunakan",
       "lowPerformanceMode": "Mode kinerja/bandwidth rendah",
       "lowPerformanceModeDescription": "Mengoptimalkan aplikasi untuk koneksi dan perangkat yang lebih lambat dengan menonaktifkan fitur-fitur yang membutuhkan banyak bandwidth. Mode ini mengurangi penggunaan data dan meningkatkan kinerja sekaligus menjaga fungsi pencarian dan jam tangan inti tetap utuh.",
       "lowPerformanceModeLabel": "Mode kinerja rendah",
-      "manualSource": "Pemilihan sumber manual",
-      "manualSourceDescription": "Perlu memilih sumber sebelum menggores. Menonaktifkan pemilihan sumber otomatis dan membuka pemilih sumber saat memulai pemutaran.",
-      "manualSourceLabel": "Pemilihan sumber manual",
       "showLess": "Tampilkan lebih sedikit",
       "showMore": "Tampilkan lebih banyak",
       "skipCredits": "Lewati Kredit Akhir",

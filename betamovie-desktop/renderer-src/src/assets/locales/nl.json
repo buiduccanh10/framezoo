@@ -6,16 +6,6 @@
     "copy": "Kopieer"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Bezoek",
-      "step1Suffix": "of uw vertrouwde Addon-compatibele add-on-repository.",
-      "step2Prefix": "Kopieer de manifestlink (bijv.",
-      "step2Suffix": ").",
-      "step3AddName": "Toevoegen",
-      "step3Prefix": "Plak het in het vak erboven en druk vervolgens op",
-      "step3Suffix": ".",
-      "title": "Ontdek meer add-ons:"
-    },
     "manager": {
       "add": "Toevoegen",
       "adding": "Toevoegen...",
@@ -23,39 +13,28 @@
       "ariaManage": "Beheer add-ons",
       "errorFallback": "Kan deze add-on niet installeren.",
       "manageListButton": "Beheer add-onlijst",
-      "subtitle": "Voeg een Addon-manifest-URL toe voor torrent- en directe streams.",
+      "subtitle": "Optioneel. Voeg een manifest-URL toe die u kiest. Deze app bundelt, beveelt of host geen add-ons.",
       "title": "Desktop-add-ons"
     },
     "page": {
       "addAddonButton": "Add-on toevoegen",
+      "description": "Add-ons zijn optioneel. Deze app bundelt, beveelt of host geen enkele add-on.",
       "disabled": "Gehandicapt",
       "emptyInstalled": "Er zijn nog geen add-ons in het systeem geïnstalleerd.",
       "enabled": "Ingeschakeld",
-      "guideHeading": "Ontdek en installeer add-ons",
-      "guideIntro": "Add-ons helpen u door mediacatalogi en streams te bladeren die zijn afgestemd op uw persoonlijke entertainmentvoorkeuren:",
       "installError": "Kan deze add-on niet installeren.",
       "installedHeading": "Geïnstalleerde add-ons",
       "processing": "Verwerken...",
       "removeAddon": "Verwijder deze add-on",
-      "step1DescPrefix": "Bezoek de communitycatalogus op",
-      "step1DescSuffix": "of vergelijkbare standaard add-on-providers.",
-      "step1Title": "Ontdek de add-oncatalogus",
-      "step2DescPrefix": "Selecteer de gewenste add-on, pas de opties aan en kopieer de manifest-URL (standaardvoorbeeld:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopieer de manifeste link",
-      "step3AddName": "Toevoegen",
-      "step3DescPrefix": "Plak het manifestpad in het onderstaande veld en druk op",
-      "step3DescSuffix": ". De add-on wordt onmiddellijk geactiveerd om naar mediabronnen te zoeken.",
-      "step3Title": "Toevoegen aan applicatie",
       "title": "Add-onsbeheerder"
     },
     "player": {
       "chooseAddon": "Kies een add-on",
-      "emptyExplanation": "Er is nog geen stream-add-on geïnstalleerd of geactiveerd. Bezoek de Addons Manager-pagina voor installatiehandleidingen en het ontdekken van mediacatalogussen.",
+      "emptyExplanation": "Er is geen add-on geïnstalleerd of ingeschakeld. Voeg een manifest-URL toe die u kiest in Add-ons.",
       "emptyTitle": "Er zijn geen stream-add-ons beschikbaar",
       "loadingStreams": "Streams laden...",
       "manageAddonsButton": "Beheer Add-onlijst",
-      "noAddonStreams": "Er zijn geen add-onstreams geretourneerd voor deze titel.",
+      "noAddonStreams": "Er zijn geen streams geretourneerd door deze add-on.",
       "noTorrentStreams": "Er zijn geen torrent-streams geretourneerd voor deze add-on.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "AlphaFlix host geen bestanden, maar linkt alleen naar diensten van derden. Juridische kwesties moeten worden opgenomen met de bestandshosts en providers. AlphaFlix is niet verantwoordelijk voor mediabestanden die worden getoond door de videoproviders."
+      "disclaimerText": "AlphaFlix biedt een veilige, moderne en naadloze streamspeler met een gebruiksvriendelijke interface en hoogwaardige weergave op ondersteunde apparaten. Het host geen mediabestanden, beheert geen broncatalogus of beveelt geen specifieke add-ons aan. Optionele add-ons worden geconfigureerd door gebruikers, die verantwoordelijk zijn voor het gebruik van legale bronnen."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Steun ons",
       "github": "Github"
     },
-    "tagline": "Bekijk je favoriete shows en films met deze open source streaming app."
+    "tagline": "Een veilige, moderne streamspeler voor een naadloze, hoogwaardige kijkervaring."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Standaard"
       },
-      "downloads": {
-        "button": "Probeer te downloaden",
-        "copyHlsPlaylist": "HLS-afspeellijstlink kopiëren",
-        "disclaimer": "Downloads worden direct bij de bron opgehaald. AlphaFlix heeft geen controle over het bestand dat je ontvangt.",
-        "downloadSubtitle": "Download huidige ondertiteling",
-        "downloadVideo": "Download filmpje",
-        "hlsDisclaimer": "Downloads worden rechtstreeks van de aanbieder gehaald. AlphaFlix heeft geen controle over de manier waarop de downloads worden aangeboden.<br /><br />Houd er rekening mee dat u nu een HLS-afspeellijst downloadt, het wordt <bold>afgeraden deze te downloaden als u niet bekend bent met geavanceerde streamingbestandstypen</bold>. Probeer verschillende bronnen voor verschillende streamingbestandstypen.",
-        "hlsDownloader": "Of ga naar de <0>hls downloaderwebsite</0> en plak de URL van de afspeellijst hieronder.",
-        "onAndroid": {
-          "1": "Om te downloaden op Android, klik je op de downloadknop en vervolgens, op de nieuwe pagina, <bold>tap and hold</bold> op de video en selecteer <bold>save</bold>.",
-          "shortTitle": "Downloaden/Android",
-          "title": "Downloaden op Android"
-        },
-        "onIos": {
-          "1": "Als je wilt downloaden op iOS, klik je op de downloadknop en vervolgens op de nieuwe pagina op <bold><ios_share /></bold> en vervolgens op <bold>Save to Files <ios_files /></bold>.",
-          "shortTitle": "Downloaden / iOS",
-          "title": "Downloaden op iOS"
-        },
-        "onPc": {
-          "1": "Klik op de downloadknop op de pc en klik op de nieuwe pagina met de rechtermuisknop op de video en selecteer <bold>Video opslaan als</bold>",
-          "shortTitle": "Downloaden / pc",
-          "title": "Downloaden op PC"
-        },
-        "title": "Downloaden"
-      },
       "episodes": {
         "button": "Afleveringen",
         "emptyState": "Er zijn in dit seizoen geen afleveringen, kijk over een paar jaar nog eens!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Downloaden",
         "enableSubtitles": "Ondertitels inschakelen",
         "playbackItem": "Afspeel instellingen",
         "qualityItem": "Kwaliteit",
         "sourceItem": "Video-bron",
         "subtitleItem": "Instellingen ondertiteling"
-      },
-      "sources": {
-        "failed": {
-          "text": "Er ging iets mis bij het zoeken naar videos, probeer een andere bron.",
-          "title": "Het is niet gelukt dit op te halen"
-        },
-        "findNextSource": "Zoek de volgende bron",
-        "maintain": "Behouden",
-        "noEmbeds": {
-          "text": "We konden geen embeds vinden, probeer een andere bron.",
-          "title": "Geen embeds gevonden"
-        },
-        "noStream": {
-          "text": "Deze bron heeft geen links voor deze film of serie.",
-          "title": "Geen bron"
-        },
-        "title": "Bronnen",
-        "unknownOption": "Onbekend"
       },
       "subtitles": {
         "autoSelectChoice": "Automatische selectie",
@@ -953,37 +888,6 @@
       "restart": "Opnieuw opstarten",
       "resume": "Cv",
       "title": "Verder kijken?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Extensie uitgeschakeld",
-        "enableExtension": "Extensie inschakelen",
-        "homeButton": "Naar hoofdpagina",
-        "text": "Je hebt de AlphaFlix extensie geïnstalleerd. Om deze te gebruiken, moet je de extensie inschakelen voor deze site.",
-        "title": "Activeer alstublieft de extensie"
-      },
-      "items": {
-        "pending": "Naar videos aan het zoeken..."
-      },
-      "notFound": {
-        "badge": "Niet gevonden",
-        "detailsButton": "Meer informatie",
-        "discoverButton": "Ontdek meer",
-        "homeButton": "Naar de home-pagina",
-        "text": "We hebben al onze providers lief aangekeken maar we hebben niets kunnen vinden. Wij beheersen de media niet, en bepalen dus niet wat er beschikbaar is. Klik op \"meer informatie over foutmelding\" voor meer informatie.",
-        "title": "Dat konden we niet vinden"
-      },
-      "tips": {
-        "1": "Tik op het tandwielpictogram om van bron te wisselen!",
-        "2": "Tik op de titel om de link te kopiëren!",
-        "3": "Tik en houd SHIFT ingedrukt om de breedbeeldknop weer te geven in plaats van volledig scherm!",
-        "4": "Sommige bronnen werken beter dan andere!",
-        "5": "Download de extensie voor meer bronnen!",
-        "6": "Houd bladwijzers vast om ze te bewerken of te verwijderen!",
-        "7": "Houd SHIFT ingedrukt en tik op de titel om de link met de tijd te kopiëren!",
-        "8": "Stel een aangepaste ondertitelkleur in!",
-        "9": "Houd ` ingedrukt om sneltoetsen te bekijken!"
-      }
     },
     "segment": {
       "credits": "Kredieten",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Dubbeltik om te zoeken",
       "doubleClickToSeekDescription": "Dubbeltik op de linker- of rechterkant van de speler om 10 seconden vooruit of achteruit te zoeken.",
       "doubleClickToSeekLabel": "Schakel dubbeltikken om te zoeken in",
-      "embedOrder": "Insluitingen opnieuw ordenen",
-      "embedOrderDescription": "Slepen en neerzetten om de insluitingen opnieuw te ordenen. Dit bepaalt de volgorde waarin insluitingen worden gecontroleerd voor de media die u probeert te bekijken. <br><br> <strong>(De standaardvolgorde is het beste voor de meeste gebruikers)</strong>",
-      "embedOrderEnableLabel": "Aangepaste insluitvolgorde",
       "keyboardShortcuts": "Sneltoetsen op het toetsenbord",
       "keyboardShortcutsDescription": "Pas de sneltoetsen voor de toepassing aan. Houd ` vast om deze hulp op elk gewenst moment weer te geven",
       "keyboardShortcutsLabel": "Pas sneltoetsen aan",
       "language": "Applicatietaal",
       "languageDescription": "Taal toegepast op de gehele applicatie.",
-      "lastSuccessfulSource": "Laatst gebruikte bron",
-      "lastSuccessfulSourceDescription": "Geef automatisch prioriteit aan de bron die met succes inhoud voor de vorige aflevering heeft geleverd. Dit zorgt voor continuïteit bij het kijken van series.",
-      "lastSuccessfulSourceEnableLabel": "Laatst gebruikte bron",
       "lowPerformanceMode": "Lage prestatie/bandbreedtemodus",
       "lowPerformanceModeDescription": "Optimaliseert de applicatie voor langzamere verbindingen en apparaten door bandbreedte-intensieve functies uit te schakelen. Deze modus vermindert het datagebruik en verbetert de prestaties, terwijl de kernzoek- en kijkfunctionaliteit intact blijft.",
       "lowPerformanceModeLabel": "Lage prestatiemodus",
-      "manualSource": "Handmatige bronselectie",
-      "manualSourceDescription": "Vereist dat u een bron kiest voordat u gaat schrapen. Schakelt de automatische bronselectie uit en opent de bronkiezer bij het starten van het afspelen.",
-      "manualSourceLabel": "Handmatige bronselectie",
       "showLess": "Laat minder zien",
       "showMore": "Laat meer zien",
       "skipCredits": "Sla eindcredits over",
