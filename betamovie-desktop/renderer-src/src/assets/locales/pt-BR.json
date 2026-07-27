@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Use a chave de acesso"
     },
     "hasAccount": "Já tem uma conta? <0>Entre aqui.</0>",
-    "inviteCodeInvalidError": "Código de convite inválido (ID de usuário não encontrado)",
-    "inviteCodeLabel": "Código de convite",
-    "inviteCodePlaceholder": "Insira o ID de usuário de um amigo",
-    "inviteCodeRequiredError": "O código de convite é obrigatório",
     "login": {
-      "description": "Por favor, insira sua frase de acesso para entrar na sua conta",
+      "description": "Digite seu nome de usuário ou e-mail e senha para fazer login em sua conta",
       "failedToReachServer": "Falha ao acessar o servidor",
-      "nicknameLabel": "Apelido",
-      "nicknameNotFound": "Apelido não encontrado",
-      "nicknamePlaceholder": "Digite seu apelido",
-      "nicknameRequired": "O apelido é obrigatório",
+      "identifierLabel": "Nome de usuário ou e-mail",
+      "identifierNotFound": "Nome de usuário ou e-mail não encontrado",
+      "identifierPlaceholder": "Digite seu nome de usuário ou e-mail",
+      "identifierRequired": "Nome de usuário ou e-mail é obrigatório",
       "noBackendUrl": "Sem URL de back-end",
       "or": "or",
       "passwordIncorrect": "A senha está incorreta",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Confirme sua senha",
       "confirmPasswordPlaceholder": "Confirme sua senha",
+      "emailInvalid": "Insira um endereço de e-mail válido",
+      "emailLabel": "E-mail pessoal",
+      "emailPlaceholder": "Digite seu e-mail pessoal",
       "information": {
         "color1": "Cor do perfil um",
         "color2": "Cor do perfil dois",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Apelido",
       "nicknamePlaceholder": "Escolha um apelido exclusivo",
       "nicknameTaken": "O apelido já está em uso",
+      "nicknameRequired": "O apelido é obrigatório",
       "passwordInput": {
-        "description": "Escolha um apelido e uma senha. Sua senha funciona como uma senha segura, portanto lembre-se dela!",
+        "description": "Escolha um apelido, e-mail pessoal e senha. Sua senha funciona como uma senha segura, portanto lembre-se dela!",
         "title": "Crie seu login"
       },
       "passwordLabel": "Senha",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versão",
         "notLoggedIn": "Você não está logado",
-        "userId": "ID do usuário",
-        "userIdDescription": "Use isto como código de convite para o registro de seu amigo",
         "checkForUpdates": "Verifique se há atualizações",
         "upToDate": "Você está atualmente na versão mais recente"
       }

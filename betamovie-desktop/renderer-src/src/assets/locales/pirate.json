@@ -77,10 +77,6 @@
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "Arrr! Ye already got a ship on the seas? <0>Board here, me heartie!</0>",
-    "inviteCodeInvalidError": "That mark be cursed! (Mark not found)",
-    "inviteCodeLabel": "Parley Code",
-    "inviteCodePlaceholder": "Scrawl yer matey's mark",
-    "inviteCodeRequiredError": "Ye need a code to board!",
     "login": {
       "description": "Arr, ye be askin' for the key to me top-secret lair, also known as The Fortress of Wordsmithery, accessed only by recitin' the sacred incantation of the 12-word passphrase!",
       "failedToReachServer": "Failed to reach server",
@@ -1197,8 +1193,6 @@
       "info": {
         "appVersion": "App Version",
         "notLoggedIn": "Not logged in",
-        "userId": "Pirate ID",
-        "userIdDescription": "Use this as invite code for your friend register",
         "checkForUpdates": "Check for updates",
         "upToDate": "You are currently on the latest version"
       }

@@ -77,17 +77,13 @@
       "usePasskeyInstead": "اس کے بجائے پاسکی استعمال کریں۔"
     },
     "hasAccount": "پہلے سے ہی اکاؤنٹ ہے؟ <0>یہاں لاگ ان کریں۔</0>",
-    "inviteCodeInvalidError": "غلط دعوتی کوڈ (یوزر آئی ڈی نہیں ملا)",
-    "inviteCodeLabel": "دعوتی کوڈ",
-    "inviteCodePlaceholder": "دوست کی یوزر آئی ڈی درج کریں",
-    "inviteCodeRequiredError": "دعوتی کوڈ درکار ہے",
     "login": {
-      "description": "Please enter your passphrase to login to your account",
+      "description": "اپنے اکاؤنٹ میں لاگ ان کرنے کے لیے اپنا صارف نام یا ای میل اور پاس ورڈ درج کریں۔",
       "failedToReachServer": "سرور تک پہنچنے میں ناکام",
-      "nicknameLabel": "عرفی نام",
-      "nicknameNotFound": "عرفی نام نہیں ملا",
-      "nicknamePlaceholder": "اپنا عرفی نام درج کریں۔",
-      "nicknameRequired": "عرفی نام درکار ہے۔",
+      "identifierLabel": "صارف نام یا ای میل",
+      "identifierNotFound": "صارف نام یا ای میل نہیں ملا",
+      "identifierPlaceholder": "اپنا صارف نام یا ای میل درج کریں۔",
+      "identifierRequired": "صارف نام یا ای میل درکار ہے۔",
       "noBackendUrl": "کوئی بیک اینڈ URL نہیں ہے۔",
       "or": "or",
       "passwordIncorrect": "پاس ورڈ غلط ہے۔",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "پاس ورڈ کی تصدیق کریں۔",
       "confirmPasswordPlaceholder": "اپنے پاس ورڈ کی تصدیق کریں۔",
+      "emailInvalid": "ایک درست ای میل ایڈریس درج کریں۔",
+      "emailLabel": "ذاتی ای میل",
+      "emailPlaceholder": "اپنا ذاتی ای میل درج کریں۔",
       "information": {
         "color1": "پروفائل کا رنگ ایک",
         "color2": "پروفائل کا رنگ دو",
@@ -113,8 +112,9 @@
       "nicknameLabel": "عرفی نام",
       "nicknamePlaceholder": "ایک منفرد عرفی نام منتخب کریں۔",
       "nicknameTaken": "عرفی نام پہلے ہی لیا گیا ہے۔",
+      "nicknameRequired": "عرفی نام درکار ہے۔",
       "passwordInput": {
-        "description": "ایک عرفی نام اور پاس ورڈ منتخب کریں۔ آپ کا پاس ورڈ ایک محفوظ پاس ورڈ کے طور پر کام کرتا ہے، لہذا یقینی بنائیں کہ آپ اسے یاد رکھتے ہیں!",
+        "description": "ایک عرفی نام، ذاتی ای میل، اور پاس ورڈ کا انتخاب کریں۔ آپ کا پاس ورڈ ایک محفوظ پاس ورڈ کے طور پر کام کرتا ہے، لہذا یقینی بنائیں کہ آپ اسے یاد رکھتے ہیں!",
         "title": "اپنا لاگ ان بنائیں"
       },
       "passwordLabel": "پاس ورڈ",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "ورژن",
         "notLoggedIn": "آپ لاگ ان نہیں ہیں۔",
-        "userId": "یوزر آئی ڈی",
-        "userIdDescription": "اسے اپنے دوست کے رجسٹر کے لیے دعوتی کوڈ کے طور پر استعمال کریں۔",
         "checkForUpdates": "اپ ڈیٹس کے لیے چیک کریں۔",
         "upToDate": "آپ فی الحال تازہ ترین ورژن پر ہیں۔"
       }

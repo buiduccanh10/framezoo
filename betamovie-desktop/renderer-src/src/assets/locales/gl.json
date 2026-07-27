@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Use a clave de acceso"
     },
     "hasAccount": "Tes xa unha conta? <0>Inicia sesión aquí.</0>",
-    "inviteCodeInvalidError": "Código de invitación non válido (ID de usuario non atopado)",
-    "inviteCodeLabel": "Código de invitación",
-    "inviteCodePlaceholder": "Introduce o ID de usuario dun amigo",
-    "inviteCodeRequiredError": "O código de invitación é requirido",
     "login": {
-      "description": "Por favor, ingresa a túa contraseña para iniciar sesión na túa conta",
+      "description": "Introduza o seu nome de usuario ou correo electrónico e contrasinal para iniciar sesión na súa conta",
       "failedToReachServer": "Produciuse un erro ao chegar ao servidor",
-      "nicknameLabel": "Alcume",
-      "nicknameNotFound": "Non se atopou o apelido",
-      "nicknamePlaceholder": "Introduce o teu alcume",
-      "nicknameRequired": "O apelido é necesario",
+      "identifierLabel": "Nome de usuario ou correo electrónico",
+      "identifierNotFound": "Non se atopou o nome de usuario ou o correo electrónico",
+      "identifierPlaceholder": "Introduce o teu nome de usuario ou correo electrónico",
+      "identifierRequired": "Requírese nome de usuario ou correo electrónico",
       "noBackendUrl": "Sen URL de backend",
       "or": "or",
       "passwordIncorrect": "O contrasinal é incorrecto",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Confirme o contrasinal",
       "confirmPasswordPlaceholder": "Confirma o teu contrasinal",
+      "emailInvalid": "Introduce un enderezo de correo electrónico válido",
+      "emailLabel": "Correo electrónico persoal",
+      "emailPlaceholder": "Introduce o teu correo electrónico persoal",
       "information": {
         "color1": "Cór de perfil un",
         "color2": "Cór de perfil dous",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Alcume",
       "nicknamePlaceholder": "Escolle un alcume único",
       "nicknameTaken": "O apelido xa está tomado",
+      "nicknameRequired": "O alcume é necesario",
       "passwordInput": {
-        "description": "Escolla un alcume e un contrasinal. O teu contrasinal funciona como unha frase de acceso segura, así que asegúrate de lembralo.",
+        "description": "Escolle un alcume, correo electrónico persoal e contrasinal. O teu contrasinal funciona como unha frase de acceso segura, así que asegúrate de lembralo.",
         "title": "Crea o teu inicio de sesión"
       },
       "passwordLabel": "Contrasinal",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versión",
         "notLoggedIn": "Non iniciache sesión",
-        "userId": "ID do usuario",
-        "userIdDescription": "Use isto como código de invitación para o rexistro de amigos",
         "checkForUpdates": "Comproba se hai actualizacións",
         "upToDate": "Actualmente estás na última versión"
       }

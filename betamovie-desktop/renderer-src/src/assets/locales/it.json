@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Utilizza invece la passkey"
     },
     "hasAccount": "Hai già un account? <0>Accedi qua.</0>",
-    "inviteCodeInvalidError": "Codice di invito non valido (ID utente non trovato)",
-    "inviteCodeLabel": "Codice di invito",
-    "inviteCodePlaceholder": "Inserisci l'ID utente di un amico",
-    "inviteCodeRequiredError": "Il codice di invito è obbligatorio",
     "login": {
-      "description": "Inserisci la tua frase d'accesso per accedere al tuo account",
+      "description": "Inserisci il tuo nome utente o email e password per accedere al tuo account",
       "failedToReachServer": "Impossibile raggiungere il server",
-      "nicknameLabel": "Soprannome",
-      "nicknameNotFound": "Soprannome non trovato",
-      "nicknamePlaceholder": "Inserisci il tuo soprannome",
-      "nicknameRequired": "Il soprannome è obbligatorio",
+      "identifierLabel": "Nome utente o e-mail",
+      "identifierNotFound": "Nome utente o email non trovati",
+      "identifierPlaceholder": "Inserisci il tuo nome utente o la tua email",
+      "identifierRequired": "È richiesto il nome utente o l'e-mail",
       "noBackendUrl": "Nessun URL di back-end",
       "or": "or",
       "passwordIncorrect": "La password non è corretta",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Conferma password",
       "confirmPasswordPlaceholder": "Conferma la tua password",
+      "emailInvalid": "Inserisci un indirizzo email valido",
+      "emailLabel": "E-mail personale",
+      "emailPlaceholder": "Inserisci la tua email personale",
       "information": {
         "color1": "Colore profilo uno",
         "color2": "Colore profilo due",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Soprannome",
       "nicknamePlaceholder": "Scegli un soprannome unico",
       "nicknameTaken": "Il soprannome è già preso",
+      "nicknameRequired": "Il soprannome è obbligatorio",
       "passwordInput": {
-        "description": "Scegli un nickname e una password. La tua password funziona come una passphrase sicura, quindi assicurati di ricordarla!",
+        "description": "Scegli un nickname, un'e-mail personale e una password. La tua password funziona come una passphrase sicura, quindi assicurati di ricordarla!",
         "title": "Crea il tuo accesso"
       },
       "passwordLabel": "Password",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versione",
         "notLoggedIn": "Non sei loggato",
-        "userId": "ID utente",
-        "userIdDescription": "Usalo come codice di invito per il registro dei tuoi amici",
         "checkForUpdates": "Controlla gli aggiornamenti",
         "upToDate": "Attualmente sei sull'ultima versione"
       }

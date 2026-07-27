@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Namesto tega uporabite geslo"
     },
     "hasAccount": "Že imate račun?<0>Prijavi se tukaj.</0>",
-    "inviteCodeInvalidError": "Neveljavna koda za povabilo (uporabniški ID ni bil najden)",
-    "inviteCodeLabel": "Koda za povabilo",
-    "inviteCodePlaceholder": "Vnesite uporabniški ID prijatelja",
-    "inviteCodeRequiredError": "Koda za povabilo je obvezna",
     "login": {
-      "description": "Vnesite frazo za prijavo v račun",
+      "description": "Vnesite svoje uporabniško ime ali e-pošto in geslo za prijavo v svoj račun",
       "failedToReachServer": "Doseganje strežnika ni uspelo",
-      "nicknameLabel": "Vzdevek",
-      "nicknameNotFound": "Vzdevka ni bilo mogoče najti",
-      "nicknamePlaceholder": "Vnesite svoj vzdevek",
-      "nicknameRequired": "Zahtevan je vzdevek",
+      "identifierLabel": "Uporabniško ime ali e-pošta",
+      "identifierNotFound": "Uporabniškega imena ali e-pošte ni bilo mogoče najti",
+      "identifierPlaceholder": "Vnesite svoje uporabniško ime ali e-pošto",
+      "identifierRequired": "Zahtevano je uporabniško ime ali e-pošta",
       "noBackendUrl": "Ni zalednega URL-ja",
       "or": "or",
       "passwordIncorrect": "Geslo ni pravilno",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Potrdite geslo",
       "confirmPasswordPlaceholder": "Potrdite svoje geslo",
+      "emailInvalid": "Vnesite veljaven e-poštni naslov",
+      "emailLabel": "Osebni e-poštni naslov",
+      "emailPlaceholder": "Vnesite svoj osebni e-mail",
       "information": {
         "color1": "Barva prvega profila",
         "color2": "Barva drugega profila",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Vzdevek",
       "nicknamePlaceholder": "Izberite edinstven vzdevek",
       "nicknameTaken": "Vzdevek je že zaseden",
+      "nicknameRequired": "Zahtevan je vzdevek",
       "passwordInput": {
-        "description": "Izberite vzdevek in geslo. Vaše geslo deluje kot varno geslo, zato si ga zapomnite!",
+        "description": "Izberite vzdevek, osebni e-poštni naslov in geslo. Vaše geslo deluje kot varno geslo, zato si ga zapomnite!",
         "title": "Ustvarite svojo prijavo"
       },
       "passwordLabel": "Geslo",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Različica",
         "notLoggedIn": "Niste prijavljeni",
-        "userId": "ID uporabnika",
-        "userIdDescription": "Uporabite to kot kodo povabila za vašo registracijo prijateljev",
         "checkForUpdates": "Preverite posodobitve",
         "upToDate": "Trenutno uporabljate najnovejšo različico"
       }

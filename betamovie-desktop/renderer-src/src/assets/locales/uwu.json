@@ -77,10 +77,6 @@
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "Already have an account? <0>wogin here!</0>",
-    "inviteCodeInvalidError": "Inwvidalid inwvite code... (・~・)",
-    "inviteCodeLabel": "Inwvite Code (・ω・)",
-    "inviteCodePlaceholder": "Entew fwiend's Usew ID",
-    "inviteCodeRequiredError": "Inwvite code is wequiwed... pwease?",
     "login": {
       "description": "Pwease entew youw passphwase t-to wogin t-to youw account",
       "failedToReachServer": "Failed to reach server",
@@ -1197,8 +1193,6 @@
       "info": {
         "appVersion": "App Version",
         "notLoggedIn": "You awe nyot wogged in",
-        "userId": "Usew ID",
-        "userIdDescription": "Use this as invite code for your friend register",
         "checkForUpdates": "Check for updates",
         "upToDate": "You are currently on the latest version"
       }

@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Zamiast tego użyj hasła"
     },
     "hasAccount": "Masz już konto? <0>Zaloguj się tutaj.</0>",
-    "inviteCodeInvalidError": "Nieprawidłowy kod zaproszenia (nie znaleziono ID użytkownika)",
-    "inviteCodeLabel": "Kod zaproszenia",
-    "inviteCodePlaceholder": "Wprowadź ID użytkownika znajomego",
-    "inviteCodeRequiredError": "Kod zaproszenia jest wymagany",
     "login": {
-      "description": "Proszę wpisać frazę, aby zalogować się na swoje konto",
+      "description": "Wprowadź swoją nazwę użytkownika lub adres e-mail i hasło, aby zalogować się na swoje konto",
       "failedToReachServer": "Nie udało się połączyć z serwerem",
-      "nicknameLabel": "Przydomek",
-      "nicknameNotFound": "Nie znaleziono pseudonimu",
-      "nicknamePlaceholder": "Wpisz swój pseudonim",
-      "nicknameRequired": "Pseudonim jest wymagany",
+      "identifierLabel": "Nazwa użytkownika lub adres e-mail",
+      "identifierNotFound": "Nie znaleziono nazwy użytkownika ani adresu e-mail",
+      "identifierPlaceholder": "Wpisz swoją nazwę użytkownika lub adres e-mail",
+      "identifierRequired": "Wymagana jest nazwa użytkownika lub adres e-mail",
       "noBackendUrl": "Brak adresu URL zaplecza",
       "or": "or",
       "passwordIncorrect": "Hasło jest nieprawidłowe",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Potwierdź hasło",
       "confirmPasswordPlaceholder": "Potwierdź swoje hasło",
+      "emailInvalid": "Wpisz prawidłowy adres e-mail",
+      "emailLabel": "Osobisty e-mail",
+      "emailPlaceholder": "Wpisz swój osobisty adres e-mail",
       "information": {
         "color1": "Kolor profilu jeden",
         "color2": "Kolor profilu dwa",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Przydomek",
       "nicknamePlaceholder": "Wybierz unikalny pseudonim",
       "nicknameTaken": "Pseudonim jest już zajęty",
+      "nicknameRequired": "Pseudonim jest wymagany",
       "passwordInput": {
-        "description": "Wybierz pseudonim i hasło. Twoje hasło działa jak bezpieczne hasło, więc pamiętaj o nim!",
+        "description": "Wybierz pseudonim, osobisty adres e-mail i hasło. Twoje hasło działa jak bezpieczne hasło, więc pamiętaj o nim!",
         "title": "Utwórz swój login"
       },
       "passwordLabel": "Hasło",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Wersja",
         "notLoggedIn": "Nie jesteś zalogowany",
-        "userId": "Identyfikator użytkownika",
-        "userIdDescription": "Użyj tego jako kodu zaproszenia do rejestracji znajomego",
         "checkForUpdates": "Sprawdź aktualizacje",
         "upToDate": "Obecnie korzystasz z najnowszej wersji"
       }

@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Sử dụng passkey thay thế"
     },
     "hasAccount": "Đã có tài khoản? <0>Hãy đăng nhập.</0>",
-    "inviteCodeInvalidError": "Mã mời không hợp lệ (Không tìm thấy ID người dùng)",
-    "inviteCodeLabel": "Mã mời",
-    "inviteCodePlaceholder": "Nhập ID người dùng của bạn bè",
-    "inviteCodeRequiredError": "Vui lòng nhập mã mời",
     "login": {
-      "description": "Hãy nhập biệt danh và mật khẩu của bạn để đăng nhập vào tài khoản",
+      "description": "Nhập tên người dùng hoặc email và mật khẩu để đăng nhập vào tài khoản của bạn",
       "failedToReachServer": "Không thể truy cập máy chủ",
-      "nicknameLabel": "Biệt danh",
-      "nicknameNotFound": "Không tìm thấy biệt danh",
-      "nicknamePlaceholder": "Nhập biệt danh của bạn",
-      "nicknameRequired": "Vui lòng nhập biệt danh",
+      "identifierLabel": "Tên người dùng hoặc email",
+      "identifierNotFound": "Không tìm thấy tên người dùng hoặc email",
+      "identifierPlaceholder": "Nhập tên người dùng hoặc email của bạn",
+      "identifierRequired": "Tên người dùng hoặc email là bắt buộc",
       "noBackendUrl": "Không có URL backend",
       "or": "hoặc",
       "passwordIncorrect": "Mật khẩu không chính xác",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Xác nhận mật khẩu",
       "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+      "emailInvalid": "Nhập địa chỉ email hợp lệ",
+      "emailLabel": "Email cá nhân",
+      "emailPlaceholder": "Nhập email cá nhân của bạn",
       "information": {
         "color1": "Màu hồ sơ số một",
         "color2": "Màu hồ sơ số hai",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Biệt danh",
       "nicknamePlaceholder": "Chọn một biệt danh duy nhất",
       "nicknameTaken": "Biệt danh đã được sử dụng",
+      "nicknameRequired": "Biệt hiệu là bắt buộc",
       "passwordInput": {
-        "description": "Chọn biệt danh và mật khẩu. Mật khẩu của bạn hoạt động như một mật ngữ an toàn, vì vậy hãy chắc chắn rằng bạn nhớ nó nhé!",
+        "description": "Chọn biệt hiệu, email cá nhân và mật khẩu. Mật khẩu của bạn hoạt động như một cụm mật khẩu an toàn, vì vậy hãy đảm bảo bạn ghi nhớ nó!",
         "title": "Tạo thông tin đăng nhập"
       },
       "passwordLabel": "Mật khẩu",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Phiên bản",
         "notLoggedIn": "Bạn chưa đăng nhập",
-        "userId": "ID người dùng",
-        "userIdDescription": "Sử dụng mã này làm mã mời khi bạn bè đăng ký",
         "checkForUpdates": "Kiểm tra bản cập nhật",
         "upToDate": "Bạn đang dùng phiên bản mới nhất"
       }

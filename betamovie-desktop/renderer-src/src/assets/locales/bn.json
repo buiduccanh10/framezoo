@@ -77,17 +77,13 @@
       "usePasskeyInstead": "পরিবর্তে পাসকি ব্যবহার করুন"
     },
     "hasAccount": "ইতিমধ্যে একটি সদস্যপদ আছে? <0>এখানে লগইন করুন।</0>",
-    "inviteCodeInvalidError": "অবৈধ আমন্ত্রণ কোড (ইউজার আইডি পাওয়া যায়নি)",
-    "inviteCodeLabel": "আমন্ত্রণ কোড",
-    "inviteCodePlaceholder": "বন্ধুর ইউজার আইডি লিখুন",
-    "inviteCodeRequiredError": "আমন্ত্রণ কোড প্রয়োজন",
     "login": {
-      "description": "আপনার অ্যাকাউন্টে লগইন করতে আপনার পাসফ্রেজ লিখুন",
+      "description": "আপনার অ্যাকাউন্টে লগইন করতে আপনার ব্যবহারকারীর নাম বা ইমেল এবং পাসওয়ার্ড লিখুন",
       "failedToReachServer": "সার্ভারে পৌঁছাতে ব্যর্থ হয়েছে৷",
-      "nicknameLabel": "ডাকনাম",
-      "nicknameNotFound": "ডাকনাম পাওয়া যায়নি",
-      "nicknamePlaceholder": "আপনার ডাকনাম লিখুন",
-      "nicknameRequired": "ডাকনাম প্রয়োজন",
+      "identifierLabel": "ব্যবহারকারীর নাম বা ইমেল",
+      "identifierNotFound": "ব্যবহারকারীর নাম বা ইমেল পাওয়া যায়নি",
+      "identifierPlaceholder": "আপনার ব্যবহারকারীর নাম বা ইমেল লিখুন",
+      "identifierRequired": "ব্যবহারকারীর নাম বা ইমেল প্রয়োজন",
       "noBackendUrl": "কোনো ব্যাকএন্ড URL নেই",
       "or": "or",
       "passwordIncorrect": "পাসওয়ার্ডটি ভুল",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "পাসওয়ার্ড নিশ্চিত করুন",
       "confirmPasswordPlaceholder": "আপনার পাসওয়ার্ড নিশ্চিত করুন",
+      "emailInvalid": "একটি বৈধ ইমেল ঠিকানা লিখুন",
+      "emailLabel": "ব্যক্তিগত ইমেইল",
+      "emailPlaceholder": "আপনার ব্যক্তিগত ইমেল লিখুন",
       "information": {
         "color1": "প্রোফাইল রঙ এক",
         "color2": "প্রোফাইল রঙ দুই",
@@ -113,8 +112,9 @@
       "nicknameLabel": "ডাকনাম",
       "nicknamePlaceholder": "একটি অনন্য ডাকনাম চয়ন করুন",
       "nicknameTaken": "ডাক নাম ইতিমধ্যে নেওয়া হয়েছে",
+      "nicknameRequired": "ডাকনাম প্রয়োজন",
       "passwordInput": {
-        "description": "একটি ডাকনাম এবং পাসওয়ার্ড চয়ন করুন. আপনার পাসওয়ার্ড একটি নিরাপদ পাসফ্রেজ হিসাবে কাজ করে, তাই নিশ্চিত করুন যে আপনি এটি মনে রাখবেন!",
+        "description": "একটি ডাকনাম, ব্যক্তিগত ইমেল এবং পাসওয়ার্ড চয়ন করুন৷ আপনার পাসওয়ার্ড একটি নিরাপদ পাসফ্রেজ হিসাবে কাজ করে, তাই নিশ্চিত করুন যে আপনি এটি মনে রাখবেন!",
         "title": "আপনার লগইন তৈরি করুন"
       },
       "passwordLabel": "পাসওয়ার্ড",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "সংস্করণ",
         "notLoggedIn": "আপনি লগ ইন করা হয় না",
-        "userId": "ইউজার আইডি",
-        "userIdDescription": "আপনার বন্ধু নিবন্ধনের জন্য আমন্ত্রণ কোড হিসাবে এটি ব্যবহার করুন",
         "checkForUpdates": "আপডেটের জন্য চেক করুন",
         "upToDate": "আপনি বর্তমানে সর্বশেষ সংস্করণে আছেন"
       }

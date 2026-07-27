@@ -77,17 +77,13 @@
       "usePasskeyInstead": "ใช้รหัสผ่านแทน"
     },
     "hasAccount": "คุณมีบัญชีแล้วหรือไม่? <0>เข้าสู่ระบบที่นี่.</0>",
-    "inviteCodeInvalidError": "รหัสคำเชิญไม่ถูกต้อง (ไม่พบ ID ผู้ใช้)",
-    "inviteCodeLabel": "รหัสคำเชิญ",
-    "inviteCodePlaceholder": "ป้อน ID ผู้ใช้ของเพื่อน",
-    "inviteCodeRequiredError": "ต้องมีรหัสคำเชิญ",
     "login": {
-      "description": "โปรดป้อนสหัสผ่านของคุณเพื่อเข้าสู่ระบบ",
+      "description": "กรอกชื่อผู้ใช้หรืออีเมลและรหัสผ่านเพื่อเข้าสู่บัญชีของคุณ",
       "failedToReachServer": "ไม่สามารถเข้าถึงเซิร์ฟเวอร์",
-      "nicknameLabel": "ชื่อเล่น",
-      "nicknameNotFound": "ไม่พบชื่อเล่น",
-      "nicknamePlaceholder": "ป้อนชื่อเล่นของคุณ",
-      "nicknameRequired": "จำเป็นต้องมีชื่อเล่น",
+      "identifierLabel": "ชื่อผู้ใช้หรืออีเมล",
+      "identifierNotFound": "ไม่พบชื่อผู้ใช้หรืออีเมล",
+      "identifierPlaceholder": "กรอกชื่อผู้ใช้หรืออีเมลของคุณ",
+      "identifierRequired": "ชื่อผู้ใช้หรืออีเมลเป็นสิ่งจำเป็น",
       "noBackendUrl": "ไม่มี URL แบ็กเอนด์",
       "or": "or",
       "passwordIncorrect": "รหัสผ่านไม่ถูกต้อง",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "ยืนยันรหัสผ่าน",
       "confirmPasswordPlaceholder": "ยืนยันรหัสผ่านของคุณ",
+      "emailInvalid": "ป้อนที่อยู่อีเมลที่ถูกต้อง",
+      "emailLabel": "อีเมลส่วนตัว",
+      "emailPlaceholder": "กรอกอีเมลส่วนตัวของคุณ",
       "information": {
         "color1": "สีโปรไฟล์ 1",
         "color2": "สีโปรไฟล์ 2",
@@ -113,8 +112,9 @@
       "nicknameLabel": "ชื่อเล่น",
       "nicknamePlaceholder": "เลือกชื่อเล่นที่ไม่ซ้ำใคร",
       "nicknameTaken": "ชื่อเล่นถูกใช้ไปแล้ว",
+      "nicknameRequired": "จำเป็นต้องระบุชื่อเล่น",
       "passwordInput": {
-        "description": "เลือกชื่อเล่นและรหัสผ่าน รหัสผ่านของคุณทำงานเป็นข้อความรหัสผ่านที่ปลอดภัย ดังนั้นอย่าลืมจำไว้!",
+        "description": "เลือกชื่อเล่น อีเมลส่วนตัว และรหัสผ่าน รหัสผ่านของคุณทำงานเป็นข้อความรหัสผ่านที่ปลอดภัย ดังนั้นอย่าลืมจำไว้!",
         "title": "สร้างข้อมูลเข้าสู่ระบบของคุณ"
       },
       "passwordLabel": "รหัสผ่าน",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "เวอร์ชัน",
         "notLoggedIn": "คุณไม่ได้เข้าสู่ระบบ",
-        "userId": "รหัสผู้ใช้",
-        "userIdDescription": "ใช้รหัสนี้เป็นรหัสเชิญสำหรับการลงทะเบียนเพื่อนของคุณ",
         "checkForUpdates": "ตรวจสอบการอัปเดต",
         "upToDate": "ขณะนี้คุณใช้เวอร์ชันล่าสุด"
       }

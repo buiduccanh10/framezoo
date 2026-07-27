@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Verwenden Sie stattdessen den Passkey"
     },
     "hasAccount": "Du hesch bereits en Account? <0>Do Amälde.</0>",
-    "inviteCodeInvalidError": "Ungültiger Einladungscode (Benutzer-ID nicht gefunden)",
-    "inviteCodeLabel": "Einladungscode",
-    "inviteCodePlaceholder": "Benutzer-ID eines Freundes eingeben",
-    "inviteCodeRequiredError": "Einladungscode ist erforderlich",
     "login": {
-      "description": "Geb din Passphrase a, om dich in di Account i z'logge",
+      "description": "Geben Sie Ihren Benutzernamen oder Ihre E-Mail-Adresse und Ihr Passwort ein, um sich bei Ihrem Konto anzumelden",
       "failedToReachServer": "Server konnte nicht erreicht werden",
-      "nicknameLabel": "Spitzname",
-      "nicknameNotFound": "Spitzname nicht gefunden",
-      "nicknamePlaceholder": "Geben Sie Ihren Spitznamen ein",
-      "nicknameRequired": "Spitzname ist erforderlich",
+      "identifierLabel": "Benutzername oder E-Mail",
+      "identifierNotFound": "Benutzername oder E-Mail nicht gefunden",
+      "identifierPlaceholder": "Geben Sie Ihren Benutzernamen oder Ihre E-Mail-Adresse ein",
+      "identifierRequired": "Benutzername oder E-Mail ist erforderlich",
       "noBackendUrl": "Keine Backend-URL",
       "or": "or",
       "passwordIncorrect": "Das Passwort ist falsch",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Passwort bestätigen",
       "confirmPasswordPlaceholder": "Bestätigen Sie Ihr Passwort",
+      "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein",
+      "emailLabel": "Persönliche E-Mail",
+      "emailPlaceholder": "Geben Sie Ihre persönliche E-Mail-Adresse ein",
       "information": {
         "color1": "Profilfarb 1",
         "color2": "Profilfarb 2",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Spitzname",
       "nicknamePlaceholder": "Wählen Sie einen eindeutigen Spitznamen",
       "nicknameTaken": "Der Spitzname ist bereits vergeben",
+      "nicknameRequired": "Spitzname ist erforderlich",
       "passwordInput": {
-        "description": "Wählen Sie einen Spitznamen und ein Passwort. Ihr Passwort fungiert als sichere Passphrase, also merken Sie es sich unbedingt!",
+        "description": "Wählen Sie einen Spitznamen, eine persönliche E-Mail-Adresse und ein Passwort. Ihr Passwort fungiert als sichere Passphrase. Denken Sie also daran, es sich zu merken!",
         "title": "Erstellen Sie Ihr Login"
       },
       "passwordLabel": "Passwort",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Version",
         "notLoggedIn": "Du besch net agmäldet",
-        "userId": "Nutzer-ID",
-        "userIdDescription": "Verwenden Sie diesen als Einladungscode für Ihr Freundesregister",
         "checkForUpdates": "Suchen Sie nach Updates",
         "upToDate": "Sie befinden sich derzeit auf der neuesten Version"
       }

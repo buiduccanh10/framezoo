@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Gunakan kunci sandi sebagai gantinya"
     },
     "hasAccount": "Sudah memiliki akun? <0>Masuk disini.</0>",
-    "inviteCodeInvalidError": "Kode undangan tidak valid (ID Pengguna tidak ditemukan)",
-    "inviteCodeLabel": "Kode Undangan",
-    "inviteCodePlaceholder": "Masukkan ID Pengguna teman",
-    "inviteCodeRequiredError": "Kode undangan wajib diisi",
     "login": {
-      "description": "Mohon masukkan kombinasi kata anda untuk masuk ke akun Anda",
+      "description": "Masukkan nama pengguna atau email dan kata sandi Anda untuk masuk ke akun Anda",
       "failedToReachServer": "Gagal menjangkau server",
-      "nicknameLabel": "Nama panggilan",
-      "nicknameNotFound": "Nama panggilan tidak ditemukan",
-      "nicknamePlaceholder": "Masukkan nama panggilan Anda",
-      "nicknameRequired": "Nama panggilan diperlukan",
+      "identifierLabel": "Nama pengguna atau email",
+      "identifierNotFound": "Nama pengguna atau email tidak ditemukan",
+      "identifierPlaceholder": "Masukkan nama pengguna atau email Anda",
+      "identifierRequired": "Nama pengguna atau email diperlukan",
       "noBackendUrl": "Tidak ada URL ujung belakang",
       "or": "or",
       "passwordIncorrect": "Kata sandi salah",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Konfirmasi Kata Sandi",
       "confirmPasswordPlaceholder": "Konfirmasikan kata sandi Anda",
+      "emailInvalid": "Masukkan alamat email yang valid",
+      "emailLabel": "Email pribadi",
+      "emailPlaceholder": "Masukkan email pribadi Anda",
       "information": {
         "color1": "Warna profil pertama",
         "color2": "Warna profil kedua",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Nama panggilan",
       "nicknamePlaceholder": "Pilih nama panggilan yang unik",
       "nicknameTaken": "Nama panggilan sudah dipakai",
+      "nicknameRequired": "Nama panggilan diperlukan",
       "passwordInput": {
-        "description": "Pilih nama panggilan dan kata sandi. Kata sandi Anda berfungsi sebagai frasa sandi yang aman, jadi pastikan Anda mengingatnya!",
+        "description": "Pilih nama panggilan, email pribadi, dan kata sandi. Kata sandi Anda berfungsi sebagai frasa sandi yang aman, jadi pastikan Anda mengingatnya!",
         "title": "Buat login Anda"
       },
       "passwordLabel": "Kata sandi",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versi",
         "notLoggedIn": "Anda belum masuk ke akun anda",
-        "userId": "ID pengguna",
-        "userIdDescription": "Gunakan ini sebagai kode undangan untuk daftar teman Anda",
         "checkForUpdates": "Periksa pembaruan",
         "upToDate": "Anda saat ini menggunakan versi terbaru"
       }

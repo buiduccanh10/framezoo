@@ -77,17 +77,13 @@
       "usePasskeyInstead": "તેના બદલે પાસકીનો ઉપયોગ કરો"
     },
     "hasAccount": "પહેલેથી જ એકાઉન્ટ છે? <0>અહીં લોગિન કરો.</0>",
-    "inviteCodeInvalidError": "અમાન્ય આમંત્રણ કોડ (વપરાશકર્તા ID મળ્યું નથી)",
-    "inviteCodeLabel": "આમંત્રણ કોડ",
-    "inviteCodePlaceholder": "મિત્રનું વપરાશકર્તા ID દાખલ કરો",
-    "inviteCodeRequiredError": "આમંત્રણ કોડ જરૂરી છે",
     "login": {
-      "description": "તમારા એકાઉન્ટમાં લૉગિન કરવા માટે કૃપા કરીને તમારો પાસફ્રેઝ દાખલ કરો",
+      "description": "તમારા એકાઉન્ટમાં લૉગિન કરવા માટે તમારું વપરાશકર્તા નામ અથવા ઇમેઇલ અને પાસવર્ડ દાખલ કરો",
       "failedToReachServer": "સર્વર સુધી પહોંચવામાં નિષ્ફળ",
-      "nicknameLabel": "ઉપનામ",
-      "nicknameNotFound": "ઉપનામ મળ્યું નથી",
-      "nicknamePlaceholder": "તમારું ઉપનામ દાખલ કરો",
-      "nicknameRequired": "ઉપનામ જરૂરી છે",
+      "identifierLabel": "વપરાશકર્તા નામ અથવા ઇમેઇલ",
+      "identifierNotFound": "વપરાશકર્તાનામ અથવા ઇમેઇલ મળ્યા નથી",
+      "identifierPlaceholder": "તમારું વપરાશકર્તા નામ અથવા ઇમેઇલ દાખલ કરો",
+      "identifierRequired": "વપરાશકર્તા નામ અથવા ઇમેઇલ આવશ્યક છે",
       "noBackendUrl": "કોઈ બેકએન્ડ URL નથી",
       "or": "or",
       "passwordIncorrect": "પાસવર્ડ ખોટો છે",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "પાસવર્ડની પુષ્ટિ કરો",
       "confirmPasswordPlaceholder": "તમારા પાસવર્ડની પુષ્ટિ કરો",
+      "emailInvalid": "માન્ય ઇમેઇલ સરનામું દાખલ કરો",
+      "emailLabel": "વ્યક્તિગત ઇમેઇલ",
+      "emailPlaceholder": "તમારું અંગત ઈમેલ દાખલ કરો",
       "information": {
         "color1": "પ્રોફાઇલ રંગ એક",
         "color2": "પ્રોફાઇલ રંગ બે",
@@ -113,8 +112,9 @@
       "nicknameLabel": "ઉપનામ",
       "nicknamePlaceholder": "એક અનન્ય ઉપનામ પસંદ કરો",
       "nicknameTaken": "ઉપનામ પહેલેથી જ લેવામાં આવ્યું છે",
+      "nicknameRequired": "ઉપનામ જરૂરી છે",
       "passwordInput": {
-        "description": "ઉપનામ અને પાસવર્ડ પસંદ કરો. તમારો પાસવર્ડ સુરક્ષિત પાસફ્રેઝ તરીકે કામ કરે છે, તેથી ખાતરી કરો કે તમને તે યાદ છે!",
+        "description": "ઉપનામ, વ્યક્તિગત ઈમેલ અને પાસવર્ડ પસંદ કરો. તમારો પાસવર્ડ સુરક્ષિત પાસફ્રેઝ તરીકે કામ કરે છે, તેથી ખાતરી કરો કે તમને તે યાદ છે!",
         "title": "તમારું લોગિન બનાવો"
       },
       "passwordLabel": "પાસવર્ડ",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "સંસ્કરણ",
         "notLoggedIn": "તમે લૉગ ઇન નથી",
-        "userId": "વપરાશકર્તા ID",
-        "userIdDescription": "તમારા મિત્ર રજીસ્ટર માટે આમંત્રિત કોડ તરીકે આનો ઉપયોગ કરો",
         "checkForUpdates": "અપડેટ્સ માટે તપાસો",
         "upToDate": "તમે હાલમાં નવીનતમ સંસ્કરણ પર છો"
       }

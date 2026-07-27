@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Utilice la clave de acceso en su lugar"
     },
     "hasAccount": "¿Ya tienes una cuenta? <0>Inicia sesión aquí.</0>",
-    "inviteCodeInvalidError": "Código de invitación no válido (ID de usuario no encontrado)",
-    "inviteCodeLabel": "Código de invitación",
-    "inviteCodePlaceholder": "Ingresa el ID de usuario de tu amigo",
-    "inviteCodeRequiredError": "El código de invitación es obligatorio",
     "login": {
-      "description": "Por favor, ingresa tu frase de contraseña para iniciar sesión en tu cuenta",
+      "description": "Ingrese su nombre de usuario o correo electrónico y contraseña para iniciar sesión en su cuenta",
       "failedToReachServer": "No se pudo llegar al servidor",
-      "nicknameLabel": "Apodo",
-      "nicknameNotFound": "Apodo no encontrado",
-      "nicknamePlaceholder": "Introduce tu apodo",
-      "nicknameRequired": "Se requiere apodo",
+      "identifierLabel": "Nombre de usuario o correo electrónico",
+      "identifierNotFound": "Nombre de usuario o correo electrónico no encontrado",
+      "identifierPlaceholder": "Introduce tu nombre de usuario o correo electrónico",
+      "identifierRequired": "Se requiere nombre de usuario o correo electrónico",
       "noBackendUrl": "Sin URL de fondo",
       "or": "or",
       "passwordIncorrect": "La contraseña es incorrecta",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "confirmar Contraseña",
       "confirmPasswordPlaceholder": "Confirma tu contraseña",
+      "emailInvalid": "Introduzca una dirección de correo electrónico válida",
+      "emailLabel": "correo electrónico personal",
+      "emailPlaceholder": "Introduce tu correo electrónico personal",
       "information": {
         "color1": "Color de perfil uno",
         "color2": "Color de perfil dos",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Apodo",
       "nicknamePlaceholder": "Elige un apodo único",
       "nicknameTaken": "El apodo ya está tomado.",
+      "nicknameRequired": "Se requiere apodo",
       "passwordInput": {
-        "description": "Elija un apodo y una contraseña. Su contraseña funciona como una frase de contraseña segura, ¡así que asegúrese de recordarla!",
+        "description": "Elija un apodo, correo electrónico personal y contraseña. Su contraseña funciona como una frase de contraseña segura, ¡así que asegúrese de recordarla!",
         "title": "Crea tu inicio de sesión"
       },
       "passwordLabel": "Contraseña",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versión",
         "notLoggedIn": "No has iniciado sesión",
-        "userId": "ID de usuario",
-        "userIdDescription": "Utilice esto como código de invitación para su registro de amigo.",
         "checkForUpdates": "Buscar actualizaciones",
         "upToDate": "Actualmente estás en la última versión."
       }
