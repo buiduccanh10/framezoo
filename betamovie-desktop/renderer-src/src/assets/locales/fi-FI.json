@@ -50,9 +50,28 @@
       "title": "Lisäosien hallinta"
     },
     "player": {
+      "chooseAddon": "Valitse lisäosa",
       "emptyExplanation": "Stream-lisäosaa ei ole vielä asennettu tai aktivoitu. Käy Addons Manager -sivulla asennusoppaita ja medialuetteloiden löytämistä varten.",
       "emptyTitle": "Stream-lisäosia ei ole saatavilla",
-      "manageAddonsButton": "Hallinnoi lisäosien luetteloa"
+      "loadingStreams": "Ladataan streameja...",
+      "manageAddonsButton": "Hallinnoi lisäosien luetteloa",
+      "noAddonStreams": "Tälle nimikkeelle ei palautettu lisäosia.",
+      "noTorrentStreams": "Tälle lisäosalle ei palautettu torrent-streameja.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Kaikki ominaisuudet",
+        "other": "muu"
+      },
+      "sources": "Lähteet",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} streamia",
+      "title": "Työpöydän lisäosat",
+      "unableToLoad": "Streamejä ei voi ladata",
+      "viewStreams": "Näytä streamit"
     }
   },
   "auth": {

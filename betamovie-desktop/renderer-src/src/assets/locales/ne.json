@@ -50,9 +50,28 @@
       "title": "Addons प्रबन्धक"
     },
     "player": {
+      "chooseAddon": "एक addon छान्नुहोस्",
       "emptyExplanation": "कुनै स्ट्रिम एडअन अझै स्थापित वा सक्रिय गरिएको छैन। सेटअप गाइडहरू र मिडिया क्याटलग खोजको लागि Addons प्रबन्धक पृष्ठमा जानुहोस्।",
       "emptyTitle": "कुनै स्ट्रिम एडअन्स उपलब्ध छैन",
-      "manageAddonsButton": "Addon सूची प्रबन्ध गर्नुहोस्"
+      "loadingStreams": "स्ट्रिमहरू लोड गर्दै...",
+      "manageAddonsButton": "Addon सूची प्रबन्ध गर्नुहोस्",
+      "noAddonStreams": "यस शीर्षकको लागि कुनै पनि एडअन स्ट्रिमहरू फर्किएन।",
+      "noTorrentStreams": "यस एडअनका लागि कुनै टोरेन्ट स्ट्रिमहरू फर्किएन।",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "सबै गुणहरू",
+        "other": "अन्य"
+      },
+      "sources": "स्रोतहरू",
+      "streamCount": "{{count}} स्ट्रिम",
+      "streamCount_plural": "{{count}} स्ट्रिमहरू",
+      "title": "डेस्कटप addons",
+      "unableToLoad": "स्ट्रिमहरू लोड गर्न असमर्थ",
+      "viewStreams": "स्ट्रिमहरू हेर्नुहोस्"
     }
   },
   "auth": {

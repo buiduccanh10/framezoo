@@ -50,9 +50,28 @@
       "title": "Addons-Manager"
     },
     "player": {
+      "chooseAddon": "Wählen Sie ein Add-on",
       "emptyExplanation": "Es ist noch kein Stream-Addon installiert oder aktiviert. Besuchen Sie die Add-ons-Manager-Seite für Einrichtungsanleitungen und Medienkatalog-Erkennung.",
       "emptyTitle": "Keine Stream-Add-ons verfügbar",
-      "manageAddonsButton": "Add-on-Liste verwalten"
+      "loadingStreams": "Streams werden geladen...",
+      "manageAddonsButton": "Add-on-Liste verwalten",
+      "noAddonStreams": "Für diesen Titel wurden keine Add-on-Streams zurückgegeben.",
+      "noTorrentStreams": "Für dieses Add-on wurden keine Torrent-Streams zurückgegeben.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Alle Qualitäten",
+        "other": "Andere"
+      },
+      "sources": "Quellen",
+      "streamCount": "{{count}} Stream",
+      "streamCount_plural": "{{count}} Streams",
+      "title": "Desktop-Add-ons",
+      "unableToLoad": "Streams können nicht geladen werden",
+      "viewStreams": "Streams ansehen"
     }
   },
   "auth": {

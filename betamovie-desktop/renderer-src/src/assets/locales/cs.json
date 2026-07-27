@@ -50,9 +50,28 @@
       "title": "Správce doplňků"
     },
     "player": {
+      "chooseAddon": "Vyberte si doplněk",
       "emptyExplanation": "Zatím není nainstalován ani aktivován žádný doplněk streamu. Navštivte stránku Správce doplňků, kde najdete průvodce nastavením a vyhledání katalogu médií.",
       "emptyTitle": "Nejsou k dispozici žádné doplňky streamu",
-      "manageAddonsButton": "Správa seznamu doplňků"
+      "loadingStreams": "Načítání streamů...",
+      "manageAddonsButton": "Správa seznamu doplňků",
+      "noAddonStreams": "Pro tento titul se nevrátily žádné streamy doplňků.",
+      "noTorrentStreams": "Pro tento doplněk se nevrátily žádné torrentové proudy.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Všechny kvality",
+        "other": "Ostatní"
+      },
+      "sources": "Zdroje",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} streamů",
+      "title": "Desktopové doplňky",
+      "unableToLoad": "Nelze načíst streamy",
+      "viewStreams": "Zobrazit streamy"
     }
   },
   "auth": {

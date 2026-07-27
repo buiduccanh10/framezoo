@@ -50,9 +50,28 @@
       "title": "外掛程式管理器"
     },
     "player": {
+      "chooseAddon": "選擇一個插件",
       "emptyExplanation": "尚未安裝或啟用任何串流插件。造訪外掛程式管理器頁面以取得設定指南和媒體目錄發現。",
       "emptyTitle": "沒有可用的串流插件",
-      "manageAddonsButton": "管理外掛程式列表"
+      "loadingStreams": "正在加載流...",
+      "manageAddonsButton": "管理外掛程式列表",
+      "noAddonStreams": "沒有為此標題傳回任何插件流。",
+      "noTorrentStreams": "此插件沒有傳回種子流。",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "所有品質",
+        "other": "其他"
+      },
+      "sources": "來源",
+      "streamCount": "{{count}} 流",
+      "streamCount_plural": "{{count}} 流",
+      "title": "桌面插件",
+      "unableToLoad": "無法載入串流",
+      "viewStreams": "查看串流"
     }
   },
   "auth": {

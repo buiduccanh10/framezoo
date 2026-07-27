@@ -50,9 +50,28 @@
       "title": "Eklenti Yöneticisi"
     },
     "player": {
+      "chooseAddon": "Bir eklenti seçin",
       "emptyExplanation": "Henüz hiçbir akış eklentisi kurulmamış veya etkinleştirilmemiştir. Kurulum kılavuzları ve medya kataloğu keşfi için Eklenti Yöneticisi sayfasını ziyaret edin.",
       "emptyTitle": "Akış eklentisi yok",
-      "manageAddonsButton": "Eklenti Listesini Yönet"
+      "loadingStreams": "Akışlar yükleniyor...",
+      "manageAddonsButton": "Eklenti Listesini Yönet",
+      "noAddonStreams": "Bu başlık için hiçbir eklenti akışı döndürülmedi.",
+      "noTorrentStreams": "Bu eklenti için torrent akışı döndürülmedi.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Tüm Nitelikler",
+        "other": "Diğer"
+      },
+      "sources": "Kaynaklar",
+      "streamCount": "{{count}} akış",
+      "streamCount_plural": "{{count}} akış",
+      "title": "Masaüstü eklentileri",
+      "unableToLoad": "Akışlar yüklenemiyor",
+      "viewStreams": "Akışları görüntüle"
     }
   },
   "auth": {

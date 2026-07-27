@@ -50,9 +50,28 @@
       "title": "Tilläggshanterare"
     },
     "player": {
+      "chooseAddon": "Välj ett tillägg",
       "emptyExplanation": "Inget stream-tillägg är installerat eller aktiverat ännu. Besök Addons Manager-sidan för installationsguider och mediekatalogupptäckt.",
       "emptyTitle": "Inga stream-tillägg tillgängliga",
-      "manageAddonsButton": "Hantera tilläggslista"
+      "loadingStreams": "Laddar strömmar...",
+      "manageAddonsButton": "Hantera tilläggslista",
+      "noAddonStreams": "Inga tilläggsströmmar returnerade för den här titeln.",
+      "noTorrentStreams": "Inga torrentströmmar returnerade för detta tillägg.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Alla kvaliteter",
+        "other": "Andra"
+      },
+      "sources": "Källor",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} strömmar",
+      "title": "Skrivbordstillägg",
+      "unableToLoad": "Det gick inte att ladda strömmar",
+      "viewStreams": "Visa strömmar"
     }
   },
   "auth": {

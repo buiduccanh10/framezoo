@@ -50,9 +50,28 @@
       "title": "插件管理器"
     },
     "player": {
+      "chooseAddon": "选择一个插件",
       "emptyExplanation": "尚未安装或激活任何流插件。访问插件管理器页面以获取设置指南和媒体目录发现。",
       "emptyTitle": "没有可用的流插件",
-      "manageAddonsButton": "管理插件列表"
+      "loadingStreams": "正在加载流...",
+      "manageAddonsButton": "管理插件列表",
+      "noAddonStreams": "没有为此标题返回任何插件流。",
+      "noTorrentStreams": "此插件没有返回种子流。",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "所有品质",
+        "other": "其他"
+      },
+      "sources": "来源",
+      "streamCount": "{{count}} 流",
+      "streamCount_plural": "{{count}} 流",
+      "title": "桌面插件",
+      "unableToLoad": "无法加载流",
+      "viewStreams": "查看流"
     }
   },
   "auth": {

@@ -50,9 +50,28 @@
       "title": "Gestore componenti aggiuntivi"
     },
     "player": {
+      "chooseAddon": "Scegli un componente aggiuntivo",
       "emptyExplanation": "Nessun componente aggiuntivo dello streaming è ancora installato o attivato. Visita la pagina Gestione componenti aggiuntivi per le guide di installazione e la scoperta del catalogo multimediale.",
       "emptyTitle": "Nessun componente aggiuntivo dello streaming disponibile",
-      "manageAddonsButton": "Gestisci elenco componenti aggiuntivi"
+      "loadingStreams": "Caricamento stream...",
+      "manageAddonsButton": "Gestisci elenco componenti aggiuntivi",
+      "noAddonStreams": "Nessun flusso aggiuntivo restituito per questo titolo.",
+      "noTorrentStreams": "Nessun flusso torrent restituito per questo componente aggiuntivo.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Tutte le qualità",
+        "other": "Altro"
+      },
+      "sources": "Fonti",
+      "streamCount": "{{count}} flusso",
+      "streamCount_plural": "{{count}} streaming",
+      "title": "Componenti aggiuntivi per il desktop",
+      "unableToLoad": "Impossibile caricare i flussi",
+      "viewStreams": "Visualizza flussi"
     }
   },
   "auth": {
