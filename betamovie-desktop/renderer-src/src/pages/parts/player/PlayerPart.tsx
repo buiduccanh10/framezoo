@@ -43,7 +43,10 @@ export function PlayerPart(props: PlayerPartProps) {
     status === playerStatus.PLAYING &&
     !isLoading &&
     (isMobile ? showTargets : showTouchTargets);
-  const mobileActionIconClass = "text-[22px] ssm:text-[24px]";
+  const desktopActionIconClass = "text-[32px] leading-none";
+  const desktopActionButtonClass =
+    "h-14 w-14 shrink-0 flex items-center justify-center";
+  const mobileActionIconClass = "text-[22px] leading-none ssm:text-[24px]";
   const mobileActionButtonClass = "p-2 ssm:p-2.5";
 
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -211,37 +214,78 @@ export function PlayerPart(props: PlayerPartProps) {
           <Player.LeftSideControls>
             {status === playerStatus.PLAYING ? (
               <>
-                <Player.Pause />
-                <Player.SkipBackward inControl={inControl} />
-                <Player.SkipForward inControl={inControl} />
-                <Player.Volume />
+                <Player.Pause
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.SkipBackward
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                  inControl={inControl}
+                />
+                <Player.SkipForward
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                  inControl={inControl}
+                />
+                <Player.Volume
+                  buttonClassName={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
                 <Player.Time />
               </>
             ) : null}
           </Player.LeftSideControls>
           <div className="flex items-center space-x-6">
-            <Player.Episodes inControl={inControl} />
-            <Player.SkipEpisodeButton
+            <Player.Episodes
+              className={desktopActionButtonClass}
               inControl={inControl}
+              iconSizeClass={desktopActionIconClass}
+            />
+            <Player.SkipEpisodeButton
+              className={desktopActionButtonClass}
+              inControl={inControl}
+              iconSizeClass={desktopActionIconClass}
               onChange={props.onMetaChange}
             />
-            <TorrentNetworkStatus />
+            <TorrentNetworkStatus
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+            />
             {status === playerStatus.PLAYING ? (
               <>
-                <Player.Pip />
-                <Player.Airplay />
-                <Player.Chromecast />
+                <Player.Pip
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.Airplay
+                  className={desktopActionButtonClass}
+                  iconSizeClass={desktopActionIconClass}
+                />
+                <Player.Chromecast className={desktopActionButtonClass} />
               </>
             ) : null}
             {status === playerStatus.PLAYBACK_ERROR ||
             status === playerStatus.PLAYING ? (
-              <Player.Captions />
+              <Player.Captions
+                className={desktopActionButtonClass}
+                iconSizeClass={desktopActionIconClass}
+              />
             ) : null}
-            <Player.Settings />
+            <Player.Settings
+              className={desktopActionButtonClass}
+              iconSizeClass={desktopActionIconClass}
+            />
             {isShifting || isHoldingFullscreen ? (
-              <Player.Widescreen />
+              <Player.Widescreen
+                className={desktopActionButtonClass}
+                iconSizeClass={desktopActionIconClass}
+              />
             ) : (
-              <Player.Fullscreen />
+              <Player.Fullscreen
+                className={desktopActionButtonClass}
+                iconSizeClass={desktopActionIconClass}
+              />
             )}
           </div>
         </div>

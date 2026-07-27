@@ -431,8 +431,8 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 
 .cast-button-container {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -440,10 +440,10 @@ input[type="range"].styled-slider.slider-progress::-ms-fill-lower {
 }
 
 .cast-button-container google-cast-launcher {
-  width: 24px !important;
-  height: 24px !important;
-  min-width: 24px !important;
-  min-height: 24px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
   display: block;
 }
 
