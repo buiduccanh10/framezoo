@@ -77,17 +77,13 @@
       "usePasskeyInstead": "השתמש במפתח סיסמה במקום זאת"
     },
     "hasAccount": "כבר יש לך חשבון? <0>התחבר כאן.</0>",
-    "inviteCodeInvalidError": "קוד הזמנה לא חוקי (מזהה משתמש לא נמצא)",
-    "inviteCodeLabel": "קוד הזמנה",
-    "inviteCodePlaceholder": "הזן את מזהه המשתמש של חבר",
-    "inviteCodeRequiredError": "קוד הזמנה נדרש",
     "login": {
-      "description": "אנא הזן את ביטוי הסיסמה שלך כדי להתחבר לחשבונך",
+      "description": "הזן את שם המשתמש או הדואר האלקטרוני והסיסמה שלך כדי להיכנס לחשבון שלך",
       "failedToReachServer": "הגישה לשרת נכשלה",
-      "nicknameLabel": "כינוי",
-      "nicknameNotFound": "כינוי לא נמצא",
-      "nicknamePlaceholder": "הזן את הכינוי שלך",
-      "nicknameRequired": "נדרש כינוי",
+      "identifierLabel": "שם משתמש או אימייל",
+      "identifierNotFound": "שם משתמש או אימייל לא נמצאו",
+      "identifierPlaceholder": "הזן את שם המשתמש או האימייל שלך",
+      "identifierRequired": "נדרש שם משתמש או אימייל",
       "noBackendUrl": "אין כתובת אתר אחורי",
       "or": "or",
       "passwordIncorrect": "הסיסמה שגויה",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "אשר את הסיסמה",
       "confirmPasswordPlaceholder": "אשר את הסיסמה שלך",
+      "emailInvalid": "הזן כתובת אימייל חוקית",
+      "emailLabel": "מייל אישי",
+      "emailPlaceholder": "הזן את המייל האישי שלך",
       "information": {
         "color1": "צבע פרופיל ראשון",
         "color2": "צבע פרופיל שני",
@@ -113,8 +112,9 @@
       "nicknameLabel": "כינוי",
       "nicknamePlaceholder": "בחר כינוי ייחודי",
       "nicknameTaken": "הכינוי כבר נלקח",
+      "nicknameRequired": "נדרש כינוי",
       "passwordInput": {
-        "description": "בחר כינוי וסיסמה. הסיסמה שלך פועלת כביטוי סיסמה מאובטח, אז וודא שאתה זוכר אותה!",
+        "description": "בחר כינוי, אימייל אישי וסיסמה. הסיסמה שלך פועלת כביטוי סיסמה מאובטח, אז וודא שאתה זוכר אותה!",
         "title": "צור את הכניסה שלך"
       },
       "passwordLabel": "סִיסמָה",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "גִרְסָה",
         "notLoggedIn": "אתה לא מחובר",
-        "userId": "זהות המשתמש",
-        "userIdDescription": "השתמש בזה כקוד הזמנה לרישום החברים שלך",
         "checkForUpdates": "בדוק אם יש עדכונים",
         "upToDate": "אתה נמצא כרגע בגרסה העדכנית ביותר"
       }

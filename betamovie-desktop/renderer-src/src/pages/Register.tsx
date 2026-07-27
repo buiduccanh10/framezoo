@@ -115,7 +115,7 @@ export function RegisterPanel() {
       password: passwordData.credentialId ? undefined : passwordData.password,
       credentialId: passwordData.credentialId,
       userData: {
-        inviteCode: passwordData.inviteCode ?? "",
+        email: passwordData.email ?? "",
         profile: data.profile,
       },
     })

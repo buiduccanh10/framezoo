@@ -1,8 +1,12 @@
 import { z } from 'zod';
 import { useChallenge } from '~/utils/challenge';
+import { findUserByAccountIdentifier } from '~/utils/accountIdentifier';
 
 const startSchema = z.object({
-  nickname: z.string().min(1).max(255),
+  identifier: z.string().min(1).max(255).optional(),
+  nickname: z.string().min(1).max(255).optional(),
+}).refine((value) => value.identifier || value.nickname, {
+  message: 'Account identifier is required',
 });
 
 export default defineEventHandler(async event => {
@@ -16,10 +20,8 @@ export default defineEventHandler(async event => {
     });
   }
 
-  // Check if user exists with this nickname
-  const user = await prisma.users.findUnique({
-    where: { nickname: body.nickname },
-  });
+  const identifier = body.identifier ?? body.nickname;
+  const user = await findUserByAccountIdentifier(identifier, identifier);
 
   if (!user) {
     throw createError({

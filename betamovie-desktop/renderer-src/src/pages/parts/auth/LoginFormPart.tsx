@@ -117,7 +117,7 @@ export function LoginFormPart(props: LoginFormPartProps) {
       let account: AsyncReturnType<typeof login>;
       try {
         account = await login({
-          nickname: data.nickname,
+          identifier: data.nickname,
           password: data.password,
           userData: {
             device: "Browser",
@@ -129,10 +129,10 @@ export function LoginFormPart(props: LoginFormPartProps) {
         const beMessage: string =
           anyErr?.response?._data?.message ?? anyErr?.message ?? "";
 
-        // Nickname not found
+        // Username or email not found
         if (status === 401 && beMessage.includes("User cannot be found")) {
           setNicknameError(
-            t("auth.login.nicknameNotFound") ?? "Nickname not found",
+            t("auth.login.identifierNotFound") ?? "Username or email not found",
           );
           return;
         }

@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Folosiți cheia de acces"
     },
     "hasAccount": "ai deja un cont? <0>Autentificați-vă aici.</0>",
-    "inviteCodeInvalidError": "Cod de invitație nevalid (ID-ul de utilizator nu a fost găsit)",
-    "inviteCodeLabel": "Cod de invitație",
-    "inviteCodePlaceholder": "Introduceți ID-ul de utilizator al unui prieten",
-    "inviteCodeRequiredError": "Codul de invitație este obligatoriu",
     "login": {
-      "description": "Vă rugăm să introduceți fraza de acces pentru a vă conecta la contul dvs",
+      "description": "Introduceți numele de utilizator sau adresa de e-mail și parola pentru a vă conecta la contul dvs",
       "failedToReachServer": "Nu s-a putut ajunge la server",
-      "nicknameLabel": "Pseudonim",
-      "nicknameNotFound": "Pseudomul nu a fost găsit",
-      "nicknamePlaceholder": "Introduceți porecla",
-      "nicknameRequired": "Este necesar un pseudonim",
+      "identifierLabel": "Nume de utilizator sau e-mail",
+      "identifierNotFound": "Numele de utilizator sau e-mailul nu a fost găsit",
+      "identifierPlaceholder": "Introduceți numele de utilizator sau adresa de e-mail",
+      "identifierRequired": "Numele de utilizator sau e-mailul este necesar",
       "noBackendUrl": "Nicio adresă URL de backend",
       "or": "or",
       "passwordIncorrect": "Parola este incorectă",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Confirmați parola",
       "confirmPasswordPlaceholder": "Confirmați-vă parola",
+      "emailInvalid": "Introduceți o adresă de e-mail validă",
+      "emailLabel": "E-mail personal",
+      "emailPlaceholder": "Introduceți adresa dvs. de e-mail personală",
       "information": {
         "color1": "Culoarea profilului unu",
         "color2": "Culoarea profilului doi",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Pseudonim",
       "nicknamePlaceholder": "Alegeți o poreclă unică",
       "nicknameTaken": "Porecla este deja luată",
+      "nicknameRequired": "Este necesar un pseudonim",
       "passwordInput": {
-        "description": "Alegeți o poreclă și o parolă. Parola dvs. funcționează ca o expresie de acces sigură, așa că asigurați-vă că o amintiți!",
+        "description": "Alegeți o poreclă, un e-mail personal și o parolă. Parola dvs. funcționează ca o expresie de acces sigură, așa că asigurați-vă că o amintiți!",
         "title": "Creați-vă autentificarea"
       },
       "passwordLabel": "Parolă",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versiune",
         "notLoggedIn": "Nu sunteți autentificat",
-        "userId": "ID-ul utilizatorului",
-        "userIdDescription": "Folosește-l ca cod de invitație pentru înregistrarea prietenilor tăi",
         "checkForUpdates": "Verificați actualizările",
         "upToDate": "În prezent sunteți la cea mai recentă versiune"
       }

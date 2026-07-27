@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Bunun yerine şifreyi kullanın"
     },
     "hasAccount": "Zaten hesabınız var mı?<0>Giriş yapın.</0>",
-    "inviteCodeInvalidError": "Geçersiz davet kodu (Kullanıcı Kimliği bulunamadı)",
-    "inviteCodeLabel": "Davet Kodu",
-    "inviteCodePlaceholder": "Arkadaşının Kullanıcı Kimliğini gir",
-    "inviteCodeRequiredError": "Davet kodu gerekli",
     "login": {
-      "description": "Hesabınıza giriş yapmak için lütfen şifreleme anahtarınızı girin",
+      "description": "Hesabınıza giriş yapmak için kullanıcı adınızı veya e-posta adresinizi ve şifrenizi girin",
       "failedToReachServer": "Sunucuya ulaşılamadı",
-      "nicknameLabel": "Takma ad",
-      "nicknameNotFound": "Takma ad bulunamadı",
-      "nicknamePlaceholder": "Takma adınızı girin",
-      "nicknameRequired": "Takma ad gerekli",
+      "identifierLabel": "Kullanıcı adı veya e-posta",
+      "identifierNotFound": "Kullanıcı adı veya e-posta bulunamadı",
+      "identifierPlaceholder": "Kullanıcı adınızı veya e-posta adresinizi girin",
+      "identifierRequired": "Kullanıcı adı veya e-posta gerekli",
       "noBackendUrl": "Arka uç URL'si yok",
       "or": "or",
       "passwordIncorrect": "Şifre yanlış",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Şifreyi Onayla",
       "confirmPasswordPlaceholder": "Şifrenizi onaylayın",
+      "emailInvalid": "Geçerli bir e-posta adresi girin",
+      "emailLabel": "Kişisel e-posta",
+      "emailPlaceholder": "Kişisel e-postanızı girin",
       "information": {
         "color1": "Birinci hesap rengi",
         "color2": "İkinci hesap rengi",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Takma ad",
       "nicknamePlaceholder": "Benzersiz bir takma ad seçin",
       "nicknameTaken": "Takma ad zaten alınmış",
+      "nicknameRequired": "Takma ad gerekli",
       "passwordInput": {
-        "description": "Bir takma ad ve şifre seçin. Parolanız güvenli bir parola olarak çalışır, bu nedenle onu hatırladığınızdan emin olun!",
+        "description": "Bir takma ad, kişisel e-posta ve şifre seçin. Parolanız güvenli bir parola olarak çalışır, bu nedenle onu hatırladığınızdan emin olun!",
         "title": "Giriş bilgilerinizi oluşturun"
       },
       "passwordLabel": "Şifre",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Sürüm",
         "notLoggedIn": "Giriş yapmadınız",
-        "userId": "Kullanıcı Kimliği",
-        "userIdDescription": "Bunu arkadaş kaydınız için davet kodu olarak kullanın",
         "checkForUpdates": "Güncellemeleri kontrol edin",
         "upToDate": "Şu anda en son sürümdesiniz"
       }

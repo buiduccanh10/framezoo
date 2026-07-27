@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Utilitzeu la clau d'accés"
     },
     "hasAccount": "Ja tens un compte? <0>Inicieu sessió aquí.</0>",
-    "inviteCodeInvalidError": "Codi d'invitació no vàlid (no s'ha trobat l'identificador d'usuari)",
-    "inviteCodeLabel": "Codi d'invitació",
-    "inviteCodePlaceholder": "Introduïu l'identificador d'usuari de l'amic",
-    "inviteCodeRequiredError": "Cal un codi d'invitació",
     "login": {
-      "description": "Introduïu el vostre àlies i contrasenya per iniciar sessió al vostre compte",
+      "description": "Introduïu el vostre nom d'usuari o correu electrònic i contrasenya per iniciar sessió al vostre compte",
       "failedToReachServer": "No s'ha pogut arribar al servidor",
-      "nicknameLabel": "Pseudònim",
-      "nicknameNotFound": "No s'ha trobat el sobrenom",
-      "nicknamePlaceholder": "Introduïu el vostre àlies",
-      "nicknameRequired": "El sobrenom és obligatori",
+      "identifierLabel": "Nom d'usuari o correu electrònic",
+      "identifierNotFound": "No s'ha trobat el nom d'usuari o el correu electrònic",
+      "identifierPlaceholder": "Introduïu el vostre nom d'usuari o correu electrònic",
+      "identifierRequired": "És necessari el nom d'usuari o el correu electrònic",
       "noBackendUrl": "No hi ha URL de backend",
       "or": "o",
       "passwordIncorrect": "La contrasenya és incorrecta",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Confirmeu la contrasenya",
       "confirmPasswordPlaceholder": "Confirmeu la vostra contrasenya",
+      "emailInvalid": "Introduïu una adreça de correu electrònic vàlida",
+      "emailLabel": "Correu electrònic personal",
+      "emailPlaceholder": "Introduïu el vostre correu electrònic personal",
       "information": {
         "color1": "Color del perfil 1",
         "color2": "Color del perfil dos",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Pseudònim",
       "nicknamePlaceholder": "Trieu un sobrenom únic",
       "nicknameTaken": "El sobrenom ja està pres",
+      "nicknameRequired": "El sobrenom és obligatori",
       "passwordInput": {
-        "description": "Trieu un àlies i una contrasenya. La vostra contrasenya funciona com una frase de contrasenya segura, així que assegureu-vos de recordar-la!",
+        "description": "Trieu un àlies, un correu electrònic personal i una contrasenya. La vostra contrasenya funciona com una frase de contrasenya segura, així que assegureu-vos de recordar-la!",
         "title": "Creeu el vostre inici de sessió"
       },
       "passwordLabel": "Contrasenya",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versió",
         "notLoggedIn": "No heu iniciat sessió",
-        "userId": "ID d'usuari",
-        "userIdDescription": "Utilitzeu-lo com a codi d'invitació per al vostre registre d'amics",
         "checkForUpdates": "Comproveu si hi ha actualitzacions",
         "upToDate": "Actualment esteu a la darrera versió"
       }

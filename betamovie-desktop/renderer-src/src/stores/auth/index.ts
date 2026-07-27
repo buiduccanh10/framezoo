@@ -9,6 +9,7 @@ export interface Account {
     icon: string;
   };
   nickname: string;
+  email?: string | null;
 }
 
 export type AccountWithToken = Account & {

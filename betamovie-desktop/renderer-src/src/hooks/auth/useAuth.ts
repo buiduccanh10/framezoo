@@ -47,7 +47,7 @@ export interface RegistrationData {
   nickname?: string;
   password?: string;
   userData: {
-    inviteCode: string;
+    email: string;
     profile: {
       colorA: string;
       colorB: string;
@@ -59,6 +59,7 @@ export interface RegistrationData {
 export interface LoginData {
   mnemonic?: string;
   credentialId?: string;
+  identifier?: string;
   nickname?: string;
   password?: string;
   userData: {
@@ -84,24 +85,23 @@ export function useAuth() {
       // Support both old (mnemonic/credentialId) and new (nickname/password) auth methods
       let keys: any;
       let publicKeyBase64Url: string;
-      let nickname: string | undefined;
+      const identifier = loginData.identifier ?? loginData.nickname;
 
-      if (loginData.nickname && loginData.password) {
-        // New method: nickname + password (password is mnemonic/passphrase)
+      if (identifier && loginData.password) {
+        // New method: username/email + password (password is mnemonic/passphrase)
         keys = await keysFromMnemonic(loginData.password);
         publicKeyBase64Url = bytesToBase64Url(keys.publicKey);
-        nickname = loginData.nickname;
 
-        // Get challenge using nickname
+        // Get challenge using username or email
         const challengeResponse = await getLoginChallengeToken(
           backendUrl,
-          nickname,
+          identifier,
         );
         const { challenge, publicKey: returnedPublicKey } = challengeResponse;
 
         const signature = await signChallenge(keys, challenge);
         const loginResult = await loginAccount(backendUrl, {
-          nickname,
+          identifier,
           publicKey: returnedPublicKey || publicKeyBase64Url,
           challenge: {
             code: challenge,
@@ -164,7 +164,7 @@ export function useAuth() {
         return userDataLogin(loginResult, user.user, user.session, seedBase64);
       } else {
         throw new Error(
-          "Either nickname/password or mnemonic/credentialId must be provided",
+          "Either identifier/password or mnemonic/credentialId must be provided",
         );
       }
     },
@@ -219,7 +219,7 @@ export function useAuth() {
           },
           publicKey: publicKeyBase64Url,
           nickname: nickname,
-          inviteCode: registerData.userData.inviteCode,
+          email: registerData.userData.email,
           device: await encryptData("Browser", keys.seed),
           profile: registerData.userData.profile,
         });
@@ -252,7 +252,7 @@ export function useAuth() {
           },
           publicKey: publicKeyBase64Url,
           nickname: registerData.nickname ?? "",
-          inviteCode: registerData.userData.inviteCode,
+          email: registerData.userData.email,
           device: await encryptData("Browser", keys.seed),
           profile: registerData.userData.profile,
         });

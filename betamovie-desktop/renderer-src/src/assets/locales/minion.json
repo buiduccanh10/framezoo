@@ -77,10 +77,6 @@
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "Bello! Already have an account? <0>Login here.</0>",
-    "inviteCodeInvalidError": "No banana! (ID not found)",
-    "inviteCodeLabel": "Invite Banana",
-    "inviteCodePlaceholder": "Enter bff's ID",
-    "inviteCodeRequiredError": "Need banana code!",
     "login": {
       "description": "Please enter your secret banana language passphrase to login to your account",
       "failedToReachServer": "Failed to reach server",
@@ -1197,8 +1193,6 @@
       "info": {
         "appVersion": "App Version",
         "notLoggedIn": "You are not banana in",
-        "userId": "Minion ID",
-        "userIdDescription": "Use this as invite code for your friend register",
         "checkForUpdates": "Check for updates",
         "upToDate": "You are currently on the latest version"
       }

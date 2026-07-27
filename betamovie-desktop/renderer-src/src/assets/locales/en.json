@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "Already have an account? <0>Login here.</0>",
-    "inviteCodeInvalidError": "Invalid invite code (User ID not found)",
-    "inviteCodeLabel": "Invite Code",
-    "inviteCodePlaceholder": "Enter friend's User ID",
-    "inviteCodeRequiredError": "Invite code is required",
     "login": {
-      "description": "Please enter your nickname and password to login to your account",
+      "description": "Enter your username or email and password to login to your account",
       "failedToReachServer": "Failed to reach server",
-      "nicknameLabel": "Nickname",
-      "nicknameNotFound": "Nickname not found",
-      "nicknamePlaceholder": "Enter your nickname",
-      "nicknameRequired": "Nickname is required",
+      "identifierLabel": "Username or email",
+      "identifierNotFound": "Username or email not found",
+      "identifierPlaceholder": "Enter your username or email",
+      "identifierRequired": "Username or email is required",
       "noBackendUrl": "No backend URL",
       "or": "or",
       "passwordIncorrect": "Password is incorrect",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Confirm Password",
       "confirmPasswordPlaceholder": "Confirm your password",
+      "emailInvalid": "Enter a valid email address",
+      "emailLabel": "Personal email",
+      "emailPlaceholder": "Enter your personal email",
       "information": {
         "color1": "Profile color one",
         "color2": "Profile color two",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Nickname",
       "nicknamePlaceholder": "Choose a unique nickname",
       "nicknameTaken": "Nickname is already taken",
+      "nicknameRequired": "Nickname is required",
       "passwordInput": {
-        "description": "Choose a nickname and password. Your password works as a secure passphrase, so make sure you remember it!",
+        "description": "Choose a nickname, personal email, and password. Your password works as a secure passphrase, so make sure you remember it!",
         "title": "Create your login"
       },
       "passwordLabel": "Password",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "App Version",
         "notLoggedIn": "You are not logged in",
-        "userId": "User ID",
-        "userIdDescription": "Use this as invite code for your friend register",
         "checkForUpdates": "Check for updates",
         "upToDate": "You are currently on the latest version"
       }

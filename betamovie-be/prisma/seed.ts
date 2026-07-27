@@ -118,7 +118,6 @@ async function main() {
         await tx.$executeRaw`UPDATE "progress_items" SET "user_id" = ${adminId} WHERE "user_id" = ${previousId}`;
         await tx.$executeRaw`UPDATE "sessions" SET "user" = ${adminId} WHERE "user" = ${previousId}`;
         await tx.$executeRaw`UPDATE "watch_history" SET "user_id" = ${adminId} WHERE "user_id" = ${previousId}`;
-        await tx.$executeRaw`UPDATE "users" SET "invited_by" = ${adminId} WHERE "invited_by" = ${previousId}`;
         await tx.$executeRaw`UPDATE "user_settings" SET "id" = ${adminId} WHERE "id" = ${previousId}`;
         await tx.$executeRaw`UPDATE "user_group_order" SET "user_id" = ${adminId} WHERE "user_id" = ${previousId}`;
       }

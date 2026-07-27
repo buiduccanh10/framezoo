@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { useChallenge } from '~/utils/challenge';
 import { useAuth } from '~/utils/auth';
 import { randomUUID } from 'crypto';
+import { normalizeEmail } from '~/utils/accountIdentifier';
 
 const completeSchema = z.object({
   publicKey: z.string(),
@@ -12,7 +13,7 @@ const completeSchema = z.object({
   namespace: z.string().min(1),
   device: z.string().max(500).min(1),
   nickname: z.string().min(1).max(255),
-  inviteCode: z.string().min(1),
+  email: z.string().email().max(255),
   profile: z.object({
     colorA: z.string(),
     colorB: z.string(),
@@ -47,7 +48,8 @@ export default defineEventHandler(async event => {
     });
   }
 
-  // Check if nickname is already taken
+  const email = normalizeEmail(body.email);
+
   const existingNickname = await prisma.users.findUnique({
     where: { nickname: body.nickname },
   });
@@ -59,15 +61,19 @@ export default defineEventHandler(async event => {
     });
   }
 
-  // Verify invite code (inviter user id)
-  const inviter = await prisma.users.findUnique({
-    where: { id: body.inviteCode },
+  const existingEmail = await prisma.users.findFirst({
+    where: {
+      email: {
+        equals: email,
+        mode: 'insensitive',
+      },
+    },
   });
 
-  if (!inviter) {
+  if (existingEmail) {
     throw createError({
-      statusCode: 400,
-      message: 'Invalid invite code: User does not exist',
+      statusCode: 409,
+      message: 'Email is already registered',
     });
   }
 
@@ -80,11 +86,11 @@ export default defineEventHandler(async event => {
       namespace: body.namespace,
       public_key: body.publicKey,
       nickname: body.nickname,
+      email,
       created_at: now,
       last_logged_in: now,
       permissions: [],
       profile: body.profile,
-      invited_by: inviter.id,
     } as any,
   });
 
@@ -113,6 +119,7 @@ export default defineEventHandler(async event => {
       nickname: (user as any).nickname,
       profile: user.profile,
       permissions: user.permissions,
+      email: user.email,
     },
     session: {
       id: hydratedSession.id,

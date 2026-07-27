@@ -77,17 +77,13 @@
       "usePasskeyInstead": "使用密钥代替"
     },
     "hasAccount": "已经拥有账户？<0>点击此处登录</0>",
-    "inviteCodeInvalidError": "邀请码无效（未找到用户 ID）",
-    "inviteCodeLabel": "邀请码",
-    "inviteCodePlaceholder": "输入好友的用户 ID",
-    "inviteCodeRequiredError": "需要邀请码",
     "login": {
-      "description": "请输入助记词以登录您的账户",
+      "description": "输入您的用户名或电子邮件和密码以登录您的帐户",
       "failedToReachServer": "无法到达服务器",
-      "nicknameLabel": "昵称",
-      "nicknameNotFound": "未找到昵称",
-      "nicknamePlaceholder": "输入您的昵称",
-      "nicknameRequired": "昵称为必填项",
+      "identifierLabel": "用户名或电子邮件",
+      "identifierNotFound": "找不到用户名或电子邮件",
+      "identifierPlaceholder": "输入您的用户名或电子邮件",
+      "identifierRequired": "需要用户名或电子邮件",
       "noBackendUrl": "无后端网址",
       "or": "or",
       "passwordIncorrect": "密码不正确",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "确认密码",
       "confirmPasswordPlaceholder": "确认您的密码",
+      "emailInvalid": "输入有效的电子邮件地址",
+      "emailLabel": "个人邮箱",
+      "emailPlaceholder": "输入您的个人电子邮件",
       "information": {
         "color1": "头像配色 1",
         "color2": "头像配色 2",
@@ -113,8 +112,9 @@
       "nicknameLabel": "昵称",
       "nicknamePlaceholder": "选择一个独特的昵称",
       "nicknameTaken": "昵称已被占用",
+      "nicknameRequired": "昵称为必填项",
       "passwordInput": {
-        "description": "选择昵称和密码。您的密码是安全密码，因此请务必记住它！",
+        "description": "选择昵称、个人电子邮件和密码。您的密码是安全密码，因此请务必记住它！",
         "title": "创建您的登录名"
       },
       "passwordLabel": "密码",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "版本",
         "notLoggedIn": "您尚未登录",
-        "userId": "用户 ID",
-        "userIdDescription": "使用此作为您的好友注册的邀请码",
         "checkForUpdates": "检查更新",
         "upToDate": "您目前使用的是最新版本"
       }

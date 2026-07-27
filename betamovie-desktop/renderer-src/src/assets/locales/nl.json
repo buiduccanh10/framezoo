@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Gebruik in plaats daarvan een toegangssleutel"
     },
     "hasAccount": "Heb je al een account? <0>Log hier in.</0>",
-    "inviteCodeInvalidError": "Ongeldige uitnodigingscode (gebruikers-ID niet gevonden)",
-    "inviteCodeLabel": "Uitnodigingscode",
-    "inviteCodePlaceholder": "Voer de gebruikers-ID van een vriend in",
-    "inviteCodeRequiredError": "Uitnodigingscode is vereist",
     "login": {
-      "description": "Vul je wachtwoord in",
+      "description": "Voer uw gebruikersnaam of e-mailadres en wachtwoord in om in te loggen op uw account",
       "failedToReachServer": "Kan de server niet bereiken",
-      "nicknameLabel": "Bijnaam",
-      "nicknameNotFound": "Bijnaam niet gevonden",
-      "nicknamePlaceholder": "Voer uw bijnaam in",
-      "nicknameRequired": "Bijnaam is vereist",
+      "identifierLabel": "Gebruikersnaam of e-mailadres",
+      "identifierNotFound": "Gebruikersnaam of e-mailadres niet gevonden",
+      "identifierPlaceholder": "Voer uw gebruikersnaam of e-mailadres in",
+      "identifierRequired": "Gebruikersnaam of e-mailadres is vereist",
       "noBackendUrl": "Geen backend-URL",
       "or": "or",
       "passwordIncorrect": "Wachtwoord is onjuist",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Bevestig wachtwoord",
       "confirmPasswordPlaceholder": "Bevestig uw wachtwoord",
+      "emailInvalid": "Voer een geldig e-mailadres in",
+      "emailLabel": "Persoonlijke e-mail",
+      "emailPlaceholder": "Voer uw persoonlijke e-mailadres in",
       "information": {
         "color1": "Profielkleur 1",
         "color2": "Profielkleur 2",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Bijnaam",
       "nicknamePlaceholder": "Kies een unieke bijnaam",
       "nicknameTaken": "Bijnaam is al in gebruik",
+      "nicknameRequired": "Bijnaam is vereist",
       "passwordInput": {
-        "description": "Kies een bijnaam en wachtwoord. Uw wachtwoord werkt als een veilige wachtwoordzin, dus zorg ervoor dat u deze onthoudt!",
+        "description": "Kies een bijnaam, persoonlijk e-mailadres en wachtwoord. Uw wachtwoord werkt als een veilige wachtwoordzin, dus zorg ervoor dat u deze onthoudt!",
         "title": "Maak uw login aan"
       },
       "passwordLabel": "Wachtwoord",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versie",
         "notLoggedIn": "U bent niet ingelogd",
-        "userId": "Gebruiker ID",
-        "userIdDescription": "Gebruik dit als uitnodigingscode voor uw vriendenregister",
         "checkForUpdates": "Controleer op updates",
         "upToDate": "U gebruikt momenteel de nieuwste versie"
       }

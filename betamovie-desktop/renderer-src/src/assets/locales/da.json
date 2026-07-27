@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Brug adgangsnøgle i stedet"
     },
     "hasAccount": "Har du allerede en profil? <0>Log ind her.</0>",
-    "inviteCodeInvalidError": "Ugyldig invitationskode (bruger-ID ikke fundet)",
-    "inviteCodeLabel": "Invitationskode",
-    "inviteCodePlaceholder": "Indtast ven's bruger-ID",
-    "inviteCodeRequiredError": "Invitationskode er påkrævet",
     "login": {
-      "description": "Indtast din adgangssætning for at logge ind på din profil",
+      "description": "Indtast dit brugernavn eller e-mail og adgangskode for at logge ind på din konto",
       "failedToReachServer": "Kunne ikke nå serveren",
-      "nicknameLabel": "Kaldenavn",
-      "nicknameNotFound": "Kaldenavn blev ikke fundet",
-      "nicknamePlaceholder": "Indtast dit kaldenavn",
-      "nicknameRequired": "Kaldenavn er påkrævet",
+      "identifierLabel": "Brugernavn eller e-mail",
+      "identifierNotFound": "Brugernavn eller e-mail ikke fundet",
+      "identifierPlaceholder": "Indtast dit brugernavn eller din e-mail",
+      "identifierRequired": "Brugernavn eller e-mail er påkrævet",
       "noBackendUrl": "Ingen backend-URL",
       "or": "or",
       "passwordIncorrect": "Adgangskoden er forkert",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Bekræft adgangskode",
       "confirmPasswordPlaceholder": "Bekræft din adgangskode",
+      "emailInvalid": "Indtast en gyldig e-mailadresse",
+      "emailLabel": "Personlig e-mail",
+      "emailPlaceholder": "Indtast din personlige e-mail",
       "information": {
         "color1": "Profil farve 1",
         "color2": "Profil farve 2",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Kaldenavn",
       "nicknamePlaceholder": "Vælg et unikt kaldenavn",
       "nicknameTaken": "Kaldenavnet er allerede taget",
+      "nicknameRequired": "Kaldenavn er påkrævet",
       "passwordInput": {
-        "description": "Vælg et kaldenavn og en adgangskode. Din adgangskode fungerer som en sikker adgangssætning, så sørg for at huske den!",
+        "description": "Vælg et kaldenavn, personlig e-mail og adgangskode. Din adgangskode fungerer som en sikker adgangssætning, så sørg for at huske den!",
         "title": "Opret dit login"
       },
       "passwordLabel": "Adgangskode",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Version",
         "notLoggedIn": "Du er ikke logget ind",
-        "userId": "Bruger ID",
-        "userIdDescription": "Brug denne som invitationskode til dit venneregister",
         "checkForUpdates": "Se efter opdateringer",
         "upToDate": "Du er i øjeblikket på den seneste version"
       }

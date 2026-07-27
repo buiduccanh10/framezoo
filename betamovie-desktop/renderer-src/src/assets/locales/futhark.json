@@ -77,10 +77,6 @@
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "ᚨᛚᚱᛖᛞᛁ ᚺᚨᚢᛖ ᚨᚾ ᚨᚲᚲᛟᚢᚾᛏ? <0>ᛚᛟᚷᛁᚾ ᚺᛖᚱᛖ.</0>",
-    "inviteCodeInvalidError": "ᛋᚴᚭᚦ ᛁᛋ ᚾᚭᛏ ᚠᚭᚢᚾᚦ",
-    "inviteCodeLabel": "ᚱᚢᚿᛅ ᚴᚭᚦ",
-    "inviteCodePlaceholder": "Enteᚱ fᚱiend's Useᚱ ID",
-    "inviteCodeRequiredError": "ᛚᛅᛒᛅᛚ ᛁᛋ ᚱᛅᚴᚢᛁᚱᛅᛏ",
     "login": {
       "description": "ᛈᛚᛖᛊᛖ ᛖᚾᛏᛖᚱ ᛁᛟᚢᚱ ᛈᚨᛊᛊᛈᚺᚱᚨᛊᛖ ᛏᛟ ᛚᛟᚷᛁᚾ ᛏᛟ ᛁᛟᚢᚱ ᚨᚲᚲᛟᚢᚾᛏ",
       "failedToReachServer": "Failed to reach server",
@@ -1197,8 +1193,6 @@
       "info": {
         "appVersion": "App Version",
         "notLoggedIn": "ᛁᛟᚢ ᚨᚱᛖ ᚾᛟᛏ ᛚᛟᚷᚷᛖᛞ ᛁᚾ",
-        "userId": "ᚢᛊᛖᚱ ᛁᛞ",
-        "userIdDescription": "Use this as invite code for your friend register",
         "checkForUpdates": "Check for updates",
         "upToDate": "You are currently on the latest version"
       }

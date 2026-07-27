@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Вместо това използвайте парола"
     },
     "hasAccount": "Вече имате акаунт? <0>Влезте тук.</0>",
-    "inviteCodeInvalidError": "Невалиден код за покана (потребителското ID не е намерено)",
-    "inviteCodeLabel": "Код за покана",
-    "inviteCodePlaceholder": "Въведете потребителското ID на приятел",
-    "inviteCodeRequiredError": "Кодът за покана е задължителен",
     "login": {
-      "description": "Моля, въведете своята паролна фраза, за да влезете в своя акаунт",
+      "description": "Въведете вашето потребителско име или имейл и парола, за да влезете в акаунта си",
       "failedToReachServer": "Неуспешно достигане до сървъра",
-      "nicknameLabel": "Псевдоним",
-      "nicknameNotFound": "Псевдонимът не е намерен",
-      "nicknamePlaceholder": "Въведете псевдонима си",
-      "nicknameRequired": "Изисква се псевдоним",
+      "identifierLabel": "Потребителско име или имейл",
+      "identifierNotFound": "Потребителското име или имейл не са намерени",
+      "identifierPlaceholder": "Въведете вашето потребителско име или имейл",
+      "identifierRequired": "Изисква се потребителско име или имейл",
       "noBackendUrl": "Няма backend URL",
       "or": "or",
       "passwordIncorrect": "Паролата е неправилна",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Потвърдете паролата",
       "confirmPasswordPlaceholder": "Потвърдете паролата си",
+      "emailInvalid": "Въведете валиден имейл адрес",
+      "emailLabel": "Личен имейл",
+      "emailPlaceholder": "Въведете личния си имейл",
       "information": {
         "color1": "Профилен цвят едно",
         "color2": "Профилен цвят две",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Псевдоним",
       "nicknamePlaceholder": "Изберете уникален псевдоним",
       "nicknameTaken": "Псевдонимът вече е зает",
+      "nicknameRequired": "Изисква се псевдоним",
       "passwordInput": {
-        "description": "Изберете псевдоним и парола. Вашата парола работи като защитена парола, така че се уверете, че я помните!",
+        "description": "Изберете псевдоним, личен имейл и парола. Вашата парола работи като защитена парола, така че се уверете, че я помните!",
         "title": "Създайте своя вход"
       },
       "passwordLabel": "Парола",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Версия",
         "notLoggedIn": "Вие не сте влезли в системата",
-        "userId": "Потребителско име",
-        "userIdDescription": "Използвайте това като код за покана за вашата регистрация на приятели",
         "checkForUpdates": "Проверете за актуализации",
         "upToDate": "В момента сте на най-новата версия"
       }

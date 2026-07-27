@@ -77,17 +77,13 @@
       "usePasskeyInstead": "代わりにパスキーを使用してください"
     },
     "hasAccount": "既にアカウントをお持ちですか？ <0>ログインはこちら</0>",
-    "inviteCodeInvalidError": "無効な招待コードです（ユーザーIDが見つかりません）",
-    "inviteCodeLabel": "招待コード",
-    "inviteCodePlaceholder": "友達のユーザーIDを入力してください",
-    "inviteCodeRequiredError": "招待コードは必須です",
     "login": {
-      "description": "ログインするにはパスフレーズを入力してください",
+      "description": "ユーザー名またはメールアドレスとパスワードを入力してアカウントにログインします",
       "failedToReachServer": "サーバーに到達できませんでした",
-      "nicknameLabel": "ニックネーム",
-      "nicknameNotFound": "ニックネームが見つかりません",
-      "nicknamePlaceholder": "ニックネームを入力してください",
-      "nicknameRequired": "ニックネームは必須です",
+      "identifierLabel": "ユーザー名またはメールアドレス",
+      "identifierNotFound": "ユーザー名またはメールアドレスが見つかりません",
+      "identifierPlaceholder": "ユーザー名またはメールアドレスを入力してください",
+      "identifierRequired": "ユーザー名またはメールアドレスは必須です",
       "noBackendUrl": "バックエンド URL がありません",
       "or": "or",
       "passwordIncorrect": "パスワードが間違っています",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "パスワードを認証する",
       "confirmPasswordPlaceholder": "パスワードを確認してください",
+      "emailInvalid": "有効なメールアドレスを入力してください",
+      "emailLabel": "個人メール",
+      "emailPlaceholder": "個人のメールアドレスを入力してください",
       "information": {
         "color1": "プロフィールカラー1",
         "color2": "プロフィールカラー2",
@@ -113,8 +112,9 @@
       "nicknameLabel": "ニックネーム",
       "nicknamePlaceholder": "ユニークなニックネームを選択してください",
       "nicknameTaken": "ニックネームはすでに使用されています",
+      "nicknameRequired": "ニックネームは必須です",
       "passwordInput": {
-        "description": "ニックネームとパスワードを選択します。パスワードは安全なパスフレーズとして機能するので、必ず覚えておいてください。",
+        "description": "ニックネーム、個人用メールアドレス、パスワードを選択します。パスワードは安全なパスフレーズとして機能するので、必ず覚えておいてください。",
         "title": "ログインを作成する"
       },
       "passwordLabel": "パスワード",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "バージョン",
         "notLoggedIn": "ログインしていません",
-        "userId": "ユーザーID",
-        "userIdDescription": "これを友達登録の招待コードとして使用してください",
         "checkForUpdates": "アップデートを確認する",
         "upToDate": "現在最新バージョンを使用しています"
       }

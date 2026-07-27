@@ -77,17 +77,13 @@
       "usePasskeyInstead": "대신 패스키를 사용하세요"
     },
     "hasAccount": "이미 계정을 보유하고 있으십니까? <0>로그인 하기.</0>",
-    "inviteCodeInvalidError": "유효하지 않은 초대 코드입니다 (사용자 ID를 찾을 수 없음)",
-    "inviteCodeLabel": "초대 코드",
-    "inviteCodePlaceholder": "친구의 사용자 ID를 입력하세요",
-    "inviteCodeRequiredError": "초대 코드가 필요합니다",
     "login": {
-      "description": "계정에 로그인하기위해 암호문을 입력하세요",
+      "description": "귀하의 계정에 로그인하려면 사용자 이름 또는 이메일과 비밀번호를 입력하세요",
       "failedToReachServer": "서버에 연결하지 못했습니다.",
-      "nicknameLabel": "별명",
-      "nicknameNotFound": "닉네임을 찾을 수 없습니다",
-      "nicknamePlaceholder": "닉네임을 입력하세요",
-      "nicknameRequired": "닉네임은 필수입니다",
+      "identifierLabel": "사용자 이름 또는 이메일",
+      "identifierNotFound": "사용자 이름 또는 이메일을 찾을 수 없습니다",
+      "identifierPlaceholder": "사용자 이름이나 이메일을 입력하세요",
+      "identifierRequired": "사용자 이름 또는 이메일이 필요합니다",
       "noBackendUrl": "백엔드 URL 없음",
       "or": "or",
       "passwordIncorrect": "비밀번호가 올바르지 않습니다.",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "비밀번호 확인",
       "confirmPasswordPlaceholder": "비밀번호를 확인하세요",
+      "emailInvalid": "유효한 이메일 주소를 입력하세요.",
+      "emailLabel": "개인 이메일",
+      "emailPlaceholder": "개인 이메일을 입력하세요",
       "information": {
         "color1": "프로필 색상 1",
         "color2": "프로필 색상 2",
@@ -113,8 +112,9 @@
       "nicknameLabel": "별명",
       "nicknamePlaceholder": "독특한 별명을 선택하세요",
       "nicknameTaken": "닉네임은 이미 사용 중입니다.",
+      "nicknameRequired": "닉네임은 필수입니다",
       "passwordInput": {
-        "description": "닉네임과 비밀번호를 선택하세요. 귀하의 비밀번호는 안전한 비밀번호 문구로 사용되므로 반드시 기억해 두십시오!",
+        "description": "닉네임, 개인 이메일, 비밀번호를 선택하세요. 귀하의 비밀번호는 안전한 비밀번호 문구로 사용되므로 반드시 기억해 두십시오!",
         "title": "로그인 만들기"
       },
       "passwordLabel": "비밀번호",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "버전",
         "notLoggedIn": "로그인하지 않으셨습니다",
-        "userId": "유저 ID",
-        "userIdDescription": "친구등록 초대코드로 사용하세요",
         "checkForUpdates": "업데이트 확인",
         "upToDate": "현재 최신 버전을 사용 중입니다."
       }

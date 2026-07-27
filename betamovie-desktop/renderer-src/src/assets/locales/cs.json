@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Místo toho použijte přístupový klíč"
     },
     "hasAccount": "Již máte účet? <0> Přihlaste se zde.</0>",
-    "inviteCodeInvalidError": "Neplatný zvací kód (ID uživatele nebylo nalezeno)",
-    "inviteCodeLabel": "Zvací kód",
-    "inviteCodePlaceholder": "Zadejte ID uživatele přítele",
-    "inviteCodeRequiredError": "Zvací kód je vyžadován",
     "login": {
-      "description": "Pro přihlášení ke svému účtu zadejte svou přístupovou frázi",
+      "description": "Zadejte své uživatelské jméno nebo e-mail a heslo pro přihlášení ke svému účtu",
       "failedToReachServer": "Nepodařilo se připojit k serveru",
-      "nicknameLabel": "Přezdívka",
-      "nicknameNotFound": "Přezdívka nenalezena",
-      "nicknamePlaceholder": "Zadejte svou přezdívku",
-      "nicknameRequired": "Přezdívka je povinná",
+      "identifierLabel": "Uživatelské jméno nebo email",
+      "identifierNotFound": "Uživatelské jméno nebo e-mail nebyl nalezen",
+      "identifierPlaceholder": "Zadejte své uživatelské jméno nebo e-mail",
+      "identifierRequired": "Je vyžadováno uživatelské jméno nebo e-mail",
       "noBackendUrl": "Žádná koncová adresa URL",
       "or": "or",
       "passwordIncorrect": "Heslo je nesprávné",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Potvrďte heslo",
       "confirmPasswordPlaceholder": "Potvrďte své heslo",
+      "emailInvalid": "Zadejte platnou e-mailovou adresu",
+      "emailLabel": "Osobní email",
+      "emailPlaceholder": "Zadejte svůj osobní e-mail",
       "information": {
         "color1": "První barva profilu",
         "color2": "Druhá barva profilu",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Přezdívka",
       "nicknamePlaceholder": "Vyberte si jedinečnou přezdívku",
       "nicknameTaken": "Přezdívka je již obsazena",
+      "nicknameRequired": "Přezdívka je povinná",
       "passwordInput": {
-        "description": "Vyberte si přezdívku a heslo. Vaše heslo funguje jako bezpečná přístupová fráze, takže si jej zapamatujte!",
+        "description": "Vyberte si přezdívku, osobní e-mail a heslo. Vaše heslo funguje jako bezpečná přístupová fráze, takže si jej zapamatujte!",
         "title": "Vytvořte si přihlašovací jméno"
       },
       "passwordLabel": "Heslo",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Verze",
         "notLoggedIn": "Nejste přihlášen",
-        "userId": "Uživatelské ID",
-        "userIdDescription": "Použijte jej jako zvací kód pro registraci přátel",
         "checkForUpdates": "Zkontrolujte aktualizace",
         "upToDate": "Momentálně používáte nejnovější verzi"
       }

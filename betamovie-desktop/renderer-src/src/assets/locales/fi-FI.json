@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Käytä sen sijaan salasanaa"
     },
     "hasAccount": "Onko sinulla jo tili? <0>Kirjaudu sisään tästä.</0>",
-    "inviteCodeInvalidError": "Virheellinen kutsuavain (käyttäjätunnusta ei löytynyt)",
-    "inviteCodeLabel": "Kutsuavain",
-    "inviteCodePlaceholder": "Syötä ystävän käyttäjätunnus",
-    "inviteCodeRequiredError": "Kutsuavain vaaditaan",
     "login": {
-      "description": "Anna tunnuslauseesi kirjautuaksesi tilillesi",
+      "description": "Kirjoita käyttäjätunnuksesi tai sähköpostiosoitteesi ja salasanasi kirjautuaksesi tilillesi",
       "failedToReachServer": "Palvelimeen ei saada yhteyttä",
-      "nicknameLabel": "Lempinimi",
-      "nicknameNotFound": "Lempinimeä ei löydy",
-      "nicknamePlaceholder": "Kirjoita lempinimesi",
-      "nicknameRequired": "Lempinimi vaaditaan",
+      "identifierLabel": "Käyttäjätunnus tai sähköpostiosoite",
+      "identifierNotFound": "Käyttäjätunnusta tai sähköpostiosoitetta ei löydy",
+      "identifierPlaceholder": "Anna käyttäjätunnuksesi tai sähköpostiosoitteesi",
+      "identifierRequired": "Käyttäjätunnus tai sähköpostiosoite vaaditaan",
       "noBackendUrl": "Ei tausta-URL-osoitetta",
       "or": "or",
       "passwordIncorrect": "Salasana on väärä",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Vahvista salasana",
       "confirmPasswordPlaceholder": "Vahvista salasanasi",
+      "emailInvalid": "Anna kelvollinen sähköpostiosoite",
+      "emailLabel": "Henkilökohtainen sähköposti",
+      "emailPlaceholder": "Kirjoita henkilökohtainen sähköpostiosoitteesi",
       "information": {
         "color1": "Profiilin väri yksi",
         "color2": "Profiilin väri kaksi",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Lempinimi",
       "nicknamePlaceholder": "Valitse ainutlaatuinen lempinimi",
       "nicknameTaken": "Lempinimi on jo varattu",
+      "nicknameRequired": "Lempinimi vaaditaan",
       "passwordInput": {
-        "description": "Valitse lempinimi ja salasana. Salasanasi toimii turvallisena tunnuslauseena, joten muista se muistaa!",
+        "description": "Valitse lempinimi, henkilökohtainen sähköpostiosoite ja salasana. Salasanasi toimii turvallisena tunnuslauseena, joten muista se muistaa!",
         "title": "Luo kirjautumistunnuksesi"
       },
       "passwordLabel": "Salasana",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versio",
         "notLoggedIn": "Et ole kirjautunut sisään",
-        "userId": "Käyttäjätunnus",
-        "userIdDescription": "Käytä tätä kutsukoodina ystävärekisteriin",
         "checkForUpdates": "Tarkista päivitykset",
         "upToDate": "Käytät tällä hetkellä uusinta versiota"
       }

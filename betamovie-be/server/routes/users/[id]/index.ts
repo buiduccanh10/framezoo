@@ -34,6 +34,7 @@ export default defineEventHandler(async event => {
       id: user.id,
       namespace: user.namespace,
       nickname: (user as any).nickname,
+      email: user.email,
       profile: user.profile,
     };
   }
@@ -74,6 +75,7 @@ export default defineEventHandler(async event => {
         publicKey: user.public_key,
         namespace: user.namespace,
         nickname: (user as any).nickname,
+        email: user.email,
         profile: user.profile,
         permissions: user.permissions,
         createdAt: user.created_at,
