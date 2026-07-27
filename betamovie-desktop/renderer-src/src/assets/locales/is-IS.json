@@ -50,9 +50,28 @@
       "title": "Viðbótarstjóri"
     },
     "player": {
+      "chooseAddon": "Veldu viðbót",
       "emptyExplanation": "Engin straumaviðbót er uppsett eða virkjuð ennþá. Farðu á Addons Manager síðuna til að fá uppsetningarleiðbeiningar og uppgötvun fjölmiðlaskrár.",
       "emptyTitle": "Engar straumviðbætur tiltækar",
-      "manageAddonsButton": "Stjórna viðbótarlista"
+      "loadingStreams": "Hleður straumum...",
+      "manageAddonsButton": "Stjórna viðbótarlista",
+      "noAddonStreams": "Engir viðbótarstraumar skiluðu sér fyrir þennan titil.",
+      "noTorrentStreams": "Engir straumstraumar skiluðu sér fyrir þessa viðbót.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Allir eiginleikar",
+        "other": "Annað"
+      },
+      "sources": "Heimildir",
+      "streamCount": "{{count}} straumur",
+      "streamCount_plural": "{{count}} straumar",
+      "title": "Viðbætur fyrir skjáborð",
+      "unableToLoad": "Ekki er hægt að hlaða straumum",
+      "viewStreams": "Skoða strauma"
     }
   },
   "auth": {

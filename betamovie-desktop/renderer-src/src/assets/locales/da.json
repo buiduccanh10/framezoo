@@ -50,9 +50,28 @@
       "title": "Addons Manager"
     },
     "player": {
+      "chooseAddon": "Vælg en tilføjelse",
       "emptyExplanation": "Ingen stream-tilføjelse er installeret eller aktiveret endnu. Besøg Addons Manager-siden for opsætningsvejledninger og mediekatalogopdagelse.",
       "emptyTitle": "Ingen tilgængelige stream-tilføjelser",
-      "manageAddonsButton": "Administrer tilføjelsesliste"
+      "loadingStreams": "Indlæser streams...",
+      "manageAddonsButton": "Administrer tilføjelsesliste",
+      "noAddonStreams": "Ingen tilføjelsesstreams returnerede for denne titel.",
+      "noTorrentStreams": "Ingen torrent-streams returnerede for denne tilføjelse.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Alle kvaliteter",
+        "other": "Andre"
+      },
+      "sources": "Kilder",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} streams",
+      "title": "Desktop tilføjelser",
+      "unableToLoad": "Kan ikke indlæse streams",
+      "viewStreams": "Se streams"
     }
   },
   "auth": {

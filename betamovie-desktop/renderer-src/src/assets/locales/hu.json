@@ -50,9 +50,28 @@
       "title": "Addons Manager"
     },
     "player": {
+      "chooseAddon": "Válasszon egy kiegészítőt",
       "emptyExplanation": "Még nincs telepítve vagy aktiválva adatfolyam-kiegészítő. Látogassa meg az Addons Manager oldalt a beállítási útmutatókért és a médiakatalógusok felfedezéséhez.",
       "emptyTitle": "Nem állnak rendelkezésre adatfolyam-kiegészítők",
-      "manageAddonsButton": "Addon List kezelése"
+      "loadingStreams": "Adatfolyamok betöltése...",
+      "manageAddonsButton": "Addon List kezelése",
+      "noAddonStreams": "Ehhez a címhez nem érkezett vissza kiegészítő adatfolyam.",
+      "noTorrentStreams": "Ehhez a kiegészítőhöz nem érkezett vissza torrentfolyam.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Minden minőség",
+        "other": "Más"
+      },
+      "sources": "Források",
+      "streamCount": "{{count}} adatfolyam",
+      "streamCount_plural": "{{count}} adatfolyam",
+      "title": "Asztali kiegészítők",
+      "unableToLoad": "Nem sikerült betölteni az adatfolyamokat",
+      "viewStreams": "Streamek megtekintése"
     }
   },
   "auth": {

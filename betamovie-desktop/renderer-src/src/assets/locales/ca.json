@@ -50,9 +50,28 @@
       "title": "Gestor de complements"
     },
     "player": {
+      "chooseAddon": "Trieu un complement",
       "emptyExplanation": "Encara no s'ha instal·lat ni activat cap complement de reproducció. Visiteu la pàgina del Gestor de complements per obtenir guies de configuració i descobriment de catàlegs multimèdia.",
       "emptyTitle": "No hi ha complements de reproducció disponibles",
-      "manageAddonsButton": "Gestioneu la llista de complements"
+      "loadingStreams": "S'estan carregant els fluxos...",
+      "manageAddonsButton": "Gestioneu la llista de complements",
+      "noAddonStreams": "No s'ha retornat cap flux de complements per a aquest títol.",
+      "noTorrentStreams": "No s'ha retornat cap flux de torrent per a aquest complement.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Totes les Qualitats",
+        "other": "Altres"
+      },
+      "sources": "Fonts",
+      "streamCount": "{{count}} tauler d'activitat",
+      "streamCount_plural": "{{count}} reproduccions",
+      "title": "Complements d'escriptori",
+      "unableToLoad": "No es poden carregar els fluxos",
+      "viewStreams": "Veure streams"
     }
   },
   "auth": {

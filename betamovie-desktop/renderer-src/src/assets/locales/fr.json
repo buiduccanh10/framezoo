@@ -50,9 +50,28 @@
       "title": "Gestionnaire de modules complémentaires"
     },
     "player": {
+      "chooseAddon": "Choisissez un module complémentaire",
       "emptyExplanation": "Aucun module complémentaire de flux n'est encore installé ou activé. Visitez la page Addons Manager pour les guides de configuration et la découverte du catalogue multimédia.",
       "emptyTitle": "Aucun module complémentaire de flux disponible",
-      "manageAddonsButton": "Gérer la liste des modules complémentaires"
+      "loadingStreams": "Chargement des flux...",
+      "manageAddonsButton": "Gérer la liste des modules complémentaires",
+      "noAddonStreams": "Aucun flux complémentaire n'a été renvoyé pour ce titre.",
+      "noTorrentStreams": "Aucun flux torrent renvoyé pour cet addon.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Toutes les qualités",
+        "other": "Autre"
+      },
+      "sources": "Sources",
+      "streamCount": "Flux {{count}}",
+      "streamCount_plural": "{{count}} flux",
+      "title": "Modules complémentaires de bureau",
+      "unableToLoad": "Impossible de charger les flux",
+      "viewStreams": "Afficher les flux"
     }
   },
   "auth": {

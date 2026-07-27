@@ -50,9 +50,28 @@
       "title": "Manager de suplimente"
     },
     "player": {
+      "chooseAddon": "Alegeți un supliment",
       "emptyExplanation": "Nu este instalat sau activat încă niciun supliment de flux. Vizitați pagina Addons Manager pentru ghiduri de configurare și descoperire a catalogului media.",
       "emptyTitle": "Nu sunt disponibile suplimente de flux",
-      "manageAddonsButton": "Gestionați lista de suplimente"
+      "loadingStreams": "Se încarcă fluxurile...",
+      "manageAddonsButton": "Gestionați lista de suplimente",
+      "noAddonStreams": "Nu au fost returnate fluxuri suplimentare pentru acest titlu.",
+      "noTorrentStreams": "Nu au fost returnate fluxuri de torrent pentru acest supliment.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Toate Calitățile",
+        "other": "Alte"
+      },
+      "sources": "Surse",
+      "streamCount": "{{count}} flux",
+      "streamCount_plural": "{{count}} fluxuri",
+      "title": "Suplimente desktop",
+      "unableToLoad": "Nu se pot încărca fluxurile",
+      "viewStreams": "Vizualizați fluxurile"
     }
   },
   "auth": {
