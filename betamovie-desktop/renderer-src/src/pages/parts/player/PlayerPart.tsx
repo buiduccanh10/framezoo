@@ -46,6 +46,8 @@ export function PlayerPart(props: PlayerPartProps) {
   const desktopActionIconClass = "text-[32px] leading-none";
   const desktopActionButtonClass =
     "h-14 w-14 shrink-0 flex items-center justify-center";
+  const desktopTextActionButtonClass =
+    "h-14 w-auto px-3 shrink-0 flex items-center justify-center";
   const mobileActionIconClass = "text-[22px] leading-none ssm:text-[24px]";
   const mobileActionButtonClass = "p-2 ssm:p-2.5";
 
@@ -238,7 +240,7 @@ export function PlayerPart(props: PlayerPartProps) {
           </Player.LeftSideControls>
           <div className="flex items-center space-x-6">
             <Player.Episodes
-              className={desktopActionButtonClass}
+              className={desktopTextActionButtonClass}
               inControl={inControl}
               iconSizeClass={desktopActionIconClass}
             />

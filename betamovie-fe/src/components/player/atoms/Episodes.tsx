@@ -1313,7 +1313,11 @@ export function Episodes(props: {
         onClick={() => router.open("/episodes")}
         icon={Icons.EPISODES}
       >
-        {props.compact ? null : t("player.menus.episodes.button")}
+        {props.compact ? null : (
+          <span className="ml-2.5 inline-block whitespace-nowrap">
+            {t("player.menus.episodes.button")}
+          </span>
+        )}
       </VideoPlayerButton>
     </OverlayAnchor>
   );
