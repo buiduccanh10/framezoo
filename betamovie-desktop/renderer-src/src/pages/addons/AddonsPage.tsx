@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { Icon, Icons } from "@/components/Icon";
-import { SectionHeading } from "@/components/layout/SectionHeading";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { Heading1 } from "@/components/utils/Text";
 import {
@@ -62,92 +61,14 @@ export function AddonsPage() {
           </button>
         </div>
 
-        {/* Step Guide Section */}
-        <SectionHeading
-          title={t("addons.page.guideHeading", "Discover & Install Addons")}
-          icon={Icons.EXTENSION}
-        />
         <div className="mb-8 rounded-2xl border border-dropdown-border bg-dropdown-contentBackground/40 p-6 shadow-xl backdrop-blur-md">
           <p className="mb-4 text-sm leading-relaxed text-dropdown-text">
             {t(
-              "addons.page.guideIntro",
-              "Addons help you browse media catalogs and streams tailored to your personal entertainment preferences:",
+              "addons.page.description",
+              "Addons are optional. This app does not bundle, recommend, or host any addon.",
             )}
           </p>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div className="rounded-xl border border-dropdown-border bg-dropdown-altBackground/60 p-4">
-              <div className="mb-2 flex items-center gap-2 font-semibold text-white">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-buttons-purple font-bold text-xs text-white">
-                  1
-                </span>
-                <span>
-                  {t("addons.page.step1Title", "Explore Addon Catalog")}
-                </span>
-              </div>
-              <p className="text-xs leading-relaxed text-dropdown-text">
-                {t(
-                  "addons.page.step1DescPrefix",
-                  "Visit the community catalog at ",
-                )}
-                <a
-                  href="https://stremio-addons.net"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-semibold text-type-link hover:underline"
-                >
-                  https://stremio-addons.net
-                </a>
-                {t(
-                  "addons.page.step1DescSuffix",
-                  " or similar standard addon providers.",
-                )}
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-dropdown-border bg-dropdown-altBackground/60 p-4">
-              <div className="mb-2 flex items-center gap-2 font-semibold text-white">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-buttons-purple font-bold text-xs text-white">
-                  2
-                </span>
-                <span>{t("addons.page.step2Title", "Copy Manifest Link")}</span>
-              </div>
-              <p className="text-xs leading-relaxed text-dropdown-text">
-                {t(
-                  "addons.page.step2DescPrefix",
-                  "Select your desired addon, customize options, and copy its manifest URL (standard example: ",
-                )}
-                <code className="rounded bg-dropdown-contentBackground px-1 py-0.5 text-white/90">
-                  https://addon.example.com/manifest.json
-                </code>
-                {t("addons.page.step2DescSuffix", ").")}
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-dropdown-border bg-dropdown-altBackground/60 p-4">
-              <div className="mb-2 flex items-center gap-2 font-semibold text-white">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-buttons-purple font-bold text-xs text-white">
-                  3
-                </span>
-                <span>{t("addons.page.step3Title", "Add to Application")}</span>
-              </div>
-              <p className="text-xs leading-relaxed text-dropdown-text">
-                {t(
-                  "addons.page.step3DescPrefix",
-                  "Paste the manifest path into the field below and press ",
-                )}
-                <span className="font-semibold text-white">
-                  {t("addons.page.step3AddName", "Add")}
-                </span>
-                {t(
-                  "addons.page.step3DescSuffix",
-                  ". The addon will immediately activate to search for media sources.",
-                )}
-              </p>
-            </div>
-          </div>
-
-          {/* Addon Input Form */}
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <input
               value={url}
               onChange={(event) => {
@@ -185,10 +106,12 @@ export function AddonsPage() {
         </div>
 
         {/* Installed Addons List */}
-        <SectionHeading
-          title={t("addons.page.installedHeading", "Installed Addons")}
-          icon={Icons.EXTENSION}
-        />
+        <div className="mb-4 flex items-center gap-3">
+          <Icon icon={Icons.EXTENSION} className="text-xl text-white" />
+          <h2 className="text-xl font-bold text-white">
+            {t("addons.page.installedHeading", "Installed Addons")}
+          </h2>
+        </div>
         <div className="space-y-3 pb-16">
           {addons.length === 0 ? (
             <div className="rounded-2xl border border-dropdown-border border-dashed bg-dropdown-contentBackground/20 p-8 text-center text-dropdown-text">

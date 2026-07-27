@@ -6,16 +6,6 @@
     "copy": "Kopier"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Besøg",
-      "step1Suffix": "eller dit betroede Addon-kompatible addon-lager.",
-      "step2Prefix": "Kopiér manifestlinket (f.eks.",
-      "step2Suffix": ").",
-      "step3AddName": "Tilføje",
-      "step3Prefix": "Indsæt i boksen ovenfor, og tryk derefter på",
-      "step3Suffix": ".",
-      "title": "Udforsk flere tilføjelser:"
-    },
     "manager": {
       "add": "Tilføje",
       "adding": "Tilføjer...",
@@ -23,39 +13,28 @@
       "ariaManage": "Administrer tilføjelser",
       "errorFallback": "Kan ikke installere denne tilføjelse.",
       "manageListButton": "Administrer tilføjelsesliste",
-      "subtitle": "Tilføj en Addon-manifest-URL til torrent og direkte streams.",
+      "subtitle": "Valgfri. Tilføj en manifest-URL, du vælger. Denne app samler, anbefaler eller hoster ikke tilføjelser.",
       "title": "Desktop tilføjelser"
     },
     "page": {
       "addAddonButton": "Tilføj Addon",
+      "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
       "disabled": "Handicappet",
       "emptyInstalled": "Ingen tilføjelser installeret i systemet endnu.",
       "enabled": "Aktiveret",
-      "guideHeading": "Opdag og installer tilføjelser",
-      "guideIntro": "Tilføjelser hjælper dig med at gennemse mediekataloger og streams, der er skræddersyet til dine personlige underholdningspræferencer:",
       "installError": "Kan ikke installere denne tilføjelse.",
       "installedHeading": "Installerede tilføjelser",
       "processing": "Forarbejdning...",
       "removeAddon": "Fjern denne tilføjelse",
-      "step1DescPrefix": "Besøg samfundskataloget på",
-      "step1DescSuffix": "eller lignende standard tilføjelsesudbydere.",
-      "step1Title": "Udforsk Addon-kataloget",
-      "step2DescPrefix": "Vælg din ønskede tilføjelse, tilpas indstillinger, og kopier dens manifest-URL (standardeksempel:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopiér Manifest Link",
-      "step3AddName": "Tilføje",
-      "step3DescPrefix": "Indsæt manifeststien i feltet nedenfor, og tryk på",
-      "step3DescSuffix": ". Tilføjelsen aktiveres straks for at søge efter mediekilder.",
-      "step3Title": "Tilføj til applikation",
       "title": "Addons Manager"
     },
     "player": {
       "chooseAddon": "Vælg en tilføjelse",
-      "emptyExplanation": "Ingen stream-tilføjelse er installeret eller aktiveret endnu. Besøg Addons Manager-siden for opsætningsvejledninger og mediekatalogopdagelse.",
+      "emptyExplanation": "Ingen tilføjelse er installeret eller aktiveret. Tilføj en manifest-URL, du vælger i tilføjelser.",
       "emptyTitle": "Ingen tilgængelige stream-tilføjelser",
       "loadingStreams": "Indlæser streams...",
       "manageAddonsButton": "Administrer tilføjelsesliste",
-      "noAddonStreams": "Ingen tilføjelsesstreams returnerede for denne titel.",
+      "noAddonStreams": "Ingen streams blev returneret af denne tilføjelse.",
       "noTorrentStreams": "Ingen torrent-streams returnerede for denne tilføjelse.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Ansvarsfraskrivelse ",
-      "disclaimerText": "Bemærk: AlphaFlix hoster ikke selv nogen filer, men viser i stedet kun indhold fra tredjepartsudbydere. Lovmæssige forhold bør afklares med dem."
+      "disclaimerText": "AlphaFlix giver en sikker, moderne og problemfri stream-afspiller med en brugervenlig grænseflade og afspilning af høj kvalitet på tværs af understøttede enheder. Det hoster ikke mediefiler, driver ikke et kildekatalog eller anbefaler specifikke tilføjelser. Valgfrie tilføjelser konfigureres af brugere, som er ansvarlige for at bruge lovlige kilder."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Støt os",
       "github": "GitHub"
     },
-    "tagline": "Se dine favoritserier og -film gratis og uden reklamer! "
+    "tagline": "En sikker, moderne stream-afspiller til en problemfri seeroplevelse i høj kvalitet."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Misligholdelse"
       },
-      "downloads": {
-        "button": "Forsøg at downloade",
-        "copyHlsPlaylist": "Kopier link til HLS-playliste",
-        "disclaimer": "Downloads tages direkte fra udbyderen. AlphaFlix har ikke kontrol over, hvordan downloads leveres.",
-        "downloadSubtitle": "Download aktuel undertekst",
-        "downloadVideo": "Download video",
-        "hlsDisclaimer": "Downloads tages direkte fra udbyderen. AlphaFlix har ikke kontrol over, hvordan downloads leveres.<br /><br />Vær opmærksom på, at du downloader en HLS-playliste, <bold>det anbefales ikke at downloade, hvis du ikke er bekendt med avancerede streamingformater</bold>. Prøv forskellige kilder til forskellige formater.",
-        "hlsDownloader": "Eller gå til <0>hls downloader-websted</0> og indsæt afspilningslistens URL nedefra.",
-        "onAndroid": {
-          "1": "For at downloade på Android skal du klikke på download-knappen og derefter, på den nye side, <bold>trykke og holde</bold> på videoen og derefter vælge <bold>gem</bold>.",
-          "shortTitle": "Download / Android",
-          "title": "Download på Android"
-        },
-        "onIos": {
-          "1": "For at downloade på iOS skal du klikke på download-knappen og derefter på den nye side klikke på <bold><ios_share /></bold> og derefter <bold>Save to Files <ios_files /></bold>.",
-          "shortTitle": "Download / iOS",
-          "title": "Download på iOS"
-        },
-        "onPc": {
-          "1": "På PC skal du klikke på download-knappen og derefter højreklikke på videoen på den nye side og vælge <bold>Gem video som</bold>",
-          "shortTitle": "Download / PC",
-          "title": "Download på pc"
-        },
-        "title": "Download"
-      },
       "episodes": {
         "button": "Episoder",
         "emptyState": "Der er ingen episoder i denne sæson, kom tilbage senere (undskyld :3)...",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Lyd",
-        "downloadItem": "Download",
         "enableSubtitles": "Aktiver undertekster",
         "playbackItem": "Afspilningsindstillinger",
         "qualityItem": "Kvalitet",
         "sourceItem": "Videokilder",
         "subtitleItem": "Undertekstindstillinger"
-      },
-      "sources": {
-        "failed": {
-          "text": "Der skete en fejl under søgningen efter videoer... Prøv en anden kilde?",
-          "title": "Kunne ikke scrape"
-        },
-        "findNextSource": "Find næste kilde",
-        "maintain": "Opretholde",
-        "noEmbeds": {
-          "text": "Vi kunne ikke finde nogen embeds, prøv venligst en anden kilde.",
-          "title": "Ingen embeds fundet"
-        },
-        "noStream": {
-          "text": "Denne kilde har ingen streams for denne film eller serie. /ᐠ - ˕ -マ Ⳋ",
-          "title": "Ingen stream :("
-        },
-        "title": "Kilder",
-        "unknownOption": "Ukendt"
       },
       "subtitles": {
         "autoSelectChoice": "Automatisk valg",
@@ -953,37 +888,6 @@
       "restart": "Genstart",
       "resume": "Genoptage",
       "title": "Vil du fortsætte med at se?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Udvidelse deaktiveret",
-        "enableExtension": "Aktiver udvidelse",
-        "homeButton": "Gå til hjem",
-        "text": "Du har installeret AlphaFlix-udvidelsen. For at begynde at bruge den skal du aktivere udvidelsen for dette websted.",
-        "title": "Aktiver venligst udvidelsen"
-      },
-      "items": {
-        "pending": "Tjekker for videoer..."
-      },
-      "notFound": {
-        "badge": "Ikke fundet",
-        "detailsButton": "Vis detaljer",
-        "discoverButton": "Opdag mere",
-        "homeButton": "Gå til hjem",
-        "text": "Vi har søgt gennem vores udbydere og kan ikke finde de medier, du leder efter! Vi hoster ikke medierne og har ingen kontrol over, hvad der er tilgængeligt. Klik på 'Vis detaljer' nedenfor for at få flere detaljer.",
-        "title": "Vi kunne ikke finde det"
-      },
-      "tips": {
-        "1": "Tryk på tandhjulsikonet for at skifte kilde!",
-        "2": "Tryk på titlen for at kopiere linket!",
-        "3": "Tryk og hold eller hold SHIFT nede for at vise widescreen-knap i stedet for fuldskærm!",
-        "4": "Nogle kilder virker bedre end andre!",
-        "5": "Få udvidelsen for flere kilder!",
-        "6": "Hold bogmærker for at redigere eller slette dem!",
-        "7": "Hold SHIFT nede, og tryk på titlen for at kopiere linket med tiden!",
-        "8": "Indstil en brugerdefineret undertekstfarve!",
-        "9": "Hold ` for at se tastaturgenveje!"
-      }
     },
     "segment": {
       "credits": "Kreditter",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Dobbelttryk for at søge",
       "doubleClickToSeekDescription": "Dobbelttryk på venstre eller højre side af afspilleren for at søge 10 sekunder frem eller tilbage.",
       "doubleClickToSeekLabel": "Aktiver dobbelttryk for at søge",
-      "embedOrder": "Omarrangering af indlejringer",
-      "embedOrderDescription": "Træk og slip for at omarrangere indlejringer. Dette vil bestemme den rækkefølge, som indlejringer kontrolleres i for det medie, du prøver at se. <br><br> <strong>(Standardrækkefølgen er bedst for de fleste brugere)</strong>",
-      "embedOrderEnableLabel": "Brugerdefineret indlejringsrækkefølge",
       "keyboardShortcuts": "Tastaturgenveje",
       "keyboardShortcutsDescription": "Tilpas tastaturgenvejene til applikationen. Hold ` for at vise denne hjælp når som helst",
       "keyboardShortcutsLabel": "Tilpas tastaturgenveje",
       "language": "Applikationens sprog",
       "languageDescription": "Sproget gælder for hele applikationen, kun engelsk har fjollede ting 🙁.",
-      "lastSuccessfulSource": "Sidst brugte kilde",
-      "lastSuccessfulSourceDescription": "Prioriter automatisk den kilde, der med succes leverede indhold til den forrige episode. Dette er med til at sikre kontinuitet, når du ser serier.",
-      "lastSuccessfulSourceEnableLabel": "Sidst brugte kilde",
       "lowPerformanceMode": "Lav ydeevne/båndbreddetilstand",
       "lowPerformanceModeDescription": "Optimerer applikationen til langsommere forbindelser og enheder ved at deaktivere båndbredde-tunge funktioner. Denne tilstand reducerer dataforbruget og forbedrer ydeevnen, mens den centrale søge- og urfunktionalitet bevares.",
       "lowPerformanceModeLabel": "Lav ydeevne tilstand",
-      "manualSource": "Manuelt kildevalg",
-      "manualSourceDescription": "Kræv at vælge en kilde før skrabning. Deaktiverer automatisk kildevalg og åbner kildevælgeren, når afspilning startes.",
-      "manualSourceLabel": "Manuelt kildevalg",
       "showLess": "Vis mindre",
       "showMore": "Vis mere",
       "skipCredits": "Spring over slutkreditter",

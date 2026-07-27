@@ -66,7 +66,7 @@ export function AddonManager() {
                 <p className="mt-1 text-xs text-dropdown-text">
                   {t(
                     "addons.manager.subtitle",
-                    "Add an addon manifest URL for torrent and direct streams.",
+                    "Add a manifest URL you choose. The app does not bundle or recommend addons.",
                   )}
                 </p>
               </div>
@@ -117,52 +117,6 @@ export function AddonManager() {
               <p className="mt-2 text-sm font-medium text-red-400">{error}</p>
             ) : null}
 
-            {/* Step Guide Section */}
-            <div className="mt-6 rounded-xl border border-dropdown-border bg-dropdown-contentBackground/40 p-4">
-              <h3 className="mb-2 text-sm font-semibold text-white flex items-center gap-2">
-                <Icon icon={Icons.EXTENSION} className="text-type-link" />
-                <span>{t("addons.guide.title", "Explore more addons:")}</span>
-              </h3>
-              <ol className="list-decimal space-y-2.5 pl-4 text-xs leading-relaxed text-dropdown-text">
-                <li>
-                  {t("addons.guide.step1Prefix", "Visit ")}
-                  <a
-                    href="https://stremio-addons.net"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-semibold text-type-link hover:underline"
-                  >
-                    https://stremio-addons.net
-                  </a>
-                  {t(
-                    "addons.guide.step1Suffix",
-                    " or your trusted community addon catalog.",
-                  )}
-                </li>
-                <li>
-                  {t(
-                    "addons.guide.step2Prefix",
-                    "Copy the manifest link (e.g. ",
-                  )}
-                  <code className="rounded bg-dropdown-contentBackground px-1 py-0.5 text-white/90">
-                    https://addon.example.com/manifest.json
-                  </code>
-                  {t("addons.guide.step2Suffix", ").")}
-                </li>
-                <li>
-                  {t(
-                    "addons.guide.step3Prefix",
-                    "Paste into the box above, then press ",
-                  )}
-                  <span className="font-semibold text-white">
-                    {t("addons.guide.step3AddName", "Add")}
-                  </span>
-                  {t("addons.guide.step3Suffix", ".")}
-                </li>
-              </ol>
-            </div>
-
-            {/* Navigation Button to Manage Addons Page */}
             <div className="mt-5 flex justify-end">
               <button
                 type="button"

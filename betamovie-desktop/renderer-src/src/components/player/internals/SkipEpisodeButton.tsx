@@ -5,7 +5,6 @@ import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
 
 interface SkipEpisodeButtonProps {
@@ -20,19 +19,12 @@ export function SkipEpisodeButton(props: SkipEpisodeButtonProps) {
     (s) => s.setShouldStartFromBeginning,
   );
   const updateItem = useProgressStore((s) => s.updateItem);
-  const sourceId = usePlayerStore((s) => s.sourceId);
-  const setLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setLastSuccessfulSource,
-  );
   const nextEp = meta?.episodes?.find(
     (v) => v.number === (meta?.episode?.number ?? 0) + 1,
   );
 
   const loadNextEpisode = useCallback(() => {
     if (!meta || !nextEp) return;
-    if (sourceId) {
-      setLastSuccessfulSource(sourceId);
-    }
     const metaCopy = { ...meta };
     metaCopy.episode = nextEp;
     setShouldStartFromBeginning(true);
@@ -50,8 +42,6 @@ export function SkipEpisodeButton(props: SkipEpisodeButtonProps) {
     props,
     setShouldStartFromBeginning,
     updateItem,
-    sourceId,
-    setLastSuccessfulSource,
   ]);
 
   // Don't show button if not in control, not a show, or no next episode

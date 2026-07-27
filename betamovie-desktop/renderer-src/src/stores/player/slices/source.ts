@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { SegmentQualityDebugInfo } from "@/components/player/display/displayInterface";
-import { ScrapeMedia } from "@/lib/providers";
 import { MakeSlice } from "@/stores/player/slices/types";
 import {
   SourceQuality,
@@ -17,9 +16,8 @@ import { ValuesOf } from "@/utils/typeguard";
 export const playerStatus = {
   IDLE: "idle",
   RESUME: "resume",
-  SCRAPING: "scraping",
+  SOURCE_SELECTION: "sourceSelection",
   PLAYING: "playing",
-  SCRAPE_NOT_FOUND: "scrapeNotFound",
   PLAYBACK_ERROR: "playbackError",
 } as const;
 
@@ -122,9 +120,6 @@ export interface SourceSlice {
     translateTask: TranslateTask | null;
   };
   meta: PlayerMeta | null;
-  failedSourcesPerMedia: Record<string, string[]>; // mediaKey -> array of failed sourceIds
-  failedEmbedsPerMedia: Record<string, Record<string, string[]>>; // mediaKey -> sourceId -> array of failed embedIds
-  resumeFromSourceId: string | null;
   setStatus(status: PlayerStatus): void;
   setSource(
     stream: SourceSliceSource,
@@ -147,11 +142,6 @@ export interface SourceSlice {
     targetLanguage: string,
   ): Promise<void>;
   clearTranslateTask(): void;
-  addFailedSource(sourceId: string): void;
-  addFailedEmbed(sourceId: string, embedId: string): void;
-  clearFailedSources(mediaKey?: string): void;
-  clearFailedEmbeds(mediaKey?: string): void;
-  setResumeFromSourceId(sourceId: string | null): void;
   reset(): void;
 }
 
@@ -174,29 +164,6 @@ export function getMediaKey(meta: PlayerMeta | null): string | null {
 
   // Fallback if show data is incomplete
   return `${meta.type}-${meta.tmdbId}`;
-}
-
-export function metaToScrapeMedia(meta: PlayerMeta): ScrapeMedia {
-  if (meta.type === "show") {
-    if (!meta.episode || !meta.season) throw new Error("missing show data");
-    return {
-      title: meta.title,
-      releaseYear: meta.releaseYear,
-      tmdbId: meta.tmdbId,
-      type: "show",
-      imdbId: meta.imdbId,
-      episode: meta.episode,
-      season: meta.season,
-    };
-  }
-
-  return {
-    title: meta.title,
-    releaseYear: meta.releaseYear,
-    tmdbId: meta.tmdbId,
-    type: "movie",
-    imdbId: meta.imdbId,
-  };
 }
 
 function getCaptionIdentityKey(caption: CaptionListItem): string {
@@ -312,9 +279,6 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   currentAudioTrack: null,
   status: playerStatus.IDLE,
   meta: null,
-  failedSourcesPerMedia: {},
-  failedEmbedsPerMedia: {},
-  resumeFromSourceId: null,
   caption: {
     selected: null,
     secondary: null,
@@ -352,16 +316,6 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (newStatus) s.status = newStatus;
       if (newMediaKey !== oldMediaKey) {
         s.externalSubtitleMediaKey = null;
-      }
-
-      // Clear failed sources/embeds for the new media when media changes
-      // Since we're doing per-episode tracking, we clear whenever media key changes
-      // Only clear if we're actually switching to different media (not just setting meta for the first time)
-      if (newMediaKey && oldMediaKey && oldMediaKey !== newMediaKey) {
-        // Clear failed sources/embeds for the new media (if any exist from previous session)
-        // This ensures a fresh start for each media/episode
-        delete s.failedSourcesPerMedia[newMediaKey];
-        delete s.failedEmbedsPerMedia[newMediaKey];
       }
     });
   },
@@ -522,70 +476,6 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.caption.asTrack = asTrack;
     });
   },
-  addFailedSource(sourceId: string) {
-    const store = get();
-    const mediaKey = getMediaKey(store.meta);
-    if (!mediaKey) return; // Skip tracking if no media is set
-
-    set((s) => {
-      if (!s.failedSourcesPerMedia[mediaKey]) {
-        s.failedSourcesPerMedia[mediaKey] = [];
-      }
-      if (!s.failedSourcesPerMedia[mediaKey].includes(sourceId)) {
-        s.failedSourcesPerMedia[mediaKey] = [
-          ...s.failedSourcesPerMedia[mediaKey],
-          sourceId,
-        ];
-      }
-    });
-  },
-  addFailedEmbed(sourceId: string, embedId: string) {
-    const store = get();
-    const mediaKey = getMediaKey(store.meta);
-    if (!mediaKey) return; // Skip tracking if no media is set
-
-    set((s) => {
-      if (!s.failedEmbedsPerMedia[mediaKey]) {
-        s.failedEmbedsPerMedia[mediaKey] = {};
-      }
-      if (!s.failedEmbedsPerMedia[mediaKey][sourceId]) {
-        s.failedEmbedsPerMedia[mediaKey][sourceId] = [];
-      }
-      if (!s.failedEmbedsPerMedia[mediaKey][sourceId].includes(embedId)) {
-        s.failedEmbedsPerMedia[mediaKey][sourceId] = [
-          ...s.failedEmbedsPerMedia[mediaKey][sourceId],
-          embedId,
-        ];
-      }
-    });
-  },
-  clearFailedSources(mediaKey?: string) {
-    set((s) => {
-      if (mediaKey) {
-        // Clear for specific media
-        delete s.failedSourcesPerMedia[mediaKey];
-      } else {
-        // Clear all
-        s.failedSourcesPerMedia = {};
-      }
-    });
-  },
-  clearFailedEmbeds(mediaKey?: string) {
-    set((s) => {
-      if (mediaKey) {
-        // Clear for specific media
-        delete s.failedEmbedsPerMedia[mediaKey];
-      } else {
-        // Clear all
-        s.failedEmbedsPerMedia = {};
-      }
-    });
-  },
-  setResumeFromSourceId(sourceId: string | null) {
-    set((s) => {
-      s.resumeFromSourceId = sourceId;
-    });
-  },
   reset() {
     get().clearSkipSegments?.();
     set((s) => {
@@ -607,9 +497,6 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.currentAudioTrack = null;
       s.status = playerStatus.IDLE;
       s.meta = null;
-      s.failedSourcesPerMedia = {};
-      s.failedEmbedsPerMedia = {};
-      s.resumeFromSourceId = null;
       s.mediaPlaying.isPlaying = false;
       s.mediaPlaying.isPaused = true;
       s.mediaPlaying.isLoading = false;

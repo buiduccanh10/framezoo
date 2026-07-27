@@ -21,7 +21,6 @@ import {
 } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import type { SourceSliceSource } from "@/stores/player/utils/qualities";
-import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import {
   getSavedProgressItem,
@@ -46,9 +45,6 @@ export function RealPlayerView() {
   const setPlayerStoreMeta = usePlayerStore((s) => s.setMeta);
   const { playerMeta, setPlayerMeta } = usePlayerMeta();
   const backUrl = useLastNonPlayerLink();
-  const setLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setLastSuccessfulSource,
-  );
   const router = useOverlayRouter("settings");
   const openedWatchPartyRef = useRef<boolean>(false);
   const progressItems = useProgressStore((s) => s.items);
@@ -58,13 +54,6 @@ export function RealPlayerView() {
   const preloadedMeta = (
     location.state as PlayerNavigationState | null | undefined
   )?.playerMeta;
-
-  // Reset last successful source when leaving the player
-  useEffect(() => {
-    return () => {
-      setLastSuccessfulSource(null);
-    };
-  }, [setLastSuccessfulSource]);
 
   const paramsData = JSON.stringify({
     media: params.media,
@@ -205,7 +194,7 @@ export function RealPlayerView() {
       preloadedMeta,
       shouldShowResumeScreen(preloadedMeta)
         ? playerStatus.RESUME
-        : playerStatus.SCRAPING,
+        : playerStatus.SOURCE_SELECTION,
     );
   }, [preloadedMeta, setPlayerStoreMeta, shouldShowResumeScreen]);
 
@@ -220,11 +209,11 @@ export function RealPlayerView() {
   );
 
   const handleResume = useCallback(() => {
-    setStatus(playerStatus.SCRAPING);
+    setStatus(playerStatus.SOURCE_SELECTION);
   }, [setStatus]);
 
   const handleRestart = useCallback(() => {
-    setStatus(playerStatus.SCRAPING);
+    setStatus(playerStatus.SOURCE_SELECTION);
   }, [setStatus]);
 
   return (
@@ -244,7 +233,7 @@ export function RealPlayerView() {
           onMetaChange={metaChange}
         />
       ) : null}
-      {(status === playerStatus.SCRAPING ||
+      {(status === playerStatus.SOURCE_SELECTION ||
         status === playerStatus.PLAYBACK_ERROR) &&
       playerMeta ? (
         <SourceSelectPart

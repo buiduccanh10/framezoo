@@ -386,26 +386,8 @@ export function MigrationUploadPage() {
             uploadedData.settings.enableSkipCredits,
           );
         }
-        if (uploadedData.settings.lastSuccessfulSource !== undefined) {
-          preferencesStore.setLastSuccessfulSource(
-            uploadedData.settings.lastSuccessfulSource,
-          );
-        }
-        if (uploadedData.settings.embedOrder !== undefined) {
-          preferencesStore.setEmbedOrder(uploadedData.settings.embedOrder);
-        }
-        if (uploadedData.settings.enableEmbedOrder !== undefined) {
-          preferencesStore.setEnableEmbedOrder(
-            uploadedData.settings.enableEmbedOrder,
-          );
-        }
         if (uploadedData.settings.proxyTmdb !== undefined) {
           preferencesStore.setProxyTmdb(uploadedData.settings.proxyTmdb);
-        }
-        if (uploadedData.settings.manualSourceSelection !== undefined) {
-          preferencesStore.setManualSourceSelection(
-            uploadedData.settings.manualSourceSelection,
-          );
         }
         if (uploadedData.settings.enableDoubleClickToSeek !== undefined) {
           preferencesStore.setEnableDoubleClickToSeek(

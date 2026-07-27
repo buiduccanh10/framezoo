@@ -1,18 +1,11 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { getCachedMetadata } from "@/backend/helpers/providerApi";
-import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Toggle } from "@/components/buttons/Toggle";
 import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
-import {
-  formatKkphimSourceName,
-  getOpenMovieVariantLabelFromStreamId,
-} from "@/components/player/utils/openMovieVariant";
 import { useInstalledAddons } from "@/desktop/addons/store";
-import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { qualityToString } from "@/stores/player/utils/qualities";
@@ -21,8 +14,6 @@ import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 export function SettingsMenu({ id }: { id: string }) {
   const { t } = useTranslation();
-  useProviderMetadataVersion();
-  const isDesktop = useIsDesktopApp();
   const addons = useInstalledAddons();
   const router = useOverlayRouter(id);
   const currentQuality = usePlayerStore((s) => s.currentQuality);
@@ -35,10 +26,6 @@ export function SettingsMenu({ id }: { id: string }) {
   );
   const subtitlesEnabled = useSubtitleStore((s) => s.enabled);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
-  const currentEmbedId = usePlayerStore(
-    (s) => (s as any).embedId as string | null,
-  );
-  const activeStreamId = usePlayerStore((s) => s.source?.id);
   const addonSourceName = useMemo(() => {
     if (!currentSourceId) return "Addon streams";
     return (
@@ -47,30 +34,7 @@ export function SettingsMenu({ id }: { id: string }) {
       )?.manifest.name ?? "Addon streams"
     );
   }, [addons, currentSourceId]);
-  const sourceName = currentSourceId
-    ? isDesktop
-      ? addonSourceName
-      : (getCachedMetadata().find((src) => src.id === currentSourceId)?.name ??
-        "...")
-    : "...";
-  const kkphimVariantLabel = useMemo(() => {
-    if (currentSourceId !== "kkphim") {
-      return null;
-    }
-
-    return getOpenMovieVariantLabelFromStreamId(activeStreamId);
-  }, [activeStreamId, currentSourceId]);
-  const sourceDisplayName = useMemo(() => {
-    if (currentSourceId !== "kkphim") {
-      return sourceName;
-    }
-
-    return formatKkphimSourceName(sourceName, kkphimVariantLabel);
-  }, [currentSourceId, kkphimVariantLabel, sourceName]);
-  const embedName =
-    isDesktop || currentSourceId === "kkphim" || !currentEmbedId
-      ? undefined
-      : getCachedMetadata().find((s) => s.id === currentEmbedId)?.name;
+  const sourceName = currentSourceId ? addonSourceName : "...";
   const { toggleLastUsed } = useCaptions();
 
   const selectedLanguagePretty = selectedCaptionLanguage
@@ -107,15 +71,10 @@ export function SettingsMenu({ id }: { id: string }) {
         <Menu.ChevronLink
           box
           onClick={() => router.navigate("/source")}
-          rightText={kkphimVariantLabel ?? sourceDisplayName}
+          rightText={sourceName}
         >
           {t("player.menus.settings.sourceItem")}
-          <span className="text-type-secondary text-sm">
-            {sourceDisplayName}
-          </span>
-          {embedName && (
-            <span className="text-type-secondary text-xs">{embedName}</span>
-          )}
+          <span className="text-type-secondary text-sm">{sourceName}</span>
         </Menu.ChevronLink>
         <Menu.ChevronLink
           box

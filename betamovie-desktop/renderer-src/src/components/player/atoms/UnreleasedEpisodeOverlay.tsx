@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Icon, Icons } from "@/components/Icon";
 import { Flare } from "@/components/utils/Flare";
 import { Transition } from "@/components/utils/Transition";
+import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 import { hasAired } from "../utils/aired";
@@ -13,7 +14,7 @@ export function UnreleasedEpisodeOverlay() {
   const status = usePlayerStore((s) => s.status);
 
   if (
-    status !== "scraping" ||
+    status !== playerStatus.SOURCE_SELECTION ||
     !meta?.episode?.air_date ||
     hasAired(meta.episode.air_date)
   ) {

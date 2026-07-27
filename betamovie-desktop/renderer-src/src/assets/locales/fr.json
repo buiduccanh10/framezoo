@@ -6,16 +6,6 @@
     "copy": "Copier"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Visite",
-      "step1Suffix": "ou votre référentiel de modules complémentaires compatible Addon de confiance.",
-      "step2Prefix": "Copiez le lien du manifeste (par ex.",
-      "step2Suffix": ").",
-      "step3AddName": "Ajouter",
-      "step3Prefix": "Collez dans la case ci-dessus, puis appuyez sur",
-      "step3Suffix": ".",
-      "title": "Explorez plus de modules complémentaires :"
-    },
     "manager": {
       "add": "Ajouter",
       "adding": "Ajout...",
@@ -23,39 +13,28 @@
       "ariaManage": "Gérer les modules complémentaires",
       "errorFallback": "Impossible d'installer cet addon.",
       "manageListButton": "Gérer la liste des modules complémentaires",
-      "subtitle": "Ajoutez une URL manifeste Addon pour les flux torrent et directs.",
+      "subtitle": "Facultatif. Ajoutez une URL manifeste de votre choix. Cette application ne regroupe pas, ne recommande pas et n'héberge pas de modules complémentaires.",
       "title": "Modules complémentaires de bureau"
     },
     "page": {
       "addAddonButton": "Ajouter un module complémentaire",
+      "description": "Les modules complémentaires sont facultatifs. Cette application ne regroupe, ne recommande ni n'héberge aucun module complémentaire.",
       "disabled": "Désactivé",
       "emptyInstalled": "Aucun module complémentaire n'est encore installé dans le système.",
       "enabled": "Activé",
-      "guideHeading": "Découvrez et installez des modules complémentaires",
-      "guideIntro": "Les modules complémentaires vous aident à parcourir des catalogues et des flux multimédias adaptés à vos préférences personnelles en matière de divertissement :",
       "installError": "Impossible d'installer cet addon.",
       "installedHeading": "Modules complémentaires installés",
       "processing": "Traitement...",
       "removeAddon": "Supprimer ce module complémentaire",
-      "step1DescPrefix": "Visitez le catalogue de la communauté sur",
-      "step1DescSuffix": "ou des fournisseurs de modules complémentaires standard similaires.",
-      "step1Title": "Explorer le catalogue de modules complémentaires",
-      "step2DescPrefix": "Sélectionnez le module complémentaire souhaité, personnalisez les options et copiez son URL manifeste (exemple standard :",
-      "step2DescSuffix": ").",
-      "step2Title": "Copier le lien du manifeste",
-      "step3AddName": "Ajouter",
-      "step3DescPrefix": "Collez le chemin du manifeste dans le champ ci-dessous et appuyez sur",
-      "step3DescSuffix": ". L'addon s'activera immédiatement pour rechercher des sources multimédias.",
-      "step3Title": "Ajouter à la candidature",
       "title": "Gestionnaire de modules complémentaires"
     },
     "player": {
       "chooseAddon": "Choisissez un module complémentaire",
-      "emptyExplanation": "Aucun module complémentaire de flux n'est encore installé ou activé. Visitez la page Addons Manager pour les guides de configuration et la découverte du catalogue multimédia.",
+      "emptyExplanation": "Aucun module complémentaire n'est installé ou activé. Ajoutez une URL manifeste que vous choisissez dans Addons.",
       "emptyTitle": "Aucun module complémentaire de flux disponible",
       "loadingStreams": "Chargement des flux...",
       "manageAddonsButton": "Gérer la liste des modules complémentaires",
-      "noAddonStreams": "Aucun flux complémentaire n'a été renvoyé pour ce titre.",
+      "noAddonStreams": "Aucun flux n'a été renvoyé par cet addon.",
       "noTorrentStreams": "Aucun flux torrent renvoyé pour cet addon.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Avertissement",
-      "disclaimerText": "AlphaFlix ne stocke pas de fichiers, mais propose des liens vers des services externes. Les problèmes juridiques doivent être traités avec les fournisseurs et les hébergeurs de fichiers. Les fichiers multimédias diffusés par les fournisseurs de vidéos ne sont pas couverts par AlphaFlix."
+      "disclaimerText": "AlphaFlix fournit un lecteur de flux sécurisé, moderne et transparent avec une interface facile à utiliser et une lecture de haute qualité sur les appareils pris en charge. Il n'héberge pas de fichiers multimédias, n'exploite pas de catalogue source et ne recommande pas de modules complémentaires spécifiques. Les modules complémentaires facultatifs sont configurés par les utilisateurs, qui sont responsables de l'utilisation de sources licites."
     },
     "links": {
       "fluxer": "Fluxeur",
       "funding": "Soutenez-nous",
       "github": "GitHub"
     },
-    "tagline": "Regardez vos émissions et films préférés gratuitement et sans aucune pubs ! "
+    "tagline": "Un lecteur de flux sécurisé et moderne pour une expérience visuelle fluide et de haute qualité."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Par défault"
       },
-      "downloads": {
-        "button": "Essayer de télécharger",
-        "copyHlsPlaylist": "Copier le lien de la playlist HLS",
-        "disclaimer": "Les téléchargements sont effectués directement par le fournisseur. AlphaFlix n'a aucun contrôle sur la manière dont les téléchargements sont effectués.",
-        "downloadSubtitle": "Télécharger les sous-titres",
-        "downloadVideo": "Télécharger la vidéo",
-        "hlsDisclaimer": "Les téléchargements sont effectués directement auprès du fournisseur. AlphaFlix n'a aucun contrôle sur la façon dont les téléchargements sont fournis.<br /><br />Veuillez noter que vous téléchargez une liste de lecture HLS, <bold>il n'est pas recommandé de la télécharger si vous n'êtes pas familier avec les formats de streaming avancés</bold>. Essayez différentes sources pour différents formats.",
-        "hlsDownloader": "Ou rendez-vous sur le site <0>HLS Downloader Website</0> et collez l’URL de la playlist ci-dessous.",
-        "onAndroid": {
-          "1": "Pour télécharger sur Android, cliquez sur le bouton de téléchargement, puis, sur la nouvelle page, <bold>tapez et maintenez</bold> sur la vidéo, et sélectionnez <bold>enregistrer</bold>.",
-          "shortTitle": "Télécharger / Android",
-          "title": "Téléchargement sur Android"
-        },
-        "onIos": {
-          "1": "Pour télécharger sur iOS, cliquez sur le bouton de téléchargement, puis, sur la nouvelle page, cliquez sur <bold><ios_share /></bold>, et <bold>Enregistrer dans les fichiers <ios_files /></bold>.",
-          "shortTitle": "Télécharger / iOS",
-          "title": "Télécharger sur iOS"
-        },
-        "onPc": {
-          "1": "Sur PC, cliquez sur le bouton de téléchargement puis, sur la nouvelle page, faites un clic droit sur la vidéo et sélectionnez <bold>Enregistrer la vidéo sous</bold>",
-          "shortTitle": "Télécharger / PC",
-          "title": "Téléchargement sur PC"
-        },
-        "title": "Télécharger"
-      },
       "episodes": {
         "button": "Épisodes",
         "emptyState": "Cette saison ne contient aucun épisode, revenez plus tard !",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Télécharger",
         "enableSubtitles": "Activer les sous-titres",
         "playbackItem": "Paramètres de lecture",
         "qualityItem": "Qualité",
         "sourceItem": "Sources vidéo",
         "subtitleItem": "Sous-titres"
-      },
-      "sources": {
-        "failed": {
-          "text": "Une erreur s'est produite lors de la recherche de vidéos, veuillez essayer une autre source.",
-          "title": "Échec de la récupération (scrape)"
-        },
-        "findNextSource": "Trouver la source suivante",
-        "maintain": "Maintenir",
-        "noEmbeds": {
-          "text": "Nous n'avons pas trouvé de liens, veuillez essayer une autre source.",
-          "title": "Pas d'intégrations (embeds) trouvées"
-        },
-        "noStream": {
-          "text": "Cette source n'a pas de flux pour ce film ou cette série.",
-          "title": "Pas de flux"
-        },
-        "title": "Sources",
-        "unknownOption": "Inconnu"
       },
       "subtitles": {
         "autoSelectChoice": "Sélection automatique",
@@ -953,37 +888,6 @@
       "restart": "Redémarrage",
       "resume": "CV",
       "title": "Continuer à regarder ?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Extension désactivée",
-        "enableExtension": "Activer l'extension",
-        "homeButton": "Revenir à l'accueil",
-        "text": "Vous avez installé l'extension AlphaFlix. Pour commencer à l'utiliser, vous devez activer l'extension pour ce site.",
-        "title": "Veuillez activer l'extension"
-      },
-      "items": {
-        "pending": "Recherche de vidéos..."
-      },
-      "notFound": {
-        "badge": "Non trouvé",
-        "detailsButton": "Afficher les détails",
-        "discoverButton": "En savoir plus",
-        "homeButton": "Revenir à l'accueil",
-        "text": "Nous avons cherché parmi nos sources et n'avons pas trouvé les médias que vous recherchez ! Nous n'hébergeons pas les médias et n'avons aucun contrôle sur ce qui est disponible. Veuillez cliquer sur \"Afficher les détails\" ci-dessous pour plus d'informations.",
-        "title": "Nous n'avons pas trouvé cela"
-      },
-      "tips": {
-        "1": "Appuyez sur l'icône d'engrenage pour changer de source !",
-        "2": "Appuyez sur le titre pour copier le lien !",
-        "3": "Appuyez et maintenez ou maintenez SHIFT pour afficher le bouton grand écran au lieu du plein écran !",
-        "4": "Certaines sources fonctionnent mieux que d’autres !",
-        "5": "Obtenez l'extension pour plus de sources !",
-        "6": "Conservez les signets pour les modifier ou les supprimer !",
-        "7": "Maintenez SHIFT et appuyez sur le titre pour copier le lien avec le temps !",
-        "8": "Personnalisez la couleur des sous-titres !",
-        "9": "Maintenez ` pour afficher les raccourcis clavier !"
-      }
     },
     "segment": {
       "credits": "Crédits",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Appuyez deux fois pour rechercher",
       "doubleClickToSeekDescription": "Appuyez deux fois sur le côté gauche ou droit du lecteur pour rechercher 10 secondes en avant ou en arrière.",
       "doubleClickToSeekLabel": "Activer le double appui pour rechercher",
-      "embedOrder": "Réorganisation des intégrations",
-      "embedOrderDescription": "Faites glisser et déposez pour réorganiser les intégrations. Cela déterminera l'ordre dans lequel les intégrations sont vérifiées pour les médias que vous essayez de regarder. <br><br> <strong>(L'ordre par défaut convient le mieux à la plupart des utilisateurs)</strong>",
-      "embedOrderEnableLabel": "Ordre d'intégration personnalisé",
       "keyboardShortcuts": "Raccourcis clavier",
       "keyboardShortcutsDescription": "Personnalisez les raccourcis clavier de l'application. Maintenez ` pour afficher cette aide à tout moment",
       "keyboardShortcutsLabel": "Personnaliser les raccourcis clavier",
       "language": "Langage de l'application",
       "languageDescription": "Langue appliquée à l’ensemble de l’application.",
-      "lastSuccessfulSource": "Dernière source utilisée",
-      "lastSuccessfulSourceDescription": "Priorisez automatiquement la source qui a fourni avec succès le contenu de l'épisode précédent. Cela permet d’assurer la continuité lorsque vous regardez des séries.",
-      "lastSuccessfulSourceEnableLabel": "Dernière source utilisée",
       "lowPerformanceMode": "Mode faible performance/bande passante",
       "lowPerformanceModeDescription": "Optimise l'application pour les connexions et les appareils plus lents en désactivant les fonctionnalités gourmandes en bande passante. Ce mode réduit l’utilisation des données et améliore les performances tout en conservant intactes les fonctionnalités principales de recherche et de surveillance.",
       "lowPerformanceModeLabel": "Mode basse performance",
-      "manualSource": "Sélection manuelle des sources",
-      "manualSourceDescription": "Exiger de choisir une source avant de gratter. Désactive la sélection automatique de la source et ouvre le sélecteur de source au démarrage de la lecture.",
-      "manualSourceLabel": "Sélection manuelle des sources",
       "showLess": "Afficher moins",
       "showMore": "Afficher plus",
       "skipCredits": "Passer le générique de fin",

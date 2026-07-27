@@ -189,9 +189,9 @@ export function SourceSelectPart(props: {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const addons = useInstalledAddons();
-  const currentSourceId = usePlayerStore((state) => state.sourceId);
   const progressItems = useProgressStore((state) => state.items);
   const { playMedia } = usePlayer();
+  const currentSourceId = usePlayerStore((state) => state.sourceId);
   const [addonStreams, setAddonStreams] = React.useState<AddonStream[]>([]);
   const [addonLoadErrors, setAddonLoadErrors] = React.useState<
     AddonStreamLoadError[]
@@ -449,7 +449,7 @@ export function SourceSelectPart(props: {
                   <p className="max-w-md text-sm leading-relaxed text-video-context-type-main text-opacity-80">
                     {t(
                       "addons.player.emptyExplanation",
-                      "No stream addon is installed or activated yet. Visit the Addons Manager page for setup guides and media catalog discovery.",
+                      "No stream addon is installed or enabled. Add a manifest URL you choose in the Addons Manager.",
                     )}
                   </p>
                   <button

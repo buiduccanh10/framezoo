@@ -6,16 +6,6 @@
     "copy": "Kopyala"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Ziyaret etmek",
-      "step1Suffix": "veya güvenilir Addon uyumlu eklenti deponuz.",
-      "step2Prefix": "Bildirim bağlantısını kopyalayın (ör.",
-      "step2Suffix": ").",
-      "step3AddName": "Eklemek",
-      "step3Prefix": "Yukarıdaki kutuya yapıştırın ve ardından tuşuna basın.",
-      "step3Suffix": ".",
-      "title": "Daha fazla eklenti keşfedin:"
-    },
     "manager": {
       "add": "Eklemek",
       "adding": "Ekleniyor...",
@@ -23,39 +13,28 @@
       "ariaManage": "Eklentileri yönet",
       "errorFallback": "Bu eklenti yüklenemiyor.",
       "manageListButton": "Eklenti listesini yönet",
-      "subtitle": "Torrent ve doğrudan akışlar için bir Addon bildirim URL'si ekleyin.",
+      "subtitle": "İsteğe bağlı. Seçtiğiniz bir bildirim URL'sini ekleyin. Bu uygulama eklentileri paketlemez, önermez veya barındırmaz.",
       "title": "Masaüstü Eklentileri"
     },
     "page": {
       "addAddonButton": "Eklenti Ekle",
+      "description": "Eklentiler isteğe bağlıdır. Bu uygulama herhangi bir eklentiyi paketlemez, önermez veya barındırmaz.",
       "disabled": "Engelli",
       "emptyInstalled": "Sistemde henüz eklenti yüklü değil.",
       "enabled": "Etkinleştirilmiş",
-      "guideHeading": "Eklentileri Keşfedin ve Yükleyin",
-      "guideIntro": "Eklentiler, kişisel eğlence tercihlerinize göre uyarlanmış medya kataloglarına ve akışlara göz atmanıza yardımcı olur:",
       "installError": "Bu eklenti yüklenemiyor.",
       "installedHeading": "Yüklü Eklentiler",
       "processing": "İşleme...",
       "removeAddon": "Bu eklentiyi kaldır",
-      "step1DescPrefix": "Topluluk kataloğunu şu adreste ziyaret edin:",
-      "step1DescSuffix": "veya benzer standart eklenti sağlayıcıları.",
-      "step1Title": "Eklenti Kataloğunu Keşfedin",
-      "step2DescPrefix": "İstediğiniz eklentiyi seçin, seçenekleri özelleştirin ve bildirim URL'sini kopyalayın (standart örnek:",
-      "step2DescSuffix": ").",
-      "step2Title": "Bildiri Bağlantısını Kopyala",
-      "step3AddName": "Eklemek",
-      "step3DescPrefix": "Bildirim yolunu aşağıdaki alana yapıştırın ve tuşuna basın.",
-      "step3DescSuffix": ". Eklenti, medya kaynaklarını aramak için hemen etkinleştirilecektir.",
-      "step3Title": "Uygulamaya Ekle",
       "title": "Eklenti Yöneticisi"
     },
     "player": {
       "chooseAddon": "Bir eklenti seçin",
-      "emptyExplanation": "Henüz hiçbir akış eklentisi kurulmamış veya etkinleştirilmemiştir. Kurulum kılavuzları ve medya kataloğu keşfi için Eklenti Yöneticisi sayfasını ziyaret edin.",
+      "emptyExplanation": "Hiçbir eklenti yüklü veya etkin değil. Eklentiler'de seçtiğiniz bir bildirim URL'sini ekleyin.",
       "emptyTitle": "Akış eklentisi yok",
       "loadingStreams": "Akışlar yükleniyor...",
       "manageAddonsButton": "Eklenti Listesini Yönet",
-      "noAddonStreams": "Bu başlık için hiçbir eklenti akışı döndürülmedi.",
+      "noAddonStreams": "Bu eklenti tarafından hiçbir akış döndürülmedi.",
       "noTorrentStreams": "Bu eklenti için torrent akışı döndürülmedi.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Sorumluluk Reddi",
-      "disclaimerText": "AlphaFlix herhangi bir dosya barındırmaz, yalnızca 3. parti hizmetlere bağlantı verir. Yasal meseleler, dosya barındırıcıları ve sağlayıcıları ile görüşülmelidir. AlphaFlix, video sağlayıcıları tarafından gösterilen hiçbir medya dosyasından sorumlu değildir."
+      "disclaimerText": "AlphaFlix, kullanımı kolay bir arayüze ve desteklenen cihazlarda yüksek kaliteli oynatmaya sahip, güvenli, modern ve kusursuz bir yayın oynatıcısı sağlar. Medya dosyalarını barındırmaz, kaynak kataloğu çalıştırmaz veya belirli eklentiler önermez. İsteğe bağlı eklentiler, yasal kaynakların kullanılmasından sorumlu olan kullanıcılar tarafından yapılandırılır."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Bizi destekleyin",
       "github": "GitHub"
     },
-    "tagline": "Bu açık kaynaklı akış uygulamasıyla en sevdiğiniz dizileri ve filmleri izleyin."
+    "tagline": "Sorunsuz, yüksek kaliteli bir izleme deneyimi için güvenli, modern bir yayın oynatıcısı."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Varsayılan"
       },
-      "downloads": {
-        "button": "İndirmeyi dene",
-        "copyHlsPlaylist": "HLS oynatma listesi bağlantısını kopyala",
-        "disclaimer": "İndirme bağlantıları doğrudan sağlayıcının kendisinden alınır. AlphaFlix'in sağlanan indirme bağlantıları üzerinde hiçbir konrolü yoktur.",
-        "downloadSubtitle": "Geçerli altyazıyı indir",
-        "downloadVideo": "Videoyu indir",
-        "hlsDisclaimer": "İndirmeler doğrudan sağlayıcıdan alınır. AlphaFlix, indirmelerin nasıl sağlanacağı üzerinde kontrole sahip değildir.<br /><br />Lütfen bir HLS oynatma listesi indirdiğinizi unutmayın; <bold>ileri seviye bilginiz yoksa indirmeniz önerilmez. akış biçimleri</bold>. Farklı formatlar için farklı kaynakları deneyin.",
-        "hlsDownloader": "Veya <0>hls indirici web sitesine</0> gidin ve aşağıdan oynatma listesi URL'sini yapıştırın.",
-        "onAndroid": {
-          "1": "Android'e indirmek için önce indir butonuna basın, sonra açılan yeni sayfada video üzerine <bold>basılı tutun</bold>, ardından <bold>Videoyu indir</bold> seçeneğini seçin.",
-          "shortTitle": "İndir / Android",
-          "title": "Android'e indirme"
-        },
-        "onIos": {
-          "1": "iOS'a indirmek için öncelikle indir butonuna basın, sonra açılan yeni sayfada <bold><ios_share /></bold>'e basın, hemen ardından <bold>Dosyalara Kaydet <ios_files /></bold>'e basın.",
-          "shortTitle": "İndir / iOS",
-          "title": "iOS'a indirme"
-        },
-        "onPc": {
-          "1": "Bilgisayarda önce indir butonuna tıklayın, sonra ise açılan yeni sayfada videoya sağ tıklayın ve <bold>Videoyu farklı kaydet </bold> seçeneğini seçin",
-          "shortTitle": "İndir / Bilgisayar",
-          "title": "Bilgisayara indirme"
-        },
-        "title": "İndir"
-      },
       "episodes": {
         "button": "Bölümler",
         "emptyState": "Bu sezonda hiç bölüm yok, sonra tekrar deneyin!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Ses",
-        "downloadItem": "İndir",
         "enableSubtitles": "Altyazıları Etkinleştir",
         "playbackItem": "Oynatma ayarları",
         "qualityItem": "Kalite",
         "sourceItem": "Video kaynakları",
         "subtitleItem": "Altyazı ayarları"
-      },
-      "sources": {
-        "failed": {
-          "text": "Video bulunmaya çalışılırken sorun oluştu, lütfen farklı bir kaynak deneyin.",
-          "title": "Video alınırken sorun oluştu"
-        },
-        "findNextSource": "Sonraki kaynağı bul",
-        "maintain": "Sürdürmek",
-        "noEmbeds": {
-          "text": "Herhangi bir video bulamadık, lütfen farklı bir kaynak deneyin.",
-          "title": "Video bulunamadı"
-        },
-        "noStream": {
-          "text": "Bu kaynakta bu film ya da dizi için akış bulunmamaktadır.",
-          "title": "Akış yok"
-        },
-        "title": "Kaynaklar",
-        "unknownOption": "Bilinmeyen"
       },
       "subtitles": {
         "autoSelectChoice": "Otomatik seç",
@@ -953,37 +888,6 @@
       "restart": "Tekrar başlat",
       "resume": "Sürdürmek",
       "title": "İzlemeye devam etmek istiyor musunuz?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Eklenti devre dışı",
-        "enableExtension": "Eklentiyi etkinleştir",
-        "homeButton": "Eve git",
-        "text": "AlphaFlix uzantısını kurdunuz. Kullanmaya başlamak için, uzantıyı bu site için etkinleştirmeniz gerekiyor.",
-        "title": "Lütfen eklentiyi etkinleştirin"
-      },
-      "items": {
-        "pending": "Videolar aranıyor..."
-      },
-      "notFound": {
-        "badge": "Bulunamadı",
-        "detailsButton": "Ayrıntıları göster",
-        "discoverButton": "Daha fazlasını keşfedin",
-        "homeButton": "Ana sayfaya git",
-        "text": "Sağlayıcılarımız arasında arama yaptık ve aradığınız medyayı bulamadık! Medyaları barındırmıyoruz ve mevcut olanlar üzerinde hiçbir kontrolümüz yok. Daha fazla ayrıntı için lütfen aşağıdaki 'Ayrıntıları göster' seçeneğine tıklayın.",
-        "title": "Bunu bulamadık"
-      },
-      "tips": {
-        "1": "Kaynakları değiştirmek için dişli simgesine dokunun!",
-        "2": "Bağlantıyı kopyalamak için başlığa dokunun!",
-        "3": "Tam ekran yerine geniş ekran düğmesini göstermek için SHIFT'e dokunup basılı tutun veya basılı tutun!",
-        "4": "Bazı kaynaklar diğerlerinden daha iyi çalışır!",
-        "5": "Daha fazla kaynak için uzantıyı edinin!",
-        "6": "Düzenlemek veya silmek için yer imlerini basılı tutun!",
-        "7": "Zaman içeren bağlantıyı kopyalamak için SHIFT'i basılı tutun ve başlığa dokunun!",
-        "8": "Özel bir altyazı rengi ayarlayın!",
-        "9": "Klavye kısayollarını görüntülemek için ` tuşunu basılı tutun!"
-      }
     },
     "segment": {
       "credits": "Kredi",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Aramak için iki kez dokunun",
       "doubleClickToSeekDescription": "10 saniye ileri veya geri gitmek için oynatıcının sol veya sağ tarafına iki kez dokunun.",
       "doubleClickToSeekLabel": "Aramak için iki kez dokunmayı etkinleştirin",
-      "embedOrder": "Yerleştirmeleri yeniden sıralama",
-      "embedOrderDescription": "Yerleştirmeleri yeniden sıralamak için sürükleyip bırakın. Bu, izlemeye çalıştığınız medya için yerleştirmelerin kontrol edilme sırasını belirleyecektir. <br><br> <strong>(Varsayılan sıra çoğu kullanıcı için en iyisidir)</strong>",
-      "embedOrderEnableLabel": "Özel yerleştirme sırası",
       "keyboardShortcuts": "Klavye Kısayolları",
       "keyboardShortcutsDescription": "Uygulama için klavye kısayollarını özelleştirin. Bu yardımı istediğiniz zaman göstermek için ` tuşunu basılı tutun",
       "keyboardShortcutsLabel": "Klavye Kısayollarını Özelleştirin",
       "language": "Uygulama dili",
       "languageDescription": "Uygulamanın tamamı için seçili dil",
-      "lastSuccessfulSource": "Son kullanılan kaynak",
-      "lastSuccessfulSourceDescription": "Önceki bölüm için başarıyla içerik sağlayan kaynağa otomatik olarak öncelik verin. Bu, dizi izlerken sürekliliğin sağlanmasına yardımcı olur.",
-      "lastSuccessfulSourceEnableLabel": "Son kullanılan kaynak",
       "lowPerformanceMode": "Düşük performans/bant genişliği modu",
       "lowPerformanceModeDescription": "Bant genişliği yoğun özellikleri devre dışı bırakarak uygulamayı daha yavaş bağlantılar ve cihazlar için optimize eder. Bu mod, temel arama ve izleme işlevselliğini korurken veri kullanımını azaltır ve performansı artırır.",
       "lowPerformanceModeLabel": "Düşük performans modu",
-      "manualSource": "Manuel kaynak seçimi",
-      "manualSourceDescription": "Kazımadan önce bir kaynak seçmeyi gerektirir. Otomatik kaynak seçimini devre dışı bırakır ve oynatmayı başlatırken kaynak seçiciyi açar.",
-      "manualSourceLabel": "Manuel kaynak seçimi",
       "showLess": "Daha az göster",
       "showMore": "Daha fazlasını göster",
       "skipCredits": "Bitiş Kredilerini Atla",

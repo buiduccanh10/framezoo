@@ -1,4 +1,4 @@
-import { labelToLanguageCode } from "@/lib/providers";
+import { labelToLanguageCode } from "@/lib/language";
 import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
 

@@ -1,4 +1,4 @@
-import { Qualities, Stream } from "@/lib/providers";
+import { Qualities, Stream } from "@/lib/streamTypes";
 import { QualityStore } from "@/stores/quality";
 
 export type SourceQuality = Qualities;

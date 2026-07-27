@@ -66,8 +66,6 @@ export function PreferencesPart(props: {
   setEnableSkipCredits: (v: boolean) => void;
   enableAutoSkipSegments: boolean;
   setEnableAutoSkipSegments: (v: boolean) => void;
-  manualSourceSelection: boolean;
-  setManualSourceSelection: (v: boolean) => void;
   enableDoubleClickToSeek: boolean;
   setEnableDoubleClickToSeek: (v: boolean) => void;
   enableAutoResumeOnPlaybackError: boolean;
@@ -172,21 +170,6 @@ export function PreferencesPart(props: {
         </div>
 
         <div className="space-y-6">
-          <div id="source-order">
-            <PreferenceCard
-              title={t("settings.preferences.manualSource")}
-              description={t("settings.preferences.manualSourceDescription")}
-            >
-              <PreferenceToggleRow
-                enabled={props.manualSourceSelection}
-                label={t("settings.preferences.manualSourceLabel")}
-                onClick={() =>
-                  props.setManualSourceSelection(!props.manualSourceSelection)
-                }
-              />
-            </PreferenceCard>
-          </div>
-
           <PreferenceCard
             title={t("settings.preferences.autoResumeOnPlaybackError")}
             description={t(

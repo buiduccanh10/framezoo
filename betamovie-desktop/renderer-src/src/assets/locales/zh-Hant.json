@@ -6,16 +6,6 @@
     "copy": "複製"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "訪問",
-      "step1Suffix": "或您值得信賴的 Addon 相容外掛程式儲存庫。",
-      "step2Prefix": "複製清單連結（例如",
-      "step2Suffix": ").",
-      "step3AddName": "添加",
-      "step3Prefix": "貼到上面的框中，然後按",
-      "step3Suffix": ".",
-      "title": "探索更多插件："
-    },
     "manager": {
       "add": "添加",
       "adding": "新增...",
@@ -23,39 +13,28 @@
       "ariaManage": "管理插件",
       "errorFallback": "無法安裝此外掛程式。",
       "manageListButton": "管理外掛程式列表",
-      "subtitle": "新增 Torrent 和直接流的 Addon 清單 URL。",
+      "subtitle": "選修的。新增您選擇的清單 URL。此應用程式不捆綁、推薦或託管插件。",
       "title": "桌面插件"
     },
     "page": {
       "addAddonButton": "新增插件",
+      "description": "插件是可選的。此應用程式不捆綁、推薦或託管任何插件。",
       "disabled": "殘障人士",
       "emptyInstalled": "系統中尚未安裝任何插件。",
       "enabled": "啟用",
-      "guideHeading": "發現並安裝插件",
-      "guideIntro": "外掛程式可協助您瀏覽根據您的個人娛樂偏好量身訂製的媒體目錄和串流：",
       "installError": "無法安裝此外掛程式。",
       "installedHeading": "已安裝的插件",
       "processing": "加工...",
       "removeAddon": "刪除這個插件",
-      "step1DescPrefix": "參觀社區目錄：",
-      "step1DescSuffix": "或類似的標準插件提供者。",
-      "step1Title": "探索插件目錄",
-      "step2DescPrefix": "選擇所需的插件，自訂選項，然後複製其清單 URL（標準範例：",
-      "step2DescSuffix": ").",
-      "step2Title": "複製清單連結",
-      "step3AddName": "添加",
-      "step3DescPrefix": "將清單路徑貼到下面的欄位中，然後按",
-      "step3DescSuffix": "。該插件將立即啟動以搜尋媒體來源。",
-      "step3Title": "添加到應用程式",
       "title": "外掛程式管理器"
     },
     "player": {
       "chooseAddon": "選擇一個插件",
-      "emptyExplanation": "尚未安裝或啟用任何串流插件。造訪外掛程式管理器頁面以取得設定指南和媒體目錄發現。",
+      "emptyExplanation": "未安裝或啟用任何插件。新增您在 Addons 中選擇的清單 URL。",
       "emptyTitle": "沒有可用的串流插件",
       "loadingStreams": "正在加載流...",
       "manageAddonsButton": "管理外掛程式列表",
-      "noAddonStreams": "沒有為此標題傳回任何插件流。",
+      "noAddonStreams": "此插件沒有返回任何串流。",
       "noTorrentStreams": "此插件沒有傳回種子流。",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "免責聲明",
-      "disclaimerText": "AlphaFlix 不託管任何文件，僅連結至第三方服務。法律問題應由文件託管者和內容提供者解決。 AlphaFlix 對影片提供者顯示的任何媒體檔案不承擔任何責任。"
+      "disclaimerText": "AlphaFlix provides a secure, modern, and seamless stream player with an easy-to-use interface and high-quality playback across supported devices.它不託管媒體文件、操作源目錄或推薦特定的插件。可選插件由使用者配置，使用者負責使用合法來源。"
     },
     "links": {
       "fluxer": "助焊劑",
       "funding": "支持我們",
       "github": "GitHub"
     },
-    "tagline": "使用這個開源串流媒體應用程式觀看您最喜歡的節目和電影。"
+    "tagline": "安全、現代的串流媒體播放器，可提供無縫、高品質的觀看體驗。"
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "預設"
       },
-      "downloads": {
-        "button": "嘗試下載",
-        "copyHlsPlaylist": "複製 HLS 播放清單鏈接",
-        "disclaimer": "視頻直接從供應商處獲取。AlphaFlix 無法控制下載的提供方式。",
-        "downloadSubtitle": "下載當前字幕",
-        "downloadVideo": "下載視頻",
-        "hlsDisclaimer": "下載直接從供應商處獲取。AlphaFlix 無法控制下載的提供方式。<br /><br /> 請注意，您正在下載 HLS 播放清單， <bold>如果您不熟悉高級流媒體格式，則不建議下載 </bold> 。嘗試使用不同格式的不同來源。",
-        "hlsDownloader": "或者，前往 <0>hls 下載程式網站</0> 並貼上下面的播放清單 URL。",
-        "onAndroid": {
-          "1": "要在 Android 上下載，請按下下載按鈕，然後在新頁面上<bold>點擊並按住 </bold>視頻，然後選擇 <bold>保存</bold>。",
-          "shortTitle": "下載 / Android",
-          "title": "在Android上下載"
-        },
-        "onIos": {
-          "1": "要在 iOS 上下載，請按下下載按鈕，然後在新頁面上，按下 <bold><ios_share /> </bold>然後<bold>保存到檔案 <ios_files /></bold> 。",
-          "shortTitle": "下載 / iOS",
-          "title": "正在 iOS 上下载"
-        },
-        "onPc": {
-          "1": "在PC上，按下下載按鈕，然後在新頁面上右鍵按下視頻並選擇 <bold>將視頻另存為</bold>",
-          "shortTitle": "下載 / PC",
-          "title": "正在PC 上下载"
-        },
-        "title": "下載"
-      },
       "episodes": {
         "button": "集數",
         "emptyState": "該季暫無集數，請稍後再來！",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "音頻",
-        "downloadItem": "下載",
         "enableSubtitles": "啟用字幕",
         "playbackItem": "播放設定",
         "qualityItem": "品質",
         "sourceItem": "影片來源",
         "subtitleItem": "字幕設定"
-      },
-      "sources": {
-        "failed": {
-          "text": "嘗試查找任何視頻時出錯，請嘗試其他來源。",
-          "title": "無法刮取"
-        },
-        "findNextSource": "尋找下一個來源",
-        "maintain": "維持",
-        "noEmbeds": {
-          "text": "我們無法找到任何嵌入内容，請嘗試其他來源。",
-          "title": "未找到嵌入内容"
-        },
-        "noStream": {
-          "text": "此來源沒有此電影或節目的串流。",
-          "title": "無視頻源"
-        },
-        "title": "來源",
-        "unknownOption": "未知"
       },
       "subtitles": {
         "autoSelectChoice": "自動選擇",
@@ -953,37 +888,6 @@
       "restart": "重新啟動",
       "resume": "恢復",
       "title": "繼續觀看嗎？"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "擴充功能已被禁用",
-        "enableExtension": "啟用擴充功能",
-        "homeButton": "回到首頁",
-        "text": "您已安裝該擴充功能， 你要啟用擴充程式去用它。",
-        "title": "請啟用擴充功能"
-      },
-      "items": {
-        "pending": "尋找影片中..."
-      },
-      "notFound": {
-        "badge": "未找到",
-        "detailsButton": "顯示詳情",
-        "discoverButton": "發現更多",
-        "homeButton": "返回首頁",
-        "text": "我們已經搜索了我們的供應商，但找不到您正在尋找的媒體！我們不託管媒體，也無法控制可用的內容。請點擊下面的「顯示詳情」瞭解更多詳情。",
-        "title": "我們找不到"
-      },
-      "tips": {
-        "1": "點擊齒輪圖示即可切換來源！",
-        "2": "點擊標題即可複製連結！",
-        "3": "點擊並按住或按住 SHIFT 鍵可顯示寬螢幕按鈕而不是全螢幕！",
-        "4": "有些來源比其他來源效果更好！",
-        "5": "取得更多來源的擴充！",
-        "6": "儲存書籤以編輯或刪除它們！",
-        "7": "按住 SHIFT 並點擊標題即可複製帶有時間的連結！",
-        "8": "設定自訂字幕顏色！",
-        "9": "按住 ` 查看鍵盤快速鍵！"
-      }
     },
     "segment": {
       "credits": "製作人員",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "按兩下進行搜尋",
       "doubleClickToSeekDescription": "雙擊播放器的左側或右側可向前或向後搜尋 10 秒。",
       "doubleClickToSeekLabel": "啟用雙擊搜尋",
-      "embedOrder": "重新排序嵌入",
-      "embedOrderDescription": "拖放以重新排序嵌入。這將確定檢查您嘗試觀看的媒體的嵌入的順序。 <br><br> <strong>（預設順序最適合大多數使用者）</strong>",
-      "embedOrderEnableLabel": "自訂嵌入順序",
       "keyboardShortcuts": "鍵盤快速鍵",
       "keyboardShortcutsDescription": "自訂應用程式的鍵盤快速鍵。按住 ` 隨時顯示此協助",
       "keyboardShortcutsLabel": "自訂鍵盤快速鍵",
       "language": "應用程式語言",
       "languageDescription": "語言已應用於整個應用程式。",
-      "lastSuccessfulSource": "最後使用的來源",
-      "lastSuccessfulSourceDescription": "自動優先考慮成功提供上一集內容的來源。這有助於確保觀看連續劇時的連續性。",
-      "lastSuccessfulSourceEnableLabel": "最後使用的來源",
       "lowPerformanceMode": "低性能/頻寬模式",
       "lowPerformanceModeDescription": "透過停用佔用大量頻寬的功能，優化應用程式以應對較慢的連接和裝置。此模式可減少資料使用量並提高效能，同時保持核心搜尋和觀看功能完整。",
       "lowPerformanceModeLabel": "低性能模式",
-      "manualSource": "手動選擇訊號源",
-      "manualSourceDescription": "需要在抓取之前選擇來源。停用自動來源選擇並在開始播放時開啟來源選擇器。",
-      "manualSourceLabel": "手動選擇訊號源",
       "showLess": "顯示較少",
       "showMore": "顯示更多",
       "skipCredits": "跳過結尾製作人員名單",

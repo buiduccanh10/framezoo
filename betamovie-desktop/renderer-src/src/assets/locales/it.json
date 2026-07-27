@@ -6,16 +6,6 @@
     "copy": "Copia"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Visita",
-      "step1Suffix": "o il tuo fidato repository di componenti aggiuntivi compatibile con Addon.",
-      "step2Prefix": "Copia il link manifest (ad es.",
-      "step2Suffix": ").",
-      "step3AddName": "Aggiungere",
-      "step3Prefix": "Incolla nella casella in alto, quindi premi",
-      "step3Suffix": ".",
-      "title": "Esplora altri componenti aggiuntivi:"
-    },
     "manager": {
       "add": "Aggiungere",
       "adding": "Aggiunta...",
@@ -23,39 +13,28 @@
       "ariaManage": "Gestisci componenti aggiuntivi",
       "errorFallback": "Impossibile installare questo componente aggiuntivo.",
       "manageListButton": "Gestisci l'elenco dei componenti aggiuntivi",
-      "subtitle": "Aggiungi un URL manifest di Addon per torrent e flussi diretti.",
+      "subtitle": "Opzionale. Aggiungi un URL manifest di tua scelta. Questa app non raggruppa, consiglia o ospita componenti aggiuntivi.",
       "title": "Componenti aggiuntivi per il desktop"
     },
     "page": {
       "addAddonButton": "Aggiungi componente aggiuntivo",
+      "description": "I componenti aggiuntivi sono facoltativi. Questa app non raggruppa, consiglia o ospita alcun componente aggiuntivo.",
       "disabled": "Disabilitato",
       "emptyInstalled": "Nessun componente aggiuntivo ancora installato nel sistema.",
       "enabled": "Abilitato",
-      "guideHeading": "Scopri e installa componenti aggiuntivi",
-      "guideIntro": "I componenti aggiuntivi ti aiutano a sfogliare cataloghi multimediali e streaming personalizzati in base alle tue preferenze di intrattenimento personali:",
       "installError": "Impossibile installare questo componente aggiuntivo.",
       "installedHeading": "Componenti aggiuntivi installati",
       "processing": "Elaborazione...",
       "removeAddon": "Rimuovi questo componente aggiuntivo",
-      "step1DescPrefix": "Visita il catalogo della community su",
-      "step1DescSuffix": "o fornitori di componenti aggiuntivi standard simili.",
-      "step1Title": "Esplora il catalogo dei componenti aggiuntivi",
-      "step2DescPrefix": "Seleziona il componente aggiuntivo desiderato, personalizza le opzioni e copia l'URL manifest (esempio standard:",
-      "step2DescSuffix": ").",
-      "step2Title": "Copia collegamento manifest",
-      "step3AddName": "Aggiungere",
-      "step3DescPrefix": "Incolla il percorso manifest nel campo sottostante e premi",
-      "step3DescSuffix": ". Il componente aggiuntivo si attiverà immediatamente per cercare fonti multimediali.",
-      "step3Title": "Aggiungi all'applicazione",
       "title": "Gestore componenti aggiuntivi"
     },
     "player": {
       "chooseAddon": "Scegli un componente aggiuntivo",
-      "emptyExplanation": "Nessun componente aggiuntivo dello streaming è ancora installato o attivato. Visita la pagina Gestione componenti aggiuntivi per le guide di installazione e la scoperta del catalogo multimediale.",
+      "emptyExplanation": "Nessun componente aggiuntivo è installato o abilitato. Aggiungi un URL manifest che scegli in Componenti aggiuntivi.",
       "emptyTitle": "Nessun componente aggiuntivo dello streaming disponibile",
       "loadingStreams": "Caricamento stream...",
       "manageAddonsButton": "Gestisci elenco componenti aggiuntivi",
-      "noAddonStreams": "Nessun flusso aggiuntivo restituito per questo titolo.",
+      "noAddonStreams": "Nessun flusso è stato restituito da questo componente aggiuntivo.",
       "noTorrentStreams": "Nessun flusso torrent restituito per questo componente aggiuntivo.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "Nota: AlphaFlix non ospita alcun file ma visualizza solo il contenuto di fornitori di terze parti. Le questioni legali dovrebbero essere affrontate con loro."
+      "disclaimerText": "AlphaFlix fornisce un riproduttore di streaming sicuro, moderno e senza interruzioni con un'interfaccia facile da usare e una riproduzione di alta qualità su tutti i dispositivi supportati. Non ospita file multimediali, non gestisce un catalogo di fonti né consiglia componenti aggiuntivi specifici. I componenti aggiuntivi opzionali sono configurati dagli utenti, che sono responsabili dell'utilizzo di fonti lecite."
     },
     "links": {
       "fluxer": "Flussante",
       "funding": "Supportaci",
       "github": "GitHub"
     },
-    "tagline": "Guarda i tuoi preferiti programmi televisivi e film gratis senza publicità! "
+    "tagline": "Un riproduttore di streaming moderno e sicuro per un'esperienza visiva fluida e di alta qualità."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Predefinito"
       },
-      "downloads": {
-        "button": "Tentativo di download",
-        "copyHlsPlaylist": "Copia link playlist HLS",
-        "disclaimer": "I download vengono effettuati direttamente dal provider. AlphaFlix non ha il controllo sulle modalità di fornitura dei download.",
-        "downloadSubtitle": "Scarica sottotitolo attuale",
-        "downloadVideo": "Scarica video",
-        "hlsDisclaimer": "I download vengono effettuati direttamente dal provider. AlphaFlix non ha il controllo sul modo in cui vengono forniti i download.<br /><br />Tieni presente che stai scaricando una playlist HLS, <bold>non è consigliabile scaricarla se non hai familiarità con i formati di streaming avanzati</bold>. Prova diverse fonti per diversi formati.",
-        "hlsDownloader": "In alternativa, vai al <0>sito web del downloader di hls</0> e incolla l'URL della playlist dal basso.",
-        "onAndroid": {
-          "1": "Per scaricare su Android, fai clic sul pulsante di download quindi, nella nuova pagina, <bold>tocca e tieni premuto</bold> sul video, quindi seleziona <bold>salva</bold>.",
-          "shortTitle": "Scarica / Android",
-          "title": "Scaricare su Android"
-        },
-        "onIos": {
-          "1": "Per scaricare su iOS, fai clic sul pulsante di scaricare, e poi nella nuova paggina, fai clic su <bold><ios_share /></bold> poi<bold>Salva su FIle <ios_files /></bold>.",
-          "shortTitle": "Scarica / iOS",
-          "title": "Scaricare su iOS"
-        },
-        "onPc": {
-          "1": "Sul PC, fare clic sul pulsante di download, poi nella nuova pagina, fai clic destro sul video e selezionare <bold>Salva video come</bold>",
-          "shortTitle": "Scarica / PC",
-          "title": "Scaricare su PC"
-        },
-        "title": "Scarica"
-      },
       "episodes": {
         "button": "Episodi",
         "emptyState": "Non ci sono episodi in questa stagione, controlla più tardi (scusa :3)...",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Scarica",
         "enableSubtitles": "Abilita i sottotitoli",
         "playbackItem": "Impostazioni di riproduzione",
         "qualityItem": "Qualità",
         "sourceItem": "Sorgenti video",
         "subtitleItem": "Impostazioni sottotitoli"
-      },
-      "sources": {
-        "failed": {
-          "text": "Si è verificato un errore durante il tentativo di trovare il video... Provare con una fonte diversa?",
-          "title": "Impossibile raschiare"
-        },
-        "findNextSource": "Trova la fonte successiva",
-        "maintain": "Mantenere",
-        "noEmbeds": {
-          "text": "Non siamo riusciti a trovare alcun incorporamento, prova una fonte diversa.",
-          "title": "Nessun incorporamento trovato"
-        },
-        "noStream": {
-          "text": "Questa fonte non ha streaming per questo film o programma. /ᐠ - ˕ -マ Ⳋ",
-          "title": "Nessuno streaming :("
-        },
-        "title": "Sorgenti",
-        "unknownOption": "Sconosciuto"
       },
       "subtitles": {
         "autoSelectChoice": "Selezione automatica",
@@ -953,37 +888,6 @@
       "restart": "Ricomincia",
       "resume": "Riprendere",
       "title": "Continuare a guardare?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "L'estensione è disabilitata",
-        "enableExtension": "Abilita l'estensione",
-        "homeButton": "Torna alla pagina iniziale",
-        "text": "Hai installato l'estensione AlphaFlix. Per iniziare a usarla, devi abilitare l'estensione per questo sito.",
-        "title": "Abilita l'estensione"
-      },
-      "items": {
-        "pending": "Controllo per video..."
-      },
-      "notFound": {
-        "badge": "Non trovato",
-        "detailsButton": "Mostra i dettagli",
-        "discoverButton": "Scopri di più",
-        "homeButton": "Torna a pagina iniziale",
-        "text": "Abbiamo cercato tra i nostri fornitori e non siamo riusciti a trovare i media che stai cercando! Non ospitiamo i media e non abbiamo alcun controllo su ciò che è disponibile. Fare clic su \"Mostra dettagli\" di seguito per ulteriori dettagli.",
-        "title": "Non siamo riusciti a trovarlo"
-      },
-      "tips": {
-        "1": "Tocca l'icona dell'ingranaggio per cambiare sorgente!",
-        "2": "Tocca il titolo per copiare il collegamento!",
-        "3": "Tocca e tieni premuto o tieni premuto MAIUSC per mostrare il pulsante widescreen anziché a schermo intero!",
-        "4": "Alcune fonti funzionano meglio di altre!",
-        "5": "Ottieni l'estensione per più fonti!",
-        "6": "Tieni i segnalibri per modificarli o eliminarli!",
-        "7": "Tieni premuto SHIFT e tocca il titolo per copiare il collegamento con il tempo!",
-        "8": "Imposta un colore per i sottotitoli personalizzato!",
-        "9": "Tieni premuto ` per visualizzare le scorciatoie da tastiera!"
-      }
     },
     "segment": {
       "credits": "Crediti",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Tocca due volte per cercare",
       "doubleClickToSeekDescription": "Tocca due volte sul lato sinistro o destro del lettore per cercare 10 secondi avanti o indietro.",
       "doubleClickToSeekLabel": "Abilita il doppio tocco per cercare",
-      "embedOrder": "Riordino degli incorporamenti",
-      "embedOrderDescription": "Trascina e rilascia per riordinare gli incorporamenti. Ciò determinerà l'ordine in cui verranno controllati gli incorporamenti per i contenuti multimediali che stai tentando di guardare. <br><br> <strong>(L'ordine predefinito è migliore per la maggior parte degli utenti)</strong>",
-      "embedOrderEnableLabel": "Ordine di incorporamento personalizzato",
       "keyboardShortcuts": "Scorciatoie da tastiera",
       "keyboardShortcutsDescription": "Personalizza le scorciatoie da tastiera per l'applicazione. Tieni premuto ` per mostrare questo aiuto in qualsiasi momento",
       "keyboardShortcutsLabel": "Personalizza le scorciatoie da tastiera",
       "language": "Lingua dell'applicazione",
       "languageDescription": "Lingua applicata all'intera applicazione, solo l'inglese contiene cose stupide 🙁.",
-      "lastSuccessfulSource": "Ultima fonte utilizzata",
-      "lastSuccessfulSourceDescription": "Dai automaticamente la priorità alla fonte che ha fornito con successo i contenuti per l'episodio precedente. Ciò aiuta a garantire la continuità durante la visione delle serie.",
-      "lastSuccessfulSourceEnableLabel": "Ultima fonte utilizzata",
       "lowPerformanceMode": "Modalità prestazioni/larghezza di banda ridotte",
       "lowPerformanceModeDescription": "Ottimizza l'applicazione per connessioni e dispositivi più lenti disabilitando le funzionalità che richiedono molta larghezza di banda. Questa modalità riduce l'utilizzo dei dati e migliora le prestazioni mantenendo intatte le funzionalità principali di ricerca e visualizzazione.",
       "lowPerformanceModeLabel": "Modalità a basse prestazioni",
-      "manualSource": "Selezione manuale della sorgente",
-      "manualSourceDescription": "Richiedi la scelta di una fonte prima dello scraping. Disabilita la selezione automatica della sorgente e apre il selettore della sorgente all'avvio della riproduzione.",
-      "manualSourceLabel": "Selezione manuale della sorgente",
       "showLess": "Mostra meno",
       "showMore": "Mostra di più",
       "skipCredits": "Salta i titoli di coda",
