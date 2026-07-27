@@ -77,10 +77,6 @@
       "usePasskeyInstead": "Use passkey instead"
     },
     "hasAccount": "sina jo e lipu open la <0>o pana e nimi sina</0>",
-    "inviteCodeInvalidError": "nanpa toki li pona ala",
-    "inviteCodeLabel": "nanpa toki",
-    "inviteCodePlaceholder": "o pana e nanpa pi jan pona",
-    "inviteCodeRequiredError": "nanpa toki li wile",
     "login": {
       "description": "lipu open sina la o sitelen e nimi ale sina",
       "failedToReachServer": "Failed to reach server",
@@ -1197,8 +1193,6 @@
       "info": {
         "appVersion": "App Version",
         "notLoggedIn": "mi sona ala e sina",
-        "userId": "nanpa sina",
-        "userIdDescription": "Use this as invite code for your friend register",
         "checkForUpdates": "Check for updates",
         "upToDate": "You are currently on the latest version"
       }

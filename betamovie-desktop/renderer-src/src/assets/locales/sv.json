@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Använd lösenord istället"
     },
     "hasAccount": "Har redan ett konto? <0>Logga in här.</0>",
-    "inviteCodeInvalidError": "Ogiltig inbjudningskod (användar-ID hittades inte)",
-    "inviteCodeLabel": "Inbjudningskod",
-    "inviteCodePlaceholder": "Ange väns användar-ID",
-    "inviteCodeRequiredError": "Inbjudningskod krävs",
     "login": {
-      "description": "Ange ditt lösenord för att logga in på ditt konto",
+      "description": "Ange ditt användarnamn eller e-postadress och lösenord för att logga in på ditt konto",
       "failedToReachServer": "Det gick inte att nå servern",
-      "nicknameLabel": "Smeknamn",
-      "nicknameNotFound": "Smeknamn hittades inte",
-      "nicknamePlaceholder": "Ange ditt smeknamn",
-      "nicknameRequired": "Smeknamn krävs",
+      "identifierLabel": "Användarnamn eller e-post",
+      "identifierNotFound": "Användarnamn eller e-postadress hittades inte",
+      "identifierPlaceholder": "Ange ditt användarnamn eller e-postadress",
+      "identifierRequired": "Användarnamn eller e-postadress krävs",
       "noBackendUrl": "Ingen backend-URL",
       "or": "or",
       "passwordIncorrect": "Lösenordet är felaktigt",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Bekräfta lösenord",
       "confirmPasswordPlaceholder": "Bekräfta ditt lösenord",
+      "emailInvalid": "Ange en giltig e-postadress",
+      "emailLabel": "Personlig e-post",
+      "emailPlaceholder": "Ange din personliga e-postadress",
       "information": {
         "color1": "Profilfärg ett",
         "color2": "Profilfärg två",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Smeknamn",
       "nicknamePlaceholder": "Välj ett unikt smeknamn",
       "nicknameTaken": "Smeknamn har redan tagits",
+      "nicknameRequired": "Smeknamn krävs",
       "passwordInput": {
-        "description": "Choose a nickname and password. Ditt lösenord fungerar som en säker lösenordsfras, så se till att du kommer ihåg det!",
+        "description": "Välj ett smeknamn, personlig e-postadress och lösenord. Ditt lösenord fungerar som en säker lösenordsfras, så se till att du kommer ihåg det!",
         "title": "Skapa din inloggning"
       },
       "passwordLabel": "Lösenord",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Version",
         "notLoggedIn": "Du är inte inloggad",
-        "userId": "Användar-ID",
-        "userIdDescription": "Använd denna som inbjudningskod för ditt vänregister",
         "checkForUpdates": "Sök efter uppdateringar",
         "upToDate": "Du använder för närvarande den senaste versionen"
       }

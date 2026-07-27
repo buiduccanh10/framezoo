@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Utilisez plutôt un mot de passe"
     },
     "hasAccount": "Vous avez déjà un compte ? <0>Connectez-vous ici.</0>",
-    "inviteCodeInvalidError": "Code d'invitation invalide (ID utilisateur non trouvé)",
-    "inviteCodeLabel": "Code d'invitation",
-    "inviteCodePlaceholder": "Entrez l'ID utilisateur d'un ami",
-    "inviteCodeRequiredError": "Le code d'invitation est requis",
     "login": {
-      "description": "Veuillez saisir votre phrase d'accès pour accéder à votre compte",
+      "description": "Entrez votre nom d'utilisateur ou email et votre mot de passe pour vous connecter à votre compte",
       "failedToReachServer": "Impossible d'atteindre le serveur",
-      "nicknameLabel": "Surnom",
-      "nicknameNotFound": "Pseudonyme introuvable",
-      "nicknamePlaceholder": "Entrez votre pseudo",
-      "nicknameRequired": "Le pseudo est obligatoire",
+      "identifierLabel": "Nom d'utilisateur ou email",
+      "identifierNotFound": "Nom d'utilisateur ou email introuvable",
+      "identifierPlaceholder": "Entrez votre nom d'utilisateur ou votre email",
+      "identifierRequired": "Le nom d'utilisateur ou l'e-mail est requis",
       "noBackendUrl": "Aucune URL back-end",
       "or": "or",
       "passwordIncorrect": "Le mot de passe est incorrect",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Confirmez le mot de passe",
       "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
+      "emailInvalid": "Entrez une adresse e-mail valide",
+      "emailLabel": "E-mail personnel",
+      "emailPlaceholder": "Entrez votre email personnel",
       "information": {
         "color1": "Première couleur de profil",
         "color2": "Seconde couleur de profil",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Surnom",
       "nicknamePlaceholder": "Choisissez un surnom unique",
       "nicknameTaken": "Le pseudo est déjà pris",
+      "nicknameRequired": "Le pseudo est obligatoire",
       "passwordInput": {
-        "description": "Choisissez un pseudo et un mot de passe. Votre mot de passe fonctionne comme une phrase secrète sécurisée, alors assurez-vous de vous en souvenir !",
+        "description": "Choisissez un pseudo, une adresse e-mail personnelle et un mot de passe. Votre mot de passe fonctionne comme une phrase secrète sécurisée, alors assurez-vous de vous en souvenir !",
         "title": "Créez votre identifiant"
       },
       "passwordLabel": "Mot de passe",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Version",
         "notLoggedIn": "Vous n'êtes pas connecté",
-        "userId": "ID de l'utilisateur",
-        "userIdDescription": "Utilisez-le comme code d'invitation pour votre inscription d'ami",
         "checkForUpdates": "Vérifier les mises à jour",
         "upToDate": "Vous êtes actuellement sur la dernière version"
       }

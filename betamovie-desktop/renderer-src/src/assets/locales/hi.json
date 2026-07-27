@@ -77,17 +77,13 @@
       "usePasskeyInstead": "इसके बजाय पासकी का प्रयोग करें"
     },
     "hasAccount": "पहले से एक खाता मौजूद है? <0>यहां लॉगिन करें।</0>",
-    "inviteCodeInvalidError": "अमान्य आमंत्रण कोड (यूजर आईडी नहीं मिला)",
-    "inviteCodeLabel": "आमंत्रण कोड",
-    "inviteCodePlaceholder": "मित्र का यूजर आईडी दर्ज करें",
-    "inviteCodeRequiredError": "आमंत्रण कोड आवश्यक है",
     "login": {
-      "description": "कृपया अपने खाते में लॉगिन करने के लिए अपना पासफ़्रेज़ दर्ज करें",
+      "description": "अपने खाते में लॉगिन करने के लिए अपना उपयोगकर्ता नाम या ईमेल और पासवर्ड दर्ज करें",
       "failedToReachServer": "सर्वर तक पहुंचने में विफल",
-      "nicknameLabel": "उपनाम",
-      "nicknameNotFound": "उपनाम नहीं मिला",
-      "nicknamePlaceholder": "अपना उपनाम दर्ज करें",
-      "nicknameRequired": "उपनाम आवश्यक है",
+      "identifierLabel": "उपयोगकर्ता का नाम या ईमेल",
+      "identifierNotFound": "उपयोगकर्ता नाम या ईमेल नहीं मिला",
+      "identifierPlaceholder": "अपना उपयोगकर्ता नाम या ईमेल दर्ज करें",
+      "identifierRequired": "उपयोगकर्ता नाम या ईमेल आवश्यक है",
       "noBackendUrl": "कोई बैकएंड यूआरएल नहीं",
       "or": "or",
       "passwordIncorrect": "पासवर्ड ग़लत है",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "पासवर्ड की पुष्टि कीजिये",
       "confirmPasswordPlaceholder": "अपने पासवर्ड की पुष्टि करें",
+      "emailInvalid": "एक मान्य ईमेल पता दर्ज करें",
+      "emailLabel": "व्यक्तिगत ईमेल",
+      "emailPlaceholder": "अपना व्यक्तिगत ईमेल दर्ज करें",
       "information": {
         "color1": "प्रोफ़ाइल का पहला रंग",
         "color2": "प्रोफ़ाइल का दूसरा रंग",
@@ -113,8 +112,9 @@
       "nicknameLabel": "उपनाम",
       "nicknamePlaceholder": "एक अनोखा उपनाम चुनें",
       "nicknameTaken": "उपनाम पहले ही लिया जा चुका है",
+      "nicknameRequired": "उपनाम आवश्यक है",
       "passwordInput": {
-        "description": "एक उपनाम और पासवर्ड चुनें. आपका पासवर्ड एक सुरक्षित पासफ़्रेज़ के रूप में काम करता है, इसलिए सुनिश्चित करें कि आप इसे याद रखें!",
+        "description": "एक उपनाम, व्यक्तिगत ईमेल और पासवर्ड चुनें। आपका पासवर्ड एक सुरक्षित पासफ़्रेज़ के रूप में काम करता है, इसलिए सुनिश्चित करें कि आप इसे याद रखें!",
         "title": "अपना लॉगिन बनाएँ"
       },
       "passwordLabel": "पासवर्ड",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "संस्करण",
         "notLoggedIn": "आपने लॉग - इन नहीं किया",
-        "userId": "उपयोगकर्ता पहचान",
-        "userIdDescription": "इसे अपने मित्र रजिस्टर के लिए आमंत्रण कोड के रूप में उपयोग करें",
         "checkForUpdates": "अद्यतन के लिए जाँच",
         "upToDate": "आप वर्तमान में नवीनतम संस्करण पर हैं"
       }

@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Használja helyette a jelszót"
     },
     "hasAccount": "Már van fiókod? <0>Jelentkezz be itt.</0>",
-    "inviteCodeInvalidError": "Érvénytelen meghívó kód (felhasználói azonosító nem található)",
-    "inviteCodeLabel": "Meghívó kód",
-    "inviteCodePlaceholder": "Add meg egy barátod felhasználói azonosítóját",
-    "inviteCodeRequiredError": "Meghívó kód szükséges",
     "login": {
-      "description": "Kérlek írd be a szósorozatodat, hogy bejelentkezz a fiókodba",
+      "description": "Adja meg felhasználónevét vagy e-mail címét és jelszavát a fiókjába való bejelentkezéshez",
       "failedToReachServer": "Nem sikerült elérni a szervert",
-      "nicknameLabel": "Becenév",
-      "nicknameNotFound": "A becenév nem található",
-      "nicknamePlaceholder": "Írja be a becenevét",
-      "nicknameRequired": "A becenév kötelező",
+      "identifierLabel": "Felhasználónév vagy email",
+      "identifierNotFound": "Felhasználónév vagy e-mail cím nem található",
+      "identifierPlaceholder": "Adja meg felhasználónevét vagy e-mail címét",
+      "identifierRequired": "Felhasználónév vagy email megadása kötelező",
       "noBackendUrl": "Nincs háttér-URL",
       "or": "or",
       "passwordIncorrect": "A jelszó helytelen",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Jelszó megerősítése",
       "confirmPasswordPlaceholder": "Erősítse meg jelszavát",
+      "emailInvalid": "Adjon meg egy érvényes e-mail címet",
+      "emailLabel": "Személyes e-mail",
+      "emailPlaceholder": "Adja meg személyes e-mail címét",
       "information": {
         "color1": "Első profil szín",
         "color2": "Második profil szín",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Becenév",
       "nicknamePlaceholder": "Válasszon egyedi becenevet",
       "nicknameTaken": "A becenév már foglalt",
+      "nicknameRequired": "A becenév kötelező",
       "passwordInput": {
-        "description": "Válasszon becenevet és jelszót. Jelszava biztonságos jelszóként működik, ezért feltétlenül emlékezzen rá!",
+        "description": "Válasszon becenevet, személyes e-mail címet és jelszót. Jelszava biztonságos jelszóként működik, ezért feltétlenül emlékezzen rá!",
         "title": "Hozza létre bejelentkezési adatait"
       },
       "passwordLabel": "Jelszó",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Változat",
         "notLoggedIn": "Nem vagy bejelentkezve",
-        "userId": "Felhasználó ID",
-        "userIdDescription": "Használja ezt meghívókódként az ismerősei regisztrációjához",
         "checkForUpdates": "Ellenőrizze a frissítéseket",
         "upToDate": "Jelenleg a legújabb verziót használja"
       }

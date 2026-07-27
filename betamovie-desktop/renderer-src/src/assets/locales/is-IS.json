@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Notaðu lykilorð í staðinn"
     },
     "hasAccount": "Hefurðu reikning nú þegar? <0>Skráðu þig inn hér.</0>",
-    "inviteCodeInvalidError": "Ógildur boðskóði (notandaauðkenni fannst ekki)",
-    "inviteCodeLabel": "Boðskóði",
-    "inviteCodePlaceholder": "Sláðu inn notandaauðkenni vinar",
-    "inviteCodeRequiredError": "Boðskóði er nauðsynlegur",
     "login": {
-      "description": "Vinsamlegast sláðu inn lykilorðið þitt til þess að skrá þig inn í reikningin þinn",
+      "description": "Sláðu inn notandanafn eða netfang og lykilorð til að skrá þig inn á reikninginn þinn",
       "failedToReachServer": "Ekki tókst að ná í netþjón",
-      "nicknameLabel": "Gælunafn",
-      "nicknameNotFound": "Gælunafn fannst ekki",
-      "nicknamePlaceholder": "Sláðu inn gælunafnið þitt",
-      "nicknameRequired": "Gælunafn er áskilið",
+      "identifierLabel": "Notendanafn eða netfang",
+      "identifierNotFound": "Notandanafn eða netfang fannst ekki",
+      "identifierPlaceholder": "Sláðu inn notandanafn þitt eða netfang",
+      "identifierRequired": "Notandanafn eða netfang er krafist",
       "noBackendUrl": "Engin bakenda slóð",
       "or": "or",
       "passwordIncorrect": "Lykilorð er rangt",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Staðfestu lykilorð",
       "confirmPasswordPlaceholder": "Staðfestu lykilorðið þitt",
+      "emailInvalid": "Sláðu inn gilt netfang",
+      "emailLabel": "Persónulegur tölvupóstur",
+      "emailPlaceholder": "Sláðu inn persónulega netfangið þitt",
       "information": {
         "color1": "Prófíl litur eitt",
         "color2": "Prófíl litur tvö",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Gælunafn",
       "nicknamePlaceholder": "Veldu einstakt gælunafn",
       "nicknameTaken": "Gælunafn er þegar tekið",
+      "nicknameRequired": "Gælunafn er áskilið",
       "passwordInput": {
-        "description": "Veldu gælunafn og lykilorð. Lykilorðið þitt virkar sem öruggt lykilorð, svo vertu viss um að muna það!",
+        "description": "Veldu gælunafn, persónulegan tölvupóst og lykilorð. Lykilorðið þitt virkar sem öruggt lykilorð, svo vertu viss um að muna það!",
         "title": "Búðu til innskráningu þína"
       },
       "passwordLabel": "Lykilorð",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Útgáfa",
         "notLoggedIn": "Þú ert ekki skrátt inn",
-        "userId": "Notanda kóði",
-        "userIdDescription": "Notaðu þetta sem boðskóða fyrir vinaskrána þína",
         "checkForUpdates": "Leitaðu að uppfærslum",
         "upToDate": "Þú ert núna á nýjustu útgáfunni"
       }

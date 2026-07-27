@@ -77,17 +77,13 @@
       "usePasskeyInstead": "استخدم مفتاح المرور بدلاً من ذلك"
     },
     "hasAccount": "لديك حساب بالفعل؟ <0>قم بتسجيل الدخول هنا.</0>",
-    "inviteCodeInvalidError": "رمز دعوة غير صالح (لم يتم العثور على معرف المستخدم)",
-    "inviteCodeLabel": "رمز الدعوة",
-    "inviteCodePlaceholder": "أدخل معرف المستخدم الخاص بالصديق",
-    "inviteCodeRequiredError": "رمز الدعوة مطلوب",
     "login": {
-      "description": "رجاءً ضع جملة المرور لتسجيل الدخول إلى حسابك",
+      "description": "أدخل اسم المستخدم أو البريد الإلكتروني وكلمة المرور لتسجيل الدخول إلى حسابك",
       "failedToReachServer": "فشل في الوصول إلى الخادم",
-      "nicknameLabel": "كنية",
-      "nicknameNotFound": "لم يتم العثور على اللقب",
-      "nicknamePlaceholder": "أدخل لقبك",
-      "nicknameRequired": "اللقب مطلوب",
+      "identifierLabel": "اسم المستخدم أو البريد الإلكتروني",
+      "identifierNotFound": "لم يتم العثور على اسم المستخدم أو البريد الإلكتروني",
+      "identifierPlaceholder": "أدخل اسم المستخدم أو البريد الإلكتروني الخاص بك",
+      "identifierRequired": "مطلوب اسم المستخدم أو البريد الإلكتروني",
       "noBackendUrl": "لا يوجد عنوان URL للواجهة الخلفية",
       "or": "أو",
       "passwordIncorrect": "كلمة المرور غير صحيحة",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "تأكيد كلمة المرور",
       "confirmPasswordPlaceholder": "قم بتأكيد كلمة المرور الخاصة بك",
+      "emailInvalid": "أدخل عنوان بريد إلكتروني صالحًا",
+      "emailLabel": "البريد الإلكتروني الشخصي",
+      "emailPlaceholder": "أدخل بريدك الإلكتروني الشخصي",
       "information": {
         "color1": "لون الملف الشخصي الأول",
         "color2": "لون الملف الشخصي الثاني",
@@ -113,8 +112,9 @@
       "nicknameLabel": "كنية",
       "nicknamePlaceholder": "اختر لقبًا فريدًا",
       "nicknameTaken": "اللقب مأخوذ بالفعل",
+      "nicknameRequired": "اللقب مطلوب",
       "passwordInput": {
-        "description": "اختر اللقب وكلمة المرور. تعمل كلمة المرور الخاصة بك بمثابة عبارة مرور آمنة، لذا تأكد من تذكرها!",
+        "description": "اختر اللقب والبريد الإلكتروني الشخصي وكلمة المرور. تعمل كلمة المرور الخاصة بك بمثابة عبارة مرور آمنة، لذا تأكد من تذكرها!",
         "title": "قم بإنشاء تسجيل الدخول الخاص بك"
       },
       "passwordLabel": "كلمة المرور",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "إصدار",
         "notLoggedIn": "أنت لم تسجل دخولك بعد",
-        "userId": "معرِّف المستخدم",
-        "userIdDescription": "استخدم هذا كرمز دعوة لتسجيل صديقك",
         "checkForUpdates": "التحقق من وجود تحديثات",
         "upToDate": "أنت حاليا على الإصدار الأحدث"
       }

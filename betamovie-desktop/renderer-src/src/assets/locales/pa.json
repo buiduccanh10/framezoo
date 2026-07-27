@@ -77,17 +77,13 @@
       "usePasskeyInstead": "ਇਸਦੀ ਬਜਾਏ ਪਾਸਕੁੰਜੀ ਦੀ ਵਰਤੋਂ ਕਰੋ"
     },
     "hasAccount": "ਕੀ ਪਹਿਲਾਂ ਤੋਂ ਹੀ ਖਾਤਾ ਹੈ? <0>ਇੱਥੇ ਲੌਗਇਨ ਕਰੋ.</0>",
-    "inviteCodeInvalidError": "ਅਵੈਧ ਸੱਦਾ ਕੋਡ (ਯੂਜ਼ਰ ਆਈਡੀ ਨਹੀਂ ਮਿਲਿਆ)",
-    "inviteCodeLabel": "ਸੱਦਾ ਕੋਡ",
-    "inviteCodePlaceholder": "ਦੋਸਤ ਦੀ ਯੂਜ਼ਰ ਆਈਡੀ ਦਰਜ ਕਰੋ",
-    "inviteCodeRequiredError": "ਸੱਦਾ ਕੋਡ ਲੋੜੀਂਦਾ ਹੈ",
     "login": {
-      "description": "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਲੌਗਇਨ ਕਰਨ ਲਈ ਆਪਣਾ ਗੁਪਤਕੋਡ ਦਾਖਲ ਕਰੋ",
+      "description": "ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਲੌਗਇਨ ਕਰਨ ਲਈ ਆਪਣਾ ਉਪਭੋਗਤਾ ਨਾਮ ਜਾਂ ਈਮੇਲ ਅਤੇ ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ",
       "failedToReachServer": "ਸਰਵਰ ਤੱਕ ਪਹੁੰਚਣ ਵਿੱਚ ਅਸਫਲ",
-      "nicknameLabel": "ਉਪਨਾਮ",
-      "nicknameNotFound": "ਉਪਨਾਮ ਨਹੀਂ ਮਿਲਿਆ",
-      "nicknamePlaceholder": "ਆਪਣਾ ਉਪਨਾਮ ਦਰਜ ਕਰੋ",
-      "nicknameRequired": "ਉਪਨਾਮ ਦੀ ਲੋੜ ਹੈ",
+      "identifierLabel": "ਉਪਭੋਗਤਾ ਨਾਮ ਜਾਂ ਈਮੇਲ",
+      "identifierNotFound": "ਯੂਜ਼ਰਨਾਮ ਜਾਂ ਈਮੇਲ ਨਹੀਂ ਮਿਲੀ",
+      "identifierPlaceholder": "ਆਪਣਾ ਉਪਭੋਗਤਾ ਨਾਮ ਜਾਂ ਈਮੇਲ ਦਰਜ ਕਰੋ",
+      "identifierRequired": "ਉਪਭੋਗਤਾ ਨਾਮ ਜਾਂ ਈਮੇਲ ਦੀ ਲੋੜ ਹੈ",
       "noBackendUrl": "ਕੋਈ ਬੈਕਐਂਡ URL ਨਹੀਂ ਹੈ",
       "or": "or",
       "passwordIncorrect": "ਪਾਸਵਰਡ ਗਲਤ ਹੈ",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "ਪਾਸਵਰਡ ਪੱਕਾ ਕਰੋ",
       "confirmPasswordPlaceholder": "ਆਪਣੇ ਪਾਸਵਰਡ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+      "emailInvalid": "ਇੱਕ ਵੈਧ ਈਮੇਲ ਪਤਾ ਦਰਜ ਕਰੋ",
+      "emailLabel": "ਨਿੱਜੀ ਈਮੇਲ",
+      "emailPlaceholder": "ਆਪਣੀ ਨਿੱਜੀ ਈਮੇਲ ਦਰਜ ਕਰੋ",
       "information": {
         "color1": "ਪਰੋਫਾਇਲ ਦਾ ਪੇਹਲਾ ਰੰਗ",
         "color2": "ਪ੍ਰੋਫਾਇਲ ਦਾ ਦੂਜਾ ਰੰਗ",
@@ -113,8 +112,9 @@
       "nicknameLabel": "ਉਪਨਾਮ",
       "nicknamePlaceholder": "ਇੱਕ ਵਿਲੱਖਣ ਉਪਨਾਮ ਚੁਣੋ",
       "nicknameTaken": "ਉਪਨਾਮ ਪਹਿਲਾਂ ਹੀ ਲਿਆ ਗਿਆ ਹੈ",
+      "nicknameRequired": "ਉਪਨਾਮ ਦੀ ਲੋੜ ਹੈ",
       "passwordInput": {
-        "description": "ਇੱਕ ਉਪਨਾਮ ਅਤੇ ਪਾਸਵਰਡ ਚੁਣੋ। ਤੁਹਾਡਾ ਪਾਸਵਰਡ ਇੱਕ ਸੁਰੱਖਿਅਤ ਗੁਪਤਕੋਡ ਵਜੋਂ ਕੰਮ ਕਰਦਾ ਹੈ, ਇਸਲਈ ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਤੁਸੀਂ ਇਸਨੂੰ ਯਾਦ ਰੱਖਦੇ ਹੋ!",
+        "description": "ਇੱਕ ਉਪਨਾਮ, ਨਿੱਜੀ ਈਮੇਲ ਅਤੇ ਪਾਸਵਰਡ ਚੁਣੋ। ਤੁਹਾਡਾ ਪਾਸਵਰਡ ਇੱਕ ਸੁਰੱਖਿਅਤ ਗੁਪਤਕੋਡ ਵਜੋਂ ਕੰਮ ਕਰਦਾ ਹੈ, ਇਸਲਈ ਯਕੀਨੀ ਬਣਾਓ ਕਿ ਤੁਸੀਂ ਇਸਨੂੰ ਯਾਦ ਰੱਖਦੇ ਹੋ!",
         "title": "ਆਪਣਾ ਲੌਗਇਨ ਬਣਾਓ"
       },
       "passwordLabel": "ਪਾਸਵਰਡ",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "ਸੰਸਕਰਣ",
         "notLoggedIn": "ਤੁਸੀਂ ਲੌਗਇਨ ਨਹੀਂ ਹੋ",
-        "userId": "ਯੂਜਰ ਆਈਡੀ",
-        "userIdDescription": "ਇਸ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਰਜਿਸਟਰ ਲਈ ਸੱਦਾ ਕੋਡ ਵਜੋਂ ਵਰਤੋ",
         "checkForUpdates": "ਅੱਪਡੇਟ ਲਈ ਚੈੱਕ ਕਰੋ",
         "upToDate": "ਤੁਸੀਂ ਇਸ ਸਮੇਂ ਨਵੀਨਤਮ ਸੰਸਕਰਣ 'ਤੇ ਹੋ"
       }

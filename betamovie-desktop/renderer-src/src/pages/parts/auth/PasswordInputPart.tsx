@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useAsyncFn } from "react-use";
 
 import { createPasskey, isPasskeySupported } from "@/backend/accounts/crypto";
-import { checkNicknameExists, checkUserExists } from "@/backend/accounts/user";
+import { checkNicknameExists } from "@/backend/accounts/user";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import {
@@ -16,8 +16,8 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 
 export interface PasswordInputData {
   nickname: string;
+  email?: string;
   password: string;
-  inviteCode?: string;
   credentialId?: string;
 }
 
@@ -38,9 +38,9 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
   const [hasPasswordError, setHasPasswordError] = useState(false);
   const [nicknameErrorText, setNicknameErrorText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
-  const [hasInviteError, setHasInviteError] = useState(false);
-  const [inviteErrorText, setInviteErrorText] = useState("");
+  const [email, setEmail] = useState("");
+  const [hasEmailError, setHasEmailError] = useState(false);
+  const [emailErrorText, setEmailErrorText] = useState("");
   const { t } = useTranslation();
   const backendUrl = useBackendUrl();
 
@@ -48,15 +48,6 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
     async (name: string) => {
       if (!backendUrl) return null;
       return await checkNicknameExists(backendUrl, name);
-    },
-    [backendUrl],
-  );
-
-  const [, checkInvite] = useAsyncFn(
-    async (code: string) => {
-      if (!backendUrl) return false;
-      const exists = await checkUserExists(backendUrl, code);
-      return exists;
     },
     [backendUrl],
   );
@@ -87,19 +78,22 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
     async (options?: { skipPassword?: boolean }) => {
       setHasNicknameError(false);
       setHasPasswordError(false);
-      setHasInviteError(false);
+      setHasEmailError(false);
 
       const trimmedNickname = nickname.trim();
       if (trimmedNickname.length === 0) {
         setHasNicknameError(true);
         setNicknameErrorText(
-          t("auth.login.nicknameRequired") ?? "Nickname is required",
+          props.forLogin
+            ? (t("auth.login.identifierRequired") ??
+                "Username or email is required")
+            : (t("auth.register.nicknameRequired") ?? "Nickname is required"),
         );
         return null;
       }
 
       if (props.forLogin) {
-        // Login: only require nickname and password (no async checks)
+        // Login: accept either a username or an email address.
         if (!options?.skipPassword && !password) {
           setHasPasswordError(true);
           setPasswordErrorText(
@@ -138,22 +132,14 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
           }
         }
 
-        // Invite code required and must be a valid user id
-        const trimmedInvite = inviteCode.trim();
-        if (trimmedInvite.length === 0) {
-          setHasInviteError(true);
-          setInviteErrorText(
-            t("auth.inviteCodeRequiredError") ?? "Invite code is required",
-          );
-          return null;
-        }
-
-        const inviteExists = await checkInvite(trimmedInvite);
-        if (!inviteExists) {
-          setHasInviteError(true);
-          setInviteErrorText(
-            t("auth.inviteCodeInvalidError") ??
-              "Invalid invite code (User ID not found)",
+        const trimmedEmail = email.trim().toLowerCase();
+        if (
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail) ||
+          trimmedEmail.length > 255
+        ) {
+          setHasEmailError(true);
+          setEmailErrorText(
+            t("auth.register.emailInvalid") ?? "Enter a valid email address",
           );
           return null;
         }
@@ -161,7 +147,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
 
       return {
         nickname: trimmedNickname,
-        inviteCode: inviteCode.trim(),
+        email: props.forLogin ? undefined : email.trim().toLowerCase(),
       };
     },
     [
@@ -170,10 +156,9 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
       confirmPassword,
       props.forLogin,
       checkNickname,
-      checkInvite,
       validatePassword,
       t,
-      inviteCode,
+      email,
     ],
   );
 
@@ -183,8 +168,8 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
 
     props.onNext?.({
       nickname: accountFields.nickname,
+      email: accountFields.email,
       password,
-      inviteCode: accountFields.inviteCode,
     });
   }, [password, props, validateAccountFields]);
 
@@ -199,8 +184,8 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
 
     props.onNext?.({
       nickname: accountFields.nickname,
+      email: accountFields.email,
       password: "",
-      inviteCode: accountFields.inviteCode,
       credentialId,
     });
   }, [createPasskeyForAccount, props, validateAccountFields]);
@@ -238,24 +223,28 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
         <AuthInputBox
           label={
             props.forLogin
-              ? (t("auth.login.nicknameLabel") ?? "Nickname")
+              ? (t("auth.login.identifierLabel") ?? "Username or email")
               : (t("auth.register.nicknameLabel") ?? "Choose a nickname")
           }
           value={nickname}
           onChange={setNickname}
           placeholder={
             props.forLogin
-              ? (t("auth.login.nicknamePlaceholder") ?? "Enter your nickname")
+              ? (t("auth.login.identifierPlaceholder") ??
+                "Enter your username or email")
               : (t("auth.register.nicknamePlaceholder") ??
                 "Choose a unique nickname")
           }
         />
         {!props.forLogin && (
           <AuthInputBox
-            label={t("auth.inviteCodeLabel")}
-            value={inviteCode}
-            onChange={setInviteCode}
-            placeholder={t("auth.inviteCodePlaceholder")}
+            label={t("auth.register.emailLabel") ?? "Email address"}
+            value={email}
+            onChange={setEmail}
+            placeholder={
+              t("auth.register.emailPlaceholder") ?? "Enter your email address"
+            }
+            autoComplete="email"
           />
         )}
         <AuthInputBox
@@ -297,8 +286,8 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
             {props.externalPasswordError ?? passwordErrorText}
           </p>
         ) : null}
-        {!props.forLogin && hasInviteError ? (
-          <p className="text-authentication-errorText">{inviteErrorText}</p>
+        {!props.forLogin && hasEmailError ? (
+          <p className="text-authentication-errorText">{emailErrorText}</p>
         ) : null}
         {!props.forLogin && passkeyResult.error ? (
           <p className="text-authentication-errorText">

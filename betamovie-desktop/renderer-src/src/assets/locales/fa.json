@@ -77,17 +77,13 @@
       "usePasskeyInstead": "به جای آن از کلید عبور استفاده کنید"
     },
     "hasAccount": "حساب کاربری دارید؟ <0>اینجا وارد شوید.</0>",
-    "inviteCodeInvalidError": "کد دعوت نامعتبر است (شناسه کاربری پیدا نشد)",
-    "inviteCodeLabel": "کد دعوت",
-    "inviteCodePlaceholder": "شناسه کاربری دوست خود را وارد کنید",
-    "inviteCodeRequiredError": "کد دعوت الزامی است",
     "login": {
-      "description": "لطفاً عبارت عبور امنیتی خود را وارد کنید تا وارد حساب کاربری شوید",
+      "description": "نام کاربری یا ایمیل و رمز عبور خود را وارد کنید تا وارد حساب کاربری خود شوید",
       "failedToReachServer": "دسترسی به سرور ناموفق بود",
-      "nicknameLabel": "نام مستعار",
-      "nicknameNotFound": "نام مستعار یافت نشد",
-      "nicknamePlaceholder": "نام مستعار خود را وارد کنید",
-      "nicknameRequired": "نام مستعار الزامی است",
+      "identifierLabel": "نام کاربری یا ایمیل",
+      "identifierNotFound": "نام کاربری یا ایمیل پیدا نشد",
+      "identifierPlaceholder": "نام کاربری یا ایمیل خود را وارد کنید",
+      "identifierRequired": "نام کاربری یا ایمیل الزامی است",
       "noBackendUrl": "بدون URL backend",
       "or": "or",
       "passwordIncorrect": "رمز عبور نادرست است",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "رمز عبور را تایید کنید",
       "confirmPasswordPlaceholder": "رمز عبور خود را تایید کنید",
+      "emailInvalid": "یک آدرس ایمیل معتبر وارد کنید",
+      "emailLabel": "ایمیل شخصی",
+      "emailPlaceholder": "ایمیل شخصی خود را وارد کنید",
       "information": {
         "color1": "رنگ پروفایل اول",
         "color2": "رنگ پروفایل دوم",
@@ -113,8 +112,9 @@
       "nicknameLabel": "نام مستعار",
       "nicknamePlaceholder": "یک نام مستعار منحصر به فرد انتخاب کنید",
       "nicknameTaken": "نام مستعار قبلاً گرفته شده است",
+      "nicknameRequired": "نام مستعار الزامی است",
       "passwordInput": {
-        "description": "نام مستعار و رمز عبور را انتخاب کنید. رمز عبور شما به عنوان یک کلمه عبور امن کار می کند، بنابراین مطمئن شوید که آن را به خاطر بسپارید!",
+        "description": "نام مستعار، ایمیل شخصی و رمز عبور را انتخاب کنید. رمز عبور شما به عنوان یک کلمه عبور امن کار می کند، بنابراین مطمئن شوید که آن را به خاطر بسپارید!",
         "title": "لاگین خود را ایجاد کنید"
       },
       "passwordLabel": "رمز عبور",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "نسخه",
         "notLoggedIn": "شما وارد نشده اید",
-        "userId": "شناسه کاربری",
-        "userIdDescription": "از این به عنوان کد دعوت برای ثبت نام دوستان خود استفاده کنید",
         "checkForUpdates": "به روز رسانی را بررسی کنید",
         "upToDate": "شما در حال حاضر در آخرین نسخه هستید"
       }

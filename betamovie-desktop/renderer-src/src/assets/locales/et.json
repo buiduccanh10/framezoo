@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Kasutage selle asemel parooli"
     },
     "hasAccount": "On juba konto? <0>Logi sisse.</0>",
-    "inviteCodeInvalidError": "Vigane kutsekood (kasutaja ID-d ei leitud)",
-    "inviteCodeLabel": "Kutsekood",
-    "inviteCodePlaceholder": "Sisesta sõbra kasutaja ID",
-    "inviteCodeRequiredError": "Kutsekood on kohustuslik",
     "login": {
-      "description": "Palun sisestage paroolifraas, et logida kontosse sisse",
+      "description": "Sisestage oma kasutajanimi või e-posti aadress ja parool oma kontole sisselogimiseks",
       "failedToReachServer": "Serveriga ei õnnestunud ühendust saada",
-      "nicknameLabel": "Hüüdnimi",
-      "nicknameNotFound": "Hüüdnime ei leitud",
-      "nicknamePlaceholder": "Sisestage oma hüüdnimi",
-      "nicknameRequired": "Hüüdnimi on kohustuslik",
+      "identifierLabel": "Kasutajanimi või email",
+      "identifierNotFound": "Kasutajanime või e-posti aadressi ei leitud",
+      "identifierPlaceholder": "Sisestage oma kasutajanimi või e-posti aadress",
+      "identifierRequired": "Kasutajanimi või e-posti aadress on nõutav",
       "noBackendUrl": "Taustaprogrammi URL puudub",
       "or": "or",
       "passwordIncorrect": "Parool on vale",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Kinnitage parool",
       "confirmPasswordPlaceholder": "Kinnitage oma parool",
+      "emailInvalid": "Sisestage kehtiv e-posti aadress",
+      "emailLabel": "Isiklik email",
+      "emailPlaceholder": "Sisestage oma isiklik e-posti aadress",
       "information": {
         "color1": "Profiili värv üks",
         "color2": "Profiili värv kaks",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Hüüdnimi",
       "nicknamePlaceholder": "Valige ainulaadne hüüdnimi",
       "nicknameTaken": "Hüüdnimi on juba võetud",
+      "nicknameRequired": "Hüüdnimi on kohustuslik",
       "passwordInput": {
-        "description": "Valige hüüdnimi ja parool. Teie parool töötab turvalise paroolina, seega jätke see kindlasti meelde!",
+        "description": "Valige hüüdnimi, isiklik e-posti aadress ja parool. Teie parool töötab turvalise paroolina, seega jätke see kindlasti meelde!",
         "title": "Looge oma sisselogimine"
       },
       "passwordLabel": "Parool",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versioon",
         "notLoggedIn": "Sa pole sisse loginud",
-        "userId": "Kasutaja ID",
-        "userIdDescription": "Kasutage seda oma sõbraregistri kutsekoodina",
         "checkForUpdates": "Kontrollige värskendusi",
         "upToDate": "Kasutate praegu uusimat versiooni"
       }

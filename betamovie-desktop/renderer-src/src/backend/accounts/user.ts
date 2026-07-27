@@ -14,6 +14,7 @@ export interface UserResponse {
   id: string;
   namespace: string;
   nickname: string;
+  email?: string | null;
   permissions: string[];
   profile: {
     colorA: string;

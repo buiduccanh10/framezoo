@@ -35,7 +35,7 @@ export interface RegisterInput {
   };
   device: string;
   nickname: string;
-  inviteCode: string;
+  email: string;
   profile: {
     colorA: string;
     colorB: string;

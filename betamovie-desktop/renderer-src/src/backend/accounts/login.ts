@@ -9,13 +9,13 @@ export interface ChallengeTokenResponse {
 
 export async function getLoginChallengeToken(
   url: string,
-  nickname: string,
+  identifier: string,
 ): Promise<ChallengeTokenResponse> {
   return ofetch<ChallengeTokenResponse>("/auth/login/start", {
     method: "POST",
     credentials: "include",
     body: {
-      nickname,
+      identifier,
     },
     baseURL: url,
   });
@@ -27,7 +27,7 @@ export interface LoginResponse {
 }
 
 export interface LoginInput {
-  nickname?: string;
+  identifier?: string;
   publicKey: string;
   challenge: {
     code: string;

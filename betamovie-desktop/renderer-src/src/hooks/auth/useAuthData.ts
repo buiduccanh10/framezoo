@@ -82,6 +82,7 @@ export function useAuthData() {
         deviceName: session.device,
         profile: user.profile,
         nickname: user.nickname,
+        email: user.email,
         token: accessToken,
         refreshToken,
         seed,

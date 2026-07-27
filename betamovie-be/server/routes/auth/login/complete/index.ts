@@ -1,15 +1,19 @@
 import { z } from 'zod';
 import { useChallenge } from '~/utils/challenge';
 import { useAuth } from '~/utils/auth';
+import { findUserByAccountIdentifier } from '~/utils/accountIdentifier';
 
 const completeSchema = z.object({
-  nickname: z.string().min(1).max(255),
+  identifier: z.string().min(1).max(255).optional(),
+  nickname: z.string().min(1).max(255).optional(),
   publicKey: z.string(),
   challenge: z.object({
     code: z.string(),
     signature: z.string(),
   }),
   device: z.string().max(500).min(1),
+}).refine((value) => value.identifier || value.nickname || value.publicKey, {
+  message: 'Account identifier is required',
 });
 
 export default defineEventHandler(async event => {
@@ -23,10 +27,10 @@ export default defineEventHandler(async event => {
     });
   }
 
-  // Find user by nickname
-  const user = await prisma.users.findUnique({
-    where: { nickname: body.nickname },
-  });
+  const user = await findUserByAccountIdentifier(
+    body.identifier ?? body.nickname ?? body.publicKey,
+    body.publicKey,
+  );
 
   if (!user) {
     throw createError({
@@ -72,6 +76,7 @@ export default defineEventHandler(async event => {
       profile: user.profile,
       permissions: user.permissions,
       nickname: (user as any).nickname,
+      email: user.email,
     },
     session: {
       id: hydratedSession.id,

@@ -77,17 +77,13 @@
       "usePasskeyInstead": "Tā vietā izmantojiet piekļuves atslēgu"
     },
     "hasAccount": "Tev jau ir konts> <0>Ienāc šeit.</0>",
-    "inviteCodeInvalidError": "Nederīgs ielūguma kods (lietotāja ID nav atrasts)",
-    "inviteCodeLabel": "Ielūguma kods",
-    "inviteCodePlaceholder": "Ievadiet drauga lietotāja ID",
-    "inviteCodeRequiredError": "Nepieciešams ielūguma kods",
     "login": {
-      "description": "Lūdzu ievadi paroles frāzi lai ieietu kontā",
+      "description": "Ievadiet savu lietotājvārdu vai e-pastu un paroli, lai pieteiktos savā kontā",
       "failedToReachServer": "Neizdevās sasniegt serveri",
-      "nicknameLabel": "Segvārds",
-      "nicknameNotFound": "Segvārds nav atrasts",
-      "nicknamePlaceholder": "Ievadiet savu segvārdu",
-      "nicknameRequired": "Jānorāda segvārds",
+      "identifierLabel": "Lietotājvārds vai e-pasts",
+      "identifierNotFound": "Lietotājvārds vai e-pasts nav atrasts",
+      "identifierPlaceholder": "Ievadiet savu lietotājvārdu vai e-pastu",
+      "identifierRequired": "Nepieciešams lietotājvārds vai e-pasts",
       "noBackendUrl": "Nav aizmugursistēmas URL",
       "or": "or",
       "passwordIncorrect": "Parole nav pareiza",
@@ -102,6 +98,9 @@
     "register": {
       "confirmPasswordLabel": "Apstipriniet paroli",
       "confirmPasswordPlaceholder": "Apstipriniet savu paroli",
+      "emailInvalid": "Ievadiet derīgu e-pasta adresi",
+      "emailLabel": "Personīgais e-pasts",
+      "emailPlaceholder": "Ievadiet savu personīgo e-pastu",
       "information": {
         "color1": "Profila krāsa viens",
         "color2": "Profila krāsa divi",
@@ -113,8 +112,9 @@
       "nicknameLabel": "Segvārds",
       "nicknamePlaceholder": "Izvēlieties unikālu segvārdu",
       "nicknameTaken": "Segvārds jau ir aizņemts",
+      "nicknameRequired": "Jānorāda segvārds",
       "passwordInput": {
-        "description": "Izvēlieties segvārdu un paroli. Jūsu parole darbojas kā droša ieejas frāze, tāpēc noteikti atcerieties to!",
+        "description": "Izvēlieties segvārdu, personīgo e-pastu un paroli. Jūsu parole darbojas kā droša ieejas frāze, tāpēc noteikti atcerieties to!",
         "title": "Izveidojiet savu pieteikumvārdu"
       },
       "passwordLabel": "Parole",
@@ -1197,8 +1197,6 @@
       "info": {
         "appVersion": "Versija",
         "notLoggedIn": "Jūs neesat pievienojies",
-        "userId": "Lietotāja ID",
-        "userIdDescription": "Izmantojiet šo kā ielūguma kodu drauga reģistrācijai",
         "checkForUpdates": "Pārbaudiet atjauninājumus",
         "upToDate": "Jūs pašlaik izmantojat jaunāko versiju"
       }

@@ -96,7 +96,7 @@ model users {
   profile        Json
   ratings        Json      @default("[]")
   nickname       String    @unique @db.VarChar(255)
-  invited_by     String?   @db.VarChar(255)
+  email          String?   @unique @db.VarChar(255)
 }
 
 model watch_history {

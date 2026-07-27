@@ -81,7 +81,7 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
         nickname: props.passwordData.nickname,
         password: props.passwordData.password,
         userData: {
-          inviteCode: props.passwordData.inviteCode ?? "",
+          email: props.passwordData.email ?? "",
           profile: props.accountProfile.profile,
         },
         recaptchaToken,
