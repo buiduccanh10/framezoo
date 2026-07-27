@@ -68,8 +68,7 @@ export class SidecarTorrentEngine implements TorrentEngine {
         sourceId: request.sourceId,
         streamUrl: response.session.streamUrl,
         streamType:
-          (response.session.streamType as "pending" | "file") ??
-          "pending",
+          (response.session.streamType as "pending" | "file") ?? "pending",
         startAt: response.session.startAt ?? request.startAt ?? 0,
         duration: response.session.duration ?? null,
         fileName: response.session.fileName ?? request.fileName ?? null,
@@ -121,6 +120,9 @@ export class SidecarTorrentEngine implements TorrentEngine {
     const process = spawn(this.executablePath, [], {
       stdio: ["pipe", "pipe", "pipe"],
       env: globalThis.process.env,
+      shell:
+        globalThis.process.platform === "win32" &&
+        this.executablePath.toLowerCase().endsWith(".cmd"),
     });
     this.process = process;
 
