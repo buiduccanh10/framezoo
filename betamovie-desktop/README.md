@@ -8,6 +8,21 @@ Electron shell for `betamovie-fe`.
 - bundles Electron `main` and `preload` code into `betamovie-desktop/dist`
 - packages a native desktop app with `electron-builder`
 
+## MPV Resources
+
+MPV resources are downloaded locally and ignored by Git. Development uses only
+the current host target. Targeted release commands download only the target
+being packaged:
+
+- `dist:desktop:mac:arm64` -> `darwin-arm64`
+- `dist:desktop:mac:x64` -> `darwin-x64`
+- `package:release:win:arm64` -> `win32-arm64`
+- `package:release:win:x64` -> `win32-x64`
+
+`electron-builder` copies only `resources/bin/${platform}-${arch}/**`, including
+the MPV executable and its `lib` dependencies. Other platform directories stay
+out of the app bundle.
+
 ## Commands
 
 From the repo root:

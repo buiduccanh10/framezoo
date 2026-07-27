@@ -130,11 +130,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: macos-14
+          - runner: macos-15-intel
             variant: mac-x64
             arch: x64
             command: pnpm --filter betamovie-desktop package:release:mac:x64
-          - runner: macos-14
+          - runner: macos-15
             variant: mac-arm64
             arch: arm64
             command: pnpm --filter betamovie-desktop package:release:mac:arm64
@@ -172,12 +172,12 @@ jobs:
           fi
           printf '%s' "$ENV_FILE" > .env
           printf '%s' "$ENV_FILE" > betamovie-fe/.env
-          
+
           BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$BACKEND_URL" ]; then
             echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
           fi
-          
+
           DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$DEVTOOLS" ]; then
             echo "VITE_ENABLE_DEVTOOLS_PROTECTION=$DEVTOOLS" >> "$GITHUB_ENV"
@@ -249,12 +249,12 @@ jobs:
           fi
           printf '%s' "$ENV_FILE" > .env
           printf '%s' "$ENV_FILE" > betamovie-fe/.env
-          
+
           BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$BACKEND_URL" ]; then
             echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
           fi
-          
+
           DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$DEVTOOLS" ]; then
             echo "VITE_ENABLE_DEVTOOLS_PROTECTION=$DEVTOOLS" >> "$GITHUB_ENV"
