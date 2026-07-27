@@ -11,7 +11,7 @@ export class UnavailableTorrentEngine implements TorrentEngine {
     _listener: TorrentStatusListener,
   ): Promise<TorrentSession> {
     throw new Error(
-      "Native torrent engine is unavailable. Set BETAMOVIE_TORRENT_ENGINE_PATH or BETAMOVIE_TORRENT_FIXTURE_FILE.",
+      "Native torrent engine is unavailable. Run the desktop torrent setup or provide BETAMOVIE_TORRENT_ENGINE_PATH.",
     );
   }
 

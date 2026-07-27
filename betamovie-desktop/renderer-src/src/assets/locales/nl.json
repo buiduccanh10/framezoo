@@ -50,9 +50,28 @@
       "title": "Add-onsbeheerder"
     },
     "player": {
+      "chooseAddon": "Kies een add-on",
       "emptyExplanation": "Er is nog geen stream-add-on geïnstalleerd of geactiveerd. Bezoek de Addons Manager-pagina voor installatiehandleidingen en het ontdekken van mediacatalogussen.",
       "emptyTitle": "Er zijn geen stream-add-ons beschikbaar",
-      "manageAddonsButton": "Beheer Add-onlijst"
+      "loadingStreams": "Streams laden...",
+      "manageAddonsButton": "Beheer Add-onlijst",
+      "noAddonStreams": "Er zijn geen add-onstreams geretourneerd voor deze titel.",
+      "noTorrentStreams": "Er zijn geen torrent-streams geretourneerd voor deze add-on.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Alle kwaliteiten",
+        "other": "Ander"
+      },
+      "sources": "Bronnen",
+      "streamCount": "{{count}} streamen",
+      "streamCount_plural": "{{count}} streams",
+      "title": "Desktop-add-ons",
+      "unableToLoad": "Kan streams niet laden",
+      "viewStreams": "Bekijk streams"
     }
   },
   "auth": {

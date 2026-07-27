@@ -50,9 +50,28 @@
       "title": "Papildinājumu pārvaldnieks"
     },
     "player": {
+      "chooseAddon": "Izvēlieties papildinājumu",
       "emptyExplanation": "Vēl nav instalēts vai aktivizēts neviens straumes papildinājums. Apmeklējiet Addons Manager lapu, lai skatītu iestatīšanas rokasgrāmatas un multivides kataloga atklāšanu.",
       "emptyTitle": "Nav pieejams neviens straumes papildinājums",
-      "manageAddonsButton": "Pārvaldīt papildinājumu sarakstu"
+      "loadingStreams": "Notiek straumju ielāde...",
+      "manageAddonsButton": "Pārvaldīt papildinājumu sarakstu",
+      "noAddonStreams": "Šim nosaukumam netika atgriezta neviena papildinājuma straume.",
+      "noTorrentStreams": "Šim papildinājumam netika atgriezta neviena torrent straume.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Visas īpašības",
+        "other": "Cits"
+      },
+      "sources": "Avoti",
+      "streamCount": "{{count}} straume",
+      "streamCount_plural": "{{count}} straumes",
+      "title": "Darbvirsmas papildinājumi",
+      "unableToLoad": "Nevar ielādēt straumes",
+      "viewStreams": "Skatīt straumes"
     }
   },
   "auth": {

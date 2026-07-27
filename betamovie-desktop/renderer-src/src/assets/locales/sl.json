@@ -50,9 +50,28 @@
       "title": "Upravitelj dodatkov"
     },
     "player": {
+      "chooseAddon": "Izberite dodatek",
       "emptyExplanation": "Noben dodatek za tok še ni nameščen ali aktiviran. Obiščite stran upravitelja dodatkov za navodila za namestitev in odkrivanje kataloga medijev.",
       "emptyTitle": "Na voljo ni nobenih dodatkov za tok",
-      "manageAddonsButton": "Upravljanje seznama dodatkov"
+      "loadingStreams": "Nalaganje tokov ...",
+      "manageAddonsButton": "Upravljanje seznama dodatkov",
+      "noAddonStreams": "Za ta naslov ni vrnjen noben tok dodatkov.",
+      "noTorrentStreams": "Za ta dodatek ni bil vrnjen noben torrent tok.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Vse kakovosti",
+        "other": "drugo"
+      },
+      "sources": "Viri",
+      "streamCount": "{{count}} tok",
+      "streamCount_plural": "{{count}} tokov",
+      "title": "Namizni dodatki",
+      "unableToLoad": "Ni mogoče naložiti tokov",
+      "viewStreams": "Ogled tokov"
     }
   },
   "auth": {

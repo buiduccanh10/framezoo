@@ -50,9 +50,28 @@
       "title": "アドオンマネージャー"
     },
     "player": {
+      "chooseAddon": "アドオンを選択してください",
       "emptyExplanation": "ストリーム アドオンはまだインストールまたはアクティブ化されていません。セットアップ ガイドとメディア カタログの検出については、アドオン マネージャーのページにアクセスしてください。",
       "emptyTitle": "利用可能なストリーム アドオンはありません",
-      "manageAddonsButton": "アドオンリストの管理"
+      "loadingStreams": "ストリームを読み込み中...",
+      "manageAddonsButton": "アドオンリストの管理",
+      "noAddonStreams": "このタイトルではアドオン ストリームが返されませんでした。",
+      "noTorrentStreams": "このアドオンに対して返された torrent ストリームはありません。",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "すべての資質",
+        "other": "他の"
+      },
+      "sources": "情報源",
+      "streamCount": "{{count}} ストリーム",
+      "streamCount_plural": "{{count}} ストリーム",
+      "title": "デスクトップアドオン",
+      "unableToLoad": "ストリームをロードできません",
+      "viewStreams": "ストリームを表示する"
     }
   },
   "auth": {

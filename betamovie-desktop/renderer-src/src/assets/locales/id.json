@@ -50,9 +50,28 @@
       "title": "Manajer Tambahan"
     },
     "player": {
+      "chooseAddon": "Pilih tambahan",
       "emptyExplanation": "Belum ada addon streaming yang diinstal atau diaktifkan. Kunjungi halaman Addons Manager untuk panduan pengaturan dan penemuan katalog media.",
       "emptyTitle": "Tidak ada tambahan aliran yang tersedia",
-      "manageAddonsButton": "Kelola Daftar Addon"
+      "loadingStreams": "Memuat streaming...",
+      "manageAddonsButton": "Kelola Daftar Addon",
+      "noAddonStreams": "Tidak ada aliran tambahan yang dikembalikan untuk judul ini.",
+      "noTorrentStreams": "Tidak ada aliran torrent yang dikembalikan untuk addon ini.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Semua Kualitas",
+        "other": "Lainnya"
+      },
+      "sources": "Sumber",
+      "streamCount": "{{count}} aliran",
+      "streamCount_plural": "{{count}} aliran",
+      "title": "Tambahan desktop",
+      "unableToLoad": "Tidak dapat memuat streaming",
+      "viewStreams": "Lihat aliran"
     }
   },
   "auth": {

@@ -50,9 +50,28 @@
       "title": "ผู้จัดการส่วนเสริม"
     },
     "player": {
+      "chooseAddon": "เลือกส่วนเสริม",
       "emptyExplanation": "ยังไม่มีการติดตั้งหรือเปิดใช้งานสตรีมเสริม ไปที่หน้า Addons Manager เพื่อดูคำแนะนำในการตั้งค่าและการค้นพบแคตตาล็อกสื่อ",
       "emptyTitle": "ไม่มีส่วนเสริมสตรีมให้ใช้งาน",
-      "manageAddonsButton": "จัดการรายการ Addon"
+      "loadingStreams": "กำลังโหลดสตรีม...",
+      "manageAddonsButton": "จัดการรายการ Addon",
+      "noAddonStreams": "ไม่มีการส่งคืนสตรีม addon สำหรับชื่อนี้",
+      "noTorrentStreams": "ไม่มีการส่งคืนสตรีม torrent สำหรับส่วนเสริมนี้",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "คุณสมบัติทั้งหมด",
+        "other": "อื่น"
+      },
+      "sources": "แหล่งที่มา",
+      "streamCount": "{{count}} สตรีม",
+      "streamCount_plural": "{{count}} สตรีม",
+      "title": "ส่วนเสริมเดสก์ท็อป",
+      "unableToLoad": "ไม่สามารถโหลดสตรีมได้",
+      "viewStreams": "ดูสตรีม"
     }
   },
   "auth": {

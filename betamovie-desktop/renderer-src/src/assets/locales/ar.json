@@ -50,9 +50,28 @@
       "title": "مدير الإضافات"
     },
     "player": {
+      "chooseAddon": "اختر ملحقًا",
       "emptyExplanation": "لم يتم تثبيت أو تنشيط أي ملحق دفق حتى الآن. قم بزيارة صفحة Addons Manager للحصول على أدلة الإعداد واكتشاف كتالوج الوسائط.",
       "emptyTitle": "لا توجد إضافات تيار متاحة",
-      "manageAddonsButton": "إدارة قائمة الإضافات"
+      "loadingStreams": "جارٍ تحميل التدفقات...",
+      "manageAddonsButton": "إدارة قائمة الإضافات",
+      "noAddonStreams": "لم يتم إرجاع أي تدفقات إضافية لهذا العنوان.",
+      "noTorrentStreams": "لم يتم إرجاع أي تدفقات تورنت لهذا الملحق.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "جميع الصفات",
+        "other": "آخر"
+      },
+      "sources": "مصادر",
+      "streamCount": "{{count}} تيار",
+      "streamCount_plural": "{{count}} التدفقات",
+      "title": "إضافات سطح المكتب",
+      "unableToLoad": "غير قادر على تحميل التدفقات",
+      "viewStreams": "عرض التدفقات"
     }
   },
   "auth": {

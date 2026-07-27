@@ -50,9 +50,28 @@
       "title": "Xestor de complementos"
     },
     "player": {
+      "chooseAddon": "Escolle un complemento",
       "emptyExplanation": "Aínda non hai ningún complemento de fluxo instalado nin activado. Visita a páxina do Xestor de complementos para ver guías de configuración e descubrimento do catálogo multimedia.",
       "emptyTitle": "Non hai complementos de emisión dispoñibles",
-      "manageAddonsButton": "Xestionar a lista de complementos"
+      "loadingStreams": "Cargando emisións...",
+      "manageAddonsButton": "Xestionar a lista de complementos",
+      "noAddonStreams": "Non se devolveu ningún complemento para este título.",
+      "noTorrentStreams": "Non se devolveron fluxos de torrent para este complemento.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Todas as calidades",
+        "other": "Outros"
+      },
+      "sources": "Fontes",
+      "streamCount": "{{count}} fluxo",
+      "streamCount_plural": "{{count}} emisións",
+      "title": "Complementos de escritorio",
+      "unableToLoad": "Non se poden cargar emisións",
+      "viewStreams": "Ver fluxos"
     }
   },
   "auth": {

@@ -50,9 +50,28 @@
       "title": "מנהל תוספות"
     },
     "player": {
+      "chooseAddon": "בחר תוסף",
       "emptyExplanation": "עדיין לא הותקן או הופעל תוסף סטרימינג. בקר בדף Addons Manager לקבלת מדריכי התקנה וגילוי קטלוג מדיה.",
       "emptyTitle": "אין תוספי סטרימינג זמינים",
-      "manageAddonsButton": "נהל רשימת תוספות"
+      "loadingStreams": "טוען זרמים...",
+      "manageAddonsButton": "נהל רשימת תוספות",
+      "noAddonStreams": "לא הוחזרו זרמי תוספות עבור כותר זה.",
+      "noTorrentStreams": "לא הוחזרו זרמי טורנט עבור התוסף הזה.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "כל האיכויות",
+        "other": "אַחֵר"
+      },
+      "sources": "מקורות",
+      "streamCount": "{{count}} זרם",
+      "streamCount_plural": "{{count}} זרמים",
+      "title": "תוספות לשולחן העבודה",
+      "unableToLoad": "לא ניתן לטעון זרמים",
+      "viewStreams": "צפה בזרמים"
     }
   },
   "auth": {

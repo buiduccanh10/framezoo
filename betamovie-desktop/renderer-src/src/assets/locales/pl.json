@@ -50,9 +50,28 @@
       "title": "Menedżer dodatków"
     },
     "player": {
+      "chooseAddon": "Wybierz dodatek",
       "emptyExplanation": "Żaden dodatek do strumienia nie jest jeszcze zainstalowany ani aktywowany. Odwiedź stronę Menedżera dodatków, aby zapoznać się z przewodnikami konfiguracji i odkrywaniem katalogu multimediów.",
       "emptyTitle": "Brak dostępnych dodatków do strumienia",
-      "manageAddonsButton": "Zarządzaj listą dodatków"
+      "loadingStreams": "Ładowanie strumieni...",
+      "manageAddonsButton": "Zarządzaj listą dodatków",
+      "noAddonStreams": "Nie zwrócono żadnych strumieni dodatków dla tego tytułu.",
+      "noTorrentStreams": "Dla tego dodatku nie zwrócono żadnych strumieni torrentowych.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Wszystkie cechy",
+        "other": "Inny"
+      },
+      "sources": "Źródła",
+      "streamCount": "{{count}} strumień",
+      "streamCount_plural": "{{count}} strumieni",
+      "title": "Dodatki na komputer stacjonarny",
+      "unableToLoad": "Nie można załadować strumieni",
+      "viewStreams": "Zobacz strumienie"
     }
   },
   "auth": {

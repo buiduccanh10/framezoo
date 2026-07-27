@@ -50,9 +50,28 @@
       "title": "Administrador de complementos"
     },
     "player": {
+      "chooseAddon": "Elige un complemento",
       "emptyExplanation": "Aún no hay ningún complemento de transmisión instalado o activado. Visite la página del Administrador de complementos para obtener guías de configuración y descubrimiento del catálogo de medios.",
       "emptyTitle": "No hay complementos de transmisión disponibles",
-      "manageAddonsButton": "Administrar lista de complementos"
+      "loadingStreams": "Cargando secuencias...",
+      "manageAddonsButton": "Administrar lista de complementos",
+      "noAddonStreams": "No se devolvieron transmisiones de complementos para este título.",
+      "noTorrentStreams": "No se devolvieron transmisiones de torrents para este complemento.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Todas las cualidades",
+        "other": "Otro"
+      },
+      "sources": "Fuentes",
+      "streamCount": "{{count}} transmisión",
+      "streamCount_plural": "{{count}} transmisiones",
+      "title": "Complementos de escritorio",
+      "unableToLoad": "No se pueden cargar transmisiones",
+      "viewStreams": "Ver transmisiones"
     }
   },
   "auth": {
