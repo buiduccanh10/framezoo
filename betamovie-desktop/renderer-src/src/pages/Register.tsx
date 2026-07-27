@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
-import { Helmet } from "react-helmet-async";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Trans, useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { getBackendMeta } from "@/backend/accounts/meta";
 import { Button } from "@/components/buttons/Button";
@@ -12,8 +11,9 @@ import {
   LargeCardButtons,
   LargeCardText,
 } from "@/components/layout/LargeCard";
+import { AuthDialog } from "@/components/overlays/AuthDialog";
+import { MwLink } from "@/components/text/Link";
 import { useAuth } from "@/hooks/auth/useAuth";
-import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
 import {
   AccountCreatePart,
   AccountProfile,
@@ -22,7 +22,6 @@ import {
   PasswordInputData,
   PasswordInputPart,
 } from "@/pages/parts/auth/PasswordInputPart";
-import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { usePreviewThemeStore } from "@/stores/theme";
@@ -39,7 +38,8 @@ function CaptchaProvider(props: {
   );
 }
 
-export function RegisterPage() {
+export function RegisterPanel() {
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { register } = useAuth();
@@ -120,63 +120,93 @@ export function RegisterPage() {
       },
     })
       .then(() => {
-        navigate("/");
+        const state = location.state as
+          | {
+              from?: {
+                pathname: string;
+                search?: string;
+                hash?: string;
+              };
+            }
+          | undefined;
+        const destination = state?.from
+          ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
+          : "/discover";
+        navigate(destination, { replace: true });
       })
       .catch((err) => {
         console.error("Registration failed:", err);
       });
   };
 
+  const content = (
+    <>
+      {step === -1 && (availableBackends.length > 1 || !defaultBackend) ? (
+        <LargeCard compact>
+          <LargeCardText compact title={t("auth.backendSelection.title")}>
+            {t("auth.backendSelection.description")}
+          </LargeCardText>
+          <BackendSelector
+            selectedUrl={selectedBackendUrl}
+            onSelect={handleBackendSelect}
+            availableUrls={availableBackends}
+            showCustom
+          />
+          <LargeCardButtons compact>
+            <span className="text-type-danger font-medium text-center">
+              {t("settings.connections.server.notice")}
+            </span>
+            <Button
+              theme="purple"
+              onClick={() => {
+                if (selectedBackendUrl) {
+                  setStep(1);
+                }
+              }}
+              disabled={!selectedBackendUrl}
+            >
+              {t("auth.register.information.next")}
+            </Button>
+          </LargeCardButtons>
+        </LargeCard>
+      ) : null}
+
+      {step === 1 ? (
+        <PasswordInputPart
+          forLogin={false}
+          compact
+          onNext={handlePasswordNext}
+        />
+      ) : null}
+
+      {step === 2 ? (
+        <AccountCreatePart compact onNext={handleAccountNext} />
+      ) : null}
+
+      <p className="text-center mt-6 text-type-text">
+        <Trans i18nKey="auth.hasAccount">
+          <MwLink
+            onClick={() =>
+              navigate("/login", {
+                state: location.state,
+                replace: true,
+              })
+            }
+          >
+            .
+          </MwLink>
+        </Trans>
+      </p>
+    </>
+  );
+
+  return <CaptchaProvider siteKey={siteKey}>{content}</CaptchaProvider>;
+}
+
+export function RegisterPage() {
   return (
-    <CaptchaProvider siteKey={siteKey}>
-      <SubPageLayout showFooter={false}>
-        <Helmet>
-          <body className="md:overflow-hidden" />
-        </Helmet>
-        <PageTitle subpage k="global.pages.register" />
-        <div className="flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-6">
-          <div className="w-full">
-            {step === -1 &&
-            (availableBackends.length > 1 || !defaultBackend) ? (
-              <LargeCard>
-                <LargeCardText title={t("auth.backendSelection.title")}>
-                  {t("auth.backendSelection.description")}
-                </LargeCardText>
-                <BackendSelector
-                  selectedUrl={selectedBackendUrl}
-                  onSelect={handleBackendSelect}
-                  availableUrls={availableBackends}
-                  showCustom
-                />
-                <LargeCardButtons>
-                  <span className="text-type-danger font-medium text-center">
-                    {t("settings.connections.server.notice")}
-                  </span>
-                  <Button
-                    theme="purple"
-                    onClick={() => {
-                      if (selectedBackendUrl) {
-                        setStep(1);
-                      }
-                    }}
-                    disabled={!selectedBackendUrl}
-                  >
-                    {t("auth.register.information.next")}
-                  </Button>
-                </LargeCardButtons>
-              </LargeCard>
-            ) : null}
-
-            {step === 1 ? (
-              <PasswordInputPart forLogin={false} onNext={handlePasswordNext} />
-            ) : null}
-
-            {step === 2 ? (
-              <AccountCreatePart onNext={handleAccountNext} />
-            ) : null}
-          </div>
-        </div>
-      </SubPageLayout>
-    </CaptchaProvider>
+    <AuthDialog mode="register">
+      <RegisterPanel />
+    </AuthDialog>
   );
 }

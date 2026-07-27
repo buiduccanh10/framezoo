@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -7,7 +7,6 @@ import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useAuthStore } from "@/stores/auth";
 import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
-import { getOrCreateWatchPartyParticipantId } from "@/utils/watchPartyParticipant";
 
 export function WatchPartyStatus() {
   const { t } = useTranslation();
@@ -16,10 +15,7 @@ export function WatchPartyStatus() {
   const [showNotification, setShowNotification] = useState(false);
   const [lastUserCount, setLastUserCount] = useState(1);
   const account = useAuthStore((s) => s.account);
-  const currentParticipantId = useMemo(
-    () => account?.userId ?? getOrCreateWatchPartyParticipantId(),
-    [account?.userId],
-  );
+  const currentParticipantId = account?.userId ?? "";
 
   const {
     roomUsers,

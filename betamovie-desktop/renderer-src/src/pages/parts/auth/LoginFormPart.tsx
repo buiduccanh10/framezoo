@@ -22,6 +22,7 @@ import { type PasswordInputData, PasswordInputPart } from "./PasswordInputPart";
 
 interface LoginFormPartProps {
   onLogin?: () => void;
+  onRegister?: () => void;
 }
 
 export function LoginFormPart(props: LoginFormPartProps) {
@@ -166,13 +167,14 @@ export function LoginFormPart(props: LoginFormPartProps) {
   const globalError = result.error || passkeyResult.error;
 
   return (
-    <LargeCard top={<BrandPill backgroundClass="bg-[#161527]" />}>
-      <LargeCardText title={t("auth.login.title")}>
+    <LargeCard compact top={<BrandPill backgroundClass="bg-[#161527]" />}>
+      <LargeCardText compact title={t("auth.login.title")}>
         {t("auth.login.description")}
       </LargeCardText>
       <div className="space-y-4">
         <PasswordInputPart
           forLogin
+          compact
           onNext={handlePasswordSubmit}
           externalNicknameError={nicknameError}
           externalPasswordError={passwordError}
@@ -208,9 +210,15 @@ export function LoginFormPart(props: LoginFormPartProps) {
           </p>
         ) : null}
       </div>
-      <p className="text-center mt-6">
+      <p className="text-center mt-4 sm:mt-6">
         <Trans i18nKey="auth.createAccount">
-          <MwLink to="/register">.</MwLink>
+          <MwLink
+            {...(props.onRegister
+              ? { onClick: props.onRegister }
+              : { to: "/register" })}
+          >
+            .
+          </MwLink>
         </Trans>
       </p>
     </LargeCard>
