@@ -5,7 +5,7 @@
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.9.0",
   "scripts": {
-    "dev": "pnpm run resources:ensure && concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
+    "dev": "pnpm run resources:ensure && pnpm run torrent:setup && concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
     "dev:renderer": "pnpm exec vite --config renderer-src/vite.config.mts --host 127.0.0.1 --port 5174",
     "dev:shell": "tsup --watch",
     "dev:electron": "wait-on dist/main.cjs tcp:127.0.0.1:5174 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5174 electronmon dist/main.cjs",
@@ -17,16 +17,21 @@
     "resources:ensure:darwin-x64": "node scripts/update-mpv.mjs --ensure --target darwin-x64",
     "resources:ensure:win32-arm64": "node scripts/update-mpv.mjs --ensure --target win32-arm64",
     "resources:ensure:win32-x64": "node scripts/update-mpv.mjs --ensure --target win32-x64",
-    "package:dir": "pnpm run resources:ensure && pnpm run build && electron-builder --dir",
-    "package:release": "pnpm run resources:ensure && pnpm run build && electron-builder",
-    "package:release:mac": "pnpm run resources:ensure && pnpm run build && electron-builder --mac dmg zip",
-    "package:release:mac:arm64": "pnpm run resources:ensure:darwin-arm64 && pnpm run build && electron-builder --mac dmg zip --arm64",
-    "package:release:mac:x64": "pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --mac dmg zip --x64",
-    "package:release:mac:universal": "pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --mac dmg zip --universal",
-    "package:release:win:x64": "pnpm run resources:ensure:win32-x64 && pnpm run build && electron-builder --win nsis --x64",
-    "package:release:win:arm64": "pnpm run resources:ensure:win32-arm64 && pnpm run build && electron-builder --win nsis --arm64",
-    "torrent:setup": "sh torrent-engine/setup.sh",
-    "dev:torrent": "pnpm run torrent:setup && BETAMOVIE_TORRENT_ENGINE_PATH=\"$PWD/torrent-engine/run.sh\" pnpm run dev",
+    "torrent:setup": "node scripts/setup-torrent-engine.mjs",
+    "torrent:build": "node scripts/build-torrent-engine.mjs",
+    "torrent:build:darwin-arm64": "node scripts/build-torrent-engine.mjs darwin-arm64",
+    "torrent:build:darwin-x64": "node scripts/build-torrent-engine.mjs darwin-x64",
+    "torrent:build:win32-arm64": "node scripts/build-torrent-engine.mjs win32-arm64",
+    "torrent:build:win32-x64": "node scripts/build-torrent-engine.mjs win32-x64",
+    "package:dir": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run resources:ensure && pnpm run build && electron-builder --dir",
+    "package:release": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run resources:ensure && pnpm run build && electron-builder",
+    "package:release:mac": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run resources:ensure && pnpm run build && electron-builder --mac dmg zip",
+    "package:release:mac:arm64": "pnpm run torrent:setup && pnpm run torrent:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64 && pnpm run build && electron-builder --mac dmg zip --arm64",
+    "package:release:mac:x64": "pnpm run torrent:setup && pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --mac dmg zip --x64",
+    "package:release:mac:universal": "pnpm run torrent:setup && pnpm run torrent:build:darwin-arm64 && pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --mac dmg zip --universal",
+    "package:release:win:x64": "pnpm run torrent:setup && pnpm run torrent:build:win32-x64 && pnpm run resources:ensure:win32-x64 && pnpm run build && electron-builder --win nsis --x64",
+    "package:release:win:arm64": "pnpm run torrent:setup && pnpm run torrent:build:win32-arm64 && pnpm run resources:ensure:win32-arm64 && pnpm run build && electron-builder --win nsis --arm64",
+    "dev:torrent": "pnpm run dev",
     "lint:renderer": "cd renderer-src && eslint src",
     "test:renderer": "vitest run --config renderer-src/vite.config.mts",
     "test:torrent": "vitest run --config vitest.main.config.mts src/torrent/fixtureEngine.test.ts",
@@ -179,7 +184,24 @@
         "from": "resources/bin/${platform}-${arch}",
         "to": "bin",
         "filter": [
-          "*"
+          "**/*"
+        ]
+      },
+      {
+        "from": "torrent-engine/bin",
+        "to": "torrent-engine/bin",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "torrent-engine",
+        "to": "torrent-engine",
+        "filter": [
+          "libtorrent_sidecar.py",
+          "requirements.txt",
+          "run.sh",
+          "run.cmd"
         ]
       }
     ],

@@ -7,6 +7,7 @@ import { FixtureTorrentEngine } from "./fixtureEngine";
 import { SidecarTorrentEngine } from "./sidecarEngine";
 import type { TorrentEngine, TorrentStatusListener } from "./types";
 import { UnavailableTorrentEngine } from "./unavailableEngine";
+import { resolveTorrentEnginePath } from "./paths";
 
 export class TorrentManager {
   private readonly engine: TorrentEngine;
@@ -18,6 +19,7 @@ export class TorrentManager {
     fixtureFilePath?: string;
     fixtureIntervalMs?: number;
   }) {
+    const enginePath = resolveTorrentEnginePath();
     this.engine =
       options?.engine ??
       (options?.fixtureFilePath
@@ -25,8 +27,8 @@ export class TorrentManager {
             filePath: options.fixtureFilePath,
             intervalMs: options.fixtureIntervalMs,
           })
-        : process.env.BETAMOVIE_TORRENT_ENGINE_PATH
-          ? new SidecarTorrentEngine(process.env.BETAMOVIE_TORRENT_ENGINE_PATH)
+        : enginePath
+          ? new SidecarTorrentEngine(enginePath)
           : new UnavailableTorrentEngine());
   }
 

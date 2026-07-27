@@ -1,23 +1,26 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { execSync } = require("child_process");
+const fs = require("fs");
+const path = require("path");
 
-const rootDir = path.resolve(__dirname, '..');
-const desktopDir = path.join(rootDir, 'betamovie-desktop');
-const downloadsDir = path.join(rootDir, 'downloads');
+const rootDir = path.resolve(__dirname, "..");
+const desktopDir = path.join(rootDir, "betamovie-desktop");
+const downloadsDir = path.join(rootDir, "downloads");
 
 // Load environment variables from root .env file if it exists to pass VITE_BACKEND_URL to builds
-const envPath = path.join(rootDir, '.env');
+const envPath = path.join(rootDir, ".env");
 if (fs.existsSync(envPath)) {
-  console.log('Loading environment variables from root .env file...');
-  const envContent = fs.readFileSync(envPath, 'utf8');
-  for (const line of envContent.split('\n')) {
+  console.log("Loading environment variables from root .env file...");
+  const envContent = fs.readFileSync(envPath, "utf8");
+  for (const line of envContent.split("\n")) {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const firstEqual = trimmed.indexOf('=');
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const firstEqual = trimmed.indexOf("=");
     if (firstEqual === -1) continue;
     const key = trimmed.slice(0, firstEqual).trim();
-    const val = trimmed.slice(firstEqual + 1).trim().replace(/^['"]|['"]$/g, '');
+    const val = trimmed
+      .slice(firstEqual + 1)
+      .trim()
+      .replace(/^['"]|['"]$/g, "");
     if (!process.env[key]) {
       process.env[key] = val;
     }
@@ -31,71 +34,112 @@ if (!fs.existsSync(downloadsDir)) {
 
 // Remove stale release artifacts so the downloads dir only contains the latest build set.
 for (const entry of fs.readdirSync(downloadsDir)) {
-  if (entry.startsWith('AlphaFlix-') || entry === 'README.txt') {
+  if (entry.startsWith("AlphaFlix-") || entry === "README.txt") {
     fs.rmSync(path.join(downloadsDir, entry), { recursive: true, force: true });
   }
 }
 
 // 2. Build desktop renderer and shell code
-console.log('Building desktop renderer and shell...');
-execSync('pnpm run build', { cwd: desktopDir, stdio: 'inherit' });
+console.log("Building desktop renderer and shell...");
+execSync("pnpm run torrent:setup", { cwd: desktopDir, stdio: "inherit" });
+execSync("pnpm run build", { cwd: desktopDir, stdio: "inherit" });
 
 // 3. Package desktop application for macOS and Windows sequentially to avoid CLI flag conflicts
-console.log('Packaging desktop applications for macOS and Windows...');
+console.log("Packaging desktop applications for macOS and Windows...");
 
 const targets = [];
-if (process.platform === 'darwin') {
+if (process.platform === "darwin") {
   targets.push(
-    { name: 'macOS Apple Silicon (arm64)', command: 'npx electron-builder --mac dmg --arm64' },
-    { name: 'macOS Intel (x64)', command: 'npx electron-builder --mac dmg --x64' },
-    { name: 'macOS Universal', command: 'npx electron-builder --mac dmg --universal' }
+    {
+      name: "macOS Apple Silicon (arm64)",
+      prepare:
+        "pnpm run torrent:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64",
+      command: "npx electron-builder --mac dmg --arm64",
+    },
+    {
+      name: "macOS Intel (x64)",
+      prepare:
+        "pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-x64",
+      command: "npx electron-builder --mac dmg --x64",
+    },
+    {
+      name: "macOS Universal",
+      prepare:
+        "pnpm run torrent:build:darwin-arm64 && pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64",
+      command: "npx electron-builder --mac dmg --universal",
+    },
   );
-} else if (process.platform === 'linux') {
+} else if (process.platform === "linux") {
   // Build macOS zip targets on Linux CI
   targets.push(
-    { name: 'macOS Apple Silicon (arm64) Zip', command: 'npx electron-builder --mac zip --arm64' },
-    { name: 'macOS Intel (x64) Zip', command: 'npx electron-builder --mac zip --x64' }
+    {
+      name: "macOS Apple Silicon (arm64) Zip",
+      prepare:
+        "pnpm run torrent:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64",
+      command: "npx electron-builder --mac zip --arm64",
+    },
+    {
+      name: "macOS Intel (x64) Zip",
+      prepare:
+        "pnpm run torrent:build:darwin-x64 && pnpm run resources:ensure:darwin-x64",
+      command: "npx electron-builder --mac zip --x64",
+    },
   );
 }
 // Windows zip targets can be built on macOS, Linux, and Windows
 targets.push(
-  { name: 'Windows x64', command: 'npx electron-builder --win zip --x64' },
-  { name: 'Windows ARM64', command: 'npx electron-builder --win zip --arm64' }
+  {
+    name: "Windows x64",
+    prepare:
+      "pnpm run torrent:build:win32-x64 && pnpm run resources:ensure:win32-x64",
+    command: "npx electron-builder --win zip --x64",
+  },
+  {
+    name: "Windows ARM64",
+    prepare:
+      "pnpm run torrent:build:win32-arm64 && pnpm run resources:ensure:win32-arm64",
+    command: "npx electron-builder --win zip --arm64",
+  },
 );
 
 for (const target of targets) {
   console.log(`\n--- Building target: ${target.name} ---`);
   try {
-    execSync(target.command, { cwd: desktopDir, stdio: 'inherit' });
+    execSync(target.prepare, { cwd: desktopDir, stdio: "inherit" });
+    execSync(target.command, { cwd: desktopDir, stdio: "inherit" });
   } catch (error) {
     console.error(`Failed to build target ${target.name}:`, error.message);
   }
 }
 
 // 4. Find version from package.json
-const packageJson = JSON.parse(fs.readFileSync(path.join(desktopDir, 'package.json'), 'utf8'));
+const packageJson = JSON.parse(
+  fs.readFileSync(path.join(desktopDir, "package.json"), "utf8"),
+);
 const version = packageJson.version;
 
 // 5. Copy built artifacts to the downloads folder
-const releaseDir = path.join(desktopDir, 'release');
-console.log(`\nCopying packaged builds (v${version}) from ${releaseDir} to ${downloadsDir}...`);
+const releaseDir = path.join(desktopDir, "release");
+console.log(
+  `\nCopying packaged builds (v${version}) from ${releaseDir} to ${downloadsDir}...`,
+);
 
 const filesToCopy = [];
-if (process.platform === 'darwin') {
+if (process.platform === "darwin") {
   filesToCopy.push(
     `AlphaFlix-${version}-arm64-mac.dmg`,
     `AlphaFlix-${version}-x64-mac.dmg`,
-    `AlphaFlix-${version}-universal-mac.dmg`
+    `AlphaFlix-${version}-universal-mac.dmg`,
   );
-} else if (process.platform === 'linux') {
+} else if (process.platform === "linux") {
   filesToCopy.push(
     `AlphaFlix-${version}-arm64-mac.zip`,
-    `AlphaFlix-${version}-x64-mac.zip`
+    `AlphaFlix-${version}-x64-mac.zip`,
   );
 }
 filesToCopy.push(
   `AlphaFlix-${version}-x64.zip`,
-  `AlphaFlix-${version}-arm64.zip`
+  `AlphaFlix-${version}-arm64.zip`,
 );
 
 let copiedCount = 0;
@@ -107,49 +151,57 @@ for (const file of filesToCopy) {
     fs.copyFileSync(src, dest);
     copiedCount++;
   } else {
-    console.warn(`Warning: Built file ${file} was not found in release directory.`);
+    console.warn(
+      `Warning: Built file ${file} was not found in release directory.`,
+    );
   }
 }
 
 // Also copy the README.txt guide
-const readmeSrc = path.join(desktopDir, 'README.txt');
-const readmeDest = path.join(downloadsDir, 'README.txt');
+const readmeSrc = path.join(desktopDir, "README.txt");
+const readmeDest = path.join(downloadsDir, "README.txt");
 if (fs.existsSync(readmeSrc)) {
-  console.log('Copying README.txt...');
+  console.log("Copying README.txt...");
   fs.copyFileSync(readmeSrc, readmeDest);
 }
 
-console.log(`Successfully built and copied ${copiedCount} files to the downloads folder.`);
+console.log(
+  `Successfully built and copied ${copiedCount} files to the downloads folder.`,
+);
 
 if (copiedCount === 0) {
-  console.error('Error: No files were successfully built and copied! Failing build.');
+  console.error(
+    "Error: No files were successfully built and copied! Failing build.",
+  );
   process.exit(1);
 }
 
 // 6. Sync to Docker volume if Docker is available
 try {
-  console.log('\nChecking for Docker volumes to sync...');
+  console.log("\nChecking for Docker volumes to sync...");
   // Check which volume exists
   let volumeName = null;
-  const volumesList = execSync('docker volume ls -q', { encoding: 'utf8' });
-  if (volumesList.includes('betamovie_backend_downloads-data')) {
-    volumeName = 'betamovie_backend_downloads-data';
-  } else if (volumesList.includes('betamovie_downloads-data')) {
-    volumeName = 'betamovie_downloads-data';
+  const volumesList = execSync("docker volume ls -q", { encoding: "utf8" });
+  if (volumesList.includes("betamovie_backend_downloads-data")) {
+    volumeName = "betamovie_backend_downloads-data";
+  } else if (volumesList.includes("betamovie_downloads-data")) {
+    volumeName = "betamovie_downloads-data";
   }
-  
+
   if (volumeName) {
     console.log(`Syncing files to Docker volume "${volumeName}"...`);
     // Resolve absolute path to downloads folder for Docker mount
     const absDownloadsDir = path.resolve(downloadsDir);
     execSync(
       `docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "rm -f /data/AlphaFlix-* /data/README.txt && cp -r /src/. /data/"`,
-      { stdio: 'inherit' }
+      { stdio: "inherit" },
     );
-    console.log('Successfully synced files to Docker volume.');
+    console.log("Successfully synced files to Docker volume.");
   } else {
-    console.log('No matching Docker downloads volume found to sync. Local files are preserved.');
+    console.log(
+      "No matching Docker downloads volume found to sync. Local files are preserved.",
+    );
   }
 } catch (dockerError) {
-  console.log('Docker is not running or volume sync failed. Continuing...');
+  console.log("Docker is not running or volume sync failed. Continuing...");
 }
