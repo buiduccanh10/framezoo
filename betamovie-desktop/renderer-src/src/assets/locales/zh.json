@@ -825,6 +825,14 @@
         },
         "title": "字幕",
         "transcriptChoice": "成绩单",
+        "searchPlaceholder": "搜索字幕或对话...",
+        "seekMode": "寻找",
+        "syncMode": "同步",
+        "syncOffset": "偏移量：{{delay}}s",
+        "syncAction": "同步",
+        "nowPlaying": "正在播放",
+        "syncDescription": "单击与当前视频场景匹配的对话，或调整偏移：",
+        "resetDelay": "重置",
         "translate": {
           "title": "翻译自 {{language}}"
         },

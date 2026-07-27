@@ -825,6 +825,14 @@
         },
         "title": "Subtitle",
         "transcriptChoice": "Salinan",
+        "searchPlaceholder": "Cari subtitle atau dialog...",
+        "seekMode": "Mencari",
+        "syncMode": "Sinkronisasi",
+        "syncOffset": "Pergeseran: {{delay}}s",
+        "syncAction": "Sinkronisasi",
+        "nowPlaying": "Sekarang sedang diputar",
+        "syncDescription": "Klik dialog yang cocok dengan adegan video saat ini, atau sesuaikan offset:",
+        "resetDelay": "Mengatur ulang",
         "translate": {
           "title": "Terjemahkan dari {{language}}"
         },

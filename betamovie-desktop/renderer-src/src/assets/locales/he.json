@@ -825,6 +825,14 @@
         },
         "title": "כתוביות",
         "transcriptChoice": "תמלול",
+        "searchPlaceholder": "חפש כתוביות או דיאלוג...",
+        "seekMode": "לְחַפֵּשׂ",
+        "syncMode": "סנכרון",
+        "syncOffset": "היסט: {{delay}}s",
+        "syncAction": "סנכרון",
+        "nowPlaying": "עכשיו משחק",
+        "syncDescription": "לחץ על דיאלוג התואם לסצינת הווידאו הנוכחית, או התאם את ההיסט:",
+        "resetDelay": "אִתחוּל",
         "translate": {
           "title": "תרגם מ-{{language}}"
         },

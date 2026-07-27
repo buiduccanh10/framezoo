@@ -825,6 +825,14 @@
         },
         "title": "Podnapisi",
         "transcriptChoice": "Prepis",
+        "searchPlaceholder": "Išči podnapise ali dialog ...",
+        "seekMode": "Iskanje",
+        "syncMode": "Sinhronizacija",
+        "syncOffset": "Odmik: {{delay}}s",
+        "syncAction": "Sinhronizacija",
+        "nowPlaying": "Zdaj se igra",
+        "syncDescription": "Kliknite pogovorno okno, ki se ujema s trenutno video sceno, ali prilagodite odmik:",
+        "resetDelay": "Ponastavi",
         "translate": {
           "title": "Prevedi iz {{language}}"
         },

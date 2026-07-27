@@ -825,6 +825,14 @@
         },
         "title": "Tekstitykset",
         "transcriptChoice": "Transkriptio",
+        "searchPlaceholder": "Hae tekstityksiä tai dialogia...",
+        "seekMode": "Etsi",
+        "syncMode": "Synkronoi",
+        "syncOffset": "Poikkeama: {{delay}}s",
+        "syncAction": "Synkronoi",
+        "nowPlaying": "Nyt pelaa",
+        "syncDescription": "Napsauta nykyistä videokohtausta vastaavaa dialogia tai säädä siirtymää:",
+        "resetDelay": "Nollaa",
         "translate": {
           "title": "Käännä kielestä {{language}}"
         },

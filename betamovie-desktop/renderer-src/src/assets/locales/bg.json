@@ -825,6 +825,14 @@
         },
         "title": "субтитри",
         "transcriptChoice": "Препис",
+        "searchPlaceholder": "Търсете субтитри или диалог...",
+        "seekMode": "Търсене",
+        "syncMode": "Синхронизиране",
+        "syncOffset": "Отместване: {{delay}}s",
+        "syncAction": "Синхронизиране",
+        "nowPlaying": "Сега се играе",
+        "syncDescription": "Щракнете върху диалога, съответстващ на текущата видео сцена, или коригирайте отместването:",
+        "resetDelay": "Нулиране",
         "translate": {
           "title": "Превод от {{language}}"
         },

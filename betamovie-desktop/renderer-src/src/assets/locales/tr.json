@@ -825,6 +825,14 @@
         },
         "title": "Altyazılar",
         "transcriptChoice": "Deşifre metni",
+        "searchPlaceholder": "Altyazı veya diyalog arayın...",
+        "seekMode": "Aramak",
+        "syncMode": "Senkronizasyon",
+        "syncOffset": "Uzaklık: {{delay}}s",
+        "syncAction": "Senkronizasyon",
+        "nowPlaying": "Şimdi oynatılıyor",
+        "syncDescription": "Geçerli video sahnesiyle eşleşen diyaloğa tıklayın veya uzaklığı ayarlayın:",
+        "resetDelay": "Sıfırla",
         "translate": {
           "title": "{{language}} adresinden çevir"
         },

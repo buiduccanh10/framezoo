@@ -825,6 +825,14 @@
         },
         "title": "الترجمة",
         "transcriptChoice": "نص",
+        "searchPlaceholder": "البحث عن الترجمة أو الحوار...",
+        "seekMode": "يطلب",
+        "syncMode": "مزامنة",
+        "syncOffset": "الإزاحة: {{delay}}s",
+        "syncAction": "مزامنة",
+        "nowPlaying": "العب الآن",
+        "syncDescription": "انقر فوق مربع حوار يطابق مشهد الفيديو الحالي، أو اضبط الإزاحة:",
+        "resetDelay": "إعادة ضبط",
         "translate": {
           "title": "الترجمة من {{language}}"
         },

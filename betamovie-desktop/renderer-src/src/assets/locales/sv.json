@@ -825,6 +825,14 @@
         },
         "title": "Undertexter",
         "transcriptChoice": "Avskrift",
+        "searchPlaceholder": "Sök efter undertexter eller dialog...",
+        "seekMode": "Söka",
+        "syncMode": "Synkronisera",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Synkronisera",
+        "nowPlaying": "Spelar nu",
+        "syncDescription": "Klicka på dialogen som matchar aktuell videoscen, eller justera offset:",
+        "resetDelay": "Återställa",
         "translate": {
           "title": "Översätt från {{language}}"
         },

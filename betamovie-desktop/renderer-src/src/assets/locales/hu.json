@@ -825,6 +825,14 @@
         },
         "title": "Feliratok",
         "transcriptChoice": "Átirat",
+        "searchPlaceholder": "Feliratok vagy párbeszédablak keresése...",
+        "seekMode": "Keress",
+        "syncMode": "Szinkronizál",
+        "syncOffset": "Eltolás: {{delay}}s",
+        "syncAction": "Szinkronizál",
+        "nowPlaying": "Most játszik",
+        "syncDescription": "Kattintson az aktuális videójelenetnek megfelelő párbeszédpanelre, vagy állítsa be az eltolást:",
+        "resetDelay": "Reset",
         "translate": {
           "title": "Fordítás {{language}}"
         },

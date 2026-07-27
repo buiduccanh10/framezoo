@@ -3,11 +3,13 @@ import Fuse from "fuse.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
 import { Link } from "@/components/player/internals/ContextMenu/Links";
 import {
   captionIsVisible,
+  getCaptionDelayForCue,
   makeQueId,
   parseCanonicalVtt,
   sanitize,
@@ -22,15 +24,19 @@ import { wordOverrides } from "../../Player";
 export function TranscriptView({ id }: { id: string }) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
-  const display = usePlayerStore((s) => s.display);
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const delay = useSubtitleStore((s) => s.delay);
+  const setDelay = useSubtitleStore((s) => s.setDelay);
   const { duration: timeDuration, time } = usePlayerStore((s) => s.progress);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [delayInput, setDelayInput] = useState("");
+  const [isDelayFocused, setIsDelayFocused] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
 
   const parsedCaptions = useMemo(
     () => (vttData ? parseCanonicalVtt(vttData) : []),
@@ -43,7 +49,8 @@ export function TranscriptView({ id }: { id: string }) {
 
   const transcriptItems = useMemo(
     () =>
-      parsedCaptions.map(({ start, end, content: raw }, i) => {
+      parsedCaptions.map((cue, i) => {
+        const { start, end, content: raw } = cue;
         const delayedStart = start / 1000 + delay;
         const delayedEnd = end / 1000 + delay;
 
@@ -56,6 +63,7 @@ export function TranscriptView({ id }: { id: string }) {
 
         return {
           key: makeQueId(i, start, end),
+          cue,
           startMs: start,
           endMs: end,
           start: delayedStart,
@@ -197,8 +205,9 @@ export function TranscriptView({ id }: { id: string }) {
     doScroll();
   }, [scrollTargetKey, didFirstScroll]);
 
-  const handleSeek = (seconds: number) => {
-    display?.setTime(seconds);
+  const handleItemClick = (item: (typeof transcriptItems)[number]) => {
+    const newDelay = getCaptionDelayForCue(item.cue, time);
+    setDelay(Number(newDelay.toFixed(2)));
   };
 
   return (
@@ -207,7 +216,72 @@ export function TranscriptView({ id }: { id: string }) {
         {t("player.menus.subtitles.transcriptChoice")}
       </Menu.BackLink>
       <Menu.Section>
-        <Input value={searchQuery} onInput={setSearchQuery} />
+        <div className="flex flex-col gap-2.5">
+          <Input
+            value={searchQuery}
+            onInput={setSearchQuery}
+            placeholder={t(
+              "player.menus.subtitles.searchPlaceholder",
+              "Search subtitles or dialogue...",
+            )}
+          />
+          <div className="flex items-center justify-between px-1 py-0.5 text-sm">
+            <span className="font-medium text-video-context-type-main text-xs sm:text-sm">
+              {t("player.menus.subtitles.delayLabel", "Subtitle offset")}
+            </span>
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setDelay(Number((delay - 0.1).toFixed(2)))}
+                className="w-7 h-7 flex items-center justify-center rounded-md bg-video-context-light bg-opacity-15 hover:bg-opacity-25 text-white font-bold transition-colors select-none text-sm"
+                title="-0.1s"
+              >
+                -
+              </button>
+              <div className="relative flex items-center">
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  value={displayDelay}
+                  onFocus={() => {
+                    setDelayInput(delay.toString());
+                    setIsDelayFocused(true);
+                  }}
+                  onChange={(e) => {
+                    const valStr = e.target.value;
+                    setDelayInput(valStr);
+                    const val = parseFloat(valStr);
+                    if (!isNaN(val)) {
+                      setDelay(Number(val.toFixed(2)));
+                    }
+                  }}
+                  onBlur={() => setIsDelayFocused(false)}
+                  className="w-16 h-7 text-center font-mono text-xs bg-video-context-inputBg text-white rounded-md border border-white/5 focus:border-white/20 focus:outline-none pr-3.5 transition-colors"
+                />
+                <span className="absolute right-2 text-xs text-video-context-type-secondary pointer-events-none">
+                  s
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDelay(Number((delay + 0.1).toFixed(2)))}
+                className="w-7 h-7 flex items-center justify-center rounded-md bg-video-context-light bg-opacity-15 hover:bg-opacity-25 text-white font-bold transition-colors select-none text-sm"
+                title="+0.1s"
+              >
+                +
+              </button>
+              <button
+                type="button"
+                onClick={() => setDelay(0)}
+                disabled={delay === 0}
+                className="h-7 px-2 ml-0.5 text-xs rounded-md bg-video-context-light bg-opacity-15 hover:bg-opacity-25 text-video-context-type-main hover:text-white transition-colors flex items-center justify-center disabled:opacity-40 disabled:hover:bg-opacity-15 disabled:hover:text-video-context-type-main disabled:cursor-not-allowed"
+                title={t("player.menus.subtitles.resetDelay", "Reset")}
+              >
+                <Icon icon={Icons.RELOAD} className="text-xs" />
+              </button>
+            </div>
+          </div>
+        </div>
       </Menu.Section>
       <div
         ref={carouselRef}
@@ -233,9 +307,9 @@ export function TranscriptView({ id }: { id: string }) {
             return (
               <div key={item.key} data-que-id={item.key}>
                 <Link
-                  onClick={() => handleSeek(item.start)}
+                  onClick={() => handleItemClick(item)}
                   clickable
-                  className="items-start"
+                  className="items-start transition-colors duration-150 rounded-lg"
                   active={isActive}
                 >
                   <span className="mr-3 flex-none w-[4.5rem] h-[1.75rem] flex items-center justify-center px-0 leading-tight rounded-md bg-video-context-light bg-opacity-20 text-video-context-type-main font-normal whitespace-nowrap overflow-hidden text-sm">
@@ -246,8 +320,8 @@ export function TranscriptView({ id }: { id: string }) {
                   <span
                     className={
                       isActive
-                        ? "flex-1 text-white font-semibold text-sm"
-                        : "flex-1 text-video-context-type-main text-sm"
+                        ? "flex-1 text-white font-semibold text-sm leading-snug py-0.5"
+                        : "flex-1 text-video-context-type-main text-sm leading-snug py-0.5 hover:text-white transition-colors"
                     }
                   >
                     <span

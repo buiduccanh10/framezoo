@@ -825,6 +825,14 @@
         },
         "title": "Sous-titres",
         "transcriptChoice": "Transcription",
+        "searchPlaceholder": "Rechercher des sous-titres ou des dialogues...",
+        "seekMode": "Chercher",
+        "syncMode": "Synchroniser",
+        "syncOffset": "Décalage : {{delay}}s",
+        "syncAction": "Synchroniser",
+        "nowPlaying": "Je joue en ce moment",
+        "syncDescription": "Cliquez sur le dialogue correspondant à la scène vidéo actuelle ou ajustez le décalage :",
+        "resetDelay": "Réinitialiser",
         "translate": {
           "title": "Traduire à partir de {{language}}"
         },

@@ -825,6 +825,14 @@
         },
         "title": "Napisy",
         "transcriptChoice": "Transkrypcja",
+        "searchPlaceholder": "Wyszukaj napisy lub dialogi...",
+        "seekMode": "Szukać",
+        "syncMode": "Synchronizuj",
+        "syncOffset": "Przesunięcie: {{delay}}s",
+        "syncAction": "Synchronizuj",
+        "nowPlaying": "Teraz gram",
+        "syncDescription": "Kliknij dialog pasujący do bieżącej sceny wideo lub dostosuj przesunięcie:",
+        "resetDelay": "Nastawić",
         "translate": {
           "title": "Tłumaczenie z {{language}}"
         },

@@ -824,7 +824,16 @@
           "timelineEmpty": "Không có tín hiệu phụ đề có sẵn."
         },
         "title": "Phụ đề",
-        "transcriptChoice": "Bản ghi âm",
+        "transcriptChoice": "Danh sách thoại & Đồng bộ",
+        "searchPlaceholder": "Tìm kiếm lời thoại, phụ đề...",
+        "delayLabel": "Độ lệch phụ đề",
+        "seekMode": "Điều hướng",
+        "syncMode": "Đồng bộ",
+        "syncOffset": "Độ lệch: {{delay}}s",
+        "syncAction": "Đồng bộ",
+        "nowPlaying": "Đang phát",
+        "syncDescription": "Bấm vào câu thoại của cảnh hiện tại, hoặc tinh chỉnh nhanh độ lệch:",
+        "resetDelay": "Đặt lại",
         "translate": {
           "title": "Dịch từ {{language}}"
         },

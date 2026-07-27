@@ -825,6 +825,14 @@
         },
         "title": "자막",
         "transcriptChoice": "성적 증명서",
+        "searchPlaceholder": "자막이나 대화 검색...",
+        "seekMode": "구하다",
+        "syncMode": "동조",
+        "syncOffset": "오프셋: {{delay}}s",
+        "syncAction": "동조",
+        "nowPlaying": "지금 재생 중",
+        "syncDescription": "현재 비디오 장면과 일치하는 대화를 클릭하거나 오프셋을 조정하십시오.",
+        "resetDelay": "다시 놓기",
         "translate": {
           "title": "{{language}}에서 번역"
         },
