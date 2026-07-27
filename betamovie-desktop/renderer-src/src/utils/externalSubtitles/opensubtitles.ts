@@ -1,4 +1,4 @@
-import { labelToLanguageCode } from "@/lib/providers";
+import { labelToLanguageCode } from "@/lib/language";
 import { CaptionListItem } from "@/stores/player/slices/source";
 
 export async function scrapeOpenSubtitlesCaptions(

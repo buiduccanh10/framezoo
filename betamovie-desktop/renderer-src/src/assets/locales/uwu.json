@@ -5,6 +5,54 @@
     "copied": "Cawpied",
     "copy": "Cawpy"
   },
+  "addons": {
+    "manager": {
+      "add": "Add",
+      "adding": "Adding...",
+      "ariaClose": "Close addon manager",
+      "ariaManage": "Manage addons",
+      "errorFallback": "Unable to install this addon.",
+      "manageListButton": "Manage addon list",
+      "subtitle": "Optional. Add a manifest URL you choose. This app does not bundle, recommend, or host addons.",
+      "title": "Desktop Addons"
+    },
+    "page": {
+      "addAddonButton": "Add Addon",
+      "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
+      "disabled": "Disabled",
+      "emptyInstalled": "No addons installed in the system yet.",
+      "enabled": "Enabled",
+      "installError": "Unable to install this addon.",
+      "installedHeading": "Installed Addons",
+      "processing": "Processing...",
+      "removeAddon": "Remove this addon",
+      "title": "Addons Manager"
+    },
+    "player": {
+      "chooseAddon": "Choose an addon",
+      "emptyExplanation": "No addon is installed or enabled. Add a manifest URL you choose in Addons.",
+      "emptyTitle": "No stream addons available",
+      "loadingStreams": "Loading streams...",
+      "manageAddonsButton": "Manage Addon List",
+      "noAddonStreams": "No streams were returned by this addon.",
+      "noTorrentStreams": "No torrent streams returned for this addon.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "All Qualities",
+        "other": "Other"
+      },
+      "sources": "Sources",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} streams",
+      "title": "Desktop addons",
+      "unableToLoad": "Unable to load streams",
+      "viewStreams": "View streams"
+    }
+  },
   "auth": {
     "backendSelection": {
       "active": "Active",
@@ -35,6 +83,7 @@
     "inviteCodeRequiredError": "Inwvite code is wequiwed... pwease?",
     "login": {
       "description": "Pwease entew youw passphwase t-to wogin t-to youw account",
+      "failedToReachServer": "Failed to reach server",
       "nicknameLabel": "Nickname",
       "nicknameNotFound": "Nickname not found",
       "nicknamePlaceholder": "Enter your nickname",
@@ -95,8 +144,10 @@
     }
   },
   "details": {
+    "addToList": "Add to List",
     "airs": "aiws",
     "collection": {
+      "bookmarkAll": "Bookmark All",
       "movie": "Movie",
       "movies": "Movies",
       "rating": "Rating",
@@ -105,6 +156,9 @@
     },
     "endsAt": "e-ends at {{time}}",
     "episode": "Epwisode",
+    "episodeNumber": "Episode {{number}}",
+    "episodeReleaseDate": "Release Date: {{date}}",
+    "episodeReleaseDateUnknown": "Release Date: Unknown",
     "episodes": "Episwodes",
     "imdb": "vwiew on IMDb",
     "language": "Wangwuage:",
@@ -114,6 +168,7 @@
     "resume": "Wesume :3",
     "runtime": "w-wuntime:",
     "season": "Sweason",
+    "specialSeason": "Special season",
     "seasons": "Sweason/s",
     "similar": "Similar",
     "tmdb": "vwiew on TMDB",
@@ -125,6 +180,8 @@
     "carousel": {
       "change": "Chwange >_<",
       "more": "View mwore",
+      "today": "Today",
+      "thisWeek": "This Week",
       "title": {
         "4kReleases": "4K Weweases",
         "editorPicksMovies": "Mwasters Picks Movies",
@@ -182,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Discwaimew ",
-      "disclaimerText": "Pwease note ^w^: uwu-flix does nyot host any OwO fiwes itsewf but instead onwy dispway's content fwom 3wd pawty pwovidews. Wegaw issues shouwd be taken up with them."
+      "disclaimerText": "This app is a stream player only. It does not host media, provide source catalogs, or recommend addons. Users are responsible for the sources they configure."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Suppowt us",
       "github": "GitHub"
     },
-    "tagline": "Watch youw favowite shows and movies fow fwee with nyo ads evew!!11 >w< "
+    "tagline": "A free stream player with no built-in media hosting."
   },
   "global": {
     "keyboardShortcuts": {
@@ -238,6 +295,8 @@
         "skipForward5": "Skip forward 5 seconds",
         "syncSubtitlesEarlier": "Sync subtitles earlier (-0.5s)",
         "syncSubtitlesLater": "Sync subtitles later (+0.5s)",
+        "previousSubtitleCue": "Previous subtitle cue",
+        "nextSubtitleCue": "Next subtitle cue",
         "toggleCaptions": "Toggle captions",
         "toggleFullscreen": "Toggle fullscreen",
         "toggleNativeSubtitles": "Toggle native subtitles"
@@ -271,6 +330,7 @@
       "groups": {
         "dropdown": {
           "empty": "No groups yet",
+          "namePlaceholder": "Group name",
           "placeholderButton": "Add to group",
           "removeAll": "Remove all",
           "removeFromGroup": "Remove from group"
@@ -324,6 +384,7 @@
       "allResults": "That's aww we *notices buldge* have...",
       "discover": "Discwover",
       "discoverMore": "Discwover more",
+      "genreFilterAll": "All genres",
       "empty": {
         "default": "w-wewcome, find media to watch here!",
         "extra": [
@@ -410,6 +471,100 @@
       "sectionTitle": "Watch History"
     }
   },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copy share link",
+      "create": "Create list",
+      "delete": "Delete",
+      "edit": "Edit",
+      "editItems": "Edit items",
+      "open": "Open",
+      "save": "Save changes",
+      "saveMembership": "Save changes"
+    },
+    "delete": {
+      "confirm": "Delete \"{{name}}\"? This cannot be undone."
+    },
+    "empty": {
+      "description": "Create your first list to start grouping titles.",
+      "title": "No lists yet"
+    },
+    "errors": {
+      "load": "Failed to load your lists."
+    },
+    "form": {
+      "createDescription": "Start a new list for favorites, rewatches, or anything else you want to share.",
+      "createTitle": "Create list",
+      "description": "Description",
+      "descriptionHelp": "Optional note to help you remember what belongs in this list.",
+      "descriptionPlaceholder": "What's this list for?",
+      "editDescription": "Update the name, description, or visibility for this list.",
+      "editTitle": "Edit list",
+      "errors": {
+        "nameRequired": "List name is required",
+        "submitFailed": "Failed to save list."
+      },
+      "name": "List name",
+      "namePlaceholder": "Weekend sci-fi",
+      "public": "Public list",
+      "publicHelp": "Anyone with the link can view this list."
+    },
+    "items": {
+      "empty": "This list is empty.",
+      "emptyHelp": "Add titles from any movie or show card with Add to List, then come back here to manage the lineup."
+    },
+    "meta": {
+      "itemCount": "{{count}} item",
+      "itemCount_plural": "{{count}} items",
+      "updatedAt": "Updated {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancel",
+        "create": "Create list",
+        "save": "Save changes"
+      },
+      "description": "Choose which lists should include {{title}}.",
+      "empty": {
+        "description": "Create a list to save this title.",
+        "title": "No lists yet"
+      },
+      "errors": {
+        "create": "Failed to create list.",
+        "save": "Failed to update list membership."
+      },
+      "title": "Add to List"
+    },
+    "page": {
+      "description": "Curate favorites, theme nights, and watch-next picks you can keep private or share with a link.",
+      "editingHint": "Click the close button on a card to remove it from this list.",
+      "eyebrow": "Collections",
+      "itemsEyebrow": "Titles in this list",
+      "itemsHint": "Select a list on the left to browse it, then use edit mode when you want to clean it up.",
+      "publicCountPlural": "{{count}} public lists",
+      "publicCountSingular": "1 public list",
+      "searchEmptyDescription": "Try another name or clear your search.",
+      "searchEmptyTitle": "No matching lists",
+      "searchPlaceholder": "Search lists",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Recently updated",
+      "summaryPlural": "{{count}} lists",
+      "summarySingular": "1 list",
+      "title": "Lists"
+    },
+    "public": {
+      "descriptionFallback": "A shared collection curated in AlphaFlix.",
+      "notFoundDescription": "This share link is missing or no longer available.",
+      "notFoundTitle": "List not found",
+      "pageTitle": "Shared list",
+      "privateDescription": "The owner has not shared this list publicly.",
+      "privateTitle": "This list is private"
+    },
+    "visibility": {
+      "private": "Private",
+      "public": "Public"
+    }
+  },
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
@@ -490,13 +645,51 @@
   },
   "navigation": {
     "banner": {
+      "appUpdate": {
+        "action": "Update now",
+        "available": "A new app version is ready.",
+        "download": "Download update",
+        "later": "Later",
+        "restart": "Restart to update",
+        "updating": "Updating..."
+      },
       "offline": "Check youw intewnyet connyection."
+    },
+    "download": {
+      "empty": "No downloads are configured yet.",
+      "failed": "Failed to load download options.",
+      "label": "Download app",
+      "options": {
+        "mac-arm64": {
+          "description": "Best for M-series Macs",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Works on both Apple Silicon and Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Best for Intel Macs",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Best for Snapdragon/ARM Windows PCs",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Best for 64-bit Windows PCs",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "No backend URL is configured."
     },
     "install": {
       "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
       "iosSafariGuide": "To install AlphaFlix as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
     },
     "menu": {
+      "accountMenu": "Open account menu",
+      "addons": "Addons",
       "desktop": "App Settings",
       "logout": "Log out",
       "register": "Register an account",
@@ -555,31 +748,6 @@
       "audio": {
         "default": "Defwault"
       },
-      "downloads": {
-        "button": "Atwempt downwoad",
-        "copyHlsPlaylist": "Copy H-HWS pwaywist wink",
-        "disclaimer": "Downwoads awe taken diwectwy fwom the x3 pwovidew. uwu-flix does nyot have contwow uvw how the downwoads awe pwovided.",
-        "downloadSubtitle": "Downwoad cuwwent subtitwe",
-        "downloadVideo": "Downwoad v-v-video",
-        "hlsDisclaimer": "Downwoads awe taken diwectwy fwom the pwovidew. uwufwix does nyot have contwow uvw how the downwoads awe pwovided.<br /><br />Pwease nyote you awe downwoading an H-HWS pwaywist, <bold>it is nyot wecommended t-to downwoad if you awe nyot famiwiaw with advanced stweaming fowmats</bold>. Twy diffewent souwces fow diffewent fowmats.",
-        "hlsDownloader": "ow, go to the <0>hls downwoader website</0> and pwaste the pwaylist URL f-fwom bewow.",
-        "onAndroid": {
-          "1": "To downwoad on A-A-Andwoid, cwick ^w^ the downwoad button ;;w;; then, on the nyew page, <bold>tap and howd</bold> on the x3 video, then sewect <bold>save</bold>.",
-          "shortTitle": "Downwoad / Android",
-          "title": "Downwoading on Android"
-        },
-        "onIos": {
-          "1": "To downwoad on i-i-iOS, cwick ^w^ the x3 downwoad button ;;w;; then, on the nyew page, cwick ^w^ <bold><ios_shawe /></bod>, then <bold>Save t-to Fiwes <-<ios_fiwes /></bold>.",
-          "shortTitle": "Downwoad / iOS",
-          "title": "Downwoadipng on iOS"
-        },
-        "onPc": {
-          "1": "On PC, UwU cwick ^w^ the x3 downwoad button ;;w;; then, on the x3 nyew page, wight cwick ^w^ the v-v-video and sewect <bold>Save v-v-video as</bold> *huggles tightly*",
-          "shortTitle": "Downwoad / PC",
-          "title": "Downwoading on PC"
-        },
-        "title": "Downwoad OwO"
-      },
       "episodes": {
         "button": "Episodes",
         "emptyState": "Thewe awe nyo episodes in this season, ^-^ check back watew (sowwy)?!?1",
@@ -612,29 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Downwoad",
         "enableSubtitles": "Enyabwe Subtitwes ;;w;;",
         "playbackItem": "Pwayback settings",
         "qualityItem": "Quawity",
         "sourceItem": "video souwces",
         "subtitleItem": "Subtitwe settings"
-      },
-      "sources": {
-        "failed": {
-          "text": "Thewe was an ewwow whiwe t-twying t-to find any v-videos... Twy a diffewent souwce!?",
-          "title": "Faiwed t-to scwape"
-        },
-        "findNextSource": "Find next source",
-        "noEmbeds": {
-          "text": "We wewe unyabwe ;;w;; t-to find any OwO embeds, pwease twy a diffewent souwce.",
-          "title": "Nyo embeds found"
-        },
-        "noStream": {
-          "text": "This souwce has nyo stweams fow this movie ow (・`ω´・) show. /ᐠ - ˕ ---マ Ⳋ",
-          "title": "No stweam :("
-        },
-        "title": "Souwces",
-        "unknownOption": "Unknyown"
       },
       "subtitles": {
         "autoSelectChoice": "Auto select",
@@ -665,7 +815,13 @@
         "settings": {
           "backlink": "Custom subtitwes",
           "delay": "Subtitwe deway",
-          "fixCapitals": "Fix capitawization"
+          "fixCapitals": "Fix capitawization",
+          "autoSync": "Auto sync subtitles",
+          "syncingProgress": "Syncing... ({{progress}}%) (this process may take 2-3 minutes)",
+          "syncApplied": "Auto-sync applied.",
+          "timeline": "Subtitle timeline",
+          "timelineHint": "Choose a subtitle cue to sync it with the current video time.",
+          "timelineEmpty": "No subtitle cues available."
         },
         "title": "Subtitwes",
         "transcriptChoice": "Transcript",
@@ -733,37 +889,6 @@
       "resume": "Resume",
       "title": "Continue watching?"
     },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Extension disabwed",
-        "enableExtension": "Enyabwe extension",
-        "homeButton": "Go home",
-        "text": "You've instawwed the s-AlphaFlix e-extension. To stawt u-using it, you nyeed t-to enyabwe the extension fow this site.",
-        "title": "Pwease enyabwe the extension"
-      },
-      "items": {
-        "pending": "Checking fow videos..."
-      },
-      "notFound": {
-        "badge": "Nyot found",
-        "detailsButton": "Show detaiws",
-        "discoverButton": "Discuvw mowe",
-        "homeButton": "Go home",
-        "text": "We have seawched thwough ouw p-pwovidews and cannyot ^w^ find the x3 media you awe wooking fow?!?! We do nyot host the media and have nyo contwow uvw what is avaiwabwe. Pwease cwick ^w^ 'Show d-detaiws' bewow fow mowe detaiws.",
-        "title": "We couwdn't find that"
-      },
-      "tips": {
-        "1": "Twap the gwear icwon to switch swources!",
-        "2": "Twap the twitle to cwopy the w-wink!",
-        "3": "tap and howd ow howd shift to show widescween button instead of fuwwscween (* ^ ω ^)!",
-        "4": "Some swources work bwetter than others!",
-        "5": "Gwet the extwension for more swources!",
-        "6": "Howd bookmwarks to edit or dewete them!",
-        "7": "Hold SHIFT and twap the twitle to copy the wink with time!",
-        "8": "Set a cwustom swubtitle cowor!",
-        "9": "Use [ and ] two adjust swubtitle timing!"
-      }
-    },
     "segment": {
       "credits": "Credits",
       "intro": "Intro",
@@ -775,6 +900,7 @@
       "credits": "Skip Credits",
       "endOfVideo": "End",
       "endsAt": "Ends at {{time}}",
+      "submissionUnavailableMessage": "Segment submission is not available on this server.",
       "feedback": {
         "modal": {
           "cancel": "Cancel",
@@ -876,6 +1002,8 @@
     }
   },
   "screens": {
+    "loadingApp": "Loading app...",
+    "loadingUser": "Loading user profile...",
     "loadingUserError": {
       "disconectCancel": "Cancel",
       "disconnectConfirm": "Confirm",
@@ -883,7 +1011,9 @@
       "disconnectTitle": "Disconnect from backend?",
       "logout": "Wogout",
       "reload": "Wewoad",
-      "reset": "Weset custom sewvew"
+      "reset": "Weset custom sewvew",
+      "text": "Failed to load your user profile. Please try reloading the page.",
+      "textWithReset": "Failed to load your user profile using the current custom server. Try resetting the custom server and then reload."
     },
     "migration": {
       "failed": "Faiwed t-to migwate youw data. 😿",
@@ -1040,23 +1170,14 @@
       "doubleClickToSeek": "Double tap to seek",
       "doubleClickToSeekDescription": "Double tap on the left or right side of the player to seek 10 seconds forward or backward.",
       "doubleClickToSeekLabel": "Enable double tap to seek",
-      "embedOrder": "Reordering embeds",
-      "embedOrderDescription": "Drag and drop to reorder embeds. This will determine the order in which embeds are checked for the media you are trying to watch. <br><br> <strong>(The default order is best for most users)</strong>",
-      "embedOrderEnableLabel": "Custom embed order",
       "keyboardShortcuts": "Keyboard Shortcuts",
       "keyboardShortcutsDescription": "Customize the keyboard shortcuts for the application. Hold ` to show this help anytime",
       "keyboardShortcutsLabel": "Customize Keyboard Shortcuts",
       "language": "Appwication wanguage",
       "languageDescription": "Wanguage appwied t-to the entiwe a-appwication, onwy Engwish has siwwy stuff 🙁.",
-      "lastSuccessfulSource": "Last used source",
-      "lastSuccessfulSourceDescription": "Automatically prioritize the source that successfully provided content for the previous episode. This helps ensure continuity when watching series.",
-      "lastSuccessfulSourceEnableLabel": "Last used source",
       "lowPerformanceMode": "wow pewfowmance/bandwidth mwode",
       "lowPerformanceModeDescription": "optimizes the appwication fow s-swower connections and d-devices by disabwing bandwidth-heavy features (o^▽^o) this mode w-weduces data usage and i-impwoves pewfowmance while k-keeping the core seawch and watch f-functionawity i-intact. ",
       "lowPerformanceModeLabel": "wow pewfowmance mode",
-      "manualSource": "Manual source selection",
-      "manualSourceDescription": "Require picking a source before scraping. Disables automatic source selection and opens the source picker when starting playback.",
-      "manualSourceLabel": "Manual source selection",
       "showLess": "Show less",
       "showMore": "Show more",
       "skipCredits": "Skip End Cwedits",
@@ -1074,9 +1195,12 @@
     },
     "sidebar": {
       "info": {
+        "appVersion": "App Version",
         "notLoggedIn": "You awe nyot wogged in",
         "userId": "Usew ID",
-        "userIdDescription": "Use this as invite code for your friend register"
+        "userIdDescription": "Use this as invite code for your friend register",
+        "checkForUpdates": "Check for updates",
+        "upToDate": "You are currently on the latest version"
       }
     },
     "subtitles": {
@@ -1106,7 +1230,8 @@
   },
   "tmdb": {
     "genres": {
-      "10759": "Action & Adventure"
+      "10759": "Action & Adventure",
+      "10765": "Sci-Fi & Fantasy"
     }
   },
   "watchParty": {

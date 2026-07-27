@@ -6,16 +6,6 @@
     "copy": "Kopiuj"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Odwiedzać",
-      "step1Suffix": "lub zaufane repozytorium dodatków kompatybilne ze Addon.",
-      "step2Prefix": "Skopiuj link do manifestu (np.",
-      "step2Suffix": ").",
-      "step3AddName": "Dodać",
-      "step3Prefix": "Wklej w powyższym polu i naciśnij",
-      "step3Suffix": ".",
-      "title": "Odkryj więcej dodatków:"
-    },
     "manager": {
       "add": "Dodać",
       "adding": "Dodawanie...",
@@ -23,39 +13,28 @@
       "ariaManage": "Zarządzaj dodatkami",
       "errorFallback": "Nie można zainstalować tego dodatku.",
       "manageListButton": "Zarządzaj listą dodatków",
-      "subtitle": "Dodaj adres URL manifestu Addon dla torrentów i strumieni bezpośrednich.",
+      "subtitle": "Fakultatywny. Dodaj wybrany adres URL manifestu. Ta aplikacja nie łączy, nie poleca ani nie hostuje dodatków.",
       "title": "Dodatki do komputerów stacjonarnych"
     },
     "page": {
       "addAddonButton": "Dodaj dodatek",
+      "description": "Dodatki są opcjonalne. Ta aplikacja nie łączy, nie poleca ani nie hostuje żadnych dodatków.",
       "disabled": "Wyłączony",
       "emptyInstalled": "W systemie nie zainstalowano jeszcze żadnych dodatków.",
       "enabled": "Włączony",
-      "guideHeading": "Odkryj i zainstaluj dodatki",
-      "guideIntro": "Dodatki pomagają przeglądać katalogi multimediów i strumienie dostosowane do Twoich osobistych preferencji rozrywkowych:",
       "installError": "Nie można zainstalować tego dodatku.",
       "installedHeading": "Zainstalowane dodatki",
       "processing": "Przetwarzanie...",
       "removeAddon": "Usuń ten dodatek",
-      "step1DescPrefix": "Odwiedź katalog społeczności pod adresem",
-      "step1DescSuffix": "lub podobnych standardowych dostawców dodatków.",
-      "step1Title": "Przeglądaj katalog dodatków",
-      "step2DescPrefix": "Wybierz żądany dodatek, dostosuj opcje i skopiuj jego manifest URL (standardowy przykład:",
-      "step2DescSuffix": ").",
-      "step2Title": "Skopiuj link do manifestu",
-      "step3AddName": "Dodać",
-      "step3DescPrefix": "Wklej ścieżkę manifestu w polu poniżej i naciśnij",
-      "step3DescSuffix": ". Dodatek zostanie natychmiast aktywowany w celu wyszukiwania źródeł multimediów.",
-      "step3Title": "Dodaj do aplikacji",
       "title": "Menedżer dodatków"
     },
     "player": {
       "chooseAddon": "Wybierz dodatek",
-      "emptyExplanation": "Żaden dodatek do strumienia nie jest jeszcze zainstalowany ani aktywowany. Odwiedź stronę Menedżera dodatków, aby zapoznać się z przewodnikami konfiguracji i odkrywaniem katalogu multimediów.",
+      "emptyExplanation": "Żaden dodatek nie jest zainstalowany ani włączony. Dodaj manifestowy adres URL wybrany w dodatkach.",
       "emptyTitle": "Brak dostępnych dodatków do strumienia",
       "loadingStreams": "Ładowanie strumieni...",
       "manageAddonsButton": "Zarządzaj listą dodatków",
-      "noAddonStreams": "Nie zwrócono żadnych strumieni dodatków dla tego tytułu.",
+      "noAddonStreams": "Ten dodatek nie zwrócił żadnych strumieni.",
       "noTorrentStreams": "Dla tego dodatku nie zwrócono żadnych strumieni torrentowych.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Zastrzeżenie ",
-      "disclaimerText": "AlphaFlix nie przechowuje żadnych plików, zawiera jedynie łącza do usług stron trzecich. Kwestie prawne należy konsultować z hostami plików i dostawcami. AlphaFlix nie ponosi odpowiedzialności za jakiekolwiek pliki multimedialne prezentowane przez dostawców wideo."
+      "disclaimerText": "AlphaFlix zapewnia bezpieczny, nowoczesny i bezproblemowy odtwarzacz strumieniowy z łatwym w obsłudze interfejsem i wysokiej jakości odtwarzaniem na obsługiwanych urządzeniach. Nie przechowuje plików multimedialnych, nie obsługuje katalogu źródłowego ani nie poleca określonych dodatków. Opcjonalne dodatki są konfigurowane przez użytkowników, którzy są odpowiedzialni za korzystanie z legalnych źródeł."
     },
     "links": {
       "fluxer": "Flukser",
       "funding": "Wesprzyj nas",
       "github": "GitHub"
     },
-    "tagline": "Oglądaj swoje ulubione seriale i filmy za darmo, bez reklam! "
+    "tagline": "Bezpieczny, nowoczesny odtwarzacz strumieniowy zapewniający płynne oglądanie wysokiej jakości."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Domyślny"
       },
-      "downloads": {
-        "button": "Próba pobrania",
-        "copyHlsPlaylist": "Kopiuj link do listy odtwarzania HLS",
-        "disclaimer": "Pliki do pobrania są pobierane bezpośrednio od dostawcy. AlphaFlix nie ma kontroli nad sposobem dostarczania plików do pobrania.",
-        "downloadSubtitle": "Pobierz aktualne napisy",
-        "downloadVideo": "Pobierz wideo",
-        "hlsDisclaimer": "Pliki do pobrania są pobierane bezpośrednio od dostawcy. AlphaFlix nie ma kontroli nad sposobem dostarczania plików do pobrania.<br /><br />Należy pamiętać, że pobierasz playlistę HLS, <bold>nie zaleca się pobierania, jeśli nie jesteś zaznajomiony z zaawansowanymi formatami przesyłania strumieniowego</bold>. Wypróbuj różne źródła dla innych formatów.",
-        "hlsDownloader": "Lub przejdź do <0>hls downloader website</0> i wklej link playlisty z dołu.",
-        "onAndroid": {
-          "1": "Aby pobrać na Androidzie, kliknij przycisk pobierania, a następnie na nowej stronie <bold>dotknij i przytrzymaj</bold> na filmie, a następnie wybierz <bold>zapisz</bold>.",
-          "shortTitle": "Pobierz / Android",
-          "title": "Pobieranie na Androidzie"
-        },
-        "onIos": {
-          "1": "Aby pobrać na iOS, kliknij przycisk pobierania, a następnie na nowej stronie, kliknij <bold><ios_share /></bold>, a następnie <bold>Zapisz do plików <ios_files /></bold>.",
-          "shortTitle": "Pobierz / iOS",
-          "title": "Pobieranie na iOS"
-        },
-        "onPc": {
-          "1": "Na komputerze, kliknij przycisk pobierania, a następnie na nowej stronie, kliknij wideo prawym przyciskiem myszy i wybierz <bold>Zapisz wideo jako</bold>",
-          "shortTitle": "Pobierz / Komputer",
-          "title": "Pobieranie na komputerze"
-        },
-        "title": "Pobierz"
-      },
       "episodes": {
         "button": "Odcinki",
         "emptyState": "Nie ma odcinków w tym sezonie, sprawdź później!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Dźwięk",
-        "downloadItem": "Pobierz",
         "enableSubtitles": "Włącz napisy",
         "playbackItem": "Ustawienia odtwarzania",
         "qualityItem": "Jakość",
         "sourceItem": "Źródła wideo",
         "subtitleItem": "Ustawienia napisów"
-      },
-      "sources": {
-        "failed": {
-          "text": "Wystąpił błąd podczas próby znalezienia filmów. Spróbuj użyć innego źródła.",
-          "title": "Nie udało się zgarnąć"
-        },
-        "findNextSource": "Znajdź następne źródło",
-        "maintain": "Utrzymywać",
-        "noEmbeds": {
-          "text": "Nie znaleźliśmy żadnych osadzonych plików. Spróbuj użyć innego źródła.",
-          "title": "Nie znaleziono osadzonych treści"
-        },
-        "noStream": {
-          "text": "To źródło nie ma strumieni dla tego filmu lub serialu.",
-          "title": "Brak strumienia"
-        },
-        "title": "Źródła",
-        "unknownOption": "Nieznany"
       },
       "subtitles": {
         "autoSelectChoice": "Wybór automatyczny",
@@ -953,37 +888,6 @@
       "restart": "Uruchom ponownie",
       "resume": "Wznawiać",
       "title": "Kontynuować oglądanie?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Rozszerzenie wyłączone",
-        "enableExtension": "Włącz rozszerzenie",
-        "homeButton": "Wróć na stronę główną",
-        "text": "Zainstalowałeś rozszerzenie AlphaFlix. Aby zaczęło działać musisz włączyć dla tej strony.",
-        "title": "Proszę włączyć rozszerzenie"
-      },
-      "items": {
-        "pending": "Sprawdzanie filmów..."
-      },
-      "notFound": {
-        "badge": "Nie znaleziono",
-        "detailsButton": "Pokaż szczegóły",
-        "discoverButton": "Odkryj więcej",
-        "homeButton": "Wróć na stronę główną",
-        "text": "Przeszukaliśmy naszych dostawców i nie możemy znaleźć poszukiwanych multimediów! Nie przechowujemy multimediów i nie mamy kontroli nad ich dostępnością. Kliknij \"Pokaż szczegóły\" poniżej, aby uzyskać więcej informacji.",
-        "title": "Nie mogliśmy tego znaleźć"
-      },
-      "tips": {
-        "1": "Kliknij w ikonkę zębatek, aby zmienić źródło!",
-        "2": "Kliknij w tytuł, aby skopiować link!",
-        "3": "Wciśnij i przytrzymaj lub przytrzymaj SHIFT, aby wyświetlić przycisk od szerokiego ekranu, zamiast pełnego!",
-        "4": "Niektóre źródła działają lepiej niż inne!",
-        "5": "Zainstaluj rozszerzenie, aby mieć więcej źródeł!",
-        "6": "Przytrzymaj zakładki, aby edytować lub usunąć!",
-        "7": "Przytrzymaj SHIFT i kliknij w tytuł, aby skopiować link!",
-        "8": "Ustaw niestandardowy kolor napisów!",
-        "9": "Użyj [ i ] żeby dostosować prędkość napisów!"
-      }
     },
     "segment": {
       "credits": "Kredyty",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Kliknij dwukrotnie, aby wyszukać",
       "doubleClickToSeekDescription": "Kliknij dwukrotnie lewą lub prawą stronę odtwarzacza, aby przewinąć o 10 sekund do przodu lub do tyłu.",
       "doubleClickToSeekLabel": "Włącz podwójne dotknięcie, aby wyszukać",
-      "embedOrder": "Zmiana kolejności osadzania",
-      "embedOrderDescription": "Przeciągnij i upuść, aby zmienić kolejność osadzonych elementów. To określi kolejność sprawdzania osadzonych multimediów, które próbujesz oglądać. <br><br> <strong>(Domyślna kolejność jest najlepsza dla większości użytkowników)</strong>",
-      "embedOrderEnableLabel": "Niestandardowa kolejność osadzania",
       "keyboardShortcuts": "Skróty klawiaturowe",
       "keyboardShortcutsDescription": "Dostosuj skróty klawiaturowe dla aplikacji. Przytrzymaj `, aby wyświetlić tę pomoc w dowolnym momencie",
       "keyboardShortcutsLabel": "Dostosuj skróty klawiaturowe",
       "language": "Język aplikacji",
       "languageDescription": "Język zastosowany do całej aplikacji.",
-      "lastSuccessfulSource": "Ostatnio używane źródło",
-      "lastSuccessfulSourceDescription": "Automatycznie nadawaj priorytet źródłu, które pomyślnie dostarczyło treść do poprzedniego odcinka. Pomaga to zapewnić ciągłość podczas oglądania seriali.",
-      "lastSuccessfulSourceEnableLabel": "Ostatnio używane źródło",
       "lowPerformanceMode": "Tryb niskiej wydajności/przepustowości",
       "lowPerformanceModeDescription": "Optymalizuje aplikację pod kątem wolniejszych połączeń i urządzeń, wyłączając funkcje wymagające dużej przepustowości. Ten tryb zmniejsza zużycie danych i poprawia wydajność, zachowując jednocześnie podstawowe funkcje wyszukiwania i oglądania.",
       "lowPerformanceModeLabel": "Tryb niskiej wydajności",
-      "manualSource": "Ręczny wybór źródła",
-      "manualSourceDescription": "Wymagaj wybrania źródła przed zeskrobaniem. Wyłącza automatyczny wybór źródła i otwiera selektor źródła podczas rozpoczynania odtwarzania.",
-      "manualSourceLabel": "Ręczny wybór źródła",
       "showLess": "Pokaż mniej",
       "showMore": "Pokaż więcej",
       "skipCredits": "Pomiń napisy końcowe",

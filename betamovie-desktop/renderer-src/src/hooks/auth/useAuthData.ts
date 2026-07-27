@@ -53,15 +53,9 @@ export function useAuthData() {
     (s) => s.setEnableSkipCredits,
   );
 
-  const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
-  const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
-
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
   const setEnableDoubleClickToSeek = usePreferencesStore(
     (s) => s.setEnableDoubleClickToSeek,
-  );
-  const setManualSourceSelection = usePreferencesStore(
-    (s) => s.setManualSourceSelection,
   );
   const setEnableAutoResumeOnPlaybackError = usePreferencesStore(
     (s) => s.setEnableAutoResumeOnPlaybackError,
@@ -156,14 +150,6 @@ export function useAuthData() {
         setEnableSkipCredits(settings.enableSkipCredits);
       }
 
-      if (settings.embedOrder !== undefined) {
-        setEmbedOrder(settings.embedOrder ?? []);
-      }
-
-      if (settings.enableEmbedOrder !== undefined) {
-        setEnableEmbedOrder(settings.enableEmbedOrder);
-      }
-
       if (settings.proxyTmdb !== undefined) {
         setProxyTmdb(settings.proxyTmdb);
       }
@@ -178,10 +164,6 @@ export function useAuthData() {
 
       if (settings.debridService !== undefined) {
         setdebridService(settings.debridService);
-      }
-
-      if (settings.manualSourceSelection !== undefined) {
-        setManualSourceSelection(settings.manualSourceSelection);
       }
 
       if (settings.enableDoubleClickToSeek !== undefined) {
@@ -213,13 +195,10 @@ export function useAuthData() {
 
       setEnableAutoplay,
       setEnableSkipCredits,
-      setEmbedOrder,
-      setEnableEmbedOrder,
       setProxyTmdb,
       setFebboxKey,
       setdebridToken,
       setdebridService,
-      setManualSourceSelection,
       setEnableDoubleClickToSeek,
       setEnableAutoResumeOnPlaybackError,
       setEnableNumberKeySeeking,

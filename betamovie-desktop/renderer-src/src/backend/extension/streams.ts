@@ -1,5 +1,5 @@
 import { RULE_IDS, setDomainRule } from "@/backend/extension/messaging";
-import { Stream } from "@/lib/providers";
+import { Stream } from "@/lib/streamTypes";
 
 function extractDomain(url: string): string | null {
   try {

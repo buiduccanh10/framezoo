@@ -46,14 +46,11 @@ export function VerifyPasswordPart(props: VerifyPasswordProps) {
   const preferences = usePreferencesStore((store) => ({
     enableAutoplay: store.enableAutoplay,
     enableSkipCredits: store.enableSkipCredits,
-    embedOrder: store.embedOrder,
-    enableEmbedOrder: store.enableEmbedOrder,
     proxyTmdb: store.proxyTmdb,
     febboxKey: store.febboxKey,
     debridToken: store.debridToken,
     debridService: store.debridService,
     enableDoubleClickToSeek: store.enableDoubleClickToSeek,
-    manualSourceSelection: store.manualSourceSelection,
     enableAutoResumeOnPlaybackError: store.enableAutoResumeOnPlaybackError,
   }));
 

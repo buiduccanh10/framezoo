@@ -2,9 +2,6 @@ import DOMPurify from "dompurify";
 import { convert, detect, parse } from "subsrt-ts";
 import { ContentCaption } from "subsrt-ts/dist/types/handler";
 
-import { RunOutput } from "@/lib/providers";
-import { CaptionListItem } from "@/stores/player/slices/source";
-
 export type CaptionCueType = ContentCaption;
 export const sanitize = DOMPurify.sanitize;
 
@@ -254,25 +251,6 @@ export function buildVttObjectUrl(
       type: "text/vtt",
     }),
   );
-}
-
-export function convertProviderCaption(
-  captions: RunOutput["stream"]["captions"],
-): CaptionListItem[] {
-  return captions.map((v) => ({
-    id: v.id,
-    language: v.language,
-    url: v.url,
-    type: (v as any).type,
-    needsProxy: v.hasCorsRestrictions,
-    opensubtitles: v.opensubtitles,
-    // subtitle details from wyzie
-    display: (v as any).display,
-    media: (v as any).media,
-    isHearingImpaired: (v as any).isHearingImpaired,
-    source: (v as any).source,
-    encoding: (v as any).encoding,
-  }));
 }
 
 export function decodeSubtitleBytes(

@@ -6,16 +6,6 @@
     "copy": "Afrita"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Heimsókn",
-      "step1Suffix": "eða trausta samhæfða viðbótargeymsluna þína.",
-      "step2Prefix": "Afritaðu upplýsingaskráartengilinn (t.d.",
-      "step2Suffix": ").",
-      "step3AddName": "Bæta við",
-      "step3Prefix": "Límdu inn í reitinn hér að ofan og ýttu svo á",
-      "step3Suffix": ".",
-      "title": "Skoðaðu fleiri viðbætur:"
-    },
     "manager": {
       "add": "Bæta við",
       "adding": "Bætir við...",
@@ -23,39 +13,28 @@
       "ariaManage": "Stjórna viðbótum",
       "errorFallback": "Ekki er hægt að setja upp þessa viðbót.",
       "manageListButton": "Stjórna viðbótarlista",
-      "subtitle": "Bættu við Addon upplýsingavefslóð fyrir straumstraum og beina strauma.",
+      "subtitle": "Valfrjálst. Bættu við upplýsingavefslóð sem þú velur. Þetta app hefur ekki búnt, mælir með eða hýsir viðbætur.",
       "title": "Viðbætur fyrir skjáborð"
     },
     "page": {
       "addAddonButton": "Bæta við viðbót",
+      "description": "Viðbætur eru valfrjálsar. Þetta app hefur ekki búnt, mælir með eða hýsir neina viðbót.",
       "disabled": "Öryrkjar",
       "emptyInstalled": "Engar viðbætur uppsettar í kerfinu ennþá.",
       "enabled": "Virkt",
-      "guideHeading": "Uppgötvaðu og settu upp viðbætur",
-      "guideIntro": "Viðbætur hjálpa þér að fletta í fjölmiðlum og straumum sem eru sérsniðnir að þínum persónulegu afþreyingarvalkostum:",
       "installError": "Ekki er hægt að setja upp þessa viðbót.",
       "installedHeading": "Uppsett viðbót",
       "processing": "Vinnur...",
       "removeAddon": "Fjarlægðu þessa viðbót",
-      "step1DescPrefix": "Skoðaðu samfélagsskrána á",
-      "step1DescSuffix": "eða svipaðar staðlaðar viðbótarveitur.",
-      "step1Title": "Skoðaðu Addon vörulistann",
-      "step2DescPrefix": "Veldu viðbótina sem þú vilt, sérsníddu valkostina og afritaðu vefslóð hennar (venjulegt dæmi:",
-      "step2DescSuffix": ").",
-      "step2Title": "Afritaðu Manifest Link",
-      "step3AddName": "Bæta við",
-      "step3DescPrefix": "Límdu upplýsingaslóðina inn í reitinn fyrir neðan og ýttu á",
-      "step3DescSuffix": ". Viðbótin mun strax virkjast til að leita að miðlum.",
-      "step3Title": "Bæta við umsókn",
       "title": "Viðbótarstjóri"
     },
     "player": {
       "chooseAddon": "Veldu viðbót",
-      "emptyExplanation": "Engin straumaviðbót er uppsett eða virkjuð ennþá. Farðu á Addons Manager síðuna til að fá uppsetningarleiðbeiningar og uppgötvun fjölmiðlaskrár.",
+      "emptyExplanation": "Engin viðbót er sett upp eða virkjuð. Bættu við upplýsingavefslóð sem þú velur í viðbótum.",
       "emptyTitle": "Engar straumviðbætur tiltækar",
       "loadingStreams": "Hleður straumum...",
       "manageAddonsButton": "Stjórna viðbótarlista",
-      "noAddonStreams": "Engir viðbótarstraumar skiluðu sér fyrir þennan titil.",
+      "noAddonStreams": "Engum straumum var skilað af þessari viðbót.",
       "noTorrentStreams": "Engir straumstraumar skiluðu sér fyrir þessa viðbót.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Fyrirvari",
-      "disclaimerText": "AlphaFlix hýsir engar skrár, það tengist eingöngu þjónustu þriðja aðila. Lagleg atriði ættu að vera rædd við skráarhýsinga og veitanda. AlphaFlix er ekki ábyrg fyrir neinum skrám sýndar af myndbands veitöndum."
+      "disclaimerText": "AlphaFlix býður upp á öruggan, nútímalegan og óaðfinnanlegan straumspilara með auðveldu viðmóti og hágæða spilun á studdum tækjum. Það hýsir ekki miðlunarskrár, rekur upprunaskrá eða mælir með sérstökum viðbótum. Valfrjálsar viðbætur eru stilltar af notendum, sem eru ábyrgir fyrir notkun löglegra heimilda."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Styðjið okkur",
       "github": "GitHub"
     },
-    "tagline": "Horfðu á uppáhalds þætti og myndirnar þínar með þessu opna hugbúnaða forriti."
+    "tagline": "Öruggur, nútímalegur straumspilari fyrir óaðfinnanlega, hágæða útsýnisupplifun."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Sjálfgefið"
       },
-      "downloads": {
-        "button": "Tilraun til að hlaða niður",
-        "copyHlsPlaylist": "Afrita HLS spilalista hlekk",
-        "disclaimer": "Niðurhalningar eru teknar beint frá heimildini. AlphaFlix hefur engan kraft yfir hvernig niðurhalningarnar eru gefnar.",
-        "downloadSubtitle": "Hlaða niður nú verandi texta",
-        "downloadVideo": "Hlaða niður myndbandi",
-        "hlsDisclaimer": "Niðurhalningar eru teknar beint frá heimildini. AlphaFlix hefur engan kraft yfir hvernig niðurhalningarnar eru gefnar.<br /><br />Vinsamlegast fattaðu að þú ert að niðurhala HLS spilunarlista, <bold>það er ekki mælt með að niðurhala ef þú kannt ekki mikið á háþróað streymis sniði.</bold>. Reyndu aðrar heimildir fyrir önnur sniði.",
-        "hlsDownloader": "Eða farðu á <0>hls niðurhalssíðuna</0> og límdu slóð spilunarlistans að neðan.",
-        "onAndroid": {
-          "1": "Til þess að niðurhala á Android, ýttu á niðurhalningar takkan síðan, á nýju síðunni, <bold>smelltu og haltu niðri</bold> á myndbandinu, veldu síðan <bold>vista</bold>.",
-          "shortTitle": "Hlaða niður / Android",
-          "title": "Að hlaða niður á Android"
-        },
-        "onIos": {
-          "1": "Til þess að niðurhala á iOS, ýttu á niðurhalninga takkan síðan, á nýju síðunni, ýttu á <bold><ios_share /></bold>, síðan <bold>Vista í skrár <ios_files /></bold>.",
-          "shortTitle": "Hlaða niður / iOS",
-          "title": "Að hlaða niður á iOS"
-        },
-        "onPc": {
-          "1": "Á PC, ýttu á niðurhalningar takkan síðan, á nýju síðunni, hægri smelltu á myndbandið og veldu <bold>Vista myndband sem</bold>",
-          "shortTitle": "Hlaða niður / PC",
-          "title": "Að hlaða niður á PC"
-        },
-        "title": "Hlaða niður"
-      },
       "episodes": {
         "button": "Þættir",
         "emptyState": "Það eru engir þættir í þessari seríu, kíktu aftur seinna!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Hljóð",
-        "downloadItem": "Niðurhala",
         "enableSubtitles": "Virkja texta",
         "playbackItem": "Spilunar stillingar",
         "qualityItem": "Gæði",
         "sourceItem": "Myndbands heimildir",
         "subtitleItem": "Texta stillingar"
-      },
-      "sources": {
-        "failed": {
-          "text": "Það kom upp villa á meðan við vorum að reyna að finna myndbönd, vinsamlegast reyndu að nota aðra heimild.",
-          "title": "Skröpun mistókst"
-        },
-        "findNextSource": "Finndu næstu heimild",
-        "maintain": "Viðhalda",
-        "noEmbeds": {
-          "text": "Við gátum ekki fundið neina innfellu, vinsamlegast reyndu að nota aðra heimild.",
-          "title": "Engar innifellur fundnar"
-        },
-        "noStream": {
-          "text": "Þessi heimild hefur engin streymi fyrir þessa mynd eða þætti.",
-          "title": "Ekkert streymi"
-        },
-        "title": "Heimildir",
-        "unknownOption": "Óvitað"
       },
       "subtitles": {
         "autoSelectChoice": "Sjálfvirkt val",
@@ -953,37 +888,6 @@
       "restart": "Endurræstu",
       "resume": "Halda áfram",
       "title": "Halda áfram að horfa?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Framlenging óvirk",
-        "enableExtension": "Virkja viðbót",
-        "homeButton": "Farðu heim",
-        "text": "Þú hefur sett upp AlphaFlix viðbótina. Til að byrja að nota það þarftu að virkja viðbótina fyrir þessa síðu.",
-        "title": "Vinsamlegast virkjaðu viðbótina"
-      },
-      "items": {
-        "pending": "Leitandi af myndböndum..."
-      },
-      "notFound": {
-        "badge": "Ekki fundið",
-        "detailsButton": "Sýna smáatriði",
-        "discoverButton": "Uppgötvaðu meira",
-        "homeButton": "Fara heim",
-        "text": "Við höfun leitað í heimildum okkar og getum ekki fundið miðilin sem þú ert að leita að! Við hýsum ekki miðlana og höfum enga stjórn yfir hvað er fáanlegt. Visnamlegast ýttu á 'Sýna smáatriði' fyrir neðan þennan texta fyrir fleiri smáatriði.",
-        "title": "Við gátum ekki fundið þetta"
-      },
-      "tips": {
-        "1": "Pikkaðu á gírtáknið til að skipta um uppruna!",
-        "2": "Pikkaðu á titilinn til að afrita hlekkinn!",
-        "3": "Pikkaðu og haltu inni eða haltu SHIFT inni til að sýna breiðskjáhnappinn í staðinn fyrir allan skjáinn!",
-        "4": "Sumar heimildir virka betur en aðrar!",
-        "5": "Fáðu viðbótina fyrir fleiri heimildir!",
-        "6": "Haltu bókamerkjum til að breyta eða eyða þeim!",
-        "7": "Haltu SHIFT inni og pikkaðu á titilinn til að afrita hlekkinn með tímanum!",
-        "8": "Stilltu sérsniðinn textalit!",
-        "9": "Haltu ` til að skoða flýtilykla!"
-      }
     },
     "segment": {
       "credits": "Inneign",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Ýttu tvisvar til að leita",
       "doubleClickToSeekDescription": "Ýttu tvisvar vinstra eða hægra megin á spilaranum til að leita 10 sekúndur áfram eða afturábak.",
       "doubleClickToSeekLabel": "Virkjaðu tvisvar til að leita",
-      "embedOrder": "Endurröðun innfellinga",
-      "embedOrderDescription": "Dragðu og slepptu til að endurraða innfellingum. Þetta mun ákvarða í hvaða röð innfellingar eru merktar fyrir miðilinn sem þú ert að reyna að horfa á. <br><br> <strong>(sjálfgefin röð er best fyrir flesta notendur)</strong>",
-      "embedOrderEnableLabel": "Sérsniðin innfelld röð",
       "keyboardShortcuts": "Flýtivísar",
       "keyboardShortcutsDescription": "Sérsníddu flýtilykla fyrir forritið. Haltu ` til að sýna þessa hjálp hvenær sem er",
       "keyboardShortcutsLabel": "Sérsníddu flýtilykla",
       "language": "Tungumál forrits",
       "languageDescription": "Tungumál beitt á allt forritið.",
-      "lastSuccessfulSource": "Síðast notuð heimild",
-      "lastSuccessfulSourceDescription": "Forgangsraðaðu sjálfkrafa upprunanum sem gaf efni fyrir fyrri þáttinn. Þetta hjálpar til við að tryggja samfellu þegar þú horfir á seríur.",
-      "lastSuccessfulSourceEnableLabel": "Síðast notuð heimild",
       "lowPerformanceMode": "Lítil afköst/bandbreiddarstilling",
       "lowPerformanceModeDescription": "Fínstillir forritið fyrir hægari tengingar og tæki með því að slökkva á bandbreiddarþungum eiginleikum. Þessi stilling dregur úr gagnanotkun og bætir afköst á sama tíma og kjarnaleitar- og úravirkni er óbreytt.",
       "lowPerformanceModeLabel": "Lítil afköst stilling",
-      "manualSource": "Handvirkt val á uppruna",
-      "manualSourceDescription": "Krefjast þess að velja heimild áður en þú skafar. Slökkva á sjálfvirku vali á uppruna og opna upprunavalið þegar spilun er hafin.",
-      "manualSourceLabel": "Handvirkt val á uppruna",
       "showLess": "Sýna minna",
       "showMore": "Sýna meira",
       "skipCredits": "Slepptu lokaeiningar",

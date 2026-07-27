@@ -44,10 +44,6 @@ export function KeyboardEvents() {
     (s) => s.setShouldStartFromBeginning,
   );
   const updateItem = useProgressStore((s) => s.updateItem);
-  const sourceId = usePlayerStore((s) => s.sourceId);
-  const setLastSuccessfulSource = usePreferencesStore(
-    (s) => s.setLastSuccessfulSource,
-  );
 
   const { toggleLastUsed, selectBestCaptionFromLastUsedLanguage } =
     useCaptions();
@@ -128,9 +124,6 @@ export function KeyboardEvents() {
         (v) => v.number === meta.episode!.number + 1,
       );
       if (nextEp) {
-        if (sourceId) {
-          setLastSuccessfulSource(sourceId);
-        }
         const metaCopy = { ...meta };
         metaCopy.episode = nextEp;
         setShouldStartFromBeginning(true);
@@ -178,10 +171,6 @@ export function KeyboardEvents() {
             if (nextSeasonEpisodes.length > 0) {
               const nextEp = nextSeasonEpisodes[0];
 
-              if (sourceId) {
-                setLastSuccessfulSource(sourceId);
-              }
-
               const metaCopy = { ...meta };
               metaCopy.episode = nextEp;
               metaCopy.season = {
@@ -204,14 +193,7 @@ export function KeyboardEvents() {
         console.error("Failed to load next season:", error);
       }
     }
-  }, [
-    meta,
-    setDirectMeta,
-    setShouldStartFromBeginning,
-    updateItem,
-    sourceId,
-    setLastSuccessfulSource,
-  ]);
+  }, [meta, setDirectMeta, setShouldStartFromBeginning, updateItem]);
 
   const navigateToPreviousEpisode = useCallback(async () => {
     if (!meta || meta.type !== "show" || !meta.episode) return;
@@ -225,9 +207,6 @@ export function KeyboardEvents() {
         (v) => v.number === meta.episode!.number - 1,
       );
       if (prevEp) {
-        if (sourceId) {
-          setLastSuccessfulSource(sourceId);
-        }
         const metaCopy = { ...meta };
         metaCopy.episode = prevEp;
         setShouldStartFromBeginning(true);
@@ -275,10 +254,6 @@ export function KeyboardEvents() {
             if (prevSeasonEpisodes.length > 0) {
               const prevEp = prevSeasonEpisodes[prevSeasonEpisodes.length - 1];
 
-              if (sourceId) {
-                setLastSuccessfulSource(sourceId);
-              }
-
               const metaCopy = { ...meta };
               metaCopy.episode = prevEp;
               metaCopy.season = {
@@ -301,14 +276,7 @@ export function KeyboardEvents() {
         console.error("Failed to load previous season:", error);
       }
     }
-  }, [
-    meta,
-    setDirectMeta,
-    setShouldStartFromBeginning,
-    updateItem,
-    sourceId,
-    setLastSuccessfulSource,
-  ]);
+  }, [meta, setDirectMeta, setShouldStartFromBeginning, updateItem]);
 
   const dataRef = useRef({
     setShowVolume,

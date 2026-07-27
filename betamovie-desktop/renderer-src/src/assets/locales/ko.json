@@ -6,16 +6,6 @@
     "copy": "복사하기"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "방문하다",
-      "step1Suffix": "또는 신뢰할 수 있는 Addon 호환 애드온 저장소.",
-      "step2Prefix": "매니페스트 링크를 복사합니다(예:",
-      "step2Suffix": ").",
-      "step3AddName": "추가하다",
-      "step3Prefix": "위 상자에 붙여넣은 후 다음을 누르세요.",
-      "step3Suffix": ".",
-      "title": "더 많은 애드온 살펴보기:"
-    },
     "manager": {
       "add": "추가하다",
       "adding": "첨가...",
@@ -23,39 +13,28 @@
       "ariaManage": "애드온 관리",
       "errorFallback": "이 애드온을 설치할 수 없습니다.",
       "manageListButton": "애드온 목록 관리",
-      "subtitle": "토렌트 및 직접 스트림을 위한 Addon 매니페스트 URL을 추가합니다.",
+      "subtitle": "선택 과목. 선택한 매니페스트 URL을 추가하세요. 이 앱은 애드온을 번들로 제공하거나 추천하거나 호스팅하지 않습니다.",
       "title": "데스크탑 애드온"
     },
     "page": {
       "addAddonButton": "애드온 추가",
+      "description": "애드온은 선택사항입니다. 이 앱은 애드온을 번들로 제공하거나 권장하거나 호스팅하지 않습니다.",
       "disabled": "장애가 있는",
       "emptyInstalled": "아직 시스템에 애드온이 설치되지 않았습니다.",
       "enabled": "활성화됨",
-      "guideHeading": "애드온 검색 및 설치",
-      "guideIntro": "애드온을 사용하면 개인 엔터테인먼트 선호도에 맞춰 미디어 카탈로그와 스트림을 검색할 수 있습니다.",
       "installError": "이 애드온을 설치할 수 없습니다.",
       "installedHeading": "설치된 애드온",
       "processing": "처리 중...",
       "removeAddon": "이 애드온 제거",
-      "step1DescPrefix": "커뮤니티 카탈로그를 방문하세요.",
-      "step1DescSuffix": "또는 유사한 표준 애드온 제공업체.",
-      "step1Title": "애드온 카탈로그 살펴보기",
-      "step2DescPrefix": "원하는 애드온을 선택하고 옵션을 맞춤설정한 후 매니페스트 URL을 복사하세요(표준 예:",
-      "step2DescSuffix": ").",
-      "step2Title": "매니페스트 링크 복사",
-      "step3AddName": "추가하다",
-      "step3DescPrefix": "아래 필드에 매니페스트 경로를 붙여넣고 다음을 누르세요.",
-      "step3DescSuffix": ". 애드온이 즉시 활성화되어 미디어 소스를 검색합니다.",
-      "step3Title": "신청서에 추가",
       "title": "애드온 관리자"
     },
     "player": {
       "chooseAddon": "애드온을 선택하세요",
-      "emptyExplanation": "아직 스트림 애드온이 설치되거나 활성화되지 않았습니다. 설정 가이드 및 미디어 카탈로그 검색을 보려면 애드온 관리자 페이지를 방문하세요.",
+      "emptyExplanation": "애드온이 설치되거나 활성화되지 않았습니다. 애드온에서 선택한 매니페스트 URL을 추가하세요.",
       "emptyTitle": "사용 가능한 스트림 애드온이 없습니다.",
       "loadingStreams": "스트림 로드 중...",
       "manageAddonsButton": "애드온 목록 관리",
-      "noAddonStreams": "이 타이틀에 대해 반환된 애드온 스트림이 없습니다.",
+      "noAddonStreams": "이 애드온은 스트림을 반환하지 않았습니다.",
       "noTorrentStreams": "이 애드온에 대해 반환된 토렌트 스트림이 없습니다.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "면책 조항",
-      "disclaimerText": "AlphaFlix은 어떠한 파일도 호스팅하지 않으며, 제3자 서비스에 대한 링크만 제공합니다. 법적 문제는 파일 호스트 및 제공업체와 해결해야 합니다. 동영상 제공업체가 표시하는 미디어 파일에 대해 AlphaFlix은 책임을 지지 않습니다."
+      "disclaimerText": "AlphaFlix는 사용하기 쉬운 인터페이스와 지원되는 장치 전반에 걸쳐 고품질 재생 기능을 갖춘 안전하고 현대적이며 원활한 스트림 플레이어를 제공합니다. 미디어 파일을 호스팅하거나, 소스 카탈로그를 운영하거나, 특정 애드온을 권장하지 않습니다. 선택적 애드온은 합법적인 소스 사용을 담당하는 사용자가 구성합니다."
     },
     "links": {
       "fluxer": "디스코드",
       "funding": "우리를 지원하세요",
       "github": "깃허브"
     },
-    "tagline": "이 오픈 소스 스트리밍 앱으로 좋아하는 프로그램과 영화를 시청하세요."
+    "tagline": "원활한 고품질 시청 환경을 제공하는 안전하고 현대적인 스트림 플레이어입니다."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "기본"
       },
-      "downloads": {
-        "button": "다운로드 시도",
-        "copyHlsPlaylist": "HLS 플레이리스트 링크 복사하기",
-        "disclaimer": "다운로드는 제공업체에서 직접 가져옵니다. AlphaFlix은 다운로드 제공 방식을 통제할 수 없습니다.",
-        "downloadSubtitle": "현재 자막 다운로드",
-        "downloadVideo": "영상 다운로드",
-        "hlsDisclaimer": "다운로드는 제공업체에서 직접 가져옵니다. AlphaFlix은 다운로드 제공 방식을 통제할 수 없습니다.<br /><br />사용자께서는 HLS 플레이리스트를 다운로드 하고 있으며, <bold>이는 고급 스트리밍 포맷의 사용에 익숙하지 않은 사용자에게는 추천하지 않는다는 것을 유의해주세요<bold>. 혹은 다른 소스와 포맷을 이용하여 보세요.",
-        "hlsDownloader": "또는 <0>hls 다운로더 웹사이트</0>로 이동하여 아래의 재생목록 URL을 붙여넣으세요.",
-        "onAndroid": {
-          "1": "Android에서 다운로드하려면 다운로드 버튼을 클릭한 다음 새 페이지에서 동영상을 <bold>길게 눌러</bold>저장을 선택합니다.",
-          "shortTitle": "다운로드 / Android",
-          "title": "Android에서 다운로드하기"
-        },
-        "onIos": {
-          "1": "iOS에서 다운로드하려면 다운로드 버튼을 클릭한 다음 새 페이지에서 <bold><ios_share /></bold>를 클릭한 다음 <bold>파일로 저장 <ios_files /></bold>을 클릭합니다.",
-          "shortTitle": "다운로드 / iOS",
-          "title": "iOS에서 다운로드하기"
-        },
-        "onPc": {
-          "1": "PC에서는 다운로드 버튼을 클릭한 다음 새 페이지에서 동영상을 마우스 오른쪽 버튼으로 클릭하고 <bold>다른 이름으로 동영상 저장</bold>을 선택합니다",
-          "shortTitle": "다운로드 / PC",
-          "title": "PC에서 다운로드하기"
-        },
-        "title": "다운로드"
-      },
       "episodes": {
         "button": "회차",
         "emptyState": "이번 시즌에는 에피소드가 없으니 나중에 다시 확인하세요!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "오디오",
-        "downloadItem": "다운로드",
         "enableSubtitles": "자막 활성화",
         "playbackItem": "재생 설정",
         "qualityItem": "화질",
         "sourceItem": "영상 소스",
         "subtitleItem": "자막 설정"
-      },
-      "sources": {
-        "failed": {
-          "text": "동영상을 찾는 동안 오류가 발생했습니다. 다른 소스를 사용해 보세요.",
-          "title": "스크래핑 실패"
-        },
-        "findNextSource": "다음 소스 찾기",
-        "maintain": "유지하다",
-        "noEmbeds": {
-          "text": "임베드를 찾을 수 없습니다. 다른 소스를 사용해 보세요.",
-          "title": "발견된 임베드없음"
-        },
-        "noStream": {
-          "text": "이 소스에는 해당 영화 또는 프로그램에 대한 스트림이 없습니다.",
-          "title": "발견된 스트림 없음"
-        },
-        "title": "소스",
-        "unknownOption": "알수없음"
       },
       "subtitles": {
         "autoSelectChoice": "자동 선택",
@@ -953,37 +888,6 @@
       "restart": "다시 시작",
       "resume": "재개하다",
       "title": "계속 시청하시겠습니까?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "확장 프로그램이 비활성화되었습니다.",
-        "enableExtension": "확장 프로그램 활성화",
-        "homeButton": "집에 가세요",
-        "text": "AlphaFlix 확장 프로그램을 설치했습니다. 이 기능을 사용하려면 이 사이트에 대한 확장 기능을 활성화해야 합니다.",
-        "title": "확장 기능을 활성화해주세요"
-      },
-      "items": {
-        "pending": "동영상 확인 중..."
-      },
-      "notFound": {
-        "badge": "찾을 수 없음",
-        "detailsButton": "상세 보기",
-        "discoverButton": "더 알아보기",
-        "homeButton": "메인으로 돌아가기",
-        "text": "제공업체를 통해 검색했지만 원하는 미디어를 찾을 수 없습니다! 당사는 해당 미디어를 호스팅하지 않으며 이용 가능한 미디어에 대한 통제권이 없습니다. 자세한 내용을 보려면 아래의 '세부 정보 보기'를 클릭하세요.",
-        "title": "찾을 수 없습니다"
-      },
-      "tips": {
-        "1": "소스를 전환하려면 톱니바퀴 아이콘을 탭하세요!",
-        "2": "제목을 누르면 링크가 복사됩니다!",
-        "3": "전체 화면 대신 와이드스크린 버튼을 표시하려면 Shift 키를 길게 누르세요!",
-        "4": "일부 소스는 다른 소스보다 더 잘 작동합니다!",
-        "5": "더 많은 소스를 보려면 확장 프로그램을 받으세요!",
-        "6": "북마크를 유지하여 편집하거나 삭제하세요!",
-        "7": "SHIFT를 누른 상태에서 제목을 탭하면 시간과 함께 링크가 복사됩니다!",
-        "8": "맞춤 자막 색상을 설정해보세요!",
-        "9": "키보드 단축키를 보려면 `를 누르세요!"
-      }
     },
     "segment": {
       "credits": "크레딧",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "탐색하려면 두 번 탭하세요.",
       "doubleClickToSeekDescription": "플레이어의 왼쪽이나 오른쪽을 두 번 탭하면 10초 앞이나 뒤로 탐색됩니다.",
       "doubleClickToSeekLabel": "탐색하려면 두 번 탭하세요.",
-      "embedOrder": "임베드 재정렬",
-      "embedOrderDescription": "드래그 앤 드롭하여 삽입 순서를 변경하세요. 이를 통해 시청하려는 미디어에 대한 임베드를 확인하는 순서가 결정됩니다. <br><br> <strong>(대부분의 사용자에게 가장 적합한 기본 순서)</strong>",
-      "embedOrderEnableLabel": "맞춤 삽입 순서",
       "keyboardShortcuts": "키보드 단축키",
       "keyboardShortcutsDescription": "애플리케이션의 키보드 단축키를 사용자 정의합니다. 언제든지 이 도움말을 표시하려면 `를 누르세요.",
       "keyboardShortcutsLabel": "키보드 단축키 사용자 정의",
       "language": "애플리케이션 언어",
       "languageDescription": "애플리케이션 전체에 적용될 언어.",
-      "lastSuccessfulSource": "마지막으로 사용한 소스",
-      "lastSuccessfulSourceDescription": "이전 에피소드에 콘텐츠를 성공적으로 제공한 소스의 우선순위를 자동으로 지정합니다. 이는 시리즈를 시청할 때 연속성을 보장하는 데 도움이 됩니다.",
-      "lastSuccessfulSourceEnableLabel": "마지막으로 사용한 소스",
       "lowPerformanceMode": "낮은 성능/대역폭 모드",
       "lowPerformanceModeDescription": "대역폭을 많이 사용하는 기능을 비활성화하여 느린 연결 및 장치에 맞게 애플리케이션을 최적화합니다. 이 모드는 핵심 검색 및 감시 기능을 그대로 유지하면서 데이터 사용량을 줄이고 성능을 향상시킵니다.",
       "lowPerformanceModeLabel": "저성능 모드",
-      "manualSource": "수동 소스 선택",
-      "manualSourceDescription": "스크랩하기 전에 소스를 선택해야 합니다. 자동 소스 선택을 비활성화하고 재생을 시작할 때 소스 선택기를 엽니다.",
-      "manualSourceLabel": "수동 소스 선택",
       "showLess": "간략히 보기",
       "showMore": "더 보기",
       "skipCredits": "엔딩 크레딧 건너뛰기",

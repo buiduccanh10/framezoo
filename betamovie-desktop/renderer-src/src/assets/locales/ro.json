@@ -6,16 +6,6 @@
     "copy": "Copiați"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Vizita",
-      "step1Suffix": "sau depozitul dvs. de suplimente de încredere compatibil cu Addon.",
-      "step2Prefix": "Copiați linkul manifest (de ex.",
-      "step2Suffix": ").",
-      "step3AddName": "Adăuga",
-      "step3Prefix": "Lipiți în caseta de mai sus, apoi apăsați",
-      "step3Suffix": ".",
-      "title": "Explorați mai multe suplimente:"
-    },
     "manager": {
       "add": "Adăuga",
       "adding": "Se adaugă...",
@@ -23,39 +13,28 @@
       "ariaManage": "Gestionați suplimente",
       "errorFallback": "Imposibil de instalat acest addon.",
       "manageListButton": "Gestionați lista de suplimente",
-      "subtitle": "Adăugați o adresă URL manifest Addon pentru fluxuri torrent și directe.",
+      "subtitle": "Opțional. Adăugați o adresă URL manifest pe care o alegeți. Această aplicație nu include, nu recomandă sau găzduiește suplimente.",
       "title": "Suplimente pentru desktop"
     },
     "page": {
       "addAddonButton": "Adăugați Addon",
+      "description": "Suplimentele sunt opționale. Această aplicație nu include, nu recomandă sau găzduiește niciun supliment.",
       "disabled": "Dezactivat",
       "emptyInstalled": "Nu există încă suplimente instalate în sistem.",
       "enabled": "Activat",
-      "guideHeading": "Descoperiți și instalați suplimente",
-      "guideIntro": "Suplimentele vă ajută să răsfoiți cataloage media și fluxuri adaptate preferințelor dvs. personale de divertisment:",
       "installError": "Imposibil de instalat acest addon.",
       "installedHeading": "Suplimente instalate",
       "processing": "Prelucrare...",
       "removeAddon": "Eliminați acest supliment",
-      "step1DescPrefix": "Vizitați catalogul comunității la",
-      "step1DescSuffix": "sau furnizori de suplimente standard similari.",
-      "step1Title": "Explorați Catalogul de suplimente",
-      "step2DescPrefix": "Selectați suplimentul dorit, personalizați opțiunile și copiați adresa URL a manifestului acestuia (exemplu standard:",
-      "step2DescSuffix": ").",
-      "step2Title": "Copiați linkul manifest",
-      "step3AddName": "Adăuga",
-      "step3DescPrefix": "Lipiți calea manifest în câmpul de mai jos și apăsați",
-      "step3DescSuffix": ". Suplimentul se va activa imediat pentru a căuta surse media.",
-      "step3Title": "Adăugați la aplicație",
       "title": "Manager de suplimente"
     },
     "player": {
       "chooseAddon": "Alegeți un supliment",
-      "emptyExplanation": "Nu este instalat sau activat încă niciun supliment de flux. Vizitați pagina Addons Manager pentru ghiduri de configurare și descoperire a catalogului media.",
+      "emptyExplanation": "Nu este instalat sau activat niciun supliment. Adăugați o adresă URL manifest pe care o alegeți în Addons.",
       "emptyTitle": "Nu sunt disponibile suplimente de flux",
       "loadingStreams": "Se încarcă fluxurile...",
       "manageAddonsButton": "Gestionați lista de suplimente",
-      "noAddonStreams": "Nu au fost returnate fluxuri suplimentare pentru acest titlu.",
+      "noAddonStreams": "Acest supliment nu a returnat niciun flux.",
       "noTorrentStreams": "Nu au fost returnate fluxuri de torrent pentru acest supliment.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Declinare a răspunderii",
-      "disclaimerText": "AlphaFlix nu găzduiește niciun fișier, ci doar trimite la servicii terțe. Problemele juridice ar trebui abordate cu gazdele și furnizorii de fișiere. AlphaFlix nu este responsabil pentru niciun fișier media afișat de furnizorii de video."
+      "disclaimerText": "AlphaFlix oferă un player de flux sigur, modern și fără întreruperi, cu o interfață ușor de utilizat și redare de înaltă calitate pe dispozitivele acceptate. Nu găzduiește fișiere media, nu operează un catalog sursă și nu recomandă suplimente specifice. Suplimentele opționale sunt configurate de utilizatori, care sunt responsabili pentru utilizarea surselor legale."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Ajută-ne",
       "github": "GitHub"
     },
-    "tagline": "Urmăriți emisiunile și filmele preferate cu această aplicație de streaming open source."
+    "tagline": "Un stream player securizat și modern pentru o experiență de vizionare perfectă și de înaltă calitate."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Implicit"
       },
-      "downloads": {
-        "button": "Încercați să descărcați",
-        "copyHlsPlaylist": "Copiere link către lista de redare HLS",
-        "disclaimer": "Descărcările sunt luate direct de la furnizor. AlphaFlix nu are control cum descărcările sunt furnizate.",
-        "downloadSubtitle": "Descărcați subtitlul curente",
-        "downloadVideo": "Descarcă video",
-        "hlsDisclaimer": "Descărcările sunt preluate direct de la furnizor. AlphaFlix nu are control asupra modului în care sunt furnizate descărcările.<br /><br />Vă rugăm să rețineți că descărcați o listă de redare HLS, <bold>nu este recomandat să o descărcați dacă nu sunteți familiari cu formate avasate de streaming</bold>. Încercați surse diferite pentru formate diferte.",
-        "hlsDownloader": "Sau accesați site-ul web de descărcare <0>hls</0> și inserați adresa URL a listei de redare de mai jos.",
-        "onAndroid": {
-          "1": "Pentru a descărca pe android, apăsați butonul de descărcare apoi în pagina nouă,<bold>apăsați și țineți</bold> pe video, apoi selectați <bold>salvează</bold>.",
-          "shortTitle": "Descărcare / Android",
-          "title": "Descărcare pe Android"
-        },
-        "onIos": {
-          "1": "Pentru a instala pe iOS, apăsați butonul de instalare apoi în pagina nouă apăsați <bold><ios_share /></bold>, apoi <bold>Salvează in File <ios_files /></bold>.",
-          "shortTitle": "Descărcare / iOS",
-          "title": "Descărcare pe iOS"
-        },
-        "onPc": {
-          "1": "Pe calculator, apăsați butonul de descărcare apoi în pagina nouă, apăsați click drept pe video și selectați <bold> Salvați videoul ca</bold>",
-          "shortTitle": "Descarcă / Calculator",
-          "title": "Descărcare pe calculator"
-        },
-        "title": "Descarcă"
-      },
       "episodes": {
         "button": "Episoade",
         "emptyState": "Nu sunt episoade in sezonul acesta, reveniți mai târziu!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Audio",
-        "downloadItem": "Descarcă",
         "enableSubtitles": "Activează subtitlurile",
         "playbackItem": "Setări de redare",
         "qualityItem": "Calitate",
         "sourceItem": "Surse video",
         "subtitleItem": "Setările subtitlului"
-      },
-      "sources": {
-        "failed": {
-          "text": "Aici a fost o eroare încercând să găsim video, încercați o altă sursă.",
-          "title": "Nu s-a răzuit"
-        },
-        "findNextSource": "Găsiți următoarea sursă",
-        "maintain": "Menţine",
-        "noEmbeds": {
-          "text": "Nu am putut găsi nicio incorporare, vă rog să încercați o altă sursă.",
-          "title": "Nu a fost găsită nicio încorporare"
-        },
-        "noStream": {
-          "text": "Sursa aceasta nu are niciun flux pentru acest film sau serial.",
-          "title": "Niciun flux"
-        },
-        "title": "Surse",
-        "unknownOption": "Necunoscut"
       },
       "subtitles": {
         "autoSelectChoice": "Selectare automată",
@@ -953,37 +888,6 @@
       "restart": "Repornire",
       "resume": "Relua",
       "title": "Continuați să vizionați?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Extensia dezactivată",
-        "enableExtension": "Activați extensia",
-        "homeButton": "Du-te acasă",
-        "text": "Ați instalat extensia AlphaFlix. Pentru a începe să-l utilizați, trebuie să activați extensia pentru acest site.",
-        "title": "Vă rugăm să activați extensia"
-      },
-      "items": {
-        "pending": "Verificând pentru videouri..."
-      },
-      "notFound": {
-        "badge": "Nu a fost găsit",
-        "detailsButton": "Arată detalii",
-        "discoverButton": "Descoperiți mai multe",
-        "homeButton": "Du-te acasă",
-        "text": "Am căutat prin furnizorii noștri și nu putem găsi media pe care o căutați! Nu găzduim mass-media și nu avem control asupra a ceea ce este disponibil. Vă rugăm să faceți clic pe „Afișați detalii” de mai jos pentru mai multe detalii.",
-        "title": "Nu am putut găsi aia"
-      },
-      "tips": {
-        "1": "Atingeți pictograma roată pentru a schimba sursele!",
-        "2": "Atingeți titlul pentru a copia linkul!",
-        "3": "Atingeți lung sau țineți apăsat SHIFT pentru a afișa butonul pentru ecran lat în loc de ecran complet!",
-        "4": "Unele surse funcționează mai bine decât altele!",
-        "5": "Obțineți extensia pentru mai multe surse!",
-        "6": "Țineți marcajele pentru a le edita sau șterge!",
-        "7": "Țineți apăsat SHIFT și atingeți titlul pentru a copia linkul cu timpul!",
-        "8": "Setează o culoare personalizată pentru subtitrare!",
-        "9": "Țineți apăsat ` pentru a vedea comenzile rapide de la tastatură!"
-      }
     },
     "segment": {
       "credits": "Credite",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Atingeți de două ori pentru a căuta",
       "doubleClickToSeekDescription": "Atingeți de două ori partea stângă sau dreaptă a playerului pentru a căuta 10 secunde înainte sau înapoi.",
       "doubleClickToSeekLabel": "Activați atingerea de două ori pentru a căuta",
-      "embedOrder": "Reordonarea înglobărilor",
-      "embedOrderDescription": "Trageți și plasați pentru a reordona încorporațiile. Aceasta va determina ordinea în care sunt verificate încorporațiile pentru media pe care încercați să vizionați. <br><br> <strong>(Comanda implicită este cea mai bună pentru majoritatea utilizatorilor)</strong>",
-      "embedOrderEnableLabel": "Comanda de încorporare personalizată",
       "keyboardShortcuts": "Comenzi rapide de la tastatură",
       "keyboardShortcutsDescription": "Personalizați comenzile rapide de la tastatură pentru aplicație. Țineți apăsat ` pentru a afișa acest ajutor oricând",
       "keyboardShortcutsLabel": "Personalizați comenzile rapide de la tastatură",
       "language": "Limba aplicației",
       "languageDescription": "Limba aplicată întregii aplicații.",
-      "lastSuccessfulSource": "Ultima sursă folosită",
-      "lastSuccessfulSourceDescription": "Prioritizează automat sursa care a furnizat cu succes conținut pentru episodul anterior. Acest lucru ajută la asigurarea continuității atunci când vizionați seriale.",
-      "lastSuccessfulSourceEnableLabel": "Ultima sursă folosită",
       "lowPerformanceMode": "Performanță scăzută/mod lățime de bandă",
       "lowPerformanceModeDescription": "Optimizează aplicația pentru conexiuni și dispozitive mai lente prin dezactivarea funcțiilor cu lățime de bandă mare. Acest mod reduce utilizarea datelor și îmbunătățește performanța, păstrând în același timp intactă funcționalitatea de bază de căutare și ceas.",
       "lowPerformanceModeLabel": "Mod de performanță scăzută",
-      "manualSource": "Selectarea manuală a sursei",
-      "manualSourceDescription": "Solicitați alegerea unei surse înainte de răzuire. Dezactivează selecția automată a sursei și deschide selectorul sursei la pornirea redării.",
-      "manualSourceLabel": "Selectarea manuală a sursei",
       "showLess": "Arată mai puțin",
       "showMore": "Arată mai multe",
       "skipCredits": "Omite creditele de sfârșit",

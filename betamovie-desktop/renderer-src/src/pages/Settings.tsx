@@ -12,7 +12,6 @@ import {
 import { getSessions, updateSession } from "@/backend/accounts/sessions";
 import { getSettings, updateSettings } from "@/backend/accounts/settings";
 import { editUser } from "@/backend/accounts/user";
-import { useProviderMetadataVersion } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
@@ -169,7 +168,6 @@ export function AccountSettings(props: {
 }
 
 export function SettingsPage() {
-  useProviderMetadataVersion();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   // TIDB segment submissions are now handled by the backend, so the legacy
@@ -194,18 +192,7 @@ export function SettingsPage() {
     const hash = window.location.hash;
     if (hash) {
       const hashId = hash.substring(1); // Remove the # symbol
-      // Map sub-section hashes to their parent categories
-      const subSectionToCategory: Record<string, string> = {
-        "source-order": "settings-preferences",
-      };
-
-      // Check if it's a sub-section hash
-      if (subSectionToCategory[hashId]) {
-        const categoryId = subSectionToCategory[hashId];
-        setSelectedCategory(categoryId);
-        // Wait for the section to render, then scroll
-        scrollToHash(hash, { delay: 100 });
-      } else if (validCategories.includes(hashId)) {
+      if (validCategories.includes(hashId)) {
         // It's a category hash
         setSelectedCategory(hashId);
         scrollToHash(hash);
@@ -241,15 +228,7 @@ export function SettingsPage() {
       const hash = window.location.hash;
       if (hash) {
         const hashId = hash.substring(1);
-        const subSectionToCategory: Record<string, string> = {
-          "source-order": "settings-preferences",
-        };
-
-        if (subSectionToCategory[hashId]) {
-          const categoryId = subSectionToCategory[hashId];
-          setSelectedCategory(categoryId);
-          scrollToHash(hash, { delay: 100 });
-        } else if (validCategories.includes(hashId)) {
+        if (validCategories.includes(hashId)) {
           setSelectedCategory(hashId);
           scrollToHash(hash, { delay: 100 });
         } else {
@@ -429,24 +408,8 @@ export function SettingsPage() {
     (s) => s.setEnableAutoSkipSegments,
   );
 
-  // These are commented because the EmbedOrderPart is on the admin page and not on the settings page.
-  const embedOrder = usePreferencesStore((s) => s.embedOrder);
-  // const setEmbedOrder = usePreferencesStore((s) => s.setEmbedOrder);
-
-  const enableEmbedOrder = usePreferencesStore((s) => s.enableEmbedOrder);
-  // const setEnableEmbedOrder = usePreferencesStore((s) => s.setEnableEmbedOrder);
-
-  // const setDisabledEmbeds = usePreferencesStore((s) => s.setDisabledEmbeds);
-
   const proxyTmdb = usePreferencesStore((s) => s.proxyTmdb);
   const setProxyTmdb = usePreferencesStore((s) => s.setProxyTmdb);
-
-  const manualSourceSelection = usePreferencesStore(
-    (s) => s.manualSourceSelection,
-  );
-  const setManualSourceSelection = usePreferencesStore(
-    (s) => s.setManualSourceSelection,
-  );
 
   const setEnableDoubleClickToSeek = usePreferencesStore(
     (s) => s.setEnableDoubleClickToSeek,
@@ -518,9 +481,6 @@ export function SettingsPage() {
         if (settings.proxyTmdb !== undefined) {
           setProxyTmdb(settings.proxyTmdb);
         }
-        if (settings.manualSourceSelection !== undefined) {
-          setManualSourceSelection(settings.manualSourceSelection);
-        }
         if (settings.enableDoubleClickToSeek !== undefined) {
           setEnableDoubleClickToSeek(settings.enableDoubleClickToSeek);
         }
@@ -555,7 +515,6 @@ export function SettingsPage() {
     setEnableSkipCredits,
     setEnableAutoSkipSegments,
     setProxyTmdb,
-    setManualSourceSelection,
     setEnableDoubleClickToSeek,
     setEnableAutoResumeOnPlaybackError,
     setEnableNumberKeySeeking,
@@ -579,10 +538,7 @@ export function SettingsPage() {
     enableAutoplay,
     enableSkipCredits,
     enableAutoSkipSegments,
-    embedOrder,
-    enableEmbedOrder,
     proxyTmdb,
-    manualSourceSelection,
     true,
     enableAutoResumeOnPlaybackError,
     customThemeBaseline ?? customTheme,
@@ -620,7 +576,6 @@ export function SettingsPage() {
         state.enableSkipCredits.changed ||
         state.enableAutoSkipSegments.changed ||
         state.proxyTmdb.changed ||
-        state.manualSourceSelection.changed ||
         state.enableDoubleClickToSeek.changed ||
         state.enableAutoResumeOnPlaybackError.changed ||
         state.customTheme.changed
@@ -638,7 +593,6 @@ export function SettingsPage() {
           enableAutoSkipSegments: state.enableAutoSkipSegments.state,
 
           proxyTmdb: state.proxyTmdb.state,
-          manualSourceSelection: state.manualSourceSelection.state,
           enableDoubleClickToSeek: state.enableDoubleClickToSeek.state,
           enableAutoResumeOnPlaybackError:
             state.enableAutoResumeOnPlaybackError.state,
@@ -682,7 +636,6 @@ export function SettingsPage() {
     setdebridService(state.debridService.state);
     setTIDBKey(state.tidbKey.state);
     setProxyTmdb(state.proxyTmdb.state);
-    setManualSourceSelection(state.manualSourceSelection.state);
     setEnableDoubleClickToSeek(state.enableDoubleClickToSeek.state);
     setEnableAutoResumeOnPlaybackError(
       state.enableAutoResumeOnPlaybackError.state,
@@ -732,7 +685,6 @@ export function SettingsPage() {
     updateProfile,
     updateNickname,
     setProxyTmdb,
-    setManualSourceSelection,
     setEnableDoubleClickToSeek,
     setEnableAutoResumeOnPlaybackError,
     setCustomTheme,
@@ -822,8 +774,6 @@ export function SettingsPage() {
                 setEnableSkipCredits={state.enableSkipCredits.set}
                 enableAutoSkipSegments={state.enableAutoSkipSegments.state}
                 setEnableAutoSkipSegments={state.enableAutoSkipSegments.set}
-                manualSourceSelection={state.manualSourceSelection.state}
-                setManualSourceSelection={state.manualSourceSelection.set}
                 enableDoubleClickToSeek
                 setEnableDoubleClickToSeek={() => undefined}
                 enableAutoResumeOnPlaybackError={

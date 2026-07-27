@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { reportCaptchaSolve } from "@/backend/helpers/report";
+import { reportCaptchaSolve } from "@/backend/helpers/captchaReport";
 
 export interface TurnstileStore {
   isInWidget: boolean;

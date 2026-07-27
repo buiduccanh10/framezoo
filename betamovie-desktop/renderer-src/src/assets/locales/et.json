@@ -6,16 +6,6 @@
     "copy": "Kopeeri"
   },
   "addons": {
-    "guide": {
-      "step1Prefix": "Külastage",
-      "step1Suffix": "või teie usaldusväärse Addon-ühilduva lisandmoodulite hoidla.",
-      "step2Prefix": "Kopeerige manifesti link (nt.",
-      "step2Suffix": ").",
-      "step3AddName": "Lisa",
-      "step3Prefix": "Kleepige ülalolevasse kasti ja seejärel vajutage",
-      "step3Suffix": ".",
-      "title": "Uurige rohkem lisandmooduleid:"
-    },
     "manager": {
       "add": "Lisa",
       "adding": "Lisamine...",
@@ -23,39 +13,28 @@
       "ariaManage": "Lisandmoodulite haldamine",
       "errorFallback": "Seda lisandmoodulit ei saa installida.",
       "manageListButton": "Halda lisandmoodulite loendit",
-      "subtitle": "Lisage Addon manifesti URL torrenti ja otsevoogude jaoks.",
+      "subtitle": "Valikuline. Lisage valitud manifesti URL. See rakendus ei koonda, ei soovita ega hosti lisandmooduleid.",
       "title": "Töölaua lisad"
     },
     "page": {
       "addAddonButton": "Lisage Addon",
+      "description": "Lisad on valikulised. See rakendus ei koonda, ei soovita ega hosti ühtegi lisandmoodulit.",
       "disabled": "Keelatud",
       "emptyInstalled": "Süsteemi pole veel installitud ühtegi lisandmoodulit.",
       "enabled": "Lubatud",
-      "guideHeading": "Avastage ja installige lisandmooduleid",
-      "guideIntro": "Lisad aitavad teil sirvida meediakatalooge ja vooge, mis on kohandatud teie isiklike meelelahutuseelistustega.",
       "installError": "Seda lisandmoodulit ei saa installida.",
       "installedHeading": "Installitud lisad",
       "processing": "Töötlemine...",
       "removeAddon": "Eemalda see lisand",
-      "step1DescPrefix": "Külastage kogukonna kataloogi aadressil",
-      "step1DescSuffix": "või sarnased standardsed lisandmoodulite pakkujad.",
-      "step1Title": "Avastage Addoni kataloogi",
-      "step2DescPrefix": "Valige soovitud lisandmoodul, kohandage valikuid ja kopeerige selle manifesti URL (standardnäide:",
-      "step2DescSuffix": ").",
-      "step2Title": "Kopeeri manifesti link",
-      "step3AddName": "Lisa",
-      "step3DescPrefix": "Kleepige manifesti tee allolevale väljale ja vajutage",
-      "step3DescSuffix": ". Lisandmoodul aktiveerub kohe meediumiallikate otsimiseks.",
-      "step3Title": "Lisa rakendusse",
       "title": "Lisade haldur"
     },
     "player": {
       "chooseAddon": "Valige lisandmoodul",
-      "emptyExplanation": "Ühtegi voo lisandmoodulit pole veel installitud ega aktiveeritud. Häälestusjuhendite ja meediakataloogi avastamiseks külastage Addons Manageri lehte.",
+      "emptyExplanation": "Ühtegi lisandmoodulit pole installitud ega lubatud. Lisage Addonsis valitud manifesti URL.",
       "emptyTitle": "Voo lisandmooduleid pole saadaval",
       "loadingStreams": "Voogude laadimine...",
       "manageAddonsButton": "Lisandite loendi haldamine",
-      "noAddonStreams": "Selle pealkirja jaoks ei tagastatud ühtegi lisavoogu.",
+      "noAddonStreams": "See lisandmoodul ei tagastanud ühtegi voogu.",
       "noTorrentStreams": "Selle lisandmooduli jaoks ei tagastatud ühtegi torrenti voogu.",
       "qualities": {
         "1080p": "1080p",
@@ -260,14 +239,14 @@
   "footer": {
     "legal": {
       "disclaimer": "Lahtiütlemine",
-      "disclaimerText": "AlphaFlix ei hoiusta ühtegi faili, vaid ainult lingib kolmandate osapoolte teenustele. Juriidilised küsimused tuleks lahendada failihostide ja teenusepakkujatega. AlphaFlix ei vastuta videopakkujate poolt näidatud meediafailide eest."
+      "disclaimerText": "AlphaFlix pakub turvalist, kaasaegset ja sujuvat voogedastust, millel on lihtsalt kasutatav liides ja kvaliteetne taasesitus kõigis toetatud seadmetes. See ei majuta meediumifaile, ei kasuta lähtekataloogi ega soovita konkreetseid lisandmooduleid. Valikulised lisandmoodulid konfigureerivad kasutajad, kes vastutavad seaduslike allikate kasutamise eest."
     },
     "links": {
       "fluxer": "Fluxer",
       "funding": "Toetage meid",
       "github": "GitHub"
     },
-    "tagline": "Vaadake selle avatud lähtekoodiga striimimis rakendusega oma lemmiksaateid ja -filme."
+    "tagline": "Turvaline ja kaasaegne voomängija sujuvaks ja kvaliteetseks vaatamiskogemuseks."
   },
   "global": {
     "keyboardShortcuts": {
@@ -769,31 +748,6 @@
       "audio": {
         "default": "Vaikimisi"
       },
-      "downloads": {
-        "button": "Proovige alla laadida",
-        "copyHlsPlaylist": "Kopeeri HLS esitusloendi link",
-        "disclaimer": "Allalaadimine toimub otse teenusepakkujalt. AlphaFlix ei saa kontrollida, kuidas allalaadimine toimub.",
-        "downloadSubtitle": "Laadige alla praegune subtiiter",
-        "downloadVideo": "Lae alla video",
-        "hlsDisclaimer": "Allalaadimised võetakse otse teenusepakkujalt. AlphaFlix ei kontrolli, kuidas allalaadimisi pakutakse. <br /><br /><bold>Pange tähele, et laadite alla HLS-i esitusloendit, see on mõeldud kasutajatele, kes on tuttavad multimeediumi striimimisega</bold>.",
-        "hlsDownloader": "Või minge <0>hls-i allalaadimisprogrammi veebisaidile</0> ja kleepige alt esitusloendi URL.",
-        "onAndroid": {
-          "1": "Et allalaadida Androidi telefonil, vajuta allalaadimise nupule, siis uuel leheküljel <bold>vajuta ja hoia</bold> video peal, siis vali <bold>salvesta</bold>.",
-          "shortTitle": "Allalaadimine / Android",
-          "title": "Androidil allalaadimine"
-        },
-        "onIos": {
-          "1": "Et allalaadida iOS telefonil, vajuta allalaadimise nupule, siis uuel leheküljel vajuta <bold><ios_share /></bold>, siis <bold>Salvesta failidesse <ios_files /></bold>.",
-          "shortTitle": "Allalaadimine / iOS",
-          "title": "iOSil allalaadimine"
-        },
-        "onPc": {
-          "1": "Klõpsake arvutis allalaadimise nupule, seejärel klõpsake uuel lehel parema klõpsuga videol ja valige <bold>Salvesta video</bold>",
-          "shortTitle": "Allalaadimine / Arvutis",
-          "title": "Arvutis allalaadimine"
-        },
-        "title": "Lae alla"
-      },
       "episodes": {
         "button": "Episoodid",
         "emptyState": "Selles hooajas puuduvad episoodid, vaadake hiljem uuesti!",
@@ -826,30 +780,11 @@
       },
       "settings": {
         "audioItem": "Heli",
-        "downloadItem": "Lae alla",
         "enableSubtitles": "Luba Subtiitrid",
         "playbackItem": "Taasesituse sätted",
         "qualityItem": "Kvaliteet",
         "sourceItem": "Video allikad",
         "subtitleItem": "Subtiitri sätted"
-      },
-      "sources": {
-        "failed": {
-          "text": "Videote leidmisel tekkis viga, palun proovige mõnda muud allikat.",
-          "title": "Ei õnnestunud kraapida"
-        },
-        "findNextSource": "Otsige üles järgmine allikas",
-        "maintain": "Säilitada",
-        "noEmbeds": {
-          "text": "Me ei leidnud ühtegi manust, proovige twist allikat.",
-          "title": "Ei leitud manuseid"
-        },
-        "noStream": {
-          "text": "Sellel allikal ei ole selle filmi või seriaali jaoks ühtegi striimi.",
-          "title": "Puudub striim"
-        },
-        "title": "Allikad",
-        "unknownOption": "Teadmata"
       },
       "subtitles": {
         "autoSelectChoice": "Automaatne valimine",
@@ -953,37 +888,6 @@
       "restart": "Taaskäivitage",
       "resume": "Jätka",
       "title": "Kas jätkata vaatamist?"
-    },
-    "scraping": {
-      "extensionFailure": {
-        "badge": "Brauserilaiendus väljalülitatud",
-        "enableExtension": "Lülita brauserilaiendus sisse",
-        "homeButton": "Tagasi",
-        "text": "Olete allalaadinud AlphaFlix'i brauserilaiendue. Selle kasutamiseks peate vajutama brauserilaienduse peale ning andma ligipääsu praegusele saidile.",
-        "title": "Palun lülita brauserilaiendus sisse"
-      },
-      "items": {
-        "pending": "Otsin videoid..."
-      },
-      "notFound": {
-        "badge": "Ei leitud",
-        "detailsButton": "Näita üksikasju",
-        "discoverButton": "Avastage rohkem",
-        "homeButton": "Mine koju",
-        "text": "Me otsisime läbi meie teenusepakkujad ja ei leidnud teie poolt otsitud meediat! Me ei halda meediat ja meil ei ole kontrolli selle üle, mis on saadaval. Täpsema teabe saamiseks klõpsake allpool nupule \"Näita üksikasju\".",
-        "title": "Me ei leidnud seda"
-      },
-      "tips": {
-        "1": "Allikate vahetamiseks puudutage hammasrattaikooni!",
-        "2": "Lingi kopeerimiseks puudutage pealkirja!",
-        "3": "Täisekraani asemel laiekraannupu kuvamiseks puudutage ja hoidke all või hoidke all SHIFT!",
-        "4": "Mõned allikad töötavad paremini kui teised!",
-        "5": "Hankige laiendus rohkemate allikate jaoks!",
-        "6": "Hoidke järjehoidjaid nende muutmiseks või kustutamiseks!",
-        "7": "Hoidke all SHIFT ja puudutage pealkirja, et kopeerida link aja jooksul!",
-        "8": "Määrake kohandatud subtiitrite värv!",
-        "9": "Klaviatuuri otseteede vaatamiseks hoidke all `!"
-      }
     },
     "segment": {
       "credits": "Krediidid",
@@ -1266,23 +1170,14 @@
       "doubleClickToSeek": "Otsimiseks topeltpuudutage",
       "doubleClickToSeekDescription": "Topeltpuudutage mängija vasakul või paremal küljel, et otsida 10 sekundit edasi või tagasi.",
       "doubleClickToSeekLabel": "Otsimiseks lubage topeltpuudutamine",
-      "embedOrder": "Manuste ümberjärjestamine",
-      "embedOrderDescription": "Manuste ümberjärjestamiseks lohistage. See määrab järjestuse, milles kontrollitakse vaadatava meediumi manustamist. <br><br> <strong>(Vaikejärjestus on enamiku kasutajate jaoks parim)</strong>",
-      "embedOrderEnableLabel": "Kohandatud manustamise järjekord",
       "keyboardShortcuts": "Klaviatuuri otseteed",
       "keyboardShortcutsDescription": "Kohandage rakenduse klaviatuuri otseteid. Hoidke klahvi all, et seda abi igal ajal kuvada",
       "keyboardShortcutsLabel": "Kohandage klaviatuuri otseteid",
       "language": "Rakenduse keel",
       "languageDescription": "Keel, mis on rakendatud tervele rakendusele.",
-      "lastSuccessfulSource": "Viimati kasutatud allikas",
-      "lastSuccessfulSourceDescription": "Eelistage automaatselt allikat, mis eelmise jao jaoks sisu edukalt pakkus. See aitab tagada järjepidevuse seriaalide vaatamisel.",
-      "lastSuccessfulSourceEnableLabel": "Viimati kasutatud allikas",
       "lowPerformanceMode": "Madala jõudluse / ribalaiuse režiim",
       "lowPerformanceModeDescription": "Optimeerib rakenduse aeglasemate ühenduste ja seadmete jaoks, keelates suure ribalaiusega funktsioonid. See režiim vähendab andmekasutust ja parandab jõudlust, säilitades samal ajal põhiotsingu ja kella funktsioonid.",
       "lowPerformanceModeLabel": "Madala jõudlusega režiim",
-      "manualSource": "Allika käsitsi valimine",
-      "manualSourceDescription": "Enne kraapimist tuleb valida allikas. Keelab allika automaatse valiku ja avab taasesituse alustamisel allika valija.",
-      "manualSourceLabel": "Allika käsitsi valimine",
       "showLess": "Näita vähem",
       "showMore": "Näita rohkem",
       "skipCredits": "Jäta lõputiitrid vahele",

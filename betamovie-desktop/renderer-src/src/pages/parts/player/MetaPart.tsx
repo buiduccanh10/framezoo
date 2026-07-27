@@ -5,11 +5,9 @@ import type { AsyncReturnType } from "type-fest";
 
 import { isAllowedExtensionVersion } from "@/backend/extension/compatibility";
 import { extensionInfo, sendPage } from "@/backend/extension/messaging";
-import { refreshCachedMetadata } from "@/backend/helpers/providerApi";
 import { DetailedMeta, getMetaFromId } from "@/backend/metadata/getmeta";
 import { decodeTMDBId } from "@/backend/metadata/tmdb";
 import { MWMediaType } from "@/backend/metadata/types/mw";
-import { loadProviderMetadata } from "@/backend/providers/runtimeMetadata";
 import { Button } from "@/components/buttons/Button";
 import { Icons } from "@/components/Icon";
 import { IconPill } from "@/components/layout/IconPill";
@@ -46,11 +44,6 @@ export function MetaPart(props: MetaPartProps) {
     if (isValidExtension) {
       if (!info.hasPermission) throw new Error("extension-no-permission");
     }
-
-    await loadProviderMetadata();
-
-    // use providers metadata
-    refreshCachedMetadata();
 
     // get media meta data
     let data: ReturnType<typeof decodeTMDBId> = null;

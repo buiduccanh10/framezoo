@@ -59,10 +59,7 @@ export function useSettingsState(
   enableAutoplay: boolean,
   enableSkipCredits: boolean,
   enableAutoSkipSegments: boolean,
-  embedOrder: string[],
-  enableEmbedOrder: boolean,
   proxyTmdb: boolean,
-  manualSourceSelection: boolean,
   enableDoubleClickToSeek: boolean,
   enableAutoResumeOnPlaybackError: boolean,
   customTheme: {
@@ -134,26 +131,8 @@ export function useSettingsState(
     resetEnableAutoSkipSegments,
     enableAutoSkipSegmentsChanged,
   ] = useDerived(enableAutoSkipSegments);
-  const [
-    embedOrderState,
-    setEmbedOrderState,
-    resetEmbedOrder,
-    embedOrderChanged,
-  ] = useDerived(embedOrder);
-  const [
-    enableEmbedOrderState,
-    setEnableEmbedOrderState,
-    resetEnableEmbedOrder,
-    enableEmbedOrderChanged,
-  ] = useDerived(enableEmbedOrder);
   const [proxyTmdbState, setProxyTmdbState, resetProxyTmdb, proxyTmdbChanged] =
     useDerived(proxyTmdb);
-  const [
-    manualSourceSelectionState,
-    setManualSourceSelectionState,
-    resetManualSourceSelection,
-    manualSourceSelectionChanged,
-  ] = useDerived(manualSourceSelection);
   const [
     enableDoubleClickToSeekState,
     setEnableDoubleClickToSeekState,
@@ -192,10 +171,7 @@ export function useSettingsState(
     resetEnableSkipCredits();
     resetEnableAutoSkipSegments();
 
-    resetEmbedOrder();
-    resetEnableEmbedOrder();
     resetProxyTmdb();
-    resetManualSourceSelection();
     resetEnableDoubleClickToSeek();
     resetEnableAutoResumeOnPlaybackError();
     resetCustomTheme();
@@ -217,10 +193,7 @@ export function useSettingsState(
     enableAutoplayChanged ||
     enableSkipCreditsChanged ||
     enableAutoSkipSegmentsChanged ||
-    embedOrderChanged ||
-    enableEmbedOrderChanged ||
     proxyTmdbChanged ||
-    manualSourceSelectionChanged ||
     enableDoubleClickToSeekChanged ||
     enableAutoResumeOnPlaybackErrorChanged ||
     customThemeChanged;
@@ -308,21 +281,6 @@ export function useSettingsState(
       state: proxyTmdbState,
       set: setProxyTmdbState,
       changed: proxyTmdbChanged,
-    },
-    embedOrder: {
-      state: embedOrderState,
-      set: setEmbedOrderState,
-      changed: embedOrderChanged,
-    },
-    enableEmbedOrder: {
-      state: enableEmbedOrderState,
-      set: setEnableEmbedOrderState,
-      changed: enableEmbedOrderChanged,
-    },
-    manualSourceSelection: {
-      state: manualSourceSelectionState,
-      set: setManualSourceSelectionState,
-      changed: manualSourceSelectionChanged,
     },
     enableDoubleClickToSeek: {
       state: enableDoubleClickToSeekState,
