@@ -132,11 +132,13 @@ build:desktop:macos:
       pnpm --filter betamovie-desktop build
 
       clean_release_dir
+      pnpm --filter betamovie-desktop exec node scripts/update-mpv.mjs --ensure --target darwin-arm64
       pnpm --filter betamovie-desktop exec electron-builder --mac zip --arm64
       require_files "mac-arm64" "latest-mac.yml" "AlphaFlix-*-arm64-mac.zip" "AlphaFlix-*-arm64-mac.zip.blockmap"
       copy_optional "mac-arm64" "AlphaFlix-*-arm64-mac.dmg"
 
       clean_release_dir
+      pnpm --filter betamovie-desktop exec node scripts/update-mpv.mjs --ensure --target darwin-x64
       pnpm --filter betamovie-desktop exec electron-builder --mac zip --x64
       require_files "mac-x64" "latest-mac.yml" "AlphaFlix-*-x64-mac.zip" "AlphaFlix-*-x64-mac.zip.blockmap"
       copy_optional "mac-x64" "AlphaFlix-*-x64-mac.dmg"
@@ -220,10 +222,12 @@ build:desktop:windows:
       pnpm --filter betamovie-desktop build
 
       clean_release_dir
+      pnpm --filter betamovie-desktop exec node scripts/update-mpv.mjs --ensure --target win32-x64
       pnpm --filter betamovie-desktop exec electron-builder --win nsis --x64
       require_files "win-x64" "latest.yml" "AlphaFlix-*-x64.exe" "AlphaFlix-*-x64.exe.blockmap"
 
       clean_release_dir
+      pnpm --filter betamovie-desktop exec node scripts/update-mpv.mjs --ensure --target win32-arm64
       pnpm --filter betamovie-desktop exec electron-builder --win nsis --arm64
       require_files "win-arm64" "latest.yml" "AlphaFlix-*-arm64.exe" "AlphaFlix-*-arm64.exe.blockmap"
 
