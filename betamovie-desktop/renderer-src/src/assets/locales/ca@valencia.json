@@ -825,6 +825,14 @@
         },
         "title": "Subtítols",
         "transcriptChoice": "Transcripció",
+        "searchPlaceholder": "Cerca subtítols o diàlegs...",
+        "seekMode": "Busca",
+        "syncMode": "Sincronització",
+        "syncOffset": "Desplaçament: {{delay}}s",
+        "syncAction": "Sincronització",
+        "nowPlaying": "Ara jugant",
+        "syncDescription": "Feu clic al diàleg que coincideixi amb l'escena del vídeo actual o ajusteu el desplaçament:",
+        "resetDelay": "Restableix",
         "translate": {
           "title": "Tradueix de {{language}}"
         },

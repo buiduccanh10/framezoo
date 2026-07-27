@@ -825,6 +825,14 @@
         },
         "title": "Subtitri",
         "transcriptChoice": "Atšifrējums",
+        "searchPlaceholder": "Meklēt subtitrus vai dialogu...",
+        "seekMode": "Meklēt",
+        "syncMode": "Sinhronizēt",
+        "syncOffset": "Nobīde: {{delay}}s",
+        "syncAction": "Sinhronizēt",
+        "nowPlaying": "Tagad spēlē",
+        "syncDescription": "Noklikšķiniet uz dialoga, kas atbilst pašreizējam video sižetam, vai pielāgojiet nobīdi:",
+        "resetDelay": "Atiestatīt",
         "translate": {
           "title": "Tulkot no {{language}}"
         },

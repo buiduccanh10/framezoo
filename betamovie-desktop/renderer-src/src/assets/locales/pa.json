@@ -825,6 +825,14 @@
         },
         "title": "ਉਪਸਿਰਲੇਖ",
         "transcriptChoice": "ਪ੍ਰਤੀਲਿਪੀ",
+        "searchPlaceholder": "ਉਪਸਿਰਲੇਖ ਜਾਂ ਡਾਇਲਾਗ ਖੋਜੋ...",
+        "seekMode": "ਭਾਲ",
+        "syncMode": "ਸਿੰਕ",
+        "syncOffset": "ਔਫਸੈੱਟ: {{delay}}s",
+        "syncAction": "ਸਿੰਕ",
+        "nowPlaying": "ਹੁਣ ਖੇਡ ਰਿਹਾ ਹੈ",
+        "syncDescription": "ਮੌਜੂਦਾ ਵੀਡੀਓ ਦ੍ਰਿਸ਼ ਨਾਲ ਮੇਲ ਖਾਂਦਾ ਡਾਇਲਾਗ 'ਤੇ ਕਲਿੱਕ ਕਰੋ, ਜਾਂ ਔਫਸੈੱਟ ਨੂੰ ਵਿਵਸਥਿਤ ਕਰੋ:",
+        "resetDelay": "ਰੀਸੈਟ ਕਰੋ",
         "translate": {
           "title": "{{language}} ਤੋਂ ਅਨੁਵਾਦ ਕਰੋ"
         },

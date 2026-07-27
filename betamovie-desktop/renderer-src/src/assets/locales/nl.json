@@ -825,6 +825,14 @@
         },
         "title": "Ondertiteling",
         "transcriptChoice": "Afschrift",
+        "searchPlaceholder": "Zoek ondertitels of dialoog...",
+        "seekMode": "Zoeken",
+        "syncMode": "Synchroniseren",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Synchroniseren",
+        "nowPlaying": "Nu aan het spelen",
+        "syncDescription": "Klik op een dialoog die overeenkomt met de huidige videoscène, of pas de offset aan:",
+        "resetDelay": "Opnieuw instellen",
         "translate": {
           "title": "Vertalen van {{language}}"
         },

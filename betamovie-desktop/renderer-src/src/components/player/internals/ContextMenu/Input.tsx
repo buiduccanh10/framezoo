@@ -3,6 +3,7 @@ import { Icon, Icons } from "@/components/Icon";
 export function Input(props: {
   value: string;
   onInput: (str: string) => void;
+  placeholder?: string;
 }) {
   return (
     <div className="w-full relative">
@@ -11,8 +12,8 @@ export function Input(props: {
         icon={Icons.SEARCH}
       />
       <input
-        placeholder="Search"
-        className="w-full py-2 px-3 pl-[calc(0.75rem+24px)] tabbable bg-video-context-inputBg rounded placeholder:text-video-context-inputPlaceholder"
+        placeholder={props.placeholder || "Search"}
+        className="w-full py-2 px-3 pl-[calc(0.75rem+24px)] tabbable bg-video-context-inputBg rounded placeholder:text-video-context-inputPlaceholder text-white text-sm focus:outline-none focus:ring-1 focus:ring-video-context-border transition-all"
         value={props.value}
         onInput={(e) => props.onInput(e.currentTarget.value)}
       />

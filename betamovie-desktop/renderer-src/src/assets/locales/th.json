@@ -825,6 +825,14 @@
         },
         "title": "คำบรรยาย",
         "transcriptChoice": "การถอดเสียง",
+        "searchPlaceholder": "ค้นหาคำบรรยายหรือบทสนทนา...",
+        "seekMode": "แสวงหา",
+        "syncMode": "ซิงค์",
+        "syncOffset": "ออฟเซ็ต: {{delay}}วินาที",
+        "syncAction": "ซิงค์",
+        "nowPlaying": "กำลังเล่นอยู่",
+        "syncDescription": "คลิกบทสนทนาที่ตรงกับฉากวิดีโอปัจจุบัน หรือปรับออฟเซ็ต:",
+        "resetDelay": "รีเซ็ต",
         "translate": {
           "title": "แปลจาก {{language}}"
         },

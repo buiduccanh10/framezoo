@@ -825,6 +825,14 @@
         },
         "title": "Υπότιτλοι",
         "transcriptChoice": "Αντίγραφο",
+        "searchPlaceholder": "Αναζήτηση υπότιτλων ή διαλόγων...",
+        "seekMode": "Ζητώ",
+        "syncMode": "Συγχρονισμός",
+        "syncOffset": "Μετατόπιση: {{delay}}s",
+        "syncAction": "Συγχρονισμός",
+        "nowPlaying": "Τώρα παίζει",
+        "syncDescription": "Κάντε κλικ στους διαλόγους που ταιριάζουν με την τρέχουσα σκηνή βίντεο ή προσαρμόστε τη μετατόπιση:",
+        "resetDelay": "Επαναφορά",
         "translate": {
           "title": "Μετάφραση από {{language}}"
         },

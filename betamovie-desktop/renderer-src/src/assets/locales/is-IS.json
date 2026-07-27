@@ -825,6 +825,14 @@
         },
         "title": "Textar",
         "transcriptChoice": "Afrit",
+        "searchPlaceholder": "Leita að texta eða samræðum...",
+        "seekMode": "Leita",
+        "syncMode": "Samstilla",
+        "syncOffset": "Frávik: {{delay}}s",
+        "syncAction": "Samstilla",
+        "nowPlaying": "Nú spilar",
+        "syncDescription": "Smelltu á samræðu sem passar við núverandi myndbandssenu, eða stilltu offset:",
+        "resetDelay": "Endurstilla",
         "translate": {
           "title": "Þýða úr {{language}}"
         },

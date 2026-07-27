@@ -825,6 +825,14 @@
         },
         "title": "उपशीर्षक",
         "transcriptChoice": "प्रतिलिपि",
+        "searchPlaceholder": "उपशीर्षक या संवाद खोजें...",
+        "seekMode": "तलाश",
+        "syncMode": "साथ-साथ करना",
+        "syncOffset": "ऑफसेट: {{delay}}s",
+        "syncAction": "साथ-साथ करना",
+        "nowPlaying": "अब खेल रहे हैं",
+        "syncDescription": "वर्तमान वीडियो दृश्य से मेल खाने वाले संवाद पर क्लिक करें, या ऑफसेट समायोजित करें:",
+        "resetDelay": "रीसेट करें",
         "translate": {
           "title": "{{language}} से अनुवाद करें"
         },

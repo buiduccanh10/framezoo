@@ -825,6 +825,14 @@
         },
         "title": "ចំណងជើងរង",
         "transcriptChoice": "ប្រតិចារិក",
+        "searchPlaceholder": "ស្វែងរកចំណងជើងរង ឬការសន្ទនា...",
+        "seekMode": "ស្វែងរក",
+        "syncMode": "ធ្វើសមកាលកម្ម",
+        "syncOffset": "អុហ្វសិត៖ {{delay}}s",
+        "syncAction": "ធ្វើសមកាលកម្ម",
+        "nowPlaying": "ឥឡូវនេះកំពុងលេង",
+        "syncDescription": "ចុចការសន្ទនាដែលត្រូវគ្នានឹងឈុតវីដេអូបច្ចុប្បន្ន ឬកែតម្រូវអុហ្វសិត៖",
+        "resetDelay": "កំណត់ឡើងវិញ",
         "translate": {
           "title": "បកប្រែពី {{language}}"
         },

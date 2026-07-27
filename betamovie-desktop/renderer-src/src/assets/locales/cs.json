@@ -825,6 +825,14 @@
         },
         "title": "Titulky",
         "transcriptChoice": "Přepis",
+        "searchPlaceholder": "Hledat titulky nebo dialogy...",
+        "seekMode": "Hledat",
+        "syncMode": "Synchronizovat",
+        "syncOffset": "Posun: {{delay}}s",
+        "syncAction": "Synchronizovat",
+        "nowPlaying": "Nyní se hraje",
+        "syncDescription": "Klikněte na dialog odpovídající aktuální scéně videa nebo upravte offset:",
+        "resetDelay": "Resetovat",
         "translate": {
           "title": "Přeložit z {{language}}"
         },
