@@ -24,6 +24,9 @@ betamovie-be/.output
 betamovie-desktop/dist
 betamovie-desktop/renderer
 betamovie-desktop/release
+/betamovie-desktop/resources/**
+!/betamovie-desktop/resources/**/
+!/betamovie-desktop/resources/**/.gitkeep
 betamovie-be/generated
 betamovie-be/.metrics.json
 betamovie-be/.metrics_daily.json
