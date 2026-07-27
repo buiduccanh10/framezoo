@@ -193,10 +193,12 @@ function VideoElement() {
   const streamUrl = torrentStatus?.streamUrl;
   const streamType = torrentStatus?.streamType;
   const directPlay = (torrentStatus as any)?.directPlay;
+  const useEmbeddedMpv =
+    typeof (window as any).electronAPI?.attachMpvPlayer === "function";
 
   useEffect(() => {
     const electronAPI = (window as any).electronAPI;
-    if (!electronAPI?.attachMpvPlayer) return;
+    if (!useEmbeddedMpv || !electronAPI) return;
 
     if (streamUrl && (streamType === "file" || directPlay)) {
       const container = mpvContainerRef.current;
@@ -237,7 +239,7 @@ function VideoElement() {
     } else {
       void electronAPI.detachMpvPlayer();
     }
-  }, [streamUrl, streamType, directPlay]);
+  }, [directPlay, streamType, streamUrl, useEmbeddedMpv]);
 
   const mpvBufferingRef = useRef({ seeking: false, pausedForCache: false });
 
@@ -374,7 +376,10 @@ function VideoElement() {
         className="absolute inset-0 w-full h-screen bg-black"
         autoPlay
         playsInline
-        muted={!!(streamUrl && (streamType === "file" || directPlay))}
+        muted={
+          useEmbeddedMpv &&
+          !!(streamUrl && (streamType === "file" || directPlay))
+        }
         ref={handleVideoRef}
         preload={preloadMode}
         onContextMenu={(e) => e.preventDefault()}

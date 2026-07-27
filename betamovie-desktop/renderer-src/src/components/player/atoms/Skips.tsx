@@ -7,6 +7,7 @@ import { usePlayerStore } from "@/stores/player/store";
 export function SkipForward(props: {
   iconSizeClass?: string;
   inControl: boolean;
+  className?: string;
 }) {
   const display = usePlayerStore((s) => s.display);
   const time = usePlayerStore((s) => s.progress.time);
@@ -16,6 +17,7 @@ export function SkipForward(props: {
   if (!props.inControl) return null;
   return (
     <VideoPlayerButton
+      className={props.className}
       iconSizeClass={props.iconSizeClass}
       onClick={commit}
       icon={Icons.SKIP_FORWARD}
@@ -26,6 +28,7 @@ export function SkipForward(props: {
 export function SkipBackward(props: {
   iconSizeClass?: string;
   inControl: boolean;
+  className?: string;
 }) {
   const display = usePlayerStore((s) => s.display);
   const time = usePlayerStore((s) => s.progress.time);
@@ -35,6 +38,7 @@ export function SkipBackward(props: {
   if (!props.inControl) return null;
   return (
     <VideoPlayerButton
+      className={props.className}
       iconSizeClass={props.iconSizeClass}
       onClick={commit}
       icon={Icons.SKIP_BACKWARD}

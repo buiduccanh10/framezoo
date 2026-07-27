@@ -11,6 +11,8 @@ const runtimeConfig: RuntimeConfig = {
   VITE_BACKEND_URL: "http://127.0.0.1:3000",
   VITE_NORMAL_ROUTER: "false",
 };
+const supportsEmbeddedMpv =
+  process.platform === "win32" || process.platform === "linux";
 
 if (process.env.BETAMOVIE_BACKEND_URL || process.env.VITE_BACKEND_URL) {
   runtimeConfig.VITE_BACKEND_URL =
@@ -109,7 +111,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
     return ipcRenderer.invoke("desktop:torrent-get-status", sessionId);
   },
   onTorrentStatus(listener: (status: TorrentStatus) => void) {
-    const handler = (_event: Electron.IpcRendererEvent, status: TorrentStatus) => {
+    const handler = (
+      _event: Electron.IpcRendererEvent,
+      status: TorrentStatus,
+    ) => {
       listener(status);
     };
     ipcRenderer.on("desktop:torrent-status", handler);
@@ -117,27 +122,42 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:torrent-status", handler);
     };
   },
-  attachMpvPlayer(url: string, bounds: { x: number; y: number; width: number; height: number }) {
-    return ipcRenderer.invoke("desktop:mpv-attach", url, bounds);
-  },
-  updateMpvBounds(bounds: { x: number; y: number; width: number; height: number }) {
-    return ipcRenderer.invoke("desktop:mpv-update-bounds", bounds);
-  },
-  detachMpvPlayer() {
-    return ipcRenderer.invoke("desktop:mpv-detach");
-  },
-  sendMpvCommand(command: string, ...args: any[]) {
-    return ipcRenderer.invoke("desktop:mpv-command", command, ...args);
-  },
-  onMpvStatus(listener: (status: { name: string; data: any }) => void) {
-    const handler = (_event: Electron.IpcRendererEvent, status: { name: string; data: any }) => {
-      listener(status);
-    };
-    ipcRenderer.on("desktop:mpv-status", handler);
-    return () => {
-      ipcRenderer.removeListener("desktop:mpv-status", handler);
-    };
-  },
+  ...(supportsEmbeddedMpv
+    ? {
+        attachMpvPlayer(
+          url: string,
+          bounds: { x: number; y: number; width: number; height: number },
+        ) {
+          return ipcRenderer.invoke("desktop:mpv-attach", url, bounds);
+        },
+        updateMpvBounds(bounds: {
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+        }) {
+          return ipcRenderer.invoke("desktop:mpv-update-bounds", bounds);
+        },
+        detachMpvPlayer() {
+          return ipcRenderer.invoke("desktop:mpv-detach");
+        },
+        sendMpvCommand(command: string, ...args: any[]) {
+          return ipcRenderer.invoke("desktop:mpv-command", command, ...args);
+        },
+        onMpvStatus(listener: (status: { name: string; data: any }) => void) {
+          const handler = (
+            _event: Electron.IpcRendererEvent,
+            status: { name: string; data: any },
+          ) => {
+            listener(status);
+          };
+          ipcRenderer.on("desktop:mpv-status", handler);
+          return () => {
+            ipcRenderer.removeListener("desktop:mpv-status", handler);
+          };
+        },
+      }
+    : {}),
 });
 
 window.addEventListener("DOMContentLoaded", () => {
