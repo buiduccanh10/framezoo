@@ -825,6 +825,14 @@
         },
         "title": "Subtítulos",
         "transcriptChoice": "Transcripción",
+        "searchPlaceholder": "Buscar subtítulos o diálogos...",
+        "seekMode": "Buscar",
+        "syncMode": "Sincronizar",
+        "syncOffset": "Desplazamiento: {{delay}}s",
+        "syncAction": "Sincronizar",
+        "nowPlaying": "Ahora jugando",
+        "syncDescription": "Haga clic en el diálogo que coincida con la escena de vídeo actual o ajuste el desplazamiento:",
+        "resetDelay": "Reiniciar",
         "translate": {
           "title": "Traducir de {{language}}"
         },

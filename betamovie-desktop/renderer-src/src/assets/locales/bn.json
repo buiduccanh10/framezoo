@@ -825,6 +825,14 @@
         },
         "title": "সাবটাইটেল",
         "transcriptChoice": "প্রতিলিপি",
+        "searchPlaceholder": "সাবটাইটেল বা সংলাপ খুঁজুন...",
+        "seekMode": "খোঁজ",
+        "syncMode": "সিঙ্ক",
+        "syncOffset": "অফসেট: {{delay}}s",
+        "syncAction": "সিঙ্ক",
+        "nowPlaying": "এখন বাজছে",
+        "syncDescription": "বর্তমান ভিডিও দৃশ্যের সাথে মেলে ডায়ালগ ক্লিক করুন, বা অফসেট সামঞ্জস্য করুন:",
+        "resetDelay": "রিসেট করুন",
         "translate": {
           "title": "{{language}} থেকে অনুবাদ করুন"
         },

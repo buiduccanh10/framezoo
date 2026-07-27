@@ -825,6 +825,14 @@
         },
         "title": "Субтитри",
         "transcriptChoice": "Стенограма",
+        "searchPlaceholder": "Пошук субтитрів або діалогів...",
+        "seekMode": "шукати",
+        "syncMode": "Синхронізувати",
+        "syncOffset": "Зсув: {{delay}}s",
+        "syncAction": "Синхронізувати",
+        "nowPlaying": "Зараз грає",
+        "syncDescription": "Клацніть діалогове вікно, яке відповідає поточній сцені відео, або відрегулюйте зсув:",
+        "resetDelay": "Скинути",
         "translate": {
           "title": "Перекласти з {{language}}"
         },

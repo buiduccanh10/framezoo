@@ -825,6 +825,14 @@
         },
         "title": "زیرنویس ها",
         "transcriptChoice": "رونوشت",
+        "searchPlaceholder": "جستجوی زیرنویس یا گفتگو...",
+        "seekMode": "جستجو کنید",
+        "syncMode": "همگام سازی",
+        "syncOffset": "افست: {{delay}}s",
+        "syncAction": "همگام سازی",
+        "nowPlaying": "در حال حاضر بازی",
+        "syncDescription": "روی گفتگوی منطبق با صحنه ویدیوی فعلی کلیک کنید یا افست را تنظیم کنید:",
+        "resetDelay": "بازنشانی کنید",
         "translate": {
           "title": "ترجمه از {{language}}"
         },

@@ -825,6 +825,14 @@
         },
         "title": "Субтитры",
         "transcriptChoice": "Стенограмма",
+        "searchPlaceholder": "Поиск субтитров или диалогов...",
+        "seekMode": "Искать",
+        "syncMode": "Синхронизировать",
+        "syncOffset": "Смещение: {{delay}}с",
+        "syncAction": "Синхронизировать",
+        "nowPlaying": "Сейчас играю",
+        "syncDescription": "Нажмите диалог, соответствующий текущей видеосцене, или отрегулируйте смещение:",
+        "resetDelay": "Перезагрузить",
         "translate": {
           "title": "Перевести с {{language}}"
         },

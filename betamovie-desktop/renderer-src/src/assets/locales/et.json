@@ -825,6 +825,14 @@
         },
         "title": "Subtiitrid",
         "transcriptChoice": "Ärakiri",
+        "searchPlaceholder": "Otsige subtiitreid või dialoogi...",
+        "seekMode": "Otsige",
+        "syncMode": "Sünkroonimine",
+        "syncOffset": "Nihe: {{delay}}s",
+        "syncAction": "Sünkroonimine",
+        "nowPlaying": "Nüüd mängib",
+        "syncDescription": "Klõpsake dialoogi, mis vastab praegusele videostseenile, või reguleerige nihet:",
+        "resetDelay": "Lähtesta",
         "translate": {
           "title": "Tõlgi keelest {{language}}"
         },

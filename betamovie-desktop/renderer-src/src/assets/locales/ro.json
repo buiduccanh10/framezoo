@@ -825,6 +825,14 @@
         },
         "title": "Subtitluri",
         "transcriptChoice": "Transcriere",
+        "searchPlaceholder": "Caută subtitrări sau dialog...",
+        "seekMode": "Caută",
+        "syncMode": "Sincronizare",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Sincronizare",
+        "nowPlaying": "Acum se joacă",
+        "syncDescription": "Faceți clic pe dialog care se potrivește cu scena video curentă sau ajustați offset:",
+        "resetDelay": "Resetați",
         "translate": {
           "title": "Traduceți din {{language}}"
         },

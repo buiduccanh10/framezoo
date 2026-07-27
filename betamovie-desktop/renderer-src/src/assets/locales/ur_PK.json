@@ -825,6 +825,14 @@
         },
         "title": "سب ٹائٹلز",
         "transcriptChoice": "نقل",
+        "searchPlaceholder": "سب ٹائٹلز یا ڈائیلاگ تلاش کریں...",
+        "seekMode": "تلاش کرنا",
+        "syncMode": "مطابقت پذیری",
+        "syncOffset": "آفسیٹ: {{delay}}s",
+        "syncAction": "مطابقت پذیری",
+        "nowPlaying": "اب کھیل رہا ہے۔",
+        "syncDescription": "موجودہ ویڈیو منظر سے مماثل ڈائیلاگ پر کلک کریں، یا آفسیٹ کو ایڈجسٹ کریں:",
+        "resetDelay": "دوبارہ ترتیب دیں۔",
         "translate": {
           "title": "{{language}} سے ترجمہ کریں"
         },

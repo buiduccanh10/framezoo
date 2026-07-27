@@ -824,7 +824,16 @@
           "timelineEmpty": "No subtitle cues available."
         },
         "title": "Subtitles",
-        "transcriptChoice": "Transcript",
+        "transcriptChoice": "Transcript & Sync",
+        "searchPlaceholder": "Search subtitles or dialogue...",
+        "delayLabel": "Subtitle offset",
+        "seekMode": "Seek",
+        "syncMode": "Sync",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Sync",
+        "nowPlaying": "Now playing",
+        "syncDescription": "Click dialogue matching current video scene, or adjust offset:",
+        "resetDelay": "Reset",
         "translate": {
           "title": "Translate from {{language}}"
         },

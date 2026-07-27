@@ -825,6 +825,14 @@
         },
         "title": "Untertitel",
         "transcriptChoice": "Transkript",
+        "searchPlaceholder": "Untertitel oder Dialoge suchen...",
+        "seekMode": "Suchen",
+        "syncMode": "Synchronisieren",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Synchronisieren",
+        "nowPlaying": "Jetzt spielen",
+        "syncDescription": "Klicken Sie auf den Dialog, der zur aktuellen Videoszene passt, oder passen Sie den Offset an:",
+        "resetDelay": "Zurücksetzen",
         "translate": {
           "title": "Übersetzen von {{language}}"
         },

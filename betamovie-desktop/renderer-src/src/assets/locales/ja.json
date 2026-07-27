@@ -825,6 +825,14 @@
         },
         "title": "字幕",
         "transcriptChoice": "成績証明書",
+        "searchPlaceholder": "字幕やセリフを検索...",
+        "seekMode": "求める",
+        "syncMode": "同期",
+        "syncOffset": "オフセット: {{delay}}s",
+        "syncAction": "同期",
+        "nowPlaying": "プレイ中",
+        "syncDescription": "現在のビデオ シーンに一致するダイアログをクリックするか、オフセットを調整します。",
+        "resetDelay": "リセット",
         "translate": {
           "title": "{{language}} から翻訳"
         },

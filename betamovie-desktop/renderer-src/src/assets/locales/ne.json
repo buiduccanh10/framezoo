@@ -825,6 +825,14 @@
         },
         "title": "उपशीर्षक",
         "transcriptChoice": "ट्रान्सक्रिप्ट",
+        "searchPlaceholder": "उपशीर्षक वा संवाद खोज्नुहोस्...",
+        "seekMode": "खोज्नुहोस्",
+        "syncMode": "सिंक",
+        "syncOffset": "अफसेट: {{delay}}s",
+        "syncAction": "सिंक",
+        "nowPlaying": "अब खेल्दै छ",
+        "syncDescription": "हालको भिडियो दृश्यसँग मेल खाने संवाद क्लिक गर्नुहोस्, वा अफसेट समायोजन गर्नुहोस्:",
+        "resetDelay": "रिसेट गर्नुहोस्",
         "translate": {
           "title": "{{language}} बाट अनुवाद गर्नुहोस्"
         },

@@ -825,6 +825,14 @@
         },
         "title": "સબટાઈટલ",
         "transcriptChoice": "ટ્રાન્સક્રિપ્ટ",
+        "searchPlaceholder": "ઉપશીર્ષકો અથવા સંવાદ શોધો...",
+        "seekMode": "શોધો",
+        "syncMode": "સમન્વય",
+        "syncOffset": "ઑફસેટ: {{delay}} સે",
+        "syncAction": "સમન્વય",
+        "nowPlaying": "હવે રમે છે",
+        "syncDescription": "વર્તમાન વિડિઓ દ્રશ્ય સાથે મેળ ખાતા સંવાદ પર ક્લિક કરો અથવા ઑફસેટને સમાયોજિત કરો:",
+        "resetDelay": "રીસેટ કરો",
         "translate": {
           "title": "{{language}} માંથી અનુવાદ કરો"
         },

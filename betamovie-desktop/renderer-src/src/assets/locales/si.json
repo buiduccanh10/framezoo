@@ -825,6 +825,14 @@
         },
         "title": "උපසිරැසි",
         "transcriptChoice": "පිටපත",
+        "searchPlaceholder": "උපසිරැසි හෝ දෙබස් සොයන්න...",
+        "seekMode": "සොයන්න",
+        "syncMode": "සමමුහුර්ත කරන්න",
+        "syncOffset": "ඕෆ්සෙට්: {{delay}}s",
+        "syncAction": "සමමුහුර්ත කරන්න",
+        "nowPlaying": "දැන් සෙල්ලම් කරනවා",
+        "syncDescription": "සංවාද ගැළපෙන වත්මන් වීඩියෝ දර්ශනය ක්ලික් කරන්න, නැතහොත් ඕෆ්සෙට් සීරුමාරු කරන්න:",
+        "resetDelay": "යළි පිහිටුවන්න",
         "translate": {
           "title": "{{language}} වෙතින් පරිවර්තනය කරන්න"
         },

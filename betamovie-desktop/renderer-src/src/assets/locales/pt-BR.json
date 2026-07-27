@@ -825,6 +825,14 @@
         },
         "title": "Legendas",
         "transcriptChoice": "Transcrição",
+        "searchPlaceholder": "Pesquisar legendas ou diálogos...",
+        "seekMode": "Procurar",
+        "syncMode": "Sincronizar",
+        "syncOffset": "Deslocamento: {{delay}}s",
+        "syncAction": "Sincronizar",
+        "nowPlaying": "Agora jogando",
+        "syncDescription": "Clique na caixa de diálogo correspondente à cena de vídeo atual ou ajuste o deslocamento:",
+        "resetDelay": "Reiniciar",
         "translate": {
           "title": "Traduzir de {{language}}"
         },
