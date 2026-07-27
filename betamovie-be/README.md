@@ -1,10 +1,9 @@
-# BackendV2
-follow me on [GitHub](https://github.com/FifthWit)
+# Betamovie Backend
 
-BackendV2 is a from scratch rewrite of movie-web's backend using [Nitro](https://nitro.build), and [Prisma](https://prisma.io). 
+Betamovie's metadata and account backend, built with [Nitro](https://nitro.build) and [Prisma](https://prisma.io).
 
 ## Deployment
-There are multiple supported ways to deploy BackendV2 based on your needs:
+There are multiple supported ways to deploy the Betamovie backend based on your needs:
 ### NixPacks
 1. Install NixPacks with
 ```sh
@@ -58,10 +57,9 @@ docker ps
 ```
 
 ### Manually
-1. Git clone the environment
+1. Open the backend directory
 ```sh
-git clone https://github.com/p-stream/backend.git
-cd backend
+cd betamovie-be
 ```
 2. Build the backend
 ```sh
@@ -87,10 +85,9 @@ cp .env.example .env
 ## Contributing
 We love contributors, it helps the community so much, if you are interested in contributing here are some steps:
 
-1. Clone the repo
+1. Open the repository
 ```sh
-git clone https://github.com/p-stream/backend.git
-cd backend
+cd betamovie-be
 ```
 
 2. Install Deps/Run the backend
@@ -108,5 +105,3 @@ Here is a general rule of thumb for what your changes and developments should lo
 - Use Prettier & ESLint: We aren't going to be crazy if it's not well formatted but by using the extensions it keeps our code consistent, which makes it a lot easier for maintainers to help merge your code
 - Keep it minimal, things like Email are out of the question, we want to keep it small, if you think that it's **really** needed, make an issue on our GitHub to express your interest in it, and a maintainer will confirm or deny whether we would merge it
 - Understand our tech stack, this is a generic piece of advice but if you haven't use NitroJS for example, read their docs and make sure you're familiar with the framework, it makes your code quality much better, and makes reviewing much easier
-
-Star this repo and please follow me on [GitHub](https://github.com/FifthWit)!

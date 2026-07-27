@@ -1,13 +1,11 @@
 import { useAuth } from '~/utils/auth';
-import {
-  getProxyCapabilityKindForPath,
-  getProxyCapabilityToken,
-  isValidInternalApiRequest,
-  isProxyCapabilityPath,
-  verifyProxyCapabilityToken,
-} from '~/utils/proxySecurity';
+import { isValidInternalApiRequest } from '~/utils/internalApi';
 
-const PUBLIC_API_PATHS = new Set(['/api/providers', '/api/skip-segments']);
+const isPublicApiRequest = (path: string, method: string) => {
+  if (method !== 'GET') return false;
+  if (path === '/api/skip-segments') return true;
+  return path === '/api/tmdb' || path.startsWith('/api/tmdb/');
+};
 
 export default defineEventHandler(async event => {
   const path = event.path.split('?')[0] || '';
@@ -21,28 +19,12 @@ export default defineEventHandler(async event => {
     return;
   }
 
-  // Provider metadata is required before login to bootstrap the player.
-  if (PUBLIC_API_PATHS.has(path)) {
+  // Metadata and skip-segment lookups are available before login.
+  if (isPublicApiRequest(path, event.method)) {
     return;
   }
 
-  // Capability issuance is intentionally public for anonymous playback.
-  // The issuer applies SSRF, header, TTL, and rate-limit controls.
-  if (isProxyCapabilityPath(path)) {
-    return;
-  }
-
-  const proxyKind = getProxyCapabilityKindForPath(path);
-  if (proxyKind) {
-    if (isValidInternalApiRequest(event)) {
-      return;
-    }
-
-    const capability = getProxyCapabilityToken(event);
-    if (capability && verifyProxyCapabilityToken(capability, proxyKind)) {
-      return;
-    }
-  } else if (isValidInternalApiRequest(event)) {
+  if (isValidInternalApiRequest(event)) {
     return;
   }
 

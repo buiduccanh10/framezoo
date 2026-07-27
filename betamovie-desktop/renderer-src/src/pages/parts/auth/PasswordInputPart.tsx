@@ -24,6 +24,7 @@ export interface PasswordInputData {
 interface PasswordInputPartProps {
   onNext?: (data: PasswordInputData) => void;
   forLogin?: boolean;
+  compact?: boolean;
   externalNicknameError?: string | null;
   externalPasswordError?: string | null;
   submitLoading?: boolean;
@@ -224,9 +225,10 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
   const loading = props.submitLoading || checkResult.loading;
 
   return (
-    <LargeCard>
+    <LargeCard compact={props.compact}>
       {!props.forLogin && (
         <LargeCardText
+          compact={props.compact}
           title={t("auth.register.passwordInput.title") ?? undefined}
         >
           {t("auth.register.passwordInput.description") ?? undefined}
@@ -304,7 +306,7 @@ export function PasswordInputPart(props: PasswordInputPartProps) {
           </p>
         ) : null}
       </div>
-      <LargeCardButtons>
+      <LargeCardButtons compact={props.compact}>
         {!props.forLogin && isPasskeySupported() ? (
           <Button
             theme="secondary"

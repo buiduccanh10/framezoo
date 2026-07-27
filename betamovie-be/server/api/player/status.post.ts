@@ -4,9 +4,12 @@ import {
   playerStatusStore,
   PlayerStatus,
 } from '~/utils/playerStatus';
+import { useAuth } from '~/utils/auth';
 
 export default defineEventHandler(async event => {
   const body = await readBody(event);
+  const session =
+    event.context.session || (await useAuth().getCurrentSessionForEvent(event));
 
   if (!body || !body.userId || !body.roomCode) {
     throw createError({
@@ -15,9 +18,16 @@ export default defineEventHandler(async event => {
     });
   }
 
+  if (body.userId !== session.user) {
+    throw createError({
+      statusCode: 403,
+      statusMessage: 'Cannot publish player status for another user',
+    });
+  }
+
   const status: PlayerStatus = {
     participantId: body.participantId || body.userId,
-    userId: body.userId,
+    userId: session.user,
     nickname: body.nickname,
     roomCode: body.roomCode,
     isHost: body.isHost || false,

@@ -9,11 +9,6 @@ import {
   DisplayInterfaceEvents,
   DisplayMeta,
 } from "@/components/player/display/displayInterface";
-import {
-  createM3U8ProxyUrl,
-  createMP4ProxyUrl,
-  isUrlAlreadyProxied,
-} from "@/components/player/utils/proxy";
 import { LoadableSource } from "@/stores/player/utils/qualities";
 import { processCdnLink } from "@/utils/cdn";
 import { canFullscreen, canFullscreenAnyElement } from "@/utils/detectFeatures";
@@ -117,29 +112,9 @@ export function makeChromecastDisplayInterface(
     const metaData = new chrome.cast.media.GenericMediaMetadata();
     metaData.title = meta.title;
 
-    let contentUrl = processCdnLink(source.url);
+    const contentUrl = processCdnLink(source.url);
 
-    // Only proxy streams if they need it:
-    // 1. Not already proxied AND
-    // 2. Has headers (either preferredHeaders or headers)
-    const allHeaders = {
-      ...source.preferredHeaders,
-      ...source.headers,
-    };
-    const hasHeaders = Object.keys(allHeaders).length > 0;
-
-    // Handle HLS streams
-    if (source.type === "hls") {
-      if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
-        contentUrl = await createM3U8ProxyUrl(source.url, allHeaders);
-      }
-    } else if (source.type === "dash") {
-      contentUrl = source.url;
-    }
-    // Handle MP4 streams with headers
-    else if (source.type === "mp4" && hasHeaders) {
-      contentUrl = createMP4ProxyUrl(source.url, source.headers || {});
-    }
+    // Cast the addon-provided URL directly. The app does not relay media.
 
     const mediaInfo = new chrome.cast.media.MediaInfo(contentUrl, type);
     mediaInfo.streamType = chrome.cast.media.StreamType.BUFFERED;

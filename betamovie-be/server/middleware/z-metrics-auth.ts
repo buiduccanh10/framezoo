@@ -1,6 +1,6 @@
 import { applyCorsHeaders } from '~/utils/cors';
 import { useAuth } from '~/utils/auth';
-import { isValidInternalApiRequest } from '~/utils/proxySecurity';
+import { isValidInternalApiRequest } from '~/utils/internalApi';
 
 export default defineEventHandler(async event => {
   if (!event.path.startsWith('/metrics')) {

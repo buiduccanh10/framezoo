@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getRoomStatuses, sendPlayerStatus } from "@/backend/player/status";
@@ -8,10 +8,6 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
 import { usePlayerStore } from "@/stores/player/store";
 import { useWatchPartyStore } from "@/stores/watchParty";
-import {
-  getOrCreateWatchPartyGuestNickname,
-  getOrCreateWatchPartyParticipantId,
-} from "@/utils/watchPartyParticipant";
 
 // Event for content validation status
 const VALIDATION_EVENT = "watchparty:validation";
@@ -34,15 +30,9 @@ export function WatchPartyReporter() {
 
   // Auth data
   const account = useAuthStore((s) => s.account);
-  const participantId = useMemo(
-    () => account?.userId ?? getOrCreateWatchPartyParticipantId(),
-    [account?.userId],
-  );
-  const userId = account?.userId || participantId;
-  const nickname = useMemo(
-    () => account?.nickname || getOrCreateWatchPartyGuestNickname(),
-    [account?.nickname],
-  );
+  const participantId = account?.userId ?? "";
+  const userId = account?.userId ?? "";
+  const nickname = account?.nickname ?? "";
   const backendUrl = useBackendUrl();
 
   // Player metadata
@@ -69,6 +59,7 @@ export function WatchPartyReporter() {
     const validateContent = async () => {
       if (
         !watchPartyEnabled ||
+        !account ||
         !roomCode ||
         !meta?.tmdbId ||
         isHost ||
@@ -172,6 +163,7 @@ export function WatchPartyReporter() {
   useEffect(() => {
     if (
       !watchPartyEnabled ||
+      !account ||
       !roomCode ||
       isHost ||
       !meta?.tmdbId ||
@@ -278,6 +270,7 @@ export function WatchPartyReporter() {
     // Skip if watch party is not enabled
     if (
       !watchPartyEnabled ||
+      !account ||
       !latestStatus ||
       !latestStatus.hasPlayedOnce ||
       !roomCode ||

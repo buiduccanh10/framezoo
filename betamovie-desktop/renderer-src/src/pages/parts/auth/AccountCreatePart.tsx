@@ -22,6 +22,7 @@ export interface AccountProfile {
 
 interface AccountCreatePartProps {
   onNext?: (data: AccountProfile) => void;
+  compact?: boolean;
 }
 
 export function AccountCreatePart(props: AccountCreatePartProps) {
@@ -41,8 +42,9 @@ export function AccountCreatePart(props: AccountCreatePartProps) {
   }, [props, colorA, colorB, userIcon]);
 
   return (
-    <LargeCard>
+    <LargeCard compact={props.compact}>
       <LargeCardText
+        compact={props.compact}
         icon={
           <Avatar
             profile={{ colorA, colorB, icon: userIcon }}
@@ -71,7 +73,7 @@ export function AccountCreatePart(props: AccountCreatePartProps) {
           onInput={setUserIcon}
         />
       </div>
-      <LargeCardButtons>
+      <LargeCardButtons compact={props.compact}>
         <Button theme="purple" onClick={() => nextStep()}>
           {t("actions.confirm")}
         </Button>
