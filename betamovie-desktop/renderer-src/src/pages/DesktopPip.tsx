@@ -21,10 +21,6 @@ import {
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import {
-  createM3U8ProxyUrl,
-  isUrlAlreadyProxied,
-} from "@/components/player/utils/proxy";
-import {
   DesktopPipAction,
   DesktopPipCaption,
   DesktopPipState,
@@ -64,30 +60,6 @@ function getSourceSignature(state: DesktopPipState | null): string {
 async function resolveDesktopPipSource(
   source: DesktopPipState["source"],
 ): Promise<DesktopPipState["source"]> {
-  if (!source || source.type !== "hls") return source;
-
-  const headers = {
-    ...source.preferredHeaders,
-    ...source.headers,
-  };
-  if (Object.keys(headers).length === 0 || isUrlAlreadyProxied(source.url)) {
-    return source;
-  }
-
-  try {
-    const proxiedUrl = await createM3U8ProxyUrl(source.url, headers);
-    if (proxiedUrl !== source.url && isUrlAlreadyProxied(proxiedUrl)) {
-      return {
-        ...source,
-        url: proxiedUrl,
-        headers: undefined,
-        preferredHeaders: undefined,
-      };
-    }
-  } catch (error) {
-    console.warn("Failed to prepare Desktop PiP HLS source", error);
-  }
-
   return source;
 }
 

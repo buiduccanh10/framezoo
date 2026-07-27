@@ -1,6 +1,7 @@
 import { ReactElement, Suspense, useEffect, useState } from "react";
 import { lazyWithPreload } from "react-lazy-with-preload";
 import {
+  type Location,
   Navigate,
   Route,
   Routes,
@@ -14,6 +15,7 @@ import {
   decodeTMDBId,
   generateQuickSearchMediaUrl,
 } from "@/backend/metadata/tmdb";
+import { AuthRoute } from "@/components/overlays/AuthRoute";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
@@ -28,12 +30,10 @@ import { MoreContent } from "@/pages/discover/MoreContent";
 import MaintenancePage from "@/pages/errors/MaintenancePage";
 import { NotFoundPage } from "@/pages/errors/NotFoundPage";
 import { HomePage } from "@/pages/HomePage";
-import { LoginPage } from "@/pages/Login";
 import { Marked } from "@/pages/marked/Marked";
 import { MigrationPage } from "@/pages/migration/Migration";
 import { MigrationDownloadPage } from "@/pages/migration/MigrationDownload";
 import { MigrationUploadPage } from "@/pages/migration/MigrationUpload";
-import { RegisterPage } from "@/pages/Register";
 import { WatchHistory } from "@/pages/watchHistory/WatchHistory";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
@@ -110,6 +110,22 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const showModal = useOverlayStack((s) => s.showModal);
+  const isAuthRoute =
+    location.pathname === "/login" || location.pathname === "/register";
+  const routeState = location.state as
+    | {
+        backgroundLocation?: Location;
+      }
+    | undefined;
+  const backgroundLocation: Location = isAuthRoute
+    ? (routeState?.backgroundLocation ?? {
+        pathname: "/discover",
+        search: "",
+        hash: "",
+        state: null,
+        key: "auth-background",
+      })
+    : location;
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -159,26 +175,35 @@ function App() {
       <DetailsModal id="discover-details" />
       <DetailsModal id="player-details" />
       {!showDowntime && (
-        <Routes>
-          {/* Functional routes */}
-          <Route
-            path="/desktop-pip"
-            element={
-              <Suspense fallback={null}>
-                <DesktopPipPage />
-              </Suspense>
-            }
-          />
-          <Route path="/s/:query" element={<QuickSearch />} />
-          <Route path="/search/:type" element={<Navigate to="/browse" />} />
-          <Route path="/search/:type/:query?" element={<QueryView />} />
+        <>
+          <Routes location={backgroundLocation}>
+            {/* Functional routes */}
+            <Route
+              path="/desktop-pip"
+              element={
+                <Suspense fallback={null}>
+                  <DesktopPipPage />
+                </Suspense>
+              }
+            />
+            <Route path="/s/:query" element={<QuickSearch />} />
+            <Route path="/search/:type" element={<Navigate to="/browse" />} />
+            <Route path="/search/:type/:query?" element={<QueryView />} />
 
-          {/* Public pages */}
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-
-          {/* Protected routes */}
-          <Route element={<ProtectedRoute />}>
+            {/* Public pages */}
+            <Route path="/" element={<Navigate to="/discover" replace />} />
+            <Route path="/browse/:query?" element={<HomePage />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route
+              path="/discover/more/:contentType/:mediaType"
+              element={<MoreContent />}
+            />
+            <Route
+              path="/discover/more/:contentType/:id/:mediaType"
+              element={<MoreContent />}
+            />
+            <Route path="/discover/more/:category" element={<MoreContent />} />
+            <Route path="/discover/all" element={<DiscoverMore />} />
             <Route
               path="/media/:media"
               element={
@@ -199,36 +224,7 @@ function App() {
                 </LegacyUrlView>
               }
             />
-            <Route path="/browse/:query?" element={<HomePage />} />
-            <Route path="/" element={<Navigate to="/discover" replace />} />
-            {/* Migration pages */}
-            <Route path="/migration" element={<MigrationPage />} />
-            <Route
-              path="/migration/download"
-              element={<MigrationDownloadPage />}
-            />
-            <Route path="/migration/upload" element={<MigrationUploadPage />} />
-
-            {/* Discover pages */}
-            <Route path="/discover" element={<Discover />} />
-            <Route
-              path="/discover/more/:contentType/:mediaType"
-              element={<MoreContent />}
-            />
-            <Route
-              path="/discover/more/:contentType/:id/:mediaType"
-              element={<MoreContent />}
-            />
-            <Route path="/discover/more/:category" element={<MoreContent />} />
-            <Route path="/discover/all" element={<DiscoverMore />} />
-            {/* Bookmarks page */}
-            <Route path="/bookmarks" element={<AllBookmarks />} />
-            <Route path="/marked" element={<Marked />} />
-            {/* Watch History page */}
-            <Route path="/watch-history" element={<WatchHistory />} />
-            {/* Addons page */}
             <Route path="/addons" element={<AddonsPage />} />
-            {/* Settings page */}
             <Route
               path="/settings"
               element={
@@ -237,9 +233,26 @@ function App() {
                 </Suspense>
               }
             />
-          </Route>
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+            <Route path="/migration" element={<MigrationPage />} />
+            <Route
+              path="/migration/download"
+              element={<MigrationDownloadPage />}
+            />
+
+            {/* User data routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route
+                path="/migration/upload"
+                element={<MigrationUploadPage />}
+              />
+              <Route path="/bookmarks" element={<AllBookmarks />} />
+              <Route path="/marked" element={<Marked />} />
+              <Route path="/watch-history" element={<WatchHistory />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          {isAuthRoute ? <AuthRoute /> : null}
+        </>
       )}
       {showDowntime && (
         <MaintenancePage onHomeButtonClick={handleButtonClick} />

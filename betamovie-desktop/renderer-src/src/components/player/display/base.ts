@@ -21,11 +21,6 @@ import {
 import { ensureDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { handleBuffered } from "@/components/player/utils/handleBuffered";
 import { getMediaErrorDetails } from "@/components/player/utils/mediaErrorDetails";
-import {
-  createM3U8ProxyUrl,
-  createMP4ProxyUrl,
-  isUrlAlreadyProxied,
-} from "@/components/player/utils/proxy";
 import { extractSegmentResolution } from "@/components/player/utils/segmentResolution";
 import {
   DesktopPipAction,
@@ -2197,33 +2192,9 @@ export function makeVideoElementDisplayInterface(options?: {
       let proxiedUrl: string | null = null;
 
       if (source?.type === "hls") {
-        // Only proxy HLS streams if they need it:
-        // 1. Not already proxied AND
-        // 2. Has headers (either preferredHeaders or headers)
-        const allHeaders = {
-          ...source.preferredHeaders,
-          ...source.headers,
-        };
-        const hasHeaders = Object.keys(allHeaders).length > 0;
-
-        // Don't create proxy URL if it's already using the proxy
-        if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
-          proxiedUrl = await createM3U8ProxyUrl(source.url, allHeaders);
-        } else {
-          proxiedUrl = source.url; // Already proxied or no headers needed
-        }
+        proxiedUrl = source.url;
       } else if (source?.type === "mp4") {
-        const allHeaders = {
-          ...source.preferredHeaders,
-          ...source.headers,
-        };
-        const hasHeaders = Object.keys(allHeaders).length > 0;
-        if (!isUrlAlreadyProxied(source.url) && hasHeaders) {
-          // Use MP4 proxy for streams with headers
-          proxiedUrl = createMP4ProxyUrl(source.url, allHeaders);
-        } else {
-          proxiedUrl = source.url;
-        }
+        proxiedUrl = source.url;
       }
 
       // Function to restore original URL

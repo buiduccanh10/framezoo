@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { base64ToBuffer, decryptData } from "@/backend/accounts/crypto";
 import { getRoomStatuses } from "@/backend/player/status";
@@ -102,6 +102,7 @@ export function WatchPartyInputLink({
   triggerVariant?: "dropdown" | "icon";
 }) {
   const { t } = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState("");
@@ -109,6 +110,20 @@ export function WatchPartyInputLink({
   const [error, setError] = useState<string | null>(null);
   const backendUrl = useBackendUrl();
   const account = useAuthStore((s) => s.account);
+
+  const requestLogin = () => {
+    navigate("/login", {
+      state: {
+        from: location,
+        backgroundLocation: {
+          pathname: "/discover",
+          search: "",
+          hash: "",
+        },
+      },
+      replace: true,
+    });
+  };
 
   useEffect(() => {
     if (!open) {
@@ -129,6 +144,10 @@ export function WatchPartyInputLink({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!account) {
+      requestLogin();
+      return;
+    }
     const parsedCode = parseWatchPartyCode(code);
     if (!parsedCode || !backendUrl) {
       setError(t("watchParty.invalidRoom"));
@@ -187,7 +206,7 @@ export function WatchPartyInputLink({
       {triggerVariant === "dropdown" ? (
         <DropdownLink
           icon={Icons.WATCH_PARTY}
-          onClick={() => setOpen(true)}
+          onClick={() => (account ? setOpen(true) : requestLogin())}
           className="text-dropdown-text hover:text-white"
         >
           {t("player.menus.watchparty.watchpartyItem")}
@@ -195,7 +214,7 @@ export function WatchPartyInputLink({
       ) : (
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={() => (account ? setOpen(true) : requestLogin())}
           className="text-lg text-white tabbable rounded-full backdrop-blur-lg pointer-events-auto"
           aria-label={t("player.menus.watchparty.watchpartyItem")}
         >

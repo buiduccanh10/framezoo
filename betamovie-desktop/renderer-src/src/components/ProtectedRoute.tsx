@@ -7,7 +7,20 @@ export function ProtectedRoute() {
   const location = useLocation();
 
   if (!loggedIn) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return (
+      <Navigate
+        to="/login"
+        state={{
+          from: location,
+          backgroundLocation: {
+            pathname: "/discover",
+            search: "",
+            hash: "",
+          },
+        }}
+        replace
+      />
+    );
   }
 
   return <Outlet />;

@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { getProxyCapabilityKindForPath, isValidInternalApiRequest } from '~/utils/proxySecurity';
+import { isValidInternalApiRequest } from '~/utils/internalApi';
 
 interface MemoryCacheEntry {
   count: number;
@@ -19,51 +19,16 @@ setInterval(() => {
   }
 }, 60_000).unref?.();
 
-const isCapabilityPath = (path: string) => (path.split('?')[0] || '') === '/api/proxy/capability';
-
 const getPositiveInt = (value: string | undefined, fallback: number) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 };
 
-const DEFAULT_PROXY_RATE_LIMITS: Record<string, number> = {
-  m3u8: 240,
-  media: 30,
-  embed: 120,
-};
-
-const getRateLimitConfig = (path: string) => {
-  if (isCapabilityPath(path)) {
-    return {
-      scope: 'capability',
-      windowMs: getPositiveInt(process.env.PROXY_CAPABILITY_RATE_LIMIT_WINDOW_MS, 60_000),
-      maxRequests: getPositiveInt(process.env.PROXY_CAPABILITY_RATE_LIMIT_MAX_REQUESTS, 30),
-      isProxyLimited: true,
-    };
-  }
-
-  const kind = getProxyCapabilityKindForPath(path);
-  if (kind) {
-    const envPrefix = `PROXY_${kind.replace(/-/g, '_').toUpperCase()}_RATE_LIMIT`;
-    return {
-      scope: `proxy:${kind}`,
-      windowMs: getPositiveInt(
-        process.env[`${envPrefix}_WINDOW_MS`] || process.env.PROXY_RATE_LIMIT_WINDOW_MS,
-        60_000
-      ),
-      maxRequests: getPositiveInt(
-        process.env[`${envPrefix}_MAX_REQUESTS`] || process.env.PROXY_RATE_LIMIT_MAX_REQUESTS,
-        DEFAULT_PROXY_RATE_LIMITS[kind] || 100
-      ),
-      isProxyLimited: true,
-    };
-  }
-
+const getRateLimitConfig = () => {
   return {
     scope: 'api',
     windowMs: getPositiveInt(process.env.RATE_LIMIT_WINDOW_MS, 60_000),
     maxRequests: getPositiveInt(process.env.RATE_LIMIT_MAX_REQUESTS, 100),
-    isProxyLimited: false,
   };
 };
 
@@ -123,7 +88,7 @@ export default defineEventHandler(async event => {
 
   const trustProxy = String(process.env.TRUST_PROXY).toLowerCase() === 'true';
   const ip = getRequestIP(event, { xForwardedFor: trustProxy }) || '127.0.0.1';
-  const { scope, windowMs, maxRequests, isProxyLimited } = getRateLimitConfig(path);
+  const { scope, windowMs, maxRequests } = getRateLimitConfig();
   const currentBucket = Math.floor(Date.now() / windowMs);
   const cacheKey = `rate-limit:${scope}:${ip}:${currentBucket}`;
   const resetTime = Math.ceil(((currentBucket + 1) * windowMs) / 1000);

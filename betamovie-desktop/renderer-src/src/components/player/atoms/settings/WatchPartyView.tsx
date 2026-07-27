@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAsync } from "react-use";
 
 import { getBackendMeta } from "@/backend/accounts/meta";
@@ -14,10 +15,11 @@ import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useAuthStore } from "@/stores/auth";
 import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
-import { getOrCreateWatchPartyParticipantId } from "@/utils/watchPartyParticipant";
 
 export function WatchPartyView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
+  const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [joinCode, setJoinCode] = useState("");
   const [showJoinInput, setShowJoinInput] = useState(false);
@@ -29,10 +31,7 @@ export function WatchPartyView({ id }: { id: string }) {
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const account = useAuthStore((s) => s.account);
-  const currentParticipantId = useMemo(
-    () => account?.userId ?? getOrCreateWatchPartyParticipantId(),
-    [account?.userId],
-  );
+  const currentParticipantId = account?.userId ?? "";
 
   const clearWatchPartyQueryParam = () => {
     const url = new URL(window.location.href);
@@ -80,6 +79,20 @@ export function WatchPartyView({ id }: { id: string }) {
   // Watch party sync data
   const { roomUsers, hostUser } = useWatchPartySync();
 
+  const requestLogin = () => {
+    navigate("/login", {
+      state: {
+        from: location,
+        backgroundLocation: {
+          pathname: "/discover",
+          search: "",
+          hash: "",
+        },
+      },
+      replace: true,
+    });
+  };
+
   // If guest no longer sees a host in room, leave watch party instead of auto-promoting.
   useEffect(() => {
     if (!enabled || isHost) return;
@@ -123,11 +136,19 @@ export function WatchPartyView({ id }: { id: string }) {
   }, [enabled]);
 
   const handleHostParty = () => {
+    if (!account) {
+      requestLogin();
+      return;
+    }
     enableAsHost();
     setShowJoinInput(false);
   };
 
   const handleJoinParty = async () => {
+    if (!account) {
+      requestLogin();
+      return;
+    }
     if (joinCode.length > 0) {
       setIsValidating(true);
       setValidationError(null);
@@ -202,7 +223,17 @@ export function WatchPartyView({ id }: { id: string }) {
       </Menu.BackLink>
       <Menu.Section>
         <div className="pb-4">
-          {backendSupportsWatchParty &&
+          {!account ? (
+            <div className="space-y-4 text-center">
+              <p className="text-sm text-type-secondary">
+                {t("watchParty.loginRequired", "Log in to use Watch Party.")}
+              </p>
+              <Button theme="purple" className="w-full" onClick={requestLogin}>
+                {t("auth.login.submit", "Log in")}
+              </Button>
+            </div>
+          ) : (
+            backendSupportsWatchParty &&
             (enabled ? (
               <div className="space-y-4">
                 {isJoining ? (
@@ -434,7 +465,8 @@ export function WatchPartyView({ id }: { id: string }) {
                   </div>
                 )}
               </div>
-            ))}
+            ))
+          )}
         </div>
       </Menu.Section>
     </>

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -10,14 +9,13 @@ import {
   LargeCardButtons,
   LargeCardText,
 } from "@/components/layout/LargeCard";
-import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
+import { AuthDialog } from "@/components/overlays/AuthDialog";
 import { LoginFormPart } from "@/pages/parts/auth/LoginFormPart";
-import { PageTitle } from "@/pages/parts/util/PageTitle";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { usePreviewThemeStore } from "@/stores/theme";
 
-export function LoginPage() {
+export function LoginPanel() {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -70,51 +68,56 @@ export function LoginPage() {
     }
   };
 
+  const content =
+    showBackendSelection &&
+    (availableBackends.length > 1 || !defaultBackend) ? (
+      <LargeCard compact>
+        <LargeCardText compact title={t("auth.backendSelection.title")}>
+          {t("auth.backendSelection.description")}
+        </LargeCardText>
+        <BackendSelector
+          selectedUrl={selectedBackendUrl ?? defaultBackend}
+          onSelect={handleBackendSelect}
+          availableUrls={availableBackends}
+          showCustom
+        />
+        <LargeCardButtons compact>
+          <span className="text-type-danger font-medium text-center">
+            {t("settings.connections.server.notice")}
+          </span>
+          <Button
+            theme="purple"
+            onClick={handleContinue}
+            disabled={!selectedBackendUrl && !defaultBackend}
+          >
+            {t("auth.register.information.next")}
+          </Button>
+        </LargeCardButtons>
+      </LargeCard>
+    ) : (
+      <LoginFormPart
+        onLogin={() => {
+          const destination = state?.from
+            ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
+            : "/discover";
+          navigate(destination, { replace: true });
+        }}
+        onRegister={() =>
+          navigate("/register", {
+            state: location.state,
+            replace: true,
+          })
+        }
+      />
+    );
+
+  return content;
+}
+
+export function LoginPage() {
   return (
-    <SubPageLayout showFooter={false}>
-      <Helmet>
-        <body className="md:overflow-hidden" />
-      </Helmet>
-      <PageTitle subpage k="global.pages.login" />
-      <div className="flex min-h-[calc(100dvh-12rem)] items-center justify-center px-4 py-6">
-        <div className="w-full">
-          {showBackendSelection &&
-          (availableBackends.length > 1 || !defaultBackend) ? (
-            <LargeCard>
-              <LargeCardText title={t("auth.backendSelection.title")}>
-                {t("auth.backendSelection.description")}
-              </LargeCardText>
-              <BackendSelector
-                selectedUrl={selectedBackendUrl ?? defaultBackend}
-                onSelect={handleBackendSelect}
-                availableUrls={availableBackends}
-                showCustom
-              />
-              <LargeCardButtons>
-                <span className="text-type-danger font-medium text-center">
-                  {t("settings.connections.server.notice")}
-                </span>
-                <Button
-                  theme="purple"
-                  onClick={handleContinue}
-                  disabled={!selectedBackendUrl && !defaultBackend}
-                >
-                  {t("auth.register.information.next")}
-                </Button>
-              </LargeCardButtons>
-            </LargeCard>
-          ) : (
-            <LoginFormPart
-              onLogin={() => {
-                const destination = state?.from
-                  ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
-                  : "/";
-                navigate(destination, { replace: true });
-              }}
-            />
-          )}
-        </div>
-      </div>
-    </SubPageLayout>
+    <AuthDialog mode="login">
+      <LoginPanel />
+    </AuthDialog>
   );
 }

@@ -46,7 +46,6 @@ const DEFAULT_ALLOWED_HEADERS = [
   'Content-Type',
   'Authorization',
   'X-Requested-With',
-  'X-Proxy-Capability',
   'Range',
   'If-Range',
   'X-Token',

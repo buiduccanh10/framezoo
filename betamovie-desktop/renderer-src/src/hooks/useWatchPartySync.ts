@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-// import { getRoomStatuses, getUserPlayerStatus } from "@/backend/player/status";
 import { getRoomStatuses } from "@/backend/player/status";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
@@ -75,6 +75,8 @@ export function useWatchPartySync(
   // Get our auth and backend info
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Get player store functions
   const display = usePlayerStore((s) => s.display);
@@ -99,14 +101,28 @@ export function useWatchPartySync(
       const watchPartyCode = params.get("watchparty");
 
       if (watchPartyCode && !enabled && watchPartyCode.length > 0) {
-        enableAsGuest(watchPartyCode);
+        if (!account) {
+          navigate("/login", {
+            state: {
+              from: location,
+              backgroundLocation: {
+                pathname: "/discover",
+                search: "",
+                hash: "",
+              },
+            },
+            replace: true,
+          });
+        } else {
+          enableAsGuest(watchPartyCode);
+        }
       }
 
       syncStateRef.current.checkedUrlParams = true;
     } catch (error) {
       console.error("Failed to check URL parameters for watch party:", error);
     }
-  }, [enabled, enableAsGuest]);
+  }, [account, enabled, enableAsGuest, location, navigate]);
 
   // Find the host user in the room
   const hostUser = roomUsers.find((user) => user.isHost) || null;
@@ -225,7 +241,7 @@ export function useWatchPartySync(
 
   // Function to refresh room data
   const refreshRoomData = useCallback(async () => {
-    if (!enabled || !roomCode || !backendUrl) return;
+    if (!account || !enabled || !roomCode || !backendUrl) return;
 
     try {
       const response = await getRoomStatuses(backendUrl, account, roomCode);
@@ -294,7 +310,7 @@ export function useWatchPartySync(
     // Store reference to current syncState for cleanup
     const syncState = syncStateRef.current;
 
-    if (!enabled || !roomCode) {
+    if (!account || !enabled || !roomCode) {
       setRoomUsers([]);
       setUserCount(1);
 
@@ -321,7 +337,7 @@ export function useWatchPartySync(
       syncState.previousHostPlaying = null;
       syncState.previousHostTime = null;
     };
-  }, [enabled, roomCode, refreshRoomData]);
+  }, [account, enabled, roomCode, refreshRoomData]);
 
   return {
     roomUsers,
