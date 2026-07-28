@@ -35,6 +35,7 @@ type LibMpvPlayerEvent = {
     | "property"
     | "file-loaded"
     | "video-reconfig"
+    | "video-frame"
     | "end-file"
     | "log"
     | "error";
@@ -438,11 +439,14 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "file-loaded") {
-      if (!source?.isTorrent) emit("loading", false);
       return;
     }
 
     if (event.type === "video-reconfig") {
+      return;
+    }
+
+    if (event.type === "video-frame") {
       emit("loading", false);
       return;
     }

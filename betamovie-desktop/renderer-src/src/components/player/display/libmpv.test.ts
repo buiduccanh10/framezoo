@@ -128,6 +128,63 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("keeps the loading overlay until libmpv renders the first frame", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "file-loaded" | "video-reconfig" | "video-frame";
+        }) => void)
+      | undefined;
+    const loading: boolean[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("loading", (isLoading) => loading.push(isLoading));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "https://example.test/video.mkv",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "file-loaded",
+    });
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "video-reconfig",
+    });
+    expect(loading).toEqual([true]);
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "video-frame",
+    });
+    expect(loading).toEqual([true, false]);
+    display.destroy();
+  });
+
   it("queues the app play action across native player creation and load", async () => {
     const commands: Array<{ type: string }> = [];
 

@@ -725,9 +725,7 @@ function createMainWindow() {
     minHeight: 700,
     backgroundColor: "#00000000",
     transparent: true,
-    ...(process.platform === "darwin"
-      ? { titleBarStyle: "hiddenInset" as const }
-      : {}),
+    titleBarStyle: "default" as const,
     autoHideMenuBar: process.platform === "darwin",
     icon: getWindowIconPath(),
     webPreferences: {

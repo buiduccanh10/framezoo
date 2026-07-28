@@ -117,6 +117,9 @@ struct MpvPlayer {
   std::thread event_thread;
   std::atomic<uint64_t> render_update_count{0};
   std::atomic<uint64_t> render_count{0};
+  std::atomic<bool> video_metadata_ready{false};
+  std::atomic<bool> video_frame_ready{false};
+  std::atomic<double> pending_start_at{0};
 
   int command(const char* const* commands) {
     std::lock_guard<std::mutex> lock(command_mutex);
@@ -259,6 +262,17 @@ struct MpvPlayer {
           generation.load()
       );
     }
+    if (
+        video_metadata_ready.load(std::memory_order_acquire) &&
+        (update_flags & 1u) != 0 &&
+        !video_frame_ready.exchange(true, std::memory_order_acq_rel)
+    ) {
+      auto* native_event = new NativeEvent();
+      native_event->player_id = id;
+      native_event->generation = generation.load();
+      native_event->type = "video-frame";
+      emit(native_event);
+    }
     surface_swap_buffers(surface);
     api.render_context_report_swap(render_context);
   }
@@ -279,6 +293,27 @@ struct MpvPlayer {
           native_event->type = "file-loaded";
           emit(native_event);
           emit_playback_property_snapshots();
+          {
+            const double start_at =
+                pending_start_at.exchange(0, std::memory_order_acq_rel);
+            if (start_at > 0) {
+              const std::string start_value = std::to_string(start_at);
+              const char* seek_command[] = {
+                  "seek",
+                  start_value.c_str(),
+                  "absolute",
+                  nullptr,
+              };
+              if (command(seek_command) < 0) {
+                std::fprintf(
+                    stderr,
+                    "[libmpv-native] initial seek failed after file-loaded "
+                    "start=%.3f\n",
+                    start_at
+                );
+              }
+            }
+          }
           break;
         case MPV_EVENT_VIDEO_RECONFIG:
           native_event->type = "video-reconfig";
@@ -349,6 +384,16 @@ struct MpvPlayer {
               default:
                 break;
             }
+          }
+          if (
+              property &&
+              property->data &&
+              property->name &&
+              (std::string(property->name) == "video-params" ||
+               std::string(property->name) == "video-out-params")
+          ) {
+            video_metadata_ready.store(true, std::memory_order_release);
+            surface_request_paint(surface);
           }
           const bool is_diagnostic_property =
               property && property->name &&
@@ -584,6 +629,11 @@ napi_value create_player(napi_env env, napi_callback_info info) {
 
   set_mpv_option(player.get(), "terminal", "no");
   set_mpv_option(player.get(), "vo", "libmpv");
+  set_mpv_option(player.get(), "osc", "no");
+  set_mpv_option(player.get(), "osd-level", "0");
+  set_mpv_option(player.get(), "osd-bar", "no");
+  set_mpv_option(player.get(), "input-default-bindings", "no");
+  set_mpv_option(player.get(), "input-vo-keyboard", "no");
   set_mpv_option(player.get(), "hwdec", "auto-safe");
   set_mpv_option(player.get(), "keep-open", "yes");
   set_mpv_option(player.get(), "idle", "yes");
@@ -893,6 +943,12 @@ napi_value load_player(napi_env env, napi_callback_info info) {
   player->generation.store(
       std::max(0, static_cast<int>(requested_generation))
   );
+  player->video_metadata_ready.store(false, std::memory_order_release);
+  player->video_frame_ready.store(false, std::memory_order_release);
+  player->pending_start_at.store(
+      std::max(0.0, start_at),
+      std::memory_order_release
+  );
   const std::string headers = get_headers(env, argv[1]);
   if (
       set_mpv_property(
@@ -917,19 +973,6 @@ napi_value load_player(napi_env env, napi_callback_info info) {
   if (player->command(load_command) < 0) {
     return throw_error(env, "libmpv loadfile command failed");
   }
-  if (start_at > 0) {
-    const std::string start_value = std::to_string(start_at);
-    const char* seek_command[] = {
-        "seek",
-        start_value.c_str(),
-        "absolute",
-        nullptr,
-    };
-    if (player->command(seek_command) < 0) {
-      return throw_error(env, "libmpv initial seek command failed");
-    }
-  }
-
   napi_value result;
   napi_get_boolean(env, true, &result);
   return result;

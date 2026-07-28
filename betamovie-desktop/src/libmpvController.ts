@@ -457,6 +457,8 @@ export class LibMpvController {
       this.broadcastLog("info", "file_loaded", eventData);
     } else if (event.type === "video-reconfig") {
       this.broadcastLog("debug", "video_reconfig", eventData);
+    } else if (event.type === "video-frame") {
+      this.broadcastLog("debug", "video_frame", eventData);
     } else if (event.type === "end-file") {
       this.broadcastLog("info", "end_file", eventData);
     } else if (event.type === "error") {

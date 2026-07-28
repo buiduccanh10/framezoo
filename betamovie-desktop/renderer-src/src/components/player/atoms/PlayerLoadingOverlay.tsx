@@ -129,7 +129,7 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     props.sourceLoading && status === playerStatus.SOURCE_SELECTION;
 
   const isTorrentPreparing = useMemo(() => {
-    if (!torrentStatus || !isLoading) return false;
+    if (!torrentStatus || status !== playerStatus.PLAYING) return false;
     if (torrentStatus.state === "error") return false;
     return (
       torrentStatus.streamType === "pending" ||
@@ -137,7 +137,7 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
       (duration === 0 && buffered === 0) ||
       !Number.isFinite(duration)
     );
-  }, [torrentStatus, isLoading, duration, buffered]);
+  }, [torrentStatus, status, duration, buffered]);
 
   const showOverlay =
     status === playerStatus.IDLE ||
