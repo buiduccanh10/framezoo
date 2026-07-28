@@ -1002,6 +1002,26 @@ napi_value destroy_player(napi_env env, napi_callback_info info) {
   return result;
 }
 
+napi_value configure_window(napi_env env, napi_callback_info info) {
+  size_t argc = 1;
+  napi_value argv[1];
+  napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+  bool is_buffer = false;
+  if (argc > 0) napi_is_buffer(env, argv[0], &is_buffer);
+  if (!is_buffer) return throw_error(env, "parentHandle must be a Buffer");
+  void* handle = nullptr;
+  size_t handle_length = 0;
+  napi_get_buffer_info(env, argv[0], &handle, &handle_length);
+  if (!handle || handle_length < sizeof(void*)) {
+    return throw_error(env, "parentHandle is empty");
+  }
+  auto parent = *static_cast<void**>(handle);
+  surface_configure_window(parent);
+  napi_value result;
+  napi_get_boolean(env, true, &result);
+  return result;
+}
+
 napi_value init(napi_env env, napi_value exports) {
   napi_property_descriptor methods[] = {
       {"createPlayer", nullptr, create_player, nullptr, nullptr, nullptr,
@@ -1015,6 +1035,8 @@ napi_value init(napi_env env, napi_value exports) {
       {"loadPlayer", nullptr, load_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"destroyPlayer", nullptr, destroy_player, nullptr, nullptr, nullptr,
+       napi_default, nullptr},
+      {"configureWindow", nullptr, configure_window, nullptr, nullptr, nullptr,
        napi_default, nullptr},
   };
   napi_define_properties(

@@ -27,6 +27,7 @@ interface NativeLibMpvAddon {
   ): void;
   commandPlayer(playerId: string, command: LibMpvCommand): void;
   destroyPlayer(playerId: string): void;
+  configureWindow?(parentHandle: Buffer): void;
 }
 
 type PlayerRecord = {
@@ -162,6 +163,12 @@ export class LibMpvController {
         arch: process.arch,
         candidates: getNativeAddonCandidates(),
       });
+    } else if (this.addon.configureWindow && process.platform === "darwin") {
+      try {
+        this.addon.configureWindow(mainWindow.getNativeWindowHandle());
+      } catch (err) {
+        console.warn("[libmpv] failed to configure window titlebar", err);
+      }
     }
 
     this.registerIpc();

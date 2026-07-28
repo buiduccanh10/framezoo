@@ -724,8 +724,8 @@ function createMainWindow() {
     minWidth: 1100,
     minHeight: 700,
     backgroundColor: "#00000000",
-    // transparent: true,
-    // titleBarStyle: "default" as const,
+    transparent: true,
+    titleBarStyle: "default" as const,
     autoHideMenuBar: process.platform === "darwin",
     icon: getWindowIconPath(),
     webPreferences: {
@@ -738,6 +738,9 @@ function createMainWindow() {
     },
   });
 
+  if (process.platform === "darwin") {
+    mainWindow.setWindowButtonVisibility(true);
+  }
   libmpvController.init(mainWindow, () => desktopPipController.getWindow());
 
   mainWindow.webContents.on("before-input-event", (event, input) => {
