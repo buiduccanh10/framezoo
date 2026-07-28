@@ -4,6 +4,7 @@ import tempfile
 import threading
 import time
 import unittest
+from io import BytesIO
 from pathlib import Path
 from types import SimpleNamespace
 from types import MethodType
@@ -23,6 +24,63 @@ except ModuleNotFoundError as error:
 
 
 class SidecarStreamTest(unittest.TestCase):
+    def test_sends_headers_after_first_piece_is_available(self):
+        runtime = object.__new__(sidecar.TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.metadata_ready = threading.Event()
+        runtime.metadata_ready.set()
+        runtime.metadata_complete = threading.Event()
+        runtime.metadata_error = None
+        runtime.file_index = 0
+        runtime.file_size = 4
+        runtime.file_path = "episode.mkv"
+        runtime.save_path = tempfile.gettempdir()
+        runtime.session_id = "torrent-test"
+        runtime.first_request_logged = False
+        piece_release = threading.Event()
+
+        def open_first_chunk(self, _absolute_path, _start, _end):
+            piece_release.wait(2)
+            return BytesIO(b"test"), b"test"
+
+        runtime.open_first_chunk = MethodType(open_first_chunk, runtime)
+
+        class FakeHandler:
+            command = "GET"
+            headers = {"Range": "bytes=0-"}
+            close_connection = False
+
+            def __init__(self):
+                self.status = None
+                self.headers_sent = {}
+                self.header_event = threading.Event()
+                self.wfile = BytesIO()
+
+            def send_response(self, status):
+                self.status = status
+
+            def send_header(self, name, value):
+                self.headers_sent[name] = value
+
+            def end_headers(self):
+                self.header_event.set()
+
+        handler = FakeHandler()
+        worker = threading.Thread(target=runtime.serve, args=(handler, False))
+        worker.start()
+
+        self.assertFalse(handler.header_event.wait(0.1))
+        self.assertIsNone(handler.status)
+
+        piece_release.set()
+        self.assertTrue(handler.header_event.wait(1))
+        self.assertEqual(handler.status, 206)
+        self.assertEqual(handler.headers_sent["Content-Length"], "4")
+
+        worker.join(2)
+        self.assertFalse(worker.is_alive())
+        self.assertEqual(handler.wfile.getvalue(), b"test")
+
     def test_waits_for_file_created_after_metadata(self):
         runtime = object.__new__(sidecar.TorrentRuntime)
         runtime.stop_event = threading.Event()

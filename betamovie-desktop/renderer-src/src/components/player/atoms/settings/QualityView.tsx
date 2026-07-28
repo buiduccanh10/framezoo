@@ -1,4 +1,3 @@
-import Hls from "hls.js";
 import { t } from "i18next";
 import { useCallback, useMemo } from "react";
 import { Trans } from "react-i18next";
@@ -18,7 +17,6 @@ import {
   qualityToString,
 } from "@/stores/player/utils/qualities";
 import { useQualityStore } from "@/stores/quality";
-import { canPlayHlsNatively } from "@/utils/detectFeatures";
 
 const alwaysVisibleQualities: Record<SourceQuality, boolean> = {
   unknown: false,
@@ -30,21 +28,8 @@ const alwaysVisibleQualities: Record<SourceQuality, boolean> = {
   "4k": true,
 };
 
-function useIsIosHls() {
-  const sourceType = usePlayerStore((s) => s.source?.type);
-  const result = useMemo(() => {
-    const videoEl = document.createElement("video");
-    if (sourceType !== "hls") return false;
-    if (Hls.isSupported()) return false;
-    if (!canPlayHlsNatively(videoEl)) return false;
-    return true;
-  }, [sourceType]);
-  return result;
-}
-
 export function QualityView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
-  const isIosHls = useIsIosHls();
   const meta = usePlayerStore((s) => s.meta);
   const sourceType = usePlayerStore((s) => s.source?.type);
   const sourceId = usePlayerStore((s) => s.sourceId);
@@ -175,13 +160,7 @@ export function QualityView({ id }: { id: string }) {
           </>
         )}
         <Menu.SmallText>
-          <Trans
-            i18nKey={
-              isIosHls
-                ? "player.menus.quality.iosNoQuality"
-                : "player.menus.quality.hint"
-            }
-          >
+          <Trans i18nKey="player.menus.quality.hint">
             <Menu.Anchor onClick={() => router.navigate("/source")}>
               text
             </Menu.Anchor>

@@ -1,32 +1,16 @@
-import {
-  memo,
-  startTransition,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import { CaptionCue } from "@/components/player/base/SubtitleView";
-import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
-import {
-  DisplayError,
-  DisplayInterface,
-} from "@/components/player/display/displayInterface";
 import {
   captionIsVisible,
-  makeQueId,
   parseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import {
   DesktopPipAction,
-  DesktopPipCaption,
   DesktopPipState,
   setPersistedDesktopPipWindowSize,
 } from "@/desktop/pip";
-import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
 
 type DesktopElectronApi = {
@@ -42,323 +26,18 @@ type DesktopElectronApi = {
 const dragRegionStyle = { ["WebkitAppRegion" as any]: "drag" };
 const noDragRegionStyle = { ["WebkitAppRegion" as any]: "no-drag" };
 const CONTROL_AUTOHIDE_MS = 2200;
-const DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS = 0.12;
-const DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS = 0.35;
-const DESKTOP_PIP_SYNC_RATE_ADJUSTMENT = 0.08;
 
 function getDesktopElectronApi(): DesktopElectronApi | null {
-  const electronApi = (window as any).electronAPI;
-  if (!electronApi) return null;
-  return electronApi as DesktopElectronApi;
-}
-
-function getSourceSignature(state: DesktopPipState | null): string {
-  if (!state?.source) return "";
-  return JSON.stringify(state.source);
-}
-
-async function resolveDesktopPipSource(
-  source: DesktopPipState["source"],
-): Promise<DesktopPipState["source"]> {
-  return source;
-}
-
-function clampTime(time: number, duration: number) {
-  if (!Number.isFinite(duration) || duration <= 0) {
-    return Math.max(0, time);
+  const api = (window as any).electronAPI;
+  if (
+    !api ||
+    typeof api.getDesktopPipWindowState !== "function" ||
+    typeof api.onDesktopPipState !== "function"
+  ) {
+    return null;
   }
-
-  return Math.max(0, Math.min(time, duration));
+  return api as DesktopElectronApi;
 }
-
-function clampPlaybackRate(playbackRate: number) {
-  if (!Number.isFinite(playbackRate) || playbackRate <= 0) {
-    return 1;
-  }
-
-  return Math.max(0.25, Math.min(playbackRate, 4));
-}
-
-function areDesktopPipCaptionsEqual(
-  left: DesktopPipCaption | null,
-  right: DesktopPipCaption | null,
-) {
-  if (left === right) return true;
-  if (!left || !right) return false;
-  return left.language === right.language && left.vttData === right.vttData;
-}
-
-function shouldReplacePipState(
-  previousState: DesktopPipState | null,
-  nextState: DesktopPipState | null,
-) {
-  if (previousState === nextState) return false;
-  if (!previousState || !nextState) return true;
-
-  return (
-    getSourceSignature(previousState) !== getSourceSignature(nextState) ||
-    previousState.duration !== nextState.duration ||
-    previousState.paused !== nextState.paused ||
-    previousState.playbackRate !== nextState.playbackRate ||
-    previousState.title !== nextState.title ||
-    previousState.delay !== nextState.delay ||
-    previousState.dualSubEnabled !== nextState.dualSubEnabled ||
-    !areDesktopPipCaptionsEqual(previousState.caption, nextState.caption) ||
-    !areDesktopPipCaptionsEqual(
-      previousState.secondaryCaption,
-      nextState.secondaryCaption,
-    )
-  );
-}
-
-type ParsedCaptionCue = {
-  start: number;
-  end: number;
-  content: string;
-};
-
-function getVisibleCaptionCues(
-  parsedCaptions: ParsedCaptionCue[],
-  delay: number,
-  videoTime: number,
-) {
-  return parsedCaptions.filter(({ start, end }) =>
-    captionIsVisible(start, end, delay, videoTime),
-  );
-}
-
-function areVisibleCaptionCuesEqual(
-  left: ParsedCaptionCue[],
-  right: ParsedCaptionCue[],
-) {
-  if (left === right) return true;
-  if (left.length !== right.length) return false;
-
-  return left.every((cue, index) => {
-    const nextCue = right[index];
-    return (
-      cue.start === nextCue?.start &&
-      cue.end === nextCue?.end &&
-      cue.content === nextCue?.content
-    );
-  });
-}
-
-const DesktopPipCaptionTrack = memo(
-  function DesktopPipCaptionTrackInner(props: {
-    caption: DesktopPipCaption | null;
-    delay: number;
-    display: DisplayInterface | null;
-    initialTime: number;
-    secondary?: boolean;
-  }) {
-    const styling = useSubtitleStore((s) => s.styling);
-    const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
-    const delay = Number.isFinite(props.delay) ? props.delay : 0;
-
-    const parsedCaptions = useMemo(
-      () =>
-        props.caption?.vttData ? parseCanonicalVtt(props.caption.vttData) : [],
-      [props.caption?.vttData],
-    );
-
-    const [visibleCaptions, setVisibleCaptions] = useState<ParsedCaptionCue[]>(
-      () => getVisibleCaptionCues(parsedCaptions, delay, props.initialTime),
-    );
-
-    useEffect(() => {
-      const nextVisibleCaptions = getVisibleCaptionCues(
-        parsedCaptions,
-        delay,
-        props.initialTime,
-      );
-      setVisibleCaptions((previousCaptions) =>
-        areVisibleCaptionCuesEqual(previousCaptions, nextVisibleCaptions)
-          ? previousCaptions
-          : nextVisibleCaptions,
-      );
-    }, [delay, parsedCaptions, props.initialTime]);
-
-    useEffect(() => {
-      if (!props.display) return;
-
-      const handleTime = (nextTime: number) => {
-        const nextVisibleCaptions = getVisibleCaptionCues(
-          parsedCaptions,
-          delay,
-          nextTime,
-        );
-        setVisibleCaptions((previousCaptions) =>
-          areVisibleCaptionCuesEqual(previousCaptions, nextVisibleCaptions)
-            ? previousCaptions
-            : nextVisibleCaptions,
-        );
-      };
-
-      props.display.on("time", handleTime);
-
-      return () => {
-        props.display?.off("time", handleTime);
-      };
-    }, [delay, parsedCaptions, props.display]);
-
-    if (!props.caption || visibleCaptions.length === 0) return null;
-
-    return (
-      <div
-        className={props.secondary ? "opacity-90" : undefined}
-        style={props.secondary ? { opacity: 0.9 } : undefined}
-      >
-        {visibleCaptions.map(({ start, end, content }, i) => (
-          <CaptionCue
-            key={`${props.secondary ? "secondary-" : ""}${makeQueId(i, start, end)}`}
-            text={content}
-            styling={styling}
-            overrideCasing={overrideCasing}
-            useNativePictureInPictureStyle
-          />
-        ))}
-      </div>
-    );
-  },
-);
-
-function useDisplayTime(
-  display: DisplayInterface | null,
-  initialTime: number,
-  throttleMs = 0,
-) {
-  const [time, setTime] = useState(initialTime);
-  const committedTimeRef = useRef(initialTime);
-  const pendingTimeRef = useRef<number | null>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    committedTimeRef.current = initialTime;
-    pendingTimeRef.current = null;
-    setTime(initialTime);
-  }, [initialTime]);
-
-  useEffect(() => {
-    if (!display) return;
-
-    const clearPendingTimeout = () => {
-      if (!timeoutRef.current) return;
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    };
-
-    const commitTime = (nextTime: number) => {
-      committedTimeRef.current = nextTime;
-      startTransition(() => {
-        setTime(nextTime);
-      });
-    };
-
-    const flushPendingTime = () => {
-      clearPendingTimeout();
-      if (pendingTimeRef.current === null) return;
-      const nextTime = pendingTimeRef.current;
-      pendingTimeRef.current = null;
-      commitTime(nextTime);
-    };
-
-    const handleTime = (nextTime: number) => {
-      if (throttleMs <= 0) {
-        pendingTimeRef.current = null;
-        commitTime(nextTime);
-        return;
-      }
-
-      pendingTimeRef.current = nextTime;
-
-      const currentSecond = Math.floor(committedTimeRef.current);
-      const nextSecond = Math.floor(nextTime);
-      if (
-        nextSecond !== currentSecond ||
-        Math.abs(nextTime - committedTimeRef.current) >= 0.35
-      ) {
-        flushPendingTime();
-        return;
-      }
-
-      if (!timeoutRef.current) {
-        timeoutRef.current = setTimeout(flushPendingTime, throttleMs);
-      }
-    };
-
-    display.on("time", handleTime);
-
-    return () => {
-      clearPendingTimeout();
-      pendingTimeRef.current = null;
-      display.off("time", handleTime);
-    };
-  }, [display, throttleMs]);
-
-  return time;
-}
-
-const DesktopPipProgressBar = memo(function DesktopPipProgressBarInner(props: {
-  controlsVisible: boolean;
-  display: DisplayInterface | null;
-  duration: number;
-  initialTime: number;
-  isScrubbing: boolean;
-  onScrubbingChange(nextScrubbing: boolean): void;
-  onSeek(nextTime: number): void;
-  revealControls(): void;
-}) {
-  const videoTime = useDisplayTime(
-    props.display,
-    props.initialTime,
-    props.isScrubbing ? 0 : 140,
-  );
-  const effectiveTime = clampTime(videoTime, props.duration);
-  const timeHasHours = durationExceedsHour(props.duration);
-  const remainingTime = Math.max(props.duration - effectiveTime, 0);
-
-  return (
-    <div
-      className={`absolute inset-x-0 bottom-0 z-20 px-2.5 pb-2.5 transition-all duration-200 ${
-        props.controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
-      }`}
-      style={noDragRegionStyle}
-    >
-      <div className="bg-transparent py-2.5 shadow-2xl backdrop-blur-xl">
-        <div className="grid grid-cols-[auto,1fr,auto] items-center gap-2.5">
-          <span className="min-w-[42px] text-right text-[11px] font-medium tabular-nums text-white/76">
-            {formatSeconds(effectiveTime, timeHasHours)}
-          </span>
-          <input
-            type="range"
-            min={0}
-            max={Math.max(props.duration, 0)}
-            step={0.1}
-            value={props.duration > 0 ? effectiveTime : 0}
-            onPointerDown={() => {
-              props.onScrubbingChange(true);
-              props.revealControls();
-            }}
-            onPointerUp={() => {
-              props.onScrubbingChange(false);
-              props.revealControls();
-            }}
-            onChange={(event) => {
-              props.onSeek(Number(event.currentTarget.value));
-            }}
-            className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/18 accent-white"
-          />
-          <span className="min-w-[48px] text-left text-[11px] font-medium tabular-nums text-white/76">
-            {props.duration > 0
-              ? `-${formatSeconds(remainingTime, timeHasHours)}`
-              : "--:--"}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-});
 
 function DesktopPipButton(props: {
   icon: Icons;
@@ -386,380 +65,254 @@ function DesktopPipButton(props: {
   );
 }
 
+const PipCaptions = memo(function PipCaptionsView(props: {
+  state: DesktopPipState;
+}) {
+  const styling = {
+    ...useFallbackSubtitleStyling(),
+  };
+  const captions = useMemo(() => {
+    const primary = props.state.caption
+      ? parseCanonicalVtt(props.state.caption.vttData)
+      : [];
+    const secondary = props.state.secondaryCaption
+      ? parseCanonicalVtt(props.state.secondaryCaption.vttData)
+      : [];
+    return {
+      primary: primary.filter((cue) =>
+        captionIsVisible(
+          cue.start,
+          cue.end,
+          props.state.delay,
+          props.state.time,
+        ),
+      ),
+      secondary: secondary.filter((cue) =>
+        captionIsVisible(
+          cue.start,
+          cue.end,
+          props.state.delay,
+          props.state.time,
+        ),
+      ),
+    };
+  }, [props.state]);
+
+  const showSecondary =
+    props.state.dualSubEnabled &&
+    props.state.secondaryCaption &&
+    props.state.secondaryCaption.vttData !== props.state.caption?.vttData;
+
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-20 z-10 flex flex-col items-center px-[8%]">
+      {showSecondary
+        ? captions.secondary.map((cue, index) => (
+            <CaptionCue
+              key={`secondary-${cue.start}-${cue.end}-${index}`}
+              text={cue.content}
+              styling={styling}
+              overrideCasing={false}
+              useNativePictureInPictureStyle
+            />
+          ))
+        : null}
+      {captions.primary.map((cue, index) => (
+        <CaptionCue
+          key={`primary-${cue.start}-${cue.end}-${index}`}
+          text={cue.content}
+          styling={styling}
+          overrideCasing={false}
+          useNativePictureInPictureStyle
+        />
+      ))}
+    </div>
+  );
+});
+
+function useFallbackSubtitleStyling() {
+  return {
+    fontSize: 1,
+    color: "#ffffff",
+    backgroundColor: "rgba(0,0,0,0.45)",
+  } as any;
+}
+
+function PipProgress(props: {
+  state: DesktopPipState;
+  visible: boolean;
+  onSeek(time: number): void;
+}) {
+  const hours = durationExceedsHour(props.state.duration);
+  const current = Math.max(
+    0,
+    Math.min(
+      props.state.time,
+      props.state.duration || Number.POSITIVE_INFINITY,
+    ),
+  );
+  const remaining = Math.max(props.state.duration - current, 0);
+
+  return (
+    <div
+      className={`absolute inset-x-0 bottom-0 z-20 px-2.5 pb-2.5 transition-opacity ${
+        props.visible ? "opacity-100" : "pointer-events-none opacity-0"
+      }`}
+      style={noDragRegionStyle}
+    >
+      <div className="bg-transparent py-2.5 shadow-2xl backdrop-blur-xl">
+        <div className="grid grid-cols-[auto,1fr,auto] items-center gap-2.5">
+          <span className="min-w-[42px] text-right text-[11px] font-medium tabular-nums text-white/76">
+            {formatSeconds(current, hours)}
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={Math.max(props.state.duration, 0)}
+            step={0.1}
+            value={props.state.duration > 0 ? current : 0}
+            onChange={(event) =>
+              props.onSeek(Number(event.currentTarget.value))
+            }
+            className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/18 accent-white"
+          />
+          <span className="min-w-[48px] text-left text-[11px] font-medium tabular-nums text-white/76">
+            {props.state.duration > 0
+              ? `-${formatSeconds(remaining, hours)}`
+              : "--:--"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function DesktopPipPage() {
   const [pipState, setPipState] = useState<DesktopPipState | null>(null);
-  const [display, setDisplay] = useState<DisplayInterface | null>(null);
-  const [videoElementNode, setVideoElementNode] =
-    useState<HTMLVideoElement | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [controlsVisible, setControlsVisible] = useState(true);
-  const [isScrubbing, setIsScrubbing] = useState(false);
-  const displayRef = useRef<DisplayInterface | null>(null);
-  const sourceSignatureRef = useRef("");
-  const pendingSourceSignatureRef = useRef("");
-  const sourceLoadRequestRef = useRef(0);
-  const controlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const videoTimeRef = useRef(0);
-
-  const clearControlsTimeout = useCallback(() => {
-    if (!controlsTimeoutRef.current) return;
-    clearTimeout(controlsTimeoutRef.current);
-    controlsTimeoutRef.current = null;
-  }, []);
-
-  const scheduleControlsHide = useCallback(() => {
-    clearControlsTimeout();
-    if (isScrubbing) return;
-
-    controlsTimeoutRef.current = setTimeout(() => {
-      setControlsVisible(false);
-      controlsTimeoutRef.current = null;
-    }, CONTROL_AUTOHIDE_MS);
-  }, [clearControlsTimeout, isScrubbing]);
+  const [scrubbing, setScrubbing] = useState(false);
+  const [hideTimer, setHideTimer] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null);
 
   const revealControls = useCallback(() => {
     setControlsVisible(true);
-    scheduleControlsHide();
-  }, [scheduleControlsHide]);
-
-  const syncStateToDisplay = useCallback(
-    (nextState: DesktopPipState | null) => {
-      if (!nextState?.source || !videoElementNode || !displayRef.current) {
-        return;
-      }
-
-      const displayInterface = displayRef.current;
-      const sourceSignature = getSourceSignature(nextState);
-      const sourceChanged = sourceSignature !== sourceSignatureRef.current;
-      const targetPlaybackRate = clampPlaybackRate(nextState.playbackRate || 1);
-
-      document.title = nextState.title || "AlphaFlix PiP";
-
-      if (sourceChanged) {
-        sourceSignatureRef.current = sourceSignature;
-        pendingSourceSignatureRef.current = sourceSignature;
-        const requestId = ++sourceLoadRequestRef.current;
-        videoTimeRef.current = nextState.time;
-        void resolveDesktopPipSource(nextState.source).then((source) => {
-          if (
-            requestId !== sourceLoadRequestRef.current ||
-            sourceSignatureRef.current !== sourceSignature ||
-            !displayRef.current
-          ) {
-            return;
-          }
-
-          pendingSourceSignatureRef.current = "";
-          displayInterface.load({
-            source,
-            startAt: nextState.time,
-            automaticQuality: false,
-            preferredQuality: null,
-            autoplay: !nextState.paused,
-          });
-        });
-        return;
-      }
-
-      if (pendingSourceSignatureRef.current === sourceSignature) {
-        return;
-      }
-
-      const hasTimeline =
-        Number.isFinite(videoElementNode.duration) &&
-        videoElementNode.duration > 0 &&
-        videoElementNode.readyState >= HTMLMediaElement.HAVE_METADATA;
-      if (!hasTimeline) {
-        return;
-      }
-
-      const hasCurrentFrame =
-        videoElementNode.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA;
-      const canSyncPlayback =
-        nextState.paused ||
-        videoElementNode.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA;
-      if (!hasCurrentFrame || !canSyncPlayback) {
-        return;
-      }
-
-      const currentTime = videoElementNode.currentTime ?? 0;
-      const drift = nextState.time - currentTime;
-      const absoluteDrift = Math.abs(drift);
-
-      if (absoluteDrift >= DESKTOP_PIP_HARD_SYNC_DRIFT_SECONDS) {
-        displayInterface.setTime(nextState.time);
-        displayInterface.setPlaybackRate(targetPlaybackRate);
-      } else if (
-        !nextState.paused &&
-        absoluteDrift >= DESKTOP_PIP_SOFT_SYNC_DRIFT_SECONDS
-      ) {
-        const correction = Math.min(
-          DESKTOP_PIP_SYNC_RATE_ADJUSTMENT,
-          Math.max(0.02, absoluteDrift * 0.2),
-        );
-        displayInterface.setPlaybackRate(
-          clampPlaybackRate(targetPlaybackRate + Math.sign(drift) * correction),
-        );
-      } else if (
-        Math.abs(videoElementNode.playbackRate - targetPlaybackRate) > 0.01
-      ) {
-        displayInterface.setPlaybackRate(targetPlaybackRate);
-      }
-
-      if (nextState.paused) {
-        if (!videoElementNode.paused) {
-          displayInterface.pause();
-        }
-      } else if (
-        videoElementNode.paused &&
-        !videoElementNode.ended &&
-        hasCurrentFrame
-      ) {
-        displayInterface.play();
-      }
-    },
-    [videoElementNode],
-  );
-
-  const updatePipState = useCallback(
-    (updater: (state: DesktopPipState) => DesktopPipState) => {
-      setPipState((previousState) => {
-        if (!previousState) return previousState;
-        return updater(previousState);
-      });
-    },
-    [],
-  );
+    if (hideTimer) clearTimeout(hideTimer);
+    setHideTimer(
+      setTimeout(() => {
+        setControlsVisible(false);
+        setHideTimer(null);
+      }, CONTROL_AUTOHIDE_MS),
+    );
+  }, [hideTimer]);
 
   const sendAction = useCallback((action: DesktopPipAction) => {
     void getDesktopElectronApi()?.sendDesktopPipAction(action);
   }, []);
 
-  const togglePlayback = useCallback(() => {
-    sendAction({ type: "togglePlayback" });
-    updatePipState((state) => ({
-      ...state,
-      paused: !state.paused,
-    }));
-
-    if (displayRef.current) {
-      if (pipState?.paused) {
-        displayRef.current.play();
-      } else {
-        displayRef.current.pause();
-      }
-    }
-  }, [pipState?.paused, sendAction, updatePipState]);
-
   const seekTo = useCallback(
-    (nextTime: number) => {
-      const duration = pipState?.duration ?? 0;
-      const clampedTime = clampTime(nextTime, duration);
-
-      sendAction({
-        type: "seekTo",
-        time: clampedTime,
-      });
-      updatePipState((state) => ({
-        ...state,
-        time: clampedTime,
-      }));
-      videoTimeRef.current = clampedTime;
-      displayRef.current?.setTime(clampedTime);
+    (time: number) => {
+      if (!pipState) return;
+      const nextTime = Math.max(
+        0,
+        Math.min(time, pipState.duration || Number.POSITIVE_INFINITY),
+      );
+      sendAction({ type: "seekTo", time: nextTime });
+      setPipState((state) => (state ? { ...state, time: nextTime } : state));
     },
-    [pipState?.duration, sendAction, updatePipState],
+    [pipState, sendAction],
   );
 
-  const seekBy = useCallback(
-    (delta: number) => {
-      seekTo(videoTimeRef.current + delta);
-    },
-    [seekTo],
-  );
-
-  const returnToPlayerApp = useCallback(() => {
-    const electronApi = getDesktopElectronApi();
-    if (!electronApi) return;
-
-    void Promise.allSettled([
-      electronApi.focusMainWindow(),
-      electronApi.closeDesktopPipWindow(),
-    ]);
-  }, []);
-
-  const closeDesktopPip = useCallback(() => {
+  const close = useCallback(() => {
     void getDesktopElectronApi()?.closeDesktopPipWindow();
   }, []);
 
-  useEffect(() => {
-    const displayInterface = makeVideoElementDisplayInterface({
-      desktopPipMirror: true,
-    });
-    const handleTime = (time: number) => {
-      videoTimeRef.current = time;
-    };
-    const handleError = (nextError: DisplayError) => {
-      setError(nextError.message ?? nextError.errorName);
-    };
-
-    displayRef.current = displayInterface;
-    setDisplay(displayInterface);
-    displayInterface.on("time", handleTime);
-    displayInterface.on("error", handleError);
-
-    return () => {
-      displayInterface.off("time", handleTime);
-      displayInterface.off("error", handleError);
-      displayInterface.destroy();
-      displayRef.current = null;
-      setDisplay(null);
-    };
+  const returnToPlayer = useCallback(() => {
+    const api = getDesktopElectronApi();
+    if (!api) return;
+    void Promise.allSettled([
+      api.focusMainWindow(),
+      api.closeDesktopPipWindow(),
+    ]);
   }, []);
 
   useEffect(() => {
-    if (!display || !videoElementNode) return;
-    display.processVideoElement(videoElementNode);
-    void display.setVolume(0);
-  }, [display, videoElementNode]);
-
-  useEffect(() => {
-    scheduleControlsHide();
-    return () => {
-      clearControlsTimeout();
-    };
-  }, [clearControlsTimeout, scheduleControlsHide]);
-
-  useEffect(() => {
-    if (isScrubbing) {
-      clearControlsTimeout();
-      setControlsVisible(true);
-      return;
-    }
-
-    scheduleControlsHide();
-  }, [clearControlsTimeout, isScrubbing, scheduleControlsHide]);
-
-  useEffect(() => {
-    if (!isScrubbing) return;
-
-    const handlePointerRelease = () => {
-      setIsScrubbing(false);
-      revealControls();
-    };
-
-    window.addEventListener("pointerup", handlePointerRelease);
-    window.addEventListener("pointercancel", handlePointerRelease);
-
-    return () => {
-      window.removeEventListener("pointerup", handlePointerRelease);
-      window.removeEventListener("pointercancel", handlePointerRelease);
-    };
-  }, [isScrubbing, revealControls]);
-
-  useEffect(() => {
-    let resizeTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    const persistWindowSize = () => {
-      setPersistedDesktopPipWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-    const schedulePersistWindowSize = () => {
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-      }
-
-      resizeTimeout = setTimeout(() => {
-        resizeTimeout = null;
-        persistWindowSize();
-      }, 120);
-    };
-
-    persistWindowSize();
-    window.addEventListener("resize", schedulePersistWindowSize);
-    window.addEventListener("beforeunload", persistWindowSize);
-
-    return () => {
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-      }
-      persistWindowSize();
-      window.removeEventListener("resize", schedulePersistWindowSize);
-      window.removeEventListener("beforeunload", persistWindowSize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const electronApi = getDesktopElectronApi();
-    if (!electronApi) {
+    const api = getDesktopElectronApi();
+    if (!api) {
       setError("Desktop bridge unavailable");
       return;
     }
 
     let active = true;
+    void api
+      .getDesktopPipWindowState()
+      .then((state) => {
+        if (active) setPipState(state);
+      })
+      .catch(() => setError("Unable to load PiP state"));
 
-    void electronApi.getDesktopPipWindowState().then((state) => {
-      if (!active) return;
-      videoTimeRef.current = state?.time ?? 0;
-      syncStateToDisplay(state);
-      setPipState(state);
-    });
-
-    const unsubscribe = electronApi.onDesktopPipState((state) => {
+    const unsubscribe = api.onDesktopPipState((state) => {
       setError(null);
-      videoTimeRef.current = state?.time ?? videoTimeRef.current;
-      syncStateToDisplay(state);
-      setPipState((previousState) =>
-        shouldReplacePipState(previousState, state) ? state : previousState,
-      );
+      setPipState(state);
     });
 
     return () => {
       active = false;
       unsubscribe();
     };
-  }, [syncStateToDisplay]);
+  }, []);
 
-  const duration = pipState?.duration ?? 0;
-  const shouldShowSecondaryCaption =
-    pipState?.dualSubEnabled &&
-    pipState.secondaryCaption &&
-    (!pipState.caption ||
-      pipState.secondaryCaption.vttData !== pipState.caption.vttData);
+  useEffect(() => {
+    return () => {
+      if (hideTimer) clearTimeout(hideTimer);
+    };
+  }, [hideTimer]);
+
+  useEffect(() => {
+    const persist = () => {
+      setPersistedDesktopPipWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    const onResize = () => persist();
+    persist();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("beforeunload", persist);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("beforeunload", persist);
+    };
+  }, []);
+
+  if (!pipState) {
+    return (
+      <div className="fixed inset-0 bg-black text-center text-xs text-white/60">
+        {error ?? "Loading PiP"}
+      </div>
+    );
+  }
 
   return (
     <div
-      className="fixed inset-0 overflow-hidden bg-black text-white select-none"
+      className="fixed inset-0 select-none overflow-hidden bg-black text-white"
       onPointerMove={revealControls}
       onPointerDown={revealControls}
       onPointerLeave={() => {
-        if (!isScrubbing) {
-          clearControlsTimeout();
+        if (!scrubbing) {
+          if (hideTimer) clearTimeout(hideTimer);
           setControlsVisible(false);
         }
       }}
     >
-      <video
-        className="absolute inset-0 h-full w-full bg-black"
-        autoPlay
-        muted
-        playsInline
-        ref={setVideoElementNode}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          backgroundColor: "black",
-          objectFit: "contain",
-        }}
-      />
-
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />
-
       <div
-        className={`absolute inset-x-0 top-0 z-20 transition-opacity duration-200 ${
+        id="libmpv-pip-surface"
+        className="pointer-events-none absolute inset-0 h-full w-full bg-black"
+        aria-hidden="true"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />
+      <div
+        className={`absolute inset-x-0 top-0 z-20 transition-opacity ${
           controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
@@ -774,51 +327,25 @@ export default function DesktopPipPage() {
             <DesktopPipButton
               icon={Icons.X}
               label="Close picture in picture"
-              onClick={closeDesktopPip}
+              onClick={close}
             />
             <div className="min-w-0 max-w-[30vw] truncate text-sm font-medium text-white/80">
-              {pipState?.title ?? "AlphaFlix"}
+              {pipState.title || "AlphaFlix"}
             </div>
           </div>
-
           <div style={noDragRegionStyle}>
             <DesktopPipButton
               icon={Icons.COMPRESS}
               label="Return to player app"
-              onClick={returnToPlayerApp}
+              onClick={returnToPlayer}
             />
           </div>
         </div>
       </div>
-
+      <PipCaptions state={pipState} />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-[8%] transition-all duration-200"
-        style={{
-          bottom: controlsVisible ? "3.55rem" : "1.2rem",
-        }}
-      >
-        {shouldShowSecondaryCaption ? (
-          <DesktopPipCaptionTrack
-            display={display}
-            caption={pipState.secondaryCaption}
-            delay={pipState.delay}
-            initialTime={videoTimeRef.current}
-            secondary
-          />
-        ) : null}
-        <DesktopPipCaptionTrack
-          display={display}
-          caption={pipState?.caption ?? null}
-          delay={pipState?.delay ?? 0}
-          initialTime={videoTimeRef.current}
-        />
-      </div>
-
-      <div
-        className={`absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-center transition-all duration-200 ${
-          controlsVisible
-            ? "opacity-100"
-            : "pointer-events-none translate-y-[-44%] opacity-0"
+        className={`absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-center transition-opacity ${
+          controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         style={noDragRegionStyle}
       >
@@ -826,36 +353,33 @@ export default function DesktopPipPage() {
           <DesktopPipButton
             icon={Icons.SKIP_BACKWARD}
             label="Seek backward 10 seconds"
-            onClick={() => seekBy(-10)}
+            onClick={() => sendAction({ type: "seekBy", delta: -10 })}
             className="h-14 w-14 bg-black/20 backdrop-blur-md"
           />
           <DesktopPipButton
-            icon={pipState?.paused ? Icons.PLAY : Icons.PAUSE}
-            label={pipState?.paused ? "Play" : "Pause"}
-            onClick={togglePlayback}
+            icon={pipState.paused ? Icons.PLAY : Icons.PAUSE}
+            label={pipState.paused ? "Play" : "Pause"}
+            onClick={() => sendAction({ type: "togglePlayback" })}
             large
             className="bg-white/18 backdrop-blur-md"
           />
           <DesktopPipButton
             icon={Icons.SKIP_FORWARD}
             label="Seek forward 10 seconds"
-            onClick={() => seekBy(10)}
+            onClick={() => sendAction({ type: "seekBy", delta: 10 })}
             className="h-14 w-14 bg-black/20 backdrop-blur-md"
           />
         </div>
       </div>
-
-      <DesktopPipProgressBar
-        controlsVisible={controlsVisible}
-        display={display}
-        duration={duration}
-        initialTime={videoTimeRef.current}
-        isScrubbing={isScrubbing}
-        onScrubbingChange={setIsScrubbing}
-        onSeek={seekTo}
-        revealControls={revealControls}
+      <PipProgress
+        state={pipState}
+        visible={controlsVisible}
+        onSeek={(time) => {
+          setScrubbing(true);
+          seekTo(time);
+          setScrubbing(false);
+        }}
       />
-
       {error ? (
         <div className="pointer-events-none absolute inset-x-0 bottom-24 px-4 text-center text-xs text-white/70">
           {error}

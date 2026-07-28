@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from "react";
 
 import { mediaItemTypeToMediaType } from "@/backend/metadata/tmdb";
-import { makeVideoElementDisplayInterface } from "@/components/player/display/base";
 import { makeChromecastDisplayInterface } from "@/components/player/display/chromecast";
+import { makeLibMpvDisplayInterface } from "@/components/player/display/libmpv";
 import { useChromecastAvailable } from "@/hooks/useChromecastAvailable";
 import { usePlayerStore } from "@/stores/player/store";
 
@@ -67,7 +67,7 @@ export function CastingInternal() {
         redisplaySource(dataRef.current.time ?? 0);
       }
     } else {
-      const newDisplay = makeVideoElementDisplayInterface();
+      const newDisplay = makeLibMpvDisplayInterface();
       setDisplay(newDisplay);
       redisplaySource(dataRef.current.time ?? 0);
     }

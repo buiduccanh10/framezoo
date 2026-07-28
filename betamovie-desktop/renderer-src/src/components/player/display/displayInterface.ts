@@ -1,11 +1,9 @@
-import { MediaPlaylist } from "hls.js";
-
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import { AudioTrack, CaptionListItem } from "@/stores/player/slices/source";
 import { LoadableSource, SourceQuality } from "@/stores/player/utils/qualities";
 import { Listener } from "@/utils/events";
 
-export type DisplayErrorType = "hls" | "dash" | "htmlvideo" | "global";
+export type DisplayErrorType = "mpv" | "hls" | "dash" | "htmlvideo" | "global";
 export type DisplayError = {
   stackTrace?: string;
   message?: string;
@@ -92,6 +90,14 @@ export interface DisplayCaption {
   url?: string;
 }
 
+export type MpvTrack = {
+  id: string;
+  kind: "audio" | "sub";
+  label: string;
+  language: string;
+  selected: boolean;
+};
+
 export type DisplayType = "web" | "casting";
 
 export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
@@ -103,8 +109,8 @@ export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
     preferredQuality: SourceQuality | null,
   ): void;
   changeAudioTrack(audioTrack: AudioTrack): void;
-  processVideoElement(video: HTMLVideoElement): void;
   processContainerElement(container: HTMLElement): void;
+  processSurfaceElement?(container: HTMLElement | null): void;
   toggleFullscreen(): void;
   togglePictureInPicture(): void;
   setSeeking(active: boolean): void;
@@ -117,6 +123,6 @@ export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
   setCaption(caption: DisplayCaption | null): void;
   getType(): DisplayType;
   getCaptionList(): CaptionListItem[];
-  getSubtitleTracks(): MediaPlaylist[];
+  getSubtitleTracks(): MpvTrack[];
   setSubtitlePreference(lang: string): Promise<void>;
 }

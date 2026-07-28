@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import subsrt from "subsrt-ts";
 
-import { downloadCaptionAsVtt, downloadWebVTT } from "@/backend/helpers/subs";
+import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFit";
 import { useLanguageStore } from "@/stores/language";
@@ -14,10 +13,6 @@ import {
   getCaptionLanguageGroupKey,
   isLanguageMatch,
 } from "../utils/captionLanguage";
-import {
-  filterDuplicateCaptionCues,
-  parseVttSubtitles,
-} from "../utils/captions";
 
 let autoSelectionRequestId = 0;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
@@ -64,10 +59,6 @@ export function useCaptions() {
   const videoDuration = usePlayerStore((s) => s.progress.duration);
   const segments = useSkipTime();
 
-  const getSubtitleTracks = usePlayerStore((s) => s.display?.getSubtitleTracks);
-  const setSubtitlePreference = usePlayerStore(
-    (s) => s.display?.setSubtitlePreference,
-  );
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
@@ -231,36 +222,7 @@ export function useCaptions() {
           vttData: "",
         };
 
-        if (!caption.hls) {
-          const vttData = await downloadCaptionAsVtt(caption);
-          captionToSet.vttData = vttData;
-        } else {
-          // request a language change to hls, so it can load the subtitles
-          await setSubtitlePreference?.(caption.language);
-          const track = getSubtitleTracks?.().find(
-            (t) => t.id.toString() === caption.id && t.details !== undefined,
-          );
-          if (!track) return false;
-
-          const fragments =
-            track.details?.fragments?.filter(
-              (frag) => frag !== null && frag.url !== null,
-            ) ?? [];
-
-          const vttCaptions = (
-            await Promise.all(
-              fragments.map(async (frag) => {
-                const vtt = await downloadWebVTT(frag.url);
-                return parseVttSubtitles(vtt);
-              }),
-            )
-          ).flat();
-
-          const filtered = filterDuplicateCaptionCues(vttCaptions);
-
-          const vttData = subsrt.build(filtered, { format: "vtt" });
-          captionToSet.vttData = vttData;
-        }
+        captionToSet.vttData = await downloadCaptionAsVtt(caption);
 
         setDirectCaption(captionToSet, caption);
         return true;
@@ -273,7 +235,7 @@ export function useCaptions() {
         return false;
       }
     },
-    [captions, getSubtitleTracks, setSubtitlePreference, setDirectCaption],
+    [captions, setDirectCaption],
   );
 
   const selectSecondaryCaptionById = useCallback(
@@ -294,35 +256,7 @@ export function useCaptions() {
           vttData: "",
         };
 
-        if (!caption.hls) {
-          const vttData = await downloadCaptionAsVtt(caption);
-          captionToSet.vttData = vttData;
-        } else {
-          await setSubtitlePreference?.(caption.language);
-          const track = getSubtitleTracks?.().find(
-            (t) => t.id.toString() === caption.id && t.details !== undefined,
-          );
-          if (!track) return;
-
-          const fragments =
-            track.details?.fragments?.filter(
-              (frag) => frag !== null && frag.url !== null,
-            ) ?? [];
-
-          const vttCaptions = (
-            await Promise.all(
-              fragments.map(async (frag) => {
-                const vtt = await downloadWebVTT(frag.url);
-                return parseVttSubtitles(vtt);
-              }),
-            )
-          ).flat();
-
-          const filtered = filterDuplicateCaptionCues(vttCaptions);
-
-          const vttData = subsrt.build(filtered, { format: "vtt" });
-          captionToSet.vttData = vttData;
-        }
+        captionToSet.vttData = await downloadCaptionAsVtt(caption);
 
         setSecondaryCaption(captionToSet);
       } catch (error) {
@@ -333,7 +267,7 @@ export function useCaptions() {
         });
       }
     },
-    [captions, getSubtitleTracks, setSubtitlePreference, setSecondaryCaption],
+    [captions, setSecondaryCaption],
   );
 
   const disableSecondary = useCallback(() => {

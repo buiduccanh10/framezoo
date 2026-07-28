@@ -27,6 +27,7 @@ betamovie-desktop/release
 /betamovie-desktop/resources/**
 !/betamovie-desktop/resources/**/
 !/betamovie-desktop/resources/**/.gitkeep
+/betamovie-desktop/native/build
 /betamovie-desktop/torrent-engine/.build
 /betamovie-desktop/torrent-engine/bin/**
 betamovie-be/generated

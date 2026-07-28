@@ -35,6 +35,12 @@ body[data-no-scroll] {
   box-sizing: border-box;
 }
 
+html[data-libmpv-player="true"],
+html[data-libmpv-player="true"] body,
+html[data-libmpv-player="true"] #root {
+  background: transparent !important;
+}
+
 html[data-desktop-app="true"],
 html[data-desktop-app="true"] body {
   scrollbar-width: none;

@@ -20,6 +20,7 @@ import {
   createTorrentManagerFromEnvironment,
   TorrentManager,
 } from "./torrent/manager";
+import { libmpvController } from "./libmpvController";
 import type {
   ExtensionMessageName,
   StreamRule,
@@ -61,8 +62,6 @@ protocol.registerSchemesAsPrivileged([
 
 let mainWindow: BrowserWindow | null = null;
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
-
-import { embeddedMpv } from "./embeddedMpv";
 
 function setupTorrentEnv() {
   if (!process.env.BETAMOVIE_TORRENT_DATA_DIR) {
@@ -121,9 +120,7 @@ function registerRendererProtocol() {
     try {
       const url = new URL(request.url);
       if (ALLOWED_REMOTE_PROTOCOL_HOSTS.has(url.hostname)) {
-        return net.fetch(
-          `https://${url.hostname}${url.pathname}${url.search}`,
-        );
+        return net.fetch(`https://${url.hostname}${url.pathname}${url.search}`);
       }
 
       if (url.hostname !== RENDERER_PROTOCOL_HOST) {
@@ -726,7 +723,11 @@ function createMainWindow() {
     height: 900,
     minWidth: 1100,
     minHeight: 700,
-    backgroundColor: "#09090b",
+    backgroundColor: "#00000000",
+    transparent: true,
+    ...(process.platform === "darwin"
+      ? { titleBarStyle: "hiddenInset" as const }
+      : {}),
     autoHideMenuBar: process.platform === "darwin",
     icon: getWindowIconPath(),
     webPreferences: {
@@ -739,7 +740,7 @@ function createMainWindow() {
     },
   });
 
-  embeddedMpv.init(mainWindow);
+  libmpvController.init(mainWindow, () => desktopPipController.getWindow());
 
   mainWindow.webContents.on("before-input-event", (event, input) => {
     if (!ENABLE_DEVTOOLS && isDevtoolsShortcut(input)) {
