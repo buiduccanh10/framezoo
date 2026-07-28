@@ -1634,7 +1634,9 @@ export function makeVideoElementDisplayInterface(options?: {
             return;
           }
 
-          if (source?.isTorrent) {
+          const hasEmbeddedMpv =
+            typeof (window as any).electronAPI?.attachMpvPlayer === "function";
+          if (source?.isTorrent && hasEmbeddedMpv) {
             console.warn(
               "[player] Ignoring HTML5 video error because MPV native player is active for torrent playback",
             );
@@ -1646,6 +1648,8 @@ export function makeVideoElementDisplayInterface(options?: {
             errorCode: video.error.code,
             errorName: errorDetails.name,
             sourceType: source?.type,
+            isTorrent: source?.isTorrent,
+            hasEmbeddedMpv,
             currentTime: video.currentTime,
             readyState: video.readyState,
             networkState: video.networkState,

@@ -222,7 +222,28 @@ function VideoElement() {
         height: rect.height || window.innerHeight,
       };
 
-      void electronAPI.attachMpvPlayer(streamUrl, bounds);
+      console.debug("[player] attaching torrent stream", {
+        streamType,
+        streamUrl,
+        useEmbeddedMpv,
+      });
+      void electronAPI
+        .attachMpvPlayer(streamUrl, bounds)
+        .then((attached: boolean) => {
+          if (!attached) {
+            console.error("[player] failed to attach torrent stream", {
+              streamUrl,
+              streamType,
+            });
+          }
+        })
+        .catch((error: unknown) => {
+          console.error("[player] torrent stream attach rejected", {
+            error,
+            streamUrl,
+            streamType,
+          });
+        });
 
       const resizeObserver = new ResizeObserver(() => {
         updateBounds();
