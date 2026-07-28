@@ -221,4 +221,8 @@ int surface_height(NativeSurface* surface) {
   return surface ? surface->bounds.height : 0;
 }
 
+void surface_configure_window(void* parent_handle) {
+  // No-op on Windows
+}
+
 #endif

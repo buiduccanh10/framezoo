@@ -270,4 +270,32 @@ int surface_height(NativeSurface* surface) {
   );
 }
 
+void surface_configure_window(void* parent_handle) {
+  if (!parent_handle) return;
+  NSView* anchor = static_cast<NSView*>(parent_handle);
+  NSWindow* window = anchor.window;
+  if (!window) return;
+
+  window.styleMask |= NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |
+                      NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable;
+  window.titlebarAppearsTransparent = NO;
+  window.titleVisibility = NSWindowTitleVisible;
+  [window setOpaque:YES];
+  [window setBackgroundColor:[NSColor blackColor]];
+  [window setHasShadow:YES];
+
+  for (NSWindowButton btnType : {NSWindowCloseButton, NSWindowMiniaturizeButton, NSWindowZoomButton}) {
+    NSButton* btn = [window standardWindowButton:btnType];
+    if (btn) {
+      [btn setHidden:NO];
+      [btn setEnabled:YES];
+      NSView* v = btn;
+      while (v && v != window.contentView && v != window.contentView.superview) {
+        [v setHidden:NO];
+        v = v.superview;
+      }
+    }
+  }
+}
+
 #endif
