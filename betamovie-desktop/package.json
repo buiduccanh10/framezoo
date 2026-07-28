@@ -43,6 +43,8 @@
     "test:renderer": "vitest run --config renderer-src/vite.config.mts",
     "test:torrent": "vitest run --config vitest.main.config.mts src/torrent/fixtureEngine.test.ts",
     "libmpv:update": "node scripts/ensure-libmpv.mjs",
+    "libmpv:fetch:win32-x64": "node scripts/fetch-windows-libmpv.mjs --target win32-x64",
+    "libmpv:fetch:win32-arm64": "node scripts/fetch-windows-libmpv.mjs --target win32-arm64",
     "i18n:audit": "node scripts/i18n-locale-sync.mjs audit",
     "i18n:translate": "node scripts/i18n-locale-sync.mjs translate --write",
     "i18n:translate:force": "node scripts/i18n-locale-sync.mjs translate --write --force-keys"
