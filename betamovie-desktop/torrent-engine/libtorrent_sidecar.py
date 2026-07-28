@@ -27,11 +27,14 @@ import libtorrent as lt
 OUTPUT_LOCK = threading.Lock()
 VIDEO_EXTENSIONS = (".avi", ".m4v", ".mkv", ".mov", ".mp4", ".webm")
 STREAM_CHUNK_SIZE = 1024 * 1024
+RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
 RANGE_WAIT_TIMEOUT = 90
 RANGE_RETRY_INTERVAL = 0.2
 FILE_OPEN_RETRY_INTERVAL = 0.2
 
 def log_event(message: str, **fields: Any) -> None:
+    if "sessionId" in fields and "playbackId" not in fields:
+        fields["playbackId"] = fields["sessionId"]
     suffix = " " + json.dumps(fields, separators=(",", ":")) if fields else ""
     sys.stderr.write(f"[sidecar] {message}{suffix}\n")
     sys.stderr.flush()
@@ -249,6 +252,8 @@ class TorrentRuntime:
         self.metadata_error: Optional[str] = None
         self.metadata_thread: Optional[threading.Thread] = None
         self.first_request_logged = False
+        self.request_count = 0
+        self.last_range_key: Optional[Tuple[int, int]] = None
         self.status_thread = threading.Thread(
             target=self.publish_status,
             name="torrent-status-" + session_id,
@@ -311,6 +316,11 @@ class TorrentRuntime:
                 priorities[self.file_index] = 7
                 self.handle.prioritize_files(priorities)
                 self.handle.set_sequential_download(True)
+                self.prioritize_range(
+                    0,
+                    RANGE_PREFETCH_BYTES,
+                    reason="metadata",
+                )
                 self.metadata_ready.set()
                 log_event(
                     "metadata ready",
@@ -442,15 +452,72 @@ class TorrentRuntime:
             return set()
         return set(range(first_piece, last_piece + 1))
 
+    def prioritize_range(
+        self,
+        start: int,
+        length: int,
+        reason: str,
+    ) -> None:
+        pieces = sorted(self.map_pieces(start, length))
+        missing_pieces = [
+            piece for piece in pieces if not self.handle.have_piece(piece)
+        ]
+        for index, piece in enumerate(missing_pieces):
+            try:
+                self.handle.piece_priority(piece, 7)
+                self.handle.set_piece_deadline(
+                    piece,
+                    index * 25,
+                    lt.deadline_flags_t.alert_when_available,
+                )
+            except Exception:
+                continue
+        log_event(
+            "range prioritized",
+            sessionId=self.session_id,
+            reason=reason,
+            start=start,
+            length=length,
+            pieces=len(pieces),
+            missingPieces=len(missing_pieces),
+        )
+
     def wait_for_range(
         self,
         start: int,
         end: int,
         timeout: float = RANGE_WAIT_TIMEOUT,
     ) -> bool:
-        prefetch_length = max(end - start + 1, 25 * 1024 * 1024)
-        required_pieces = self.map_pieces(start, end - start + 1)
-        all_pieces = list(self.map_pieces(start, prefetch_length))
+        prefetch_length = max(end - start + 1, RANGE_PREFETCH_BYTES)
+        required_pieces = sorted(self.map_pieces(start, end - start + 1))
+        all_pieces = sorted(self.map_pieces(start, prefetch_length))
+        range_key = (start, end)
+        if getattr(self, "last_range_key", None) != range_key:
+            self.last_range_key = range_key
+            try:
+                status = self.handle.status()
+                piece_flags = getattr(status, "pieces", None)
+                piece_count = len(piece_flags) if piece_flags is not None else None
+                first_piece_available = (
+                    bool(piece_flags[0])
+                    if piece_flags is not None and len(piece_flags) > 0
+                    else None
+                )
+            except Exception:
+                piece_count = None
+                first_piece_available = None
+            log_event(
+                "range wait",
+                sessionId=self.session_id,
+                start=start,
+                end=end,
+                requiredPieces=len(required_pieces),
+                firstPiece=min(required_pieces) if required_pieces else None,
+                lastPiece=max(required_pieces) if required_pieces else None,
+                prefetchPieces=len(all_pieces),
+                pieceCount=piece_count,
+                firstPieceAvailable=first_piece_available,
+            )
 
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline and not self.stop_event.is_set():
@@ -460,18 +527,41 @@ class TorrentRuntime:
                 if not self.handle.have_piece(piece)
             ]
             if not missing_required:
+                log_event(
+                    "range ready",
+                    sessionId=self.session_id,
+                    start=start,
+                    end=end,
+                    requiredPieces=len(required_pieces),
+                )
                 return True
 
-            for idx, piece in enumerate(all_pieces):
+            # Required bytes win over read-ahead. Reapplying a short deadline
+            # to the required pieces prevents sequential mode from starving a
+            # demuxer request after an HTTP seek.
+            for index, piece in enumerate(required_pieces):
                 if not self.handle.have_piece(piece):
                     try:
+                        self.handle.piece_priority(piece, 7)
                         self.handle.set_piece_deadline(
                             piece,
-                            idx * 100,
+                            index * 10,
                             lt.deadline_flags_t.alert_when_available,
                         )
                     except Exception:
                         pass
+            for index, piece in enumerate(all_pieces):
+                if piece in required_pieces or self.handle.have_piece(piece):
+                    continue
+                try:
+                    self.handle.piece_priority(piece, 7)
+                    self.handle.set_piece_deadline(
+                        piece,
+                        500 + index * 50,
+                        lt.deadline_flags_t.alert_when_available,
+                    )
+                except Exception:
+                    pass
             time.sleep(RANGE_RETRY_INTERVAL)
         return not required_pieces
 
@@ -500,11 +590,21 @@ class TorrentRuntime:
         return None
 
     def serve(self, handler: BaseHTTPRequestHandler, head_only: bool) -> None:
+        request_number = getattr(self, "request_count", 0) + 1
+        self.request_count = request_number
         if not self.first_request_logged:
             self.first_request_logged = True
             log_event(
                 "first HTTP request",
                 sessionId=self.session_id,
+                method=handler.command,
+                range=handler.headers.get("Range"),
+            )
+        else:
+            log_event(
+                "HTTP request",
+                sessionId=self.session_id,
+                request=request_number,
                 method=handler.command,
                 range=handler.headers.get("Range"),
             )
@@ -528,6 +628,13 @@ class TorrentRuntime:
             handler.send_header("Content-Range", "bytes */%d" % total)
             handler.send_header("Connection", "close")
             handler.end_headers()
+            log_event(
+                "HTTP range rejected",
+                sessionId=self.session_id,
+                request=request_number,
+                range=range_header,
+                total=total,
+            )
             return
 
         if byte_range is None:
@@ -553,6 +660,9 @@ class TorrentRuntime:
         stream = None
         first_chunk: Optional[bytes] = None
         if not head_only and length > 0:
+            # Do not send a successful response until the first bytes exist.
+            # A 206 header followed by an empty body makes libmpv classify the
+            # torrent as a stalled HTTP stream.
             stream, first_chunk = self.open_first_chunk(
                 absolute_path,
                 start,
@@ -562,13 +672,11 @@ class TorrentRuntime:
                 log_event(
                     "range unavailable",
                     sessionId=self.session_id,
+                    request=request_number,
                     start=start,
                     end=end,
                 )
-                handler.send_error(
-                    504,
-                    "Torrent file is not ready for the requested range",
-                )
+                handler.send_error(504, "Torrent range is not available")
                 return
 
         handler.send_response(status_code)
@@ -581,6 +689,17 @@ class TorrentRuntime:
                 "bytes %d-%d/%d" % (start, end, total),
             )
         handler.end_headers()
+        handler.wfile.flush()
+        log_event(
+            "HTTP response headers sent",
+            sessionId=self.session_id,
+            status=status_code,
+            start=start,
+            end=end,
+            length=length,
+            firstChunkBytes=len(first_chunk) if first_chunk is not None else 0,
+            request=request_number,
+        )
 
         if head_only or length == 0:
             return
@@ -600,7 +719,21 @@ class TorrentRuntime:
                 handler.wfile.flush()
                 offset += len(chunk)
                 chunk = None
+            log_event(
+                "HTTP response complete",
+                sessionId=self.session_id,
+                request=request_number,
+                start=start,
+                end=end,
+                bytesSent=offset - start,
+            )
         except (BrokenPipeError, ConnectionResetError):
+            log_event(
+                "HTTP response disconnected",
+                sessionId=self.session_id,
+                request=request_number,
+                bytesSent=max(0, offset - start),
+            )
             return
         finally:
             if stream is not None:
@@ -825,8 +958,8 @@ class LibtorrentEngine:
             self.sessions[session_id] = runtime
         runtime.start()
 
-        # Return a pending HLS session immediately. Metadata/probe/transcode
-        # continue in the runtime thread and publish the final stream choice.
+        # Return the local file route immediately. Metadata continues in the
+        # runtime thread while the HTTP handler waits for requested pieces.
         return runtime.session_payload()
 
     def stop(self, session_id: str) -> None:

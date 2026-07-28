@@ -20,9 +20,9 @@ export function Widescreen(props: WidescreenProps) {
       iconSizeClass={props.iconSizeClass}
       icon={isWideScreen ? Icons.SHRINK : Icons.STRETCH}
       onClick={() => {
-        const videoElement = document.getElementById("video-element");
-        if (videoElement) {
-          videoElement.classList.toggle("object-cover");
+        const surface = document.getElementById("libmpv-video-surface");
+        if (surface) {
+          surface.classList.toggle("object-cover");
           setIsWideScreen(!isWideScreen);
         }
       }}

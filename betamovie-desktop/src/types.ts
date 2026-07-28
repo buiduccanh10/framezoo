@@ -83,6 +83,54 @@ export type CreateDesktopAppUpdaterOptions = {
 
 export type DesktopPipState = Record<string, unknown> | null;
 
+export interface LibMpvBounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export type LibMpvSourceType = "file" | "mp4" | "hls" | "dash" | "web";
+
+export interface LibMpvSourceRequest {
+  url: string;
+  type: LibMpvSourceType;
+  startAt: number;
+  autoplay: boolean;
+  headers?: Record<string, string>;
+}
+
+export interface LibMpvPlayerEvent {
+  playerId: string;
+  playbackId?: string;
+  generation: number;
+  type:
+    | "property"
+    | "file-loaded"
+    | "video-reconfig"
+    | "end-file"
+    | "log"
+    | "error";
+  name?: string;
+  data?: unknown;
+  message?: string;
+  level?: string;
+}
+
+export type LibMpvCommand =
+  | { type: "play" }
+  | { type: "pause" }
+  | { type: "seek"; time: number }
+  | { type: "set-volume"; volume: number }
+  | { type: "set-mute"; muted: boolean }
+  | { type: "set-playback-rate"; rate: number }
+  | { type: "set-audio-track"; trackId: string }
+  | { type: "set-subtitle-track"; trackId: string };
+
+export interface LibMpvPlayerRequest {
+  bounds: LibMpvBounds;
+}
+
 export interface DesktopPipWindowSize {
   width: number;
   height: number;

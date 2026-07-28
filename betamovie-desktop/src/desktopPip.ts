@@ -141,6 +141,9 @@ export function createDesktopPipController(
   }
 
   return {
+    getWindow() {
+      return pipWindow;
+    },
     close() {
       pipState = null;
 

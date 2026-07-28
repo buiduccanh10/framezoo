@@ -83,9 +83,30 @@ function BaseContainer(props: { children?: ReactNode }) {
 
 export function Container(props: PlayerProps) {
   const propRef = useRef(props.onLoad);
+  const status = usePlayerStore((s) => s.status);
   useEffect(() => {
     propRef.current?.();
   }, []);
+
+  useEffect(() => {
+    const electronApi = (
+      window as Window & {
+        electronAPI?: { createLibMpvPlayer?: unknown };
+      }
+    ).electronAPI;
+    if (typeof electronApi?.createLibMpvPlayer !== "function") return;
+
+    const root = document.documentElement;
+    if (status === "playing") {
+      root.dataset.libmpvPlayer = "true";
+    } else {
+      delete root.dataset.libmpvPlayer;
+    }
+
+    return () => {
+      delete root.dataset.libmpvPlayer;
+    };
+  }, [status]);
 
   return (
     <div className="relative">
