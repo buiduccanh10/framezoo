@@ -10,6 +10,8 @@ export function AutoPlayStart() {
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const hasPlayedOnce = usePlayerStore((s) => s.mediaPlaying.hasPlayedOnce);
   const status = usePlayerStore((s) => s.status);
+  const source = usePlayerStore((s) => s.source);
+  const duration = usePlayerStore((s) => s.progress.duration);
 
   const handleClick = useCallback(() => {
     display?.play();
@@ -19,6 +21,13 @@ export function AutoPlayStart() {
   if (isPlaying) return null;
   if (isLoading) return null;
   if (status !== playerStatus.PLAYING) return null;
+  if (
+    source?.type === "file" &&
+    source.isTorrent === true &&
+    (!Number.isFinite(duration) || duration <= 0)
+  ) {
+    return null;
+  }
 
   return (
     <div
