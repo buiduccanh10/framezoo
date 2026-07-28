@@ -122,8 +122,9 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
 
   const isBufferingCurrentPlaybackSegment = useMemo(() => {
     if (status !== playerStatus.PLAYING || !isLoading) return false;
+    if (time > 0 && !isLoading) return false;
     return true;
-  }, [status, isLoading]);
+  }, [status, isLoading, time]);
 
   const isPreparingSource =
     props.sourceLoading && status === playerStatus.SOURCE_SELECTION;
@@ -131,23 +132,37 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const isTorrentPreparing = useMemo(() => {
     if (!torrentStatus || status !== playerStatus.PLAYING) return false;
     if (torrentStatus.state === "error") return false;
+    if (time > 0) return false;
     return (
       torrentStatus.streamType === "pending" ||
       !torrentStatus.streamUrl ||
       (duration === 0 && buffered === 0) ||
       !Number.isFinite(duration)
     );
-  }, [torrentStatus, status, duration, buffered]);
+  }, [torrentStatus, status, duration, buffered, time]);
 
   const showOverlay =
-    status === playerStatus.IDLE ||
-    isPreparingSource ||
-    isBufferingCurrentPlaybackSegment ||
-    isTorrentPreparing;
+    (status === playerStatus.IDLE ||
+      isPreparingSource ||
+      isBufferingCurrentPlaybackSegment ||
+      isTorrentPreparing) &&
+    !(status === playerStatus.PLAYING && !isLoading && time > 0);
   const bufferedProgress =
     duration > 0 ? Math.min(100, (buffered / duration) * 100) : 0;
+  const STREAM_READY_THRESHOLD_BYTES = 4 * 1024 * 1024; // ~4MB of initial pieces required to stream first frame
+  const torrentStreamTargetBytes = torrentStatus?.totalBytes
+    ? Math.min(STREAM_READY_THRESHOLD_BYTES, torrentStatus.totalBytes)
+    : STREAM_READY_THRESHOLD_BYTES;
+  const torrentStreamProgress = torrentStatus
+    ? Math.min(
+        99,
+        Math.round(
+          (torrentStatus.downloadedBytes / torrentStreamTargetBytes) * 100,
+        ),
+      )
+    : 0;
   const loadingProgress = torrentStatus
-    ? Math.max(bufferedProgress, torrentStatus.progress)
+    ? Math.max(bufferedProgress, torrentStreamProgress)
     : bufferedProgress;
 
   const metaType = meta?.type;
