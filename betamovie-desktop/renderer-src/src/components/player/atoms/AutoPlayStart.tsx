@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import { playerStatus } from "@/stores/player/slices/source";
@@ -12,12 +12,32 @@ export function AutoPlayStart() {
   const status = usePlayerStore((s) => s.status);
   const source = usePlayerStore((s) => s.source);
   const duration = usePlayerStore((s) => s.progress.duration);
+  const time = usePlayerStore((s) => s.progress.time);
+
+  const attemptedPlayRef = useRef(false);
+
+  useEffect(() => {
+    if (status !== playerStatus.PLAYING || hasPlayedOnce || time > 0) {
+      if (status !== playerStatus.PLAYING) {
+        attemptedPlayRef.current = false;
+      }
+      return;
+    }
+
+    const isStreamReady =
+      !isLoading || (Number.isFinite(duration) && duration > 0) || time > 0;
+
+    if (display && !isPlaying && !attemptedPlayRef.current && isStreamReady) {
+      attemptedPlayRef.current = true;
+      display.play();
+    }
+  }, [status, display, isPlaying, isLoading, duration, time, hasPlayedOnce]);
 
   const handleClick = useCallback(() => {
     display?.play();
   }, [display]);
 
-  if (hasPlayedOnce) return null;
+  if (hasPlayedOnce || time > 0) return null;
   if (isPlaying) return null;
   if (isLoading) return null;
   if (status !== playerStatus.PLAYING) return null;
