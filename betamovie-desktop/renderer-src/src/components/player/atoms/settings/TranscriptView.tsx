@@ -44,8 +44,10 @@ export function TranscriptView({ id }: { id: string }) {
   );
 
   const showHours = useMemo(() => {
-    return durationExceedsHour(timeDuration);
-  }, [timeDuration]);
+    const subtitleDuration =
+      (parsedCaptions[parsedCaptions.length - 1]?.end ?? 0) / 1000;
+    return durationExceedsHour(Math.max(timeDuration, subtitleDuration));
+  }, [parsedCaptions, timeDuration]);
 
   const transcriptItems = useMemo(
     () =>
@@ -313,7 +315,7 @@ export function TranscriptView({ id }: { id: string }) {
                   active={isActive}
                 >
                   <span className="mr-3 flex-none w-[4.5rem] h-[1.75rem] flex items-center justify-center px-0 leading-tight rounded-md bg-video-context-light bg-opacity-20 text-video-context-type-main font-normal whitespace-nowrap overflow-hidden text-sm">
-                    {item.start < 0 || item.start > timeDuration
+                    {item.start < 0 || !Number.isFinite(item.start)
                       ? "N/A"
                       : formatSeconds(item.start, showHours)}
                   </span>

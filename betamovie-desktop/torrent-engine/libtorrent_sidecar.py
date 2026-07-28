@@ -31,6 +31,11 @@ RANGE_WAIT_TIMEOUT = 90
 RANGE_RETRY_INTERVAL = 0.2
 FILE_OPEN_RETRY_INTERVAL = 0.2
 
+def log_event(message: str, **fields: Any) -> None:
+    suffix = " " + json.dumps(fields, separators=(",", ":")) if fields else ""
+    sys.stderr.write(f"[sidecar] {message}{suffix}\n")
+    sys.stderr.flush()
+
 
 def emit(message: Dict[str, Any]) -> None:
     with OUTPUT_LOCK:
@@ -243,6 +248,7 @@ class TorrentRuntime:
         self.metadata_complete = threading.Event()
         self.metadata_error: Optional[str] = None
         self.metadata_thread: Optional[threading.Thread] = None
+        self.first_request_logged = False
         self.status_thread = threading.Thread(
             target=self.publish_status,
             name="torrent-status-" + session_id,
@@ -261,6 +267,12 @@ class TorrentRuntime:
         self.raw_stream_url = self.engine.http_server.register(self)
         self.stream_type = "file"
         self.stream_url = self.raw_stream_url
+        log_event(
+            "session started",
+            sessionId=self.session_id,
+            sourceId=self.request.get("sourceId", ""),
+            streamUrl=self.stream_url,
+        )
         self.status_thread.start()
         self.metadata_thread = threading.Thread(
             target=self.initialize_metadata,
@@ -274,6 +286,11 @@ class TorrentRuntime:
             self.wait_for_metadata(90)
         except Exception as error:
             self.metadata_error = str(error)
+            log_event(
+                "metadata failed",
+                sessionId=self.session_id,
+                error=self.metadata_error,
+            )
         finally:
             self.metadata_complete.set()
 
@@ -295,6 +312,12 @@ class TorrentRuntime:
                 self.handle.prioritize_files(priorities)
                 self.handle.set_sequential_download(True)
                 self.metadata_ready.set()
+                log_event(
+                    "metadata ready",
+                    sessionId=self.session_id,
+                    fileName=self.file_path.rsplit("/", 1)[-1],
+                    fileSize=self.file_size,
+                )
                 return
             time.sleep(0.2)
         raise TimeoutError("timed out waiting for torrent metadata")
@@ -321,6 +344,7 @@ class TorrentRuntime:
     def stop(self) -> None:
         self.stop_event.set()
         self.engine.http_server.unregister(self.session_id)
+        log_event("session stopped", sessionId=self.session_id)
         if not self._torrent_cleaned:
             try:
                 self.engine.session.remove_torrent(self.handle)
@@ -476,6 +500,14 @@ class TorrentRuntime:
         return None
 
     def serve(self, handler: BaseHTTPRequestHandler, head_only: bool) -> None:
+        if not self.first_request_logged:
+            self.first_request_logged = True
+            log_event(
+                "first HTTP request",
+                sessionId=self.session_id,
+                method=handler.command,
+                range=handler.headers.get("Range"),
+            )
         if not self.metadata_ready.is_set():
             self.metadata_complete.wait(RANGE_WAIT_TIMEOUT)
         if self.metadata_error:
@@ -527,6 +559,12 @@ class TorrentRuntime:
                 end,
             )
             if stream is None or first_chunk is None:
+                log_event(
+                    "range unavailable",
+                    sessionId=self.session_id,
+                    start=start,
+                    end=end,
+                )
                 handler.send_error(
                     504,
                     "Torrent file is not ready for the requested range",
