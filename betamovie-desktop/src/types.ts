@@ -108,6 +108,7 @@ export interface LibMpvPlayerEvent {
     | "property"
     | "file-loaded"
     | "video-reconfig"
+    | "video-frame"
     | "end-file"
     | "log"
     | "error";
