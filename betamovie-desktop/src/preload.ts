@@ -11,8 +11,7 @@ const runtimeConfig: RuntimeConfig = {
   VITE_BACKEND_URL: "http://127.0.0.1:3000",
   VITE_NORMAL_ROUTER: "false",
 };
-const supportsEmbeddedMpv =
-  process.platform === "win32" || process.platform === "linux";
+const supportsEmbeddedMpv = true;
 
 if (process.env.BETAMOVIE_BACKEND_URL || process.env.VITE_BACKEND_URL) {
   runtimeConfig.VITE_BACKEND_URL =

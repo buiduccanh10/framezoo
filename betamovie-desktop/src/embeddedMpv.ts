@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from "electron";
-import { spawn, ChildProcess } from "node:child_process";
+import { spawn, type ChildProcess } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -21,6 +21,7 @@ export class EmbeddedMpvController {
   private currentUrl: string | null = null;
   private lastBounds: MpvBounds | null = null;
   private buffer: string = "";
+  private connectionGeneration = 0;
 
   constructor() {}
 
@@ -166,7 +167,9 @@ export class EmbeddedMpvController {
     const targetW = Math.max(10, Math.round(bounds.width));
     const targetH = Math.max(10, Math.round(bounds.height));
 
-    this.ipcSocketPath = this.getSocketPath();
+    const generation = this.connectionGeneration;
+    const socketPath = this.getSocketPath();
+    this.ipcSocketPath = socketPath;
     const mpvBin = this.getMpvBinaryPath();
 
     const geometry = `${targetW}x${targetH}+${targetX}+${targetY}`;
@@ -227,27 +230,51 @@ export class EmbeddedMpvController {
     mpvArgs.push(url);
 
     try {
-      this.mpvProcess = spawn(mpvBin, mpvArgs, {
+      const process = spawn(mpvBin, mpvArgs, {
         stdio: ["ignore", "pipe", "pipe"],
       });
+      this.mpvProcess = process;
 
-      this.mpvProcess.stderr?.on("data", (data) => {
+      process.stderr?.on("data", (data) => {
         const msg = data.toString("utf8").trim();
         if (msg) console.log(`[embedded-mpv] ${msg}`);
       });
 
-      this.mpvProcess.on("error", (err) => {
-        console.error("[embedded-mpv] Failed to spawn mpv:", err);
+      process.on("error", (err) => {
+        if (this.mpvProcess !== process) return;
+        console.error("[embedded-mpv] Failed to spawn mpv:", {
+          error: err,
+          url,
+        });
       });
 
-      this.mpvProcess.on("exit", (code) => {
-        console.log(`[embedded-mpv] mpv exited with code ${code}`);
-        this.cleanupSocket();
+      process.on("exit", (code, signal) => {
+        const isCurrentProcess = this.mpvProcess === process;
+        console.log("[embedded-mpv] mpv exited", {
+          code,
+          signal,
+          isCurrentProcess,
+          url,
+        });
+        this.cleanupSocket(socketPath);
+        if (!isCurrentProcess) return;
+
+        this.mpvProcess = null;
+        if (this.socket) {
+          this.socket.destroy();
+          this.socket = null;
+        }
+      });
+
+      console.log("[embedded-mpv] spawning mpv", {
+        generation,
+        socketPath,
+        url,
       });
 
       // Connect socket after brief delay for MPV IPC initialization
       setTimeout(() => {
-        this.connectSocket();
+        this.connectSocket(generation, socketPath, process);
       }, 300);
 
       return true;
@@ -258,13 +285,36 @@ export class EmbeddedMpvController {
     }
   }
 
-  private connectSocket(retries = 15, delay = 200): void {
-    if (!this.ipcSocketPath || this.socket) return;
+  private connectSocket(
+    generation: number,
+    socketPath: string,
+    process: ChildProcess,
+    retries = 15,
+    delay = 200,
+  ): void {
+    if (
+      generation !== this.connectionGeneration ||
+      this.mpvProcess !== process ||
+      this.socket ||
+      !socketPath
+    ) {
+      return;
+    }
 
-    const socketPath = this.ipcSocketPath;
     const client = net.connect(socketPath, () => {
+      if (
+        generation !== this.connectionGeneration ||
+        this.mpvProcess !== process
+      ) {
+        client.destroy();
+        return;
+      }
+
       this.socket = client;
-      console.log("[embedded-mpv] Connected to MPV IPC socket");
+      console.log("[embedded-mpv] connected to IPC socket", {
+        generation,
+        socketPath,
+      });
       // Observe key properties for UI sync
       this.sendCommand("observe_property", [1, "time-pos"]);
       this.sendCommand("observe_property", [2, "duration"]);
@@ -273,9 +323,19 @@ export class EmbeddedMpvController {
       this.sendCommand("observe_property", [5, "paused-for-cache"]);
       this.sendCommand("observe_property", [6, "seeking"]);
       this.sendCommand("observe_property", [7, "cache-buffering-state"]);
+      this.sendCommand("set_property", ["pause", false]);
     });
 
     client.on("data", (data) => {
+      if (
+        generation !== this.connectionGeneration ||
+        this.mpvProcess !== process ||
+        this.socket !== client
+      ) {
+        client.destroy();
+        return;
+      }
+
       this.buffer += data.toString("utf8");
       const lines = this.buffer.split("\n");
       this.buffer = lines.pop() || "";
@@ -302,14 +362,48 @@ export class EmbeddedMpvController {
     });
 
     client.on("error", (err: any) => {
-      if (this.socket) return;
-      if (retries > 0 && (err.code === "ENOENT" || err.code === "ECONNREFUSED")) {
+      if (
+        generation !== this.connectionGeneration ||
+        this.mpvProcess !== process
+      ) {
+        return;
+      }
+      if (
+        retries > 0 &&
+        (err.code === "ENOENT" || err.code === "ECONNREFUSED")
+      ) {
+        console.debug("[embedded-mpv] IPC socket not ready; retrying", {
+          retries,
+          error: err.code,
+          socketPath,
+        });
         setTimeout(() => {
-          this.connectSocket(retries - 1, delay);
+          this.connectSocket(
+            generation,
+            socketPath,
+            process,
+            retries - 1,
+            delay,
+          );
         }, delay);
       } else {
-        console.warn("[embedded-mpv] Socket error:", err.message);
+        console.warn("[embedded-mpv] IPC socket error", {
+          error: err.message,
+          socketPath,
+        });
       }
+    });
+
+    client.on("close", () => {
+      if (
+        generation !== this.connectionGeneration ||
+        this.mpvProcess !== process ||
+        this.socket !== client
+      ) {
+        return;
+      }
+      this.socket = null;
+      console.warn("[embedded-mpv] IPC socket closed", { socketPath });
     });
   }
 
@@ -337,10 +431,6 @@ export class EmbeddedMpvController {
   public sendCommand(cmd: string, args: any[]): boolean {
     if (!this.ipcSocketPath) return false;
 
-    if (!this.socket || this.socket.destroyed) {
-      this.connectSocket();
-    }
-
     if (!this.socket || this.socket.destroyed) return false;
 
     const commandObj = { command: [cmd, ...args] };
@@ -354,6 +444,9 @@ export class EmbeddedMpvController {
   }
 
   public detach(): void {
+    this.connectionGeneration += 1;
+    const socketPath = this.ipcSocketPath;
+
     if (this.socket) {
       this.socket.destroy();
       this.socket = null;
@@ -373,20 +466,21 @@ export class EmbeddedMpvController {
       this.mpvWindow = null;
     }
 
-    this.cleanupSocket();
+    this.cleanupSocket(socketPath);
+    this.ipcSocketPath = "";
     this.currentUrl = null;
     this.lastBounds = null;
     this.buffer = "";
   }
 
-  private cleanupSocket(): void {
+  private cleanupSocket(socketPath: string): void {
     if (
-      this.ipcSocketPath &&
+      socketPath &&
       process.platform !== "win32" &&
-      fs.existsSync(this.ipcSocketPath)
+      fs.existsSync(socketPath)
     ) {
       try {
-        fs.unlinkSync(this.ipcSocketPath);
+        fs.unlinkSync(socketPath);
       } catch {
         // ignore
       }
