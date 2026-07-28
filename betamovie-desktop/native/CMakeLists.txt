@@ -43,9 +43,9 @@ target_include_directories(libmpv PRIVATE
 if(DEFINED LIBMPV_ROOT)
   target_include_directories(libmpv PRIVATE "${LIBMPV_ROOT}/include")
   if(WIN32)
-    target_link_directories(libmpv PRIVATE "${LIBMPV_ROOT}/lib")
+    target_link_directories(libmpv PRIVATE "${LIBMPV_ROOT}/lib" "${LIBMPV_ROOT}")
   else()
-    target_link_directories(libmpv PRIVATE "${LIBMPV_ROOT}/lib")
+    target_link_directories(libmpv PRIVATE "${LIBMPV_ROOT}/lib" "${LIBMPV_ROOT}")
   endif()
 endif()
 

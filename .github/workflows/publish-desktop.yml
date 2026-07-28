@@ -184,6 +184,11 @@ jobs:
           fi
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Setup macOS native toolchain & libmpv
+        run: |
+          brew install mpv cmake
+          echo "LIBMPV_ROOT=$(brew --prefix mpv)" >> "$GITHUB_ENV"
+          echo "CMAKE=$(brew --prefix)/bin/cmake" >> "$GITHUB_ENV"
       - name: Build desktop artifacts
         shell: bash
         env:
@@ -261,6 +266,8 @@ jobs:
           fi
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Setup Windows libmpv SDK
+        run: node betamovie-desktop/scripts/fetch-windows-libmpv.mjs --target ${{ matrix.variant == 'win-x64' && 'win32-x64' || 'win32-arm64' }} --out ./win-mpv-dev-${{ matrix.variant }}
       - name: Build desktop artifacts
         shell: bash
         run: ${{ matrix.command }}
