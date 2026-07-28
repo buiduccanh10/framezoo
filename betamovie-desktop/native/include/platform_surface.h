@@ -27,3 +27,4 @@ void surface_make_current(NativeSurface* surface);
 void surface_swap_buffers(NativeSurface* surface);
 int surface_width(NativeSurface* surface);
 int surface_height(NativeSurface* surface);
+void surface_configure_window(void* parent_handle);
