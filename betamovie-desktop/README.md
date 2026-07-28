@@ -8,20 +8,42 @@ Electron shell for `betamovie-fe`.
 - bundles Electron `main` and `preload` code into `betamovie-desktop/dist`
 - packages a native desktop app with `electron-builder`
 
-## MPV Resources
+## libmpv Resources
 
-MPV resources are downloaded locally and ignored by Git. Development uses only
-the current host target. Targeted release commands download only the target
-being packaged:
+Desktop playback uses the libmpv Render API through the native Node-API addon.
+The app does not spawn the MPV CLI or create an MPV IPC socket.
 
-- `dist:desktop:mac:arm64` -> `darwin-arm64`
-- `dist:desktop:mac:x64` -> `darwin-x64`
-- `package:release:win:arm64` -> `win32-arm64`
-- `package:release:win:x64` -> `win32-x64`
+Supported targets:
 
-`electron-builder` copies only `resources/bin/${platform}-${arch}/**`, including
-the MPV executable and its `lib` dependencies. Other platform directories stay
-out of the app bundle.
+- `darwin-arm64`
+- `darwin-x64`
+- `win32-arm64`
+- `win32-x64`
+
+Build from a pinned libmpv `v0.41.0` runtime root. On macOS, the staging
+script copies the non-system dylib dependency closure and rewrites it to
+`@loader_path`; on Windows it stages the matching DLL set:
+
+```bash
+LIBMPV_ROOT=/path/to/pinned/libmpv CMAKE=/path/to/cmake \
+  pnpm run native:build:host
+LIBMPV_ROOT=/path/to/pinned/libmpv pnpm run resources:ensure
+```
+
+`electron-builder` packages the native addon and matching libmpv runtime from
+`resources/native/${platform}-${arch}` and
+`resources/libmpv/${platform}-${arch}`. Linux is not a supported desktop
+native target.
+
+For a macOS universal build, build both slices first, then combine the addon,
+libmpv, and dependency dylibs:
+
+```bash
+pnpm run native:build:darwin-arm64
+pnpm run native:build:darwin-x64
+pnpm run native:build:darwin-universal
+pnpm run resources:ensure:darwin-universal
+```
 
 ## Commands
 

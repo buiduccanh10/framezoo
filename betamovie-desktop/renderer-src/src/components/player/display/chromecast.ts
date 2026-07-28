@@ -33,7 +33,6 @@ export function makeChromecastDisplayInterface(
   let isPaused = false;
   let playbackRate = 1;
   let source: LoadableSource | null = null;
-  let videoElement: HTMLVideoElement | null = null;
   let containerElement: HTMLElement | null = null;
   let isFullscreen = false;
   let isPausedBeforeSeeking = false;
@@ -167,10 +166,6 @@ export function makeChromecastDisplayInterface(
     setupSource();
   }
 
-  function destroyVideoElement() {
-    if (videoElement) videoElement = null;
-  }
-
   function fullscreenChange() {
     isFullscreen =
       !!document.fullscreenElement || // other browsers
@@ -191,7 +186,6 @@ export function makeChromecastDisplayInterface(
     },
     destroy: () => {
       stopListening();
-      destroyVideoElement();
       fscreen.removeEventListener("fullscreenchange", fullscreenChange);
     },
     load(loadOps) {
@@ -222,11 +216,6 @@ export function makeChromecastDisplayInterface(
       setSource();
     },
 
-    processVideoElement(video) {
-      destroyVideoElement();
-      videoElement = video;
-      setSource();
-    },
     processContainerElement(container) {
       containerElement = container;
     },

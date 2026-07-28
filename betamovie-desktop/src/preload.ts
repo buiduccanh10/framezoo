@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type {
+  LibMpvBounds,
+  LibMpvCommand,
+  LibMpvPlayerEvent,
+  LibMpvSourceRequest,
   TorrentSession,
   TorrentStartRequest,
   TorrentStatus,
@@ -11,7 +15,8 @@ const runtimeConfig: RuntimeConfig = {
   VITE_BACKEND_URL: "http://127.0.0.1:3000",
   VITE_NORMAL_ROUTER: "false",
 };
-const supportsEmbeddedMpv = true;
+const supportsLibMpv =
+  process.platform === "darwin" || process.platform === "win32";
 
 if (process.env.BETAMOVIE_BACKEND_URL || process.env.VITE_BACKEND_URL) {
   runtimeConfig.VITE_BACKEND_URL =
@@ -121,38 +126,65 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:torrent-status", handler);
     };
   },
-  ...(supportsEmbeddedMpv
+  ...(supportsLibMpv
     ? {
-        attachMpvPlayer(
-          url: string,
-          bounds: { x: number; y: number; width: number; height: number },
-        ) {
-          return ipcRenderer.invoke("desktop:mpv-attach", url, bounds);
+        createLibMpvPlayer(bounds: LibMpvBounds): Promise<string | null> {
+          return ipcRenderer.invoke("desktop:libmpv-create", { bounds });
         },
-        updateMpvBounds(bounds: {
-          x: number;
-          y: number;
-          width: number;
-          height: number;
-        }) {
-          return ipcRenderer.invoke("desktop:mpv-update-bounds", bounds);
+        resizeLibMpvPlayer(
+          playerId: string,
+          bounds: LibMpvBounds,
+        ): Promise<boolean> {
+          return ipcRenderer.invoke("desktop:libmpv-resize", playerId, bounds);
         },
-        detachMpvPlayer() {
-          return ipcRenderer.invoke("desktop:mpv-detach");
+        loadLibMpvSource(
+          playerId: string,
+          request: LibMpvSourceRequest,
+        ): Promise<boolean> {
+          return ipcRenderer.invoke("desktop:libmpv-load", playerId, request);
         },
-        sendMpvCommand(command: string, ...args: any[]) {
-          return ipcRenderer.invoke("desktop:mpv-command", command, ...args);
+        sendLibMpvCommand(
+          playerId: string,
+          command: LibMpvCommand,
+        ): Promise<boolean> {
+          return ipcRenderer.invoke(
+            "desktop:libmpv-command",
+            playerId,
+            command,
+          );
         },
-        onMpvStatus(listener: (status: { name: string; data: any }) => void) {
+        reparentLibMpvPlayer(
+          playerId: string,
+          target: "main" | "pip",
+        ): Promise<boolean> {
+          return ipcRenderer.invoke(
+            "desktop:libmpv-reparent",
+            playerId,
+            target,
+          );
+        },
+        destroyLibMpvPlayer(playerId: string): Promise<boolean> {
+          return ipcRenderer.invoke("desktop:libmpv-destroy", playerId);
+        },
+        onLibMpvEvent(listener: (event: LibMpvPlayerEvent) => void) {
           const handler = (
             _event: Electron.IpcRendererEvent,
-            status: { name: string; data: any },
+            event: LibMpvPlayerEvent,
           ) => {
-            listener(status);
+            listener(event);
           };
-          ipcRenderer.on("desktop:mpv-status", handler);
+          ipcRenderer.on("desktop:libmpv-event", handler);
           return () => {
-            ipcRenderer.removeListener("desktop:mpv-status", handler);
+            ipcRenderer.removeListener("desktop:libmpv-event", handler);
+          };
+        },
+        onLibMpvLog(listener: (log: unknown) => void) {
+          const handler = (_event: Electron.IpcRendererEvent, log: unknown) => {
+            listener(log);
+          };
+          ipcRenderer.on("desktop:libmpv-log", handler);
+          return () => {
+            ipcRenderer.removeListener("desktop:libmpv-log", handler);
           };
         },
       }

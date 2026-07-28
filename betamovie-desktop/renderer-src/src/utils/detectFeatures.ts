@@ -1,6 +1,5 @@
 import { detect } from "detect-browser";
 import fscreen from "fscreen";
-import Hls from "hls.js";
 
 declare global {
   interface Window {
@@ -73,11 +72,6 @@ export function canDocumentPictureInPicture(): boolean {
 
 export function canWebkitPictureInPicture(): boolean {
   return "webkitSupportsPresentationMode" in document.createElement("video");
-}
-
-export function canPlayHlsNatively(video: HTMLVideoElement): boolean {
-  if (Hls.isSupported()) return false; // no need to play natively
-  return !!video.canPlayType("application/vnd.apple.mpegurl");
 }
 
 export type ExtensionDetectionResult =

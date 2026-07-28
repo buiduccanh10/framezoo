@@ -41,7 +41,6 @@ export function ColorOption(props: {
   );
 }
 
-
 export function CaptionSetting(props: {
   textTransformer?: (s: string) => string;
   value: number;

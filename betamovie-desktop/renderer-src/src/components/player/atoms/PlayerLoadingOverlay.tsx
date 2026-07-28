@@ -129,16 +129,15 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     props.sourceLoading && status === playerStatus.SOURCE_SELECTION;
 
   const isTorrentPreparing = useMemo(() => {
-    if (!torrentStatus) return false;
+    if (!torrentStatus || !isLoading) return false;
     if (torrentStatus.state === "error") return false;
     return (
       torrentStatus.streamType === "pending" ||
       !torrentStatus.streamUrl ||
-      duration === 0 ||
-      !Number.isFinite(duration) ||
-      (time === 0 && buffered === 0)
+      (duration === 0 && buffered === 0) ||
+      !Number.isFinite(duration)
     );
-  }, [torrentStatus, duration, time, buffered]);
+  }, [torrentStatus, isLoading, duration, buffered]);
 
   const showOverlay =
     status === playerStatus.IDLE ||
@@ -325,7 +324,10 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     return () => window.clearInterval(interval);
   }, [showOverlayWhenReady, loadingMessages, messageEnabled]);
 
-  if (!shouldRender) return null;
+  // The desktop window is transparent for the native libmpv surface. Render
+  // the loading layer immediately to avoid exposing a black frame while
+  // backdrop assets are still loading.
+  if (!shouldRender && !showOverlay) return null;
 
   const showLoadingTitle = true;
   const displayTitle = meta?.title;
@@ -334,7 +336,7 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   return (
     <div
       className={`absolute inset-0 z-0 pointer-events-none overflow-hidden transition-opacity duration-300 ${
-        isVisible ? "opacity-100" : "opacity-0"
+        isVisible || !showOverlayWhenReady ? "opacity-100" : "opacity-0"
       }`}
     >
       {showBackdropImage ? (
