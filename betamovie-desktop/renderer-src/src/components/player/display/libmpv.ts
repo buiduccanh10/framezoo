@@ -151,6 +151,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let generation = 0;
   let duration = 0;
   let time = 0;
+  let bufferedTime = 0;
   let volume = 1;
   let playbackRate = 1;
   let paused = true;
@@ -439,6 +440,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "file-loaded") {
+      if (!desiredPaused && !paused) {
+        emit("play", undefined);
+      }
       return;
     }
 
@@ -448,6 +452,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     if (event.type === "video-frame") {
       emit("loading", false);
+      if (!paused) {
+        emit("play", undefined);
+      }
       return;
     }
 
@@ -465,6 +472,14 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
           time = Math.max(0, event.data);
           emit("time", time);
+          if (time > bufferedTime) {
+            bufferedTime = time;
+            emit("buffered", bufferedTime);
+          }
+          if (!paused && time > 0) {
+            emit("loading", false);
+            emit("play", undefined);
+          }
         }
         break;
       case "duration":
@@ -504,7 +519,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           Number.isFinite(event.data) &&
           Number.isFinite(time)
         ) {
-          emit("buffered", time + Math.max(0, event.data));
+          bufferedTime = Math.max(bufferedTime, time + Math.max(0, event.data));
+          emit("buffered", bufferedTime);
         }
         break;
       case "track-list":
@@ -618,6 +634,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       emit("audiotracks", []);
       emit("changedaudiotrack", null);
       time = Math.max(0, ops.startAt);
+      bufferedTime = time;
       duration = ops.source?.duration ?? 0;
       desiredPaused = !(ops.autoplay ?? true);
       emit("loading", Boolean(ops.source));
