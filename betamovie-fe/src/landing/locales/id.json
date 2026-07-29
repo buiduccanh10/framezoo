@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Pertunjukan",
+    "addons": "Ekosistem",
+    "download": "Unduh",
+    "language": "Bahasa"
+  },
+  "hero": {
+    "eyebrow": "DESKTOP ALPHAFLIX / 01",
+    "title": "Tonton lebih baik.",
+    "titleAccent": "Di desktop.",
+    "description": "Pemutaran asli, kontrol yang lebih tajam, dan tempat yang lebih tenang untuk jam tangan Anda berikutnya.",
+    "primaryCta": "Unduh desktop",
+    "secondaryCta": "Lihat pengalamannya",
+    "imageAlt": "Pratinjau aplikasi desktop AlphaFlix",
+    "version": "Rilis desktop"
+  },
+  "features": {
+    "performanceTitle": "Perpustakaan Anda, tanpa pajak browser.",
+    "overviewDescription": "AlphaFlix Desktop memberikan ruang pemutaran yang dibutuhkan: performa asli, handoff yang bersih, dan kontrol yang tidak mengganggu.",
+    "playback": "Pemutaran asli",
+    "playbackDescription": "Video halus dengan penanganan media kelas desktop.",
+    "performance": "Performa yang tenang",
+    "performanceDescription": "Kurang krom. Lebih fokus. Tidak ada tab juggling.",
+    "continuity": "Pertahankan aliran Anda",
+    "continuityDescription": "Lanjutkan, jelajahi, dan ganti sumber tanpa kehilangan momen.",
+    "ecosystemTitle": "Siap untuk apa yang terjadi selanjutnya.",
+    "ecosystemDescription": "Aplikasi desktop adalah intinya. Addons memperluas keunggulannya, sehingga pengaturan Anda tetap personal tanpa menjadi rumit.",
+    "addonLabel": "TAMBAHAN-SIAP",
+    "addonOne": "Konektor sumber",
+    "addonTwo": "Alat subtitle",
+    "addonThree": "Ekstensi komunitas",
+    "showcaseTitle": "Layar adalah tujuannya.",
+    "showcaseDescription": "Permukaan desktop yang terfokus untuk penemuan, pemutaran, dan segala hal seputar cerita.",
+    "showcaseCaption": "Mode Desktop / Fokus AlphaFlix"
+  },
+  "download": {
+    "eyebrow": "PILIH BANGUNAN ANDA",
+    "title": "Bawalah AlphaFlix bersamamu.",
+    "description": "Pilih build untuk mesin Anda. Browser Anda akan membuat rekomendasi, atau menampilkan setiap opsi yang tersedia di bawah.",
+    "recommended": "Direkomendasikan",
+    "chooseBuild": "Pilih bangunan",
+    "selected": "Terpilih",
+    "download": "Unduh",
+    "showAll": "Semua bangunan ditampilkan",
+    "detected": "Terdeteksi di perangkat ini",
+    "loading": "Memeriksa build yang tersedia...",
+    "empty": "Belum ada versi desktop yang dipublikasikan. Segera periksa kembali.",
+    "error": "Tidak dapat memuat daftar rilis desktop.",
+    "retry": "Coba lagi",
+    "noBackend": "Layanan pengunduhan tidak dikonfigurasi untuk penerapan ini.",
+    "version": "Melepaskan"
+  },
+  "footer": {
+    "line": "Rumah yang lebih tenang untuk cerita yang selalu Anda ingat.",
+    "status": "Desktop-pertama. Siap tambahan."
+  }
+}

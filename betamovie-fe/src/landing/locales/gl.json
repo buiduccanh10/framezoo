@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Rendemento",
+    "addons": "Ecosistema",
+    "download": "Descargar",
+    "language": "Linguaxe"
+  },
+  "hero": {
+    "eyebrow": "ESCRITORIO ALPHAFLIX / 01",
+    "title": "Mira mellor.",
+    "titleAccent": "No escritorio.",
+    "description": "Reprodución nativa, controis máis nítidos e un lugar máis tranquilo para o teu próximo reloxo.",
+    "primaryCta": "Descargar escritorio",
+    "secondaryCta": "Vexa a experiencia",
+    "imageAlt": "Vista previa da aplicación de escritorio AlphaFlix",
+    "version": "Lanzamento de escritorio"
+  },
+  "features": {
+    "performanceTitle": "A túa biblioteca, sen o imposto do navegador.",
+    "overviewDescription": "AlphaFlix Desktop ofrécelle a reprodución a sala que necesita: rendemento nativo, transferencias limpas e controis que quedan fóra do camiño.",
+    "playback": "Reprodución nativa",
+    "playbackDescription": "Vídeo fluido con manexo de medios de escritorio.",
+    "performance": "Actuación silenciosa",
+    "performanceDescription": "Menos cromo. Máis foco. Sen malabares de fichas.",
+    "continuity": "Mantén o teu fluxo",
+    "continuityDescription": "Retoma, explora e cambia de fonte sen perder o momento.",
+    "ecosystemTitle": "Listo para o que vén despois.",
+    "ecosystemDescription": "A aplicación de escritorio é o núcleo. Os complementos estenden os bordos, polo que a súa configuración pode permanecer persoal sen complicarse.",
+    "addonLabel": "PREPARADO PARA ADDON",
+    "addonOne": "Conectores de orixe",
+    "addonTwo": "Ferramentas de subtítulos",
+    "addonThree": "Extensións comunitarias",
+    "showcaseTitle": "A pantalla é o destino.",
+    "showcaseDescription": "Unha superficie de escritorio enfocada para o descubrimento, a reprodución e todo o que rodea a historia.",
+    "showcaseCaption": "AlphaFlix Desktop / Modo de enfoque"
+  },
+  "download": {
+    "eyebrow": "ESCOLLE A SÚA CONSTRUCCIÓN",
+    "title": "Leva AlphaFlix contigo.",
+    "description": "Escolle a versión para a túa máquina. O teu navegador fará a recomendación ou revelará todas as opcións dispoñibles a continuación.",
+    "recommended": "Recomendado",
+    "chooseBuild": "Escolle unha construción",
+    "selected": "Seleccionado",
+    "download": "Descargar",
+    "showAll": "Móstranse todas as construcións",
+    "detected": "Detectouse neste dispositivo",
+    "loading": "Comprobando versións dispoñibles...",
+    "empty": "Aínda non se publicou ningunha compilación de escritorio. Volve a consultar pronto.",
+    "error": "Non se puido cargar a lista de versións de escritorio.",
+    "retry": "Téntao de novo",
+    "noBackend": "O servizo de descarga non está configurado para esta implementación.",
+    "version": "Lanzamento"
+  },
+  "footer": {
+    "line": "Un fogar máis tranquilo para as historias ás que segues volvendo.",
+    "status": "O escritorio primeiro. Listo para complementos."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Actuación",
+    "addons": "Ecosistema",
+    "download": "Descargar",
+    "language": "Idioma"
+  },
+  "hero": {
+    "eyebrow": "ESCRITORIO ALPHAFLIX / 01",
+    "title": "Mira mejor.",
+    "titleAccent": "En el escritorio.",
+    "description": "Reproducción nativa, controles más nítidos y un lugar más tranquilo para tu próximo reloj.",
+    "primaryCta": "Descargar escritorio",
+    "secondaryCta": "ver la experiencia",
+    "imageAlt": "Vista previa de la aplicación de escritorio AlphaFlix",
+    "version": "Lanzamiento de escritorio"
+  },
+  "features": {
+    "performanceTitle": "Tu biblioteca, sin el impuesto del navegador.",
+    "overviewDescription": "AlphaFlix Desktop brinda a la reproducción el espacio que necesita: rendimiento nativo, transferencias limpias y controles que no estorban.",
+    "playback": "Reproducción nativa",
+    "playbackDescription": "Vídeo fluido con manejo de medios de escritorio.",
+    "performance": "Rendimiento silencioso",
+    "performanceDescription": "Menos cromo. Más concentración. Sin malabarismos con las pestañas.",
+    "continuity": "Mantén tu flujo",
+    "continuityDescription": "Reanude, explore y cambie de fuente sin perder el momento.",
+    "ecosystemTitle": "Listo para lo que viene después.",
+    "ecosystemDescription": "La aplicación de escritorio es el núcleo. Los complementos amplían los límites, por lo que su configuración puede seguir siendo personal sin volverse complicada.",
+    "addonLabel": "LISTO PARA ADICIONALES",
+    "addonOne": "Conectores de fuente",
+    "addonTwo": "Herramientas de subtítulos",
+    "addonThree": "Extensiones comunitarias",
+    "showcaseTitle": "La pantalla es el destino.",
+    "showcaseDescription": "Una superficie de escritorio enfocada para el descubrimiento, la reproducción y todo lo relacionado con la historia.",
+    "showcaseCaption": "Escritorio AlphaFlix / Modo de enfoque"
+  },
+  "download": {
+    "eyebrow": "ELIGE TU CONSTRUCCIÓN",
+    "title": "Lleva AlphaFlix contigo.",
+    "description": "Elija la versión para su máquina. Su navegador hará la recomendación o revelará todas las opciones disponibles a continuación.",
+    "recommended": "Recomendado",
+    "chooseBuild": "Elige una construcción",
+    "selected": "Seleccionado",
+    "download": "Descargar",
+    "showAll": "Se muestran todas las compilaciones.",
+    "detected": "Detectado en este dispositivo",
+    "loading": "Comprobando compilaciones disponibles...",
+    "empty": "Aún no se han publicado compilaciones de escritorio. Vuelve pronto.",
+    "error": "No se pudo cargar la lista de versiones de escritorio.",
+    "retry": "Intentar otra vez",
+    "noBackend": "El servicio de descarga no está configurado para esta implementación.",
+    "version": "Liberar"
+  },
+  "footer": {
+    "line": "Un hogar más tranquilo para las historias a las que sigues volviendo.",
+    "status": "Primero el escritorio. Listo para complementos."
+  }
+}

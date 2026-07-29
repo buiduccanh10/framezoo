@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Desempenho",
+    "addons": "Ecossistema",
+    "download": "Download",
+    "language": "Linguagem"
+  },
+  "hero": {
+    "eyebrow": "DESKTOP ALPHAFLIX / 01",
+    "title": "Observe melhor.",
+    "titleAccent": "Na área de trabalho.",
+    "description": "Reprodução nativa, controles mais nítidos e um local mais calmo para sua próxima exibição.",
+    "primaryCta": "Baixar área de trabalho",
+    "secondaryCta": "Veja a experiência",
+    "imageAlt": "Visualização do aplicativo de desktop AlphaFlix",
+    "version": "Versão para desktop"
+  },
+  "features": {
+    "performanceTitle": "Sua biblioteca, sem a taxa do navegador.",
+    "overviewDescription": "AlphaFlix Desktop oferece à reprodução o espaço necessário: desempenho nativo, transferências limpas e controles que ficam fora do caminho.",
+    "playback": "Reprodução nativa",
+    "playbackDescription": "Vídeo suave com manipulação de mídia de nível desktop.",
+    "performance": "Desempenho silencioso",
+    "performanceDescription": "Menos cromo. Mais foco. Sem malabarismo com guias.",
+    "continuity": "Mantenha seu fluxo",
+    "continuityDescription": "Retome, navegue e troque de fonte sem perder o momento.",
+    "ecosystemTitle": "Pronto para o que vem a seguir.",
+    "ecosystemDescription": "O aplicativo de desktop é o núcleo. Os complementos ampliam os limites, para que sua configuração possa permanecer pessoal sem se tornar complicada.",
+    "addonLabel": "PRONTO PARA ADDON",
+    "addonOne": "Conectores de origem",
+    "addonTwo": "Ferramentas de legenda",
+    "addonThree": "Extensões da comunidade",
+    "showcaseTitle": "A tela é o destino.",
+    "showcaseDescription": "Uma superfície de desktop focada para descoberta, reprodução e tudo o que envolve a história.",
+    "showcaseCaption": "AlphaFlix Desktop / modo Foco"
+  },
+  "download": {
+    "eyebrow": "ESCOLHA SUA CONSTRUÇÃO",
+    "title": "Leve AlphaFlix com você.",
+    "description": "Escolha a construção para sua máquina. Seu navegador fará a recomendação ou revelará todas as opções disponíveis abaixo.",
+    "recommended": "Recomendado",
+    "chooseBuild": "Escolha uma construção",
+    "selected": "Selecionado",
+    "download": "Download",
+    "showAll": "Todas as construções são mostradas",
+    "detected": "Detectado neste dispositivo",
+    "loading": "Verificando compilações disponíveis...",
+    "empty": "Nenhuma versão para desktop foi publicada ainda. Volte em breve.",
+    "error": "Não foi possível carregar a lista de versões do desktop.",
+    "retry": "Tente novamente",
+    "noBackend": "O serviço de download não está configurado para esta implantação.",
+    "version": "Liberar"
+  },
+  "footer": {
+    "line": "Uma casa mais tranquila para as histórias às quais você sempre volta.",
+    "status": "Desktop primeiro. Pronto para complemento."
+  }
+}
