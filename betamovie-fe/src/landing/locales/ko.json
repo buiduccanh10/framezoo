@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "성능",
+    "addons": "생태계",
+    "download": "다운로드",
+    "language": "언어"
+  },
+  "hero": {
+    "eyebrow": "알파플릭스 데스크탑 / 01",
+    "title": "더 잘보세요.",
+    "titleAccent": "데스크탑에서.",
+    "description": "다음 시계를 위한 기본 재생, 더 선명한 컨트롤, 더 조용한 장소.",
+    "primaryCta": "데스크탑 다운로드",
+    "secondaryCta": "경험 보기",
+    "imageAlt": "AlphaFlix 데스크톱 앱 미리보기",
+    "version": "데스크탑 릴리스"
+  },
+  "features": {
+    "performanceTitle": "브라우저 세금이 없는 도서관.",
+    "overviewDescription": "AlphaFlix Desktop은 기본 성능, 깔끔한 핸드오프, 방해받지 않는 컨트롤 등 재생에 필요한 공간을 제공합니다.",
+    "playback": "기본 재생",
+    "playbackDescription": "데스크탑급 미디어 처리로 비디오를 매끄럽게 처리합니다.",
+    "performance": "조용한 성능",
+    "performanceDescription": "크롬이 적습니다. 더 집중하세요. 탭 저글링이 없습니다.",
+    "continuity": "흐름을 유지하세요",
+    "continuityDescription": "순간을 놓치지 않고 소스를 재개하고 탐색하고 전환하세요.",
+    "ecosystemTitle": "다음에 일어날 일을 준비하세요.",
+    "ecosystemDescription": "데스크톱 앱이 핵심입니다. 애드온이 가장자리를 확장하므로 복잡해지지 않고 설정을 개인화할 수 있습니다.",
+    "addonLabel": "애드온 지원",
+    "addonOne": "소스 커넥터",
+    "addonTwo": "자막 도구",
+    "addonThree": "커뮤니티 확장",
+    "showcaseTitle": "화면이 목적지입니다.",
+    "showcaseDescription": "스토리와 관련된 검색, 재생 및 모든 것을 위한 집중형 데스크탑 표면입니다.",
+    "showcaseCaption": "AlphaFlix 데스크탑 / 포커스 모드"
+  },
+  "download": {
+    "eyebrow": "빌드를 선택하세요",
+    "title": "AlphaFlix를 가지고 가세요.",
+    "description": "귀하의 컴퓨터에 맞는 빌드를 선택하십시오. 브라우저가 권장 사항을 제시하거나 아래에 사용 가능한 모든 옵션을 표시합니다.",
+    "recommended": "추천",
+    "chooseBuild": "빌드를 선택하세요",
+    "selected": "선택된",
+    "download": "다운로드",
+    "showAll": "모든 빌드가 표시됩니다.",
+    "detected": "이 기기에서 감지됨",
+    "loading": "사용 가능한 빌드를 확인하는 중...",
+    "empty": "아직 게시된 데스크톱 빌드가 없습니다. 나중에 다시 확인해 보세요.",
+    "error": "데스크톱 출시 목록을 로드할 수 없습니다.",
+    "retry": "다시 시도하세요",
+    "noBackend": "이 배포에 대해 다운로드 서비스가 구성되지 않았습니다.",
+    "version": "풀어 주다"
+  },
+  "footer": {
+    "line": "계속해서 들려오는 이야기를 담을 수 있는 조용한 집.",
+    "status": "데스크탑 우선. 애드온이 준비되어 있습니다."
+  }
+}

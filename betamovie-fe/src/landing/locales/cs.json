@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Výkon",
+    "addons": "Ekosystém",
+    "download": "Stáhnout",
+    "language": "Jazyk"
+  },
+  "hero": {
+    "eyebrow": "DESKTOP ALPHAFLIX / 01",
+    "title": "Sledujte lépe.",
+    "titleAccent": "Na ploše.",
+    "description": "Nativní přehrávání, ostřejší ovládání a klidnější místo pro vaše další hodinky.",
+    "primaryCta": "Stáhnout desktop",
+    "secondaryCta": "Podívejte se na zážitek",
+    "imageAlt": "Náhled desktopové aplikace AlphaFlix",
+    "version": "Desktopová verze"
+  },
+  "features": {
+    "performanceTitle": "Vaše knihovna bez daně z prohlížeče.",
+    "overviewDescription": "AlphaFlix Desktop poskytuje přehrávání prostor, který potřebuje: nativní výkon, čisté předávání a ovládací prvky, které nepřekáží.",
+    "playback": "Nativní přehrávání",
+    "playbackDescription": "Plynulé video se zpracováním médií na úrovni stolního počítače.",
+    "performance": "Tichý výkon",
+    "performanceDescription": "Méně chromu. Více soustředění. Žádné žonglování s kartami.",
+    "continuity": "Udržujte svůj tok",
+    "continuityDescription": "Obnovte, procházejte a přepínejte zdroje bez ztráty okamžiku.",
+    "ecosystemTitle": "Připraveni na to, co přijde dál.",
+    "ecosystemDescription": "Jádrem je desktopová aplikace. Doplňky rozšiřují okraje, takže vaše nastavení může zůstat osobní, aniž by se komplikovalo.",
+    "addonLabel": "PŘIPRAVENO PŘIDÁNÍ",
+    "addonOne": "Zdrojové konektory",
+    "addonTwo": "Nástroje pro titulky",
+    "addonThree": "Rozšíření komunity",
+    "showcaseTitle": "Obrazovka je cíl.",
+    "showcaseDescription": "Zaměřený povrch plochy pro objevování, přehrávání a vše kolem příběhu.",
+    "showcaseCaption": "AlphaFlix Desktop / Režim zaostření"
+  },
+  "download": {
+    "eyebrow": "VYBERTE SI SVOU STAVBU",
+    "title": "Vezměte AlphaFlix s sebou.",
+    "description": "Vyberte sestavení pro váš stroj. Váš prohlížeč doporučí nebo odhalí všechny dostupné možnosti níže.",
+    "recommended": "Doporučeno",
+    "chooseBuild": "Vyberte sestavení",
+    "selected": "Vybraný",
+    "download": "Stáhnout",
+    "showAll": "Jsou zobrazeny všechny sestavení",
+    "detected": "Zjištěno na tomto zařízení",
+    "loading": "Kontrola dostupných sestavení...",
+    "empty": "Zatím nejsou publikovány žádné sestavení pro stolní počítače. Vraťte se brzy.",
+    "error": "Nelze načíst seznam verzí pro stolní počítače.",
+    "retry": "Zkuste to znovu",
+    "noBackend": "Služba stahování není pro toto nasazení nakonfigurována.",
+    "version": "Uvolnění"
+  },
+  "footer": {
+    "line": "Tišší domov pro příběhy, ke kterým se stále vracíte.",
+    "status": "Desktop-first. Addon připraven."
+  }
+}

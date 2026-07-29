@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Prestatie",
+    "addons": "Ecosysteem",
+    "download": "Downloaden",
+    "language": "Taal"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX-BUREAUBLAD / 01",
+    "title": "Kijk beter.",
+    "titleAccent": "Op bureaublad.",
+    "description": "Native afspelen, scherpere bediening en een rustigere plek voor je volgende horloge.",
+    "primaryCta": "Bureaublad downloaden",
+    "secondaryCta": "Bekijk de ervaring",
+    "imageAlt": "Preview van AlphaFlix desktop-app",
+    "version": "Desktop-versie"
+  },
+  "features": {
+    "performanceTitle": "Uw bibliotheek, zonder browserbelasting.",
+    "overviewDescription": "AlphaFlix Desktop geeft het afspelen de ruimte die het nodig heeft: native prestaties, zuivere overdracht en bedieningselementen die uit de weg blijven.",
+    "playback": "Native afspelen",
+    "playbackDescription": "Vloeiende video met mediaverwerking op desktopniveau.",
+    "performance": "Stille prestaties",
+    "performanceDescription": "Minder chroom. Meer aandacht. Geen tab-jongleren.",
+    "continuity": "Houd je stroom vast",
+    "continuityDescription": "Hervat, blader en wissel van bron zonder het moment te verliezen.",
+    "ecosystemTitle": "Klaar voor wat hierna komt.",
+    "ecosystemDescription": "De desktop-app is de kern. Add-ons breiden de randen uit, zodat uw installatie persoonlijk kan blijven zonder ingewikkeld te worden.",
+    "addonLabel": "ADDON-KLAAR",
+    "addonOne": "Bronconnectoren",
+    "addonTwo": "Hulpmiddelen voor ondertiteling",
+    "addonThree": "Community-extensies",
+    "showcaseTitle": "Het scherm is de bestemming.",
+    "showcaseDescription": "Een gericht bureaubladoppervlak voor ontdekken, afspelen en alles rondom het verhaal.",
+    "showcaseCaption": "AlphaFlix Desktop / Focusmodus"
+  },
+  "download": {
+    "eyebrow": "KIES UW BOUW",
+    "title": "Neem AlphaFlix mee.",
+    "description": "Kies de build voor uw machine. Uw browser zal de aanbeveling doen of alle beschikbare opties hieronder onthullen.",
+    "recommended": "Aanbevolen",
+    "chooseBuild": "Kies een constructie",
+    "selected": "Gekozen",
+    "download": "Downloaden",
+    "showAll": "Alle bouwwerken worden getoond",
+    "detected": "Gedetecteerd op dit apparaat",
+    "loading": "Beschikbare builds controleren...",
+    "empty": "Er zijn nog geen desktopbuilds gepubliceerd. Kom snel terug.",
+    "error": "Kan de desktopversielijst niet laden.",
+    "retry": "Probeer het opnieuw",
+    "noBackend": "De downloadservice is niet geconfigureerd voor deze implementatie.",
+    "version": "Uitgave"
+  },
+  "footer": {
+    "line": "Een rustiger huis voor de verhalen waar je steeds naar terugkomt.",
+    "status": "Desktop-eerst. Klaar voor add-ons."
+  }
+}

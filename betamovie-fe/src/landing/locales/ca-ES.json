@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Rendiment",
+    "addons": "Ecosistema",
+    "download": "Descarregar",
+    "language": "Llengua"
+  },
+  "hero": {
+    "eyebrow": "ESCRIPTORI ALPHAFLIX / 01",
+    "title": "Mira millor.",
+    "titleAccent": "A l'escriptori.",
+    "description": "Reproducció nativa, controls més nítids i un lloc més tranquil per al teu proper rellotge.",
+    "primaryCta": "Descarrega l'escriptori",
+    "secondaryCta": "Veure l'experiència",
+    "imageAlt": "Vista prèvia de l'aplicació d'escriptori AlphaFlix",
+    "version": "Alliberament d'escriptori"
+  },
+  "features": {
+    "performanceTitle": "La teva biblioteca, sense l'impost del navegador.",
+    "overviewDescription": "AlphaFlix Desktop ofereix la reproducció de l'espai que necessita: rendiment natiu, transferències netes i controls que es mantenen fora del camí.",
+    "playback": "Reproducció nativa",
+    "playbackDescription": "Vídeo suau amb maneig de suports d'escriptori.",
+    "performance": "Rendiment tranquil",
+    "performanceDescription": "Menys crom. Més enfocament. Sense malabars de pestanyes.",
+    "continuity": "Mantingueu el vostre flux",
+    "continuityDescription": "Reprèn, navega i canvia de font sense perdre el moment.",
+    "ecosystemTitle": "Preparat pel que vindrà després.",
+    "ecosystemDescription": "L'aplicació d'escriptori és el nucli. Els complements amplien les vores, de manera que la vostra configuració es pot mantenir personal sense complicar-se.",
+    "addonLabel": "PREPARAT PER ADDONS",
+    "addonOne": "Connectors de font",
+    "addonTwo": "Eines de subtítols",
+    "addonThree": "Extensions de comunitat",
+    "showcaseTitle": "La pantalla és la destinació.",
+    "showcaseDescription": "Una superfície d'escriptori centrada per al descobriment, la reproducció i tot el que envolta la història.",
+    "showcaseCaption": "AlphaFlix Desktop / Mode Focus"
+  },
+  "download": {
+    "eyebrow": "TRIA LA TEVA CONSTRUCCIÓ",
+    "title": "Porta AlphaFlix amb tu.",
+    "description": "Trieu la construcció per a la vostra màquina. El vostre navegador farà la recomanació o revelarà totes les opcions disponibles a continuació.",
+    "recommended": "Recomanat",
+    "chooseBuild": "Trieu una construcció",
+    "selected": "Seleccionat",
+    "download": "Descarregar",
+    "showAll": "Es mostren totes les compilacions",
+    "detected": "S'ha detectat en aquest dispositiu",
+    "loading": "S'estan comprovant les versions disponibles...",
+    "empty": "Encara no s'ha publicat cap compilació d'escriptori. Torna a consultar aviat.",
+    "error": "No s'ha pogut carregar la llista de versions d'escriptori.",
+    "retry": "Torna-ho a provar",
+    "noBackend": "El servei de descàrrega no està configurat per a aquest desplegament.",
+    "version": "Alliberament"
+  },
+  "footer": {
+    "line": "Una casa més tranquil·la per a les històries a les quals continueu tornant.",
+    "status": "Primer l'escriptori. Preparat per a complements."
+  }
+}

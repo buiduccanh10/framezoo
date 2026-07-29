@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Performanţă",
+    "addons": "Ecosistem",
+    "download": "Descărcați",
+    "language": "Limbă"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX DESKTOP / 01",
+    "title": "Privește mai bine.",
+    "titleAccent": "Pe desktop.",
+    "description": "Redare nativă, comenzi mai clare și un loc mai calm pentru următorul tău ceas.",
+    "primaryCta": "Descărcați desktop",
+    "secondaryCta": "Vezi experiența",
+    "imageAlt": "Previzualizarea aplicației desktop AlphaFlix",
+    "version": "Lansare desktop"
+  },
+  "features": {
+    "performanceTitle": "Biblioteca dvs., fără taxa de browser.",
+    "overviewDescription": "AlphaFlix Desktop oferă redării spațiul de care are nevoie: performanță nativă, handoff-uri curate și comenzi care rămân în afara drumului.",
+    "playback": "Redare nativă",
+    "playbackDescription": "Video fluide cu manipulare media de calitate desktop.",
+    "performance": "Performanță liniștită",
+    "performanceDescription": "Mai puțin crom. Mai multă concentrare. Fără jonglare cu file.",
+    "continuity": "Păstrează-ți fluxul",
+    "continuityDescription": "Reluați, răsfoiți și schimbați sursele fără a pierde momentul.",
+    "ecosystemTitle": "Gata pentru ce urmează.",
+    "ecosystemDescription": "Aplicația desktop este nucleul. Suplimentele extind marginile, astfel încât configurarea dvs. poate rămâne personală fără a deveni complicată.",
+    "addonLabel": "ADDON-GATA",
+    "addonOne": "Conectori sursă",
+    "addonTwo": "Instrumente de subtitrare",
+    "addonThree": "Extensii comunitare",
+    "showcaseTitle": "Ecranul este destinația.",
+    "showcaseDescription": "O suprafață desktop concentrată pentru descoperire, redare și tot ce se află în jurul poveștii.",
+    "showcaseCaption": "AlphaFlix Desktop / Modul Focus"
+  },
+  "download": {
+    "eyebrow": "ALEGE-ȚI CONSTRUCȚIA",
+    "title": "Luați AlphaFlix cu dvs.",
+    "description": "Alegeți construcția pentru mașina dvs. Browserul dvs. va face recomandarea sau va dezvălui fiecare opțiune disponibilă mai jos.",
+    "recommended": "Recomandat",
+    "chooseBuild": "Alegeți o construcție",
+    "selected": "Selectat",
+    "download": "Descărcați",
+    "showAll": "Sunt afișate toate versiunile",
+    "detected": "Detectat pe acest dispozitiv",
+    "loading": "Se verifică versiunile disponibile...",
+    "empty": "Încă nu sunt publicate versiuni pentru desktop. Reveniți în curând.",
+    "error": "Nu s-a putut încărca lista de versiuni desktop.",
+    "retry": "Încearcă din nou",
+    "noBackend": "Serviciul de descărcare nu este configurat pentru această implementare.",
+    "version": "Eliberare"
+  },
+  "footer": {
+    "line": "O casă mai liniștită pentru poveștile la care te întorci.",
+    "status": "Desktop-în primul rând. Pregătit pentru suplimente."
+  }
+}

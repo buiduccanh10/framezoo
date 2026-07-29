@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Frammistaða",
+    "addons": "Vistkerfi",
+    "download": "Sækja",
+    "language": "Tungumál"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX SKJÁLFTRÖF / 01",
+    "title": "Horfðu betur.",
+    "titleAccent": "Á skjáborði.",
+    "description": "Innfædd spilun, skarpari stýringar og rólegri staður fyrir næsta úr.",
+    "primaryCta": "Sækja skrifborð",
+    "secondaryCta": "Sjáðu reynsluna",
+    "imageAlt": "Forskoðun AlphaFlix skrifborðsforrits",
+    "version": "Útgáfa á skjáborði"
+  },
+  "features": {
+    "performanceTitle": "Bókasafnið þitt, án vafraskatts.",
+    "overviewDescription": "AlphaFlix Desktop gefur spilun herbergið sem það þarf: innfæddur árangur, hreinar sendingar og stýringar sem haldast úr vegi.",
+    "playback": "Innfædd spilun",
+    "playbackDescription": "Slétt myndband með skrifborðsmiðlun.",
+    "performance": "Rólegur árangur",
+    "performanceDescription": "Minni króm. Meiri einbeiting. Engin flipajuggling.",
+    "continuity": "Haltu flæðinu þínu",
+    "continuityDescription": "Haltu áfram, vafraðu og skiptu um heimildir án þess að missa augnablikið.",
+    "ecosystemTitle": "Tilbúinn fyrir það sem kemur næst.",
+    "ecosystemDescription": "Skrifborðsforritið er kjarninn. Viðbætur lengja brúnirnar, svo uppsetningin þín getur verið persónuleg án þess að verða flókin.",
+    "addonLabel": "VIÐBÆTTA TILBÚIN",
+    "addonOne": "Heimildatengi",
+    "addonTwo": "Textaverkfæri",
+    "addonThree": "Samfélagsframlengingar",
+    "showcaseTitle": "Skjárinn er áfangastaðurinn.",
+    "showcaseDescription": "Einbeittur skjáborðsyfirborð til að uppgötva, spila og allt í kringum söguna.",
+    "showcaseCaption": "AlphaFlix skjáborð / fókusstilling"
+  },
+  "download": {
+    "eyebrow": "VELDU BYGGINGU ÞÍNA",
+    "title": "Taktu AlphaFlix með þér.",
+    "description": "Veldu smíðina fyrir vélina þína. Vafrinn þinn mun gera tillöguna eða sýna alla tiltæka valkosti hér að neðan.",
+    "recommended": "Mælt er með",
+    "chooseBuild": "Veldu byggingu",
+    "selected": "Valið",
+    "download": "Sækja",
+    "showAll": "Allar byggingar eru sýndar",
+    "detected": "Greinist á þessu tæki",
+    "loading": "Athugar tiltækar byggingar...",
+    "empty": "Engar skrifborðssmíðar eru gefnar út ennþá. Athugaðu aftur fljótlega.",
+    "error": "Gat ekki hlaðið skjáborðsútgáfulistanum.",
+    "retry": "Reyndu aftur",
+    "noBackend": "Niðurhalsþjónusta er ekki stillt fyrir þessa dreifingu.",
+    "version": "Gefa út"
+  },
+  "footer": {
+    "line": "Rólegra heimili fyrir sögurnar sem þú kemur alltaf aftur til.",
+    "status": "Skrifborð fyrst. Viðbót tilbúin."
+  }
+}

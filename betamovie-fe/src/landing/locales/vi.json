@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Hiệu năng",
+    "addons": "Hệ sinh thái",
+    "download": "Tải xuống",
+    "language": "Ngôn ngữ"
+  },
+  "hero": {
+    "eyebrow": "MÁY TÍNH ĐỂ BÀN ALPHAFLIX / 01",
+    "title": "Xem phim đã hơn.",
+    "titleAccent": "Trên desktop.",
+    "description": "Phát native, điều khiển mượt, không gian tập trung cho bộ phim tiếp theo.",
+    "primaryCta": "Tải app desktop",
+    "secondaryCta": "Xem trải nghiệm",
+    "imageAlt": "Bản xem trước AlphaFlix desktop",
+    "version": "Bản desktop"
+  },
+  "features": {
+    "performanceTitle": "Thư viện của bạn, không còn giới hạn trình duyệt.",
+    "overviewDescription": "AlphaFlix Desktop dành không gian cho playback: hiệu năng native, chuyển đổi liền mạch, điều khiển luôn vừa đủ.",
+    "playback": "Phát native",
+    "playbackDescription": "Video mượt với khả năng xử lý media cấp desktop.",
+    "performance": "Hiệu năng yên tĩnh",
+    "performanceDescription": "Ít chrome hơn. Tập trung hơn. Không phải đổi tab.",
+    "continuity": "Giữ trọn mạch xem",
+    "continuityDescription": "Tiếp tục, khám phá, đổi nguồn mà không mất khoảnh khắc.",
+    "ecosystemTitle": "Sẵn sàng cho bước tiếp theo.",
+    "ecosystemDescription": "Desktop app là lõi. Addon mở rộng các cạnh, để setup của bạn riêng tư mà không phức tạp.",
+    "addonLabel": "SẴN SÀNG CHO ADDON",
+    "addonOne": "Kết nối nguồn",
+    "addonTwo": "Công cụ phụ đề",
+    "addonThree": "Extension cộng đồng",
+    "showcaseTitle": "Màn hình là điểm đến.",
+    "showcaseDescription": "Một không gian desktop tập trung cho khám phá, playback và mọi thứ xung quanh câu chuyện.",
+    "showcaseCaption": "Chế độ lấy nét / máy tính để bàn AlphaFlix"
+  },
+  "download": {
+    "eyebrow": "CHỌN BẢN BUILD",
+    "title": "Mang AlphaFlix theo bạn.",
+    "description": "Chọn bản build cho thiết bị. Trình duyệt sẽ đề xuất lựa chọn phù hợp hoặc hiển thị toàn bộ bản có sẵn.",
+    "recommended": "Đề xuất",
+    "chooseBuild": "Chọn bản build",
+    "selected": "Đã chọn",
+    "download": "Tải xuống",
+    "showAll": "Đang hiển thị mọi bản build",
+    "detected": "Đã nhận diện thiết bị",
+    "loading": "Đang kiểm tra bản build...",
+    "empty": "Chưa có bản desktop nào được phát hành. Hãy quay lại sau.",
+    "error": "Không tải được danh sách bản desktop.",
+    "retry": "Thử lại",
+    "noBackend": "Deployment này chưa cấu hình dịch vụ tải xuống.",
+    "version": "Bản phát hành"
+  },
+  "footer": {
+    "line": "Một không gian yên tĩnh hơn cho những câu chuyện bạn luôn muốn xem lại.",
+    "status": "Desktop-first. Sẵn sàng cho addon."
+  }
+}

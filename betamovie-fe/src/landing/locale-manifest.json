@@ -1,0 +1,425 @@
+[
+  {
+    "id": "en",
+    "file": "en",
+    "label": "English",
+    "nativeLabel": "English",
+    "flag": "🇺🇸",
+    "direction": "ltr",
+    "google": "en"
+  },
+  {
+    "id": "ar",
+    "file": "ar",
+    "label": "Arabic",
+    "nativeLabel": "العربية",
+    "flag": "🇸🇦",
+    "direction": "rtl",
+    "google": "ar"
+  },
+  {
+    "id": "bg",
+    "file": "bg",
+    "label": "Bulgarian",
+    "nativeLabel": "Български",
+    "flag": "🇧🇬",
+    "direction": "ltr",
+    "google": "bg"
+  },
+  {
+    "id": "bn",
+    "file": "bn",
+    "label": "Bengali",
+    "nativeLabel": "বাংলা",
+    "flag": "🇧🇩",
+    "direction": "ltr",
+    "google": "bn"
+  },
+  {
+    "id": "ca",
+    "file": "ca",
+    "label": "Catalan",
+    "nativeLabel": "Català",
+    "flag": "🇦🇩",
+    "direction": "ltr",
+    "google": "ca"
+  },
+  {
+    "id": "ca-ES",
+    "file": "ca-ES",
+    "label": "Valencian",
+    "nativeLabel": "Valencià",
+    "flag": "🇪🇸",
+    "direction": "ltr",
+    "google": "ca"
+  },
+  {
+    "id": "cs",
+    "file": "cs",
+    "label": "Czech",
+    "nativeLabel": "Čeština",
+    "flag": "🇨🇿",
+    "direction": "ltr",
+    "google": "cs"
+  },
+  {
+    "id": "da",
+    "file": "da",
+    "label": "Danish",
+    "nativeLabel": "Dansk",
+    "flag": "🇩🇰",
+    "direction": "ltr",
+    "google": "da"
+  },
+  {
+    "id": "de",
+    "file": "de",
+    "label": "German",
+    "nativeLabel": "Deutsch",
+    "flag": "🇩🇪",
+    "direction": "ltr",
+    "google": "de"
+  },
+  {
+    "id": "de-CH",
+    "file": "de-CH",
+    "label": "Swiss German",
+    "nativeLabel": "Schweizerdeutsch",
+    "flag": "🇨🇭",
+    "direction": "ltr",
+    "google": "de"
+  },
+  {
+    "id": "el",
+    "file": "el",
+    "label": "Greek",
+    "nativeLabel": "Ελληνικά",
+    "flag": "🇬🇷",
+    "direction": "ltr",
+    "google": "el"
+  },
+  {
+    "id": "es",
+    "file": "es",
+    "label": "Spanish",
+    "nativeLabel": "Español",
+    "flag": "🇪🇸",
+    "direction": "ltr",
+    "google": "es"
+  },
+  {
+    "id": "et",
+    "file": "et",
+    "label": "Estonian",
+    "nativeLabel": "Eesti",
+    "flag": "🇪🇪",
+    "direction": "ltr",
+    "google": "et"
+  },
+  {
+    "id": "fa",
+    "file": "fa",
+    "label": "Persian",
+    "nativeLabel": "فارسی",
+    "flag": "🇮🇷",
+    "direction": "rtl",
+    "google": "fa"
+  },
+  {
+    "id": "fi-FI",
+    "file": "fi-FI",
+    "label": "Finnish",
+    "nativeLabel": "Suomi",
+    "flag": "🇫🇮",
+    "direction": "ltr",
+    "google": "fi"
+  },
+  {
+    "id": "fr",
+    "file": "fr",
+    "label": "French",
+    "nativeLabel": "Français",
+    "flag": "🇫🇷",
+    "direction": "ltr",
+    "google": "fr"
+  },
+  {
+    "id": "gl",
+    "file": "gl",
+    "label": "Galician",
+    "nativeLabel": "Galego",
+    "flag": "🇪🇸",
+    "direction": "ltr",
+    "google": "gl"
+  },
+  {
+    "id": "gu",
+    "file": "gu",
+    "label": "Gujarati",
+    "nativeLabel": "ગુજરાતી",
+    "flag": "🇮🇳",
+    "direction": "ltr",
+    "google": "gu"
+  },
+  {
+    "id": "he",
+    "file": "he",
+    "label": "Hebrew",
+    "nativeLabel": "עברית",
+    "flag": "🇮🇱",
+    "direction": "rtl",
+    "google": "iw"
+  },
+  {
+    "id": "hi",
+    "file": "hi",
+    "label": "Hindi",
+    "nativeLabel": "हिन्दी",
+    "flag": "🇮🇳",
+    "direction": "ltr",
+    "google": "hi"
+  },
+  {
+    "id": "hu",
+    "file": "hu",
+    "label": "Hungarian",
+    "nativeLabel": "Magyar",
+    "flag": "🇭🇺",
+    "direction": "ltr",
+    "google": "hu"
+  },
+  {
+    "id": "id",
+    "file": "id",
+    "label": "Indonesian",
+    "nativeLabel": "Bahasa Indonesia",
+    "flag": "🇮🇩",
+    "direction": "ltr",
+    "google": "id"
+  },
+  {
+    "id": "is-IS",
+    "file": "is-IS",
+    "label": "Icelandic",
+    "nativeLabel": "Íslenska",
+    "flag": "🇮🇸",
+    "direction": "ltr",
+    "google": "is"
+  },
+  {
+    "id": "it",
+    "file": "it",
+    "label": "Italian",
+    "nativeLabel": "Italiano",
+    "flag": "🇮🇹",
+    "direction": "ltr",
+    "google": "it"
+  },
+  {
+    "id": "ja",
+    "file": "ja",
+    "label": "Japanese",
+    "nativeLabel": "日本語",
+    "flag": "🇯🇵",
+    "direction": "ltr",
+    "google": "ja"
+  },
+  {
+    "id": "km",
+    "file": "km",
+    "label": "Khmer",
+    "nativeLabel": "ខ្មែរ",
+    "flag": "🇰🇭",
+    "direction": "ltr",
+    "google": "km"
+  },
+  {
+    "id": "ko",
+    "file": "ko",
+    "label": "Korean",
+    "nativeLabel": "한국어",
+    "flag": "🇰🇷",
+    "direction": "ltr",
+    "google": "ko"
+  },
+  {
+    "id": "lv",
+    "file": "lv",
+    "label": "Latvian",
+    "nativeLabel": "Latviešu",
+    "flag": "🇱🇻",
+    "direction": "ltr",
+    "google": "lv"
+  },
+  {
+    "id": "ne",
+    "file": "ne",
+    "label": "Nepali",
+    "nativeLabel": "नेपाली",
+    "flag": "🇳🇵",
+    "direction": "ltr",
+    "google": "ne"
+  },
+  {
+    "id": "nl",
+    "file": "nl",
+    "label": "Dutch",
+    "nativeLabel": "Nederlands",
+    "flag": "🇳🇱",
+    "direction": "ltr",
+    "google": "nl"
+  },
+  {
+    "id": "pa",
+    "file": "pa",
+    "label": "Punjabi",
+    "nativeLabel": "ਪੰਜਾਬੀ",
+    "flag": "🇮🇳",
+    "direction": "ltr",
+    "google": "pa"
+  },
+  {
+    "id": "pl",
+    "file": "pl",
+    "label": "Polish",
+    "nativeLabel": "Polski",
+    "flag": "🇵🇱",
+    "direction": "ltr",
+    "google": "pl"
+  },
+  {
+    "id": "pt-BR",
+    "file": "pt-BR",
+    "label": "Portuguese (Brazil)",
+    "nativeLabel": "Português (Brasil)",
+    "flag": "🇧🇷",
+    "direction": "ltr",
+    "google": "pt"
+  },
+  {
+    "id": "pt-PT",
+    "file": "pt-PT",
+    "label": "Portuguese (Portugal)",
+    "nativeLabel": "Português (Portugal)",
+    "flag": "🇵🇹",
+    "direction": "ltr",
+    "google": "pt"
+  },
+  {
+    "id": "ro",
+    "file": "ro",
+    "label": "Romanian",
+    "nativeLabel": "Română",
+    "flag": "🇷🇴",
+    "direction": "ltr",
+    "google": "ro"
+  },
+  {
+    "id": "ru",
+    "file": "ru",
+    "label": "Russian",
+    "nativeLabel": "Русский",
+    "flag": "🇷🇺",
+    "direction": "ltr",
+    "google": "ru"
+  },
+  {
+    "id": "si",
+    "file": "si",
+    "label": "Sinhala",
+    "nativeLabel": "සිංහල",
+    "flag": "🇱🇰",
+    "direction": "ltr",
+    "google": "si"
+  },
+  {
+    "id": "sl",
+    "file": "sl",
+    "label": "Slovenian",
+    "nativeLabel": "Slovenščina",
+    "flag": "🇸🇮",
+    "direction": "ltr",
+    "google": "sl"
+  },
+  {
+    "id": "sv",
+    "file": "sv",
+    "label": "Swedish",
+    "nativeLabel": "Svenska",
+    "flag": "🇸🇪",
+    "direction": "ltr",
+    "google": "sv"
+  },
+  {
+    "id": "ta",
+    "file": "ta",
+    "label": "Tamil",
+    "nativeLabel": "தமிழ்",
+    "flag": "🇱🇰",
+    "direction": "ltr",
+    "google": "ta"
+  },
+  {
+    "id": "th",
+    "file": "th",
+    "label": "Thai",
+    "nativeLabel": "ไทย",
+    "flag": "🇹🇭",
+    "direction": "ltr",
+    "google": "th"
+  },
+  {
+    "id": "tr",
+    "file": "tr",
+    "label": "Turkish",
+    "nativeLabel": "Türkçe",
+    "flag": "🇹🇷",
+    "direction": "ltr",
+    "google": "tr"
+  },
+  {
+    "id": "uk",
+    "file": "uk",
+    "label": "Ukrainian",
+    "nativeLabel": "Українська",
+    "flag": "🇺🇦",
+    "direction": "ltr",
+    "google": "uk"
+  },
+  {
+    "id": "ur-PK",
+    "file": "ur-PK",
+    "label": "Urdu",
+    "nativeLabel": "اردو",
+    "flag": "🇵🇰",
+    "direction": "rtl",
+    "google": "ur"
+  },
+  {
+    "id": "vi",
+    "file": "vi",
+    "label": "Vietnamese",
+    "nativeLabel": "Tiếng Việt",
+    "flag": "🇻🇳",
+    "direction": "ltr",
+    "google": "vi"
+  },
+  {
+    "id": "zh",
+    "file": "zh",
+    "label": "Chinese (Simplified)",
+    "nativeLabel": "简体中文",
+    "flag": "🇨🇳",
+    "direction": "ltr",
+    "google": "zh-CN"
+  },
+  {
+    "id": "zh-Hant",
+    "file": "zh-Hant",
+    "label": "Chinese (Traditional)",
+    "nativeLabel": "繁體中文",
+    "flag": "🇹🇼",
+    "direction": "ltr",
+    "google": "zh-TW"
+  }
+]

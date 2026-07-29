@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Esitus",
+    "addons": "Ökosüsteem",
+    "download": "Laadi alla",
+    "language": "Keel"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX LAUAARV / 01",
+    "title": "Vaadake paremini.",
+    "titleAccent": "Töölaual.",
+    "description": "Algne taasesitus, teravamad juhtnupud ja rahulikum koht järgmise kella jaoks.",
+    "primaryCta": "Laadige alla töölaud",
+    "secondaryCta": "Vaata kogemust",
+    "imageAlt": "AlphaFlixi töölauarakenduse eelvaade",
+    "version": "Töölaua väljalase"
+  },
+  "features": {
+    "performanceTitle": "Teie raamatukogu ilma brauserimaksuta.",
+    "overviewDescription": "AlphaFlix Desktop annab taasesitamiseks vajaliku ruumi: loomulik jõudlus, puhtad üleandmised ja juhtnupud, mis jäävad eemale.",
+    "playback": "Algne taasesitus",
+    "playbackDescription": "Sujuv video töölauatasemel meediakäsitlusega.",
+    "performance": "Vaikne jõudlus",
+    "performanceDescription": "Vähem kroomi. Rohkem keskendumist. Ei mingit vahelehtede žongleerimist.",
+    "continuity": "Hoidke oma voolu",
+    "continuityDescription": "Jätkake, sirvige ja vahetage allikaid hetke kaotamata.",
+    "ecosystemTitle": "Valmis järgmiseks.",
+    "ecosystemDescription": "Töölauarakendus on tuum. Lisad laiendavad servi, nii et teie seadistus võib jääda isiklikuks, ilma et see muutuks keeruliseks.",
+    "addonLabel": "LISAKS VALMIS",
+    "addonOne": "Allika pistikud",
+    "addonTwo": "Subtiitrite tööriistad",
+    "addonThree": "kogukonna laiendused",
+    "showcaseTitle": "Ekraan on sihtkoht.",
+    "showcaseDescription": "Fokuseeritud töölauapind avastamiseks, taasesituseks ja kõigeks loo ümber.",
+    "showcaseCaption": "AlphaFlix töölaua / fookuse režiim"
+  },
+  "download": {
+    "eyebrow": "VALI OMA EHITUS",
+    "title": "Võtke AlphaFlix endaga kaasa.",
+    "description": "Valige oma masina ehitus. Teie brauser annab soovituse või kuvab allpool kõik saadaolevad valikud.",
+    "recommended": "Soovitatav",
+    "chooseBuild": "Valige ehitus",
+    "selected": "Valitud",
+    "download": "Laadi alla",
+    "showAll": "Kõik konstruktsioonid on näidatud",
+    "detected": "Tuvastati selles seadmes",
+    "loading": "Saadaolevate järge kontrollimine...",
+    "empty": "Ühtegi töölauajärku pole veel avaldatud. Tulge varsti tagasi.",
+    "error": "Töölaua versioonide loendit ei saanud laadida.",
+    "retry": "Proovi uuesti",
+    "noBackend": "Allalaadimisteenus ei ole selle juurutuse jaoks konfigureeritud.",
+    "version": "Vabasta"
+  },
+  "footer": {
+    "line": "Vaiksem kodu lugudele, mille juurde sa ikka ja jälle tagasi tuled.",
+    "status": "Töölaud kõigepealt. Lisandmooduliks valmis."
+  }
+}

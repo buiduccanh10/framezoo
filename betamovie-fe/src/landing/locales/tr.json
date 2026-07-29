@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Performans",
+    "addons": "Ekosistem",
+    "download": "İndirmek",
+    "language": "Dil"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX MASAÜSTÜ / 01",
+    "title": "Daha iyi izle.",
+    "titleAccent": "Masaüstünde.",
+    "description": "Yerel oynatma, daha keskin kontroller ve bir sonraki izlemeniz için daha sakin bir yer.",
+    "primaryCta": "Masaüstünü indir",
+    "secondaryCta": "Deneyimi görün",
+    "imageAlt": "AlphaFlix masaüstü uygulaması önizlemesi",
+    "version": "Masaüstü sürümü"
+  },
+  "features": {
+    "performanceTitle": "Tarayıcı vergisi olmadan kitaplığınız.",
+    "overviewDescription": "AlphaFlix Masaüstü, oynatmaya ihtiyaç duyduğu alanı sağlar: yerel performans, temiz aktarımlar ve engellenmeyen kontroller.",
+    "playback": "Yerel oynatma",
+    "playbackDescription": "Masaüstü düzeyinde medya işlemeyle akıcı video.",
+    "performance": "Sessiz performans",
+    "performanceDescription": "Daha az krom. Daha fazla odaklanma. Sekme hokkabazlığı yok.",
+    "continuity": "Akışınızı koruyun",
+    "continuityDescription": "Anı kaybetmeden devam edin, göz atın ve kaynaklar arasında geçiş yapın.",
+    "ecosystemTitle": "Bundan sonra olacaklara hazırız.",
+    "ecosystemDescription": "Masaüstü uygulaması temeldir. Eklentiler sınırları genişletir, böylece kurulumunuz karmaşıklaşmadan kişisel kalabilir.",
+    "addonLabel": "ADDON'A HAZIR",
+    "addonOne": "Kaynak konnektörleri",
+    "addonTwo": "Altyazı araçları",
+    "addonThree": "Topluluk uzantıları",
+    "showcaseTitle": "Hedef ekrandır.",
+    "showcaseDescription": "Keşif, oynatma ve hikayeyle ilgili her şey için odaklanmış bir masaüstü yüzeyi.",
+    "showcaseCaption": "AlphaFlix Masaüstü / Odak modu"
+  },
+  "download": {
+    "eyebrow": "YAPINIZI SEÇİN",
+    "title": "AlphaFlix'i yanınıza alın.",
+    "description": "Makineniz için yapıyı seçin. Tarayıcınız öneride bulunacak veya aşağıda mevcut tüm seçenekleri gösterecektir.",
+    "recommended": "Tavsiye edilen",
+    "chooseBuild": "Bir yapı seçin",
+    "selected": "Seçildi",
+    "download": "İndirmek",
+    "showAll": "Tüm yapılar gösteriliyor",
+    "detected": "Bu cihazda algılandı",
+    "loading": "Mevcut yapılar kontrol ediliyor...",
+    "empty": "Henüz hiçbir masaüstü sürümü yayınlanmadı. Yakında tekrar kontrol edin.",
+    "error": "Masaüstü sürüm listesi yüklenemedi.",
+    "retry": "Tekrar deneyin",
+    "noBackend": "İndirme hizmeti bu dağıtım için yapılandırılmadı.",
+    "version": "Serbest bırakmak"
+  },
+  "footer": {
+    "line": "Sürekli geri döndüğünüz hikayeler için daha sessiz bir yuva.",
+    "status": "Önce masaüstü. Eklentiye hazır."
+  }
+}
