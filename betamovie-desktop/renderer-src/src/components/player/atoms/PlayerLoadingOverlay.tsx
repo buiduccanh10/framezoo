@@ -37,11 +37,11 @@ function LoadingTitle(props: {
 
   if (!props.logo) {
     return (
-      <div className="relative max-w-full overflow-hidden text-4xl font-bold uppercase tracking-[0.28em] text-white/25 md:text-6xl">
+      <div className="relative max-w-full overflow-hidden text-4xl font-bold uppercase tracking-[0.28em] text-white/25 transition-[transform,opacity] duration-500 ease-out motion-safe:animate-pulse md:text-6xl">
         <span>{props.title}</span>
         <span
-          className="absolute inset-y-0 left-0 overflow-hidden whitespace-nowrap text-white"
-          style={{ width: progress }}
+          className="absolute inset-y-0 left-0 overflow-hidden whitespace-nowrap text-white transition-[width] duration-700 ease-out"
+          style={{ width: progress, willChange: "width" }}
         >
           {props.title}
         </span>
@@ -50,7 +50,7 @@ function LoadingTitle(props: {
   }
 
   return (
-    <div className="relative w-full max-w-[16rem] md:max-w-[20rem] lg:max-w-[30rem] max-h-[12rem]">
+    <div className="relative w-full max-w-[16rem] md:max-w-[20rem] lg:max-w-[30rem] max-h-[12rem] motion-safe:animate-pulse">
       <LazyImage
         src={props.logo}
         alt={props.title}
@@ -61,9 +61,10 @@ function LoadingTitle(props: {
         onError={props.onError}
       />
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 transition-[clip-path] duration-700 ease-out"
         style={{
           clipPath: `inset(0 ${100 - progressValue}% 0 0)`,
+          willChange: "clip-path",
         }}
       >
         <LazyImage
@@ -114,17 +115,17 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const meta = usePlayerStore((s) => s.meta);
   const sourceId = usePlayerStore((s) => s.sourceId);
   const embedId = usePlayerStore((s) => s.embedId);
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const time = usePlayerStore((s) => s.progress.time);
   const buffered = usePlayerStore((s) => s.progress.buffered);
   const duration = usePlayerStore((s) => s.progress.duration);
   const torrentStatus = useActiveTorrentStatus();
 
-  const isBufferingCurrentPlaybackSegment = useMemo(() => {
-    if (status !== playerStatus.PLAYING || !isLoading) return false;
-    if (time > 0 && !isLoading) return false;
-    return true;
-  }, [status, isLoading, time]);
+  const isBufferingCurrentPlaybackSegment =
+    status === playerStatus.PLAYING && isLoading;
 
   const isPreparingSource =
     props.sourceLoading && status === playerStatus.SOURCE_SELECTION;
@@ -141,12 +142,6 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     );
   }, [torrentStatus, status, duration, buffered, time]);
 
-  const showOverlay =
-    (status === playerStatus.IDLE ||
-      isPreparingSource ||
-      isBufferingCurrentPlaybackSegment ||
-      isTorrentPreparing) &&
-    !(status === playerStatus.PLAYING && !isLoading && time > 0);
   const bufferedProgress =
     duration > 0 ? Math.min(100, (buffered / duration) * 100) : 0;
   const STREAM_READY_THRESHOLD_BYTES = 4 * 1024 * 1024; // ~4MB of initial pieces required to stream first frame
@@ -155,13 +150,13 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     : STREAM_READY_THRESHOLD_BYTES;
   const torrentStreamProgress = torrentStatus
     ? Math.min(
-        99,
+        95,
         Math.round(
           (torrentStatus.downloadedBytes / torrentStreamTargetBytes) * 100,
         ),
       )
     : 0;
-  const loadingProgress = torrentStatus
+  const rawLoadingProgress = torrentStatus
     ? Math.max(bufferedProgress, torrentStreamProgress)
     : bufferedProgress;
 
@@ -191,6 +186,35 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     sourceId,
     embedId,
   ]);
+
+  const [canHidePlaybackOverlay, setCanHidePlaybackOverlay] = useState(false);
+  const isPlaybackReady =
+    status === playerStatus.PLAYING && hasRenderedFrame && !isLoading;
+
+  useEffect(() => {
+    if (!isPlaybackReady) {
+      setCanHidePlaybackOverlay(false);
+      return;
+    }
+
+    // Let the native surface swap and audio pipeline settle before hiding the
+    // cover. Progress reaching 100% is not a readiness signal.
+    const timeout = window.setTimeout(() => {
+      setCanHidePlaybackOverlay(true);
+    }, 140);
+
+    return () => window.clearTimeout(timeout);
+  }, [isPlaybackReady, playbackKey]);
+
+  const showOverlay =
+    status === playerStatus.IDLE ||
+    isPreparingSource ||
+    isBufferingCurrentPlaybackSegment ||
+    isTorrentPreparing ||
+    (status === playerStatus.PLAYING && !canHidePlaybackOverlay);
+  const loadingProgress = canHidePlaybackOverlay
+    ? 100
+    : Math.min(95, rawLoadingProgress);
 
   const lastPlaybackKeyRef = useRef<string | null>(null);
   const [initialLoadPlaybackKey, setInitialLoadPlaybackKey] = useState<
