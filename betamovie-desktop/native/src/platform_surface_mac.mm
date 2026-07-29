@@ -207,13 +207,22 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
 void surface_request_paint(NativeSurface* surface) {
   if (!surface || !surface->view) return;
   BetaMovieMpvView* view = surface->view;
+  [view retain];
   dispatch_async(dispatch_get_main_queue(), ^{
     [view setNeedsDisplay:YES];
+    [view release];
   });
+}
+
+void surface_disable_paint(NativeSurface* surface) {
+  if (!surface) return;
+  surface->paint_callback = nullptr;
+  surface->user = nullptr;
 }
 
 void surface_destroy(NativeSurface* surface) {
   if (!surface) return;
+  surface_disable_paint(surface);
   if (surface->view) {
     surface->view.surface = nullptr;
     [surface->view removeFromSuperview];

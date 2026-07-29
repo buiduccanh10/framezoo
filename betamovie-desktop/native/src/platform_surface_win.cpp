@@ -176,8 +176,15 @@ void surface_request_paint(NativeSurface* surface) {
   InvalidateRect(surface->hwnd, nullptr, FALSE);
 }
 
+void surface_disable_paint(NativeSurface* surface) {
+  if (!surface) return;
+  surface->paint_callback = nullptr;
+  surface->user = nullptr;
+}
+
 void surface_destroy(NativeSurface* surface) {
   if (!surface) return;
+  surface_disable_paint(surface);
   if (surface->gl_context) {
     wglMakeCurrent(nullptr, nullptr);
     wglDeleteContext(surface->gl_context);

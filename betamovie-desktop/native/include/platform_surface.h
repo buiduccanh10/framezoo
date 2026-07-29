@@ -21,6 +21,7 @@ NativeSurface* surface_create(
 void surface_resize(NativeSurface* surface, SurfaceBounds bounds);
 void surface_reparent(NativeSurface* surface, void* parent_handle);
 void surface_request_paint(NativeSurface* surface);
+void surface_disable_paint(NativeSurface* surface);
 void surface_destroy(NativeSurface* surface);
 void* surface_get_proc_address(NativeSurface* surface, const char* name);
 void surface_make_current(NativeSurface* surface);

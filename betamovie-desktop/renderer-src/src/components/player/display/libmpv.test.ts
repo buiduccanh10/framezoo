@@ -286,4 +286,42 @@ describe("libmpv display", () => {
     expect(createPlayer).toHaveBeenCalledTimes(2);
     display.destroy();
   });
+
+  it("destroys the native player when the source is cleared", async () => {
+    const destroyPlayer = vi.fn().mockResolvedValue(true);
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      destroyLibMpvPlayer: destroyPlayer,
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "mp4",
+        url: "https://example.test/video.mkv",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    display.load({
+      source: null,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(destroyPlayer).toHaveBeenCalledWith("player-1");
+  });
 });
