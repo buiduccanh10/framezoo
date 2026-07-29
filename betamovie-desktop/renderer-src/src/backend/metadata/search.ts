@@ -6,6 +6,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 import {
   formatTMDBMetaToMediaItem,
   formatTMDBSearchResult,
+  getMediaBaseDetails,
   getMediaDetails,
   getMediaPoster,
   searchMedia,
@@ -131,32 +132,51 @@ export async function searchForMedia(query: MWQuery): Promise<MediaItem[]> {
   }
 
   const data = await searchMedia(searchQuery, language);
-  const results = await Promise.all(
-    data.map(async (v) => {
-      let countryCodes = getCountryCodesFromSearchResult(v);
-
-      try {
-        const details = (await getMediaDetails(
-          v.id.toString(),
-          v.media_type,
-          false,
-        )) as TMDBMovieData | TMDBShowData;
-        countryCodes = getCountryCodesFromDetails(details, v.media_type);
-      } catch {
-        // Keep fallback country codes from the search payload when details fail.
-      }
-
-      const formattedResult = formatTMDBSearchResult(v, v.media_type);
-      const mediaItem = formatTMDBMetaToMediaItem(formattedResult);
-      return {
-        ...mediaItem,
-        genreIds: v.genre_ids,
-        originCountryCodes: countryCodes,
-      };
-    }),
-  );
+  const results = data.map((v) => {
+    const formattedResult = formatTMDBSearchResult(v, v.media_type);
+    const mediaItem = formatTMDBMetaToMediaItem(formattedResult);
+    return {
+      ...mediaItem,
+      genreIds: v.genre_ids,
+      originCountryCodes: getCountryCodesFromSearchResult(v),
+    };
+  });
 
   // cache results for 1 hour
   cache.set(cacheKey, results, 3600);
   return results;
+}
+
+export async function enrichSearchResults(
+  query: MWQuery,
+  results: MediaItem[],
+): Promise<MediaItem[]> {
+  const language = getTmdbLanguageCode(useLanguageStore.getState().language);
+  const cacheKey = {
+    searchQuery: query.searchQuery,
+    language,
+    version: SEARCH_CACHE_VERSION,
+  };
+
+  const enrichedResults = await Promise.all(
+    results.map(async (result) => {
+      const tmdbType =
+        result.type === "show" ? TMDBContentTypes.TV : TMDBContentTypes.MOVIE;
+
+      try {
+        const details = (await getMediaBaseDetails(result.id, tmdbType)) as
+          | TMDBMovieData
+          | TMDBShowData;
+        return {
+          ...result,
+          originCountryCodes: getCountryCodesFromDetails(details, tmdbType),
+        };
+      } catch {
+        return result;
+      }
+    }),
+  );
+
+  cache.set(cacheKey, enrichedResults, 3600);
+  return enrichedResults;
 }
