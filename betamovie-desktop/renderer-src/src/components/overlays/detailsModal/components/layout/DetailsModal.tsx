@@ -58,39 +58,26 @@ export function DetailsModal({
       try {
         const type =
           data.type === "movie" ? TMDBContentTypes.MOVIE : TMDBContentTypes.TV;
-        const [baseResult, supplementalResult, logoResult] =
-          await Promise.allSettled([
-            getMediaBaseDetails(data.id.toString(), type),
-            getMediaDetailSupplemental(data.id.toString(), type),
-            getMediaLogo(data.id.toString(), type),
-          ]);
+        const basePromise = getMediaBaseDetails(data.id.toString(), type);
+        const supplementalPromise = getMediaDetailSupplemental(
+          data.id.toString(),
+          type,
+        );
+        const logoPromise = getMediaLogo(data.id.toString(), type);
+        const supplementalAndLogoPromise = Promise.allSettled([
+          supplementalPromise,
+          logoPromise,
+        ]);
 
-        if (baseResult.status !== "fulfilled") {
-          throw baseResult.reason;
-        }
+        const details = await basePromise;
 
         if (isCancelled) return;
 
-        const details = baseResult.value;
         const backdropUrl = getMediaBackdrop(details.backdrop_path);
-        const logoUrl =
-          logoResult.status === "fulfilled" ? logoResult.value : undefined;
+        const posterUrl = getMediaPoster(details.poster_path);
 
         if (type === TMDBContentTypes.MOVIE) {
           const movieDetails = details as TMDBMovieData;
-          const supplemental =
-            supplementalResult.status === "fulfilled"
-              ? (supplementalResult.value as Pick<
-                  TMDBMovieData,
-                  "external_ids" | "release_dates"
-                >)
-              : undefined;
-          const posterUrl = getMediaPoster(movieDetails.poster_path);
-          const rating = supplemental?.release_dates?.results?.find(
-            (r) => r.iso_3166_1 === "US",
-          )?.release_dates?.[0]?.certification;
-
-          if (isCancelled) return;
           setDetailsData({
             title: movieDetails.title,
             overview: movieDetails.overview,
@@ -102,28 +89,15 @@ export function DetailsModal({
             voteAverage: movieDetails.vote_average,
             voteCount: movieDetails.vote_count,
             releaseDate: movieDetails.release_date,
-            rating,
+            rating: undefined,
             type: "movie",
             id: movieDetails.id,
-            imdbId: supplemental?.external_ids?.imdb_id ?? undefined,
-            logoUrl,
+            imdbId: undefined,
+            logoUrl: undefined,
             collection: movieDetails.belongs_to_collection,
           });
         } else {
           const showDetails = details as TMDBShowData;
-          const supplemental =
-            supplementalResult.status === "fulfilled"
-              ? (supplementalResult.value as Pick<
-                  TMDBShowData,
-                  "external_ids" | "content_ratings"
-                >)
-              : undefined;
-          const posterUrl = getMediaPoster(showDetails.poster_path);
-          const rating = supplemental?.content_ratings?.results?.find(
-            (r) => r.iso_3166_1 === "US",
-          )?.rating;
-
-          if (isCancelled) return;
           setDetailsData({
             title: showDetails.name,
             overview: showDetails.overview,
@@ -136,23 +110,65 @@ export function DetailsModal({
             voteAverage: showDetails.vote_average,
             voteCount: showDetails.vote_count,
             releaseDate: showDetails.first_air_date,
-            rating,
+            rating: undefined,
             type: "show",
             id: showDetails.id,
-            imdbId: supplemental?.external_ids?.imdb_id ?? undefined,
+            imdbId: undefined,
             seasonData: {
               seasons: showDetails.seasons,
               episodes: [],
             },
-            logoUrl,
+            logoUrl: undefined,
           });
         }
+
+        setIsLoading(false);
+
+        void supplementalAndLogoPromise.then(
+          ([supplementalResult, logoResult]) => {
+            if (isCancelled) return;
+
+            const supplemental =
+              supplementalResult.status === "fulfilled"
+                ? supplementalResult.value
+                : undefined;
+            const logoUrl =
+              logoResult.status === "fulfilled" ? logoResult.value : undefined;
+
+            if (type === TMDBContentTypes.MOVIE) {
+              const movieSupplemental = supplemental as
+                | Pick<TMDBMovieData, "external_ids" | "release_dates">
+                | undefined;
+              const rating = movieSupplemental?.release_dates?.results?.find(
+                (r) => r.iso_3166_1 === "US",
+              )?.release_dates?.[0]?.certification;
+              const imdbId = movieSupplemental?.external_ids?.imdb_id;
+
+              setDetailsData((current: any) =>
+                current?.id === details.id && current.type === "movie"
+                  ? { ...current, rating, imdbId, logoUrl }
+                  : current,
+              );
+            } else {
+              const showSupplemental = supplemental as
+                | Pick<TMDBShowData, "external_ids" | "content_ratings">
+                | undefined;
+              const rating = showSupplemental?.content_ratings?.results?.find(
+                (r) => r.iso_3166_1 === "US",
+              )?.rating;
+              const imdbId = showSupplemental?.external_ids?.imdb_id;
+
+              setDetailsData((current: any) =>
+                current?.id === details.id && current.type === "show"
+                  ? { ...current, rating, imdbId, logoUrl }
+                  : current,
+              );
+            }
+          },
+        );
       } catch (err) {
         if (!isCancelled) {
           console.error("Failed to fetch media details:", err);
-        }
-      } finally {
-        if (!isCancelled) {
           setIsLoading(false);
         }
       }
