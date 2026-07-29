@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Performance",
+    "addons": "Écosystème",
+    "download": "Télécharger",
+    "language": "Langue"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX BUREAU / 01",
+    "title": "Regardez mieux.",
+    "titleAccent": "Sur le bureau.",
+    "description": "Lecture native, commandes plus précises et endroit plus calme pour votre prochaine montre.",
+    "primaryCta": "Télécharger le bureau",
+    "secondaryCta": "Voir l'expérience",
+    "imageAlt": "Aperçu de l'application de bureau AlphaFlix",
+    "version": "Version de bureau"
+  },
+  "features": {
+    "performanceTitle": "Votre bibliothèque, sans la taxe du navigateur.",
+    "overviewDescription": "AlphaFlix Desktop donne à la lecture l'espace dont elle a besoin : des performances natives, des transferts clairs et des commandes qui ne gênent pas.",
+    "playback": "Lecture native",
+    "playbackDescription": "Vidéo fluide avec une gestion multimédia de qualité bureautique.",
+    "performance": "Performances silencieuses",
+    "performanceDescription": "Moins de chrome. Plus de concentration. Pas de jonglerie avec les tabulations.",
+    "continuity": "Gardez votre flux",
+    "continuityDescription": "Reprenez, parcourez et changez de source sans perdre l'instant.",
+    "ecosystemTitle": "Prêt pour la suite.",
+    "ecosystemDescription": "L’application de bureau est au cœur. Les modules complémentaires étendent les bords, afin que votre configuration puisse rester personnelle sans devenir compliquée.",
+    "addonLabel": "PRÊT POUR LES ADDONS",
+    "addonOne": "Connecteurs sources",
+    "addonTwo": "Outils de sous-titres",
+    "addonThree": "Extensions de communauté",
+    "showcaseTitle": "L'écran est la destination.",
+    "showcaseDescription": "Une surface de bureau ciblée pour la découverte, la lecture et tout ce qui concerne l'histoire.",
+    "showcaseCaption": "Bureau AlphaFlix / Mode mise au point"
+  },
+  "download": {
+    "eyebrow": "CHOISISSEZ VOTRE CONSTRUCTION",
+    "title": "Emportez AlphaFlix avec vous.",
+    "description": "Choisissez la version de votre machine. Votre navigateur fera la recommandation ou révélera toutes les options disponibles ci-dessous.",
+    "recommended": "Recommandé",
+    "chooseBuild": "Choisissez une version",
+    "selected": "Choisi",
+    "download": "Télécharger",
+    "showAll": "Toutes les versions sont affichées",
+    "detected": "Détecté sur cet appareil",
+    "loading": "Vérification des versions disponibles...",
+    "empty": "Aucune version de bureau n'est encore publiée. Revenez bientôt.",
+    "error": "Impossible de charger la liste des versions de bureau.",
+    "retry": "Essayer à nouveau",
+    "noBackend": "Le service de téléchargement n'est pas configuré pour ce déploiement.",
+    "version": "Libérer"
+  },
+  "footer": {
+    "line": "Une maison plus calme pour les histoires auxquelles vous revenez sans cesse.",
+    "status": "Le bureau d’abord. Prêt pour les modules complémentaires."
+  }
+}

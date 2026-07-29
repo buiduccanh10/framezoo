@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "パフォーマンス",
+    "addons": "生態系",
+    "download": "ダウンロード",
+    "language": "言語"
+  },
+  "hero": {
+    "eyebrow": "アルファフリックス デスクトップ / 01",
+    "title": "もっとよく見てください。",
+    "titleAccent": "デスクトップ上。",
+    "description": "ネイティブ再生、よりシャープなコントロール、そして次の時計をより静かに楽しめる場所。",
+    "primaryCta": "デスクトップをダウンロード",
+    "secondaryCta": "体験談を見る",
+    "imageAlt": "AlphaFlix デスクトップ アプリのプレビュー",
+    "version": "デスクトップリリース"
+  },
+  "features": {
+    "performanceTitle": "ブラウザ税なしのあなたのライブラリ。",
+    "overviewDescription": "AlphaFlix Desktop は、ネイティブ パフォーマンス、クリーンなハンドオフ、邪魔にならないコントロールなど、再生に必要なスペースを提供します。",
+    "playback": "ネイティブ再生",
+    "playbackDescription": "デスクトップグレードのメディア処理によるスムーズなビデオ。",
+    "performance": "静かなパフォーマンス",
+    "performanceDescription": "クロムが少ない。さらに集中力を高めます。タブジャグリングはありません。",
+    "continuity": "流れを維持する",
+    "continuityDescription": "瞬間を逃すことなくソースを再開、閲覧、切り替えできます。",
+    "ecosystemTitle": "次に何が起こるかに備えてください。",
+    "ecosystemDescription": "デスクトップ アプリが核となります。アドオンはエッジを拡張するため、セットアップが複雑になることなく個人的なものを維持できます。",
+    "addonLabel": "アドオン対応",
+    "addonOne": "ソースコネクタ",
+    "addonTwo": "字幕ツール",
+    "addonThree": "コミュニティ拡張機能",
+    "showcaseTitle": "画面が目的地です。",
+    "showcaseDescription": "発見、再生、ストーリーに関するすべてのことに集中したデスクトップ サーフェス。",
+    "showcaseCaption": "AlphaFlix デスクトップ / フォーカス モード"
+  },
+  "download": {
+    "eyebrow": "ビルドを選択してください",
+    "title": "AlphaFlix を持ち歩きましょう。",
+    "description": "マシンのビルドを選択します。ブラウザーが推奨を行うか、以下の利用可能なすべてのオプションを表示します。",
+    "recommended": "推奨",
+    "chooseBuild": "ビルドを選択してください",
+    "selected": "選択済み",
+    "download": "ダウンロード",
+    "showAll": "すべてのビルドが表示されます",
+    "detected": "このデバイスで検出されました",
+    "loading": "利用可能なビルドを確認しています...",
+    "empty": "デスクトップ ビルドはまだ公開されていません。すぐにもう一度確認してください。",
+    "error": "デスクトップ リリース リストをロードできませんでした。",
+    "retry": "もう一度やり直してください",
+    "noBackend": "この展開にはダウンロード サービスが構成されていません。",
+    "version": "リリース"
+  },
+  "footer": {
+    "line": "何度も戻ってくる物語のための、より静かな家。",
+    "status": "デスクトップファースト。アドオン対応。"
+  }
+}

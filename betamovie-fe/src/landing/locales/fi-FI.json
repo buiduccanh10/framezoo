@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Suorituskyky",
+    "addons": "Ekosysteemi",
+    "download": "Lataa",
+    "language": "Kieli"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX DESKTOP / 01",
+    "title": "Katso paremmin.",
+    "titleAccent": "työpöydällä.",
+    "description": "Alkuperäinen toisto, terävämmät säätimet ja rauhallisempi paikka seuraavalle kellolle.",
+    "primaryCta": "Lataa työpöytä",
+    "secondaryCta": "Katso kokemus",
+    "imageAlt": "AlphaFlix-työpöytäsovelluksen esikatselu",
+    "version": "Työpöytäjulkaisu"
+  },
+  "features": {
+    "performanceTitle": "Kirjastosi ilman selainveroa.",
+    "overviewDescription": "AlphaFlix Desktop antaa toistolle sen tarvitseman tilan: alkuperäisen suorituskyvyn, puhtaat kanavanvaihdot ja säätimet, jotka pysyvät poissa tieltä.",
+    "playback": "Alkuperäinen toisto",
+    "playbackDescription": "Tasainen video työpöytätason mediankäsittelyllä.",
+    "performance": "Hiljainen suorituskyky",
+    "performanceDescription": "Vähemmän kromia. Enemmän keskittymistä. Ei välilehtien jongleerausta.",
+    "continuity": "Pidä virtaus",
+    "continuityDescription": "Jatka, selaa ja vaihda lähteitä menettämättä hetkeä.",
+    "ecosystemTitle": "Valmiina seuraavaan.",
+    "ecosystemDescription": "Työpöytäsovellus on ydin. Lisäosat laajentavat reunoja, joten kokoonpanosi voi pysyä henkilökohtaisena ilman, että siitä tulee monimutkainen.",
+    "addonLabel": "LISÄYSVALMIS",
+    "addonOne": "Lähdeliittimet",
+    "addonTwo": "Tekstitystyökalut",
+    "addonThree": "Yhteisön laajennukset",
+    "showcaseTitle": "Näyttö on määränpää.",
+    "showcaseDescription": "Kohdistettu työpöytäpinta löytöjä, toistoa ja kaikkea tarinaa varten.",
+    "showcaseCaption": "AlphaFlix Desktop / Focus -tila"
+  },
+  "download": {
+    "eyebrow": "VALITSE RAKENNUSSI",
+    "title": "Ota AlphaFlix mukaasi.",
+    "description": "Valitse koneesi rakenne. Selaimesi antaa suosituksen tai paljastaa kaikki alla olevat vaihtoehdot.",
+    "recommended": "Suositeltava",
+    "chooseBuild": "Valitse rakennelma",
+    "selected": "Valittu",
+    "download": "Lataa",
+    "showAll": "Kaikki rakenteet näytetään",
+    "detected": "Havaittu tässä laitteessa",
+    "loading": "Tarkistetaan saatavilla olevia rakennelmia...",
+    "empty": "Työpöytäversioita ei ole vielä julkaistu. Tarkista pian uudelleen.",
+    "error": "Työpöydän julkaisuluetteloa ei voitu ladata.",
+    "retry": "Yritä uudelleen",
+    "noBackend": "Latauspalvelua ei ole määritetty tälle käyttöönotolle.",
+    "version": "Vapauta"
+  },
+  "footer": {
+    "line": "Hiljaisempi koti tarinoille, joihin palaat jatkuvasti.",
+    "status": "Työpöytä ensin. Lisäys valmiina."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Performance",
+    "addons": "Ecosystem",
+    "download": "Download",
+    "language": "Language"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX DESKTOP / 01",
+    "title": "Watch better.",
+    "titleAccent": "On desktop.",
+    "description": "Native playback, sharper controls, and a calmer place for your next watch.",
+    "primaryCta": "Download desktop",
+    "secondaryCta": "See the experience",
+    "imageAlt": "AlphaFlix desktop app preview",
+    "version": "Desktop release"
+  },
+  "features": {
+    "performanceTitle": "Your library, without the browser tax.",
+    "overviewDescription": "AlphaFlix Desktop gives playback the room it needs: native performance, clean handoffs, and controls that stay out of the way.",
+    "playback": "Native playback",
+    "playbackDescription": "Smooth video with desktop-grade media handling.",
+    "performance": "Quiet performance",
+    "performanceDescription": "Less chrome. More focus. No tab juggling.",
+    "continuity": "Keep your flow",
+    "continuityDescription": "Resume, browse, and switch sources without losing the moment.",
+    "ecosystemTitle": "Ready for what comes next.",
+    "ecosystemDescription": "The desktop app is the core. Addons extend the edges, so your setup can stay personal without becoming complicated.",
+    "addonLabel": "ADDON-READY",
+    "addonOne": "Source connectors",
+    "addonTwo": "Subtitle tools",
+    "addonThree": "Community extensions",
+    "showcaseTitle": "The screen is the destination.",
+    "showcaseDescription": "A focused desktop surface for discovery, playback, and everything around the story.",
+    "showcaseCaption": "AlphaFlix Desktop / Focus mode"
+  },
+  "download": {
+    "eyebrow": "CHOOSE YOUR BUILD",
+    "title": "Take AlphaFlix with you.",
+    "description": "Pick the build for your machine. Your browser will make the recommendation, or reveal every available option below.",
+    "recommended": "Recommended",
+    "chooseBuild": "Choose a build",
+    "selected": "Selected",
+    "download": "Download",
+    "showAll": "All builds are shown",
+    "detected": "Detected on this device",
+    "loading": "Checking available builds...",
+    "empty": "No desktop builds are published yet. Check back soon.",
+    "error": "Could not load the desktop release list.",
+    "retry": "Try again",
+    "noBackend": "Download service is not configured for this deployment.",
+    "version": "Release"
+  },
+  "footer": {
+    "line": "A quieter home for the stories you keep coming back to.",
+    "status": "Desktop-first. Addon-ready."
+  }
+}

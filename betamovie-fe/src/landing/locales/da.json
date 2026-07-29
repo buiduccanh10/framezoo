@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "features": "Præstation",
+    "addons": "Økosystem",
+    "download": "Download",
+    "language": "Sprog"
+  },
+  "hero": {
+    "eyebrow": "ALPHAFLIX DESKTOP / 01",
+    "title": "Se bedre.",
+    "titleAccent": "På skrivebordet.",
+    "description": "Indbygget afspilning, skarpere kontroller og et roligere sted til dit næste ur.",
+    "primaryCta": "Download skrivebordet",
+    "secondaryCta": "Se oplevelsen",
+    "imageAlt": "Forhåndsvisning af AlphaFlix desktop-app",
+    "version": "Desktop udgivelse"
+  },
+  "features": {
+    "performanceTitle": "Dit bibliotek, uden browserafgiften.",
+    "overviewDescription": "AlphaFlix Desktop giver afspilning det rum, det har brug for: indbygget ydeevne, rene overdragelser og kontroller, der holder sig ude af vejen.",
+    "playback": "Native afspilning",
+    "playbackDescription": "Glat video med mediehåndtering i desktop-kvalitet.",
+    "performance": "Stille præstation",
+    "performanceDescription": "Mindre krom. Mere fokus. Ingen fanejonglering.",
+    "continuity": "Hold dit flow",
+    "continuityDescription": "Genoptag, gennemse og skift kilder uden at miste øjeblikket.",
+    "ecosystemTitle": "Klar til det næste.",
+    "ecosystemDescription": "Desktop-appen er kernen. Tilføjelser udvider kanterne, så din opsætning kan forblive personlig uden at blive kompliceret.",
+    "addonLabel": "TILFØJELSE-KLAR",
+    "addonOne": "Kildestik",
+    "addonTwo": "Undertekstværktøjer",
+    "addonThree": "Fællesskabsudvidelser",
+    "showcaseTitle": "Skærmen er destinationen.",
+    "showcaseDescription": "En fokuseret skrivebordsoverflade til opdagelse, afspilning og alt omkring historien.",
+    "showcaseCaption": "AlphaFlix Desktop / Fokustilstand"
+  },
+  "download": {
+    "eyebrow": "VÆLG DIN BYGNING",
+    "title": "Tag AlphaFlix med dig.",
+    "description": "Vælg bygningen til din maskine. Din browser vil fremsætte anbefalingen eller afsløre alle tilgængelige muligheder nedenfor.",
+    "recommended": "Anbefales",
+    "chooseBuild": "Vælg en konstruktion",
+    "selected": "Valgt",
+    "download": "Download",
+    "showAll": "Alle builds vises",
+    "detected": "Registreret på denne enhed",
+    "loading": "Kontrollerer tilgængelige builds...",
+    "empty": "Ingen desktop-builds er offentliggjort endnu. Kom snart tilbage.",
+    "error": "Kunne ikke indlæse skrivebordsudgivelseslisten.",
+    "retry": "Prøv igen",
+    "noBackend": "Downloadtjenesten er ikke konfigureret til denne implementering.",
+    "version": "Frigøre"
+  },
+  "footer": {
+    "line": "Et mere stille hjem for de historier, du bliver ved med at vende tilbage til.",
+    "status": "Desktop først. Addon-klar."
+  }
+}
