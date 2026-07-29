@@ -947,6 +947,15 @@ class LibtorrentEngine:
         params.save_path = save_path
         params.storage_mode = lt.storage_mode_t.storage_mode_sparse
         handle = self.session.add_torrent(params)
+        
+        actual_save_path = handle.status().save_path
+        if actual_save_path != save_path:
+            try:
+                os.rmdir(save_path)
+            except OSError:
+                pass
+            save_path = actual_save_path
+
         runtime = TorrentRuntime(
             self,
             session_id,
