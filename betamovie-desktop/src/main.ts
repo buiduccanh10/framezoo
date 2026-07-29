@@ -743,6 +743,15 @@ function createMainWindow() {
   }
   libmpvController.init(mainWindow, () => desktopPipController.getWindow());
 
+  // The renderer cannot reliably finish async IPC during a hard reload.
+  // Native libmpv players live in the main process, so clean them up here.
+  mainWindow.webContents.on("did-start-loading", () => {
+    libmpvController.destroyAll();
+  });
+  mainWindow.webContents.on("render-process-gone", () => {
+    libmpvController.destroyAll();
+  });
+
   mainWindow.webContents.on("before-input-event", (event, input) => {
     if (!ENABLE_DEVTOOLS && isDevtoolsShortcut(input)) {
       event.preventDefault();

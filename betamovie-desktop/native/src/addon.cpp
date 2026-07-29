@@ -126,13 +126,25 @@ struct MpvPlayer {
     return api.command(handle, commands);
   }
 
-  ~MpvPlayer() {
-    running = false;
-    if (handle) {
+  void stop() {
+    const bool wasRunning = running.exchange(false, std::memory_order_acq_rel);
+    surface_disable_paint(surface);
+
+    if (wasRunning && handle) {
       const char* command[] = {"quit", nullptr};
       this->command(command);
     }
-    if (event_thread.joinable()) event_thread.join();
+
+    if (
+        event_thread.joinable() &&
+        event_thread.get_id() != std::this_thread::get_id()
+    ) {
+      event_thread.join();
+    }
+  }
+
+  ~MpvPlayer() {
+    stop();
     if (render_context) {
       api.render_context_free(render_context);
       render_context = nullptr;
@@ -224,10 +236,17 @@ struct MpvPlayer {
   }
 
   void render() {
-    if (!render_context || !surface) return;
+    if (
+        !running.load(std::memory_order_acquire) ||
+        !render_context ||
+        !surface
+    ) {
+      return;
+    }
     const uint64_t render_number = render_count.fetch_add(1) + 1;
     surface_make_current(surface);
     const uint64_t update_flags = api.render_context_update(render_context);
+    if (!running.load(std::memory_order_acquire)) return;
     mpv_opengl_fbo fbo{};
     fbo.fbo = 0;
     fbo.w = surface_width(surface);
@@ -243,8 +262,9 @@ struct MpvPlayer {
     if (result < 0) {
       std::fprintf(
           stderr,
-          "[libmpv-native] render failed result=%d update_flags=%llu "
+          "[libmpv-native] render failed player=%s result=%d update_flags=%llu "
           "surface=%dx%d\n",
+          id.c_str(),
           result,
           static_cast<unsigned long long>(update_flags),
           fbo.w,
@@ -253,8 +273,9 @@ struct MpvPlayer {
     } else if (render_number <= 5 || render_number % 60 == 0) {
       std::fprintf(
           stderr,
-          "[libmpv-native] render frame=%llu update_flags=%llu "
+          "[libmpv-native] render player=%s frame=%llu update_flags=%llu "
           "surface=%dx%d generation=%d\n",
+          id.c_str(),
           static_cast<unsigned long long>(render_number),
           static_cast<unsigned long long>(update_flags),
           fbo.w,
@@ -281,8 +302,9 @@ struct MpvPlayer {
     while (running) {
       mpv_event* event = api.wait_event(handle, 0.1);
       if (!event || event->event_id == MPV_EVENT_NONE) continue;
+      if (!running.load(std::memory_order_acquire)) break;
 
-    if (event->event_id == MPV_EVENT_SHUTDOWN) break;
+      if (event->event_id == MPV_EVENT_SHUTDOWN) break;
 
       auto* native_event = new NativeEvent();
       native_event->player_id = id;
@@ -432,12 +454,13 @@ std::atomic<uint64_t> next_player_id{1};
 
 void render_update_callback(void* user) {
   auto* player = static_cast<MpvPlayer*>(user);
-  if (!player) return;
+  if (!player || !player->running.load(std::memory_order_acquire)) return;
   const uint64_t update_number = player->render_update_count.fetch_add(1) + 1;
   if (update_number <= 5 || update_number % 60 == 0) {
     std::fprintf(
         stderr,
-        "[libmpv-native] render_update count=%llu generation=%d\n",
+        "[libmpv-native] render_update player=%s count=%llu generation=%d\n",
+        player->id.c_str(),
         static_cast<unsigned long long>(update_number),
         player->generation.load()
     );
@@ -447,7 +470,9 @@ void render_update_callback(void* user) {
 
 void paint_callback(void* user, NativeSurface*) {
   auto* player = static_cast<MpvPlayer*>(user);
-  if (player) player->render();
+  if (player && player->running.load(std::memory_order_acquire)) {
+    player->render();
+  }
 }
 
 bool get_named(napi_env env, napi_value object, const char* name, napi_value* out) {
@@ -996,6 +1021,7 @@ napi_value destroy_player(napi_env env, napi_callback_info info) {
       players.erase(found);
     }
   }
+  if (player) player->stop();
   player.reset();
   napi_value result;
   napi_get_boolean(env, true, &result);

@@ -23,9 +23,21 @@ function useDisplayInterface() {
     }
 
     return () => {
-      if (!displayRef.current) return;
+      const displayToDestroy = displayRef.current;
       displayRef.current = null;
-      setDisplay(null);
+
+      // Route unmounts must release the native libmpv instance. Guard the
+      // store identity so a late cleanup cannot destroy a replacement display.
+      if (!displayToDestroy) {
+        if (usePlayerStore.getState().display) setDisplay(null);
+        return;
+      }
+
+      if (usePlayerStore.getState().display === displayToDestroy) {
+        setDisplay(null);
+      } else {
+        displayToDestroy.destroy();
+      }
     };
   }, [setDisplay]);
 }
