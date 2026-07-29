@@ -58,6 +58,7 @@ export type DisplayInterfaceEvents = {
   duration: number;
   buffered: number;
   loading: boolean;
+  rendered: void;
   qualities: SourceQuality[];
   changedquality: SourceQuality | null;
   audiotracks: AudioTrack[];

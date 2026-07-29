@@ -451,6 +451,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "video-frame") {
+      emit("rendered", undefined);
       emit("loading", false);
       if (!paused) {
         emit("play", undefined);

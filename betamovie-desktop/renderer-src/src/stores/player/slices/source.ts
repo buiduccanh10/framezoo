@@ -385,6 +385,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     set((s) => {
       const nextRequestId = s.externalSubtitleRequestId + 1;
       s.source = stream;
+      s.mediaPlaying.hasRenderedFrame = false;
       s.qualities = qualities as SourceQuality[];
       s.currentQuality = loadableStream.quality;
       s.segmentQualityDebug = null;
@@ -501,6 +502,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.mediaPlaying.isPaused = true;
       s.mediaPlaying.isLoading = false;
       s.mediaPlaying.hasPlayedOnce = false;
+      s.mediaPlaying.hasRenderedFrame = false;
       this.clearTranslateTask();
       s.caption = {
         selected: null,

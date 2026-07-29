@@ -17,6 +17,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     if (!newDisplay) {
       set((s) => {
         s.display = null;
+        s.mediaPlaying.hasRenderedFrame = false;
         s.interface.pictureInPictureMode = null;
         s.interface.documentPictureInPictureWindow = null;
       });
@@ -35,6 +36,9 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         s.mediaPlaying.hasPlayedOnce = true;
         s.mediaPlaying.isPaused = false;
         s.mediaPlaying.isPlaying = true;
+        if (newDisplay.getType() === "casting") {
+          s.mediaPlaying.hasRenderedFrame = true;
+        }
       }),
     );
     newDisplay.on("fullscreen", (isFullscreen) =>
@@ -65,6 +69,11 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     newDisplay.on("loading", (isLoading) =>
       set((s) => {
         s.mediaPlaying.isLoading = isLoading;
+      }),
+    );
+    newDisplay.on("rendered", () =>
+      set((s) => {
+        s.mediaPlaying.hasRenderedFrame = true;
       }),
     );
     newDisplay.on("qualities", (qualities) => {
@@ -160,6 +169,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
 
     set((s) => {
       s.display = newDisplay;
+      s.mediaPlaying.hasRenderedFrame = false;
     });
   },
   reset() {

@@ -137,6 +137,7 @@ describe("libmpv display", () => {
         }) => void)
       | undefined;
     const loading: boolean[] = [];
+    const rendered: number[] = [];
 
     (window as any).electronAPI = {
       createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
@@ -152,6 +153,7 @@ describe("libmpv display", () => {
     const display = makeLibMpvDisplayInterface();
     display.processContainerElement(makeElement());
     display.on("loading", (isLoading) => loading.push(isLoading));
+    display.on("rendered", () => rendered.push(1));
     display.load({
       source: {
         type: "mp4",
@@ -182,6 +184,7 @@ describe("libmpv display", () => {
       type: "video-frame",
     });
     expect(loading).toEqual([true, false]);
+    expect(rendered).toEqual([1]);
     display.destroy();
   });
 
