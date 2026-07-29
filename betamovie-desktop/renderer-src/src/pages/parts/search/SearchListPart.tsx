@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAsyncFn } from "react-use";
 
-import { searchForMedia } from "@/backend/metadata/search";
+import { enrichSearchResults, searchForMedia } from "@/backend/metadata/search";
 import { MWQuery } from "@/backend/metadata/types/mw";
 import { ActionPillButton } from "@/components/buttons/ActionPillButton";
 import { IconPatch } from "@/components/buttons/IconPatch";
@@ -98,6 +98,7 @@ export function SearchListPart({
   const { genres: movieGenres } = useDiscoverOptions("movie");
   const { genres: showGenres } = useDiscoverOptions("tv");
   const [state, exec] = useAsyncFn((query: MWQuery) => searchForMedia(query));
+  const searchRequestId = useRef(0);
 
   const genreNameById = useMemo(() => {
     const map = new Map<number, string>();
@@ -152,13 +153,36 @@ export function SearchListPart({
   }, [results, selectedGenreId, filterYear, filterCountry]);
 
   useEffect(() => {
+    const requestId = ++searchRequestId.current;
+    let cancelled = false;
+
     async function runSearch(query: MWQuery) {
       const searchResults = await exec(query);
-      if (!searchResults) return;
+      if (
+        !searchResults ||
+        cancelled ||
+        requestId !== searchRequestId.current
+      ) {
+        return;
+      }
+
       setResults(searchResults);
+
+      void enrichSearchResults(query, searchResults)
+        .then((enrichedResults) => {
+          if (cancelled || requestId !== searchRequestId.current) return;
+          setResults(enrichedResults);
+        })
+        .catch(() => {
+          // Raw search results remain visible when background metadata fails.
+        });
     }
 
     if (searchQuery !== "") runSearch({ searchQuery });
+
+    return () => {
+      cancelled = true;
+    };
   }, [searchQuery, exec]);
 
   useEffect(() => {
