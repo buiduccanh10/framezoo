@@ -17,7 +17,8 @@ function NavButton({ direction, onClick }: NavButtonProps) {
   return (
     <button
       type="button"
-      className={`absolute ${direction === "left" ? "left-12" : "right-12"} top-1/2 transform -translate-y-3/4 z-10`}
+      aria-label={direction === "left" ? "Previous items" : "Next items"}
+      className={`absolute ${direction === "left" ? "left-12" : "right-12"} top-1/2 transform -translate-y-3/4 z-[100]`}
       onClick={onClick}
     >
       <Flare.Base className="group -m-[0.705em] rounded-full bg-search-hoverBackground transition-transform duration-300 focus:relative focus:z-10 hover:bg-mediaCard-hoverBackground tabbable hover:scale-110">
@@ -47,30 +48,10 @@ export function CarouselNavButtons({
     const carousel = carouselRefs.current[categorySlug];
     if (!carousel) return;
 
-    const movieElements = carousel.getElementsByTagName("a");
-    if (movieElements.length === 0) return;
-
-    // Wait for next frame to ensure measurements are available
-    requestAnimationFrame(() => {
-      const movieWidth = movieElements[0].getBoundingClientRect().width;
-
-      const carouselWidth = carousel.getBoundingClientRect().width;
-
-      if (movieWidth === 0 || carouselWidth === 0) {
-        return;
-      }
-
-      const visibleMovies = Math.floor(carouselWidth / movieWidth);
-      const scrollAmount = movieWidth * (visibleMovies > 5 ? 4 : 2);
-
-      const newScrollPosition =
-        carousel.scrollLeft +
-        (direction === "left" ? -scrollAmount : scrollAmount);
-
-      carousel.scrollTo({
-        left: newScrollPosition,
-        behavior: "smooth",
-      });
+    const scrollAmount = Math.max(carousel.clientWidth * 0.8, 200);
+    carousel.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
     });
   };
 
