@@ -283,6 +283,8 @@ struct MpvPlayer {
           generation.load()
       );
     }
+    surface_swap_buffers(surface);
+    api.render_context_report_swap(render_context);
     if (
         video_metadata_ready.load(std::memory_order_acquire) &&
         (update_flags & 1u) != 0 &&
@@ -294,8 +296,6 @@ struct MpvPlayer {
       native_event->type = "video-frame";
       emit(native_event);
     }
-    surface_swap_buffers(surface);
-    api.render_context_report_swap(render_context);
   }
 
   void event_loop() {

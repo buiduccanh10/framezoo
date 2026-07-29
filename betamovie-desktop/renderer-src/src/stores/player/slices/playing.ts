@@ -8,6 +8,7 @@ export interface PlayingSlice {
     isDragSeeking: boolean; // is seeking for our custom progress bar
     isLoading: boolean; // buffering or not
     hasPlayedOnce: boolean; // has the video played at all?
+    hasRenderedFrame: boolean; // has the current source rendered a frame?
     volume: number;
     playbackRate: number;
   };
@@ -23,6 +24,7 @@ export const createPlayingSlice: MakeSlice<PlayingSlice> = (set) => ({
     isSeeking: false,
     isDragSeeking: false,
     hasPlayedOnce: false,
+    hasRenderedFrame: false,
     volume: 1,
     playbackRate: 1,
   },
