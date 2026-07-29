@@ -20,24 +20,20 @@ import { AdsPart } from "./parts/home/AdsPart";
 import { SupportBar } from "./parts/home/SupportBar";
 
 function useSearch(search: string) {
-  const [searching, setSearching] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-
   const debouncedSearch = useDebounce<string>(search, 500);
+  const searching = search !== "";
+  const loading = searching && search !== debouncedSearch;
+
   useEffect(() => {
-    setSearching(search !== "");
-    setLoading(search !== "");
     if (search !== "") {
       window.scrollTo(0, 0);
     }
   }, [search]);
-  useEffect(() => {
-    setLoading(false);
-  }, [debouncedSearch]);
 
   return {
     loading,
     searching,
+    searchQuery: debouncedSearch,
   };
 }
 
@@ -127,7 +123,7 @@ export function HomePage() {
           ) : (
             s.searching && (
               <SearchListPart
-                searchQuery={search}
+                searchQuery={s.searchQuery}
                 onShowDetails={handleShowDetails}
                 filterCountry={filterCountry}
                 filterYear={filterYear}
