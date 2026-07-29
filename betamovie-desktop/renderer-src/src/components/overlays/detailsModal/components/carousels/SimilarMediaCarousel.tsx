@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
@@ -21,22 +21,18 @@ export function SimilarMediaCarousel({
   const { t } = useTranslation();
   const { isMobile } = useIsMobile();
   const { showModal } = useOverlayStack();
-  const carouselRef = useRef<HTMLDivElement>(null);
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({
     similar: null,
   });
+  const setCarouselRef = (element: HTMLDivElement | null) => {
+    carouselRefs.current.similar = element;
+  };
 
   const { media: similarMedia, isLoading } = useSimilarMedia({
     mediaId,
     mediaType,
     limit: 12,
   });
-
-  useEffect(() => {
-    if (carouselRef.current) {
-      carouselRefs.current.similar = carouselRef.current;
-    }
-  }, []);
 
   const handleShowDetails = (media: MediaItem) => {
     showModal("details", {
@@ -56,7 +52,8 @@ export function SimilarMediaCarousel({
       <div className="relative">
         {/* Carousel Container */}
         <div
-          ref={carouselRef}
+          ref={setCarouselRef}
+          id="carousel-similar"
           className="grid grid-flow-col auto-cols-max gap-4 pt-0 overflow-x-scroll scrollbar-none rounded-xl overflow-y-hidden md:pl-8 md:pr-8"
           style={{
             scrollSnapType: "x mandatory",
