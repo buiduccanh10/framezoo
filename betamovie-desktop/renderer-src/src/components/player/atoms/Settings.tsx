@@ -16,10 +16,7 @@ import { usePlayerStore } from "@/stores/player/store";
 
 import { AudioView } from "./settings/AudioView";
 import { CaptionSettingsView } from "./settings/CaptionSettingsView";
-import {
-  CaptionsView,
-  type SubtitleSelectionMode,
-} from "./settings/CaptionsView";
+import { CaptionsView } from "./settings/CaptionsView";
 import { LanguageSubtitlesView } from "./settings/LanguageSubtitlesView";
 import { PlaybackSettingsView } from "./settings/PlaybackSettingsView";
 import { QualityView } from "./settings/QualityView";
@@ -33,8 +30,6 @@ function SettingsOverlay({ id }: { id: string }) {
   const [chosenLanguage, setChosenLanguage] = useState<string | null>(null);
   const [captionToTranslate, setCaptionToTranslate] =
     useState<CaptionListItem | null>(null);
-  const [subtitleSelectionMode, setSubtitleSelectionMode] =
-    useState<SubtitleSelectionMode>("primary");
   const [sourceViewState, setSourceViewState] = useState<"addons" | "streams">(
     "addons",
   );
@@ -42,6 +37,15 @@ function SettingsOverlay({ id }: { id: string }) {
   const { isMobile } = useIsMobile();
   const router = useOverlayRouter(id);
   const playerMeta = usePlayerStore((state) => state.meta);
+  const subtitleSelectionMode = usePlayerStore(
+    (state) => state.caption.activeTrack,
+  );
+  const isDualSubEnabled = usePlayerStore(
+    (state) => state.caption.dualSubEnabled,
+  );
+  const setSubtitleSelectionMode = usePlayerStore(
+    (state) => state.setActiveCaptionTrack,
+  );
 
   const isLandscape = viewportWidth > viewportHeight;
   const horizontalPadding = isMobile ? 20 : 60;
@@ -51,6 +55,10 @@ function SettingsOverlay({ id }: { id: string }) {
   const defaultWidth = Math.min(343, maxOverlayWidth);
   const wideWidth = Math.min(443, maxOverlayWidth);
   const defaultHeight = Math.min(496, maxOverlayHeight);
+  const transcriptHeight = Math.min(
+    defaultHeight + (isDualSubEnabled ? 96 : 0),
+    maxOverlayHeight,
+  );
   const playbackHeight = Math.min(330, maxOverlayHeight);
   const skipSegmentsHeight = Math.min(446, maxOverlayHeight);
 
@@ -58,7 +66,6 @@ function SettingsOverlay({ id }: { id: string }) {
   useEffect(() => {
     if (!router.isRouterActive) {
       setChosenLanguage(null);
-      setSubtitleSelectionMode("primary");
       setSourceViewState("addons");
     }
     if (router.route === "/") {
@@ -227,10 +234,14 @@ function SettingsOverlay({ id }: { id: string }) {
           id={id}
           path="/captions/transcript"
           width={defaultWidth}
-          height={defaultHeight}
+          height={transcriptHeight}
         >
-          <Menu.CardWithScrollable>
-            <TranscriptView id={id} />
+          <Menu.CardWithScrollable scrollLastChild>
+            <TranscriptView
+              id={id}
+              selectionMode={subtitleSelectionMode}
+              onSelectionModeChange={setSubtitleSelectionMode}
+            />
           </Menu.CardWithScrollable>
         </OverlayPage>
         <OverlayPage

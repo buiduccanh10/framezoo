@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { getDesktopPipStateFromPlayerState } from "./pip";
 
 describe("Desktop PiP subtitle state", () => {
-  it("carries the current subtitle delay into the separate PiP renderer", () => {
+  it("carries both subtitle delays into the separate PiP renderer", () => {
     const state = getDesktopPipStateFromPlayerState(
       {
         source: {
@@ -29,8 +29,10 @@ describe("Desktop PiP subtitle state", () => {
         },
       } as never,
       1.25,
+      -0.5,
     );
 
-    expect(state?.delay).toBe(1.25);
+    expect(state?.primaryDelay).toBe(1.25);
+    expect(state?.secondaryDelay).toBe(-0.5);
   });
 });

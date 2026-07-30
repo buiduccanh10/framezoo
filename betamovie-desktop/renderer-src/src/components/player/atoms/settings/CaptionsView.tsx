@@ -27,7 +27,7 @@ import {
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useLanguageStore } from "@/stores/language";
-import { CaptionListItem } from "@/stores/player/slices/source";
+import { CaptionListItem, SubtitleTrack } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import {
@@ -44,6 +44,7 @@ export interface CaptionOptionProps {
   countryCode?: string;
   children: React.ReactNode;
   selected?: boolean;
+  primarySelected?: boolean;
   secondarySelected?: boolean;
   disabled?: boolean;
   loading?: boolean;
@@ -93,23 +94,43 @@ function CaptionOptionRightSide(props: CaptionOptionProps) {
     );
   }
 
-  if (props.selected || props.secondarySelected || props.error) {
+  if (
+    props.primarySelected ||
+    props.secondarySelected ||
+    props.selected ||
+    props.error
+  ) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center gap-1">
         {translateBtn(true)}
         {props.error ? (
           <span className="flex items-center text-video-context-error">
             <Icon className="ml-2" icon={Icons.WARNING} />
           </span>
-        ) : props.secondarySelected ? (
-          <span className="flex items-center gap-1 text-xs font-medium text-purple-400 bg-purple-500/20 px-2 py-0.5 rounded">
-            2nd
-          </span>
         ) : (
-          <Icon
-            icon={Icons.CIRCLE_CHECK}
-            className="text-xl text-video-context-type-accent"
-          />
+          <>
+            {props.selected ? (
+              <Icon
+                icon={Icons.CIRCLE_CHECK}
+                className={classNames(
+                  "text-xl",
+                  props.secondarySelected
+                    ? "text-purple-300"
+                    : "text-video-context-type-accent",
+                )}
+              />
+            ) : null}
+            {props.primarySelected && !props.selected ? (
+              <span className="flex items-center rounded bg-video-context-type-accent/20 px-2 py-0.5 text-xs font-medium text-video-context-type-accent">
+                1st
+              </span>
+            ) : null}
+            {props.secondarySelected && !props.selected ? (
+              <span className="flex items-center rounded bg-purple-500/20 px-2 py-0.5 text-xs font-medium text-purple-300">
+                2nd
+              </span>
+            ) : null}
+          </>
         )}
       </div>
     );
@@ -309,13 +330,22 @@ export function useSubtitleList(subs: CaptionListItem[], searchQuery: string) {
   }, [subs, searchQuery, unknownChoice]);
 }
 
-export function CustomCaptionOption() {
+export function CustomCaptionOption({
+  selectionMode = "primary",
+}: {
+  selectionMode?: SubtitleSelectionMode;
+}) {
   const { t } = useTranslation();
-  const lang = usePlayerStore((s) => s.caption.selected?.language);
+  const primaryLanguage = usePlayerStore((s) => s.caption.selected?.language);
+  const secondaryLanguage = usePlayerStore(
+    (s) => s.caption.secondary?.language,
+  );
   const setCaption = usePlayerStore((s) => s.setCaption);
+  const setSecondaryCaption = usePlayerStore((s) => s.setSecondaryCaption);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
   const fileInput = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
+  const isSecondary = selectionMode === "secondary";
 
   const handleFileSelect = (file: File) => {
     setError(null);
@@ -333,12 +363,17 @@ export function CustomCaptionOption() {
       try {
         const decoded = decodeSubtitleBytes(event.target.result, "vi");
         const converted = normalizeSubtitleToVtt(decoded);
-        setCaption({
+        const caption = {
           language: "custom",
           vttData: converted,
           id: "custom-caption",
-        });
-        setCustomSubs();
+        };
+        if (isSecondary) {
+          setSecondaryCaption(caption);
+        } else {
+          setCaption(caption);
+          setCustomSubs();
+        }
       } catch (err) {
         setError(
           err instanceof Error
@@ -357,7 +392,11 @@ export function CustomCaptionOption() {
 
   return (
     <CaptionOption
-      selected={lang === "custom"}
+      selected={
+        (isSecondary ? secondaryLanguage : primaryLanguage) === "custom"
+      }
+      primarySelected={!isSecondary && primaryLanguage === "custom"}
+      secondarySelected={isSecondary && secondaryLanguage === "custom"}
       error={error}
       onClick={() => fileInput.current?.click()}
     >
@@ -390,13 +429,22 @@ export function CustomCaptionOption() {
   );
 }
 
-export function PasteCaptionOption(props: { selected?: boolean }) {
+export function PasteCaptionOption({
+  selected,
+  selectionMode = "primary",
+}: {
+  selected?: boolean;
+  selectionMode?: SubtitleSelectionMode;
+}) {
   const { t } = useTranslation();
   const setCaption = usePlayerStore((s) => s.setCaption);
+  const setSecondaryCaption = usePlayerStore((s) => s.setSecondaryCaption);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
-  const setDelay = useSubtitleStore((s) => s.setDelay);
+  const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
+  const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const isSecondary = selectionMode === "secondary";
 
   const handlePaste = async () => {
     setIsLoading(true);
@@ -426,18 +474,25 @@ export function PasteCaptionOption(props: { selected?: boolean }) {
 
       const converted = normalizeSubtitleToVtt(subtitleText);
 
-      setCaption({
+      const caption = {
         language: parsedData.language,
         vttData: converted,
         id: "pasted-caption",
-      });
-      setCustomSubs();
+      };
+      if (isSecondary) {
+        setSecondaryCaption(caption);
+      } else {
+        setCaption(caption);
+        setCustomSubs();
+      }
 
       // Set delay if included in the pasted data, otherwise reset to 0
       if (parsedData.delay !== undefined) {
-        setDelay(parsedData.delay);
+        if (isSecondary) setSecondaryDelay(parsedData.delay);
+        else setPrimaryDelay(parsedData.delay);
       } else {
-        setDelay(0);
+        if (isSecondary) setSecondaryDelay(0);
+        else setPrimaryDelay(0);
       }
     } catch (err) {
       console.error("Failed to paste subtitle:", err);
@@ -452,14 +507,16 @@ export function PasteCaptionOption(props: { selected?: boolean }) {
       onClick={handlePaste}
       loading={isLoading}
       error={error}
-      selected={props.selected}
+      selected={selected}
+      primarySelected={selectionMode === "primary" && selected}
+      secondarySelected={selectionMode === "secondary" && selected}
     >
       {t("player.menus.subtitles.pasteChoice")}
     </CaptionOption>
   );
 }
 
-export type SubtitleSelectionMode = "primary" | "secondary";
+export type SubtitleSelectionMode = SubtitleTrack;
 
 export interface CaptionsViewProps {
   id: string;
@@ -499,8 +556,8 @@ export function CaptionsView({
     }
   };
   const setCaption = usePlayerStore((s) => s.setCaption);
+  const setSecondaryCaption = usePlayerStore((s) => s.setSecondaryCaption);
   const videoTime = usePlayerStore((s) => s.progress.time);
-  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
@@ -525,7 +582,8 @@ export function CaptionsView({
   const refreshButtonLabel = isLoadingExternalSubtitles
     ? t("player.menus.subtitles.refreshing")
     : t("player.menus.subtitles.refresh");
-  const delay = useSubtitleStore((s) => s.delay);
+  const primaryDelay = useSubtitleStore((s) => s.primaryDelay);
+  const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
   const appLanguage = useLanguageStore((s) => s.language);
   const setCustomSubs = useSubtitleStore((s) => s.setCustomSubs);
   const matchScore = useCaptionMatchScore();
@@ -537,6 +595,18 @@ export function CaptionsView({
           defaultValue: "Match ~{{score}}%",
         })
       : null;
+  const activeCaption =
+    selectionMode === "secondary" ? secondaryCaption : selectedCaption;
+  const activeDelay =
+    selectionMode === "secondary" ? secondaryDelay : primaryDelay;
+  const disableActiveCaption = () => {
+    if (selectionMode === "secondary") {
+      disableSecondary();
+      onSelectionModeChange?.("primary");
+      return;
+    }
+    void disable();
+  };
   const handleRefreshExternalSubtitles = useCallback(() => {
     if (isLoadingExternalSubtitles) return;
     void addExternalSubtitles();
@@ -632,13 +702,13 @@ export function CaptionsView({
 
   // Get current subtitle text preview
   const currentSubtitleText = useMemo(() => {
-    if (!vttData || !selectedCaption) return null;
-    const parsedCaptions = parseCanonicalVtt(vttData);
+    if (!activeCaption) return null;
+    const parsedCaptions = parseCanonicalVtt(activeCaption.vttData);
     const visibleCaption = parsedCaptions.find(({ start, end }) =>
-      captionIsVisible(start, end, delay, videoTime),
+      captionIsVisible(start, end, activeDelay, videoTime),
     );
     return visibleCaption?.content;
-  }, [vttData, delay, videoTime, selectedCaption]);
+  }, [activeCaption, activeDelay, videoTime]);
 
   function onDrop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -661,12 +731,17 @@ export function CaptionsView({
         const decoded = decodeSubtitleBytes(e.target.result, "vi");
         const converted = normalizeSubtitleToVtt(decoded);
 
-        setCaption({
+        const caption = {
           language: "custom",
           vttData: converted,
           id: "custom-caption",
-        });
-        setCustomSubs();
+        };
+        if (selectionMode === "secondary") {
+          setSecondaryCaption(caption);
+        } else {
+          setCaption(caption);
+          setCustomSubs();
+        }
       } catch {
         // Silently fail on drop - user can use the upload button for better error feedback
       }
@@ -749,16 +824,17 @@ export function CaptionsView({
       >
         {/* Secondary subtitle hint — shown when dual sub is active */}
         {isDualSubEnabled && selectionMode === "secondary" && (
-          <div className="px-4 py-2 text-xs text-video-context-type-secondary text-center bg-video-context-light bg-opacity-30">
+          <div className="w-full px-0 pt-2 pb-1 text-center text-xs leading-relaxed text-video-context-type-secondary">
             {t("player.menus.subtitles.dualSubHint")}
           </div>
         )}
 
         {/* Current subtitle preview */}
-        {isMobile && selectedCaption && selectionMode === "primary" && (
+        {isMobile && activeCaption && (
           <div className="mt-3 p-2 rounded-xl bg-video-context-light bg-opacity-10 text-center">
             <div className="text-sm text-video-context-type-secondary mb-1">
-              {t("player.menus.subtitles.previewLabel")}
+              {t("player.menus.subtitles.previewLabel")} ·{" "}
+              {t(`player.menus.subtitles.${selectionMode}`)}
             </div>
             <div
               className="text-base font-medium min-h-[3rem] flex items-center justify-center"
@@ -779,18 +855,25 @@ export function CaptionsView({
           </div>
         )}
 
-        {/* Selected captions indicator — only when dual sub is active */}
+        {/* Selected captions indicator — keeps both tracks visible while choosing */}
         {isDualSubEnabled && (selectedCaption || secondaryCaption) && (
-          <div className="mx-4 mt-3 space-y-2">
+          <div className="mt-2 grid w-full gap-3">
             {selectedCaption && (
-              <div className="p-2 rounded-lg bg-video-context-type-accent/20 border border-video-context-type-accent/30">
+              <div
+                className={classNames(
+                  "rounded-xl border p-3 transition-colors",
+                  selectionMode === "primary"
+                    ? "border-video-context-type-accent/50 bg-video-context-type-accent/15"
+                    : "border-white/10 bg-white/[0.04]",
+                )}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-video-context-type-accent bg-video-context-type-accent/30 px-2 py-0.5 rounded">
-                      1st
+                    <span className="rounded-md bg-video-context-type-accent/25 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-video-context-type-accent">
+                      {t("player.menus.subtitles.primary")}
                     </span>
                     <FlagIcon langCode={selectedCaption.language} />
-                    <span className="text-sm text-white">
+                    <span className="min-w-0 truncate text-sm text-white">
                       {getPrettyLanguageNameFromLocale(
                         selectedCaption.language,
                       ) || selectedCaption.language}
@@ -799,7 +882,8 @@ export function CaptionsView({
                   <button
                     type="button"
                     onClick={() => disable()}
-                    className="text-video-context-type-accent hover:text-white transition-colors"
+                    className="rounded-md p-1 text-video-context-type-accent transition-colors hover:bg-white/10 hover:text-white"
+                    aria-label={t("player.menus.subtitles.offChoice")}
                   >
                     <Icon icon={Icons.X} className="text-base" />
                   </button>
@@ -808,14 +892,21 @@ export function CaptionsView({
             )}
 
             {secondaryCaption && (
-              <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30">
+              <div
+                className={classNames(
+                  "rounded-xl border p-3 transition-colors",
+                  selectionMode === "secondary"
+                    ? "border-purple-400/60 bg-purple-500/15"
+                    : "border-white/10 bg-white/[0.04]",
+                )}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-purple-400 bg-purple-500/30 px-2 py-0.5 rounded">
-                      2nd
+                    <span className="rounded-md bg-purple-500/25 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-purple-300">
+                      {t("player.menus.subtitles.secondary")}
                     </span>
                     <FlagIcon langCode={secondaryCaption.language} />
-                    <span className="text-sm text-white">
+                    <span className="min-w-0 truncate text-sm text-white">
                       {getPrettyLanguageNameFromLocale(
                         secondaryCaption.language,
                       ) || secondaryCaption.language}
@@ -823,8 +914,14 @@ export function CaptionsView({
                   </div>
                   <button
                     type="button"
-                    onClick={() => disableSecondary()}
-                    className="text-purple-400 hover:text-white transition-colors"
+                    onClick={() => {
+                      disableSecondary();
+                      if (selectionMode === "secondary") {
+                        onSelectionModeChange?.("primary");
+                      }
+                    }}
+                    className="rounded-md p-1 text-purple-300 transition-colors hover:bg-white/10 hover:text-white"
+                    aria-label={t("player.menus.subtitles.clearSecondary")}
                   >
                     <Icon icon={Icons.X} className="text-base" />
                   </button>
@@ -836,7 +933,10 @@ export function CaptionsView({
 
         <div>
           {/* Off button */}
-          <CaptionOption onClick={() => disable()} selected={!selectedCaption}>
+          <CaptionOption
+            onClick={() => disableActiveCaption()}
+            selected={!activeCaption}
+          >
             {t("player.menus.subtitles.offChoice")}
           </CaptionOption>
 
@@ -877,16 +977,22 @@ export function CaptionsView({
 
             {/* Primary / Secondary tab selector — only visible when dual sub is on */}
             {isDualSubEnabled && (
-              <div className="flex items-center justify-center gap-2 px-4 py-2">
+              <div
+                className="my-2 grid w-full grid-cols-2 gap-1 rounded-xl bg-white/[0.06] p-1"
+                role="tablist"
+                aria-label={t("player.menus.subtitles.dualSub")}
+              >
                 <button
                   type="button"
                   onClick={() => onSelectionModeChange?.("primary")}
                   className={classNames(
-                    "px-4 py-1.5 rounded text-sm font-medium transition-colors",
+                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     selectionMode === "primary"
-                      ? "bg-video-context-type-accent text-white"
-                      : "bg-video-context-light bg-opacity-50 text-video-context-type-secondary hover:bg-opacity-80",
+                      ? "bg-video-context-type-accent text-white shadow-sm"
+                      : "text-video-context-type-secondary hover:bg-white/10",
                   )}
+                  role="tab"
+                  aria-selected={selectionMode === "primary"}
                 >
                   {t("player.menus.subtitles.primary")}
                 </button>
@@ -894,30 +1000,22 @@ export function CaptionsView({
                   type="button"
                   onClick={() => onSelectionModeChange?.("secondary")}
                   className={classNames(
-                    "px-4 py-1.5 rounded text-sm font-medium transition-colors",
+                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                     selectionMode === "secondary"
-                      ? "bg-purple-600 text-white"
-                      : "bg-video-context-light bg-opacity-50 text-video-context-type-secondary hover:bg-opacity-80",
+                      ? "bg-purple-600 text-white shadow-sm"
+                      : "text-video-context-type-secondary hover:bg-white/10",
                   )}
+                  role="tab"
+                  aria-selected={selectionMode === "secondary"}
                 >
                   {t("player.menus.subtitles.secondary")}
                 </button>
-                {secondaryCaption && (
-                  <button
-                    type="button"
-                    onClick={() => disableSecondary()}
-                    className="px-2 py-1.5 rounded text-sm text-video-context-type-secondary hover:bg-video-context-light"
-                    title={t("player.menus.subtitles.clearSecondary")}
-                  >
-                    <Icon icon={Icons.X} className="text-base" />
-                  </button>
-                )}
               </div>
             )}
           </div>
 
           {/* Automatically select subtitles option */}
-          {captions.length > 0 && (
+          {captions.length > 0 && selectionMode === "primary" && (
             <CaptionOption
               onClick={() => handleRandomSelect()}
               selected={!!selectedCaption}
@@ -951,14 +1049,15 @@ export function CaptionsView({
           )}
 
           {/* Custom upload option */}
-          <CustomCaptionOption />
+          <CustomCaptionOption selectionMode={selectionMode} />
 
           {/* Paste subtitle option */}
           <PasteCaptionOption
-            selected={selectedCaption?.id === "pasted-caption"}
+            selected={activeCaption?.id === "pasted-caption"}
+            selectionMode={selectionMode}
           />
 
-          {selectedCaption && (
+          {activeCaption && (
             <Menu.ChevronLink
               onClick={() => router.navigate("/captions/transcript")}
             >

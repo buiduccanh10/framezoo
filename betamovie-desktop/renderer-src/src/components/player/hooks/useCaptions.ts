@@ -258,6 +258,9 @@ export function useCaptions() {
 
         captionToSet.vttData = await downloadCaptionAsVtt(caption);
 
+        if (secondaryCaption?.id !== caption.id) {
+          resetSubtitleSpecificSettings("secondary");
+        }
         setSecondaryCaption(captionToSet);
       } catch (error) {
         console.warn("Skipping unavailable secondary caption source", {
@@ -267,7 +270,12 @@ export function useCaptions() {
         });
       }
     },
-    [captions, setSecondaryCaption],
+    [
+      captions,
+      resetSubtitleSpecificSettings,
+      secondaryCaption,
+      setSecondaryCaption,
+    ],
   );
 
   const disableSecondary = useCallback(() => {

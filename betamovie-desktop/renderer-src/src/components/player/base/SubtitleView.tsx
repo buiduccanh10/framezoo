@@ -158,7 +158,7 @@ export function SubtitleRenderer(props?: {
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
-  const delay = useSubtitleStore((s) => s.delay);
+  const delay = useSubtitleStore((s) => s.primaryDelay);
 
   const parsedCaptions = useMemo(
     () => (vttData ? parseCanonicalVtt(vttData) : []),
@@ -195,7 +195,7 @@ export function SecondarySubtitleRenderer(props?: {
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
-  const delay = useSubtitleStore((s) => s.delay);
+  const delay = useSubtitleStore((s) => s.secondaryDelay);
 
   const parsedCaptions = useMemo(
     () => (vttData ? parseCanonicalVtt(vttData) : []),

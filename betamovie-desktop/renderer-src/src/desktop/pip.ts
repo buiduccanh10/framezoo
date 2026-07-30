@@ -23,7 +23,8 @@ export interface DesktopPipState {
   paused: boolean;
   playbackRate: number;
   title: string;
-  delay: number;
+  primaryDelay: number;
+  secondaryDelay: number;
   caption: DesktopPipCaption | null;
   secondaryCaption: DesktopPipCaption | null;
   dualSubEnabled: boolean;
@@ -214,7 +215,8 @@ export function getDesktopPipSourceSnapshot(
 
 export function getDesktopPipStateFromPlayerState(
   state: AllSlices,
-  delay = 0,
+  primaryDelay = 0,
+  secondaryDelay = 0,
 ): DesktopPipState | null {
   const source = getDesktopPipSourceSnapshot(
     state.source,
@@ -229,7 +231,8 @@ export function getDesktopPipStateFromPlayerState(
     paused: state.mediaPlaying.isPaused,
     playbackRate: state.mediaPlaying.playbackRate,
     title: state.meta?.title ?? "AlphaFlix",
-    delay: Number.isFinite(delay) ? delay : 0,
+    primaryDelay: Number.isFinite(primaryDelay) ? primaryDelay : 0,
+    secondaryDelay: Number.isFinite(secondaryDelay) ? secondaryDelay : 0,
     caption: toDesktopPipCaption(state.caption.selected),
     secondaryCaption: toDesktopPipCaption(state.caption.secondary),
     dualSubEnabled: state.caption.dualSubEnabled,
