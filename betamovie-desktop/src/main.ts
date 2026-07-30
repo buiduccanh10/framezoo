@@ -743,13 +743,14 @@ function createMainWindow() {
   }
   libmpvController.init(mainWindow, () => desktopPipController.getWindow());
 
-  // The renderer cannot reliably finish async IPC during a hard reload.
-  // Native libmpv players live in the main process, so clean them up here.
-  mainWindow.webContents.on("did-start-loading", () => {
-    libmpvController.destroyAll();
+  // The renderer cannot reliably finish async IPC during a full navigation.
+  // Ignore same-document SPA navigations used by player overlays/popups.
+  mainWindow.webContents.on("did-start-navigation", (details) => {
+    if (!details.isMainFrame || details.isSameDocument) return;
+    libmpvController.destroyAll("main-window:did-start-navigation");
   });
   mainWindow.webContents.on("render-process-gone", () => {
-    libmpvController.destroyAll();
+    libmpvController.destroyAll("main-window:render-process-gone");
   });
 
   mainWindow.webContents.on("before-input-event", (event, input) => {

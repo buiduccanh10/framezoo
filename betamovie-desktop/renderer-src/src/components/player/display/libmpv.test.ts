@@ -325,6 +325,9 @@ describe("libmpv display", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 0));
 
-    expect(destroyPlayer).toHaveBeenCalledWith("player-1");
+    expect(destroyPlayer).toHaveBeenCalledWith(
+      "player-1",
+      "display:load-empty-source",
+    );
   });
 });
