@@ -39,6 +39,10 @@ export function KeyboardEvents() {
   const selectedCaptionVttData = usePlayerStore(
     (s) => s.caption.selected?.vttData,
   );
+  const secondaryCaptionVttData = usePlayerStore(
+    (s) => s.caption.secondary?.vttData,
+  );
+  const activeSubtitleTrack = usePlayerStore((s) => s.caption.activeTrack);
   const { setDirectMeta } = usePlayerMeta();
   const setShouldStartFromBeginning = usePlayerStore(
     (s) => s.setShouldStartFromBeginning,
@@ -48,7 +52,12 @@ export function KeyboardEvents() {
   const { toggleLastUsed, selectBestCaptionFromLastUsedLanguage } =
     useCaptions();
   const setShowVolume = useEmpheralVolumeStore((s) => s.setShowVolume);
-  const setDelay = useSubtitleStore((s) => s.setDelay);
+  const primaryDelay = useSubtitleStore((s) => s.primaryDelay);
+  const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
+  const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
+  const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
+  const setDelay =
+    activeSubtitleTrack === "secondary" ? setSecondaryDelay : setPrimaryDelay;
   const setSubtitleCuePopup = useSubtitleCuePopupStore((s) => s.setPopup);
   const storedKeyboardShortcuts = usePreferencesStore(
     (s) => s.keyboardShortcuts,
@@ -83,18 +92,22 @@ export function KeyboardEvents() {
 
   const navigateSubtitleCue = useCallback(
     (direction: -1 | 1) => {
-      if (!selectedCaptionVttData) return;
+      const activeCaptionVttData =
+        activeSubtitleTrack === "secondary"
+          ? secondaryCaptionVttData
+          : selectedCaptionVttData;
+      if (!activeCaptionVttData) return;
 
       let cues;
       try {
-        cues = parseCanonicalVtt(selectedCaptionVttData);
+        cues = parseCanonicalVtt(activeCaptionVttData);
       } catch {
         return;
       }
 
       const cue = getCaptionCueForNavigation(
         cues,
-        useSubtitleStore.getState().delay,
+        activeSubtitleTrack === "secondary" ? secondaryDelay : primaryDelay,
         time,
         direction,
       );
@@ -107,7 +120,16 @@ export function KeyboardEvents() {
         content: cue.content,
       });
     },
-    [selectedCaptionVttData, time, setDelay, setSubtitleCuePopup],
+    [
+      activeSubtitleTrack,
+      primaryDelay,
+      secondaryCaptionVttData,
+      secondaryDelay,
+      selectedCaptionVttData,
+      time,
+      setDelay,
+      setSubtitleCuePopup,
+    ],
   );
 
   // Episode navigation functions

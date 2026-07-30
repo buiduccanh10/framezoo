@@ -73,16 +73,18 @@ export interface SubtitleStore {
   isOpenSubtitles: boolean;
   styling: SubtitleStyling;
   overrideCasing: boolean;
-  delay: number;
+  primaryDelay: number;
+  secondaryDelay: number;
   updateStyling(newStyling: Partial<SubtitleStyling>): void;
   resetStyling(): void;
   setLanguage(language: string | null): void;
   setIsOpenSubtitles(isOpenSubtitles: boolean): void;
   setCustomSubs(): void;
   setOverrideCasing(enabled: boolean): void;
-  setDelay(delay: number): void;
+  setPrimaryDelay(delay: number): void;
+  setSecondaryDelay(delay: number): void;
   importSubtitleLanguage(lang: string | null): void;
-  resetSubtitleSpecificSettings(): void;
+  resetSubtitleSpecificSettings(track?: "primary" | "secondary"): void;
 }
 
 export const DEFAULT_SUBTITLE_STYLING: SubtitleStyling = {
@@ -138,11 +140,13 @@ export const useSubtitleStore = create(
       lastSelectedLanguage: null,
       isOpenSubtitles: false,
       overrideCasing: false,
-      delay: 0,
+      primaryDelay: 0,
+      secondaryDelay: 0,
       styling: { ...DEFAULT_SUBTITLE_STYLING },
-      resetSubtitleSpecificSettings() {
+      resetSubtitleSpecificSettings(track = "primary") {
         set((s) => {
-          s.delay = 0;
+          if (track === "secondary") s.secondaryDelay = 0;
+          else s.primaryDelay = 0;
           s.overrideCasing = false;
         });
       },
@@ -206,9 +210,14 @@ export const useSubtitleStore = create(
           s.overrideCasing = enabled;
         });
       },
-      setDelay(delay) {
+      setPrimaryDelay(delay) {
         set((s) => {
-          s.delay = Number.isFinite(delay) ? delay : 0;
+          s.primaryDelay = Number.isFinite(delay) ? delay : 0;
+        });
+      },
+      setSecondaryDelay(delay) {
+        set((s) => {
+          s.secondaryDelay = Number.isFinite(delay) ? delay : 0;
         });
       },
       importSubtitleLanguage(lang) {
@@ -220,7 +229,7 @@ export const useSubtitleStore = create(
     })),
     {
       name: "__MW::subtitles",
-      version: 3,
+      version: 4,
       migrate: (persistedState: unknown, version: number) => {
         if (!persistedState || typeof persistedState !== "object") {
           return persistedState;
@@ -228,7 +237,20 @@ export const useSubtitleStore = create(
 
         const state = persistedState as {
           styling?: Partial<SubtitleStyling>;
+          delay?: unknown;
+          primaryDelay?: unknown;
+          secondaryDelay?: unknown;
         };
+
+        if (version < 4) {
+          const legacyDelay =
+            typeof state.delay === "number" && Number.isFinite(state.delay)
+              ? state.delay
+              : 0;
+          state.primaryDelay = legacyDelay;
+          state.secondaryDelay = legacyDelay;
+          delete state.delay;
+        }
 
         if (!state.styling) return state;
 

@@ -9,6 +9,7 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
+import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import { CaptionOption, type SubtitleSelectionMode } from "./CaptionsView";
@@ -80,6 +81,8 @@ export function LanguageSubtitlesView({
   const router = useOverlayRouter(id);
   const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
   const secondaryCaptionId = usePlayerStore((s) => s.caption.secondary?.id);
+  const primaryDelay = useSubtitleStore((s) => s.primaryDelay);
+  const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
   const currentTranslateTask = usePlayerStore((s) => s.caption.translateTask);
   const { selectCaptionById, selectSecondaryCaptionById } = useCaptions();
   const [currentlyDownloading, setCurrentlyDownloading] = useState<
@@ -90,10 +93,10 @@ export function LanguageSubtitlesView({
   const matchScore = useCaptionMatchScore();
 
   useEffect(() => {
-    if (selectedCaptionId) {
+    if (selectionMode === "primary" ? selectedCaptionId : secondaryCaptionId) {
       setScrollTrigger((prev) => prev + 1);
     }
-  }, [selectedCaptionId]);
+  }, [selectedCaptionId, secondaryCaptionId, selectionMode]);
 
   // Manual scroll function with smooth behavior
   const scrollToActiveCaption = () => {
@@ -198,7 +201,7 @@ export function LanguageSubtitlesView({
         isHearingImpaired: v.isHearingImpaired,
         source: v.source,
         encoding: v.encoding,
-        delay: 0,
+        delay: selectionMode === "secondary" ? secondaryDelay : primaryDelay,
       };
 
       try {
@@ -228,9 +231,8 @@ export function LanguageSubtitlesView({
         key={v.id}
         countryCode={v.language}
         selected={isSelected}
-        secondarySelected={
-          selectionMode === "primary" ? isSecondarySelected : isPrimarySelected
-        }
+        primarySelected={isPrimarySelected}
+        secondarySelected={isSecondarySelected}
         disabled={isTranslating}
         loading={
           (v.id === currentlyDownloading && downloadReq.loading) ||
