@@ -11,7 +11,6 @@ import {
   LargeCardButtons,
   LargeCardText,
 } from "@/components/layout/LargeCard";
-import { AuthDialog } from "@/components/overlays/AuthDialog";
 import { MwLink } from "@/components/text/Link";
 import { useAuth } from "@/hooks/auth/useAuth";
 import {
@@ -201,12 +200,4 @@ export function RegisterPanel() {
   );
 
   return <CaptchaProvider siteKey={siteKey}>{content}</CaptchaProvider>;
-}
-
-export function RegisterPage() {
-  return (
-    <AuthDialog mode="register">
-      <RegisterPanel />
-    </AuthDialog>
-  );
 }

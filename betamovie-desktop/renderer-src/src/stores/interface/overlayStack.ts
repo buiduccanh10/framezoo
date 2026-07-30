@@ -11,8 +11,8 @@ type OverlayType =
   | null;
 
 interface ModalData {
-  id: number;
-  type: "movie" | "show";
+  id?: number;
+  type?: "movie" | "show";
   [key: string]: any;
 }
 

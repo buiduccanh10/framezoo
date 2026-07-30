@@ -1,7 +1,6 @@
 import { ReactElement, Suspense, useEffect, useState } from "react";
 import { lazyWithPreload } from "react-lazy-with-preload";
 import {
-  type Location,
   Navigate,
   Route,
   Routes,
@@ -15,7 +14,7 @@ import {
   decodeTMDBId,
   generateQuickSearchMediaUrl,
 } from "@/backend/metadata/tmdb";
-import { AuthRoute } from "@/components/overlays/AuthRoute";
+import { AuthModal } from "@/components/overlays/AuthModal";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
@@ -110,22 +109,6 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const showModal = useOverlayStack((s) => s.showModal);
-  const isAuthRoute =
-    location.pathname === "/login" || location.pathname === "/register";
-  const routeState = location.state as
-    | {
-        backgroundLocation?: Location;
-      }
-    | undefined;
-  const backgroundLocation: Location = isAuthRoute
-    ? (routeState?.backgroundLocation ?? {
-        pathname: "/discover",
-        search: "",
-        hash: "",
-        state: null,
-        key: "auth-background",
-      })
-    : location;
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -174,9 +157,10 @@ function App() {
       <DetailsModal id="details" />
       <DetailsModal id="discover-details" />
       <DetailsModal id="player-details" />
+      <AuthModal />
       {!showDowntime && (
         <>
-          <Routes location={backgroundLocation}>
+          <Routes>
             {/* Functional routes */}
             <Route
               path="/desktop-pip"
@@ -251,7 +235,6 @@ function App() {
             </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-          {isAuthRoute ? <AuthRoute /> : null}
         </>
       )}
       {showDowntime && (
