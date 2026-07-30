@@ -18,6 +18,7 @@ import { AuthModal } from "@/components/overlays/AuthModal";
 import { DetailsModal } from "@/components/overlays/detailsModal";
 import { KeyboardCommandsEditModal } from "@/components/overlays/KeyboardCommandsEditModal";
 import { KeyboardCommandsModal } from "@/components/overlays/KeyboardCommandsModal";
+import { ToastProvider } from "@/components/overlays/ToastProvider";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { useGlobalKeyboardEvents } from "@/hooks/useGlobalKeyboardEvents";
 import { useOnlineListener } from "@/hooks/usePing";
@@ -158,6 +159,7 @@ function App() {
       <DetailsModal id="discover-details" />
       <DetailsModal id="player-details" />
       <AuthModal />
+      <ToastProvider />
       {!showDowntime && (
         <>
           <Routes>

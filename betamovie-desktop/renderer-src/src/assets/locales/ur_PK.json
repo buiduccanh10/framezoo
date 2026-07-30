@@ -826,6 +826,7 @@
         "title": "سب ٹائٹلز",
         "transcriptChoice": "نقل",
         "searchPlaceholder": "سب ٹائٹلز یا ڈائیلاگ تلاش کریں...",
+        "delayLabel": "سب ٹائٹل آفسیٹ",
         "seekMode": "تلاش کرنا",
         "syncMode": "مطابقت پذیری",
         "syncOffset": "آفسیٹ: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "دیکھ رہا ہے۔",
     "withCount": "{{count}} دوسروں کے ساتھ",
     "you": "آپ"
+  },
+  "toasts": {
+    "linkCopied": "لنک کلپ بورڈ پر کاپی ہو گیا!",
+    "loginSuccess": "کامیابی سے لاگ ان ہو گیا!",
+    "logoutSuccess": "کامیابی سے لاگ آؤٹ ہو گیا!",
+    "registerSuccess": "کامیابی کے ساتھ رجسٹر ہو گیا!"
   }
 }

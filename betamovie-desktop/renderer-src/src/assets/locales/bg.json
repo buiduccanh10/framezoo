@@ -826,6 +826,7 @@
         "title": "субтитри",
         "transcriptChoice": "Препис",
         "searchPlaceholder": "Търсете субтитри или диалог...",
+        "delayLabel": "Отместване на субтитрите",
         "seekMode": "Търсене",
         "syncMode": "Синхронизиране",
         "syncOffset": "Отместване: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Гледане",
     "withCount": "С {{count}} други",
     "you": "Вие"
+  },
+  "toasts": {
+    "linkCopied": "Връзката е копирана в клипборда!",
+    "loginSuccess": "Влязохте успешно!",
+    "logoutSuccess": "Излязохте успешно!",
+    "registerSuccess": "Успешна регистрация!"
   }
 }

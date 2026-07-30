@@ -826,6 +826,7 @@
         "title": "자막",
         "transcriptChoice": "성적 증명서",
         "searchPlaceholder": "자막이나 대화 검색...",
+        "delayLabel": "자막 오프셋",
         "seekMode": "구하다",
         "syncMode": "동조",
         "syncOffset": "오프셋: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "보고 있다",
     "withCount": "{{count}} 다른 사람들과 함께",
     "you": "너"
+  },
+  "toasts": {
+    "linkCopied": "링크가 클립보드에 복사되었습니다!",
+    "loginSuccess": "성공적으로 로그인되었습니다!",
+    "logoutSuccess": "성공적으로 로그아웃되었습니다!",
+    "registerSuccess": "성공적으로 등록되었습니다!"
   }
 }

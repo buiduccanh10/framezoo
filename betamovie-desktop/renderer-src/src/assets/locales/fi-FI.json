@@ -826,6 +826,7 @@
         "title": "Tekstitykset",
         "transcriptChoice": "Transkriptio",
         "searchPlaceholder": "Hae tekstityksiä tai dialogia...",
+        "delayLabel": "Tekstityksen offset",
         "seekMode": "Etsi",
         "syncMode": "Synkronoi",
         "syncOffset": "Poikkeama: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Katsomassa",
     "withCount": "{{count}} muun kanssa",
     "you": "sinä"
+  },
+  "toasts": {
+    "linkCopied": "Linkki kopioitu leikepöydälle!",
+    "loginSuccess": "Sisäänkirjautuminen onnistui!",
+    "logoutSuccess": "Uloskirjautuminen onnistui!",
+    "registerSuccess": "Rekisteröity onnistuneesti!"
   }
 }

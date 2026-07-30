@@ -826,6 +826,7 @@
         "title": "الترجمة",
         "transcriptChoice": "نص",
         "searchPlaceholder": "البحث عن الترجمة أو الحوار...",
+        "delayLabel": "إزاحة الترجمة",
         "seekMode": "يطلب",
         "syncMode": "مزامنة",
         "syncOffset": "الإزاحة: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "مشاهدة",
     "withCount": "مع {{count}} آخرين",
     "you": "أنت"
+  },
+  "toasts": {
+    "linkCopied": "تم نسخ الرابط إلى الحافظة!",
+    "loginSuccess": "تم تسجيل الدخول بنجاح!",
+    "logoutSuccess": "تم تسجيل الخروج بنجاح!",
+    "registerSuccess": "تم التسجيل بنجاح!"
   }
 }

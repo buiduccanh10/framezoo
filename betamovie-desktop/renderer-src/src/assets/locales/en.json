@@ -1276,5 +1276,11 @@
     "watching": "Watching",
     "withCount": "With {{count}} others",
     "you": "You"
+  },
+  "toasts": {
+    "linkCopied": "Link copied to clipboard!",
+    "loginSuccess": "Logged in successfully!",
+    "logoutSuccess": "Logged out successfully!",
+    "registerSuccess": "Registered successfully!"
   }
 }

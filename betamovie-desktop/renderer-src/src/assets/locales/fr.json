@@ -826,6 +826,7 @@
         "title": "Sous-titres",
         "transcriptChoice": "Transcription",
         "searchPlaceholder": "Rechercher des sous-titres ou des dialogues...",
+        "delayLabel": "Décalage des sous-titres",
         "seekMode": "Chercher",
         "syncMode": "Synchroniser",
         "syncOffset": "Décalage : {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Regarde",
     "withCount": "Avec {{count}} autres",
     "you": "Toi"
+  },
+  "toasts": {
+    "linkCopied": "Lien copié dans le presse-papier !",
+    "loginSuccess": "Connecté avec succès !",
+    "logoutSuccess": "Déconnexion réussie !",
+    "registerSuccess": "Inscrit avec succès !"
   }
 }

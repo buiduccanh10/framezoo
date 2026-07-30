@@ -12,6 +12,7 @@ import {
 import { LoginFormPart } from "@/pages/parts/auth/LoginFormPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePreviewThemeStore } from "@/stores/theme";
 
 export function LoginPanel() {
@@ -96,16 +97,14 @@ export function LoginPanel() {
     ) : (
       <LoginFormPart
         onLogin={() => {
+          useOverlayStack.getState().hideModal("auth");
           const destination = state?.from
             ? `${state.from.pathname}${state.from.search || ""}${state.from.hash || ""}`
             : "/discover";
           navigate(destination, { replace: true });
         }}
         onRegister={() =>
-          navigate("/register", {
-            state: location.state,
-            replace: true,
-          })
+          useOverlayStack.getState().showModal("auth", { mode: "register" })
         }
       />
     );

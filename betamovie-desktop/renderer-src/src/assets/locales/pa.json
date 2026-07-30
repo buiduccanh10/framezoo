@@ -826,6 +826,7 @@
         "title": "ਉਪਸਿਰਲੇਖ",
         "transcriptChoice": "ਪ੍ਰਤੀਲਿਪੀ",
         "searchPlaceholder": "ਉਪਸਿਰਲੇਖ ਜਾਂ ਡਾਇਲਾਗ ਖੋਜੋ...",
+        "delayLabel": "ਉਪਸਿਰਲੇਖ ਆਫਸੈੱਟ",
         "seekMode": "ਭਾਲ",
         "syncMode": "ਸਿੰਕ",
         "syncOffset": "ਔਫਸੈੱਟ: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "ਦੇਖ ਰਿਹਾ ਹੈ",
     "withCount": "{{count}} ਹੋਰਾਂ ਨਾਲ",
     "you": "ਤੁਹਾਨੂੰ"
+  },
+  "toasts": {
+    "linkCopied": "ਲਿੰਕ ਕਲਿੱਪਬੋਰਡ 'ਤੇ ਕਾਪੀ ਕੀਤਾ ਗਿਆ!",
+    "loginSuccess": "ਸਫਲਤਾਪੂਰਵਕ ਲੌਗਇਨ ਕੀਤਾ ਗਿਆ!",
+    "logoutSuccess": "ਸਫਲਤਾਪੂਰਵਕ ਲੌਗ ਆਊਟ ਕੀਤਾ ਗਿਆ!",
+    "registerSuccess": "ਸਫਲਤਾਪੂਰਵਕ ਰਜਿਸਟਰ ਕੀਤਾ ਗਿਆ!"
   }
 }

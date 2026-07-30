@@ -826,6 +826,7 @@
         "title": "उपशीर्षक",
         "transcriptChoice": "प्रतिलिपि",
         "searchPlaceholder": "उपशीर्षक या संवाद खोजें...",
+        "delayLabel": "उपशीर्षक ऑफसेट",
         "seekMode": "तलाश",
         "syncMode": "साथ-साथ करना",
         "syncOffset": "ऑफसेट: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "देख रहे",
     "withCount": "{{count}} अन्य के साथ",
     "you": "आप"
+  },
+  "toasts": {
+    "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया!",
+    "loginSuccess": "सफलतापूर्वक लॉग इन हो चुका है!",
+    "logoutSuccess": "सफलतापूर्वक लॉग आउट हो गया!",
+    "registerSuccess": "सफलतापूर्वक पंजीकृत!"
   }
 }

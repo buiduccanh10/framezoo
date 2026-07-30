@@ -826,6 +826,7 @@
         "title": "Subtitri",
         "transcriptChoice": "Atšifrējums",
         "searchPlaceholder": "Meklēt subtitrus vai dialogu...",
+        "delayLabel": "Subtitru nobīde",
         "seekMode": "Meklēt",
         "syncMode": "Sinhronizēt",
         "syncOffset": "Nobīde: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Skatos",
     "withCount": "Ar {{count}} citiem",
     "you": "Tu"
+  },
+  "toasts": {
+    "linkCopied": "Saite ir kopēta starpliktuvē!",
+    "loginSuccess": "Veiksmīgi pieteicies!",
+    "logoutSuccess": "Veiksmīgi atteicies!",
+    "registerSuccess": "Veiksmīgi reģistrēts!"
   }
 }

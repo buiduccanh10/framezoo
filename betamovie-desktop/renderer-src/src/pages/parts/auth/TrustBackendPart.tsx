@@ -14,6 +14,7 @@ import {
 import { Loading } from "@/components/layout/Loading";
 import { MwLink } from "@/components/text/Link";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 
 interface TrustBackendPartProps {
   backendUrl?: string | null;
@@ -91,7 +92,15 @@ export function TrustBackendPart(props: TrustBackendPartProps) {
           </LargeCardButtons>
           <p className="text-center mt-6">
             <Trans i18nKey="auth.hasAccount">
-              <MwLink to="/login">.</MwLink>
+              <MwLink
+                onClick={() =>
+                  useOverlayStack
+                    .getState()
+                    .showModal("auth", { mode: "login" })
+                }
+              >
+                .
+              </MwLink>
             </Trans>
           </p>
         </>
