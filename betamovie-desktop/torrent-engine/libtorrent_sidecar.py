@@ -28,6 +28,7 @@ OUTPUT_LOCK = threading.Lock()
 VIDEO_EXTENSIONS = (".avi", ".m4v", ".mkv", ".mov", ".mp4", ".webm")
 STREAM_CHUNK_SIZE = 1024 * 1024
 RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
+RANGE_RESPONSE_MAX_BYTES = 32 * 1024 * 1024
 RANGE_WAIT_TIMEOUT = 90
 RANGE_RETRY_INTERVAL = 0.2
 FILE_OPEN_RETRY_INTERVAL = 0.2
@@ -590,6 +591,9 @@ class TorrentRuntime:
         return None
 
     def serve(self, handler: BaseHTTPRequestHandler, head_only: bool) -> None:
+        # mpv cancels the current range connection while seeking. Keep each
+        # response single-use so FFmpeg does not reuse a half-read HTTP body.
+        handler.close_connection = True
         request_number = getattr(self, "request_count", 0) + 1
         self.request_count = request_number
         if not self.first_request_logged:
@@ -641,6 +645,7 @@ class TorrentRuntime:
             start, end, status_code = 0, max(0, total - 1), 200
         else:
             start, end, status_code = byte_range[0], byte_range[1], 206
+            start, end = cap_open_ended_range(range_header, (start, end))
 
         relative_path = self.file_path.replace("\\", "/")
         absolute_path = os.path.abspath(
@@ -683,6 +688,7 @@ class TorrentRuntime:
         handler.send_header("Accept-Ranges", "bytes")
         handler.send_header("Content-Type", content_type)
         handler.send_header("Content-Length", str(length))
+        handler.send_header("Connection", "close")
         if status_code == 206:
             handler.send_header(
                 "Content-Range",
@@ -791,6 +797,22 @@ def parse_range(
     if start < 0 or start >= size or end < start:
         return None
     return start, min(end, size - 1)
+
+
+def cap_open_ended_range(
+    value: Optional[str],
+    byte_range: Tuple[int, int],
+) -> Tuple[int, int]:
+    """Bound open-ended HTTP ranges so clients can cancel cleanly."""
+    if not value or not value.lower().startswith("bytes="):
+        return byte_range
+
+    raw_start, raw_end = value[6:].split("-", 1)
+    if not raw_start or raw_end:
+        return byte_range
+
+    start, end = byte_range
+    return start, min(end, start + RANGE_RESPONSE_MAX_BYTES - 1)
 
 
 DEFAULT_MAX_TORRENT_BYTES = 5 * 1024 * 1024 * 1024  # 5 GB
