@@ -78,6 +78,8 @@ export interface CaptionListItem {
   encoding?: string;
 }
 
+export type SubtitleTrack = "primary" | "secondary";
+
 export interface AudioTrack {
   id: string;
   label: string;
@@ -116,6 +118,7 @@ export interface SourceSlice {
     selected: Caption | null;
     secondary: Caption | null;
     dualSubEnabled: boolean;
+    activeTrack: SubtitleTrack;
     asTrack: boolean;
     translateTask: TranslateTask | null;
   };
@@ -131,6 +134,7 @@ export interface SourceSlice {
   setCaption(caption: Caption | null): void;
   setSecondaryCaption(caption: Caption | null): void;
   setDualSubEnabled(enabled: boolean): void;
+  setActiveCaptionTrack(track: SubtitleTrack): void;
   setSourceId(id: string | null): void;
   setEmbedId(id: string | null): void;
   enableAutomaticQuality(): void;
@@ -283,6 +287,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     selected: null,
     secondary: null,
     dualSubEnabled: false,
+    activeTrack: "primary",
     asTrack: false,
     translateTask: null,
   },
@@ -344,7 +349,13 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.caption.dualSubEnabled = enabled;
       if (!enabled) {
         s.caption.secondary = null;
+        s.caption.activeTrack = "primary";
       }
+    });
+  },
+  setActiveCaptionTrack(track) {
+    set((s) => {
+      s.caption.activeTrack = track;
     });
   },
   setSource(
@@ -404,6 +415,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         !!preservedSelectedCaption &&
         !!preservedSecondaryCaption &&
         store.caption.dualSubEnabled;
+      s.caption.activeTrack =
+        s.caption.dualSubEnabled && store.caption.activeTrack === "secondary"
+          ? "secondary"
+          : "primary";
       s.caption.translateTask = null;
       s.externalSubtitleMediaKey = shouldReuseLoadedExternalSubtitles
         ? currentMediaKey
@@ -508,6 +523,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         selected: null,
         secondary: null,
         dualSubEnabled: false,
+        activeTrack: "primary",
         asTrack: false,
         translateTask: null,
       };

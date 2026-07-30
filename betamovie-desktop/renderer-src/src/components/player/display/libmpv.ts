@@ -556,19 +556,23 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
   function buildPipState(): DesktopPipState | null {
     const playerState = usePlayerStore.getState();
+    const subtitleState = useSubtitleStore.getState();
     if (!source) return null;
+    const pipBaseState = getDesktopPipStateFromPlayerState(
+      playerState,
+      subtitleState.primaryDelay,
+      subtitleState.secondaryDelay,
+    );
+    if (!pipBaseState) return null;
+
     return {
-      ...getDesktopPipStateFromPlayerState(
-        playerState,
-        useSubtitleStore.getState().delay,
-      ),
+      ...pipBaseState,
       source,
       time,
       duration,
       paused,
       playbackRate,
       title: playerState.meta?.title ?? "",
-      delay: useSubtitleStore.getState().delay,
       caption: caption
         ? { vttData: caption.vttData, language: caption.language }
         : null,

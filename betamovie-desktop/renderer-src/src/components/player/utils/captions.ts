@@ -239,11 +239,12 @@ export function shiftVttTimestamps(vttText: string, delay: number): string {
 export function buildVttObjectUrl(
   vttText: string,
   secondaryVttText?: string,
-  delay = 0,
+  primaryDelay = 0,
+  secondaryDelay = primaryDelay,
 ): string {
-  let vtt = shiftVttTimestamps(vttText, delay);
+  let vtt = shiftVttTimestamps(vttText, primaryDelay);
   if (secondaryVttText) {
-    const secondaryVtt = shiftVttTimestamps(secondaryVttText, delay);
+    const secondaryVtt = shiftVttTimestamps(secondaryVttText, secondaryDelay);
     vtt = vtt + "\n\n" + secondaryVtt.replace(/^WEBVTT(?:[\r\n]+)?/i, "");
   }
   return URL.createObjectURL(

@@ -3,6 +3,7 @@ import Fuse from "fuse.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
@@ -18,16 +19,37 @@ import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
+import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
+import type { SubtitleSelectionMode } from "./CaptionsView";
 import { wordOverrides } from "../../Player";
 
-export function TranscriptView({ id }: { id: string }) {
+export function TranscriptView({
+  id,
+  selectionMode = "primary",
+  onSelectionModeChange,
+}: {
+  id: string;
+  selectionMode?: SubtitleSelectionMode;
+  onSelectionModeChange?: (mode: SubtitleSelectionMode) => void;
+}) {
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
-  const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
-  const delay = useSubtitleStore((s) => s.delay);
-  const setDelay = useSubtitleStore((s) => s.setDelay);
+  const primaryCaption = usePlayerStore((s) => s.caption.selected);
+  const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
+  const isDualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
+  const setActiveCaptionTrack = usePlayerStore((s) => s.setActiveCaptionTrack);
+  const primaryDelay = useSubtitleStore((s) => s.primaryDelay);
+  const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
+  const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
+  const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
   const { duration: timeDuration, time } = usePlayerStore((s) => s.progress);
+  const activeCaption =
+    selectionMode === "secondary" ? secondaryCaption : primaryCaption;
+  const delay = selectionMode === "secondary" ? secondaryDelay : primaryDelay;
+  const setDelay =
+    selectionMode === "secondary" ? setSecondaryDelay : setPrimaryDelay;
+  const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [delayInput, setDelayInput] = useState("");
@@ -39,8 +61,9 @@ export function TranscriptView({ id }: { id: string }) {
   const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
 
   const parsedCaptions = useMemo(
-    () => (vttData ? parseCanonicalVtt(vttData) : []),
-    [vttData],
+    () =>
+      activeCaption?.vttData ? parseCanonicalVtt(activeCaption.vttData) : [],
+    [activeCaption],
   );
 
   const showHours = useMemo(() => {
@@ -215,9 +238,57 @@ export function TranscriptView({ id }: { id: string }) {
   return (
     <>
       <Menu.BackLink onClick={() => router.navigate("/captions")}>
-        {t("player.menus.subtitles.transcriptChoice")}
+        <span className="flex min-w-0 items-center gap-2">
+          {t("player.menus.subtitles.transcriptChoice")}
+          <span className="truncate text-video-context-type-secondary">
+            · {t(`player.menus.subtitles.${selectionMode}`)}
+          </span>
+        </span>
       </Menu.BackLink>
       <Menu.Section>
+        {isDualSubEnabled && (
+          <div
+            className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-white/[0.06] p-1"
+            role="tablist"
+            aria-label={t("player.menus.subtitles.dualSub")}
+          >
+            {(["primary", "secondary"] as const).map((track) => {
+              const caption =
+                track === "primary" ? primaryCaption : secondaryCaption;
+              const language = caption
+                ? (getPrettyLanguageNameFromLocale(caption.language) ??
+                  caption.language)
+                : t("player.menus.subtitles.offChoice");
+
+              return (
+                <button
+                  key={track}
+                  type="button"
+                  role="tab"
+                  aria-selected={selectionMode === track}
+                  onClick={() => changeSelectionMode(track)}
+                  disabled={track === "secondary" && !secondaryCaption}
+                  className={classNames(
+                    "flex min-w-0 items-center gap-2 rounded-lg px-3 py-2 text-left text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40",
+                    selectionMode === track
+                      ? track === "primary"
+                        ? "bg-video-context-type-accent text-white shadow-sm"
+                        : "bg-purple-600 text-white shadow-sm"
+                      : "text-video-context-type-secondary hover:bg-white/10",
+                  )}
+                >
+                  {caption ? <FlagIcon langCode={caption.language} /> : null}
+                  <span className="min-w-0 truncate">
+                    <span className="block text-[11px] font-semibold uppercase tracking-wide opacity-70">
+                      {t(`player.menus.subtitles.${track}`)}
+                    </span>
+                    <span className="block truncate">{language}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
         <div className="flex flex-col gap-2.5">
           <Input
             value={searchQuery}
@@ -229,7 +300,8 @@ export function TranscriptView({ id }: { id: string }) {
           />
           <div className="flex items-center justify-between px-1 py-0.5 text-sm">
             <span className="font-medium text-video-context-type-main text-xs sm:text-sm">
-              {t("player.menus.subtitles.delayLabel", "Subtitle offset")}
+              {t("player.menus.subtitles.delayLabel", "Subtitle offset")} ·{" "}
+              {t(`player.menus.subtitles.${selectionMode}`)}
             </span>
             <div className="flex items-center gap-1.5">
               <button
@@ -288,7 +360,7 @@ export function TranscriptView({ id }: { id: string }) {
       <div
         ref={carouselRef}
         className={classNames(
-          "max-h-[18rem] overflow-y-auto",
+          "min-h-0 overflow-y-auto",
           "vertical-carousel-container",
           {
             "hide-top-gradient": isAtTop,
@@ -297,44 +369,52 @@ export function TranscriptView({ id }: { id: string }) {
         )}
       >
         <div className="flex flex-col gap-1 pb-4">
-          {filteredItems.map((item) => {
-            const html = sanitize(item.raw.replaceAll(/\r?\n/g, "<br />"), {
-              ALLOWED_TAGS: ["c", "b", "i", "u", "span", "ruby", "rt", "br"],
-              ADD_TAGS: ["v", "lang"],
-              ALLOWED_ATTR: ["title", "lang"],
-            });
+          {activeCaption ? (
+            filteredItems.map((item) => {
+              const html = sanitize(item.raw.replaceAll(/\r?\n/g, "<br />"), {
+                ALLOWED_TAGS: ["c", "b", "i", "u", "span", "ruby", "rt", "br"],
+                ADD_TAGS: ["v", "lang"],
+                ALLOWED_ATTR: ["title", "lang"],
+              });
 
-            const isActive = activeKey === item.key;
+              const isActive = activeKey === item.key;
 
-            return (
-              <div key={item.key} data-que-id={item.key}>
-                <Link
-                  onClick={() => handleItemClick(item)}
-                  clickable
-                  className="items-start transition-colors duration-150 rounded-lg"
-                  active={isActive}
-                >
-                  <span className="mr-3 flex-none w-[4.5rem] h-[1.75rem] flex items-center justify-center px-0 leading-tight rounded-md bg-video-context-light bg-opacity-20 text-video-context-type-main font-normal whitespace-nowrap overflow-hidden text-sm">
-                    {item.start < 0 || !Number.isFinite(item.start)
-                      ? "N/A"
-                      : formatSeconds(item.start, showHours)}
-                  </span>
-                  <span
-                    className={
-                      isActive
-                        ? "flex-1 text-white font-semibold text-sm leading-snug py-0.5"
-                        : "flex-1 text-video-context-type-main text-sm leading-snug py-0.5 hover:text-white transition-colors"
-                    }
+              return (
+                <div key={item.key} data-que-id={item.key}>
+                  <Link
+                    onClick={() => handleItemClick(item)}
+                    clickable
+                    className="items-start transition-colors duration-150 rounded-lg"
+                    active={isActive}
                   >
+                    <span className="mr-3 flex-none w-[4.5rem] h-[1.75rem] flex items-center justify-center px-0 leading-tight rounded-md bg-video-context-light bg-opacity-20 text-video-context-type-main font-normal whitespace-nowrap overflow-hidden text-sm">
+                      {item.start < 0 || !Number.isFinite(item.start)
+                        ? "N/A"
+                        : formatSeconds(item.start, showHours)}
+                    </span>
                     <span
-                      dangerouslySetInnerHTML={{ __html: html }}
-                      dir="ltr"
-                    />
-                  </span>
-                </Link>
-              </div>
-            );
-          })}
+                      className={
+                        isActive
+                          ? "flex-1 text-white font-semibold text-sm leading-snug py-0.5"
+                          : "flex-1 text-video-context-type-main text-sm leading-snug py-0.5 hover:text-white transition-colors"
+                      }
+                    >
+                      <span
+                        dangerouslySetInnerHTML={{ __html: html }}
+                        dir="ltr"
+                      />
+                    </span>
+                  </Link>
+                </div>
+              );
+            })
+          ) : (
+            <div className="rounded-xl border border-dashed border-white/10 px-4 py-8 text-center text-sm text-video-context-type-secondary">
+              {selectionMode === "secondary"
+                ? t("player.menus.subtitles.clearSecondary")
+                : t("player.menus.subtitles.offChoice")}
+            </div>
+          )}
         </div>
       </div>
     </>

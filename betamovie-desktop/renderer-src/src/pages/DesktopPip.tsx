@@ -83,7 +83,7 @@ const PipCaptions = memo(function PipCaptionsView(props: {
         captionIsVisible(
           cue.start,
           cue.end,
-          props.state.delay,
+          props.state.secondaryDelay,
           props.state.time,
         ),
       ),
@@ -91,7 +91,7 @@ const PipCaptions = memo(function PipCaptionsView(props: {
         captionIsVisible(
           cue.start,
           cue.end,
-          props.state.delay,
+          props.state.primaryDelay,
           props.state.time,
         ),
       ),
