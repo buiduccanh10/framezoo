@@ -1,7 +1,9 @@
 import { useCallback, useMemo } from "react";
 
 import { Icons } from "@/components/Icon";
+import { useAuth } from "@/hooks/auth/useAuth";
 import { useBookmarkStore } from "@/stores/bookmarks";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { MediaItem } from "@/utils/mediaTypes";
 
@@ -13,6 +15,9 @@ interface MediaBookmarkProps {
 }
 
 export function MediaBookmarkButton({ media, group }: MediaBookmarkProps) {
+  const { loggedIn } = useAuth();
+  const showModal = useOverlayStack((s) => s.showModal);
+
   const addBookmark = useBookmarkStore((s) => s.addBookmark);
   const addBookmarkWithGroups = useBookmarkStore(
     (s) => s.addBookmarkWithGroups,
@@ -33,11 +38,18 @@ export function MediaBookmarkButton({ media, group }: MediaBookmarkProps) {
   const isBookmarked = !!bookmarks[meta?.tmdbId ?? ""];
 
   const toggleBookmark = useCallback(() => {
+    if (!loggedIn) {
+      showModal("auth", { mode: "login" });
+      return;
+    }
+
     if (!meta) return;
     if (isBookmarked) removeBookmark(meta.tmdbId);
     else if (group && group.length > 0) addBookmarkWithGroups(meta, group);
     else addBookmark(meta);
   }, [
+    loggedIn,
+    showModal,
     isBookmarked,
     meta,
     addBookmark,

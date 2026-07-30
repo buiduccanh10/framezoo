@@ -9,7 +9,6 @@ import {
   LargeCardButtons,
   LargeCardText,
 } from "@/components/layout/LargeCard";
-import { AuthDialog } from "@/components/overlays/AuthDialog";
 import { LoginFormPart } from "@/pages/parts/auth/LoginFormPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
@@ -112,12 +111,4 @@ export function LoginPanel() {
     );
 
   return content;
-}
-
-export function LoginPage() {
-  return (
-    <AuthDialog mode="login">
-      <LoginPanel />
-    </AuthDialog>
-  );
 }

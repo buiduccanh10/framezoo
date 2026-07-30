@@ -1,84 +1,34 @@
-import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
 
 import { IconPatch } from "@/components/buttons/IconPatch";
 import { Icon, Icons } from "@/components/Icon";
 import { OverlayPortal } from "@/components/overlays/OverlayDisplay";
 
-type AuthDialogMode = "login" | "register";
-
-interface AuthDialogState {
-  backgroundLocation?: {
-    pathname: string;
-    search?: string;
-    hash?: string;
-  };
-}
-
-function formatLocation(location: {
-  pathname: string;
-  search?: string;
-  hash?: string;
-}) {
-  return `${location.pathname}${location.search || ""}${location.hash || ""}`;
-}
+export type AuthDialogMode = "login" | "register";
 
 export function AuthDialog(props: {
   mode: AuthDialogMode;
+  show: boolean;
+  onClose: () => void;
+  onModeChange: (mode: AuthDialogMode) => void;
   children: React.ReactNode;
 }) {
-  const location = useLocation();
-  const navigate = useNavigate();
   const { t } = useTranslation();
-  const state = location.state as AuthDialogState | null;
-  const [isOpen, setIsOpen] = useState(true);
-  const closeTimer = useRef<number | null>(null);
-  const isClosing = useRef(false);
-
-  useEffect(() => {
-    return () => {
-      if (closeTimer.current !== null) {
-        window.clearTimeout(closeTimer.current);
-      }
-    };
-  }, []);
-
-  const closeDestination = () =>
-    formatLocation(
-      state?.backgroundLocation ?? {
-        pathname: "/discover",
-      },
-    );
-
-  const close = () => {
-    if (isClosing.current) return;
-
-    isClosing.current = true;
-    setIsOpen(false);
-    closeTimer.current = window.setTimeout(() => {
-      navigate(closeDestination(), { replace: true });
-    }, 500);
-  };
 
   const goBack = () => {
     if (props.mode === "register") {
-      navigate("/login", {
-        state: location.state,
-        replace: true,
-      });
+      props.onModeChange("login");
       return;
     }
-
-    close();
+    props.onClose();
   };
 
   return (
     <OverlayPortal
       darken
-      close={close}
-      show={isOpen}
+      close={props.onClose}
+      show={props.show}
       durationClass="duration-500"
       zIndex={1200}
     >
@@ -109,7 +59,7 @@ export function AuthDialog(props: {
             <button
               type="button"
               className="rounded-full p-2 text-type-secondary transition-colors hover:bg-white/10 hover:text-white"
-              onClick={close}
+              onClick={props.onClose}
               aria-label={t("overlays.close", "Close")}
             >
               <IconPatch icon={Icons.X} />
