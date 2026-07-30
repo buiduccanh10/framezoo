@@ -38,6 +38,23 @@ class SidecarStreamTest(unittest.TestCase):
             sidecar.cap_open_ended_range("bytes=0-99", (0, 99)),
             (0, 99),
         )
+        self.assertEqual(
+            sidecar.cap_open_ended_range(
+                "bytes=44-%d" % large_end,
+                (44, large_end),
+            ),
+            (44, 44 + sidecar.RANGE_RESPONSE_MAX_BYTES - 1),
+        )
+        self.assertEqual(
+            sidecar.cap_open_ended_range(
+                "bytes=-%d" % large_end,
+                (0, large_end - 1),
+            ),
+            (
+                large_end - sidecar.RANGE_RESPONSE_MAX_BYTES,
+                large_end - 1,
+            ),
+        )
 
     def test_sends_headers_after_first_piece_is_available(self):
         runtime = object.__new__(sidecar.TorrentRuntime)
@@ -97,6 +114,67 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertFalse(worker.is_alive())
         self.assertTrue(handler.close_connection)
         self.assertEqual(handler.wfile.getvalue(), b"test")
+
+    def test_bounds_no_range_requests(self):
+        with patch.object(sidecar, "RANGE_RESPONSE_MAX_BYTES", 4):
+            runtime = object.__new__(sidecar.TorrentRuntime)
+            runtime.stop_event = threading.Event()
+            runtime.metadata_ready = threading.Event()
+            runtime.metadata_ready.set()
+            runtime.metadata_complete = threading.Event()
+            runtime.metadata_error = None
+            runtime.file_index = 0
+            runtime.file_size = 9
+            runtime.file_path = "episode.mkv"
+            runtime.save_path = tempfile.gettempdir()
+            runtime.session_id = "torrent-no-range-test"
+            runtime.first_request_logged = False
+
+            def open_first_chunk(self, _absolute_path, _start, _end):
+                return BytesIO(b"012345678"), b"0123"
+
+            def read_range_chunk(self, stream, start, end):
+                stream.seek(start)
+                return stream.read(end - start + 1)
+
+            runtime.open_first_chunk = MethodType(
+                open_first_chunk,
+                runtime,
+            )
+            runtime.read_range_chunk = MethodType(
+                read_range_chunk,
+                runtime,
+            )
+
+            class FakeHandler:
+                command = "GET"
+                headers = {}
+                close_connection = False
+
+                def __init__(self):
+                    self.status = None
+                    self.headers_sent = {}
+                    self.wfile = BytesIO()
+
+                def send_response(self, status):
+                    self.status = status
+
+                def send_header(self, name, value):
+                    self.headers_sent[name] = value
+
+                def end_headers(self):
+                    return None
+
+            handler = FakeHandler()
+            runtime.serve(handler, False)
+
+            self.assertEqual(handler.status, 206)
+            self.assertEqual(handler.headers_sent["Content-Length"], "4")
+            self.assertEqual(
+                handler.headers_sent["Content-Range"],
+                "bytes 0-3/9",
+            )
+            self.assertEqual(handler.wfile.getvalue(), b"0123")
 
     def test_waits_for_file_created_after_metadata(self):
         runtime = object.__new__(sidecar.TorrentRuntime)
