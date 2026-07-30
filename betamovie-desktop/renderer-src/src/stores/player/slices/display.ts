@@ -154,9 +154,12 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         return;
       }
 
-      if ((currentState.source as any)?.isTorrent) {
+      if (
+        (currentState.source as any)?.isTorrent &&
+        currentState.mediaPlaying.hasRenderedFrame
+      ) {
         set((s) => {
-          s.mediaPlaying.isLoading = true;
+          s.mediaPlaying.isLoading = false;
         });
         return;
       }

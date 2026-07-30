@@ -37,6 +37,7 @@ type PlayerRecord = {
 };
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
+const FILE_NATIVE_EVENT_TIMEOUT_MS = 45_000;
 
 function isSupportedDesktopPlatform(): boolean {
   return process.platform === "darwin" || process.platform === "win32";
@@ -318,18 +319,22 @@ export class LibMpvController {
         startAt: Math.max(0, Number(request.startAt) || 0),
       });
 
+      const timeoutMs =
+        request.type === "file"
+          ? FILE_NATIVE_EVENT_TIMEOUT_MS
+          : DEFAULT_NATIVE_EVENT_TIMEOUT_MS;
       const timeout = setTimeout(() => {
         if (this.players.get(playerId)?.generation !== generation) return;
         this.eventTimers.delete(playerId);
         this.broadcastError(
           "load_timeout",
-          `libmpv load timed out after ${DEFAULT_NATIVE_EVENT_TIMEOUT_MS}ms`,
+          `libmpv load timed out after ${timeoutMs}ms`,
           {
             playerId,
             generation,
           },
         );
-      }, DEFAULT_NATIVE_EVENT_TIMEOUT_MS);
+      }, timeoutMs);
       this.eventTimers.set(playerId, timeout);
       return true;
     } catch (error) {
@@ -442,9 +447,9 @@ export class LibMpvController {
     if (!player || event.generation !== player.generation) return;
 
     if (
-      event.type === "file-loaded" ||
       event.type === "error" ||
-      event.type === "end-file"
+      event.type === "end-file" ||
+      event.type === "video-frame"
     ) {
       const timer = this.eventTimers.get(playerId);
       if (timer) clearTimeout(timer);
