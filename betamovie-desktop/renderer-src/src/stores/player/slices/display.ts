@@ -12,7 +12,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
   display: null,
   setDisplay(newDisplay: DisplayInterface | null) {
     const display = get().display;
-    if (display) display.destroy();
+    if (display) display.destroy("store:set-display");
 
     if (!newDisplay) {
       set((s) => {
@@ -178,6 +178,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       startAt: 0,
       automaticQuality: false,
       preferredQuality: null,
+      reason: "store:reset",
     });
     set((s) => {
       s.status = playerStatus.IDLE;

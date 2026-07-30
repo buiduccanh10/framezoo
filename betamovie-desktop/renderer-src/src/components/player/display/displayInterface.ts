@@ -77,6 +77,7 @@ export interface qualityChangeOptions {
   preferredQuality: SourceQuality | null;
   startAt: number;
   autoplay?: boolean;
+  reason?: string;
 }
 
 export interface DisplayMeta {
@@ -117,7 +118,7 @@ export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
   setSeeking(active: boolean): void;
   setVolume(vol: number): void;
   setTime(t: number): void;
-  destroy(): void;
+  destroy(reason?: string): void;
   startAirplay(): void;
   setPlaybackRate(rate: number): void;
   setMeta(meta: DisplayMeta): void;

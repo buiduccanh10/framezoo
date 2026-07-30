@@ -163,8 +163,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
             target,
           );
         },
-        destroyLibMpvPlayer(playerId: string): Promise<boolean> {
-          return ipcRenderer.invoke("desktop:libmpv-destroy", playerId);
+        destroyLibMpvPlayer(
+          playerId: string,
+          reason?: string,
+        ): Promise<boolean> {
+          return ipcRenderer.invoke(
+            "desktop:libmpv-destroy",
+            playerId,
+            reason,
+          );
         },
         onLibMpvEvent(listener: (event: LibMpvPlayerEvent) => void) {
           const handler = (

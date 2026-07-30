@@ -230,8 +230,8 @@ export class LibMpvController {
 
     ipcMain.handle(
       "desktop:libmpv-destroy",
-      async (_event, playerId: string) => {
-        return this.destroy(playerId);
+      async (_event, playerId: string, reason?: string) => {
+        return this.destroy(playerId, reason);
       },
     );
   }
@@ -406,7 +406,7 @@ export class LibMpvController {
     }
   }
 
-  public destroy(playerId: string): boolean {
+  public destroy(playerId: string, reason = "ipc:destroy"): boolean {
     const player = this.players.get(playerId);
     if (!player) return false;
 
@@ -420,19 +420,19 @@ export class LibMpvController {
       this.broadcastError(
         "destroy_failed",
         error instanceof Error ? error.message : String(error),
-        { playerId },
+        { playerId, reason },
       );
     } finally {
       this.players.delete(playerId);
-      this.broadcastLog("info", "destroy", { playerId });
+      this.broadcastLog("info", "destroy", { playerId, reason });
     }
 
     return true;
   }
 
-  public destroyAll(): void {
+  public destroyAll(reason = "controller:destroy-all"): void {
     for (const playerId of [...this.players.keys()]) {
-      this.destroy(playerId);
+      this.destroy(playerId, reason);
     }
   }
 

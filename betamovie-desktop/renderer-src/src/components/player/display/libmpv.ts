@@ -93,7 +93,7 @@ type LibMpvElectronApi = {
     playerId: string,
     target: "main" | "pip",
   ) => Promise<boolean>;
-  destroyLibMpvPlayer?: (playerId: string) => Promise<boolean>;
+  destroyLibMpvPlayer?: (playerId: string, reason?: string) => Promise<boolean>;
   onLibMpvEvent?: (listener: (event: LibMpvPlayerEvent) => void) => () => void;
   onLibMpvLog?: (listener: (log: LibMpvLogEvent) => void) => () => void;
 };
@@ -263,7 +263,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       const createdPlayerId = await electronApi.createLibMpvPlayer!(bounds);
       if (!createdPlayerId || destroyed || !source) {
         if (createdPlayerId && (destroyed || !source)) {
-          await electronApi.destroyLibMpvPlayer?.(createdPlayerId);
+          await electronApi.destroyLibMpvPlayer?.(
+            createdPlayerId,
+            destroyed
+              ? "display:ensure-player-aborted-destroyed"
+              : "display:ensure-player-aborted-no-source",
+          );
         }
         if (!createdPlayerId) {
           emit("error", {
@@ -337,6 +342,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (!playerId || !electronApi?.resizeLibMpvPlayer) return;
     const bounds = getBounds();
     if (bounds) void electronApi.resizeLibMpvPlayer(playerId, bounds);
+  }
+
+  function destroyNativePlayer(id: string, reason: string) {
+    console.info("[libmpv] destroy_requested", {
+      playerId: id,
+      reason,
+    });
+    void enqueueNativeOperation(() =>
+      electronApi?.destroyLibMpvPlayer?.(id, reason),
+    );
   }
 
   function handleTrackList(data: unknown) {
@@ -606,7 +621,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     getType() {
       return "web";
     },
-    destroy() {
+    destroy(reason = "display:destroy") {
       destroyed = true;
       pendingLoad = null;
       resizeObserver?.disconnect();
@@ -619,9 +634,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       const playerToDestroy = playerId;
       playerId = null;
       if (playerToDestroy) {
-        void enqueueNativeOperation(() =>
-          electronApi?.destroyLibMpvPlayer?.(playerToDestroy),
-        );
+        destroyNativePlayer(playerToDestroy, reason);
       }
       if (pictureInPictureMode === "desktop") {
         pictureInPictureMode = null;
@@ -655,8 +668,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         unbindLogs?.();
         unbindLogs = null;
         if (playerToDestroy) {
-          void enqueueNativeOperation(() =>
-            electronApi?.destroyLibMpvPlayer?.(playerToDestroy),
+          destroyNativePlayer(
+            playerToDestroy,
+            ops.reason ?? "display:load-empty-source",
           );
         }
         return;
