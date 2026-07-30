@@ -28,8 +28,9 @@ OUTPUT_LOCK = threading.Lock()
 VIDEO_EXTENSIONS = (".avi", ".m4v", ".mkv", ".mov", ".mp4", ".webm")
 STREAM_CHUNK_SIZE = 1024 * 1024
 RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
+RANGE_METADATA_TAIL_BYTES = 8 * 1024 * 1024
 RANGE_RESPONSE_MAX_BYTES = 32 * 1024 * 1024
-RANGE_WAIT_TIMEOUT = 90
+RANGE_WAIT_TIMEOUT = 30
 RANGE_RETRY_INTERVAL = 0.2
 FILE_OPEN_RETRY_INTERVAL = 0.2
 
@@ -320,8 +321,14 @@ class TorrentRuntime:
                 self.prioritize_range(
                     0,
                     RANGE_PREFETCH_BYTES,
-                    reason="metadata",
+                    reason="metadata-head",
                 )
+                if self.file_size > RANGE_PREFETCH_BYTES:
+                    self.prioritize_range(
+                        max(0, self.file_size - RANGE_METADATA_TAIL_BYTES),
+                        RANGE_METADATA_TAIL_BYTES,
+                        reason="metadata-tail",
+                    )
                 self.metadata_ready.set()
                 log_event(
                     "metadata ready",
@@ -362,6 +369,7 @@ class TorrentRuntime:
             except Exception:
                 pass
             shutil.rmtree(self.save_path, ignore_errors=True)
+            self._torrent_cleaned = True
 
     def current_status(self) -> Dict[str, Any]:
         status = self.handle.status()
@@ -642,7 +650,12 @@ class TorrentRuntime:
             return
 
         if byte_range is None:
-            start, end, status_code = 0, max(0, total - 1), 200
+            start = 0
+            end = min(
+                max(0, total - 1),
+                RANGE_RESPONSE_MAX_BYTES - 1,
+            )
+            status_code = 206
         else:
             start, end, status_code = byte_range[0], byte_range[1], 206
             start, end = cap_open_ended_range(range_header, (start, end))
@@ -803,15 +816,18 @@ def cap_open_ended_range(
     value: Optional[str],
     byte_range: Tuple[int, int],
 ) -> Tuple[int, int]:
-    """Bound open-ended HTTP ranges so clients can cancel cleanly."""
+    """Bound large HTTP ranges so clients can cancel cleanly."""
     if not value or not value.lower().startswith("bytes="):
         return byte_range
 
     raw_start, raw_end = value[6:].split("-", 1)
-    if not raw_start or raw_end:
-        return byte_range
-
     start, end = byte_range
+    if not raw_start:
+        if end - start + 1 <= RANGE_RESPONSE_MAX_BYTES:
+            return byte_range
+        return max(start, end - RANGE_RESPONSE_MAX_BYTES + 1), end
+    if raw_end and end - start + 1 <= RANGE_RESPONSE_MAX_BYTES:
+        return byte_range
     return start, min(end, start + RANGE_RESPONSE_MAX_BYTES - 1)
 
 
