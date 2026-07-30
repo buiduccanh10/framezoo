@@ -24,6 +24,21 @@ except ModuleNotFoundError as error:
 
 
 class SidecarStreamTest(unittest.TestCase):
+    def test_caps_open_ended_ranges(self):
+        large_end = sidecar.RANGE_RESPONSE_MAX_BYTES * 2
+        self.assertEqual(
+            sidecar.cap_open_ended_range("bytes=0-", (0, large_end)),
+            (0, sidecar.RANGE_RESPONSE_MAX_BYTES - 1),
+        )
+        self.assertEqual(
+            sidecar.cap_open_ended_range("bytes=44-", (44, large_end)),
+            (44, 44 + sidecar.RANGE_RESPONSE_MAX_BYTES - 1),
+        )
+        self.assertEqual(
+            sidecar.cap_open_ended_range("bytes=0-99", (0, 99)),
+            (0, 99),
+        )
+
     def test_sends_headers_after_first_piece_is_available(self):
         runtime = object.__new__(sidecar.TorrentRuntime)
         runtime.stop_event = threading.Event()
@@ -76,9 +91,11 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertTrue(handler.header_event.wait(1))
         self.assertEqual(handler.status, 206)
         self.assertEqual(handler.headers_sent["Content-Length"], "4")
+        self.assertEqual(handler.headers_sent["Connection"], "close")
 
         worker.join(2)
         self.assertFalse(worker.is_alive())
+        self.assertTrue(handler.close_connection)
         self.assertEqual(handler.wfile.getvalue(), b"test")
 
     def test_waits_for_file_created_after_metadata(self):
