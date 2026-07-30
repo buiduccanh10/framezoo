@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getRoomStatuses } from "@/backend/player/status";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
@@ -102,17 +103,9 @@ export function useWatchPartySync(
 
       if (watchPartyCode && !enabled && watchPartyCode.length > 0) {
         if (!account) {
-          navigate("/login", {
-            state: {
-              from: location,
-              backgroundLocation: {
-                pathname: "/discover",
-                search: "",
-                hash: "",
-              },
-            },
-            replace: true,
-          });
+          useOverlayStack.getState().showModal("auth", { mode: "login" });
+          syncStateRef.current.checkedUrlParams = true;
+          return;
         } else {
           enableAsGuest(watchPartyCode);
         }

@@ -826,6 +826,7 @@
         "title": "字幕",
         "transcriptChoice": "成績証明書",
         "searchPlaceholder": "字幕やセリフを検索...",
+        "delayLabel": "字幕オフセット",
         "seekMode": "求める",
         "syncMode": "同期",
         "syncOffset": "オフセット: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "見てる",
     "withCount": "他の{{count}}人と",
     "you": "あなた"
+  },
+  "toasts": {
+    "linkCopied": "リンクがクリップボードにコピーされました!",
+    "loginSuccess": "ログインに成功しました！",
+    "logoutSuccess": "正常にログアウトされました!",
+    "registerSuccess": "無事に登録されました！"
   }
 }

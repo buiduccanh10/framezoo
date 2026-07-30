@@ -826,6 +826,7 @@
         "title": "Subtitluri",
         "transcriptChoice": "Transcriere",
         "searchPlaceholder": "Caută subtitrări sau dialog...",
+        "delayLabel": "Compensare subtitrare",
         "seekMode": "Caută",
         "syncMode": "Sincronizare",
         "syncOffset": "Offset: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Privind",
     "withCount": "Cu alți {{count}}",
     "you": "Tu"
+  },
+  "toasts": {
+    "linkCopied": "Link copiat în clipboard!",
+    "loginSuccess": "Autentificat cu succes!",
+    "logoutSuccess": "Te-ai deconectat cu succes!",
+    "registerSuccess": "Inregistrat cu succes!"
   }
 }

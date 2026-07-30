@@ -826,6 +826,7 @@
         "title": "Altyazılar",
         "transcriptChoice": "Deşifre metni",
         "searchPlaceholder": "Altyazı veya diyalog arayın...",
+        "delayLabel": "Altyazı dengesi",
         "seekMode": "Aramak",
         "syncMode": "Senkronizasyon",
         "syncOffset": "Uzaklık: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "izliyorum",
     "withCount": "{{count}} diğer kişiyle birlikte",
     "you": "Sen"
+  },
+  "toasts": {
+    "linkCopied": "Bağlantı panoya kopyalandı!",
+    "loginSuccess": "Başarıyla giriş yaptınız!",
+    "logoutSuccess": "Başarıyla çıkış yapıldı!",
+    "registerSuccess": "Başarıyla kaydoldunuz!"
   }
 }

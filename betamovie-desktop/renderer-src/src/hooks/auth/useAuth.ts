@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import { useCallback } from "react";
 
 import {
@@ -38,6 +39,7 @@ import { useAuthData } from "@/hooks/auth/useAuthData";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { AccountWithToken, useAuthStore } from "@/stores/auth";
 import { BookmarkMediaItem } from "@/stores/bookmarks";
+import { useToastStore } from "@/stores/interface/toast";
 import { ProgressMediaItem } from "@/stores/progress";
 
 export interface RegistrationData {
@@ -72,6 +74,7 @@ export function useAuth() {
   const profile = useAuthStore((s) => s.account?.profile);
   const loggedIn = !!useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
+  const showToast = useToastStore((s) => s.showToast);
   const {
     logout: userDataLogout,
     login: userDataLogin,
@@ -116,7 +119,14 @@ export function useAuth() {
         );
         const seedBase64 = bytesToBase64(keys.seed);
 
-        return userDataLogin(loginResult, user.user, user.session, seedBase64);
+        const result = userDataLogin(
+          loginResult,
+          user.user,
+          user.session,
+          seedBase64,
+        );
+        showToast(t("toasts.loginSuccess"), "success");
+        return result;
       } else if (loginData.mnemonic || loginData.credentialId) {
         // Old method: mnemonic or credentialId
         if (!loginData.mnemonic && !loginData.credentialId) {
@@ -161,14 +171,21 @@ export function useAuth() {
           storeCredentialMapping(backendUrl, publicKeyBase64Url, credentialId);
         }
 
-        return userDataLogin(loginResult, user.user, user.session, seedBase64);
+        const result = userDataLogin(
+          loginResult,
+          user.user,
+          user.session,
+          seedBase64,
+        );
+        showToast(t("toasts.loginSuccess"), "success");
+        return result;
       } else {
         throw new Error(
           "Either identifier/password or mnemonic/credentialId must be provided",
         );
       }
     },
-    [userDataLogin, backendUrl],
+    [userDataLogin, backendUrl, showToast],
   );
 
   const logout = useCallback(async () => {
@@ -179,7 +196,8 @@ export function useAuth() {
       // we dont care about failing to delete session
     }
     await userDataLogout();
-  }, [userDataLogout, backendUrl, currentAccount]);
+    showToast(t("toasts.logoutSuccess"), "success");
+  }, [userDataLogout, backendUrl, currentAccount, showToast]);
 
   const disconnectFromBackend = useCallback(async () => {
     if (!currentAccount || !backendUrl) return;
@@ -190,7 +208,8 @@ export function useAuth() {
     }
     // Only remove the account, keep all local data
     useAuthStore.getState().removeAccount();
-  }, [backendUrl, currentAccount]);
+    showToast(t("toasts.logoutSuccess"), "success");
+  }, [backendUrl, currentAccount, showToast]);
 
   const register = useCallback(
     async (registerData: RegistrationData) => {
@@ -224,12 +243,14 @@ export function useAuth() {
           profile: registerData.userData.profile,
         });
 
-        return userDataLogin(
+        const result = userDataLogin(
           registerResult,
           registerResult.user,
           registerResult.session,
           bytesToBase64(keys.seed),
         );
+        showToast(t("toasts.registerSuccess"), "success");
+        return result;
       } else if (registerData.mnemonic || registerData.credentialId) {
         // Old method: mnemonic or credentialId
         if (!registerData.mnemonic && !registerData.credentialId) {
@@ -266,19 +287,21 @@ export function useAuth() {
           );
         }
 
-        return userDataLogin(
+        const result = userDataLogin(
           registerResult,
           registerResult.user,
           registerResult.session,
           bytesToBase64(keys.seed),
         );
+        showToast(t("toasts.registerSuccess"), "success");
+        return result;
       } else {
         throw new Error(
           "Either nickname/password or mnemonic/credentialId must be provided",
         );
       }
     },
-    [backendUrl, userDataLogin],
+    [backendUrl, userDataLogin, showToast],
   );
 
   const importData = useCallback(

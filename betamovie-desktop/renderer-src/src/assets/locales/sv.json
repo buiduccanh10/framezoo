@@ -826,6 +826,7 @@
         "title": "Undertexter",
         "transcriptChoice": "Avskrift",
         "searchPlaceholder": "Sök efter undertexter eller dialog...",
+        "delayLabel": "Undertextförskjutning",
         "seekMode": "Söka",
         "syncMode": "Synkronisera",
         "syncOffset": "Offset: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Tittar på",
     "withCount": "Med {{count}} andra",
     "you": "Du"
+  },
+  "toasts": {
+    "linkCopied": "Länken har kopierats till urklipp!",
+    "loginSuccess": "Inloggad framgångsrikt!",
+    "logoutSuccess": "Loggade ut framgångsrikt!",
+    "registerSuccess": "Registrerad framgångsrikt!"
   }
 }

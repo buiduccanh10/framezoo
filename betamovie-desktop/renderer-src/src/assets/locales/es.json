@@ -826,6 +826,7 @@
         "title": "Subtítulos",
         "transcriptChoice": "Transcripción",
         "searchPlaceholder": "Buscar subtítulos o diálogos...",
+        "delayLabel": "Desplazamiento de subtítulos",
         "seekMode": "Buscar",
         "syncMode": "Sincronizar",
         "syncOffset": "Desplazamiento: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Mirando",
     "withCount": "Con {{count}} otros",
     "you": "Tú"
+  },
+  "toasts": {
+    "linkCopied": "¡Enlace copiado al portapapeles!",
+    "loginSuccess": "¡Inicié sesión exitosamente!",
+    "logoutSuccess": "¡Cerró sesión exitosamente!",
+    "registerSuccess": "¡Registrado exitosamente!"
   }
 }

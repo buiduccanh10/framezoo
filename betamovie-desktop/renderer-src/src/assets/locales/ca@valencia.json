@@ -826,6 +826,7 @@
         "title": "Subtítols",
         "transcriptChoice": "Transcripció",
         "searchPlaceholder": "Cerca subtítols o diàlegs...",
+        "delayLabel": "Desplaçament de subtítols",
         "seekMode": "Busca",
         "syncMode": "Sincronització",
         "syncOffset": "Desplaçament: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Mirant",
     "withCount": "Amb {{count}} més",
     "you": "tu"
+  },
+  "toasts": {
+    "linkCopied": "S'ha copiat l'enllaç al porta-retalls!",
+    "loginSuccess": "S'ha iniciat sessió correctament!",
+    "logoutSuccess": "S'ha tancat la sessió correctament!",
+    "registerSuccess": "Registrat amb èxit!"
   }
 }

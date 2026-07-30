@@ -826,6 +826,7 @@
         "title": "Untertitel",
         "transcriptChoice": "Transkript",
         "searchPlaceholder": "Untertitel oder Dialoge suchen...",
+        "delayLabel": "Untertitel-Offset",
         "seekMode": "Suchen",
         "syncMode": "Synchronisieren",
         "syncOffset": "Offset: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Aufpassen",
     "withCount": "Mit {{count}} anderen",
     "you": "Du"
+  },
+  "toasts": {
+    "linkCopied": "Link in die Zwischenablage kopiert!",
+    "loginSuccess": "Erfolgreich angemeldet!",
+    "logoutSuccess": "Erfolgreich abgemeldet!",
+    "registerSuccess": "Erfolgreich registriert!"
   }
 }

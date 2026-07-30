@@ -11,6 +11,7 @@ import { MWMediaType } from "@/backend/metadata/types/mw";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
 import { conf } from "@/setup/config";
+import { useToastStore } from "@/stores/interface/toast";
 import { useLanguageStore } from "@/stores/language";
 import {
   PlayerMeta,
@@ -282,7 +283,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingCast, setIsLoadingCast] = useState(false);
   const [isLoadingTrailers, setIsLoadingTrailers] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
-  const [hasCopiedShare, setHasCopiedShare] = useState(false);
+  const showToast = useToastStore((s) => s.showToast);
   const progress = useProgressStore((s) => s.items);
   const updateItem = useProgressStore((s) => s.updateItem);
 
@@ -553,8 +554,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     } else {
       // Fall back to clipboard copy for non-iOS devices
       copyToClipboard(shareUrl);
-      setHasCopiedShare(true);
-      setTimeout(() => setHasCopiedShare(false), 2000);
+      showToast(t("toasts.linkCopied"), "success");
     }
   };
 
@@ -585,18 +585,6 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
 
   return (
     <div className="relative h-full flex flex-col">
-      {/* Share notification popup */}
-      {hasCopiedShare && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 bg-green-600 text-white rounded-lg shadow-lg transition-all duration-300 animate-[scaleIn_0.6s_ease-out_forwards]">
-          <div className="flex items-center gap-2">
-            <Icon icon={Icons.CHECKMARK} className="text-white" />
-            <span className="text-sm font-medium">
-              Link copied to clipboard!
-            </span>
-          </div>
-        </div>
-      )}
-
       {/* Trailer Overlay */}
       {showTrailer && imdbData?.trailer_url && (
         <TrailerOverlay

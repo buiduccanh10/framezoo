@@ -826,6 +826,7 @@
         "title": "คำบรรยาย",
         "transcriptChoice": "การถอดเสียง",
         "searchPlaceholder": "ค้นหาคำบรรยายหรือบทสนทนา...",
+        "delayLabel": "ชดเชยคำบรรยาย",
         "seekMode": "แสวงหา",
         "syncMode": "ซิงค์",
         "syncOffset": "ออฟเซ็ต: {{delay}}วินาที",
@@ -1275,5 +1276,11 @@
     "watching": "การรับชม",
     "withCount": "กับอีก {{count}} คน",
     "you": "คุณ"
+  },
+  "toasts": {
+    "linkCopied": "คัดลอกลิงก์ไปยังคลิปบอร์ดแล้ว!",
+    "loginSuccess": "เข้าสู่ระบบสำเร็จ!",
+    "logoutSuccess": "ออกจากระบบเรียบร้อยแล้ว!",
+    "registerSuccess": "ลงทะเบียนเรียบร้อยแล้ว!"
   }
 }

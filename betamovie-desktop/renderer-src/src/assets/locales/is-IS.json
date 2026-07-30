@@ -826,6 +826,7 @@
         "title": "Textar",
         "transcriptChoice": "Afrit",
         "searchPlaceholder": "Leita að texta eða samræðum...",
+        "delayLabel": "Undirtextajöfnun",
         "seekMode": "Leita",
         "syncMode": "Samstilla",
         "syncOffset": "Frávik: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Er að horfa á",
     "withCount": "Með {{count}} öðrum",
     "you": "Þú"
+  },
+  "toasts": {
+    "linkCopied": "Tengill afritaður á klippiborð!",
+    "loginSuccess": "Innskráning tókst!",
+    "logoutSuccess": "Tókst að skrá þig út!",
+    "registerSuccess": "Skráðu þig með góðum árangri!"
   }
 }

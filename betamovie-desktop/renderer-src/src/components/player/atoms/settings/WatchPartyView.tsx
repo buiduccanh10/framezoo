@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useAsync } from "react-use";
 
 import { getBackendMeta } from "@/backend/accounts/meta";
@@ -13,13 +12,12 @@ import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
 import { useAuthStore } from "@/stores/auth";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { getProgressPercentage } from "@/stores/progress";
 import { useWatchPartyStore } from "@/stores/watchParty";
 
 export function WatchPartyView({ id }: { id: string }) {
   const router = useOverlayRouter(id);
-  const location = useLocation();
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const [joinCode, setJoinCode] = useState("");
   const [showJoinInput, setShowJoinInput] = useState(false);
@@ -80,17 +78,7 @@ export function WatchPartyView({ id }: { id: string }) {
   const { roomUsers, hostUser } = useWatchPartySync();
 
   const requestLogin = () => {
-    navigate("/login", {
-      state: {
-        from: location,
-        backgroundLocation: {
-          pathname: "/discover",
-          search: "",
-          hash: "",
-        },
-      },
-      replace: true,
-    });
+    useOverlayStack.getState().showModal("auth", { mode: "login" });
   };
 
   // If guest no longer sees a host in room, leave watch party instead of auto-promoting.
