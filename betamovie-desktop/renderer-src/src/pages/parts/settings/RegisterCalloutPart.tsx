@@ -1,12 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/buttons/Button";
 import { SolidSettingsCard } from "@/components/layout/SettingsCard";
 import { Heading3 } from "@/components/utils/Text";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 
 export function RegisterCalloutPart() {
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   return (
@@ -22,7 +21,12 @@ export function RegisterCalloutPart() {
           </p>
         </div>
         <div className="flex justify-end items-center">
-          <Button theme="purple" onClick={() => navigate("/register")}>
+          <Button
+            theme="purple"
+            onClick={() =>
+              useOverlayStack.getState().showModal("auth", { mode: "register" })
+            }
+          >
             {t("settings.account.register.cta")}
           </Button>
         </div>

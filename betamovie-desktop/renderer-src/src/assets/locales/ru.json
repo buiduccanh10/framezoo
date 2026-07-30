@@ -826,6 +826,7 @@
         "title": "Субтитры",
         "transcriptChoice": "Стенограмма",
         "searchPlaceholder": "Поиск субтитров или диалогов...",
+        "delayLabel": "Смещение субтитров",
         "seekMode": "Искать",
         "syncMode": "Синхронизировать",
         "syncOffset": "Смещение: {{delay}}с",
@@ -1275,5 +1276,11 @@
     "watching": "Смотрю",
     "withCount": "С {{count}} другими",
     "you": "Ты"
+  },
+  "toasts": {
+    "linkCopied": "Ссылка скопирована в буфер обмена!",
+    "loginSuccess": "Авторизован успешно!",
+    "logoutSuccess": "Вышел из системы успешно!",
+    "registerSuccess": "Зарегистрировался успешно!"
   }
 }

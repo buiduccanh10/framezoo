@@ -826,6 +826,7 @@
         "title": "Υπότιτλοι",
         "transcriptChoice": "Αντίγραφο",
         "searchPlaceholder": "Αναζήτηση υπότιτλων ή διαλόγων...",
+        "delayLabel": "Μετατόπιση υποτίτλων",
         "seekMode": "Ζητώ",
         "syncMode": "Συγχρονισμός",
         "syncOffset": "Μετατόπιση: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Παρακολούθηση",
     "withCount": "Με {{count}} άλλους",
     "you": "Εσείς"
+  },
+  "toasts": {
+    "linkCopied": "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο!",
+    "loginSuccess": "Συνδεθήκατε με επιτυχία!",
+    "logoutSuccess": "Αποσυνδέθηκε με επιτυχία!",
+    "registerSuccess": "Εγγραφή με επιτυχία!"
   }
 }

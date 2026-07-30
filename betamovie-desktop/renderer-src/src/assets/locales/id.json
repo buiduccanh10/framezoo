@@ -826,6 +826,7 @@
         "title": "Subtitle",
         "transcriptChoice": "Salinan",
         "searchPlaceholder": "Cari subtitle atau dialog...",
+        "delayLabel": "Subjudul diimbangi",
         "seekMode": "Mencari",
         "syncMode": "Sinkronisasi",
         "syncOffset": "Pergeseran: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Menonton",
     "withCount": "Dengan {{count}} lainnya",
     "you": "Anda"
+  },
+  "toasts": {
+    "linkCopied": "Tautan disalin ke papan klip!",
+    "loginSuccess": "Berhasil masuk!",
+    "logoutSuccess": "Berhasil keluar!",
+    "registerSuccess": "Berhasil mendaftar!"
   }
 }

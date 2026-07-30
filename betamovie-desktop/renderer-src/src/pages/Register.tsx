@@ -23,6 +23,7 @@ import {
 } from "@/pages/parts/auth/PasswordInputPart";
 import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePreviewThemeStore } from "@/stores/theme";
 
 function CaptchaProvider(props: {
@@ -119,6 +120,7 @@ export function RegisterPanel() {
       },
     })
       .then(() => {
+        useOverlayStack.getState().hideModal("auth");
         const state = location.state as
           | {
               from?: {
@@ -186,10 +188,7 @@ export function RegisterPanel() {
         <Trans i18nKey="auth.hasAccount">
           <MwLink
             onClick={() =>
-              navigate("/login", {
-                state: location.state,
-                replace: true,
-              })
+              useOverlayStack.getState().showModal("auth", { mode: "login" })
             }
           >
             .

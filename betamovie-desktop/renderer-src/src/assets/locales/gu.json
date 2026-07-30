@@ -826,6 +826,7 @@
         "title": "સબટાઈટલ",
         "transcriptChoice": "ટ્રાન્સક્રિપ્ટ",
         "searchPlaceholder": "ઉપશીર્ષકો અથવા સંવાદ શોધો...",
+        "delayLabel": "ઉપશીર્ષક ઓફસેટ",
         "seekMode": "શોધો",
         "syncMode": "સમન્વય",
         "syncOffset": "ઑફસેટ: {{delay}} સે",
@@ -1275,5 +1276,11 @@
     "watching": "જોવાનું",
     "withCount": "{{count}} અન્ય લોકો સાથે",
     "you": "તમે"
+  },
+  "toasts": {
+    "linkCopied": "લિંક ક્લિપબોર્ડ પર કૉપિ કરી!",
+    "loginSuccess": "સફળતાપૂર્વક લૉગ ઇન થયા!",
+    "logoutSuccess": "સફળતાપૂર્વક લૉગ આઉટ થયા!",
+    "registerSuccess": "સફળતાપૂર્વક નોંધણી થઈ!"
   }
 }

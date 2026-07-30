@@ -826,6 +826,7 @@
         "title": "সাবটাইটেল",
         "transcriptChoice": "প্রতিলিপি",
         "searchPlaceholder": "সাবটাইটেল বা সংলাপ খুঁজুন...",
+        "delayLabel": "সাবটাইটেল অফসেট",
         "seekMode": "খোঁজ",
         "syncMode": "সিঙ্ক",
         "syncOffset": "অফসেট: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "দেখছি",
     "withCount": "{{count}} অন্যদের সাথে",
     "you": "আপনি"
+  },
+  "toasts": {
+    "linkCopied": "লিঙ্ক ক্লিপবোর্ডে অনুলিপি করা হয়েছে!",
+    "loginSuccess": "সফলভাবে লগ ইন!",
+    "logoutSuccess": "সফলভাবে লগ আউট!",
+    "registerSuccess": "সফলভাবে নিবন্ধিত!"
   }
 }

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { base64ToBuffer, decryptData } from "@/backend/accounts/crypto";
 import { getRoomStatuses } from "@/backend/player/status";
@@ -13,6 +13,7 @@ import { Transition } from "@/components/utils/Transition";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useAuthStore } from "@/stores/auth";
+import { useOverlayStack } from "@/stores/interface/overlayStack";
 
 function Divider() {
   return <hr className="border-0 w-full h-px bg-dropdown-border" />;
@@ -102,7 +103,6 @@ export function WatchPartyInputLink({
   triggerVariant?: "dropdown" | "icon";
 }) {
   const { t } = useTranslation();
-  const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState("");
@@ -112,17 +112,7 @@ export function WatchPartyInputLink({
   const account = useAuthStore((s) => s.account);
 
   const requestLogin = () => {
-    navigate("/login", {
-      state: {
-        from: location,
-        backgroundLocation: {
-          pathname: "/discover",
-          search: "",
-          hash: "",
-        },
-      },
-      replace: true,
-    });
+    useOverlayStack.getState().showModal("auth", { mode: "login" });
   };
 
   useEffect(() => {
@@ -309,11 +299,21 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
   const nickname = useAuthStore((s) => s.account?.nickname);
   const deviceName = useAuthStore((s) => s.account?.deviceName);
   const seed = useAuthStore((s) => s.account?.seed);
+  const account = useAuthStore((s) => s.account);
+  const navigate = useNavigate();
   const bufferSeed = useMemo(
     () => (seed ? base64ToBuffer(seed) : null),
     [seed],
   );
   const { logout } = useAuth();
+
+  const handleProtectedRoute = (path: string) => {
+    if (account) {
+      navigate(path);
+    } else {
+      useOverlayStack.getState().showModal("auth", { mode: "login" });
+    }
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -377,15 +377,29 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
               })()}
             </DropdownLink>
           ) : (
-            <DropdownLink href="/login" icon={Icons.CLOUD_ARROW_UP} highlight>
+            <DropdownLink
+              onClick={() =>
+                useOverlayStack
+                  .getState()
+                  .showModal("auth", { mode: "register" })
+              }
+              icon={Icons.CLOUD_ARROW_UP}
+              highlight
+            >
               {t("navigation.menu.register")}
             </DropdownLink>
           )}
           <Divider />
-          <DropdownLink href="/watch-history" icon={Icons.CLOCK}>
+          <DropdownLink
+            onClick={() => handleProtectedRoute("/watch-history")}
+            icon={Icons.CLOCK}
+          >
             {t("home.watchHistory.sectionTitle")}
           </DropdownLink>
-          <DropdownLink href="/marked" icon={Icons.BOOKMARK}>
+          <DropdownLink
+            onClick={() => handleProtectedRoute("/marked")}
+            icon={Icons.BOOKMARK}
+          >
             {t("home.bookmarks.sectionTitle")}
           </DropdownLink>
           <DropdownLink href="/addons" icon={Icons.EXTENSION}>

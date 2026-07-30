@@ -826,6 +826,7 @@
         "title": "כתוביות",
         "transcriptChoice": "תמלול",
         "searchPlaceholder": "חפש כתוביות או דיאלוג...",
+        "delayLabel": "היסט כתוביות",
         "seekMode": "לְחַפֵּשׂ",
         "syncMode": "סנכרון",
         "syncOffset": "היסט: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "צופה",
     "withCount": "עם עוד {{count}}",
     "you": "אַתָה"
+  },
+  "toasts": {
+    "linkCopied": "הקישור הועתק ללוח!",
+    "loginSuccess": "התחבר בהצלחה!",
+    "logoutSuccess": "התנתק בהצלחה!",
+    "registerSuccess": "נרשם בהצלחה!"
   }
 }

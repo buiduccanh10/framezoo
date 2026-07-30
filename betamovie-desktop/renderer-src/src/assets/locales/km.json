@@ -826,6 +826,7 @@
         "title": "ចំណងជើងរង",
         "transcriptChoice": "ប្រតិចារិក",
         "searchPlaceholder": "ស្វែងរកចំណងជើងរង ឬការសន្ទនា...",
+        "delayLabel": "ចំណងជើងរងអុហ្វសិត",
         "seekMode": "ស្វែងរក",
         "syncMode": "ធ្វើសមកាលកម្ម",
         "syncOffset": "អុហ្វសិត៖ {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "កំពុងមើល",
     "withCount": "ជាមួយ {{count}} ផ្សេងទៀត។",
     "you": "អ្នក"
+  },
+  "toasts": {
+    "linkCopied": "តំណត្រូវបានចម្លងទៅក្ដារតម្បៀតខ្ទាស់!",
+    "loginSuccess": "ចូលដោយជោគជ័យ!",
+    "logoutSuccess": "ចេញដោយជោគជ័យ!",
+    "registerSuccess": "ចុះឈ្មោះដោយជោគជ័យ!"
   }
 }

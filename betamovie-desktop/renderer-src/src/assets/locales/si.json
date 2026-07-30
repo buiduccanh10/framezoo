@@ -826,6 +826,7 @@
         "title": "උපසිරැසි",
         "transcriptChoice": "පිටපත",
         "searchPlaceholder": "උපසිරැසි හෝ දෙබස් සොයන්න...",
+        "delayLabel": "උපසිරැසි ඕෆ්සෙට්",
         "seekMode": "සොයන්න",
         "syncMode": "සමමුහුර්ත කරන්න",
         "syncOffset": "ඕෆ්සෙට්: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "බලනවා",
     "withCount": "තවත් {{count}} සමග",
     "you": "ඔබ"
+  },
+  "toasts": {
+    "linkCopied": "සබැඳිය පසුරු පුවරුවට පිටපත් කරන ලදී!",
+    "loginSuccess": "සාර්ථකව ලොග් විය!",
+    "logoutSuccess": "සාර්ථකව ලොග් අවුට් විය!",
+    "registerSuccess": "සාර්ථකව ලියාපදිංචි විය!"
   }
 }

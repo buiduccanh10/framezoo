@@ -826,6 +826,7 @@
         "title": "Napisy",
         "transcriptChoice": "Transkrypcja",
         "searchPlaceholder": "Wyszukaj napisy lub dialogi...",
+        "delayLabel": "Przesunięcie napisów",
         "seekMode": "Szukać",
         "syncMode": "Synchronizuj",
         "syncOffset": "Przesunięcie: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Dozorujący",
     "withCount": "Z {{count}} innymi",
     "you": "Ty"
+  },
+  "toasts": {
+    "linkCopied": "Link skopiowany do schowka!",
+    "loginSuccess": "Zalogowano się pomyślnie!",
+    "logoutSuccess": "Wylogowano się pomyślnie!",
+    "registerSuccess": "Zarejestrowano się pomyślnie!"
   }
 }

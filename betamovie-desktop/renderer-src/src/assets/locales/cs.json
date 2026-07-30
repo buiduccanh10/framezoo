@@ -826,6 +826,7 @@
         "title": "Titulky",
         "transcriptChoice": "Přepis",
         "searchPlaceholder": "Hledat titulky nebo dialogy...",
+        "delayLabel": "Offset titulků",
         "seekMode": "Hledat",
         "syncMode": "Synchronizovat",
         "syncOffset": "Posun: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Sledování",
     "withCount": "S {{count}} dalšími",
     "you": "Vy"
+  },
+  "toasts": {
+    "linkCopied": "Odkaz zkopírován do schránky!",
+    "loginSuccess": "Úspěšně přihlášen!",
+    "logoutSuccess": "Úspěšně odhlášeno!",
+    "registerSuccess": "Úspěšně zaregistrováno!"
   }
 }

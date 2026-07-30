@@ -826,6 +826,7 @@
         "title": "Субтитри",
         "transcriptChoice": "Стенограма",
         "searchPlaceholder": "Пошук субтитрів або діалогів...",
+        "delayLabel": "Зміщення субтитрів",
         "seekMode": "шукати",
         "syncMode": "Синхронізувати",
         "syncOffset": "Зсув: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Дивлячись",
     "withCount": "З {{count}} іншими",
     "you": "Ви"
+  },
+  "toasts": {
+    "linkCopied": "Посилання скопійовано в буфер обміну!",
+    "loginSuccess": "Успішно ввійшли!",
+    "logoutSuccess": "Ви успішно вийшли!",
+    "registerSuccess": "Зареєстровано успішно!"
   }
 }

@@ -826,6 +826,7 @@
         "title": "字幕",
         "transcriptChoice": "成绩单",
         "searchPlaceholder": "搜索字幕或对话...",
+        "delayLabel": "字幕偏移量",
         "seekMode": "寻找",
         "syncMode": "同步",
         "syncOffset": "偏移量：{{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "观看",
     "withCount": "与其他 {{count}} 人",
     "you": "你"
+  },
+  "toasts": {
+    "linkCopied": "链接已复制到剪贴板！",
+    "loginSuccess": "登录成功！",
+    "logoutSuccess": "退出成功！",
+    "registerSuccess": "注册成功！"
   }
 }

@@ -826,6 +826,7 @@
         "title": "Subtiitrid",
         "transcriptChoice": "Ärakiri",
         "searchPlaceholder": "Otsige subtiitreid või dialoogi...",
+        "delayLabel": "Subtiitrite nihe",
         "seekMode": "Otsige",
         "syncMode": "Sünkroonimine",
         "syncOffset": "Nihe: {{delay}}s",
@@ -1275,5 +1276,11 @@
     "watching": "Vaatamine",
     "withCount": "Koos {{count}} teisega",
     "you": "Sina"
+  },
+  "toasts": {
+    "linkCopied": "Link on lõikelauale kopeeritud!",
+    "loginSuccess": "Sisselogimine õnnestus!",
+    "logoutSuccess": "Välja logiti edukalt!",
+    "registerSuccess": "Registreerumine õnnestus!"
   }
 }

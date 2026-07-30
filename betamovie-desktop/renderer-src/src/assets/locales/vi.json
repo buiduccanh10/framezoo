@@ -1276,5 +1276,11 @@
     "watching": "Đang xem",
     "withCount": "Với {{count}} người khác",
     "you": "Bạn"
+  },
+  "toasts": {
+    "linkCopied": "Đã sao chép liên kết vào clipboard!",
+    "loginSuccess": "Đăng nhập thành công!",
+    "logoutSuccess": "Đăng xuất thành công!",
+    "registerSuccess": "Đã đăng ký thành công!"
   }
 }
