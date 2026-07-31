@@ -89,9 +89,11 @@ export function TorrentNetworkStatus(props: {
                 infoHash: status.infoHash ?? t("player.torrent.unknown"),
               })}
             </p>
-            {status.fileName
-              ? t("player.torrent.file", { fileName: status.fileName })
-              : null}
+            <p>
+              {status.fileName
+                ? t("player.torrent.file", { fileName: status.fileName })
+                : null}
+            </p>
           </div>
         </div>
       ) : null}
