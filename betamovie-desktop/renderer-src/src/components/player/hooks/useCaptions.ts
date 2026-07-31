@@ -4,7 +4,8 @@ import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFit";
 import {
-  alignSubtitleWithCurrentStream,
+  type SubtitleAlignmentTrack,
+  alignSubtitlesWithCurrentStream,
   applySubtitleAlignment,
 } from "@/components/player/utils/subtitleAlignment";
 import { useLanguageStore } from "@/stores/language";
@@ -28,6 +29,12 @@ const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
 const AUTO_SUBTITLE_DISABLED_SOURCE_IDS = new Set(["kkphim"]);
+
+type SubtitleSyncTarget = {
+  track: SubtitleAlignmentTrack;
+  caption: Caption;
+  listItem: CaptionListItem;
+};
 
 function resolvePreferredAutoSubtitleLanguage(
   lastSelectedLanguage: string | null,
@@ -80,9 +87,9 @@ export function useCaptions() {
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
   const [isSyncingSubtitle, setIsSyncingSubtitle] = useState(false);
 
-  const alignExternalCaption = useCallback(
-    async (caption: Caption, listItem: CaptionListItem): Promise<boolean> => {
-      if (!listItem.opensubtitles || source?.type !== "file") return false;
+  const alignCaptionTracks = useCallback(
+    async (targets: SubtitleSyncTarget[]): Promise<boolean> => {
+      if (targets.length === 0 || source?.type !== "file") return false;
       const quality =
         (currentQuality && source.qualities[currentQuality]) ||
         Object.values(source.qualities).find((item) => Boolean(item));
@@ -91,36 +98,73 @@ export function useCaptions() {
       const requestId = ++subtitleAlignmentRequestId;
       setIsSyncingSubtitle(true);
       try {
-        const result = await alignSubtitleWithCurrentStream({
+        const batchResult = await alignSubtitlesWithCurrentStream({
           sourceUrl: quality.url,
           startAt: Math.max(0, currentTime - 5),
           language: currentAudioTrack?.language ?? "en",
-          vttData: caption.vttData,
+          subtitles: targets.map(({ track, caption }) => ({
+            track,
+            vttData: caption.vttData,
+          })),
           headers: source.headers ?? source.preferredHeaders,
+          videoDuration,
         });
         if (requestId !== subtitleAlignmentRequestId) return false;
 
-        const currentCaption = usePlayerStore.getState().caption.selected;
-        if (!currentCaption || currentCaption.id !== caption.id) return false;
+        const currentCaptions = usePlayerStore.getState().caption;
+        let didAlign = false;
 
-        const alignedVtt = applySubtitleAlignment(caption.vttData, result);
-        if (alignedVtt !== currentCaption.vttData) {
-          setCaption({
-            ...currentCaption,
-            vttData: alignedVtt,
-          });
+        for (const target of targets) {
+          const result = batchResult.results[target.track];
+          const currentCaption =
+            target.track === "primary"
+              ? currentCaptions.selected
+              : currentCaptions.secondary;
+          if (
+            !result ||
+            !currentCaption ||
+            currentCaption.id !== target.caption.id
+          ) {
+            continue;
+          }
+
+          const alignedVtt = applySubtitleAlignment(
+            target.caption.vttData,
+            result,
+          );
+          if (alignedVtt !== currentCaption.vttData) {
+            if (target.track === "primary") {
+              setCaption({
+                ...currentCaption,
+                vttData: alignedVtt,
+              });
+            } else {
+              setSecondaryCaption({
+                ...currentCaption,
+                vttData: alignedVtt,
+              });
+            }
+          }
+          didAlign ||= result.aligned;
         }
+
         console.info("[subtitle-align]", {
-          captionId: caption.id,
-          offsetMs: result.offsetMs,
-          confidence: result.confidence,
-          reason: result.reason,
+          tracks: targets.map(({ track, caption }) => {
+            const result = batchResult.results[track];
+            return {
+              track,
+              captionId: caption.id,
+              offsetMs: result?.offsetMs,
+              confidence: result?.confidence,
+              reason: result?.reason,
+            };
+          }),
         });
-        return result.aligned;
+        return didAlign;
       } catch (error) {
         if (requestId !== subtitleAlignmentRequestId) return false;
         console.warn("[subtitle-align] skipped", {
-          captionId: caption.id,
+          captionIds: targets.map(({ caption }) => caption.id),
           error,
         });
         return false;
@@ -135,8 +179,9 @@ export function useCaptions() {
       currentAudioTrack?.language,
       currentTime,
       setCaption,
-      setIsSyncingSubtitle,
+      setSecondaryCaption,
       source,
+      videoDuration,
     ],
   );
 
@@ -151,25 +196,70 @@ export function useCaptions() {
       captions.find((caption) => caption.id === selectedCaption?.id) ?? null,
     [captions, selectedCaption?.id],
   );
+  const secondaryCaptionListItem = useMemo(
+    () =>
+      secondaryCaption
+        ? (captions.find((caption) => caption.id === secondaryCaption.id) ??
+          null)
+        : null,
+    [captions, secondaryCaption],
+  );
   const canSyncSelectedCaption =
-    source?.type === "file" && selectedCaptionListItem?.opensubtitles === true;
+    source?.type === "file" &&
+    ((selectedCaption != null &&
+      selectedCaptionListItem != null &&
+      !isEmbeddedCaption(selectedCaptionListItem) &&
+      selectedCaptionListItem.opensubtitles === true &&
+      selectedCaption.vttData.trim().length > 0) ||
+      (secondaryCaption != null &&
+        secondaryCaptionListItem != null &&
+        !isEmbeddedCaption(secondaryCaptionListItem) &&
+        secondaryCaptionListItem.opensubtitles === true &&
+        secondaryCaption.vttData.trim().length > 0));
 
   const syncSelectedCaption = useCallback(async (): Promise<boolean> => {
-    if (
-      isSyncingSubtitle ||
-      !selectedCaption ||
-      !selectedCaptionListItem ||
-      !canSyncSelectedCaption
-    ) {
+    if (isSyncingSubtitle || !canSyncSelectedCaption) {
       return false;
     }
-    return alignExternalCaption(selectedCaption, selectedCaptionListItem);
+
+    const targets: SubtitleSyncTarget[] = [];
+    if (
+      selectedCaption &&
+      selectedCaptionListItem &&
+      !isEmbeddedCaption(selectedCaptionListItem) &&
+      selectedCaptionListItem.opensubtitles === true &&
+      selectedCaption.vttData.trim().length > 0
+    ) {
+      targets.push({
+        track: "primary",
+        caption: selectedCaption,
+        listItem: selectedCaptionListItem,
+      });
+    }
+    if (
+      secondaryCaption &&
+      secondaryCaptionListItem &&
+      secondaryCaption.id !== selectedCaption?.id &&
+      !isEmbeddedCaption(secondaryCaptionListItem) &&
+      secondaryCaptionListItem.opensubtitles === true &&
+      secondaryCaption.vttData.trim().length > 0
+    ) {
+      targets.push({
+        track: "secondary",
+        caption: secondaryCaption,
+        listItem: secondaryCaptionListItem,
+      });
+    }
+
+    return alignCaptionTracks(targets);
   }, [
-    alignExternalCaption,
+    alignCaptionTracks,
     canSyncSelectedCaption,
     isSyncingSubtitle,
     selectedCaption,
     selectedCaptionListItem,
+    secondaryCaption,
+    secondaryCaptionListItem,
   ]);
 
   const findCaptionByPreferredLanguage = useCallback(
@@ -353,12 +443,6 @@ export function useCaptions() {
 
       const caption = captions.find((v) => v.id === captionId);
       if (!caption) return;
-      if (isEmbeddedCaption(caption)) {
-        console.warn(
-          "Embedded subtitles are supported as the primary track only",
-        );
-        return;
-      }
 
       try {
         const captionToSet: Caption = {
@@ -366,9 +450,12 @@ export function useCaptions() {
           language: caption.language,
           url: caption.url,
           vttData: "",
+          ...(isEmbeddedCaption(caption) ? { trackId: caption.trackId } : {}),
         };
 
-        captionToSet.vttData = await downloadCaptionAsVtt(caption);
+        if (!isEmbeddedCaption(caption)) {
+          captionToSet.vttData = await downloadCaptionAsVtt(caption);
+        }
 
         if (secondaryCaption?.id !== caption.id) {
           resetSubtitleSpecificSettings("secondary");

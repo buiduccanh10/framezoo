@@ -1210,12 +1210,16 @@ napi_value command_player(napi_env env, napi_callback_info info) {
   ) {
     values = {"set", "speed", std::to_string(number)};
   } else if (
-      (type == "set-audio-track" || type == "set-subtitle-track") &&
+      (type == "set-audio-track" || type == "set-subtitle-track" ||
+       type == "set-secondary-subtitle-track") &&
       get_string(env, argv[1], "trackId", &value)
   ) {
     values = {
         "set",
-        type == "set-audio-track" ? "aid" : "sid",
+        type == "set-audio-track"
+            ? "aid"
+            : type == "set-secondary-subtitle-track" ? "secondary-sid"
+                                                       : "sid",
         value,
     };
   } else {

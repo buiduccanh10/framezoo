@@ -133,7 +133,8 @@ export type LibMpvCommand =
   | { type: "set-mute"; muted: boolean }
   | { type: "set-playback-rate"; rate: number }
   | { type: "set-audio-track"; trackId: string }
-  | { type: "set-subtitle-track"; trackId: string };
+  | { type: "set-subtitle-track"; trackId: string }
+  | { type: "set-secondary-subtitle-track"; trackId: string };
 
 export interface LibMpvPlayerRequest {
   bounds: LibMpvBounds;
