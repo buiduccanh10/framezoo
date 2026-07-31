@@ -125,6 +125,7 @@ export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
   setPlaybackRate(rate: number): void;
   setMeta(meta: DisplayMeta): void;
   setCaption(caption: DisplayCaption | null): void;
+  setSecondaryCaption?(caption: DisplayCaption | null): void;
   getType(): DisplayType;
   getCaptionList(): CaptionListItem[];
   getSubtitleTracks(): MpvTrack[];

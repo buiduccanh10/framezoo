@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import math
 import os
 import re
@@ -60,6 +61,7 @@ ISO_639_3_TO_1 = {
 
 MAX_AUDIO_BYTES = 8 * 1024 * 1024
 MAX_VTT_BYTES = 2 * 1024 * 1024
+MIN_ALIGNMENT_CONFIDENCE = 60
 MIN_SPEECH_INTERVAL_MS = 120
 MERGE_SPEECH_GAP_MS = 350
 SEARCH_RANGE_MS = 180_000
@@ -434,22 +436,13 @@ def build_cleaned_vtt(
     return "\n\n".join(output_blocks).strip() + "\n"
 
 
-def align_vtt(
-    audio_data: bytes,
+def alignment_result_from_speech(
     vtt: str,
-    language: str,
+    cues: list[Cue],
+    speech_intervals: list[tuple[int, int]],
     audio_start_ms: int,
+    audio_end_ms: int,
 ) -> dict[str, Any]:
-    audio, sample_rate = decode_wav(audio_data)
-    audio_duration_ms = int(round(len(audio) * 1_000 / sample_rate))
-    audio_end_ms = audio_start_ms + audio_duration_ms
-    cues = parse_vtt(vtt)
-    speech_intervals = transcribe_speech_intervals(
-        audio,
-        sample_rate,
-        language,
-        audio_start_ms,
-    )
     if not speech_intervals:
         return {
             "aligned": False,
@@ -476,7 +469,7 @@ def align_vtt(
         audio_end_ms,
     )
     return {
-        "aligned": confidence >= 15,
+        "aligned": confidence >= MIN_ALIGNMENT_CONFIDENCE,
         "offsetMs": offset_ms,
         "confidence": confidence,
         "speechIntervals": [
@@ -484,8 +477,131 @@ def align_vtt(
             for start_ms, end_ms in speech_intervals
         ],
         "cleanedVtt": cleaned_vtt,
-        "reason": None if confidence >= 15 else "low_alignment_confidence",
+        "reason": (
+            None
+            if confidence >= MIN_ALIGNMENT_CONFIDENCE
+            else "low_alignment_confidence"
+        ),
     }
+
+
+def invalid_alignment_result(
+    vtt: str,
+    speech_intervals: list[tuple[int, int]],
+    reason: str,
+) -> dict[str, Any]:
+    return {
+        "aligned": False,
+        "offsetMs": 0,
+        "confidence": 0,
+        "speechIntervals": [
+            {"startMs": start_ms, "endMs": end_ms}
+            for start_ms, end_ms in speech_intervals
+        ],
+        "cleanedVtt": vtt,
+        "reason": reason,
+    }
+
+
+def align_vtt(
+    audio_data: bytes,
+    vtt: str,
+    language: str,
+    audio_start_ms: int,
+) -> dict[str, Any]:
+    audio, sample_rate = decode_wav(audio_data)
+    audio_duration_ms = int(round(len(audio) * 1_000 / sample_rate))
+    audio_end_ms = audio_start_ms + audio_duration_ms
+    cues = parse_vtt(vtt)
+    speech_intervals = transcribe_speech_intervals(
+        audio,
+        sample_rate,
+        language,
+        audio_start_ms,
+    )
+    return alignment_result_from_speech(
+        vtt,
+        cues,
+        speech_intervals,
+        audio_start_ms,
+        audio_end_ms,
+    )
+
+
+def align_vtt_batch(
+    audio_data: bytes,
+    subtitles: list[dict[str, str]],
+    language: str,
+    audio_start_ms: int,
+) -> dict[str, Any]:
+    audio, sample_rate = decode_wav(audio_data)
+    audio_duration_ms = int(round(len(audio) * 1_000 / sample_rate))
+    audio_end_ms = audio_start_ms + audio_duration_ms
+    speech_intervals = transcribe_speech_intervals(
+        audio,
+        sample_rate,
+        language,
+        audio_start_ms,
+    )
+
+    results: dict[str, Any] = {}
+    for subtitle in subtitles:
+        track = subtitle["track"]
+        vtt = subtitle["vttData"]
+        try:
+            cues = parse_vtt(vtt)
+        except (IndexError, ValueError):
+            results[track] = invalid_alignment_result(
+                vtt,
+                speech_intervals,
+                "invalid_subtitle",
+            )
+            continue
+        results[track] = alignment_result_from_speech(
+            vtt,
+            cues,
+            speech_intervals,
+            audio_start_ms,
+            audio_end_ms,
+        )
+    return {"results": results}
+
+
+def parse_batch_subtitles(value: str) -> list[dict[str, str]]:
+    try:
+        payload = json.loads(value)
+    except json.JSONDecodeError as error:
+        raise ValueError("subtitles must be valid JSON") from error
+
+    if not isinstance(payload, list) or not payload:
+        raise ValueError("subtitles must be a non-empty array")
+    if len(payload) > 2:
+        raise ValueError("subtitles supports primary and secondary tracks only")
+
+    subtitles: list[dict[str, str]] = []
+    seen_tracks: set[str] = set()
+    for item in payload:
+        if not isinstance(item, dict):
+            raise ValueError("each subtitle must be an object")
+        track = item.get("track")
+        vtt_data = item.get("vttData")
+        if track not in {"primary", "secondary"}:
+            raise ValueError("subtitle track must be primary or secondary")
+        if track in seen_tracks:
+            raise ValueError("subtitle tracks must be unique")
+        if not isinstance(vtt_data, str) or not vtt_data.strip():
+            raise ValueError("subtitle vttData must be a non-empty string")
+        if len(vtt_data.encode("utf-8")) > MAX_VTT_BYTES:
+            raise ValueError("subtitle is too large")
+        seen_tracks.add(track)
+        subtitles.append({"track": track, "vttData": vtt_data})
+    return subtitles
+
+
+def validate_internal_token(token: str | None) -> None:
+    expected_token = os.getenv("MOONSHINE_INTERNAL_TOKEN", "").strip()
+    if expected_token and token != expected_token:
+        raise HTTPException(status_code=401, detail="invalid internal token")
 
 
 @app.get("/health")
@@ -500,14 +616,45 @@ async def health() -> dict[str, Any]:
 @app.post("/v1/align")
 async def align(
     audio: UploadFile = File(...),
-    vtt: UploadFile = File(...),
+    vtt: UploadFile | None = File(default=None),
+    subtitles: str | None = Form(default=None),
     language: str = Form("en"),
     audio_start_ms: int = Form(0),
     x_internal_token: str | None = Header(default=None),
 ) -> dict[str, Any]:
-    expected_token = os.getenv("MOONSHINE_INTERNAL_TOKEN", "").strip()
-    if expected_token and x_internal_token != expected_token:
-        raise HTTPException(status_code=401, detail="invalid internal token")
+    validate_internal_token(x_internal_token)
+    if vtt is None and subtitles is None:
+        raise HTTPException(
+            status_code=400,
+            detail="audio and vtt or subtitles are required",
+        )
+
+    if subtitles is not None:
+        try:
+            subtitle_items = parse_batch_subtitles(subtitles)
+        except ValueError as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+
+        audio_data = await audio.read()
+        if len(audio_data) > MAX_AUDIO_BYTES:
+            raise HTTPException(status_code=413, detail="audio is too large")
+        if not audio_data:
+            raise HTTPException(status_code=400, detail="audio is empty")
+
+        try:
+            return await asyncio.to_thread(
+                align_vtt_batch,
+                audio_data,
+                subtitle_items,
+                normalize_language(language),
+                max(0, int(audio_start_ms)),
+            )
+        except (ValueError, wave.Error) as error:
+            raise HTTPException(status_code=400, detail=str(error)) from error
+        except Exception as error:
+            raise HTTPException(status_code=502, detail=str(error)) from error
+
+    assert vtt is not None
     vtt_data = await vtt.read()
     if len(vtt_data) > MAX_VTT_BYTES:
         raise HTTPException(status_code=413, detail="subtitle is too large")
@@ -523,6 +670,40 @@ async def align(
             align_vtt,
             audio_data,
             vtt_data.decode("utf-8-sig"),
+            normalize_language(language),
+            max(0, int(audio_start_ms)),
+        )
+    except (ValueError, wave.Error) as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except Exception as error:
+        raise HTTPException(status_code=502, detail=str(error)) from error
+
+
+@app.post("/v1/align-batch")
+async def align_batch_endpoint(
+    audio: UploadFile = File(...),
+    subtitles: str = Form(...),
+    language: str = Form("en"),
+    audio_start_ms: int = Form(0),
+    x_internal_token: str | None = Header(default=None),
+) -> dict[str, Any]:
+    validate_internal_token(x_internal_token)
+    try:
+        subtitle_items = parse_batch_subtitles(subtitles)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+
+    audio_data = await audio.read()
+    if len(audio_data) > MAX_AUDIO_BYTES:
+        raise HTTPException(status_code=413, detail="audio is too large")
+    if not audio_data:
+        raise HTTPException(status_code=400, detail="audio is empty")
+
+    try:
+        return await asyncio.to_thread(
+            align_vtt_batch,
+            audio_data,
+            subtitle_items,
             normalize_language(language),
             max(0, int(audio_start_ms)),
         )

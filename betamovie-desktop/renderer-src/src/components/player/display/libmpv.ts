@@ -67,7 +67,8 @@ type LibMpvCommand =
   | { type: "set-mute"; muted: boolean }
   | { type: "set-playback-rate"; rate: number }
   | { type: "set-audio-track"; trackId: string }
-  | { type: "set-subtitle-track"; trackId: string };
+  | { type: "set-subtitle-track"; trackId: string }
+  | { type: "set-secondary-subtitle-track"; trackId: string };
 
 type PendingLoad = {
   generation: number;
@@ -159,6 +160,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
+  let secondaryCaption: DisplayCaption | null = null;
   let tracks: MpvTrack[] = [];
   let destroyed = false;
   let desiredPaused = true;
@@ -321,6 +323,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       await electronApi?.sendLibMpvCommand?.(id, {
         type: "set-subtitle-track",
         trackId: caption?.trackId ?? "no",
+      });
+      await electronApi?.sendLibMpvCommand?.(id, {
+        type: "set-secondary-subtitle-track",
+        trackId: secondaryCaption?.trackId ?? "no",
       });
       await electronApi?.sendLibMpvCommand?.(id, {
         type: "set-volume",
@@ -806,6 +812,15 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
       void sendNativeCommand(playerId, {
         type: "set-subtitle-track",
+        trackId: nextCaption?.trackId ?? "no",
+      });
+    },
+    setSecondaryCaption(nextCaption) {
+      secondaryCaption = nextCaption;
+      if (!playerId) return;
+
+      void sendNativeCommand(playerId, {
+        type: "set-secondary-subtitle-track",
         trackId: nextCaption?.trackId ?? "no",
       });
     },

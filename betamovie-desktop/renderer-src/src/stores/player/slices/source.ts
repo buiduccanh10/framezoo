@@ -256,6 +256,7 @@ function hasCompletedExternalSubtitleLoad(
 function canPreserveCaption(caption: Caption | null) {
   if (!caption) return false;
   if (isCustomCaptionId(caption.id)) return true;
+  if (caption.trackId?.trim()) return true;
   return caption.vttData.trim().length > 0;
 }
 
@@ -366,11 +367,19 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     });
   },
   setSecondaryCaption(caption) {
+    const store = get();
+    store.display?.setSecondaryCaption?.(
+      store.caption.dualSubEnabled ? caption : null,
+    );
     set((s) => {
       s.caption.secondary = caption;
     });
   },
   setDualSubEnabled(enabled) {
+    const store = get();
+    store.display?.setSecondaryCaption?.(
+      enabled ? store.caption.secondary : null,
+    );
     set((s) => {
       s.caption.dualSubEnabled = enabled;
       if (!enabled) {
@@ -459,6 +468,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const requestId = nextStore.externalSubtitleRequestId;
     nextStore.redisplaySource(startAt);
     nextStore.display?.setCaption(preservedSelectedCaption);
+    nextStore.display?.setSecondaryCaption?.(
+      nextStore.caption.dualSubEnabled ? preservedSecondaryCaption : null,
+    );
 
     // Trigger external subtitle scraping after stream is loaded
     // This runs asynchronously so it doesn't block the stream loading
