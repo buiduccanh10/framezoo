@@ -799,6 +799,7 @@
         "dualSub": "Kahekordsed subtiitrid",
         "dualSubDesc": "Parimaks sünkroonimiseks valige sama vorming (SRT, VTT...) ja pakkuja (OpenSubs...).",
         "dualSubHint": "Valige teisejärguliste subtiitrite keel (kuvatakse esmase subtiitrite kohal)",
+        "embedded": "Manustatud",
         "empty": "Selle jaoks pole subtiitreid ette nähtud.",
         "loadingExternal": "Väliste subtiitrite laadimine...",
         "loadingExternalProgress": "Väliste subtiitrite laadimine... ({{progress}}%)",

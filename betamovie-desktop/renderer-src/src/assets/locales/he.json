@@ -799,6 +799,7 @@
         "dualSub": "כתוביות כפולות",
         "dualSubDesc": "בחר אותו פורמט (SRT, VTT...) וספק (OpenSubs...) לסנכרון הטוב ביותר",
         "dualSubHint": "בחר שפה עבור הכתובית המשנית (מוצגת למעלה הראשית)",
+        "embedded": "מוטבע",
         "empty": "לא נמצאו כתוביות.",
         "loadingExternal": "טוען כתוביות חיצוניות...",
         "loadingExternalProgress": "טוען כתוביות חיצוניות... ({{progress}}%)",

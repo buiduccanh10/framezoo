@@ -319,6 +319,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       }
       await electronApi?.loadLibMpvSource?.(id, pending.request);
       await electronApi?.sendLibMpvCommand?.(id, {
+        type: "set-subtitle-track",
+        trackId: caption?.trackId ?? "no",
+      });
+      await electronApi?.sendLibMpvCommand?.(id, {
         type: "set-volume",
         volume,
       });
@@ -383,7 +387,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     const audioTracks = tracks
       .filter((track) => track.kind === "audio")
       .map(toAudioTrack);
+    const subtitleTracks = tracks.filter((track) => track.kind === "sub");
     emit("audiotracks", audioTracks);
+    emit("subtitletracks", subtitleTracks);
     emit(
       "changedaudiotrack",
       audioTracks.find((track) =>
@@ -796,6 +802,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     setMeta(_meta: DisplayMeta) {},
     setCaption(nextCaption) {
       caption = nextCaption;
+      if (!playerId) return;
+
+      void sendNativeCommand(playerId, {
+        type: "set-subtitle-track",
+        trackId: nextCaption?.trackId ?? "no",
+      });
     },
     getCaptionList() {
       return [];

@@ -799,6 +799,7 @@
         "dualSub": "Doppi sottotitoli",
         "dualSubDesc": "Seleziona lo stesso formato (SRT, VTT...) e provider (OpenSubs...) per la migliore sincronizzazione",
         "dualSubHint": "Seleziona una lingua per i sottotitoli secondari (mostrati sopra quelli primari)",
+        "embedded": "Incorporato",
         "empty": "Non ci sono sottotitoli forniti per questo fornitore.",
         "loadingExternal": "Caricamento sottotitoli esterni...",
         "loadingExternalProgress": "Caricamento sottotitoli esterni... ({{progress}}%)",

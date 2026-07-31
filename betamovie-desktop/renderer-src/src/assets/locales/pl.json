@@ -799,6 +799,7 @@
         "dualSub": "Podwójne napisy",
         "dualSubDesc": "Wybierz ten sam format (SRT, VTT...) i dostawcę (OpenSubs...), aby uzyskać najlepszą synchronizację",
         "dualSubHint": "Wybierz język dodatkowych napisów (pokazany powyżej podstawowego)",
+        "embedded": "Osadzony",
         "empty": "Nie znaleziono napisów.",
         "loadingExternal": "Ładowanie napisów zewnętrznych...",
         "loadingExternalProgress": "Ładowanie napisów zewnętrznych... ({{progress}}%)",

@@ -72,6 +72,7 @@ describe("libmpv display", () => {
         }) => void)
       | undefined;
     const audioTracks: unknown[] = [];
+    const subtitleTracks: unknown[] = [];
     const durations: number[] = [];
 
     (window as any).electronAPI = {
@@ -89,6 +90,7 @@ describe("libmpv display", () => {
     display.processContainerElement(makeElement());
     display.on("duration", (duration) => durations.push(duration));
     display.on("audiotracks", (tracks) => audioTracks.push(tracks));
+    display.on("subtitletracks", (tracks) => subtitleTracks.push(tracks));
     const source = {
       type: "mp4",
       url: "https://example.test/video.mkv",
@@ -125,6 +127,77 @@ describe("libmpv display", () => {
     expect(audioTracks.at(-1)).toEqual([
       { id: "2", label: "English", language: "en" },
     ]);
+    expect(subtitleTracks.at(-1)).toEqual([
+      {
+        id: "3",
+        kind: "sub",
+        label: "Vietnamese",
+        language: "vi",
+        selected: false,
+      },
+    ]);
+    expect(display.getSubtitleTracks()).toEqual([
+      {
+        id: "3",
+        kind: "sub",
+        label: "Vietnamese",
+        language: "vi",
+        selected: false,
+      },
+    ]);
+    display.destroy();
+  });
+
+  it("selects embedded subtitles natively and disables them for external captions", async () => {
+    const commands: Array<{ type: string; trackId?: string }> = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; trackId?: string }) => {
+          commands.push(command);
+          return Promise.resolve(true);
+        },
+      ),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "mp4",
+        url: "http://127.0.0.1/video.mkv",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    display.setCaption({
+      id: "embedded:3",
+      language: "vi",
+      vttData: "",
+      trackId: "3",
+    });
+    display.setCaption({
+      id: "external:vi",
+      language: "vi",
+      vttData: "WEBVTT",
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(commands).toContainEqual({
+      type: "set-subtitle-track",
+      trackId: "3",
+    });
+    expect(commands).toContainEqual({
+      type: "set-subtitle-track",
+      trackId: "no",
+    });
     display.destroy();
   });
 

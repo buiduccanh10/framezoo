@@ -799,6 +799,7 @@
         "dualSub": "雙字幕",
         "dualSubDesc": "選擇相同的格式（SRT、VTT...）和提供者（OpenSubs...）以獲得最佳同步",
         "dualSubHint": "選擇輔助字幕的語言（顯示在主要字幕上方）",
+        "embedded": "嵌入式",
         "empty": "沒有為此提供字幕。",
         "loadingExternal": "正在載入外部字幕...",
         "loadingExternalProgress": "正在載入外部字幕... ({{progress}}%)",

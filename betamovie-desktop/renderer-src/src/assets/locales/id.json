@@ -799,6 +799,7 @@
         "dualSub": "Subtitle Ganda",
         "dualSubDesc": "Pilih format yang sama (SRT, VTT...) & penyedia (OpenSubs...) untuk sinkronisasi terbaik",
         "dualSubHint": "Pilih bahasa untuk subtitle sekunder (ditampilkan di atas bahasa utama)",
+        "embedded": "Tertanam",
         "empty": "Tidak ada subtitle yang disediakan untuk ini.",
         "loadingExternal": "Memuat subtitle eksternal...",
         "loadingExternalProgress": "Memuat subtitle eksternal... ({{progress}}%)",

@@ -799,6 +799,7 @@
         "dualSub": "Dobbelte undertekster",
         "dualSubDesc": "Vælg samme format (SRT, VTT...) og udbyder (OpenSubs...) for den bedste synkronisering",
         "dualSubHint": "Vælg et sprog til den sekundære undertekst (vist ovenfor primær)",
+        "embedded": "Indlejret",
         "empty": "Der er ingen undertekster til dette.",
         "loadingExternal": "Indlæser eksterne undertekster...",
         "loadingExternalProgress": "Indlæser eksterne undertekster... ({{progress}}%)",

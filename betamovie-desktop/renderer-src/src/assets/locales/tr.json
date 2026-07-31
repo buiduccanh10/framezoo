@@ -799,6 +799,7 @@
         "dualSub": "Çift Altyazı",
         "dualSubDesc": "En iyi senkronizasyon için aynı formatı (SRT, VTT...) ve sağlayıcıyı (OpenSubs...) seçin",
         "dualSubHint": "İkincil altyazı için bir dil seçin (birincilin üzerinde gösterilmiştir)",
+        "embedded": "Gömülü",
         "empty": "Bunun için sağlanan altyazı yok.",
         "loadingExternal": "Harici altyazılar yükleniyor...",
         "loadingExternalProgress": "Harici altyazılar yükleniyor... ({{progress}}%)",

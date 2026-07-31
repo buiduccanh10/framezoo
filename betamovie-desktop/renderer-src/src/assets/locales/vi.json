@@ -799,6 +799,7 @@
         "dualSub": "Phụ đề kép",
         "dualSubDesc": "Chọn cùng định dạng (SRT, VTT...) & nhà cung cấp (OpenSubs...) để đồng bộ tốt nhất",
         "dualSubHint": "Chọn ngôn ngữ cho phụ đề phụ (hiển thị phía trên phụ đề chính)",
+        "embedded": "Nhúng",
         "empty": "Không có phụ đề nào được cung cấp cho video này.",
         "loadingExternal": "Đang tải phụ đề bên ngoài...",
         "loadingExternalProgress": "Đang tải phụ đề bên ngoài... ({{progress}}%)",
