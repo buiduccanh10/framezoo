@@ -164,7 +164,10 @@ export function AddonsPage() {
                       type="button"
                       className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-green-500/20 hover:text-green-400"
                       onClick={() =>
-                        window.open(`${addon.baseUrl}/configure`, "_blank")
+                        window.open(
+                          `${addon.baseUrl.replace(/\/+$/, "")}/configure`,
+                          "_blank",
+                        )
                       }
                       title={t(
                         "addons.page.configureAddon",
