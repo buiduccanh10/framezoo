@@ -45,6 +45,11 @@ export class TorrentManager {
     this.statuses.delete(sessionId);
   }
 
+  async stopAll() {
+    const sessions = Array.from(this.statuses.keys());
+    await Promise.allSettled(sessions.map((id) => this.stop(id)));
+  }
+
   getStatus(sessionId: string) {
     return this.statuses.get(sessionId) ?? this.engine.getStatus(sessionId);
   }
