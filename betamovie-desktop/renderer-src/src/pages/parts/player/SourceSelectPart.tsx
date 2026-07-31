@@ -1,3 +1,4 @@
+import { useQueries } from "@tanstack/react-query";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +12,14 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { LazyImage } from "@/components/utils/Image";
 import { loadAddonStreams } from "@/desktop/addons/client";
+import { supportsType } from "@/desktop/addons/manifest";
 import { useInstalledAddons } from "@/desktop/addons/store";
-import { loadAllAddonStreamsDetailed } from "@/desktop/addons/streams";
+import {
+  ADDON_STREAMS_GC_TIME_MS,
+  ADDON_STREAMS_STALE_TIME_MS,
+  getAddonStreamQueryKey,
+  normalizeAddonStreams,
+} from "@/desktop/addons/streams";
 import type {
   AddonStream,
   AddonStreamLoadError,
@@ -27,7 +34,10 @@ import {
 } from "@/desktop/torrentPlaybackStore";
 import type { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
-import type { SourceSliceSource } from "@/stores/player/utils/qualities";
+import type {
+  SourceQuality,
+  SourceSliceSource,
+} from "@/stores/player/utils/qualities";
 import { useProgressStore } from "@/stores/progress";
 import { getSavedProgressTime } from "@/stores/progress/selectors";
 
@@ -116,6 +126,19 @@ function getStreamQuality(stream: AddonStream): string {
   return "other";
 }
 
+function getTorrentQuality(stream: AddonStream): SourceQuality {
+  const quality = getStreamQuality(stream);
+  const qualityMap: Record<string, SourceQuality> = {
+    "4K": "4k",
+    "1440p": "1440",
+    "1080p": "1080",
+    "720p": "720",
+    "480p": "480",
+  };
+
+  return qualityMap[quality] ?? "unknown";
+}
+
 function AddonIcon(props: { name: string; logo?: string }) {
   if (props.logo) {
     return (
@@ -192,13 +215,6 @@ export function SourceSelectPart(props: {
   const progressItems = useProgressStore((state) => state.items);
   const { playMedia } = usePlayer();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
-  const [addonStreams, setAddonStreams] = React.useState<AddonStream[]>([]);
-  const [addonLoadErrors, setAddonLoadErrors] = React.useState<
-    AddonStreamLoadError[]
-  >([]);
-  const [loadingAddonIds, setLoadingAddonIds] = React.useState<Set<string>>(
-    new Set(),
-  );
   const [addonError, setAddonError] = React.useState<string | null>(null);
   const [startingAddonId, setStartingAddonId] = React.useState<string | null>(
     null,
@@ -234,6 +250,60 @@ export function SourceSelectPart(props: {
     [meta],
   );
 
+  const eligibleAddons = useMemo(
+    () =>
+      addons.filter(
+        (addon) => addon.enabled && supportsType(addon, addonMedia.type),
+      ),
+    [addons, addonMedia.type],
+  );
+
+  const addonStreamQueries = useQueries({
+    queries: eligibleAddons.map((addon) => ({
+      queryKey: getAddonStreamQueryKey(addon, addonMedia),
+      queryFn: async () => {
+        const streams = await loadAddonStreams(addon, addonMedia);
+        return normalizeAddonStreams(addon, streams);
+      },
+      staleTime: ADDON_STREAMS_STALE_TIME_MS,
+      gcTime: ADDON_STREAMS_GC_TIME_MS,
+      retry: false,
+    })),
+  });
+
+  const addonStreams = useMemo(
+    () => addonStreamQueries.flatMap((query) => (query.data ? query.data : [])),
+    [addonStreamQueries],
+  );
+  const addonLoadErrors = useMemo(
+    () =>
+      addonStreamQueries.flatMap<AddonStreamLoadError>((query, index) => {
+        const addon = eligibleAddons[index];
+        if (!addon || !query.error) return [];
+        return [
+          {
+            addonId: addon.manifest.id,
+            addonName: addon.manifest.name,
+            url: addon.manifestUrl,
+            message:
+              query.error instanceof Error
+                ? query.error.message
+                : String(query.error),
+          },
+        ];
+      }),
+    [addonStreamQueries, eligibleAddons],
+  );
+  const loadingAddonIds = useMemo(
+    () =>
+      new Set(
+        eligibleAddons.flatMap((addon, index) =>
+          addonStreamQueries[index]?.isLoading ? [addon.manifest.id] : [],
+        ),
+      ),
+    [addonStreamQueries, eligibleAddons],
+  );
+
   const selectedAddon = useMemo(
     () => addons.find((addon) => addon.manifest.id === selectedAddonId) ?? null,
     [addons, selectedAddonId],
@@ -241,55 +311,13 @@ export function SourceSelectPart(props: {
 
   useEffect(() => {
     setSelectedAddonId(null);
-    setAddonStreams([]);
-    setAddonLoadErrors([]);
     setAddonError(null);
-    setLoadingAddonIds(new Set());
     setSelectedQuality(qualityOptions[0]);
   }, [addonMedia, qualityOptions]);
 
   useEffect(() => {
     onStateChange?.(selectedAddonId ? "streams" : "addons");
   }, [selectedAddonId, onStateChange]);
-
-  useEffect(() => {
-    let cancelled = false;
-    const enabledAddonIds = new Set(
-      addons.filter((addon) => addon.enabled).map((addon) => addon.manifest.id),
-    );
-    console.debug("[desktop-addon] loading streams", {
-      addons: addons
-        .filter((addon) => enabledAddonIds.has(addon.manifest.id))
-        .map((addon) => ({
-          id: addon.manifest.id,
-          name: addon.manifest.name,
-          manifestUrl: addon.manifestUrl,
-        })),
-      media: addonMedia,
-    });
-    setLoadingAddonIds(enabledAddonIds);
-    void loadAllAddonStreamsDetailed(addons, addonMedia, loadAddonStreams)
-      .then((result) => {
-        if (cancelled) return;
-        setAddonStreams(result.streams);
-        setAddonLoadErrors(result.errors);
-      })
-      .catch((reason) => {
-        if (cancelled) return;
-        setAddonError(
-          reason instanceof Error
-            ? reason.message
-            : "Unable to load addon streams",
-        );
-      })
-      .finally(() => {
-        if (!cancelled) setLoadingAddonIds(new Set());
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [addons, addonMedia]);
 
   const selectAddonStream = useCallback(
     async (stream: AddonStream) => {
@@ -315,6 +343,7 @@ export function SourceSelectPart(props: {
           const mediaSource: SourceSliceSource = {
             id: stream.id,
             type: "file",
+            quality: getTorrentQuality(stream),
             qualities: {
               unknown: {
                 type: "mp4",
@@ -428,7 +457,6 @@ export function SourceSelectPart(props: {
           addon={selectedAddon}
           onBack={() => {
             setSelectedAddonId(null);
-            setAddonLoadErrors([]);
             setAddonError(null);
           }}
           rightSide={inlineDropdown}
@@ -586,6 +614,14 @@ export function SourceSelectPart(props: {
                   active={selected || isStartingThisStream}
                   clickable={!startingAddonId}
                   disabled={startingAddonId !== null && !isStartingThisStream}
+                  rightSide={
+                    selected ? (
+                      <Icon
+                        icon={Icons.CIRCLE_CHECK}
+                        className="text-xl text-video-context-type-accent"
+                      />
+                    ) : null
+                  }
                   className="items-center gap-4 px-3 py-3"
                   onClick={() => void selectAddonStream(stream)}
                 >

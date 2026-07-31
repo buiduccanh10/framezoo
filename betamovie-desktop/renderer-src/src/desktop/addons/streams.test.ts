@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { normalizeManifest } from "./manifest";
-import { loadAllAddonStreamsDetailed, normalizeAddonStreams } from "./streams";
+import {
+  getAddonStreamQueryKey,
+  loadAllAddonStreamsDetailed,
+  normalizeAddonStreams,
+} from "./streams";
 
 const addon = normalizeManifest("https://example.com/manifest.json", {
   id: "com.example.addon",
@@ -76,6 +80,23 @@ describe("addon stream normalization", () => {
 });
 
 describe("addon stream loading", () => {
+  it("isolates movie and episode results in separate query keys", () => {
+    const movieKey = getAddonStreamQueryKey(addon, {
+      type: "movie",
+      id: "tt1234567",
+    });
+    const episodeKey = getAddonStreamQueryKey(addon, {
+      type: "series",
+      id: "tt1234567",
+      season: 1,
+      episode: 2,
+    });
+
+    expect(movieKey).not.toEqual(episodeKey);
+    expect(movieKey[0]).toBe("addon-streams");
+    expect(episodeKey.slice(-3)).toEqual(["tt1234567", 1, 2]);
+  });
+
   it("keeps successful streams and reports failed addons", async () => {
     const workingAddon = normalizeManifest(
       "https://working.example/manifest.json",
