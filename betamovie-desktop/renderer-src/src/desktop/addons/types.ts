@@ -15,6 +15,11 @@ export interface StremioManifest {
   resources?: StremioResource[];
   types?: string[];
   catalogs?: Array<Record<string, unknown>>;
+  behaviorHints?: {
+    configurable?: boolean;
+    configurationRequired?: boolean;
+    [key: string]: unknown;
+  };
 }
 
 export interface InstalledAddon {

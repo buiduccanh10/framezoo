@@ -159,6 +159,21 @@ export function AddonsPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
+                  {addon.manifest.behaviorHints?.configurable ? (
+                    <button
+                      type="button"
+                      className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-green-500/20 hover:text-green-400"
+                      onClick={() =>
+                        window.open(`${addon.baseUrl}/configure`, "_blank")
+                      }
+                      title={t(
+                        "addons.page.configureAddon",
+                        "Configure this addon",
+                      )}
+                    >
+                      <Icon icon={Icons.SETTINGS} className="text-base" />
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     className={classNames(
