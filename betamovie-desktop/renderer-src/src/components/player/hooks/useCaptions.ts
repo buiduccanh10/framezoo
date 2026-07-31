@@ -8,7 +8,11 @@ import {
   applySubtitleAlignment,
 } from "@/components/player/utils/subtitleAlignment";
 import { useLanguageStore } from "@/stores/language";
-import { Caption, CaptionListItem } from "@/stores/player/slices/source";
+import {
+  Caption,
+  CaptionListItem,
+  isEmbeddedCaption,
+} from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
@@ -54,6 +58,9 @@ export function useCaptions() {
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
   const sourceId = usePlayerStore((s) => s.sourceId);
   const source = usePlayerStore((s) => s.source);
+  const embeddedSubtitleTracksLoaded = usePlayerStore(
+    (s) => s.embeddedSubtitleTracksLoaded,
+  );
   const currentQuality = usePlayerStore((s) => s.currentQuality);
   const currentAudioTrack = usePlayerStore((s) => s.currentAudioTrack);
   const currentTime = usePlayerStore((s) => s.progress.time);
@@ -316,9 +323,12 @@ export function useCaptions() {
           language: caption.language,
           url: caption.url,
           vttData: "",
+          ...(isEmbeddedCaption(caption) ? { trackId: caption.trackId } : {}),
         };
 
-        captionToSet.vttData = await downloadCaptionAsVtt(caption);
+        if (!isEmbeddedCaption(caption)) {
+          captionToSet.vttData = await downloadCaptionAsVtt(caption);
+        }
 
         setDirectCaption(captionToSet, caption);
         return true;
@@ -343,6 +353,12 @@ export function useCaptions() {
 
       const caption = captions.find((v) => v.id === captionId);
       if (!caption) return;
+      if (isEmbeddedCaption(caption)) {
+        console.warn(
+          "Embedded subtitles are supported as the primary track only",
+        );
+        return;
+      }
 
       try {
         const captionToSet: Caption = {
@@ -408,8 +424,18 @@ export function useCaptions() {
           isLanguageMatch(getCaptionLanguageGroupKey(caption), language) ||
           isLanguageMatch(caption.language, language),
       );
+      const hasEmbeddedLanguageMatch = captions.some(
+        (caption) =>
+          isEmbeddedCaption(caption) &&
+          (isLanguageMatch(getCaptionLanguageGroupKey(caption), language) ||
+            isLanguageMatch(caption.language, language)),
+      );
 
-      if (waitForExternal && isLoadingExternalSubtitles) {
+      if (
+        waitForExternal &&
+        isLoadingExternalSubtitles &&
+        !hasEmbeddedLanguageMatch
+      ) {
         return false;
       }
 
@@ -452,6 +478,10 @@ export function useCaptions() {
   }, [setCaption, setLanguage, setIsOpenSubtitles]);
 
   const selectLastUsedLanguage = useCallback(async () => {
+    if (source?.type === "file" && !embeddedSubtitleTracksLoaded) {
+      return false;
+    }
+
     const language = resolvePreferredAutoSubtitleLanguage(
       lastSelectedLanguage,
       userLanguage,
@@ -460,7 +490,13 @@ export function useCaptions() {
       fallbackToEnglish: false,
       waitForExternal: true,
     });
-  }, [lastSelectedLanguage, userLanguage, selectLanguage]);
+  }, [
+    embeddedSubtitleTracksLoaded,
+    lastSelectedLanguage,
+    source,
+    userLanguage,
+    selectLanguage,
+  ]);
 
   const selectLastUsedLanguageIfEnabled = useCallback(async () => {
     if (isAutoSubtitleDisabledSource(sourceId)) return;
@@ -498,6 +534,7 @@ export function useCaptions() {
   // Validate selected caption when caption list changes
   useEffect(() => {
     if (captions.length === 0) return;
+    if (source?.type === "file" && !embeddedSubtitleTracksLoaded) return;
 
     if (!selectedCaption) {
       const isAutoSelectDisabledForSource =
@@ -565,9 +602,11 @@ export function useCaptions() {
     selectCaptionById,
     currentTranslateTask,
     enabled,
+    embeddedSubtitleTracksLoaded,
     isLoadingExternalSubtitles,
     externalSubtitleRequestId,
     sourceId,
+    source,
     lastSelectedLanguage,
     selectLastUsedLanguage,
     selectLanguage,

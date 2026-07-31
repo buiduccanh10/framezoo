@@ -96,6 +96,21 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
         s.audioTracks = audioTracks;
       });
     });
+    newDisplay.on("subtitletracks", (subtitleTracks) => {
+      get().setEmbeddedSubtitleTracks(
+        subtitleTracks.map((track) => ({
+          id: `embedded:${track.id}`,
+          language: track.language || "unknown",
+          url: "",
+          trackId: track.id,
+          type: "embedded",
+          needsProxy: false,
+          opensubtitles: false,
+          display: track.label || track.language || `Track ${track.id}`,
+          source: "embedded",
+        })),
+      );
+    });
     newDisplay.on("changedaudiotrack", (audioTrack) => {
       set((s) => {
         s.currentAudioTrack = audioTrack;

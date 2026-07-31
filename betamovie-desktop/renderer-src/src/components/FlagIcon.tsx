@@ -77,6 +77,28 @@ export function FlagIcon(props: FlagIconProps) {
   let backgroundClass = "bg-video-context-flagBg";
   if (countryCode === "np") backgroundClass = "bg-white";
 
+  if (!countryCode) {
+    return (
+      <span
+        className={classNames(
+          "!w-8 min-w-8 h-6 rounded overflow-hidden bg-video-context-flagBg flex items-center justify-center text-video-context-type-secondary",
+        )}
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          className="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M3.5 12h17M12 3.5c2.25 2.35 3.4 5.18 3.4 8.5S14.25 18.15 12 20.5C9.75 18.15 8.6 15.32 8.6 12S9.75 5.85 12 3.5Z" />
+        </svg>
+      </span>
+    );
+  }
+
   return (
     <span
       className={classNames(

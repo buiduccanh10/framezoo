@@ -799,6 +799,7 @@
         "dualSub": "Kettős feliratok",
         "dualSubDesc": "Válassza ugyanazt a formátumot (SRT, VTT...) és szolgáltatót (OpenSubs...) a legjobb szinkronizálás érdekében",
         "dualSubHint": "Válasszon nyelvet a másodlagos felirathoz (az elsődleges felirat felett)",
+        "embedded": "Beágyazott",
         "empty": "Nincsenek szolgáltatott feliratok ennek.",
         "loadingExternal": "Külső feliratok betöltése...",
         "loadingExternalProgress": "Külső feliratok betöltése... ({{progress}}%)",

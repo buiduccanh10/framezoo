@@ -799,6 +799,7 @@
         "dualSub": "Kaksoistekstitykset",
         "dualSubDesc": "Valitse sama muoto (SRT, VTT...) ja toimittaja (OpenSubs...) parhaan synkronoinnin saavuttamiseksi",
         "dualSubHint": "Valitse toissijaisen tekstityksen kieli (näkyy ensisijaisen tekstityksen yläpuolella)",
+        "embedded": "Upotettu",
         "empty": "Tälle ei ole saatavilla tekstityksiä.",
         "loadingExternal": "Ladataan ulkoisia tekstityksiä...",
         "loadingExternalProgress": "Ladataan ulkoisia tekstityksiä... ({{progress}}%)",

@@ -7,7 +7,10 @@ import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
-import { CaptionListItem } from "@/stores/player/slices/source";
+import {
+  CaptionListItem,
+  isEmbeddedCaption,
+} from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
@@ -229,7 +232,7 @@ export function LanguageSubtitlesView({
     return (
       <CaptionOption
         key={v.id}
-        countryCode={v.language}
+        countryCode={getCaptionLanguageGroupKey(v)}
         selected={isSelected}
         primarySelected={isPrimarySelected}
         secondarySelected={isSecondarySelected}
@@ -262,7 +265,7 @@ export function LanguageSubtitlesView({
         }
         onDoubleClick={handleDoubleClick}
         flag
-        translatable={selectionMode === "primary"}
+        translatable={selectionMode === "primary" && !isEmbeddedCaption(v)}
         subtitleUrl={v.url}
         subtitleType={v.type}
         subtitleSource={inferredSource}

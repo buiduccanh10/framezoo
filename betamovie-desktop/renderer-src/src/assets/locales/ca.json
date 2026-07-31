@@ -799,6 +799,7 @@
         "dualSub": "Doble subtítol",
         "dualSubDesc": "Seleccioneu el mateix format (SRT, VTT...) i proveïdor (OpenSubs...) per a la millor sincronització",
         "dualSubHint": "Seleccioneu un idioma per al subtítol secundari (que es mostra a sobre del principal)",
+        "embedded": "Incrustat",
         "empty": "No hi ha subtítols per a això.",
         "loadingExternal": "S'estan carregant subtítols externs...",
         "loadingExternalProgress": "S'estan carregant subtítols externs... ({{progress}}%)",

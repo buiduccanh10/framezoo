@@ -258,8 +258,15 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   // native subtitle tracks (e.g. native fullscreen / native PiP).
   const shouldUseNativeTrack =
     pictureInPictureMode !== "document" && captionAsTrack && source !== null;
+  const hasEmbeddedPrimaryCaption = Boolean(caption?.trackId);
+  const hasEmbeddedSecondaryCaption = Boolean(secondaryCaption?.trackId);
+  const shouldRenderPrimaryCaption =
+    Boolean(caption) && !hasEmbeddedPrimaryCaption;
+  const shouldRenderSecondaryCaption =
+    Boolean(secondaryCaption) && !hasEmbeddedSecondaryCaption;
   if (shouldUseNativeTrack || (!caption && !secondaryCaption) || isCasting)
     return null;
+  if (!shouldRenderPrimaryCaption && !shouldRenderSecondaryCaption) return null;
 
   const subtitleView = (
     <Transition animation="slide-up" show>
@@ -286,6 +293,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
       >
         {dualSubEnabled &&
           secondaryCaption &&
+          shouldRenderSecondaryCaption &&
           (!caption || secondaryCaption.vttData !== caption.vttData) && (
             <SecondarySubtitleRenderer
               useNativePictureInPictureStyle={
@@ -293,7 +301,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
               }
             />
           )}
-        {caption && (
+        {shouldRenderPrimaryCaption && (
           <SubtitleRenderer
             useNativePictureInPictureStyle={
               shouldUseDocumentPictureInPictureCaptionStyle

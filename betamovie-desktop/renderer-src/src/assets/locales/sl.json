@@ -799,6 +799,7 @@
         "dualSub": "Dvojni podnapisi",
         "dualSubDesc": "Izberite isti format (SRT, VTT ...) in ponudnika (OpenSubs ...) za najboljšo sinhronizacijo",
         "dualSubHint": "Izberite jezik za sekundarni podnapis (prikazan nad primarnim)",
+        "embedded": "Vdelano",
         "empty": "Za to ni na voljo podnapisov.",
         "loadingExternal": "Nalaganje zunanjih podnapisov ...",
         "loadingExternalProgress": "Nalaganje zunanjih podnapisov ... ({{progress}}%)",

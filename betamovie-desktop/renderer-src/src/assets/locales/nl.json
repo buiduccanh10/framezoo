@@ -799,6 +799,7 @@
         "dualSub": "Dubbele ondertitels",
         "dualSubDesc": "Selecteer hetzelfde formaat (SRT, VTT...) en provider (OpenSubs...) voor de beste synchronisatie",
         "dualSubHint": "Selecteer een taal voor de secundaire ondertitel (weergegeven boven de primaire ondertitel)",
+        "embedded": "Ingebed",
         "empty": "Er zijn geen ondertitels beschikbaar voor dit.",
         "loadingExternal": "Externe ondertiteling laden...",
         "loadingExternalProgress": "Externe ondertitels laden... ({{progress}}%)",

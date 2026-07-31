@@ -799,6 +799,7 @@
         "dualSub": "Tveir textar",
         "dualSubDesc": "Veldu sama snið (SRT, VTT...) og þjónustuveitu (OpenSubs...) fyrir bestu samstillingu",
         "dualSubHint": "Veldu tungumál fyrir aukatextann (sýnt fyrir ofan aðal)",
+        "embedded": "Innfelld",
         "empty": "Enginn texti er til staðar fyrir þetta.",
         "loadingExternal": "Hleður ytri skjátexta...",
         "loadingExternalProgress": "Hleður ytri skjátexta... ({{progress}}%)",

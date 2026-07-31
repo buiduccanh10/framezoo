@@ -59,6 +59,7 @@ export interface Caption {
   language: string;
   url?: string;
   vttData: string;
+  trackId?: string;
   persisted?: boolean;
 }
 
@@ -66,6 +67,7 @@ export interface CaptionListItem {
   id: string;
   language: string;
   url: string;
+  trackId?: string;
   type?: string;
   needsProxy: boolean;
   hls?: boolean;
@@ -103,6 +105,7 @@ export interface SourceSlice {
   embedId: string | null;
   qualities: SourceQuality[];
   audioTracks: AudioTrack[];
+  embeddedSubtitleTracksLoaded: boolean;
   currentQuality: SourceQuality | null;
   segmentQualityDebug: SegmentQualityDebugInfo | null;
   currentAudioTrack: AudioTrack | null;
@@ -132,6 +135,7 @@ export interface SourceSlice {
   switchQuality(quality: SourceQuality): void;
   setMeta(meta: PlayerMeta, status?: PlayerStatus): void;
   setCaption(caption: Caption | null): void;
+  setEmbeddedSubtitleTracks(captions: CaptionListItem[]): void;
   setSecondaryCaption(caption: Caption | null): void;
   setDualSubEnabled(enabled: boolean): void;
   setActiveCaptionTrack(track: SubtitleTrack): void;
@@ -174,13 +178,25 @@ function getCaptionIdentityKey(caption: CaptionListItem): string {
   return [
     caption.url,
     caption.language,
+    caption.trackId ?? "",
     caption.type ?? "",
     caption.source ?? "",
     caption.display ?? "",
   ].join("::");
 }
 
+export function isEmbeddedCaption(
+  caption: Pick<CaptionListItem, "trackId" | "type" | "source">,
+): boolean {
+  return (
+    typeof caption.trackId === "string" ||
+    caption.type === "embedded" ||
+    caption.source === "embedded"
+  );
+}
+
 function getCaptionSourcePriority(caption: CaptionListItem): number {
+  if (isEmbeddedCaption(caption)) return -2;
   if (!caption.opensubtitles) return -1;
 
   const normalizedSource = caption.source?.toLowerCase() ?? "";
@@ -270,6 +286,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   embedId: null,
   qualities: [],
   audioTracks: [],
+  embeddedSubtitleTracksLoaded: false,
   captionList: [],
   isLoadingExternalSubtitles: false,
   externalSubtitleRequestId: 0,
@@ -337,6 +354,15 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     }
     set((s) => {
       s.caption.selected = caption;
+    });
+  },
+  setEmbeddedSubtitleTracks(captions) {
+    set((s) => {
+      const existingCaptions = s.captionList.filter(
+        (caption) => !isEmbeddedCaption(caption),
+      );
+      s.captionList = sortCaptionList([...existingCaptions, ...captions]);
+      s.embeddedSubtitleTracksLoaded = true;
     });
   },
   setSecondaryCaption(caption) {
@@ -426,6 +452,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
       s.audioTracks = [];
+      s.embeddedSubtitleTracksLoaded = false;
       s.currentAudioTrack = null;
     });
     const nextStore = get();
@@ -500,6 +527,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.embedId = null;
       s.qualities = [];
       s.audioTracks = [];
+      s.embeddedSubtitleTracksLoaded = false;
       s.captionList = [];
       s.isLoadingExternalSubtitles = false;
       s.externalSubtitleRequestId += 1;
