@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdlib>
+#include <cstdio>
+#include <cmath>
 #include <memory>
 #include <mutex>
 #include <sstream>
@@ -563,6 +565,295 @@ void set_mpv_option(MpvPlayer* player, const char* option, const char* value) {
   }
 }
 
+std::string get_headers(napi_env env, napi_value request);
+
+struct AudioExtractionRequest {
+  napi_env env = nullptr;
+  napi_async_work work = nullptr;
+  napi_deferred deferred = nullptr;
+  std::string url;
+  std::string output_path;
+  std::string headers;
+  double start_at = 0;
+  double duration = 0;
+  std::string error;
+  bool succeeded = false;
+};
+
+bool wait_for_audio_file(
+    AudioExtractionRequest* request,
+    MpvApi* api,
+    mpv_handle* handle
+) {
+  const double target_time = request->start_at + request->duration;
+  bool file_loaded = false;
+  bool stop_requested = false;
+  auto capture_started_at = std::chrono::steady_clock::now();
+  auto started_at = std::chrono::steady_clock::now();
+  const auto timeout = std::chrono::seconds(
+      static_cast<int>(std::ceil(request->duration)) + 120
+  );
+
+  while (true) {
+    if (
+        std::chrono::steady_clock::now() - started_at > timeout
+    ) {
+      request->error = "libmpv audio extraction timed out";
+      return false;
+    }
+
+    mpv_event* event = api->wait_event(handle, 0.1);
+    if (!event) continue;
+    if (event->event_id == MPV_EVENT_SHUTDOWN) {
+      request->error = "libmpv audio extraction shut down";
+      return false;
+    }
+    if (event->event_id == MPV_EVENT_FILE_LOADED) {
+      file_loaded = true;
+      const char* play_command[] = {"set", "pause", "no", nullptr};
+      if (api->command(handle, play_command) < 0) {
+        request->error = "libmpv audio extraction playback failed";
+        return false;
+      }
+      capture_started_at = std::chrono::steady_clock::now();
+      continue;
+    }
+    if (event->event_id == MPV_EVENT_END_FILE) {
+      auto* end_file = static_cast<mpv_event_end_file*>(event->data);
+      if (end_file && end_file->error < 0) {
+        request->error =
+            "libmpv audio extraction ended with error " +
+            std::to_string(end_file->error);
+        return false;
+      }
+      return file_loaded;
+    }
+
+    if (!file_loaded) continue;
+
+    double current_time = 0;
+    const bool has_current_time =
+        api->get_property(
+            handle,
+            "time-pos",
+            MPV_FORMAT_DOUBLE,
+            &current_time
+        ) >= 0 &&
+        std::isfinite(current_time);
+
+    const auto capture_elapsed =
+        std::chrono::steady_clock::now() - capture_started_at;
+    const bool reached_target =
+        has_current_time && current_time >= target_time;
+    const bool exceeded_duration =
+        capture_elapsed >=
+        std::chrono::duration<double>(request->duration + 3.0);
+    if (reached_target || exceeded_duration) {
+      if (!stop_requested) {
+        const char* pause_command[] = {"set", "pause", "yes", nullptr};
+        api->command(handle, pause_command);
+        const char* stop_command[] = {"stop", nullptr};
+        if (api->command(handle, stop_command) < 0) {
+          request->error = "libmpv audio extraction stop failed";
+          return false;
+        }
+        stop_requested = true;
+      }
+    }
+  }
+}
+
+void run_audio_extraction(AudioExtractionRequest* request) {
+  MpvApi api;
+  std::string load_error;
+  if (!api.load(&load_error)) {
+    request->error = load_error;
+    return;
+  }
+
+  mpv_handle* handle = api.create();
+  if (!handle) {
+    request->error = "mpv_create failed for audio extraction";
+    api.unload();
+    return;
+  }
+
+  auto cleanup = [&]() {
+    api.terminate_destroy(handle);
+    api.unload();
+    handle = nullptr;
+  };
+
+  const std::string start_value = std::to_string(request->start_at);
+  const std::string length_value = std::to_string(request->duration);
+  const auto set_option = [&](const char* name, const char* value) {
+    return api.set_option_string(handle, name, value) >= 0;
+  };
+  if (
+      !set_option("terminal", "no") ||
+      !set_option("vo", "null") ||
+      !set_option("vid", "no") ||
+      !set_option("ao", "pcm") ||
+      !set_option("ao-pcm-file", request->output_path.c_str()) ||
+      !set_option("ao-pcm-waveheader", "yes") ||
+      !set_option("audio-format", "s16") ||
+      !set_option("audio-channels", "mono") ||
+      !set_option("audio-samplerate", "16000") ||
+      !set_option("start", start_value.c_str()) ||
+      !set_option("length", length_value.c_str()) ||
+      !set_option("pause", "yes") ||
+      !set_option("keep-open", "no") ||
+      !set_option("idle", "no") ||
+      !set_option("cache", "yes") ||
+      !set_option("force-seekable", "yes")
+  ) {
+    request->error = "libmpv audio extraction option failed";
+    cleanup();
+    return;
+  }
+
+  if (api.initialize(handle) < 0) {
+    request->error = "mpv_initialize failed for audio extraction";
+    cleanup();
+    return;
+  }
+
+  if (!request->headers.empty()) {
+    const char* header_command[] = {
+        "set",
+        "http-header-fields",
+        request->headers.c_str(),
+        nullptr,
+    };
+    if (api.command(handle, header_command) < 0) {
+      request->error = "libmpv audio extraction header configuration failed";
+      cleanup();
+      return;
+    }
+  }
+
+  const char* load_command[] = {
+      "loadfile",
+      request->url.c_str(),
+      "replace",
+      nullptr,
+  };
+  if (api.command(handle, load_command) < 0) {
+    request->error = "libmpv audio extraction load failed";
+    cleanup();
+    return;
+  }
+
+  const bool completed = wait_for_audio_file(request, &api, handle);
+  cleanup();
+  if (!completed) {
+    std::remove(request->output_path.c_str());
+    return;
+  }
+
+  request->succeeded = true;
+}
+
+void execute_audio_extraction(napi_env, void* data) {
+  run_audio_extraction(static_cast<AudioExtractionRequest*>(data));
+}
+
+void complete_audio_extraction(
+    napi_env env,
+    napi_status status,
+    void* data
+) {
+  auto* request = static_cast<AudioExtractionRequest*>(data);
+  if (status != napi_ok || !request->succeeded) {
+    napi_value error;
+    napi_create_string_utf8(
+        env,
+        request->error.empty()
+            ? "libmpv audio extraction failed"
+            : request->error.c_str(),
+        NAPI_AUTO_LENGTH,
+        &error
+    );
+    napi_reject_deferred(env, request->deferred, error);
+  } else {
+    napi_value result;
+    napi_create_string_utf8(
+        env,
+        request->output_path.c_str(),
+        NAPI_AUTO_LENGTH,
+        &result
+    );
+    napi_resolve_deferred(env, request->deferred, result);
+  }
+  napi_delete_async_work(env, request->work);
+  delete request;
+}
+
+napi_value extract_audio(napi_env env, napi_callback_info info) {
+  size_t argc = 1;
+  napi_value argv[1];
+  if (
+      napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr) != napi_ok ||
+      argc < 1
+  ) {
+    return throw_error(env, "extractAudio(request) expected");
+  }
+
+  auto* request = new AudioExtractionRequest();
+  request->env = env;
+  if (
+      !get_string(env, argv[0], "url", &request->url) ||
+      request->url.empty() ||
+      !get_string(env, argv[0], "outputPath", &request->output_path) ||
+      request->output_path.empty() ||
+      !get_number(env, argv[0], "startAt", &request->start_at) ||
+      !get_number(env, argv[0], "duration", &request->duration) ||
+      request->duration <= 0
+  ) {
+    delete request;
+    return throw_error(env, "invalid audio extraction request");
+  }
+  request->headers = get_headers(env, argv[0]);
+  request->start_at = std::max(0.0, request->start_at);
+  request->duration = std::min(60.0, std::max(1.0, request->duration));
+
+  napi_value promise;
+  if (
+      napi_create_promise(env, &request->deferred, &promise) != napi_ok
+  ) {
+    delete request;
+    return throw_error(env, "failed to create audio extraction promise");
+  }
+
+  napi_value resource_name;
+  napi_create_string_utf8(
+      env,
+      "libmpv-audio-extraction",
+      NAPI_AUTO_LENGTH,
+      &resource_name
+  );
+  if (
+      napi_create_async_work(
+          env,
+          nullptr,
+          resource_name,
+          execute_audio_extraction,
+          complete_audio_extraction,
+          request,
+          &request->work
+      ) != napi_ok
+  ) {
+    delete request;
+    return throw_error(env, "failed to create audio extraction work");
+  }
+  if (napi_queue_async_work(env, request->work) != napi_ok) {
+    napi_delete_async_work(env, request->work);
+    delete request;
+    return throw_error(env, "failed to queue audio extraction work");
+  }
+  return promise;
+}
+
 std::string get_headers(napi_env env, napi_value request) {
   napi_value headers;
   if (!get_named(env, request, "headers", &headers)) return "";
@@ -1057,6 +1348,8 @@ napi_value init(napi_env env, napi_value exports) {
       {"reparentPlayer", nullptr, reparent_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"commandPlayer", nullptr, command_player, nullptr, nullptr, nullptr,
+       napi_default, nullptr},
+      {"extractAudio", nullptr, extract_audio, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"loadPlayer", nullptr, load_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},

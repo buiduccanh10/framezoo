@@ -812,6 +812,13 @@
         "refreshing": "Notiek atsvaidzināšana...",
         "secondary": "Sekundārais",
         "selectingSecondary": "Tiek atlasīti sekundārie subtitri",
+        "syncSubtitleConfirmTitle": "Vai sinhronizēt subtitrus ar AI?",
+        "syncSubtitleConfirmDescription": "Subtitri līdzinās AI, lai tie atbilstu videoklipam.",
+        "syncSubtitleSupportedLanguages": "Atbalstītās audio valodas",
+        "syncSubtitleSuccess": "Subtitri veiksmīgi sinhronizēti",
+        "syncSubtitleFailed": "Nevarēja sinhronizēt subtitrus",
+        "syncSubtitleOpen": "Sinhronizējiet subtitrus ar AI",
+        "syncSubtitleAction": "Sinhronizēt",
         "settings": {
           "backlink": "Pielāgoti subtitri",
           "delay": "Subtitru aizkave",

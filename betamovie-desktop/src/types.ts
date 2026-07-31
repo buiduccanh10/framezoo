@@ -100,6 +100,13 @@ export interface LibMpvSourceRequest {
   headers?: Record<string, string>;
 }
 
+export interface LibMpvAudioRequest {
+  url: string;
+  startAt: number;
+  duration: number;
+  headers?: Record<string, string>;
+}
+
 export interface LibMpvPlayerEvent {
   playerId: string;
   playbackId?: string;

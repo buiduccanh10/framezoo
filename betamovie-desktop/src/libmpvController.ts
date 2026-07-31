@@ -4,6 +4,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 
 import type {
+  LibMpvAudioRequest,
   LibMpvBounds,
   LibMpvCommand,
   LibMpvPlayerEvent,
@@ -26,6 +27,7 @@ interface NativeLibMpvAddon {
     request: LibMpvSourceRequest & { generation: number },
   ): void;
   commandPlayer(playerId: string, command: LibMpvCommand): void;
+  extractAudio(request: LibMpvAudioRequest & { outputPath: string }): Promise<string>;
   destroyPlayer(playerId: string): void;
   configureWindow?(parentHandle: Buffer): void;
 }
@@ -223,6 +225,13 @@ export class LibMpvController {
     );
 
     ipcMain.handle(
+      "desktop:libmpv-extract-audio",
+      async (_event, request: LibMpvAudioRequest) => {
+        return this.extractAudio(request);
+      },
+    );
+
+    ipcMain.handle(
       "desktop:libmpv-reparent",
       async (_event, playerId: string, target: "main" | "pip") => {
         return this.reparent(playerId, target);
@@ -365,6 +374,38 @@ export class LibMpvController {
         { playerId, generation: player.generation, command: command.type },
       );
       return false;
+    }
+  }
+
+  public async extractAudio(request: LibMpvAudioRequest): Promise<Uint8Array> {
+    if (!this.addon) {
+      throw new Error("Native libmpv addon is unavailable");
+    }
+    if (
+      !request ||
+      typeof request.url !== "string" ||
+      request.url.length === 0 ||
+      !Number.isFinite(request.startAt) ||
+      !Number.isFinite(request.duration) ||
+      request.duration <= 0
+    ) {
+      throw new Error("Invalid libmpv audio extraction request");
+    }
+
+    const outputPath = path.join(
+      app.getPath("temp"),
+      `betamovie-audio-${Date.now()}-${Math.random().toString(16).slice(2)}.wav`,
+    );
+    try {
+      await this.addon.extractAudio({
+        ...request,
+        startAt: Math.max(0, request.startAt),
+        duration: Math.min(60, Math.max(1, request.duration)),
+        outputPath,
+      });
+      return new Uint8Array(await fs.promises.readFile(outputPath));
+    } finally {
+      await fs.promises.rm(outputPath, { force: true }).catch(() => {});
     }
   }
 

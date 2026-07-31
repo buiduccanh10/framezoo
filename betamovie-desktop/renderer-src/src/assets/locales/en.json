@@ -428,21 +428,15 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "day": {
         "default": "What would you like to watch this afternoon?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -455,15 +449,11 @@
       },
       "morning": {
         "default": "What would you like to watch this morning?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       },
       "night": {
         "default": "What would you like to watch tonight?",
-        "extra": [
-          "Viva la AlphaFlix!"
-        ]
+        "extra": ["Viva la AlphaFlix!"]
       }
     },
     "watchHistory": {
@@ -812,6 +802,13 @@
         "refreshing": "Refreshing...",
         "secondary": "Secondary",
         "selectingSecondary": "Selecting secondary subtitle",
+        "syncSubtitleConfirmTitle": "Sync subtitle with AI?",
+        "syncSubtitleConfirmDescription": "Subtitles will be aligned by AI to match the video.",
+        "syncSubtitleSupportedLanguages": "Supported audio languages",
+        "syncSubtitleSuccess": "Subtitle synced successfully",
+        "syncSubtitleFailed": "Could not sync subtitle",
+        "syncSubtitleOpen": "Sync subtitle with AI",
+        "syncSubtitleAction": "Sync",
         "settings": {
           "backlink": "Custom subtitles",
           "delay": "Subtitle delay",

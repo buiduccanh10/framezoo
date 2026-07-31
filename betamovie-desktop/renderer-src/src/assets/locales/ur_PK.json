@@ -812,6 +812,13 @@
         "refreshing": "ریفریش ہو رہا ہے...",
         "secondary": "ثانوی",
         "selectingSecondary": "ثانوی ذیلی عنوان کا انتخاب",
+        "syncSubtitleConfirmTitle": "سب ٹائٹل کو AI کے ساتھ سنک کریں؟",
+        "syncSubtitleConfirmDescription": "سب ٹائٹلز کو ویڈیو سے مماثل کرنے کے لیے AI کے ذریعے منسلک کیا جائے گا۔",
+        "syncSubtitleSupportedLanguages": "تائید شدہ آڈیو زبانیں۔",
+        "syncSubtitleSuccess": "سب ٹائٹل کامیابی کے ساتھ مطابقت پذیر ہو گیا۔",
+        "syncSubtitleFailed": "سب ٹائٹل کی مطابقت پذیری نہیں ہو سکی",
+        "syncSubtitleOpen": "سب ٹائٹل کو AI کے ساتھ سنک کریں۔",
+        "syncSubtitleAction": "مطابقت پذیری",
         "settings": {
           "backlink": "حسب ضرورت سب ٹائٹلز",
           "delay": "ذیلی عنوان میں تاخیر",

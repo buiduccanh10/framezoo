@@ -812,6 +812,13 @@
         "refreshing": "Värskendamine...",
         "secondary": "Teisene",
         "selectingSecondary": "Teisese subtiitrite valimine",
+        "syncSubtitleConfirmTitle": "Kas sünkroonida subtiitrid tehisintellektiga?",
+        "syncSubtitleConfirmDescription": "Subtiitrid joondab AI, et need vastaksid videole.",
+        "syncSubtitleSupportedLanguages": "Toetatud helikeeled",
+        "syncSubtitleSuccess": "Subtiitrite sünkroonimine õnnestus",
+        "syncSubtitleFailed": "Subtiitreid ei saanud sünkroonida",
+        "syncSubtitleOpen": "Sünkroonige subtiitrid tehisintellektiga",
+        "syncSubtitleAction": "Sünkroonimine",
         "settings": {
           "backlink": "Kohandatud subtiitrid",
           "delay": "Subtiitrite viivitus",

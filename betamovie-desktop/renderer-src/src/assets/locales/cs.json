@@ -812,6 +812,13 @@
         "refreshing": "Osvěžující...",
         "secondary": "Sekundární",
         "selectingSecondary": "Výběr sekundárních titulků",
+        "syncSubtitleConfirmTitle": "Synchronizovat titulky s AI?",
+        "syncSubtitleConfirmDescription": "Titulky budou zarovnány AI tak, aby odpovídaly videu.",
+        "syncSubtitleSupportedLanguages": "Podporované jazyky zvuku",
+        "syncSubtitleSuccess": "Titulky byly úspěšně synchronizovány",
+        "syncSubtitleFailed": "Titulky nelze synchronizovat",
+        "syncSubtitleOpen": "Synchronizujte titulky s AI",
+        "syncSubtitleAction": "Synchronizovat",
         "settings": {
           "backlink": "Vlastní titulky",
           "delay": "Posunutí titulků",

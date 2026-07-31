@@ -812,6 +812,13 @@
         "refreshing": "Опресняване...",
         "secondary": "Вторичен",
         "selectingSecondary": "Избиране на вторични субтитри",
+        "syncSubtitleConfirmTitle": "Синхронизиране на субтитри с AI?",
+        "syncSubtitleConfirmDescription": "Субтитрите ще бъдат подравнени от AI, за да съответстват на видеоклипа.",
+        "syncSubtitleSupportedLanguages": "Поддържани аудио езици",
+        "syncSubtitleSuccess": "Субтитрите са синхронизирани успешно",
+        "syncSubtitleFailed": "Субтитрите не можаха да се синхронизират",
+        "syncSubtitleOpen": "Синхронизиране на субтитри с AI",
+        "syncSubtitleAction": "Синхронизиране",
         "settings": {
           "backlink": "Персонализирани субтитри",
           "delay": "Забавяне на субтитрите",

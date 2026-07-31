@@ -812,6 +812,13 @@
         "refreshing": "Uppdaterar...",
         "secondary": "Sekundär",
         "selectingSecondary": "Väljer sekundär undertext",
+        "syncSubtitleConfirmTitle": "Synkronisera undertext med AI?",
+        "syncSubtitleConfirmDescription": "Undertexter kommer att anpassas av AI för att matcha videon.",
+        "syncSubtitleSupportedLanguages": "Ljudspråk som stöds",
+        "syncSubtitleSuccess": "Undertexten har synkroniserats",
+        "syncSubtitleFailed": "Det gick inte att synkronisera undertexten",
+        "syncSubtitleOpen": "Synkronisera undertext med AI",
+        "syncSubtitleAction": "Synkronisera",
         "settings": {
           "backlink": "Anpassade undertexter",
           "delay": "Undertexts fördrivning",

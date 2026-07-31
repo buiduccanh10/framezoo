@@ -812,6 +812,13 @@
         "refreshing": "מְרַעֲנֵן...",
         "secondary": "מִשׁנִי",
         "selectingSecondary": "בחירת כתובית משנית",
+        "syncSubtitleConfirmTitle": "לסנכרן כתוביות עם AI?",
+        "syncSubtitleConfirmDescription": "כתוביות יתאימו על ידי AI כך שיתאימו לסרטון.",
+        "syncSubtitleSupportedLanguages": "שפות שמע נתמכות",
+        "syncSubtitleSuccess": "כתוביות סנכרון בהצלחה",
+        "syncSubtitleFailed": "לא ניתן היה לסנכרן את הכתוביות",
+        "syncSubtitleOpen": "סנכרן כתוביות עם AI",
+        "syncSubtitleAction": "סנכרון",
         "settings": {
           "backlink": "כתוביות מותאמות אישית",
           "delay": "עיכוב בכיתוב",

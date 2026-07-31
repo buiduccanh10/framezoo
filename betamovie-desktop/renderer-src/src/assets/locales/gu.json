@@ -812,6 +812,13 @@
         "refreshing": "તાજું કરી રહ્યું છે...",
         "secondary": "માધ્યમિક",
         "selectingSecondary": "ગૌણ ઉપશીર્ષક પસંદ કરી રહ્યા છીએ",
+        "syncSubtitleConfirmTitle": "AI સાથે સબટાઈટલ સમન્વયિત કરીએ?",
+        "syncSubtitleConfirmDescription": "સબટાઈટલ વિડિયો સાથે મેળ કરવા માટે AI દ્વારા સંરેખિત કરવામાં આવશે.",
+        "syncSubtitleSupportedLanguages": "સપોર્ટેડ ઓડિયો ભાષાઓ",
+        "syncSubtitleSuccess": "સબટાઈટલ સફળતાપૂર્વક સમન્વયિત થયું",
+        "syncSubtitleFailed": "ઉપશીર્ષક સમન્વયિત કરી શકાયું નથી",
+        "syncSubtitleOpen": "AI સાથે સબટાઈટલ સમન્વયિત કરો",
+        "syncSubtitleAction": "સમન્વય",
         "settings": {
           "backlink": "કસ્ટમ સબટાઈટલ",
           "delay": "ઉપશીર્ષક વિલંબ",

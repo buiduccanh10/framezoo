@@ -812,6 +812,13 @@
         "refreshing": "منعش...",
         "secondary": "ثانوي",
         "selectingSecondary": "اختيار العنوان الفرعي الثانوي",
+        "syncSubtitleConfirmTitle": "مزامنة الترجمة مع الذكاء الاصطناعي؟",
+        "syncSubtitleConfirmDescription": "سيتم محاذاة الترجمات بواسطة الذكاء الاصطناعي لتتناسب مع الفيديو.",
+        "syncSubtitleSupportedLanguages": "اللغات الصوتية المدعومة",
+        "syncSubtitleSuccess": "تمت مزامنة الترجمة بنجاح",
+        "syncSubtitleFailed": "تعذرت مزامنة الترجمة",
+        "syncSubtitleOpen": "مزامنة الترجمة مع الذكاء الاصطناعي",
+        "syncSubtitleAction": "مزامنة",
         "settings": {
           "backlink": "ترجمة مخصصة",
           "delay": "تأخير الترجمة",

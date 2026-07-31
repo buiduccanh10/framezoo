@@ -812,6 +812,13 @@
         "refreshing": "Hressandi...",
         "secondary": "Secondary",
         "selectingSecondary": "Að velja aukatexta",
+        "syncSubtitleConfirmTitle": "Samstilla texti við gervigreind?",
+        "syncSubtitleConfirmDescription": "Textar verða samræmdir af gervigreind til að passa við myndbandið.",
+        "syncSubtitleSupportedLanguages": "Hljóðtungumál studd",
+        "syncSubtitleSuccess": "Texti samstilltur tókst",
+        "syncSubtitleFailed": "Ekki tókst að samstilla textann",
+        "syncSubtitleOpen": "Samstilltu texti við gervigreind",
+        "syncSubtitleAction": "Samstilla",
         "settings": {
           "backlink": "Sérsniðir textar",
           "delay": "Texta seinkun",

@@ -812,6 +812,13 @@
         "refreshing": "Δροσιστικός...",
         "secondary": "Δευτερεύων",
         "selectingSecondary": "Επιλογή δευτερεύοντος υπότιτλου",
+        "syncSubtitleConfirmTitle": "Συγχρονισμός υποτίτλων με AI;",
+        "syncSubtitleConfirmDescription": "Οι υπότιτλοι θα ευθυγραμμιστούν με AI ώστε να ταιριάζουν με το βίντεο.",
+        "syncSubtitleSupportedLanguages": "Υποστηριζόμενες γλώσσες ήχου",
+        "syncSubtitleSuccess": "Οι υπότιτλοι συγχρονίστηκαν με επιτυχία",
+        "syncSubtitleFailed": "Δεν ήταν δυνατός ο συγχρονισμός των υπότιτλων",
+        "syncSubtitleOpen": "Συγχρονισμός υποτίτλων με AI",
+        "syncSubtitleAction": "Συγχρονισμός",
         "settings": {
           "backlink": "Προσαρμοσμένοι υπότιτλοι",
           "delay": "Καθυστέρηση υποτίτλων",

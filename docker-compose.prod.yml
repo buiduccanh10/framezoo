@@ -26,6 +26,32 @@ services:
     volumes:
       - redis-data:/data
 
+  moonshine-service:
+    build:
+      context: .
+      dockerfile: moonshine-service/Dockerfile
+    restart: always
+    volumes:
+      - moonshine-cache:/root/.cache
+    environment:
+      MOONSHINE_LANGUAGE: ${MOONSHINE_LANGUAGE:-en}
+      MOONSHINE_MODEL_ARCH: ${MOONSHINE_MODEL_ARCH:-tiny}
+      MOONSHINE_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - betamovie-prod-network
+
   betamovie-be:
     build:
       context: .
@@ -43,6 +69,8 @@ services:
       CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
       NODE_ENV: ${NODE_ENV:-production}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      MOONSHINE_SERVICE_URL: http://moonshine-service:8000
+      MOONSHINE_TIMEOUT_MS: ${MOONSHINE_TIMEOUT_MS:-120000}
       PROXY_REQUIRE_UPSTREAM_ALLOWLIST: "true"
       PROXY_ALLOWED_UPSTREAM_HOSTS: ${PROXY_ALLOWED_UPSTREAM_HOSTS:-}
       RATE_LIMIT_FAIL_CLOSED: "true"
@@ -63,6 +91,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+      moonshine-service:
+        condition: service_healthy
     networks:
       - betamovie-prod-network
       - betakiot_proxy_network
@@ -132,3 +162,6 @@ volumes:
   downloads-data:
     external: ${EXTERNAL_LEGACY_VOLUMES:-false}
     name: betamovie_backend_downloads-data
+  moonshine-cache:
+    external: ${EXTERNAL_LEGACY_VOLUMES:-false}
+    name: betamovie_backend_moonshine-cache

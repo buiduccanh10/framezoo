@@ -812,6 +812,13 @@
         "refreshing": "Rinfrescante...",
         "secondary": "Secondario",
         "selectingSecondary": "Selezione del sottotitolo secondario",
+        "syncSubtitleConfirmTitle": "Sincronizzare i sottotitoli con l'intelligenza artificiale?",
+        "syncSubtitleConfirmDescription": "I sottotitoli verranno allineati dall'intelligenza artificiale per corrispondere al video.",
+        "syncSubtitleSupportedLanguages": "Lingue audio supportate",
+        "syncSubtitleSuccess": "Sottotitoli sincronizzati correttamente",
+        "syncSubtitleFailed": "Impossibile sincronizzare i sottotitoli",
+        "syncSubtitleOpen": "Sincronizza i sottotitoli con l'intelligenza artificiale",
+        "syncSubtitleAction": "Sincronizzazione",
         "settings": {
           "backlink": "Sottotitoli personalizzati",
           "delay": "Ritardo dei sottotitoli",

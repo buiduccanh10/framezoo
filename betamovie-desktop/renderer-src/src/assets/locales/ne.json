@@ -812,6 +812,13 @@
         "refreshing": "रिफ्रेस गर्दै...",
         "secondary": "माध्यमिक",
         "selectingSecondary": "माध्यमिक उपशीर्षक चयन गर्दै",
+        "syncSubtitleConfirmTitle": "AI सँग उपशीर्षक सिंक गर्ने हो?",
+        "syncSubtitleConfirmDescription": "भिडियोसँग मेल खाने उपशीर्षकहरू AI द्वारा पङ्क्तिबद्ध हुनेछन्।",
+        "syncSubtitleSupportedLanguages": "समर्थित अडियो भाषाहरू",
+        "syncSubtitleSuccess": "उपशीर्षक सफलतापूर्वक सिंक गरियो",
+        "syncSubtitleFailed": "उपशीर्षक सिंक गर्न सकिएन",
+        "syncSubtitleOpen": "AI सँग उपशीर्षक सिंक गर्नुहोस्",
+        "syncSubtitleAction": "सिंक",
         "settings": {
           "backlink": "अनुकूलन उपशीर्षकहरू",
           "delay": "उपशीर्षकको ढिलाइ",
