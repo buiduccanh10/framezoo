@@ -799,6 +799,7 @@
         "dualSub": "Dubbla undertexter",
         "dualSubDesc": "Välj samma format (SRT, VTT...) och leverantör (OpenSubs...) för bästa synkronisering",
         "dualSubHint": "Välj ett språk för den sekundära undertexten (visas ovan primär)",
+        "embedded": "Inbäddad",
         "empty": "Det finns inga tillhandahållna undertexter för detta.",
         "loadingExternal": "Laddar externa undertexter...",
         "loadingExternalProgress": "Laddar externa undertexter... ({{progress}}%)",

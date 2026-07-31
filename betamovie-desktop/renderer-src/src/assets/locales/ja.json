@@ -799,6 +799,7 @@
         "dualSub": "二重字幕",
         "dualSubDesc": "最適な同期を実現するには、同じフォーマット (SRT、VTT...) とプロバイダー (OpenSubs...) を選択してください",
         "dualSubHint": "副字幕の言語を選択します (主字幕の上に表示)",
+        "embedded": "埋め込み",
         "empty": "これには字幕は提供されていません。",
         "loadingExternal": "外部字幕を読み込んでいます...",
         "loadingExternalProgress": "外部字幕を読み込んでいます... ({{progress}}%)",

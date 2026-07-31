@@ -799,6 +799,7 @@
         "dualSub": "Dubultie subtitri",
         "dualSubDesc": "Labākai sinhronizācijai atlasiet to pašu formātu (SRT, VTT...) un nodrošinātāju (OpenSubs...).",
         "dualSubHint": "Atlasiet valodu sekundārajiem subtitriem (redzams virs primārā)",
+        "embedded": "Iegults",
         "empty": "Šim nolūkam nav nodrošināti subtitri.",
         "loadingExternal": "Notiek ārējo subtitru ielāde...",
         "loadingExternalProgress": "Notiek ārējo subtitru ielāde... ({{progress}}%)",

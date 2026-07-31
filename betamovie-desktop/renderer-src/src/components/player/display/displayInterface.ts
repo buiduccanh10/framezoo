@@ -63,6 +63,7 @@ export type DisplayInterfaceEvents = {
   changedquality: SourceQuality | null;
   audiotracks: AudioTrack[];
   changedaudiotrack: AudioTrack | null;
+  subtitletracks: MpvTrack[];
   needstrack: boolean;
   pictureinpicture: PictureInPictureState;
   canairplay: boolean;
@@ -90,6 +91,7 @@ export interface DisplayCaption {
   vttData: string;
   language: string;
   url?: string;
+  trackId?: string;
 }
 
 export type MpvTrack = {

@@ -799,6 +799,7 @@
         "dualSub": "Duální titulky",
         "dualSubDesc": "Pro nejlepší synchronizaci vyberte stejný formát (SRT, VTT...) a poskytovatele (OpenSubs...).",
         "dualSubHint": "Vyberte jazyk pro sekundární titulky (zobrazeno nad primárními)",
+        "embedded": "Vložené",
         "empty": "Nejsou k tomu poskytovány žádné titulky.",
         "loadingExternal": "Načítání externích titulků...",
         "loadingExternalProgress": "Načítání externích titulků... ({{progress}}%)",

@@ -143,6 +143,18 @@ export function CaptionOption(props: CaptionOptionProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { t } = useTranslation();
+  const getSubtitleBadgeLabel = (value?: string) => {
+    if (!value) return null;
+    if (value.toLowerCase() === "embedded") {
+      return t("player.menus.subtitles.embedded", {
+        defaultValue: "Embedded",
+      });
+    }
+    return value.toUpperCase();
+  };
+  const subtitleTypeLabel = getSubtitleBadgeLabel(props.subtitleType);
+  const subtitleSourceLabel = getSubtitleBadgeLabel(props.subtitleSource);
+  const subtitleSource = props.subtitleSource?.toLowerCase();
 
   const tooltipContent = useMemo(() => {
     if (!props.subtitleUrl && !props.subtitleSource) return null;
@@ -241,24 +253,24 @@ export function CaptionOption(props: CaptionOptionProps) {
             </span>
           </div>
           <div className="flex items-center">
-            {props.subtitleType && (
+            {subtitleTypeLabel && (
               <span className="px-2 py-0.5 mt-2 rounded bg-video-context-hoverColor bg-opacity-80 text-video-context-type-main text-xs font-semibold">
-                {props.subtitleType.toUpperCase()}
+                {subtitleTypeLabel}
               </span>
             )}
-            {props.subtitleSource && (
+            {subtitleSourceLabel && (
               <span
                 className={classNames(
                   "ml-2 px-2 py-0.5 mt-2 rounded text-white text-xs font-semibold overflow-hidden text-ellipsis whitespace-nowrap",
                   {
-                    "bg-blue-500": props.subtitleSource.includes("wyzie"),
-                    "bg-orange-500": props.subtitleSource === "opensubs",
-                    "bg-cyan-500": props.subtitleSource === "subsource",
-                    "bg-green-500": props.subtitleSource === "granite",
+                    "bg-blue-500": subtitleSource?.includes("wyzie"),
+                    "bg-orange-500": subtitleSource === "opensubs",
+                    "bg-cyan-500": subtitleSource === "subsource",
+                    "bg-green-500": subtitleSource === "granite",
                   },
                 )}
               >
-                {props.subtitleSource.toUpperCase()}
+                {subtitleSourceLabel}
               </span>
             )}
             {props.isHearingImpaired && (

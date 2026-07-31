@@ -799,6 +799,7 @@
         "dualSub": "Legendas Duplas",
         "dualSubDesc": "Selecione o mesmo formato (SRT, VTT...) e provedor (OpenSubs...) para melhor sincronização",
         "dualSubHint": "Selecione um idioma para a legenda secundária (mostrada acima da primária)",
+        "embedded": "Integrado",
         "empty": "Não há legendas fornecidas para isso.",
         "loadingExternal": "Carregando legendas externas...",
         "loadingExternalProgress": "Carregando legendas externas... ({{progress}}%)",
