@@ -104,7 +104,7 @@ const PipCaptions = memo(function PipCaptionsView(props: {
     props.state.secondaryCaption.vttData !== props.state.caption?.vttData;
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-20 z-10 flex flex-col items-center px-[8%]">
+    <div className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex flex-col items-center px-[8%]">
       {showSecondary
         ? captions.secondary.map((cue, index) => (
             <CaptionCue
@@ -237,6 +237,13 @@ export default function DesktopPipPage() {
   }, []);
 
   useEffect(() => {
+    document.documentElement.dataset.desktopPip = "true";
+    return () => {
+      delete document.documentElement.dataset.desktopPip;
+    };
+  }, []);
+
+  useEffect(() => {
     const api = getDesktopElectronApi();
     if (!api) {
       setError("Desktop bridge unavailable");
@@ -295,7 +302,7 @@ export default function DesktopPipPage() {
 
   return (
     <div
-      className="fixed inset-0 select-none overflow-hidden bg-black text-white"
+      className="fixed inset-0 select-none overflow-hidden bg-transparent text-white"
       onPointerMove={revealControls}
       onPointerDown={revealControls}
       onPointerLeave={() => {
@@ -307,7 +314,7 @@ export default function DesktopPipPage() {
     >
       <div
         id="libmpv-pip-surface"
-        className="pointer-events-none absolute inset-0 h-full w-full bg-black"
+        className="pointer-events-none absolute inset-0 h-full w-full bg-transparent"
         aria-hidden="true"
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/70" />

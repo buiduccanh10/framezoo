@@ -97,6 +97,8 @@ type LibMpvElectronApi = {
   destroyLibMpvPlayer?: (playerId: string, reason?: string) => Promise<boolean>;
   onLibMpvEvent?: (listener: (event: LibMpvPlayerEvent) => void) => () => void;
   onLibMpvLog?: (listener: (log: LibMpvLogEvent) => void) => () => void;
+  toggleFullscreen?: () => Promise<void>;
+  onFullscreenState?: (listener: (isFullscreen: boolean) => void) => () => void;
 };
 
 function getElectronApi(): LibMpvElectronApi | null {
@@ -172,6 +174,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let lastBoundsKey: string | null = null;
   let desktopPipClosedUnsubscribe: (() => void) | null = null;
   let desktopPipActionUnsubscribe: (() => void) | null = null;
+  let unbindFullscreen: (() => void) | null = null;
 
   function enqueueNativeOperation<T>(
     operation: () => Promise<T> | T,
@@ -508,6 +511,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             emit("loading", false);
             emit("play", undefined);
           }
+          syncPipState();
         }
         break;
       case "duration":
@@ -520,6 +524,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         if (typeof event.data === "boolean") {
           paused = event.data;
           emit(paused ? "pause" : "play", undefined);
+          syncPipState(true);
         }
         break;
       case "volume":
@@ -564,6 +569,21 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     desktopPipClosedUnsubscribe?.();
     desktopPipActionUnsubscribe = null;
     desktopPipClosedUnsubscribe = null;
+  }
+
+  let lastPipSync = 0;
+  function syncPipState(force = false) {
+    if (pictureInPictureMode !== "desktop") return;
+    const now = Date.now();
+    if (!force && now - lastPipSync < 250) return;
+    lastPipSync = now;
+
+    const api = getElectronApi() as any;
+    if (!api?.updateDesktopPipWindow) return;
+    const state = buildPipState();
+    if (state) {
+      void api.updateDesktopPipWindow(state);
+    }
   }
 
   function buildPipState(): DesktopPipState | null {
@@ -646,6 +666,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       unbindEvents = null;
       unbindLogs?.();
       unbindLogs = null;
+      unbindFullscreen?.();
+      unbindFullscreen = null;
       cleanupPipSubscriptions();
       const playerToDestroy = playerId;
       playerId = null;
@@ -746,6 +768,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       updateBounds();
     },
     toggleFullscreen() {
+      const api = getElectronApi();
+      if (api?.toggleFullscreen) {
+        void api.toggleFullscreen();
+        return;
+      }
       if (fscreen.fullscreenElement) {
         void fscreen.exitFullscreen();
         return;
@@ -808,6 +835,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     setMeta(_meta: DisplayMeta) {},
     setCaption(nextCaption) {
       caption = nextCaption;
+      syncPipState(true);
       if (!playerId) return;
 
       void sendNativeCommand(playerId, {
@@ -817,6 +845,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     setSecondaryCaption(nextCaption) {
       secondaryCaption = nextCaption;
+      syncPipState(true);
       if (!playerId) return;
 
       void sendNativeCommand(playerId, {
@@ -844,11 +873,18 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   };
 
   function fullscreenChanged() {
+    if (getElectronApi()?.toggleFullscreen) return; // Native handles this via IPC
     isFullscreen = Boolean(fscreen.fullscreenElement);
     emit("fullscreen", isFullscreen);
   }
 
   fscreen.addEventListener("fullscreenchange", fullscreenChanged);
+
+  unbindFullscreen =
+    electronApi?.onFullscreenState?.((isFull) => {
+      isFullscreen = isFull;
+      emit("fullscreen", isFull);
+    }) ?? null;
 
   return thisDisplay;
 }

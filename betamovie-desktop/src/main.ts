@@ -753,6 +753,18 @@ function createMainWindow() {
     libmpvController.destroyAll("main-window:render-process-gone");
   });
 
+  mainWindow.on("enter-full-screen", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send("desktop:fullscreen-state", true);
+    }
+  });
+
+  mainWindow.on("leave-full-screen", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send("desktop:fullscreen-state", false);
+    }
+  });
+
   mainWindow.webContents.on("before-input-event", (event, input) => {
     if (!ENABLE_DEVTOOLS && isDevtoolsShortcut(input)) {
       event.preventDefault();
@@ -887,6 +899,12 @@ function registerIpcHandlers() {
   ipcMain.handle("desktop:focus-main-window", async () => {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     focusMainWindow(mainWindow);
+    return true;
+  });
+
+  ipcMain.handle("desktop:toggle-fullscreen", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    mainWindow.setFullScreen(!mainWindow.isFullScreen());
     return true;
   });
 
