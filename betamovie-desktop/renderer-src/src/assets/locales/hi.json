@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} समय बचा है • ख़तम होगा {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "फ़ाइल: {{fileName}}",
+      "infohash": "इन्फोहैश: {{infoHash}}",
+      "network": "टोरेंट नेटवर्क",
+      "networkStatus": "टोरेंट नेटवर्क स्थिति",
+      "peers": "सहकर्मी: {{count}}",
+      "progress": "प्रगति: {{progress}}%",
+      "speed": "गति: {{speed}}",
+      "states": {
+        "buffering": "बफ़र हो",
+        "downloading": "डाउनलोड",
+        "error": "गलती",
+        "ready": "तैयार",
+        "starting": "प्रारंभ",
+        "stopped": "रुक गया"
+      },
+      "unknown": "अज्ञात"
     }
   },
   "screens": {

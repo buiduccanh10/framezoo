@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} tilbage • Færdig til {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fil: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent netværk",
+      "networkStatus": "Torrent netværksstatus",
+      "peers": "Peers: {{count}}",
+      "progress": "Fremskridt: {{progress}}%",
+      "speed": "Hastighed: {{speed}}",
+      "states": {
+        "buffering": "Buffer",
+        "downloading": "Downloader",
+        "error": "Fejl",
+        "ready": "Parat",
+        "starting": "Starter",
+        "stopped": "Stoppet"
+      },
+      "unknown": "Ukendt"
     }
   },
   "screens": {

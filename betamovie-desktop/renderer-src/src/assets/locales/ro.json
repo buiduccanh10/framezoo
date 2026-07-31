@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} rămas • Se termină la{{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fișier: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Rețea torrent",
+      "networkStatus": "Starea rețelei torrent",
+      "peers": "Semeni: {{count}}",
+      "progress": "Progres: {{progress}}%",
+      "speed": "Viteză: {{speed}}",
+      "states": {
+        "buffering": "Buffering",
+        "downloading": "Descărcarea",
+        "error": "Eroare",
+        "ready": "Gata",
+        "starting": "Pornire",
+        "stopped": "oprit"
+      },
+      "unknown": "Necunoscut"
     }
   },
   "screens": {

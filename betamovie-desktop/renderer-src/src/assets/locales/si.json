@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} ඉතිරි • {{timeFinished, datetime}} ට අවසන් කරන්න",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "ගොනුව: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "ටොරන්ට් ජාලය",
+      "networkStatus": "ටොරන්ට් ජාල තත්ත්වය",
+      "peers": "සම වයසේ මිතුරන්: {{count}}",
+      "progress": "ප්‍රගතිය: {{progress}}%",
+      "speed": "වේගය: {{speed}}",
+      "states": {
+        "buffering": "බෆරින්",
+        "downloading": "බාගත කිරීම",
+        "error": "දෝෂයකි",
+        "ready": "සූදානම්",
+        "starting": "පටන් ගන්නවා",
+        "stopped": "නැවැත්තුවා"
+      },
+      "unknown": "නොදන්නා"
     }
   },
   "screens": {

@@ -1016,6 +1016,24 @@
       "remaining": "تبقى {{timeLeft}} • ينتهي في {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "الملف: {{fileName}}",
+      "infohash": "المعلومات: {{infoHash}}",
+      "network": "شبكة تورنت",
+      "networkStatus": "حالة شبكة تورنت",
+      "peers": "الأقران: {{count}}",
+      "progress": "التقدم: {{progress}}%",
+      "speed": "السرعة: {{speed}}",
+      "states": {
+        "buffering": "التخزين المؤقت",
+        "downloading": "جارٍ التنزيل",
+        "error": "خطأ",
+        "ready": "مستعد",
+        "starting": "البدء",
+        "stopped": "توقف"
+      },
+      "unknown": "مجهول"
     }
   },
   "screens": {

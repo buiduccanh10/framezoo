@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Icons } from "@/components/Icon";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
@@ -16,9 +17,15 @@ export function TorrentNetworkStatus(props: {
   iconSizeClass?: string;
   className?: string;
 }) {
+  const { t } = useTranslation();
   const status = useActiveTorrentStatus();
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const stateLabel = status
+    ? t(`player.torrent.states.${status.state}`, {
+        defaultValue: status.state,
+      })
+    : "";
 
   useEffect(() => {
     if (!open) return;
@@ -54,25 +61,37 @@ export function TorrentNetworkStatus(props: {
         className={`text-white ${props.className ?? ""}`}
         iconSizeClass={props.iconSizeClass ?? "text-[24px]"}
         onClick={() => setOpen((value) => !value)}
-        aria-label="Torrent network status"
+        aria-label={t("player.torrent.networkStatus")}
         aria-expanded={open}
-        title="Torrent network status"
+        title={t("player.torrent.networkStatus")}
         icon={Icons.WEB}
       />
       {open ? (
         <div className="absolute bottom-full right-0 z-[100] mb-2 w-max min-w-[16rem] max-w-[90vw] sm:max-w-md rounded-xl border border-dropdown-border bg-dropdown-altBackground p-3 text-xs text-dropdown-text shadow-xl">
           <div className="mb-2 flex items-center justify-between gap-4 text-white">
-            <span>Torrent network</span>
-            <span className="uppercase text-type-link">{status.state}</span>
+            <span>{t("player.torrent.network")}</span>
+            <span className="uppercase text-type-link">{stateLabel}</span>
           </div>
           <div className="space-y-1">
-            <p>Progress: {status.progress.toFixed(1)}%</p>
-            <p>Peers: {status.peers}</p>
-            <p>Speed: {formatSpeed(status.speedBytesPerSecond)}</p>
-            <p className="break-all">
-              Infohash: {status.infoHash ?? "unknown"}
+            <p>
+              {t("player.torrent.progress", {
+                progress: status.progress.toFixed(1),
+              })}
             </p>
-            {status.fileName ? <p>File: {status.fileName}</p> : null}
+            <p>{t("player.torrent.peers", { count: status.peers })}</p>
+            <p>
+              {t("player.torrent.speed", {
+                speed: formatSpeed(status.speedBytesPerSecond),
+              })}
+            </p>
+            <p className="break-all">
+              {t("player.torrent.infohash", {
+                infoHash: status.infoHash ?? t("player.torrent.unknown"),
+              })}
+            </p>
+            {status.fileName
+              ? t("player.torrent.file", { fileName: status.fileName })
+              : null}
           </div>
         </div>
       ) : null}

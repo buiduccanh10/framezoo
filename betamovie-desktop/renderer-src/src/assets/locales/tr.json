@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} kaldı • {{timeFinished, datetime}}'de bitiyor",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Dosya: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent ağı",
+      "networkStatus": "Torrent ağ durumu",
+      "peers": "Benzerleri: {{count}}",
+      "progress": "İlerleme: %{{progress}}",
+      "speed": "Hız: {{speed}}",
+      "states": {
+        "buffering": "Tamponlama",
+        "downloading": "İndiriliyor",
+        "error": "Hata",
+        "ready": "Hazır",
+        "starting": "Başlangıç",
+        "stopped": "Durduruldu"
+      },
+      "unknown": "Bilinmiyor"
     }
   },
   "screens": {
