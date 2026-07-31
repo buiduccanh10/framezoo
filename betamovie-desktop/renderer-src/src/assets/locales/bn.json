@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} বাকি • {{timeFinished, datetime}} এ শেষ করুন",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "ফাইল: {{fileName}}",
+      "infohash": "ইনফোহ্যাশ: {{infoHash}}",
+      "network": "টরেন্ট নেটওয়ার্ক",
+      "networkStatus": "টরেন্ট নেটওয়ার্কের অবস্থা",
+      "peers": "সহকর্মী: {{count}}",
+      "progress": "অগ্রগতি: {{progress}}%",
+      "speed": "গতি: {{speed}}",
+      "states": {
+        "buffering": "বাফারিং",
+        "downloading": "ডাউনলোড হচ্ছে",
+        "error": "ত্রুটি",
+        "ready": "প্রস্তুত",
+        "starting": "শুরু হচ্ছে",
+        "stopped": "থেমে গেল"
+      },
+      "unknown": "অজানা"
     }
   },
   "screens": {

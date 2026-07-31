@@ -1016,6 +1016,24 @@
       "remaining": "Zostało {{timeLeft}} • Skończy się {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Plik: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Sieć torrentowa",
+      "networkStatus": "Stan sieci torrent",
+      "peers": "Rówieśnicy: {{count}}",
+      "progress": "Postęp: {{progress}}%",
+      "speed": "Prędkość: {{speed}}",
+      "states": {
+        "buffering": "Buforowanie",
+        "downloading": "Ściąganie",
+        "error": "Błąd",
+        "ready": "Gotowy",
+        "starting": "Startowy",
+        "stopped": "Zatrzymany"
+      },
+      "unknown": "Nieznany"
     }
   },
   "screens": {

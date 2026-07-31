@@ -1016,6 +1016,24 @@
       "remaining": "Остават {{timeLeft}} • Завършете на {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Файл: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Торент мрежа",
+      "networkStatus": "Състояние на торент мрежа",
+      "peers": "Връстници: {{count}}",
+      "progress": "Напредък: {{progress}}%",
+      "speed": "Скорост: {{speed}}",
+      "states": {
+        "buffering": "Буфериране",
+        "downloading": "Изтегля се",
+        "error": "Грешка",
+        "ready": "Готови",
+        "starting": "Стартиране",
+        "stopped": "Спряно"
+      },
+      "unknown": "неизвестен"
     }
   },
   "screens": {

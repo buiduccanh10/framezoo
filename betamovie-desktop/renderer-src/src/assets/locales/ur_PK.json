@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} بائیں • {{timeFinished, datetime}} پر ختم",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "فائل: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "ٹورینٹ نیٹ ورک",
+      "networkStatus": "ٹورینٹ نیٹ ورک کی حیثیت",
+      "peers": "ہم عمر: {{count}}",
+      "progress": "پیش رفت: {{progress}}%",
+      "speed": "رفتار: {{speed}}",
+      "states": {
+        "buffering": "بفرنگ",
+        "downloading": "ڈاؤن لوڈ ہو رہا ہے۔",
+        "error": "خرابی",
+        "ready": "تیار",
+        "starting": "شروع ہو رہا ہے۔",
+        "stopped": "رک گیا۔"
+      },
+      "unknown": "نامعلوم"
     }
   },
   "screens": {

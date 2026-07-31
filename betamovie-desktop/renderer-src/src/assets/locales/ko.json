@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} 남음 • {{timeFinished, datetime}}에 종료",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "파일: {{fileName}}",
+      "infohash": "정보해시: {{infoHash}}",
+      "network": "토렌트 네트워크",
+      "networkStatus": "토렌트 네트워크 상태",
+      "peers": "동료: {{count}}",
+      "progress": "진행률: {{progress}}%",
+      "speed": "속도: {{speed}}",
+      "states": {
+        "buffering": "버퍼링",
+        "downloading": "다운로드 중",
+        "error": "오류",
+        "ready": "준비가 된",
+        "starting": "시작",
+        "stopped": "중지됨"
+      },
+      "unknown": "알려지지 않은"
     }
   },
   "screens": {

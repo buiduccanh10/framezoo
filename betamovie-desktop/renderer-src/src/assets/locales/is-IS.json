@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} er eftir • Þú klárar {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Skrá: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent net",
+      "networkStatus": "Staða netstraums",
+      "peers": "Jafnaldrar: {{count}}",
+      "progress": "Framfarir: {{progress}}%",
+      "speed": "Hraði: {{speed}}",
+      "states": {
+        "buffering": "Biðmögnun",
+        "downloading": "Niðurhal",
+        "error": "Villa",
+        "ready": "Tilbúið",
+        "starting": "Byrjar",
+        "stopped": "Hætt"
+      },
+      "unknown": "Óþekkt"
     }
   },
   "screens": {

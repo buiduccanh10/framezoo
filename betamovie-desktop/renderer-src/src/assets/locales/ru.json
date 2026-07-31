@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} осталось - Завершится в {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Файл: {{fileName}}",
+      "infohash": "Инфохэш: {{infoHash}}",
+      "network": "Торрент-сеть",
+      "networkStatus": "Статус торрент-сети",
+      "peers": "Коллеги: {{count}}",
+      "progress": "Прогресс: {{progress}}%",
+      "speed": "Скорость: {{speed}}",
+      "states": {
+        "buffering": "Буферизация",
+        "downloading": "Загрузка",
+        "error": "Ошибка",
+        "ready": "Готовый",
+        "starting": "Начало",
+        "stopped": "Остановлено"
+      },
+      "unknown": "Неизвестный"
     }
   },
   "screens": {

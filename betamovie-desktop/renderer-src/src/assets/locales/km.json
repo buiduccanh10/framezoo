@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} ឆ្វេង • បញ្ចប់នៅ {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "ឯកសារ៖ {{fileName}}",
+      "infohash": "ព័ត៌មាន៖ {{infoHash}}",
+      "network": "បណ្តាញ Torrent",
+      "networkStatus": "ស្ថានភាពបណ្តាញ Torrent",
+      "peers": "មិត្តភ័ក្តិ៖ {{count}}",
+      "progress": "វឌ្ឍនភាព៖ {{progress}}%",
+      "speed": "ល្បឿន៖ {{speed}}",
+      "states": {
+        "buffering": "សតិបណ្ដោះអាសន្ន",
+        "downloading": "កំពុងទាញយក",
+        "error": "កំហុស",
+        "ready": "រួចរាល់",
+        "starting": "ចាប់ផ្តើម",
+        "stopped": "ឈប់"
+      },
+      "unknown": "មិនស្គាល់"
     }
   },
   "screens": {

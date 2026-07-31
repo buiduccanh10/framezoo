@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} jäljellä • Päättyy {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Tiedosto: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent verkko",
+      "networkStatus": "Torrent-verkon tila",
+      "peers": "Vertailijat: {{count}}",
+      "progress": "Edistyminen: {{progress}}%",
+      "speed": "Nopeus: {{speed}}",
+      "states": {
+        "buffering": "Puskurointi",
+        "downloading": "Ladataan",
+        "error": "Virhe",
+        "ready": "Valmis",
+        "starting": "Alkaa",
+        "stopped": "Pysähtynyt"
+      },
+      "unknown": "Tuntematon"
     }
   },
   "screens": {

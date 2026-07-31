@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} Öbrig • Fertig am {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Datei: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent-Netzwerk",
+      "networkStatus": "Torrent-Netzwerkstatus",
+      "peers": "Kollegen: {{count}}",
+      "progress": "Fortschritt: {{progress}}%",
+      "speed": "Geschwindigkeit: {{speed}}",
+      "states": {
+        "buffering": "Pufferung",
+        "downloading": "Herunterladen",
+        "error": "Fehler",
+        "ready": "Bereit",
+        "starting": "Beginnt",
+        "stopped": "Angehalten"
+      },
+      "unknown": "Unbekannt"
     }
   },
   "screens": {

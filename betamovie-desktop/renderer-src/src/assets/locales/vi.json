@@ -1016,6 +1016,24 @@
       "remaining": "Còn {{timeLeft}} • Kết thúc lúc {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Tập tin: {{fileName}}",
+      "infohash": "Infor hash: {{infoHash}}",
+      "network": "Mạng torrent",
+      "networkStatus": "Trạng thái mạng torrent",
+      "peers": "Peers: {{count}}",
+      "progress": "Tiến độ: {{progress}}%",
+      "speed": "Tốc độ: {{speed}}",
+      "states": {
+        "buffering": "Đang đệm",
+        "downloading": "Đang tải xuống",
+        "error": "Lỗi",
+        "ready": "Sẵn sàng",
+        "starting": "Bắt đầu",
+        "stopped": "Đã dừng"
+      },
+      "unknown": "Không xác định"
     }
   },
   "screens": {

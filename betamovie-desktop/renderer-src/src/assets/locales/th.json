@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} หมดเวลา • สิ้นสุดใน {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "ไฟล์: {{fileName}}",
+      "infohash": "ข้อมูลแฮช: {{infoHash}}",
+      "network": "เครือข่ายทอร์เรนต์",
+      "networkStatus": "สถานะเครือข่ายทอร์เรนต์",
+      "peers": "เพื่อนร่วมงาน: {{count}}",
+      "progress": "ความคืบหน้า: {{progress}}%",
+      "speed": "ความเร็ว: {{speed}}",
+      "states": {
+        "buffering": "การบัฟเฟอร์",
+        "downloading": "กำลังดาวน์โหลด",
+        "error": "ข้อผิดพลาด",
+        "ready": "พร้อม",
+        "starting": "กำลังเริ่มต้น",
+        "stopped": "หยุดแล้ว"
+      },
+      "unknown": "ไม่ทราบ"
     }
   },
   "screens": {
