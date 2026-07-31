@@ -36,6 +36,9 @@ type PlayerRecord = {
   id: string;
   generation: number;
   bounds: LibMpvBounds;
+  target: "main" | "pip";
+  pipResizeListener?: () => void;
+  pipWindow?: BrowserWindow;
 };
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
@@ -266,6 +269,7 @@ export class LibMpvController {
         id,
         generation: 0,
         bounds: normalizedBounds,
+        target: "main",
       });
       this.broadcastLog("info", "create", {
         playerId: id,
@@ -289,6 +293,8 @@ export class LibMpvController {
       bounds,
       getNativeScaleFactor(this.mainWindow),
     );
+    if (player.target === "pip") return true;
+
     try {
       this.addon.resizePlayer(playerId, player.bounds);
       this.broadcastLog("debug", "surface_bounds", {
@@ -417,22 +423,39 @@ export class LibMpvController {
       target === "pip" ? this.pipWindowProvider?.() : this.mainWindow;
     if (!parentWindow || parentWindow.isDestroyed()) return false;
 
+    if (player.pipResizeListener && player.pipWindow) {
+      player.pipWindow.off("resize", player.pipResizeListener);
+      player.pipResizeListener = undefined;
+      player.pipWindow = undefined;
+    }
+
+    player.target = target;
+
     try {
       this.addon.reparentPlayer(playerId, parentWindow.getNativeWindowHandle());
       if (target === "pip") {
-        const contentBounds = parentWindow.getContentBounds();
-        this.addon.resizePlayer(
-          playerId,
-          normalizeBounds(
-            {
-              x: 0,
-              y: 0,
-              width: Math.max(1, contentBounds.width),
-              height: Math.max(1, contentBounds.height),
-            },
-            getNativeScaleFactor(parentWindow),
-          ),
-        );
+        const resizePip = () => {
+          if (player.target !== "pip" || parentWindow.isDestroyed()) return;
+          const contentBounds = parentWindow.getContentBounds();
+          try {
+            this.addon!.resizePlayer(
+              playerId,
+              normalizeBounds(
+                {
+                  x: 0,
+                  y: 0,
+                  width: Math.max(1, contentBounds.width),
+                  height: Math.max(1, contentBounds.height),
+                },
+                getNativeScaleFactor(parentWindow),
+              ),
+            );
+          } catch {}
+        };
+        resizePip();
+        parentWindow.on("resize", resizePip);
+        player.pipResizeListener = resizePip;
+        player.pipWindow = parentWindow;
       } else {
         this.addon.resizePlayer(playerId, player.bounds);
       }
@@ -456,6 +479,13 @@ export class LibMpvController {
     const player = this.players.get(playerId);
     if (!player) return false;
 
+    if (player.pipResizeListener && player.pipWindow) {
+      player.pipWindow.off("resize", player.pipResizeListener);
+      player.pipResizeListener = undefined;
+      player.pipWindow = undefined;
+    }
+    
+    this.players.delete(playerId);
     const timer = this.eventTimers.get(playerId);
     if (timer) clearTimeout(timer);
     this.eventTimers.delete(playerId);

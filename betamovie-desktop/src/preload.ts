@@ -106,6 +106,21 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:app-update-state", handler);
     };
   },
+  toggleFullscreen(): Promise<void> {
+    return ipcRenderer.invoke("desktop:toggle-fullscreen");
+  },
+  onFullscreenState(listener: (isFullscreen: boolean) => void) {
+    const handler = (
+      _event: Electron.IpcRendererEvent,
+      isFullscreen: boolean,
+    ) => {
+      listener(isFullscreen);
+    };
+    ipcRenderer.on("desktop:fullscreen-state", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:fullscreen-state", handler);
+    };
+  },
   startTorrent(request: TorrentStartRequest): Promise<TorrentSession> {
     return ipcRenderer.invoke("desktop:torrent-start", request);
   },
