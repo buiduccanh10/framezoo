@@ -198,6 +198,23 @@ describe("libmpv display", () => {
       type: "set-subtitle-track",
       trackId: "no",
     });
+    display.setSecondaryCaption?.({
+      id: "embedded:4",
+      language: "en",
+      vttData: "",
+      trackId: "4",
+    });
+    display.setSecondaryCaption?.(null);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(commands).toContainEqual({
+      type: "set-secondary-subtitle-track",
+      trackId: "4",
+    });
+    expect(commands).toContainEqual({
+      type: "set-secondary-subtitle-track",
+      trackId: "no",
+    });
     display.destroy();
   });
 

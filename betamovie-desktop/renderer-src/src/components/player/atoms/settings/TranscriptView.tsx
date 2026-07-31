@@ -283,7 +283,7 @@ export function TranscriptView({
       <Menu.BackLink
         onClick={() => router.navigate("/captions")}
         rightSide={
-          selectionMode === "primary" && canSyncSelectedCaption ? (
+          canSyncSelectedCaption ? (
             <button
               type="button"
               onClick={() => syncModal.show()}
@@ -309,11 +309,6 @@ export function TranscriptView({
       >
         <span className="flex min-w-0 items-center gap-2">
           {t("player.menus.subtitles.transcriptChoice")}
-          {isDualSubEnabled && (
-            <span className="truncate text-video-context-type-secondary">
-              · {t(`player.menus.subtitles.${selectionMode}`)}
-            </span>
-          )}
         </span>
       </Menu.BackLink>
       <Menu.Section>
