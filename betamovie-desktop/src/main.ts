@@ -815,6 +815,7 @@ function createMainWindow() {
   mainWindow.on("closed", () => {
     desktopPipController.close();
     mainWindow = null;
+    void torrentManager.stopAll();
   });
 
   installApplicationMenu();
@@ -1023,7 +1024,15 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("before-quit", () => {
+let isQuitting = false;
+app.on("before-quit", (event) => {
+  if (isQuitting) return;
+  event.preventDefault();
+  isQuitting = true;
   desktopAppUpdater.dispose();
-  void torrentManager.dispose();
+  torrentManager.stopAll().catch(console.error).finally(() => {
+    void torrentManager.dispose().finally(() => {
+      app.quit();
+    });
+  });
 });
