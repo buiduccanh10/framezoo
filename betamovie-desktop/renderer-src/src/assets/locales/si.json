@@ -812,6 +812,13 @@
         "refreshing": "ප්‍රබෝධමත් කරමින්...",
         "secondary": "ද්විතියික",
         "selectingSecondary": "ද්විතියික උපසිරැසි තේරීම",
+        "syncSubtitleConfirmTitle": "උපසිරැසි AI සමඟ සමමුහුර්ත කරන්නද?",
+        "syncSubtitleConfirmDescription": "වීඩියෝවට ගැළපීමට AI මගින් උපසිරැසි පෙළගස්වනු ඇත.",
+        "syncSubtitleSupportedLanguages": "සහාය දක්වන ශ්‍රව්‍ය භාෂා",
+        "syncSubtitleSuccess": "උපසිරැසි සාර්ථකව සමමුහුර්ත විය",
+        "syncSubtitleFailed": "උපසිරැසි සමමුහුර්ත කිරීමට නොහැකි විය",
+        "syncSubtitleOpen": "AI සමඟ උපසිරැසි සමමුහුර්ත කරන්න",
+        "syncSubtitleAction": "සමමුහුර්ත කරන්න",
         "settings": {
           "backlink": "අභිරුචි උපසිරැසි",
           "delay": "උපසිරැසි ප්‍රමාදය",

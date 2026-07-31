@@ -812,6 +812,13 @@
         "refreshing": "Erfrischend...",
         "secondary": "Sekundär",
         "selectingSecondary": "Auswahl des sekundären Untertitels",
+        "syncSubtitleConfirmTitle": "Untertitel mit KI synchronisieren?",
+        "syncSubtitleConfirmDescription": "Die Untertitel werden von der KI an das Video angepasst.",
+        "syncSubtitleSupportedLanguages": "Unterstützte Audiosprachen",
+        "syncSubtitleSuccess": "Untertitel erfolgreich synchronisiert",
+        "syncSubtitleFailed": "Untertitel konnten nicht synchronisiert werden",
+        "syncSubtitleOpen": "Untertitel mit KI synchronisieren",
+        "syncSubtitleAction": "Synchronisieren",
         "settings": {
           "backlink": "Eigene Untertitel",
           "delay": "Untertitelverzögerung",

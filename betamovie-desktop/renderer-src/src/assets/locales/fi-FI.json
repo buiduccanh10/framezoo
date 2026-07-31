@@ -812,6 +812,13 @@
         "refreshing": "Virkistävä...",
         "secondary": "Toissijainen",
         "selectingSecondary": "Toissijaisen tekstityksen valinta",
+        "syncSubtitleConfirmTitle": "Synkronoidaanko tekstitys tekoälyn kanssa?",
+        "syncSubtitleConfirmDescription": "Tekoäly kohdistaa tekstitykset vastaamaan videota.",
+        "syncSubtitleSupportedLanguages": "Tuetut äänikielet",
+        "syncSubtitleSuccess": "Tekstityksen synkronointi onnistui",
+        "syncSubtitleFailed": "Tekstitystä ei voitu synkronoida",
+        "syncSubtitleOpen": "Synkronoi tekstitys tekoälyn kanssa",
+        "syncSubtitleAction": "Synkronoi",
         "settings": {
           "backlink": "Mukautetut tekstitykset",
           "delay": "Tekstityksen viive",

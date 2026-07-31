@@ -812,6 +812,13 @@
         "refreshing": "Refrescante...",
         "secondary": "Secundário",
         "selectingSecondary": "Selecionando legenda secundária",
+        "syncSubtitleConfirmTitle": "Sincronizar legenda com IA?",
+        "syncSubtitleConfirmDescription": "As legendas serão alinhadas pela IA para corresponder ao vídeo.",
+        "syncSubtitleSupportedLanguages": "Idiomas de áudio suportados",
+        "syncSubtitleSuccess": "Legenda sincronizada com sucesso",
+        "syncSubtitleFailed": "Não foi possível sincronizar a legenda",
+        "syncSubtitleOpen": "Sincronize legendas com IA",
+        "syncSubtitleAction": "Sincronizar",
         "settings": {
           "backlink": "Legendas personalizadas",
           "delay": "Atraso das legendas",

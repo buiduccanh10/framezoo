@@ -812,6 +812,13 @@
         "refreshing": "Menyegarkan...",
         "secondary": "Sekunder",
         "selectingSecondary": "Memilih subtitle sekunder",
+        "syncSubtitleConfirmTitle": "Sinkronkan subtitle dengan AI?",
+        "syncSubtitleConfirmDescription": "Subtitle akan diselaraskan oleh AI agar sesuai dengan video.",
+        "syncSubtitleSupportedLanguages": "Bahasa audio yang didukung",
+        "syncSubtitleSuccess": "Subtitle berhasil disinkronkan",
+        "syncSubtitleFailed": "Tidak dapat menyinkronkan subtitle",
+        "syncSubtitleOpen": "Sinkronkan subtitle dengan AI",
+        "syncSubtitleAction": "Sinkronisasi",
         "settings": {
           "backlink": "Subtitle khusus",
           "delay": "Penundaan subtitle",

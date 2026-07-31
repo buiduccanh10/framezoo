@@ -812,6 +812,13 @@
         "refreshing": "Refrescant...",
         "secondary": "Secundària",
         "selectingSecondary": "Selecció de subtítols secundaris",
+        "syncSubtitleConfirmTitle": "Vols sincronitzar els subtítols amb IA?",
+        "syncSubtitleConfirmDescription": "L'IA alinearà els subtítols perquè coincideixin amb el vídeo.",
+        "syncSubtitleSupportedLanguages": "Idiomes d'àudio compatibles",
+        "syncSubtitleSuccess": "Els subtítols s'han sincronitzat correctament",
+        "syncSubtitleFailed": "No s'han pogut sincronitzar els subtítols",
+        "syncSubtitleOpen": "Sincronitza subtítols amb IA",
+        "syncSubtitleAction": "Sincronització",
         "settings": {
           "backlink": "Subtítols personalitzats",
           "delay": "Retard dels subtítols",

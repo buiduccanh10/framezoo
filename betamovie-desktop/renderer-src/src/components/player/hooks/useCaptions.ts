@@ -1,8 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
 import { scoreCaptionSourceFit } from "@/components/player/utils/captionSourceFit";
+import {
+  alignSubtitleWithCurrentStream,
+  applySubtitleAlignment,
+} from "@/components/player/utils/subtitleAlignment";
 import { useLanguageStore } from "@/stores/language";
 import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -15,6 +19,7 @@ import {
 } from "../utils/captionLanguage";
 
 let autoSelectionRequestId = 0;
+let subtitleAlignmentRequestId = 0;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
@@ -48,6 +53,10 @@ export function useCaptions() {
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
   const sourceId = usePlayerStore((s) => s.sourceId);
+  const source = usePlayerStore((s) => s.source);
+  const currentQuality = usePlayerStore((s) => s.currentQuality);
+  const currentAudioTrack = usePlayerStore((s) => s.currentAudioTrack);
+  const currentTime = usePlayerStore((s) => s.progress.time);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const externalSubtitleRequestId = usePlayerStore(
@@ -62,12 +71,99 @@ export function useCaptions() {
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
+  const [isSyncingSubtitle, setIsSyncingSubtitle] = useState(false);
+
+  const alignExternalCaption = useCallback(
+    async (caption: Caption, listItem: CaptionListItem): Promise<boolean> => {
+      if (!listItem.opensubtitles || source?.type !== "file") return false;
+      const quality =
+        (currentQuality && source.qualities[currentQuality]) ||
+        Object.values(source.qualities).find((item) => Boolean(item));
+      if (!quality?.url) return false;
+
+      const requestId = ++subtitleAlignmentRequestId;
+      setIsSyncingSubtitle(true);
+      try {
+        const result = await alignSubtitleWithCurrentStream({
+          sourceUrl: quality.url,
+          startAt: Math.max(0, currentTime - 5),
+          language: currentAudioTrack?.language ?? "en",
+          vttData: caption.vttData,
+          headers: source.headers ?? source.preferredHeaders,
+        });
+        if (requestId !== subtitleAlignmentRequestId) return false;
+
+        const currentCaption = usePlayerStore.getState().caption.selected;
+        if (!currentCaption || currentCaption.id !== caption.id) return false;
+
+        const alignedVtt = applySubtitleAlignment(caption.vttData, result);
+        if (alignedVtt !== currentCaption.vttData) {
+          setCaption({
+            ...currentCaption,
+            vttData: alignedVtt,
+          });
+        }
+        console.info("[subtitle-align]", {
+          captionId: caption.id,
+          offsetMs: result.offsetMs,
+          confidence: result.confidence,
+          reason: result.reason,
+        });
+        return result.aligned;
+      } catch (error) {
+        if (requestId !== subtitleAlignmentRequestId) return false;
+        console.warn("[subtitle-align] skipped", {
+          captionId: caption.id,
+          error,
+        });
+        return false;
+      } finally {
+        if (requestId === subtitleAlignmentRequestId) {
+          setIsSyncingSubtitle(false);
+        }
+      }
+    },
+    [
+      currentQuality,
+      currentAudioTrack?.language,
+      currentTime,
+      setCaption,
+      setIsSyncingSubtitle,
+      source,
+    ],
+  );
 
   const captions = useMemo(
     () =>
       captionList.length !== 0 ? captionList : (getHlsCaptionList?.() ?? []),
     [captionList, getHlsCaptionList],
   );
+
+  const selectedCaptionListItem = useMemo(
+    () =>
+      captions.find((caption) => caption.id === selectedCaption?.id) ?? null,
+    [captions, selectedCaption?.id],
+  );
+  const canSyncSelectedCaption =
+    source?.type === "file" && selectedCaptionListItem?.opensubtitles === true;
+
+  const syncSelectedCaption = useCallback(async (): Promise<boolean> => {
+    if (
+      isSyncingSubtitle ||
+      !selectedCaption ||
+      !selectedCaptionListItem ||
+      !canSyncSelectedCaption
+    ) {
+      return false;
+    }
+    return alignExternalCaption(selectedCaption, selectedCaptionListItem);
+  }, [
+    alignExternalCaption,
+    canSyncSelectedCaption,
+    isSyncingSubtitle,
+    selectedCaption,
+    selectedCaptionListItem,
+  ]);
 
   const findCaptionByPreferredLanguage = useCallback(
     (language: string) => {
@@ -521,6 +617,9 @@ export function useCaptions() {
     selectBestCaptionFromLastUsedLanguage,
     selectSecondaryCaptionById,
     disableSecondary,
+    syncSelectedCaption,
+    canSyncSelectedCaption,
+    isSyncingSubtitle,
     secondaryCaption,
   };
 }

@@ -812,6 +812,13 @@
         "refreshing": "Înviorare...",
         "secondary": "Secundar",
         "selectingSecondary": "Selectarea subtitrarii secundare",
+        "syncSubtitleConfirmTitle": "Sincronizați subtitrarea cu AI?",
+        "syncSubtitleConfirmDescription": "Subtitrările vor fi aliniate de AI pentru a se potrivi cu videoclipul.",
+        "syncSubtitleSupportedLanguages": "Limbi audio acceptate",
+        "syncSubtitleSuccess": "Subtitrarea a fost sincronizată cu succes",
+        "syncSubtitleFailed": "Subtitrarea nu a putut fi sincronizată",
+        "syncSubtitleOpen": "Sincronizați subtitrarea cu AI",
+        "syncSubtitleAction": "Sincronizare",
         "settings": {
           "backlink": "Subtitluri personalizate",
           "delay": "Intârziera subtitlurilor",

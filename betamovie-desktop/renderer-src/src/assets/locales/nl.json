@@ -812,6 +812,13 @@
         "refreshing": "Verfrissend...",
         "secondary": "Secundair",
         "selectingSecondary": "Secundaire ondertiteling selecteren",
+        "syncSubtitleConfirmTitle": "Ondertiteling synchroniseren met AI?",
+        "syncSubtitleConfirmDescription": "Ondertitels worden door AI afgestemd op de video.",
+        "syncSubtitleSupportedLanguages": "Ondersteunde audiotalen",
+        "syncSubtitleSuccess": "Ondertiteling succesvol gesynchroniseerd",
+        "syncSubtitleFailed": "Kan ondertiteling niet synchroniseren",
+        "syncSubtitleOpen": "Synchroniseer ondertitels met AI",
+        "syncSubtitleAction": "Synchroniseren",
         "settings": {
           "backlink": "Aangepaste ondertiteling",
           "delay": "Ondertiteling vertraging",

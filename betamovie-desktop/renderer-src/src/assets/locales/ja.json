@@ -812,6 +812,13 @@
         "refreshing": "爽やかな...",
         "secondary": "二次",
         "selectingSecondary": "副字幕の選択",
+        "syncSubtitleConfirmTitle": "字幕をAIと同期させる？",
+        "syncSubtitleConfirmDescription": "字幕はAIによって映像に合わせて調整されます。",
+        "syncSubtitleSupportedLanguages": "サポートされている音声言語",
+        "syncSubtitleSuccess": "字幕は正常に同期されました",
+        "syncSubtitleFailed": "字幕を同期できませんでした",
+        "syncSubtitleOpen": "AIと字幕を同期する",
+        "syncSubtitleAction": "同期",
         "settings": {
           "backlink": "カスタム字幕",
           "delay": "字幕の遅延",

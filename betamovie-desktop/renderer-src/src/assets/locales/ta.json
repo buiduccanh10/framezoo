@@ -812,6 +812,13 @@
         "refreshing": "புத்துணர்ச்சி அளிக்கிறது...",
         "secondary": "இரண்டாம் நிலை",
         "selectingSecondary": "இரண்டாம் நிலை வசனத்தைத் தேர்ந்தெடுக்கிறது",
+        "syncSubtitleConfirmTitle": "AI உடன் வசனங்களை ஒத்திசைக்கவா?",
+        "syncSubtitleConfirmDescription": "வீடியோவுடன் பொருந்த, வசனங்கள் AI ஆல் சீரமைக்கப்படும்.",
+        "syncSubtitleSupportedLanguages": "ஆதரிக்கப்படும் ஆடியோ மொழிகள்",
+        "syncSubtitleSuccess": "வசனம் வெற்றிகரமாக ஒத்திசைக்கப்பட்டது",
+        "syncSubtitleFailed": "வசனத்தை ஒத்திசைக்க முடியவில்லை",
+        "syncSubtitleOpen": "AI உடன் வசனங்களை ஒத்திசைக்கவும்",
+        "syncSubtitleAction": "ஒத்திசை",
         "settings": {
           "backlink": "தனிப்பட்ட வசன வரிகள்",
           "delay": "வசன வரி தாமதம்",

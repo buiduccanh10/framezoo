@@ -812,6 +812,13 @@
         "refreshing": "Đang làm mới...",
         "secondary": "Phụ đề phụ",
         "selectingSecondary": "Đang chọn phụ đề phụ",
+        "syncSubtitleConfirmTitle": "Đồng bộ phụ đề bằng AI?",
+        "syncSubtitleConfirmDescription": "Phụ đề sẽ được căn chỉnh bởi AI cho khớp với video.",
+        "syncSubtitleSupportedLanguages": "Ngôn ngữ audio được hỗ trợ",
+        "syncSubtitleSuccess": "Đã đồng bộ phụ đề",
+        "syncSubtitleFailed": "Không thể đồng bộ phụ đề",
+        "syncSubtitleOpen": "Đồng bộ phụ đề bằng AI",
+        "syncSubtitleAction": "Đồng bộ",
         "settings": {
           "backlink": "Phụ đề tùy chỉnh",
           "delay": "Độ trễ phụ đề",

@@ -3,8 +3,12 @@ import Fuse from "fuse.js";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@/components/buttons/Button";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
+import { Spinner } from "@/components/layout/Spinner";
+import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
+import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
 import { Link } from "@/components/player/internals/ContextMenu/Links";
@@ -16,6 +20,7 @@ import {
   sanitize,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import { useToastStore } from "@/stores/interface/toast";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
@@ -23,6 +28,17 @@ import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
 import type { SubtitleSelectionMode } from "./CaptionsView";
 import { wordOverrides } from "../../Player";
+
+const MOONSHINE_AUDIO_LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "es", label: "Spanish" },
+  { code: "zh", label: "Mandarin" },
+  { code: "ja", label: "Japanese" },
+  { code: "ko", label: "Korean" },
+  { code: "vi", label: "Vietnamese" },
+  { code: "uk", label: "Ukrainian" },
+  { code: "ar", label: "Arabic" },
+] as const;
 
 export function TranscriptView({
   id,
@@ -50,6 +66,10 @@ export function TranscriptView({
   const setDelay =
     selectionMode === "secondary" ? setSecondaryDelay : setPrimaryDelay;
   const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
+  const { syncSelectedCaption, canSyncSelectedCaption, isSyncingSubtitle } =
+    useCaptions();
+  const syncModal = useModal("subtitle-sync-confirm");
+  const showToast = useToastStore((s) => s.showToast);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [delayInput, setDelayInput] = useState("");
@@ -59,6 +79,29 @@ export function TranscriptView({
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
+
+  const handleConfirmSync = async () => {
+    const synced = await syncSelectedCaption();
+    if (synced) {
+      syncModal.hide();
+      showToast(
+        t("player.menus.subtitles.syncSubtitleSuccess", {
+          defaultValue: "Subtitle synced successfully",
+        }),
+        "success",
+      );
+      return;
+    }
+
+    if (!isSyncingSubtitle) {
+      showToast(
+        t("player.menus.subtitles.syncSubtitleFailed", {
+          defaultValue: "Could not sync subtitle",
+        }),
+        "error",
+      );
+    }
+  };
 
   const parsedCaptions = useMemo(
     () =>
@@ -237,15 +280,106 @@ export function TranscriptView({
 
   return (
     <>
-      <Menu.BackLink onClick={() => router.navigate("/captions")}>
+      <Menu.BackLink
+        onClick={() => router.navigate("/captions")}
+        rightSide={
+          selectionMode === "primary" && canSyncSelectedCaption ? (
+            <button
+              type="button"
+              onClick={() => syncModal.show()}
+              disabled={isSyncingSubtitle}
+              className="mr-[-0.5rem] flex h-8 w-8 items-center justify-center rounded-md text-video-context-type-accent transition-colors hover:bg-video-context-type-accent/15 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label={t(
+                "player.menus.subtitles.syncSubtitleOpen",
+                "Sync subtitle with AI",
+              )}
+              title={t(
+                "player.menus.subtitles.syncSubtitleOpen",
+                "Sync subtitle with AI",
+              )}
+            >
+              {isSyncingSubtitle ? (
+                <Spinner className="text-base" />
+              ) : (
+                <Icon icon={Icons.WAND} className="text-2xl" />
+              )}
+            </button>
+          ) : null
+        }
+      >
         <span className="flex min-w-0 items-center gap-2">
           {t("player.menus.subtitles.transcriptChoice")}
-          <span className="truncate text-video-context-type-secondary">
-            · {t(`player.menus.subtitles.${selectionMode}`)}
-          </span>
+          {isDualSubEnabled && (
+            <span className="truncate text-video-context-type-secondary">
+              · {t(`player.menus.subtitles.${selectionMode}`)}
+            </span>
+          )}
         </span>
       </Menu.BackLink>
       <Menu.Section>
+        <Modal id={syncModal.id}>
+          <ModalCard className="!max-w-md">
+            <div className="space-y-5">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-video-context-type-accent/15 text-video-context-type-accent">
+                  <Icon icon={Icons.WAND} className="text-xl" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">
+                    {t("player.menus.subtitles.syncSubtitleConfirmTitle", {
+                      defaultValue: "Sync subtitle with AI?",
+                    })}
+                  </h3>
+                  <p className="mt-1 text-sm text-video-context-type-secondary">
+                    {t(
+                      "player.menus.subtitles.syncSubtitleConfirmDescription",
+                      {
+                        defaultValue:
+                          "Moonshine will analyze the current stream audio and align this subtitle.",
+                      },
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
+                <p className="text-xs uppercase tracking-wide text-video-context-type-secondary">
+                  {t("player.menus.subtitles.syncSubtitleSupportedLanguages", {
+                    defaultValue: "Supported audio languages",
+                  })}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-white">
+                  {MOONSHINE_AUDIO_LANGUAGES.map((language, index) => (
+                    <span key={language.code}>
+                      {index > 0 ? ", " : ""}
+                      {language.label}
+                    </span>
+                  ))}
+                </p>
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <Button
+                  theme="secondary"
+                  onClick={() => syncModal.hide()}
+                  disabled={isSyncingSubtitle}
+                >
+                  {t("actions.cancel")}
+                </Button>
+                <Button
+                  theme="purple"
+                  onClick={() => void handleConfirmSync()}
+                  disabled={!canSyncSelectedCaption}
+                  loading={isSyncingSubtitle}
+                >
+                  {t("player.menus.subtitles.syncSubtitleAction", {
+                    defaultValue: "Sync",
+                  })}
+                </Button>
+              </div>
+            </div>
+          </ModalCard>
+        </Modal>
         {isDualSubEnabled && (
           <div
             className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-white/[0.06] p-1"
@@ -300,8 +434,10 @@ export function TranscriptView({
           />
           <div className="flex items-center justify-between px-1 py-0.5 text-sm">
             <span className="font-medium text-video-context-type-main text-xs sm:text-sm">
-              {t("player.menus.subtitles.delayLabel", "Subtitle offset")} ·{" "}
-              {t(`player.menus.subtitles.${selectionMode}`)}
+              {t("player.menus.subtitles.delayLabel", "Subtitle offset")}
+              {isDualSubEnabled
+                ? ` · ${t(`player.menus.subtitles.${selectionMode}`)}`
+                : ""}
             </span>
             <div className="flex items-center gap-1.5">
               <button

@@ -812,6 +812,13 @@
         "refreshing": "ताज़ा...",
         "secondary": "माध्यमिक",
         "selectingSecondary": "द्वितीयक उपशीर्षक का चयन करना",
+        "syncSubtitleConfirmTitle": "उपशीर्षक को AI के साथ सिंक करें?",
+        "syncSubtitleConfirmDescription": "वीडियो से मेल खाने के लिए उपशीर्षक को एआई द्वारा संरेखित किया जाएगा।",
+        "syncSubtitleSupportedLanguages": "समर्थित ऑडियो भाषाएँ",
+        "syncSubtitleSuccess": "उपशीर्षक सफलतापूर्वक समन्वयित हुआ",
+        "syncSubtitleFailed": "उपशीर्षक सिंक नहीं कर सका",
+        "syncSubtitleOpen": "उपशीर्षक को AI के साथ सिंक करें",
+        "syncSubtitleAction": "साथ-साथ करना",
         "settings": {
           "backlink": "कस्टम उपशीर्षक",
           "delay": "उपशीर्षक विलंब",

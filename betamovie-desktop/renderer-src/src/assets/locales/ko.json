@@ -812,6 +812,13 @@
         "refreshing": "상쾌하다...",
         "secondary": "반성",
         "selectingSecondary": "보조 자막 선택",
+        "syncSubtitleConfirmTitle": "AI와 자막을 동기화하시겠습니까?",
+        "syncSubtitleConfirmDescription": "자막은 AI가 영상에 맞게 정렬합니다.",
+        "syncSubtitleSupportedLanguages": "지원되는 오디오 언어",
+        "syncSubtitleSuccess": "자막이 동기화되었습니다.",
+        "syncSubtitleFailed": "자막을 동기화할 수 없습니다.",
+        "syncSubtitleOpen": "AI와 자막 동기화",
+        "syncSubtitleAction": "동조",
         "settings": {
           "backlink": "자막 커스텀",
           "delay": "자막 딜레이",

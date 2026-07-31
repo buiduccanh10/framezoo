@@ -812,6 +812,13 @@
         "refreshing": "Forfriskende...",
         "secondary": "Sekundær",
         "selectingSecondary": "Valg af sekundær undertekst",
+        "syncSubtitleConfirmTitle": "Synkronisere undertekster med AI?",
+        "syncSubtitleConfirmDescription": "Undertekster vil blive justeret af AI, så de matcher videoen.",
+        "syncSubtitleSupportedLanguages": "Understøttede lydsprog",
+        "syncSubtitleSuccess": "Undertekster synkroniseret",
+        "syncSubtitleFailed": "Kunne ikke synkronisere undertekster",
+        "syncSubtitleOpen": "Synkroniser undertekster med AI",
+        "syncSubtitleAction": "Synkroniser",
         "settings": {
           "backlink": "Brugerdefinerede undertekster",
           "delay": "Undertekstforsinkelse",
