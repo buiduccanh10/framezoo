@@ -1006,6 +1006,24 @@
       "remaining": "{{timeLeft}} left • Finish at {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "File: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent network",
+      "networkStatus": "Torrent network status",
+      "peers": "Peers: {{count}}",
+      "progress": "Progress: {{progress}}%",
+      "speed": "Speed: {{speed}}",
+      "states": {
+        "buffering": "Buffering",
+        "downloading": "Downloading",
+        "error": "Error",
+        "ready": "Ready",
+        "starting": "Starting",
+        "stopped": "Stopped"
+      },
+      "unknown": "Unknown"
     }
   },
   "screens": {

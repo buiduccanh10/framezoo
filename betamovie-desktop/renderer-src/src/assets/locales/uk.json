@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} залишилось • Закінчити в {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Файл: {{fileName}}",
+      "infohash": "Інфохеш: {{infoHash}}",
+      "network": "Торрент мережа",
+      "networkStatus": "Статус мережі торрент",
+      "peers": "Аналогів: {{count}}",
+      "progress": "Прогрес: {{progress}}%",
+      "speed": "Швидкість: {{speed}}",
+      "states": {
+        "buffering": "Буферизація",
+        "downloading": "Завантаження",
+        "error": "Помилка",
+        "ready": "Готовий",
+        "starting": "Запуск",
+        "stopped": "Зупинився"
+      },
+      "unknown": "Невідомий"
     }
   },
   "screens": {

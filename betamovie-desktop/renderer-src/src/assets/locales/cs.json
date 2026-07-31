@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} zbývá • Dokončeno v {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Soubor: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrentová síť",
+      "networkStatus": "Stav sítě torrent",
+      "peers": "Ostatní: {{count}}",
+      "progress": "Průběh: {{progress}}%",
+      "speed": "Rychlost: {{speed}}",
+      "states": {
+        "buffering": "Ukládání do vyrovnávací paměti",
+        "downloading": "Stahování",
+        "error": "Chyba",
+        "ready": "Připraveno",
+        "starting": "Spuštění",
+        "stopped": "Zastaveno"
+      },
+      "unknown": "Neznámý"
     }
   },
   "screens": {

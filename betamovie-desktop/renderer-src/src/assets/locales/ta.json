@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} மீதமுள்ள நேரம்• {{timeFinished, datetime}} அன்று முடிந்தது",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "கோப்பு: {{fileName}}",
+      "infohash": "இன்ஃபோஹாஷ்: {{infoHash}}",
+      "network": "டோரண்ட் நெட்வொர்க்",
+      "networkStatus": "டோரண்ட் நெட்வொர்க் நிலை",
+      "peers": "சகாக்கள்: {{count}}",
+      "progress": "முன்னேற்றம்: {{progress}}%",
+      "speed": "வேகம்: {{speed}}",
+      "states": {
+        "buffering": "தாங்கல்",
+        "downloading": "பதிவிறக்குகிறது",
+        "error": "பிழை",
+        "ready": "தயார்",
+        "starting": "தொடங்குகிறது",
+        "stopped": "நிறுத்தப்பட்டது"
+      },
+      "unknown": "தெரியவில்லை"
     }
   },
   "screens": {

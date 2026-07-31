@@ -1016,6 +1016,24 @@
       "remaining": "剩余 {{timeLeft}} • 结束于 {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "文件：{{fileName}}",
+      "infohash": "信息哈希：{{infoHash}}",
+      "network": "激流网络",
+      "networkStatus": "洪流网络状态",
+      "peers": "同行：{{count}}",
+      "progress": "进度：{{progress}}%",
+      "speed": "速度：{{speed}}",
+      "states": {
+        "buffering": "缓冲",
+        "downloading": "正在下载",
+        "error": "错误",
+        "ready": "准备好",
+        "starting": "开始",
+        "stopped": "已停止"
+      },
+      "unknown": "未知"
     }
   },
   "screens": {

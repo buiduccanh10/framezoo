@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} נשאר • סיים ב {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "קובץ: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "רשת טורנט",
+      "networkStatus": "סטטוס רשת טורנט",
+      "peers": "עמיתים: {{count}}",
+      "progress": "התקדמות: {{progress}}%",
+      "speed": "מהירות: {{speed}}",
+      "states": {
+        "buffering": "חציצה",
+        "downloading": "מוריד",
+        "error": "שְׁגִיאָה",
+        "ready": "מוּכָן",
+        "starting": "מתחיל",
+        "stopped": "נֶעצָר"
+      },
+      "unknown": "לֹא יְדוּעַ"
     }
   },
   "screens": {

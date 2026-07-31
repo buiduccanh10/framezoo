@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} απέμεινε • Ολοκλήρωση στις {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Αρχείο: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Δίκτυο torrent",
+      "networkStatus": "Κατάσταση δικτύου torrent",
+      "peers": "Συνομήλικοι: {{count}}",
+      "progress": "Πρόοδος: {{progress}}%",
+      "speed": "Ταχύτητα: {{speed}}",
+      "states": {
+        "buffering": "Προσωρινή αποθήκευση",
+        "downloading": "Λήψη",
+        "error": "Σφάλμα",
+        "ready": "Ετοιμος",
+        "starting": "Εκκίνηση",
+        "stopped": "Σταμάτησε"
+      },
+      "unknown": "Αγνωστος"
     }
   },
   "screens": {

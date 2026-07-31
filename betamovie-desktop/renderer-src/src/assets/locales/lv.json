@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} beidza • pabeidza {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fails: {{fileName}}",
+      "infohash": "Info hash: {{infoHash}}",
+      "network": "Torrent tīkls",
+      "networkStatus": "Torrent tīkla statuss",
+      "peers": "Līdzinieki: {{count}}",
+      "progress": "Progress: {{progress}}%",
+      "speed": "Ātrums: {{speed}}",
+      "states": {
+        "buffering": "Buferizācija",
+        "downloading": "Notiek lejupielāde",
+        "error": "Kļūda",
+        "ready": "Gatavs",
+        "starting": "Sākas",
+        "stopped": "Apstājās"
+      },
+      "unknown": "Nezināms"
     }
   },
   "screens": {

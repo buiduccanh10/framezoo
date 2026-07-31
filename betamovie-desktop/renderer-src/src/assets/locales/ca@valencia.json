@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} esquerra • Acabar a {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fitxer: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Xarxa Torrent",
+      "networkStatus": "Estat de la xarxa de torrent",
+      "peers": "Iguals: {{count}}",
+      "progress": "Progrés: {{progress}}%",
+      "speed": "Velocitat: {{speed}}",
+      "states": {
+        "buffering": "Buffering",
+        "downloading": "Descàrrega",
+        "error": "Error",
+        "ready": "A punt",
+        "starting": "Començant",
+        "stopped": "Parat"
+      },
+      "unknown": "Desconegut"
     }
   },
   "screens": {

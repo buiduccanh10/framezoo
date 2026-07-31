@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} مشاهده شده • {{timeFinished, datetime}} دیگر تمام می‌شود",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "فایل: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "شبکه تورنت",
+      "networkStatus": "وضعیت شبکه تورنت",
+      "peers": "همتایان: {{count}}",
+      "progress": "پیشرفت: {{progress}}%",
+      "speed": "سرعت: {{speed}}",
+      "states": {
+        "buffering": "بافر کردن",
+        "downloading": "در حال دانلود",
+        "error": "خطا",
+        "ready": "آماده است",
+        "starting": "شروع کردن",
+        "stopped": "متوقف شد"
+      },
+      "unknown": "ناشناس"
     }
   },
   "screens": {

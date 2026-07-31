@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} alles • Lõppeb {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fail: {{fileName}}",
+      "infohash": "Inforäsi: {{infoHash}}",
+      "network": "Torrent võrk",
+      "networkStatus": "Torrenti võrgu olek",
+      "peers": "Sarnased partnerid: {{count}}",
+      "progress": "Edenemine: {{progress}}%",
+      "speed": "Kiirus: {{speed}}",
+      "states": {
+        "buffering": "Puhverdamine",
+        "downloading": "Allalaadimine",
+        "error": "Viga",
+        "ready": "Valmis",
+        "starting": "Käivitamine",
+        "stopped": "Peatatud"
+      },
+      "unknown": "Tundmatu"
     }
   },
   "screens": {

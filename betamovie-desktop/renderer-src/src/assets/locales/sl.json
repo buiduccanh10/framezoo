@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} do konca • Konča ob {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Datoteka: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent omrežje",
+      "networkStatus": "Stanje omrežja Torrent",
+      "peers": "Vrstniki: {{count}}",
+      "progress": "Napredek: {{progress}}%",
+      "speed": "Hitrost: {{speed}}",
+      "states": {
+        "buffering": "Medpomnjenje",
+        "downloading": "Prenašanje",
+        "error": "Napaka",
+        "ready": "pripravljena",
+        "starting": "Začetek",
+        "stopped": "ustavil"
+      },
+      "unknown": "Neznano"
     }
   },
   "screens": {

@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} van hátra • Vége {{timeFinished, datetime}}-kor",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fájl: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent hálózat",
+      "networkStatus": "Torrent hálózat állapota",
+      "peers": "Társ: {{count}}",
+      "progress": "Haladás: {{progress}}%",
+      "speed": "Sebesség: {{speed}}",
+      "states": {
+        "buffering": "Pufferelés",
+        "downloading": "Letöltés",
+        "error": "Hiba",
+        "ready": "Kész",
+        "starting": "Indulás",
+        "stopped": "Megállt"
+      },
+      "unknown": "Ismeretlen"
     }
   },
   "screens": {

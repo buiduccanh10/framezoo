@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} 残り • {{timeFinished, datetime}} で終了",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "ファイル: {{fileName}}",
+      "infohash": "インフォハッシュ: {{infoHash}}",
+      "network": "トレントネットワーク",
+      "networkStatus": "トレントネットワークのステータス",
+      "peers": "ピア: {{count}}",
+      "progress": "進捗状況: {{progress}}%",
+      "speed": "速度: {{speed}}",
+      "states": {
+        "buffering": "バッファリング",
+        "downloading": "ダウンロード中",
+        "error": "エラー",
+        "ready": "準備ができて",
+        "starting": "起動",
+        "stopped": "停止しました"
+      },
+      "unknown": "未知"
     }
   },
   "screens": {

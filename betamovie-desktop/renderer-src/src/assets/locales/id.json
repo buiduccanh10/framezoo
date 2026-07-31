@@ -1016,6 +1016,24 @@
       "remaining": "{{timeLeft}} tersisa • Selesai pada pukul {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Berkas: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Jaringan torrent",
+      "networkStatus": "Status jaringan torrent",
+      "peers": "Rekan: {{count}}",
+      "progress": "Kemajuan: {{progress}}%",
+      "speed": "Kecepatan: {{speed}}",
+      "states": {
+        "buffering": "Penyangga",
+        "downloading": "Mengunduh",
+        "error": "Kesalahan",
+        "ready": "Siap",
+        "starting": "Mulai",
+        "stopped": "Berhenti"
+      },
+      "unknown": "Tidak dikenal"
     }
   },
   "screens": {

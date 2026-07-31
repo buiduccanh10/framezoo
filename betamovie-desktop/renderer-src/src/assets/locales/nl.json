@@ -1016,6 +1016,24 @@
       "remaining": "Nog {{timeLeft}} • Klaar om {{timeFinished, datetime}}",
       "shortRegular": "{{timeWatched}}",
       "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Bestand: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent-netwerk",
+      "networkStatus": "Torrent-netwerkstatus",
+      "peers": "Collega's: {{count}}",
+      "progress": "Voortgang: {{progress}}%",
+      "speed": "Snelheid: {{speed}}",
+      "states": {
+        "buffering": "Bufferen",
+        "downloading": "Downloaden",
+        "error": "Fout",
+        "ready": "Klaar",
+        "starting": "Beginnen",
+        "stopped": "Gestopt"
+      },
+      "unknown": "Onbekend"
     }
   },
   "screens": {
