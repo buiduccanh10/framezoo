@@ -812,6 +812,13 @@
         "refreshing": "تازه کردن...",
         "secondary": "ثانویه",
         "selectingSecondary": "انتخاب زیرنویس ثانویه",
+        "syncSubtitleConfirmTitle": "زیرنویس با هوش مصنوعی همگام شود؟",
+        "syncSubtitleConfirmDescription": "زیرنویس ها با هوش مصنوعی تراز می شوند تا با ویدیو مطابقت داشته باشند.",
+        "syncSubtitleSupportedLanguages": "پشتیبانی از زبان های صوتی",
+        "syncSubtitleSuccess": "زیرنویس با موفقیت همگام سازی شد",
+        "syncSubtitleFailed": "زیرنویس همگام‌سازی نشد",
+        "syncSubtitleOpen": "همگام سازی زیرنویس با هوش مصنوعی",
+        "syncSubtitleAction": "همگام سازی",
         "settings": {
           "backlink": "زیرنویس سفارشی",
           "delay": "تاخیر زیرنویس",

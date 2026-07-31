@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from "electron";
 import type {
   LibMpvBounds,
   LibMpvCommand,
+  LibMpvAudioRequest,
   LibMpvPlayerEvent,
   LibMpvSourceRequest,
   TorrentSession,
@@ -152,6 +153,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
             playerId,
             command,
           );
+        },
+        extractLibMpvAudio(
+          request: LibMpvAudioRequest,
+        ): Promise<Uint8Array> {
+          return ipcRenderer.invoke("desktop:libmpv-extract-audio", request);
         },
         reparentLibMpvPlayer(
           playerId: string,

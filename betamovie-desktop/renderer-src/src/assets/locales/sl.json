@@ -812,6 +812,13 @@
         "refreshing": "Osvežitev ...",
         "secondary": "Sekundarno",
         "selectingSecondary": "Izbira sekundarnega podnapisa",
+        "syncSubtitleConfirmTitle": "Sinhronizirati podnapise z AI?",
+        "syncSubtitleConfirmDescription": "Podnapise bo poravnal umetna inteligenca, da bodo ustrezali videoposnetku.",
+        "syncSubtitleSupportedLanguages": "Podprti avdio jeziki",
+        "syncSubtitleSuccess": "Podnapisi so uspešno sinhronizirani",
+        "syncSubtitleFailed": "Podnapisov ni bilo mogoče sinhronizirati",
+        "syncSubtitleOpen": "Sinhronizacija podnapisov z AI",
+        "syncSubtitleAction": "Sinhronizacija",
         "settings": {
           "backlink": "Podnapisi po meri",
           "delay": "Zamik podnapisov",

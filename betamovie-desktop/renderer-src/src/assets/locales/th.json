@@ -812,6 +812,13 @@
         "refreshing": "กำลังสดชื่น...",
         "secondary": "รอง",
         "selectingSecondary": "การเลือกคำบรรยายรอง",
+        "syncSubtitleConfirmTitle": "ซิงค์คำบรรยายกับ AI หรือไม่",
+        "syncSubtitleConfirmDescription": "คำบรรยายจะถูกจัดตำแหน่งโดย AI เพื่อให้ตรงกับวิดีโอ",
+        "syncSubtitleSupportedLanguages": "ภาษาเสียงที่รองรับ",
+        "syncSubtitleSuccess": "ซิงค์คำบรรยายสำเร็จแล้ว",
+        "syncSubtitleFailed": "ไม่สามารถซิงค์คำบรรยายได้",
+        "syncSubtitleOpen": "ซิงค์คำบรรยายกับ AI",
+        "syncSubtitleAction": "ซิงค์",
         "settings": {
           "backlink": "คำบรรยายแบบกำหนดเอง",
           "delay": "เวลาดีเลย์คำบรรยาย",

@@ -812,6 +812,13 @@
         "refreshing": "清爽...",
         "secondary": "中学",
         "selectingSecondary": "选择辅助字幕",
+        "syncSubtitleConfirmTitle": "与AI同步字幕？",
+        "syncSubtitleConfirmDescription": "字幕将由人工智能对齐以匹配视频。",
+        "syncSubtitleSupportedLanguages": "支持的音频语言",
+        "syncSubtitleSuccess": "字幕同步成功",
+        "syncSubtitleFailed": "无法同步字幕",
+        "syncSubtitleOpen": "与AI同步字幕",
+        "syncSubtitleAction": "同步",
         "settings": {
           "backlink": "自定义字幕",
           "delay": "字幕偏移",

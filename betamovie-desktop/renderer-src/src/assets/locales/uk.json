@@ -812,6 +812,13 @@
         "refreshing": "Оновлення...",
         "secondary": "Вторинний",
         "selectingSecondary": "Вибір вторинних субтитрів",
+        "syncSubtitleConfirmTitle": "Синхронізувати субтитри з AI?",
+        "syncSubtitleConfirmDescription": "Субтитри будуть вирівняні ШІ відповідно до відео.",
+        "syncSubtitleSupportedLanguages": "Підтримувані мови аудіо",
+        "syncSubtitleSuccess": "Субтитри успішно синхронізовано",
+        "syncSubtitleFailed": "Не вдалося синхронізувати субтитри",
+        "syncSubtitleOpen": "Синхронізувати субтитри з AI",
+        "syncSubtitleAction": "Синхронізувати",
         "settings": {
           "backlink": "Власні субтитри",
           "delay": "Затримка субтитрів",

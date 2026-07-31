@@ -812,6 +812,13 @@
         "refreshing": "ਤਾਜ਼ਾ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
         "secondary": "ਸੈਕੰਡਰੀ",
         "selectingSecondary": "ਸੈਕੰਡਰੀ ਉਪਸਿਰਲੇਖ ਚੁਣਨਾ",
+        "syncSubtitleConfirmTitle": "ਕੀ ਉਪਸਿਰਲੇਖ ਨੂੰ AI ਨਾਲ ਸਿੰਕ ਕਰਨਾ ਹੈ?",
+        "syncSubtitleConfirmDescription": "ਵੀਡੀਓ ਨਾਲ ਮੇਲ ਕਰਨ ਲਈ ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ AI ਦੁਆਰਾ ਇਕਸਾਰ ਕੀਤਾ ਜਾਵੇਗਾ।",
+        "syncSubtitleSupportedLanguages": "ਸਮਰਥਿਤ ਆਡੀਓ ਭਾਸ਼ਾਵਾਂ",
+        "syncSubtitleSuccess": "ਉਪਸਿਰਲੇਖ ਸਫਲਤਾਪੂਰਵਕ ਸਮਕਾਲੀ ਕੀਤਾ ਗਿਆ",
+        "syncSubtitleFailed": "ਉਪਸਿਰਲੇਖ ਨੂੰ ਸਿੰਕ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ",
+        "syncSubtitleOpen": "AI ਨਾਲ ਉਪਸਿਰਲੇਖ ਸਿੰਕ ਕਰੋ",
+        "syncSubtitleAction": "ਸਿੰਕ",
         "settings": {
           "backlink": "ਕਸਟਮ ਉਪਸਿਰਲੇਖ",
           "delay": "ਉਪਸਿਰਲੇਖ ਦੇਰੀ",

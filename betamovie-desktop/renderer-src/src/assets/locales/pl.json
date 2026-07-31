@@ -812,6 +812,13 @@
         "refreshing": "Orzeźwiający...",
         "secondary": "Wtórny",
         "selectingSecondary": "Wybieranie drugiego napisu",
+        "syncSubtitleConfirmTitle": "Zsynchronizować napisy z AI?",
+        "syncSubtitleConfirmDescription": "Napisy zostaną dopasowane przez sztuczną inteligencję do filmu.",
+        "syncSubtitleSupportedLanguages": "Obsługiwane języki audio",
+        "syncSubtitleSuccess": "Napisy zostały pomyślnie zsynchronizowane",
+        "syncSubtitleFailed": "Nie można zsynchronizować napisów",
+        "syncSubtitleOpen": "Synchronizuj napisy z AI",
+        "syncSubtitleAction": "Synchronizuj",
         "settings": {
           "backlink": "Własne napisy",
           "delay": "Opóźnienie napisów",

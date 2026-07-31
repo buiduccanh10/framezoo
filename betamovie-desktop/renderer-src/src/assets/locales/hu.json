@@ -812,6 +812,13 @@
         "refreshing": "Üdítő...",
         "secondary": "Másodlagos",
         "selectingSecondary": "Másodlagos felirat kiválasztása",
+        "syncSubtitleConfirmTitle": "Szinkronizálja a feliratot az AI-val?",
+        "syncSubtitleConfirmDescription": "A feliratokat mesterséges intelligencia igazítja a videóhoz.",
+        "syncSubtitleSupportedLanguages": "Támogatott hangnyelvek",
+        "syncSubtitleSuccess": "A felirat sikeresen szinkronizálva",
+        "syncSubtitleFailed": "Nem sikerült szinkronizálni a feliratot",
+        "syncSubtitleOpen": "Szinkronizálja a feliratot az AI-val",
+        "syncSubtitleAction": "Szinkronizál",
         "settings": {
           "backlink": "Egyéni feliratok",
           "delay": "Felirat késleltetése",

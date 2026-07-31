@@ -812,6 +812,13 @@
         "refreshing": "Yenileniyor...",
         "secondary": "İkincil",
         "selectingSecondary": "İkincil altyazının seçilmesi",
+        "syncSubtitleConfirmTitle": "Altyazı AI ile senkronize edilsin mi?",
+        "syncSubtitleConfirmDescription": "Altyazılar yapay zeka tarafından videoyla eşleşecek şekilde hizalanacak.",
+        "syncSubtitleSupportedLanguages": "Desteklenen ses dilleri",
+        "syncSubtitleSuccess": "Altyazı başarıyla senkronize edildi",
+        "syncSubtitleFailed": "Altyazı senkronize edilemedi",
+        "syncSubtitleOpen": "Altyazıyı AI ile senkronize edin",
+        "syncSubtitleAction": "Senkronizasyon",
         "settings": {
           "backlink": "Kişisel altyazılar",
           "delay": "Altyazı gecikmesi",
