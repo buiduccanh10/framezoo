@@ -41,6 +41,12 @@ html[data-libmpv-player="true"] #root {
   background: transparent !important;
 }
 
+html[data-desktop-pip="true"],
+html[data-desktop-pip="true"] body,
+html[data-desktop-pip="true"] #root {
+  background: transparent !important;
+}
+
 html[data-desktop-app="true"],
 html[data-desktop-app="true"] body {
   scrollbar-width: none;
