@@ -111,6 +111,7 @@ export function RealPlayerView() {
     const promotedSource: SourceSliceSource = {
       id: source.id ?? sourceId ?? undefined,
       type: "file",
+      quality: source.quality,
       qualities: {
         unknown: {
           type: "mp4",

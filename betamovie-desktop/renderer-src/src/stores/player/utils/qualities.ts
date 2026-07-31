@@ -29,6 +29,7 @@ export type SourceSliceSource =
       id?: string;
       type: "file";
       qualities: Partial<Record<SourceQuality, SourceFileStream>>;
+      quality?: SourceQuality;
       duration?: number;
       isTorrent?: boolean;
       headers?: Stream["headers"];
@@ -38,6 +39,7 @@ export type SourceSliceSource =
       id?: string;
       type: "hls";
       url: string;
+      quality?: SourceQuality;
       duration?: number;
       isTorrent?: boolean;
       headers?: Stream["headers"];
@@ -47,6 +49,7 @@ export type SourceSliceSource =
       id?: string;
       type: "dash";
       url: string;
+      quality?: SourceQuality;
       duration?: number;
       headers?: Stream["headers"];
       preferredHeaders?: Stream["preferredHeaders"];

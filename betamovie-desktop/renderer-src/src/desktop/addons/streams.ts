@@ -7,6 +7,33 @@ import type {
   StremioStream,
 } from "./types";
 
+export type AddonStreamMedia = {
+  type: "movie" | "series";
+  id: string;
+  season?: number;
+  episode?: number;
+};
+
+export const ADDON_STREAMS_STALE_TIME_MS = 10 * 60 * 1000;
+export const ADDON_STREAMS_GC_TIME_MS = 60 * 60 * 1000;
+
+export function getAddonStreamQueryKey(
+  addon: InstalledAddon,
+  media: AddonStreamMedia,
+) {
+  return [
+    "addon-streams",
+    addon.manifest.id,
+    addon.manifest.version,
+    addon.manifestUrl,
+    addon.baseUrl,
+    media.type,
+    media.id,
+    media.season ?? null,
+    media.episode ?? null,
+  ] as const;
+}
+
 function getStreamKind(stream: StremioStream): AddonStream["kind"] | null {
   const url = stream.url?.trim() ?? "";
   const filename = stream.behaviorHints?.filename?.toLowerCase() ?? "";
@@ -91,20 +118,10 @@ export function normalizeAddonStreams(
 
 export async function loadAllAddonStreams(
   addons: InstalledAddon[],
-  media: {
-    type: "movie" | "series";
-    id: string;
-    season?: number;
-    episode?: number;
-  },
+  media: AddonStreamMedia,
   load: (
     addon: InstalledAddon,
-    media: {
-      type: "movie" | "series";
-      id: string;
-      season?: number;
-      episode?: number;
-    },
+    media: AddonStreamMedia,
   ) => Promise<StremioStream[]>,
 ) {
   const result = await loadAllAddonStreamsDetailed(addons, media, load);
@@ -113,20 +130,10 @@ export async function loadAllAddonStreams(
 
 export async function loadAllAddonStreamsDetailed(
   addons: InstalledAddon[],
-  media: {
-    type: "movie" | "series";
-    id: string;
-    season?: number;
-    episode?: number;
-  },
+  media: AddonStreamMedia,
   load: (
     addon: InstalledAddon,
-    media: {
-      type: "movie" | "series";
-      id: string;
-      season?: number;
-      episode?: number;
-    },
+    media: AddonStreamMedia,
   ) => Promise<StremioStream[]>,
 ): Promise<AddonStreamLoadResult> {
   const eligibleAddons = addons

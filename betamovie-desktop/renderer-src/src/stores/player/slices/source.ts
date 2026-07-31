@@ -433,7 +433,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.source = stream;
       s.mediaPlaying.hasRenderedFrame = false;
       s.qualities = qualities as SourceQuality[];
-      s.currentQuality = loadableStream.quality;
+      s.currentQuality = stream.quality ?? loadableStream.quality;
       s.segmentQualityDebug = null;
       s.captionList = mergedCaptions;
       s.externalSubtitleRequestId = nextRequestId;
