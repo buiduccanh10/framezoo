@@ -67,6 +67,7 @@ function DesktopPipButton(props: {
 
 const PipCaptions = memo(function PipCaptionsView(props: {
   state: DesktopPipState;
+  controlsVisible: boolean;
 }) {
   const styling = {
     ...useFallbackSubtitleStyling(),
@@ -104,7 +105,11 @@ const PipCaptions = memo(function PipCaptionsView(props: {
     props.state.secondaryCaption.vttData !== props.state.caption?.vttData;
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex flex-col items-center px-[8%]">
+    <div
+      className={`pointer-events-none absolute inset-x-0 z-10 flex flex-col items-center px-[8%] transition-all duration-300 ${
+        props.controlsVisible ? "bottom-14" : "bottom-5"
+      }`}
+    >
       {showSecondary
         ? captions.secondary.map((cue, index) => (
             <CaptionCue
@@ -349,7 +354,7 @@ export default function DesktopPipPage() {
           </div>
         </div>
       </div>
-      <PipCaptions state={pipState} />
+      <PipCaptions state={pipState} controlsVisible={controlsVisible} />
       <div
         className={`absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 justify-center transition-opacity ${
           controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
