@@ -37,7 +37,7 @@ export function RealPlayerView() {
     episode?: string;
     season?: string;
   }>();
-  const { status, reset, setStatus } = usePlayer();
+  const { status, reset, setStatus, setShouldStartFromBeginning } = usePlayer();
   const sourceId = usePlayerStore((s) => s.sourceId);
   const source = usePlayerStore((s) => s.source);
   const captionList = usePlayerStore((s) => s.captionList);
@@ -48,6 +48,7 @@ export function RealPlayerView() {
   const router = useOverlayRouter("settings");
   const openedWatchPartyRef = useRef<boolean>(false);
   const progressItems = useProgressStore((s) => s.items);
+  const updateProgress = useProgressStore((s) => s.updateItem);
   const torrentStatus = useActiveTorrentStatus();
   const torrentPromotionRef = useRef<string | null>(null);
   const [sourceLoading, setSourceLoading] = useState(false);
@@ -214,8 +215,17 @@ export function RealPlayerView() {
   }, [setStatus]);
 
   const handleRestart = useCallback(() => {
+    // Tell SourceSelectPart to start from position 0, not from saved progress.
+    setShouldStartFromBeginning(true);
+    // Also reset the stored progress so ProgressSaver's late-resume doesn't kick in.
+    if (playerMeta) {
+      updateProgress({
+        meta: playerMeta,
+        progress: { duration: 0, watched: 0 },
+      });
+    }
     setStatus(playerStatus.SOURCE_SELECTION);
-  }, [setStatus]);
+  }, [setStatus, setShouldStartFromBeginning, updateProgress, playerMeta]);
 
   return (
     <PlayerPart
