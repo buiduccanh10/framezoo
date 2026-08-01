@@ -9,6 +9,8 @@ import math
 import mimetypes
 import os
 import shutil
+import socket
+import select
 import sys
 import tempfile
 import threading
@@ -30,7 +32,7 @@ STREAM_CHUNK_SIZE = 1024 * 1024
 RANGE_PREFETCH_BYTES = 32 * 1024 * 1024
 RANGE_METADATA_TAIL_BYTES = 8 * 1024 * 1024
 RANGE_RESPONSE_MAX_BYTES = 32 * 1024 * 1024
-RANGE_WAIT_TIMEOUT = 45
+RANGE_WAIT_TIMEOUT = 3600
 RANGE_RETRY_INTERVAL = 0.2
 FILE_OPEN_RETRY_INTERVAL = 0.2
 
@@ -46,6 +48,18 @@ def emit(message: Dict[str, Any]) -> None:
     with OUTPUT_LOCK:
         sys.stdout.write(json.dumps(message, separators=(",", ":")) + "\n")
         sys.stdout.flush()
+
+def is_client_connected(handler: BaseHTTPRequestHandler) -> bool:
+    try:
+        r, _, _ = select.select([handler.connection], [], [], 0)
+        if r:
+            msg = handler.connection.recv(1, socket.MSG_PEEK)
+            if not msg:
+                return False
+    except Exception:
+        return False
+    return True
+
 
 def get_local_cors_origin(handler: BaseHTTPRequestHandler) -> Optional[str]:
     origin = handler.headers.get("Origin")
@@ -468,9 +482,12 @@ class TorrentRuntime:
         reason: str,
     ) -> None:
         pieces = sorted(self.map_pieces(start, length))
-        missing_pieces = [
-            piece for piece in pieces if not self.handle.have_piece(piece)
-        ]
+        try:
+            missing_pieces = [
+                piece for piece in pieces if not self.handle.have_piece(piece)
+            ]
+        except RuntimeError:
+            return
         for index, piece in enumerate(missing_pieces):
             try:
                 self.handle.piece_priority(piece, 7)
@@ -496,6 +513,7 @@ class TorrentRuntime:
         start: int,
         end: int,
         timeout: float = RANGE_WAIT_TIMEOUT,
+        handler: Optional[BaseHTTPRequestHandler] = None,
     ) -> bool:
         prefetch_length = max(end - start + 1, RANGE_PREFETCH_BYTES)
         required_pieces = sorted(self.map_pieces(start, end - start + 1))
@@ -530,11 +548,16 @@ class TorrentRuntime:
 
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline and not self.stop_event.is_set():
-            missing_required = [
-                piece
-                for piece in required_pieces
-                if not self.handle.have_piece(piece)
-            ]
+            if handler and not is_client_connected(handler):
+                return False
+            try:
+                missing_required = [
+                    piece
+                    for piece in required_pieces
+                    if not self.handle.have_piece(piece)
+                ]
+            except RuntimeError:
+                return False
             if not missing_required:
                 log_event(
                     "range ready",
@@ -579,12 +602,15 @@ class TorrentRuntime:
         stream: Any,
         start: int,
         end: int,
+        handler: Optional[BaseHTTPRequestHandler] = None,
     ) -> Optional[bytes]:
         expected_length = end - start + 1
         deadline = time.monotonic() + RANGE_WAIT_TIMEOUT
 
         while time.monotonic() < deadline and not self.stop_event.is_set():
-            if not self.wait_for_range(start, end):
+            if handler and not is_client_connected(handler):
+                return None
+            if not self.wait_for_range(start, end, handler=handler):
                 return None
 
             stream.seek(start)
@@ -685,6 +711,7 @@ class TorrentRuntime:
                 absolute_path,
                 start,
                 end,
+                handler=handler,
             )
             if stream is None or first_chunk is None:
                 log_event(
@@ -729,7 +756,7 @@ class TorrentRuntime:
             while offset <= end:
                 if chunk is None:
                     chunk_end = min(end, offset + STREAM_CHUNK_SIZE - 1)
-                    chunk = self.read_range_chunk(stream, offset, chunk_end)
+                    chunk = self.read_range_chunk(stream, offset, chunk_end, handler=handler)
                     if chunk is None:
                         handler.close_connection = True
                         return
@@ -763,12 +790,15 @@ class TorrentRuntime:
         absolute_path: str,
         start: int,
         end: int,
+        handler: Optional[BaseHTTPRequestHandler] = None,
     ) -> Tuple[Optional[Any], Optional[bytes]]:
         """Wait for libtorrent to create and fill the first requested bytes."""
         chunk_end = min(end, start + STREAM_CHUNK_SIZE - 1)
         deadline = time.monotonic() + RANGE_WAIT_TIMEOUT
 
         while time.monotonic() < deadline and not self.stop_event.is_set():
+            if handler and not is_client_connected(handler):
+                return None, None
             try:
                 stream = open(absolute_path, "rb")
             except FileNotFoundError:
@@ -777,7 +807,7 @@ class TorrentRuntime:
             except OSError:
                 return None, None
 
-            chunk = self.read_range_chunk(stream, start, chunk_end)
+            chunk = self.read_range_chunk(stream, start, chunk_end, handler=handler)
             if chunk is not None:
                 return stream, chunk
 

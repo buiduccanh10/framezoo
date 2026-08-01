@@ -86,6 +86,9 @@ export function useCaptions() {
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
   const [isSyncingSubtitle, setIsSyncingSubtitle] = useState(false);
+  const [syncSubtitleProgress, setSyncSubtitleProgress] = useState<
+    number | null
+  >(null);
 
   const alignCaptionTracks = useCallback(
     async (targets: SubtitleSyncTarget[]): Promise<boolean> => {
@@ -97,6 +100,7 @@ export function useCaptions() {
 
       const requestId = ++subtitleAlignmentRequestId;
       setIsSyncingSubtitle(true);
+      setSyncSubtitleProgress(0);
       try {
         const batchResult = await alignSubtitlesWithCurrentStream({
           sourceUrl: quality.url,
@@ -108,6 +112,11 @@ export function useCaptions() {
           })),
           headers: source.headers ?? source.preferredHeaders,
           videoDuration,
+          onProgress: (progress) => {
+            if (requestId === subtitleAlignmentRequestId) {
+              setSyncSubtitleProgress(progress);
+            }
+          },
         });
         if (requestId !== subtitleAlignmentRequestId) return false;
 
@@ -171,6 +180,7 @@ export function useCaptions() {
       } finally {
         if (requestId === subtitleAlignmentRequestId) {
           setIsSyncingSubtitle(false);
+          setSyncSubtitleProgress(null);
         }
       }
     },
@@ -746,6 +756,7 @@ export function useCaptions() {
     syncSelectedCaption,
     canSyncSelectedCaption,
     isSyncingSubtitle,
+    syncSubtitleProgress,
     secondaryCaption,
   };
 }
