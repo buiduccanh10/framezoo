@@ -329,7 +329,7 @@ export function TranscriptView({
                     icon={Icons.PROGRESS_SPINNER}
                     className="absolute text-2xl animate-spin text-video-context-type-accent"
                   />
-                  <span className="absolute text-sm font-bold text-video-context-type-accent">
+                  <span className="absolute text-[10px] font-bold text-video-context-type-accent">
                     {Math.round((syncSubtitleProgress ?? 0) * 100)}%
                   </span>
                 </div>

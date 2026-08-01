@@ -34,6 +34,12 @@ RANGE_METADATA_TAIL_BYTES = 8 * 1024 * 1024
 RANGE_RESPONSE_MAX_BYTES = 32 * 1024 * 1024
 RANGE_WAIT_TIMEOUT = 3600
 RANGE_RETRY_INTERVAL = 0.2
+# Minimum seconds to wait before declaring client disconnected.
+# MPV holds the TCP connection open while waiting for the 206 header;
+# select() may briefly see the socket as readable due to buffered request
+# bytes that were already consumed, so we give the client a short grace
+# period before we start checking for disconnection.
+CLIENT_DISCONNECT_GRACE_SECS = 10.0
 FILE_OPEN_RETRY_INTERVAL = 0.2
 
 def log_event(message: str, **fields: Any) -> None:
@@ -49,7 +55,17 @@ def emit(message: Dict[str, Any]) -> None:
         sys.stdout.write(json.dumps(message, separators=(",", ":")) + "\n")
         sys.stdout.flush()
 
-def is_client_connected(handler: BaseHTTPRequestHandler) -> bool:
+def is_client_connected(
+    handler: BaseHTTPRequestHandler,
+    connect_start: float,
+) -> bool:
+    """Return False only if the client has clearly closed the connection.
+
+    We apply a grace period (CLIENT_DISCONNECT_GRACE_SECS) so we don't
+    mistakenly kill a request that is still being set up by the client.
+    """
+    if time.monotonic() - connect_start < CLIENT_DISCONNECT_GRACE_SECS:
+        return True
     try:
         r, _, _ = select.select([handler.connection], [], [], 0)
         if r:
@@ -514,6 +530,7 @@ class TorrentRuntime:
         end: int,
         timeout: float = RANGE_WAIT_TIMEOUT,
         handler: Optional[BaseHTTPRequestHandler] = None,
+        connect_start: float = 0.0,
     ) -> bool:
         prefetch_length = max(end - start + 1, RANGE_PREFETCH_BYTES)
         required_pieces = sorted(self.map_pieces(start, end - start + 1))
@@ -548,7 +565,13 @@ class TorrentRuntime:
 
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline and not self.stop_event.is_set():
-            if handler and not is_client_connected(handler):
+            if handler and not is_client_connected(handler, connect_start):
+                log_event(
+                    "client disconnected during range wait",
+                    sessionId=self.session_id,
+                    start=start,
+                    end=end,
+                )
                 return False
             try:
                 missing_required = [
@@ -603,14 +626,21 @@ class TorrentRuntime:
         start: int,
         end: int,
         handler: Optional[BaseHTTPRequestHandler] = None,
+        connect_start: float = 0.0,
     ) -> Optional[bytes]:
         expected_length = end - start + 1
         deadline = time.monotonic() + RANGE_WAIT_TIMEOUT
 
         while time.monotonic() < deadline and not self.stop_event.is_set():
-            if handler and not is_client_connected(handler):
+            if handler and not is_client_connected(handler, connect_start):
+                log_event(
+                    "client disconnected during chunk read",
+                    sessionId=self.session_id,
+                    start=start,
+                    end=end,
+                )
                 return None
-            if not self.wait_for_range(start, end, handler=handler):
+            if not self.wait_for_range(start, end, handler=handler, connect_start=connect_start):
                 return None
 
             stream.seek(start)
@@ -628,6 +658,7 @@ class TorrentRuntime:
         # mpv cancels the current range connection while seeking. Keep each
         # response single-use so FFmpeg does not reuse a half-read HTTP body.
         handler.close_connection = True
+        connect_start = time.monotonic()
         request_number = getattr(self, "request_count", 0) + 1
         self.request_count = request_number
         if not self.first_request_logged:
@@ -712,6 +743,7 @@ class TorrentRuntime:
                 start,
                 end,
                 handler=handler,
+                connect_start=connect_start,
             )
             if stream is None or first_chunk is None:
                 log_event(
@@ -756,7 +788,7 @@ class TorrentRuntime:
             while offset <= end:
                 if chunk is None:
                     chunk_end = min(end, offset + STREAM_CHUNK_SIZE - 1)
-                    chunk = self.read_range_chunk(stream, offset, chunk_end, handler=handler)
+                    chunk = self.read_range_chunk(stream, offset, chunk_end, handler=handler, connect_start=connect_start)
                     if chunk is None:
                         handler.close_connection = True
                         return
@@ -791,13 +823,22 @@ class TorrentRuntime:
         start: int,
         end: int,
         handler: Optional[BaseHTTPRequestHandler] = None,
+        connect_start: float = 0.0,
     ) -> Tuple[Optional[Any], Optional[bytes]]:
         """Wait for libtorrent to create and fill the first requested bytes."""
         chunk_end = min(end, start + STREAM_CHUNK_SIZE - 1)
         deadline = time.monotonic() + RANGE_WAIT_TIMEOUT
+        if connect_start == 0.0:
+            connect_start = time.monotonic()
 
         while time.monotonic() < deadline and not self.stop_event.is_set():
-            if handler and not is_client_connected(handler):
+            if handler and not is_client_connected(handler, connect_start):
+                log_event(
+                    "client disconnected before first chunk",
+                    sessionId=self.session_id,
+                    start=start,
+                    end=end,
+                )
                 return None, None
             try:
                 stream = open(absolute_path, "rb")
@@ -807,7 +848,7 @@ class TorrentRuntime:
             except OSError:
                 return None, None
 
-            chunk = self.read_range_chunk(stream, start, chunk_end, handler=handler)
+            chunk = self.read_range_chunk(stream, start, chunk_end, handler=handler, connect_start=connect_start)
             if chunk is not None:
                 return stream, chunk
 

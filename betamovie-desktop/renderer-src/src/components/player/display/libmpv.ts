@@ -742,6 +742,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         startAt: time,
         autoplay: ops.autoplay ?? true,
         ...(headers && Object.keys(headers).length > 0 ? { headers } : {}),
+        ...(requestedSource.isTorrent ? { isTorrent: true } : {}),
       };
       pendingLoad = {
         generation: requestGeneration,
