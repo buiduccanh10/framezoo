@@ -13,6 +13,7 @@ export interface VideoPlayerButtonProps {
   "aria-label"?: string;
   "aria-expanded"?: boolean;
   title?: string;
+  disabled?: boolean;
 }
 
 export const VideoPlayerButton = forwardRef<
@@ -23,14 +24,22 @@ export const VideoPlayerButton = forwardRef<
     <button
       ref={ref}
       type="button"
-      onClick={(e) => props.onClick?.(e.currentTarget as HTMLButtonElement)}
+      disabled={props.disabled}
+      onClick={(e) => {
+        if (!props.disabled)
+          props.onClick?.(e.currentTarget as HTMLButtonElement);
+      }}
       aria-label={props["aria-label"]}
       aria-expanded={props["aria-expanded"]}
       title={props.title}
       className={classNames([
-        "tabbable p-3 rounded-full hover:bg-video-buttonBackground hover:bg-opacity-50 transition-transform duration-100 flex items-center justify-center",
-        props.activeClass ??
-          "active:scale-110 active:bg-opacity-75 active:text-white",
+        "tabbable p-3 rounded-full transition-transform duration-100 flex items-center justify-center",
+        props.disabled
+          ? "opacity-50 cursor-not-allowed"
+          : "hover:bg-video-buttonBackground hover:bg-opacity-50",
+        !props.disabled &&
+          (props.activeClass ??
+            "active:scale-110 active:bg-opacity-75 active:text-white"),
         props.className ?? "",
       ])}
     >

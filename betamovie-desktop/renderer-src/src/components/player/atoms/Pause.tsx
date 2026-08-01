@@ -4,9 +4,14 @@ import { usePlayerStore } from "@/stores/player/store";
 
 export function Pause(props: { iconSizeClass?: string; className?: string }) {
   const display = usePlayerStore((s) => s.display);
-  const { isPaused } = usePlayerStore((s) => s.mediaPlaying);
+  const { isPaused, isLoading, hasRenderedFrame } = usePlayerStore(
+    (s) => s.mediaPlaying,
+  );
+
+  const disabled = !isPaused && (isLoading || !hasRenderedFrame);
 
   const toggle = () => {
+    if (disabled) return;
     if (isPaused) display?.play();
     else display?.pause();
   };
@@ -16,6 +21,7 @@ export function Pause(props: { iconSizeClass?: string; className?: string }) {
       className={props.className}
       iconSizeClass={props.iconSizeClass}
       onClick={toggle}
+      disabled={disabled}
       icon={isPaused ? Icons.PLAY : Icons.PAUSE}
     />
   );

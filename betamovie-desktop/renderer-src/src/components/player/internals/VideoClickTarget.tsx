@@ -14,6 +14,10 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   const display = usePlayerStore((s) => s.display);
   const time = usePlayerStore((s) => s.progress.time);
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
+  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
   const updateInterfaceHovering = usePlayerStore(
     (s) => s.updateInterfaceHovering,
@@ -90,8 +94,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   const togglePause = useCallback(
     (e: PointerEvent<HTMLDivElement>) => {
       // Don't toggle pause if holding for speed change
-      if (isHoldingRef.current) {
-        isHoldingRef.current = false;
+      if (!isPaused && (isLoading || !hasRenderedFrame)) {
         return;
       }
 
@@ -129,6 +132,8 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       cancel,
       isPendingBoost,
       isSeeking,
+      isLoading,
+      hasRenderedFrame,
     ],
   );
 
@@ -162,7 +167,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
           e.pointerType === "touch") &&
         !isInWatchParty
       ) {
-        if (isPaused) return; // Don't boost if video is paused
+        if (isPaused || isLoading || !hasRenderedFrame) return; // Don't boost if video is paused or loading
 
         // Store current rate before changing
         previousRateRef.current = playbackRate;
@@ -201,6 +206,8 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       setShowSpeedIndicator,
       setCurrentOverlay,
       isInWatchParty,
+      isLoading,
+      hasRenderedFrame,
     ],
   );
 
