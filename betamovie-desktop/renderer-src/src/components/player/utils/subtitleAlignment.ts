@@ -237,6 +237,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
   headers?: unknown;
   signal?: AbortSignal;
   videoDuration?: number;
+  onProgress?: (progress: number) => void;
 }): Promise<SubtitleAlignmentBatchResponse> {
   const windowStarts = buildAlignmentWindowStarts(
     options.startAt,
@@ -245,7 +246,8 @@ export async function alignSubtitlesWithCurrentStream(options: {
   const windowResponses: AlignmentWindowResponse[] = [];
   let lastError: unknown = null;
 
-  for (const startAt of windowStarts) {
+  for (let i = 0; i < windowStarts.length; i++) {
+    const startAt = windowStarts[i];
     if (options.signal?.aborted) {
       throw new DOMException("Subtitle alignment was aborted", "AbortError");
     }
@@ -272,6 +274,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
         },
       );
       windowResponses.push({ startAt, response });
+      options.onProgress?.((i + 1) / windowStarts.length);
     } catch (error) {
       if (options.signal?.aborted) throw error;
       lastError = error;
@@ -279,6 +282,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
         startAt,
         error,
       });
+      options.onProgress?.((i + 1) / windowStarts.length);
     }
   }
 
