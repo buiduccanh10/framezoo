@@ -87,8 +87,12 @@ export function TranscriptView({
   const setDelay =
     selectionMode === "secondary" ? setSecondaryDelay : setPrimaryDelay;
   const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
-  const { syncSelectedCaption, canSyncSelectedCaption, isSyncingSubtitle } =
-    useCaptions();
+  const {
+    syncSelectedCaption,
+    canSyncSelectedCaption,
+    isSyncingSubtitle,
+    syncSubtitleProgress,
+  } = useCaptions();
   const syncModal = useModal("subtitle-sync-confirm");
   const showToast = useToastStore((s) => s.showToast);
 
@@ -102,9 +106,9 @@ export function TranscriptView({
   const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
 
   const handleConfirmSync = async () => {
+    syncModal.hide();
     const synced = await syncSelectedCaption();
     if (synced) {
-      syncModal.hide();
       showToast(
         t("player.menus.subtitles.syncSubtitleSuccess", {
           defaultValue: "Subtitle synced successfully",
@@ -114,14 +118,12 @@ export function TranscriptView({
       return;
     }
 
-    if (!isSyncingSubtitle) {
-      showToast(
-        t("player.menus.subtitles.syncSubtitleFailed", {
-          defaultValue: "Could not sync subtitle",
-        }),
-        "error",
-      );
-    }
+    showToast(
+      t("player.menus.subtitles.syncSubtitleFailed", {
+        defaultValue: "Could not sync subtitle",
+      }),
+      "error",
+    );
   };
 
   const parsedCaptions = useMemo(
@@ -322,7 +324,15 @@ export function TranscriptView({
               )}
             >
               {isSyncingSubtitle ? (
-                <Spinner className="text-base" />
+                <div className="relative flex h-full w-full items-center justify-center">
+                  <Icon
+                    icon={Icons.PROGRESS_SPINNER}
+                    className="absolute text-2xl animate-spin text-video-context-type-accent"
+                  />
+                  <span className="absolute text-sm font-bold text-video-context-type-accent">
+                    {Math.round((syncSubtitleProgress ?? 0) * 100)}%
+                  </span>
+                </div>
               ) : (
                 <Icon icon={Icons.WAND} className="text-2xl" />
               )}
@@ -388,7 +398,6 @@ export function TranscriptView({
                   theme="purple"
                   onClick={() => void handleConfirmSync()}
                   disabled={!canSyncSelectedCaption}
-                  loading={isSyncingSubtitle}
                 >
                   {t("player.menus.subtitles.syncSubtitleAction", {
                     defaultValue: "Sync",

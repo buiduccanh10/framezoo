@@ -89,11 +89,13 @@ export enum Icons {
   THUMBS_UP = "thumbsUp",
   THUMBS_DOWN = "thumbsDown",
   EXTENSION = "extension",
+  PROGRESS_SPINNER = "progressSpinner",
 }
 
 export interface IconProps {
   icon: Icons;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const iconList: Record<Icons, string> = {
@@ -310,6 +312,7 @@ const iconList: Record<Icons, string> = {
 	<path stroke="none" d="M0 0h24v24H0z" fill="none" />
 	<path d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1" />
 </svg>`,
+  progressSpinner: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 36 36"><path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"/><path stroke-dasharray="25, 100" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"/></svg>`,
 };
 
 export const Icon = memo((props: IconProps) => {
@@ -325,6 +328,7 @@ export const Icon = memo((props: IconProps) => {
     <span
       dangerouslySetInnerHTML={{ __html: iconList[props.icon] }}
       className={classNames(props.className, flipClass)}
+      style={props.style}
     />
   );
 });
