@@ -1,6 +1,7 @@
+import { useVirtualizer } from "@tanstack/react-virtual";
 import classNames from "classnames";
 import Fuse from "fuse.js";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/buttons/Button";
@@ -59,7 +60,27 @@ export function TranscriptView({
   const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
   const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
   const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
-  const { duration: timeDuration, time } = usePlayerStore((s) => s.progress);
+  const { duration: timeDuration } = usePlayerStore((s) => s.progress);
+  // Subscribe to `time` via ref + 500ms poll to avoid re-rendering the whole
+  // component 4-10x per second (every MPV time-pos event).
+  const timeRef = useRef(0);
+  const [highlightTime, setHighlightTime] = useState(0);
+  useEffect(() => {
+    // Keep ref up to date without triggering React renders
+    const unsub = usePlayerStore.subscribe((s) => {
+      timeRef.current = s.progress.time;
+    });
+    // Poll ref value twice per second for highlight + scroll
+    const ids = setInterval(() => {
+      setHighlightTime(timeRef.current);
+    }, 500);
+    return () => {
+      unsub();
+      clearInterval(ids);
+    };
+  }, []);
+  // Alias so existing code below works unchanged
+  const time = highlightTime;
   const activeCaption =
     selectionMode === "secondary" ? secondaryCaption : primaryCaption;
   const delay = selectionMode === "secondary" ? secondaryDelay : primaryDelay;
@@ -154,6 +175,10 @@ export function TranscriptView({
     return fuse.search(searchQuery).map((r) => r.item);
   }, [transcriptItems, searchQuery]);
 
+  // Defer rendering the full list so the popup itself opens snappily.
+  const deferredFilteredItems = useDeferredValue(filteredItems);
+  const isListPending = deferredFilteredItems !== filteredItems;
+
   // Determine currently visible caption to highlight
   const { activeKey, nextKey } = useMemo(() => {
     if (parsedCaptions.length === 0)
@@ -190,15 +215,17 @@ export function TranscriptView({
 
   const scrollTargetKey = useMemo(() => {
     if (searchQuery.trim()) {
-      const nextFiltered = filteredItems.find((it) => it.start > time);
+      const nextFiltered = deferredFilteredItems.find((it) => it.start > time);
       if (nextFiltered) return nextFiltered.key;
 
-      const hasActive = filteredItems.some((it) => it.key === activeKey);
+      const hasActive = deferredFilteredItems.some(
+        (it) => it.key === activeKey,
+      );
       if (hasActive) return activeKey;
       return null;
     }
     return nextKey ?? activeKey;
-  }, [filteredItems, searchQuery, time, nextKey, activeKey]);
+  }, [deferredFilteredItems, searchQuery, time, nextKey, activeKey]);
 
   const checkScrollPosition = () => {
     const container = carouselRef.current;
@@ -224,57 +251,53 @@ export function TranscriptView({
     };
   }, []);
 
+  const scrollTargetIndex = useMemo(() => {
+    if (!scrollTargetKey) return -1;
+    return deferredFilteredItems.findIndex((it) => it.key === scrollTargetKey);
+  }, [scrollTargetKey, deferredFilteredItems]);
+
+  const virtualizer = useVirtualizer({
+    count: deferredFilteredItems.length,
+    getScrollElement: () => carouselRef.current,
+    estimateSize: () => 48,
+    overscan: 5,
+  });
+
+  const lastScrolledIndexRef = useRef(-1);
+
   // Autoscroll with delay to prevent clashing with menu animation
   const [didFirstScroll, setDidFirstScroll] = useState(false);
   useEffect(() => {
-    if (!scrollTargetKey) return;
-    const scrollToStablePoint = (target: HTMLElement) => {
-      const container = carouselRef.current;
-      if (!container) return;
+    if (scrollTargetIndex === -1) return;
 
-      const containerRect = container.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-
-      const containerHeight = container.clientHeight || 288; // 18rem = 288px
-      const desiredOffsetFromTop = Math.floor(containerHeight * 0.6); // half of the container height
-
-      // Current absolute position of target center within container's scroll space
-      const targetCenterAbs =
-        container.scrollTop +
-        (targetRect.top - containerRect.top) +
-        targetRect.height / 2;
-
-      // Desired scrollTop so that the target center sits at desired offset
-      let nextScrollTop = targetCenterAbs - desiredOffsetFromTop;
-
-      const maxScrollTop = Math.max(
-        0,
-        container.scrollHeight - containerHeight,
-      );
-      nextScrollTop = Math.max(0, Math.min(nextScrollTop, maxScrollTop));
-
-      container.scrollTo({ top: nextScrollTop, behavior: "smooth" });
-    };
-
-    const doScroll = () => {
-      const el = document.querySelector<HTMLElement>(
-        `[data-que-id="${scrollTargetKey}"]`,
-      );
-      if (el) scrollToStablePoint(el);
-    };
+    // Prevent scrolling repeatedly to the same target if we already scrolled to it.
+    // Since virtualizer is recreated every render, we must guard this.
+    if (didFirstScroll && lastScrolledIndexRef.current === scrollTargetIndex) {
+      return;
+    }
 
     if (!didFirstScroll) {
       const timeout = setTimeout(() => {
-        doScroll();
+        virtualizer.scrollToIndex(scrollTargetIndex, {
+          align: "center",
+          behavior: "smooth",
+        });
+        lastScrolledIndexRef.current = scrollTargetIndex;
         setDidFirstScroll(true);
       }, 100);
       return () => clearTimeout(timeout);
     }
-    doScroll();
-  }, [scrollTargetKey, didFirstScroll]);
+
+    virtualizer.scrollToIndex(scrollTargetIndex, {
+      align: "center",
+      behavior: "smooth",
+    });
+    lastScrolledIndexRef.current = scrollTargetIndex;
+  }, [scrollTargetIndex, didFirstScroll, virtualizer]);
 
   const handleItemClick = (item: (typeof transcriptItems)[number]) => {
-    const newDelay = getCaptionDelayForCue(item.cue, time);
+    // Read time from ref so this works even without a subscription
+    const newDelay = getCaptionDelayForCue(item.cue, timeRef.current);
     setDelay(Number(newDelay.toFixed(2)));
   };
 
@@ -499,9 +522,20 @@ export function TranscriptView({
           },
         )}
       >
-        <div className="flex flex-col gap-1 pb-4">
+        <div
+          className={classNames(
+            "transition-opacity duration-150 relative w-full",
+            {
+              "opacity-50": isListPending,
+            },
+          )}
+          style={{ height: `${virtualizer.getTotalSize()}px` }}
+        >
           {activeCaption ? (
-            filteredItems.map((item) => {
+            virtualizer.getVirtualItems().map((virtualItem) => {
+              const item = deferredFilteredItems[virtualItem.index];
+              if (!item) return null;
+
               const html = sanitize(item.raw.replaceAll(/\r?\n/g, "<br />"), {
                 ALLOWED_TAGS: ["c", "b", "i", "u", "span", "ruby", "rt", "br"],
                 ADD_TAGS: ["v", "lang"],
@@ -511,7 +545,16 @@ export function TranscriptView({
               const isActive = activeKey === item.key;
 
               return (
-                <div key={item.key} data-que-id={item.key}>
+                <div
+                  key={item.key}
+                  data-que-id={item.key}
+                  data-index={virtualItem.index}
+                  ref={virtualizer.measureElement}
+                  className="absolute top-0 left-0 w-full pb-1"
+                  style={{
+                    transform: `translateY(${virtualItem.start}px)`,
+                  }}
+                >
                   <Link
                     onClick={() => handleItemClick(item)}
                     clickable
@@ -540,7 +583,7 @@ export function TranscriptView({
               );
             })
           ) : (
-            <div className="rounded-xl border border-dashed border-white/10 px-4 py-8 text-center text-sm text-video-context-type-secondary">
+            <div className="rounded-xl border border-dashed border-white/10 px-4 py-8 text-center text-sm text-video-context-type-secondary w-full">
               {selectionMode === "secondary"
                 ? t("player.menus.subtitles.clearSecondary")
                 : t("player.menus.subtitles.offChoice")}

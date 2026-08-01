@@ -9,7 +9,10 @@ import { OverlayRouter } from "@/components/overlays/OverlayRouter";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import {
+  useInternalOverlayRouter,
+  useOverlayRouter,
+} from "@/hooks/useOverlayRouter";
 import { SourceSelectPart } from "@/pages/parts/player/SourceSelectPart";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -36,7 +39,11 @@ function SettingsOverlay({ id }: { id: string }) {
   const { width: viewportWidth, height: viewportHeight } = useWindowSize();
   const { isMobile } = useIsMobile();
   const router = useOverlayRouter(id);
+  const internalRouter = useInternalOverlayRouter(id);
   const playerMeta = usePlayerStore((state) => state.meta);
+  const isTranscriptVisible = internalRouter.isCurrentPage(
+    "/captions/transcript",
+  );
   const subtitleSelectionMode = usePlayerStore(
     (state) => state.caption.activeTrack,
   );
@@ -237,11 +244,13 @@ function SettingsOverlay({ id }: { id: string }) {
           height={transcriptHeight}
         >
           <Menu.CardWithScrollable scrollLastChild>
-            <TranscriptView
-              id={id}
-              selectionMode={subtitleSelectionMode}
-              onSelectionModeChange={setSubtitleSelectionMode}
-            />
+            {isTranscriptVisible ? (
+              <TranscriptView
+                id={id}
+                selectionMode={subtitleSelectionMode}
+                onSelectionModeChange={setSubtitleSelectionMode}
+              />
+            ) : null}
           </Menu.CardWithScrollable>
         </OverlayPage>
         <OverlayPage

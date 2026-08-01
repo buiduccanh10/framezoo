@@ -223,6 +223,12 @@ export function SourceSelectPart(props: {
   const setPreferredStream = usePlayerStore(
     (state) => state.setPreferredStream,
   );
+  const shouldStartFromBeginning = usePlayerStore(
+    (state) => state.interface.shouldStartFromBeginning,
+  );
+  const setShouldStartFromBeginning = usePlayerStore(
+    (state) => state.setShouldStartFromBeginning,
+  );
   const [addonError, setAddonError] = React.useState<string | null>(null);
   const [startingAddonId, setStartingAddonId] = React.useState<string | null>(
     null,
@@ -358,7 +364,11 @@ export function SourceSelectPart(props: {
 
       try {
         if (stream.kind === "torrent") {
-          const startAt = getSavedProgressTime(progressItems, meta);
+          const wasStartFromBeginning = shouldStartFromBeginning;
+          const startAt = wasStartFromBeginning
+            ? 0
+            : getSavedProgressTime(progressItems, meta);
+          if (wasStartFromBeginning) setShouldStartFromBeginning(false);
           const session = await startTorrent({
             sourceId: stream.id,
             url: stream.url,
@@ -369,7 +379,11 @@ export function SourceSelectPart(props: {
           });
           registerTorrentSession(session.sessionId);
           const duration = session.duration ?? undefined;
-          const playbackStartAt = session.startAt ?? startAt;
+          // When user explicitly chose "watch from beginning", ignore session.startAt
+          // (sidecar may return a cached previous position and override our intent).
+          const playbackStartAt = wasStartFromBeginning
+            ? 0
+            : (session.startAt ?? startAt);
           const mediaSource: SourceSliceSource = {
             id: stream.id,
             type: "file",
