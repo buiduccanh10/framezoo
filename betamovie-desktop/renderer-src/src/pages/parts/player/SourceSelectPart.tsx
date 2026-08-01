@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -219,6 +219,10 @@ export function SourceSelectPart(props: {
   const progressItems = useProgressStore((state) => state.items);
   const { playMedia } = usePlayer();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
+  const preferredStream = usePlayerStore((state) => state.preferredStream);
+  const setPreferredStream = usePlayerStore(
+    (state) => state.setPreferredStream,
+  );
   const [addonError, setAddonError] = React.useState<string | null>(null);
   const [startingAddonId, setStartingAddonId] = React.useState<string | null>(
     null,
@@ -227,6 +231,11 @@ export function SourceSelectPart(props: {
     null,
   );
   const isInitialSelection = mode === "initial";
+
+  const hasAttemptedAutoSelect = useRef(false);
+  useEffect(() => {
+    hasAttemptedAutoSelect.current = false;
+  }, [meta.tmdbId, meta.season?.tmdbId, meta.episode?.tmdbId]);
 
   const qualityOptions: OptionItem[] = useMemo(
     () => [
@@ -313,6 +322,12 @@ export function SourceSelectPart(props: {
     [addons, selectedAddonId],
   );
 
+  const currentAddonId = useMemo(() => {
+    if (!currentSourceId) return null;
+    const stream = addonStreams.find((s) => s.id === currentSourceId);
+    return stream?.addonId ?? null;
+  }, [currentSourceId, addonStreams]);
+
   useEffect(() => {
     setSelectedAddonId(null);
     setAddonError(null);
@@ -324,11 +339,22 @@ export function SourceSelectPart(props: {
   }, [selectedAddonId, onStateChange]);
 
   const selectAddonStream = useCallback(
-    async (stream: AddonStream) => {
+    async (stream: AddonStream, isAutoPlay = false) => {
       setStartingAddonId(stream.id);
       onLoadingChange?.(true);
       setAddonError(null);
       const previousTorrentSessionId = getActiveTorrentSessionId();
+
+      if (!isAutoPlay && meta.type === "show") {
+        setPreferredStream({
+          seriesId: meta.tmdbId,
+          addonId: stream.addonId,
+          quality: getStreamQuality(stream),
+          name: stream.name || "",
+          title: stream.title || "",
+          bingeGroup: stream.bingeGroup,
+        });
+      }
 
       try {
         if (stream.kind === "torrent") {
@@ -394,13 +420,123 @@ export function SourceSelectPart(props: {
         setStartingAddonId(null);
       }
     },
-    [meta, onLoadingChange, onSelected, playMedia, progressItems],
+    [
+      meta,
+      onLoadingChange,
+      onSelected,
+      playMedia,
+      progressItems,
+      setPreferredStream,
+    ],
   );
 
   const enabledAddons = useMemo(
     () => addons.filter((addon) => addon.enabled),
     [addons],
   );
+
+  useEffect(() => {
+    if (
+      hasAttemptedAutoSelect.current ||
+      mode !== "initial" ||
+      !preferredStream ||
+      preferredStream.seriesId !== meta.tmdbId
+    ) {
+      return;
+    }
+
+    if (!selectedAddonId && preferredStream.addonId) {
+      const isAddonEnabled = enabledAddons.some(
+        (a) => a.manifest.id === preferredStream.addonId,
+      );
+      if (isAddonEnabled) {
+        setSelectedAddonId(preferredStream.addonId);
+        const matchingQuality = qualityOptions.find(
+          (q) => q.id === preferredStream.quality,
+        );
+        if (matchingQuality) {
+          setSelectedQuality(matchingQuality);
+        }
+      }
+    }
+
+    const matchingStream = addonStreams.find((s) => {
+      if (s.addonId !== preferredStream.addonId) return false;
+
+      if (getStreamQuality(s) !== preferredStream.quality) return false;
+
+      const sName = s.name || "";
+      const pName = preferredStream.name || "";
+
+      let isHeuristicMatch = false;
+      if (sName === pName) {
+        const sTitleLines = (s.title || "")
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean);
+        const pTitleLines = (preferredStream.title || "")
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean);
+
+        if (sTitleLines.length > 0 && pTitleLines.length > 0) {
+          const sLastLine = sTitleLines[sTitleLines.length - 1];
+          const pLastLine = pTitleLines[pTitleLines.length - 1];
+
+          const extractWords = (str: string): string[] =>
+            str.toLowerCase().match(/[a-z]{4,}/g) || [];
+          const sWords = extractWords(sLastLine);
+          const pWords = extractWords(pLastLine);
+
+          const hasCommonWord = sWords.some((w) => pWords.includes(w));
+          if (hasCommonWord || sLastLine === pLastLine) {
+            isHeuristicMatch = true;
+          }
+        } else if (s.title === preferredStream.title) {
+          isHeuristicMatch = true;
+        }
+      }
+
+      if (isHeuristicMatch) return true;
+
+      if (
+        s.bingeGroup &&
+        preferredStream.bingeGroup &&
+        s.bingeGroup === preferredStream.bingeGroup
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (matchingStream && !startingAddonId) {
+      hasAttemptedAutoSelect.current = true;
+      void selectAddonStream(matchingStream, true);
+      return;
+    }
+
+    const preferredAddonIndex = eligibleAddons.findIndex(
+      (a) => a.manifest.id === preferredStream.addonId,
+    );
+    const preferredQuery =
+      preferredAddonIndex >= 0 ? addonStreamQueries[preferredAddonIndex] : null;
+    if (preferredQuery && !preferredQuery.isLoading) {
+      hasAttemptedAutoSelect.current = true;
+    }
+  }, [
+    addonStreams,
+    addonStreamQueries,
+    preferredStream,
+    meta,
+    mode,
+    selectedAddonId,
+    enabledAddons,
+    qualityOptions,
+    selectAddonStream,
+    startingAddonId,
+    eligibleAddons,
+  ]);
   const filteredAddonStreams = useMemo(() => {
     if (selectedQuality.id === "all") return addonStreams;
     return addonStreams.filter(
@@ -511,14 +647,24 @@ export function SourceSelectPart(props: {
                   (error) => error.addonId === addon.manifest.id,
                 );
 
+                const isSelected = currentAddonId === addon.manifest.id;
+
                 return (
                   <SelectableLink
                     key={addon.manifest.id}
                     rightSide={
-                      <Icon
-                        className="ml-2 text-xl"
-                        icon={Icons.CHEVRON_RIGHT}
-                      />
+                      <div className="flex items-center gap-2">
+                        {isSelected ? (
+                          <Icon
+                            icon={Icons.CIRCLE_CHECK}
+                            className="text-xl text-video-context-type-accent"
+                          />
+                        ) : null}
+                        <Icon
+                          className="ml-2 text-xl"
+                          icon={Icons.CHEVRON_RIGHT}
+                        />
+                      </div>
                     }
                     onClick={() => setSelectedAddonId(addon.manifest.id)}
                   >

@@ -93,4 +93,5 @@ export interface AddonStream {
   videoSize: number | null;
   subtitles: StremioSubtitle[];
   headers?: Record<string, string>;
+  bingeGroup?: string;
 }
