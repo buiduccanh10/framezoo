@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@/components/buttons/Button";
+import { ButtonPlain } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { Modal } from "@/components/overlays/Modal";
 import { DisplayError } from "@/components/player/display/displayInterface";
@@ -51,7 +51,7 @@ export function ErrorCard(props: {
       <div className="border-errors-border flex items-center justify-between border-b pb-2">
         <span className="font-medium text-white">{t("errors.details")}</span>
         <div className="flex items-center justify-center gap-3">
-          <Button
+          <ButtonPlain
             theme="secondary"
             padding="p-2 h-10 min-w-[40px] md:px-4"
             onClick={() => copyError()}
@@ -71,14 +71,14 @@ export function ErrorCard(props: {
                 </span>
               </>
             )}
-          </Button>
-          <Button
+          </ButtonPlain>
+          <ButtonPlain
             theme="secondary"
             padding="p-2 md:px-2"
             onClick={props.onClose}
           >
             <Icon icon={Icons.X} className="text-2xl" />
-          </Button>
+          </ButtonPlain>
         </div>
       </div>
       <div className="pointer-events-auto mt-4 h-60 select-text overflow-y-auto whitespace-pre text-left">

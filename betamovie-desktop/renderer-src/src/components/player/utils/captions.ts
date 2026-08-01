@@ -126,7 +126,7 @@ export function makeQueId(index: number, start: number, end: number): string {
 export function normalizeSubtitleToVtt(text: string, format?: string): string {
   const textTrimmed = text.replace(/^\uFEFF/, "").trim();
   if (textTrimmed === "") {
-    throw new Error("Given text is empty");
+    return "WEBVTT\n\n";
   }
   const formatHint = format?.trim().toLowerCase().replace(/^\./, "");
   const vtt =
