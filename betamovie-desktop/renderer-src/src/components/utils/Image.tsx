@@ -18,6 +18,7 @@ export function LazyImage({
   showSkeleton = true,
   loading = "lazy",
   decoding = "async",
+  referrerPolicy = "no-referrer",
   onLoad,
   onError,
   style,
@@ -86,6 +87,7 @@ export function LazyImage({
           alt={alt || ""}
           loading={loading}
           decoding={decoding}
+          referrerPolicy={referrerPolicy}
           onLoad={handleLoad}
           onError={handleError}
           className={classNames("block", className)}
