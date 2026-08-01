@@ -21,7 +21,18 @@ except ImportError:  # pragma: no cover - exercised only by broken image builds
     get_model_for_language = None
 
 
-app = FastAPI(title="Betamovie Moonshine alignment service", version="1")
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    if Transcriber is not None and get_model_for_language is not None:
+        if not os.getenv("MOONSHINE_MODEL_ARCH"):
+            os.environ["MOONSHINE_MODEL_ARCH"] = "tiny"
+        get_transcriber("en")
+        get_transcriber("ko")
+    yield
+
+app = FastAPI(title="Betamovie Moonshine alignment service", version="1", lifespan=lifespan)
 
 TIMING_RE = re.compile(
     r"^\s*((?:\d+:)?\d{1,2}:\d{2}(?:[.,]\d{3})?)\s+-->\s+"
