@@ -43,6 +43,9 @@ type PlayerRecord = {
 
 const DEFAULT_NATIVE_EVENT_TIMEOUT_MS = 120_000;
 const FILE_NATIVE_EVENT_TIMEOUT_MS = 45_000;
+// Torrent streams must buffer pieces before the first bytes arrive.
+// Give them much more time before treating the load as failed.
+const TORRENT_NATIVE_EVENT_TIMEOUT_MS = 600_000; // 10 minutes
 
 function isSupportedDesktopPlatform(): boolean {
   return process.platform === "darwin" || process.platform === "win32";
@@ -334,8 +337,9 @@ export class LibMpvController {
         startAt: Math.max(0, Number(request.startAt) || 0),
       });
 
-      const timeoutMs =
-        request.type === "file"
+      const timeoutMs = request.isTorrent
+        ? TORRENT_NATIVE_EVENT_TIMEOUT_MS
+        : request.type === "file"
           ? FILE_NATIVE_EVENT_TIMEOUT_MS
           : DEFAULT_NATIVE_EVENT_TIMEOUT_MS;
       const timeout = setTimeout(() => {

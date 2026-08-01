@@ -98,6 +98,8 @@ export interface LibMpvSourceRequest {
   startAt: number;
   autoplay: boolean;
   headers?: Record<string, string>;
+  /** Set to true for torrent HTTP streams that may buffer before sending data. */
+  isTorrent?: boolean;
 }
 
 export interface LibMpvAudioRequest {
