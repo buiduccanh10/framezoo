@@ -64,10 +64,12 @@ function addonCaptions(stream: AddonStream) {
 }
 
 function addonDirectSource(stream: AddonStream): SourceSliceSource {
+  const quality = getTorrentQuality(stream);
   if (stream.kind === "hls") {
     return {
       id: stream.id,
       type: "hls",
+      quality,
       url: stream.url,
       headers: stream.headers,
     };
@@ -76,6 +78,7 @@ function addonDirectSource(stream: AddonStream): SourceSliceSource {
     return {
       id: stream.id,
       type: "dash",
+      quality,
       url: stream.url,
       headers: stream.headers,
     };
@@ -83,12 +86,13 @@ function addonDirectSource(stream: AddonStream): SourceSliceSource {
   return {
     id: stream.id,
     type: "file",
+    quality,
     qualities: {
-      unknown: {
+      [quality]: {
         type: "mp4",
         url: stream.url,
       },
-    },
+    } as Record<SourceQuality, { type: "mp4"; url: string }>,
     headers: stream.headers,
   };
 }
@@ -406,19 +410,16 @@ export function SourceSelectPart(props: {
   const selectedAddonStreams = useMemo(() => {
     if (!selectedAddonId) return [];
     return filteredAddonStreams.filter(
-      (stream) =>
-        stream.addonId === selectedAddonId &&
-        (!isInitialSelection || stream.kind === "torrent"),
+      (stream) => stream.addonId === selectedAddonId,
     );
-  }, [filteredAddonStreams, isInitialSelection, selectedAddonId]);
+  }, [filteredAddonStreams, selectedAddonId]);
   const streamCountByAddon = useMemo(() => {
     const counts = new Map<string, number>();
     for (const stream of filteredAddonStreams) {
-      if (isInitialSelection && stream.kind !== "torrent") continue;
       counts.set(stream.addonId, (counts.get(stream.addonId) ?? 0) + 1);
     }
     return counts;
-  }, [filteredAddonStreams, isInitialSelection]);
+  }, [filteredAddonStreams]);
   const selectedAddonError = useMemo(
     () =>
       addonLoadErrors.find((error) => error.addonId === selectedAddonId) ??
@@ -576,7 +577,7 @@ export function SourceSelectPart(props: {
               {isInitialSelection
                 ? t(
                     "addons.player.noTorrentStreams",
-                    "No torrent streams returned for this addon.",
+                    "No streams returned for this addon.",
                   )
                 : t(
                     "addons.player.noAddonStreams",
