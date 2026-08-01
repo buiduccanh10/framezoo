@@ -175,6 +175,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let desktopPipClosedUnsubscribe: (() => void) | null = null;
   let desktopPipActionUnsubscribe: (() => void) | null = null;
   let unbindFullscreen: (() => void) | null = null;
+  // Tracks whether the current generation's file has fully loaded.
+  // Used to drop stale `pause: true` events emitted during old-file teardown.
+  let fileLoaded = false;
 
   function enqueueNativeOperation<T>(
     operation: () => Promise<T> | T,
@@ -470,8 +473,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "file-loaded") {
-      if (!desiredPaused && !paused) {
-        emit("play", undefined);
+      fileLoaded = true;
+      if (!desiredPaused) {
+        if (paused) {
+          thisDisplay.play();
+        } else {
+          emit("play", undefined);
+        }
       }
       return;
     }
@@ -491,7 +499,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     if (event.type === "end-file") {
       paused = true;
-      emit("pause", undefined);
+      fileLoaded = false;
       emit("loading", false);
       return;
     }
@@ -525,6 +533,15 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           paused = event.data;
           emit(paused ? "pause" : "play", undefined);
           syncPipState(true);
+
+          // If mpv reports pause=true but we want to play:
+          // - If file hasn't loaded yet for this generation, the pause event is
+          //   a leftover from old-file teardown — ignore it (don't force play
+          //   because playerId may not be ready yet).
+          // - If file is already loaded, force play immediately.
+          if (paused && !desiredPaused && fileLoaded) {
+            thisDisplay.play();
+          }
         }
         break;
       case "volume":
@@ -716,6 +733,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
       const requestGeneration = generation + 1;
       generation = requestGeneration;
+      fileLoaded = false; // reset for new load
       const requestedSource = ops.source;
       const headers = sourceHeaders(requestedSource);
       const loadRequest: LibMpvSourceRequest = {

@@ -457,6 +457,15 @@ export function KeyboardEvents() {
         // Prevent the default spacebar behavior
         evt.preventDefault();
 
+        // Do not allow pause if video is still loading (but allow play if paused)
+        if (
+          !dataRef.current.mediaPlaying.isPaused &&
+          (dataRef.current.mediaPlaying.isLoading ||
+            !dataRef.current.mediaPlaying.hasRenderedFrame)
+        ) {
+          return;
+        }
+
         // If already paused, play the video and return
         if (dataRef.current.mediaPlaying.isPaused) {
           dataRef.current.display?.play();
@@ -522,6 +531,14 @@ export function KeyboardEvents() {
 
         // Prevent the default spacebar behavior
         evt.preventDefault();
+
+        if (
+          !dataRef.current.mediaPlaying.isPaused &&
+          (dataRef.current.mediaPlaying.isLoading ||
+            !dataRef.current.mediaPlaying.hasRenderedFrame)
+        ) {
+          return;
+        }
 
         // Simple play/pause toggle
         const action = dataRef.current.mediaPlaying.isPaused ? "play" : "pause";
@@ -680,6 +697,14 @@ export function KeyboardEvents() {
         if (
           evt.target &&
           (evt.target as HTMLInputElement).nodeName === "BUTTON"
+        ) {
+          return;
+        }
+
+        if (
+          !dataRef.current.mediaPlaying.isPaused &&
+          (dataRef.current.mediaPlaying.isLoading ||
+            !dataRef.current.mediaPlaying.hasRenderedFrame)
         ) {
           return;
         }

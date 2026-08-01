@@ -98,6 +98,15 @@ export interface TranslateTask {
   cancel: () => void;
 }
 
+export interface PreferredStream {
+  seriesId: string;
+  addonId: string;
+  quality: string;
+  name: string;
+  title: string;
+  bingeGroup?: string;
+}
+
 export interface SourceSlice {
   status: PlayerStatus;
   source: SourceSliceSource | null;
@@ -126,6 +135,8 @@ export interface SourceSlice {
     translateTask: TranslateTask | null;
   };
   meta: PlayerMeta | null;
+  preferredStream: PreferredStream | null;
+  setPreferredStream(stream: PreferredStream | null): void;
   setStatus(status: PlayerStatus): void;
   setSource(
     stream: SourceSliceSource,
@@ -299,6 +310,12 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   currentQuality: null,
   segmentQualityDebug: null,
   currentAudioTrack: null,
+  preferredStream: null,
+  setPreferredStream(stream) {
+    set((s) => {
+      s.preferredStream = stream;
+    });
+  },
   status: playerStatus.IDLE,
   meta: null,
   caption: {
@@ -460,6 +477,8 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         : null;
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
+      s.mediaPlaying.isPaused = !isAutoplayAllowed();
+      s.mediaPlaying.isPlaying = isAutoplayAllowed();
       s.audioTracks = [];
       s.embeddedSubtitleTracksLoaded = false;
       s.currentAudioTrack = null;
@@ -553,8 +572,8 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.currentAudioTrack = null;
       s.status = playerStatus.IDLE;
       s.meta = null;
-      s.mediaPlaying.isPlaying = false;
-      s.mediaPlaying.isPaused = true;
+      s.mediaPlaying.isPlaying = isAutoplayAllowed();
+      s.mediaPlaying.isPaused = !isAutoplayAllowed();
       s.mediaPlaying.isLoading = false;
       s.mediaPlaying.hasPlayedOnce = false;
       s.mediaPlaying.hasRenderedFrame = false;

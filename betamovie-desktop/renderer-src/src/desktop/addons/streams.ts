@@ -109,8 +109,9 @@ export function normalizeAddonStreams(
           : null,
         fileName: stream.behaviorHints?.filename ?? null,
         videoSize: stream.behaviorHints?.videoSize ?? null,
-        subtitles: Array.isArray(stream.subtitles) ? stream.subtitles : [],
-        headers: stream.behaviorHints?.proxyHeaders?.request,
+        subtitles: stream.subtitles ?? [],
+        headers: stream.behaviorHints?.proxyHeaders?.request ?? undefined,
+        bingeGroup: stream.behaviorHints?.bingeGroup,
       },
     ];
   });
