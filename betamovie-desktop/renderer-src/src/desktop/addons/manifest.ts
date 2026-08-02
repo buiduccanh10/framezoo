@@ -26,10 +26,6 @@ export function normalizeManifest(
     throw new Error("Addon manifest requires id, version, and name");
   }
 
-  if (!hasStreamResource(manifest.resources)) {
-    throw new Error("Addon manifest does not expose a stream resource");
-  }
-
   return {
     manifestUrl: url,
     baseUrl: new URL(".", url).toString(),
@@ -71,4 +67,28 @@ export function supportsType(addon: InstalledAddon, type: "movie" | "series") {
   }
 
   return true;
+}
+
+/**
+ * Returns true if the addon manifest declares the given resource capability.
+ * Works for any resource name: "catalog", "meta", "stream", "subtitles".
+ */
+export function hasResource(addon: InstalledAddon, resource: string): boolean {
+  return (
+    Array.isArray(addon.manifest.resources) &&
+    addon.manifest.resources.some((r) =>
+      typeof r === "string" ? r === resource : r?.name === resource,
+    )
+  );
+}
+
+/**
+ * Returns the normalized list of resource names declared in the manifest.
+ * Useful for displaying capability badges in the UI.
+ */
+export function getAddonResources(addon: InstalledAddon): string[] {
+  if (!Array.isArray(addon.manifest.resources)) return [];
+  return addon.manifest.resources
+    .map((r) => (typeof r === "string" ? r : (r?.name ?? "")))
+    .filter(Boolean);
 }

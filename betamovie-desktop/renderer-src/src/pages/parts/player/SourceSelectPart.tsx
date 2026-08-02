@@ -12,7 +12,7 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { LazyImage } from "@/components/utils/Image";
 import { loadAddonStreams } from "@/desktop/addons/client";
-import { supportsType } from "@/desktop/addons/manifest";
+import { hasResource, supportsType } from "@/desktop/addons/manifest";
 import { useInstalledAddons } from "@/desktop/addons/store";
 import {
   ADDON_STREAMS_GC_TIME_MS,
@@ -272,7 +272,10 @@ export function SourceSelectPart(props: {
   const eligibleAddons = useMemo(
     () =>
       addons.filter(
-        (addon) => addon.enabled && supportsType(addon, addonMedia.type),
+        (addon) =>
+          addon.enabled &&
+          hasResource(addon, "stream") &&
+          supportsType(addon, addonMedia.type),
       ),
     [addons, addonMedia.type],
   );
@@ -615,7 +618,7 @@ export function SourceSelectPart(props: {
       )}
       <>
         {showAddonList ? (
-          enabledAddons.length === 0 ? (
+          eligibleAddons.length === 0 ? (
             <Menu.Section>
               <Menu.TextDisplay
                 noIcon
@@ -653,7 +656,7 @@ export function SourceSelectPart(props: {
             </Menu.Section>
           ) : (
             <Menu.Section>
-              {enabledAddons.map((addon) => {
+              {eligibleAddons.map((addon) => {
                 const streamCount =
                   streamCountByAddon.get(addon.manifest.id) ?? 0;
                 const loading = loadingAddonIds.has(addon.manifest.id);

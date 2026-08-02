@@ -276,9 +276,6 @@ importers:
       react-router-dom:
         specifier: ^6.30.3
         version: 6.30.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react-sticky-el:
-        specifier: ^2.1.1
-        version: 2.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-use:
         specifier: ^17.6.1
         version: 17.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -5596,12 +5593,6 @@ packages:
     resolution: {integrity: sha512-H3ar+SOWP920EbVg7qWfP3fZjZiwhlEJAEJQqjt+w8oKijCwFgr0+R4941PIHscOXRNRvEOjvWilitImC0DdBg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
-  react-sticky-el@2.1.1:
-    resolution: {integrity: sha512-likcCH5HN86qQGdOMbvMMJQXJQzelvxuGovFglnBlu8qqgPaee90hO4sws9oSwnsnRPows6Ry7RAd+tazVCS+w==}
-    peerDependencies:
-      react: '>=16.3.0'
-      react-dom: '>=16.3.0'
 
   react-universal-interface@0.6.2:
     resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
@@ -12702,11 +12693,6 @@ snapshots:
       '@swc/helpers': 0.5.23
       react: 18.3.1
       use-sync-external-store: 1.6.0(react@18.3.1)
-
-  react-sticky-el@2.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   react-universal-interface@0.6.2(react@18.3.1)(tslib@2.8.1):
     dependencies:

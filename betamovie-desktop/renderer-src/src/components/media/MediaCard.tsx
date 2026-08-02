@@ -76,6 +76,8 @@ export interface MediaCardProps {
 }
 
 function checkReleased(media: MediaItem): boolean {
+  if (!media.year && !media.release_date) return true;
+
   const isReleasedYear = Boolean(
     media.year && media.year <= new Date().getFullYear(),
   );
@@ -353,8 +355,8 @@ export function MediaCard(props: MediaCardProps) {
 
   if (!canLink) {
     return (
-      <span
-        className="relative"
+      <div
+        className="relative block h-full w-full"
         onClick={(e) => {
           if (e.defaultPrevented) {
             e.preventDefault();
@@ -363,7 +365,7 @@ export function MediaCard(props: MediaCardProps) {
         onContextMenu={handleCardContextMenu}
       >
         {content}
-      </span>
+      </div>
     );
   }
 
