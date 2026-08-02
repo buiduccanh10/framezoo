@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Sticky from "react-sticky-el";
+import { useIntersection } from "react-use";
 
 import { SearchBarInput } from "@/components/form/SearchBar";
 import { ThinContainer } from "@/components/layout/ThinContainer";
@@ -80,6 +80,21 @@ export function HeroPart({
     }
   }, [location.pathname]);
 
+  const observerRef = useRef<HTMLDivElement>(null);
+  const intersection = useIntersection(observerRef, {
+    root: null,
+    rootMargin: `-${Math.max(0, topOffset - 1)}px 0px 0px 0px`,
+    threshold: 1,
+  });
+
+  const isSticky = intersection
+    ? !intersection.isIntersecting || intersection.intersectionRatio < 1
+    : false;
+
+  useEffect(() => {
+    stickStateChanged(isSticky);
+  }, [isSticky, stickStateChanged]);
+
   return (
     <ThinContainer>
       <div
@@ -95,13 +110,16 @@ export function HeroPart({
         ) : null}
 
         <div className="relative h-20 z-30">
-          <Sticky
-            topOffset={-topOffset}
-            stickyStyle={{
+          <div
+            ref={observerRef}
+            className="absolute inset-x-0 -top-[1px] h-[1px]"
+          />
+          <div
+            className="sticky"
+            style={{
+              top: `${topOffset}px`,
               paddingTop: `${topOffset}px`,
             }}
-            onFixedToggle={stickStateChanged}
-            scrollElement="window"
           >
             <SearchBarInput
               ref={inputRef}
@@ -112,7 +130,7 @@ export function HeroPart({
               isSticky={showBg}
               isInFeatured={isInFeatured}
             />
-          </Sticky>
+          </div>
         </div>
       </div>
     </ThinContainer>

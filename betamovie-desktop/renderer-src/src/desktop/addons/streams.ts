@@ -1,4 +1,4 @@
-import { supportsType } from "./manifest";
+import { hasResource, supportsType } from "./manifest";
 import type {
   AddonStream,
   AddonStreamLoadError,
@@ -139,6 +139,7 @@ export async function loadAllAddonStreamsDetailed(
 ): Promise<AddonStreamLoadResult> {
   const eligibleAddons = addons
     .filter((addon) => addon.enabled)
+    .filter((addon) => hasResource(addon, "stream"))
     .filter((addon) => supportsType(addon, media.type));
 
   console.debug("[desktop-addon] eligible addons", {

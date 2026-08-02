@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Icon, Icons } from "@/components/Icon";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { Heading1 } from "@/components/utils/Text";
+import { getAddonResources } from "@/desktop/addons/manifest";
 import {
   installAddon,
   removeAddon,
@@ -65,7 +66,7 @@ export function AddonsPage() {
           <p className="mb-4 text-sm leading-relaxed text-dropdown-text">
             {t(
               "addons.page.description",
-              "Addons are optional. This app does not bundle, recommend, or host any addon.",
+              "Install community addons to extend Betamovie with additional streams, catalogs, and subtitles. Addons are optional — this app does not bundle, recommend, or host any addon.",
             )}
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -153,6 +154,28 @@ export function AddonsPage() {
                         v{addon.manifest.version}
                       </span>
                     ) : null}
+                  </div>
+                  {/* Resource capability badges */}
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {getAddonResources(addon).map((resource) => {
+                      const badgeColors: Record<string, string> = {
+                        stream: "bg-purple-500/20 text-purple-300",
+                        catalog: "bg-blue-500/20 text-blue-300",
+                        meta: "bg-yellow-500/20 text-yellow-300",
+                        subtitles: "bg-green-500/20 text-green-300",
+                      };
+                      const color =
+                        badgeColors[resource] ??
+                        "bg-dropdown-altBackground text-dropdown-text";
+                      return (
+                        <span
+                          key={resource}
+                          className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider ${color}`}
+                        >
+                          {resource}
+                        </span>
+                      );
+                    })}
                   </div>
                   <p className="mt-0.5 truncate text-dropdown-text text-xs">
                     {addon.manifestUrl}
