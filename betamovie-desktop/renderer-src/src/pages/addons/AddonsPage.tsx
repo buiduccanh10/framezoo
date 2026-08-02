@@ -1,14 +1,13 @@
 import classNames from "classnames";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { Icon, Icons } from "@/components/Icon";
+import { AddonManager } from "@/components/layout/AddonManager";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { Heading1 } from "@/components/utils/Text";
 import { getAddonResources } from "@/desktop/addons/manifest";
 import {
-  installAddon,
   removeAddon,
   setAddonEnabled,
   useInstalledAddons,
@@ -19,91 +18,39 @@ export function AddonsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const addons = useInstalledAddons();
-  const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleAdd = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await installAddon(url);
-      setUrl("");
-    } catch (reason) {
-      setError(
-        reason instanceof Error
-          ? reason.message
-          : t("addons.page.installError", "Unable to install this addon."),
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <SubPageLayout>
       <WideContainer>
         <div className="flex items-center justify-between gap-8">
-          <Heading1 className="text-2xl font-bold text-white">
+          <Heading1 className="text-4xl font-bold text-white">
             {t("addons.page.title", "Addons Manager")}
           </Heading1>
+          <AddonManager>
+            {(open) => (
+              <button
+                type="button"
+                onClick={open}
+                className="flex items-center gap-2 rounded-xl bg-buttons-purple px-5 py-2.5 font-semibold text-sm text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-buttons-purpleHover active:scale-95"
+              >
+                <Icon icon={Icons.PLUS} className="text-base" />
+                <span>{t("addons.page.addAddonButton", "Add Addon")}</span>
+              </button>
+            )}
+          </AddonManager>
         </div>
 
-        <div className="flex items-center gap-4 pb-8">
+        <div className="flex items-center gap-4 pb-8 mt-6">
           <button
             type="button"
             onClick={() => navigate("/")}
-            className="flex items-center text-white transition-colors hover:text-gray-300"
+            className="flex items-center font-medium text-white transition-colors hover:text-gray-300"
           >
             <Icon icon={Icons.ARROW_LEFT} className="text-xl" />
             <span className="ml-2">
               {t("discover.page.back", "Back to home")}
             </span>
           </button>
-        </div>
-
-        <div className="mb-8 rounded-2xl border border-dropdown-border bg-dropdown-contentBackground/40 p-6 shadow-xl backdrop-blur-md">
-          <p className="mb-4 text-sm leading-relaxed text-dropdown-text">
-            {t(
-              "addons.page.description",
-              "Install community addons to extend Betamovie with additional streams, catalogs, and subtitles. Addons are optional — this app does not bundle, recommend, or host any addon.",
-            )}
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              value={url}
-              onChange={(event) => {
-                setUrl(event.target.value);
-                setError(null);
-              }}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && url.trim()) void handleAdd();
-              }}
-              placeholder="https://addon.example.com/manifest.json"
-              className="min-w-0 flex-1 rounded-xl border border-dropdown-border bg-dropdown-contentBackground px-4 py-3 text-sm text-white placeholder-dropdown-text/60 outline-none transition-colors focus:border-type-link"
-              disabled={loading}
-            />
-            <button
-              type="button"
-              className={classNames(
-                "flex w-full items-center justify-center gap-2 rounded-xl bg-buttons-purple px-6 py-3 font-semibold text-sm text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-buttons-purpleHover active:scale-95 sm:w-auto",
-                (!url.trim() || loading) &&
-                  "!cursor-not-allowed !scale-100 opacity-60 hover:bg-buttons-purple",
-              )}
-              onClick={() => void handleAdd()}
-              disabled={!url.trim() || loading}
-            >
-              <Icon icon={Icons.PLUS} className="text-base" />
-              <span>
-                {loading
-                  ? t("addons.page.processing", "Processing...")
-                  : t("addons.page.addAddonButton", "Add Addon")}
-              </span>
-            </button>
-          </div>
-          {error ? (
-            <p className="mt-2 font-medium text-red-400 text-sm">{error}</p>
-          ) : null}
         </div>
 
         {/* Installed Addons List */}
@@ -150,10 +97,13 @@ export function AddonsPage() {
                       {addon.manifest.name}
                     </p>
                     {addon.manifest.version ? (
-                      <span className="rounded bg-dropdown-altBackground px-2 py-0.5 text-dropdown-text text-xs">
+                      <span className="shrink-0 rounded bg-dropdown-altBackground px-2 py-0.5 text-dropdown-text text-xs">
                         v{addon.manifest.version}
                       </span>
                     ) : null}
+                    <p className="min-w-0 flex-1 truncate text-[11px] text-dropdown-text opacity-60 ml-1">
+                      {addon.manifestUrl}
+                    </p>
                   </div>
                   {/* Resource capability badges */}
                   <div className="mt-1 flex flex-wrap gap-1">
@@ -177,9 +127,11 @@ export function AddonsPage() {
                       );
                     })}
                   </div>
-                  <p className="mt-0.5 truncate text-dropdown-text text-xs">
-                    {addon.manifestUrl}
-                  </p>
+                  {addon.manifest.description ? (
+                    <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-dropdown-text opacity-90">
+                      {addon.manifest.description}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="flex items-center gap-2">
                   {addon.manifest.behaviorHints?.configurable ? (

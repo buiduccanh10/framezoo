@@ -13,8 +13,8 @@
       "ariaManage": "Quản lý Addons",
       "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
       "manageListButton": "Quản lý danh sách Addons",
-      "subtitle": "Không bắt buộc. Thêm URL tệp kê khai mà bạn chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ các tiện ích bổ sung.",
-      "title": "Tiện ích dành cho máy tính để bàn"
+      "subtitle": "Chúng tôi không khuyến khích thêm bất kỳ tiện ích bổ sung không chính thức hoặc bất hợp pháp nào.",
+      "title": "Thêm Addons"
     },
     "page": {
       "addAddonButton": "Thêm Addon",
