@@ -12,6 +12,7 @@ import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { useProgressStore } from "@/stores/progress";
 import { MediaItem } from "@/utils/mediaTypes";
 
+import { AddonCatalogRow } from "./components/AddonCatalogRow";
 import { DiscoverNavigation } from "./components/DiscoverNavigation";
 import type { FeaturedMedia } from "./components/FeaturedCarousel";
 import { LazyMediaCarousel } from "./components/LazyMediaCarousel";
@@ -241,6 +242,16 @@ export function DiscoverContent({
     //   />,
     // );
 
+    // Addon catalogs — appended last so native content always comes first
+    carousels.push(
+      <AddonCatalogRow
+        key="addon-catalog-movie"
+        type="movie"
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />,
+    );
+
     return carousels;
   };
 
@@ -370,6 +381,16 @@ export function DiscoverContent({
         showGenres
         moreContent
         {...filtersProps}
+      />,
+    );
+
+    // Addon catalogs for TV Shows
+    carousels.push(
+      <AddonCatalogRow
+        key="addon-catalog-series"
+        type="series"
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
       />,
     );
 

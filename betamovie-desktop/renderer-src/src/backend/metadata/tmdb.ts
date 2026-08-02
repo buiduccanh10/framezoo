@@ -725,6 +725,22 @@ export async function getMovieFromExternalId(
   return movie.id.toString();
 }
 
+export async function getMediaFromExternalId(
+  imdbId: string,
+): Promise<{ id: string; type: "movie" | "show" } | undefined> {
+  const data = await get<ExternalIdMovieSearchResult>(`/find/${imdbId}`, {
+    external_source: "imdb_id",
+  });
+
+  if (data.movie_results && data.movie_results[0]) {
+    return { id: data.movie_results[0].id.toString(), type: "movie" };
+  }
+  if (data.tv_results && data.tv_results[0]) {
+    return { id: data.tv_results[0].id.toString(), type: "show" };
+  }
+  return undefined;
+}
+
 export function formatTMDBSearchResult(
   result: TMDBMovieSearchResult | TMDBShowSearchResult,
   mediatype: TMDBContentTypes,
