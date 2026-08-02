@@ -1,20 +1,45 @@
 import classNames from "classnames";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { Icon, Icons } from "@/components/Icon";
+import { loadAddonManifest } from "@/desktop/addons/client";
 import { installAddon } from "@/desktop/addons/store";
+import type { StremioManifest } from "@/desktop/addons/types";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 
-export function AddonManager() {
+export function AddonManager({
+  children,
+}: {
+  children?: (open: () => void) => React.ReactNode;
+} = {}) {
   const { t } = useTranslation();
   const isDesktop = useIsDesktopApp();
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [preview, setPreview] = useState<StremioManifest | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+
+  useEffect(() => {
+    if (!url.trim()) {
+      setPreview(null);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setPreviewLoading(true);
+      setPreview(null);
+      loadAddonManifest(url)
+        .then((addon) => setPreview(addon.manifest))
+        .catch(() => setPreview(null))
+        .finally(() => setPreviewLoading(false));
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [url]);
 
   if (!isDesktop) return null;
 
@@ -35,19 +60,25 @@ export function AddonManager() {
     }
   };
 
+  const isAddonsPage = location.pathname === "/addons";
+
   return (
     <>
-      <button
-        type="button"
-        className="pointer-events-auto shrink-0 rounded-full text-lg text-white tabbable backdrop-blur-lg"
-        onClick={() => setOpen(true)}
-        aria-label={t("addons.manager.ariaManage", "Manage addons")}
-        title={t("addons.manager.ariaManage", "Manage addons")}
-      >
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-pill-background bg-opacity-50 transition-colors hover:bg-pill-backgroundHover">
-          <Icon icon={Icons.EXTENSION} />
-        </span>
-      </button>
+      {children ? (
+        children(() => setOpen(true))
+      ) : (
+        <button
+          type="button"
+          className="pointer-events-auto shrink-0 rounded-full text-lg text-white tabbable backdrop-blur-lg"
+          onClick={() => setOpen(true)}
+          aria-label={t("addons.manager.ariaManage", "Manage addons")}
+          title={t("addons.manager.ariaManage", "Manage addons")}
+        >
+          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-pill-background bg-opacity-50 transition-colors hover:bg-pill-backgroundHover">
+            <Icon icon={Icons.EXTENSION} />
+          </span>
+        </button>
+      )}
 
       {open ? (
         <div
@@ -113,26 +144,67 @@ export function AddonManager() {
               </button>
             </div>
 
+            {previewLoading ? (
+              <div className="mt-4 flex items-center gap-3 rounded-xl border border-dropdown-border bg-dropdown-contentBackground p-3">
+                <div className="h-10 w-10 animate-pulse rounded bg-dropdown-border" />
+                <div className="flex flex-col gap-2">
+                  <div className="h-4 w-32 animate-pulse rounded bg-dropdown-border" />
+                  <div className="h-3 w-48 animate-pulse rounded bg-dropdown-border" />
+                </div>
+              </div>
+            ) : preview ? (
+              <div className="mt-4 flex items-center gap-3 rounded-xl border border-dropdown-border bg-dropdown-contentBackground p-3">
+                {preview.logo ? (
+                  <img
+                    src={preview.logo}
+                    className="h-10 w-10 rounded object-contain"
+                  />
+                ) : (
+                  <div className="flex h-10 w-10 items-center justify-center rounded bg-dropdown-border">
+                    <Icon
+                      icon={Icons.EXTENSION}
+                      className="text-xl text-white"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-col overflow-hidden">
+                  <span className="truncate font-semibold text-white">
+                    {preview.name}{" "}
+                    <span className="text-xs font-normal text-dropdown-text">
+                      v{preview.version}
+                    </span>
+                  </span>
+                  {preview.description && (
+                    <span className="truncate text-xs text-dropdown-text">
+                      {preview.description}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ) : null}
+
             {error ? (
               <p className="mt-2 text-sm font-medium text-red-400">{error}</p>
             ) : null}
 
-            <div className="mt-5 flex justify-end">
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  navigate("/addons");
-                }}
-                className="flex items-center gap-2 rounded-xl bg-dropdown-contentBackground px-4 py-2.5 text-sm font-semibold text-white border border-dropdown-border transition-all duration-200 hover:border-type-link hover:bg-pill-backgroundHover"
-              >
-                <Icon icon={Icons.EXTENSION} className="text-base" />
-                <span>
-                  {t("addons.manager.manageListButton", "Manage addon list")}
-                </span>
-                <Icon icon={Icons.CHEVRON_RIGHT} className="text-sm" />
-              </button>
-            </div>
+            {!isAddonsPage && (
+              <div className="mt-5 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/addons");
+                  }}
+                  className="flex items-center gap-2 rounded-xl bg-dropdown-contentBackground px-4 py-2.5 text-sm font-semibold text-white border border-dropdown-border transition-all duration-200 hover:border-type-link hover:bg-pill-backgroundHover"
+                >
+                  <Icon icon={Icons.EXTENSION} className="text-base" />
+                  <span>
+                    {t("addons.manager.manageListButton", "Manage addon list")}
+                  </span>
+                  <Icon icon={Icons.CHEVRON_RIGHT} className="text-sm" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : null}

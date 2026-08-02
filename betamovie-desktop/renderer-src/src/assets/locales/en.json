@@ -13,8 +13,8 @@
       "ariaManage": "Manage addons",
       "errorFallback": "Unable to install this addon.",
       "manageListButton": "Manage addon list",
-      "subtitle": "Optional. Add a manifest URL you choose. This app does not bundle, recommend, or host addons.",
-      "title": "Desktop Addons"
+      "subtitle": "We do not recommend adding any unofficial or illegal add-ons.",
+      "title": "Add Addons"
     },
     "page": {
       "addAddonButton": "Add Addon",

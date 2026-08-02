@@ -141,7 +141,7 @@ export function AddonCatalogRow({
   const groups = Object.entries(groupedItems);
 
   return (
-    <div ref={intersectionRef} className="mb-24 md:mb-32">
+    <div ref={intersectionRef}>
       {isLoading && <CatalogRowSkeleton />}
       {error && (
         <p className="text-sm text-type-secondary px-4 md:px-[3.25rem] lg:px-[6.25rem] py-4">
