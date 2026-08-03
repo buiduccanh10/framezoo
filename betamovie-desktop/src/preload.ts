@@ -1,5 +1,9 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type {
+  AddonProtocolRequest,
+  AddonProtocolResponse,
+} from "./addons/types";
+import type {
   LibMpvBounds,
   LibMpvCommand,
   LibMpvAudioRequest,
@@ -14,6 +18,7 @@ type RuntimeConfig = Record<string, string>;
 
 const runtimeConfig: RuntimeConfig = {
   VITE_BACKEND_URL: "http://127.0.0.1:3000",
+  VITE_ADDON_GUIDE_URL: "http://localhost:5173/#addon-guide",
   VITE_NORMAL_ROUTER: "false",
 };
 const supportsLibMpv =
@@ -24,6 +29,13 @@ if (process.env.BETAMOVIE_BACKEND_URL || process.env.VITE_BACKEND_URL) {
     process.env.BETAMOVIE_BACKEND_URL ??
     process.env.VITE_BACKEND_URL ??
     runtimeConfig.VITE_BACKEND_URL;
+}
+
+if (process.env.BETAMOVIE_ADDON_GUIDE_URL || process.env.VITE_ADDON_GUIDE_URL) {
+  runtimeConfig.VITE_ADDON_GUIDE_URL =
+    process.env.BETAMOVIE_ADDON_GUIDE_URL ??
+    process.env.VITE_ADDON_GUIDE_URL ??
+    runtimeConfig.VITE_ADDON_GUIDE_URL;
 }
 
 contextBridge.exposeInMainWorld("__CONFIG__", runtimeConfig);
@@ -45,6 +57,18 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   sendExtensionMessage(name: string, payload?: unknown) {
     return ipcRenderer.invoke("desktop:extension-message", name, payload);
+  },
+  addons: {
+    loadManifest(
+      manifestUrl: string,
+    ): Promise<AddonProtocolResponse> {
+      return ipcRenderer.invoke("desktop:addon-manifest", manifestUrl);
+    },
+    request(
+      request: AddonProtocolRequest,
+    ): Promise<AddonProtocolResponse> {
+      return ipcRenderer.invoke("desktop:addon-request", request);
+    },
   },
   openExternal(url: string) {
     return ipcRenderer.invoke("desktop:open-external", url);

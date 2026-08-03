@@ -11,14 +11,22 @@
       "adding": "Hinzufügen...",
       "ariaClose": "Schließen Sie den Addon-Manager",
       "ariaManage": "Add-ons verwalten",
+      "createGuideLink": "So erstellen Sie ein Add-on",
       "errorFallback": "Dieses Add-on kann nicht installiert werden.",
       "manageListButton": "Add-on-Liste verwalten",
       "subtitle": "Wir empfehlen, keine inoffiziellen oder illegalen Add-ons hinzuzufügen.",
       "title": "Desktop-Add-ons"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Unterstützte Plattformen für Add-ons:",
+      "supported": "Unterstützte Plattformen: AlphaFlix und Stremio"
+    },
     "page": {
       "addAddonButton": "Add-on hinzufügen",
       "description": "Add-ons sind optional. Diese App bündelt, empfiehlt oder hostet kein Add-on.",
+      "createGuideLink": "Erstellen Sie einen Add-on-Leitfaden",
       "disabled": "Deaktiviert",
       "emptyInstalled": "Es sind noch keine Add-ons im System installiert.",
       "enabled": "Ermöglicht",

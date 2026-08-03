@@ -3,7 +3,8 @@
     "features": "Prestatie",
     "addons": "Ecosysteem",
     "download": "Downloaden",
-    "language": "Taal"
+    "language": "Taal",
+    "addonGuide": "Add-on-gids"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX-BUREAUBLAD / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Een rustiger huis voor de verhalen waar je steeds naar terugkomt.",
     "status": "Desktop-eerst. Klaar voor add-ons."
+  },
+  "addonGuide": {
+    "manifestDescription": "Metadata vertellen de app wie uw add-on is, welke bronnen deze ondersteunt en waar het pictogram zich bevindt.",
+    "resourcesTitle": "Kies de bronnen",
+    "manifestTitle": "Begin met manifest.json",
+    "description": "Een add-on is een kleine HTTP-service. Serveer een manifest en de middelen die je nodig hebt; AlphaFlix regelt de rest.",
+    "title": "Bouw een add-on zonder deel te nemen aan het app-proces.",
+    "resources": {
+      "catalog": "Rijen films of series om te ontdekken.",
+      "addon_catalog": "Een catalogus met andere add-ons.",
+      "stream": "Torrent-, HLS-, DASH- of directe bestandsbronnen.",
+      "meta": "Metagegevens van films of series voor een titel.",
+      "subtitles": "Ondertitelbestanden met taallabels."
+    },
+    "resourcesDescription": "Implementeer alleen de eindpunten die uw add-on nodig heeft. Reacties zijn JSON en kunnen in elke taal worden geschreven.",
+    "eyebrow": "ADDON-PROTOCOL / GIDS",
+    "runTitle": "Uitvoeren, testen, installeren",
+    "steps": [
+      "Serveer /manifest.json en uw broneindpunten vanaf een lokale of openbare HTTP(S)-server.",
+      "Test elk eindpunt met krul en verifieer de JSON-vorm.",
+      "Plak de manifest-URL in AlphaFlix Desktop > Add-ons."
+    ],
+    "advancedTitle": "Node-helper nodig?",
+    "advancedLink": "Open geavanceerde SDK-referentie",
+    "advancedDescription": "De Stremio Addon SDK is optioneel. Gebruik het als u routerings- en serialisatiehulpmiddelen nodig heeft; het is niet vereist door het protocol."
   }
 }

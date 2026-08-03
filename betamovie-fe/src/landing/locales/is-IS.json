@@ -3,7 +3,8 @@
     "features": "Frammistaða",
     "addons": "Vistkerfi",
     "download": "Sækja",
-    "language": "Tungumál"
+    "language": "Tungumál",
+    "addonGuide": "Addon leiðarvísir"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX SKJÁLFTRÖF / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Rólegra heimili fyrir sögurnar sem þú kemur alltaf aftur til.",
     "status": "Skrifborð fyrst. Viðbót tilbúin."
+  },
+  "addonGuide": {
+    "manifestDescription": "Lýsigögn segja forritinu hver viðbótin þín er, hvaða auðlindir það styður og hvar táknið hennar býr.",
+    "description": "Viðbót er lítil HTTP þjónusta. Berið fram upplýsingaskrá og úrræði sem þú þarft; AlphaFlix sér um afganginn.",
+    "manifestTitle": "Byrjaðu á manifest.json",
+    "eyebrow": "AÐBÓTUNARBÓKUN / LEIÐBEININGAR",
+    "title": "Búðu til viðbót án þess að taka þátt í appferlinu.",
+    "resourcesTitle": "Veldu úrræði",
+    "resources": {
+      "catalog": "Raðir af kvikmyndum eða seríum til uppgötvunar.",
+      "subtitles": "Textaskrár með tungumálamerkjum.",
+      "meta": "Lýsigögn kvikmynda eða þáttaraðar fyrir titil.",
+      "stream": "Torrent, HLS, DASH eða beinar skráarheimildir.",
+      "addon_catalog": "Skrá yfir aðrar viðbætur."
+    },
+    "resourcesDescription": "Innleiða aðeins endapunktana sem viðbótin þín þarfnast. Svörin eru JSON og hægt er að skrifa þau á hvaða tungumáli sem er.",
+    "runTitle": "Keyra, prófa, setja upp",
+    "steps": [
+      "Þjónu /manifest.json og auðlindaendapunktum þínum frá staðbundnum eða opinberum HTTP(S) netþjóni.",
+      "Prófaðu hvern endapunkt með krullu og staðfestu JSON lögunina.",
+      "Límdu upplýsingavefslóðina inn í AlphaFlix Desktop > Addons."
+    ],
+    "advancedTitle": "Vantar þig Node-hjálp?",
+    "advancedLink": "Opna háþróaða SDK tilvísun",
+    "advancedDescription": "Stremio Addon SDK er valfrjálst. Notaðu það ef þú vilt leiðar- og raðgreiningarhjálpar; það er ekki krafist í bókuninni."
   }
 }

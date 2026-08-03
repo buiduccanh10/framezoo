@@ -11,14 +11,22 @@
       "adding": "Lägger till...",
       "ariaClose": "Stäng tilläggshanteraren",
       "ariaManage": "Hantera tillägg",
+      "createGuideLink": "Hur man skapar ett tillägg",
       "errorFallback": "Det går inte att installera detta tillägg.",
       "manageListButton": "Hantera tilläggslista",
       "subtitle": "Vi rekommenderar inte att du lägger till några inofficiella eller olagliga tillägg.",
       "title": "Skrivbordstillägg"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Plattformar som stöds för tillägg:",
+      "supported": "Plattformar som stöds: AlphaFlix och Stremio"
+    },
     "page": {
       "addAddonButton": "Lägg till addon",
       "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
+      "createGuideLink": "Skapa tilläggsguide",
       "disabled": "Inaktiverad",
       "emptyInstalled": "Inga tillägg installerade i systemet ännu.",
       "enabled": "Aktiverad",

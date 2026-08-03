@@ -11,14 +11,22 @@
       "adding": "מוֹסִיף...",
       "ariaClose": "סגור את מנהל ההרחבות",
       "ariaManage": "נהל תוספות",
+      "createGuideLink": "כיצד ליצור תוסף",
       "errorFallback": "לא ניתן להתקין את התוסף הזה.",
       "manageListButton": "נהל רשימת תוספות",
       "subtitle": "איננו ממליצים להוסיף תוספות לא רשמיות או לא חוקיות.",
       "title": "תוספות לשולחן העבודה"
     },
+    "platforms": {
+      "alphaflix": "אלפאפליקס",
+      "stremio": "סטרמיו",
+      "supportLabel": "פלטפורמות נתמכות עבור תוספות:",
+      "supported": "פלטפורמות נתמכות: AlphaFlix ו-Stremio"
+    },
     "page": {
       "addAddonButton": "הוסף Addon",
       "description": "תוספות הן אופציונליות. אפליקציה זו אינה מאגדת, ממליצה או מארחת תוסף כלשהו.",
+      "createGuideLink": "צור מדריך תוספות",
       "disabled": "נָכֶה",
       "emptyInstalled": "עדיין לא הותקנו תוספות במערכת.",
       "enabled": "מופעל",

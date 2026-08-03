@@ -11,14 +11,22 @@
       "adding": "Ekleniyor...",
       "ariaClose": "Eklenti yöneticisini kapat",
       "ariaManage": "Eklentileri yönet",
+      "createGuideLink": "Bir eklenti nasıl oluşturulur",
       "errorFallback": "Bu eklenti yüklenemiyor.",
       "manageListButton": "Eklenti listesini yönet",
       "subtitle": "Resmi olmayan veya yasa dışı eklentiler eklemenizi önermiyoruz.",
       "title": "Masaüstü Eklentileri"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Eklentiler için desteklenen platformlar:",
+      "supported": "Desteklenen platformlar: AlphaFlix ve Stremio"
+    },
     "page": {
       "addAddonButton": "Eklenti Ekle",
       "description": "Eklentiler isteğe bağlıdır. Bu uygulama herhangi bir eklentiyi paketlemez, önermez veya barındırmaz.",
+      "createGuideLink": "Eklenti kılavuzu oluştur",
       "disabled": "Engelli",
       "emptyInstalled": "Sistemde henüz eklenti yüklü değil.",
       "enabled": "Etkinleştirilmiş",

@@ -3,7 +3,8 @@
     "features": "Prestazione",
     "addons": "Ecosistema",
     "download": "Scaricamento",
-    "language": "Lingua"
+    "language": "Lingua",
+    "addonGuide": "Guida ai componenti aggiuntivi"
   },
   "hero": {
     "eyebrow": "DESKTOP ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Una casa più tranquilla per le storie a cui continui a tornare.",
     "status": "Prima il desktop. Pronto per il componente aggiuntivo."
+  },
+  "addonGuide": {
+    "manifestDescription": "I metadati dicono all'app chi è il tuo componente aggiuntivo, quali risorse supporta e dove si trova la sua icona.",
+    "description": "Un componente aggiuntivo è un piccolo servizio HTTP. Servi un manifest e le risorse di cui hai bisogno; AlphaFlix si occupa del resto.",
+    "title": "Crea un componente aggiuntivo senza partecipare al processo dell'app.",
+    "manifestTitle": "Inizia con manifest.json",
+    "eyebrow": "PROTOCOLLO/GUIDA AGGIUNTA",
+    "resourcesDescription": "Implementa solo gli endpoint necessari al tuo componente aggiuntivo. Le risposte sono JSON e possono essere scritte in qualsiasi lingua.",
+    "resources": {
+      "stream": "Fonti torrent, HLS, DASH o file diretti.",
+      "catalog": "File di film o serie da scoprire.",
+      "subtitles": "File di sottotitoli con etichette di lingua.",
+      "meta": "Metadati di film o serie per un titolo.",
+      "addon_catalog": "Un catalogo di altri componenti aggiuntivi."
+    },
+    "resourcesTitle": "Scegli le risorse",
+    "runTitle": "Esegui, prova, installa",
+    "advancedTitle": "Hai bisogno di un aiutante del nodo?",
+    "steps": [
+      "Servi /manifest.json e i tuoi endpoint di risorse da un server HTTP(S) locale o pubblico.",
+      "Testa ogni endpoint con curl e verifica la forma JSON.",
+      "Incolla l'URL manifest in AlphaFlix Desktop > Componenti aggiuntivi."
+    ],
+    "advancedDescription": "L'SDK del componente aggiuntivo Stremio è facoltativo. Usalo se desideri aiutanti di routing e serializzazione; non è richiesto dal protocollo.",
+    "advancedLink": "Apri il riferimento SDK avanzato"
   }
 }

@@ -11,6 +11,7 @@ import { usePlayer } from "@/components/player/hooks/usePlayer";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import { LazyImage } from "@/components/utils/Image";
+import { AddonLogo } from "@/desktop/addons/AddonLogo";
 import { loadAddonStreams } from "@/desktop/addons/client";
 import { hasResource, supportsType } from "@/desktop/addons/manifest";
 import { useInstalledAddons } from "@/desktop/addons/store";
@@ -144,26 +145,13 @@ function getTorrentQuality(stream: AddonStream): SourceQuality {
 }
 
 function AddonIcon(props: { name: string; logo?: string }) {
-  if (props.logo) {
-    return (
-      <LazyImage
-        src={props.logo}
-        alt=""
-        className="h-10 w-10 shrink-0 rounded-lg object-contain"
-        showSkeleton={false}
-        loading="eager"
-        decoding="sync"
-      />
-    );
-  }
-
   return (
-    <span
-      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 text-xl text-white"
-      aria-label={`${props.name} addon icon`}
-    >
-      <Icon icon={Icons.WEB} />
-    </span>
+    <AddonLogo
+      name={props.name}
+      logo={props.logo}
+      fallbackIcon={Icons.WEB}
+      className="h-10 w-10"
+    />
   );
 }
 

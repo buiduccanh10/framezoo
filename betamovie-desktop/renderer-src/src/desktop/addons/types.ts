@@ -12,6 +12,7 @@ export interface StremioManifest {
   name: string;
   description?: string;
   logo?: string;
+  background?: string;
   resources?: StremioResource[];
   types?: string[];
   catalogs?: Array<Record<string, unknown>>;

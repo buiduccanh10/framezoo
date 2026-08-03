@@ -11,14 +11,22 @@
       "adding": "Engadindo...",
       "ariaClose": "Pechar o xestor de complementos",
       "ariaManage": "Xestionar complementos",
+      "createGuideLink": "Como crear un complemento",
       "errorFallback": "Non se puido instalar este complemento.",
       "manageListButton": "Xestionar a lista de complementos",
       "subtitle": "Non recomendamos engadir complementos non oficiais ou ilegais.",
       "title": "Complementos de escritorio"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Plataformas compatibles para complementos:",
+      "supported": "Plataformas compatibles: AlphaFlix e Stremio"
+    },
     "page": {
       "addAddonButton": "Engadir complemento",
       "description": "Os complementos son opcionais. Esta aplicación non agrupa, recomenda nin aloxa ningún complemento.",
+      "createGuideLink": "Crear guía de complementos",
       "disabled": "Desactivado",
       "emptyInstalled": "Aínda non hai complementos instalados no sistema.",
       "enabled": "Activado",

@@ -11,14 +11,22 @@
       "adding": "Tilføjer...",
       "ariaClose": "Luk tilføjelsesadministrator",
       "ariaManage": "Administrer tilføjelser",
+      "createGuideLink": "Sådan opretter du en tilføjelse",
       "errorFallback": "Kan ikke installere denne tilføjelse.",
       "manageListButton": "Administrer tilføjelsesliste",
       "subtitle": "Vi anbefaler ikke at tilføje nogen uofficielle eller ulovlige tilføjelser.",
       "title": "Desktop tilføjelser"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Understøttede platforme til tilføjelser:",
+      "supported": "Understøttede platforme: AlphaFlix og Stremio"
+    },
     "page": {
       "addAddonButton": "Tilføj Addon",
       "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
+      "createGuideLink": "Opret tilføjelsesvejledning",
       "disabled": "Handicappet",
       "emptyInstalled": "Ingen tilføjelser installeret i systemet endnu.",
       "enabled": "Aktiveret",

@@ -14,10 +14,41 @@ const localeModules = import.meta.glob("./locales/*.json", {
   import: "default",
 }) as Record<string, LandingCopy>;
 
+function mergeLandingCopy(base: unknown, override: unknown): unknown {
+  if (
+    base &&
+    typeof base === "object" &&
+    !Array.isArray(base) &&
+    override &&
+    typeof override === "object" &&
+    !Array.isArray(override)
+  ) {
+    const keys = new Set([
+      ...Object.keys(base as Record<string, unknown>),
+      ...Object.keys(override as Record<string, unknown>),
+    ]);
+
+    return Object.fromEntries(
+      [...keys].map((key) => [
+        key,
+        mergeLandingCopy(
+          (base as Record<string, unknown>)[key],
+          (override as Record<string, unknown>)[key],
+        ),
+      ]),
+    );
+  }
+
+  return override === undefined ? base : override;
+}
+
 const copy: Record<string, LandingCopy> = Object.fromEntries(
   LANDING_LOCALES.map((locale) => [
     locale.id,
-    localeModules[`./locales/${locale.file}.json`] ?? enCopy,
+    mergeLandingCopy(
+      enCopy,
+      localeModules[`./locales/${locale.file}.json`],
+    ) as LandingCopy,
   ]),
 );
 

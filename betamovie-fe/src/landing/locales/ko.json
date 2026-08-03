@@ -3,7 +3,8 @@
     "features": "성능",
     "addons": "생태계",
     "download": "다운로드",
-    "language": "언어"
+    "language": "언어",
+    "addonGuide": "애드온 가이드"
   },
   "hero": {
     "eyebrow": "알파플릭스 데스크탑 / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "계속해서 들려오는 이야기를 담을 수 있는 조용한 집.",
     "status": "데스크탑 우선. 애드온이 준비되어 있습니다."
+  },
+  "addonGuide": {
+    "manifestTitle": "매니페스트.json으로 시작",
+    "eyebrow": "애드온 프로토콜/가이드",
+    "manifestDescription": "메타데이터는 귀하의 애드온이 누구인지, 어떤 리소스를 지원하는지, 해당 아이콘이 어디에 있는지 앱에 알려줍니다.",
+    "description": "애드온은 작은 HTTP 서비스입니다. 필요한 매니페스트와 리소스를 제공하세요. 나머지는 AlphaFlix가 처리합니다.",
+    "title": "앱 프로세스에 참여하지 않고 애드온을 구축하세요.",
+    "resources": {
+      "catalog": "검색할 수 있는 영화 또는 시리즈입니다.",
+      "meta": "제목에 대한 영화 또는 시리즈 메타데이터입니다.",
+      "subtitles": "언어 라벨이 포함된 자막 파일입니다.",
+      "stream": "Torrent, HLS, DASH 또는 직접 파일 소스.",
+      "addon_catalog": "다른 애드온 카탈로그."
+    },
+    "resourcesTitle": "리소스를 선택하세요",
+    "runTitle": "실행, 테스트, 설치",
+    "resourcesDescription": "애드온에 필요한 엔드포인트만 구현하세요. 응답은 JSON이며 모든 언어로 작성할 수 있습니다.",
+    "steps": [
+      "로컬 또는 공용 HTTP(S) 서버에서 /manifest.json 및 리소스 엔드포인트를 제공합니다.",
+      "컬을 사용하여 각 엔드포인트를 테스트하고 JSON 형태를 확인합니다.",
+      "매니페스트 URL을 AlphaFlix Desktop > Addons에 붙여넣습니다."
+    ],
+    "advancedTitle": "노드 도우미가 필요하십니까?",
+    "advancedLink": "고급 SDK 참조 열기",
+    "advancedDescription": "Stremio Addon SDK는 선택 사항입니다. 라우팅 및 직렬화 도우미가 필요한 경우 이를 사용하십시오. 프로토콜에서는 필요하지 않습니다."
   }
 }

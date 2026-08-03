@@ -3,7 +3,8 @@
     "features": "Učinkovitost",
     "addons": "Ekosistem",
     "download": "Prenos",
-    "language": "Jezik"
+    "language": "Jezik",
+    "addonGuide": "Vodnik po dodatkih"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX DESKTOP / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Tišji dom za zgodbe, h katerim se vedno znova vračate.",
     "status": "Najprej namizje. Pripravljen za dodatek."
+  },
+  "addonGuide": {
+    "manifestTitle": "Začnite z manifest.json",
+    "eyebrow": "DODATNI PROTOKOL / VODNIK",
+    "title": "Zgradite dodatek, ne da bi se pridružili procesu aplikacije.",
+    "description": "Dodatek je majhna storitev HTTP. Postrezite manifest in vire, ki jih potrebujete; AlphaFlix poskrbi za ostalo.",
+    "resources": {
+      "catalog": "Vrstice filmov ali serij za odkrivanje.",
+      "meta": "Metapodatki filma ali serije za naslov.",
+      "subtitles": "Datoteke s podnapisi z jezikovnimi oznakami.",
+      "stream": "Torrent, HLS, DASH ali neposredni viri datotek.",
+      "addon_catalog": "Katalog drugih dodatkov."
+    },
+    "resourcesTitle": "Izberite vire",
+    "manifestDescription": "Metapodatki povedo aplikaciji, kdo je vaš dodatek, katere vire podpira in kje se nahaja njegova ikona.",
+    "resourcesDescription": "Implementirajte samo končne točke, ki jih potrebuje vaš dodatek. Odgovori so JSON in so lahko napisani v katerem koli jeziku.",
+    "runTitle": "Zaženite, preizkusite, namestite",
+    "steps": [
+      "Strežite /manifest.json in svoje končne točke virov iz lokalnega ali javnega strežnika HTTP(S).",
+      "Preizkusite vsako končno točko s curl in preverite obliko JSON.",
+      "Prilepite URL manifesta v AlphaFlix Desktop > Addons."
+    ],
+    "advancedTitle": "Potrebujete pomočnika Node?",
+    "advancedDescription": "Stremio Addon SDK ni obvezen. Uporabite ga, če želite pomočnike za usmerjanje in serializacijo; protokol ga ne zahteva.",
+    "advancedLink": "Odpri napredno referenco SDK"
   }
 }

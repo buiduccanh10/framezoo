@@ -3,7 +3,8 @@
     "features": "パフォーマンス",
     "addons": "生態系",
     "download": "ダウンロード",
-    "language": "言語"
+    "language": "言語",
+    "addonGuide": "アドオンガイド"
   },
   "hero": {
     "eyebrow": "アルファフリックス デスクトップ / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "何度も戻ってくる物語のための、より静かな家。",
     "status": "デスクトップファースト。アドオン対応。"
+  },
+  "addonGuide": {
+    "eyebrow": "アドオンプロトコル/ガイド",
+    "manifestTitle": "まずはmanifest.jsonから",
+    "resourcesTitle": "リソースを選択してください",
+    "manifestDescription": "メタデータは、アドオンが誰であるか、サポートするリソース、アイコンがどこにあるかをアプリに伝えます。",
+    "resourcesDescription": "アドオンに必要なエンドポイントのみを実装します。応答は JSON であり、任意の言語で記述できます。",
+    "description": "アドオンは小さな HTTP サービスです。マニフェストと必要なリソースを提供します。残りは AlphaFlix が処理します。",
+    "title": "アプリのプロセスに参加せずにアドオンを構築します。",
+    "resources": {
+      "catalog": "発見のための映画やシリーズの列。",
+      "stream": "Torrent、HLS、DASH、または直接ファイル ソース。",
+      "meta": "タイトルの映画またはシリーズのメタデータ。",
+      "addon_catalog": "他のアドオンのカタログ。",
+      "subtitles": "言語ラベルが付いた字幕ファイル。"
+    },
+    "runTitle": "実行、テスト、インストール",
+    "steps": [
+      "/manifest.json とリソース エンドポイントをローカルまたはパブリック HTTP(S) サーバーから提供します。",
+      "各エンドポイントをcurlでテストし、JSONの形状を確認します。",
+      "マニフェスト URL を AlphaFlix デスクトップ > アドオンに貼り付けます。"
+    ],
+    "advancedTitle": "ノードヘルパーが必要ですか?",
+    "advancedDescription": "Stremio Addon SDK はオプションです。ルーティングおよびシリアル化ヘルパーが必要な場合に使用します。プロトコルでは必須ではありません。",
+    "advancedLink": "高度な SDK リファレンスを開く"
   }
 }

@@ -3,7 +3,8 @@
     "features": "Performance",
     "addons": "Ekosistēma",
     "download": "Lejupielādēt",
-    "language": "Valoda"
+    "language": "Valoda",
+    "addonGuide": "Papildinājuma ceļvedis"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX DESKTOP / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Klusāka māja stāstiem, kuros jūs pastāvīgi atgriežaties.",
     "status": "Vispirms galddators. Gatavs papildinājumam."
+  },
+  "addonGuide": {
+    "manifestTitle": "Sāciet ar manifest.json",
+    "eyebrow": "ADDON PROTOKOLS / CEĻVEDIS",
+    "description": "Papildinājums ir neliels HTTP pakalpojums. Pasniedziet manifestu un nepieciešamos resursus; AlphaFlix tiek galā ar pārējo.",
+    "title": "Izveidojiet papildinājumu, nepievienojoties lietotnes procesam.",
+    "manifestDescription": "Metadati norāda lietotnei, kas ir jūsu papildinājums, kādus resursus tas atbalsta un kur atrodas tā ikona.",
+    "resourcesTitle": "Izvēlieties resursus",
+    "resources": {
+      "catalog": "Filmu vai seriālu rindas atklāšanai.",
+      "stream": "Torrent, HLS, DASH vai tiešie failu avoti.",
+      "meta": "Filmas vai seriāla metadati nosaukumam.",
+      "subtitles": "Subtitru faili ar valodu etiķetēm.",
+      "addon_catalog": "Citu papildinājumu katalogs."
+    },
+    "resourcesDescription": "Ieviesiet tikai tos galapunktus, kas nepieciešami jūsu papildinājumam. Atbildes ir JSON, un tās var rakstīt jebkurā valodā.",
+    "runTitle": "Palaist, pārbaudīt, instalēt",
+    "steps": [
+      "Apkalpojiet /manifest.json un jūsu resursu galapunktus no lokāla vai publiska HTTP(S) servera.",
+      "Pārbaudiet katru galapunktu ar izliekumu un pārbaudiet JSON formu.",
+      "Ielīmējiet manifesta URL mapē AlphaFlix Desktop > Addons."
+    ],
+    "advancedTitle": "Nepieciešams mezgla palīgs?",
+    "advancedLink": "Atveriet papildu SDK atsauci",
+    "advancedDescription": "Stremio Addon SDK nav obligāts. Izmantojiet to, ja vēlaties maršrutēšanas un serializācijas palīgus; to neprasa protokols."
   }
 }

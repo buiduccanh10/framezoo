@@ -11,14 +11,22 @@
       "adding": "Aggiunta...",
       "ariaClose": "Chiudi il gestore dei componenti aggiuntivi",
       "ariaManage": "Gestisci componenti aggiuntivi",
+      "createGuideLink": "Come creare un componente aggiuntivo",
       "errorFallback": "Impossibile installare questo componente aggiuntivo.",
       "manageListButton": "Gestisci l'elenco dei componenti aggiuntivi",
       "subtitle": "Non consigliamo di aggiungere componenti aggiuntivi non ufficiali o illegali.",
       "title": "Componenti aggiuntivi per il desktop"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Piattaforme supportate per i componenti aggiuntivi:",
+      "supported": "Piattaforme supportate: AlphaFlix e Stremio"
+    },
     "page": {
       "addAddonButton": "Aggiungi componente aggiuntivo",
       "description": "I componenti aggiuntivi sono facoltativi. Questa app non raggruppa, consiglia o ospita alcun componente aggiuntivo.",
+      "createGuideLink": "Crea una guida per i componenti aggiuntivi",
       "disabled": "Disabilitato",
       "emptyInstalled": "Nessun componente aggiuntivo ancora installato nel sistema.",
       "enabled": "Abilitato",

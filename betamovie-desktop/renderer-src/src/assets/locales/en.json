@@ -11,14 +11,22 @@
       "adding": "Adding...",
       "ariaClose": "Close addon manager",
       "ariaManage": "Manage addons",
+      "createGuideLink": "How to create an addon?",
       "errorFallback": "Unable to install this addon.",
       "manageListButton": "Manage addon list",
       "subtitle": "We do not recommend adding any unofficial or illegal add-ons.",
       "title": "Add Addons"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Supported platforms for Addons:",
+      "supported": "Supported platforms for Addons: Stremio and AlphaFlix"
+    },
     "page": {
       "addAddonButton": "Add Addon",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
+      "createGuideLink": "Create addon guide?",
       "disabled": "Disabled",
       "emptyInstalled": "No addons installed in the system yet.",
       "enabled": "Enabled",

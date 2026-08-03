@@ -11,14 +11,22 @@
       "adding": "S'està afegint...",
       "ariaClose": "Tanqueu el gestor de complements",
       "ariaManage": "Gestiona els complements",
+      "createGuideLink": "Com crear un complement",
       "errorFallback": "No es pot instal·lar aquest complement.",
       "manageListButton": "Gestioneu la llista de complements",
       "subtitle": "No recomanem afegir cap complement no oficial o il·legal.",
       "title": "Complements d'escriptori"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Plataformes compatibles per a complements:",
+      "supported": "Plataformes compatibles: AlphaFlix i Stremio"
+    },
     "page": {
       "addAddonButton": "Afegeix un complement",
       "description": "Els complements són opcionals. Aquesta aplicació no agrupa, recomana ni allotja cap complement.",
+      "createGuideLink": "Crea una guia de complements",
       "disabled": "Inhabilitat",
       "emptyInstalled": "Encara no hi ha cap complement instal·lat al sistema.",
       "enabled": "Habilitat",

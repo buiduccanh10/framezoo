@@ -3,7 +3,8 @@
     "features": "表現",
     "addons": "生態系統",
     "download": "下載",
-    "language": "語言"
+    "language": "語言",
+    "addonGuide": "插件指南"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX 桌面 / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "一個更安靜的家，供您不斷回顧的故事。",
     "status": "桌面優先。插件就緒。"
+  },
+  "addonGuide": {
+    "resourcesTitle": "選擇資源",
+    "manifestDescription": "元資料告訴應用程式您的插件是誰、它支援哪些資源以及它的圖示所在的位置。",
+    "description": "外掛程式是一個小型 HTTP 服務。提供清單和您需要的資源； AlphaFlix 處理剩下的事情。",
+    "title": "無需加入應用程式流程即可建立插件。",
+    "resourcesDescription": "僅實現您的外掛所需的端點。回應是 JSON，可以用任何語言編寫。",
+    "resources": {
+      "meta": "標題的電影或系列元資料。",
+      "catalog": "成排的電影或連續劇可供探索。",
+      "stream": "Torrent、HLS、DASH 或直接檔案來源。",
+      "subtitles": "帶有語言標籤的字幕檔。",
+      "addon_catalog": "其他插件的目錄。"
+    },
+    "manifestTitle": "從manifest.json開始",
+    "eyebrow": "插件協定/指南",
+    "steps": [
+      "從本機或公用 HTTP(S) 伺服器提供 /manifest.json 和您的資源端點。",
+      "使用curl 測試每個端點並驗證JSON 形狀。",
+      "將清單 URL 貼到 AlphaFlix Desktop > Addons 中。"
+    ],
+    "advancedDescription": "Stremio Addon SDK 是可選的。如果您需要路由和序列化助手，請使用它；協定沒有要求。",
+    "runTitle": "運行、測試、安裝",
+    "advancedLink": "開啟高級SDK參考",
+    "advancedTitle": "需要節點助手嗎？"
   }
 }
