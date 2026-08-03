@@ -18,26 +18,58 @@ export function normalizeManifest(
   }
 
   const manifest = value as Partial<StremioManifest>;
-  if (
-    typeof manifest.id !== "string" ||
-    typeof manifest.version !== "string" ||
-    typeof manifest.name !== "string"
-  ) {
+  const id = normalizeRequiredManifestField(manifest.id, "id");
+  const version = normalizeRequiredManifestField(manifest.version, "version");
+  const name = normalizeRequiredManifestField(manifest.name, "name");
+
+  if (!id || !version || !name) {
     throw new Error("Addon manifest requires id, version, and name");
   }
+
+  const normalizedManifest: StremioManifest = {
+    ...manifest,
+    id,
+    version,
+    name,
+    logo: normalizeAddonAssetUrl(url, manifest.logo),
+    background: normalizeAddonAssetUrl(url, manifest.background),
+  };
 
   return {
     manifestUrl: url,
     baseUrl: new URL(".", url).toString(),
-    manifest: {
-      ...manifest,
-      id: manifest.id,
-      version: manifest.version,
-      name: manifest.name,
-    },
+    manifest: normalizedManifest,
     enabled: true,
     addedAt: Date.now(),
   };
+}
+
+function normalizeRequiredManifestField(
+  value: unknown,
+  field: "id" | "version" | "name",
+) {
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error(`Addon manifest requires ${field}`);
+  }
+
+  return value.trim();
+}
+
+export function normalizeAddonAssetUrl(
+  manifestUrl: string,
+  value: unknown,
+): string | undefined {
+  if (typeof value !== "string" || !value.trim()) return undefined;
+
+  try {
+    const resolved = new URL(value.trim(), manifestUrl);
+    if (resolved.protocol !== "http:" && resolved.protocol !== "https:") {
+      return undefined;
+    }
+    return resolved.toString();
+  } catch {
+    return undefined;
+  }
 }
 
 export function hasStreamResource(resources?: StremioResource[]) {

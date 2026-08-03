@@ -67,7 +67,7 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
 
   return (
     <section className="landing-download" id="download">
-      <div className="landing-download-header">
+      <div className="landing-download-header landing-scroll-reveal">
         <div>
           <span className="landing-eyebrow">{copy.eyebrow}</span>
           <h2>{copy.title}</h2>
@@ -75,69 +75,71 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
         <p>{copy.description}</p>
       </div>
 
-      {state.status === "loading" ? (
-        <div className="landing-download-state" role="status">
-          <span className="landing-state-pulse" aria-hidden="true" />
-          {copy.loading}
-        </div>
-      ) : state.status === "error" ? (
-        <div
-          className="landing-download-state landing-download-error"
-          role="alert"
-        >
-          <span>{state.message}</span>
-          <button
-            className="landing-text-button"
-            type="button"
-            onClick={loadManifest}
-          >
-            {copy.retry} <span aria-hidden="true">↗</span>
-          </button>
-        </div>
-      ) : state.status === "empty" ? (
-        <div className="landing-download-state" role="status">
-          {copy.empty}
-          <button
-            className="landing-text-button"
-            type="button"
-            onClick={loadManifest}
-          >
-            {copy.retry} <span aria-hidden="true">↗</span>
-          </button>
-        </div>
-      ) : (
-        <div className="landing-download-content">
-          <PlatformSelector
-            options={state.manifest.options}
-            selectedId={selectedOption?.id ?? null}
-            recommendedId={
-              detectPlatformForManifest(state.manifest).recommendedId
-            }
-            detection={detectPlatformForManifest(state.manifest)}
-            copy={copy}
-            onSelect={setSelectedId}
-          />
-          <div className="landing-download-cta">
-            <div>
-              <span>{copy.version}</span>
-              <strong>
-                {state.manifest.version
-                  ? `v${state.manifest.version}`
-                  : "Stable build"}
-              </strong>
-            </div>
-            <a
-              className="landing-button landing-button-primary"
-              href={selectedOption?.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {copy.download}
-              <span aria-hidden="true">↓</span>
-            </a>
+      <div className="landing-download-content landing-scroll-reveal landing-scroll-reveal-delay-one">
+        {state.status === "loading" ? (
+          <div className="landing-download-state" role="status">
+            <span className="landing-state-pulse" aria-hidden="true" />
+            {copy.loading}
           </div>
-        </div>
-      )}
+        ) : state.status === "error" ? (
+          <div
+            className="landing-download-state landing-download-error"
+            role="alert"
+          >
+            <span>{state.message}</span>
+            <button
+              className="landing-text-button"
+              type="button"
+              onClick={loadManifest}
+            >
+              {copy.retry} <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        ) : state.status === "empty" ? (
+          <div className="landing-download-state" role="status">
+            {copy.empty}
+            <button
+              className="landing-text-button"
+              type="button"
+              onClick={loadManifest}
+            >
+              {copy.retry} <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        ) : (
+          <div className="landing-download-content">
+            <PlatformSelector
+              options={state.manifest.options}
+              selectedId={selectedOption?.id ?? null}
+              recommendedId={
+                detectPlatformForManifest(state.manifest).recommendedId
+              }
+              detection={detectPlatformForManifest(state.manifest)}
+              copy={copy}
+              onSelect={setSelectedId}
+            />
+            <div className="landing-download-cta">
+              <div>
+                <span>{copy.version}</span>
+                <strong>
+                  {state.manifest.version
+                    ? `v${state.manifest.version}`
+                    : "Stable build"}
+                </strong>
+              </div>
+              <a
+                className="landing-button landing-button-primary"
+                href={selectedOption?.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {copy.download}
+                <span aria-hidden="true">↓</span>
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

@@ -13,7 +13,7 @@ import { useBannerSize } from "@/stores/banner";
 
 import { AddonManager } from "./AddonManager";
 import { BrandPill } from "./BrandPill";
-import { DownloadAppButton } from "./DownloadAppButton";
+// import { DownloadAppButton } from "./DownloadAppButton";
 
 export interface NavigationProps {
   bg?: boolean;
@@ -172,9 +172,9 @@ export function Navigation(props: NavigationProps) {
                 location.pathname !== "/register" && (
                   <WatchPartyInputLink triggerVariant="icon" />
                 )}
-              {location.pathname !== "/login" &&
+              {/* {location.pathname !== "/login" &&
                 location.pathname !== "/settings" &&
-                location.pathname !== "/register" && <DownloadAppButton />}
+                location.pathname !== "/register" && <DownloadAppButton />} */}
               {location.pathname !== "/login" &&
                 location.pathname !== "/settings" &&
                 location.pathname !== "/register" && <AddonManager />}

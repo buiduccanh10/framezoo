@@ -3,7 +3,8 @@
     "features": "Suorituskyky",
     "addons": "Ekosysteemi",
     "download": "Lataa",
-    "language": "Kieli"
+    "language": "Kieli",
+    "addonGuide": "Lisäyksen opas"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX DESKTOP / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Hiljaisempi koti tarinoille, joihin palaat jatkuvasti.",
     "status": "Työpöytä ensin. Lisäys valmiina."
+  },
+  "addonGuide": {
+    "manifestTitle": "Aloita tiedostosta manifest.json",
+    "eyebrow": "ADDON PROTOKOLLA / OPAS",
+    "title": "Luo lisäosa liittymättä sovellusprosessiin.",
+    "description": "Lisäosa on pieni HTTP-palvelu. Tarjoa luettelo ja tarvitsemasi resurssit; AlphaFlix hoitaa loput.",
+    "manifestDescription": "Metadata kertoo sovellukselle, kuka lisäosasi on, mitä resursseja se tukee ja missä sen kuvake sijaitsee.",
+    "resourcesTitle": "Valitse resurssit",
+    "resources": {
+      "meta": "Elokuvan tai sarjan sisällönkuvaustiedot nimikkeelle.",
+      "subtitles": "Tekstitystiedostot kielitunnisteilla.",
+      "stream": "Torrent, HLS, DASH tai suorat tiedostolähteet.",
+      "catalog": "Rivit elokuvia tai sarjoja löytöjä varten.",
+      "addon_catalog": "Luettelo muista lisäosista."
+    },
+    "resourcesDescription": "Ota käyttöön vain lisäyksen tarvitsemat päätepisteet. Vastaukset ovat JSON-muotoisia, ja ne voidaan kirjoittaa millä tahansa kielellä.",
+    "advancedTitle": "Tarvitsetko Node-apulaisen?",
+    "runTitle": "Suorita, testaa, asenna",
+    "steps": [
+      "Palvele /manifest.json ja resurssipäätepisteesi paikalliselta tai julkiselta HTTP(S)-palvelimelta.",
+      "Testaa jokaista päätepistettä kiharalla ja tarkista JSON-muoto.",
+      "Liitä luettelon URL-osoite kohtaan AlphaFlix Desktop > Lisäosat."
+    ],
+    "advancedLink": "Avaa edistynyt SDK-viite",
+    "advancedDescription": "Stremio Addon SDK on valinnainen. Käytä sitä, jos haluat reitityksen ja serialisoinnin avustajia; sitä ei vaadita protokollassa."
   }
 }

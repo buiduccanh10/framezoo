@@ -11,14 +11,22 @@
       "adding": "Toevoegen...",
       "ariaClose": "Sluit de add-onbeheerder",
       "ariaManage": "Beheer add-ons",
+      "createGuideLink": "Hoe een add-on te maken",
       "errorFallback": "Kan deze add-on niet installeren.",
       "manageListButton": "Beheer add-onlijst",
       "subtitle": "We raden niet aan om onofficiële of illegale add-ons toe te voegen.",
       "title": "Desktop-add-ons"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Ondersteunde platforms voor add-ons:",
+      "supported": "Ondersteunde platforms: AlphaFlix en Stremio"
+    },
     "page": {
       "addAddonButton": "Add-on toevoegen",
       "description": "Add-ons zijn optioneel. Deze app bundelt, beveelt of host geen enkele add-on.",
+      "createGuideLink": "Add-onhandleiding maken",
       "disabled": "Gehandicapt",
       "emptyInstalled": "Er zijn nog geen add-ons in het systeem geïnstalleerd.",
       "enabled": "Ingeschakeld",

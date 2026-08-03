@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("@/backend/extension/messaging", () => mocks);
 
-import { loadAddonStreams } from "./client";
+import { loadAddonManifest, loadAddonStreams } from "./client";
 import { normalizeManifest } from "./manifest";
 
 const addon = normalizeManifest("https://torrentio.strem.fun/manifest.json", {
@@ -29,6 +29,48 @@ afterEach(() => {
 });
 
 describe("desktop addon client", () => {
+  it("uses the native protocol bridge when available", async () => {
+    const loadManifest = vi.fn().mockResolvedValue({
+      statusCode: 200,
+      headers: { "content-type": "application/json" },
+      finalUrl: "https://example.com/manifest.json",
+      body: {
+        id: "com.example.native",
+        version: "1.0.0",
+        name: "Native addon",
+        description: "Loaded by the desktop protocol engine.",
+        logo: "assets/logo.svg",
+        resources: ["catalog"],
+      },
+    });
+    const request = vi.fn();
+
+    vi.stubGlobal("window", {
+      __ALPHAFLIX_DESKTOP__: true,
+      electronAPI: {
+        addons: {
+          loadManifest,
+          request,
+        },
+      },
+    });
+
+    const nativeAddon = await loadAddonManifest(
+      "https://example.com/addons/manifest.json",
+    );
+
+    expect(loadManifest).toHaveBeenCalledWith(
+      "https://example.com/addons/manifest.json",
+    );
+    expect(request).not.toHaveBeenCalled();
+    expect(nativeAddon.manifest.logo).toBe(
+      "https://example.com/addons/assets/logo.svg",
+    );
+    expect(nativeAddon.manifest.description).toBe(
+      "Loaded by the desktop protocol engine.",
+    );
+  });
+
   it("uses renderer fetch when Electron IPC does not settle", async () => {
     mocks.sendExtensionRequest.mockImplementation(() => new Promise(() => {}));
     vi.stubGlobal("window", {

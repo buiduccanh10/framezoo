@@ -11,14 +11,22 @@
       "adding": "جارٍ الإضافة...",
       "ariaClose": "إغلاق مدير الملحق",
       "ariaManage": "إدارة الإضافات",
+      "createGuideLink": "كيفية إنشاء الملحق",
       "errorFallback": "غير قادر على تثبيت هذا الملحق.",
       "manageListButton": "إدارة قائمة الملحق",
       "subtitle": "لا ننصح بإضافة أي إضافات غير رسمية أو غير قانونية.",
       "title": "إضافات سطح المكتب"
     },
+    "platforms": {
+      "alphaflix": "ألفا فليكس",
+      "stremio": "ستريميو",
+      "supportLabel": "المنصات المدعومة للإضافات:",
+      "supported": "المنصات المدعومة: AlphaFlix وStremio"
+    },
     "page": {
       "addAddonButton": "أضف الملحق",
       "description": "الإضافات اختيارية. لا يجمع هذا التطبيق أي ملحق أو يوصي به أو يستضيفه.",
+      "createGuideLink": "إنشاء دليل الملحق",
       "disabled": "عاجز",
       "emptyInstalled": "لا توجد إضافات مثبتة في النظام حتى الآن.",
       "enabled": "ممكّن",

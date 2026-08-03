@@ -11,14 +11,22 @@
       "adding": "थप्दै...",
       "ariaClose": "एडअन प्रबन्धक बन्द गर्नुहोस्",
       "ariaManage": "addons प्रबन्ध गर्नुहोस्",
+      "createGuideLink": "कसरी एक addon सिर्जना गर्ने",
       "errorFallback": "यो एडअन स्थापना गर्न असमर्थ।",
       "manageListButton": "एडअन सूची प्रबन्ध गर्नुहोस्",
       "subtitle": "हामी कुनै पनि अनौपचारिक वा अवैध एड-अनहरू थप्न सिफारिस गर्दैनौं।",
       "title": "डेस्कटप Addons"
     },
+    "platforms": {
+      "alphaflix": "अल्फाफ्लिक्स",
+      "stremio": "स्ट्रिमियो",
+      "supportLabel": "Addons को लागि समर्थित प्लेटफार्महरू:",
+      "supported": "समर्थित प्लेटफार्महरू: AlphaFlix र Stremio"
+    },
     "page": {
       "addAddonButton": "Addon थप्नुहोस्",
       "description": "Addons वैकल्पिक छन्। यो एपले कुनै पनि एडअनलाई बन्डल, सिफारिस वा होस्ट गर्दैन।",
+      "createGuideLink": "एडअन गाइड सिर्जना गर्नुहोस्",
       "disabled": "असक्षम",
       "emptyInstalled": "प्रणालीमा अहिलेसम्म कुनै एडअन्स स्थापना गरिएको छैन।",
       "enabled": "सक्षम गरियो",

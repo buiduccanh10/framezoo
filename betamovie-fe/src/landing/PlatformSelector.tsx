@@ -1,6 +1,6 @@
 import type { AppDownloadOption } from "@/backend/download";
 
-import type { LandingCopy } from "./LandingPage";
+import type { LandingCopy } from "./i18n";
 import type { PlatformDetection } from "./platform";
 
 interface PlatformSelectorProps {

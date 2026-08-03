@@ -11,14 +11,22 @@
       "adding": "追加中...",
       "ariaClose": "アドオンマネージャーを閉じる",
       "ariaManage": "アドオンの管理",
+      "createGuideLink": "アドオンの作成方法",
       "errorFallback": "このアドオンをインストールできません。",
       "manageListButton": "アドオンリストの管理",
       "subtitle": "非公式または違法なアドオンを追加することはお勧めしません。",
       "title": "デスクトップアドオン"
     },
+    "platforms": {
+      "alphaflix": "アルファフリックス",
+      "stremio": "ストレミオ",
+      "supportLabel": "アドオンがサポートされているプラ​​ットフォーム:",
+      "supported": "サポートされているプラ​​ットフォーム: AlphaFlix および Stremio"
+    },
     "page": {
       "addAddonButton": "アドオンを追加する",
       "description": "アドオンはオプションです。このアプリはアドオンをバンドルしたり、推奨したり、ホストしたりするものではありません。",
+      "createGuideLink": "アドオン作成ガイド",
       "disabled": "無効",
       "emptyInstalled": "システムにはまだアドオンがインストールされていません。",
       "enabled": "有効",

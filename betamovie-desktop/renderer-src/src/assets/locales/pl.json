@@ -11,14 +11,22 @@
       "adding": "Dodawanie...",
       "ariaClose": "Zamknij menedżera dodatków",
       "ariaManage": "Zarządzaj dodatkami",
+      "createGuideLink": "Jak stworzyć dodatek",
       "errorFallback": "Nie można zainstalować tego dodatku.",
       "manageListButton": "Zarządzaj listą dodatków",
       "subtitle": "Nie zalecamy dodawania żadnych nieoficjalnych lub nielegalnych dodatków.",
       "title": "Dodatki do komputerów stacjonarnych"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Obsługiwane platformy dla dodatków:",
+      "supported": "Obsługiwane platformy: AlphaFlix i Stremio"
+    },
     "page": {
       "addAddonButton": "Dodaj dodatek",
       "description": "Dodatki są opcjonalne. Ta aplikacja nie łączy, nie poleca ani nie hostuje żadnych dodatków.",
+      "createGuideLink": "Utwórz przewodnik po dodatkach",
       "disabled": "Wyłączony",
       "emptyInstalled": "W systemie nie zainstalowano jeszcze żadnych dodatków.",
       "enabled": "Włączony",

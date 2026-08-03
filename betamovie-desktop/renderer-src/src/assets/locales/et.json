@@ -11,14 +11,22 @@
       "adding": "Lisamine...",
       "ariaClose": "Sule lisandmoodulite haldur",
       "ariaManage": "Lisandmoodulite haldamine",
+      "createGuideLink": "Kuidas lisandmoodulit luua",
       "errorFallback": "Seda lisandmoodulit ei saa installida.",
       "manageListButton": "Halda lisandmoodulite loendit",
       "subtitle": "Me ei soovita lisada mitteametlikke või ebaseaduslikke lisandmooduleid.",
       "title": "Töölaua lisad"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Lisandmoodulite toetatud platvormid:",
+      "supported": "Toetatud platvormid: AlphaFlix ja Stremio"
+    },
     "page": {
       "addAddonButton": "Lisage Addon",
       "description": "Lisad on valikulised. See rakendus ei koonda, ei soovita ega hosti ühtegi lisandmoodulit.",
+      "createGuideLink": "Loo lisade juhend",
       "disabled": "Keelatud",
       "emptyInstalled": "Süsteemi pole veel installitud ühtegi lisandmoodulit.",
       "enabled": "Lubatud",

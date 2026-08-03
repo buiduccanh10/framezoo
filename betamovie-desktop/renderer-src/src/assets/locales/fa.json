@@ -11,14 +11,22 @@
       "adding": "در حال افزودن...",
       "ariaClose": "مدیر افزونه را ببندید",
       "ariaManage": "افزونه ها را مدیریت کنید",
+      "createGuideLink": "چگونه یک افزونه ایجاد کنیم",
       "errorFallback": "نصب این افزونه ممکن نیست.",
       "manageListButton": "لیست افزونه ها را مدیریت کنید",
       "subtitle": "ما اضافه کردن افزونه های غیر رسمی یا غیرقانونی را توصیه نمی کنیم.",
       "title": "افزونه های دسکتاپ"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "پلتفرم های پشتیبانی شده برای Addons:",
+      "supported": "پلتفرم های پشتیبانی شده: AlphaFlix و Stremio"
+    },
     "page": {
       "addAddonButton": "Addon را اضافه کنید",
       "description": "افزونه ها اختیاری هستند. این برنامه هیچ افزونه ای را بسته، توصیه یا میزبانی نمی کند.",
+      "createGuideLink": "ایجاد راهنمای افزونه",
       "disabled": "از کار افتاده است",
       "emptyInstalled": "هنوز هیچ افزونه ای در سیستم نصب نشده است.",
       "enabled": "فعال شد",

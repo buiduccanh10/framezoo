@@ -11,14 +11,22 @@
       "adding": "កំពុង​បន្ថែម...",
       "ariaClose": "បិទកម្មវិធីគ្រប់គ្រងកម្មវិធីបន្ថែម",
       "ariaManage": "គ្រប់គ្រង addons",
+      "createGuideLink": "របៀបបង្កើត addon",
       "errorFallback": "មិនអាចដំឡើង addon នេះបានទេ។",
       "manageListButton": "គ្រប់គ្រងបញ្ជី addon",
       "subtitle": "យើងមិនណែនាំឱ្យបន្ថែមកម្មវិធីបន្ថែមក្រៅផ្លូវការ ឬខុសច្បាប់ណាមួយឡើយ។",
       "title": "កម្មវិធីបន្ថែមលើតុ"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "វេទិកាដែលគាំទ្រសម្រាប់ Addons៖",
+      "supported": "វេទិកាដែលគាំទ្រ៖ AlphaFlix និង Stremio"
+    },
     "page": {
       "addAddonButton": "បន្ថែម Addon",
       "description": "Addons គឺស្រេចចិត្ត។ កម្មវិធីនេះមិនបាច់ ណែនាំ ឬបង្ហោះ addon ណាមួយទេ។",
+      "createGuideLink": "បង្កើតការណែនាំបន្ថែម",
       "disabled": "ពិការ",
       "emptyInstalled": "មិនទាន់មានកម្មវិធីបន្ថែមនៅក្នុងប្រព័ន្ធនៅឡើយទេ។",
       "enabled": "បានបើក",

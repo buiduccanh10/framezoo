@@ -16,6 +16,8 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
 import { createDesktopPipController } from "./desktopPip";
+import { AddonProtocolEngine } from "./addons/engine";
+import type { AddonProtocolRequest } from "./addons/types";
 import {
   createTorrentManagerFromEnvironment,
   TorrentManager,
@@ -98,6 +100,7 @@ setupTorrentEnv();
 
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
+const addonProtocolEngine = new AddonProtocolEngine();
 
 function supportsDesktopAppUpdates() {
   return process.platform === "darwin" || process.platform === "win32";
@@ -851,6 +854,20 @@ function registerIpcHandlers() {
     "desktop:extension-message",
     async (_event, message: ExtensionMessageName, payload?: any) => {
       return handleExtensionMessage(message, payload);
+    },
+  );
+
+  ipcMain.handle(
+    "desktop:addon-manifest",
+    async (_event, manifestUrl: string) => {
+      return addonProtocolEngine.loadManifest(manifestUrl);
+    },
+  );
+
+  ipcMain.handle(
+    "desktop:addon-request",
+    async (_event, request: AddonProtocolRequest) => {
+      return addonProtocolEngine.request(request);
     },
   );
 

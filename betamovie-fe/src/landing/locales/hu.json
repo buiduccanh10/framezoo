@@ -3,7 +3,8 @@
     "features": "Teljesítmény",
     "addons": "Ökoszisztéma",
     "download": "Letöltés",
-    "language": "Nyelv"
+    "language": "Nyelv",
+    "addonGuide": "Addon útmutató"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX DESKTOP / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Egy csendesebb otthon a történetek számára, amelyekhez folyamatosan visszatér.",
     "status": "Asztali első. Addon kész."
+  },
+  "addonGuide": {
+    "manifestTitle": "Kezdje a manifest.json fájllal",
+    "eyebrow": "ADDON PROTOKOLL / ÚTMUTATÓ",
+    "title": "Hozzon létre egy kiegészítőt anélkül, hogy csatlakozna az alkalmazásfolyamathoz.",
+    "description": "A kiegészítő egy kis HTTP-szolgáltatás. Kiszolgálja a jegyzéket és a szükséges erőforrásokat; A többit az AlphaFlix intézi.",
+    "resourcesTitle": "Válassza ki az erőforrásokat",
+    "resources": {
+      "meta": "Film vagy sorozat metaadatai egy címhez.",
+      "stream": "Torrent, HLS, DASH vagy közvetlen fájlforrások.",
+      "catalog": "Filmek vagy sorozatok sorai a felfedezéshez.",
+      "subtitles": "Feliratfájlok nyelvi címkékkel.",
+      "addon_catalog": "Más kiegészítők katalógusa."
+    },
+    "manifestDescription": "A metaadatok közlik az alkalmazással, hogy ki a kiegészítője, mely erőforrásokat támogatja, és hol található az ikonja.",
+    "resourcesDescription": "Csak azokat a végpontokat valósítsa meg, amelyekre a kiegészítőnek szüksége van. A válaszok JSON formátumúak, és bármilyen nyelven megírhatók.",
+    "steps": [
+      "A /manifest.json és az erőforrás-végpontok kiszolgálása helyi vagy nyilvános HTTP(S)-kiszolgálóról.",
+      "Tesztelje az egyes végpontokat a curl segítségével, és ellenőrizze a JSON alakzatot.",
+      "Illessze be a jegyzék URL-címét az AlphaFlix Desktop > Addons mappába."
+    ],
+    "runTitle": "Futtassa, tesztelje, telepítse",
+    "advancedLink": "Nyissa meg a speciális SDK-referenciát",
+    "advancedDescription": "A Stremio Addon SDK opcionális. Használja, ha útválasztási és szerializációs segítőket szeretne; a protokoll nem írja elő.",
+    "advancedTitle": "Node segítőre van szüksége?"
   }
 }

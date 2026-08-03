@@ -39,7 +39,7 @@ export function FeatureSection({ copy }: FeatureSectionProps) {
         <p>{copy.overviewDescription}</p>
       </div>
 
-      <div className="landing-feature-grid">
+      <div className="landing-feature-grid landing-scroll-reveal landing-scroll-reveal-delay-one">
         <animated.article
           className="landing-feature-card landing-feature-card-tall"
           style={reveal}
@@ -87,7 +87,7 @@ export function FeatureSection({ copy }: FeatureSectionProps) {
         </div>
       </div>
 
-      <div className="landing-ecosystem" id="ecosystem">
+      <div className="landing-ecosystem landing-scroll-reveal" id="ecosystem">
         <div className="landing-ecosystem-copy">
           <span className="landing-eyebrow">{copy.addonLabel}</span>
           <h2>{copy.ecosystemTitle}</h2>
@@ -109,7 +109,7 @@ export function FeatureSection({ copy }: FeatureSectionProps) {
         </div>
       </div>
 
-      <div className="landing-showcase">
+      <div className="landing-showcase landing-scroll-reveal">
         <div className="landing-showcase-image">
           <img src="/embed-preview.png" alt="" loading="lazy" />
           <span>{copy.showcaseCaption}</span>

@@ -3,7 +3,8 @@
     "features": "Performanţă",
     "addons": "Ecosistem",
     "download": "Descărcați",
-    "language": "Limbă"
+    "language": "Limbă",
+    "addonGuide": "Ghid de suplimente"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX DESKTOP / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "O casă mai liniștită pentru poveștile la care te întorci.",
     "status": "Desktop-în primul rând. Pregătit pentru suplimente."
+  },
+  "addonGuide": {
+    "eyebrow": "ADDON PROTOCOL / GHID",
+    "manifestTitle": "Începeți cu manifest.json",
+    "title": "Creați un supliment fără a vă alătura procesului aplicației.",
+    "description": "Un supliment este un mic serviciu HTTP. Serviți un manifest și resursele de care aveți nevoie; AlphaFlix se ocupă de restul.",
+    "resourcesTitle": "Alegeți resursele",
+    "resources": {
+      "meta": "Metadatele unui film sau serial pentru un titlu.",
+      "stream": "Torrent, HLS, DASH sau surse directe de fișiere.",
+      "catalog": "Rânduri de filme sau seriale pentru descoperire.",
+      "addon_catalog": "Un catalog cu alte suplimente.",
+      "subtitles": "Fișiere de subtitrare cu etichete de limbă."
+    },
+    "resourcesDescription": "Implementați numai punctele finale de care suplimentul dvs. are nevoie. Răspunsurile sunt JSON și pot fi scrise în orice limbă.",
+    "manifestDescription": "Metadatele indică aplicației cine este suplimentul dvs., ce resurse le acceptă și unde se află pictograma acestuia.",
+    "steps": [
+      "Serviți /manifest.json și punctele finale de resurse de pe un server HTTP(S) local sau public.",
+      "Testați fiecare punct final cu curl și verificați forma JSON.",
+      "Lipiți adresa URL a manifestului în AlphaFlix Desktop > Addons."
+    ],
+    "runTitle": "Rulați, testați, instalați",
+    "advancedTitle": "Ai nevoie de un ajutor Node?",
+    "advancedLink": "Deschideți referința SDK avansată",
+    "advancedDescription": "Stremio Addon SDK este opțional. Folosiți-l dacă doriți ajutoare pentru rutare și serializare; nu este cerut de protocol."
   }
 }

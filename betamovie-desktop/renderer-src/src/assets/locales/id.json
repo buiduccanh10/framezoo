@@ -11,14 +11,22 @@
       "adding": "Menambahkan...",
       "ariaClose": "Tutup manajer addon",
       "ariaManage": "Kelola tambahan",
+      "createGuideLink": "Cara membuat tambahan",
       "errorFallback": "Tidak dapat memasang addon ini.",
       "manageListButton": "Kelola daftar tambahan",
       "subtitle": "Kami tidak menyarankan menambahkan add-on yang tidak resmi atau ilegal.",
       "title": "Tambahan Desktop"
     },
+    "platforms": {
+      "alphaflix": "AlfaFlix",
+      "stremio": "tremio",
+      "supportLabel": "Platform yang didukung untuk Addons:",
+      "supported": "Platform yang didukung: AlphaFlix dan Stremio"
+    },
     "page": {
       "addAddonButton": "Tambahkan Addon",
       "description": "Add-on bersifat opsional. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on apa pun.",
+      "createGuideLink": "Buat panduan tambahan",
       "disabled": "Dengan disabilitas",
       "emptyInstalled": "Belum ada tambahan yang terpasang di sistem.",
       "enabled": "Diaktifkan",

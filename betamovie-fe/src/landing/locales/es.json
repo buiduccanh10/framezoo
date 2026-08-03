@@ -3,7 +3,8 @@
     "features": "Actuación",
     "addons": "Ecosistema",
     "download": "Descargar",
-    "language": "Idioma"
+    "language": "Idioma",
+    "addonGuide": "Guía de complementos"
   },
   "hero": {
     "eyebrow": "ESCRITORIO ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Un hogar más tranquilo para las historias a las que sigues volviendo.",
     "status": "Primero el escritorio. Listo para complementos."
+  },
+  "addonGuide": {
+    "description": "Un complemento es un pequeño servicio HTTP. Entrega un manifiesto y los recursos que necesitas; AlphaFlix se encarga del resto.",
+    "title": "Cree un complemento sin unirse al proceso de la aplicación.",
+    "manifestDescription": "Los metadatos le dicen a la aplicación quién es su complemento, qué recursos admite y dónde se encuentra su ícono.",
+    "eyebrow": "PROTOCOLO / GUÍA ADICIONAL",
+    "manifestTitle": "Comience con manifest.json",
+    "resourcesTitle": "Elige los recursos",
+    "resources": {
+      "stream": "Fuentes de archivos Torrent, HLS, DASH o directo.",
+      "subtitles": "Archivos de subtítulos con etiquetas de idioma.",
+      "catalog": "Filas de películas o series para descubrir.",
+      "addon_catalog": "Un catálogo de otros complementos.",
+      "meta": "Metadatos de película o serie para un título."
+    },
+    "resourcesDescription": "Implemente solo los puntos finales que su complemento necesita. Las respuestas son JSON y pueden escribirse en cualquier idioma.",
+    "steps": [
+      "Sirve /manifest.json y tus puntos finales de recursos desde un servidor HTTP(S) local o público.",
+      "Pruebe cada punto final con curl y verifique la forma JSON.",
+      "Pegue la URL del manifiesto en AlphaFlix Desktop > Complementos."
+    ],
+    "runTitle": "Ejecutar, probar, instalar",
+    "advancedDescription": "El SDK del complemento Stremio es opcional. Úselo si desea ayudas de enrutamiento y serialización; no es requerido por el protocolo.",
+    "advancedTitle": "¿Necesitas un ayudante de nodo?",
+    "advancedLink": "Abrir referencia avanzada de SDK"
   }
 }

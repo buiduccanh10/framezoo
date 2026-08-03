@@ -3,7 +3,8 @@
     "features": "Performans",
     "addons": "Ekosistem",
     "download": "İndirmek",
-    "language": "Dil"
+    "language": "Dil",
+    "addonGuide": "Eklenti kılavuzu"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX MASAÜSTÜ / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Sürekli geri döndüğünüz hikayeler için daha sessiz bir yuva.",
     "status": "Önce masaüstü. Eklentiye hazır."
+  },
+  "addonGuide": {
+    "eyebrow": "ADDON PROTOKOLÜ / KILAVUZU",
+    "manifestDescription": "Meta veriler uygulamaya eklentinizin kim olduğunu, hangi kaynakları desteklediğini ve simgesinin nerede bulunduğunu bildirir.",
+    "description": "Eklenti küçük bir HTTP hizmetidir. Bir manifesto ve ihtiyacınız olan kaynakları sunun; Gerisini AlphaFlix halleder.",
+    "resources": {
+      "catalog": "Keşfedilecek diziler veya filmler.",
+      "stream": "Torrent, HLS, DASH veya doğrudan dosya kaynakları.",
+      "meta": "Bir başlığa ilişkin film veya dizi meta verileri.",
+      "addon_catalog": "Diğer eklentilerin kataloğu.",
+      "subtitles": "Dil etiketli altyazı dosyaları."
+    },
+    "title": "Uygulama sürecine katılmadan bir eklenti oluşturun.",
+    "manifestTitle": "manifest.json ile başlayın",
+    "resourcesTitle": "Kaynakları seçin",
+    "resourcesDescription": "Yalnızca eklentinizin ihtiyaç duyduğu uç noktaları uygulayın. Yanıtlar JSON'dur ve herhangi bir dilde yazılabilir.",
+    "advancedTitle": "Bir Node yardımcısına mı ihtiyacınız var?",
+    "runTitle": "Çalıştırın, test edin, yükleyin",
+    "steps": [
+      "/manifest.json'u ve kaynak uç noktalarınızı yerel veya genel bir HTTP(S) sunucusundan servis edin.",
+      "Her uç noktayı curl ile test edin ve JSON şeklini doğrulayın.",
+      "Bildiri URL'sini AlphaFlix Masaüstü > Eklentiler'e yapıştırın."
+    ],
+    "advancedLink": "Gelişmiş SDK referansını aç",
+    "advancedDescription": "Stremio Addon SDK'sı isteğe bağlıdır. Yönlendirme ve serileştirme yardımcıları istiyorsanız bunu kullanın; protokol gereği buna gerek yoktur."
   }
 }

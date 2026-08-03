@@ -3,7 +3,8 @@
     "features": "Rendiment",
     "addons": "Ecosistema",
     "download": "Descarregar",
-    "language": "Llengua"
+    "language": "Llengua",
+    "addonGuide": "Guia de complements"
   },
   "hero": {
     "eyebrow": "ESCRIPTORI ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Una casa més tranquil·la per a les històries a les quals continueu tornant.",
     "status": "Primer l'escriptori. Preparat per a complements."
+  },
+  "addonGuide": {
+    "title": "Creeu un complement sense unir-vos al procés de l'aplicació.",
+    "manifestTitle": "Comenceu amb manifest.json",
+    "eyebrow": "PROTOCOL / GUIA ADDON",
+    "description": "Un complement és un petit servei HTTP. Doneu un manifest i els recursos que necessiteu; AlphaFlix s'encarrega de la resta.",
+    "manifestDescription": "Les metadades indiquen a l'aplicació qui és el vostre complement, quins recursos admet i on es troba la seva icona.",
+    "resourcesTitle": "Trieu els recursos",
+    "resources": {
+      "meta": "Metadades de pel·lícula o sèrie per a un títol.",
+      "subtitles": "Fitxers de subtítols amb etiquetes d'idioma.",
+      "catalog": "Files de pel·lícules o sèries per descobrir.",
+      "stream": "Fonts de fitxers Torrent, HLS, DASH o directes.",
+      "addon_catalog": "Un catàleg d'altres complements."
+    },
+    "resourcesDescription": "Implementeu només els punts finals que el vostre complement necessita. Les respostes són JSON i es poden escriure en qualsevol idioma.",
+    "runTitle": "Executar, provar, instal·lar",
+    "steps": [
+      "Doneu /manifest.json i els vostres punts finals de recursos des d'un servidor HTTP(S) local o públic.",
+      "Proveu cada punt final amb curl i verifiqueu la forma JSON.",
+      "Enganxeu l'URL del manifest a AlphaFlix Desktop > Complements."
+    ],
+    "advancedTitle": "Necessites un ajudant de Node?",
+    "advancedDescription": "L'SDK del complement Stremio és opcional. Utilitzeu-lo si voleu ajudants d'encaminament i serialització; no ho exigeix ​​el protocol.",
+    "advancedLink": "Obriu la referència SDK avançada"
   }
 }

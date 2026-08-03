@@ -3,7 +3,8 @@
     "features": "表现",
     "addons": "生态系统",
     "download": "下载",
-    "language": "语言"
+    "language": "语言",
+    "addonGuide": "插件指南"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX 桌面 / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "一个更安静的家，供您不断回顾的故事。",
     "status": "桌面优先。插件就绪。"
+  },
+  "addonGuide": {
+    "description": "插件是一个小型 HTTP 服务。提供清单和您需要的资源； AlphaFlix 处理剩下的事情。",
+    "title": "无需加入应用程序流程即可构建插件。",
+    "manifestTitle": "从manifest.json开始",
+    "eyebrow": "插件协议/指南",
+    "manifestDescription": "元数据告诉应用程序您的插件是谁、它支持哪些资源以及它的图标所在的位置。",
+    "resources": {
+      "meta": "标题的电影或系列元数据。",
+      "catalog": "成排的电影或连续剧可供探索。",
+      "addon_catalog": "其他插件的目录。",
+      "subtitles": "带有语言标签的字幕文件。",
+      "stream": "Torrent、HLS、DASH 或直接文件源。"
+    },
+    "resourcesTitle": "选择资源",
+    "resourcesDescription": "仅实现您的插件所需的端点。响应是 JSON，可以用任何语言编写。",
+    "runTitle": "运行、测试、安装",
+    "advancedLink": "打开高级SDK参考",
+    "advancedTitle": "需要节点助手吗？",
+    "steps": [
+      "从本地或公共 HTTP(S) 服务器提供 /manifest.json 和您的资源端点。",
+      "使用curl 测试每个端点并验证JSON 形状。",
+      "将清单 URL 粘贴到 AlphaFlix Desktop > Addons 中。"
+    ],
+    "advancedDescription": "Stremio Addon SDK 是可选的。如果您需要路由和序列化助手，请使用它；协议没有要求。"
   }
 }

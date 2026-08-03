@@ -11,14 +11,22 @@
       "adding": "Notiek pievienošana...",
       "ariaClose": "Aizvērt papildinājumu pārvaldnieku",
       "ariaManage": "Pārvaldiet papildinājumus",
+      "createGuideLink": "Kā izveidot papildinājumu",
       "errorFallback": "Nevar instalēt šo papildinājumu.",
       "manageListButton": "Pārvaldīt papildinājumu sarakstu",
       "subtitle": "Mēs neiesakām pievienot neoficiālus vai nelegālus papildinājumus.",
       "title": "Darbvirsmas papildinājumi"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Atbalstītās platformas papildinājumiem:",
+      "supported": "Atbalstītās platformas: AlphaFlix un Stremio"
+    },
     "page": {
       "addAddonButton": "Pievienojiet papildinājumu",
       "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
+      "createGuideLink": "Izveidojiet papildinājumu ceļvedi",
       "disabled": "Atspējots",
       "emptyInstalled": "Sistēmā vēl nav instalēts neviens papildinājums.",
       "enabled": "Iespējots",

@@ -11,14 +11,22 @@
       "adding": "Přidávání...",
       "ariaClose": "Zavřete správce doplňků",
       "ariaManage": "Spravujte doplňky",
+      "createGuideLink": "Jak vytvořit addon",
       "errorFallback": "Tento doplněk nelze nainstalovat.",
       "manageListButton": "Správa seznamu doplňků",
       "subtitle": "Nedoporučujeme přidávat žádné neoficiální nebo nelegální doplňky.",
       "title": "Desktopové doplňky"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Podporované platformy pro doplňky:",
+      "supported": "Podporované platformy: AlphaFlix a Stremio"
+    },
     "page": {
       "addAddonButton": "Přidat doplněk",
       "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
+      "createGuideLink": "Vytvořte průvodce doplňkem",
       "disabled": "Zakázáno",
       "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",
       "enabled": "Povoleno",

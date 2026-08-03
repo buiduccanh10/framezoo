@@ -11,14 +11,22 @@
       "adding": "Añadiendo...",
       "ariaClose": "Cerrar administrador de complementos",
       "ariaManage": "Administrar complementos",
+      "createGuideLink": "Cómo crear un complemento",
       "errorFallback": "No se puede instalar este complemento.",
       "manageListButton": "Administrar lista de complementos",
       "subtitle": "No recomendamos agregar ningún complemento no oficial o ilegal.",
       "title": "Complementos de escritorio"
     },
+    "platforms": {
+      "alphaflix": "alfaflix",
+      "stremio": "estremio",
+      "supportLabel": "Plataformas compatibles para complementos:",
+      "supported": "Plataformas compatibles: AlphaFlix y Stremio"
+    },
     "page": {
       "addAddonButton": "Agregar complemento",
       "description": "Los complementos son opcionales. Esta aplicación no incluye, recomienda ni aloja ningún complemento.",
+      "createGuideLink": "Crear guía de complementos",
       "disabled": "Desactivado",
       "emptyInstalled": "Aún no hay complementos instalados en el sistema.",
       "enabled": "Activado",

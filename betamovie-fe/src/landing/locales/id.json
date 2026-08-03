@@ -3,7 +3,8 @@
     "features": "Pertunjukan",
     "addons": "Ekosistem",
     "download": "Unduh",
-    "language": "Bahasa"
+    "language": "Bahasa",
+    "addonGuide": "Panduan tambahan"
   },
   "hero": {
     "eyebrow": "DESKTOP ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Rumah yang lebih tenang untuk cerita yang selalu Anda ingat.",
     "status": "Desktop-pertama. Siap tambahan."
+  },
+  "addonGuide": {
+    "eyebrow": "PROTOKOL / PANDUAN TAMBAHAN",
+    "manifestTitle": "Mulailah dengan manifes.json",
+    "description": "Addon adalah layanan HTTP kecil. Sajikan manifes dan sumber daya yang Anda perlukan; AlphaFlix menangani sisanya.",
+    "title": "Bangun add-on tanpa bergabung dengan proses aplikasi.",
+    "resources": {
+      "catalog": "Deretan film atau serial untuk penemuan.",
+      "subtitles": "File subtitle dengan label bahasa.",
+      "addon_catalog": "Katalog tambahan lainnya.",
+      "meta": "Metadata film atau serial untuk sebuah judul.",
+      "stream": "Torrent, HLS, DASH, atau sumber file langsung."
+    },
+    "resourcesTitle": "Pilih sumber daya",
+    "manifestDescription": "Metadata memberi tahu aplikasi siapa add-on Anda, sumber daya apa yang didukungnya, dan di mana ikonnya berada.",
+    "resourcesDescription": "Terapkan hanya titik akhir yang dibutuhkan addon Anda. Responsnya adalah JSON dan dapat ditulis dalam bahasa apa pun.",
+    "steps": [
+      "Sajikan /manifest.json dan titik akhir sumber daya Anda dari server HTTP(S) lokal atau publik.",
+      "Uji setiap titik akhir dengan curl dan verifikasi bentuk JSON.",
+      "Rekatkan URL manifes ke AlphaFlix Desktop > Addons."
+    ],
+    "runTitle": "Jalankan, uji, instal",
+    "advancedLink": "Buka referensi SDK tingkat lanjut",
+    "advancedDescription": "Stremio Addon SDK bersifat opsional. Gunakan jika Anda menginginkan bantuan perutean dan serialisasi; itu tidak diwajibkan oleh protokol.",
+    "advancedTitle": "Butuh pembantu Node?"
   }
 }

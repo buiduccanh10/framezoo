@@ -11,14 +11,22 @@
       "adding": "Lisätään...",
       "ariaClose": "Sulje lisäosien hallinta",
       "ariaManage": "Hallinnoi lisäosia",
+      "createGuideLink": "Kuinka luoda lisäosa",
       "errorFallback": "Tätä lisäosaa ei voi asentaa.",
       "manageListButton": "Hallinnoi lisäosien luetteloa",
       "subtitle": "Emme suosittele epävirallisten tai laittomien lisäosien lisäämistä.",
       "title": "Työpöydän lisäosat"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Tuetut alustat lisäyksille:",
+      "supported": "Tuetut alustat: AlphaFlix ja Stremio"
+    },
     "page": {
       "addAddonButton": "Lisää Addon",
       "description": "Lisäosat ovat valinnaisia. Tämä sovellus ei niputa, suosittele tai isännöi mitään lisäosia.",
+      "createGuideLink": "Luo lisäosien opas",
       "disabled": "Ei käytössä",
       "emptyInstalled": "Järjestelmään ei ole vielä asennettu lisäosia.",
       "enabled": "Käytössä",

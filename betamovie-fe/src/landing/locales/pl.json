@@ -3,7 +3,8 @@
     "features": "Wydajność",
     "addons": "Ekosystem",
     "download": "Pobierać",
-    "language": "Język"
+    "language": "Język",
+    "addonGuide": "Przewodnik po dodatkach"
   },
   "hero": {
     "eyebrow": "KOMPUTER ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Cichszy dom dla historii, do których wciąż wracasz.",
     "status": "Najpierw komputer stacjonarny. Gotowy na dodatek."
+  },
+  "addonGuide": {
+    "title": "Utwórz dodatek bez dołączania do procesu aplikacji.",
+    "eyebrow": "PROTOKÓŁ / PRZEWODNIK DODATKÓW",
+    "description": "Dodatek to mała usługa HTTP. Podaj manifest i potrzebne zasoby; Resztą zajmie się AlphaFlix.",
+    "manifestTitle": "Zacznij od pliku manifest.json",
+    "manifestDescription": "Metadane informują aplikację, kim jest Twój dodatek, jakie zasoby obsługuje i gdzie znajduje się jego ikona.",
+    "resourcesTitle": "Wybierz zasoby",
+    "resources": {
+      "addon_catalog": "Katalog innych dodatków.",
+      "subtitles": "Pliki napisów z etykietami językowymi.",
+      "meta": "Metadane filmu lub serialu dotyczące tytułu.",
+      "stream": "Torrent, HLS, DASH lub bezpośrednie źródła plików.",
+      "catalog": "Rzędy filmów lub seriali do odkrycia."
+    },
+    "resourcesDescription": "Implementuj tylko te punkty końcowe, których potrzebuje Twój dodatek. Odpowiedzi są w formacie JSON i można je zapisać w dowolnym języku.",
+    "steps": [
+      "Udostępniaj plik /manifest.json i punkty końcowe zasobów z lokalnego lub publicznego serwera HTTP(S).",
+      "Przetestuj każdy punkt końcowy za pomocą curl i sprawdź kształt JSON.",
+      "Wklej adres URL manifestu do AlphaFlix Desktop > Dodatki."
+    ],
+    "advancedDescription": "Zestaw SDK dodatku Stremio jest opcjonalny. Użyj go, jeśli potrzebujesz pomocy w routingu i serializacji; nie jest to wymagane protokołem.",
+    "runTitle": "Uruchom, przetestuj, zainstaluj",
+    "advancedTitle": "Potrzebujesz pomocnika Node?",
+    "advancedLink": "Otwórz zaawansowane informacje o pakiecie SDK"
   }
 }

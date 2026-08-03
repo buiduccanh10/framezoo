@@ -3,7 +3,8 @@
     "features": "Rendemento",
     "addons": "Ecosistema",
     "download": "Descargar",
-    "language": "Linguaxe"
+    "language": "Linguaxe",
+    "addonGuide": "Guía de complementos"
   },
   "hero": {
     "eyebrow": "ESCRITORIO ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Un fogar máis tranquilo para as historias ás que segues volvendo.",
     "status": "O escritorio primeiro. Listo para complementos."
+  },
+  "addonGuide": {
+    "title": "Crea un complemento sen unirte ao proceso da aplicación.",
+    "description": "Un complemento é un pequeno servizo HTTP. Servir un manifesto e os recursos que precisa; AlphaFlix encárgase do resto.",
+    "manifestTitle": "Comeza con manifest.json",
+    "eyebrow": "PROTOCOLO / GUÍA ADDON",
+    "manifestDescription": "Os metadatos indican á aplicación quen é o teu complemento, que recursos admite e onde está a súa icona.",
+    "resources": {
+      "meta": "Metadatos de película ou serie para un título.",
+      "catalog": "Filas de películas ou series para descubrir.",
+      "subtitles": "Arquivos de subtítulos con etiquetas de idioma.",
+      "stream": "Torrent, HLS, DASH ou fontes de ficheiros directos.",
+      "addon_catalog": "Un catálogo doutros complementos."
+    },
+    "resourcesTitle": "Escolle os recursos",
+    "resourcesDescription": "Implementa só os puntos finais que o teu complemento precisa. As respostas son JSON e pódense escribir en calquera idioma.",
+    "runTitle": "Executar, probar, instalar",
+    "steps": [
+      "Servir /manifest.json e os puntos finais dos teus recursos desde un servidor HTTP(S) local ou público.",
+      "Proba cada punto final con curl e verifica a forma JSON.",
+      "Pega o URL do manifesto en AlphaFlix Desktop > Complementos."
+    ],
+    "advancedTitle": "Necesitas un axudante de Node?",
+    "advancedLink": "Abre a referencia avanzada do SDK",
+    "advancedDescription": "O Stremio Addon SDK é opcional. Utilízao se queres axudantes de enrutamento e serialización; non o esixe o protocolo."
   }
 }
