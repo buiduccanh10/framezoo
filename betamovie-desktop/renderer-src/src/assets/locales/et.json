@@ -13,7 +13,7 @@
       "ariaManage": "Lisandmoodulite haldamine",
       "errorFallback": "Seda lisandmoodulit ei saa installida.",
       "manageListButton": "Halda lisandmoodulite loendit",
-      "subtitle": "Valikuline. Lisage valitud manifesti URL. See rakendus ei koonda, ei soovita ega hosti lisandmooduleid.",
+      "subtitle": "Me ei soovita lisada mitteametlikke või ebaseaduslikke lisandmooduleid.",
       "title": "Töölaua lisad"
     },
     "page": {

@@ -13,7 +13,7 @@
       "ariaManage": "Zarządzaj dodatkami",
       "errorFallback": "Nie można zainstalować tego dodatku.",
       "manageListButton": "Zarządzaj listą dodatków",
-      "subtitle": "Fakultatywny. Dodaj wybrany adres URL manifestu. Ta aplikacja nie łączy, nie poleca ani nie hostuje dodatków.",
+      "subtitle": "Nie zalecamy dodawania żadnych nieoficjalnych lub nielegalnych dodatków.",
       "title": "Dodatki do komputerów stacjonarnych"
     },
     "page": {

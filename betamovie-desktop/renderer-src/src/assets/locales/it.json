@@ -13,7 +13,7 @@
       "ariaManage": "Gestisci componenti aggiuntivi",
       "errorFallback": "Impossibile installare questo componente aggiuntivo.",
       "manageListButton": "Gestisci l'elenco dei componenti aggiuntivi",
-      "subtitle": "Opzionale. Aggiungi un URL manifest di tua scelta. Questa app non raggruppa, consiglia o ospita componenti aggiuntivi.",
+      "subtitle": "Non consigliamo di aggiungere componenti aggiuntivi non ufficiali o illegali.",
       "title": "Componenti aggiuntivi per il desktop"
     },
     "page": {

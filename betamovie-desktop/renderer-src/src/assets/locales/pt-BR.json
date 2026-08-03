@@ -13,7 +13,7 @@
       "ariaManage": "Gerenciar complementos",
       "errorFallback": "Não foi possível instalar este complemento.",
       "manageListButton": "Gerenciar lista de complementos",
-      "subtitle": "Opcional. Adicione um URL de manifesto de sua escolha. Este aplicativo não agrupa, recomenda ou hospeda complementos.",
+      "subtitle": "Não recomendamos adicionar complementos não oficiais ou ilegais.",
       "title": "Complementos para área de trabalho"
     },
     "page": {
