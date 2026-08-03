@@ -379,9 +379,7 @@ export function LinksDropdown(props: { children: React.ReactNode }) {
           ) : (
             <DropdownLink
               onClick={() =>
-                useOverlayStack
-                  .getState()
-                  .showModal("auth", { mode: "register" })
+                useOverlayStack.getState().showModal("auth", { mode: "login" })
               }
               icon={Icons.CLOUD_ARROW_UP}
               highlight
