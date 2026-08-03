@@ -15,12 +15,14 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 try:
     import libtorrent_sidecar as sidecar
+    import torrent_constants as constants
 except ModuleNotFoundError as error:
     if error.name != "libtorrent":
         raise
     # Pure helper/transcoder tests do not instantiate the libtorrent engine.
     sys.modules["libtorrent"] = ModuleType("libtorrent")
     import libtorrent_sidecar as sidecar
+    import torrent_constants as constants
 
 
 class SidecarStreamTest(unittest.TestCase):
@@ -71,7 +73,7 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.first_request_logged = False
         piece_release = threading.Event()
 
-        def open_first_chunk(self, _absolute_path, _start, _end):
+        def open_first_chunk(self, _absolute_path, _start, _end, **_kwargs):
             piece_release.wait(2)
             return BytesIO(b"test"), b"test"
 
@@ -116,7 +118,7 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertEqual(handler.wfile.getvalue(), b"test")
 
     def test_bounds_no_range_requests(self):
-        with patch.object(sidecar, "RANGE_RESPONSE_MAX_BYTES", 4):
+        with patch.object(constants, "RANGE_RESPONSE_MAX_BYTES", 4):
             runtime = object.__new__(sidecar.TorrentRuntime)
             runtime.stop_event = threading.Event()
             runtime.metadata_ready = threading.Event()
@@ -130,10 +132,10 @@ class SidecarStreamTest(unittest.TestCase):
             runtime.session_id = "torrent-no-range-test"
             runtime.first_request_logged = False
 
-            def open_first_chunk(self, _absolute_path, _start, _end):
+            def open_first_chunk(self, _absolute_path, _start, _end, **_kwargs):
                 return BytesIO(b"012345678"), b"0123"
 
-            def read_range_chunk(self, stream, start, end):
+            def read_range_chunk(self, stream, start, end, **_kwargs):
                 stream.seek(start)
                 return stream.read(end - start + 1)
 
@@ -180,7 +182,7 @@ class SidecarStreamTest(unittest.TestCase):
         runtime = object.__new__(sidecar.TorrentRuntime)
         runtime.stop_event = threading.Event()
 
-        def read_range_chunk(self, stream, start, end):
+        def read_range_chunk(self, stream, start, end, **_kwargs):
             expected_length = end - start + 1
             stream.seek(start)
             data = stream.read(expected_length)
