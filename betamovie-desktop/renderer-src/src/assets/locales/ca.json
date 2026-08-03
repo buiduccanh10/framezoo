@@ -13,7 +13,7 @@
       "ariaManage": "Gestiona els complements",
       "errorFallback": "No es pot instal·lar aquest complement.",
       "manageListButton": "Gestioneu la llista de complements",
-      "subtitle": "Opcional. Afegiu un URL de manifest que trieu. Aquesta aplicació no agrupa, recomana ni allotja complements.",
+      "subtitle": "No recomanem afegir cap complement no oficial o il·legal.",
       "title": "Complements d'escriptori"
     },
     "page": {

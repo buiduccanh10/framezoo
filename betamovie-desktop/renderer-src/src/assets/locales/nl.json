@@ -13,7 +13,7 @@
       "ariaManage": "Beheer add-ons",
       "errorFallback": "Kan deze add-on niet installeren.",
       "manageListButton": "Beheer add-onlijst",
-      "subtitle": "Optioneel. Voeg een manifest-URL toe die u kiest. Deze app bundelt, beveelt of host geen add-ons.",
+      "subtitle": "We raden niet aan om onofficiële of illegale add-ons toe te voegen.",
       "title": "Desktop-add-ons"
     },
     "page": {

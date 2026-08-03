@@ -13,7 +13,7 @@
       "ariaManage": "Upravljanje dodatkov",
       "errorFallback": "Tega dodatka ni mogoče namestiti.",
       "manageListButton": "Upravljanje seznama dodatkov",
-      "subtitle": "Neobvezno. Dodajte URL manifesta, ki ga izberete. Ta aplikacija ne združuje, priporoča ali gosti dodatkov.",
+      "subtitle": "Ne priporočamo dodajanja neuradnih ali nezakonitih dodatkov.",
       "title": "Namizni dodatki"
     },
     "page": {

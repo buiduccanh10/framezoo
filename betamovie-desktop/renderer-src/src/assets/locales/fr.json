@@ -13,7 +13,7 @@
       "ariaManage": "Gérer les modules complémentaires",
       "errorFallback": "Impossible d'installer cet addon.",
       "manageListButton": "Gérer la liste des modules complémentaires",
-      "subtitle": "Facultatif. Ajoutez une URL manifeste de votre choix. Cette application ne regroupe pas, ne recommande pas et n'héberge pas de modules complémentaires.",
+      "subtitle": "Nous vous déconseillons d'ajouter des modules complémentaires non officiels ou illégaux.",
       "title": "Modules complémentaires de bureau"
     },
     "page": {

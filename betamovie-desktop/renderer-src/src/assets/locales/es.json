@@ -13,7 +13,7 @@
       "ariaManage": "Administrar complementos",
       "errorFallback": "No se puede instalar este complemento.",
       "manageListButton": "Administrar lista de complementos",
-      "subtitle": "Opcional. Agregue una URL de manifiesto que elija. Esta aplicación no incluye, recomienda ni aloja complementos.",
+      "subtitle": "No recomendamos agregar ningún complemento no oficial o ilegal.",
       "title": "Complementos de escritorio"
     },
     "page": {
