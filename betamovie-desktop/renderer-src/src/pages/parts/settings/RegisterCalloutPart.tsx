@@ -24,7 +24,7 @@ export function RegisterCalloutPart() {
           <Button
             theme="purple"
             onClick={() =>
-              useOverlayStack.getState().showModal("auth", { mode: "register" })
+              useOverlayStack.getState().showModal("auth", { mode: "login" })
             }
           >
             {t("settings.account.register.cta")}
