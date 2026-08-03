@@ -4,8 +4,8 @@ import { createPortal } from "react-dom";
 import {
   captionIsVisible,
   makeQueId,
-  parseCanonicalVtt,
   sanitize,
+  tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
 import { Transition } from "@/components/utils/Transition";
@@ -15,6 +15,32 @@ import { SubtitleStyling, useSubtitleStore } from "@/stores/subtitles";
 export const wordOverrides: Record<string, string> = {
   // Example: i: "I", but in polish "i" is "and" so this is disabled.
 };
+
+export const DUAL_SUBTITLE_SIZE_SCALE = 0.78;
+export const SECONDARY_SUBTITLE_SIZE_SCALE = 0.88;
+
+function getRenderedSubtitleStyling(
+  styling: SubtitleStyling,
+  dualSubEnabled: boolean,
+  primaryStyling?: SubtitleStyling,
+) {
+  if (!dualSubEnabled) return styling;
+
+  const dualSize = styling.size * DUAL_SUBTITLE_SIZE_SCALE;
+  const secondarySizeLimit = primaryStyling
+    ? primaryStyling.size *
+      DUAL_SUBTITLE_SIZE_SCALE *
+      SECONDARY_SUBTITLE_SIZE_SCALE
+    : Number.POSITIVE_INFINITY;
+
+  return {
+    ...styling,
+    size: Math.min(
+      dualSize * (primaryStyling ? SECONDARY_SUBTITLE_SIZE_SCALE : 1),
+      secondarySizeLimit,
+    ),
+  };
+}
 
 export function CaptionCue({
   text,
@@ -156,12 +182,14 @@ export function SubtitleRenderer(props?: {
 }) {
   const videoTime = usePlayerStore((s) => s.progress.time);
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
+  const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.primaryDelay);
+  const renderedStyling = getRenderedSubtitleStyling(styling, dualSubEnabled);
 
   const parsedCaptions = useMemo(
-    () => (vttData ? parseCanonicalVtt(vttData) : []),
+    () => tryParseCanonicalVtt(vttData),
     [vttData],
   );
 
@@ -179,7 +207,7 @@ export function SubtitleRenderer(props?: {
         <CaptionCue
           key={makeQueId(i, start, end)}
           text={content}
-          styling={styling}
+          styling={renderedStyling}
           overrideCasing={overrideCasing}
           useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
         />
@@ -193,12 +221,19 @@ export function SecondarySubtitleRenderer(props?: {
 }) {
   const videoTime = usePlayerStore((s) => s.progress.time);
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
-  const styling = useSubtitleStore((s) => s.styling);
+  const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
+  const primaryStyling = useSubtitleStore((s) => s.styling);
+  const styling = useSubtitleStore((s) => s.secondaryStyling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.secondaryDelay);
+  const renderedStyling = getRenderedSubtitleStyling(
+    styling,
+    dualSubEnabled,
+    primaryStyling,
+  );
 
   const parsedCaptions = useMemo(
-    () => (vttData ? parseCanonicalVtt(vttData) : []),
+    () => tryParseCanonicalVtt(vttData),
     [vttData],
   );
 
@@ -212,19 +247,13 @@ export function SecondarySubtitleRenderer(props?: {
 
   if (!vttData) return null;
 
-  const secondaryStyling = {
-    ...styling,
-    size: styling.size * 0.85,
-    backgroundOpacity: styling.backgroundOpacity * 0.8,
-  };
-
   return (
     <div className="opacity-90" style={{ opacity: 0.9 }}>
       {visibleCaptions.map(({ start, end, content }, i) => (
         <CaptionCue
           key={`secondary-${makeQueId(i, start, end)}`}
           text={content}
-          styling={secondaryStyling}
+          styling={renderedStyling}
           overrideCasing={overrideCasing}
           useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
         />

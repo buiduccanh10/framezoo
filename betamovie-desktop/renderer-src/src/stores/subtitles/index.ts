@@ -72,10 +72,12 @@ export interface SubtitleStore {
   lastSelectedLanguage: string | null;
   isOpenSubtitles: boolean;
   styling: SubtitleStyling;
+  secondaryStyling: SubtitleStyling;
   overrideCasing: boolean;
   primaryDelay: number;
   secondaryDelay: number;
   updateStyling(newStyling: Partial<SubtitleStyling>): void;
+  updateSecondaryStyling(newStyling: Partial<SubtitleStyling>): void;
   resetStyling(): void;
   setLanguage(language: string | null): void;
   setIsOpenSubtitles(isOpenSubtitles: boolean): void;
@@ -143,6 +145,7 @@ export const useSubtitleStore = create(
       primaryDelay: 0,
       secondaryDelay: 0,
       styling: { ...DEFAULT_SUBTITLE_STYLING },
+      secondaryStyling: { ...DEFAULT_SUBTITLE_STYLING },
       resetSubtitleSpecificSettings(track = "primary") {
         set((s) => {
           if (track === "secondary") s.secondaryDelay = 0;
@@ -183,9 +186,48 @@ export const useSubtitleStore = create(
             );
         });
       },
+      updateSecondaryStyling(newStyling) {
+        set((s) => {
+          if (newStyling.backgroundOpacity !== undefined)
+            s.secondaryStyling.backgroundOpacity = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundOpacity),
+            );
+          if (newStyling.backgroundBlur !== undefined)
+            s.secondaryStyling.backgroundBlur = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundBlur),
+            );
+          if (newStyling.backgroundBlurEnabled !== undefined)
+            s.secondaryStyling.backgroundBlurEnabled =
+              newStyling.backgroundBlurEnabled;
+          if (newStyling.color !== undefined)
+            s.secondaryStyling.color = newStyling.color.toLowerCase();
+          if (newStyling.size !== undefined)
+            s.secondaryStyling.size = Math.min(
+              10,
+              Math.max(0.01, newStyling.size),
+            );
+          if (newStyling.bold !== undefined)
+            s.secondaryStyling.bold = newStyling.bold;
+          if (newStyling.verticalPosition !== undefined)
+            s.secondaryStyling.verticalPosition = Math.min(
+              100,
+              Math.max(0, newStyling.verticalPosition),
+            );
+          if (newStyling.fontStyle !== undefined)
+            s.secondaryStyling.fontStyle = newStyling.fontStyle;
+          if (newStyling.borderThickness !== undefined)
+            s.secondaryStyling.borderThickness = Math.min(
+              10,
+              Math.max(0, newStyling.borderThickness),
+            );
+        });
+      },
       resetStyling() {
         set((s) => {
           s.styling = { ...DEFAULT_SUBTITLE_STYLING };
+          s.secondaryStyling = { ...DEFAULT_SUBTITLE_STYLING };
         });
       },
       setLanguage(lang) {
@@ -229,7 +271,7 @@ export const useSubtitleStore = create(
     })),
     {
       name: "__MW::subtitles",
-      version: 4,
+      version: 5,
       migrate: (persistedState: unknown, version: number) => {
         if (!persistedState || typeof persistedState !== "object") {
           return persistedState;
@@ -237,6 +279,7 @@ export const useSubtitleStore = create(
 
         const state = persistedState as {
           styling?: Partial<SubtitleStyling>;
+          secondaryStyling?: Partial<SubtitleStyling>;
           delay?: unknown;
           primaryDelay?: unknown;
           secondaryDelay?: unknown;
@@ -252,12 +295,10 @@ export const useSubtitleStore = create(
           delete state.delay;
         }
 
-        if (!state.styling) return state;
-
         // Migrate old defaults:
         // - size: 100% (1.0) -> 165% in UI (1.65 * 1.5 in renderer em)
         // - background opacity: 50% -> 0%
-        if (version < 2) {
+        if (version < 2 && state.styling) {
           if (state.styling.size === 1) {
             state.styling.size = 1.65;
           }
@@ -267,6 +308,7 @@ export const useSubtitleStore = create(
         }
 
         if (
+          state.styling &&
           version < 3 &&
           matchesSubtitleStyling(
             state.styling,
@@ -274,6 +316,12 @@ export const useSubtitleStore = create(
           )
         ) {
           state.styling = { ...DEFAULT_SUBTITLE_STYLING };
+        }
+
+        if (!state.secondaryStyling) {
+          state.secondaryStyling = {
+            ...(state.styling ?? DEFAULT_SUBTITLE_STYLING),
+          };
         }
 
         return state;

@@ -4,7 +4,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { CaptionCue } from "@/components/player/base/SubtitleView";
 import {
   captionIsVisible,
-  parseCanonicalVtt,
+  tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import {
   DesktopPipAction,
@@ -74,10 +74,10 @@ const PipCaptions = memo(function PipCaptionsView(props: {
   };
   const captions = useMemo(() => {
     const primary = props.state.caption
-      ? parseCanonicalVtt(props.state.caption.vttData)
+      ? tryParseCanonicalVtt(props.state.caption.vttData)
       : [];
     const secondary = props.state.secondaryCaption
-      ? parseCanonicalVtt(props.state.secondaryCaption.vttData)
+      ? tryParseCanonicalVtt(props.state.secondaryCaption.vttData)
       : [];
     return {
       primary: primary.filter((cue) =>

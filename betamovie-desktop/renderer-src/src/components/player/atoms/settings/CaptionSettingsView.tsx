@@ -9,6 +9,8 @@ import { Icon, Icons } from "@/components/Icon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useProgressBar } from "@/hooks/useProgressBar";
+import { SubtitleTrack } from "@/stores/player/slices/source";
+import { usePlayerStore } from "@/stores/player/store";
 import {
   DEFAULT_SUBTITLE_STYLING,
   SubtitleStyling,
@@ -222,6 +224,41 @@ export function CaptionSetting(props: {
 
 export const colors = ["#ffffff", "#80b1fa", "#e2e535", "#10B239FF"];
 
+export function SubtitleTrackTabs(props: {
+  selectedTrack: SubtitleTrack;
+  onChange: (track: SubtitleTrack) => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <div
+      className="grid grid-cols-2 gap-1 rounded-xl bg-white/[0.06] p-1"
+      role="tablist"
+      aria-label={t("player.menus.subtitles.dualSub")}
+    >
+      {(["primary", "secondary"] as const).map((track) => (
+        <button
+          key={track}
+          type="button"
+          onClick={() => props.onChange(track)}
+          className={classNames(
+            "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+            props.selectedTrack === track
+              ? track === "primary"
+                ? "bg-video-context-type-accent text-white shadow-sm"
+                : "bg-purple-600 text-white shadow-sm"
+              : "text-video-context-type-secondary hover:bg-white/10",
+          )}
+          role="tab"
+          aria-selected={props.selectedTrack === track}
+        >
+          {t(`player.menus.subtitles.${track}`)}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function CaptionSettingsView({
   id,
   overlayBackLink,
@@ -232,23 +269,31 @@ export function CaptionSettingsView({
   const { t } = useTranslation();
   const router = useOverlayRouter(id);
   const subtitleStore = useSubtitleStore();
+  const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
+  const [selectedTrack, setSelectedTrack] = useState<SubtitleTrack>("primary");
 
-  const styling = subtitleStore.styling;
+  const styling =
+    selectedTrack === "secondary"
+      ? subtitleStore.secondaryStyling
+      : subtitleStore.styling;
   const overrideCasing = subtitleStore.overrideCasing;
   const setOverrideCasing = subtitleStore.setOverrideCasing;
-  const updateStyling = subtitleStore.updateStyling;
-
-  useEffect(() => {
-    subtitleStore.updateStyling(styling);
-  }, [styling, subtitleStore]);
+  const updateStyling =
+    selectedTrack === "secondary"
+      ? subtitleStore.updateSecondaryStyling
+      : subtitleStore.updateStyling;
 
   const handleStylingChange = (newStyling: SubtitleStyling) => {
     updateStyling(newStyling);
   };
 
   const resetSubStyling = () => {
-    subtitleStore.updateStyling(DEFAULT_SUBTITLE_STYLING);
+    updateStyling(DEFAULT_SUBTITLE_STYLING);
   };
+
+  useEffect(() => {
+    if (!dualSubEnabled) setSelectedTrack("primary");
+  }, [dualSubEnabled]);
 
   return (
     <>
@@ -259,6 +304,14 @@ export function CaptionSettingsView({
       >
         {t("player.menus.subtitles.settings.backlink")}
       </Menu.BackLink>
+      {dualSubEnabled && (
+        <Menu.Section className="pb-1">
+          <SubtitleTrackTabs
+            selectedTrack={selectedTrack}
+            onChange={setSelectedTrack}
+          />
+        </Menu.Section>
+      )}
       <Menu.Section className="space-y-6 pb-5">
         <>
           <div className="flex justify-between items-center">

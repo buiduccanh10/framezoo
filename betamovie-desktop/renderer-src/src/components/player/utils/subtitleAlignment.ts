@@ -168,26 +168,20 @@ function buildUnalignedResult(
 export function selectSubtitleAlignmentConsensus(
   vttData: string,
   candidates: SubtitleAlignmentResponse[],
-  expectedOffsetMs?: number,
 ): SubtitleAlignmentResponse {
   const validCandidates = candidates.filter(
     (candidate) =>
       candidate.aligned &&
       Number.isFinite(candidate.offsetMs) &&
-      candidate.confidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE &&
-      (expectedOffsetMs == null ||
-        Math.abs(candidate.offsetMs - expectedOffsetMs) <=
-          SUBTITLE_ALIGNMENT_OFFSET_TOLERANCE_MS),
+      candidate.confidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE,
   );
   if (validCandidates.length === 0) {
     return buildUnalignedResult(
       vttData,
       candidates,
-      expectedOffsetMs != null && candidates.length > 0
-        ? "secondary_offset_mismatch"
-        : candidates.length > 0
-          ? "low_alignment_confidence"
-          : "no_alignment_result",
+      candidates.length > 0
+        ? "low_alignment_confidence"
+        : "no_alignment_result",
     );
   }
 
@@ -316,13 +310,9 @@ export async function alignSubtitlesWithCurrentStream(options: {
 
   for (const subtitle of options.subtitles) {
     if (subtitle.track === "primary") continue;
-    const primaryOffset = results.primary?.aligned
-      ? results.primary.offsetMs
-      : undefined;
     results[subtitle.track] = selectSubtitleAlignmentConsensus(
       subtitle.vttData,
       candidatesByTrack.get(subtitle.track) ?? [],
-      primaryOffset,
     );
   }
 

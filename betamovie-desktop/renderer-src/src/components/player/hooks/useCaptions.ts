@@ -508,34 +508,55 @@ export function useCaptions() {
       const caption = captions.find((v) => v.id === captionId);
       if (!caption) return;
 
-      try {
-        const captionToSet: Caption = {
-          id: caption.id,
-          language: caption.language,
-          url: caption.url,
-          vttData: "",
-          ...(isEmbeddedCaption(caption) ? { trackId: caption.trackId } : {}),
-        };
+      const candidates = [
+        caption,
+        ...captions.filter(
+          (candidate) =>
+            candidate.id !== caption.id &&
+            candidate.id !== selectedCaption?.id &&
+            candidate.url !== caption.url &&
+            getCaptionLanguageGroupKey(candidate) ===
+              getCaptionLanguageGroupKey(caption),
+        ),
+      ];
+      let lastError: unknown;
 
-        if (!isEmbeddedCaption(caption)) {
-          captionToSet.vttData = await downloadCaptionAsVtt(caption);
-        }
+      for (const candidate of candidates) {
+        try {
+          const captionToSet: Caption = {
+            id: candidate.id,
+            language: candidate.language,
+            url: candidate.url,
+            vttData: "",
+            ...(isEmbeddedCaption(candidate)
+              ? { trackId: candidate.trackId }
+              : {}),
+          };
 
-        if (secondaryCaption?.id !== caption.id) {
-          resetSubtitleSpecificSettings("secondary");
+          if (!isEmbeddedCaption(candidate)) {
+            captionToSet.vttData = await downloadCaptionAsVtt(candidate);
+          }
+
+          if (secondaryCaption?.id !== candidate.id) {
+            resetSubtitleSpecificSettings("secondary");
+          }
+          setSecondaryCaption(captionToSet);
+          return;
+        } catch (error) {
+          lastError = error;
         }
-        setSecondaryCaption(captionToSet);
-      } catch (error) {
-        console.warn("Skipping unavailable secondary caption source", {
-          captionId: caption.id,
-          source: caption.source,
-          error,
-        });
       }
+
+      console.warn("Skipping unavailable secondary caption source", {
+        captionId: caption.id,
+        source: caption.source,
+        error: lastError,
+      });
     },
     [
       captions,
       resetSubtitleSpecificSettings,
+      selectedCaption?.id,
       secondaryCaption,
       setSecondaryCaption,
     ],

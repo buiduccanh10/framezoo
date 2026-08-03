@@ -10,12 +10,15 @@ import { Icon, Icons } from "@/components/Icon";
 import {
   CaptionSetting,
   ColorOption,
+  SubtitleTrackTabs,
   colors,
 } from "@/components/player/atoms/settings/CaptionSettingsView";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { CaptionCue } from "@/components/player/Player";
 import { Heading1 } from "@/components/utils/Text";
 import { Transition } from "@/components/utils/Transition";
+import { SubtitleTrack } from "@/stores/player/slices/source";
+import { usePlayerStore } from "@/stores/player/store";
 import {
   DEFAULT_SUBTITLE_STYLING,
   SubtitleStyling,
@@ -102,29 +105,60 @@ export function CaptionPreview(props: {
 export function CaptionsPart(props: {
   styling: SubtitleStyling;
   setStyling: (s: SubtitleStyling) => void;
+  secondaryStyling: SubtitleStyling;
+  setSecondaryStyling: (s: SubtitleStyling) => void;
 }) {
   const { t } = useTranslation();
   const [fullscreenPreview, setFullscreenPreview] = useState(false);
 
-  const subtitleStore = useSubtitleStore();
+  const updatePrimaryStyling = useSubtitleStore((s) => s.updateStyling);
+  const updateSecondaryStyling = useSubtitleStore(
+    (s) => s.updateSecondaryStyling,
+  );
+  const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
+  const [selectedTrack, setSelectedTrack] = useState<SubtitleTrack>("primary");
 
   useEffect(() => {
-    subtitleStore.updateStyling(props.styling);
-  }, [props.styling, subtitleStore, subtitleStore.updateStyling]);
+    updatePrimaryStyling(props.styling);
+    updateSecondaryStyling(props.secondaryStyling);
+  }, [
+    props.styling,
+    props.secondaryStyling,
+    updatePrimaryStyling,
+    updateSecondaryStyling,
+  ]);
 
+  const styling =
+    selectedTrack === "secondary" ? props.secondaryStyling : props.styling;
   const handleStylingChange = (newStyling: SubtitleStyling) => {
-    props.setStyling(newStyling);
-    subtitleStore.updateStyling(newStyling);
+    if (selectedTrack === "secondary") {
+      props.setSecondaryStyling(newStyling);
+      updateSecondaryStyling(newStyling);
+    } else {
+      props.setStyling(newStyling);
+      updatePrimaryStyling(newStyling);
+    }
   };
 
   const resetSubStyling = () => {
-    subtitleStore.resetStyling();
-    props.setStyling({ ...DEFAULT_SUBTITLE_STYLING });
+    handleStylingChange({ ...DEFAULT_SUBTITLE_STYLING });
   };
+
+  useEffect(() => {
+    if (!dualSubEnabled) setSelectedTrack("primary");
+  }, [dualSubEnabled]);
 
   return (
     <div>
       <Heading1 border>{t("settings.subtitles.title")}</Heading1>
+      {dualSubEnabled && (
+        <div className="mb-6 max-w-md">
+          <SubtitleTrackTabs
+            selectedTrack={selectedTrack}
+            onChange={setSelectedTrack}
+          />
+        </div>
+      )}
       <div className="grid md:grid-cols-[1fr,356px] gap-8">
         <div className="space-y-6">
           <>
@@ -134,11 +168,11 @@ export function CaptionsPart(props: {
               min={0}
               onChange={(v) =>
                 handleStylingChange({
-                  ...props.styling,
+                  ...styling,
                   backgroundOpacity: v / 100,
                 })
               }
-              value={props.styling.backgroundOpacity * 100}
+              value={styling.backgroundOpacity * 100}
               textTransformer={(s) => `${s}%`}
             />
             <div className="flex justify-between items-center">
@@ -147,12 +181,11 @@ export function CaptionsPart(props: {
               </Menu.FieldTitle>
               <div className="flex justify-center items-center">
                 <Toggle
-                  enabled={props.styling.backgroundBlurEnabled}
+                  enabled={styling.backgroundBlurEnabled}
                   onClick={() =>
                     handleStylingChange({
-                      ...props.styling,
-                      backgroundBlurEnabled:
-                        !props.styling.backgroundBlurEnabled,
+                      ...styling,
+                      backgroundBlurEnabled: !styling.backgroundBlurEnabled,
                     })
                   }
                 />
@@ -161,18 +194,18 @@ export function CaptionsPart(props: {
             <span className="text-xs text-type-secondary">
               {t("settings.subtitles.backgroundBlurEnabledDescription")}
             </span>
-            {props.styling.backgroundBlurEnabled && (
+            {styling.backgroundBlurEnabled && (
               <CaptionSetting
                 label={t("settings.subtitles.backgroundBlurLabel")}
                 max={100}
                 min={0}
                 onChange={(v) =>
                   handleStylingChange({
-                    ...props.styling,
+                    ...styling,
                     backgroundBlur: v / 100,
                   })
                 }
-                value={props.styling.backgroundBlur * 100}
+                value={styling.backgroundBlur * 100}
                 textTransformer={(s) => `${s}%`}
               />
             )}
@@ -183,11 +216,11 @@ export function CaptionsPart(props: {
               textTransformer={(s) => `${s}%`}
               onChange={(v) =>
                 handleStylingChange({
-                  ...props.styling,
+                  ...styling,
                   size: v / 100,
                 })
               }
-              value={props.styling.size * 100}
+              value={styling.size * 100}
             />
             <div className="flex justify-between items-center">
               <Menu.FieldTitle>
@@ -218,33 +251,32 @@ export function CaptionsPart(props: {
                     },
                   ]}
                   selectedItem={{
-                    id: props.styling.fontStyle,
+                    id: styling.fontStyle,
                     name:
-                      t(
-                        `settings.subtitles.textStyle.${props.styling.fontStyle}`,
-                      ) || props.styling.fontStyle,
+                      t(`settings.subtitles.textStyle.${styling.fontStyle}`) ||
+                      styling.fontStyle,
                   }}
                   setSelectedItem={(item) =>
                     handleStylingChange({
-                      ...props.styling,
+                      ...styling,
                       fontStyle: item.id,
                     })
                   }
                 />
               </div>
             </div>
-            {props.styling.fontStyle === "Border" && (
+            {styling.fontStyle === "Border" && (
               <CaptionSetting
                 label={t("settings.subtitles.BorderThicknessLabel")}
                 max={10}
                 min={0}
                 onChange={(v) =>
                   handleStylingChange({
-                    ...props.styling,
+                    ...styling,
                     borderThickness: v,
                   })
                 }
-                value={props.styling.borderThickness}
+                value={styling.borderThickness}
                 textTransformer={(s) => `${s}px`}
                 decimalsAllowed={1}
               />
@@ -255,11 +287,11 @@ export function CaptionsPart(props: {
               </Menu.FieldTitle>
               <div className="flex justify-center items-center">
                 <Toggle
-                  enabled={props.styling.bold}
+                  enabled={styling.bold}
                   onClick={() =>
                     handleStylingChange({
-                      ...props.styling,
-                      bold: !props.styling.bold,
+                      ...styling,
+                      bold: !styling.bold,
                     })
                   }
                 />
@@ -274,30 +306,26 @@ export function CaptionsPart(props: {
                   <ColorOption
                     onClick={() =>
                       handleStylingChange({
-                        ...props.styling,
+                        ...styling,
                         color: v,
                       })
                     }
                     color={v}
-                    active={props.styling.color === v}
+                    active={styling.color === v}
                     key={v}
                   />
                 ))}
                 <div className="relative">
                   <input
                     type="color"
-                    value={props.styling.color}
+                    value={styling.color}
                     onChange={(e) => {
                       const color = e.target.value;
-                      handleStylingChange({ ...props.styling, color });
-                      subtitleStore.updateStyling({
-                        ...props.styling,
-                        color,
-                      });
+                      handleStylingChange({ ...styling, color });
                     }}
                     className="absolute opacity-0 cursor-pointer w-8 h-8"
                   />
-                  <div style={{ color: props.styling.color }}>
+                  <div style={{ color: styling.color }}>
                     <Icon icon={Icons.BRUSH} className="text-2xl" />
                   </div>
                 </div>
@@ -312,13 +340,13 @@ export function CaptionsPart(props: {
                   type="button"
                   className={classNames(
                     "px-3 py-1 rounded transition-colors duration-100",
-                    props.styling.verticalPosition === 1
+                    styling.verticalPosition === 1
                       ? "bg-video-context-buttonFocus"
                       : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
                   )}
                   onClick={() =>
                     handleStylingChange({
-                      ...props.styling,
+                      ...styling,
                       verticalPosition: 1,
                     })
                   }
@@ -329,13 +357,13 @@ export function CaptionsPart(props: {
                   type="button"
                   className={classNames(
                     "px-3 py-1 rounded transition-colors duration-100",
-                    props.styling.verticalPosition === 3
+                    styling.verticalPosition === 3
                       ? "bg-video-context-buttonFocus"
                       : "bg-video-context-buttonFocus bg-opacity-0 hover:bg-opacity-50",
                   )}
                   onClick={() =>
                     handleStylingChange({
-                      ...props.styling,
+                      ...styling,
                       verticalPosition: 3,
                     })
                   }
@@ -356,13 +384,13 @@ export function CaptionsPart(props: {
         <>
           <CaptionPreview
             show
-            styling={props.styling}
+            styling={styling}
             onToggle={() => setFullscreenPreview((s) => !s)}
           />
           <CaptionPreview
             show={fullscreenPreview}
             fullscreen
-            styling={props.styling}
+            styling={styling}
             onToggle={() => setFullscreenPreview((s) => !s)}
           />
         </>

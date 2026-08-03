@@ -56,6 +56,19 @@ function extractSubtitleTextFromZip(
   }
 }
 
+function isHtmlResponse(data: string, contentType?: string): boolean {
+  const hasHtmlMarkup =
+    /^\s*(?:<!doctype\s+html\b|<html\b|<head\b|<body\b)/i.test(data) ||
+    /<!--[\s\S]*-->/i.test(data);
+  if (hasHtmlMarkup) return true;
+
+  if (!contentType?.toLowerCase().includes("text/html")) return false;
+
+  return !/(?:^|\r?\n)\s*(?:(?:\d+:)?\d{1,2}:\d{2}[.,]\d{1,3})\s+-->/m.test(
+    data,
+  );
+}
+
 /**
  * Always returns canonical WebVTT.
  */
@@ -122,8 +135,16 @@ export async function downloadCaptionAsVtt(
     if (!data) {
       data = decodeSubtitleBytes(buffer, caption.language);
     }
+
+    if (data && isHtmlResponse(data, contentType)) {
+      throw new Error("Subtitle source returned HTML instead of subtitle data");
+    }
   }
   if (!data) throw new Error("failed to get caption data");
+
+  if (isHtmlResponse(data)) {
+    throw new Error("Subtitle source returned HTML instead of subtitle data");
+  }
 
   const output = normalizeSubtitleToVtt(data, caption.type);
   downloadCache.set(caption.url, output, expirySeconds);

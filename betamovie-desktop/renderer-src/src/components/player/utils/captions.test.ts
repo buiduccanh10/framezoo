@@ -4,6 +4,7 @@ import {
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
   shiftVttTimestamps,
+  tryParseCanonicalVtt,
 } from "./captions";
 
 describe("canonical subtitle VTT helpers", () => {
@@ -20,16 +21,50 @@ Hello world`;
     expect(cues[0].content).toBe("Hello world");
   });
 
-  it("uses the supplied format hint for non-standard WebVTT headers", () => {
-    const vtt = normalizeSubtitleToVtt(
-      `WEBVTT - generated
+  it("normalizes WebVTT with an extended header without a format hint", () => {
+    const vtt = normalizeSubtitleToVtt(`WEBVTT - generated
 
 00:00:01.000 --> 00:00:02.500
+Hello world`);
+
+    expect(parseCanonicalVtt(vtt)).toHaveLength(1);
+  });
+
+  it("supports VTT cue settings and files without a WebVTT header", () => {
+    const vtt = normalizeSubtitleToVtt(
+      `00:00:01.000 --> 00:00:02.500 align:start position:10%
 Hello world`,
-      "vtt",
     );
 
     expect(parseCanonicalVtt(vtt)).toHaveLength(1);
+  });
+
+  it("detects the payload before trusting a wrong format hint", () => {
+    const srt = `1
+00:00:01,000 --> 00:00:02,500
+Hello world`;
+
+    const vtt = normalizeSubtitleToVtt(srt, "vtt");
+
+    expect(parseCanonicalVtt(vtt)).toHaveLength(1);
+  });
+
+  it("keeps an empty WebVTT document valid", () => {
+    expect(parseCanonicalVtt("WEBVTT")).toEqual([]);
+  });
+
+  it("rejects malformed subtitle data instead of returning an empty VTT", () => {
+    expect(() =>
+      normalizeSubtitleToVtt("not a subtitle payload", "srt"),
+    ).toThrow("Invalid subtitle format");
+  });
+
+  it("rejects an HTML error page as subtitle data", () => {
+    expect(() =>
+      normalizeSubtitleToVtt(
+        "<!doctype html><html><body>upstream error</body></html>",
+      ),
+    ).toThrow("Invalid subtitle format");
   });
 
   it("deduplicates canonical VTT cues during parse", () => {
@@ -51,6 +86,11 @@ Second line`;
       "Hello world",
       "Second line",
     ]);
+  });
+
+  it("fails soft for malformed runtime subtitle payloads", () => {
+    expect(tryParseCanonicalVtt("not a subtitle payload")).toEqual([]);
+    expect(tryParseCanonicalVtt(null)).toEqual([]);
   });
 
   it("shifts native VTT cues by subtitle delay", () => {
