@@ -13,7 +13,7 @@
       "ariaManage": "Kiegészítők kezelése",
       "errorFallback": "Nem sikerült telepíteni ezt a kiegészítőt.",
       "manageListButton": "Kiegészítőlista kezelése",
-      "subtitle": "Választható. Adjon hozzá egy kiválasztott manifeszt URL-t. Ez az alkalmazás nem köt össze, nem ajánl és nem tárol kiegészítőket.",
+      "subtitle": "Nem javasoljuk nem hivatalos vagy illegális kiegészítők hozzáadását.",
       "title": "Asztali kiegészítők"
     },
     "page": {

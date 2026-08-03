@@ -42,19 +42,30 @@ const GOOGLE_LANG_MAP = {
 };
 
 function parseArgs(argv) {
-  const args = { cmd: "audit", locale: null, write: false, forceKeys: [] };
+  const args = {
+    cmd: "audit",
+    locale: null,
+    write: false,
+    forceKeys: [],
+    forceKeysRequested: false,
+  };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === "audit" || arg === "translate") args.cmd = arg;
+    else if (arg === "--") continue;
     else if (arg.startsWith("--locale="))
       args.locale = arg.slice("--locale=".length);
-    else if (arg.startsWith("--force-keys="))
+    else if (arg.startsWith("--force-keys=")) {
+      args.forceKeysRequested = true;
       args.forceKeys = arg
         .slice("--force-keys=".length)
         .split(",")
         .map((k) => k.trim())
         .filter(Boolean);
+    }
     else if (arg === "--force-keys") {
+      args.forceKeysRequested = true;
+      if (argv[i + 1] === "--") i++;
       const next = argv[i + 1];
       if (next && !next.startsWith("--")) {
         args.forceKeys = next
@@ -64,7 +75,15 @@ function parseArgs(argv) {
         i++;
       }
     } else if (arg === "--write") args.write = true;
+    else if (arg.startsWith("--"))
+      throw new Error(
+        `Unknown option "${arg}". Use --force-keys <key>[,<key>...] and --locale=<locale>.`,
+      );
   }
+  if (args.forceKeysRequested && !args.forceKeys.length)
+    throw new Error(
+      "--force-keys requires at least one translation key, for example: --force-keys addons.manager.subtitle",
+    );
   return args;
 }
 

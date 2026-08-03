@@ -13,7 +13,7 @@
       "ariaManage": "Hallinnoi lisäosia",
       "errorFallback": "Tätä lisäosaa ei voi asentaa.",
       "manageListButton": "Hallinnoi lisäosien luetteloa",
-      "subtitle": "Valinnainen. Lisää valitsemasi URL-osoite. Tämä sovellus ei niputa, suosittele tai isännöi lisäosia.",
+      "subtitle": "Emme suosittele epävirallisten tai laittomien lisäosien lisäämistä.",
       "title": "Työpöydän lisäosat"
     },
     "page": {

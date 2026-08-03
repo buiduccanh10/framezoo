@@ -13,7 +13,7 @@
       "ariaManage": "Eklentileri yönet",
       "errorFallback": "Bu eklenti yüklenemiyor.",
       "manageListButton": "Eklenti listesini yönet",
-      "subtitle": "İsteğe bağlı. Seçtiğiniz bir bildirim URL'sini ekleyin. Bu uygulama eklentileri paketlemez, önermez veya barındırmaz.",
+      "subtitle": "Resmi olmayan veya yasa dışı eklentiler eklemenizi önermiyoruz.",
       "title": "Masaüstü Eklentileri"
     },
     "page": {
