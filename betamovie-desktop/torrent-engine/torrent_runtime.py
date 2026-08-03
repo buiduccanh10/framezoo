@@ -113,16 +113,8 @@ class TorrentRuntime:
                 priorities = [0] * self.info.files().num_files()
                 priorities[self.file_index] = 7
                 self.handle.prioritize_files(priorities)
-                # Streaming requests are scheduled by piece deadlines below.
-                # Sequential mode would start at torrent piece 0, which may
-                # be far before the selected video file in a multi-file
-                # torrent.
-                self.handle.set_sequential_download(False)
-                self.prioritize_range(
-                    0,
-                    constants.RANGE_PREFETCH_BYTES,
-                    reason="metadata-head",
-                )
+                # Enable sequential downloading for instant streaming (Stremio-like behavior)
+                self.handle.set_sequential_download(True)
                 self.metadata_ready.set()
                 log_event(
                     "metadata ready",
@@ -307,12 +299,7 @@ class TorrentRuntime:
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
     ) -> bool:
-        prefetch_length = max(
-            end - start + 1,
-            constants.RANGE_PREFETCH_BYTES,
-        )
         required_pieces = sorted(self.map_pieces(start, end - start + 1))
-        all_pieces = sorted(self.map_pieces(start, prefetch_length))
         range_key = (start, end)
         first_required_piece = min(required_pieces) if required_pieces else None
         last_required_piece = max(required_pieces) if required_pieces else None
@@ -352,7 +339,6 @@ class TorrentRuntime:
                 requiredPieces=len(required_pieces),
                 firstPiece=first_required_piece,
                 lastPiece=last_required_piece,
-                prefetchPieces=len(all_pieces),
                 pieceCount=piece_count,
                 firstPieceAvailable=first_piece_available,
                 firstPieceAvailability=first_piece_availability,
@@ -386,9 +372,6 @@ class TorrentRuntime:
                 )
                 return True
 
-            # Required bytes win over read-ahead. Reapplying a short deadline
-            # to the required pieces prevents sequential mode from starving a
-            # demuxer request after an HTTP seek.
             for index, piece in enumerate(required_pieces):
                 if not self.handle.have_piece(piece):
                     try:
@@ -396,14 +379,6 @@ class TorrentRuntime:
                         self._set_piece_deadline(piece, index * 10)
                     except Exception:
                         pass
-            for index, piece in enumerate(all_pieces):
-                if piece in required_pieces or self.handle.have_piece(piece):
-                    continue
-                try:
-                    self.handle.piece_priority(piece, 7)
-                    self._set_piece_deadline(piece, 500 + index * 50)
-                except Exception:
-                    pass
             time.sleep(constants.RANGE_RETRY_INTERVAL)
         return not required_pieces
 
@@ -500,11 +475,8 @@ class TorrentRuntime:
 
         if byte_range is None:
             start = 0
-            end = min(
-                max(0, total - 1),
-                constants.RANGE_RESPONSE_MAX_BYTES - 1,
-            )
-            status_code = 206
+            end = max(0, total - 1)
+            status_code = 200
         else:
             start, end, status_code = byte_range[0], byte_range[1], 206
             start, end = cap_open_ended_range(range_header, (start, end))

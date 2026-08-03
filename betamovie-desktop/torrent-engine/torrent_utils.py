@@ -102,22 +102,15 @@ def cap_open_ended_range(
     value: Optional[str],
     byte_range: Tuple[int, int],
 ) -> Tuple[int, int]:
-    """Bound large HTTP ranges so clients can cancel cleanly."""
+    """Return the requested byte range without artificial limits."""
     if not value or not value.lower().startswith("bytes="):
         return byte_range
 
     raw_start, raw_end = value[6:].split("-", 1)
     start, end = byte_range
     if not raw_start:
-        if end - start + 1 <= constants.RANGE_RESPONSE_MAX_BYTES:
-            return byte_range
-        return max(start, end - constants.RANGE_RESPONSE_MAX_BYTES + 1), end
-    if raw_end and end - start + 1 <= constants.RANGE_RESPONSE_MAX_BYTES:
-        return byte_range
-    return start, min(
-        end,
-        start + constants.RANGE_RESPONSE_MAX_BYTES - 1,
-    )
+        return max(start, end - (int(raw_end) if raw_end else 0)), end
+    return start, min(end, int(raw_end) if raw_end else end)
 
 
 def get_torrent_data_dir() -> str:
