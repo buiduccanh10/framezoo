@@ -113,8 +113,11 @@ class TorrentRuntime:
                 priorities = [0] * self.info.files().num_files()
                 priorities[self.file_index] = 7
                 self.handle.prioritize_files(priorities)
-                # Enable sequential downloading for instant streaming (Stremio-like behavior)
-                self.handle.set_sequential_download(True)
+                # Do NOT use set_sequential_download(True): it sequences by TORRENT piece index
+                # (starting from piece 0 of all files), not by file byte offset.
+                # For multi-file torrents this means it downloads subs/nfo/extras FIRST
+                # before ever touching the video file pieces.
+                # Instead we rely entirely on piece_priority + piece deadlines in wait_for_range.
                 self.metadata_ready.set()
                 log_event(
                     "metadata ready",
@@ -299,7 +302,12 @@ class TorrentRuntime:
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
     ) -> bool:
+        prefetch_length = max(
+            end - start + 1,
+            constants.RANGE_PREFETCH_BYTES,
+        )
         required_pieces = sorted(self.map_pieces(start, end - start + 1))
+        all_pieces = sorted(self.map_pieces(start, prefetch_length))
         range_key = (start, end)
         first_required_piece = min(required_pieces) if required_pieces else None
         last_required_piece = max(required_pieces) if required_pieces else None
@@ -345,6 +353,28 @@ class TorrentRuntime:
             )
 
         deadline = time.monotonic() + timeout
+
+        # Set all pieces to priority 0 except our sliding window.
+        try:
+            num_pieces = self.info.num_pieces()
+            priorities = [0] * num_pieces
+            for piece in all_pieces:
+                if piece < num_pieces:
+                    priorities[piece] = 1
+            for piece in required_pieces:
+                if piece < num_pieces:
+                    priorities[piece] = 7
+            self.handle.prioritize_pieces(priorities)
+        except Exception:
+            pass
+
+        for index, piece in enumerate(required_pieces):
+            if not self.handle.have_piece(piece):
+                try:
+                    self._set_piece_deadline(piece, max(1, index * 10))
+                except Exception:
+                    pass
+
         while time.monotonic() < deadline and not self.stop_event.is_set():
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
@@ -372,14 +402,15 @@ class TorrentRuntime:
                 )
                 return True
 
+            time.sleep(constants.RANGE_RETRY_INTERVAL)
+
+            # Re-apply deadlines each iteration for any pieces that still haven't arrived.
             for index, piece in enumerate(required_pieces):
                 if not self.handle.have_piece(piece):
                     try:
-                        self.handle.piece_priority(piece, 7)
-                        self._set_piece_deadline(piece, index * 10)
+                        self._set_piece_deadline(piece, max(1, index * 10))
                     except Exception:
                         pass
-            time.sleep(constants.RANGE_RETRY_INTERVAL)
         return not required_pieces
 
     def read_range_chunk(
