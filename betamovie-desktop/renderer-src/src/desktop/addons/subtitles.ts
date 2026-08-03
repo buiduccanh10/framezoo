@@ -1,5 +1,6 @@
 import type { CaptionListItem } from "@/stores/player/slices/source";
 
+import { fetchAddonJson } from "./client";
 import { hasResource } from "./manifest";
 import type { InstalledAddon, StremioSubtitle } from "./types";
 
@@ -16,33 +17,6 @@ export interface AddonSubtitleLoadError {
 export interface AddonSubtitleLoadResult {
   captions: CaptionListItem[];
   errors: AddonSubtitleLoadError[];
-}
-
-const SUBTITLE_REQUEST_TIMEOUT_MS = 15_000;
-
-async function fetchSubtitleJson<T>(url: string): Promise<T> {
-  const controller = new AbortController();
-  const timeoutHandle = setTimeout(
-    () => controller.abort(),
-    SUBTITLE_REQUEST_TIMEOUT_MS,
-  );
-
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) {
-      throw new Error(`Request failed with HTTP ${response.status}`);
-    }
-    return (await response.json()) as T;
-  } catch (error) {
-    if (controller.signal.aborted) {
-      throw new Error(
-        `Subtitle request timed out after ${SUBTITLE_REQUEST_TIMEOUT_MS}ms: ${url}`,
-      );
-    }
-    throw error;
-  } finally {
-    clearTimeout(timeoutHandle);
-  }
 }
 
 /**
@@ -101,9 +75,14 @@ export async function loadAddonSubtitles(
     url: url.toString(),
   });
 
-  const response = await fetchSubtitleJson<
+  const response = await fetchAddonJson<
     StremioSubtitleResponse | StremioSubtitle[]
-  >(url.toString());
+  >(url.toString(), {
+    manifestUrl: addon.manifestUrl,
+    resource: "subtitles",
+    type,
+    id,
+  });
 
   const rawSubs: StremioSubtitle[] = Array.isArray(response)
     ? response

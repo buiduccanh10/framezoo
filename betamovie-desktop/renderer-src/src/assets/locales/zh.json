@@ -11,14 +11,22 @@
       "adding": "添加...",
       "ariaClose": "关闭插件管理器",
       "ariaManage": "管理插件",
+      "createGuideLink": "如何创建插件",
       "errorFallback": "无法安装此插件。",
       "manageListButton": "管理插件列表",
       "subtitle": "我们不建议添加任何非官方或非法的附加组件。",
       "title": "桌面插件"
     },
+    "platforms": {
+      "alphaflix": "阿尔法飞利克斯",
+      "stremio": "斯特雷米奥",
+      "supportLabel": "插件支持的平台：",
+      "supported": "支持的平台：AlphaFlix 和 Stremio"
+    },
     "page": {
       "addAddonButton": "添加插件",
       "description": "插件是可选的。此应用程序不捆绑、推荐或托管任何插件。",
+      "createGuideLink": "创建插件指南",
       "disabled": "残疾人",
       "emptyInstalled": "系统中尚未安装任何插件。",
       "enabled": "启用",

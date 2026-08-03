@@ -1,6 +1,8 @@
 import { sendExtensionRequest } from "@/backend/extension/messaging";
 
+import { getDesktopAddonElectronApi } from "../electron";
 import { normalizeManifest, normalizeManifestUrl } from "./manifest";
+import type { AddonProtocolRequest } from "./nativeTypes";
 import type {
   InstalledAddon,
   StremioManifest,
@@ -15,6 +17,16 @@ function requestTimeoutError(url: string) {
     `Addon request timed out after ${ADDON_REQUEST_TIMEOUT_MS}ms: ${url}`,
   );
 }
+
+type NativeAddonRequest =
+  | {
+      kind: "manifest";
+      manifestUrl: string;
+    }
+  | {
+      kind: "resource";
+      request: AddonProtocolRequest;
+    };
 
 async function fetchWithTimeout(url: string) {
   const controller = new AbortController();
@@ -35,7 +47,35 @@ async function fetchWithTimeout(url: string) {
   }
 }
 
-async function fetchJson<T>(url: string): Promise<T> {
+async function fetchJson<T>(
+  url: string,
+  nativeRequest?: NativeAddonRequest,
+): Promise<T> {
+  const fetchFromNativeAddon = async () => {
+    const api = getDesktopAddonElectronApi();
+    if (!api || !nativeRequest) {
+      throw new Error("Native addon bridge is unavailable");
+    }
+
+    const startedAt = Date.now();
+    const result =
+      nativeRequest.kind === "manifest"
+        ? await api.loadManifest(nativeRequest.manifestUrl)
+        : await api.request(nativeRequest.request);
+
+    if (result.statusCode < 200 || result.statusCode >= 300) {
+      throw new Error(`Request failed with HTTP ${result.statusCode}`);
+    }
+
+    console.debug("[desktop-addon] native protocol request completed", {
+      url,
+      elapsedMs: Date.now() - startedAt,
+      status: result.statusCode,
+    });
+
+    return result.body as T;
+  };
+
   const fetchFromRenderer = async () => {
     const startedAt = Date.now();
     const response = await fetchWithTimeout(url);
@@ -82,6 +122,10 @@ async function fetchJson<T>(url: string): Promise<T> {
     }
   };
 
+  if (nativeRequest && getDesktopAddonElectronApi()) {
+    return fetchFromNativeAddon();
+  }
+
   const desktopApi = window.electronAPI;
   if (
     window.__ALPHAFLIX_DESKTOP__ &&
@@ -109,8 +153,21 @@ async function fetchJson<T>(url: string): Promise<T> {
 
 export async function loadAddonManifest(input: string) {
   const manifestUrl = normalizeManifestUrl(input);
-  const manifest = await fetchJson<StremioManifest>(manifestUrl);
+  const manifest = await fetchJson<StremioManifest>(manifestUrl, {
+    kind: "manifest",
+    manifestUrl,
+  });
   return normalizeManifest(manifestUrl, manifest);
+}
+
+export async function fetchAddonJson<T>(
+  url: string,
+  request: AddonProtocolRequest,
+) {
+  return fetchJson<T>(url, {
+    kind: "resource",
+    request,
+  });
 }
 
 export async function loadAddonStreams(
@@ -138,9 +195,14 @@ export async function loadAddonStreams(
     url: url.toString(),
   });
 
-  const response = await fetchJson<StremioStreamResponse | StremioStream[]>(
-    url.toString(),
-  );
+  const response = await fetchAddonJson<
+    StremioStreamResponse | StremioStream[]
+  >(url.toString(), {
+    manifestUrl: addon.manifestUrl,
+    resource: "stream",
+    type: media.type,
+    id: mediaId,
+  });
   if (Array.isArray(response)) return response;
   if (response && Array.isArray(response.streams)) return response.streams;
 

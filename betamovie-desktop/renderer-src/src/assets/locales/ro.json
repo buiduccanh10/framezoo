@@ -11,14 +11,22 @@
       "adding": "Se adaugă...",
       "ariaClose": "Închideți addon manager",
       "ariaManage": "Gestionați suplimente",
+      "createGuideLink": "Cum se creează un supliment",
       "errorFallback": "Imposibil de instalat acest addon.",
       "manageListButton": "Gestionați lista de suplimente",
       "subtitle": "Nu vă recomandăm să adăugați suplimente neoficiale sau ilegale.",
       "title": "Suplimente pentru desktop"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Platforme acceptate pentru suplimente:",
+      "supported": "Platforme acceptate: AlphaFlix și Stremio"
+    },
     "page": {
       "addAddonButton": "Adăugați Addon",
       "description": "Suplimentele sunt opționale. Această aplicație nu include, nu recomandă sau găzduiește niciun supliment.",
+      "createGuideLink": "Creați un ghid pentru suplimente",
       "disabled": "Dezactivat",
       "emptyInstalled": "Nu există încă suplimente instalate în sistem.",
       "enabled": "Activat",

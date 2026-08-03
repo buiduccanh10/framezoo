@@ -6,6 +6,8 @@ import { Icon, Icons } from "@/components/Icon";
 import { AddonManager } from "@/components/layout/AddonManager";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { Heading1 } from "@/components/utils/Text";
+import { AddonLogo } from "@/desktop/addons/AddonLogo";
+import { getAddonGuideUrl, openAddonGuide } from "@/desktop/addons/guide";
 import { getAddonResources } from "@/desktop/addons/manifest";
 import {
   removeAddon,
@@ -26,18 +28,30 @@ export function AddonsPage() {
           <Heading1 className="text-4xl font-bold text-white">
             {t("addons.page.title", "Addons Manager")}
           </Heading1>
-          <AddonManager>
-            {(open) => (
-              <button
-                type="button"
-                onClick={open}
-                className="flex items-center gap-2 rounded-xl bg-buttons-purple px-5 py-2.5 font-semibold text-sm text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-buttons-purpleHover active:scale-95"
-              >
-                <Icon icon={Icons.PLUS} className="text-base" />
-                <span>{t("addons.page.addAddonButton", "Add Addon")}</span>
-              </button>
-            )}
-          </AddonManager>
+          <div className="flex flex-wrap justify-end gap-8">
+            <a
+              href={getAddonGuideUrl()}
+              onClick={(event) => {
+                event.preventDefault();
+                void openAddonGuide();
+              }}
+              className="inline-flex items-center border-0 bg-transparent p-0 text-sm font-semibold text-type-link transition-colors hover:text-type-linkHover hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-type-link/60"
+            >
+              {t("addons.page.createGuideLink", "Create addon guide")}
+            </a>
+            <AddonManager>
+              {(open) => (
+                <button
+                  type="button"
+                  onClick={open}
+                  className="flex items-center gap-2 rounded-xl bg-buttons-purple px-5 py-2.5 font-semibold text-sm text-white shadow-lg transition-all duration-200 hover:scale-105 hover:bg-buttons-purpleHover active:scale-95"
+                >
+                  <Icon icon={Icons.PLUS} className="text-base" />
+                  <span>{t("addons.page.addAddonButton", "Add Addon")}</span>
+                </button>
+              )}
+            </AddonManager>
+          </div>
         </div>
 
         <div className="flex items-center gap-4 pb-8 mt-6">
@@ -80,17 +94,11 @@ export function AddonsPage() {
                 key={addon.manifest.id}
                 className="flex items-center gap-4 rounded-xl border border-dropdown-border bg-dropdown-contentBackground/60 p-4 transition-all duration-200 hover:border-dropdown-border/80 hover:bg-dropdown-contentBackground"
               >
-                {addon.manifest.logo ? (
-                  <img
-                    src={addon.manifest.logo}
-                    alt={addon.manifest.name}
-                    className="h-11 w-11 rounded-lg bg-black/20 p-1 object-contain"
-                  />
-                ) : (
-                  <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-pill-background text-white text-xl">
-                    <Icon icon={Icons.EXTENSION} />
-                  </span>
-                )}
+                <AddonLogo
+                  name={addon.manifest.name}
+                  logo={addon.manifest.logo}
+                  className="h-11 w-11 rounded-lg bg-black/20 p-1"
+                />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <p className="truncate font-semibold text-base text-white">

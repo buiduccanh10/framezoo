@@ -25,6 +25,10 @@ export interface DesktopUpdateElectronApi {
 }
 
 import type {
+  AddonProtocolRequest,
+  AddonProtocolResponse,
+} from "./addons/nativeTypes";
+import type {
   TorrentSession,
   TorrentStartRequest,
   TorrentStatus,
@@ -50,9 +54,34 @@ declare global {
         name: string,
         payload?: unknown,
       ) => Promise<unknown>;
+      openExternal?: (url: string) => Promise<boolean>;
+      addons?: {
+        loadManifest?: (manifestUrl: string) => Promise<AddonProtocolResponse>;
+        request?: (
+          request: AddonProtocolRequest,
+        ) => Promise<AddonProtocolResponse>;
+      };
     };
     __CONFIG__?: Record<string, string>;
   }
+}
+
+export interface DesktopAddonElectronApi {
+  loadManifest(manifestUrl: string): Promise<AddonProtocolResponse>;
+  request(request: AddonProtocolRequest): Promise<AddonProtocolResponse>;
+}
+
+export function getDesktopAddonElectronApi(): DesktopAddonElectronApi | null {
+  const api = window.electronAPI;
+  if (
+    !window.__ALPHAFLIX_DESKTOP__ ||
+    typeof api?.addons?.loadManifest !== "function" ||
+    typeof api.addons.request !== "function"
+  ) {
+    return null;
+  }
+
+  return api.addons as DesktopAddonElectronApi;
 }
 
 export function getDesktopUpdateElectronApi(): DesktopUpdateElectronApi | null {

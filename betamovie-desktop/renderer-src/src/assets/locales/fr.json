@@ -11,14 +11,22 @@
       "adding": "Ajout...",
       "ariaClose": "Fermer le gestionnaire de modules complémentaires",
       "ariaManage": "Gérer les modules complémentaires",
+      "createGuideLink": "Comment créer un module complémentaire",
       "errorFallback": "Impossible d'installer cet addon.",
       "manageListButton": "Gérer la liste des modules complémentaires",
       "subtitle": "Nous vous déconseillons d'ajouter des modules complémentaires non officiels ou illégaux.",
       "title": "Modules complémentaires de bureau"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Strémio",
+      "supportLabel": "Plateformes prises en charge pour les modules complémentaires :",
+      "supported": "Plateformes prises en charge : AlphaFlix et Stremio"
+    },
     "page": {
       "addAddonButton": "Ajouter un module complémentaire",
       "description": "Les modules complémentaires sont facultatifs. Cette application ne regroupe, ne recommande ni n'héberge aucun module complémentaire.",
+      "createGuideLink": "Créer un guide de module complémentaire",
       "disabled": "Désactivé",
       "emptyInstalled": "Aucun module complémentaire n'est encore installé dans le système.",
       "enabled": "Activé",

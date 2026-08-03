@@ -1,4 +1,4 @@
-import { loadAddonManifest } from "./client";
+import { fetchAddonJson } from "./client";
 import { hasResource } from "./manifest";
 import type { InstalledAddon } from "./types";
 
@@ -47,33 +47,6 @@ export interface AddonCatalogLoadResult {
   errors: AddonCatalogLoadError[];
 }
 
-const CATALOG_REQUEST_TIMEOUT_MS = 15_000;
-
-async function fetchCatalogJson<T>(url: string): Promise<T> {
-  const controller = new AbortController();
-  const timeoutHandle = setTimeout(
-    () => controller.abort(),
-    CATALOG_REQUEST_TIMEOUT_MS,
-  );
-
-  try {
-    const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) {
-      throw new Error(`Request failed with HTTP ${response.status}`);
-    }
-    return (await response.json()) as T;
-  } catch (error) {
-    if (controller.signal.aborted) {
-      throw new Error(
-        `Catalog request timed out after ${CATALOG_REQUEST_TIMEOUT_MS}ms: ${url}`,
-      );
-    }
-    throw error;
-  } finally {
-    clearTimeout(timeoutHandle);
-  }
-}
-
 /**
  * Returns a stable React Query cache key for a catalog request.
  */
@@ -114,9 +87,12 @@ export async function loadAddonCatalog(
     url: url.toString(),
   });
 
-  const response = await fetchCatalogJson<StremoCatalogResponse>(
-    url.toString(),
-  );
+  const response = await fetchAddonJson<StremoCatalogResponse>(url.toString(), {
+    manifestUrl: addon.manifestUrl,
+    resource: "catalog",
+    type,
+    catalogId,
+  });
 
   if (Array.isArray(response)) return response as StremioMetaPreview[];
   if (response && Array.isArray(response.metas)) return response.metas;

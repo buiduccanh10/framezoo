@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { AddonPlatformBadges } from "@/components/addons/AddonPlatformBadges";
 import { Icon, Icons } from "@/components/Icon";
+import { AddonLogo } from "@/desktop/addons/AddonLogo";
 import { loadAddonManifest } from "@/desktop/addons/client";
+import { getAddonGuideUrl, openAddonGuide } from "@/desktop/addons/guide";
 import { installAddon } from "@/desktop/addons/store";
 import type { StremioManifest } from "@/desktop/addons/types";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
@@ -100,6 +103,12 @@ export function AddonManager({
                     "Add a manifest URL you choose. The app does not bundle or recommend addons.",
                   )}
                 </p>
+                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-dropdown-text">
+                  <span>
+                    {t("addons.platforms.supportLabel", "Supported platforms:")}
+                  </span>
+                  <AddonPlatformBadges compact />
+                </div>
               </div>
               <button
                 type="button"
@@ -154,19 +163,11 @@ export function AddonManager({
               </div>
             ) : preview ? (
               <div className="mt-4 flex items-center gap-3 rounded-xl border border-dropdown-border bg-dropdown-contentBackground p-3">
-                {preview.logo ? (
-                  <img
-                    src={preview.logo}
-                    className="h-10 w-10 rounded object-contain"
-                  />
-                ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded bg-dropdown-border">
-                    <Icon
-                      icon={Icons.EXTENSION}
-                      className="text-xl text-white"
-                    />
-                  </div>
-                )}
+                <AddonLogo
+                  name={preview.name}
+                  logo={preview.logo}
+                  className="h-10 w-10 rounded bg-dropdown-border"
+                />
                 <div className="flex flex-col overflow-hidden">
                   <span className="truncate font-semibold text-white">
                     {preview.name}{" "}
@@ -187,8 +188,23 @@ export function AddonManager({
               <p className="mt-2 text-sm font-medium text-red-400">{error}</p>
             ) : null}
 
-            {!isAddonsPage && (
-              <div className="mt-5 flex justify-end">
+            <div
+              className={classNames(
+                "mt-5 flex flex-wrap justify-end gap-2",
+                !isAddonsPage && "sm:justify-between",
+              )}
+            >
+              <a
+                href={getAddonGuideUrl()}
+                onClick={(event) => {
+                  event.preventDefault();
+                  void openAddonGuide();
+                }}
+                className="inline-flex items-center border-0 bg-transparent p-0 text-sm font-semibold text-type-link transition-colors hover:text-type-linkHover hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-type-link/60"
+              >
+                {t("addons.manager.createGuideLink", "How to create an addon")}
+              </a>
+              {!isAddonsPage && (
                 <button
                   type="button"
                   onClick={() => {
@@ -203,8 +219,8 @@ export function AddonManager({
                   </span>
                   <Icon icon={Icons.CHEVRON_RIGHT} className="text-sm" />
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       ) : null}

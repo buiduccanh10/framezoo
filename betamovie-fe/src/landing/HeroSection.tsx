@@ -1,13 +1,14 @@
 import { animated, useSpring } from "@react-spring/web";
-import { useRef } from "react";
+import { type MouseEvent, useRef } from "react";
 
 import type { LandingCopy } from "./i18n";
 
 interface HeroSectionProps {
   copy: LandingCopy["hero"];
+  onHashLinkClick: (event: MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export function HeroSection({ copy }: HeroSectionProps) {
+export function HeroSection({ copy, onHashLinkClick }: HeroSectionProps) {
   const screenshotRef = useRef<HTMLDivElement>(null);
   const [{ x, y }, api] = useSpring(() => ({
     x: 0,
@@ -38,13 +39,18 @@ export function HeroSection({ copy }: HeroSectionProps) {
         </h1>
         <p>{copy.description}</p>
         <div className="landing-hero-actions">
-          <a className="landing-button landing-button-primary" href="#download">
+          <a
+            className="landing-button landing-button-primary"
+            href="#download"
+            onClick={onHashLinkClick}
+          >
             {copy.primaryCta}
             <span aria-hidden="true">↗</span>
           </a>
           <a
             className="landing-button landing-button-quiet"
             href="#performance"
+            onClick={onHashLinkClick}
           >
             {copy.secondaryCta}
           </a>

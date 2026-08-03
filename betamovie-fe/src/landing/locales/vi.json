@@ -3,7 +3,8 @@
     "features": "Hiệu năng",
     "addons": "Hệ sinh thái",
     "download": "Tải xuống",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "addonGuide": "Hướng dẫn bổ sung"
   },
   "hero": {
     "eyebrow": "MÁY TÍNH ĐỂ BÀN ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Một không gian yên tĩnh hơn cho những câu chuyện bạn luôn muốn xem lại.",
     "status": "Desktop-first. Sẵn sàng cho addon."
+  },
+  "addonGuide": {
+    "description": "Tiện ích bổ sung là một dịch vụ HTTP nhỏ. Cung cấp bản kê khai và các tài nguyên bạn cần; AlphaFlix xử lý phần còn lại.",
+    "title": "Xây dựng một addon mà không cần tham gia quá trình ứng dụng.",
+    "manifestDescription": "Siêu dữ liệu cho ứng dụng biết tiện ích bổ sung của bạn là ai, tài nguyên nào nó hỗ trợ và biểu tượng của nó nằm ở đâu.",
+    "eyebrow": "GIAO THỨC THÊM / HƯỚNG DẪN",
+    "manifestTitle": "Bắt đầu với tệp kê khai.json",
+    "resources": {
+      "stream": "Torrent, HLS, DASH hoặc nguồn tệp trực tiếp.",
+      "meta": "Siêu dữ liệu phim hoặc loạt phim cho tiêu đề.",
+      "catalog": "Hàng loạt phim hoặc loạt phim để khám phá.",
+      "subtitles": "Tệp phụ đề có nhãn ngôn ngữ.",
+      "addon_catalog": "Một danh mục các addon khác."
+    },
+    "resourcesDescription": "Chỉ triển khai các điểm cuối mà tiện ích bổ sung của bạn cần. Phản hồi là JSON và có thể được viết bằng bất kỳ ngôn ngữ nào.",
+    "runTitle": "Chạy, kiểm tra, cài đặt",
+    "resourcesTitle": "Chọn các tài nguyên",
+    "steps": [
+      "Phục vụ /manifest.json và các điểm cuối tài nguyên của bạn từ máy chủ HTTP(S) cục bộ hoặc công cộng.",
+      "Kiểm tra từng điểm cuối bằng tính năng cuộn tròn và xác minh hình dạng JSON.",
+      "Dán URL tệp kê khai vào AlphaFlix Desktop > Addons."
+    ],
+    "advancedDescription": "SDK bổ trợ Stremio là tùy chọn. Sử dụng nó nếu bạn muốn người trợ giúp định tuyến và tuần tự hóa; nó không được yêu cầu bởi giao thức.",
+    "advancedTitle": "Cần một người trợ giúp Node?",
+    "advancedLink": "Mở tài liệu tham khảo SDK nâng cao"
   }
 }

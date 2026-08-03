@@ -3,7 +3,8 @@
     "features": "Performance",
     "addons": "Écosystème",
     "download": "Télécharger",
-    "language": "Langue"
+    "language": "Langue",
+    "addonGuide": "Guide des modules complémentaires"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX BUREAU / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Une maison plus calme pour les histoires auxquelles vous revenez sans cesse.",
     "status": "Le bureau d’abord. Prêt pour les modules complémentaires."
+  },
+  "addonGuide": {
+    "manifestDescription": "Les métadonnées indiquent à l'application qui est votre module complémentaire, quelles ressources il prend en charge et où se trouve son icône.",
+    "manifestTitle": "Commencez par manifest.json",
+    "eyebrow": "PROTOCOLE ADDITIONNEL / GUIDE",
+    "title": "Créez un module complémentaire sans rejoindre le processus d'application.",
+    "description": "Un module complémentaire est un petit service HTTP. Présentez un manifeste et les ressources dont vous avez besoin ; AlphaFlix s'occupe du reste.",
+    "resourcesDescription": "Implémentez uniquement les points de terminaison dont votre module complémentaire a besoin. Les réponses sont JSON et peuvent être écrites dans n’importe quelle langue.",
+    "resources": {
+      "catalog": "Des rangées de films ou de séries à découvrir.",
+      "subtitles": "Fichiers de sous-titres avec étiquettes de langue.",
+      "meta": "Métadonnées de film ou de série pour un titre.",
+      "stream": "Sources torrent, HLS, DASH ou fichiers directs.",
+      "addon_catalog": "Un catalogue d'autres addons."
+    },
+    "resourcesTitle": "Choisissez les ressources",
+    "steps": [
+      "Servez /manifest.json et vos points de terminaison de ressources à partir d’un serveur HTTP(S) local ou public.",
+      "Testez chaque point de terminaison avec curl et vérifiez la forme JSON.",
+      "Collez l'URL du manifeste dans AlphaFlix Desktop > Addons."
+    ],
+    "runTitle": "Exécuter, tester, installer",
+    "advancedLink": "Ouvrir la référence du SDK avancé",
+    "advancedTitle": "Besoin d'un assistant Node ?",
+    "advancedDescription": "Le SDK Stremio Addon est facultatif. Utilisez-le si vous souhaitez des aides au routage et à la sérialisation ; ce n’est pas requis par le protocole."
   }
 }

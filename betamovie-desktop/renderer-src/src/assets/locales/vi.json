@@ -11,14 +11,22 @@
       "adding": "Đang thêm...",
       "ariaClose": "Đóng cửa sổ quản lý addon",
       "ariaManage": "Quản lý Addons",
+      "createGuideLink": "Cách tạo Addons?",
       "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
       "manageListButton": "Quản lý danh sách Addons",
       "subtitle": "Chúng tôi không khuyến khích thêm bất kỳ tiện ích bổ sung không chính thức hoặc bất hợp pháp nào.",
       "title": "Thêm Addons"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Nền tảng hỗ trợ Addons:",
+      "supported": "Nền tảng được hỗ trợ Addons: Stremio và AlphaFlix"
+    },
     "page": {
       "addAddonButton": "Thêm Addon",
       "description": "Addons là tùy chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ bất kỳ tiện ích bổ sung nào.",
+      "createGuideLink": "Hướng dẫn tạo Addons",
       "disabled": "Đã tắt",
       "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
       "enabled": "Đang bật",

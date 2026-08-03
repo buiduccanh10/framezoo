@@ -3,7 +3,8 @@
     "features": "Desempenho",
     "addons": "Ecossistema",
     "download": "Download",
-    "language": "Linguagem"
+    "language": "Linguagem",
+    "addonGuide": "Guia de complementos"
   },
   "hero": {
     "eyebrow": "DESKTOP ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Uma casa mais tranquila para as histórias às quais você sempre volta.",
     "status": "Desktop primeiro. Pronto para complemento."
+  },
+  "addonGuide": {
+    "eyebrow": "PROTOCOLO / GUIA ADDON",
+    "manifestDescription": "Os metadados informam ao aplicativo quem é o seu complemento, quais recursos ele suporta e onde fica seu ícone.",
+    "title": "Crie um complemento sem ingressar no processo do aplicativo.",
+    "description": "Um complemento é um pequeno serviço HTTP. Sirva um manifesto e os recursos necessários; AlphaFlix cuida do resto.",
+    "resources": {
+      "catalog": "Fileiras de filmes ou séries para descoberta.",
+      "addon_catalog": "Um catálogo de outros complementos.",
+      "stream": "Torrent, HLS, DASH ou fontes de arquivo direto.",
+      "meta": "Metadados de filmes ou séries para um título.",
+      "subtitles": "Arquivos de legenda com rótulos de idioma."
+    },
+    "manifestTitle": "Comece com manifest.json",
+    "resourcesTitle": "Escolha os recursos",
+    "resourcesDescription": "Implemente apenas os endpoints que seu complemento precisa. As respostas são JSON e podem ser escritas em qualquer idioma.",
+    "runTitle": "Execute, teste, instale",
+    "steps": [
+      "Sirva /manifest.json e seus endpoints de recursos a partir de um servidor HTTP(S) local ou público.",
+      "Teste cada endpoint com curl e verifique o formato JSON.",
+      "Cole o URL do manifesto em AlphaFlix Desktop > Addons."
+    ],
+    "advancedLink": "Abra a referência avançada do SDK",
+    "advancedDescription": "O Stremio Addon SDK é opcional. Use-o se desejar auxiliares de roteamento e serialização; não é exigido pelo protocolo.",
+    "advancedTitle": "Precisa de um ajudante do Node?"
   }
 }

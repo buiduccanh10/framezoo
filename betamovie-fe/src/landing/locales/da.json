@@ -3,7 +3,8 @@
     "features": "Præstation",
     "addons": "Økosystem",
     "download": "Download",
-    "language": "Sprog"
+    "language": "Sprog",
+    "addonGuide": "Addon guide"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX DESKTOP / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Et mere stille hjem for de historier, du bliver ved med at vende tilbage til.",
     "status": "Desktop først. Addon-klar."
+  },
+  "addonGuide": {
+    "title": "Byg en tilføjelse uden at deltage i app-processen.",
+    "description": "En tilføjelse er en lille HTTP-tjeneste. Server et manifest og de ressourcer, du har brug for; AlphaFlix klarer resten.",
+    "manifestTitle": "Start med manifest.json",
+    "eyebrow": "ADDON PROTOKOL / GUIDE",
+    "resourcesTitle": "Vælg ressourcerne",
+    "manifestDescription": "Metadata fortæller appen, hvem din tilføjelse er, hvilke ressourcer den understøtter, og hvor dens ikon bor.",
+    "resources": {
+      "meta": "Film- eller seriemetadata for en titel.",
+      "stream": "Torrent, HLS, DASH eller direkte filkilder.",
+      "subtitles": "Undertekstfiler med sprogetiketter.",
+      "catalog": "Rækker af film eller serier til opdagelse.",
+      "addon_catalog": "Et katalog over andre tilføjelser."
+    },
+    "resourcesDescription": "Implementer kun de endepunkter, din tilføjelse har brug for. Svarene er JSON og kan skrives på ethvert sprog.",
+    "runTitle": "Kør, test, installer",
+    "steps": [
+      "Server /manifest.json og dine ressourceslutpunkter fra en lokal eller offentlig HTTP(S)-server.",
+      "Test hvert endepunkt med krølle og bekræft JSON-formen.",
+      "Indsæt manifest-URL'en i AlphaFlix Desktop > Tilføjelser."
+    ],
+    "advancedDescription": "Stremio Addon SDK er valgfrit. Brug det, hvis du vil have routing- og serialiseringshjælpere; det er ikke påkrævet af protokollen.",
+    "advancedTitle": "Har du brug for en node-hjælper?",
+    "advancedLink": "Åbn avanceret SDK-reference"
   }
 }

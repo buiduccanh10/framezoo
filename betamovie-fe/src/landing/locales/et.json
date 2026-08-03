@@ -3,7 +3,8 @@
     "features": "Esitus",
     "addons": "Ökosüsteem",
     "download": "Laadi alla",
-    "language": "Keel"
+    "language": "Keel",
+    "addonGuide": "Lisade juhend"
   },
   "hero": {
     "eyebrow": "ALPHAFLIX LAUAARV / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Vaiksem kodu lugudele, mille juurde sa ikka ja jälle tagasi tuled.",
     "status": "Töölaud kõigepealt. Lisandmooduliks valmis."
+  },
+  "addonGuide": {
+    "description": "Lisand on väike HTTP-teenus. Esitage manifest ja vajalikud vahendid; AlphaFlix tegeleb ülejäänuga.",
+    "manifestTitle": "Alustage failist manifest.json",
+    "eyebrow": "LISAPROTOKOLL / JUHEND",
+    "manifestDescription": "Metaandmed ütlevad rakendusele, kes on teie lisand, milliseid ressursse see toetab ja kus selle ikoon asub.",
+    "title": "Looge lisandmoodul ilma rakenduse protsessiga liitumata.",
+    "resourcesTitle": "Valige ressursid",
+    "resources": {
+      "subtitles": "Keelesiltidega subtiitrite failid.",
+      "meta": "Filmi või sarja metaandmed pealkirja jaoks.",
+      "stream": "Torrent, HLS, DASH või otsene failiallikas.",
+      "catalog": "Filmide või seriaalide read avastamiseks.",
+      "addon_catalog": "Muude lisade kataloog."
+    },
+    "resourcesDescription": "Rakendage ainult need lõpp-punktid, mida teie lisand vajab. Vastused on JSON-vormingus ja neid saab kirjutada mis tahes keeles.",
+    "runTitle": "Käivitage, testige, installige",
+    "steps": [
+      "Esitage /manifest.json ja oma ressursi lõpp-punktid kohalikust või avalikust HTTP(S) serverist.",
+      "Testige iga lõpp-punkti kõverusega ja kontrollige JSON-i kuju.",
+      "Kleepige manifesti URL jaotisesse AlphaFlix Desktop > Lisad."
+    ],
+    "advancedDescription": "Stremio Addoni SDK on valikuline. Kasutage seda, kui soovite marsruutimise ja serialiseerimise abilisi; seda protokoll ei nõua.",
+    "advancedTitle": "Kas vajate Node'i abilist?",
+    "advancedLink": "Avage täiustatud SDK viide"
   }
 }

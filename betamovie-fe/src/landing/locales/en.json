@@ -2,6 +2,7 @@
   "nav": {
     "features": "Performance",
     "addons": "Ecosystem",
+    "addonGuide": "Addon guide",
     "download": "Download",
     "language": "Language"
   },
@@ -33,6 +34,31 @@
     "showcaseTitle": "The screen is the destination.",
     "showcaseDescription": "A focused desktop surface for discovery, playback, and everything around the story.",
     "showcaseCaption": "AlphaFlix Desktop / Focus mode"
+  },
+  "addonGuide": {
+    "eyebrow": "ADDON PROTOCOL / GUIDE",
+    "title": "Build an addon without joining the app process.",
+    "description": "An addon is a small HTTP service. Serve a manifest and the resources you need; AlphaFlix handles the rest.",
+    "manifestTitle": "Start with manifest.json",
+    "manifestDescription": "Metadata tells the app who your addon is, which resources it supports, and where its icon lives.",
+    "resourcesTitle": "Choose the resources",
+    "resourcesDescription": "Implement only the endpoints your addon needs. Responses are JSON and can be written in any language.",
+    "resources": {
+      "catalog": "Rows of movies or series for discovery.",
+      "meta": "Movie or series metadata for a title.",
+      "stream": "Torrent, HLS, DASH, or direct file sources.",
+      "subtitles": "Subtitle files with language labels.",
+      "addon_catalog": "A catalog of other addons."
+    },
+    "runTitle": "Run, test, install",
+    "steps": [
+      "Serve /manifest.json and your resource endpoints from a local or public HTTP(S) server.",
+      "Test each endpoint with curl and verify the JSON shape.",
+      "Paste the manifest URL into AlphaFlix Desktop > Addons."
+    ],
+    "advancedTitle": "Need a Node helper?",
+    "advancedDescription": "The Stremio Addon SDK is optional. Use it if you want routing and serialization helpers; it is not required by the protocol.",
+    "advancedLink": "Open advanced SDK reference"
   },
   "download": {
     "eyebrow": "CHOOSE YOUR BUILD",

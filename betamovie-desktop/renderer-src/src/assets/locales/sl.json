@@ -11,14 +11,22 @@
       "adding": "Dodajanje ...",
       "ariaClose": "Zapri upravitelja dodatkov",
       "ariaManage": "Upravljanje dodatkov",
+      "createGuideLink": "Kako ustvariti dodatek",
       "errorFallback": "Tega dodatka ni mogoče namestiti.",
       "manageListButton": "Upravljanje seznama dodatkov",
       "subtitle": "Ne priporočamo dodajanja neuradnih ali nezakonitih dodatkov.",
       "title": "Namizni dodatki"
     },
+    "platforms": {
+      "alphaflix": "AlphaFlix",
+      "stremio": "Stremio",
+      "supportLabel": "Podprte platforme za dodatke:",
+      "supported": "Podprte platforme: AlphaFlix in Stremio"
+    },
     "page": {
       "addAddonButton": "Dodaj dodatek",
       "description": "Dodatki niso obvezni. Ta aplikacija ne združuje, priporoča ali gosti nobenega dodatka.",
+      "createGuideLink": "Ustvari vodnik za dodatke",
       "disabled": "Onemogočen",
       "emptyInstalled": "V sistemu še ni nameščen noben dodatek.",
       "enabled": "Omogočeno",

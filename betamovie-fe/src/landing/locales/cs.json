@@ -3,7 +3,8 @@
     "features": "Výkon",
     "addons": "Ekosystém",
     "download": "Stáhnout",
-    "language": "Jazyk"
+    "language": "Jazyk",
+    "addonGuide": "Průvodce addony"
   },
   "hero": {
     "eyebrow": "DESKTOP ALPHAFLIX / 01",
@@ -54,5 +55,30 @@
   "footer": {
     "line": "Tišší domov pro příběhy, ke kterým se stále vracíte.",
     "status": "Desktop-first. Addon připraven."
+  },
+  "addonGuide": {
+    "description": "Addon je malá služba HTTP. Podávejte manifest a zdroje, které potřebujete; AlphaFlix se postará o zbytek.",
+    "manifestTitle": "Začněte souborem manifest.json",
+    "manifestDescription": "Metadata řeknou aplikaci, kdo je váš doplněk, jaké zdroje podporuje a kde se nachází jeho ikona.",
+    "resourcesTitle": "Vyberte zdroje",
+    "title": "Vytvořte doplněk, aniž byste se připojili k procesu aplikace.",
+    "eyebrow": "PŘIDAT PROTOKOL / PRŮVODCE",
+    "resources": {
+      "stream": "Torrent, HLS, DASH nebo přímé zdroje souborů.",
+      "meta": "Metadata filmu nebo seriálu pro titul.",
+      "catalog": "Řady filmů nebo seriálů pro objevování.",
+      "subtitles": "Soubory titulků s jazykovými štítky.",
+      "addon_catalog": "Katalog dalších doplňků."
+    },
+    "resourcesDescription": "Implementujte pouze koncové body, které váš doplněk potřebuje. Odpovědi jsou JSON a lze je psát v jakémkoli jazyce.",
+    "runTitle": "Spustit, otestovat, nainstalovat",
+    "advancedTitle": "Potřebujete pomocníka Node?",
+    "steps": [
+      "Obsluhujte /manifest.json a své koncové body prostředků z místního nebo veřejného serveru HTTP(S).",
+      "Otestujte každý koncový bod pomocí zvlnění a ověřte tvar JSON.",
+      "Vložte adresu URL manifestu do AlphaFlix Desktop > Addons."
+    ],
+    "advancedDescription": "Sada Stremio Addon SDK je volitelná. Použijte jej, pokud chcete pomocníky pro směrování a serializaci; protokol to nevyžaduje.",
+    "advancedLink": "Otevřete pokročilou referenci SDK"
   }
 }
