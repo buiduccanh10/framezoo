@@ -2,6 +2,7 @@ from __future__ import annotations
 
 VIDEO_EXTENSIONS = (".avi", ".m4v", ".mkv", ".mov", ".mp4", ".webm")
 STREAM_CHUNK_SIZE = 1024 * 1024
+RANGE_PREFETCH_BYTES = 8 * 1024 * 1024
 RANGE_WAIT_TIMEOUT = 3600
 RANGE_RETRY_INTERVAL = 0.2
 # Minimum seconds to wait before declaring client disconnected.
