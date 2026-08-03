@@ -41,6 +41,7 @@ export function useSettingsState(
   theme: string | null,
   appLanguage: string,
   subtitleStyling: SubtitleStyling,
+  secondarySubtitleStyling: SubtitleStyling,
   deviceName: string,
   nickname: string,
   proxyUrls: string[] | null,
@@ -103,6 +104,12 @@ export function useSettingsState(
   const [subStylingState, setSubStyling, resetSubStyling, subStylingChanged] =
     useDerived(subtitleStyling);
   const [
+    secondarySubStylingState,
+    setSecondarySubStyling,
+    resetSecondarySubStyling,
+    secondarySubStylingChanged,
+  ] = useDerived(secondarySubtitleStyling);
+  const [
     deviceNameState,
     setDeviceNameState,
     resetDeviceName,
@@ -158,6 +165,7 @@ export function useSettingsState(
     resetPreviewTheme();
     resetAppLanguage();
     resetSubStyling();
+    resetSecondarySubStyling();
     resetProxyUrls();
     resetBackendUrl();
     resetFebboxKey();
@@ -181,6 +189,7 @@ export function useSettingsState(
     themeChanged ||
     appLanguageChanged ||
     subStylingChanged ||
+    secondarySubStylingChanged ||
     deviceNameChanged ||
     nicknameChanged ||
     backendUrlChanged ||
@@ -215,6 +224,11 @@ export function useSettingsState(
       state: subStylingState,
       set: setSubStyling,
       changed: subStylingChanged,
+    },
+    secondarySubtitleStyling: {
+      state: secondarySubStylingState,
+      set: setSecondarySubStyling,
+      changed: secondarySubStylingChanged,
     },
     deviceName: {
       state: deviceNameState,

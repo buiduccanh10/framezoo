@@ -22,7 +22,7 @@ import {
   captionIsVisible,
   decodeSubtitleBytes,
   normalizeSubtitleToVtt,
-  parseCanonicalVtt,
+  tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
@@ -715,7 +715,7 @@ export function CaptionsView({
   // Get current subtitle text preview
   const currentSubtitleText = useMemo(() => {
     if (!activeCaption) return null;
-    const parsedCaptions = parseCanonicalVtt(activeCaption.vttData);
+    const parsedCaptions = tryParseCanonicalVtt(activeCaption.vttData);
     const visibleCaption = parsedCaptions.find(({ start, end }) =>
       captionIsVisible(start, end, activeDelay, videoTime),
     );
