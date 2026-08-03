@@ -17,8 +17,8 @@ import {
   captionIsVisible,
   getCaptionDelayForCue,
   makeQueId,
-  parseCanonicalVtt,
   sanitize,
+  tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useToastStore } from "@/stores/interface/toast";
@@ -127,8 +127,7 @@ export function TranscriptView({
   };
 
   const parsedCaptions = useMemo(
-    () =>
-      activeCaption?.vttData ? parseCanonicalVtt(activeCaption.vttData) : [],
+    () => tryParseCanonicalVtt(activeCaption?.vttData),
     [activeCaption],
   );
 

@@ -123,20 +123,82 @@ export function makeQueId(index: number, start: number, end: number): string {
   return `${index}-${start}-${end}`;
 }
 
+const VTT_TIMESTAMP_PATTERN = String.raw`(?:\d+:)?\d{1,2}:\d{2}[.,]\d{1,3}`;
+const VTT_HEADER_RE = /^\s*WEBVTT(?:[ \t].*)?(?:\r?\n|$)/i;
+const VTT_TIMING_LINE_RE = new RegExp(
+  String.raw`^\s*(${VTT_TIMESTAMP_PATTERN})\s+-->\s+(${VTT_TIMESTAMP_PATTERN})(.*)$`,
+);
+const VTT_CUE_TIMING_RE = new RegExp(VTT_TIMING_LINE_RE.source, "m");
+
+function normalizeFormatHint(format?: string): string | undefined {
+  const normalized = format?.trim().toLowerCase().replace(/^\./, "");
+  return normalized && SUBTITLE_FORMATS.has(normalized)
+    ? normalized
+    : undefined;
+}
+
+function hasVttHeader(text: string): boolean {
+  return VTT_HEADER_RE.test(text);
+}
+
+function hasVttCue(text: string): boolean {
+  return VTT_CUE_TIMING_RE.test(text);
+}
+
+function getDetectedSubtitleFormat(text: string): string | undefined {
+  if (hasVttHeader(text)) return "vtt";
+
+  const detected = detect(text);
+  if (detected) return detected;
+
+  return hasVttCue(text) ? "vtt" : undefined;
+}
+
+function prepareVttInput(text: string): string {
+  return hasVttHeader(text) ? text : `WEBVTT\n\n${text}`;
+}
+
+function isEmptyVttDocument(text: string): boolean {
+  if (!hasVttHeader(text)) return false;
+
+  const firstLineEnd = text.search(/\r?\n/);
+  if (firstLineEnd === -1) return true;
+
+  return (
+    text.slice(firstLineEnd + (text[firstLineEnd] === "\r" ? 2 : 1)).trim() ===
+    ""
+  );
+}
+
 export function normalizeSubtitleToVtt(text: string, format?: string): string {
   const textTrimmed = text.replace(/^\uFEFF/, "").trim();
   if (textTrimmed === "") {
     return "WEBVTT\n\n";
   }
-  const formatHint = format?.trim().toLowerCase().replace(/^\./, "");
-  const vtt =
-    formatHint && SUBTITLE_FORMATS.has(formatHint)
-      ? convert(textTrimmed, { from: formatHint, to: "vtt" })
-      : convert(textTrimmed, "vtt");
-  if (detect(vtt) === "") {
-    throw new Error("Invalid subtitle format");
+
+  const formatHint = normalizeFormatHint(format);
+  const detectedFormat = getDetectedSubtitleFormat(textTrimmed);
+  const candidateFormats = [detectedFormat, formatHint, "vtt", "srt"].filter(
+    (candidate, index, formats): candidate is string =>
+      Boolean(candidate) && formats.indexOf(candidate) === index,
+  );
+
+  for (const candidateFormat of candidateFormats) {
+    try {
+      const input =
+        candidateFormat === "vtt" ? prepareVttInput(textTrimmed) : textTrimmed;
+      const vtt = convert(input, { from: candidateFormat, to: "vtt" });
+      const cues = parseVttSubtitles(vtt);
+
+      if (cues.length > 0 || isEmptyVttDocument(textTrimmed)) {
+        return vtt;
+      }
+    } catch {
+      // Try the next format. The final error below keeps the public contract stable.
+    }
   }
-  return vtt;
+
+  throw new Error("Invalid subtitle format");
 }
 
 export function filterDuplicateCaptionCues(cues: ContentCaption[]) {
@@ -158,13 +220,20 @@ export function parseCanonicalVtt(vttText: string): CaptionCueType[] {
   return filterDuplicateCaptionCues(parseVttSubtitles(vtt));
 }
 
-const VTT_TIMING_LINE_RE =
-  /^\s*((?:\d+:)?\d{1,2}:\d{2}\.\d{3})\s+-->\s+((?:\d+:)?\d{1,2}:\d{2}\.\d{3})(.*)$/;
+export function tryParseCanonicalVtt(vttText: unknown): CaptionCueType[] {
+  if (typeof vttText !== "string") return [];
+
+  try {
+    return parseCanonicalVtt(vttText);
+  } catch {
+    return [];
+  }
+}
 
 function parseVttTimestamp(timestamp: string): number {
   const parts = timestamp.split(":");
   const secondsPart = parts.pop() ?? "0";
-  const [seconds, milliseconds] = secondsPart.split(".");
+  const [seconds, milliseconds] = secondsPart.split(/[.,]/);
   const numericParts = parts.map(Number);
 
   if (

@@ -85,19 +85,15 @@ Hello`;
     expect(result.cleanedVtt).toBe(vtt);
   });
 
-  it("does not let secondary choose an offset far from primary", () => {
+  it("aligns a track independently when its offset differs from primary", () => {
     const vtt = "WEBVTT";
-    const result = selectSubtitleAlignmentConsensus(
-      vtt,
-      [
-        { ...baseResult, offsetMs: 12_000, confidence: 90 },
-        { ...baseResult, offsetMs: 12_200, confidence: 90 },
-      ],
-      -2000,
-    );
+    const result = selectSubtitleAlignmentConsensus(vtt, [
+      { ...baseResult, offsetMs: 12_000, confidence: 90 },
+      { ...baseResult, offsetMs: 12_200, confidence: 90 },
+    ]);
 
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("secondary_offset_mismatch");
-    expect(result.cleanedVtt).toBe(vtt);
+    expect(result.aligned).toBe(true);
+    expect(result.offsetMs).toBe(12_100);
+    expect(result.reason).toBeNull();
   });
 });

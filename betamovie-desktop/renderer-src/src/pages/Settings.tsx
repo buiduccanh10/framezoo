@@ -375,6 +375,10 @@ export function SettingsPage() {
 
   const subStyling = useSubtitleStore((s) => s.styling);
   const setSubStyling = useSubtitleStore((s) => s.updateStyling);
+  const subSecondaryStyling = useSubtitleStore((s) => s.secondaryStyling);
+  const setSubSecondaryStyling = useSubtitleStore(
+    (s) => s.updateSecondaryStyling,
+  );
 
   const proxySet = useAuthStore((s) => s.proxySet);
   const setProxySet = useAuthStore((s) => s.setProxySet);
@@ -525,6 +529,7 @@ export function SettingsPage() {
     activeTheme,
     appLanguage,
     subStyling,
+    subSecondaryStyling,
     decryptedName,
     account?.nickname || "",
     proxySet,
@@ -630,6 +635,7 @@ export function SettingsPage() {
     setAppLanguage(state.appLanguage.state);
     setTheme(state.theme.state);
     setSubStyling(state.subtitleStyling.state);
+    setSubSecondaryStyling(state.secondarySubtitleStyling.state);
     setProxySet(state.proxyUrls.state?.filter((v) => v !== "") ?? null);
     setFebboxKey(state.febboxKey.state);
     setdebridToken(state.debridToken.state);
@@ -680,6 +686,7 @@ export function SettingsPage() {
     setAppLanguage,
     setTheme,
     setSubStyling,
+    setSubSecondaryStyling,
     setProxySet,
     updateDeviceName,
     updateProfile,
@@ -805,6 +812,8 @@ export function SettingsPage() {
               <CaptionsPart
                 styling={state.subtitleStyling.state}
                 setStyling={state.subtitleStyling.set}
+                secondaryStyling={state.secondarySubtitleStyling.state}
+                setSecondaryStyling={state.secondarySubtitleStyling.set}
               />
             </div>
           )}
