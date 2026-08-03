@@ -92,7 +92,7 @@ export function AddonManager({
             className="w-full max-w-lg rounded-2xl border border-dropdown-border bg-dropdown-altBackground p-6 shadow-2xl"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-4 flex items-start justify-between">
               <div>
                 <h2 className="text-lg font-bold text-white">
                   {t("addons.manager.title", "Desktop Addons")}
