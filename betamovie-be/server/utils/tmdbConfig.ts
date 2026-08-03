@@ -1,5 +1,5 @@
-export const TMDB_PRIMARY_BASE_URL = 'https://api.themoviedb.org/3';
-export const TMDB_FALLBACK_BASE_URL = 'https://api.tmdb.org/3';
+export const TMDB_PRIMARY_BASE_URL = 'https://api.tmdb.org/3';
+export const TMDB_FALLBACK_BASE_URL = 'https://api.themoviedb.org/3';
 
 export const TMDB_TIMEOUT_MS = 15_000;
 export const TMDB_RETRY_ATTEMPTS = 3;
