@@ -63,3 +63,5 @@ package-lock.json
 # build artifacts
 /downloads
 /desktop-publish-staging
+__pycache__/
+*.pyc
