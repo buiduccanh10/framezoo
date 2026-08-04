@@ -118,7 +118,6 @@ export function HeroPart({
             className="sticky"
             style={{
               top: `${topOffset}px`,
-              paddingTop: `${topOffset}px`,
             }}
           >
             <SearchBarInput
