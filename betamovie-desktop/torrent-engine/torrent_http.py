@@ -19,6 +19,7 @@ OUTPUT_LOCK = threading.Lock()
 def log_event(message: str, **fields: Any) -> None:
     if "sessionId" in fields and "playbackId" not in fields:
         fields["playbackId"] = fields["sessionId"]
+    fields.setdefault("wallClockMs", int(time.time() * 1000))
     suffix = " " + json.dumps(fields, separators=(",", ":")) if fields else ""
     sys.stderr.write(f"[sidecar] {message}{suffix}\n")
     sys.stderr.flush()

@@ -1256,9 +1256,11 @@ napi_value load_player(napi_env env, napi_callback_info info) {
 
   double start_at = 0;
   bool autoplay = true;
+  bool is_torrent = false;
   double requested_generation = 0;
   get_number(env, argv[1], "startAt", &start_at);
   get_bool(env, argv[1], "autoplay", &autoplay);
+  get_bool(env, argv[1], "isTorrent", &is_torrent);
   get_number(env, argv[1], "generation", &requested_generation);
   player->generation.store(
       std::max(0, static_cast<int>(requested_generation))
@@ -1287,6 +1289,15 @@ napi_value load_player(napi_env env, napi_callback_info info) {
       ) < 0
   ) {
     return throw_error(env, "libmpv pause configuration failed");
+  }
+  if (
+      set_mpv_property(
+          player.get(),
+          "force-seekable",
+          is_torrent ? "no" : "yes"
+      ) < 0
+  ) {
+    return throw_error(env, "libmpv seekability configuration failed");
   }
 
   const char* load_command[] = {"loadfile", url.c_str(), "replace", nullptr};

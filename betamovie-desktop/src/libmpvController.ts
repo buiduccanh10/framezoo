@@ -37,6 +37,8 @@ type PlayerRecord = {
   generation: number;
   bounds: LibMpvBounds;
   target: "main" | "pip";
+  loadStartedAtMs?: number;
+  isTorrent?: boolean;
   pipResizeListener?: () => void;
   pipWindow?: BrowserWindow;
 };
@@ -320,15 +322,21 @@ export class LibMpvController {
 
     player.generation += 1;
     const generation = player.generation;
+    player.loadStartedAtMs = Date.now();
+    player.isTorrent = request.isTorrent === true;
     const oldTimer = this.eventTimers.get(playerId);
     if (oldTimer) clearTimeout(oldTimer);
 
-    this.broadcastLog("info", "load_requested", {
-      playerId,
-      generation,
-      type: request.type,
-      url: redactUrl(request.url),
-    });
+      this.broadcastLog("info", "load_requested", {
+        playerId,
+        generation,
+        type: request.type,
+        url: redactUrl(request.url),
+        wallClockMs: Date.now(),
+        loadElapsedMs: 0,
+        isTorrent: player.isTorrent,
+        timingPhase: "libmpv_load",
+      });
 
     try {
       this.addon.loadPlayer(playerId, {
@@ -536,16 +544,27 @@ export class LibMpvController {
       playbackId: playerId,
       generation: event.generation,
       message: redactLogMessage(event.message),
+      wallClockMs: Date.now(),
+      loadElapsedMs: player.loadStartedAtMs
+        ? Date.now() - player.loadStartedAtMs
+        : undefined,
+      isTorrent: player.isTorrent === true,
     };
 
     if (event.type === "log") {
       this.broadcastLog(event.level ?? "info", "mpv", eventData);
     } else if (event.type === "file-loaded") {
-      this.broadcastLog("info", "file_loaded", eventData);
+      this.broadcastLog("info", "file_loaded", {
+        ...eventData,
+        timingPhase: "file_loaded",
+      });
     } else if (event.type === "video-reconfig") {
       this.broadcastLog("debug", "video_reconfig", eventData);
     } else if (event.type === "video-frame") {
-      this.broadcastLog("debug", "video_frame", eventData);
+      this.broadcastLog("debug", "video_frame", {
+        ...eventData,
+        timingPhase: "video_frame",
+      });
     } else if (event.type === "end-file") {
       this.broadcastLog("info", "end_file", eventData);
     } else if (event.type === "error") {
