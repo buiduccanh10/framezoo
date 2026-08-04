@@ -1,3 +1,4 @@
+import { iso6393To1 } from "iso-639-3";
 import type { SubtitleData } from "wyzie-lib";
 import { configure, searchSubtitles } from "wyzie-lib";
 
@@ -49,13 +50,25 @@ export async function scrapeWyzieCaptions(
 ): Promise<CaptionListItem[]> {
   try {
     const wyzieApiKey = conf().WYZIE_API_KEY;
-    const preferredSubtitleLanguage =
-      useSubtitleStore.getState().lastSelectedLanguage ??
-      useLanguageStore.getState().language;
-    const normalizedLanguage = preferredSubtitleLanguage
-      ?.trim()
-      .toLowerCase()
-      .split("-")[0];
+    const lastSelectedLanguage =
+      useSubtitleStore.getState().lastSelectedLanguage;
+    const appLanguage = useLanguageStore.getState().language;
+
+    function getNormalized(lang: string | null | undefined) {
+      let normalized = lang?.trim().toLowerCase().split("-")[0];
+      if (normalized && normalized.length === 3) {
+        normalized =
+          iso6393To1[normalized as keyof typeof iso6393To1] || normalized;
+      }
+      return normalized;
+    }
+
+    const normalizedLastSelected = getNormalized(lastSelectedLanguage);
+    const normalizedApp = getNormalized(appLanguage);
+
+    const languagesToSearch = new Set<string>();
+    if (normalizedLastSelected) languagesToSearch.add(normalizedLastSelected);
+    if (normalizedApp) languagesToSearch.add(normalizedApp);
 
     configure({
       baseUrl: "https://sub.wyzie.io",
@@ -88,28 +101,36 @@ export async function scrapeWyzieCaptions(
       params: { imdb_id?: string; tmdb_id?: number },
       label: string,
     ) {
-      const filteredSearchParams = {
-        ...baseSearchParams,
-        ...params,
-        ...(normalizedLanguage ? { language: normalizedLanguage } : {}),
-        encoding: "utf-8",
-      };
-      console.info(`Searching Wyzie subtitles with ${label} params:`, {
-        ...filteredSearchParams,
-        key: "[redacted]",
-      });
-      searchRequests.push(searchSubtitles(filteredSearchParams));
+      languagesToSearch.forEach((lang) => {
+        const filteredSearchParams = {
+          ...baseSearchParams,
+          ...params,
+          language: lang,
+          encoding: "utf-8",
+        };
+        console.info(
+          `Searching Wyzie subtitles with ${label} params for ${lang}:`,
+          {
+            ...filteredSearchParams,
+            key: "[redacted]",
+          },
+        );
+        searchRequests.push(searchSubtitles(filteredSearchParams));
 
-      const fallbackSearchParams = {
-        ...baseSearchParams,
-        ...params,
-        ...(normalizedLanguage ? { language: normalizedLanguage } : {}),
-      };
-      console.info(`Searching Wyzie subtitles with ${label} fallback params:`, {
-        ...fallbackSearchParams,
-        key: "[redacted]",
+        const fallbackSearchParams = {
+          ...baseSearchParams,
+          ...params,
+          language: lang,
+        };
+        console.info(
+          `Searching Wyzie subtitles with ${label} fallback params for ${lang}:`,
+          {
+            ...fallbackSearchParams,
+            key: "[redacted]",
+          },
+        );
+        searchRequests.push(searchSubtitles(fallbackSearchParams));
       });
-      searchRequests.push(searchSubtitles(fallbackSearchParams));
 
       const rawSearchParams = {
         ...baseSearchParams,
