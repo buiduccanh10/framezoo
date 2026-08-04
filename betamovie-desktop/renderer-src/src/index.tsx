@@ -1,7 +1,6 @@
 import "@/setup/pwa";
 import "core-js/stable";
 import "./stores/__old/imports";
-import "@/setup/devtoolsProtection";
 import "@/assets/css/index.css";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
