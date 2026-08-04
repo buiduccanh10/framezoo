@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import sys
 import tempfile
 from typing import Any, List, Optional, Set, Tuple
+from urllib.parse import parse_qs, urlparse
 
 import torrent_constants as constants
 
@@ -28,6 +30,27 @@ def get_magnet(request: dict[str, Any]) -> str:
         return "magnet:?xt=urn:btih:" + info_hash
 
     raise ValueError("torrent request requires a magnet URL or infoHash")
+
+
+def get_torrent_cache_key(request: dict[str, Any]) -> Optional[str]:
+    value = normalized_info_hash(request.get("infoHash"))
+    if not value:
+        url = request.get("url")
+        if isinstance(url, str) and url.strip().lower().startswith("magnet:"):
+            try:
+                for item in parse_qs(urlparse(url).query).get("xt", []):
+                    if item.lower().startswith("urn:btih:"):
+                        value = normalized_info_hash(item)
+                        if value:
+                            break
+            except ValueError:
+                value = None
+
+    if not value:
+        return None
+
+    key = re.sub(r"[^a-z0-9]", "", value.lower())
+    return key[:128] or None
 
 
 def safe_file_name(value: str) -> str:
