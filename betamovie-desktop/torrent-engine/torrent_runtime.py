@@ -15,6 +15,7 @@ import torrent_constants as constants
 from torrent_http import emit, is_client_connected, log_event
 from torrent_utils import (
     cap_open_ended_range,
+    get_torrent_cache_key,
     parse_range,
     select_file,
     torrent_hash,
@@ -37,6 +38,8 @@ class TorrentRuntime:
         self.handle = handle
         self.save_path = save_path
         self.persistent_cache = persistent_cache
+        self.cache_key = get_torrent_cache_key(request)
+        self._resume_lock = threading.Lock()
         self.info: Any = None
         self.file_index: Optional[int] = None
         self.file_path = ""
@@ -130,6 +133,8 @@ class TorrentRuntime:
                 # Piece priorities and deadlines drive playback; global sequential mode
                 # would start from piece 0 instead of the selected file's playhead.
                 self.handle.set_sequential_download(False)
+                if self.persistent_cache:
+                    self.persist_metadata()
                 self.metadata_ready.set()
                 log_event(
                     "metadata ready",
@@ -162,11 +167,48 @@ class TorrentRuntime:
             ),
         }
 
+    def persist_metadata(self) -> None:
+        if not self.cache_key or self.info is None:
+            return
+        torrent_path = os.path.join(self.save_path, self.cache_key + ".torrent")
+        if os.path.exists(torrent_path):
+            return
+        try:
+            entry = lt.create_torrent(self.info).generate()
+            with open(torrent_path, "wb") as f:
+                f.write(lt.bencode(entry))
+            log_event(
+                "metadata persisted",
+                sessionId=self.session_id,
+                torrentPath=torrent_path,
+            )
+        except Exception as error:
+            sys.stderr.write(f"[sidecar] Failed to persist torrent metadata: {error}\n")
+
+    def save_resume_data_sync(self) -> bool:
+        if not self.persistent_cache:
+            return False
+        with self._resume_lock:
+            try:
+                entry = self.handle.write_resume_data()
+                data = lt.bencode(entry)
+                with open(
+                    os.path.join(self.save_path, "resume.dat"),
+                    "wb",
+                ) as f:
+                    f.write(data)
+                return True
+            except Exception as error:
+                sys.stderr.write(f"[sidecar] Failed to save resume data: {error}\n")
+                return False
+
     def stop(self) -> None:
         self.stop_event.set()
         self.engine.http_server.unregister(self.session_id)
         log_event("session stopped", sessionId=self.session_id)
         if not self._torrent_cleaned:
+            if self.persistent_cache:
+                self.save_resume_data_sync()
             try:
                 self.engine.session.remove_torrent(self.handle)
             except Exception:
@@ -235,12 +277,23 @@ class TorrentRuntime:
         }
 
     def publish_status(self) -> None:
+        resume_saves = 0
         while not self.stop_event.is_set():
             try:
                 emit({"type": "status", "status": self.current_status()})
             except Exception:
                 return
             self.stop_event.wait(0.5)
+            # Persist resume data periodically so cached torrents survive
+            # abrupt app exits without a full re-check on the next start.
+            resume_saves += 1
+            if (
+                resume_saves >= 60
+                and self.persistent_cache
+                and self.metadata_ready.is_set()
+            ):
+                resume_saves = 0
+                self.save_resume_data_sync()
 
     def map_pieces(self, start: int, length: int) -> Set[int]:
         if self.info is None or self.file_index is None:

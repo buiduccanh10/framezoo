@@ -27,7 +27,9 @@ interface NativeLibMpvAddon {
     request: LibMpvSourceRequest & { generation: number },
   ): void;
   commandPlayer(playerId: string, command: LibMpvCommand): void;
-  extractAudio(request: LibMpvAudioRequest & { outputPath: string }): Promise<string>;
+  extractAudio(
+    request: LibMpvAudioRequest & { outputPath: string },
+  ): Promise<string>;
   destroyPlayer(playerId: string): void;
   configureWindow?(parentHandle: Buffer): void;
 }
@@ -320,29 +322,43 @@ export class LibMpvController {
     const player = this.players.get(playerId);
     if (!player || !this.addon) return false;
 
-    player.generation += 1;
-    const generation = player.generation;
+    const requestedGeneration = request.generation;
+    let generation: number;
+    if (
+      typeof requestedGeneration === "number" &&
+      Number.isInteger(requestedGeneration) &&
+      requestedGeneration >= 0
+    ) {
+      // Trust the renderer's generation. It tags its load requests so filtered
+      // events stay in sync even when an earlier load is coalesced away.
+      player.generation = requestedGeneration;
+      generation = requestedGeneration;
+    } else {
+      player.generation += 1;
+      generation = player.generation;
+    }
     player.loadStartedAtMs = Date.now();
     player.isTorrent = request.isTorrent === true;
     const oldTimer = this.eventTimers.get(playerId);
     if (oldTimer) clearTimeout(oldTimer);
 
-      this.broadcastLog("info", "load_requested", {
-        playerId,
-        generation,
-        type: request.type,
-        url: redactUrl(request.url),
-        wallClockMs: Date.now(),
-        loadElapsedMs: 0,
-        isTorrent: player.isTorrent,
-        timingPhase: "libmpv_load",
-      });
+    this.broadcastLog("info", "load_requested", {
+      playerId,
+      generation,
+      type: request.type,
+      url: redactUrl(request.url),
+      wallClockMs: Date.now(),
+      loadElapsedMs: 0,
+      isTorrent: player.isTorrent,
+      timingPhase: "libmpv_load",
+    });
 
     try {
       this.addon.loadPlayer(playerId, {
         ...request,
         generation,
         startAt: Math.max(0, Number(request.startAt) || 0),
+        autoplay: request.autoplay !== false,
       });
 
       const timeoutMs = request.isTorrent
@@ -496,7 +512,7 @@ export class LibMpvController {
       player.pipResizeListener = undefined;
       player.pipWindow = undefined;
     }
-    
+
     this.players.delete(playerId);
     const timer = this.eventTimers.get(playerId);
     if (timer) clearTimeout(timer);
