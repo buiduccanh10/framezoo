@@ -287,9 +287,14 @@ struct MpvPlayer {
     }
     surface_swap_buffers(surface);
     api.render_context_report_swap(render_context);
+    // A paused player stops producing new frames, so `update_flags & FRAME`
+    // can be 0 on every render after the first presentation. Emitting the
+    // first-frame signal as soon as the video pipeline is ready removes the
+    // race where the initial render lands before video-params arrives and no
+    // later render ever reports a new frame (stuck-paused autoplay deadlock).
     if (
+        result >= 0 &&
         video_metadata_ready.load(std::memory_order_acquire) &&
-        (update_flags & 1u) != 0 &&
         !video_frame_ready.exchange(true, std::memory_order_acq_rel)
     ) {
       auto* native_event = new NativeEvent();

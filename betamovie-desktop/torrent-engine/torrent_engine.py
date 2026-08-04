@@ -79,16 +79,59 @@ class LibtorrentEngine:
             )
 
         cache_key = get_torrent_cache_key(request)
+        resume_data = b""
+        torrent_info = None
         if cache_key:
             save_path = os.path.join(root, "torrent-" + cache_key)
             os.makedirs(save_path, exist_ok=True)
+            torrent_path = os.path.join(save_path, cache_key + ".torrent")
+            if os.path.exists(torrent_path):
+                try:
+                    torrent_info = lt.torrent_info(torrent_path)
+                except Exception as error:
+                    sys.stderr.write(
+                        f"[sidecar] Failed to load cached torrent file: {error}\n"
+                    )
+                    torrent_info = None
+            resume_path = os.path.join(save_path, "resume.dat")
+            if os.path.exists(resume_path):
+                try:
+                    with open(resume_path, "rb") as f:
+                        resume_data = f.read()
+                except Exception:
+                    resume_data = b""
         else:
             save_path = tempfile.mkdtemp(
                 prefix="betamovie-torrent-",
                 dir=root,
             )
+
         params = lt.parse_magnet_uri(magnet)
         params.save_path = save_path
+        if torrent_info is not None:
+            params.ti = torrent_info
+
+        if resume_data:
+            try:
+                rd_params = lt.read_resume_data(resume_data)
+                if torrent_info is not None and getattr(rd_params, "ti", None) is None:
+                    rd_params.ti = torrent_info
+                t_list = list(rd_params.trackers)
+                for t in params.trackers:
+                    if t not in t_list:
+                        t_list.append(t)
+                rd_params.trackers = t_list
+                u_list = list(rd_params.url_seeds)
+                for u in params.url_seeds:
+                    if u not in u_list:
+                        u_list.append(u)
+                rd_params.url_seeds = u_list
+                rd_params.save_path = save_path
+                params = rd_params
+            except Exception as error:
+                sys.stderr.write(
+                    f"[sidecar] Failed to parse resume data: {error}\n"
+                )
         params.storage_mode = lt.storage_mode_t.storage_mode_sparse
         torrent_flags = getattr(lt, "torrent_flags", None)
         auto_managed = getattr(torrent_flags, "auto_managed", None)
