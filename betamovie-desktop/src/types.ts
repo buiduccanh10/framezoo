@@ -100,6 +100,13 @@ export interface LibMpvSourceRequest {
   headers?: Record<string, string>;
   /** Set to true for torrent HTTP streams that may buffer before sending data. */
   isTorrent?: boolean;
+  /**
+   * Generation supplied by the renderer. The controller and native addon tag
+   * every event with this value, so the renderer's own counter stays in sync
+   * even when multiple loads are coalesced. When omitted, the controller falls
+   * back to its own per-player counter.
+   */
+  generation?: number;
 }
 
 export interface LibMpvAudioRequest {

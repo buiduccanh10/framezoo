@@ -37,7 +37,7 @@ export const createPlayingSlice: MakeSlice<PlayingSlice> = (set) => ({
   pause() {
     set((state) => {
       state.mediaPlaying.isPlaying = false;
-      state.mediaPlaying.isPaused = false;
+      state.mediaPlaying.isPaused = true;
     });
   },
 });
