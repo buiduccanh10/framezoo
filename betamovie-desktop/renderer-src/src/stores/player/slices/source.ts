@@ -606,6 +606,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     if (!store.meta) return;
     const activeRequestId = requestId ?? store.externalSubtitleRequestId + 1;
     const mediaKey = getExternalSubtitleMediaKey(store.meta);
+    const requestedMediaKey = getMediaKey(store.meta);
 
     set((s) => {
       if (requestId == null) {
@@ -627,15 +628,22 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       await scrapeExternalSubtitles(
         store.meta,
         ({ captions, completed, total }) => {
-          if (get().externalSubtitleRequestId !== activeRequestId) return;
+          const currentStore = get();
+          const isSameMedia =
+            getMediaKey(currentStore.meta) === requestedMediaKey;
+          if (!isSameMedia) return;
 
           set((s) => {
-            if (s.externalSubtitleRequestId !== activeRequestId) return;
+            if (getMediaKey(s.meta) !== requestedMediaKey) return;
 
-            s.externalSubtitleLoadProgress = {
-              completed,
-              total,
-            };
+            // Keep results from an older request when the player still shows
+            // the same episode, but never let them update current progress.
+            if (s.externalSubtitleRequestId === activeRequestId) {
+              s.externalSubtitleLoadProgress = {
+                completed,
+                total,
+              };
+            }
 
             if (captions.length > 0) {
               const existingCaptionKeys = new Set(
