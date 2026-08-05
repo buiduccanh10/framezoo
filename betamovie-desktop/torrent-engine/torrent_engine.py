@@ -36,7 +36,7 @@ class LibtorrentEngine:
                 "max_allowed_in_request_queue": 2000,
                 "whole_pieces_threshold": 5,
                 "peer_connect_timeout": 2,
-                "piece_timeout": 10,
+                "piece_timeout": 3,
                 "aio_threads": 8,
                 "send_buffer_watermark": 4 * 1024 * 1024,
                 "suggest_mode": 1,

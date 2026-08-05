@@ -19,6 +19,34 @@ METADATA_WAIT_TIMEOUT = 90
 INITIAL_TAIL_PROBE_MAX_REQUESTS = 3
 RANGE_RETRY_INTERVAL = 0.05
 BLOCKED_REPLAN_INTERVAL = 0.25
+# Re-assert/expand the blocked range only when the missing set or the window
+# size changes, or every N seconds. Re-scheduling every tick churns
+# libtorrent's piece picker and spams logs without helping the stuck piece.
+BLOCKED_REPLAN_REASSERT_INTERVAL = 5
+# A stuck required piece rarely completes from priority alone: libtorrent
+# never cancels in-flight block requests when priority is raised. After the
+# target stalls this long we cancel the piece (priority 0) and re-prioritize
+# it so every missing block is re-requested from all peers (endgame).
+TARGET_KICK_DELAY = 1.0
+TARGET_KICK_INTERVAL = 12.0
+# A kick drops the target to priority 0 to cancel its in-flight requests,
+# then restores top priority after this delay. Raising it back within the
+# same picker tick is a no-op: the cancellation is never processed, so the
+# missing blocks stay requested from the same slow peers. A full tick at
+# priority 0 forces a genuine re-request from every peer (endgame).
+TARGET_KICK_RESTORE_DELAY = 0.5
+# A kick cancels the piece's requests and discards its downloaded blocks.
+# Kicking while the swarm is busy delivering other pieces just wipes the
+# target and starves it forever, so only kick when the swarm made less than
+# this much progress since the last kick, is effectively idle, or the target
+# owns exclusive focus and still cannot finish.
+TARGET_KICK_MIN_PROGRESS_BYTES = 1024 * 1024
+# A swarm below this download rate cannot deliver the target's blocks; a
+# kick re-requests them from every peer instead of waiting on one slow one.
+TARGET_KICK_IDLE_RATE = 64 * 1024
+# After the target stalls this long, demote every other priority-7 piece to
+# hot priority so the stuck piece receives the swarm's full bandwidth.
+TARGET_FOCUS_DELAY = 5.0
 TARGET_STALL_REANNOUNCE_DELAY = 1.0
 REANNOUNCE_COOLDOWN = 10
 # Minimum seconds to wait before declaring client disconnected.
