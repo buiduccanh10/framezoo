@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { SegmentQualityDebugInfo } from "@/components/player/display/displayInterface";
+import { useLanguageStore } from "@/stores/language";
 import { MakeSlice } from "@/stores/player/slices/types";
 import {
   SourceQuality,
@@ -8,7 +9,9 @@ import {
   selectQuality,
 } from "@/stores/player/utils/qualities";
 import { useQualityStore } from "@/stores/quality";
+import { useSubtitleStore } from "@/stores/subtitles";
 import { isAutoplayAllowed } from "@/utils/autoplay";
+import { getExternalSubtitleLanguageKey } from "@/utils/externalSubtitles/language";
 import googletranslate from "@/utils/translation/googletranslate";
 import { translate } from "@/utils/translation/index";
 import { ValuesOf } from "@/utils/typeguard";
@@ -183,6 +186,16 @@ export function getMediaKey(meta: PlayerMeta | null): string | null {
 
   // Fallback if show data is incomplete
   return `${meta.type}-${meta.tmdbId}`;
+}
+
+function getExternalSubtitleMediaKey(meta: PlayerMeta | null): string | null {
+  const mediaKey = getMediaKey(meta);
+  if (!mediaKey) return null;
+
+  return `${mediaKey}:${getExternalSubtitleLanguageKey(
+    useSubtitleStore.getState().lastSelectedLanguage,
+    useLanguageStore.getState().language,
+  )}`;
 }
 
 function getCaptionIdentityKey(caption: CaptionListItem): string {
@@ -416,7 +429,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     startAt: number,
   ) {
     const store = get();
-    const currentMediaKey = getMediaKey(store.meta);
+    const currentMediaKey = getExternalSubtitleMediaKey(store.meta);
     const shouldReuseLoadedExternalSubtitles =
       !!currentMediaKey &&
       currentMediaKey === store.externalSubtitleMediaKey &&
@@ -591,10 +604,13 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   async addExternalSubtitles(requestId) {
     const store = get();
     if (!store.meta) return;
-    const activeRequestId = requestId ?? store.externalSubtitleRequestId;
-    const mediaKey = getMediaKey(store.meta);
+    const activeRequestId = requestId ?? store.externalSubtitleRequestId + 1;
+    const mediaKey = getExternalSubtitleMediaKey(store.meta);
 
     set((s) => {
+      if (requestId == null) {
+        s.externalSubtitleRequestId = activeRequestId;
+      }
       if (s.externalSubtitleRequestId === activeRequestId) {
         s.isLoadingExternalSubtitles = true;
         s.externalSubtitleLoadProgress = {
