@@ -490,8 +490,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         : null;
       s.interface.error = undefined;
       s.status = playerStatus.PLAYING;
-      s.mediaPlaying.isPaused = !isAutoplayAllowed();
-      s.mediaPlaying.isPlaying = isAutoplayAllowed();
+      const autoplayNext = store.mediaPlaying.isPlaying || isAutoplayAllowed();
+      s.mediaPlaying.isPaused = !autoplayNext;
+      s.mediaPlaying.isPlaying = autoplayNext;
       s.audioTracks = [];
       s.embeddedSubtitleTracksLoaded = false;
       s.currentAudioTrack = null;
@@ -529,7 +530,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       startAt,
       automaticQuality: qualityPreferences.quality.automaticQuality,
       preferredQuality: qualityPreferences.quality.lastChosenQuality,
-      autoplay: isAutoplayAllowed(),
+      autoplay: store.mediaPlaying.isPlaying || isAutoplayAllowed(),
     });
   },
   switchQuality(quality) {

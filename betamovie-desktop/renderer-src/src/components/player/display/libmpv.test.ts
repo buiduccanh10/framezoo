@@ -408,6 +408,78 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("does not surface the previous source's teardown pause as a user pause", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "file-loaded" | "property";
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const plays: number[] = [];
+    const pauses: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("play", () => plays.push(1));
+    display.on("pause", () => pauses.push(1));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "http://127.0.0.1/video.mkv",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+      autoplay: false,
+    });
+    display.play();
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The user pressed play while the new file is still loading. The pause
+    // reported here is a leftover from the old source's teardown and must
+    // not be surfaced as a user pause.
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "pause",
+      data: true,
+    });
+    expect(pauses).toEqual([]);
+
+    // The new file loads and playback starts automatically.
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "file-loaded",
+    });
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "pause",
+      data: false,
+    });
+    expect(plays.length).toBeGreaterThan(0);
+    expect(pauses).toEqual([]);
+    display.destroy();
+  });
+
   it("resets generation when clearing the native player", async () => {
     let eventListener:
       | ((event: {

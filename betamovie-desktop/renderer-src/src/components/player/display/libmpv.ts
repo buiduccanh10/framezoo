@@ -560,6 +560,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         break;
       case "pause":
         if (typeof event.data === "boolean") {
+          if (event.data && !desiredPaused && !fileLoaded && !cachePaused) {
+            return;
+          }
           const wasPaused = paused;
           paused = event.data;
           if (!paused) {
