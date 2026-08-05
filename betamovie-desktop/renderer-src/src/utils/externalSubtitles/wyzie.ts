@@ -1,4 +1,3 @@
-import { iso6393To1 } from "iso-639-3";
 import type { SubtitleData } from "wyzie-lib";
 import { configure, searchSubtitles } from "wyzie-lib";
 
@@ -6,6 +5,11 @@ import { conf } from "@/setup/config";
 import { useLanguageStore } from "@/stores/language";
 import { CaptionListItem } from "@/stores/player/slices/source";
 import { useSubtitleStore } from "@/stores/subtitles";
+
+import {
+  getExternalSubtitleLanguageKey,
+  normalizeExternalSubtitleLanguage,
+} from "./language";
 
 function normalizeSubtitleFormat(
   format: string | undefined | null,
@@ -53,22 +57,11 @@ export async function scrapeWyzieCaptions(
     const lastSelectedLanguage =
       useSubtitleStore.getState().lastSelectedLanguage;
     const appLanguage = useLanguageStore.getState().language;
-
-    function getNormalized(lang: string | null | undefined) {
-      let normalized = lang?.trim().toLowerCase().split("-")[0];
-      if (normalized && normalized.length === 3) {
-        normalized =
-          iso6393To1[normalized as keyof typeof iso6393To1] || normalized;
-      }
-      return normalized;
-    }
-
-    const normalizedLastSelected = getNormalized(lastSelectedLanguage);
-    const normalizedApp = getNormalized(appLanguage);
-
-    const languagesToSearch = new Set<string>();
-    if (normalizedLastSelected) languagesToSearch.add(normalizedLastSelected);
-    if (normalizedApp) languagesToSearch.add(normalizedApp);
+    const languagesToSearch = new Set(
+      getExternalSubtitleLanguageKey(lastSelectedLanguage, appLanguage)
+        .split(",")
+        .filter(Boolean),
+    );
 
     configure({
       baseUrl: "https://sub.wyzie.io",
@@ -173,7 +166,10 @@ export async function scrapeWyzieCaptions(
       const type = normalizeSubtitleFormat(subtitle.format, subtitle.url);
       const caption: CaptionListItem = {
         id: buildWyzieCaptionId(subtitle, type),
-        language: subtitle.language || "unknown",
+        language:
+          normalizeExternalSubtitleLanguage(subtitle.language) ||
+          subtitle.language ||
+          "unknown",
         url: subtitle.url,
         type,
         needsProxy: false,
