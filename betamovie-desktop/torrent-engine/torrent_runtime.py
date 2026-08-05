@@ -54,15 +54,24 @@ class TorrentRuntime:
         self.metadata_complete = threading.Event()
         self.metadata_error: Optional[str] = None
         self.metadata_thread: Optional[threading.Thread] = None
+        self._metadata_lock = threading.Lock()
         self.session_started_at = time.monotonic()
         self.first_request_logged = False
         self.request_count = 0
         self.last_range_key: Optional[Tuple[int, int]] = None
         self._piece_priority_lock = threading.RLock()
         self._boosted_pieces: Set[int] = set()
+        self._piece_priorities: dict[int, int] = {}
+        self._piece_deadlines: dict[int, int] = {}
         self._focused_file_index: Optional[int] = None
         self._has_streamed_bytes = False
         self._last_stream_start: Optional[int] = None
+        self._first_peer_logged = False
+        self._first_download_logged = False
+        self._first_piece_prioritized_logged = False
+        self._first_piece_ready_logged = False
+        self._reannounce_lock = threading.Lock()
+        self._last_reannounce = 0.0
         self.status_thread = threading.Thread(
             target=self.publish_status,
             name="torrent-status-" + session_id,
@@ -117,35 +126,48 @@ class TorrentRuntime:
     def wait_for_metadata(self, timeout: float) -> None:
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline and not self.stop_event.is_set():
+            if self.metadata_ready.is_set():
+                return
             status = self.handle.status()
             if status.has_metadata:
-                self.info = self.handle.torrent_file()
-                if self.info is None:
-                    raise ValueError("libtorrent returned no torrent metadata")
-                (
-                    self.file_index,
-                    self.file_path,
-                    self.file_size,
-                ) = select_file(self.info, self.request)
-                priorities = [0] * self.info.files().num_files()
-                priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
-                self.handle.prioritize_files(priorities)
-                # Piece priorities and deadlines drive playback; global sequential mode
-                # would start from piece 0 instead of the selected file's playhead.
-                self.handle.set_sequential_download(False)
-                if self.persistent_cache:
-                    self.persist_metadata()
-                self.metadata_ready.set()
-                log_event(
-                    "metadata ready",
-                    sessionId=self.session_id,
-                    fileName=self.file_path.rsplit("/", 1)[-1],
-                    fileSize=self.file_size,
-                    timingPhase="metadata_ready",
-                    elapsedMs=self.elapsed_ms(),
-                )
+                with self._metadata_lock:
+                    if self.metadata_ready.is_set():
+                        return
+                    self.info = self.handle.torrent_file()
+                    if self.info is None:
+                        raise ValueError(
+                            "libtorrent returned no torrent metadata",
+                        )
+                    (
+                        self.file_index,
+                        self.file_path,
+                        self.file_size,
+                    ) = select_file(self.info, self.request)
+                    priorities = [0] * self.info.files().num_files()
+                    priorities[
+                        self.file_index
+                    ] = constants.STREAM_IDLE_FILE_PRIORITY
+                    self.handle.prioritize_files(priorities)
+                    # Piece priorities and deadlines drive playback; global
+                    # sequential mode would start from piece 0 instead of
+                    # the selected file's playhead.
+                    self.handle.set_sequential_download(False)
+                    if self.persistent_cache:
+                        self.persist_metadata()
+                    self.metadata_ready.set()
+                    log_event(
+                        "metadata ready",
+                        sessionId=self.session_id,
+                        fileName=self.file_path.rsplit("/", 1)[-1],
+                        fileSize=self.file_size,
+                        timingPhase="metadata_ready",
+                        elapsedMs=self.elapsed_ms(),
+                    )
+                    self.prime_startup_ranges()
                 return
             time.sleep(0.2)
+        if self.stop_event.is_set():
+            return
         raise TimeoutError("timed out waiting for torrent metadata")
 
     def session_payload(self) -> dict[str, Any]:
@@ -224,6 +246,7 @@ class TorrentRuntime:
 
     def current_status(self) -> dict[str, Any]:
         status = self.handle.status()
+        self._observe_status_milestones(status)
         file_progress = 0
         if self.file_index is not None:
             try:
@@ -275,6 +298,29 @@ class TorrentRuntime:
             "error": stream_error,
             "updatedAt": int(time.time() * 1000),
         }
+
+    def _observe_status_milestones(self, status: Any) -> None:
+        peers = int(getattr(status, "num_peers", 0))
+        download_rate = int(getattr(status, "download_rate", 0))
+        if peers > 0 and not self._first_peer_logged:
+            self._first_peer_logged = True
+            log_event(
+                "first peer",
+                sessionId=self.session_id,
+                peers=peers,
+                timingPhase="first_peer",
+                elapsedMs=self.elapsed_ms(),
+            )
+        if download_rate > 0 and not self._first_download_logged:
+            self._first_download_logged = True
+            log_event(
+                "first download rate",
+                sessionId=self.session_id,
+                peers=peers,
+                downloadRate=download_rate,
+                timingPhase="first_download_rate",
+                elapsedMs=self.elapsed_ms(),
+            )
 
     def publish_status(self) -> None:
         resume_saves = 0
@@ -354,6 +400,14 @@ class TorrentRuntime:
             deadline_ms,
             self._deadline_flags(),
         )
+        lock = getattr(self, "_piece_priority_lock", None)
+        if lock is None:
+            self._piece_deadlines = getattr(self, "_piece_deadlines", {})
+            self._piece_deadlines[piece] = deadline_ms
+            return
+        with lock:
+            self._piece_deadlines = getattr(self, "_piece_deadlines", {})
+            self._piece_deadlines[piece] = deadline_ms
 
     def prioritize_range(
         self,
@@ -364,6 +418,71 @@ class TorrentRuntime:
         pieces = sorted(self.map_pieces(start, length))
         self._schedule_pieces(pieces, set(pieces), reason)
 
+    def prime_startup_ranges(self) -> None:
+        """Schedule head and tail pieces before libmpv issues HTTP probes."""
+        if (
+            self.info is None
+            or self.file_index is None
+            or self.file_size <= 0
+        ):
+            return
+
+        try:
+            piece_length = int(self.info.piece_length())
+        except (AttributeError, TypeError, ValueError):
+            piece_length = constants.STREAM_CHUNK_SIZE
+
+        try:
+            head_pieces = sorted(
+                self.map_pieces(
+                    0,
+                    max(1, piece_length * constants.STARTUP_WINDOW_PIECES),
+                ),
+            )[: constants.STARTUP_WINDOW_PIECES]
+            tail_start = max(
+                0,
+                self.file_size - constants.TAIL_PREFETCH_BYTES,
+            )
+            tail_pieces = [
+                piece
+                for piece in sorted(
+                    self.map_pieces(
+                        tail_start,
+                        constants.TAIL_PREFETCH_BYTES,
+                    ),
+                )
+                if piece not in head_pieces
+            ]
+
+            if head_pieces:
+                self._schedule_pieces(
+                    head_pieces,
+                    set(head_pieces),
+                    reason="startup-prefetch",
+                )
+            if tail_pieces:
+                self._schedule_pieces(
+                    tail_pieces,
+                    set(tail_pieces),
+                    reason="startup-prefetch",
+                )
+
+            log_event(
+                "startup prefetch",
+                sessionId=self.session_id,
+                headPieces=head_pieces,
+                tailPieces=tail_pieces,
+                tailStart=tail_start,
+                timingPhase="startup_prefetch",
+                elapsedMs=self.elapsed_ms(),
+            )
+        except Exception as error:
+            log_event(
+                "startup prefetch failed",
+                sessionId=self.session_id,
+                error=str(error),
+            )
+
     def focus_file(self) -> None:
         if self.info is None or self.file_index is None:
             return
@@ -372,7 +491,7 @@ class TorrentRuntime:
                 return
         try:
             priorities = [0] * self.info.files().num_files()
-            priorities[self.file_index] = constants.STREAM_ACTIVE_FILE_PRIORITY
+            priorities[self.file_index] = constants.STREAM_IDLE_FILE_PRIORITY
             self.handle.prioritize_files(priorities)
             self.handle.set_sequential_download(False)
             with self._piece_priority_lock:
@@ -389,7 +508,7 @@ class TorrentRuntime:
                 if not self.handle.have_piece(piece):
                     self.handle.piece_priority(
                         piece,
-                        constants.STREAM_ACTIVE_FILE_PRIORITY,
+                        constants.STREAM_HOT_PIECE_PRIORITY,
                     )
                 self.handle.reset_piece_deadline(piece)
             except Exception:
@@ -452,6 +571,9 @@ class TorrentRuntime:
         previously scheduled stream pieces remain eligible.
         """
         missing_pieces = 0
+        required_set = set(required_pieces)
+        first_required_piece = min(required_set) if required_set else None
+        first_piece_was_prioritized = False
         with self._piece_priority_lock:
             for index, piece in enumerate(prefetch_pieces):
                 try:
@@ -460,20 +582,39 @@ class TorrentRuntime:
                 except RuntimeError:
                     return
 
-                priority = constants.STREAM_PIECE_PRIORITY
-                deadline_ms = (
-                    index * 10
-                    if piece in required_pieces
-                    else (
+                if piece in required_set:
+                    priority = constants.STREAM_PIECE_PRIORITY
+                    distance = (
+                        0
+                        if first_required_piece is None
+                        else max(0, piece - first_required_piece)
+                    )
+                    deadline_ms = distance * 25
+                elif index < constants.STARTUP_WINDOW_PIECES:
+                    priority = constants.STREAM_HOT_PIECE_PRIORITY
+                    deadline_ms = (
                         constants.PREFETCH_DEADLINE_BASE_MS
                         + index * constants.PREFETCH_DEADLINE_STEP_MS
                     )
-                )
+                else:
+                    priority = constants.STREAM_WARM_PIECE_PRIORITY
+                    deadline_ms = (
+                        constants.PREFETCH_DEADLINE_BASE_MS
+                        + index * constants.PREFETCH_DEADLINE_STEP_MS
+                    )
                 try:
                     self.handle.piece_priority(piece, priority)
-                    self._set_piece_deadline(piece, max(1, deadline_ms))
+                    self._set_piece_deadline(piece, max(0, deadline_ms))
                     with self._piece_priority_lock:
                         self._boosted_pieces.add(piece)
+                        self._piece_priorities = getattr(
+                            self,
+                            "_piece_priorities",
+                            {},
+                        )
+                        self._piece_priorities[piece] = priority
+                    if piece == first_required_piece:
+                        first_piece_was_prioritized = True
                     missing_pieces += 1
                 except Exception:
                     continue
@@ -490,6 +631,183 @@ class TorrentRuntime:
                 if reason == "first-chunk"
                 else None
             ),
+        )
+        if (
+            required_set
+            and first_piece_was_prioritized
+            and not getattr(self, "_first_piece_prioritized_logged", False)
+            and reason in ("first-chunk", "range", "blocked-replan")
+        ):
+            self._first_piece_prioritized_logged = True
+            log_event(
+                "first piece prioritized",
+                sessionId=self.session_id,
+                piece=first_required_piece,
+                priority=constants.STREAM_PIECE_PRIORITY,
+                deadlineMs=0,
+                timingPhase="first_piece_prioritized",
+                elapsedMs=self.elapsed_ms(),
+            )
+
+    def _log_first_piece_ready(self, piece: Optional[int]) -> None:
+        if piece is None or getattr(self, "_first_piece_ready_logged", False):
+            return
+        self._first_piece_ready_logged = True
+        log_event(
+            "first piece ready",
+            sessionId=self.session_id,
+            piece=piece,
+            timingPhase="first_piece_ready",
+            elapsedMs=self.elapsed_ms(),
+        )
+
+    def _piece_availability(self, piece: Optional[int]) -> Optional[int]:
+        if piece is None:
+            return None
+        try:
+            availability = self.handle.piece_availability()
+            if piece >= len(availability):
+                return None
+            return int(availability[piece])
+        except Exception:
+            return None
+
+    def _piece_have(self, piece: Optional[int]) -> Optional[bool]:
+        if piece is None:
+            return None
+        try:
+            return bool(self.handle.have_piece(piece))
+        except Exception:
+            return None
+
+    def _piece_priority(self, piece: Optional[int]) -> Optional[int]:
+        if piece is None:
+            return None
+        try:
+            value = self.handle.piece_priority(piece)
+            return int(value)
+        except Exception:
+            lock = getattr(self, "_piece_priority_lock", None)
+            if lock is None:
+                value = getattr(self, "_piece_priorities", {}).get(piece)
+            else:
+                with lock:
+                    value = getattr(self, "_piece_priorities", {}).get(piece)
+            return int(value) if value is not None else None
+
+    def _piece_deadline(self, piece: Optional[int]) -> Optional[int]:
+        if piece is None:
+            return None
+        lock = getattr(self, "_piece_priority_lock", None)
+        if lock is None:
+            value = getattr(self, "_piece_deadlines", {}).get(piece)
+        else:
+            with lock:
+                value = getattr(self, "_piece_deadlines", {}).get(piece)
+        return int(value) if value is not None else None
+
+    def _reassert_target_piece(self, target_piece: Optional[int]) -> None:
+        if target_piece is None or self._piece_have(target_piece):
+            return
+
+        with self._piece_priority_lock:
+            try:
+                self.handle.piece_priority(
+                    target_piece,
+                    constants.STREAM_PIECE_PRIORITY,
+                )
+                reset_deadline = getattr(
+                    self.handle,
+                    "reset_piece_deadline",
+                    None,
+                )
+                if callable(reset_deadline):
+                    reset_deadline(target_piece)
+                self._set_piece_deadline(target_piece, 0)
+                self._boosted_pieces.add(target_piece)
+                self._piece_priorities = getattr(
+                    self,
+                    "_piece_priorities",
+                    {},
+                )
+                self._piece_priorities[target_piece] = (
+                    constants.STREAM_PIECE_PRIORITY
+                )
+            except Exception:
+                return
+
+        log_event(
+            "target piece escalated",
+            sessionId=self.session_id,
+            targetPiece=target_piece,
+            targetPieceAvailability=self._piece_availability(target_piece),
+            targetPieceHave=False,
+            targetPiecePriority=self._piece_priority(target_piece),
+            targetPieceDeadlineMs=self._piece_deadline(target_piece),
+            timingPhase="target_piece_escalated",
+            elapsedMs=self.elapsed_ms(),
+        )
+
+    def _force_reannounce_if_stalled(
+        self,
+        target_piece: Optional[int],
+        blocked_waits: int,
+        stall_seconds: float,
+    ) -> None:
+        target_availability = self._piece_availability(target_piece)
+        if (
+            target_piece is None
+            or stall_seconds < constants.TARGET_STALL_REANNOUNCE_DELAY
+            or target_availability is None
+        ):
+            return
+
+        now = time.monotonic()
+        with self._reannounce_lock:
+            if (
+                now - getattr(self, "_last_reannounce", 0.0)
+                < constants.REANNOUNCE_COOLDOWN
+            ):
+                return
+
+            announced = False
+            force_reannounce = getattr(self.handle, "force_reannounce", None)
+            force_dht_announce = getattr(
+                self.handle,
+                "force_dht_announce",
+                None,
+            )
+            try:
+                if callable(force_reannounce):
+                    force_reannounce()
+                    announced = True
+            except Exception:
+                pass
+            try:
+                if callable(force_dht_announce):
+                    force_dht_announce()
+                    announced = True
+            except Exception:
+                pass
+            if not announced:
+                return
+            self._last_reannounce = now
+
+        status = self.handle.status()
+        log_event(
+            "swarm reannounce",
+            sessionId=self.session_id,
+            peers=int(getattr(status, "num_peers", 0)),
+            downloadRate=int(getattr(status, "download_rate", 0)),
+            blockedWaits=blocked_waits,
+            targetPiece=target_piece,
+            targetPieceAvailability=target_availability,
+            targetPieceHave=self._piece_have(target_piece),
+            targetPiecePriority=self._piece_priority(target_piece),
+            targetPieceDeadlineMs=self._piece_deadline(target_piece),
+            stallMs=int(stall_seconds * 1000),
+            timingPhase="swarm_reannounce",
+            elapsedMs=self.elapsed_ms(),
         )
 
     def wait_for_range(
@@ -569,12 +887,15 @@ class TorrentRuntime:
 
         if track_position:
             self.maybe_refocus(start)
-        self._schedule_pieces(
-            all_pieces,
-            set(required_pieces),
-            reason="range",
-        )
+        required_set = set(required_pieces)
+        self._schedule_pieces(all_pieces, required_set, reason="range")
 
+        blocked_waits = 0
+        blocked_replan_count = 0
+        last_blocked_replan = 0.0
+        stalled_target_piece: Optional[int] = None
+        stalled_since = time.monotonic()
+        target_stall_logged = False
         while time.monotonic() < deadline and not self.stop_event.is_set():
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
@@ -592,6 +913,11 @@ class TorrentRuntime:
                 ]
             except RuntimeError:
                 return False
+            if (
+                first_required_piece is not None
+                and first_required_piece not in missing_required
+            ):
+                self._log_first_piece_ready(first_required_piece)
             if not missing_required:
                 log_event(
                     "range ready",
@@ -605,24 +931,75 @@ class TorrentRuntime:
                 )
                 return True
 
+            blocked_waits += 1
             time.sleep(constants.RANGE_RETRY_INTERVAL)
             if self.stop_event.is_set():
                 break
 
-            # Re-apply deadlines each iteration for any pieces that still haven't arrived.
-            with self._piece_priority_lock:
-                for index, piece in enumerate(required_pieces):
-                    try:
-                        if not self.handle.have_piece(piece):
-                            self.handle.piece_priority(
-                                piece,
-                                constants.STREAM_PIECE_PRIORITY,
-                            )
-                            self._set_piece_deadline(piece, max(1, index * 10))
-                    except RuntimeError:
-                        return False
-                    except Exception:
-                        continue
+            now = time.monotonic()
+            if now - last_blocked_replan >= constants.BLOCKED_REPLAN_INTERVAL:
+                last_blocked_replan = now
+                blocked_replan_count += 1
+                target_piece = missing_required[0] if missing_required else None
+                if target_piece != stalled_target_piece:
+                    stalled_target_piece = target_piece
+                    stalled_since = now
+                    target_stall_logged = False
+                target_availability = self._piece_availability(target_piece)
+                target_have = self._piece_have(target_piece)
+                stall_seconds = max(0.0, now - stalled_since)
+                if (
+                    target_piece is not None
+                    and stall_seconds
+                    >= constants.TARGET_STALL_REANNOUNCE_DELAY
+                ):
+                    if not target_stall_logged:
+                        status = self.handle.status()
+                        log_event(
+                            "target piece stalled",
+                            sessionId=self.session_id,
+                            targetPiece=target_piece,
+                            targetPieceAvailability=target_availability,
+                            targetPieceHave=target_have,
+                            targetPiecePriority=self._piece_priority(
+                                target_piece,
+                            ),
+                            targetPieceDeadlineMs=self._piece_deadline(
+                                target_piece,
+                            ),
+                            peers=int(getattr(status, "num_peers", 0)),
+                            downloadRate=int(
+                                getattr(status, "download_rate", 0),
+                            ),
+                            blockedWaits=blocked_waits,
+                            stallMs=int(stall_seconds * 1000),
+                            timingPhase="target_piece_stalled",
+                            elapsedMs=self.elapsed_ms(),
+                        )
+                        target_stall_logged = True
+                    self._reassert_target_piece(target_piece)
+                expansion = min(
+                    2 ** min(2, blocked_replan_count),
+                    constants.MAX_REPLAN_PREFETCH_BYTES
+                    // max(1, prefetch_length),
+                )
+                replan_length = min(
+                    constants.MAX_REPLAN_PREFETCH_BYTES,
+                    prefetch_length * expansion,
+                )
+                replanned_pieces = sorted(
+                    self.map_pieces(start, replan_length),
+                )
+                self._schedule_pieces(
+                    replanned_pieces,
+                    required_set,
+                    reason="blocked-replan",
+                )
+                self._force_reannounce_if_stalled(
+                    target_piece,
+                    blocked_waits,
+                    stall_seconds,
+                )
         return not required_pieces
 
     def read_range_chunk(
@@ -767,15 +1144,10 @@ class TorrentRuntime:
 
         stream = None
         first_chunk: Optional[bytes] = None
-        defer_first_chunk = (
-            not head_only
-            and length > 0
-            and not track_position
-        )
-        if not head_only and length > 0 and not defer_first_chunk:
-            # Do not send a successful response until the first bytes exist.
-            # A 206 header followed by an empty body makes libmpv classify the
-            # torrent as a stalled HTTP stream.
+        defer_first_chunk = not head_only and length > 0
+        if not head_only and length > 0 and track_position:
+            # Give the current piece a short chance to arrive before headers,
+            # then keep the HTTP response alive while the body waits.
             stream, first_chunk = self.open_first_chunk(
                 absolute_path,
                 start,
@@ -783,17 +1155,9 @@ class TorrentRuntime:
                 handler=handler,
                 connect_start=connect_start,
                 track_position=track_position,
+                timeout=constants.INITIAL_RANGE_HEADER_WAIT_TIMEOUT,
             )
-            if stream is None or first_chunk is None:
-                log_event(
-                    "range unavailable",
-                    sessionId=self.session_id,
-                    request=request_number,
-                    start=start,
-                    end=end,
-                )
-                handler.send_error(504, "Torrent range is not available")
-                return
+            defer_first_chunk = stream is None or first_chunk is None
 
         handler.send_response(status_code)
         handler.send_header("Accept-Ranges", "bytes")
@@ -825,16 +1189,16 @@ class TorrentRuntime:
             return
 
         if defer_first_chunk:
-            # MPV probes the Matroska tail immediately after opening the head.
-            # Match Stremio's range server: acknowledge the 206 first, then
-            # wait for the tail piece without turning the probe into a load error.
+            # Acknowledge the range before waiting on a missing piece. This
+            # keeps libmpv's HTTP load alive during peer discovery and filling.
             stream, first_chunk = self.open_first_chunk(
                 absolute_path,
                 start,
                 end,
                 handler=handler,
                 connect_start=connect_start,
-                track_position=False,
+                track_position=track_position,
+                timeout=constants.FIRST_RANGE_WAIT_TIMEOUT,
             )
             if stream is None or first_chunk is None:
                 log_event(
@@ -919,6 +1283,7 @@ class TorrentRuntime:
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
         track_position: bool = True,
+        timeout: float = constants.FIRST_RANGE_WAIT_TIMEOUT,
     ) -> Tuple[Optional[Any], Optional[bytes]]:
         """Wait for libtorrent to create and fill the first requested bytes."""
         chunk_end = min(
@@ -938,7 +1303,7 @@ class TorrentRuntime:
                 max(1, chunk_end - start + 1),
                 reason="first-chunk",
             )
-        deadline = time.monotonic() + constants.FIRST_RANGE_WAIT_TIMEOUT
+        deadline = time.monotonic() + timeout
         if connect_start == 0.0:
             connect_start = time.monotonic()
 
@@ -959,11 +1324,12 @@ class TorrentRuntime:
             except OSError:
                 return None, None
 
+            remaining = max(0.01, deadline - time.monotonic())
             chunk = self.read_range_chunk(
                 stream,
                 start,
                 chunk_end,
-                timeout=constants.FIRST_RANGE_WAIT_TIMEOUT,
+                timeout=min(constants.RANGE_WAIT_TIMEOUT, remaining),
                 handler=handler,
                 connect_start=connect_start,
                 track_position=track_position,

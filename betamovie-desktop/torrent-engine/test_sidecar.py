@@ -55,6 +55,20 @@ class SidecarStreamTest(unittest.TestCase):
             (0, large_end - 1),
         )
 
+    def test_merges_trackers_without_duplicates(self):
+        self.assertEqual(
+            utils.merge_tracker_sources(
+                [" udp://one.example/announce ", "udp://two.example/announce"],
+                ["udp://one.example/announce", None],
+                ["udp://three.example/announce"],
+            ),
+            [
+                "udp://one.example/announce",
+                "udp://two.example/announce",
+                "udp://three.example/announce",
+            ],
+        )
+
     def test_sends_headers_after_first_piece_is_available(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()
@@ -117,6 +131,69 @@ class SidecarStreamTest(unittest.TestCase):
         worker.join(2)
         self.assertFalse(worker.is_alive())
         self.assertTrue(handler.close_connection)
+        self.assertEqual(handler.wfile.getvalue(), b"test")
+
+    def test_sends_headers_before_missing_initial_piece_arrives(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.metadata_ready = threading.Event()
+        runtime.metadata_ready.set()
+        runtime.metadata_complete = threading.Event()
+        runtime.metadata_error = None
+        runtime.info = None
+        runtime.file_index = 0
+        runtime.file_size = 4
+        runtime.file_path = "episode.mkv"
+        runtime.save_path = tempfile.gettempdir()
+        runtime.session_id = "torrent-early-headers-test"
+        runtime.first_request_logged = False
+        runtime.request_count = 0
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime._has_streamed_bytes = False
+        runtime._last_stream_start = None
+        body_release = threading.Event()
+
+        def open_first_chunk(self, _absolute_path, _start, _end, timeout, **_kwargs):
+            if timeout <= constants.INITIAL_RANGE_HEADER_WAIT_TIMEOUT:
+                return None, None
+            body_release.wait(2)
+            return BytesIO(b"test"), b"test"
+
+        runtime.open_first_chunk = MethodType(open_first_chunk, runtime)
+
+        class FakeHandler:
+            command = "GET"
+            headers = {"Range": "bytes=0-"}
+            close_connection = False
+
+            def __init__(self):
+                self.status = None
+                self.headers_sent = {}
+                self.header_event = threading.Event()
+                self.wfile = BytesIO()
+
+            def send_response(self, status):
+                self.status = status
+
+            def send_header(self, name, value):
+                self.headers_sent[name] = value
+
+            def end_headers(self):
+                self.header_event.set()
+
+        handler = FakeHandler()
+        worker = threading.Thread(target=runtime.serve, args=(handler, False))
+        worker.start()
+
+        self.assertTrue(handler.header_event.wait(1))
+        self.assertEqual(handler.status, 206)
+        self.assertEqual(handler.wfile.getvalue(), b"")
+
+        # The body remains blocked until the piece becomes available.
+        body_release.set()
+        worker.join(1)
+        self.assertFalse(worker.is_alive())
         self.assertEqual(handler.wfile.getvalue(), b"test")
 
     def test_streams_full_body_without_range_header(self):
@@ -206,9 +283,307 @@ class SidecarStreamTest(unittest.TestCase):
 
         self.assertIn((522, 7), runtime.handle.priorities)
         self.assertIn((478, 7), runtime.handle.priorities)
-        self.assertIn((479, 7), runtime.handle.priorities)
+        self.assertIn((479, 4), runtime.handle.priorities)
         self.assertEqual(len(runtime.handle.deadlines), 3)
-        self.assertTrue(all(deadline > 0 for _, deadline, _ in runtime.handle.deadlines))
+        self.assertIn(0, [deadline for _, deadline, _ in runtime.handle.deadlines])
+
+    def test_piece_scheduling_uses_hot_startup_window_and_warm_readahead(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime.session_id = "torrent-startup-window-test"
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = []
+                self.deadlines = []
+
+            def have_piece(self, _piece):
+                return False
+
+            def piece_priority(self, piece, priority):
+                self.priorities.append((piece, priority))
+
+            def set_piece_deadline(self, piece, deadline, flags):
+                self.deadlines.append((piece, deadline, flags))
+
+        runtime.handle = FakeHandle()
+        runtime._schedule_pieces(
+            [10, 11, 12, 13, 14, 15],
+            {10},
+            "range",
+        )
+
+        self.assertEqual(
+            runtime.handle.priorities,
+            [
+                (10, constants.STREAM_PIECE_PRIORITY),
+                (11, constants.STREAM_HOT_PIECE_PRIORITY),
+                (12, constants.STREAM_HOT_PIECE_PRIORITY),
+                (13, constants.STREAM_HOT_PIECE_PRIORITY),
+                (14, constants.STREAM_WARM_PIECE_PRIORITY),
+                (15, constants.STREAM_WARM_PIECE_PRIORITY),
+            ],
+        )
+        self.assertEqual(runtime.handle.deadlines[0][1], 0)
+
+    def test_metadata_prefetches_head_and_tail_pieces(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.info = type(
+            "FakeInfo",
+            (),
+            {"piece_length": lambda _self: 256 * 1024},
+        )()
+        runtime.file_index = 0
+        runtime.file_size = 4 * constants.STREAM_CHUNK_SIZE
+        runtime.session_id = "torrent-startup-prefetch-test"
+        scheduled = []
+
+        def map_pieces(self, start, _length):
+            if start == 0:
+                return {10, 11, 12, 13, 14}
+            return {90, 91}
+
+        def schedule(self, pieces, required, reason):
+            scheduled.append((pieces, required, reason))
+
+        runtime.map_pieces = MethodType(map_pieces, runtime)
+        runtime._schedule_pieces = MethodType(schedule, runtime)
+        runtime.prime_startup_ranges()
+
+        self.assertEqual(
+            scheduled,
+            [
+                (
+                    [10, 11, 12, 13],
+                    {10, 11, 12, 13},
+                    "startup-prefetch",
+                ),
+                ([90, 91], {90, 91}, "startup-prefetch"),
+            ],
+        )
+
+    def test_reannounces_when_target_piece_is_unavailable_with_active_rate(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-target-stall-test"
+        runtime._reannounce_lock = threading.Lock()
+        runtime._last_reannounce = -constants.REANNOUNCE_COOLDOWN
+        calls = []
+
+        class FakeStatus:
+            num_peers = 3
+            download_rate = 10_000
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def piece_availability(self):
+                return [0] * 8
+
+            def force_reannounce(self):
+                calls.append("tracker")
+
+            def force_dht_announce(self):
+                calls.append("dht")
+
+        runtime.handle = FakeHandle()
+        runtime._force_reannounce_if_stalled(7, 20, 1.1)
+
+        self.assertEqual(calls, ["tracker", "dht"])
+
+    def test_reannounces_when_target_piece_has_availability(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-target-available-test"
+        runtime._reannounce_lock = threading.Lock()
+        runtime._last_reannounce = -constants.REANNOUNCE_COOLDOWN
+        calls = []
+
+        class FakeStatus:
+            num_peers = 2
+            download_rate = 10_000
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def piece_availability(self):
+                return [0] * 7 + [1]
+
+            def force_reannounce(self):
+                calls.append("tracker")
+
+            def force_dht_announce(self):
+                calls.append("dht")
+
+        runtime.handle = FakeHandle()
+        runtime._force_reannounce_if_stalled(7, 20, 1.1)
+
+        self.assertEqual(calls, ["tracker", "dht"])
+
+    def test_reasserts_target_priority_and_deadline_after_stall(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-target-escalation-test"
+        runtime.stop_event = threading.Event()
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime._piece_priorities = {}
+        runtime._piece_deadlines = {}
+        calls = []
+
+        class FakeHandle:
+            def have_piece(self, _piece):
+                return False
+
+            def piece_priority(self, piece, *priority):
+                if priority:
+                    calls.append(("priority", piece, priority[0]))
+                    return None
+                return 2
+
+            def reset_piece_deadline(self, piece):
+                calls.append(("reset", piece))
+
+            def set_piece_deadline(self, piece, deadline, _flags):
+                calls.append(("deadline", piece, deadline))
+
+            def piece_availability(self):
+                return [5] * 8
+
+        runtime.handle = FakeHandle()
+        runtime._reassert_target_piece(7)
+
+        self.assertEqual(
+            calls,
+            [
+                ("priority", 7, constants.STREAM_PIECE_PRIORITY),
+                ("reset", 7),
+                ("deadline", 7, 0),
+            ],
+        )
+        self.assertEqual(
+            runtime._piece_deadlines[7],
+            0,
+        )
+
+    def test_concurrent_ranges_keep_independent_blocked_state(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.info = None
+        runtime.file_index = None
+        runtime.file_size = 2
+        runtime.session_id = "torrent-concurrent-stall-test"
+        runtime.last_range_key = None
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime._reannounce_lock = threading.Lock()
+        runtime._last_reannounce = 0.0
+        observed_targets = []
+        observed_lock = threading.Lock()
+
+        def map_pieces(self, start, _length):
+            return {start}
+
+        def schedule(self, _pieces, _required, _reason=None, **_kwargs):
+            return None
+
+        def record_stall(
+            self,
+            target_piece,
+            _blocked_waits,
+            _stall_seconds,
+        ):
+            with observed_lock:
+                observed_targets.append(target_piece)
+
+        class FakeStatus:
+            has_metadata = True
+            total_done = 0
+            download_rate = 10_000
+            pieces = [False, False]
+            num_peers = 2
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def piece_availability(self):
+                return [0, 0]
+
+            def have_piece(self, _piece):
+                return False
+
+        runtime.map_pieces = MethodType(map_pieces, runtime)
+        runtime._schedule_pieces = MethodType(schedule, runtime)
+        runtime._force_reannounce_if_stalled = MethodType(
+            record_stall,
+            runtime,
+        )
+        runtime.handle = FakeHandle()
+
+        workers = [
+            threading.Thread(
+                target=runtime.wait_for_range,
+                args=(piece, piece),
+                kwargs={"timeout": 0.55, "track_position": False},
+            )
+            for piece in (0, 1)
+        ]
+        for worker in workers:
+            worker.start()
+        for worker in workers:
+            worker.join(2)
+
+        self.assertEqual(set(observed_targets), {0, 1})
+        self.assertGreaterEqual(observed_targets.count(0), 1)
+        self.assertGreaterEqual(observed_targets.count(1), 1)
+
+    def test_blocked_range_expands_replan_window_to_cap(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.info = None
+        runtime.file_index = None
+        runtime.file_size = constants.MAX_REPLAN_PREFETCH_BYTES * 2
+        runtime.session_id = "torrent-replan-test"
+        runtime.last_range_key = None
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        map_lengths = []
+
+        def map_pieces(self, _start, length):
+            map_lengths.append(length)
+            return {0} if length <= 1 else {0, 1, 2, 3}
+
+        runtime.map_pieces = MethodType(map_pieces, runtime)
+
+        class FakeStatus:
+            has_metadata = True
+            total_done = 0
+            download_rate = 0
+            pieces = [False] * 4
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def piece_availability(self):
+                return [0] * 4
+
+            def have_piece(self, _piece):
+                return False
+
+            def piece_priority(self, _piece, _priority):
+                return None
+
+            def set_piece_deadline(self, _piece, _deadline, _flags):
+                return None
+
+        runtime.handle = FakeHandle()
+        runtime.wait_for_range(0, 0, timeout=0.7, track_position=False)
+
+        self.assertIn(constants.RANGE_PREFETCH_BYTES, map_lengths)
+        self.assertIn(constants.RANGE_PREFETCH_BYTES * 2, map_lengths)
+        self.assertIn(constants.MAX_REPLAN_PREFETCH_BYTES, map_lengths)
 
     def test_focus_file_does_not_reset_priorities_for_each_range(self):
         runtime = object.__new__(TorrentRuntime)
@@ -242,7 +617,7 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.focus_file()
         runtime.focus_file()
 
-        self.assertEqual(runtime.handle.file_priorities, [[0, 4, 0]])
+        self.assertEqual(runtime.handle.file_priorities, [[0, 1, 0]])
         self.assertEqual(runtime.handle.sequential_calls, 1)
         self.assertFalse(runtime.handle.sequential_enabled)
 

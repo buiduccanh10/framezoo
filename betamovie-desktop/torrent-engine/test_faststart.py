@@ -7,6 +7,7 @@ import tempfile
 import time
 import threading
 from pathlib import Path
+from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -118,6 +119,25 @@ def main():
     ready_ms = (time.monotonic() - t0) * 1000
     print(f"[2] first range ready in {ready_ms:.0f}ms (should be near-instant, no re-check no DHT)")
     assert runtime2.range_is_ready(0, first_range_start), "pieces not available instantly on replay"
+
+    range_request = Request(
+        runtime2.stream_url,
+        headers={"Range": "bytes=0-1023"},
+    )
+    with urlopen(range_request, timeout=10) as response:
+        body = response.read()
+        print(
+            "[2] HTTP range:",
+            response.status,
+            response.headers.get("Content-Range"),
+            "bytes:",
+            len(body),
+        )
+        assert response.status == 206
+        assert response.headers.get("Content-Range", "").startswith(
+            "bytes 0-1023/",
+        )
+        assert len(body) == 1024
 
     engine.stop("s2")
     engine.close()
