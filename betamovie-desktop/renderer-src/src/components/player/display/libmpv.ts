@@ -173,6 +173,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let nativeOperationQueue = Promise.resolve();
   let pendingLoad: PendingLoad | null = null;
   let lastBoundsKey: string | null = null;
+  let loadStartedAt = 0;
+  let firstFrameLoggedGeneration = -1;
   let desktopPipClosedUnsubscribe: (() => void) | null = null;
   let desktopPipActionUnsubscribe: (() => void) | null = null;
   let unbindFullscreen: (() => void) | null = null;
@@ -183,6 +185,24 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   // (torrent download slow). Such a pause is not a user pause and must not
   // flip the UI to the paused state.
   let cachePaused = false;
+
+  function logPlaybackMilestone(
+    timingPhase: "libmpv_file_loaded" | "libmpv_video_frame",
+    eventType: "file-loaded" | "video-frame",
+  ) {
+    console.info("[libmpv] playback milestone", {
+      timingPhase,
+      event: eventType,
+      playerId,
+      generation,
+      elapsedMs:
+        loadStartedAt > 0
+          ? Math.max(0, Math.round(performance.now() - loadStartedAt))
+          : undefined,
+      sourceType: source?.type,
+      isTorrent: source?.isTorrent === true,
+    });
+  }
 
   function enqueueNativeOperation<T>(
     operation: () => Promise<T> | T,
@@ -478,6 +498,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "file-loaded") {
+      logPlaybackMilestone("libmpv_file_loaded", "file-loaded");
       fileLoaded = true;
       if (!desiredPaused) {
         if (paused) {
@@ -494,6 +515,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     }
 
     if (event.type === "video-frame") {
+      if (firstFrameLoggedGeneration !== generation) {
+        firstFrameLoggedGeneration = generation;
+        logPlaybackMilestone("libmpv_video_frame", "video-frame");
+      }
       emit("rendered", undefined);
       emit("loading", false);
       if (!paused) {
@@ -756,6 +781,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       const requestGeneration = generation + 1;
       generation = requestGeneration;
       fileLoaded = false; // reset for new load
+      firstFrameLoggedGeneration = -1;
+      loadStartedAt = performance.now();
       const requestedSource = ops.source;
       const headers = sourceHeaders(requestedSource);
       const loadRequest: LibMpvSourceRequest = {

@@ -8,6 +8,7 @@ from typing import Any, Dict
 
 import libtorrent as lt
 
+import torrent_constants as constants
 from torrent_http import TorrentHttpServer
 from torrent_runtime import TorrentRuntime
 from torrent_utils import (
@@ -15,6 +16,7 @@ from torrent_utils import (
     get_magnet,
     get_torrent_cache_key,
     get_torrent_data_dir,
+    merge_tracker_sources,
 )
 
 
@@ -107,6 +109,7 @@ class LibtorrentEngine:
             )
 
         params = lt.parse_magnet_uri(magnet)
+        magnet_trackers = list(getattr(params, "trackers", []))
         params.save_path = save_path
         if torrent_info is not None:
             params.ti = torrent_info
@@ -116,11 +119,11 @@ class LibtorrentEngine:
                 rd_params = lt.read_resume_data(resume_data)
                 if torrent_info is not None and getattr(rd_params, "ti", None) is None:
                     rd_params.ti = torrent_info
-                t_list = list(rd_params.trackers)
-                for t in params.trackers:
-                    if t not in t_list:
-                        t_list.append(t)
-                rd_params.trackers = t_list
+                rd_params.trackers = merge_tracker_sources(
+                    rd_params.trackers,
+                    magnet_trackers,
+                    constants.DEFAULT_TRACKERS,
+                )
                 u_list = list(rd_params.url_seeds)
                 for u in params.url_seeds:
                     if u not in u_list:
@@ -132,6 +135,11 @@ class LibtorrentEngine:
                 sys.stderr.write(
                     f"[sidecar] Failed to parse resume data: {error}\n"
                 )
+        params.trackers = merge_tracker_sources(
+            getattr(params, "trackers", []),
+            magnet_trackers,
+            constants.DEFAULT_TRACKERS,
+        )
         params.storage_mode = lt.storage_mode_t.storage_mode_sparse
         torrent_flags = getattr(lt, "torrent_flags", None)
         auto_managed = getattr(torrent_flags, "auto_managed", None)

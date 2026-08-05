@@ -960,6 +960,9 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   set_mpv_option(player.get(), "idle", "yes");
   set_mpv_option(player.get(), "network-timeout", "120");
   set_mpv_option(player.get(), "cache", "yes");
+  set_mpv_option(player.get(), "cache-pause", "yes");
+  set_mpv_option(player.get(), "cache-pause-initial", "no");
+  set_mpv_option(player.get(), "cache-pause-wait", "0.5");
   set_mpv_option(player.get(), "cache-secs", "60");
   set_mpv_option(player.get(), "demuxer-readahead-secs", "30");
   set_mpv_option(player.get(), "demuxer-max-bytes", "512MiB");

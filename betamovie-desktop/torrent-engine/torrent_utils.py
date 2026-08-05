@@ -11,6 +11,23 @@ from urllib.parse import parse_qs, urlparse
 import torrent_constants as constants
 
 
+def merge_tracker_sources(*sources: Any) -> List[str]:
+    merged: List[str] = []
+    seen: Set[str] = set()
+    for source in sources:
+        if not isinstance(source, (list, tuple)):
+            continue
+        for value in source:
+            if not isinstance(value, str):
+                continue
+            tracker = value.strip()
+            if not tracker or tracker in seen:
+                continue
+            seen.add(tracker)
+            merged.append(tracker)
+    return merged
+
+
 def normalized_info_hash(value: Any) -> Optional[str]:
     if not isinstance(value, str):
         return None
