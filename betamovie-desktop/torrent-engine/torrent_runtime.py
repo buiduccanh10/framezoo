@@ -63,6 +63,10 @@ class TorrentRuntime:
         self._boosted_pieces: Set[int] = set()
         self._piece_priorities: dict[int, int] = {}
         self._piece_deadlines: dict[int, int] = {}
+        # Pieces cancelled by _kick_target_piece: piece -> monotonic time
+        # when the priority-0 hold expires and _restore_pending_kicks
+        # re-raises the piece to endgame-request it from every peer.
+        self._pending_kick_restore: dict[int, float] = {}
         self._focused_file_index: Optional[int] = None
         self._has_streamed_bytes = False
         self._last_stream_start: Optional[int] = None
@@ -72,6 +76,7 @@ class TorrentRuntime:
         self._first_piece_ready_logged = False
         self._reannounce_lock = threading.Lock()
         self._last_reannounce = 0.0
+        self._focus_piece: Optional[int] = None
         self.status_thread = threading.Thread(
             target=self.publish_status,
             name="torrent-status-" + session_id,
@@ -581,9 +586,18 @@ class TorrentRuntime:
                         continue
                 except RuntimeError:
                     return
+                if piece in getattr(self, "_pending_kick_restore", {}):
+                    continue
 
                 if piece in required_set:
-                    priority = constants.STREAM_PIECE_PRIORITY
+                    focus_piece = getattr(self, "_focus_piece", None)
+                    if (
+                        focus_piece is not None
+                        and piece != focus_piece
+                    ):
+                        priority = constants.STREAM_HOT_PIECE_PRIORITY
+                    else:
+                        priority = constants.STREAM_PIECE_PRIORITY
                     distance = (
                         0
                         if first_required_piece is None
@@ -619,19 +633,31 @@ class TorrentRuntime:
                 except Exception:
                     continue
 
-        log_event(
-            "range prioritized",
-            sessionId=self.session_id,
-            reason=reason,
-            pieces=len(prefetch_pieces),
-            requiredPieces=len(required_pieces),
-            missingPieces=missing_pieces,
-            timingPhase=(
-                "first_chunk_prioritized"
-                if reason == "first-chunk"
-                else None
-            ),
+        # Suppress repetitive blocked-replan logs; they change nothing between
+        # re-asserts and drown out the important timing events.
+        now = time.monotonic()
+        last_logged = getattr(self, "_last_range_prioritized_log", 0.0)
+        suppress = (
+            reason == "blocked-replan"
+            and missing_pieces == getattr(self, "_last_range_prioritized_missing", None)
+            and now - last_logged < constants.BLOCKED_REPLAN_REASSERT_INTERVAL
         )
+        if not suppress:
+            self._last_range_prioritized_log = now
+            self._last_range_prioritized_missing = missing_pieces
+            log_event(
+                "range prioritized",
+                sessionId=self.session_id,
+                reason=reason,
+                pieces=len(prefetch_pieces),
+                requiredPieces=len(required_pieces),
+                missingPieces=missing_pieces,
+                timingPhase=(
+                    "first_chunk_prioritized"
+                    if reason == "first-chunk"
+                    else None
+                ),
+            )
         if (
             required_set
             and first_piece_was_prioritized
@@ -648,7 +674,6 @@ class TorrentRuntime:
                 timingPhase="first_piece_prioritized",
                 elapsedMs=self.elapsed_ms(),
             )
-
     def _log_first_piece_ready(self, piece: Optional[int]) -> None:
         if piece is None or getattr(self, "_first_piece_ready_logged", False):
             return
@@ -706,16 +731,127 @@ class TorrentRuntime:
                 value = getattr(self, "_piece_deadlines", {}).get(piece)
         return int(value) if value is not None else None
 
-    def _reassert_target_piece(self, target_piece: Optional[int]) -> None:
+    def _activate_target_focus(self, target_piece: int) -> bool:
+        """Give the stalled target exclusive bandwidth.
+
+        The swarm races ahead on other priority-7 pieces while the target's
+        final blocks sit with slow peers, so raising the target alone never
+        finishes it. Demote every other priority-7 piece to hot priority so
+        the target owns the swarm until it completes. Only one stall owns
+        the focus at a time; concurrent request loops keep their required
+        pieces at hot priority until the focus is released.
+        """
+        with self._piece_priority_lock:
+            current = getattr(self, "_focus_piece", None)
+            if current is not None and current != target_piece:
+                return False
+            if current == target_piece:
+                return True
+            self._focus_piece = target_piece
+            demoted = 0
+            for piece, priority in list(self._piece_priorities.items()):
+                if (
+                    piece == target_piece
+                    or priority != constants.STREAM_PIECE_PRIORITY
+                ):
+                    continue
+                try:
+                    if self.handle.have_piece(piece):
+                        continue
+                    self.handle.piece_priority(
+                        piece,
+                        constants.STREAM_HOT_PIECE_PRIORITY,
+                    )
+                    self._piece_priorities[piece] = (
+                        constants.STREAM_HOT_PIECE_PRIORITY
+                    )
+                    demoted += 1
+                except Exception:
+                    continue
+            if demoted:
+                log_event(
+                    "target piece focus",
+                    sessionId=self.session_id,
+                    targetPiece=target_piece,
+                    demotedPieces=demoted,
+                    timingPhase="target_piece_focus",
+                    elapsedMs=self.elapsed_ms(),
+                )
+            return True
+
+    def _release_target_focus(self, target_piece: Optional[int]) -> None:
+        """Clear focus ownership without re-raising demoted pieces; their
+        owning request loops re-assert top priority on their next schedule."""
+        if target_piece is None:
+            return
+        with self._piece_priority_lock:
+            if getattr(self, "_focus_piece", None) == target_piece:
+                self._focus_piece = None
+
+    def _post_kick_cancel(self, target_piece: int) -> None:
+        """Trigger libtorrent's cancel_non_critical for the stalled piece.
+
+        libtorrent only sends CANCEL messages from cancel_non_critical(),
+        which it posts when set_piece_deadline() is called with an empty
+        time-critical list, cancelling every in-flight request except the
+        time-critical pieces. Add a throwaway missing piece to that list to
+        post the cancel (the target itself must not be time-critical when it
+        runs, so it is exempt from the cancel), then un-promote it again.
+        """
+        try:
+            num_pieces = int(self.info.num_pieces())
+        except Exception:
+            return
+        for piece in range(num_pieces):
+            if piece == target_piece:
+                continue
+            try:
+                if self.handle.have_piece(piece):
+                    continue
+            except RuntimeError:
+                return
+            try:
+                # flags=0 (no alert_when_available): avoid read_piece_alert
+                self.handle.set_piece_deadline(piece, 10000, 0)
+            except Exception:
+                return
+            reset_deadline = getattr(self.handle, "reset_piece_deadline", None)
+            if callable(reset_deadline):
+                try:
+                    reset_deadline(piece)
+                except Exception:
+                    pass
+            return
+
+    def _kick_target_piece(self, target_piece: Optional[int]) -> None:
+        """Cancel a stalled target piece so its blocks are re-requested.
+
+        Raising priority alone never cancels in-flight block requests, so a
+        piece whose final blocks sit with slow peers can stay incomplete for
+        minutes while the swarm races ahead. Filter the piece (priority 0)
+        and hold it there for a full picker tick (TARGET_KICK_RESTORE_DELAY)
+        while _post_kick_cancel() makes libtorrent send CANCEL messages for
+        every non-time-critical in-flight request, the stalled piece's
+        included. Once the hold expires, _restore_pending_kicks re-raises
+        the piece so every peer that has it re-requests the missing blocks
+        (endgame).
+        """
         if target_piece is None or self._piece_have(target_piece):
             return
 
-        with self._piece_priority_lock:
-            try:
-                self.handle.piece_priority(
-                    target_piece,
-                    constants.STREAM_PIECE_PRIORITY,
-                )
+        try:
+            # Empty the time-critical list first: the piece's in-flight
+            # requests are only cancellable while it is not time-critical.
+            # clear_piece_deadlines() drops every deadline piece to low
+            # priority (transient; the next schedule re-asserts them).
+            clear_deadlines = getattr(
+                self.handle,
+                "clear_piece_deadlines",
+                None,
+            )
+            if callable(clear_deadlines):
+                clear_deadlines()
+            else:
                 reset_deadline = getattr(
                     self.handle,
                     "reset_piece_deadline",
@@ -723,30 +859,104 @@ class TorrentRuntime:
                 )
                 if callable(reset_deadline):
                     reset_deadline(target_piece)
-                self._set_piece_deadline(target_piece, 0)
-                self._boosted_pieces.add(target_piece)
+            # Filter the piece: priority 0 stops the picker from requesting
+            # more of its blocks during the hold. Filtering alone does not
+            # abort in-flight requests; _post_kick_cancel() handles that.
+            self.handle.piece_priority(target_piece, 0)
+            self._post_kick_cancel(target_piece)
+            with self._piece_priority_lock:
                 self._piece_priorities = getattr(
                     self,
                     "_piece_priorities",
                     {},
                 )
-                self._piece_priorities[target_piece] = (
-                    constants.STREAM_PIECE_PRIORITY
+                self._piece_priorities[target_piece] = 0
+                self._pending_kick_restore = getattr(
+                    self,
+                    "_pending_kick_restore",
+                    {},
                 )
-            except Exception:
-                return
+                self._pending_kick_restore[target_piece] = (
+                    time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
+                )
+        except Exception:
+            return
 
         log_event(
-            "target piece escalated",
+            "target piece kicked",
             sessionId=self.session_id,
             targetPiece=target_piece,
             targetPieceAvailability=self._piece_availability(target_piece),
             targetPieceHave=False,
             targetPiecePriority=self._piece_priority(target_piece),
             targetPieceDeadlineMs=self._piece_deadline(target_piece),
-            timingPhase="target_piece_escalated",
+            restoreDelayMs=int(constants.TARGET_KICK_RESTORE_DELAY * 1000),
+            timingPhase="target_piece_kicked",
             elapsedMs=self.elapsed_ms(),
         )
+
+    def _restore_pending_kicks(self, now: Optional[float] = None) -> None:
+        """Re-raise kicked pieces whose priority-0 hold has expired.
+
+        Called from the range-wait loop every tick and on every exit path so
+        a cancelled piece is never left at priority 0 once the hold that made
+        the cancellation effective is over.
+        """
+        if now is None:
+            now = time.monotonic()
+        handle = getattr(self, "handle", None)
+        if handle is None:
+            return
+        with self._piece_priority_lock:
+            pending = getattr(self, "_pending_kick_restore", {})
+            if not pending:
+                return
+            for piece, restore_at in list(pending.items()):
+                if now < restore_at:
+                    continue
+                pending.pop(piece, None)
+                try:
+                    if handle.have_piece(piece):
+                        continue
+                    handle.piece_priority(
+                        piece,
+                        constants.STREAM_PIECE_PRIORITY,
+                    )
+                    reset_deadline = getattr(
+                        handle,
+                        "reset_piece_deadline",
+                        None,
+                    )
+                    if callable(reset_deadline):
+                        reset_deadline(piece)
+                    self._set_piece_deadline(piece, 0)
+                    self._boosted_pieces = getattr(
+                        self,
+                        "_boosted_pieces",
+                        set(),
+                    )
+                    self._boosted_pieces.add(piece)
+                    self._piece_priorities = getattr(
+                        self,
+                        "_piece_priorities",
+                        {},
+                    )
+                    self._piece_priorities[piece] = (
+                        constants.STREAM_PIECE_PRIORITY
+                    )
+                except Exception:
+                    continue
+                log_event(
+                    "target piece escalated",
+                    sessionId=self.session_id,
+                    targetPiece=piece,
+                    targetPieceAvailability=self._piece_availability(piece),
+                    targetPieceHave=False,
+                    targetPiecePriority=self._piece_priority(piece),
+                    targetPieceDeadlineMs=self._piece_deadline(piece),
+                    timingPhase="target_piece_escalated",
+                    elapsedMs=self.elapsed_ms(),
+                )
 
     def _force_reannounce_if_stalled(
         self,
@@ -893,6 +1103,12 @@ class TorrentRuntime:
         blocked_waits = 0
         blocked_replan_count = 0
         last_blocked_replan = 0.0
+        last_kick = float("-inf")
+        kick_progress_last_total_done: Optional[int] = None
+        focus_claimed = False
+        last_replan_schedule = 0.0
+        last_replan_length = 0
+        last_missing_signature = ""
         stalled_target_piece: Optional[int] = None
         stalled_since = time.monotonic()
         target_stall_logged = False
@@ -904,6 +1120,9 @@ class TorrentRuntime:
                     start=start,
                     end=end,
                 )
+                self._restore_pending_kicks(
+                    time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
+                )
                 return False
             try:
                 missing_required = [
@@ -912,6 +1131,9 @@ class TorrentRuntime:
                     if not self.handle.have_piece(piece)
                 ]
             except RuntimeError:
+                self._restore_pending_kicks(
+                    time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
+                )
                 return False
             if (
                 first_required_piece is not None
@@ -919,6 +1141,11 @@ class TorrentRuntime:
             ):
                 self._log_first_piece_ready(first_required_piece)
             if not missing_required:
+                if stalled_target_piece is not None:
+                    self._release_target_focus(stalled_target_piece)
+                self._restore_pending_kicks(
+                    time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
+                )
                 log_event(
                     "range ready",
                     sessionId=self.session_id,
@@ -937,14 +1164,21 @@ class TorrentRuntime:
                 break
 
             now = time.monotonic()
+            self._restore_pending_kicks(now)
             if now - last_blocked_replan >= constants.BLOCKED_REPLAN_INTERVAL:
                 last_blocked_replan = now
                 blocked_replan_count += 1
                 target_piece = missing_required[0] if missing_required else None
                 if target_piece != stalled_target_piece:
+                    previous_target = stalled_target_piece
                     stalled_target_piece = target_piece
                     stalled_since = now
                     target_stall_logged = False
+                    last_kick = float("-inf")
+                    kick_progress_last_total_done = None
+                    focus_claimed = False
+                    if previous_target is not None:
+                        self._release_target_focus(previous_target)
                 target_availability = self._piece_availability(target_piece)
                 target_have = self._piece_have(target_piece)
                 stall_seconds = max(0.0, now - stalled_since)
@@ -977,7 +1211,70 @@ class TorrentRuntime:
                             elapsedMs=self.elapsed_ms(),
                         )
                         target_stall_logged = True
-                    self._reassert_target_piece(target_piece)
+                    # Focus: after the target stalls long enough, demote
+                    # every other priority-7 piece so the stuck piece owns
+                    # the swarm's full bandwidth until it completes.
+                    if (
+                        stall_seconds >= constants.TARGET_FOCUS_DELAY
+                        and not focus_claimed
+                    ):
+                        focus_claimed = self._activate_target_focus(
+                            target_piece,
+                        )
+                    # Endgame: cancel and re-request the stuck piece so its
+                    # missing blocks are pulled from every peer, not just the
+                    # slow one holding the in-flight request. Kicking while
+                    # the swarm is busy delivering other pieces just wipes
+                    # the piece's downloaded blocks and starves it forever,
+                    # so only kick when nothing is progressing, or when the
+                    # target already owns exclusive focus.
+                    if (
+                        stall_seconds >= constants.TARGET_KICK_DELAY
+                        and now - last_kick
+                        >= constants.TARGET_KICK_INTERVAL
+                    ):
+                        kick_total_done = None
+                        kick_download_rate = None
+                        kick_progress = 0
+                        try:
+                            kick_status = self.handle.status()
+                            kick_total_done = int(
+                                getattr(kick_status, "total_done", 0)
+                            )
+                            kick_download_rate = int(
+                                getattr(kick_status, "download_rate", 0)
+                            )
+                            if kick_progress_last_total_done is not None:
+                                kick_progress = max(
+                                    0,
+                                    kick_total_done
+                                    - kick_progress_last_total_done,
+                                )
+                        except Exception:
+                            kick_total_done = None
+                        focused = (
+                            focus_claimed
+                            or getattr(self, "_focus_piece", None)
+                            == target_piece
+                        )
+                        if kick_progress_last_total_done is None:
+                            kick_progress_last_total_done = kick_total_done
+                        elif (
+                            focused
+                            or kick_progress
+                            < constants.TARGET_KICK_MIN_PROGRESS_BYTES
+                            or (
+                                kick_download_rate is not None
+                                and kick_download_rate
+                                < constants.TARGET_KICK_IDLE_RATE
+                            )
+                        ):
+                            self._kick_target_piece(target_piece)
+                            last_kick = now
+                            if kick_total_done is not None:
+                                kick_progress_last_total_done = (
+                                    kick_total_done
+                                )
                 expansion = min(
                     2 ** min(2, blocked_replan_count),
                     constants.MAX_REPLAN_PREFETCH_BYTES
@@ -987,19 +1284,38 @@ class TorrentRuntime:
                     constants.MAX_REPLAN_PREFETCH_BYTES,
                     prefetch_length * expansion,
                 )
-                replanned_pieces = sorted(
-                    self.map_pieces(start, replan_length),
+                # Expand the read-ahead window as it grows, and re-assert the
+                # window periodically, but do not reschedule on every tick.
+                missing_signature = ",".join(
+                    str(piece) for piece in missing_required
                 )
-                self._schedule_pieces(
-                    replanned_pieces,
-                    required_set,
-                    reason="blocked-replan",
-                )
+                if (
+                    replan_length != last_replan_length
+                    or missing_signature != last_missing_signature
+                    or now - last_replan_schedule
+                    >= constants.BLOCKED_REPLAN_REASSERT_INTERVAL
+                ):
+                    last_replan_length = replan_length
+                    last_missing_signature = missing_signature
+                    last_replan_schedule = now
+                    replanned_pieces = sorted(
+                        self.map_pieces(start, replan_length),
+                    )
+                    self._schedule_pieces(
+                        replanned_pieces,
+                        required_set,
+                        reason="blocked-replan",
+                    )
                 self._force_reannounce_if_stalled(
                     target_piece,
                     blocked_waits,
                     stall_seconds,
                 )
+        if stalled_target_piece is not None:
+            self._release_target_focus(stalled_target_piece)
+        self._restore_pending_kicks(
+            time.monotonic() + constants.TARGET_KICK_RESTORE_DELAY
+        )
         return not required_pieces
 
     def read_range_chunk(
