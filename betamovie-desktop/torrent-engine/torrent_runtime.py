@@ -1104,7 +1104,6 @@ class TorrentRuntime:
         blocked_replan_count = 0
         last_blocked_replan = 0.0
         last_kick = float("-inf")
-        kick_progress_last_total_done: Optional[int] = None
         focus_claimed = False
         last_replan_schedule = 0.0
         last_replan_length = 0
@@ -1175,7 +1174,6 @@ class TorrentRuntime:
                     stalled_since = now
                     target_stall_logged = False
                     last_kick = float("-inf")
-                    kick_progress_last_total_done = None
                     focus_claimed = False
                     if previous_target is not None:
                         self._release_target_focus(previous_target)
@@ -1223,58 +1221,20 @@ class TorrentRuntime:
                         )
                     # Endgame: cancel and re-request the stuck piece so its
                     # missing blocks are pulled from every peer, not just the
-                    # slow one holding the in-flight request. Kicking while
-                    # the swarm is busy delivering other pieces just wipes
-                    # the piece's downloaded blocks and starves it forever,
-                    # so only kick when nothing is progressing, or when the
-                    # target already owns exclusive focus.
+                    # slow one holding the in-flight request. The kick gate
+                    # tracks the target piece only: a busy swarm tells us
+                    # nothing about the required piece, which can be stuck
+                    # with every peer requesting it from the same two slow
+                    # seeds. cancel_non_critical keeps the piece's downloaded
+                    # blocks and only re-picks its missing ones, so repeated
+                    # kicks are safe while it remains stalled.
                     if (
                         stall_seconds >= constants.TARGET_KICK_DELAY
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
                     ):
-                        kick_total_done = None
-                        kick_download_rate = None
-                        kick_progress = 0
-                        try:
-                            kick_status = self.handle.status()
-                            kick_total_done = int(
-                                getattr(kick_status, "total_done", 0)
-                            )
-                            kick_download_rate = int(
-                                getattr(kick_status, "download_rate", 0)
-                            )
-                            if kick_progress_last_total_done is not None:
-                                kick_progress = max(
-                                    0,
-                                    kick_total_done
-                                    - kick_progress_last_total_done,
-                                )
-                        except Exception:
-                            kick_total_done = None
-                        focused = (
-                            focus_claimed
-                            or getattr(self, "_focus_piece", None)
-                            == target_piece
-                        )
-                        if kick_progress_last_total_done is None:
-                            kick_progress_last_total_done = kick_total_done
-                        elif (
-                            focused
-                            or kick_progress
-                            < constants.TARGET_KICK_MIN_PROGRESS_BYTES
-                            or (
-                                kick_download_rate is not None
-                                and kick_download_rate
-                                < constants.TARGET_KICK_IDLE_RATE
-                            )
-                        ):
-                            self._kick_target_piece(target_piece)
-                            last_kick = now
-                            if kick_total_done is not None:
-                                kick_progress_last_total_done = (
-                                    kick_total_done
-                                )
+                        self._kick_target_piece(target_piece)
+                        last_kick = now
                 expansion = min(
                     2 ** min(2, blocked_replan_count),
                     constants.MAX_REPLAN_PREFETCH_BYTES

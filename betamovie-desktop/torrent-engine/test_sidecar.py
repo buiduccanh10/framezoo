@@ -590,7 +590,7 @@ class SidecarStreamTest(unittest.TestCase):
 
         return FakeHandle()
 
-    def test_skips_kick_while_swarm_makes_progress(self):
+    def test_kicks_while_swarm_makes_progress_when_required_piece_stalls(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()
         runtime.info = None
@@ -656,7 +656,7 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.handle = BusyHandle()
         runtime.wait_for_range(0, 0, timeout=2.2, track_position=False)
 
-        self.assertEqual(kicks, [])
+        self.assertEqual(kicks, [("kick", 0)])
 
     def test_kicks_when_swarm_makes_no_progress(self):
         runtime = object.__new__(TorrentRuntime)
