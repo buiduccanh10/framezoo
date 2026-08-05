@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import type { DisplayInterface } from "@/components/player/display/displayInterface";
+
 import { usePlayerStore } from "../store";
 import type { CaptionListItem, PlayerMeta } from "./source";
 import type { SourceSliceSource } from "../utils/qualities";
@@ -139,6 +141,38 @@ describe("external subtitle source transitions", () => {
 
     expect(usePlayerStore.getState().captionList).not.toContainEqual(
       oldEpisodeCaption,
+    );
+  });
+
+  it("preserves playback intent across source switches", async () => {
+    const load = vi.fn();
+    const display = {
+      load,
+      destroy: vi.fn(),
+      getType: () => "web",
+      on: vi.fn(),
+      setCaption: vi.fn(),
+      setSecondaryCaption: vi.fn(),
+    } as unknown as DisplayInterface;
+    usePlayerStore.getState().setDisplay(display);
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-a"), [], 0);
+
+    const playing = usePlayerStore.getState().mediaPlaying;
+    usePlayerStore.setState({
+      mediaPlaying: { ...playing, isPlaying: true, isPaused: false },
+    });
+
+    usePlayerStore.getState().setMeta(createMeta(2));
+    usePlayerStore.getState().setSource(createSource("source-b"), [], 0);
+
+    const state = usePlayerStore.getState();
+    expect(state.mediaPlaying.isPlaying).toBe(true);
+    expect(state.mediaPlaying.isPaused).toBe(false);
+    expect(load).toHaveBeenLastCalledWith(
+      expect.objectContaining({ autoplay: true }),
     );
   });
 });
