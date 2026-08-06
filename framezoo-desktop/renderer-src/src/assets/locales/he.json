@@ -1,0 +1,1320 @@
+{
+  "actions": {
+    "cancel": "לְבַטֵל",
+    "confirm": "לְאַשֵׁר",
+    "copied": "הועתק",
+    "copy": "להעתיק"
+  },
+  "addons": {
+    "manager": {
+      "add": "לְהוֹסִיף",
+      "adding": "מוֹסִיף...",
+      "ariaClose": "סגור את מנהל ההרחבות",
+      "ariaManage": "נהל תוספות",
+      "createGuideLink": "כיצד ליצור תוסף",
+      "errorFallback": "לא ניתן להתקין את התוסף הזה.",
+      "manageListButton": "נהל רשימת תוספות",
+      "subtitle": "איננו ממליצים להוסיף תוספות לא רשמיות או לא חוקיות.",
+      "title": "תוספות לשולחן העבודה"
+    },
+    "platforms": {
+      "framezoo": "FrameZoo",
+      "stremio": "סטרמיו",
+      "supportLabel": "פלטפורמות נתמכות עבור תוספות:",
+      "supported": "פלטפורמות נתמכות: FrameZoo ו-Stremio"
+    },
+    "page": {
+      "addAddonButton": "הוסף Addon",
+      "description": "תוספות הן אופציונליות. אפליקציה זו אינה מאגדת, ממליצה או מארחת תוסף כלשהו.",
+      "createGuideLink": "צור מדריך תוספות",
+      "disabled": "נָכֶה",
+      "emptyInstalled": "עדיין לא הותקנו תוספות במערכת.",
+      "enabled": "מופעל",
+      "installError": "לא ניתן להתקין את התוסף הזה.",
+      "installedHeading": "תוספים מותקנים",
+      "processing": "מעבד...",
+      "removeAddon": "הסר את התוסף הזה",
+      "title": "מנהל תוספות"
+    },
+    "player": {
+      "chooseAddon": "בחר תוסף",
+      "emptyExplanation": "שום תוסף לא מותקן או מופעל. הוסף כתובת אתר מניפסט שתבחר בתוספות.",
+      "emptyTitle": "אין תוספי סטרימינג זמינים",
+      "loadingStreams": "טוען זרמים...",
+      "manageAddonsButton": "נהל רשימת תוספות",
+      "noAddonStreams": "שום זרמים לא הוחזרו על ידי התוסף הזה.",
+      "noTorrentStreams": "לא הוחזרו זרמי טורנט עבור התוסף הזה.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "כל האיכויות",
+        "other": "אַחֵר"
+      },
+      "sources": "מקורות",
+      "streamCount": "{{count}} זרם",
+      "streamCount_plural": "{{count}} זרמים",
+      "title": "תוספות לשולחן העבודה",
+      "unableToLoad": "לא ניתן לטעון זרמים",
+      "viewStreams": "צפה בזרמים"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "פָּעִיל",
+      "confirm": "לְאַשֵׁר",
+      "customBackend": "Backend מותאם אישית",
+      "customBackendPlaceholder": "https://",
+      "description": "בחר לאיזה שרת אחורי להתחבר",
+      "title": "בחר חשבון שרת"
+    },
+    "createAccount": "עדיין אין לך חשבון 😬 <0>צור חשבון.</0>",
+    "generate": {
+      "custom": "מִנְהָג",
+      "customPassphraseLabel": "ביטוי סיסמה מותאם אישית",
+      "customPassphrasePlaceholder": "הזן את ביטוי הסיסמה המותאם אישית שלך",
+      "description": "הביטוי הסודי שלך משמש כשם משתמש וסיסמה. חשוב לשמור עליו היטב כי תצטרך להזין אותו כדי להתחבר לחשבונך. <bold>אל תאבד את הביטוי הסודי שלך!</bold>",
+      "invalidPassphraseCharacters": "תווי ביטוי סיסמה לא חוקיים. רק אותיות באנגלית, מספרים 1-10 וסמלים רגילים מותרים.",
+      "next": "אני שמרתי את משפט הסיסמה שלי",
+      "passphraseFrameLabel": "ביטוי סיסמה",
+      "passphraseTooShort": "ביטוי הסיסמה חייב להיות באורך של 8 תווים לפחות.",
+      "title": "משפט הסיסמה שלך",
+      "useCustomPassphrase": "השתמש בביטוי סיסמה מותאם אישית",
+      "usePasskeyInstead": "השתמש במפתח סיסמה במקום זאת"
+    },
+    "hasAccount": "כבר יש לך חשבון? <0>התחבר כאן.</0>",
+    "login": {
+      "description": "הזן את שם המשתמש או הדואר האלקטרוני והסיסמה שלך כדי להיכנס לחשבון שלך",
+      "failedToReachServer": "הגישה לשרת נכשלה",
+      "identifierLabel": "שם משתמש או אימייל",
+      "identifierNotFound": "שם משתמש או אימייל לא נמצאו",
+      "identifierPlaceholder": "הזן את שם המשתמש או האימייל שלך",
+      "identifierRequired": "נדרש שם משתמש או אימייל",
+      "noBackendUrl": "אין כתובת אתר אחורי",
+      "or": "or",
+      "passwordIncorrect": "הסיסמה שגויה",
+      "passwordLabel": "סִיסמָה",
+      "passwordPlaceholder": "הזן את הסיסמה שלך",
+      "passwordRequired": "נדרשת סיסמה",
+      "submit": "התחבר",
+      "title": "התחבר לחשבונך",
+      "usePasskey": "השתמש במפתח סיסמה",
+      "validationError": "ביטוי סיסמה שגוי או לא שלם"
+    },
+    "register": {
+      "confirmPasswordLabel": "אשר את הסיסמה",
+      "confirmPasswordPlaceholder": "אשר את הסיסמה שלך",
+      "emailInvalid": "הזן כתובת אימייל חוקית",
+      "emailLabel": "מייל אישי",
+      "emailPlaceholder": "הזן את המייל האישי שלך",
+      "information": {
+        "color1": "צבע פרופיל ראשון",
+        "color2": "צבע פרופיל שני",
+        "header": "הזן שם למכשיר שלך ואז בחר צבעים וסמל משתמש לפי בחירתך!",
+        "icon": "סמל משתמש",
+        "next": "הבא",
+        "title": "פרטי חשבון"
+      },
+      "nicknameLabel": "כינוי",
+      "nicknamePlaceholder": "בחר כינוי ייחודי",
+      "nicknameTaken": "הכינוי כבר נלקח",
+      "nicknameRequired": "נדרש כינוי",
+      "passwordInput": {
+        "description": "בחר כינוי, אימייל אישי וסיסמה. הסיסמה שלך פועלת כביטוי סיסמה מאובטח, אז וודא שאתה זוכר אותה!",
+        "title": "צור את הכניסה שלך"
+      },
+      "passwordLabel": "סִיסמָה",
+      "passwordMismatch": "הסיסמאות אינן תואמות",
+      "passwordPlaceholder": "צור סיסמה (המשמשת כביטוי הסיסמה שלך)",
+      "passwordWeak": "הסיסמה חייבת להיות לפחות 8 תווים עם אותיות ומספרים"
+    },
+    "trust": {
+      "failed": {
+        "text": "האם הגדרת את זה נכון?",
+        "title": "הגישה לשרת נכשלה"
+      },
+      "host": "אתה מתחבר ל־<0>{{hostname}}</0> – אנא ודא שאתה סומך עליו לפני יצירת חשבון...",
+      "no": "חזור",
+      "noHost": "השרת אינו הוגדר, לכן אינך יכול ליצור חשבון",
+      "noHostTitle": "השרת לא מוגדר!",
+      "title": "האם אתה סומך על שרת זה?",
+      "yes": "אני בוטח בשרת זה"
+    },
+    "verify": {
+      "description": "אנא הזן את משפט הסיסמה שלך מקודם כדי לאשר ששמרת אותו וכדי ליצור את חשבונך",
+      "invalidData": "הנתונים אינם חוקיים",
+      "noMatch": "ביטוי הסיסמה אינו תואם",
+      "recaptchaFailed": "אימות ReCaptcha נכשל",
+      "register": "צור חשבון",
+      "title": "אשר את ביטוי הסיסמה שלך"
+    }
+  },
+  "details": {
+    "addToList": "הוסף לרשימה",
+    "airs": "עולה לאוויר",
+    "collection": {
+      "bookmarkAll": "סמן הכל",
+      "movie": "סֶרֶט",
+      "movies": "סרטים",
+      "rating": "דֵרוּג",
+      "releaseDate": "תאריך יציאה",
+      "sortBy": "מיין לפי"
+    },
+    "endsAt": "מסתיים ב־{{time}}",
+    "episode": "פרק",
+    "episodeNumber": "פרק {{number}}",
+    "episodeReleaseDate": "תאריך יציאה: {{date}}",
+    "episodeReleaseDateUnknown": "תאריך יציאה: לא ידוע",
+    "episodes": "פרקים",
+    "imdb": "לבדוק בIMDb",
+    "language": "שפה:",
+    "play": "לנגן",
+    "rating": "דירוג:",
+    "releaseDate": "תאריך השקה:",
+    "resume": "להמשיך",
+    "runtime": "זמן ריצה:",
+    "season": "עונה",
+    "specialSeason": "עונה מיוחדת",
+    "seasons": "עונה/עונות",
+    "similar": "דוֹמֶה",
+    "tmdb": "לבדוק בTMDB",
+    "trailers": "טריילרים",
+    "watched": "צפה ב{{watched}} מתוך {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "כל רשימות הסרטים",
+    "carousel": {
+      "change": "שנה",
+      "more": "הצג עוד",
+      "today": "הַיוֹם",
+      "thisWeek": "השבוע",
+      "title": {
+        "4kReleases": "השקות ב-4K",
+        "editorPicksMovies": "סרטים שנבחרו על ידי העורך",
+        "editorPicksShows": "סדרות שנבחרו על ידי העורך",
+        "forYou": "בשבילך",
+        "inCinemas": "בקולנוע",
+        "latestReleases": "ההשקות האחרונות",
+        "latestTVReleases": "סדרות טלוויזיה חדשות",
+        "movies": "{{category}} סרטים",
+        "moviesOn": "סרטים ב-{{provider}}",
+        "onTheAir": "משודר עכשיו",
+        "popular": "הפופולריים ביותר",
+        "recommended": "כי צפית ב-{{title}}",
+        "top10": "10 המובילים",
+        "topRated": "המדורגים ביותר",
+        "trending": "פופולרי עכשיו",
+        "tvshows": "{{category}} סדרות",
+        "tvshowsOn": "סדרות ב-{{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "מידע נוסף",
+      "playNow": "נגן עכשיו"
+    },
+    "filters": {
+      "country": "מְדִינָה"
+    },
+    "page": {
+      "back": "חזור",
+      "loading": "טוען...",
+      "loadMore": "טען עוד",
+      "title": "גלה סרטים וסדרות"
+    },
+    "scrollToTop": "חזרה למעלה",
+    "tabs": {
+      "movies": "סרטים",
+      "top10": "10 המובילים",
+      "tvshows": "סדרות"
+    },
+    "viewLists": "הצג את כל רשימות הסרטים"
+  },
+  "downtimeNotice": {
+    "badge": "בעיות",
+    "goHome": "חזור לדף הבית",
+    "message": "FrameZoo נתקל שוב בבעיות עם חלק מהשרתים, אם אינך יכול למצוא או להפעיל סדרה אנא שנה את המקור. צפו ששגיאה זו תימשך לאורך כל הזמנים שלהלן.",
+    "title": "בעיות בספקים"
+  },
+  "errors": {
+    "badge": "זה נשבר",
+    "details": "פרטי שגיאה",
+    "reloadPage": "טען מחדש את הדף",
+    "showError": "הצג פרטי שגיאה",
+    "title": "נתקלנו בשגיאה!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "תנית ויתור",
+      "disclaimerText": "FrameZoo מספקת נגן סטרימינג מאובטח, מודרני וחלק עם ממשק קל לשימוש והשמעה באיכות גבוהה בין מכשירים נתמכים. הוא אינו מארח קובצי מדיה, אינו מפעיל קטלוג מקור או ממליץ על תוספות ספציפיות. תוספות אופציונליות מוגדרות על ידי משתמשים, אשר אחראים לשימוש במקורות חוקיים."
+    },
+    "links": {
+      "fluxer": "דיסקורד",
+      "funding": "לתמיכה",
+      "github": "גיטהאב"
+    },
+    "tagline": "נגן סטרימינג מאובטח ומודרני לחוויית צפייה חלקה ואיכותית."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "לְבַטֵל",
+      "clickToEdit": "לחץ על תג מפתח כדי לערוך אותו",
+      "conditions": {
+        "showsOnly": "מופעים בלבד"
+      },
+      "conflict": "סְתִירָה",
+      "conflicts": "קונפליקטים",
+      "detected": "זוהה",
+      "editInSettings": "ערוך פקודות מקלדת מההגדרות",
+      "groups": {
+        "audioVideo": "אודיו ווידאו",
+        "interface": "מִמְשָׁק",
+        "jumpToPosition": "קפוץ למיקום",
+        "subtitlesAccessibility": "כתוביות ונגישות",
+        "videoPlayback": "הפעלת וידאו"
+      },
+      "none": "אַף לֹא אֶחָד",
+      "numberKeySeeking": "מחפש התקדמות מפתח מספר",
+      "numberKeySeekingDescription": "השתמש במקשי המספרים 0-9 כדי לחפש מיקומים ספציפיים בסרטון. 0 הולך להתחלה, 1-8 קופץ ל-10%-80%, ו-9 עובר ל-90%.",
+      "pressKey": "הקש על מקש...",
+      "resetAllToDefault": "אפס הכל לברירת מחדל",
+      "resetToDefault": "אפס לברירת המחדל",
+      "save": "לְהַצִיל",
+      "saveChanges": "שמור שינויים",
+      "shortcuts": {
+        "barrelRoll": "תעשה גלגול חבית! 🌀",
+        "closeOverlay": "סגור שכבת-על/מודאלית",
+        "decreaseVolume": "הורד נפח",
+        "increaseVolume": "הגדל נפח",
+        "jumpTo0": "קפוץ ל-0% (התחלה)",
+        "jumpTo9": "קפוץ ל-90%",
+        "mute": "השתקה/בטל השתקה",
+        "nextEpisode": "הפרק הבא",
+        "playPause": "הפעל/השהה (או החזק למהירות פי 2 כאשר מופעל)",
+        "playPauseAlt": "הפעל/השהה",
+        "previousEpisode": "הפרק הקודם",
+        "randomCaption": "בחר כיתוב אקראי מהשפה האחרונה שבה השתמשת",
+        "skipBackward1": "דלג אחורה שנייה אחת",
+        "skipBackward10": "דלג אחורה 10 שניות",
+        "skipBackward5": "דלג אחורה 5 שניות",
+        "skipForward1": "דלג קדימה שנייה אחת",
+        "skipForward10": "דלג קדימה 10 שניות",
+        "skipForward5": "דלג קדימה 5 שניות",
+        "syncSubtitlesEarlier": "סנכרן כתוביות מוקדם יותר (-0.5 שניות)",
+        "syncSubtitlesLater": "סנכרן כתוביות מאוחר יותר (+0.5 שניות)",
+        "previousSubtitleCue": "סימן כתוביות קודם",
+        "nextSubtitleCue": "רמז הכתוביות הבא",
+        "toggleCaptions": "החלף כתוביות",
+        "toggleFullscreen": "החלף מסך מלא",
+        "toggleNativeSubtitles": "החלף כתוביות מקוריות"
+      },
+      "subtitle": "החזק ` כדי להציג את העזרה הזו בכל עת",
+      "title": "קיצורי מקלדת"
+    },
+    "name": "פיי-סטרים",
+    "pages": {
+      "discover": "גלה",
+      "login": "התחבר",
+      "migration": "העברת חשבון",
+      "pagetitle": "{{title}} – פיי-סטרים",
+      "register": "הירשם",
+      "settings": "הגדרות"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "לְבַטֵל",
+        "description": "ערוך את הפרטים עבור סימניה זו",
+        "groupsLabel": "קבוצות",
+        "save": "לְהַצִיל",
+        "title": "ערוך סימניה",
+        "titleLabel": "כּוֹתֶרֶת",
+        "titlePlaceholder": "הזן כותרת עבור הסימניה שלך",
+        "yearLabel": "שָׁנָה",
+        "yearPlaceholder": "הזן שנה עבור הסימניה שלך"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "עדיין אין קבוצות",
+          "namePlaceholder": "שם הקבוצה",
+          "placeholderButton": "הוסף לקבוצה",
+          "removeAll": "הסר הכל",
+          "removeFromGroup": "הסר מהקבוצה"
+        },
+        "editGroup": {
+          "affectsBookmarks": "זה ישפיע על {{count}} סימניות",
+          "cancel": "לְבַטֵל",
+          "description": "ערוך את השם והסמל של קבוצת הסימניות שלך",
+          "nameLabel": "שם הקבוצה",
+          "namePlaceholder": "הזן שם לקבוצה שלך",
+          "save": "לְהַצִיל",
+          "title": "ערוך קבוצה"
+        },
+        "reorder": {
+          "button": "סדר מחדש",
+          "cancel": "לְבַטֵל",
+          "description": "גרור ושחרר כדי לסדר מחדש את קבוצות הסימניות שלך",
+          "done": "נַעֲשָׂה",
+          "save": "לְהַצִיל",
+          "title": "ערוך סדר קבוצתי"
+        }
+      },
+      "sectionTitle": "סימניות",
+      "showAll": "הצג הכל",
+      "sorting": {
+        "options": {
+          "date": "ברירת מחדל (תאריך הוספה)",
+          "titleAsc": "כותרת א-ז",
+          "titleDesc": "כותרת ז-א",
+          "yearAsc": "תאריך יציאה הישן-החדש ביותר",
+          "yearDesc": "תאריך יציאה הכי חדש-ישן"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "המשך צפייה...",
+      "sorting": {
+        "options": {
+          "date": "ברירת מחדל (תאריך הוספה)",
+          "titleAsc": "כותרת א-ז",
+          "titleDesc": "כותרת ז-א",
+          "yearAsc": "תאריך יציאה הישן-החדש ביותר",
+          "yearDesc": "תאריך יציאה הכי חדש-ישן"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "הפסק עריכה"
+    },
+    "search": {
+      "allResults": "זה כל מה שיש לנו...",
+      "discover": "גלה",
+      "discoverMore": "גלה עוד",
+      "genreFilterAll": "כל הז'אנרים",
+      "empty": {
+        "default": "ברוך הבא, מצא מדיה לצפייה כאן!",
+        "extra": [
+          "אין פה כלום :(",
+          "כל כך ריק...",
+          "ריקנות מוחלטת.",
+          "היי משתמש חדש:3"
+        ]
+      },
+      "failed": "לא הצלחנו למצוא מדיה, נסה שוב!",
+      "loading": "טוען...",
+      "noResults": "לא הצלחנו למצוא כלום :(",
+      "placeholder": {
+        "default": "מה אתה רוצה לצפות?",
+        "extra": [
+          "מה בא לך לראות עכשיו?",
+          "האם תרצה למחוק את היסטוריית הדפדפן שלך?",
+          "במה תרצה לצפות?",
+          "FrameZoo הוא האתר הכי טוב שיש!",
+          "מה ברשימת הצפייה שלך היום?",
+          "איך היה היום שלך?",
+          "חבל שהאתר אף פעם לא עובד...",
+          "FrameZoo לא פשוט הכי טוב?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "תוצאות חיפוש"
+    },
+    "support": {
+      "complete": "לְהַשְׁלִים",
+      "description": "FrameZoo מנוהל בהפסד, ואנו זקוקים לעזרה כדי לשמור אותו ללא פרסומות! אם אתה נהנה להשתמש ב-FrameZoo, אנא שקול לתרום כדי לעזור לנו לכסות את העלויות שלנו.",
+      "donate": "לִתְרוֹם",
+      "explanation": "אם אינך משתמש בתוסף או שאין לך הגדרת FED API, ייתכן שיהיה קשה יותר למצוא תוכן! אנחנו רוצים לתקן את זה, אבל הרבה יותר קשה לספק תוכן בלי שרתים יקרים. אז בבקשה, אם אתה נהנה להשתמש ב-FrameZoo, אנא שקול לתרום כדי לעזור לנו לכסות את העלויות הגדלות שלנו.",
+      "explanation2": "אם אתה רוצה מידע נוסף, אנא הצטרף אלינו",
+      "fluxer": "Fluxer",
+      "label": "מימון פרויקט: ${{current}} / ${{goal}}",
+      "moreInfo": "מידע נוסף",
+      "thankYou": "תודה על תמיכתך!",
+      "title": "FrameZoo זקוק לעזרתכם!"
+    },
+    "titles": {
+      "69": {
+        "default": "באלך משהו חריף?",
+        "extra": [
+          "יום 69 שמח 😘!"
+        ]
+      },
+      "420": {
+        "default": "מה היית רוצה לראות ב-4/20 הזה?",
+        "extra": [
+          "4/20 שמח 🥳!"
+        ]
+      },
+      "day": {
+        "default": "במה תרצה לצפות באחר צהריים זה?",
+        "extra": [
+          "עם ישראל חיי FrameZoo!"
+        ]
+      },
+      "halloween": {
+        "default": "איזה סרט מפחיד היית רוצה לראות את ליל כל הקדושים הזה?",
+        "extra": [
+          "ליל כל הקדושים שמח! 🎃👻",
+          "בו! 👻",
+          "טריק או תעלול! 🍬",
+          "זו הדלעת הגדולה, צ'רלי בראון!"
+        ]
+      },
+      "morning": {
+        "default": "אני אוהב את חברה שלי?",
+        "extra": [
+          "עם ישראל חיי FrameZoo!"
+        ]
+      },
+      "night": {
+        "default": "במה תרצה לצפות הלילה?",
+        "extra": [
+          "עם ישראל חיי FrameZoo!"
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "נצפה לאחרונה",
+      "sectionTitle": "צפה בהיסטוריה"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "העתק קישור לשיתוף",
+      "create": "צור רשימה",
+      "delete": "לִמְחוֹק",
+      "edit": "לַעֲרוֹך",
+      "editItems": "ערוך פריטים",
+      "open": "לִפְתוֹחַ",
+      "save": "שמור שינויים",
+      "saveMembership": "שמור שינויים"
+    },
+    "delete": {
+      "confirm": "למחוק את \"{{name}}\"? לא ניתן לבטל זאת."
+    },
+    "empty": {
+      "description": "צור את הרשימה הראשונה שלך כדי להתחיל לקבץ כותרות.",
+      "title": "עדיין אין רשימות"
+    },
+    "errors": {
+      "load": "טעינת הרשימות שלך נכשלה."
+    },
+    "form": {
+      "createDescription": "התחל רשימה חדשה למועדפים, צפייה חוזרת או כל דבר אחר שתרצה לשתף.",
+      "createTitle": "צור רשימה",
+      "description": "תֵאוּר",
+      "descriptionHelp": "הערה אופציונלית שתעזור לך לזכור מה שייך לרשימה זו.",
+      "descriptionPlaceholder": "בשביל מה הרשימה הזו?",
+      "editDescription": "עדכן את השם, התיאור או הנראות של רשימה זו.",
+      "editTitle": "ערוך רשימה",
+      "errors": {
+        "nameRequired": "נדרש שם רשימה",
+        "submitFailed": "שמירת הרשימה נכשלה."
+      },
+      "name": "שם רשימה",
+      "namePlaceholder": "מדע בדיוני סוף שבוע",
+      "public": "רשימה ציבורית",
+      "publicHelp": "כל מי שיש לו את הקישור יכול לצפות ברשימה הזו."
+    },
+    "items": {
+      "empty": "רשימה זו ריקה.",
+      "emptyHelp": "הוסף כותרות מכל סרט או כרטיס הצגה עם הוסף לרשימה, ואז חזור לכאן כדי לנהל את ההרכב."
+    },
+    "meta": {
+      "itemCount": "{{count}} פריט",
+      "itemCount_plural": "{{count}} פריטים",
+      "updatedAt": "עודכן {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "לְבַטֵל",
+        "create": "צור רשימה",
+        "save": "שמור שינויים"
+      },
+      "description": "בחר אילו רשימות צריכות לכלול {{title}}.",
+      "empty": {
+        "description": "צור רשימה כדי לשמור כותרת זו.",
+        "title": "עדיין אין רשימות"
+      },
+      "errors": {
+        "create": "יצירת הרשימה נכשלה.",
+        "save": "נכשל עדכון החברות ברשימה."
+      },
+      "title": "הוסף לרשימה"
+    },
+    "page": {
+      "description": "אצור מועדפים, ערבי נושא ובחירות לצפייה הבאה שתוכל לשמור על פרטיות או לשתף באמצעות קישור.",
+      "editingHint": "לחץ על לחצן הסגירה בכרטיס כדי להסיר אותו מרשימה זו.",
+      "eyebrow": "אוספים",
+      "itemsEyebrow": "כותרות ברשימה זו",
+      "itemsHint": "בחר רשימה בצד שמאל כדי לעיין בה, ולאחר מכן השתמש במצב עריכה כשתרצה לנקות אותה.",
+      "publicCountPlural": "{{count}} רשימות ציבוריות",
+      "publicCountSingular": "רשימה ציבורית אחת",
+      "searchEmptyDescription": "נסה שם אחר או נקה את החיפוש.",
+      "searchEmptyTitle": "אין רשימות מתאימות",
+      "searchPlaceholder": "חפש רשימות",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "עודכן לאחרונה",
+      "summaryPlural": "{{count}} רשימות",
+      "summarySingular": "רשימה 1",
+      "title": "רשימות"
+    },
+    "public": {
+      "descriptionFallback": "אוסף משותף שנאסף ב-FrameZoo.",
+      "notFoundDescription": "קישור שיתוף זה חסר או אינו זמין עוד.",
+      "notFoundTitle": "רשימה לא נמצאה",
+      "pageTitle": "רשימה משותפת",
+      "privateDescription": "הבעלים לא שיתף את הרשימה הזו באופן ציבורי.",
+      "privateTitle": "רשימה זו היא פרטית"
+    },
+    "visibility": {
+      "private": "פְּרָטִי",
+      "public": "פּוּמְבֵּי"
+    }
+  },
+  "media": {
+    "episodeDisplay": "S{{season}} E{{episode}}",
+    "episodeShort": "פ",
+    "seasonUnwatched": "האם אתה בטוח שאתה רוצה לסמן את העונה כלא נצפתה?",
+    "seasonWatched": "האם אתה בטוח שאתה רוצה לסמן את העונה כצפית?",
+    "types": {
+      "movie": "סרט",
+      "show": "סדרה"
+    },
+    "unreleased": "בקרוב בקולנוע"
+  },
+  "migration": {
+    "back": "לחזור",
+    "download": {
+      "button": {
+        "download": "הורד נתונים",
+        "home": "הביתה"
+      },
+      "description": "פעולה זו תוריד את הנתונים שלך למכשיר שלך. לאחר מכן תוכל להעלות אותו לשרת החדש או פשוט לשמור אותו לשמירה.",
+      "status": {
+        "error": "הורדת הנתונים שלך נכשלה. 😿",
+        "success": "הנתונים שלך הורדו בהצלחה! 🎉"
+      },
+      "title": "הורד נתונים"
+    },
+    "loginRequired": "עליך להיות מחובר כדי להעביר את הנתונים שלך! אנא חזור והירשם כדי להמשיך.",
+    "preview": {
+      "downloadDescription": "ההורדה כוללת:",
+      "items": {
+        "bookmarks": "מדיה מסומנת",
+        "progress": "צפו בהתקדמות",
+        "settings": "הגדרות והעדפות"
+      },
+      "uploadDescription": "נתונים להעלאה:"
+    },
+    "start": {
+      "explainer": "פעולה זו תוריד את הנתונים שלך למכשיר שלך. לאחר מכן תוכל להעלות אותו לשרת החדש או פשוט לשמור אותו לשמירה. העלה את קובץ הנתונים שיוצאו בעבר כדי לשחזר את הסימניות ולהתקדמות בחשבון זה.",
+      "options": {
+        "download": {
+          "action": "הורד נתונים",
+          "description": "פעולה זו תוריד את הנתונים שלך למכשיר שלך. לאחר מכן תוכל להעלות אותו לשרת החדש או פשוט לשמור אותו לשמירה.",
+          "quality": "יותר טכני",
+          "title": "הורד נתונים"
+        },
+        "or": "או",
+        "upload": {
+          "action": "העלה נתונים",
+          "description": "העלה את קובץ הנתונים שיוצאו בעבר כדי לשחזר את הסימניות ולהתקדמות בחשבון זה.",
+          "quality": "שחזר מגיבוי",
+          "title": "העלה נתונים"
+        }
+      },
+      "title": "העבר את הנתונים שלך"
+    },
+    "upload": {
+      "button": {
+        "home": "המשך הביתה",
+        "import": "ייבוא נתונים",
+        "processing": "מעבד...",
+        "saveLocal": "שמור באופן מקומי"
+      },
+      "description": "העלה את קובץ הנתונים שיוצאו בעבר כדי לשחזר את הסימניות ולהתקדם בחשבון זה.",
+      "exportedOn": "יוצא ב-",
+      "file": {
+        "change": "שנה קובץ",
+        "description": "בחר את הקובץ שברצונך להעלות",
+        "select": "בחר קובץ"
+      },
+      "previewTitle": "תצוגה מקדימה:",
+      "status": {
+        "error": "העלאת הנתונים שלך נכשלה. 😿",
+        "processing": "מעבד נתונים...",
+        "success": "הנתונים שלך הועלו בהצלחה! 🎉",
+        "successLocal": "הנתונים שלך נשמרו באופן מקומי! 🎉"
+      },
+      "title": "העלה נתונים"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "עדכן עכשיו",
+        "available": "גרסת אפליקציה חדשה מוכנה.",
+        "download": "הורד עדכון",
+        "later": "מְאוּחָר יוֹתֵר",
+        "restart": "הפעל מחדש כדי לעדכן",
+        "updating": "עִדכּוּן..."
+      },
+      "offline": "תבדוק את חיבור האינטרנט שלך"
+    },
+    "download": {
+      "empty": "עדיין לא הוגדרו הורדות.",
+      "failed": "טעינת אפשרויות ההורדה נכשלה.",
+      "label": "הורד אפליקציה",
+      "options": {
+        "mac-arm64": {
+          "description": "הטוב ביותר עבור מחשבי Mac מסדרת M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "עובד גם על Apple Silicon וגם על מחשבי Mac של אינטל",
+          "label": "macOS אוניברסלי"
+        },
+        "mac-x64": {
+          "description": "הטוב ביותר עבור מחשבי מקינטוש של אינטל",
+          "label": "macOS אינטל"
+        },
+        "win-arm64": {
+          "description": "הטוב ביותר עבור מחשבי Snapdragon/ARM Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "הטוב ביותר עבור מחשבי Windows 64 סיביות",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "לא מוגדרת כתובת אתר אחורי."
+    },
+    "install": {
+      "genericGuide": "הדפדפן שלך אינו תומך בהודעת התקנה אוטומטית של PWA.\nאתה עדיין יכול להתקין באמצעות תפריט הדפדפן (לדוגמה: 'התקן אפליקציה', 'צור קיצור דרך' או 'הוסף למעגן/מסך בית').",
+      "iosSafariGuide": "כדי להתקין את FrameZoo כאפליקציה:\n\n1. הקש על כפתור השיתוף (ריבוע עם חץ).\n2. בחר 'הוסף למסך הבית'.\n3. הקש על הוסף."
+    },
+    "menu": {
+      "accountMenu": "פתח את תפריט החשבון",
+      "addons": "תוספות",
+      "desktop": "הגדרות אפליקציה",
+      "logout": "להתנתק",
+      "register": "סנכרון לענן",
+      "settings": "הגדרות"
+    }
+  },
+  "notFound": {
+    "badge": "לא נמצא",
+    "goHome": "בחזרה לבית",
+    "message": "חיפשנו בכל מקום: מתחת לפחים, בארון, מאחורי הפרוקסי, אבל בסוף לא הצלחנו למצוא את העמוד שאתה מחפש. ",
+    "reloadButton": "נסה שוב",
+    "title": "לא יכולנו למצוא את דף זה"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "בטל"
+    }
+  },
+  "overlays": {
+    "close": "סגור"
+  },
+  "player": {
+    "back": {
+      "default": "חזרה לדף הבית",
+      "short": "קווין"
+    },
+    "casting": {
+      "device": "הֶתקֵן",
+      "to": "העברה ל-{{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "מוריד עוד זיכרון RAM...",
+      "2": "המרת קפאין לתוכן...",
+      "3": "ללמד את האוגר לרוץ מהר יותר...",
+      "4": "לשכנע אלקטרונים לנוע מהר יותר...",
+      "5": "כמעט שם... אמר כל סרגל טעינה אי פעם...",
+      "6": "מוצא את השלט... רגע, בעיה שגויה...",
+      "7": "סופרים לאחור מהאינסוף...",
+      "8": "מדמיית העתיד...",
+      "9": "צופה בסרטוני חתולים...",
+      "10": "מוסחת על ידי קובצי GIF של חתולים...",
+      "11": "המתן בבקשה בזמן שהמתמחה ממלא מחדש את הקפה שלו...",
+      "12": "בודק אם הוא מחובר לחשמל...",
+      "13": "מכבה ומדליק שוב...",
+      "14": "לא להיבהל...",
+      "15": "החורף מגיע...",
+      "16": "מתחבר ל-Skynet...",
+      "17": "כל הדפדפנים שלך שייכים לנו...",
+      "18": "מחפש דחף חוסר סבירות אינסופי...",
+      "19": "מגלה דרכים חדשות לגרום לך לחכות...",
+      "20": "הזמן שלך מאוד חשוב לנו. אנא המתן בזמן שאנו מתעלמים ממך...",
+      "21": "עדיין מהיר יותר מ-Windows Update...",
+      "22": "למה שלא תחטוף כריך?"
+    },
+    "menus": {
+      "audio": {
+        "default": "ברירת מחדל"
+      },
+      "episodes": {
+        "button": "פרקים",
+        "emptyState": "אין פרקים בעונה הזו, בדוק שוב מאוחר יותר (סליחה 3: )...",
+        "episodeBadge": "פ{{episode}}",
+        "favorites": "מועדפים",
+        "loadingError": "ארע שגיאה בטעינת העונה",
+        "loadingList": "טוען...",
+        "loadingTitle": "טוען...",
+        "markAsFavorite": "סמן כמועדף",
+        "markAsUnwatched": "סמן כלא צפוי",
+        "markAsWatched": "סמן כצפוי",
+        "noFavorites": "אין עדיין פרקים מועדפים. כוכב פרקים כדי להוסיף אותם למועדפים שלך!",
+        "showLess": "הצג פחות",
+        "showMore": "הראה עוד",
+        "specials": "מבצעים"
+      },
+      "playback": {
+        "disabled": "(מושבת במצב צפייה משותפת)",
+        "speedBoosted": "2x",
+        "speedLabel": "מהירות הניגון",
+        "speedUnboosted": "{{speed}}x",
+        "title": "הגדרות ניגון"
+      },
+      "quality": {
+        "auto": "אוטומטי",
+        "automaticLabel": "איכות אוטומטית",
+        "hint": "אתה יכול לנסות <0>להחליף מקור</0> כדי לקבל אפשרויות איכות שונות.",
+        "iosNoQuality": "בשל מגבלות שהוגדרו על ידי אפל, בחירת איכות אינה זמינה ב-iOS עבור מקור זה. אתה יכול לנסות <0>לעבור למקור אחר</0> כדי לקבל אפשרויות איכות שונות.",
+        "title": "איכות"
+      },
+      "settings": {
+        "audioItem": "אודיו",
+        "enableSubtitles": "כתוביות",
+        "playbackItem": "הגדרות ניגון",
+        "qualityItem": "איכות",
+        "sourceItem": "מקורות וידאו",
+        "subtitleItem": "הגדרות כתוביות"
+      },
+      "subtitles": {
+        "autoSelectChoice": "בחירה אוטומטית",
+        "autoSelectDifferentChoice": "הקש שוב כדי לבחור אוטומטית כתוביות שונות",
+        "clearSecondary": "נקה כתובית משנית",
+        "customChoice": "בחר כתובית מקובץ",
+        "customizeLabel": "התאם",
+        "delayEarly": "ראה כיתוב",
+        "delayLate": "שמע אודיו",
+        "doubleClickToCopy": "לחץ פעמיים כדי להעתיק נתוני כתוביות",
+        "dropSubtitleFile": "תשים קובץ כתוביות כאן! >_<",
+        "dualSub": "כתוביות כפולות",
+        "dualSubDesc": "בחר אותו פורמט (SRT, VTT...) וספק (OpenSubs...) לסנכרון הטוב ביותר",
+        "dualSubHint": "בחר שפה עבור הכתובית המשנית (מוצגת למעלה הראשית)",
+        "embedded": "מוטבע",
+        "empty": "לא נמצאו כתוביות.",
+        "loadingExternal": "טוען כתוביות חיצוניות...",
+        "loadingExternalProgress": "טוען כתוביות חיצוניות... ({{progress}}%)",
+        "matchScoreLabel": "התאמה ~{{score}}%",
+        "notFound": "אף אחת מהאפשרויות הזמינות לא תואמת את השאילתה שלך",
+        "offChoice": "כבוי",
+        "pasteChoice": "הדבק נתוני כתוביות",
+        "previewLabel": "תצוגה מקדימה של כתוביות:",
+        "primary": "יְסוֹדִי",
+        "refresh": "רענן כתוביות חיצוניות",
+        "refreshing": "מְרַעֲנֵן...",
+        "secondary": "מִשׁנִי",
+        "selectingSecondary": "בחירת כתובית משנית",
+        "syncSubtitleConfirmTitle": "לסנכרן כתוביות עם AI?",
+        "syncSubtitleConfirmDescription": "כתוביות יתאימו על ידי AI כך שיתאימו לסרטון.",
+        "syncSubtitleSupportedLanguages": "שפות שמע נתמכות",
+        "syncSubtitleSuccess": "כתוביות סנכרון בהצלחה",
+        "syncSubtitleFailed": "לא ניתן היה לסנכרן את הכתוביות",
+        "syncSubtitleOpen": "סנכרן כתוביות עם AI",
+        "syncSubtitleAction": "סנכרון",
+        "settings": {
+          "backlink": "כתוביות מותאמות אישית",
+          "delay": "עיכוב בכיתוב",
+          "fixCapitals": "תקן שימוש באותיות גדולות",
+          "autoSync": "סנכרון אוטומטי של כתוביות",
+          "syncingProgress": "מסנכרן... ({{progress}}%) (תהליך זה עשוי להימשך 2-3 דקות)",
+          "syncApplied": "הוחל סנכרון אוטומטי.",
+          "timeline": "ציר זמן של כתוביות",
+          "timelineHint": "בחר סימן כתוביות כדי לסנכרן אותו עם זמן הווידאו הנוכחי.",
+          "timelineEmpty": "אין רמזים לכתוביות זמינות."
+        },
+        "title": "כתוביות",
+        "transcriptChoice": "תמלול",
+        "searchPlaceholder": "חפש כתוביות או דיאלוג...",
+        "delayLabel": "היסט כתוביות",
+        "seekMode": "לְחַפֵּשׂ",
+        "syncMode": "סנכרון",
+        "syncOffset": "היסט: {{delay}}s",
+        "syncAction": "סנכרון",
+        "nowPlaying": "עכשיו משחק",
+        "syncDescription": "לחץ על דיאלוג התואם לסצינת הווידאו הנוכחית, או התאם את ההיסט:",
+        "resetDelay": "אִתחוּל",
+        "translate": {
+          "title": "תרגם מ-{{language}}"
+        },
+        "unknownLanguage": "לא ידוע",
+        "useNativeSubtitles": "השתמש בכתוביות המקור של הווידאו",
+        "useNativeSubtitlesDescription": "עשוי לתקן כתוביות בעת שידור למכשיר אחר ובמצב תמונה בתוך תמונה (PiP)"
+      },
+      "watchparty": {
+        "watchpartyItem": "מסיבת צפייה"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "הרשאה חסר",
+        "button": "השתמש בתוסף",
+        "text": "יש לך את תוסף הדפדפן, אך אנו זקוקים לאישורך כדי להתחיל להשתמש בתוסף.(¬_¬)",
+        "title": "הגדר את התוסף"
+      },
+      "failed": {
+        "badge": "נכשל",
+        "homeButton": "חזור לדף הבית",
+        "text": "לא היה ניתן לטעון את הmetadata של המדיה מ-TMDB. אנא בדוק אם TMDB מושבת או חסום בחיבור האינטרנט שלך.",
+        "title": "טעינת הmetdata נכשלה"
+      },
+      "legal": {
+        "badge": "הוסר",
+        "text": "מדיה זו אינה זמינה יותר עקב הודעת הסרה או תביעה בגין זכויות יוצרים.😨",
+        "title": "מדיה הוסרה"
+      },
+      "notFound": {
+        "badge": "לא נמצא",
+        "homeButton": "חזרה לדף הבית",
+        "text": "לא הצלחנו למצוא את המדיה שביקשת. או שהוא הוסר או שהתעסקת בכתובת האתר.",
+        "title": "לא הצלחנו למצוא את המדיה הזו."
+      }
+    },
+    "nextEpisode": {
+      "next": "פרק הבא",
+      "nextSeason": "עונה הבאה",
+      "replay": "ריפליי"
+    },
+    "playbackError": {
+      "autoResumeText": "אירעה שגיאה בניסיון להפעיל את המדיה 😖. מנסה אוטומטית את המקורות האחרים...",
+      "badge": "שגיאת ניגון",
+      "copyDebugInfo": "העתק מידע על ניפוי באגים",
+      "debugInfo": "בדוק את המסוף לפרטים נוספים.",
+      "errors": {
+        "errorAborted": "השגת המדיה בוטלה על ידי בקשת המשתמש.",
+        "errorDecode": "למרות שנקבע קודם כל שהמדיה יכולה להשתמש בה, אירעה שגיאה בעת ניסיון לפענח משאבי המדיה, וכתוצאה מכך קרה שגיאה.",
+        "errorGenericMedia": "‍אירעה שגיאת מדיה לא ידועה.",
+        "errorNetwork": "אירעה סוג של שגיאת רשת שמנעה גישה למדיה, למרות שהיא הייתה זמינה מראש.",
+        "errorNotSupported": "המדיה או ספק המדיה אינם נתמכים."
+      },
+      "homeButton": "חזור לדף הבית",
+      "resumeButton": "נסה את המקורות הבאים",
+      "text": "אירעה שגיאה בהפעלת המדיה.😖 אנא נסה שוב!",
+      "title": "הפעלת הסרטון נכשלה!"
+    },
+    "resume": {
+      "description": "פרק זה נצפה ב-{{percentage}}%.",
+      "restart": "הפעל מחדש",
+      "resume": "קוֹרוֹת חַיִים",
+      "title": "להמשיך לצפות?"
+    },
+    "segment": {
+      "credits": "קרדיטים",
+      "intro": "הקדמה",
+      "recap": "לְסַכֵּם"
+    },
+    "skipTime": {
+      "confidence": "אֵמוּן",
+      "connectApiKeyMessage": "כדי לשלוח פלחים חדשים, הזן את מפתח ה-API של IntroDB בהגדרות החיבורים",
+      "credits": "דלג על קרדיטים",
+      "endOfVideo": "סוֹף",
+      "endsAt": "מסתיים ב-{{time}}",
+      "submissionUnavailableMessage": "שליחת הפלחים אינה זמינה בשרת זה.",
+      "feedback": {
+        "modal": {
+          "cancel": "לְבַטֵל",
+          "description": "תרום ל-TheIntroDB על ידי שליחת חותמות זמן מדויקות של פלחים. כל ההגשות מתקבלות על ידי הקהילה לפני פרסום.",
+          "endTimeLabel": "סוף (ים)",
+          "error": {
+            "endTime": "נדרשת שעת סיום",
+            "mediaInfo": "מידע מדיה אינו זמין",
+            "segment": "לא נבחר פלח",
+            "startTime": "נדרשת שעת התחלה",
+            "submission": "שגיאה בהגשת חותמות זמן",
+            "tidbKey": "מפתח API של TIDB לא מוגדר"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "מינימום 5 שניות אם מסופק סוף. יכול להרחיב עד סוף המדיה.",
+              "endDesc": "אופציונלי - השאר ריק אם הקרדיטים מגיעים עד סוף הקובץ.",
+              "excludeDesc": "אל תכלול סצנות ביניים או שלאחר קרדיטים; רק גליל האשראי הראשי.",
+              "startDesc": "חובה - כאשר נקודות הסיום מתחילות (למשל כאשר מופיע טקסט הקרדיט הראשון).",
+              "whenToTitle": "מדריך חותמות זמן של קרדיטים:"
+            },
+            "durationDesc": "מינימום 5 שניות אם הסוף מסופק",
+            "durationLabel": "מֶשֶׁך:",
+            "endDesc": "אופציונלי - ריק אם מתארך עד הסוף",
+            "endLabel": "סוֹף:",
+            "excludeDesc": "סצנות פוסט קרדיטים",
+            "excludeLabel": "אל תכלול:",
+            "intro": {
+              "durationDesc": "רוב הפתיחה הם 30-90 שניות. מינימום 5 שניות אם מוגדרים גם ההתחלה וגם הסוף.",
+              "endDesc": "חובה - כאשר ההקדמה מסתיימת (בדרך כלל כאשר כרטיס הכותרת או הפרק הראשי מתחיל).",
+              "excludeDesc": "אל תכלול סצנות פתיחה קרות או קדם-מבוא; רק רצף הכותרות הראשיות.",
+              "startDesc": "אופציונלי - השאר ריק אם ההקדמה מתחילה בתחילת הפרק.",
+              "whenToTitle": "מדריך חותמות זמן מבוא:"
+            },
+            "preview": {
+              "durationDesc": "תצוגה מקדימה משתנה באורך. מינימום 5 שניות.",
+              "endDesc": "אופציונלי - השאר ריק אם התצוגה המקדימה מסתיימת בסוף המדיה.",
+              "excludeDesc": "תצוגה מקדימה היא בדרך כלל 15-90 שניות בסוף הפרק תצוגה מקדימה של הפרק הבא.",
+              "startDesc": "חובה - כאשר התצוגה המקדימה מתחילה (למשל כאשר מופיע טקסט התצוגה המקדימה).",
+              "whenToTitle": "מדריך חותמות זמן לתצוגה מקדימה:"
+            },
+            "recap": {
+              "durationDesc": "הסיכומים משתנים באורכם. מינימום 5 שניות אם מוגדרים גם ההתחלה וגם הסוף.",
+              "endDesc": "חובה - כאשר הסיכום מסתיים ומתחיל התוכן החדש.",
+              "excludeDesc": "רק הקטע \"קודם לכן\" או סיכום; אל תכלול את המבוא או הסצנות החדשות.",
+              "startDesc": "אופציונלי - השאר ריק אם הסיכום מתחיל בתחילת הפרק.",
+              "whenToTitle": "מדריך סיכום חותמות זמן:"
+            },
+            "startDesc": "חובה - כאשר הזיכויים מתחילים להתגלגל",
+            "startLabel": "הַתחָלָה:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 או 210 (להשאיר ריק לסיום המדיה)",
+              "intro": "3:30 או 210 (חובה)",
+              "preview": "3:30 או 210 (להשאיר ריק לסיום המדיה)",
+              "recap": "3:30 או 210 (חובה)"
+            },
+            "start": {
+              "credits": "2:30 או 150 (חובה)",
+              "intro": "2:30 או 150 (להשאיר ריק להתחלה בהתחלה)",
+              "preview": "2:30 או 150 (חובה)",
+              "recap": "2:30 או 150 (להשאיר ריק להתחלה בהתחלה)"
+            }
+          },
+          "segmentType": "סוג פלח",
+          "startTimeLabel": "התחל (ים)",
+          "submit": "לְהַגִישׁ",
+          "submitting": "הַגָשָׁה...",
+          "success": {
+            "title": "ההגשה הצליחה! תוֹדָה!"
+          },
+          "title": "שלח חותמות זמן ל-TheIntroDB",
+          "types": {
+            "credits": "קרדיטים",
+            "intro": "הקדמה",
+            "preview": "תצוגה מקדימה",
+            "recap": "לְסַכֵּם"
+          },
+          "whenToDesc": "הזן חותמות זמן בשניות (למשל 150), פורמט mm:ss (למשל 2:30), או בפורמט hh:mm:ss (למשל 1:42:20). אנו נמיר את הפורמט עבורך באופן אוטומטי.",
+          "whenToTitle": "מדריך חותמות זמן:"
+        },
+        "title": "האם הדילוג הזה היה נכון?"
+      },
+      "intro": "דלג על מבוא",
+      "noSegments": "אין קטעי דילוג זמינים",
+      "recap": "דלג על Recap",
+      "skipSegments": "דלג על פלחים",
+      "startsAt": "מתחיל ב-{{time}}",
+      "submissions": "{{count}} הגשות",
+      "submitSegment": "שלח פלח",
+      "timeUnknown": "זמן לא ידוע"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} נשאר • סיים ב {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "קובץ: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "רשת טורנט",
+      "networkStatus": "סטטוס רשת טורנט",
+      "peers": "עמיתים: {{count}}",
+      "progress": "התקדמות: {{progress}}%",
+      "speed": "מהירות: {{speed}}",
+      "states": {
+        "buffering": "חציצה",
+        "downloading": "מוריד",
+        "error": "שְׁגִיאָה",
+        "ready": "מוּכָן",
+        "starting": "מתחיל",
+        "stopped": "נֶעצָר"
+      },
+      "unknown": "לֹא יְדוּעַ"
+    }
+  },
+  "screens": {
+    "loadingApp": "טוען אפליקציה...",
+    "loadingUser": "טוען פרופיל משתמש...",
+    "loadingUserError": {
+      "disconectCancel": "לְבַטֵל",
+      "disconnectConfirm": "לְאַשֵׁר",
+      "disconnectMessage": "התנתק משרת החשבון, תוך שמירה על הנתונים המקומיים העדכניים ביותר. שינויים ותוכן שנצפה לא יסונכרנו עד שתיכנס שוב.",
+      "disconnectTitle": "להתנתק מהקצה האחורי?",
+      "logout": "להתנתק",
+      "reload": "טעינה מחדש",
+      "reset": "אפס שרת מותאם אישית",
+      "text": "טעינת פרופיל המשתמש שלך נכשלה. אנא נסה לטעון מחדש את הדף.",
+      "textWithReset": "טעינת פרופיל המשתמש שלך נכשלה באמצעות השרת המותאם אישית הנוכחי. נסה לאפס את השרת המותאם אישית ולאחר מכן טען מחדש."
+    },
+    "migration": {
+      "failed": "נכשלה העברת הנתונים שלך. 😿",
+      "inProgress": "אנא המתן, אנו מעבירים את הנתונים שלך. זה לא אמור לקחת הרבה זמן."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "ערוך",
+        "logoutButton": "התנתק",
+        "nicknameLabel": "כינוי",
+        "nicknamePlaceholder": "הזן את הכינוי שלך"
+      },
+      "actions": {
+        "delete": {
+          "button": "מחק משתמש",
+          "confirmButton": "מחק משתמש",
+          "confirmDescription": "האם אתה בטוח שברצונך למחוק את החשבון שלך? כל הנתונים שלך ייאבדו! ",
+          "confirmTitle": "אתה בטוח?",
+          "text": "פעולה זו היא בלתי הפיכה. כל הנתונים יימחקו ולא ניתן יהיה לשחזר דבר.",
+          "title": "מחק משתמש"
+        },
+        "logoutAllDevices": {
+          "button": "התנתק מכל המכשירים",
+          "text": "זה יגרום לך להתנתק מכל המכשירים הקשורים לחשבונך.",
+          "title": "סיים את כל הסשנים"
+        },
+        "migration": {
+          "button": "העבר חשבון",
+          "text": "העבר את החשבון שלך לשרת חדש או הורד את הנתונים שלך.",
+          "title": "העברת החשבון"
+        },
+        "title": "פעולות"
+      },
+      "devices": {
+        "deviceNameLabel": "שם מכשיר",
+        "failed": "טעינת ההפעלות נכשלה",
+        "lastActive": "פעיל אחרון: {{date}}",
+        "loggedInAt": "מחובר ב: {{date}}",
+        "removeDevice": "הסר",
+        "title": "מכשירים",
+        "unknownDevice": "מכשיר לא ידוע, שגיאה בפענוח השם"
+      },
+      "profile": {
+        "finish": "סייםעריכה",
+        "firstColor": "‫‫צבע פרופיל ראשון",
+        "secondColor": "צבע פרופיל שני",
+        "title": "ערוך תמונת פרופיל",
+        "userIcon": "סמל משתמש"
+      },
+      "register": {
+        "cta": "התחל",
+        "text": "שתף את התקדמות הצפייה בין מכשירים ושמור על סנכרון. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "title": "סנכרון לענן"
+      },
+      "title": "משתמש"
+    },
+    "all": {
+      "title": "כל ההגדרות"
+    },
+    "appearance": {
+      "activeTheme": "פעיל",
+      "customParts": {
+        "primary": "יְסוֹדִי",
+        "secondary": "מִשׁנִי",
+        "tertiary": "שְׁלִישׁוֹנִי"
+      },
+      "options": {
+        "carouselView": "תצוגת קרוסלה",
+        "carouselViewDescription": "הצג את מדורי \"צופה כרגע\" ו\"הוספה לסימניות\" בתצוגת קרוסלה במקום רשת. מושבת כברירת מחדל.",
+        "carouselViewLabel": "תצוגת קרוסלה",
+        "discover": "מצא עוד",
+        "discoverDescription": "הצג את הצג עוד בדף הבית מתחת למדיה שסימנת. מופעל כברירת מחדל.",
+        "discoverLabel": "אזור חיפוש והמלצות",
+        "featured": "מדיה מומלצת",
+        "featuredDescription": "הצג קרוסלה של סרטים וסדרות מומלצים בראש דף הבית שלך! מושבת כברירת מחדל.",
+        "featuredLabel": "מדיה מומלצת",
+        "forceCompactEpisodeView": "אילוץ תצוגת פרקים קומפקטית",
+        "forceCompactEpisodeViewDescription": "אילץ את הקרוסלת פרקים בנגן להשתמש בתצוגה הקומפקטית האנכית הקלאסית. מושבת כברירת מחדל.",
+        "forceCompactEpisodeViewLabel": "פרקים קומפקטיים",
+        "homeSectionOrder": "סדר מדור בית",
+        "homeSectionOrderDescription": "גרור ושחרר כדי לסדר מחדש את קטעי הצפייה והסימניות בדף הבית שלך. ניתן לערוך סדר קבוצתי מדף הבית.",
+        "homeSectionOrderGroups": "סדר מחדש את קבוצות הסימניות",
+        "logos": "לוגואים בתמונה",
+        "logosDescription": "הצג לוגואים בתמונה במקום כותרות טקסט בחלון הפרטים ובמדור המובלט. מופעל כברירת מחדל.",
+        "logosLabel": "לוגואים בתמונה",
+        "logosNotice": "רוב הזמן, הלוגואים הם באנגלית בלבד. שפות אחרות עשויות לרצות להשבית זאת!",
+        "minimalCards": "כרטיסים מינימליים",
+        "minimalCardsDescription": "הסתר תוכן טקסט (כותרת, סוג, שנה) בכרטיסי מדיה, תוך הצגת תמונת הפוסטר בלבד.",
+        "minimalCardsLabel": "כרטיסים מינימליים",
+        "modal": "מודל הפרטים",
+        "modalDescription": "הצג את מודל הפרטים כאשר אתה לוחץ על כרטיס מדיה במקום לעבור לדף הצפייה. נדרש פרוקסי או תוסף. מושבת כברירת מחדל.",
+        "modalLabel": "מודל הפרטים",
+        "pauseOverlay": "השהה שכבת-על",
+        "pauseOverlayDescription": "הצג כותרת/לוגו ושכבת-על של תיאור כאשר הנגן מושהה ולא פעיל.",
+        "pauseOverlayLabel": "השהה שכבת-על"
+      },
+      "sections": {
+        "bookmarks": "סימניות",
+        "watching": "צופה כרגע"
+      },
+      "themes": {
+        "acid": "ירוק חמצמץ",
+        "autumn": "סתָיו",
+        "blue": "כחול",
+        "christmas": "חַג הַמוֹלָד",
+        "classic": "קלאסי",
+        "cobalt": "קובלט",
+        "custom": "מִנְהָג",
+        "default": "ברירת מחדל",
+        "ember": "כתום להבה",
+        "forest": "יער",
+        "frost": "כְּפוֹר",
+        "grape": "ענב",
+        "gray": "אפור",
+        "green": "ירוק",
+        "hulk": "הענק הירוק",
+        "mocha": "מוקה",
+        "noir": "אפל",
+        "pink": "ורוד",
+        "popsicle": "ארטיק",
+        "red": "אדום",
+        "spark": "נצנץ",
+        "spiderman": "ספיידרמן",
+        "teal": "ירוק כחלחל",
+        "wolverine": "וולבריין"
+      },
+      "title": "מראה"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "שינוי השרת האחורי ינתק אותך. לְהַמשִׁיך?",
+        "changeWarningTitle": "שנה שרת אחורי",
+        "error": "שגיאה בחיבור ל-backend",
+        "notice": "החשבון שלך לא מסתנכרן בין הקצה האחורי, אז זכור באיזה מהם אתה משתמש!"
+      },
+      "tidb": {
+        "description": "תרום ל-TheIntroDB על ידי השארת משוב על קטעי הקדמה, סיכום וקרדיטים. <0>למידע נוסף.</0>",
+        "tokenLabel": "מפתח API"
+      },
+      "title": "התחברויות"
+    },
+    "preferences": {
+      "autoplay": "הפעלה אוטומטית",
+      "autoplayDescription": "הפעל אוטומטית את הפרק הבא בסדרה לאחר שמגיעים לסוף.",
+      "autoplayLabel": "הפעלה אוטומטית",
+      "autoResumeOnPlaybackError": "המשך אוטומטי בשגיאת השמעה",
+      "autoResumeOnPlaybackErrorDescription": "המשך אוטומטית בחיפוש אחר מקורות אחרים כאשר המקור הנוכחי נכשל במהלך ההשמעה. אם מושבת, תראה מסך שגיאה עם אפשרות המשך ידנית.",
+      "autoResumeOnPlaybackErrorLabel": "המשך אוטומטי בשגיאת השמעה",
+      "autoSkipSegments": "דילוג אוטומטי על פלחים",
+      "autoSkipSegmentsDescription": "כאשר מופעל, דלג אוטומטית על קטעי מבוא, סיכום ותצוגה מקדימה בזמן הצפייה.",
+      "autoSkipSegmentsLabel": "דילוג אוטומטי על קטעים",
+      "doubleClickToSeek": "הקש פעמיים כדי לחפש",
+      "doubleClickToSeekDescription": "הקש פעמיים על הצד השמאלי או הימני של הנגן כדי לחפש 10 שניות קדימה או אחורה.",
+      "doubleClickToSeekLabel": "אפשר הקשה כפולה כדי לחפש",
+      "keyboardShortcuts": "קיצורי מקלדת",
+      "keyboardShortcutsDescription": "התאם אישית את קיצורי המקלדת עבור האפליקציה. החזק ` כדי להציג את העזרה הזו בכל עת",
+      "keyboardShortcutsLabel": "התאם אישית את קיצורי המקלדת",
+      "language": "שפת האפליקציה",
+      "languageDescription": "השפה החלה על האפליקציה כולה.",
+      "lowPerformanceMode": "מצב ביצועים נמוכים / חיסכון ברוחב פס",
+      "lowPerformanceModeDescription": "מייעל את האפליקציה לחיבורים ומכשירים איטיים על ידי נטרול תכונות שדורשות רוחב פס גבוה. מצב זה מפחית את צריכת הנתונים ומשפר את הביצועים, תוך שמירה על פונקציות החיפוש והצפייה המרכזיות. ",
+      "lowPerformanceModeLabel": "מצב ביצועים נמוכים",
+      "showLess": "הצג פחות",
+      "showMore": "הצג עוד",
+      "skipCredits": "דלג על הקרדיטים",
+      "skipCreditsDescription": "כאשר מופעל, הפעל אוטומטית את הפרק הבא בהשלמה של 99% כדי לדלג על הקרדיטים. כאשר מושבת, המתן עד שהפרק יושלם במלואו.",
+      "skipCreditsLabel": "דלג על הקרדיטים",
+      "thumbnail": "צור טאמבניילים",
+      "thumbnailDescription": "לרוב, לסרטונים אין טאמבניילים. אתה יכול להפעיל את ההגדרה הזו כדי ליצור אותם, אבל הם יכולים להפוך את הסרטון שלך לאיטי יותר.",
+      "thumbnailLabel": "צור טאמבניילים",
+      "title": "העדפות"
+    },
+    "reset": "איפוס",
+    "save": "לשמור",
+    "search": {
+      "placeholder": "הגדרות חיפוש..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "גִרְסָה",
+        "notLoggedIn": "אתה לא מחובר",
+        "checkForUpdates": "בדוק אם יש עדכונים",
+        "upToDate": "אתה נמצא כרגע בגרסה העדכנית ביותר"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "השבתת טשטוש הרקע של הכתוביות עשויה לתקן כמה בעיות מהבהבות",
+      "backgroundBlurEnabledLabel": "טשטוש רקע",
+      "backgroundBlurLabel": "טשטוש רקע",
+      "backgroundLabel": "אטימות רקע",
+      "BorderThicknessLabel": "עובי גבול",
+      "colorLabel": "צבע",
+      "high": "גָבוֹהַ",
+      "low": "נמוך",
+      "previewQuote": "אין נחום, אני לא באמת קיים. אני למעשה, חישוק.",
+      "textBoldLabel": "טקסט מודגש",
+      "textSizeLabel": "גודל הטקסט",
+      "textStyle": {
+        "Border": "גְבוּל",
+        "default": "ברירת מחדל",
+        "depressed": "מורד",
+        "dropShadow": "צל",
+        "raised": "מורם",
+        "title": "סטייל הטקסט"
+      },
+      "title": "כתוביות",
+      "verticalPositionLabel": "מיקום אנכי"
+    },
+    "unsaved": "יש לך שינויים שלא נשמרו"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "פעולה והרפתקאות",
+      "10765": "מדע בדיוני ופנטזיה"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "מקדים את המארח ב-{{seconds}} שניות",
+    "alone": "לבד",
+    "behindHost": "מפגר אחרי המארח ב-{{seconds}} שניות",
+    "cancel": "ביטול",
+    "connectedAsGuest": "מחובר למסיבת צפייה כאורח",
+    "contentMismatch": "לא ניתן להצטרף למסיבת צפייה: התוכן שונה מתוכן המארח.",
+    "copyCode": "לחץ להעתקה",
+    "emptyRoom": "עדיין אין אף אחד בחדר הזה",
+    "enterCodeOrLink": "הזן קישור משותף למסיבת צפייה או קוד חדר",
+    "episodeMismatch": "לא ניתן להצטרף למסיבת צפייה: אתה צופה בפרק שונה מהמארח.",
+    "guestFallback": "אוֹרֵחַ",
+    "hosting": "מארח",
+    "hostParty": "אירח מסיבת צפייה",
+    "invalidRoom": "לא ניתן להתחבר לחדר הזה",
+    "isGuest": "צופה כאורח ב-<0>{{backendName}}</0>",
+    "isHost": "מארח ב-<0>{{backendName}}</0>",
+    "join": "הצטרף",
+    "joinParty": "הצטרף למסיבת צפייה",
+    "leaveWatchParty": "צא ממסיבת צפייה",
+    "linkCopied": "הועתק!",
+    "noHost": "אין מארח במסיבת הצפייה הזו",
+    "save": "שמור",
+    "shareCode": "שתף את הקוד הזה עם חברים (לחץ להעתקת הקישור)",
+    "showStatusOverlay": "הצג שכבת מצב",
+    "status": {
+      "inSync": "מסונכרן",
+      "outOfSync": "לא מסונכרן"
+    },
+    "syncing": "מסנכרן...",
+    "validating": "מאמתים את מסיבת הצפייה...",
+    "viewers": "צופים ({{count}})",
+    "watching": "צופה",
+    "withCount": "עם עוד {{count}}",
+    "you": "אַתָה"
+  },
+  "toasts": {
+    "linkCopied": "הקישור הועתק ללוח!",
+    "loginSuccess": "התחבר בהצלחה!",
+    "logoutSuccess": "התנתק בהצלחה!",
+    "registerSuccess": "נרשם בהצלחה!"
+  }
+}

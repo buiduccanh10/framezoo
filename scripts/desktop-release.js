@@ -2,7 +2,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const PRODUCT_NAME = "AlphaFlix";
+const PRODUCT_NAME = "FrameZoo";
 
 const RELEASE_VARIANTS = {
   "mac-arm64": {
@@ -13,11 +13,11 @@ const RELEASE_VARIANTS = {
     description: "Best for M-series Macs",
     feedFileName: "latest-mac.yml",
     downloadPattern: [
-      /^AlphaFlix-(.+)-arm64-mac\.dmg$/,
-      /^AlphaFlix-(.+)-arm64-mac\.zip$/,
+      /^FrameZoo-(.+)-arm64-mac\.dmg$/,
+      /^FrameZoo-(.+)-arm64-mac\.zip$/,
     ],
-    artifactPattern: /^AlphaFlix-(.+)-arm64-mac\.zip$/,
-    blockmapPattern: /^AlphaFlix-(.+)-arm64-mac\.zip\.blockmap$/,
+    artifactPattern: /^FrameZoo-(.+)-arm64-mac\.zip$/,
+    blockmapPattern: /^FrameZoo-(.+)-arm64-mac\.zip\.blockmap$/,
   },
   "mac-x64": {
     id: "mac-x64",
@@ -27,11 +27,11 @@ const RELEASE_VARIANTS = {
     description: "Best for Intel Macs",
     feedFileName: "latest-mac.yml",
     downloadPattern: [
-      /^AlphaFlix-(.+)-x64-mac\.dmg$/,
-      /^AlphaFlix-(.+)-x64-mac\.zip$/,
+      /^FrameZoo-(.+)-x64-mac\.dmg$/,
+      /^FrameZoo-(.+)-x64-mac\.zip$/,
     ],
-    artifactPattern: /^AlphaFlix-(.+)-x64-mac\.zip$/,
-    blockmapPattern: /^AlphaFlix-(.+)-x64-mac\.zip\.blockmap$/,
+    artifactPattern: /^FrameZoo-(.+)-x64-mac\.zip$/,
+    blockmapPattern: /^FrameZoo-(.+)-x64-mac\.zip\.blockmap$/,
   },
   "mac-universal": {
     id: "mac-universal",
@@ -41,11 +41,11 @@ const RELEASE_VARIANTS = {
     description: "Works on both Apple Silicon and Intel Macs",
     feedFileName: "latest-mac.yml",
     downloadPattern: [
-      /^AlphaFlix-(.+)-universal-mac\.dmg$/,
-      /^AlphaFlix-(.+)-universal-mac\.zip$/,
+      /^FrameZoo-(.+)-universal-mac\.dmg$/,
+      /^FrameZoo-(.+)-universal-mac\.zip$/,
     ],
-    artifactPattern: /^AlphaFlix-(.+)-universal-mac\.zip$/,
-    blockmapPattern: /^AlphaFlix-(.+)-universal-mac\.zip\.blockmap$/,
+    artifactPattern: /^FrameZoo-(.+)-universal-mac\.zip$/,
+    blockmapPattern: /^FrameZoo-(.+)-universal-mac\.zip\.blockmap$/,
   },
   "win-x64": {
     id: "win-x64",
@@ -54,8 +54,8 @@ const RELEASE_VARIANTS = {
     label: "Windows x64",
     description: "Best for 64-bit Windows PCs",
     feedFileName: "latest.yml",
-    downloadPattern: /^AlphaFlix-(.+)-x64\.exe$/,
-    blockmapPattern: /^AlphaFlix-(.+)-x64\.exe\.blockmap$/,
+    downloadPattern: /^FrameZoo-(.+)-x64\.exe$/,
+    blockmapPattern: /^FrameZoo-(.+)-x64\.exe\.blockmap$/,
   },
   "win-arm64": {
     id: "win-arm64",
@@ -64,8 +64,8 @@ const RELEASE_VARIANTS = {
     label: "Windows ARM64",
     description: "Best for Snapdragon\/ARM Windows PCs",
     feedFileName: "latest.yml",
-    downloadPattern: /^AlphaFlix-(.+)-arm64\.exe$/,
-    blockmapPattern: /^AlphaFlix-(.+)-arm64\.exe\.blockmap$/,
+    downloadPattern: /^FrameZoo-(.+)-arm64\.exe$/,
+    blockmapPattern: /^FrameZoo-(.+)-arm64\.exe\.blockmap$/,
   },
 };
 

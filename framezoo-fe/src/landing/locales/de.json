@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Leistung",
+    "addons": "Ökosystem",
+    "download": "Herunterladen",
+    "language": "Sprache",
+    "addonGuide": "Addon-Anleitung"
+  },
+  "hero": {
+    "eyebrow": "FRAMEZOO DESKTOP / 01",
+    "title": "Schauen Sie besser zu.",
+    "titleAccent": "Auf dem Desktop.",
+    "description": "Native Wiedergabe, schärfere Steuerung und ein ruhigerer Ort für Ihre nächste Uhr.",
+    "primaryCta": "Desktop herunterladen",
+    "secondaryCta": "Erleben Sie die Erfahrung",
+    "imageAlt": "Vorschau der FrameZoo-Desktop-App",
+    "version": "Desktop-Version"
+  },
+  "features": {
+    "performanceTitle": "Ihre Bibliothek, ohne Browsersteuer.",
+    "overviewDescription": "FrameZoo Desktop gibt der Wiedergabe den Raum, den sie braucht: native Leistung, saubere Übergaben und Bedienelemente, die nicht im Weg sind.",
+    "playback": "Native Wiedergabe",
+    "playbackDescription": "Reibungsloses Video mit Medienverarbeitung auf Desktop-Niveau.",
+    "performance": "Ruhige Leistung",
+    "performanceDescription": "Weniger Chrom. Mehr Fokus. Kein Tab-Jonglieren.",
+    "continuity": "Bleiben Sie im Fluss",
+    "continuityDescription": "Machen Sie weiter, durchsuchen Sie und wechseln Sie die Quelle, ohne den Moment zu verlieren.",
+    "ecosystemTitle": "Bereit für das, was als nächstes kommt.",
+    "ecosystemDescription": "Die Desktop-App ist das Herzstück. Add-Ons erweitern die Möglichkeiten, sodass Ihr Setup persönlich bleibt, ohne kompliziert zu werden.",
+    "addonLabel": "ADDON-FERTIG",
+    "addonOne": "Quellanschlüsse",
+    "addonTwo": "Untertitel-Tools",
+    "addonThree": "Community-Erweiterungen",
+    "showcaseTitle": "Der Bildschirm ist das Ziel.",
+    "showcaseDescription": "Eine fokussierte Desktop-Oberfläche zum Entdecken, Abspielen und allem rund um die Geschichte.",
+    "showcaseCaption": "FrameZoo Desktop / Fokusmodus"
+  },
+  "download": {
+    "eyebrow": "WÄHLEN SIE IHREN GEBÄUDE",
+    "title": "Nehmen Sie FrameZoo mit.",
+    "description": "Wählen Sie den Build für Ihre Maschine. Ihr Browser gibt die Empfehlung ab oder zeigt unten alle verfügbaren Optionen an.",
+    "recommended": "Empfohlen",
+    "chooseBuild": "Wählen Sie einen Build",
+    "selected": "Ausgewählt",
+    "download": "Herunterladen",
+    "showAll": "Alle Builds werden angezeigt",
+    "detected": "Auf diesem Gerät erkannt",
+    "loading": "Verfügbare Builds werden geprüft...",
+    "empty": "Es sind noch keine Desktop-Builds veröffentlicht. Schauen Sie bald wieder vorbei.",
+    "error": "Die Desktop-Release-Liste konnte nicht geladen werden.",
+    "retry": "Versuchen Sie es erneut",
+    "noBackend": "Der Download-Dienst ist für diese Bereitstellung nicht konfiguriert.",
+    "version": "Freigeben"
+  },
+  "footer": {
+    "line": "Ein ruhigeres Zuhause für die Geschichten, zu denen Sie immer wieder zurückkehren.",
+    "status": "Desktop-first. Addon-bereit."
+  },
+  "addonGuide": {
+    "eyebrow": "ADDON-PROTOKOLL / ANLEITUNG",
+    "manifestTitle": "Beginnen Sie mit manifest.json",
+    "title": "Erstellen Sie ein Add-on, ohne am App-Prozess teilzunehmen.",
+    "description": "Ein Addon ist ein kleiner HTTP-Dienst. Stellen Sie ein Manifest und die Ressourcen bereit, die Sie benötigen. FrameZoo kümmert sich um den Rest.",
+    "manifestDescription": "Metadaten teilen der App mit, wer Ihr Add-on ist, welche Ressourcen es unterstützt und wo sich sein Symbol befindet.",
+    "resources": {
+      "meta": "Film- oder Serienmetadaten für einen Titel.",
+      "stream": "Torrent, HLS, DASH oder direkte Dateiquellen.",
+      "catalog": "Reihenweise Filme oder Serien zum Entdecken.",
+      "subtitles": "Untertiteldateien mit Sprachbezeichnungen.",
+      "addon_catalog": "Ein Katalog weiterer Addons."
+    },
+    "resourcesDescription": "Implementieren Sie nur die Endpunkte, die Ihr Add-on benötigt. Antworten sind JSON und können in jeder Sprache verfasst werden.",
+    "resourcesTitle": "Wählen Sie die Ressourcen",
+    "runTitle": "Ausführen, testen, installieren",
+    "advancedTitle": "Benötigen Sie einen Node-Helfer?",
+    "steps": [
+      "Stellen Sie /manifest.json und Ihre Ressourcenendpunkte von einem lokalen oder öffentlichen HTTP(S)-Server bereit.",
+      "Testen Sie jeden Endpunkt mit Curl und überprüfen Sie die JSON-Form.",
+      "Fügen Sie die Manifest-URL in FrameZoo Desktop > Add-ons ein."
+    ],
+    "advancedLink": "Öffnen Sie die erweiterte SDK-Referenz",
+    "advancedDescription": "Das Stremio Addon SDK ist optional. Verwenden Sie es, wenn Sie Routing- und Serialisierungshilfen benötigen. Dies ist im Protokoll nicht erforderlich."
+  }
+}

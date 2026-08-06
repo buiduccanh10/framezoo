@@ -39,7 +39,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Betamovie Moonshine alignment service",
+    title="FrameZoo Moonshine alignment service",
     version="1",
     lifespan=lifespan,
 )

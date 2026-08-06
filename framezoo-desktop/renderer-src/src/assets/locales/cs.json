@@ -1,0 +1,1320 @@
+{
+  "actions": {
+    "cancel": "Zrušit",
+    "confirm": "Potvrdit",
+    "copied": "Zkopírováno",
+    "copy": "Zkopírovat"
+  },
+  "addons": {
+    "manager": {
+      "add": "Přidat",
+      "adding": "Přidávání...",
+      "ariaClose": "Zavřete správce doplňků",
+      "ariaManage": "Spravujte doplňky",
+      "createGuideLink": "Jak vytvořit addon",
+      "errorFallback": "Tento doplněk nelze nainstalovat.",
+      "manageListButton": "Správa seznamu doplňků",
+      "subtitle": "Nedoporučujeme přidávat žádné neoficiální nebo nelegální doplňky.",
+      "title": "Desktopové doplňky"
+    },
+    "platforms": {
+      "framezoo": "FrameZoo",
+      "stremio": "Stremio",
+      "supportLabel": "Podporované platformy pro doplňky:",
+      "supported": "Podporované platformy: FrameZoo a Stremio"
+    },
+    "page": {
+      "addAddonButton": "Přidat doplněk",
+      "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
+      "createGuideLink": "Vytvořte průvodce doplňkem",
+      "disabled": "Zakázáno",
+      "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",
+      "enabled": "Povoleno",
+      "installError": "Tento doplněk nelze nainstalovat.",
+      "installedHeading": "Nainstalované doplňky",
+      "processing": "Zpracovává se...",
+      "removeAddon": "Odeberte tento doplněk",
+      "title": "Správce doplňků"
+    },
+    "player": {
+      "chooseAddon": "Vyberte si doplněk",
+      "emptyExplanation": "Není nainstalován ani povolen žádný doplněk. Přidejte adresu URL manifestu, kterou si vyberete v Doplňcích.",
+      "emptyTitle": "Nejsou k dispozici žádné doplňky streamu",
+      "loadingStreams": "Načítání streamů...",
+      "manageAddonsButton": "Správa seznamu doplňků",
+      "noAddonStreams": "Tento doplněk nevrátil žádné streamy.",
+      "noTorrentStreams": "Pro tento doplněk se nevrátily žádné torrentové proudy.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Všechny kvality",
+        "other": "Ostatní"
+      },
+      "sources": "Zdroje",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} streamů",
+      "title": "Desktopové doplňky",
+      "unableToLoad": "Nelze načíst streamy",
+      "viewStreams": "Zobrazit streamy"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "Aktivní",
+      "confirm": "Potvrdit",
+      "customBackend": "Vlastní backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Vyberte, ke kterému backend serveru se chcete připojit",
+      "title": "Vyberte Account Server"
+    },
+    "createAccount": "Ještě nemáte účet? <0>Vytvořte si účet.</0>",
+    "generate": {
+      "custom": "Zvyk",
+      "customPassphraseLabel": "Vlastní přístupová fráze",
+      "customPassphrasePlaceholder": "Zadejte svou vlastní přístupovou frázi",
+      "description": "Vaše přístupová fráze se chová jako vaše přezdívka a heslo. Uchovejte jí v bezpečí, protože jí budete muset zadat, abyste se mohli přihlásit ke svému účtu",
+      "invalidPassphraseCharacters": "Neplatné znaky přístupové fráze. Povolena jsou pouze anglická písmena, číslice 1-10 a normální symboly.",
+      "next": "Uložil jsem si moji přístupovou frázi",
+      "passphraseFrameLabel": "Přístupová fráze",
+      "passphraseTooShort": "Heslo musí mít alespoň 8 znaků.",
+      "title": "Vaše přístupová fráze",
+      "useCustomPassphrase": "Použijte vlastní přístupovou frázi",
+      "usePasskeyInstead": "Místo toho použijte přístupový klíč"
+    },
+    "hasAccount": "Již máte účet? <0> Přihlaste se zde.</0>",
+    "login": {
+      "description": "Zadejte své uživatelské jméno nebo e-mail a heslo pro přihlášení ke svému účtu",
+      "failedToReachServer": "Nepodařilo se připojit k serveru",
+      "identifierLabel": "Uživatelské jméno nebo email",
+      "identifierNotFound": "Uživatelské jméno nebo e-mail nebyl nalezen",
+      "identifierPlaceholder": "Zadejte své uživatelské jméno nebo e-mail",
+      "identifierRequired": "Je vyžadováno uživatelské jméno nebo e-mail",
+      "noBackendUrl": "Žádná koncová adresa URL",
+      "or": "or",
+      "passwordIncorrect": "Heslo je nesprávné",
+      "passwordLabel": "Heslo",
+      "passwordPlaceholder": "Zadejte své heslo",
+      "passwordRequired": "Je vyžadováno heslo",
+      "submit": "Přihlásit",
+      "title": "Přihlaste se ke svému účtu",
+      "usePasskey": "Použijte přístupový klíč",
+      "validationError": "Nesprávná nebo neúplná přístupová fráze"
+    },
+    "register": {
+      "confirmPasswordLabel": "Potvrďte heslo",
+      "confirmPasswordPlaceholder": "Potvrďte své heslo",
+      "emailInvalid": "Zadejte platnou e-mailovou adresu",
+      "emailLabel": "Osobní email",
+      "emailPlaceholder": "Zadejte svůj osobní e-mail",
+      "information": {
+        "color1": "První barva profilu",
+        "color2": "Druhá barva profilu",
+        "header": "Zadejte název pro vaše zařízení a vyberte barvy a ikonu uživatele podle vašeho výběru",
+        "icon": "Ikona uživatele",
+        "next": "Další",
+        "title": "Informace o účtu"
+      },
+      "nicknameLabel": "Přezdívka",
+      "nicknamePlaceholder": "Vyberte si jedinečnou přezdívku",
+      "nicknameTaken": "Přezdívka je již obsazena",
+      "nicknameRequired": "Přezdívka je povinná",
+      "passwordInput": {
+        "description": "Vyberte si přezdívku, osobní e-mail a heslo. Vaše heslo funguje jako bezpečná přístupová fráze, takže si jej zapamatujte!",
+        "title": "Vytvořte si přihlašovací jméno"
+      },
+      "passwordLabel": "Heslo",
+      "passwordMismatch": "Hesla se neshodují",
+      "passwordPlaceholder": "Vytvořte heslo (používá se jako vaše přístupová fráze)",
+      "passwordWeak": "Heslo musí mít alespoň 8 znaků s písmeny a číslicemi"
+    },
+    "trust": {
+      "failed": {
+        "text": "Nastavili jste to správně?",
+        "title": "Selhalo připojení k serveru"
+      },
+      "host": "Připojujete se k <0>{{hostname}}</0> - potvrďte, že mu věříte před vytvořením účtu",
+      "no": "Zpět",
+      "noHost": "Server nebyl nakonfigurován, tudíž si nemůžete vytvořit účet",
+      "noHostTitle": "Server není nakonfigurován!",
+      "title": "Věříte tomuto serveru?",
+      "yes": "Věřím tomuto serveru"
+    },
+    "verify": {
+      "description": "Zadejte prosím svou přístupovou frázi, abyste potvrdili, že jste si ji uložili, a vytvořte si účet",
+      "invalidData": "Data nejsou platná",
+      "noMatch": "Přístupová fráze neodpovídá",
+      "recaptchaFailed": "ReCaptcha ověření se nezdařilo",
+      "register": "Založit účet",
+      "title": "Potvrďte vaši přístupovou frázi"
+    }
+  },
+  "details": {
+    "addToList": "Přidat do seznamu",
+    "airs": "Airs",
+    "collection": {
+      "bookmarkAll": "Přidat do záložek vše",
+      "movie": "Film",
+      "movies": "Filmy",
+      "rating": "Hodnocení",
+      "releaseDate": "Datum vydání",
+      "sortBy": "Seřadit podle"
+    },
+    "endsAt": "Končí v {{time}}",
+    "episode": "Epizoda",
+    "episodeNumber": "Epizoda {{number}}",
+    "episodeReleaseDate": "Datum vydání: {{date}}",
+    "episodeReleaseDateUnknown": "Datum vydání: neznámé",
+    "episodes": "Epizody",
+    "imdb": "Zobrazit na IMDb",
+    "language": "Jazyk:",
+    "play": "Hrát",
+    "rating": "Hodnocení:",
+    "releaseDate": "Datum vydání:",
+    "resume": "Resumé",
+    "runtime": "Doba běhu:",
+    "season": "Sezóna",
+    "specialSeason": "Speciální sezóna",
+    "seasons": "Sezóna/y",
+    "similar": "Podobný",
+    "tmdb": "Zobrazit na TMDB",
+    "trailers": "Přívěsy",
+    "watched": "Zhlédnuto {{watched}} z {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Všechny seznamy filmů",
+    "carousel": {
+      "change": "Přeměna",
+      "more": "Zobrazit více",
+      "today": "Dnes",
+      "thisWeek": "Tento týden",
+      "title": {
+        "4kReleases": "4K vydání",
+        "editorPicksMovies": "Editor vybírá filmy",
+        "editorPicksShows": "Výběr pořadů redaktora",
+        "forYou": "Pro vás",
+        "inCinemas": "V kinech",
+        "latestReleases": "Nejnovější verze",
+        "latestTVReleases": "Nejnovější televizní pořady",
+        "movies": "{{category}} filmy",
+        "moviesOn": "Filmy na {{provider}}",
+        "onTheAir": "On The Air",
+        "popular": "Nejoblíbenější",
+        "recommended": "Protože jste sledovali: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Nejlépe hodnocené",
+        "trending": "Aktuální trendy",
+        "tvshows": "{{category}} pořady",
+        "tvshowsOn": "Pořady na {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Více informací",
+      "playNow": "Hrát hned"
+    },
+    "filters": {
+      "country": "Země"
+    },
+    "page": {
+      "back": "Vraťte se",
+      "loading": "Načítání...",
+      "loadMore": "Načíst více",
+      "title": "Objevte Filmy a TV"
+    },
+    "scrollToTop": "Zpět nahoru",
+    "tabs": {
+      "movies": "Filmy",
+      "top10": "Top 10",
+      "tvshows": "TV pořady"
+    },
+    "viewLists": "Zobrazit všechny seznamy filmů"
+  },
+  "downtimeNotice": {
+    "badge": "Problémy",
+    "goHome": "Jít domů",
+    "message": "FrameZoo má opět problémy s některými poskytovateli, pokud nemůžete najít nebo přehrát pořad, změňte zdroj. Očekávejte, že tato chyba přetrvá po dobu níže.",
+    "title": "Problémy s poskytovatelem"
+  },
+  "errors": {
+    "badge": "Rozbilo se to",
+    "details": "Detaily chyby",
+    "reloadPage": "Znovu načíst stránku",
+    "showError": "Ukázat detaily chyby",
+    "title": "Narazili jsme na chybu!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Zřeknutí odpovědnosti",
+      "disclaimerText": "FrameZoo poskytuje bezpečný, moderní a bezproblémový přehrávač streamů se snadno použitelným rozhraním a vysoce kvalitním přehráváním napříč podporovanými zařízeními. Nehostuje mediální soubory, neprovozuje zdrojový katalog ani nedoporučuje konkrétní doplňky. Volitelné doplňky konfigurují uživatelé, kteří jsou odpovědní za používání zákonných zdrojů."
+    },
+    "links": {
+      "fluxer": "Fluxer",
+      "funding": "Podpořte nás",
+      "github": "GitHub"
+    },
+    "tagline": "Bezpečný, moderní přehrávač streamů pro bezproblémový a vysoce kvalitní zážitek ze sledování."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "Zrušit",
+      "clickToEdit": "Kliknutím na klíčový odznak jej upravíte",
+      "conditions": {
+        "showsOnly": "Pouze ukazuje"
+      },
+      "conflict": "konflikt",
+      "conflicts": "konflikty",
+      "detected": "zjištěno",
+      "editInSettings": "Upravte příkazy klávesnice z nastavení",
+      "groups": {
+        "audioVideo": "Audio & Video",
+        "interface": "Rozhraní",
+        "jumpToPosition": "Přejít na pozici",
+        "subtitlesAccessibility": "Titulky a přístupnost",
+        "videoPlayback": "Přehrávání videa"
+      },
+      "none": "Žádný",
+      "numberKeySeeking": "Číselný klíč hledání pokroku",
+      "numberKeySeekingDescription": "Pomocí číselných kláves 0-9 vyhledejte konkrétní pozice ve videu. 0 přejde na začátek, 1-8 přeskočí na 10%-80% a 9 přejde na 90%.",
+      "pressKey": "Stiskněte klávesu...",
+      "resetAllToDefault": "Obnovit vše na výchozí",
+      "resetToDefault": "Obnovit výchozí",
+      "save": "Uložit",
+      "saveChanges": "Uložit změny",
+      "shortcuts": {
+        "barrelRoll": "Udělejte sudovou roli! 🌀",
+        "closeOverlay": "Zavřít překryvnou/modální vrstvu",
+        "decreaseVolume": "Snížit hlasitost",
+        "increaseVolume": "Zvyšte hlasitost",
+        "jumpTo0": "Přejít na 0 % (začátek)",
+        "jumpTo9": "Přejít na 90 %",
+        "mute": "Ztlumit/zapnout ztlumení",
+        "nextEpisode": "Další epizoda",
+        "playPause": "Přehrát/pozastavit (nebo podržet pro 2x rychlost, je-li povoleno)",
+        "playPauseAlt": "Přehrát/pozastavit",
+        "previousEpisode": "Předchozí epizoda",
+        "randomCaption": "Vyberte náhodný titulek z naposledy použitého jazyka",
+        "skipBackward1": "Přeskočte o 1 sekundu zpět",
+        "skipBackward10": "Přeskočte o 10 sekund zpět",
+        "skipBackward5": "Přeskočte o 5 sekund zpět",
+        "skipForward1": "Přeskočit o 1 sekundu dopředu",
+        "skipForward10": "Přeskočte o 10 sekund vpřed",
+        "skipForward5": "Přeskočte o 5 sekund dopředu",
+        "syncSubtitlesEarlier": "Synchronizovat titulky dříve (-0,5 s)",
+        "syncSubtitlesLater": "Synchronizovat titulky později (+0,5 s)",
+        "previousSubtitleCue": "Předchozí nápověda pro titulky",
+        "nextSubtitleCue": "Další narážka na titulky",
+        "toggleCaptions": "Přepnout titulky",
+        "toggleFullscreen": "Přepnout na celou obrazovku",
+        "toggleNativeSubtitles": "Přepnout nativní titulky"
+      },
+      "subtitle": "Podržením ` tuto nápovědu kdykoli zobrazíte",
+      "title": "Klávesové zkratky"
+    },
+    "name": "FrameZoo",
+    "pages": {
+      "discover": "Objevit",
+      "login": "Přihlásit se",
+      "migration": "Migrovat účet",
+      "pagetitle": "{{title}} – FrameZoo",
+      "register": "Zaregistrovat se",
+      "settings": "Nastavení"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "Zrušit",
+        "description": "Upravit podrobnosti této záložky",
+        "groupsLabel": "Skupiny",
+        "save": "Uložit",
+        "title": "Upravit záložku",
+        "titleLabel": "Titul",
+        "titlePlaceholder": "Zadejte název záložky",
+        "yearLabel": "Rok",
+        "yearPlaceholder": "Zadejte rok pro svou záložku"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "Zatím žádné skupiny",
+          "namePlaceholder": "Název skupiny",
+          "placeholderButton": "Přidat do skupiny",
+          "removeAll": "Odebrat vše",
+          "removeFromGroup": "Odebrat ze skupiny"
+        },
+        "editGroup": {
+          "affectsBookmarks": "To ovlivní {{count}} záložek",
+          "cancel": "Zrušit",
+          "description": "Upravte název a ikonu skupiny záložek",
+          "nameLabel": "Název skupiny",
+          "namePlaceholder": "Zadejte název skupiny",
+          "save": "Uložit",
+          "title": "Upravit skupinu"
+        },
+        "reorder": {
+          "button": "Změnit pořadí",
+          "cancel": "Zrušit",
+          "description": "Přetažením změníte pořadí skupin záložek",
+          "done": "Hotovo",
+          "save": "Uložit",
+          "title": "Upravit pořadí skupin"
+        }
+      },
+      "sectionTitle": "Záložky",
+      "showAll": "Zobrazit vše",
+      "sorting": {
+        "options": {
+          "date": "Výchozí (datum přidání)",
+          "titleAsc": "Titul A-Z",
+          "titleDesc": "Titul Z-A",
+          "yearAsc": "Datum vydání nejstarší-nejnovější",
+          "yearDesc": "Datum vydání nejnovější-nejstarší"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "Pokračujte ve sledování",
+      "sorting": {
+        "options": {
+          "date": "Výchozí (datum přidání)",
+          "titleAsc": "Titul A-Z",
+          "titleDesc": "Titul Z-A",
+          "yearAsc": "Datum vydání nejstarší-nejnovější",
+          "yearDesc": "Datum vydání nejnovější-nejstarší"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "Přestat upravovat"
+    },
+    "search": {
+      "allResults": "To je vše co máme!",
+      "discover": "Objevit",
+      "discoverMore": "Objevte více",
+      "genreFilterAll": "Všechny žánry",
+      "empty": {
+        "default": "Vítejte, zde najdete média ke sledování!",
+        "extra": [
+          "Nic tu není :(",
+          "Tak prázdné...",
+          "Taková prázdnota.",
+          "Ahoj nový uživatel :3"
+        ]
+      },
+      "failed": "Nepodařilo se najít média, zkuste to znovu!",
+      "loading": "Načítání...",
+      "noResults": "Nemohli jsme nic najít!",
+      "placeholder": {
+        "default": "Co si přejete sledovat?",
+        "extra": [
+          "Co chcete objevit?",
+          "Co je na vašem seznamu sledovaných filmů?",
+          "Jaký je váš oblíbený film?",
+          "Jaký je tvůj oblíbený seriál?",
+          "Co je dnes na vašem seznamu sledovaných?",
+          "jaký jsi měl den?",
+          "Škoda, že stránka nikdy nefunguje...",
+          "Není FrameZoo prostě nejlepší?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "Výsledky vyhledávání"
+    },
+    "support": {
+      "complete": "kompletní",
+      "description": "FrameZoo běží se ztrátou a my potřebujeme pomoc, aby byl bez reklam! Pokud rádi používáte FrameZoo, zvažte prosím dar, který nám pomůže pokrýt naše náklady.",
+      "donate": "Darovat",
+      "explanation": "Pokud rozšíření nepoužíváte nebo nemáte nastavené FED API, může být obtížnější najít obsah! Chceme to napravit, ale poskytovat obsah bez drahých serverů je mnohem těžší. Pokud tedy rádi používáte FrameZoo, zvažte prosím darování, které nám pomůže pokrýt naše rostoucí náklady.",
+      "explanation2": "Pokud chcete více informací, přidejte se k nám",
+      "fluxer": "Fluxer",
+      "label": "Financování projektu: ${{current}} / ${{goal}}",
+      "moreInfo": "Více informací",
+      "thankYou": "Děkujeme za vaši podporu!",
+      "title": "FrameZoo potřebuje vaši pomoc!"
+    },
+    "titles": {
+      "69": {
+        "default": "Chystáte se na něco pikantního?",
+        "extra": [
+          "Šťastných 69 dní 😘!"
+        ]
+      },
+      "420": {
+        "default": "Na co byste se chtěli dívat 20. 4.?",
+        "extra": [
+          "Šťastné 4/20 🥳!"
+        ]
+      },
+      "day": {
+        "default": "Na co byste se chtěli dnes odpoledne dívat?",
+        "extra": [
+          "Chceš zažít dobrodružství? Jurský Park je pro tebe."
+        ]
+      },
+      "halloween": {
+        "default": "Na jaký strašidelný film byste se rádi podívali o tomto Halloweenu?",
+        "extra": [
+          "Veselý Halloween! 🎃👻",
+          "Vypískat! 👻",
+          "Trik or treat! 🍬",
+          "Je to Velká dýně, Charlie Brown!"
+        ]
+      },
+      "morning": {
+        "default": "Na co byste se chtěli dnes ráno dívat?",
+        "extra": [
+          "Slyšel jsem, že Před úsvitem je super"
+        ]
+      },
+      "night": {
+        "default": "Na co byste se chtěli dnes večer dívat?",
+        "extra": [
+          "Unaven? Slyšel jsem, že Vymítač ďábla je super."
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "Nedávno sledované",
+      "sectionTitle": "Historie sledování"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopírovat odkaz na sdílení",
+      "create": "Vytvořte seznam",
+      "delete": "Vymazat",
+      "edit": "Upravit",
+      "editItems": "Upravit položky",
+      "open": "OTEVŘENO",
+      "save": "Uložit změny",
+      "saveMembership": "Uložit změny"
+    },
+    "delete": {
+      "confirm": "Smazat „{{name}}“? Toto nelze vrátit zpět."
+    },
+    "empty": {
+      "description": "Vytvořte svůj první seznam a začněte seskupovat tituly.",
+      "title": "Zatím žádné seznamy"
+    },
+    "errors": {
+      "load": "Nepodařilo se načíst vaše seznamy."
+    },
+    "form": {
+      "createDescription": "Vytvořte nový seznam oblíbených položek, přehrání nebo čehokoli jiného, ​​co chcete sdílet.",
+      "createTitle": "Vytvořte seznam",
+      "description": "Popis",
+      "descriptionHelp": "Nepovinná poznámka, která vám pomůže zapamatovat si, co patří do tohoto seznamu.",
+      "descriptionPlaceholder": "K čemu je tento seznam?",
+      "editDescription": "Aktualizujte název, popis nebo viditelnost tohoto seznamu.",
+      "editTitle": "Upravit seznam",
+      "errors": {
+        "nameRequired": "Název seznamu je povinný",
+        "submitFailed": "Seznam se nepodařilo uložit."
+      },
+      "name": "Název seznamu",
+      "namePlaceholder": "Víkendové sci-fi",
+      "public": "Veřejný seznam",
+      "publicHelp": "Tento seznam může zobrazit kdokoli s odkazem."
+    },
+    "items": {
+      "empty": "Tento seznam je prázdný.",
+      "emptyHelp": "Přidejte tituly z libovolného filmu nebo karty show pomocí Přidat do seznamu a poté se sem vraťte a spravujte sestavu."
+    },
+    "meta": {
+      "itemCount": "{{count}} položka",
+      "itemCount_plural": "{{count}} položek",
+      "updatedAt": "Aktualizováno {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Zrušit",
+        "create": "Vytvořte seznam",
+        "save": "Uložit změny"
+      },
+      "description": "Vyberte, které seznamy mají obsahovat {{title}}.",
+      "empty": {
+        "description": "Vytvořte seznam pro uložení tohoto titulu.",
+        "title": "Zatím žádné seznamy"
+      },
+      "errors": {
+        "create": "Seznam se nepodařilo vytvořit.",
+        "save": "Aktualizace členství v seznamu se nezdařila."
+      },
+      "title": "Přidat do seznamu"
+    },
+    "page": {
+      "description": "Vytvářejte oblíbené položky, tematické večery a výběry, které můžete sledovat jako další, které můžete ponechat v soukromí nebo sdílet pomocí odkazu.",
+      "editingHint": "Kliknutím na tlačítko Zavřít na kartě ji odstraníte z tohoto seznamu.",
+      "eyebrow": "Sbírky",
+      "itemsEyebrow": "Tituly v tomto seznamu",
+      "itemsHint": "Chcete-li procházet seznam nalevo, vyberte jej, a když jej chcete vyčistit, použijte režim úprav.",
+      "publicCountPlural": "{{count}} veřejných seznamů",
+      "publicCountSingular": "1 veřejný seznam",
+      "searchEmptyDescription": "Zkuste jiné jméno nebo vymažte vyhledávání.",
+      "searchEmptyTitle": "Žádné odpovídající seznamy",
+      "searchPlaceholder": "Hledat seznamy",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nedávno aktualizováno",
+      "summaryPlural": "{{count}} seznamů",
+      "summarySingular": "1 seznam",
+      "title": "Seznamy"
+    },
+    "public": {
+      "descriptionFallback": "Sdílená sbírka vytvořená v FrameZoo.",
+      "notFoundDescription": "Tento odkaz na sdílení chybí nebo již není dostupný.",
+      "notFoundTitle": "Seznam nenalezen",
+      "pageTitle": "Sdílený seznam",
+      "privateDescription": "Vlastník tento seznam veřejně nesdílí.",
+      "privateTitle": "Tento seznam je soukromý"
+    },
+    "visibility": {
+      "private": "Soukromé",
+      "public": "Veřejnost"
+    }
+  },
+  "media": {
+    "episodeDisplay": "S{{season}} E{{episode}}",
+    "episodeShort": "E",
+    "seasonUnwatched": "Opravdu chcete sezónu označit jako nezhlédnutou?",
+    "seasonWatched": "Opravdu chcete označit sezónu jako sledovanou?",
+    "types": {
+      "movie": "Film",
+      "show": "Seriál"
+    },
+    "unreleased": "Nevydáno"
+  },
+  "migration": {
+    "back": "Vraťte se",
+    "download": {
+      "button": {
+        "download": "Stáhnout data",
+        "home": "Jít domů"
+      },
+      "description": "Tím se stáhne vaše data do vašeho zařízení. Poté jej můžete nahrát na nový server nebo si jej nechat pro úschovu.",
+      "status": {
+        "error": "Stažení dat se nezdařilo. 😿",
+        "success": "Vaše data byla úspěšně stažena! 🎉"
+      },
+      "title": "Stáhnout data"
+    },
+    "loginRequired": "Pro migraci dat musíte být přihlášeni! Pro pokračování se prosím vraťte a přihlaste se.",
+    "preview": {
+      "downloadDescription": "Stáhnout obsahuje:",
+      "items": {
+        "bookmarks": "Média se záložkou",
+        "progress": "Sledujte pokrok",
+        "settings": "Nastavení a předvolby"
+      },
+      "uploadDescription": "Data k nahrání:"
+    },
+    "start": {
+      "explainer": "This will download your data to your device. You can then upload it to the new server or just keep it for safekeeping. Upload your previously exported data file to restore your bookmarks and progress on this account.",
+      "options": {
+        "download": {
+          "action": "Stáhnout data",
+          "description": "Tím se stáhne vaše data do vašeho zařízení. Poté jej můžete nahrát na nový server nebo si jej nechat pro úschovu.",
+          "quality": "Technickější",
+          "title": "Stáhnout data"
+        },
+        "or": "or",
+        "upload": {
+          "action": "Nahrát data",
+          "description": "Nahrajte svůj dříve exportovaný datový soubor, abyste obnovili své záložky a postup na tomto účtu.",
+          "quality": "Obnovit ze zálohy",
+          "title": "Nahrát data"
+        }
+      },
+      "title": "Migrujte svá data"
+    },
+    "upload": {
+      "button": {
+        "home": "Pokračujte domů",
+        "import": "Importujte data",
+        "processing": "Zpracovává se...",
+        "saveLocal": "Uložit lokálně"
+      },
+      "description": "Nahrajte svůj dříve exportovaný datový soubor, abyste obnovili své záložky a postup na tomto účtu.",
+      "exportedOn": "Exportováno dne",
+      "file": {
+        "change": "Změnit soubor",
+        "description": "Vyberte soubor, který chcete nahrát",
+        "select": "Vyberte soubor"
+      },
+      "previewTitle": "Náhled:",
+      "status": {
+        "error": "Nahrání dat se nezdařilo. 😿",
+        "processing": "Zpracování dat...",
+        "success": "Vaše data byla úspěšně nahrána! 🎉",
+        "successLocal": "Vaše data byla uložena lokálně! 🎉"
+      },
+      "title": "Nahrajte data"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "Aktualizujte nyní",
+        "available": "Nová verze aplikace je připravena.",
+        "download": "Stáhnout aktualizaci",
+        "later": "Později",
+        "restart": "Pro aktualizaci restartujte",
+        "updating": "Aktualizace..."
+      },
+      "offline": "Zkontrolujte své internetové připojení"
+    },
+    "download": {
+      "empty": "Zatím nejsou nakonfigurována žádná stahování.",
+      "failed": "Nepodařilo se načíst možnosti stahování.",
+      "label": "Stáhněte si aplikaci",
+      "options": {
+        "mac-arm64": {
+          "description": "Nejlepší pro počítače Mac řady M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Funguje na počítačích Apple Silicon i Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Nejlepší pro Intel Mac",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Nejlepší pro počítače Snapdragon/ARM s Windows",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Nejlepší pro 64bitové počítače se systémem Windows",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "Není nakonfigurována žádná koncová adresa URL."
+    },
+    "install": {
+      "genericGuide": "Váš prohlížeč nepodporuje automatickou výzvu k instalaci PWA.\nStále můžete instalovat pomocí nabídky prohlížeče (například: „Instalovat aplikaci“, „Vytvořit zástupce“ nebo „Přidat do doku/domovské obrazovky“).",
+      "iosSafariGuide": "Instalace FrameZoo jako aplikace:\n\n1. Klepněte na tlačítko Sdílet (čtverec se šipkou).\n2. Zvolte 'Přidat na domovskou obrazovku'.\n3. Klepněte na Přidat."
+    },
+    "menu": {
+      "accountMenu": "Otevřete nabídku účtu",
+      "addons": "Addons",
+      "desktop": "Nastavení aplikace",
+      "logout": "Odhlásit se",
+      "register": "Synchronizovat do Cloudu",
+      "settings": "Nastavení"
+    }
+  },
+  "notFound": {
+    "badge": "Nenalezeno",
+    "goHome": "Zpátky domů",
+    "message": "Dívali jsme se všude: pod koši, ve skříni, za proxy, ale nakonec jsme nemohli najít stránku, kterou hledáte.",
+    "reloadButton": "Zkuste to znovu",
+    "title": "Tuto stránku se nepodařilo najít"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Zrušit"
+    }
+  },
+  "overlays": {
+    "close": "Zavřít"
+  },
+  "player": {
+    "back": {
+      "default": "Zpátky domů",
+      "short": "Zpět"
+    },
+    "casting": {
+      "device": "zařízení",
+      "to": "Odesílání do {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Stahování další paměti RAM...",
+      "2": "Převádění kofeinu na obsah...",
+      "3": "Naučte křečka běhat rychleji...",
+      "4": "Přesvědčit elektrony, aby se pohybovaly rychleji...",
+      "5": "Téměř tam... řekl každý načítací pruh vůbec...",
+      "6": "Hledání dálkového ovládání... počkejte, špatný problém...",
+      "7": "Počítání pozpátku od nekonečna...",
+      "8": "Simulace budoucnosti...",
+      "9": "Sledování videí s kočkami...",
+      "10": "Rozptýlené kočičími GIFy...",
+      "11": "Počkejte prosím, než si stážista doplní kávu...",
+      "12": "Kontrola, zda je zapojen...",
+      "13": "Vypnutí a opětovné zapnutí...",
+      "14": "Nepanikařte...",
+      "15": "Zima se blíží...",
+      "16": "Přihlašování do Skynetu...",
+      "17": "Všechny vaše prohlížeče patří nám...",
+      "18": "Hledáte nekonečný nepravděpodobnostní pohon...",
+      "19": "Objevování nových způsobů, jak vás nechat čekat...",
+      "20": "Váš čas je pro nás velmi důležitý. Počkejte prosím, než vás budeme ignorovat...",
+      "21": "Stále rychlejší než Windows Update...",
+      "22": "Proč si nevezmeš sendvič?"
+    },
+    "menus": {
+      "audio": {
+        "default": "Výchozí"
+      },
+      "episodes": {
+        "button": "Epizody",
+        "emptyState": "V této sezóně nejsou žádné epizody, vraťte se později!",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "Oblíbené",
+        "loadingError": "Chyba při načítání sezóny",
+        "loadingList": "Načítání...",
+        "loadingTitle": "Načítání...",
+        "markAsFavorite": "Označit jako oblíbené",
+        "markAsUnwatched": "Označit jako nesledované",
+        "markAsWatched": "Označit jako sledované",
+        "noFavorites": "Zatím žádné oblíbené epizody. Označte epizody hvězdičkou a přidejte je mezi své oblíbené!",
+        "showLess": "Ukažte méně",
+        "showMore": "Zobrazit více",
+        "specials": "Speciality"
+      },
+      "playback": {
+        "disabled": "(Zakázáno ve skupině sledování)",
+        "speedBoosted": "2x",
+        "speedLabel": "Rychlost přehrávání",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Nastavení přehrávání"
+      },
+      "quality": {
+        "auto": "Auto",
+        "automaticLabel": "Automatická kvalita",
+        "hint": "Chcete-li získat jinou kvalitu, můžete zkusit <0>přepnout zdroj</0>.",
+        "iosNoQuality": "Kvůli omezením definovaným společností Apple není pro tento zdroj v iOS k dispozici výběr kvality. Chcete-li získat jinou kvalitu, můžete zkusit <0>přepnout zdroj</0>.",
+        "title": "Kvalita"
+      },
+      "settings": {
+        "audioItem": "Zvuk",
+        "enableSubtitles": "Zapnout titulky",
+        "playbackItem": "Nastavení přehrávání",
+        "qualityItem": "Kvalita",
+        "sourceItem": "Zdroje videa",
+        "subtitleItem": "Nastavení titulků"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Automatický výběr",
+        "autoSelectDifferentChoice": "Dalším klepnutím automaticky vyberete jiné titulky",
+        "clearSecondary": "Jasné sekundární titulky",
+        "customChoice": "Vybrat titulky ze souboru",
+        "customizeLabel": "Přizpůsobit",
+        "delayEarly": "Viděl titulek",
+        "delayLate": "Slyšel zvuk",
+        "doubleClickToCopy": "Dvojitým kliknutím zkopírujete data titulků",
+        "dropSubtitleFile": "Sem přetáhněte soubor s titulky! >_<",
+        "dualSub": "Duální titulky",
+        "dualSubDesc": "Pro nejlepší synchronizaci vyberte stejný formát (SRT, VTT...) a poskytovatele (OpenSubs...).",
+        "dualSubHint": "Vyberte jazyk pro sekundární titulky (zobrazeno nad primárními)",
+        "embedded": "Vložené",
+        "empty": "Nejsou k tomu poskytovány žádné titulky.",
+        "loadingExternal": "Načítání externích titulků...",
+        "loadingExternalProgress": "Načítání externích titulků... ({{progress}}%)",
+        "matchScoreLabel": "Shoda ~{{score}}%",
+        "notFound": "Vašemu dotazu neodpovídá žádná z dostupných možností",
+        "offChoice": "Vypnuto",
+        "pasteChoice": "Vložte data titulků",
+        "previewLabel": "Náhled titulků:",
+        "primary": "Primární",
+        "refresh": "Obnovit externí titulky",
+        "refreshing": "Osvěžující...",
+        "secondary": "Sekundární",
+        "selectingSecondary": "Výběr sekundárních titulků",
+        "syncSubtitleConfirmTitle": "Synchronizovat titulky s AI?",
+        "syncSubtitleConfirmDescription": "Titulky budou zarovnány AI tak, aby odpovídaly videu.",
+        "syncSubtitleSupportedLanguages": "Podporované jazyky zvuku",
+        "syncSubtitleSuccess": "Titulky byly úspěšně synchronizovány",
+        "syncSubtitleFailed": "Titulky nelze synchronizovat",
+        "syncSubtitleOpen": "Synchronizujte titulky s AI",
+        "syncSubtitleAction": "Synchronizovat",
+        "settings": {
+          "backlink": "Vlastní titulky",
+          "delay": "Posunutí titulků",
+          "fixCapitals": "Opravit velká písmena",
+          "autoSync": "Automatická synchronizace titulků",
+          "syncingProgress": "Synchronizace... ({{progress}}%) (tento proces může trvat 2–3 minuty)",
+          "syncApplied": "Byla použita automatická synchronizace.",
+          "timeline": "Časová osa titulků",
+          "timelineHint": "Vyberte cue titulků, které chcete synchronizovat s aktuálním časem videa.",
+          "timelineEmpty": "Nejsou k dispozici žádné titulky."
+        },
+        "title": "Titulky",
+        "transcriptChoice": "Přepis",
+        "searchPlaceholder": "Hledat titulky nebo dialogy...",
+        "delayLabel": "Offset titulků",
+        "seekMode": "Hledat",
+        "syncMode": "Synchronizovat",
+        "syncOffset": "Posun: {{delay}}s",
+        "syncAction": "Synchronizovat",
+        "nowPlaying": "Nyní se hraje",
+        "syncDescription": "Klikněte na dialog odpovídající aktuální scéně videa nebo upravte offset:",
+        "resetDelay": "Resetovat",
+        "translate": {
+          "title": "Přeložit z {{language}}"
+        },
+        "unknownLanguage": "Neznámé",
+        "useNativeSubtitles": "Nativní video titulky",
+        "useNativeSubtitlesDescription": "Vysílejte titulky pro nativní celou obrazovku a PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Sledujte Party"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Chybí povolení",
+        "button": "Použít rozšíření",
+        "text": "Máte rozšíření, ale k jeho použití potřebujeme vaše povolení.",
+        "title": "Konfigurace rozšíření"
+      },
+      "failed": {
+        "badge": "Neúspěšný",
+        "homeButton": "Jít domů",
+        "text": "Nelze načíst metadata média z TMDB. Zkontrolujte, zda není TMDB nefunkční nebo blokovaný na vašem internetovém připojení.",
+        "title": "Načtení metadat se nezdařilo"
+      },
+      "legal": {
+        "badge": "Odstraněno",
+        "text": "Toto média není dostupné, kvůli oznámení o zastavení šíření nebo nároku na autorská práva.",
+        "title": "Média byla odstraněna"
+      },
+      "notFound": {
+        "badge": "Nenalezeno",
+        "homeButton": "Zpátky domů",
+        "text": "Nemohli jsme najít média o které jste požádali. Buď bylo odstraňeno, nebo jste manipulovali s URL.",
+        "title": "Nemohli jsme najít Vaše média."
+      }
+    },
+    "nextEpisode": {
+      "next": "Další epizoda",
+      "nextSeason": "Příští sezónu",
+      "replay": "Přehrát znovu"
+    },
+    "playbackError": {
+      "autoResumeText": "Při pokusu o přehrání média došlo k chybě 😖. Automaticky zkoušet jiné zdroje...",
+      "badge": "Chyba přehrávání",
+      "copyDebugInfo": "Zkopírujte informace o ladění",
+      "debugInfo": "Další podrobnosti naleznete v konzole.",
+      "errors": {
+        "errorAborted": "Načítání média bylo přerušeno uživatelem.",
+        "errorDecode": "Navzdory tomu, že bylo dříve určeno jako použitelné došlo při pokusu o dekódování média k chybě.",
+        "errorGenericMedia": "Nastala chyba neznámého média.",
+        "errorNetwork": "Nastala nějaká chyba síťě, která zabránila načtení média, přestože bylo předtím dostupné.",
+        "errorNotSupported": "Médium nebo poskytovatel média není podporovaný."
+      },
+      "homeButton": "Jít domů",
+      "resumeButton": "Zkuste další zdroje",
+      "text": "Nastala chyba při přehrávání média. Prosíme skuste to znovu.",
+      "title": "Video se nepodařilo přehrát!"
+    },
+    "resume": {
+      "description": "Tato epizoda má {{percentage}}% zhlédnutí",
+      "restart": "Restartujte",
+      "resume": "Resumé",
+      "title": "Pokračovat ve sledování?"
+    },
+    "segment": {
+      "credits": "Kredity",
+      "intro": "Úvod",
+      "recap": "Shrnout"
+    },
+    "skipTime": {
+      "confidence": "důvěra",
+      "connectApiKeyMessage": "Chcete-li odeslat nové segmenty, zadejte svůj klíč API TheIntroDB v nastavení připojení",
+      "credits": "Přeskočit kredity",
+      "endOfVideo": "Konec",
+      "endsAt": "Končí v {{time}}",
+      "submissionUnavailableMessage": "Odeslání segmentu není na tomto serveru dostupné.",
+      "feedback": {
+        "modal": {
+          "cancel": "Zrušit",
+          "description": "Přispějte do TheIntroDB odesláním přesných časových razítek segmentů. Všechny příspěvky jsou před zveřejněním akceptovány komunitou.",
+          "endTimeLabel": "Konec (y)",
+          "error": {
+            "endTime": "Je vyžadován čas ukončení",
+            "mediaInfo": "Informace o médiích nejsou k dispozici",
+            "segment": "Není vybrán žádný segment",
+            "startTime": "Je vyžadován čas zahájení",
+            "submission": "Chyba při odesílání časových razítek",
+            "tidbKey": "TIDB API klíč není nastaven"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minimálně 5 s, pokud je zadán konec. Může se rozšířit až na konec média.",
+              "endDesc": "Volitelné – ponechte prázdné, pokud titulky sahají až na konec souboru.",
+              "excludeDesc": "Vyloučit střední nebo post-kreditové scény; pouze hlavní kreditní role.",
+              "startDesc": "Povinné – když začínají závěrečné titulky (např. když se objeví text prvního kreditu).",
+              "whenToTitle": "Průvodce časovými razítky kreditů:"
+            },
+            "durationDesc": "Min 5s, pokud je zadán konec",
+            "durationLabel": "Trvání:",
+            "endDesc": "Volitelné – prázdné, pokud sahá až do konce",
+            "endLabel": "Konec:",
+            "excludeDesc": "Post-kreditní scény",
+            "excludeLabel": "Vyloučit:",
+            "intro": {
+              "durationDesc": "Většina intro má 30–90 sekund. Minimálně 5 s, pokud je nastaven začátek i konec.",
+              "endDesc": "Povinné – když intro končí (obvykle když začíná titulní karta nebo hlavní epizoda).",
+              "excludeDesc": "Nezahrnujte studené otevření nebo scény před úvodem; pouze hlavní titulní sekvence.",
+              "startDesc": "Volitelné – ponechte prázdné, pokud úvod začíná na začátku epizody.",
+              "whenToTitle": "Úvodní průvodce časovými razítky:"
+            },
+            "preview": {
+              "durationDesc": "Náhled se liší v délce. Minimálně 5s.",
+              "endDesc": "Volitelné – ponechte prázdné, pokud náhled končí na konci média.",
+              "excludeDesc": "Náhled je obvykle 15–90 sekund na konci epizody a představuje náhled další epizody.",
+              "startDesc": "Povinné – při spuštění náhledu (např. když se zobrazí text náhledu).",
+              "whenToTitle": "Náhled průvodce časovými razítky:"
+            },
+            "recap": {
+              "durationDesc": "Recaps vary in length. Minimálně 5 s, pokud je nastaven začátek i konec.",
+              "endDesc": "Povinné – když rekapitulace končí a začíná nový obsah.",
+              "excludeDesc": "Pouze segment „dříve zapnutý“ nebo rekapitulace; nezahrnujte úvodní nebo nové scény.",
+              "startDesc": "Volitelné – ponechte prázdné, pokud rekapitulace začíná na začátku epizody.",
+              "whenToTitle": "Průvodce rekapitulací časových razítek:"
+            },
+            "startDesc": "Povinné – když začnou přicházet kredity",
+            "startLabel": "Start:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 nebo 210 (nechte prázdné pro konec média)",
+              "intro": "3:30 nebo 210 (povinné)",
+              "preview": "3:30 nebo 210 (nechte prázdné pro konec média)",
+              "recap": "3:30 nebo 210 (povinné)"
+            },
+            "start": {
+              "credits": "2:30 nebo 150 (povinné)",
+              "intro": "2:30 nebo 150 (nechte prázdné pro začátek na začátku)",
+              "preview": "2:30 nebo 150 (povinné)",
+              "recap": "2:30 nebo 150 (nechte prázdné pro začátek na začátku)"
+            }
+          },
+          "segmentType": "Typ segmentu",
+          "startTimeLabel": "Start (s)",
+          "submit": "Předložit",
+          "submitting": "Odesílání...",
+          "success": {
+            "title": "Odeslání bylo úspěšné! Díky!"
+          },
+          "title": "Odešlete časová razítka do TheIntroDB",
+          "types": {
+            "credits": "Kredity",
+            "intro": "Úvod",
+            "preview": "Náhled",
+            "recap": "Shrnout"
+          },
+          "whenToDesc": "Zadejte časová razítka v sekundách (např. 150), formát mm:ss (např. 2:30) nebo hh:mm:ss (např. 1:42:20). Formát za vás automaticky převedeme.",
+          "whenToTitle": "Průvodce časovými razítky:"
+        },
+        "title": "Bylo toto přeskočení správné?"
+      },
+      "intro": "Přeskočit úvod",
+      "noSegments": "Nejsou k dispozici žádné segmenty přeskočení",
+      "recap": "Přeskočit rekapitulaci",
+      "skipSegments": "Přeskočit segmenty",
+      "startsAt": "Začíná v {{time}}",
+      "submissions": "Počet příspěvků: {{count}}",
+      "submitSegment": "Odeslat segment",
+      "timeUnknown": "Čas neznámý"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} zbývá • Dokončeno v {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Soubor: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrentová síť",
+      "networkStatus": "Stav sítě torrent",
+      "peers": "Ostatní: {{count}}",
+      "progress": "Průběh: {{progress}}%",
+      "speed": "Rychlost: {{speed}}",
+      "states": {
+        "buffering": "Ukládání do vyrovnávací paměti",
+        "downloading": "Stahování",
+        "error": "Chyba",
+        "ready": "Připraveno",
+        "starting": "Spuštění",
+        "stopped": "Zastaveno"
+      },
+      "unknown": "Neznámý"
+    }
+  },
+  "screens": {
+    "loadingApp": "Načítání aplikace...",
+    "loadingUser": "Načítání uživatelského profilu...",
+    "loadingUserError": {
+      "disconectCancel": "Zrušit",
+      "disconnectConfirm": "Potvrdit",
+      "disconnectMessage": "Odpojte se od serveru účtu a udržujte nejnovější místní data. Změny a sledovaný obsah se nebudou synchronizovat, dokud se znovu nepřihlásíte.",
+      "disconnectTitle": "Odpojit od backendu?",
+      "logout": "Odhlásit se",
+      "reload": "Znovu načíst",
+      "reset": "Resetovat vlastní server",
+      "text": "Nepodařilo se načíst váš uživatelský profil. Zkuste prosím znovu načíst stránku.",
+      "textWithReset": "Nepodařilo se načíst váš uživatelský profil pomocí aktuálního vlastního serveru. Zkuste resetovat vlastní server a poté znovu načíst."
+    },
+    "migration": {
+      "failed": "Migrace dat se nezdařila.",
+      "inProgress": "Počkejte prosím, migrujeme vaše data. Nemělo by to trvat dlouho."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "Upravit",
+        "logoutButton": "Odhlásit se",
+        "nicknameLabel": "Přezdívka",
+        "nicknamePlaceholder": "Zadejte svou přezdívku"
+      },
+      "actions": {
+        "delete": {
+          "button": "Smazat účet",
+          "confirmButton": "Potvrdit smazání",
+          "confirmDescription": "Jste si jisti, že chcete smazat váš účet? Všechna data budou ztracena!",
+          "confirmTitle": "Potvrdit smazání",
+          "text": "Tato akce je nevratná. Všechna data budou smazána a nic nebude možné obnovit.",
+          "title": "Smazat účet"
+        },
+        "logoutAllDevices": {
+          "button": "Odhlásit se ze všech zařízení",
+          "text": "Toto vás odhlásí ze všech zařízení připojených k vašemu účtu.",
+          "title": "Ukončit všechny relace"
+        },
+        "migration": {
+          "button": "Migrovat účet",
+          "text": "Migrujte svůj účet na nový server nebo si stáhněte data.",
+          "title": "Migrace účtu"
+        },
+        "title": "Akce"
+      },
+      "devices": {
+        "deviceNameLabel": "Název zařízení",
+        "failed": "Načtení relací se nezdařilo",
+        "lastActive": "Poslední aktivní: {{date}}",
+        "loggedInAt": "Přihlášen na: {{date}}",
+        "removeDevice": "Odstranit",
+        "title": "Zařízení",
+        "unknownDevice": "Neznámé zařízení, při dešifrování názvu došlo k chybě"
+      },
+      "profile": {
+        "finish": "Dokončit",
+        "firstColor": "První barva profilu",
+        "secondColor": "Druhá barva profilu",
+        "title": "Upravit profilovou fotografii",
+        "userIcon": "Ikona uživatele"
+      },
+      "register": {
+        "cta": "Začněte",
+        "text": "Sdílejte průběh sledování mezi zařízeními a udržujte je synchronizovaná.",
+        "title": "Synchronizace do Cloudu"
+      },
+      "title": "Účet"
+    },
+    "all": {
+      "title": "Všechna nastavení"
+    },
+    "appearance": {
+      "activeTheme": "Aktivní",
+      "customParts": {
+        "primary": "Primární",
+        "secondary": "Sekundární",
+        "tertiary": "Terciární"
+      },
+      "options": {
+        "carouselView": "Pohled na kolotoč",
+        "carouselViewDescription": "Zobrazte aktuálně sledované sekce a uložte je do záložek jako karusely namísto mřížky. Ve výchozím nastavení zakázáno.",
+        "carouselViewLabel": "Pohled na kolotoč",
+        "discover": "Sekce Objevit",
+        "discoverDescription": "Zobrazte sekci Objevit na domovské stránce pod médiem uloženým v záložkách. Ve výchozím nastavení povoleno.",
+        "discoverLabel": "Sekce Objevit",
+        "featured": "Doporučená média",
+        "featuredDescription": "Zobrazte v horní části své domovské stránky kolotoč doporučených filmů a pořadů! Ve výchozím nastavení zakázáno.",
+        "featuredLabel": "Doporučená média",
+        "forceCompactEpisodeView": "Vynutit kompaktní zobrazení epizody",
+        "forceCompactEpisodeViewDescription": "Přinuťte kolotoč epizod v přehrávači, aby používal „klasický“ kompaktní vertikální pohled. Ve výchozím nastavení zakázáno.",
+        "forceCompactEpisodeViewLabel": "Kompaktní epizody",
+        "homeSectionOrder": "Pořadí domovské sekce",
+        "homeSectionOrderDescription": "Přetažením změníte pořadí sekcí sledování a záložek na své domovské stránce. Pořadí skupiny lze upravit z domovské stránky.",
+        "homeSectionOrderGroups": "Změnit pořadí skupin záložek",
+        "logos": "Obrázková loga",
+        "logosDescription": "Zobrazit loga obrázků namísto textových názvů v modální a doporučené části. Ve výchozím nastavení povoleno.",
+        "logosLabel": "Obrázková loga",
+        "logosNotice": "Většinu času jsou loga pouze v angličtině. Jiné jazyky mohou chtít toto zakázat!",
+        "minimalCards": "Minimální karty",
+        "minimalCardsDescription": "Skrýt textový obsah (název, typ, rok) na paměťových kartách a zobrazit pouze obrázek plakátu.",
+        "minimalCardsLabel": "Minimální karty",
+        "modal": "Podrobnosti modální",
+        "modalDescription": "Když kliknete na paměťovou kartu, místo přechodu na stránku sledování videa zobrazíte modální podrobnosti. Pro přívěs je vyžadován Proxy nebo Extension. Ve výchozím nastavení zakázáno.",
+        "modalLabel": "Podrobnosti modální",
+        "pauseOverlay": "Pozastavit překryvnou vrstvu",
+        "pauseOverlayDescription": "Zobrazit překryvný název/logo a popis, když je přehrávač pozastavený a nečinný.",
+        "pauseOverlayLabel": "Pozastavit překryvnou vrstvu"
+      },
+      "sections": {
+        "bookmarks": "Záložky",
+        "watching": "Právě sleduje"
+      },
+      "themes": {
+        "acid": "Kyselina",
+        "autumn": "Podzim",
+        "blue": "Modrá",
+        "christmas": "Vánoce",
+        "classic": "Klasický",
+        "cobalt": "Kobalt",
+        "custom": "Zvyk",
+        "default": "Výchozí",
+        "ember": "Ember",
+        "forest": "Les",
+        "frost": "Mráz",
+        "grape": "Hroznová",
+        "gray": "Šedá",
+        "green": "Zelený",
+        "hulk": "Vrak",
+        "mocha": "Moka",
+        "noir": "Noir",
+        "pink": "Růžový",
+        "popsicle": "Nanuk",
+        "red": "Červená",
+        "spark": "Jiskra",
+        "spiderman": "Spiderman",
+        "teal": "Modrozelená",
+        "wolverine": "Wolverine"
+      },
+      "title": "Vzhled"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "Změna backend serveru vás odhlásí. Pokračovat?",
+        "changeWarningTitle": "Změňte server backend",
+        "error": "Chyba při připojování k backendu",
+        "notice": "Váš účet se NEsynchronizuje mezi backendy, takže si pamatujte, který používáte!"
+      },
+      "tidb": {
+        "description": "Přispějte do TheIntroDB tím, že zanecháte zpětnou vazbu na segmenty úvod, rekapitulace a poděkování. <0>Další informace.</0>",
+        "tokenLabel": "Klíč API"
+      },
+      "title": "Spojení"
+    },
+    "preferences": {
+      "autoplay": "Automatické přehrávání",
+      "autoplayDescription": "Automaticky přehrát další epizodu v sérii po dosažení konce.",
+      "autoplayLabel": "Automatické přehrávání",
+      "autoResumeOnPlaybackError": "Automatické obnovení při chybě přehrávání",
+      "autoResumeOnPlaybackErrorDescription": "Automaticky pokračovat v hledání dalších zdrojů, když aktuální zdroj během přehrávání selže. Pokud je zakázáno, zobrazí se chybová obrazovka s možností ručního obnovení.",
+      "autoResumeOnPlaybackErrorLabel": "Automatické obnovení při chybě přehrávání",
+      "autoSkipSegments": "Automatické přeskakování segmentů",
+      "autoSkipSegmentsDescription": "Když je tato možnost povolena, automaticky přeskakuje úvod, rekapitulaci a náhled segmentů při sledování.",
+      "autoSkipSegmentsLabel": "Automatické přeskakování segmentů",
+      "doubleClickToSeek": "Dvojitým klepnutím vyhledáte",
+      "doubleClickToSeekDescription": "Dvojitým klepnutím na levou nebo pravou stranu přehrávače přejdete o 10 sekund dopředu nebo dozadu.",
+      "doubleClickToSeekLabel": "Povolte vyhledávání dvojitým klepnutím",
+      "keyboardShortcuts": "Klávesové zkratky",
+      "keyboardShortcutsDescription": "Přizpůsobte si klávesové zkratky pro aplikaci. Podržením ` tuto nápovědu kdykoli zobrazíte",
+      "keyboardShortcutsLabel": "Přizpůsobte si klávesové zkratky",
+      "language": "Jazyk aplikace",
+      "languageDescription": "Jazyk aplikován na celou aplikaci.",
+      "lowPerformanceMode": "Nízký výkon/režim šířky pásma",
+      "lowPerformanceModeDescription": "Optimalizuje aplikaci pro pomalejší připojení a zařízení vypnutím funkcí náročných na šířku pásma. Tento režim snižuje spotřebu dat a zlepšuje výkon při zachování základní funkce vyhledávání a sledování.",
+      "lowPerformanceModeLabel": "Režim nízkého výkonu",
+      "showLess": "Ukažte méně",
+      "showMore": "Zobrazit více",
+      "skipCredits": "Přeskočit závěrečné titulky",
+      "skipCreditsDescription": "Je-li povoleno, automaticky přehraje další epizodu na 99% dokončení, aby se přeskočily závěrečné titulky. Je-li zakázáno, počkejte, dokud nebude epizoda zcela dokončena.",
+      "skipCreditsLabel": "Přeskočit závěrečné titulky",
+      "thumbnail": "Generovat miniatury",
+      "thumbnailDescription": "Videa většinou nemají miniatury. Toto nastavení můžete povolit, ale mohou zpomalit vaše video.",
+      "thumbnailLabel": "Generovat miniatury",
+      "title": "Preference"
+    },
+    "reset": "Resetovat",
+    "save": "Uložit",
+    "search": {
+      "placeholder": "Nastavení vyhledávání..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "Verze",
+        "notLoggedIn": "Nejste přihlášen",
+        "checkForUpdates": "Zkontrolujte aktualizace",
+        "upToDate": "Momentálně používáte nejnovější verzi"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "Zakázání rozmazání pozadí titulků může vyřešit některé problémy s blikáním",
+      "backgroundBlurEnabledLabel": "Rozostření pozadí",
+      "backgroundBlurLabel": "Rozostření pozadí",
+      "backgroundLabel": "Neprůhlednost pozadí",
+      "BorderThicknessLabel": "Tloušťka okraje",
+      "colorLabel": "Barva",
+      "high": "Vysoký",
+      "low": "Výchozí",
+      "previewQuote": "Nesmím se bát. Strach zabíjí myšlení.",
+      "textBoldLabel": "Tučný text",
+      "textSizeLabel": "Velikost textu",
+      "textStyle": {
+        "Border": "Pohraniční",
+        "default": "Výchozí",
+        "depressed": "Depresivní",
+        "dropShadow": "Vržený stín",
+        "raised": "Zvednutý",
+        "title": "Styl textu"
+      },
+      "title": "Titulky",
+      "verticalPositionLabel": "Vertikální poloha"
+    },
+    "unsaved": "Máte neuložené změny"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Akční & Dobrodružné",
+      "10765": "Sci-Fi & Fantasy"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "Před hostitelem o {{seconds}} sekund",
+    "alone": "Sám",
+    "behindHost": "Za hostitelem o {{seconds}} sekund",
+    "cancel": "Zrušit",
+    "connectedAsGuest": "Připojeno ke sledování večírku jako host",
+    "contentMismatch": "Nelze se připojit ke sledování: Obsah neodpovídá obsahu hostitele.",
+    "copyCode": "Kliknutím zkopírujete",
+    "emptyRoom": "V této místnosti zatím nikdo není",
+    "enterCodeOrLink": "Zadejte odkaz na sdílený večírek nebo kód pokoje",
+    "episodeMismatch": "Nelze se připojit ke sledování: Sledujete jinou epizodu než moderátor.",
+    "guestFallback": "Host",
+    "hosting": "Hosting",
+    "hostParty": "Uspořádejte Watch Party",
+    "invalidRoom": "K této místnosti se nelze připojit",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Připojte se",
+    "joinParty": "Připojte se k Watch Party",
+    "leaveWatchParty": "Opustit Watch Party",
+    "linkCopied": "Zkopírováno!",
+    "noHost": "Na této hlídce není žádný hostitel",
+    "save": "Uložit",
+    "shareCode": "Sdílejte tento kód s přáteli (kliknutím zkopírujte odkaz)",
+    "showStatusOverlay": "Zobrazit překryvnou vrstvu stavu",
+    "status": {
+      "inSync": "Synchronizováno",
+      "outOfSync": "Nesynchronizováno"
+    },
+    "syncing": "Synchronizace...",
+    "validating": "Ověřování hodinek...",
+    "viewers": "Diváci ({{count}})",
+    "watching": "Sledování",
+    "withCount": "S {{count}} dalšími",
+    "you": "Vy"
+  },
+  "toasts": {
+    "linkCopied": "Odkaz zkopírován do schránky!",
+    "loginSuccess": "Úspěšně přihlášen!",
+    "logoutSuccess": "Úspěšně odhlášeno!",
+    "registerSuccess": "Úspěšně zaregistrováno!"
+  }
+}

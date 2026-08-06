@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Výkon",
+    "addons": "Ekosystém",
+    "download": "Stáhnout",
+    "language": "Jazyk",
+    "addonGuide": "Průvodce addony"
+  },
+  "hero": {
+    "eyebrow": "DESKTOP FRAMEZOO / 01",
+    "title": "Sledujte lépe.",
+    "titleAccent": "Na ploše.",
+    "description": "Nativní přehrávání, ostřejší ovládání a klidnější místo pro vaše další hodinky.",
+    "primaryCta": "Stáhnout desktop",
+    "secondaryCta": "Podívejte se na zážitek",
+    "imageAlt": "Náhled desktopové aplikace FrameZoo",
+    "version": "Desktopová verze"
+  },
+  "features": {
+    "performanceTitle": "Vaše knihovna bez daně z prohlížeče.",
+    "overviewDescription": "FrameZoo Desktop poskytuje přehrávání prostor, který potřebuje: nativní výkon, čisté předávání a ovládací prvky, které nepřekáží.",
+    "playback": "Nativní přehrávání",
+    "playbackDescription": "Plynulé video se zpracováním médií na úrovni stolního počítače.",
+    "performance": "Tichý výkon",
+    "performanceDescription": "Méně chromu. Více soustředění. Žádné žonglování s kartami.",
+    "continuity": "Udržujte svůj tok",
+    "continuityDescription": "Obnovte, procházejte a přepínejte zdroje bez ztráty okamžiku.",
+    "ecosystemTitle": "Připraveni na to, co přijde dál.",
+    "ecosystemDescription": "Jádrem je desktopová aplikace. Doplňky rozšiřují okraje, takže vaše nastavení může zůstat osobní, aniž by se komplikovalo.",
+    "addonLabel": "PŘIPRAVENO PŘIDÁNÍ",
+    "addonOne": "Zdrojové konektory",
+    "addonTwo": "Nástroje pro titulky",
+    "addonThree": "Rozšíření komunity",
+    "showcaseTitle": "Obrazovka je cíl.",
+    "showcaseDescription": "Zaměřený povrch plochy pro objevování, přehrávání a vše kolem příběhu.",
+    "showcaseCaption": "FrameZoo Desktop / Režim zaostření"
+  },
+  "download": {
+    "eyebrow": "VYBERTE SI SVOU STAVBU",
+    "title": "Vezměte FrameZoo s sebou.",
+    "description": "Vyberte sestavení pro váš stroj. Váš prohlížeč doporučí nebo odhalí všechny dostupné možnosti níže.",
+    "recommended": "Doporučeno",
+    "chooseBuild": "Vyberte sestavení",
+    "selected": "Vybraný",
+    "download": "Stáhnout",
+    "showAll": "Jsou zobrazeny všechny sestavení",
+    "detected": "Zjištěno na tomto zařízení",
+    "loading": "Kontrola dostupných sestavení...",
+    "empty": "Zatím nejsou publikovány žádné sestavení pro stolní počítače. Vraťte se brzy.",
+    "error": "Nelze načíst seznam verzí pro stolní počítače.",
+    "retry": "Zkuste to znovu",
+    "noBackend": "Služba stahování není pro toto nasazení nakonfigurována.",
+    "version": "Uvolnění"
+  },
+  "footer": {
+    "line": "Tišší domov pro příběhy, ke kterým se stále vracíte.",
+    "status": "Desktop-first. Addon připraven."
+  },
+  "addonGuide": {
+    "description": "Addon je malá služba HTTP. Podávejte manifest a zdroje, které potřebujete; FrameZoo se postará o zbytek.",
+    "manifestTitle": "Začněte souborem manifest.json",
+    "manifestDescription": "Metadata řeknou aplikaci, kdo je váš doplněk, jaké zdroje podporuje a kde se nachází jeho ikona.",
+    "resourcesTitle": "Vyberte zdroje",
+    "title": "Vytvořte doplněk, aniž byste se připojili k procesu aplikace.",
+    "eyebrow": "PŘIDAT PROTOKOL / PRŮVODCE",
+    "resources": {
+      "stream": "Torrent, HLS, DASH nebo přímé zdroje souborů.",
+      "meta": "Metadata filmu nebo seriálu pro titul.",
+      "catalog": "Řady filmů nebo seriálů pro objevování.",
+      "subtitles": "Soubory titulků s jazykovými štítky.",
+      "addon_catalog": "Katalog dalších doplňků."
+    },
+    "resourcesDescription": "Implementujte pouze koncové body, které váš doplněk potřebuje. Odpovědi jsou JSON a lze je psát v jakémkoli jazyce.",
+    "runTitle": "Spustit, otestovat, nainstalovat",
+    "advancedTitle": "Potřebujete pomocníka Node?",
+    "steps": [
+      "Obsluhujte /manifest.json a své koncové body prostředků z místního nebo veřejného serveru HTTP(S).",
+      "Otestujte každý koncový bod pomocí zvlnění a ověřte tvar JSON.",
+      "Vložte adresu URL manifestu do FrameZoo Desktop > Addons."
+    ],
+    "advancedDescription": "Sada Stremio Addon SDK je volitelná. Použijte jej, pokud chcete pomocníky pro směrování a serializaci; protokol to nevyžaduje.",
+    "advancedLink": "Otevřete pokročilou referenci SDK"
+  }
+}
