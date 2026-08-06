@@ -1,0 +1,1320 @@
+{
+  "actions": {
+    "cancel": "Avbryt",
+    "confirm": "Godkänn",
+    "copied": "Kopierad",
+    "copy": "Kopiera"
+  },
+  "addons": {
+    "manager": {
+      "add": "Tillägga",
+      "adding": "Lägger till...",
+      "ariaClose": "Stäng tilläggshanteraren",
+      "ariaManage": "Hantera tillägg",
+      "createGuideLink": "Hur man skapar ett tillägg",
+      "errorFallback": "Det går inte att installera detta tillägg.",
+      "manageListButton": "Hantera tilläggslista",
+      "subtitle": "Vi rekommenderar inte att du lägger till några inofficiella eller olagliga tillägg.",
+      "title": "Skrivbordstillägg"
+    },
+    "platforms": {
+      "framezoo": "FrameZoo",
+      "stremio": "Stremio",
+      "supportLabel": "Plattformar som stöds för tillägg:",
+      "supported": "Plattformar som stöds: FrameZoo och Stremio"
+    },
+    "page": {
+      "addAddonButton": "Lägg till addon",
+      "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
+      "createGuideLink": "Skapa tilläggsguide",
+      "disabled": "Inaktiverad",
+      "emptyInstalled": "Inga tillägg installerade i systemet ännu.",
+      "enabled": "Aktiverad",
+      "installError": "Det går inte att installera detta tillägg.",
+      "installedHeading": "Installerade tillägg",
+      "processing": "Bearbetar...",
+      "removeAddon": "Ta bort detta tillägg",
+      "title": "Tilläggshanterare"
+    },
+    "player": {
+      "chooseAddon": "Välj ett tillägg",
+      "emptyExplanation": "Inget tillägg är installerat eller aktiverat. Lägg till en manifest-URL du väljer i tillägg.",
+      "emptyTitle": "Inga stream-tillägg tillgängliga",
+      "loadingStreams": "Laddar strömmar...",
+      "manageAddonsButton": "Hantera tilläggslista",
+      "noAddonStreams": "Inga strömmar returnerades av detta tillägg.",
+      "noTorrentStreams": "Inga torrentströmmar returnerade för detta tillägg.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Alla kvaliteter",
+        "other": "Andra"
+      },
+      "sources": "Källor",
+      "streamCount": "{{count}} stream",
+      "streamCount_plural": "{{count}} strömmar",
+      "title": "Skrivbordstillägg",
+      "unableToLoad": "Det gick inte att ladda strömmar",
+      "viewStreams": "Visa strömmar"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "Aktiv",
+      "confirm": "Bekräfta",
+      "customBackend": "Anpassad backend",
+      "customBackendPlaceholder": "https://",
+      "description": "Välj vilken backend-server du vill ansluta till",
+      "title": "Välj Kontoserver"
+    },
+    "createAccount": "Har du inget konto ännu? <0>Skapa ett konto.</0>",
+    "generate": {
+      "custom": "Anpassad",
+      "customPassphraseLabel": "Anpassad Lösenfras",
+      "customPassphrasePlaceholder": "Ange din anpassade lösenfras",
+      "description": "Din lösenfras fungerar som ditt användarnamn och lösenord. Se till att hålla den säker eftersom du behöver ange den för att logga in på ditt konto. <bold>Förlora INTE din lösenfras!</bold>",
+      "invalidPassphraseCharacters": "Ogiltiga tecken i lösenfrasen. Endast engelska bokstäver, siffrorna 1–10 och vanliga symboler är tillåtna.",
+      "next": "Jag har sparat mitt lösenord",
+      "passphraseFrameLabel": "Lösenfras",
+      "passphraseTooShort": "Lösenfras måste vara minst 8 tecken lång.",
+      "title": "Ditt lösenord",
+      "useCustomPassphrase": "Använd Anpassad Lösenfras",
+      "usePasskeyInstead": "Använd lösenord istället"
+    },
+    "hasAccount": "Har redan ett konto? <0>Logga in här.</0>",
+    "login": {
+      "description": "Ange ditt användarnamn eller e-postadress och lösenord för att logga in på ditt konto",
+      "failedToReachServer": "Det gick inte att nå servern",
+      "identifierLabel": "Användarnamn eller e-post",
+      "identifierNotFound": "Användarnamn eller e-postadress hittades inte",
+      "identifierPlaceholder": "Ange ditt användarnamn eller e-postadress",
+      "identifierRequired": "Användarnamn eller e-postadress krävs",
+      "noBackendUrl": "Ingen backend-URL",
+      "or": "or",
+      "passwordIncorrect": "Lösenordet är felaktigt",
+      "passwordLabel": "Lösenord",
+      "passwordPlaceholder": "Ange ditt lösenord",
+      "passwordRequired": "Lösenord krävs",
+      "submit": "Logga in",
+      "title": "Logga in på ditt konto",
+      "usePasskey": "Använd lösenord",
+      "validationError": "Felaktigt eller ofullständigt lösenord"
+    },
+    "register": {
+      "confirmPasswordLabel": "Bekräfta lösenord",
+      "confirmPasswordPlaceholder": "Bekräfta ditt lösenord",
+      "emailInvalid": "Ange en giltig e-postadress",
+      "emailLabel": "Personlig e-post",
+      "emailPlaceholder": "Ange din personliga e-postadress",
+      "information": {
+        "color1": "Profilfärg ett",
+        "color2": "Profilfärg två",
+        "header": "Ange ett namn för din enhet och välj färger samt ett användarikon efter eget val",
+        "icon": "Användarikon",
+        "next": "Nästa",
+        "title": "Kontoinformation"
+      },
+      "nicknameLabel": "Smeknamn",
+      "nicknamePlaceholder": "Välj ett unikt smeknamn",
+      "nicknameTaken": "Smeknamn har redan tagits",
+      "nicknameRequired": "Smeknamn krävs",
+      "passwordInput": {
+        "description": "Välj ett smeknamn, personlig e-postadress och lösenord. Ditt lösenord fungerar som en säker lösenordsfras, så se till att du kommer ihåg det!",
+        "title": "Skapa din inloggning"
+      },
+      "passwordLabel": "Lösenord",
+      "passwordMismatch": "Lösenord stämmer inte överens",
+      "passwordPlaceholder": "Skapa ett lösenord (används som din lösenordsfras)",
+      "passwordWeak": "Lösenordet måste bestå av minst 8 tecken med bokstäver och siffror"
+    },
+    "trust": {
+      "failed": {
+        "text": "Har du konfigurerat den korrekt?",
+        "title": "Kunde inte nå servern"
+      },
+      "host": "Du ansluter till <0>{{hostname}}</0> - bekräfta att du litar på den innan du skapar ett konto",
+      "no": "Gå tillbaka",
+      "noHost": "Servern har inte blivit inställd, därför kan du inte skapa ett konto",
+      "noHostTitle": "Server inte inställd!",
+      "title": "Litar du på denna server?",
+      "yes": "Jag litar på denna server"
+    },
+    "verify": {
+      "description": "Ange ditt lösenord igen för att bekräfta att du har sparat det och skapa ditt konto",
+      "invalidData": "Data är inte giltig",
+      "noMatch": "Lösenorden matchar inte",
+      "recaptchaFailed": "ReCaptcha validering misslyckades",
+      "register": "Skapa konto",
+      "title": "Bekräfta ditt lösenord"
+    }
+  },
+  "details": {
+    "addToList": "Lägg till i listan",
+    "airs": "Sänds",
+    "collection": {
+      "bookmarkAll": "Bokmärk alla",
+      "movie": "Film",
+      "movies": "Filmer",
+      "rating": "Gradering",
+      "releaseDate": "Releasedatum",
+      "sortBy": "Sortera efter"
+    },
+    "endsAt": "Slutar på {{time}}",
+    "episode": "Avsnitt",
+    "episodeNumber": "Avsnitt {{number}}",
+    "episodeReleaseDate": "Utgivningsdatum: {{date}}",
+    "episodeReleaseDateUnknown": "Releasedatum: Okänt",
+    "episodes": "Avsnitt",
+    "imdb": "Visa på IMDb",
+    "language": "Språk:",
+    "play": "Spela upp",
+    "rating": "Betyg:",
+    "releaseDate": "Lanseringsdatum:",
+    "resume": "Återuppta",
+    "runtime": "Uppspelningstid:",
+    "season": "Säsong",
+    "specialSeason": "Specialsäsong",
+    "seasons": "Säsong/er",
+    "similar": "Liknande",
+    "tmdb": "Visa på TMDB",
+    "trailers": "Släpvagnar",
+    "watched": "Såg {{watched}} av {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Alla filmlistor",
+    "carousel": {
+      "change": "Ändra",
+      "more": "Visa mer",
+      "today": "I dag",
+      "thisWeek": "Denna vecka",
+      "title": {
+        "4kReleases": "4K Releaserna",
+        "editorPicksMovies": "Redaktören väljer filmer",
+        "editorPicksShows": "Redaktören väljer program",
+        "forYou": "För dig",
+        "inCinemas": "På biografer",
+        "latestReleases": "Senaste releaserna",
+        "latestTVReleases": "Senaste TV Serier",
+        "movies": "{{category}} Filmer",
+        "moviesOn": "Filmer på {{provider}}",
+        "onTheAir": "I sändning",
+        "popular": "Mest populära",
+        "recommended": "Eftersom du tittade på: {{title}}",
+        "top10": "Topp 10",
+        "topRated": "Topprankad",
+        "trending": "Trendigt nu",
+        "tvshows": "{{category}} Program",
+        "tvshowsOn": "Program på {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Mer info",
+      "playNow": "Spela nu"
+    },
+    "filters": {
+      "country": "Land"
+    },
+    "page": {
+      "back": "Gå tillbaka",
+      "loading": "Belastning...",
+      "loadMore": "Ladda mer",
+      "title": "Upptäck filmer och tv"
+    },
+    "scrollToTop": "Tillbaka till toppen",
+    "tabs": {
+      "movies": "Filmer",
+      "top10": "Topp 10",
+      "tvshows": "TV-program"
+    },
+    "viewLists": "Visa alla filmlistor"
+  },
+  "downtimeNotice": {
+    "badge": "Problem",
+    "goHome": "Gå hem",
+    "message": "FrameZoo upplever återigen problem med vissa leverantörer. Om du inte kan hitta eller spela upp ett program, byt källa. Förvänta dig att detta fel kvarstår under de tider som anges nedan.",
+    "title": "Leverantörs-problem"
+  },
+  "errors": {
+    "badge": "Något gick fel",
+    "details": "Felinformation",
+    "reloadPage": "Ladda om sidan",
+    "showError": "Visa felinformation",
+    "title": "Vi stötte på ett fel!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Friskriver sig från ansvar",
+      "disclaimerText": "FrameZoo tillhandahåller en säker, modern och sömlös streamspelare med ett lättanvänt gränssnitt och högkvalitativ uppspelning över enheter som stöds. Det är inte värd för mediafiler, driver inte en källkatalog eller rekommenderar specifika tillägg. Valfria tillägg konfigureras av användare som är ansvariga för att använda lagliga källor."
+    },
+    "links": {
+      "fluxer": "Fluxer",
+      "funding": "Stöd oss",
+      "github": "GitHub"
+    },
+    "tagline": "En säker, modern stream-spelare för en sömlös, högkvalitativ tittarupplevelse."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "Avboka",
+      "clickToEdit": "Klicka på en nyckelbricka för att redigera den",
+      "conditions": {
+        "showsOnly": "Visar endast"
+      },
+      "conflict": "konflikt",
+      "conflicts": "konflikter",
+      "detected": "upptäckt",
+      "editInSettings": "Redigera tangentbordskommandon från inställningar",
+      "groups": {
+        "audioVideo": "Ljud & Video",
+        "interface": "Gränssnitt",
+        "jumpToPosition": "Hoppa till position",
+        "subtitlesAccessibility": "Undertexter och tillgänglighet",
+        "videoPlayback": "Videouppspelning"
+      },
+      "none": "Ingen",
+      "numberKeySeeking": "Nummernyckelframsteg söker",
+      "numberKeySeekingDescription": "Använd sifferknapparna 0-9 för att söka till specifika positioner i videon. 0 går till början, 1-8 hoppar till 10%-80% och 9 går till 90%.",
+      "pressKey": "Tryck på en tangent...",
+      "resetAllToDefault": "Återställ alla till standard",
+      "resetToDefault": "Återställ till standard",
+      "save": "Spara",
+      "saveChanges": "Spara ändringar",
+      "shortcuts": {
+        "barrelRoll": "Gör en fatrulle! 🌀",
+        "closeOverlay": "Stäng överlägg/modal",
+        "decreaseVolume": "Minska volymen",
+        "increaseVolume": "Öka volymen",
+        "jumpTo0": "Hoppa till 0 % (början)",
+        "jumpTo9": "Hoppa till 90 %",
+        "mute": "Stäng av/slå på ljudet",
+        "nextEpisode": "Nästa avsnitt",
+        "playPause": "Spela/pausa (eller håll för 2x hastighet när aktiverat)",
+        "playPauseAlt": "Spela/pausa",
+        "previousEpisode": "Föregående avsnitt",
+        "randomCaption": "Välj slumpmässig bildtext från senast använda språk",
+        "skipBackward1": "Hoppa bakåt 1 sekund",
+        "skipBackward10": "Hoppa bakåt 10 sekunder",
+        "skipBackward5": "Hoppa bakåt 5 sekunder",
+        "skipForward1": "Hoppa framåt 1 sekund",
+        "skipForward10": "Hoppa framåt 10 sekunder",
+        "skipForward5": "Hoppa framåt 5 sekunder",
+        "syncSubtitlesEarlier": "Synkronisera undertexter tidigare (-0,5s)",
+        "syncSubtitlesLater": "Synkronisera undertexter senare (+0,5s)",
+        "previousSubtitleCue": "Föregående undertextsignal",
+        "nextSubtitleCue": "Nästa undertextsignal",
+        "toggleCaptions": "Växla bildtexter",
+        "toggleFullscreen": "Växla helskärm",
+        "toggleNativeSubtitles": "Växla inbyggda undertexter"
+      },
+      "subtitle": "Håll ` för att visa denna hjälp när som helst",
+      "title": "Kortkommandon"
+    },
+    "name": "FrameZoo",
+    "pages": {
+      "discover": "Upptäck",
+      "login": "Logga in",
+      "migration": "Migrera Konto",
+      "pagetitle": "{{title}} - FrameZoo",
+      "register": "Registrera",
+      "settings": "Inställningar"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "Avboka",
+        "description": "Redigera informationen för detta bokmärke",
+        "groupsLabel": "Grupper",
+        "save": "Spara",
+        "title": "Redigera bokmärke",
+        "titleLabel": "Titel",
+        "titlePlaceholder": "Ange en titel för ditt bokmärke",
+        "yearLabel": "År",
+        "yearPlaceholder": "Ange ett årtal för ditt bokmärke"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "Inga grupper än",
+          "namePlaceholder": "Gruppnamn",
+          "placeholderButton": "Lägg till i grupp",
+          "removeAll": "Ta bort alla",
+          "removeFromGroup": "Ta bort från grupp"
+        },
+        "editGroup": {
+          "affectsBookmarks": "Detta kommer att påverka {{count}} bokmärken",
+          "cancel": "Avboka",
+          "description": "Redigera namnet och ikonen för din bokmärkesgrupp",
+          "nameLabel": "Gruppnamn",
+          "namePlaceholder": "Ange ett namn för din grupp",
+          "save": "Spara",
+          "title": "Redigera grupp"
+        },
+        "reorder": {
+          "button": "Omordna",
+          "cancel": "Avbryt",
+          "description": "Dra och släpp för att omordna på dina bokmärkesgrupper",
+          "done": "Klar",
+          "save": "Spara",
+          "title": "Ändra Grupp Ordning"
+        }
+      },
+      "sectionTitle": "Bokmärken",
+      "showAll": "Visa alla",
+      "sorting": {
+        "options": {
+          "date": "Standard (datum tillagt)",
+          "titleAsc": "Titel A-Z",
+          "titleDesc": "Titel Z-A",
+          "yearAsc": "Utgivningsdatum Äldst-nyast",
+          "yearDesc": "Utgivningsdatum Nyaste-äldst"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "Fortsätt titta...",
+      "sorting": {
+        "options": {
+          "date": "Standard (datum tillagt)",
+          "titleAsc": "Titel A-Z",
+          "titleDesc": "Titel Z-A",
+          "yearAsc": "Utgivningsdatum Äldst-nyast",
+          "yearDesc": "Utgivningsdatum Nyaste-äldst"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "Sluta redigera"
+    },
+    "search": {
+      "allResults": "Det är allt vi har!",
+      "discover": "Utforska",
+      "discoverMore": "Upptäck mer",
+      "genreFilterAll": "Alla genrer",
+      "empty": {
+        "default": "Välkommen, hitta media att titta på här!",
+        "extra": [
+          "Det är inget här :(",
+          "Så tomt...",
+          "Så mycket tomhet.",
+          "Hej nya användare :3"
+        ]
+      },
+      "failed": "Misslyckades med att hitta media, försök igen!",
+      "loading": "Laddar...",
+      "noResults": "Vi kunde inte hitta någonting :(",
+      "placeholder": {
+        "default": "Vad vill du titta på?",
+        "extra": [
+          "Vad har du lust med?",
+          "Ska vi radera din webbläsarhistorik?",
+          "Vad vill du streama?",
+          "FrameZoo är den bästa sidan någonsin!",
+          "Vad är på din titta-lista idag?",
+          "Hur var din dag?",
+          "Ingen fara, sidan fungerar tydligen aldrig…",
+          "Är inte FrameZoo bara det bästa?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "Sökresultat"
+    },
+    "support": {
+      "complete": "komplett",
+      "description": "FrameZoo drivs med förlust och vi behöver hjälp med att hålla det annonsfritt! Om du gillar att använda FrameZoo, överväg att donera för att hjälpa oss att täcka våra kostnader.",
+      "donate": "Donera",
+      "explanation": "Om du inte använder tillägget eller inte har FED API konfigurerat kan det vara svårare att hitta innehåll! Vi vill fixa detta, men det är mycket svårare att tillhandahålla innehåll utan dyra servrar. Så snälla, om du gillar att använda FrameZoo, överväg att donera för att hjälpa oss att täcka våra växande kostnader.",
+      "explanation2": "Om du vill ha mer information, vänligen gå med i vår",
+      "fluxer": "Fluxer",
+      "label": "Projektfinansiering: ${{current}} / ${{goal}}",
+      "moreInfo": "Mer info",
+      "thankYou": "Tack för ditt stöd!",
+      "title": "FrameZoo behöver din hjälp!"
+    },
+    "titles": {
+      "69": {
+        "default": "Sugen på något hett?",
+        "extra": [
+          "Glad 69 dag 😘!"
+        ]
+      },
+      "420": {
+        "default": "Vad vill du titta denna 4/20?",
+        "extra": [
+          "Glad 4/20 🥳!"
+        ]
+      },
+      "day": {
+        "default": "Vad vill du titta på i eftermiddag?",
+        "extra": [
+          "Viva la FrameZoo!"
+        ]
+      },
+      "halloween": {
+        "default": "Vilken läskig film skulle du vilja se denna Halloween?",
+        "extra": [
+          "Glad Halloween! 🎃👻",
+          "Bua! 👻",
+          "Trick or treat! 🍬",
+          "Det är den stora pumpan, Charlie Brown!"
+        ]
+      },
+      "morning": {
+        "default": "Vad vill du titta på den här morgonen?",
+        "extra": [
+          "Jag hör att Before Sunrise är bra"
+        ]
+      },
+      "night": {
+        "default": "Vad vill du titta på ikväll?",
+        "extra": [
+          "Trött? Jag hör att The Exorcist är bra."
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "Nyligen sett",
+      "sectionTitle": "Titta på Historia"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Kopiera delningslänk",
+      "create": "Skapa lista",
+      "delete": "Radera",
+      "edit": "Redigera",
+      "editItems": "Redigera objekt",
+      "open": "Öppna",
+      "save": "Spara ändringar",
+      "saveMembership": "Spara ändringar"
+    },
+    "delete": {
+      "confirm": "Ta bort \"{{name}}\"? Detta kan inte ångras."
+    },
+    "empty": {
+      "description": "Skapa din första lista för att börja gruppera titlar.",
+      "title": "Inga listor ännu"
+    },
+    "errors": {
+      "load": "Det gick inte att läsa in dina listor."
+    },
+    "form": {
+      "createDescription": "Starta en ny lista för favoriter, omvisningar eller något annat du vill dela.",
+      "createTitle": "Skapa lista",
+      "description": "Beskrivning",
+      "descriptionHelp": "Valfri notering som hjälper dig att komma ihåg vad som hör till den här listan.",
+      "descriptionPlaceholder": "Vad är den här listan till för?",
+      "editDescription": "Uppdatera namn, beskrivning eller synlighet för den här listan.",
+      "editTitle": "Redigera lista",
+      "errors": {
+        "nameRequired": "Listnamn krävs",
+        "submitFailed": "Det gick inte att spara listan."
+      },
+      "name": "Listans namn",
+      "namePlaceholder": "Helgens sci-fi",
+      "public": "Offentlig lista",
+      "publicHelp": "Alla som har länken kan se den här listan."
+    },
+    "items": {
+      "empty": "Den här listan är tom.",
+      "emptyHelp": "Lägg till titlar från valfri film eller visa kort med Lägg till i lista och kom sedan tillbaka hit för att hantera sortimentet."
+    },
+    "meta": {
+      "itemCount": "{{count}} objekt",
+      "itemCount_plural": "{{count}} objekt",
+      "updatedAt": "Uppdaterad {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Avboka",
+        "create": "Skapa lista",
+        "save": "Spara ändringar"
+      },
+      "description": "Välj vilka listor som ska innehålla {{title}}.",
+      "empty": {
+        "description": "Skapa en lista för att spara denna titel.",
+        "title": "Inga listor ännu"
+      },
+      "errors": {
+        "create": "Det gick inte att skapa listan.",
+        "save": "Det gick inte att uppdatera listmedlemskapet."
+      },
+      "title": "Lägg till i listan"
+    },
+    "page": {
+      "description": "Skapa favoriter, temakvällar och se-nästa-val som du kan hålla privat eller dela med en länk.",
+      "editingHint": "Klicka på stängknappen på ett kort för att ta bort det från den här listan.",
+      "eyebrow": "Samlingar",
+      "itemsEyebrow": "Titlar i denna lista",
+      "itemsHint": "Välj en lista till vänster för att bläddra i den och använd sedan redigeringsläget när du vill rensa upp den.",
+      "publicCountPlural": "{{count}} offentliga listor",
+      "publicCountSingular": "1 offentlig lista",
+      "searchEmptyDescription": "Försök med ett annat namn eller rensa sökningen.",
+      "searchEmptyTitle": "Inga matchande listor",
+      "searchPlaceholder": "Sök listor",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Nyligen uppdaterad",
+      "summaryPlural": "{{count}} listor",
+      "summarySingular": "1 lista",
+      "title": "Listor"
+    },
+    "public": {
+      "descriptionFallback": "En delad samling kurerad i FrameZoo.",
+      "notFoundDescription": "Denna delningslänk saknas eller är inte längre tillgänglig.",
+      "notFoundTitle": "Listan hittades inte",
+      "pageTitle": "Delad lista",
+      "privateDescription": "Ägaren har inte delat den här listan offentligt.",
+      "privateTitle": "Denna lista är privat"
+    },
+    "visibility": {
+      "private": "Privat",
+      "public": "Offentlig"
+    }
+  },
+  "media": {
+    "episodeDisplay": "S{{season}} E{{episode}}",
+    "episodeShort": "A",
+    "seasonUnwatched": "Är du säker du vill markera säsongen som otittad?",
+    "seasonWatched": "Är du säker du vill markera säsongen som tittad?",
+    "types": {
+      "movie": "Film",
+      "show": "Serie"
+    },
+    "unreleased": "O-släppt"
+  },
+  "migration": {
+    "back": "Gå tillbaks",
+    "download": {
+      "button": {
+        "download": "Ladda ned data",
+        "home": "Gå hem"
+      },
+      "description": "Detta kommer att ladda ner dina data till din enhet. Du kan sedan ladda upp dem till den nya servern eller bara behålla dem som säkerhetskopia.",
+      "status": {
+        "error": "Misslyckades att ladda ned din data. 😿",
+        "success": "Din data har laddats ned lyckat! 🎉"
+      },
+      "title": "Ladda ned data"
+    },
+    "loginRequired": "Du måste vara inloggad för att migrera din data! Vänligen gå tillbaka och logga in för att fortsätta.",
+    "preview": {
+      "downloadDescription": "Nedladdningen inkluderar:",
+      "items": {
+        "bookmarks": "Bokmärkt media",
+        "progress": "Se framstegen",
+        "settings": "Inställningar och inställningar"
+      },
+      "uploadDescription": "Data att ladda upp:"
+    },
+    "start": {
+      "explainer": "Detta kommer att ladda ner dina data till din enhet. Du kan sedan ladda upp dem till den nya servern eller bara behålla dem som säkerhetskopia. Ladda upp din tidigare exporterade datafil för att återställa dina bokmärken och framsteg på detta konto.",
+      "options": {
+        "download": {
+          "action": "Ladda ned data",
+          "description": "Detta kommer att ladda ner dina data till din enhet. Du kan sedan ladda upp dem till den nya servern eller bara behålla dem som säkerhetskopia.",
+          "quality": "Mer tekniskt",
+          "title": "Ladda ned data"
+        },
+        "or": "eller",
+        "upload": {
+          "action": "Ladda upp Data",
+          "description": "Ladda upp din tidigare exporterade datafil för att återställa dina bokmärken och framsteg på detta konto.",
+          "quality": "Återställ från säkerhetskopia",
+          "title": "Ladda upp Data"
+        }
+      },
+      "title": "Migrera din data"
+    },
+    "upload": {
+      "button": {
+        "home": "fortsätt hem",
+        "import": "Importera data",
+        "processing": "Bearbetar...",
+        "saveLocal": "Spara lokalt"
+      },
+      "description": "Ladda upp din tidigare exporterade datafil för att återställa dina bokmärken och framsteg på detta konto.",
+      "exportedOn": "Exporterad på",
+      "file": {
+        "change": "Ändra fil",
+        "description": "Välj filen du vill ladda upp",
+        "select": "Välj fil"
+      },
+      "previewTitle": "Förhandsvisning:",
+      "status": {
+        "error": "Misslyckades att ladda upp din data. 😿",
+        "processing": "Bearbetar data…",
+        "success": "Dina data har laddats upp lyckat! 🎉",
+        "successLocal": "Din data har sparats lokalt! 🎉"
+      },
+      "title": "Ladda upp data"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "Uppdatera nu",
+        "available": "En ny appversion är klar.",
+        "download": "Ladda ner uppdatering",
+        "later": "Senare",
+        "restart": "Starta om för att uppdatera",
+        "updating": "Uppdaterar..."
+      },
+      "offline": "Kontrollera din internetanslutning, tokiga gås! 🦢"
+    },
+    "download": {
+      "empty": "Inga nedladdningar är konfigurerade än.",
+      "failed": "Det gick inte att ladda nedladdningsalternativ.",
+      "label": "Ladda ner app",
+      "options": {
+        "mac-arm64": {
+          "description": "Bäst för Mac-datorer i M-serien",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Fungerar på både Apple Silicon och Intel Macs",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Bäst för Intel Mac-datorer",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Bäst för Snapdragon/ARM Windows-datorer",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Bäst för 64-bitars Windows-datorer",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "Ingen backend-URL är konfigurerad."
+    },
+    "install": {
+      "genericGuide": "Din webbläsare stöder inte en automatisk PWA-installationsuppmaning.\nDu kan fortfarande installera med hjälp av webbläsarmenyn (till exempel: 'Installera app', 'Skapa genväg' eller 'Lägg till i docka/startskärm').",
+      "iosSafariGuide": "Så här installerar du FrameZoo som en app:\n\n1. Tryck på knappen Dela (fyrkant med en pil).\n2. Välj \"Lägg till på startskärmen\".\n3. Tryck på Lägg till."
+    },
+    "menu": {
+      "accountMenu": "Öppna kontomenyn",
+      "addons": "Tillägg",
+      "desktop": "Appinställningar",
+      "logout": "Logga ut",
+      "register": "Synkronisera till molnet",
+      "settings": "Inställningar"
+    }
+  },
+  "notFound": {
+    "badge": "Ej hittad",
+    "goHome": "Tillbaka till startsidan",
+    "message": "Vi letade överallt: under soptunnorna, i garderoben, bakom proxy men kunde slutligen inte hitta sidan du letar efter. ",
+    "reloadButton": "Försök igen",
+    "title": "Kunde inte hitta den sidan"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Avbryt"
+    }
+  },
+  "overlays": {
+    "close": "Stäng"
+  },
+  "player": {
+    "back": {
+      "default": "Tillbaka till startsidan",
+      "short": "Tillbaka"
+    },
+    "casting": {
+      "device": "anordning",
+      "to": "Castar till {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Laddar ner mer RAM...",
+      "2": "Konverterar koffein till innehåll...",
+      "3": "Att lära hamstern att springa snabbare...",
+      "4": "Övertyga elektroner att röra sig snabbare...",
+      "5": "Nästan framme... sa varje laddningsstång någonsin...",
+      "6": "Hittar fjärrkontrollen... vänta, fel problem...",
+      "7": "Räknar baklänges från oändligheten...",
+      "8": "Simulerar framtiden...",
+      "9": "Tittar på kattfilmer...",
+      "10": "Distraherad av katt-gifs...",
+      "11": "Vänta medan praktikanten fyller på sitt kaffe...",
+      "12": "Kontrollerar om den är ansluten...",
+      "13": "Stänger av och sätter på den igen...",
+      "14": "Få inte panik...",
+      "15": "Vintern kommer...",
+      "16": "Loggar in på Skynet...",
+      "17": "Alla dina webbläsare tillhör oss...",
+      "18": "Letar efter oändlig osannolikhet...",
+      "19": "Upptäcker nya sätt att få dig att vänta...",
+      "20": "Din tid är mycket viktig för oss. Vänta medan vi ignorerar dig...",
+      "21": "Fortfarande snabbare än Windows Update...",
+      "22": "Varför tar du inte en smörgås?"
+    },
+    "menus": {
+      "audio": {
+        "default": "Standard"
+      },
+      "episodes": {
+        "button": "Avsnitt",
+        "emptyState": "Det finns inga avsnitt i denna säsong, kom tillbaka senare!",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "Favoriter",
+        "loadingError": "Fel vid laddning av säsong",
+        "loadingList": "Laddar...",
+        "loadingTitle": "Laddar...",
+        "markAsFavorite": "Markera som favorit",
+        "markAsUnwatched": "Markera som inte sedd",
+        "markAsWatched": "Markera som sedd",
+        "noFavorites": "Inga favoritavsnitt ännu. Stjärna avsnitt för att lägga till dem i dina favoriter!",
+        "showLess": "Visa mindre",
+        "showMore": "Visa mer",
+        "specials": "Specialerbjudanden"
+      },
+      "playback": {
+        "disabled": "(Inaktiverat i tittarparty)",
+        "speedBoosted": "Uppspelningshastighet boostad till 2x",
+        "speedLabel": "Uppspelningshastighet",
+        "speedUnboosted": "Uppspelningshastighet återställd till {{speed}}x",
+        "title": "Uppspelningsinställningar"
+      },
+      "quality": {
+        "auto": "Bil",
+        "automaticLabel": "Automatisk kvalitet",
+        "hint": "Du kan prova att <0>byta källa</0> för att få olika kvalitetsval.",
+        "iosNoQuality": "På grund av Apple-definierade begränsningar är kvalitetsval inte tillgängligt på iOS för denna källa. Du kan prova att <0>byta till en annan källa</0> för att få olika kvalitetsval.",
+        "title": "Kvalitet"
+      },
+      "settings": {
+        "audioItem": "Ljud",
+        "enableSubtitles": "Aktivera Undertexter",
+        "playbackItem": "Uppspelningsinställningar",
+        "qualityItem": "Kvalitet",
+        "sourceItem": "Videokällor",
+        "subtitleItem": "Undertexter"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Autoval",
+        "autoSelectDifferentChoice": "Tryck igen för att automatiskt välja annan undertext",
+        "clearSecondary": "Rensa sekundär undertext",
+        "customChoice": "Släpp eller ladda upp fil",
+        "customizeLabel": "Anpassa",
+        "delayEarly": "Såg bildtext",
+        "delayLate": "Hörde ljud",
+        "doubleClickToCopy": "Dubbelklicka för att kopiera undertextdata",
+        "dropSubtitleFile": "Släpp undertextsfil här! >_<",
+        "dualSub": "Dubbla undertexter",
+        "dualSubDesc": "Välj samma format (SRT, VTT...) och leverantör (OpenSubs...) för bästa synkronisering",
+        "dualSubHint": "Välj ett språk för den sekundära undertexten (visas ovan primär)",
+        "embedded": "Inbäddad",
+        "empty": "Det finns inga tillhandahållna undertexter för detta.",
+        "loadingExternal": "Laddar externa undertexter...",
+        "loadingExternalProgress": "Laddar externa undertexter... ({{progress}}%)",
+        "matchScoreLabel": "Matcha ~{{score}}%",
+        "notFound": "Ingen av de tillgängliga alternativen matchar din sökning",
+        "offChoice": "Av",
+        "pasteChoice": "Klistra in undertextdata",
+        "previewLabel": "Förhandsvisning av undertexter:",
+        "primary": "Primär",
+        "refresh": "Uppdatera externa undertexter",
+        "refreshing": "Uppdaterar...",
+        "secondary": "Sekundär",
+        "selectingSecondary": "Väljer sekundär undertext",
+        "syncSubtitleConfirmTitle": "Synkronisera undertext med AI?",
+        "syncSubtitleConfirmDescription": "Undertexter kommer att anpassas av AI för att matcha videon.",
+        "syncSubtitleSupportedLanguages": "Ljudspråk som stöds",
+        "syncSubtitleSuccess": "Undertexten har synkroniserats",
+        "syncSubtitleFailed": "Det gick inte att synkronisera undertexten",
+        "syncSubtitleOpen": "Synkronisera undertext med AI",
+        "syncSubtitleAction": "Synkronisera",
+        "settings": {
+          "backlink": "Anpassade undertexter",
+          "delay": "Undertexts fördrivning",
+          "fixCapitals": "Reparera kapitalisering",
+          "autoSync": "Autosynkronisera undertexter",
+          "syncingProgress": "Synkronisera... ({{progress}}%) (denna process kan ta 2-3 minuter)",
+          "syncApplied": "Automatisk synkronisering tillämpas.",
+          "timeline": "Undertext tidslinje",
+          "timelineHint": "Välj en undertextsignal för att synkronisera den med den aktuella videotiden.",
+          "timelineEmpty": "Inga undertexter tillgängliga."
+        },
+        "title": "Undertexter",
+        "transcriptChoice": "Avskrift",
+        "searchPlaceholder": "Sök efter undertexter eller dialog...",
+        "delayLabel": "Undertextförskjutning",
+        "seekMode": "Söka",
+        "syncMode": "Synkronisera",
+        "syncOffset": "Offset: {{delay}}s",
+        "syncAction": "Synkronisera",
+        "nowPlaying": "Spelar nu",
+        "syncDescription": "Klicka på dialogen som matchar aktuell videoscen, eller justera offset:",
+        "resetDelay": "Återställa",
+        "translate": {
+          "title": "Översätt från {{language}}"
+        },
+        "unknownLanguage": "Okänd",
+        "useNativeSubtitles": "Använd videons inbyggda undertexter",
+        "useNativeSubtitlesDescription": "Kan fixa undertexter vid casting och i PiP-läge"
+      },
+      "watchparty": {
+        "watchpartyItem": "Tittarparty"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Behörighet saknas",
+        "button": "Använd tillägget",
+        "text": "Du har webbläsartillägget, men vi behöver din tillåtelse för att börja använda tillägget. (¬_¬)",
+        "title": "Konfigurera tillägget"
+      },
+      "failed": {
+        "badge": "Misslyckades",
+        "homeButton": "Till startsidan",
+        "text": "Kunde inte ladda medias metadata från TMDB. Kontrollera om TMDB är nere eller blockerat på din internetanslutning.",
+        "title": "Misslyckades att ladda metadata"
+      },
+      "legal": {
+        "badge": "Borttagen",
+        "text": "Detta innehåll är inte längre tillgängligt på grund av en nedtagningsanmälan eller upphovsrättskrav. 😨",
+        "title": "Innehållet har tagits bort"
+      },
+      "notFound": {
+        "badge": "Ej hittad",
+        "homeButton": "Tillbaka till startsidan",
+        "text": "Vi kunde inte hitta den media du begärde. Antingen har den tagits bort eller så har du manipulerat URL:en.",
+        "title": "Kunde inte hitta den media."
+      }
+    },
+    "nextEpisode": {
+      "next": "Nästa avsnitt",
+      "nextSeason": "Nästa säsong",
+      "replay": "Spela om"
+    },
+    "playbackError": {
+      "autoResumeText": "Det uppstod ett fel när media skulle spelas upp 😖. Försöker automatiskt de andra källorna...",
+      "badge": "Uppspelningsfel",
+      "copyDebugInfo": "Kopiera felsökningsinformation",
+      "debugInfo": "Kontrollera konsolen för mer information.",
+      "errors": {
+        "errorAborted": "Hämtningen av media avbröts på användarens begäran.",
+        "errorDecode": "Trots att det tidigare bedömts som användbart uppstod ett fel vid försök att avkoda mediaresursen, vilket resulterade i ett fel.",
+        "errorGenericMedia": "Okänt mediafel inträffade.",
+        "errorNetwork": "Någon form av nätverksfel inträffade vilket förhindrade att media framgångsrikt hämtades, trots att det tidigare var tillgängligt.",
+        "errorNotSupported": "Media- eller mediaproviderobjektet stöds inte."
+      },
+      "homeButton": "Till startsidan",
+      "resumeButton": "Prova nästa källor",
+      "text": "Det uppstod ett fel när vi försökte spela upp media. Försök igen.",
+      "title": "Misslyckades spela upp video!"
+    },
+    "resume": {
+      "description": "Detta avsnitt är {{percentage}}% tittat",
+      "restart": "Starta om",
+      "resume": "Återuppta",
+      "title": "Fortsätt titta?"
+    },
+    "segment": {
+      "credits": "Krediter",
+      "intro": "Intro",
+      "recap": "Sammanfattning"
+    },
+    "skipTime": {
+      "confidence": "förtroende",
+      "connectApiKeyMessage": "För att skicka in nya segment, skriv in din TheIntroDB API-nyckel i anslutningsinställningarna",
+      "credits": "Hoppa över krediter",
+      "endOfVideo": "Avsluta",
+      "endsAt": "Slutar kl. {{time}}",
+      "submissionUnavailableMessage": "Segmentinlämning är inte tillgängligt på den här servern.",
+      "feedback": {
+        "modal": {
+          "cancel": "Avboka",
+          "description": "Bidra till TheIntroDB genom att skicka in korrekta segmenttidsstämplar. Alla bidrag accepteras av communityn innan de publiceras.",
+          "endTimeLabel": "Slut (s)",
+          "error": {
+            "endTime": "Sluttid krävs",
+            "mediaInfo": "Medieinformation är inte tillgänglig",
+            "segment": "Inget segment valt",
+            "startTime": "Starttid krävs",
+            "submission": "Det gick inte att skicka in tidsstämplar",
+            "tidbKey": "TIDB API-nyckel är inte inställd"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Minst 5s om slutet tillhandahålls. Kan sträcka sig till slutet av media.",
+              "endDesc": "Valfritt - lämna tomt om krediterna löper till slutet av filen.",
+              "excludeDesc": "Uteslut scener i mitten av krediter eller efter krediter; endast huvudkreditrullen.",
+              "startDesc": "Obligatoriskt - när de avslutande krediterna börjar (t.ex. när den första kredittexten visas).",
+              "whenToTitle": "Credits tidsstämplar guide:"
+            },
+            "durationDesc": "Min 5s om slutet tillhandahålls",
+            "durationLabel": "Varaktighet:",
+            "endDesc": "Valfritt - tom om sträcker sig till slutet",
+            "endLabel": "Avsluta:",
+            "excludeDesc": "Scener efter krediter",
+            "excludeLabel": "Utesluta:",
+            "intro": {
+              "durationDesc": "De flesta intro är 30–90 sekunder. Minst 5s om både start och slut är inställda.",
+              "endDesc": "Krävs - när introt slutar (vanligtvis när titelkortet eller huvudavsnittet börjar).",
+              "excludeDesc": "Inkludera inte kalla öppningar eller pre-introscener; endast huvudtitelsekvensen.",
+              "startDesc": "Valfritt - lämna tomt om introt börjar i början av avsnittet.",
+              "whenToTitle": "Introduktionsguide för tidsstämplar:"
+            },
+            "preview": {
+              "durationDesc": "Förhandsvisningen varierar i längd. Minst 5s.",
+              "endDesc": "Valfritt – lämna tomt om förhandsvisningen slutar i slutet av media.",
+              "excludeDesc": "Förhandsvisningen är vanligtvis 15-90 sekunder i slutet av avsnittet förhandsgranskning av nästa avsnitt.",
+              "startDesc": "Obligatoriskt - när förhandsgranskningen startar (t.ex. när förhandsgranskningstexten visas).",
+              "whenToTitle": "Guide för förhandsgranskning av tidsstämplar:"
+            },
+            "recap": {
+              "durationDesc": "Recaps varierar i längd. Minst 5s om både start och slut är inställda.",
+              "endDesc": "Obligatoriskt – när sammanfattningen slutar och det nya innehållet börjar.",
+              "excludeDesc": "Endast segmentet \"tidigare på\" eller sammanfattning; inkludera inte introt eller nya scener.",
+              "startDesc": "Valfritt – lämna tomt om sammanfattningen börjar i början av avsnittet.",
+              "whenToTitle": "Guide för sammanfattning av tidsstämplar:"
+            },
+            "startDesc": "Obligatoriskt - när krediter börjar rulla",
+            "startLabel": "Start:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 eller 210 (låt vara tomt för slutet av media)",
+              "intro": "3:30 eller 210 (obligatoriskt)",
+              "preview": "3:30 eller 210 (låt vara tomt för slutet av media)",
+              "recap": "3:30 eller 210 (obligatoriskt)"
+            },
+            "start": {
+              "credits": "2:30 eller 150 (obligatoriskt)",
+              "intro": "2:30 eller 150 (låt stå tomt för start vid början)",
+              "preview": "2:30 eller 150 (obligatoriskt)",
+              "recap": "2:30 eller 150 (låt stå tomt för start vid början)"
+            }
+          },
+          "segmentType": "Segmenttyp",
+          "startTimeLabel": "Start (s)",
+          "submit": "Överlämna",
+          "submitting": "Skickar...",
+          "success": {
+            "title": "Inlämningen lyckades! Tack!"
+          },
+          "title": "Skicka in tidsstämplar till TheIntroDB",
+          "types": {
+            "credits": "Krediter",
+            "intro": "Intro",
+            "preview": "Förhandsvisning",
+            "recap": "Sammanfattning"
+          },
+          "whenToDesc": "Ange tidsstämplar i sekunder (t.ex. 150), mm:ss-format (t.ex. 2:30) eller hh:mm:ss-format (t.ex. 1:42:20). Vi konverterar formatet automatiskt åt dig.",
+          "whenToTitle": "Guide för tidsstämplar:"
+        },
+        "title": "Var detta överhoppning korrekt?"
+      },
+      "intro": "Hoppa över introt",
+      "noSegments": "Inga överhoppningssegment tillgängliga",
+      "recap": "Hoppa över sammanfattning",
+      "skipSegments": "Hoppa över segment",
+      "startsAt": "Börjar kl. {{time}}",
+      "submissions": "{{count}} bidrag",
+      "submitSegment": "Skicka segment",
+      "timeUnknown": "Tid okänd"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} kvar • Slutar kl {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Fil: {{fileName}}",
+      "infohash": "Infohash: {{infoHash}}",
+      "network": "Torrent nätverk",
+      "networkStatus": "Torrent nätverksstatus",
+      "peers": "Peers: {{count}}",
+      "progress": "Framsteg: {{progress}}%",
+      "speed": "Hastighet: {{speed}}",
+      "states": {
+        "buffering": "Buffring",
+        "downloading": "Laddar ner",
+        "error": "Fel",
+        "ready": "Redo",
+        "starting": "Startande",
+        "stopped": "Slutade"
+      },
+      "unknown": "Okänd"
+    }
+  },
+  "screens": {
+    "loadingApp": "Laddar app...",
+    "loadingUser": "Laddar användarprofil...",
+    "loadingUserError": {
+      "disconectCancel": "Avboka",
+      "disconnectConfirm": "Bekräfta",
+      "disconnectMessage": "Koppla från kontoservern och behåll de senaste lokala data. Ändringar och visat innehåll synkroniseras inte förrän du är inloggad igen.",
+      "disconnectTitle": "Koppla bort från backend?",
+      "logout": "Logga ut",
+      "reload": "Ladda om",
+      "reset": "Återställ anpassad server",
+      "text": "Det gick inte att läsa in din användarprofil. Försök att ladda om sidan.",
+      "textWithReset": "Det gick inte att ladda din användarprofil med den aktuella anpassade servern. Försök att återställa den anpassade servern och ladda sedan om."
+    },
+    "migration": {
+      "failed": "Misslyckades att migrera dina data.",
+      "inProgress": "Vänligen vänta, vi migrerar dina data. Detta borde inte ta lång tid."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "Redigera",
+        "logoutButton": "Logga ut",
+        "nicknameLabel": "Smeknamn",
+        "nicknamePlaceholder": "Ange ditt smeknamn"
+      },
+      "actions": {
+        "delete": {
+          "button": "Ta bort konto",
+          "confirmButton": "Ta bort konto",
+          "confirmDescription": "Är du säker på att du vill ta bort ditt konto? All din data kommer att gå förlorad!",
+          "confirmTitle": "Är du säker?",
+          "text": "Denna åtgärd är oåterkallelig. All data kommer att raderas och kan inte återställas.",
+          "title": "Ta bort konto"
+        },
+        "logoutAllDevices": {
+          "button": "Logga ut från alla enheter",
+          "text": "Detta loggar ut dig från alla enheter kopplade till ditt konto.",
+          "title": "Avsluta alla sessioner"
+        },
+        "migration": {
+          "button": "Migrera konto",
+          "text": "Migrera ditt konto till en ny server eller ladda ner din data.",
+          "title": "Kontomigrering"
+        },
+        "title": "Åtgärder"
+      },
+      "devices": {
+        "deviceNameLabel": "Enhetens namn",
+        "failed": "Misslyckades att ladda sessioner",
+        "lastActive": "Senast aktiv: {{date}}",
+        "loggedInAt": "Inloggad på: {{date}}",
+        "removeDevice": "Ta bort",
+        "title": "Enheter",
+        "unknownDevice": "Okänd enhet, fel vid dekryptering av namn"
+      },
+      "profile": {
+        "finish": "Slutför redigering",
+        "firstColor": "Profilfärg ett",
+        "secondColor": "Profilfärg två",
+        "title": "Redigera profilbild",
+        "userIcon": "Användarikon"
+      },
+      "register": {
+        "cta": "Kom igång",
+        "text": "Dela din tittarframsteg mellan enheter och håll dem synkroniserade.",
+        "title": "Synkronisera till molnet"
+      },
+      "title": "Konto"
+    },
+    "all": {
+      "title": "Alla inställningar"
+    },
+    "appearance": {
+      "activeTheme": "Aktiv",
+      "customParts": {
+        "primary": "Primär",
+        "secondary": "Sekundär",
+        "tertiary": "Tertiär"
+      },
+      "options": {
+        "carouselView": "Karusellvy",
+        "carouselViewDescription": "Visa dina sektioner som du tittar på och bokmärker som karuseller istället för ett rutnät. Inaktiverad som standard.",
+        "carouselViewLabel": "Karusellvy",
+        "discover": "Upptäck avsnitt",
+        "discoverDescription": "Visa avsnittet Upptäck på hemsidan under ditt bokmärkta media. Aktiverad som standard.",
+        "discoverLabel": "Upptäck avsnitt",
+        "featured": "Utvalda media",
+        "featuredDescription": "Visa en karusell av utvalda filmer och program överst på din startsida! Inaktiverad som standard.",
+        "featuredLabel": "Utvalda media",
+        "forceCompactEpisodeView": "Framtvinga kompakt avsnittsvy",
+        "forceCompactEpisodeViewDescription": "Tvinga avsnittskarusellen i spelaren att använda den \"klassiska\" kompakta vertikala vyn. Inaktiverad som standard.",
+        "forceCompactEpisodeViewLabel": "Kompakta avsnitt",
+        "homeSectionOrder": "Hemsektionsordning",
+        "homeSectionOrderDescription": "Dra och släpp för att ändra ordningen på visnings- och bokmärkesavsnitten på din startsida. Grupporder kan redigeras från hemsidan.",
+        "homeSectionOrderGroups": "Ändra ordning på bokmärkesgrupper",
+        "logos": "Bildlogotyper",
+        "logosDescription": "Visa bildlogotyper istället för textrubriker i detaljernas modala och utvalda avsnitt. Aktiverad som standard.",
+        "logosLabel": "Bildlogotyper",
+        "logosNotice": "För det mesta är logotyper endast på engelska. Andra språk kanske vill inaktivera detta!",
+        "minimalCards": "Minimala kort",
+        "minimalCardsDescription": "Dölj textinnehåll (titel, typ, årtal) på mediekort och visar bara affischbilden.",
+        "minimalCardsLabel": "Minimala kort",
+        "modal": "Detaljer modal",
+        "modalDescription": "Visa detaljerna när du klickar på ett mediekort istället för att gå till visningssidan. Fullmakt eller förlängning krävs för trailer. Inaktiverad som standard.",
+        "modalLabel": "Detaljer modal",
+        "pauseOverlay": "Pausa överlagring",
+        "pauseOverlayDescription": "Visa en titel/logotyp och en beskrivningsöverlagring när spelaren är pausad och inaktiv.",
+        "pauseOverlayLabel": "Pausa överlagring"
+      },
+      "sections": {
+        "bookmarks": "Bokmärken",
+        "watching": "Tittar just nu"
+      },
+      "themes": {
+        "acid": "Syra",
+        "autumn": "Höst",
+        "blue": "Blå",
+        "christmas": "Jul",
+        "classic": "Klassisk",
+        "cobalt": "Kobolt",
+        "custom": "Beställnings",
+        "default": "Standard",
+        "ember": "Glödande kol",
+        "forest": "Skog",
+        "frost": "Glasera",
+        "grape": "Druva",
+        "gray": "Grå",
+        "green": "Grön",
+        "hulk": "Holk",
+        "mocha": "Mocka",
+        "noir": "Noir",
+        "pink": "Rosa",
+        "popsicle": "Isglass",
+        "red": "Röd",
+        "spark": "Gnista",
+        "spiderman": "Spiderman",
+        "teal": "Blågrön",
+        "wolverine": "Järv"
+      },
+      "title": "Utseende"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "Om du byter backend-server loggas du ut. Fortsätta?",
+        "changeWarningTitle": "Byt backend-server",
+        "error": "Fel vid anslutning till backend",
+        "notice": "Ditt konto synkroniseras INTE mellan backends, så kom ihåg vilken du använder!"
+      },
+      "tidb": {
+        "description": "Bidra till TheIntroDB genom att lämna feedback på intro-, sammanfattnings- och kreditsegment. <0>Läs mer.</0>",
+        "tokenLabel": "API-nyckel"
+      },
+      "title": "Anslutningar"
+    },
+    "preferences": {
+      "autoplay": "Autouppspelning",
+      "autoplayDescription": "Spela automatiskt nästa avsnitt i en serie efter att ha nått slutet.",
+      "autoplayLabel": "Autouppspelning",
+      "autoResumeOnPlaybackError": "Återuppta automatiskt vid uppspelningsfel",
+      "autoResumeOnPlaybackErrorDescription": "Fortsätt automatiskt att söka efter andra källor när den aktuella källan misslyckas under uppspelning. Om det är inaktiverat ser du en felskärm med ett alternativ för manuellt återuppta.",
+      "autoResumeOnPlaybackErrorLabel": "Återuppta automatiskt vid uppspelningsfel",
+      "autoSkipSegments": "Autohopp över segment",
+      "autoSkipSegmentsDescription": "När det är aktiverat hoppar du automatiskt över intro-, sammanfattnings- och förhandsgranskningssegment medan du tittar.",
+      "autoSkipSegmentsLabel": "Hoppa över segment automatiskt",
+      "doubleClickToSeek": "Dubbeltryck för att söka",
+      "doubleClickToSeekDescription": "Dubbelklicka på spelarens vänstra eller högra sida för att söka 10 sekunder framåt eller bakåt.",
+      "doubleClickToSeekLabel": "Aktivera dubbeltryck för att söka",
+      "keyboardShortcuts": "Kortkommandon",
+      "keyboardShortcutsDescription": "Anpassa kortkommandon för programmet. Håll ` för att visa denna hjälp när som helst",
+      "keyboardShortcutsLabel": "Anpassa kortkommandon",
+      "language": "Applikationsspråk",
+      "languageDescription": "Språk tillämpas på hela applikationen, bara engelska har dumma saker 🙁.",
+      "lowPerformanceMode": "Läge för låg prestanda/bandbredd",
+      "lowPerformanceModeDescription": "Optimerar applikationen för långsammare anslutningar och enheter genom att inaktivera bandbreddstunga funktioner. Det här läget minskar dataanvändningen och förbättrar prestandan samtidigt som den centrala sök- och klockfunktionen behålls intakt.",
+      "lowPerformanceModeLabel": "Läge med låg prestanda",
+      "showLess": "Visa mindre",
+      "showMore": "Visa mer",
+      "skipCredits": "Hoppa över slutpoäng",
+      "skipCreditsDescription": "När det är aktiverat, spela nästa avsnitt automatiskt med 99 % färdigställt för att hoppa över sluttexter. När den är inaktiverad, vänta tills avsnittet är helt slutfört.",
+      "skipCreditsLabel": "Hoppa över slutpoäng",
+      "thumbnail": "Skapa miniatyrer",
+      "thumbnailDescription": "För det mesta har videor inga miniatyrer. Du kan aktivera den här inställningen för att generera dem i farten men de kan göra din video långsammare.",
+      "thumbnailLabel": "Skapa miniatyrer",
+      "title": "Inställningar"
+    },
+    "reset": "Återställ",
+    "save": "Spara",
+    "search": {
+      "placeholder": "Sökinställningar..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "Version",
+        "notLoggedIn": "Du är inte inloggad",
+        "checkForUpdates": "Sök efter uppdateringar",
+        "upToDate": "Du använder för närvarande den senaste versionen"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "Att inaktivera bildtextens bakgrundsoskärpa kan lösa vissa flimrande problem",
+      "backgroundBlurEnabledLabel": "Bakgrundsoskärpa",
+      "backgroundBlurLabel": "Bakgrundsoskärpa intensitet",
+      "backgroundLabel": "Bakgrundens opacitet",
+      "BorderThicknessLabel": "Gränstjocklek",
+      "colorLabel": "Färg",
+      "high": "Hög",
+      "low": "Standard",
+      "previewQuote": "Övertygad om att livet är meningslöst, jag saknar modet i min övertygelse.",
+      "textBoldLabel": "Fet text",
+      "textSizeLabel": "Textstorlek",
+      "textStyle": {
+        "Border": "Gräns",
+        "default": "Standard",
+        "depressed": "Deprimerad",
+        "dropShadow": "Drop Shadow",
+        "raised": "Upphöjd",
+        "title": "Text stil"
+      },
+      "title": "Undertexter",
+      "verticalPositionLabel": "Vertikal position"
+    },
+    "unsaved": "Du har osparade ändringar"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Action & Äventyr",
+      "10765": "Sci-Fi & Fantasy"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "Före värden med {{seconds}} sekunder",
+    "alone": "Ensam",
+    "behindHost": "Bakom värd med {{seconds}} sekunder",
+    "cancel": "Avboka",
+    "connectedAsGuest": "Ansluten för att titta på festen som gäst",
+    "contentMismatch": "Kan inte gå med i visningsfesten: Innehållet matchar inte värdens innehåll.",
+    "copyCode": "Klicka för att kopiera",
+    "emptyRoom": "Ingen är i det här rummet ännu",
+    "enterCodeOrLink": "Ange en delad visningsfestlänk eller rumskod",
+    "episodeMismatch": "Kan inte gå med i visningsfesten: Du tittar på ett annat avsnitt än värden.",
+    "guestFallback": "Gäst",
+    "hosting": "Värdskap",
+    "hostParty": "Arrangera en Watch Party",
+    "invalidRoom": "Det går inte att ansluta till det här rummet",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Ansluta sig till",
+    "joinParty": "Gå med i en Watch Party",
+    "leaveWatchParty": "Lämna Watch Party",
+    "linkCopied": "Kopierade!",
+    "noHost": "Ingen värd i det här klockpartiet",
+    "save": "Spara",
+    "shareCode": "Dela denna kod med vänner (klicka för att kopiera länken)",
+    "showStatusOverlay": "Visa statusöverlagring",
+    "status": {
+      "inSync": "Synk",
+      "outOfSync": "Osynkroniserad"
+    },
+    "syncing": "Synkroniseras...",
+    "validating": "Validerar visningsfest...",
+    "viewers": "Tittare ({{count}})",
+    "watching": "Tittar på",
+    "withCount": "Med {{count}} andra",
+    "you": "Du"
+  },
+  "toasts": {
+    "linkCopied": "Länken har kopierats till urklipp!",
+    "loginSuccess": "Inloggad framgångsrikt!",
+    "logoutSuccess": "Loggade ut framgångsrikt!",
+    "registerSuccess": "Registrerad framgångsrikt!"
+  }
+}

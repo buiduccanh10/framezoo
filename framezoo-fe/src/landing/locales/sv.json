@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Prestanda",
+    "addons": "Ekosystem",
+    "download": "Ladda ner",
+    "language": "Språk",
+    "addonGuide": "Addon guide"
+  },
+  "hero": {
+    "eyebrow": "FRAMEZOO DESKTOP / 01",
+    "title": "Titta bättre.",
+    "titleAccent": "På skrivbordet.",
+    "description": "Inbyggd uppspelning, skarpare kontroller och en lugnare plats för din nästa klocka.",
+    "primaryCta": "Ladda ner skrivbordet",
+    "secondaryCta": "Se upplevelsen",
+    "imageAlt": "FrameZoo förhandsvisning av skrivbordsapp",
+    "version": "Skrivbordsversion"
+  },
+  "features": {
+    "performanceTitle": "Ditt bibliotek, utan webbläsarskatten.",
+    "overviewDescription": "FrameZoo Desktop ger uppspelningen rummet den behöver: inbyggd prestanda, rena handoffs och kontroller som håller sig ur vägen.",
+    "playback": "Inbyggd uppspelning",
+    "playbackDescription": "Smidig video med mediehantering av skrivbordskvalitet.",
+    "performance": "Tyst prestanda",
+    "performanceDescription": "Mindre krom. Mer fokus. Ingen flikjonglering.",
+    "continuity": "Håll ditt flöde",
+    "continuityDescription": "Återuppta, bläddra och byt källa utan att förlora ögonblicket.",
+    "ecosystemTitle": "Redo för vad som kommer härnäst.",
+    "ecosystemDescription": "Desktop-appen är kärnan. Tillägg förlänger kanterna, så att din installation kan förbli personlig utan att bli komplicerad.",
+    "addonLabel": "ADDON-KLAR",
+    "addonOne": "Källkontakter",
+    "addonTwo": "Undertextverktyg",
+    "addonThree": "Community-tillägg",
+    "showcaseTitle": "Skärmen är destinationen.",
+    "showcaseDescription": "En fokuserad skrivbordsyta för upptäckt, uppspelning och allt runt historien.",
+    "showcaseCaption": "FrameZoo Desktop / Fokusläge"
+  },
+  "download": {
+    "eyebrow": "VÄLJ DIN BYGG",
+    "title": "Ta med dig FrameZoo.",
+    "description": "Välj konstruktion för din maskin. Din webbläsare kommer att ge rekommendationen, eller avslöja alla tillgängliga alternativ nedan.",
+    "recommended": "Rekommenderad",
+    "chooseBuild": "Välj en konstruktion",
+    "selected": "Vald",
+    "download": "Ladda ner",
+    "showAll": "Alla byggen visas",
+    "detected": "Upptäcktes på den här enheten",
+    "loading": "Kontrollerar tillgängliga versioner...",
+    "empty": "Inga skrivbordsversioner har publicerats ännu. Kom tillbaka snart.",
+    "error": "Det gick inte att ladda skrivbordsversionslistan.",
+    "retry": "Försök igen",
+    "noBackend": "Nedladdningstjänsten är inte konfigurerad för den här distributionen.",
+    "version": "Släppa"
+  },
+  "footer": {
+    "line": "Ett lugnare hem för berättelserna du hela tiden kommer tillbaka till.",
+    "status": "Desktop-först. Addon-klar."
+  },
+  "addonGuide": {
+    "manifestTitle": "Börja med manifest.json",
+    "eyebrow": "ADDON PROTOKOLL / GUIDE",
+    "title": "Bygg ett tillägg utan att gå med i appprocessen.",
+    "description": "Ett tillägg är en liten HTTP-tjänst. Servera ett manifest och de resurser du behöver; FrameZoo sköter resten.",
+    "manifestDescription": "Metadata berättar för appen vem ditt tillägg är, vilka resurser den stöder och var dess ikon finns.",
+    "resources": {
+      "meta": "Film- eller seriemetadata för en titel.",
+      "catalog": "Rader av filmer eller serier för upptäckt.",
+      "stream": "Torrent, HLS, DASH eller direkta filkällor.",
+      "subtitles": "Undertextfiler med språketiketter.",
+      "addon_catalog": "En katalog med andra tillägg."
+    },
+    "resourcesDescription": "Implementera endast de slutpunkter som ditt tillägg behöver. Svaren är JSON och kan skrivas på alla språk.",
+    "resourcesTitle": "Välj resurser",
+    "steps": [
+      "Servera /manifest.json och dina resursslutpunkter från en lokal eller offentlig HTTP(S)-server.",
+      "Testa varje slutpunkt med curl och verifiera JSON-formen.",
+      "Klistra in manifestets URL i FrameZoo Desktop > Addons."
+    ],
+    "runTitle": "Kör, testa, installera",
+    "advancedTitle": "Behöver du en nodhjälpare?",
+    "advancedLink": "Öppna avancerad SDK-referens",
+    "advancedDescription": "Stremio Addon SDK är valfritt. Använd den om du vill ha routing- och serialiseringshjälpare; det krävs inte av protokollet."
+  }
+}

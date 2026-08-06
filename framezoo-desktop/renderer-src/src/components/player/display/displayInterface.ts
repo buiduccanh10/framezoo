@@ -1,0 +1,133 @@
+import { MWMediaType } from "@/backend/metadata/types/mw";
+import { AudioTrack, CaptionListItem } from "@/stores/player/slices/source";
+import { LoadableSource, SourceQuality } from "@/stores/player/utils/qualities";
+import { Listener } from "@/utils/events";
+
+export type DisplayErrorType = "mpv" | "hls" | "dash" | "htmlvideo" | "global";
+export type DisplayError = {
+  stackTrace?: string;
+  message?: string;
+  key?: string;
+  errorName: string;
+  type: DisplayErrorType;
+  hls?: {
+    details: string;
+    fatal: boolean;
+    level?: number;
+    levelDetails?: {
+      url: string;
+      width: number;
+      height: number;
+      bitrate: number;
+    };
+    frag?: {
+      url: string;
+      baseurl: string;
+      duration: number;
+      start: number;
+      sn: number | string;
+    };
+    type: string;
+    url?: string;
+    response?: {
+      code?: number;
+    };
+  };
+};
+
+export type SegmentQualityDebugInfo = {
+  realQuality: "4k" | "1440" | "1080" | "720" | "unknown";
+  width: number | null;
+  height: number | null;
+  updatedAt: number;
+};
+
+export type PictureInPictureMode = "native" | "document" | "desktop" | null;
+export type PictureInPictureState = {
+  active: boolean;
+  mode: PictureInPictureMode;
+  documentWindow: Window | null;
+};
+
+export type DisplayInterfaceEvents = {
+  play: void;
+  pause: void;
+  fullscreen: boolean;
+  volumechange: number;
+  time: number;
+  duration: number;
+  buffered: number;
+  loading: boolean;
+  rendered: void;
+  qualities: SourceQuality[];
+  changedquality: SourceQuality | null;
+  audiotracks: AudioTrack[];
+  changedaudiotrack: AudioTrack | null;
+  subtitletracks: MpvTrack[];
+  needstrack: boolean;
+  pictureinpicture: PictureInPictureState;
+  canairplay: boolean;
+  playbackrate: number;
+  error: DisplayError;
+  segmentqualitydebug: SegmentQualityDebugInfo | null;
+};
+
+export interface qualityChangeOptions {
+  source: LoadableSource | null;
+  automaticQuality: boolean;
+  preferredQuality: SourceQuality | null;
+  startAt: number;
+  autoplay?: boolean;
+  reason?: string;
+}
+
+export interface DisplayMeta {
+  title: string;
+  type: MWMediaType;
+}
+
+export interface DisplayCaption {
+  id: string;
+  vttData: string;
+  language: string;
+  url?: string;
+  trackId?: string;
+}
+
+export type MpvTrack = {
+  id: string;
+  kind: "audio" | "sub";
+  label: string;
+  language: string;
+  selected: boolean;
+};
+
+export type DisplayType = "web" | "casting";
+
+export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
+  play(): void;
+  pause(): void;
+  load(ops: qualityChangeOptions): void;
+  changeQuality(
+    automaticQuality: boolean,
+    preferredQuality: SourceQuality | null,
+  ): void;
+  changeAudioTrack(audioTrack: AudioTrack): void;
+  processContainerElement(container: HTMLElement): void;
+  processSurfaceElement?(container: HTMLElement | null): void;
+  toggleFullscreen(): void;
+  togglePictureInPicture(): void;
+  setSeeking(active: boolean): void;
+  setVolume(vol: number): void;
+  setTime(t: number): void;
+  destroy(reason?: string): void;
+  startAirplay(): void;
+  setPlaybackRate(rate: number): void;
+  setMeta(meta: DisplayMeta): void;
+  setCaption(caption: DisplayCaption | null): void;
+  setSecondaryCaption?(caption: DisplayCaption | null): void;
+  getType(): DisplayType;
+  getCaptionList(): CaptionListItem[];
+  getSubtitleTracks(): MpvTrack[];
+  setSubtitlePreference(lang: string): Promise<void>;
+}

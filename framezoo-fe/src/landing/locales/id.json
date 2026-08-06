@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Pertunjukan",
+    "addons": "Ekosistem",
+    "download": "Unduh",
+    "language": "Bahasa",
+    "addonGuide": "Panduan tambahan"
+  },
+  "hero": {
+    "eyebrow": "DESKTOP FRAMEZOO / 01",
+    "title": "Tonton lebih baik.",
+    "titleAccent": "Di desktop.",
+    "description": "Pemutaran asli, kontrol yang lebih tajam, dan tempat yang lebih tenang untuk jam tangan Anda berikutnya.",
+    "primaryCta": "Unduh desktop",
+    "secondaryCta": "Lihat pengalamannya",
+    "imageAlt": "Pratinjau aplikasi desktop FrameZoo",
+    "version": "Rilis desktop"
+  },
+  "features": {
+    "performanceTitle": "Perpustakaan Anda, tanpa pajak browser.",
+    "overviewDescription": "FrameZoo Desktop memberikan ruang pemutaran yang dibutuhkan: performa asli, handoff yang bersih, dan kontrol yang tidak mengganggu.",
+    "playback": "Pemutaran asli",
+    "playbackDescription": "Video halus dengan penanganan media kelas desktop.",
+    "performance": "Performa yang tenang",
+    "performanceDescription": "Kurang krom. Lebih fokus. Tidak ada tab juggling.",
+    "continuity": "Pertahankan aliran Anda",
+    "continuityDescription": "Lanjutkan, jelajahi, dan ganti sumber tanpa kehilangan momen.",
+    "ecosystemTitle": "Siap untuk apa yang terjadi selanjutnya.",
+    "ecosystemDescription": "Aplikasi desktop adalah intinya. Addons memperluas keunggulannya, sehingga pengaturan Anda tetap personal tanpa menjadi rumit.",
+    "addonLabel": "TAMBAHAN-SIAP",
+    "addonOne": "Konektor sumber",
+    "addonTwo": "Alat subtitle",
+    "addonThree": "Ekstensi komunitas",
+    "showcaseTitle": "Layar adalah tujuannya.",
+    "showcaseDescription": "Permukaan desktop yang terfokus untuk penemuan, pemutaran, dan segala hal seputar cerita.",
+    "showcaseCaption": "Mode Desktop / Fokus FrameZoo"
+  },
+  "download": {
+    "eyebrow": "PILIH BANGUNAN ANDA",
+    "title": "Bawalah FrameZoo bersamamu.",
+    "description": "Pilih build untuk mesin Anda. Browser Anda akan membuat rekomendasi, atau menampilkan setiap opsi yang tersedia di bawah.",
+    "recommended": "Direkomendasikan",
+    "chooseBuild": "Pilih bangunan",
+    "selected": "Terpilih",
+    "download": "Unduh",
+    "showAll": "Semua bangunan ditampilkan",
+    "detected": "Terdeteksi di perangkat ini",
+    "loading": "Memeriksa build yang tersedia...",
+    "empty": "Belum ada versi desktop yang dipublikasikan. Segera periksa kembali.",
+    "error": "Tidak dapat memuat daftar rilis desktop.",
+    "retry": "Coba lagi",
+    "noBackend": "Layanan pengunduhan tidak dikonfigurasi untuk penerapan ini.",
+    "version": "Melepaskan"
+  },
+  "footer": {
+    "line": "Rumah yang lebih tenang untuk cerita yang selalu Anda ingat.",
+    "status": "Desktop-pertama. Siap tambahan."
+  },
+  "addonGuide": {
+    "eyebrow": "PROTOKOL / PANDUAN TAMBAHAN",
+    "manifestTitle": "Mulailah dengan manifes.json",
+    "description": "Addon adalah layanan HTTP kecil. Sajikan manifes dan sumber daya yang Anda perlukan; FrameZoo menangani sisanya.",
+    "title": "Bangun add-on tanpa bergabung dengan proses aplikasi.",
+    "resources": {
+      "catalog": "Deretan film atau serial untuk penemuan.",
+      "subtitles": "File subtitle dengan label bahasa.",
+      "addon_catalog": "Katalog tambahan lainnya.",
+      "meta": "Metadata film atau serial untuk sebuah judul.",
+      "stream": "Torrent, HLS, DASH, atau sumber file langsung."
+    },
+    "resourcesTitle": "Pilih sumber daya",
+    "manifestDescription": "Metadata memberi tahu aplikasi siapa add-on Anda, sumber daya apa yang didukungnya, dan di mana ikonnya berada.",
+    "resourcesDescription": "Terapkan hanya titik akhir yang dibutuhkan addon Anda. Responsnya adalah JSON dan dapat ditulis dalam bahasa apa pun.",
+    "steps": [
+      "Sajikan /manifest.json dan titik akhir sumber daya Anda dari server HTTP(S) lokal atau publik.",
+      "Uji setiap titik akhir dengan curl dan verifikasi bentuk JSON.",
+      "Rekatkan URL manifes ke FrameZoo Desktop > Addons."
+    ],
+    "runTitle": "Jalankan, uji, instal",
+    "advancedLink": "Buka referensi SDK tingkat lanjut",
+    "advancedDescription": "Stremio Addon SDK bersifat opsional. Gunakan jika Anda menginginkan bantuan perutean dan serialisasi; itu tidak diwajibkan oleh protokol.",
+    "advancedTitle": "Butuh pembantu Node?"
+  }
+}

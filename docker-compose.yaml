@@ -3,7 +3,7 @@ services:
     image: postgres:15-alpine
     restart: unless-stopped
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U $$PG_USER -d $$PG_DB']
+      test: ["CMD-SHELL", "pg_isready -U $$PG_USER -d $$PG_DB"]
       interval: 5s
       retries: 10
       timeout: 2s
@@ -16,43 +16,50 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
     networks:
-      - betamovie-network
+      - framezoo-network
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     ports:
-      - '6379:6379'
+      - "6379:6379"
     networks:
-      - betamovie-network
+      - framezoo-network
     volumes:
       - redis-data:/data
 
-  preview-service:
-    build:
-      context: ./betamovie-be/preview-service
-    restart: unless-stopped
-    environment:
-      PORT: 3100
-      PREVIEW_DATA_DIR: /data/previews
-      PREVIEW_INTERVAL_SECONDS: ${PREVIEW_INTERVAL_SECONDS:-10}
-      PREVIEW_FRAME_WIDTH: ${PREVIEW_FRAME_WIDTH:-320}
-      PREVIEW_TILE_COLS: ${PREVIEW_TILE_COLS:-5}
-      PREVIEW_TILE_ROWS: ${PREVIEW_TILE_ROWS:-5}
-      PREVIEW_MAX_FRAMES: ${PREVIEW_MAX_FRAMES:-48}
-      PREVIEW_FFMPEG_CONCURRENCY: ${PREVIEW_FFMPEG_CONCURRENCY:-4}
-      PREVIEW_COMMAND_TIMEOUT_MS: ${PREVIEW_COMMAND_TIMEOUT_MS:-90000}
-    volumes:
-      - preview-data:/data/previews
-    networks:
-      - betamovie-network
-
-  betamovie-be:
+  moonshine-service:
     build:
       context: .
-      dockerfile: betamovie-be/Dockerfile
+      dockerfile: moonshine-service/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - moonshine-cache:/root/.cache
+    environment:
+      MOONSHINE_LANGUAGE: ${MOONSHINE_LANGUAGE:-en}
+      MOONSHINE_MODEL_ARCH: ${MOONSHINE_MODEL_ARCH:-tiny}
+      MOONSHINE_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks:
+      - framezoo-network
+
+  framezoo-be:
+    build:
+      context: .
+      dockerfile: framezoo-be/Dockerfile
     restart: unless-stopped
     env_file:
       - .env
@@ -65,11 +72,13 @@ services:
       CAPTCHA: ${CAPTCHA}
       CAPTCHA_CLIENT_KEY: ${CAPTCHA_CLIENT_KEY}
       NODE_ENV: ${NODE_ENV:-production}
-      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
-      PREVIEW_SERVICE_URL: http://preview-service:3100
-      PREVIEW_BACKEND_INTERNAL_BASE_URL: http://betamovie-be:3000
+      REDIS_URL: redis://redis:6379
+      MOONSHINE_SERVICE_URL: http://moonshine-service:8000
+      MOONSHINE_TIMEOUT_MS: ${MOONSHINE_TIMEOUT_MS:-120000}
+      PROXY_REQUIRE_UPSTREAM_ALLOWLIST: ${PROXY_REQUIRE_UPSTREAM_ALLOWLIST:-false}
+      RATE_LIMIT_FAIL_CLOSED: ${RATE_LIMIT_FAIL_CLOSED:-false}
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
       - downloads-data:/data/downloads
     depends_on:
@@ -77,15 +86,15 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      preview-service:
-        condition: service_started
+      moonshine-service:
+        condition: service_healthy
     networks:
-      - betamovie-network
+      - framezoo-network
 
-  betamovie-fe:
+  framezoo-fe:
     build:
       context: .
-      dockerfile: betamovie-fe/Dockerfile
+      dockerfile: framezoo-fe/Dockerfile
       args:
         BACKEND_URL: ${VITE_BACKEND_URL:-http://localhost:3000}
         CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
@@ -98,13 +107,13 @@ services:
         SUBSOURCE_API_KEY: ${VITE_SUBSOURCE_API_KEY}
         ENABLE_DEVTOOLS_PROTECTION: ${VITE_ENABLE_DEVTOOLS_PROTECTION:-false}
     ports:
-      - '80:80'
+      - "80:80"
     depends_on:
-      betamovie-be:
+      framezoo-be:
         condition: service_started
     restart: unless-stopped
     networks:
-      - betamovie-network
+      - framezoo-network
 
   desktop-publisher:
     profiles:
@@ -119,12 +128,12 @@ services:
       - downloads-data:/data/downloads
 
 networks:
-  betamovie-network:
+  framezoo-network:
     driver: bridge
 
 volumes:
   postgres-data:
   redis-data:
-  preview-data:
   downloads-data:
-    name: betamovie_downloads-data
+    name: framezoo_downloads-data
+  moonshine-cache:

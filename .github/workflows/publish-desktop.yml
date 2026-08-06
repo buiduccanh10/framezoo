@@ -50,8 +50,8 @@ jobs:
             const currentSha = process.env.TARGET_REF;
             const publishedAt = new Date().toISOString();
             const desktopPatterns = [
-              /^betamovie-fe\//,
-              /^betamovie-desktop\//,
+              /^framezoo-fe\//,
+              /^framezoo-desktop\//,
               /^package\.json$/,
               /^pnpm-lock\.yaml$/,
               /^pnpm-workspace\.yaml$/,
@@ -130,14 +130,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: macos-14
+          - runner: macos-15-intel
             variant: mac-x64
             arch: x64
-            command: pnpm --filter betamovie-desktop package:release:mac:x64
-          - runner: macos-14
+            command: pnpm --filter framezoo-desktop package:release:mac:x64
+          - runner: macos-15
             variant: mac-arm64
             arch: arm64
-            command: pnpm --filter betamovie-desktop package:release:mac:arm64
+            command: pnpm --filter framezoo-desktop package:release:mac:arm64
     steps:
       - uses: actions/checkout@v5
         with:
@@ -160,6 +160,10 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
+      - name: Set up Python 3.13 for the torrent engine sidecar
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
       - name: Write env file
         shell: bash
         env:
@@ -171,19 +175,24 @@ jobs:
             exit 1
           fi
           printf '%s' "$ENV_FILE" > .env
-          printf '%s' "$ENV_FILE" > betamovie-fe/.env
-          
+          printf '%s' "$ENV_FILE" > framezoo-fe/.env
+
           BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$BACKEND_URL" ]; then
             echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
           fi
-          
+
           DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$DEVTOOLS" ]; then
             echo "VITE_ENABLE_DEVTOOLS_PROTECTION=$DEVTOOLS" >> "$GITHUB_ENV"
           fi
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Setup macOS native toolchain & libmpv
+        run: |
+          brew install mpv cmake
+          echo "LIBMPV_ROOT=$(brew --prefix mpv)" >> "$GITHUB_ENV"
+          echo "CMAKE=$(brew --prefix)/bin/cmake" >> "$GITHUB_ENV"
       - name: Build desktop artifacts
         shell: bash
         env:
@@ -205,10 +214,10 @@ jobs:
           name: ${{ matrix.variant }}
           if-no-files-found: error
           path: |
-            betamovie-desktop/release/latest-mac.yml
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.dmg
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}-mac.zip.blockmap
+            framezoo-desktop/release/latest-mac.yml
+            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}-mac.dmg
+            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}-mac.zip
+            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}-mac.zip.blockmap
 
   build-windows:
     name: Build Windows (${{ matrix.variant }})
@@ -221,10 +230,10 @@ jobs:
       matrix:
         include:
           - variant: win-x64
-            command: pnpm --filter betamovie-desktop package:release:win:x64
+            command: pnpm --filter framezoo-desktop package:release:win:x64
             arch: x64
           - variant: win-arm64
-            command: pnpm --filter betamovie-desktop package:release:win:arm64
+            command: pnpm --filter framezoo-desktop package:release:win:arm64
             arch: arm64
     steps:
       - uses: actions/checkout@v5
@@ -237,6 +246,10 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
+      - name: Set up Python 3.13 for the torrent engine sidecar
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
       - name: Write env file
         shell: bash
         env:
@@ -248,19 +261,21 @@ jobs:
             exit 1
           fi
           printf '%s' "$ENV_FILE" > .env
-          printf '%s' "$ENV_FILE" > betamovie-fe/.env
-          
+          printf '%s' "$ENV_FILE" > framezoo-fe/.env
+
           BACKEND_URL=$(grep -Eo '^VITE_BACKEND_URL=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$BACKEND_URL" ]; then
             echo "VITE_BACKEND_URL=$BACKEND_URL" >> "$GITHUB_ENV"
           fi
-          
+
           DEVTOOLS=$(grep -Eo '^VITE_ENABLE_DEVTOOLS_PROTECTION=(.*)' .env | cut -d= -f2- | tr -d '"' | tr -d "'" || echo "")
           if [ -n "$DEVTOOLS" ]; then
             echo "VITE_ENABLE_DEVTOOLS_PROTECTION=$DEVTOOLS" >> "$GITHUB_ENV"
           fi
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Setup Windows libmpv SDK
+        run: node framezoo-desktop/scripts/fetch-windows-libmpv.mjs --target ${{ matrix.variant == 'win-x64' && 'win32-x64' || 'win32-arm64' }} --out ./win-mpv-dev-${{ matrix.variant }}
       - name: Build desktop artifacts
         shell: bash
         run: ${{ matrix.command }}
@@ -270,9 +285,9 @@ jobs:
           name: ${{ matrix.variant }}
           if-no-files-found: error
           path: |
-            betamovie-desktop/release/latest.yml
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe
-            betamovie-desktop/release/AlphaFlix-*-${{ matrix.arch }}.exe.blockmap
+            framezoo-desktop/release/latest.yml
+            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}.exe
+            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}.exe.blockmap
 
   publish:
     name: Publish
@@ -344,12 +359,12 @@ jobs:
 
           DEPLOY_USER="${VPS_USER:-betakiot}"
           DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
-          DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
-          DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
+          DEPLOY_PATH="${DEPLOY_PATH:-/home/framezoo}"
+          DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-framezoo}"
           STAGING_PATH="${DEPLOY_PATH}/desktop-publish-staging"
 
           ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${STAGING_PATH}'"
           scp -P "${VPS_PORT:-22}" desktop-release-bundle.tar.gz "${DEPLOY_TARGET}:${STAGING_PATH}/desktop-release-bundle.tar.gz"
 
           printf '%s' "$ENV_FILE" | ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
-            "set -eu; ENV_TMP=\$(mktemp /tmp/betamovie_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"
+            "set -eu; ENV_TMP=\$(mktemp /tmp/framezoo_env.XXXXXX); trap 'rm -f \"\$ENV_TMP\"' EXIT; cat > \"\$ENV_TMP\"; chmod 600 \"\$ENV_TMP\"; cd '${DEPLOY_PATH}'; PROJECT_NAME='${DEPLOY_PROJECT_NAME}' COMPOSE_FILE='docker-compose.prod.yml' ENV_FILE_PATH=\"\$ENV_TMP\" ./scripts/deploy.sh publish-desktop"

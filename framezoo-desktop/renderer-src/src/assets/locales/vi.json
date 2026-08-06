@@ -1,0 +1,1320 @@
+{
+  "actions": {
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "copied": "Đã sao chép",
+    "copy": "Sao chép"
+  },
+  "addons": {
+    "manager": {
+      "add": "Thêm",
+      "adding": "Đang thêm...",
+      "ariaClose": "Đóng cửa sổ quản lý addon",
+      "ariaManage": "Quản lý Addons",
+      "createGuideLink": "Cách tạo Addons?",
+      "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
+      "manageListButton": "Quản lý danh sách Addons",
+      "subtitle": "Chúng tôi không khuyến khích thêm bất kỳ tiện ích bổ sung không chính thức hoặc bất hợp pháp nào.",
+      "title": "Thêm Addons"
+    },
+    "platforms": {
+      "framezoo": "FrameZoo",
+      "stremio": "Stremio",
+      "supportLabel": "Nền tảng hỗ trợ Addons:",
+      "supported": "Nền tảng được hỗ trợ Addons: Stremio và FrameZoo"
+    },
+    "page": {
+      "addAddonButton": "Thêm Addon",
+      "description": "Addons là tùy chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ bất kỳ tiện ích bổ sung nào.",
+      "createGuideLink": "Hướng dẫn tạo Addons",
+      "disabled": "Đã tắt",
+      "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
+      "enabled": "Đang bật",
+      "installError": "Không thể cài đặt tiện ích mở rộng này.",
+      "installedHeading": "Danh sách Addons đã cài đặt",
+      "processing": "Đang xử lý...",
+      "removeAddon": "Xóa addon này",
+      "title": "Quản lý Addons"
+    },
+    "player": {
+      "chooseAddon": "Chọn addon",
+      "emptyExplanation": "Không có addon nào được cài đặt hoặc kích hoạt. Thêm URL kê khai bạn chọn trong Addons.",
+      "emptyTitle": "Chưa có Addon stream nào",
+      "loadingStreams": "Đang tìm luồng...",
+      "manageAddonsButton": "Quản lý danh sách Addons",
+      "noAddonStreams": "Không có luồng nào được trả lại bởi addon này.",
+      "noTorrentStreams": "Không tìm thấy luồng torrent nào từ addon này.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Tất cả chất lượng",
+        "other": "Khác"
+      },
+      "sources": "Nguồn",
+      "streamCount": "{{count}} luồng",
+      "streamCount_plural": "{{count}} luồng",
+      "title": "Tiện ích bổ sung dành cho máy tính để bàn",
+      "unableToLoad": "Không thể tải danh sách luồng",
+      "viewStreams": "Xem luồng"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "Đang hoạt động",
+      "confirm": "Xác nhận",
+      "customBackend": "Backend tùy chỉnh",
+      "customBackendPlaceholder": "https://",
+      "description": "Chọn máy chủ backend để kết nối",
+      "title": "Chọn máy chủ tài khoản"
+    },
+    "createAccount": "Chưa có tài khoản? <0>Hãy tạo tài khoản.</0>",
+    "generate": {
+      "custom": "Tùy chỉnh",
+      "customPassphraseLabel": "Mật ngữ tùy chỉnh",
+      "customPassphrasePlaceholder": "Nhập mật ngữ tùy chỉnh của bạn",
+      "description": "Passphrase đóng vai trò là tên người dùng và mật khẩu của bạn. Hãy giữ nó an toàn vì bạn sẽ cần nó để đăng nhập vào tài khoản của bạn.<bold>ĐỪNG làm mất passphrase của bạn!</bold>",
+      "invalidPassphraseCharacters": "Ký tự mật ngữ không hợp lệ. Chỉ cho phép các chữ cái tiếng Anh, số 1-10 và các biểu tượng thông thường.",
+      "next": "Tôi đã lưu giữ mật ngữ của mình",
+      "passphraseFrameLabel": "Mật ngữ",
+      "passphraseTooShort": "Mật ngữ phải dài ít nhất 8 ký tự.",
+      "title": "Mật ngữ của bạn",
+      "useCustomPassphrase": "Sử dụng mật ngữ tùy chỉnh",
+      "usePasskeyInstead": "Sử dụng passkey thay thế"
+    },
+    "hasAccount": "Đã có tài khoản? <0>Hãy đăng nhập.</0>",
+    "login": {
+      "description": "Nhập tên người dùng hoặc email và mật khẩu để đăng nhập vào tài khoản của bạn",
+      "failedToReachServer": "Không thể truy cập máy chủ",
+      "identifierLabel": "Tên người dùng hoặc email",
+      "identifierNotFound": "Không tìm thấy tên người dùng hoặc email",
+      "identifierPlaceholder": "Nhập tên người dùng hoặc email của bạn",
+      "identifierRequired": "Tên người dùng hoặc email là bắt buộc",
+      "noBackendUrl": "Không có URL backend",
+      "or": "hoặc",
+      "passwordIncorrect": "Mật khẩu không chính xác",
+      "passwordLabel": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "passwordRequired": "Vui lòng nhập mật khẩu",
+      "submit": "Đăng nhập",
+      "title": "Đăng nhập vào tài khoản của bạn",
+      "usePasskey": "Sử dụng passkey",
+      "validationError": "Mật khẩu không chính xác hoặc không đầy đủ"
+    },
+    "register": {
+      "confirmPasswordLabel": "Xác nhận mật khẩu",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+      "emailInvalid": "Nhập địa chỉ email hợp lệ",
+      "emailLabel": "Email cá nhân",
+      "emailPlaceholder": "Nhập email cá nhân của bạn",
+      "information": {
+        "color1": "Màu hồ sơ số một",
+        "color2": "Màu hồ sơ số hai",
+        "header": "Chọn màu hồ sơ và biểu tượng của bạn.",
+        "icon": "Biểu tượng người dùng",
+        "next": "Tiếp theo",
+        "title": "Thông tin tài khoản"
+      },
+      "nicknameLabel": "Biệt danh",
+      "nicknamePlaceholder": "Chọn một biệt danh duy nhất",
+      "nicknameTaken": "Biệt danh đã được sử dụng",
+      "nicknameRequired": "Biệt hiệu là bắt buộc",
+      "passwordInput": {
+        "description": "Chọn biệt hiệu, email cá nhân và mật khẩu. Mật khẩu của bạn hoạt động như một cụm mật khẩu an toàn, vì vậy hãy đảm bảo bạn ghi nhớ nó!",
+        "title": "Tạo thông tin đăng nhập"
+      },
+      "passwordLabel": "Mật khẩu",
+      "passwordMismatch": "Mật khẩu nhập lại không khớp",
+      "passwordPlaceholder": "Tạo mật khẩu (được dùng làm mật ngữ)",
+      "passwordWeak": "Mật khẩu phải có ít nhất 8 ký tự gồm cả chữ và số"
+    },
+    "trust": {
+      "failed": {
+        "text": "Bạn đã cài đặt nó một cách chính xác chưa?",
+        "title": "Không thể truy vấn máy chủ"
+      },
+      "host": "Bạn đang kết nối đến máy chủ <0>{{hostname}}</0> - vui lòng chắc chắn rằng bạn tin tưởng máy chủ này trước khi tạo tài khoản...",
+      "no": "Quay lại",
+      "noHost": "Máy chủ chưa được cấu hình, nên bạn không thể tạo tài khoản",
+      "noHostTitle": "Máy chủ chưa được cấu hình!",
+      "title": "Bạn có tin tưởng máy chủ này không?",
+      "yes": "Tôi tin tưởng máy chủ này"
+    },
+    "verify": {
+      "description": "Vui lòng nhập mật ngữ của bạn lúc nãy đễ chắc chắn rằng bạn đã lưu nó và để tạo tài khoản",
+      "invalidData": "Dữ liệu không hợp lệ",
+      "noMatch": "Mật ngữ không khớp",
+      "recaptchaFailed": "Xác minh bằng ReCaptcha không hợp lệ",
+      "register": "Tạo tài khoản",
+      "title": "Nhập lại mật ngữ của bạn"
+    }
+  },
+  "details": {
+    "addToList": "Thêm vào danh sách",
+    "airs": "Phát sóng",
+    "collection": {
+      "bookmarkAll": "Đánh dấu tất cả",
+      "movie": "Phim điện ảnh",
+      "movies": "Phim điện ảnh",
+      "rating": "Đánh giá",
+      "releaseDate": "Ngày phát hành",
+      "sortBy": "Sắp xếp theo"
+    },
+    "endsAt": "Kết thúc tại {{time}}",
+    "episode": "Tập",
+    "episodeNumber": "Tập {{number}}",
+    "episodeReleaseDate": "Ngày phát hành: {{date}}",
+    "episodeReleaseDateUnknown": "Ngày phát hành: Chưa xác định",
+    "episodes": "Tập phim",
+    "imdb": "Xem trên IMDb",
+    "language": "Ngôn ngữ:",
+    "play": "Phát",
+    "rating": "Đánh giá:",
+    "releaseDate": "Ngày phát hành:",
+    "resume": "Tiếp tục",
+    "runtime": "Thời lượng:",
+    "season": "Mùa",
+    "specialSeason": "Mùa đặc biệt",
+    "seasons": "Mùa phim",
+    "similar": "Tương tự",
+    "tmdb": "Xem trên TMDB",
+    "trailers": "Trailer",
+    "watched": "Đã xem {{watched}} trên {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Tất cả danh sách phim",
+    "carousel": {
+      "change": "Thay đổi",
+      "more": "Xem thêm",
+      "today": "Hôm nay",
+      "thisWeek": "Tuần này",
+      "title": {
+        "4kReleases": "Phát hành 4K",
+        "editorPicksMovies": "Phim điện ảnh biên tập viên chọn",
+        "editorPicksShows": "Phim truyền hình biên tập viên chọn",
+        "forYou": "Dành cho bạn",
+        "inCinemas": "Đang chiếu rạp",
+        "latestReleases": "Phát hành mới nhất",
+        "latestTVReleases": "Phim truyền hình mới nhất",
+        "movies": "Phim {{category}}",
+        "moviesOn": "Phim điện ảnh trên {{provider}}",
+        "onTheAir": "Đang phát sóng",
+        "popular": "Phổ biến nhất",
+        "recommended": "Vì bạn đã xem: {{title}}",
+        "top10": "Top 10",
+        "topRated": "Đánh giá cao nhất",
+        "trending": "Xu hướng",
+        "tvshows": "Phim truyền hình {{category}}",
+        "tvshowsOn": "Phim truyền hình trên {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Thông tin thêm",
+      "playNow": "Xem ngay"
+    },
+    "filters": {
+      "country": "Quốc gia"
+    },
+    "page": {
+      "back": "Quay lại",
+      "loading": "Đang tải...",
+      "loadMore": "Tải thêm",
+      "title": "Khám phá Phim & TV"
+    },
+    "scrollToTop": "Quay lại đầu trang",
+    "tabs": {
+      "movies": "Phim điện ảnh",
+      "top10": "Top 10",
+      "tvshows": "Phim truyền hình"
+    },
+    "viewLists": "Xem tất cả danh sách phim"
+  },
+  "downtimeNotice": {
+    "badge": "Sự cố",
+    "goHome": "Về trang chính",
+    "message": "FrameZoo đang gặp sự cố với một số nhà cung cấp một lần nữa, nếu bạn không tìm thấy hoặc không phát được chương trình, vui lòng thay đổi nguồn. Dự kiến lỗi này sẽ tiếp diễn trong thời gian tới.",
+    "title": "Sự cố nhà cung cấp"
+  },
+  "errors": {
+    "badge": "Lỗi",
+    "details": "Thông tin về lỗi",
+    "reloadPage": "Tải lại trang",
+    "showError": "Hiển thị thông tin về lỗi",
+    "title": "Đã xảy ra lỗi!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Tuyên bố miễn trừ trách nhiệm",
+      "disclaimerText": "FrameZoo cung cấp trình phát trực tuyến an toàn, hiện đại và liền mạch với giao diện dễ sử dụng và phát lại chất lượng cao trên các thiết bị được hỗ trợ. Nó không lưu trữ các tệp phương tiện, vận hành danh mục nguồn hoặc đề xuất các tiện ích bổ sung cụ thể. Các tiện ích bổ sung tùy chọn được cấu hình bởi người dùng, những người chịu trách nhiệm sử dụng các nguồn hợp pháp."
+    },
+    "links": {
+      "fluxer": "thông lượng",
+      "funding": "Hỗ trợ chúng tôi",
+      "github": "GitHub"
+    },
+    "tagline": "Trình phát trực tuyến hiện đại, an toàn mang lại trải nghiệm xem liền mạch, chất lượng cao."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "Hủy",
+      "clickToEdit": "Nhấn vào huy hiệu phím để chỉnh sửa",
+      "conditions": {
+        "showsOnly": "Chỉ phim truyền hình"
+      },
+      "conflict": "xung đột",
+      "conflicts": "xung đột",
+      "detected": "đã phát hiện",
+      "editInSettings": "Chỉnh sửa lệnh bàn phím từ cài đặt",
+      "groups": {
+        "audioVideo": "Âm thanh & Video",
+        "interface": "Giao diện",
+        "jumpToPosition": "Nhảy tới vị trí",
+        "subtitlesAccessibility": "Phụ đề & Khả năng truy cập",
+        "videoPlayback": "Phát video"
+      },
+      "none": "Không có",
+      "numberKeySeeking": "Tìm kiếm tiến trình bằng phím số",
+      "numberKeySeekingDescription": "Sử dụng các phím số 0-9 để nhảy tới các vị trí cụ thể trong video. 0 về đầu, 1-8 nhảy tới 10%-80%, và 9 nhảy tới 90%.",
+      "pressKey": "Nhấn một phím...",
+      "resetAllToDefault": "Đặt lại tất cả về mặc định",
+      "resetToDefault": "Đặt lại về mặc định",
+      "save": "Lưu",
+      "saveChanges": "Lưu thay đổi",
+      "shortcuts": {
+        "barrelRoll": "Lộn vòng! 🌀",
+        "closeOverlay": "Đóng lớp phủ/cửa sổ",
+        "decreaseVolume": "Giảm âm lượng",
+        "increaseVolume": "Tăng âm lượng",
+        "jumpTo0": "Nhảy tới 0% (bắt đầu)",
+        "jumpTo9": "Nhảy tới 90%",
+        "mute": "Bật/tắt tiếng",
+        "nextEpisode": "Tập kế tiếp",
+        "playPause": "Phát/tạm dừng (hoặc giữ để tăng tốc 2x khi được bật)",
+        "playPauseAlt": "Phát/tạm dừng",
+        "previousEpisode": "Tập trước đó",
+        "randomCaption": "Chọn phụ đề ngẫu nhiên từ ngôn ngữ dùng gần nhất",
+        "skipBackward1": "Tua lùi 1 giây",
+        "skipBackward10": "Tua lùi 10 giây",
+        "skipBackward5": "Tua lùi 5 giây",
+        "skipForward1": "Tua tiến 1 giây",
+        "skipForward10": "Tua tiến 10 giây",
+        "skipForward5": "Tua tiến 5 giây",
+        "syncSubtitlesEarlier": "Mốc phụ đề trước",
+        "syncSubtitlesLater": "Mốc phụ đề tiếp theo",
+        "previousSubtitleCue": "Mốc phụ đề trước",
+        "nextSubtitleCue": "Mốc phụ đề tiếp theo",
+        "toggleCaptions": "Bật/tắt phụ đề",
+        "toggleFullscreen": "Bật/tắt toàn màn hình",
+        "toggleNativeSubtitles": "Bật/tắt phụ đề gốc"
+      },
+      "subtitle": "Giữ phím ` để hiển thị trợ giúp này bất cứ lúc nào",
+      "title": "Phím tắt bàn phím"
+    },
+    "name": "FrameZoo",
+    "pages": {
+      "discover": "Khám phá",
+      "login": "Đăng nhập",
+      "migration": "Chuyển tài khoản",
+      "pagetitle": "{{title}} - FrameZoo",
+      "register": "Đăng ký",
+      "settings": "Cài đặt"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "Hủy",
+        "description": "Chỉnh sửa chi tiết cho dấu trang này",
+        "groupsLabel": "Nhóm",
+        "save": "Lưu",
+        "title": "Chỉnh sửa dấu trang",
+        "titleLabel": "Tiêu đề",
+        "titlePlaceholder": "Nhập tiêu đề cho dấu trang của bạn",
+        "yearLabel": "Năm",
+        "yearPlaceholder": "Nhập năm cho dấu trang của bạn"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "Chưa có nhóm nào",
+          "namePlaceholder": "Tên nhóm",
+          "placeholderButton": "Thêm vào nhóm",
+          "removeAll": "Xóa tất cả",
+          "removeFromGroup": "Xóa khỏi nhóm"
+        },
+        "editGroup": {
+          "affectsBookmarks": "Điều này sẽ ảnh hưởng đến {{count}} dấu trang",
+          "cancel": "Hủy",
+          "description": "Chỉnh sửa tên và biểu tượng của nhóm dấu trang",
+          "nameLabel": "Tên nhóm",
+          "namePlaceholder": "Nhập tên cho nhóm của bạn",
+          "save": "Lưu",
+          "title": "Chỉnh sửa nhóm"
+        },
+        "reorder": {
+          "button": "Sắp xếp lại",
+          "cancel": "Hủy",
+          "description": "Kéo và thả để sắp xếp lại các nhóm dấu trang của bạn",
+          "done": "Xong",
+          "save": "Lưu",
+          "title": "Chỉnh sửa thứ tự nhóm"
+        }
+      },
+      "sectionTitle": "Đánh dấu",
+      "showAll": "Xem tất cả",
+      "sorting": {
+        "options": {
+          "date": "Mặc định (Ngày thêm)",
+          "titleAsc": "Tiêu đề A-Z",
+          "titleDesc": "Tiêu đề Z-A",
+          "yearAsc": "Ngày phát hành Cũ-Mới",
+          "yearDesc": "Ngày phát hành Mới-Cũ"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "Tiếp tục xem...",
+      "sorting": {
+        "options": {
+          "date": "Mặc định (Ngày thêm)",
+          "titleAsc": "Tiêu đề A-Z",
+          "titleDesc": "Tiêu đề Z-A",
+          "yearAsc": "Ngày phát hành Cũ-Mới",
+          "yearDesc": "Ngày phát hành Mới-Cũ"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "Hoàn thành"
+    },
+    "search": {
+      "allResults": "Đó là tất cả chúng tôi có...",
+      "discover": "Khám phá",
+      "discoverMore": "Khám phá thêm",
+      "genreFilterAll": "Tất cả thể loại",
+      "empty": {
+        "default": "Chào mừng, tìm phương tiện truyền thông để xem tại đây!",
+        "extra": [
+          "Không có gì ở đây :(",
+          "Thật trống rỗng...",
+          "Trống trải thật.",
+          "Xin chào người dùng mới :3"
+        ]
+      },
+      "failed": "Không tìm thấy phương tiện, hãy thử lại!",
+      "loading": "Đang tải...",
+      "noResults": "Chúng tôi không thể tìm thấy gì :(",
+      "placeholder": {
+        "default": "Bạn muốn xem gì?",
+        "extra": [
+          "Bạn đang muốn làm gì?",
+          "Chúng tôi có nên xóa trình duyệt web của bạn không?",
+          "Ban muốn xem gì?",
+          "FrameZoo là trang web tuyệt nhất!",
+          "Có gì trong danh sách phim của bạn hôm nay?",
+          "Hôm nay bạn thế nào?",
+          "Xin lỗi nha, trang này hay hỏng lắm...",
+          "Không phải FrameZoo là tuyệt nhất sao?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "Kết quả tìm kiếm"
+    },
+    "support": {
+      "complete": "hoàn thành",
+      "description": "FrameZoo hoạt động không vì lợi nhuận, và chúng tôi cần sự giúp đỡ để duy trì ứng dụng không có quảng cáo! Nếu bạn thích sử dụng FrameZoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải chi phí.",
+      "donate": "Quyên góp",
+      "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng FrameZoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
+      "explanation2": "Nếu bạn muốn biết thêm thông tin, vui lòng tham gia ",
+      "fluxer": "thông lượng",
+      "label": "Kinh phí dự án: ${{current}} / ${{goal}}",
+      "moreInfo": "Thêm thông tin",
+      "thankYou": "Cảm ơn sự ủng hộ của bạn!",
+      "title": "FrameZoo cần sự giúp đỡ của bạn!"
+    },
+    "titles": {
+      "69": {
+        "default": "Muốn khuấy đảo tí cho đời thêm vui không?",
+        "extra": [
+          "Chúc mừng 69 ngày 😘!"
+        ]
+      },
+      "420": {
+        "default": "Bạn muốn xem gì ngày 20/4 này?",
+        "extra": [
+          "Chúc mừng ngày 20/4 🥳 !"
+        ]
+      },
+      "day": {
+        "default": "Chiều nay bạn muốn coi gì?",
+        "extra": [
+          "Cảm thấy muốn phiêu lưu? Phim Công viên kỷ Jura có thể là sự lựa chọn hoàn hảo cho bạn."
+        ]
+      },
+      "halloween": {
+        "default": "Bộ phim rùng rợn nào bạn muốn xem trong dịp Halloween này?",
+        "extra": [
+          "Chúc mừng Halloween! 🎃👻",
+          "Ối! 👻",
+          "Cho kẹo hay bị ghẹo! 🍬",
+          "Đó là Great Pumpkin, Charlie Brown!"
+        ]
+      },
+      "morning": {
+        "default": "Sáng nay bạn muốn coi gì?",
+        "extra": [
+          "Tôi nghe nói rằng bộ phim Before Sunrise hay đấy"
+        ]
+      },
+      "night": {
+        "default": "Đêm nay bạn muốn coi gì?",
+        "extra": [
+          "Cảm thấy mệt? Tôi nghe nói phim The Exorcist hay đấy."
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "Xem gần đây",
+      "sectionTitle": "Lịch sử xem"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Sao chép liên kết chia sẻ",
+      "create": "Tạo danh sách",
+      "delete": "Xóa bỏ",
+      "edit": "Chỉnh sửa",
+      "editItems": "Chỉnh sửa mục",
+      "open": "Mở",
+      "save": "Lưu thay đổi",
+      "saveMembership": "Lưu thay đổi"
+    },
+    "delete": {
+      "confirm": "Xóa \"{{name}}\"? Điều này không thể hoàn tác được."
+    },
+    "empty": {
+      "description": "Tạo danh sách đầu tiên của bạn để bắt đầu nhóm các tiêu đề.",
+      "title": "Chưa có danh sách nào"
+    },
+    "errors": {
+      "load": "Không thể tải danh sách của bạn."
+    },
+    "form": {
+      "createDescription": "Bắt đầu danh sách mới cho các mục yêu thích, video xem lại hoặc bất kỳ nội dung nào khác mà bạn muốn chia sẻ.",
+      "createTitle": "Tạo danh sách",
+      "description": "Sự miêu tả",
+      "descriptionHelp": "Ghi chú tùy chọn để giúp bạn nhớ những gì thuộc danh sách này.",
+      "descriptionPlaceholder": "Danh sách này dùng để làm gì?",
+      "editDescription": "Cập nhật tên, mô tả hoặc khả năng hiển thị cho danh sách này.",
+      "editTitle": "Chỉnh sửa danh sách",
+      "errors": {
+        "nameRequired": "Tên danh sách là bắt buộc",
+        "submitFailed": "Không lưu được danh sách."
+      },
+      "name": "Tên danh sách",
+      "namePlaceholder": "khoa học viễn tưởng cuối tuần",
+      "public": "Danh sách công khai",
+      "publicHelp": "Bất kỳ ai có liên kết đều có thể xem danh sách này."
+    },
+    "items": {
+      "empty": "Danh sách này trống.",
+      "emptyHelp": "Thêm tiêu đề từ bất kỳ phim hoặc thẻ chương trình nào bằng Thêm vào danh sách, sau đó quay lại đây để quản lý danh sách."
+    },
+    "meta": {
+      "itemCount": "{{count}} mục",
+      "itemCount_plural": "{{count}} mục",
+      "updatedAt": "Đã cập nhật {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Hủy bỏ",
+        "create": "Tạo danh sách",
+        "save": "Lưu thay đổi"
+      },
+      "description": "Chọn danh sách nào sẽ bao gồm {{title}}.",
+      "empty": {
+        "description": "Tạo một danh sách để lưu tiêu đề này.",
+        "title": "Chưa có danh sách nào"
+      },
+      "errors": {
+        "create": "Không tạo được danh sách.",
+        "save": "Không cập nhật được danh sách thành viên."
+      },
+      "title": "Thêm vào danh sách"
+    },
+    "page": {
+      "description": "Tuyển chọn các video yêu thích, đêm chủ đề và các lựa chọn xem tiếp theo mà bạn có thể giữ ở chế độ riêng tư hoặc chia sẻ bằng một liên kết.",
+      "editingHint": "Nhấp vào nút đóng trên thẻ để xóa thẻ đó khỏi danh sách này.",
+      "eyebrow": "Bộ sưu tập",
+      "itemsEyebrow": "Tiêu đề trong danh sách này",
+      "itemsHint": "Chọn danh sách ở bên trái để duyệt qua, sau đó sử dụng chế độ chỉnh sửa khi bạn muốn dọn dẹp danh sách đó.",
+      "publicCountPlural": "{{count}} danh sách công khai",
+      "publicCountSingular": "1 danh sách công khai",
+      "searchEmptyDescription": "Hãy thử tên khác hoặc xóa tìm kiếm của bạn.",
+      "searchEmptyTitle": "Không có danh sách phù hợp",
+      "searchPlaceholder": "Danh sách tìm kiếm",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Đã cập nhật gần đây",
+      "summaryPlural": "{{count}} danh sách",
+      "summarySingular": "1 danh sách",
+      "title": "Danh sách"
+    },
+    "public": {
+      "descriptionFallback": "Một bộ sưu tập được chia sẻ được quản lý trong FrameZoo.",
+      "notFoundDescription": "Liên kết chia sẻ này bị thiếu hoặc không còn tồn tại.",
+      "notFoundTitle": "Không tìm thấy danh sách",
+      "pageTitle": "Danh sách chia sẻ",
+      "privateDescription": "Chủ sở hữu chưa chia sẻ danh sách này một cách công khai.",
+      "privateTitle": "Danh sách này là riêng tư"
+    },
+    "visibility": {
+      "private": "Riêng tư",
+      "public": "Công khai"
+    }
+  },
+  "media": {
+    "episodeDisplay": "M{{season}} T{{episode}}",
+    "episodeShort": "T",
+    "seasonUnwatched": "Bạn có chắc chắn muốn đánh dấu mùa này là chưa xem không?",
+    "seasonWatched": "Bạn có chắc chắn muốn đánh dấu mùa này là đã xem không?",
+    "types": {
+      "movie": "Phim",
+      "show": "Chương trình truyền hình"
+    },
+    "unreleased": "Chưa phát hành"
+  },
+  "migration": {
+    "back": "Quay về",
+    "download": {
+      "button": {
+        "download": "Tải dữ liệu",
+        "home": "Về trang chính"
+      },
+      "description": "Điều này sẽ tải dữ liệu đến thiết bị của bạn. Bạn có thể tải nó lên máy chủ mới hoặc giữ nguyên để bảo mật.",
+      "status": {
+        "error": "Tải dữ liệu thất bại. 😿",
+        "success": "Dữ liệu của bạn đã được tải thành công! 🎉"
+      },
+      "title": "Tải dữ liệu"
+    },
+    "loginRequired": "Bạn phải đăng nhập để nhập dữ liệu của bạn! Xin quay lại và đăng nhập để tiếp tục.",
+    "preview": {
+      "downloadDescription": "Bản tải xuống bao gồm:",
+      "items": {
+        "bookmarks": "Phương tiện đã đánh dấu",
+        "progress": "Tiến trình xem",
+        "settings": "Cài đặt & Tùy chọn"
+      },
+      "uploadDescription": "Dữ liệu để tải lên:"
+    },
+    "start": {
+      "explainer": "Điều này sẽ tải dữ liệu đến thiết bị của bạn. Bạn có thể tải nó lên máy chủ mới hoặc giữ nguyên để bảo mật. Tải lên tệp dữ liệu đã xuất của bạn để phục hồi các trang dấu và quá trình trên tài khoản này.",
+      "options": {
+        "download": {
+          "action": "Tải dữ liệu",
+          "description": "Điều này sẽ tải dữ liệu đến thiết bị của bạn. Bạn có thể tải nó lên máy chủ mới hoặc giữ nguyên để bảo mật.",
+          "quality": "Nâng cao",
+          "title": "Tải dữ liệu"
+        },
+        "or": "hoặc",
+        "upload": {
+          "action": "Tải lên dữ liệu",
+          "description": "Tải lên tệp dữ liệu đã xuất của bạn để phục hồi các trang dấu và quá trình trên tài khoản này.",
+          "quality": "Phục hồi sao lưu",
+          "title": "Tải lên dữ liệu"
+        }
+      },
+      "title": "Nhập dữ liệu của bạn"
+    },
+    "upload": {
+      "button": {
+        "home": "Tiếp tục về trang chính",
+        "import": "Nhập dữ liệu",
+        "processing": "Đang xử lý...",
+        "saveLocal": "Lưu cục bộ"
+      },
+      "description": "Tải lên tệp dữ liệu đã xuất của bạn để phục hồi các trang dấu và quá trình trên tài khoản này.",
+      "exportedOn": "Xuất ra",
+      "file": {
+        "change": "Đổi tệp",
+        "description": "Chọn tệp bạn muốn tải lên",
+        "select": "Chọn tệp"
+      },
+      "previewTitle": "Xem trước:",
+      "status": {
+        "error": "Tải dữ liệu lên thất bại. 😿",
+        "processing": "Đang xử lý dữ liệu...",
+        "success": "Dữ liệu của bạn đã được tải lên thành công! 🎉",
+        "successLocal": "Dữ liệu của bạn đã được lưu cục bộ! 🎉"
+      },
+      "title": "Tải lên dữ liệu"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "Cập nhật ngay",
+        "available": "Đã có phiên bản mới của ứng dụng.",
+        "download": "Tải xuống bản cập nhật",
+        "later": "Để sau",
+        "restart": "Khởi động lại để cập nhật",
+        "updating": "Đang cập nhật..."
+      },
+      "offline": "Hãy kiểm tra kết nối Internet của bạn"
+    },
+    "download": {
+      "empty": "Chưa có nội dung tải xuống nào được định cấu hình.",
+      "failed": "Không tải được các tùy chọn tải xuống.",
+      "label": "Tải xuống ứng dụng",
+      "options": {
+        "mac-arm64": {
+          "description": "Tốt nhất cho máy Mac dòng M",
+          "label": "macOS Apple Silicon"
+        },
+        "mac-universal": {
+          "description": "Hoạt động trên cả máy Mac Apple Silicon và Intel",
+          "label": "macOS phổ thông"
+        },
+        "mac-x64": {
+          "description": "Tốt nhất cho máy Mac Intel",
+          "label": "macOS Intel"
+        },
+        "win-arm64": {
+          "description": "Tốt nhất cho PC Windows Snapdragon/ARM",
+          "label": "Windows ARM64"
+        },
+        "win-x64": {
+          "description": "Tốt nhất cho PC Windows 64-bit",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "Không có URL phụ trợ nào được định cấu hình."
+    },
+    "install": {
+      "genericGuide": "Trình duyệt của bạn không hỗ trợ hộp thoại cài đặt PWA tự động.\nBạn có thể cài bằng cách dùng menu trình duyệt (ví dụ: \"Install app\", \"Create shortcut\", hoặc \"Add to Dock/Home Screen\").",
+      "iosSafariGuide": "Để cài FrameZoo như ứng dụng:\n\n1. Nhấn nút Chia sẻ (biểu tượng hình vuông có mũi tên).\n2. Chọn \"Thêm vào Màn hình chính\" / \"Add to Home Screen\".\n3. Nhấn Thêm."
+    },
+    "menu": {
+      "accountMenu": "Mở menu tài khoản",
+      "addons": "Tiện ích bổ sung",
+      "desktop": "Cài đặt ứng dụng",
+      "logout": "Đăng xuất",
+      "register": "Đồng bộ hóa với đám mây",
+      "settings": "Cài đặt"
+    }
+  },
+  "notFound": {
+    "badge": "Không tìm thấy",
+    "goHome": "Quay lại trang chính",
+    "message": "Chúng tôi đã tìm kiếm khắp nơi: dưới thùng rác, trong tủ quần áo, đằng sau máy chủ proxy nhưng vẫn không thể tìm thấy trang bạn đang tìm kiếm. ",
+    "reloadButton": "Thử lại",
+    "title": "Không thể tìm thấy trang"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Huỷ"
+    }
+  },
+  "overlays": {
+    "close": "Đóng"
+  },
+  "player": {
+    "back": {
+      "default": "Quay lại trang chính",
+      "short": "Quay lại"
+    },
+    "casting": {
+      "device": "thiết bị",
+      "to": "Đang truyền tới {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Đang trích điện dev…",
+      "2": "Nghỉ xíu đã...",
+      "3": "Kích hoạt chế độ tự huỷ...",
+      "4": "Dev đang bận đi trà đá…",
+      "5": "Hacking nasa...",
+      "6": "Chúng tôi đã cố gắng hết sức...",
+      "7": "Sắp được rồi... thật.",
+      "8": "Vẫn nhanh hơn window update...",
+      "9": "Cứ bình tĩnh...",
+      "10": "Đợi chút, đang ăn mì gói...",
+      "11": "Tắt đi, bật lại…",
+      "12": "Downloading more RAM...",
+      "13": "Winter is coming...",
+      "14": "Sắp xong rồi…(nghe bảo vậy)",
+      "15": "Dữ liệu của bạn giờ thuộc về chúng tôi…",
+      "16": "Hay là bạn tìm cái gì ăn tạm đi?",
+      "17": "Vui lòng chờ trong lúc chúng tôi giả vờ đang làm việc…",
+      "18": "Tìm thêm cách mới để bạn phải chờ…",
+      "19": "Đừng lo, chúng tôi cũng đang chờ…",
+      "20": "Nếu bạn đọc được dòng này…loading vẫn chưa xong",
+      "21": "Coi chừng đằng sau kìa",
+      "22": "Đừng nhìn thanh loading… nó sẽ chậm hơn."
+    },
+    "menus": {
+      "audio": {
+        "default": "Mặc định"
+      },
+      "episodes": {
+        "button": "Tập phim",
+        "emptyState": "Không có tập nào trong mùa này, hãy quay lại sau (xin lỗi :3)...",
+        "episodeBadge": "T{{episode}}",
+        "favorites": "Yêu thích",
+        "loadingError": "Lỗi khi tải mùa phim",
+        "loadingList": "Đang tải...",
+        "loadingTitle": "Đang tải...",
+        "markAsFavorite": "Gắn sao yêu thích",
+        "markAsUnwatched": "Đánh dấu là chưa xem",
+        "markAsWatched": "Đánh dấu là đã xem",
+        "noFavorites": "Chưa có tập phim yêu thích nào. Hãy gắn sao các tập để thêm vào đây!",
+        "showLess": "Xem ít hơn",
+        "showMore": "Xem thêm",
+        "specials": "Tập đặc biệt"
+      },
+      "playback": {
+        "disabled": "(Tắt trong buổi tiệc xem)",
+        "speedBoosted": "2x",
+        "speedLabel": "Tốc độ phát lại",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Cài đặt phát lại"
+      },
+      "quality": {
+        "auto": "Tự động",
+        "automaticLabel": "Chất lượng tự động",
+        "hint": "Bạn có thể thử <0>chuyển đổi nguồn</0> để có các tùy chọn chất lượng khác nhau.",
+        "iosNoQuality": "Do những hạn chế do Apple xác định, lựa chọn chất lượng không khả dụng trên iOS cho nguồn này. Bạn có thể thử <0>chuyển sang nguồn khác</0> để có các tùy chọn chất lượng khác.",
+        "title": "Chất lượng"
+      },
+      "settings": {
+        "audioItem": "Âm thanh",
+        "enableSubtitles": "Bật Phụ đề",
+        "playbackItem": "Cài đặt phát lại",
+        "qualityItem": "Chất lượng",
+        "sourceItem": "Nguồn",
+        "subtitleItem": "Phụ đề"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Tự động chọn",
+        "autoSelectDifferentChoice": "Nhấn lại để tự động chọn phụ đề khác",
+        "clearSecondary": "Xóa phụ đề phụ",
+        "customChoice": "Thả hoặc tải tập tin lên",
+        "customizeLabel": "Tùy chỉnh",
+        "delayEarly": "Nhìn thấy phụ đề",
+        "delayLate": "Nghe thấy âm thanh",
+        "doubleClickToCopy": "Nhấp đúp để sao chép dữ liệu phụ đề",
+        "dropSubtitleFile": "Thả file phụ đề vào đây! >_<",
+        "dualSub": "Phụ đề kép",
+        "dualSubDesc": "Chọn cùng định dạng (SRT, VTT...) & nhà cung cấp (OpenSubs...) để đồng bộ tốt nhất",
+        "dualSubHint": "Chọn ngôn ngữ cho phụ đề phụ (hiển thị phía trên phụ đề chính)",
+        "embedded": "Nhúng",
+        "empty": "Không có phụ đề nào được cung cấp cho video này.",
+        "loadingExternal": "Đang tải phụ đề bên ngoài...",
+        "loadingExternalProgress": "Đang tải phụ đề bên ngoài... ({{progress}}%)",
+        "matchScoreLabel": "Khớp ~{{score}}%",
+        "notFound": "Không có tùy chọn nào có sẵn phù hợp với truy vấn của bạn",
+        "offChoice": "Tắt",
+        "pasteChoice": "Dán dữ liệu phụ đề",
+        "previewLabel": "Xem trước phụ đề:",
+        "primary": "Phụ đề chính",
+        "refresh": "Làm mới phụ đề bên ngoài",
+        "refreshing": "Đang làm mới...",
+        "secondary": "Phụ đề phụ",
+        "selectingSecondary": "Đang chọn phụ đề phụ",
+        "syncSubtitleConfirmTitle": "Đồng bộ phụ đề bằng AI?",
+        "syncSubtitleConfirmDescription": "Phụ đề sẽ được căn chỉnh bởi AI cho khớp với video.",
+        "syncSubtitleSupportedLanguages": "Ngôn ngữ audio được hỗ trợ",
+        "syncSubtitleSuccess": "Đã đồng bộ phụ đề",
+        "syncSubtitleFailed": "Không thể đồng bộ phụ đề",
+        "syncSubtitleOpen": "Đồng bộ phụ đề bằng AI",
+        "syncSubtitleAction": "Đồng bộ",
+        "settings": {
+          "backlink": "Phụ đề tùy chỉnh",
+          "delay": "Độ trễ phụ đề",
+          "fixCapitals": "Sửa lỗi viết hoa",
+          "autoSync": "Tự động đồng bộ phụ đề",
+          "syncingProgress": "Đang đồng bộ hóa... ({{progress}}%) (quá trình này có thể mất 2-3 phút)",
+          "syncApplied": "Đã áp dụng tự động đồng bộ.",
+          "timeline": "Dòng thời gian phụ đề",
+          "timelineHint": "Chọn gợi ý phụ đề để đồng bộ hóa với thời gian video hiện tại.",
+          "timelineEmpty": "Không có tín hiệu phụ đề có sẵn."
+        },
+        "title": "Phụ đề",
+        "transcriptChoice": "Danh sách thoại & Đồng bộ",
+        "searchPlaceholder": "Tìm kiếm lời thoại, phụ đề...",
+        "delayLabel": "Độ lệch phụ đề",
+        "seekMode": "Điều hướng",
+        "syncMode": "Đồng bộ",
+        "syncOffset": "Độ lệch: {{delay}}s",
+        "syncAction": "Đồng bộ",
+        "nowPlaying": "Đang phát",
+        "syncDescription": "Bấm vào câu thoại của cảnh hiện tại, hoặc tinh chỉnh nhanh độ lệch:",
+        "resetDelay": "Đặt lại",
+        "translate": {
+          "title": "Dịch từ {{language}}"
+        },
+        "unknownLanguage": "Không rõ",
+        "useNativeSubtitles": "Sử dụng phụ đề video gốc",
+        "useNativeSubtitlesDescription": "Có thể sửa phụ đề khi phát và trong PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Xem cùng bạn bè"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Thiếu quyền",
+        "button": "Sử dụng tiện ích mở rộng",
+        "text": "Bạn đã có tiện ích mở rộng, nhưng chúng tôi cần sự cho phép của bạn để bắt đầu sử dụng nó. (¬_¬)",
+        "title": "Cấu hình tiện ích mở rộng"
+      },
+      "failed": {
+        "badge": "Thất bại",
+        "homeButton": "Về trang chính",
+        "text": "Không thể tải siêu dữ liệu của phim từ TMDB. Vui lòng kiểm tra xem TMDB có đang bị sập hay bị chặn bởi kết nối internet của bạn không.",
+        "title": "Tải siêu dữ liệu thất bại"
+      },
+      "legal": {
+        "badge": "Đã xóa",
+        "text": "Phương tiện truyền thông này không còn khả dụng do thông báo gỡ xuống hoặc khiếu nại về bản quyền. 😨",
+        "title": "Phương tiện truyền thông đã bị xóa"
+      },
+      "notFound": {
+        "badge": "Không tìm thấy",
+        "homeButton": "Về trang chính",
+        "text": "Chúng tôi không thể tìm thấy nội dung bạn yêu cầu. Có thể nó đã bị xóa, hoặc bạn đã nhập sai URL.",
+        "title": "Không tìm thấy nội dung."
+      }
+    },
+    "nextEpisode": {
+      "next": "Tập tiếp theo",
+      "nextSeason": "Mùa tiếp theo",
+      "replay": "Phát lại"
+    },
+    "playbackError": {
+      "autoResumeText": "Đã xảy ra lỗi khi cố gắng phát phương tiện 😖. Đang tự động thử các nguồn khác...",
+      "badge": "Lỗi phát lại",
+      "copyDebugInfo": "Sao chép thông tin gỡ lỗi",
+      "debugInfo": "Kiểm tra console để biết thêm chi tiết.",
+      "errors": {
+        "errorAborted": "Việc tải phương tiện đã bị hủy bỏ theo yêu cầu của người dùng.",
+        "errorDecode": "Mặc dù trước đó đã được xác định là có thể sử dụng được, nhưng đã xảy ra lỗi khi cố gắng giải mã tài nguyên phương tiện, dẫn đến lỗi.",
+        "errorGenericMedia": "Đã xảy ra lỗi phương tiện không xác định.",
+        "errorNetwork": "Đã xảy ra một số loại lỗi mạng ngăn cản việc tải phương tiện thành công, mặc dù trước đó đã có sẵn.",
+        "errorNotSupported": "Đối tượng phương tiện hoặc nhà cung cấp phương tiện không được hỗ trợ."
+      },
+      "homeButton": "Về trang chính",
+      "resumeButton": "Thử các nguồn tiếp theo",
+      "text": "Đã xảy ra lỗi khi cố gắng phát phương tiện 😖. Vui lòng thử lại hoặc thử một nguồn khác!",
+      "title": "Phát video thất bại!"
+    },
+    "resume": {
+      "description": "Tập này đã xem {{percentage}}%",
+      "restart": "Xem lại từ đầu",
+      "resume": "Tiếp tục",
+      "title": "Tiếp tục xem?"
+    },
+    "segment": {
+      "credits": "Giới thiệu cuối",
+      "intro": "Mở đầu",
+      "recap": "Tóm tắt"
+    },
+    "skipTime": {
+      "confidence": "độ tin cậy",
+      "connectApiKeyMessage": "Để gửi các phân đoạn mới, hãy nhập khóa API TheIntroDB của bạn trong cài đặt kết nối",
+      "credits": "Bỏ qua",
+      "endOfVideo": "Kết thúc",
+      "endsAt": "Kết thúc lúc {{time}}",
+      "submissionUnavailableMessage": "Máy chủ này hiện chưa hỗ trợ gửi phân đoạn.",
+      "feedback": {
+        "modal": {
+          "cancel": "Hủy",
+          "description": "Đóng góp cho TheIntroDB bằng cách gửi dấu thời gian phân đoạn chính xác. Tất cả các lượt gửi đều được cộng đồng chấp nhận trước khi được công bố.",
+          "endTimeLabel": "(Các) kết thúc",
+          "error": {
+            "endTime": "Thời gian kết thúc là bắt buộc",
+            "mediaInfo": "Thông tin phương tiện không khả dụng",
+            "segment": "Chưa chọn phân đoạn",
+            "startTime": "Thời gian bắt đầu là bắt buộc",
+            "submission": "Lỗi khi gửi dấu thời gian",
+            "tidbKey": "Khóa API TIDB chưa được đặt"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Tối thiểu 5 giây nếu có cung cấp thời gian kết thúc. Có thể kéo dài đến hết phương tiện.",
+              "endDesc": "Tùy chọn - để trống nếu phần tín dụng chạy đến hết tập tin.",
+              "excludeDesc": "Loại trừ các cảnh mid-credits hoặc post-credits; chỉ bao gồm phần chạy chữ tín dụng chính.",
+              "startDesc": "Bắt buộc - khi phần giới thiệu cuối bắt đầu (ví dụ: khi văn bản tín dụng đầu tiên xuất hiện).",
+              "whenToTitle": "Hướng dẫn dấu thời gian credits:"
+            },
+            "durationDesc": "Tối thiểu 5 giây nếu có cung cấp thời gian kết thúc",
+            "durationLabel": "Thời lượng:",
+            "endDesc": "Tùy chọn - để trống nếu kéo dài đến hết",
+            "endLabel": "Kết thúc:",
+            "excludeDesc": "Các cảnh sau phần giới thiệu cuối",
+            "excludeLabel": "Loại trừ:",
+            "intro": {
+              "durationDesc": "Hầu hết các intro dài từ 30-90 giây. Tối thiểu 5 giây nếu cả bắt đầu và kết thúc đều được đặt.",
+              "endDesc": "Bắt buộc - khi intro kết thúc (thường là khi thẻ tiêu đề hoặc nội dung chính của tập bắt đầu).",
+              "excludeDesc": "Không bao gồm cold opens hoặc các cảnh trước intro; chỉ bao gồm trình tự tiêu đề chính.",
+              "startDesc": "Tùy chọn - để trống nếu intro bắt đầu từ đầu tập phim.",
+              "whenToTitle": "Hướng dẫn dấu thời gian intro:"
+            },
+            "preview": {
+              "durationDesc": "Phần xem trước có độ dài khác nhau. Tối thiểu 5 giây.",
+              "endDesc": "Tùy chọn - để trống nếu phần xem trước kết thúc ở cuối phương tiện.",
+              "excludeDesc": "Phần xem trước thường dài 15-90 giây ở cuối tập phim, giới thiệu về tập tiếp theo.",
+              "startDesc": "Bắt buộc - khi phần xem trước bắt đầu (ví dụ: khi văn bản xem trước xuất hiện).",
+              "whenToTitle": "Hướng dẫn dấu thời gian preview:"
+            },
+            "recap": {
+              "durationDesc": "Các phần tóm tắt có độ dài khác nhau. Tối thiểu 5 giây nếu cả bắt đầu và kết thúc đều được đặt.",
+              "endDesc": "Bắt buộc - khi phần tóm tắt kết thúc và nội dung mới bắt đầu.",
+              "excludeDesc": "Chỉ phân đoạn \"tập trước\" hoặc tóm tắt; không bao gồm intro hoặc các cảnh mới.",
+              "startDesc": "Tùy chọn - để trống nếu phần tóm tắt bắt đầu từ đầu tập phim.",
+              "whenToTitle": "Hướng dẫn dấu thời gian recap:"
+            },
+            "startDesc": "Bắt buộc - khi phần tín dụng bắt đầu chạy",
+            "startLabel": "Bắt đầu:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 hoặc 210 (để trống nếu kết thúc phim)",
+              "intro": "3:30 hoặc 210 (bắt buộc)",
+              "preview": "3:30 hoặc 210 (để trống nếu kết thúc phim)",
+              "recap": "3:30 hoặc 210 (bắt buộc)"
+            },
+            "start": {
+              "credits": "2:30 hoặc 150 (bắt buộc)",
+              "intro": "2:30 hoặc 150 (để trống nếu bắt đầu từ đầu)",
+              "preview": "2:30 hoặc 150 (bắt buộc)",
+              "recap": "2:30 hoặc 150 (để trống nếu bắt đầu từ đầu)"
+            }
+          },
+          "segmentType": "Loại phân đoạn",
+          "startTimeLabel": "Bắt đầu (s)",
+          "submit": "Gửi",
+          "submitting": "Đang gửi...",
+          "success": {
+            "title": "Gửi thành công! Cảm ơn bạn!"
+          },
+          "title": "Gửi dấu thời gian cho TheIntroDB",
+          "types": {
+            "credits": "Giới thiệu cuối",
+            "intro": "Mở đầu",
+            "preview": "Xem trước",
+            "recap": "Tóm tắt"
+          },
+          "whenToDesc": "Nhập dấu thời gian bằng giây (ví dụ: 150), định dạng mm:ss (ví dụ: 2:30), hoặc định dạng hh:mm:ss (ví dụ: 1:42:20). Chúng tôi sẽ tự động chuyển đổi định dạng cho bạn.",
+          "whenToTitle": "Hướng dẫn dấu thời gian:"
+        },
+        "title": "Việc bỏ qua này có đúng không?"
+      },
+      "intro": "Bỏ qua",
+      "noSegments": "Không có phân đoạn bỏ qua nào khả dụng",
+      "recap": "Bỏ qua tóm tắt",
+      "skipSegments": "Bỏ qua phân đoạn",
+      "startsAt": "Bắt đầu lúc {{time}}",
+      "submissions": "{{count}} lượt gửi",
+      "submitSegment": "Gửi phân đoạn",
+      "timeUnknown": "Không rõ thời gian"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "Còn {{timeLeft}} • Kết thúc lúc {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Tập tin: {{fileName}}",
+      "infohash": "Infor hash: {{infoHash}}",
+      "network": "Mạng torrent",
+      "networkStatus": "Trạng thái mạng torrent",
+      "peers": "Peers: {{count}}",
+      "progress": "Tiến độ: {{progress}}%",
+      "speed": "Tốc độ: {{speed}}",
+      "states": {
+        "buffering": "Đang đệm",
+        "downloading": "Đang tải xuống",
+        "error": "Lỗi",
+        "ready": "Sẵn sàng",
+        "starting": "Bắt đầu",
+        "stopped": "Đã dừng"
+      },
+      "unknown": "Không xác định"
+    }
+  },
+  "screens": {
+    "loadingApp": "Đang tải ứng dụng...",
+    "loadingUser": "Đang tải hồ sơ người dùng...",
+    "loadingUserError": {
+      "disconectCancel": "Hủy",
+      "disconnectConfirm": "Xác nhận",
+      "disconnectMessage": "Ngắt kết nối khỏi máy chủ tài khoản, duy trì dữ liệu cục bộ gần đây nhất. Các thay đổi và nội dung đã xem sẽ không được đồng bộ hóa cho đến khi bạn đăng nhập lại.",
+      "disconnectTitle": "Ngắt kết nối khỏi backend?",
+      "logout": "Đăng xuất",
+      "reload": "Tải lại",
+      "reset": "Đặt lại tùy chỉnh máy chủ",
+      "text": "Không thể tải hồ sơ người dùng của bạn. Vui lòng thử tải lại trang.",
+      "textWithReset": "Không thể tải hồ sơ người dùng của bạn bằng máy chủ tùy chỉnh hiện tại. Hãy thử đặt lại máy chủ tùy chỉnh và sau đó tải lại."
+    },
+    "migration": {
+      "failed": "Di chuyển dữ liệu của bạn thất bại. 😿",
+      "inProgress": "Vui lòng chờ, chúng tôi đang di chuyển dữ liệu của bạn. Việc này sẽ không mất nhiều thời gian..."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "Chỉnh sửa",
+        "logoutButton": "Đăng xuất",
+        "nicknameLabel": "Biệt danh",
+        "nicknamePlaceholder": "Nhập biệt danh của bạn"
+      },
+      "actions": {
+        "delete": {
+          "button": "Xóa tài khoản",
+          "confirmButton": "Xóa tài khoản",
+          "confirmDescription": "Bạn có chắc chắn muốn xóa tài khoản của mình không? Tất cả dữ liệu của bạn sẽ bị mất! ",
+          "confirmTitle": "Bạn có chắc chắn không?",
+          "text": "Hành động này không thể hoàn tác. Tất cả dữ liệu sẽ bị xóa và không thể khôi phục.",
+          "title": "Xóa tài khoản"
+        },
+        "logoutAllDevices": {
+          "button": "Đăng xuất khỏi tất cả các thiết bị",
+          "text": "Điều này sẽ đăng xuất bạn khỏi tất cả các thiết bị được liên kết với tài khoản của bạn.",
+          "title": "Kết thúc tất cả các phiên"
+        },
+        "migration": {
+          "button": "Di chuyển tài khoản",
+          "text": "Di chuyển tài khoản của bạn sang máy chủ mới hoặc tải xuống dữ liệu của bạn.",
+          "title": "Di chuyển tài khoản"
+        },
+        "title": "Hành động"
+      },
+      "devices": {
+        "deviceNameLabel": "Tên thiết bị",
+        "failed": "Tải các phiên thất bại",
+        "lastActive": "Hoạt động gần nhất: {{date}}",
+        "loggedInAt": "Đăng nhập lúc: {{date}}",
+        "removeDevice": "Xóa",
+        "title": "Thiết bị",
+        "unknownDevice": "Thiết bị không xác định, lỗi giải mã tên"
+      },
+      "profile": {
+        "finish": "Hoàn tất chỉnh sửa",
+        "firstColor": "Màu hồ sơ thứ nhất",
+        "secondColor": "Màu hồ sơ thứ hai",
+        "title": "Chỉnh sửa ảnh hồ sơ",
+        "userIcon": "Biểu tượng người dùng"
+      },
+      "register": {
+        "cta": "Bắt đầu",
+        "text": "Chia sẻ tiến trình xem của bạn giữa các thiết bị và giữ cho chúng luôn đồng bộ. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "title": "Đồng bộ hóa với Đám mây"
+      },
+      "title": "Tài khoản"
+    },
+    "all": {
+      "title": "Tất cả cài đặt"
+    },
+    "appearance": {
+      "activeTheme": "Đang hoạt động",
+      "customParts": {
+        "primary": "Chính",
+        "secondary": "Phụ",
+        "tertiary": "Bổ trợ"
+      },
+      "options": {
+        "carouselView": "Chế độ xem băng chuyền",
+        "carouselViewDescription": "Hiển thị các phần đang xem và dấu trang của bạn dưới dạng băng chuyền thay vì dạng lưới. Bị tắt theo mặc định.",
+        "carouselViewLabel": "Chế độ xem băng chuyền",
+        "discover": "Mục Khám phá",
+        "discoverDescription": "Hiển thị mục Khám phá trên Trang chủ bên dưới các phương tiện đã đánh dấu của bạn. Được bật theo mặc định.",
+        "discoverLabel": "Mục Khám phá",
+        "featured": "Phương tiện nổi bật",
+        "featuredDescription": "Hiển thị băng chuyền các bộ phim và chương trình nổi bật ở đầu trang chủ của bạn! Bị tắt theo mặc định.",
+        "featuredLabel": "Phương tiện nổi bật",
+        "forceCompactEpisodeView": "Bắt buộc xem tập tối giản",
+        "forceCompactEpisodeViewDescription": "Bắt buộc băng chuyền tập phim trong trình phát sử dụng chế độ xem dọc tối giản \"cổ điển\". Bị tắt theo mặc định.",
+        "forceCompactEpisodeViewLabel": "Tập tối giản",
+        "homeSectionOrder": "Thứ tự phần trang chủ",
+        "homeSectionOrderDescription": "Kéo và thả để sắp xếp lại các phần đang xem và dấu trang trên trang chủ của bạn. Thứ tự nhóm có thể được chỉnh sửa từ trang chủ.",
+        "homeSectionOrderGroups": "Sắp xếp lại các nhóm dấu trang",
+        "logos": "Logo hình ảnh",
+        "logosDescription": "Hiển thị logo hình ảnh thay vì tiêu đề văn bản trong hộp thoại chi tiết và phần nổi bật. Được bật theo mặc định.",
+        "logosLabel": "Logo hình ảnh",
+        "logosNotice": "Hầu hết các logo chỉ có tiếng Anh. Các ngôn ngữ khác có thể muốn tắt tính năng này!",
+        "minimalCards": "Thẻ tối giản",
+        "minimalCardsDescription": "Ẩn nội dung văn bản (tiêu đề, loại, năm) trên thẻ phương tiện, chỉ hiển thị hình ảnh poster.",
+        "minimalCardsLabel": "Thẻ tối giản",
+        "modal": "Hộp thoại chi tiết",
+        "modalDescription": "Hiển thị chi tiết khi bạn nhấp vào thẻ phương tiện thay vì đi đến trang xem. Cần có Proxy hoặc Tiện ích mở rộng cho đoạn giới thiệu. Bị tắt theo mặc định.",
+        "modalLabel": "Hộp thoại chi tiết",
+        "pauseOverlay": "Lớp phủ tạm dừng",
+        "pauseOverlayDescription": "Hiển thị lớp phủ tiêu đề/logo và mô tả khi trình phát bị tạm dừng và ở trạng thái rảnh.",
+        "pauseOverlayLabel": "Lớp phủ tạm dừng"
+      },
+      "sections": {
+        "bookmarks": "Dấu trang",
+        "watching": "Đang xem"
+      },
+      "themes": {
+        "acid": "Axit",
+        "autumn": "Mùa thu",
+        "blue": "Xanh dương",
+        "christmas": "Giáng sinh",
+        "classic": "Cổ điển",
+        "cobalt": "coban",
+        "custom": "Tùy chỉnh",
+        "default": "Mặc định",
+        "ember": "Hổ phách",
+        "forest": "Rừng rậm",
+        "frost": "Băng giá",
+        "grape": "Nho",
+        "gray": "Xám",
+        "green": "Xanh lá",
+        "hulk": "Hulk",
+        "mocha": "mocha",
+        "noir": "Đen",
+        "pink": "Hồng",
+        "popsicle": "Kem que",
+        "red": "Đỏ",
+        "spark": "tia lửa",
+        "spiderman": "Spider-man",
+        "teal": "Xanh mòng két",
+        "wolverine": "Người Sói"
+      },
+      "title": "Giao diện"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "Thay đổi máy chủ backend sẽ đăng xuất bạn. Tiếp tục?",
+        "changeWarningTitle": "Thay đổi máy chủ Backend",
+        "error": "Lỗi kết nối với backend",
+        "notice": "Tài khoản của bạn KHÔNG đồng bộ hóa giữa các backend, vì vậy hãy nhớ cái nào bạn sử dụng!"
+      },
+      "tidb": {
+        "description": "Đóng góp cho TheIntroDB bằng cách để lại phản hồi về các phân đoạn intro, recap và credits. <0>Tìm hiểu thêm.</0>",
+        "tokenLabel": "Khóa API"
+      },
+      "title": "Kết nối"
+    },
+    "preferences": {
+      "autoplay": "Tự động phát",
+      "autoplayDescription": "Tự động phát tập tiếp theo trong một loạt phim sau khi kết thúc, nếu máy chủ cho phép tự động phát.",
+      "autoplayLabel": "Tự động phát",
+      "autoResumeOnPlaybackError": "Tự động tiếp tục khi lỗi phát lại",
+      "autoResumeOnPlaybackErrorDescription": "Tự động tiếp tục tìm kiếm các nguồn khác khi nguồn hiện tại thất bại trong quá trình phát lại. Nếu bị tắt, bạn sẽ thấy màn hình lỗi với tùy chọn tiếp tục thủ công.",
+      "autoResumeOnPlaybackErrorLabel": "Tự động tiếp tục khi lỗi phát lại",
+      "autoSkipSegments": "Tự động bỏ qua phân đoạn",
+      "autoSkipSegmentsDescription": "Khi được bật, tự động bỏ qua các phân đoạn intro, recap và preview khi đang xem.",
+      "autoSkipSegmentsLabel": "Tự động bỏ qua phân đoạn",
+      "doubleClickToSeek": "Nhấn đúp để tua",
+      "doubleClickToSeekDescription": "Nhấn đúp vào bên trái hoặc bên phải của trình phát để tua lùi hoặc tua đi 10 giây.",
+      "doubleClickToSeekLabel": "Bật nhấn đúp để tua",
+      "keyboardShortcuts": "Phím tắt bàn phím",
+      "keyboardShortcutsDescription": "Tùy chỉnh các phím tắt cho ứng dụng. Nhấn giữ ` để xem trợ giúp này bất cứ lúc nào",
+      "keyboardShortcutsLabel": "Tùy chỉnh phím tắt bàn phím",
+      "language": "Ngôn ngữ ứng dụng",
+      "languageDescription": "Ngôn ngữ áp dụng cho toàn bộ ứng dụng, chỉ tiếng Anh mới có những thứ ngớ ngẩn thôi 🙁.",
+      "lowPerformanceMode": "Chế độ hiệu suất/băng thông thấp",
+      "lowPerformanceModeDescription": "Tối ưu hóa ứng dụng cho các kết nối và thiết bị chậm hơn bằng cách tắt các tính năng sử dụng nhiều băng thông. Chế độ này giúp giảm mức sử dụng dữ liệu và cải thiện hiệu suất trong khi vẫn giữ nguyên chức năng tìm kiếm và xem phim. ",
+      "lowPerformanceModeLabel": "Chế độ hiệu suất thấp",
+      "showLess": "Hiện ít hơn",
+      "showMore": "Hiện thêm",
+      "skipCredits": "Bỏ qua giới thiệu cuối",
+      "skipCreditsDescription": "Khi được bật, tự động phát tập tiếp theo khi hoàn thành 99% để bỏ qua phần giới thiệu cuối. Khi bị tắt, đợi cho đến khi tập phim hoàn thành hoàn toàn.",
+      "skipCreditsLabel": "Bỏ qua giới thiệu cuối",
+      "thumbnail": "Tạo hình thu nhỏ",
+      "thumbnailDescription": "Hầu hết các video không có hình thu nhỏ. Bạn có thể bật cài đặt này để tạo chúng ngay lập tức nhưng chúng có thể làm video của bạn chạy chậm hơn.",
+      "thumbnailLabel": "Tạo hình thu nhỏ",
+      "title": "Tùy chọn"
+    },
+    "reset": "Đặt lại",
+    "save": "Lưu",
+    "search": {
+      "placeholder": "Tìm kiếm cài đặt..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "Phiên bản",
+        "notLoggedIn": "Bạn chưa đăng nhập",
+        "checkForUpdates": "Kiểm tra bản cập nhật",
+        "upToDate": "Bạn đang dùng phiên bản mới nhất"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "Tắt làm mờ nền phụ đề có thể khắc phục một số vấn đề nhấp nháy",
+      "backgroundBlurEnabledLabel": "Làm mờ nền",
+      "backgroundBlurLabel": "Cường độ làm mờ nền",
+      "backgroundLabel": "Độ mờ nền",
+      "BorderThicknessLabel": "Độ dày viền",
+      "colorLabel": "Màu sắc",
+      "high": "Cao",
+      "low": "Mặc định",
+      "previewQuote": "Tin rằng cuộc sống là vô nghĩa, tôi thiếu đi sự can đảm của niềm tin đó.",
+      "textBoldLabel": "Chữ đậm",
+      "textSizeLabel": "Kích cỡ chữ",
+      "textStyle": {
+        "Border": "Viền",
+        "default": "Mặc định",
+        "depressed": "Hạ xuống",
+        "dropShadow": "Đổ bóng",
+        "raised": "Nâng lên",
+        "title": "Kiểu chữ"
+      },
+      "title": "Phụ đề",
+      "verticalPositionLabel": "Vị trí dọc"
+    },
+    "unsaved": "Bạn có thay đổi chưa lưu... "
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Hành động & Phiêu lưu",
+      "10765": "Khoa học Viễn tưởng & Giả tưởng"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "Nhanh hơn chủ phòng {{seconds}} giây",
+    "alone": "Một mình",
+    "behindHost": "Chậm hơn chủ phòng {{seconds}} giây",
+    "cancel": "Hủy",
+    "connectedAsGuest": "Đã kết nối với buổi tiệc xem với tư cách khách",
+    "contentMismatch": "Không thể tham gia buổi tiệc xem: Nội dung không khớp với chủ phòng.",
+    "copyCode": "Nhấn để sao chép",
+    "emptyRoom": "Chưa có ai trong phòng này",
+    "enterCodeOrLink": "Nhập liên kết hoặc mã phòng được bạn bè chia sẻ",
+    "episodeMismatch": "Không thể tham gia buổi tiệc xem: Bạn đang xem tập khác với chủ phòng.",
+    "guestFallback": "Khách mời",
+    "hosting": "Đang làm chủ phòng",
+    "hostParty": "Tổ chức buổi tiệc xem",
+    "invalidRoom": "Không thể kết nối với phòng này",
+    "isGuest": "Đang xem với tư cách khách trên <0>FrameZoo</0>",
+    "isHost": "Đang làm chủ phòng trên <0>FrameZoo</0>",
+    "join": "Tham gia",
+    "joinParty": "Tham gia buổi tiệc xem",
+    "leaveWatchParty": "Rời buổi tiệc xem",
+    "linkCopied": "Đã sao chép!",
+    "noHost": "Không có chủ phòng trong buổi tiệc xem này",
+    "save": "Lưu",
+    "shareCode": "Chia sẻ mã này với bạn bè (nhấn để sao chép liên kết)",
+    "showStatusOverlay": "Hiển thị lớp phủ trạng thái",
+    "status": {
+      "inSync": "Đã đồng bộ",
+      "outOfSync": "Mất đồng bộ"
+    },
+    "syncing": "Đang đồng bộ...",
+    "validating": "Đang xác thực buổi tiệc xem...",
+    "viewers": "Người xem ({{count}})",
+    "watching": "Đang xem",
+    "withCount": "Với {{count}} người khác",
+    "you": "Bạn"
+  },
+  "toasts": {
+    "linkCopied": "Đã sao chép liên kết vào clipboard!",
+    "loginSuccess": "Đăng nhập thành công!",
+    "logoutSuccess": "Đăng xuất thành công!",
+    "registerSuccess": "Đã đăng ký thành công!"
+  }
+}

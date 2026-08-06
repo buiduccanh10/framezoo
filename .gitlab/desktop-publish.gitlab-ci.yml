@@ -68,7 +68,7 @@ build:desktop:macos:
       corepack prepare pnpm@${PNPM_VERSION} --activate
 
       printf '%s' "$ENV_FILE" > .env
-      printf '%s' "$ENV_FILE" > betamovie-fe/.env
+      printf '%s' "$ENV_FILE" > framezoo-fe/.env
 
       BACKEND_URL="$(grep -E '^VITE_BACKEND_URL=' .env | head -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)"
       if [ -n "$BACKEND_URL" ]; then
@@ -83,7 +83,7 @@ build:desktop:macos:
       pnpm install --frozen-lockfile
 
       ARTIFACT_ROOT="desktop-artifacts"
-      RELEASE_DIR="betamovie-desktop/release"
+      RELEASE_DIR="framezoo-desktop/release"
 
       clean_release_dir() {
         rm -rf "$RELEASE_DIR"
@@ -129,17 +129,19 @@ build:desktop:macos:
 
       rm -rf "$ARTIFACT_ROOT"
 
-      pnpm --filter betamovie-desktop build
+      pnpm --filter framezoo-desktop build
 
       clean_release_dir
-      pnpm --filter betamovie-desktop exec electron-builder --mac zip --arm64
-      require_files "mac-arm64" "latest-mac.yml" "AlphaFlix-*-arm64-mac.zip" "AlphaFlix-*-arm64-mac.zip.blockmap"
-      copy_optional "mac-arm64" "AlphaFlix-*-arm64-mac.dmg"
+      pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target darwin-arm64
+      pnpm --filter framezoo-desktop exec electron-builder --mac zip --arm64
+      require_files "mac-arm64" "latest-mac.yml" "FrameZoo-*-arm64-mac.zip" "FrameZoo-*-arm64-mac.zip.blockmap"
+      copy_optional "mac-arm64" "FrameZoo-*-arm64-mac.dmg"
 
       clean_release_dir
-      pnpm --filter betamovie-desktop exec electron-builder --mac zip --x64
-      require_files "mac-x64" "latest-mac.yml" "AlphaFlix-*-x64-mac.zip" "AlphaFlix-*-x64-mac.zip.blockmap"
-      copy_optional "mac-x64" "AlphaFlix-*-x64-mac.dmg"
+      pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target darwin-x64
+      pnpm --filter framezoo-desktop exec electron-builder --mac zip --x64
+      require_files "mac-x64" "latest-mac.yml" "FrameZoo-*-x64-mac.zip" "FrameZoo-*-x64-mac.zip.blockmap"
+      copy_optional "mac-x64" "FrameZoo-*-x64-mac.dmg"
 
       find "$ARTIFACT_ROOT" -maxdepth 2 -type f | sort
   artifacts:
@@ -169,7 +171,7 @@ build:desktop:windows:
       corepack prepare pnpm@${PNPM_VERSION} --activate
 
       printf '%s' "$ENV_FILE" > .env
-      printf '%s' "$ENV_FILE" > betamovie-fe/.env
+      printf '%s' "$ENV_FILE" > framezoo-fe/.env
 
       BACKEND_URL="$(grep -E '^VITE_BACKEND_URL=' .env | head -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)"
       if [ -n "$BACKEND_URL" ]; then
@@ -184,7 +186,7 @@ build:desktop:windows:
       pnpm install --frozen-lockfile
 
       ARTIFACT_ROOT="desktop-artifacts"
-      RELEASE_DIR="betamovie-desktop/release"
+      RELEASE_DIR="framezoo-desktop/release"
 
       clean_release_dir() {
         rm -rf "$RELEASE_DIR"
@@ -217,15 +219,17 @@ build:desktop:windows:
 
       rm -rf "$ARTIFACT_ROOT"
 
-      pnpm --filter betamovie-desktop build
+      pnpm --filter framezoo-desktop build
 
       clean_release_dir
-      pnpm --filter betamovie-desktop exec electron-builder --win nsis --x64
-      require_files "win-x64" "latest.yml" "AlphaFlix-*-x64.exe" "AlphaFlix-*-x64.exe.blockmap"
+      pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target win32-x64
+      pnpm --filter framezoo-desktop exec electron-builder --win nsis --x64
+      require_files "win-x64" "latest.yml" "FrameZoo-*-x64.exe" "FrameZoo-*-x64.exe.blockmap"
 
       clean_release_dir
-      pnpm --filter betamovie-desktop exec electron-builder --win nsis --arm64
-      require_files "win-arm64" "latest.yml" "AlphaFlix-*-arm64.exe" "AlphaFlix-*-arm64.exe.blockmap"
+      pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target win32-arm64
+      pnpm --filter framezoo-desktop exec electron-builder --win nsis --arm64
+      require_files "win-arm64" "latest.yml" "FrameZoo-*-arm64.exe" "FrameZoo-*-arm64.exe.blockmap"
 
       find "$ARTIFACT_ROOT" -maxdepth 2 -type f | sort
   artifacts:
@@ -275,8 +279,8 @@ publish:desktop:
 
       DEPLOY_USER="${VPS_USER:-betakiot}"
       DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
-      DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
-      DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
+      DEPLOY_PATH="${DEPLOY_PATH:-/home/framezoo}"
+      DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-framezoo}"
       STAGING_PATH="${DEPLOY_PATH}/desktop-publish-staging"
 
       ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" "mkdir -p '${STAGING_PATH}'"

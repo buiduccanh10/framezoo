@@ -1,0 +1,1320 @@
+{
+  "actions": {
+    "cancel": "取消",
+    "confirm": "确认",
+    "copied": "已复制",
+    "copy": "复制"
+  },
+  "addons": {
+    "manager": {
+      "add": "添加",
+      "adding": "添加...",
+      "ariaClose": "关闭插件管理器",
+      "ariaManage": "管理插件",
+      "createGuideLink": "如何创建插件",
+      "errorFallback": "无法安装此插件。",
+      "manageListButton": "管理插件列表",
+      "subtitle": "我们不建议添加任何非官方或非法的附加组件。",
+      "title": "桌面插件"
+    },
+    "platforms": {
+      "framezoo": "FrameZoo",
+      "stremio": "斯特雷米奥",
+      "supportLabel": "插件支持的平台：",
+      "supported": "支持的平台：FrameZoo 和 Stremio"
+    },
+    "page": {
+      "addAddonButton": "添加插件",
+      "description": "插件是可选的。此应用程序不捆绑、推荐或托管任何插件。",
+      "createGuideLink": "创建插件指南",
+      "disabled": "残疾人",
+      "emptyInstalled": "系统中尚未安装任何插件。",
+      "enabled": "启用",
+      "installError": "无法安装此插件。",
+      "installedHeading": "已安装的插件",
+      "processing": "加工...",
+      "removeAddon": "删除这个插件",
+      "title": "插件管理器"
+    },
+    "player": {
+      "chooseAddon": "选择一个插件",
+      "emptyExplanation": "未安装或启用任何插件。添加您在 Addons 中选择的清单 URL。",
+      "emptyTitle": "没有可用的流插件",
+      "loadingStreams": "正在加载流...",
+      "manageAddonsButton": "管理插件列表",
+      "noAddonStreams": "此插件没有返回任何流。",
+      "noTorrentStreams": "此插件没有返回种子流。",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "所有品质",
+        "other": "其他"
+      },
+      "sources": "来源",
+      "streamCount": "{{count}} 流",
+      "streamCount_plural": "{{count}} 流",
+      "title": "桌面插件",
+      "unableToLoad": "无法加载流",
+      "viewStreams": "查看流"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "积极的",
+      "confirm": "确认",
+      "customBackend": "自定义后端",
+      "customBackendPlaceholder": "https://",
+      "description": "选择要连接的后端服务器",
+      "title": "选择账户服务器"
+    },
+    "createAccount": "还没有账户？ <0>创建一个</0>",
+    "generate": {
+      "custom": "风俗",
+      "customPassphraseLabel": "自定义密码",
+      "customPassphrasePlaceholder": "输入您的自定义密码",
+      "description": "助记词相当于您的用户名和密码。请务必妥善保管，因为登录账户时需要输入该密码。<bold>切勿遗失你的助记词！</bold>",
+      "invalidPassphraseCharacters": "密码字符无效。只允许使用英文字母、数字 1-10 和普通符号。",
+      "next": "我已妥善保管助记词",
+      "passphraseFrameLabel": "助记词",
+      "passphraseTooShort": "密码短语的长度必须至少为 8 个字符。",
+      "title": "您的助记词",
+      "useCustomPassphrase": "使用自定义密码",
+      "usePasskeyInstead": "使用密钥代替"
+    },
+    "hasAccount": "已经拥有账户？<0>点击此处登录</0>",
+    "login": {
+      "description": "输入您的用户名或电子邮件和密码以登录您的帐户",
+      "failedToReachServer": "无法到达服务器",
+      "identifierLabel": "用户名或电子邮件",
+      "identifierNotFound": "找不到用户名或电子邮件",
+      "identifierPlaceholder": "输入您的用户名或电子邮件",
+      "identifierRequired": "需要用户名或电子邮件",
+      "noBackendUrl": "无后端网址",
+      "or": "or",
+      "passwordIncorrect": "密码不正确",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "输入您的密码",
+      "passwordRequired": "需要密码",
+      "submit": "登录",
+      "title": "登录您的账户",
+      "usePasskey": "使用密钥",
+      "validationError": "助记词不正确或不完整"
+    },
+    "register": {
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "确认您的密码",
+      "emailInvalid": "输入有效的电子邮件地址",
+      "emailLabel": "个人邮箱",
+      "emailPlaceholder": "输入您的个人电子邮件",
+      "information": {
+        "color1": "头像配色 1",
+        "color2": "头像配色 2",
+        "header": "输入设备名称，然后选择颜色和用户图标！",
+        "icon": "用户图标",
+        "next": "下一步",
+        "title": "账户信息"
+      },
+      "nicknameLabel": "昵称",
+      "nicknamePlaceholder": "选择一个独特的昵称",
+      "nicknameTaken": "昵称已被占用",
+      "nicknameRequired": "昵称为必填项",
+      "passwordInput": {
+        "description": "选择昵称、个人电子邮件和密码。您的密码是安全密码，因此请务必记住它！",
+        "title": "创建您的登录名"
+      },
+      "passwordLabel": "密码",
+      "passwordMismatch": "密码不匹配",
+      "passwordPlaceholder": "创建密码（用作您的密码）",
+      "passwordWeak": "密码必须至少8位，包含字母和数字"
+    },
+    "trust": {
+      "failed": {
+        "text": "您的配置是否正确？",
+        "title": "无法连接服务器"
+      },
+      "host": "您正在连接到 <0>{{hostname}}</0> - 在创建账户前，确保您信任它…",
+      "no": "返回",
+      "noHost": "服务器尚未配置，因此您无法创建账户",
+      "noHostTitle": "未配置服务器！",
+      "title": "您是否信任这个服务器？",
+      "yes": "我信任这个服务器"
+    },
+    "verify": {
+      "description": "请输入您之前得到的助记词，以确认您已保存密码并继续创建账户",
+      "invalidData": "数据无效",
+      "noMatch": "助记词不匹配",
+      "recaptchaFailed": "ReCaptcha 验证失败",
+      "register": "创建账户",
+      "title": "确认您的助记词"
+    }
+  },
+  "details": {
+    "addToList": "添加到列表",
+    "airs": "空气",
+    "collection": {
+      "bookmarkAll": "全部添加书签",
+      "movie": "电影",
+      "movies": "电影",
+      "rating": "等级",
+      "releaseDate": "发布日期",
+      "sortBy": "排序方式"
+    },
+    "endsAt": "结束于 {{time}}",
+    "episode": "插曲",
+    "episodeNumber": "第 {{number}} 集",
+    "episodeReleaseDate": "发布日期：{{date}}",
+    "episodeReleaseDateUnknown": "发布日期： 未知",
+    "episodes": "剧集数",
+    "imdb": "在 IMDb 上查看",
+    "language": "语言：",
+    "play": "玩",
+    "rating": "等级：",
+    "releaseDate": "发布日期：",
+    "resume": "恢复",
+    "runtime": "运行时间：",
+    "season": "季节",
+    "specialSeason": "特别季节",
+    "seasons": "季节",
+    "similar": "相似的",
+    "tmdb": "在 TMDB 上查看",
+    "trailers": "拖车",
+    "watched": "观看了 {{watched}} 个，共 {{total}} 个 ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "所有电影列表",
+    "carousel": {
+      "change": "改变",
+      "more": "查看更多",
+      "today": "今天",
+      "thisWeek": "本星期",
+      "title": {
+        "4kReleases": "4K 发布",
+        "editorPicksMovies": "编辑精选电影",
+        "editorPicksShows": "编辑精选节目",
+        "forYou": "为你",
+        "inCinemas": "电影院中",
+        "latestReleases": "最新发布",
+        "latestTVReleases": "最新电视节目",
+        "movies": "{{category}}电影",
+        "moviesOn": "{{provider}} 上的电影",
+        "onTheAir": "直播中",
+        "popular": "最受欢迎",
+        "recommended": "因为您观看了：{{title}}",
+        "top10": "前10名",
+        "topRated": "最受好评",
+        "trending": "现在流行",
+        "tvshows": "{{category}}节目",
+        "tvshowsOn": "演出于 {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "更多信息",
+      "playNow": "立即播放"
+    },
+    "filters": {
+      "country": "国家"
+    },
+    "page": {
+      "back": "回去",
+      "loading": "加载中...",
+      "loadMore": "加载更多",
+      "title": "探索电影和节目"
+    },
+    "scrollToTop": "返回顶部",
+    "tabs": {
+      "movies": "电影",
+      "top10": "前10名",
+      "tvshows": "节目"
+    },
+    "viewLists": "查看所有电影列表"
+  },
+  "downtimeNotice": {
+    "badge": "问题",
+    "goHome": "返回首页",
+    "message": "FrameZoo 在某些片源提供商处遇到问题，如果您无法找到或播放节目，请更换片源。预计该错误将在一段时间内持续存在。",
+    "title": "片源提供商问题"
+  },
+  "errors": {
+    "badge": "出现错误",
+    "details": "错误详情",
+    "reloadPage": "刷新页面",
+    "showError": "显示错误详情",
+    "title": "我们遇到了一个错误！"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "免责声明",
+      "disclaimerText": "FrameZoo 提供安全、现代、无缝的流媒体播放器，具有易于使用的界面和跨支持设备的高质量播放。它不托管媒体文件、操作源目录或推荐特定的插件。可选插件由用户配置，用户负责使用合法来源。"
+    },
+    "links": {
+      "fluxer": "助焊剂",
+      "funding": "支持我们",
+      "github": "GitHub"
+    },
+    "tagline": "安全、现代的流媒体播放器，可提供无缝、高质量的观看体验。"
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "取消",
+      "clickToEdit": "单击关键徽章进行编辑",
+      "conditions": {
+        "showsOnly": "仅显示"
+      },
+      "conflict": "冲突",
+      "conflicts": "冲突",
+      "detected": "检测到",
+      "editInSettings": "从设置中编辑键盘命令",
+      "groups": {
+        "audioVideo": "音频和视频",
+        "interface": "界面",
+        "jumpToPosition": "跳转到位置",
+        "subtitlesAccessibility": "字幕和辅助功能",
+        "videoPlayback": "视频播放"
+      },
+      "none": "没有任何",
+      "numberKeySeeking": "寻求关键进展数",
+      "numberKeySeekingDescription": "使用数字键 0-9 查找视频中的特定位置。 0 开始，1-8 跳转到 10%-80%，9 跳转到 90%。",
+      "pressKey": "按一个键...",
+      "resetAllToDefault": "全部重置为默认值",
+      "resetToDefault": "重置为默认值",
+      "save": "节省",
+      "saveChanges": "保存更改",
+      "shortcuts": {
+        "barrelRoll": "做飞行特技表演！ 🌀",
+        "closeOverlay": "关闭叠加/模态",
+        "decreaseVolume": "减小音量",
+        "increaseVolume": "增加音量",
+        "jumpTo0": "跳至0%（开始）",
+        "jumpTo9": "跳至 90%",
+        "mute": "静音/取消静音",
+        "nextEpisode": "下一集",
+        "playPause": "播放/暂停（或启用时按住以 2 倍速度）",
+        "playPauseAlt": "播放/暂停",
+        "previousEpisode": "上一集",
+        "randomCaption": "从上次使用的语言中选择随机标题",
+        "skipBackward1": "向后跳 1 秒",
+        "skipBackward10": "快退 10 秒",
+        "skipBackward5": "向后跳 5 秒",
+        "skipForward1": "快进 1 秒",
+        "skipForward10": "快进 10 秒",
+        "skipForward5": "快进 5 秒",
+        "syncSubtitlesEarlier": "提前同步字幕（-0.5s）",
+        "syncSubtitlesLater": "稍后同步字幕（+0.5 秒）",
+        "previousSubtitleCue": "上一个字幕提示",
+        "nextSubtitleCue": "下一个字幕提示",
+        "toggleCaptions": "切换字幕",
+        "toggleFullscreen": "切换全屏",
+        "toggleNativeSubtitles": "切换原生字幕"
+      },
+      "subtitle": "按住 ` 可随时显示此帮助",
+      "title": "键盘快捷键"
+    },
+    "name": "阿尔法飞利克斯",
+    "pages": {
+      "discover": "探索",
+      "login": "登录",
+      "migration": "迁移账户",
+      "pagetitle": "{{title}} - FrameZoo",
+      "register": "注册",
+      "settings": "设置"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "取消",
+        "description": "编辑此书签的详细信息",
+        "groupsLabel": "团体",
+        "save": "节省",
+        "title": "编辑书签",
+        "titleLabel": "标题",
+        "titlePlaceholder": "输入书签的标题",
+        "yearLabel": "年",
+        "yearPlaceholder": "输入书签的年份"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "还没有群组",
+          "namePlaceholder": "团体名称",
+          "placeholderButton": "添加到群组",
+          "removeAll": "全部删除",
+          "removeFromGroup": "从组中删除"
+        },
+        "editGroup": {
+          "affectsBookmarks": "这将影响 {{count}} 书签",
+          "cancel": "取消",
+          "description": "编辑书签组的名称和图标",
+          "nameLabel": "团体名称",
+          "namePlaceholder": "输入您的群组的名称",
+          "save": "节省",
+          "title": "编辑组"
+        },
+        "reorder": {
+          "button": "重新排序",
+          "cancel": "取消",
+          "description": "拖放以重新排序书签组",
+          "done": "完毕",
+          "save": "节省",
+          "title": "编辑组订单"
+        }
+      },
+      "sectionTitle": "书签",
+      "showAll": "显示全部",
+      "sorting": {
+        "options": {
+          "date": "默认（添加日期）",
+          "titleAsc": "标题 A-Z",
+          "titleDesc": "标题 Z-A",
+          "yearAsc": "发布日期 最旧-最新",
+          "yearDesc": "发布日期 最新-最旧"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "继续观看",
+      "sorting": {
+        "options": {
+          "date": "默认（添加日期）",
+          "titleAsc": "标题 A-Z",
+          "titleDesc": "标题 Z-A",
+          "yearAsc": "发布日期 最旧-最新",
+          "yearDesc": "发布日期 最新-最旧"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "编辑完成"
+    },
+    "search": {
+      "allResults": "以上是我们能找到的所有结果…",
+      "discover": "探索",
+      "discoverMore": "探索更多",
+      "genreFilterAll": "所有流派",
+      "empty": {
+        "default": "欢迎，在这里找到你想看的！",
+        "extra": [
+          "这里啥都没有",
+          "空空如也…",
+          "空空如也…",
+          "Hi，新用户"
+        ]
+      },
+      "failed": "查找媒体失败，请重试！",
+      "loading": "加载中…",
+      "noResults": "我们找不到任何结果！",
+      "placeholder": {
+        "default": "您想看些什么？",
+        "extra": [
+          "您想探索些什么？",
+          "您的片单上都有啥？",
+          "您最喜欢的影片是什么？",
+          "FrameZoo 是最好的网站！",
+          "您今天的片单上有什么？",
+          "今天过得怎么样？",
+          "是我的错，网站总是无法正常运行…",
+          "FrameZoo 不就是最棒的吗？",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "搜索结果"
+    },
+    "support": {
+      "complete": "完全的",
+      "description": "FrameZoo 处于亏损状态，我们需要帮助以使其保持无广告！如果您喜欢使用 FrameZoo，请考虑捐赠以帮助我们支付费用。",
+      "donate": "捐",
+      "explanation": "如果您不使用该扩展程序或未设置 FED API，则可能会更难找到内容！我们希望解决这个问题，但如果没有昂贵的服务器，提供内容会困难得多。因此，如果您喜欢使用 FrameZoo，请考虑捐款来帮助我们支付不断增长的成本。",
+      "explanation2": "如果您想了解更多信息，请加入我们",
+      "fluxer": "助焊剂",
+      "label": "项目资金：${{current}} / ${{goal}}",
+      "moreInfo": "更多信息",
+      "thankYou": "感谢您的支持！",
+      "title": "FrameZoo 需要您的帮助！"
+    },
+    "titles": {
+      "69": {
+        "default": "想来点火热的吗？",
+        "extra": [
+          "69 日快乐 😘！"
+        ]
+      },
+      "420": {
+        "default": "这个 4/20 你想看什么？",
+        "extra": [
+          "4/20 快乐 🥳！"
+        ]
+      },
+      "day": {
+        "default": "您今天下午想看什么？",
+        "extra": [
+          "FrameZoo 万岁！"
+        ]
+      },
+      "halloween": {
+        "default": "这个万圣节你想看什么恐怖电影？",
+        "extra": [
+          "万圣节快乐！ 🎃👻",
+          "嘘！ 👻",
+          "不给糖就捣蛋！ 🍬",
+          "这是伟大的南瓜，查理·布朗！"
+        ]
+      },
+      "morning": {
+        "default": "您今早想看什么？",
+        "extra": [
+          "FrameZoo 万岁！"
+        ]
+      },
+      "night": {
+        "default": "您今晚想看什么？",
+        "extra": [
+          "FrameZoo 万岁！"
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "最近观看",
+      "sectionTitle": "观看历史"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "复制分享链接",
+      "create": "创建列表",
+      "delete": "删除",
+      "edit": "编辑",
+      "editItems": "编辑项目",
+      "open": "打开",
+      "save": "保存更改",
+      "saveMembership": "保存更改"
+    },
+    "delete": {
+      "confirm": "删除“{{name}}”？此操作无法撤消。"
+    },
+    "empty": {
+      "description": "创建您的第一个列表以开始对标题进行分组。",
+      "title": "还没有列表"
+    },
+    "errors": {
+      "load": "无法加载您的列表。"
+    },
+    "form": {
+      "createDescription": "为最喜欢的、重看的或任何您想分享的其他内容创建一个新列表。",
+      "createTitle": "创建列表",
+      "description": "描述",
+      "descriptionHelp": "可选注释可帮助您记住此列表中的内容。",
+      "descriptionPlaceholder": "这份清单有什么用？",
+      "editDescription": "更新此列表的名称、描述或可见性。",
+      "editTitle": "编辑列表",
+      "errors": {
+        "nameRequired": "名单名称为必填项",
+        "submitFailed": "保存列表失败。"
+      },
+      "name": "名单名称",
+      "namePlaceholder": "周末科幻",
+      "public": "公开名单",
+      "publicHelp": "知道该链接的任何人都可以查看此列表。"
+    },
+    "items": {
+      "empty": "该列表是空的。",
+      "emptyHelp": "使用“添加到列表”添加任何电影或放映卡的标题，然后返回此处管理阵容。"
+    },
+    "meta": {
+      "itemCount": "{{count}} 项目",
+      "itemCount_plural": "{{count}} 项",
+      "updatedAt": "已更新 {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "取消",
+        "create": "创建列表",
+        "save": "保存更改"
+      },
+      "description": "选择哪些列表应包含 {{title}}。",
+      "empty": {
+        "description": "创建一个列表来保存该标题。",
+        "title": "还没有列表"
+      },
+      "errors": {
+        "create": "创建列表失败。",
+        "save": "无法更新列表成员资格。"
+      },
+      "title": "添加到列表"
+    },
+    "page": {
+      "description": "策划您最喜欢的节目、主题之夜和下一个观看精选，您可以将其保密或通过链接分享。",
+      "editingHint": "单击卡上的关闭按钮可将其从此列表中删除。",
+      "eyebrow": "收藏",
+      "itemsEyebrow": "此列表中的标题",
+      "itemsHint": "选择左侧的列表进行浏览，然后在需要清理时使用编辑模式。",
+      "publicCountPlural": "{{count}} 公共列表",
+      "publicCountSingular": "1 公开名单",
+      "searchEmptyDescription": "尝试其他名称或清除搜索。",
+      "searchEmptyTitle": "没有匹配的列表",
+      "searchPlaceholder": "搜索列表",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "最近更新",
+      "summaryPlural": "{{count}} 列表",
+      "summarySingular": "1 列表",
+      "title": "列表"
+    },
+    "public": {
+      "descriptionFallback": "FrameZoo 中策划的共享合集。",
+      "notFoundDescription": "此共享链接丢失或不再可用。",
+      "notFoundTitle": "未找到列表",
+      "pageTitle": "共享列表",
+      "privateDescription": "所有者尚未公开分享此列表。",
+      "privateTitle": "该列表是私人的"
+    },
+    "visibility": {
+      "private": "私人的",
+      "public": "民众"
+    }
+  },
+  "media": {
+    "episodeDisplay": "S{{season}} - E{{episode}}",
+    "episodeShort": "E",
+    "seasonUnwatched": "您确定要将本季标记为未观看吗？",
+    "seasonWatched": "您确定要将该季标记为已观看吗？",
+    "types": {
+      "movie": "电影",
+      "show": "节目"
+    },
+    "unreleased": "未发布"
+  },
+  "migration": {
+    "back": "返回",
+    "download": {
+      "button": {
+        "download": "下载数据",
+        "home": "返回首页"
+      },
+      "description": "这将把您的数据下载到您的设备上。然后您可以将其上传到新的服务器，或将其妥善保存。",
+      "status": {
+        "error": "数据下载失败",
+        "success": "你的数据已被成功下载！"
+      },
+      "title": "下载数据"
+    },
+    "loginRequired": "您必须登录后才能迁移数据！请返回并登录以继续。",
+    "preview": {
+      "downloadDescription": "下载内容包括：",
+      "items": {
+        "bookmarks": "已添加书签的媒体",
+        "progress": "观看进度",
+        "settings": "设置和首选项"
+      },
+      "uploadDescription": "待上传数据："
+    },
+    "start": {
+      "explainer": "这将把您的数据下载到您的设备上。然后您可以将其上传到新的服务器，或将其妥善保存。 上传您之前导出的数据文件，以恢复您在此账户上的书签和进度。",
+      "options": {
+        "download": {
+          "action": "下载数据",
+          "description": "这将把您的数据下载到您的设备上。然后您可以将其上传到新的服务器，或将其妥善保存。",
+          "quality": "更高级",
+          "title": "下载数据"
+        },
+        "or": "或",
+        "upload": {
+          "action": "上传数据",
+          "description": "上传您之前导出的数据文件，以恢复您在此账户上的书签和进度。",
+          "quality": "从备份恢复",
+          "title": "上传数据"
+        }
+      },
+      "title": "迁移你的数据"
+    },
+    "upload": {
+      "button": {
+        "home": "返回主页",
+        "import": "导入数据",
+        "processing": "处理中…",
+        "saveLocal": "保存在本地"
+      },
+      "description": "上传您之前导出的数据文件，以恢复您在此账户上的书签和进度。",
+      "exportedOn": "被导出的账户",
+      "file": {
+        "change": "更改文件",
+        "description": "选择你想上传的文件",
+        "select": "选择文件"
+      },
+      "previewTitle": "预览：",
+      "status": {
+        "error": "上传数据失败",
+        "processing": "处理数据中…",
+        "success": "你的数据已被成功上传！",
+        "successLocal": "您的数据已保存在本地！ 🎉"
+      },
+      "title": "上传数据"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "立即更新",
+        "available": "新的应用程序版本已准备就绪。",
+        "download": "下载更新",
+        "later": "之后",
+        "restart": "重启即可更新",
+        "updating": "更新中..."
+      },
+      "offline": "请检查您的互联网连接"
+    },
+    "download": {
+      "empty": "尚未配置下载。",
+      "failed": "无法加载下载选项。",
+      "label": "下载应用程序",
+      "options": {
+        "mac-arm64": {
+          "description": "最适合 M 系列 Mac",
+          "label": "macOS 苹果芯片"
+        },
+        "mac-universal": {
+          "description": "适用于 Apple Silicon 和 Intel Mac",
+          "label": "macOS 通用"
+        },
+        "mac-x64": {
+          "description": "最适合英特尔 Mac 电脑",
+          "label": "macOS 英特尔"
+        },
+        "win-arm64": {
+          "description": "最适合 Snapdragon/ARM Windows PC",
+          "label": "视窗ARM64"
+        },
+        "win-x64": {
+          "description": "最适合 64 位 Windows PC",
+          "label": "Windows x64"
+        }
+      },
+      "unavailable": "未配置后端 URL。"
+    },
+    "install": {
+      "genericGuide": "您的浏览器不支持自动 PWA 安装提示。\n您仍然可以使用浏览器菜单进行安装（例如：“安装应用程序”、“创建快捷方式”或“添加到 Dock/主屏幕”）。",
+      "iosSafariGuide": "要将 FrameZoo 安装为应用程序：\n\n1. 点击共享按钮（带箭头的方块）。\n2. 选择“添加到主屏幕”。\n3. 点击添加。"
+    },
+    "menu": {
+      "accountMenu": "开设账户菜单",
+      "addons": "插件",
+      "desktop": "应用程序设置",
+      "logout": "登出",
+      "register": "同步到云端",
+      "settings": "设置"
+    }
+  },
+  "notFound": {
+    "badge": "未找到",
+    "goHome": "返回首页",
+    "message": "我们找遍了所有地方：不管是废纸篓、衣柜里还是代理服务器后，但最终还是没有找到你要找的那一页。",
+    "reloadButton": "重试",
+    "title": "无法找到此页面"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "取消"
+    }
+  },
+  "overlays": {
+    "close": "关闭"
+  },
+  "player": {
+    "back": {
+      "default": "返回首页",
+      "short": "返回"
+    },
+    "casting": {
+      "device": "设备",
+      "to": "投射到 {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "正在下载更多 RAM...",
+      "2": "将咖啡因转化为内容...",
+      "3": "教仓鼠跑得更快...",
+      "4": "说服电子移动得更快......",
+      "5": "几乎就在那里……每个加载栏都说……",
+      "6": "找到遥控器...等等，错误问题...",
+      "7": "从无穷大倒数...",
+      "8": "模拟未来...",
+      "9": "看猫视频...",
+      "10": "被猫 GIF 分散了注意力......",
+      "11": "请稍候，实习生正在给他添咖啡……",
+      "12": "检查是否已插入...",
+      "13": "将其关闭并再次打开...",
+      "14": "不要恐慌...",
+      "15": "冬天来了...",
+      "16": "正在登录天网...",
+      "17": "您所有的浏览器都属于我们...",
+      "18": "寻找无限不可能的驱动器...",
+      "19": "发现让您等待的新方法......",
+      "20": "您的时间对我们非常重要。请稍等，我们将忽略您...",
+      "21": "仍然比 Windows 更新快...",
+      "22": "你为什么不吃个三明治呢？"
+    },
+    "menus": {
+      "audio": {
+        "default": "默认"
+      },
+      "episodes": {
+        "button": "分集",
+        "emptyState": "该季暂无剧集，请稍后再来！",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "收藏夹",
+        "loadingError": "加载分季时发生错误",
+        "loadingList": "加载中……",
+        "loadingTitle": "加载中……",
+        "markAsFavorite": "标记为最爱",
+        "markAsUnwatched": "标记为未观看",
+        "markAsWatched": "标记为已观看",
+        "noFavorites": "还没有最喜欢的剧集。为剧集加注星标，将其添加到您的最爱！",
+        "showLess": "显示较少",
+        "showMore": "显示更多",
+        "specials": "特价商品"
+      },
+      "playback": {
+        "disabled": "（在观看派对中禁用）",
+        "speedBoosted": "2x",
+        "speedLabel": "播放速度",
+        "speedUnboosted": "{{speed}}x",
+        "title": "播放设置"
+      },
+      "quality": {
+        "auto": "汽车",
+        "automaticLabel": "自动质量",
+        "hint": "您可以尝试<0>切换片源</0>以获取不同的质量选项。",
+        "iosNoQuality": "由于 Apple 的（common IOS L）限制，iOS 上无法为该片源提供质量选择。您可以尝试<0>切换到另一个片源</0>，以获得不同的画质选项。",
+        "title": "画质"
+      },
+      "settings": {
+        "audioItem": "音频",
+        "enableSubtitles": "启用字幕",
+        "playbackItem": "播放设置",
+        "qualityItem": "画质",
+        "sourceItem": "片源",
+        "subtitleItem": "字幕设置"
+      },
+      "subtitles": {
+        "autoSelectChoice": "自动选择",
+        "autoSelectDifferentChoice": "再次点击即可自动选择不同的字幕",
+        "clearSecondary": "清除辅助字幕",
+        "customChoice": "拖入或上传文件",
+        "customizeLabel": "自定义",
+        "delayEarly": "看到标题",
+        "delayLate": "听到音频",
+        "doubleClickToCopy": "双击复制字幕数据",
+        "dropSubtitleFile": "将字幕拖入这里",
+        "dualSub": "双字幕",
+        "dualSubDesc": "选择相同的格式（SRT、VTT...）和提供商（OpenSubs...）以获得最佳同步",
+        "dualSubHint": "选择辅助字幕的语言（显示在主要字幕上方）",
+        "embedded": "嵌入式",
+        "empty": "没有提供的字幕。",
+        "loadingExternal": "正在加载外部字幕...",
+        "loadingExternalProgress": "正在加载外部字幕... ({{progress}}%)",
+        "matchScoreLabel": "匹配 ~{{score}}%",
+        "notFound": "没有一个可用选项符合您的查询",
+        "offChoice": "关闭",
+        "pasteChoice": "粘贴字幕数据",
+        "previewLabel": "字幕预览：",
+        "primary": "基本的",
+        "refresh": "刷新外部字幕",
+        "refreshing": "清爽...",
+        "secondary": "中学",
+        "selectingSecondary": "选择辅助字幕",
+        "syncSubtitleConfirmTitle": "与AI同步字幕？",
+        "syncSubtitleConfirmDescription": "字幕将由人工智能对齐以匹配视频。",
+        "syncSubtitleSupportedLanguages": "支持的音频语言",
+        "syncSubtitleSuccess": "字幕同步成功",
+        "syncSubtitleFailed": "无法同步字幕",
+        "syncSubtitleOpen": "与AI同步字幕",
+        "syncSubtitleAction": "同步",
+        "settings": {
+          "backlink": "自定义字幕",
+          "delay": "字幕偏移",
+          "fixCapitals": "修正大小写",
+          "autoSync": "自动同步字幕",
+          "syncingProgress": "正在同步... ({{progress}}%)（此过程可能需要 2-3 分钟）",
+          "syncApplied": "已应用自动同步。",
+          "timeline": "字幕时间线",
+          "timelineHint": "选择一个字幕提示以将其与当前视频时间同步。",
+          "timelineEmpty": "没有可用的字幕提示。"
+        },
+        "title": "字幕",
+        "transcriptChoice": "成绩单",
+        "searchPlaceholder": "搜索字幕或对话...",
+        "delayLabel": "字幕偏移量",
+        "seekMode": "寻找",
+        "syncMode": "同步",
+        "syncOffset": "偏移量：{{delay}}s",
+        "syncAction": "同步",
+        "nowPlaying": "正在播放",
+        "syncDescription": "单击与当前视频场景匹配的对话，或调整偏移：",
+        "resetDelay": "重置",
+        "translate": {
+          "title": "翻译自 {{language}}"
+        },
+        "unknownLanguage": "未知",
+        "useNativeSubtitles": "原生视频字幕",
+        "useNativeSubtitlesDescription": "本机全屏和画中画的广播字幕"
+      },
+      "watchparty": {
+        "watchpartyItem": "观看派对"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "没有权限",
+        "button": "使用扩展程序",
+        "text": "您已安装浏览器扩展，但我们需要您的许可才能启用它。",
+        "title": "配置扩展程序"
+      },
+      "failed": {
+        "badge": "失败",
+        "homeButton": "返回首页",
+        "text": "无法从 TMDB 载入媒体的元数据。请检查 TMDB 是否掉线或在您的网络连接中被屏蔽。",
+        "title": "载入元数据失败"
+      },
+      "legal": {
+        "badge": "已移除",
+        "text": "由于侵权通知或版权要求，该媒体已不可用。",
+        "title": "媒体已被移除"
+      },
+      "notFound": {
+        "badge": "未找到",
+        "homeButton": "返回首页",
+        "text": "我们无法找到您请求的媒体。它可能已被删除，或您篡改了 URL。",
+        "title": "无法找到媒体。"
+      }
+    },
+    "nextEpisode": {
+      "next": "下一集",
+      "nextSeason": "下一季",
+      "replay": "重新播放"
+    },
+    "playbackError": {
+      "autoResumeText": "尝试播放媒体时出错 😖。自动尝试其他来源...",
+      "badge": "播放错误",
+      "copyDebugInfo": "复制调试信息",
+      "debugInfo": "检查控制台了解更多详细信息。",
+      "errors": {
+        "errorAborted": "用户已请求中止获取媒体。",
+        "errorDecode": "尽管媒体资源此前已确定可用，但在尝试解码时产生问题，导致错误。",
+        "errorGenericMedia": "发生了未知的媒体错误。",
+        "errorNetwork": "发生了一些网络错误，导致媒体无法成功获取，尽管此前它可用。",
+        "errorNotSupported": "该媒体或媒体提供者对象不被支持。"
+      },
+      "homeButton": "返回首页",
+      "resumeButton": "尝试下一个来源",
+      "text": "尝试播放媒体时发生错误。请尝试其他片源。",
+      "title": "视频播放失败！"
+    },
+    "resume": {
+      "description": "本集观看人数为 {{percentage}}%",
+      "restart": "重新启动",
+      "resume": "恢复",
+      "title": "继续观看吗？"
+    },
+    "segment": {
+      "credits": "制作人员",
+      "intro": "简介",
+      "recap": "回顾"
+    },
+    "skipTime": {
+      "confidence": "信心",
+      "connectApiKeyMessage": "要提交新分段，请在连接设置中输入您的 TheIntroDB API 密钥",
+      "credits": "跳过制作人员名单",
+      "endOfVideo": "结尾",
+      "endsAt": "结束于 {{time}}",
+      "submissionUnavailableMessage": "分段提交在此服务器上不可用。",
+      "feedback": {
+        "modal": {
+          "cancel": "取消",
+          "description": "通过提交准确的分段时间戳为 TheIntroDB 做出贡献。所有提交的内容在发布之前都会被社区接受。",
+          "endTimeLabel": "结束",
+          "error": {
+            "endTime": "结束时间为必填项",
+            "mediaInfo": "媒体信息不可用",
+            "segment": "未选择段",
+            "startTime": "需要开始时间",
+            "submission": "提交时间戳时出错",
+            "tidbKey": "未设置 TIDB API 密钥"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "如果提供结束，则至少 5 秒。可以延伸到媒体末尾。",
+              "endDesc": "可选 - 如果制作人员名单已到文件末尾，则留空。",
+              "excludeDesc": "排除片尾字幕或片尾字幕场景；仅主要学分。",
+              "startDesc": "必需 - 当片尾字幕开始时（例如，当第一个字幕文本出现时）。",
+              "whenToTitle": "制作人员时间戳指南："
+            },
+            "durationDesc": "如果提供结束，则至少 5 秒",
+            "durationLabel": "期间：",
+            "endDesc": "可选 - 如果延伸到末尾则为空",
+            "endLabel": "结尾：",
+            "excludeDesc": "片尾彩蛋场景",
+            "excludeLabel": "排除：",
+            "intro": {
+              "durationDesc": "大多数介绍的时长为 30-90 秒。如果同时设置了开始和结束，则最少 5 秒。",
+              "endDesc": "必需 - 当介绍结束时（​​通常当标题卡或主要剧集开始时）。",
+              "excludeDesc": "不包括冷开场或开场前的场景；只有主标题序列。",
+              "startDesc": "可选 - 如果介绍从剧集开头开始，则留空。",
+              "whenToTitle": "时间戳指南简介："
+            },
+            "preview": {
+              "durationDesc": "预览的长度各不相同。最少 5 秒。",
+              "endDesc": "可选 - 如果预览在媒体末尾结束，则留空。",
+              "excludeDesc": "预览通常是在剧集结束时 15-90 秒预览下一集。",
+              "startDesc": "必需 - 当预览开始时（例如，当预览文本出现时）。",
+              "whenToTitle": "预览时间戳指南："
+            },
+            "recap": {
+              "durationDesc": "回顾的长度各不相同。如果同时设置了开始和结束，则最少 5 秒。",
+              "endDesc": "必需 - 当回顾结束且新内容开始时。",
+              "excludeDesc": "仅“先前”或回顾部分；不包括介绍或新场景。",
+              "startDesc": "可选 - 如果重述从剧集开头开始，则留空。",
+              "whenToTitle": "回顾时间戳指南："
+            },
+            "startDesc": "必需 - 当积分开始滚动时",
+            "startLabel": "开始："
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 或 210（媒体结束时留空）",
+              "intro": "3:30 或 210（必填）",
+              "preview": "3:30 或 210（媒体结束时留空）",
+              "recap": "3:30 或 210（必填）"
+            },
+            "start": {
+              "credits": "2:30 或 150（必填）",
+              "intro": "2:30或150（开始时留空）",
+              "preview": "2:30 或 150（必填）",
+              "recap": "2:30或150（开始时留空）"
+            }
+          },
+          "segmentType": "段类型",
+          "startTimeLabel": "开始",
+          "submit": "提交",
+          "submitting": "正在提交...",
+          "success": {
+            "title": "提交成功！谢谢！"
+          },
+          "title": "向 TheIntroDB 提交时间戳",
+          "types": {
+            "credits": "制作人员",
+            "intro": "简介",
+            "preview": "预览",
+            "recap": "回顾"
+          },
+          "whenToDesc": "输入以秒为单位的时间戳（例如 150）、mm:ss 格式（例如 2:30）或 hh:mm:ss 格式（例如 1:42:20）。我们会自动为您转换格式。",
+          "whenToTitle": "时间戳指南："
+        },
+        "title": "这个跳过正确吗？"
+      },
+      "intro": "跳过介绍",
+      "noSegments": "没有可用的跳过段",
+      "recap": "跳过回顾",
+      "skipSegments": "跳过片段",
+      "startsAt": "开始于 {{time}}",
+      "submissions": "{{count}} 提交内容",
+      "submitSegment": "提交片段",
+      "timeUnknown": "时间未知"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "剩余 {{timeLeft}} • 结束于 {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "文件：{{fileName}}",
+      "infohash": "信息哈希：{{infoHash}}",
+      "network": "激流网络",
+      "networkStatus": "洪流网络状态",
+      "peers": "同行：{{count}}",
+      "progress": "进度：{{progress}}%",
+      "speed": "速度：{{speed}}",
+      "states": {
+        "buffering": "缓冲",
+        "downloading": "正在下载",
+        "error": "错误",
+        "ready": "准备好",
+        "starting": "开始",
+        "stopped": "已停止"
+      },
+      "unknown": "未知"
+    }
+  },
+  "screens": {
+    "loadingApp": "正在加载应用程序...",
+    "loadingUser": "正在加载用户个人资料...",
+    "loadingUserError": {
+      "disconectCancel": "取消",
+      "disconnectConfirm": "确认",
+      "disconnectMessage": "断开与账户服务器的连接，维护最新的本地数据。在您再次登录之前，更改和观看的内容不会同步。",
+      "disconnectTitle": "与后端断开连接？",
+      "logout": "登出",
+      "reload": "重新加载",
+      "reset": "重设自定义服务器",
+      "text": "无法加载您的用户个人资料。请尝试重新加载页面。",
+      "textWithReset": "无法使用当前自定义服务器加载您的用户配置文件。尝试重置自定义服务器，然后重新加载。"
+    },
+    "migration": {
+      "failed": "数据迁移失败",
+      "inProgress": "请稍候，我们正在迁移您的数据。这不会花很多时间。"
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "编辑",
+        "logoutButton": "登出",
+        "nicknameLabel": "昵称",
+        "nicknamePlaceholder": "输入您的昵称"
+      },
+      "actions": {
+        "delete": {
+          "button": "删除账户",
+          "confirmButton": "删除账户",
+          "confirmDescription": "您确定要删除账户吗？所有数据将会丢失！",
+          "confirmTitle": "您确定吗？",
+          "text": "此操作不可逆。所有数据将被删除且无法恢复。",
+          "title": "删除账户"
+        },
+        "logoutAllDevices": {
+          "button": "登出所有设备",
+          "text": "这将会登出所有与您的账户关联的设备。",
+          "title": "结束所有会话"
+        },
+        "migration": {
+          "button": "迁移账户",
+          "text": "将账户迁移到新服务器或下载数据。",
+          "title": "账户迁移"
+        },
+        "title": "操作"
+      },
+      "devices": {
+        "deviceNameLabel": "设备名称",
+        "failed": "载入会话失败",
+        "lastActive": "最后活跃时间：{{date}}",
+        "loggedInAt": "登录于：{{date}}",
+        "removeDevice": "移除",
+        "title": "设备",
+        "unknownDevice": "未知设备，解密名称时出错"
+      },
+      "profile": {
+        "finish": "完成编辑",
+        "firstColor": "个人资料颜色 1",
+        "secondColor": "个人资料颜色 2",
+        "title": "编辑个人资料图像",
+        "userIcon": "用户图标"
+      },
+      "register": {
+        "cta": "开始使用",
+        "text": "在设备之间共享并持续同步您的观看进度。",
+        "title": "同步到云端"
+      },
+      "title": "账户"
+    },
+    "all": {
+      "title": "所有设置"
+    },
+    "appearance": {
+      "activeTheme": "已激活",
+      "customParts": {
+        "primary": "基本的",
+        "secondary": "中学",
+        "tertiary": "第三"
+      },
+      "options": {
+        "carouselView": "轮播视图",
+        "carouselViewDescription": "将您当前观看的部分和书签部分显示为轮播而不是网格。默认禁用。",
+        "carouselViewLabel": "轮播视图",
+        "discover": "“探索”部分",
+        "discoverDescription": "在主页上书签媒体下方显示“探索”部分。默认已启用。",
+        "discoverLabel": "“探索”部分",
+        "featured": "特色媒体",
+        "featuredDescription": "在主页顶部显示精选电影和节目的轮播！默认禁用。",
+        "featuredLabel": "特色媒体",
+        "forceCompactEpisodeView": "强制紧凑剧集视图",
+        "forceCompactEpisodeViewDescription": "强制播放器中的剧集轮播使用“经典”紧凑垂直视图。默认禁用。",
+        "forceCompactEpisodeViewLabel": "情节紧凑",
+        "homeSectionOrder": "首页部分订单",
+        "homeSectionOrderDescription": "拖放以重新排序主页上的观看和书签部分。可以从主页编辑团体订单。",
+        "homeSectionOrderGroups": "重新排序书签组",
+        "logos": "图像标志",
+        "logosDescription": "在详细信息模式和特色部分中显示图像徽标而不是文本标题。默认启用。",
+        "logosLabel": "图像标志",
+        "logosNotice": "大多数时候，徽标只有英文。其他语言可能想要禁用此功能！",
+        "minimalCards": "最少的卡片",
+        "minimalCardsDescription": "隐藏媒体卡上的文本内容（标题、类型、年份），仅显示海报图像。",
+        "minimalCardsLabel": "最少的卡片",
+        "modal": "详细信息",
+        "modalDescription": "点击媒体卡片时显示详细信息模式，而不是转到观看页面。预告片需要代理或扩展。默认已禁用。",
+        "modalLabel": "详细信息",
+        "pauseOverlay": "暂停叠加",
+        "pauseOverlayDescription": "当播放器暂停和闲置时显示标题/徽标和描述叠加层。",
+        "pauseOverlayLabel": "暂停叠加"
+      },
+      "sections": {
+        "bookmarks": "书签",
+        "watching": "目前正在观看"
+      },
+      "themes": {
+        "acid": "酸",
+        "autumn": "秋天",
+        "blue": "湛蓝海韵",
+        "christmas": "圣诞节",
+        "classic": "经典",
+        "cobalt": "钴",
+        "custom": "风俗",
+        "default": "默认",
+        "ember": "余烬",
+        "forest": "森林",
+        "frost": "霜",
+        "grape": "葡萄",
+        "gray": "银月暮霭",
+        "green": "碧草春风",
+        "hulk": "浩克",
+        "mocha": "摩卡",
+        "noir": "黑色",
+        "pink": "桃花",
+        "popsicle": "棒冰",
+        "red": "绯焰之心",
+        "spark": "火花",
+        "spiderman": "蜘蛛侠",
+        "teal": "翡翠烟波",
+        "wolverine": "金刚狼"
+      },
+      "title": "外观"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "更改后端服务器将使您退出。继续？",
+        "changeWarningTitle": "更改后端服务器",
+        "error": "连接后端时出错",
+        "notice": "您的帐户不会在后端之间同步，因此请记住您使用的是哪一个！"
+      },
+      "tidb": {
+        "description": "通过留下有关介绍、回顾和制作人员名单的反馈来为 TheIntroDB 做出贡献。 <0>了解更多.</0>",
+        "tokenLabel": "API密钥"
+      },
+      "title": "连接"
+    },
+    "preferences": {
+      "autoplay": "自动播放",
+      "autoplayDescription": "在系列节目（剧集）束后自动播放下一集。如果主机允许，用户可以使用浏览器扩展、自定义代理或默认设置启用。",
+      "autoplayLabel": "自动播放",
+      "autoResumeOnPlaybackError": "播放错误时自动恢复",
+      "autoResumeOnPlaybackErrorDescription": "播放过程中当前源失败时自动继续搜索其他源。如果禁用，您将看到一个带有手动恢复选项的错误屏幕。",
+      "autoResumeOnPlaybackErrorLabel": "播放错误时自动恢复",
+      "autoSkipSegments": "自动跳过片段",
+      "autoSkipSegmentsDescription": "启用后，在观看时自动跳过介绍、回顾和预览片段。",
+      "autoSkipSegmentsLabel": "自动跳过片段",
+      "doubleClickToSeek": "双击进行搜索",
+      "doubleClickToSeekDescription": "双击播放器的左侧或右侧可向前或向后搜索 10 秒。",
+      "doubleClickToSeekLabel": "启用双击搜索",
+      "keyboardShortcuts": "键盘快捷键",
+      "keyboardShortcutsDescription": "自定义应用程序的键盘快捷键。按住 ` 可随时显示此帮助",
+      "keyboardShortcutsLabel": "自定义键盘快捷键",
+      "language": "应用程序语言",
+      "languageDescription": "作用于整个应用程序的语言。",
+      "lowPerformanceMode": "低性能/带宽模式",
+      "lowPerformanceModeDescription": "通过禁用占用大量带宽的功能，优化应用程序以应对较慢的连接和设备。此模式可减少数据使用量并提高性能，同时保持核心搜索和观看功能完整。",
+      "lowPerformanceModeLabel": "低性能模式",
+      "showLess": "显示较少",
+      "showMore": "显示更多",
+      "skipCredits": "跳过片尾",
+      "skipCreditsDescription": "启用后在进度达到 99% 时自动播放下一集，跳过片尾字幕。禁用时会等待节目全部结束。",
+      "skipCreditsLabel": "跳过片尾",
+      "thumbnail": "生成缩略图",
+      "thumbnailDescription": "大多数时候，视频没有缩略图。您可以启用此设置以在视频播放时动态生成它们，但此选项可能会拖慢视频速度。",
+      "thumbnailLabel": "生成缩略图",
+      "title": "偏好设置"
+    },
+    "reset": "重设",
+    "save": "保存",
+    "search": {
+      "placeholder": "搜索设置..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "版本",
+        "notLoggedIn": "您尚未登录",
+        "checkForUpdates": "检查更新",
+        "upToDate": "您目前使用的是最新版本"
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "禁用字幕背景模糊可能会解决一些闪烁问题",
+      "backgroundBlurEnabledLabel": "背景模糊",
+      "backgroundBlurLabel": "背景模糊",
+      "backgroundLabel": "背景不透明度",
+      "BorderThicknessLabel": "边框厚度",
+      "colorLabel": "颜色",
+      "high": "高的",
+      "low": "默认",
+      "previewQuote": "我不能害怕。恐惧是心灵的杀手。",
+      "textBoldLabel": "粗体文本",
+      "textSizeLabel": "字体大小",
+      "textStyle": {
+        "Border": "边界",
+        "default": "默认",
+        "depressed": "郁闷",
+        "dropShadow": "投影",
+        "raised": "凸起",
+        "title": "文字样式"
+      },
+      "title": "字幕",
+      "verticalPositionLabel": "垂直位置"
+    },
+    "unsaved": "您有未保存的更改…"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "动作与冒险",
+      "10765": "科幻与奇幻"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "领先主持人 {{seconds}} 秒",
+    "alone": "独自的",
+    "behindHost": "落后主机 {{seconds}} 秒",
+    "cancel": "取消",
+    "connectedAsGuest": "已连接以访客身份观看派对",
+    "contentMismatch": "无法加入观看派对：内容与主持人的内容不符。",
+    "copyCode": "点击复制",
+    "emptyRoom": "这个房间里还没有人",
+    "enterCodeOrLink": "输入共享观看派对链接或房间代码",
+    "episodeMismatch": "无法加入观看派对：您正在观看与主持人不同的剧集。",
+    "guestFallback": "客人",
+    "hosting": "托管",
+    "hostParty": "举办观看派对",
+    "invalidRoom": "无法连接到该房间",
+    "isGuest": "Watching as a guest on <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "加入",
+    "joinParty": "参加观看派对",
+    "leaveWatchParty": "离开观看派对",
+    "linkCopied": "复制了！",
+    "noHost": "本次观看派对没有主持人",
+    "save": "节省",
+    "shareCode": "与朋友分享此代码（点击复制链接）",
+    "showStatusOverlay": "显示状态叠加",
+    "status": {
+      "inSync": "同步",
+      "outOfSync": "不同步"
+    },
+    "syncing": "正在同步...",
+    "validating": "正在验证观看派对...",
+    "viewers": "观看者 ({{count}})",
+    "watching": "观看",
+    "withCount": "与其他 {{count}} 人",
+    "you": "你"
+  },
+  "toasts": {
+    "linkCopied": "链接已复制到剪贴板！",
+    "loginSuccess": "登录成功！",
+    "logoutSuccess": "退出成功！",
+    "registerSuccess": "注册成功！"
+  }
+}

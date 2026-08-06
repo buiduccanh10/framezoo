@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Frammistaða",
+    "addons": "Vistkerfi",
+    "download": "Sækja",
+    "language": "Tungumál",
+    "addonGuide": "Addon leiðarvísir"
+  },
+  "hero": {
+    "eyebrow": "FRAMEZOO SKJÁLFTRÖF / 01",
+    "title": "Horfðu betur.",
+    "titleAccent": "Á skjáborði.",
+    "description": "Innfædd spilun, skarpari stýringar og rólegri staður fyrir næsta úr.",
+    "primaryCta": "Sækja skrifborð",
+    "secondaryCta": "Sjáðu reynsluna",
+    "imageAlt": "Forskoðun FrameZoo skrifborðsforrits",
+    "version": "Útgáfa á skjáborði"
+  },
+  "features": {
+    "performanceTitle": "Bókasafnið þitt, án vafraskatts.",
+    "overviewDescription": "FrameZoo Desktop gefur spilun herbergið sem það þarf: innfæddur árangur, hreinar sendingar og stýringar sem haldast úr vegi.",
+    "playback": "Innfædd spilun",
+    "playbackDescription": "Slétt myndband með skrifborðsmiðlun.",
+    "performance": "Rólegur árangur",
+    "performanceDescription": "Minni króm. Meiri einbeiting. Engin flipajuggling.",
+    "continuity": "Haltu flæðinu þínu",
+    "continuityDescription": "Haltu áfram, vafraðu og skiptu um heimildir án þess að missa augnablikið.",
+    "ecosystemTitle": "Tilbúinn fyrir það sem kemur næst.",
+    "ecosystemDescription": "Skrifborðsforritið er kjarninn. Viðbætur lengja brúnirnar, svo uppsetningin þín getur verið persónuleg án þess að verða flókin.",
+    "addonLabel": "VIÐBÆTTA TILBÚIN",
+    "addonOne": "Heimildatengi",
+    "addonTwo": "Textaverkfæri",
+    "addonThree": "Samfélagsframlengingar",
+    "showcaseTitle": "Skjárinn er áfangastaðurinn.",
+    "showcaseDescription": "Einbeittur skjáborðsyfirborð til að uppgötva, spila og allt í kringum söguna.",
+    "showcaseCaption": "FrameZoo skjáborð / fókusstilling"
+  },
+  "download": {
+    "eyebrow": "VELDU BYGGINGU ÞÍNA",
+    "title": "Taktu FrameZoo með þér.",
+    "description": "Veldu smíðina fyrir vélina þína. Vafrinn þinn mun gera tillöguna eða sýna alla tiltæka valkosti hér að neðan.",
+    "recommended": "Mælt er með",
+    "chooseBuild": "Veldu byggingu",
+    "selected": "Valið",
+    "download": "Sækja",
+    "showAll": "Allar byggingar eru sýndar",
+    "detected": "Greinist á þessu tæki",
+    "loading": "Athugar tiltækar byggingar...",
+    "empty": "Engar skrifborðssmíðar eru gefnar út ennþá. Athugaðu aftur fljótlega.",
+    "error": "Gat ekki hlaðið skjáborðsútgáfulistanum.",
+    "retry": "Reyndu aftur",
+    "noBackend": "Niðurhalsþjónusta er ekki stillt fyrir þessa dreifingu.",
+    "version": "Gefa út"
+  },
+  "footer": {
+    "line": "Rólegra heimili fyrir sögurnar sem þú kemur alltaf aftur til.",
+    "status": "Skrifborð fyrst. Viðbót tilbúin."
+  },
+  "addonGuide": {
+    "manifestDescription": "Lýsigögn segja forritinu hver viðbótin þín er, hvaða auðlindir það styður og hvar táknið hennar býr.",
+    "description": "Viðbót er lítil HTTP þjónusta. Berið fram upplýsingaskrá og úrræði sem þú þarft; FrameZoo sér um afganginn.",
+    "manifestTitle": "Byrjaðu á manifest.json",
+    "eyebrow": "AÐBÓTUNARBÓKUN / LEIÐBEININGAR",
+    "title": "Búðu til viðbót án þess að taka þátt í appferlinu.",
+    "resourcesTitle": "Veldu úrræði",
+    "resources": {
+      "catalog": "Raðir af kvikmyndum eða seríum til uppgötvunar.",
+      "subtitles": "Textaskrár með tungumálamerkjum.",
+      "meta": "Lýsigögn kvikmynda eða þáttaraðar fyrir titil.",
+      "stream": "Torrent, HLS, DASH eða beinar skráarheimildir.",
+      "addon_catalog": "Skrá yfir aðrar viðbætur."
+    },
+    "resourcesDescription": "Innleiða aðeins endapunktana sem viðbótin þín þarfnast. Svörin eru JSON og hægt er að skrifa þau á hvaða tungumáli sem er.",
+    "runTitle": "Keyra, prófa, setja upp",
+    "steps": [
+      "Þjónu /manifest.json og auðlindaendapunktum þínum frá staðbundnum eða opinberum HTTP(S) netþjóni.",
+      "Prófaðu hvern endapunkt með krullu og staðfestu JSON lögunina.",
+      "Límdu upplýsingavefslóðina inn í FrameZoo Desktop > Addons."
+    ],
+    "advancedTitle": "Vantar þig Node-hjálp?",
+    "advancedLink": "Opna háþróaða SDK tilvísun",
+    "advancedDescription": "Stremio Addon SDK er valfrjálst. Notaðu það ef þú vilt leiðar- og raðgreiningarhjálpar; það er ekki krafist í bókuninni."
+  }
+}

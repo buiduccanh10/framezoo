@@ -1,0 +1,341 @@
+import merge from "lodash.merge";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+
+import { isFirefox } from "@/utils/detectFeatures";
+
+export interface SubtitleStyling {
+  /**
+   * Text color of subtitles, hex string
+   */
+  color: string;
+
+  /**
+   * size percentage, ranges between 0.01 and 2
+   */
+  size: number;
+
+  /**
+   * background opacity, ranges between 0 and 1
+   */
+  backgroundOpacity: number;
+
+  /**
+   * background blur, ranges between 0 and 1
+   */
+  backgroundBlur: number;
+
+  /**
+   * whether background blur is enabled (disabled by default on Firefox due to flickering issues)
+   */
+  backgroundBlurEnabled: boolean;
+
+  /**
+   * bold, boolean
+   */
+  bold: boolean;
+
+  /**
+   * vertical position percentage, ranges between 1 and 3 (rem)
+   */
+  verticalPosition: number;
+
+  /**
+   * font style for text rendering
+   * "default" | "raised" | "depressed" | "Border" | "dropShadow"
+   */
+  fontStyle: string;
+
+  /**
+   * border thickness for Border font style, ranges between 0 and 10
+   */
+  borderThickness: number;
+}
+
+export interface SubtitleCuePopupData {
+  direction: -1 | 1;
+  start: number;
+  content: string;
+}
+
+interface SubtitleCuePopupStore {
+  popup: SubtitleCuePopupData | null;
+  setPopup(popup: SubtitleCuePopupData | null): void;
+}
+
+export interface SubtitleStore {
+  lastSync: {
+    lastSelectedLanguage: string | null;
+  };
+  enabled: boolean;
+  lastSelectedLanguage: string | null;
+  isOpenSubtitles: boolean;
+  styling: SubtitleStyling;
+  secondaryStyling: SubtitleStyling;
+  overrideCasing: boolean;
+  primaryDelay: number;
+  secondaryDelay: number;
+  updateStyling(newStyling: Partial<SubtitleStyling>): void;
+  updateSecondaryStyling(newStyling: Partial<SubtitleStyling>): void;
+  resetStyling(): void;
+  setLanguage(language: string | null): void;
+  setIsOpenSubtitles(isOpenSubtitles: boolean): void;
+  setCustomSubs(): void;
+  setOverrideCasing(enabled: boolean): void;
+  setPrimaryDelay(delay: number): void;
+  setSecondaryDelay(delay: number): void;
+  importSubtitleLanguage(lang: string | null): void;
+  resetSubtitleSpecificSettings(track?: "primary" | "secondary"): void;
+}
+
+export const DEFAULT_SUBTITLE_STYLING: SubtitleStyling = {
+  color: "#ffffff",
+  backgroundOpacity: 0,
+  size: 1.65,
+  backgroundBlur: 0.5,
+  backgroundBlurEnabled: !isFirefox,
+  bold: false,
+  verticalPosition: 1,
+  fontStyle: "default",
+  borderThickness: 1,
+};
+
+const LEGACY_PLAYER_RESET_SUBTITLE_STYLING: SubtitleStyling = {
+  color: "#ffffff",
+  backgroundOpacity: 0.25,
+  size: 0.75,
+  backgroundBlur: 0.25,
+  backgroundBlurEnabled: !isFirefox,
+  bold: false,
+  verticalPosition: 1,
+  fontStyle: "default",
+  borderThickness: 1,
+};
+
+function matchesSubtitleStyling(
+  styling: Partial<SubtitleStyling> | undefined,
+  target: SubtitleStyling,
+) {
+  if (!styling) return false;
+
+  return (
+    styling.color === target.color &&
+    styling.backgroundOpacity === target.backgroundOpacity &&
+    styling.size === target.size &&
+    styling.backgroundBlur === target.backgroundBlur &&
+    styling.backgroundBlurEnabled === target.backgroundBlurEnabled &&
+    styling.bold === target.bold &&
+    styling.verticalPosition === target.verticalPosition &&
+    styling.fontStyle === target.fontStyle &&
+    styling.borderThickness === target.borderThickness
+  );
+}
+
+export const useSubtitleStore = create(
+  persist(
+    immer<SubtitleStore>((set) => ({
+      enabled: false,
+      lastSync: {
+        lastSelectedLanguage: null,
+      },
+      lastSelectedLanguage: null,
+      isOpenSubtitles: false,
+      overrideCasing: false,
+      primaryDelay: 0,
+      secondaryDelay: 0,
+      styling: { ...DEFAULT_SUBTITLE_STYLING },
+      secondaryStyling: { ...DEFAULT_SUBTITLE_STYLING },
+      resetSubtitleSpecificSettings(track = "primary") {
+        set((s) => {
+          if (track === "secondary") s.secondaryDelay = 0;
+          else s.primaryDelay = 0;
+          s.overrideCasing = false;
+        });
+      },
+      updateStyling(newStyling) {
+        set((s) => {
+          if (newStyling.backgroundOpacity !== undefined)
+            s.styling.backgroundOpacity = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundOpacity),
+            );
+          if (newStyling.backgroundBlur !== undefined)
+            s.styling.backgroundBlur = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundBlur),
+            );
+          if (newStyling.backgroundBlurEnabled !== undefined)
+            s.styling.backgroundBlurEnabled = newStyling.backgroundBlurEnabled;
+          if (newStyling.color !== undefined)
+            s.styling.color = newStyling.color.toLowerCase();
+          if (newStyling.size !== undefined)
+            s.styling.size = Math.min(10, Math.max(0.01, newStyling.size));
+          if (newStyling.bold !== undefined) s.styling.bold = newStyling.bold;
+          if (newStyling.verticalPosition !== undefined)
+            s.styling.verticalPosition = Math.min(
+              100,
+              Math.max(0, newStyling.verticalPosition),
+            );
+          if (newStyling.fontStyle !== undefined)
+            s.styling.fontStyle = newStyling.fontStyle;
+          if (newStyling.borderThickness !== undefined)
+            s.styling.borderThickness = Math.min(
+              10,
+              Math.max(0, newStyling.borderThickness),
+            );
+        });
+      },
+      updateSecondaryStyling(newStyling) {
+        set((s) => {
+          if (newStyling.backgroundOpacity !== undefined)
+            s.secondaryStyling.backgroundOpacity = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundOpacity),
+            );
+          if (newStyling.backgroundBlur !== undefined)
+            s.secondaryStyling.backgroundBlur = Math.min(
+              1,
+              Math.max(0, newStyling.backgroundBlur),
+            );
+          if (newStyling.backgroundBlurEnabled !== undefined)
+            s.secondaryStyling.backgroundBlurEnabled =
+              newStyling.backgroundBlurEnabled;
+          if (newStyling.color !== undefined)
+            s.secondaryStyling.color = newStyling.color.toLowerCase();
+          if (newStyling.size !== undefined)
+            s.secondaryStyling.size = Math.min(
+              10,
+              Math.max(0.01, newStyling.size),
+            );
+          if (newStyling.bold !== undefined)
+            s.secondaryStyling.bold = newStyling.bold;
+          if (newStyling.verticalPosition !== undefined)
+            s.secondaryStyling.verticalPosition = Math.min(
+              100,
+              Math.max(0, newStyling.verticalPosition),
+            );
+          if (newStyling.fontStyle !== undefined)
+            s.secondaryStyling.fontStyle = newStyling.fontStyle;
+          if (newStyling.borderThickness !== undefined)
+            s.secondaryStyling.borderThickness = Math.min(
+              10,
+              Math.max(0, newStyling.borderThickness),
+            );
+        });
+      },
+      resetStyling() {
+        set((s) => {
+          s.styling = { ...DEFAULT_SUBTITLE_STYLING };
+          s.secondaryStyling = { ...DEFAULT_SUBTITLE_STYLING };
+        });
+      },
+      setLanguage(lang) {
+        set((s) => {
+          s.enabled = !!lang;
+          if (lang) s.lastSelectedLanguage = lang;
+        });
+      },
+      setIsOpenSubtitles(isOpenSubtitles) {
+        set((s) => {
+          s.isOpenSubtitles = isOpenSubtitles;
+        });
+      },
+      setCustomSubs() {
+        set((s) => {
+          s.enabled = true;
+          s.lastSelectedLanguage = null;
+        });
+      },
+      setOverrideCasing(enabled) {
+        set((s) => {
+          s.overrideCasing = enabled;
+        });
+      },
+      setPrimaryDelay(delay) {
+        set((s) => {
+          s.primaryDelay = Number.isFinite(delay) ? delay : 0;
+        });
+      },
+      setSecondaryDelay(delay) {
+        set((s) => {
+          s.secondaryDelay = Number.isFinite(delay) ? delay : 0;
+        });
+      },
+      importSubtitleLanguage(lang) {
+        set((s) => {
+          s.lastSelectedLanguage = lang;
+          s.lastSync.lastSelectedLanguage = lang;
+        });
+      },
+    })),
+    {
+      name: "__MW::subtitles",
+      version: 5,
+      migrate: (persistedState: unknown, version: number) => {
+        if (!persistedState || typeof persistedState !== "object") {
+          return persistedState;
+        }
+
+        const state = persistedState as {
+          styling?: Partial<SubtitleStyling>;
+          secondaryStyling?: Partial<SubtitleStyling>;
+          delay?: unknown;
+          primaryDelay?: unknown;
+          secondaryDelay?: unknown;
+        };
+
+        if (version < 4) {
+          const legacyDelay =
+            typeof state.delay === "number" && Number.isFinite(state.delay)
+              ? state.delay
+              : 0;
+          state.primaryDelay = legacyDelay;
+          state.secondaryDelay = legacyDelay;
+          delete state.delay;
+        }
+
+        // Migrate old defaults:
+        // - size: 100% (1.0) -> 165% in UI (1.65 * 1.5 in renderer em)
+        // - background opacity: 50% -> 0%
+        if (version < 2 && state.styling) {
+          if (state.styling.size === 1) {
+            state.styling.size = 1.65;
+          }
+          if (state.styling.backgroundOpacity === 0.5) {
+            state.styling.backgroundOpacity = 0;
+          }
+        }
+
+        if (
+          state.styling &&
+          version < 3 &&
+          matchesSubtitleStyling(
+            state.styling,
+            LEGACY_PLAYER_RESET_SUBTITLE_STYLING,
+          )
+        ) {
+          state.styling = { ...DEFAULT_SUBTITLE_STYLING };
+        }
+
+        if (!state.secondaryStyling) {
+          state.secondaryStyling = {
+            ...(state.styling ?? DEFAULT_SUBTITLE_STYLING),
+          };
+        }
+
+        return state;
+      },
+      merge: (persisted, current) => merge({}, current, persisted),
+    },
+  ),
+);
+
+export const useSubtitleCuePopupStore = create<SubtitleCuePopupStore>(
+  (set) => ({
+    popup: null,
+    setPopup(popup) {
+      set({ popup });
+    },
+  }),
+);

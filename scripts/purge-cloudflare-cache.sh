@@ -86,6 +86,7 @@ trap 'rm -f "$urls_file"' EXIT
   printf '%s\n' "$PURGE_DOMAIN/index.html"
   printf '%s\n' "$PURGE_DOMAIN/sw.js"
   printf '%s\n' "$PURGE_DOMAIN/config.js"
+  printf '%s\n' "$PURGE_DOMAIN/version.json"
   printf '%s\n' "$PURGE_DOMAIN/manifest.webmanifest"
 
   if [ -n "$PURGE_EXTRA_URLS" ]; then

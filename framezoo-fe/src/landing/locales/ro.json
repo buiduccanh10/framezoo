@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Performanţă",
+    "addons": "Ecosistem",
+    "download": "Descărcați",
+    "language": "Limbă",
+    "addonGuide": "Ghid de suplimente"
+  },
+  "hero": {
+    "eyebrow": "FRAMEZOO DESKTOP / 01",
+    "title": "Privește mai bine.",
+    "titleAccent": "Pe desktop.",
+    "description": "Redare nativă, comenzi mai clare și un loc mai calm pentru următorul tău ceas.",
+    "primaryCta": "Descărcați desktop",
+    "secondaryCta": "Vezi experiența",
+    "imageAlt": "Previzualizarea aplicației desktop FrameZoo",
+    "version": "Lansare desktop"
+  },
+  "features": {
+    "performanceTitle": "Biblioteca dvs., fără taxa de browser.",
+    "overviewDescription": "FrameZoo Desktop oferă redării spațiul de care are nevoie: performanță nativă, handoff-uri curate și comenzi care rămân în afara drumului.",
+    "playback": "Redare nativă",
+    "playbackDescription": "Video fluide cu manipulare media de calitate desktop.",
+    "performance": "Performanță liniștită",
+    "performanceDescription": "Mai puțin crom. Mai multă concentrare. Fără jonglare cu file.",
+    "continuity": "Păstrează-ți fluxul",
+    "continuityDescription": "Reluați, răsfoiți și schimbați sursele fără a pierde momentul.",
+    "ecosystemTitle": "Gata pentru ce urmează.",
+    "ecosystemDescription": "Aplicația desktop este nucleul. Suplimentele extind marginile, astfel încât configurarea dvs. poate rămâne personală fără a deveni complicată.",
+    "addonLabel": "ADDON-GATA",
+    "addonOne": "Conectori sursă",
+    "addonTwo": "Instrumente de subtitrare",
+    "addonThree": "Extensii comunitare",
+    "showcaseTitle": "Ecranul este destinația.",
+    "showcaseDescription": "O suprafață desktop concentrată pentru descoperire, redare și tot ce se află în jurul poveștii.",
+    "showcaseCaption": "FrameZoo Desktop / Modul Focus"
+  },
+  "download": {
+    "eyebrow": "ALEGE-ȚI CONSTRUCȚIA",
+    "title": "Luați FrameZoo cu dvs.",
+    "description": "Alegeți construcția pentru mașina dvs. Browserul dvs. va face recomandarea sau va dezvălui fiecare opțiune disponibilă mai jos.",
+    "recommended": "Recomandat",
+    "chooseBuild": "Alegeți o construcție",
+    "selected": "Selectat",
+    "download": "Descărcați",
+    "showAll": "Sunt afișate toate versiunile",
+    "detected": "Detectat pe acest dispozitiv",
+    "loading": "Se verifică versiunile disponibile...",
+    "empty": "Încă nu sunt publicate versiuni pentru desktop. Reveniți în curând.",
+    "error": "Nu s-a putut încărca lista de versiuni desktop.",
+    "retry": "Încearcă din nou",
+    "noBackend": "Serviciul de descărcare nu este configurat pentru această implementare.",
+    "version": "Eliberare"
+  },
+  "footer": {
+    "line": "O casă mai liniștită pentru poveștile la care te întorci.",
+    "status": "Desktop-în primul rând. Pregătit pentru suplimente."
+  },
+  "addonGuide": {
+    "eyebrow": "ADDON PROTOCOL / GHID",
+    "manifestTitle": "Începeți cu manifest.json",
+    "title": "Creați un supliment fără a vă alătura procesului aplicației.",
+    "description": "Un supliment este un mic serviciu HTTP. Serviți un manifest și resursele de care aveți nevoie; FrameZoo se ocupă de restul.",
+    "resourcesTitle": "Alegeți resursele",
+    "resources": {
+      "meta": "Metadatele unui film sau serial pentru un titlu.",
+      "stream": "Torrent, HLS, DASH sau surse directe de fișiere.",
+      "catalog": "Rânduri de filme sau seriale pentru descoperire.",
+      "addon_catalog": "Un catalog cu alte suplimente.",
+      "subtitles": "Fișiere de subtitrare cu etichete de limbă."
+    },
+    "resourcesDescription": "Implementați numai punctele finale de care suplimentul dvs. are nevoie. Răspunsurile sunt JSON și pot fi scrise în orice limbă.",
+    "manifestDescription": "Metadatele indică aplicației cine este suplimentul dvs., ce resurse le acceptă și unde se află pictograma acestuia.",
+    "steps": [
+      "Serviți /manifest.json și punctele finale de resurse de pe un server HTTP(S) local sau public.",
+      "Testați fiecare punct final cu curl și verificați forma JSON.",
+      "Lipiți adresa URL a manifestului în FrameZoo Desktop > Addons."
+    ],
+    "runTitle": "Rulați, testați, instalați",
+    "advancedTitle": "Ai nevoie de un ajutor Node?",
+    "advancedLink": "Deschideți referința SDK avansată",
+    "advancedDescription": "Stremio Addon SDK este opțional. Folosiți-l dacă doriți ajutoare pentru rutare și serializare; nu este cerut de protocol."
+  }
+}
