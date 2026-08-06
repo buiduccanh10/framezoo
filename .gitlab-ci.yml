@@ -15,8 +15,8 @@ variables:
 # - VPS_PORT: SSH port (default: 22)
 # - VPS_USER: SSH user (default: betakiot)
 # - DEPLOY_BRANCH: git branch to deploy (default: main)
-# - DEPLOY_PATH: monorepo path on VPS (default: /home/betamovie)
-# - DEPLOY_PROJECT_NAME: docker compose project name (default: betamovie)
+# - DEPLOY_PATH: monorepo path on VPS (default: /home/framezoo)
+# - DEPLOY_PROJECT_NAME: docker compose project name (default: framezoo)
 # - FORCE_DESKTOP_PUBLISH: set to "true" to bypass desktop changes filter / manual desktop publish
 
 .default_ssh_setup: &default_ssh_setup
@@ -33,13 +33,13 @@ variables:
     - if: '$CI_COMMIT_BRANCH == "main" && $FORCE_DESKTOP_PUBLISH == "true"'
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
-        - betamovie-fe/**/*
-        - betamovie-desktop/**/*
+        - framezoo-fe/**/*
+        - framezoo-desktop/**/*
         - package.json
         - pnpm-lock.yaml
         - pnpm-workspace.yaml
 
-audit:betamovie:
+audit:framezoo:
   stage: audit
   image: node:22-alpine
   variables:
@@ -52,15 +52,15 @@ audit:betamovie:
     - pnpm config set store-dir .pnpm-store
     - pnpm install --frozen-lockfile --ignore-scripts
     - pnpm audit
-    - echo "All audits passed for betamovie-fe & betamovie-be."
+    - echo "All audits passed for framezoo-fe & framezoo-be."
 
-deploy:betamovie:
+deploy:framezoo:
   stage: deploy
   image: alpine:3.19
   timeout: 30m
   extends: [.default_ssh_setup]
   needs:
-    - job: audit:betamovie
+    - job: audit:framezoo
   variables:
     GIT_STRATEGY: fetch
   rules:
@@ -78,8 +78,8 @@ deploy:betamovie:
       DEPLOY_USER="${VPS_USER:-betakiot}"
       DEPLOY_TARGET="${DEPLOY_USER}@${VPS_HOST}"
       DEPLOY_BRANCH="${DEPLOY_BRANCH:-main}"
-      DEPLOY_PATH="${DEPLOY_PATH:-/home/betamovie}"
-      DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-betamovie}"
+      DEPLOY_PATH="${DEPLOY_PATH:-/home/framezoo}"
+      DEPLOY_PROJECT_NAME="${DEPLOY_PROJECT_NAME:-framezoo}"
 
       echo "Syncing monorepo on VPS (${DEPLOY_PATH})..."
       ssh -p "${VPS_PORT:-22}" "${DEPLOY_TARGET}" \
@@ -101,7 +101,7 @@ trigger:desktop:publish:
   inherit:
     variables: false
   needs:
-    - job: deploy:betamovie
+    - job: deploy:framezoo
   variables:
     PARENT_COMMIT_SHA: $CI_COMMIT_SHA
     PARENT_PIPELINE_CREATED_AT: $CI_PIPELINE_CREATED_AT

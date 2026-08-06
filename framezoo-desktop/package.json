@@ -1,0 +1,273 @@
+{
+  "name": "framezoo-desktop",
+  "private": true,
+  "version": "1.0.0",
+  "main": "dist/main.cjs",
+  "packageManager": "pnpm@11.17.0",
+  "scripts": {
+    "dev": "pnpm run resources:ensure && pnpm run torrent:setup && concurrently -k -n renderer,shell,electron -c cyan,yellow,green \"pnpm run dev:renderer\" \"pnpm run dev:shell\" \"pnpm run dev:electron\"",
+    "dev:renderer": "pnpm exec vite --config renderer-src/vite.config.mts --host 127.0.0.1 --port 5174",
+    "dev:shell": "tsup --watch",
+    "dev:electron": "wait-on dist/main.cjs tcp:127.0.0.1:5174 && cross-env ELECTRON_RENDERER_URL=http://127.0.0.1:5174 electronmon dist/main.cjs",
+    "build": "rimraf renderer dist && pnpm run build:renderer && pnpm run build:shell",
+    "build:renderer": "cross-env VITE_BASE_URL=./ VITE_PWA_ENABLED=false pnpm exec vite build --config renderer-src/vite.config.mts",
+    "build:shell": "tsup",
+    "resources:ensure": "node scripts/ensure-libmpv.mjs",
+    "resources:ensure:darwin-arm64": "node scripts/ensure-libmpv.mjs --target darwin-arm64",
+    "resources:ensure:darwin-x64": "node scripts/ensure-libmpv.mjs --target darwin-x64",
+    "resources:ensure:win32-arm64": "node scripts/ensure-libmpv.mjs --target win32-arm64",
+    "resources:ensure:win32-x64": "node scripts/ensure-libmpv.mjs --target win32-x64",
+    "resources:ensure:darwin-universal": "node scripts/ensure-libmpv.mjs --target darwin-universal",
+    "native:build:host": "node scripts/build-libmpv-native.mjs",
+    "native:build:darwin-arm64": "node scripts/build-libmpv-native.mjs --target darwin-arm64",
+    "native:build:darwin-x64": "node scripts/build-libmpv-native.mjs --target darwin-x64",
+    "native:build:win32-arm64": "node scripts/build-libmpv-native.mjs --target win32-arm64",
+    "native:build:win32-x64": "node scripts/build-libmpv-native.mjs --target win32-x64",
+    "native:build:darwin-universal": "node scripts/stage-libmpv-universal.mjs",
+    "torrent:setup": "node scripts/setup-torrent-engine.mjs",
+    "torrent:build": "node scripts/build-torrent-engine.mjs",
+    "torrent:build:darwin-arm64": "node scripts/build-torrent-engine.mjs darwin-arm64",
+    "torrent:build:darwin-x64": "node scripts/build-torrent-engine.mjs darwin-x64",
+    "torrent:build:win32-arm64": "node scripts/build-torrent-engine.mjs win32-arm64",
+    "torrent:build:win32-x64": "node scripts/build-torrent-engine.mjs win32-x64",
+    "package:dir": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --dir",
+    "package:release": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder",
+    "package:release:mac": "pnpm run torrent:setup && pnpm run torrent:build && pnpm run native:build:host && pnpm run resources:ensure && pnpm run build && electron-builder --mac dmg zip",
+    "package:release:mac:arm64": "pnpm run torrent:setup && pnpm run torrent:build:darwin-arm64 && pnpm run native:build:darwin-arm64 && pnpm run resources:ensure:darwin-arm64 && pnpm run build && electron-builder --mac dmg zip --arm64",
+    "package:release:mac:x64": "pnpm run torrent:setup && pnpm run torrent:build:darwin-x64 && pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-x64 && pnpm run build && electron-builder --mac dmg zip --x64",
+    "package:release:mac:universal": "pnpm run torrent:setup && pnpm run torrent:build:darwin-arm64 && pnpm run torrent:build:darwin-x64 && pnpm run native:build:darwin-arm64 && pnpm run native:build:darwin-x64 && pnpm run resources:ensure:darwin-arm64 && pnpm run resources:ensure:darwin-x64 && pnpm run native:build:darwin-universal && pnpm run resources:ensure:darwin-universal && pnpm run build && electron-builder --mac dmg zip --universal",
+    "package:release:win:x64": "pnpm run torrent:setup && pnpm run torrent:build:win32-x64 && pnpm run native:build:win32-x64 && pnpm run resources:ensure:win32-x64 && pnpm run build && electron-builder --win nsis --x64",
+    "package:release:win:arm64": "pnpm run torrent:setup && pnpm run torrent:build:win32-arm64 && pnpm run native:build:win32-arm64 && pnpm run resources:ensure:win32-arm64 && pnpm run build && electron-builder --win nsis --arm64",
+    "dev:torrent": "pnpm run dev",
+    "lint:renderer": "cd renderer-src && eslint src",
+    "test:renderer": "vitest run --config renderer-src/vite.config.mts",
+    "test:torrent": "vitest run --config vitest.main.config.mts src/torrent/fixtureEngine.test.ts",
+    "libmpv:update": "node scripts/ensure-libmpv.mjs",
+    "libmpv:fetch:win32-x64": "node scripts/fetch-windows-libmpv.mjs --target win32-x64",
+    "libmpv:fetch:win32-arm64": "node scripts/fetch-windows-libmpv.mjs --target win32-arm64",
+    "i18n:audit": "node scripts/i18n-locale-sync.mjs audit",
+    "i18n:translate": "node scripts/i18n-locale-sync.mjs translate --write",
+    "i18n:translate:force": "node scripts/i18n-locale-sync.mjs translate --write --force-keys"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/modifiers": "^9.0.0",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@formkit/auto-animate": "^0.9.0",
+    "@headlessui/react": "^2.2.10",
+    "@ladjs/country-language": "^1.0.3",
+    "@marsidev/react-turnstile": "^1.5.3",
+    "@noble/hashes": "^1.8.0",
+    "@plasmohq/messaging": "^0.7.2",
+    "@react-spring/web": "^10.1.1",
+    "@scure/bip39": "^1.6.0",
+    "@sozialhelden/ietf-language-tags": "^5.4.2",
+    "@tanstack/query-sync-storage-persister": "^5.101.0",
+    "@tanstack/react-query": "^5.101.0",
+    "@tanstack/react-query-devtools": "^5.101.0",
+    "@tanstack/react-query-persist-client": "^5.101.0",
+    "@tanstack/react-virtual": "^3.14.3",
+    "@types/node-forge": "^1.3.14",
+    "bcryptjs": "^3.0.3",
+    "classnames": "^2.5.1",
+    "core-js": "^3.49.0",
+    "detect-browser": "^5.3.0",
+    "dompurify": "^3.4.10",
+    "electron-updater": "^6.6.2",
+    "fflate": "^0.8.3",
+    "flag-icons": "^7.5.0",
+    "focus-trap-react": "^12.0.2",
+    "fscreen": "^1.2.0",
+    "fuse.js": "^7.4.2",
+    "i18next": "^26.3.1",
+    "immer": "^11.1.8",
+    "iso-639-3": "^3.0.1",
+    "jwt-decode": "^4.0.0",
+    "lodash.merge": "^4.6.2",
+    "nanoid": "^5.1.11",
+    "node-forge": "^1.4.0",
+    "ofetch": "^1.5.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-ga4": "^3.0.1",
+    "react-google-recaptcha-v3": "^1.11.0",
+    "react-helmet-async": "^2.0.5",
+    "react-i18next": "^14.1.3",
+    "react-lazy-load-image-component": "^1.6.3",
+    "react-lazy-with-preload": "^2.2.1",
+    "react-router-dom": "^6.30.3",
+    "react-use": "^17.6.1",
+    "semver": "^7.8.4",
+    "slugify": "^1.6.9",
+    "subsrt-ts": "^2.1.2",
+    "wyzie-lib": "2.5.2",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-typescript": "^7.29.7",
+    "@csstools/css-calc": "^3.2.1",
+    "@eslint/js": "^9.39.4",
+    "@rollup/wasm-node": "^4.62.0",
+    "@types/adm-zip": "^0.5.8",
+    "@types/chromecast-caf-sender": "^1.0.11",
+    "@types/crypto-js": "^4.2.2",
+    "@types/fscreen": "^1.0.4",
+    "@types/lodash.merge": "^4.6.9",
+    "@types/lodash.throttle": "^4.1.9",
+    "@types/node": "^25.9.3",
+    "@types/pako": "^2.0.4",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "@types/react-lazy-load-image-component": "^1.6.5",
+    "@types/react-router": "^5.1.20",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/react-stickynode": "^4.0.3",
+    "@types/react-transition-group": "^4.4.12",
+    "@types/semver": "^7.7.1",
+    "@vitejs/plugin-react": "^6.0.2",
+    "adm-zip": "^0.6.0",
+    "autoprefixer": "^10.5.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^42.5.0",
+    "electron-builder": "^26.0.12",
+    "electronmon": "^2.0.4",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "glob": "^13.0.6",
+    "handlebars": "^4.7.9",
+    "jsdom": "^29.1.1",
+    "postcss": "^8.5.15",
+    "postcss-rtl": "^2.0.0",
+    "postcss-rtlcss": "^6.0.0",
+    "prettier": "^3.8.4",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "rimraf": "^6.1.3",
+    "rollup-plugin-visualizer": "^7.0.1",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss": "^3.4.19",
+    "tailwindcss-themer": "^4.1.1",
+    "tsup": "^8.5.1",
+    "type-fest": "^5.7.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.61.0",
+    "vite": "^8.0.16",
+    "vite-plugin-checker": "^0.14.1",
+    "vite-plugin-package-version": "^1.1.0",
+    "vite-plugin-pwa": "^1.3.0",
+    "vite-plugin-static-copy": "^4.1.1",
+    "vitest": "^4.1.9",
+    "wait-on": "^9.0.3",
+    "workbox-build": "^7.4.1",
+    "workbox-window": "^7.4.1"
+  },
+  "build": {
+    "appId": "com.framezoo.desktop",
+    "productName": "FrameZoo",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "asar": true,
+    "asarUnpack": [],
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/native/${platform}-${arch}",
+        "to": "native",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "resources/libmpv/${platform}-${arch}",
+        "to": "libmpv",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "torrent-engine/bin",
+        "to": "torrent-engine/bin",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "torrent-engine",
+        "to": "torrent-engine",
+        "filter": [
+          "libtorrent_sidecar.py",
+          "requirements.txt",
+          "run.sh",
+          "run.cmd"
+        ]
+      }
+    ],
+    "extraMetadata": {
+      "description": "FrameZoo desktop app"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "artifactName": "${productName}-${version}-${arch}-mac.${ext}",
+      "extraDistFiles": [
+        "README.txt"
+      ],
+      "category": "public.app-category.entertainment",
+      "icon": "build/icon.png",
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 170
+        },
+        {
+          "x": 410,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 270,
+          "y": 270,
+          "type": "file",
+          "path": "README.txt"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "extraFiles": [
+        "README.txt"
+      ],
+      "icon": "build/icon.png"
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://updates.invalid/desktop-updates/stable"
+      }
+    ],
+    "electronUpdaterCompatibility": ">=2.16"
+  }
+}

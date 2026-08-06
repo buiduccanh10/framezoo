@@ -1,0 +1,1320 @@
+{
+  "actions": {
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "copied": "Copiado",
+    "copy": "Copiar"
+  },
+  "addons": {
+    "manager": {
+      "add": "Agregar",
+      "adding": "Añadiendo...",
+      "ariaClose": "Cerrar administrador de complementos",
+      "ariaManage": "Administrar complementos",
+      "createGuideLink": "Cómo crear un complemento",
+      "errorFallback": "No se puede instalar este complemento.",
+      "manageListButton": "Administrar lista de complementos",
+      "subtitle": "No recomendamos agregar ningún complemento no oficial o ilegal.",
+      "title": "Complementos de escritorio"
+    },
+    "platforms": {
+      "framezoo": "FrameZoo",
+      "stremio": "estremio",
+      "supportLabel": "Plataformas compatibles para complementos:",
+      "supported": "Plataformas compatibles: FrameZoo y Stremio"
+    },
+    "page": {
+      "addAddonButton": "Agregar complemento",
+      "description": "Los complementos son opcionales. Esta aplicación no incluye, recomienda ni aloja ningún complemento.",
+      "createGuideLink": "Crear guía de complementos",
+      "disabled": "Desactivado",
+      "emptyInstalled": "Aún no hay complementos instalados en el sistema.",
+      "enabled": "Activado",
+      "installError": "No se puede instalar este complemento.",
+      "installedHeading": "Complementos instalados",
+      "processing": "Tratamiento...",
+      "removeAddon": "Eliminar este complemento",
+      "title": "Administrador de complementos"
+    },
+    "player": {
+      "chooseAddon": "Elige un complemento",
+      "emptyExplanation": "No hay ningún complemento instalado o habilitado. Agregue una URL de manifiesto que elija en Complementos.",
+      "emptyTitle": "No hay complementos de transmisión disponibles",
+      "loadingStreams": "Cargando secuencias...",
+      "manageAddonsButton": "Administrar lista de complementos",
+      "noAddonStreams": "Este complemento no devolvió transmisiones.",
+      "noTorrentStreams": "No se devolvieron transmisiones de torrents para este complemento.",
+      "qualities": {
+        "1080p": "1080p",
+        "1440p": "1440p",
+        "480p": "480p / SD",
+        "4k": "4K",
+        "720p": "720p",
+        "all": "Todas las cualidades",
+        "other": "Otro"
+      },
+      "sources": "Fuentes",
+      "streamCount": "{{count}} transmisión",
+      "streamCount_plural": "{{count}} transmisiones",
+      "title": "Complementos de escritorio",
+      "unableToLoad": "No se pueden cargar transmisiones",
+      "viewStreams": "Ver transmisiones"
+    }
+  },
+  "auth": {
+    "backendSelection": {
+      "active": "Activo",
+      "confirm": "Confirmar",
+      "customBackend": "Servidor personalizado",
+      "customBackendPlaceholder": "https://",
+      "description": "Elija a qué servidor backend conectarse",
+      "title": "Seleccionar servidor de cuentas"
+    },
+    "createAccount": "¿Todavía no tienes una cuenta? <0>Crea una cuenta.</0>",
+    "generate": {
+      "custom": "Costumbre",
+      "customPassphraseLabel": "Frase de contraseña personalizada",
+      "customPassphrasePlaceholder": "Ingrese su frase de contraseña personalizada",
+      "description": "Tu frase de contraseña actúa como tu nombre de usuario y contraseña. Asegúrate de mantenerlas seguras, ya que las necesitarás para iniciar sesión en tu cuenta",
+      "invalidPassphraseCharacters": "Caracteres de frase de contraseña no válidos. Sólo se permiten letras en inglés, números del 1 al 10 y símbolos normales.",
+      "next": "He guardado mi frase de contraseña",
+      "passphraseFrameLabel": "Frase de contraseña",
+      "passphraseTooShort": "La frase de contraseña debe tener al menos 8 caracteres.",
+      "title": "Tu frase de contraseña",
+      "useCustomPassphrase": "Usar frase de contraseña personalizada",
+      "usePasskeyInstead": "Utilice la clave de acceso en su lugar"
+    },
+    "hasAccount": "¿Ya tienes una cuenta? <0>Inicia sesión aquí.</0>",
+    "login": {
+      "description": "Ingrese su nombre de usuario o correo electrónico y contraseña para iniciar sesión en su cuenta",
+      "failedToReachServer": "No se pudo llegar al servidor",
+      "identifierLabel": "Nombre de usuario o correo electrónico",
+      "identifierNotFound": "Nombre de usuario o correo electrónico no encontrado",
+      "identifierPlaceholder": "Introduce tu nombre de usuario o correo electrónico",
+      "identifierRequired": "Se requiere nombre de usuario o correo electrónico",
+      "noBackendUrl": "Sin URL de fondo",
+      "or": "or",
+      "passwordIncorrect": "La contraseña es incorrecta",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Introduce tu contraseña",
+      "passwordRequired": "Se requiere contraseña",
+      "submit": "Iniciar sesión",
+      "title": "Inicia sesión en tu cuenta",
+      "usePasskey": "Usar clave de acceso",
+      "validationError": "Contraseña incorrecta o incompleta"
+    },
+    "register": {
+      "confirmPasswordLabel": "confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu contraseña",
+      "emailInvalid": "Introduzca una dirección de correo electrónico válida",
+      "emailLabel": "correo electrónico personal",
+      "emailPlaceholder": "Introduce tu correo electrónico personal",
+      "information": {
+        "color1": "Color de perfil uno",
+        "color2": "Color de perfil dos",
+        "header": "Ingresa un nombre para tu dispositivo, elige colores, y un ícono de usuario de tu elección",
+        "icon": "Ícono de usuario",
+        "next": "Siguiente",
+        "title": "Información de la cuenta"
+      },
+      "nicknameLabel": "Apodo",
+      "nicknamePlaceholder": "Elige un apodo único",
+      "nicknameTaken": "El apodo ya está tomado.",
+      "nicknameRequired": "Se requiere apodo",
+      "passwordInput": {
+        "description": "Elija un apodo, correo electrónico personal y contraseña. Su contraseña funciona como una frase de contraseña segura, ¡así que asegúrese de recordarla!",
+        "title": "Crea tu inicio de sesión"
+      },
+      "passwordLabel": "Contraseña",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "passwordPlaceholder": "Cree una contraseña (usada como su frase de contraseña)",
+      "passwordWeak": "La contraseña debe tener al menos 8 caracteres con letras y números."
+    },
+    "trust": {
+      "failed": {
+        "text": "¿Lo configuraste correctamente?",
+        "title": "No se pudo conectar al servidor"
+      },
+      "host": "Te estás conectando a <0>{{hostname}}</0> - por favor, confirma si confías en este antes de crear una cuenta",
+      "no": "Regresar",
+      "noHost": "El servidor no se ha configurado, por lo tanto, no puede crear una cuenta",
+      "noHostTitle": "¡El servidor no está configurado!",
+      "title": "¿Confías en este servidor?",
+      "yes": "Confío en este servidor"
+    },
+    "verify": {
+      "description": "Por favor, ingresa tu frase de contraseña anterior para confirmar que la has guardado y para crear tu cuenta",
+      "invalidData": "Los datos no son válidos",
+      "noMatch": "La frase de contraseña no coincide",
+      "recaptchaFailed": "La validación de ReCaptcha falló",
+      "register": "Crear cuenta",
+      "title": "Confirma tu frase de contraseña"
+    }
+  },
+  "details": {
+    "addToList": "Añadir a la lista",
+    "airs": "aires",
+    "collection": {
+      "bookmarkAll": "Marcar todo",
+      "movie": "Película",
+      "movies": "Cine",
+      "rating": "Clasificación",
+      "releaseDate": "Fecha de lanzamiento",
+      "sortBy": "Ordenar por"
+    },
+    "endsAt": "Termina en {{time}}",
+    "episode": "Episodio",
+    "episodeNumber": "Episodio {{number}}",
+    "episodeReleaseDate": "Fecha de lanzamiento: {{date}}",
+    "episodeReleaseDateUnknown": "Fecha de lanzamiento: Desconocida",
+    "episodes": "Episodios",
+    "imdb": "Ver en IMDb",
+    "language": "Idioma:",
+    "play": "Reproducir",
+    "rating": "Clasificación:",
+    "releaseDate": "Fecha de lanzamiento:",
+    "resume": "Reanudar",
+    "runtime": "Tiempo de ejecución:",
+    "season": "Temporada",
+    "specialSeason": "temporada especial",
+    "seasons": "Temporada/s",
+    "similar": "Similar",
+    "tmdb": "Ver en TMDB",
+    "trailers": "Remolques",
+    "watched": "Visto {{watched}} de {{total}} ({{percentage}}%)"
+  },
+  "discover": {
+    "allLists": "Todas las listas de películas",
+    "carousel": {
+      "change": "Cambiar",
+      "more": "Ver más",
+      "today": "Hoy",
+      "thisWeek": "Esta semana",
+      "title": {
+        "4kReleases": "Lanzamientos 4K",
+        "editorPicksMovies": "El editor elige películas",
+        "editorPicksShows": "Programas seleccionados por el editor",
+        "forYou": "Para ti",
+        "inCinemas": "En cines",
+        "latestReleases": "Últimos lanzamientos",
+        "latestTVReleases": "Últimos programas de televisión",
+        "movies": "{{category}} Películas",
+        "moviesOn": "Películas en {{provider}}",
+        "onTheAir": "En el aire",
+        "popular": "Más Popular",
+        "recommended": "Porque miraste: {{title}}",
+        "top10": "10 mejores",
+        "topRated": "Mejor valorados",
+        "trending": "Tendencia ahora",
+        "tvshows": "{{category}} Espectáculos",
+        "tvshowsOn": "Se muestra el {{provider}}"
+      }
+    },
+    "featured": {
+      "moreInfo": "Más información",
+      "playNow": "Jugar ahora"
+    },
+    "filters": {
+      "country": "País"
+    },
+    "page": {
+      "back": "Volver",
+      "loading": "Cargando...",
+      "loadMore": "Cargar más",
+      "title": "Descubre películas y TV"
+    },
+    "scrollToTop": "Volver arriba",
+    "tabs": {
+      "movies": "Cine",
+      "top10": "10 mejores",
+      "tvshows": "Programas de televisión"
+    },
+    "viewLists": "Ver todas las listas de películas"
+  },
+  "downtimeNotice": {
+    "badge": "Problemas",
+    "goHome": "Ir a casa",
+    "message": "FrameZoo esta experimentando problemas con algunos proveedores de nuevo. Si no puedes encontrar o reproducir un programa, por favor cambie de fuente. Espera que este error persista a lo largo de los siguientes momentos.",
+    "title": "Problemas de proveedor"
+  },
+  "errors": {
+    "badge": "Se descompuso",
+    "details": "Detalles del error",
+    "reloadPage": "Recargar la página",
+    "showError": "Mostrar detalles del error",
+    "title": "¡Encontramos un error!"
+  },
+  "footer": {
+    "legal": {
+      "disclaimer": "Descargo de responsabilidad",
+      "disclaimerText": "FrameZoo proporciona un reproductor de streaming seguro, moderno y fluido con una interfaz fácil de usar y reproducción de alta calidad en los dispositivos compatibles. No aloja archivos multimedia, no opera un catálogo de fuentes ni recomienda complementos específicos. Los complementos opcionales los configuran los usuarios, que son responsables de utilizar fuentes legales."
+    },
+    "links": {
+      "fluxer": "fluxor",
+      "funding": "Apóyanos",
+      "github": "GitHub"
+    },
+    "tagline": "Un reproductor de streaming moderno y seguro para una experiencia visual fluida y de alta calidad."
+  },
+  "global": {
+    "keyboardShortcuts": {
+      "cancel": "Cancelar",
+      "clickToEdit": "Haga clic en una insignia de llave para editarla",
+      "conditions": {
+        "showsOnly": "Sólo muestra"
+      },
+      "conflict": "conflicto",
+      "conflicts": "conflictos",
+      "detected": "detectado",
+      "editInSettings": "Editar comandos de teclado desde la configuración",
+      "groups": {
+        "audioVideo": "Audio y vídeo",
+        "interface": "Interfaz",
+        "jumpToPosition": "Saltar a la posición",
+        "subtitlesAccessibility": "Subtítulos y accesibilidad",
+        "videoPlayback": "Reproducción de vídeo"
+      },
+      "none": "Ninguno",
+      "numberKeySeeking": "Número clave de búsqueda de progreso",
+      "numberKeySeekingDescription": "Utilice las teclas numéricas del 0 al 9 para buscar posiciones específicas en el vídeo. 0 va al principio, 1-8 salta al 10%-80% y 9 va al 90%.",
+      "pressKey": "Pulsa una tecla...",
+      "resetAllToDefault": "Restablecer todo a los valores predeterminados",
+      "resetToDefault": "Restablecer los valores predeterminados",
+      "save": "Ahorrar",
+      "saveChanges": "Guardar cambios",
+      "shortcuts": {
+        "barrelRoll": "¡Haz una tirada de barril! 🌀",
+        "closeOverlay": "Cerrar superposición/modal",
+        "decreaseVolume": "Disminuir volumen",
+        "increaseVolume": "aumentar el volumen",
+        "jumpTo0": "Saltar al 0% (principio)",
+        "jumpTo9": "Saltar al 90%",
+        "mute": "Silenciar/activar silencio",
+        "nextEpisode": "Próximo episodio",
+        "playPause": "Reproducir/pausar (o mantener presionado para velocidad 2x cuando esté habilitado)",
+        "playPauseAlt": "Reproducir/pausar",
+        "previousEpisode": "Episodio anterior",
+        "randomCaption": "Seleccione un título aleatorio del último idioma utilizado",
+        "skipBackward1": "Saltar hacia atrás 1 segundo",
+        "skipBackward10": "Saltar hacia atrás 10 segundos",
+        "skipBackward5": "Saltar hacia atrás 5 segundos",
+        "skipForward1": "Saltar 1 segundo hacia adelante",
+        "skipForward10": "Saltar 10 segundos hacia adelante",
+        "skipForward5": "Saltar 5 segundos hacia adelante",
+        "syncSubtitlesEarlier": "Sincronizar subtítulos antes (-0,5 s)",
+        "syncSubtitlesLater": "Sincronizar subtítulos más tarde (+0,5 s)",
+        "previousSubtitleCue": "Señal de subtítulo anterior",
+        "nextSubtitleCue": "Siguiente señal de subtítulo",
+        "toggleCaptions": "Alternar subtítulos",
+        "toggleFullscreen": "Alternar pantalla completa",
+        "toggleNativeSubtitles": "Alternar subtítulos nativos"
+      },
+      "subtitle": "Mantenga presionado ` para mostrar esta ayuda en cualquier momento",
+      "title": "Atajos de teclado"
+    },
+    "name": "alfaflix",
+    "pages": {
+      "discover": "Descubrir",
+      "login": "Iniciar sesión",
+      "migration": "Migrar Cuenta",
+      "pagetitle": "{{title}} - AlfaFlix",
+      "register": "Registrarse",
+      "settings": "Configuración"
+    }
+  },
+  "home": {
+    "bookmarks": {
+      "edit": {
+        "cancel": "Cancelar",
+        "description": "Editar los detalles de este marcador",
+        "groupsLabel": "Grupos",
+        "save": "Ahorrar",
+        "title": "Editar marcador",
+        "titleLabel": "Título",
+        "titlePlaceholder": "Introduzca un título para su marcador",
+        "yearLabel": "Año",
+        "yearPlaceholder": "Introduzca un año para su marcador"
+      },
+      "groups": {
+        "dropdown": {
+          "empty": "Aún no hay grupos",
+          "namePlaceholder": "Nombre del grupo",
+          "placeholderButton": "Agregar al grupo",
+          "removeAll": "Quitar todo",
+          "removeFromGroup": "Quitar del grupo"
+        },
+        "editGroup": {
+          "affectsBookmarks": "Esto afectará a {{count}} marcadores",
+          "cancel": "Cancelar",
+          "description": "Edite el nombre y el ícono de su grupo de marcadores",
+          "nameLabel": "Nombre del grupo",
+          "namePlaceholder": "Introduce un nombre para tu grupo",
+          "save": "Ahorrar",
+          "title": "Editar grupo"
+        },
+        "reorder": {
+          "button": "Reordenar",
+          "cancel": "Cancelar",
+          "description": "Arrastra y suelta para reordenar tus grupos de marcadores",
+          "done": "Hecho",
+          "save": "Ahorrar",
+          "title": "Editar orden de grupo"
+        }
+      },
+      "sectionTitle": "Marcadores",
+      "showAll": "Mostrar todo",
+      "sorting": {
+        "options": {
+          "date": "Predeterminado (Fecha agregada)",
+          "titleAsc": "Título A-Z",
+          "titleDesc": "Título Z-A",
+          "yearAsc": "Fecha de lanzamiento Más antiguo-Más nuevo",
+          "yearDesc": "Fecha de lanzamiento Más reciente-Más antiguo"
+        }
+      }
+    },
+    "continueWatching": {
+      "sectionTitle": "Continuar viendo",
+      "sorting": {
+        "options": {
+          "date": "Predeterminado (Fecha agregada)",
+          "titleAsc": "Título A-Z",
+          "titleDesc": "Título Z-A",
+          "yearAsc": "Fecha de lanzamiento Más antiguo-Más nuevo",
+          "yearDesc": "Fecha de lanzamiento Más reciente-Más antiguo"
+        }
+      }
+    },
+    "mediaList": {
+      "stopEditing": "Detener edición"
+    },
+    "search": {
+      "allResults": "¡Eso es todo lo que tenemos!",
+      "discover": "Descubre",
+      "discoverMore": "Descubre más",
+      "genreFilterAll": "Todos los géneros",
+      "empty": {
+        "default": "¡Bienvenido! ¡Encuentra contenido para ver aquí!",
+        "extra": [
+          "No hay nada aquí :(",
+          "Tan vacío...",
+          "Qué vacío.",
+          "Hola nuevo usuario :3"
+        ]
+      },
+      "failed": "¡Error al encontrar contenido, inténtalo de nuevo!",
+      "loading": "Cargando...",
+      "noResults": "¡No pudimos encontrar nada!",
+      "placeholder": {
+        "default": "¿Qué te gustaría ver?",
+        "extra": [
+          "¿Qué quieres explorar?",
+          "¿Qué hay en tu lista de reproducción?",
+          "¿Cuál es tu película favorita?",
+          "¿Cuál es tu serie favorita?",
+          "¿Qué hay en tu lista de seguimiento hoy?",
+          "¿Cómo estuvo su día?",
+          "Mala mia este sitio nunca funciona...",
+          "¿No es FrameZoo lo mejor?",
+          ">ᴗ<"
+        ]
+      },
+      "sectionTitle": "Resultados de búsqueda"
+    },
+    "support": {
+      "complete": "completo",
+      "description": "¡FrameZoo se ejecuta con pérdidas y necesitamos ayuda para mantenerlo libre de publicidad! Si le gusta usar FrameZoo, considere hacer una donación para ayudarnos a cubrir nuestros costos.",
+      "donate": "Donar",
+      "explanation": "Si no está utilizando la extensión o no tiene configurada la API FED, ¡puede ser más difícil encontrar contenido! Queremos solucionar este problema, pero es mucho más difícil proporcionar contenido sin servidores costosos. Entonces, si le gusta usar FrameZoo, considere hacer una donación para ayudarnos a cubrir nuestros crecientes costos.",
+      "explanation2": "Si quieres más información, únete a nuestro",
+      "fluxer": "fluxor",
+      "label": "Financiamiento del proyecto: ${{current}} / ${{goal}}",
+      "moreInfo": "Más información",
+      "thankYou": "¡Gracias por su apoyo!",
+      "title": "¡FrameZoo necesita tu ayuda!"
+    },
+    "titles": {
+      "69": {
+        "default": "¿Te apetece algo picante?",
+        "extra": [
+          "¡Feliz día 69 😘!"
+        ]
+      },
+      "420": {
+        "default": "¿Qué te gustaría ver este 4/20?",
+        "extra": [
+          "¡Feliz 4/20 🥳!"
+        ]
+      },
+      "day": {
+        "default": "¿Qué te gustaría ver esta tarde?",
+        "extra": [
+          "¿Te sientes aventurero? Jurassic Park podría ser la elección perfecta."
+        ]
+      },
+      "halloween": {
+        "default": "¿Qué película de terror te gustaría ver este Halloween?",
+        "extra": [
+          "¡Feliz Halloween! 🎃👻",
+          "¡Abucheo! 👻",
+          "¡Truco o trato! 🍬",
+          "¡Es la Gran Calabaza, Charlie Brown!"
+        ]
+      },
+      "morning": {
+        "default": "¿Qué te gustaría ver esta mañana?",
+        "extra": [
+          "Escuché que “Antes del amanecer” es buena"
+        ]
+      },
+      "night": {
+        "default": "¿Qué te gustaría ver esta noche?",
+        "extra": [
+          "¿Cansado? Escuché que “El Exorcista” es buena."
+        ]
+      }
+    },
+    "watchHistory": {
+      "recentlyWatched": "Visto recientemente",
+      "sectionTitle": "Ver historial"
+    }
+  },
+  "lists": {
+    "actions": {
+      "copyShareLink": "Copiar enlace para compartir",
+      "create": "Crear lista",
+      "delete": "Borrar",
+      "edit": "Editar",
+      "editItems": "Editar elementos",
+      "open": "Abierto",
+      "save": "Guardar cambios",
+      "saveMembership": "Guardar cambios"
+    },
+    "delete": {
+      "confirm": "¿Eliminar \"{{name}}\"? Esto no se puede deshacer."
+    },
+    "empty": {
+      "description": "Crea tu primera lista para comenzar a agrupar títulos.",
+      "title": "Aún no hay listas"
+    },
+    "errors": {
+      "load": "No se pudieron cargar sus listas."
+    },
+    "form": {
+      "createDescription": "Inicie una nueva lista de favoritos, repeticiones o cualquier otra cosa que desee compartir.",
+      "createTitle": "Crear lista",
+      "description": "Descripción",
+      "descriptionHelp": "Nota opcional para ayudarle a recordar lo que pertenece a esta lista.",
+      "descriptionPlaceholder": "¿Para qué es esta lista?",
+      "editDescription": "Actualice el nombre, la descripción o la visibilidad de esta lista.",
+      "editTitle": "Editar lista",
+      "errors": {
+        "nameRequired": "El nombre de la lista es obligatorio.",
+        "submitFailed": "No se pudo guardar la lista."
+      },
+      "name": "Nombre de la lista",
+      "namePlaceholder": "Ciencia ficción de fin de semana",
+      "public": "Lista pública",
+      "publicHelp": "Cualquiera que tenga el enlace puede ver esta lista."
+    },
+    "items": {
+      "empty": "Esta lista está vacía.",
+      "emptyHelp": "Agregue títulos de cualquier película o tarjeta de programa con Agregar a la lista, luego regrese aquí para administrar la programación."
+    },
+    "meta": {
+      "itemCount": "{{count}} elemento",
+      "itemCount_plural": "{{count}} artículos",
+      "updatedAt": "Actualizado {{date}}"
+    },
+    "modal": {
+      "actions": {
+        "cancel": "Cancelar",
+        "create": "Crear lista",
+        "save": "Guardar cambios"
+      },
+      "description": "Elija qué listas deben incluir {{title}}.",
+      "empty": {
+        "description": "Crea una lista para guardar este título.",
+        "title": "Aún no hay listas"
+      },
+      "errors": {
+        "create": "No se pudo crear la lista.",
+        "save": "No se pudo actualizar la membresía de la lista."
+      },
+      "title": "Añadir a la lista"
+    },
+    "page": {
+      "description": "Selecciona favoritos, noches temáticas y selecciones para ver a continuación que puedes mantener en privado o compartir con un enlace.",
+      "editingHint": "Haga clic en el botón cerrar de una tarjeta para eliminarla de esta lista.",
+      "eyebrow": "Colecciones",
+      "itemsEyebrow": "Títulos en esta lista",
+      "itemsHint": "Seleccione una lista a la izquierda para explorarla, luego use el modo de edición cuando desee limpiarla.",
+      "publicCountPlural": "{{count}} listas públicas",
+      "publicCountSingular": "1 lista pública",
+      "searchEmptyDescription": "Pruebe con otro nombre o borre su búsqueda.",
+      "searchEmptyTitle": "No hay listas coincidentes",
+      "searchPlaceholder": "Listas de búsqueda",
+      "sortAlphabetical": "A-Z",
+      "sortRecent": "Actualizado recientemente",
+      "summaryPlural": "{{count}} listas",
+      "summarySingular": "1 lista",
+      "title": "Liza"
+    },
+    "public": {
+      "descriptionFallback": "Una colección compartida curada en FrameZoo.",
+      "notFoundDescription": "Este enlace para compartir falta o ya no está disponible.",
+      "notFoundTitle": "Lista no encontrada",
+      "pageTitle": "Lista compartida",
+      "privateDescription": "El propietario no ha compartido esta lista públicamente.",
+      "privateTitle": "Esta lista es privada."
+    },
+    "visibility": {
+      "private": "Privado",
+      "public": "Público"
+    }
+  },
+  "media": {
+    "episodeDisplay": "T{{season}} E{{episode}}",
+    "episodeShort": "E",
+    "seasonUnwatched": "¿Estás seguro de que quieres marcar la temporada como no vista?",
+    "seasonWatched": "¿Estás seguro de que quieres marcar la temporada como vista?",
+    "types": {
+      "movie": "Película",
+      "show": "Serie"
+    },
+    "unreleased": "No Estrenado"
+  },
+  "migration": {
+    "back": "Ir de vuelta",
+    "download": {
+      "button": {
+        "download": "Descargar datos",
+        "home": "Ir al Inicio"
+      },
+      "description": "Esto descargará tus datos a tu dispositivo. Podrás subirlos al nuevo servidor o simplemente guardarlos para mayor seguridad.",
+      "status": {
+        "error": "No se pudo descargar tus datos. 😿",
+        "success": "¡Tus datos se han descargado correctamente! 🎉"
+      },
+      "title": "Descargar datos"
+    },
+    "loginRequired": "¡Debes iniciar sesión para migrar tus datos! Vuelve e inicia sesión para continuar.",
+    "preview": {
+      "downloadDescription": "La descarga incluye:",
+      "items": {
+        "bookmarks": "Medios marcados",
+        "progress": "Ver progreso",
+        "settings": "Configuración y preferencias"
+      },
+      "uploadDescription": "Datos para subir:"
+    },
+    "start": {
+      "explainer": "Esto descargará tus datos a tu dispositivo. Podrás subirlos al nuevo servidor o simplemente guardarlos para mayor seguridad. Sube tu archivo de datos previamente exportado para restaurar tus marcadores y progreso en esta cuenta.",
+      "options": {
+        "download": {
+          "action": "Descargar datos",
+          "description": "Esto descargará tus datos a tu dispositivo. Podrás subirlos al nuevo servidor o simplemente guardarlos para mayor seguridad.",
+          "quality": "Mas tecnico",
+          "title": "Descargar datos"
+        },
+        "or": "o",
+        "upload": {
+          "action": "Subir Datos",
+          "description": "Sube tu archivo de datos previamente exportado para restaurar tus marcadores y progreso en esta cuenta.",
+          "quality": "Restaurar desde copia de seguridad",
+          "title": "Subir Datos"
+        }
+      },
+      "title": "Migra tus datos"
+    },
+    "upload": {
+      "button": {
+        "home": "Continuar a casa",
+        "import": "Importar data",
+        "processing": "Procesando...",
+        "saveLocal": "Guardar localmente"
+      },
+      "description": "Sube tu archivo de datos previamente exportado para restaurar tus marcadores y progreso en esta cuenta.",
+      "exportedOn": "Exportado en",
+      "file": {
+        "change": "Cambiar archivo",
+        "description": "Seleccione el archivo que desea subir",
+        "select": "Seleccionar archivo"
+      },
+      "previewTitle": "Avance:",
+      "status": {
+        "error": "No se pudieron cargar tus datos. 😿",
+        "processing": "Procesando datos...",
+        "success": "¡Tus datos se han cargado correctamente! 🎉",
+        "successLocal": "¡Tus datos se han guardado localmente! 🎉"
+      },
+      "title": "Subir datos"
+    }
+  },
+  "navigation": {
+    "banner": {
+      "appUpdate": {
+        "action": "Actualizar ahora",
+        "available": "Una nueva versión de la aplicación está lista.",
+        "download": "Descargar actualización",
+        "later": "Más tarde",
+        "restart": "Reiniciar para actualizar",
+        "updating": "Actualizando..."
+      },
+      "offline": "Verifica tu conexión a internet"
+    },
+    "download": {
+      "empty": "Aún no se han configurado descargas.",
+      "failed": "No se pudieron cargar las opciones de descarga.",
+      "label": "Descargar aplicación",
+      "options": {
+        "mac-arm64": {
+          "description": "Lo mejor para Mac de la serie M",
+          "label": "macOS Apple Silicio"
+        },
+        "mac-universal": {
+          "description": "Funciona tanto en Apple Silicon como en Intel Mac",
+          "label": "macOS Universal"
+        },
+        "mac-x64": {
+          "description": "Lo mejor para Mac Intel",
+          "label": "MacOS Intel"
+        },
+        "win-arm64": {
+          "description": "Lo mejor para PC con Windows Snapdragon/ARM",
+          "label": "ventanas ARM64"
+        },
+        "win-x64": {
+          "description": "Lo mejor para PC con Windows de 64 bits",
+          "label": "Ventanas x64"
+        }
+      },
+      "unavailable": "No hay ninguna URL de backend configurada."
+    },
+    "install": {
+      "genericGuide": "Su navegador no admite un mensaje de instalación automática de PWA.\nAún puedes instalar usando el menú del navegador (por ejemplo: 'Instalar aplicación', 'Crear acceso directo' o 'Agregar al Dock/Pantalla de inicio').",
+      "iosSafariGuide": "Para instalar FrameZoo como aplicación:\n\n1. Toque el botón Compartir (cuadrado con una flecha).\n2. Elija 'Agregar a la pantalla de inicio'.\n3. Toque Agregar."
+    },
+    "menu": {
+      "accountMenu": "Abrir menú de cuenta",
+      "addons": "Complementos",
+      "desktop": "Configuración de la aplicación",
+      "logout": "Cerrar sesión",
+      "register": "Sincronizar con la nube",
+      "settings": "Configuración"
+    }
+  },
+  "notFound": {
+    "badge": "No encontrado",
+    "goHome": "Volver a inicio",
+    "message": "Buscamos en todas partes: debajo de los contenedores, en el armario, detrás del proxy, pero al final no pudimos encontrar la página que estás buscando.",
+    "reloadButton": "Intentar de nuevo",
+    "title": "No se puede encontrar esa página"
+  },
+  "onboarding": {
+    "defaultConfirm": {
+      "cancel": "Cancelar"
+    }
+  },
+  "overlays": {
+    "close": "Cerrar"
+  },
+  "player": {
+    "back": {
+      "default": "Volver al inicio",
+      "short": "Volver"
+    },
+    "casting": {
+      "device": "dispositivo",
+      "to": "Transmitiendo a {{device}} 📺"
+    },
+    "loadingOverlayMessages": {
+      "1": "Descargando más RAM...",
+      "2": "Convirtiendo cafeína en contenido...",
+      "3": "Enseñar al hámster a correr más rápido...",
+      "4": "Convencer a los electrones para que se muevan más rápido...",
+      "5": "Ya casi llegamos... decía cada barra de carga...",
+      "6": "Encontrando el control remoto... espera, problema equivocado...",
+      "7": "Contando hacia atrás desde el infinito...",
+      "8": "Simulando el futuro...",
+      "9": "Viendo vídeos de gatos...",
+      "10": "Distraído por GIF de gatos...",
+      "11": "Espere mientras el interno vuelve a llenar su café...",
+      "12": "Comprobando si está enchufado...",
+      "13": "Apagándolo y volviéndolo a encender...",
+      "14": "No entrar en pánico...",
+      "15": "Se acerca el invierno...",
+      "16": "Iniciando sesión en Skynet...",
+      "17": "Todos tus navegadores nos pertenecen...",
+      "18": "Buscando un impulso de improbabilidad infinita...",
+      "19": "Descubriendo nuevas formas de hacerte esperar...",
+      "20": "Tu tiempo es muy importante para nosotros. Por favor espera mientras te ignoramos...",
+      "21": "Aún más rápido que Windows Update...",
+      "22": "¿Por qué no comes un sándwich?"
+    },
+    "menus": {
+      "audio": {
+        "default": "Por defecto"
+      },
+      "episodes": {
+        "button": "Episodios",
+        "emptyState": "No hay episodios en esta temporada, ¡Intenta más tarde!",
+        "episodeBadge": "E{{episode}}",
+        "favorites": "Favoritos",
+        "loadingError": "Error al cargar la temporada",
+        "loadingList": "Cargando...",
+        "loadingTitle": "Cargando...",
+        "markAsFavorite": "Marcar como favorito",
+        "markAsUnwatched": "Marcar como no visto",
+        "markAsWatched": "Marcar como visto",
+        "noFavorites": "Aún no hay episodios favoritos. ¡Estrella episodios para agregarlos a tus favoritos!",
+        "showLess": "Mostrar menos",
+        "showMore": "Mostrar más",
+        "specials": "Especiales"
+      },
+      "playback": {
+        "disabled": "Desabilitado en Watch party",
+        "speedBoosted": "2x",
+        "speedLabel": "Velocidad de reproducción",
+        "speedUnboosted": "{{speed}}x",
+        "title": "Configuración de reproducción"
+      },
+      "quality": {
+        "auto": "Automático",
+        "automaticLabel": "Calidad automática",
+        "hint": "Puedes intentar <0>cambiar de fuente</0> para obtener diferentes opciones de calidad.",
+        "iosNoQuality": "Debido a limitaciones definidas por Apple, la selección de calidad no está disponible en iOS para esta fuente. Puedes intentar <0>cambiar a otra fuente</0> para obtener diferentes opciones de calidad.",
+        "title": "Calidad"
+      },
+      "settings": {
+        "audioItem": "Audio",
+        "enableSubtitles": "Habilitar subtítulos",
+        "playbackItem": "Configuración de reproducción",
+        "qualityItem": "Calidad",
+        "sourceItem": "Fuentes de vídeo",
+        "subtitleItem": "Configuración de subtítulos"
+      },
+      "subtitles": {
+        "autoSelectChoice": "Selección automática",
+        "autoSelectDifferentChoice": "Toque nuevamente para seleccionar automáticamente diferentes subtítulos",
+        "clearSecondary": "Borrar subtítulo secundario",
+        "customChoice": "Sube o arrastra un archivo",
+        "customizeLabel": "Personalizar",
+        "delayEarly": "Título de la sierra",
+        "delayLate": "audio escuchado",
+        "doubleClickToCopy": "Haga doble clic para copiar los datos de los subtítulos.",
+        "dropSubtitleFile": "Suelta el archivo de subtítulos aquí",
+        "dualSub": "Subtítulos duales",
+        "dualSubDesc": "Seleccione el mismo formato (SRT, VTT...) y proveedor (OpenSubs...) para una mejor sincronización",
+        "dualSubHint": "Seleccione un idioma para el subtítulo secundario (que se muestra arriba del principal)",
+        "embedded": "Incorporado",
+        "empty": "No hay subtítulos provistos para esto.",
+        "loadingExternal": "Cargando subtítulos externos...",
+        "loadingExternalProgress": "Cargando subtítulos externos... ({{progress}}%)",
+        "matchScoreLabel": "Coincidencia ~{{score}}%",
+        "notFound": "Ni una de las opciones habiles coinciden con tus preferencias",
+        "offChoice": "Apagado",
+        "pasteChoice": "Pegar datos de subtítulos",
+        "previewLabel": "Vista previa de subtítulos:",
+        "primary": "Primario",
+        "refresh": "Actualizar subtítulos externos",
+        "refreshing": "Refrescante...",
+        "secondary": "Secundario",
+        "selectingSecondary": "Seleccionar subtítulo secundario",
+        "syncSubtitleConfirmTitle": "¿Sincronizar subtítulos con IA?",
+        "syncSubtitleConfirmDescription": "La IA alineará los subtítulos para que coincidan con el vídeo.",
+        "syncSubtitleSupportedLanguages": "Idiomas de audio soportados",
+        "syncSubtitleSuccess": "Subtítulo sincronizado exitosamente",
+        "syncSubtitleFailed": "No se pudo sincronizar el subtítulo",
+        "syncSubtitleOpen": "Sincronizar subtítulos con IA",
+        "syncSubtitleAction": "Sincronizar",
+        "settings": {
+          "backlink": "Subtítulos personalizados",
+          "delay": "Retraso de subtítulos",
+          "fixCapitals": "Arreglar capitalización",
+          "autoSync": "Subtítulos de sincronización automática",
+          "syncingProgress": "Sincronizando... ({{progress}}%) (este proceso puede tardar entre 2 y 3 minutos)",
+          "syncApplied": "Sincronización automática aplicada.",
+          "timeline": "Línea de tiempo de subtítulos",
+          "timelineHint": "Elija una señal de subtítulo para sincronizarla con la hora del video actual.",
+          "timelineEmpty": "No hay pistas de subtítulos disponibles."
+        },
+        "title": "Subtítulos",
+        "transcriptChoice": "Transcripción",
+        "searchPlaceholder": "Buscar subtítulos o diálogos...",
+        "delayLabel": "Desplazamiento de subtítulos",
+        "seekMode": "Buscar",
+        "syncMode": "Sincronizar",
+        "syncOffset": "Desplazamiento: {{delay}}s",
+        "syncAction": "Sincronizar",
+        "nowPlaying": "Ahora jugando",
+        "syncDescription": "Haga clic en el diálogo que coincida con la escena de vídeo actual o ajuste el desplazamiento:",
+        "resetDelay": "Reiniciar",
+        "translate": {
+          "title": "Traducir de {{language}}"
+        },
+        "unknownLanguage": "Desconocido",
+        "useNativeSubtitles": "Usar subtitulos de video nativos",
+        "useNativeSubtitlesDescription": "Transmitir subtítulos para pantalla completa nativa y PiP"
+      },
+      "watchparty": {
+        "watchpartyItem": "Ver fiesta"
+      }
+    },
+    "metadata": {
+      "extensionPermission": {
+        "badge": "Permisos insuficientes",
+        "button": "Usar extensión",
+        "text": "Tienes la extensión de navegador, pero necesitamos tu permiso para empezar a usarla.",
+        "title": "Configura la extensión"
+      },
+      "failed": {
+        "badge": "Error",
+        "homeButton": "Ir al inicio",
+        "text": "No se pudieron cargar los metadatos del contenido de TMDB. Por favor, verifica si TMDB está caído o bloqueado en tu conexión a internet.",
+        "title": "Error al cargar los metadatos"
+      },
+      "legal": {
+        "badge": "Eliminado",
+        "text": "Este contenido no va a estar disponible debido a un aviso de eliminación o un reclamo de derechos de autor.",
+        "title": "El contenido ha sido eliminado"
+      },
+      "notFound": {
+        "badge": "No encontrado",
+        "homeButton": "Volver al inicio",
+        "text": "No pudimos encontrar el contenido que solicitaste. Ya sea que se haya eliminado o se haya modificado la URL.",
+        "title": "No se pudo encontrar ese contenido."
+      }
+    },
+    "nextEpisode": {
+      "next": "Siguiente episodio",
+      "nextSeason": "La próxima temporada",
+      "replay": "Repetición"
+    },
+    "playbackError": {
+      "autoResumeText": "Hubo un error al intentar reproducir los medios 😖. Probando automáticamente las otras fuentes...",
+      "badge": "Error de reproducción",
+      "copyDebugInfo": "Copiar información de depuración",
+      "debugInfo": "Consulte la consola para obtener más detalles.",
+      "errors": {
+        "errorAborted": "La obtención del contenido fue cancelada por solicitud del usuario.",
+        "errorDecode": "A pesar de haber sido determinado previamente como utilizable, se produjo un error al intentar decodificar el recurso del contenido, lo que resultó en un error.",
+        "errorGenericMedia": "Se produjo un error desconocido en el contenido.",
+        "errorNetwork": "Se produjo un error de red que impidió obtener el contenido de manera exitosa, a pesar de haber estado disponible anteriormente.",
+        "errorNotSupported": "El contenido o el proveedor del contenido no es compatible."
+      },
+      "homeButton": "Ir al inicio",
+      "resumeButton": "Pruebe las siguientes fuentes",
+      "text": "Se produjo un error al intentar reproducir el contenido. Por favor, inténtalo de nuevo.",
+      "title": "¡No se pudo reproducir el vídeo!"
+    },
+    "resume": {
+      "description": "Este episodio ha sido visto el {{percentage}}%.",
+      "restart": "Reanudar",
+      "resume": "Reanudar",
+      "title": "¿Continuar viendo?"
+    },
+    "segment": {
+      "credits": "Créditos",
+      "intro": "Introducción",
+      "recap": "Resumen"
+    },
+    "skipTime": {
+      "confidence": "confianza",
+      "connectApiKeyMessage": "Para enviar nuevos segmentos, ingrese su clave API de TheIntroDB en la configuración de conexiones",
+      "credits": "Saltar créditos",
+      "endOfVideo": "Fin",
+      "endsAt": "Termina en {{time}}",
+      "submissionUnavailableMessage": "El envío de segmentos no está disponible en este servidor.",
+      "feedback": {
+        "modal": {
+          "cancel": "Cancelar",
+          "description": "Contribuya a TheIntroDB enviando marcas de tiempo de segmentos precisas. Todos los envíos son aceptados por la comunidad antes de ser publicados.",
+          "endTimeLabel": "Fin(es)",
+          "error": {
+            "endTime": "Se requiere hora de finalización",
+            "mediaInfo": "La información de los medios no está disponible.",
+            "segment": "Ningún segmento seleccionado",
+            "startTime": "Se requiere hora de inicio",
+            "submission": "Error al enviar marcas de tiempo",
+            "tidbKey": "La clave API TIDB no está configurada"
+          },
+          "guide": {
+            "credits": {
+              "durationDesc": "Mínimo 5 segundos si se proporciona el final. Puede extenderse hasta el final del medio.",
+              "endDesc": "Opcional: déjelo en blanco si los créditos llegan hasta el final del archivo.",
+              "excludeDesc": "Excluir escenas de mitad de créditos o post-créditos; sólo la lista de crédito principal.",
+              "startDesc": "Obligatorio: cuando comienzan los créditos finales (por ejemplo, cuando aparece el primer texto de crédito).",
+              "whenToTitle": "Guía de marcas de tiempo de créditos:"
+            },
+            "durationDesc": "Min 5s si se proporciona el final",
+            "durationLabel": "Duración:",
+            "endDesc": "Opcional: vacío si se extiende hasta el final",
+            "endLabel": "Fin:",
+            "excludeDesc": "Escenas post-créditos",
+            "excludeLabel": "Excluir:",
+            "intro": {
+              "durationDesc": "La mayoría de las introducciones duran entre 30 y 90 segundos. Mínimo 5 segundos si se establecen tanto el inicio como el final.",
+              "endDesc": "Obligatorio: cuando finaliza la introducción (normalmente cuando comienza la tarjeta de título o el episodio principal).",
+              "excludeDesc": "No incluya aperturas frías ni escenas previas a la introducción; sólo la secuencia del título principal.",
+              "startDesc": "Opcional: déjelo en blanco si la introducción comienza al comienzo del episodio.",
+              "whenToTitle": "Guía de introducción de marcas de tiempo:"
+            },
+            "preview": {
+              "durationDesc": "La vista previa varía en longitud. Mínimo 5s.",
+              "endDesc": "Opcional: déjelo en blanco si la vista previa finaliza al final del medio.",
+              "excludeDesc": "La vista previa suele ser de 15 a 90 segundos al final del episodio y muestra una vista previa del siguiente episodio.",
+              "startDesc": "Obligatorio: cuando comienza la vista previa (por ejemplo, cuando aparece el texto de la vista previa).",
+              "whenToTitle": "Guía de vista previa de marcas de tiempo:"
+            },
+            "recap": {
+              "durationDesc": "Los resúmenes varían en longitud. Mínimo 5 segundos si se establecen tanto el inicio como el final.",
+              "endDesc": "Obligatorio: cuando finaliza el resumen y comienza el nuevo contenido.",
+              "excludeDesc": "Sólo el segmento \"anteriormente activado\" o de resumen; No incluyas la introducción ni las escenas nuevas.",
+              "startDesc": "Opcional: déjelo en blanco si el resumen comienza al comienzo del episodio.",
+              "whenToTitle": "Guía de resumen de marcas de tiempo:"
+            },
+            "startDesc": "Requerido: cuando los créditos comienzan a acumularse",
+            "startLabel": "Comenzar:"
+          },
+          "placeholders": {
+            "end": {
+              "credits": "3:30 o 210 (déjelo vacío para el final del medio)",
+              "intro": "3:30 o 210 (obligatorio)",
+              "preview": "3:30 o 210 (déjelo vacío para el final del medio)",
+              "recap": "3:30 o 210 (obligatorio)"
+            },
+            "start": {
+              "credits": "2:30 o 150 (obligatorio)",
+              "intro": "2:30 o 150 (déjelo vacío para empezar desde el principio)",
+              "preview": "2:30 o 150 (obligatorio)",
+              "recap": "2:30 o 150 (déjelo vacío para empezar desde el principio)"
+            }
+          },
+          "segmentType": "Tipo de segmento",
+          "startTimeLabel": "Inicio(s)",
+          "submit": "Entregar",
+          "submitting": "Sumisión...",
+          "success": {
+            "title": "¡Envío exitoso! ¡Gracias!"
+          },
+          "title": "Enviar marcas de tiempo a TheIntroDB",
+          "types": {
+            "credits": "Créditos",
+            "intro": "Introducción",
+            "preview": "Avance",
+            "recap": "Resumen"
+          },
+          "whenToDesc": "Ingrese marcas de tiempo en segundos (por ejemplo, 150), formato mm:ss (por ejemplo, 2:30) o formato hh:mm:ss (por ejemplo, 1:42:20). Convertiremos automáticamente el formato por usted.",
+          "whenToTitle": "Guía de marcas de tiempo:"
+        },
+        "title": "¿Fue correcto este salto?"
+      },
+      "intro": "Saltar introducción",
+      "noSegments": "No hay segmentos de omisión disponibles",
+      "recap": "Saltar resumen",
+      "skipSegments": "Saltar segmentos",
+      "startsAt": "Comienza en {{time}}",
+      "submissions": "{{count}} envíos",
+      "submitSegment": "Enviar segmento",
+      "timeUnknown": "Hora desconocida"
+    },
+    "time": {
+      "regular": "{{timeWatched}} / {{duration}}",
+      "remaining": "{{timeLeft}} restante • Finaliza a las {{timeFinished, datetime}}",
+      "shortRegular": "{{timeWatched}}",
+      "shortRemaining": "-{{timeLeft}}"
+    },
+    "torrent": {
+      "file": "Archivo: {{fileName}}",
+      "infohash": "Información hash: {{infoHash}}",
+      "network": "Red de torrents",
+      "networkStatus": "Estado de la red de torrents",
+      "peers": "Compañeros: {{count}}",
+      "progress": "Progreso: {{progress}}%",
+      "speed": "Velocidad: {{speed}}",
+      "states": {
+        "buffering": "Almacenamiento en búfer",
+        "downloading": "Descargando",
+        "error": "Error",
+        "ready": "Listo",
+        "starting": "A partir de",
+        "stopped": "Interrumpido"
+      },
+      "unknown": "Desconocido"
+    }
+  },
+  "screens": {
+    "loadingApp": "Cargando aplicación...",
+    "loadingUser": "Cargando perfil de usuario...",
+    "loadingUserError": {
+      "disconectCancel": "Cancelar",
+      "disconnectConfirm": "Confirmar",
+      "disconnectMessage": "Desconéctese del servidor de la cuenta, manteniendo los datos locales más recientes. Los cambios y el contenido visto no se sincronizarán hasta que vuelvas a iniciar sesión.",
+      "disconnectTitle": "¿Desconectarse del backend?",
+      "logout": "Cerrar sesión",
+      "reload": "Recargar",
+      "reset": "Restablecer servidor personalizado",
+      "text": "No se pudo cargar su perfil de usuario. Intente recargar la página.",
+      "textWithReset": "No se pudo cargar su perfil de usuario usando el servidor personalizado actual. Intente restablecer el servidor personalizado y luego vuelva a cargarlo."
+    },
+    "migration": {
+      "failed": "Error al migrar tus datos.",
+      "inProgress": "Por favor espera, estamos migrando tus datos. Esto no debería tomar mucho tiempo."
+    }
+  },
+  "settings": {
+    "account": {
+      "accountDetails": {
+        "editProfile": "Editar",
+        "logoutButton": "Cerrar sesión",
+        "nicknameLabel": "Apodo",
+        "nicknamePlaceholder": "Introduce tu apodo"
+      },
+      "actions": {
+        "delete": {
+          "button": "Eliminar cuenta",
+          "confirmButton": "Eliminar cuenta",
+          "confirmDescription": "¿Estás seguro de que quieres eliminar tu cuenta? ¡Todos tus datos se perderán!",
+          "confirmTitle": "¿Estás seguro?",
+          "text": "Esta acción es irreversible. Todos los datos se eliminarán y no se podrán recuperar.",
+          "title": "Eliminar cuenta"
+        },
+        "logoutAllDevices": {
+          "button": "Cerrar sesión en todos los dispositivos",
+          "text": "Esto te desconectará de todos los dispositivos vinculados a tu cuenta.",
+          "title": "Finalizar todas las sesiones"
+        },
+        "migration": {
+          "button": "Migrar cuenta",
+          "text": "Migra tu cuenta a un nuevo servidor o descarga tus datos.",
+          "title": "Migración de cuenta"
+        },
+        "title": "Acciones"
+      },
+      "devices": {
+        "deviceNameLabel": "Nombre del dispositivo",
+        "failed": "Error al cargar las sesiones",
+        "lastActive": "Último activo: {{date}}",
+        "loggedInAt": "Inicia sesión en: {{date}}",
+        "removeDevice": "Eliminar",
+        "title": "Dispositivos",
+        "unknownDevice": "Dispositivo desconocido, error al descifrar el nombre"
+      },
+      "profile": {
+        "finish": "Finalizar edición",
+        "firstColor": "Color de perfil uno",
+        "secondColor": "Color de perfil dos",
+        "title": "Editar imagen de perfil",
+        "userIcon": "Icono de usuario"
+      },
+      "register": {
+        "cta": "Empezar",
+        "text": "Comparte tu progreso de visualización entre dispositivos y manténlos sincronizados.",
+        "title": "Sincronizar con la nube"
+      },
+      "title": "Cuenta"
+    },
+    "all": {
+      "title": "Todas las configuraciones"
+    },
+    "appearance": {
+      "activeTheme": "Activo",
+      "customParts": {
+        "primary": "Primario",
+        "secondary": "Secundario",
+        "tertiary": "Terciario"
+      },
+      "options": {
+        "carouselView": "Vista carrusel",
+        "carouselViewDescription": "Muestra las secciones que estás viendo y las de marcadores como carruseles en lugar de una cuadrícula. Deshabilitado por defecto.",
+        "carouselViewLabel": "Vista carrusel",
+        "discover": "Sección descubrir",
+        "discoverDescription": "Muestre la sección Descubrir en la página de inicio debajo de sus medios favoritos. Habilitado de forma predeterminada.",
+        "discoverLabel": "Sección descubrir",
+        "featured": "Medios destacados",
+        "featuredDescription": "¡Muestre un carrusel de películas y programas destacados en la parte superior de su página de inicio! Deshabilitado por defecto.",
+        "featuredLabel": "Medios destacados",
+        "forceCompactEpisodeView": "Forzar vista compacta del episodio",
+        "forceCompactEpisodeViewDescription": "Fuerza el carrusel de episodios en el reproductor para que utilice la vista vertical compacta \"clásica\". Deshabilitado por defecto.",
+        "forceCompactEpisodeViewLabel": "Episodios compactos",
+        "homeSectionOrder": "Orden de la sección de inicio",
+        "homeSectionOrderDescription": "Arrastre y suelte para reordenar las secciones de visualización y marcadores en su página de inicio. El orden del grupo se puede editar desde la página de inicio.",
+        "homeSectionOrderGroups": "Reordenar grupos de marcadores",
+        "logos": "Logotipos de imagen",
+        "logosDescription": "Muestre logotipos de imágenes en lugar de títulos de texto en la sección modal y destacada de detalles. Habilitado de forma predeterminada.",
+        "logosLabel": "Logotipos de imagen",
+        "logosNotice": "La mayoría de las veces, los logotipos están únicamente en inglés. ¡Es posible que otros idiomas quieran desactivar esto!",
+        "minimalCards": "Tarjetas mínimas",
+        "minimalCardsDescription": "Oculte el contenido del texto (título, tipo, año) en las tarjetas multimedia y muestre solo la imagen del póster.",
+        "minimalCardsLabel": "Tarjetas mínimas",
+        "modal": "Detalles modales",
+        "modalDescription": "Muestra el modo de detalles cuando haces clic en una tarjeta multimedia en lugar de ir a la página de visualización. Se requiere proxy o extensión para el tráiler. Deshabilitado por defecto.",
+        "modalLabel": "Detalles modales",
+        "pauseOverlay": "Pausar superposición",
+        "pauseOverlayDescription": "Muestra un título/logotipo y una descripción superpuesta cuando el reproductor está en pausa o inactivo.",
+        "pauseOverlayLabel": "Pausar superposición"
+      },
+      "sections": {
+        "bookmarks": "Marcadores",
+        "watching": "Actualmente viendo"
+      },
+      "themes": {
+        "acid": "Ácido",
+        "autumn": "Otoño",
+        "blue": "Azul",
+        "christmas": "Navidad",
+        "classic": "Clásico",
+        "cobalt": "Cobalto",
+        "custom": "Costumbre",
+        "default": "Predeterminado",
+        "ember": "Ascua",
+        "forest": "Bosque",
+        "frost": "Helada",
+        "grape": "Uva",
+        "gray": "Gris",
+        "green": "Verde",
+        "hulk": "Casco",
+        "mocha": "Moca",
+        "noir": "negro",
+        "pink": "Rosa",
+        "popsicle": "paleta",
+        "red": "Rojo",
+        "spark": "Chispa",
+        "spiderman": "hombre araña",
+        "teal": "Turquesa",
+        "wolverine": "Glotón"
+      },
+      "title": "Apariencia"
+    },
+    "connections": {
+      "server": {
+        "changeWarning": "Cambiar el servidor backend cerrará tu sesión. ¿Continuar?",
+        "changeWarningTitle": "Cambiar servidor backend",
+        "error": "Error al conectarse al backend",
+        "notice": "Tu cuenta NO se sincroniza entre backends, ¡así que recuerda cuál usas!"
+      },
+      "tidb": {
+        "description": "Contribuya a TheIntroDB dejando comentarios sobre los segmentos de introducción, resumen y créditos. <0>Más información.</0>",
+        "tokenLabel": "Clave API"
+      },
+      "title": "Conexiones"
+    },
+    "preferences": {
+      "autoplay": "Reproducción automática",
+      "autoplayDescription": "Reproduce automáticamente el siguiente episodio de una serie después de llegar al final.",
+      "autoplayLabel": "Reproducción automática",
+      "autoResumeOnPlaybackError": "Reanudación automática en caso de error de reproducción",
+      "autoResumeOnPlaybackErrorDescription": "Continúe buscando automáticamente otras fuentes cuando la fuente actual falle durante la reproducción. Si está deshabilitado, verá una pantalla de error con una opción de reanudación manual.",
+      "autoResumeOnPlaybackErrorLabel": "Reanudación automática en caso de error de reproducción",
+      "autoSkipSegments": "Saltar segmentos automáticamente",
+      "autoSkipSegmentsDescription": "Cuando está habilitado, omita automáticamente los segmentos de introducción, resumen y vista previa mientras mira.",
+      "autoSkipSegmentsLabel": "Saltar segmentos automáticamente",
+      "doubleClickToSeek": "Toca dos veces para buscar",
+      "doubleClickToSeekDescription": "Toca dos veces en el lado izquierdo o derecho del reproductor para buscar 10 segundos hacia adelante o hacia atrás.",
+      "doubleClickToSeekLabel": "Habilitar doble toque para buscar",
+      "keyboardShortcuts": "Atajos de teclado",
+      "keyboardShortcutsDescription": "Personaliza los atajos de teclado para la aplicación. Mantenga presionado ` para mostrar esta ayuda en cualquier momento",
+      "keyboardShortcutsLabel": "Personalizar atajos de teclado",
+      "language": "Idioma de la aplicación",
+      "languageDescription": "Idioma aplicado a toda la aplicación.",
+      "lowPerformanceMode": "Modo de bajo rendimiento/ancho de banda",
+      "lowPerformanceModeDescription": "Optimiza la aplicación para conexiones y dispositivos más lentos al deshabilitar funciones que requieren mucho ancho de banda. Este modo reduce el uso de datos y mejora el rendimiento manteniendo intactas las funciones principales de búsqueda y visualización.",
+      "lowPerformanceModeLabel": "Modo de bajo rendimiento",
+      "showLess": "Mostrar menos",
+      "showMore": "Mostrar más",
+      "skipCredits": "Saltar créditos finales",
+      "skipCreditsDescription": "Cuando está habilitado, reproduce automáticamente el siguiente episodio al 99% de finalización para omitir los créditos finales. Cuando esté deshabilitado, espere hasta que el episodio se complete por completo.",
+      "skipCreditsLabel": "Saltar créditos finales",
+      "thumbnail": "Generar miniaturas",
+      "thumbnailDescription": "La mayor parte del tiempo, los videos no tienen miniaturas. Puedes activar esta configuración para generarlas sobre la marcha, pero pueden realentizar tu video.",
+      "thumbnailLabel": "Generar miniaturas",
+      "title": "Preferencias"
+    },
+    "reset": "Restablecer",
+    "save": "Guardar",
+    "search": {
+      "placeholder": "Configuración de búsqueda..."
+    },
+    "sidebar": {
+      "info": {
+        "appVersion": "Versión",
+        "notLoggedIn": "No has iniciado sesión",
+        "checkForUpdates": "Buscar actualizaciones",
+        "upToDate": "Actualmente estás en la última versión."
+      }
+    },
+    "subtitles": {
+      "backgroundBlurEnabledDescription": "Desactivar el desenfoque del fondo de los subtítulos puede solucionar algunos problemas de parpadeo",
+      "backgroundBlurEnabledLabel": "Desenfoque de fondo",
+      "backgroundBlurLabel": "Desefoque de fondo",
+      "backgroundLabel": "Opacidad del fondo",
+      "BorderThicknessLabel": "Grosor del borde",
+      "colorLabel": "Color",
+      "high": "Alto",
+      "low": "Por defecto",
+      "previewQuote": "No debo temer. El miedo es el asesino de la mente.",
+      "textBoldLabel": "Texto en negrita",
+      "textSizeLabel": "Tamaño del texto",
+      "textStyle": {
+        "Border": "Borde",
+        "default": "Por defecto",
+        "depressed": "Deprimido",
+        "dropShadow": "Sombra paralela",
+        "raised": "Aumentó",
+        "title": "Estilo de texto"
+      },
+      "title": "Subtítulos",
+      "verticalPositionLabel": "posición vertical"
+    },
+    "unsaved": "Tienes cambios sin guardar"
+  },
+  "tmdb": {
+    "genres": {
+      "10759": "Acción y aventura",
+      "10765": "Ciencia ficción y fantasía"
+    }
+  },
+  "watchParty": {
+    "aheadOfHost": "Adelantado del anfitrión por {{seconds}} segundos",
+    "alone": "Solo",
+    "behindHost": "Atrás del anfitrión por {{seconds}} segundos",
+    "cancel": "Cancelar",
+    "connectedAsGuest": "Conectado para ver la fiesta como invitado",
+    "contentMismatch": "No puedo unirme a la fiesta de visualización: el contenido no coincide con el contenido del anfitrión.",
+    "copyCode": "Toca para copiar",
+    "emptyRoom": "Nadie está aún en la sala",
+    "enterCodeOrLink": "Ingresa un enlace de fiesta de observación compartida o un código de habitación",
+    "episodeMismatch": "No puedes unirte al grupo de visualización: estás viendo un episodio diferente al del presentador.",
+    "guestFallback": "Invitado",
+    "hosting": "Alojamiento",
+    "hostParty": "Organizar una fiesta de observación",
+    "invalidRoom": "No se pudo conectar a la sala",
+    "isGuest": "Mirando como invitado en <0>{{backendName}}</0>",
+    "isHost": "Hosting on <0>{{backendName}}</0>",
+    "join": "Unirse",
+    "joinParty": "Únase a una fiesta de observación",
+    "leaveWatchParty": "Dejar la fiesta de vigilancia",
+    "linkCopied": "Copiado!",
+    "noHost": "No hay ningún anfitrión en esta fiesta de observación",
+    "save": "Guardar",
+    "shareCode": "Compartir este codigo con amigos (Toca para copiar link)",
+    "showStatusOverlay": "Mostrar superposición de estado",
+    "status": {
+      "inSync": "En sincronización",
+      "outOfSync": "Fuera de sincronización"
+    },
+    "syncing": "Sincronizando...",
+    "validating": "Validando la fiesta de vigilancia...",
+    "viewers": "Espectadores ({{count}})",
+    "watching": "Mirando",
+    "withCount": "Con {{count}} otros",
+    "you": "Tú"
+  },
+  "toasts": {
+    "linkCopied": "¡Enlace copiado al portapapeles!",
+    "loginSuccess": "¡Inicié sesión exitosamente!",
+    "logoutSuccess": "¡Cerró sesión exitosamente!",
+    "registerSuccess": "¡Registrado exitosamente!"
+  }
+}

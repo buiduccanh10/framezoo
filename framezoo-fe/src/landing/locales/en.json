@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Performance",
+    "addons": "Ecosystem",
+    "addonGuide": "Addon guide",
+    "download": "Download",
+    "language": "Language"
+  },
+  "hero": {
+    "eyebrow": "FRAMEZOO DESKTOP / 01",
+    "title": "Watch better.",
+    "titleAccent": "On desktop.",
+    "description": "Native playback, sharper controls, and a calmer place for your next watch.",
+    "primaryCta": "Download desktop",
+    "secondaryCta": "See the experience",
+    "imageAlt": "FrameZoo desktop app preview",
+    "version": "Desktop release"
+  },
+  "features": {
+    "performanceTitle": "Your library, without the browser tax.",
+    "overviewDescription": "FrameZoo Desktop gives playback the room it needs: native performance, clean handoffs, and controls that stay out of the way.",
+    "playback": "Native playback",
+    "playbackDescription": "Smooth video with desktop-grade media handling.",
+    "performance": "Quiet performance",
+    "performanceDescription": "Less chrome. More focus. No tab juggling.",
+    "continuity": "Keep your flow",
+    "continuityDescription": "Resume, browse, and switch sources without losing the moment.",
+    "ecosystemTitle": "Ready for what comes next.",
+    "ecosystemDescription": "The desktop app is the core. Addons extend the edges, so your setup can stay personal without becoming complicated.",
+    "addonLabel": "ADDON-READY",
+    "addonOne": "Source connectors",
+    "addonTwo": "Subtitle tools",
+    "addonThree": "Community extensions",
+    "showcaseTitle": "The screen is the destination.",
+    "showcaseDescription": "A focused desktop surface for discovery, playback, and everything around the story.",
+    "showcaseCaption": "FrameZoo Desktop / Focus mode"
+  },
+  "addonGuide": {
+    "eyebrow": "ADDON PROTOCOL / GUIDE",
+    "title": "Build an addon without joining the app process.",
+    "description": "An addon is a small HTTP service. Serve a manifest and the resources you need; FrameZoo handles the rest.",
+    "manifestTitle": "Start with manifest.json",
+    "manifestDescription": "Metadata tells the app who your addon is, which resources it supports, and where its icon lives.",
+    "resourcesTitle": "Choose the resources",
+    "resourcesDescription": "Implement only the endpoints your addon needs. Responses are JSON and can be written in any language.",
+    "resources": {
+      "catalog": "Rows of movies or series for discovery.",
+      "meta": "Movie or series metadata for a title.",
+      "stream": "Torrent, HLS, DASH, or direct file sources.",
+      "subtitles": "Subtitle files with language labels.",
+      "addon_catalog": "A catalog of other addons."
+    },
+    "runTitle": "Run, test, install",
+    "steps": [
+      "Serve /manifest.json and your resource endpoints from a local or public HTTP(S) server.",
+      "Test each endpoint with curl and verify the JSON shape.",
+      "Paste the manifest URL into FrameZoo Desktop > Addons."
+    ],
+    "advancedTitle": "Need a Node helper?",
+    "advancedDescription": "The Stremio Addon SDK is optional. Use it if you want routing and serialization helpers; it is not required by the protocol.",
+    "advancedLink": "Open advanced SDK reference"
+  },
+  "download": {
+    "eyebrow": "CHOOSE YOUR BUILD",
+    "title": "Take FrameZoo with you.",
+    "description": "Pick the build for your machine. Your browser will make the recommendation, or reveal every available option below.",
+    "recommended": "Recommended",
+    "chooseBuild": "Choose a build",
+    "selected": "Selected",
+    "download": "Download",
+    "showAll": "All builds are shown",
+    "detected": "Detected on this device",
+    "loading": "Checking available builds...",
+    "empty": "No desktop builds are published yet. Check back soon.",
+    "error": "Could not load the desktop release list.",
+    "retry": "Try again",
+    "noBackend": "Download service is not configured for this deployment.",
+    "version": "Release"
+  },
+  "footer": {
+    "line": "A quieter home for the stories you keep coming back to.",
+    "status": "Desktop-first. Addon-ready."
+  }
+}

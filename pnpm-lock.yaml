@@ -57,7 +57,7 @@ importers:
 
   .: {}
 
-  betamovie-be:
+  framezoo-be:
     dependencies:
       '@prisma/adapter-pg':
         specifier: ^7.9.0
@@ -130,7 +130,7 @@ importers:
         specifier: ^4.22.4
         version: 4.22.4
 
-  betamovie-desktop:
+  framezoo-desktop:
     dependencies:
       '@dnd-kit/core':
         specifier: ^6.3.1
@@ -482,7 +482,7 @@ importers:
         specifier: ^7.4.1
         version: 7.4.1
 
-  betamovie-fe:
+  framezoo-fe:
     dependencies:
       '@react-spring/web':
         specifier: ^10.1.1

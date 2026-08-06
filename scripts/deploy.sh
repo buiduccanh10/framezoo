@@ -23,16 +23,16 @@ if [ ! -f "$ENV_FILE_PATH" ]; then
 fi
 
 if [ "$EXTERNAL_LEGACY_VOLUMES" = "false" ] \
-  && docker volume inspect betamovie_backend_postgres-data >/dev/null 2>&1 \
-  && docker volume inspect betamovie_backend_redis-data >/dev/null 2>&1 \
-  && docker volume inspect betamovie_backend_preview-data >/dev/null 2>&1; then
+  && docker volume inspect framezoo_backend_postgres-data >/dev/null 2>&1 \
+  && docker volume inspect framezoo_backend_redis-data >/dev/null 2>&1 \
+  && docker volume inspect framezoo_backend_preview-data >/dev/null 2>&1; then
   EXTERNAL_LEGACY_VOLUMES=true
 fi
 
 if [ "$EXTERNAL_LEGACY_VOLUMES" = "true" ]; then
-  if ! docker volume inspect betamovie_backend_downloads-data >/dev/null 2>&1; then
-    echo "Creating missing production downloads volume: betamovie_backend_downloads-data"
-    docker volume create betamovie_backend_downloads-data >/dev/null
+  if ! docker volume inspect framezoo_backend_downloads-data >/dev/null 2>&1; then
+    echo "Creating missing production downloads volume: framezoo_backend_downloads-data"
+    docker volume create framezoo_backend_downloads-data >/dev/null
   fi
 fi
 

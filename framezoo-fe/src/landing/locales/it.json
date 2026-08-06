@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Prestazione",
+    "addons": "Ecosistema",
+    "download": "Scaricamento",
+    "language": "Lingua",
+    "addonGuide": "Guida ai componenti aggiuntivi"
+  },
+  "hero": {
+    "eyebrow": "DESKTOP FRAMEZOO / 01",
+    "title": "Guarda meglio.",
+    "titleAccent": "Sulla scrivania.",
+    "description": "Riproduzione nativa, controlli più nitidi e un posto più tranquillo per il tuo prossimo orologio.",
+    "primaryCta": "Scarica desktop",
+    "secondaryCta": "Vedi l'esperienza",
+    "imageAlt": "Anteprima dell'app desktop FrameZoo",
+    "version": "Versione desktop"
+  },
+  "features": {
+    "performanceTitle": "La tua biblioteca, senza la tassa sul browser.",
+    "overviewDescription": "FrameZoo Desktop offre alla riproduzione lo spazio di cui ha bisogno: prestazioni native, passaggi puliti e controlli che non intralciano.",
+    "playback": "Riproduzione nativa",
+    "playbackDescription": "Video fluidi con gestione multimediale di livello desktop.",
+    "performance": "Prestazioni silenziose",
+    "performanceDescription": "Meno cromature. Maggiore concentrazione. Nessuna giocoleria con le schede.",
+    "continuity": "Mantieni il tuo flusso",
+    "continuityDescription": "Riprendi, sfoglia e cambia fonte senza perdere l'attimo.",
+    "ecosystemTitle": "Pronti per quello che verrà dopo.",
+    "ecosystemDescription": "L'app desktop è il nucleo. I componenti aggiuntivi estendono i margini, così la tua configurazione può rimanere personale senza diventare complicata.",
+    "addonLabel": "PRONTO PER L'AGGIUNTA",
+    "addonOne": "Connettori di origine",
+    "addonTwo": "Strumenti per i sottotitoli",
+    "addonThree": "Estensioni della comunità",
+    "showcaseTitle": "Lo schermo è la destinazione.",
+    "showcaseDescription": "Una superficie desktop focalizzata per la scoperta, la riproduzione e tutto ciò che riguarda la storia.",
+    "showcaseCaption": "Modalità desktop/messa a fuoco FrameZoo"
+  },
+  "download": {
+    "eyebrow": "SCEGLI LA TUA COSTRUZIONE",
+    "title": "Porta FrameZoo con te.",
+    "description": "Scegli la build per la tua macchina. Il tuo browser formulerà la raccomandazione o rivelerà tutte le opzioni disponibili di seguito.",
+    "recommended": "Raccomandato",
+    "chooseBuild": "Scegli una costruzione",
+    "selected": "Selezionato",
+    "download": "Scaricamento",
+    "showAll": "Vengono visualizzate tutte le build",
+    "detected": "Rilevato su questo dispositivo",
+    "loading": "Controllo delle build disponibili...",
+    "empty": "Nessuna build desktop è stata ancora pubblicata. Ricontrolla presto.",
+    "error": "Impossibile caricare l'elenco delle versioni desktop.",
+    "retry": "Riprova",
+    "noBackend": "Il servizio di download non è configurato per questa distribuzione.",
+    "version": "Pubblicazione"
+  },
+  "footer": {
+    "line": "Una casa più tranquilla per le storie a cui continui a tornare.",
+    "status": "Prima il desktop. Pronto per il componente aggiuntivo."
+  },
+  "addonGuide": {
+    "manifestDescription": "I metadati dicono all'app chi è il tuo componente aggiuntivo, quali risorse supporta e dove si trova la sua icona.",
+    "description": "Un componente aggiuntivo è un piccolo servizio HTTP. Servi un manifest e le risorse di cui hai bisogno; FrameZoo si occupa del resto.",
+    "title": "Crea un componente aggiuntivo senza partecipare al processo dell'app.",
+    "manifestTitle": "Inizia con manifest.json",
+    "eyebrow": "PROTOCOLLO/GUIDA AGGIUNTA",
+    "resourcesDescription": "Implementa solo gli endpoint necessari al tuo componente aggiuntivo. Le risposte sono JSON e possono essere scritte in qualsiasi lingua.",
+    "resources": {
+      "stream": "Fonti torrent, HLS, DASH o file diretti.",
+      "catalog": "File di film o serie da scoprire.",
+      "subtitles": "File di sottotitoli con etichette di lingua.",
+      "meta": "Metadati di film o serie per un titolo.",
+      "addon_catalog": "Un catalogo di altri componenti aggiuntivi."
+    },
+    "resourcesTitle": "Scegli le risorse",
+    "runTitle": "Esegui, prova, installa",
+    "advancedTitle": "Hai bisogno di un aiutante del nodo?",
+    "steps": [
+      "Servi /manifest.json e i tuoi endpoint di risorse da un server HTTP(S) locale o pubblico.",
+      "Testa ogni endpoint con curl e verifica la forma JSON.",
+      "Incolla l'URL manifest in FrameZoo Desktop > Componenti aggiuntivi."
+    ],
+    "advancedDescription": "L'SDK del componente aggiuntivo Stremio è facoltativo. Usalo se desideri aiutanti di routing e serializzazione; non è richiesto dal protocollo.",
+    "advancedLink": "Apri il riferimento SDK avanzato"
+  }
+}

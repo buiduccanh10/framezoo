@@ -1,0 +1,84 @@
+{
+  "nav": {
+    "features": "Hiệu năng",
+    "addons": "Hệ sinh thái",
+    "download": "Tải xuống",
+    "language": "Ngôn ngữ",
+    "addonGuide": "Hướng dẫn bổ sung"
+  },
+  "hero": {
+    "eyebrow": "MÁY TÍNH ĐỂ BÀN FRAMEZOO / 01",
+    "title": "Xem phim đã hơn.",
+    "titleAccent": "Trên desktop.",
+    "description": "Phát native, điều khiển mượt, không gian tập trung cho bộ phim tiếp theo.",
+    "primaryCta": "Tải app desktop",
+    "secondaryCta": "Xem trải nghiệm",
+    "imageAlt": "Bản xem trước FrameZoo desktop",
+    "version": "Bản desktop"
+  },
+  "features": {
+    "performanceTitle": "Thư viện của bạn, không còn giới hạn trình duyệt.",
+    "overviewDescription": "FrameZoo Desktop dành không gian cho playback: hiệu năng native, chuyển đổi liền mạch, điều khiển luôn vừa đủ.",
+    "playback": "Phát native",
+    "playbackDescription": "Video mượt với khả năng xử lý media cấp desktop.",
+    "performance": "Hiệu năng yên tĩnh",
+    "performanceDescription": "Ít chrome hơn. Tập trung hơn. Không phải đổi tab.",
+    "continuity": "Giữ trọn mạch xem",
+    "continuityDescription": "Tiếp tục, khám phá, đổi nguồn mà không mất khoảnh khắc.",
+    "ecosystemTitle": "Sẵn sàng cho bước tiếp theo.",
+    "ecosystemDescription": "Desktop app là lõi. Addon mở rộng các cạnh, để setup của bạn riêng tư mà không phức tạp.",
+    "addonLabel": "SẴN SÀNG CHO ADDON",
+    "addonOne": "Kết nối nguồn",
+    "addonTwo": "Công cụ phụ đề",
+    "addonThree": "Extension cộng đồng",
+    "showcaseTitle": "Màn hình là điểm đến.",
+    "showcaseDescription": "Một không gian desktop tập trung cho khám phá, playback và mọi thứ xung quanh câu chuyện.",
+    "showcaseCaption": "Chế độ lấy nét / máy tính để bàn FrameZoo"
+  },
+  "download": {
+    "eyebrow": "CHỌN BẢN BUILD",
+    "title": "Mang FrameZoo theo bạn.",
+    "description": "Chọn bản build cho thiết bị. Trình duyệt sẽ đề xuất lựa chọn phù hợp hoặc hiển thị toàn bộ bản có sẵn.",
+    "recommended": "Đề xuất",
+    "chooseBuild": "Chọn bản build",
+    "selected": "Đã chọn",
+    "download": "Tải xuống",
+    "showAll": "Đang hiển thị mọi bản build",
+    "detected": "Đã nhận diện thiết bị",
+    "loading": "Đang kiểm tra bản build...",
+    "empty": "Chưa có bản desktop nào được phát hành. Hãy quay lại sau.",
+    "error": "Không tải được danh sách bản desktop.",
+    "retry": "Thử lại",
+    "noBackend": "Deployment này chưa cấu hình dịch vụ tải xuống.",
+    "version": "Bản phát hành"
+  },
+  "footer": {
+    "line": "Một không gian yên tĩnh hơn cho những câu chuyện bạn luôn muốn xem lại.",
+    "status": "Desktop-first. Sẵn sàng cho addon."
+  },
+  "addonGuide": {
+    "description": "Tiện ích bổ sung là một dịch vụ HTTP nhỏ. Cung cấp bản kê khai và các tài nguyên bạn cần; FrameZoo xử lý phần còn lại.",
+    "title": "Xây dựng một addon mà không cần tham gia quá trình ứng dụng.",
+    "manifestDescription": "Siêu dữ liệu cho ứng dụng biết tiện ích bổ sung của bạn là ai, tài nguyên nào nó hỗ trợ và biểu tượng của nó nằm ở đâu.",
+    "eyebrow": "GIAO THỨC THÊM / HƯỚNG DẪN",
+    "manifestTitle": "Bắt đầu với tệp kê khai.json",
+    "resources": {
+      "stream": "Torrent, HLS, DASH hoặc nguồn tệp trực tiếp.",
+      "meta": "Siêu dữ liệu phim hoặc loạt phim cho tiêu đề.",
+      "catalog": "Hàng loạt phim hoặc loạt phim để khám phá.",
+      "subtitles": "Tệp phụ đề có nhãn ngôn ngữ.",
+      "addon_catalog": "Một danh mục các addon khác."
+    },
+    "resourcesDescription": "Chỉ triển khai các điểm cuối mà tiện ích bổ sung của bạn cần. Phản hồi là JSON và có thể được viết bằng bất kỳ ngôn ngữ nào.",
+    "runTitle": "Chạy, kiểm tra, cài đặt",
+    "resourcesTitle": "Chọn các tài nguyên",
+    "steps": [
+      "Phục vụ /manifest.json và các điểm cuối tài nguyên của bạn từ máy chủ HTTP(S) cục bộ hoặc công cộng.",
+      "Kiểm tra từng điểm cuối bằng tính năng cuộn tròn và xác minh hình dạng JSON.",
+      "Dán URL tệp kê khai vào FrameZoo Desktop > Addons."
+    ],
+    "advancedDescription": "SDK bổ trợ Stremio là tùy chọn. Sử dụng nó nếu bạn muốn người trợ giúp định tuyến và tuần tự hóa; nó không được yêu cầu bởi giao thức.",
+    "advancedTitle": "Cần một người trợ giúp Node?",
+    "advancedLink": "Mở tài liệu tham khảo SDK nâng cao"
+  }
+}

@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const rootDir = path.resolve(__dirname, "..");
-const desktopDir = path.join(rootDir, "betamovie-desktop");
+const desktopDir = path.join(rootDir, "framezoo-desktop");
 const downloadsDir = path.join(rootDir, "downloads");
 
 // Load environment variables from root .env file if it exists to pass VITE_BACKEND_URL to builds
@@ -34,7 +34,7 @@ if (!fs.existsSync(downloadsDir)) {
 
 // Remove stale release artifacts so the downloads dir only contains the latest build set.
 for (const entry of fs.readdirSync(downloadsDir)) {
-  if (entry.startsWith("AlphaFlix-") || entry === "README.txt") {
+  if (entry.startsWith("FrameZoo-") || entry === "README.txt") {
     fs.rmSync(path.join(downloadsDir, entry), { recursive: true, force: true });
   }
 }
@@ -127,19 +127,19 @@ console.log(
 const filesToCopy = [];
 if (process.platform === "darwin") {
   filesToCopy.push(
-    `AlphaFlix-${version}-arm64-mac.dmg`,
-    `AlphaFlix-${version}-x64-mac.dmg`,
-    `AlphaFlix-${version}-universal-mac.dmg`,
+    `FrameZoo-${version}-arm64-mac.dmg`,
+    `FrameZoo-${version}-x64-mac.dmg`,
+    `FrameZoo-${version}-universal-mac.dmg`,
   );
 } else if (process.platform === "linux") {
   filesToCopy.push(
-    `AlphaFlix-${version}-arm64-mac.zip`,
-    `AlphaFlix-${version}-x64-mac.zip`,
+    `FrameZoo-${version}-arm64-mac.zip`,
+    `FrameZoo-${version}-x64-mac.zip`,
   );
 }
 filesToCopy.push(
-  `AlphaFlix-${version}-x64.zip`,
-  `AlphaFlix-${version}-arm64.zip`,
+  `FrameZoo-${version}-x64.zip`,
+  `FrameZoo-${version}-arm64.zip`,
 );
 
 let copiedCount = 0;
@@ -182,10 +182,10 @@ try {
   // Check which volume exists
   let volumeName = null;
   const volumesList = execSync("docker volume ls -q", { encoding: "utf8" });
-  if (volumesList.includes("betamovie_backend_downloads-data")) {
-    volumeName = "betamovie_backend_downloads-data";
-  } else if (volumesList.includes("betamovie_downloads-data")) {
-    volumeName = "betamovie_downloads-data";
+  if (volumesList.includes("framezoo_backend_downloads-data")) {
+    volumeName = "framezoo_backend_downloads-data";
+  } else if (volumesList.includes("framezoo_downloads-data")) {
+    volumeName = "framezoo_downloads-data";
   }
 
   if (volumeName) {
@@ -193,7 +193,7 @@ try {
     // Resolve absolute path to downloads folder for Docker mount
     const absDownloadsDir = path.resolve(downloadsDir);
     execSync(
-      `docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "rm -f /data/AlphaFlix-* /data/README.txt && cp -r /src/. /data/"`,
+      `docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "rm -f /data/FrameZoo-* /data/README.txt && cp -r /src/. /data/"`,
       { stdio: "inherit" },
     );
     console.log("Successfully synced files to Docker volume.");

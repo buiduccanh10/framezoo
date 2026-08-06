@@ -1,7 +1,7 @@
 packages:
-  - betamovie-fe
-  - betamovie-be
-  - betamovie-desktop
+  - framezoo-fe
+  - framezoo-be
+  - framezoo-desktop
 
 shamefullyHoist: true
 strictPeerDependencies: false

@@ -18,7 +18,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - betamovie-network
+      - framezoo-network
 
   redis:
     image: redis:7-alpine
@@ -26,7 +26,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - betamovie-network
+      - framezoo-network
     volumes:
       - redis-data:/data
 
@@ -54,12 +54,12 @@ services:
       retries: 12
       start_period: 30s
     networks:
-      - betamovie-network
+      - framezoo-network
 
-  betamovie-be:
+  framezoo-be:
     build:
       context: .
-      dockerfile: betamovie-be/Dockerfile
+      dockerfile: framezoo-be/Dockerfile
     restart: unless-stopped
     env_file:
       - .env
@@ -89,12 +89,12 @@ services:
       moonshine-service:
         condition: service_healthy
     networks:
-      - betamovie-network
+      - framezoo-network
 
-  betamovie-fe:
+  framezoo-fe:
     build:
       context: .
-      dockerfile: betamovie-fe/Dockerfile
+      dockerfile: framezoo-fe/Dockerfile
       args:
         BACKEND_URL: ${VITE_BACKEND_URL:-http://localhost:3000}
         CORS_PROXY_URL: ${VITE_CORS_PROXY_URL}
@@ -109,11 +109,11 @@ services:
     ports:
       - "80:80"
     depends_on:
-      betamovie-be:
+      framezoo-be:
         condition: service_started
     restart: unless-stopped
     networks:
-      - betamovie-network
+      - framezoo-network
 
   desktop-publisher:
     profiles:
@@ -128,12 +128,12 @@ services:
       - downloads-data:/data/downloads
 
 networks:
-  betamovie-network:
+  framezoo-network:
     driver: bridge
 
 volumes:
   postgres-data:
   redis-data:
   downloads-data:
-    name: betamovie_downloads-data
+    name: framezoo_downloads-data
   moonshine-cache:
