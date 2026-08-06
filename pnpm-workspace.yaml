@@ -76,8 +76,6 @@ overrides:
 minimumReleaseAgeExclude:
   - '@hono/node-server@2.1.0'
 
-auditConfig:
-  ignoreCves:
-    - GHSA-qwww-vcr4-c8h2
-  ignoreGhsas:
+audit:
+  ignore:
     - GHSA-qwww-vcr4-c8h2
