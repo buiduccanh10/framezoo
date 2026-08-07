@@ -264,7 +264,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
           body,
           baseURL: conf().BACKEND_URL ?? undefined,
           signal: options.signal,
-          timeout: 120_000,
+          timeout: 300_000,
         },
       );
       windowResponses.push({ startAt, response });
@@ -344,7 +344,7 @@ export async function alignSubtitleWithCurrentStream(options: {
     body,
     baseURL: conf().BACKEND_URL ?? undefined,
     signal: options.signal,
-    timeout: 120_000,
+    timeout: 300_000,
   });
 }
 

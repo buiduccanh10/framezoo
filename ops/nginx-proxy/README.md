@@ -146,6 +146,37 @@ docker compose -f docker-compose.prod.yml up -d --remove-orphans
 Khong khai bao lai `nginx-proxy` hoac `nginx-proxy-acme` trong cac compose ung
 dung. Chi service app moi khai bao `VIRTUAL_HOST` va `ACME_HOST`.
 
+## 5.1. Vhost override (vi du: client_max_body_size)
+
+File trong `ops/nginx-proxy/vhost.d/<hostname>` se duoc nginx-proxy include vao
+server block cua vhost do. Vi du `vhost.d/api.framezoo.top` chua
+`client_max_body_size 20m;` (can thiet de `/api/subtitle-align` nhan upload WAV
+~2MB, nginx mac dinh gioi han 1MB).
+
+Volume `nginx_vhost` la volume named chia se, nen phai copy file vao trong
+volume (khong mount bind duoc):
+
+```bash
+VHOST_VOLUME=betakiot_nginx_vhost
+docker run --rm \
+  -v "$VHOST_VOLUME:/vhost.d" \
+  -v /opt/framezoo/ops/nginx-proxy/vhost.d:/src:ro \
+  alpine:3.20 \
+  sh -c 'cp -a /src/. /vhost.d/'
+```
+
+Sau do reload nginx de ap dung (khong can restart stack):
+
+```bash
+docker exec nginx-proxy nginx -s reload
+```
+
+Kiem tra config da co hieu luc:
+
+```bash
+docker exec nginx-proxy sh -c 'grep -rn client_max_body_size /etc/nginx/conf.d/'
+```
+
 ## 6. Verify
 
 ```bash

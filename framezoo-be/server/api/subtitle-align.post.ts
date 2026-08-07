@@ -92,7 +92,7 @@ export default defineEventHandler(async event => {
     method: 'POST',
     headers: internalToken ? { 'x-internal-token': internalToken } : undefined,
     body,
-    signal: AbortSignal.timeout(Number(process.env.MOONSHINE_TIMEOUT_MS) || 120_000),
+    signal: AbortSignal.timeout(Number(process.env.MOONSHINE_TIMEOUT_MS) || 300_000),
   });
 
   if (!response.ok) {
