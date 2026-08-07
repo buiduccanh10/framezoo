@@ -79,8 +79,8 @@ services:
       VIRTUAL_PORT: 3000
       VIRTUAL_PROTO: http
       VIRTUAL_PATH: /
-      LETSENCRYPT_HOST: api.framezoo.top
-      LETSENCRYPT_EMAIL: buiduccanh10@gmail.com
+      ACME_HOST: api.framezoo.top
+      ACME_EMAIL: buiduccanh10@gmail.com
       NGINX_PROXY_READ_TIMEOUT: 360s
       NGINX_PROXY_CONNECT_TIMEOUT: 10s
       NGINX_PROXY_SEND_TIMEOUT: 360s
@@ -119,8 +119,8 @@ services:
       - VIRTUAL_PORT=80
       - VIRTUAL_PROTO=http
       - VIRTUAL_PATH=/
-      - LETSENCRYPT_HOST=framezoo.top
-      - LETSENCRYPT_EMAIL=buiduccanh10@gmail.com
+      - ACME_HOST=framezoo.top
+      - ACME_EMAIL=buiduccanh10@gmail.com
       - NGINX_PROXY_READ_TIMEOUT=30s
       - NGINX_PROXY_CONNECT_TIMEOUT=10s
       - NGINX_PROXY_SEND_TIMEOUT=30s

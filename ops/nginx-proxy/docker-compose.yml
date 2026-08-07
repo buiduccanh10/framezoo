@@ -1,0 +1,60 @@
+name: shared-nginx-proxy
+
+services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:1.11
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - nginx_certs:/etc/nginx/certs:ro
+      - nginx_vhost:/etc/nginx/vhost.d:ro
+      - nginx_html:/usr/share/nginx/html:ro
+    networks:
+      - proxy_network
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    restart: unless-stopped
+
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion:2.8.2
+    container_name: nginx-proxy-acme
+    depends_on:
+      - nginx-proxy
+    environment:
+      DEFAULT_EMAIL: ${ACME_DEFAULT_EMAIL:?ACME_DEFAULT_EMAIL is required}
+      NGINX_PROXY_CONTAINER: nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx_certs:/etc/nginx/certs
+      - nginx_vhost:/etc/nginx/vhost.d
+      - nginx_html:/usr/share/nginx/html
+      - nginx_acme:/etc/acme.sh
+    networks:
+      - proxy_network
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    restart: unless-stopped
+
+networks:
+  proxy_network:
+    external: true
+    name: ${PROXY_NETWORK_NAME:-betakiot_proxy_network}
+
+volumes:
+  nginx_certs:
+    external: true
+    name: ${NGINX_CERTS_VOLUME:?NGINX_CERTS_VOLUME is required}
+  nginx_vhost:
+    external: true
+    name: ${NGINX_VHOST_VOLUME:?NGINX_VHOST_VOLUME is required}
+  nginx_html:
+    external: true
+    name: ${NGINX_HTML_VOLUME:?NGINX_HTML_VOLUME is required}
+  nginx_acme:
+    external: true
+    name: ${NGINX_ACME_VOLUME:?NGINX_ACME_VOLUME is required}
