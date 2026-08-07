@@ -1,7 +1,7 @@
 {
   "packageManager": "pnpm@11.17.0",
   "name": "framezoo-fe",
-  "version": "6.4.5",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
