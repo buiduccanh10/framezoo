@@ -5,6 +5,12 @@
   text-rendering: optimizeLegibility;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   min-width: 320px;
   background: #090b0d;

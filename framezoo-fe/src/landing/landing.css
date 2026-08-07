@@ -12,6 +12,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
+  overflow-x: hidden;
   min-height: 100dvh;
   color: var(--landing-text);
   background:
@@ -1536,17 +1537,17 @@
   .landing-addon-guide,
   .landing-download,
   .landing-footer {
-    width: min(100% - 32px, 1180px);
+    width: min(100% - 48px, 1180px);
   }
 
   .landing-nav {
     width: 100%;
     min-height: 68px;
-    padding-inline: 16px;
+    padding-inline: 24px;
   }
 
   .landing-brand img {
-    width: 112px;
+    width: 100px;
     height: auto;
   }
 
@@ -1597,7 +1598,7 @@
   .landing-hero h1 {
     max-width: 15ch;
     margin-top: 18px;
-    font-size: clamp(3.2rem, 16vw, 5rem);
+    font-size: clamp(2.6rem, 12vw, 4rem);
   }
 
   .landing-hero-copy > p {
