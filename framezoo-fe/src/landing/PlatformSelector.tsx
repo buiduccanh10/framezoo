@@ -4,48 +4,43 @@ import type { LandingCopy } from "./i18n";
 
 interface PlatformSelectorProps {
   options: AppDownloadOption[];
-  selectedId: AppDownloadOption["id"] | null;
   recommendedId: AppDownloadOption["id"] | null;
   copy: LandingCopy["download"];
-  onSelect: (id: AppDownloadOption["id"]) => void;
 }
 
 export function PlatformSelector({
   options,
-  selectedId,
   recommendedId,
   copy,
-  onSelect,
 }: PlatformSelectorProps) {
   return (
     <div className="landing-platforms" aria-label={copy.chooseBuild}>
       <div className="landing-platform-grid">
         {options.map((option) => {
-          const isSelected = selectedId === option.id;
           const isRecommended = recommendedId === option.id;
 
           return (
-            <button
-              className={`landing-platform-card${isSelected ? " is-selected" : ""}`}
+            <a
+              className={`landing-platform-card${isRecommended ? " is-recommended" : ""}`}
               key={option.id}
-              type="button"
-              onClick={() => onSelect(option.id)}
-              aria-pressed={isSelected}
+              href={option.url}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`${copy.download}: ${option.label}`}
             >
-              <span className="landing-platform-icon" aria-hidden="true">
-                {option.id.startsWith("mac") ? "⌘" : "⊞"}
-              </span>
               <span className="landing-platform-copy">
                 <strong>{option.label}</strong>
+                {isRecommended ? (
+                  <span className="landing-platform-state">
+                    {copy.recommended}
+                  </span>
+                ) : null}
               </span>
-              <span className="landing-platform-state">
-                {isRecommended
-                  ? copy.recommended
-                  : isSelected
-                    ? copy.selected
-                    : ""}
+              <span className="landing-platform-action">
+                {copy.download}
+                <span aria-hidden="true">↓</span>
               </span>
-            </button>
+            </a>
           );
         })}
       </div>

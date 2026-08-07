@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 
 import {
   type AppDownloadManifest,
-  type AppDownloadOption,
   getAppDownloadManifest,
 } from "@/backend/download";
 
@@ -23,10 +22,6 @@ type DownloadState =
 
 export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
   const [state, setState] = useState<DownloadState>({ status: "loading" });
-  const [selectedId, setSelectedId] = useState<AppDownloadOption["id"] | null>(
-    null,
-  );
-  const [showAllBuilds, setShowAllBuilds] = useState(false);
 
   const loadManifest = useCallback(() => {
     if (!backendUrl) {
@@ -38,13 +33,10 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
     void getAppDownloadManifest(backendUrl)
       .then((manifest) => {
         if (manifest.options.length === 0) {
-          setSelectedId(null);
           setState({ status: "empty" });
           return;
         }
 
-        const recommendedId = detectPlatformForManifest(manifest).recommendedId;
-        setSelectedId(recommendedId);
         setState({ status: "ready", manifest });
       })
       .catch((error: unknown) => {
@@ -60,11 +52,6 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
     loadManifest();
   }, [loadManifest]);
 
-  const selectedOption =
-    state.status === "ready"
-      ? (state.manifest.options.find((option) => option.id === selectedId) ??
-        state.manifest.options[0])
-      : null;
   const detection =
     state.status === "ready" ? detectPlatformForManifest(state.manifest) : null;
 
@@ -110,47 +97,11 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
             </button>
           </div>
         ) : (
-          <>
-            <div className="landing-download-primary">
-              <div>
-                <span>{copy.recommended}</span>
-                <strong>{selectedOption?.label}</strong>
-                {state.manifest.version ? (
-                  <small>
-                    v{state.manifest.version}
-                    {detection?.platform !== "other" ? ` · ${copy.ready}` : ""}
-                  </small>
-                ) : null}
-              </div>
-              <a
-                className="landing-button landing-button-primary"
-                href={selectedOption?.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {copy.download}
-                <span aria-hidden="true">↓</span>
-              </a>
-            </div>
-            <button
-              className="landing-build-toggle"
-              type="button"
-              aria-expanded={showAllBuilds}
-              onClick={() => setShowAllBuilds((visible) => !visible)}
-            >
-              {showAllBuilds ? copy.hideAll : copy.showAll}
-              <span aria-hidden="true">{showAllBuilds ? "↑" : "↓"}</span>
-            </button>
-            {showAllBuilds ? (
-              <PlatformSelector
-                options={state.manifest.options}
-                selectedId={selectedOption?.id ?? null}
-                recommendedId={detection?.recommendedId ?? null}
-                copy={copy}
-                onSelect={setSelectedId}
-              />
-            ) : null}
-          </>
+          <PlatformSelector
+            options={state.manifest.options}
+            recommendedId={detection?.recommendedId ?? null}
+            copy={copy}
+          />
         )}
       </div>
     </section>

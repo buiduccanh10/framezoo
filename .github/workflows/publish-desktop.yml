@@ -76,18 +76,36 @@ jobs:
               branch: currentRun.head_branch,
               per_page: 100,
             });
-            const previousRun = runs.find(
-              (run) =>
-                run.id !== currentRun.id &&
-                run.conclusion === "success" &&
-                run.head_sha !== currentSha,
-            );
+            const previousRun = runs
+              .filter(
+                (run) =>
+                  run.id !== currentRun.id &&
+                  run.conclusion === "success" &&
+                  new Date(run.created_at) < new Date(currentRun.created_at),
+              )
+              .sort(
+                (first, second) =>
+                  new Date(second.created_at).getTime() -
+                  new Date(first.created_at).getTime(),
+              )[0];
 
-            if (!previousRun) {
-              core.setOutput("should_publish", "true");
+            let baseSha = previousRun?.head_sha ?? null;
+            if (!baseSha) {
+              const commit = await github.rest.repos.getCommit({
+                owner,
+                repo,
+                ref: currentSha,
+              });
+              baseSha = commit.data.parents?.[0]?.sha ?? null;
+            }
+
+            if (!baseSha) {
+              core.setOutput("should_publish", "false");
               await core.summary
                 .addHeading("Desktop publish")
-                .addRaw("No previous successful web deploy found on this branch. Publishing desktop bundle.")
+                .addRaw(
+                  "No comparable parent commit found. Skipping automatic desktop publish; use workflow_dispatch for an initial or manual release.",
+                )
                 .write();
               return;
             }
@@ -95,7 +113,7 @@ jobs:
             const compare = await github.rest.repos.compareCommitsWithBasehead({
               owner,
               repo,
-              basehead: `${previousRun.head_sha}...${currentSha}`,
+              basehead: `${baseSha}...${currentSha}`,
             });
             const changedFiles = (compare.data.files ?? []).map((file) => file.filename);
             const shouldPublish = changedFiles.some((file) =>
@@ -105,12 +123,12 @@ jobs:
             core.setOutput("should_publish", shouldPublish ? "true" : "false");
             await core.summary
               .addHeading("Desktop publish diff")
-              .addRaw(`Base: \`${previousRun.head_sha}\``, true)
+              .addRaw(`Base: \`${baseSha}\``, true)
               .addRaw(`Head: \`${currentSha}\``, true)
               .addRaw(
                 shouldPublish
                   ? "Desktop-related changes detected."
-                  : "No desktop/frontend/runtime package changes detected.",
+                  : "No desktop or shared package changes detected.",
                 true,
               )
               .addList(changedFiles.length > 0 ? changedFiles : ["No files returned by compare API."])

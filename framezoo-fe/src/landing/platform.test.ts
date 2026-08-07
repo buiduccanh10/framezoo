@@ -58,21 +58,59 @@ describe("platform detection", () => {
     ).toEqual({ platform: "windows", architecture: "arm64" });
   });
 
-  it("prioritizes macOS Universal when published", () => {
+  it("does not recommend a Mac build when Safari hides the architecture", () => {
     expect(
       detectPlatformForManifest(
         { version: "1.0.0", options },
         { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" },
       ).recommendedId,
-    ).toBe("mac-universal");
+    ).toBeNull();
   });
 
-  it("falls back to the first available build on unknown platforms", () => {
+  it("recommends the exact macOS architecture when user agent data exposes it", () => {
+    expect(
+      detectPlatformForManifest(
+        { version: "1.0.0", options },
+        {
+          userAgent: "Mozilla/5.0 (Macintosh; Mac OS X 14_0)",
+          userAgentData: { platform: "macOS", architecture: "arm" },
+        },
+      ).recommendedId,
+    ).toBe("mac-arm64");
+
+    expect(
+      detectPlatformForManifest(
+        { version: "1.0.0", options },
+        {
+          userAgent: "Mozilla/5.0 (Macintosh; Mac OS X 14_0)",
+          userAgentData: { platform: "macOS", architecture: "x86" },
+        },
+      ).recommendedId,
+    ).toBe("mac-x64");
+  });
+
+  it("recommends the exact Windows architecture", () => {
+    expect(
+      detectPlatformForManifest(
+        { version: "1.0.0", options },
+        { userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" },
+      ).recommendedId,
+    ).toBe("win-x64");
+
+    expect(
+      detectPlatformForManifest(
+        { version: "1.0.0", options },
+        { userAgent: "Mozilla/5.0 (Windows NT 10.0; ARM64)" },
+      ).recommendedId,
+    ).toBe("win-arm64");
+  });
+
+  it("does not recommend a build when the platform is unknown", () => {
     expect(
       getRecommendedOptionId(options, {
         platform: "other",
         architecture: "unknown",
       }),
-    ).toBe("mac-arm64");
+    ).toBeNull();
   });
 });

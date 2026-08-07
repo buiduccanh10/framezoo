@@ -30,17 +30,19 @@ export function detectPlatform(
   const userAgent = navigatorLike?.userAgent ?? "";
   const userAgentData = navigatorLike?.userAgentData;
   const platformValue = `${userAgent} ${userAgentData?.platform ?? ""}`;
-  const architectureValue = `${userAgent} ${userAgentData?.architecture ?? ""}`;
+  const architectureValue = `${userAgentData?.architecture ?? ""} ${userAgent}`;
 
   const platform = /Windows/i.test(platformValue)
     ? "windows"
-    : /Macintosh|Mac OS X/i.test(platformValue)
+    : /Macintosh|Mac OS X|macOS/i.test(platformValue)
       ? "macos"
       : "other";
 
-  const architecture = /arm64|aarch64|ARM/i.test(architectureValue)
+  const architecture = /\barm64|aarch64|\barm\b/i.test(architectureValue)
     ? "arm64"
-    : /x86_64|Win64|WOW64|x64|Intel Mac/i.test(architectureValue)
+    : /\bx86_64\b|x86-64|amd64|\bx64\b|\bx86\b|Win64|WOW64/i.test(
+          architectureValue,
+        )
       ? "x64"
       : "unknown";
 
@@ -54,21 +56,24 @@ export function getRecommendedOptionId(
   const optionIds = new Set(options.map((option) => option.id));
 
   if (detection.platform === "macos") {
-    if (optionIds.has("mac-universal")) return "mac-universal";
     if (detection.architecture === "arm64" && optionIds.has("mac-arm64")) {
       return "mac-arm64";
     }
-    if (optionIds.has("mac-x64")) return "mac-x64";
+    if (detection.architecture === "x64" && optionIds.has("mac-x64")) {
+      return "mac-x64";
+    }
   }
 
   if (detection.platform === "windows") {
     if (detection.architecture === "arm64" && optionIds.has("win-arm64")) {
       return "win-arm64";
     }
-    if (optionIds.has("win-x64")) return "win-x64";
+    if (detection.architecture === "x64" && optionIds.has("win-x64")) {
+      return "win-x64";
+    }
   }
 
-  return options[0]?.id ?? null;
+  return null;
 }
 
 export function detectPlatformForManifest(
