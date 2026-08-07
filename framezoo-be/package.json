@@ -9,7 +9,6 @@
     "dev": "nitro dev",
     "prepare": "nitro prepare && prisma generate && nitro prepare",
     "preview": "node .output/server/index.mjs",
-    "seed": "tsx prisma/seed.ts",
     "lint": "ESLINT_USE_FLAT_CONFIG=false eslint . --ext .ts,.mts,.js,.mjs --quiet"
   },
   "devDependencies": {
@@ -22,8 +21,7 @@
     "h3": "1.15.11",
     "nitropack": "^2.13.4",
     "prettier": "^3.8.4",
-    "prisma": "^7.9.0",
-    "tsx": "^4.22.4"
+    "prisma": "^7.9.0"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.0",

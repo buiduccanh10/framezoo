@@ -50,8 +50,8 @@ function canImportLibtorrent() {
 function findSystemPython() {
   const candidates = isWindows
     ? [
+        { command: process.env.PYTHON_BIN || "python", prefix: [] },
         { command: "py", prefix: ["-3"] },
-        { command: "python", prefix: [] },
       ]
     : [
         { command: process.env.PYTHON_BIN || "python3", prefix: [] },

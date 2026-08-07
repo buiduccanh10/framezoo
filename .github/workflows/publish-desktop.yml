@@ -160,10 +160,10 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
-      - name: Set up Python 3.13 for the torrent engine sidecar
+      - name: Set up Python 3.12 for the torrent engine sidecar
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.12'
       - name: Write env file
         shell: bash
         env:
@@ -246,10 +246,10 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
-      - name: Set up Python 3.13 for the torrent engine sidecar
+      - name: Set up Python 3.12 for the torrent engine sidecar
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.12'
       - name: Write env file
         shell: bash
         env:

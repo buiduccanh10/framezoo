@@ -28,4 +28,4 @@ RUN pnpm --filter framezoo-be run build
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "pnpm --filter framezoo-be exec prisma migrate deploy && pnpm --filter framezoo-be exec prisma db seed && node framezoo-be/.output/server/index.mjs"]
+CMD ["sh", "-c", "pnpm --filter framezoo-be exec prisma migrate deploy && node framezoo-be/.output/server/index.mjs"]
