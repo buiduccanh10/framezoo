@@ -12,6 +12,18 @@
 /config.js
   Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
 
+/favicon.ico
+  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
+
+/favicon-16.png
+  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
+
+/favicon-32.png
+  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=0, s-maxage=0, must-revalidate
+
 /version.json
   Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0
   Content-Type: application/json

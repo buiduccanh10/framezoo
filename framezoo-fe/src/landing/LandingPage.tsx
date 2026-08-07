@@ -148,7 +148,7 @@ export function LandingPage() {
           />
         </a>
         <nav className="landing-nav-links" aria-label="Primary navigation">
-          <a href="#performance" onClick={handleLandingHashClick}>
+          <a href="#experience" onClick={handleLandingHashClick}>
             {activeCopy.nav.features}
           </a>
           <a href="#ecosystem" onClick={handleLandingHashClick}>
@@ -188,10 +188,8 @@ export function LandingPage() {
 
       <footer className="landing-footer">
         <div>
-          <span className="landing-footer-kicker">FRAMEZOO DESKTOP</span>
           <p>{activeCopy.footer.line}</p>
         </div>
-        <span>{activeCopy.footer.status}</span>
       </footer>
 
       <button

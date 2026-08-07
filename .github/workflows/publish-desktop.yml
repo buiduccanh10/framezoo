@@ -50,7 +50,6 @@ jobs:
             const currentSha = process.env.TARGET_REF;
             const publishedAt = new Date().toISOString();
             const desktopPatterns = [
-              /^framezoo-fe\//,
               /^framezoo-desktop\//,
               /^package\.json$/,
               /^pnpm-lock\.yaml$/,

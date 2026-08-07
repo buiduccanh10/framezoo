@@ -84,14 +84,12 @@ export function AddonGuideSection({ copy }: AddonGuideSectionProps) {
 
       <div className="landing-guide-layout landing-scroll-reveal landing-scroll-reveal-delay-one">
         <div className="landing-guide-intro">
-          <div className="landing-guide-number">01</div>
           <h3>{copy.manifestTitle}</h3>
           <p>{copy.manifestDescription}</p>
           <GuideCode value={manifestExample} label="manifest.json" />
         </div>
 
         <div className="landing-guide-resource-panel">
-          <div className="landing-guide-number">02</div>
           <h3>{copy.resourcesTitle}</h3>
           <p>{copy.resourcesDescription}</p>
           <div className="landing-guide-resource-grid">
@@ -107,7 +105,6 @@ export function AddonGuideSection({ copy }: AddonGuideSectionProps) {
 
       <div className="landing-guide-examples landing-scroll-reveal landing-scroll-reveal-delay-two">
         <div className="landing-guide-example-copy">
-          <div className="landing-guide-number">03</div>
           <h3>{copy.runTitle}</h3>
           <ol>
             {copy.steps.map((step) => (

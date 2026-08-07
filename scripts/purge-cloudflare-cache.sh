@@ -88,6 +88,10 @@ trap 'rm -f "$urls_file"' EXIT
   printf '%s\n' "$PURGE_DOMAIN/config.js"
   printf '%s\n' "$PURGE_DOMAIN/version.json"
   printf '%s\n' "$PURGE_DOMAIN/manifest.webmanifest"
+  printf '%s\n' "$PURGE_DOMAIN/favicon.ico"
+  printf '%s\n' "$PURGE_DOMAIN/favicon-16.png"
+  printf '%s\n' "$PURGE_DOMAIN/favicon-32.png"
+  printf '%s\n' "$PURGE_DOMAIN/apple-touch-icon.png"
 
   if [ -n "$PURGE_EXTRA_URLS" ]; then
     printf '%s\n' "$PURGE_EXTRA_URLS" | tr ', ' '\n\n'

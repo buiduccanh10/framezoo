@@ -1,49 +1,54 @@
 {
   "nav": {
-    "features": "Hiệu năng",
+    "features": "Trải nghiệm",
     "addons": "Hệ sinh thái",
     "download": "Tải xuống",
     "language": "Ngôn ngữ",
-    "addonGuide": "Hướng dẫn bổ sung"
+    "addonGuide": "Tạo addon"
   },
   "hero": {
-    "eyebrow": "MÁY TÍNH ĐỂ BÀN FRAMEZOO / 01",
-    "title": "Xem phim đã hơn.",
-    "titleAccent": "Trên desktop.",
-    "description": "Phát native, điều khiển mượt, không gian tập trung cho bộ phim tiếp theo.",
+    "title": "Một nơi xem phim",
+    "titleAccent": "đúng ý bạn.",
+    "description": "Khám phá, phát và chỉnh từng chi tiết mà không rời khỏi mạch phim.",
     "primaryCta": "Tải app desktop",
     "secondaryCta": "Xem trải nghiệm",
-    "imageAlt": "Bản xem trước FrameZoo desktop",
+    "imageAlt": "Giao diện khám phá phim của FrameZoo desktop",
     "version": "Bản desktop"
   },
   "features": {
-    "performanceTitle": "Thư viện của bạn, không còn giới hạn trình duyệt.",
-    "overviewDescription": "FrameZoo Desktop dành không gian cho playback: hiệu năng native, chuyển đổi liền mạch, điều khiển luôn vừa đủ.",
-    "playback": "Phát native",
-    "playbackDescription": "Video mượt với khả năng xử lý media cấp desktop.",
-    "performance": "Hiệu năng yên tĩnh",
-    "performanceDescription": "Ít chrome hơn. Tập trung hơn. Không phải đổi tab.",
-    "continuity": "Giữ trọn mạch xem",
-    "continuityDescription": "Tiếp tục, khám phá, đổi nguồn mà không mất khoảnh khắc.",
-    "ecosystemTitle": "Sẵn sàng cho bước tiếp theo.",
-    "ecosystemDescription": "Desktop app là lõi. Addon mở rộng các cạnh, để setup của bạn riêng tư mà không phức tạp.",
-    "addonLabel": "SẴN SÀNG CHO ADDON",
-    "addonOne": "Kết nối nguồn",
-    "addonTwo": "Công cụ phụ đề",
-    "addonThree": "Extension cộng đồng",
-    "showcaseTitle": "Màn hình là điểm đến.",
-    "showcaseDescription": "Một không gian desktop tập trung cho khám phá, playback và mọi thứ xung quanh câu chuyện.",
-    "showcaseCaption": "Chế độ lấy nét / máy tính để bàn FrameZoo"
+    "featureLabel": "Player theo cách của bạn",
+    "experienceTitle": "Mọi thứ để buổi xem phim trọn vẹn hơn.",
+    "overviewDescription": "Đồng bộ phụ đề bằng AI, hiển thị dualsub, xem metadata đầy đủ và điều khiển player vừa đủ.",
+    "subtitleSync": "Đồng bộ phụ đề bằng AI",
+    "subtitleSyncDescription": "Khớp câu thoại đầu tiên với hình ảnh chỉ trong vài giây.",
+    "dualSubtitles": "Hiển thị hai ngôn ngữ cùng lúc",
+    "dualSubtitlesDescription": "Bật dualsub khi học, đối chiếu hoặc chỉ vì bạn thích xem như vậy.",
+    "subtitleControls": "Chỉnh player theo ý bạn",
+    "subtitleControlsDescription": "Chọn nguồn phụ đề, ngôn ngữ, thời gian và cách hiển thị mà không mất mạch xem.",
+    "ecosystemTitle": "Những gì cần thiết đã có trong player.",
+    "ecosystemDescription": "Phụ đề, metadata catalog và điều khiển playback là phần lõi. Addon bổ sung thêm nguồn phát, catalog và công cụ khi bạn cần.",
+    "addonLabel": "Có sẵn trong FrameZoo",
+    "addonOne": "Điều khiển phụ đề",
+    "addonTwo": "Metadata catalog",
+    "addonThree": "Addon mở rộng",
+    "showcaseTitle": "Đủ ngữ cảnh trước khi bấm play.",
+    "showcaseDescription": "Mở một tựa phim và thấy ngay poster, rating, mùa phim và metadata trong cùng một nơi.",
+    "showcasePrimaryAlt": "Màn hình chi tiết phim FrameZoo với poster, rating, mùa phim và metadata",
+    "showcaseSecondaryTitle": "Tìm phim rồi xem ngay.",
+    "showcaseSecondaryDescription": "Bắt đầu từ giao diện khám phá rõ ràng, sau đó vào playback mà không mất vị trí.",
+    "showcaseSecondaryAlt": "Màn hình khám phá FrameZoo với tìm kiếm, danh mục và các hàng phim"
   },
   "download": {
-    "eyebrow": "CHỌN BẢN BUILD",
-    "title": "Mang FrameZoo theo bạn.",
-    "description": "Chọn bản build cho thiết bị. Trình duyệt sẽ đề xuất lựa chọn phù hợp hoặc hiển thị toàn bộ bản có sẵn.",
-    "recommended": "Đề xuất",
+    "eyebrow": "TẢI FRAMEZOO",
+    "title": "Bắt đầu buổi xem tiếp theo.",
+    "description": "Tải bản phù hợp với thiết bị hoặc chọn nền tảng khác.",
+    "recommended": "Đề xuất cho bạn",
     "chooseBuild": "Chọn bản build",
     "selected": "Đã chọn",
     "download": "Tải xuống",
-    "showAll": "Đang hiển thị mọi bản build",
+    "ready": "Phù hợp với thiết bị này",
+    "showAll": "Chọn bản build khác",
+    "hideAll": "Ẩn các bản khác",
     "detected": "Đã nhận diện thiết bị",
     "loading": "Đang kiểm tra bản build...",
     "empty": "Chưa có bản desktop nào được phát hành. Hãy quay lại sau.",
@@ -53,7 +58,7 @@
     "version": "Bản phát hành"
   },
   "footer": {
-    "line": "Một không gian yên tĩnh hơn cho những câu chuyện bạn luôn muốn xem lại.",
+    "line": "Một nơi yên tĩnh hơn cho những câu chuyện bạn luôn muốn xem lại.",
     "status": "Desktop-first. Sẵn sàng cho addon."
   },
   "addonGuide": {
@@ -75,7 +80,7 @@
     "steps": [
       "Phục vụ /manifest.json và các điểm cuối tài nguyên của bạn từ máy chủ HTTP(S) cục bộ hoặc công cộng.",
       "Kiểm tra từng điểm cuối bằng tính năng cuộn tròn và xác minh hình dạng JSON.",
-      "Dán URL tệp kê khai vào FrameZoo Desktop > Addons."
+      "Dán URL tệp kê khai vào FrameZoo > Addons."
     ],
     "advancedDescription": "SDK bổ trợ Stremio là tùy chọn. Sử dụng nó nếu bạn muốn người trợ giúp định tuyến và tuần tự hóa; nó không được yêu cầu bởi giao thức.",
     "advancedTitle": "Cần một người trợ giúp Node?",

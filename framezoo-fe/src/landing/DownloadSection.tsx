@@ -26,6 +26,7 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
   const [selectedId, setSelectedId] = useState<AppDownloadOption["id"] | null>(
     null,
   );
+  const [showAllBuilds, setShowAllBuilds] = useState(false);
 
   const loadManifest = useCallback(() => {
     if (!backendUrl) {
@@ -64,6 +65,8 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
       ? (state.manifest.options.find((option) => option.id === selectedId) ??
         state.manifest.options[0])
       : null;
+  const detection =
+    state.status === "ready" ? detectPlatformForManifest(state.manifest) : null;
 
   return (
     <section className="landing-download" id="download">
@@ -107,25 +110,17 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
             </button>
           </div>
         ) : (
-          <div className="landing-download-content">
-            <PlatformSelector
-              options={state.manifest.options}
-              selectedId={selectedOption?.id ?? null}
-              recommendedId={
-                detectPlatformForManifest(state.manifest).recommendedId
-              }
-              detection={detectPlatformForManifest(state.manifest)}
-              copy={copy}
-              onSelect={setSelectedId}
-            />
-            <div className="landing-download-cta">
+          <>
+            <div className="landing-download-primary">
               <div>
-                <span>{copy.version}</span>
-                <strong>
-                  {state.manifest.version
-                    ? `v${state.manifest.version}`
-                    : "Stable build"}
-                </strong>
+                <span>{copy.recommended}</span>
+                <strong>{selectedOption?.label}</strong>
+                {state.manifest.version ? (
+                  <small>
+                    v{state.manifest.version}
+                    {detection?.platform !== "other" ? ` · ${copy.ready}` : ""}
+                  </small>
+                ) : null}
               </div>
               <a
                 className="landing-button landing-button-primary"
@@ -137,7 +132,25 @@ export function DownloadSection({ backendUrl, copy }: DownloadSectionProps) {
                 <span aria-hidden="true">↓</span>
               </a>
             </div>
-          </div>
+            <button
+              className="landing-build-toggle"
+              type="button"
+              aria-expanded={showAllBuilds}
+              onClick={() => setShowAllBuilds((visible) => !visible)}
+            >
+              {showAllBuilds ? copy.hideAll : copy.showAll}
+              <span aria-hidden="true">{showAllBuilds ? "↑" : "↓"}</span>
+            </button>
+            {showAllBuilds ? (
+              <PlatformSelector
+                options={state.manifest.options}
+                selectedId={selectedOption?.id ?? null}
+                recommendedId={detection?.recommendedId ?? null}
+                copy={copy}
+                onSelect={setSelectedId}
+              />
+            ) : null}
+          </>
         )}
       </div>
     </section>

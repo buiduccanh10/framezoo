@@ -33,7 +33,6 @@ variables:
     - if: '$CI_COMMIT_BRANCH == "main" && $FORCE_DESKTOP_PUBLISH == "true"'
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
-        - framezoo-fe/**/*
         - framezoo-desktop/**/*
         - package.json
         - pnpm-lock.yaml
