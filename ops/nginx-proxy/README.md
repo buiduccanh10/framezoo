@@ -165,11 +165,16 @@ docker run --rm \
   sh -c 'cp -a /src/. /vhost.d/'
 ```
 
-Sau do reload nginx de ap dung (khong can restart stack):
+Sau do restart `nginx-proxy` de docker-gen regenerate config (docker-gen chi
+chay lai khi co Docker event, khong watch file trong vhost.d) va reload nginx:
 
 ```bash
-docker exec nginx-proxy nginx -s reload
+docker restart nginx-proxy
 ```
+
+Khong du chi `docker exec nginx-proxy nginx -s reload` — dong
+`include /etc/nginx/vhost.d/...` chi duoc render vao config khi docker-gen
+generate, reload thuan tuy khong them include vao config cu.
 
 Kiem tra config da co hieu luc:
 

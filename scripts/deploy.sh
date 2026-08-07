@@ -50,6 +50,35 @@ purge_cloudflare_cache() {
   "$REPO_ROOT/scripts/purge-cloudflare-cache.sh" "$ENV_FILE_PATH"
 }
 
+sync_vhost_overrides() {
+  VHOST_DIR="$REPO_ROOT/ops/nginx-proxy/vhost.d"
+  VHOST_VOLUME="${VHOST_VOLUME:-betakiot_nginx_vhost}"
+
+  if [ ! -d "$VHOST_DIR" ] || [ -z "$(ls -A "$VHOST_DIR" 2>/dev/null)" ]; then
+    echo "No vhost.d overrides to sync (skip)."
+    return 0
+  fi
+
+  if ! docker volume inspect "$VHOST_VOLUME" >/dev/null 2>&1; then
+    echo "Vhost volume not found: $VHOST_VOLUME (skip vhost.d sync)."
+    return 0
+  fi
+
+  echo "Syncing vhost.d overrides into volume $VHOST_VOLUME..."
+  docker run --rm \
+    -v "$VHOST_VOLUME:/vhost.d" \
+    -v "$VHOST_DIR:/src:ro" \
+    alpine:3.20 \
+    sh -c 'cp -a /src/. /vhost.d/'
+
+  # docker-gen chi regenerate config khi co Docker event va khong watch file,
+  # nen restart proxy de apply config moi (client_max_body_size,...).
+  if docker inspect nginx-proxy >/dev/null 2>&1; then
+    echo "Restarting nginx-proxy to apply vhost.d overrides..."
+    docker restart nginx-proxy >/dev/null
+  fi
+}
+
 case "$ACTION" in
   all)
     echo "Deploy root: $REPO_ROOT"
@@ -59,6 +88,7 @@ case "$ACTION" in
     compose build --pull
     compose up -d --remove-orphans
 
+    sync_vhost_overrides
     purge_cloudflare_cache
     ;;
   up)
