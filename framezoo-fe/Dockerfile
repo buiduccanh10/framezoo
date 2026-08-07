@@ -12,6 +12,7 @@ ARG BACKEND_URL
 
 ENV VITE_BACKEND_URL=${BACKEND_URL}
 
+COPY framezoo-desktop/renderer-src/src/components/Icon.tsx ./framezoo-desktop/renderer-src/src/components/Icon.tsx
 COPY framezoo-fe ./framezoo-fe
 RUN pnpm --filter framezoo-fe build
 
