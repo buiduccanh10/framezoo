@@ -59,6 +59,10 @@ function getCmakeArgs(target, buildDir) {
     );
   }
 
+  if (target.startsWith("win32-")) {
+    args.push("-A", target.endsWith("arm64") ? "ARM64" : "x64");
+  }
+
   if (process.env.LIBMPV_ROOT) {
     args.push(`-DLIBMPV_ROOT=${process.env.LIBMPV_ROOT}`);
   }
