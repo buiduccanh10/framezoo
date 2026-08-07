@@ -164,29 +164,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install Node headers for native addon
-        shell: pwsh
-        run: |
-          $nodeVersion = node -p "process.versions.node"
-          $nodeGypDir = Join-Path $env:RUNNER_TEMP "node-gyp"
-
-          pnpm exec node-gyp install `
-            --target $nodeVersion `
-            --arch=${{ matrix.arch }} `
-            --devdir $nodeGypDir
-
-          $includeDir = Join-Path $nodeGypDir "$nodeVersion\include\node"
-          $nodeLib = Join-Path $nodeGypDir "$nodeVersion\${{ matrix.arch }}\node.lib"
-
-          if (!(Test-Path (Join-Path $includeDir "node_api.h"))) {
-            throw "Node headers not found: $includeDir"
-          }
-          if (!(Test-Path $nodeLib)) {
-            throw "Node library not found: $nodeLib"
-          }
-
-          "NODE_INCLUDE_DIR=$includeDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "NODE_LIB=$nodeLib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Write env file
         shell: bash
         env:
@@ -273,6 +250,29 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install Node headers for native addon
+        shell: pwsh
+        run: |
+          $nodeVersion = node -p "process.versions.node"
+          $nodeGypDir = Join-Path $env:RUNNER_TEMP "node-gyp"
+
+          pnpm exec node-gyp install `
+            --target $nodeVersion `
+            --arch=${{ matrix.arch }} `
+            --devdir $nodeGypDir
+
+          $includeDir = Join-Path $nodeGypDir "$nodeVersion\include\node"
+          $nodeLib = Join-Path $nodeGypDir "$nodeVersion\${{ matrix.arch }}\node.lib"
+
+          if (!(Test-Path (Join-Path $includeDir "node_api.h"))) {
+            throw "Node headers not found: $includeDir"
+          }
+          if (!(Test-Path $nodeLib)) {
+            throw "Node library not found: $nodeLib"
+          }
+
+          "NODE_INCLUDE_DIR=$includeDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "NODE_LIB=$nodeLib" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Write env file
         shell: bash
         env:
