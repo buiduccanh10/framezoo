@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Trans, useTranslation } from "react-i18next";
+
+import { getInitialLandingLocale, getLandingCopy } from "./i18n";
 
 export function DeepLinkPage({ path }: { path: string }) {
-  const { t } = useTranslation();
+  const t = getLandingCopy(getInitialLandingLocale());
   const [showFallback, setShowFallback] = useState(false);
 
   useEffect(() => {
@@ -46,12 +47,18 @@ export function DeepLinkPage({ path }: { path: string }) {
           </svg>
         </div>
 
-        <h1 className="text-2xl font-bold mb-3">{t("deepLink.opening")}</h1>
+        <h1 className="text-2xl font-bold mb-3">{t.deepLink.opening}</h1>
         <p className="text-gray-400 mb-8 leading-relaxed">
-          <Trans i18nKey="deepLink.openingDescription">
-            Your browser is trying to open the FrameZoo Desktop app. If a prompt
-            appears, please select <strong>Open FrameZoo</strong>.
-          </Trans>
+          {t.deepLink.openingDescription.split("<1>").map((part, index) => {
+            if (index === 0) return part;
+            const [boldText, restText] = part.split("</1>");
+            return (
+              <React.Fragment key={index}>
+                <strong>{boldText}</strong>
+                {restText}
+              </React.Fragment>
+            );
+          })}
         </p>
 
         <div
@@ -61,7 +68,7 @@ export function DeepLinkPage({ path }: { path: string }) {
             href={`framezoo://${path.startsWith("/") ? path.substring(1) : path}`}
             className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors duration-200"
           >
-            {t("deepLink.retry")}
+            {t.deepLink.retry}
           </a>
           <a
             href="https://framezoo.top/#download"
@@ -69,13 +76,13 @@ export function DeepLinkPage({ path }: { path: string }) {
             rel="noreferrer"
             className="w-full py-3 px-4 bg-white/10 hover:bg-white/20 text-white font-medium rounded-xl transition-colors duration-200"
           >
-            {t("deepLink.download")}
+            {t.deepLink.download}
           </a>
           <a
             href="/"
             className="w-full py-3 px-4 text-gray-400 hover:text-white font-medium transition-colors duration-200 mt-2"
           >
-            {t("deepLink.backHome")}
+            {t.deepLink.backHome}
           </a>
         </div>
       </div>
