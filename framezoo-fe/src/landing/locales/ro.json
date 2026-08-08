@@ -33,7 +33,19 @@
     "addonThree": "Extensii comunitare",
     "showcaseTitle": "Ecranul este destinația.",
     "showcaseDescription": "O suprafață desktop concentrată pentru descoperire, redare și tot ce se află în jurul poveștii.",
-    "showcaseCaption": "FrameZoo Desktop / Modul Focus"
+    "showcaseCaption": "FrameZoo Desktop / Modul Focus",
+    "subtitleSync": "Sincronizați subtitrările cu AI",
+    "featureLabel": "Jucătorul, în felul tău",
+    "dualSubtitlesDescription": "Activați subtitrările duble atunci când învățați, comparați sau pur și simplu le preferați pe ambele.",
+    "experienceTitle": "Tot ce ai nevoie pentru un ceas mai bun.",
+    "subtitleControls": "Reglați playerul din jurul vostru",
+    "dualSubtitles": "Păstrați două limbi de subtitrare vizibile",
+    "showcasePrimaryAlt": "Ecran cu detalii de titlu FrameZoo cu lucrări de artă, evaluări, anotimpuri și metadate",
+    "subtitleSyncDescription": "Aliniați dialogul de deschidere cu imaginea în câteva secunde.",
+    "showcaseSecondaryAlt": "Ecran de descoperire FrameZoo cu căutare, categorii și rânduri de titlu",
+    "subtitleControlsDescription": "Alegeți sursa de subtitrare, limba, sincronizarea și afișarea fără a vă întrerupe fluxul.",
+    "showcaseSecondaryTitle": "Găsiți ceva ce merită urmărit.",
+    "showcaseSecondaryDescription": "Începeți de la o suprafață de descoperire curată, apoi treceți la redare fără a vă pierde locul."
   },
   "download": {
     "eyebrow": "ALEGE-ȚI CONSTRUCȚIA",
@@ -50,7 +62,9 @@
     "error": "Nu s-a putut încărca lista de versiuni desktop.",
     "retry": "Încearcă din nou",
     "noBackend": "Serviciul de descărcare nu este configurat pentru această implementare.",
-    "version": "Eliberare"
+    "version": "Eliberare",
+    "hideAll": "Ascunde alte versiuni",
+    "ready": "Gata pentru acest dispozitiv"
   },
   "footer": {
     "line": "O casă mai liniștită pentru poveștile la care te întorci.",
@@ -80,5 +94,12 @@
     "advancedTitle": "Ai nevoie de un ajutor Node?",
     "advancedLink": "Deschideți referința SDK avansată",
     "advancedDescription": "Stremio Addon SDK este opțional. Folosiți-l dacă doriți ajutoare pentru rutare și serializare; nu este cerut de protocol."
+  },
+  "deepLink": {
+    "opening": "Se deschide FrameZoo...",
+    "backHome": "Reveniți la pagina de pornire",
+    "download": "Descărcați FrameZoo",
+    "retry": "Încercați să deschideți din nou aplicația Desktop",
+    "openingDescription": "Browserul dvs. încearcă să deschidă aplicația FrameZoo Desktop. Dacă apare o solicitare, selectați <1>Open FrameZoo</1>."
   }
 }

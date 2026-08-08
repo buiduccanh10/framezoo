@@ -63,6 +63,26 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 let mainWindow: BrowserWindow | null = null;
+const PROTOCOL_PREFIX = "framezoo";
+
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient(PROTOCOL_PREFIX, process.execPath, [path.resolve(process.argv[1])]);
+  }
+} else {
+  app.setAsDefaultProtocolClient(PROTOCOL_PREFIX);
+}
+
+function handleDeepLink(url: string) {
+  const deepLinkPath = url.replace(new RegExp(`^${PROTOCOL_PREFIX}:/+`), "/");
+  
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+    mainWindow.webContents.send("desktop:deep-link", deepLinkPath);
+  }
+}
+
 const hasSingleInstanceLock = app.requestSingleInstanceLock();
 
 function setupTorrentEnv() {
@@ -1008,7 +1028,7 @@ if (process.platform === "win32") {
 if (!hasSingleInstanceLock) {
   app.quit();
 } else {
-  app.on("second-instance", () => {
+  app.on("second-instance", (event, commandLine) => {
     if (!mainWindow) return;
 
     if (mainWindow.isMinimized()) {
@@ -1016,6 +1036,11 @@ if (!hasSingleInstanceLock) {
     }
 
     mainWindow.focus();
+
+    const deepLinkUrl = commandLine.find((arg) => arg.startsWith(`${PROTOCOL_PREFIX}:/`));
+    if (deepLinkUrl) {
+      handleDeepLink(deepLinkUrl);
+    }
   });
 
   app.whenReady().then(() => {
@@ -1031,8 +1056,24 @@ if (!hasSingleInstanceLock) {
         createMainWindow();
       }
     });
+
+    const deepLinkUrl = process.argv.find((arg) => arg.startsWith(`${PROTOCOL_PREFIX}:/`));
+    if (deepLinkUrl) {
+      setTimeout(() => handleDeepLink(deepLinkUrl), 1500);
+    }
   });
 }
+
+app.on("open-url", (event, url) => {
+  event.preventDefault();
+  if (app.isReady()) {
+    handleDeepLink(url);
+  } else {
+    app.whenReady().then(() => {
+      setTimeout(() => handleDeepLink(url), 1500);
+    });
+  }
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

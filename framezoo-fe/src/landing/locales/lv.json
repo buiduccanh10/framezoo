@@ -33,7 +33,19 @@
     "addonThree": "Kopienas paplašinājumi",
     "showcaseTitle": "Ekrāns ir galamērķis.",
     "showcaseDescription": "Koncentrēta darbvirsmas virsma atklāšanai, atskaņošanai un visam stāstam.",
-    "showcaseCaption": "FrameZoo darbvirsmas / fokusa režīms"
+    "showcaseCaption": "FrameZoo darbvirsmas / fokusa režīms",
+    "dualSubtitles": "Saglabājiet divas subtitru valodas redzamas",
+    "experienceTitle": "Viss, kas nepieciešams labākam pulkstenim.",
+    "subtitleSyncDescription": "Saskaņojiet sākuma dialogu ar attēlu dažu sekunžu laikā.",
+    "featureLabel": "Spēlētājs, jūsu veids",
+    "subtitleSync": "Sinhronizējiet subtitrus ar AI",
+    "dualSubtitlesDescription": "Ieslēdziet dubultos subtitrus, kad mācāties, salīdzināt vai vienkārši dodat priekšroku abiem.",
+    "showcasePrimaryAlt": "FrameZoo virsraksta detaļas ekrāns ar mākslas darbiem, vērtējumiem, sezonām un metadatiem",
+    "showcaseSecondaryDescription": "Sāciet no tīras atklāšanas virsmas, pēc tam pārejiet uz atskaņošanu, nezaudējot vietu.",
+    "subtitleControlsDescription": "Izvēlieties subtitru avotu, valodu, laiku un displeju, nepārkāpjot plūsmu.",
+    "showcaseSecondaryTitle": "Atrodiet kaut ko skatīšanās vērtu.",
+    "showcaseSecondaryAlt": "FrameZoo atklāšanas ekrāns ar meklēšanu, kategorijām un virsraksta rindām",
+    "subtitleControls": "Noskaņojiet atskaņotāju sev apkārt"
   },
   "download": {
     "eyebrow": "IZVĒLIES SAVU BŪVNI",
@@ -50,7 +62,9 @@
     "error": "Nevarēja ielādēt darbvirsmas izlaidumu sarakstu.",
     "retry": "Mēģiniet vēlreiz",
     "noBackend": "Lejupielādes pakalpojums nav konfigurēts šai izvietošanai.",
-    "version": "Atbrīvot"
+    "version": "Atbrīvot",
+    "hideAll": "Slēpt citas konstrukcijas",
+    "ready": "Gatavs šai ierīcei"
   },
   "footer": {
     "line": "Klusāka māja stāstiem, kuros jūs pastāvīgi atgriežaties.",
@@ -80,5 +94,12 @@
     "advancedTitle": "Nepieciešams mezgla palīgs?",
     "advancedLink": "Atveriet papildu SDK atsauci",
     "advancedDescription": "Stremio Addon SDK nav obligāts. Izmantojiet to, ja vēlaties maršrutēšanas un serializācijas palīgus; to neprasa protokols."
+  },
+  "deepLink": {
+    "openingDescription": "Jūsu pārlūkprogramma mēģina atvērt FrameZoo Desktop lietotni. Ja tiek parādīta uzvedne, lūdzu, atlasiet <1>Open FrameZoo</1>.",
+    "retry": "Mēģiniet vēlreiz atvērt darbvirsmas lietotni",
+    "opening": "Notiek FrameZoo atvēršana...",
+    "backHome": "Dodieties atpakaļ uz sākumlapu",
+    "download": "Lejupielādēt FrameZoo"
   }
 }

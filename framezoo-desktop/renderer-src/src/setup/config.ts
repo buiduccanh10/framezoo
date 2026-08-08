@@ -21,6 +21,7 @@ interface Config {
   TIDB_API_KEY: string;
   WYZIE_API_KEY: string;
   SUBSOURCE_API_KEY: string;
+  APP_DOMAIN: string;
 }
 
 export interface RuntimeConfig {
@@ -46,6 +47,7 @@ export interface RuntimeConfig {
   TIDB_API_KEY: string | null;
   WYZIE_API_KEY: string | null;
   SUBSOURCE_API_KEY: string | null;
+  APP_DOMAIN: string;
 }
 
 const env: Record<keyof Config, undefined | string> = {
@@ -70,6 +72,7 @@ const env: Record<keyof Config, undefined | string> = {
   TIDB_API_KEY: import.meta.env.VITE_TIDB_API_KEY,
   WYZIE_API_KEY: import.meta.env.VITE_WYZIE_API_KEY,
   SUBSOURCE_API_KEY: import.meta.env.VITE_SUBSOURCE_API_KEY,
+  APP_DOMAIN: import.meta.env.VITE_APP_DOMAIN,
 };
 
 function coerceUndefined(value: string | null | undefined): string | undefined {
@@ -165,5 +168,6 @@ export function conf(): RuntimeConfig {
     TIDB_API_KEY: getKey("TIDB_API_KEY"),
     WYZIE_API_KEY: getKey("WYZIE_API_KEY"),
     SUBSOURCE_API_KEY: getKey("SUBSOURCE_API_KEY"),
+    APP_DOMAIN: getKey("APP_DOMAIN") ?? "https://framezoo.com",
   };
 }

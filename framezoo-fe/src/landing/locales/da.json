@@ -33,7 +33,19 @@
     "addonThree": "Fællesskabsudvidelser",
     "showcaseTitle": "Skærmen er destinationen.",
     "showcaseDescription": "En fokuseret skrivebordsoverflade til opdagelse, afspilning og alt omkring historien.",
-    "showcaseCaption": "FrameZoo Desktop / Fokustilstand"
+    "showcaseCaption": "FrameZoo Desktop / Fokustilstand",
+    "featureLabel": "Spilleren, på din måde",
+    "subtitleSync": "Synkroniser undertekster med AI",
+    "subtitleSyncDescription": "Sæt åbningsdialogen på linje med billedet på få sekunder.",
+    "experienceTitle": "Alt hvad du behøver for et bedre ur.",
+    "dualSubtitles": "Hold to undertekstsprog synlige",
+    "dualSubtitlesDescription": "Slå dobbelte undertekster til, når du lærer, sammenligner eller foretrækker begge dele.",
+    "subtitleControlsDescription": "Vælg undertekstkilde, sprog, timing og visning uden at bryde dit flow.",
+    "showcaseSecondaryAlt": "FrameZoo-opdagelsesskærm med søgning, kategorier og titelrækker",
+    "showcasePrimaryAlt": "FrameZoo-titeldetaljeskærm med illustrationer, bedømmelser, årstider og metadata",
+    "showcaseSecondaryTitle": "Find noget der er værd at se.",
+    "subtitleControls": "Indstil afspilleren omkring dig",
+    "showcaseSecondaryDescription": "Start fra en ren opdagelsesflade, og gå derefter ind i afspilning uden at miste din plads."
   },
   "download": {
     "eyebrow": "VÆLG DIN BYGNING",
@@ -50,7 +62,9 @@
     "error": "Kunne ikke indlæse skrivebordsudgivelseslisten.",
     "retry": "Prøv igen",
     "noBackend": "Downloadtjenesten er ikke konfigureret til denne implementering.",
-    "version": "Frigøre"
+    "version": "Frigøre",
+    "ready": "Klar til denne enhed",
+    "hideAll": "Skjul andre builds"
   },
   "footer": {
     "line": "Et mere stille hjem for de historier, du bliver ved med at vende tilbage til.",
@@ -80,5 +94,12 @@
     "advancedDescription": "Stremio Addon SDK er valgfrit. Brug det, hvis du vil have routing- og serialiseringshjælpere; det er ikke påkrævet af protokollen.",
     "advancedTitle": "Har du brug for en node-hjælper?",
     "advancedLink": "Åbn avanceret SDK-reference"
+  },
+  "deepLink": {
+    "download": "Download FrameZoo",
+    "opening": "Åbner FrameZoo...",
+    "openingDescription": "Din browser forsøger at åbne FrameZoo Desktop-appen. Hvis en prompt vises, skal du vælge <1>Open FrameZoo</1>.",
+    "retry": "Prøv at åbne Desktop App igen",
+    "backHome": "Gå tilbage til startsiden"
   }
 }

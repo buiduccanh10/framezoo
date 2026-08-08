@@ -33,7 +33,19 @@
     "addonThree": "社區擴展",
     "showcaseTitle": "螢幕就是目的地。",
     "showcaseDescription": "一個專注於發現、播放和故事相關一切的桌面介面。",
-    "showcaseCaption": "FrameZoo 桌面/焦點模式"
+    "showcaseCaption": "FrameZoo 桌面/焦點模式",
+    "featureLabel": "玩家，你的方式",
+    "subtitleSync": "與AI同步字幕",
+    "dualSubtitlesDescription": "當您學習、比較或只是喜歡兩者時，請打開雙字幕。",
+    "experienceTitle": "打造更好腕錶所需的一切。",
+    "dualSubtitles": "保持兩種字幕語言可見",
+    "subtitleSyncDescription": "在幾秒鐘內將開頭對話與圖片對齊。",
+    "showcasePrimaryAlt": "FrameZoo 標題詳細資訊螢幕，包含藝術品、評級、季節和元數據",
+    "showcaseSecondaryDescription": "從乾淨的發現介面開始，然後進入播放狀態，而不會丟失您的位置。",
+    "showcaseSecondaryAlt": "FrameZoo 發現螢幕，包含搜尋、類別和標題行",
+    "subtitleControlsDescription": "選擇字幕來源、語言、時間和顯示，而不會中斷您的流程。",
+    "showcaseSecondaryTitle": "找一些值得一看的東西。",
+    "subtitleControls": "調整你周圍的播放器"
   },
   "download": {
     "eyebrow": "選擇您的構建",
@@ -50,7 +62,9 @@
     "error": "無法載入桌面版本清單。",
     "retry": "再試一次",
     "noBackend": "未為此部署配置下載服務。",
-    "version": "發布"
+    "version": "發布",
+    "hideAll": "隱藏其他構建",
+    "ready": "準備好使用此設備"
   },
   "footer": {
     "line": "一個更安靜的家，供您不斷回顧的故事。",
@@ -80,5 +94,12 @@
     "runTitle": "運行、測試、安裝",
     "advancedLink": "開啟高級SDK參考",
     "advancedTitle": "需要節點助手嗎？"
+  },
+  "deepLink": {
+    "backHome": "回首頁",
+    "opening": "開啟 FrameZoo...",
+    "openingDescription": "您的瀏覽器正在嘗試開啟 FrameZoo 桌面應用程式。如果出現提示，請選擇<1>Open FrameZoo</1>。",
+    "download": "下載 FrameZoo",
+    "retry": "嘗試再次開啟桌面應用程式"
   }
 }

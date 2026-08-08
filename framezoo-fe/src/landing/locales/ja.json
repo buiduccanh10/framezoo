@@ -33,7 +33,19 @@
     "addonThree": "コミュニティ拡張機能",
     "showcaseTitle": "画面が目的地です。",
     "showcaseDescription": "発見、再生、ストーリーに関するすべてのことに集中したデスクトップ サーフェス。",
-    "showcaseCaption": "FrameZoo デスクトップ / フォーカス モード"
+    "showcaseCaption": "FrameZoo デスクトップ / フォーカス モード",
+    "dualSubtitles": "2 つの字幕言語を表示したままにする",
+    "subtitleSync": "字幕を AI と同期する",
+    "experienceTitle": "より良い時計に必要なものがすべて揃っています。",
+    "subtitleControls": "周りのプレーヤーをチューニングする",
+    "dualSubtitlesDescription": "学習中、比較中、または単に両方を好む場合は、デュアル字幕をオンにします。",
+    "subtitleSyncDescription": "冒頭のダイアログと画像を数秒で並べます。",
+    "featureLabel": "プレイヤーはあなたのやり方で",
+    "showcaseSecondaryTitle": "見る価値のあるものを見つけてください。",
+    "showcaseSecondaryAlt": "検索、カテゴリ、タイトル行を備えた FrameZoo 検出画面",
+    "showcaseSecondaryDescription": "きれいな検出面から開始して、場所を見失うことなく再生に進みます。",
+    "subtitleControlsDescription": "流れを中断することなく、字幕ソース、言語、タイミング、表示を選択します。",
+    "showcasePrimaryAlt": "アートワーク、評価、シーズン、メタデータを含む FrameZoo タイトル詳細画面"
   },
   "download": {
     "eyebrow": "ビルドを選択してください",
@@ -50,7 +62,9 @@
     "error": "デスクトップ リリース リストをロードできませんでした。",
     "retry": "もう一度やり直してください",
     "noBackend": "この展開にはダウンロード サービスが構成されていません。",
-    "version": "リリース"
+    "version": "リリース",
+    "hideAll": "他のビルドを非表示にする",
+    "ready": "このデバイスの準備ができています"
   },
   "footer": {
     "line": "何度も戻ってくる物語のための、より静かな家。",
@@ -80,5 +94,12 @@
     "advancedTitle": "ノードヘルパーが必要ですか?",
     "advancedDescription": "Stremio Addon SDK はオプションです。ルーティングおよびシリアル化ヘルパーが必要な場合に使用します。プロトコルでは必須ではありません。",
     "advancedLink": "高度な SDK リファレンスを開く"
+  },
+  "deepLink": {
+    "openingDescription": "ブラウザーが FrameZoo デスクトップ アプリを開こうとしています。プロンプトが表示されたら、<1>Open FrameZoo</1> を選択してください。",
+    "retry": "デスクトップ アプリをもう一度開いてみます",
+    "opening": "FrameZoo を開く...",
+    "download": "FrameZooをダウンロード",
+    "backHome": "ホームページに戻る"
   }
 }

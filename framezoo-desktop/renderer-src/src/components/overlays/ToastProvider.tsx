@@ -16,7 +16,7 @@ export function ToastProvider() {
   if (!toast) return null;
 
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] px-4 py-2 bg-green-600 text-white rounded-lg shadow-lg transition-all duration-300 animate-[scaleIn_0.6s_ease-out_forwards]">
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] px-4 py-2 bg-green-600 text-white rounded-lg shadow-lg transition-all duration-300 animate-[scaleIn_0.6s_ease-out_forwards]">
       <div className="flex items-center gap-2">
         <Icon
           icon={toast.type === "error" ? Icons.X : Icons.CHECKMARK}

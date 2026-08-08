@@ -33,7 +33,19 @@
     "addonThree": "Samfélagsframlengingar",
     "showcaseTitle": "Skjárinn er áfangastaðurinn.",
     "showcaseDescription": "Einbeittur skjáborðsyfirborð til að uppgötva, spila og allt í kringum söguna.",
-    "showcaseCaption": "FrameZoo skjáborð / fókusstilling"
+    "showcaseCaption": "FrameZoo skjáborð / fókusstilling",
+    "featureLabel": "Leikmaðurinn, á þinn hátt",
+    "subtitleControls": "Stilltu spilarann ​​í kringum þig",
+    "experienceTitle": "Allt sem þú þarft fyrir betra úr.",
+    "subtitleSyncDescription": "Settu upphafsspjallið upp við myndina á nokkrum sekúndum.",
+    "dualSubtitlesDescription": "Kveiktu á tvöföldum texta þegar þú ert að læra, bera saman eða einfaldlega kýst hvort tveggja.",
+    "subtitleSync": "Samstilltu texta við gervigreind",
+    "dualSubtitles": "Haltu tveimur textamálum sýnilegum",
+    "showcaseSecondaryTitle": "Finndu eitthvað sem er þess virði að horfa á.",
+    "showcasePrimaryAlt": "FrameZoo titilupplýsingaskjár með listaverkum, einkunnum, árstíðum og lýsigögnum",
+    "subtitleControlsDescription": "Veldu uppruna texta, tungumál, tímasetningu og birtingu án þess að brjóta flæði þitt.",
+    "showcaseSecondaryDescription": "Byrjaðu á hreinu uppgötvunaryfirborði, farðu síðan yfir í spilun án þess að missa þinn stað.",
+    "showcaseSecondaryAlt": "FrameZoo uppgötvunarskjár með leit, flokkum og titlaröðum"
   },
   "download": {
     "eyebrow": "VELDU BYGGINGU ÞÍNA",
@@ -50,7 +62,9 @@
     "error": "Gat ekki hlaðið skjáborðsútgáfulistanum.",
     "retry": "Reyndu aftur",
     "noBackend": "Niðurhalsþjónusta er ekki stillt fyrir þessa dreifingu.",
-    "version": "Gefa út"
+    "version": "Gefa út",
+    "ready": "Tilbúið fyrir þetta tæki",
+    "hideAll": "Fela aðrar byggingar"
   },
   "footer": {
     "line": "Rólegra heimili fyrir sögurnar sem þú kemur alltaf aftur til.",
@@ -80,5 +94,12 @@
     "advancedTitle": "Vantar þig Node-hjálp?",
     "advancedLink": "Opna háþróaða SDK tilvísun",
     "advancedDescription": "Stremio Addon SDK er valfrjálst. Notaðu það ef þú vilt leiðar- og raðgreiningarhjálpar; það er ekki krafist í bókuninni."
+  },
+  "deepLink": {
+    "opening": "Opnar FrameZoo...",
+    "download": "Sækja FrameZoo",
+    "openingDescription": "Vafrinn þinn er að reyna að opna FrameZoo Desktop appið. Ef kvaðning birtist skaltu velja <1>Open FrameZoo</1>.",
+    "retry": "Reyndu að opna Desktop App aftur",
+    "backHome": "Farðu aftur á heimasíðuna"
   }
 }

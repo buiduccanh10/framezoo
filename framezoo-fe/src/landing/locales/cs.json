@@ -33,7 +33,19 @@
     "addonThree": "Rozšíření komunity",
     "showcaseTitle": "Obrazovka je cíl.",
     "showcaseDescription": "Zaměřený povrch plochy pro objevování, přehrávání a vše kolem příběhu.",
-    "showcaseCaption": "FrameZoo Desktop / Režim zaostření"
+    "showcaseCaption": "FrameZoo Desktop / Režim zaostření",
+    "featureLabel": "Hráč, vaše cesta",
+    "subtitleSync": "Synchronizujte titulky s AI",
+    "dualSubtitlesDescription": "Zapněte duální titulky, když se učíte, porovnáváte nebo prostě preferujete obojí.",
+    "subtitleSyncDescription": "Zarovnejte úvodní dialog s obrázkem během několika sekund.",
+    "dualSubtitles": "Ponechte viditelné dva jazyky titulků",
+    "experienceTitle": "Vše, co potřebujete pro lepší hodinky.",
+    "subtitleControls": "Nalaďte si přehrávač kolem sebe",
+    "showcaseSecondaryTitle": "Najděte něco, co stojí za to sledovat.",
+    "showcaseSecondaryAlt": "Obrazovka zjišťování FrameZoo s vyhledáváním, kategoriemi a řádky titulků",
+    "showcaseSecondaryDescription": "Začněte z čistého objevovacího povrchu a poté přejděte do přehrávání, aniž byste ztratili své místo.",
+    "showcasePrimaryAlt": "Obrazovka s podrobnostmi o titulu FrameZoo s kresbou, hodnocením, sezónami a metadaty",
+    "subtitleControlsDescription": "Vyberte zdroj titulků, jazyk, časování a zobrazení, aniž byste narušili tok titulků."
   },
   "download": {
     "eyebrow": "VYBERTE SI SVOU STAVBU",
@@ -50,7 +62,9 @@
     "error": "Nelze načíst seznam verzí pro stolní počítače.",
     "retry": "Zkuste to znovu",
     "noBackend": "Služba stahování není pro toto nasazení nakonfigurována.",
-    "version": "Uvolnění"
+    "version": "Uvolnění",
+    "ready": "Připraveno pro toto zařízení",
+    "hideAll": "Skrýt další sestavení"
   },
   "footer": {
     "line": "Tišší domov pro příběhy, ke kterým se stále vracíte.",
@@ -80,5 +94,12 @@
     ],
     "advancedDescription": "Sada Stremio Addon SDK je volitelná. Použijte jej, pokud chcete pomocníky pro směrování a serializaci; protokol to nevyžaduje.",
     "advancedLink": "Otevřete pokročilou referenci SDK"
+  },
+  "deepLink": {
+    "openingDescription": "Váš prohlížeč se pokouší otevřít aplikaci FrameZoo Desktop. Pokud se zobrazí výzva, vyberte <1>Otevřít FrameZoo</1>.",
+    "download": "Stáhněte si FrameZoo",
+    "opening": "Otevírání FrameZoo...",
+    "retry": "Zkuste znovu otevřít aplikaci Desktop",
+    "backHome": "Přejít zpět na domovskou stránku"
   }
 }

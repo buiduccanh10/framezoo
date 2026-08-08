@@ -33,7 +33,19 @@
     "addonThree": "Ekstensi komunitas",
     "showcaseTitle": "Layar adalah tujuannya.",
     "showcaseDescription": "Permukaan desktop yang terfokus untuk penemuan, pemutaran, dan segala hal seputar cerita.",
-    "showcaseCaption": "Mode Desktop / Fokus FrameZoo"
+    "showcaseCaption": "Mode Desktop / Fokus FrameZoo",
+    "experienceTitle": "Semua yang Anda perlukan untuk jam tangan yang lebih baik.",
+    "dualSubtitlesDescription": "Aktifkan subtitle ganda saat Anda mempelajari, membandingkan, atau sekadar memilih keduanya.",
+    "subtitleSyncDescription": "Sejajarkan dialog pembuka dengan gambar dalam hitungan detik.",
+    "dualSubtitles": "Jaga agar dua bahasa subtitle tetap terlihat",
+    "featureLabel": "Pemain, sesuai keinginan Anda",
+    "subtitleControls": "Sesuaikan pemutar di sekitar Anda",
+    "subtitleControlsDescription": "Pilih sumber subtitle, bahasa, waktu, dan tampilan tanpa mengganggu alur Anda.",
+    "showcaseSecondaryTitle": "Temukan sesuatu yang layak untuk ditonton.",
+    "showcaseSecondaryDescription": "Mulai dari permukaan penemuan yang bersih, lalu lanjutkan ke pemutaran tanpa kehilangan tempat.",
+    "subtitleSync": "Sinkronkan subtitle dengan AI",
+    "showcaseSecondaryAlt": "Layar penemuan FrameZoo dengan pencarian, kategori, dan baris judul",
+    "showcasePrimaryAlt": "Layar detail judul FrameZoo dengan karya seni, peringkat, musim, dan metadata"
   },
   "download": {
     "eyebrow": "PILIH BANGUNAN ANDA",
@@ -50,7 +62,9 @@
     "error": "Tidak dapat memuat daftar rilis desktop.",
     "retry": "Coba lagi",
     "noBackend": "Layanan pengunduhan tidak dikonfigurasi untuk penerapan ini.",
-    "version": "Melepaskan"
+    "version": "Melepaskan",
+    "hideAll": "Sembunyikan bangunan lain",
+    "ready": "Siap untuk perangkat ini"
   },
   "footer": {
     "line": "Rumah yang lebih tenang untuk cerita yang selalu Anda ingat.",
@@ -80,5 +94,12 @@
     "advancedLink": "Buka referensi SDK tingkat lanjut",
     "advancedDescription": "Stremio Addon SDK bersifat opsional. Gunakan jika Anda menginginkan bantuan perutean dan serialisasi; itu tidak diwajibkan oleh protokol.",
     "advancedTitle": "Butuh pembantu Node?"
+  },
+  "deepLink": {
+    "opening": "Membuka BingkaiKebun Binatang...",
+    "openingDescription": "Browser Anda mencoba membuka aplikasi FrameZoo Desktop. Jika muncul prompt, silakan pilih <1>Open FrameZoo</1>.",
+    "retry": "Coba buka Aplikasi Desktop lagi",
+    "backHome": "Kembali ke beranda",
+    "download": "Unduh FrameZoo"
   }
 }

@@ -61,6 +61,7 @@ declare global {
           request: AddonProtocolRequest,
         ) => Promise<AddonProtocolResponse>;
       };
+      onDeepLink?: (listener: (url: string) => void) => () => void;
     };
     __CONFIG__?: Record<string, string>;
   }

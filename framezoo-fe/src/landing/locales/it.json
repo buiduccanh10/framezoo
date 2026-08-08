@@ -33,7 +33,19 @@
     "addonThree": "Estensioni della comunità",
     "showcaseTitle": "Lo schermo è la destinazione.",
     "showcaseDescription": "Una superficie desktop focalizzata per la scoperta, la riproduzione e tutto ciò che riguarda la storia.",
-    "showcaseCaption": "Modalità desktop/messa a fuoco FrameZoo"
+    "showcaseCaption": "Modalità desktop/messa a fuoco FrameZoo",
+    "subtitleSyncDescription": "Allinea il dialogo di apertura con l'immagine in pochi secondi.",
+    "subtitleSync": "Sincronizza i sottotitoli con l'intelligenza artificiale",
+    "featureLabel": "Il giocatore, a modo tuo",
+    "dualSubtitles": "Mantieni visibili due lingue dei sottotitoli",
+    "experienceTitle": "Tutto ciò di cui hai bisogno per un orologio migliore.",
+    "dualSubtitlesDescription": "Attiva i doppi sottotitoli quando stai imparando, confrontando o semplicemente preferisci entrambi.",
+    "subtitleControls": "Sintonizza il lettore intorno a te",
+    "showcaseSecondaryAlt": "Schermata di scoperta di FrameZoo con ricerca, categorie e righe del titolo",
+    "showcasePrimaryAlt": "Schermata dei dettagli del titolo FrameZoo con grafica, valutazioni, stagioni e metadati",
+    "subtitleControlsDescription": "Scegli la fonte, la lingua, i tempi e la visualizzazione dei sottotitoli senza interrompere il flusso.",
+    "showcaseSecondaryDescription": "Inizia da una superficie di scoperta pulita, quindi passa alla riproduzione senza perdere la posizione.",
+    "showcaseSecondaryTitle": "Trova qualcosa che valga la pena guardare."
   },
   "download": {
     "eyebrow": "SCEGLI LA TUA COSTRUZIONE",
@@ -50,7 +62,9 @@
     "error": "Impossibile caricare l'elenco delle versioni desktop.",
     "retry": "Riprova",
     "noBackend": "Il servizio di download non è configurato per questa distribuzione.",
-    "version": "Pubblicazione"
+    "version": "Pubblicazione",
+    "hideAll": "Nascondi altre build",
+    "ready": "Pronto per questo dispositivo"
   },
   "footer": {
     "line": "Una casa più tranquilla per le storie a cui continui a tornare.",
@@ -80,5 +94,12 @@
     ],
     "advancedDescription": "L'SDK del componente aggiuntivo Stremio è facoltativo. Usalo se desideri aiutanti di routing e serializzazione; non è richiesto dal protocollo.",
     "advancedLink": "Apri il riferimento SDK avanzato"
+  },
+  "deepLink": {
+    "opening": "Apertura di FrameZoo...",
+    "download": "Scarica FrameZoo",
+    "openingDescription": "Il tuo browser sta tentando di aprire l'app FrameZoo Desktop. Se viene visualizzato un messaggio, seleziona <1>Apri FrameZoo</1>.",
+    "retry": "Prova ad aprire nuovamente l'app desktop",
+    "backHome": "Torna alla home page"
   }
 }

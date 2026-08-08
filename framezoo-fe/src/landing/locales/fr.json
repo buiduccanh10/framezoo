@@ -33,7 +33,19 @@
     "addonThree": "Extensions de communauté",
     "showcaseTitle": "L'écran est la destination.",
     "showcaseDescription": "Une surface de bureau ciblée pour la découverte, la lecture et tout ce qui concerne l'histoire.",
-    "showcaseCaption": "Bureau FrameZoo / Mode mise au point"
+    "showcaseCaption": "Bureau FrameZoo / Mode mise au point",
+    "featureLabel": "Le joueur, à votre façon",
+    "subtitleSyncDescription": "Alignez le dialogue d’ouverture avec l’image en quelques secondes.",
+    "dualSubtitlesDescription": "Activez les sous-titres doubles lorsque vous apprenez, comparez ou préférez simplement les deux.",
+    "subtitleControlsDescription": "Choisissez la source des sous-titres, la langue, le timing et l'affichage sans interrompre votre flux.",
+    "subtitleSync": "Synchronisez les sous-titres avec l'IA",
+    "experienceTitle": "Tout ce dont vous avez besoin pour une meilleure montre.",
+    "showcaseSecondaryTitle": "Trouvez quelque chose qui vaut la peine d'être regardé.",
+    "subtitleControls": "Accordez le joueur autour de vous",
+    "dualSubtitles": "Gardez deux langues de sous-titres visibles",
+    "showcaseSecondaryAlt": "Écran de découverte FrameZoo avec recherche, catégories et lignes de titre",
+    "showcasePrimaryAlt": "Écran détaillé du titre FrameZoo avec illustrations, notes, saisons et métadonnées",
+    "showcaseSecondaryDescription": "Partez d’une surface de découverte propre, puis passez à la lecture sans perdre votre place."
   },
   "download": {
     "eyebrow": "CHOISISSEZ VOTRE CONSTRUCTION",
@@ -50,7 +62,9 @@
     "error": "Impossible de charger la liste des versions de bureau.",
     "retry": "Essayer à nouveau",
     "noBackend": "Le service de téléchargement n'est pas configuré pour ce déploiement.",
-    "version": "Libérer"
+    "version": "Libérer",
+    "ready": "Prêt pour cet appareil",
+    "hideAll": "Masquer les autres versions"
   },
   "footer": {
     "line": "Une maison plus calme pour les histoires auxquelles vous revenez sans cesse.",
@@ -80,5 +94,12 @@
     "advancedLink": "Ouvrir la référence du SDK avancé",
     "advancedTitle": "Besoin d'un assistant Node ?",
     "advancedDescription": "Le SDK Stremio Addon est facultatif. Utilisez-le si vous souhaitez des aides au routage et à la sérialisation ; ce n’est pas requis par le protocole."
+  },
+  "deepLink": {
+    "openingDescription": "Votre navigateur tente d'ouvrir l'application FrameZoo Desktop. Si une invite apparaît, veuillez sélectionner <1>Open FrameZoo</1>.",
+    "opening": "Ouverture de FrameZoo...",
+    "download": "Télécharger FrameZoo",
+    "retry": "Essayez à nouveau d'ouvrir l'application de bureau",
+    "backHome": "Retour à la page d'accueil"
   }
 }

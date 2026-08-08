@@ -33,7 +33,19 @@
     "addonThree": "Topluluk uzantıları",
     "showcaseTitle": "Hedef ekrandır.",
     "showcaseDescription": "Keşif, oynatma ve hikayeyle ilgili her şey için odaklanmış bir masaüstü yüzeyi.",
-    "showcaseCaption": "FrameZoo Masaüstü / Odak modu"
+    "showcaseCaption": "FrameZoo Masaüstü / Odak modu",
+    "experienceTitle": "Daha iyi bir saat için ihtiyacınız olan her şey.",
+    "featureLabel": "Oyuncu, sizin tarzınız",
+    "subtitleSync": "Altyazıları AI ile senkronize edin",
+    "dualSubtitlesDescription": "Öğrenirken, karşılaştırırken veya sadece ikisini birden tercih ederken çift altyazıyı açın.",
+    "subtitleSyncDescription": "Açılış diyaloğunu saniyeler içinde resimle hizalayın.",
+    "dualSubtitles": "İki altyazı dilini görünür tutun",
+    "showcasePrimaryAlt": "Çizimler, derecelendirmeler, sezonlar ve meta veriler içeren FrameZoo başlık ayrıntısı ekranı",
+    "subtitleControlsDescription": "Akışınızı bozmadan altyazı kaynağını, dilini, zamanlamasını ve gösterimini seçin.",
+    "showcaseSecondaryTitle": "İzlemeye değer bir şey bulun.",
+    "subtitleControls": "Çevrenizdeki oynatıcıyı ayarlayın",
+    "showcaseSecondaryDescription": "Temiz bir keşif yüzeyinden başlayın, ardından yerinizi kaybetmeden oynatmaya geçin.",
+    "showcaseSecondaryAlt": "Arama, kategoriler ve başlık satırlarını içeren FrameZoo keşif ekranı"
   },
   "download": {
     "eyebrow": "YAPINIZI SEÇİN",
@@ -50,7 +62,9 @@
     "error": "Masaüstü sürüm listesi yüklenemedi.",
     "retry": "Tekrar deneyin",
     "noBackend": "İndirme hizmeti bu dağıtım için yapılandırılmadı.",
-    "version": "Serbest bırakmak"
+    "version": "Serbest bırakmak",
+    "hideAll": "Diğer yapıları gizle",
+    "ready": "Bu cihaz için hazır"
   },
   "footer": {
     "line": "Sürekli geri döndüğünüz hikayeler için daha sessiz bir yuva.",
@@ -80,5 +94,12 @@
     ],
     "advancedLink": "Gelişmiş SDK referansını aç",
     "advancedDescription": "Stremio Addon SDK'sı isteğe bağlıdır. Yönlendirme ve serileştirme yardımcıları istiyorsanız bunu kullanın; protokol gereği buna gerek yoktur."
+  },
+  "deepLink": {
+    "download": "FrameZoo'yu indirin",
+    "opening": "FrameZoo açılıyor...",
+    "openingDescription": "Tarayıcınız FrameZoo Masaüstü uygulamasını açmaya çalışıyor. Bir istem görünürse lütfen <1>FrameZoo'yu Aç</1> öğesini seçin.",
+    "retry": "Masaüstü Uygulamasını tekrar açmayı deneyin",
+    "backHome": "Ana sayfaya geri dön"
   }
 }

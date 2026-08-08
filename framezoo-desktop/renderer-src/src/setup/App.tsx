@@ -150,6 +150,18 @@ function App() {
     }
   }, [setShowDowntime, maintenance]);
 
+  useEffect(() => {
+    if (window.electronAPI?.onDeepLink) {
+      const cleanup = window.electronAPI.onDeepLink((deepLinkPath) => {
+        // Remove leading slash if any to ensure correct navigation path, but navigate works with absolute path within router
+        navigate(
+          deepLinkPath.startsWith("/") ? deepLinkPath : `/${deepLinkPath}`,
+        );
+      });
+      return cleanup;
+    }
+  }, [navigate]);
+
   return (
     <Layout>
       <LanguageProvider />

@@ -33,7 +33,19 @@
     "addonThree": "kogukonna laiendused",
     "showcaseTitle": "Ekraan on sihtkoht.",
     "showcaseDescription": "Fokuseeritud töölauapind avastamiseks, taasesituseks ja kõigeks loo ümber.",
-    "showcaseCaption": "FrameZoo töölaua / fookuse režiim"
+    "showcaseCaption": "FrameZoo töölaua / fookuse režiim",
+    "dualSubtitles": "Hoidke kaks subtiitrite keelt nähtaval",
+    "dualSubtitlesDescription": "Lülitage topeltsubtiitrid sisse, kui õpite, võrdlete või lihtsalt eelistate mõlemat.",
+    "experienceTitle": "Kõik, mida parema käekella jaoks vaja on.",
+    "featureLabel": "Mängija, teie tee",
+    "subtitleSyncDescription": "Joondage avadialoog sekunditega pildiga.",
+    "subtitleSync": "Sünkroonige subtiitrid tehisintellektiga",
+    "showcasePrimaryAlt": "FrameZoo pealkirja üksikasjade ekraan kunstiteoste, hinnangute, aastaaegade ja metaandmetega",
+    "showcaseSecondaryDescription": "Alustage puhtalt avastamispinnalt, seejärel liikuge taasesitusse ilma oma kohta kaotamata.",
+    "showcaseSecondaryTitle": "Leidke midagi, mida tasub vaadata.",
+    "subtitleControls": "Häälestage mängija enda ümber",
+    "showcaseSecondaryAlt": "FrameZoo avastusekraan otsingu, kategooriate ja tiitliridadega",
+    "subtitleControlsDescription": "Valige subtiitrite allikas, keel, ajastus ja ekraan ilma oma voogu katkestamata."
   },
   "download": {
     "eyebrow": "VALI OMA EHITUS",
@@ -50,7 +62,9 @@
     "error": "Töölaua versioonide loendit ei saanud laadida.",
     "retry": "Proovi uuesti",
     "noBackend": "Allalaadimisteenus ei ole selle juurutuse jaoks konfigureeritud.",
-    "version": "Vabasta"
+    "version": "Vabasta",
+    "hideAll": "Peida teised konstruktsioonid",
+    "ready": "Selle seadme jaoks valmis"
   },
   "footer": {
     "line": "Vaiksem kodu lugudele, mille juurde sa ikka ja jälle tagasi tuled.",
@@ -80,5 +94,12 @@
     "advancedDescription": "Stremio Addoni SDK on valikuline. Kasutage seda, kui soovite marsruutimise ja serialiseerimise abilisi; seda protokoll ei nõua.",
     "advancedTitle": "Kas vajate Node'i abilist?",
     "advancedLink": "Avage täiustatud SDK viide"
+  },
+  "deepLink": {
+    "retry": "Proovige töölauarakendus uuesti avada",
+    "opening": "FrameZoo avamine...",
+    "backHome": "Mine tagasi avalehele",
+    "openingDescription": "Teie brauser üritab avada FrameZoo Desktopi rakendust. Kui kuvatakse viip, valige <1>Open FrameZoo</1>.",
+    "download": "Laadige alla FrameZoo"
   }
 }
