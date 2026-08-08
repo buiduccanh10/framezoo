@@ -47,6 +47,7 @@ declare global {
       startTorrent?: (request: TorrentStartRequest) => Promise<TorrentSession>;
       stopTorrent?: (sessionId: string) => Promise<boolean>;
       getTorrentStatus?: (sessionId: string) => Promise<TorrentStatus | null>;
+      setTorrentMaxSize?: (size: string | null) => Promise<boolean>;
       onTorrentStatus?: (
         listener: (status: TorrentStatus) => void,
       ) => () => void;
@@ -61,6 +62,7 @@ declare global {
           request: AddonProtocolRequest,
         ) => Promise<AddonProtocolResponse>;
       };
+      onDeepLink?: (listener: (url: string) => void) => () => void;
     };
     __CONFIG__?: Record<string, string>;
   }

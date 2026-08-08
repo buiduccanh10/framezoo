@@ -33,7 +33,19 @@
     "addonThree": "Extensions de comunitat",
     "showcaseTitle": "La pantalla és la destinació.",
     "showcaseDescription": "Una superfície d'escriptori centrada per al descobriment, la reproducció i tot el que envolta la història.",
-    "showcaseCaption": "FrameZoo Desktop / Mode Focus"
+    "showcaseCaption": "FrameZoo Desktop / Mode Focus",
+    "experienceTitle": "Tot el que necessiteu per a un millor rellotge.",
+    "featureLabel": "El jugador, a la teva manera",
+    "subtitleSync": "Sincronitza subtítols amb IA",
+    "dualSubtitlesDescription": "Activeu els subtítols duals quan apreneu, compareu o simplement preferiu tots dos.",
+    "dualSubtitles": "Mantén visibles dos idiomes de subtítols",
+    "subtitleSyncDescription": "Alineeu el diàleg inicial amb la imatge en segons.",
+    "subtitleControls": "Sintonitza el reproductor al teu voltant",
+    "subtitleControlsDescription": "Trieu la font dels subtítols, l'idioma, el temps i la visualització sense interrompre el vostre flux.",
+    "showcasePrimaryAlt": "Pantalla de detalls del títol de FrameZoo amb obres d'art, classificacions, temporades i metadades",
+    "showcaseSecondaryTitle": "Trobeu alguna cosa que valgui la pena veure.",
+    "showcaseSecondaryDescription": "Comença des d'una superfície de descobriment neta i després passa a la reproducció sense perdre el teu lloc.",
+    "showcaseSecondaryAlt": "Pantalla de descobriment de FrameZoo amb cerca, categories i files de títol"
   },
   "download": {
     "eyebrow": "TRIA LA TEVA CONSTRUCCIÓ",
@@ -50,7 +62,9 @@
     "error": "No s'ha pogut carregar la llista de versions d'escriptori.",
     "retry": "Torna-ho a provar",
     "noBackend": "El servei de descàrrega no està configurat per a aquest desplegament.",
-    "version": "Alliberament"
+    "version": "Alliberament",
+    "ready": "Preparat per a aquest dispositiu",
+    "hideAll": "Amaga altres compilacions"
   },
   "footer": {
     "line": "Una casa més tranquil·la per a les històries a les quals continueu tornant.",
@@ -80,5 +94,12 @@
     "advancedTitle": "Necessites un ajudant de Node?",
     "advancedDescription": "L'SDK del complement Stremio és opcional. Utilitzeu-lo si voleu ajudants d'encaminament i serialització; no ho exigeix ​​el protocol.",
     "advancedLink": "Obriu la referència SDK avançada"
+  },
+  "deepLink": {
+    "opening": "Obrint FrameZoo...",
+    "openingDescription": "El vostre navegador està provant d'obrir l'aplicació FrameZoo Desktop. Si apareix una sol·licitud, seleccioneu <1>Obre FrameZoo</1>.",
+    "download": "Descarrega FrameZoo",
+    "backHome": "Torna a la pàgina d'inici",
+    "retry": "Proveu d'obrir l'aplicació d'escriptori de nou"
   }
 }

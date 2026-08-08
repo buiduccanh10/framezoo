@@ -33,7 +33,19 @@
     "addonThree": "ملحقات المجتمع",
     "showcaseTitle": "الشاشة هي الوجهة.",
     "showcaseDescription": "سطح مكتب مركز للاستكشاف والتشغيل وكل ما يتعلق بالقصة.",
-    "showcaseCaption": "FrameZoo سطح المكتب / وضع التركيز"
+    "showcaseCaption": "FrameZoo سطح المكتب / وضع التركيز",
+    "featureLabel": "اللاعب، طريقك",
+    "dualSubtitlesDescription": "قم بتشغيل الترجمات المزدوجة عندما تتعلم أو تقارن أو ببساطة تفضل كليهما.",
+    "subtitleSync": "مزامنة الترجمات مع الذكاء الاصطناعي",
+    "experienceTitle": "كل ما تحتاجه لمشاهدة أفضل.",
+    "dualSubtitles": "احتفظ بلغتين للترجمة مرئية",
+    "subtitleSyncDescription": "قم بمحاذاة الحوار الافتتاحي مع الصورة في ثوانٍ.",
+    "subtitleControls": "ضبط اللاعب من حولك",
+    "showcaseSecondaryTitle": "ابحث عن شيء يستحق المشاهدة.",
+    "showcaseSecondaryDescription": "ابدأ من سطح اكتشاف نظيف، ثم انتقل إلى التشغيل دون أن تفقد مكانك.",
+    "subtitleControlsDescription": "اختر مصدر الترجمة واللغة والتوقيت والعرض دون انقطاع التدفق.",
+    "showcaseSecondaryAlt": "شاشة اكتشاف FrameZoo مع البحث والفئات وصفوف العناوين",
+    "showcasePrimaryAlt": "شاشة تفاصيل عنوان FrameZoo مع العمل الفني والتقييمات والمواسم والبيانات الوصفية"
   },
   "download": {
     "eyebrow": "اختر المبنى الخاص بك",
@@ -50,7 +62,9 @@
     "error": "تعذر تحميل قائمة إصدارات سطح المكتب.",
     "retry": "حاول ثانية",
     "noBackend": "لم يتم تكوين خدمة التنزيل لهذا النشر.",
-    "version": "يطلق"
+    "version": "يطلق",
+    "ready": "جاهز لهذا الجهاز",
+    "hideAll": "إخفاء البنيات الأخرى"
   },
   "footer": {
     "line": "منزل أكثر هدوءًا للقصص التي تستمر في العودة إليها.",
@@ -80,5 +94,12 @@
     "advancedLink": "افتح مرجع SDK المتقدم",
     "advancedDescription": "يعد Stremio Addon SDK اختياريًا. استخدمه إذا كنت تريد مساعدين للتوجيه والتسلسل؛ غير مطلوب من قبل البروتوكول.",
     "advancedTitle": "هل تحتاج إلى مساعد العقدة؟"
+  },
+  "deepLink": {
+    "openingDescription": "يحاول متصفحك فتح تطبيق FrameZoo Desktop. إذا ظهرت المطالبة، فيرجى تحديد <1>Open FrameZoo</1>.",
+    "retry": "حاول فتح تطبيق سطح المكتب مرة أخرى",
+    "backHome": "العودة إلى الصفحة الرئيسية",
+    "opening": "جارٍ فتح FrameZoo...",
+    "download": "تحميل FrameZoo"
   }
 }

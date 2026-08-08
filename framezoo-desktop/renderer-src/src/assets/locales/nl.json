@@ -1267,6 +1267,13 @@
       "title": "Ondertiteling",
       "verticalPositionLabel": "Verticale positie"
     },
+    "torrent": {
+      "title": "Streamcache",
+      "maxSizeLabel": "Maximale cachegrootte",
+      "maxSizeDescription": "Stel de maximale hoeveelheid schijfruimte in die wordt gebruikt voor het cachen van streambestanden. Als de cache deze limiet overschrijdt, wordt het oudere streambestand verwijderd.",
+      "unlimited": "Onbeperkt",
+      "custom": "Aangepast..."
+    },
     "unsaved": "U heeft niet-opgeslagen wijzigingen"
   },
   "tmdb": {

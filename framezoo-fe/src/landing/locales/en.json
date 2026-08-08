@@ -85,5 +85,12 @@
   "footer": {
     "line": "A quieter place for the stories you keep coming back to.",
     "status": "Desktop-first. Addon-ready."
+  },
+  "deepLink": {
+    "opening": "Opening FrameZoo...",
+    "openingDescription": "Your browser is trying to open the FrameZoo Desktop app. If a prompt appears, please select <1>Open FrameZoo</1>.",
+    "retry": "Try opening Desktop App again",
+    "download": "Download FrameZoo",
+    "backHome": "Go back to homepage"
   }
 }

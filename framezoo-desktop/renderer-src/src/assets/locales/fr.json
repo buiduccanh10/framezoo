@@ -18,7 +18,7 @@
       "title": "Modules complémentaires de bureau"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "CadreZoo",
       "stremio": "Strémio",
       "supportLabel": "Plateformes prises en charge pour les modules complémentaires :",
       "supported": "Plateformes prises en charge : FrameZoo et Stremio"
@@ -312,12 +312,12 @@
       "subtitle": "Maintenez ` pour afficher cette aide à tout moment",
       "title": "Raccourcis clavier"
     },
-    "name": "FrameZoo",
+    "name": "CadreZoo",
     "pages": {
       "discover": "Découvrir",
       "login": "Se connecter",
       "migration": "Migrer le compte",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - CadreZoo",
       "register": "Créer un compte",
       "settings": "Paramètres"
     }
@@ -1266,6 +1266,13 @@
       },
       "title": "Sous-titres",
       "verticalPositionLabel": "Position verticale"
+    },
+    "torrent": {
+      "title": "Cache de flux",
+      "maxSizeLabel": "Taille maximale du cache",
+      "maxSizeDescription": "Définissez la quantité maximale d'espace disque utilisée pour la mise en cache du fichier de flux. Si le cache dépasse cette limite, l'ancien fichier de flux sera supprimé.",
+      "unlimited": "Illimité",
+      "custom": "Coutume..."
     },
     "unsaved": "Vous avez des changements non sauvegardés"
   },

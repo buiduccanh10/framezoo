@@ -1267,6 +1267,13 @@
       "title": "Subtiitrid",
       "verticalPositionLabel": "Vertikaalne asend"
     },
+    "torrent": {
+      "title": "Voo vahemälu",
+      "maxSizeLabel": "Maksimaalne vahemälu suurus",
+      "maxSizeDescription": "Määrake voofaili vahemällu salvestamiseks kasutatava kettaruumi maksimaalne arv. Kui vahemälu ületab selle limiidi, kustutatakse vanem voofail.",
+      "unlimited": "Piiramatu",
+      "custom": "Kohandatud..."
+    },
     "unsaved": "Teil on salvestamata muudatusi"
   },
   "tmdb": {

@@ -11,6 +11,7 @@ import { Menu } from "@/components/player/internals/ContextMenu";
 import { useBackendUrl } from "@/hooks/auth/useBackendUrl";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useWatchPartySync } from "@/hooks/useWatchPartySync";
+import { conf } from "@/setup/config";
 import { useAuthStore } from "@/stores/auth";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { getProgressPercentage } from "@/stores/progress";
@@ -172,8 +173,12 @@ export function WatchPartyView({ id }: { id: string }) {
 
   const handleCopyCode = () => {
     if (roomCode) {
-      // Create URL with watchparty parameter
-      const url = new URL(window.location.href);
+      // Create URL with watchparty parameter based on APP_DOMAIN
+      const middlePart = conf().NORMAL_ROUTER ? "" : "/#";
+      const pathWithSearch =
+        window.location.href.split(window.location.origin + middlePart)[1] ||
+        window.location.pathname + window.location.search;
+      const url = new URL(`${conf().APP_DOMAIN}${pathWithSearch}`);
       url.searchParams.set("watchparty", roomCode);
       navigator.clipboard.writeText(url.toString());
       setHasCopiedShare(true);

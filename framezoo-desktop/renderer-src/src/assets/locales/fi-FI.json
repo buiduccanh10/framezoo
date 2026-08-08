@@ -1267,6 +1267,13 @@
       "title": "Tekstitykset",
       "verticalPositionLabel": "Pystysuora asento"
     },
+    "torrent": {
+      "title": "Stream Cache",
+      "maxSizeLabel": "Välimuistin enimmäiskoko",
+      "maxSizeDescription": "Aseta levytilan enimmäismäärä suoratoistotiedoston välimuistiin tallentamiseen. Jos välimuisti ylittää tämän rajan, vanhempi stream-tiedosto poistetaan.",
+      "unlimited": "Rajoittamaton",
+      "custom": "Mukautettu..."
+    },
     "unsaved": "Sinulla on tallentamattomia muutoksia..."
   },
   "tmdb": {

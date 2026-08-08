@@ -33,7 +33,19 @@
     "addonThree": "Community-extensies",
     "showcaseTitle": "Het scherm is de bestemming.",
     "showcaseDescription": "Een gericht bureaubladoppervlak voor ontdekken, afspelen en alles rondom het verhaal.",
-    "showcaseCaption": "FrameZoo Desktop / Focusmodus"
+    "showcaseCaption": "FrameZoo Desktop / Focusmodus",
+    "featureLabel": "De speler, op jouw manier",
+    "experienceTitle": "Alles wat je nodig hebt voor een beter horloge.",
+    "dualSubtitlesDescription": "Schakel dubbele ondertiteling in als je aan het leren, vergelijken bent of gewoon de voorkeur geeft aan beide.",
+    "dualSubtitles": "Houd twee ondertiteltalen zichtbaar",
+    "showcasePrimaryAlt": "FrameZoo-titeldetailscherm met artwork, beoordelingen, seizoenen en metadata",
+    "subtitleControlsDescription": "Kies ondertitelbron, taal, timing en weergave zonder uw stroom te onderbreken.",
+    "subtitleSyncDescription": "Lijn de openingsdialoog binnen enkele seconden uit met de afbeelding.",
+    "subtitleSync": "Synchroniseer ondertitels met AI",
+    "subtitleControls": "Stem de speler om je heen af",
+    "showcaseSecondaryDescription": "Begin vanaf een schoon ontdekkingsoppervlak en ga vervolgens naar het afspelen zonder uw plaats te verliezen.",
+    "showcaseSecondaryTitle": "Zoek iets dat de moeite waard is om te bekijken.",
+    "showcaseSecondaryAlt": "FrameZoo-ontdekkingsscherm met zoek-, categorieën- en titelrijen"
   },
   "download": {
     "eyebrow": "KIES UW BOUW",
@@ -50,7 +62,9 @@
     "error": "Kan de desktopversielijst niet laden.",
     "retry": "Probeer het opnieuw",
     "noBackend": "De downloadservice is niet geconfigureerd voor deze implementatie.",
-    "version": "Uitgave"
+    "version": "Uitgave",
+    "ready": "Klaar voor dit apparaat",
+    "hideAll": "Verberg andere builds"
   },
   "footer": {
     "line": "Een rustiger huis voor de verhalen waar je steeds naar terugkomt.",
@@ -80,5 +94,12 @@
     "advancedTitle": "Node-helper nodig?",
     "advancedLink": "Open geavanceerde SDK-referentie",
     "advancedDescription": "De Stremio Addon SDK is optioneel. Gebruik het als u routerings- en serialisatiehulpmiddelen nodig heeft; het is niet vereist door het protocol."
+  },
+  "deepLink": {
+    "opening": "FrameZoo openen...",
+    "retry": "Probeer de Desktop-app opnieuw te openen",
+    "download": "FrameZoo downloaden",
+    "openingDescription": "Uw browser probeert de FrameZoo Desktop-app te openen. Als er een prompt verschijnt, selecteer dan <1>Open FrameZoo</1>.",
+    "backHome": "Ga terug naar de startpagina"
   }
 }

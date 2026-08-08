@@ -1267,6 +1267,13 @@
       "title": "Feliratok",
       "verticalPositionLabel": "Függőleges elhelyezkedés"
     },
+    "torrent": {
+      "title": "Stream Cache",
+      "maxSizeLabel": "Maximális gyorsítótár mérete",
+      "maxSizeDescription": "Állítsa be a lemezterület maximális mennyiségét az adatfolyamfájlok gyorsítótárazásánál. Ha a gyorsítótár meghaladja ezt a korlátot, a régebbi adatfolyamfájl törlődik.",
+      "unlimited": "Korlátlan",
+      "custom": "Szokás..."
+    },
     "unsaved": "Mentetlen változtatásaid vannak..."
   },
   "tmdb": {

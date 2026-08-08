@@ -33,7 +33,19 @@
     "addonThree": "Rozszerzenia społecznościowe",
     "showcaseTitle": "Ekran jest celem.",
     "showcaseDescription": "Skoncentrowana powierzchnia pulpitu do odkrywania, odtwarzania i wszystkiego, co dotyczy historii.",
-    "showcaseCaption": "Tryb pulpitu / ostrości FrameZoo"
+    "showcaseCaption": "Tryb pulpitu / ostrości FrameZoo",
+    "subtitleSyncDescription": "W ciągu kilku sekund dopasuj początkowy dialog do obrazu.",
+    "dualSubtitlesDescription": "Włącz podwójne napisy, gdy się uczysz, porównujesz lub po prostu wolisz jedno i drugie.",
+    "subtitleSync": "Synchronizuj napisy z AI",
+    "featureLabel": "Gracz, na swój sposób",
+    "experienceTitle": "Wszystko, czego potrzebujesz, aby mieć lepszy zegarek.",
+    "dualSubtitles": "Zachowaj widoczność dwóch języków napisów",
+    "showcasePrimaryAlt": "Ekran szczegółów tytułu FrameZoo z grafiką, ocenami, porami roku i metadanymi",
+    "showcaseSecondaryDescription": "Zacznij od czystej powierzchni do odkrywania, a następnie rozpocznij odtwarzanie, nie tracąc miejsca.",
+    "subtitleControlsDescription": "Wybierz źródło napisów, język, czas i sposób wyświetlania, nie przerywając przepływu.",
+    "showcaseSecondaryAlt": "Ekran odkrywania FrameZoo z wyszukiwaniem, kategoriami i wierszami tytułów",
+    "showcaseSecondaryTitle": "Znajdź coś wartego obejrzenia.",
+    "subtitleControls": "Dostrój odtwarzacz wokół siebie"
   },
   "download": {
     "eyebrow": "WYBIERZ SWOJĄ KONSTRUKCJĘ",
@@ -50,7 +62,9 @@
     "error": "Nie można załadować listy wydań dla komputerów stacjonarnych.",
     "retry": "Spróbuj ponownie",
     "noBackend": "Usługa pobierania nie jest skonfigurowana dla tego wdrożenia.",
-    "version": "Uwolnienie"
+    "version": "Uwolnienie",
+    "ready": "Gotowy na to urządzenie",
+    "hideAll": "Ukryj inne kompilacje"
   },
   "footer": {
     "line": "Cichszy dom dla historii, do których wciąż wracasz.",
@@ -80,5 +94,12 @@
     "runTitle": "Uruchom, przetestuj, zainstaluj",
     "advancedTitle": "Potrzebujesz pomocnika Node?",
     "advancedLink": "Otwórz zaawansowane informacje o pakiecie SDK"
+  },
+  "deepLink": {
+    "opening": "Otwieranie ramkiZoo...",
+    "openingDescription": "Twoja przeglądarka próbuje otworzyć aplikację FrameZoo Desktop. Jeśli pojawi się monit, wybierz <1>Open FrameZoo</1>.",
+    "retry": "Spróbuj ponownie otworzyć aplikację komputerową",
+    "backHome": "Wróć do strony głównej",
+    "download": "Pobierz FrameZoo"
   }
 }

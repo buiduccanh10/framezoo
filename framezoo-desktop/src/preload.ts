@@ -121,6 +121,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:pip-action", handler);
     };
   },
+  onDeepLink(listener: (url: string) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, url: string) => {
+      listener(url);
+    };
+    ipcRenderer.on("desktop:deep-link", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:deep-link", handler);
+    };
+  },
   onAppUpdateState(listener: (state: unknown) => void) {
     const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
       listener(state);
@@ -153,6 +162,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   getTorrentStatus(sessionId: string): Promise<TorrentStatus | null> {
     return ipcRenderer.invoke("desktop:torrent-get-status", sessionId);
+  },
+  setTorrentMaxSize(size: string | null): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:set-torrent-max-size", size);
   },
   onTorrentStatus(listener: (status: TorrentStatus) => void) {
     const handler = (

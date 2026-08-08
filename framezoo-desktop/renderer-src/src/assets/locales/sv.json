@@ -1030,7 +1030,7 @@
       "infohash": "Infohash: {{infoHash}}",
       "network": "Torrent nätverk",
       "networkStatus": "Torrent nätverksstatus",
-      "peers": "Peers: {{count}}",
+      "peers": "Kamrater: {{count}}",
       "progress": "Framsteg: {{progress}}%",
       "speed": "Hastighet: {{speed}}",
       "states": {
@@ -1266,6 +1266,13 @@
       },
       "title": "Undertexter",
       "verticalPositionLabel": "Vertikal position"
+    },
+    "torrent": {
+      "title": "Streama cache",
+      "maxSizeLabel": "Maximal cachestorlek",
+      "maxSizeDescription": "Ställ in den maximala mängden diskutrymme som används för cachelagring av strömfil. Om cachen överskrider denna gräns kommer äldre stream-fil att raderas.",
+      "unlimited": "Obegränsat",
+      "custom": "Beställnings..."
     },
     "unsaved": "Du har osparade ändringar"
   },

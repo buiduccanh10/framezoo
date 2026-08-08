@@ -1257,6 +1257,13 @@
       "title": "Subtitles",
       "verticalPositionLabel": "Vertical position"
     },
+    "torrent": {
+      "title": "Stream Cache",
+      "maxSizeLabel": "Maximum Cache Size",
+      "maxSizeDescription": "Set the maximum amount of disk space use for caching stream file. If the cache exceeds this limit, older stream file will be deleted.",
+      "unlimited": "Unlimited",
+      "custom": "Custom..."
+    },
     "unsaved": "You have unsaved changes... "
   },
   "tmdb": {

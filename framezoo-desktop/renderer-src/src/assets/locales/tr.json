@@ -18,7 +18,7 @@
       "title": "Masaüstü Eklentileri"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Çerçeve Hayvanat Bahçesi",
       "stremio": "Stremio",
       "supportLabel": "Eklentiler için desteklenen platformlar:",
       "supported": "Desteklenen platformlar: FrameZoo ve Stremio"
@@ -312,7 +312,7 @@
       "subtitle": "Bu yardımı istediğiniz zaman göstermek için ` tuşunu basılı tutun",
       "title": "Klavye Kısayolları"
     },
-    "name": "FrameZoo",
+    "name": "Çerçeve Hayvanat Bahçesi",
     "pages": {
       "discover": "Keşfet",
       "login": "Giriş yap",
@@ -1266,6 +1266,13 @@
       },
       "title": "Altyazılar",
       "verticalPositionLabel": "Dikey konum"
+    },
+    "torrent": {
+      "title": "Akış Önbelleği",
+      "maxSizeLabel": "Maksimum Önbellek Boyutu",
+      "maxSizeDescription": "Akış dosyasını önbelleğe almak için kullanılacak maksimum disk alanı miktarını ayarlayın. Önbellek bu sınırı aşarsa eski akış dosyası silinir.",
+      "unlimited": "Sınırsız",
+      "custom": "Gelenek..."
     },
     "unsaved": "Kaydedilmemiş değişiklikleriniz mevcut"
   },

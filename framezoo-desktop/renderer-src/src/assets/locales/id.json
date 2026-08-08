@@ -18,7 +18,7 @@
       "title": "Tambahan Desktop"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "BingkaiKebun Binatang",
       "stremio": "tremio",
       "supportLabel": "Platform yang didukung untuk Addons:",
       "supported": "Platform yang didukung: FrameZoo dan Stremio"
@@ -1266,6 +1266,13 @@
       },
       "title": "Subtitle",
       "verticalPositionLabel": "Posisi vertikal"
+    },
+    "torrent": {
+      "title": "Aliran Cache",
+      "maxSizeLabel": "Ukuran Cache Maksimum",
+      "maxSizeDescription": "Tetapkan jumlah maksimum penggunaan ruang disk untuk menyimpan file streaming. Jika cache melebihi batas ini, file streaming lama akan dihapus.",
+      "unlimited": "Tak terbatas",
+      "custom": "Kebiasaan..."
     },
     "unsaved": "Anda memiliki perubahan yang belum disimpan"
   },

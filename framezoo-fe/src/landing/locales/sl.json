@@ -33,7 +33,19 @@
     "addonThree": "razširitve skupnosti",
     "showcaseTitle": "Zaslon je cilj.",
     "showcaseDescription": "Osredotočena površina namizja za odkrivanje, predvajanje in vse, kar je povezano z zgodbo.",
-    "showcaseCaption": "FrameZoo Desktop/Focus način"
+    "showcaseCaption": "FrameZoo Desktop/Focus način",
+    "subtitleSyncDescription": "V nekaj sekundah poravnajte začetni dialog s sliko.",
+    "featureLabel": "Igralec na svoj način",
+    "subtitleSync": "Sinhronizirajte podnapise z AI",
+    "dualSubtitlesDescription": "Dvojne podnapise vklopite, ko se učite, primerjate ali preprosto imate raje oboje.",
+    "experienceTitle": "Vse kar potrebujete za boljšo uro.",
+    "dualSubtitles": "Dva jezika podnapisov naj bodo vidna",
+    "showcaseSecondaryTitle": "Poiščite nekaj, kar je vredno ogleda.",
+    "subtitleControls": "Uglasite predvajalnik okoli sebe",
+    "showcaseSecondaryAlt": "Zaslon za odkrivanje FrameZoo z iskanjem, kategorijami in naslovnimi vrsticami",
+    "showcasePrimaryAlt": "Zaslon s podrobnostmi naslova FrameZoo z umetninami, ocenami, letnimi časi in metapodatki",
+    "subtitleControlsDescription": "Izberite vir podnapisov, jezik, čas in prikaz, ne da bi prekinili vaš tok.",
+    "showcaseSecondaryDescription": "Začnite s čiste površine za odkrivanje, nato se premaknite na predvajanje, ne da bi izgubili svoje mesto."
   },
   "download": {
     "eyebrow": "IZBERITE SVOJO ZGRADBO",
@@ -50,7 +62,9 @@
     "error": "Ni bilo mogoče naložiti seznama izdaj za namizne računalnike.",
     "retry": "poskusi ponovno",
     "noBackend": "Storitev prenosa ni konfigurirana za to uvedbo.",
-    "version": "Sprostitev"
+    "version": "Sprostitev",
+    "hideAll": "Skrij druge zgradbe",
+    "ready": "Pripravljen za to napravo"
   },
   "footer": {
     "line": "Tišji dom za zgodbe, h katerim se vedno znova vračate.",
@@ -80,5 +94,12 @@
     "advancedTitle": "Potrebujete pomočnika Node?",
     "advancedDescription": "Stremio Addon SDK ni obvezen. Uporabite ga, če želite pomočnike za usmerjanje in serializacijo; protokol ga ne zahteva.",
     "advancedLink": "Odpri napredno referenco SDK"
+  },
+  "deepLink": {
+    "opening": "Odpiranje FrameZoo ...",
+    "download": "Prenesite FrameZoo",
+    "retry": "Poskusite znova odpreti namizno aplikacijo",
+    "openingDescription": "Vaš brskalnik poskuša odpreti namizno aplikacijo FrameZoo. Če se prikaže poziv, izberite <1>Odpri FrameZoo</1>.",
+    "backHome": "Nazaj na domačo stran"
   }
 }

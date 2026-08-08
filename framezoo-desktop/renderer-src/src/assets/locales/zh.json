@@ -18,7 +18,7 @@
       "title": "桌面插件"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "框架动物园",
       "stremio": "斯特雷米奥",
       "supportLabel": "插件支持的平台：",
       "supported": "支持的平台：FrameZoo 和 Stremio"
@@ -1266,6 +1266,13 @@
       },
       "title": "字幕",
       "verticalPositionLabel": "垂直位置"
+    },
+    "torrent": {
+      "title": "流缓存",
+      "maxSizeLabel": "最大缓存大小",
+      "maxSizeDescription": "设置用于缓存流文件的最大磁盘空间量。如果缓存超过此限制，较旧的流文件将被删除。",
+      "unlimited": "无限",
+      "custom": "风俗..."
     },
     "unsaved": "您有未保存的更改…"
   },

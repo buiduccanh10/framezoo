@@ -18,7 +18,7 @@
       "title": "デスクトップアドオン"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "フレームズー",
       "stremio": "ストレミオ",
       "supportLabel": "アドオンがサポートされているプラ​​ットフォーム:",
       "supported": "サポートされているプラ​​ットフォーム: FrameZoo および Stremio"
@@ -1266,6 +1266,13 @@
       },
       "title": "字幕",
       "verticalPositionLabel": "縦位置"
+    },
+    "torrent": {
+      "title": "ストリームキャッシュ",
+      "maxSizeLabel": "最大キャッシュサイズ",
+      "maxSizeDescription": "ストリーム ファイルのキャッシュに使用するディスク領域の最大量を設定します。キャッシュがこの制限を超えると、古いストリーム ファイルが削除されます。",
+      "unlimited": "無制限",
+      "custom": "カスタム..."
     },
     "unsaved": "未保存の変更があります..."
   },

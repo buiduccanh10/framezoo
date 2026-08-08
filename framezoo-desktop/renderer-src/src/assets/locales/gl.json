@@ -1267,6 +1267,13 @@
       "title": "Subtítulos",
       "verticalPositionLabel": "Posición vertical"
     },
+    "torrent": {
+      "title": "Caché de fluxo",
+      "maxSizeLabel": "Tamaño máximo da caché",
+      "maxSizeDescription": "Establece a cantidade máxima de espazo no disco utilizado para almacenar na caché o ficheiro de fluxo. Se a caché supera este límite, eliminarase o ficheiro de fluxo máis antigo.",
+      "unlimited": "Ilimitado",
+      "custom": "Personalizado..."
+    },
     "unsaved": "Tes cambios sen gardar"
   },
   "tmdb": {

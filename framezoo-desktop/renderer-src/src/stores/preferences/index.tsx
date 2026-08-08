@@ -21,6 +21,7 @@ export interface PreferencesStore {
   enableAutoResumeOnPlaybackError: boolean;
   enableNumberKeySeeking: boolean;
   keyboardShortcuts: KeyboardShortcuts;
+  torrentMaxSize: string | null;
 
   setEnableAutoplay(v: boolean): void;
   setEnableSkipCredits(v: boolean): void;
@@ -35,6 +36,7 @@ export interface PreferencesStore {
   setEnableAutoResumeOnPlaybackError(v: boolean): void;
   setEnableNumberKeySeeking(v: boolean): void;
   setKeyboardShortcuts(v: KeyboardShortcuts): void;
+  setTorrentMaxSize(v: string | null): void;
 }
 
 export const usePreferencesStore = create(
@@ -53,6 +55,7 @@ export const usePreferencesStore = create(
       enableAutoResumeOnPlaybackError: true,
       enableNumberKeySeeking: true,
       keyboardShortcuts: DEFAULT_KEYBOARD_SHORTCUTS,
+      torrentMaxSize: null,
 
       setEnableAutoplay(v) {
         set((s) => {
@@ -117,6 +120,11 @@ export const usePreferencesStore = create(
       setKeyboardShortcuts(v) {
         set((s) => {
           s.keyboardShortcuts = v;
+        });
+      },
+      setTorrentMaxSize(v) {
+        set((s) => {
+          s.torrentMaxSize = v;
         });
       },
     })),

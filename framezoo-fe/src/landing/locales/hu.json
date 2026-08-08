@@ -33,7 +33,19 @@
     "addonThree": "Közösségi bővítések",
     "showcaseTitle": "A képernyő a cél.",
     "showcaseDescription": "Fókuszált asztali felület a felfedezéshez, lejátszáshoz és mindenhez, ami a történet körül van.",
-    "showcaseCaption": "FrameZoo asztali / fókusz mód"
+    "showcaseCaption": "FrameZoo asztali / fókusz mód",
+    "subtitleSync": "Szinkronizálja a feliratokat az AI-val",
+    "experienceTitle": "Minden, ami egy jobb órához kell.",
+    "featureLabel": "A játékos, a te utad",
+    "subtitleControls": "Hangolja be a lejátszót maga körül",
+    "subtitleSyncDescription": "Párosítsa a nyitó párbeszédet a képpel másodpercek alatt.",
+    "dualSubtitlesDescription": "Kapcsolja be a kettős feliratot, amikor tanul, összehasonlít, vagy egyszerűen mindkettőt részesíti előnyben.",
+    "dualSubtitles": "Két feliratnyelv legyen látható",
+    "subtitleControlsDescription": "Válassza ki a felirat forrását, nyelvét, időzítését és megjelenítését anélkül, hogy megszakítaná a folyamatot.",
+    "showcaseSecondaryTitle": "Találj valamit, amit érdemes megnézni.",
+    "showcaseSecondaryDescription": "Kezdje egy tiszta felfedezési felületről, majd lépjen lejátszásba anélkül, hogy elveszítené a helyét.",
+    "showcaseSecondaryAlt": "FrameZoo felfedező képernyő kereséssel, kategóriákkal és címsorokkal",
+    "showcasePrimaryAlt": "A FrameZoo címrészletek képernyője alkotásokkal, értékelésekkel, évszakokkal és metaadatokkal"
   },
   "download": {
     "eyebrow": "VÁLASZD KI AZ ÉPÜLETET",
@@ -50,7 +62,9 @@
     "error": "Nem sikerült betölteni az asztali kiadások listáját.",
     "retry": "Próbáld újra",
     "noBackend": "A letöltési szolgáltatás nincs konfigurálva ehhez a telepítéshez.",
-    "version": "Kiadás"
+    "version": "Kiadás",
+    "ready": "Készen áll erre az eszközre",
+    "hideAll": "Más buildek elrejtése"
   },
   "footer": {
     "line": "Egy csendesebb otthon a történetek számára, amelyekhez folyamatosan visszatér.",
@@ -80,5 +94,12 @@
     "advancedLink": "Nyissa meg a speciális SDK-referenciát",
     "advancedDescription": "A Stremio Addon SDK opcionális. Használja, ha útválasztási és szerializációs segítőket szeretne; a protokoll nem írja elő.",
     "advancedTitle": "Node segítőre van szüksége?"
+  },
+  "deepLink": {
+    "opening": "FrameZoo megnyitása...",
+    "download": "Töltse le a FrameZoo-t",
+    "retry": "Próbálja meg újra megnyitni az asztali alkalmazást",
+    "openingDescription": "A böngészője megpróbálja megnyitni a FrameZoo Desktop alkalmazást. Ha megjelenik egy üzenet, válassza az <1>Open FrameZoo</1> lehetőséget.",
+    "backHome": "Menjen vissza a kezdőlapra"
   }
 }

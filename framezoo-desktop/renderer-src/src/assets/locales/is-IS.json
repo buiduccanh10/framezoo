@@ -1267,6 +1267,13 @@
       "title": "Textar",
       "verticalPositionLabel": "Lóðrétt staða"
     },
+    "torrent": {
+      "title": "Straumskyndiminni",
+      "maxSizeLabel": "Hámarksstærð skyndiminni",
+      "maxSizeDescription": "Stilltu hámarksnotkun pláss fyrir skyndiminni straumskrár. Ef skyndiminni fer yfir þessi mörk verður eldri straumskránni eytt.",
+      "unlimited": "Ótakmarkað",
+      "custom": "Sérsniðin..."
+    },
     "unsaved": "Þú hefur óvistaðar breytingar"
   },
   "tmdb": {

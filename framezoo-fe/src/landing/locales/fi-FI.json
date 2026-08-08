@@ -33,7 +33,19 @@
     "addonThree": "Yhteisön laajennukset",
     "showcaseTitle": "Näyttö on määränpää.",
     "showcaseDescription": "Kohdistettu työpöytäpinta löytöjä, toistoa ja kaikkea tarinaa varten.",
-    "showcaseCaption": "FrameZoo Desktop / Focus -tila"
+    "showcaseCaption": "FrameZoo Desktop / Focus -tila",
+    "dualSubtitles": "Pidä kaksi tekstityskieltä näkyvissä",
+    "experienceTitle": "Kaikki mitä tarvitset parempaan kelloon.",
+    "subtitleSync": "Synkronoi tekstitykset tekoälyn kanssa",
+    "featureLabel": "Pelaaja, sinun tapasi",
+    "subtitleSyncDescription": "Kohdista aloitusdialogi kuvan kanssa sekunneissa.",
+    "subtitleControlsDescription": "Valitse tekstityksen lähde, kieli, ajoitus ja näyttö häiritsemättä kulkua.",
+    "dualSubtitlesDescription": "Ota kaksoistekstitys käyttöön, kun opit, vertaat tai pidät molemmista parempana.",
+    "subtitleControls": "Viritä soitin ympärilläsi",
+    "showcaseSecondaryTitle": "Etsi jotain katsomisen arvoista.",
+    "showcasePrimaryAlt": "FrameZoo-otsikon yksityiskohtien näyttö, jossa on taideteoksia, luokituksia, vuodenaikoja ja metatietoja",
+    "showcaseSecondaryDescription": "Aloita puhtaalta etsintäpinnalta ja siirry sitten toistoon menettämättä paikkaasi.",
+    "showcaseSecondaryAlt": "FrameZoo-etsintänäyttö, jossa on haku, luokat ja otsikkorivit"
   },
   "download": {
     "eyebrow": "VALITSE RAKENNUSSI",
@@ -50,7 +62,9 @@
     "error": "Työpöydän julkaisuluetteloa ei voitu ladata.",
     "retry": "Yritä uudelleen",
     "noBackend": "Latauspalvelua ei ole määritetty tälle käyttöönotolle.",
-    "version": "Vapauta"
+    "version": "Vapauta",
+    "ready": "Valmiina tätä laitetta varten",
+    "hideAll": "Piilota muut rakenteet"
   },
   "footer": {
     "line": "Hiljaisempi koti tarinoille, joihin palaat jatkuvasti.",
@@ -80,5 +94,12 @@
     ],
     "advancedLink": "Avaa edistynyt SDK-viite",
     "advancedDescription": "Stremio Addon SDK on valinnainen. Käytä sitä, jos haluat reitityksen ja serialisoinnin avustajia; sitä ei vaadita protokollassa."
+  },
+  "deepLink": {
+    "opening": "Avataan FrameZoo...",
+    "backHome": "Palaa etusivulle",
+    "retry": "Yritä avata Desktop App uudelleen",
+    "download": "Lataa FrameZoo",
+    "openingDescription": "Selaimesi yrittää avata FrameZoo Desktop -sovelluksen. Jos näyttöön tulee kehote, valitse <1>Open FrameZoo</1>."
   }
 }

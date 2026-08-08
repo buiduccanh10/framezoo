@@ -33,7 +33,19 @@
     "addonThree": "社区扩展",
     "showcaseTitle": "屏幕就是目的地。",
     "showcaseDescription": "一个专注于发现、播放和故事相关一切的桌面界面。",
-    "showcaseCaption": "FrameZoo 桌面/焦点模式"
+    "showcaseCaption": "FrameZoo 桌面/焦点模式",
+    "experienceTitle": "打造更好腕表所需的一切。",
+    "dualSubtitles": "保持两种字幕语言可见",
+    "dualSubtitlesDescription": "当您学习、比较或只是喜欢两者时，请打开双字幕。",
+    "subtitleSyncDescription": "在几秒钟内将开头对话与图片对齐。",
+    "subtitleSync": "与AI同步字幕",
+    "featureLabel": "玩家，你的方式",
+    "subtitleControlsDescription": "选择字幕源、语言、时间和显示，而不会中断您的流程。",
+    "subtitleControls": "调整你周围的播放器",
+    "showcaseSecondaryTitle": "找一些值得一看的东西。",
+    "showcasePrimaryAlt": "FrameZoo 标题详细信息屏幕，包含艺术品、评级、季节和元数据",
+    "showcaseSecondaryDescription": "从干净的发现界面开始，然后进入播放状态，而不会丢失您的位置。",
+    "showcaseSecondaryAlt": "FrameZoo 发现屏幕，包含搜索、类别和标题行"
   },
   "download": {
     "eyebrow": "选择您的构建",
@@ -50,7 +62,9 @@
     "error": "无法加载桌面版本列表。",
     "retry": "再试一次",
     "noBackend": "未为此部署配置下载服务。",
-    "version": "发布"
+    "version": "发布",
+    "ready": "准备好使用此设备",
+    "hideAll": "隐藏其他构建"
   },
   "footer": {
     "line": "一个更安静的家，供您不断回顾的故事。",
@@ -80,5 +94,12 @@
       "将清单 URL 粘贴到 FrameZoo Desktop > Addons 中。"
     ],
     "advancedDescription": "Stremio Addon SDK 是可选的。如果您需要路由和序列化助手，请使用它；协议没有要求。"
+  },
+  "deepLink": {
+    "openingDescription": "您的浏览器正在尝试打开 FrameZoo 桌面应用程序。如果出现提示，请选择<1>Open FrameZoo</1>。",
+    "download": "下载 FrameZoo",
+    "backHome": "返回首页",
+    "opening": "打开 FrameZoo...",
+    "retry": "尝试再次打开桌面应用程序"
   }
 }

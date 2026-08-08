@@ -18,7 +18,7 @@
       "title": "데스크탑 애드온"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "프레임주",
       "stremio": "스트레미오",
       "supportLabel": "애드온 지원 플랫폼:",
       "supported": "지원되는 플랫폼: FrameZoo 및 Stremio"
@@ -317,7 +317,7 @@
       "discover": "발견하다",
       "login": "로그인",
       "migration": "계정 마이그레이션",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - 프레임주",
       "register": "회원가입",
       "settings": "설정"
     }
@@ -1266,6 +1266,13 @@
       },
       "title": "자막",
       "verticalPositionLabel": "수직 위치"
+    },
+    "torrent": {
+      "title": "스트림 캐시",
+      "maxSizeLabel": "최대 캐시 크기",
+      "maxSizeDescription": "스트림 파일 캐싱에 사용되는 최대 디스크 공간을 설정합니다. 캐시가 이 제한을 초과하면 오래된 스트림 파일이 삭제됩니다.",
+      "unlimited": "제한 없는",
+      "custom": "관습..."
     },
     "unsaved": "저장하지 않은 변경 사항이 있습니다"
   },

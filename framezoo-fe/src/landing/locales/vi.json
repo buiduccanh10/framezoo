@@ -85,5 +85,12 @@
     "advancedDescription": "SDK bổ trợ Stremio là tùy chọn. Sử dụng nó nếu bạn muốn người trợ giúp định tuyến và tuần tự hóa; nó không được yêu cầu bởi giao thức.",
     "advancedTitle": "Cần một người trợ giúp Node?",
     "advancedLink": "Mở tài liệu tham khảo SDK nâng cao"
+  },
+  "deepLink": {
+    "opening": "Đang mở FrameZoo...",
+    "download": "Tải xuống FrameZoo",
+    "backHome": "Quay lại trang chủ",
+    "openingDescription": "Trình duyệt của bạn đang cố mở ứng dụng FrameZoo Desktop. Nếu lời nhắc xuất hiện, vui lòng chọn <1>Open FrameZoo</1>.",
+    "retry": "Hãy thử mở lại Ứng dụng máy tính để bàn"
   }
 }

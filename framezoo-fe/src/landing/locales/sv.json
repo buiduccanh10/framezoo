@@ -33,7 +33,19 @@
     "addonThree": "Community-tillägg",
     "showcaseTitle": "Skärmen är destinationen.",
     "showcaseDescription": "En fokuserad skrivbordsyta för upptäckt, uppspelning och allt runt historien.",
-    "showcaseCaption": "FrameZoo Desktop / Fokusläge"
+    "showcaseCaption": "FrameZoo Desktop / Fokusläge",
+    "dualSubtitles": "Håll två undertextspråk synliga",
+    "dualSubtitlesDescription": "Slå på dubbla undertexter när du lär dig, jämför eller helt enkelt föredrar båda.",
+    "featureLabel": "Spelaren, på ditt sätt",
+    "subtitleSyncDescription": "Rikta in öppningsdialogen med bilden på några sekunder.",
+    "subtitleSync": "Synkronisera undertexter med AI",
+    "experienceTitle": "Allt du behöver för en bättre klocka.",
+    "subtitleControls": "Ställ in spelaren runt dig",
+    "showcaseSecondaryTitle": "Hitta något värt att titta på.",
+    "subtitleControlsDescription": "Välj undertextkälla, språk, timing och visning utan att bryta ditt flöde.",
+    "showcaseSecondaryAlt": "FrameZoo upptäcktsskärm med sökning, kategorier och titelrader",
+    "showcaseSecondaryDescription": "Börja från en ren upptäcktsyta och gå sedan till uppspelning utan att förlora din plats.",
+    "showcasePrimaryAlt": "FrameZoo-titeldetaljskärm med konstverk, betyg, säsonger och metadata"
   },
   "download": {
     "eyebrow": "VÄLJ DIN BYGG",
@@ -50,7 +62,9 @@
     "error": "Det gick inte att ladda skrivbordsversionslistan.",
     "retry": "Försök igen",
     "noBackend": "Nedladdningstjänsten är inte konfigurerad för den här distributionen.",
-    "version": "Släppa"
+    "version": "Släppa",
+    "hideAll": "Dölj andra byggen",
+    "ready": "Klar för den här enheten"
   },
   "footer": {
     "line": "Ett lugnare hem för berättelserna du hela tiden kommer tillbaka till.",
@@ -80,5 +94,12 @@
     "advancedTitle": "Behöver du en nodhjälpare?",
     "advancedLink": "Öppna avancerad SDK-referens",
     "advancedDescription": "Stremio Addon SDK är valfritt. Använd den om du vill ha routing- och serialiseringshjälpare; det krävs inte av protokollet."
+  },
+  "deepLink": {
+    "opening": "Öppnar FrameZoo...",
+    "download": "Ladda ner FrameZoo",
+    "openingDescription": "Din webbläsare försöker öppna FrameZoo Desktop-appen. Om en prompt visas, välj <1>Open FrameZoo</1>.",
+    "retry": "Försök att öppna Desktop App igen",
+    "backHome": "Gå tillbaka till hemsidan"
   }
 }

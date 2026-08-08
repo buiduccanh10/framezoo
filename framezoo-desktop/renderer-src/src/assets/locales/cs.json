@@ -1267,6 +1267,13 @@
       "title": "Titulky",
       "verticalPositionLabel": "Vertikální poloha"
     },
+    "torrent": {
+      "title": "Mezipaměť streamu",
+      "maxSizeLabel": "Maximální velikost mezipaměti",
+      "maxSizeDescription": "Nastavte maximální množství místa na disku pro ukládání datového proudu do mezipaměti. Pokud mezipaměť překročí tento limit, starší soubor streamu bude smazán.",
+      "unlimited": "Neomezený",
+      "custom": "Zvyk..."
+    },
     "unsaved": "Máte neuložené změny"
   },
   "tmdb": {

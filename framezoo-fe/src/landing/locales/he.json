@@ -33,7 +33,19 @@
     "addonThree": "הרחבות קהילתיות",
     "showcaseTitle": "המסך הוא היעד.",
     "showcaseDescription": "משטח שולחני ממוקד לגילוי, השמעה וכל מה שמסביב לסיפור.",
-    "showcaseCaption": "FrameZoo שולחן עבודה / מצב פוקוס"
+    "showcaseCaption": "FrameZoo שולחן עבודה / מצב פוקוס",
+    "subtitleSyncDescription": "יישר את דיאלוג הפתיחה עם התמונה בשניות.",
+    "dualSubtitles": "השאר שתי שפות כתוביות גלויות",
+    "dualSubtitlesDescription": "הפעל כתוביות כפולות כאשר אתה לומד, משווה, או פשוט מעדיף את שניהם.",
+    "subtitleControlsDescription": "בחר מקור כתוביות, שפה, תזמון ותצוגה מבלי לשבור את הזרימה שלך.",
+    "experienceTitle": "כל מה שאתה צריך לשעון טוב יותר.",
+    "featureLabel": "השחקן, בדרך שלך",
+    "subtitleSync": "סנכרן כתוביות עם AI",
+    "subtitleControls": "כוונן את הנגן סביבך",
+    "showcaseSecondaryDescription": "התחל ממשטח גילוי נקי, ולאחר מכן עבור להפעלה מבלי לאבד את מקומך.",
+    "showcaseSecondaryAlt": "מסך גילוי FrameZoo עם חיפוש, קטגוריות ושורות כותרות",
+    "showcaseSecondaryTitle": "מצא משהו ששווה לראות.",
+    "showcasePrimaryAlt": "מסך פירוט הכותרת של FrameZoo עם יצירות אמנות, דירוגים, עונות ומטא נתונים"
   },
   "download": {
     "eyebrow": "בחר את המבנה שלך",
@@ -50,7 +62,9 @@
     "error": "לא ניתן לטעון את רשימת המהדורות של שולחן העבודה.",
     "retry": "נסה שוב",
     "noBackend": "שירות ההורדה אינו מוגדר לפריסה זו.",
-    "version": "לְשַׁחְרֵר"
+    "version": "לְשַׁחְרֵר",
+    "ready": "מוכן למכשיר הזה",
+    "hideAll": "הסתר מבנים אחרים"
   },
   "footer": {
     "line": "בית שקט יותר לסיפורים שאתה כל הזמן חוזר אליהם.",
@@ -80,5 +94,12 @@
     "runTitle": "הפעל, בדוק, התקן",
     "advancedLink": "פתח את הפניה מתקדמת של SDK",
     "advancedDescription": "ה-SDK של Stremio Addon הוא אופציונלי. השתמש בו אם אתה רוצה עוזרי ניתוב והסדרה; זה לא נדרש לפי הפרוטוקול."
+  },
+  "deepLink": {
+    "openingDescription": "הדפדפן שלך מנסה לפתוח את אפליקציית FrameZoo Desktop. אם מופיעה הנחיה, אנא בחר <1>Open FrameZoo</1>.",
+    "download": "הורד את FrameZoo",
+    "opening": "פותח את FrameZoo...",
+    "retry": "נסה לפתוח שוב את אפליקציית שולחן העבודה",
+    "backHome": "חזור לדף הבית"
   }
 }
