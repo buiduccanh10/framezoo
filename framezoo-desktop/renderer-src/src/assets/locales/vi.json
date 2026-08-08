@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Vị trí dọc"
     },
     "torrent": {
-      "title": "Truyền bộ nhớ đệm",
+      "title": "Phát trực tuyến",
       "maxSizeLabel": "Kích thước bộ đệm tối đa",
-      "maxSizeDescription": "Đặt mức sử dụng dung lượng ổ đĩa tối đa cho tệp luồng bộ nhớ đệm. Nếu bộ đệm vượt quá giới hạn này, tệp luồng cũ hơn sẽ bị xóa.",
+      "maxSizeDescription": "Thiết lập dung lượng đĩa tối đa được sử dụng để lưu trữ bộ nhớ đệm cho các tệp stream. Nếu bộ nhớ đệm vượt quá giới hạn này, các tệp stream cũ hơn sẽ được dọn dẹp.",
       "unlimited": "Không giới hạn",
       "custom": "Phong tục..."
     },

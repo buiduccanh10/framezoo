@@ -1258,9 +1258,9 @@
       "verticalPositionLabel": "Vertical position"
     },
     "torrent": {
-      "title": "Stream Cache",
+      "title": "Streaming",
       "maxSizeLabel": "Maximum Cache Size",
-      "maxSizeDescription": "Set the maximum amount of disk space use for caching stream file. If the cache exceeds this limit, older stream file will be deleted.",
+      "maxSizeDescription": "Set the maximum disk space used for caching stream files. If the cache exceeds this limit, older stream files will be cleared.",
       "unlimited": "Unlimited",
       "custom": "Custom..."
     },
