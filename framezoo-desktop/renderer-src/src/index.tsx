@@ -198,21 +198,8 @@ function MigrationRunner() {
 function TheRouter(props: { children: ReactNode }) {
   const normalRouter = conf().NORMAL_ROUTER;
 
-  if (normalRouter)
-    return (
-      <BrowserRouter
-        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-      >
-        {props.children}
-      </BrowserRouter>
-    );
-  return (
-    <HashRouter
-      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-    >
-      {props.children}
-    </HashRouter>
-  );
+  if (normalRouter) return <BrowserRouter>{props.children}</BrowserRouter>;
+  return <HashRouter>{props.children}</HashRouter>;
 }
 
 // Checks if the extension is installed

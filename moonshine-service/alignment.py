@@ -23,6 +23,9 @@ SEARCH_RANGE_MS = 180_000
 SEARCH_STEP_MS = 250
 REFINE_RANGE_MS = 750
 REFINE_STEP_MS = 25
+# Cue boundaries within this distance of a detected speech-interval boundary
+# are snapped onto it, removing residual per-cue error after the global shift.
+SNAP_RANGE_MS = 250
 
 
 @dataclass(frozen=True)
@@ -287,6 +290,49 @@ def find_best_offset(
     )
 
 
+def snap_aligned_cue(
+    cue: Cue,
+    offset_ms: int,
+    speech_intervals: list[tuple[int, int]],
+) -> tuple[int, int] | None:
+    """Return (start_ms, end_ms) in file coordinates for the aligned cue.
+
+    The cue is shifted by the global offset; if it overlaps a detected speech
+    interval, boundaries within SNAP_RANGE_MS of the interval are snapped onto
+    it. Returns None when the cue should be dropped (shifted entirely before
+    the file start).
+    """
+    shifted_start = cue.start_ms + offset_ms
+    shifted_end = cue.end_ms + offset_ms
+    if shifted_end <= 0:
+        return None
+
+    best_interval: tuple[int, int] | None = None
+    best_overlap = 0
+    for start_ms, end_ms in speech_intervals:
+        interval_overlap = overlap_ms(
+            shifted_start, shifted_end, start_ms, end_ms
+        )
+        if interval_overlap > best_overlap:
+            best_overlap = interval_overlap
+            best_interval = (start_ms, end_ms)
+
+    snapped_start = shifted_start
+    snapped_end = shifted_end
+    if best_interval is not None and best_overlap > 0:
+        interval_start, interval_end = best_interval
+        if abs(interval_start - shifted_start) <= SNAP_RANGE_MS:
+            snapped_start = interval_start
+        if abs(interval_end - shifted_end) <= SNAP_RANGE_MS:
+            snapped_end = interval_end
+
+    file_start = max(0, snapped_start - offset_ms)
+    file_end = max(0, snapped_end - offset_ms)
+    if file_end <= file_start:
+        return None
+    return file_start, file_end
+
+
 def build_cleaned_vtt(
     vtt: str,
     cues: list[Cue],
@@ -295,24 +341,15 @@ def build_cleaned_vtt(
     audio_start_ms: int,
     audio_end_ms: int,
 ) -> str:
+    """Rewrite the VTT with aligned timings.
+
+    Every cue is shifted by the global offset and boundaries near a detected
+    speech interval are snapped onto it. Unlike dropping unaligned cues inside
+    the analysis window, every cue is kept so subtitles never permanently
+    disappear where the user is currently watching.
+    """
     if not cues or not speech_intervals:
         return vtt
-
-    keep_indexes: set[int] = set()
-    for cue in cues:
-        shifted_start = cue.start_ms + offset_ms
-        shifted_end = cue.end_ms + offset_ms
-        if shifted_end <= 0:
-            continue
-        if shifted_end <= audio_start_ms or shifted_start >= audio_end_ms:
-            keep_indexes.add(cue.index)
-            continue
-        cue_overlap = sum(
-            overlap_ms(shifted_start, shifted_end, start_ms, end_ms)
-            for start_ms, end_ms in speech_intervals
-        )
-        if cue_overlap >= MIN_SPEECH_INTERVAL_MS:
-            keep_indexes.add(cue.index)
 
     cue_by_block = {cue.block: cue for cue in cues}
     output_blocks: list[str] = []
@@ -321,8 +358,24 @@ def build_cleaned_vtt(
         if cue is None:
             output_blocks.append(block)
             continue
-        if cue.index in keep_indexes:
-            output_blocks.append(block)
+
+        aligned = snap_aligned_cue(cue, offset_ms, speech_intervals)
+        if aligned is None:
+            continue
+        file_start, file_end = aligned
+
+        lines = block.splitlines()
+        for index, line in enumerate(lines):
+            match = TIMING_RE.match(line)
+            if match is None:
+                continue
+            lines[index] = (
+                f"{format_timestamp(file_start)} --> {format_timestamp(file_end)}"
+                + line[match.end(2) :]
+            )
+            break
+        output_blocks.append("\n".join(lines))
+
     return "\n\n".join(output_blocks).strip() + "\n"
 
 

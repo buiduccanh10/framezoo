@@ -160,6 +160,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let playbackRate = 1;
   let paused = true;
   let isSeeking = false;
+  // Set while a seek command is in flight. mpv reports stale time-pos while
+  // seeking, so time updates are held back until the position matches the
+  // seek target. This keeps the subtitle overlay from flashing cues for a
+  // position the video has not reached yet.
+  let pendingSeekTarget: number | null = null;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
@@ -539,6 +544,15 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     switch (event.name) {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
+          if (pendingSeekTarget !== null) {
+            if (Math.abs(event.data - pendingSeekTarget) <= 0.5) {
+              pendingSeekTarget = null;
+            } else {
+              // Stale position while the seek is in flight — hold the last
+              // stable time so the subtitle overlay does not flicker.
+              break;
+            }
+          }
           time = Math.max(0, event.data);
           emit("time", time);
           if (time > bufferedTime) {
@@ -765,6 +779,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         generation = 0;
         desiredPaused = true;
         pendingLoad = null;
+        pendingSeekTarget = null;
         const playerToDestroy = playerId;
         playerId = null;
         tracks = [];
@@ -785,6 +800,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       generation = requestGeneration;
       fileLoaded = false; // reset for new load
       firstFrameLoggedGeneration = -1;
+      pendingSeekTarget = null;
       loadStartedAt = performance.now();
       const requestedSource = ops.source;
       const headers = sourceHeaders(requestedSource);
@@ -883,7 +899,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         Math.min(nextTime, duration > 0 ? duration : Number.POSITIVE_INFINITY),
       );
       time = clamped;
-      emit("time", clamped);
+      pendingSeekTarget = clamped;
+      // Deliberately no "time" emit here: the rendered frame has not caught
+      // up to the target yet, and forwarding the target optimistically makes
+      // subtitles pop in ahead of the video. "time" is emitted from the
+      // time-pos handler once the seek settles.
       void sendNativeCommand(playerId, {
         type: "seek",
         time: clamped,

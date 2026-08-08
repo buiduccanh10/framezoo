@@ -674,4 +674,75 @@ describe("libmpv display", () => {
       "display:load-empty-source",
     );
   });
+
+  it("holds time updates until the seek target is reached", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: "property";
+          name: string;
+          data: unknown;
+        }) => void)
+      | undefined;
+    const seekCommands: number[] = [];
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; time?: number }) => {
+          if (command.type === "seek") seekCommands.push(command.time ?? -1);
+          return Promise.resolve(true);
+        },
+      ),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const timePos = (time: number) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "property",
+        name: "time-pos",
+        data: time,
+      });
+
+    timePos(10);
+    expect(times).toEqual([10]);
+
+    // Seek: mpv reports the stale pre-seek position, then settles on target.
+    display.setTime(60);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(seekCommands).toEqual([60]);
+    expect(times).toEqual([10]);
+
+    timePos(10.4);
+    expect(times).toEqual([10]);
+
+    timePos(50);
+    expect(times).toEqual([10]);
+
+    timePos(60);
+    expect(times).toEqual([10, 60]);
+
+    display.destroy();
+  });
 });

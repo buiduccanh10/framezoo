@@ -85,7 +85,7 @@ How are you?
         self.assertAlmostEqual(offset_ms, -30_000, delta=750)
         self.assertGreater(score, 0.4)
 
-    def test_drops_leading_non_speech_cue_after_alignment(self):
+    def test_drops_cue_shifted_before_file_start_after_alignment(self):
         vtt = """WEBVTT
 
 00:00:00.000 --> 00:00:05.000
@@ -106,6 +106,81 @@ Hello
 
         self.assertNotIn("Subscribe now", cleaned)
         self.assertIn("Hello", cleaned)
+
+    def test_keeps_in_window_cue_without_speech_overlap(self):
+        vtt = """WEBVTT
+
+00:00:10.000 --> 00:00:14.000
+Music only
+
+00:00:20.000 --> 00:00:24.000
+Hello
+"""
+        cues = parse_vtt(vtt)
+        cleaned = build_cleaned_vtt(
+            vtt,
+            cues,
+            [(0, 4_000)],
+            0,
+            0,
+            20_000,
+        )
+
+        self.assertIn("Music only", cleaned)
+
+    def test_snaps_cue_boundaries_to_speech_within_cap(self):
+        vtt = """WEBVTT
+
+00:00:05.250 --> 00:00:08.750
+Hello
+"""
+        cues = parse_vtt(vtt)
+        cleaned = build_cleaned_vtt(
+            vtt,
+            cues,
+            [(5_000, 9_000)],
+            0,
+            0,
+            20_000,
+        )
+
+        self.assertIn("00:00:05.000 --> 00:00:09.000", cleaned)
+
+    def test_keeps_cue_when_speech_snap_exceeds_cap(self):
+        vtt = """WEBVTT
+
+00:00:05.600 --> 00:00:08.600
+Hello
+"""
+        cues = parse_vtt(vtt)
+        cleaned = build_cleaned_vtt(
+            vtt,
+            cues,
+            [(5_000, 9_000)],
+            0,
+            0,
+            20_000,
+        )
+
+        self.assertIn("00:00:05.600 --> 00:00:08.600", cleaned)
+
+    def test_snaps_cue_after_global_offset(self):
+        vtt = """WEBVTT
+
+00:00:35.250 --> 00:00:38.750
+Hello
+"""
+        cues = parse_vtt(vtt)
+        cleaned = build_cleaned_vtt(
+            vtt,
+            cues,
+            [(5_000, 9_000)],
+            -30_000,
+            0,
+            20_000,
+        )
+
+        self.assertIn("00:00:35.000 --> 00:00:39.000", cleaned)
 
     def test_batch_alignment_transcribes_audio_once_for_both_tracks(self):
         primary_vtt = """WEBVTT
