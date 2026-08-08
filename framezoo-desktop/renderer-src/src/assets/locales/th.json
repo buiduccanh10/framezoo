@@ -18,7 +18,7 @@
       "title": "ส่วนเสริมเดสก์ท็อป"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "เฟรมซู",
       "stremio": "สเตรมีโอ",
       "supportLabel": "แพลตฟอร์มที่รองรับสำหรับ Addons:",
       "supported": "แพลตฟอร์มที่รองรับ: FrameZoo และ Stremio"
@@ -1266,6 +1266,13 @@
       },
       "title": "คำบรรยาย",
       "verticalPositionLabel": "ตำแหน่งแนวตั้ง"
+    },
+    "torrent": {
+      "title": "สตรีมแคช",
+      "maxSizeLabel": "ขนาดแคชสูงสุด",
+      "maxSizeDescription": "ตั้งค่าจำนวนพื้นที่ดิสก์สูงสุดที่ใช้สำหรับแคชไฟล์สตรีม หากแคชเกินขีดจำกัดนี้ ไฟล์สตรีมเก่าจะถูกลบ",
+      "unlimited": "ไม่จำกัด",
+      "custom": "กำหนดเอง..."
     },
     "unsaved": "คุณได้บันทึกการเปลี่ยนแปลงแล้ว"
   },

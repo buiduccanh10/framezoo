@@ -1267,6 +1267,13 @@
       "title": "Sottotitoli",
       "verticalPositionLabel": "Posizione verticale"
     },
+    "torrent": {
+      "title": "Cache del flusso",
+      "maxSizeLabel": "Dimensione massima della cache",
+      "maxSizeDescription": "Imposta la quantità massima di spazio su disco utilizzato per la memorizzazione nella cache del file di flusso. Se la cache supera questo limite, il file di flusso più vecchio verrà eliminato.",
+      "unlimited": "Illimitato",
+      "custom": "Costume..."
+    },
     "unsaved": "Hai modifiche non salvate... "
   },
   "tmdb": {

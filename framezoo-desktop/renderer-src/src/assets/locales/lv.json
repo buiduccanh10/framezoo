@@ -1267,6 +1267,13 @@
       "title": "Subtitri",
       "verticalPositionLabel": "Vertikālā pozīcija"
     },
+    "torrent": {
+      "title": "Straumes kešatmiņa",
+      "maxSizeLabel": "Maksimālais kešatmiņas lielums",
+      "maxSizeDescription": "Iestatiet maksimālo diska vietas daudzumu, kas tiek izmantots straumes faila saglabāšanai kešatmiņā. Ja kešatmiņa pārsniedz šo ierobežojumu, vecāks straumes fails tiks dzēsts.",
+      "unlimited": "Neierobežots",
+      "custom": "Pielāgots..."
+    },
     "unsaved": "Jums ir nesaglabātas izmaiņas"
   },
   "tmdb": {

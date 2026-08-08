@@ -18,7 +18,7 @@
       "title": "Complementos de escritorio"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "marcozoo",
       "stremio": "estremio",
       "supportLabel": "Plataformas compatibles para complementos:",
       "supported": "Plataformas compatibles: FrameZoo y Stremio"
@@ -1266,6 +1266,13 @@
       },
       "title": "Subtítulos",
       "verticalPositionLabel": "posición vertical"
+    },
+    "torrent": {
+      "title": "Caché de transmisión",
+      "maxSizeLabel": "Tamaño máximo de caché",
+      "maxSizeDescription": "Establezca la cantidad máxima de uso de espacio en disco para almacenar en caché el archivo de flujo. Si el caché excede este límite, se eliminará el archivo de secuencia más antiguo.",
+      "unlimited": "Ilimitado",
+      "custom": "Costumbre..."
     },
     "unsaved": "Tienes cambios sin guardar"
   },

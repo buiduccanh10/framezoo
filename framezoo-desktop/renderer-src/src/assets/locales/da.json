@@ -1267,6 +1267,13 @@
       "title": "Undertekster",
       "verticalPositionLabel": "Lodret position"
     },
+    "torrent": {
+      "title": "Stream cache",
+      "maxSizeLabel": "Maksimal cachestørrelse",
+      "maxSizeDescription": "Indstil den maksimale mængde diskplads, der bruges til cachelagring af streamfil. Hvis cachen overskrider denne grænse, vil ældre stream-fil blive slettet.",
+      "unlimited": "Ubegrænset",
+      "custom": "Skik..."
+    },
     "unsaved": "Du har ændringer, der ikke er gemt... "
   },
   "tmdb": {

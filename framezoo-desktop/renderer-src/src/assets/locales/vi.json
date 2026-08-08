@@ -18,7 +18,7 @@
       "title": "Thêm Addons"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "KhungZoo",
       "stremio": "Stremio",
       "supportLabel": "Nền tảng hỗ trợ Addons:",
       "supported": "Nền tảng được hỗ trợ Addons: Stremio và FrameZoo"
@@ -312,7 +312,7 @@
       "subtitle": "Giữ phím ` để hiển thị trợ giúp này bất cứ lúc nào",
       "title": "Phím tắt bàn phím"
     },
-    "name": "FrameZoo",
+    "name": "KhungZoo",
     "pages": {
       "discover": "Khám phá",
       "login": "Đăng nhập",
@@ -1030,7 +1030,7 @@
       "infohash": "Infor hash: {{infoHash}}",
       "network": "Mạng torrent",
       "networkStatus": "Trạng thái mạng torrent",
-      "peers": "Peers: {{count}}",
+      "peers": "Đồng nghiệp: {{count}}",
       "progress": "Tiến độ: {{progress}}%",
       "speed": "Tốc độ: {{speed}}",
       "states": {
@@ -1266,6 +1266,13 @@
       },
       "title": "Phụ đề",
       "verticalPositionLabel": "Vị trí dọc"
+    },
+    "torrent": {
+      "title": "Truyền bộ nhớ đệm",
+      "maxSizeLabel": "Kích thước bộ đệm tối đa",
+      "maxSizeDescription": "Đặt mức sử dụng dung lượng ổ đĩa tối đa cho tệp luồng bộ nhớ đệm. Nếu bộ đệm vượt quá giới hạn này, tệp luồng cũ hơn sẽ bị xóa.",
+      "unlimited": "Không giới hạn",
+      "custom": "Phong tục..."
     },
     "unsaved": "Bạn có thay đổi chưa lưu... "
   },

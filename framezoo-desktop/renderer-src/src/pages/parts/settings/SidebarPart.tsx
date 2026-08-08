@@ -53,6 +53,11 @@ export function SidebarPart(props: {
         id: "settings-captions",
         icon: Icons.CAPTIONS,
       },
+      {
+        textKey: "settings.torrent.title",
+        id: "settings-torrent",
+        icon: Icons.DOWNLOAD,
+      },
       ...(props.showConnections
         ? [
             {

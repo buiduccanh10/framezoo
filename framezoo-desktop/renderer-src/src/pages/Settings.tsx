@@ -44,6 +44,7 @@ import { scrollToElement, scrollToHash } from "@/utils/scroll";
 
 import { SubPageLayout } from "./layouts/SubPageLayout";
 import { PreferencesPart } from "./parts/settings/PreferencesPart";
+import { TorrentPart } from "./parts/settings/TorrentPart";
 
 function SettingsLayout(props: {
   className?: string;
@@ -179,6 +180,7 @@ export function SettingsPage() {
       "settings-preferences",
       "settings-appearance",
       "settings-captions",
+      "settings-torrent",
       ...(shouldShowConnections ? ["settings-connection"] : []),
     ],
     [shouldShowConnections],
@@ -815,6 +817,13 @@ export function SettingsPage() {
                 secondaryStyling={state.secondarySubtitleStyling.state}
                 setSecondaryStyling={state.secondarySubtitleStyling.set}
               />
+            </div>
+          )}
+          {(searchQuery.trim() ||
+            !selectedCategory ||
+            selectedCategory === "settings-torrent") && (
+            <div id="settings-torrent">
+              <TorrentPart />
             </div>
           )}
           {shouldShowConnections &&

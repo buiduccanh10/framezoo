@@ -47,6 +47,7 @@ declare global {
       startTorrent?: (request: TorrentStartRequest) => Promise<TorrentSession>;
       stopTorrent?: (sessionId: string) => Promise<boolean>;
       getTorrentStatus?: (sessionId: string) => Promise<TorrentStatus | null>;
+      setTorrentMaxSize?: (size: string | null) => Promise<boolean>;
       onTorrentStatus?: (
         listener: (status: TorrentStatus) => void,
       ) => () => void;

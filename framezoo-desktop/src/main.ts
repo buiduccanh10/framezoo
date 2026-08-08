@@ -990,11 +990,27 @@ function registerIpcHandlers() {
     } catch {
       // ignore
     }
+    
+    let maxBytes = 5 * 1024 * 1024 * 1024; // Default 5GB
+    if (process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES) {
+      const parsed = parseInt(process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES, 10);
+      if (!isNaN(parsed)) maxBytes = parsed;
+    }
+
     return {
       path: torrentDir,
       usedBytes: totalBytes,
-      maxBytes: 5 * 1024 * 1024 * 1024,
+      maxBytes,
     };
+  });
+
+  ipcMain.handle("desktop:set-torrent-max-size", async (_event, size: string | null) => {
+    if (size) {
+      process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES = size;
+    } else {
+      delete process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES;
+    }
+    return true;
   });
 
   ipcMain.handle("desktop:torrent-clear-storage", async () => {

@@ -42,6 +42,7 @@ import {
   useOverlayStack,
 } from "@/stores/interface/overlayStack";
 import { LanguageProvider } from "@/stores/language";
+import { usePreferencesStore } from "@/stores/preferences";
 
 const PlayerView = lazyWithPreload(() => import("@/pages/PlayerView"));
 const DesktopPipPage = lazyWithPreload(() => import("@/pages/DesktopPip"));
@@ -161,6 +162,13 @@ function App() {
       return cleanup;
     }
   }, [navigate]);
+
+  const torrentMaxSize = usePreferencesStore((s) => s.torrentMaxSize);
+  useEffect(() => {
+    if (window.electronAPI?.setTorrentMaxSize) {
+      window.electronAPI.setTorrentMaxSize(torrentMaxSize).catch(() => {});
+    }
+  }, [torrentMaxSize]);
 
   return (
     <Layout>

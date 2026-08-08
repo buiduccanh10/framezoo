@@ -18,7 +18,7 @@
       "title": "桌面插件"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "框架動物園",
       "stremio": "斯特雷米奧",
       "supportLabel": "插件支援的平台：",
       "supported": "支援的平台：FrameZoo 和 Stremio"
@@ -1266,6 +1266,13 @@
       },
       "title": "字幕",
       "verticalPositionLabel": "垂直位置"
+    },
+    "torrent": {
+      "title": "串流緩存",
+      "maxSizeLabel": "最大快取大小",
+      "maxSizeDescription": "設定用於快取流檔案的最大磁碟空間量。如果快取超過此限制，較舊的串流檔案將被刪除。",
+      "unlimited": "無限",
+      "custom": "風俗..."
     },
     "unsaved": "您有未儲存的變更"
   },

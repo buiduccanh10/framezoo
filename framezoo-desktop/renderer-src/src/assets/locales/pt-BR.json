@@ -18,7 +18,7 @@
       "title": "Complementos para área de trabalho"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "QuadroZoo",
       "stremio": "Strémio",
       "supportLabel": "Plataformas suportadas para complementos:",
       "supported": "Plataformas suportadas: FrameZoo e Stremio"
@@ -312,12 +312,12 @@
       "subtitle": "Segure ` para mostrar esta ajuda a qualquer momento",
       "title": "Atalhos de teclado"
     },
-    "name": "FrameZoo",
+    "name": "QuadroZoo",
     "pages": {
       "discover": "Descubra",
       "login": "Entrar",
       "migration": "Migrar conta",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - QuadroZoo",
       "register": "Registrar",
       "settings": "Configurações"
     }
@@ -1266,6 +1266,13 @@
       },
       "title": "Legendas",
       "verticalPositionLabel": "Posição vertical"
+    },
+    "torrent": {
+      "title": "Cache de fluxo",
+      "maxSizeLabel": "Tamanho máximo do cache",
+      "maxSizeDescription": "Defina a quantidade máxima de espaço em disco usado para armazenar em cache o arquivo de fluxo. Se o cache exceder esse limite, o arquivo de fluxo mais antigo será excluído.",
+      "unlimited": "Ilimitado",
+      "custom": "Personalizado..."
     },
     "unsaved": "Você tem alterações não salvas"
   },

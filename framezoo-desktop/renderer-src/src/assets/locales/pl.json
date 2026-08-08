@@ -18,7 +18,7 @@
       "title": "Dodatki do komputerów stacjonarnych"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "RamaZoo",
       "stremio": "Stremio",
       "supportLabel": "Obsługiwane platformy dla dodatków:",
       "supported": "Obsługiwane platformy: FrameZoo i Stremio"
@@ -312,7 +312,7 @@
       "subtitle": "Przytrzymaj `, aby wyświetlić tę pomoc w dowolnym momencie",
       "title": "Skróty klawiaturowe"
     },
-    "name": "FrameZoo",
+    "name": "RamaZoo",
     "pages": {
       "discover": "Odkrywaj",
       "login": "Zaloguj sie",
@@ -1266,6 +1266,13 @@
       },
       "title": "Napisy",
       "verticalPositionLabel": "Pozycja pionowa"
+    },
+    "torrent": {
+      "title": "Pamięć podręczna strumieniowa",
+      "maxSizeLabel": "Maksymalny rozmiar pamięci podręcznej",
+      "maxSizeDescription": "Ustaw maksymalną ilość miejsca na dysku wykorzystywanego do buforowania pliku strumieniowego. Jeśli pamięć podręczna przekroczy ten limit, starszy plik strumieniowy zostanie usunięty.",
+      "unlimited": "Nieograniczony",
+      "custom": "Zwyczaj..."
     },
     "unsaved": "Masz niezapisane zmiany"
   },

@@ -1267,6 +1267,13 @@
       "title": "Untertitel",
       "verticalPositionLabel": "Vertikale Position"
     },
+    "torrent": {
+      "title": "Stream-Cache",
+      "maxSizeLabel": "Maximale Cache-Größe",
+      "maxSizeDescription": "Legen Sie die maximale Speicherplatznutzung für die Zwischenspeicherung der Stream-Datei fest. Wenn der Cache diesen Grenzwert überschreitet, werden ältere Streamdateien gelöscht.",
+      "unlimited": "Unbegrenzt",
+      "custom": "Brauch..."
+    },
     "unsaved": "Du hast ungespeicherte Änderungen"
   },
   "tmdb": {

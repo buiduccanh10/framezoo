@@ -1267,6 +1267,13 @@
       "title": "Subtítols",
       "verticalPositionLabel": "Posició vertical"
     },
+    "torrent": {
+      "title": "Stream Cache",
+      "maxSizeLabel": "Mida màxima de la memòria cau",
+      "maxSizeDescription": "Estableix la quantitat màxima d'espai en disc per a la memòria cau del fitxer de flux. Si la memòria cau supera aquest límit, se suprimirà el fitxer de reproducció anterior.",
+      "unlimited": "Il·limitat",
+      "custom": "Personalitzat..."
+    },
     "unsaved": "Tens canvis no desats..."
   },
   "tmdb": {

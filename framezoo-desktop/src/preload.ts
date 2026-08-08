@@ -163,6 +163,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getTorrentStatus(sessionId: string): Promise<TorrentStatus | null> {
     return ipcRenderer.invoke("desktop:torrent-get-status", sessionId);
   },
+  setTorrentMaxSize(size: string | null): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:set-torrent-max-size", size);
+  },
   onTorrentStatus(listener: (status: TorrentStatus) => void) {
     const handler = (
       _event: Electron.IpcRendererEvent,

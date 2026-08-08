@@ -1267,6 +1267,13 @@
       "title": "Subtitluri",
       "verticalPositionLabel": "Poziție verticală"
     },
+    "torrent": {
+      "title": "Stream Cache",
+      "maxSizeLabel": "Dimensiunea maximă a memoriei cache",
+      "maxSizeDescription": "Setați cantitatea maximă de spațiu pe disc utilizată pentru stocarea în cache a fișierului flux. Dacă memoria cache depășește această limită, fișierul de flux mai vechi va fi șters.",
+      "unlimited": "Nelimitat",
+      "custom": "Personalizat..."
+    },
     "unsaved": "Aveți modificări nesalvate"
   },
   "tmdb": {
