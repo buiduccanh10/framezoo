@@ -1030,7 +1030,7 @@
       "infohash": "Infor hash: {{infoHash}}",
       "network": "Mạng torrent",
       "networkStatus": "Trạng thái mạng torrent",
-      "peers": "Đồng nghiệp: {{count}}",
+      "peers": "Peers: {{count}}",
       "progress": "Tiến độ: {{progress}}%",
       "speed": "Tốc độ: {{speed}}",
       "states": {
