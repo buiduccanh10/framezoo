@@ -1272,7 +1272,7 @@
       "maxSizeLabel": "Kích thước bộ đệm tối đa",
       "maxSizeDescription": "Thiết lập dung lượng đĩa tối đa được sử dụng để lưu trữ bộ nhớ đệm cho các tệp stream. Nếu bộ nhớ đệm vượt quá giới hạn này, các tệp stream cũ hơn sẽ được dọn dẹp.",
       "unlimited": "Không giới hạn",
-      "custom": "Phong tục..."
+      "custom": "Tùy chỉnh..."
     },
     "unsaved": "Bạn có thay đổi chưa lưu... "
   },
