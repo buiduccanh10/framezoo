@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Atruna",
-      "disclaimerText": "FrameZoo nodrošina drošu, modernu un vienmērīgu straumēšanas atskaņotāju ar viegli lietojamu interfeisu un augstas kvalitātes atskaņošanu atbalstītajās ierīcēs. Tajā netiek mitināti multivides faili, netiek izmantots avota katalogs un netiek ieteikti konkrēti papildinājumi. Izvēles papildinājumus konfigurē lietotāji, kuri ir atbildīgi par likumīgu avotu izmantošanu."
+      "disclaimerText": "FrameZoo piedāvā drošu, modernu un nevainojamu izklaides pieredzi. Izmantojot tā ērti lietojamo saskarni un daudzveidīgo satura bibliotēku, tostarp 4K HDR atbalstu, lietotāji var baudīt savas iecienītākās filmas un TV pārraides. Un ar savu apņemšanos nodrošināt drošību, FrameZoo ir labākā izvēle bezrūpīgai augstas kvalitātes straumēšanas pieredzei."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Vertikālā pozīcija"
     },
     "torrent": {
-      "title": "Straumes kešatmiņa",
+      "title": "Straumēšana",
       "maxSizeLabel": "Maksimālais kešatmiņas lielums",
-      "maxSizeDescription": "Iestatiet maksimālo diska vietas daudzumu, kas tiek izmantots straumes faila saglabāšanai kešatmiņā. Ja kešatmiņa pārsniedz šo ierobežojumu, vecāks straumes fails tiks dzēsts.",
+      "maxSizeDescription": "Iestatiet maksimālo diska vietu, kas tiek izmantota straumes failu saglabāšanai kešatmiņā. Ja kešatmiņa pārsniedz šo ierobežojumu, vecāki straumes faili tiks notīrīti.",
       "unlimited": "Neierobežots",
       "custom": "Pielāgots..."
     },

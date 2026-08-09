@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Lahtiütlemine",
-      "disclaimerText": "FrameZoo pakub turvalist, kaasaegset ja sujuvat voogedastust, millel on lihtsalt kasutatav liides ja kvaliteetne taasesitus kõigis toetatud seadmetes. See ei majuta meediumifaile, ei kasuta lähtekataloogi ega soovita konkreetseid lisandmooduleid. Valikulised lisandmoodulid konfigureerivad kasutajad, kes vastutavad seaduslike allikate kasutamise eest."
+      "disclaimerText": "FrameZoo pakub turvalist, kaasaegset ja sujuvat meelelahutuskogemust. Selle hõlpsasti kasutatava liidese ja mitmekesise sisukogu, sealhulgas 4K HDR-toega, saavad kasutajad nautida oma lemmikfilme ja telesaateid. Tänu oma turvalisusele on FrameZoo parim valik muretu ja kvaliteetse voogesituse jaoks."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Vertikaalne asend"
     },
     "torrent": {
-      "title": "Voo vahemälu",
+      "title": "Voogesitus",
       "maxSizeLabel": "Maksimaalne vahemälu suurus",
-      "maxSizeDescription": "Määrake voofaili vahemällu salvestamiseks kasutatava kettaruumi maksimaalne arv. Kui vahemälu ületab selle limiidi, kustutatakse vanem voofail.",
+      "maxSizeDescription": "Määrake voofailide vahemällu salvestamiseks kasutatav maksimaalne kettaruum. Kui vahemälu ületab selle limiidi, kustutatakse vanemad voofailid.",
       "unlimited": "Piiramatu",
       "custom": "Kohandatud..."
     },

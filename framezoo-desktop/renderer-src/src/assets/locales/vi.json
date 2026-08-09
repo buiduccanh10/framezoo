@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Tuyên bố miễn trừ trách nhiệm",
-      "disclaimerText": "FrameZoo cung cấp trình phát trực tuyến an toàn, hiện đại và liền mạch với giao diện dễ sử dụng và phát lại chất lượng cao trên các thiết bị được hỗ trợ. Nó không lưu trữ các tệp phương tiện, vận hành danh mục nguồn hoặc đề xuất các tiện ích bổ sung cụ thể. Các tiện ích bổ sung tùy chọn được cấu hình bởi người dùng, những người chịu trách nhiệm sử dụng các nguồn hợp pháp."
+      "disclaimerText": "FrameZoo mang đến trải nghiệm giải trí an toàn, hiện đại và liền mạch. Với giao diện dễ sử dụng và thư viện nội dung đa dạng, bao gồm hỗ trợ 4K HDR, người dùng có thể thưởng thức các bộ phim và chương trình TV yêu thích của mình. Và với cam kết về bảo mật, FrameZoo là lựa chọn tối ưu để mang lại trải nghiệm phát trực tuyến chất lượng cao, an tâm."
     },
     "links": {
       "fluxer": "thông lượng",
@@ -1268,7 +1268,7 @@
       "verticalPositionLabel": "Vị trí dọc"
     },
     "torrent": {
-      "title": "Phát trực tuyến",
+      "title": "Truyền phát",
       "maxSizeLabel": "Kích thước bộ đệm tối đa",
       "maxSizeDescription": "Thiết lập dung lượng đĩa tối đa được sử dụng để lưu trữ bộ nhớ đệm cho các tệp stream. Nếu bộ nhớ đệm vượt quá giới hạn này, các tệp stream cũ hơn sẽ được dọn dẹp.",
       "unlimited": "Không giới hạn",

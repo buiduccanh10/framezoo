@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Descargo de responsabilidad",
-      "disclaimerText": "FrameZoo proporciona un reproductor de streaming seguro, moderno y fluido con una interfaz fácil de usar y reproducción de alta calidad en los dispositivos compatibles. No aloja archivos multimedia, no opera un catálogo de fuentes ni recomienda complementos específicos. Los complementos opcionales los configuran los usuarios, que son responsables de utilizar fuentes legales."
+      "disclaimerText": "FrameZoo ofrece una experiencia de entretenimiento segura, moderna y fluida. Con su interfaz fácil de usar y su diversa biblioteca de contenidos, incluida la compatibilidad con 4K HDR, los usuarios pueden disfrutar de sus películas y programas de televisión favoritos. Y con su compromiso con la seguridad, FrameZoo es la mejor opción para una experiencia de transmisión de alta calidad y sin preocupaciones."
     },
     "links": {
       "fluxer": "fluxor",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "posición vertical"
     },
     "torrent": {
-      "title": "Caché de transmisión",
+      "title": "Transmisión",
       "maxSizeLabel": "Tamaño máximo de caché",
-      "maxSizeDescription": "Establezca la cantidad máxima de uso de espacio en disco para almacenar en caché el archivo de flujo. Si el caché excede este límite, se eliminará el archivo de secuencia más antiguo.",
+      "maxSizeDescription": "Establezca el espacio máximo en disco utilizado para almacenar en caché los archivos continuos. Si el caché excede este límite, los archivos continuos más antiguos se borrarán.",
       "unlimited": "Ilimitado",
       "custom": "Costumbre..."
     },

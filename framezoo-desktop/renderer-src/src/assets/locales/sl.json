@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Opozorilo",
-      "disclaimerText": "FrameZoo ponuja varen, sodoben in brezhiben pretočni predvajalnik z vmesnikom, ki je enostaven za uporabo, in visokokakovostnim predvajanjem v podprtih napravah. Ne gosti medijskih datotek, ne upravlja izvornega kataloga ali priporoča določenih dodatkov. Izbirne dodatke konfigurirajo uporabniki, ki so odgovorni za uporabo zakonitih virov."
+      "disclaimerText": "FrameZoo ponuja varno, sodobno in brezhibno izkušnjo zabave. Z vmesnikom, ki je enostaven za uporabo, in raznoliko knjižnico vsebin, vključno s podporo za 4K HDR, lahko uporabniki uživajo v svojih najljubših filmih in TV-oddajah. S svojo predanostjo varnosti je FrameZoo najboljša izbira za brezskrbno visokokakovostno pretočno izkušnjo."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Navpični položaj"
     },
     "torrent": {
-      "title": "Predpomnilnik toka",
+      "title": "Pretakanje",
       "maxSizeLabel": "Največja velikost predpomnilnika",
-      "maxSizeDescription": "Nastavite največjo količino prostora na disku za predpomnjenje tokovne datoteke. Če predpomnilnik preseže to omejitev, bo starejša datoteka toka izbrisana.",
+      "maxSizeDescription": "Nastavite največji prostor na disku, uporabljen za predpomnjenje tokovnih datotek. Če predpomnilnik preseže to omejitev, bodo starejše tokovne datoteke izbrisane.",
       "unlimited": "Neomejeno",
       "custom": "Po meri ..."
     },

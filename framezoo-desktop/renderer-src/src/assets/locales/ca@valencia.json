@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Exempció de responsabilitat",
-      "disclaimerText": "FrameZoo ofereix un reproductor de reproducció de flux segur, modern i perfecte amb una interfície fàcil d'utilitzar i reproducció d'alta qualitat als dispositius compatibles. No allotja fitxers multimèdia, no opera un catàleg d'origen ni recomana complements específics. Els complements opcionals els configuren els usuaris, que són responsables d'utilitzar fonts lícites."
+      "disclaimerText": "FrameZoo ofereix una experiència d'entreteniment segura, moderna i perfecta. Amb la seva interfície fàcil d'utilitzar i una biblioteca de contingut diversa, inclosa la compatibilitat amb 4K HDR, els usuaris poden gaudir de les seves pel·lícules i programes de televisió preferits. I amb el seu compromís amb la seguretat, FrameZoo és l'opció definitiva per a una experiència de transmissió d'alta qualitat i sense preocupacions."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Posició vertical"
     },
     "torrent": {
-      "title": "Stream Cache",
+      "title": "Transmissió en directe",
       "maxSizeLabel": "Mida màxima de la memòria cau",
-      "maxSizeDescription": "Estableix la quantitat màxima d'espai en disc per a la memòria cau del fitxer de flux. Si la memòria cau supera aquest límit, se suprimirà el fitxer de reproducció anterior.",
+      "maxSizeDescription": "Estableix l'espai màxim de disc utilitzat per a la memòria cau dels fitxers de flux. Si la memòria cau supera aquest límit, s'esborraran els fitxers de reproducció més antics.",
       "unlimited": "Il·limitat",
       "custom": "Personalitzat..."
     },

@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Sanggahan",
-      "disclaimerText": "FrameZoo menyediakan pemutar streaming yang aman, modern, dan lancar dengan antarmuka yang mudah digunakan dan pemutaran berkualitas tinggi di seluruh perangkat yang didukung. Itu tidak meng-host file media, mengoperasikan katalog sumber, atau merekomendasikan add-on tertentu. Add-on opsional dikonfigurasikan oleh pengguna, yang bertanggung jawab untuk menggunakan sumber yang sah."
+      "disclaimerText": "FrameZoo menawarkan pengalaman hiburan yang aman, modern, dan lancar. Dengan antarmuka yang mudah digunakan dan pustaka konten yang beragam, termasuk dukungan 4K HDR, pengguna dapat menikmati film dan acara TV favorit mereka. Dan dengan komitmennya terhadap keamanan, FrameZoo adalah pilihan utama untuk pengalaman streaming berkualitas tinggi tanpa rasa khawatir."
     },
     "links": {
       "fluxer": "fluks",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Posisi vertikal"
     },
     "torrent": {
-      "title": "Aliran Cache",
+      "title": "Mengalir",
       "maxSizeLabel": "Ukuran Cache Maksimum",
-      "maxSizeDescription": "Tetapkan jumlah maksimum penggunaan ruang disk untuk menyimpan file streaming. Jika cache melebihi batas ini, file streaming lama akan dihapus.",
+      "maxSizeDescription": "Tetapkan ruang disk maksimum yang digunakan untuk menyimpan file streaming. Jika cache melebihi batas ini, file streaming lama akan dihapus.",
       "unlimited": "Tak terbatas",
       "custom": "Kebiasaan..."
     },

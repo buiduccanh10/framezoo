@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "免责声明",
-      "disclaimerText": "FrameZoo 提供安全、现代、无缝的流媒体播放器，具有易于使用的界面和跨支持设备的高质量播放。它不托管媒体文件、操作源目录或推荐特定的插件。可选插件由用户配置，用户负责使用合法来源。"
+      "disclaimerText": "FrameZoo 提供安全、现代且无缝的娱乐体验。凭借其易于使用的界面和多样化的内容库（包括 4K HDR 支持），用户可以欣赏自己喜爱的电影和电视节目。凭借对安全性的承诺，FrameZoo 是无忧、高品质流媒体体验的终极选择。"
     },
     "links": {
       "fluxer": "助焊剂",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "垂直位置"
     },
     "torrent": {
-      "title": "流缓存",
+      "title": "流媒体",
       "maxSizeLabel": "最大缓存大小",
-      "maxSizeDescription": "设置用于缓存流文件的最大磁盘空间量。如果缓存超过此限制，较旧的流文件将被删除。",
+      "maxSizeDescription": "设置用于缓存流文件的最大磁盘空间。如果缓存超过此限制，较旧的流文件将被清除。",
       "unlimited": "无限",
       "custom": "风俗..."
     },

@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Declinare a răspunderii",
-      "disclaimerText": "FrameZoo oferă un player de flux sigur, modern și fără întreruperi, cu o interfață ușor de utilizat și redare de înaltă calitate pe dispozitivele acceptate. Nu găzduiește fișiere media, nu operează un catalog sursă și nu recomandă suplimente specifice. Suplimentele opționale sunt configurate de utilizatori, care sunt responsabili pentru utilizarea surselor legale."
+      "disclaimerText": "FrameZoo oferă o experiență de divertisment sigură, modernă și perfectă. Cu interfața sa ușor de utilizat și biblioteca diversă de conținut, inclusiv suportul 4K HDR, utilizatorii se pot bucura de filmele și emisiunile TV preferate. Și prin angajamentul său față de securitate, FrameZoo este alegerea supremă pentru o experiență de streaming de înaltă calitate, fără griji."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Poziție verticală"
     },
     "torrent": {
-      "title": "Stream Cache",
+      "title": "Streaming",
       "maxSizeLabel": "Dimensiunea maximă a memoriei cache",
-      "maxSizeDescription": "Setați cantitatea maximă de spațiu pe disc utilizată pentru stocarea în cache a fișierului flux. Dacă memoria cache depășește această limită, fișierul de flux mai vechi va fi șters.",
+      "maxSizeDescription": "Setați spațiul maxim pe disc utilizat pentru stocarea în cache a fișierelor flux. Dacă memoria cache depășește această limită, fișierele de flux mai vechi vor fi șterse.",
       "unlimited": "Nelimitat",
       "custom": "Personalizat..."
     },

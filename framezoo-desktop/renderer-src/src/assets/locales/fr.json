@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Avertissement",
-      "disclaimerText": "FrameZoo fournit un lecteur de flux sécurisé, moderne et transparent avec une interface facile à utiliser et une lecture de haute qualité sur les appareils pris en charge. Il n'héberge pas de fichiers multimédias, n'exploite pas de catalogue source et ne recommande pas de modules complémentaires spécifiques. Les modules complémentaires facultatifs sont configurés par les utilisateurs, qui sont responsables de l'utilisation de sources licites."
+      "disclaimerText": "FrameZoo offre une expérience de divertissement sécurisée, moderne et transparente. Grâce à son interface facile à utiliser et à sa bibliothèque de contenus diversifiée, notamment la prise en charge 4K HDR, les utilisateurs peuvent profiter de leurs films et émissions de télévision préférés. Et grâce à son engagement en faveur de la sécurité, FrameZoo est le choix ultime pour une expérience de streaming de haute qualité et sans souci."
     },
     "links": {
       "fluxer": "Fluxeur",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Position verticale"
     },
     "torrent": {
-      "title": "Cache de flux",
+      "title": "Streaming",
       "maxSizeLabel": "Taille maximale du cache",
-      "maxSizeDescription": "Définissez la quantité maximale d'espace disque utilisée pour la mise en cache du fichier de flux. Si le cache dépasse cette limite, l'ancien fichier de flux sera supprimé.",
+      "maxSizeDescription": "Définissez l'espace disque maximum utilisé pour la mise en cache des fichiers de flux. Si le cache dépasse cette limite, les anciens fichiers de flux seront effacés.",
       "unlimited": "Illimité",
       "custom": "Coutume..."
     },
