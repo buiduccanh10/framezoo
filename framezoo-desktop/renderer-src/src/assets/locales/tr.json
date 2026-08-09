@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Sorumluluk Reddi",
-      "disclaimerText": "FrameZoo, kullanımı kolay bir arayüze ve desteklenen cihazlarda yüksek kaliteli oynatmaya sahip, güvenli, modern ve kusursuz bir yayın oynatıcısı sağlar. Medya dosyalarını barındırmaz, kaynak kataloğu çalıştırmaz veya belirli eklentiler önermez. İsteğe bağlı eklentiler, yasal kaynakların kullanılmasından sorumlu olan kullanıcılar tarafından yapılandırılır."
+      "disclaimerText": "FrameZoo güvenli, modern ve kusursuz bir eğlence deneyimi sunar. Kullanımı kolay arayüzü ve 4K HDR desteği de dahil olmak üzere zengin içerik kütüphanesi ile kullanıcılar en sevdikleri film ve dizilerin keyfini çıkarabiliyor. Güvenlik taahhüdüyle FrameZoo, sorunsuz, yüksek kaliteli bir yayın deneyimi için en iyi seçimdir."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Dikey konum"
     },
     "torrent": {
-      "title": "Akış Önbelleği",
+      "title": "Akış",
       "maxSizeLabel": "Maksimum Önbellek Boyutu",
-      "maxSizeDescription": "Akış dosyasını önbelleğe almak için kullanılacak maksimum disk alanı miktarını ayarlayın. Önbellek bu sınırı aşarsa eski akış dosyası silinir.",
+      "maxSizeDescription": "Akış dosyalarını önbelleğe almak için kullanılan maksimum disk alanını ayarlayın. Önbellek bu sınırı aşarsa eski akış dosyaları temizlenecektir.",
       "unlimited": "Sınırsız",
       "custom": "Gelenek..."
     },

@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Figyelmeztetés",
-      "disclaimerText": "Az FrameZoo biztonságos, modern és zökkenőmentes streamlejátszót kínál könnyen használható felülettel és kiváló minőségű lejátszással a támogatott eszközökön. Nem tárol médiafájlokat, nem működtet forráskatalógust, és nem ajánl speciális kiegészítőket. Az opcionális kiegészítőket a felhasználók konfigurálják, akik felelősek a törvényes források használatáért."
+      "disclaimerText": "A FrameZoo biztonságos, modern és zökkenőmentes szórakozási élményt kínál. Könnyen használható kezelőfelületének és sokrétű tartalomkönyvtárának köszönhetően, beleértve a 4K HDR támogatást is, a felhasználók élvezhetik kedvenc filmeiket és tévéműsoraikat. A biztonság iránti elkötelezettségével a FrameZoo a tökéletes választás a gondtalan, kiváló minőségű streaming élményhez."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Függőleges elhelyezkedés"
     },
     "torrent": {
-      "title": "Stream Cache",
+      "title": "Folyó",
       "maxSizeLabel": "Maximális gyorsítótár mérete",
-      "maxSizeDescription": "Állítsa be a lemezterület maximális mennyiségét az adatfolyamfájlok gyorsítótárazásánál. Ha a gyorsítótár meghaladja ezt a korlátot, a régebbi adatfolyamfájl törlődik.",
+      "maxSizeDescription": "Állítsa be a streamfájlok gyorsítótárazásához felhasznált maximális lemezterületet. Ha a gyorsítótár meghaladja ezt a korlátot, a régebbi adatfolyam-fájlok törlődnek.",
       "unlimited": "Korlátlan",
       "custom": "Szokás..."
     },

@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Fyrirvari",
-      "disclaimerText": "FrameZoo býður upp á öruggan, nútímalegan og óaðfinnanlegan straumspilara með auðveldu viðmóti og hágæða spilun á studdum tækjum. Það hýsir ekki miðlunarskrár, rekur upprunaskrá eða mælir með sérstökum viðbótum. Valfrjálsar viðbætur eru stilltar af notendum, sem eru ábyrgir fyrir notkun löglegra heimilda."
+      "disclaimerText": "FrameZoo býður upp á örugga, nútímalega og óaðfinnanlega afþreyingarupplifun. Með auðveldu viðmóti og fjölbreyttu efnissafni, þar á meðal 4K HDR stuðningi, geta notendur notið uppáhaldskvikmynda sinna og sjónvarpsþátta. Og með skuldbindingu sinni um öryggi er FrameZoo fullkominn kostur fyrir áhyggjulausa, hágæða streymisupplifun."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Lóðrétt staða"
     },
     "torrent": {
-      "title": "Straumskyndiminni",
+      "title": "Straumspilun",
       "maxSizeLabel": "Hámarksstærð skyndiminni",
-      "maxSizeDescription": "Stilltu hámarksnotkun pláss fyrir skyndiminni straumskrár. Ef skyndiminni fer yfir þessi mörk verður eldri straumskránni eytt.",
+      "maxSizeDescription": "Stilltu hámarks pláss sem notað er til að vista straumskrár. Ef skyndiminni fer yfir þessi mörk verða eldri straumskrár hreinsaðar.",
       "unlimited": "Ótakmarkað",
       "custom": "Sérsniðin..."
     },

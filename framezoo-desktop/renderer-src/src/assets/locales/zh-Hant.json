@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "免責聲明",
-      "disclaimerText": "FrameZoo provides a secure, modern, and seamless stream player with an easy-to-use interface and high-quality playback across supported devices.它不託管媒體文件、操作源目錄或推薦特定的插件。可選插件由使用者配置，使用者負責使用合法來源。"
+      "disclaimerText": "FrameZoo 提供安全、現代且無縫的娛樂體驗。憑藉其易於使用的介面和多樣化的內容庫（包括 4K HDR 支援），用戶可以欣賞自己喜愛的電影和電視節目。憑藉對安全性的承諾，FrameZoo 是無憂、高品質串流體驗的終極選擇。"
     },
     "links": {
       "fluxer": "助焊劑",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "垂直位置"
     },
     "torrent": {
-      "title": "串流緩存",
+      "title": "串流媒體",
       "maxSizeLabel": "最大快取大小",
-      "maxSizeDescription": "設定用於快取流檔案的最大磁碟空間量。如果快取超過此限制，較舊的串流檔案將被刪除。",
+      "maxSizeDescription": "設定用於快取流檔案的最大磁碟空間。如果快取超過此限制，較舊的流檔案將被清除。",
       "unlimited": "無限",
       "custom": "風俗..."
     },

@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "FrameZoo biedt een veilige, moderne en naadloze streamspeler met een gebruiksvriendelijke interface en hoogwaardige weergave op ondersteunde apparaten. Het host geen mediabestanden, beheert geen broncatalogus of beveelt geen specifieke add-ons aan. Optionele add-ons worden geconfigureerd door gebruikers, die verantwoordelijk zijn voor het gebruik van legale bronnen."
+      "disclaimerText": "FrameZoo biedt een veilige, moderne en naadloze entertainmentervaring. Dankzij de gebruiksvriendelijke interface en de gevarieerde inhoudsbibliotheek, inclusief 4K HDR-ondersteuning, kunnen gebruikers genieten van hun favoriete films en tv-programma's. En met zijn toewijding aan beveiliging is FrameZoo de ultieme keuze voor een zorgeloze streamingervaring van hoge kwaliteit."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Verticale positie"
     },
     "torrent": {
-      "title": "Streamcache",
+      "title": "Streamen",
       "maxSizeLabel": "Maximale cachegrootte",
-      "maxSizeDescription": "Stel de maximale hoeveelheid schijfruimte in die wordt gebruikt voor het cachen van streambestanden. Als de cache deze limiet overschrijdt, wordt het oudere streambestand verwijderd.",
+      "maxSizeDescription": "Stel de maximale schijfruimte in die wordt gebruikt voor het cachen van streambestanden. Als de cache deze limiet overschrijdt, worden oudere streambestanden gewist.",
       "unlimited": "Onbeperkt",
       "custom": "Aangepast..."
     },

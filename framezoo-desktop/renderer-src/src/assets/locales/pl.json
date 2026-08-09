@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Zastrzeżenie ",
-      "disclaimerText": "FrameZoo zapewnia bezpieczny, nowoczesny i bezproblemowy odtwarzacz strumieniowy z łatwym w obsłudze interfejsem i wysokiej jakości odtwarzaniem na obsługiwanych urządzeniach. Nie przechowuje plików multimedialnych, nie obsługuje katalogu źródłowego ani nie poleca określonych dodatków. Opcjonalne dodatki są konfigurowane przez użytkowników, którzy są odpowiedzialni za korzystanie z legalnych źródeł."
+      "disclaimerText": "FrameZoo oferuje bezpieczną, nowoczesną i bezproblemową rozrywkę. Dzięki łatwemu w obsłudze interfejsowi i różnorodnej bibliotece treści, w tym obsłudze 4K HDR, użytkownicy mogą cieszyć się ulubionymi filmami i programami telewizyjnymi. A dzięki swojemu zaangażowaniu w bezpieczeństwo FrameZoo jest najlepszym wyborem, jeśli chodzi o bezproblemowe przesyłanie strumieniowe wysokiej jakości."
     },
     "links": {
       "fluxer": "Flukser",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Pozycja pionowa"
     },
     "torrent": {
-      "title": "Pamięć podręczna strumieniowa",
+      "title": "Transmisja strumieniowa",
       "maxSizeLabel": "Maksymalny rozmiar pamięci podręcznej",
-      "maxSizeDescription": "Ustaw maksymalną ilość miejsca na dysku wykorzystywanego do buforowania pliku strumieniowego. Jeśli pamięć podręczna przekroczy ten limit, starszy plik strumieniowy zostanie usunięty.",
+      "maxSizeDescription": "Ustaw maksymalną ilość miejsca na dysku używaną do buforowania plików strumieniowych. Jeśli pamięć podręczna przekroczy ten limit, starsze pliki strumieniowe zostaną usunięte.",
       "unlimited": "Nieograniczony",
       "custom": "Zwyczaj..."
     },

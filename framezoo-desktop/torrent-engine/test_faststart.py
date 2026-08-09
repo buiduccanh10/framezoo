@@ -140,6 +140,55 @@ def main():
         assert len(body) == 1024
 
     engine.stop("s2")
+    print("PASS (phase 2)")
+
+    # ---- PHASE 3: re-selecting the same torrent replaces the active session ----
+    # Reproduces "next episode": the renderer auto-selects the same torrent
+    # while the previous session is still alive (stop grace), then stops the
+    # superseded session a few seconds later. The replacement session must own
+    # a fresh handle; otherwise libtorrent reuses the old handle for the
+    # duplicate add and the grace stop invalidates it mid-stream, freezing
+    # playback until the page is reloaded.
+    engine.start("s3", request)
+    runtime3 = engine.sessions["s3"]
+    runtime3.handle.connect_peer(("127.0.0.1", 6889), 0)
+    runtime3.wait_for_metadata(30)
+    print("[3] session s3 active; metadata_ready:", runtime3.metadata_ready.is_set())
+    assert runtime3.metadata_ready.is_set()
+
+    engine.start("s4", request)
+    runtime4 = engine.sessions["s4"]
+    assert "s3" not in engine.sessions, "superseded session was not replaced"
+    runtime4.handle.connect_peer(("127.0.0.1", 6889), 0)
+    runtime4.wait_for_metadata(15)
+    print("[3] session s4 replaced s3; metadata_ready:", runtime4.metadata_ready.is_set())
+    assert runtime4.metadata_ready.is_set()
+
+    # The renderer's deferred grace stop of the superseded session must not
+    # invalidate the replacement session's handle.
+    engine.stop("s3")
+    st = runtime4.handle.status()
+    print("[3] after stop(s3), s4 torrent state:", st.state)
+
+    first_range_start = min(1024 * 1024, max(1, runtime4.file_size - 1))
+    deadline = time.time() + 15
+    while time.time() < deadline and not runtime4.range_is_ready(0, first_range_start):
+        time.sleep(0.1)
+    assert runtime4.range_is_ready(0, first_range_start), "s4 pieces lost after s3 stop"
+
+    range_request = Request(
+        runtime4.stream_url,
+        headers={"Range": "bytes=0-1023"},
+    )
+    with urlopen(range_request, timeout=10) as response:
+        body = response.read()
+        assert response.status == 206
+        assert len(body) == 1024
+        print("[3] HTTP range after s3 stop:", response.status, "bytes:", len(body))
+
+    engine.stop("s4")
+    print("PASS (phase 3): replacement session survived the superseded session stop")
+
     engine.close()
     shutil.rmtree(root)
     print("PASS")

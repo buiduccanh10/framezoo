@@ -110,7 +110,8 @@ export function TorrentPart() {
                 selectedItem={activeOption}
                 setSelectedItem={handleSelect}
                 options={translatedOptions}
-                className="w-48 !my-0"
+                className="min-w-[12rem] !my-0"
+                preventWrap
               />
               {selectedItem.id === "custom" && (
                 <div className="flex items-center gap-2">

@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Zřeknutí odpovědnosti",
-      "disclaimerText": "FrameZoo poskytuje bezpečný, moderní a bezproblémový přehrávač streamů se snadno použitelným rozhraním a vysoce kvalitním přehráváním napříč podporovanými zařízeními. Nehostuje mediální soubory, neprovozuje zdrojový katalog ani nedoporučuje konkrétní doplňky. Volitelné doplňky konfigurují uživatelé, kteří jsou odpovědní za používání zákonných zdrojů."
+      "disclaimerText": "FrameZoo nabízí bezpečný, moderní a bezproblémový zážitek ze zábavy. Díky snadno použitelnému rozhraní a rozmanité knihovně obsahu, včetně podpory 4K HDR, si uživatelé mohou vychutnat své oblíbené filmy a televizní pořady. A díky svému závazku k zabezpečení je FrameZoo tou nejlepší volbou pro bezstarostné a vysoce kvalitní streamování."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Vertikální poloha"
     },
     "torrent": {
-      "title": "Mezipaměť streamu",
+      "title": "Streamování",
       "maxSizeLabel": "Maximální velikost mezipaměti",
-      "maxSizeDescription": "Nastavte maximální množství místa na disku pro ukládání datového proudu do mezipaměti. Pokud mezipaměť překročí tento limit, starší soubor streamu bude smazán.",
+      "maxSizeDescription": "Nastavte maximální místo na disku použité pro ukládání datových proudů do mezipaměti. Pokud mezipaměť překročí tento limit, starší soubory streamu budou vymazány.",
       "unlimited": "Neomezený",
       "custom": "Zvyk..."
     },

@@ -247,7 +247,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Vastuuvapauslauseke",
-      "disclaimerText": "FrameZoo tarjoaa turvallisen, modernin ja saumattoman suoratoistosoittimen, jossa on helppokäyttöinen käyttöliittymä ja korkealaatuinen toisto tuetuilla laitteilla. Se ei isännöi mediatiedostoja, käytä lähdeluetteloa tai suosittele tiettyjä lisäosia. Valinnaiset lisäosat määrittävät käyttäjät, jotka ovat vastuussa laillisten lähteiden käytöstä."
+      "disclaimerText": "FrameZoo tarjoaa turvallisen, modernin ja saumattoman viihdekokemuksen. Helppokäyttöisen käyttöliittymän ja monipuolisen sisältökirjaston, mukaan lukien 4K HDR -tuen, ansiosta käyttäjät voivat nauttia suosikkielokuvistaan ​​ja TV-ohjelmistaan. Ja sitoutumisensa turvallisuuteen FrameZoo on täydellinen valinta huolettomaan, laadukkaaseen suoratoistokokemukseen."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -1268,9 +1268,9 @@
       "verticalPositionLabel": "Pystysuora asento"
     },
     "torrent": {
-      "title": "Stream Cache",
+      "title": "Suoratoisto",
       "maxSizeLabel": "Välimuistin enimmäiskoko",
-      "maxSizeDescription": "Aseta levytilan enimmäismäärä suoratoistotiedoston välimuistiin tallentamiseen. Jos välimuisti ylittää tämän rajan, vanhempi stream-tiedosto poistetaan.",
+      "maxSizeDescription": "Aseta stream-tiedostojen välimuistiin käytettävä enimmäislevytila. Jos välimuisti ylittää tämän rajan, vanhemmat stream-tiedostot tyhjennetään.",
       "unlimited": "Rajoittamaton",
       "custom": "Mukautettu..."
     },

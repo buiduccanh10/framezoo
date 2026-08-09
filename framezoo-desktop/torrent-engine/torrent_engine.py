@@ -71,21 +71,47 @@ class LibtorrentEngine:
     ) -> Dict[str, Any]:
         magnet = get_magnet(request)
         root = get_torrent_data_dir()
-        with self.lock:
-            active_paths = {runtime.save_path for runtime in self.sessions.values()}
+        cache_key = get_torrent_cache_key(request)
+
+        # Replace an active session for the same torrent before adding a new
+        # one. libtorrent returns the existing handle for a duplicate add, so
+        # a second runtime would otherwise share the old handle; stopping the
+        # superseded session (renderer "next episode" grace stop) would then
+        # invalidate the new session's handle mid-stream and freeze playback.
+        if cache_key:
+            with self.lock:
+                superseded = [
+                    sid
+                    for sid, runtime in self.sessions.items()
+                    if runtime.cache_key == cache_key
+                ]
+            for sid in superseded:
+                self.stop(sid)
+
+        if cache_key:
+            save_path = os.path.join(root, "torrent-" + cache_key)
+            os.makedirs(save_path, exist_ok=True)
+        else:
+            save_path = tempfile.mkdtemp(
+                prefix="framezoo-torrent-",
+                dir=root,
+            )
+
         try:
+            with self.lock:
+                active_paths = {
+                    runtime.save_path for runtime in self.sessions.values()
+                }
+            active_paths.add(save_path)
             enforce_storage_limit(root, active_paths=active_paths)
         except Exception as error:
             sys.stderr.write(
                 f"[sidecar] Storage limit enforcement error: {error}\n"
             )
 
-        cache_key = get_torrent_cache_key(request)
         resume_data = b""
         torrent_info = None
         if cache_key:
-            save_path = os.path.join(root, "torrent-" + cache_key)
-            os.makedirs(save_path, exist_ok=True)
             torrent_path = os.path.join(save_path, cache_key + ".torrent")
             if os.path.exists(torrent_path):
                 try:
@@ -102,11 +128,6 @@ class LibtorrentEngine:
                         resume_data = f.read()
                 except Exception:
                     resume_data = b""
-        else:
-            save_path = tempfile.mkdtemp(
-                prefix="framezoo-torrent-",
-                dir=root,
-            )
 
         params = lt.parse_magnet_uri(magnet)
         magnet_trackers = list(getattr(params, "trackers", []))
