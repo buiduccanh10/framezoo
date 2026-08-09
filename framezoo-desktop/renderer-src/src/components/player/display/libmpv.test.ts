@@ -745,4 +745,222 @@ describe("libmpv display", () => {
 
     display.destroy();
   });
+
+  it("holds the keyframe backtrack reported right after a seek settles", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+    const seekCommands: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn(
+        (_id: string, command: { type: string; time?: number }) => {
+          if (command.type === "seek") seekCommands.push(command.time ?? -1);
+          return Promise.resolve(true);
+        },
+      ),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const timePos = (time: number) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "property",
+        name: "time-pos",
+        data: time,
+      });
+
+    timePos(10);
+    expect(times).toEqual([10]);
+
+    display.setTime(60);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // The seek target lands.
+    timePos(60);
+    expect(times).toEqual([10, 60]);
+
+    // mpv then snaps back to the keyframe while frames catch up — the cue
+    // at 60 must not blink out.
+    timePos(50);
+    expect(times).toEqual([10, 60]);
+
+    // Forward flow resumes once playback actually reaches the position.
+    timePos(59.8);
+    expect(times).toEqual([10, 60, 59.8]);
+
+    display.destroy();
+  });
+
+  it("settles a paused scrub when mpv reports the seek completed", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const timePos = (time: number) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "property",
+        name: "time-pos",
+        data: time,
+      });
+
+    timePos(10);
+    expect(times).toEqual([10]);
+
+    display.setTime(60);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // mpv reports the target early while still seeking — hold it so the
+    // cue does not pop in ahead of the picture.
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "seeking",
+      data: true,
+    });
+    timePos(60);
+    expect(times).toEqual([10]);
+
+    // The seek completes while paused; no follow-up time-pos event arrives,
+    // so the held position must settle now instead of freezing the time.
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "seeking",
+      data: false,
+    });
+    expect(times).toEqual([10, 60]);
+
+    display.destroy();
+  });
+
+  it("holds the stale time-pos snapshot during the initial load seek", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/first.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const timePos = (time: number, generation: number) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation,
+        type: "property",
+        name: "time-pos",
+        data: time,
+      });
+
+    timePos(10, 1);
+    expect(times).toEqual([10]);
+
+    // Reload the file at a resume position (store calls setTime before load).
+    display.setTime(30);
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 30,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // FILE_LOADED property snapshot reports the pre-seek position — the cue
+    // at the resume position must not flash before the initial seek lands.
+    timePos(0, 2);
+    expect(times).toEqual([10]);
+
+    // The native initial seek lands at the resume position.
+    timePos(30, 2);
+    expect(times).toEqual([10, 30]);
+
+    display.destroy();
+  });
 });
