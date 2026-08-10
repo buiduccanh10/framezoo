@@ -79,12 +79,12 @@ function SettingsLayout(props: {
     <WideContainer ultraWide classNames="overflow-visible">
       {/* Floating Search Bar - starts in sticky state */}
       <div
-        className="fixed left-0 right-0 z-[600]"
+        className="pointer-events-none fixed left-0 right-0 z-[600]"
         style={{
           top: `${topOffset}px`,
         }}
       >
-        <ThinContainer>
+        <ThinContainer classNames="pointer-events-auto">
           <SearchBarInput
             ref={searchRef}
             onChange={props.onSearchChange}
