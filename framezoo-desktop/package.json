@@ -180,6 +180,7 @@
       }
     ],
     "productName": "FrameZoo",
+    "executableName": "FrameZoo",
     "artifactName": "${productName}-${version}-${arch}.${ext}",
     "asar": true,
     "asarUnpack": [],
