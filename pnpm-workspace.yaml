@@ -2,6 +2,7 @@ packages:
   - framezoo-fe
   - framezoo-be
   - framezoo-desktop
+  - framezoo-mobile
 
 shamefullyHoist: true
 strictPeerDependencies: false
