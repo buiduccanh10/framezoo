@@ -1271,6 +1271,11 @@
       "title": "Transmisión",
       "maxSizeLabel": "Tamaño máximo de caché",
       "maxSizeDescription": "Establezca el espacio máximo en disco utilizado para almacenar en caché los archivos continuos. Si el caché excede este límite, los archivos continuos más antiguos se borrarán.",
+      "currentSizeLabel": "Tamaño de caché actual",
+      "currentSizeLoading": "Cargando...",
+      "clearCache": "Borrar caché",
+      "clearCacheSuccess": "Caché borrado",
+      "clearCacheError": "No se pudo borrar el caché. Por favor inténtalo de nuevo.",
       "unlimited": "Ilimitado",
       "custom": "Costumbre..."
     },

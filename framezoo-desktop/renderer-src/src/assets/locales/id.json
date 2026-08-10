@@ -1271,6 +1271,11 @@
       "title": "Mengalir",
       "maxSizeLabel": "Ukuran Cache Maksimum",
       "maxSizeDescription": "Tetapkan ruang disk maksimum yang digunakan untuk menyimpan file streaming. Jika cache melebihi batas ini, file streaming lama akan dihapus.",
+      "currentSizeLabel": "Ukuran cache saat ini",
+      "currentSizeLoading": "Memuat...",
+      "clearCache": "Hapus cache",
+      "clearCacheSuccess": "Tembolok dibersihkan",
+      "clearCacheError": "Gagal menghapus cache. Silakan coba lagi.",
       "unlimited": "Tak terbatas",
       "custom": "Kebiasaan..."
     },

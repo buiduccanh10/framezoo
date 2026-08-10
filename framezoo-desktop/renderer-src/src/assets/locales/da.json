@@ -1271,6 +1271,11 @@
       "title": "Streaming",
       "maxSizeLabel": "Maksimal cachestørrelse",
       "maxSizeDescription": "Indstil den maksimale diskplads, der bruges til cachelagring af streamfiler. Hvis cachen overskrider denne grænse, vil ældre stream-filer blive ryddet.",
+      "currentSizeLabel": "Aktuel cachestørrelse",
+      "currentSizeLoading": "Indlæser...",
+      "clearCache": "Ryd cache",
+      "clearCacheSuccess": "Cache ryddet",
+      "clearCacheError": "Kunne ikke rydde cachen. Prøv venligst igen.",
       "unlimited": "Ubegrænset",
       "custom": "Skik..."
     },

@@ -1271,6 +1271,11 @@
       "title": "Transmisja strumieniowa",
       "maxSizeLabel": "Maksymalny rozmiar pamięci podręcznej",
       "maxSizeDescription": "Ustaw maksymalną ilość miejsca na dysku używaną do buforowania plików strumieniowych. Jeśli pamięć podręczna przekroczy ten limit, starsze pliki strumieniowe zostaną usunięte.",
+      "currentSizeLabel": "Bieżący rozmiar pamięci podręcznej",
+      "currentSizeLoading": "Załadunek...",
+      "clearCache": "Wyczyść pamięć podręczną",
+      "clearCacheSuccess": "Pamięć podręczna wyczyszczona",
+      "clearCacheError": "Nie udało się wyczyścić pamięci podręcznej. Spróbuj ponownie.",
       "unlimited": "Nieograniczony",
       "custom": "Zwyczaj..."
     },

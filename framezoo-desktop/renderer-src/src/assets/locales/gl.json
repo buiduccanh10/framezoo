@@ -1271,6 +1271,11 @@
       "title": "Transmisión en directo",
       "maxSizeLabel": "Tamaño máximo da caché",
       "maxSizeDescription": "Establece o espazo máximo de disco utilizado para almacenar na caché os ficheiros de fluxo. Se a caché supera este límite, borraranse os ficheiros de fluxo máis antigos.",
+      "currentSizeLabel": "Tamaño actual da caché",
+      "currentSizeLoading": "Cargando...",
+      "clearCache": "Limpar a caché",
+      "clearCacheSuccess": "Limpar a caché",
+      "clearCacheError": "Produciuse un erro ao borrar a caché. Téntao de novo.",
       "unlimited": "Ilimitado",
       "custom": "Personalizado..."
     },

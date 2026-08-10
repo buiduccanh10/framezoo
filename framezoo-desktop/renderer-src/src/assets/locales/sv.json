@@ -1271,6 +1271,11 @@
       "title": "Streaming",
       "maxSizeLabel": "Maximal cachestorlek",
       "maxSizeDescription": "Ställ in maximalt diskutrymme som används för att cachelagra strömfiler. Om cachen överskrider denna gräns kommer äldre streamfiler att rensas.",
+      "currentSizeLabel": "Aktuell cachestorlek",
+      "currentSizeLoading": "Belastning...",
+      "clearCache": "Rensa cache",
+      "clearCacheSuccess": "Cache rensad",
+      "clearCacheError": "Det gick inte att rensa cacheminnet. Försök igen.",
       "unlimited": "Obegränsat",
       "custom": "Beställnings..."
     },

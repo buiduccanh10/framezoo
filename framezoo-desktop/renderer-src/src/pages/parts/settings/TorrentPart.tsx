@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { Button } from "@/components/buttons/Button";
 import { Dropdown } from "@/components/form/Dropdown";
 import { SettingsCard } from "@/components/layout/SettingsCard";
 import { Heading1 } from "@/components/utils/Text";
+import type { TorrentStorageInfo } from "@/desktop/torrentTypes";
+import { useToastStore } from "@/stores/interface/toast";
 import { usePreferencesStore } from "@/stores/preferences";
 
 const PREDEFINED_OPTIONS = [
@@ -14,9 +17,41 @@ const PREDEFINED_OPTIONS = [
   { id: "unlimited", name: "Unlimited" },
   { id: "custom", name: "Custom..." },
 ];
+const DEFAULT_MAX_SIZE_BYTES = 5 * 1024 * 1024 * 1024;
+
+function getMaxSizeBytes(value: string | null) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0
+    ? parsed
+    : DEFAULT_MAX_SIZE_BYTES;
+}
+
+function formatBytes(bytes: number) {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "0 B";
+
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  const unitIndex = Math.min(
+    Math.floor(Math.log(bytes) / Math.log(1024)),
+    units.length - 1,
+  );
+  const value = bytes / 1024 ** unitIndex;
+
+  return `${new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: unitIndex === 0 ? 0 : 2,
+  }).format(value)} ${units[unitIndex]}`;
+}
+
+async function getTorrentStorageInfo(): Promise<TorrentStorageInfo | null> {
+  if (typeof window.electronAPI?.getTorrentStorageInfo !== "function") {
+    return null;
+  }
+
+  return window.electronAPI.getTorrentStorageInfo();
+}
 
 export function TorrentPart() {
   const { t } = useTranslation();
+  const showToast = useToastStore((s) => s.showToast);
   const torrentMaxSize = usePreferencesStore((s) => s.torrentMaxSize);
   const setTorrentMaxSize = usePreferencesStore((s) => s.setTorrentMaxSize);
 
@@ -31,6 +66,39 @@ export function TorrentPart() {
 
   const [selectedItem, setSelectedItem] = useState(getInitialOption());
   const [customValue, setCustomValue] = useState("");
+  const [storageInfo, setStorageInfo] = useState<TorrentStorageInfo | null>(
+    null,
+  );
+  const [isClearing, setIsClearing] = useState(false);
+  const currentMaxSizeBytes = getMaxSizeBytes(torrentMaxSize);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const refreshStorageInfo = async () => {
+      try {
+        const nextInfo = await getTorrentStorageInfo();
+        if (!cancelled && nextInfo) {
+          setStorageInfo({
+            ...nextInfo,
+            maxBytes: currentMaxSizeBytes,
+          });
+        }
+      } catch {
+        if (!cancelled) setStorageInfo(null);
+      }
+    };
+
+    void refreshStorageInfo();
+    const interval = window.electronAPI?.getTorrentStorageInfo
+      ? window.setInterval(refreshStorageInfo, 5000)
+      : undefined;
+
+    return () => {
+      cancelled = true;
+      if (interval) window.clearInterval(interval);
+    };
+  }, [currentMaxSizeBytes, torrentMaxSize]);
 
   // Initialize custom input if it's a custom value
   useEffect(() => {
@@ -90,6 +158,30 @@ export function TorrentPart() {
     translatedOptions.find((o) => o.id === selectedItem.id) ||
     translatedOptions[0];
 
+  const handleClearCache = async () => {
+    if (typeof window.electronAPI?.clearTorrentStorage !== "function") return;
+
+    setIsClearing(true);
+    try {
+      const cleared = await window.electronAPI.clearTorrentStorage();
+      if (!cleared) throw new Error("Failed to clear torrent storage");
+
+      const nextInfo = await getTorrentStorageInfo();
+      setStorageInfo(nextInfo);
+      showToast(t("settings.torrent.clearCacheSuccess", "Cache cleared"));
+    } catch {
+      showToast(
+        t(
+          "settings.torrent.clearCacheError",
+          "Failed to clear cache. Please try again.",
+        ),
+        "error",
+      );
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
   return (
     <div>
       <Heading1 border>{t("settings.torrent.title", "Torrent Cache")}</Heading1>
@@ -133,6 +225,35 @@ export function TorrentPart() {
                   <span className="text-type-secondary">GB</span>
                 </div>
               )}
+            </div>
+            <div className="mt-8 border-t border-utils-divider border-opacity-50 pt-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="text-white font-bold mb-2">
+                    {t(
+                      "settings.torrent.currentSizeLabel",
+                      "Current cache size",
+                    )}
+                  </p>
+                  <p className="font-medium text-type-secondary">
+                    {storageInfo
+                      ? `${formatBytes(storageInfo.usedBytes)} / ${formatBytes(currentMaxSizeBytes)}`
+                      : t("settings.torrent.currentSizeLoading", "Loading...")}
+                  </p>
+                </div>
+                <Button
+                  theme="purple"
+                  loading={isClearing}
+                  disabled={
+                    typeof window.electronAPI?.clearTorrentStorage !==
+                    "function"
+                  }
+                  onClick={handleClearCache}
+                  className="w-full md:w-auto"
+                >
+                  {t("settings.torrent.clearCache", "Clear cache")}
+                </Button>
+              </div>
             </div>
           </div>
         </SettingsCard>

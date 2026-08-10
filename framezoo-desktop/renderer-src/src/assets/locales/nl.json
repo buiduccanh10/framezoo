@@ -1271,6 +1271,11 @@
       "title": "Streamen",
       "maxSizeLabel": "Maximale cachegrootte",
       "maxSizeDescription": "Stel de maximale schijfruimte in die wordt gebruikt voor het cachen van streambestanden. Als de cache deze limiet overschrijdt, worden oudere streambestanden gewist.",
+      "currentSizeLabel": "Huidige cachegrootte",
+      "currentSizeLoading": "Laden...",
+      "clearCache": "Cache wissen",
+      "clearCacheSuccess": "Cache gewist",
+      "clearCacheError": "Kan de cache niet wissen. Probeer het opnieuw.",
       "unlimited": "Onbeperkt",
       "custom": "Aangepast..."
     },

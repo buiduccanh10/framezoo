@@ -1271,6 +1271,11 @@
       "title": "Streaming",
       "maxSizeLabel": "Maximale Cache-Größe",
       "maxSizeDescription": "Legen Sie den maximalen Speicherplatz fest, der zum Zwischenspeichern von Stream-Dateien verwendet wird. Wenn der Cache dieses Limit überschreitet, werden ältere Streamdateien gelöscht.",
+      "currentSizeLabel": "Aktuelle Cachegröße",
+      "currentSizeLoading": "Laden...",
+      "clearCache": "Cache leeren",
+      "clearCacheSuccess": "Cache geleert",
+      "clearCacheError": "Cache konnte nicht geleert werden. Bitte versuchen Sie es erneut.",
       "unlimited": "Unbegrenzt",
       "custom": "Brauch..."
     },

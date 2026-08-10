@@ -1271,6 +1271,11 @@
       "title": "스트리밍",
       "maxSizeLabel": "최대 캐시 크기",
       "maxSizeDescription": "스트림 파일 캐싱에 사용되는 최대 디스크 공간을 설정합니다. 캐시가 이 제한을 초과하면 오래된 스트림 파일이 지워집니다.",
+      "currentSizeLabel": "현재 캐시 크기",
+      "currentSizeLoading": "로드 중...",
+      "clearCache": "캐시 지우기",
+      "clearCacheSuccess": "캐시가 삭제되었습니다.",
+      "clearCacheError": "캐시를 지우지 못했습니다. 다시 시도해 주세요.",
       "unlimited": "제한 없는",
       "custom": "관습..."
     },

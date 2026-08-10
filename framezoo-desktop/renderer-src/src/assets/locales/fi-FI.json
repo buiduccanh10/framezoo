@@ -1271,6 +1271,11 @@
       "title": "Suoratoisto",
       "maxSizeLabel": "Välimuistin enimmäiskoko",
       "maxSizeDescription": "Aseta stream-tiedostojen välimuistiin käytettävä enimmäislevytila. Jos välimuisti ylittää tämän rajan, vanhemmat stream-tiedostot tyhjennetään.",
+      "currentSizeLabel": "Nykyinen välimuistin koko",
+      "currentSizeLoading": "Ladataan...",
+      "clearCache": "Tyhjennä välimuisti",
+      "clearCacheSuccess": "Välimuisti tyhjennetty",
+      "clearCacheError": "Välimuistin tyhjennys epäonnistui. Yritä uudelleen.",
       "unlimited": "Rajoittamaton",
       "custom": "Mukautettu..."
     },
