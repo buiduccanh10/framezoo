@@ -30,7 +30,6 @@ let subtitleAlignmentRequestId = 0;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
-const AUTO_SUBTITLE_DISABLED_SOURCE_IDS = new Set(["kkphim"]);
 
 type SubtitleSyncTarget = {
   track: SubtitleAlignmentTrack;
@@ -43,11 +42,6 @@ function resolvePreferredAutoSubtitleLanguage(
   userLanguage: string | null | undefined,
 ) {
   return lastSelectedLanguage ?? userLanguage ?? "en";
-}
-
-function isAutoSubtitleDisabledSource(sourceId: string | null): boolean {
-  if (!sourceId) return false;
-  return AUTO_SUBTITLE_DISABLED_SOURCE_IDS.has(sourceId);
 }
 
 export function useCaptions() {
@@ -65,7 +59,6 @@ export function useCaptions() {
 
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);
-  const sourceId = usePlayerStore((s) => s.sourceId);
   const source = usePlayerStore((s) => s.source);
   const embeddedSubtitleTracksLoaded = usePlayerStore(
     (s) => s.embeddedSubtitleTracksLoaded,
@@ -671,9 +664,8 @@ export function useCaptions() {
   ]);
 
   const selectLastUsedLanguageIfEnabled = useCallback(async () => {
-    if (isAutoSubtitleDisabledSource(sourceId)) return;
     if (enabled || !lastSelectedLanguage) await selectLastUsedLanguage();
-  }, [sourceId, selectLastUsedLanguage, enabled, lastSelectedLanguage]);
+  }, [selectLastUsedLanguage, enabled, lastSelectedLanguage]);
 
   const toggleLastUsed = useCallback(async () => {
     if (enabled) disable();
@@ -709,13 +701,6 @@ export function useCaptions() {
     if (source?.type === "file" && !embeddedSubtitleTracksLoaded) return;
 
     if (!selectedCaption) {
-      const isAutoSelectDisabledForSource =
-        isAutoSubtitleDisabledSource(sourceId);
-      if (isAutoSelectDisabledForSource) {
-        latestAutoSelectRequestIdRef.current = externalSubtitleRequestId;
-        return;
-      }
-
       const isNewSourceRequest =
         latestAutoSelectRequestIdRef.current !== externalSubtitleRequestId;
       const shouldAutoSelect =
@@ -777,7 +762,6 @@ export function useCaptions() {
     embeddedSubtitleTracksLoaded,
     isLoadingExternalSubtitles,
     externalSubtitleRequestId,
-    sourceId,
     source,
     lastSelectedLanguage,
     selectLastUsedLanguage,
