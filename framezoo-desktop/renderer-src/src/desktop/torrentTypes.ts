@@ -44,3 +44,9 @@ export interface TorrentSession {
   fileName: string | null;
   infoHash: string | null;
 }
+
+export interface TorrentStorageInfo {
+  path: string;
+  usedBytes: number;
+  maxBytes: number;
+}

@@ -1271,6 +1271,11 @@
       "title": "Streaming",
       "maxSizeLabel": "Dimensione massima della cache",
       "maxSizeDescription": "Imposta lo spazio su disco massimo utilizzato per la memorizzazione nella cache dei file di flusso. Se la cache supera questo limite, i file di flusso più vecchi verranno cancellati.",
+      "currentSizeLabel": "Dimensione corrente della cache",
+      "currentSizeLoading": "Caricamento...",
+      "clearCache": "Cancella cache",
+      "clearCacheSuccess": "Cache cancellata",
+      "clearCacheError": "Impossibile svuotare la cache. Per favore riprova.",
       "unlimited": "Illimitato",
       "custom": "Costume..."
     },

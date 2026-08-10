@@ -1271,6 +1271,11 @@
       "title": "Folyó",
       "maxSizeLabel": "Maximális gyorsítótár mérete",
       "maxSizeDescription": "Állítsa be a streamfájlok gyorsítótárazásához felhasznált maximális lemezterületet. Ha a gyorsítótár meghaladja ezt a korlátot, a régebbi adatfolyam-fájlok törlődnek.",
+      "currentSizeLabel": "A gyorsítótár jelenlegi mérete",
+      "currentSizeLoading": "Terhelés...",
+      "clearCache": "Gyorsítótár törlése",
+      "clearCacheSuccess": "A gyorsítótár törölve",
+      "clearCacheError": "Nem sikerült törölni a gyorsítótárat. Kérjük, próbálja újra.",
       "unlimited": "Korlátlan",
       "custom": "Szokás..."
     },

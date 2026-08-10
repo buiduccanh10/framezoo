@@ -1271,6 +1271,11 @@
       "title": "Akış",
       "maxSizeLabel": "Maksimum Önbellek Boyutu",
       "maxSizeDescription": "Akış dosyalarını önbelleğe almak için kullanılan maksimum disk alanını ayarlayın. Önbellek bu sınırı aşarsa eski akış dosyaları temizlenecektir.",
+      "currentSizeLabel": "Geçerli önbellek boyutu",
+      "currentSizeLoading": "Yükleniyor...",
+      "clearCache": "Önbelleği temizle",
+      "clearCacheSuccess": "Önbellek temizlendi",
+      "clearCacheError": "Önbellek temizlenemedi. Lütfen tekrar deneyin.",
       "unlimited": "Sınırsız",
       "custom": "Gelenek..."
     },

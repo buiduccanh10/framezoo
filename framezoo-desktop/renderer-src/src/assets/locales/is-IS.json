@@ -1271,6 +1271,11 @@
       "title": "Straumspilun",
       "maxSizeLabel": "Hámarksstærð skyndiminni",
       "maxSizeDescription": "Stilltu hámarks pláss sem notað er til að vista straumskrár. Ef skyndiminni fer yfir þessi mörk verða eldri straumskrár hreinsaðar.",
+      "currentSizeLabel": "Núverandi stærð skyndiminni",
+      "currentSizeLoading": "Hleður...",
+      "clearCache": "Hreinsaðu skyndiminni",
+      "clearCacheSuccess": "Skyndiminni hreinsaður",
+      "clearCacheError": "Mistókst að hreinsa skyndiminni. Vinsamlegast reyndu aftur.",
       "unlimited": "Ótakmarkað",
       "custom": "Sérsniðin..."
     },

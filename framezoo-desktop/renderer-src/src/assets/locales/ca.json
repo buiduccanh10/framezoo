@@ -1271,6 +1271,11 @@
       "title": "Transmissió en directe",
       "maxSizeLabel": "Mida màxima de la memòria cau",
       "maxSizeDescription": "Estableix l'espai màxim de disc utilitzat per a la memòria cau dels fitxers de flux. Si la memòria cau supera aquest límit, s'esborraran els fitxers de reproducció més antics.",
+      "currentSizeLabel": "Mida actual de la memòria cau",
+      "currentSizeLoading": "Carregant...",
+      "clearCache": "Esborra la memòria cau",
+      "clearCacheSuccess": "S'ha esborrat la memòria cau",
+      "clearCacheError": "No s'ha pogut esborrar la memòria cau. Si us plau, torna-ho a provar.",
       "unlimited": "Il·limitat",
       "custom": "Personalitzat..."
     },

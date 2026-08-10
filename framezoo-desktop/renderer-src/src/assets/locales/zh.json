@@ -1271,6 +1271,11 @@
       "title": "流媒体",
       "maxSizeLabel": "最大缓存大小",
       "maxSizeDescription": "设置用于缓存流文件的最大磁盘空间。如果缓存超过此限制，较旧的流文件将被清除。",
+      "currentSizeLabel": "当前缓存大小",
+      "currentSizeLoading": "加载中...",
+      "clearCache": "清除缓存",
+      "clearCacheSuccess": "缓存已清除",
+      "clearCacheError": "清除缓存失败。请再试一次。",
       "unlimited": "无限",
       "custom": "风俗..."
     },

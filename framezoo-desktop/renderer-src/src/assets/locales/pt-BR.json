@@ -1271,6 +1271,11 @@
       "title": "Transmissão",
       "maxSizeLabel": "Tamanho máximo do cache",
       "maxSizeDescription": "Defina o espaço máximo em disco usado para armazenar arquivos de fluxo em cache. Se o cache exceder esse limite, os arquivos de stream mais antigos serão apagados.",
+      "currentSizeLabel": "Tamanho atual do cache",
+      "currentSizeLoading": "Carregando...",
+      "clearCache": "Limpar cache",
+      "clearCacheSuccess": "Cache limpo",
+      "clearCacheError": "Falha ao limpar o cache. Por favor, tente novamente.",
       "unlimited": "Ilimitado",
       "custom": "Personalizado..."
     },

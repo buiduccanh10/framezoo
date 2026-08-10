@@ -12,6 +12,7 @@ import type {
   TorrentSession,
   TorrentStartRequest,
   TorrentStatus,
+  TorrentStorageInfo,
 } from "./types";
 
 type RuntimeConfig = Record<string, string>;
@@ -59,14 +60,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
     return ipcRenderer.invoke("desktop:extension-message", name, payload);
   },
   addons: {
-    loadManifest(
-      manifestUrl: string,
-    ): Promise<AddonProtocolResponse> {
+    loadManifest(manifestUrl: string): Promise<AddonProtocolResponse> {
       return ipcRenderer.invoke("desktop:addon-manifest", manifestUrl);
     },
-    request(
-      request: AddonProtocolRequest,
-    ): Promise<AddonProtocolResponse> {
+    request(request: AddonProtocolRequest): Promise<AddonProtocolResponse> {
       return ipcRenderer.invoke("desktop:addon-request", request);
     },
   },
@@ -166,6 +163,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   setTorrentMaxSize(size: string | null): Promise<boolean> {
     return ipcRenderer.invoke("desktop:set-torrent-max-size", size);
   },
+  getTorrentStorageInfo(): Promise<TorrentStorageInfo> {
+    return ipcRenderer.invoke("desktop:torrent-get-storage-info");
+  },
+  clearTorrentStorage(): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:torrent-clear-storage");
+  },
   onTorrentStatus(listener: (status: TorrentStatus) => void) {
     const handler = (
       _event: Electron.IpcRendererEvent,
@@ -205,9 +208,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
             command,
           );
         },
-        extractLibMpvAudio(
-          request: LibMpvAudioRequest,
-        ): Promise<Uint8Array> {
+        extractLibMpvAudio(request: LibMpvAudioRequest): Promise<Uint8Array> {
           return ipcRenderer.invoke("desktop:libmpv-extract-audio", request);
         },
         reparentLibMpvPlayer(
@@ -224,11 +225,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
           playerId: string,
           reason?: string,
         ): Promise<boolean> {
-          return ipcRenderer.invoke(
-            "desktop:libmpv-destroy",
-            playerId,
-            reason,
-          );
+          return ipcRenderer.invoke("desktop:libmpv-destroy", playerId, reason);
         },
         onLibMpvEvent(listener: (event: LibMpvPlayerEvent) => void) {
           const handler = (

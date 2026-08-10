@@ -79,7 +79,7 @@ function SettingsLayout(props: {
     <WideContainer ultraWide classNames="overflow-visible">
       {/* Floating Search Bar - starts in sticky state */}
       <div
-        className="fixed left-0 right-0 z-50"
+        className="fixed left-0 right-0 z-[600]"
         style={{
           top: `${topOffset}px`,
         }}

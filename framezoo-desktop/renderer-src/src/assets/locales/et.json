@@ -1271,6 +1271,11 @@
       "title": "Voogesitus",
       "maxSizeLabel": "Maksimaalne vahemälu suurus",
       "maxSizeDescription": "Määrake voofailide vahemällu salvestamiseks kasutatav maksimaalne kettaruum. Kui vahemälu ületab selle limiidi, kustutatakse vanemad voofailid.",
+      "currentSizeLabel": "Praegune vahemälu suurus",
+      "currentSizeLoading": "Laadimine...",
+      "clearCache": "Tühjenda vahemälu",
+      "clearCacheSuccess": "Vahemälu tühjendatud",
+      "clearCacheError": "Vahemälu tühjendamine ebaõnnestus. Palun proovi uuesti.",
       "unlimited": "Piiramatu",
       "custom": "Kohandatud..."
     },

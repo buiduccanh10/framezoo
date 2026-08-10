@@ -1271,6 +1271,11 @@
       "title": "Streaming",
       "maxSizeLabel": "Dimensiunea maximă a memoriei cache",
       "maxSizeDescription": "Setați spațiul maxim pe disc utilizat pentru stocarea în cache a fișierelor flux. Dacă memoria cache depășește această limită, fișierele de flux mai vechi vor fi șterse.",
+      "currentSizeLabel": "Dimensiunea actuală a memoriei cache",
+      "currentSizeLoading": "Încărcare...",
+      "clearCache": "Goliți memoria cache",
+      "clearCacheSuccess": "Cache-ul a fost golit",
+      "clearCacheError": "Nu s-a șters memoria cache. Vă rugăm să încercați din nou.",
       "unlimited": "Nelimitat",
       "custom": "Personalizat..."
     },

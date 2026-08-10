@@ -1271,6 +1271,11 @@
       "title": "Straumēšana",
       "maxSizeLabel": "Maksimālais kešatmiņas lielums",
       "maxSizeDescription": "Iestatiet maksimālo diska vietu, kas tiek izmantota straumes failu saglabāšanai kešatmiņā. Ja kešatmiņa pārsniedz šo ierobežojumu, vecāki straumes faili tiks notīrīti.",
+      "currentSizeLabel": "Pašreizējais kešatmiņas lielums",
+      "currentSizeLoading": "Notiek ielāde...",
+      "clearCache": "Notīrīt kešatmiņu",
+      "clearCacheSuccess": "Kešatmiņa notīrīta",
+      "clearCacheError": "Neizdevās notīrīt kešatmiņu. Lūdzu, mēģiniet vēlreiz.",
       "unlimited": "Neierobežots",
       "custom": "Pielāgots..."
     },

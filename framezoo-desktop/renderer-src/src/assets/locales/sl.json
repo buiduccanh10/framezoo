@@ -1271,6 +1271,11 @@
       "title": "Pretakanje",
       "maxSizeLabel": "Največja velikost predpomnilnika",
       "maxSizeDescription": "Nastavite največji prostor na disku, uporabljen za predpomnjenje tokovnih datotek. Če predpomnilnik preseže to omejitev, bodo starejše tokovne datoteke izbrisane.",
+      "currentSizeLabel": "Trenutna velikost predpomnilnika",
+      "currentSizeLoading": "Nalaganje...",
+      "clearCache": "Počisti predpomnilnik",
+      "clearCacheSuccess": "Predpomnilnik počiščen",
+      "clearCacheError": "Čiščenje predpomnilnika ni uspelo. prosim poskusite znova",
       "unlimited": "Neomejeno",
       "custom": "Po meri ..."
     },

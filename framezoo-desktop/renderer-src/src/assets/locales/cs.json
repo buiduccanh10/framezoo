@@ -1271,6 +1271,11 @@
       "title": "Streamování",
       "maxSizeLabel": "Maximální velikost mezipaměti",
       "maxSizeDescription": "Nastavte maximální místo na disku použité pro ukládání datových proudů do mezipaměti. Pokud mezipaměť překročí tento limit, starší soubory streamu budou vymazány.",
+      "currentSizeLabel": "Aktuální velikost mezipaměti",
+      "currentSizeLoading": "Načítání...",
+      "clearCache": "Vymazat mezipaměť",
+      "clearCacheSuccess": "Cache vymazána",
+      "clearCacheError": "Vymazání mezipaměti se nezdařilo. Zkuste to prosím znovu.",
       "unlimited": "Neomezený",
       "custom": "Zvyk..."
     },

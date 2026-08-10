@@ -51,6 +51,12 @@ export interface TorrentSession {
   infoHash: string | null;
 }
 
+export interface TorrentStorageInfo {
+  path: string;
+  usedBytes: number;
+  maxBytes: number;
+}
+
 export type StreamRule = {
   targetDomains: string[];
   requestHeaders?: Record<string, string>;

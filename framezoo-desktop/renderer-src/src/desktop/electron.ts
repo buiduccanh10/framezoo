@@ -32,6 +32,7 @@ import type {
   TorrentSession,
   TorrentStartRequest,
   TorrentStatus,
+  TorrentStorageInfo,
 } from "./torrentTypes";
 
 declare global {
@@ -48,6 +49,8 @@ declare global {
       stopTorrent?: (sessionId: string) => Promise<boolean>;
       getTorrentStatus?: (sessionId: string) => Promise<TorrentStatus | null>;
       setTorrentMaxSize?: (size: string | null) => Promise<boolean>;
+      getTorrentStorageInfo?: () => Promise<TorrentStorageInfo>;
+      clearTorrentStorage?: () => Promise<boolean>;
       onTorrentStatus?: (
         listener: (status: TorrentStatus) => void,
       ) => () => void;

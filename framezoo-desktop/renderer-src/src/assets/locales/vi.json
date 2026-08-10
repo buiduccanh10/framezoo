@@ -1271,6 +1271,11 @@
       "title": "Truyền phát",
       "maxSizeLabel": "Kích thước bộ đệm tối đa",
       "maxSizeDescription": "Thiết lập dung lượng đĩa tối đa được sử dụng để lưu trữ bộ nhớ đệm cho các tệp stream. Nếu bộ nhớ đệm vượt quá giới hạn này, các tệp stream cũ hơn sẽ được dọn dẹp.",
+      "currentSizeLabel": "Kích thước bộ đệm hiện tại",
+      "currentSizeLoading": "Đang tải...",
+      "clearCache": "Xóa bộ nhớ đệm",
+      "clearCacheSuccess": "Đã xóa bộ nhớ đệm",
+      "clearCacheError": "Không xóa được bộ nhớ đệm. Vui lòng thử lại.",
       "unlimited": "Không giới hạn",
       "custom": "Tùy chỉnh..."
     },

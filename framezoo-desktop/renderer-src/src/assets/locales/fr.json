@@ -1271,6 +1271,11 @@
       "title": "Streaming",
       "maxSizeLabel": "Taille maximale du cache",
       "maxSizeDescription": "Définissez l'espace disque maximum utilisé pour la mise en cache des fichiers de flux. Si le cache dépasse cette limite, les anciens fichiers de flux seront effacés.",
+      "currentSizeLabel": "Taille actuelle du cache",
+      "currentSizeLoading": "Chargement...",
+      "clearCache": "Vider le cache",
+      "clearCacheSuccess": "Cache vidé",
+      "clearCacheError": "Échec de la suppression du cache. Veuillez réessayer.",
       "unlimited": "Illimité",
       "custom": "Coutume..."
     },
