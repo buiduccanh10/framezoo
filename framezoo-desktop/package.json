@@ -1,7 +1,7 @@
 {
   "name": "framezoo-desktop",
   "private": true,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.17.0",
   "scripts": {

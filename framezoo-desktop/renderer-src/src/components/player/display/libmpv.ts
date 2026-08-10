@@ -180,6 +180,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   // mpv reports the position snapped back to the keyframe right after a seek
   // settles; hold backward jumps within this window so cues do not blink out.
   const SEEK_BACKTRACK_GUARD_MS = 3000;
+  // Ignore stale decoder positions that arrive outside an explicit seek.
+  const TIME_BACKTRACK_TOLERANCE_SECONDS = 0.5;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
@@ -574,6 +576,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
           const rawPosition = Math.max(0, event.data);
+          if (cachePaused) {
+            // The rendered frame is stalled while libmpv waits for input.
+            // Ignore clock snapshots from that interval so subtitles do not
+            // disappear or jump ahead of the visible video.
+            break;
+          }
           if (pendingSeekTarget !== null) {
             if (
               (isSeeking || Math.abs(rawPosition - pendingSeekTarget) > 0.5) &&
@@ -595,6 +603,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             // Right after a seek settles, the decoder restarts from a
             // keyframe before the target. Hold the backward jump so cues
             // stay visible until playback catches up.
+            break;
+          } else if (rawPosition < time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
+            // A backward jump without a pending seek is stale decoder state,
+            // not a real user navigation. Letting it through makes
+            // SubtitleView briefly filter the active cue out.
             break;
           }
           applyTimePosition(rawPosition);
@@ -851,6 +864,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       generation = requestGeneration;
       fileLoaded = false; // reset for new load
       firstFrameLoggedGeneration = -1;
+      seekSettledAt = 0;
       // The native player issues an initial seek to the current position
       // after FILE_LOADED; treat it like a user seek so the stale time-pos
       // snapshot (and the early target report) do not flash subtitle cues.

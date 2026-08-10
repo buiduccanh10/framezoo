@@ -818,6 +818,119 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("ignores stale backward time updates during normal playback", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const timePos = (time: number) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "property",
+        name: "time-pos",
+        data: time,
+      });
+
+    timePos(60.2);
+    timePos(59);
+    expect(times).toEqual([60.2]);
+
+    // A real backward seek still passes through the pending-seek path.
+    display.setTime(50);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    timePos(50);
+    expect(times).toEqual([60.2, 50]);
+
+    display.destroy();
+  });
+
+  it("holds time updates during a normal stream cache pause", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    const property = (name: string, data: unknown) =>
+      eventListener?.({
+        playerId: "player-1",
+        generation: 1,
+        type: "property",
+        name,
+        data,
+      });
+
+    property("time-pos", 60.2);
+    property("paused-for-cache", true);
+    property("time-pos", 65);
+    expect(times).toEqual([60.2]);
+
+    property("paused-for-cache", false);
+    property("time-pos", 60.4);
+    expect(times).toEqual([60.2, 60.4]);
+
+    display.destroy();
+  });
+
   it("settles a paused scrub when mpv reports the seek completed", async () => {
     let eventListener:
       | ((event: {
