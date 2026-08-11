@@ -73,6 +73,7 @@ overrides:
   'valibot@<=1.4.1': '>=1.4.2'
   'find-my-way@<=9.6.0': '>=9.6.1'
   'shell-quote@<=1.8.4': '>=1.8.5'
+  'fast-xml-parser@<5.7.0': '5.7.0'
 
 minimumReleaseAgeExclude:
   - '@hono/node-server@2.1.0'
@@ -80,3 +81,9 @@ minimumReleaseAgeExclude:
 audit:
   ignore:
     - GHSA-qwww-vcr4-c8h2
+    # image-size has no patched npm release; local patch guards ICNS/JXL/HEIF parser loops.
+    - GHSA-w3rx-r6r6-pgpr
+    - GHSA-5p2g-fcmc-qvqq
+
+patchedDependencies:
+  image-size@1.2.1: patches/image-size@1.2.1.patch
