@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -11,12 +11,21 @@ export function Screen(props: {
   style?: object;
   refreshing?: boolean;
   onRefresh?: () => void;
+  scrollKey?: string | number;
 }) {
   const insets = useSafeAreaInsets();
+  const scrollRef = useRef<ScrollView>(null);
+  useEffect(() => {
+    if (props.scroll && props.scrollKey !== undefined) {
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+    }
+  }, [props.scroll, props.scrollKey]);
+
   const content = (
     <View
       style={[
         styles.content,
+        props.scroll ? styles.scrollContentView : styles.fillContent,
         props.padded && styles.padded,
         { paddingTop: Math.max(insets.top, spacing.lg) },
         props.style,
@@ -28,6 +37,7 @@ export function Screen(props: {
 
   return props.scroll ? (
     <ScrollView
+      ref={scrollRef}
       style={styles.screen}
       contentContainerStyle={styles.scrollContent}
       refreshControl={
@@ -52,7 +62,9 @@ export function Screen(props: {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
-  content: { flex: 1 },
+  content: {},
+  fillContent: { flex: 1 },
+  scrollContentView: { alignSelf: 'stretch' },
   padded: { paddingHorizontal: spacing.lg },
   scrollContent: { flexGrow: 1, paddingBottom: spacing.xxxl },
 });

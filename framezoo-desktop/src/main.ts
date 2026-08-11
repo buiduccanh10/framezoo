@@ -30,7 +30,7 @@ import type {
 } from "./types";
 
 const APP_ID = "com.framezoo.desktop";
-const APP_NAME = "FrameZoo";
+const APP_NAME = "Framezoo";
 const DEFAULT_BACKEND_URL = "http://127.0.0.1:3000";
 const RENDERER_DEV_URL = process.env.ELECTRON_RENDERER_URL;
 const RENDERER_PROTOCOL = "app";
@@ -67,7 +67,9 @@ const PROTOCOL_PREFIX = "framezoo";
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient(PROTOCOL_PREFIX, process.execPath, [path.resolve(process.argv[1])]);
+    app.setAsDefaultProtocolClient(PROTOCOL_PREFIX, process.execPath, [
+      path.resolve(process.argv[1]),
+    ]);
   }
 } else {
   app.setAsDefaultProtocolClient(PROTOCOL_PREFIX);
@@ -75,7 +77,7 @@ if (process.defaultApp) {
 
 function handleDeepLink(url: string) {
   const deepLinkPath = url.replace(new RegExp(`^${PROTOCOL_PREFIX}:/+`), "/");
-  
+
   if (mainWindow) {
     if (mainWindow.isMinimized()) mainWindow.restore();
     mainWindow.focus();
@@ -178,9 +180,7 @@ function getConfiguredBackendUrl() {
 }
 
 function normalizeWindowTitle(title: string) {
-  const normalized = title
-    .replace(/FrameZoo/gi, APP_NAME)
-    .trim();
+  const normalized = title.replace(/Framezoo/gi, APP_NAME).trim();
 
   return normalized.length > 0 ? normalized : APP_NAME;
 }
@@ -545,7 +545,7 @@ async function handleDesktopAppUpdateMenuAction() {
 
   await showDesktopMessageBox({
     type: "info",
-    title: "FrameZoo is up to date",
+    title: "Framezoo is up to date",
     message: `You are already on the latest desktop version (v${app.getVersion()}).`,
   });
 }
@@ -990,7 +990,7 @@ function registerIpcHandlers() {
     } catch {
       // ignore
     }
-    
+
     let maxBytes = 5 * 1024 * 1024 * 1024; // Default 5GB
     if (process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES) {
       const parsed = parseInt(process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES, 10);
@@ -1004,14 +1004,17 @@ function registerIpcHandlers() {
     };
   });
 
-  ipcMain.handle("desktop:set-torrent-max-size", async (_event, size: string | null) => {
-    if (size) {
-      process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES = size;
-    } else {
-      delete process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES;
-    }
-    return true;
-  });
+  ipcMain.handle(
+    "desktop:set-torrent-max-size",
+    async (_event, size: string | null) => {
+      if (size) {
+        process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES = size;
+      } else {
+        delete process.env.FRAMEZOO_TORRENT_MAX_SIZE_BYTES;
+      }
+      return true;
+    },
+  );
 
   ipcMain.handle("desktop:torrent-clear-storage", async () => {
     const torrentDir =
@@ -1053,7 +1056,9 @@ if (!hasSingleInstanceLock) {
 
     mainWindow.focus();
 
-    const deepLinkUrl = commandLine.find((arg) => arg.startsWith(`${PROTOCOL_PREFIX}:/`));
+    const deepLinkUrl = commandLine.find((arg) =>
+      arg.startsWith(`${PROTOCOL_PREFIX}:/`),
+    );
     if (deepLinkUrl) {
       handleDeepLink(deepLinkUrl);
     }
@@ -1073,7 +1078,9 @@ if (!hasSingleInstanceLock) {
       }
     });
 
-    const deepLinkUrl = process.argv.find((arg) => arg.startsWith(`${PROTOCOL_PREFIX}:/`));
+    const deepLinkUrl = process.argv.find((arg) =>
+      arg.startsWith(`${PROTOCOL_PREFIX}:/`),
+    );
     if (deepLinkUrl) {
       setTimeout(() => handleDeepLink(deepLinkUrl), 1500);
     }
@@ -1103,9 +1110,12 @@ app.on("before-quit", (event) => {
   event.preventDefault();
   isQuitting = true;
   desktopAppUpdater.dispose();
-  torrentManager.stopAll().catch(console.error).finally(() => {
-    void torrentManager.dispose().finally(() => {
-      app.quit();
+  torrentManager
+    .stopAll()
+    .catch(console.error)
+    .finally(() => {
+      void torrentManager.dispose().finally(() => {
+        app.quit();
+      });
     });
-  });
 });

@@ -232,9 +232,9 @@ jobs:
           if-no-files-found: error
           path: |
             framezoo-desktop/release/latest-mac.yml
-            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}-mac.dmg
-            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}-mac.zip
-            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}-mac.zip.blockmap
+            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}-mac.dmg
+            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}-mac.zip
+            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}-mac.zip.blockmap
 
   build-windows:
     name: Build Windows (${{ matrix.variant }})
@@ -326,8 +326,8 @@ jobs:
           if-no-files-found: error
           path: |
             framezoo-desktop/release/latest.yml
-            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}.exe
-            framezoo-desktop/release/FrameZoo-*-${{ matrix.arch }}.exe.blockmap
+            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}.exe
+            framezoo-desktop/release/Framezoo-*-${{ matrix.arch }}.exe.blockmap
 
   publish:
     name: Publish

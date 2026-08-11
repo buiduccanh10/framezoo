@@ -89,7 +89,7 @@ export function DocumentPipOverlay() {
   const effectiveTime = clampTime(time, duration);
   const timeHasHours = durationExceedsHour(duration);
   const remainingTime = Math.max(duration - effectiveTime, 0);
-  const title = meta?.episode?.title || meta?.title || "FrameZoo";
+  const title = meta?.episode?.title || meta?.title || "Framezoo";
 
   const seekTo = useCallback(
     (nextTime: number) => {

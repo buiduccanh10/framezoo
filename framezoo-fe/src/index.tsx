@@ -7,7 +7,7 @@ import App from "@/setup/App";
 const container = document.getElementById("root");
 
 if (!container) {
-  throw new Error("FrameZoo landing root was not found.");
+  throw new Error("Framezoo landing root was not found.");
 }
 
 createRoot(container).render(

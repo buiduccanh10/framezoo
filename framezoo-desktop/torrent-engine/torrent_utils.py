@@ -159,7 +159,7 @@ def get_torrent_data_dir() -> str:
         os.makedirs(env_dir, exist_ok=True)
         return os.path.abspath(env_dir)
     fallback = (
-        os.path.expanduser("~/Library/Application Support/FrameZoo/torrents")
+        os.path.expanduser("~/Library/Application Support/Framezoo/torrents")
         if sys.platform == "darwin"
         else os.path.join(tempfile.gettempdir(), "framezoo-torrents")
     )

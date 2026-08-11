@@ -12,8 +12,30 @@ Bare React Native TypeScript app for Android phone and Android TV.
 
 ## Development
 
+Metro dev server with Fast Refresh:
+
+```bash
+pnpm --filter framezoo-mobile dev
+```
+
+Run a debug app. The React Native CLI starts/connects to Metro automatically:
+
+```bash
+pnpm --filter framezoo-mobile ios:dev
+pnpm --filter framezoo-mobile android:dev
+```
+
+When Metro cache is stale:
+
+```bash
+pnpm --filter framezoo-mobile dev:reset
+```
+
+Equivalent legacy commands remain available:
+
 ```bash
 pnpm --filter framezoo-mobile start
+pnpm --filter framezoo-mobile ios
 pnpm --filter framezoo-mobile android
 pnpm --filter framezoo-mobile typecheck
 pnpm --filter framezoo-mobile lint

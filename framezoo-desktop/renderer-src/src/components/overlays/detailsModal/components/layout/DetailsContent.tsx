@@ -545,7 +545,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     if (/iPad|iPhone|iPod/i.test(navigator.userAgent) && navigator.share) {
       navigator
         .share({
-          title: "FrameZoo",
+          title: "Framezoo",
           text: data.title,
           url: shareUrl,
         })

@@ -342,7 +342,7 @@ export default function DesktopPipPage() {
               onClick={close}
             />
             <div className="min-w-0 max-w-[30vw] truncate text-sm font-medium text-white/80">
-              {pipState.title || "FrameZoo"}
+              {pipState.title || "Framezoo"}
             </div>
           </div>
           <div style={noDragRegionStyle}>

@@ -10,11 +10,18 @@ function getArg(name, defaultValue) {
 }
 
 const target = getArg("--target", "win32-x64");
-const defaultOutDir = path.join(process.cwd(), "resources", "libmpv-sdk", target);
+const defaultOutDir = path.join(
+  process.cwd(),
+  "resources",
+  "libmpv-sdk",
+  target,
+);
 const outDir = path.resolve(getArg("--out", defaultOutDir));
 
 if (!target.startsWith("win32-")) {
-  console.log(`[fetch-windows-libmpv] Target ${target} is not a Windows target. Skipping.`);
+  console.log(
+    `[fetch-windows-libmpv] Target ${target} is not a Windows target. Skipping.`,
+  );
   process.exit(0);
 }
 
@@ -32,7 +39,7 @@ const candidateRepos = [
 ];
 
 async function fetchReleaseAsset() {
-  const headers = { "User-Agent": "FrameZoo-Build-Script" };
+  const headers = { "User-Agent": "Framezoo-Build-Script" };
   if (process.env.GITHUB_TOKEN) {
     headers["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;
   }
@@ -42,7 +49,9 @@ async function fetchReleaseAsset() {
     try {
       const res = await fetch(apiUrl, { headers });
       if (!res.ok) {
-        console.warn(`[fetch-windows-libmpv] Failed to query ${apiUrl}: ${res.status} ${res.statusText}`);
+        console.warn(
+          `[fetch-windows-libmpv] Failed to query ${apiUrl}: ${res.status} ${res.statusText}`,
+        );
         continue;
       }
       const releases = await res.json();
@@ -50,17 +59,26 @@ async function fetchReleaseAsset() {
 
       for (const release of releases) {
         if (!release.assets || !Array.isArray(release.assets)) continue;
-        const asset = release.assets.find((a) => pattern.test(a.name)) || release.assets.find((a) => fallbackPattern.test(a.name));
+        const asset =
+          release.assets.find((a) => pattern.test(a.name)) ||
+          release.assets.find((a) => fallbackPattern.test(a.name));
         if (asset) {
-          console.log(`[fetch-windows-libmpv] Found asset: ${asset.name} (${asset.browser_download_url})`);
+          console.log(
+            `[fetch-windows-libmpv] Found asset: ${asset.name} (${asset.browser_download_url})`,
+          );
           return asset;
         }
       }
     } catch (error) {
-      console.warn(`[fetch-windows-libmpv] Error checking ${apiUrl}:`, error.message);
+      console.warn(
+        `[fetch-windows-libmpv] Error checking ${apiUrl}:`,
+        error.message,
+      );
     }
   }
-  throw new Error(`[fetch-windows-libmpv] Could not find suitable prebuilt libmpv dev asset for target ${target}`);
+  throw new Error(
+    `[fetch-windows-libmpv] Could not find suitable prebuilt libmpv dev asset for target ${target}`,
+  );
 }
 
 async function main() {
@@ -69,22 +87,34 @@ async function main() {
   const asset = await fetchReleaseAsset();
   const tmpFile = path.join(os.tmpdir(), `mpv-sdk-${Date.now()}-${asset.name}`);
 
-  console.log(`[fetch-windows-libmpv] Downloading ${asset.browser_download_url}...`);
+  console.log(
+    `[fetch-windows-libmpv] Downloading ${asset.browser_download_url}...`,
+  );
   const downloadRes = await fetch(asset.browser_download_url, {
-    headers: { "User-Agent": "FrameZoo-Build-Script" },
+    headers: { "User-Agent": "Framezoo-Build-Script" },
   });
   if (!downloadRes.ok) {
-    throw new Error(`Failed to download ${asset.browser_download_url}: ${downloadRes.status} ${downloadRes.statusText}`);
+    throw new Error(
+      `Failed to download ${asset.browser_download_url}: ${downloadRes.status} ${downloadRes.statusText}`,
+    );
   }
   const buffer = Buffer.from(await downloadRes.arrayBuffer());
   fs.writeFileSync(tmpFile, buffer);
-  console.log(`[fetch-windows-libmpv] Saved temporary archive (${(buffer.length / 1024 / 1024).toFixed(2)} MB) to ${tmpFile}`);
+  console.log(
+    `[fetch-windows-libmpv] Saved temporary archive (${(buffer.length / 1024 / 1024).toFixed(2)} MB) to ${tmpFile}`,
+  );
 
-  console.log(`[fetch-windows-libmpv] Extracting archive using 7z to ${outDir}...`);
+  console.log(
+    `[fetch-windows-libmpv] Extracting archive using 7z to ${outDir}...`,
+  );
   try {
-    execFileSync("7z", ["x", "-y", `-o${outDir}`, tmpFile], { stdio: "inherit" });
+    execFileSync("7z", ["x", "-y", `-o${outDir}`, tmpFile], {
+      stdio: "inherit",
+    });
   } catch (error) {
-    throw new Error(`Failed to extract archive using '7z'. Ensure 7-Zip (7z) is installed and in PATH. Details: ${error.message}`);
+    throw new Error(
+      `Failed to extract archive using '7z'. Ensure 7-Zip (7z) is installed and in PATH. Details: ${error.message}`,
+    );
   } finally {
     if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile);
   }
@@ -119,8 +149,14 @@ async function main() {
   console.log(`[fetch-windows-libmpv] SDK Ready at: ${libmpvRoot}`);
 
   if (process.env.GITHUB_ENV) {
-    fs.appendFileSync(process.env.GITHUB_ENV, `LIBMPV_ROOT=${libmpvRoot}\n`, "utf8");
-    console.log(`[fetch-windows-libmpv] Appended LIBMPV_ROOT=${libmpvRoot} to GITHUB_ENV`);
+    fs.appendFileSync(
+      process.env.GITHUB_ENV,
+      `LIBMPV_ROOT=${libmpvRoot}\n`,
+      "utf8",
+    );
+    console.log(
+      `[fetch-windows-libmpv] Appended LIBMPV_ROOT=${libmpvRoot} to GITHUB_ENV`,
+    );
   }
 }
 

@@ -3,7 +3,7 @@ import type { MediaItem } from '@/types';
 export const demoMedia: MediaItem[] = [
   {
     id: 'demo-1',
-    title: 'FrameZoo Premiere',
+    title: 'Framezoo Premiere',
     type: 'movie',
     year: 2025,
     poster: 'https://image.tmdb.org/t/p/w342/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',

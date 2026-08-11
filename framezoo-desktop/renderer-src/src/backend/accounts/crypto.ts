@@ -239,7 +239,7 @@ export async function createPasskey(
     {
       challenge,
       rp: {
-        name: "FrameZoo",
+        name: "Framezoo",
         id: window.location.hostname,
       },
       user: {

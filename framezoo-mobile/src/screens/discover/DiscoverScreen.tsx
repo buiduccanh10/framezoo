@@ -162,6 +162,7 @@ export function DiscoverScreen() {
     <Screen
       scroll
       padded
+      scrollKey={`${category}:${year}:${country}`}
       onRefresh={() => {
         refetch().catch(() => undefined);
       }}

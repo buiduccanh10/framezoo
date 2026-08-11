@@ -87,8 +87,8 @@ export default defineConfig(({ mode }) => {
           "safari-pinned-tab.svg",
         ],
         manifest: {
-          name: "FrameZoo",
-          short_name: "FrameZoo",
+          name: "Framezoo",
+          short_name: "Framezoo",
           description:
             "Watch your favorite shows and movies for free with no ads ever! ",
           theme_color: "#000000",

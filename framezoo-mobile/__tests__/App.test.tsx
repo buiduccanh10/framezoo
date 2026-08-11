@@ -9,7 +9,7 @@ import {
   signChallenge,
 } from '../src/services/auth/crypto';
 
-describe('FrameZoo mobile app', () => {
+describe('Framezoo mobile app', () => {
   it('runs the mock player contract', async () => {
     const adapter = new MockPlayerAdapter();
     const source = {
@@ -33,7 +33,9 @@ describe('FrameZoo mobile app', () => {
   });
 
   it('builds generic addon protocol URLs', () => {
-    const manifestUrl = normalizeAddonManifestUrl('https://example.test/manifest.json');
+    const manifestUrl = normalizeAddonManifestUrl(
+      'https://example.test/manifest.json',
+    );
     expect(
       getAddonResourceUrl({
         manifestUrl,
@@ -48,7 +50,9 @@ describe('FrameZoo mobile app', () => {
     const first = deriveAuthKeys('correct horse battery staple 123');
     const second = deriveAuthKeys('correct horse battery staple 123');
 
-    expect(encodePublicKey(first.publicKey)).toBe(encodePublicKey(second.publicKey));
+    expect(encodePublicKey(first.publicKey)).toBe(
+      encodePublicKey(second.publicKey),
+    );
     expect(signChallenge(first.secretKey, 'challenge-1')).toBe(
       signChallenge(second.secretKey, 'challenge-1'),
     );
@@ -58,8 +62,8 @@ describe('FrameZoo mobile app', () => {
   });
 
   it('rejects malformed addon manifest URLs', () => {
-    expect(() => normalizeAddonManifestUrl('file:///tmp/manifest.json')).toThrow(
-      'Addon manifest must use HTTP or HTTPS',
-    );
+    expect(() =>
+      normalizeAddonManifestUrl('file:///tmp/manifest.json'),
+    ).toThrow('Addon manifest must use HTTP or HTTPS');
   });
 });

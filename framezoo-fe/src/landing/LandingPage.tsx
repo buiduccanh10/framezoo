@@ -137,14 +137,14 @@ export function LandingPage() {
         <a
           className="landing-brand"
           href="#top"
-          aria-label="FrameZoo home"
+          aria-label="Framezoo home"
           onClick={handleLandingHashClick}
         >
           <img
             src="/framezoo-logo.svg"
             width="138"
             height="40"
-            alt="FrameZoo"
+            alt="Framezoo"
           />
         </a>
         <nav className="landing-nav-links" aria-label="Primary navigation">
