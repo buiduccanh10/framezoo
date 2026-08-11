@@ -5,6 +5,7 @@ import { useCopyToClipboard, useIntersection } from "react-use";
 
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
+import { getMediaVideos } from "@/backend/metadata/tmdb";
 import { TMDBIdToUrlId, getSeasonDetails } from "@/backend/metadata/tmdb";
 import { getNetworkContent } from "@/backend/metadata/traktApi";
 import { MWMediaType } from "@/backend/metadata/types/mw";
@@ -272,6 +273,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState<string | undefined>();
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showCollection, setShowCollection] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
@@ -396,6 +398,38 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     return () => {
       isCancelled = true;
       clearTimeout(timer);
+    };
+  }, [data.id, data.type]);
+
+  // Fetch trailer video key for backdrop
+  useEffect(() => {
+    let isCancelled = false;
+    setTrailerKey(null);
+
+    if (!data.id || !data.type) return;
+
+    const fetchTrailerForBackdrop = async () => {
+      try {
+        const videos = await getMediaVideos(
+          data.id!.toString(),
+          data.type === "movie" ? TMDBContentTypes.MOVIE : TMDBContentTypes.TV,
+        );
+        if (isCancelled) return;
+        const trailer =
+          videos.find((v) => v.type === "Trailer") ?? videos[0] ?? null;
+        const videoKey = trailer?.key ?? null;
+
+        if (!isCancelled) {
+          setTrailerKey(videoKey);
+        }
+      } catch {
+        if (!isCancelled) setTrailerKey(null);
+      }
+    };
+
+    void fetchTrailerForBackdrop();
+    return () => {
+      isCancelled = true;
     };
   }, [data.id, data.type]);
 
@@ -613,6 +647,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         title={data.title}
         logoUrl={data.logoUrl}
         backdrop={data.backdrop}
+        tmdbId={data.id?.toString() ?? ""}
+        tmdbType={data.type === "movie" ? "movie" : "show"}
+        imdbId={data.imdbId}
       />
 
       {/* Content */}

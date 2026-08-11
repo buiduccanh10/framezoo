@@ -432,6 +432,8 @@ export function SourceSelectPart(props: {
       playMedia,
       progressItems,
       setPreferredStream,
+      setShouldStartFromBeginning,
+      shouldStartFromBeginning,
     ],
   );
 

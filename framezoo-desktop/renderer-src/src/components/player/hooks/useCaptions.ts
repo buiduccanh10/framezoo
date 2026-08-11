@@ -127,12 +127,14 @@ export function useCaptions() {
       cancelled = true;
     };
     // Re-run when the video changes (meta id changes) or addon list changes
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    meta,
     meta?.tmdbId,
     meta?.type,
-    (meta as any)?.season?.number,
-    (meta as any)?.episode?.number,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    meta?.type === "show" ? (meta as any)?.season?.number : undefined,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    meta?.type === "show" ? (meta as any)?.episode?.number : undefined,
     installedAddons,
   ]);
   // ────────────────────────────────────────────────────────────────────────────
