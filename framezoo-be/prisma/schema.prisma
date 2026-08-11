@@ -27,6 +27,19 @@ model challenge_codes {
   expires_at DateTime @db.Timestamptz(0)
 }
 
+model download_unique_users {
+  id                   String   @id @default(uuid()) @db.Uuid
+  identity_type        String   @db.VarChar(16)
+  identity_key         String   @db.VarChar(255)
+  version              String   @db.VarChar(64)
+  option_id            String   @db.VarChar(64)
+  first_downloaded_at  DateTime @default(now()) @db.Timestamptz(0)
+  last_downloaded_at   DateTime @default(now()) @db.Timestamptz(0)
+
+  @@unique([identity_type, identity_key, version, option_id], map: "download_unique_users_identity_version_option_unique")
+  @@index([version, option_id], map: "download_unique_users_version_option_idx")
+}
+
 model progress_items {
   id             String   @id @db.Uuid
   tmdb_id        String   @db.VarChar(255)

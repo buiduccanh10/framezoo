@@ -1,3 +1,8 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
+Disallow: /media/
+Disallow: /browse/
+Disallow: /discover
+
+Sitemap: https://framezoo.top/sitemap.xml

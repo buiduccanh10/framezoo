@@ -20,6 +20,7 @@ import {
 } from "./i18n";
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
+import { applyLandingSeo } from "./seo";
 import "./landing.css";
 
 export function LandingPage() {
@@ -33,6 +34,7 @@ export function LandingPage() {
     document.documentElement.lang = locale;
     document.documentElement.dir =
       getLandingLocaleOption(locale)?.direction ?? "ltr";
+    applyLandingSeo(locale);
 
     try {
       window.localStorage.setItem(LANDING_LOCALE_STORAGE_KEY, locale);

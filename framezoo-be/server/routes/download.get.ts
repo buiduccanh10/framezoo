@@ -9,6 +9,10 @@ import {
   readDesktopReleaseManifest,
   resolveDesktopReleaseFilePath,
 } from "../utils/desktopRelease";
+import { recordUniqueDownload } from "../utils/downloadTracking";
+import { scopedLogger } from "../utils/logger";
+
+const log = scopedLogger('download-route');
 
 export default defineEventHandler(async event => {
   const { option } = getQuery(event);
@@ -41,6 +45,21 @@ export default defineEventHandler(async event => {
       throw createError({
         statusCode: 404,
         message: 'Download file is not available',
+      });
+    }
+
+    try {
+      await recordUniqueDownload(
+        event,
+        manifest?.version ?? 'unknown',
+        downloadOption.id,
+      );
+    } catch (error) {
+      log.warn('Failed to record unique desktop download', {
+        evt: 'download_unique_record_error',
+        version: manifest?.version ?? 'unknown',
+        optionId: downloadOption.id,
+        error: error instanceof Error ? error.message : String(error),
       });
     }
 

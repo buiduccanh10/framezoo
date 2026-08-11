@@ -475,6 +475,22 @@ export function useAuth() {
     return resolveCurrentSessionFromEvent(event);
   };
 
+  const getOptionalCurrentSessionForEvent = async (event: H3EventCompat) => {
+    const accessToken = getAccessToken(event);
+
+    if (accessToken) {
+      const payload = verifyAccessToken(accessToken);
+      if (payload) {
+        const session = await getSessionAndBump(payload.sid);
+        if (session) {
+          return session;
+        }
+      }
+    }
+
+    return tryRefreshSessionFromEvent(event);
+  };
+
   return {
     getSession,
     getSessionAndBump,
@@ -489,6 +505,7 @@ export function useAuth() {
     rotateRefreshToken,
     getCurrentSession,
     getCurrentSessionForEvent,
+    getOptionalCurrentSessionForEvent,
     getRefreshTokenForEvent,
     setSessionCookie,
     setRefreshCookie,
