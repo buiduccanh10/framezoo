@@ -313,7 +313,6 @@
   font-size: 0.72rem;
   line-height: 1.2;
   white-space: nowrap;
-  touch-action: pan-y;
   transition:
     color 180ms ease,
     background 180ms ease,

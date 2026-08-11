@@ -74,9 +74,26 @@ export function LandingLanguageSelector({
               type="button"
               role="menuitemradio"
               aria-checked={option.id === locale}
+              onPointerDown={(event) => {
+                // Store the start Y position to detect dragging
+                (event.currentTarget as any)._startY = event.clientY;
+                (event.currentTarget as any)._isDragging = false;
+              }}
+              onPointerMove={(event) => {
+                const startY = (event.currentTarget as any)._startY;
+                if (startY !== undefined) {
+                  // If moved more than 5px, it's a drag/scroll
+                  if (Math.abs(event.clientY - startY) > 5) {
+                    (event.currentTarget as any)._isDragging = true;
+                  }
+                }
+              }}
               onClick={(event) => {
                 event.stopPropagation();
-                selectLocale(option.id);
+                // Only select if not dragging
+                if (!(event.currentTarget as any)._isDragging) {
+                  selectLocale(option.id);
+                }
               }}
             >
               <span className="landing-language-flag" aria-hidden="true">
