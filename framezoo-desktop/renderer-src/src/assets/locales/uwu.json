@@ -424,21 +424,15 @@
     "titles": {
       "69": {
         "default": "up fow something spicy owo?",
-        "extra": [
-          "happy 69 day 😘 (* ^ ω ^)!"
-        ]
+        "extra": ["happy 69 day 😘 (* ^ ω ^)!"]
       },
       "420": {
         "default": "What w-wouwd you wike t-to watch this 4/20!? *cries*",
-        "extra": [
-          "(づ ᴗ _ᴗ)づ♡ Weed!"
-        ]
+        "extra": ["(づ ᴗ _ᴗ)づ♡ Weed!"]
       },
       "day": {
         "default": "What w-wouwd you wike t-to watch this aftewnyoon!!11",
-        "extra": [
-          " /ᐠ>ヮ<ᐟ\\ฅ"
-        ]
+        "extra": [" /ᐠ>ヮ<ᐟ\\ฅ"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -451,15 +445,11 @@
       },
       "morning": {
         "default": "What w-wouwd you wike t-to watch this mownying?!! *walks away*",
-        "extra": [
-          "\"૮₍ ˶•⤙•˶ ₎ა"
-        ]
+        "extra": ["\"૮₍ ˶•⤙•˶ ₎ა"]
       },
       "night": {
         "default": "What w-wouwd you wike t-to watch tonyight?!!",
-        "extra": [
-          "(づ ᴗ _ᴗ)づ♡"
-        ]
+        "extra": ["(づ ᴗ _ᴗ)づ♡"]
       }
     },
     "watchHistory": {
@@ -1063,7 +1053,7 @@
       },
       "register": {
         "cta": "Get stawted",
-        "text": "Shawe youw watch pwogwess between devices and k-k-keep them synced. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Shawe youw watch pwogwess between devices and k-k-keep them synced. ",
         "title": "Sync t-to the cwoud"
       },
       "title": "Account"

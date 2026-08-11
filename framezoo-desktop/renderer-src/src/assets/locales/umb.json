@@ -424,21 +424,15 @@
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "day": {
         "default": "What would you like to watch this afternoon?",
-        "extra": [
-          "Viva la FrameZoo!"
-        ]
+        "extra": ["Viva la FrameZoo!"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -451,15 +445,11 @@
       },
       "morning": {
         "default": "What would you like to watch this morning?",
-        "extra": [
-          "Viva la FrameZoo!"
-        ]
+        "extra": ["Viva la FrameZoo!"]
       },
       "night": {
         "default": "What would you like to watch tonight?",
-        "extra": [
-          "Viva la FrameZoo!"
-        ]
+        "extra": ["Viva la FrameZoo!"]
       }
     },
     "watchHistory": {
@@ -1063,7 +1053,7 @@
       },
       "register": {
         "cta": "Get started",
-        "text": "Share your watch progress between devices and keep them synced. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Share your watch progress between devices and keep them synced. ",
         "title": "Sync to the Cloud"
       },
       "title": "Account"

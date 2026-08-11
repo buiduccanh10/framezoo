@@ -436,21 +436,15 @@
     "titles": {
       "69": {
         "default": "Hesch loscht of öpis scharfs?",
-        "extra": [
-          "Schöne 69. Tag 😘!"
-        ]
+        "extra": ["Schöne 69. Tag 😘!"]
       },
       "420": {
         "default": "Gets öpis, wodu am 4/20 welsch luege?",
-        "extra": [
-          "Fröhleche 4/20 🥳!"
-        ]
+        "extra": ["Fröhleche 4/20 🥳!"]
       },
       "day": {
         "default": "Was möchtisch a däm schöne nomitag aluege?",
-        "extra": [
-          "Viva la FrameZoo e ciao Svizzera"
-        ]
+        "extra": ["Viva la FrameZoo e ciao Svizzera"]
       },
       "halloween": {
         "default": "Welchen gruseligen Film würden Sie dieses Halloween gerne sehen?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "Was welsch a däm morge aluege?",
-        "extra": [
-          "Viva la FrameZoo!"
-        ]
+        "extra": ["Viva la FrameZoo!"]
       },
       "night": {
         "default": "Besch no wach? Was möchtisch luege?",
-        "extra": [
-          "Viva la ﻿﻿Svizzera!"
-        ]
+        "extra": ["Viva la ﻿﻿Svizzera!"]
       }
     },
     "watchHistory": {
@@ -1110,7 +1100,7 @@
       },
       "register": {
         "cta": "Los goht's",
-        "text": "Teil din watch progress met dine andere Grät ond palt si Synchronisiert. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Teil din watch progress met dine andere Grät ond palt si Synchronisiert. ",
         "title": "Met der Cloud synchronisiere"
       },
       "title": "Konto"

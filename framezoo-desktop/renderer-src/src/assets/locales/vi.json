@@ -436,15 +436,11 @@
     "titles": {
       "69": {
         "default": "Muốn khuấy đảo tí cho đời thêm vui không?",
-        "extra": [
-          "Chúc mừng 69 ngày 😘!"
-        ]
+        "extra": ["Chúc mừng 69 ngày 😘!"]
       },
       "420": {
         "default": "Bạn muốn xem gì ngày 20/4 này?",
-        "extra": [
-          "Chúc mừng ngày 20/4 🥳 !"
-        ]
+        "extra": ["Chúc mừng ngày 20/4 🥳 !"]
       },
       "day": {
         "default": "Chiều nay bạn muốn coi gì?",
@@ -463,15 +459,11 @@
       },
       "morning": {
         "default": "Sáng nay bạn muốn coi gì?",
-        "extra": [
-          "Tôi nghe nói rằng bộ phim Before Sunrise hay đấy"
-        ]
+        "extra": ["Tôi nghe nói rằng bộ phim Before Sunrise hay đấy"]
       },
       "night": {
         "default": "Đêm nay bạn muốn coi gì?",
-        "extra": [
-          "Cảm thấy mệt? Tôi nghe nói phim The Exorcist hay đấy."
-        ]
+        "extra": ["Cảm thấy mệt? Tôi nghe nói phim The Exorcist hay đấy."]
       }
     },
     "watchHistory": {
@@ -1110,7 +1102,7 @@
       },
       "register": {
         "cta": "Bắt đầu",
-        "text": "Chia sẻ tiến trình xem của bạn giữa các thiết bị và giữ cho chúng luôn đồng bộ. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Chia sẻ tiến trình xem của bạn giữa các thiết bị và giữ cho chúng luôn đồng bộ. ",
         "title": "Đồng bộ hóa với Đám mây"
       },
       "title": "Tài khoản"
