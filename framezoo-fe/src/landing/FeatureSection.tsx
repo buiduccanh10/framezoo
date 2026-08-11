@@ -87,7 +87,7 @@ export function FeatureSection({ copy }: FeatureSectionProps) {
         <div className="landing-addon-orbit" aria-hidden="true">
           <span className="landing-orbit-ring landing-orbit-ring-one" />
           <span className="landing-orbit-ring landing-orbit-ring-two" />
-          <span className="landing-orbit-core">FrameZoo</span>
+          <span className="landing-orbit-core">Framezoo</span>
           <span className="landing-addon-tag landing-addon-tag-one">
             {copy.addonOne}
           </span>

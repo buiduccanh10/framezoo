@@ -1,17 +1,26 @@
 import { DeepLinkPage } from "@/landing/DeepLinkPage";
 import { LandingPage } from "@/landing/LandingPage";
 
-export default function App() {
-  const path = window.location.pathname;
+interface AppProps {
+  pathname?: string;
+  search?: string;
+}
+
+export default function App({ pathname, search }: AppProps = {}) {
+  const currentPathname =
+    pathname ??
+    (typeof window !== "undefined" ? window.location.pathname : "/");
+  const currentSearch =
+    search ?? (typeof window !== "undefined" ? window.location.search : "");
 
   // Paths that should trigger a deep link redirect instead of showing the landing page
   const isDeepLink =
-    path.startsWith("/media/") ||
-    path.startsWith("/browse/") ||
-    path.startsWith("/discover");
+    currentPathname.startsWith("/media/") ||
+    currentPathname.startsWith("/browse/") ||
+    currentPathname.startsWith("/discover");
 
   if (isDeepLink) {
-    const fullPath = window.location.pathname + window.location.search;
+    const fullPath = currentPathname + currentSearch;
     return <DeepLinkPage path={fullPath} />;
   }
 

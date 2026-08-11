@@ -134,14 +134,14 @@ build:desktop:macos:
       clean_release_dir
       pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target darwin-arm64
       pnpm --filter framezoo-desktop exec electron-builder --mac zip --arm64
-      require_files "mac-arm64" "latest-mac.yml" "FrameZoo-*-arm64-mac.zip" "FrameZoo-*-arm64-mac.zip.blockmap"
-      copy_optional "mac-arm64" "FrameZoo-*-arm64-mac.dmg"
+      require_files "mac-arm64" "latest-mac.yml" "Framezoo-*-arm64-mac.zip" "Framezoo-*-arm64-mac.zip.blockmap"
+      copy_optional "mac-arm64" "Framezoo-*-arm64-mac.dmg"
 
       clean_release_dir
       pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target darwin-x64
       pnpm --filter framezoo-desktop exec electron-builder --mac zip --x64
-      require_files "mac-x64" "latest-mac.yml" "FrameZoo-*-x64-mac.zip" "FrameZoo-*-x64-mac.zip.blockmap"
-      copy_optional "mac-x64" "FrameZoo-*-x64-mac.dmg"
+      require_files "mac-x64" "latest-mac.yml" "Framezoo-*-x64-mac.zip" "Framezoo-*-x64-mac.zip.blockmap"
+      copy_optional "mac-x64" "Framezoo-*-x64-mac.dmg"
 
       find "$ARTIFACT_ROOT" -maxdepth 2 -type f | sort
   artifacts:
@@ -224,12 +224,12 @@ build:desktop:windows:
       clean_release_dir
       pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target win32-x64
       pnpm --filter framezoo-desktop exec electron-builder --win nsis --x64
-      require_files "win-x64" "latest.yml" "FrameZoo-*-x64.exe" "FrameZoo-*-x64.exe.blockmap"
+      require_files "win-x64" "latest.yml" "Framezoo-*-x64.exe" "Framezoo-*-x64.exe.blockmap"
 
       clean_release_dir
       pnpm --filter framezoo-desktop exec node scripts/update-mpv.mjs --ensure --target win32-arm64
       pnpm --filter framezoo-desktop exec electron-builder --win nsis --arm64
-      require_files "win-arm64" "latest.yml" "FrameZoo-*-arm64.exe" "FrameZoo-*-arm64.exe.blockmap"
+      require_files "win-arm64" "latest.yml" "Framezoo-*-arm64.exe" "Framezoo-*-arm64.exe.blockmap"
 
       find "$ARTIFACT_ROOT" -maxdepth 2 -type f | sort
   artifacts:

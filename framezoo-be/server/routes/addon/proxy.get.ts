@@ -32,7 +32,7 @@ const BLOCKED_HOST_PATTERNS = [
 ];
 
 function isBlockedHost(hostname: string): boolean {
-  return BLOCKED_HOST_PATTERNS.some((pattern) => pattern.test(hostname));
+  return BLOCKED_HOST_PATTERNS.some(pattern => pattern.test(hostname));
 }
 
 function validateProxyUrl(rawUrl: string): URL {
@@ -66,7 +66,7 @@ function validateProxyUrl(rawUrl: string): URL {
   return parsed;
 }
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async event => {
   const { url } = getQuery(event);
 
   if (!url || typeof url !== 'string') {
@@ -84,7 +84,7 @@ export default defineEventHandler(async (event) => {
     response = await fetch(targetUrl.toString(), {
       method: 'GET',
       headers: {
-        'User-Agent': 'FrameZoo/1.0 (compatible; addon-proxy)',
+        'User-Agent': 'Framezoo/1.0 (compatible; addon-proxy)',
         Accept: 'application/json',
       },
       signal: AbortSignal.timeout(15_000), // 15s timeout
@@ -129,8 +129,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Forward content-type from the origin addon server
-  const contentType =
-    response.headers.get('content-type') || 'application/json';
+  const contentType = response.headers.get('content-type') || 'application/json';
 
   setHeader(event, 'Content-Type', contentType);
   setHeader(event, 'Cache-Control', 'public, max-age=60, stale-while-revalidate=300');

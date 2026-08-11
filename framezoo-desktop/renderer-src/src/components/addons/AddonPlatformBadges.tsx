@@ -79,7 +79,7 @@ export function AddonPlatformBadges({
     },
     {
       id: "framezoo",
-      label: t("addons.platforms.framezoo", "FrameZoo"),
+      label: t("addons.platforms.framezoo", "Framezoo"),
       className: "border-[#E40D00]/35 bg-[#E40D00]/10 text-red-100",
     },
   ];
@@ -89,7 +89,7 @@ export function AddonPlatformBadges({
       className={classNames("flex flex-wrap items-center gap-1.5", className)}
       aria-label={t(
         "addons.platforms.supported",
-        "Supported platforms: Stremio and FrameZoo",
+        "Supported platforms: Stremio and Framezoo",
       )}
     >
       {platforms.map((platform) => (

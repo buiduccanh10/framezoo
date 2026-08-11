@@ -230,7 +230,7 @@ export function getDesktopPipStateFromPlayerState(
     duration: state.progress.duration,
     paused: state.mediaPlaying.isPaused,
     playbackRate: state.mediaPlaying.playbackRate,
-    title: state.meta?.title ?? "FrameZoo",
+    title: state.meta?.title ?? "Framezoo",
     primaryDelay: Number.isFinite(primaryDelay) ? primaryDelay : 0,
     secondaryDelay: Number.isFinite(secondaryDelay) ? secondaryDelay : 0,
     caption: toDesktopPipCaption(state.caption.selected),
