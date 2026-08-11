@@ -1,0 +1,16 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "directory": "./framezoo-fe",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "./framezoo-desktop/renderer-src",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "./framezoo-be",
+      "changeProcessCWD": true
+    }
+  ]
+}
