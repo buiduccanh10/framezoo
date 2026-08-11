@@ -5,7 +5,11 @@ import { useCopyToClipboard, useIntersection } from "react-use";
 
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
-import { TMDBIdToUrlId, getSeasonDetails } from "@/backend/metadata/tmdb";
+import {
+  TMDBIdToUrlId,
+  getMediaVideos,
+  getSeasonDetails,
+} from "@/backend/metadata/tmdb";
 import { getNetworkContent } from "@/backend/metadata/traktApi";
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
@@ -20,6 +24,7 @@ import {
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { getTmdbLanguageCode } from "@/utils/language";
+import { getYoutubeStreamUrl } from "@/utils/youtubeStream";
 
 import {
   DetailsContentProps,
@@ -284,6 +289,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingCast, setIsLoadingCast] = useState(false);
   const [isLoadingTrailers, setIsLoadingTrailers] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
+  const [trailerStreamUrl, setTrailerStreamUrl] = useState<
+    string | null | undefined
+  >(undefined);
   const showToast = useToastStore((s) => s.showToast);
   const progress = useProgressStore((s) => s.items);
   const updateItem = useProgressStore((s) => s.updateItem);
@@ -396,6 +404,44 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     return () => {
       isCancelled = true;
       clearTimeout(timer);
+    };
+  }, [data.id, data.type]);
+
+  // Fetch trailer stream URL for backdrop (TMDB key → Piped direct stream)
+  useEffect(() => {
+    let isCancelled = false;
+    setTrailerStreamUrl(undefined);
+
+    if (!data.id || !data.type) return;
+
+    const fetchTrailerForBackdrop = async () => {
+      try {
+        // Step 1: get YouTube video key from TMDB
+        const videos = await getMediaVideos(
+          data.id!.toString(),
+          data.type === "movie" ? TMDBContentTypes.MOVIE : TMDBContentTypes.TV,
+        );
+        if (isCancelled) return;
+        const trailer =
+          videos.find((v) => v.type === "Trailer") ?? videos[0] ?? null;
+        const videoKey = trailer?.key ?? null;
+
+        if (!videoKey || isCancelled) {
+          if (!isCancelled) setTrailerStreamUrl(null);
+          return;
+        }
+
+        // Step 2: resolve direct stream URL via Piped
+        const streamUrl = await getYoutubeStreamUrl(videoKey);
+        if (!isCancelled) setTrailerStreamUrl(streamUrl);
+      } catch {
+        if (!isCancelled) setTrailerStreamUrl(null);
+      }
+    };
+
+    void fetchTrailerForBackdrop();
+    return () => {
+      isCancelled = true;
     };
   }, [data.id, data.type]);
 
@@ -613,6 +659,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
         title={data.title}
         logoUrl={data.logoUrl}
         backdrop={data.backdrop}
+        trailerStreamUrl={trailerStreamUrl}
       />
 
       {/* Content */}

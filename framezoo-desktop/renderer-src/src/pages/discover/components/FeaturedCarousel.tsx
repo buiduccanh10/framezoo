@@ -7,7 +7,12 @@ import { useWindowSize } from "react-use";
 
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
-import { TMDBIdToUrlId, getMediaLogo } from "@/backend/metadata/tmdb";
+import {
+  TMDBIdToUrlId,
+  getMediaLogo,
+  getMediaVideos,
+} from "@/backend/metadata/tmdb";
+import { getYoutubeStreamUrl } from "@/utils/youtubeStream";
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import {
   TMDBContentTypes,
@@ -176,6 +181,13 @@ export function FeaturedCarousel({
   const [rtData, setRtData] = useState<FeaturedRTData | null>(null);
   const [isLoadingImdb, setIsLoadingImdb] = useState(false);
   const [isLoadingRt, setIsLoadingRt] = useState(false);
+  // Trailer stream: direct URL from Piped API, null = no trailer, undefined = fetching
+  const [trailerStreamUrl, setTrailerStreamUrl] = useState<
+    string | null | undefined
+  >(undefined);
+  const [trailerReady, setTrailerReady] = useState(false);
+  // Cache: cacheKey → YouTube video key (from TMDB)
+  const trailerKeyCacheRef = useRef<Record<string, string | null>>({});
   const logoFetchController = useRef<AbortController | null>(null);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
   const imdbCacheRef = useRef<Record<string, FeaturedIMDbData | null>>({});
@@ -536,6 +548,69 @@ export function FeaturedCarousel({
     };
   }, [currentIndex, media]);
 
+  // Fetch trailer stream URL (via TMDB key → Piped direct stream)
+  useEffect(() => {
+    let isCancelled = false;
+    const currentItem = media[currentIndex];
+    if (!currentItem?.id) {
+      setTrailerStreamUrl(null);
+      setTrailerReady(false);
+      return () => {
+        isCancelled = true;
+      };
+    }
+
+    const cacheKey = `${currentItem.type}-${currentItem.id}`;
+
+    // Reset while fetching
+    setTrailerStreamUrl(undefined);
+    setTrailerReady(false);
+
+    const fetchTrailer = async () => {
+      try {
+        // Step 1: get YouTube video ID from TMDB
+        let videoKey: string | null = null;
+        if (
+          Object.prototype.hasOwnProperty.call(
+            trailerKeyCacheRef.current,
+            cacheKey,
+          )
+        ) {
+          videoKey = trailerKeyCacheRef.current[cacheKey];
+        } else {
+          const videos = await getMediaVideos(
+            currentItem.id!.toString(),
+            currentItem.type === "movie"
+              ? TMDBContentTypes.MOVIE
+              : TMDBContentTypes.TV,
+          );
+          if (isCancelled) return;
+          const trailer =
+            videos.find((v) => v.type === "Trailer") ?? videos[0] ?? null;
+          videoKey = trailer?.key ?? null;
+          trailerKeyCacheRef.current[cacheKey] = videoKey;
+        }
+
+        if (!videoKey || isCancelled) {
+          if (!isCancelled) setTrailerStreamUrl(null);
+          return;
+        }
+
+        // Step 2: resolve direct stream URL via Piped
+        const streamUrl = await getYoutubeStreamUrl(videoKey);
+        if (isCancelled) return;
+        setTrailerStreamUrl(streamUrl);
+      } catch {
+        if (!isCancelled) setTrailerStreamUrl(null);
+      }
+    };
+
+    void fetchTrailer();
+    return () => {
+      isCancelled = true;
+    };
+  }, [currentIndex, media]);
+
   useEffect(() => {
     let isCancelled = false;
     const mediaId = currentMedia?.id;
@@ -798,14 +873,18 @@ export function FeaturedCarousel({
       >
         {media.map((item, index) => {
           const imagePath = getSlideImagePath(item);
+          const isActive = index === currentIndex;
+          const showTrailerForSlide =
+            isActive && trailerStreamUrl && trailerReady;
 
           return (
             <div
               key={`${item.type}-${item.id}`}
               className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === currentIndex ? "opacity-100" : "opacity-0"
+                isActive ? "opacity-100" : "opacity-0"
               }`}
             >
+              {/* Backdrop image — always rendered as fallback layer */}
               <LazyImage
                 src={
                   shouldLoadSlideImage(index, currentIndex, media.length) &&
@@ -815,14 +894,40 @@ export function FeaturedCarousel({
                 }
                 alt={item.title || item.name || ""}
                 className="absolute inset-0 w-full h-full object-cover object-top"
-                loading={index === currentIndex ? "eager" : "lazy"}
+                loading={isActive ? "eager" : "lazy"}
                 style={{
                   maskImage:
                     "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
                   WebkitMaskImage:
                     "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+                  // Fade out once trailer is playing
+                  opacity: showTrailerForSlide ? 0 : 1,
+                  transition: "opacity 0.8s ease",
                 }}
               />
+
+              {/* Direct video trailer — no iframe, no player UI */}
+              {isActive && trailerStreamUrl && (
+                <video
+                  key={trailerStreamUrl}
+                  src={trailerStreamUrl}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  onCanPlay={() => setTrailerReady(true)}
+                  onError={() => setTrailerReady(false)}
+                  className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+                  style={{
+                    maskImage:
+                      "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+                    WebkitMaskImage:
+                      "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+                    opacity: trailerReady ? 1 : 0,
+                    transition: "opacity 0.8s ease",
+                  }}
+                />
+              )}
             </div>
           );
         })}

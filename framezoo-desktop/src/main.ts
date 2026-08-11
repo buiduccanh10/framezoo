@@ -363,10 +363,44 @@ function registerHeaderInterceptors() {
   });
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
-    let nextHeaders = details.responseHeaders;
+    let nextHeaders = details.responseHeaders ?? {};
 
     try {
       const hostname = new URL(details.url).hostname.toLowerCase();
+
+      // Inject CORS headers for Piped API instances and YouTube CDN
+      // so the renderer can fetch stream URLs and play video without CORS errors.
+      const pipedHosts = [
+        "pipedapi.kavin.rocks",
+        "pipedapi.adminforge.de",
+        "api.piped.yt",
+        "piped-api.garudalinux.org",
+      ];
+      const youtubeCdnHosts = [
+        "rr1.sn-",
+        "rr2.sn-",
+        "rr3.sn-",
+        "rr4.sn-", // YouTube CDN prefixes
+        "googlevideo.com",
+        "youtube.com",
+      ];
+      const isPiped = pipedHosts.includes(hostname);
+      const isYtCdn =
+        hostname.endsWith("googlevideo.com") ||
+        youtubeCdnHosts.some((h) => hostname.startsWith(h));
+
+      if (isPiped || isYtCdn) {
+        nextHeaders = {
+          ...nextHeaders,
+          "access-control-allow-origin": ["*"],
+          "access-control-allow-methods": ["GET, HEAD, OPTIONS"],
+          "access-control-allow-headers": ["*"],
+          // Remove restrictive headers that block cross-origin video playback
+          "x-frame-options": ["ALLOWALL"],
+        };
+      }
+
+      // Existing streamRules logic
       for (const rule of streamRules.values()) {
         if (
           !rule.responseHeaders ||
