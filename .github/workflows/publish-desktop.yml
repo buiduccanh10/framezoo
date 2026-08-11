@@ -150,11 +150,11 @@ jobs:
           - runner: macos-15-intel
             variant: mac-x64
             arch: x64
-            command: pnpm --filter framezoo-desktop package:release:mac:x64
+            command: pnpm --filter Framezoo package:release:mac:x64
           - runner: macos-15
             variant: mac-arm64
             arch: arm64
-            command: pnpm --filter framezoo-desktop package:release:mac:arm64
+            command: pnpm --filter Framezoo package:release:mac:arm64
     steps:
       - uses: actions/checkout@v5
         with:
@@ -247,10 +247,10 @@ jobs:
       matrix:
         include:
           - variant: win-x64
-            command: pnpm --filter framezoo-desktop package:release:win:x64
+            command: pnpm --filter Framezoo package:release:win:x64
             arch: x64
           - variant: win-arm64
-            command: pnpm --filter framezoo-desktop package:release:win:arm64
+            command: pnpm --filter Framezoo package:release:win:arm64
             arch: arm64
     steps:
       - uses: actions/checkout@v5
