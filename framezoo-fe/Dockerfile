@@ -7,6 +7,7 @@ RUN corepack enable
 COPY framezoo-fe/package.json ./framezoo-fe/package.json
 COPY framezoo-desktop/package.json ./framezoo-desktop/package.json
 COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY patches ./patches
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter framezoo-fe...
 
 ARG BACKEND_URL

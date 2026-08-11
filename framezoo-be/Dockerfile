@@ -8,6 +8,7 @@ RUN corepack enable && apk add --no-cache curl
 
 COPY framezoo-be/package.json ./framezoo-be/package.json
 COPY pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY patches ./patches
 
 # framezoo-be prepare runs prisma generate; install without lifecycle until sources exist.
 # Keep the workspace shape stable after this layer. Adding another workspace
