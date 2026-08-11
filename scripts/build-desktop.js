@@ -34,7 +34,7 @@ if (!fs.existsSync(downloadsDir)) {
 
 // Remove stale release artifacts so the downloads dir only contains the latest build set.
 for (const entry of fs.readdirSync(downloadsDir)) {
-  if (entry.startsWith("FrameZoo-") || entry === "README.txt") {
+  if (entry.startsWith("Framezoo-") || entry === "README.txt") {
     fs.rmSync(path.join(downloadsDir, entry), { recursive: true, force: true });
   }
 }
@@ -127,19 +127,19 @@ console.log(
 const filesToCopy = [];
 if (process.platform === "darwin") {
   filesToCopy.push(
-    `FrameZoo-${version}-arm64-mac.dmg`,
-    `FrameZoo-${version}-x64-mac.dmg`,
-    `FrameZoo-${version}-universal-mac.dmg`,
+    `Framezoo-${version}-arm64-mac.dmg`,
+    `Framezoo-${version}-x64-mac.dmg`,
+    `Framezoo-${version}-universal-mac.dmg`,
   );
 } else if (process.platform === "linux") {
   filesToCopy.push(
-    `FrameZoo-${version}-arm64-mac.zip`,
-    `FrameZoo-${version}-x64-mac.zip`,
+    `Framezoo-${version}-arm64-mac.zip`,
+    `Framezoo-${version}-x64-mac.zip`,
   );
 }
 filesToCopy.push(
-  `FrameZoo-${version}-x64.zip`,
-  `FrameZoo-${version}-arm64.zip`,
+  `Framezoo-${version}-x64.zip`,
+  `Framezoo-${version}-arm64.zip`,
 );
 
 let copiedCount = 0;
@@ -193,7 +193,7 @@ try {
     // Resolve absolute path to downloads folder for Docker mount
     const absDownloadsDir = path.resolve(downloadsDir);
     execSync(
-      `docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "rm -f /data/FrameZoo-* /data/README.txt && cp -r /src/. /data/"`,
+      `docker run --rm -v "${volumeName}":/data -v "${absDownloadsDir}":/src alpine sh -c "rm -f /data/Framezoo-* /data/README.txt && cp -r /src/. /data/"`,
       { stdio: "inherit" },
     );
     console.log("Successfully synced files to Docker volume.");

@@ -1,7 +1,7 @@
 {
   "name": "framezoo-desktop",
   "private": true,
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.17.0",
   "scripts": {
@@ -173,14 +173,14 @@
     "appId": "com.framezoo.desktop",
     "protocols": [
       {
-        "name": "FrameZoo Protocol",
+        "name": "Framezoo Protocol",
         "schemes": [
           "framezoo"
         ]
       }
     ],
-    "productName": "FrameZoo",
-    "executableName": "FrameZoo",
+    "productName": "Framezoo",
+    "executableName": "Framezoo",
     "artifactName": "${productName}-${version}-${arch}.${ext}",
     "asar": true,
     "asarUnpack": [],
@@ -227,7 +227,7 @@
       }
     ],
     "extraMetadata": {
-      "description": "FrameZoo desktop app"
+      "description": "Framezoo desktop app"
     },
     "mac": {
       "target": [
