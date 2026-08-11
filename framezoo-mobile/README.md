@@ -18,12 +18,21 @@ Metro dev server with Fast Refresh:
 pnpm --filter framezoo-mobile dev
 ```
 
-Run a debug app. The React Native CLI starts/connects to Metro automatically:
+One-command iOS development: select a simulator/device, then run Debug with
+Metro and Fast Refresh:
 
 ```bash
 pnpm --filter framezoo-mobile ios:dev
+```
+
+Android development:
+
+```bash
 pnpm --filter framezoo-mobile android:dev
 ```
+
+The CLI starts Metro automatically for `ios:dev` and `android:dev`. Use the
+separate `dev` command when Metro must be managed in its own terminal.
 
 When Metro cache is stale:
 
