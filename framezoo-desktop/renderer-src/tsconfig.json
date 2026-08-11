@@ -20,9 +20,11 @@
       "@themes/*": ["./themes/*"],
       "@sozialhelden/ietf-language-tags": [
         "./node_modules/@sozialhelden/ietf-language-tags/dist/cjs"
-      ]
+      ],
+      "react": ["../node_modules/@types/react"],
+      "react-dom": ["../node_modules/@types/react-dom"]
     },
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["../node_modules/@types"]
   },
   "include": ["src", "themes"]
 }

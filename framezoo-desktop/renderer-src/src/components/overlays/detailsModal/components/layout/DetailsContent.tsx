@@ -271,6 +271,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingImdb, setIsLoadingImdb] = useState(false);
   const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [trailerUrl, setTrailerUrl] = useState<string | undefined>();
   const [showCollection, setShowCollection] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
@@ -430,6 +431,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
             rating: imdbMetadata.imdb_rating,
             votes: imdbMetadata.votes,
             trailer_url: imdbMetadata.trailer_url,
+            trailer_thumbnail: imdbMetadata.trailer_thumbnail,
           });
         } else {
           setImdbData(null);
@@ -585,9 +587,9 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   return (
     <div className="relative h-full flex flex-col">
       {/* Trailer Overlay */}
-      {showTrailer && imdbData?.trailer_url && (
+      {showTrailer && trailerUrl && (
         <TrailerOverlay
-          trailerUrl={imdbData.trailer_url}
+          trailerUrl={trailerUrl}
           onClose={() => setShowTrailer(false)}
         />
       )}
@@ -778,19 +780,16 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
               imdbData={imdbData}
               onLoadingChange={setIsLoadingTrailers}
               onTrailerClick={(videoKey, isImdbTrailer) => {
-                let trailerUrl: string;
+                let playbackUrl: string;
                 if (isImdbTrailer) {
                   // IMDb trailer is already a full URL
-                  trailerUrl = videoKey;
+                  playbackUrl = videoKey;
                 } else {
                   // TMDB trailer needs to be converted to YouTube embed URL
-                  trailerUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
+                  playbackUrl = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`;
                 }
+                setTrailerUrl(playbackUrl);
                 setShowTrailer(true);
-                setImdbData((prev: any) => ({
-                  ...prev,
-                  trailer_url: trailerUrl,
-                }));
               }}
             />
           </LazyCarouselWrapper>

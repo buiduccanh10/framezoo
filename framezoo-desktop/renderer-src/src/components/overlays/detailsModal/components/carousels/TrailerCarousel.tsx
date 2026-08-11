@@ -6,6 +6,8 @@ import { TMDBContentTypes, TMDBVideo } from "@/backend/metadata/types/tmdb";
 import { LazyImage } from "@/components/utils/Image";
 import { resolvePublicUrl } from "@/utils/publicUrl";
 
+import type { DetailsIMDbData } from "../../types";
+
 const THUMBNAIL_PLACEHOLDER =
   resolvePublicUrl("/thumbnail-placeholder.png") ??
   "/thumbnail-placeholder.png";
@@ -13,7 +15,7 @@ const THUMBNAIL_PLACEHOLDER =
 interface TrailerCarouselProps {
   mediaId: string;
   mediaType: TMDBContentTypes;
-  imdbData?: any;
+  imdbData?: DetailsIMDbData | null;
   onLoadingChange?: (isLoading: boolean) => void;
   onTrailerClick: (videoKey: string, isImdbTrailer?: boolean) => void;
 }
@@ -38,13 +40,7 @@ export function TrailerCarousel({
         const mediaVideos = await getMediaVideos(mediaId, mediaType);
         if (isCancelled) return;
 
-        // Sort by official status and then by type (Trailer first, then Teaser)
-        const sortedVideos = mediaVideos.sort((a, b) => {
-          if (a.official !== b.official) return b.official ? 1 : -1;
-          if (a.type !== b.type) return a.type === "Trailer" ? -1 : 1;
-          return 0;
-        });
-        setVideos(sortedVideos);
+        setVideos(mediaVideos);
       } catch (err) {
         console.error("Failed to load videos:", err);
       } finally {
