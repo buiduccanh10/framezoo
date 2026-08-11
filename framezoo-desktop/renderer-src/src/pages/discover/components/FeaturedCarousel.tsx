@@ -20,6 +20,7 @@ import {
   type ReleaseQualityVariant,
   getReleaseQualityVariantFromTmdbReleaseDates,
 } from "@/components/media/ReleaseQualityBadge";
+import { TrailerPlayer } from "@/components/TrailerPlayer";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
@@ -194,6 +195,7 @@ export function FeaturedCarousel({
   const isRestoring = useIsRestoring();
   const hasReportedInitialContent = useRef(false);
 
+  const [trailerReady, setTrailerReady] = useState(false);
   const currentMedia = media[currentIndex];
 
   const SLIDE_QUANTITY = 15;
@@ -488,6 +490,10 @@ export function FeaturedCarousel({
     touchEndXRef.current = null;
     touchEndYRef.current = null;
   };
+
+  useEffect(() => {
+    setTrailerReady(false);
+  }, [currentIndex]);
 
   // Fetch clear logo when current media changes
   useEffect(() => {
@@ -821,6 +827,17 @@ export function FeaturedCarousel({
                     "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
                   WebkitMaskImage:
                     "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
+                  opacity: index === currentIndex && trailerReady ? 0 : 1, // Only hide image when video is fully ready and playing
+                  transition: "opacity 0.8s ease",
+                }}
+              />
+              <TrailerPlayer
+                tmdbId={item.id!.toString()}
+                tmdbType={item.type === "movie" ? "movie" : "show"}
+                initialImdbId={item.external_ids?.imdb_id}
+                isActive={index === currentIndex}
+                onPlay={() => {
+                  if (index === currentIndex) setTrailerReady(true);
                 }}
               />
             </div>

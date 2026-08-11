@@ -74,6 +74,7 @@ export interface DetailsIMDbData {
   rating: number;
   votes: number;
   trailer_url?: string;
+  trailer_thumbnail?: string;
 }
 
 export interface DetailsRTData {

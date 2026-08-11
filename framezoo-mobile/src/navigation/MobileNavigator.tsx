@@ -32,6 +32,7 @@ export function MobileNavigator() {
         options={{
           title: 'Discover',
           tabBarLabel: 'Discover',
+          overrideScrollViewContentInsetAdjustmentBehavior: false,
           tabBarIcon: () =>
             Platform.OS === 'ios'
               ? { type: 'sfSymbol', name: 'sparkles' }

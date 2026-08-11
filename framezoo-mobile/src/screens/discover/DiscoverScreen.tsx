@@ -1,31 +1,33 @@
-import React, { useMemo, useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useQuery } from '@tanstack/react-query';
+import React, { useMemo } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { ChoiceChips } from '@/components/navigation';
+import { NativeSelect } from '@/components/forms';
 import {
   AppText,
   EmptyState,
   ErrorState,
-  LoadingState,
   Screen,
   Section,
 } from '@/components/primitives';
-import { MediaRow } from '@/components/media';
-import { discoverMedia, getDiscoverGenres } from '@/services/api/metadata';
-import { demoMedia } from '@/services/metadata';
+import { getDiscoverSection, getDiscoverGenres } from '@/services/api/metadata';
 import { addonRepository } from '@/services/addons';
+import { demoMedia } from '@/services/metadata';
+import { useAuthStore } from '@/state/auth/store';
 import {
   useDiscoverStore,
   type DiscoverCategory,
 } from '@/state/discover/store';
-import { useAuthStore } from '@/state/auth/store';
+import { useLibraryStore } from '@/state/library/store';
 import { colors, spacing } from '@/theme';
-
 import type { AddonCatalogItem } from '@/types';
+import type { MediaItem, MediaType } from '@/types/media';
 import type { RootStackParamList } from '@/navigation/routeTypes';
+
+import { FeaturedCarousel } from './components/FeaturedCarousel';
+import { MediaCarouselSection } from './components/MediaCarouselSection';
 
 const categories: Array<{ id: DiscoverCategory; label: string }> = [
   { id: 'popular', label: 'Popular' },
@@ -42,6 +44,14 @@ const countries = [
   { label: 'GB', value: 'GB' },
 ];
 
+type SectionConfig = {
+  key: string;
+  title: string;
+  section: 'trending' | 'popular' | 'topRated' | 'latest' | 'genre';
+  mediaType: MediaType;
+  genreId?: string;
+};
+
 function addonItemToMedia(item: AddonCatalogItem, type: 'movie' | 'series') {
   return {
     id: item.id,
@@ -53,15 +63,28 @@ function addonItemToMedia(item: AddonCatalogItem, type: 'movie' | 'series') {
   };
 }
 
+function demoSectionItems(
+  config: SectionConfig,
+  year: string,
+): MediaItem[] {
+  return demoMedia.filter(item => {
+    const typeMatches =
+      config.mediaType === 'show' ? item.type === 'show' : item.type === 'movie';
+    return typeMatches && (!year || String(item.year) === year);
+  });
+}
+
 export function DiscoverScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const queryClient = useQueryClient();
   const category = useDiscoverStore(state => state.category);
   const setCategory = useDiscoverStore(state => state.setCategory);
   const backendUrl = useAuthStore(state => state.backendUrl);
-  const isAddonCategory = category === 'addons';
-  const [year, setYear] = useState('');
-  const [country, setCountry] = useState('');
+  const progress = useLibraryStore(state => state.progress);
+  const [year, setYear] = React.useState('');
+  const [country, setCountry] = React.useState('');
+
   const yearOptions = useMemo(
     () => [
       { label: 'Any year', value: '' },
@@ -72,36 +95,140 @@ export function DiscoverScreen() {
     ],
     [],
   );
+
   const genresQuery = useQuery({
     queryKey: ['discover-genres', backendUrl],
     queryFn: () => getDiscoverGenres(backendUrl),
     enabled: Boolean(backendUrl),
     staleTime: 24 * 60 * 60 * 1000,
   });
-  const query = useQuery({
-    queryKey: ['discover', backendUrl, category, year, country],
-    queryFn: () => {
-      if (isAddonCategory) {
-        return Promise.resolve([]);
-      }
-      if (!backendUrl) {
-        return Promise.resolve(
-          demoMedia.filter(item => {
-            const matchesYear = !year || String(item.year) === year;
-            const matchesType =
-              category === 'movies'
-                ? item.type === 'movie'
-                : category === 'tvshows'
-                ? item.type === 'show'
-                : true;
-            return matchesYear && matchesType;
-          }),
-        );
-      }
-      return discoverMedia(backendUrl, category, { year, country });
-    },
-    enabled: !isAddonCategory,
+
+  const genreCategories = useMemo(
+    () =>
+      (genresQuery.data ?? []).map(genre => ({
+        id: `genre:${genre.id}` as const,
+        label: genre.name,
+      })),
+    [genresQuery.data],
+  );
+  const allCategories = useMemo(
+    () => [...categories, ...genreCategories],
+    [genreCategories],
+  );
+
+  const sectionConfigs = useMemo<SectionConfig[]>(() => {
+    if (category === 'addons') return [];
+    if (category === 'popular') {
+      return [
+        {
+          key: 'popular-movies',
+          title: 'Popular movies',
+          section: 'popular',
+          mediaType: 'movie',
+        },
+        {
+          key: 'popular-shows',
+          title: 'Popular TV shows',
+          section: 'popular',
+          mediaType: 'show',
+        },
+      ];
+    }
+    if (category === 'movies') {
+      return [
+        {
+          key: 'movies-trending',
+          title: 'Trending movies',
+          section: 'trending',
+          mediaType: 'movie',
+        },
+        {
+          key: 'movies-popular',
+          title: 'Popular movies',
+          section: 'popular',
+          mediaType: 'movie',
+        },
+        {
+          key: 'movies-top-rated',
+          title: 'Top rated movies',
+          section: 'topRated',
+          mediaType: 'movie',
+        },
+        {
+          key: 'movies-latest',
+          title: 'Latest releases',
+          section: 'latest',
+          mediaType: 'movie',
+        },
+      ];
+    }
+    if (category === 'tvshows') {
+      return [
+        {
+          key: 'shows-trending',
+          title: 'Trending TV shows',
+          section: 'trending',
+          mediaType: 'show',
+        },
+        {
+          key: 'shows-popular',
+          title: 'Popular TV shows',
+          section: 'popular',
+          mediaType: 'show',
+        },
+        {
+          key: 'shows-top-rated',
+          title: 'Top rated TV shows',
+          section: 'topRated',
+          mediaType: 'show',
+        },
+        {
+          key: 'shows-latest',
+          title: 'On the air',
+          section: 'latest',
+          mediaType: 'show',
+        },
+      ];
+    }
+
+    const genreId = category.slice('genre:'.length);
+    const genreTitle =
+      genreCategories.find(item => item.id === category)?.label ?? 'Genre';
+    return [
+      {
+        key: `genre:${genreId}`,
+        title: `Movies in ${genreTitle}`,
+        section: 'genre',
+        mediaType: 'movie',
+        genreId,
+      },
+    ];
+  }, [category, genreCategories]);
+
+  const sectionQueries = useQueries({
+    queries: sectionConfigs.map(config => ({
+      queryKey: [
+        'discover-section',
+        backendUrl,
+        config.key,
+        year,
+        country,
+      ],
+      queryFn: () =>
+        backendUrl
+          ? getDiscoverSection(
+              backendUrl,
+              config.section,
+              config.mediaType,
+              { year, country },
+              config.genreId,
+            )
+          : Promise.resolve(demoSectionItems(config, year)),
+      enabled: category !== 'addons',
+      staleTime: 60 * 1000,
+    })),
   });
+
   const addonQuery = useQuery({
     queryKey: ['discover-addon-catalogs'],
     queryFn: async () => {
@@ -115,21 +242,24 @@ export function DiscoverScreen() {
         failures: [...movies.failures, ...series.failures],
       };
     },
-    enabled: isAddonCategory,
     staleTime: 30_000,
   });
-  const genreCategories = useMemo(
+
+  const progressItems = useMemo<MediaItem[]>(
     () =>
-      (genresQuery.data ?? []).map(genre => ({
-        id: `genre:${genre.id}` as const,
-        label: genre.name,
-      })),
-    [genresQuery.data],
+      progress
+        .slice()
+        .sort((left, right) => right.updatedAt - left.updatedAt)
+        .map(item => ({
+          id: item.mediaId,
+          title: item.title ?? 'Continue watching',
+          type: item.type,
+          poster: item.poster,
+          year: item.year,
+        })),
+    [progress],
   );
-  const allCategories = useMemo(
-    () => [...categories, ...genreCategories],
-    [genreCategories],
-  );
+
   const addonMovies = useMemo(
     () =>
       (addonQuery.data?.movies ?? []).filter(
@@ -144,238 +274,225 @@ export function DiscoverScreen() {
       ),
     [addonQuery.data?.series, year],
   );
-  const items = useMemo(
-    () =>
-      isAddonCategory ? [...addonMovies, ...addonSeries] : query.data ?? [],
-    [addonMovies, addonSeries, isAddonCategory, query.data],
+  const addonItems = category === 'addons' ? [...addonMovies, ...addonSeries] : [];
+  const sectionsLoading = sectionQueries.some(query => query.isLoading);
+  const sectionsHaveError = sectionQueries.some(query => query.isError);
+  const nativeItems = sectionQueries.flatMap(query => query.data ?? []);
+  const hasNativeContent = nativeItems.length > 0 || progressItems.length > 0;
+  const hasSuccessfulSection = sectionQueries.some(
+    query => (query.data?.length ?? 0) > 0,
   );
-  const isLoading = isAddonCategory ? addonQuery.isLoading : query.isLoading;
-  const isError = isAddonCategory ? addonQuery.isError : query.isError;
-  const error = isAddonCategory ? addonQuery.error : query.error;
-  const refetch = isAddonCategory ? addonQuery.refetch : query.refetch;
-  const categoryLabel =
-    allCategories.find(item => item.id === category)?.label ??
-    (category === 'addons' ? 'Addons' : 'Discover');
-  const addonFailures = addonQuery.data?.failures ?? [];
+  const hasAddonContent = addonMovies.length > 0 || addonSeries.length > 0;
+
+  async function refresh() {
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['discover-featured'] }),
+      queryClient.invalidateQueries({ queryKey: ['discover-genres'] }),
+      queryClient.invalidateQueries({ queryKey: ['discover-section'] }),
+      addonQuery.refetch(),
+    ]);
+  }
+
+  function showDetails(media: MediaItem) {
+    navigation.navigate('Details', { mediaId: media.id, type: media.type });
+  }
+
+  function playMedia(media: MediaItem) {
+    navigation.navigate('Player', { mediaId: media.id, type: media.type });
+  }
 
   return (
     <Screen
       scroll
-      padded
+      safeAreaTop={false}
       scrollKey={`${category}:${year}:${country}`}
       onRefresh={() => {
-        refetch().catch(() => undefined);
+        refresh().catch(() => undefined);
       }}
       refreshing={
-        isAddonCategory ? addonQuery.isRefetching : query.isRefetching
+        addonQuery.isRefetching ||
+        sectionQueries.some(query => query.isRefetching)
       }
     >
-      <View style={styles.header}>
-        <View style={styles.headerCopy}>
-          <AppText variant="heading">Discover</AppText>
-          <AppText variant="muted">Find your next watch.</AppText>
-        </View>
-        <Image
-          accessibilityLabel="Framezoo logo"
-          resizeMode="contain"
-          source={require('../../assets/framezoo-logo.png')}
-          style={styles.brand}
-        />
-      </View>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categories}
-      >
-        {allCategories.map(item => (
-          <Pressable
-            key={item.id}
-            accessibilityRole="button"
-            onPress={() => setCategory(item.id)}
-            style={[
-              styles.category,
-              category === item.id && styles.categoryActive,
-            ]}
-          >
-            <AppText
-              style={
-                category === item.id
-                  ? styles.categoryActiveText
-                  : styles.categoryText
-              }
+      <FeaturedCarousel onPlay={playMedia} onShowDetails={showDetails} />
+
+      <View style={styles.content}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categories}
+        >
+          {allCategories.map(item => (
+            <Pressable
+              accessibilityRole="button"
+              key={item.id}
+              onPress={() => setCategory(item.id)}
+              style={[
+                styles.category,
+                category === item.id && styles.categoryActive,
+              ]}
             >
-              {item.label}
-            </AppText>
-          </Pressable>
-        ))}
-      </ScrollView>
-      <View style={styles.filters}>
-        <AppText variant="label">Filters</AppText>
-        <ScrollView
-          horizontal
-          nestedScrollEnabled
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filterRow}
-        >
-          <ChoiceChips
-            compact
-            options={yearOptions}
-            value={year}
-            onChange={setYear}
-          />
+              <AppText
+                style={
+                  category === item.id
+                    ? styles.categoryActiveText
+                    : styles.categoryText
+                }
+              >
+                {item.label}
+              </AppText>
+            </Pressable>
+          ))}
         </ScrollView>
-        <ScrollView
-          horizontal
-          nestedScrollEnabled
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filterRow}
-        >
-          <ChoiceChips
-            compact
-            options={countries}
-            value={country}
-            onChange={setCountry}
+
+        {category !== 'addons' ? (
+          <View style={styles.filters}>
+            <NativeSelect
+              label="Year"
+              options={yearOptions}
+              value={year}
+              onChange={setYear}
+            />
+            <NativeSelect
+              label="Country"
+              options={countries}
+              value={country}
+              onChange={setCountry}
+            />
+          </View>
+        ) : null}
+
+        {progressItems.length ? (
+          <MediaCarouselSection
+            title="Continue watching"
+            items={progressItems}
+            onPress={showDetails}
           />
-        </ScrollView>
+        ) : null}
+
+        {sectionsLoading
+          ? sectionConfigs.map(config => (
+              <MediaCarouselSection
+                key={config.key}
+                loading
+                title={config.title}
+                items={[]}
+                onPress={showDetails}
+              />
+            ))
+          : null}
+
+        {sectionsHaveError && !hasSuccessfulSection ? (
+          <ErrorState
+            message="Some Discover sections could not be loaded."
+            onRetry={() => {
+              sectionQueries.forEach(query => {
+                query.refetch().catch(() => undefined);
+              });
+            }}
+          />
+        ) : null}
+
+        {!sectionsLoading
+          ? sectionConfigs.map((config, index) => (
+              <MediaCarouselSection
+                key={config.key}
+                title={config.title}
+                items={sectionQueries[index]?.data ?? []}
+                onPress={showDetails}
+              />
+            ))
+          : null}
+
+        {category !== 'popular' && category !== 'addons' && hasAddonContent ? (
+          <AddonRows
+            movies={addonMovies}
+            series={addonSeries}
+            onPress={showDetails}
+          />
+        ) : null}
+
+        {category === 'addons' && addonQuery.isLoading ? (
+          <MediaCarouselSection
+            loading
+            title="Addon catalogs"
+            items={[]}
+            onPress={showDetails}
+          />
+        ) : null}
+
+        {category === 'addons' && !addonQuery.isLoading && !hasAddonContent ? (
+          <EmptyState
+            title="No addon catalogs"
+            description={
+              addonQuery.data?.failures[0]?.message ??
+              'Install an addon that declares a catalog resource to show content here.'
+            }
+            action="Manage addons"
+            onAction={() => navigation.navigate('Addons')}
+          />
+        ) : null}
+
+        {category !== 'addons' &&
+        !sectionsLoading &&
+        !sectionsHaveError &&
+        !hasNativeContent ? (
+          <EmptyState
+            title="No media found"
+            description="Try another category or filter."
+          />
+        ) : null}
+
+        {addonQuery.data?.failures.length && category !== 'addons' ? (
+          <AppText variant="caption" style={styles.addonWarning}>
+            {addonQuery.data.failures.length} addon catalog request
+            {addonQuery.data.failures.length === 1 ? '' : 's'} failed.
+          </AppText>
+        ) : null}
+
+        {category === 'addons' && addonItems.length ? (
+          <AppText variant="caption" style={styles.addonWarning}>
+            Catalogs are supplied by your installed addons.
+          </AppText>
+        ) : null}
       </View>
-      {isLoading ? (
-        <LoadingState
-          label={
-            isAddonCategory ? 'Loading addon catalogs...' : 'Loading catalog...'
-          }
-        />
-      ) : null}
-      {isError ? (
-        <ErrorState
-          message={
-            error instanceof Error ? error.message : 'Catalog request failed.'
-          }
-          onRetry={() => refetch().catch(() => undefined)}
-        />
-      ) : null}
-      {!isLoading && !isError && isAddonCategory && !items.length ? (
-        <EmptyState
-          title="No addon catalogs"
-          description={
-            addonFailures[0]?.message ??
-            'Install an addon that declares a catalog resource to show content here.'
-          }
-          action="Manage addons"
-          onAction={() => navigation.navigate('Addons')}
-        />
-      ) : null}
-      {!isLoading && !isError && !isAddonCategory && !items.length ? (
-        <EmptyState
-          title="No media found"
-          description="Try another category or filter."
-        />
-      ) : null}
-      {!isLoading && !isError && items.length ? (
-        <>
-          {isAddonCategory ? (
-            <>
-              {addonMovies.length ? (
-                <Section title="Movies from addons">
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.rowContent}
-                  >
-                    <MediaRow
-                      items={addonMovies}
-                      onPress={media =>
-                        navigation.navigate('Details', {
-                          mediaId: media.id,
-                          type: media.type,
-                        })
-                      }
-                    />
-                  </ScrollView>
-                </Section>
-              ) : null}
-              {addonSeries.length ? (
-                <Section title="TV Shows from addons">
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.rowContent}
-                  >
-                    <MediaRow
-                      items={addonSeries}
-                      onPress={media =>
-                        navigation.navigate('Details', {
-                          mediaId: media.id,
-                          type: media.type,
-                        })
-                      }
-                      tv
-                    />
-                  </ScrollView>
-                </Section>
-              ) : null}
-              {addonFailures.length ? (
-                <AppText variant="caption" style={styles.addonWarning}>
-                  {addonFailures.length} addon catalog request
-                  {addonFailures.length === 1 ? '' : 's'} failed.
-                </AppText>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <Section title={categoryLabel}>
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.rowContent}
-                >
-                  <MediaRow
-                    items={items}
-                    onPress={media =>
-                      navigation.navigate('Details', {
-                        mediaId: media.id,
-                        type: media.type,
-                      })
-                    }
-                  />
-                </ScrollView>
-              </Section>
-              <Section title="Continue exploring">
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.rowContent}
-                >
-                  <MediaRow
-                    items={[...items].reverse()}
-                    onPress={media =>
-                      navigation.navigate('Details', {
-                        mediaId: media.id,
-                        type: media.type,
-                      })
-                    }
-                  />
-                </ScrollView>
-              </Section>
-            </>
-          )}
-        </>
-      ) : null}
     </Screen>
   );
 }
 
+function AddonRows(props: {
+  movies: MediaItem[];
+  series: MediaItem[];
+  onPress: (media: MediaItem) => void;
+}) {
+  return (
+    <>
+      {props.movies.length ? (
+        <MediaCarouselSection
+          badge="Addons"
+          title="Movies from addons"
+          items={props.movies}
+          onPress={props.onPress}
+        />
+      ) : null}
+      {props.series.length ? (
+        <MediaCarouselSection
+          badge="Addons"
+          title="TV shows from addons"
+          items={props.series}
+          onPress={props.onPress}
+        />
+      ) : null}
+    </>
+  );
+}
+
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    marginBottom: spacing.xl,
-  },
-  headerCopy: { gap: spacing.xs },
-  brand: { width: 48, height: 48, marginTop: spacing.xs },
+  content: { paddingTop: spacing.lg },
   categories: {
     alignItems: 'center',
     gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
     paddingBottom: spacing.lg,
   },
   category: {
@@ -389,15 +506,15 @@ const styles = StyleSheet.create({
   categoryActive: { backgroundColor: colors.text, borderColor: colors.text },
   categoryText: { color: colors.textSecondary, fontWeight: '700' },
   categoryActiveText: { color: colors.black, fontWeight: '800' },
-  filters: { gap: spacing.sm, marginBottom: spacing.xl },
-  filterRow: {
-    alignItems: 'center',
-    gap: spacing.xs,
-    paddingRight: spacing.xl,
+  filters: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.xl,
   },
-  rowContent: { paddingRight: spacing.xl },
   addonWarning: {
     color: colors.warning,
+    marginHorizontal: spacing.lg,
     marginTop: -spacing.lg,
     marginBottom: spacing.lg,
   },

@@ -272,6 +272,8 @@
   gap: 4px;
   padding: 6px;
   overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   background: rgba(19, 9, 9, 0.96);
   border: 1px solid rgba(255, 225, 210, 0.2);
@@ -311,6 +313,7 @@
   font-size: 0.72rem;
   line-height: 1.2;
   white-space: nowrap;
+  touch-action: pan-y;
   transition:
     color 180ms ease,
     background 180ms ease,

@@ -8,9 +8,23 @@ export interface MediaItem {
   releaseDate?: string;
   poster?: string;
   backdrop?: string;
+  logo?: string;
   overview?: string;
   genres?: string[];
   rating?: number;
+  voteCount?: number;
+  numberOfSeasons?: number;
+  runtime?: number;
+  language?: string;
+  director?: string;
+  actors?: string[];
+  imdbId?: string;
+  collection?: {
+    id: string;
+    name: string;
+    poster?: string;
+    backdrop?: string;
+  };
 }
 
 export interface Episode {
@@ -20,6 +34,8 @@ export interface Episode {
   overview?: string;
   stillPath?: string;
   airDate?: string;
+  rating?: number;
+  voteCount?: number;
 }
 
 export interface Season {
@@ -27,6 +43,10 @@ export interface Season {
   number: number;
   title: string;
   episodes: Episode[];
+  episodeCount?: number;
+  overview?: string;
+  airDate?: string;
+  poster?: string;
 }
 
 export interface MediaDetails extends MediaItem {

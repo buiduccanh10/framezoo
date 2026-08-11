@@ -814,11 +814,18 @@ export async function getMediaVideos(
   type: TMDBContentTypes,
 ): Promise<TMDBVideo[]> {
   const endpoint = type === TMDBContentTypes.MOVIE ? "movie" : "tv";
-  const data = await get<TMDBVideosResponse>(`/${endpoint}/${id}/videos`);
-  return data.results.filter(
-    (video) =>
-      video.site === "YouTube" &&
-      (video.type === "Trailer" || video.type === "Teaser"),
+  const data = await get<{ videos?: TMDBVideosResponse }>(
+    `/${endpoint}/${id}`,
+    {
+      append_to_response: "videos",
+      language: ENGLISH_TMDB_LANGUAGE,
+    },
+  );
+
+  return (
+    data.videos?.results
+      ?.filter((video) => video.site === "YouTube" && video.type === "Trailer")
+      .slice(0, 6) ?? []
   );
 }
 

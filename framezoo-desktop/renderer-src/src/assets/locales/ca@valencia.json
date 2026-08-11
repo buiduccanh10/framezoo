@@ -436,21 +436,15 @@
     "titles": {
       "69": {
         "default": "Vols alguna cosa picant?",
-        "extra": [
-          "Feliç 69 dia 😘!"
-        ]
+        "extra": ["Feliç 69 dia 😘!"]
       },
       "420": {
         "default": "Què t'agradaria veure aquest 20/4?",
-        "extra": [
-          "Feliç 20/4 🥳!"
-        ]
+        "extra": ["Feliç 20/4 🥳!"]
       },
       "day": {
         "default": "Què t'agradaria veure aquesta tarda?",
-        "extra": [
-          "Viva l'FrameZoo!"
-        ]
+        "extra": ["Viva l'FrameZoo!"]
       },
       "halloween": {
         "default": "Quina pel·lícula esgarrifosa t'agradaria veure aquest Halloween?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "Què t'agradaria veure aquest matí?",
-        "extra": [
-          "Viva l'FrameZoo!"
-        ]
+        "extra": ["Viva l'FrameZoo!"]
       },
       "night": {
         "default": "Què t'agradaria veure aquesta nit?",
-        "extra": [
-          "Viva l'FrameZoo!"
-        ]
+        "extra": ["Viva l'FrameZoo!"]
       }
     },
     "watchHistory": {
@@ -1110,7 +1100,7 @@
       },
       "register": {
         "cta": "Comença",
-        "text": "Comparteix el progrés del teu rellotge entre dispositius i mantén-los sincronitzats. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Comparteix el progrés del teu rellotge entre dispositius i mantén-los sincronitzats. ",
         "title": "Sincronitza amb el núvol"
       },
       "title": "Compte"

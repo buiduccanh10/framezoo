@@ -436,21 +436,15 @@
     "titles": {
       "69": {
         "default": "Pronto per qualcosa di piccante?",
-        "extra": [
-          "Buon 69 giorno😘!"
-        ]
+        "extra": ["Buon 69 giorno😘!"]
       },
       "420": {
         "default": "Cosa ti piacerebbe guardare questo 20/4?",
-        "extra": [
-          "Buon 20/4 🥳!"
-        ]
+        "extra": ["Buon 20/4 🥳!"]
       },
       "day": {
         "default": "Cosa vorresti guardare questo pomeriggio?",
-        "extra": [
-          "Viva FrameZoo!"
-        ]
+        "extra": ["Viva FrameZoo!"]
       },
       "halloween": {
         "default": "Quale film spaventoso ti piacerebbe vedere questo Halloween?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "Cosa vorresti guardare questa mattina?",
-        "extra": [
-          "Viva FrameZoo!"
-        ]
+        "extra": ["Viva FrameZoo!"]
       },
       "night": {
         "default": "Cosa vorresti guardare questa sera?",
-        "extra": [
-          "Viva FrameZoo!"
-        ]
+        "extra": ["Viva FrameZoo!"]
       }
     },
     "watchHistory": {
@@ -1110,7 +1100,7 @@
       },
       "register": {
         "cta": "Inizia",
-        "text": "Condividi i progressi dei tuoi film e serie tra dispositivi e mantienili sincronizzati. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Condividi i progressi dei tuoi film e serie tra dispositivi e mantienili sincronizzati. ",
         "title": "Sincronizza col Cloud"
       },
       "title": "Account"

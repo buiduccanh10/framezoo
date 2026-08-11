@@ -74,11 +74,6 @@ export function LandingLanguageSelector({
               type="button"
               role="menuitemradio"
               aria-checked={option.id === locale}
-              onPointerDown={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                selectLocale(option.id);
-              }}
               onClick={(event) => {
                 event.stopPropagation();
                 selectLocale(option.id);

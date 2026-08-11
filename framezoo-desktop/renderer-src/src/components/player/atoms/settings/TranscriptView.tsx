@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/buttons/Button";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
-import { Spinner } from "@/components/layout/Spinner";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";

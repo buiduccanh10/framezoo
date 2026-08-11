@@ -1,20 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 
+import { TrailerPlayer } from "@/components/TrailerPlayer";
 import { LazyImage } from "@/components/utils/Image";
 
 interface DetailsBackdropProps {
   title: string;
   logoUrl?: string | null;
   backdrop?: string | null;
+  tmdbId: string;
+  tmdbType: "movie" | "show";
+  imdbId?: string | null;
 }
 
 export function DetailsBackdrop({
   title,
   logoUrl,
   backdrop,
+  tmdbId,
+  tmdbType,
+  imdbId,
 }: DetailsBackdropProps) {
   const [logoHeight, setLogoHeight] = useState<number>(0);
   const logoRef = useRef<HTMLDivElement>(null);
+  const [trailerReady, setTrailerReady] = useState(false);
 
   useEffect(() => {
     if (logoRef.current) {
@@ -52,30 +60,62 @@ export function DetailsBackdrop({
           </h3>
         )}
       </div>
-      {backdrop ? (
-        <LazyImage
-          src={backdrop}
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover object-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
-          style={{
-            maskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-            WebkitMaskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-            zIndex: -1,
-          }}
-        />
-      ) : (
+
+      {/* Fallback Image Layer (fades out when trailer is ready) */}
+      <div
+        className="absolute inset-0 transition-opacity duration-1000"
+        style={{
+          opacity: trailerReady ? 0 : 1,
+          zIndex: -1,
+        }}
+      >
+        {backdrop ? (
+          <LazyImage
+            src={backdrop}
+            alt={title}
+            className="absolute inset-0 w-full h-full object-cover object-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
+            style={{
+              maskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+              WebkitMaskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+            }}
+          />
+        ) : (
+          <div
+            className="absolute inset-0 bg-cover bg-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
+            style={{
+              maskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+              WebkitMaskImage:
+                "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+            }}
+          />
+        )}
+      </div>
+
+      {/* Trailer Layer - Masked and hidden until playing */}
+      {tmdbId && (
         <div
-          className="absolute inset-0 bg-cover bg-top before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
           style={{
+            zIndex: -2,
             maskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
+              "linear-gradient(to top, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%)",
             WebkitMaskImage:
-              "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 150px)",
-            zIndex: -1,
+              "linear-gradient(to top, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%)",
+            opacity: trailerReady ? 1 : 0,
+            transition: "opacity 0.8s ease",
           }}
-        />
+        >
+          <TrailerPlayer
+            tmdbId={tmdbId}
+            tmdbType={tmdbType}
+            initialImdbId={imdbId || undefined}
+            isActive={true}
+            onPlay={() => setTrailerReady(true)}
+          />
+        </div>
       )}
 
       {/* Focus Vignette / Edge Blur Overlay */}

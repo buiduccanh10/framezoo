@@ -7,20 +7,23 @@ import { AppText } from './AppText';
 
 export function Section(props: {
   title: string;
+  showTitle?: boolean;
   action?: string;
   onAction?: () => void;
   children: React.ReactNode;
 }) {
   return (
     <View style={styles.section}>
-      <View style={styles.header}>
-        <AppText variant="title">{props.title}</AppText>
-        {props.action && props.onAction ? (
-          <AppText onPress={props.onAction} style={styles.action}>
-            {props.action}
-          </AppText>
-        ) : null}
-      </View>
+      {props.showTitle !== false ? (
+        <View style={styles.header}>
+          <AppText variant="title">{props.title}</AppText>
+          {props.action && props.onAction ? (
+            <AppText onPress={props.onAction} style={styles.action}>
+              {props.action}
+            </AppText>
+          ) : null}
+        </View>
+      ) : null}
       {props.children}
     </View>
   );
@@ -28,6 +31,11 @@ export function Section(props: {
 
 const styles = StyleSheet.create({
   section: { marginBottom: spacing.xxl },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.md },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.md,
+  },
   action: { color: '#8288fe', fontWeight: '700' },
 });

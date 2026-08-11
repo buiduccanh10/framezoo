@@ -436,15 +436,11 @@
     "titles": {
       "69": {
         "default": "Ootko valmis johonkin kuumaan?",
-        "extra": [
-          "Hyvää 69-päivää 😘!"
-        ]
+        "extra": ["Hyvää 69-päivää 😘!"]
       },
       "420": {
         "default": "Mitä tekisi mieli katsoa tänä 4/20-päivänä?",
-        "extra": [
-          "Hyvää 4/20-päivää 🥳!"
-        ]
+        "extra": ["Hyvää 4/20-päivää 🥳!"]
       },
       "day": {
         "default": "Mitä haluaisit katsoa tänä iltapäivänä?",
@@ -469,9 +465,7 @@
       },
       "night": {
         "default": "Mitä haluaisit katsoa tänä iltana?",
-        "extra": [
-          "Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"
-        ]
+        "extra": ["Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"]
       }
     },
     "watchHistory": {
@@ -1110,7 +1104,7 @@
       },
       "register": {
         "cta": "Aloita",
-        "text": "Jaa katseluedistymisesi laitteiden välillä ja pidä ne synkronoituna. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Jaa katseluedistymisesi laitteiden välillä ja pidä ne synkronoituna. ",
         "title": "Synkronoi pilveen"
       },
       "title": "Tili"

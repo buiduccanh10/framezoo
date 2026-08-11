@@ -436,21 +436,15 @@
     "titles": {
       "69": {
         "default": "Har du lyst til at \"hygge\"?",
-        "extra": [
-          "Glædelig 69-dag 😘!"
-        ]
+        "extra": ["Glædelig 69-dag 😘!"]
       },
       "420": {
         "default": "Hvad vil du gerne se denne 4/20?",
-        "extra": [
-          "Glædelig 4/20 🥳!"
-        ]
+        "extra": ["Glædelig 4/20 🥳!"]
       },
       "day": {
         "default": "Hvad vil du gerne se i eftermiddag?",
-        "extra": [
-          "Længe leve FrameZoo!"
-        ]
+        "extra": ["Længe leve FrameZoo!"]
       },
       "halloween": {
         "default": "Hvilken uhyggelig film vil du gerne se denne Halloween?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "Hvad vil du gerne se her til morgen?",
-        "extra": [
-          "Længe leve FrameZoo!"
-        ]
+        "extra": ["Længe leve FrameZoo!"]
       },
       "night": {
         "default": "Hvad vil du gerne se i aften?",
-        "extra": [
-          "Længe leve FrameZoo!"
-        ]
+        "extra": ["Længe leve FrameZoo!"]
       }
     },
     "watchHistory": {
@@ -1110,7 +1100,7 @@
       },
       "register": {
         "cta": "Kom godt i gang",
-        "text": "Del fremskridt mellem enheder, og hold dem synkroniseret. ( ̧⸝⸝⍢⸝⸝)ෆ",
+        "text": "Del fremskridt mellem enheder, og hold dem synkroniseret. ",
         "title": "Synkroniser med Cloud"
       },
       "title": "Profil"

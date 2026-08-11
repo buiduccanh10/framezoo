@@ -18,12 +18,17 @@ export type PlatformIconName =
   | 'language'
   | 'playback'
   | 'bookmark'
+  | 'share'
+  | 'eye'
   | 'history'
   | 'migration'
   | 'trash'
   | 'logout'
   | 'edit'
   | 'chevronRight'
+  | 'chevronLeft'
+  | 'play'
+  | 'info'
   | 'check'
   | 'refresh';
 
@@ -90,6 +95,14 @@ const icons: Record<
     ios: { active: 'bookmark', inactive: 'bookmark-outline' },
     android: { active: 'bookmark', inactive: 'bookmark-border' },
   },
+  share: {
+    ios: { active: 'share-outline', inactive: 'share-outline' },
+    android: { active: 'share', inactive: 'share' },
+  },
+  eye: {
+    ios: { active: 'eye', inactive: 'eye-outline' },
+    android: { active: 'visibility', inactive: 'visibility-off' },
+  },
   history: {
     ios: { active: 'time', inactive: 'time-outline' },
     android: { active: 'history', inactive: 'history' },
@@ -113,6 +126,21 @@ const icons: Record<
   chevronRight: {
     ios: { active: 'chevron-forward', inactive: 'chevron-forward' },
     android: { active: 'chevron-right', inactive: 'chevron-right' },
+  },
+  chevronLeft: {
+    ios: { active: 'chevron-back', inactive: 'chevron-back' },
+    android: { active: 'chevron-left', inactive: 'chevron-left' },
+  },
+  play: {
+    ios: { active: 'play', inactive: 'play' },
+    android: { active: 'play-arrow', inactive: 'play-arrow' },
+  },
+  info: {
+    ios: {
+      active: 'information-circle',
+      inactive: 'information-circle-outline',
+    },
+    android: { active: 'info-outline', inactive: 'info-outline' },
   },
   check: {
     ios: { active: 'checkmark-circle', inactive: 'checkmark-circle-outline' },
