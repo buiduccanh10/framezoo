@@ -1,5 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, spacing } from '@/theme';
@@ -12,9 +18,13 @@ export function Screen(props: {
   refreshing?: boolean;
   onRefresh?: () => void;
   scrollKey?: string | number;
+  safeAreaTop?: boolean;
 }) {
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
+  const topInset = props.safeAreaTop === false ? 0 : insets.top + spacing.sm;
+  const useNativeScrollInset =
+    Platform.OS === 'ios' && props.scroll && props.safeAreaTop !== false;
   useEffect(() => {
     if (props.scroll && props.scrollKey !== undefined) {
       scrollRef.current?.scrollTo({ y: 0, animated: false });
@@ -27,7 +37,7 @@ export function Screen(props: {
         styles.content,
         props.scroll ? styles.scrollContentView : styles.fillContent,
         props.padded && styles.padded,
-        { paddingTop: Math.max(insets.top, spacing.lg) },
+        { paddingTop: useNativeScrollInset ? 0 : topInset },
         props.style,
       ]}
     >
@@ -40,6 +50,13 @@ export function Screen(props: {
       ref={scrollRef}
       style={styles.screen}
       contentContainerStyle={styles.scrollContent}
+      contentInsetAdjustmentBehavior="never"
+      contentInset={
+        useNativeScrollInset
+          ? { bottom: 0, left: 0, right: 0, top: topInset }
+          : undefined
+      }
+      contentOffset={useNativeScrollInset ? { x: 0, y: -topInset } : undefined}
       refreshControl={
         props.onRefresh ? (
           <RefreshControl

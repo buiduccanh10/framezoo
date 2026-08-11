@@ -52,7 +52,16 @@ export function RootNavigator() {
           component={AuthNavigator}
           options={{ headerShown: false, presentation: 'modal' }}
         />
-        <Stack.Screen name="Details" component={DetailsScreen} options={{ title: 'Details' }} />
+        <Stack.Screen
+          name="Details"
+          component={DetailsScreen}
+          options={{
+            headerTransparent: true,
+            headerStyle: { backgroundColor: 'transparent' },
+            headerTitle: '',
+            headerShadowVisible: false,
+          }}
+        />
         <Stack.Screen name="Player" component={PlayerScreen} options={{ headerShown: false, orientation: 'landscape' }} />
         <Stack.Screen name="Addons" component={AddonsScreen} options={{ title: 'Addons' }} />
         <Stack.Screen name="Settings" component={require('@/screens/settings/SettingsScreen').SettingsScreen} options={{ title: 'Settings' }} />

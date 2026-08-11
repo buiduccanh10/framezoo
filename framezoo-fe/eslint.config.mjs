@@ -1,9 +1,13 @@
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
 import importPlugin from "eslint-plugin-import";
 import prettierPlugin from "eslint-plugin-prettier/recommended";
+
+const configDir = dirname(fileURLToPath(import.meta.url));
 
 export default tseslint.config(
   // Global ignores (replaces ignorePatterns)
@@ -34,7 +38,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir: configDir,
       },
     },
     settings: {
