@@ -24,6 +24,7 @@ import { TrailerPlayer } from "@/components/TrailerPlayer";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
+import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { getTmdbLanguageCode } from "@/utils/language";
@@ -196,6 +197,8 @@ export function FeaturedCarousel({
   const hasReportedInitialContent = useRef(false);
 
   const [trailerReady, setTrailerReady] = useState(false);
+  const isTrailerEnabled = usePreferencesStore((s) => s.enableTrailer);
+  const setEnableTrailer = usePreferencesStore((s) => s.setEnableTrailer);
   const currentMedia = media[currentIndex];
 
   const SLIDE_QUANTITY = 15;
@@ -494,6 +497,11 @@ export function FeaturedCarousel({
   useEffect(() => {
     setTrailerReady(false);
   }, [currentIndex]);
+
+  const toggleTrailer = () => {
+    setEnableTrailer(!isTrailerEnabled);
+    setTrailerReady(false);
+  };
 
   // Fetch clear logo when current media changes
   useEffect(() => {
@@ -827,7 +835,10 @@ export function FeaturedCarousel({
                     "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
                   WebkitMaskImage:
                     "linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 700px)",
-                  opacity: index === currentIndex && trailerReady ? 0 : 1, // Only hide image when video is fully ready and playing
+                  opacity:
+                    isTrailerEnabled && index === currentIndex && trailerReady
+                      ? 0
+                      : 1,
                   transition: "opacity 0.8s ease",
                 }}
               />
@@ -835,9 +846,11 @@ export function FeaturedCarousel({
                 tmdbId={item.id!.toString()}
                 tmdbType={item.type === "movie" ? "movie" : "show"}
                 initialImdbId={item.external_ids?.imdb_id}
-                isActive={index === currentIndex}
+                isActive={isTrailerEnabled && index === currentIndex}
                 onPlay={() => {
-                  if (index === currentIndex) setTrailerReady(true);
+                  if (isTrailerEnabled && index === currentIndex) {
+                    setTrailerReady(true);
+                  }
                 }}
               />
             </div>
@@ -868,7 +881,6 @@ export function FeaturedCarousel({
       >
         <Icon icon={Icons.CHEVRON_RIGHT} className="text-white w-8 h-8" />
       </button>
-
       {/* Navigation Dots */}
       <div
         className={classNames(
@@ -1123,7 +1135,23 @@ export function FeaturedCarousel({
               ) : null}
             </div>
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden items-center gap-2 lg:flex">
+            <button
+              type="button"
+              onClick={toggleTrailer}
+              className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+              aria-label={isTrailerEnabled ? "Show image" : "Show trailer"}
+              aria-pressed={!isTrailerEnabled}
+              title={isTrailerEnabled ? "Show image" : "Show trailer"}
+            >
+              <Icon
+                icon={Icons.IMAGE}
+                className={classNames(
+                  "inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl",
+                  !isTrailerEnabled ? "text-buttons-purple" : "text-white",
+                )}
+              />
+            </button>
             <RandomMovieButton />
           </div>
         </div>

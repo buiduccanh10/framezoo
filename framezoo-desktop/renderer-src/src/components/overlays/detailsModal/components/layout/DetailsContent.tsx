@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { t } from "i18next";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,7 @@ import {
   PlayerMeta,
   PlayerNavigationState,
 } from "@/stores/player/slices/source";
+import { usePreferencesStore } from "@/stores/preferences";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
 import { getTmdbLanguageCode } from "@/utils/language";
@@ -272,6 +274,8 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingImdb, setIsLoadingImdb] = useState(false);
   const [isLoadingRt, setIsLoadingRt] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+  const isTrailerEnabled = usePreferencesStore((s) => s.enableTrailer);
+  const setEnableTrailer = usePreferencesStore((s) => s.setEnableTrailer);
   const [trailerUrl, setTrailerUrl] = useState<string | undefined>();
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showCollection, setShowCollection] = useState(false);
@@ -643,14 +647,33 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       )}
 
       {/* Backdrop */}
-      <DetailsBackdrop
-        title={data.title}
-        logoUrl={data.logoUrl}
-        backdrop={data.backdrop}
-        tmdbId={data.id?.toString() ?? ""}
-        tmdbType={data.type === "movie" ? "movie" : "show"}
-        imdbId={data.imdbId}
-      />
+      <div className="relative">
+        <DetailsBackdrop
+          title={data.title}
+          logoUrl={data.logoUrl}
+          backdrop={data.backdrop}
+          tmdbId={data.id?.toString() ?? ""}
+          tmdbType={data.type === "movie" ? "movie" : "show"}
+          imdbId={data.imdbId}
+          isTrailerEnabled={isTrailerEnabled}
+        />
+        <button
+          type="button"
+          onClick={() => setEnableTrailer(!isTrailerEnabled)}
+          className="pointer-events-auto absolute bottom-6 right-6 z-50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+          aria-label={isTrailerEnabled ? "Show image" : "Show trailer"}
+          aria-pressed={!isTrailerEnabled}
+          title={isTrailerEnabled ? "Show image" : "Show trailer"}
+        >
+          <Icon
+            icon={Icons.IMAGE}
+            className={classNames(
+              "inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl",
+              !isTrailerEnabled ? "text-buttons-purple" : "text-white",
+            )}
+          />
+        </button>
+      </div>
 
       {/* Content */}
       <div

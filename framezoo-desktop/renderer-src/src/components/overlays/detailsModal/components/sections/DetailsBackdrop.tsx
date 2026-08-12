@@ -10,6 +10,7 @@ interface DetailsBackdropProps {
   tmdbId: string;
   tmdbType: "movie" | "show";
   imdbId?: string | null;
+  isTrailerEnabled: boolean;
 }
 
 export function DetailsBackdrop({
@@ -19,10 +20,17 @@ export function DetailsBackdrop({
   tmdbId,
   tmdbType,
   imdbId,
+  isTrailerEnabled,
 }: DetailsBackdropProps) {
   const [logoHeight, setLogoHeight] = useState<number>(0);
   const logoRef = useRef<HTMLDivElement>(null);
   const [trailerReady, setTrailerReady] = useState(false);
+
+  useEffect(() => {
+    if (!isTrailerEnabled) {
+      setTrailerReady(false);
+    }
+  }, [isTrailerEnabled]);
 
   useEffect(() => {
     if (logoRef.current) {
@@ -65,7 +73,7 @@ export function DetailsBackdrop({
       <div
         className="absolute inset-0 transition-opacity duration-1000"
         style={{
-          opacity: trailerReady ? 0 : 1,
+          opacity: isTrailerEnabled && trailerReady ? 0 : 1,
           zIndex: -1,
         }}
       >
@@ -104,7 +112,7 @@ export function DetailsBackdrop({
               "linear-gradient(to top, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%)",
             WebkitMaskImage:
               "linear-gradient(to top, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%)",
-            opacity: trailerReady ? 1 : 0,
+            opacity: isTrailerEnabled && trailerReady ? 1 : 0,
             transition: "opacity 0.8s ease",
           }}
         >
@@ -112,8 +120,10 @@ export function DetailsBackdrop({
             tmdbId={tmdbId}
             tmdbType={tmdbType}
             initialImdbId={imdbId || undefined}
-            isActive={true}
-            onPlay={() => setTrailerReady(true)}
+            isActive={isTrailerEnabled}
+            onPlay={() => {
+              if (isTrailerEnabled) setTrailerReady(true);
+            }}
           />
         </div>
       )}
