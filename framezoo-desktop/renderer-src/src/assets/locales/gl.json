@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Volver arriba",
     "tabs": {
+      "all": "Todos",
       "movies": "Películas",
       "top10": "Top 10",
       "tvshows": "Programas de TV"
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Queres algo picante?",
-        "extra": ["Feliz día 69 😘!"]
+        "extra": [
+          "Feliz día 69 😘!"
+        ]
       },
       "420": {
         "default": "Que che gustaría ver este 20/4?",
-        "extra": ["Feliz 20/4 🥳!"]
+        "extra": [
+          "Feliz 20/4 🥳!"
+        ]
       },
       "day": {
         "default": "Que che gustaría ver esta tarde?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "Que che gustaría ver esta mañá?",
-        "extra": ["Escoitei que “Antes del amanecer” é boa"]
+        "extra": [
+          "Escoitei que “Antes del amanecer” é boa"
+        ]
       },
       "night": {
         "default": "Que che gustaría ver esta noite?",
-        "extra": ["Canso? Escoitei que “El Exorcista” é boa."]
+        "extra": [
+          "Canso? Escoitei que “El Exorcista” é boa."
+        ]
       }
     },
     "watchHistory": {

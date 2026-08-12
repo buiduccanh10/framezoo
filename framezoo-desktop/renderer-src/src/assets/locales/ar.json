@@ -18,7 +18,7 @@
     },
     "platforms": {
       "framezoo": "Framezoo",
-      "stremio": "ستريميو",
+      "stremio": "Stremio",
       "supportLabel": "المنصات المدعومة للإضافات:",
       "supported": "المنصات المدعومة: Framezoo وStremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "العودة إلى الأعلى",
     "tabs": {
+      "all": "الجميع",
       "movies": "أفلام",
       "top10": "أعلى 10",
       "tvshows": "مسلسلات"
@@ -310,12 +311,12 @@
       "subtitle": "اضغط باستمرار لإظهار هذه المساعدة في أي وقت",
       "title": "اختصارات لوحة المفاتيح"
     },
-    "name": "ألفا فليكس",
+    "name": "Framezoo",
     "pages": {
       "discover": "اكتشف",
       "login": "تسجيل الدخول",
       "migration": "ترحيل الحساب",
-      "pagetitle": "\"{{title}} - Framezoo\"",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "تسجيل",
       "settings": "الإعدادات"
     }
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "هل ترغب في شيء مثير؟",
-        "extra": ["يوم 69 سعيد 😘!"]
+        "extra": [
+          "يوم 69 سعيد 😘!"
+        ]
       },
       "420": {
         "default": "ماذا تريد أن تشاهد اليوم؟",
-        "extra": ["يوم 4/20 سعيد 🥳!"]
+        "extra": [
+          "يوم 4/20 سعيد 🥳!"
+        ]
       },
       "day": {
         "default": "ماذا تريد أن تشاهد في هذه الظهيرة؟",
-        "extra": ["يحيا Framezoo!"]
+        "extra": [
+          "يحيا Framezoo!"
+        ]
       },
       "halloween": {
         "default": "ما هو الفيلم المخيف الذي تود مشاهدته في عيد الهالوين هذا؟",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "ماذا تريد أن تشاهد في هذا الصباح؟",
-        "extra": ["تحيا Framezoo!"]
+        "extra": [
+          "تحيا Framezoo!"
+        ]
       },
       "night": {
         "default": "ماذا تريد أن تشاهد في هذه الليلة؟",
-        "extra": ["تحيا Framezoo!"]
+        "extra": [
+          "تحيا Framezoo!"
+        ]
       }
     },
     "watchHistory": {

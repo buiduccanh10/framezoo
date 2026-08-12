@@ -17,8 +17,8 @@
       "title": "デスクトップアドオン"
     },
     "platforms": {
-      "framezoo": "フレームズー",
-      "stremio": "ストレミオ",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "アドオンがサポートされているプラ​​ットフォーム:",
       "supported": "サポートされているプラ​​ットフォーム: Framezoo および Stremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "トップに戻る",
     "tabs": {
+      "all": "全て",
       "movies": "映画",
       "top10": "トップ10",
       "tvshows": "テレビ番組"
@@ -310,12 +311,12 @@
       "subtitle": "` を押し続けると、いつでもこのヘルプが表示されます",
       "title": "キーボードショートカット"
     },
-    "name": "映画ウェブ",
+    "name": "Framezoo",
     "pages": {
       "discover": "発見する",
       "login": "ログイン",
       "migration": "アカウントの移行",
-      "pagetitle": "{{title}} - アルファフリックス",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "登録する",
       "settings": "設定"
     }
@@ -413,7 +414,7 @@
           "今日のウォッチリストには何が入っていますか?",
           "あなたの一日はどうでした？",
           "残念ながらサイトは機能しません...",
-          "FrameZooはまさに最高ではないでしょうか？",
+          "Framezooはまさに最高ではないでしょうか？",
           ">ᴗ<"
         ]
       },
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "何かスパイシーなものを食べたいですか？",
-        "extra": ["69日目おめでとう😘!"]
+        "extra": [
+          "69日目おめでとう😘!"
+        ]
       },
       "420": {
         "default": "4/20は何を見たいですか？",
-        "extra": ["4/20おめでとうございます🥳!"]
+        "extra": [
+          "4/20おめでとうございます🥳!"
+        ]
       },
       "day": {
         "default": "今日の午後はどんな映画を見たい？",
-        "extra": ["アルファフリックス万歳！"]
+        "extra": [
+          "Framezoo万歳！"
+        ]
       },
       "halloween": {
         "default": "今年のハロウィーンに見たい不気味な映画は何ですか?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "今朝はどんな映画を見たい？",
-        "extra": ["アルファフリックス万歳！"]
+        "extra": [
+          "Framezoo万歳！"
+        ]
       },
       "night": {
         "default": "今夜はどんな映画を見たい？",
-        "extra": ["アルファフリックス万歳！"]
+        "extra": [
+          "Framezoo万歳！"
+        ]
       }
     },
     "watchHistory": {

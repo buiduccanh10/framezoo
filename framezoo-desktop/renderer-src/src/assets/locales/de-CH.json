@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Ufwärts 🚀",
     "tabs": {
+      "all": "Alle",
       "movies": "Filme",
       "top10": "Top 10",
       "tvshows": "Fernsehserie"
@@ -315,7 +316,7 @@
       "discover": "Entdecke",
       "login": "Amälde",
       "migration": "Account öberträge",
-      "pagetitle": "{{title}} – Framezoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Regischtriere",
       "settings": "Ischtelige"
     }
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Hesch loscht of öpis scharfs?",
-        "extra": ["Schöne 69. Tag 😘!"]
+        "extra": [
+          "Schöne 69. Tag 😘!"
+        ]
       },
       "420": {
         "default": "Gets öpis, wodu am 4/20 welsch luege?",
-        "extra": ["Fröhleche 4/20 🥳!"]
+        "extra": [
+          "Fröhleche 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Was möchtisch a däm schöne nomitag aluege?",
-        "extra": ["Viva la Framezoo e ciao Svizzera"]
+        "extra": [
+          "Viva la Framezoo e ciao Svizzera"
+        ]
       },
       "halloween": {
         "default": "Welchen gruseligen Film würden Sie dieses Halloween gerne sehen?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Was welsch a däm morge aluege?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "night": {
         "default": "Besch no wach? Was möchtisch luege?",
-        "extra": ["Viva la ﻿﻿Svizzera!"]
+        "extra": [
+          "Viva la ﻿﻿Svizzera!"
+        ]
       }
     },
     "watchHistory": {

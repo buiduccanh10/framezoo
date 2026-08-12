@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Terug naar boven",
     "tabs": {
+      "all": "Alle",
       "movies": "Films",
       "top10": "Top-10",
       "tvshows": "Televisieshows"
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Zin in iets pittigs?",
-        "extra": ["Gelukkige 69e dag 😘!"]
+        "extra": [
+          "Gelukkige 69e dag 😘!"
+        ]
       },
       "420": {
         "default": "Wat wil je deze 4/20 bekijken?",
-        "extra": ["Happy 4/20 🥳"]
+        "extra": [
+          "Happy 4/20 🥳"
+        ]
       },
       "day": {
         "default": "Wat wil je vanmiddag kijken?",
-        "extra": ["Lang leven Framezoo!"]
+        "extra": [
+          "Lang leven Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Welke griezelige film zou jij deze Halloween graag willen zien?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Waar wil je deze ochtend naar kijken?",
-        "extra": ["Lang leven Framezoo!"]
+        "extra": [
+          "Lang leven Framezoo!"
+        ]
       },
       "night": {
         "default": "Wat wil je vanavond bekijken?",
-        "extra": ["Moe? Ik hoor dat The Exorcist goed is."]
+        "extra": [
+          "Moe? Ik hoor dat The Exorcist goed is."
+        ]
       }
     },
     "watchHistory": {

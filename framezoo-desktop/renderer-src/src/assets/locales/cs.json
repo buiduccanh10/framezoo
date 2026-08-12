@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Zpět nahoru",
     "tabs": {
+      "all": "Vše",
       "movies": "Filmy",
       "top10": "Top 10",
       "tvshows": "TV pořady"
@@ -315,7 +316,7 @@
       "discover": "Objevit",
       "login": "Přihlásit se",
       "migration": "Migrovat účet",
-      "pagetitle": "{{title}} – Framezoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Zaregistrovat se",
       "settings": "Nastavení"
     }
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Chystáte se na něco pikantního?",
-        "extra": ["Šťastných 69 dní 😘!"]
+        "extra": [
+          "Šťastných 69 dní 😘!"
+        ]
       },
       "420": {
         "default": "Na co byste se chtěli dívat 20. 4.?",
-        "extra": ["Šťastné 4/20 🥳!"]
+        "extra": [
+          "Šťastné 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Na co byste se chtěli dnes odpoledne dívat?",
-        "extra": ["Chceš zažít dobrodružství? Jurský Park je pro tebe."]
+        "extra": [
+          "Chceš zažít dobrodružství? Jurský Park je pro tebe."
+        ]
       },
       "halloween": {
         "default": "Na jaký strašidelný film byste se rádi podívali o tomto Halloweenu?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Na co byste se chtěli dnes ráno dívat?",
-        "extra": ["Slyšel jsem, že Před úsvitem je super"]
+        "extra": [
+          "Slyšel jsem, že Před úsvitem je super"
+        ]
       },
       "night": {
         "default": "Na co byste se chtěli dnes večer dívat?",
-        "extra": ["Unaven? Slyšel jsem, že Vymítač ďábla je super."]
+        "extra": [
+          "Unaven? Slyšel jsem, že Vymítač ďábla je super."
+        ]
       }
     },
     "watchHistory": {

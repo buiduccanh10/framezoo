@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Tillbaka till toppen",
     "tabs": {
+      "all": "Alla",
       "movies": "Filmer",
       "top10": "Topp 10",
       "tvshows": "TV-program"
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Sugen på något hett?",
-        "extra": ["Glad 69 dag 😘!"]
+        "extra": [
+          "Glad 69 dag 😘!"
+        ]
       },
       "420": {
         "default": "Vad vill du titta denna 4/20?",
-        "extra": ["Glad 4/20 🥳!"]
+        "extra": [
+          "Glad 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Vad vill du titta på i eftermiddag?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Vilken läskig film skulle du vilja se denna Halloween?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Vad vill du titta på den här morgonen?",
-        "extra": ["Jag hör att Before Sunrise är bra"]
+        "extra": [
+          "Jag hör att Before Sunrise är bra"
+        ]
       },
       "night": {
         "default": "Vad vill du titta på ikväll?",
-        "extra": ["Trött? Jag hör att The Exorcist är bra."]
+        "extra": [
+          "Trött? Jag hör att The Exorcist är bra."
+        ]
       }
     },
     "watchHistory": {

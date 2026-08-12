@@ -13,7 +13,7 @@ import { Flare } from "@/components/utils/Flare";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   DiscoverContentType,
-  MediaType,
+  DiscoverMediaType,
   useDiscoverMedia,
   useDiscoverOptions,
 } from "@/pages/discover/hooks/useDiscoverMedia";
@@ -32,6 +32,7 @@ interface ContentConfig {
 interface MediaCarouselProps {
   content: ContentConfig;
   isTVShow: boolean;
+  isMixed?: boolean;
   carouselRefs: React.MutableRefObject<{
     [key: string]: HTMLDivElement | null;
   }>;
@@ -84,6 +85,7 @@ function MoreCard({ link, onClick }: { link: string; onClick?: () => void }) {
 export function MediaCarousel({
   content,
   isTVShow,
+  isMixed = false,
   carouselRefs,
   onShowDetails,
   moreContent,
@@ -120,7 +122,11 @@ export function MediaCarousel({
   const [timeWindow, setTimeWindow] = useState<"day" | "week">("day");
 
   // Get available providers and genres
-  const mediaType: MediaType = isTVShow ? "tv" : "movie";
+  const mediaType: DiscoverMediaType = isMixed
+    ? "all"
+    : isTVShow
+      ? "tv"
+      : "movie";
   const { providers, genres } = useDiscoverOptions(mediaType);
 
   // Get progress items for recommendations
@@ -128,7 +134,8 @@ export function MediaCarousel({
   const recommendationSources = Object.entries(progressItems || {})
     .filter(
       ([id, item]) =>
-        isValidTmdbId(id) && item.type === (isTVShow ? "show" : "movie"),
+        isValidTmdbId(id) &&
+        (isMixed || item.type === (isTVShow ? "show" : "movie")),
     )
     .map(([id, item]) => ({
       id,
@@ -164,23 +171,24 @@ export function MediaCarousel({
       return;
     }
 
-    if (showProviders && providers.length > 0 && !selectedProviderId) {
-      handleProviderChange(providers[0].id, providers[0].name);
-    }
-    if (showGenres && genres.length > 0 && !selectedGenreId) {
-      handleGenreChange(genres[0].id.toString(), genres[0].name);
+    const firstRelatedButton = relatedButtons?.[0];
+    if (!firstRelatedButton) return;
+
+    if (showProviders && !selectedProviderId) {
+      handleProviderChange(firstRelatedButton.id, firstRelatedButton.name);
+    } else if (showGenres && !selectedGenreId) {
+      handleGenreChange(firstRelatedButton.id, firstRelatedButton.name);
     }
   }, [
-    showProviders,
-    showGenres,
-    providers,
-    genres,
     forcedGenreId,
     forcedGenreName,
-    selectedProviderId,
-    selectedGenreId,
-    handleProviderChange,
     handleGenreChange,
+    handleProviderChange,
+    relatedButtons,
+    selectedGenreId,
+    selectedProviderId,
+    showGenres,
+    showProviders,
   ]);
 
   // Get the appropriate button click handler
@@ -256,13 +264,19 @@ export function MediaCarousel({
       timeWindow: contentType === "trending" ? timeWindow : undefined,
     });
   const resolvedSectionTitle = sectionTitleOverride || sectionTitle;
+  const filterSectionTitle = showProviders
+    ? t("discover.filters.providers", { defaultValue: "Providers" })
+    : showGenres
+      ? t("discover.filters.genres", { defaultValue: "Genres" })
+      : "";
+  const displaySectionTitle = resolvedSectionTitle || filterSectionTitle;
 
   // Deduplicate media by ID to prevent duplicate React keys
   const uniqueMedia = React.useMemo(() => {
     const seen = new Set();
     return media.filter((item) => {
       if (!item?.id) return false;
-      const idStr = item.id.toString();
+      const idStr = `${item.type || "unknown"}:${item.id}`;
       if (seen.has(idStr)) return false;
       seen.add(idStr);
       return true;
@@ -270,16 +284,28 @@ export function MediaCarousel({
   }, [media]);
 
   // Hide section if there's an error or no content (after loading is complete)
-  const shouldHide = !isLoading && (error || uniqueMedia.length === 0);
+  const hasSelectableFilters =
+    Boolean(relatedButtons?.length) && (showProviders || showGenres);
+  const shouldHide =
+    !isLoading &&
+    (Boolean(error) || (uniqueMedia.length === 0 && !hasSelectableFilters));
 
   // Find active button
   const activeButton = React.useMemo(() => {
     return relatedButtons?.find(
       (btn) =>
         btn.name === selectedGenre?.name ||
+        btn.id === selectedProviderId ||
+        btn.id === selectedGenreId ||
         btn.name === resolvedSectionTitle.split(" on ")[1],
     );
-  }, [relatedButtons, resolvedSectionTitle, selectedGenre?.name]);
+  }, [
+    relatedButtons,
+    resolvedSectionTitle,
+    selectedGenre?.name,
+    selectedProviderId,
+    selectedGenreId,
+  ]);
 
   // Convert buttons to dropdown options
   const dropdownOptions: OptionItem[] = React.useMemo(() => {
@@ -315,7 +341,7 @@ export function MediaCarousel({
     }
   }, [showRecommendations, recommendationSources, selectedRecommendationId]);
 
-  const categorySlug = `${resolvedSectionTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${isTVShow ? "tv" : "movie"}`;
+  const categorySlug = `${displaySectionTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${isMixed ? "all" : isTVShow ? "tv" : "movie"}`;
   const isScrollingRef = useRef(false);
 
   const handleWheel = React.useCallback(
@@ -349,6 +375,12 @@ export function MediaCarousel({
   // Generate more link
   const generatedMoreLink = React.useMemo(() => {
     if (moreLink) return moreLink;
+    if (
+      (showProviders && !selectedProviderId) ||
+      (showGenres && !selectedGenreId && !forcedGenreId)
+    ) {
+      return "";
+    }
 
     const baseLink = `/discover/more`;
     const resolvedGenreId = forcedGenreId || selectedGenreId;
@@ -396,7 +428,7 @@ export function MediaCarousel({
         <div className="flex flex-col pl-2 lg:pl-[68px]">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl cursor-default font-bold text-white md:text-2xl pl-0 text-balance">
-              {resolvedSectionTitle}
+              {displaySectionTitle}
             </h2>
             {contentType === "trending" && (
               <div className="inline-flex items-center rounded-full bg-mediaCard-hoverBackground p-1">
@@ -605,48 +637,51 @@ export function MediaCarousel({
                   onContextMenu={(e: React.MouseEvent<HTMLDivElement>) =>
                     e.preventDefault()
                   }
-                  key={item.id}
+                  key={`${item.type || "unknown"}-${item.id}`}
                   className="relative mt-4 group cursor-pointer user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
                 >
                   <WatchedMediaCard
-                    key={item.id}
+                    key={`${item.type || "unknown"}-${item.id}`}
                     media={{
                       id: item.id.toString(),
                       title: item.title || item.name || "",
                       poster: item.poster_path
                         ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
                         : "/placeholder.png",
-                      type: isTVShow ? "show" : "movie",
-                      year: isTVShow
-                        ? item.first_air_date
-                          ? parseInt(item.first_air_date.split("-")[0], 10)
-                          : undefined
-                        : item.release_date
-                          ? parseInt(item.release_date.split("-")[0], 10)
-                          : undefined,
+                      type: item.type || (isTVShow ? "show" : "movie"),
+                      year:
+                        item.type === "show" || (!item.type && isTVShow)
+                          ? item.first_air_date
+                            ? parseInt(item.first_air_date.split("-")[0], 10)
+                            : undefined
+                          : item.release_date
+                            ? parseInt(item.release_date.split("-")[0], 10)
+                            : undefined,
                     }}
                     onShowDetails={onShowDetails}
                   />
                 </div>
               ))
-            : Array(10)
-                .fill(null)
-                .map((_, index) => (
-                  <div
-                    key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(2)}`}
-                    className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
-                  >
-                    <MediaCard
-                      media={{
-                        id: `skeleton-${index}`,
-                        title: "",
-                        poster: "",
-                        type: isTVShow ? "show" : "movie",
-                      }}
-                      forceSkeleton
-                    />
-                  </div>
-                ))}
+            : isLoading
+              ? Array(10)
+                  .fill(null)
+                  .map((_, index) => (
+                    <div
+                      key={`skeleton-${categorySlug}-${Math.random().toString(36).substring(2)}`}
+                      className="relative mt-4 group cursor-default user-select-none rounded-xl p-2 bg-transparent transition-colors duration-300 w-[10rem] md:w-[11.5rem] h-auto"
+                    >
+                      <MediaCard
+                        media={{
+                          id: `skeleton-${index}`,
+                          title: "",
+                          poster: "",
+                          type: isMixed ? "movie" : isTVShow ? "show" : "movie",
+                        }}
+                        forceSkeleton
+                      />
+                    </div>
+                  ))
+              : null}
 
           {moreContent && generatedMoreLink && (
             <MoreCard link={generatedMoreLink} onClick={handleMoreClick} />

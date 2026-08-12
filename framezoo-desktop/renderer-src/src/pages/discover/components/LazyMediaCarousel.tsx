@@ -14,6 +14,7 @@ interface ContentConfig {
 interface LazyMediaCarouselProps {
   content: ContentConfig;
   isTVShow: boolean;
+  isMixed?: boolean;
   carouselRefs: React.MutableRefObject<{
     [key: string]: HTMLDivElement | null;
   }>;
@@ -35,6 +36,7 @@ interface LazyMediaCarouselProps {
 export function LazyMediaCarousel({
   content,
   isTVShow,
+  isMixed = false,
   carouselRefs,
   onShowDetails,
   moreContent,
@@ -65,6 +67,7 @@ export function LazyMediaCarousel({
         <MediaCarousel
           content={content}
           isTVShow={isTVShow}
+          isMixed={isMixed}
           carouselRefs={carouselRefs}
           onShowDetails={onShowDetails}
           moreContent={moreContent}

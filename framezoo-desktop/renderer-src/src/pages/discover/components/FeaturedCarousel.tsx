@@ -1155,7 +1155,7 @@ export function FeaturedCarousel({
               title={isTrailerEnabled ? "Show image" : "Show trailer"}
             >
               <Icon
-                icon={isTrailerEnabled ? Icons.IMG_X : Icons.IMG}
+                icon={isTrailerEnabled ? Icons.IMG : Icons.VIDEO}
                 className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl text-white"
               />
             </button>

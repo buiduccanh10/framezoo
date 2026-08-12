@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Tornar a dalt",
     "tabs": {
+      "all": "Tots",
       "movies": "Pel·lícules",
       "top10": "Top 10",
       "tvshows": "Programes de televisió"
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Vols alguna cosa picant?",
-        "extra": ["Feliç 69 dia 😘!"]
+        "extra": [
+          "Feliç 69 dia 😘!"
+        ]
       },
       "420": {
         "default": "Què t'agradaria veure aquest 20/4?",
-        "extra": ["Feliç 20/4 🥳!"]
+        "extra": [
+          "Feliç 20/4 🥳!"
+        ]
       },
       "day": {
         "default": "Què us agradaria mirar aquesta vesprada/tarda?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "Què us agradaria mirar aquest matí?",
-        "extra": ["He sentit que «Abans de l'alba» és bona"]
+        "extra": [
+          "He sentit que «Abans de l'alba» és bona"
+        ]
       },
       "night": {
         "default": "Què us agradaria mirar aquesta nit?",
-        "extra": ["Esteu cansat? He sentit que «L'exorcista» és bona."]
+        "extra": [
+          "Esteu cansat? He sentit que «L'exorcista» és bona."
+        ]
       }
     },
     "watchHistory": {

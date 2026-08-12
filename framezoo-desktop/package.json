@@ -47,7 +47,7 @@
     "libmpv:fetch:win32-arm64": "node scripts/fetch-windows-libmpv.mjs --target win32-arm64",
     "i18n:audit": "node scripts/i18n-locale-sync.mjs audit",
     "i18n:translate": "node scripts/i18n-locale-sync.mjs translate --write",
-    "i18n:translate:force": "node scripts/i18n-locale-sync.mjs translate --write --force-keys"
+    "i18n:translate:force": "node scripts/i18n-locale-sync.mjs translate --write --force"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

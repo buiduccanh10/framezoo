@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Înapoi sus",
     "tabs": {
+      "all": "Toate",
       "movies": "Filme",
       "top10": "Top 10",
       "tvshows": "Emisiuni TV"
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Gata de ceva picant?",
-        "extra": ["69 de zile fericite 😘!"]
+        "extra": [
+          "69 de zile fericite 😘!"
+        ]
       },
       "420": {
         "default": "Ce ai vrea să vizionezi pe data asta de 20/4?",
-        "extra": ["Un 20/4 fericit 🥳!"]
+        "extra": [
+          "Un 20/4 fericit 🥳!"
+        ]
       },
       "day": {
         "default": "La ce vrei să te uiți după-amiaza asta?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "La ce dorești să te in uiți dimineață aceasta?",
-        "extra": ["Aud că Before Sunrise este bun"]
+        "extra": [
+          "Aud că Before Sunrise este bun"
+        ]
       },
       "night": {
         "default": "La ce dorești să te uiți în astă seară?",
-        "extra": ["Obosit? Aud că The Exorcist is good."]
+        "extra": [
+          "Obosit? Aud că The Exorcist is good."
+        ]
       }
     },
     "watchHistory": {

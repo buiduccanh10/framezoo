@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Torna all'inizio",
     "tabs": {
+      "all": "Tutto",
       "movies": "Film",
       "top10": "I primi 10",
       "tvshows": "Spettacoli televisivi"
@@ -232,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Problemi",
     "goHome": "Vai alla pagina iniziale",
-    "message": "Framezoo.lol sta riscontrando problemi con alcuni provider, se non riesci a trovare o riprodurre uno show, cambia la fonte. È previsto che questo errore persista durante i tempi indicati di seguito.",
+    "message": "Framezoo sta riscontrando problemi con alcuni provider, se non riesci a trovare o riprodurre uno show, cambia la fonte. È previsto che questo errore persista durante i tempi indicati di seguito.",
     "title": "Problemi col fornitore"
   },
   "errors": {
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Pronto per qualcosa di piccante?",
-        "extra": ["Buon 69 giorno😘!"]
+        "extra": [
+          "Buon 69 giorno😘!"
+        ]
       },
       "420": {
         "default": "Cosa ti piacerebbe guardare questo 20/4?",
-        "extra": ["Buon 20/4 🥳!"]
+        "extra": [
+          "Buon 20/4 🥳!"
+        ]
       },
       "day": {
         "default": "Cosa vorresti guardare questo pomeriggio?",
-        "extra": ["Viva Framezoo!"]
+        "extra": [
+          "Viva Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Quale film spaventoso ti piacerebbe vedere questo Halloween?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Cosa vorresti guardare questa mattina?",
-        "extra": ["Viva Framezoo!"]
+        "extra": [
+          "Viva Framezoo!"
+        ]
       },
       "night": {
         "default": "Cosa vorresti guardare questa sera?",
-        "extra": ["Viva Framezoo!"]
+        "extra": [
+          "Viva Framezoo!"
+        ]
       }
     },
     "watchHistory": {

@@ -16,6 +16,12 @@
       "subtitle": "Optional. Add a manifest URL you choose. This app does not bundle, recommend, or host addons.",
       "title": "Desktop Addons"
     },
+    "platforms": {
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
+      "supportLabel": "Supported platforms for Addons:",
+      "supported": "Supported platforms for Addons: Stremio and Framezoo"
+    },
     "page": {
       "addAddonButton": "Add Addon",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
@@ -213,6 +219,7 @@
     },
     "scrollToTop": "Back to top",
     "tabs": {
+      "all": "All",
       "movies": "Movies",
       "top10": "Top 10",
       "tvshows": "TV Shows"

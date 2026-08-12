@@ -16,6 +16,12 @@
       "subtitle": "Optional. Add a manifest URL you choose. This app does not bundle, recommend, or host addons.",
       "title": "Desktop Addons"
     },
+    "platforms": {
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
+      "supportLabel": "Supported platforms for Addons:",
+      "supported": "Supported platforms for Addons: Stremio and Framezoo"
+    },
     "page": {
       "addAddonButton": "Add Addon",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
@@ -213,6 +219,7 @@
     },
     "scrollToTop": "Back to top",
     "tabs": {
+      "all": "All",
       "movies": "Movies",
       "top10": "Top 10",
       "tvshows": "TV Shows"
@@ -300,12 +307,12 @@
       "subtitle": "Hold ` to show this help anytime",
       "title": "Keyboard Shortcuts"
     },
-    "name": "banana-web",
+    "name": "Framezoo",
     "pages": {
       "discover": "Discover",
       "login": "Banana Login",
       "migration": "Migrate Account",
-      "pagetitle": "{{title}} - banana-web",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Banana Register",
       "settings": "Banana Settings"
     }

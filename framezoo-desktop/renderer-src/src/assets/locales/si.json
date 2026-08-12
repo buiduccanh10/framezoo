@@ -223,6 +223,7 @@
     },
     "scrollToTop": "ආපසු ඉහළට",
     "tabs": {
+      "all": "සියල්ල",
       "movies": "චිත්රපට",
       "top10": "ඉහළම 10",
       "tvshows": "රූපවාහිනී වැඩසටහන්"
@@ -310,7 +311,7 @@
       "subtitle": "ඕනෑම වේලාවක මෙම උදවු පෙන්වීමට ` අල්ලාගෙන සිටින්න",
       "title": "යතුරුපුවරු කෙටිමං"
     },
-    "name": "ඇල්ෆාෆ්ලික්ස්",
+    "name": "Framezoo",
     "pages": {
       "discover": "සොයා ගන්න",
       "login": "ඇතුල් වන්න",
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "කුළුබඩු සහිත දෙයක් සඳහා සූදානම්ද?",
-        "extra": ["සුභ දින 69ක් 😘!"]
+        "extra": [
+          "සුභ දින 69ක් 😘!"
+        ]
       },
       "420": {
         "default": "ඔබ මෙම 4/20 නැරඹීමට කැමති කුමක්ද?",
-        "extra": ["සුභ 4/20 🥳!"]
+        "extra": [
+          "සුභ 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "ඔබ අද දහවල් නැරඹීමට කැමති කුමක්ද?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "halloween": {
         "default": "ඔබ මෙම හැලොවීන් නැරඹීමට කැමති භයානක චිත්‍රපටය කුමක්ද?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "ඔබ අද උදෑසන නැරඹීමට කැමති කුමක්ද?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "night": {
         "default": "ඔබ අද රාත්‍රියේ නැරඹීමට කැමති කුමක්ද?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       }
     },
     "watchHistory": {

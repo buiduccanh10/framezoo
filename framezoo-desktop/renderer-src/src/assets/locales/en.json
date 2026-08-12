@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Back to top",
     "tabs": {
+      "all": "All",
       "movies": "Movies",
       "top10": "Top 10",
       "tvshows": "TV Shows"

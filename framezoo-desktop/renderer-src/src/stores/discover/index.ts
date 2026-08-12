@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 export type GenreCategory = `genre:${string}`;
 
 export type Category =
+  | "all"
   | "movies"
   | "tvshows"
   | "popular"
@@ -27,7 +28,7 @@ interface DiscoverState {
 export const useDiscoverStore = create<DiscoverState>()(
   persist(
     (set) => ({
-      selectedCategory: "tvshows",
+      selectedCategory: "all",
       lastView: null,
       setSelectedCategory: (category) => set({ selectedCategory: category }),
       setLastView: (view) => set({ lastView: view }),
@@ -35,24 +36,27 @@ export const useDiscoverStore = create<DiscoverState>()(
     }),
     {
       name: "__MW::discover",
-      version: 2,
+      version: 3,
       migrate: (persistedState: unknown, version: number) => {
         if (!persistedState || typeof persistedState !== "object") {
           return persistedState;
         }
 
         const state = persistedState as Partial<DiscoverState>;
-        let selectedCategory = state.selectedCategory;
-
-        if (version < 1 && selectedCategory === "movies") {
-          selectedCategory = "tvshows";
-        }
+        let selectedCategory = state.selectedCategory || "all";
 
         if (
           version < 2 &&
           (selectedCategory === "top10" || selectedCategory === "editorpicks")
         ) {
           selectedCategory = "popular";
+        }
+
+        if (
+          version < 3 &&
+          (selectedCategory === "movies" || selectedCategory === "tvshows")
+        ) {
+          selectedCategory = "all";
         }
 
         return {

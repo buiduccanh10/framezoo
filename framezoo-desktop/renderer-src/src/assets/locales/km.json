@@ -17,7 +17,7 @@
       "title": "កម្មវិធីបន្ថែមលើតុ"
     },
     "platforms": {
-      "framezoo": "ស៊ុមសួនសត្វ",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "វេទិកាដែលគាំទ្រសម្រាប់ Addons៖",
       "supported": "វេទិកាដែលគាំទ្រ៖ Framezoo និង Stremio"
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "ត្រឡប់ទៅកំពូល",
     "tabs": {
+      "all": "ទាំងអស់។",
       "movies": "ភាពយន្ត",
       "top10": "កំពូល 10",
       "tvshows": "កម្មវិធីទូរទស្សន៍"
@@ -310,7 +311,7 @@
       "subtitle": "សង្កត់ ` ដើម្បីបង្ហាញជំនួយនេះគ្រប់ពេល",
       "title": "ផ្លូវកាត់ក្តារចុច"
     },
-    "name": "ស៊ុមសួនសត្វ",
+    "name": "Framezoo",
     "pages": {
       "discover": "ស្វែងយល់",
       "login": "ចូល",
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "ចង់បានអ្វីហឹរ?",
-        "extra": ["រីករាយថ្ងៃ 69 😘!"]
+        "extra": [
+          "រីករាយថ្ងៃ 69 😘!"
+        ]
       },
       "420": {
         "default": "ចង់​ទស្សនា​រឿង​អ្វី​ខ្លះ​នៅ​ថ្ងៃ​ទី ៤/២០ នេះ?",
-        "extra": ["រីករាយថ្ងៃទី ៤/២០ 🥳!"]
+        "extra": [
+          "រីករាយថ្ងៃទី ៤/២០ 🥳!"
+        ]
       },
       "day": {
         "default": "ចង់​ទស្សនា​រឿង​អ្វី​នៅ​រសៀល​នេះ?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "halloween": {
         "default": "តើ​ភាពយន្ត​ដ៏​រន្ធត់​មួយ​ណា​ដែល​អ្នក​ចង់​មើល​ថ្ងៃ Halloween នេះ?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "ចង់​មើល​អ្វី​នៅ​ព្រឹក​នេះ?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       },
       "night": {
         "default": "យប់នេះចង់មើលរឿងអ្វី?",
-        "extra": ["Viva la Framezoo!"]
+        "extra": [
+          "Viva la Framezoo!"
+        ]
       }
     },
     "watchHistory": {

@@ -17,8 +17,8 @@
       "title": "Modules complémentaires de bureau"
     },
     "platforms": {
-      "framezoo": "CadreZoo",
-      "stremio": "Strémio",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "Plateformes prises en charge pour les modules complémentaires :",
       "supported": "Plateformes prises en charge : Framezoo et Stremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Revenir en haut",
     "tabs": {
+      "all": "Tous",
       "movies": "Films",
       "top10": "Top 10",
       "tvshows": "Séries"
@@ -310,12 +311,12 @@
       "subtitle": "Maintenez ` pour afficher cette aide à tout moment",
       "title": "Raccourcis clavier"
     },
-    "name": "CadreZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Découvrir",
       "login": "Se connecter",
       "migration": "Migrer le compte",
-      "pagetitle": "{{title}} - CadreZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Créer un compte",
       "settings": "Paramètres"
     }
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Partant pour quelque chose de corsé ?",
-        "extra": ["Joyeux jour 69 😘 !"]
+        "extra": [
+          "Joyeux jour 69 😘 !"
+        ]
       },
       "420": {
         "default": "Qu'aimeriez-vous regarder ce 20/4?",
-        "extra": ["Joyeux 4/20 🥳!"]
+        "extra": [
+          "Joyeux 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Que voulez-vous regarder cet après-midi ?",
-        "extra": ["Viva la Framezoo !"]
+        "extra": [
+          "Viva la Framezoo !"
+        ]
       },
       "halloween": {
         "default": "Quel film effrayant aimeriez-vous regarder cet Halloween ?",
@@ -455,7 +462,9 @@
       },
       "morning": {
         "default": "Que voulez-vous regarder ce matin ?",
-        "extra": ["Les films, c'est comme les voyages : ça nous ouvre l'esprit"]
+        "extra": [
+          "Les films, c'est comme les voyages : ça nous ouvre l'esprit"
+        ]
       },
       "night": {
         "default": "Que voulez-vous regarder ce soir ?",

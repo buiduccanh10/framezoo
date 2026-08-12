@@ -17,8 +17,8 @@
       "title": "Complementos de escritorio"
     },
     "platforms": {
-      "framezoo": "marcozoo",
-      "stremio": "estremio",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "Plataformas compatibles para complementos:",
       "supported": "Plataformas compatibles: Framezoo y Stremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Volver arriba",
     "tabs": {
+      "all": "Todo",
       "movies": "Cine",
       "top10": "10 mejores",
       "tvshows": "Programas de televisión"
@@ -310,12 +311,12 @@
       "subtitle": "Mantenga presionado ` para mostrar esta ayuda en cualquier momento",
       "title": "Atajos de teclado"
     },
-    "name": "alfaflix",
+    "name": "Framezoo",
     "pages": {
       "discover": "Descubrir",
       "login": "Iniciar sesión",
       "migration": "Migrar Cuenta",
-      "pagetitle": "{{title}} - AlfaFlix",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registrarse",
       "settings": "Configuración"
     }
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "¿Te apetece algo picante?",
-        "extra": ["¡Feliz día 69 😘!"]
+        "extra": [
+          "¡Feliz día 69 😘!"
+        ]
       },
       "420": {
         "default": "¿Qué te gustaría ver este 4/20?",
-        "extra": ["¡Feliz 4/20 🥳!"]
+        "extra": [
+          "¡Feliz 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "¿Qué te gustaría ver esta tarde?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "¿Qué te gustaría ver esta mañana?",
-        "extra": ["Escuché que “Antes del amanecer” es buena"]
+        "extra": [
+          "Escuché que “Antes del amanecer” es buena"
+        ]
       },
       "night": {
         "default": "¿Qué te gustaría ver esta noche?",
-        "extra": ["¿Cansado? Escuché que “El Exorcista” es buena."]
+        "extra": [
+          "¿Cansado? Escuché que “El Exorcista” es buena."
+        ]
       }
     },
     "watchHistory": {

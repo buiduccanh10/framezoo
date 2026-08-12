@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Tornar a dalt",
     "tabs": {
+      "all": "Tots",
       "movies": "Pel·lícules",
       "top10": "Top 10",
       "tvshows": "Programes de televisió"
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Vols alguna cosa picant?",
-        "extra": ["Feliç 69 dia 😘!"]
+        "extra": [
+          "Feliç 69 dia 😘!"
+        ]
       },
       "420": {
         "default": "Què t'agradaria veure aquest 20/4?",
-        "extra": ["Feliç 20/4 🥳!"]
+        "extra": [
+          "Feliç 20/4 🥳!"
+        ]
       },
       "day": {
         "default": "Què t'agradaria veure aquesta tarda?",
-        "extra": ["Viva l'Framezoo!"]
+        "extra": [
+          "Viva l'Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Quina pel·lícula esgarrifosa t'agradaria veure aquest Halloween?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Què t'agradaria veure aquest matí?",
-        "extra": ["Viva l'Framezoo!"]
+        "extra": [
+          "Viva l'Framezoo!"
+        ]
       },
       "night": {
         "default": "Què t'agradaria veure aquesta nit?",
-        "extra": ["Viva l'Framezoo!"]
+        "extra": [
+          "Viva l'Framezoo!"
+        ]
       }
     },
     "watchHistory": {

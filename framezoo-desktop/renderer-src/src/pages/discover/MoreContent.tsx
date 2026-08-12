@@ -13,7 +13,7 @@ import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { Heading1 } from "@/components/utils/Text";
 import {
   DiscoverContentType,
-  MediaType,
+  DiscoverMediaType,
   useDiscoverMedia,
   useDiscoverOptions,
 } from "@/pages/discover/hooks/useDiscoverMedia";
@@ -59,17 +59,21 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
   const progressStore = useProgressStore();
 
   // Get available providers and genres
-  const { providers, genres, countries } = useDiscoverOptions(
-    mediaType as MediaType,
-    { includeCountries: true },
-  );
+  const actualMediaType: DiscoverMediaType =
+    mediaType === "tv" ? "tv" : mediaType === "all" ? "all" : "movie";
+
+  const { providers, genres, countries } = useDiscoverOptions(actualMediaType, {
+    includeCountries: true,
+  });
 
   // Get recommendation sources from progress store
   const recommendationSources = Object.entries(progressStore.items || {})
     .filter(
       ([itemId, item]) =>
         isValidTmdbId(itemId) &&
-        item.type === (mediaType === "tv" ? "show" : "movie"),
+        isValidTmdbId(itemId) &&
+        (actualMediaType === "all" ||
+          item.type === (actualMediaType === "tv" ? "show" : "movie")),
     )
     .map(([itemId, item]) => ({
       id: itemId,
@@ -84,8 +88,13 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
 
   // Determine the actual content type and ID from URL parameters
   const actualContentType = contentType || category?.split("-")[0] || "popular";
-  const actualMediaType =
-    mediaType || (category?.endsWith("-tv") ? "tv" : "movie");
+  const resolvedMediaType: DiscoverMediaType =
+    actualMediaType ||
+    (category?.endsWith("-tv")
+      ? "tv"
+      : category?.endsWith("-all")
+        ? "all"
+        : "movie");
   const selectedReleaseYear =
     searchParams.get("year")?.match(/^\d{4}$/)?.[0] || "";
   const selectedOriginCountry =
@@ -135,7 +144,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
     sectionTitle,
   } = useDiscoverMedia({
     contentType: actualContentType as DiscoverContentType,
-    mediaType: actualMediaType as MediaType,
+    mediaType: resolvedMediaType,
     id:
       id ||
       selectedProvider?.id ||
@@ -619,7 +628,8 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
         >
           <MediaGrid>
             {mediaItems.map((item) => {
-              const isTVShow = Boolean(item.first_air_date);
+              const isTVShow =
+                item.type === "show" || Boolean(item.first_air_date);
               const releaseDate = isTVShow
                 ? item.first_air_date
                 : item.release_date;

@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Nazaj na vrh",
     "tabs": {
+      "all": "Vse",
       "movies": "Filmi",
       "top10": "10 najboljših",
       "tvshows": "TV oddaje"
@@ -315,7 +316,7 @@
       "discover": "Odkrij",
       "login": "Prijava",
       "migration": "Preseli račun",
-      "pagetitle": "{{title}} – Framezoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registriraj se",
       "settings": "Nastavitve"
     }
@@ -421,7 +422,7 @@
     },
     "support": {
       "complete": "popolna",
-      "description": "Framezoo posluje z izgubo in potrebujemo pomoč, da ostane brez oglasov! Če uživate v uporabi FrameZooa, razmislite o donaciji, da nam pomagate pokriti naše stroške.",
+      "description": "Framezoo posluje z izgubo in potrebujemo pomoč, da ostane brez oglasov! Če uživate v uporabi Framezoo, razmislite o donaciji, da nam pomagate pokriti naše stroške.",
       "donate": "Donirajte",
       "explanation": "Če ne uporabljate razširitve ali nimate nastavljenega FED API-ja, bo morda težje najti vsebino! To želimo popraviti, vendar je veliko težje zagotoviti vsebino brez dragih strežnikov. Če radi uporabljate Framezoo, vas prosimo, da razmislite o donaciji in nam tako pomagate pokriti naše naraščajoče stroške.",
       "explanation2": "Če želite več informacij, se nam pridružite",
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Ste za nekaj pikantnega?",
-        "extra": ["Vesel 69 dan 😘!"]
+        "extra": [
+          "Vesel 69 dan 😘!"
+        ]
       },
       "420": {
         "default": "Kaj bi radi gledali ta 4/20?",
-        "extra": ["Srečno 4/20 🥳!"]
+        "extra": [
+          "Srečno 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Kateri film ali serijo bi si želeli ogledati ob tem popoldnevu?",
@@ -457,7 +462,9 @@
       },
       "morning": {
         "default": "Kateri film ali serijo bi si želeli ogledati ob tem jutru?",
-        "extra": ["Slišala sem, da je film \"Pred sončnim vzhodom\" odličen"]
+        "extra": [
+          "Slišala sem, da je film \"Pred sončnim vzhodom\" odličen"
+        ]
       },
       "night": {
         "default": "Kateri film ali serijo bi si želeli ogledati nocoj?",

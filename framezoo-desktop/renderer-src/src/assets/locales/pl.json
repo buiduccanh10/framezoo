@@ -17,7 +17,7 @@
       "title": "Dodatki do komputerów stacjonarnych"
     },
     "platforms": {
-      "framezoo": "RamaZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Obsługiwane platformy dla dodatków:",
       "supported": "Obsługiwane platformy: Framezoo i Stremio"
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Powrót do góry",
     "tabs": {
+      "all": "Wszystko",
       "movies": "Kino",
       "top10": "Najlepsze 10",
       "tvshows": "Programy telewizyjne"
@@ -310,12 +311,12 @@
       "subtitle": "Przytrzymaj `, aby wyświetlić tę pomoc w dowolnym momencie",
       "title": "Skróty klawiaturowe"
     },
-    "name": "RamaZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Odkrywaj",
       "login": "Zaloguj sie",
       "migration": "Migruj konto",
-      "pagetitle": "{{title}} — Framezoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Zarejestruj się",
       "settings": "Ustawienia"
     }
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Masz ochotę na coś pikantnego?",
-        "extra": ["Wesołego dnia 69 😘!"]
+        "extra": [
+          "Wesołego dnia 69 😘!"
+        ]
       },
       "420": {
         "default": "Dziś jest 20 kwietnia, co chciałbyś obejrzeć?",
-        "extra": ["Wesołego 420 🥳!"]
+        "extra": [
+          "Wesołego 420 🥳!"
+        ]
       },
       "day": {
         "default": "Co chciałbyś obejrzeć dziś po południu?",
-        "extra": ["Żyj w Framezoo!"]
+        "extra": [
+          "Żyj w Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Jaki straszny film chciałbyś obejrzeć w Halloween?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Co chciałbyś obejrzeć dziś rano?",
-        "extra": ["Żyj w Framezoo!"]
+        "extra": [
+          "Żyj w Framezoo!"
+        ]
       },
       "night": {
         "default": "Co chciałbyś obejrzeć dziś wieczorem?",
-        "extra": ["Żyj w Framezoo!"]
+        "extra": [
+          "Żyj w Framezoo!"
+        ]
       }
     },
     "watchHistory": {

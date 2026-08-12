@@ -18,7 +18,7 @@
     },
     "platforms": {
       "framezoo": "Framezoo",
-      "stremio": "סטרמיו",
+      "stremio": "Stremio",
       "supportLabel": "פלטפורמות נתמכות עבור תוספות:",
       "supported": "פלטפורמות נתמכות: Framezoo ו-Stremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "חזרה למעלה",
     "tabs": {
+      "all": "כֹּל",
       "movies": "סרטים",
       "top10": "10 המובילים",
       "tvshows": "סדרות"
@@ -310,12 +311,12 @@
       "subtitle": "החזק ` כדי להציג את העזרה הזו בכל עת",
       "title": "קיצורי מקלדת"
     },
-    "name": "פיי-סטרים",
+    "name": "Framezoo",
     "pages": {
       "discover": "גלה",
       "login": "התחבר",
       "migration": "העברת חשבון",
-      "pagetitle": "{{title}} – פיי-סטרים",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "הירשם",
       "settings": "הגדרות"
     }
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "באלך משהו חריף?",
-        "extra": ["יום 69 שמח 😘!"]
+        "extra": [
+          "יום 69 שמח 😘!"
+        ]
       },
       "420": {
         "default": "מה היית רוצה לראות ב-4/20 הזה?",
-        "extra": ["4/20 שמח 🥳!"]
+        "extra": [
+          "4/20 שמח 🥳!"
+        ]
       },
       "day": {
         "default": "במה תרצה לצפות באחר צהריים זה?",
-        "extra": ["עם ישראל חיי Framezoo!"]
+        "extra": [
+          "עם ישראל חיי Framezoo!"
+        ]
       },
       "halloween": {
         "default": "איזה סרט מפחיד היית רוצה לראות את ליל כל הקדושים הזה?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "אני אוהב את חברה שלי?",
-        "extra": ["עם ישראל חיי Framezoo!"]
+        "extra": [
+          "עם ישראל חיי Framezoo!"
+        ]
       },
       "night": {
         "default": "במה תרצה לצפות הלילה?",
-        "extra": ["עם ישראל חיי Framezoo!"]
+        "extra": [
+          "עם ישראל חיי Framezoo!"
+        ]
       }
     },
     "watchHistory": {

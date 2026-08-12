@@ -17,8 +17,8 @@
       "title": "Complementos para área de trabalho"
     },
     "platforms": {
-      "framezoo": "QuadroZoo",
-      "stremio": "Strémio",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "Plataformas suportadas para complementos:",
       "supported": "Plataformas suportadas: Framezoo e Stremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Voltar ao topo",
     "tabs": {
+      "all": "Todos",
       "movies": "Filmes",
       "top10": "10 principais",
       "tvshows": "Programas de TV"
@@ -310,12 +311,12 @@
       "subtitle": "Segure ` para mostrar esta ajuda a qualquer momento",
       "title": "Atalhos de teclado"
     },
-    "name": "QuadroZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Explorar",
       "login": "Entrar",
       "migration": "Migrar Conta",
-      "pagetitle": "{{title}} - QuadroZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registrar",
       "settings": "Configurações"
     }
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Apetece-te algo picante?",
-        "extra": ["Feliz dia 69 😘!"]
+        "extra": [
+          "Feliz dia 69 😘!"
+        ]
       },
       "420": {
         "default": "O que gostarias de ver neste 4/20?",
-        "extra": ["Feliz 4/20 🥳!"]
+        "extra": [
+          "Feliz 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "O que gostaria de assistir esta tarde?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "O que gostaria de assistir esta manhã?",
-        "extra": ["Dizem que Antes do Amanhecer é bom"]
+        "extra": [
+          "Dizem que Antes do Amanhecer é bom"
+        ]
       },
       "night": {
         "default": "O que gostaria de assistir esta noite?",
-        "extra": ["Cansado? Dizem que O Exorcista é bom."]
+        "extra": [
+          "Cansado? Dizem que O Exorcista é bom."
+        ]
       }
     },
     "watchHistory": {

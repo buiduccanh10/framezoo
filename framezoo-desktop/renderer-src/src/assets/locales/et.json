@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Tagasi üles",
     "tabs": {
+      "all": "Kõik",
       "movies": "Filmid",
       "top10": "Top 10",
       "tvshows": "Telesaated"
@@ -232,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Probleemid",
     "goHome": "Mine koju",
-    "message": "FrameZooil on mõne teenusepakkujaga taas probleeme. Kui te ei leia saadet ega esita seda, muutke allikat. Oodake, et see viga püsib allolevatel aegadel.",
+    "message": "Framezoo on mõne teenusepakkujaga taas probleeme. Kui te ei leia saadet ega esita seda, muutke allikat. Oodake, et see viga püsib allolevatel aegadel.",
     "title": "Pakkuja probleemid"
   },
   "errors": {
@@ -315,7 +316,7 @@
       "discover": "Avasta",
       "login": "Logi sisse",
       "migration": "Konto üleviimine",
-      "pagetitle": "{{title}} – Framezoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registreeri",
       "settings": "Sätted"
     }
@@ -421,9 +422,9 @@
     },
     "support": {
       "complete": "täielik",
-      "description": "Framezoo töötab kahjumiga ja me vajame abi, et see oleks reklaamivaba! Kui teile meeldib FrameZooi kasutamine, kaaluge annetamist, et aidata meil kulusid katta.",
+      "description": "Framezoo töötab kahjumiga ja me vajame abi, et see oleks reklaamivaba! Kui teile meeldib Framezoo kasutamine, kaaluge annetamist, et aidata meil kulusid katta.",
       "donate": "Anneta",
-      "explanation": "Kui te laiendust ei kasuta või FED API-d pole seadistatud, võib sisu leidmine olla raskem! Tahame seda parandada, kuid ilma kallite serveriteta on sisu pakkuda palju raskem. Seega, kui teile meeldib FrameZooi kasutamine, kaaluge annetamist, et aidata meil katta meie kasvavaid kulusid.",
+      "explanation": "Kui te laiendust ei kasuta või FED API-d pole seadistatud, võib sisu leidmine olla raskem! Tahame seda parandada, kuid ilma kallite serveriteta on sisu pakkuda palju raskem. Seega, kui teile meeldib Framezoo kasutamine, kaaluge annetamist, et aidata meil katta meie kasvavaid kulusid.",
       "explanation2": "Kui soovite lisateavet, liituge meiega",
       "fluxer": "Fluxer",
       "label": "Projekti rahastamine: ${{current}} / ${{goal}}",
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Kas otsite midagi vürtsikat?",
-        "extra": ["Head 69 päeva 😘!"]
+        "extra": [
+          "Head 69 päeva 😘!"
+        ]
       },
       "420": {
         "default": "Mida sa tahaksid seda 4/20 vaadata?",
-        "extra": ["Head 20.04 🥳!"]
+        "extra": [
+          "Head 20.04 🥳!"
+        ]
       },
       "day": {
         "default": "Mida te soovite täna pärastlõunal vaadata?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "Mida te soovite täna hommikul vaadata?",
-        "extra": ["Ma kuulsin, et Before Sunrise on hea"]
+        "extra": [
+          "Ma kuulsin, et Before Sunrise on hea"
+        ]
       },
       "night": {
         "default": "Mida te soovite täna õhtul vaadata?",
-        "extra": ["Väsinud? Olen kuulnud, et The Exorcist on hea."]
+        "extra": [
+          "Väsinud? Olen kuulnud, et The Exorcist on hea."
+        ]
       }
     },
     "watchHistory": {
@@ -551,7 +560,7 @@
       "title": "Loendid"
     },
     "public": {
-      "descriptionFallback": "Framezoo's kureeritud jagatud kollektsioon.",
+      "descriptionFallback": "Framezoo kureeritud jagatud kollektsioon.",
       "notFoundDescription": "See jagamise link puudub või pole enam saadaval.",
       "notFoundTitle": "Nimekirja ei leitud",
       "pageTitle": "Jagatud loend",
@@ -683,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Teie brauser ei toeta automaatset PWA installiviipa.\nSaate siiski installida brauseri menüü kaudu (näiteks: „Installi rakendus”, „Loo otsetee” või „Lisa dokki/avakuvale”).",
-      "iosSafariGuide": "FrameZooi installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa."
+    "iosSafariGuide": "Framezoo installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa."
     },
     "menu": {
       "accountMenu": "Ava konto menüü",

@@ -25,16 +25,16 @@ export function DiscoverNavigation({
   onYearChange,
 }: DiscoverNavigationProps) {
   const { t } = useTranslation();
-  const { genres, countries } = useDiscoverOptions("movie", {
+  const { genres, countries } = useDiscoverOptions("all", {
     includeCountries: true,
   });
   const primaryNavigationItems = useMemo<
     Array<{ id: Category; label: string }>
   >(
     () => [
+      { id: "all", label: t("discover.tabs.all", { defaultValue: "All" }) },
       { id: "tvshows", label: t("discover.tabs.tvshows") },
       { id: "movies", label: t("discover.tabs.movies") },
-      { id: "popular", label: t("discover.carousel.title.popular") },
     ],
     [t],
   );
@@ -104,7 +104,7 @@ export function DiscoverNavigation({
           : "bg-mediaCard-hoverBackground text-type-secondary hover:text-type-primary",
     );
   const isPrimaryItem = (id: Category) =>
-    id === "movies" || id === "tvshows" || id === "popular";
+    id === "all" || id === "movies" || id === "tvshows";
 
   const countryLabel = t("discover.filters.country", {
     defaultValue: "Country",

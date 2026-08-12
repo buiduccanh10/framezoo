@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Nach oben",
     "tabs": {
+      "all": "Alle",
       "movies": "Filme",
       "top10": "Top 10",
       "tvshows": "Serien"
@@ -315,7 +316,7 @@
       "discover": "Entdecken",
       "login": "Anmelden",
       "migration": "Konto übertragen",
-      "pagetitle": "{{title}} – Framezoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registrieren",
       "settings": "Einstellungen"
     }
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Lust auf etwas scharfes?",
-        "extra": ["Schönen 69. Tag 😘!"]
+        "extra": [
+          "Schönen 69. Tag 😘!"
+        ]
       },
       "420": {
         "default": "Was möchten Sie am 4/20 sehen?",
-        "extra": ["Schönen 4/20 🥳!"]
+        "extra": [
+          "Schönen 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Was würdest du diesem Nachmittag gerne schauen?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "Was würdest du diesen Morgen gerne schauen?",
-        "extra": ["Before Sunrise soll gut sein"]
+        "extra": [
+          "Before Sunrise soll gut sein"
+        ]
       },
       "night": {
         "default": "Was möchtest du diesen Abend gerne schauen?",
-        "extra": ["Müde? Ich hab gehört The Exorcist soll gut sein."]
+        "extra": [
+          "Müde? Ich hab gehört The Exorcist soll gut sein."
+        ]
       }
     },
     "watchHistory": {

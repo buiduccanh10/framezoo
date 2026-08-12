@@ -17,8 +17,8 @@
       "title": "桌面插件"
     },
     "platforms": {
-      "framezoo": "框架动物园",
-      "stremio": "斯特雷米奥",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "插件支持的平台：",
       "supported": "支持的平台：Framezoo 和 Stremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "返回顶部",
     "tabs": {
+      "all": "全部",
       "movies": "电影",
       "top10": "前10名",
       "tvshows": "节目"
@@ -310,7 +311,7 @@
       "subtitle": "按住 ` 可随时显示此帮助",
       "title": "键盘快捷键"
     },
-    "name": "阿尔法飞利克斯",
+    "name": "Framezoo",
     "pages": {
       "discover": "探索",
       "login": "登录",
@@ -393,7 +394,12 @@
       "genreFilterAll": "所有流派",
       "empty": {
         "default": "欢迎，在这里找到你想看的！",
-        "extra": ["这里啥都没有", "空空如也…", "空空如也…", "Hi，新用户"]
+        "extra": [
+          "这里啥都没有",
+          "空空如也…",
+          "空空如也…",
+          "Hi，新用户"
+        ]
       },
       "failed": "查找媒体失败，请重试！",
       "loading": "加载中…",
@@ -429,15 +435,21 @@
     "titles": {
       "69": {
         "default": "想来点火热的吗？",
-        "extra": ["69 日快乐 😘！"]
+        "extra": [
+          "69 日快乐 😘！"
+        ]
       },
       "420": {
         "default": "这个 4/20 你想看什么？",
-        "extra": ["4/20 快乐 🥳！"]
+        "extra": [
+          "4/20 快乐 🥳！"
+        ]
       },
       "day": {
         "default": "您今天下午想看什么？",
-        "extra": ["Framezoo 万岁！"]
+        "extra": [
+          "Framezoo 万岁！"
+        ]
       },
       "halloween": {
         "default": "这个万圣节你想看什么恐怖电影？",
@@ -450,11 +462,15 @@
       },
       "morning": {
         "default": "您今早想看什么？",
-        "extra": ["Framezoo 万岁！"]
+        "extra": [
+          "Framezoo 万岁！"
+        ]
       },
       "night": {
         "default": "您今晚想看什么？",
-        "extra": ["Framezoo 万岁！"]
+        "extra": [
+          "Framezoo 万岁！"
+        ]
       }
     },
     "watchHistory": {

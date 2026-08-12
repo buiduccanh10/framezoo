@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Atpakaļ uz augšu",
     "tabs": {
+      "all": "Visi",
       "movies": "Filmas",
       "top10": "Top 10",
       "tvshows": "TV šovi"
@@ -310,12 +311,12 @@
       "subtitle": "Turiet nospiestu, lai jebkurā laikā parādītu šo palīdzību",
       "title": "Tastatūras īsinājumtaustiņi"
     },
-    "name": "Filmas-web",
+    "name": "Framezoo",
     "pages": {
       "discover": "Atklājiet",
       "login": "Ieiet",
       "migration": "Migrēt kontu",
-      "pagetitle": "{{title}} - filmas-web",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Reģistrēties",
       "settings": "Iestādijumi"
     }
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Vai vēlaties kaut ko pikantu?",
-        "extra": ["Laimīgas 69 dienas 😘!"]
+        "extra": [
+          "Laimīgas 69 dienas 😘!"
+        ]
       },
       "420": {
         "default": "Ko jūs vēlētos noskatīties šajā 4/20?",
-        "extra": ["Priecīgu 20. aprīlī 🥳!"]
+        "extra": [
+          "Priecīgu 20. aprīlī 🥳!"
+        ]
       },
       "day": {
         "default": "Ko jūs vēlētos noskatīties šajā pēcpusdienā?",
-        "extra": ["Dzīvo Framezoo!"]
+        "extra": [
+          "Dzīvo Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Kādu spokainu filmu jūs vēlētos noskatīties šajā Helovīnā?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Ko tu gribētu šorīt noskatīties?",
-        "extra": ["Es dzirdu, ka Pirms saullēkta ir labs"]
+        "extra": [
+          "Es dzirdu, ka Pirms saullēkta ir labs"
+        ]
       },
       "night": {
         "default": "Ko tu gribētu šovakar skatīties?",
-        "extra": ["Noguris? Es dzirdu, ka Exorcist ir labs."]
+        "extra": [
+          "Noguris? Es dzirdu, ka Exorcist ir labs."
+        ]
       }
     },
     "watchHistory": {

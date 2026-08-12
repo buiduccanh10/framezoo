@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Aftur efst",
     "tabs": {
+      "all": "Allt",
       "movies": "Kvikmyndir",
       "top10": "Topp 10",
       "tvshows": "Sjónvarpsþættir"
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Til í eitthvað kryddað?",
-        "extra": ["Til hamingju með daginn 69 😘!"]
+        "extra": [
+          "Til hamingju með daginn 69 😘!"
+        ]
       },
       "420": {
         "default": "Hvað myndir þú vilja horfa á þennan 4/20?",
-        "extra": ["Gleðilegan 20/4 🥳!"]
+        "extra": [
+          "Gleðilegan 20/4 🥳!"
+        ]
       },
       "day": {
         "default": "Hvað myndirðu vilja horfa á þetta kvöldið?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "Hvað myndirðu vilja horfa á þessum morgni?",
-        "extra": ["Ég heyrði að Before Sunrise sé góð"]
+        "extra": [
+          "Ég heyrði að Before Sunrise sé góð"
+        ]
       },
       "night": {
         "default": "Hvað myndirðu vilja horfa á í nótt?",
-        "extra": ["Þreytt? Ég heyrði að The Exorcist sé góð."]
+        "extra": [
+          "Þreytt? Ég heyrði að The Exorcist sé góð."
+        ]
       }
     },
     "watchHistory": {

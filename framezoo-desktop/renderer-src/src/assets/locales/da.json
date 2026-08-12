@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Tilbage til toppen",
     "tabs": {
+      "all": "Alle",
       "movies": "Film",
       "top10": "Top 10",
       "tvshows": "TV-shows"
@@ -232,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Problemer",
     "goHome": "Gå til hjem",
-    "message": "Framezoo.lol har igen problemer med nogle udbydere. Hvis du ikke kan finde eller afspille et afsnit, skal du skifte kilde. Vi forventer, at denne fejl fortsætter i tidsrummet nedenfor.",
+    "message": "Framezoo har igen problemer med nogle udbydere. Hvis du ikke kan finde eller afspille et afsnit, skal du skifte kilde. Vi forventer, at denne fejl fortsætter i tidsrummet nedenfor.",
     "title": "Problemer med udbydere"
   },
   "errors": {
@@ -434,15 +435,21 @@
     "titles": {
       "69": {
         "default": "Har du lyst til at \"hygge\"?",
-        "extra": ["Glædelig 69-dag 😘!"]
+        "extra": [
+          "Glædelig 69-dag 😘!"
+        ]
       },
       "420": {
         "default": "Hvad vil du gerne se denne 4/20?",
-        "extra": ["Glædelig 4/20 🥳!"]
+        "extra": [
+          "Glædelig 4/20 🥳!"
+        ]
       },
       "day": {
         "default": "Hvad vil du gerne se i eftermiddag?",
-        "extra": ["Længe leve Framezoo!"]
+        "extra": [
+          "Længe leve Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Hvilken uhyggelig film vil du gerne se denne Halloween?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Hvad vil du gerne se her til morgen?",
-        "extra": ["Længe leve Framezoo!"]
+        "extra": [
+          "Længe leve Framezoo!"
+        ]
       },
       "night": {
         "default": "Hvad vil du gerne se i aften?",
-        "extra": ["Længe leve Framezoo!"]
+        "extra": [
+          "Længe leve Framezoo!"
+        ]
       }
     },
     "watchHistory": {

@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Takaisin alkuun",
     "tabs": {
+      "all": "Kaikki",
       "movies": "Elokuvat",
       "top10": "Top 10",
       "tvshows": "TV-ohjelmat"
@@ -232,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Ongelmat",
     "goHome": "Mene kotiin",
-    "message": "FrameZooillä on jälleen ongelmia joidenkin palveluntarjoajien kanssa. Jos et löydä tai toista esitystä, vaihda lähdettä. Odota, että tämä virhe jatkuu alla olevien aikojen ajan.",
+    "message": "Framezoo on jälleen ongelmia joidenkin palveluntarjoajien kanssa. Jos et löydä tai toista esitystä, vaihda lähdettä. Odota, että tämä virhe jatkuu alla olevien aikojen ajan.",
     "title": "Palveluntarjoajan ongelmat"
   },
   "errors": {
@@ -421,9 +422,9 @@
     },
     "support": {
       "complete": "täydellinen",
-      "description": "Framezoo toimii tappiolla, ja tarvitsemme apua pitääksemme sen ilman mainoksia! Jos pidät FrameZooin käytöstä, harkitse lahjoittamista kulujen kattamiseksi.",
+      "description": "Framezoo toimii tappiolla, ja tarvitsemme apua pitääksemme sen ilman mainoksia! Jos pidät Framezoo käytöstä, harkitse lahjoittamista kulujen kattamiseksi.",
       "donate": "Lahjoittaa",
-      "explanation": "Jos et käytä laajennusta tai FED-sovellusliittymää ei ole määritetty, sisällön löytäminen voi olla vaikeampaa! Haluamme korjata tämän, mutta sisällön tarjoaminen ilman kalliita palvelimia on paljon vaikeampaa. Joten jos pidät FrameZooin käytöstä, harkitse lahjoittamista, jotta voimme kattaa kasvavat kustannukset.",
+      "explanation": "Jos et käytä laajennusta tai FED-sovellusliittymää ei ole määritetty, sisällön löytäminen voi olla vaikeampaa! Haluamme korjata tämän, mutta sisällön tarjoaminen ilman kalliita palvelimia on paljon vaikeampaa. Joten jos pidät Framezoo käytöstä, harkitse lahjoittamista, jotta voimme kattaa kasvavat kustannukset.",
       "explanation2": "Jos haluat lisätietoja, liity joukkoomme",
       "fluxer": "Fluxer",
       "label": "Projektin rahoitus: ${{current}} / ${{goal}}",
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Ootko valmis johonkin kuumaan?",
-        "extra": ["Hyvää 69-päivää 😘!"]
+        "extra": [
+          "Hyvää 69-päivää 😘!"
+        ]
       },
       "420": {
         "default": "Mitä tekisi mieli katsoa tänä 4/20-päivänä?",
-        "extra": ["Hyvää 4/20-päivää 🥳!"]
+        "extra": [
+          "Hyvää 4/20-päivää 🥳!"
+        ]
       },
       "day": {
         "default": "Mitä haluaisit katsoa tänä iltapäivänä?",
@@ -463,7 +468,9 @@
       },
       "night": {
         "default": "Mitä haluaisit katsoa tänä iltana?",
-        "extra": ["Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"]
+        "extra": [
+          "Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"
+        ]
       }
     },
     "watchHistory": {
@@ -553,7 +560,7 @@
       "title": "Luettelot"
     },
     "public": {
-      "descriptionFallback": "Jaettu kokoelma, joka on kuratoitu FrameZoossa.",
+      "descriptionFallback": "Jaettu kokoelma, joka on kuratoitu Framezoo.",
       "notFoundDescription": "Tämä jakolinkki puuttuu tai ei ole enää saatavilla.",
       "notFoundTitle": "Listaa ei löydy",
       "pageTitle": "Jaettu luettelo",
@@ -685,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Selaimesi ei tue automaattista PWA-asennuskehotetta.\nVoit silti asentaa selaimen valikon kautta (esimerkiksi \"Asenna sovellus\", \"Luo pikakuvake\" tai \"Lisää telakkaan/aloitusnäyttöön\").",
-      "iosSafariGuide": "FrameZooin asentaminen sovelluksena:\n\n1. Napauta Jaa-painiketta (neliö nuolella).\n2. Valitse Lisää aloitusnäyttöön.\n3. Napauta Lisää."
+      "iosSafariGuide": "Framezoo asentaminen sovelluksena:\n\n1. Napauta Jaa-painiketta (neliö nuolella).\n2. Valitse Lisää aloitusnäyttöön.\n3. Napauta Lisää."
     },
     "menu": {
       "accountMenu": "Avaa tilivalikko",

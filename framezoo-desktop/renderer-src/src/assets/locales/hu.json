@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Vissza a tetejére",
     "tabs": {
+      "all": "Minden",
       "movies": "Filmek",
       "top10": "Top 10",
       "tvshows": "Sorozatok"
@@ -429,20 +430,26 @@
       "label": "Projektfinanszírozás: ${{current}} / ${{goal}}",
       "moreInfo": "További információ",
       "thankYou": "Köszönjük a támogatást!",
-      "title": "Az FrameZoonek szüksége van a segítségedre!"
+      "title": "A Framezoo segítségedre van szükség!"
     },
     "titles": {
       "69": {
         "default": "Felvagy készülve valami szaftós, tüzes kalandra?",
-        "extra": ["Boldog 69 napot!"]
+        "extra": [
+          "Boldog 69 napot!"
+        ]
       },
       "420": {
         "default": "Mit szeretnél nézni ezen a 4/20-adikán?",
-        "extra": ["Boldog 4/20-át!"]
+        "extra": [
+          "Boldog 4/20-át!"
+        ]
       },
       "day": {
         "default": "Mit szeretnél nézni e délután?",
-        "extra": ["Éljen az Framezoo!"]
+        "extra": [
+          "Éljen az Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Milyen kísérteties filmet néznél meg szívesen ezen a Halloweenkor?",
@@ -455,11 +462,15 @@
       },
       "morning": {
         "default": "Mit szeretnél nézni e reggelen?",
-        "extra": ["Éljen az Framezoo!"]
+        "extra": [
+          "Éljen az Framezoo!"
+        ]
       },
       "night": {
         "default": "Mit szeretnél nézni ezen az estén?",
-        "extra": ["Éljen az Framezoo!"]
+        "extra": [
+          "Éljen az Framezoo!"
+        ]
       }
     },
     "watchHistory": {

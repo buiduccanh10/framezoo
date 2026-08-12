@@ -17,8 +17,8 @@
       "title": "Tambahan Desktop"
     },
     "platforms": {
-      "framezoo": "BingkaiKebun Binatang",
-      "stremio": "tremio",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "Platform yang didukung untuk Addons:",
       "supported": "Platform yang didukung: Framezoo dan Stremio"
     },
@@ -223,6 +223,7 @@
     },
     "scrollToTop": "Kembali ke atas",
     "tabs": {
+      "all": "Semua",
       "movies": "Film",
       "top10": "10 teratas",
       "tvshows": "Acara TV"
@@ -310,12 +311,12 @@
       "subtitle": "Tahan ` untuk menampilkan bantuan ini kapan saja",
       "title": "Pintasan Papan Ketik"
     },
-    "name": "AlfaFlix",
+    "name": "Framezoo",
     "pages": {
       "discover": "Menemukan",
       "login": "Masuk",
       "migration": "Migrasi Akun",
-      "pagetitle": "{{title}} - AlfaFlix",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Daftar",
       "settings": "Pengaturan"
     }
@@ -434,11 +435,15 @@
     "titles": {
       "69": {
         "default": "Ingin sesuatu yang pedas?",
-        "extra": ["Selamat hari ke-69 😘!"]
+        "extra": [
+          "Selamat hari ke-69 😘!"
+        ]
       },
       "420": {
         "default": "Apa yang ingin Anda tonton pada 20/4 ini?",
-        "extra": ["Selamat 20/4 🥳!"]
+        "extra": [
+          "Selamat 20/4 🥳!"
+        ]
       },
       "day": {
         "default": "Apa yang ingin anda tonton sore ini?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "Apa yang ingin anda tonton pagi ini?",
-        "extra": ["Kayaknya film Before Sunrise bagus deh"]
+        "extra": [
+          "Kayaknya film Before Sunrise bagus deh"
+        ]
       },
       "night": {
         "default": "Apa yang ingin Anda tonton malam ini?",
-        "extra": ["Capek? Saya dengar The Exocist bagus."]
+        "extra": [
+          "Capek? Saya dengar The Exocist bagus."
+        ]
       }
     },
     "watchHistory": {
