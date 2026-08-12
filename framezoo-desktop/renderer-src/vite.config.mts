@@ -188,6 +188,7 @@ export default defineConfig(({ mode }) => {
     },
 
     resolve: {
+      dedupe: ["react", "react-dom"],
       alias: {
         "@": path.resolve(__dirname, "./src"),
         "@themes": path.resolve(__dirname, "./themes"),
