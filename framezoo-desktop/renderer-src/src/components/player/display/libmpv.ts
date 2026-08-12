@@ -165,23 +165,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   // seek target. This keeps the subtitle overlay from flashing cues for a
   // position the video has not reached yet.
   let pendingSeekTarget: number | null = null;
-  let pendingSeekSetAt = 0;
-  // Timestamp of the last seek that landed; the backtrack guard window runs
-  // from this point.
-  let seekSettledAt = 0;
-  // Last time-pos value held back while a seek was in flight. Used to settle
-  // the position when mpv reports the seek completed without emitting another
-  // time-pos event (e.g. scrubbing while paused).
-  let heldSeekPosition: number | null = null;
-  // When the seek target never lands (out-of-range target, unseekable
-  // stream), stop holding time updates after this long so playback time
-  // keeps flowing.
-  const PENDING_SEEK_TIMEOUT_MS = 8000;
-  // mpv reports the position snapped back to the keyframe right after a seek
-  // settles; hold backward jumps within this window so cues do not blink out.
-  const SEEK_BACKTRACK_GUARD_MS = 3000;
-  // Ignore stale decoder positions that arrive outside an explicit seek.
-  const TIME_BACKTRACK_TOLERANCE_SECONDS = 0.5;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
@@ -462,20 +445,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     );
   }
 
-  function applyTimePosition(position: number) {
-    time = position;
-    emit("time", time);
-    if (time > bufferedTime) {
-      bufferedTime = time;
-      emit("buffered", bufferedTime);
-    }
-    if (!paused && time > 0) {
-      emit("loading", false);
-      emit("play", undefined);
-    }
-    syncPipState();
-  }
-
   function handleEvent(event: LibMpvPlayerEvent) {
     if (!playerId || event.playerId !== playerId) {
       console.warn("[libmpv] dropped event: player mismatch", {
@@ -575,42 +544,26 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     switch (event.name) {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
-          const rawPosition = Math.max(0, event.data);
-          if (cachePaused) {
-            // The rendered frame is stalled while libmpv waits for input.
-            // Ignore clock snapshots from that interval so subtitles do not
-            // disappear or jump ahead of the visible video.
-            break;
-          }
           if (pendingSeekTarget !== null) {
-            if (
-              (isSeeking || Math.abs(rawPosition - pendingSeekTarget) > 0.5) &&
-              performance.now() - pendingSeekSetAt <= PENDING_SEEK_TIMEOUT_MS
-            ) {
-              // Seek in flight: mpv reports the target early and then stale
-              // pre-seek/keyframe positions while frames catch up. Hold the
-              // last stable time so the subtitle overlay does not flicker.
-              heldSeekPosition = rawPosition;
+            if (Math.abs(event.data - pendingSeekTarget) <= 0.5) {
+              pendingSeekTarget = null;
+            } else {
+              // Stale position while the seek is in flight — hold the last
+              // stable time so the subtitle overlay does not flicker.
               break;
             }
-            pendingSeekTarget = null;
-            seekSettledAt = performance.now();
-            heldSeekPosition = null;
-          } else if (
-            performance.now() - seekSettledAt < SEEK_BACKTRACK_GUARD_MS &&
-            rawPosition < time - 0.5
-          ) {
-            // Right after a seek settles, the decoder restarts from a
-            // keyframe before the target. Hold the backward jump so cues
-            // stay visible until playback catches up.
-            break;
-          } else if (rawPosition < time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
-            // A backward jump without a pending seek is stale decoder state,
-            // not a real user navigation. Letting it through makes
-            // SubtitleView briefly filter the active cue out.
-            break;
           }
-          applyTimePosition(rawPosition);
+          time = Math.max(0, event.data);
+          emit("time", time);
+          if (time > bufferedTime) {
+            bufferedTime = time;
+            emit("buffered", bufferedTime);
+          }
+          if (!paused && time > 0) {
+            emit("loading", false);
+            emit("play", undefined);
+          }
+          syncPipState();
         }
         break;
       case "duration":
@@ -667,25 +620,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         }
         break;
       case "seeking":
-        if (event.data === true) {
-          isSeeking = true;
-          emit("loading", true);
-          break;
-        }
-        isSeeking = false;
-        emit("loading", false);
-        if (pendingSeekTarget !== null && heldSeekPosition !== null) {
-          if (Math.abs(heldSeekPosition - pendingSeekTarget) <= 0.5) {
-            // The seek completed without a follow-up time-pos event (e.g.
-            // scrubbing while paused). Settle the held position now so the
-            // time does not freeze on the pre-seek value.
-            pendingSeekTarget = null;
-            seekSettledAt = performance.now();
-            const settled = heldSeekPosition;
-            heldSeekPosition = null;
-            applyTimePosition(settled);
-          }
-        }
+        isSeeking = event.data === true;
+        emit("loading", isSeeking);
         break;
       case "paused-for-cache":
         cachePaused = event.data === true;
@@ -864,13 +800,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       generation = requestGeneration;
       fileLoaded = false; // reset for new load
       firstFrameLoggedGeneration = -1;
-      seekSettledAt = 0;
-      // The native player issues an initial seek to the current position
-      // after FILE_LOADED; treat it like a user seek so the stale time-pos
-      // snapshot (and the early target report) do not flash subtitle cues.
-      pendingSeekTarget = time > 0.5 ? time : null;
-      pendingSeekSetAt = pendingSeekTarget === null ? 0 : performance.now();
-      heldSeekPosition = null;
+      pendingSeekTarget = null;
       loadStartedAt = performance.now();
       const requestedSource = ops.source;
       const headers = sourceHeaders(requestedSource);
@@ -970,8 +900,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       );
       time = clamped;
       pendingSeekTarget = clamped;
-      pendingSeekSetAt = performance.now();
-      heldSeekPosition = null;
       // Deliberately no "time" emit here: the rendered frame has not caught
       // up to the target yet, and forwarding the target optimistically makes
       // subtitles pop in ahead of the video. "time" is emitted from the
