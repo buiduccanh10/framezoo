@@ -16,6 +16,12 @@
       "subtitle": "Optional. Add a manifest URL you choose. This app does not bundle, recommend, or host addons.",
       "title": "Desktop Addons"
     },
+    "platforms": {
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
+      "supportLabel": "Supported platforms for Addons:",
+      "supported": "Supported platforms for Addons: Stremio and Framezoo"
+    },
     "page": {
       "addAddonButton": "Add Addon",
       "description": "Addons are optional. This app does not bundle, recommend, or host any addon.",
@@ -213,6 +219,7 @@
     },
     "scrollToTop": "Back to twop",
     "tabs": {
+      "all": "All",
       "movies": "Mwovies",
       "top10": "Top 10",
       "tvshows": "TV shows >~<"
@@ -222,7 +229,7 @@
   "downtimeNotice": {
     "badge": "Issues",
     "goHome": "Go home",
-    "message": "uwu-flix is expewiencing issues with some p-pwovidews again, if you cant find ow (・`ω´・) pway a show pwease change the souwce. Expect this ewwow t-to pewsist thwoughout the bewow times.",
+    "message": "Framezoo is expewiencing issues with some p-pwovidews again, if you cant find ow (・`ω´・) pway a show pwease change the souwce. Expect this ewwow t-to pewsist thwoughout the bewow times.",
     "title": "Provider issues"
   },
   "errors": {
@@ -300,12 +307,12 @@
       "subtitle": "Hold ` to show this help anytime",
       "title": "Keyboard Shortcuts"
     },
-    "name": "uwu-flix",
+    "name": "Framezoo",
     "pages": {
       "discover": "Discover",
       "login": "Login",
       "migration": "m-migwate account",
-      "pagetitle": "{{title}} - uwu-flix",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Register",
       "settings": "Settings"
     }
@@ -399,11 +406,11 @@
           "What awe you in the mood >w< f-f-fow?",
           "Shouwd we *notices buldge* dewete youw bwowsew histowy? ;;w;;",
           "What do you w-want t-to stweam?",
-          "uwu-flix is the best *starts twerking* site e-e-evew!",
+          "Framezoo is the best *starts twerking* site e-e-evew!",
           "What's on youw watchwist today?",
           "How was youw day?",
           "My bad >w< the site nyevew wowks...",
-          "Isn't uwu-flix just *whispers to self* the best?",
+          "Isn't Framezoo just *whispers to self* the best?",
           ">ᴗ<"
         ]
       },
@@ -411,15 +418,15 @@
     },
     "support": {
       "complete": "complete",
-      "description": "FrameZoo is run at a loss, and we need help to keep it ad free! If you enjoy using FrameZoo, please consider donating to help us cover our costs.",
+      "description": "Framezoo is run at a loss, and we need help to keep it ad free! If you enjoy using Framezoo, please consider donating to help us cover our costs.",
       "donate": "Donate",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using FrameZoo, please consider donating to help us cover our growing costs.",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using Framezoo, please consider donating to help us cover our growing costs.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
       "label": "Project Funding: ${{current}} / ${{goal}}",
       "moreInfo": "More info",
       "thankYou": "Thank you for your support!",
-      "title": "FrameZoo needs your help!"
+      "title": "Framezoo needs your help!"
     },
     "titles": {
       "69": {
@@ -539,7 +546,7 @@
       "title": "Lists"
     },
     "public": {
-      "descriptionFallback": "A shared collection curated in FrameZoo.",
+      "descriptionFallback": "A shared collection curated in Framezoo.",
       "notFoundDescription": "This share link is missing or no longer available.",
       "notFoundTitle": "List not found",
       "pageTitle": "Shared list",
@@ -671,7 +678,7 @@
     },
     "install": {
       "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
-      "iosSafariGuide": "To install FrameZoo as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
+      "iosSafariGuide": "To install Framezoo as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
     },
     "menu": {
       "accountMenu": "Open account menu",

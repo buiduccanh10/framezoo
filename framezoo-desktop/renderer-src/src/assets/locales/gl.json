@@ -11,22 +11,20 @@
       "adding": "Engadindo...",
       "ariaClose": "Pechar o xestor de complementos",
       "ariaManage": "Xestionar complementos",
-      "createGuideLink": "Como crear un complemento",
       "errorFallback": "Non se puido instalar este complemento.",
       "manageListButton": "Xestionar a lista de complementos",
       "subtitle": "Non recomendamos engadir complementos non oficiais ou ilegais.",
       "title": "Complementos de escritorio"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Plataformas compatibles para complementos:",
-      "supported": "Plataformas compatibles: FrameZoo e Stremio"
+      "supported": "Plataformas compatibles: Framezoo e Stremio"
     },
     "page": {
       "addAddonButton": "Engadir complemento",
       "description": "Os complementos son opcionais. Esta aplicación non agrupa, recomenda nin aloxa ningún complemento.",
-      "createGuideLink": "Crear guía de complementos",
       "disabled": "Desactivado",
       "emptyInstalled": "Aínda non hai complementos instalados no sistema.",
       "enabled": "Activado",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Volver arriba",
     "tabs": {
+      "all": "Todos",
       "movies": "Películas",
       "top10": "Top 10",
       "tvshows": "Programas de TV"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Problemas",
     "goHome": "Vaite a casa",
-    "message": "FrameZoo volve ter problemas con algúns provedores, se non podes atopar nin reproducir un programa, cambia a fonte. Espere que este erro persista durante os seguintes tempos.",
+    "message": "Framezoo volve ter problemas con algúns provedores, se non podes atopar nin reproducir un programa, cambia a fonte. Espere que este erro persista durante os seguintes tempos.",
     "title": "Problemas do provedor"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Descargo de responsabilidade",
-      "disclaimerText": "FrameZoo ofrece unha experiencia de entretemento segura, moderna e sen problemas. Coa súa interface fácil de usar e a súa biblioteca de contido diversa, incluíndo compatibilidade con 4K HDR, os usuarios poden gozar das súas películas e programas de televisión favoritos. E co seu compromiso coa seguridade, FrameZoo é a opción definitiva para unha experiencia de streaming de alta calidade sen preocupacións."
+      "disclaimerText": "Framezoo ofrece unha experiencia de entretemento segura, moderna e sen problemas. Coa súa interface fácil de usar e a súa biblioteca de contido diversa, incluíndo compatibilidade con 4K HDR, os usuarios poden gozar das súas películas e programas de televisión favoritos. E co seu compromiso coa seguridade, Framezoo é a opción definitiva para unha experiencia de streaming de alta calidade sen preocupacións."
     },
     "links": {
       "fluxer": "Fluxador",
@@ -312,12 +311,12 @@
       "subtitle": "Mantén premido ` para mostrar esta axuda en calquera momento",
       "title": "Atallos de teclado"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Descubrir",
       "login": "Iniciar sesión",
       "migration": "Migrar conta",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Rexistrarse",
       "settings": "Configuración"
     }
@@ -415,7 +414,7 @@
           "Que hai na túa lista de vixilancia hoxe?",
           "Como foi o teu día?",
           "O meu mal o sitio nunca funciona...",
-          "FrameZoo non é só o mellor?",
+          "Framezoo non é só o mellor?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +422,15 @@
     },
     "support": {
       "complete": "completo",
-      "description": "FrameZoo execútase con perdas e necesitamos axuda para mantelo sen publicidade. Se che gusta usar FrameZoo, considera doar para axudarnos a cubrir os nosos custos.",
+      "description": "Framezoo execútase con perdas e necesitamos axuda para mantelo sen publicidade. Se che gusta usar Framezoo, considera doar para axudarnos a cubrir os nosos custos.",
       "donate": "Doa",
-      "explanation": "Se non estás usando a extensión ou non tes a API FED configurada, pode ser máis difícil atopar contido. Queremos solucionar isto, pero é moito máis difícil ofrecer contido sen servidores caros. Entón, por favor, se che gusta usar FrameZoo, considera doar para axudarnos a cubrir os nosos custos crecentes.",
+      "explanation": "Se non estás usando a extensión ou non tes a API FED configurada, pode ser máis difícil atopar contido. Queremos solucionar isto, pero é moito máis difícil ofrecer contido sen servidores caros. Entón, por favor, se che gusta usar Framezoo, considera doar para axudarnos a cubrir os nosos custos crecentes.",
       "explanation2": "Se queres máis información, únete ao noso",
       "fluxer": "Fluxador",
       "label": "Financiamento do proxecto: ${{current}} / ${{goal}}",
       "moreInfo": "Máis información",
       "thankYou": "Grazas polo teu apoio!",
-      "title": "FrameZoo precisa da túa axuda!"
+      "title": "Framezoo precisa da túa axuda!"
     },
     "titles": {
       "69": {
@@ -561,7 +560,7 @@
       "title": "Listas"
     },
     "public": {
-      "descriptionFallback": "Unha colección compartida seleccionada en FrameZoo.",
+      "descriptionFallback": "Unha colección compartida seleccionada en Framezoo.",
       "notFoundDescription": "Falta esta ligazón para compartir ou xa non está dispoñible.",
       "notFoundTitle": "Non se atopou a lista",
       "pageTitle": "Lista compartida",
@@ -693,7 +692,7 @@
     },
     "install": {
       "genericGuide": "O teu navegador non admite unha solicitude de instalación automática de PWA.\nAínda podes instalar a través do menú do navegador (por exemplo: \"Instalar aplicación\", \"Crear atallo\" ou \"Engadir ao Dock/Pantalla de inicio\").",
-      "iosSafariGuide": "Para instalar FrameZoo como unha aplicación:\n\n1. Toca o botón Compartir (cadrado cunha frecha).\n2. Escolla \"Engadir á pantalla de inicio\".\n3. Toque Engadir."
+      "iosSafariGuide": "Para instalar Framezoo como unha aplicación:\n\n1. Toca o botón Compartir (cadrado cunha frecha).\n2. Escolla \"Engadir á pantalla de inicio\".\n3. Toque Engadir."
     },
     "menu": {
       "accountMenu": "Abrir o menú da conta",

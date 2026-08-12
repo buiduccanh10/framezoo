@@ -227,8 +227,10 @@ export function SourceSelectPart(props: {
   const isInitialSelection = mode === "initial";
 
   const hasAttemptedAutoSelect = useRef(false);
+  const hasAutoSelectedSingleAddon = useRef(false);
   useEffect(() => {
     hasAttemptedAutoSelect.current = false;
+    hasAutoSelectedSingleAddon.current = false;
   }, [meta.tmdbId, meta.season?.tmdbId, meta.episode?.tmdbId]);
 
   const qualityOptions: OptionItem[] = useMemo(
@@ -330,6 +332,19 @@ export function SourceSelectPart(props: {
     setAddonError(null);
     setSelectedQuality(qualityOptions[0]);
   }, [addonMedia, qualityOptions]);
+
+  useEffect(() => {
+    if (
+      hasAutoSelectedSingleAddon.current ||
+      selectedAddonId ||
+      eligibleAddons.length !== 1
+    ) {
+      return;
+    }
+
+    hasAutoSelectedSingleAddon.current = true;
+    setSelectedAddonId(eligibleAddons[0].manifest.id);
+  }, [eligibleAddons, selectedAddonId]);
 
   useEffect(() => {
     onStateChange?.(selectedAddonId ? "streams" : "addons");
@@ -600,6 +615,7 @@ export function SourceSelectPart(props: {
         <SelectedAddonHeader
           addon={selectedAddon}
           onBack={() => {
+            hasAutoSelectedSingleAddon.current = true;
             setSelectedAddonId(null);
             setAddonError(null);
           }}

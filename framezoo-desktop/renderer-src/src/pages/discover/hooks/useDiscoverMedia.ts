@@ -24,7 +24,9 @@ import {
   getTop10Movies,
 } from "@/backend/metadata/traktApi";
 import { paginateResults } from "@/backend/metadata/traktFunctions";
+import type { TMDBMovieData } from "@/backend/metadata/types/tmdb";
 import type { TraktListResponse } from "@/backend/metadata/types/trakt";
+import { getReleaseQualityVariantFromTmdbReleaseDates } from "@/components/media/ReleaseQualityBadge";
 import {
   EDITOR_PICKS_MOVIES,
   EDITOR_PICKS_TV_SHOWS,
@@ -35,6 +37,7 @@ import type {
   Country,
   DiscoverContentType,
   DiscoverMedia,
+  DiscoverMediaType,
   Genre,
   MediaType,
   Provider,
@@ -46,11 +49,14 @@ import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
 import { fetchCachedTmdb } from "@/utils/tmdbQuery";
 
+const MIXED_MEDIA_TYPES: MediaType[] = ["movie", "tv"];
+
 // Re-export types for backward compatibility
 export type {
   Country,
   DiscoverContentType,
   DiscoverMedia,
+  DiscoverMediaType,
   Genre,
   MediaType,
   Provider,
@@ -70,9 +76,11 @@ function appendUniqueMedia(
   existingItems: DiscoverMedia[],
   incomingItems: DiscoverMedia[],
 ) {
-  const seen = new Set(existingItems.map((item) => item.id.toString()));
+  const seen = new Set(
+    existingItems.map((item) => `${item.type || "unknown"}:${item.id}`),
+  );
   const appendedItems = incomingItems.filter((item) => {
-    const idStr = item.id.toString();
+    const idStr = `${item.type || "unknown"}:${item.id}`;
     if (seen.has(idStr)) return false;
     seen.add(idStr);
     return true;
@@ -81,8 +89,66 @@ function appendUniqueMedia(
   return [...existingItems, ...appendedItems];
 }
 
+type DiscoverMediaWithReleaseDates = DiscoverMedia & {
+  release_dates?: TMDBMovieData["release_dates"];
+};
+
+async function enrichMovieReleaseQuality(
+  items: DiscoverMedia[],
+  language: string,
+): Promise<DiscoverMedia[]> {
+  const movieItems = items.filter((item) => item.type === "movie");
+  if (movieItems.length === 0) return items;
+
+  const qualityById = new Map<number, "CAM" | "HD" | null>();
+  const itemsWithReleaseDates = movieItems.filter((item) =>
+    Object.prototype.hasOwnProperty.call(item, "release_dates"),
+  ) as DiscoverMediaWithReleaseDates[];
+
+  itemsWithReleaseDates.forEach((item) => {
+    qualityById.set(
+      item.id,
+      getReleaseQualityVariantFromTmdbReleaseDates(item.release_dates),
+    );
+  });
+
+  const itemsToFetch = movieItems.filter((item) => !qualityById.has(item.id));
+  let nextIndex = 0;
+  const worker = async () => {
+    while (nextIndex < itemsToFetch.length) {
+      const item = itemsToFetch[nextIndex++];
+      if (!item) continue;
+
+      try {
+        const details = await fetchCachedTmdb<{
+          release_dates?: DiscoverMediaWithReleaseDates["release_dates"];
+        }>(`/movie/${item.id}`, {
+          language,
+          append_to_response: "release_dates",
+        });
+        qualityById.set(
+          item.id,
+          getReleaseQualityVariantFromTmdbReleaseDates(details.release_dates),
+        );
+      } catch {
+        qualityById.set(item.id, null);
+      }
+    }
+  };
+
+  await Promise.all(
+    Array.from({ length: Math.min(6, itemsToFetch.length) }, () => worker()),
+  );
+
+  return items.map((item) =>
+    item.type === "movie"
+      ? { ...item, releaseQuality: qualityById.get(item.id) ?? null }
+      : item,
+  );
+}
+
 export function useDiscoverOptions(
-  mediaType: MediaType,
+  mediaType: DiscoverMediaType,
   options?: { includeCountries?: boolean },
 ) {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -96,7 +162,19 @@ export function useDiscoverOptions(
   const userLanguage = useLanguageStore((s) => s.language);
   const formattedLanguage = getTmdbLanguageCode(userLanguage);
 
-  const providers = mediaType === "movie" ? MOVIE_PROVIDERS : TV_PROVIDERS;
+  const providers =
+    mediaType === "all"
+      ? Array.from(
+          new Map(
+            [...MOVIE_PROVIDERS, ...TV_PROVIDERS].map((provider) => [
+              provider.id,
+              provider,
+            ]),
+          ).values(),
+        )
+      : mediaType === "movie"
+        ? MOVIE_PROVIDERS
+        : TV_PROVIDERS;
 
   useEffect(() => {
     const fetchOptions = async () => {
@@ -106,20 +184,37 @@ export function useDiscoverOptions(
       setError(null);
 
       try {
-        const [genresData, countriesData] = await Promise.all([
-          fetchCachedTmdb<any>(`/genre/${mediaType}/list`, {
-            language: formattedLanguage,
-          }),
+        const genreMediaTypes: MediaType[] =
+          mediaType === "all" ? ["movie", "tv"] : [mediaType];
+        const [genreResults, countriesData] = await Promise.all([
+          Promise.all(
+            genreMediaTypes.map((genreMediaType) =>
+              fetchCachedTmdb<any>(`/genre/${genreMediaType}/list`, {
+                language: formattedLanguage,
+              }),
+            ),
+          ),
           includeCountries
             ? fetchCachedTmdb<any[]>("/configuration/countries")
             : [],
         ]);
 
         setGenres(
-          (genresData.genres || []).slice(0, 50).map((genre: Genre) => ({
-            ...genre,
-            name: t(`tmdb.genres.${genre.id}`, { defaultValue: genre.name }),
-          })),
+          Array.from(
+            new Map(
+              genreResults
+                .flatMap((result) => result.genres || [])
+                .map((genre: Genre) => [
+                  genre.id,
+                  {
+                    ...genre,
+                    name: t(`tmdb.genres.${genre.id}`, {
+                      defaultValue: genre.name,
+                    }),
+                  },
+                ]),
+            ).values(),
+          ).slice(0, 50),
         );
 
         if (includeCountries) {
@@ -215,9 +310,9 @@ export function useDiscoverMedia({
   const releaseYearParams = useMemo(
     () =>
       releaseYear
-        ? mediaType === "movie"
-          ? { primary_release_year: releaseYear }
-          : { first_air_date_year: releaseYear }
+        ? mediaType === "tv"
+          ? { first_air_date_year: releaseYear }
+          : { primary_release_year: releaseYear }
         : {},
     [mediaType, releaseYear],
   );
@@ -236,8 +331,12 @@ export function useDiscoverMedia({
     }
   }, [contentType, currentContentType]);
 
-  const fetchTMDBMedia = useCallback(
-    async (endpoint: string, params: Record<string, any> = {}) => {
+  const fetchTMDBMediaForType = useCallback(
+    async (
+      requestMediaType: MediaType,
+      endpoint: string,
+      params: Record<string, any> = {},
+    ) => {
       try {
         const requestPage = isCarouselView ? 1 : page;
         const data = await fetchCachedTmdb<any>(endpoint, {
@@ -253,10 +352,13 @@ export function useDiscoverMedia({
         );
 
         return {
-          results: results.map((item: any) => ({
-            ...item,
-            type: mediaType === "movie" ? "movie" : "show",
-          })),
+          results: await enrichMovieReleaseQuality(
+            results.map((item: any) => ({
+              ...item,
+              type: requestMediaType === "movie" ? "movie" : "show",
+            })),
+            formattedLanguage,
+          ),
           hasMore: requestPage < totalPages,
         };
       } catch (err) {
@@ -264,7 +366,74 @@ export function useDiscoverMedia({
         throw err;
       }
     },
-    [formattedLanguage, isCarouselView, mediaType, page],
+    [formattedLanguage, isCarouselView, page],
+  );
+
+  const fetchTMDBMedia = useCallback(
+    async (endpoint: string, params: Record<string, any> = {}) => {
+      if (mediaType === "all") {
+        throw new Error(`Mixed media requires explicit endpoints: ${endpoint}`);
+      }
+
+      return fetchTMDBMediaForType(mediaType, endpoint, params);
+    },
+    [fetchTMDBMediaForType, mediaType],
+  );
+
+  const fetchMixedMedia = useCallback(
+    async (
+      requests: Array<{
+        mediaType: MediaType;
+        endpoint: string;
+        params?: Record<string, any>;
+      }>,
+      sortBy?: (a: DiscoverMedia, b: DiscoverMedia) => number,
+    ) => {
+      const responses = await Promise.all(
+        requests.map(({ mediaType: requestMediaType, endpoint, params }) =>
+          fetchTMDBMediaForType(requestMediaType, endpoint, params),
+        ),
+      );
+      let results = appendUniqueMedia(
+        [],
+        responses.flatMap((response) => response.results),
+      );
+      if (sortBy) results = results.sort(sortBy);
+
+      return {
+        results: isCarouselView ? results.slice(0, 20) : results,
+        hasMore: responses.some((response) => response.hasMore),
+      };
+    },
+    [fetchTMDBMediaForType, isCarouselView],
+  );
+
+  const fetchTMDBMixedFeed = useCallback(
+    async (endpoint: string) => {
+      const requestPage = isCarouselView ? 1 : page;
+      const data = await fetchCachedTmdb<any>(endpoint, {
+        language: formattedLanguage,
+        page: requestPage.toString(),
+      });
+      const results = (data.results ?? [])
+        .filter(
+          (item: any) =>
+            item.media_type === "movie" || item.media_type === "tv",
+        )
+        .map((item: any) => ({
+          ...item,
+          type: item.media_type === "movie" ? "movie" : "show",
+        }));
+
+      return {
+        results: await enrichMovieReleaseQuality(
+          isCarouselView ? results.slice(0, 20) : results,
+          formattedLanguage,
+        ),
+        hasMore: requestPage < (data.total_pages ?? 1),
+      };
+    },
+    [formattedLanguage, isCarouselView, page],
   );
 
   const fetchTraktMedia = useCallback(
@@ -293,6 +462,9 @@ export function useDiscoverMedia({
           try {
             const data = await fetchCachedTmdb<any>(endpoint, {
               language: formattedLanguage,
+              ...(mediaType === "movie"
+                ? { append_to_response: "release_dates" }
+                : {}),
             });
 
             return {
@@ -311,10 +483,11 @@ export function useDiscoverMedia({
             (result): result is PromiseFulfilledResult<DiscoverMedia | null> =>
               result.status === "fulfilled" && result.value !== null,
           )
-          .map((result) => result.value);
+          .map((result) => result.value)
+          .filter((item): item is DiscoverMedia => item !== null);
 
         return {
-          results,
+          results: await enrichMovieReleaseQuality(results, formattedLanguage),
           hasMore: hasMoreResults,
         };
       } catch (err) {
@@ -374,7 +547,7 @@ export function useDiscoverMedia({
       if (releaseYear) {
         results = results.filter((item) => {
           const releaseDate =
-            mediaType === "movie" ? item.release_date : item.first_air_date;
+            item.type === "movie" ? item.release_date : item.first_air_date;
           return releaseDate?.startsWith(`${releaseYear}-`);
         });
       }
@@ -388,22 +561,29 @@ export function useDiscoverMedia({
 
       return { ...data, results };
     },
-    [mediaType, releaseYear, originCountry],
+    [releaseYear, originCountry],
   );
 
   const fetchEditorPicks = useCallback(async () => {
     const picks =
-      mediaType === "movie" ? EDITOR_PICKS_MOVIES : EDITOR_PICKS_TV_SHOWS;
+      mediaType === "movie"
+        ? EDITOR_PICKS_MOVIES
+        : mediaType === "tv"
+          ? EDITOR_PICKS_TV_SHOWS
+          : [...EDITOR_PICKS_MOVIES, ...EDITOR_PICKS_TV_SHOWS];
 
     // For carousel views, limit the number of picks to fetch
     const picksToFetch = isCarouselView ? picks.slice(0, 20) : picks;
 
     try {
       const mediaPromises = picksToFetch.map(async (item) => {
-        const endpoint = `/${mediaType}/${item.id}`;
+        const endpoint = `/${item.type === "movie" ? "movie" : "tv"}/${item.id}`;
         const data = await fetchCachedTmdb<any>(endpoint, {
           language: formattedLanguage,
-          append_to_response: "videos,images",
+          append_to_response:
+            item.type === "movie"
+              ? "videos,images,release_dates"
+              : "videos,images",
         });
 
         return {
@@ -412,7 +592,10 @@ export function useDiscoverMedia({
         };
       });
 
-      const results = await Promise.all(mediaPromises);
+      const results = await enrichMovieReleaseQuality(
+        await Promise.all(mediaPromises),
+        formattedLanguage,
+      );
       return filterResultsByReleaseYear({
         results,
         hasMore: picks.length > picksToFetch.length,
@@ -475,26 +658,76 @@ export function useDiscoverMedia({
       switch (type) {
         case "popular":
           data =
-            releaseYear || hasOriginCountryFilter
-              ? await fetchTMDBMedia(`/discover/${mediaType}`, {
-                  sort_by: "popularity.desc",
-                  ...releaseYearParams,
-                  ...originCountryParams,
-                })
-              : await fetchTMDBMedia(`/${mediaType}/popular`);
+            mediaType === "all"
+              ? await fetchMixedMedia(
+                  MIXED_MEDIA_TYPES.map((requestMediaType) => ({
+                    mediaType: requestMediaType,
+                    endpoint:
+                      releaseYear || hasOriginCountryFilter
+                        ? `/discover/${requestMediaType}`
+                        : `/${requestMediaType}/popular`,
+                    params:
+                      releaseYear || hasOriginCountryFilter
+                        ? {
+                            sort_by: "popularity.desc",
+                            ...(requestMediaType === "movie"
+                              ? { primary_release_year: releaseYear }
+                              : { first_air_date_year: releaseYear }),
+                            ...originCountryParams,
+                          }
+                        : undefined,
+                  })),
+                  (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0),
+                )
+              : releaseYear || hasOriginCountryFilter
+                ? await fetchTMDBMedia(`/discover/${mediaType}`, {
+                    sort_by: "popularity.desc",
+                    ...releaseYearParams,
+                    ...originCountryParams,
+                  })
+                : await fetchTMDBMedia(`/${mediaType}/popular`);
           setSectionTitle(t("discover.carousel.title.popular"));
           break;
 
         case "topRated":
           data =
-            releaseYear || hasOriginCountryFilter
-              ? await fetchTMDBMedia(`/discover/${mediaType}`, {
-                  sort_by: "vote_average.desc",
-                  "vote_count.gte": 200,
-                  ...releaseYearParams,
-                  ...originCountryParams,
-                })
-              : await fetchTMDBMedia(`/${mediaType}/top_rated`);
+            mediaType === "all"
+              ? await fetchMixedMedia(
+                  MIXED_MEDIA_TYPES.map((requestMediaType) => ({
+                    mediaType: requestMediaType,
+                    endpoint:
+                      releaseYear || hasOriginCountryFilter
+                        ? `/discover/${requestMediaType}`
+                        : `/${requestMediaType}/top_rated`,
+                    params:
+                      releaseYear || hasOriginCountryFilter
+                        ? {
+                            sort_by: "vote_average.desc",
+                            "vote_count.gte": 200,
+                            ...(requestMediaType === "movie"
+                              ? { primary_release_year: releaseYear }
+                              : { first_air_date_year: releaseYear }),
+                            ...originCountryParams,
+                          }
+                        : undefined,
+                  })),
+                  (a, b) => {
+                    const ratingDifference =
+                      (b.vote_average ?? 0) - (a.vote_average ?? 0);
+                    return (
+                      ratingDifference ||
+                      (b.vote_count ?? 0) - (a.vote_count ?? 0)
+                    );
+                  },
+                )
+              : releaseYear || hasOriginCountryFilter
+                ? await fetchTMDBMedia(`/discover/${mediaType}`, {
+                    sort_by: "vote_average.desc",
+                    "vote_count.gte": 200,
+                    ...releaseYearParams,
+                    ...originCountryParams,
+                  })
+                : await fetchTMDBMedia(`/${mediaType}/top_rated`);
           setSectionTitle(t("discover.carousel.title.topRated"));
           break;
 
@@ -526,70 +759,137 @@ export function useDiscoverMedia({
         case "genre":
           if (!id) throw new Error("Genre ID is required");
 
-          data = await fetchTMDBMedia(`/discover/${mediaType}`, {
-            with_genres: id,
-            ...releaseYearParams,
-            ...originCountryParams,
-          });
+          data =
+            mediaType === "all"
+              ? await fetchMixedMedia(
+                  MIXED_MEDIA_TYPES.map((requestMediaType) => ({
+                    mediaType: requestMediaType,
+                    endpoint: `/discover/${requestMediaType}`,
+                    params: {
+                      with_genres: id,
+                      ...(requestMediaType === "movie"
+                        ? { primary_release_year: releaseYear }
+                        : { first_air_date_year: releaseYear }),
+                      ...originCountryParams,
+                    },
+                  })),
+                  (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0),
+                )
+              : await fetchTMDBMedia(`/discover/${mediaType}`, {
+                  with_genres: id,
+                  ...releaseYearParams,
+                  ...originCountryParams,
+                });
           setSectionTitle(
-            mediaType === "movie"
-              ? t("discover.carousel.title.movies", { category: genreName })
-              : t("discover.carousel.title.tvshows", { category: genreName }),
+            mediaType === "all"
+              ? genreName || t("discover.carousel.title.popular")
+              : mediaType === "movie"
+                ? t("discover.carousel.title.movies", { category: genreName })
+                : t("discover.carousel.title.tvshows", { category: genreName }),
           );
           break;
 
-        case "provider":
+        case "provider": {
           if (!id) throw new Error("Provider ID is required");
 
-          if (conf().USE_TRAKT && !releaseYear && !hasOriginCountryFilter) {
-            const traktProviderFunction = getTraktProviderFunction(id);
-            if (traktProviderFunction) {
-              try {
-                data = await fetchTraktMedia(traktProviderFunction);
-                setSectionTitle(
-                  mediaType === "movie"
-                    ? t("discover.carousel.title.moviesOn", {
-                        provider: providerName,
-                      })
-                    : t("discover.carousel.title.tvshowsOn", {
-                        provider: providerName,
-                      }),
-                );
-                break;
-              } catch (traktProviderError) {
-                console.warn(
-                  "Falling back to TMDB provider discover:",
-                  traktProviderError,
-                );
+          if (
+            mediaType !== "all" &&
+            conf().USE_TRAKT &&
+            !releaseYear &&
+            !hasOriginCountryFilter
+          ) {
+            {
+              const traktProviderFunction = getTraktProviderFunction(id);
+              if (traktProviderFunction) {
+                try {
+                  data = await fetchTraktMedia(traktProviderFunction);
+                  setSectionTitle(
+                    mediaType === "movie"
+                      ? t("discover.carousel.title.moviesOn", {
+                          provider: providerName,
+                        })
+                      : t("discover.carousel.title.tvshowsOn", {
+                          provider: providerName,
+                        }),
+                  );
+                  break;
+                } catch (traktProviderError) {
+                  console.warn(
+                    "Falling back to TMDB provider discover:",
+                    traktProviderError,
+                  );
+                }
               }
             }
           }
 
-          data = await fetchTMDBMedia(`/discover/${mediaType}`, {
-            with_watch_providers: id,
-            watch_region: "US",
-            ...releaseYearParams,
-            ...originCountryParams,
-          });
+          const providerRequests =
+            mediaType === "all"
+              ? (["movie", "tv"] as MediaType[]).map((requestMediaType) => ({
+                  mediaType: requestMediaType,
+                  endpoint: `/discover/${requestMediaType}`,
+                  params: {
+                    with_watch_providers: id,
+                    watch_region: "US",
+                    ...(requestMediaType === "movie"
+                      ? { primary_release_year: releaseYear }
+                      : { first_air_date_year: releaseYear }),
+                    ...originCountryParams,
+                  },
+                }))
+              : [
+                  {
+                    mediaType,
+                    endpoint: `/discover/${mediaType}`,
+                    params: {
+                      with_watch_providers: id,
+                      watch_region: "US",
+                      ...releaseYearParams,
+                      ...originCountryParams,
+                    },
+                  },
+                ];
+          data =
+            mediaType === "all"
+              ? await fetchMixedMedia(
+                  providerRequests,
+                  (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0),
+                )
+              : await fetchTMDBMedia(
+                  providerRequests[0]!.endpoint,
+                  providerRequests[0]!.params,
+                );
           if (data.results.length === 0 && formattedLanguage !== "en-US") {
-            data = await fetchTMDBMedia(`/discover/${mediaType}`, {
-              with_watch_providers: id,
-              watch_region: "US",
-              language: "en-US",
-              ...releaseYearParams,
-              ...originCountryParams,
-            });
+            data =
+              mediaType === "all"
+                ? await fetchMixedMedia(
+                    providerRequests.map((request) => ({
+                      ...request,
+                      params: {
+                        ...request.params,
+                        language: "en-US",
+                      },
+                    })),
+                    (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0),
+                  )
+                : await fetchTMDBMedia(providerRequests[0]!.endpoint, {
+                    ...providerRequests[0]!.params,
+                    language: "en-US",
+                  });
           }
           setSectionTitle(
-            mediaType === "movie"
-              ? t("discover.carousel.title.moviesOn", {
-                  provider: providerName,
-                })
-              : t("discover.carousel.title.tvshowsOn", {
-                  provider: providerName,
-                }),
+            mediaType === "all"
+              ? providerName || t("discover.carousel.title.popular")
+              : mediaType === "movie"
+                ? t("discover.carousel.title.moviesOn", {
+                    provider: providerName,
+                  })
+                : t("discover.carousel.title.tvshowsOn", {
+                    provider: providerName,
+                  }),
           );
           break;
+        }
 
         case "recommendations":
           if (!id) throw new Error("Media ID is required for recommendations");
@@ -602,16 +902,23 @@ export function useDiscoverMedia({
         case "editorPicks":
           data = await fetchEditorPicks();
           setSectionTitle(
-            mediaType === "movie"
-              ? t("discover.carousel.title.editorPicksMovies")
-              : t("discover.carousel.title.editorPicksShows"),
+            mediaType === "all"
+              ? t("discover.carousel.title.editorPicks", {
+                  defaultValue: "Editor's Picks",
+                })
+              : mediaType === "movie"
+                ? t("discover.carousel.title.editorPicksMovies")
+                : t("discover.carousel.title.editorPicksShows"),
           );
           break;
 
         case "trending":
-          data = await fetchTMDBMedia(
-            `/trending/${mediaType}/${timeWindow || "day"}`,
-          );
+          data =
+            mediaType === "all"
+              ? await fetchTMDBMixedFeed(`/trending/all/${timeWindow || "day"}`)
+              : await fetchTMDBMedia(
+                  `/trending/${mediaType}/${timeWindow || "day"}`,
+                );
           setSectionTitle(t("discover.carousel.title.trending"));
           break;
 
@@ -657,6 +964,45 @@ export function useDiscoverMedia({
           break;
 
         case "latest":
+          if (mediaType === "all") {
+            data = await fetchMixedMedia(
+              MIXED_MEDIA_TYPES.map((requestMediaType) => ({
+                mediaType: requestMediaType,
+                endpoint:
+                  releaseYear || hasOriginCountryFilter
+                    ? `/discover/${requestMediaType}`
+                    : requestMediaType === "movie"
+                      ? "/movie/now_playing"
+                      : "/tv/on_the_air",
+                params:
+                  releaseYear || hasOriginCountryFilter
+                    ? {
+                        sort_by:
+                          requestMediaType === "movie"
+                            ? "primary_release_date.desc"
+                            : "first_air_date.desc",
+                        ...(requestMediaType === "movie"
+                          ? { primary_release_year: releaseYear }
+                          : { first_air_date_year: releaseYear }),
+                        ...originCountryParams,
+                      }
+                    : undefined,
+              })),
+              (a, b) => {
+                const dateA =
+                  a.type === "movie" ? a.release_date : a.first_air_date;
+                const dateB =
+                  b.type === "movie" ? b.release_date : b.first_air_date;
+                return (
+                  new Date(dateB || 0).getTime() -
+                  new Date(dateA || 0).getTime()
+                );
+              },
+            );
+            setSectionTitle(t("discover.carousel.title.latestReleases"));
+            break;
+          }
+
           if (conf().USE_TRAKT && !releaseYear && !hasOriginCountryFilter) {
             try {
               data = await fetchTraktMedia(
@@ -816,6 +1162,8 @@ export function useDiscoverMedia({
     filterResultsByReleaseYear,
     fetchEditorPicks,
     fetchRecommendations,
+    fetchMixedMedia,
+    fetchTMDBMixedFeed,
     getTraktProviderFunction,
     t,
     page,

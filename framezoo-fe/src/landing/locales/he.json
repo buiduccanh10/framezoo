@@ -13,12 +13,12 @@
     "description": "השמעה מקורית, בקרות חדות יותר ומקום רגוע יותר לשעון הבא שלך.",
     "primaryCta": "הורד את שולחן העבודה",
     "secondaryCta": "ראה את החוויה",
-    "imageAlt": "תצוגה מקדימה של אפליקציית שולחן העבודה של FrameZoo",
+    "imageAlt": "תצוגה מקדימה של אפליקציית שולחן העבודה של Framezoo",
     "version": "שחרור שולחן העבודה"
   },
   "features": {
     "performanceTitle": "הספרייה שלך, ללא מס הדפדפן.",
-    "overviewDescription": "FrameZoo Desktop נותן להשמעה את החדר שהוא צריך: ביצועים מקוריים, מסירות נקיות ופקדים שנשארים מהדרך.",
+    "overviewDescription": "Framezoo Desktop נותן להשמעה את החדר שהוא צריך: ביצועים מקוריים, מסירות נקיות ופקדים שנשארים מהדרך.",
     "playback": "השמעה מקורית",
     "playbackDescription": "וידאו חלק עם טיפול במדיה ברמה שולחנית.",
     "performance": "הופעה שקטה",
@@ -33,7 +33,7 @@
     "addonThree": "הרחבות קהילתיות",
     "showcaseTitle": "המסך הוא היעד.",
     "showcaseDescription": "משטח שולחני ממוקד לגילוי, השמעה וכל מה שמסביב לסיפור.",
-    "showcaseCaption": "FrameZoo שולחן עבודה / מצב פוקוס",
+    "showcaseCaption": "Framezoo שולחן עבודה / מצב פוקוס",
     "subtitleSyncDescription": "יישר את דיאלוג הפתיחה עם התמונה בשניות.",
     "dualSubtitles": "השאר שתי שפות כתוביות גלויות",
     "dualSubtitlesDescription": "הפעל כתוביות כפולות כאשר אתה לומד, משווה, או פשוט מעדיף את שניהם.",
@@ -43,13 +43,13 @@
     "subtitleSync": "סנכרן כתוביות עם AI",
     "subtitleControls": "כוונן את הנגן סביבך",
     "showcaseSecondaryDescription": "התחל ממשטח גילוי נקי, ולאחר מכן עבור להפעלה מבלי לאבד את מקומך.",
-    "showcaseSecondaryAlt": "מסך גילוי FrameZoo עם חיפוש, קטגוריות ושורות כותרות",
+    "showcaseSecondaryAlt": "מסך גילוי Framezoo עם חיפוש, קטגוריות ושורות כותרות",
     "showcaseSecondaryTitle": "מצא משהו ששווה לראות.",
-    "showcasePrimaryAlt": "מסך פירוט הכותרת של FrameZoo עם יצירות אמנות, דירוגים, עונות ומטא נתונים"
+    "showcasePrimaryAlt": "מסך פירוט הכותרת של Framezoo עם יצירות אמנות, דירוגים, עונות ומטא נתונים"
   },
   "download": {
     "eyebrow": "בחר את המבנה שלך",
-    "title": "קח איתך את FrameZoo.",
+    "title": "קח איתך את Framezoo.",
     "description": "בחר את המבנה עבור המכונה שלך. הדפדפן שלך ייתן את ההמלצה, או יחשוף כל אפשרות זמינה למטה.",
     "recommended": "מוּמלָץ",
     "chooseBuild": "בחר מבנה",
@@ -72,7 +72,7 @@
   },
   "addonGuide": {
     "manifestDescription": "מטא נתונים מספרים לאפליקציה מיהו התוסף שלך, באילו משאבים היא תומכת והיכן הסמל שלה מתגורר.",
-    "description": "תוסף הוא שירות HTTP קטן. הציגו מניפסט ואת המשאבים הדרושים לכם; FrameZoo מטפל בשאר.",
+    "description": "תוסף הוא שירות HTTP קטן. הציגו מניפסט ואת המשאבים הדרושים לכם; Framezoo מטפל בשאר.",
     "title": "בנה תוסף מבלי להצטרף לתהליך האפליקציה.",
     "eyebrow": "פרוטוקול / מדריך של ADDON",
     "manifestTitle": "התחל עם manifest.json",
@@ -88,7 +88,7 @@
     "steps": [
       "שרת את /manifest.json ואת נקודות הקצה של המשאבים שלך משרת HTTP(S) מקומי או ציבורי.",
       "בדוק כל נקודת קצה עם סלסול ואמת את צורת ה-JSON.",
-      "הדבק את כתובת האתר של המניפסט לתוך FrameZoo Desktop > Addons."
+      "הדבק את כתובת האתר של המניפסט לתוך Framezoo Desktop > Addons."
     ],
     "advancedTitle": "צריך עוזר צומת?",
     "runTitle": "הפעל, בדוק, התקן",
@@ -96,9 +96,9 @@
     "advancedDescription": "ה-SDK של Stremio Addon הוא אופציונלי. השתמש בו אם אתה רוצה עוזרי ניתוב והסדרה; זה לא נדרש לפי הפרוטוקול."
   },
   "deepLink": {
-    "openingDescription": "הדפדפן שלך מנסה לפתוח את אפליקציית FrameZoo Desktop. אם מופיעה הנחיה, אנא בחר <1>Open FrameZoo</1>.",
-    "download": "הורד את FrameZoo",
-    "opening": "פותח את FrameZoo...",
+    "openingDescription": "הדפדפן שלך מנסה לפתוח את אפליקציית Framezoo Desktop. אם מופיעה הנחיה, אנא בחר <1>Open Framezoo</1>.",
+    "download": "הורד את Framezoo",
+    "opening": "פותח את Framezoo...",
     "retry": "נסה לפתוח שוב את אפליקציית שולחן העבודה",
     "backHome": "חזור לדף הבית"
   }

@@ -11,22 +11,20 @@
       "adding": "Hozzáadás...",
       "ariaClose": "A bővítménykezelő bezárása",
       "ariaManage": "Kiegészítők kezelése",
-      "createGuideLink": "Hogyan készítsünk kiegészítőt",
       "errorFallback": "Nem sikerült telepíteni ezt a kiegészítőt.",
       "manageListButton": "Kiegészítőlista kezelése",
       "subtitle": "Nem javasoljuk nem hivatalos vagy illegális kiegészítők hozzáadását.",
       "title": "Asztali kiegészítők"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Támogatott platformok az Addonokhoz:",
-      "supported": "Támogatott platformok: FrameZoo és Stremio"
+      "supported": "Támogatott platformok: Framezoo és Stremio"
     },
     "page": {
       "addAddonButton": "Addon hozzáadása",
       "description": "A kiegészítők nem kötelezőek. Ez az alkalmazás nem köt össze, ajánl vagy fogad semmilyen kiegészítőt.",
-      "createGuideLink": "Hozzon létre kiegészítő útmutatót",
       "disabled": "Letiltva",
       "emptyInstalled": "A rendszerbe még nincs telepítve kiegészítő.",
       "enabled": "Engedélyezve",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Vissza a tetejére",
     "tabs": {
+      "all": "Minden",
       "movies": "Filmek",
       "top10": "Top 10",
       "tvshows": "Sorozatok"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Hibák",
     "goHome": "Kezdőlapra",
-    "message": "FrameZoo hiábakt tapasztal néhány szolgáltatóval megint, ha nem találsz, vagy nem tudsz lejátszani egy sorozatot, változtass forrást. Az alábbi időszakokban ez a hiba várhatóan fennmarad.",
+    "message": "Framezoo hiábakt tapasztal néhány szolgáltatóval megint, ha nem találsz, vagy nem tudsz lejátszani egy sorozatot, változtass forrást. Az alábbi időszakokban ez a hiba várhatóan fennmarad.",
     "title": "Tartalomszolgáltatói problémák"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Figyelmeztetés",
-      "disclaimerText": "A FrameZoo biztonságos, modern és zökkenőmentes szórakozási élményt kínál. Könnyen használható kezelőfelületének és sokrétű tartalomkönyvtárának köszönhetően, beleértve a 4K HDR támogatást is, a felhasználók élvezhetik kedvenc filmeiket és tévéműsoraikat. A biztonság iránti elkötelezettségével a FrameZoo a tökéletes választás a gondtalan, kiváló minőségű streaming élményhez."
+      "disclaimerText": "A Framezoo biztonságos, modern és zökkenőmentes szórakozási élményt kínál. Könnyen használható kezelőfelületének és sokrétű tartalomkönyvtárának köszönhetően, beleértve a 4K HDR támogatást is, a felhasználók élvezhetik kedvenc filmeiket és tévéműsoraikat. A biztonság iránti elkötelezettségével a Framezoo a tökéletes választás a gondtalan, kiváló minőségű streaming élményhez."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +311,12 @@
       "subtitle": "Tartsa lenyomva a ` billentyűt a segítség bármikori megjelenítéséhez",
       "title": "Billentyűparancsok"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Felfedezés",
       "login": "Bejelentkezés",
       "migration": "Fiók átvitele",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Regisztrálás",
       "settings": "Beállítások"
     }
@@ -411,11 +410,11 @@
           "Mihez van kedved?",
           "Kitöröljük a böngészési előzményeidet?",
           "Mit akarsz streamelni?",
-          "FrameZoo mindenidők legjobb oldala!",
+          "Framezoo mindenidők legjobb oldala!",
           "Mi van a nézési listádon ma?",
           "Milyen volt a napod?",
           "A francba, bocsi, az én hibám, hogy soha se működik az oldal...",
-          "Ugye, hogy a FrameZoo a legjobb?",
+          "Ugye, hogy a Framezoo a legjobb?",
           "UwU"
         ]
       },
@@ -423,15 +422,15 @@
     },
     "support": {
       "complete": "teljes",
-      "description": "Az FrameZoo veszteségesen működik, és segítségre van szükségünk, hogy hirdetésmentes legyen! Ha élvezi az FrameZoo használatát, kérjük, fontolja meg az adományozást, hogy segítsen nekünk költségeinket fedezni.",
+      "description": "Az Framezoo veszteségesen működik, és segítségre van szükségünk, hogy hirdetésmentes legyen! Ha élvezi az Framezoo használatát, kérjük, fontolja meg az adományozást, hogy segítsen nekünk költségeinket fedezni.",
       "donate": "Adományoz",
-      "explanation": "Ha nem használja a bővítményt, vagy nincs beállítva a FED API, akkor nehezebb lehet tartalmat találni! Ezt szeretnénk javítani, de sokkal nehezebb drága szerverek nélkül tartalmat szolgáltatni. Ezért kérjük, ha élvezi az FrameZoo használatát, fontolja meg az adományozást, hogy segítsen nekünk fedezni növekvő költségeinket.",
+      "explanation": "Ha nem használja a bővítményt, vagy nincs beállítva a FED API, akkor nehezebb lehet tartalmat találni! Ezt szeretnénk javítani, de sokkal nehezebb drága szerverek nélkül tartalmat szolgáltatni. Ezért kérjük, ha élvezi az Framezoo használatát, fontolja meg az adományozást, hogy segítsen nekünk fedezni növekvő költségeinket.",
       "explanation2": "Ha további információra van szüksége, kérjük, csatlakozzon hozzánk",
       "fluxer": "Fluxer",
       "label": "Projektfinanszírozás: ${{current}} / ${{goal}}",
       "moreInfo": "További információ",
       "thankYou": "Köszönjük a támogatást!",
-      "title": "Az FrameZoonek szüksége van a segítségedre!"
+      "title": "A Framezoo segítségedre van szükség!"
     },
     "titles": {
       "69": {
@@ -449,7 +448,7 @@
       "day": {
         "default": "Mit szeretnél nézni e délután?",
         "extra": [
-          "Éljen az FrameZoo!"
+          "Éljen az Framezoo!"
         ]
       },
       "halloween": {
@@ -464,13 +463,13 @@
       "morning": {
         "default": "Mit szeretnél nézni e reggelen?",
         "extra": [
-          "Éljen az FrameZoo!"
+          "Éljen az Framezoo!"
         ]
       },
       "night": {
         "default": "Mit szeretnél nézni ezen az estén?",
         "extra": [
-          "Éljen az FrameZoo!"
+          "Éljen az Framezoo!"
         ]
       }
     },
@@ -561,7 +560,7 @@
       "title": "Listák"
     },
     "public": {
-      "descriptionFallback": "Megosztott gyűjtemény a FrameZoo-ban.",
+      "descriptionFallback": "Megosztott gyűjtemény a Framezoo-ban.",
       "notFoundDescription": "Ez a megosztási link hiányzik vagy már nem érhető el.",
       "notFoundTitle": "A lista nem található",
       "pageTitle": "Megosztott lista",
@@ -693,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Az Ön böngészője nem támogatja az automatikus PWA-telepítést.\nTovábbra is telepítheti a böngésző menüjét (például: „Alkalmazás telepítése”, „Parancsikon létrehozása” vagy „Hozzáadás a dokkolóhoz/Kezdőképernyőhöz”).",
-      "iosSafariGuide": "Az FrameZoo alkalmazásként történő telepítése:\n\n1. Érintse meg a Megosztás gombot (négyzet nyíllal).\n2. Válassza a \"Hozzáadás a kezdőképernyőhöz\" lehetőséget.\n3. Érintse meg a Hozzáadás gombot."
+      "iosSafariGuide": "Az Framezoo alkalmazásként történő telepítése:\n\n1. Érintse meg a Megosztás gombot (négyzet nyíllal).\n2. Válassza a \"Hozzáadás a kezdőképernyőhöz\" lehetőséget.\n3. Érintse meg a Hozzáadás gombot."
     },
     "menu": {
       "accountMenu": "Nyissa meg a fiók menüt",

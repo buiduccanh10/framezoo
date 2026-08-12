@@ -18,7 +18,7 @@
   },
   "features": {
     "performanceTitle": "Teie raamatukogu ilma brauserimaksuta.",
-    "overviewDescription": "FrameZoo Desktop annab taasesitamiseks vajaliku ruumi: loomulik jõudlus, puhtad üleandmised ja juhtnupud, mis jäävad eemale.",
+    "overviewDescription": "Framezoo Desktop annab taasesitamiseks vajaliku ruumi: loomulik jõudlus, puhtad üleandmised ja juhtnupud, mis jäävad eemale.",
     "playback": "Algne taasesitus",
     "playbackDescription": "Sujuv video töölauatasemel meediakäsitlusega.",
     "performance": "Vaikne jõudlus",
@@ -33,23 +33,23 @@
     "addonThree": "kogukonna laiendused",
     "showcaseTitle": "Ekraan on sihtkoht.",
     "showcaseDescription": "Fokuseeritud töölauapind avastamiseks, taasesituseks ja kõigeks loo ümber.",
-    "showcaseCaption": "FrameZoo töölaua / fookuse režiim",
+    "showcaseCaption": "Framezoo töölaua / fookuse režiim",
     "dualSubtitles": "Hoidke kaks subtiitrite keelt nähtaval",
     "dualSubtitlesDescription": "Lülitage topeltsubtiitrid sisse, kui õpite, võrdlete või lihtsalt eelistate mõlemat.",
     "experienceTitle": "Kõik, mida parema käekella jaoks vaja on.",
     "featureLabel": "Mängija, teie tee",
     "subtitleSyncDescription": "Joondage avadialoog sekunditega pildiga.",
     "subtitleSync": "Sünkroonige subtiitrid tehisintellektiga",
-    "showcasePrimaryAlt": "FrameZoo pealkirja üksikasjade ekraan kunstiteoste, hinnangute, aastaaegade ja metaandmetega",
+    "showcasePrimaryAlt": "Framezoo pealkirja üksikasjade ekraan kunstiteoste, hinnangute, aastaaegade ja metaandmetega",
     "showcaseSecondaryDescription": "Alustage puhtalt avastamispinnalt, seejärel liikuge taasesitusse ilma oma kohta kaotamata.",
     "showcaseSecondaryTitle": "Leidke midagi, mida tasub vaadata.",
     "subtitleControls": "Häälestage mängija enda ümber",
-    "showcaseSecondaryAlt": "FrameZoo avastusekraan otsingu, kategooriate ja tiitliridadega",
+    "showcaseSecondaryAlt": "Framezoo avastusekraan otsingu, kategooriate ja tiitliridadega",
     "subtitleControlsDescription": "Valige subtiitrite allikas, keel, ajastus ja ekraan ilma oma voogu katkestamata."
   },
   "download": {
     "eyebrow": "VALI OMA EHITUS",
-    "title": "Võtke FrameZoo endaga kaasa.",
+    "title": "Võtke Framezoo endaga kaasa.",
     "description": "Valige oma masina ehitus. Teie brauser annab soovituse või kuvab allpool kõik saadaolevad valikud.",
     "recommended": "Soovitatav",
     "chooseBuild": "Valige ehitus",
@@ -71,7 +71,7 @@
     "status": "Töölaud kõigepealt. Lisandmooduliks valmis."
   },
   "addonGuide": {
-    "description": "Lisand on väike HTTP-teenus. Esitage manifest ja vajalikud vahendid; FrameZoo tegeleb ülejäänuga.",
+    "description": "Lisand on väike HTTP-teenus. Esitage manifest ja vajalikud vahendid; Framezoo tegeleb ülejäänuga.",
     "manifestTitle": "Alustage failist manifest.json",
     "eyebrow": "LISAPROTOKOLL / JUHEND",
     "manifestDescription": "Metaandmed ütlevad rakendusele, kes on teie lisand, milliseid ressursse see toetab ja kus selle ikoon asub.",
@@ -89,7 +89,7 @@
     "steps": [
       "Esitage /manifest.json ja oma ressursi lõpp-punktid kohalikust või avalikust HTTP(S) serverist.",
       "Testige iga lõpp-punkti kõverusega ja kontrollige JSON-i kuju.",
-      "Kleepige manifesti URL jaotisesse FrameZoo Desktop > Lisad."
+      "Kleepige manifesti URL jaotisesse Framezoo Desktop > Lisad."
     ],
     "advancedDescription": "Stremio Addoni SDK on valikuline. Kasutage seda, kui soovite marsruutimise ja serialiseerimise abilisi; seda protokoll ei nõua.",
     "advancedTitle": "Kas vajate Node'i abilist?",
@@ -97,9 +97,9 @@
   },
   "deepLink": {
     "retry": "Proovige töölauarakendus uuesti avada",
-    "opening": "FrameZoo avamine...",
+    "opening": "Framezoo avamine...",
     "backHome": "Mine tagasi avalehele",
-    "openingDescription": "Teie brauser üritab avada FrameZoo Desktopi rakendust. Kui kuvatakse viip, valige <1>Open FrameZoo</1>.",
-    "download": "Laadige alla FrameZoo"
+    "openingDescription": "Teie brauser üritab avada Framezoo Desktopi rakendust. Kui kuvatakse viip, valige <1>Open Framezoo</1>.",
+    "download": "Laadige alla Framezoo"
   }
 }

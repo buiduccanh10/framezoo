@@ -11,22 +11,20 @@
       "adding": "Menambahkan...",
       "ariaClose": "Tutup manajer addon",
       "ariaManage": "Kelola tambahan",
-      "createGuideLink": "Cara membuat tambahan",
       "errorFallback": "Tidak dapat memasang addon ini.",
       "manageListButton": "Kelola daftar tambahan",
       "subtitle": "Kami tidak menyarankan menambahkan add-on yang tidak resmi atau ilegal.",
       "title": "Tambahan Desktop"
     },
     "platforms": {
-      "framezoo": "BingkaiKebun Binatang",
-      "stremio": "tremio",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "Platform yang didukung untuk Addons:",
-      "supported": "Platform yang didukung: FrameZoo dan Stremio"
+      "supported": "Platform yang didukung: Framezoo dan Stremio"
     },
     "page": {
       "addAddonButton": "Tambahkan Addon",
       "description": "Add-on bersifat opsional. Aplikasi ini tidak memaketkan, merekomendasikan, atau menghosting add-on apa pun.",
-      "createGuideLink": "Buat panduan tambahan",
       "disabled": "Dengan disabilitas",
       "emptyInstalled": "Belum ada tambahan yang terpasang di sistem.",
       "enabled": "Diaktifkan",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Kembali ke atas",
     "tabs": {
+      "all": "Semua",
       "movies": "Film",
       "top10": "10 teratas",
       "tvshows": "Acara TV"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Masalah",
     "goHome": "Pulang",
-    "message": "FrameZoo kembali mengalami masalah dengan beberapa penyedia, jika Anda tidak dapat menemukan atau memutar acara, harap ubah sumbernya. Harapkan kesalahan ini terus berlanjut sepanjang waktu di bawah ini.",
+    "message": "Framezoo kembali mengalami masalah dengan beberapa penyedia, jika Anda tidak dapat menemukan atau memutar acara, harap ubah sumbernya. Harapkan kesalahan ini terus berlanjut sepanjang waktu di bawah ini.",
     "title": "Masalah penyedia"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Sanggahan",
-      "disclaimerText": "FrameZoo menawarkan pengalaman hiburan yang aman, modern, dan lancar. Dengan antarmuka yang mudah digunakan dan pustaka konten yang beragam, termasuk dukungan 4K HDR, pengguna dapat menikmati film dan acara TV favorit mereka. Dan dengan komitmennya terhadap keamanan, FrameZoo adalah pilihan utama untuk pengalaman streaming berkualitas tinggi tanpa rasa khawatir."
+      "disclaimerText": "Framezoo menawarkan pengalaman hiburan yang aman, modern, dan lancar. Dengan antarmuka yang mudah digunakan dan pustaka konten yang beragam, termasuk dukungan 4K HDR, pengguna dapat menikmati film dan acara TV favorit mereka. Dan dengan komitmennya terhadap keamanan, Framezoo adalah pilihan utama untuk pengalaman streaming berkualitas tinggi tanpa rasa khawatir."
     },
     "links": {
       "fluxer": "fluks",
@@ -312,12 +311,12 @@
       "subtitle": "Tahan ` untuk menampilkan bantuan ini kapan saja",
       "title": "Pintasan Papan Ketik"
     },
-    "name": "AlfaFlix",
+    "name": "Framezoo",
     "pages": {
       "discover": "Menemukan",
       "login": "Masuk",
       "migration": "Migrasi Akun",
-      "pagetitle": "{{title}} - AlfaFlix",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Daftar",
       "settings": "Pengaturan"
     }
@@ -415,7 +414,7 @@
           "Apa yang ada dalam daftar pantauan Anda hari ini?",
           "Apa kabar hari ini?",
           "Sayang sekali situs ini tidak pernah berfungsi...",
-          "Bukankah FrameZoo yang terbaik?",
+          "Bukankah Framezoo yang terbaik?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +422,15 @@
     },
     "support": {
       "complete": "menyelesaikan",
-      "description": "FrameZoo dijalankan dalam keadaan bingung, dan kami membutuhkan bantuan untuk menjaganya tetap bebas iklan! Jika Anda senang menggunakan FrameZoo, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami.",
+      "description": "Framezoo dijalankan dalam keadaan bingung, dan kami membutuhkan bantuan untuk menjaganya tetap bebas iklan! Jika Anda senang menggunakan Framezoo, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami.",
       "donate": "Menyumbangkan",
-      "explanation": "Jika Anda tidak menggunakan ekstensi atau belum menyiapkan FED API, mungkin akan lebih sulit menemukan konten! Kami ingin memperbaikinya, tetapi menyediakan konten tanpa server yang mahal jauh lebih sulit. Jadi mohon, jika Anda senang menggunakan FrameZoo, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami yang terus meningkat.",
+      "explanation": "Jika Anda tidak menggunakan ekstensi atau belum menyiapkan FED API, mungkin akan lebih sulit menemukan konten! Kami ingin memperbaikinya, tetapi menyediakan konten tanpa server yang mahal jauh lebih sulit. Jadi mohon, jika Anda senang menggunakan Framezoo, mohon pertimbangkan untuk berdonasi untuk membantu kami menutupi biaya kami yang terus meningkat.",
       "explanation2": "Jika Anda ingin info lebih lanjut, silakan bergabung dengan kami",
       "fluxer": "fluks",
       "label": "Pendanaan Proyek: ${{current}} / ${{goal}}",
       "moreInfo": "Informasi lebih lanjut",
       "thankYou": "Terima kasih atas dukungan Anda!",
-      "title": "FrameZoo membutuhkan bantuan Anda!"
+      "title": "Framezoo membutuhkan bantuan Anda!"
     },
     "titles": {
       "69": {
@@ -561,7 +560,7 @@
       "title": "Daftar"
     },
     "public": {
-      "descriptionFallback": "Koleksi bersama yang dikurasi di FrameZoo.",
+      "descriptionFallback": "Koleksi bersama yang dikurasi di Framezoo.",
       "notFoundDescription": "Tautan berbagi ini tidak ada atau tidak tersedia lagi.",
       "notFoundTitle": "Daftar tidak ditemukan",
       "pageTitle": "Daftar bersama",
@@ -693,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Browser Anda tidak mendukung perintah pemasangan PWA otomatis.\nAnda masih dapat menginstal menggunakan menu browser (misalnya: 'Instal aplikasi', 'Buat pintasan', atau 'Tambahkan ke Dock/Layar Beranda').",
-      "iosSafariGuide": "Untuk menginstal FrameZoo sebagai aplikasi:\n\n1. Ketuk tombol Bagikan (persegi dengan panah).\n2. Pilih 'Tambahkan ke Layar Beranda'.\n3. Ketuk Tambah."
+      "iosSafariGuide": "Untuk menginstal Framezoo sebagai aplikasi:\n\n1. Ketuk tombol Bagikan (persegi dengan panah).\n2. Pilih 'Tambahkan ke Layar Beranda'.\n3. Ketuk Tambah."
     },
     "menu": {
       "accountMenu": "Buka menu akun",

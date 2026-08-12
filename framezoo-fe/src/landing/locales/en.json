@@ -12,7 +12,7 @@
     "description": "Discover, play, and tune every detail without leaving the story.",
     "primaryCta": "Download desktop",
     "secondaryCta": "Explore the experience",
-    "imageAlt": "FrameZoo desktop app showing the discovery screen",
+    "imageAlt": "Framezoo desktop app showing the discovery screen",
     "version": "Desktop release"
   },
   "features": {
@@ -27,22 +27,22 @@
     "subtitleControlsDescription": "Choose subtitle source, language, timing, and display without breaking your flow.",
     "ecosystemTitle": "The essentials live in the player.",
     "ecosystemDescription": "Subtitles, catalog metadata, and playback controls are built in. Addons extend the edges with more sources and catalogs when you need them.",
-    "addonLabel": "Inside FrameZoo",
+    "addonLabel": "Inside Framezoo",
     "addonOne": "Subtitle controls",
     "addonTwo": "Catalog metadata",
     "addonThree": "Addon support",
     "showcaseTitle": "Context before play.",
     "showcaseDescription": "Open a title and get the story around it: artwork, ratings, seasons, and metadata in one place.",
-    "showcasePrimaryAlt": "FrameZoo title detail screen with artwork, ratings, seasons, and metadata",
+    "showcasePrimaryAlt": "Framezoo title detail screen with artwork, ratings, seasons, and metadata",
     "showcaseSecondaryTitle": "Find something worth watching.",
     "showcaseSecondaryDescription": "Start from a clean discovery surface, then move into playback without losing your place.",
-    "showcaseSecondaryAlt": "FrameZoo discovery screen with search, categories, and title rows"
+    "showcaseSecondaryAlt": "Framezoo discovery screen with search, categories, and title rows"
   },
   "addonGuide": {
     "eyebrow": "BUILD WITH FRAMEZOO",
     "title": "Add a source without rebuilding the player.",
-    "description": "An addon is a small HTTP service. Provide the resources you need; FrameZoo handles the rest.",
-    "manifestTitle": "Tell FrameZoo what you provide.",
+    "description": "An addon is a small HTTP service. Provide the resources you need; Framezoo handles the rest.",
+    "manifestTitle": "Tell Framezoo what you provide.",
     "manifestDescription": "Your manifest gives the app a name, supported resources, and a home for its icon.",
     "resourcesTitle": "Bring the pieces you need.",
     "resourcesDescription": "Implement only the endpoints your addon needs. Responses are JSON and can be written in any language.",
@@ -57,7 +57,7 @@
     "steps": [
       "Serve /manifest.json and your resource endpoints from a local or public HTTP(S) server.",
       "Test each endpoint with curl and verify the JSON shape.",
-      "Paste the manifest URL into FrameZoo > Addons."
+      "Paste the manifest URL into Framezoo > Addons."
     ],
     "advancedTitle": "Want a helper?",
     "advancedDescription": "The Stremio Addon SDK is optional. Use it for routing and serialization helpers; the protocol does not require it.",
@@ -87,10 +87,10 @@
     "status": "Desktop-first. Addon-ready."
   },
   "deepLink": {
-    "opening": "Opening FrameZoo...",
-    "openingDescription": "Your browser is trying to open the FrameZoo Desktop app. If a prompt appears, please select <1>Open FrameZoo</1>.",
+    "opening": "Opening Framezoo...",
+    "openingDescription": "Your browser is trying to open the Framezoo Desktop app. If a prompt appears, please select <1>Open Framezoo</1>.",
     "retry": "Try opening Desktop App again",
-    "download": "Download FrameZoo",
+    "download": "Download Framezoo",
     "backHome": "Go back to homepage"
   }
 }

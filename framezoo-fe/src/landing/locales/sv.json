@@ -13,12 +13,12 @@
     "description": "Inbyggd uppspelning, skarpare kontroller och en lugnare plats för din nästa klocka.",
     "primaryCta": "Ladda ner skrivbordet",
     "secondaryCta": "Se upplevelsen",
-    "imageAlt": "FrameZoo förhandsvisning av skrivbordsapp",
+    "imageAlt": "Framezoo förhandsvisning av skrivbordsapp",
     "version": "Skrivbordsversion"
   },
   "features": {
     "performanceTitle": "Ditt bibliotek, utan webbläsarskatten.",
-    "overviewDescription": "FrameZoo Desktop ger uppspelningen rummet den behöver: inbyggd prestanda, rena handoffs och kontroller som håller sig ur vägen.",
+    "overviewDescription": "Framezoo Desktop ger uppspelningen rummet den behöver: inbyggd prestanda, rena handoffs och kontroller som håller sig ur vägen.",
     "playback": "Inbyggd uppspelning",
     "playbackDescription": "Smidig video med mediehantering av skrivbordskvalitet.",
     "performance": "Tyst prestanda",
@@ -33,7 +33,7 @@
     "addonThree": "Community-tillägg",
     "showcaseTitle": "Skärmen är destinationen.",
     "showcaseDescription": "En fokuserad skrivbordsyta för upptäckt, uppspelning och allt runt historien.",
-    "showcaseCaption": "FrameZoo Desktop / Fokusläge",
+    "showcaseCaption": "Framezoo Desktop / Fokusläge",
     "dualSubtitles": "Håll två undertextspråk synliga",
     "dualSubtitlesDescription": "Slå på dubbla undertexter när du lär dig, jämför eller helt enkelt föredrar båda.",
     "featureLabel": "Spelaren, på ditt sätt",
@@ -43,13 +43,13 @@
     "subtitleControls": "Ställ in spelaren runt dig",
     "showcaseSecondaryTitle": "Hitta något värt att titta på.",
     "subtitleControlsDescription": "Välj undertextkälla, språk, timing och visning utan att bryta ditt flöde.",
-    "showcaseSecondaryAlt": "FrameZoo upptäcktsskärm med sökning, kategorier och titelrader",
+    "showcaseSecondaryAlt": "Framezoo upptäcktsskärm med sökning, kategorier och titelrader",
     "showcaseSecondaryDescription": "Börja från en ren upptäcktsyta och gå sedan till uppspelning utan att förlora din plats.",
-    "showcasePrimaryAlt": "FrameZoo-titeldetaljskärm med konstverk, betyg, säsonger och metadata"
+    "showcasePrimaryAlt": "Framezoo-titeldetaljskärm med konstverk, betyg, säsonger och metadata"
   },
   "download": {
     "eyebrow": "VÄLJ DIN BYGG",
-    "title": "Ta med dig FrameZoo.",
+    "title": "Ta med dig Framezoo.",
     "description": "Välj konstruktion för din maskin. Din webbläsare kommer att ge rekommendationen, eller avslöja alla tillgängliga alternativ nedan.",
     "recommended": "Rekommenderad",
     "chooseBuild": "Välj en konstruktion",
@@ -74,7 +74,7 @@
     "manifestTitle": "Börja med manifest.json",
     "eyebrow": "ADDON PROTOKOLL / GUIDE",
     "title": "Bygg ett tillägg utan att gå med i appprocessen.",
-    "description": "Ett tillägg är en liten HTTP-tjänst. Servera ett manifest och de resurser du behöver; FrameZoo sköter resten.",
+    "description": "Ett tillägg är en liten HTTP-tjänst. Servera ett manifest och de resurser du behöver; Framezoo sköter resten.",
     "manifestDescription": "Metadata berättar för appen vem ditt tillägg är, vilka resurser den stöder och var dess ikon finns.",
     "resources": {
       "meta": "Film- eller seriemetadata för en titel.",
@@ -88,7 +88,7 @@
     "steps": [
       "Servera /manifest.json och dina resursslutpunkter från en lokal eller offentlig HTTP(S)-server.",
       "Testa varje slutpunkt med curl och verifiera JSON-formen.",
-      "Klistra in manifestets URL i FrameZoo Desktop > Addons."
+      "Klistra in manifestets URL i Framezoo Desktop > Addons."
     ],
     "runTitle": "Kör, testa, installera",
     "advancedTitle": "Behöver du en nodhjälpare?",
@@ -96,9 +96,9 @@
     "advancedDescription": "Stremio Addon SDK är valfritt. Använd den om du vill ha routing- och serialiseringshjälpare; det krävs inte av protokollet."
   },
   "deepLink": {
-    "opening": "Öppnar FrameZoo...",
-    "download": "Ladda ner FrameZoo",
-    "openingDescription": "Din webbläsare försöker öppna FrameZoo Desktop-appen. Om en prompt visas, välj <1>Open FrameZoo</1>.",
+    "opening": "Öppnar Framezoo...",
+    "download": "Ladda ner Framezoo",
+    "openingDescription": "Din webbläsare försöker öppna Framezoo Desktop-appen. Om en prompt visas, välj <1>Open Framezoo</1>.",
     "retry": "Försök att öppna Desktop App igen",
     "backHome": "Gå tillbaka till hemsidan"
   }

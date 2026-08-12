@@ -13,12 +13,12 @@
     "description": "Reproducció nativa, controls més nítids i un lloc més tranquil per al teu proper rellotge.",
     "primaryCta": "Descarrega l'escriptori",
     "secondaryCta": "Veure l'experiència",
-    "imageAlt": "Vista prèvia de l'aplicació d'escriptori FrameZoo",
+    "imageAlt": "Vista prèvia de l'aplicació d'escriptori Framezoo",
     "version": "Alliberament d'escriptori"
   },
   "features": {
     "performanceTitle": "La teva biblioteca, sense l'impost del navegador.",
-    "overviewDescription": "FrameZoo Desktop ofereix la reproducció de l'espai que necessita: rendiment natiu, transferències netes i controls que es mantenen fora del camí.",
+    "overviewDescription": "Framezoo Desktop ofereix la reproducció de l'espai que necessita: rendiment natiu, transferències netes i controls que es mantenen fora del camí.",
     "playback": "Reproducció nativa",
     "playbackDescription": "Vídeo suau amb maneig de suports d'escriptori.",
     "performance": "Rendiment tranquil",
@@ -33,7 +33,7 @@
     "addonThree": "Extensions de comunitat",
     "showcaseTitle": "La pantalla és la destinació.",
     "showcaseDescription": "Una superfície d'escriptori centrada per al descobriment, la reproducció i tot el que envolta la història.",
-    "showcaseCaption": "FrameZoo Desktop / Mode Focus",
+    "showcaseCaption": "Framezoo Desktop / Mode Focus",
     "experienceTitle": "Tot el que necessiteu per a un millor rellotge.",
     "featureLabel": "El jugador, a la teva manera",
     "subtitleSync": "Sincronitza subtítols amb IA",
@@ -42,14 +42,14 @@
     "subtitleSyncDescription": "Alineeu el diàleg inicial amb la imatge en segons.",
     "subtitleControls": "Sintonitza el reproductor al teu voltant",
     "subtitleControlsDescription": "Trieu la font dels subtítols, l'idioma, el temps i la visualització sense interrompre el vostre flux.",
-    "showcasePrimaryAlt": "Pantalla de detalls del títol de FrameZoo amb obres d'art, classificacions, temporades i metadades",
+    "showcasePrimaryAlt": "Pantalla de detalls del títol de Framezoo amb obres d'art, classificacions, temporades i metadades",
     "showcaseSecondaryTitle": "Trobeu alguna cosa que valgui la pena veure.",
     "showcaseSecondaryDescription": "Comença des d'una superfície de descobriment neta i després passa a la reproducció sense perdre el teu lloc.",
-    "showcaseSecondaryAlt": "Pantalla de descobriment de FrameZoo amb cerca, categories i files de títol"
+    "showcaseSecondaryAlt": "Pantalla de descobriment de Framezoo amb cerca, categories i files de títol"
   },
   "download": {
     "eyebrow": "TRIA LA TEVA CONSTRUCCIÓ",
-    "title": "Porta FrameZoo amb tu.",
+    "title": "Porta Framezoo amb tu.",
     "description": "Trieu la construcció per a la vostra màquina. El vostre navegador farà la recomanació o revelarà totes les opcions disponibles a continuació.",
     "recommended": "Recomanat",
     "chooseBuild": "Trieu una construcció",
@@ -74,7 +74,7 @@
     "title": "Creeu un complement sense unir-vos al procés de l'aplicació.",
     "manifestTitle": "Comenceu amb manifest.json",
     "eyebrow": "PROTOCOL / GUIA ADDON",
-    "description": "Un complement és un petit servei HTTP. Doneu un manifest i els recursos que necessiteu; FrameZoo s'encarrega de la resta.",
+    "description": "Un complement és un petit servei HTTP. Doneu un manifest i els recursos que necessiteu; Framezoo s'encarrega de la resta.",
     "manifestDescription": "Les metadades indiquen a l'aplicació qui és el vostre complement, quins recursos admet i on es troba la seva icona.",
     "resourcesTitle": "Trieu els recursos",
     "resources": {
@@ -89,16 +89,16 @@
     "steps": [
       "Doneu /manifest.json i els vostres punts finals de recursos des d'un servidor HTTP(S) local o públic.",
       "Proveu cada punt final amb curl i verifiqueu la forma JSON.",
-      "Enganxeu l'URL del manifest a FrameZoo Desktop > Complements."
+      "Enganxeu l'URL del manifest a Framezoo Desktop > Complements."
     ],
     "advancedTitle": "Necessites un ajudant de Node?",
     "advancedDescription": "L'SDK del complement Stremio és opcional. Utilitzeu-lo si voleu ajudants d'encaminament i serialització; no ho exigeix ​​el protocol.",
     "advancedLink": "Obriu la referència SDK avançada"
   },
   "deepLink": {
-    "opening": "Obrint FrameZoo...",
-    "openingDescription": "El vostre navegador està provant d'obrir l'aplicació FrameZoo Desktop. Si apareix una sol·licitud, seleccioneu <1>Obre FrameZoo</1>.",
-    "download": "Descarrega FrameZoo",
+    "opening": "Obrint Framezoo...",
+    "openingDescription": "El vostre navegador està provant d'obrir l'aplicació Framezoo Desktop. Si apareix una sol·licitud, seleccioneu <1>Obre Framezoo</1>.",
+    "download": "Descarrega Framezoo",
     "backHome": "Torna a la pàgina d'inici",
     "retry": "Proveu d'obrir l'aplicació d'escriptori de nou"
   }

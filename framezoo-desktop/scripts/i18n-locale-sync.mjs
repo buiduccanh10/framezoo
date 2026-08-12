@@ -41,6 +41,22 @@ const GOOGLE_LANG_MAP = {
   zh: "zh-CN",
 };
 
+const PROTECTED_TRANSLATIONS = new Map([
+  ["addons.platforms.framezoo", "Framezoo"],
+  ["addons.platforms.stremio", "Stremio"],
+  ["global.name", "Framezoo"],
+  ["global.pages.pagetitle", "{{title}} - Framezoo"],
+]);
+const PROTECTED_KEYS = new Set(PROTECTED_TRANSLATIONS.keys());
+
+
+function parseKeyList(value) {
+  return value
+    .split(",")
+    .map((k) => k.trim())
+    .filter(Boolean);
+}
+
 function parseArgs(argv) {
   const args = {
     cmd: "audit",
@@ -55,35 +71,28 @@ function parseArgs(argv) {
     else if (arg === "--") continue;
     else if (arg.startsWith("--locale="))
       args.locale = arg.slice("--locale=".length);
-    else if (arg.startsWith("--force-keys=")) {
+    else if (arg.startsWith("--force=")) {
       args.forceKeysRequested = true;
-      args.forceKeys = arg
-        .slice("--force-keys=".length)
-        .split(",")
-        .map((k) => k.trim())
-        .filter(Boolean);
-    }
-    else if (arg === "--force-keys") {
+      args.forceKeys.push(...parseKeyList(arg.slice("--force=".length)));
+    } else if (arg === "--force") {
       args.forceKeysRequested = true;
       if (argv[i + 1] === "--") i++;
       const next = argv[i + 1];
       if (next && !next.startsWith("--")) {
-        args.forceKeys = next
-          .split(",")
-          .map((k) => k.trim())
-          .filter(Boolean);
+        args.forceKeys.push(...parseKeyList(next));
         i++;
       }
     } else if (arg === "--write") args.write = true;
     else if (arg.startsWith("--"))
       throw new Error(
-        `Unknown option "${arg}". Use --force-keys <key>[,<key>...] and --locale=<locale>.`,
+        `Unknown option "${arg}". Use --force <key>[,<key>...] and --locale=<locale>.`,
       );
   }
   if (args.forceKeysRequested && !args.forceKeys.length)
     throw new Error(
-      "--force-keys requires at least one translation key, for example: --force-keys addons.manager.subtitle",
+      "--force requires at least one translation key, for example: --force addons.manager.subtitle",
     );
+  args.forceKeys = [...new Set(args.forceKeys)];
   return args;
 }
 
@@ -154,11 +163,19 @@ function shouldTranslate(text) {
 
 function maskPlaceholders(text) {
   const saved = [];
-  const masked = text.replace(PLACEHOLDER_RE, (m) => {
-    const token = `__PH_${saved.length}__`;
-    saved.push([token, m]);
-    return token;
-  });
+  const masked = text
+    .replace(PLACEHOLDER_RE, (m) => {
+      const token = `__PH_${saved.length}__`;
+      saved.push([token, m]);
+      return token;
+    })
+    .replace(/\b(Framezoo|Stremio)\b/gi, (brand) => {
+      const token = `__BRAND_${saved.length}__`;
+      const canonical =
+        brand.toLowerCase() === "stremio" ? "Stremio" : "Framezoo";
+      saved.push([token, canonical]);
+      return token;
+    });
   return { masked, saved };
 }
 
@@ -184,8 +201,7 @@ async function translateText(source, targetLang) {
       const translated = data?.[0]?.map((x) => x?.[0] ?? "").join("") ?? "";
       if (translated) return translated;
     } catch {
-      if (attempt < 3)
-        await new Promise((r) => setTimeout(r, 2000 * attempt));
+      if (attempt < 3) await new Promise((r) => setTimeout(r, 2000 * attempt));
     }
   }
   return null;
@@ -204,8 +220,7 @@ async function readJson(filePath) {
 }
 
 function buildSchemaOnlyFromEn(enObj) {
-  if (Array.isArray(enObj))
-    return enObj.map((x) => buildSchemaOnlyFromEn(x));
+  if (Array.isArray(enObj)) return enObj.map((x) => buildSchemaOnlyFromEn(x));
   if (isObject(enObj)) {
     const out = {};
     for (const [k, v] of Object.entries(enObj))
@@ -219,6 +234,12 @@ async function main() {
   const args = parseArgs(process.argv.slice(2));
   const enJson = await readJson(EN_FILE);
   const enLeaves = flattenLeaves(enJson);
+  const unknownForceKeys = args.forceKeys.filter((key) => !enLeaves.has(key));
+  if (unknownForceKeys.length) {
+    throw new Error(
+      `Unknown translation key(s): ${unknownForceKeys.join(", ")}`,
+    );
+  }
   const files = (await fs.readdir(LOCALES_DIR))
     .filter((f) => f.endsWith(".json"))
     .sort((a, b) => a.localeCompare(b));
@@ -243,11 +264,7 @@ async function main() {
       let sameAsEn = 0;
       for (const [k, enVal] of enLeaves.entries()) {
         const v = leaves.get(k);
-        if (
-          typeof v === "string" &&
-          typeof enVal === "string" &&
-          v === enVal
-        ) {
+        if (typeof v === "string" && typeof enVal === "string" && v === enVal) {
           sameAsEn += 1;
         }
       }
@@ -268,7 +285,12 @@ async function main() {
 
     for (const [k] of enLeaves.entries()) {
       const existing = getByPath(rawLocale, k);
-      if (existing !== undefined) setByPath(localeJson, k, existing);
+      if (existing === undefined) continue;
+      setByPath(localeJson, k, existing);
+    }
+
+    for (const [key, value] of PROTECTED_TRANSLATIONS) {
+      if (enLeaves.has(key)) setByPath(localeJson, key, value);
     }
 
     if (SKIP_LOCALES.has(locale)) {
@@ -279,14 +301,13 @@ async function main() {
     }
 
     const targetLang = localeToGoogle(locale);
-    const leaves = flattenLeaves(localeJson);
     const candidates = [];
 
     for (const [k, enVal] of enLeaves.entries()) {
       const forceTranslate = args.forceKeys.includes(k);
-      const cur = leaves.get(k);
 
       if (typeof enVal !== "string") continue;
+      if (PROTECTED_KEYS.has(k)) continue;
 
       if (forceTranslate) {
         if (!shouldTranslate(enVal)) continue;
@@ -294,10 +315,9 @@ async function main() {
         continue;
       }
 
-      if (typeof cur !== "string") continue;
-      if (cur !== enVal) continue;
-      if (!shouldTranslate(cur)) continue;
-      candidates.push([k, cur]);
+      if (getByPath(rawLocale, k) !== undefined) continue;
+      if (!shouldTranslate(enVal)) continue;
+      candidates.push([k, enVal]);
     }
 
     console.log(
@@ -319,7 +339,9 @@ async function main() {
       done += 1;
       const percent = Math.round((done / candidates.length) * 100);
       if (done % 25 === 0 || done === candidates.length) {
-        console.log(`  - ${locale}: ${done}/${candidates.length} (${percent}%)`);
+        console.log(
+          `  - ${locale}: ${done}/${candidates.length} (${percent}%)`,
+        );
       }
 
       // Sleep to avoid rate limit
@@ -327,12 +349,14 @@ async function main() {
     }
 
     if (args.write) {
-      await fs.writeFile(
-        localePath,
-        `${JSON.stringify(localeJson, null, 2)}\n`,
-        "utf8",
-      );
-      console.log(`  saved: ${file}`);
+      const serialized = `${JSON.stringify(localeJson, null, 2)}\n`;
+      const original = await fs.readFile(localePath, "utf8");
+      if (serialized !== original) {
+        await fs.writeFile(localePath, serialized, "utf8");
+        console.log(`  saved: ${file}`);
+      } else {
+        console.log(`  unchanged: ${file}`);
+      }
     } else {
       console.log(`  dry-run: ${file} not written (use --write)`);
     }

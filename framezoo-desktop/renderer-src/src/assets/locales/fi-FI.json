@@ -11,22 +11,20 @@
       "adding": "Lisätään...",
       "ariaClose": "Sulje lisäosien hallinta",
       "ariaManage": "Hallinnoi lisäosia",
-      "createGuideLink": "Kuinka luoda lisäosa",
       "errorFallback": "Tätä lisäosaa ei voi asentaa.",
       "manageListButton": "Hallinnoi lisäosien luetteloa",
       "subtitle": "Emme suosittele epävirallisten tai laittomien lisäosien lisäämistä.",
       "title": "Työpöydän lisäosat"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Tuetut alustat lisäyksille:",
-      "supported": "Tuetut alustat: FrameZoo ja Stremio"
+      "supported": "Tuetut alustat: Framezoo ja Stremio"
     },
     "page": {
       "addAddonButton": "Lisää Addon",
       "description": "Lisäosat ovat valinnaisia. Tämä sovellus ei niputa, suosittele tai isännöi mitään lisäosia.",
-      "createGuideLink": "Luo lisäosien opas",
       "disabled": "Ei käytössä",
       "emptyInstalled": "Järjestelmään ei ole vielä asennettu lisäosia.",
       "enabled": "Käytössä",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Takaisin alkuun",
     "tabs": {
+      "all": "Kaikki",
       "movies": "Elokuvat",
       "top10": "Top 10",
       "tvshows": "TV-ohjelmat"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Ongelmat",
     "goHome": "Mene kotiin",
-    "message": "FrameZooillä on jälleen ongelmia joidenkin palveluntarjoajien kanssa. Jos et löydä tai toista esitystä, vaihda lähdettä. Odota, että tämä virhe jatkuu alla olevien aikojen ajan.",
+    "message": "Framezoo on jälleen ongelmia joidenkin palveluntarjoajien kanssa. Jos et löydä tai toista esitystä, vaihda lähdettä. Odota, että tämä virhe jatkuu alla olevien aikojen ajan.",
     "title": "Palveluntarjoajan ongelmat"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Vastuuvapauslauseke",
-      "disclaimerText": "FrameZoo tarjoaa turvallisen, modernin ja saumattoman viihdekokemuksen. Helppokäyttöisen käyttöliittymän ja monipuolisen sisältökirjaston, mukaan lukien 4K HDR -tuen, ansiosta käyttäjät voivat nauttia suosikkielokuvistaan ​​ja TV-ohjelmistaan. Ja sitoutumisensa turvallisuuteen FrameZoo on täydellinen valinta huolettomaan, laadukkaaseen suoratoistokokemukseen."
+      "disclaimerText": "Framezoo tarjoaa turvallisen, modernin ja saumattoman viihdekokemuksen. Helppokäyttöisen käyttöliittymän ja monipuolisen sisältökirjaston, mukaan lukien 4K HDR -tuen, ansiosta käyttäjät voivat nauttia suosikkielokuvistaan ​​ja TV-ohjelmistaan. Ja sitoutumisensa turvallisuuteen Framezoo on täydellinen valinta huolettomaan, laadukkaaseen suoratoistokokemukseen."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +311,12 @@
       "subtitle": "Pidä ` painettuna näyttääksesi tämän ohjeen milloin tahansa",
       "title": "Pikanäppäimet"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Löydä uutta",
       "login": "Kirjaudu sisään",
       "migration": "Siirrä käyttäjätili",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Rekisteröidy",
       "settings": "Asetukset"
     }
@@ -411,11 +410,11 @@
           "Mitä tekisi mieli?",
           "Poistetaanko selaushistoriasi?",
           "Mitä haluat striimata?",
-          "FrameZoo on paras sivusto ikinä!",
+          "Framezoo on paras sivusto ikinä!",
           "Mitä katselulistallasi on tänään?",
           "Miten päiväsi sujui?",
           "Pahoittelut, sivusto ei toimi koskaan...",
-          "Eikö FrameZoo olekin paras?",
+          "Eikö Framezoo olekin paras?",
           ">ᴗ<"
         ]
       },
@@ -423,24 +422,28 @@
     },
     "support": {
       "complete": "täydellinen",
-      "description": "FrameZoo toimii tappiolla, ja tarvitsemme apua pitääksemme sen ilman mainoksia! Jos pidät FrameZooin käytöstä, harkitse lahjoittamista kulujen kattamiseksi.",
+      "description": "Framezoo toimii tappiolla, ja tarvitsemme apua pitääksemme sen ilman mainoksia! Jos pidät Framezoo käytöstä, harkitse lahjoittamista kulujen kattamiseksi.",
       "donate": "Lahjoittaa",
-      "explanation": "Jos et käytä laajennusta tai FED-sovellusliittymää ei ole määritetty, sisällön löytäminen voi olla vaikeampaa! Haluamme korjata tämän, mutta sisällön tarjoaminen ilman kalliita palvelimia on paljon vaikeampaa. Joten jos pidät FrameZooin käytöstä, harkitse lahjoittamista, jotta voimme kattaa kasvavat kustannukset.",
+      "explanation": "Jos et käytä laajennusta tai FED-sovellusliittymää ei ole määritetty, sisällön löytäminen voi olla vaikeampaa! Haluamme korjata tämän, mutta sisällön tarjoaminen ilman kalliita palvelimia on paljon vaikeampaa. Joten jos pidät Framezoo käytöstä, harkitse lahjoittamista, jotta voimme kattaa kasvavat kustannukset.",
       "explanation2": "Jos haluat lisätietoja, liity joukkoomme",
       "fluxer": "Fluxer",
       "label": "Projektin rahoitus: ${{current}} / ${{goal}}",
       "moreInfo": "Lisätietoja",
       "thankYou": "Kiitos tuestanne!",
-      "title": "FrameZoo tarvitsee apuasi!"
+      "title": "Framezoo tarvitsee apuasi!"
     },
     "titles": {
       "69": {
         "default": "Ootko valmis johonkin kuumaan?",
-        "extra": ["Hyvää 69-päivää 😘!"]
+        "extra": [
+          "Hyvää 69-päivää 😘!"
+        ]
       },
       "420": {
         "default": "Mitä tekisi mieli katsoa tänä 4/20-päivänä?",
-        "extra": ["Hyvää 4/20-päivää 🥳!"]
+        "extra": [
+          "Hyvää 4/20-päivää 🥳!"
+        ]
       },
       "day": {
         "default": "Mitä haluaisit katsoa tänä iltapäivänä?",
@@ -465,7 +468,9 @@
       },
       "night": {
         "default": "Mitä haluaisit katsoa tänä iltana?",
-        "extra": ["Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"]
+        "extra": [
+          "Väsynyt? Kuulin, että Manaaja (The Exorcist) on hyvä!"
+        ]
       }
     },
     "watchHistory": {
@@ -555,7 +560,7 @@
       "title": "Luettelot"
     },
     "public": {
-      "descriptionFallback": "Jaettu kokoelma, joka on kuratoitu FrameZoossa.",
+      "descriptionFallback": "Jaettu kokoelma, joka on kuratoitu Framezoo.",
       "notFoundDescription": "Tämä jakolinkki puuttuu tai ei ole enää saatavilla.",
       "notFoundTitle": "Listaa ei löydy",
       "pageTitle": "Jaettu luettelo",
@@ -687,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Selaimesi ei tue automaattista PWA-asennuskehotetta.\nVoit silti asentaa selaimen valikon kautta (esimerkiksi \"Asenna sovellus\", \"Luo pikakuvake\" tai \"Lisää telakkaan/aloitusnäyttöön\").",
-      "iosSafariGuide": "FrameZooin asentaminen sovelluksena:\n\n1. Napauta Jaa-painiketta (neliö nuolella).\n2. Valitse Lisää aloitusnäyttöön.\n3. Napauta Lisää."
+      "iosSafariGuide": "Framezoo asentaminen sovelluksena:\n\n1. Napauta Jaa-painiketta (neliö nuolella).\n2. Valitse Lisää aloitusnäyttöön.\n3. Napauta Lisää."
     },
     "menu": {
       "accountMenu": "Avaa tilivalikko",

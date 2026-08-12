@@ -11,22 +11,20 @@
       "adding": "Aggiunta...",
       "ariaClose": "Chiudi il gestore dei componenti aggiuntivi",
       "ariaManage": "Gestisci componenti aggiuntivi",
-      "createGuideLink": "Come creare un componente aggiuntivo",
       "errorFallback": "Impossibile installare questo componente aggiuntivo.",
       "manageListButton": "Gestisci l'elenco dei componenti aggiuntivi",
       "subtitle": "Non consigliamo di aggiungere componenti aggiuntivi non ufficiali o illegali.",
       "title": "Componenti aggiuntivi per il desktop"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Piattaforme supportate per i componenti aggiuntivi:",
-      "supported": "Piattaforme supportate: FrameZoo e Stremio"
+      "supported": "Piattaforme supportate: Framezoo e Stremio"
     },
     "page": {
       "addAddonButton": "Aggiungi componente aggiuntivo",
       "description": "I componenti aggiuntivi sono facoltativi. Questa app non raggruppa, consiglia o ospita alcun componente aggiuntivo.",
-      "createGuideLink": "Crea una guida per i componenti aggiuntivi",
       "disabled": "Disabilitato",
       "emptyInstalled": "Nessun componente aggiuntivo ancora installato nel sistema.",
       "enabled": "Abilitato",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Torna all'inizio",
     "tabs": {
+      "all": "Tutto",
       "movies": "Film",
       "top10": "I primi 10",
       "tvshows": "Spettacoli televisivi"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Problemi",
     "goHome": "Vai alla pagina iniziale",
-    "message": "FrameZoo.lol sta riscontrando problemi con alcuni provider, se non riesci a trovare o riprodurre uno show, cambia la fonte. È previsto che questo errore persista durante i tempi indicati di seguito.",
+    "message": "Framezoo sta riscontrando problemi con alcuni provider, se non riesci a trovare o riprodurre uno show, cambia la fonte. È previsto che questo errore persista durante i tempi indicati di seguito.",
     "title": "Problemi col fornitore"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "FrameZoo offre un'esperienza di intrattenimento sicura, moderna e senza soluzione di continuità. Con la sua interfaccia facile da usare e una libreria di contenuti diversificata, incluso il supporto 4K HDR, gli utenti possono godersi i loro film e programmi TV preferiti. E con il suo impegno per la sicurezza, FrameZoo è la scelta definitiva per un'esperienza di streaming di alta qualità e senza preoccupazioni."
+      "disclaimerText": "Framezoo offre un'esperienza di intrattenimento sicura, moderna e senza soluzione di continuità. Con la sua interfaccia facile da usare e una libreria di contenuti diversificata, incluso il supporto 4K HDR, gli utenti possono godersi i loro film e programmi TV preferiti. E con il suo impegno per la sicurezza, Framezoo è la scelta definitiva per un'esperienza di streaming di alta qualità e senza preoccupazioni."
     },
     "links": {
       "fluxer": "Flussante",
@@ -312,12 +311,12 @@
       "subtitle": "Tieni premuto ` per mostrare questo aiuto in qualsiasi momento",
       "title": "Scorciatoie da tastiera"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Scopri",
       "login": "Accedi",
       "migration": "migrare l'account",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registrati",
       "settings": "Impostazioni"
     }
@@ -411,11 +410,11 @@
           "Di cosa hai voglia?",
           "Dovremmo eliminare la cronologia del browser?",
           "Cosa vuoi trasmettere in streaming?",
-          "FrameZoo è il sito migliore di sempre!",
+          "Framezoo è il sito migliore di sempre!",
           "Cosa c'è nella tua lista oggi?",
           "Com'è stata la tua giornata?",
           "Colpa mia, il sito non funziona mai...",
-          "FrameZoo non è semplicemente il migliore?",
+          "Framezoo non è semplicemente il migliore?",
           ">ᴗ<"
         ]
       },
@@ -423,28 +422,34 @@
     },
     "support": {
       "complete": "completare",
-      "description": "FrameZoo è gestito in perdita e abbiamo bisogno di aiuto per mantenerlo senza pubblicità! Se ti piace usare FrameZoo, considera la possibilità di fare una donazione per aiutarci a coprire i nostri costi.",
+      "description": "Framezoo è gestito in perdita e abbiamo bisogno di aiuto per mantenerlo senza pubblicità! Se ti piace usare Framezoo, considera la possibilità di fare una donazione per aiutarci a coprire i nostri costi.",
       "donate": "Donare",
-      "explanation": "Se non stai utilizzando l'estensione o non hai configurato l'API FED, potrebbe essere più difficile trovare contenuti! Vogliamo risolvere questo problema, ma è molto più difficile fornire contenuti senza server costosi. Quindi, per favore, se ti piace usare FrameZoo, considera la possibilità di fare una donazione per aiutarci a coprire i nostri costi crescenti.",
+      "explanation": "Se non stai utilizzando l'estensione o non hai configurato l'API FED, potrebbe essere più difficile trovare contenuti! Vogliamo risolvere questo problema, ma è molto più difficile fornire contenuti senza server costosi. Quindi, per favore, se ti piace usare Framezoo, considera la possibilità di fare una donazione per aiutarci a coprire i nostri costi crescenti.",
       "explanation2": "Se desideri maggiori informazioni, iscriviti al nostro",
       "fluxer": "Flussante",
       "label": "Finanziamento del progetto: ${{current}} / ${{goal}}",
       "moreInfo": "Maggiori informazioni",
       "thankYou": "Grazie per il vostro supporto!",
-      "title": "FrameZoo ha bisogno del tuo aiuto!"
+      "title": "Framezoo ha bisogno del tuo aiuto!"
     },
     "titles": {
       "69": {
         "default": "Pronto per qualcosa di piccante?",
-        "extra": ["Buon 69 giorno😘!"]
+        "extra": [
+          "Buon 69 giorno😘!"
+        ]
       },
       "420": {
         "default": "Cosa ti piacerebbe guardare questo 20/4?",
-        "extra": ["Buon 20/4 🥳!"]
+        "extra": [
+          "Buon 20/4 🥳!"
+        ]
       },
       "day": {
         "default": "Cosa vorresti guardare questo pomeriggio?",
-        "extra": ["Viva FrameZoo!"]
+        "extra": [
+          "Viva Framezoo!"
+        ]
       },
       "halloween": {
         "default": "Quale film spaventoso ti piacerebbe vedere questo Halloween?",
@@ -457,11 +462,15 @@
       },
       "morning": {
         "default": "Cosa vorresti guardare questa mattina?",
-        "extra": ["Viva FrameZoo!"]
+        "extra": [
+          "Viva Framezoo!"
+        ]
       },
       "night": {
         "default": "Cosa vorresti guardare questa sera?",
-        "extra": ["Viva FrameZoo!"]
+        "extra": [
+          "Viva Framezoo!"
+        ]
       }
     },
     "watchHistory": {
@@ -551,7 +560,7 @@
       "title": "Elenchi"
     },
     "public": {
-      "descriptionFallback": "Una raccolta condivisa curata in FrameZoo.",
+      "descriptionFallback": "Una raccolta condivisa curata in Framezoo.",
       "notFoundDescription": "Questo collegamento di condivisione è mancante o non più disponibile.",
       "notFoundTitle": "Elenco non trovato",
       "pageTitle": "Elenco condiviso",
@@ -683,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Il tuo browser non supporta una richiesta di installazione PWA automatica.\nPuoi comunque eseguire l'installazione utilizzando il menu del browser (ad esempio: \"Installa app\", \"Crea collegamento\" o \"Aggiungi al Dock/Schermata iniziale\").",
-      "iosSafariGuide": "Per installare FrameZoo come app:\n\n1. Tocca il pulsante Condividi (quadrato con una freccia).\n2. Scegli \"Aggiungi alla schermata iniziale\".\n3. Tocca Aggiungi."
+      "iosSafariGuide": "Per installare Framezoo come app:\n\n1. Tocca il pulsante Condividi (quadrato con una freccia).\n2. Scegli \"Aggiungi alla schermata iniziale\".\n3. Tocca Aggiungi."
     },
     "menu": {
       "accountMenu": "Apri il menu dell'account",

@@ -13,12 +13,12 @@
     "description": "Native Wiedergabe, schärfere Steuerung und ein ruhigerer Ort für Ihre nächste Uhr.",
     "primaryCta": "Desktop herunterladen",
     "secondaryCta": "Erleben Sie die Erfahrung",
-    "imageAlt": "Vorschau der FrameZoo-Desktop-App",
+    "imageAlt": "Vorschau der Framezoo-Desktop-App",
     "version": "Desktop-Version"
   },
   "features": {
     "performanceTitle": "Ihre Bibliothek, ohne Browsersteuer.",
-    "overviewDescription": "FrameZoo Desktop gibt der Wiedergabe den Raum, den sie braucht: native Leistung, saubere Übergaben und Bedienelemente, die nicht im Weg sind.",
+    "overviewDescription": "Framezoo Desktop gibt der Wiedergabe den Raum, den sie braucht: native Leistung, saubere Übergaben und Bedienelemente, die nicht im Weg sind.",
     "playback": "Native Wiedergabe",
     "playbackDescription": "Reibungsloses Video mit Medienverarbeitung auf Desktop-Niveau.",
     "performance": "Ruhige Leistung",
@@ -33,7 +33,7 @@
     "addonThree": "Community-Erweiterungen",
     "showcaseTitle": "Der Bildschirm ist das Ziel.",
     "showcaseDescription": "Eine fokussierte Desktop-Oberfläche zum Entdecken, Abspielen und allem rund um die Geschichte.",
-    "showcaseCaption": "FrameZoo Desktop / Fokusmodus",
+    "showcaseCaption": "Framezoo Desktop / Fokusmodus",
     "experienceTitle": "Alles, was Sie für eine bessere Uhr brauchen.",
     "subtitleSyncDescription": "Richten Sie den Eröffnungsdialog in Sekundenschnelle am Bild aus.",
     "dualSubtitlesDescription": "Schalten Sie die doppelten Untertitel ein, wenn Sie lernen, vergleichen oder einfach beides bevorzugen.",
@@ -44,12 +44,12 @@
     "subtitleControlsDescription": "Wählen Sie Untertitelquelle, Sprache, Timing und Anzeige, ohne Ihren Ablauf zu unterbrechen.",
     "showcaseSecondaryTitle": "Finden Sie etwas, das es wert ist, gesehen zu werden.",
     "subtitleControls": "Stimmen Sie den Player um Sie herum ab",
-    "showcasePrimaryAlt": "FrameZoo-Titeldetailbildschirm mit Bildmaterial, Bewertungen, Staffeln und Metadaten",
-    "showcaseSecondaryAlt": "FrameZoo-Erkennungsbildschirm mit Suche, Kategorien und Titelzeilen"
+    "showcasePrimaryAlt": "Framezoo-Titeldetailbildschirm mit Bildmaterial, Bewertungen, Staffeln und Metadaten",
+    "showcaseSecondaryAlt": "Framezoo-Erkennungsbildschirm mit Suche, Kategorien und Titelzeilen"
   },
   "download": {
     "eyebrow": "WÄHLEN SIE IHREN GEBÄUDE",
-    "title": "Nehmen Sie FrameZoo mit.",
+    "title": "Nehmen Sie Framezoo mit.",
     "description": "Wählen Sie den Build für Ihre Maschine. Ihr Browser gibt die Empfehlung ab oder zeigt unten alle verfügbaren Optionen an.",
     "recommended": "Empfohlen",
     "chooseBuild": "Wählen Sie einen Build",
@@ -74,7 +74,7 @@
     "manifestTitle": "Beginnen Sie mit manifest.json",
     "eyebrow": "ADDON-PROTOKOLL / ANLEITUNG",
     "title": "Erstellen Sie ein Add-on, ohne am App-Prozess teilzunehmen.",
-    "description": "Ein Addon ist ein kleiner HTTP-Dienst. Stellen Sie ein Manifest und die Ressourcen bereit, die Sie benötigen. FrameZoo kümmert sich um den Rest.",
+    "description": "Ein Addon ist ein kleiner HTTP-Dienst. Stellen Sie ein Manifest und die Ressourcen bereit, die Sie benötigen. Framezoo kümmert sich um den Rest.",
     "manifestDescription": "Metadaten teilen der App mit, wer Ihr Add-on ist, welche Ressourcen es unterstützt und wo sich sein Symbol befindet.",
     "resourcesTitle": "Wählen Sie die Ressourcen",
     "resourcesDescription": "Implementieren Sie nur die Endpunkte, die Ihr Add-on benötigt. Antworten sind JSON und können in jeder Sprache verfasst werden.",
@@ -89,7 +89,7 @@
     "steps": [
       "Stellen Sie /manifest.json und Ihre Ressourcenendpunkte von einem lokalen oder öffentlichen HTTP(S)-Server bereit.",
       "Testen Sie jeden Endpunkt mit Curl und überprüfen Sie die JSON-Form.",
-      "Fügen Sie die Manifest-URL in FrameZoo Desktop > Add-ons ein."
+      "Fügen Sie die Manifest-URL in Framezoo Desktop > Add-ons ein."
     ],
     "advancedTitle": "Benötigen Sie einen Node-Helfer?",
     "advancedLink": "Öffnen Sie die erweiterte SDK-Referenz",
@@ -97,9 +97,9 @@
   },
   "deepLink": {
     "retry": "Versuchen Sie erneut, die Desktop-App zu öffnen",
-    "opening": "FrameZoo wird geöffnet...",
-    "openingDescription": "Ihr Browser versucht, die FrameZoo Desktop-App zu öffnen. Wenn eine Eingabeaufforderung erscheint, wählen Sie bitte <1>Open FrameZoo</1>.",
+    "opening": "Framezoo wird geöffnet...",
+    "openingDescription": "Ihr Browser versucht, die Framezoo Desktop-App zu öffnen. Wenn eine Eingabeaufforderung erscheint, wählen Sie bitte <1>Open Framezoo</1>.",
     "backHome": "Gehen Sie zurück zur Startseite",
-    "download": "Laden Sie FrameZoo herunter"
+    "download": "Laden Sie Framezoo herunter"
   }
 }

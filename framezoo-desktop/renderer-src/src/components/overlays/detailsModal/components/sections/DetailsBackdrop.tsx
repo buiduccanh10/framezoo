@@ -1,6 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
-import { TrailerPlayer } from "@/components/TrailerPlayer";
+import {
+  TrailerPlayer,
+  type TrailerPlayerHandle,
+} from "@/components/TrailerPlayer";
 import { LazyImage } from "@/components/utils/Image";
 
 interface DetailsBackdropProps {
@@ -10,19 +19,44 @@ interface DetailsBackdropProps {
   tmdbId: string;
   tmdbType: "movie" | "show";
   imdbId?: string | null;
+  isTrailerEnabled: boolean;
+  isTrailerMuted: boolean;
 }
 
-export function DetailsBackdrop({
-  title,
-  logoUrl,
-  backdrop,
-  tmdbId,
-  tmdbType,
-  imdbId,
-}: DetailsBackdropProps) {
+export const DetailsBackdrop = forwardRef<
+  TrailerPlayerHandle,
+  DetailsBackdropProps
+>(function DetailsBackdropComponent(
+  {
+    title,
+    logoUrl,
+    backdrop,
+    tmdbId,
+    tmdbType,
+    imdbId,
+    isTrailerEnabled,
+    isTrailerMuted,
+  },
+  ref,
+) {
   const [logoHeight, setLogoHeight] = useState<number>(0);
   const logoRef = useRef<HTMLDivElement>(null);
   const [trailerReady, setTrailerReady] = useState(false);
+  const trailerPlayerRef = useRef<TrailerPlayerHandle>(null);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      setMuted: (muted) => trailerPlayerRef.current?.setMuted(muted),
+    }),
+    [],
+  );
+
+  useEffect(() => {
+    if (!isTrailerEnabled) {
+      setTrailerReady(false);
+    }
+  }, [isTrailerEnabled]);
 
   useEffect(() => {
     if (logoRef.current) {
@@ -65,7 +99,7 @@ export function DetailsBackdrop({
       <div
         className="absolute inset-0 transition-opacity duration-1000"
         style={{
-          opacity: trailerReady ? 0 : 1,
+          opacity: isTrailerEnabled && trailerReady ? 0 : 1,
           zIndex: -1,
         }}
       >
@@ -104,16 +138,23 @@ export function DetailsBackdrop({
               "linear-gradient(to top, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%)",
             WebkitMaskImage:
               "linear-gradient(to top, rgba(0, 0, 0, 0) 10%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 100%)",
-            opacity: trailerReady ? 1 : 0,
+            opacity: isTrailerEnabled && trailerReady ? 1 : 0,
             transition: "opacity 0.8s ease",
           }}
         >
           <TrailerPlayer
+            ref={trailerPlayerRef}
             tmdbId={tmdbId}
             tmdbType={tmdbType}
             initialImdbId={imdbId || undefined}
-            isActive={true}
-            onPlay={() => setTrailerReady(true)}
+            isActive={isTrailerEnabled}
+            isMuted={isTrailerMuted}
+            onPlay={() => {
+              if (isTrailerEnabled) setTrailerReady(true);
+            }}
+            onError={() => {
+              if (isTrailerEnabled) setTrailerReady(false);
+            }}
           />
         </div>
       )}
@@ -131,4 +172,4 @@ export function DetailsBackdrop({
       />
     </div>
   );
-}
+});

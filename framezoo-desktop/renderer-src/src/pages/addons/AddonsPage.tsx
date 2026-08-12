@@ -1,25 +1,33 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useCopyToClipboard } from "react-use";
 
+import { AddonResourceBadges } from "@/components/addons/AddonResourceBadges";
 import { Icon, Icons } from "@/components/Icon";
 import { AddonManager } from "@/components/layout/AddonManager";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { Heading1 } from "@/components/utils/Text";
 import { AddonLogo } from "@/desktop/addons/AddonLogo";
-import { getAddonGuideUrl, openAddonGuide } from "@/desktop/addons/guide";
-import { getAddonResources } from "@/desktop/addons/manifest";
 import {
   removeAddon,
   setAddonEnabled,
   useInstalledAddons,
 } from "@/desktop/addons/store";
 import { SubPageLayout } from "@/pages/layouts/SubPageLayout";
+import { useToastStore } from "@/stores/interface/toast";
 
 export function AddonsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const addons = useInstalledAddons();
+  const [, copyToClipboard] = useCopyToClipboard();
+  const showToast = useToastStore((state) => state.showToast);
+
+  const handleShareAddon = (manifestUrl: string) => {
+    copyToClipboard(manifestUrl);
+    showToast(t("toasts.linkCopied"), "success");
+  };
 
   return (
     <SubPageLayout>
@@ -29,16 +37,6 @@ export function AddonsPage() {
             {t("addons.page.title", "Addons Manager")}
           </Heading1>
           <div className="flex flex-wrap justify-end gap-8">
-            <a
-              href={getAddonGuideUrl()}
-              onClick={(event) => {
-                event.preventDefault();
-                void openAddonGuide();
-              }}
-              className="inline-flex items-center border-0 bg-transparent p-0 text-sm font-semibold text-type-link transition-colors hover:text-type-linkHover hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-type-link/60"
-            >
-              {t("addons.page.createGuideLink", "Create addon guide")}
-            </a>
             <AddonManager>
               {(open) => (
                 <button
@@ -109,28 +107,10 @@ export function AddonsPage() {
                       {addon.manifestUrl}
                     </p>
                   </div>
-                  {/* Resource capability badges */}
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {getAddonResources(addon).map((resource) => {
-                      const badgeColors: Record<string, string> = {
-                        stream: "bg-purple-500/20 text-purple-300",
-                        catalog: "bg-blue-500/20 text-blue-300",
-                        meta: "bg-yellow-500/20 text-yellow-300",
-                        subtitles: "bg-green-500/20 text-green-300",
-                      };
-                      const color =
-                        badgeColors[resource] ??
-                        "bg-dropdown-altBackground text-dropdown-text";
-                      return (
-                        <span
-                          key={resource}
-                          className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider ${color}`}
-                        >
-                          {resource}
-                        </span>
-                      );
-                    })}
-                  </div>
+                  <AddonResourceBadges
+                    resources={addon.manifest.resources}
+                    className="mt-1"
+                  />
                   {addon.manifest.description ? (
                     <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-dropdown-text opacity-90">
                       {addon.manifest.description}
@@ -138,6 +118,15 @@ export function AddonsPage() {
                   ) : null}
                 </div>
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-blue-500/20 hover:text-blue-400"
+                    onClick={() => handleShareAddon(addon.manifestUrl)}
+                    aria-label={t("actions.copy")}
+                    title={t("actions.copy")}
+                  >
+                    <Icon icon={Icons.IOS_SHARE} className="text-base" />
+                  </button>
                   {addon.manifest.behaviorHints?.configurable ? (
                     <button
                       type="button"

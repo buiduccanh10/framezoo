@@ -11,22 +11,20 @@
       "adding": "Toevoegen...",
       "ariaClose": "Sluit de add-onbeheerder",
       "ariaManage": "Beheer add-ons",
-      "createGuideLink": "Hoe een add-on te maken",
       "errorFallback": "Kan deze add-on niet installeren.",
       "manageListButton": "Beheer add-onlijst",
       "subtitle": "We raden niet aan om onofficiële of illegale add-ons toe te voegen.",
       "title": "Desktop-add-ons"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Ondersteunde platforms voor add-ons:",
-      "supported": "Ondersteunde platforms: FrameZoo en Stremio"
+      "supported": "Ondersteunde platforms: Framezoo en Stremio"
     },
     "page": {
       "addAddonButton": "Add-on toevoegen",
       "description": "Add-ons zijn optioneel. Deze app bundelt, beveelt of host geen enkele add-on.",
-      "createGuideLink": "Add-onhandleiding maken",
       "disabled": "Gehandicapt",
       "emptyInstalled": "Er zijn nog geen add-ons in het systeem geïnstalleerd.",
       "enabled": "Ingeschakeld",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Terug naar boven",
     "tabs": {
+      "all": "Alle",
       "movies": "Films",
       "top10": "Top-10",
       "tvshows": "Televisieshows"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Problemen",
     "goHome": "Ga naar startpagina",
-    "message": "FrameZoo ondervindt opnieuw problemen met sommige providers. Als je een show niet kunt vinden of afspelen, probeer dan de bron te wijzigen. Verwacht dat deze fout zich zal blijven voordoen gedurende de onderstaande tijden.",
+    "message": "Framezoo ondervindt opnieuw problemen met sommige providers. Als je een show niet kunt vinden of afspelen, probeer dan de bron te wijzigen. Verwacht dat deze fout zich zal blijven voordoen gedurende de onderstaande tijden.",
     "title": "Providerproblemen"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Disclaimer",
-      "disclaimerText": "FrameZoo biedt een veilige, moderne en naadloze entertainmentervaring. Dankzij de gebruiksvriendelijke interface en de gevarieerde inhoudsbibliotheek, inclusief 4K HDR-ondersteuning, kunnen gebruikers genieten van hun favoriete films en tv-programma's. En met zijn toewijding aan beveiliging is FrameZoo de ultieme keuze voor een zorgeloze streamingervaring van hoge kwaliteit."
+      "disclaimerText": "Framezoo biedt een veilige, moderne en naadloze entertainmentervaring. Dankzij de gebruiksvriendelijke interface en de gevarieerde inhoudsbibliotheek, inclusief 4K HDR-ondersteuning, kunnen gebruikers genieten van hun favoriete films en tv-programma's. En met zijn toewijding aan beveiliging is Framezoo de ultieme keuze voor een zorgeloze streamingervaring van hoge kwaliteit."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +311,12 @@
       "subtitle": "Houd ` vast om deze hulp op elk gewenst moment weer te geven",
       "title": "Sneltoetsen op het toetsenbord"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Ondek",
       "login": "Login",
       "migration": "Account migreren",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registreren",
       "settings": "Instellingen"
     }
@@ -415,7 +414,7 @@
           "Wat staat er vandaag op jouw kijklijst?",
           "Hoe was je dag?",
           "Mijn fout, de site werkt nooit...",
-          "Is FrameZoo niet gewoon de beste?",
+          "Is Framezoo niet gewoon de beste?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +422,15 @@
     },
     "support": {
       "complete": "compleet",
-      "description": "FrameZoo draait met verlies en we hebben hulp nodig om het advertentievrij te houden! Als u FrameZoo graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze kosten te dekken.",
+      "description": "Framezoo draait met verlies en we hebben hulp nodig om het advertentievrij te houden! Als u Framezoo graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze kosten te dekken.",
       "donate": "Doneer",
-      "explanation": "Als u de extensie niet gebruikt of de FED API niet heeft ingesteld, kan het moeilijker zijn om inhoud te vinden! We willen dit oplossen, maar het is een stuk moeilijker om inhoud aan te bieden zonder dure servers. Dus alsjeblieft, als je FrameZoo graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze groeikosten te dekken.",
+      "explanation": "Als u de extensie niet gebruikt of de FED API niet heeft ingesteld, kan het moeilijker zijn om inhoud te vinden! We willen dit oplossen, maar het is een stuk moeilijker om inhoud aan te bieden zonder dure servers. Dus alsjeblieft, als je Framezoo graag gebruikt, overweeg dan om een ​​donatie te doen om ons te helpen onze groeikosten te dekken.",
       "explanation2": "Als je meer informatie wilt, sluit je dan aan bij onze",
       "fluxer": "Fluxer",
       "label": "Projectfinanciering: ${{current}} / ${{goal}}",
       "moreInfo": "Meer informatie",
       "thankYou": "Bedankt voor uw steun!",
-      "title": "FrameZoo heeft jouw hulp nodig!"
+      "title": "Framezoo heeft jouw hulp nodig!"
     },
     "titles": {
       "69": {
@@ -449,7 +448,7 @@
       "day": {
         "default": "Wat wil je vanmiddag kijken?",
         "extra": [
-          "Lang leven FrameZoo!"
+          "Lang leven Framezoo!"
         ]
       },
       "halloween": {
@@ -464,7 +463,7 @@
       "morning": {
         "default": "Waar wil je deze ochtend naar kijken?",
         "extra": [
-          "Lang leven FrameZoo!"
+          "Lang leven Framezoo!"
         ]
       },
       "night": {
@@ -561,7 +560,7 @@
       "title": "Lijsten"
     },
     "public": {
-      "descriptionFallback": "Een gedeelde collectie samengesteld in FrameZoo.",
+      "descriptionFallback": "Een gedeelde collectie samengesteld in Framezoo.",
       "notFoundDescription": "Deze deellink ontbreekt of is niet langer beschikbaar.",
       "notFoundTitle": "Lijst niet gevonden",
       "pageTitle": "Gedeelde lijst",
@@ -693,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Uw browser ondersteunt geen automatische PWA-installatieprompt.\nJe kunt nog steeds installeren via het browsermenu (bijvoorbeeld: 'App installeren', 'Snelkoppeling maken' of 'Toevoegen aan Dock/Startscherm').",
-      "iosSafariGuide": "FrameZoo als app installeren:\n\n1. Tik op de knop Delen (vierkant met een pijl).\n2. Kies 'Toevoegen aan startscherm'.\n3. Tik op Toevoegen."
+      "iosSafariGuide": "Framezoo als app installeren:\n\n1. Tik op de knop Delen (vierkant met een pijl).\n2. Kies 'Toevoegen aan startscherm'.\n3. Tik op Toevoegen."
     },
     "menu": {
       "accountMenu": "Accountmenu openen",

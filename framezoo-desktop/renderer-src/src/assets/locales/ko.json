@@ -11,22 +11,20 @@
       "adding": "첨가...",
       "ariaClose": "애드온 관리자 닫기",
       "ariaManage": "애드온 관리",
-      "createGuideLink": "애드온을 만드는 방법",
       "errorFallback": "이 애드온을 설치할 수 없습니다.",
       "manageListButton": "애드온 목록 관리",
       "subtitle": "비공식적이거나 불법적인 추가 기능은 추가하지 않는 것이 좋습니다.",
       "title": "데스크탑 애드온"
     },
     "platforms": {
-      "framezoo": "프레임주",
-      "stremio": "스트레미오",
+      "framezoo": "Framezoo",
+      "stremio": "Stremio",
       "supportLabel": "애드온 지원 플랫폼:",
-      "supported": "지원되는 플랫폼: FrameZoo 및 Stremio"
+      "supported": "지원되는 플랫폼: Framezoo 및 Stremio"
     },
     "page": {
       "addAddonButton": "애드온 추가",
       "description": "애드온은 선택사항입니다. 이 앱은 애드온을 번들로 제공하거나 권장하거나 호스팅하지 않습니다.",
-      "createGuideLink": "애드온 가이드 생성",
       "disabled": "장애가 있는",
       "emptyInstalled": "아직 시스템에 애드온이 설치되지 않았습니다.",
       "enabled": "활성화됨",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "맨 위로 돌아가기",
     "tabs": {
+      "all": "모두",
       "movies": "영화 산업",
       "top10": "상위 10위",
       "tvshows": "TV 프로그램"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "문제",
     "goHome": "집에 가세요",
-    "message": "FrameZoo에서 일부 제공업체에 문제가 다시 발생합니다. 프로그램을 찾거나 재생할 수 없는 경우 소스를 변경하세요. 이 오류는 아래 시간 동안 지속될 것으로 예상됩니다.",
+    "message": "Framezoo에서 일부 제공업체에 문제가 다시 발생합니다. 프로그램을 찾거나 재생할 수 없는 경우 소스를 변경하세요. 이 오류는 아래 시간 동안 지속될 것으로 예상됩니다.",
     "title": "공급자 문제"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "면책 조항",
-      "disclaimerText": "FrameZoo는 안전하고 현대적이며 원활한 엔터테인먼트 경험을 제공합니다. 사용하기 쉬운 인터페이스와 4K HDR 지원을 포함한 다양한 콘텐츠 라이브러리를 통해 사용자는 좋아하는 영화와 TV 프로그램을 즐길 수 있습니다. 보안에 대한 약속을 바탕으로 FrameZoo는 걱정 없는 고품질 스트리밍 경험을 위한 최고의 선택입니다."
+      "disclaimerText": "Framezoo는 안전하고 현대적이며 원활한 엔터테인먼트 경험을 제공합니다. 사용하기 쉬운 인터페이스와 4K HDR 지원을 포함한 다양한 콘텐츠 라이브러리를 통해 사용자는 좋아하는 영화와 TV 프로그램을 즐길 수 있습니다. 보안에 대한 약속을 바탕으로 Framezoo는 걱정 없는 고품질 스트리밍 경험을 위한 최고의 선택입니다."
     },
     "links": {
       "fluxer": "디스코드",
@@ -312,12 +311,12 @@
       "subtitle": "언제든지 이 도움말을 표시하려면 `를 누르세요.",
       "title": "키보드 단축키"
     },
-    "name": "무비-웹",
+    "name": "Framezoo",
     "pages": {
       "discover": "발견하다",
       "login": "로그인",
       "migration": "계정 마이그레이션",
-      "pagetitle": "{{title}} - 프레임주",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "회원가입",
       "settings": "설정"
     }
@@ -415,7 +414,7 @@
           "오늘 당신의 관심 목록에는 무엇이 있나요?",
           "오늘 어땠나요?",
           "안타깝게도 사이트가 작동하지 않습니다 ...",
-          "FrameZoo가 최고 아닌가요?",
+          "Framezoo가 최고 아닌가요?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +422,15 @@
     },
     "support": {
       "complete": "완벽한",
-      "description": "FrameZoo는 어려움을 겪고 있으며 광고 없이 계속 운영하려면 도움이 필요합니다! FrameZoo를 즐겨 사용하신다면 비용을 충당할 수 있도록 기부해 주시기 바랍니다.",
+      "description": "Framezoo는 어려움을 겪고 있으며 광고 없이 계속 운영하려면 도움이 필요합니다! Framezoo를 즐겨 사용하신다면 비용을 충당할 수 있도록 기부해 주시기 바랍니다.",
       "donate": "기부",
-      "explanation": "확장 프로그램을 사용하지 않거나 FED API가 설정되어 있지 않으면 콘텐츠를 찾기가 더 어려울 수 있습니다! 우리는 이 문제를 고치고 싶지만 값비싼 서버 없이 콘텐츠를 제공하기가 훨씬 어렵습니다. 따라서 FrameZoo를 즐겨 사용하신다면 증가하는 비용을 충당할 수 있도록 기부해 주시기 바랍니다.",
+      "explanation": "확장 프로그램을 사용하지 않거나 FED API가 설정되어 있지 않으면 콘텐츠를 찾기가 더 어려울 수 있습니다! 우리는 이 문제를 고치고 싶지만 값비싼 서버 없이 콘텐츠를 제공하기가 훨씬 어렵습니다. 따라서 Framezoo를 즐겨 사용하신다면 증가하는 비용을 충당할 수 있도록 기부해 주시기 바랍니다.",
       "explanation2": "더 많은 정보를 원하시면, 우리와 함께 해주세요",
       "fluxer": "플럭서",
       "label": "프로젝트 자금: ${{current}} / ${{goal}}",
       "moreInfo": "추가 정보",
       "thankYou": "귀하의 지원에 감사드립니다!",
-      "title": "FrameZoo는 여러분의 도움이 필요합니다!"
+      "title": "Framezoo는 여러분의 도움이 필요합니다!"
     },
     "titles": {
       "69": {
@@ -561,7 +560,7 @@
       "title": "기울기"
     },
     "public": {
-      "descriptionFallback": "FrameZoo에서 선별된 공유 컬렉션입니다.",
+      "descriptionFallback": "Framezoo에서 선별된 공유 컬렉션입니다.",
       "notFoundDescription": "이 공유 링크가 없거나 더 이상 사용할 수 없습니다.",
       "notFoundTitle": "목록을 찾을 수 없습니다",
       "pageTitle": "공유 목록",
@@ -693,7 +692,7 @@
     },
     "install": {
       "genericGuide": "귀하의 브라우저는 자동 PWA 설치 프롬프트를 지원하지 않습니다.\n브라우저 메뉴(예: '앱 설치', '바로가기 만들기' 또는 'Dock/홈 화면에 추가')를 사용하여 설치할 수 있습니다.",
-      "iosSafariGuide": "FrameZoo를 앱으로 설치하려면:\n\n1. 공유 버튼(화살표가 있는 사각형)을 탭합니다.\n2. '홈 화면에 추가'를 선택하세요.\n3. 추가를 탭합니다."
+      "iosSafariGuide": "Framezoo를 앱으로 설치하려면:\n\n1. 공유 버튼(화살표가 있는 사각형)을 탭합니다.\n2. '홈 화면에 추가'를 선택하세요.\n3. 추가를 탭합니다."
     },
     "menu": {
       "accountMenu": "계정 메뉴 열기",

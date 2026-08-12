@@ -13,12 +13,12 @@
     "description": "Natív lejátszás, élesebb kezelőszervek és nyugodtabb hely a következő órához.",
     "primaryCta": "Asztali letöltése",
     "secondaryCta": "Lásd az élményt",
-    "imageAlt": "FrameZoo asztali alkalmazás előnézete",
+    "imageAlt": "Framezoo asztali alkalmazás előnézete",
     "version": "Asztali kiadás"
   },
   "features": {
     "performanceTitle": "Az Ön könyvtára, böngészőadó nélkül.",
-    "overviewDescription": "Az FrameZoo Desktop annyi helyet biztosít a lejátszáshoz, amire szüksége van: natív teljesítmény, tiszta átadások és vezérlők, amelyek távol maradnak az útból.",
+    "overviewDescription": "Az Framezoo Desktop annyi helyet biztosít a lejátszáshoz, amire szüksége van: natív teljesítmény, tiszta átadások és vezérlők, amelyek távol maradnak az útból.",
     "playback": "Natív lejátszás",
     "playbackDescription": "Sima videó asztali szintű médiakezeléssel.",
     "performance": "Csendes teljesítmény",
@@ -33,7 +33,7 @@
     "addonThree": "Közösségi bővítések",
     "showcaseTitle": "A képernyő a cél.",
     "showcaseDescription": "Fókuszált asztali felület a felfedezéshez, lejátszáshoz és mindenhez, ami a történet körül van.",
-    "showcaseCaption": "FrameZoo asztali / fókusz mód",
+    "showcaseCaption": "Framezoo asztali / fókusz mód",
     "subtitleSync": "Szinkronizálja a feliratokat az AI-val",
     "experienceTitle": "Minden, ami egy jobb órához kell.",
     "featureLabel": "A játékos, a te utad",
@@ -44,12 +44,12 @@
     "subtitleControlsDescription": "Válassza ki a felirat forrását, nyelvét, időzítését és megjelenítését anélkül, hogy megszakítaná a folyamatot.",
     "showcaseSecondaryTitle": "Találj valamit, amit érdemes megnézni.",
     "showcaseSecondaryDescription": "Kezdje egy tiszta felfedezési felületről, majd lépjen lejátszásba anélkül, hogy elveszítené a helyét.",
-    "showcaseSecondaryAlt": "FrameZoo felfedező képernyő kereséssel, kategóriákkal és címsorokkal",
-    "showcasePrimaryAlt": "A FrameZoo címrészletek képernyője alkotásokkal, értékelésekkel, évszakokkal és metaadatokkal"
+    "showcaseSecondaryAlt": "Framezoo felfedező képernyő kereséssel, kategóriákkal és címsorokkal",
+    "showcasePrimaryAlt": "A Framezoo címrészletek képernyője alkotásokkal, értékelésekkel, évszakokkal és metaadatokkal"
   },
   "download": {
     "eyebrow": "VÁLASZD KI AZ ÉPÜLETET",
-    "title": "Vigye magával az FrameZoo-et.",
+    "title": "Vigye magával az Framezoo-et.",
     "description": "Válaszd ki a géped összeállítását. Böngészője javaslatot tesz, vagy alább felfed minden elérhető lehetőséget.",
     "recommended": "Ajánlott",
     "chooseBuild": "Válasszon egy építményt",
@@ -74,7 +74,7 @@
     "manifestTitle": "Kezdje a manifest.json fájllal",
     "eyebrow": "ADDON PROTOKOLL / ÚTMUTATÓ",
     "title": "Hozzon létre egy kiegészítőt anélkül, hogy csatlakozna az alkalmazásfolyamathoz.",
-    "description": "A kiegészítő egy kis HTTP-szolgáltatás. Kiszolgálja a jegyzéket és a szükséges erőforrásokat; A többit az FrameZoo intézi.",
+    "description": "A kiegészítő egy kis HTTP-szolgáltatás. Kiszolgálja a jegyzéket és a szükséges erőforrásokat; A többit az Framezoo intézi.",
     "resourcesTitle": "Válassza ki az erőforrásokat",
     "resources": {
       "meta": "Film vagy sorozat metaadatai egy címhez.",
@@ -88,7 +88,7 @@
     "steps": [
       "A /manifest.json és az erőforrás-végpontok kiszolgálása helyi vagy nyilvános HTTP(S)-kiszolgálóról.",
       "Tesztelje az egyes végpontokat a curl segítségével, és ellenőrizze a JSON alakzatot.",
-      "Illessze be a jegyzék URL-címét az FrameZoo Desktop > Addons mappába."
+      "Illessze be a jegyzék URL-címét az Framezoo Desktop > Addons mappába."
     ],
     "runTitle": "Futtassa, tesztelje, telepítse",
     "advancedLink": "Nyissa meg a speciális SDK-referenciát",
@@ -96,10 +96,10 @@
     "advancedTitle": "Node segítőre van szüksége?"
   },
   "deepLink": {
-    "opening": "FrameZoo megnyitása...",
-    "download": "Töltse le a FrameZoo-t",
+    "opening": "Framezoo megnyitása...",
+    "download": "Töltse le a Framezoo-t",
     "retry": "Próbálja meg újra megnyitni az asztali alkalmazást",
-    "openingDescription": "A böngészője megpróbálja megnyitni a FrameZoo Desktop alkalmazást. Ha megjelenik egy üzenet, válassza az <1>Open FrameZoo</1> lehetőséget.",
+    "openingDescription": "A böngészője megpróbálja megnyitni a Framezoo Desktop alkalmazást. Ha megjelenik egy üzenet, válassza az <1>Open Framezoo</1> lehetőséget.",
     "backHome": "Menjen vissza a kezdőlapra"
   }
 }

@@ -1,15 +1,16 @@
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { AddonPlatformBadges } from "@/components/addons/AddonPlatformBadges";
+import { AddonResourceBadges } from "@/components/addons/AddonResourceBadges";
 import { Icon, Icons } from "@/components/Icon";
+import { Spinner } from "@/components/layout/Spinner";
 import { AddonLogo } from "@/desktop/addons/AddonLogo";
 import { loadAddonManifest } from "@/desktop/addons/client";
-import { getAddonGuideUrl, openAddonGuide } from "@/desktop/addons/guide";
 import { installAddon } from "@/desktop/addons/store";
-import type { StremioManifest } from "@/desktop/addons/types";
+import type { InstalledAddon } from "@/desktop/addons/types";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 
 export function AddonManager({
@@ -25,28 +26,46 @@ export function AddonManager({
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<StremioManifest | null>(null);
+  const [preview, setPreview] = useState<InstalledAddon | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
+  const previewRequestId = useRef(0);
 
   useEffect(() => {
-    if (!url.trim()) {
+    const manifestUrl = url.trim();
+    const requestId = ++previewRequestId.current;
+
+    if (!manifestUrl) {
       setPreview(null);
+      setPreviewLoading(false);
       return;
     }
+
+    setPreviewLoading(true);
+    setPreview(null);
+
     const timeout = setTimeout(() => {
-      setPreviewLoading(true);
-      setPreview(null);
-      loadAddonManifest(url)
-        .then((addon) => setPreview(addon.manifest))
-        .catch(() => setPreview(null))
-        .finally(() => setPreviewLoading(false));
+      loadAddonManifest(manifestUrl)
+        .then((addon) => {
+          if (requestId === previewRequestId.current) setPreview(addon);
+        })
+        .catch(() => {
+          if (requestId === previewRequestId.current) setPreview(null);
+        })
+        .finally(() => {
+          if (requestId === previewRequestId.current) {
+            setPreviewLoading(false);
+          }
+        });
     }, 500);
+
     return () => clearTimeout(timeout);
   }, [url]);
 
   if (!isDesktop) return null;
 
   const add = async () => {
+    if (!url.trim() || loading || previewLoading) return;
+
     setLoading(true);
     setError(null);
     try {
@@ -63,6 +82,7 @@ export function AddonManager({
     }
   };
 
+  const isBusy = loading || previewLoading;
   const isAddonsPage = location.pathname === "/addons";
 
   return (
@@ -131,7 +151,8 @@ export function AddonManager({
                   setError(null);
                 }}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" && url.trim()) void add();
+                  if (event.key === "Enter" && url.trim() && !isBusy)
+                    void add();
                 }}
                 placeholder="https://addon.example.com/manifest.json"
                 className="min-w-0 flex-1 rounded-xl border border-dropdown-border bg-dropdown-contentBackground px-3.5 py-2.5 text-sm text-white placeholder-dropdown-text/60 outline-none transition-colors focus:border-type-link"
@@ -141,15 +162,23 @@ export function AddonManager({
                 type="button"
                 className={classNames(
                   "rounded-xl bg-buttons-purple px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-buttons-purpleHover hover:scale-105 active:scale-95",
-                  (!url.trim() || loading) &&
+                  (!url.trim() || isBusy) &&
                     "!cursor-not-allowed !scale-100 opacity-60 hover:bg-buttons-purple",
                 )}
                 onClick={() => void add()}
-                disabled={!url.trim() || loading}
+                disabled={!url.trim() || isBusy}
+                aria-busy={isBusy}
               >
-                {loading
-                  ? t("addons.manager.adding", "Adding...")
-                  : t("addons.manager.add", "Add")}
+                {isBusy ? (
+                  <>
+                    <Spinner className="mr-2 inline-block h-4 w-4 text-current" />
+                    {loading
+                      ? t("addons.manager.adding", "Adding...")
+                      : t("addons.page.processing", "Processing...")}
+                  </>
+                ) : (
+                  t("addons.manager.add", "Add")
+                )}
               </button>
             </div>
 
@@ -164,20 +193,24 @@ export function AddonManager({
             ) : preview ? (
               <div className="mt-4 flex items-center gap-3 rounded-xl border border-dropdown-border bg-dropdown-contentBackground p-3">
                 <AddonLogo
-                  name={preview.name}
-                  logo={preview.logo}
+                  name={preview.manifest.name}
+                  logo={preview.manifest.logo}
                   className="h-10 w-10 rounded bg-dropdown-border"
                 />
                 <div className="flex flex-col overflow-hidden">
                   <span className="truncate font-semibold text-white">
-                    {preview.name}{" "}
+                    {preview.manifest.name}{" "}
                     <span className="text-xs font-normal text-dropdown-text">
-                      v{preview.version}
+                      v{preview.manifest.version}
                     </span>
                   </span>
-                  {preview.description && (
+                  <AddonResourceBadges
+                    resources={preview.manifest.resources}
+                    className="mt-1"
+                  />
+                  {preview.manifest.description && (
                     <span className="truncate text-xs text-dropdown-text">
-                      {preview.description}
+                      {preview.manifest.description}
                     </span>
                   )}
                 </div>
@@ -194,16 +227,6 @@ export function AddonManager({
                 !isAddonsPage && "sm:justify-between",
               )}
             >
-              <a
-                href={getAddonGuideUrl()}
-                onClick={(event) => {
-                  event.preventDefault();
-                  void openAddonGuide();
-                }}
-                className="inline-flex items-center border-0 bg-transparent p-0 text-sm font-semibold text-type-link transition-colors hover:text-type-linkHover hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-type-link/60"
-              >
-                {t("addons.manager.createGuideLink", "How to create an addon")}
-              </a>
               {!isAddonsPage && (
                 <button
                   type="button"

@@ -34,7 +34,7 @@ export function DiscoverContent({
   onFilterYearChange,
 }: DiscoverContentProps) {
   const { selectedCategory, setSelectedCategory } = useDiscoverStore();
-  const { genres: movieGenres } = useDiscoverOptions("movie");
+  const { genres: discoverGenres } = useDiscoverOptions("all");
   const navigate = useNavigate();
   const { showModal } = useOverlayStack();
   const carouselRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -66,6 +66,7 @@ export function DiscoverContent({
   // Only load data for the active tab
   const isMoviesTab = selectedCategory === "movies";
   const isTVShowsTab = selectedCategory === "tvshows";
+  const isAllTab = selectedCategory === "all";
   const isPopularTab =
     selectedCategory === "popular" ||
     selectedCategory === "top10" ||
@@ -75,7 +76,7 @@ export function DiscoverContent({
     ? selectedCategory.replace("genre:", "")
     : null;
   const selectedGenreName =
-    movieGenres.find((genre) => genre.id.toString() === selectedGenreId)
+    discoverGenres.find((genre) => genre.id.toString() === selectedGenreId)
       ?.name || "";
 
   const handleCategoryChange = (category: Category) => {
@@ -398,40 +399,111 @@ export function DiscoverContent({
   };
 
   const renderPopularContent = () => {
-    const popularLabel = t("discover.carousel.title.popular");
-
     return (
-      <>
-        <LazyMediaCarousel
-          key="movie-popular-nav"
-          content={{ type: "popular" }}
-          isTVShow={false}
-          carouselRefs={carouselRefs}
-          onShowDetails={handleShowDetails}
-          moreContent
-          priority
-          sectionTitleOverride={t("discover.carousel.title.movies", {
-            category: popularLabel,
-          })}
-          {...filtersProps}
-        />
-
-        <LazyMediaCarousel
-          key="tv-popular-nav"
-          content={{ type: "popular" }}
-          isTVShow
-          carouselRefs={carouselRefs}
-          onShowDetails={handleShowDetails}
-          moreContent
-          priority
-          sectionTitleOverride={t("discover.carousel.title.tvshows", {
-            category: popularLabel,
-          })}
-          {...filtersProps}
-        />
-      </>
+      <LazyMediaCarousel
+        key="mixed-popular-nav"
+        content={{ type: "popular" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority
+        {...filtersProps}
+      />
     );
   };
+
+  const renderAllContent = () => (
+    <>
+      <LazyMediaCarousel
+        key="all-trending"
+        content={{ type: "trending" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority
+        {...filtersProps}
+      />
+      <LazyMediaCarousel
+        key="all-popular"
+        content={{ type: "popular" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        priority
+        {...filtersProps}
+      />
+      <LazyMediaCarousel
+        key="all-providers"
+        content={{ type: "provider" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showProviders
+        moreContent
+        {...filtersProps}
+      />
+      <LazyMediaCarousel
+        key="all-top-rated"
+        content={{ type: "topRated" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        {...filtersProps}
+      />
+      <LazyMediaCarousel
+        key="all-editor-picks"
+        content={{ type: "editorPicks" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        {...filtersProps}
+      />
+      <LazyMediaCarousel
+        key="all-latest"
+        content={{ type: "latest" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        moreContent
+        {...filtersProps}
+      />
+      <LazyMediaCarousel
+        key="all-genres"
+        content={{ type: "genre" }}
+        isTVShow={false}
+        isMixed
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+        showGenres
+        moreContent
+        {...filtersProps}
+      />
+      <AddonCatalogRow
+        key="addon-catalog-all"
+        type="movie"
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />
+      <AddonCatalogRow
+        key="addon-catalog-all-series"
+        type="series"
+        carouselRefs={carouselRefs}
+        onShowDetails={handleShowDetails}
+      />
+    </>
+  );
 
   const renderSelectedGenreContent = () => {
     if (!selectedGenreId) return null;
@@ -441,6 +513,7 @@ export function DiscoverContent({
         key={`movie-genre-${selectedGenreId}`}
         content={{ type: "genre" }}
         isTVShow={false}
+        isMixed
         carouselRefs={carouselRefs}
         onShowDetails={handleShowDetails}
         moreContent
@@ -470,6 +543,11 @@ export function DiscoverContent({
       />
 
       <WideContainer ultraWide classNames="!px-0">
+        {/* All Tab */}
+        <div style={{ display: isAllTab ? "block" : "none" }}>
+          {(isAllTab || visitedTabs.has("all")) && renderAllContent()}
+        </div>
+
         {/* Movies Tab */}
         <div style={{ display: isMoviesTab ? "block" : "none" }}>
           {(isMoviesTab || visitedTabs.has("movies")) && renderMoviesContent()}
@@ -502,7 +580,9 @@ export function DiscoverContent({
       <div
         className={classNames(
           "flex justify-center mt-8 mb-12",
-          isMoviesTab || isPopularTab || isGenreTab ? "block" : "hidden",
+          isAllTab || isMoviesTab || isPopularTab || isGenreTab
+            ? "block"
+            : "hidden",
         )}
       >
         <Button theme="purple" onClick={() => navigate("/discover/all")}>

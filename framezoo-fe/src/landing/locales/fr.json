@@ -13,12 +13,12 @@
     "description": "Lecture native, commandes plus précises et endroit plus calme pour votre prochaine montre.",
     "primaryCta": "Télécharger le bureau",
     "secondaryCta": "Voir l'expérience",
-    "imageAlt": "Aperçu de l'application de bureau FrameZoo",
+    "imageAlt": "Aperçu de l'application de bureau Framezoo",
     "version": "Version de bureau"
   },
   "features": {
     "performanceTitle": "Votre bibliothèque, sans la taxe du navigateur.",
-    "overviewDescription": "FrameZoo Desktop donne à la lecture l'espace dont elle a besoin : des performances natives, des transferts clairs et des commandes qui ne gênent pas.",
+    "overviewDescription": "Framezoo Desktop donne à la lecture l'espace dont elle a besoin : des performances natives, des transferts clairs et des commandes qui ne gênent pas.",
     "playback": "Lecture native",
     "playbackDescription": "Vidéo fluide avec une gestion multimédia de qualité bureautique.",
     "performance": "Performances silencieuses",
@@ -33,7 +33,7 @@
     "addonThree": "Extensions de communauté",
     "showcaseTitle": "L'écran est la destination.",
     "showcaseDescription": "Une surface de bureau ciblée pour la découverte, la lecture et tout ce qui concerne l'histoire.",
-    "showcaseCaption": "Bureau FrameZoo / Mode mise au point",
+    "showcaseCaption": "Bureau Framezoo / Mode mise au point",
     "featureLabel": "Le joueur, à votre façon",
     "subtitleSyncDescription": "Alignez le dialogue d’ouverture avec l’image en quelques secondes.",
     "dualSubtitlesDescription": "Activez les sous-titres doubles lorsque vous apprenez, comparez ou préférez simplement les deux.",
@@ -43,13 +43,13 @@
     "showcaseSecondaryTitle": "Trouvez quelque chose qui vaut la peine d'être regardé.",
     "subtitleControls": "Accordez le joueur autour de vous",
     "dualSubtitles": "Gardez deux langues de sous-titres visibles",
-    "showcaseSecondaryAlt": "Écran de découverte FrameZoo avec recherche, catégories et lignes de titre",
-    "showcasePrimaryAlt": "Écran détaillé du titre FrameZoo avec illustrations, notes, saisons et métadonnées",
+    "showcaseSecondaryAlt": "Écran de découverte Framezoo avec recherche, catégories et lignes de titre",
+    "showcasePrimaryAlt": "Écran détaillé du titre Framezoo avec illustrations, notes, saisons et métadonnées",
     "showcaseSecondaryDescription": "Partez d’une surface de découverte propre, puis passez à la lecture sans perdre votre place."
   },
   "download": {
     "eyebrow": "CHOISISSEZ VOTRE CONSTRUCTION",
-    "title": "Emportez FrameZoo avec vous.",
+    "title": "Emportez Framezoo avec vous.",
     "description": "Choisissez la version de votre machine. Votre navigateur fera la recommandation ou révélera toutes les options disponibles ci-dessous.",
     "recommended": "Recommandé",
     "chooseBuild": "Choisissez une version",
@@ -75,7 +75,7 @@
     "manifestTitle": "Commencez par manifest.json",
     "eyebrow": "PROTOCOLE ADDITIONNEL / GUIDE",
     "title": "Créez un module complémentaire sans rejoindre le processus d'application.",
-    "description": "Un module complémentaire est un petit service HTTP. Présentez un manifeste et les ressources dont vous avez besoin ; FrameZoo s'occupe du reste.",
+    "description": "Un module complémentaire est un petit service HTTP. Présentez un manifeste et les ressources dont vous avez besoin ; Framezoo s'occupe du reste.",
     "resourcesDescription": "Implémentez uniquement les points de terminaison dont votre module complémentaire a besoin. Les réponses sont JSON et peuvent être écrites dans n’importe quelle langue.",
     "resources": {
       "catalog": "Des rangées de films ou de séries à découvrir.",
@@ -88,7 +88,7 @@
     "steps": [
       "Servez /manifest.json et vos points de terminaison de ressources à partir d’un serveur HTTP(S) local ou public.",
       "Testez chaque point de terminaison avec curl et vérifiez la forme JSON.",
-      "Collez l'URL du manifeste dans FrameZoo Desktop > Addons."
+      "Collez l'URL du manifeste dans Framezoo Desktop > Addons."
     ],
     "runTitle": "Exécuter, tester, installer",
     "advancedLink": "Ouvrir la référence du SDK avancé",
@@ -96,9 +96,9 @@
     "advancedDescription": "Le SDK Stremio Addon est facultatif. Utilisez-le si vous souhaitez des aides au routage et à la sérialisation ; ce n’est pas requis par le protocole."
   },
   "deepLink": {
-    "openingDescription": "Votre navigateur tente d'ouvrir l'application FrameZoo Desktop. Si une invite apparaît, veuillez sélectionner <1>Open FrameZoo</1>.",
-    "opening": "Ouverture de FrameZoo...",
-    "download": "Télécharger FrameZoo",
+    "openingDescription": "Votre navigateur tente d'ouvrir l'application Framezoo Desktop. Si une invite apparaît, veuillez sélectionner <1>Open Framezoo</1>.",
+    "opening": "Ouverture de Framezoo...",
+    "download": "Télécharger Framezoo",
     "retry": "Essayez à nouveau d'ouvrir l'application de bureau",
     "backHome": "Retour à la page d'accueil"
   }

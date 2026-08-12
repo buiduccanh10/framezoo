@@ -11,22 +11,20 @@
       "adding": "Lisamine...",
       "ariaClose": "Sule lisandmoodulite haldur",
       "ariaManage": "Lisandmoodulite haldamine",
-      "createGuideLink": "Kuidas lisandmoodulit luua",
       "errorFallback": "Seda lisandmoodulit ei saa installida.",
       "manageListButton": "Halda lisandmoodulite loendit",
       "subtitle": "Me ei soovita lisada mitteametlikke või ebaseaduslikke lisandmooduleid.",
       "title": "Töölaua lisad"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Lisandmoodulite toetatud platvormid:",
-      "supported": "Toetatud platvormid: FrameZoo ja Stremio"
+      "supported": "Toetatud platvormid: Framezoo ja Stremio"
     },
     "page": {
       "addAddonButton": "Lisage Addon",
       "description": "Lisad on valikulised. See rakendus ei koonda, ei soovita ega hosti ühtegi lisandmoodulit.",
-      "createGuideLink": "Loo lisade juhend",
       "disabled": "Keelatud",
       "emptyInstalled": "Süsteemi pole veel installitud ühtegi lisandmoodulit.",
       "enabled": "Lubatud",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Tagasi üles",
     "tabs": {
+      "all": "Kõik",
       "movies": "Filmid",
       "top10": "Top 10",
       "tvshows": "Telesaated"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Probleemid",
     "goHome": "Mine koju",
-    "message": "FrameZooil on mõne teenusepakkujaga taas probleeme. Kui te ei leia saadet ega esita seda, muutke allikat. Oodake, et see viga püsib allolevatel aegadel.",
+    "message": "Framezoo on mõne teenusepakkujaga taas probleeme. Kui te ei leia saadet ega esita seda, muutke allikat. Oodake, et see viga püsib allolevatel aegadel.",
     "title": "Pakkuja probleemid"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Lahtiütlemine",
-      "disclaimerText": "FrameZoo pakub turvalist, kaasaegset ja sujuvat meelelahutuskogemust. Selle hõlpsasti kasutatava liidese ja mitmekesise sisukogu, sealhulgas 4K HDR-toega, saavad kasutajad nautida oma lemmikfilme ja telesaateid. Tänu oma turvalisusele on FrameZoo parim valik muretu ja kvaliteetse voogesituse jaoks."
+      "disclaimerText": "Framezoo pakub turvalist, kaasaegset ja sujuvat meelelahutuskogemust. Selle hõlpsasti kasutatava liidese ja mitmekesise sisukogu, sealhulgas 4K HDR-toega, saavad kasutajad nautida oma lemmikfilme ja telesaateid. Tänu oma turvalisusele on Framezoo parim valik muretu ja kvaliteetse voogesituse jaoks."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +311,12 @@
       "subtitle": "Hoidke klahvi all, et seda abi igal ajal kuvada",
       "title": "Klaviatuuri otseteed"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Avasta",
       "login": "Logi sisse",
       "migration": "Konto üleviimine",
-      "pagetitle": "{{title}} – FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registreeri",
       "settings": "Sätted"
     }
@@ -415,7 +414,7 @@
           "Mis on teie jälgimisnimekirjas täna?",
           "Kuidas su päev möödus?",
           "Kahju, et sait ei tööta kunagi...",
-          "Kas FrameZoo pole lihtsalt parim?",
+          "Kas Framezoo pole lihtsalt parim?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +422,15 @@
     },
     "support": {
       "complete": "täielik",
-      "description": "FrameZoo töötab kahjumiga ja me vajame abi, et see oleks reklaamivaba! Kui teile meeldib FrameZooi kasutamine, kaaluge annetamist, et aidata meil kulusid katta.",
+      "description": "Framezoo töötab kahjumiga ja me vajame abi, et see oleks reklaamivaba! Kui teile meeldib Framezoo kasutamine, kaaluge annetamist, et aidata meil kulusid katta.",
       "donate": "Anneta",
-      "explanation": "Kui te laiendust ei kasuta või FED API-d pole seadistatud, võib sisu leidmine olla raskem! Tahame seda parandada, kuid ilma kallite serveriteta on sisu pakkuda palju raskem. Seega, kui teile meeldib FrameZooi kasutamine, kaaluge annetamist, et aidata meil katta meie kasvavaid kulusid.",
+      "explanation": "Kui te laiendust ei kasuta või FED API-d pole seadistatud, võib sisu leidmine olla raskem! Tahame seda parandada, kuid ilma kallite serveriteta on sisu pakkuda palju raskem. Seega, kui teile meeldib Framezoo kasutamine, kaaluge annetamist, et aidata meil katta meie kasvavaid kulusid.",
       "explanation2": "Kui soovite lisateavet, liituge meiega",
       "fluxer": "Fluxer",
       "label": "Projekti rahastamine: ${{current}} / ${{goal}}",
       "moreInfo": "Rohkem infot",
       "thankYou": "Täname teid toetuse eest!",
-      "title": "FrameZoo vajab teie abi!"
+      "title": "Framezoo vajab teie abi!"
     },
     "titles": {
       "69": {
@@ -561,7 +560,7 @@
       "title": "Loendid"
     },
     "public": {
-      "descriptionFallback": "FrameZoo's kureeritud jagatud kollektsioon.",
+      "descriptionFallback": "Framezoo kureeritud jagatud kollektsioon.",
       "notFoundDescription": "See jagamise link puudub või pole enam saadaval.",
       "notFoundTitle": "Nimekirja ei leitud",
       "pageTitle": "Jagatud loend",
@@ -693,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Teie brauser ei toeta automaatset PWA installiviipa.\nSaate siiski installida brauseri menüü kaudu (näiteks: „Installi rakendus”, „Loo otsetee” või „Lisa dokki/avakuvale”).",
-      "iosSafariGuide": "FrameZooi installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa."
+    "iosSafariGuide": "Framezoo installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa."
     },
     "menu": {
       "accountMenu": "Ava konto menüü",

@@ -11,22 +11,20 @@
       "adding": "Dodajanje ...",
       "ariaClose": "Zapri upravitelja dodatkov",
       "ariaManage": "Upravljanje dodatkov",
-      "createGuideLink": "Kako ustvariti dodatek",
       "errorFallback": "Tega dodatka ni mogoče namestiti.",
       "manageListButton": "Upravljanje seznama dodatkov",
       "subtitle": "Ne priporočamo dodajanja neuradnih ali nezakonitih dodatkov.",
       "title": "Namizni dodatki"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Podprte platforme za dodatke:",
-      "supported": "Podprte platforme: FrameZoo in Stremio"
+      "supported": "Podprte platforme: Framezoo in Stremio"
     },
     "page": {
       "addAddonButton": "Dodaj dodatek",
       "description": "Dodatki niso obvezni. Ta aplikacija ne združuje, priporoča ali gosti nobenega dodatka.",
-      "createGuideLink": "Ustvari vodnik za dodatke",
       "disabled": "Onemogočen",
       "emptyInstalled": "V sistemu še ni nameščen noben dodatek.",
       "enabled": "Omogočeno",
@@ -225,6 +223,7 @@
     },
     "scrollToTop": "Nazaj na vrh",
     "tabs": {
+      "all": "Vse",
       "movies": "Filmi",
       "top10": "10 najboljših",
       "tvshows": "TV oddaje"
@@ -234,7 +233,7 @@
   "downtimeNotice": {
     "badge": "Težave",
     "goHome": "Pojdi domov",
-    "message": "FrameZoo ima spet težave z nekaterimi ponudniki. Če ne morete najti ali predvajati oddaje, spremenite vir. Pričakujte, da se bo ta napaka pojavljala skozi spodnje čase.",
+    "message": "Framezoo ima spet težave z nekaterimi ponudniki. Če ne morete najti ali predvajati oddaje, spremenite vir. Pričakujte, da se bo ta napaka pojavljala skozi spodnje čase.",
     "title": "Težave s ponudnikom"
   },
   "errors": {
@@ -247,7 +246,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Opozorilo",
-      "disclaimerText": "FrameZoo ponuja varno, sodobno in brezhibno izkušnjo zabave. Z vmesnikom, ki je enostaven za uporabo, in raznoliko knjižnico vsebin, vključno s podporo za 4K HDR, lahko uporabniki uživajo v svojih najljubših filmih in TV-oddajah. S svojo predanostjo varnosti je FrameZoo najboljša izbira za brezskrbno visokokakovostno pretočno izkušnjo."
+      "disclaimerText": "Framezoo ponuja varno, sodobno in brezhibno izkušnjo zabave. Z vmesnikom, ki je enostaven za uporabo, in raznoliko knjižnico vsebin, vključno s podporo za 4K HDR, lahko uporabniki uživajo v svojih najljubših filmih in TV-oddajah. S svojo predanostjo varnosti je Framezoo najboljša izbira za brezskrbno visokokakovostno pretočno izkušnjo."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +311,12 @@
       "subtitle": "Držite `, če želite kadar koli prikazati to pomoč",
       "title": "Bližnjice na tipkovnici"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Odkrij",
       "login": "Prijava",
       "migration": "Preseli račun",
-      "pagetitle": "{{title}} – FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registriraj se",
       "settings": "Nastavitve"
     }
@@ -415,7 +414,7 @@
           "Kaj je danes na vašem seznamu za spremljanje?",
           "Kakšen je bil vaš dan?",
           "Moja slaba stran je, da stran nikoli ne deluje...",
-          "Ali ni FrameZoo najboljši?",
+          "Ali ni Framezoo najboljši?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +422,15 @@
     },
     "support": {
       "complete": "popolna",
-      "description": "FrameZoo posluje z izgubo in potrebujemo pomoč, da ostane brez oglasov! Če uživate v uporabi FrameZooa, razmislite o donaciji, da nam pomagate pokriti naše stroške.",
+      "description": "Framezoo posluje z izgubo in potrebujemo pomoč, da ostane brez oglasov! Če uživate v uporabi Framezoo, razmislite o donaciji, da nam pomagate pokriti naše stroške.",
       "donate": "Donirajte",
-      "explanation": "Če ne uporabljate razširitve ali nimate nastavljenega FED API-ja, bo morda težje najti vsebino! To želimo popraviti, vendar je veliko težje zagotoviti vsebino brez dragih strežnikov. Če radi uporabljate FrameZoo, vas prosimo, da razmislite o donaciji in nam tako pomagate pokriti naše naraščajoče stroške.",
+      "explanation": "Če ne uporabljate razširitve ali nimate nastavljenega FED API-ja, bo morda težje najti vsebino! To želimo popraviti, vendar je veliko težje zagotoviti vsebino brez dragih strežnikov. Če radi uporabljate Framezoo, vas prosimo, da razmislite o donaciji in nam tako pomagate pokriti naše naraščajoče stroške.",
       "explanation2": "Če želite več informacij, se nam pridružite",
       "fluxer": "Fluxer",
       "label": "Financiranje projekta: ${{current}} / ${{goal}}",
       "moreInfo": "Več informacij",
       "thankYou": "Hvala za vašo podporo!",
-      "title": "FrameZoo potrebuje vašo pomoč!"
+      "title": "Framezoo potrebuje vašo pomoč!"
     },
     "titles": {
       "69": {
@@ -561,7 +560,7 @@
       "title": "Seznami"
     },
     "public": {
-      "descriptionFallback": "Skupna zbirka, kurirana v FrameZoo.",
+      "descriptionFallback": "Skupna zbirka, kurirana v Framezoo.",
       "notFoundDescription": "Ta povezava za skupno rabo manjka ali ni več na voljo.",
       "notFoundTitle": "Seznama ni mogoče najti",
       "pageTitle": "Skupni seznam",
@@ -693,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Vaš brskalnik ne podpira samodejnega poziva za namestitev PWA.\nŠe vedno lahko namestite z uporabo menija brskalnika (na primer: »Namesti aplikacijo«, »Ustvari bližnjico« ali »Dodaj na dok/začetni zaslon«).",
-      "iosSafariGuide": "Če želite namestiti FrameZoo kot aplikacijo:\n\n1. Tapnite gumb Skupna raba (kvadrat s puščico).\n2. Izberite »Dodaj na začetni zaslon«.\n3. Tapnite Dodaj."
+      "iosSafariGuide": "Če želite namestiti Framezoo kot aplikacijo:\n\n1. Tapnite gumb Skupna raba (kvadrat s puščico).\n2. Izberite »Dodaj na začetni zaslon«.\n3. Tapnite Dodaj."
     },
     "menu": {
       "accountMenu": "Odprite meni računa",

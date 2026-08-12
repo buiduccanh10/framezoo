@@ -13,12 +13,12 @@
     "description": "Innfædd spilun, skarpari stýringar og rólegri staður fyrir næsta úr.",
     "primaryCta": "Sækja skrifborð",
     "secondaryCta": "Sjáðu reynsluna",
-    "imageAlt": "Forskoðun FrameZoo skrifborðsforrits",
+    "imageAlt": "Forskoðun Framezoo skrifborðsforrits",
     "version": "Útgáfa á skjáborði"
   },
   "features": {
     "performanceTitle": "Bókasafnið þitt, án vafraskatts.",
-    "overviewDescription": "FrameZoo Desktop gefur spilun herbergið sem það þarf: innfæddur árangur, hreinar sendingar og stýringar sem haldast úr vegi.",
+    "overviewDescription": "Framezoo Desktop gefur spilun herbergið sem það þarf: innfæddur árangur, hreinar sendingar og stýringar sem haldast úr vegi.",
     "playback": "Innfædd spilun",
     "playbackDescription": "Slétt myndband með skrifborðsmiðlun.",
     "performance": "Rólegur árangur",
@@ -33,7 +33,7 @@
     "addonThree": "Samfélagsframlengingar",
     "showcaseTitle": "Skjárinn er áfangastaðurinn.",
     "showcaseDescription": "Einbeittur skjáborðsyfirborð til að uppgötva, spila og allt í kringum söguna.",
-    "showcaseCaption": "FrameZoo skjáborð / fókusstilling",
+    "showcaseCaption": "Framezoo skjáborð / fókusstilling",
     "featureLabel": "Leikmaðurinn, á þinn hátt",
     "subtitleControls": "Stilltu spilarann ​​í kringum þig",
     "experienceTitle": "Allt sem þú þarft fyrir betra úr.",
@@ -42,14 +42,14 @@
     "subtitleSync": "Samstilltu texta við gervigreind",
     "dualSubtitles": "Haltu tveimur textamálum sýnilegum",
     "showcaseSecondaryTitle": "Finndu eitthvað sem er þess virði að horfa á.",
-    "showcasePrimaryAlt": "FrameZoo titilupplýsingaskjár með listaverkum, einkunnum, árstíðum og lýsigögnum",
+    "showcasePrimaryAlt": "Framezoo titilupplýsingaskjár með listaverkum, einkunnum, árstíðum og lýsigögnum",
     "subtitleControlsDescription": "Veldu uppruna texta, tungumál, tímasetningu og birtingu án þess að brjóta flæði þitt.",
     "showcaseSecondaryDescription": "Byrjaðu á hreinu uppgötvunaryfirborði, farðu síðan yfir í spilun án þess að missa þinn stað.",
-    "showcaseSecondaryAlt": "FrameZoo uppgötvunarskjár með leit, flokkum og titlaröðum"
+    "showcaseSecondaryAlt": "Framezoo uppgötvunarskjár með leit, flokkum og titlaröðum"
   },
   "download": {
     "eyebrow": "VELDU BYGGINGU ÞÍNA",
-    "title": "Taktu FrameZoo með þér.",
+    "title": "Taktu Framezoo með þér.",
     "description": "Veldu smíðina fyrir vélina þína. Vafrinn þinn mun gera tillöguna eða sýna alla tiltæka valkosti hér að neðan.",
     "recommended": "Mælt er með",
     "chooseBuild": "Veldu byggingu",
@@ -72,7 +72,7 @@
   },
   "addonGuide": {
     "manifestDescription": "Lýsigögn segja forritinu hver viðbótin þín er, hvaða auðlindir það styður og hvar táknið hennar býr.",
-    "description": "Viðbót er lítil HTTP þjónusta. Berið fram upplýsingaskrá og úrræði sem þú þarft; FrameZoo sér um afganginn.",
+    "description": "Viðbót er lítil HTTP þjónusta. Berið fram upplýsingaskrá og úrræði sem þú þarft; Framezoo sér um afganginn.",
     "manifestTitle": "Byrjaðu á manifest.json",
     "eyebrow": "AÐBÓTUNARBÓKUN / LEIÐBEININGAR",
     "title": "Búðu til viðbót án þess að taka þátt í appferlinu.",
@@ -89,16 +89,16 @@
     "steps": [
       "Þjónu /manifest.json og auðlindaendapunktum þínum frá staðbundnum eða opinberum HTTP(S) netþjóni.",
       "Prófaðu hvern endapunkt með krullu og staðfestu JSON lögunina.",
-      "Límdu upplýsingavefslóðina inn í FrameZoo Desktop > Addons."
+      "Límdu upplýsingavefslóðina inn í Framezoo Desktop > Addons."
     ],
     "advancedTitle": "Vantar þig Node-hjálp?",
     "advancedLink": "Opna háþróaða SDK tilvísun",
     "advancedDescription": "Stremio Addon SDK er valfrjálst. Notaðu það ef þú vilt leiðar- og raðgreiningarhjálpar; það er ekki krafist í bókuninni."
   },
   "deepLink": {
-    "opening": "Opnar FrameZoo...",
-    "download": "Sækja FrameZoo",
-    "openingDescription": "Vafrinn þinn er að reyna að opna FrameZoo Desktop appið. Ef kvaðning birtist skaltu velja <1>Open FrameZoo</1>.",
+    "opening": "Opnar Framezoo...",
+    "download": "Sækja Framezoo",
+    "openingDescription": "Vafrinn þinn er að reyna að opna Framezoo Desktop appið. Ef kvaðning birtist skaltu velja <1>Open Framezoo</1>.",
     "retry": "Reyndu að opna Desktop App aftur",
     "backHome": "Farðu aftur á heimasíðuna"
   }

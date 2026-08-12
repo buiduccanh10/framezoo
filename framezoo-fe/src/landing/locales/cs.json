@@ -13,12 +13,12 @@
     "description": "Nativní přehrávání, ostřejší ovládání a klidnější místo pro vaše další hodinky.",
     "primaryCta": "Stáhnout desktop",
     "secondaryCta": "Podívejte se na zážitek",
-    "imageAlt": "Náhled desktopové aplikace FrameZoo",
+    "imageAlt": "Náhled desktopové aplikace Framezoo",
     "version": "Desktopová verze"
   },
   "features": {
     "performanceTitle": "Vaše knihovna bez daně z prohlížeče.",
-    "overviewDescription": "FrameZoo Desktop poskytuje přehrávání prostor, který potřebuje: nativní výkon, čisté předávání a ovládací prvky, které nepřekáží.",
+    "overviewDescription": "Framezoo Desktop poskytuje přehrávání prostor, který potřebuje: nativní výkon, čisté předávání a ovládací prvky, které nepřekáží.",
     "playback": "Nativní přehrávání",
     "playbackDescription": "Plynulé video se zpracováním médií na úrovni stolního počítače.",
     "performance": "Tichý výkon",
@@ -33,7 +33,7 @@
     "addonThree": "Rozšíření komunity",
     "showcaseTitle": "Obrazovka je cíl.",
     "showcaseDescription": "Zaměřený povrch plochy pro objevování, přehrávání a vše kolem příběhu.",
-    "showcaseCaption": "FrameZoo Desktop / Režim zaostření",
+    "showcaseCaption": "Framezoo Desktop / Režim zaostření",
     "featureLabel": "Hráč, vaše cesta",
     "subtitleSync": "Synchronizujte titulky s AI",
     "dualSubtitlesDescription": "Zapněte duální titulky, když se učíte, porovnáváte nebo prostě preferujete obojí.",
@@ -42,14 +42,14 @@
     "experienceTitle": "Vše, co potřebujete pro lepší hodinky.",
     "subtitleControls": "Nalaďte si přehrávač kolem sebe",
     "showcaseSecondaryTitle": "Najděte něco, co stojí za to sledovat.",
-    "showcaseSecondaryAlt": "Obrazovka zjišťování FrameZoo s vyhledáváním, kategoriemi a řádky titulků",
+    "showcaseSecondaryAlt": "Obrazovka zjišťování Framezoo s vyhledáváním, kategoriemi a řádky titulků",
     "showcaseSecondaryDescription": "Začněte z čistého objevovacího povrchu a poté přejděte do přehrávání, aniž byste ztratili své místo.",
-    "showcasePrimaryAlt": "Obrazovka s podrobnostmi o titulu FrameZoo s kresbou, hodnocením, sezónami a metadaty",
+    "showcasePrimaryAlt": "Obrazovka s podrobnostmi o titulu Framezoo s kresbou, hodnocením, sezónami a metadaty",
     "subtitleControlsDescription": "Vyberte zdroj titulků, jazyk, časování a zobrazení, aniž byste narušili tok titulků."
   },
   "download": {
     "eyebrow": "VYBERTE SI SVOU STAVBU",
-    "title": "Vezměte FrameZoo s sebou.",
+    "title": "Vezměte Framezoo s sebou.",
     "description": "Vyberte sestavení pro váš stroj. Váš prohlížeč doporučí nebo odhalí všechny dostupné možnosti níže.",
     "recommended": "Doporučeno",
     "chooseBuild": "Vyberte sestavení",
@@ -71,7 +71,7 @@
     "status": "Desktop-first. Addon připraven."
   },
   "addonGuide": {
-    "description": "Addon je malá služba HTTP. Podávejte manifest a zdroje, které potřebujete; FrameZoo se postará o zbytek.",
+    "description": "Addon je malá služba HTTP. Podávejte manifest a zdroje, které potřebujete; Framezoo se postará o zbytek.",
     "manifestTitle": "Začněte souborem manifest.json",
     "manifestDescription": "Metadata řeknou aplikaci, kdo je váš doplněk, jaké zdroje podporuje a kde se nachází jeho ikona.",
     "resourcesTitle": "Vyberte zdroje",
@@ -90,15 +90,15 @@
     "steps": [
       "Obsluhujte /manifest.json a své koncové body prostředků z místního nebo veřejného serveru HTTP(S).",
       "Otestujte každý koncový bod pomocí zvlnění a ověřte tvar JSON.",
-      "Vložte adresu URL manifestu do FrameZoo Desktop > Addons."
+      "Vložte adresu URL manifestu do Framezoo Desktop > Addons."
     ],
     "advancedDescription": "Sada Stremio Addon SDK je volitelná. Použijte jej, pokud chcete pomocníky pro směrování a serializaci; protokol to nevyžaduje.",
     "advancedLink": "Otevřete pokročilou referenci SDK"
   },
   "deepLink": {
-    "openingDescription": "Váš prohlížeč se pokouší otevřít aplikaci FrameZoo Desktop. Pokud se zobrazí výzva, vyberte <1>Otevřít FrameZoo</1>.",
-    "download": "Stáhněte si FrameZoo",
-    "opening": "Otevírání FrameZoo...",
+    "openingDescription": "Váš prohlížeč se pokouší otevřít aplikaci Framezoo Desktop. Pokud se zobrazí výzva, vyberte <1>Otevřít Framezoo</1>.",
+    "download": "Stáhněte si Framezoo",
+    "opening": "Otevírání Framezoo...",
     "retry": "Zkuste znovu otevřít aplikaci Desktop",
     "backHome": "Přejít zpět na domovskou stránku"
   }

@@ -15,10 +15,11 @@ export type DiscoverContentType =
   | "search";
 
 export type MediaType = "movie" | "tv";
+export type DiscoverMediaType = MediaType | "all";
 
 export interface UseDiscoverMediaProps {
   contentType: DiscoverContentType;
-  mediaType: MediaType;
+  mediaType: DiscoverMediaType;
   id?: string;
   fallbackType?: DiscoverContentType;
   page?: number;
@@ -47,6 +48,8 @@ export interface DiscoverMedia {
   overview: string;
   vote_average: number;
   vote_count: number;
+  popularity?: number;
+  releaseQuality?: "CAM" | "HD" | null;
   type?: "movie" | "show";
 }
 
