@@ -1,6 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
-import { TrailerPlayer } from "@/components/TrailerPlayer";
+import {
+  TrailerPlayer,
+  type TrailerPlayerHandle,
+} from "@/components/TrailerPlayer";
 import { LazyImage } from "@/components/utils/Image";
 
 interface DetailsBackdropProps {
@@ -11,20 +20,37 @@ interface DetailsBackdropProps {
   tmdbType: "movie" | "show";
   imdbId?: string | null;
   isTrailerEnabled: boolean;
+  isTrailerMuted: boolean;
 }
 
-export function DetailsBackdrop({
-  title,
-  logoUrl,
-  backdrop,
-  tmdbId,
-  tmdbType,
-  imdbId,
-  isTrailerEnabled,
-}: DetailsBackdropProps) {
+export const DetailsBackdrop = forwardRef<
+  TrailerPlayerHandle,
+  DetailsBackdropProps
+>(function DetailsBackdropComponent(
+  {
+    title,
+    logoUrl,
+    backdrop,
+    tmdbId,
+    tmdbType,
+    imdbId,
+    isTrailerEnabled,
+    isTrailerMuted,
+  },
+  ref,
+) {
   const [logoHeight, setLogoHeight] = useState<number>(0);
   const logoRef = useRef<HTMLDivElement>(null);
   const [trailerReady, setTrailerReady] = useState(false);
+  const trailerPlayerRef = useRef<TrailerPlayerHandle>(null);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      setMuted: (muted) => trailerPlayerRef.current?.setMuted(muted),
+    }),
+    [],
+  );
 
   useEffect(() => {
     if (!isTrailerEnabled) {
@@ -117,12 +143,17 @@ export function DetailsBackdrop({
           }}
         >
           <TrailerPlayer
+            ref={trailerPlayerRef}
             tmdbId={tmdbId}
             tmdbType={tmdbType}
             initialImdbId={imdbId || undefined}
             isActive={isTrailerEnabled}
+            isMuted={isTrailerMuted}
             onPlay={() => {
               if (isTrailerEnabled) setTrailerReady(true);
+            }}
+            onError={() => {
+              if (isTrailerEnabled) setTrailerReady(false);
             }}
           />
         </div>
@@ -141,4 +172,4 @@ export function DetailsBackdrop({
       />
     </div>
   );
-}
+});

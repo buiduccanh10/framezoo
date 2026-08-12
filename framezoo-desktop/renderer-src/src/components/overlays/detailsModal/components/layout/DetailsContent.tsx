@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { t } from "i18next";
 import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,12 +5,12 @@ import { useCopyToClipboard, useIntersection } from "react-use";
 
 import { getIMDbMetadata } from "@/backend/metadata/imdb";
 import { getRottenTomatoesMetadata } from "@/backend/metadata/rottenTomatoes";
-import { getMediaVideos } from "@/backend/metadata/tmdb";
 import { TMDBIdToUrlId, getSeasonDetails } from "@/backend/metadata/tmdb";
 import { getNetworkContent } from "@/backend/metadata/traktApi";
 import { MWMediaType } from "@/backend/metadata/types/mw";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { Icon, Icons } from "@/components/Icon";
+import type { TrailerPlayerHandle } from "@/components/TrailerPlayer";
 import { conf } from "@/setup/config";
 import { useToastStore } from "@/stores/interface/toast";
 import { useLanguageStore } from "@/stores/language";
@@ -276,10 +275,14 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [showTrailer, setShowTrailer] = useState(false);
   const isTrailerEnabled = usePreferencesStore((s) => s.enableTrailer);
   const setEnableTrailer = usePreferencesStore((s) => s.setEnableTrailer);
+  const isTrailerMuted = !usePreferencesStore((s) => s.enableTrailerAudio);
+  const setEnableTrailerAudio = usePreferencesStore(
+    (s) => s.setEnableTrailerAudio,
+  );
   const [trailerUrl, setTrailerUrl] = useState<string | undefined>();
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [showCollection, setShowCollection] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const trailerPlayerRef = useRef<TrailerPlayerHandle>(null);
   const [selectedSeason, setSelectedSeason] = useState<number>(1);
   const [fetchedSeasons, setFetchedSeasons] = useState<
     Record<number, DetailsEpisode[]>
@@ -402,38 +405,6 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
     return () => {
       isCancelled = true;
       clearTimeout(timer);
-    };
-  }, [data.id, data.type]);
-
-  // Fetch trailer video key for backdrop
-  useEffect(() => {
-    let isCancelled = false;
-    setTrailerKey(null);
-
-    if (!data.id || !data.type) return;
-
-    const fetchTrailerForBackdrop = async () => {
-      try {
-        const videos = await getMediaVideos(
-          data.id!.toString(),
-          data.type === "movie" ? TMDBContentTypes.MOVIE : TMDBContentTypes.TV,
-        );
-        if (isCancelled) return;
-        const trailer =
-          videos.find((v) => v.type === "Trailer") ?? videos[0] ?? null;
-        const videoKey = trailer?.key ?? null;
-
-        if (!isCancelled) {
-          setTrailerKey(videoKey);
-        }
-      } catch {
-        if (!isCancelled) setTrailerKey(null);
-      }
-    };
-
-    void fetchTrailerForBackdrop();
-    return () => {
-      isCancelled = true;
     };
   }, [data.id, data.type]);
 
@@ -649,6 +620,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
       {/* Backdrop */}
       <div className="relative">
         <DetailsBackdrop
+          ref={trailerPlayerRef}
           title={data.title}
           logoUrl={data.logoUrl}
           backdrop={data.backdrop}
@@ -656,6 +628,7 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
           tmdbType={data.type === "movie" ? "movie" : "show"}
           imdbId={data.imdbId}
           isTrailerEnabled={isTrailerEnabled}
+          isTrailerMuted={isTrailerMuted}
         />
         <button
           type="button"
@@ -666,11 +639,25 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
           title={isTrailerEnabled ? "Show image" : "Show trailer"}
         >
           <Icon
-            icon={Icons.IMAGE}
-            className={classNames(
-              "inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl",
-              !isTrailerEnabled ? "text-buttons-purple" : "text-white",
-            )}
+            icon={isTrailerEnabled ? Icons.IMG_X : Icons.IMG}
+            className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl text-white"
+          />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            const nextMuted = !isTrailerMuted;
+            trailerPlayerRef.current?.setMuted(nextMuted);
+            setEnableTrailerAudio(!nextMuted);
+          }}
+          className="pointer-events-auto absolute bottom-6 right-20 z-50 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+          aria-label={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}
+          aria-pressed={!isTrailerMuted}
+          title={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}
+        >
+          <Icon
+            icon={isTrailerMuted ? Icons.VOLUME_X : Icons.VOLUME}
+            className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl text-white"
           />
         </button>
       </div>

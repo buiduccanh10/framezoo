@@ -10,6 +10,7 @@ import {
 export interface PreferencesStore {
   enableAutoplay: boolean;
   enableTrailer: boolean;
+  enableTrailerAudio: boolean;
   enableSkipCredits: boolean;
   enableAutoSkipSegments: boolean;
   proxyTmdb: boolean;
@@ -26,6 +27,7 @@ export interface PreferencesStore {
 
   setEnableAutoplay(v: boolean): void;
   setEnableTrailer(v: boolean): void;
+  setEnableTrailerAudio(v: boolean): void;
   setEnableSkipCredits(v: boolean): void;
   setEnableAutoSkipSegments(v: boolean): void;
   setProxyTmdb(v: boolean): void;
@@ -46,6 +48,7 @@ export const usePreferencesStore = create(
     immer<PreferencesStore>((set) => ({
       enableAutoplay: true,
       enableTrailer: true,
+      enableTrailerAudio: false,
       enableSkipCredits: false,
       enableAutoSkipSegments: false,
       proxyTmdb: false,
@@ -68,6 +71,11 @@ export const usePreferencesStore = create(
       setEnableTrailer(v) {
         set((s) => {
           s.enableTrailer = v;
+        });
+      },
+      setEnableTrailerAudio(v) {
+        set((s) => {
+          s.enableTrailerAudio = v;
         });
       },
       setEnableSkipCredits(v) {

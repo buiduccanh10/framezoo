@@ -20,7 +20,10 @@ import {
   type ReleaseQualityVariant,
   getReleaseQualityVariantFromTmdbReleaseDates,
 } from "@/components/media/ReleaseQualityBadge";
-import { TrailerPlayer } from "@/components/TrailerPlayer";
+import {
+  TrailerPlayer,
+  type TrailerPlayerHandle,
+} from "@/components/TrailerPlayer";
 import { LazyImage } from "@/components/utils/Image";
 import { Movie, TVShow } from "@/pages/discover/common";
 import { useLanguageStore } from "@/stores/language";
@@ -197,8 +200,13 @@ export function FeaturedCarousel({
   const hasReportedInitialContent = useRef(false);
 
   const [trailerReady, setTrailerReady] = useState(false);
+  const trailerPlayerRef = useRef<TrailerPlayerHandle>(null);
   const isTrailerEnabled = usePreferencesStore((s) => s.enableTrailer);
   const setEnableTrailer = usePreferencesStore((s) => s.setEnableTrailer);
+  const isTrailerMuted = !usePreferencesStore((s) => s.enableTrailerAudio);
+  const setEnableTrailerAudio = usePreferencesStore(
+    (s) => s.setEnableTrailerAudio,
+  );
   const currentMedia = media[currentIndex];
 
   const SLIDE_QUANTITY = 15;
@@ -847,6 +855,8 @@ export function FeaturedCarousel({
                 tmdbType={item.type === "movie" ? "movie" : "show"}
                 initialImdbId={item.external_ids?.imdb_id}
                 isActive={isTrailerEnabled && index === currentIndex}
+                isMuted={isTrailerMuted}
+                ref={index === currentIndex ? trailerPlayerRef : undefined}
                 onPlay={() => {
                   if (isTrailerEnabled && index === currentIndex) {
                     setTrailerReady(true);
@@ -1145,11 +1155,25 @@ export function FeaturedCarousel({
               title={isTrailerEnabled ? "Show image" : "Show trailer"}
             >
               <Icon
-                icon={Icons.IMAGE}
-                className={classNames(
-                  "inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl",
-                  !isTrailerEnabled ? "text-buttons-purple" : "text-white",
-                )}
+                icon={isTrailerEnabled ? Icons.IMG_X : Icons.IMG}
+                className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl text-white"
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const nextMuted = !isTrailerMuted;
+                trailerPlayerRef.current?.setMuted(nextMuted);
+                setEnableTrailerAudio(!nextMuted);
+              }}
+              className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-pill-background bg-opacity-50 text-white transition-all duration-300 ease-in-out hover:bg-pill-backgroundHover"
+              aria-label={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}
+              aria-pressed={!isTrailerMuted}
+              title={isTrailerMuted ? "Unmute trailer" : "Mute trailer"}
+            >
+              <Icon
+                icon={isTrailerMuted ? Icons.VOLUME_X : Icons.VOLUME}
+                className="inline-flex h-6 w-6 shrink-0 items-center justify-center text-2xl text-white"
               />
             </button>
             <RandomMovieButton />
