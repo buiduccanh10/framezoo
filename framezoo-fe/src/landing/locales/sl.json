@@ -13,12 +13,12 @@
     "description": "Izvorno predvajanje, ostrejše krmiljenje in mirnejše mesto za vašo naslednjo uro.",
     "primaryCta": "Prenesite namizje",
     "secondaryCta": "Glej izkušnjo",
-    "imageAlt": "Predogled namiznega programa FrameZoo",
+    "imageAlt": "Predogled namiznega programa Framezoo",
     "version": "Izdaja za namizne računalnike"
   },
   "features": {
     "performanceTitle": "Vaša knjižnica, brez davka na brskalnik.",
-    "overviewDescription": "FrameZoo Desktop daje predvajanju prostor, ki ga potrebuje: izvorno delovanje, čiste predaje in kontrolniki, ki ostanejo stran od poti.",
+    "overviewDescription": "Framezoo Desktop daje predvajanju prostor, ki ga potrebuje: izvorno delovanje, čiste predaje in kontrolniki, ki ostanejo stran od poti.",
     "playback": "Izvorno predvajanje",
     "playbackDescription": "Gladek videoposnetek z upravljanjem medijev v namiznem razredu.",
     "performance": "Tiho delovanje",
@@ -33,7 +33,7 @@
     "addonThree": "razširitve skupnosti",
     "showcaseTitle": "Zaslon je cilj.",
     "showcaseDescription": "Osredotočena površina namizja za odkrivanje, predvajanje in vse, kar je povezano z zgodbo.",
-    "showcaseCaption": "FrameZoo Desktop/Focus način",
+    "showcaseCaption": "Framezoo Desktop/Focus način",
     "subtitleSyncDescription": "V nekaj sekundah poravnajte začetni dialog s sliko.",
     "featureLabel": "Igralec na svoj način",
     "subtitleSync": "Sinhronizirajte podnapise z AI",
@@ -42,14 +42,14 @@
     "dualSubtitles": "Dva jezika podnapisov naj bodo vidna",
     "showcaseSecondaryTitle": "Poiščite nekaj, kar je vredno ogleda.",
     "subtitleControls": "Uglasite predvajalnik okoli sebe",
-    "showcaseSecondaryAlt": "Zaslon za odkrivanje FrameZoo z iskanjem, kategorijami in naslovnimi vrsticami",
-    "showcasePrimaryAlt": "Zaslon s podrobnostmi naslova FrameZoo z umetninami, ocenami, letnimi časi in metapodatki",
+    "showcaseSecondaryAlt": "Zaslon za odkrivanje Framezoo z iskanjem, kategorijami in naslovnimi vrsticami",
+    "showcasePrimaryAlt": "Zaslon s podrobnostmi naslova Framezoo z umetninami, ocenami, letnimi časi in metapodatki",
     "subtitleControlsDescription": "Izberite vir podnapisov, jezik, čas in prikaz, ne da bi prekinili vaš tok.",
     "showcaseSecondaryDescription": "Začnite s čiste površine za odkrivanje, nato se premaknite na predvajanje, ne da bi izgubili svoje mesto."
   },
   "download": {
     "eyebrow": "IZBERITE SVOJO ZGRADBO",
-    "title": "S seboj vzemite FrameZoo.",
+    "title": "S seboj vzemite Framezoo.",
     "description": "Izberite gradnjo za vaš stroj. Vaš brskalnik bo dal priporočilo ali razkril vsako razpoložljivo možnost spodaj.",
     "recommended": "Priporočeno",
     "chooseBuild": "Izberite zgradbo",
@@ -74,7 +74,7 @@
     "manifestTitle": "Začnite z manifest.json",
     "eyebrow": "DODATNI PROTOKOL / VODNIK",
     "title": "Zgradite dodatek, ne da bi se pridružili procesu aplikacije.",
-    "description": "Dodatek je majhna storitev HTTP. Postrezite manifest in vire, ki jih potrebujete; FrameZoo poskrbi za ostalo.",
+    "description": "Dodatek je majhna storitev HTTP. Postrezite manifest in vire, ki jih potrebujete; Framezoo poskrbi za ostalo.",
     "resources": {
       "catalog": "Vrstice filmov ali serij za odkrivanje.",
       "meta": "Metapodatki filma ali serije za naslov.",
@@ -89,17 +89,17 @@
     "steps": [
       "Strežite /manifest.json in svoje končne točke virov iz lokalnega ali javnega strežnika HTTP(S).",
       "Preizkusite vsako končno točko s curl in preverite obliko JSON.",
-      "Prilepite URL manifesta v FrameZoo Desktop > Addons."
+      "Prilepite URL manifesta v Framezoo Desktop > Addons."
     ],
     "advancedTitle": "Potrebujete pomočnika Node?",
     "advancedDescription": "Stremio Addon SDK ni obvezen. Uporabite ga, če želite pomočnike za usmerjanje in serializacijo; protokol ga ne zahteva.",
     "advancedLink": "Odpri napredno referenco SDK"
   },
   "deepLink": {
-    "opening": "Odpiranje FrameZoo ...",
-    "download": "Prenesite FrameZoo",
+    "opening": "Odpiranje Framezoo ...",
+    "download": "Prenesite Framezoo",
     "retry": "Poskusite znova odpreti namizno aplikacijo",
-    "openingDescription": "Vaš brskalnik poskuša odpreti namizno aplikacijo FrameZoo. Če se prikaže poziv, izberite <1>Odpri FrameZoo</1>.",
+    "openingDescription": "Vaš brskalnik poskuša odpreti namizno aplikacijo Framezoo. Če se prikaže poziv, izberite <1>Odpri Framezoo</1>.",
     "backHome": "Nazaj na domačo stran"
   }
 }

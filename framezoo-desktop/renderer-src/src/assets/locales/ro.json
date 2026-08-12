@@ -11,22 +11,20 @@
       "adding": "Se adaugă...",
       "ariaClose": "Închideți addon manager",
       "ariaManage": "Gestionați suplimente",
-      "createGuideLink": "Cum se creează un supliment",
       "errorFallback": "Imposibil de instalat acest addon.",
       "manageListButton": "Gestionați lista de suplimente",
       "subtitle": "Nu vă recomandăm să adăugați suplimente neoficiale sau ilegale.",
       "title": "Suplimente pentru desktop"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Platforme acceptate pentru suplimente:",
-      "supported": "Platforme acceptate: FrameZoo și Stremio"
+      "supported": "Platforme acceptate: Framezoo și Stremio"
     },
     "page": {
       "addAddonButton": "Adăugați Addon",
       "description": "Suplimentele sunt opționale. Această aplicație nu include, nu recomandă sau găzduiește niciun supliment.",
-      "createGuideLink": "Creați un ghid pentru suplimente",
       "disabled": "Dezactivat",
       "emptyInstalled": "Nu există încă suplimente instalate în sistem.",
       "enabled": "Activat",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Probleme",
     "goHome": "Du-te acasă",
-    "message": "FrameZoo se confruntă din nou cu probleme cu unii furnizori, dacă nu puteți găsi sau reda o emisiune, vă rugăm să schimbați sursa. Așteptați-vă că această eroare va persista pe parcursul perioadelor de mai jos.",
+    "message": "Framezoo se confruntă din nou cu probleme cu unii furnizori, dacă nu puteți găsi sau reda o emisiune, vă rugăm să schimbați sursa. Așteptați-vă că această eroare va persista pe parcursul perioadelor de mai jos.",
     "title": "Probleme cu furnizorii"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Declinare a răspunderii",
-      "disclaimerText": "FrameZoo oferă o experiență de divertisment sigură, modernă și perfectă. Cu interfața sa ușor de utilizat și biblioteca diversă de conținut, inclusiv suportul 4K HDR, utilizatorii se pot bucura de filmele și emisiunile TV preferate. Și prin angajamentul său față de securitate, FrameZoo este alegerea supremă pentru o experiență de streaming de înaltă calitate, fără griji."
+      "disclaimerText": "Framezoo oferă o experiență de divertisment sigură, modernă și perfectă. Cu interfața sa ușor de utilizat și biblioteca diversă de conținut, inclusiv suportul 4K HDR, utilizatorii se pot bucura de filmele și emisiunile TV preferate. Și prin angajamentul său față de securitate, Framezoo este alegerea supremă pentru o experiență de streaming de înaltă calitate, fără griji."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +310,12 @@
       "subtitle": "Țineți apăsat ` pentru a afișa acest ajutor oricând",
       "title": "Comenzi rapide de la tastatură"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Descoperă",
       "login": "Log in",
       "migration": "Migrare cont",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Inregistreaza-te",
       "settings": "Setări"
     }
@@ -415,7 +413,7 @@
           "Ce ai vrea să vizionezi azi?",
           "Cum a fost ziua de azi?",
           "Vina mea că site-ul nu funcționează niciodată...",
-          "Nu-i așa că FrameZoo e cel mai tare?",
+          "Nu-i așa că Framezoo e cel mai tare?",
           ">ᴗ<"
         ]
       },
@@ -423,28 +421,24 @@
     },
     "support": {
       "complete": "complet",
-      "description": "FrameZoo este rulat cu pierdere și avem nevoie de ajutor pentru a-l menține fără reclame! Dacă vă place să utilizați FrameZoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile.",
+      "description": "Framezoo este rulat cu pierdere și avem nevoie de ajutor pentru a-l menține fără reclame! Dacă vă place să utilizați Framezoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile.",
       "donate": "Dona",
-      "explanation": "Dacă nu utilizați extensia sau nu aveți configurat FED API, poate fi mai greu să găsiți conținut! Vrem să remediem acest lucru, dar este mult mai greu să oferim conținut fără servere scumpe. Așa că, dacă vă place să utilizați FrameZoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile în creștere.",
+      "explanation": "Dacă nu utilizați extensia sau nu aveți configurat FED API, poate fi mai greu să găsiți conținut! Vrem să remediem acest lucru, dar este mult mai greu să oferim conținut fără servere scumpe. Așa că, dacă vă place să utilizați Framezoo, vă rugăm să luați în considerare donarea pentru a ne ajuta să ne acoperim costurile în creștere.",
       "explanation2": "Dacă doriți mai multe informații, vă rugăm să vă alăturați",
       "fluxer": "Fluxer",
       "label": "Finanțarea proiectului: ${{current}} / ${{goal}}",
       "moreInfo": "Mai multe informații",
       "thankYou": "Vă mulțumim pentru susținere!",
-      "title": "FrameZoo are nevoie de ajutorul tău!"
+      "title": "Framezoo are nevoie de ajutorul tău!"
     },
     "titles": {
       "69": {
         "default": "Gata de ceva picant?",
-        "extra": [
-          "69 de zile fericite 😘!"
-        ]
+        "extra": ["69 de zile fericite 😘!"]
       },
       "420": {
         "default": "Ce ai vrea să vizionezi pe data asta de 20/4?",
-        "extra": [
-          "Un 20/4 fericit 🥳!"
-        ]
+        "extra": ["Un 20/4 fericit 🥳!"]
       },
       "day": {
         "default": "La ce vrei să te uiți după-amiaza asta?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "La ce dorești să te in uiți dimineață aceasta?",
-        "extra": [
-          "Aud că Before Sunrise este bun"
-        ]
+        "extra": ["Aud că Before Sunrise este bun"]
       },
       "night": {
         "default": "La ce dorești să te uiți în astă seară?",
-        "extra": [
-          "Obosit? Aud că The Exorcist is good."
-        ]
+        "extra": ["Obosit? Aud că The Exorcist is good."]
       }
     },
     "watchHistory": {
@@ -561,7 +551,7 @@
       "title": "Liste"
     },
     "public": {
-      "descriptionFallback": "O colecție comună organizată în FrameZoo.",
+      "descriptionFallback": "O colecție comună organizată în Framezoo.",
       "notFoundDescription": "Acest link de distribuire lipsește sau nu mai este disponibil.",
       "notFoundTitle": "Lista nu a fost găsită",
       "pageTitle": "Listă comună",
@@ -693,7 +683,7 @@
     },
     "install": {
       "genericGuide": "Browserul dvs. nu acceptă o solicitare automată de instalare PWA.\nPuteți instala în continuare utilizând meniul browserului (de exemplu: „Instalați aplicația”, „Creați o comandă rapidă” sau „Adăugați la Dock/Ecranul de pornire”).",
-      "iosSafariGuide": "Pentru a instala FrameZoo ca aplicație:\n\n1. Atingeți butonul Partajare (pătrat cu o săgeată).\n2. Alegeți „Adăugați la ecranul de pornire”.\n3. Atingeți Adăugați."
+      "iosSafariGuide": "Pentru a instala Framezoo ca aplicație:\n\n1. Atingeți butonul Partajare (pătrat cu o săgeată).\n2. Alegeți „Adăugați la ecranul de pornire”.\n3. Atingeți Adăugați."
     },
     "menu": {
       "accountMenu": "Deschide meniul cont",

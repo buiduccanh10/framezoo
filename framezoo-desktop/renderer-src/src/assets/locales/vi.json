@@ -11,22 +11,20 @@
       "adding": "Đang thêm...",
       "ariaClose": "Đóng cửa sổ quản lý addon",
       "ariaManage": "Quản lý Addons",
-      "createGuideLink": "Cách tạo Addons?",
       "errorFallback": "Không thể cài đặt tiện ích mở rộng này",
       "manageListButton": "Quản lý danh sách Addons",
       "subtitle": "Chúng tôi không khuyến khích thêm bất kỳ tiện ích bổ sung không chính thức hoặc bất hợp pháp nào.",
       "title": "Thêm Addons"
     },
     "platforms": {
-      "framezoo": "KhungZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Nền tảng hỗ trợ Addons:",
-      "supported": "Nền tảng được hỗ trợ Addons: Stremio và FrameZoo"
+      "supported": "Nền tảng được hỗ trợ Addons: Stremio và Framezoo"
     },
     "page": {
       "addAddonButton": "Thêm Addon",
       "description": "Addons là tùy chọn. Ứng dụng này không đóng gói, đề xuất hoặc lưu trữ bất kỳ tiện ích bổ sung nào.",
-      "createGuideLink": "Hướng dẫn tạo Addons",
       "disabled": "Đã tắt",
       "emptyInstalled": "Chưa có Addon nào được cài đặt trong hệ thống.",
       "enabled": "Đang bật",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Sự cố",
     "goHome": "Về trang chính",
-    "message": "FrameZoo đang gặp sự cố với một số nhà cung cấp một lần nữa, nếu bạn không tìm thấy hoặc không phát được chương trình, vui lòng thay đổi nguồn. Dự kiến lỗi này sẽ tiếp diễn trong thời gian tới.",
+    "message": "Framezoo đang gặp sự cố với một số nhà cung cấp một lần nữa, nếu bạn không tìm thấy hoặc không phát được chương trình, vui lòng thay đổi nguồn. Dự kiến lỗi này sẽ tiếp diễn trong thời gian tới.",
     "title": "Sự cố nhà cung cấp"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Tuyên bố miễn trừ trách nhiệm",
-      "disclaimerText": "FrameZoo mang đến trải nghiệm giải trí an toàn, hiện đại và liền mạch. Với giao diện dễ sử dụng và thư viện nội dung đa dạng, bao gồm hỗ trợ 4K HDR, người dùng có thể thưởng thức các bộ phim và chương trình TV yêu thích của mình. Và với cam kết về bảo mật, FrameZoo là lựa chọn tối ưu để mang lại trải nghiệm phát trực tuyến chất lượng cao, an tâm."
+      "disclaimerText": "Framezoo mang đến trải nghiệm giải trí an toàn, hiện đại và liền mạch. Với giao diện dễ sử dụng và thư viện nội dung đa dạng, bao gồm hỗ trợ 4K HDR, người dùng có thể thưởng thức các bộ phim và chương trình TV yêu thích của mình. Và với cam kết về bảo mật, Framezoo là lựa chọn tối ưu để mang lại trải nghiệm phát trực tuyến chất lượng cao, an tâm."
     },
     "links": {
       "fluxer": "thông lượng",
@@ -317,7 +315,7 @@
       "discover": "Khám phá",
       "login": "Đăng nhập",
       "migration": "Chuyển tài khoản",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Đăng ký",
       "settings": "Cài đặt"
     }
@@ -411,11 +409,11 @@
           "Bạn đang muốn làm gì?",
           "Chúng tôi có nên xóa trình duyệt web của bạn không?",
           "Ban muốn xem gì?",
-          "FrameZoo là trang web tuyệt nhất!",
+          "Framezoo là trang web tuyệt nhất!",
           "Có gì trong danh sách phim của bạn hôm nay?",
           "Hôm nay bạn thế nào?",
           "Xin lỗi nha, trang này hay hỏng lắm...",
-          "Không phải FrameZoo là tuyệt nhất sao?",
+          "Không phải Framezoo là tuyệt nhất sao?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +421,15 @@
     },
     "support": {
       "complete": "hoàn thành",
-      "description": "FrameZoo hoạt động không vì lợi nhuận, và chúng tôi cần sự giúp đỡ để duy trì ứng dụng không có quảng cáo! Nếu bạn thích sử dụng FrameZoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải chi phí.",
+      "description": "Framezoo hoạt động không vì lợi nhuận, và chúng tôi cần sự giúp đỡ để duy trì ứng dụng không có quảng cáo! Nếu bạn thích sử dụng Framezoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải chi phí.",
       "donate": "Quyên góp",
-      "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng FrameZoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
+      "explanation": "Nếu bạn không sử dụng tiện ích mở rộng hoặc không thiết lập FED API, việc tìm kiếm nội dung có thể khó khăn hơn! Chúng tôi muốn khắc phục điều này, nhưng việc cung cấp nội dung mà không có máy chủ đắt tiền là rất khó khăn. Vì vậy, nếu bạn thích sử dụng Framezoo, vui lòng cân nhắc quyên góp để giúp chúng tôi trang trải các chi phí đang tăng lên.",
       "explanation2": "Nếu bạn muốn biết thêm thông tin, vui lòng tham gia ",
       "fluxer": "thông lượng",
       "label": "Kinh phí dự án: ${{current}} / ${{goal}}",
       "moreInfo": "Thêm thông tin",
       "thankYou": "Cảm ơn sự ủng hộ của bạn!",
-      "title": "FrameZoo cần sự giúp đỡ của bạn!"
+      "title": "Framezoo cần sự giúp đỡ của bạn!"
     },
     "titles": {
       "69": {
@@ -553,7 +551,7 @@
       "title": "Danh sách"
     },
     "public": {
-      "descriptionFallback": "Một bộ sưu tập được chia sẻ được quản lý trong FrameZoo.",
+      "descriptionFallback": "Một bộ sưu tập được chia sẻ được quản lý trong Framezoo.",
       "notFoundDescription": "Liên kết chia sẻ này bị thiếu hoặc không còn tồn tại.",
       "notFoundTitle": "Không tìm thấy danh sách",
       "pageTitle": "Danh sách chia sẻ",
@@ -685,7 +683,7 @@
     },
     "install": {
       "genericGuide": "Trình duyệt của bạn không hỗ trợ hộp thoại cài đặt PWA tự động.\nBạn có thể cài bằng cách dùng menu trình duyệt (ví dụ: \"Install app\", \"Create shortcut\", hoặc \"Add to Dock/Home Screen\").",
-      "iosSafariGuide": "Để cài FrameZoo như ứng dụng:\n\n1. Nhấn nút Chia sẻ (biểu tượng hình vuông có mũi tên).\n2. Chọn \"Thêm vào Màn hình chính\" / \"Add to Home Screen\".\n3. Nhấn Thêm."
+      "iosSafariGuide": "Để cài Framezoo như ứng dụng:\n\n1. Nhấn nút Chia sẻ (biểu tượng hình vuông có mũi tên).\n2. Chọn \"Thêm vào Màn hình chính\" / \"Add to Home Screen\".\n3. Nhấn Thêm."
     },
     "menu": {
       "accountMenu": "Mở menu tài khoản",
@@ -1294,8 +1292,8 @@
     "hosting": "Đang làm chủ phòng",
     "hostParty": "Tổ chức buổi tiệc xem",
     "invalidRoom": "Không thể kết nối với phòng này",
-    "isGuest": "Đang xem với tư cách khách trên <0>FrameZoo</0>",
-    "isHost": "Đang làm chủ phòng trên <0>FrameZoo</0>",
+    "isGuest": "Đang xem với tư cách khách trên <0>Framezoo</0>",
+    "isHost": "Đang làm chủ phòng trên <0>Framezoo</0>",
     "join": "Tham gia",
     "joinParty": "Tham gia buổi tiệc xem",
     "leaveWatchParty": "Rời buổi tiệc xem",

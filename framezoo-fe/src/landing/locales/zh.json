@@ -13,12 +13,12 @@
     "description": "原生播放、更清晰的控制以及为您的下一次观看提供更安静的环境。",
     "primaryCta": "下载桌面",
     "secondaryCta": "查看体验",
-    "imageAlt": "FrameZoo 桌面应用程序预览",
+    "imageAlt": "Framezoo 桌面应用程序预览",
     "version": "桌面版"
   },
   "features": {
     "performanceTitle": "您的图书馆，无需支付浏览器税。",
-    "overviewDescription": "FrameZoo Desktop 为播放提供了所需的空间：本机性能、干净的切换以及不妨碍的控件。",
+    "overviewDescription": "Framezoo Desktop 为播放提供了所需的空间：本机性能、干净的切换以及不妨碍的控件。",
     "playback": "原生播放",
     "playbackDescription": "通过桌面级媒体处理实现流畅的视频。",
     "performance": "安静的性能",
@@ -33,7 +33,7 @@
     "addonThree": "社区扩展",
     "showcaseTitle": "屏幕就是目的地。",
     "showcaseDescription": "一个专注于发现、播放和故事相关一切的桌面界面。",
-    "showcaseCaption": "FrameZoo 桌面/焦点模式",
+    "showcaseCaption": "Framezoo 桌面/焦点模式",
     "experienceTitle": "打造更好腕表所需的一切。",
     "dualSubtitles": "保持两种字幕语言可见",
     "dualSubtitlesDescription": "当您学习、比较或只是喜欢两者时，请打开双字幕。",
@@ -43,13 +43,13 @@
     "subtitleControlsDescription": "选择字幕源、语言、时间和显示，而不会中断您的流程。",
     "subtitleControls": "调整你周围的播放器",
     "showcaseSecondaryTitle": "找一些值得一看的东西。",
-    "showcasePrimaryAlt": "FrameZoo 标题详细信息屏幕，包含艺术品、评级、季节和元数据",
+    "showcasePrimaryAlt": "Framezoo 标题详细信息屏幕，包含艺术品、评级、季节和元数据",
     "showcaseSecondaryDescription": "从干净的发现界面开始，然后进入播放状态，而不会丢失您的位置。",
-    "showcaseSecondaryAlt": "FrameZoo 发现屏幕，包含搜索、类别和标题行"
+    "showcaseSecondaryAlt": "Framezoo 发现屏幕，包含搜索、类别和标题行"
   },
   "download": {
     "eyebrow": "选择您的构建",
-    "title": "随身携带 FrameZoo。",
+    "title": "随身携带 Framezoo。",
     "description": "选择适合您机器的版本。您的浏览器将提出建议，或显示下面的每个可用选项。",
     "recommended": "受到推崇的",
     "chooseBuild": "选择构建",
@@ -71,7 +71,7 @@
     "status": "桌面优先。插件就绪。"
   },
   "addonGuide": {
-    "description": "插件是一个小型 HTTP 服务。提供清单和您需要的资源； FrameZoo 处理剩下的事情。",
+    "description": "插件是一个小型 HTTP 服务。提供清单和您需要的资源； Framezoo 处理剩下的事情。",
     "title": "无需加入应用程序流程即可构建插件。",
     "manifestTitle": "从manifest.json开始",
     "eyebrow": "插件协议/指南",
@@ -91,15 +91,15 @@
     "steps": [
       "从本地或公共 HTTP(S) 服务器提供 /manifest.json 和您的资源端点。",
       "使用curl 测试每个端点并验证JSON 形状。",
-      "将清单 URL 粘贴到 FrameZoo Desktop > Addons 中。"
+      "将清单 URL 粘贴到 Framezoo Desktop > Addons 中。"
     ],
     "advancedDescription": "Stremio Addon SDK 是可选的。如果您需要路由和序列化助手，请使用它；协议没有要求。"
   },
   "deepLink": {
-    "openingDescription": "您的浏览器正在尝试打开 FrameZoo 桌面应用程序。如果出现提示，请选择<1>Open FrameZoo</1>。",
-    "download": "下载 FrameZoo",
+    "openingDescription": "您的浏览器正在尝试打开 Framezoo 桌面应用程序。如果出现提示，请选择<1>Open Framezoo</1>。",
+    "download": "下载 Framezoo",
     "backHome": "返回首页",
-    "opening": "打开 FrameZoo...",
+    "opening": "打开 Framezoo...",
     "retry": "尝试再次打开桌面应用程序"
   }
 }

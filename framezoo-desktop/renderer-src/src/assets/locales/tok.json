@@ -222,7 +222,7 @@
   "downtimeNotice": {
     "badge": "Issues",
     "goHome": "Go home",
-    "message": "FrameZoo is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
+    "message": "Framezoo is experiencing issues with some providers again, if you cant find or play a show please change the source. Expect this error to persist throughout the below times.",
     "title": "Provider issues"
   },
   "errors": {
@@ -403,7 +403,7 @@
           "What's on your watchlist today?",
           "How was your day?",
           "My bad the site never works...",
-          "Isn't FrameZoo just the best?",
+          "Isn't Framezoo just the best?",
           ">ᴗ<"
         ]
       },
@@ -411,34 +411,28 @@
     },
     "support": {
       "complete": "complete",
-      "description": "FrameZoo is run at a loss, and we need help to keep it ad free! If you enjoy using FrameZoo, please consider donating to help us cover our costs.",
+      "description": "Framezoo is run at a loss, and we need help to keep it ad free! If you enjoy using Framezoo, please consider donating to help us cover our costs.",
       "donate": "Donate",
-      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using FrameZoo, please consider donating to help us cover our growing costs.",
+      "explanation": "If you aren't using the extension or don't have FED API set up, it may be harder to find content! We want to fix this, but it's a lot harder to provide content without expensive servers. So please, if you enjoy using Framezoo, please consider donating to help us cover our growing costs.",
       "explanation2": "If you want more info, please join our ",
       "fluxer": "Fluxer",
       "label": "Project Funding: ${{current}} / ${{goal}}",
       "moreInfo": "More info",
       "thankYou": "Thank you for your support!",
-      "title": "FrameZoo needs your help!"
+      "title": "Framezoo needs your help!"
     },
     "titles": {
       "69": {
         "default": "Up for something spicy?",
-        "extra": [
-          "Happy 69 day 😘!"
-        ]
+        "extra": ["Happy 69 day 😘!"]
       },
       "420": {
         "default": "What would you like to watch this 4/20?",
-        "extra": [
-          "Happy 4/20 🥳!"
-        ]
+        "extra": ["Happy 4/20 🥳!"]
       },
       "day": {
         "default": "tenpo suno ni la sina wile lukin e seme?",
-        "extra": [
-          "sina pilin alasa la o lukin e sitelen Jurassic Park"
-        ]
+        "extra": ["sina pilin alasa la o lukin e sitelen Jurassic Park"]
       },
       "halloween": {
         "default": "What spooky movie would you like to watch this Halloween?",
@@ -451,15 +445,11 @@
       },
       "morning": {
         "default": "tenpo sin ni la sina wile lukin e seme?",
-        "extra": [
-          "ken la sitelen Before Sunrise li pona"
-        ]
+        "extra": ["ken la sitelen Before Sunrise li pona"]
       },
       "night": {
         "default": "tenpo pimeja ni la sina wile lukin e seme?",
-        "extra": [
-          "sina pilin lape anu seme? o alasa lukin e sitelen Exorcist"
-        ]
+        "extra": ["sina pilin lape anu seme? o alasa lukin e sitelen Exorcist"]
       }
     },
     "watchHistory": {
@@ -549,7 +539,7 @@
       "title": "Lists"
     },
     "public": {
-      "descriptionFallback": "A shared collection curated in FrameZoo.",
+      "descriptionFallback": "A shared collection curated in Framezoo.",
       "notFoundDescription": "This share link is missing or no longer available.",
       "notFoundTitle": "List not found",
       "pageTitle": "Shared list",
@@ -681,7 +671,7 @@
     },
     "install": {
       "genericGuide": "Your browser does not support an automatic PWA install prompt.\nYou can still install using the browser menu (for example: 'Install app', 'Create shortcut', or 'Add to Dock/Home Screen').",
-      "iosSafariGuide": "To install FrameZoo as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
+      "iosSafariGuide": "To install Framezoo as an app:\n\n1. Tap the Share button (square with an arrow).\n2. Choose 'Add to Home Screen'.\n3. Tap Add."
     },
     "menu": {
       "accountMenu": "Open account menu",

@@ -13,12 +13,12 @@
     "description": "ネイティブ再生、よりシャープなコントロール、そして次の時計をより静かに楽しめる場所。",
     "primaryCta": "デスクトップをダウンロード",
     "secondaryCta": "体験談を見る",
-    "imageAlt": "FrameZoo デスクトップ アプリのプレビュー",
+    "imageAlt": "Framezoo デスクトップ アプリのプレビュー",
     "version": "デスクトップリリース"
   },
   "features": {
     "performanceTitle": "ブラウザ税なしのあなたのライブラリ。",
-    "overviewDescription": "FrameZoo Desktop は、ネイティブ パフォーマンス、クリーンなハンドオフ、邪魔にならないコントロールなど、再生に必要なスペースを提供します。",
+    "overviewDescription": "Framezoo Desktop は、ネイティブ パフォーマンス、クリーンなハンドオフ、邪魔にならないコントロールなど、再生に必要なスペースを提供します。",
     "playback": "ネイティブ再生",
     "playbackDescription": "デスクトップグレードのメディア処理によるスムーズなビデオ。",
     "performance": "静かなパフォーマンス",
@@ -33,7 +33,7 @@
     "addonThree": "コミュニティ拡張機能",
     "showcaseTitle": "画面が目的地です。",
     "showcaseDescription": "発見、再生、ストーリーに関するすべてのことに集中したデスクトップ サーフェス。",
-    "showcaseCaption": "FrameZoo デスクトップ / フォーカス モード",
+    "showcaseCaption": "Framezoo デスクトップ / フォーカス モード",
     "dualSubtitles": "2 つの字幕言語を表示したままにする",
     "subtitleSync": "字幕を AI と同期する",
     "experienceTitle": "より良い時計に必要なものがすべて揃っています。",
@@ -42,14 +42,14 @@
     "subtitleSyncDescription": "冒頭のダイアログと画像を数秒で並べます。",
     "featureLabel": "プレイヤーはあなたのやり方で",
     "showcaseSecondaryTitle": "見る価値のあるものを見つけてください。",
-    "showcaseSecondaryAlt": "検索、カテゴリ、タイトル行を備えた FrameZoo 検出画面",
+    "showcaseSecondaryAlt": "検索、カテゴリ、タイトル行を備えた Framezoo 検出画面",
     "showcaseSecondaryDescription": "きれいな検出面から開始して、場所を見失うことなく再生に進みます。",
     "subtitleControlsDescription": "流れを中断することなく、字幕ソース、言語、タイミング、表示を選択します。",
-    "showcasePrimaryAlt": "アートワーク、評価、シーズン、メタデータを含む FrameZoo タイトル詳細画面"
+    "showcasePrimaryAlt": "アートワーク、評価、シーズン、メタデータを含む Framezoo タイトル詳細画面"
   },
   "download": {
     "eyebrow": "ビルドを選択してください",
-    "title": "FrameZoo を持ち歩きましょう。",
+    "title": "Framezoo を持ち歩きましょう。",
     "description": "マシンのビルドを選択します。ブラウザーが推奨を行うか、以下の利用可能なすべてのオプションを表示します。",
     "recommended": "推奨",
     "chooseBuild": "ビルドを選択してください",
@@ -76,7 +76,7 @@
     "resourcesTitle": "リソースを選択してください",
     "manifestDescription": "メタデータは、アドオンが誰であるか、サポートするリソース、アイコンがどこにあるかをアプリに伝えます。",
     "resourcesDescription": "アドオンに必要なエンドポイントのみを実装します。応答は JSON であり、任意の言語で記述できます。",
-    "description": "アドオンは小さな HTTP サービスです。マニフェストと必要なリソースを提供します。残りは FrameZoo が処理します。",
+    "description": "アドオンは小さな HTTP サービスです。マニフェストと必要なリソースを提供します。残りは Framezoo が処理します。",
     "title": "アプリのプロセスに参加せずにアドオンを構築します。",
     "resources": {
       "catalog": "発見のための映画やシリーズの列。",
@@ -89,16 +89,16 @@
     "steps": [
       "/manifest.json とリソース エンドポイントをローカルまたはパブリック HTTP(S) サーバーから提供します。",
       "各エンドポイントをcurlでテストし、JSONの形状を確認します。",
-      "マニフェスト URL を FrameZoo デスクトップ > アドオンに貼り付けます。"
+      "マニフェスト URL を Framezoo デスクトップ > アドオンに貼り付けます。"
     ],
     "advancedTitle": "ノードヘルパーが必要ですか?",
     "advancedDescription": "Stremio Addon SDK はオプションです。ルーティングおよびシリアル化ヘルパーが必要な場合に使用します。プロトコルでは必須ではありません。",
     "advancedLink": "高度な SDK リファレンスを開く"
   },
   "deepLink": {
-    "openingDescription": "ブラウザーが FrameZoo デスクトップ アプリを開こうとしています。プロンプトが表示されたら、<1>Open FrameZoo</1> を選択してください。",
+    "openingDescription": "ブラウザーが Framezoo デスクトップ アプリを開こうとしています。プロンプトが表示されたら、<1>Open Framezoo</1> を選択してください。",
     "retry": "デスクトップ アプリをもう一度開いてみます",
-    "opening": "FrameZoo を開く...",
+    "opening": "Framezoo を開く...",
     "download": "FrameZooをダウンロード",
     "backHome": "ホームページに戻る"
   }

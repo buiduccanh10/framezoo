@@ -12,7 +12,7 @@
     "description": "Khám phá, phát và chỉnh từng chi tiết mà không rời khỏi mạch phim.",
     "primaryCta": "Tải app desktop",
     "secondaryCta": "Xem trải nghiệm",
-    "imageAlt": "Giao diện khám phá phim của FrameZoo desktop",
+    "imageAlt": "Giao diện khám phá phim của Framezoo desktop",
     "version": "Bản desktop"
   },
   "features": {
@@ -27,16 +27,16 @@
     "subtitleControlsDescription": "Chọn nguồn phụ đề, ngôn ngữ, thời gian và cách hiển thị mà không mất mạch xem.",
     "ecosystemTitle": "Những gì cần thiết đã có trong player.",
     "ecosystemDescription": "Phụ đề, metadata catalog và điều khiển playback là phần lõi. Addon bổ sung thêm nguồn phát, catalog và công cụ khi bạn cần.",
-    "addonLabel": "Có sẵn trong FrameZoo",
+    "addonLabel": "Có sẵn trong Framezoo",
     "addonOne": "Điều khiển phụ đề",
     "addonTwo": "Metadata catalog",
     "addonThree": "Addon mở rộng",
     "showcaseTitle": "Đủ ngữ cảnh trước khi bấm play.",
     "showcaseDescription": "Mở một tựa phim và thấy ngay poster, rating, mùa phim và metadata trong cùng một nơi.",
-    "showcasePrimaryAlt": "Màn hình chi tiết phim FrameZoo với poster, rating, mùa phim và metadata",
+    "showcasePrimaryAlt": "Màn hình chi tiết phim Framezoo với poster, rating, mùa phim và metadata",
     "showcaseSecondaryTitle": "Tìm phim rồi xem ngay.",
     "showcaseSecondaryDescription": "Bắt đầu từ giao diện khám phá rõ ràng, sau đó vào playback mà không mất vị trí.",
-    "showcaseSecondaryAlt": "Màn hình khám phá FrameZoo với tìm kiếm, danh mục và các hàng phim"
+    "showcaseSecondaryAlt": "Màn hình khám phá Framezoo với tìm kiếm, danh mục và các hàng phim"
   },
   "download": {
     "eyebrow": "TẢI FRAMEZOO",
@@ -62,7 +62,7 @@
     "status": "Desktop-first. Sẵn sàng cho addon."
   },
   "addonGuide": {
-    "description": "Tiện ích bổ sung là một dịch vụ HTTP nhỏ. Cung cấp bản kê khai và các tài nguyên bạn cần; FrameZoo xử lý phần còn lại.",
+    "description": "Tiện ích bổ sung là một dịch vụ HTTP nhỏ. Cung cấp bản kê khai và các tài nguyên bạn cần; Framezoo xử lý phần còn lại.",
     "title": "Xây dựng một addon mà không cần tham gia quá trình ứng dụng.",
     "manifestDescription": "Siêu dữ liệu cho ứng dụng biết tiện ích bổ sung của bạn là ai, tài nguyên nào nó hỗ trợ và biểu tượng của nó nằm ở đâu.",
     "eyebrow": "GIAO THỨC THÊM / HƯỚNG DẪN",
@@ -80,17 +80,17 @@
     "steps": [
       "Phục vụ /manifest.json và các điểm cuối tài nguyên của bạn từ máy chủ HTTP(S) cục bộ hoặc công cộng.",
       "Kiểm tra từng điểm cuối bằng tính năng cuộn tròn và xác minh hình dạng JSON.",
-      "Dán URL tệp kê khai vào FrameZoo > Addons."
+      "Dán URL tệp kê khai vào Framezoo > Addons."
     ],
     "advancedDescription": "SDK bổ trợ Stremio là tùy chọn. Sử dụng nó nếu bạn muốn người trợ giúp định tuyến và tuần tự hóa; nó không được yêu cầu bởi giao thức.",
     "advancedTitle": "Cần một người trợ giúp Node?",
     "advancedLink": "Mở tài liệu tham khảo SDK nâng cao"
   },
   "deepLink": {
-    "opening": "Đang mở FrameZoo...",
-    "download": "Tải xuống FrameZoo",
+    "opening": "Đang mở Framezoo...",
+    "download": "Tải xuống Framezoo",
     "backHome": "Quay lại trang chủ",
-    "openingDescription": "Trình duyệt của bạn đang cố mở ứng dụng FrameZoo Desktop. Nếu lời nhắc xuất hiện, vui lòng chọn <1>Open FrameZoo</1>.",
+    "openingDescription": "Trình duyệt của bạn đang cố mở ứng dụng Framezoo Desktop. Nếu lời nhắc xuất hiện, vui lòng chọn <1>Open Framezoo</1>.",
     "retry": "Hãy thử mở lại Ứng dụng máy tính để bàn"
   }
 }

@@ -13,12 +13,12 @@
     "description": "پخش بومی، کنترل‌های واضح‌تر، و مکانی آرام‌تر برای ساعت بعدی شما.",
     "primaryCta": "دانلود دسکتاپ",
     "secondaryCta": "تجربه را ببینید",
-    "imageAlt": "پیش نمایش برنامه دسکتاپ FrameZoo",
+    "imageAlt": "پیش نمایش برنامه دسکتاپ Framezoo",
     "version": "انتشار دسکتاپ"
   },
   "features": {
     "performanceTitle": "کتابخانه شما، بدون مالیات مرورگر.",
-    "overviewDescription": "دسک‌تاپ FrameZoo اتاق مورد نیاز خود را پخش می‌کند: عملکرد بومی، انتقال‌های تمیز و کنترل‌هایی که از راه دور باقی می‌مانند.",
+    "overviewDescription": "دسک‌تاپ Framezoo اتاق مورد نیاز خود را پخش می‌کند: عملکرد بومی، انتقال‌های تمیز و کنترل‌هایی که از راه دور باقی می‌مانند.",
     "playback": "پخش بومی",
     "playbackDescription": "ویدیوی روان با مدیریت رسانه در سطح دسکتاپ.",
     "performance": "عملکرد بی صدا",
@@ -33,7 +33,7 @@
     "addonThree": "برنامه های افزودنی انجمن",
     "showcaseTitle": "صفحه نمایش مقصد است.",
     "showcaseDescription": "یک سطح دسکتاپ متمرکز برای کشف، پخش و همه چیز در مورد داستان.",
-    "showcaseCaption": "حالت دسکتاپ / فوکوس FrameZoo",
+    "showcaseCaption": "حالت دسکتاپ / فوکوس Framezoo",
     "subtitleSync": "همگام سازی زیرنویس ها با هوش مصنوعی",
     "dualSubtitlesDescription": "هنگام یادگیری، مقایسه یا ترجیح دادن هر دو زیرنویس دوگانه را روشن کنید.",
     "featureLabel": "بازیکن، راه شماست",
@@ -44,12 +44,12 @@
     "showcaseSecondaryDescription": "از یک سطح اکتشافی تمیز شروع کنید، سپس بدون از دست دادن جایگاه خود، به سمت پخش بروید.",
     "showcaseSecondaryTitle": "چیزی را پیدا کنید که ارزش تماشا کردن داشته باشد.",
     "subtitleControls": "پخش کننده اطراف خود را تنظیم کنید",
-    "showcasePrimaryAlt": "صفحه نمایش جزئیات عنوان FrameZoo با آثار هنری، رتبه بندی ها، فصل ها و ابرداده ها",
-    "showcaseSecondaryAlt": "صفحه کشف FrameZoo با جستجو، دسته‌ها و ردیف‌های عنوان"
+    "showcasePrimaryAlt": "صفحه نمایش جزئیات عنوان Framezoo با آثار هنری، رتبه بندی ها، فصل ها و ابرداده ها",
+    "showcaseSecondaryAlt": "صفحه کشف Framezoo با جستجو، دسته‌ها و ردیف‌های عنوان"
   },
   "download": {
     "eyebrow": "ساخت خود را انتخاب کنید",
-    "title": "FrameZoo را با خود ببرید.",
+    "title": "Framezoo را با خود ببرید.",
     "description": "ساخت دستگاه خود را انتخاب کنید. مرورگر شما توصیه می کند یا هر گزینه موجود را در زیر نشان می دهد.",
     "recommended": "توصیه می شود",
     "chooseBuild": "ساختنی را انتخاب کنید",
@@ -72,7 +72,7 @@
   },
   "addonGuide": {
     "title": "بدون پیوستن به فرآیند برنامه یک افزونه بسازید.",
-    "description": "افزونه یک سرویس HTTP کوچک است. ارائه مانیفست و منابعی که نیاز دارید. FrameZoo بقیه را اداره می کند.",
+    "description": "افزونه یک سرویس HTTP کوچک است. ارائه مانیفست و منابعی که نیاز دارید. Framezoo بقیه را اداره می کند.",
     "eyebrow": "پروتکل / راهنما ADDON",
     "resourcesTitle": "منابع را انتخاب کنید",
     "manifestDescription": "ابرداده به برنامه می‌گوید که افزونه شما کیست، از چه منابعی پشتیبانی می‌کند و نماد آن در کجا زندگی می‌کند.",
@@ -88,7 +88,7 @@
     "steps": [
       "/manifest.json و نقاط پایانی منبع خود را از یک سرور HTTP(S) محلی یا عمومی ارائه دهید.",
       "هر نقطه پایانی را با curl تست کنید و شکل JSON را تأیید کنید.",
-      "URL مانیفست را در FrameZoo Desktop > Addons قرار دهید."
+      "URL مانیفست را در Framezoo Desktop > Addons قرار دهید."
     ],
     "advancedLink": "مرجع SDK پیشرفته را باز کنید",
     "runTitle": "اجرا، تست، نصب",
@@ -97,9 +97,9 @@
   },
   "deepLink": {
     "retry": "دوباره Desktop App را باز کنید",
-    "opening": "باز کردن FrameZoo...",
+    "opening": "باز کردن Framezoo...",
     "backHome": "به صفحه اصلی برگردید",
-    "openingDescription": "مرورگر شما در حال تلاش برای باز کردن برنامه FrameZoo Desktop است. اگر درخواستی ظاهر شد، لطفاً <1>Open FrameZoo</1> را انتخاب کنید.",
-    "download": "FrameZoo را دانلود کنید"
+    "openingDescription": "مرورگر شما در حال تلاش برای باز کردن برنامه Framezoo Desktop است. اگر درخواستی ظاهر شد، لطفاً <1>Open Framezoo</1> را انتخاب کنید.",
+    "download": "Framezoo را دانلود کنید"
   }
 }

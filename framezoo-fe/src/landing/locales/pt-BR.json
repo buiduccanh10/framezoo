@@ -13,12 +13,12 @@
     "description": "Reprodução nativa, controles mais nítidos e um local mais calmo para sua próxima exibição.",
     "primaryCta": "Baixar área de trabalho",
     "secondaryCta": "Veja a experiência",
-    "imageAlt": "Visualização do aplicativo de desktop FrameZoo",
+    "imageAlt": "Visualização do aplicativo de desktop Framezoo",
     "version": "Versão para desktop"
   },
   "features": {
     "performanceTitle": "Sua biblioteca, sem a taxa do navegador.",
-    "overviewDescription": "FrameZoo Desktop oferece à reprodução o espaço necessário: desempenho nativo, transferências limpas e controles que ficam fora do caminho.",
+    "overviewDescription": "Framezoo Desktop oferece à reprodução o espaço necessário: desempenho nativo, transferências limpas e controles que ficam fora do caminho.",
     "playback": "Reprodução nativa",
     "playbackDescription": "Vídeo suave com manipulação de mídia de nível desktop.",
     "performance": "Desempenho silencioso",
@@ -33,7 +33,7 @@
     "addonThree": "Extensões da comunidade",
     "showcaseTitle": "A tela é o destino.",
     "showcaseDescription": "Uma superfície de desktop focada para descoberta, reprodução e tudo o que envolve a história.",
-    "showcaseCaption": "FrameZoo Desktop / modo Foco",
+    "showcaseCaption": "Framezoo Desktop / modo Foco",
     "dualSubtitles": "Mantenha dois idiomas de legenda visíveis",
     "experienceTitle": "Tudo que você precisa para um relógio melhor.",
     "subtitleControls": "Sintonize o player ao seu redor",
@@ -43,13 +43,13 @@
     "dualSubtitlesDescription": "Ative legendas duplas quando estiver aprendendo, comparando ou simplesmente preferir ambas.",
     "subtitleControlsDescription": "Escolha a fonte da legenda, o idioma, o tempo e a exibição sem interromper o fluxo.",
     "showcaseSecondaryTitle": "Encontre algo que valha a pena assistir.",
-    "showcaseSecondaryAlt": "Tela de descoberta do FrameZoo com pesquisa, categorias e linhas de título",
+    "showcaseSecondaryAlt": "Tela de descoberta do Framezoo com pesquisa, categorias e linhas de título",
     "showcaseSecondaryDescription": "Comece com uma superfície de descoberta limpa e depois passe para a reprodução sem perder o seu lugar.",
-    "showcasePrimaryAlt": "Tela de detalhes do título do FrameZoo com arte, classificações, temporadas e metadados"
+    "showcasePrimaryAlt": "Tela de detalhes do título do Framezoo com arte, classificações, temporadas e metadados"
   },
   "download": {
     "eyebrow": "ESCOLHA SUA CONSTRUÇÃO",
-    "title": "Leve FrameZoo com você.",
+    "title": "Leve Framezoo com você.",
     "description": "Escolha a construção para sua máquina. Seu navegador fará a recomendação ou revelará todas as opções disponíveis abaixo.",
     "recommended": "Recomendado",
     "chooseBuild": "Escolha uma construção",
@@ -74,7 +74,7 @@
     "eyebrow": "PROTOCOLO / GUIA ADDON",
     "manifestDescription": "Os metadados informam ao aplicativo quem é o seu complemento, quais recursos ele suporta e onde fica seu ícone.",
     "title": "Crie um complemento sem ingressar no processo do aplicativo.",
-    "description": "Um complemento é um pequeno serviço HTTP. Sirva um manifesto e os recursos necessários; FrameZoo cuida do resto.",
+    "description": "Um complemento é um pequeno serviço HTTP. Sirva um manifesto e os recursos necessários; Framezoo cuida do resto.",
     "resources": {
       "catalog": "Fileiras de filmes ou séries para descoberta.",
       "addon_catalog": "Um catálogo de outros complementos.",
@@ -89,7 +89,7 @@
     "steps": [
       "Sirva /manifest.json e seus endpoints de recursos a partir de um servidor HTTP(S) local ou público.",
       "Teste cada endpoint com curl e verifique o formato JSON.",
-      "Cole o URL do manifesto em FrameZoo Desktop > Addons."
+      "Cole o URL do manifesto em Framezoo Desktop > Addons."
     ],
     "advancedLink": "Abra a referência avançada do SDK",
     "advancedDescription": "O Stremio Addon SDK é opcional. Use-o se desejar auxiliares de roteamento e serialização; não é exigido pelo protocolo.",
@@ -97,9 +97,9 @@
   },
   "deepLink": {
     "retry": "Tente abrir o aplicativo para desktop novamente",
-    "openingDescription": "Seu navegador está tentando abrir o aplicativo FrameZoo Desktop. Se um prompt aparecer, selecione <1>Open FrameZoo</1>.",
-    "opening": "Abrindo o FrameZoo...",
-    "download": "Baixar FrameZoo",
+    "openingDescription": "Seu navegador está tentando abrir o aplicativo Framezoo Desktop. Se um prompt aparecer, selecione <1>Open Framezoo</1>.",
+    "opening": "Abrindo o Framezoo...",
+    "download": "Baixar Framezoo",
     "backHome": "Voltar para a página inicial"
   }
 }

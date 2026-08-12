@@ -13,12 +13,12 @@
     "description": "Redare nativă, comenzi mai clare și un loc mai calm pentru următorul tău ceas.",
     "primaryCta": "Descărcați desktop",
     "secondaryCta": "Vezi experiența",
-    "imageAlt": "Previzualizarea aplicației desktop FrameZoo",
+    "imageAlt": "Previzualizarea aplicației desktop Framezoo",
     "version": "Lansare desktop"
   },
   "features": {
     "performanceTitle": "Biblioteca dvs., fără taxa de browser.",
-    "overviewDescription": "FrameZoo Desktop oferă redării spațiul de care are nevoie: performanță nativă, handoff-uri curate și comenzi care rămân în afara drumului.",
+    "overviewDescription": "Framezoo Desktop oferă redării spațiul de care are nevoie: performanță nativă, handoff-uri curate și comenzi care rămân în afara drumului.",
     "playback": "Redare nativă",
     "playbackDescription": "Video fluide cu manipulare media de calitate desktop.",
     "performance": "Performanță liniștită",
@@ -33,23 +33,23 @@
     "addonThree": "Extensii comunitare",
     "showcaseTitle": "Ecranul este destinația.",
     "showcaseDescription": "O suprafață desktop concentrată pentru descoperire, redare și tot ce se află în jurul poveștii.",
-    "showcaseCaption": "FrameZoo Desktop / Modul Focus",
+    "showcaseCaption": "Framezoo Desktop / Modul Focus",
     "subtitleSync": "Sincronizați subtitrările cu AI",
     "featureLabel": "Jucătorul, în felul tău",
     "dualSubtitlesDescription": "Activați subtitrările duble atunci când învățați, comparați sau pur și simplu le preferați pe ambele.",
     "experienceTitle": "Tot ce ai nevoie pentru un ceas mai bun.",
     "subtitleControls": "Reglați playerul din jurul vostru",
     "dualSubtitles": "Păstrați două limbi de subtitrare vizibile",
-    "showcasePrimaryAlt": "Ecran cu detalii de titlu FrameZoo cu lucrări de artă, evaluări, anotimpuri și metadate",
+    "showcasePrimaryAlt": "Ecran cu detalii de titlu Framezoo cu lucrări de artă, evaluări, anotimpuri și metadate",
     "subtitleSyncDescription": "Aliniați dialogul de deschidere cu imaginea în câteva secunde.",
-    "showcaseSecondaryAlt": "Ecran de descoperire FrameZoo cu căutare, categorii și rânduri de titlu",
+    "showcaseSecondaryAlt": "Ecran de descoperire Framezoo cu căutare, categorii și rânduri de titlu",
     "subtitleControlsDescription": "Alegeți sursa de subtitrare, limba, sincronizarea și afișarea fără a vă întrerupe fluxul.",
     "showcaseSecondaryTitle": "Găsiți ceva ce merită urmărit.",
     "showcaseSecondaryDescription": "Începeți de la o suprafață de descoperire curată, apoi treceți la redare fără a vă pierde locul."
   },
   "download": {
     "eyebrow": "ALEGE-ȚI CONSTRUCȚIA",
-    "title": "Luați FrameZoo cu dvs.",
+    "title": "Luați Framezoo cu dvs.",
     "description": "Alegeți construcția pentru mașina dvs. Browserul dvs. va face recomandarea sau va dezvălui fiecare opțiune disponibilă mai jos.",
     "recommended": "Recomandat",
     "chooseBuild": "Alegeți o construcție",
@@ -74,7 +74,7 @@
     "eyebrow": "ADDON PROTOCOL / GHID",
     "manifestTitle": "Începeți cu manifest.json",
     "title": "Creați un supliment fără a vă alătura procesului aplicației.",
-    "description": "Un supliment este un mic serviciu HTTP. Serviți un manifest și resursele de care aveți nevoie; FrameZoo se ocupă de restul.",
+    "description": "Un supliment este un mic serviciu HTTP. Serviți un manifest și resursele de care aveți nevoie; Framezoo se ocupă de restul.",
     "resourcesTitle": "Alegeți resursele",
     "resources": {
       "meta": "Metadatele unui film sau serial pentru un titlu.",
@@ -88,7 +88,7 @@
     "steps": [
       "Serviți /manifest.json și punctele finale de resurse de pe un server HTTP(S) local sau public.",
       "Testați fiecare punct final cu curl și verificați forma JSON.",
-      "Lipiți adresa URL a manifestului în FrameZoo Desktop > Addons."
+      "Lipiți adresa URL a manifestului în Framezoo Desktop > Addons."
     ],
     "runTitle": "Rulați, testați, instalați",
     "advancedTitle": "Ai nevoie de un ajutor Node?",
@@ -96,10 +96,10 @@
     "advancedDescription": "Stremio Addon SDK este opțional. Folosiți-l dacă doriți ajutoare pentru rutare și serializare; nu este cerut de protocol."
   },
   "deepLink": {
-    "opening": "Se deschide FrameZoo...",
+    "opening": "Se deschide Framezoo...",
     "backHome": "Reveniți la pagina de pornire",
-    "download": "Descărcați FrameZoo",
+    "download": "Descărcați Framezoo",
     "retry": "Încercați să deschideți din nou aplicația Desktop",
-    "openingDescription": "Browserul dvs. încearcă să deschidă aplicația FrameZoo Desktop. Dacă apare o solicitare, selectați <1>Open FrameZoo</1>."
+    "openingDescription": "Browserul dvs. încearcă să deschidă aplicația Framezoo Desktop. Dacă apare o solicitare, selectați <1>Open Framezoo</1>."
   }
 }

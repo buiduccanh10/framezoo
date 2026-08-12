@@ -13,12 +13,12 @@
     "description": "Vietējā atskaņošana, asākas vadības ierīces un mierīgāka vieta nākamajam pulkstenim.",
     "primaryCta": "Lejupielādēt darbvirsmu",
     "secondaryCta": "Skatiet pieredzi",
-    "imageAlt": "FrameZoo darbvirsmas lietotnes priekšskatījums",
+    "imageAlt": "Framezoo darbvirsmas lietotnes priekšskatījums",
     "version": "Darbvirsmas izlaidums"
   },
   "features": {
     "performanceTitle": "Jūsu bibliotēka bez pārlūkprogrammas nodokļa.",
-    "overviewDescription": "FrameZoo Desktop nodrošina atskaņošanai nepieciešamo telpu: sākotnējo veiktspēju, tīru pārsūtīšanu un vadīklas, kas nav ceļā.",
+    "overviewDescription": "Framezoo Desktop nodrošina atskaņošanai nepieciešamo telpu: sākotnējo veiktspēju, tīru pārsūtīšanu un vadīklas, kas nav ceļā.",
     "playback": "Vietējā atskaņošana",
     "playbackDescription": "Vienmērīgs video ar darbvirsmas līmeņa multivides apstrādi.",
     "performance": "Kluss sniegums",
@@ -33,23 +33,23 @@
     "addonThree": "Kopienas paplašinājumi",
     "showcaseTitle": "Ekrāns ir galamērķis.",
     "showcaseDescription": "Koncentrēta darbvirsmas virsma atklāšanai, atskaņošanai un visam stāstam.",
-    "showcaseCaption": "FrameZoo darbvirsmas / fokusa režīms",
+    "showcaseCaption": "Framezoo darbvirsmas / fokusa režīms",
     "dualSubtitles": "Saglabājiet divas subtitru valodas redzamas",
     "experienceTitle": "Viss, kas nepieciešams labākam pulkstenim.",
     "subtitleSyncDescription": "Saskaņojiet sākuma dialogu ar attēlu dažu sekunžu laikā.",
     "featureLabel": "Spēlētājs, jūsu veids",
     "subtitleSync": "Sinhronizējiet subtitrus ar AI",
     "dualSubtitlesDescription": "Ieslēdziet dubultos subtitrus, kad mācāties, salīdzināt vai vienkārši dodat priekšroku abiem.",
-    "showcasePrimaryAlt": "FrameZoo virsraksta detaļas ekrāns ar mākslas darbiem, vērtējumiem, sezonām un metadatiem",
+    "showcasePrimaryAlt": "Framezoo virsraksta detaļas ekrāns ar mākslas darbiem, vērtējumiem, sezonām un metadatiem",
     "showcaseSecondaryDescription": "Sāciet no tīras atklāšanas virsmas, pēc tam pārejiet uz atskaņošanu, nezaudējot vietu.",
     "subtitleControlsDescription": "Izvēlieties subtitru avotu, valodu, laiku un displeju, nepārkāpjot plūsmu.",
     "showcaseSecondaryTitle": "Atrodiet kaut ko skatīšanās vērtu.",
-    "showcaseSecondaryAlt": "FrameZoo atklāšanas ekrāns ar meklēšanu, kategorijām un virsraksta rindām",
+    "showcaseSecondaryAlt": "Framezoo atklāšanas ekrāns ar meklēšanu, kategorijām un virsraksta rindām",
     "subtitleControls": "Noskaņojiet atskaņotāju sev apkārt"
   },
   "download": {
     "eyebrow": "IZVĒLIES SAVU BŪVNI",
-    "title": "Paņemiet FrameZoo līdzi.",
+    "title": "Paņemiet Framezoo līdzi.",
     "description": "Izvēlieties savas mašīnas uzbūvi. Jūsu pārlūkprogramma sniegs ieteikumu vai tālāk atklās visas pieejamās opcijas.",
     "recommended": "Ieteicams",
     "chooseBuild": "Izvēlieties konstrukciju",
@@ -73,7 +73,7 @@
   "addonGuide": {
     "manifestTitle": "Sāciet ar manifest.json",
     "eyebrow": "ADDON PROTOKOLS / CEĻVEDIS",
-    "description": "Papildinājums ir neliels HTTP pakalpojums. Pasniedziet manifestu un nepieciešamos resursus; FrameZoo tiek galā ar pārējo.",
+    "description": "Papildinājums ir neliels HTTP pakalpojums. Pasniedziet manifestu un nepieciešamos resursus; Framezoo tiek galā ar pārējo.",
     "title": "Izveidojiet papildinājumu, nepievienojoties lietotnes procesam.",
     "manifestDescription": "Metadati norāda lietotnei, kas ir jūsu papildinājums, kādus resursus tas atbalsta un kur atrodas tā ikona.",
     "resourcesTitle": "Izvēlieties resursus",
@@ -89,17 +89,17 @@
     "steps": [
       "Apkalpojiet /manifest.json un jūsu resursu galapunktus no lokāla vai publiska HTTP(S) servera.",
       "Pārbaudiet katru galapunktu ar izliekumu un pārbaudiet JSON formu.",
-      "Ielīmējiet manifesta URL mapē FrameZoo Desktop > Addons."
+      "Ielīmējiet manifesta URL mapē Framezoo Desktop > Addons."
     ],
     "advancedTitle": "Nepieciešams mezgla palīgs?",
     "advancedLink": "Atveriet papildu SDK atsauci",
     "advancedDescription": "Stremio Addon SDK nav obligāts. Izmantojiet to, ja vēlaties maršrutēšanas un serializācijas palīgus; to neprasa protokols."
   },
   "deepLink": {
-    "openingDescription": "Jūsu pārlūkprogramma mēģina atvērt FrameZoo Desktop lietotni. Ja tiek parādīta uzvedne, lūdzu, atlasiet <1>Open FrameZoo</1>.",
+    "openingDescription": "Jūsu pārlūkprogramma mēģina atvērt Framezoo Desktop lietotni. Ja tiek parādīta uzvedne, lūdzu, atlasiet <1>Open Framezoo</1>.",
     "retry": "Mēģiniet vēlreiz atvērt darbvirsmas lietotni",
-    "opening": "Notiek FrameZoo atvēršana...",
+    "opening": "Notiek Framezoo atvēršana...",
     "backHome": "Dodieties atpakaļ uz sākumlapu",
-    "download": "Lejupielādēt FrameZoo"
+    "download": "Lejupielādēt Framezoo"
   }
 }

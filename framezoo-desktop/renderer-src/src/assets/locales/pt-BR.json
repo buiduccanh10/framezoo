@@ -11,7 +11,6 @@
       "adding": "Adicionando...",
       "ariaClose": "Fechar gerenciador de complementos",
       "ariaManage": "Gerenciar complementos",
-      "createGuideLink": "Como criar um complemento",
       "errorFallback": "Não foi possível instalar este complemento.",
       "manageListButton": "Gerenciar lista de complementos",
       "subtitle": "Não recomendamos adicionar complementos não oficiais ou ilegais.",
@@ -21,12 +20,11 @@
       "framezoo": "QuadroZoo",
       "stremio": "Strémio",
       "supportLabel": "Plataformas suportadas para complementos:",
-      "supported": "Plataformas suportadas: FrameZoo e Stremio"
+      "supported": "Plataformas suportadas: Framezoo e Stremio"
     },
     "page": {
       "addAddonButton": "Adicionar complemento",
       "description": "Os complementos são opcionais. Este aplicativo não agrupa, recomenda ou hospeda nenhum complemento.",
-      "createGuideLink": "Criar guia de complementos",
       "disabled": "Desabilitado",
       "emptyInstalled": "Nenhum complemento instalado no sistema ainda.",
       "enabled": "Habilitado",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Problemas",
     "goHome": "Ir para página inicial",
-    "message": "O FrameZoo está enfrentando problemas com alguns provedores novamente. Se você não consegue encontrar ou reproduzir um programa, por favor, mude a fonte. É esperado que este erro persista durante os horários abaixo.",
+    "message": "O Framezoo está enfrentando problemas com alguns provedores novamente. Se você não consegue encontrar ou reproduzir um programa, por favor, mude a fonte. É esperado que este erro persista durante os horários abaixo.",
     "title": "Problema com provedores"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Aviso legal",
-      "disclaimerText": "FrameZoo oferece uma experiência de entretenimento segura, moderna e perfeita. Com sua interface fácil de usar e biblioteca de conteúdo diversificada, incluindo suporte 4K HDR, os usuários podem desfrutar de seus filmes e programas de TV favoritos. E com seu compromisso com a segurança, o FrameZoo é a melhor escolha para uma experiência de streaming de alta qualidade e sem preocupações."
+      "disclaimerText": "Framezoo oferece uma experiência de entretenimento segura, moderna e perfeita. Com sua interface fácil de usar e biblioteca de conteúdo diversificada, incluindo suporte 4K HDR, os usuários podem desfrutar de seus filmes e programas de TV favoritos. E com seu compromisso com a segurança, o Framezoo é a melhor escolha para uma experiência de streaming de alta qualidade e sem preocupações."
     },
     "links": {
       "fluxer": "Fluxador",
@@ -415,7 +413,7 @@
           "O que tem na sua watchlist hoje?",
           "Como foi o teu dia?",
           "Foi mal, o site nunca funciona...",
-          "A FrameZoo não é a melhor?",
+          "A Framezoo não é a melhor?",
           ">ᴗ<"
         ]
       },
@@ -423,28 +421,24 @@
     },
     "support": {
       "complete": "completo",
-      "description": "FrameZoo funciona com prejuízo e precisamos de ajuda para mantê-lo livre de anúncios! Se você gosta de usar FrameZoo, considere fazer uma doação para nos ajudar a cobrir nossos custos.",
+      "description": "Framezoo funciona com prejuízo e precisamos de ajuda para mantê-lo livre de anúncios! Se você gosta de usar Framezoo, considere fazer uma doação para nos ajudar a cobrir nossos custos.",
       "donate": "Doar",
-      "explanation": "Se você não estiver usando a extensão ou não tiver a API FED configurada, pode ser mais difícil encontrar conteúdo! Queremos corrigir isso, mas é muito mais difícil fornecer conteúdo sem servidores caros. Então, por favor, se você gosta de usar FrameZoo, considere fazer uma doação para nos ajudar a cobrir nossos custos crescentes.",
+      "explanation": "Se você não estiver usando a extensão ou não tiver a API FED configurada, pode ser mais difícil encontrar conteúdo! Queremos corrigir isso, mas é muito mais difícil fornecer conteúdo sem servidores caros. Então, por favor, se você gosta de usar Framezoo, considere fazer uma doação para nos ajudar a cobrir nossos custos crescentes.",
       "explanation2": "Se você quiser mais informações, por favor junte-se ao nosso",
       "fluxer": "Fluxador",
       "label": "Financiamento do projeto: ${{current}} / ${{goal}}",
       "moreInfo": "Mais informações",
       "thankYou": "Obrigado pelo seu apoio!",
-      "title": "FrameZoo precisa da sua ajuda!"
+      "title": "Framezoo precisa da sua ajuda!"
     },
     "titles": {
       "69": {
         "default": "Que tal algo picante?",
-        "extra": [
-          "Feliz dia 69 😘!"
-        ]
+        "extra": ["Feliz dia 69 😘!"]
       },
       "420": {
         "default": "O que você gostaria de assistir neste 4/20?",
-        "extra": [
-          "Feliz 4/20 🥳!"
-        ]
+        "extra": ["Feliz 4/20 🥳!"]
       },
       "day": {
         "default": "O que você gostaria de assistir esta tarde?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "O que você gostaria de assistir esta manhã?",
-        "extra": [
-          "Ouvi dizer que Antes do Amanhecer é bom"
-        ]
+        "extra": ["Ouvi dizer que Antes do Amanhecer é bom"]
       },
       "night": {
         "default": "O que você gostaria de assistir esta noite?",
-        "extra": [
-          "Cansado? Ouvi dizer que O Exorcista é bom."
-        ]
+        "extra": ["Cansado? Ouvi dizer que O Exorcista é bom."]
       }
     },
     "watchHistory": {
@@ -561,7 +551,7 @@
       "title": "Listas"
     },
     "public": {
-      "descriptionFallback": "Uma coleção compartilhada com curadoria do FrameZoo.",
+      "descriptionFallback": "Uma coleção compartilhada com curadoria do Framezoo.",
       "notFoundDescription": "Este link de compartilhamento está faltando ou não está mais disponível.",
       "notFoundTitle": "Lista não encontrada",
       "pageTitle": "Lista compartilhada",
@@ -693,7 +683,7 @@
     },
     "install": {
       "genericGuide": "Seu navegador não oferece suporte a um prompt de instalação automática do PWA.\nVocê ainda pode instalar usando o menu do navegador (por exemplo: 'Instalar aplicativo', 'Criar atalho' ou 'Adicionar ao Dock/Tela inicial').",
-      "iosSafariGuide": "Para instalar FrameZoo como um aplicativo:\n\n1. Toque no botão Compartilhar (quadrado com uma seta).\n2. Escolha ‘Adicionar à tela inicial’.\n3. Toque em Adicionar."
+      "iosSafariGuide": "Para instalar Framezoo como um aplicativo:\n\n1. Toque no botão Compartilhar (quadrado com uma seta).\n2. Escolha ‘Adicionar à tela inicial’.\n3. Toque em Adicionar."
     },
     "menu": {
       "accountMenu": "Abra o menu da conta",

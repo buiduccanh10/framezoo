@@ -16,9 +16,9 @@ export function Footer() {
           <p className="mt-4 lg:max-w-[400px]">{t("footer.tagline")}</p>
         </div>
         <div className="md:text-right">
-          <h3 className="font-semibold text-type-emphasis">
+          {/* <h3 className="font-semibold text-type-emphasis">
             {t("footer.legal.disclaimer")}
-          </h3>
+          </h3> */}
           <p className="mt-3">{t("footer.legal.disclaimerText")}</p>
         </div>
       </WideContainer>

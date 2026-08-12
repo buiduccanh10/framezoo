@@ -11,22 +11,20 @@
       "adding": "Tilføjer...",
       "ariaClose": "Luk tilføjelsesadministrator",
       "ariaManage": "Administrer tilføjelser",
-      "createGuideLink": "Sådan opretter du en tilføjelse",
       "errorFallback": "Kan ikke installere denne tilføjelse.",
       "manageListButton": "Administrer tilføjelsesliste",
       "subtitle": "Vi anbefaler ikke at tilføje nogen uofficielle eller ulovlige tilføjelser.",
       "title": "Desktop tilføjelser"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Understøttede platforme til tilføjelser:",
-      "supported": "Understøttede platforme: FrameZoo og Stremio"
+      "supported": "Understøttede platforme: Framezoo og Stremio"
     },
     "page": {
       "addAddonButton": "Tilføj Addon",
       "description": "Tilføjelser er valgfrie. Denne app samler, anbefaler eller hoster ikke nogen tilføjelse.",
-      "createGuideLink": "Opret tilføjelsesvejledning",
       "disabled": "Handicappet",
       "emptyInstalled": "Ingen tilføjelser installeret i systemet endnu.",
       "enabled": "Aktiveret",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Problemer",
     "goHome": "Gå til hjem",
-    "message": "FrameZoo.lol har igen problemer med nogle udbydere. Hvis du ikke kan finde eller afspille et afsnit, skal du skifte kilde. Vi forventer, at denne fejl fortsætter i tidsrummet nedenfor.",
+    "message": "Framezoo.lol har igen problemer med nogle udbydere. Hvis du ikke kan finde eller afspille et afsnit, skal du skifte kilde. Vi forventer, at denne fejl fortsætter i tidsrummet nedenfor.",
     "title": "Problemer med udbydere"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Ansvarsfraskrivelse ",
-      "disclaimerText": "FrameZoo tilbyder en sikker, moderne og problemfri underholdningsoplevelse. Med dens brugervenlige grænseflade og mangfoldige indholdsbibliotek, inklusive 4K HDR-understøttelse, kan brugerne nyde deres yndlingsfilm og tv-shows. Og med sin forpligtelse til sikkerhed er FrameZoo det ultimative valg for en bekymringsfri streamingoplevelse af høj kvalitet."
+      "disclaimerText": "Framezoo tilbyder en sikker, moderne og problemfri underholdningsoplevelse. Med dens brugervenlige grænseflade og mangfoldige indholdsbibliotek, inklusive 4K HDR-understøttelse, kan brugerne nyde deres yndlingsfilm og tv-shows. Og med sin forpligtelse til sikkerhed er Framezoo det ultimative valg for en bekymringsfri streamingoplevelse af høj kvalitet."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +310,12 @@
       "subtitle": "Hold ` for at vise denne hjælp når som helst",
       "title": "Tastaturgenveje"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Opdag",
       "login": "Log ind",
       "migration": "Migrer Profil",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registrer",
       "settings": "Indstillinger"
     }
@@ -411,11 +409,11 @@
           "Hvad har du lyst til?",
           "Skal vi slette din browserhistorik?",
           "Hvad ønsker du at streame?",
-          "FrameZoo er den bedste side nogensinde!",
+          "Framezoo er den bedste side nogensinde!",
           "Hvad er der på din favoritliste i dag?",
           "Hvordan har din dag været?",
           "Min fejl, siden virker aldrig...",
-          "Er FrameZoo ikke bare det bedste?",
+          "Er Framezoo ikke bare det bedste?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +421,15 @@
     },
     "support": {
       "complete": "komplet",
-      "description": "FrameZoo kører med tab, og vi har brug for hjælp til at holde det annoncefrit! Hvis du kan lide at bruge FrameZoo, så overvej at donere for at hjælpe os med at dække vores omkostninger.",
+      "description": "Framezoo kører med tab, og vi har brug for hjælp til at holde det annoncefrit! Hvis du kan lide at bruge Framezoo, så overvej at donere for at hjælpe os med at dække vores omkostninger.",
       "donate": "Doner",
-      "explanation": "Hvis du ikke bruger udvidelsen eller ikke har FED API sat op, kan det være sværere at finde indhold! Vi vil gerne løse dette, men det er meget sværere at levere indhold uden dyre servere. Så venligst, hvis du kan lide at bruge FrameZoo, bedes du overveje at donere for at hjælpe os med at dække vores voksende omkostninger.",
+      "explanation": "Hvis du ikke bruger udvidelsen eller ikke har FED API sat op, kan det være sværere at finde indhold! Vi vil gerne løse dette, men det er meget sværere at levere indhold uden dyre servere. Så venligst, hvis du kan lide at bruge Framezoo, bedes du overveje at donere for at hjælpe os med at dække vores voksende omkostninger.",
       "explanation2": "Hvis du ønsker mere information, så tilmeld dig vores",
       "fluxer": "Fluxer",
       "label": "Projektfinansiering: ${{current}} / ${{goal}}",
       "moreInfo": "Mere info",
       "thankYou": "Tak for din støtte!",
-      "title": "FrameZoo har brug for din hjælp!"
+      "title": "Framezoo har brug for din hjælp!"
     },
     "titles": {
       "69": {
@@ -444,7 +442,7 @@
       },
       "day": {
         "default": "Hvad vil du gerne se i eftermiddag?",
-        "extra": ["Længe leve FrameZoo!"]
+        "extra": ["Længe leve Framezoo!"]
       },
       "halloween": {
         "default": "Hvilken uhyggelig film vil du gerne se denne Halloween?",
@@ -457,11 +455,11 @@
       },
       "morning": {
         "default": "Hvad vil du gerne se her til morgen?",
-        "extra": ["Længe leve FrameZoo!"]
+        "extra": ["Længe leve Framezoo!"]
       },
       "night": {
         "default": "Hvad vil du gerne se i aften?",
-        "extra": ["Længe leve FrameZoo!"]
+        "extra": ["Længe leve Framezoo!"]
       }
     },
     "watchHistory": {
@@ -551,7 +549,7 @@
       "title": "Lister"
     },
     "public": {
-      "descriptionFallback": "En delt samling kurateret i FrameZoo.",
+      "descriptionFallback": "En delt samling kurateret i Framezoo.",
       "notFoundDescription": "Dette delelink mangler eller er ikke længere tilgængeligt.",
       "notFoundTitle": "Listen blev ikke fundet",
       "pageTitle": "Delt liste",
@@ -683,7 +681,7 @@
     },
     "install": {
       "genericGuide": "Din browser understøtter ikke en automatisk PWA-installationsprompt.\nDu kan stadig installere ved hjælp af browsermenuen (for eksempel: 'Installer app', 'Opret genvej' eller 'Tilføj til dock/startskærm').",
-      "iosSafariGuide": "Sådan installerer du FrameZoo som en app:\n\n1. Tryk på knappen Del (firkantet med en pil).\n2. Vælg 'Tilføj til startskærmen'.\n3. Tryk på Tilføj."
+      "iosSafariGuide": "Sådan installerer du Framezoo som en app:\n\n1. Tryk på knappen Del (firkantet med en pil).\n2. Vælg 'Tilføj til startskærmen'.\n3. Tryk på Tilføj."
     },
     "menu": {
       "accountMenu": "Åbn kontomenuen",

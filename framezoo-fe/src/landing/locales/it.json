@@ -13,12 +13,12 @@
     "description": "Riproduzione nativa, controlli più nitidi e un posto più tranquillo per il tuo prossimo orologio.",
     "primaryCta": "Scarica desktop",
     "secondaryCta": "Vedi l'esperienza",
-    "imageAlt": "Anteprima dell'app desktop FrameZoo",
+    "imageAlt": "Anteprima dell'app desktop Framezoo",
     "version": "Versione desktop"
   },
   "features": {
     "performanceTitle": "La tua biblioteca, senza la tassa sul browser.",
-    "overviewDescription": "FrameZoo Desktop offre alla riproduzione lo spazio di cui ha bisogno: prestazioni native, passaggi puliti e controlli che non intralciano.",
+    "overviewDescription": "Framezoo Desktop offre alla riproduzione lo spazio di cui ha bisogno: prestazioni native, passaggi puliti e controlli che non intralciano.",
     "playback": "Riproduzione nativa",
     "playbackDescription": "Video fluidi con gestione multimediale di livello desktop.",
     "performance": "Prestazioni silenziose",
@@ -33,7 +33,7 @@
     "addonThree": "Estensioni della comunità",
     "showcaseTitle": "Lo schermo è la destinazione.",
     "showcaseDescription": "Una superficie desktop focalizzata per la scoperta, la riproduzione e tutto ciò che riguarda la storia.",
-    "showcaseCaption": "Modalità desktop/messa a fuoco FrameZoo",
+    "showcaseCaption": "Modalità desktop/messa a fuoco Framezoo",
     "subtitleSyncDescription": "Allinea il dialogo di apertura con l'immagine in pochi secondi.",
     "subtitleSync": "Sincronizza i sottotitoli con l'intelligenza artificiale",
     "featureLabel": "Il giocatore, a modo tuo",
@@ -41,15 +41,15 @@
     "experienceTitle": "Tutto ciò di cui hai bisogno per un orologio migliore.",
     "dualSubtitlesDescription": "Attiva i doppi sottotitoli quando stai imparando, confrontando o semplicemente preferisci entrambi.",
     "subtitleControls": "Sintonizza il lettore intorno a te",
-    "showcaseSecondaryAlt": "Schermata di scoperta di FrameZoo con ricerca, categorie e righe del titolo",
-    "showcasePrimaryAlt": "Schermata dei dettagli del titolo FrameZoo con grafica, valutazioni, stagioni e metadati",
+    "showcaseSecondaryAlt": "Schermata di scoperta di Framezoo con ricerca, categorie e righe del titolo",
+    "showcasePrimaryAlt": "Schermata dei dettagli del titolo Framezoo con grafica, valutazioni, stagioni e metadati",
     "subtitleControlsDescription": "Scegli la fonte, la lingua, i tempi e la visualizzazione dei sottotitoli senza interrompere il flusso.",
     "showcaseSecondaryDescription": "Inizia da una superficie di scoperta pulita, quindi passa alla riproduzione senza perdere la posizione.",
     "showcaseSecondaryTitle": "Trova qualcosa che valga la pena guardare."
   },
   "download": {
     "eyebrow": "SCEGLI LA TUA COSTRUZIONE",
-    "title": "Porta FrameZoo con te.",
+    "title": "Porta Framezoo con te.",
     "description": "Scegli la build per la tua macchina. Il tuo browser formulerà la raccomandazione o rivelerà tutte le opzioni disponibili di seguito.",
     "recommended": "Raccomandato",
     "chooseBuild": "Scegli una costruzione",
@@ -72,7 +72,7 @@
   },
   "addonGuide": {
     "manifestDescription": "I metadati dicono all'app chi è il tuo componente aggiuntivo, quali risorse supporta e dove si trova la sua icona.",
-    "description": "Un componente aggiuntivo è un piccolo servizio HTTP. Servi un manifest e le risorse di cui hai bisogno; FrameZoo si occupa del resto.",
+    "description": "Un componente aggiuntivo è un piccolo servizio HTTP. Servi un manifest e le risorse di cui hai bisogno; Framezoo si occupa del resto.",
     "title": "Crea un componente aggiuntivo senza partecipare al processo dell'app.",
     "manifestTitle": "Inizia con manifest.json",
     "eyebrow": "PROTOCOLLO/GUIDA AGGIUNTA",
@@ -90,15 +90,15 @@
     "steps": [
       "Servi /manifest.json e i tuoi endpoint di risorse da un server HTTP(S) locale o pubblico.",
       "Testa ogni endpoint con curl e verifica la forma JSON.",
-      "Incolla l'URL manifest in FrameZoo Desktop > Componenti aggiuntivi."
+      "Incolla l'URL manifest in Framezoo Desktop > Componenti aggiuntivi."
     ],
     "advancedDescription": "L'SDK del componente aggiuntivo Stremio è facoltativo. Usalo se desideri aiutanti di routing e serializzazione; non è richiesto dal protocollo.",
     "advancedLink": "Apri il riferimento SDK avanzato"
   },
   "deepLink": {
-    "opening": "Apertura di FrameZoo...",
-    "download": "Scarica FrameZoo",
-    "openingDescription": "Il tuo browser sta tentando di aprire l'app FrameZoo Desktop. Se viene visualizzato un messaggio, seleziona <1>Apri FrameZoo</1>.",
+    "opening": "Apertura di Framezoo...",
+    "download": "Scarica Framezoo",
+    "openingDescription": "Il tuo browser sta tentando di aprire l'app Framezoo Desktop. Se viene visualizzato un messaggio, seleziona <1>Apri Framezoo</1>.",
     "retry": "Prova ad aprire nuovamente l'app desktop",
     "backHome": "Torna alla home page"
   }

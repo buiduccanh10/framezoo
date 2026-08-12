@@ -11,22 +11,20 @@
       "adding": "S'està afegint...",
       "ariaClose": "Tanqueu el gestor de complements",
       "ariaManage": "Gestiona els complements",
-      "createGuideLink": "Com crear un complement",
       "errorFallback": "No es pot instal·lar aquest complement.",
       "manageListButton": "Gestioneu la llista de complements",
       "subtitle": "No recomanem afegir cap complement no oficial o il·legal.",
       "title": "Complements d'escriptori"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Plataformes compatibles per a complements:",
-      "supported": "Plataformes compatibles: FrameZoo i Stremio"
+      "supported": "Plataformes compatibles: Framezoo i Stremio"
     },
     "page": {
       "addAddonButton": "Afegeix un complement",
       "description": "Els complements són opcionals. Aquesta aplicació no agrupa, recomana ni allotja cap complement.",
-      "createGuideLink": "Crea una guia de complements",
       "disabled": "Inhabilitat",
       "emptyInstalled": "Encara no hi ha cap complement instal·lat al sistema.",
       "enabled": "Habilitat",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Problemes",
     "goHome": "Ves a casa",
-    "message": "FrameZoo torna a tenir problemes amb alguns proveïdors, si no podeu trobar o reproduir un programa, canvieu la font. Espereu que aquest error persisteixi durant els temps següents.",
+    "message": "Framezoo torna a tenir problemes amb alguns proveïdors, si no podeu trobar o reproduir un programa, canvieu la font. Espereu que aquest error persisteixi durant els temps següents.",
     "title": "Problemes amb el proveïdor"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Exempció de responsabilitat",
-      "disclaimerText": "FrameZoo ofereix una experiència d'entreteniment segura, moderna i perfecta. Amb la seva interfície fàcil d'utilitzar i una biblioteca de contingut diversa, inclosa la compatibilitat amb 4K HDR, els usuaris poden gaudir de les seves pel·lícules i programes de televisió preferits. I amb el seu compromís amb la seguretat, FrameZoo és l'opció definitiva per a una experiència de transmissió d'alta qualitat i sense preocupacions."
+      "disclaimerText": "Framezoo ofereix una experiència d'entreteniment segura, moderna i perfecta. Amb la seva interfície fàcil d'utilitzar i una biblioteca de contingut diversa, inclosa la compatibilitat amb 4K HDR, els usuaris poden gaudir de les seves pel·lícules i programes de televisió preferits. I amb el seu compromís amb la seguretat, Framezoo és l'opció definitiva per a una experiència de transmissió d'alta qualitat i sense preocupacions."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +310,12 @@
       "subtitle": "Manteniu premut ` per mostrar aquesta ajuda en qualsevol moment",
       "title": "Dreceres de teclat"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Descobreix",
       "login": "Inicieu sessió",
       "migration": "Migra el compte",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registra't",
       "settings": "Configuració"
     }
@@ -411,11 +409,11 @@
           "De què estàs d'humor?",
           "Hem d'esborrar l'historial del vostre navegador?",
           "Què vols transmetre?",
-          "FrameZoo és el millor lloc mai!",
+          "Framezoo és el millor lloc mai!",
           "Què tens avui a la teva llista de seguiment?",
           "Com va ser el teu dia?",
           "Llàstima que el lloc mai funcioni...",
-          "FrameZoo no és només el millor?",
+          "Framezoo no és només el millor?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +421,15 @@
     },
     "support": {
       "complete": "completa",
-      "description": "FrameZoo s'executa amb pèrdues i necessitem ajuda per mantenir-lo sense anuncis! Si us agrada utilitzar FrameZoo, considereu fer una donació per ajudar-nos a cobrir els nostres costos.",
+      "description": "Framezoo s'executa amb pèrdues i necessitem ajuda per mantenir-lo sense anuncis! Si us agrada utilitzar Framezoo, considereu fer una donació per ajudar-nos a cobrir els nostres costos.",
       "donate": "Donar",
-      "explanation": "Si no feu servir l'extensió o no teniu l'API FED configurada, pot ser que sigui més difícil trobar contingut! Volem solucionar-ho, però és molt més difícil oferir contingut sense servidors cars. Així que si us plau, si us agrada utilitzar FrameZoo, considereu fer una donació per ajudar-nos a cobrir els nostres costos creixents.",
+      "explanation": "Si no feu servir l'extensió o no teniu l'API FED configurada, pot ser que sigui més difícil trobar contingut! Volem solucionar-ho, però és molt més difícil oferir contingut sense servidors cars. Així que si us plau, si us agrada utilitzar Framezoo, considereu fer una donació per ajudar-nos a cobrir els nostres costos creixents.",
       "explanation2": "Si vols més informació, uneix-te al nostre",
       "fluxer": "Fluxer",
       "label": "Finançament del projecte: ${{current}} / ${{goal}}",
       "moreInfo": "Més informació",
       "thankYou": "Gràcies pel vostre suport!",
-      "title": "FrameZoo necessita la teva ajuda!"
+      "title": "Framezoo necessita la teva ajuda!"
     },
     "titles": {
       "69": {
@@ -444,7 +442,7 @@
       },
       "day": {
         "default": "Què t'agradaria veure aquesta tarda?",
-        "extra": ["Viva l'FrameZoo!"]
+        "extra": ["Viva l'Framezoo!"]
       },
       "halloween": {
         "default": "Quina pel·lícula esgarrifosa t'agradaria veure aquest Halloween?",
@@ -457,11 +455,11 @@
       },
       "morning": {
         "default": "Què t'agradaria veure aquest matí?",
-        "extra": ["Viva l'FrameZoo!"]
+        "extra": ["Viva l'Framezoo!"]
       },
       "night": {
         "default": "Què t'agradaria veure aquesta nit?",
-        "extra": ["Viva l'FrameZoo!"]
+        "extra": ["Viva l'Framezoo!"]
       }
     },
     "watchHistory": {
@@ -551,7 +549,7 @@
       "title": "Llistes"
     },
     "public": {
-      "descriptionFallback": "Una col·lecció compartida comissariada a FrameZoo.",
+      "descriptionFallback": "Una col·lecció compartida comissariada a Framezoo.",
       "notFoundDescription": "Falta aquest enllaç per compartir o ja no està disponible.",
       "notFoundTitle": "No s'ha trobat la llista",
       "pageTitle": "Llista compartida",
@@ -683,7 +681,7 @@
     },
     "install": {
       "genericGuide": "El vostre navegador no admet una sol·licitud d'instal·lació automàtica de PWA.\nEncara podeu instal·lar-lo mitjançant el menú del navegador (per exemple: \"Instal·la l'aplicació\", \"Crea una drecera\" o \"Afegeix al Dock/Pantalla d'inici\").",
-      "iosSafariGuide": "Per instal·lar FrameZoo com a aplicació:\n\n1. Toqueu el botó Compartir (quadrat amb una fletxa).\n2. Trieu \"Afegeix a la pantalla d'inici\".\n3. Toqueu Afegeix."
+      "iosSafariGuide": "Per instal·lar Framezoo com a aplicació:\n\n1. Toqueu el botó Compartir (quadrat amb una fletxa).\n2. Trieu \"Afegeix a la pantalla d'inici\".\n3. Toqueu Afegeix."
     },
     "menu": {
       "accountMenu": "Obre el menú del compte",

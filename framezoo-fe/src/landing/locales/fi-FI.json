@@ -13,12 +13,12 @@
     "description": "Alkuperäinen toisto, terävämmät säätimet ja rauhallisempi paikka seuraavalle kellolle.",
     "primaryCta": "Lataa työpöytä",
     "secondaryCta": "Katso kokemus",
-    "imageAlt": "FrameZoo-työpöytäsovelluksen esikatselu",
+    "imageAlt": "Framezoo-työpöytäsovelluksen esikatselu",
     "version": "Työpöytäjulkaisu"
   },
   "features": {
     "performanceTitle": "Kirjastosi ilman selainveroa.",
-    "overviewDescription": "FrameZoo Desktop antaa toistolle sen tarvitseman tilan: alkuperäisen suorituskyvyn, puhtaat kanavanvaihdot ja säätimet, jotka pysyvät poissa tieltä.",
+    "overviewDescription": "Framezoo Desktop antaa toistolle sen tarvitseman tilan: alkuperäisen suorituskyvyn, puhtaat kanavanvaihdot ja säätimet, jotka pysyvät poissa tieltä.",
     "playback": "Alkuperäinen toisto",
     "playbackDescription": "Tasainen video työpöytätason mediankäsittelyllä.",
     "performance": "Hiljainen suorituskyky",
@@ -33,7 +33,7 @@
     "addonThree": "Yhteisön laajennukset",
     "showcaseTitle": "Näyttö on määränpää.",
     "showcaseDescription": "Kohdistettu työpöytäpinta löytöjä, toistoa ja kaikkea tarinaa varten.",
-    "showcaseCaption": "FrameZoo Desktop / Focus -tila",
+    "showcaseCaption": "Framezoo Desktop / Focus -tila",
     "dualSubtitles": "Pidä kaksi tekstityskieltä näkyvissä",
     "experienceTitle": "Kaikki mitä tarvitset parempaan kelloon.",
     "subtitleSync": "Synkronoi tekstitykset tekoälyn kanssa",
@@ -43,13 +43,13 @@
     "dualSubtitlesDescription": "Ota kaksoistekstitys käyttöön, kun opit, vertaat tai pidät molemmista parempana.",
     "subtitleControls": "Viritä soitin ympärilläsi",
     "showcaseSecondaryTitle": "Etsi jotain katsomisen arvoista.",
-    "showcasePrimaryAlt": "FrameZoo-otsikon yksityiskohtien näyttö, jossa on taideteoksia, luokituksia, vuodenaikoja ja metatietoja",
+    "showcasePrimaryAlt": "Framezoo-otsikon yksityiskohtien näyttö, jossa on taideteoksia, luokituksia, vuodenaikoja ja metatietoja",
     "showcaseSecondaryDescription": "Aloita puhtaalta etsintäpinnalta ja siirry sitten toistoon menettämättä paikkaasi.",
-    "showcaseSecondaryAlt": "FrameZoo-etsintänäyttö, jossa on haku, luokat ja otsikkorivit"
+    "showcaseSecondaryAlt": "Framezoo-etsintänäyttö, jossa on haku, luokat ja otsikkorivit"
   },
   "download": {
     "eyebrow": "VALITSE RAKENNUSSI",
-    "title": "Ota FrameZoo mukaasi.",
+    "title": "Ota Framezoo mukaasi.",
     "description": "Valitse koneesi rakenne. Selaimesi antaa suosituksen tai paljastaa kaikki alla olevat vaihtoehdot.",
     "recommended": "Suositeltava",
     "chooseBuild": "Valitse rakennelma",
@@ -74,7 +74,7 @@
     "manifestTitle": "Aloita tiedostosta manifest.json",
     "eyebrow": "ADDON PROTOKOLLA / OPAS",
     "title": "Luo lisäosa liittymättä sovellusprosessiin.",
-    "description": "Lisäosa on pieni HTTP-palvelu. Tarjoa luettelo ja tarvitsemasi resurssit; FrameZoo hoitaa loput.",
+    "description": "Lisäosa on pieni HTTP-palvelu. Tarjoa luettelo ja tarvitsemasi resurssit; Framezoo hoitaa loput.",
     "manifestDescription": "Metadata kertoo sovellukselle, kuka lisäosasi on, mitä resursseja se tukee ja missä sen kuvake sijaitsee.",
     "resourcesTitle": "Valitse resurssit",
     "resources": {
@@ -90,16 +90,16 @@
     "steps": [
       "Palvele /manifest.json ja resurssipäätepisteesi paikalliselta tai julkiselta HTTP(S)-palvelimelta.",
       "Testaa jokaista päätepistettä kiharalla ja tarkista JSON-muoto.",
-      "Liitä luettelon URL-osoite kohtaan FrameZoo Desktop > Lisäosat."
+      "Liitä luettelon URL-osoite kohtaan Framezoo Desktop > Lisäosat."
     ],
     "advancedLink": "Avaa edistynyt SDK-viite",
     "advancedDescription": "Stremio Addon SDK on valinnainen. Käytä sitä, jos haluat reitityksen ja serialisoinnin avustajia; sitä ei vaadita protokollassa."
   },
   "deepLink": {
-    "opening": "Avataan FrameZoo...",
+    "opening": "Avataan Framezoo...",
     "backHome": "Palaa etusivulle",
     "retry": "Yritä avata Desktop App uudelleen",
-    "download": "Lataa FrameZoo",
-    "openingDescription": "Selaimesi yrittää avata FrameZoo Desktop -sovelluksen. Jos näyttöön tulee kehote, valitse <1>Open FrameZoo</1>."
+    "download": "Lataa Framezoo",
+    "openingDescription": "Selaimesi yrittää avata Framezoo Desktop -sovelluksen. Jos näyttöön tulee kehote, valitse <1>Open Framezoo</1>."
   }
 }

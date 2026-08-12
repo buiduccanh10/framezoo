@@ -13,12 +13,12 @@
     "description": "Yerel oynatma, daha keskin kontroller ve bir sonraki izlemeniz için daha sakin bir yer.",
     "primaryCta": "Masaüstünü indir",
     "secondaryCta": "Deneyimi görün",
-    "imageAlt": "FrameZoo masaüstü uygulaması önizlemesi",
+    "imageAlt": "Framezoo masaüstü uygulaması önizlemesi",
     "version": "Masaüstü sürümü"
   },
   "features": {
     "performanceTitle": "Tarayıcı vergisi olmadan kitaplığınız.",
-    "overviewDescription": "FrameZoo Masaüstü, oynatmaya ihtiyaç duyduğu alanı sağlar: yerel performans, temiz aktarımlar ve engellenmeyen kontroller.",
+    "overviewDescription": "Framezoo Masaüstü, oynatmaya ihtiyaç duyduğu alanı sağlar: yerel performans, temiz aktarımlar ve engellenmeyen kontroller.",
     "playback": "Yerel oynatma",
     "playbackDescription": "Masaüstü düzeyinde medya işlemeyle akıcı video.",
     "performance": "Sessiz performans",
@@ -33,23 +33,23 @@
     "addonThree": "Topluluk uzantıları",
     "showcaseTitle": "Hedef ekrandır.",
     "showcaseDescription": "Keşif, oynatma ve hikayeyle ilgili her şey için odaklanmış bir masaüstü yüzeyi.",
-    "showcaseCaption": "FrameZoo Masaüstü / Odak modu",
+    "showcaseCaption": "Framezoo Masaüstü / Odak modu",
     "experienceTitle": "Daha iyi bir saat için ihtiyacınız olan her şey.",
     "featureLabel": "Oyuncu, sizin tarzınız",
     "subtitleSync": "Altyazıları AI ile senkronize edin",
     "dualSubtitlesDescription": "Öğrenirken, karşılaştırırken veya sadece ikisini birden tercih ederken çift altyazıyı açın.",
     "subtitleSyncDescription": "Açılış diyaloğunu saniyeler içinde resimle hizalayın.",
     "dualSubtitles": "İki altyazı dilini görünür tutun",
-    "showcasePrimaryAlt": "Çizimler, derecelendirmeler, sezonlar ve meta veriler içeren FrameZoo başlık ayrıntısı ekranı",
+    "showcasePrimaryAlt": "Çizimler, derecelendirmeler, sezonlar ve meta veriler içeren Framezoo başlık ayrıntısı ekranı",
     "subtitleControlsDescription": "Akışınızı bozmadan altyazı kaynağını, dilini, zamanlamasını ve gösterimini seçin.",
     "showcaseSecondaryTitle": "İzlemeye değer bir şey bulun.",
     "subtitleControls": "Çevrenizdeki oynatıcıyı ayarlayın",
     "showcaseSecondaryDescription": "Temiz bir keşif yüzeyinden başlayın, ardından yerinizi kaybetmeden oynatmaya geçin.",
-    "showcaseSecondaryAlt": "Arama, kategoriler ve başlık satırlarını içeren FrameZoo keşif ekranı"
+    "showcaseSecondaryAlt": "Arama, kategoriler ve başlık satırlarını içeren Framezoo keşif ekranı"
   },
   "download": {
     "eyebrow": "YAPINIZI SEÇİN",
-    "title": "FrameZoo'i yanınıza alın.",
+    "title": "Framezoo'i yanınıza alın.",
     "description": "Makineniz için yapıyı seçin. Tarayıcınız öneride bulunacak veya aşağıda mevcut tüm seçenekleri gösterecektir.",
     "recommended": "Tavsiye edilen",
     "chooseBuild": "Bir yapı seçin",
@@ -73,7 +73,7 @@
   "addonGuide": {
     "eyebrow": "ADDON PROTOKOLÜ / KILAVUZU",
     "manifestDescription": "Meta veriler uygulamaya eklentinizin kim olduğunu, hangi kaynakları desteklediğini ve simgesinin nerede bulunduğunu bildirir.",
-    "description": "Eklenti küçük bir HTTP hizmetidir. Bir manifesto ve ihtiyacınız olan kaynakları sunun; Gerisini FrameZoo halleder.",
+    "description": "Eklenti küçük bir HTTP hizmetidir. Bir manifesto ve ihtiyacınız olan kaynakları sunun; Gerisini Framezoo halleder.",
     "resources": {
       "catalog": "Keşfedilecek diziler veya filmler.",
       "stream": "Torrent, HLS, DASH veya doğrudan dosya kaynakları.",
@@ -90,15 +90,15 @@
     "steps": [
       "/manifest.json'u ve kaynak uç noktalarınızı yerel veya genel bir HTTP(S) sunucusundan servis edin.",
       "Her uç noktayı curl ile test edin ve JSON şeklini doğrulayın.",
-      "Bildiri URL'sini FrameZoo Masaüstü > Eklentiler'e yapıştırın."
+      "Bildiri URL'sini Framezoo Masaüstü > Eklentiler'e yapıştırın."
     ],
     "advancedLink": "Gelişmiş SDK referansını aç",
     "advancedDescription": "Stremio Addon SDK'sı isteğe bağlıdır. Yönlendirme ve serileştirme yardımcıları istiyorsanız bunu kullanın; protokol gereği buna gerek yoktur."
   },
   "deepLink": {
-    "download": "FrameZoo'yu indirin",
-    "opening": "FrameZoo açılıyor...",
-    "openingDescription": "Tarayıcınız FrameZoo Masaüstü uygulamasını açmaya çalışıyor. Bir istem görünürse lütfen <1>FrameZoo'yu Aç</1> öğesini seçin.",
+    "download": "Framezoo'yu indirin",
+    "opening": "Framezoo açılıyor...",
+    "openingDescription": "Tarayıcınız Framezoo Masaüstü uygulamasını açmaya çalışıyor. Bir istem görünürse lütfen <1>Framezoo'yu Aç</1> öğesini seçin.",
     "retry": "Masaüstü Uygulamasını tekrar açmayı deneyin",
     "backHome": "Ana sayfaya geri dön"
   }

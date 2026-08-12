@@ -11,7 +11,6 @@
       "adding": "Dodawanie...",
       "ariaClose": "Zamknij menedżera dodatków",
       "ariaManage": "Zarządzaj dodatkami",
-      "createGuideLink": "Jak stworzyć dodatek",
       "errorFallback": "Nie można zainstalować tego dodatku.",
       "manageListButton": "Zarządzaj listą dodatków",
       "subtitle": "Nie zalecamy dodawania żadnych nieoficjalnych lub nielegalnych dodatków.",
@@ -21,12 +20,11 @@
       "framezoo": "RamaZoo",
       "stremio": "Stremio",
       "supportLabel": "Obsługiwane platformy dla dodatków:",
-      "supported": "Obsługiwane platformy: FrameZoo i Stremio"
+      "supported": "Obsługiwane platformy: Framezoo i Stremio"
     },
     "page": {
       "addAddonButton": "Dodaj dodatek",
       "description": "Dodatki są opcjonalne. Ta aplikacja nie łączy, nie poleca ani nie hostuje żadnych dodatków.",
-      "createGuideLink": "Utwórz przewodnik po dodatkach",
       "disabled": "Wyłączony",
       "emptyInstalled": "W systemie nie zainstalowano jeszcze żadnych dodatków.",
       "enabled": "Włączony",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Problemy",
     "goHome": "Wróć do strony głównej",
-    "message": "FrameZoo napotkał problem z niektórymi dostawcami, jeśli nie możesz znaleźć albo odtworzyć serialu, proszę zmienić źródło. Możesz spodziewać sie tego problemu przez pewien czas.",
+    "message": "Framezoo napotkał problem z niektórymi dostawcami, jeśli nie możesz znaleźć albo odtworzyć serialu, proszę zmienić źródło. Możesz spodziewać sie tego problemu przez pewien czas.",
     "title": "Problemy z dostawcą"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Zastrzeżenie ",
-      "disclaimerText": "FrameZoo oferuje bezpieczną, nowoczesną i bezproblemową rozrywkę. Dzięki łatwemu w obsłudze interfejsowi i różnorodnej bibliotece treści, w tym obsłudze 4K HDR, użytkownicy mogą cieszyć się ulubionymi filmami i programami telewizyjnymi. A dzięki swojemu zaangażowaniu w bezpieczeństwo FrameZoo jest najlepszym wyborem, jeśli chodzi o bezproblemowe przesyłanie strumieniowe wysokiej jakości."
+      "disclaimerText": "Framezoo oferuje bezpieczną, nowoczesną i bezproblemową rozrywkę. Dzięki łatwemu w obsłudze interfejsowi i różnorodnej bibliotece treści, w tym obsłudze 4K HDR, użytkownicy mogą cieszyć się ulubionymi filmami i programami telewizyjnymi. A dzięki swojemu zaangażowaniu w bezpieczeństwo Framezoo jest najlepszym wyborem, jeśli chodzi o bezproblemowe przesyłanie strumieniowe wysokiej jakości."
     },
     "links": {
       "fluxer": "Flukser",
@@ -317,7 +315,7 @@
       "discover": "Odkrywaj",
       "login": "Zaloguj sie",
       "migration": "Migruj konto",
-      "pagetitle": "{{title}} — FrameZoo",
+      "pagetitle": "{{title}} — Framezoo",
       "register": "Zarejestruj się",
       "settings": "Ustawienia"
     }
@@ -411,11 +409,11 @@
           "Na co masz ochotę?",
           "Czy mamy usunąć Twoją historię wyszukiwania?",
           "Co chcesz streamować?",
-          "FrameZoo to najlepsza strona!",
+          "Framezoo to najlepsza strona!",
           "Co jest dzisiaj na Twojej liście Do Obejrzenia?",
           "Jak Ci minął dzień?",
           "Mój błąd, ta strona nigdy nie działa...",
-          "Czy FrameZoo nie jest najlepszy?",
+          "Czy Framezoo nie jest najlepszy?",
           ">ᴗ<"
         ]
       },
@@ -423,34 +421,28 @@
     },
     "support": {
       "complete": "kompletny",
-      "description": "FrameZoo przynosi straty i potrzebujemy pomocy, aby był wolny od reklam! Jeśli lubisz korzystać z FrameZoo, rozważ przekazanie darowizny, która pomoże nam pokryć nasze koszty.",
+      "description": "Framezoo przynosi straty i potrzebujemy pomocy, aby był wolny od reklam! Jeśli lubisz korzystać z Framezoo, rozważ przekazanie darowizny, która pomoże nam pokryć nasze koszty.",
       "donate": "Podarować",
-      "explanation": "Jeśli nie używasz rozszerzenia lub nie masz skonfigurowanego interfejsu API FED, znalezienie treści może być trudniejsze! Chcemy to naprawić, ale dostarczanie treści bez drogich serwerów jest znacznie trudniejsze. Jeśli więc lubisz korzystać z FrameZoo, rozważ przekazanie darowizny, która pomoże nam pokryć rosnące koszty.",
+      "explanation": "Jeśli nie używasz rozszerzenia lub nie masz skonfigurowanego interfejsu API FED, znalezienie treści może być trudniejsze! Chcemy to naprawić, ale dostarczanie treści bez drogich serwerów jest znacznie trudniejsze. Jeśli więc lubisz korzystać z Framezoo, rozważ przekazanie darowizny, która pomoże nam pokryć rosnące koszty.",
       "explanation2": "Jeśli chcesz uzyskać więcej informacji, dołącz do naszego",
       "fluxer": "Flukser",
       "label": "Finansowanie projektu: ${{current}} / ${{goal}}",
       "moreInfo": "Więcej informacji",
       "thankYou": "Dziękuję za wsparcie!",
-      "title": "FrameZoo potrzebuje Twojej pomocy!"
+      "title": "Framezoo potrzebuje Twojej pomocy!"
     },
     "titles": {
       "69": {
         "default": "Masz ochotę na coś pikantnego?",
-        "extra": [
-          "Wesołego dnia 69 😘!"
-        ]
+        "extra": ["Wesołego dnia 69 😘!"]
       },
       "420": {
         "default": "Dziś jest 20 kwietnia, co chciałbyś obejrzeć?",
-        "extra": [
-          "Wesołego 420 🥳!"
-        ]
+        "extra": ["Wesołego 420 🥳!"]
       },
       "day": {
         "default": "Co chciałbyś obejrzeć dziś po południu?",
-        "extra": [
-          "Żyj w FrameZoo!"
-        ]
+        "extra": ["Żyj w Framezoo!"]
       },
       "halloween": {
         "default": "Jaki straszny film chciałbyś obejrzeć w Halloween?",
@@ -463,15 +455,11 @@
       },
       "morning": {
         "default": "Co chciałbyś obejrzeć dziś rano?",
-        "extra": [
-          "Żyj w FrameZoo!"
-        ]
+        "extra": ["Żyj w Framezoo!"]
       },
       "night": {
         "default": "Co chciałbyś obejrzeć dziś wieczorem?",
-        "extra": [
-          "Żyj w FrameZoo!"
-        ]
+        "extra": ["Żyj w Framezoo!"]
       }
     },
     "watchHistory": {
@@ -561,7 +549,7 @@
       "title": "Listy"
     },
     "public": {
-      "descriptionFallback": "Udostępniona kolekcja wyselekcjonowana w FrameZoo.",
+      "descriptionFallback": "Udostępniona kolekcja wyselekcjonowana w Framezoo.",
       "notFoundDescription": "Brakuje tego linku do udostępniania lub jest on już niedostępny.",
       "notFoundTitle": "Nie znaleziono listy",
       "pageTitle": "Udostępniona lista",
@@ -693,7 +681,7 @@
     },
     "install": {
       "genericGuide": "Twoja przeglądarka nie obsługuje automatycznego monitu o instalację PWA.\nNadal możesz przeprowadzić instalację za pomocą menu przeglądarki (na przykład: „Zainstaluj aplikację”, „Utwórz skrót” lub „Dodaj do Docka/Ekranu głównego”).",
-      "iosSafariGuide": "Aby zainstalować FrameZoo jako aplikację:\n\n1. Naciśnij przycisk Udostępnij (kwadrat ze strzałką).\n2. Wybierz opcję „Dodaj do ekranu głównego”.\n3. Stuknij Dodaj."
+      "iosSafariGuide": "Aby zainstalować Framezoo jako aplikację:\n\n1. Naciśnij przycisk Udostępnij (kwadrat ze strzałką).\n2. Wybierz opcję „Dodaj do ekranu głównego”.\n3. Stuknij Dodaj."
     },
     "menu": {
       "accountMenu": "Otwórz menu konta",

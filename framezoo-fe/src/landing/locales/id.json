@@ -13,12 +13,12 @@
     "description": "Pemutaran asli, kontrol yang lebih tajam, dan tempat yang lebih tenang untuk jam tangan Anda berikutnya.",
     "primaryCta": "Unduh desktop",
     "secondaryCta": "Lihat pengalamannya",
-    "imageAlt": "Pratinjau aplikasi desktop FrameZoo",
+    "imageAlt": "Pratinjau aplikasi desktop Framezoo",
     "version": "Rilis desktop"
   },
   "features": {
     "performanceTitle": "Perpustakaan Anda, tanpa pajak browser.",
-    "overviewDescription": "FrameZoo Desktop memberikan ruang pemutaran yang dibutuhkan: performa asli, handoff yang bersih, dan kontrol yang tidak mengganggu.",
+    "overviewDescription": "Framezoo Desktop memberikan ruang pemutaran yang dibutuhkan: performa asli, handoff yang bersih, dan kontrol yang tidak mengganggu.",
     "playback": "Pemutaran asli",
     "playbackDescription": "Video halus dengan penanganan media kelas desktop.",
     "performance": "Performa yang tenang",
@@ -33,7 +33,7 @@
     "addonThree": "Ekstensi komunitas",
     "showcaseTitle": "Layar adalah tujuannya.",
     "showcaseDescription": "Permukaan desktop yang terfokus untuk penemuan, pemutaran, dan segala hal seputar cerita.",
-    "showcaseCaption": "Mode Desktop / Fokus FrameZoo",
+    "showcaseCaption": "Mode Desktop / Fokus Framezoo",
     "experienceTitle": "Semua yang Anda perlukan untuk jam tangan yang lebih baik.",
     "dualSubtitlesDescription": "Aktifkan subtitle ganda saat Anda mempelajari, membandingkan, atau sekadar memilih keduanya.",
     "subtitleSyncDescription": "Sejajarkan dialog pembuka dengan gambar dalam hitungan detik.",
@@ -44,12 +44,12 @@
     "showcaseSecondaryTitle": "Temukan sesuatu yang layak untuk ditonton.",
     "showcaseSecondaryDescription": "Mulai dari permukaan penemuan yang bersih, lalu lanjutkan ke pemutaran tanpa kehilangan tempat.",
     "subtitleSync": "Sinkronkan subtitle dengan AI",
-    "showcaseSecondaryAlt": "Layar penemuan FrameZoo dengan pencarian, kategori, dan baris judul",
-    "showcasePrimaryAlt": "Layar detail judul FrameZoo dengan karya seni, peringkat, musim, dan metadata"
+    "showcaseSecondaryAlt": "Layar penemuan Framezoo dengan pencarian, kategori, dan baris judul",
+    "showcasePrimaryAlt": "Layar detail judul Framezoo dengan karya seni, peringkat, musim, dan metadata"
   },
   "download": {
     "eyebrow": "PILIH BANGUNAN ANDA",
-    "title": "Bawalah FrameZoo bersamamu.",
+    "title": "Bawalah Framezoo bersamamu.",
     "description": "Pilih build untuk mesin Anda. Browser Anda akan membuat rekomendasi, atau menampilkan setiap opsi yang tersedia di bawah.",
     "recommended": "Direkomendasikan",
     "chooseBuild": "Pilih bangunan",
@@ -73,7 +73,7 @@
   "addonGuide": {
     "eyebrow": "PROTOKOL / PANDUAN TAMBAHAN",
     "manifestTitle": "Mulailah dengan manifes.json",
-    "description": "Addon adalah layanan HTTP kecil. Sajikan manifes dan sumber daya yang Anda perlukan; FrameZoo menangani sisanya.",
+    "description": "Addon adalah layanan HTTP kecil. Sajikan manifes dan sumber daya yang Anda perlukan; Framezoo menangani sisanya.",
     "title": "Bangun add-on tanpa bergabung dengan proses aplikasi.",
     "resources": {
       "catalog": "Deretan film atau serial untuk penemuan.",
@@ -88,7 +88,7 @@
     "steps": [
       "Sajikan /manifest.json dan titik akhir sumber daya Anda dari server HTTP(S) lokal atau publik.",
       "Uji setiap titik akhir dengan curl dan verifikasi bentuk JSON.",
-      "Rekatkan URL manifes ke FrameZoo Desktop > Addons."
+      "Rekatkan URL manifes ke Framezoo Desktop > Addons."
     ],
     "runTitle": "Jalankan, uji, instal",
     "advancedLink": "Buka referensi SDK tingkat lanjut",
@@ -97,9 +97,9 @@
   },
   "deepLink": {
     "opening": "Membuka BingkaiKebun Binatang...",
-    "openingDescription": "Browser Anda mencoba membuka aplikasi FrameZoo Desktop. Jika muncul prompt, silakan pilih <1>Open FrameZoo</1>.",
+    "openingDescription": "Browser Anda mencoba membuka aplikasi Framezoo Desktop. Jika muncul prompt, silakan pilih <1>Open Framezoo</1>.",
     "retry": "Coba buka Aplikasi Desktop lagi",
     "backHome": "Kembali ke beranda",
-    "download": "Unduh FrameZoo"
+    "download": "Unduh Framezoo"
   }
 }

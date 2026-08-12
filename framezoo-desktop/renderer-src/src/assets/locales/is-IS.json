@@ -11,22 +11,20 @@
       "adding": "Bætir við...",
       "ariaClose": "Lokaðu viðbótarstjóra",
       "ariaManage": "Stjórna viðbótum",
-      "createGuideLink": "Hvernig á að búa til viðbót",
       "errorFallback": "Ekki er hægt að setja upp þessa viðbót.",
       "manageListButton": "Stjórna viðbótarlista",
       "subtitle": "Við mælum ekki með því að bæta við neinum óopinberum eða ólöglegum viðbótum.",
       "title": "Viðbætur fyrir skjáborð"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Styður pallur fyrir viðbætur:",
-      "supported": "Styður pallur: FrameZoo og Stremio"
+      "supported": "Styður pallur: Framezoo og Stremio"
     },
     "page": {
       "addAddonButton": "Bæta við viðbót",
       "description": "Viðbætur eru valfrjálsar. Þetta app hefur ekki búnt, mælir með eða hýsir neina viðbót.",
-      "createGuideLink": "Búðu til viðbótarleiðbeiningar",
       "disabled": "Öryrkjar",
       "emptyInstalled": "Engar viðbætur uppsettar í kerfinu ennþá.",
       "enabled": "Virkt",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Málefni",
     "goHome": "Farðu heim",
-    "message": "FrameZoo er aftur að lenda í vandræðum með sumar veitendur, ef þú finnur ekki eða spilar þátt vinsamlegast breyttu upprunanum. Búast má við að þessi villa verði viðvarandi allan eftirfarandi tíma.",
+    "message": "Framezoo er aftur að lenda í vandræðum með sumar veitendur, ef þú finnur ekki eða spilar þátt vinsamlegast breyttu upprunanum. Búast má við að þessi villa verði viðvarandi allan eftirfarandi tíma.",
     "title": "Mál veitenda"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Fyrirvari",
-      "disclaimerText": "FrameZoo býður upp á örugga, nútímalega og óaðfinnanlega afþreyingarupplifun. Með auðveldu viðmóti og fjölbreyttu efnissafni, þar á meðal 4K HDR stuðningi, geta notendur notið uppáhaldskvikmynda sinna og sjónvarpsþátta. Og með skuldbindingu sinni um öryggi er FrameZoo fullkominn kostur fyrir áhyggjulausa, hágæða streymisupplifun."
+      "disclaimerText": "Framezoo býður upp á örugga, nútímalega og óaðfinnanlega afþreyingarupplifun. Með auðveldu viðmóti og fjölbreyttu efnissafni, þar á meðal 4K HDR stuðningi, geta notendur notið uppáhaldskvikmynda sinna og sjónvarpsþátta. Og með skuldbindingu sinni um öryggi er Framezoo fullkominn kostur fyrir áhyggjulausa, hágæða streymisupplifun."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +310,12 @@
       "subtitle": "Haltu ` til að sýna þessa hjálp hvenær sem er",
       "title": "Flýtivísar"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Uppgötvaðu",
       "login": "Skrá inn",
       "migration": "Flytja reikning",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Skrá",
       "settings": "Stillingar"
     }
@@ -415,7 +413,7 @@
           "Hvað er á vaktlistanum þínum í dag?",
           "Hvernig var dagurinn þinn?",
           "Slæmt, síðan virkar aldrei...",
-          "Er FrameZoo ekki bara best?",
+          "Er Framezoo ekki bara best?",
           ">ᴗ<"
         ]
       },
@@ -423,28 +421,24 @@
     },
     "support": {
       "complete": "lokið",
-      "description": "FrameZoo er rekið með tapi og við þurfum hjálp til að halda því án auglýsinga! Ef þér finnst gaman að nota FrameZoo skaltu íhuga að gefa til að hjálpa okkur að standa straum af kostnaði okkar.",
+      "description": "Framezoo er rekið með tapi og við þurfum hjálp til að halda því án auglýsinga! Ef þér finnst gaman að nota Framezoo skaltu íhuga að gefa til að hjálpa okkur að standa straum af kostnaði okkar.",
       "donate": "Gefðu",
-      "explanation": "Ef þú ert ekki að nota viðbótina eða ert ekki með FED API uppsett, gæti verið erfiðara að finna efni! Við viljum laga þetta, en það er miklu erfiðara að útvega efni án dýrra netþjóna. Svo vinsamlegast, ef þú hefur gaman af því að nota FrameZoo, vinsamlegast íhugaðu að gefa til að hjálpa okkur að standa straum af vaxandi kostnaði okkar.",
+      "explanation": "Ef þú ert ekki að nota viðbótina eða ert ekki með FED API uppsett, gæti verið erfiðara að finna efni! Við viljum laga þetta, en það er miklu erfiðara að útvega efni án dýrra netþjóna. Svo vinsamlegast, ef þú hefur gaman af því að nota Framezoo, vinsamlegast íhugaðu að gefa til að hjálpa okkur að standa straum af vaxandi kostnaði okkar.",
       "explanation2": "Ef þú vilt frekari upplýsingar, vinsamlegast vertu með í okkar",
       "fluxer": "Fluxer",
       "label": "Verkefnafjármögnun: ${{current}} / ${{goal}}",
       "moreInfo": "Frekari upplýsingar",
       "thankYou": "Þakka þér fyrir stuðninginn!",
-      "title": "FrameZoo þarf hjálp þína!"
+      "title": "Framezoo þarf hjálp þína!"
     },
     "titles": {
       "69": {
         "default": "Til í eitthvað kryddað?",
-        "extra": [
-          "Til hamingju með daginn 69 😘!"
-        ]
+        "extra": ["Til hamingju með daginn 69 😘!"]
       },
       "420": {
         "default": "Hvað myndir þú vilja horfa á þennan 4/20?",
-        "extra": [
-          "Gleðilegan 20/4 🥳!"
-        ]
+        "extra": ["Gleðilegan 20/4 🥳!"]
       },
       "day": {
         "default": "Hvað myndirðu vilja horfa á þetta kvöldið?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "Hvað myndirðu vilja horfa á þessum morgni?",
-        "extra": [
-          "Ég heyrði að Before Sunrise sé góð"
-        ]
+        "extra": ["Ég heyrði að Before Sunrise sé góð"]
       },
       "night": {
         "default": "Hvað myndirðu vilja horfa á í nótt?",
-        "extra": [
-          "Þreytt? Ég heyrði að The Exorcist sé góð."
-        ]
+        "extra": ["Þreytt? Ég heyrði að The Exorcist sé góð."]
       }
     },
     "watchHistory": {
@@ -561,7 +551,7 @@
       "title": "Listar"
     },
     "public": {
-      "descriptionFallback": "Sameiginlegt safn í FrameZoo.",
+      "descriptionFallback": "Sameiginlegt safn í Framezoo.",
       "notFoundDescription": "Þessi deilingartengil vantar eða er ekki lengur tiltækur.",
       "notFoundTitle": "Listi fannst ekki",
       "pageTitle": "Sameiginlegur listi",
@@ -693,7 +683,7 @@
     },
     "install": {
       "genericGuide": "Vafrinn þinn styður ekki sjálfvirka PWA uppsetningarkvaðningu.\nÞú getur samt sett upp með því að nota vafravalmyndina (til dæmis: 'Setja upp app', 'Búa til flýtileið' eða 'Bæta við bryggju/heimaskjá').",
-      "iosSafariGuide": "Til að setja upp FrameZoo sem app:\n\n1. Pikkaðu á Share hnappinn (ferningur með ör).\n2. Veldu 'Bæta við heimaskjá'.\n3. Pikkaðu á Bæta við."
+      "iosSafariGuide": "Til að setja upp Framezoo sem app:\n\n1. Pikkaðu á Share hnappinn (ferningur með ör).\n2. Veldu 'Bæta við heimaskjá'.\n3. Pikkaðu á Bæta við."
     },
     "menu": {
       "accountMenu": "Opnaðu reikningsvalmynd",

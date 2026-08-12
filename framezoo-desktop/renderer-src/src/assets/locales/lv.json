@@ -11,22 +11,20 @@
       "adding": "Notiek pievienošana...",
       "ariaClose": "Aizvērt papildinājumu pārvaldnieku",
       "ariaManage": "Pārvaldiet papildinājumus",
-      "createGuideLink": "Kā izveidot papildinājumu",
       "errorFallback": "Nevar instalēt šo papildinājumu.",
       "manageListButton": "Pārvaldīt papildinājumu sarakstu",
       "subtitle": "Mēs neiesakām pievienot neoficiālus vai nelegālus papildinājumus.",
       "title": "Darbvirsmas papildinājumi"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Atbalstītās platformas papildinājumiem:",
-      "supported": "Atbalstītās platformas: FrameZoo un Stremio"
+      "supported": "Atbalstītās platformas: Framezoo un Stremio"
     },
     "page": {
       "addAddonButton": "Pievienojiet papildinājumu",
       "description": "Papildinājumi nav obligāti. Šī lietotne neapvieno, neiesaka vai mitina nevienu papildinājumu.",
-      "createGuideLink": "Izveidojiet papildinājumu ceļvedi",
       "disabled": "Atspējots",
       "emptyInstalled": "Sistēmā vēl nav instalēts neviens papildinājums.",
       "enabled": "Iespējots",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "problēmas",
     "goHome": "Ejiet mājās",
-    "message": "FrameZoo atkal rodas problēmas ar dažiem pakalpojumu sniedzējiem. Ja nevarat atrast vai atskaņot pārraidi, lūdzu, mainiet avotu. Sagaidiet, ka šī kļūda saglabāsies visu tālāk norādīto laiku.",
+    "message": "Framezoo atkal rodas problēmas ar dažiem pakalpojumu sniedzējiem. Ja nevarat atrast vai atskaņot pārraidi, lūdzu, mainiet avotu. Sagaidiet, ka šī kļūda saglabāsies visu tālāk norādīto laiku.",
     "title": "Problēmas ar pakalpojumu sniedzēju"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Atruna",
-      "disclaimerText": "FrameZoo piedāvā drošu, modernu un nevainojamu izklaides pieredzi. Izmantojot tā ērti lietojamo saskarni un daudzveidīgo satura bibliotēku, tostarp 4K HDR atbalstu, lietotāji var baudīt savas iecienītākās filmas un TV pārraides. Un ar savu apņemšanos nodrošināt drošību, FrameZoo ir labākā izvēle bezrūpīgai augstas kvalitātes straumēšanas pieredzei."
+      "disclaimerText": "Framezoo piedāvā drošu, modernu un nevainojamu izklaides pieredzi. Izmantojot tā ērti lietojamo saskarni un daudzveidīgo satura bibliotēku, tostarp 4K HDR atbalstu, lietotāji var baudīt savas iecienītākās filmas un TV pārraides. Un ar savu apņemšanos nodrošināt drošību, Framezoo ir labākā izvēle bezrūpīgai augstas kvalitātes straumēšanas pieredzei."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -411,11 +409,11 @@
           "Uz ko tu esi noskaņots?",
           "Vai mums vajadzētu dzēst jūsu pārlūkprogrammas vēsturi?",
           "Ko vēlaties straumēt?",
-          "FrameZoo ir visu laiku labākā vietne!",
+          "Framezoo ir visu laiku labākā vietne!",
           "Kas šodien ir jūsu skatīšanās sarakstā?",
           "Kā pagāja tava diena?",
           "Diemžēl vietne nekad nedarbojas...",
-          "Vai FrameZoo nav tikai labākais?",
+          "Vai Framezoo nav tikai labākais?",
           ">ᴗ<"
         ]
       },
@@ -423,34 +421,28 @@
     },
     "support": {
       "complete": "pabeigts",
-      "description": "FrameZoo darbojas ar zaudējumiem, un mums ir vajadzīga palīdzība, lai to saglabātu bez reklāmām! Ja jums patīk lietot FrameZoo, lūdzu, apsveriet iespēju ziedot, lai palīdzētu mums segt mūsu izmaksas.",
+      "description": "Framezoo darbojas ar zaudējumiem, un mums ir vajadzīga palīdzība, lai to saglabātu bez reklāmām! Ja jums patīk lietot Framezoo, lūdzu, apsveriet iespēju ziedot, lai palīdzētu mums segt mūsu izmaksas.",
       "donate": "Ziedot",
-      "explanation": "Ja neizmantojat paplašinājumu vai neesat iestatījis FED API, saturu var būt grūtāk atrast! Mēs vēlamies to novērst, taču ir daudz grūtāk nodrošināt saturu bez dārgiem serveriem. Tāpēc, lūdzu, ja jums patīk lietot FrameZoo, lūdzu, apsveriet iespēju ziedot, lai palīdzētu mums segt mūsu pieaugošās izmaksas.",
+      "explanation": "Ja neizmantojat paplašinājumu vai neesat iestatījis FED API, saturu var būt grūtāk atrast! Mēs vēlamies to novērst, taču ir daudz grūtāk nodrošināt saturu bez dārgiem serveriem. Tāpēc, lūdzu, ja jums patīk lietot Framezoo, lūdzu, apsveriet iespēju ziedot, lai palīdzētu mums segt mūsu pieaugošās izmaksas.",
       "explanation2": "Ja vēlaties uzzināt vairāk, lūdzu, pievienojieties mūsu komandai",
       "fluxer": "Fluxer",
       "label": "Projekta finansējums: ${{current}} / ${{goal}}",
       "moreInfo": "Vairāk informācijas",
       "thankYou": "Paldies par atbalstu!",
-      "title": "FrameZoo nepieciešama jūsu palīdzība!"
+      "title": "Framezoo nepieciešama jūsu palīdzība!"
     },
     "titles": {
       "69": {
         "default": "Vai vēlaties kaut ko pikantu?",
-        "extra": [
-          "Laimīgas 69 dienas 😘!"
-        ]
+        "extra": ["Laimīgas 69 dienas 😘!"]
       },
       "420": {
         "default": "Ko jūs vēlētos noskatīties šajā 4/20?",
-        "extra": [
-          "Priecīgu 20. aprīlī 🥳!"
-        ]
+        "extra": ["Priecīgu 20. aprīlī 🥳!"]
       },
       "day": {
         "default": "Ko jūs vēlētos noskatīties šajā pēcpusdienā?",
-        "extra": [
-          "Dzīvo FrameZoo!"
-        ]
+        "extra": ["Dzīvo Framezoo!"]
       },
       "halloween": {
         "default": "Kādu spokainu filmu jūs vēlētos noskatīties šajā Helovīnā?",
@@ -463,15 +455,11 @@
       },
       "morning": {
         "default": "Ko tu gribētu šorīt noskatīties?",
-        "extra": [
-          "Es dzirdu, ka Pirms saullēkta ir labs"
-        ]
+        "extra": ["Es dzirdu, ka Pirms saullēkta ir labs"]
       },
       "night": {
         "default": "Ko tu gribētu šovakar skatīties?",
-        "extra": [
-          "Noguris? Es dzirdu, ka Exorcist ir labs."
-        ]
+        "extra": ["Noguris? Es dzirdu, ka Exorcist ir labs."]
       }
     },
     "watchHistory": {
@@ -561,7 +549,7 @@
       "title": "Saraksti"
     },
     "public": {
-      "descriptionFallback": "Koplietojama kolekcija, kas kurēta pakalpojumā FrameZoo.",
+      "descriptionFallback": "Koplietojama kolekcija, kas kurēta pakalpojumā Framezoo.",
       "notFoundDescription": "Šīs kopīgošanas saites trūkst vai tā vairs nav pieejama.",
       "notFoundTitle": "Saraksts nav atrasts",
       "pageTitle": "Kopīgots saraksts",
@@ -693,7 +681,7 @@
     },
     "install": {
       "genericGuide": "Jūsu pārlūkprogramma neatbalsta automātisku PWA instalēšanas uzvedni.\nJūs joprojām varat instalēt, izmantojot pārlūkprogrammas izvēlni (piemēram, “Instalēt lietotni”, “Izveidot saīsni” vai “Pievienot dokam/sākuma ekrānam”).",
-      "iosSafariGuide": "Lai instalētu FrameZoo kā lietotni:\n\n1. Pieskarieties pogai Kopīgot (kvadrāts ar bultiņu).\n2. Izvēlieties \"Pievienot sākuma ekrānam\".\n3. Pieskarieties Pievienot."
+      "iosSafariGuide": "Lai instalētu Framezoo kā lietotni:\n\n1. Pieskarieties pogai Kopīgot (kvadrāts ar bultiņu).\n2. Izvēlieties \"Pievienot sākuma ekrānam\".\n3. Pieskarieties Pievienot."
     },
     "menu": {
       "accountMenu": "Atveriet konta izvēlni",

@@ -11,22 +11,20 @@
       "adding": "Hinzufügen...",
       "ariaClose": "Schließen Sie den Addon-Manager",
       "ariaManage": "Add-ons verwalten",
-      "createGuideLink": "So erstellen Sie ein Add-on",
       "errorFallback": "Dieses Add-on kann nicht installiert werden.",
       "manageListButton": "Add-on-Liste verwalten",
       "subtitle": "Wir empfehlen, keine inoffiziellen oder illegalen Add-ons hinzuzufügen.",
       "title": "Desktop-Add-ons"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Unterstützte Plattformen für Add-ons:",
-      "supported": "Unterstützte Plattformen: FrameZoo und Stremio"
+      "supported": "Unterstützte Plattformen: Framezoo und Stremio"
     },
     "page": {
       "addAddonButton": "Add-on hinzufügen",
       "description": "Add-ons sind optional. Diese App bündelt, empfiehlt oder hostet kein Add-on.",
-      "createGuideLink": "Erstellen Sie einen Add-on-Leitfaden",
       "disabled": "Deaktiviert",
       "emptyInstalled": "Es sind noch keine Add-ons im System installiert.",
       "enabled": "Ermöglicht",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Fehler",
     "goHome": "Zor Start-Site",
-    "message": "FrameZoo het wieder Problemli mit einzelne Anbieter. Wenn du e Serie nöd finde oder abspiele chasch, versuech bitte d’Quelle z’wechsle. Dä Fehler wird voraussichtlich während de unten aaggehne Zytspanne ahalte.",
+    "message": "Framezoo het wieder Problemli mit einzelne Anbieter. Wenn du e Serie nöd finde oder abspiele chasch, versuech bitte d’Quelle z’wechsle. Dä Fehler wird voraussichtlich während de unten aaggehne Zytspanne ahalte.",
     "title": "Abieter Problem"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Hewis",
-      "disclaimerText": "FrameZoo bietet ein sicheres, modernes und nahtloses Unterhaltungserlebnis. Mit seiner benutzerfreundlichen Oberfläche und der vielfältigen Inhaltsbibliothek, einschließlich 4K HDR-Unterstützung, können Benutzer ihre Lieblingsfilme und Fernsehsendungen genießen. Und mit seinem Engagement für Sicherheit ist FrameZoo die ultimative Wahl für ein sorgenfreies Streaming-Erlebnis in hoher Qualität."
+      "disclaimerText": "Framezoo bietet ein sicheres, modernes und nahtloses Unterhaltungserlebnis. Mit seiner benutzerfreundlichen Oberfläche und der vielfältigen Inhaltsbibliothek, einschließlich 4K HDR-Unterstützung, können Benutzer ihre Lieblingsfilme und Fernsehsendungen genießen. Und mit seinem Engagement für Sicherheit ist Framezoo die ultimative Wahl für ein sorgenfreies Streaming-Erlebnis in hoher Qualität."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +310,12 @@
       "subtitle": "Halten Sie ` gedrückt, um diese Hilfe jederzeit anzuzeigen",
       "title": "Tastaturkürzel"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Entdecke",
       "login": "Amälde",
       "migration": "Account öberträge",
-      "pagetitle": "{{title}} – FrameZoo",
+      "pagetitle": "{{title}} – Framezoo",
       "register": "Regischtriere",
       "settings": "Ischtelige"
     }
@@ -411,11 +409,11 @@
           "I was för nere Stemig besch grad?",
           "Sölle mer dini Browser-Historie lösche?",
           "Was möchtisch gern luege?",
-          "FrameZoo esch die bescht Site ever!",
+          "Framezoo esch die bescht Site ever!",
           "Was esch of dim Felm ToDo Zetteli?",
           "Wie esch din Tag gse?",
           "Min Fähler, t’Site fonktioniert nie…",
-          "FrameZoo esch die bescht Site, oder?",
+          "Framezoo esch die bescht Site, oder?",
           ">ᴗ<"
         ]
       },
@@ -423,15 +421,15 @@
     },
     "support": {
       "complete": "vollständig",
-      "description": "FrameZoo wird mit Verlust betrieben und wir brauchen Hilfe, um es werbefrei zu halten! Wenn Sie FrameZoo gerne nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer Kosten zu helfen.",
+      "description": "Framezoo wird mit Verlust betrieben und wir brauchen Hilfe, um es werbefrei zu halten! Wenn Sie Framezoo gerne nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer Kosten zu helfen.",
       "donate": "Spenden",
-      "explanation": "Wenn Sie die Erweiterung nicht verwenden oder die FED-API nicht eingerichtet haben, kann es schwieriger sein, Inhalte zu finden! Wir möchten das beheben, aber ohne teure Server ist es viel schwieriger, Inhalte bereitzustellen. Wenn Sie also gerne FrameZoo nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer wachsenden Kosten zu helfen.",
+      "explanation": "Wenn Sie die Erweiterung nicht verwenden oder die FED-API nicht eingerichtet haben, kann es schwieriger sein, Inhalte zu finden! Wir möchten das beheben, aber ohne teure Server ist es viel schwieriger, Inhalte bereitzustellen. Wenn Sie also gerne Framezoo nutzen, denken Sie bitte über eine Spende nach, um uns bei der Deckung unserer wachsenden Kosten zu helfen.",
       "explanation2": "Wenn Sie weitere Informationen wünschen, nehmen Sie bitte an unserem teil",
       "fluxer": "Fluxer",
       "label": "Projektfinanzierung: ${{current}} / ${{goal}}",
       "moreInfo": "Weitere Informationen",
       "thankYou": "Vielen Dank für Ihre Unterstützung!",
-      "title": "FrameZoo braucht Ihre Hilfe!"
+      "title": "Framezoo braucht Ihre Hilfe!"
     },
     "titles": {
       "69": {
@@ -444,7 +442,7 @@
       },
       "day": {
         "default": "Was möchtisch a däm schöne nomitag aluege?",
-        "extra": ["Viva la FrameZoo e ciao Svizzera"]
+        "extra": ["Viva la Framezoo e ciao Svizzera"]
       },
       "halloween": {
         "default": "Welchen gruseligen Film würden Sie dieses Halloween gerne sehen?",
@@ -457,7 +455,7 @@
       },
       "morning": {
         "default": "Was welsch a däm morge aluege?",
-        "extra": ["Viva la FrameZoo!"]
+        "extra": ["Viva la Framezoo!"]
       },
       "night": {
         "default": "Besch no wach? Was möchtisch luege?",
@@ -551,7 +549,7 @@
       "title": "Listen"
     },
     "public": {
-      "descriptionFallback": "Eine in FrameZoo kuratierte gemeinsame Sammlung.",
+      "descriptionFallback": "Eine in Framezoo kuratierte gemeinsame Sammlung.",
       "notFoundDescription": "Dieser Freigabelink fehlt oder ist nicht mehr verfügbar.",
       "notFoundTitle": "Liste nicht gefunden",
       "pageTitle": "Geteilte Liste",
@@ -683,7 +681,7 @@
     },
     "install": {
       "genericGuide": "Ihr Browser unterstützt keine automatische PWA-Installationsaufforderung.\nSie können die Installation weiterhin über das Browsermenü durchführen (z. B. „App installieren“, „Verknüpfung erstellen“ oder „Zum Dock/Startbildschirm hinzufügen“).",
-      "iosSafariGuide": "So installieren Sie FrameZoo als App:\n\n1. Tippen Sie auf die Schaltfläche „Teilen“ (Quadrat mit einem Pfeil).\n2. Wählen Sie „Zum Startbildschirm hinzufügen“.\n3. Tippen Sie auf Hinzufügen."
+      "iosSafariGuide": "So installieren Sie Framezoo als App:\n\n1. Tippen Sie auf die Schaltfläche „Teilen“ (Quadrat mit einem Pfeil).\n2. Wählen Sie „Zum Startbildschirm hinzufügen“.\n3. Tippen Sie auf Hinzufügen."
     },
     "menu": {
       "accountMenu": "Kontomenü öffnen",

@@ -11,22 +11,20 @@
       "adding": "Lägger till...",
       "ariaClose": "Stäng tilläggshanteraren",
       "ariaManage": "Hantera tillägg",
-      "createGuideLink": "Hur man skapar ett tillägg",
       "errorFallback": "Det går inte att installera detta tillägg.",
       "manageListButton": "Hantera tilläggslista",
       "subtitle": "Vi rekommenderar inte att du lägger till några inofficiella eller olagliga tillägg.",
       "title": "Skrivbordstillägg"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Plattformar som stöds för tillägg:",
-      "supported": "Plattformar som stöds: FrameZoo och Stremio"
+      "supported": "Plattformar som stöds: Framezoo och Stremio"
     },
     "page": {
       "addAddonButton": "Lägg till addon",
       "description": "Tillägg är valfria. Denna app paketerar inte, rekommenderar eller är värd för något tillägg.",
-      "createGuideLink": "Skapa tilläggsguide",
       "disabled": "Inaktiverad",
       "emptyInstalled": "Inga tillägg installerade i systemet ännu.",
       "enabled": "Aktiverad",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Problem",
     "goHome": "Gå hem",
-    "message": "FrameZoo upplever återigen problem med vissa leverantörer. Om du inte kan hitta eller spela upp ett program, byt källa. Förvänta dig att detta fel kvarstår under de tider som anges nedan.",
+    "message": "Framezoo upplever återigen problem med vissa leverantörer. Om du inte kan hitta eller spela upp ett program, byt källa. Förvänta dig att detta fel kvarstår under de tider som anges nedan.",
     "title": "Leverantörs-problem"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Friskriver sig från ansvar",
-      "disclaimerText": "FrameZoo erbjuder en säker, modern och sömlös underhållningsupplevelse. Med sitt lättanvända gränssnitt och mångsidiga innehållsbibliotek, inklusive 4K HDR-stöd, kan användare njuta av sina favoritfilmer och TV-program. Och med sitt engagemang för säkerhet är FrameZoo det ultimata valet för en bekymmersfri streamingupplevelse av hög kvalitet."
+      "disclaimerText": "Framezoo erbjuder en säker, modern och sömlös underhållningsupplevelse. Med sitt lättanvända gränssnitt och mångsidiga innehållsbibliotek, inklusive 4K HDR-stöd, kan användare njuta av sina favoritfilmer och TV-program. Och med sitt engagemang för säkerhet är Framezoo det ultimata valet för en bekymmersfri streamingupplevelse av hög kvalitet."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +310,12 @@
       "subtitle": "Håll ` för att visa denna hjälp när som helst",
       "title": "Kortkommandon"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Upptäck",
       "login": "Logga in",
       "migration": "Migrera Konto",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Registrera",
       "settings": "Inställningar"
     }
@@ -411,11 +409,11 @@
           "Vad har du lust med?",
           "Ska vi radera din webbläsarhistorik?",
           "Vad vill du streama?",
-          "FrameZoo är den bästa sidan någonsin!",
+          "Framezoo är den bästa sidan någonsin!",
           "Vad är på din titta-lista idag?",
           "Hur var din dag?",
           "Ingen fara, sidan fungerar tydligen aldrig…",
-          "Är inte FrameZoo bara det bästa?",
+          "Är inte Framezoo bara det bästa?",
           ">ᴗ<"
         ]
       },
@@ -423,34 +421,28 @@
     },
     "support": {
       "complete": "komplett",
-      "description": "FrameZoo drivs med förlust och vi behöver hjälp med att hålla det annonsfritt! Om du gillar att använda FrameZoo, överväg att donera för att hjälpa oss att täcka våra kostnader.",
+      "description": "Framezoo drivs med förlust och vi behöver hjälp med att hålla det annonsfritt! Om du gillar att använda Framezoo, överväg att donera för att hjälpa oss att täcka våra kostnader.",
       "donate": "Donera",
-      "explanation": "Om du inte använder tillägget eller inte har FED API konfigurerat kan det vara svårare att hitta innehåll! Vi vill fixa detta, men det är mycket svårare att tillhandahålla innehåll utan dyra servrar. Så snälla, om du gillar att använda FrameZoo, överväg att donera för att hjälpa oss att täcka våra växande kostnader.",
+      "explanation": "Om du inte använder tillägget eller inte har FED API konfigurerat kan det vara svårare att hitta innehåll! Vi vill fixa detta, men det är mycket svårare att tillhandahålla innehåll utan dyra servrar. Så snälla, om du gillar att använda Framezoo, överväg att donera för att hjälpa oss att täcka våra växande kostnader.",
       "explanation2": "Om du vill ha mer information, vänligen gå med i vår",
       "fluxer": "Fluxer",
       "label": "Projektfinansiering: ${{current}} / ${{goal}}",
       "moreInfo": "Mer info",
       "thankYou": "Tack för ditt stöd!",
-      "title": "FrameZoo behöver din hjälp!"
+      "title": "Framezoo behöver din hjälp!"
     },
     "titles": {
       "69": {
         "default": "Sugen på något hett?",
-        "extra": [
-          "Glad 69 dag 😘!"
-        ]
+        "extra": ["Glad 69 dag 😘!"]
       },
       "420": {
         "default": "Vad vill du titta denna 4/20?",
-        "extra": [
-          "Glad 4/20 🥳!"
-        ]
+        "extra": ["Glad 4/20 🥳!"]
       },
       "day": {
         "default": "Vad vill du titta på i eftermiddag?",
-        "extra": [
-          "Viva la FrameZoo!"
-        ]
+        "extra": ["Viva la Framezoo!"]
       },
       "halloween": {
         "default": "Vilken läskig film skulle du vilja se denna Halloween?",
@@ -463,15 +455,11 @@
       },
       "morning": {
         "default": "Vad vill du titta på den här morgonen?",
-        "extra": [
-          "Jag hör att Before Sunrise är bra"
-        ]
+        "extra": ["Jag hör att Before Sunrise är bra"]
       },
       "night": {
         "default": "Vad vill du titta på ikväll?",
-        "extra": [
-          "Trött? Jag hör att The Exorcist är bra."
-        ]
+        "extra": ["Trött? Jag hör att The Exorcist är bra."]
       }
     },
     "watchHistory": {
@@ -561,7 +549,7 @@
       "title": "Listor"
     },
     "public": {
-      "descriptionFallback": "En delad samling kurerad i FrameZoo.",
+      "descriptionFallback": "En delad samling kurerad i Framezoo.",
       "notFoundDescription": "Denna delningslänk saknas eller är inte längre tillgänglig.",
       "notFoundTitle": "Listan hittades inte",
       "pageTitle": "Delad lista",
@@ -693,7 +681,7 @@
     },
     "install": {
       "genericGuide": "Din webbläsare stöder inte en automatisk PWA-installationsuppmaning.\nDu kan fortfarande installera med hjälp av webbläsarmenyn (till exempel: 'Installera app', 'Skapa genväg' eller 'Lägg till i docka/startskärm').",
-      "iosSafariGuide": "Så här installerar du FrameZoo som en app:\n\n1. Tryck på knappen Dela (fyrkant med en pil).\n2. Välj \"Lägg till på startskärmen\".\n3. Tryck på Lägg till."
+      "iosSafariGuide": "Så här installerar du Framezoo som en app:\n\n1. Tryck på knappen Dela (fyrkant med en pil).\n2. Välj \"Lägg till på startskärmen\".\n3. Tryck på Lägg till."
     },
     "menu": {
       "accountMenu": "Öppna kontomenyn",

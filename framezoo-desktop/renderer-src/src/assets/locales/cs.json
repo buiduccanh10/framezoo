@@ -11,22 +11,20 @@
       "adding": "Přidávání...",
       "ariaClose": "Zavřete správce doplňků",
       "ariaManage": "Spravujte doplňky",
-      "createGuideLink": "Jak vytvořit addon",
       "errorFallback": "Tento doplněk nelze nainstalovat.",
       "manageListButton": "Správa seznamu doplňků",
       "subtitle": "Nedoporučujeme přidávat žádné neoficiální nebo nelegální doplňky.",
       "title": "Desktopové doplňky"
     },
     "platforms": {
-      "framezoo": "FrameZoo",
+      "framezoo": "Framezoo",
       "stremio": "Stremio",
       "supportLabel": "Podporované platformy pro doplňky:",
-      "supported": "Podporované platformy: FrameZoo a Stremio"
+      "supported": "Podporované platformy: Framezoo a Stremio"
     },
     "page": {
       "addAddonButton": "Přidat doplněk",
       "description": "Doplňky jsou volitelné. Tato aplikace nesbaluje, nedoporučuje ani nehostuje žádný doplněk.",
-      "createGuideLink": "Vytvořte průvodce doplňkem",
       "disabled": "Zakázáno",
       "emptyInstalled": "V systému zatím nejsou nainstalovány žádné doplňky.",
       "enabled": "Povoleno",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Problémy",
     "goHome": "Jít domů",
-    "message": "FrameZoo má opět problémy s některými poskytovateli, pokud nemůžete najít nebo přehrát pořad, změňte zdroj. Očekávejte, že tato chyba přetrvá po dobu níže.",
+    "message": "Framezoo má opět problémy s některými poskytovateli, pokud nemůžete najít nebo přehrát pořad, změňte zdroj. Očekávejte, že tato chyba přetrvá po dobu níže.",
     "title": "Problémy s poskytovatelem"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Zřeknutí odpovědnosti",
-      "disclaimerText": "FrameZoo nabízí bezpečný, moderní a bezproblémový zážitek ze zábavy. Díky snadno použitelnému rozhraní a rozmanité knihovně obsahu, včetně podpory 4K HDR, si uživatelé mohou vychutnat své oblíbené filmy a televizní pořady. A díky svému závazku k zabezpečení je FrameZoo tou nejlepší volbou pro bezstarostné a vysoce kvalitní streamování."
+      "disclaimerText": "Framezoo nabízí bezpečný, moderní a bezproblémový zážitek ze zábavy. Díky snadno použitelnému rozhraní a rozmanité knihovně obsahu, včetně podpory 4K HDR, si uživatelé mohou vychutnat své oblíbené filmy a televizní pořady. A díky svému závazku k zabezpečení je Framezoo tou nejlepší volbou pro bezstarostné a vysoce kvalitní streamování."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -312,12 +310,12 @@
       "subtitle": "Podržením ` tuto nápovědu kdykoli zobrazíte",
       "title": "Klávesové zkratky"
     },
-    "name": "FrameZoo",
+    "name": "Framezoo",
     "pages": {
       "discover": "Objevit",
       "login": "Přihlásit se",
       "migration": "Migrovat účet",
-      "pagetitle": "{{title}} – FrameZoo",
+      "pagetitle": "{{title}} – Framezoo",
       "register": "Zaregistrovat se",
       "settings": "Nastavení"
     }
@@ -415,7 +413,7 @@
           "Co je dnes na vašem seznamu sledovaných?",
           "jaký jsi měl den?",
           "Škoda, že stránka nikdy nefunguje...",
-          "Není FrameZoo prostě nejlepší?",
+          "Není Framezoo prostě nejlepší?",
           ">ᴗ<"
         ]
       },
@@ -423,34 +421,28 @@
     },
     "support": {
       "complete": "kompletní",
-      "description": "FrameZoo běží se ztrátou a my potřebujeme pomoc, aby byl bez reklam! Pokud rádi používáte FrameZoo, zvažte prosím dar, který nám pomůže pokrýt naše náklady.",
+      "description": "Framezoo běží se ztrátou a my potřebujeme pomoc, aby byl bez reklam! Pokud rádi používáte Framezoo, zvažte prosím dar, který nám pomůže pokrýt naše náklady.",
       "donate": "Darovat",
-      "explanation": "Pokud rozšíření nepoužíváte nebo nemáte nastavené FED API, může být obtížnější najít obsah! Chceme to napravit, ale poskytovat obsah bez drahých serverů je mnohem těžší. Pokud tedy rádi používáte FrameZoo, zvažte prosím darování, které nám pomůže pokrýt naše rostoucí náklady.",
+      "explanation": "Pokud rozšíření nepoužíváte nebo nemáte nastavené FED API, může být obtížnější najít obsah! Chceme to napravit, ale poskytovat obsah bez drahých serverů je mnohem těžší. Pokud tedy rádi používáte Framezoo, zvažte prosím darování, které nám pomůže pokrýt naše rostoucí náklady.",
       "explanation2": "Pokud chcete více informací, přidejte se k nám",
       "fluxer": "Fluxer",
       "label": "Financování projektu: ${{current}} / ${{goal}}",
       "moreInfo": "Více informací",
       "thankYou": "Děkujeme za vaši podporu!",
-      "title": "FrameZoo potřebuje vaši pomoc!"
+      "title": "Framezoo potřebuje vaši pomoc!"
     },
     "titles": {
       "69": {
         "default": "Chystáte se na něco pikantního?",
-        "extra": [
-          "Šťastných 69 dní 😘!"
-        ]
+        "extra": ["Šťastných 69 dní 😘!"]
       },
       "420": {
         "default": "Na co byste se chtěli dívat 20. 4.?",
-        "extra": [
-          "Šťastné 4/20 🥳!"
-        ]
+        "extra": ["Šťastné 4/20 🥳!"]
       },
       "day": {
         "default": "Na co byste se chtěli dnes odpoledne dívat?",
-        "extra": [
-          "Chceš zažít dobrodružství? Jurský Park je pro tebe."
-        ]
+        "extra": ["Chceš zažít dobrodružství? Jurský Park je pro tebe."]
       },
       "halloween": {
         "default": "Na jaký strašidelný film byste se rádi podívali o tomto Halloweenu?",
@@ -463,15 +455,11 @@
       },
       "morning": {
         "default": "Na co byste se chtěli dnes ráno dívat?",
-        "extra": [
-          "Slyšel jsem, že Před úsvitem je super"
-        ]
+        "extra": ["Slyšel jsem, že Před úsvitem je super"]
       },
       "night": {
         "default": "Na co byste se chtěli dnes večer dívat?",
-        "extra": [
-          "Unaven? Slyšel jsem, že Vymítač ďábla je super."
-        ]
+        "extra": ["Unaven? Slyšel jsem, že Vymítač ďábla je super."]
       }
     },
     "watchHistory": {
@@ -561,7 +549,7 @@
       "title": "Seznamy"
     },
     "public": {
-      "descriptionFallback": "Sdílená sbírka vytvořená v FrameZoo.",
+      "descriptionFallback": "Sdílená sbírka vytvořená v Framezoo.",
       "notFoundDescription": "Tento odkaz na sdílení chybí nebo již není dostupný.",
       "notFoundTitle": "Seznam nenalezen",
       "pageTitle": "Sdílený seznam",
@@ -693,7 +681,7 @@
     },
     "install": {
       "genericGuide": "Váš prohlížeč nepodporuje automatickou výzvu k instalaci PWA.\nStále můžete instalovat pomocí nabídky prohlížeče (například: „Instalovat aplikaci“, „Vytvořit zástupce“ nebo „Přidat do doku/domovské obrazovky“).",
-      "iosSafariGuide": "Instalace FrameZoo jako aplikace:\n\n1. Klepněte na tlačítko Sdílet (čtverec se šipkou).\n2. Zvolte 'Přidat na domovskou obrazovku'.\n3. Klepněte na Přidat."
+      "iosSafariGuide": "Instalace Framezoo jako aplikace:\n\n1. Klepněte na tlačítko Sdílet (čtverec se šipkou).\n2. Zvolte 'Přidat na domovskou obrazovku'.\n3. Klepněte na Přidat."
     },
     "menu": {
       "accountMenu": "Otevřete nabídku účtu",

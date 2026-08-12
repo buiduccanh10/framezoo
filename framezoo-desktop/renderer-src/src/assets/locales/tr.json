@@ -11,7 +11,6 @@
       "adding": "Ekleniyor...",
       "ariaClose": "Eklenti yöneticisini kapat",
       "ariaManage": "Eklentileri yönet",
-      "createGuideLink": "Bir eklenti nasıl oluşturulur",
       "errorFallback": "Bu eklenti yüklenemiyor.",
       "manageListButton": "Eklenti listesini yönet",
       "subtitle": "Resmi olmayan veya yasa dışı eklentiler eklemenizi önermiyoruz.",
@@ -21,12 +20,11 @@
       "framezoo": "Çerçeve Hayvanat Bahçesi",
       "stremio": "Stremio",
       "supportLabel": "Eklentiler için desteklenen platformlar:",
-      "supported": "Desteklenen platformlar: FrameZoo ve Stremio"
+      "supported": "Desteklenen platformlar: Framezoo ve Stremio"
     },
     "page": {
       "addAddonButton": "Eklenti Ekle",
       "description": "Eklentiler isteğe bağlıdır. Bu uygulama herhangi bir eklentiyi paketlemez, önermez veya barındırmaz.",
-      "createGuideLink": "Eklenti kılavuzu oluştur",
       "disabled": "Engelli",
       "emptyInstalled": "Sistemde henüz eklenti yüklü değil.",
       "enabled": "Etkinleştirilmiş",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "Sorunlar",
     "goHome": "Eve git",
-    "message": "FrameZoo yine bazı sağlayıcılarla sorun yaşıyor; bir programı bulamıyor veya oynatamıyorsanız lütfen kaynağı değiştirin. Bu hatanın aşağıdaki zamanlarda devam etmesini bekleyin.",
+    "message": "Framezoo yine bazı sağlayıcılarla sorun yaşıyor; bir programı bulamıyor veya oynatamıyorsanız lütfen kaynağı değiştirin. Bu hatanın aşağıdaki zamanlarda devam etmesini bekleyin.",
     "title": "Sağlayıcı sorunları"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "Sorumluluk Reddi",
-      "disclaimerText": "FrameZoo güvenli, modern ve kusursuz bir eğlence deneyimi sunar. Kullanımı kolay arayüzü ve 4K HDR desteği de dahil olmak üzere zengin içerik kütüphanesi ile kullanıcılar en sevdikleri film ve dizilerin keyfini çıkarabiliyor. Güvenlik taahhüdüyle FrameZoo, sorunsuz, yüksek kaliteli bir yayın deneyimi için en iyi seçimdir."
+      "disclaimerText": "Framezoo güvenli, modern ve kusursuz bir eğlence deneyimi sunar. Kullanımı kolay arayüzü ve 4K HDR desteği de dahil olmak üzere zengin içerik kütüphanesi ile kullanıcılar en sevdikleri film ve dizilerin keyfini çıkarabiliyor. Güvenlik taahhüdüyle Framezoo, sorunsuz, yüksek kaliteli bir yayın deneyimi için en iyi seçimdir."
     },
     "links": {
       "fluxer": "Fluxer",
@@ -317,7 +315,7 @@
       "discover": "Keşfet",
       "login": "Giriş yap",
       "migration": "Hesap Taşıma",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "Kayıt ol",
       "settings": "Ayarlar"
     }
@@ -415,7 +413,7 @@
           "Bugün izleme listende neler var?",
           "Günün nasıldı?",
           "Benim hatam, site hiç çalışmıyor zaten...",
-          "FrameZoo en iyisi değil mi ya?",
+          "Framezoo en iyisi değil mi ya?",
           ">ᴗ<"
         ]
       },
@@ -423,28 +421,24 @@
     },
     "support": {
       "complete": "tamamlamak",
-      "description": "FrameZoo zararına çalışıyor ve onu reklamsız tutmak için yardıma ihtiyacımız var! FrameZoo'i kullanmaktan hoşlanıyorsanız lütfen masraflarımızı karşılamamıza yardımcı olmak için bağış yapmayı düşünün.",
+      "description": "Framezoo zararına çalışıyor ve onu reklamsız tutmak için yardıma ihtiyacımız var! Framezoo'i kullanmaktan hoşlanıyorsanız lütfen masraflarımızı karşılamamıza yardımcı olmak için bağış yapmayı düşünün.",
       "donate": "Bağış yapmak",
-      "explanation": "Uzantıyı kullanmıyorsanız veya FED API kurulumunuz yoksa içerik bulmanız daha zor olabilir! Bunu düzeltmek istiyoruz ancak pahalı sunucular olmadan içerik sağlamak çok daha zor. Bu nedenle lütfen FrameZoo'i kullanmaktan hoşlanıyorsanız, artan maliyetlerimizi karşılamamıza yardımcı olmak için lütfen bağış yapmayı düşünün.",
+      "explanation": "Uzantıyı kullanmıyorsanız veya FED API kurulumunuz yoksa içerik bulmanız daha zor olabilir! Bunu düzeltmek istiyoruz ancak pahalı sunucular olmadan içerik sağlamak çok daha zor. Bu nedenle lütfen Framezoo'i kullanmaktan hoşlanıyorsanız, artan maliyetlerimizi karşılamamıza yardımcı olmak için lütfen bağış yapmayı düşünün.",
       "explanation2": "Daha fazla bilgi istiyorsanız lütfen aramıza katılın",
       "fluxer": "Fluxer",
       "label": "Proje Finansmanı: ${{current}} / ${{goal}}",
       "moreInfo": "Daha fazla bilgi",
       "thankYou": "Desteğiniz için teşekkür ederiz!",
-      "title": "FrameZoo'in yardımınıza ihtiyacı var!"
+      "title": "Framezoo'in yardımınıza ihtiyacı var!"
     },
     "titles": {
       "69": {
         "default": "Baharatlı bir şeyler denemeye ne dersin?",
-        "extra": [
-          "Mutlu 69 günü 😘!"
-        ]
+        "extra": ["Mutlu 69 günü 😘!"]
       },
       "420": {
         "default": "Bu 4/20’de ne izlemek istersin?",
-        "extra": [
-          "Mutlu 4/20 🥳!"
-        ]
+        "extra": ["Mutlu 4/20 🥳!"]
       },
       "day": {
         "default": "Bu öğleden sonra ne izlemek istersiniz?",
@@ -463,15 +457,11 @@
       },
       "morning": {
         "default": "Bu sabah ne izlemek istersiniz?",
-        "extra": [
-          "Before Sunrise'a iyi diyorlar"
-        ]
+        "extra": ["Before Sunrise'a iyi diyorlar"]
       },
       "night": {
         "default": "Bu akşam ne izlemek istersiniz?",
-        "extra": [
-          "Yoruldun mu? The Exorcist'e iyi diyorlar."
-        ]
+        "extra": ["Yoruldun mu? The Exorcist'e iyi diyorlar."]
       }
     },
     "watchHistory": {
@@ -561,7 +551,7 @@
       "title": "Listeler"
     },
     "public": {
-      "descriptionFallback": "FrameZoo'de seçilmiş ortak bir koleksiyon.",
+      "descriptionFallback": "Framezoo'de seçilmiş ortak bir koleksiyon.",
       "notFoundDescription": "Bu paylaşım bağlantısı eksik veya artık mevcut değil.",
       "notFoundTitle": "Liste bulunamadı",
       "pageTitle": "Paylaşılan liste",
@@ -693,7 +683,7 @@
     },
     "install": {
       "genericGuide": "Tarayıcınız otomatik PWA yükleme istemini desteklemiyor.\nYine de tarayıcı menüsünü kullanarak yükleme yapabilirsiniz (örneğin: 'Uygulamayı yükle', 'Kısayol oluştur' veya 'Dock'a/Ana Ekrana Ekle').",
-      "iosSafariGuide": "FrameZoo'yi uygulama olarak yüklemek için:\n\n1. Paylaş düğmesine dokunun (oklu kare).\n2. 'Ana Ekrana Ekle'yi seçin.\n3. Ekle'ye dokunun."
+      "iosSafariGuide": "Framezoo'yi uygulama olarak yüklemek için:\n\n1. Paylaş düğmesine dokunun (oklu kare).\n2. 'Ana Ekrana Ekle'yi seçin.\n3. Ekle'ye dokunun."
     },
     "menu": {
       "accountMenu": "Hesap menüsünü aç",

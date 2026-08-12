@@ -11,7 +11,6 @@
       "adding": "添加...",
       "ariaClose": "关闭插件管理器",
       "ariaManage": "管理插件",
-      "createGuideLink": "如何创建插件",
       "errorFallback": "无法安装此插件。",
       "manageListButton": "管理插件列表",
       "subtitle": "我们不建议添加任何非官方或非法的附加组件。",
@@ -21,12 +20,11 @@
       "framezoo": "框架动物园",
       "stremio": "斯特雷米奥",
       "supportLabel": "插件支持的平台：",
-      "supported": "支持的平台：FrameZoo 和 Stremio"
+      "supported": "支持的平台：Framezoo 和 Stremio"
     },
     "page": {
       "addAddonButton": "添加插件",
       "description": "插件是可选的。此应用程序不捆绑、推荐或托管任何插件。",
-      "createGuideLink": "创建插件指南",
       "disabled": "残疾人",
       "emptyInstalled": "系统中尚未安装任何插件。",
       "enabled": "启用",
@@ -234,7 +232,7 @@
   "downtimeNotice": {
     "badge": "问题",
     "goHome": "返回首页",
-    "message": "FrameZoo 在某些片源提供商处遇到问题，如果您无法找到或播放节目，请更换片源。预计该错误将在一段时间内持续存在。",
+    "message": "Framezoo 在某些片源提供商处遇到问题，如果您无法找到或播放节目，请更换片源。预计该错误将在一段时间内持续存在。",
     "title": "片源提供商问题"
   },
   "errors": {
@@ -247,7 +245,7 @@
   "footer": {
     "legal": {
       "disclaimer": "免责声明",
-      "disclaimerText": "FrameZoo 提供安全、现代且无缝的娱乐体验。凭借其易于使用的界面和多样化的内容库（包括 4K HDR 支持），用户可以欣赏自己喜爱的电影和电视节目。凭借对安全性的承诺，FrameZoo 是无忧、高品质流媒体体验的终极选择。"
+      "disclaimerText": "Framezoo 提供安全、现代且无缝的娱乐体验。凭借其易于使用的界面和多样化的内容库（包括 4K HDR 支持），用户可以欣赏自己喜爱的电影和电视节目。凭借对安全性的承诺，Framezoo 是无忧、高品质流媒体体验的终极选择。"
     },
     "links": {
       "fluxer": "助焊剂",
@@ -317,7 +315,7 @@
       "discover": "探索",
       "login": "登录",
       "migration": "迁移账户",
-      "pagetitle": "{{title}} - FrameZoo",
+      "pagetitle": "{{title}} - Framezoo",
       "register": "注册",
       "settings": "设置"
     }
@@ -395,12 +393,7 @@
       "genreFilterAll": "所有流派",
       "empty": {
         "default": "欢迎，在这里找到你想看的！",
-        "extra": [
-          "这里啥都没有",
-          "空空如也…",
-          "空空如也…",
-          "Hi，新用户"
-        ]
+        "extra": ["这里啥都没有", "空空如也…", "空空如也…", "Hi，新用户"]
       },
       "failed": "查找媒体失败，请重试！",
       "loading": "加载中…",
@@ -411,11 +404,11 @@
           "您想探索些什么？",
           "您的片单上都有啥？",
           "您最喜欢的影片是什么？",
-          "FrameZoo 是最好的网站！",
+          "Framezoo 是最好的网站！",
           "您今天的片单上有什么？",
           "今天过得怎么样？",
           "是我的错，网站总是无法正常运行…",
-          "FrameZoo 不就是最棒的吗？",
+          "Framezoo 不就是最棒的吗？",
           ">ᴗ<"
         ]
       },
@@ -423,34 +416,28 @@
     },
     "support": {
       "complete": "完全的",
-      "description": "FrameZoo 处于亏损状态，我们需要帮助以使其保持无广告！如果您喜欢使用 FrameZoo，请考虑捐赠以帮助我们支付费用。",
+      "description": "Framezoo 处于亏损状态，我们需要帮助以使其保持无广告！如果您喜欢使用 Framezoo，请考虑捐赠以帮助我们支付费用。",
       "donate": "捐",
-      "explanation": "如果您不使用该扩展程序或未设置 FED API，则可能会更难找到内容！我们希望解决这个问题，但如果没有昂贵的服务器，提供内容会困难得多。因此，如果您喜欢使用 FrameZoo，请考虑捐款来帮助我们支付不断增长的成本。",
+      "explanation": "如果您不使用该扩展程序或未设置 FED API，则可能会更难找到内容！我们希望解决这个问题，但如果没有昂贵的服务器，提供内容会困难得多。因此，如果您喜欢使用 Framezoo，请考虑捐款来帮助我们支付不断增长的成本。",
       "explanation2": "如果您想了解更多信息，请加入我们",
       "fluxer": "助焊剂",
       "label": "项目资金：${{current}} / ${{goal}}",
       "moreInfo": "更多信息",
       "thankYou": "感谢您的支持！",
-      "title": "FrameZoo 需要您的帮助！"
+      "title": "Framezoo 需要您的帮助！"
     },
     "titles": {
       "69": {
         "default": "想来点火热的吗？",
-        "extra": [
-          "69 日快乐 😘！"
-        ]
+        "extra": ["69 日快乐 😘！"]
       },
       "420": {
         "default": "这个 4/20 你想看什么？",
-        "extra": [
-          "4/20 快乐 🥳！"
-        ]
+        "extra": ["4/20 快乐 🥳！"]
       },
       "day": {
         "default": "您今天下午想看什么？",
-        "extra": [
-          "FrameZoo 万岁！"
-        ]
+        "extra": ["Framezoo 万岁！"]
       },
       "halloween": {
         "default": "这个万圣节你想看什么恐怖电影？",
@@ -463,15 +450,11 @@
       },
       "morning": {
         "default": "您今早想看什么？",
-        "extra": [
-          "FrameZoo 万岁！"
-        ]
+        "extra": ["Framezoo 万岁！"]
       },
       "night": {
         "default": "您今晚想看什么？",
-        "extra": [
-          "FrameZoo 万岁！"
-        ]
+        "extra": ["Framezoo 万岁！"]
       }
     },
     "watchHistory": {
@@ -561,7 +544,7 @@
       "title": "列表"
     },
     "public": {
-      "descriptionFallback": "FrameZoo 中策划的共享合集。",
+      "descriptionFallback": "Framezoo 中策划的共享合集。",
       "notFoundDescription": "此共享链接丢失或不再可用。",
       "notFoundTitle": "未找到列表",
       "pageTitle": "共享列表",
@@ -693,7 +676,7 @@
     },
     "install": {
       "genericGuide": "您的浏览器不支持自动 PWA 安装提示。\n您仍然可以使用浏览器菜单进行安装（例如：“安装应用程序”、“创建快捷方式”或“添加到 Dock/主屏幕”）。",
-      "iosSafariGuide": "要将 FrameZoo 安装为应用程序：\n\n1. 点击共享按钮（带箭头的方块）。\n2. 选择“添加到主屏幕”。\n3. 点击添加。"
+      "iosSafariGuide": "要将 Framezoo 安装为应用程序：\n\n1. 点击共享按钮（带箭头的方块）。\n2. 选择“添加到主屏幕”。\n3. 点击添加。"
     },
     "menu": {
       "accountMenu": "开设账户菜单",
