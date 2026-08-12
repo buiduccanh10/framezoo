@@ -16,7 +16,7 @@ const CAM_QUALITY_PATTERN =
 const THEATRICAL_RELEASE_TYPES = new Set([2, 3]);
 const DIGITAL_RELEASE_TYPES = new Set([4, 5]);
 
-function getQualityVariantFromLabel(
+export function getReleaseQualityVariantFromLabel(
   quality?: string | null,
 ): ReleaseQualityVariant | null {
   const normalizedQuality = quality?.trim();
@@ -104,7 +104,9 @@ export function getReleaseQualityVariant(
     return "HD";
   }
 
-  return getQualityVariantFromLabel(releaseInfo.quality) ?? dateBasedVariant;
+  return (
+    getReleaseQualityVariantFromLabel(releaseInfo.quality) ?? dateBasedVariant
+  );
 }
 
 export function getReleaseQualityVariantFromTmdbReleaseDates(
@@ -127,24 +129,33 @@ export function getReleaseQualityVariantFromTmdbReleaseDates(
 export function ReleaseQualityBadge({
   variant,
   className,
+  compact = false,
 }: {
   variant: ReleaseQualityVariant;
   className?: string;
+  compact?: boolean;
 }) {
   return (
     <div
       className={classNames(
-        "rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm",
+        compact
+          ? "inline-flex items-center justify-center rounded-md bg-gray-600/40 px-2 py-2 backdrop-blur-sm"
+          : "inline-flex items-center justify-center rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm",
         className,
       )}
     >
       <span
-        className={classNames("text-xs font-semibold", {
-          "text-yellow-400": variant === "CAM",
-          "text-green-400": variant === "HD",
-        })}
+        className={classNames(
+          compact
+            ? "block whitespace-nowrap text-center text-[10px] font-semibold leading-none"
+            : "block text-center text-xs font-semibold leading-none",
+          {
+            "text-yellow-400": variant === "CAM",
+            "text-green-400": variant === "HD",
+          },
+        )}
       >
-        {variant}
+        {variant === "CAM" ? "In Cinema" : variant}
       </span>
     </div>
   );

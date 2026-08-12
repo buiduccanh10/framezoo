@@ -15,6 +15,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 import { resolvePublicUrl } from "@/utils/publicUrl";
 
 import { MediaBookmarkButton } from "./MediaBookmark";
+import { ReleaseQualityBadge } from "./ReleaseQualityBadge";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
 
@@ -174,25 +175,28 @@ function MediaCardContent({
               className="absolute inset-0 w-full object-cover"
             />
 
-            {series ? (
-              <div
-                className={[
-                  "absolute right-2 top-2 rounded-md bg-mediaCard-badge px-2 py-1 transition-colors",
-                ].join(" ")}
-              >
-                <p
-                  className={[
-                    "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
-                    closable ? "" : "group-hover:text-white",
-                  ].join(" ")}
-                >
-                  {t("media.episodeDisplay", {
-                    season: series.season || 1,
-                    episode: series.episode,
-                  })}
-                </p>
+            {(media.releaseQuality === "CAM" || series) && (
+              <div className="absolute right-1.5 top-1.5 flex flex-col items-end gap-1">
+                {media.releaseQuality === "CAM" && (
+                  <ReleaseQualityBadge variant="CAM" compact />
+                )}
+                {series ? (
+                  <div className="rounded-md bg-mediaCard-badge px-2 py-1 transition-colors">
+                    <p
+                      className={[
+                        "text-center text-xs font-bold text-mediaCard-badgeText transition-colors",
+                        closable ? "" : "group-hover:text-white",
+                      ].join(" ")}
+                    >
+                      {t("media.episodeDisplay", {
+                        season: series.season || 1,
+                        episode: series.episode,
+                      })}
+                    </p>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+            )}
 
             {percentage !== undefined ? (
               <>

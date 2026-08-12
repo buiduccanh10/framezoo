@@ -24,7 +24,9 @@ import {
   getTop10Movies,
 } from "@/backend/metadata/traktApi";
 import { paginateResults } from "@/backend/metadata/traktFunctions";
+import type { TMDBMovieData } from "@/backend/metadata/types/tmdb";
 import type { TraktListResponse } from "@/backend/metadata/types/trakt";
+import { getReleaseQualityVariantFromTmdbReleaseDates } from "@/components/media/ReleaseQualityBadge";
 import {
   EDITOR_PICKS_MOVIES,
   EDITOR_PICKS_TV_SHOWS,
@@ -85,6 +87,64 @@ function appendUniqueMedia(
   });
 
   return [...existingItems, ...appendedItems];
+}
+
+type DiscoverMediaWithReleaseDates = DiscoverMedia & {
+  release_dates?: TMDBMovieData["release_dates"];
+};
+
+async function enrichMovieReleaseQuality(
+  items: DiscoverMedia[],
+  language: string,
+): Promise<DiscoverMedia[]> {
+  const movieItems = items.filter((item) => item.type === "movie");
+  if (movieItems.length === 0) return items;
+
+  const qualityById = new Map<number, "CAM" | "HD" | null>();
+  const itemsWithReleaseDates = movieItems.filter((item) =>
+    Object.prototype.hasOwnProperty.call(item, "release_dates"),
+  ) as DiscoverMediaWithReleaseDates[];
+
+  itemsWithReleaseDates.forEach((item) => {
+    qualityById.set(
+      item.id,
+      getReleaseQualityVariantFromTmdbReleaseDates(item.release_dates),
+    );
+  });
+
+  const itemsToFetch = movieItems.filter((item) => !qualityById.has(item.id));
+  let nextIndex = 0;
+  const worker = async () => {
+    while (nextIndex < itemsToFetch.length) {
+      const item = itemsToFetch[nextIndex++];
+      if (!item) continue;
+
+      try {
+        const details = await fetchCachedTmdb<{
+          release_dates?: DiscoverMediaWithReleaseDates["release_dates"];
+        }>(`/movie/${item.id}`, {
+          language,
+          append_to_response: "release_dates",
+        });
+        qualityById.set(
+          item.id,
+          getReleaseQualityVariantFromTmdbReleaseDates(details.release_dates),
+        );
+      } catch {
+        qualityById.set(item.id, null);
+      }
+    }
+  };
+
+  await Promise.all(
+    Array.from({ length: Math.min(6, itemsToFetch.length) }, () => worker()),
+  );
+
+  return items.map((item) =>
+    item.type === "movie"
+      ? { ...item, releaseQuality: qualityById.get(item.id) ?? null }
+      : item,
+  );
 }
 
 export function useDiscoverOptions(
@@ -292,10 +352,13 @@ export function useDiscoverMedia({
         );
 
         return {
-          results: results.map((item: any) => ({
-            ...item,
-            type: requestMediaType === "movie" ? "movie" : "show",
-          })),
+          results: await enrichMovieReleaseQuality(
+            results.map((item: any) => ({
+              ...item,
+              type: requestMediaType === "movie" ? "movie" : "show",
+            })),
+            formattedLanguage,
+          ),
           hasMore: requestPage < totalPages,
         };
       } catch (err) {
@@ -363,7 +426,10 @@ export function useDiscoverMedia({
         }));
 
       return {
-        results: isCarouselView ? results.slice(0, 20) : results,
+        results: await enrichMovieReleaseQuality(
+          isCarouselView ? results.slice(0, 20) : results,
+          formattedLanguage,
+        ),
         hasMore: requestPage < (data.total_pages ?? 1),
       };
     },
@@ -396,6 +462,9 @@ export function useDiscoverMedia({
           try {
             const data = await fetchCachedTmdb<any>(endpoint, {
               language: formattedLanguage,
+              ...(mediaType === "movie"
+                ? { append_to_response: "release_dates" }
+                : {}),
             });
 
             return {
@@ -414,10 +483,11 @@ export function useDiscoverMedia({
             (result): result is PromiseFulfilledResult<DiscoverMedia | null> =>
               result.status === "fulfilled" && result.value !== null,
           )
-          .map((result) => result.value);
+          .map((result) => result.value)
+          .filter((item): item is DiscoverMedia => item !== null);
 
         return {
-          results,
+          results: await enrichMovieReleaseQuality(results, formattedLanguage),
           hasMore: hasMoreResults,
         };
       } catch (err) {
@@ -510,7 +580,10 @@ export function useDiscoverMedia({
         const endpoint = `/${item.type === "movie" ? "movie" : "tv"}/${item.id}`;
         const data = await fetchCachedTmdb<any>(endpoint, {
           language: formattedLanguage,
-          append_to_response: "videos,images",
+          append_to_response:
+            item.type === "movie"
+              ? "videos,images,release_dates"
+              : "videos,images",
         });
 
         return {
@@ -519,7 +592,10 @@ export function useDiscoverMedia({
         };
       });
 
-      const results = await Promise.all(mediaPromises);
+      const results = await enrichMovieReleaseQuality(
+        await Promise.all(mediaPromises),
+        formattedLanguage,
+      );
       return filterResultsByReleaseYear({
         results,
         hasMore: picks.length > picksToFetch.length,

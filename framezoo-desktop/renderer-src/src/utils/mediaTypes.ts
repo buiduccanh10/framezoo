@@ -3,6 +3,7 @@ export interface MediaItem {
   title: string;
   year?: number;
   release_date?: Date;
+  releaseQuality?: "CAM" | "HD" | null;
   poster?: string;
   genreIds?: number[];
   originCountryCodes?: string[];

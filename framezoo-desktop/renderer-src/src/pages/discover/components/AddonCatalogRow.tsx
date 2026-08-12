@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getMediaFromExternalId } from "@/backend/metadata/tmdb";
+import { getReleaseQualityVariantFromLabel } from "@/components/media/ReleaseQualityBadge";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import {
   type AddonCatalogEntry,
@@ -187,6 +188,9 @@ export function AddonCatalogRow({
                           title: item.name || "",
                           poster: item.poster || "/placeholder.png",
                           type: type === "series" ? "show" : "movie",
+                          releaseQuality: getReleaseQualityVariantFromLabel(
+                            item.releaseInfo,
+                          ),
                           year: item.year
                             ? parseInt(item.year.toString(), 10)
                             : item.releaseInfo
@@ -199,6 +203,9 @@ export function AddonCatalogRow({
                             title: item.name || "",
                             poster: item.poster || "/placeholder.png",
                             type: type === "series" ? "show" : "movie",
+                            releaseQuality: getReleaseQualityVariantFromLabel(
+                              item.releaseInfo,
+                            ),
                             year: item.year
                               ? parseInt(item.year.toString(), 10)
                               : item.releaseInfo

@@ -644,6 +644,7 @@ function MoreContentInner({ onShowDetails }: MoreContentProps) {
                   ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
                   : "/placeholder.png",
                 type: isTVShow ? "show" : "movie",
+                releaseQuality: item.releaseQuality,
                 year,
                 release_date: releaseDate ? new Date(releaseDate) : undefined,
               };

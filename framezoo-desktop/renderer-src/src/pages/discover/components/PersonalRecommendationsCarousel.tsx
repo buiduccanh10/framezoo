@@ -34,6 +34,7 @@ function discoverMediaToCardMedia(
     title: item.title || item.name || "",
     poster: getPosterUrl(item.poster_path),
     type: isTVShow ? "show" : "movie",
+    releaseQuality: item.releaseQuality,
     year: isTVShow
       ? item.first_air_date
         ? parseInt(item.first_air_date.split("-")[0]!, 10)

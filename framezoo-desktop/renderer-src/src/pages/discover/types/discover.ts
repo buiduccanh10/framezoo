@@ -49,6 +49,7 @@ export interface DiscoverMedia {
   vote_average: number;
   vote_count: number;
   popularity?: number;
+  releaseQuality?: "CAM" | "HD" | null;
   type?: "movie" | "show";
 }
 

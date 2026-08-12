@@ -649,6 +649,7 @@ export function MediaCarousel({
                         ? `https://image.tmdb.org/t/p/w342${item.poster_path}`
                         : "/placeholder.png",
                       type: item.type || (isTVShow ? "show" : "movie"),
+                      releaseQuality: item.releaseQuality,
                       year:
                         item.type === "show" || (!item.type && isTVShow)
                           ? item.first_air_date
