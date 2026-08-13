@@ -375,14 +375,36 @@ export function SourceSelectPart(props: {
             ? 0
             : getSavedProgressTime(progressItems, meta);
           if (wasStartFromBeginning) setShouldStartFromBeginning(false);
-          const session = await startTorrent({
-            sourceId: stream.id,
-            url: stream.url,
-            infoHash: stream.infoHash ?? undefined,
-            fileIdx: stream.fileIdx ?? undefined,
-            fileName: stream.fileName ?? undefined,
-            startAt,
-          });
+
+          // 30-second timeout — long enough for the Windows Firewall dialog
+          // to appear and be answered, but short enough to surface an error
+          // rather than leaving the UI in a permanently stuck state.
+          const TORRENT_START_TIMEOUT_MS = 30_000;
+          const session = await Promise.race([
+            startTorrent({
+              sourceId: stream.id,
+              url: stream.url,
+              infoHash: stream.infoHash ?? undefined,
+              fileIdx: stream.fileIdx ?? undefined,
+              fileName: stream.fileName ?? undefined,
+              startAt,
+            }),
+            new Promise<never>((_, reject) =>
+              setTimeout(
+                () =>
+                  reject(
+                    new Error(
+                      t(
+                        "addons.player.torrentStartTimeout",
+                        "Taking too long to start stream. Check your network permissions and try again.",
+                      ),
+                    ),
+                  ),
+                TORRENT_START_TIMEOUT_MS,
+              ),
+            ),
+          ]);
+
           registerTorrentSession(session.sessionId);
           const duration = session.duration ?? undefined;
           // When user explicitly chose "watch from beginning", ignore session.startAt
@@ -449,6 +471,7 @@ export function SourceSelectPart(props: {
       setPreferredStream,
       setShouldStartFromBeginning,
       shouldStartFromBeginning,
+      t,
     ],
   );
 
@@ -840,7 +863,37 @@ export function SourceSelectPart(props: {
     return content;
   }
 
-  if (startingAddonId) return null;
+  // While a torrent stream is being started we show a loading overlay instead
+  // of returning null (which left the user staring at a black screen with no
+  // feedback). The backdrop and spinner give a clear "please wait" signal.
+  if (startingAddonId) {
+    return (
+      <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">
+        {showBackdrop ? (
+          <>
+            {backgroundImage ? (
+              <LazyImage
+                src={backgroundImage}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover opacity-55"
+                showSkeleton={false}
+                loading="eager"
+                decoding="sync"
+              />
+            ) : null}
+            <div className="absolute inset-0 bg-black/45" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/55 to-black/80" />
+          </>
+        ) : null}
+        <div className="pointer-events-auto relative flex h-full w-full flex-col items-center justify-center gap-4 px-6 py-8">
+          <Spinner className="text-3xl text-white/80" />
+          <p className="text-sm text-white/60">
+            {t("addons.player.startingStream", "Starting stream…")}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pointer-events-none relative h-full w-full overflow-hidden bg-black">

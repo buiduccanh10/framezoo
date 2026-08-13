@@ -22,36 +22,13 @@ from torrent_utils import (
 
 class LibtorrentEngine:
     def __init__(self) -> None:
-        self.session = lt.session(
-            {
-                "listen_interfaces": "0.0.0.0:6881-6891,[::]:6881-6891",
-                "connections_limit": 400,
-                "enable_dht": True,
-                "enable_lsd": True,
-                "enable_upnp": True,
-                "enable_natpmp": True,
-                "connection_speed": 500,
-                "request_queue_time": 1,
-                "max_out_request_queue": 1500,
-                "max_allowed_in_request_queue": 2000,
-                "whole_pieces_threshold": 5,
-                "peer_connect_timeout": 2,
-                "piece_timeout": 3,
-                "aio_threads": 8,
-                "send_buffer_watermark": 4 * 1024 * 1024,
-                "suggest_mode": 1,
-                "mixed_mode_algorithm": 0,
-                "active_downloads": -1,
-                "active_limit": -1,
-                "announce_to_all_trackers": True,
-                "announce_to_all_tiers": True,
-                "allow_multiple_connections_per_ip": True,
-            },
-        )
-        try:
-            self.session.start_dht()
-        except Exception:
-            pass
+        # lt.session is created lazily on the first start() call so that the
+        # stdin reading loop starts immediately. On Windows this prevents the
+        # Firewall permission dialog from appearing before the user has chosen
+        # any torrent, and avoids a multi-second libtorrent init stall that
+        # would block all stdin while the dialog is waiting for user input.
+        self._session: Any = None
+        self._session_lock = threading.Lock()
         self.http_server = TorrentHttpServer()
         self.sessions: Dict[str, TorrentRuntime] = {}
         self.lock = threading.RLock()
@@ -64,11 +41,60 @@ class LibtorrentEngine:
                 f"[sidecar] Initial storage cleanup error: {error}\n"
             )
 
+    def _ensure_session(self) -> Any:
+        """Return the libtorrent session, creating it on first call."""
+        if self._session is not None:
+            return self._session
+        with self._session_lock:
+            if self._session is not None:
+                return self._session
+            session = lt.session(
+                {
+                    "listen_interfaces": "0.0.0.0:6881-6891,[::]:6881-6891",
+                    "connections_limit": 400,
+                    "enable_dht": True,
+                    "enable_lsd": True,
+                    "enable_upnp": True,
+                    "enable_natpmp": True,
+                    "connection_speed": 500,
+                    "request_queue_time": 1,
+                    "max_out_request_queue": 1500,
+                    "max_allowed_in_request_queue": 2000,
+                    "whole_pieces_threshold": 5,
+                    "peer_connect_timeout": 2,
+                    "piece_timeout": 3,
+                    "aio_threads": 8,
+                    "send_buffer_watermark": 4 * 1024 * 1024,
+                    "suggest_mode": 1,
+                    "mixed_mode_algorithm": 0,
+                    "active_downloads": -1,
+                    "active_limit": -1,
+                    "announce_to_all_trackers": True,
+                    "announce_to_all_tiers": True,
+                    "allow_multiple_connections_per_ip": True,
+                },
+            )
+            try:
+                session.start_dht()
+            except Exception:
+                pass
+            self._session = session
+        return self._session
+
+    @property
+    def session(self) -> Any:
+        """Property accessor kept for TorrentRuntime compatibility."""
+        return self._ensure_session()
+
     def start(
         self,
         session_id: str,
         request: Dict[str, Any],
     ) -> Dict[str, Any]:
+        # Ensure session exists before doing anything else; this is where the
+        # Windows Firewall dialog will appear (at the user's intent, not at
+        # startup), and it keeps the blocking inside a single, cancellable IPC.
+        session = self._ensure_session()
         magnet = get_magnet(request)
         root = get_torrent_data_dir()
         cache_key = get_torrent_cache_key(request)
@@ -172,7 +198,7 @@ class LibtorrentEngine:
                     params.flags &= ~paused
             except Exception:
                 pass
-        handle = self.session.add_torrent(params)
+        handle = session.add_torrent(params)
 
         actual_save_path = handle.status().save_path
         if actual_save_path != save_path:
