@@ -62,6 +62,7 @@ export interface Caption {
   language: string;
   url?: string;
   vttData: string;
+  alignmentBaseVttData?: string;
   trackId?: string;
   persisted?: boolean;
 }
