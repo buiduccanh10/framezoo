@@ -18,13 +18,6 @@ function getMoonshineServiceUrl() {
 }
 
 export default defineEventHandler(async event => {
-  if (!event.context.session) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Authentication required',
-    });
-  }
-
   const parts = await readMultipartFormData(event);
   const audioPart = parts?.find(part => part.name === 'audio');
   const vttPart = parts?.find(part => part.name === 'vtt');

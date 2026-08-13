@@ -165,6 +165,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   // seek target. This keeps the subtitle overlay from flashing cues for a
   // position the video has not reached yet.
   let pendingSeekTarget: number | null = null;
+  let pendingSeekSetAt = 0;
+  let heldSeekPosition: number | null = null;
+  const PENDING_SEEK_TIMEOUT_MS = 8000;
+  const TIME_BACKTRACK_TOLERANCE_SECONDS = 0.5;
   let isFullscreen = false;
   let pictureInPictureMode: PictureInPictureMode = null;
   let caption: DisplayCaption | null = null;
@@ -445,6 +449,20 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     );
   }
 
+  function applyTimePosition(position: number) {
+    time = position;
+    emit("time", time);
+    if (time > bufferedTime) {
+      bufferedTime = time;
+      emit("buffered", bufferedTime);
+    }
+    if (!paused && time > 0) {
+      emit("loading", false);
+      emit("play", undefined);
+    }
+    syncPipState();
+  }
+
   function handleEvent(event: LibMpvPlayerEvent) {
     if (!playerId || event.playerId !== playerId) {
       console.warn("[libmpv] dropped event: player mismatch", {
@@ -544,26 +562,28 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     switch (event.name) {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
+          const rawPosition = Math.max(0, event.data);
+          if (cachePaused) {
+            // Keep the UI clock aligned with the last rendered frame while
+            // libmpv waits for more input.
+            break;
+          }
           if (pendingSeekTarget !== null) {
-            if (Math.abs(event.data - pendingSeekTarget) <= 0.5) {
-              pendingSeekTarget = null;
-            } else {
-              // Stale position while the seek is in flight — hold the last
-              // stable time so the subtitle overlay does not flicker.
+            if (
+              (isSeeking || Math.abs(rawPosition - pendingSeekTarget) > 0.5) &&
+              performance.now() - pendingSeekSetAt <= PENDING_SEEK_TIMEOUT_MS
+            ) {
+              heldSeekPosition = rawPosition;
               break;
             }
+            pendingSeekTarget = null;
+            heldSeekPosition = null;
+          } else if (rawPosition < time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
+            // A backward jump without a pending seek is stale decoder state,
+            // not user navigation.
+            break;
           }
-          time = Math.max(0, event.data);
-          emit("time", time);
-          if (time > bufferedTime) {
-            bufferedTime = time;
-            emit("buffered", bufferedTime);
-          }
-          if (!paused && time > 0) {
-            emit("loading", false);
-            emit("play", undefined);
-          }
-          syncPipState();
+          applyTimePosition(rawPosition);
         }
         break;
       case "duration":
@@ -620,8 +640,21 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         }
         break;
       case "seeking":
-        isSeeking = event.data === true;
-        emit("loading", isSeeking);
+        if (event.data === true) {
+          isSeeking = true;
+          emit("loading", true);
+          break;
+        }
+        isSeeking = false;
+        emit("loading", false);
+        if (pendingSeekTarget !== null && heldSeekPosition !== null) {
+          if (Math.abs(heldSeekPosition - pendingSeekTarget) <= 0.5) {
+            pendingSeekTarget = null;
+            const settled = heldSeekPosition;
+            heldSeekPosition = null;
+            applyTimePosition(settled);
+          }
+        }
         break;
       case "paused-for-cache":
         cachePaused = event.data === true;
@@ -800,7 +833,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       generation = requestGeneration;
       fileLoaded = false; // reset for new load
       firstFrameLoggedGeneration = -1;
-      pendingSeekTarget = null;
+      pendingSeekTarget = time > 0.5 ? time : null;
+      pendingSeekSetAt = pendingSeekTarget === null ? 0 : performance.now();
+      heldSeekPosition = null;
       loadStartedAt = performance.now();
       const requestedSource = ops.source;
       const headers = sourceHeaders(requestedSource);
@@ -900,6 +935,8 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       );
       time = clamped;
       pendingSeekTarget = clamped;
+      pendingSeekSetAt = performance.now();
+      heldSeekPosition = null;
       // Deliberately no "time" emit here: the rendered frame has not caught
       // up to the target yet, and forwarding the target optimistically makes
       // subtitles pop in ahead of the video. "time" is emitted from the

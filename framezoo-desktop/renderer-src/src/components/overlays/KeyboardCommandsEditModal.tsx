@@ -153,16 +153,18 @@ const getShortcutGroups = (
           description: t("global.keyboardShortcuts.shortcuts.randomCaption"),
         },
         {
-          id: ShortcutId.PREVIOUS_SUBTITLE_CUE,
-          config: shortcuts[ShortcutId.PREVIOUS_SUBTITLE_CUE],
+          id: ShortcutId.SYNC_SUBTITLES_EARLIER,
+          config: shortcuts[ShortcutId.SYNC_SUBTITLES_EARLIER],
           description: t(
-            "global.keyboardShortcuts.shortcuts.previousSubtitleCue",
+            "global.keyboardShortcuts.shortcuts.syncSubtitlesEarlier",
           ),
         },
         {
-          id: ShortcutId.NEXT_SUBTITLE_CUE,
-          config: shortcuts[ShortcutId.NEXT_SUBTITLE_CUE],
-          description: t("global.keyboardShortcuts.shortcuts.nextSubtitleCue"),
+          id: ShortcutId.SYNC_SUBTITLES_LATER,
+          config: shortcuts[ShortcutId.SYNC_SUBTITLES_LATER],
+          description: t(
+            "global.keyboardShortcuts.shortcuts.syncSubtitlesLater",
+          ),
         },
       ],
     },

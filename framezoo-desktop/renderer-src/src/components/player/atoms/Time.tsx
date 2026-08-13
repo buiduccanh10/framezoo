@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import { VideoPlayerButton } from "@/components/player/internals/Button";
 import { VideoPlayerTimeFormat } from "@/stores/player/slices/interface";
 import { usePlayerStore } from "@/stores/player/store";
@@ -11,12 +12,11 @@ export function Time(props: { short?: boolean }) {
   const setTimeFormat = usePlayerStore((s) => s.setTimeFormat);
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
 
-  const {
-    duration: timeDuration,
-    time,
-    draggingTime,
-  } = usePlayerStore((s) => s.progress);
+  const { duration: timeDuration, draggingTime } = usePlayerStore(
+    (s) => s.progress,
+  );
   const { isSeeking } = usePlayerStore((s) => s.interface);
+  const clockTime = usePlaybackClock();
   const { t } = useTranslation();
   const hasHours = durationExceedsHour(timeDuration);
 
@@ -29,7 +29,7 @@ export function Time(props: { short?: boolean }) {
   }
 
   const currentTime = Math.min(
-    Math.max(isSeeking ? draggingTime : time, 0),
+    Math.max(isSeeking ? draggingTime : clockTime, 0),
     timeDuration,
   );
   const secondsRemaining = Math.abs(currentTime - timeDuration);
