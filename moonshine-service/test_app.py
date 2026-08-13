@@ -6,15 +6,13 @@ from app import (
     MIN_ALIGNMENT_CONFIDENCE,
     align_vtt_batch,
     alignment_result_from_speech,
-    build_cleaned_vtt,
     decode_wav,
+    evaluate_offset,
     find_best_offset,
     normalize_language,
     parse_batch_subtitles,
     parse_vtt,
 )
-
-
 def make_extensible_pcm_wav(
     samples: list[tuple[int, ...]],
     sample_rate: int = 16_000,
@@ -85,102 +83,59 @@ How are you?
         self.assertAlmostEqual(offset_ms, -30_000, delta=750)
         self.assertGreater(score, 0.4)
 
-    def test_drops_cue_shifted_before_file_start_after_alignment(self):
+    def test_scores_multiple_speech_anchors_in_order(self):
         vtt = """WEBVTT
 
-00:00:00.000 --> 00:00:05.000
-Subscribe now
-
-00:00:30.000 --> 00:00:34.000
+00:00:10.000 --> 00:00:13.000
 Hello
+
+00:00:20.000 --> 00:00:23.000
+Again
 """
         cues = parse_vtt(vtt)
-        cleaned = build_cleaned_vtt(
-            vtt,
-            cues,
-            [(0, 4_000)],
-            -30_000,
-            0,
-            20_000,
-        )
+        speech = [(0, 3_000), (10_000, 13_000)]
 
-        self.assertNotIn("Subscribe now", cleaned)
-        self.assertIn("Hello", cleaned)
+        evidence = evaluate_offset(cues, speech, -10_000, 0, 30_000)
 
-    def test_keeps_in_window_cue_without_speech_overlap(self):
+        self.assertEqual(evidence.matched_anchors, 2)
+        self.assertEqual(evidence.speech_anchor_count, 2)
+        self.assertGreaterEqual(evidence.anchor_coverage, 1.0)
+        self.assertGreater(evidence.score, 0.7)
+
+    def test_reduces_score_when_only_one_of_multiple_speech_anchors_matches(self):
         vtt = """WEBVTT
 
-00:00:10.000 --> 00:00:14.000
-Music only
-
-00:00:20.000 --> 00:00:24.000
+00:00:10.000 --> 00:00:13.000
 Hello
+
+00:00:50.000 --> 00:00:53.000
+Again
 """
         cues = parse_vtt(vtt)
-        cleaned = build_cleaned_vtt(
-            vtt,
+        speech = [(0, 3_000), (10_000, 13_000)]
+
+        evidence = evaluate_offset(cues, speech, -10_000, 0, 30_000)
+
+        self.assertEqual(evidence.matched_anchors, 1)
+        full_match = evaluate_offset(
             cues,
-            [(0, 4_000)],
+            speech[:1],
+            -10_000,
             0,
-            0,
-            20_000,
+            30_000,
         )
+        self.assertLess(evidence.score, full_match.score)
 
-        self.assertIn("Music only", cleaned)
+    def test_matches_speech_anchors_in_subtitle_order(self):
+        speech = [(0, 3_000), (10_000, 13_000)]
+        subtitle_intervals = [(0, 3_000), (10_000, 13_000)]
 
-    def test_snaps_cue_boundaries_to_speech_within_cap(self):
-        vtt = """WEBVTT
+        from alignment import match_speech_anchors
 
-00:00:05.250 --> 00:00:08.750
-Hello
-"""
-        cues = parse_vtt(vtt)
-        cleaned = build_cleaned_vtt(
-            vtt,
-            cues,
-            [(5_000, 9_000)],
-            0,
-            0,
-            20_000,
-        )
+        matched, errors = match_speech_anchors(speech, subtitle_intervals)
 
-        self.assertIn("00:00:05.000 --> 00:00:09.000", cleaned)
-
-    def test_keeps_cue_when_speech_snap_exceeds_cap(self):
-        vtt = """WEBVTT
-
-00:00:05.600 --> 00:00:08.600
-Hello
-"""
-        cues = parse_vtt(vtt)
-        cleaned = build_cleaned_vtt(
-            vtt,
-            cues,
-            [(5_000, 9_000)],
-            0,
-            0,
-            20_000,
-        )
-
-        self.assertIn("00:00:05.600 --> 00:00:08.600", cleaned)
-
-    def test_snaps_cue_after_global_offset(self):
-        vtt = """WEBVTT
-
-00:00:35.250 --> 00:00:38.750
-Hello
-"""
-        cues = parse_vtt(vtt)
-        cleaned = build_cleaned_vtt(
-            vtt,
-            cues,
-            [(5_000, 9_000)],
-            -30_000,
-            0,
-            20_000,
-        )
-
-        self.assertIn("00:00:35.000 --> 00:00:39.000", cleaned)
+        self.assertEqual(matched, 2)
+        self.assertEqual(errors, [0, 0])
 
     def test_batch_alignment_transcribes_audio_once_for_both_tracks(self):
         primary_vtt = """WEBVTT
@@ -195,7 +150,7 @@ Xin chao
 """
 
         with (
-            patch("app.decode_wav", return_value=([0.0] * 20, 1_000)),
+            patch("app.decode_wav", return_value=([0.0] * 20_000, 1_000)),
             patch(
                 "app.transcribe_speech_intervals",
                 return_value=[(0, 4_000)],
@@ -233,7 +188,7 @@ Broken
 """
 
         with (
-            patch("app.decode_wav", return_value=([0.0] * 20, 1_000)),
+            patch("app.decode_wav", return_value=([0.0] * 20_000, 1_000)),
             patch(
                 "app.transcribe_speech_intervals",
                 return_value=[(0, 4_000)],
@@ -251,7 +206,7 @@ Broken
 
         self.assertTrue(result["results"]["primary"]["aligned"])
         self.assertFalse(result["results"]["secondary"]["aligned"])
-        self.assertEqual(result["results"]["secondary"]["reason"], "low_alignment_confidence")
+        self.assertEqual(result["results"]["secondary"]["reason"], "invalid_subtitle")
 
     def test_rejects_alignment_below_confidence_threshold(self):
         with patch(
@@ -259,7 +214,6 @@ Broken
             return_value=(1_000, (MIN_ALIGNMENT_CONFIDENCE - 1) / 100),
         ):
             result = alignment_result_from_speech(
-                "WEBVTT",
                 parse_vtt(
                     """WEBVTT
 
@@ -275,6 +229,99 @@ Hello
         self.assertEqual(result["confidence"], MIN_ALIGNMENT_CONFIDENCE - 1)
         self.assertFalse(result["aligned"])
         self.assertEqual(result["reason"], "low_alignment_confidence")
+
+    def test_alignment_response_keeps_original_vtt_for_renderer_consensus(self):
+        vtt = """WEBVTT
+
+00:00:05.000 --> 00:00:09.000
+Hello
+"""
+        with patch(
+            "app.find_best_offset",
+            return_value=(-2_000, 0.95),
+        ):
+            result = alignment_result_from_speech(
+                parse_vtt(vtt),
+                [(3_000, 7_000)],
+                0,
+                10_000,
+            )
+
+        self.assertTrue(result["aligned"])
+        self.assertEqual(result["offsetMs"], -2_000)
+        self.assertNotIn("cleanedVtt", result)
+
+    def test_rejects_alignment_at_search_boundary(self):
+        with patch(
+            "app.find_best_offset",
+            return_value=(45_000, 0.95),
+        ):
+            result = alignment_result_from_speech(
+                parse_vtt(
+                    """WEBVTT
+
+00:00:00.000 --> 00:00:04.000
+Hello
+"""
+                ),
+                [(0, 4_000)],
+                0,
+                4_000,
+            )
+
+        self.assertFalse(result["aligned"])
+        self.assertEqual(result["offsetMs"], 0)
+        self.assertEqual(result["confidence"], 95)
+        self.assertEqual(result["reason"], "offset_out_of_range")
+
+    def test_rejects_alignment_without_enough_speech_anchors(self):
+        with patch(
+            "app.find_best_offset",
+            return_value=(-10_000, 0.95),
+        ):
+            result = alignment_result_from_speech(
+                parse_vtt(
+                    """WEBVTT
+
+00:00:10.000 --> 00:00:13.000
+Hello
+"""
+                ),
+                [(0, 3_000), (20_000, 23_000)],
+                0,
+                30_000,
+            )
+
+        self.assertFalse(result["aligned"])
+        self.assertEqual(result["reason"], "insufficient_speech_anchors")
+
+    def test_requires_two_thirds_coverage_for_many_speech_anchors(self):
+        vtt = """WEBVTT
+
+00:00:10.000 --> 00:00:13.000
+Hello
+
+00:00:20.000 --> 00:00:23.000
+Again
+"""
+        with patch(
+            "app.find_best_offset",
+            return_value=(-10_000, 0.95),
+        ):
+            result = alignment_result_from_speech(
+                parse_vtt(vtt),
+                [
+                    (0, 3_000),
+                    (10_000, 13_000),
+                    (20_000, 23_000),
+                    (30_000, 33_000),
+                ],
+                0,
+                40_000,
+            )
+
+        self.assertFalse(result["aligned"])
+        self.assertEqual(result["reason"], "insufficient_speech_anchors")
 
     def test_parses_batch_subtitles(self):
         subtitles = parse_batch_subtitles(
