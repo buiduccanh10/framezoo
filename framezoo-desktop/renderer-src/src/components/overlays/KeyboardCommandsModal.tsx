@@ -176,16 +176,18 @@ const getShortcutGroups = (
           config: getConfig(ShortcutId.RANDOM_CAPTION),
         },
         {
-          key: getDisplayKey(ShortcutId.PREVIOUS_SUBTITLE_CUE) || "[",
+          key: getDisplayKey(ShortcutId.SYNC_SUBTITLES_EARLIER) || "[",
           description: t(
-            "global.keyboardShortcuts.shortcuts.previousSubtitleCue",
+            "global.keyboardShortcuts.shortcuts.syncSubtitlesEarlier",
           ),
-          config: getConfig(ShortcutId.PREVIOUS_SUBTITLE_CUE),
+          config: getConfig(ShortcutId.SYNC_SUBTITLES_EARLIER),
         },
         {
-          key: getDisplayKey(ShortcutId.NEXT_SUBTITLE_CUE) || "]",
-          description: t("global.keyboardShortcuts.shortcuts.nextSubtitleCue"),
-          config: getConfig(ShortcutId.NEXT_SUBTITLE_CUE),
+          key: getDisplayKey(ShortcutId.SYNC_SUBTITLES_LATER) || "]",
+          description: t(
+            "global.keyboardShortcuts.shortcuts.syncSubtitlesLater",
+          ),
+          config: getConfig(ShortcutId.SYNC_SUBTITLES_LATER),
         },
       ],
     },

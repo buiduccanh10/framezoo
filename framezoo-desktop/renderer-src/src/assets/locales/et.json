@@ -692,7 +692,7 @@
     },
     "install": {
       "genericGuide": "Teie brauser ei toeta automaatset PWA installiviipa.\nSaate siiski installida brauseri menüü kaudu (näiteks: „Installi rakendus”, „Loo otsetee” või „Lisa dokki/avakuvale”).",
-    "iosSafariGuide": "Framezoo installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa."
+      "iosSafariGuide": "Framezoo installimiseks rakendusena toimige järgmiselt.\n\n1. Puudutage nuppu Jaga (noolega ruut).\n2. Valige \"Lisa avakuvale\".\n3. Puudutage valikut Lisa."
     },
     "menu": {
       "accountMenu": "Ava konto menüü",

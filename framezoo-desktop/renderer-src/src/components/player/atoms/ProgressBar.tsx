@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
+import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   getSegmentBoundsSeconds,
   useSkipTime,
@@ -21,7 +22,8 @@ const SEGMENT_COLORS: Record<
 };
 
 export function ProgressBar() {
-  const { duration, time, buffered } = usePlayerStore((s) => s.progress);
+  const { duration, buffered } = usePlayerStore((s) => s.progress);
+  const time = usePlaybackClock();
   const torrentStatus = useActiveTorrentStatus();
   const display = usePlayerStore((s) => s.display);
   const setDraggingTime = usePlayerStore((s) => s.setDraggingTime);

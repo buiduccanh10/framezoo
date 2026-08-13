@@ -53,17 +53,6 @@ export interface SubtitleStyling {
   borderThickness: number;
 }
 
-export interface SubtitleCuePopupData {
-  direction: -1 | 1;
-  start: number;
-  content: string;
-}
-
-interface SubtitleCuePopupStore {
-  popup: SubtitleCuePopupData | null;
-  setPopup(popup: SubtitleCuePopupData | null): void;
-}
-
 export interface SubtitleStore {
   lastSync: {
     lastSelectedLanguage: string | null;
@@ -76,6 +65,7 @@ export interface SubtitleStore {
   overrideCasing: boolean;
   primaryDelay: number;
   secondaryDelay: number;
+  showDelayIndicator: boolean;
   updateStyling(newStyling: Partial<SubtitleStyling>): void;
   updateSecondaryStyling(newStyling: Partial<SubtitleStyling>): void;
   resetStyling(): void;
@@ -85,6 +75,7 @@ export interface SubtitleStore {
   setOverrideCasing(enabled: boolean): void;
   setPrimaryDelay(delay: number): void;
   setSecondaryDelay(delay: number): void;
+  setShowDelayIndicator(show: boolean): void;
   importSubtitleLanguage(lang: string | null): void;
   resetSubtitleSpecificSettings(track?: "primary" | "secondary"): void;
 }
@@ -144,6 +135,7 @@ export const useSubtitleStore = create(
       overrideCasing: false,
       primaryDelay: 0,
       secondaryDelay: 0,
+      showDelayIndicator: false,
       styling: { ...DEFAULT_SUBTITLE_STYLING },
       secondaryStyling: { ...DEFAULT_SUBTITLE_STYLING },
       resetSubtitleSpecificSettings(track = "primary") {
@@ -262,6 +254,11 @@ export const useSubtitleStore = create(
           s.secondaryDelay = Number.isFinite(delay) ? delay : 0;
         });
       },
+      setShowDelayIndicator(show) {
+        set((s) => {
+          s.showDelayIndicator = show;
+        });
+      },
       importSubtitleLanguage(lang) {
         set((s) => {
           s.lastSelectedLanguage = lang;
@@ -329,13 +326,4 @@ export const useSubtitleStore = create(
       merge: (persisted, current) => merge({}, current, persisted),
     },
   ),
-);
-
-export const useSubtitleCuePopupStore = create<SubtitleCuePopupStore>(
-  (set) => ({
-    popup: null,
-    setPopup(popup) {
-      set({ popup });
-    },
-  }),
 );

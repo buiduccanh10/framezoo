@@ -655,7 +655,6 @@ export function useCaptions() {
     );
     return selectLanguage(language, {
       fallbackToEnglish: false,
-      waitForExternal: true,
     });
   }, [
     embeddedSubtitleTracksLoaded,

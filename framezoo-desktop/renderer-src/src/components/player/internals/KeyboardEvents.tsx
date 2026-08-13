@@ -5,17 +5,12 @@ import { MWMediaType } from "@/backend/metadata/types/mw";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { useVolume } from "@/components/player/hooks/useVolume";
-import {
-  getCaptionCueForNavigation,
-  getCaptionDelayForCue,
-  parseCanonicalVtt,
-} from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 import { useProgressStore } from "@/stores/progress";
-import { useSubtitleCuePopupStore, useSubtitleStore } from "@/stores/subtitles";
+import { useSubtitleStore } from "@/stores/subtitles";
 import { useEmpheralVolumeStore } from "@/stores/volume";
 import { useWatchPartyStore } from "@/stores/watchParty";
 import {
@@ -36,12 +31,6 @@ export function KeyboardEvents() {
   const { setVolume, toggleMute } = useVolume();
   const isInWatchParty = useWatchPartyStore((s) => s.enabled);
   const meta = usePlayerStore((s) => s.meta);
-  const selectedCaptionVttData = usePlayerStore(
-    (s) => s.caption.selected?.vttData,
-  );
-  const secondaryCaptionVttData = usePlayerStore(
-    (s) => s.caption.secondary?.vttData,
-  );
   const activeSubtitleTrack = usePlayerStore((s) => s.caption.activeTrack);
   const { setDirectMeta } = usePlayerMeta();
   const setShouldStartFromBeginning = usePlayerStore(
@@ -58,7 +47,11 @@ export function KeyboardEvents() {
   const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
   const setDelay =
     activeSubtitleTrack === "secondary" ? setSecondaryDelay : setPrimaryDelay;
-  const setSubtitleCuePopup = useSubtitleCuePopupStore((s) => s.setPopup);
+  const delay =
+    activeSubtitleTrack === "secondary" ? secondaryDelay : primaryDelay;
+  const setShowDelayIndicator = useSubtitleStore(
+    (s) => s.setShowDelayIndicator,
+  );
   const storedKeyboardShortcuts = usePreferencesStore(
     (s) => s.keyboardShortcuts,
   );
@@ -76,6 +69,7 @@ export function KeyboardEvents() {
 
   const [isRolling, setIsRolling] = useState(false);
   const volumeDebounce = useRef<ReturnType<typeof setTimeout> | undefined>();
+  const subtitleDebounce = useRef<ReturnType<typeof setTimeout> | undefined>();
 
   // Speed boost
   const setSpeedBoosted = usePlayerStore((s) => s.setSpeedBoosted);
@@ -89,48 +83,6 @@ export function KeyboardEvents() {
   const isSpaceHeldRef = useRef<boolean>(false);
 
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
-
-  const navigateSubtitleCue = useCallback(
-    (direction: -1 | 1) => {
-      const activeCaptionVttData =
-        activeSubtitleTrack === "secondary"
-          ? secondaryCaptionVttData
-          : selectedCaptionVttData;
-      if (!activeCaptionVttData) return;
-
-      let cues;
-      try {
-        cues = parseCanonicalVtt(activeCaptionVttData);
-      } catch {
-        return;
-      }
-
-      const cue = getCaptionCueForNavigation(
-        cues,
-        activeSubtitleTrack === "secondary" ? secondaryDelay : primaryDelay,
-        time,
-        direction,
-      );
-      if (!cue) return;
-
-      setDelay(getCaptionDelayForCue(cue, time));
-      setSubtitleCuePopup({
-        direction,
-        start: cue.start,
-        content: cue.content,
-      });
-    },
-    [
-      activeSubtitleTrack,
-      primaryDelay,
-      secondaryCaptionVttData,
-      secondaryDelay,
-      selectedCaptionVttData,
-      time,
-      setDelay,
-      setSubtitleCuePopup,
-    ],
-  );
 
   // Episode navigation functions
   const navigateToNextEpisode = useCallback(async () => {
@@ -314,9 +266,11 @@ export function KeyboardEvents() {
     isRolling,
     time,
     duration,
+    activeSubtitleTrack,
     router,
     setDelay,
-    navigateSubtitleCue,
+    delay,
+    setShowDelayIndicator,
     setCurrentOverlay,
     isInWatchParty,
     previousRateRef,
@@ -347,9 +301,11 @@ export function KeyboardEvents() {
       isRolling,
       time,
       duration,
+      activeSubtitleTrack,
       router,
       setDelay,
-      navigateSubtitleCue,
+      delay,
+      setShowDelayIndicator,
       setCurrentOverlay,
       isInWatchParty,
       previousRateRef,
@@ -380,7 +336,8 @@ export function KeyboardEvents() {
     duration,
     router,
     setDelay,
-    navigateSubtitleCue,
+    delay,
+    setShowDelayIndicator,
     setCurrentOverlay,
     isInWatchParty,
     setSpeedBoosted,
@@ -545,27 +502,49 @@ export function KeyboardEvents() {
         dataRef.current.display?.[action]();
       }
 
-      // Subtitle cue navigation - customizable
+      // Subtitle delay - customizable; handle before repeat guard so holding works.
       if (
         matchesShortcut(
           evt,
-          dataRef.current.keyboardShortcuts[ShortcutId.PREVIOUS_SUBTITLE_CUE],
+          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_EARLIER],
         )
       ) {
-        if (evt.repeat) return;
         evt.preventDefault();
-        dataRef.current.navigateSubtitleCue(-1);
+        const subtitleState = useSubtitleStore.getState();
+        const currentDelay =
+          dataRef.current.activeSubtitleTrack === "secondary"
+            ? subtitleState.secondaryDelay
+            : subtitleState.primaryDelay;
+        dataRef.current.setDelay(currentDelay - 0.5);
+        dataRef.current.setShowDelayIndicator(true);
+        dataRef.current.setCurrentOverlay("subtitle");
+        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
+        subtitleDebounce.current = setTimeout(() => {
+          dataRef.current.setShowDelayIndicator(false);
+          dataRef.current.setCurrentOverlay(null);
+        }, 3000);
         return;
       }
       if (
         matchesShortcut(
           evt,
-          dataRef.current.keyboardShortcuts[ShortcutId.NEXT_SUBTITLE_CUE],
+          dataRef.current.keyboardShortcuts[ShortcutId.SYNC_SUBTITLES_LATER],
         )
       ) {
-        if (evt.repeat) return;
         evt.preventDefault();
-        dataRef.current.navigateSubtitleCue(1);
+        const subtitleState = useSubtitleStore.getState();
+        const currentDelay =
+          dataRef.current.activeSubtitleTrack === "secondary"
+            ? subtitleState.secondaryDelay
+            : subtitleState.primaryDelay;
+        dataRef.current.setDelay(currentDelay + 0.5);
+        dataRef.current.setShowDelayIndicator(true);
+        dataRef.current.setCurrentOverlay("subtitle");
+        if (subtitleDebounce.current) clearTimeout(subtitleDebounce.current);
+        subtitleDebounce.current = setTimeout(() => {
+          dataRef.current.setShowDelayIndicator(false);
+          dataRef.current.setCurrentOverlay(null);
+        }, 3000);
         return;
       }
 
@@ -819,6 +798,9 @@ export function KeyboardEvents() {
     return () => {
       window.removeEventListener("keydown", keydownEventHandler);
       window.removeEventListener("keyup", keyupEventHandler);
+      if (subtitleDebounce.current) {
+        clearTimeout(subtitleDebounce.current);
+      }
     };
   }, []);
 

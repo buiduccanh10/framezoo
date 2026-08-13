@@ -2,6 +2,8 @@ import { useAuth } from '~/utils/auth';
 import { isValidInternalApiRequest } from '~/utils/internalApi';
 
 const isPublicApiRequest = (path: string, method: string) => {
+  // Subtitle alignment uses only submitted audio/caption data; global rate limiting still applies.
+  if (method === 'POST' && path === '/api/subtitle-align') return true;
   if (method !== 'GET') return false;
   if (path === '/api/skip-segments') return true;
   return path === '/api/tmdb' || path.startsWith('/api/tmdb/');
