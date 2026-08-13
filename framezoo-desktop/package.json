@@ -275,7 +275,7 @@
       "oneClick": true,
       "perMachine": false,
       "allowToChangeInstallationDirectory": false,
-      "runAfterFinish": true,
+      "runAfterFinish": false,
       "shortcutName": "Framezoo",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,

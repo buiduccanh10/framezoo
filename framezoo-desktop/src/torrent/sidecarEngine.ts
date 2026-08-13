@@ -114,6 +114,37 @@ export class SidecarTorrentEngine implements TorrentEngine {
     process?.kill();
   }
 
+  async warmup(): Promise<void> {
+    await this.ensureProcess();
+    // Send a lightweight "ping" that forces _ensure_session() on the Python
+    // side. This is where the OS network-permission dialog will appear so
+    // it shows at startup rather than interrupting the first stream attempt.
+    // 5-minute timeout gives the user ample time to respond to the dialog.
+    const WARMUP_TIMEOUT_MS = 5 * 60 * 1000;
+    await new Promise<void>((resolve, reject) => {
+      const requestId = randomUUID();
+      const timer = setTimeout(() => {
+        this.pending.delete(requestId);
+        // Timeout is non-fatal for warmup – the session might still be fine.
+        resolve();
+      }, WARMUP_TIMEOUT_MS);
+      this.pending.set(requestId, {
+        resolve: () => {
+          clearTimeout(timer);
+          resolve();
+        },
+        reject: (err) => {
+          clearTimeout(timer);
+          reject(err);
+        },
+        timer,
+      });
+      this.process?.stdin.write(
+        `${JSON.stringify({ type: "ping", requestId })}\n`,
+      );
+    });
+  }
+
   private async ensureProcess() {
     if (this.process) return;
 

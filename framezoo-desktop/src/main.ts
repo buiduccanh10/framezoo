@@ -44,6 +44,9 @@ const DESKTOP_APP_UPDATE_CHANNEL =
 const DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1000;
 const DESKTOP_SETTINGS_ROUTE = "/settings";
 const EXTENSION_REQUEST_TIMEOUT_MS = 15_000;
+// Delay before auto-warming up the torrent engine on startup. Long enough
+// for the main window to be fully painted before a permission dialog appears.
+const TORRENT_WARMUP_DELAY_MS = 4_000;
 
 const DEVTOOLS_PROTECTION_ENABLED =
   process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
@@ -123,6 +126,39 @@ setupTorrentEnv();
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
 const addonProtocolEngine = new AddonProtocolEngine();
+
+// Warmup state – tracks whether the torrent engine has been initialised.
+type TorrentWarmupState =
+  | { status: "idle" }
+  | { status: "warming" }
+  | { status: "ready" }
+  | { status: "error"; message: string };
+let torrentWarmupState: TorrentWarmupState = { status: "idle" };
+
+function setWarmupState(next: TorrentWarmupState) {
+  torrentWarmupState = next;
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("desktop:torrent-warmup-state", next);
+  }
+}
+
+async function runTorrentWarmup() {
+  if (
+    torrentWarmupState.status === "warming" ||
+    torrentWarmupState.status === "ready"
+  ) {
+    return;
+  }
+  setWarmupState({ status: "warming" });
+  try {
+    await torrentManager.warmup();
+    setWarmupState({ status: "ready" });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn("[torrent] warmup failed:", message);
+    setWarmupState({ status: "error", message });
+  }
+}
 
 function supportsDesktopAppUpdates() {
   return process.platform === "darwin" || process.platform === "win32";
@@ -826,11 +862,17 @@ function createMainWindow() {
     mainWindow.webContents.once("did-finish-load", () => {
       sendDesktopAppUpdateState();
       mainWindow?.webContents.openDevTools({ mode: "detach" });
+      // Trigger warmup in dev too so permission dialogs appear at startup.
+      setTimeout(() => void runTorrentWarmup(), TORRENT_WARMUP_DELAY_MS);
     });
   } else {
     void mainWindow.loadURL(PACKAGED_RENDERER_URL);
     mainWindow.webContents.on("did-finish-load", () => {
       sendDesktopAppUpdateState();
+      // Proactively warm up the torrent engine so the OS network-permission
+      // dialog (Windows Firewall / macOS local network) appears here rather
+      // than blocking the user mid-stream on their first playback attempt.
+      setTimeout(() => void runTorrentWarmup(), TORRENT_WARMUP_DELAY_MS);
     });
   }
 
@@ -1033,6 +1075,14 @@ function registerIpcHandlers() {
       console.error("Failed to clear torrent storage:", err);
       return false;
     }
+  });
+
+  // Warmup IPC: renderer can query the current warmup state or trigger a
+  // manual re-warmup (e.g. after the user grants network permission).
+  ipcMain.handle("desktop:torrent-warmup-state", () => torrentWarmupState);
+  ipcMain.handle("desktop:torrent-warmup", async () => {
+    await runTorrentWarmup();
+    return torrentWarmupState;
   });
 }
 

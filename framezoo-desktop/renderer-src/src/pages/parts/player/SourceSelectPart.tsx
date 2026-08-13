@@ -380,10 +380,11 @@ export function SourceSelectPart(props: {
             : getSavedProgressTime(progressItems, meta);
           if (wasStartFromBeginning) setShouldStartFromBeginning(false);
 
-          // 30-second timeout — long enough for the Windows Firewall dialog
-          // to appear and be answered, but short enough to surface an error
-          // rather than leaving the UI in a permanently stuck state.
-          const TORRENT_START_TIMEOUT_MS = 30_000;
+          // 60-second timeout — long enough for the Windows Firewall dialog
+          // to appear and be answered if warmup hasn't completed yet, but
+          // short enough to surface an error rather than leaving the UI in a
+          // permanently stuck state.
+          const TORRENT_START_TIMEOUT_MS = 60_000;
           const session = await Promise.race([
             startTorrent({
               sourceId: stream.id,

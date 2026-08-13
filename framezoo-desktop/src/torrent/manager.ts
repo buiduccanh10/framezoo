@@ -59,6 +59,12 @@ export class TorrentManager {
     return () => this.listeners.delete(listener);
   }
 
+  async warmup() {
+    if (typeof this.engine.warmup === "function") {
+      await this.engine.warmup();
+    }
+  }
+
   async dispose() {
     await this.engine.dispose();
     this.statuses.clear();
