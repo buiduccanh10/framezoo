@@ -43,8 +43,12 @@ import { useProgressStore } from "@/stores/progress";
 import { getSavedProgressTime } from "@/stores/progress/selectors";
 
 function addonMediaId(meta: PlayerMeta) {
+  // Addons usually do not support IMDB IDs for Season 0 (Specials).
+  // Force TMDB ID for Season 0 to ensure accurate stream matching.
+  const isSpecialSeason = meta.type === "show" && meta.season?.number === 0;
   const imdbId = meta.imdbId?.trim();
-  if (imdbId && /^tt\d+$/i.test(imdbId)) return imdbId;
+
+  if (!isSpecialSeason && imdbId && /^tt\d+$/i.test(imdbId)) return imdbId;
   return `tmdb:${meta.tmdbId}`;
 }
 
