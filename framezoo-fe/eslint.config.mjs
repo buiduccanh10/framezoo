@@ -15,6 +15,7 @@ export default tseslint.config(
     ignores: [
       "public/**",
       "dist/**",
+      "scripts/**",
       "*.js",
       "*.cjs",
       "*.ts",

@@ -8,6 +8,7 @@
     "build": "node scripts/sync-logo.mjs && vite build && node scripts/prerender.mjs",
     "logo:sync": "node scripts/sync-logo.mjs",
     "test": "vitest run",
+    "seo:validate": "node scripts/validate-seo.mjs",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "i18n:landing:audit": "node scripts/landing-i18n.mjs audit",

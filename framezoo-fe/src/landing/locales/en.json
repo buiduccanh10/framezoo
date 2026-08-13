@@ -9,18 +9,18 @@
   "hero": {
     "title": "A better place",
     "titleAccent": "to watch.",
-    "description": "Discover, play, and tune every detail without leaving the story.",
+    "description": "Framezoo is a player with AI subtitle sync, dual subtitles, rich media metadata, and addon support.",
     "primaryCta": "Download desktop",
     "secondaryCta": "Explore the experience",
-    "imageAlt": "Framezoo desktop app showing the discovery screen",
+    "imageAlt": "Framezoo player showing the discovery screen",
     "version": "Desktop release"
   },
   "features": {
     "featureLabel": "The player, your way",
-    "experienceTitle": "Everything you need for a better watch.",
-    "overviewDescription": "AI subtitle sync, dual subtitles, rich title context, and a player that stays out of the way.",
+    "experienceTitle": "Everything you need in a player.",
+    "overviewDescription": "Sync subtitles with AI, keep dual subtitles visible, explore media metadata, and control playback without leaving the story.",
     "subtitleSync": "Sync subtitles with AI",
-    "subtitleSyncDescription": "Line up the opening dialogue with the picture in seconds.",
+    "subtitleSyncDescription": "Align dialogue with the picture in seconds with AI subtitle sync.",
     "dualSubtitles": "Keep two subtitle languages visible",
     "dualSubtitlesDescription": "Switch on dual subtitles when you are learning, comparing, or simply prefer both.",
     "subtitleControls": "Tune the player around you",
@@ -31,12 +31,12 @@
     "addonOne": "Subtitle controls",
     "addonTwo": "Catalog metadata",
     "addonThree": "Addon support",
-    "showcaseTitle": "Context before play.",
+    "showcaseTitle": "Details before you press play.",
     "showcaseDescription": "Open a title and get the story around it: artwork, ratings, seasons, and metadata in one place.",
     "showcasePrimaryAlt": "Framezoo title detail screen with artwork, ratings, seasons, and metadata",
-    "showcaseSecondaryTitle": "Find something worth watching.",
+    "showcaseSecondaryTitle": "Discover something worth watching.",
     "showcaseSecondaryDescription": "Start from a clean discovery surface, then move into playback without losing your place.",
-    "showcaseSecondaryAlt": "Framezoo discovery screen with search, categories, and title rows"
+    "showcaseSecondaryAlt": "Framezoo player discovery screen with search, categories, and title rows"
   },
   "addonGuide": {
     "eyebrow": "BUILD WITH FRAMEZOO",
@@ -65,7 +65,7 @@
   },
   "download": {
     "eyebrow": "DOWNLOAD FRAMEZOO",
-    "title": "Your next watch starts here.",
+    "title": "Download Framezoo for macOS or Windows.",
     "description": "Download the build recommended for this device, or choose another platform.",
     "recommended": "Recommended for you",
     "chooseBuild": "Choose a build",
