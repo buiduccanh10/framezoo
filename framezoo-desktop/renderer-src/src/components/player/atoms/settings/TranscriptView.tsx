@@ -106,8 +106,8 @@ export function TranscriptView({
 
   const handleConfirmSync = async () => {
     syncModal.hide();
-    const synced = await syncSelectedCaption();
-    if (synced) {
+    const outcome = await syncSelectedCaption();
+    if (outcome === "success") {
       showToast(
         t("player.menus.subtitles.syncSubtitleSuccess", {
           defaultValue: "Subtitle synced successfully",

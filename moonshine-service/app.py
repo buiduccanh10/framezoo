@@ -15,8 +15,8 @@ from alignment import (
     MAX_VTT_BYTES,
     MIN_ALIGNMENT_CONFIDENCE,
     alignment_result_from_speech as _alignment_result_from_speech,
-    build_cleaned_vtt,
     decode_wav,
+    evaluate_offset,
     find_best_offset,
     parse_vtt,
     transcribe_speech_intervals,
@@ -46,20 +46,17 @@ app = FastAPI(
 
 
 def alignment_result_from_speech(
-    vtt: str,
     cues: list[_alignment.Cue],
     speech_intervals: list[tuple[int, int]],
     audio_start_ms: int,
     audio_end_ms: int,
 ) -> dict[str, Any]:
     return _alignment_result_from_speech(
-        vtt,
         cues,
         speech_intervals,
         audio_start_ms,
         audio_end_ms,
         find_best_offset_fn=find_best_offset,
-        build_cleaned_vtt_fn=build_cleaned_vtt,
     )
 
 

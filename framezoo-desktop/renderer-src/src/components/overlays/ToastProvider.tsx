@@ -15,13 +15,27 @@ export function ToastProvider() {
 
   if (!toast) return null;
 
+  const toastType = toast.type ?? "success";
+  const toastClassName = {
+    success: "bg-green-600",
+    error: "bg-red-600",
+    info: "bg-blue-600",
+  }[toastType];
+  const toastIcon =
+    toastType === "error"
+      ? Icons.X
+      : toastType === "info"
+        ? Icons.CIRCLE_EXCLAMATION
+        : Icons.CHECKMARK;
+
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] px-4 py-2 bg-green-600 text-white rounded-lg shadow-lg transition-all duration-300 animate-[scaleIn_0.6s_ease-out_forwards]">
+    <div
+      className={`fixed top-4 left-1/2 z-[9999] -translate-x-1/2 transform rounded-lg px-4 py-2 text-white shadow-lg transition-all duration-300 animate-[scaleIn_0.6s_ease-out_forwards] ${toastClassName}`}
+      role="status"
+      aria-live={toastType === "error" ? "assertive" : "polite"}
+    >
       <div className="flex items-center gap-2">
-        <Icon
-          icon={toast.type === "error" ? Icons.X : Icons.CHECKMARK}
-          className="text-white"
-        />
+        <Icon icon={toastIcon} className="text-white" />
         <span className="text-sm font-medium">{toast.message}</span>
       </div>
     </div>

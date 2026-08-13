@@ -9,8 +9,15 @@ export const SUBTITLE_ALIGNMENT_MIN_CONFIDENCE = 60;
 export const SUBTITLE_ALIGNMENT_MIN_CONSENSUS_WINDOWS = 2;
 export const SUBTITLE_ALIGNMENT_OFFSET_TOLERANCE_MS = 750;
 export const SUBTITLE_ALIGNMENT_MIN_SCORE_MARGIN = 10;
+export const SUBTITLE_ALIGNMENT_MAX_PLAUSIBLE_OFFSET_MS = 45_000;
+export const SUBTITLE_ALIGNMENT_MAX_WINDOWS = 6;
+export const SUBTITLE_ALIGNMENT_INITIAL_WINDOWS = 2;
 
-const SUBTITLE_ALIGNMENT_WINDOW_OFFSETS_SECONDS = [-45, 30, 105];
+const SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS = [
+  -120, 120, -240, 240,
+];
+const SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS = [0, 1 / 3, 2 / 3, 1];
+const SUBTITLE_ALIGNMENT_MIN_AUDIO_WINDOW_SECONDS = 1;
 
 export interface SubtitleAlignmentResponse {
   aligned: boolean;
@@ -20,7 +27,8 @@ export interface SubtitleAlignmentResponse {
     startMs: number;
     endMs: number;
   }>;
-  cleanedVtt: string;
+  speechAnchorCount?: number;
+  speechAnchorCoverage?: number;
   reason: string | null;
 }
 
@@ -30,7 +38,7 @@ export interface SubtitleAlignmentBatchResponse {
   results: Partial<Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>>;
 }
 
-type AlignmentWindowResponse = {
+export type AlignmentWindowResponse = {
   startAt: number;
   response: SubtitleAlignmentBatchResponse;
 };
@@ -41,6 +49,77 @@ type AlignmentCluster = {
   averageOffsetMs: number;
   score: number;
 };
+
+export type AlignmentWindowPlan = {
+  startAt: number;
+  priority: "nearby" | "buffered" | "fallback";
+};
+
+export type AlignmentWindowRequest = (
+  plan: AlignmentWindowPlan,
+) => Promise<SubtitleAlignmentBatchResponse | null>;
+
+export type SubtitleAlignmentCaption = {
+  vttData: string;
+  alignmentBaseVttData?: string;
+};
+
+export function getSubtitleAlignmentBaseVtt(
+  caption: SubtitleAlignmentCaption,
+): string {
+  return caption.alignmentBaseVttData ?? caption.vttData;
+}
+
+export function areSubtitleAlignmentResultsApplicable(
+  items: Array<{
+    result?: SubtitleAlignmentResponse;
+    expectedCaptionId: string;
+    currentCaptionId?: string;
+    expectedBaseVttData?: string;
+    currentBaseVttData?: string;
+  }>,
+): boolean {
+  return (
+    items.length > 0 &&
+    items.every(
+      ({
+        result,
+        expectedCaptionId,
+        currentCaptionId,
+        expectedBaseVttData,
+        currentBaseVttData,
+      }) =>
+        result?.aligned === true &&
+        currentCaptionId === expectedCaptionId &&
+        (expectedBaseVttData === undefined ||
+          expectedBaseVttData === currentBaseVttData),
+    )
+  );
+}
+
+export function getSubtitleAlignmentWindowDuration(
+  videoDuration?: number,
+): number {
+  if (
+    typeof videoDuration !== "number" ||
+    !Number.isFinite(videoDuration) ||
+    videoDuration <= 0
+  ) {
+    return SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS;
+  }
+
+  // Files shorter than two minimum extraction windows cannot provide two
+  // non-overlapping samples. Keep one full-file window in that case.
+  if (videoDuration < SUBTITLE_ALIGNMENT_MIN_AUDIO_WINDOW_SECONDS * 2) {
+    return videoDuration;
+  }
+
+  // Normal short files use two non-overlapping half-file samples.
+  return Math.max(
+    Math.min(SUBTITLE_ALIGNMENT_MIN_AUDIO_WINDOW_SECONDS, videoDuration),
+    Math.min(SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS, videoDuration / 2),
+  );
+}
 
 function normalizeHeaders(
   headers: unknown,
@@ -66,35 +145,135 @@ function appendAudio(body: FormData, audio: Uint8Array) {
 async function captureCurrentStreamAudio(options: {
   sourceUrl: string;
   startAt: number;
+  duration: number;
   headers?: unknown;
 }) {
   return await extractAudioWindow({
     url: options.sourceUrl,
     startAt: options.startAt,
-    duration: SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS,
+    duration: options.duration,
     headers: normalizeHeaders(options.headers),
   });
 }
 
-function buildAlignmentWindowStarts(
+function clampAlignmentWindowStart(
   startAt: number,
   videoDuration?: number,
-): number[] {
-  const windowDuration = SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS;
+  windowDuration = SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS,
+): number {
   const maxStart =
     typeof videoDuration === "number" &&
     Number.isFinite(videoDuration) &&
     videoDuration > 0
       ? Math.max(0, videoDuration - windowDuration)
       : Number.POSITIVE_INFINITY;
-  const baseStart = Math.min(Math.max(0, startAt), maxStart);
-  const starts = SUBTITLE_ALIGNMENT_WINDOW_OFFSETS_SECONDS.map((offset) =>
-    Math.min(Math.max(0, baseStart + offset), maxStart),
-  );
+  return Math.min(Math.max(0, startAt), maxStart);
+}
 
-  return starts.filter(
-    (candidate, index) => starts.indexOf(candidate) === index,
+function addUniqueAlignmentWindow(
+  plans: AlignmentWindowPlan[],
+  startAt: number,
+  priority: AlignmentWindowPlan["priority"],
+  videoDuration?: number,
+  windowDuration = SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS,
+) {
+  const normalizedStart = clampAlignmentWindowStart(
+    startAt,
+    videoDuration,
+    windowDuration,
   );
+  const overlapsExistingWindow = plans.some(
+    (plan) =>
+      normalizedStart < plan.startAt + windowDuration &&
+      plan.startAt < normalizedStart + windowDuration,
+  );
+  if (overlapsExistingWindow) return;
+  plans.push({ startAt: normalizedStart, priority });
+}
+
+export function buildAlignmentWindowPlan(
+  startAt: number,
+  videoDuration?: number,
+  buffered?: number,
+): AlignmentWindowPlan[] {
+  const windowDuration = getSubtitleAlignmentWindowDuration(videoDuration);
+  const currentStart = clampAlignmentWindowStart(
+    startAt,
+    videoDuration,
+    windowDuration,
+  );
+  const plans: AlignmentWindowPlan[] = [];
+
+  // The extractor owns a separate libmpv instance. `buffered` cannot make a
+  // future window free, but it can prioritize the last likely-ready range.
+  addUniqueAlignmentWindow(
+    plans,
+    currentStart,
+    "nearby",
+    videoDuration,
+    windowDuration,
+  );
+  if (
+    typeof buffered === "number" &&
+    Number.isFinite(buffered) &&
+    buffered >= windowDuration
+  ) {
+    addUniqueAlignmentWindow(
+      plans,
+      buffered - windowDuration,
+      "buffered",
+      videoDuration,
+      windowDuration,
+    );
+  }
+
+  if (
+    plans.length < SUBTITLE_ALIGNMENT_INITIAL_WINDOWS &&
+    currentStart >= windowDuration
+  ) {
+    addUniqueAlignmentWindow(
+      plans,
+      currentStart - windowDuration,
+      "nearby",
+      videoDuration,
+      windowDuration,
+    );
+  } else if (plans.length < SUBTITLE_ALIGNMENT_INITIAL_WINDOWS) {
+    addUniqueAlignmentWindow(
+      plans,
+      currentStart + windowDuration,
+      "nearby",
+      videoDuration,
+      windowDuration,
+    );
+  }
+
+  const maxStart =
+    typeof videoDuration === "number" &&
+    Number.isFinite(videoDuration) &&
+    videoDuration > 0
+      ? Math.max(0, videoDuration - windowDuration)
+      : null;
+  const fallbackStarts =
+    maxStart !== null
+      ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map(
+          (fraction) => maxStart * fraction,
+        )
+      : SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS.map(
+          (offset) => currentStart + offset,
+        );
+
+  for (const fallbackStart of fallbackStarts) {
+    addUniqueAlignmentWindow(
+      plans,
+      fallbackStart,
+      "fallback",
+      videoDuration,
+      windowDuration,
+    );
+  }
+
+  return plans.slice(0, SUBTITLE_ALIGNMENT_MAX_WINDOWS);
 }
 
 function clusterAlignmentCandidates(
@@ -109,9 +288,7 @@ function clusterAlignmentCandidates(
     const currentCluster = clusters[clusters.length - 1];
     if (
       currentCluster &&
-      candidate.offsetMs -
-        currentCluster.candidates[currentCluster.candidates.length - 1]
-          .offsetMs <=
+      candidate.offsetMs - currentCluster.candidates[0].offsetMs <=
         SUBTITLE_ALIGNMENT_OFFSET_TOLERANCE_MS
     ) {
       currentCluster.candidates.push(candidate);
@@ -147,7 +324,6 @@ function clusterAlignmentCandidates(
 }
 
 function buildUnalignedResult(
-  vttData: string,
   candidates: SubtitleAlignmentResponse[],
   reason: string,
 ): SubtitleAlignmentResponse {
@@ -160,28 +336,141 @@ function buildUnalignedResult(
     offsetMs: 0,
     confidence: bestCandidate?.confidence ?? 0,
     speechIntervals: bestCandidate?.speechIntervals ?? [],
-    cleanedVtt: vttData,
     reason,
   };
 }
 
-export function selectSubtitleAlignmentConsensus(
-  vttData: string,
+function hasSpeechEvidence(result: SubtitleAlignmentResponse): boolean {
+  return (
+    result.reason !== "no_speech_detected" && result.speechIntervals.length > 0
+  );
+}
+
+function getValidAlignmentCandidates(
   candidates: SubtitleAlignmentResponse[],
-): SubtitleAlignmentResponse {
-  const validCandidates = candidates.filter(
+): SubtitleAlignmentResponse[] {
+  return candidates.filter(
     (candidate) =>
+      hasSpeechEvidence(candidate) &&
       candidate.aligned &&
       Number.isFinite(candidate.offsetMs) &&
-      candidate.confidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE,
+      candidate.confidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE &&
+      Math.abs(candidate.offsetMs) <=
+        SUBTITLE_ALIGNMENT_MAX_PLAUSIBLE_OFFSET_MS,
   );
+}
+
+function hasAlignmentConsensus(
+  candidates: SubtitleAlignmentResponse[],
+): boolean {
+  const validCandidates = getValidAlignmentCandidates(candidates);
+  if (validCandidates.length < SUBTITLE_ALIGNMENT_MIN_CONSENSUS_WINDOWS) {
+    return false;
+  }
+
+  const clusters = clusterAlignmentCandidates(validCandidates).sort(
+    (first, second) => second.score - first.score,
+  );
+  const bestCluster = clusters[0];
+  const secondCluster = clusters[1];
+  if (!bestCluster) return false;
+
+  const scoreMargin = secondCluster
+    ? bestCluster.score - secondCluster.score
+    : Number.POSITIVE_INFINITY;
+  return (
+    bestCluster.candidates.length >= SUBTITLE_ALIGNMENT_MIN_CONSENSUS_WINDOWS &&
+    bestCluster.averageConfidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE &&
+    scoreMargin >= SUBTITLE_ALIGNMENT_MIN_SCORE_MARGIN
+  );
+}
+
+function hasConsensusForAllTracks(
+  subtitles: Array<{ track: SubtitleAlignmentTrack }>,
+  windowResponses: AlignmentWindowResponse[],
+): boolean {
+  return subtitles.every(({ track }) => {
+    const candidates = windowResponses
+      .map(({ response }) => response.results[track])
+      .filter((result): result is SubtitleAlignmentResponse => result != null);
+    return hasAlignmentConsensus(candidates);
+  });
+}
+
+export async function collectAlignmentWindowResponses(options: {
+  windowPlan: AlignmentWindowPlan[];
+  subtitles: Array<{ track: SubtitleAlignmentTrack }>;
+  signal?: AbortSignal;
+  requestWindow: AlignmentWindowRequest;
+  onProgress?: (progress: number) => void;
+}): Promise<AlignmentWindowResponse[]> {
+  const initialWindowPlan = options.windowPlan.slice(
+    0,
+    Math.min(SUBTITLE_ALIGNMENT_INITIAL_WINDOWS, options.windowPlan.length),
+  );
+  const fallbackWindowPlan = options.windowPlan.slice(initialWindowPlan.length);
+  const windowResponses: AlignmentWindowResponse[] = [];
+  const totalWindows = options.windowPlan.length;
+  let completedWindows = 0;
+  let lastError: unknown = null;
+
+  const requestWindow = async (plan: AlignmentWindowPlan) => {
+    if (options.signal?.aborted) {
+      throw new DOMException("Subtitle alignment was aborted", "AbortError");
+    }
+
+    try {
+      const response = await options.requestWindow(plan);
+      if (response) {
+        windowResponses.push({ startAt: plan.startAt, response });
+      }
+    } catch (error) {
+      if (options.signal?.aborted) throw error;
+      lastError = error;
+      console.warn("[subtitle-align] window skipped", {
+        startAt: plan.startAt,
+        priority: plan.priority,
+        error,
+      });
+    }
+
+    completedWindows += 1;
+    options.onProgress?.(
+      Math.min(1, completedWindows / Math.max(1, totalWindows)),
+    );
+  };
+
+  for (const plan of initialWindowPlan) {
+    await requestWindow(plan);
+  }
+
+  if (!hasConsensusForAllTracks(options.subtitles, windowResponses)) {
+    for (const plan of fallbackWindowPlan) {
+      await requestWindow(plan);
+      if (hasConsensusForAllTracks(options.subtitles, windowResponses)) {
+        break;
+      }
+    }
+  }
+
+  if (windowResponses.length === 0 && lastError) {
+    throw lastError;
+  }
+
+  return windowResponses;
+}
+
+export function selectSubtitleAlignmentConsensus(
+  candidates: SubtitleAlignmentResponse[],
+): SubtitleAlignmentResponse {
+  const speechCandidates = candidates.filter(hasSpeechEvidence);
+  const validCandidates = getValidAlignmentCandidates(candidates);
   if (validCandidates.length === 0) {
     return buildUnalignedResult(
-      vttData,
       candidates,
-      candidates.length > 0
-        ? "low_alignment_confidence"
-        : "no_alignment_result",
+      speechCandidates.length === 0
+        ? "no_speech_detected"
+        : "low_alignment_confidence",
     );
   }
 
@@ -200,7 +489,6 @@ export function selectSubtitleAlignmentConsensus(
 
   if (!hasConsensus) {
     return buildUnalignedResult(
-      vttData,
       candidates,
       bestCluster.candidates.length < SUBTITLE_ALIGNMENT_MIN_CONSENSUS_WINDOWS
         ? "insufficient_consensus"
@@ -231,31 +519,33 @@ export async function alignSubtitlesWithCurrentStream(options: {
   headers?: unknown;
   signal?: AbortSignal;
   videoDuration?: number;
+  buffered?: number;
   onProgress?: (progress: number) => void;
 }): Promise<SubtitleAlignmentBatchResponse> {
-  const windowStarts = buildAlignmentWindowStarts(
+  const windowPlan = buildAlignmentWindowPlan(
     options.startAt,
     options.videoDuration,
+    options.buffered,
   );
-  const windowResponses: AlignmentWindowResponse[] = [];
-  let lastError: unknown = null;
-
-  for (let i = 0; i < windowStarts.length; i++) {
-    const startAt = windowStarts[i];
-    if (options.signal?.aborted) {
-      throw new DOMException("Subtitle alignment was aborted", "AbortError");
-    }
-
-    try {
+  const windowDuration = getSubtitleAlignmentWindowDuration(
+    options.videoDuration,
+  );
+  const windowResponses = await collectAlignmentWindowResponses({
+    windowPlan,
+    subtitles: options.subtitles,
+    signal: options.signal,
+    onProgress: options.onProgress,
+    requestWindow: async (plan) => {
       const audio = await captureCurrentStreamAudio({
         ...options,
-        startAt,
+        startAt: plan.startAt,
+        duration: windowDuration,
       });
       const body = new FormData();
       appendAudio(body, audio);
       body.append("subtitles", JSON.stringify(options.subtitles));
       body.append("language", options.language || "en");
-      body.append("audioStartMs", String(Math.round(startAt * 1000)));
+      body.append("audioStartMs", String(Math.round(plan.startAt * 1000)));
 
       const response = await mwFetch<SubtitleAlignmentBatchResponse>(
         "/api/subtitle-align",
@@ -267,22 +557,10 @@ export async function alignSubtitlesWithCurrentStream(options: {
           timeout: 300_000,
         },
       );
-      windowResponses.push({ startAt, response });
-      options.onProgress?.((i + 1) / windowStarts.length);
-    } catch (error) {
-      if (options.signal?.aborted) throw error;
-      lastError = error;
-      console.warn("[subtitle-align] window skipped", {
-        startAt,
-        error,
-      });
-      options.onProgress?.((i + 1) / windowStarts.length);
-    }
-  }
-
-  if (windowResponses.length === 0 && lastError) {
-    throw lastError;
-  }
+      return response;
+    },
+  });
+  options.onProgress?.(1);
 
   const results: Partial<
     Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>
@@ -303,7 +581,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
   );
   if (primarySubtitle) {
     results.primary = selectSubtitleAlignmentConsensus(
-      primarySubtitle.vttData,
       candidatesByTrack.get("primary") ?? [],
     );
   }
@@ -311,7 +588,6 @@ export async function alignSubtitlesWithCurrentStream(options: {
   for (const subtitle of options.subtitles) {
     if (subtitle.track === "primary") continue;
     results[subtitle.track] = selectSubtitleAlignmentConsensus(
-      subtitle.vttData,
       candidatesByTrack.get(subtitle.track) ?? [],
     );
   }
@@ -326,26 +602,28 @@ export async function alignSubtitleWithCurrentStream(options: {
   vttData: string;
   headers?: unknown;
   signal?: AbortSignal;
+  videoDuration?: number;
+  buffered?: number;
 }): Promise<SubtitleAlignmentResponse> {
-  const audio = await captureCurrentStreamAudio(options);
-
-  const body = new FormData();
-  appendAudio(body, audio);
-  body.append(
-    "vtt",
-    new Blob([options.vttData], { type: "text/vtt" }),
-    "subtitle.vtt",
-  );
-  body.append("language", options.language || "en");
-  body.append("audioStartMs", String(Math.round(options.startAt * 1000)));
-
-  return await mwFetch<SubtitleAlignmentResponse>("/api/subtitle-align", {
-    method: "POST",
-    body,
-    baseURL: conf().BACKEND_URL ?? undefined,
+  const batchResult = await alignSubtitlesWithCurrentStream({
+    sourceUrl: options.sourceUrl,
+    startAt: options.startAt,
+    language: options.language,
+    subtitles: [{ track: "primary", vttData: options.vttData }],
+    headers: options.headers,
     signal: options.signal,
-    timeout: 300_000,
+    videoDuration: options.videoDuration,
+    buffered: options.buffered,
   });
+  return (
+    batchResult.results.primary ?? {
+      aligned: false,
+      offsetMs: 0,
+      confidence: 0,
+      speechIntervals: [],
+      reason: "no_alignment_result",
+    }
+  );
 }
 
 export function applySubtitleAlignment(
@@ -355,6 +633,8 @@ export function applySubtitleAlignment(
   if (!result.aligned || !Number.isFinite(result.offsetMs)) {
     return vttData;
   }
-  const cleanedVtt = result.cleanedVtt || vttData;
-  return shiftVttTimestamps(cleanedVtt, result.offsetMs / 1000);
+  // Apply the consensus offset once to the original cue timeline. A
+  // per-window cleaned VTT can contain local snapping from a different
+  // candidate offset and would reintroduce double-shift/drift.
+  return shiftVttTimestamps(vttData, result.offsetMs / 1000);
 }

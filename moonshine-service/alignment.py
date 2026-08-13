@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 import struct
-import wave
+import threading
 from dataclasses import dataclass
 from typing import Any, Callable
 
@@ -19,13 +19,19 @@ MAX_VTT_BYTES = 2 * 1024 * 1024
 MIN_ALIGNMENT_CONFIDENCE = 60
 MIN_SPEECH_INTERVAL_MS = 120
 MERGE_SPEECH_GAP_MS = 350
-SEARCH_RANGE_MS = 180_000
+# A subtitle offset beyond this range is more likely a false match from a
+# different scene than a real subtitle timing error.
+MAX_ALIGNMENT_OFFSET_MS = 45_000
+SEARCH_RANGE_MS = MAX_ALIGNMENT_OFFSET_MS
 SEARCH_STEP_MS = 250
 REFINE_RANGE_MS = 750
 REFINE_STEP_MS = 25
-# Cue boundaries within this distance of a detected speech-interval boundary
-# are snapped onto it, removing residual per-cue error after the global shift.
-SNAP_RANGE_MS = 250
+SUBTITLE_ACTIVITY_MERGE_GAP_MS = 250
+MAX_SPEECH_ANCHOR_ERROR_MS = 1_800
+MIN_SPEECH_ANCHOR_OVERLAP_MS = 120
+MIN_SPEECH_ANCHOR_COVERAGE = 0.5
+MIN_MULTI_SPEECH_ANCHOR_COVERAGE = 2 / 3
+_TRANSCRIPTION_LOCK = threading.Lock()
 
 
 @dataclass(frozen=True)
@@ -34,6 +40,15 @@ class Cue:
     start_ms: int
     end_ms: int
     block: str
+
+
+@dataclass(frozen=True)
+class OffsetEvidence:
+    score: float
+    matched_anchors: int
+    speech_anchor_count: int
+    anchor_coverage: float
+    median_anchor_error_ms: int
 
 
 def parse_timestamp(value: str) -> int:
@@ -49,14 +64,6 @@ def parse_timestamp(value: str) -> int:
         + int(seconds) * 1_000
         + int(milliseconds.ljust(3, "0")[:3])
     )
-
-
-def format_timestamp(value_ms: int) -> str:
-    value_ms = max(0, int(round(value_ms)))
-    hours, remainder = divmod(value_ms, 3_600_000)
-    minutes, remainder = divmod(remainder, 60_000)
-    seconds, milliseconds = divmod(remainder, 1_000)
-    return f"{hours:02d}:{minutes:02d}:{seconds:02d}.{milliseconds:03d}"
 
 
 def parse_vtt(text: str) -> list[Cue]:
@@ -173,11 +180,12 @@ def transcribe_speech_intervals(
     audio_start_ms: int,
 ) -> list[tuple[int, int]]:
     transcriber = get_transcriber(language)
-    transcript = transcriber.transcribe_without_streaming(
-        audio,
-        sample_rate=sample_rate,
-        flags=0,
-    )
+    with _TRANSCRIPTION_LOCK:
+        transcript = transcriber.transcribe_without_streaming(
+            audio,
+            sample_rate=sample_rate,
+            flags=0,
+        )
 
     intervals: list[tuple[int, int]] = []
     for line in transcript.lines:
@@ -198,6 +206,224 @@ def overlap_ms(
     return max(0, min(first_end, second_end) - max(first_start, second_start))
 
 
+def clip_intervals(
+    intervals: list[tuple[int, int]],
+    start_ms: int,
+    end_ms: int,
+) -> list[tuple[int, int]]:
+    clipped: list[tuple[int, int]] = []
+    for interval_start, interval_end in intervals:
+        clipped_start = max(start_ms, interval_start)
+        clipped_end = min(end_ms, interval_end)
+        if clipped_end > clipped_start:
+            clipped.append((clipped_start, clipped_end))
+    return clipped
+
+
+def merge_activity_intervals(
+    intervals: list[tuple[int, int]],
+    max_gap_ms: int,
+) -> list[tuple[int, int]]:
+    merged: list[list[int]] = []
+    for start_ms, end_ms in sorted(intervals):
+        if end_ms <= start_ms:
+            continue
+        if merged and start_ms <= merged[-1][1] + max_gap_ms:
+            merged[-1][1] = max(merged[-1][1], end_ms)
+        else:
+            merged.append([start_ms, end_ms])
+    return [(start_ms, end_ms) for start_ms, end_ms in merged]
+
+
+def total_interval_overlap(
+    first_intervals: list[tuple[int, int]],
+    second_intervals: list[tuple[int, int]],
+) -> int:
+    total = 0
+    second_index = 0
+    for first_start, first_end in first_intervals:
+        while (
+            second_index < len(second_intervals)
+            and second_intervals[second_index][1] <= first_start
+        ):
+            second_index += 1
+        index = second_index
+        while index < len(second_intervals):
+            second_start, second_end = second_intervals[index]
+            if second_start >= first_end:
+                break
+            total += overlap_ms(first_start, first_end, second_start, second_end)
+            index += 1
+    return total
+
+
+def build_shifted_subtitle_intervals(
+    cues: list[Cue],
+    offset_ms: int,
+    audio_start_ms: int,
+    audio_end_ms: int,
+) -> list[tuple[int, int]]:
+    return merge_activity_intervals(
+        clip_intervals(
+            [
+                (cue.start_ms + offset_ms, cue.end_ms + offset_ms)
+                for cue in cues
+            ],
+            audio_start_ms,
+            audio_end_ms,
+        ),
+        SUBTITLE_ACTIVITY_MERGE_GAP_MS,
+    )
+
+
+def match_speech_anchors(
+    speech_intervals: list[tuple[int, int]],
+    subtitle_intervals: list[tuple[int, int]],
+) -> tuple[int, list[int]]:
+    used_subtitle_indices: set[int] = set()
+    anchor_errors: list[int] = []
+    last_subtitle_index = -1
+
+    for speech_start, speech_end in speech_intervals:
+        best_index: int | None = None
+        best_rank: tuple[float, int] | None = None
+        speech_duration = speech_end - speech_start
+
+        for index, (subtitle_start, subtitle_end) in enumerate(
+            subtitle_intervals
+        ):
+            if index in used_subtitle_indices or index <= last_subtitle_index:
+                continue
+
+            overlap = overlap_ms(
+                speech_start,
+                speech_end,
+                subtitle_start,
+                subtitle_end,
+            )
+            if overlap < MIN_SPEECH_ANCHOR_OVERLAP_MS:
+                continue
+
+            boundary_error = min(
+                abs(speech_start - subtitle_start),
+                abs(speech_end - subtitle_end),
+            )
+            overlap_ratio = overlap / max(
+                MIN_SPEECH_ANCHOR_OVERLAP_MS,
+                min(speech_duration, subtitle_end - subtitle_start),
+            )
+            if (
+                boundary_error > MAX_SPEECH_ANCHOR_ERROR_MS
+                and overlap_ratio < 0.25
+            ):
+                continue
+
+            rank = (overlap_ratio, -boundary_error)
+            if best_rank is None or rank > best_rank:
+                best_index = index
+                best_rank = rank
+
+        if best_index is None or best_rank is None:
+            continue
+
+        used_subtitle_indices.add(best_index)
+        last_subtitle_index = best_index
+        subtitle_start, subtitle_end = subtitle_intervals[best_index]
+        anchor_errors.append(
+            min(
+                abs(speech_start - subtitle_start),
+                abs(speech_end - subtitle_end),
+            )
+        )
+
+    return len(anchor_errors), anchor_errors
+
+
+def evaluate_offset(
+    cues: list[Cue],
+    speech_intervals: list[tuple[int, int]],
+    offset_ms: int,
+    audio_start_ms: int,
+    audio_end_ms: int,
+) -> OffsetEvidence:
+    if not cues or not speech_intervals:
+        return OffsetEvidence(0.0, 0, 0, 0.0, 0)
+
+    speech_activity = clip_intervals(
+        speech_intervals,
+        audio_start_ms,
+        audio_end_ms,
+    )
+    subtitle_activity = build_shifted_subtitle_intervals(
+        cues,
+        offset_ms,
+        audio_start_ms,
+        audio_end_ms,
+    )
+    if not speech_activity or not subtitle_activity:
+        return OffsetEvidence(
+            0.0,
+            0,
+            len(speech_activity),
+            0.0,
+            0,
+        )
+
+    speech_duration = sum(end_ms - start_ms for start_ms, end_ms in speech_activity)
+    subtitle_duration = sum(
+        end_ms - start_ms for start_ms, end_ms in subtitle_activity
+    )
+    overlap_duration = total_interval_overlap(speech_activity, subtitle_activity)
+    union_duration = speech_duration + subtitle_duration - overlap_duration
+    if speech_duration <= 0 or subtitle_duration <= 0 or union_duration <= 0:
+        return OffsetEvidence(
+            0.0,
+            0,
+            len(speech_activity),
+            0.0,
+            0,
+        )
+
+    matched_anchors, anchor_errors = match_speech_anchors(
+        speech_activity,
+        subtitle_activity,
+    )
+    anchor_coverage = matched_anchors / len(speech_activity)
+    median_anchor_error_ms = (
+        sorted(anchor_errors)[len(anchor_errors) // 2]
+        if anchor_errors
+        else MAX_SPEECH_ANCHOR_ERROR_MS
+    )
+
+    speech_recall = overlap_duration / speech_duration
+    subtitle_precision = overlap_duration / subtitle_duration
+    activity_iou = overlap_duration / union_duration
+    boundary_score = max(
+        0.0,
+        1.0 - median_anchor_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+    )
+    score = (
+        activity_iou * 0.30
+        + speech_recall * 0.20
+        + subtitle_precision * 0.15
+        + anchor_coverage * 0.25
+        + boundary_score * 0.10
+    )
+    if (
+        matched_anchors == 0
+        or anchor_coverage < MIN_SPEECH_ANCHOR_COVERAGE
+    ):
+        score *= 0.5
+
+    return OffsetEvidence(
+        min(1.0, score),
+        matched_anchors,
+        len(speech_activity),
+        anchor_coverage,
+        median_anchor_error_ms,
+    )
+
+
 def score_offset(
     cues: list[Cue],
     speech_intervals: list[tuple[int, int]],
@@ -205,44 +431,13 @@ def score_offset(
     audio_start_ms: int,
     audio_end_ms: int,
 ) -> float:
-    if not cues or not speech_intervals:
-        return 0.0
-
-    analyzed_cues = [
-        cue
-        for cue in cues
-        if cue.end_ms + offset_ms > audio_start_ms
-        and cue.start_ms + offset_ms < audio_end_ms
-    ]
-    if not analyzed_cues:
-        return 0.0
-
-    total_cue_duration = sum(cue.end_ms - cue.start_ms for cue in analyzed_cues)
-    total_speech_duration = sum(
-        min(audio_end_ms, end_ms) - max(audio_start_ms, start_ms)
-        for start_ms, end_ms in speech_intervals
-        if end_ms > audio_start_ms and start_ms < audio_end_ms
-    )
-    if total_cue_duration <= 0 or total_speech_duration <= 0:
-        return 0.0
-
-    matched_cue_count = 0
-    total_overlap = 0
-    for cue in analyzed_cues:
-        shifted_start = cue.start_ms + offset_ms
-        shifted_end = cue.end_ms + offset_ms
-        cue_overlap = sum(
-            overlap_ms(shifted_start, shifted_end, start_ms, end_ms)
-            for start_ms, end_ms in speech_intervals
-        )
-        total_overlap += min(cue_overlap, cue.end_ms - cue.start_ms)
-        if cue_overlap >= MIN_SPEECH_INTERVAL_MS:
-            matched_cue_count += 1
-
-    cue_coverage = total_overlap / total_cue_duration
-    speech_coverage = min(1.0, total_overlap / total_speech_duration)
-    cue_match = matched_cue_count / len(analyzed_cues)
-    return cue_coverage * 0.45 + speech_coverage * 0.35 + cue_match * 0.20
+    return evaluate_offset(
+        cues,
+        speech_intervals,
+        offset_ms,
+        audio_start_ms,
+        audio_end_ms,
+    ).score
 
 
 def find_best_offset(
@@ -251,36 +446,30 @@ def find_best_offset(
     audio_start_ms: int,
     audio_end_ms: int,
 ) -> tuple[int, float]:
+    def rank_offset(value: int) -> tuple[float, int]:
+        return (
+            score_offset(
+                cues,
+                speech_intervals,
+                value,
+                audio_start_ms,
+                audio_end_ms,
+            ),
+            -abs(value),
+        )
+
     coarse_candidates = range(
         -SEARCH_RANGE_MS,
         SEARCH_RANGE_MS + 1,
         SEARCH_STEP_MS,
     )
-    coarse_offset = max(
-        coarse_candidates,
-        key=lambda value: score_offset(
-            cues,
-            speech_intervals,
-            value,
-            audio_start_ms,
-            audio_end_ms,
-        ),
-    )
+    coarse_offset = max(coarse_candidates, key=rank_offset)
     refined_candidates = range(
         coarse_offset - REFINE_RANGE_MS,
         coarse_offset + REFINE_RANGE_MS + 1,
         REFINE_STEP_MS,
     )
-    best_offset = max(
-        refined_candidates,
-        key=lambda value: score_offset(
-            cues,
-            speech_intervals,
-            value,
-            audio_start_ms,
-            audio_end_ms,
-        ),
-    )
+    best_offset = max(refined_candidates, key=rank_offset)
     return best_offset, score_offset(
         cues,
         speech_intervals,
@@ -290,103 +479,12 @@ def find_best_offset(
     )
 
 
-def snap_aligned_cue(
-    cue: Cue,
-    offset_ms: int,
-    speech_intervals: list[tuple[int, int]],
-) -> tuple[int, int] | None:
-    """Return (start_ms, end_ms) in file coordinates for the aligned cue.
-
-    The cue is shifted by the global offset; if it overlaps a detected speech
-    interval, boundaries within SNAP_RANGE_MS of the interval are snapped onto
-    it. Returns None when the cue should be dropped (shifted entirely before
-    the file start).
-    """
-    shifted_start = cue.start_ms + offset_ms
-    shifted_end = cue.end_ms + offset_ms
-    if shifted_end <= 0:
-        return None
-
-    best_interval: tuple[int, int] | None = None
-    best_overlap = 0
-    for start_ms, end_ms in speech_intervals:
-        interval_overlap = overlap_ms(
-            shifted_start, shifted_end, start_ms, end_ms
-        )
-        if interval_overlap > best_overlap:
-            best_overlap = interval_overlap
-            best_interval = (start_ms, end_ms)
-
-    snapped_start = shifted_start
-    snapped_end = shifted_end
-    if best_interval is not None and best_overlap > 0:
-        interval_start, interval_end = best_interval
-        if abs(interval_start - shifted_start) <= SNAP_RANGE_MS:
-            snapped_start = interval_start
-        if abs(interval_end - shifted_end) <= SNAP_RANGE_MS:
-            snapped_end = interval_end
-
-    file_start = max(0, snapped_start - offset_ms)
-    file_end = max(0, snapped_end - offset_ms)
-    if file_end <= file_start:
-        return None
-    return file_start, file_end
-
-
-def build_cleaned_vtt(
-    vtt: str,
-    cues: list[Cue],
-    speech_intervals: list[tuple[int, int]],
-    offset_ms: int,
-    audio_start_ms: int,
-    audio_end_ms: int,
-) -> str:
-    """Rewrite the VTT with aligned timings.
-
-    Every cue is shifted by the global offset and boundaries near a detected
-    speech interval are snapped onto it. Unlike dropping unaligned cues inside
-    the analysis window, every cue is kept so subtitles never permanently
-    disappear where the user is currently watching.
-    """
-    if not cues or not speech_intervals:
-        return vtt
-
-    cue_by_block = {cue.block: cue for cue in cues}
-    output_blocks: list[str] = []
-    for block in re.split(r"\r?\n\s*\r?\n", vtt.strip()):
-        cue = cue_by_block.get(block)
-        if cue is None:
-            output_blocks.append(block)
-            continue
-
-        aligned = snap_aligned_cue(cue, offset_ms, speech_intervals)
-        if aligned is None:
-            continue
-        file_start, file_end = aligned
-
-        lines = block.splitlines()
-        for index, line in enumerate(lines):
-            match = TIMING_RE.match(line)
-            if match is None:
-                continue
-            lines[index] = (
-                f"{format_timestamp(file_start)} --> {format_timestamp(file_end)}"
-                + line[match.end(2) :]
-            )
-            break
-        output_blocks.append("\n".join(lines))
-
-    return "\n\n".join(output_blocks).strip() + "\n"
-
-
 def alignment_result_from_speech(
-    vtt: str,
     cues: list[Cue],
     speech_intervals: list[tuple[int, int]],
     audio_start_ms: int,
     audio_end_ms: int,
     find_best_offset_fn: Callable[..., tuple[int, float]] | None = None,
-    build_cleaned_vtt_fn: Callable[..., str] | None = None,
 ) -> dict[str, Any]:
     if not speech_intervals:
         return {
@@ -394,12 +492,15 @@ def alignment_result_from_speech(
             "offsetMs": 0,
             "confidence": 0,
             "speechIntervals": [],
-            "cleanedVtt": vtt,
             "reason": "no_speech_detected",
         }
+    if not cues:
+        return invalid_alignment_result(
+            speech_intervals,
+            "invalid_subtitle",
+        )
 
     find_offset = find_best_offset_fn or find_best_offset
-    clean_vtt = build_cleaned_vtt_fn or build_cleaned_vtt
     offset_ms, score = find_offset(
         cues,
         speech_intervals,
@@ -407,14 +508,62 @@ def alignment_result_from_speech(
         audio_end_ms,
     )
     confidence = int(round(max(0.0, min(1.0, score)) * 100))
-    cleaned_vtt = clean_vtt(
-        vtt,
+    if abs(offset_ms) >= MAX_ALIGNMENT_OFFSET_MS:
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": [
+                {"startMs": start_ms, "endMs": end_ms}
+                for start_ms, end_ms in speech_intervals
+            ],
+            "reason": "offset_out_of_range",
+        }
+    if confidence < MIN_ALIGNMENT_CONFIDENCE:
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": [
+                {"startMs": start_ms, "endMs": end_ms}
+                for start_ms, end_ms in speech_intervals
+            ],
+            "reason": "low_alignment_confidence",
+        }
+
+    evidence = evaluate_offset(
         cues,
         speech_intervals,
         offset_ms,
         audio_start_ms,
         audio_end_ms,
     )
+    minimum_anchors = 1 if evidence.speech_anchor_count <= 1 else 2
+    minimum_anchor_coverage = (
+        MIN_SPEECH_ANCHOR_COVERAGE
+        if evidence.speech_anchor_count <= 2
+        else MIN_MULTI_SPEECH_ANCHOR_COVERAGE
+    )
+    if (
+        evidence.matched_anchors < minimum_anchors
+        or evidence.anchor_coverage < minimum_anchor_coverage
+    ):
+        return {
+            "aligned": False,
+            "offsetMs": 0,
+            "confidence": confidence,
+            "speechIntervals": [
+                {"startMs": start_ms, "endMs": end_ms}
+                for start_ms, end_ms in speech_intervals
+            ],
+            "speechAnchorCount": evidence.matched_anchors,
+            "speechAnchorCoverage": evidence.anchor_coverage,
+            "reason": "insufficient_speech_anchors",
+        }
+
+    # Keep the original timeline in the response. The renderer aggregates
+    # multiple windows and applies one consensus offset once; local snapping
+    # from a single window would mix evidence and can double-shift cues.
     return {
         "aligned": confidence >= MIN_ALIGNMENT_CONFIDENCE,
         "offsetMs": offset_ms,
@@ -423,17 +572,13 @@ def alignment_result_from_speech(
             {"startMs": start_ms, "endMs": end_ms}
             for start_ms, end_ms in speech_intervals
         ],
-        "cleanedVtt": cleaned_vtt,
-        "reason": (
-            None
-            if confidence >= MIN_ALIGNMENT_CONFIDENCE
-            else "low_alignment_confidence"
-        ),
+        "speechAnchorCount": evidence.matched_anchors,
+        "speechAnchorCoverage": evidence.anchor_coverage,
+        "reason": None,
     }
 
 
 def invalid_alignment_result(
-    vtt: str,
     speech_intervals: list[tuple[int, int]],
     reason: str,
 ) -> dict[str, Any]:
@@ -445,7 +590,6 @@ def invalid_alignment_result(
             {"startMs": start_ms, "endMs": end_ms}
             for start_ms, end_ms in speech_intervals
         ],
-        "cleanedVtt": vtt,
         "reason": reason,
     }
 
@@ -477,7 +621,6 @@ def align_vtt(
         audio_start_ms,
     )
     return result_from_speech(
-        vtt,
         cues,
         speech_intervals,
         audio_start_ms,
@@ -519,13 +662,11 @@ def align_vtt_batch(
             cues = parse_vtt(vtt)
         except (IndexError, ValueError):
             results[track] = invalid_alignment_result(
-                vtt,
                 speech_intervals,
                 "invalid_subtitle",
             )
             continue
         results[track] = result_from_speech(
-            vtt,
             cues,
             speech_intervals,
             audio_start_ms,

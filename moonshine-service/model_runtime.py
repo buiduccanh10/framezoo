@@ -95,14 +95,16 @@ def get_transcriber(language: str):
         model_arch = resolve_model_arch()
         try:
             model_path, resolved_arch = get_model_for_language(
-                normalized,
-                model_arch,
+                wanted_language=normalized,
+                wanted_model_arch=model_arch,
             )
         except ValueError:
             if model_arch is None:
                 raise
             # Some Moonshine languages only publish a base model.
-            model_path, resolved_arch = get_model_for_language(normalized)
+            model_path, resolved_arch = get_model_for_language(
+                wanted_language=normalized,
+            )
         transcriber = Transcriber(
             model_path=model_path,
             model_arch=resolved_arch,
