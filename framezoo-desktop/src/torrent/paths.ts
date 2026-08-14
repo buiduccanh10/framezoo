@@ -30,6 +30,8 @@ export function resolveTorrentEnginePath() {
   const runnerName = getRunnerName();
   const binaryName = getBinaryName();
   const target = `${process.platform}-${process.arch}`;
+  const binaryTargets =
+    target === "win32-arm64" ? [target, "win32-x64"] : [target];
   const developmentRunner = path.resolve(
     __dirname,
     "..",
@@ -37,17 +39,26 @@ export function resolveTorrentEnginePath() {
     runnerName,
   );
   const candidates: (string | null)[] = [
-    typeof process.resourcesPath === "string"
-      ? path.join(
-          process.resourcesPath,
-          "torrent-engine",
-          "bin",
-          target,
-          binaryName,
-        )
-      : null,
+    ...binaryTargets.flatMap((binaryTarget) => [
+      typeof process.resourcesPath === "string"
+        ? path.join(
+            process.resourcesPath,
+            "torrent-engine",
+            "bin",
+            binaryTarget,
+            binaryName,
+          )
+        : null,
+      path.resolve(
+        __dirname,
+        "..",
+        "torrent-engine",
+        "bin",
+        binaryTarget,
+        binaryName,
+      ),
+    ]),
     isRunnerReady(developmentRunner) ? developmentRunner : null,
-    path.resolve(__dirname, "..", "torrent-engine", "bin", target, binaryName),
     path.resolve(process.cwd(), "torrent-engine", runnerName),
   ];
 
