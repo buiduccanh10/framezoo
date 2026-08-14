@@ -28,7 +28,7 @@ const getRateLimitConfig = () => {
   return {
     scope: 'api',
     windowMs: getPositiveInt(process.env.RATE_LIMIT_WINDOW_MS, 60_000),
-    maxRequests: getPositiveInt(process.env.RATE_LIMIT_MAX_REQUESTS, 100),
+    maxRequests: getPositiveInt(process.env.RATE_LIMIT_MAX_REQUESTS, 200),
   };
 };
 
