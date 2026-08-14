@@ -74,23 +74,35 @@ function getNativeAddonCandidates(): string[] {
 }
 
 function configureNativeRuntime(): void {
-  if (process.env.FRAMEZOO_LIBMPV_PATH) return;
-
   const target = `${process.platform}-${process.arch}`;
   const runtimeName =
     process.platform === "win32" ? "libmpv-2.dll" : "libmpv.2.dylib";
   const candidates = [
+    process.env.FRAMEZOO_LIBMPV_PATH,
     app.isPackaged
       ? path.join(process.resourcesPath, "libmpv", runtimeName)
       : null,
     path.join(process.cwd(), "resources", "libmpv", target, runtimeName),
+    path.join(__dirname, "..", "resources", "libmpv", target, runtimeName),
   ].filter((candidate): candidate is string => Boolean(candidate));
   const runtimePath = candidates.find((candidate) => fs.existsSync(candidate));
-  if (runtimePath) process.env.FRAMEZOO_LIBMPV_PATH = runtimePath;
+  if (runtimePath) {
+    process.env.FRAMEZOO_LIBMPV_PATH = runtimePath;
+    if (process.platform === "win32") {
+      const libDir = path.dirname(runtimePath);
+      const currentPath = process.env.PATH || "";
+      if (!currentPath.split(";").includes(libDir)) {
+        process.env.PATH = `${libDir};${currentPath}`;
+        console.log(`[libmpv] added to PATH on Windows: ${libDir}`);
+      }
+    }
+  }
 }
 
 function getNativeAddon(): NativeLibMpvAddon | null {
   if (!isSupportedDesktopPlatform()) return null;
+
+  configureNativeRuntime();
 
   const require = createRequire(__filename);
   for (const candidate of getNativeAddonCandidates()) {
