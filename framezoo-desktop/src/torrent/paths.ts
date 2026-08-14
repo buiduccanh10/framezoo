@@ -20,47 +20,47 @@ function isRunnerReady(runnerPath: string) {
 export function resolveTorrentEnginePath() {
   const configuredPath = process.env.FRAMEZOO_TORRENT_ENGINE_PATH;
   if (configuredPath) {
+    console.log(
+      "[torrent] using FRAMEZOO_TORRENT_ENGINE_PATH:",
+      configuredPath,
+    );
     return configuredPath;
   }
 
   const runnerName = getRunnerName();
   const binaryName = getBinaryName();
   const target = `${process.platform}-${process.arch}`;
-  const binaryTargets =
-    target === "win32-arm64" ? [target, "win32-x64"] : [target];
   const developmentRunner = path.resolve(
     __dirname,
     "..",
     "torrent-engine",
     runnerName,
   );
-  const candidates = binaryTargets.flatMap((binaryTarget) => [
+  const candidates: (string | null)[] = [
     typeof process.resourcesPath === "string"
       ? path.join(
           process.resourcesPath,
           "torrent-engine",
           "bin",
-          binaryTarget,
+          target,
           binaryName,
         )
       : null,
-    binaryTarget === target
-      ? isRunnerReady(developmentRunner)
-        ? developmentRunner
-        : null
-      : null,
-    path.resolve(
-      __dirname,
-      "..",
-      "torrent-engine",
-      "bin",
-      binaryTarget,
-      binaryName,
-    ),
-  ]);
-  candidates.push(path.resolve(process.cwd(), "torrent-engine", runnerName));
+    isRunnerReady(developmentRunner) ? developmentRunner : null,
+    path.resolve(__dirname, "..", "torrent-engine", "bin", target, binaryName),
+    path.resolve(process.cwd(), "torrent-engine", runnerName),
+  ];
 
-  return candidates
-    .filter((candidate): candidate is string => Boolean(candidate))
-    .find((candidate) => fs.existsSync(candidate));
+  const filtered = candidates.filter((candidate): candidate is string =>
+    Boolean(candidate),
+  );
+  const found = filtered.find((candidate) => fs.existsSync(candidate));
+
+  console.log("[torrent] engine path resolution:", {
+    target,
+    found: found ?? null,
+    searched: filtered,
+  });
+
+  return found;
 }

@@ -40,6 +40,7 @@ import {
   registerTorrentSession,
   scheduleTorrentStop,
 } from "@/desktop/torrentPlaybackStore";
+import { ErrorCard } from "@/pages/parts/errors/ErrorCard";
 import { type PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import type {
@@ -530,7 +531,11 @@ export function SourceSelectPart(props: {
 
       if (matchingStream && !startingAddonId) {
         hasAttemptedAutoSelect.current = true;
-        void selectAddonStream(matchingStream, true);
+        void selectAddonStream(matchingStream, true).catch(() => {
+          // Auto-play failed (e.g. torrent engine unavailable).
+          // Clear the saved selection so we don't retry on every mount.
+          clearLastTorrentSelection(meta);
+        });
         return;
       }
 
@@ -906,9 +911,9 @@ export function SourceSelectPart(props: {
           </Menu.Section>
         )}
         {addonError ? (
-          <p className="px-1 pt-2 text-sm text-video-context-error">
-            {addonError}
-          </p>
+          <div className="px-1 pt-2">
+            <ErrorCard error={addonError} onClose={() => setAddonError(null)} />
+          </div>
         ) : null}
         {selectedAddonError ? (
           <p className="px-1 pt-2 text-sm text-video-context-error">

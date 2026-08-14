@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.21.0",
   "scripts": {
@@ -272,16 +272,17 @@
       "icon": "build/icon.png"
     },
     "nsis": {
-      "oneClick": true,
+      "oneClick": false,
       "perMachine": false,
-      "allowToChangeInstallationDirectory": false,
+      "allowToChangeInstallationDirectory": true,
       "runAfterFinish": false,
       "shortcutName": "Framezoo",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "deleteAppDataOnUninstall": false,
       "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico"
+      "uninstallerIcon": "build/icon.ico",
+      "guid": "com.framezoo.desktop"
     },
     "publish": [
       {

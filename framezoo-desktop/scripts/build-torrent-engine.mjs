@@ -17,9 +17,6 @@ const venvPython = path.join(
 );
 const target = process.argv[2] ?? `${process.platform}-${process.arch}`;
 const hostTarget = `${process.platform}-${process.arch}`;
-const usesWindowsArm64CompatibilitySidecar =
-  target === "win32-arm64" && hostTarget === "win32-x64";
-const buildTarget = usesWindowsArm64CompatibilitySidecar ? "win32-x64" : target;
 const supportedTargets = new Set([
   "darwin-arm64",
   "darwin-x64",
@@ -28,8 +25,8 @@ const supportedTargets = new Set([
 ]);
 const binaryName =
   process.platform === "win32" ? "torrent-engine.exe" : "torrent-engine";
-const outputDir = path.join(engineRoot, "bin", buildTarget);
-const buildDir = path.join(engineRoot, ".build", buildTarget);
+const outputDir = path.join(engineRoot, "bin", target);
+const buildDir = path.join(engineRoot, ".build", target);
 
 function fail(message) {
   throw new Error(`[torrent-build] ${message}`);
@@ -39,9 +36,9 @@ function main() {
   if (!supportedTargets.has(target)) {
     fail(`Unsupported target: ${target}`);
   }
-  if (target !== hostTarget && !usesWindowsArm64CompatibilitySidecar) {
+  if (target !== hostTarget) {
     fail(
-      `Target ${target} must be built on a matching ${target} runner; current host is ${hostTarget}.`,
+      `Target ${target} must be built on a matching ${target} runner; current host is ${hostTarget}. Native binaries are required for each platform.`,
     );
   }
   if (!fs.existsSync(venvPython)) {
@@ -94,12 +91,7 @@ function main() {
   if (process.platform !== "win32") {
     fs.chmodSync(outputPath, 0o755);
   }
-  if (usesWindowsArm64CompatibilitySidecar) {
-    console.warn(
-      "[torrent-build] win32-arm64 uses the win32-x64 sidecar for Windows ARM64 emulation.",
-    );
-  }
-  console.log(`[torrent-build] Created ${outputPath}`);
+  console.log(`[torrent-build] Created ${outputPath} for target ${target}`);
 }
 
 try {
