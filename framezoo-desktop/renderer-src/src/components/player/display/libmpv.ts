@@ -359,7 +359,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       ) {
         return;
       }
-      await electronApi?.loadLibMpvSource?.(id, pending.request);
+      const loaded = await electronApi?.loadLibMpvSource?.(id, pending.request);
+      if (loaded === false) {
+        emit("loading", false);
+        emit("error", {
+          type: "mpv",
+          errorName: "libmpv_load_failed",
+          message: "Native libmpv could not load the selected source",
+        });
+        return;
+      }
       await electronApi?.sendLibMpvCommand?.(id, {
         type: "set-subtitle-track",
         trackId: caption?.trackId ?? "no",
@@ -378,6 +387,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       });
       await electronApi?.sendLibMpvCommand?.(id, {
         type: desiredPaused ? "pause" : "play",
+      });
+    }).catch((error) => {
+      emit("loading", false);
+      emit("error", {
+        type: "mpv",
+        errorName: "libmpv_load_failed",
+        message: error instanceof Error ? error.message : String(error),
       });
     });
   }

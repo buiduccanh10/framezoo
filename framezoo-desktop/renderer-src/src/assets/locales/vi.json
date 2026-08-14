@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Đang hoàn tất thiết lập…",
     "loadingApp": "Đang tải ứng dụng...",
     "loadingUser": "Đang tải hồ sơ người dùng...",
     "loadingUserError": {

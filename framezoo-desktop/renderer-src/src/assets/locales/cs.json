@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Dokončování nastavení…",
     "loadingApp": "Načítání aplikace...",
     "loadingUser": "Načítání uživatelského profilu...",
     "loadingUserError": {

@@ -61,6 +61,36 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("stops loading when native source loading returns false", async () => {
+    const errors: Array<{ errorName?: string }> = [];
+    const loading: boolean[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(false),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("loading", (isLoading) => loading.push(isLoading));
+    display.on("error", (error) => errors.push(error));
+    display.load({
+      source: { type: "mp4", url: "https://example.test/video.mkv" } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(loading).toContain(false);
+    expect(errors.at(-1)?.errorName).toBe("libmpv_load_failed");
+    display.destroy();
+  });
+
   it("maps authoritative properties and excludes video tracks", async () => {
     let eventListener:
       | ((event: {

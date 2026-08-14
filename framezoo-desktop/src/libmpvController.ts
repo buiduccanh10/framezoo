@@ -15,6 +15,7 @@ import type {
 type NativePlayerEvent = LibMpvPlayerEvent;
 
 interface NativeLibMpvAddon {
+  warmup?(): boolean;
   createPlayer(
     parentHandle: Buffer,
     bounds: LibMpvBounds,
@@ -160,13 +161,18 @@ export class LibMpvController {
   private players = new Map<string, PlayerRecord>();
   private eventTimers = new Map<string, ReturnType<typeof setTimeout>>();
   private ipcRegistered = false;
+  private startupPreflight: (() => Promise<void>) | null = null;
+  private warmupPromise: Promise<{ ok: boolean; message?: string }> | null =
+    null;
 
   public init(
     mainWindow: BrowserWindow,
     pipWindowProvider?: () => BrowserWindow | null,
+    startupPreflight?: () => Promise<void>,
   ): void {
     this.mainWindow = mainWindow;
     this.pipWindowProvider = pipWindowProvider ?? null;
+    this.startupPreflight = startupPreflight ?? null;
     configureNativeRuntime();
     this.addon = getNativeAddon();
 
@@ -199,6 +205,63 @@ export class LibMpvController {
     });
   }
 
+  public warmup(): Promise<{ ok: boolean; message?: string }> {
+    if (this.warmupPromise) return this.warmupPromise;
+
+    this.warmupPromise = (async () => {
+      if (!this.addon || !this.mainWindow || this.mainWindow.isDestroyed()) {
+        const message = "Native libmpv addon is unavailable";
+        console.warn(
+          "[libmpv] startup warmup skipped: native addon unavailable",
+        );
+        return { ok: false, message };
+      }
+
+      try {
+        if (this.addon.warmup) {
+          if (!this.addon.warmup()) {
+            throw new Error("native libmpv warmup failed");
+          }
+        } else {
+          // Keep compatibility with an older staged addon during app updates.
+          const playerId = this.addon.createPlayer(
+            this.mainWindow.getNativeWindowHandle(),
+            { x: 0, y: 0, width: 1, height: 1 },
+            () => undefined,
+          );
+          // Creating the idle player loads and initializes the libmpv runtime.
+          this.addon.destroyPlayer(playerId);
+        }
+
+        this.broadcastLog("info", "startup_warmup", {
+          component: "libmpv",
+        });
+        return { ok: true };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn("[libmpv] startup warmup failed", {
+          error: message,
+        });
+        return { ok: false, message };
+      }
+    })();
+
+    return this.warmupPromise;
+  }
+
+  private async waitForStartupPreflight(): Promise<void> {
+    if (!this.startupPreflight) return;
+    try {
+      await this.startupPreflight();
+    } catch (error) {
+      // Preflight is best-effort. Do not block playback forever if a native
+      // component fails during startup.
+      console.warn("[libmpv] startup preflight wait failed", {
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
   private registerIpc(): void {
     if (this.ipcRegistered) return;
     this.ipcRegistered = true;
@@ -209,6 +272,7 @@ export class LibMpvController {
         if (!this.mainWindow || event.sender !== this.mainWindow.webContents) {
           return null;
         }
+        await this.waitForStartupPreflight();
         return this.create(request.bounds);
       },
     );
@@ -237,6 +301,7 @@ export class LibMpvController {
     ipcMain.handle(
       "desktop:libmpv-extract-audio",
       async (_event, request: LibMpvAudioRequest) => {
+        await this.waitForStartupPreflight();
         return this.extractAudio(request);
       },
     );

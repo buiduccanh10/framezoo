@@ -33,7 +33,7 @@ import {
   registerTorrentSession,
   scheduleTorrentStop,
 } from "@/desktop/torrentPlaybackStore";
-import type { PlayerMeta } from "@/stores/player/slices/source";
+import { type PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import type {
   SourceQuality,
@@ -209,7 +209,7 @@ export function SourceSelectPart(props: {
   const navigate = useNavigate();
   const addons = useInstalledAddons();
   const progressItems = useProgressStore((state) => state.items);
-  const { playMedia } = usePlayer();
+  const { playMedia, status } = usePlayer();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
   const preferredStream = usePlayerStore((state) => state.preferredStream);
   const setPreferredStream = usePlayerStore(
@@ -489,6 +489,7 @@ export function SourceSelectPart(props: {
     if (
       hasAttemptedAutoSelect.current ||
       mode !== "initial" ||
+      status !== playerStatus.SOURCE_SELECTION ||
       !preferredStream ||
       preferredStream.seriesId !== meta.tmdbId
     ) {
@@ -580,6 +581,7 @@ export function SourceSelectPart(props: {
     preferredStream,
     meta,
     mode,
+    status,
     selectedAddonId,
     enabledAddons,
     qualityOptions,

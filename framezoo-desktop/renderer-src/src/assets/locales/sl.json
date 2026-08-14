@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Končanje nastavitve ...",
     "loadingApp": "Nalaganje aplikacije ...",
     "loadingUser": "Nalaganje uporabniškega profila ...",
     "loadingUserError": {

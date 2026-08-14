@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Completamento della configurazione…",
     "loadingApp": "Caricamento dell'app...",
     "loadingUser": "Caricamento profilo utente...",
     "loadingUserError": {

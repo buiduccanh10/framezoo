@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Настройката завършва…",
     "loadingApp": "Приложението се зарежда...",
     "loadingUser": "Потребителският профил се зарежда...",
     "loadingUserError": {

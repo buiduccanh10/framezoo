@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Afslutter opsætning...",
     "loadingApp": "Indlæser app...",
     "loadingUser": "Indlæser brugerprofil...",
     "loadingUserError": {

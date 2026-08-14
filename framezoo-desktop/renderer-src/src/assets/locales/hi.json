@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "सेटअप पूरा हो रहा है...",
     "loadingApp": "ऐप लोड हो रहा है...",
     "loadingUser": "उपयोगकर्ता प्रोफ़ाइल लोड हो रही है...",
     "loadingUserError": {

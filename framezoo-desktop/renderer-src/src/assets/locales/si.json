@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "පිහිටුවීම අවසන් කරමින්...",
     "loadingApp": "යෙදුම පූරණය කරමින්...",
     "loadingUser": "පරිශීලක පැතිකඩ පූරණය කරමින්...",
     "loadingUserError": {

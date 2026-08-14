@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "正在完成設定...",
     "loadingApp": "正在載入應用程式...",
     "loadingUser": "正在載入用戶個人資料...",
     "loadingUserError": {

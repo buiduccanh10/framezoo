@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Seadistamise lõpetamine…",
     "loadingApp": "Rakenduse laadimine...",
     "loadingUser": "Kasutajaprofiili laadimine...",
     "loadingUserError": {

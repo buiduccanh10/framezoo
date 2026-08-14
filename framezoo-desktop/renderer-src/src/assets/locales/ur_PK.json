@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "سیٹ اپ مکمل ہو رہا ہے…",
     "loadingApp": "ایپ لوڈ ہو رہی ہے...",
     "loadingUser": "صارف کا پروفائل لوڈ ہو رہا ہے...",
     "loadingUserError": {

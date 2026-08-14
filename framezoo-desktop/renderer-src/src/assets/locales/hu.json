@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "A beállítás befejezése…",
     "loadingApp": "Alkalmazás betöltése...",
     "loadingUser": "Felhasználói profil betöltése...",
     "loadingUserError": {

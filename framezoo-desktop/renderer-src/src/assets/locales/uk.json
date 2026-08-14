@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Завершення налаштування…",
     "loadingApp": "Завантаження програми...",
     "loadingUser": "Завантаження профілю користувача...",
     "loadingUserError": {

@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "அமைவை முடிக்கிறது…",
     "loadingApp": "பயன்பாட்டை ஏற்றுகிறது...",
     "loadingUser": "பயனர் சுயவிவரத்தை ஏற்றுகிறது...",
     "loadingUserError": {

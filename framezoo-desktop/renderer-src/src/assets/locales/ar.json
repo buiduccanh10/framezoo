@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "جارٍ الانتهاء من الإعداد…",
     "loadingApp": "جارٍ تحميل التطبيق...",
     "loadingUser": "جارٍ تحميل ملف تعريف المستخدم...",
     "loadingUserError": {

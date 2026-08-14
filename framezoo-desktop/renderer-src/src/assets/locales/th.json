@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "กำลังตั้งค่าให้เสร็จสิ้น…",
     "loadingApp": "กำลังโหลดแอป...",
     "loadingUser": "กำลังโหลดโปรไฟล์ผู้ใช้...",
     "loadingUserError": {

@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Notiek iestatīšanas pabeigšana…",
     "loadingApp": "Notiek lietotnes ielāde...",
     "loadingUser": "Notiek lietotāja profila ielāde...",
     "loadingUserError": {

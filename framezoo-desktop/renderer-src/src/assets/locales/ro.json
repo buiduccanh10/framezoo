@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Se termină configurarea...",
     "loadingApp": "Se încarcă aplicația...",
     "loadingUser": "Se încarcă profilul utilizatorului...",
     "loadingUserError": {

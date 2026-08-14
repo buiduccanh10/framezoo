@@ -196,6 +196,21 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:torrent-warmup-state", handler);
     };
   },
+  getStartupNativeWarmupState(): Promise<unknown> {
+    return ipcRenderer.invoke("desktop:native-warmup-state");
+  },
+  waitForStartupNativeWarmup(): Promise<unknown> {
+    return ipcRenderer.invoke("desktop:native-warmup-wait");
+  },
+  onStartupNativeWarmupState(listener: (state: unknown) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
+      listener(state);
+    };
+    ipcRenderer.on("desktop:native-warmup-state", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:native-warmup-state", handler);
+    };
+  },
   ...(supportsLibMpv
     ? {
         createLibMpvPlayer(bounds: LibMpvBounds): Promise<string | null> {

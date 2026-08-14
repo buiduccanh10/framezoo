@@ -21,5 +21,11 @@ export class UnavailableTorrentEngine implements TorrentEngine {
     return null;
   }
 
+  async warmup() {
+    throw new Error(
+      "Native torrent engine is unavailable. Run the desktop torrent setup or provide FRAMEZOO_TORRENT_ENGINE_PATH.",
+    );
+  }
+
   async dispose() {}
 }

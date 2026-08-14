@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "설정을 완료하는 중…",
     "loadingApp": "앱 로드 중...",
     "loadingUser": "사용자 프로필 로드 중...",
     "loadingUserError": {

@@ -1141,6 +1141,37 @@ napi_value create_player(napi_env env, napi_callback_info info) {
   return result;
 }
 
+napi_value warmup(napi_env env, napi_callback_info) {
+  MpvApi api;
+  std::string load_error;
+  if (!api.load(&load_error)) {
+    return throw_error(env, load_error);
+  }
+
+  mpv_handle* handle = api.create();
+  if (!handle) {
+    api.unload();
+    return throw_error(env, "mpv_create failed during warmup");
+  }
+
+  api.set_option_string(handle, "terminal", "no");
+  api.set_option_string(handle, "vo", "null");
+  api.set_option_string(handle, "ao", "null");
+  api.set_option_string(handle, "idle", "yes");
+
+  const int result = api.initialize(handle);
+  api.terminate_destroy(handle);
+  api.unload();
+
+  if (result < 0) {
+    return throw_error(env, "mpv_initialize failed during warmup");
+  }
+
+  napi_value value;
+  napi_get_boolean(env, true, &value);
+  return value;
+}
+
 napi_value resize_player(napi_env env, napi_callback_info info) {
   size_t argc = 2;
   napi_value argv[2];
@@ -1364,6 +1395,8 @@ napi_value configure_window(napi_env env, napi_callback_info info) {
 
 napi_value init(napi_env env, napi_value exports) {
   napi_property_descriptor methods[] = {
+      {"warmup", nullptr, warmup, nullptr, nullptr, nullptr, napi_default,
+       nullptr},
       {"createPlayer", nullptr, create_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"resizePlayer", nullptr, resize_player, nullptr, nullptr, nullptr,
