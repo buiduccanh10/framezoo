@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  captionIsVisible,
+  getCaptionTimelineIndex,
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
   shiftVttTimestamps,
@@ -126,5 +128,23 @@ Clamped`;
     expect(shifted.map((cue) => [cue.start, cue.end, cue.content])).toEqual([
       [500, 1000, "Clamped"],
     ]);
+  });
+
+  it("treats cue end as exclusive for adjacent subtitles", () => {
+    expect(captionIsVisible(1000, 2000, 0, 1.999)).toBe(true);
+    expect(captionIsVisible(1000, 2000, 0, 2)).toBe(false);
+    expect(captionIsVisible(2000, 3000, 0, 2)).toBe(true);
+  });
+
+  it("selects the next cue at an adjacent cue boundary", () => {
+    const cues = parseCanonicalVtt(`WEBVTT
+
+00:00:01.000 --> 00:00:02.000
+First
+
+00:00:02.000 --> 00:00:03.000
+Second`);
+
+    expect(getCaptionTimelineIndex(cues, 0, 2)).toBe(1);
   });
 });

@@ -16,6 +16,7 @@ import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
 import { Spinner } from "@/components/layout/Spinner";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
+import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { SelectableLink } from "@/components/player/internals/ContextMenu/Links";
 import {
@@ -569,7 +570,7 @@ export function CaptionsView({
   };
   const setCaption = usePlayerStore((s) => s.setCaption);
   const setSecondaryCaption = usePlayerStore((s) => s.setSecondaryCaption);
-  const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoTime = usePlaybackClock();
   const selectedLanguage = usePlayerStore((s) => s.caption.selected?.language);
   const captionList = usePlayerStore((s) => s.captionList);
   const getHlsCaptionList = usePlayerStore((s) => s.display?.getCaptionList);

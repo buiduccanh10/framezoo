@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 
+import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   type CaptionCueType,
   captionIsVisible,
@@ -24,11 +25,11 @@ export const SECONDARY_SUBTITLE_SIZE_SCALE = 0.88;
 // lags the timeline. Rendering cues for the in-flight time makes subtitles
 // flash ahead of the picture, so keep the last stable set of cues until the
 // seek settles.
-function useSeekFrozenCaptions(
-  visibleCaptions: CaptionCueType[],
+function useSeekFrozenCaptions<T>(
+  visibleCaptions: T[],
   isSeeking: boolean,
-): CaptionCueType[] {
-  const lastStableCaptions = useRef<CaptionCueType[]>([]);
+): T[] {
+  const lastStableCaptions = useRef<T[]>([]);
 
   useEffect(() => {
     if (!isSeeking) {
@@ -38,6 +39,11 @@ function useSeekFrozenCaptions(
 
   return isSeeking ? lastStableCaptions.current : visibleCaptions;
 }
+
+type VisibleCaptionCue = {
+  cue: CaptionCueType;
+  sourceIndex: number;
+};
 
 function getRenderedSubtitleStyling(
   styling: SubtitleStyling,
@@ -200,7 +206,7 @@ export function CaptionCue({
 export function SubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoTime = usePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
@@ -216,20 +222,25 @@ export function SubtitleRenderer(props?: {
 
   const visibleCaptions = useMemo(
     () =>
-      parsedCaptions.filter(({ start, end }) =>
-        captionIsVisible(start, end, delay, videoTime),
+      parsedCaptions.flatMap((cue, sourceIndex) =>
+        captionIsVisible(cue.start, cue.end, delay, videoTime)
+          ? [{ cue, sourceIndex }]
+          : [],
       ),
     [parsedCaptions, videoTime, delay],
   );
 
-  const captionsToRender = useSeekFrozenCaptions(visibleCaptions, isSeeking);
+  const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
+    visibleCaptions,
+    isSeeking,
+  );
 
   return (
     <div>
-      {captionsToRender.map(({ start, end, content }, i) => (
+      {captionsToRender.map(({ cue, sourceIndex }) => (
         <CaptionCue
-          key={makeQueId(i, start, end)}
-          text={content}
+          key={makeQueId(sourceIndex, cue.start, cue.end)}
+          text={cue.content}
           styling={renderedStyling}
           overrideCasing={overrideCasing}
           useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
@@ -242,7 +253,7 @@ export function SubtitleRenderer(props?: {
 export function SecondarySubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoTime = usePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
@@ -263,22 +274,27 @@ export function SecondarySubtitleRenderer(props?: {
 
   const visibleCaptions = useMemo(
     () =>
-      parsedCaptions.filter(({ start, end }) =>
-        captionIsVisible(start, end, delay, videoTime),
+      parsedCaptions.flatMap((cue, sourceIndex) =>
+        captionIsVisible(cue.start, cue.end, delay, videoTime)
+          ? [{ cue, sourceIndex }]
+          : [],
       ),
     [parsedCaptions, videoTime, delay],
   );
 
-  const captionsToRender = useSeekFrozenCaptions(visibleCaptions, isSeeking);
+  const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
+    visibleCaptions,
+    isSeeking,
+  );
 
   if (!vttData) return null;
 
   return (
     <div className="opacity-90" style={{ opacity: 0.9 }}>
-      {captionsToRender.map(({ start, end, content }, i) => (
+      {captionsToRender.map(({ cue, sourceIndex }) => (
         <CaptionCue
-          key={`secondary-${makeQueId(i, start, end)}`}
-          text={content}
+          key={`secondary-${makeQueId(sourceIndex, cue.start, cue.end)}`}
+          text={cue.content}
           styling={renderedStyling}
           overrideCasing={overrideCasing}
           useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
