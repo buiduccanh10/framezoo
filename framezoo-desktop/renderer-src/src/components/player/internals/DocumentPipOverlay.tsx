@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 import { Icon, Icons } from "@/components/Icon";
 import { getDocumentPictureInPictureRoots } from "@/components/player/utils/documentPictureInPicture";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { durationExceedsHour, formatSeconds } from "@/utils/formatSeconds";
@@ -21,6 +22,7 @@ function DocumentPipButton(props: {
   icon: Icons;
   label: string;
   onClick(): void;
+  disabled?: boolean;
   large?: boolean;
   className?: string;
 }) {
@@ -30,9 +32,12 @@ function DocumentPipButton(props: {
       aria-label={props.label}
       title={props.label}
       onClick={props.onClick}
+      disabled={props.disabled}
       className={`flex items-center justify-center rounded-full border border-white/20 bg-black/35 text-white transition duration-200 hover:bg-black/60 active:scale-95 ${
         props.large ? "h-16 w-16" : "h-10 w-10"
-      } ${props.className ?? ""}`}
+      } ${props.disabled ? "cursor-not-allowed opacity-50" : ""} ${
+        props.className ?? ""
+      }`}
     >
       <Icon
         icon={props.icon}
@@ -49,6 +54,12 @@ export function DocumentPipOverlay() {
   const time = usePlayerStore((s) => s.progress.time);
   const duration = usePlayerStore((s) => s.progress.duration);
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
+  const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
+  const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
+  const isPlaybackLocked = isPlaybackInteractionLocked(
+    mediaPlaying,
+    isSubtitleSyncActive,
+  );
   const pictureInPictureMode = usePlayerStore(
     (s) => s.interface.pictureInPictureMode,
   );
@@ -93,9 +104,10 @@ export function DocumentPipOverlay() {
 
   const seekTo = useCallback(
     (nextTime: number) => {
+      if (isPlaybackLocked) return;
       display?.setTime(clampTime(nextTime, duration));
     },
-    [display, duration],
+    [display, duration, isPlaybackLocked],
   );
 
   const seekBy = useCallback(
@@ -106,13 +118,19 @@ export function DocumentPipOverlay() {
   );
 
   const togglePlayback = useCallback(() => {
-    if (!display) return;
+    if (!display || isPlaybackLocked) return;
     if (isPaused) {
       display.play();
     } else {
       display.pause();
     }
-  }, [display, isPaused]);
+  }, [display, isPaused, isPlaybackLocked]);
+
+  useEffect(() => {
+    if (!isPlaybackLocked || !isScrubbing) return;
+    setIsScrubbing(false);
+    setSeeking(false);
+  }, [isPlaybackLocked, isScrubbing, setSeeking]);
 
   useEffect(() => {
     scheduleControlsHide();
@@ -205,12 +223,14 @@ export function DocumentPipOverlay() {
             icon={Icons.SKIP_BACKWARD}
             label="Seek backward 10 seconds"
             onClick={() => seekBy(-10)}
+            disabled={isPlaybackLocked}
             className="h-14 w-14 bg-black/20 backdrop-blur-md"
           />
           <DocumentPipButton
             icon={isPaused ? Icons.PLAY : Icons.PAUSE}
             label={isPaused ? "Play" : "Pause"}
             onClick={togglePlayback}
+            disabled={isPlaybackLocked}
             large
             className="bg-white/18 backdrop-blur-md"
           />
@@ -218,6 +238,7 @@ export function DocumentPipOverlay() {
             icon={Icons.SKIP_FORWARD}
             label="Seek forward 10 seconds"
             onClick={() => seekBy(10)}
+            disabled={isPlaybackLocked}
             className="h-14 w-14 bg-black/20 backdrop-blur-md"
           />
         </div>
@@ -239,7 +260,9 @@ export function DocumentPipOverlay() {
               max={Math.max(duration, 0)}
               step={0.1}
               value={duration > 0 ? effectiveTime : 0}
+              disabled={isPlaybackLocked}
               onPointerDown={() => {
+                if (isPlaybackLocked) return;
                 setIsScrubbing(true);
                 setSeeking(true);
                 revealControls();
@@ -254,6 +277,7 @@ export function DocumentPipOverlay() {
                 setSeeking(false);
               }}
               onChange={(event) => {
+                if (isPlaybackLocked) return;
                 seekTo(Number(event.currentTarget.value));
               }}
               className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/18 accent-white"

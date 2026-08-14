@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "支持的音频语言",
         "syncSubtitleSuccess": "字幕同步成功",
         "syncSubtitleFailed": "无法同步字幕",
+        "syncSubtitleFailedWithDetail": "无法同步字幕：{{detail}}",
         "syncSubtitleOpen": "与AI同步字幕",
         "syncSubtitleAction": "同步",
+        "syncSubtitlePreparing": "正在准备音频...",
+        "syncSubtitleWorking": "Framezoo 正在同步字幕...",
+        "syncSubtitleApplying": "正在应用字幕同步...",
         "settings": {
           "backlink": "自定义字幕",
           "delay": "字幕偏移",

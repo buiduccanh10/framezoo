@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "ភាសាអូឌីយ៉ូដែលគាំទ្រ",
         "syncSubtitleSuccess": "ចំណងជើងរងត្រូវបានធ្វើសមកាលកម្មដោយជោគជ័យ",
         "syncSubtitleFailed": "មិនអាចធ្វើសមកាលកម្មចំណងជើងរងបានទេ។",
+        "syncSubtitleFailedWithDetail": "មិនអាចធ្វើសមកាលកម្មចំណងជើងរង៖ {{detail}}",
         "syncSubtitleOpen": "ធ្វើសមកាលកម្មចំណងជើងរងជាមួយ AI",
         "syncSubtitleAction": "ធ្វើសមកាលកម្ម",
+        "syncSubtitlePreparing": "កំពុងរៀបចំអូឌីយ៉ូ...",
+        "syncSubtitleWorking": "Framezoo កំពុងធ្វើសមកាលកម្មចំណងជើងរង...",
+        "syncSubtitleApplying": "កំពុងអនុវត្តការធ្វើសមកាលកម្មចំណងជើងរង...",
         "settings": {
           "backlink": "ចំណងជើងរងផ្ទាល់ខ្លួន",
           "delay": "ការពន្យារពេលចំណងជើងរង",

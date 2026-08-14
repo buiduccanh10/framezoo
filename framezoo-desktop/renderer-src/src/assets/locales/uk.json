@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Підтримувані мови аудіо",
         "syncSubtitleSuccess": "Субтитри успішно синхронізовано",
         "syncSubtitleFailed": "Не вдалося синхронізувати субтитри",
+        "syncSubtitleFailedWithDetail": "Не вдалося синхронізувати субтитри: {{detail}}",
         "syncSubtitleOpen": "Синхронізувати субтитри з AI",
         "syncSubtitleAction": "Синхронізувати",
+        "syncSubtitlePreparing": "Підготовка аудіо...",
+        "syncSubtitleWorking": "Framezoo синхронізує субтитри...",
+        "syncSubtitleApplying": "Застосування синхронізації субтитрів...",
         "settings": {
           "backlink": "Власні субтитри",
           "delay": "Затримка субтитрів",

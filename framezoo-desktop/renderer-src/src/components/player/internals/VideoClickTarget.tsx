@@ -4,6 +4,7 @@ import { useEffectOnce, useTimeoutFn } from "react-use";
 
 import { Seek, SeekDirection } from "@/components/player/atoms/Seek";
 import { useShouldShowVideoElement } from "@/components/player/internals/VideoContainer";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { PlayerHoverState } from "@/stores/player/slices/interface";
 import { usePlayerStore } from "@/stores/player/store";
@@ -17,6 +18,11 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const hasRenderedFrame = usePlayerStore(
     (s) => s.mediaPlaying.hasRenderedFrame,
+  );
+  const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
+  const isPlaybackLocked = isPlaybackInteractionLocked(
+    { isLoading, hasRenderedFrame },
+    isSubtitleSyncActive,
   );
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
   const updateInterfaceHovering = usePlayerStore(
@@ -49,12 +55,47 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const singleTapTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  useEffect(() => {
+    if (!isPlaybackLocked) return;
+
+    if (singleTapTimeout.current) {
+      clearTimeout(singleTapTimeout.current);
+      singleTapTimeout.current = null;
+    }
+    if (boostTimeoutRef.current) {
+      clearTimeout(boostTimeoutRef.current);
+      boostTimeoutRef.current = null;
+    }
+    if (speedIndicatorTimeoutRef.current) {
+      clearTimeout(speedIndicatorTimeoutRef.current);
+      speedIndicatorTimeoutRef.current = null;
+    }
+
+    if (isHoldingRef.current) {
+      display?.setPlaybackRate(previousRateRef.current);
+      isHoldingRef.current = false;
+    }
+
+    setIsPendingBoost(false);
+    setSpeedBoosted(false);
+    setShowSpeedIndicator(false);
+    setCurrentOverlay(null);
+  }, [
+    display,
+    isPlaybackLocked,
+    setCurrentOverlay,
+    setShowSpeedIndicator,
+    setSpeedBoosted,
+  ]);
+
   const toggleFullscreen = useCallback(() => {
     display?.toggleFullscreen();
   }, [display]);
 
   const handleDoubleClick = useCallback(
     (e: PointerEvent<HTMLDivElement>) => {
+      if (isPlaybackLocked) return;
+
       if (!enableDoubleClickToSeek) {
         toggleFullscreen();
         return;
@@ -77,7 +118,13 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
         toggleFullscreen();
       }
     },
-    [display, toggleFullscreen, enableDoubleClickToSeek, time],
+    [
+      display,
+      toggleFullscreen,
+      enableDoubleClickToSeek,
+      time,
+      isPlaybackLocked,
+    ],
   );
 
   useEffect(() => {
@@ -93,6 +140,8 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
 
   const togglePause = useCallback(
     (e: PointerEvent<HTMLDivElement>) => {
+      if (isPlaybackLocked) return;
+
       // Don't toggle pause if holding for speed change
       if (!isPaused && (isLoading || !hasRenderedFrame)) {
         return;
@@ -134,11 +183,14 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       isSeeking,
       isLoading,
       hasRenderedFrame,
+      isPlaybackLocked,
     ],
   );
 
   const handleTap = useCallback(
     (e: PointerEvent<HTMLDivElement>) => {
+      if (isPlaybackLocked) return;
+
       if (e.pointerType === "mouse" && e.button !== 0) return;
 
       if (singleTapTimeout.current) {
@@ -157,11 +209,13 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
         }, 250);
       }
     },
-    [handleDoubleClick, togglePause, enableDoubleClickToSeek],
+    [handleDoubleClick, togglePause, enableDoubleClickToSeek, isPlaybackLocked],
   );
 
   const handlePointerDown = useCallback(
     (e: PointerEvent<HTMLDivElement>) => {
+      if (isPlaybackLocked) return;
+
       if (
         ((e.pointerType === "mouse" && e.button === 0) ||
           e.pointerType === "touch") &&
@@ -208,11 +262,14 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       isInWatchParty,
       isLoading,
       hasRenderedFrame,
+      isPlaybackLocked,
     ],
   );
 
   const handlePointerUp = useCallback(
     (e: PointerEvent<HTMLDivElement>) => {
+      if (isPlaybackLocked) return;
+
       // If we have a pending boost that hasn't activated yet, clear it
       if (isPendingBoost) {
         clearTimeout(boostTimeoutRef.current!);
@@ -255,11 +312,14 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
       setShowSpeedIndicator,
       setCurrentOverlay,
       isPendingBoost,
+      isPlaybackLocked,
     ],
   );
 
   // Handle case where mouse leaves the player while still pressed
   const handlePointerLeave = useCallback(() => {
+    if (isPlaybackLocked) return;
+
     // Clear pending boost if mouse leaves
     if (isPendingBoost) {
       clearTimeout(boostTimeoutRef.current!);
@@ -290,6 +350,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
     setShowSpeedIndicator,
     setCurrentOverlay,
     isPendingBoost,
+    isPlaybackLocked,
   ]);
 
   if (!show) return null;

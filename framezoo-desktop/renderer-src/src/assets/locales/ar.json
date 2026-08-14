@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "اللغات الصوتية المدعومة",
         "syncSubtitleSuccess": "تمت مزامنة الترجمة بنجاح",
         "syncSubtitleFailed": "تعذرت مزامنة الترجمة",
+        "syncSubtitleFailedWithDetail": "تعذرت مزامنة العنوان الفرعي: {{detail}}",
         "syncSubtitleOpen": "مزامنة الترجمة مع الذكاء الاصطناعي",
         "syncSubtitleAction": "مزامنة",
+        "syncSubtitlePreparing": "جاري تحضير الصوت...",
+        "syncSubtitleWorking": "يقوم Framezoo بمزامنة الترجمة...",
+        "syncSubtitleApplying": "جارٍ تطبيق مزامنة الترجمة...",
         "settings": {
           "backlink": "ترجمة مخصصة",
           "delay": "تأخير الترجمة",

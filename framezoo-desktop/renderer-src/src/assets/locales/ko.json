@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "지원되는 오디오 언어",
         "syncSubtitleSuccess": "자막이 동기화되었습니다.",
         "syncSubtitleFailed": "자막을 동기화할 수 없습니다.",
+        "syncSubtitleFailedWithDetail": "자막을 동기화할 수 없습니다: {{detail}}",
         "syncSubtitleOpen": "AI와 자막 동기화",
         "syncSubtitleAction": "동조",
+        "syncSubtitlePreparing": "오디오 준비 중...",
+        "syncSubtitleWorking": "Framezoo에서 자막을 동기화하는 중입니다...",
+        "syncSubtitleApplying": "자막 동기화 적용 중...",
         "settings": {
           "backlink": "자막 커스텀",
           "delay": "자막 딜레이",

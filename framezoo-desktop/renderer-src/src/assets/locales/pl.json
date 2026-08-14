@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Obsługiwane języki audio",
         "syncSubtitleSuccess": "Napisy zostały pomyślnie zsynchronizowane",
         "syncSubtitleFailed": "Nie można zsynchronizować napisów",
+        "syncSubtitleFailedWithDetail": "Nie można zsynchronizować napisów: {{detail}}",
         "syncSubtitleOpen": "Synchronizuj napisy z AI",
         "syncSubtitleAction": "Synchronizuj",
+        "syncSubtitlePreparing": "Przygotowywanie dźwięku...",
+        "syncSubtitleWorking": "Framezoo synchronizuje napisy...",
+        "syncSubtitleApplying": "Stosowanie synchronizacji napisów...",
         "settings": {
           "backlink": "Własne napisy",
           "delay": "Opóźnienie napisów",

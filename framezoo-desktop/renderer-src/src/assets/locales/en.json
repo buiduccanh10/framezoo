@@ -815,8 +815,12 @@
         "syncSubtitleSupportedLanguages": "Supported audio languages",
         "syncSubtitleSuccess": "Subtitle synced successfully",
         "syncSubtitleFailed": "Could not sync subtitle",
+        "syncSubtitleFailedWithDetail": "Could not sync subtitle: {{detail}}",
         "syncSubtitleOpen": "Sync subtitle with AI",
         "syncSubtitleAction": "Sync",
+        "syncSubtitlePreparing": "Preparing audio...",
+        "syncSubtitleWorking": "Framezoo is syncing subtitles...",
+        "syncSubtitleApplying": "Applying subtitle sync...",
         "settings": {
           "backlink": "Custom subtitles",
           "delay": "Subtitle delay",

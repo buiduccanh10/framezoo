@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Ljudspråk som stöds",
         "syncSubtitleSuccess": "Undertexten har synkroniserats",
         "syncSubtitleFailed": "Det gick inte att synkronisera undertexten",
+        "syncSubtitleFailedWithDetail": "Det gick inte att synkronisera undertexten: {{detail}}",
         "syncSubtitleOpen": "Synkronisera undertext med AI",
         "syncSubtitleAction": "Synkronisera",
+        "syncSubtitlePreparing": "Förbereder ljud...",
+        "syncSubtitleWorking": "Framezoo synkroniserar undertexter...",
+        "syncSubtitleApplying": "Använder undertextsynkronisering...",
         "settings": {
           "backlink": "Anpassade undertexter",
           "delay": "Undertexts fördrivning",

@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "සහාය දක්වන ශ්‍රව්‍ය භාෂා",
         "syncSubtitleSuccess": "උපසිරැසි සාර්ථකව සමමුහුර්ත විය",
         "syncSubtitleFailed": "උපසිරැසි සමමුහුර්ත කිරීමට නොහැකි විය",
+        "syncSubtitleFailedWithDetail": "උපසිරැසි සමමුහුර්ත කිරීමට නොහැකි විය: {{detail}}",
         "syncSubtitleOpen": "AI සමඟ උපසිරැසි සමමුහුර්ත කරන්න",
         "syncSubtitleAction": "සමමුහුර්ත කරන්න",
+        "syncSubtitlePreparing": "ශ්‍රව්‍ය සූදානම් කරමින්...",
+        "syncSubtitleWorking": "Framezoo උපසිරැසි සමමුහුර්ත කරයි...",
+        "syncSubtitleApplying": "උපසිරැසි සමමුහුර්ත කිරීම යොදමින්...",
         "settings": {
           "backlink": "අභිරුචි උපසිරැසි",
           "delay": "උපසිරැසි ප්‍රමාදය",

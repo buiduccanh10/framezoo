@@ -45,12 +45,48 @@ const config: Config = {
           "0%": { transform: "translateX(0) scale(1)", opacity: "1" },
           "100%": { transform: "translateX(50px) scale(1.2)", opacity: "0" },
         },
+        "ai-progress-scan": {
+          "0%": {
+            left: "-18%",
+            transform: "scaleX(0.75)",
+            opacity: "0",
+          },
+          "12%": { left: "0%", opacity: "1" },
+          "48%": {
+            left: "48%",
+            transform: "scaleX(1)",
+            opacity: "0.95",
+          },
+          "78%, 100%": {
+            left: "118%",
+            transform: "scaleX(1.2)",
+            opacity: "0",
+          },
+        },
+        "ai-progress-shimmer": {
+          "0%": { backgroundPosition: "200% 0" },
+          "100%": { backgroundPosition: "-20% 0" },
+        },
+        "ai-progress-grid": {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "28px 0" },
+        },
+        "ai-progress-orbit": {
+          "0%": { transform: "rotate(0deg) scale(0.9)", opacity: "0.45" },
+          "50%": { transform: "rotate(180deg) scale(1)", opacity: "1" },
+          "100%": { transform: "rotate(360deg) scale(0.9)", opacity: "0.45" },
+        },
       },
       animation: {
         "loading-pin": "loading-pin 1.8s ease-in-out infinite",
         "fade-in": "fade-in 200ms ease-out forwards",
         "seek-left": "seek-left 0.5s cubic-bezier(0, 0, 0.2, 1) forwards",
         "seek-right": "seek-right 0.5s cubic-bezier(0, 0, 0.2, 1) forwards",
+        "ai-progress-scan":
+          "ai-progress-scan 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite",
+        "ai-progress-shimmer": "ai-progress-shimmer 1.6s linear infinite",
+        "ai-progress-grid": "ai-progress-grid 1.4s linear infinite",
+        "ai-progress-orbit": "ai-progress-orbit 1.8s linear infinite",
       },
     },
   },

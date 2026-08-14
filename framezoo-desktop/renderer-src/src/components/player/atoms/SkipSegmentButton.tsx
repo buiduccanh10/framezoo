@@ -9,6 +9,7 @@ import {
   getSegmentBoundsSeconds,
 } from "@/components/player/hooks/useSkipTime";
 import { useSkipTracking } from "@/components/player/hooks/useSkipTracking";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { Transition } from "@/components/utils/Transition";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -69,16 +70,19 @@ function isEndingAtVideoEnd(segment: SegmentData, duration: number): boolean {
 function Button(props: {
   className: string;
   onClick?: () => void;
+  disabled?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <button
       className={classNames(
         "font-bold rounded h-10 w-40 scale-95 hover:scale-100 transition-all duration-200",
+        props.disabled && "cursor-not-allowed opacity-50",
         props.className,
       )}
       type="button"
       onClick={props.onClick}
+      disabled={props.disabled}
     >
       {props.children}
     </button>
@@ -98,6 +102,12 @@ function SkipSegmentButton(props: {
   const status = usePlayerStore((s) => s.status);
   const display = usePlayerStore((s) => s.display);
   const meta = usePlayerStore((s) => s.meta);
+  const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
+  const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
+  const isPlaybackLocked = isPlaybackInteractionLocked(
+    mediaPlaying,
+    isSubtitleSyncActive,
+  );
   const { addSkipEvent } = useSkipTracking(20);
 
   const endingSegment =
@@ -122,7 +132,7 @@ function SkipSegmentButton(props: {
 
   const handleSkip = useCallback(
     (segment: SegmentData) => {
-      if (!display) return;
+      if (!display || isPlaybackLocked) return;
       const bounds = getSegmentBoundsSeconds(segment, _duration);
       if (!bounds) return;
 
@@ -160,7 +170,7 @@ function SkipSegmentButton(props: {
       // eslint-disable-next-line no-console
       console.log(`Skip ${segment.type} button used: ${skipDuration}s total`);
     },
-    [display, time, _duration, addSkipEvent, meta, props],
+    [display, time, _duration, addSkipEvent, meta, props, isPlaybackLocked],
   );
 
   if (!props.inControl) return null;
@@ -208,6 +218,7 @@ function SkipSegmentButton(props: {
               >
                 <Button
                   onClick={() => handleSkip(segment)}
+                  disabled={isPlaybackLocked}
                   className="bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText flex justify-center items-center"
                 >
                   <Icon className="text-xl mr-1" icon={Icons.SKIP_EPISODE} />

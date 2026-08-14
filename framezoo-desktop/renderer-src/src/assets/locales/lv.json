@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Atbalstītās audio valodas",
         "syncSubtitleSuccess": "Subtitri veiksmīgi sinhronizēti",
         "syncSubtitleFailed": "Nevarēja sinhronizēt subtitrus",
+        "syncSubtitleFailedWithDetail": "Nevarēja sinhronizēt subtitrus: {{detail}}",
         "syncSubtitleOpen": "Sinhronizējiet subtitrus ar AI",
         "syncSubtitleAction": "Sinhronizēt",
+        "syncSubtitlePreparing": "Notiek audio sagatavošana...",
+        "syncSubtitleWorking": "Framezoo sinhronizē subtitrus...",
+        "syncSubtitleApplying": "Notiek subtitru sinhronizēšana...",
         "settings": {
           "backlink": "Pielāgoti subtitri",
           "delay": "Subtitru aizkave",

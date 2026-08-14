@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Desteklenen ses dilleri",
         "syncSubtitleSuccess": "Altyazı başarıyla senkronize edildi",
         "syncSubtitleFailed": "Altyazı senkronize edilemedi",
+        "syncSubtitleFailedWithDetail": "Altyazı senkronize edilemedi: {{detail}}",
         "syncSubtitleOpen": "Altyazıyı AI ile senkronize edin",
         "syncSubtitleAction": "Senkronizasyon",
+        "syncSubtitlePreparing": "Ses hazırlanıyor...",
+        "syncSubtitleWorking": "Framezoo altyazıları senkronize ediyor...",
+        "syncSubtitleApplying": "Altyazı senkronizasyonu uygulanıyor...",
         "settings": {
           "backlink": "Kişisel altyazılar",
           "delay": "Altyazı gecikmesi",

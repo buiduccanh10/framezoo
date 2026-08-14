@@ -68,12 +68,7 @@ export function TranscriptView({
   const setDelay =
     selectionMode === "secondary" ? setSecondaryDelay : setPrimaryDelay;
   const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
-  const {
-    syncSelectedCaption,
-    canSyncSelectedCaption,
-    isSyncingSubtitle,
-    syncSubtitleProgress,
-  } = useCaptions();
+  const { syncSelectedCaption, canSyncSelectedCaption } = useCaptions();
   const syncModal = useModal("subtitle-sync-confirm");
   const showToast = useToastStore((s) => s.showToast);
 
@@ -88,8 +83,9 @@ export function TranscriptView({
 
   const handleConfirmSync = async () => {
     syncModal.hide();
+    router.close();
     const outcome = await syncSelectedCaption();
-    if (outcome === "success") {
+    if (outcome.status === "success") {
       showToast(
         t("player.menus.subtitles.syncSubtitleSuccess", {
           defaultValue: "Subtitle synced successfully",
@@ -100,9 +96,14 @@ export function TranscriptView({
     }
 
     showToast(
-      t("player.menus.subtitles.syncSubtitleFailed", {
-        defaultValue: "Could not sync subtitle",
-      }),
+      outcome.errorMessage
+        ? t("player.menus.subtitles.syncSubtitleFailedWithDetail", {
+            defaultValue: "Could not sync subtitle: {{detail}}",
+            detail: outcome.errorMessage,
+          })
+        : t("player.menus.subtitles.syncSubtitleFailed", {
+            defaultValue: "Could not sync subtitle",
+          }),
       "error",
     );
   };
@@ -291,7 +292,6 @@ export function TranscriptView({
             <button
               type="button"
               onClick={() => syncModal.show()}
-              disabled={isSyncingSubtitle}
               className="mr-[-0.5rem] flex h-8 w-8 items-center justify-center rounded-md text-video-context-type-accent transition-colors hover:bg-video-context-type-accent/15 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label={t(
                 "player.menus.subtitles.syncSubtitleOpen",
@@ -302,19 +302,7 @@ export function TranscriptView({
                 "Sync subtitle with AI",
               )}
             >
-              {isSyncingSubtitle ? (
-                <div className="relative flex h-full w-full items-center justify-center">
-                  <Icon
-                    icon={Icons.PROGRESS_SPINNER}
-                    className="absolute text-2xl animate-spin text-video-context-type-accent"
-                  />
-                  <span className="absolute text-[10px] font-bold text-video-context-type-accent">
-                    {Math.round((syncSubtitleProgress ?? 0) * 100)}%
-                  </span>
-                </div>
-              ) : (
-                <Icon icon={Icons.WAND} className="text-2xl" />
-              )}
+              <Icon icon={Icons.WAND} className="text-2xl" />
             </button>
           ) : null
         }
@@ -366,11 +354,7 @@ export function TranscriptView({
               </div>
 
               <div className="flex justify-end gap-2">
-                <Button
-                  theme="secondary"
-                  onClick={() => syncModal.hide()}
-                  disabled={isSyncingSubtitle}
-                >
+                <Button theme="secondary" onClick={() => syncModal.hide()}>
                   {t("actions.cancel")}
                 </Button>
                 <Button

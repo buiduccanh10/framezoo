@@ -86,6 +86,14 @@ export interface CaptionListItem {
 
 export type SubtitleTrack = "primary" | "secondary";
 
+export type SubtitleSyncPhase = "idle" | "pausing" | "analyzing" | "applying";
+
+export interface SubtitleSyncState {
+  active: boolean;
+  phase: SubtitleSyncPhase;
+  progress: number;
+}
+
 export interface AudioTrack {
   id: string;
   label: string;
@@ -141,7 +149,9 @@ export interface SourceSlice {
   };
   meta: PlayerMeta | null;
   preferredStream: PreferredStream | null;
+  subtitleSync: SubtitleSyncState;
   setPreferredStream(stream: PreferredStream | null): void;
+  setSubtitleSyncState(state: SubtitleSyncState): void;
   setStatus(status: PlayerStatus): void;
   setSource(
     stream: SourceSliceSource,
@@ -326,9 +336,19 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   segmentQualityDebug: null,
   currentAudioTrack: null,
   preferredStream: null,
+  subtitleSync: {
+    active: false,
+    phase: "idle",
+    progress: 0,
+  },
   setPreferredStream(stream) {
     set((s) => {
       s.preferredStream = stream;
+    });
+  },
+  setSubtitleSyncState(state) {
+    set((s) => {
+      s.subtitleSync = state;
     });
   },
   status: playerStatus.IDLE,
@@ -586,6 +606,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.currentQuality = null;
       s.segmentQualityDebug = null;
       s.currentAudioTrack = null;
+      s.subtitleSync = {
+        active: false,
+        phase: "idle",
+        progress: 0,
+      };
       s.status = playerStatus.IDLE;
       s.meta = null;
       s.mediaPlaying.isPlaying = isAutoplayAllowed();

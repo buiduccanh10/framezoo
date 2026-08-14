@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "समर्थित अडियो भाषाहरू",
         "syncSubtitleSuccess": "उपशीर्षक सफलतापूर्वक सिंक गरियो",
         "syncSubtitleFailed": "उपशीर्षक सिंक गर्न सकिएन",
+        "syncSubtitleFailedWithDetail": "उपशीर्षक सिंक गर्न सकिएन: {{detail}}",
         "syncSubtitleOpen": "AI सँग उपशीर्षक सिंक गर्नुहोस्",
         "syncSubtitleAction": "सिंक",
+        "syncSubtitlePreparing": "अडियो तयार गर्दै...",
+        "syncSubtitleWorking": "Framezoo उपशीर्षकहरू सिंक गर्दैछ...",
+        "syncSubtitleApplying": "उपशीर्षक सिंक लागू गर्दै...",
         "settings": {
           "backlink": "अनुकूलन उपशीर्षकहरू",
           "delay": "उपशीर्षकको ढिलाइ",

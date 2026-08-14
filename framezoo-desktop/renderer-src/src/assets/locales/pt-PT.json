@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Idiomas de áudio suportados",
         "syncSubtitleSuccess": "Legenda sincronizada com sucesso",
         "syncSubtitleFailed": "Não foi possível sincronizar a legenda",
+        "syncSubtitleFailedWithDetail": "Não foi possível sincronizar a legenda: {{detail}}",
         "syncSubtitleOpen": "Sincronize legendas com IA",
         "syncSubtitleAction": "Sincronizar",
+        "syncSubtitlePreparing": "Preparando áudio...",
+        "syncSubtitleWorking": "Framezoo está sincronizando legendas...",
+        "syncSubtitleApplying": "Aplicando sincronização de legendas...",
         "settings": {
           "backlink": "Legendas personalizadas",
           "delay": "Atraso das legendas",

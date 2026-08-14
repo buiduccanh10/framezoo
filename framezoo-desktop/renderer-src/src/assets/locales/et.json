@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Toetatud helikeeled",
         "syncSubtitleSuccess": "Subtiitrite sünkroonimine õnnestus",
         "syncSubtitleFailed": "Subtiitreid ei saanud sünkroonida",
+        "syncSubtitleFailedWithDetail": "Subtiitreid ei saanud sünkroonida: {{detail}}",
         "syncSubtitleOpen": "Sünkroonige subtiitrid tehisintellektiga",
         "syncSubtitleAction": "Sünkroonimine",
+        "syncSubtitlePreparing": "Heli ettevalmistamine...",
+        "syncSubtitleWorking": "Framezoo sünkroonib subtiitreid...",
+        "syncSubtitleApplying": "Subtiitrite sünkroonimise rakendamine...",
         "settings": {
           "backlink": "Kohandatud subtiitrid",
           "delay": "Subtiitrite viivitus",

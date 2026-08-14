@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { usePlayerStore } from "@/stores/player/store";
 
 import { usePlayerMeta } from "../hooks/usePlayerMeta";
@@ -25,6 +26,15 @@ export function MediaSession() {
       );
 
       if (!meta || !nextEp) return;
+      const state = usePlayerStore.getState();
+      if (
+        isPlaybackInteractionLocked(
+          state.mediaPlaying,
+          state.subtitleSync.active,
+        )
+      )
+        return;
+
       const metaCopy = { ...meta };
       metaCopy.episode = nextEp;
       setShouldStartFromBeginning(true);
@@ -161,19 +171,44 @@ export function MediaSession() {
     });
 
     navigator.mediaSession.setActionHandler("play", () => {
-      if (mediaPlaying.isLoading) return;
+      const state = usePlayerStore.getState();
+      if (
+        isPlaybackInteractionLocked(
+          state.mediaPlaying,
+          state.subtitleSync.active,
+        )
+      ) {
+        return;
+      }
       display?.play();
       updatePositionState(progress.time);
     });
 
     navigator.mediaSession.setActionHandler("pause", () => {
-      if (mediaPlaying.isLoading) return;
+      const state = usePlayerStore.getState();
+      if (
+        isPlaybackInteractionLocked(
+          state.mediaPlaying,
+          state.subtitleSync.active,
+        )
+      ) {
+        return;
+      }
       display?.pause();
       updatePositionState(progress.time);
     });
 
     navigator.mediaSession.setActionHandler("seekto", (e) => {
-      if (e.seekTime == null) return;
+      const state = usePlayerStore.getState();
+      if (
+        e.seekTime == null ||
+        isPlaybackInteractionLocked(
+          state.mediaPlaying,
+          state.subtitleSync.active,
+        )
+      ) {
+        return;
+      }
       display?.setTime(e.seekTime);
       updatePositionState(e.seekTime);
     });
