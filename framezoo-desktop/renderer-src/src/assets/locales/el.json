@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Υποστηριζόμενες γλώσσες ήχου",
         "syncSubtitleSuccess": "Οι υπότιτλοι συγχρονίστηκαν με επιτυχία",
         "syncSubtitleFailed": "Δεν ήταν δυνατός ο συγχρονισμός των υπότιτλων",
+        "syncSubtitleFailedWithDetail": "Δεν ήταν δυνατός ο συγχρονισμός των υπότιτλων: {{detail}}",
         "syncSubtitleOpen": "Συγχρονισμός υποτίτλων με AI",
         "syncSubtitleAction": "Συγχρονισμός",
+        "syncSubtitlePreparing": "Προετοιμασία ήχου...",
+        "syncSubtitleWorking": "Το Framezoo συγχρονίζει υπότιτλους...",
+        "syncSubtitleApplying": "Εφαρμογή συγχρονισμού υπότιτλων...",
         "settings": {
           "backlink": "Προσαρμοσμένοι υπότιτλοι",
           "delay": "Καθυστέρηση υποτίτλων",

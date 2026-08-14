@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Limbi audio acceptate",
         "syncSubtitleSuccess": "Subtitrarea a fost sincronizată cu succes",
         "syncSubtitleFailed": "Subtitrarea nu a putut fi sincronizată",
+        "syncSubtitleFailedWithDetail": "Nu s-a putut sincroniza subtitrarea: {{detail}}",
         "syncSubtitleOpen": "Sincronizați subtitrarea cu AI",
         "syncSubtitleAction": "Sincronizare",
+        "syncSubtitlePreparing": "Se pregătește sunetul...",
+        "syncSubtitleWorking": "Framezoo sincronizează subtitrările...",
+        "syncSubtitleApplying": "Se aplică sincronizarea subtitrarilor...",
         "settings": {
           "backlink": "Subtitluri personalizate",
           "delay": "Intârziera subtitlurilor",

@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "שפות שמע נתמכות",
         "syncSubtitleSuccess": "כתוביות סנכרון בהצלחה",
         "syncSubtitleFailed": "לא ניתן היה לסנכרן את הכתוביות",
+        "syncSubtitleFailedWithDetail": "לא ניתן היה לסנכרן כתוביות: {{detail}}",
         "syncSubtitleOpen": "סנכרן כתוביות עם AI",
         "syncSubtitleAction": "סנכרון",
+        "syncSubtitlePreparing": "מכין אודיו...",
+        "syncSubtitleWorking": "Framezoo מסנכרן כתוביות...",
+        "syncSubtitleApplying": "מחיל סנכרון כתוביות...",
         "settings": {
           "backlink": "כתוביות מותאמות אישית",
           "delay": "עיכוב בכיתוב",

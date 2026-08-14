@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "تائید شدہ آڈیو زبانیں۔",
         "syncSubtitleSuccess": "سب ٹائٹل کامیابی کے ساتھ مطابقت پذیر ہو گیا۔",
         "syncSubtitleFailed": "سب ٹائٹل کی مطابقت پذیری نہیں ہو سکی",
+        "syncSubtitleFailedWithDetail": "ذیلی عنوان کی مطابقت پذیری نہیں ہو سکی: {{detail}}",
         "syncSubtitleOpen": "سب ٹائٹل کو AI کے ساتھ سنک کریں۔",
         "syncSubtitleAction": "مطابقت پذیری",
+        "syncSubtitlePreparing": "آڈیو تیار ہو رہا ہے...",
+        "syncSubtitleWorking": "Framezoo سب ٹائٹلز کی مطابقت پذیری کر رہا ہے...",
+        "syncSubtitleApplying": "سب ٹائٹل کی مطابقت پذیری کا اطلاق ہو رہا ہے...",
         "settings": {
           "backlink": "حسب ضرورت سب ٹائٹلز",
           "delay": "ذیلی عنوان میں تاخیر",

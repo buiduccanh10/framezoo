@@ -370,7 +370,7 @@ export function PlayerPart(props: PlayerPartProps) {
       />
 
       <SkipSegmentButton
-        controlsShowing={showTargets}
+        controlsShowing={showTargets || isLoading}
         segments={segments}
         inControl={inControl}
         onChangeMeta={props.onMetaChange}

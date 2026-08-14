@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Tuetut äänikielet",
         "syncSubtitleSuccess": "Tekstityksen synkronointi onnistui",
         "syncSubtitleFailed": "Tekstitystä ei voitu synkronoida",
+        "syncSubtitleFailedWithDetail": "Tekstitystä ei voitu synkronoida: {{detail}}",
         "syncSubtitleOpen": "Synkronoi tekstitys tekoälyn kanssa",
         "syncSubtitleAction": "Synkronoi",
+        "syncSubtitlePreparing": "Valmistellaan ääntä...",
+        "syncSubtitleWorking": "Framezoo synkronoi tekstityksiä...",
+        "syncSubtitleApplying": "Otetaan tekstityksen synkronointia käyttöön...",
         "settings": {
           "backlink": "Mukautetut tekstitykset",
           "delay": "Tekstityksen viive",

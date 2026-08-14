@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Ondersteunde audiotalen",
         "syncSubtitleSuccess": "Ondertiteling succesvol gesynchroniseerd",
         "syncSubtitleFailed": "Kan ondertiteling niet synchroniseren",
+        "syncSubtitleFailedWithDetail": "Kon ondertiteling niet synchroniseren: {{detail}}",
         "syncSubtitleOpen": "Synchroniseer ondertitels met AI",
         "syncSubtitleAction": "Synchroniseren",
+        "syncSubtitlePreparing": "Audio voorbereiden...",
+        "syncSubtitleWorking": "Framezoo synchroniseert ondertitels...",
+        "syncSubtitleApplying": "Ondertitelsynchronisatie toepassen...",
         "settings": {
           "backlink": "Aangepaste ondertiteling",
           "delay": "Ondertiteling vertraging",

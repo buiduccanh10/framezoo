@@ -8,6 +8,7 @@ import { MWMediaType, MWSeasonMeta } from "@/backend/metadata/types/mw";
 import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { Transition } from "@/components/utils/Transition";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
@@ -31,16 +32,19 @@ function shouldShowNextEpisodeButton(
 function ActionButton(props: {
   className: string;
   onClick?: () => void;
+  disabled?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <button
       className={classNames(
         "font-bold rounded h-10 w-40 scale-95 hover:scale-100 transition-all duration-200",
+        props.disabled && "cursor-not-allowed opacity-50",
         props.className,
       )}
       type="button"
       onClick={props.onClick}
+      disabled={props.disabled}
     >
       {props.children}
     </button>
@@ -106,6 +110,12 @@ export function NextEpisodeButton(props: {
   const { setDirectMeta } = usePlayerMeta();
   const metaType = usePlayerStore((s) => s.meta?.type);
   const time = usePlayerStore((s) => s.progress.time);
+  const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
+  const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
+  const isPlaybackLocked = isPlaybackInteractionLocked(
+    mediaPlaying,
+    isSubtitleSyncActive,
+  );
   const enableSkipCredits = usePreferencesStore((s) => s.enableSkipCredits);
   const autoplayEnabled = isAutoplayAllowed();
   const timeBasedState = shouldShowNextEpisodeButton(time, duration);
@@ -149,7 +159,7 @@ export function NextEpisodeButton(props: {
       );
 
   const loadNextEpisode = useCallback(() => {
-    if (!meta || !nextEp) return;
+    if (!meta || !nextEp || isPlaybackLocked) return;
 
     const metaCopy = { ...meta };
     metaCopy.episode = nextEp;
@@ -177,10 +187,11 @@ export function NextEpisodeButton(props: {
     updateItem,
     isLastEpisode,
     nextSeason,
+    isPlaybackLocked,
   ]);
 
   const startCurrentEpisodeFromBeginning = useCallback(() => {
-    if (!meta || !meta.episode) return;
+    if (!meta || !meta.episode || isPlaybackLocked) return;
     const metaCopy = { ...meta };
     setShouldStartFromBeginning(true);
     setDirectMeta(metaCopy);
@@ -190,10 +201,19 @@ export function NextEpisodeButton(props: {
       meta: metaCopy,
       progress: defaultProgress,
     });
-  }, [setDirectMeta, meta, props, setShouldStartFromBeginning, updateItem]);
+  }, [
+    setDirectMeta,
+    meta,
+    props,
+    setShouldStartFromBeginning,
+    updateItem,
+    isPlaybackLocked,
+  ]);
 
   useEffect(() => {
-    if (!autoplayEnabled || metaType !== "show") return;
+    if (!autoplayEnabled || metaType !== "show" || isPlaybackLocked) {
+      return;
+    }
     const onePercent = duration / 100;
 
     // When skipCredits is enabled, use the 99% threshold; otherwise require 100% completion
@@ -213,6 +233,7 @@ export function NextEpisodeButton(props: {
     loadNextEpisode,
     metaType,
     time,
+    isPlaybackLocked,
   ]);
 
   if (!props.inControl) return null;
@@ -223,6 +244,7 @@ export function NextEpisodeButton(props: {
     return (
       <Button
         onClick={() => loadNextEpisode()}
+        disabled={isPlaybackLocked}
         theme="secondary"
         padding="md:px-12 p-2.5"
         className="w-full"
@@ -250,11 +272,13 @@ export function NextEpisodeButton(props: {
         <ActionButton
           className="py-px box-content bg-buttons-secondary hover:bg-buttons-secondaryHover bg-opacity-90 text-buttons-secondaryText justify-center items-center"
           onClick={() => startCurrentEpisodeFromBeginning()}
+          disabled={isPlaybackLocked}
         >
           {t("player.nextEpisode.replay")}
         </ActionButton>
         <ActionButton
           onClick={() => loadNextEpisode()}
+          disabled={isPlaybackLocked}
           className="bg-buttons-primary hover:bg-buttons-primaryHover text-buttons-primaryText flex justify-center items-center"
         >
           <Icon className="text-xl mr-1" icon={Icons.SKIP_EPISODE} />

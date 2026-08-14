@@ -5,6 +5,7 @@ import { MWMediaType } from "@/backend/metadata/types/mw";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { usePlayerMeta } from "@/components/player/hooks/usePlayerMeta";
 import { useVolume } from "@/components/player/hooks/useVolume";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { useOverlayStack } from "@/stores/interface/overlayStack";
 import { usePlayerStore } from "@/stores/player/store";
@@ -26,6 +27,11 @@ export function KeyboardEvents() {
   const mediaProgress = usePlayerStore((s) => s.progress);
   const { isSeeking } = usePlayerStore((s) => s.interface);
   const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
+  const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
+  const isPlaybackLocked = isPlaybackInteractionLocked(
+    mediaPlaying,
+    isSubtitleSyncActive,
+  );
   const time = usePlayerStore((s) => s.progress.time);
   const duration = usePlayerStore((s) => s.progress.duration);
   const { setVolume, toggleMute } = useVolume();
@@ -83,6 +89,29 @@ export function KeyboardEvents() {
   const isSpaceHeldRef = useRef<boolean>(false);
 
   const setCurrentOverlay = useOverlayStack((s) => s.setCurrentOverlay);
+
+  useEffect(() => {
+    if (!isPlaybackLocked) return;
+
+    isPendingBoostRef.current = false;
+    isSpaceHeldRef.current = false;
+    if (boostTimeoutRef.current) {
+      clearTimeout(boostTimeoutRef.current);
+      boostTimeoutRef.current = undefined;
+    }
+    if (speedIndicatorTimeoutRef.current) {
+      clearTimeout(speedIndicatorTimeoutRef.current);
+      speedIndicatorTimeoutRef.current = undefined;
+    }
+    setSpeedBoosted(false);
+    setShowSpeedIndicator(false);
+    setCurrentOverlay(null);
+  }, [
+    isPlaybackLocked,
+    setCurrentOverlay,
+    setShowSpeedIndicator,
+    setSpeedBoosted,
+  ]);
 
   // Episode navigation functions
   const navigateToNextEpisode = useCallback(async () => {
@@ -352,6 +381,17 @@ export function KeyboardEvents() {
     const keydownEventHandler = (evt: KeyboardEvent) => {
       if (evt.target && (evt.target as HTMLInputElement).nodeName === "INPUT")
         return;
+
+      const state = usePlayerStore.getState();
+      if (
+        isPlaybackInteractionLocked(
+          state.mediaPlaying,
+          state.subtitleSync.active,
+        )
+      ) {
+        evt.preventDefault();
+        return;
+      }
 
       const k = evt.key;
       const keyL = evt.key.toLowerCase();
@@ -754,6 +794,15 @@ export function KeyboardEvents() {
 
     const keyupEventHandler = (evt: KeyboardEvent) => {
       const k = evt.key;
+
+      const state = usePlayerStore.getState();
+      if (
+        isPlaybackInteractionLocked(
+          state.mediaPlaying,
+          state.subtitleSync.active,
+        )
+      )
+        return;
 
       // Handle spacebar release - only handle speed boost logic when not in watch party
       if (k === " " && !dataRef.current.isInWatchParty) {

@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Unterstützte Audiosprachen",
         "syncSubtitleSuccess": "Untertitel erfolgreich synchronisiert",
         "syncSubtitleFailed": "Untertitel konnten nicht synchronisiert werden",
+        "syncSubtitleFailedWithDetail": "Untertitel konnte nicht synchronisiert werden: {{detail}}",
         "syncSubtitleOpen": "Untertitel mit KI synchronisieren",
         "syncSubtitleAction": "Synchronisieren",
+        "syncSubtitlePreparing": "Audio wird vorbereitet...",
+        "syncSubtitleWorking": "Framezoo synchronisiert Untertitel...",
+        "syncSubtitleApplying": "Untertitelsynchronisierung wird angewendet...",
         "settings": {
           "backlink": "Eigeni Ontertetel",
           "delay": "Ontertitelverzögerig",

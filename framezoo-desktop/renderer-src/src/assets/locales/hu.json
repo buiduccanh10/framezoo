@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Támogatott hangnyelvek",
         "syncSubtitleSuccess": "A felirat sikeresen szinkronizálva",
         "syncSubtitleFailed": "Nem sikerült szinkronizálni a feliratot",
+        "syncSubtitleFailedWithDetail": "Nem sikerült szinkronizálni a feliratot: {{detail}}",
         "syncSubtitleOpen": "Szinkronizálja a feliratot az AI-val",
         "syncSubtitleAction": "Szinkronizál",
+        "syncSubtitlePreparing": "Hang előkészítése...",
+        "syncSubtitleWorking": "A Framezoo szinkronizálja a feliratokat...",
+        "syncSubtitleApplying": "Feliratszinkronizálás alkalmazása...",
         "settings": {
           "backlink": "Egyéni feliratok",
           "delay": "Felirat késleltetése",

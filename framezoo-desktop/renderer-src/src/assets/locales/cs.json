@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Podporované jazyky zvuku",
         "syncSubtitleSuccess": "Titulky byly úspěšně synchronizovány",
         "syncSubtitleFailed": "Titulky nelze synchronizovat",
+        "syncSubtitleFailedWithDetail": "Nelze synchronizovat titulky: {{detail}}",
         "syncSubtitleOpen": "Synchronizujte titulky s AI",
         "syncSubtitleAction": "Synchronizovat",
+        "syncSubtitlePreparing": "Příprava zvuku...",
+        "syncSubtitleWorking": "Framezoo synchronizuje titulky...",
+        "syncSubtitleApplying": "Probíhá synchronizace titulků...",
         "settings": {
           "backlink": "Vlastní titulky",
           "delay": "Posunutí titulků",

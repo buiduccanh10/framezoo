@@ -83,16 +83,10 @@ minimumReleaseAgeExclude:
 
 audit:
   ignore:
-    - GHSA-qwww-vcr4-c8h2
-    # image-size has no patched npm release; local patch guards ICNS/JXL/HEIF parser loops.
+    # image-size upstream has no patched npm release; the existing local patch
+    # guards ICNS/JXL/HEIF parser loops until an upstream release is available.
     - GHSA-w3rx-r6r6-pgpr
     - GHSA-5p2g-fcmc-qvqq
 
 patchedDependencies:
   image-size@1.2.1: patches/image-size@1.2.1.patch
-
-auditConfig:
-  ignoreGhsas:
-    - GHSA-qwww-vcr4-c8h2
-    - GHSA-w3rx-r6r6-pgpr
-    - GHSA-5p2g-fcmc-qvqq

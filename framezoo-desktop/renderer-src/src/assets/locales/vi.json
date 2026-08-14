@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Ngôn ngữ audio được hỗ trợ",
         "syncSubtitleSuccess": "Đã đồng bộ phụ đề",
         "syncSubtitleFailed": "Không thể đồng bộ phụ đề",
+        "syncSubtitleFailedWithDetail": "Không thể đồng bộ hóa phụ đề: {{detail}}",
         "syncSubtitleOpen": "Đồng bộ phụ đề bằng AI",
         "syncSubtitleAction": "Đồng bộ",
+        "syncSubtitlePreparing": "Đang chuẩn bị âm thanh...",
+        "syncSubtitleWorking": "Framezoo đang đồng bộ hóa phụ đề...",
+        "syncSubtitleApplying": "Đang áp dụng đồng bộ hóa phụ đề...",
         "settings": {
           "backlink": "Phụ đề tùy chỉnh",
           "delay": "Độ trễ phụ đề",

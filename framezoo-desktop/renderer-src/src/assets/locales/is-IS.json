@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Hljóðtungumál studd",
         "syncSubtitleSuccess": "Texti samstilltur tókst",
         "syncSubtitleFailed": "Ekki tókst að samstilla textann",
+        "syncSubtitleFailedWithDetail": "Gat ekki samstillt texti: {{detail}}",
         "syncSubtitleOpen": "Samstilltu texti við gervigreind",
         "syncSubtitleAction": "Samstilla",
+        "syncSubtitlePreparing": "Undirbýr hljóð...",
+        "syncSubtitleWorking": "Framezoo er að samstilla texta...",
+        "syncSubtitleApplying": "Notar samstillingu texta...",
         "settings": {
           "backlink": "Sérsniðir textar",
           "delay": "Texta seinkun",

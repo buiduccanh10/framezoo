@@ -8,7 +8,7 @@ export function ToastProvider() {
 
   useEffect(() => {
     if (toast) {
-      const timer = setTimeout(hideToast, 2000);
+      const timer = setTimeout(hideToast, toast.type === "error" ? 5000 : 2000);
       return () => clearTimeout(timer);
     }
   }, [toast, hideToast]);
@@ -30,13 +30,13 @@ export function ToastProvider() {
 
   return (
     <div
-      className={`fixed top-4 left-1/2 z-[9999] -translate-x-1/2 transform rounded-lg px-4 py-2 text-white shadow-lg transition-all duration-300 animate-[scaleIn_0.6s_ease-out_forwards] ${toastClassName}`}
+      className={`fixed top-4 left-1/2 z-[9999] w-max max-w-[min(92vw,42rem)] -translate-x-1/2 transform rounded-lg px-4 py-2 text-white shadow-lg transition-all duration-300 animate-[scaleIn_0.6s_ease-out_forwards] ${toastClassName}`}
       role="status"
       aria-live={toastType === "error" ? "assertive" : "polite"}
     >
       <div className="flex items-center gap-2">
         <Icon icon={toastIcon} className="text-white" />
-        <span className="text-sm font-medium">{toast.message}</span>
+        <span className="break-words text-sm font-medium">{toast.message}</span>
       </div>
     </div>
   );

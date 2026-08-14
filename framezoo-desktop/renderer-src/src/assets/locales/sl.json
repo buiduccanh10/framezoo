@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Podprti avdio jeziki",
         "syncSubtitleSuccess": "Podnapisi so uspešno sinhronizirani",
         "syncSubtitleFailed": "Podnapisov ni bilo mogoče sinhronizirati",
+        "syncSubtitleFailedWithDetail": "Ni bilo mogoče sinhronizirati podnapisov: {{detail}}",
         "syncSubtitleOpen": "Sinhronizacija podnapisov z AI",
         "syncSubtitleAction": "Sinhronizacija",
+        "syncSubtitlePreparing": "Priprava zvoka ...",
+        "syncSubtitleWorking": "Framezoo sinhronizira podnapise ...",
+        "syncSubtitleApplying": "Uporaba sinhronizacije podnapisov ...",
         "settings": {
           "backlink": "Podnapisi po meri",
           "delay": "Zamik podnapisov",

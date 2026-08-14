@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "サポートされている音声言語",
         "syncSubtitleSuccess": "字幕は正常に同期されました",
         "syncSubtitleFailed": "字幕を同期できませんでした",
+        "syncSubtitleFailedWithDetail": "字幕を同期できませんでした: {{detail}}",
         "syncSubtitleOpen": "AIと字幕を同期する",
         "syncSubtitleAction": "同期",
+        "syncSubtitlePreparing": "オーディオを準備しています...",
+        "syncSubtitleWorking": "Framezoo は字幕を同期しています...",
+        "syncSubtitleApplying": "字幕同期を適用しています...",
         "settings": {
           "backlink": "カスタム字幕",
           "delay": "字幕の遅延",

@@ -13,10 +13,13 @@ export function AutoPlayStart() {
   const source = usePlayerStore((s) => s.source);
   const duration = usePlayerStore((s) => s.progress.duration);
   const time = usePlayerStore((s) => s.progress.time);
+  const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
 
   const attemptedPlayRef = useRef(false);
 
   useEffect(() => {
+    if (isSubtitleSyncActive) return;
+
     if (status !== playerStatus.PLAYING || hasPlayedOnce || time > 0) {
       if (status !== playerStatus.PLAYING) {
         attemptedPlayRef.current = false;
@@ -31,12 +34,23 @@ export function AutoPlayStart() {
       attemptedPlayRef.current = true;
       display.play();
     }
-  }, [status, display, isPlaying, isLoading, duration, time, hasPlayedOnce]);
+  }, [
+    status,
+    display,
+    isPlaying,
+    isLoading,
+    duration,
+    time,
+    hasPlayedOnce,
+    isSubtitleSyncActive,
+  ]);
 
   const handleClick = useCallback(() => {
+    if (usePlayerStore.getState().subtitleSync.active) return;
     display?.play();
   }, [display]);
 
+  if (isSubtitleSyncActive) return null;
   if (hasPlayedOnce || time > 0) return null;
   if (isPlaying) return null;
   if (isLoading) return null;

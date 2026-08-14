@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Bahasa audio yang didukung",
         "syncSubtitleSuccess": "Subtitle berhasil disinkronkan",
         "syncSubtitleFailed": "Tidak dapat menyinkronkan subtitle",
+        "syncSubtitleFailedWithDetail": "Tidak dapat menyinkronkan subtitle: {{detail}}",
         "syncSubtitleOpen": "Sinkronkan subtitle dengan AI",
         "syncSubtitleAction": "Sinkronisasi",
+        "syncSubtitlePreparing": "Mempersiapkan audio...",
+        "syncSubtitleWorking": "Framezoo sedang menyinkronkan subtitle...",
+        "syncSubtitleApplying": "Menerapkan sinkronisasi subtitle...",
         "settings": {
           "backlink": "Subtitle khusus",
           "delay": "Penundaan subtitle",

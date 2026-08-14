@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "پشتیبانی از زبان های صوتی",
         "syncSubtitleSuccess": "زیرنویس با موفقیت همگام سازی شد",
         "syncSubtitleFailed": "زیرنویس همگام‌سازی نشد",
+        "syncSubtitleFailedWithDetail": "زیرنویس همگام‌سازی نشد: {{detail}}",
         "syncSubtitleOpen": "همگام سازی زیرنویس با هوش مصنوعی",
         "syncSubtitleAction": "همگام سازی",
+        "syncSubtitlePreparing": "در حال آماده سازی صدا...",
+        "syncSubtitleWorking": "Framezoo در حال همگام سازی زیرنویس ها است...",
+        "syncSubtitleApplying": "در حال اعمال همگام سازی زیرنویس...",
         "settings": {
           "backlink": "زیرنویس سفارشی",
           "delay": "تاخیر زیرنویس",

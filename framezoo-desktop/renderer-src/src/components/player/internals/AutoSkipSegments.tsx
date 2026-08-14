@@ -4,6 +4,7 @@ import {
   getSegmentBoundsSeconds,
   useSkipTime,
 } from "@/components/player/hooks/useSkipTime";
+import { isPlaybackInteractionLocked } from "@/components/player/utils/playbackLock";
 import { usePlayerStore } from "@/stores/player/store";
 import { usePreferencesStore } from "@/stores/preferences";
 
@@ -26,7 +27,13 @@ export function AutoSkipSegments() {
   const time = usePlayerStore((s) => s.progress.time);
   const duration = usePlayerStore((s) => s.progress.duration);
   const meta = usePlayerStore((s) => s.meta);
+  const mediaPlaying = usePlayerStore((s) => s.mediaPlaying);
+  const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
   const segments = useSkipTime();
+  const isPlaybackLocked = isPlaybackInteractionLocked(
+    mediaPlaying,
+    isSubtitleSyncActive,
+  );
 
   // Track which segments we've already skipped to avoid re-skipping
   const skippedSegmentsRef = useRef<Map<string, SegmentSkipState>>(new Map());
@@ -37,7 +44,9 @@ export function AutoSkipSegments() {
   }, [meta?.tmdbId, meta?.season?.number, meta?.episode?.number]);
 
   useEffect(() => {
-    if (!enableAutoSkipSegments || !display) return;
+    if (!enableAutoSkipSegments || !display || isPlaybackLocked) {
+      return;
+    }
 
     const currentSeconds = time;
 
@@ -94,6 +103,7 @@ export function AutoSkipSegments() {
     meta?.tmdbId,
     meta?.season?.number,
     meta?.episode?.number,
+    isPlaybackLocked,
   ]);
 
   return null;

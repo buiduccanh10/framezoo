@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Langues audio prises en charge",
         "syncSubtitleSuccess": "Sous-titre synchronisé avec succès",
         "syncSubtitleFailed": "Impossible de synchroniser les sous-titres",
+        "syncSubtitleFailedWithDetail": "Impossible de synchroniser le sous-titre : {{detail}}",
         "syncSubtitleOpen": "Synchroniser les sous-titres avec l'IA",
         "syncSubtitleAction": "Synchroniser",
+        "syncSubtitlePreparing": "Préparation du son...",
+        "syncSubtitleWorking": "Framezoo synchronise les sous-titres...",
+        "syncSubtitleApplying": "Application de la synchronisation des sous-titres...",
         "settings": {
           "backlink": "Sous-titres personnalisés",
           "delay": "Délai des sous-titres",

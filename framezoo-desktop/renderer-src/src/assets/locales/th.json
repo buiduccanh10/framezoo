@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "ภาษาเสียงที่รองรับ",
         "syncSubtitleSuccess": "ซิงค์คำบรรยายสำเร็จแล้ว",
         "syncSubtitleFailed": "ไม่สามารถซิงค์คำบรรยายได้",
+        "syncSubtitleFailedWithDetail": "ไม่สามารถซิงค์คำบรรยาย: {{detail}}",
         "syncSubtitleOpen": "ซิงค์คำบรรยายกับ AI",
         "syncSubtitleAction": "ซิงค์",
+        "syncSubtitlePreparing": "กำลังเตรียมเสียง...",
+        "syncSubtitleWorking": "Framezoo กำลังซิงค์คำบรรยาย...",
+        "syncSubtitleApplying": "กำลังใช้การซิงค์คำบรรยาย...",
         "settings": {
           "backlink": "คำบรรยายแบบกำหนดเอง",
           "delay": "เวลาดีเลย์คำบรรยาย",

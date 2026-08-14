@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "ஆதரிக்கப்படும் ஆடியோ மொழிகள்",
         "syncSubtitleSuccess": "வசனம் வெற்றிகரமாக ஒத்திசைக்கப்பட்டது",
         "syncSubtitleFailed": "வசனத்தை ஒத்திசைக்க முடியவில்லை",
+        "syncSubtitleFailedWithDetail": "வசனத்தை ஒத்திசைக்க முடியவில்லை: {{detail}}",
         "syncSubtitleOpen": "AI உடன் வசனங்களை ஒத்திசைக்கவும்",
         "syncSubtitleAction": "ஒத்திசை",
+        "syncSubtitlePreparing": "ஆடியோ தயாராகிறது...",
+        "syncSubtitleWorking": "Framezoo வசனங்களை ஒத்திசைக்கிறது...",
+        "syncSubtitleApplying": "வசன ஒத்திசைவைப் பயன்படுத்துகிறது...",
         "settings": {
           "backlink": "தனிப்பட்ட வசன வரிகள்",
           "delay": "வசன வரி தாமதம்",

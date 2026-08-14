@@ -825,8 +825,12 @@
         "syncSubtitleSupportedLanguages": "Idiomes d'àudio compatibles",
         "syncSubtitleSuccess": "Els subtítols s'han sincronitzat correctament",
         "syncSubtitleFailed": "No s'han pogut sincronitzar els subtítols",
+        "syncSubtitleFailedWithDetail": "No s'ha pogut sincronitzar el subtítol: {{detail}}",
         "syncSubtitleOpen": "Sincronitza subtítols amb IA",
         "syncSubtitleAction": "Sincronització",
+        "syncSubtitlePreparing": "S'està preparant l'àudio...",
+        "syncSubtitleWorking": "Framezoo està sincronitzant els subtítols...",
+        "syncSubtitleApplying": "S'està aplicant la sincronització de subtítols...",
         "settings": {
           "backlink": "Subtítols personalitzats",
           "delay": "Retard dels subtítols",

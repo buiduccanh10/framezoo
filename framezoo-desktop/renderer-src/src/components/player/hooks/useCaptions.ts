@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { useSkipTime } from "@/components/player/hooks/useSkipTime";
@@ -32,6 +32,8 @@ let subtitleAlignmentRequestId = 0;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
+const SUBTITLE_SYNC_PAUSE_TIMEOUT_MS = 1500;
+const SUBTITLE_SYNC_STABLE_SAMPLES = 2;
 
 type SubtitleSyncTarget = {
   track: SubtitleAlignmentTrack;
@@ -39,7 +41,95 @@ type SubtitleSyncTarget = {
   listItem: CaptionListItem;
 };
 
-export type SubtitleSyncOutcome = "success" | "failed";
+function waitForStablePlaybackPosition(): Promise<number | null> {
+  return new Promise((resolve) => {
+    const deadline = performance.now() + SUBTITLE_SYNC_PAUSE_TIMEOUT_MS;
+    let previousTime: number | null = null;
+    let stableSamples = 0;
+
+    const sample = () => {
+      const state = usePlayerStore.getState();
+      const currentTime = state.progress.time;
+
+      if (
+        !state.mediaPlaying.isPlaying &&
+        Number.isFinite(currentTime) &&
+        (previousTime === null || Math.abs(currentTime - previousTime) <= 0.05)
+      ) {
+        stableSamples += 1;
+      } else {
+        stableSamples = 0;
+      }
+      previousTime = currentTime;
+
+      if (
+        stableSamples >= SUBTITLE_SYNC_STABLE_SAMPLES ||
+        performance.now() >= deadline
+      ) {
+        resolve(
+          stableSamples >= SUBTITLE_SYNC_STABLE_SAMPLES &&
+            Number.isFinite(currentTime)
+            ? currentTime
+            : null,
+        );
+        return;
+      }
+
+      window.setTimeout(sample, 50);
+    };
+
+    sample();
+  });
+}
+
+export type SubtitleSyncOutcome =
+  | { status: "success" }
+  | { status: "failed"; errorMessage?: string };
+
+function extractSubtitleSyncErrorMessage(error: unknown): string | undefined {
+  const queue: unknown[] = [error];
+  const visited = new Set<object>();
+  const fallbackMessages: string[] = [];
+
+  while (queue.length > 0) {
+    const value = queue.shift();
+
+    if (typeof value === "string") {
+      const trimmed = value.trim();
+      if (!trimmed) continue;
+
+      try {
+        queue.push(JSON.parse(trimmed));
+        continue;
+      } catch {
+        fallbackMessages.push(trimmed);
+        continue;
+      }
+    }
+
+    if (!value || typeof value !== "object") continue;
+    if (visited.has(value)) continue;
+    visited.add(value);
+
+    const record = value as Record<string, unknown>;
+    const detail = record.detail;
+    if (typeof detail === "string" && detail.trim()) {
+      return detail.trim();
+    }
+
+    for (const key of ["data", "response", "_data"]) {
+      if (record[key] !== undefined) queue.push(record[key]);
+    }
+
+    for (const key of ["statusMessage", "message", "error"]) {
+      if (record[key] !== undefined) queue.push(record[key]);
+    }
+  }
+
+  return fallbackMessages.find(
+    (message) => !/^(bad request|fetch error|request failed)$/i.test(message),
+  );
+}
 
 function resolvePreferredAutoSubtitleLanguage(
   lastSelectedLanguage: string | null,
@@ -67,10 +157,6 @@ export function useCaptions() {
   const embeddedSubtitleTracksLoaded = usePlayerStore(
     (s) => s.embeddedSubtitleTracksLoaded,
   );
-  const currentQuality = usePlayerStore((s) => s.currentQuality);
-  const currentAudioTrack = usePlayerStore((s) => s.currentAudioTrack);
-  const currentTime = usePlayerStore((s) => s.progress.time);
-  const buffered = usePlayerStore((s) => s.progress.buffered);
   const selectedCaption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const externalSubtitleRequestId = usePlayerStore(
@@ -85,10 +171,12 @@ export function useCaptions() {
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
-  const [isSyncingSubtitle, setIsSyncingSubtitle] = useState(false);
-  const [syncSubtitleProgress, setSyncSubtitleProgress] = useState<
-    number | null
-  >(null);
+  const subtitleSync = usePlayerStore((s) => s.subtitleSync);
+  const setSubtitleSyncState = usePlayerStore((s) => s.setSubtitleSyncState);
+  const isSyncingSubtitle = subtitleSync.active;
+  const syncSubtitleProgress = subtitleSync.active
+    ? subtitleSync.progress
+    : null;
 
   // ─── Addon subtitle injection ───────────────────────────────────────────────
   const installedAddons = useInstalledAddons();
@@ -146,39 +234,79 @@ export function useCaptions() {
 
   const alignCaptionTracks = useCallback(
     async (targets: SubtitleSyncTarget[]): Promise<SubtitleSyncOutcome> => {
-      if (targets.length === 0 || source?.type !== "file") return "failed";
-      const quality =
-        (currentQuality && source.qualities[currentQuality]) ||
-        Object.values(source.qualities).find((item) => Boolean(item));
-      if (!quality?.url) return "failed";
-
       const requestId = ++subtitleAlignmentRequestId;
-      const contextSource = source;
-      const contextQualityUrl = quality.url;
-      const contextAudioTrackId = currentAudioTrack?.id ?? null;
-      setIsSyncingSubtitle(true);
-      setSyncSubtitleProgress(0);
+      const initialState = usePlayerStore.getState();
+      const initialSource = initialState.source;
+      const wasPlaying =
+        initialState.mediaPlaying.isPlaying &&
+        !initialState.mediaPlaying.isPaused;
+      let contextSource = initialSource;
+
+      if (targets.length === 0 || initialSource?.type !== "file") {
+        return { status: "failed" };
+      }
+
+      setSubtitleSyncState({
+        active: true,
+        phase: wasPlaying ? "pausing" : "analyzing",
+        progress: 0,
+      });
+
       try {
+        if (wasPlaying) {
+          initialState.display?.pause();
+        }
+
+        const pausedTime = await waitForStablePlaybackPosition();
+        if (pausedTime === null) return { status: "failed" };
+
+        const pausedState = usePlayerStore.getState();
+        if (pausedState.source !== initialSource) return { status: "failed" };
+
+        contextSource = pausedState.source;
+        const quality =
+          (pausedState.currentQuality &&
+            contextSource.qualities[pausedState.currentQuality]) ||
+          Object.values(contextSource.qualities).find((item) => Boolean(item));
+        if (!quality?.url) return { status: "failed" };
+
+        const contextQualityUrl = quality.url;
+        const contextAudioTrackId = pausedState.currentAudioTrack?.id ?? null;
         const alignmentVideoDuration =
-          videoDuration > 0 ? videoDuration : (source.duration ?? 0);
+          pausedState.progress.duration > 0
+            ? pausedState.progress.duration
+            : (contextSource.duration ?? 0);
+
+        setSubtitleSyncState({
+          active: true,
+          phase: "analyzing",
+          progress: 0,
+        });
+
         const batchResult = await alignSubtitlesWithCurrentStream({
           sourceUrl: quality.url,
-          startAt: Math.max(0, currentTime - 30),
-          language: currentAudioTrack?.language ?? "en",
+          startAt: Math.max(0, pausedTime - 30),
+          language: pausedState.currentAudioTrack?.language ?? "en",
           subtitles: targets.map(({ track, caption }) => ({
             track,
             vttData: getSubtitleAlignmentBaseVtt(caption),
           })),
-          headers: source.headers ?? source.preferredHeaders,
+          headers: contextSource.headers ?? contextSource.preferredHeaders,
           videoDuration: alignmentVideoDuration,
-          buffered,
+          buffered: pausedState.progress.buffered,
           onProgress: (progress) => {
             if (requestId === subtitleAlignmentRequestId) {
-              setSyncSubtitleProgress(progress);
+              setSubtitleSyncState({
+                active: true,
+                phase: "analyzing",
+                progress,
+              });
             }
           },
         });
-        if (requestId !== subtitleAlignmentRequestId) return "failed";
+        if (requestId !== subtitleAlignmentRequestId) {
+          return { status: "failed" };
+        }
 
         const currentPlayerState = usePlayerStore.getState();
         const currentSource = currentPlayerState.source;
@@ -198,7 +326,7 @@ export function useCaptions() {
           (currentPlayerState.currentAudioTrack?.id ?? null) !==
             contextAudioTrackId
         ) {
-          return "failed";
+          return { status: "failed" };
         }
 
         const currentCaptions = currentPlayerState.caption;
@@ -233,8 +361,14 @@ export function useCaptions() {
         // Dual-subtitle sync is atomic. A partial apply would leave the two
         // tracks with different timing models while reporting failure.
         if (!allAligned) {
-          return "failed";
+          return { status: "failed" };
         }
+
+        setSubtitleSyncState({
+          active: true,
+          phase: "applying",
+          progress: 1,
+        });
 
         for (const {
           target,
@@ -273,32 +407,38 @@ export function useCaptions() {
             };
           }),
         });
-        return allAligned ? "success" : "failed";
+        return allAligned ? { status: "success" } : { status: "failed" };
       } catch (error) {
-        if (requestId !== subtitleAlignmentRequestId) return "failed";
+        if (requestId !== subtitleAlignmentRequestId) {
+          return { status: "failed" };
+        }
         console.warn("[subtitle-align] skipped", {
           captionIds: targets.map(({ caption }) => caption.id),
           error,
         });
-        return "failed";
+        return {
+          status: "failed",
+          errorMessage: extractSubtitleSyncErrorMessage(error),
+        };
       } finally {
         if (requestId === subtitleAlignmentRequestId) {
-          setIsSyncingSubtitle(false);
-          setSyncSubtitleProgress(null);
+          const finalState = usePlayerStore.getState();
+          if (
+            wasPlaying &&
+            finalState.source === contextSource &&
+            finalState.display
+          ) {
+            finalState.display.play();
+          }
+          setSubtitleSyncState({
+            active: false,
+            phase: "idle",
+            progress: 0,
+          });
         }
       }
     },
-    [
-      currentQuality,
-      currentAudioTrack?.id,
-      currentAudioTrack?.language,
-      currentTime,
-      setCaption,
-      setSecondaryCaption,
-      source,
-      buffered,
-      videoDuration,
-    ],
+    [setCaption, setSecondaryCaption, setSubtitleSyncState],
   );
 
   const captions = useMemo(
@@ -336,7 +476,7 @@ export function useCaptions() {
   const syncSelectedCaption =
     useCallback(async (): Promise<SubtitleSyncOutcome> => {
       if (isSyncingSubtitle || !canSyncSelectedCaption) {
-        return "failed";
+        return { status: "failed" };
       }
 
       const targets: SubtitleSyncTarget[] = [];
