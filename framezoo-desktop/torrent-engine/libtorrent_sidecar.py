@@ -42,6 +42,18 @@ def main() -> None:
                             "ok": True,
                         },
                     )
+                elif message_type == "ping":
+                    # Forces _ensure_session() so the OS network-permission
+                    # dialog appears now (at app startup) rather than later
+                    # when the user first tries to start a stream.
+                    engine._ensure_session()
+                    emit(
+                        {
+                            "type": "response",
+                            "requestId": request_id,
+                            "ok": True,
+                        },
+                    )
                 else:
                     raise ValueError("unknown torrent sidecar message")
             except Exception as error:

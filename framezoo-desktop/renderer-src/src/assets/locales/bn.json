@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "সেটআপ শেষ হচ্ছে...",
     "loadingApp": "অ্যাপ লোড হচ্ছে...",
     "loadingUser": "ব্যবহারকারীর প্রোফাইল লোড হচ্ছে...",
     "loadingUserError": {

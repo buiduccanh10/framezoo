@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "સેટઅપ પૂર્ણ કરી રહ્યાં છીએ...",
     "loadingApp": "એપ્લિકેશન લોડ કરી રહ્યું છે...",
     "loadingUser": "વપરાશકર્તા પ્રોફાઇલ લોડ કરી રહ્યું છે...",
     "loadingUserError": {

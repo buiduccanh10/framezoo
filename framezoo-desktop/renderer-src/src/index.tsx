@@ -5,7 +5,7 @@ import "@/assets/css/index.css";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { StrictMode, Suspense, useCallback, useState } from "react";
+import { StrictMode, Suspense, useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { type Root, createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
@@ -44,6 +44,7 @@ import {
   extensionInfo,
   isExtensionActiveCached,
 } from "./backend/extension/messaging";
+import type { NativeStartupWarmupState } from "./desktop/electron";
 import { initializeChromecast } from "./setup/chromecast";
 import { initializeImageFadeIn } from "./setup/imageFadeIn";
 import { initializeOldStores } from "./stores/__old/migrations";
@@ -52,17 +53,76 @@ import { initializeOldStores } from "./stores/__old/migrations";
 initializeChromecast();
 initializeImageFadeIn();
 
-function LoadingScreen(props: { type: "user" | "lazy" }) {
+function LoadingScreen(props: { type: "user" | "lazy" | "native" }) {
   const mapping = {
     user: "screens.loadingUser",
     lazy: "screens.loadingApp",
+    native: "screens.finishingSetup",
   };
   const { t } = useTranslation();
   return (
     <LargeTextPart iconSlot={<Loading />}>
-      {t(mapping[props.type] ?? "unknown.translation")}
+      {t(mapping[props.type] ?? "unknown.translation", "Finishing setup…")}
     </LargeTextPart>
   );
+}
+
+function NativeStartupGate(props: { children: ReactNode }) {
+  const [state, setState] = useState<NativeStartupWarmupState | null>(null);
+
+  useEffect(() => {
+    const api = window.electronAPI;
+    if (
+      !window.__FRAMEZOO_DESKTOP__ ||
+      typeof api?.getStartupNativeWarmupState !== "function" ||
+      typeof api.waitForStartupNativeWarmup !== "function"
+    ) {
+      setState({
+        status: "ready",
+        torrent: { status: "ready" },
+        libmpv: { status: "ready" },
+      });
+      return;
+    }
+
+    let active = true;
+    const publish = (next: NativeStartupWarmupState) => {
+      if (active) setState(next);
+    };
+    const cleanup = api.onStartupNativeWarmupState?.(publish);
+
+    void api
+      .getStartupNativeWarmupState()
+      .then(publish)
+      .catch(() => {
+        publish({
+          status: "degraded",
+          torrent: { status: "error", message: "Warmup state unavailable" },
+          libmpv: { status: "error", message: "Warmup state unavailable" },
+        });
+      });
+    void api
+      .waitForStartupNativeWarmup()
+      .then(publish)
+      .catch(() => {
+        publish({
+          status: "degraded",
+          torrent: { status: "error", message: "Native warmup failed" },
+          libmpv: { status: "error", message: "Native warmup failed" },
+        });
+      });
+
+    return () => {
+      active = false;
+      cleanup?.();
+    };
+  }, []);
+
+  if (!state || state.status === "idle" || state.status === "warming") {
+    return <LoadingScreen type="native" />;
+  }
+
+  return props.children;
 }
 
 function ErrorScreen(props: {
@@ -252,16 +312,18 @@ root.render(
           <ReactQueryDevtools initialIsOpen={false} />
           <Suspense fallback={<LoadingScreen type="lazy" />}>
             <ExtensionStatus />
-            <TheRouter>
-              <ThemeProvider applyGlobal>
-                <ProgressSyncer />
-                <BookmarkSyncer />
-                <WatchHistorySyncer />
-                <GroupSyncer />
-                <SettingsSyncer />
-                <MigrationRunner />
-              </ThemeProvider>
-            </TheRouter>
+            <NativeStartupGate>
+              <TheRouter>
+                <ThemeProvider applyGlobal>
+                  <ProgressSyncer />
+                  <BookmarkSyncer />
+                  <WatchHistorySyncer />
+                  <GroupSyncer />
+                  <SettingsSyncer />
+                  <MigrationRunner />
+                </ThemeProvider>
+              </TheRouter>
+            </NativeStartupGate>
           </Suspense>
         </PersistQueryClientProvider>
       </HelmetProvider>

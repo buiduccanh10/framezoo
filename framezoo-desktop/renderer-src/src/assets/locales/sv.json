@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Slutför konfigurationen...",
     "loadingApp": "Laddar app...",
     "loadingUser": "Laddar användarprofil...",
     "loadingUserError": {

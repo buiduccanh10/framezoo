@@ -57,6 +57,16 @@ export interface TorrentStorageInfo {
   maxBytes: number;
 }
 
+export type NativeWarmupComponentState =
+  | { status: "idle" | "warming" | "ready" }
+  | { status: "error"; message: string };
+
+export interface NativeStartupWarmupState {
+  status: "idle" | "warming" | "ready" | "degraded";
+  torrent: NativeWarmupComponentState;
+  libmpv: NativeWarmupComponentState;
+}
+
 export type StreamRule = {
   targetDomains: string[];
   requestHeaders?: Record<string, string>;

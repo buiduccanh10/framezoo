@@ -25,6 +25,8 @@ import {
 import { libmpvController } from "./libmpvController";
 import type {
   ExtensionMessageName,
+  NativeStartupWarmupState,
+  NativeWarmupComponentState,
   StreamRule,
   TorrentStartRequest,
 } from "./types";
@@ -123,6 +125,121 @@ setupTorrentEnv();
 const streamRules = new Map<number, StreamRule>();
 const torrentManager: TorrentManager = createTorrentManagerFromEnvironment();
 const addonProtocolEngine = new AddonProtocolEngine();
+
+// Warmup state – tracks whether the torrent engine has been initialised.
+type TorrentWarmupState =
+  | { status: "idle" }
+  | { status: "warming" }
+  | { status: "ready" }
+  | { status: "error"; message: string };
+let torrentWarmupState: TorrentWarmupState = { status: "idle" };
+let libmpvWarmupState: NativeWarmupComponentState = { status: "idle" };
+let startupWarmupPromise: Promise<void> | null = null;
+let torrentWarmupPromise: Promise<boolean> | null = null;
+const STARTUP_WARMUP_TIMEOUT_MS = 90_000;
+
+function getStartupWarmupState(): NativeStartupWarmupState {
+  const status =
+    torrentWarmupState.status === "warming" ||
+    libmpvWarmupState.status === "warming"
+      ? "warming"
+      : torrentWarmupState.status === "ready" &&
+          libmpvWarmupState.status === "ready"
+        ? "ready"
+        : torrentWarmupState.status === "error" ||
+            libmpvWarmupState.status === "error"
+          ? "degraded"
+          : "idle";
+
+  return {
+    status,
+    torrent: torrentWarmupState,
+    libmpv: libmpvWarmupState,
+  };
+}
+
+function publishStartupWarmupState() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send(
+      "desktop:native-warmup-state",
+      getStartupWarmupState(),
+    );
+  }
+}
+
+function setWarmupState(next: TorrentWarmupState) {
+  torrentWarmupState = next;
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("desktop:torrent-warmup-state", next);
+  }
+  publishStartupWarmupState();
+}
+
+function runTorrentWarmup(): Promise<boolean> {
+  if (torrentWarmupState.status === "ready") return Promise.resolve(true);
+  if (torrentWarmupPromise) return torrentWarmupPromise;
+
+  setWarmupState({ status: "warming" });
+  torrentWarmupPromise = (async () => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    try {
+      await Promise.race([
+        torrentManager.warmup(),
+        new Promise<never>(
+          (_, reject) =>
+            (timeoutId = setTimeout(
+              () => reject(new Error("Torrent warmup timed out")),
+              STARTUP_WARMUP_TIMEOUT_MS,
+            )),
+        ),
+      ]);
+      setWarmupState({ status: "ready" });
+      return true;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.warn("[torrent] warmup failed:", message);
+      setWarmupState({ status: "error", message });
+      return false;
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId);
+    }
+  })().finally(() => {
+    torrentWarmupPromise = null;
+  });
+
+  return torrentWarmupPromise;
+}
+
+function runStartupNativeWarmup(): Promise<void> {
+  if (startupWarmupPromise) return startupWarmupPromise;
+
+  startupWarmupPromise = (async () => {
+    libmpvWarmupState = { status: "warming" };
+    publishStartupWarmupState();
+
+    const [torrentOk, libmpvResult] = await Promise.all([
+      runTorrentWarmup(),
+      libmpvController.warmup(),
+    ]);
+
+    libmpvWarmupState = libmpvResult.ok
+      ? { status: "ready" }
+      : {
+          status: "error",
+          message: libmpvResult.message ?? "Native libmpv warmup failed",
+        };
+    publishStartupWarmupState();
+
+    if (!torrentOk || !libmpvResult.ok) {
+      console.warn("[startup] native warmup completed in degraded mode", {
+        torrentOk,
+        libmpvOk: libmpvResult.ok,
+      });
+    }
+  })();
+
+  return startupWarmupPromise;
+}
 
 function supportsDesktopAppUpdates() {
   return process.platform === "darwin" || process.platform === "win32";
@@ -763,7 +880,11 @@ function createMainWindow() {
   if (process.platform === "darwin") {
     mainWindow.setWindowButtonVisibility(true);
   }
-  libmpvController.init(mainWindow, () => desktopPipController.getWindow());
+  libmpvController.init(
+    mainWindow,
+    () => desktopPipController.getWindow(),
+    () => startupWarmupPromise ?? Promise.resolve(),
+  );
 
   // The renderer cannot reliably finish async IPC during a full navigation.
   // Ignore same-document SPA navigations used by player overlays/popups.
@@ -953,6 +1074,7 @@ function registerIpcHandlers() {
       if (!request || typeof request.sourceId !== "string") {
         throw new Error("invalid torrent start request");
       }
+      await runStartupNativeWarmup();
       return torrentManager.start(request);
     },
   );
@@ -1034,6 +1156,19 @@ function registerIpcHandlers() {
       return false;
     }
   });
+
+  // Warmup IPC: renderer can query the current warmup state or trigger a
+  // manual re-warmup (e.g. after the user grants network permission).
+  ipcMain.handle("desktop:torrent-warmup-state", () => torrentWarmupState);
+  ipcMain.handle("desktop:torrent-warmup", async () => {
+    await runTorrentWarmup();
+    return torrentWarmupState;
+  });
+  ipcMain.handle("desktop:native-warmup-state", () => getStartupWarmupState());
+  ipcMain.handle("desktop:native-warmup-wait", async () => {
+    await runStartupNativeWarmup();
+    return getStartupWarmupState();
+  });
 }
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
@@ -1070,6 +1205,7 @@ if (!hasSingleInstanceLock) {
     registerHeaderInterceptors();
     installApplicationMenu();
     createMainWindow();
+    void runStartupNativeWarmup();
     desktopAppUpdater.initialize();
 
     app.on("activate", () => {

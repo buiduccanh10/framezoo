@@ -22,11 +22,9 @@ from torrent_utils import (
 
 class LibtorrentEngine:
     def __init__(self) -> None:
-        # lt.session is created lazily on the first start() call so that the
-        # stdin reading loop starts immediately. On Windows this prevents the
-        # Firewall permission dialog from appearing before the user has chosen
-        # any torrent, and avoids a multi-second libtorrent init stall that
-        # would block all stdin while the dialog is waiting for user input.
+        # The session is created lazily until startup preflight or the first
+        # stream request. This keeps construction cheap while allowing the
+        # desktop shell to trigger native network permission at startup.
         self._session: Any = None
         self._session_lock = threading.Lock()
         self.http_server = TorrentHttpServer()
@@ -91,9 +89,8 @@ class LibtorrentEngine:
         session_id: str,
         request: Dict[str, Any],
     ) -> Dict[str, Any]:
-        # Ensure session exists before doing anything else; this is where the
-        # Windows Firewall dialog will appear (at the user's intent, not at
-        # startup), and it keeps the blocking inside a single, cancellable IPC.
+        # Ensure session exists before doing anything else. Startup preflight
+        # normally creates it earlier; this remains the safe fallback.
         session = self._ensure_session()
         magnet = get_magnet(request)
         root = get_torrent_data_dir()

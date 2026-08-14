@@ -24,6 +24,16 @@ export interface DesktopUpdateElectronApi {
   ): () => void;
 }
 
+export type NativeWarmupComponentState =
+  | { status: "idle" | "warming" | "ready" }
+  | { status: "error"; message: string };
+
+export interface NativeStartupWarmupState {
+  status: "idle" | "warming" | "ready" | "degraded";
+  torrent: NativeWarmupComponentState;
+  libmpv: NativeWarmupComponentState;
+}
+
 import type {
   AddonProtocolRequest,
   AddonProtocolResponse,
@@ -53,6 +63,11 @@ declare global {
       clearTorrentStorage?: () => Promise<boolean>;
       onTorrentStatus?: (
         listener: (status: TorrentStatus) => void,
+      ) => () => void;
+      getStartupNativeWarmupState?: () => Promise<NativeStartupWarmupState>;
+      waitForStartupNativeWarmup?: () => Promise<NativeStartupWarmupState>;
+      onStartupNativeWarmupState?: (
+        listener: (state: NativeStartupWarmupState) => void,
       ) => () => void;
       sendExtensionMessage?: (
         name: string,

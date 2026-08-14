@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "S'està acabant la configuració...",
     "loadingApp": "S'està carregant l'aplicació...",
     "loadingUser": "S'està carregant el perfil d'usuari...",
     "loadingUserError": {

@@ -81,6 +81,7 @@ export function RealPlayerView() {
     if (!torrentStatus || torrentStatus.sourceId !== sourceId) return;
 
     if (torrentStatus.state === "error") {
+      void clearTorrentSession(torrentStatus.sessionId);
       if (status !== playerStatus.PLAYBACK_ERROR) {
         setStatus(playerStatus.PLAYBACK_ERROR);
       }

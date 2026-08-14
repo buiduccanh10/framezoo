@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "ਸੈੱਟਅੱਪ ਨੂੰ ਪੂਰਾ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
     "loadingApp": "ਐਪ ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...",
     "loadingUser": "ਉਪਭੋਗਤਾ ਪ੍ਰੋਫਾਈਲ ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
     "loadingUserError": {

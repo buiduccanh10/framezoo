@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Ljúkir uppsetningu...",
     "loadingApp": "Hleður forriti...",
     "loadingUser": "Hleður notandaprófíl...",
     "loadingUserError": {

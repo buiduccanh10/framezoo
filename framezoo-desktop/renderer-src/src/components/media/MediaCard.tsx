@@ -189,7 +189,7 @@ function MediaCardContent({
                       ].join(" ")}
                     >
                       {t("media.episodeDisplay", {
-                        season: series.season || 1,
+                        season: series.season ?? 1,
                         episode: series.episode,
                       })}
                     </p>

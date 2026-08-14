@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "Viimeistellään asennusta…",
     "loadingApp": "Ladataan sovellusta...",
     "loadingUser": "Ladataan käyttäjäprofiilia...",
     "loadingUserError": {

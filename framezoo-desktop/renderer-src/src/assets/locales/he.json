@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "מסיים את ההגדרה...",
     "loadingApp": "טוען אפליקציה...",
     "loadingUser": "טוען פרופיל משתמש...",
     "loadingUserError": {

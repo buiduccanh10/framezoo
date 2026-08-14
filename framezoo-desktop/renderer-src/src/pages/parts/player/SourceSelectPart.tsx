@@ -14,6 +14,13 @@ import { LazyImage } from "@/components/utils/Image";
 import { AddonLogo } from "@/desktop/addons/AddonLogo";
 import { loadAddonStreams } from "@/desktop/addons/client";
 import { hasResource, supportsType } from "@/desktop/addons/manifest";
+import {
+  clearLastTorrentSelection,
+  getLastTorrentSelection,
+  getPlaybackSelectionKey,
+  matchesSavedTorrentSelection,
+  saveLastTorrentSelection,
+} from "@/desktop/addons/playbackStorage";
 import { useInstalledAddons } from "@/desktop/addons/store";
 import {
   ADDON_STREAMS_GC_TIME_MS,
@@ -33,7 +40,7 @@ import {
   registerTorrentSession,
   scheduleTorrentStop,
 } from "@/desktop/torrentPlaybackStore";
-import type { PlayerMeta } from "@/stores/player/slices/source";
+import { type PlayerMeta, playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import type {
   SourceQuality,
@@ -43,8 +50,12 @@ import { useProgressStore } from "@/stores/progress";
 import { getSavedProgressTime } from "@/stores/progress/selectors";
 
 function addonMediaId(meta: PlayerMeta) {
+  // Addons usually do not support IMDB IDs for Season 0 (Specials).
+  // Force TMDB ID for Season 0 to ensure accurate stream matching.
+  const isSpecialSeason = meta.type === "show" && meta.season?.number === 0;
   const imdbId = meta.imdbId?.trim();
-  if (imdbId && /^tt\d+$/i.test(imdbId)) return imdbId;
+
+  if (!isSpecialSeason && imdbId && /^tt\d+$/i.test(imdbId)) return imdbId;
   return `tmdb:${meta.tmdbId}`;
 }
 
@@ -205,9 +216,13 @@ export function SourceSelectPart(props: {
   const navigate = useNavigate();
   const addons = useInstalledAddons();
   const progressItems = useProgressStore((state) => state.items);
-  const { playMedia } = usePlayer();
+  const { playMedia, status } = usePlayer();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
   const preferredStream = usePlayerStore((state) => state.preferredStream);
+  const savedTorrentSelection = useMemo(
+    () => getLastTorrentSelection(meta),
+    [meta],
+  );
   const setPreferredStream = usePlayerStore(
     (state) => state.setPreferredStream,
   );
@@ -357,17 +372,6 @@ export function SourceSelectPart(props: {
       setAddonError(null);
       const previousTorrentSessionId = getActiveTorrentSessionId();
 
-      if (!isAutoPlay && meta.type === "show") {
-        setPreferredStream({
-          seriesId: meta.tmdbId,
-          addonId: stream.addonId,
-          quality: getStreamQuality(stream),
-          name: stream.name || "",
-          title: stream.title || "",
-          bingeGroup: stream.bingeGroup,
-        });
-      }
-
       try {
         if (stream.kind === "torrent") {
           const wasStartFromBeginning = shouldStartFromBeginning;
@@ -376,10 +380,11 @@ export function SourceSelectPart(props: {
             : getSavedProgressTime(progressItems, meta);
           if (wasStartFromBeginning) setShouldStartFromBeginning(false);
 
-          // 30-second timeout — long enough for the Windows Firewall dialog
-          // to appear and be answered, but short enough to surface an error
-          // rather than leaving the UI in a permanently stuck state.
-          const TORRENT_START_TIMEOUT_MS = 30_000;
+          // 60-second timeout — long enough for the Windows Firewall dialog
+          // to appear and be answered if warmup hasn't completed yet, but
+          // short enough to surface an error rather than leaving the UI in a
+          // permanently stuck state.
+          const TORRENT_START_TIMEOUT_MS = 60_000;
           const session = await Promise.race([
             startTorrent({
               sourceId: stream.id,
@@ -432,6 +437,18 @@ export function SourceSelectPart(props: {
             stream.id,
             playbackStartAt,
           );
+          saveLastTorrentSelection(meta, stream);
+          if (!isAutoPlay && meta.type === "show") {
+            setPreferredStream({
+              seriesId: meta.tmdbId,
+              mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
+              addonId: stream.addonId,
+              quality: getStreamQuality(stream),
+              name: stream.name || "",
+              title: stream.title || "",
+              bingeGroup: stream.bingeGroup,
+            });
+          }
           onSelected?.();
 
           // Chromium can issue one more Range request for the old source after
@@ -448,6 +465,18 @@ export function SourceSelectPart(props: {
             addonCaptions(stream),
             stream.id,
           );
+          clearLastTorrentSelection(meta);
+          if (!isAutoPlay && meta.type === "show") {
+            setPreferredStream({
+              seriesId: meta.tmdbId,
+              mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
+              addonId: stream.addonId,
+              quality: getStreamQuality(stream),
+              name: stream.name || "",
+              title: stream.title || "",
+              bingeGroup: stream.bingeGroup,
+            });
+          }
           onSelected?.();
           if (previousTorrentSessionId) {
             await clearTorrentSession(previousTorrentSessionId);
@@ -484,8 +513,37 @@ export function SourceSelectPart(props: {
     if (
       hasAttemptedAutoSelect.current ||
       mode !== "initial" ||
+      status !== playerStatus.SOURCE_SELECTION
+    ) {
+      return;
+    }
+
+    if (savedTorrentSelection) {
+      const savedAddonIndex = eligibleAddons.findIndex(
+        (addon) => addon.manifest.id === savedTorrentSelection.addonId,
+      );
+      const savedAddonQuery =
+        savedAddonIndex >= 0 ? addonStreamQueries[savedAddonIndex] : null;
+      const matchingStream = addonStreams.find((stream) =>
+        matchesSavedTorrentSelection(savedTorrentSelection, stream),
+      );
+
+      if (matchingStream && !startingAddonId) {
+        hasAttemptedAutoSelect.current = true;
+        void selectAddonStream(matchingStream, true);
+        return;
+      }
+
+      if (!savedAddonQuery || !savedAddonQuery.isLoading) {
+        hasAttemptedAutoSelect.current = true;
+      }
+      return;
+    }
+
+    if (
       !preferredStream ||
-      preferredStream.seriesId !== meta.tmdbId
+      preferredStream.seriesId !== meta.tmdbId ||
+      preferredStream.mediaKey !== getPlaybackSelectionKey(meta)
     ) {
       return;
     }
@@ -573,8 +631,10 @@ export function SourceSelectPart(props: {
     addonStreams,
     addonStreamQueries,
     preferredStream,
+    savedTorrentSelection,
     meta,
     mode,
+    status,
     selectedAddonId,
     enabledAddons,
     qualityOptions,

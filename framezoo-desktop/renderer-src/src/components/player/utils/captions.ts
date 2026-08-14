@@ -47,7 +47,7 @@ export function captionIsVisible(
   const delayedEnd = end / 1000 + delay;
   return (
     Math.max(0, delayedStart) <= currentTime &&
-    Math.max(0, delayedEnd) >= currentTime
+    Math.max(0, delayedEnd) > currentTime
   );
 }
 

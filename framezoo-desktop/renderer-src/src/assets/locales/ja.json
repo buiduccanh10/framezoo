@@ -1044,6 +1044,7 @@
     }
   },
   "screens": {
+    "finishingSetup": "セットアップを終了しています…",
     "loadingApp": "アプリを読み込んでいます...",
     "loadingUser": "ユーザープロファイルをロード中...",
     "loadingUserError": {

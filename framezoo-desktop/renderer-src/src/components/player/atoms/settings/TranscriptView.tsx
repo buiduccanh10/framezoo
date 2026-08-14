@@ -9,6 +9,7 @@ import { FlagIcon } from "@/components/FlagIcon";
 import { Icon, Icons } from "@/components/Icon";
 import { Modal, ModalCard, useModal } from "@/components/overlays/Modal";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
+import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
 import { Link } from "@/components/player/internals/ContextMenu/Links";
@@ -59,27 +60,8 @@ export function TranscriptView({
   const secondaryDelay = useSubtitleStore((s) => s.secondaryDelay);
   const setPrimaryDelay = useSubtitleStore((s) => s.setPrimaryDelay);
   const setSecondaryDelay = useSubtitleStore((s) => s.setSecondaryDelay);
-  const { duration: timeDuration } = usePlayerStore((s) => s.progress);
-  // Subscribe to `time` via ref + 500ms poll to avoid re-rendering the whole
-  // component 4-10x per second (every MPV time-pos event).
-  const timeRef = useRef(0);
-  const [highlightTime, setHighlightTime] = useState(0);
-  useEffect(() => {
-    // Keep ref up to date without triggering React renders
-    const unsub = usePlayerStore.subscribe((s) => {
-      timeRef.current = s.progress.time;
-    });
-    // Poll ref value twice per second for highlight + scroll
-    const ids = setInterval(() => {
-      setHighlightTime(timeRef.current);
-    }, 500);
-    return () => {
-      unsub();
-      clearInterval(ids);
-    };
-  }, []);
-  // Alias so existing code below works unchanged
-  const time = highlightTime;
+  const timeDuration = usePlayerStore((s) => s.progress.duration);
+  const time = usePlaybackClock();
   const activeCaption =
     selectionMode === "secondary" ? secondaryCaption : primaryCaption;
   const delay = selectionMode === "secondary" ? secondaryDelay : primaryDelay;
@@ -296,8 +278,7 @@ export function TranscriptView({
   }, [scrollTargetIndex, didFirstScroll, virtualizer]);
 
   const handleItemClick = (item: (typeof transcriptItems)[number]) => {
-    // Read time from ref so this works even without a subscription
-    const newDelay = getCaptionDelayForCue(item.cue, timeRef.current);
+    const newDelay = getCaptionDelayForCue(item.cue, time);
     setDelay(Number(newDelay.toFixed(2)));
   };
 
