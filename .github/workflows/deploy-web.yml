@@ -30,7 +30,7 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm audit
+      - run: pnpm audit --json
 
   deploy:
     name: Deploy
