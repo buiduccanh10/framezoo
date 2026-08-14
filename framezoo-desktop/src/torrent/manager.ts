@@ -20,6 +20,13 @@ export class TorrentManager {
     fixtureIntervalMs?: number;
   }) {
     const enginePath = resolveTorrentEnginePath();
+    if (!enginePath) {
+      console.warn(
+        "[torrent] No torrent engine binary found for",
+        `${process.platform}-${process.arch}`,
+        "– torrent streaming is unavailable. Build the sidecar on a native runner first.",
+      );
+    }
     this.engine =
       options?.engine ??
       (options?.fixtureFilePath

@@ -1075,7 +1075,27 @@ function registerIpcHandlers() {
         throw new Error("invalid torrent start request");
       }
       await runStartupNativeWarmup();
-      return torrentManager.start(request);
+      try {
+        return await torrentManager.start(request);
+      } catch (err) {
+        // Enrich the error with diagnostic info so the renderer can surface
+        // it in the UI with a Copy button — essential for prod debugging
+        // where DevTools are not available.
+        const original =
+          err instanceof Error ? err.message : String(err ?? "unknown error");
+        const debugLines = [
+          `Error: ${original}`,
+          `---`,
+          `Platform : ${process.platform}-${process.arch}`,
+          `App      : ${app.getVersion()}`,
+          `Electron : ${process.versions.electron}`,
+          `Node     : ${process.versions.node}`,
+          `Warmup   : torrent=${torrentWarmupState.status}${torrentWarmupState.status === "error" ? ` (${(torrentWarmupState as { message?: string }).message ?? ""})` : ""}`,
+        ];
+        const enriched = new Error(debugLines.join("\n"));
+        enriched.stack = err instanceof Error ? err.stack : undefined;
+        throw enriched;
+      }
     },
   );
 
