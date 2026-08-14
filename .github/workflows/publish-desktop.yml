@@ -315,6 +315,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Setup Windows libmpv SDK
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node framezoo-desktop/scripts/fetch-windows-libmpv.mjs --target ${{ matrix.variant == 'win-x64' && 'win32-x64' || 'win32-arm64' }} --out ./win-mpv-dev-${{ matrix.variant }}
       - name: Build desktop artifacts
         shell: bash
