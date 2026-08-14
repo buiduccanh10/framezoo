@@ -104,6 +104,7 @@ export interface TranslateTask {
 
 export interface PreferredStream {
   seriesId: string;
+  mediaKey?: string;
   addonId: string;
   quality: string;
   name: string;
