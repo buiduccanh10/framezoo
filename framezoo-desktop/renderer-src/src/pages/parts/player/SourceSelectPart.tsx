@@ -234,6 +234,9 @@ export function SourceSelectPart(props: {
     (state) => state.setShouldStartFromBeginning,
   );
   const [addonError, setAddonError] = React.useState<string | null>(null);
+  const playbackError = usePlayerStore((state) => state.interface.error);
+  const isPlaybackError = status === playerStatus.PLAYBACK_ERROR;
+  const activeError = addonError || (isPlaybackError ? playbackError : null);
   const [startingAddonId, setStartingAddonId] = React.useState<string | null>(
     null,
   );
@@ -910,9 +913,20 @@ export function SourceSelectPart(props: {
             })}
           </Menu.Section>
         )}
-        {addonError ? (
+        {activeError ? (
           <div className="px-1 pt-2">
-            <ErrorCard error={addonError} onClose={() => setAddonError(null)} />
+            <ErrorCard
+              error={activeError}
+              onClose={() => {
+                setAddonError(null);
+                if (isPlaybackError) {
+                  usePlayerStore.setState((s) => {
+                    s.interface.error = undefined;
+                    s.status = playerStatus.SOURCE_SELECTION;
+                  });
+                }
+              }}
+            />
           </div>
         ) : null}
         {selectedAddonError ? (

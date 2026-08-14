@@ -1,7 +1,7 @@
 {
   "name": "Framezoo",
   "private": true,
-  "version": "1.0.20",
+  "version": "1.0.21",
   "main": "dist/main.cjs",
   "packageManager": "pnpm@11.21.0",
   "scripts": {
@@ -281,8 +281,7 @@
       "createStartMenuShortcut": true,
       "deleteAppDataOnUninstall": false,
       "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico",
-      "guid": "com.framezoo.desktop"
+      "uninstallerIcon": "build/icon.ico"
     },
     "publish": [
       {
