@@ -72,7 +72,7 @@ async function main() {
   const addonPath = addon ? path.resolve(addon) : null;
   if (!addonPath || !fs.existsSync(addonPath)) {
     console.error(
-      `[verify-libmpv] addon not found: ${addonPath ?? "(none)"}`,
+      `[verify-libmpv] addon not found: ${addonPath ?? "(none)"} (cwd: ${process.cwd()})`,
     );
     process.exit(1);
   }
