@@ -113,6 +113,7 @@ type LibMpvElectronApi = {
   getLibMpvDiagnostics?: () => Promise<{
     diagnostics: string;
     lastError: string | null;
+    lastCreateError: string | null;
   } | null>;
 };
 
@@ -316,7 +317,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     if (!bounds) return null;
 
     playerCreatePromise = enqueueNativeOperation(async () => {
-      const createdPlayerId = await electronApi.createLibMpvPlayer!(bounds);
+      let createdPlayerId: string | null = null;
+      let invokeError: string | null = null;
+      try {
+        createdPlayerId =
+          (await electronApi.createLibMpvPlayer!(bounds)) ?? null;
+      } catch (error) {
+        // An IPC rejection carries the native throw directly (e.g. a JS
+        // exception raised before the controller's own try/catch).
+        invokeError = error instanceof Error ? error.message : String(error);
+      }
       if (!createdPlayerId || destroyed || !source) {
         if (createdPlayerId && (destroyed || !source)) {
           await electronApi.destroyLibMpvPlayer?.(
@@ -351,17 +361,32 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           const addonDiagnostics = await electronApi
             ?.getLibMpvDiagnostics?.()
             .catch(() => null);
+          const createErrorText =
+            addonDiagnostics?.lastCreateError ?? invokeError;
           const diagnosticsText = addonDiagnostics?.diagnostics
             ? `(${addonDiagnostics.diagnostics})`
             : "";
+          // Prefer the real create failure (e.g. "native surface creation
+          // failed") over the generic diagnostics; both are surfaced so the
+          // report pinpoints the exact native throw.
+          const createMessage = createErrorText
+            ? `Native libmpv player creation failed: ${createErrorText} ${
+                diagnosticsText || ""
+              }`.trim()
+            : null;
           emit("error", {
             type: "mpv",
-            errorName: "libmpv_native_unavailable",
-            message: libmpvMsg
-              ? `Native libmpv addon is unavailable: ${libmpvMsg} ${diagnosticsText}`.trim()
-              : diagnosticsText
-                ? `Native libmpv addon is unavailable ${diagnosticsText}`
-                : "Native libmpv addon is unavailable",
+            errorName:
+              createErrorText || libmpvMsg
+                ? "libmpv_create_failed"
+                : "libmpv_native_unavailable",
+            message:
+              libmpvMsg && !createErrorText
+                ? `Native libmpv addon is unavailable: ${libmpvMsg} ${diagnosticsText}`.trim()
+                : (createMessage ??
+                  (diagnosticsText
+                    ? `Native libmpv addon is unavailable ${diagnosticsText}`
+                    : "Native libmpv addon is unavailable")),
           });
         }
         return null;

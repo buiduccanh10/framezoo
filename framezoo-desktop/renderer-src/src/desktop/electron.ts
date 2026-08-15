@@ -69,6 +69,7 @@ declare global {
       getLibMpvDiagnostics?: () => Promise<{
         diagnostics: string;
         lastError: string | null;
+        lastCreateError: string | null;
       } | null>;
       onStartupNativeWarmupState?: (
         listener: (state: NativeStartupWarmupState) => void,
