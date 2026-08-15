@@ -116,6 +116,7 @@ struct MpvPlayer {
   std::atomic<bool> running{true};
   std::atomic<int> generation{0};
   std::mutex command_mutex;
+  std::mutex render_mutex;
   std::thread event_thread;
   std::atomic<uint64_t> render_update_count{0};
   std::atomic<uint64_t> render_count{0};
@@ -240,6 +241,7 @@ struct MpvPlayer {
   }
 
   void render() {
+    std::lock_guard<std::mutex> lock(render_mutex);
     if (
         !running.load(std::memory_order_acquire) ||
         !render_context ||
@@ -295,14 +297,9 @@ struct MpvPlayer {
     }
     surface_swap_buffers(surface);
     api.render_context_report_swap(render_context);
-    // A paused player stops producing new frames, so `update_flags & FRAME`
-    // can be 0 on every render after the first presentation. Emitting the
-    // first-frame signal as soon as the video pipeline is ready removes the
-    // race where the initial render lands before video-params arrives and no
-    // later render ever reports a new frame (stuck-paused autoplay deadlock).
+
     if (
         result >= 0 &&
-        video_metadata_ready.load(std::memory_order_acquire) &&
         !video_frame_ready.exchange(true, std::memory_order_acq_rel)
     ) {
       auto* native_event = new NativeEvent();
@@ -366,7 +363,6 @@ struct MpvPlayer {
     }
     if (
         result >= 0 &&
-        video_metadata_ready.load(std::memory_order_acquire) &&
         !video_frame_ready.exchange(true, std::memory_order_acq_rel)
     ) {
       auto* native_event = new NativeEvent();

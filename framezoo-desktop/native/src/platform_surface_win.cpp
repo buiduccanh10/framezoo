@@ -85,6 +85,60 @@ bool setup_pixel_format(NativeSurface* surface) {
   return format != 0 && SetPixelFormat(surface->dc, format, &descriptor) == TRUE;
 }
 
+#define WGL_CONTEXT_MAJOR_VERSION_ARB 0x2091
+#define WGL_CONTEXT_MINOR_VERSION_ARB 0x2092
+#define WGL_CONTEXT_FLAGS_ARB 0x2094
+#define WGL_CONTEXT_PROFILE_MASK_ARB 0x9126
+#define WGL_CONTEXT_CORE_PROFILE_BIT_ARB 0x00000001
+
+typedef HGLRC(WINAPI* PFNWGLCREATECONTEXTATTRIBSARBPROC)(
+    HDC hDC,
+    HGLRC hShareContext,
+    const int* attribList
+);
+
+HGLRC create_modern_gl_context(HDC dc) {
+  HGLRC temp_context = wglCreateContext(dc);
+  if (!temp_context) return nullptr;
+  wglMakeCurrent(dc, temp_context);
+
+  auto wglCreateContextAttribsARB =
+      reinterpret_cast<PFNWGLCREATECONTEXTATTRIBSARBPROC>(
+          wglGetProcAddress("wglCreateContextAttribsARB")
+      );
+
+  if (wglCreateContextAttribsARB) {
+    const int attribs_33[] = {
+        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+        WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+        WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+        0
+    };
+    HGLRC core_context = wglCreateContextAttribsARB(dc, nullptr, attribs_33);
+    if (core_context) {
+      wglMakeCurrent(nullptr, nullptr);
+      wglDeleteContext(temp_context);
+      wglMakeCurrent(dc, core_context);
+      return core_context;
+    }
+
+    const int attribs_30[] = {
+        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+        WGL_CONTEXT_MINOR_VERSION_ARB, 0,
+        0
+    };
+    core_context = wglCreateContextAttribsARB(dc, nullptr, attribs_30);
+    if (core_context) {
+      wglMakeCurrent(nullptr, nullptr);
+      wglDeleteContext(temp_context);
+      wglMakeCurrent(dc, core_context);
+      return core_context;
+    }
+  }
+
+  return temp_context;
+}
+
 }  // namespace
 
 NativeSurface* surface_create(
@@ -104,7 +158,7 @@ NativeSurface* surface_create(
       0,
       "FrameZooLibMpvSurface",
       "",
-      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS,
       bounds.x,
       bounds.y,
       bounds.width,
@@ -140,11 +194,11 @@ NativeSurface* surface_create(
     return nullptr;
   }
 
-  surface->gl_context = wglCreateContext(surface->dc);
+  surface->gl_context = create_modern_gl_context(surface->dc);
   if (!surface->gl_context) {
     std::fprintf(
         stderr,
-        "[libmpv-native] surface_create: wglCreateContext failed (err %lu)\n",
+        "[libmpv-native] surface_create: create_modern_gl_context failed (err %lu)\n",
         static_cast<unsigned long>(GetLastError())
     );
     surface_destroy(surface);
@@ -160,12 +214,12 @@ void surface_resize(NativeSurface* surface, SurfaceBounds bounds) {
   surface->bounds = bounds;
   SetWindowPos(
       surface->hwnd,
-      HWND_BOTTOM,
+      nullptr,
       bounds.x,
       bounds.y,
       bounds.width,
       bounds.height,
-      SWP_NOACTIVATE | SWP_SHOWWINDOW
+      SWP_NOACTIVATE | SWP_NOZORDER | SWP_SHOWWINDOW
   );
   surface_request_paint(surface);
 }
@@ -176,19 +230,21 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
   SetParent(surface->hwnd, surface->parent);
   SetWindowPos(
       surface->hwnd,
-      HWND_BOTTOM,
+      nullptr,
       0,
       0,
       surface->bounds.width,
       surface->bounds.height,
-      SWP_NOACTIVATE | SWP_SHOWWINDOW
+      SWP_NOACTIVATE | SWP_NOZORDER | SWP_SHOWWINDOW
   );
   surface_request_paint(surface);
 }
 
 void surface_request_paint(NativeSurface* surface) {
   if (!surface || !surface->hwnd) return;
-  InvalidateRect(surface->hwnd, nullptr, FALSE);
+  if (surface->paint_callback && surface->user) {
+    surface->paint_callback(surface->user, surface);
+  }
 }
 
 void surface_disable_paint(NativeSurface* surface) {
@@ -217,10 +273,16 @@ void surface_destroy(NativeSurface* surface) {
   delete surface;
 }
 
-void* surface_get_proc_address(NativeSurface* surface, const char* name) {
+void* surface_get_proc_address(NativeSurface*, const char* name) {
   if (!name) return nullptr;
   void* address = reinterpret_cast<void*>(wglGetProcAddress(name));
-  if (address) return address;
+  if (address &&
+      address != reinterpret_cast<void*>(1) &&
+      address != reinterpret_cast<void*>(2) &&
+      address != reinterpret_cast<void*>(3) &&
+      address != reinterpret_cast<void*>(-1)) {
+    return address;
+  }
 
   static HMODULE opengl = LoadLibraryA("opengl32.dll");
   return reinterpret_cast<void*>(GetProcAddress(opengl, name));
