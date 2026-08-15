@@ -34,25 +34,33 @@ void register_surface_class() {
       switch (message) {
         case WM_ERASEBKGND:
           return 1;
+        case WM_USER + 101:
         case WM_PAINT: {
           PAINTSTRUCT paint{};
-          BeginPaint(hwnd, &paint);
-          if (surface && surface->gl_context && surface->paint_callback) {
+          if (message == WM_PAINT) {
+            BeginPaint(hwnd, &paint);
+          }
+          if (surface && surface->paint_callback) {
             const uint64_t paint_number =
                 surface->paint_count.fetch_add(1) + 1;
             if (paint_number <= 5 || paint_number % 60 == 0) {
               std::fprintf(
                   stderr,
-                  "[libmpv-native] paint count=%llu frame=%dx%d\n",
+                  "[libmpv-native] paint count=%llu frame=%dx%d msg=%u\n",
                   static_cast<unsigned long long>(paint_number),
                   surface->bounds.width,
-                  surface->bounds.height
+                  surface->bounds.height,
+                  static_cast<unsigned int>(message)
               );
             }
-            wglMakeCurrent(surface->dc, surface->gl_context);
+            if (surface->gl_context && surface->dc) {
+              wglMakeCurrent(surface->dc, surface->gl_context);
+            }
             surface->paint_callback(surface->user, surface);
           }
-          EndPaint(hwnd, &paint);
+          if (message == WM_PAINT) {
+            EndPaint(hwnd, &paint);
+          }
           return 0;
         }
         case WM_NCHITTEST:
@@ -242,9 +250,7 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
 
 void surface_request_paint(NativeSurface* surface) {
   if (!surface || !surface->hwnd) return;
-  if (surface->paint_callback && surface->user) {
-    surface->paint_callback(surface->user, surface);
-  }
+  PostMessageA(surface->hwnd, WM_USER + 101, 0, 0);
 }
 
 void surface_disable_paint(NativeSurface* surface) {
