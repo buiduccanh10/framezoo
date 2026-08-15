@@ -13,13 +13,37 @@ const require = createRequire(import.meta.url);
 // packaged app.
 
 function parseArgs(argv) {
-  const args = { addon: null, runtimeDir: null };
+  const args = { addon: null, runtimeDir: null, expectArch: null };
   for (let index = 0; index < argv.length; index++) {
     const value = argv[index];
     if (value === "--addon") args.addon = argv[++index] ?? null;
     else if (value === "--runtime-dir") args.runtimeDir = argv[++index] ?? null;
+    else if (value === "--expect-arch") args.expectArch = argv[++index] ?? null;
   }
   return args;
+}
+
+// Reads the PE machine type from a Windows binary so cross-compiled build
+// jobs (e.g. an arm64 addon produced on an x64 runner) can assert the addon
+// has the expected architecture without being able to load it.
+const PE_MACHINE_NAMES = {
+  0x014c: "x86",
+  0x8664: "x64",
+  0xaa64: "arm64",
+};
+
+function readPeArch(filePath) {
+  const buffer = fs.readFileSync(filePath);
+  if (buffer.length < 0x40) return null;
+  const peOffset = buffer.readUInt32LE(0x3c);
+  if (
+    peOffset + 6 > buffer.length ||
+    buffer.toString("latin1", peOffset, peOffset + 4) !== "PE\u0000\u0000"
+  ) {
+    return null;
+  }
+  const machine = buffer.readUInt16LE(peOffset + 4);
+  return PE_MACHINE_NAMES[machine] ?? null;
 }
 
 function findRuntimePath(runtimeDir) {
@@ -44,13 +68,38 @@ function findRuntimePath(runtimeDir) {
 }
 
 async function main() {
-  const { addon, runtimeDir } = parseArgs(process.argv.slice(2));
+  const { addon, runtimeDir, expectArch } = parseArgs(process.argv.slice(2));
   const addonPath = addon ? path.resolve(addon) : null;
   if (!addonPath || !fs.existsSync(addonPath)) {
     console.error(
       `[verify-libmpv] addon not found: ${addonPath ?? "(none)"}`,
     );
     process.exit(1);
+  }
+
+  // Cross-arch builds (e.g. arm64 addon on an x64 runner) cannot be loaded in
+  // this process. Assert the addon's PE architecture and skip the load test.
+  if (expectArch) {
+    const addonArch = readPeArch(addonPath);
+    if (process.platform === "win32" && !addonArch) {
+      console.error(
+        `[verify-libmpv] could not read PE architecture of ${addonPath}`,
+      );
+      process.exit(1);
+    }
+    if (addonArch && addonArch !== expectArch) {
+      console.error(
+        `[verify-libmpv] addon architecture is ${addonArch}, expected ${expectArch}`,
+      );
+      process.exit(1);
+    }
+    if (process.arch !== expectArch) {
+      console.log(
+        `[verify-libmpv] SKIP: ${expectArch} addon cannot load in a ${process.platform}-${process.arch} process; addon PE architecture verified as ${addonArch ?? "(unknown)"}`,
+      );
+      console.log("[verify-libmpv] OK");
+      process.exit(0);
+    }
   }
 
   const resolvedRuntimeDir = runtimeDir ? path.resolve(runtimeDir) : null;

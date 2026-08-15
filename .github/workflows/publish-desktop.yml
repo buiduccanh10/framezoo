@@ -336,13 +336,16 @@ jobs:
       #
       # NOTE: `pnpm --filter Framezoo exec` switches the working directory into
       # the framezoo-desktop package, so the paths below are package-relative.
+      # Cross-arch jobs (arm64 on an x64 runner) skip the load test after
+      # asserting the addon's PE architecture via --expect-arch.
       - name: Verify packaged native libmpv (Electron)
         shell: bash
         run: |
           set -eu
           pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs \
             --addon "release/win-unpacked/resources/native/libmpv.node" \
-            --runtime-dir "release/win-unpacked/resources/libmpv"
+            --runtime-dir "release/win-unpacked/resources/libmpv" \
+            --expect-arch ${{ matrix.arch }}
       - name: Upload desktop artifacts
         uses: actions/upload-artifact@v5
         with:

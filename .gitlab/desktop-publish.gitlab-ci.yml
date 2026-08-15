@@ -249,7 +249,9 @@ build:desktop:windows:x64:
       # --filter exec runs inside the framezoo-desktop package dir, so the
       # addon/runtime paths below are package-relative. Kept on one line to
       # avoid PowerShell backtick continuation issues in YAML block scalars.
-      pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-x64/libmpv.node --runtime-dir resources/libmpv/win32-x64
+      # On x64 runners cross-building arm64, --expect-arch asserts the addon's
+      # PE architecture and skips the load test instead of failing.
+      pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-x64/libmpv.node --runtime-dir resources/libmpv/win32-x64 --expect-arch x64
 
       # Build renderer + main process
       pnpm --filter Framezoo build
@@ -360,7 +362,9 @@ build:desktop:windows:arm64:
       # --filter exec runs inside the framezoo-desktop package dir, so the
       # addon/runtime paths below are package-relative. Kept on one line to
       # avoid PowerShell backtick continuation issues in YAML block scalars.
-      pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-arm64/libmpv.node --runtime-dir resources/libmpv/win32-arm64
+      # On x64 runners cross-building arm64, --expect-arch asserts the addon's
+      # PE architecture and skips the load test instead of failing.
+      pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-arm64/libmpv.node --runtime-dir resources/libmpv/win32-arm64 --expect-arch arm64
 
       # Build renderer + main process
       pnpm --filter Framezoo build
