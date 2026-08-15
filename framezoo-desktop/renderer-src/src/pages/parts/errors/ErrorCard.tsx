@@ -46,27 +46,31 @@ export function ErrorCard(props: {
   }
 
   return (
-    // I didn't put a <Transition> here because it'd fade out, then jump height weirdly
-    <div className="bg-errors-card w-full rounded-lg p-6 text-left">
+    <div className="bg-errors-card w-full rounded-lg p-4 sm:p-5 text-left border border-white/10 shadow-lg">
       <div className="border-errors-border flex items-center justify-between border-b pb-2">
-        <span className="font-medium text-white">{t("errors.details")}</span>
-        <div className="flex items-center justify-center gap-3">
+        <span className="font-medium text-white text-sm sm:text-base">
+          {t("errors.details")}
+        </span>
+        <div className="flex items-center justify-center gap-2 sm:gap-3">
           <ButtonPlain
             theme="secondary"
-            padding="p-2 h-10 min-w-[40px] md:px-4"
+            padding="p-1.5 h-8 min-w-[36px] sm:h-9 sm:px-3"
             onClick={() => copyError()}
           >
             {hasCopied ? (
               <>
-                <Icon icon={Icons.CHECKMARK} className="text-xs" />
-                <span className="hidden min-[400px]:inline-block ml-3">
+                <Icon
+                  icon={Icons.CHECKMARK}
+                  className="text-xs text-green-400"
+                />
+                <span className="hidden min-[400px]:inline-block ml-2 text-xs">
                   {t("actions.copied")}
                 </span>
               </>
             ) : (
               <>
-                <Icon icon={Icons.COPY} className="text-2xl" />
-                <span className="hidden min-[400px]:inline-block ml-3">
+                <Icon icon={Icons.COPY} className="text-lg" />
+                <span className="hidden min-[400px]:inline-block ml-2 text-xs">
                   {t("player.playbackError.copyDebugInfo")}
                 </span>
               </>
@@ -74,17 +78,19 @@ export function ErrorCard(props: {
           </ButtonPlain>
           <ButtonPlain
             theme="secondary"
-            padding="p-2 md:px-2"
+            padding="p-1.5 h-8 w-8 sm:h-9 sm:w-9 flex items-center justify-center"
             onClick={props.onClose}
           >
-            <Icon icon={Icons.X} className="text-2xl" />
+            <Icon icon={Icons.X} className="text-lg" />
           </ButtonPlain>
         </div>
       </div>
-      <div className="pointer-events-auto mt-4 h-60 select-text overflow-y-auto whitespace-pre text-left">
+      <div className="pointer-events-auto mt-3 max-h-36 select-text overflow-y-auto overflow-x-hidden break-words whitespace-pre-wrap rounded bg-black/30 p-2.5 font-mono text-xs leading-relaxed text-white/80 text-left border border-white/5">
         {errorMessage}
       </div>
-      <p className="mt-4 text-sm">{t("player.playbackError.debugInfo")}</p>
+      <p className="mt-2 text-xs text-white/50">
+        {t("player.playbackError.debugInfo")}
+      </p>
     </div>
   );
 }
