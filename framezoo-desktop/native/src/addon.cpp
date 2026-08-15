@@ -319,7 +319,7 @@ struct MpvPlayer {
     const int height = surface_height(surface);
     if (width <= 0 || height <= 0) return;
 
-    const size_t stride = static_cast<size_t>(width) * 4;
+    size_t stride = static_cast<size_t>(width) * 4;
     const size_t needed = stride * static_cast<size_t>(height);
     if (sw_buffer.size() < needed) {
       sw_buffer.assign(needed, 0);
