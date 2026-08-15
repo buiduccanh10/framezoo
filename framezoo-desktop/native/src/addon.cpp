@@ -417,6 +417,13 @@ struct MpvPlayer {
           native_event->type = "video-reconfig";
           emit(native_event);
           emit_playback_property_snapshots();
+          if (!video_frame_ready.exchange(true, std::memory_order_acq_rel)) {
+            auto* frame_event = new NativeEvent();
+            frame_event->player_id = id;
+            frame_event->generation = generation.load();
+            frame_event->type = "video-frame";
+            emit(frame_event);
+          }
           break;
         case MPV_EVENT_END_FILE: {
           auto* end_file =
@@ -492,6 +499,13 @@ struct MpvPlayer {
           ) {
             video_metadata_ready.store(true, std::memory_order_release);
             surface_request_paint(surface);
+            if (!video_frame_ready.exchange(true, std::memory_order_acq_rel)) {
+              auto* frame_event = new NativeEvent();
+              frame_event->player_id = id;
+              frame_event->generation = generation.load();
+              frame_event->type = "video-frame";
+              emit(frame_event);
+            }
           }
           const bool is_diagnostic_property =
               property && property->name &&
@@ -1014,11 +1028,29 @@ napi_value create_player(napi_env env, napi_callback_info info) {
     return throw_error(env, load_error);
   }
 
+  SurfaceBounds bounds = get_bounds(env, argv[1]);
+  player->surface = surface_create(
+      parent,
+      bounds,
+      paint_callback,
+      player.get()
+  );
+  if (!player->surface) return throw_error(env, "native surface creation failed");
+
   player->handle = player->api.create();
   if (!player->handle) return throw_error(env, "mpv_create failed");
 
   set_mpv_option(player.get(), "terminal", "no");
+#if defined(_WIN32)
+  const std::string wid_str =
+      std::to_string(reinterpret_cast<uintptr_t>(player->surface->hwnd));
+  set_mpv_option(player.get(), "wid", wid_str.c_str());
+  set_mpv_option(player.get(), "vo", "gpu,direct3d,null");
+  set_mpv_option(player.get(), "gpu-api", "d3d11,auto");
+  set_mpv_option(player.get(), "gpu-context", "d3d11,auto");
+#else
   set_mpv_option(player.get(), "vo", "libmpv");
+#endif
   set_mpv_option(player.get(), "osc", "no");
   set_mpv_option(player.get(), "osd-level", "0");
   set_mpv_option(player.get(), "osd-bar", "no");
@@ -1128,15 +1160,7 @@ napi_value create_player(napi_env env, napi_callback_info info) {
       &player->callback
   );
 
-  SurfaceBounds bounds = get_bounds(env, argv[1]);
-  player->surface = surface_create(
-      parent,
-      bounds,
-      paint_callback,
-      player.get()
-  );
-  if (!player->surface) return throw_error(env, "native surface creation failed");
-
+#if defined(__APPLE__)
   mpv_opengl_init_params gl_params{};
   gl_params.get_proc_address = [](void* ctx, const char* name) -> void* {
     return surface_get_proc_address(static_cast<NativeSurface*>(ctx), name);
@@ -1153,37 +1177,14 @@ napi_value create_player(napi_env env, napi_callback_info info) {
           player->handle,
           render_params
       ) < 0) {
-#if defined(_WIN32)
-    // Windows VMs and remote desktops often expose only GDI OpenGL 1.1,
-    // which libplacebo rejects (it needs GL 3.3+). Fall back to mpv's
-    // built-in software renderer; frames are blitted via GDI in
-    // platform_surface_win.cpp.
-    std::fprintf(
-        stderr,
-        "[libmpv-native] opengl render context failed, falling back to "
-        "software rendering\n"
-    );
-    mpv_render_param software_params[] = {
-        {MPV_RENDER_PARAM_API_TYPE, const_cast<char*>("sw")},
-        {MPV_RENDER_PARAM_INVALID, nullptr},
-    };
-    if (player->api.render_context_create(
-            &player->render_context,
-            player->handle,
-            software_params
-        ) < 0) {
-      return throw_error(env, "mpv_render_context_create failed");
-    }
-    player->software_render = true;
-#else
     return throw_error(env, "mpv_render_context_create failed");
-#endif
   }
   player->api.render_context_set_update_callback(
       player->render_context,
       render_update_callback,
       player.get()
   );
+#endif
 
   const char* observed[] = {
       "time-pos",
