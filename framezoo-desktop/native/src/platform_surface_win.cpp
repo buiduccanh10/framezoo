@@ -134,6 +134,15 @@ NativeSurface* surface_create(
       GWLP_USERDATA,
       reinterpret_cast<LONG_PTR>(surface)
   );
+  SetWindowPos(
+      surface->hwnd,
+      HWND_BOTTOM,
+      bounds.x,
+      bounds.y,
+      bounds.width,
+      bounds.height,
+      SWP_NOACTIVATE | SWP_SHOWWINDOW
+  );
   return surface;
 }
 
@@ -142,7 +151,7 @@ void surface_resize(NativeSurface* surface, SurfaceBounds bounds) {
   surface->bounds = bounds;
   SetWindowPos(
       surface->hwnd,
-      HWND_TOP,
+      HWND_BOTTOM,
       bounds.x,
       bounds.y,
       bounds.width,
@@ -159,7 +168,7 @@ void surface_reparent(NativeSurface* surface, void* parent_handle) {
   surface_configure_window(surface->parent);
   SetWindowPos(
       surface->hwnd,
-      HWND_TOP,
+      HWND_BOTTOM,
       0,
       0,
       surface->bounds.width,

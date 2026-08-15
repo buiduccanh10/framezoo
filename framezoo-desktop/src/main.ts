@@ -875,7 +875,7 @@ function createMainWindow() {
     minWidth: 1100,
     minHeight: 700,
     backgroundColor: "#00000000",
-    transparent: process.platform === "darwin",
+    transparent: true,
     titleBarStyle: "default" as const,
     autoHideMenuBar: process.platform === "darwin",
     icon: getWindowIconPath(),
