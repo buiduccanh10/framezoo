@@ -129,21 +129,21 @@ build:desktop:macos:
 
       rm -rf "$ARTIFACT_ROOT"
 
-      pnpm --filter framezoo-desktop build
+      pnpm --filter Framezoo build
 
       clean_release_dir
-      pnpm --filter framezoo-desktop run resources:ensure:darwin-arm64
-      pnpm --filter framezoo-desktop run torrent:build:darwin-arm64
-      pnpm --filter framezoo-desktop run native:build:darwin-arm64
-      pnpm --filter framezoo-desktop exec electron-builder --mac zip --arm64
+      pnpm --filter Framezoo run resources:ensure:darwin-arm64
+      pnpm --filter Framezoo run torrent:build:darwin-arm64
+      pnpm --filter Framezoo run native:build:darwin-arm64
+      pnpm --filter Framezoo exec electron-builder --mac zip --arm64
       require_files "mac-arm64" "latest-mac.yml" "Framezoo-*-arm64-mac.zip" "Framezoo-*-arm64-mac.zip.blockmap"
       copy_optional "mac-arm64" "Framezoo-*-arm64-mac.dmg"
 
       clean_release_dir
-      pnpm --filter framezoo-desktop run resources:ensure:darwin-x64
-      pnpm --filter framezoo-desktop run torrent:build:darwin-x64
-      pnpm --filter framezoo-desktop run native:build:darwin-x64
-      pnpm --filter framezoo-desktop exec electron-builder --mac zip --x64
+      pnpm --filter Framezoo run resources:ensure:darwin-x64
+      pnpm --filter Framezoo run torrent:build:darwin-x64
+      pnpm --filter Framezoo run native:build:darwin-x64
+      pnpm --filter Framezoo exec electron-builder --mac zip --x64
       require_files "mac-x64" "latest-mac.yml" "Framezoo-*-x64-mac.zip" "Framezoo-*-x64-mac.zip.blockmap"
       copy_optional "mac-x64" "Framezoo-*-x64-mac.dmg"
 
@@ -165,6 +165,8 @@ build:desktop:macos:
 #   - Node.js 22 (corepack enabled)
 #   - Python 3.11+ on PATH
 #   - pnpm (installed via corepack)
+#   - Visual Studio Build Tools 2022 (MSVC, CMake on PATH)
+#   - 7-Zip (7z) on PATH - used to extract the libmpv dev SDK
 # ──────────────────────────────────────────────────────────────────────────────
 
 build:desktop:windows:x64:
@@ -200,21 +202,62 @@ build:desktop:windows:x64:
 
       pnpm install --frozen-lockfile
 
+      # Install Node headers + import library for the native addon build
+      $nodeVersion = node -p "process.versions.node"
+      $nodeGypDir = Join-Path $env:TEMP "node-gyp"
+      pnpm exec node-gyp install --target $nodeVersion --arch=x64 --devdir $nodeGypDir
+
+      $includeDir = Join-Path $nodeGypDir "$nodeVersion\include\node"
+      if (-not (Test-Path (Join-Path $includeDir "node_api.h"))) {
+        Write-Error "Node headers not found: $includeDir"
+        exit 1
+      }
+      $nodeLib = Join-Path $nodeGypDir "$nodeVersion\x64\node.lib"
+      if (-not (Test-Path $nodeLib)) {
+        $nodeLib = Join-Path $nodeGypDir "$nodeVersion\win32-x64\node.lib"
+      }
+      if (-not (Test-Path $nodeLib)) {
+        $nodeLib = Join-Path $env:CI_PROJECT_DIR "framezoo-desktop\node_modules\electron\dist\node.lib"
+      }
+      if (-not (Test-Path $nodeLib)) {
+        Write-Error "node.lib not found. Checked node-gyp cache and electron dist."
+        exit 1
+      }
+      $env:NODE_INCLUDE_DIR = $includeDir
+      $env:NODE_LIB = $nodeLib
+      Write-Host "NODE_INCLUDE_DIR=$includeDir"
+      Write-Host "NODE_LIB=$nodeLib"
+
+      # Fetch libmpv dev SDK (downloads once; reuses the cached SDK on re-runs)
+      $sdkOut = Join-Path $env:CI_PROJECT_DIR "resources\libmpv-sdk\win32-x64"
+      pnpm --filter Framezoo run libmpv:fetch:win32-x64 -- --out $sdkOut
+      $sdkCandidates = @($sdkOut) + @(Get-ChildItem -Path $sdkOut -Directory -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName)
+      $libmpvRoot = $sdkCandidates | Where-Object { Test-Path (Join-Path $_ "include\mpv\client.h") } | Select-Object -First 1
+      if (-not $libmpvRoot) { $libmpvRoot = $sdkOut }
+      $env:LIBMPV_ROOT = $libmpvRoot
+      Write-Host "LIBMPV_ROOT=$libmpvRoot"
+
       # Build torrent sidecar binary (native win32-x64)
-      pnpm --filter framezoo-desktop run torrent:setup
-      pnpm --filter framezoo-desktop run torrent:build:win32-x64
+      pnpm --filter Framezoo run torrent:setup
+      pnpm --filter Framezoo run torrent:build:win32-x64
 
       # Build native libmpv addon
-      pnpm --filter framezoo-desktop run native:build:win32-x64
-      pnpm --filter framezoo-desktop run resources:ensure:win32-x64
+      pnpm --filter Framezoo run native:build:win32-x64
+      pnpm --filter Framezoo run resources:ensure:win32-x64
+
+      # Fail fast if the addon cannot be loaded inside real Electron. The
+      # --filter exec runs inside the framezoo-desktop package dir, so the
+      # addon/runtime paths below are package-relative. Kept on one line to
+      # avoid PowerShell backtick continuation issues in YAML block scalars.
+      pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-x64/libmpv.node --runtime-dir resources/libmpv/win32-x64
 
       # Build renderer + main process
-      pnpm --filter framezoo-desktop build
+      pnpm --filter Framezoo build
 
       # Package NSIS installer
       Remove-Item -Recurse -Force framezoo-desktop/release -ErrorAction SilentlyContinue
       New-Item -ItemType Directory -Force framezoo-desktop/release | Out-Null
-      pnpm --filter framezoo-desktop exec electron-builder --win nsis --x64
+      pnpm --filter Framezoo exec electron-builder --win nsis --x64
 
       # Collect artifacts
       $artifactDir = "desktop-artifacts/win-x64"
@@ -270,21 +313,62 @@ build:desktop:windows:arm64:
 
       pnpm install --frozen-lockfile
 
+      # Install Node headers + import library for the native addon build
+      $nodeVersion = node -p "process.versions.node"
+      $nodeGypDir = Join-Path $env:TEMP "node-gyp"
+      pnpm exec node-gyp install --target $nodeVersion --arch=arm64 --devdir $nodeGypDir
+
+      $includeDir = Join-Path $nodeGypDir "$nodeVersion\include\node"
+      if (-not (Test-Path (Join-Path $includeDir "node_api.h"))) {
+        Write-Error "Node headers not found: $includeDir"
+        exit 1
+      }
+      $nodeLib = Join-Path $nodeGypDir "$nodeVersion\arm64\node.lib"
+      if (-not (Test-Path $nodeLib)) {
+        $nodeLib = Join-Path $nodeGypDir "$nodeVersion\win32-arm64\node.lib"
+      }
+      if (-not (Test-Path $nodeLib)) {
+        $nodeLib = Join-Path $env:CI_PROJECT_DIR "framezoo-desktop\node_modules\electron\dist\node.lib"
+      }
+      if (-not (Test-Path $nodeLib)) {
+        Write-Error "node.lib not found. Checked node-gyp cache and electron dist."
+        exit 1
+      }
+      $env:NODE_INCLUDE_DIR = $includeDir
+      $env:NODE_LIB = $nodeLib
+      Write-Host "NODE_INCLUDE_DIR=$includeDir"
+      Write-Host "NODE_LIB=$nodeLib"
+
+      # Fetch libmpv dev SDK (downloads once; reuses the cached SDK on re-runs)
+      $sdkOut = Join-Path $env:CI_PROJECT_DIR "resources\libmpv-sdk\win32-arm64"
+      pnpm --filter Framezoo run libmpv:fetch:win32-arm64 -- --out $sdkOut
+      $sdkCandidates = @($sdkOut) + @(Get-ChildItem -Path $sdkOut -Directory -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName)
+      $libmpvRoot = $sdkCandidates | Where-Object { Test-Path (Join-Path $_ "include\mpv\client.h") } | Select-Object -First 1
+      if (-not $libmpvRoot) { $libmpvRoot = $sdkOut }
+      $env:LIBMPV_ROOT = $libmpvRoot
+      Write-Host "LIBMPV_ROOT=$libmpvRoot"
+
       # Build torrent sidecar binary (native win32-arm64)
-      pnpm --filter framezoo-desktop run torrent:setup
-      pnpm --filter framezoo-desktop run torrent:build:win32-arm64
+      pnpm --filter Framezoo run torrent:setup
+      pnpm --filter Framezoo run torrent:build:win32-arm64
 
       # Build native libmpv addon
-      pnpm --filter framezoo-desktop run native:build:win32-arm64
-      pnpm --filter framezoo-desktop run resources:ensure:win32-arm64
+      pnpm --filter Framezoo run native:build:win32-arm64
+      pnpm --filter Framezoo run resources:ensure:win32-arm64
+
+      # Fail fast if the addon cannot be loaded inside real Electron. The
+      # --filter exec runs inside the framezoo-desktop package dir, so the
+      # addon/runtime paths below are package-relative. Kept on one line to
+      # avoid PowerShell backtick continuation issues in YAML block scalars.
+      pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs --addon resources/native/win32-arm64/libmpv.node --runtime-dir resources/libmpv/win32-arm64
 
       # Build renderer + main process
-      pnpm --filter framezoo-desktop build
+      pnpm --filter Framezoo build
 
       # Package NSIS installer
       Remove-Item -Recurse -Force framezoo-desktop/release -ErrorAction SilentlyContinue
       New-Item -ItemType Directory -Force framezoo-desktop/release | Out-Null
-      pnpm --filter framezoo-desktop exec electron-builder --win nsis --arm64
+      pnpm --filter Framezoo exec electron-builder --win nsis --arm64
 
       # Collect artifacts
       $artifactDir = "desktop-artifacts/win-arm64"

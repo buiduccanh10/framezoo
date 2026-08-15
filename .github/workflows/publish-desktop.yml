@@ -314,6 +314,15 @@ jobs:
           fi
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Cache Windows libmpv SDK
+        uses: actions/cache@v4
+        with:
+          path: ./win-mpv-dev-${{ matrix.variant }}
+          # Keyed on the fetch script so SDK upgrades invalidate the cache,
+          # and on the lockfile so dependency changes never reuse stale SDK.
+          key: mpv-sdk-${{ matrix.variant }}-${{ hashFiles('framezoo-desktop/scripts/fetch-windows-libmpv.mjs') }}
+          restore-keys: |
+            mpv-sdk-${{ matrix.variant }}-
       - name: Setup Windows libmpv SDK
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -321,6 +330,19 @@ jobs:
       - name: Build desktop artifacts
         shell: bash
         run: ${{ matrix.command }}
+      # Strongest gate: load the addon exactly as the packaged app would, from
+      # the win-unpacked output, inside real Electron. A broken or missing
+      # native binary fails the job and the release is never published.
+      #
+      # NOTE: `pnpm --filter Framezoo exec` switches the working directory into
+      # the framezoo-desktop package, so the paths below are package-relative.
+      - name: Verify packaged native libmpv (Electron)
+        shell: bash
+        run: |
+          set -eu
+          pnpm --filter Framezoo exec electron scripts/verify-libmpv-native.mjs \
+            --addon "release/win-unpacked/resources/native/libmpv.node" \
+            --runtime-dir "release/win-unpacked/resources/libmpv"
       - name: Upload desktop artifacts
         uses: actions/upload-artifact@v5
         with:

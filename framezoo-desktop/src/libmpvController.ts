@@ -54,6 +54,18 @@ const TORRENT_NATIVE_EVENT_TIMEOUT_MS = 600_000; // 10 minutes
 
 let lastAddonLoadError: string | null = null;
 
+function getAddonDiagnostics(): string {
+  const lines = [
+    `platform=${process.platform}-${process.arch}`,
+    `packaged=${app.isPackaged}`,
+    `resourcesPath=${typeof process.resourcesPath === "string" ? process.resourcesPath : "(unset)"}`,
+    `candidates=${getNativeAddonCandidates().join(", ") || "(none)"}`,
+    `libmpvPath=${process.env.FRAMEZOO_LIBMPV_PATH ?? "(unset)"}`,
+  ];
+  if (lastAddonLoadError) lines.push(`loadError=${lastAddonLoadError}`);
+  return lines.join(" | ");
+}
+
 function isSupportedDesktopPlatform(): boolean {
   return process.platform === "darwin" || process.platform === "win32";
 }
@@ -104,7 +116,17 @@ function configureNativeRuntime(): void {
     .filter((dir) => fs.existsSync(dir));
 
   if (process.platform === "win32") {
-    for (const dir of candidateDirs) {
+    // The addon dynamically loads libmpv-2.dll by base name; the DLL search
+    // order includes PATH. Also cover the directory holding the addon itself
+    // for layouts where the runtime is staged next to libmpv.node.
+    const searchDirs = [
+      ...candidateDirs,
+      typeof process.resourcesPath === "string"
+        ? path.join(process.resourcesPath, "native")
+        : null,
+    ].filter((dir): dir is string => typeof dir === "string");
+
+    for (const dir of searchDirs) {
       const currentPath = process.env.PATH || "";
       if (!currentPath.split(";").includes(dir)) {
         process.env.PATH = `${dir};${currentPath}`;
@@ -265,7 +287,8 @@ export class LibMpvController {
       }
       if (!this.addon || !this.mainWindow || this.mainWindow.isDestroyed()) {
         const message =
-          lastAddonLoadError || "Native libmpv addon is unavailable";
+          lastAddonLoadError ||
+          `Native libmpv addon is unavailable (${getAddonDiagnostics()})`;
         console.warn(
           "[libmpv] startup warmup skipped: native addon unavailable",
           message,
@@ -382,10 +405,14 @@ export class LibMpvController {
       this.addon = getNativeAddon();
     }
     if (!this.addon || !this.mainWindow || this.mainWindow.isDestroyed()) {
-      this.broadcastError(
-        "native_addon_unavailable",
-        lastAddonLoadError || "Native libmpv addon is unavailable",
-      );
+      const message =
+        lastAddonLoadError ||
+        `Native libmpv addon is unavailable (${getAddonDiagnostics()})`;
+      this.broadcastError("native_addon_unavailable", message, {
+        ...(lastAddonLoadError
+          ? { loadError: lastAddonLoadError }
+          : { diagnostics: getAddonDiagnostics() }),
+      });
       return null;
     }
 

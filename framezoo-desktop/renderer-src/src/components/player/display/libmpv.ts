@@ -105,6 +105,11 @@ type LibMpvElectronApi = {
     libmpv?: { status?: string; message?: string };
     torrent?: { status?: string; message?: string };
   }>;
+  waitForStartupNativeWarmup?: () => Promise<{
+    status?: string;
+    libmpv?: { status?: string; message?: string };
+    torrent?: { status?: string; message?: string };
+  }>;
 };
 
 function getElectronApi(): LibMpvElectronApi | null {
@@ -318,12 +323,23 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           );
         }
         if (!createdPlayerId) {
+          // Wait for the startup warmup to settle (it also retries loading the
+          // native addon) so the reported failure is the real cause instead of
+          // a generic message. This is essential for diagnosing Windows
+          // releases where the addon binary or its runtime is missing/broken.
           const warmup = await electronApi
-            ?.getStartupNativeWarmupState?.()
+            ?.waitForStartupNativeWarmup?.()
             .catch(() => null);
+          const settleState = (warmup ??
+            (await electronApi
+              ?.getStartupNativeWarmupState?.()
+              .catch(() => null))) as
+            | { libmpv?: { status?: string; message?: string } }
+            | null
+            | undefined;
           const libmpvMsg =
-            warmup?.libmpv?.status === "error"
-              ? warmup.libmpv.message
+            settleState?.libmpv?.status === "error"
+              ? settleState.libmpv.message
               : undefined;
           emit("error", {
             type: "mpv",

@@ -27,7 +27,14 @@ if(WIN32)
   endif()
   target_link_libraries(libmpv PRIVATE "${NODE_LIB}")
   if(MSVC)
-    target_link_options(libmpv PRIVATE "/DELAYLOAD:node.exe")
+    # Delay-load the node core so the hook in win_delay_load_hook.cpp can
+    # redirect it to the running Electron image. Both names are listed
+    # because node.lib may reference node.exe or electron.exe depending on
+    # which import library the build used.
+    target_link_options(libmpv PRIVATE "/DELAYLOAD:node.exe" "/DELAYLOAD:electron.exe")
+    # Statically link the MSVC runtime so the addon has no dependency on
+    # vcruntime140.dll/msvcp140.dll being installed on user machines.
+    set_property(TARGET libmpv PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
   endif()
   set_target_properties(libmpv PROPERTIES PREFIX "" SUFFIX ".node")
 else()
