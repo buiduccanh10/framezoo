@@ -147,21 +147,37 @@ function verifyStagedAddon(target) {
     throw new Error(`Staged addon missing after build: ${addonPath}`);
   }
 
-  const verifyScript = path.join(root, "verify-libmpv-native.mjs");
-  const verifyArgs = [verifyScript, "--addon", addonPath];
-
-  // Warmup verification needs the libmpv runtime; it is staged by
-  // resources:ensure which may run before or after this script depending on
-  // the pipeline. When it is already present, verify the full warmup path.
+  // Warmup verification needs the libmpv runtime, staged by
+  // resources:ensure which runs before or after this script depending on the
+  // pipeline. When the runtime has not been staged yet, skip the load test
+  // here; the explicit post-ensure verify steps in the release pipelines are
+  // the authoritative gate.
   const runtimeDir = path.join(
     desktopRoot,
     "resources",
     "libmpv",
     target,
   );
-  if (fs.existsSync(runtimeDir)) {
-    verifyArgs.push("--runtime-dir", runtimeDir);
+  if (!fs.existsSync(runtimeDir)) {
+    if (process.env.VERIFY_NATIVE) {
+      throw new Error(
+        `VERIFY_NATIVE is set but the libmpv runtime is not staged at ${runtimeDir}. Run resources:ensure first.`,
+      );
+    }
+    console.warn(
+      `[native] skipping ${target} load verification: runtime not staged at ${runtimeDir} (run resources:ensure before verifying)`,
+    );
+    return;
   }
+
+  const verifyScript = path.join(root, "verify-libmpv-native.mjs");
+  const verifyArgs = [
+    verifyScript,
+    "--addon",
+    addonPath,
+    "--runtime-dir",
+    runtimeDir,
+  ];
 
   execFileSync(process.execPath, verifyArgs, {
     cwd: desktopRoot,
