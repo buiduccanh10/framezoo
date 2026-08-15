@@ -398,6 +398,11 @@ export class LibMpvController {
         return this.destroy(playerId, reason);
       },
     );
+
+    ipcMain.handle("desktop:libmpv-diagnostics", () => ({
+      diagnostics: getAddonDiagnostics(),
+      lastError: lastAddonLoadError,
+    }));
   }
 
   public create(bounds: LibMpvBounds): string | null {

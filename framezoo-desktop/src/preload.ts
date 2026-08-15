@@ -202,6 +202,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   waitForStartupNativeWarmup(): Promise<unknown> {
     return ipcRenderer.invoke("desktop:native-warmup-wait");
   },
+  getLibMpvDiagnostics(): Promise<{
+    diagnostics: string;
+    lastError: string | null;
+  } | null> {
+    return ipcRenderer.invoke("desktop:libmpv-diagnostics");
+  },
   onStartupNativeWarmupState(listener: (state: unknown) => void) {
     const handler = (_event: Electron.IpcRendererEvent, state: unknown) => {
       listener(state);

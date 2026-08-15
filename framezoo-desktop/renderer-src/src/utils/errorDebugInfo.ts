@@ -1,5 +1,6 @@
 import { detect } from "detect-browser";
 
+import { APP_VERSION } from "@/setup/constants";
 import { usePlayerStore } from "@/stores/player/store";
 
 export interface ErrorDebugInfo {
@@ -13,6 +14,7 @@ export interface ErrorDebugInfo {
     userAgent: string;
     browser: string;
     os: string;
+    appVersion: string;
     isMobile: boolean;
     isTV: boolean;
     screenResolution: string;
@@ -113,6 +115,7 @@ export function gatherErrorDebugInfo(error: any): ErrorDebugInfo {
       userAgent: navigator.userAgent,
       browser: browserInfo?.name || "unknown",
       os: browserInfo?.os || "unknown",
+      appVersion: APP_VERSION || "unknown",
       isMobile,
       isTV,
       screenResolution: `${window.screen.width}x${window.screen.height}`,
@@ -203,6 +206,7 @@ export function formatErrorDebugInfo(info: ErrorDebugInfo): string {
     ``,
     `=== DEVICE INFO ===`,
     `Browser: ${info.device.browser} (${info.device.os})`,
+    `Version: ${info.device.appVersion}`,
     `User Agent: ${info.device.userAgent}`,
     `Screen: ${info.device.screenResolution}`,
     `Viewport: ${info.device.viewportSize}`,
