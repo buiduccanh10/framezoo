@@ -84,7 +84,23 @@ function main() {
   }
 
   run(python.command, [...python.prefix, "-m", "venv", venvRoot]);
-  run(venvPython, ["-m", "pip", "install", "-r", requirementsPath]);
+  run(venvPython, [
+    "-m",
+    "pip",
+    "install",
+    "--upgrade",
+    "pip",
+    "setuptools",
+    "wheel",
+  ]);
+  run(venvPython, [
+    "-m",
+    "pip",
+    "install",
+    "--no-cache-dir",
+    "-r",
+    requirementsPath,
+  ]);
 
   if (!canImportLibtorrent()) {
     throw new Error(
