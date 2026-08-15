@@ -122,6 +122,8 @@ struct MpvPlayer {
   std::atomic<bool> video_metadata_ready{false};
   std::atomic<bool> video_frame_ready{false};
   std::atomic<double> pending_start_at{0};
+  bool software_render = false;
+  std::vector<uint8_t> sw_buffer;
 
   int command(const char* const* commands) {
     std::lock_guard<std::mutex> lock(command_mutex);
@@ -246,6 +248,12 @@ struct MpvPlayer {
       return;
     }
     const uint64_t render_number = render_count.fetch_add(1) + 1;
+#if defined(_WIN32)
+    if (software_render) {
+      render_software(render_number);
+      return;
+    }
+#endif
     surface_make_current(surface);
     const uint64_t update_flags = api.render_context_update(render_context);
     if (!running.load(std::memory_order_acquire)) return;
@@ -304,6 +312,71 @@ struct MpvPlayer {
       emit(native_event);
     }
   }
+
+#if defined(_WIN32)
+  void render_software(uint64_t render_number) {
+    const int width = surface_width(surface);
+    const int height = surface_height(surface);
+    if (width <= 0 || height <= 0) return;
+
+    const size_t stride = static_cast<size_t>(width) * 4;
+    const size_t needed = stride * static_cast<size_t>(height);
+    if (sw_buffer.size() < needed) {
+      sw_buffer.assign(needed, 0);
+    }
+
+    const uint64_t update_flags = api.render_context_update(render_context);
+    if (!running.load(std::memory_order_acquire)) return;
+
+    int size[2] = {width, height};
+    mpv_render_param params[] = {
+        {MPV_RENDER_PARAM_SW_SIZE, size},
+        {MPV_RENDER_PARAM_SW_FORMAT, const_cast<char*>("rgb0")},
+        {MPV_RENDER_PARAM_SW_STRIDE, &stride},
+        {MPV_RENDER_PARAM_SW_POINTER, sw_buffer.data()},
+        {MPV_RENDER_PARAM_INVALID, nullptr},
+    };
+    const int result = api.render_context_render(render_context, params);
+    if (result >= 0) {
+      surface_blit_rgb0(surface, sw_buffer.data(), stride);
+    }
+    if (result < 0) {
+      std::fprintf(
+          stderr,
+          "[libmpv-native] software render failed player=%s result=%d "
+          "update_flags=%llu surface=%dx%d\n",
+          id.c_str(),
+          result,
+          static_cast<unsigned long long>(update_flags),
+          width,
+          height
+      );
+    } else if (render_number <= 5 || render_number % 60 == 0) {
+      std::fprintf(
+          stderr,
+          "[libmpv-native] software render player=%s frame=%llu "
+          "update_flags=%llu surface=%dx%d generation=%d\n",
+          id.c_str(),
+          static_cast<unsigned long long>(render_number),
+          static_cast<unsigned long long>(update_flags),
+          width,
+          height,
+          generation.load()
+      );
+    }
+    if (
+        result >= 0 &&
+        video_metadata_ready.load(std::memory_order_acquire) &&
+        !video_frame_ready.exchange(true, std::memory_order_acq_rel)
+    ) {
+      auto* native_event = new NativeEvent();
+      native_event->player_id = id;
+      native_event->generation = generation.load();
+      native_event->type = "video-frame";
+      emit(native_event);
+    }
+  }
+#endif
 
   void event_loop() {
     while (running) {
@@ -1084,7 +1157,31 @@ napi_value create_player(napi_env env, napi_callback_info info) {
           player->handle,
           render_params
       ) < 0) {
+#if defined(_WIN32)
+    // Windows VMs and remote desktops often expose only GDI OpenGL 1.1,
+    // which libplacebo rejects (it needs GL 3.3+). Fall back to mpv's
+    // built-in software renderer; frames are blitted via GDI in
+    // platform_surface_win.cpp.
+    std::fprintf(
+        stderr,
+        "[libmpv-native] opengl render context failed, falling back to "
+        "software rendering\n"
+    );
+    mpv_render_param software_params[] = {
+        {MPV_RENDER_PARAM_API_TYPE, const_cast<char*>("sw")},
+        {MPV_RENDER_PARAM_INVALID, nullptr},
+    };
+    if (player->api.render_context_create(
+            &player->render_context,
+            player->handle,
+            software_params
+        ) < 0) {
+      return throw_error(env, "mpv_render_context_create failed");
+    }
+    player->software_render = true;
+#else
     return throw_error(env, "mpv_render_context_create failed");
+#endif
   }
   player->api.render_context_set_update_callback(
       player->render_context,

@@ -29,3 +29,10 @@ void surface_swap_buffers(NativeSurface* surface);
 int surface_width(NativeSurface* surface);
 int surface_height(NativeSurface* surface);
 void surface_configure_window(void* parent_handle);
+
+#if defined(_WIN32)
+// Blit a packed top-down 32-bit RGB0 buffer into the surface window using GDI
+// (works even with software-only display drivers, e.g. VMs/remote desktop).
+// Returns 1 on success, 0 on failure.
+int surface_blit_rgb0(NativeSurface* surface, const void* rgb0, size_t stride);
+#endif

@@ -247,4 +247,50 @@ void surface_configure_window(void* parent_handle) {
   // No-op on Windows
 }
 
+int surface_blit_rgb0(NativeSurface* surface, const void* rgb0, size_t stride) {
+  (void)stride;
+  if (!surface || !surface->hwnd || !rgb0) return 0;
+  const int width = surface->bounds.width;
+  const int height = surface->bounds.height;
+  if (width <= 0 || height <= 0) return 0;
+
+  BITMAPINFO bitmap_info{};
+  bitmap_info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+  bitmap_info.bmiHeader.biWidth = width;
+  bitmap_info.bmiHeader.biHeight = -height;  // top-down
+  bitmap_info.bmiHeader.biPlanes = 1;
+  bitmap_info.bmiHeader.biBitCount = 32;
+  bitmap_info.bmiHeader.biCompression = BI_RGB;
+
+  HDC dc = GetDC(surface->hwnd);
+  if (!dc) return 0;
+  const int lines = SetDIBitsToDevice(
+      dc,
+      0,
+      0,
+      width,
+      height,
+      0,
+      0,
+      0,
+      height,
+      rgb0,
+      &bitmap_info,
+      DIB_RGB_COLORS
+  );
+  ReleaseDC(surface->hwnd, dc);
+  if (lines != height) {
+    std::fprintf(
+        stderr,
+        "[libmpv-native] surface_blit_rgb0: SetDIBitsToDevice failed "
+        "(lines=%d/%d err %lu)\n",
+        lines,
+        height,
+        static_cast<unsigned long>(GetLastError())
+    );
+    return 0;
+  }
+  return 1;
+}
+
 #endif
