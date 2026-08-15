@@ -279,6 +279,10 @@ int surface_height(NativeSurface* surface) {
   );
 }
 
+void* surface_native_handle(NativeSurface* surface) {
+  return surface ? static_cast<void*>(surface->view) : nullptr;
+}
+
 void surface_configure_window(void* parent_handle) {
   if (!parent_handle) return;
   NSView* anchor = static_cast<NSView*>(parent_handle);

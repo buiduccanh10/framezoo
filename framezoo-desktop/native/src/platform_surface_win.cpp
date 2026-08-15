@@ -153,6 +153,10 @@ int surface_height(NativeSurface* surface) {
   return surface ? surface->bounds.height : 0;
 }
 
+void* surface_native_handle(NativeSurface* surface) {
+  return surface ? static_cast<void*>(surface->hwnd) : nullptr;
+}
+
 void surface_configure_window(void*) {}
 
 int surface_blit_rgb0(NativeSurface*, const void*, size_t) {

@@ -60,6 +60,9 @@ if(DEFINED LIBMPV_ROOT)
 endif()
 
 target_compile_definitions(libmpv PRIVATE NAPI_VERSION=8)
+if(MSVC)
+  target_compile_definitions(libmpv PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
 
 if(MSVC)
   target_compile_options(libmpv PRIVATE /W4 /EHsc)
