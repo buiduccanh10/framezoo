@@ -5,6 +5,7 @@ import { ButtonPlain } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { Modal } from "@/components/overlays/Modal";
 import { DisplayError } from "@/components/player/display/displayInterface";
+import { APP_VERSION } from "@/setup/constants";
 import {
   formatErrorDebugInfo,
   gatherErrorDebugInfo,
@@ -50,6 +51,9 @@ export function ErrorCard(props: {
       <div className="border-errors-border flex items-center justify-between border-b pb-2">
         <span className="font-medium text-white text-sm sm:text-base">
           {t("errors.details")}
+        </span>
+        <span className="ml-2 self-center text-xs font-medium text-white/40">
+          {APP_VERSION ? `v${APP_VERSION}` : ""}
         </span>
         <div className="flex items-center justify-center gap-2 sm:gap-3">
           <ButtonPlain

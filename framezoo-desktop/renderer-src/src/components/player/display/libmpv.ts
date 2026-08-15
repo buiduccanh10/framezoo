@@ -110,6 +110,10 @@ type LibMpvElectronApi = {
     libmpv?: { status?: string; message?: string };
     torrent?: { status?: string; message?: string };
   }>;
+  getLibMpvDiagnostics?: () => Promise<{
+    diagnostics: string;
+    lastError: string | null;
+  } | null>;
 };
 
 function getElectronApi(): LibMpvElectronApi | null {
@@ -341,12 +345,23 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             settleState?.libmpv?.status === "error"
               ? settleState.libmpv.message
               : undefined;
+          // Always pull the main-process addon diagnostics so the error report
+          // carries the real root cause (candidates, load error, runtime path)
+          // even when the startup warmup settled without an error message.
+          const addonDiagnostics = await electronApi
+            ?.getLibMpvDiagnostics?.()
+            .catch(() => null);
+          const diagnosticsText = addonDiagnostics?.diagnostics
+            ? `(${addonDiagnostics.diagnostics})`
+            : "";
           emit("error", {
             type: "mpv",
             errorName: "libmpv_native_unavailable",
             message: libmpvMsg
-              ? `Native libmpv addon is unavailable: ${libmpvMsg}`
-              : "Native libmpv addon is unavailable",
+              ? `Native libmpv addon is unavailable: ${libmpvMsg} ${diagnosticsText}`.trim()
+              : diagnosticsText
+                ? `Native libmpv addon is unavailable ${diagnosticsText}`
+                : "Native libmpv addon is unavailable",
           });
         }
         return null;

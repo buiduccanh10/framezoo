@@ -66,6 +66,10 @@ declare global {
       ) => () => void;
       getStartupNativeWarmupState?: () => Promise<NativeStartupWarmupState>;
       waitForStartupNativeWarmup?: () => Promise<NativeStartupWarmupState>;
+      getLibMpvDiagnostics?: () => Promise<{
+        diagnostics: string;
+        lastError: string | null;
+      } | null>;
       onStartupNativeWarmupState?: (
         listener: (state: NativeStartupWarmupState) => void,
       ) => () => void;
