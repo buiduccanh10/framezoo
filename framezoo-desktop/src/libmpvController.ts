@@ -256,11 +256,11 @@ export class LibMpvController {
         arch: process.arch,
         candidates: getNativeAddonCandidates(),
       });
-    } else if (this.addon.configureWindow && process.platform === "darwin") {
+    } else if (this.addon.configureWindow) {
       try {
         this.addon.configureWindow(mainWindow.getNativeWindowHandle());
       } catch (err) {
-        console.warn("[libmpv] failed to configure window titlebar", err);
+        console.warn("[libmpv] failed to configure window", err);
       }
     }
 
@@ -268,6 +268,11 @@ export class LibMpvController {
 
     mainWindow.on("resize", () => {
       this.broadcastLog("debug", "window_resized");
+      for (const player of this.players.values()) {
+        if (player.target === "main") {
+          this.addon?.resizePlayer(player.id, player.bounds);
+        }
+      }
     });
     mainWindow.on("minimize", () => {
       for (const player of this.players.values()) {
