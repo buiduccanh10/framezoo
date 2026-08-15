@@ -26,7 +26,11 @@ bool load_symbol(void* library, const char* name, T* target) {
 
 void* load_library(const char* path) {
 #if defined(_WIN32)
-  return static_cast<void*>(LoadLibraryA(path));
+  HMODULE h = LoadLibraryExA(path, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+  if (!h) {
+    h = LoadLibraryA(path);
+  }
+  return static_cast<void*>(h);
 #else
   return dlopen(path, RTLD_NOW | RTLD_LOCAL);
 #endif
@@ -69,7 +73,11 @@ bool MpvApi::load(std::string* error) {
   for (const auto& path : library_candidates()) {
     library = load_library(path.c_str());
     if (!library) {
+#if defined(_WIN32)
+      failures << path << " (err " << GetLastError() << "); ";
+#else
       failures << path << "; ";
+#endif
       continue;
     }
 

@@ -100,6 +100,11 @@ type LibMpvElectronApi = {
   onLibMpvLog?: (listener: (log: LibMpvLogEvent) => void) => () => void;
   toggleFullscreen?: () => Promise<void>;
   onFullscreenState?: (listener: (isFullscreen: boolean) => void) => () => void;
+  getStartupNativeWarmupState?: () => Promise<{
+    status?: string;
+    libmpv?: { status?: string; message?: string };
+    torrent?: { status?: string; message?: string };
+  }>;
 };
 
 function getElectronApi(): LibMpvElectronApi | null {
@@ -313,10 +318,19 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           );
         }
         if (!createdPlayerId) {
+          const warmup = await electronApi
+            ?.getStartupNativeWarmupState?.()
+            .catch(() => null);
+          const libmpvMsg =
+            warmup?.libmpv?.status === "error"
+              ? warmup.libmpv.message
+              : undefined;
           emit("error", {
             type: "mpv",
             errorName: "libmpv_native_unavailable",
-            message: "Native libmpv addon is unavailable",
+            message: libmpvMsg
+              ? `Native libmpv addon is unavailable: ${libmpvMsg}`
+              : "Native libmpv addon is unavailable",
           });
         }
         return null;

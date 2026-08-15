@@ -52,6 +52,8 @@ const FILE_NATIVE_EVENT_TIMEOUT_MS = 45_000;
 // Give them much more time before treating the load as failed.
 const TORRENT_NATIVE_EVENT_TIMEOUT_MS = 600_000; // 10 minutes
 
+let lastAddonLoadError: string | null = null;
+
 function isSupportedDesktopPlatform(): boolean {
   return process.platform === "darwin" || process.platform === "win32";
 }
@@ -60,12 +62,18 @@ function getNativeAddonCandidates(): string[] {
   const target = `${process.platform}-${process.arch}`;
   const candidates = [
     process.env.FRAMEZOO_LIBMPV_ADDON,
-    app.isPackaged
+    typeof process.resourcesPath === "string"
       ? path.join(process.resourcesPath, "native", "libmpv.node")
       : null,
+    typeof process.resourcesPath === "string"
+      ? path.join(process.resourcesPath, "native", target, "libmpv.node")
+      : null,
     path.join(process.cwd(), "resources", "native", target, "libmpv.node"),
+    path.join(process.cwd(), "resources", "native", "libmpv.node"),
     path.join(process.cwd(), "native", "build", target, "libmpv.node"),
+    path.join(process.cwd(), "native", "build", "Release", "libmpv.node"),
     path.join(__dirname, "..", "native", "build", target, "libmpv.node"),
+    path.join(__dirname, "..", "resources", "native", target, "libmpv.node"),
   ];
 
   return candidates.filter((candidate): candidate is string =>
@@ -75,25 +83,44 @@ function getNativeAddonCandidates(): string[] {
 
 function configureNativeRuntime(): void {
   const target = `${process.platform}-${process.arch}`;
-  const runtimeName =
-    process.platform === "win32" ? "libmpv-2.dll" : "libmpv.2.dylib";
-  const candidates = [
-    process.env.FRAMEZOO_LIBMPV_PATH,
-    app.isPackaged
-      ? path.join(process.resourcesPath, "libmpv", runtimeName)
+  const runtimeNames =
+    process.platform === "win32"
+      ? ["libmpv-2.dll", "mpv-2.dll", "libmpv.dll"]
+      : ["libmpv.2.dylib", "libmpv.dylib"];
+
+  const candidateDirs = [
+    typeof process.resourcesPath === "string"
+      ? path.join(process.resourcesPath, "libmpv")
       : null,
-    path.join(process.cwd(), "resources", "libmpv", target, runtimeName),
-    path.join(__dirname, "..", "resources", "libmpv", target, runtimeName),
-  ].filter((candidate): candidate is string => Boolean(candidate));
-  const runtimePath = candidates.find((candidate) => fs.existsSync(candidate));
-  if (runtimePath) {
-    process.env.FRAMEZOO_LIBMPV_PATH = runtimePath;
-    if (process.platform === "win32") {
-      const libDir = path.dirname(runtimePath);
+    typeof process.resourcesPath === "string"
+      ? path.join(process.resourcesPath, "libmpv", target)
+      : null,
+    path.join(process.cwd(), "resources", "libmpv", target),
+    path.join(process.cwd(), "resources", "libmpv"),
+    path.join(__dirname, "..", "resources", "libmpv", target),
+    path.join(__dirname, "..", "resources", "libmpv"),
+  ]
+    .filter((dir): dir is string => typeof dir === "string")
+    .filter((dir) => fs.existsSync(dir));
+
+  if (process.platform === "win32") {
+    for (const dir of candidateDirs) {
       const currentPath = process.env.PATH || "";
-      if (!currentPath.split(";").includes(libDir)) {
-        process.env.PATH = `${libDir};${currentPath}`;
-        console.log(`[libmpv] added to PATH on Windows: ${libDir}`);
+      if (!currentPath.split(";").includes(dir)) {
+        process.env.PATH = `${dir};${currentPath}`;
+      }
+    }
+  }
+
+  if (!process.env.FRAMEZOO_LIBMPV_PATH) {
+    for (const dir of candidateDirs) {
+      for (const name of runtimeNames) {
+        const fullPath = path.join(dir, name);
+        if (fs.existsSync(fullPath)) {
+          process.env.FRAMEZOO_LIBMPV_PATH = fullPath;
+          console.log(`[libmpv] found runtime path: ${fullPath}`);
+          return;
+        }
       }
     }
   }
@@ -104,18 +131,30 @@ function getNativeAddon(): NativeLibMpvAddon | null {
 
   configureNativeRuntime();
 
+  const candidates = getNativeAddonCandidates();
   const require = createRequire(__filename);
-  for (const candidate of getNativeAddonCandidates()) {
+  let checkedAny = false;
+
+  for (const candidate of candidates) {
     if (!fs.existsSync(candidate)) continue;
 
+    checkedAny = true;
     try {
-      return require(candidate) as NativeLibMpvAddon;
+      const addon = require(candidate) as NativeLibMpvAddon;
+      lastAddonLoadError = null;
+      return addon;
     } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      lastAddonLoadError = `Failed to load ${candidate}: ${errorMsg}`;
       console.error("[libmpv] failed to load native addon", {
         candidate,
-        error: error instanceof Error ? error.message : String(error),
+        error: errorMsg,
       });
     }
+  }
+
+  if (!checkedAny) {
+    lastAddonLoadError = `No native addon binary found. Checked: ${candidates.join(", ")}`;
   }
 
   return null;
@@ -221,10 +260,15 @@ export class LibMpvController {
     if (this.warmupPromise) return this.warmupPromise;
 
     this.warmupPromise = (async () => {
+      if (!this.addon) {
+        this.addon = getNativeAddon();
+      }
       if (!this.addon || !this.mainWindow || this.mainWindow.isDestroyed()) {
-        const message = "Native libmpv addon is unavailable";
+        const message =
+          lastAddonLoadError || "Native libmpv addon is unavailable";
         console.warn(
           "[libmpv] startup warmup skipped: native addon unavailable",
+          message,
         );
         return { ok: false, message };
       }
@@ -334,8 +378,14 @@ export class LibMpvController {
   }
 
   public create(bounds: LibMpvBounds): string | null {
+    if (!this.addon) {
+      this.addon = getNativeAddon();
+    }
     if (!this.addon || !this.mainWindow || this.mainWindow.isDestroyed()) {
-      this.broadcastError("native_addon_unavailable");
+      this.broadcastError(
+        "native_addon_unavailable",
+        lastAddonLoadError || "Native libmpv addon is unavailable",
+      );
       return null;
     }
 
