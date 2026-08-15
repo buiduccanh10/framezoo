@@ -184,9 +184,15 @@ export function createDesktopAppUpdater(
     }
   }
 
-  function installUpdate() {
+  async function installUpdate() {
     if (!app.isPackaged || !isSupported()) return false;
     if (state.status !== "downloaded") return false;
+
+    try {
+      await options.beforeInstall?.();
+    } catch (error) {
+      console.error("[updater] Error during beforeInstall cleanup:", error);
+    }
 
     if (process.platform === "darwin") {
       const zipPath = path.join(os.tmpdir(), `${tempFilePrefix}-update.zip`);
