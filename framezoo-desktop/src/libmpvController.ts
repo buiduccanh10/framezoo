@@ -53,6 +53,7 @@ const FILE_NATIVE_EVENT_TIMEOUT_MS = 45_000;
 const TORRENT_NATIVE_EVENT_TIMEOUT_MS = 600_000; // 10 minutes
 
 let lastAddonLoadError: string | null = null;
+let lastPlayerCreateError: string | null = null;
 
 function getAddonDiagnostics(): string {
   const lines = [
@@ -402,6 +403,7 @@ export class LibMpvController {
     ipcMain.handle("desktop:libmpv-diagnostics", () => ({
       diagnostics: getAddonDiagnostics(),
       lastError: lastAddonLoadError,
+      lastCreateError: lastPlayerCreateError,
     }));
   }
 
@@ -437,15 +439,18 @@ export class LibMpvController {
         bounds: normalizedBounds,
         target: "main",
       });
+      lastPlayerCreateError = null;
       this.broadcastLog("info", "create", {
         playerId: id,
         bounds: normalizedBounds,
       });
       return id;
     } catch (error) {
+      lastPlayerCreateError =
+        error instanceof Error ? error.message : String(error);
       this.broadcastError(
         "create_failed",
-        error instanceof Error ? error.message : String(error),
+        lastPlayerCreateError,
       );
       return null;
     }

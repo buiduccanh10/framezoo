@@ -205,6 +205,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getLibMpvDiagnostics(): Promise<{
     diagnostics: string;
     lastError: string | null;
+    lastCreateError: string | null;
   } | null> {
     return ipcRenderer.invoke("desktop:libmpv-diagnostics");
   },

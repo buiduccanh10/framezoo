@@ -115,6 +115,11 @@ NativeSurface* surface_create(
       nullptr
   );
   if (!surface->hwnd) {
+    std::fprintf(
+        stderr,
+        "[libmpv-native] surface_create: CreateWindowExA failed (err %lu)\n",
+        static_cast<unsigned long>(GetLastError())
+    );
     delete surface;
     return nullptr;
   }
@@ -126,12 +131,22 @@ NativeSurface* surface_create(
   );
   surface->dc = GetDC(surface->hwnd);
   if (!surface->dc || !setup_pixel_format(surface)) {
+    std::fprintf(
+        stderr,
+        "[libmpv-native] surface_create: GetDC/SetPixelFormat failed (err %lu)\n",
+        static_cast<unsigned long>(GetLastError())
+    );
     surface_destroy(surface);
     return nullptr;
   }
 
   surface->gl_context = wglCreateContext(surface->dc);
   if (!surface->gl_context) {
+    std::fprintf(
+        stderr,
+        "[libmpv-native] surface_create: wglCreateContext failed (err %lu)\n",
+        static_cast<unsigned long>(GetLastError())
+    );
     surface_destroy(surface);
     return nullptr;
   }
