@@ -91,6 +91,7 @@ export type DesktopAppUpdateState = {
 
 export type CreateDesktopAppUpdaterOptions = {
   appName: string;
+  beforeInstall?: () => Promise<void> | void;
   checkIntervalMs: number;
   getBackendUrl: () => string;
   onStateChange?: (state: DesktopAppUpdateState) => void;

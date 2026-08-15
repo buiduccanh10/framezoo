@@ -581,6 +581,18 @@ async function showDesktopMessageBox(options: {
 
 const desktopAppUpdater = createDesktopAppUpdater({
   appName: APP_NAME,
+  beforeInstall: async () => {
+    try {
+      await torrentManager.stopAll();
+    } catch (error) {
+      console.error("[main] Failed to stop torrents before update install:", error);
+    }
+    try {
+      await torrentManager.dispose();
+    } catch (error) {
+      console.error("[main] Failed to dispose torrent manager before update install:", error);
+    }
+  },
   checkIntervalMs: DESKTOP_APP_UPDATE_CHECK_INTERVAL_MS,
   getBackendUrl: getConfiguredBackendUrl,
   onStateChange: () => {

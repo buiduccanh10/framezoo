@@ -1,4 +1,8 @@
-import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
+import {
+  execSync,
+  spawn,
+  type ChildProcessWithoutNullStreams,
+} from "node:child_process";
 import { createInterface } from "node:readline";
 import { randomUUID } from "node:crypto";
 
@@ -109,9 +113,19 @@ export class SidecarTorrentEngine implements TorrentEngine {
     this.pending.clear();
     this.listeners.clear();
     this.statuses.clear();
-    const process = this.process;
+    const proc = this.process;
     this.process = null;
-    process?.kill();
+    if (proc) {
+      if (globalThis.process.platform === "win32" && proc.pid) {
+        try {
+          execSync(`taskkill /pid ${proc.pid} /T /F`, { stdio: "ignore" });
+        } catch {
+          proc.kill();
+        }
+      } else {
+        proc.kill();
+      }
+    }
   }
 
   async warmup(): Promise<void> {

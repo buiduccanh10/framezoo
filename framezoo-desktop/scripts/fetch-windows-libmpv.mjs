@@ -236,19 +236,39 @@ async function main() {
     return directory;
   }
 
-  const libmpvRoot = findMpvRoot(outDir);
-  console.log(`[fetch-windows-libmpv] SDK Ready at: ${libmpvRoot}`);
-
-  if (process.env.GITHUB_ENV) {
-    fs.appendFileSync(
-      process.env.GITHUB_ENV,
-      `LIBMPV_ROOT=${libmpvRoot}\n`,
-      "utf8",
-    );
-    console.log(
-      `[fetch-windows-libmpv] Appended LIBMPV_ROOT=${libmpvRoot} to GITHUB_ENV`,
+  function isSdkComplete(root) {
+    return (
+      fs.existsSync(path.join(root, "include", "mpv", "client.h")) &&
+      (fs.existsSync(path.join(root, "libmpv-2.dll")) ||
+        fs.existsSync(path.join(root, "mpv-2.dll")))
     );
   }
+
+  function publishLibmpvRoot(libmpvRoot) {
+    console.log(`[fetch-windows-libmpv] SDK Ready at: ${libmpvRoot}`);
+    if (process.env.GITHUB_ENV) {
+      fs.appendFileSync(
+        process.env.GITHUB_ENV,
+        `LIBMPV_ROOT=${libmpvRoot}\n`,
+        "utf8",
+      );
+      console.log(
+        `[fetch-windows-libmpv] Appended LIBMPV_ROOT=${libmpvRoot} to GITHUB_ENV`,
+      );
+    }
+  }
+
+  const cachedRoot = findMpvRoot(outDir);
+  if (isSdkComplete(cachedRoot)) {
+    console.log(
+      `[fetch-windows-libmpv] Using cached libmpv SDK at ${cachedRoot} (skipping download)`,
+    );
+    publishLibmpvRoot(cachedRoot);
+    return;
+  }
+
+  const libmpvRoot = findMpvRoot(outDir);
+  publishLibmpvRoot(libmpvRoot);
 }
 
 main().catch((err) => {
