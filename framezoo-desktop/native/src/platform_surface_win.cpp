@@ -19,6 +19,37 @@ namespace {
 
 std::once_flag register_class_once;
 
+void register_surface_class() {
+  std::call_once(register_class_once, [] {
+    WNDCLASSA window_class{};
+    window_class.lpfnWndProc = [](HWND hwnd, UINT message, WPARAM wparam,
+                                  LPARAM lparam) -> LRESULT {
+      switch (message) {
+        case WM_ERASEBKGND:
+          return 1;
+        case WM_PAINT: {
+          PAINTSTRUCT paint{};
+          BeginPaint(hwnd, &paint);
+          EndPaint(hwnd, &paint);
+          return 0;
+        }
+        case WM_NCHITTEST:
+          return HTTRANSPARENT;
+        case WM_DESTROY:
+          return 0;
+        default:
+          return DefWindowProcA(hwnd, message, wparam, lparam);
+      }
+    };
+    window_class.hInstance = GetModuleHandleA(nullptr);
+    window_class.lpszClassName = "FrameZooLibMpvSurface";
+    window_class.hbrBackground = nullptr;
+    RegisterClassA(&window_class);
+  });
+}
+
+}  // namespace
+
 void surface_configure_window(void* parent_handle) {
   if (!parent_handle) return;
   HWND parent = static_cast<HWND>(parent_handle);
@@ -57,37 +88,6 @@ void surface_configure_window(void* parent_handle) {
       0
   );
 }
-
-void register_surface_class() {
-  std::call_once(register_class_once, [] {
-    WNDCLASSA window_class{};
-    window_class.lpfnWndProc = [](HWND hwnd, UINT message, WPARAM wparam,
-                                  LPARAM lparam) -> LRESULT {
-      switch (message) {
-        case WM_ERASEBKGND:
-          return 1;
-        case WM_PAINT: {
-          PAINTSTRUCT paint{};
-          BeginPaint(hwnd, &paint);
-          EndPaint(hwnd, &paint);
-          return 0;
-        }
-        case WM_NCHITTEST:
-          return HTTRANSPARENT;
-        case WM_DESTROY:
-          return 0;
-        default:
-          return DefWindowProcA(hwnd, message, wparam, lparam);
-      }
-    };
-    window_class.hInstance = GetModuleHandleA(nullptr);
-    window_class.lpszClassName = "FrameZooLibMpvSurface";
-    window_class.hbrBackground = nullptr;
-    RegisterClassA(&window_class);
-  });
-}
-
-}  // namespace
 
 NativeSurface* surface_create(
     void* parent_handle,
