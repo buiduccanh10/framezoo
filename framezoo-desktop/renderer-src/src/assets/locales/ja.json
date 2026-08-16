@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "字幕は正常に同期されました",
         "syncSubtitleFailed": "字幕を同期できませんでした",
         "syncSubtitleFailedWithDetail": "字幕を同期できませんでした: {{detail}}",
+        "syncRateLimit": "リクエストが多すぎます。再度同期するまでしばらくお待ちください。",
+        "syncServerBusy": "AI サービスは現在ビジー状態です。数秒後に再試行してください。",
         "syncSubtitleOpen": "AIと字幕を同期する",
         "syncSubtitleAction": "同期",
         "syncSubtitlePreparing": "オーディオを準備しています...",

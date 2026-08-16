@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "उपशीर्षक सफलतापूर्वक समन्वयित हुआ",
         "syncSubtitleFailed": "उपशीर्षक सिंक नहीं कर सका",
         "syncSubtitleFailedWithDetail": "उपशीर्षक सिंक नहीं कर सका: {{detail}}",
+        "syncRateLimit": "बहुत सारे अनुरोध. कृपया पुनः समन्वयन करने से पहले एक क्षण प्रतीक्षा करें।",
+        "syncServerBusy": "AI सेवा अभी व्यस्त है. कृपया कुछ सेकंड में पुनः प्रयास करें.",
         "syncSubtitleOpen": "उपशीर्षक को AI के साथ सिंक करें",
         "syncSubtitleAction": "साथ-साथ करना",
         "syncSubtitlePreparing": "ऑडियो तैयार किया जा रहा है...",

@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Subtitrarea a fost sincronizată cu succes",
         "syncSubtitleFailed": "Subtitrarea nu a putut fi sincronizată",
         "syncSubtitleFailedWithDetail": "Nu s-a putut sincroniza subtitrarea: {{detail}}",
+        "syncRateLimit": "Prea multe cereri. Vă rugăm să așteptați un moment înainte de a sincroniza din nou.",
+        "syncServerBusy": "Serviciul AI este ocupat în prezent. Vă rugăm să reîncercați în câteva secunde.",
         "syncSubtitleOpen": "Sincronizați subtitrarea cu AI",
         "syncSubtitleAction": "Sincronizare",
         "syncSubtitlePreparing": "Se pregătește sunetul...",

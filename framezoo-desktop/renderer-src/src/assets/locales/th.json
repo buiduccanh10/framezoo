@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "ซิงค์คำบรรยายสำเร็จแล้ว",
         "syncSubtitleFailed": "ไม่สามารถซิงค์คำบรรยายได้",
         "syncSubtitleFailedWithDetail": "ไม่สามารถซิงค์คำบรรยาย: {{detail}}",
+        "syncRateLimit": "คำขอมากเกินไป โปรดรอสักครู่ก่อนที่จะซิงค์อีกครั้ง",
+        "syncServerBusy": "ขณะนี้บริการ AI ไม่ว่าง โปรดลองอีกครั้งในอีกไม่กี่วินาที",
         "syncSubtitleOpen": "ซิงค์คำบรรยายกับ AI",
         "syncSubtitleAction": "ซิงค์",
         "syncSubtitlePreparing": "กำลังเตรียมเสียง...",

@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "כתוביות סנכרון בהצלחה",
         "syncSubtitleFailed": "לא ניתן היה לסנכרן את הכתוביות",
         "syncSubtitleFailedWithDetail": "לא ניתן היה לסנכרן כתוביות: {{detail}}",
+        "syncRateLimit": "יותר מדי בקשות. המתן רגע לפני שתסנכרן שוב.",
+        "syncServerBusy": "שירות AI עמוס כרגע. אנא נסה שוב בעוד מספר שניות.",
         "syncSubtitleOpen": "סנכרן כתוביות עם AI",
         "syncSubtitleAction": "סנכרון",
         "syncSubtitlePreparing": "מכין אודיו...",

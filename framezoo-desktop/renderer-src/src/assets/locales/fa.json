@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "زیرنویس با موفقیت همگام سازی شد",
         "syncSubtitleFailed": "زیرنویس همگام‌سازی نشد",
         "syncSubtitleFailedWithDetail": "زیرنویس همگام‌سازی نشد: {{detail}}",
+        "syncRateLimit": "درخواست های خیلی زیاد لطفاً قبل از همگام سازی مجدد یک لحظه صبر کنید.",
+        "syncServerBusy": "سرویس هوش مصنوعی در حال حاضر مشغول است. لطفاً چند ثانیه دیگر دوباره امتحان کنید.",
         "syncSubtitleOpen": "همگام سازی زیرنویس با هوش مصنوعی",
         "syncSubtitleAction": "همگام سازی",
         "syncSubtitlePreparing": "در حال آماده سازی صدا...",

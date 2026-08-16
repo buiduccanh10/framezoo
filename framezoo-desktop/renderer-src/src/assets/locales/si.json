@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "උපසිරැසි සාර්ථකව සමමුහුර්ත විය",
         "syncSubtitleFailed": "උපසිරැසි සමමුහුර්ත කිරීමට නොහැකි විය",
         "syncSubtitleFailedWithDetail": "උපසිරැසි සමමුහුර්ත කිරීමට නොහැකි විය: {{detail}}",
+        "syncRateLimit": "ඉල්ලීම් වැඩියි. නැවත සමමුහුර්ත කිරීමට පෙර කරුණාකර මොහොතක් රැඳී සිටින්න.",
+        "syncServerBusy": "AI සේවාව දැනට කාර්ය බහුලයි. කරුණාකර තත්පර කිහිපයකින් නැවත උත්සාහ කරන්න.",
         "syncSubtitleOpen": "AI සමඟ උපසිරැසි සමමුහුර්ත කරන්න",
         "syncSubtitleAction": "සමමුහුර්ත කරන්න",
         "syncSubtitlePreparing": "ශ්‍රව්‍ය සූදානම් කරමින්...",

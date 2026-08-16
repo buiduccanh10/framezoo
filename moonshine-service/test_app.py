@@ -428,6 +428,37 @@ Third
 
         self.assertEqual([item["track"] for item in subtitles], ["primary", "secondary"])
 
+    def test_rate_limiter_enforces_burst_limit(self):
+        import asyncio
+        from fastapi import HTTPException
+        from limiter import SlidingWindowRateLimiter
+
+        limiter = SlidingWindowRateLimiter()
+
+        async def run_burst():
+            for _ in range(6):
+                await limiter.check_rate_limit("client-1")
+            with self.assertRaises(HTTPException) as ctx:
+                await limiter.check_rate_limit("client-1")
+            self.assertEqual(ctx.exception.status_code, 429)
+            self.assertIn("Retry-After", ctx.exception.headers)
+
+        asyncio.run(run_burst())
+
+    def test_rate_limiter_isolates_different_clients(self):
+        import asyncio
+        from limiter import SlidingWindowRateLimiter
+
+        limiter = SlidingWindowRateLimiter()
+
+        async def run_multi():
+            for _ in range(6):
+                await limiter.check_rate_limit("client-a")
+            # client-b is still allowed
+            await limiter.check_rate_limit("client-b")
+
+        asyncio.run(run_multi())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,10 @@
-import { createError, defineEventHandler, readMultipartFormData } from 'h3';
+import {
+  createError,
+  defineEventHandler,
+  getHeader,
+  getRequestIP,
+  readMultipartFormData,
+} from 'h3';
 
 const MAX_AUDIO_BYTES = 8 * 1024 * 1024;
 const MAX_VTT_BYTES = 2 * 1024 * 1024;
@@ -80,19 +86,39 @@ export default defineEventHandler(async event => {
   );
 
   const internalToken = process.env.INTERNAL_API_TOKEN?.trim();
+  const clientIp =
+    getRequestIP(event, { xForwardedFor: true }) ||
+    getHeader(event, 'x-forwarded-for') ||
+    '127.0.0.1';
+
+  const headers: Record<string, string> = {
+    'x-forwarded-for': clientIp,
+  };
+  if (internalToken) {
+    headers['x-internal-token'] = internalToken;
+  }
+
   const endpoint = subtitlesPart?.data ? '/v1/align-batch' : '/v1/align';
   const response = await fetch(`${getMoonshineServiceUrl()}${endpoint}`, {
     method: 'POST',
-    headers: internalToken ? { 'x-internal-token': internalToken } : undefined,
+    headers,
     body,
     signal: AbortSignal.timeout(Number(process.env.MOONSHINE_TIMEOUT_MS) || 300_000),
   });
 
   if (!response.ok) {
     const detail = await response.text().catch(() => '');
+    let statusMessage = 'Moonshine alignment failed';
+    try {
+      const json = JSON.parse(detail);
+      if (json.detail) statusMessage = json.detail;
+    } catch {
+      if (detail) statusMessage = detail.slice(0, 500);
+    }
+
     throw createError({
-      statusCode: response.status >= 500 ? 502 : response.status,
-      statusMessage: detail.slice(0, 500) || 'Moonshine alignment failed',
+      statusCode: response.status >= 500 && response.status !== 503 ? 502 : response.status,
+      statusMessage,
     });
   }
 

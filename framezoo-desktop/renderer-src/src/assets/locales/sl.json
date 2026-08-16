@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Podnapisi so uspešno sinhronizirani",
         "syncSubtitleFailed": "Podnapisov ni bilo mogoče sinhronizirati",
         "syncSubtitleFailedWithDetail": "Ni bilo mogoče sinhronizirati podnapisov: {{detail}}",
+        "syncRateLimit": "Preveč zahtev. Pred ponovno sinhronizacijo počakajte trenutek.",
+        "syncServerBusy": "Storitev AI je trenutno zasedena. Poskusite znova čez nekaj sekund.",
         "syncSubtitleOpen": "Sinhronizacija podnapisov z AI",
         "syncSubtitleAction": "Sinhronizacija",
         "syncSubtitlePreparing": "Priprava zvoka ...",

@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Undertexten har synkroniserats",
         "syncSubtitleFailed": "Det gick inte att synkronisera undertexten",
         "syncSubtitleFailedWithDetail": "Det gick inte att synkronisera undertexten: {{detail}}",
+        "syncRateLimit": "För många förfrågningar. Vänta en stund innan du synkroniserar igen.",
+        "syncServerBusy": "AI-tjänsten är för närvarande upptagen. Försök igen om några sekunder.",
         "syncSubtitleOpen": "Synkronisera undertext med AI",
         "syncSubtitleAction": "Synkronisera",
         "syncSubtitlePreparing": "Förbereder ljud...",

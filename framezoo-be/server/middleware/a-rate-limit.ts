@@ -24,7 +24,16 @@ const getPositiveInt = (value: string | undefined, fallback: number) => {
   return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 };
 
-const getRateLimitConfig = () => {
+const getRateLimitConfig = (path: string) => {
+  const isSubtitleAlign = path.startsWith('/api/subtitle-align');
+  if (isSubtitleAlign) {
+    return {
+      scope: 'subtitle-align',
+      windowMs: getPositiveInt(process.env.RATE_LIMIT_SUBTITLE_ALIGN_WINDOW_MS, 60_000),
+      maxRequests: getPositiveInt(process.env.RATE_LIMIT_SUBTITLE_ALIGN_MAX_REQUESTS, 20),
+    };
+  }
+
   return {
     scope: 'api',
     windowMs: getPositiveInt(process.env.RATE_LIMIT_WINDOW_MS, 60_000),
@@ -88,7 +97,7 @@ export default defineEventHandler(async event => {
 
   const trustProxy = String(process.env.TRUST_PROXY).toLowerCase() === 'true';
   const ip = getRequestIP(event, { xForwardedFor: trustProxy }) || '127.0.0.1';
-  const { scope, windowMs, maxRequests } = getRateLimitConfig();
+  const { scope, windowMs, maxRequests } = getRateLimitConfig(path);
   const currentBucket = Math.floor(Date.now() / windowMs);
   const cacheKey = `rate-limit:${scope}:${ip}:${currentBucket}`;
   const resetTime = Math.ceil(((currentBucket + 1) * windowMs) / 1000);

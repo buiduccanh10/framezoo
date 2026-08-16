@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "字幕同步成功",
         "syncSubtitleFailed": "無法同步字幕",
         "syncSubtitleFailedWithDetail": "無法同步字幕：{{detail}}",
+        "syncRateLimit": "請求太多。請稍等片刻，然後再次同步。",
+        "syncServerBusy": "AI服務目前正忙。請幾秒鐘後重試。",
         "syncSubtitleOpen": "與AI同步字幕",
         "syncSubtitleAction": "同步",
         "syncSubtitlePreparing": "正在準備音訊...",

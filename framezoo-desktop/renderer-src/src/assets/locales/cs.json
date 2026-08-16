@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Titulky byly úspěšně synchronizovány",
         "syncSubtitleFailed": "Titulky nelze synchronizovat",
         "syncSubtitleFailedWithDetail": "Nelze synchronizovat titulky: {{detail}}",
+        "syncRateLimit": "Příliš mnoho požadavků. Před opětovnou synchronizací chvíli počkejte.",
+        "syncServerBusy": "Služba AI je momentálně zaneprázdněna. Zkuste to znovu za několik sekund.",
         "syncSubtitleOpen": "Synchronizujte titulky s AI",
         "syncSubtitleAction": "Synchronizovat",
         "syncSubtitlePreparing": "Příprava zvuku...",

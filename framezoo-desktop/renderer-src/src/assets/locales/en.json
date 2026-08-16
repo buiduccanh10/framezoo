@@ -816,6 +816,8 @@
         "syncSubtitleSuccess": "Subtitle synced successfully",
         "syncSubtitleFailed": "Could not sync subtitle",
         "syncSubtitleFailedWithDetail": "Could not sync subtitle: {{detail}}",
+        "syncRateLimit": "Too many requests. Please wait a moment before syncing again.",
+        "syncServerBusy": "AI service is currently busy. Please retry in a few seconds.",
         "syncSubtitleOpen": "Sync subtitle with AI",
         "syncSubtitleAction": "Sync",
         "syncSubtitlePreparing": "Preparing audio...",

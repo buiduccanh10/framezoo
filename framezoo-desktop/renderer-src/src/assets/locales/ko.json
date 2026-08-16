@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "자막이 동기화되었습니다.",
         "syncSubtitleFailed": "자막을 동기화할 수 없습니다.",
         "syncSubtitleFailedWithDetail": "자막을 동기화할 수 없습니다: {{detail}}",
+        "syncRateLimit": "요청이 너무 많습니다. 다시 동기화하기 전에 잠시 기다려 주세요.",
+        "syncServerBusy": "현재 AI 서비스가 사용 중입니다. 몇 초 후에 다시 시도해 주세요.",
         "syncSubtitleOpen": "AI와 자막 동기화",
         "syncSubtitleAction": "동조",
         "syncSubtitlePreparing": "오디오 준비 중...",

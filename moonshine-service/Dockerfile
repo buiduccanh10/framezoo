@@ -9,6 +9,7 @@ COPY moonshine-service/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY moonshine-service/app.py ./app.py
+COPY moonshine-service/limiter.py ./limiter.py
 COPY moonshine-service/alignment.py ./alignment.py
 COPY moonshine-service/model_runtime.py ./model_runtime.py
 

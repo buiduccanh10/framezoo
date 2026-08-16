@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Subtitri veiksmīgi sinhronizēti",
         "syncSubtitleFailed": "Nevarēja sinhronizēt subtitrus",
         "syncSubtitleFailedWithDetail": "Nevarēja sinhronizēt subtitrus: {{detail}}",
+        "syncRateLimit": "Pārāk daudz pieprasījumu. Lūdzu, uzgaidiet brīdi pirms atkārtotas sinhronizācijas.",
+        "syncServerBusy": "AI pakalpojums pašlaik ir aizņemts. Lūdzu, pēc dažām sekundēm mēģiniet vēlreiz.",
         "syncSubtitleOpen": "Sinhronizējiet subtitrus ar AI",
         "syncSubtitleAction": "Sinhronizēt",
         "syncSubtitlePreparing": "Notiek audio sagatavošana...",

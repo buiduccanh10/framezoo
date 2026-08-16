@@ -72,6 +72,7 @@ export function TranscriptView({
   const syncModal = useModal("subtitle-sync-confirm");
   const showToast = useToastStore((s) => s.showToast);
 
+  const [isSyncCooldown, setIsSyncCooldown] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [delayInput, setDelayInput] = useState("");
   const [isDelayFocused, setIsDelayFocused] = useState(false);
@@ -82,30 +83,53 @@ export function TranscriptView({
   const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
 
   const handleConfirmSync = async () => {
+    if (isSyncCooldown) return;
+    setIsSyncCooldown(true);
     syncModal.hide();
     router.close();
-    const outcome = await syncSelectedCaption();
-    if (outcome.status === "success") {
-      showToast(
-        t("player.menus.subtitles.syncSubtitleSuccess", {
-          defaultValue: "Subtitle synced successfully",
-        }),
-        "success",
-      );
-      return;
-    }
 
-    showToast(
-      outcome.errorMessage
-        ? t("player.menus.subtitles.syncSubtitleFailedWithDetail", {
-            defaultValue: "Could not sync subtitle: {{detail}}",
-            detail: outcome.errorMessage,
-          })
-        : t("player.menus.subtitles.syncSubtitleFailed", {
-            defaultValue: "Could not sync subtitle",
+    try {
+      const outcome = await syncSelectedCaption();
+      if (outcome.status === "success") {
+        showToast(
+          t("player.menus.subtitles.syncSubtitleSuccess", {
+            defaultValue: "Subtitle synced successfully",
           }),
-      "error",
-    );
+          "success",
+        );
+        return;
+      }
+
+      const isRateLimit =
+        Boolean(outcome.errorMessage) &&
+        /rate limit|too many|429/i.test(outcome.errorMessage!);
+      const isServerBusy =
+        Boolean(outcome.errorMessage) &&
+        /capacity|busy|503/i.test(outcome.errorMessage!);
+
+      let detail = outcome.errorMessage;
+      if (isRateLimit) {
+        detail = t("player.menus.subtitles.syncRateLimit");
+      } else if (isServerBusy) {
+        detail = t("player.menus.subtitles.syncServerBusy");
+      }
+
+      showToast(
+        detail
+          ? t("player.menus.subtitles.syncSubtitleFailedWithDetail", {
+              defaultValue: "Could not sync subtitle: {{detail}}",
+              detail,
+            })
+          : t("player.menus.subtitles.syncSubtitleFailed", {
+              defaultValue: "Could not sync subtitle",
+            }),
+        "error",
+      );
+    } finally {
+      setTimeout(() => {
+        setIsSyncCooldown(false);
+      }, 3000);
+    }
   };
 
   const parsedCaptions = useMemo(

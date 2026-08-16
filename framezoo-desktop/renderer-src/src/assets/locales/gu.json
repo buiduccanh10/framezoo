@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "સબટાઈટલ સફળતાપૂર્વક સમન્વયિત થયું",
         "syncSubtitleFailed": "ઉપશીર્ષક સમન્વયિત કરી શકાયું નથી",
         "syncSubtitleFailedWithDetail": "ઉપશીર્ષક સમન્વયિત કરી શકાયું નથી: {{detail}}",
+        "syncRateLimit": "ઘણી બધી વિનંતીઓ. ફરી સમન્વય કરતા પહેલા કૃપા કરીને થોડીવાર રાહ જુઓ.",
+        "syncServerBusy": "AI સેવા હાલમાં વ્યસ્ત છે. કૃપા કરીને થોડી સેકંડમાં ફરી પ્રયાસ કરો.",
         "syncSubtitleOpen": "AI સાથે સબટાઈટલ સમન્વયિત કરો",
         "syncSubtitleAction": "સમન્વય",
         "syncSubtitlePreparing": "ઑડિયો તૈયાર કરી રહ્યાં છીએ...",
