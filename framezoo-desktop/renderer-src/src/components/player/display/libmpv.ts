@@ -694,6 +694,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
           } else if (!cachePaused) {
             // A pause that is not caused by input starvation is a real
             // (user or EOF) pause.
+            emit("loading", false);
             emit("pause", undefined);
             syncPipState(true);
 
@@ -733,13 +734,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         }
         isSeeking = false;
         emit("loading", false);
-        if (pendingSeekTarget !== null && heldSeekPosition !== null) {
-          if (Math.abs(heldSeekPosition - pendingSeekTarget) <= 0.5) {
-            pendingSeekTarget = null;
-            const settled = heldSeekPosition;
-            heldSeekPosition = null;
-            applyTimePosition(settled);
-          }
+        if (pendingSeekTarget !== null) {
+          const settled =
+            heldSeekPosition !== null ? heldSeekPosition : pendingSeekTarget;
+          pendingSeekTarget = null;
+          heldSeekPosition = null;
+          applyTimePosition(settled);
         }
         break;
       case "paused-for-cache":

@@ -21,7 +21,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
   );
   const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
   const isPlaybackLocked = isPlaybackInteractionLocked(
-    { isLoading, hasRenderedFrame },
+    { isLoading, hasRenderedFrame, isPaused },
     isSubtitleSyncActive,
   );
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);

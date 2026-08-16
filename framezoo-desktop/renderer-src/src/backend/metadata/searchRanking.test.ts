@@ -103,4 +103,43 @@ describe("mergeAndRankSearchResults", () => {
 
     expect(results[0]?.id).toBe(100);
   });
+
+  it("ranks prefix matches like dex -> dexter at the top by popularity", () => {
+    const dexterShow = createShowResult({
+      id: 1405,
+      name: "Dexter",
+      original_name: "Dexter",
+      popularity: 150,
+    });
+    const dexterNewBlood = createShowResult({
+      id: 131927,
+      name: "Dexter: New Blood",
+      original_name: "Dexter: New Blood",
+      popularity: 60,
+    });
+    const dexHamilton = createShowResult({
+      id: 500,
+      name: "Dex Hamilton",
+      original_name: "Dex Hamilton",
+      popularity: 5,
+    });
+    const unrelatedMovie = createMovieResult({
+      id: 600,
+      title: "Index Zero",
+      original_title: "Index Zero",
+      popularity: 1,
+    });
+
+    const results = mergeAndRankSearchResults("dex", [
+      unrelatedMovie,
+      dexHamilton,
+      dexterNewBlood,
+      dexterShow,
+    ]);
+
+    expect(results[0]?.id).toBe(1405); // Dexter (highest popularity prefix match)
+    expect(results[1]?.id).toBe(131927); // Dexter: New Blood
+    expect(results[2]?.id).toBe(500); // Dex Hamilton
+    expect(results[3]?.id).toBe(600); // Index Zero (substring match only)
+  });
 });

@@ -36,13 +36,12 @@ function getSearchScore(query: string, candidate: string): number {
   if (!query || !candidate) return 0;
 
   if (candidate === query) return 100;
-  if (candidate.startsWith(`${query} `) || candidate.startsWith(query)) {
-    return 80;
-  }
+  if (candidate.startsWith(query)) return 85;
 
   const candidateWords = candidate.split(" ");
-  if (candidateWords.includes(query)) return 70;
-  if (candidate.includes(query)) return 60;
+  if (candidateWords.includes(query)) return 75;
+  if (candidateWords.some((word) => word.startsWith(query))) return 70;
+  if (candidate.includes(query)) return 55;
 
   const queryWords = query.split(" ");
   const hasAllQueryWords = queryWords.every((word) =>
@@ -76,10 +75,12 @@ function rankSearchResults(
         index,
         result,
         score,
+        popularity: result.popularity ?? 0,
       };
     })
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
+      if (b.popularity !== a.popularity) return b.popularity - a.popularity;
       return a.index - b.index;
     })
     .map(({ result }) => result);
