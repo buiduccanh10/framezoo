@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "ਉਪਸਿਰਲੇਖ ਸਫਲਤਾਪੂਰਵਕ ਸਮਕਾਲੀ ਕੀਤਾ ਗਿਆ",
         "syncSubtitleFailed": "ਉਪਸਿਰਲੇਖ ਨੂੰ ਸਿੰਕ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ",
         "syncSubtitleFailedWithDetail": "ਉਪਸਿਰਲੇਖ ਨੂੰ ਸਿੰਕ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: {{detail}}",
+        "syncRateLimit": "ਬਹੁਤ ਸਾਰੀਆਂ ਬੇਨਤੀਆਂ। ਦੁਬਾਰਾ ਸਿੰਕ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਪਲ ਉਡੀਕ ਕਰੋ।",
+        "syncServerBusy": "AI ਸੇਵਾ ਇਸ ਸਮੇਂ ਵਿਅਸਤ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਕੁਝ ਸਕਿੰਟਾਂ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
         "syncSubtitleOpen": "AI ਨਾਲ ਉਪਸਿਰਲੇਖ ਸਿੰਕ ਕਰੋ",
         "syncSubtitleAction": "ਸਿੰਕ",
         "syncSubtitlePreparing": "ਆਡੀਓ ਤਿਆਰ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",

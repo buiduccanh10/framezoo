@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Субтитри успішно синхронізовано",
         "syncSubtitleFailed": "Не вдалося синхронізувати субтитри",
         "syncSubtitleFailedWithDetail": "Не вдалося синхронізувати субтитри: {{detail}}",
+        "syncRateLimit": "Забагато запитів. Зачекайте трохи перед повторною синхронізацією.",
+        "syncServerBusy": "Служба AI зараз зайнята. Повторіть спробу через кілька секунд.",
         "syncSubtitleOpen": "Синхронізувати субтитри з AI",
         "syncSubtitleAction": "Синхронізувати",
         "syncSubtitlePreparing": "Підготовка аудіо...",

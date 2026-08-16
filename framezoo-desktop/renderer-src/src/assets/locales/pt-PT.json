@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Legenda sincronizada com sucesso",
         "syncSubtitleFailed": "Não foi possível sincronizar a legenda",
         "syncSubtitleFailedWithDetail": "Não foi possível sincronizar a legenda: {{detail}}",
+        "syncRateLimit": "Muitos pedidos. Aguarde um momento antes de sincronizar novamente.",
+        "syncServerBusy": "O serviço de IA está ocupado no momento. Tente novamente em alguns segundos.",
         "syncSubtitleOpen": "Sincronize legendas com IA",
         "syncSubtitleAction": "Sincronizar",
         "syncSubtitlePreparing": "Preparando áudio...",

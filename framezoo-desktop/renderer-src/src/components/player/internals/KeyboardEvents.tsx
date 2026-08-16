@@ -363,6 +363,7 @@ export function KeyboardEvents() {
     isRolling,
     time,
     duration,
+    activeSubtitleTrack,
     router,
     setDelay,
     delay,

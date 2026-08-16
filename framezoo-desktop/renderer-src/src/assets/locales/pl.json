@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Napisy zostały pomyślnie zsynchronizowane",
         "syncSubtitleFailed": "Nie można zsynchronizować napisów",
         "syncSubtitleFailedWithDetail": "Nie można zsynchronizować napisów: {{detail}}",
+        "syncRateLimit": "Zbyt wiele żądań. Poczekaj chwilę przed ponowną synchronizacją.",
+        "syncServerBusy": "Usługa AI jest obecnie zajęta. Spróbuj ponownie za kilka sekund.",
         "syncSubtitleOpen": "Synchronizuj napisy z AI",
         "syncSubtitleAction": "Synchronizuj",
         "syncSubtitlePreparing": "Przygotowywanie dźwięku...",

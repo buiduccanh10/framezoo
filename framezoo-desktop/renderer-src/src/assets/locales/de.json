@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Untertitel erfolgreich synchronisiert",
         "syncSubtitleFailed": "Untertitel konnten nicht synchronisiert werden",
         "syncSubtitleFailedWithDetail": "Untertitel konnte nicht synchronisiert werden: {{detail}}",
+        "syncRateLimit": "Zu viele Anfragen. Bitte warten Sie einen Moment, bevor Sie die Synchronisierung erneut durchführen.",
+        "syncServerBusy": "Der AI-Dienst ist derzeit ausgelastet. Bitte versuchen Sie es in ein paar Sekunden noch einmal.",
         "syncSubtitleOpen": "Untertitel mit KI synchronisieren",
         "syncSubtitleAction": "Synchronisieren",
         "syncSubtitlePreparing": "Audio wird vorbereitet...",

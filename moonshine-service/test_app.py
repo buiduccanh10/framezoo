@@ -208,6 +208,55 @@ Broken
         self.assertFalse(result["results"]["secondary"]["aligned"])
         self.assertEqual(result["results"]["secondary"]["reason"], "invalid_subtitle")
 
+    def test_batch_alignment_handles_large_cross_release_offset(self):
+        # Primary starts at 00:17 (17_000ms), Secondary starts at 02:00 (120_000ms)
+        # Audio speech is at 00:17 (17_000ms)
+        primary_vtt = """WEBVTT
+
+00:00:17.000 --> 00:00:21.000
+Hello
+
+00:00:27.000 --> 00:00:31.000
+World
+"""
+        secondary_vtt = """WEBVTT
+
+00:02:00.000 --> 00:02:04.000
+Hello
+
+00:02:10.000 --> 00:02:14.000
+World
+"""
+        with (
+            patch("app.decode_wav", return_value=([0.0] * 60_000, 1_000)),
+            patch(
+                "app.transcribe_speech_intervals",
+                return_value=[(17_000, 21_000), (27_000, 31_000)],
+            ),
+        ):
+            result = align_vtt_batch(
+                b"wav",
+                [
+                    {"track": "primary", "vttData": primary_vtt},
+                    {"track": "secondary", "vttData": secondary_vtt},
+                ],
+                "en",
+                17_000,
+            )
+
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertAlmostEqual(
+            result["results"]["primary"]["offsetMs"],
+            0,
+            delta=750,
+        )
+        self.assertTrue(result["results"]["secondary"]["aligned"])
+        self.assertAlmostEqual(
+            result["results"]["secondary"]["offsetMs"],
+            -103_000,
+            delta=750,
+        )
+
     def test_rejects_alignment_below_confidence_threshold(self):
         with patch(
             "app.find_best_offset",
@@ -295,7 +344,7 @@ Hello
         self.assertFalse(result["aligned"])
         self.assertEqual(result["reason"], "insufficient_speech_anchors")
 
-    def test_requires_two_thirds_coverage_for_many_speech_anchors(self):
+    def test_requires_minimum_anchor_coverage(self):
         vtt = """WEBVTT
 
 00:00:10.000 --> 00:00:13.000
@@ -308,6 +357,7 @@ Again
             "app.find_best_offset",
             return_value=(-10_000, 0.95),
         ):
+            # 2 cues with 9 speech intervals -> 2/9 = 22.2% coverage (< 25% for 2 anchors)
             result = alignment_result_from_speech(
                 parse_vtt(vtt),
                 [
@@ -315,13 +365,60 @@ Again
                     (10_000, 13_000),
                     (20_000, 23_000),
                     (30_000, 33_000),
+                    (40_000, 43_000),
+                    (50_000, 53_000),
+                    (60_000, 63_000),
+                    (70_000, 73_000),
+                    (80_000, 83_000),
                 ],
                 0,
-                40_000,
+                90_000,
             )
 
         self.assertFalse(result["aligned"])
         self.assertEqual(result["reason"], "insufficient_speech_anchors")
+
+    def test_accepts_low_anchor_coverage_when_three_or_more_anchors_match(self):
+        vtt = """WEBVTT
+
+00:00:10.000 --> 00:00:13.000
+Hello
+
+00:00:20.000 --> 00:00:23.000
+Again
+
+00:00:30.000 --> 00:00:33.000
+Third
+"""
+        with patch(
+            "app.find_best_offset",
+            return_value=(-10_000, 0.95),
+        ):
+            # 3 cues with 13 speech intervals -> 3/13 = 23.1% coverage (>= 20% for 3+ anchors)
+            result = alignment_result_from_speech(
+                parse_vtt(vtt),
+                [
+                    (0, 3_000),
+                    (10_000, 13_000),
+                    (20_000, 23_000),
+                    (30_000, 33_000),
+                    (40_000, 43_000),
+                    (50_000, 53_000),
+                    (60_000, 63_000),
+                    (70_000, 73_000),
+                    (80_000, 83_000),
+                    (90_000, 93_000),
+                    (100_000, 103_000),
+                    (110_000, 113_000),
+                    (120_000, 123_000),
+                ],
+                0,
+                130_000,
+            )
+
+        self.assertTrue(result["aligned"])
+        self.assertEqual(result["speechAnchorCount"], 3)
+        self.assertAlmostEqual(result["speechAnchorCoverage"], 3 / 13, places=2)
 
     def test_parses_batch_subtitles(self):
         subtitles = parse_batch_subtitles(
@@ -330,6 +427,37 @@ Again
         )
 
         self.assertEqual([item["track"] for item in subtitles], ["primary", "secondary"])
+
+    def test_rate_limiter_enforces_burst_limit(self):
+        import asyncio
+        from fastapi import HTTPException
+        from limiter import SlidingWindowRateLimiter
+
+        limiter = SlidingWindowRateLimiter()
+
+        async def run_burst():
+            for _ in range(6):
+                await limiter.check_rate_limit("client-1")
+            with self.assertRaises(HTTPException) as ctx:
+                await limiter.check_rate_limit("client-1")
+            self.assertEqual(ctx.exception.status_code, 429)
+            self.assertIn("Retry-After", ctx.exception.headers)
+
+        asyncio.run(run_burst())
+
+    def test_rate_limiter_isolates_different_clients(self):
+        import asyncio
+        from limiter import SlidingWindowRateLimiter
+
+        limiter = SlidingWindowRateLimiter()
+
+        async def run_multi():
+            for _ in range(6):
+                await limiter.check_rate_limit("client-a")
+            # client-b is still allowed
+            await limiter.check_rate_limit("client-b")
+
+        asyncio.run(run_multi())
 
 
 if __name__ == "__main__":

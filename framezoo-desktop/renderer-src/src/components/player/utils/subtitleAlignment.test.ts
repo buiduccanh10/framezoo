@@ -43,7 +43,7 @@ describe("subtitle alignment", () => {
       { startAt: 840, priority: "buffered" },
     ]);
     expect(plan.slice(2).map((window) => window.startAt)).toEqual([
-      0, 1180, 2360, 3540,
+      531, 1239, 1947, 2655,
     ]);
     for (let first = 0; first < plan.length; first += 1) {
       for (let second = first + 1; second < plan.length; second += 1) {
@@ -391,7 +391,7 @@ Hello`;
     const result = selectSubtitleAlignmentConsensus([
       {
         ...baseResult,
-        offsetMs: -72_050,
+        offsetMs: -250_000,
         confidence: 90,
         speechAnchorCount: 4,
       },
@@ -400,11 +400,31 @@ Hello`;
     expect(result.aligned).toBe(false);
   });
 
+  it("accepts valid large cross-release offsets within plausible range", () => {
+    const result = selectSubtitleAlignmentConsensus([
+      {
+        ...baseResult,
+        offsetMs: -103_000,
+        confidence: 85,
+        speechAnchorCount: 3,
+      },
+      {
+        ...baseResult,
+        offsetMs: -103_200,
+        confidence: 88,
+        speechAnchorCount: 3,
+      },
+    ]);
+
+    expect(result.aligned).toBe(true);
+    expect(result.offsetMs).toBe(-103_100);
+  });
+
   it("does not chain offsets beyond the tolerance into one consensus cluster", () => {
     const result = selectSubtitleAlignmentConsensus([
       { ...baseResult, offsetMs: 0 },
-      { ...baseResult, offsetMs: 800 },
-      { ...baseResult, offsetMs: 1600 },
+      { ...baseResult, offsetMs: 1300 },
+      { ...baseResult, offsetMs: 2600 },
     ]);
 
     expect(result.aligned).toBe(false);
@@ -443,5 +463,120 @@ Hello`;
 
     expect(result.aligned).toBe(false);
     expect(result.reason).toBe("no_speech_detected");
+  });
+
+  it("treats insufficient_speech_in_window as lacking speech evidence", () => {
+    const result = selectSubtitleAlignmentConsensus([
+      {
+        ...baseResult,
+        aligned: false,
+        offsetMs: 0,
+        confidence: 0,
+        speechIntervals: [{ startMs: 0, endMs: 500 }],
+        reason: "insufficient_speech_in_window",
+      },
+      {
+        ...baseResult,
+        aligned: false,
+        offsetMs: 0,
+        confidence: 0,
+        speechIntervals: [{ startMs: 0, endMs: 800 }],
+        reason: "insufficient_speech_in_window",
+      },
+    ]);
+
+    expect(result.aligned).toBe(false);
+    expect(result.reason).toBe("no_speech_detected");
+  });
+
+  it("opens fallback windows after insufficient_speech_in_window results", async () => {
+    const plan = buildAlignmentWindowPlan(0, 3600);
+    const requestedStarts: number[] = [];
+
+    const responses = await collectAlignmentWindowResponses({
+      windowPlan: plan,
+      subtitles: primarySubtitle,
+      requestWindow: async (window) => {
+        requestedStarts.push(window.startAt);
+        if (requestedStarts.length <= 2) {
+          return makeWindowResponse({
+            aligned: false,
+            confidence: 0,
+            speechIntervals: [{ startMs: 0, endMs: 600 }],
+            reason: "insufficient_speech_in_window",
+            offsetMs: 0,
+          });
+        }
+        return makeWindowResponse({ offsetMs: -2000 });
+      },
+    });
+
+    expect(responses).toHaveLength(4);
+    expect(requestedStarts).toHaveLength(4);
+    expect(requestedStarts[2]).toBeGreaterThan(120);
+  });
+
+  it("constructs piecewise alignment segments when intro and main movie have distinct offsets", () => {
+    const rawVtt = `WEBVTT
+
+00:00:06.000 --> 00:00:12.000
+Watch Online Movies and Series for FREE www.osdb.link/lm
+
+00:01:57.957 --> 00:02:00.896
+Blood. Sometimes, it sets my teeth on edge.
+
+00:02:01.514 --> 00:02:03.903
+Other times, it helps me control the chaos.
+
+00:07:50.500 --> 00:07:55.000
+Episode dialogue in lab.
+`;
+
+    const windowEntries = [
+      {
+        startAt: 0,
+        result: {
+          aligned: true,
+          offsetMs: -104000,
+          confidence: 96,
+          speechIntervals: [{ startMs: 14000, endMs: 20000 }],
+          reason: null,
+        },
+      },
+      {
+        startAt: 473,
+        result: {
+          aligned: true,
+          offsetMs: 2500,
+          confidence: 94,
+          speechIntervals: [{ startMs: 473000, endMs: 480000 }],
+          reason: null,
+        },
+      },
+      {
+        startAt: 1104,
+        result: {
+          aligned: true,
+          offsetMs: 2500,
+          confidence: 90,
+          speechIntervals: [{ startMs: 1104000, endMs: 1110000 }],
+          reason: null,
+        },
+      },
+    ];
+
+    const result = selectSubtitleAlignmentConsensus(windowEntries);
+    expect(result.aligned).toBe(true);
+    expect(result.segments).toBeDefined();
+    expect(result.segments).toHaveLength(2);
+    expect(result.segments![0].offsetMs).toBe(-104000);
+    expect(result.segments![1].offsetMs).toBe(2500);
+
+    const alignedVtt = applySubtitleAlignment(rawVtt, result);
+    expect(alignedVtt).not.toContain("osdb.link");
+    expect(alignedVtt).toContain("00:00:13.957 --> 00:00:16.896");
+    expect(alignedVtt).toContain("Blood. Sometimes, it sets my teeth on edge.");
+    expect(alignedVtt).toContain("00:07:53.000 --> 00:07:57.500");
+    expect(alignedVtt).toContain("Episode dialogue in lab.");
   });
 });

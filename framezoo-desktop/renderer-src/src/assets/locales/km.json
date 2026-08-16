@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "ចំណងជើងរងត្រូវបានធ្វើសមកាលកម្មដោយជោគជ័យ",
         "syncSubtitleFailed": "មិនអាចធ្វើសមកាលកម្មចំណងជើងរងបានទេ។",
         "syncSubtitleFailedWithDetail": "មិនអាចធ្វើសមកាលកម្មចំណងជើងរង៖ {{detail}}",
+        "syncRateLimit": "សំណើច្រើនពេក។ សូមរង់ចាំមួយភ្លែត មុនពេលធ្វើសមកាលកម្មម្តងទៀត។",
+        "syncServerBusy": "សេវា AI បច្ចុប្បន្នកំពុងមមាញឹក។ សូមព្យាយាមម្តងទៀតក្នុងរយៈពេលពីរបីវិនាទី។",
         "syncSubtitleOpen": "ធ្វើសមកាលកម្មចំណងជើងរងជាមួយ AI",
         "syncSubtitleAction": "ធ្វើសមកាលកម្ម",
         "syncSubtitlePreparing": "កំពុងរៀបចំអូឌីយ៉ូ...",

@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Subtítulo sincronizado exitosamente",
         "syncSubtitleFailed": "No se pudo sincronizar el subtítulo",
         "syncSubtitleFailedWithDetail": "No se pudo sincronizar el subtítulo: {{detail}}",
+        "syncRateLimit": "Demasiadas solicitudes. Espere un momento antes de volver a sincronizar.",
+        "syncServerBusy": "El servicio de IA está actualmente ocupado. Vuelva a intentarlo en unos segundos.",
         "syncSubtitleOpen": "Sincronizar subtítulos con IA",
         "syncSubtitleAction": "Sincronizar",
         "syncSubtitlePreparing": "Preparando audio...",

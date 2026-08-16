@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "সাবটাইটেল সফলভাবে সিঙ্ক হয়েছে৷",
         "syncSubtitleFailed": "সাবটাইটেল সিঙ্ক করা যায়নি",
         "syncSubtitleFailedWithDetail": "সাবটাইটেল সিঙ্ক করা যায়নি: {{detail}}",
+        "syncRateLimit": "অনেক অনুরোধ. আবার সিঙ্ক করার আগে একটি মুহূর্ত অপেক্ষা করুন.",
+        "syncServerBusy": "এআই পরিষেবা বর্তমানে ব্যস্ত। কয়েক সেকেন্ডের মধ্যে আবার চেষ্টা করুন.",
         "syncSubtitleOpen": "AI এর সাথে সাবটাইটেল সিঙ্ক করুন",
         "syncSubtitleAction": "সিঙ্ক",
         "syncSubtitlePreparing": "অডিও প্রস্তুত করা হচ্ছে...",

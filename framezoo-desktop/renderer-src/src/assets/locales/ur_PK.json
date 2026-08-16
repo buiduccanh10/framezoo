@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "سب ٹائٹل کامیابی کے ساتھ مطابقت پذیر ہو گیا۔",
         "syncSubtitleFailed": "سب ٹائٹل کی مطابقت پذیری نہیں ہو سکی",
         "syncSubtitleFailedWithDetail": "ذیلی عنوان کی مطابقت پذیری نہیں ہو سکی: {{detail}}",
+        "syncRateLimit": "بہت زیادہ درخواستیں دوبارہ مطابقت پذیر ہونے سے پہلے براہ کرم ایک لمحہ انتظار کریں۔",
+        "syncServerBusy": "AI سروس فی الحال مصروف ہے۔ براہ کرم چند سیکنڈ میں دوبارہ کوشش کریں۔",
         "syncSubtitleOpen": "سب ٹائٹل کو AI کے ساتھ سنک کریں۔",
         "syncSubtitleAction": "مطابقت پذیری",
         "syncSubtitlePreparing": "آڈیو تیار ہو رہا ہے...",

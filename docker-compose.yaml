@@ -35,12 +35,28 @@ services:
       context: .
       dockerfile: moonshine-service/Dockerfile
     restart: unless-stopped
+    expose:
+      - "8000"
     volumes:
+      - ./moonshine-service:/app
       - moonshine-cache:/root/.cache
     environment:
       MOONSHINE_LANGUAGE: ${MOONSHINE_LANGUAGE:-en}
       MOONSHINE_MODEL_ARCH: ${MOONSHINE_MODEL_ARCH:-tiny}
       MOONSHINE_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
+      MAX_CONCURRENT_INFERENCES: ${MAX_CONCURRENT_INFERENCES:-2}
+      RATE_LIMIT_BURST: ${RATE_LIMIT_BURST:-6}
+      RATE_LIMIT_BURST_PERIOD: ${RATE_LIMIT_BURST_PERIOD:-10}
+      RATE_LIMIT_SUSTAINED: ${RATE_LIMIT_SUSTAINED:-20}
+      RATE_LIMIT_SUSTAINED_PERIOD: ${RATE_LIMIT_SUSTAINED_PERIOD:-60}
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2048M
+        reservations:
+          cpus: '0.5'
+          memory: 512M
     healthcheck:
       test:
         [

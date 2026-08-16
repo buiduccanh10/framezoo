@@ -873,9 +873,8 @@ function createMainWindow() {
     width: 1440,
     height: 900,
     minWidth: 1100,
-    minHeight: 700,
-    backgroundColor: "#00000000",
-    transparent: true,
+    backgroundColor: process.platform === "darwin" ? "#00000000" : "#0d0d11",
+    transparent: process.platform === "darwin",
     titleBarStyle: "default" as const,
     autoHideMenuBar: process.platform === "darwin",
     icon: getWindowIconPath(),
@@ -910,12 +909,20 @@ function createMainWindow() {
 
   mainWindow.on("enter-full-screen", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
+      if (process.platform === "win32") {
+        mainWindow.setAutoHideMenuBar(true);
+        mainWindow.setMenuBarVisibility(false);
+      }
       mainWindow.webContents.send("desktop:fullscreen-state", true);
     }
   });
 
   mainWindow.on("leave-full-screen", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
+      if (process.platform === "win32") {
+        mainWindow.setAutoHideMenuBar(false);
+        mainWindow.setMenuBarVisibility(true);
+      }
       mainWindow.webContents.send("desktop:fullscreen-state", false);
     }
   });

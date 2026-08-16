@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Ondertiteling succesvol gesynchroniseerd",
         "syncSubtitleFailed": "Kan ondertiteling niet synchroniseren",
         "syncSubtitleFailedWithDetail": "Kon ondertiteling niet synchroniseren: {{detail}}",
+        "syncRateLimit": "Te veel verzoeken. Wacht even voordat u opnieuw synchroniseert.",
+        "syncServerBusy": "De AI-service is momenteel bezet. Probeer het over een paar seconden opnieuw.",
         "syncSubtitleOpen": "Synchroniseer ondertitels met AI",
         "syncSubtitleAction": "Synchroniseren",
         "syncSubtitlePreparing": "Audio voorbereiden...",

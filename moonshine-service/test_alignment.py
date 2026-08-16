@@ -93,6 +93,177 @@ Hello
         self.assertEqual(result["offsetMs"], -2_000)
         self.assertNotIn("cleanedVtt", result)
 
+    def test_rejects_window_with_insufficient_speech_duration(self):
+        vtt = """WEBVTT
+
+00:00:05.000 --> 00:00:09.000
+Hello
+"""
+        result = alignment_result_from_speech(
+            parse_vtt(vtt),
+            [(1_000, 1_500)],  # Only 500ms speech duration (< 1000ms)
+            0,
+            10_000,
+        )
+
+        self.assertFalse(result["aligned"])
+        self.assertEqual(result["confidence"], 0)
+        self.assertEqual(result["reason"], "insufficient_speech_in_window")
+
+    def test_finds_large_offset_with_relative_search_center(self):
+        # Secondary sub has dialogue at 02:00 (120s), while audio has dialogue at 00:17 (17s)
+        # Delta offset is 17s - 120s = -103s (-103_000ms)
+        vtt = """WEBVTT
+
+00:02:00.000 --> 00:02:04.000
+Hello
+
+00:02:10.000 --> 00:02:14.000
+World
+"""
+        cues = parse_vtt(vtt)
+        speech = [(17_000, 21_000), (27_000, 31_000)]
+
+        offset, score = find_best_offset(
+            cues,
+            speech,
+            17_000,
+            47_000,
+            search_centers=[0, -103_000],
+        )
+
+        self.assertAlmostEqual(offset, -103_000, delta=750)
+        self.assertGreater(score, 0.7)
+
+        result = alignment_result_from_speech(
+            cues,
+            speech,
+            17_000,
+            47_000,
+            search_centers=[0, -103_000],
+        )
+
+        self.assertTrue(result["aligned"])
+        self.assertAlmostEqual(result["offsetMs"], -103_000, delta=750)
+
+    def test_estimate_subtitle_relative_offset_with_credit_cues(self):
+        primary_vtt = """WEBVTT
+
+00:00:01.000 --> 00:00:04.000
+Subtitle by Subscene
+
+00:00:17.000 --> 00:00:21.000
+Hello
+
+00:00:27.000 --> 00:00:31.000
+World
+
+00:00:37.000 --> 00:00:41.000
+Again
+"""
+        secondary_vtt = """WEBVTT
+
+00:00:02.000 --> 00:00:05.000
+Dịch bởi PhimMoi
+
+00:02:00.000 --> 00:02:04.000
+Hello
+
+00:02:10.000 --> 00:02:14.000
+World
+
+00:02:20.000 --> 00:02:24.000
+Again
+"""
+        from alignment import estimate_subtitle_relative_offset
+
+        offset = estimate_subtitle_relative_offset(
+            parse_vtt(primary_vtt),
+            parse_vtt(secondary_vtt),
+        )
+        self.assertIsNotNone(offset)
+        self.assertAlmostEqual(offset, -103_000, delta=750)
+
+    def test_estimate_subtitle_relative_offset_dexter_screenshot(self):
+        primary_vtt = """WEBVTT
+
+00:00:11.000 --> 00:00:15.000
+Máu. Đôi khi nó làm tôi ghê cả răng.
+
+00:00:15.000 --> 00:00:19.000
+Các lần khác nó giúp tôi kiểm soát sự hỗn loạn.
+
+00:00:20.000 --> 00:00:22.000
+Trong mùa trước...
+
+00:00:22.000 --> 00:00:25.000
+Chính là đêm nay. Chuyện đó sẽ tiếp tục xảy ra.
+
+00:00:26.000 --> 00:00:29.000
+Mở mắt ra mà xem mày đã làm gì.
+
+00:00:29.000 --> 00:00:32.000
+Làm ơn hãy hiểu cho tôi.
+"""
+        secondary_vtt = """WEBVTT
+
+00:00:06.000 --> 00:00:10.000
+Watch Online Movies and Series for FREE www.osdb.link/lm
+
+00:01:57.000 --> 00:02:01.000
+Blood. Sometimes, it sets my teeth on edge.
+
+00:02:01.000 --> 00:02:05.000
+Other times, it helps me control the chaos.
+
+00:02:06.000 --> 00:02:08.000
+Last season on Dexter...
+
+00:02:08.000 --> 00:02:11.000
+Tonight's the night and it's going to happen again,
+
+00:02:11.000 --> 00:02:14.000
+and again.
+"""
+        from alignment import estimate_subtitle_relative_offset
+
+        offset = estimate_subtitle_relative_offset(
+            parse_vtt(primary_vtt),
+            parse_vtt(secondary_vtt),
+        )
+        self.assertIsNotNone(offset)
+        # 11s - 117s = -106s = -106_000ms
+        self.assertAlmostEqual(offset, -106_000, delta=750)
+
+    def test_estimate_subtitle_relative_offset_vip_member_ad(self):
+        primary_vtt = """WEBVTT
+
+00:00:11.000 --> 00:00:15.000
+Máu. Đôi khi nó làm tôi ghê cả răng.
+
+00:00:15.000 --> 00:00:19.000
+Các lần khác nó giúp tôi kiểm soát sự hỗn loạn.
+"""
+        secondary_vtt = """WEBVTT
+
+00:00:08.000 --> 00:00:12.000
+Support us and become VIP member to remove all ads from www.OpenSubtitles.org
+
+00:01:57.000 --> 00:02:01.000
+Blood. Sometimes, it sets my teeth on edge.
+
+00:02:01.000 --> 00:02:05.000
+Other times, it helps me control the chaos.
+"""
+        from alignment import estimate_subtitle_relative_offset
+
+        offset = estimate_subtitle_relative_offset(
+            parse_vtt(primary_vtt),
+            parse_vtt(secondary_vtt),
+        )
+        self.assertIsNotNone(offset)
+        self.assertAlmostEqual(offset, -106_000, delta=750)
+
 
 if __name__ == "__main__":
     unittest.main()

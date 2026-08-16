@@ -393,6 +393,7 @@ export function useCaptions() {
               setSecondaryCaption(nextCaption);
             }
           }
+          resetSubtitleSpecificSettings(target.track);
         }
 
         console.info("[subtitle-align]", {
@@ -438,7 +439,12 @@ export function useCaptions() {
         }
       }
     },
-    [setCaption, setSecondaryCaption, setSubtitleSyncState],
+    [
+      resetSubtitleSpecificSettings,
+      setCaption,
+      setSecondaryCaption,
+      setSubtitleSyncState,
+    ],
   );
 
   const captions = useMemo(

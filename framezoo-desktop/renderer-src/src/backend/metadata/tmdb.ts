@@ -320,55 +320,80 @@ async function multiSearchByLanguage(
   query: string,
   language?: string,
 ): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
-  const data = await get<TMDBSearchResult>("search/multi", {
-    query,
-    include_adult: false,
-    page: 1,
-    ...(language ? { language } : {}),
-  });
-  // filter out results that aren't movies or shows
-  const results = data.results.filter(
-    (r) =>
-      r.media_type === TMDBContentTypes.MOVIE ||
-      r.media_type === TMDBContentTypes.TV,
-  );
-  return results;
+  const fetchPage = async (page: number) => {
+    try {
+      const data = await get<TMDBSearchResult>("search/multi", {
+        query,
+        include_adult: false,
+        page,
+        ...(language ? { language } : {}),
+      });
+      return (data?.results ?? []).filter(
+        (r) =>
+          r.media_type === TMDBContentTypes.MOVIE ||
+          r.media_type === TMDBContentTypes.TV,
+      );
+    } catch {
+      return [];
+    }
+  };
+
+  const [page1, page2] = await Promise.all([fetchPage(1), fetchPage(2)]);
+  return [...page1, ...page2];
 }
 
 async function searchMoviesByLanguage(
   query: string,
   language?: string,
 ): Promise<TMDBMovieSearchResult[]> {
-  const data = await get<{
-    results: TMDBMovieSearchResult[];
-  }>("search/movie", {
-    query,
-    include_adult: false,
-    page: 1,
-    ...(language ? { language } : {}),
-  });
-  return data.results.map((result) => ({
-    ...result,
-    media_type: TMDBContentTypes.MOVIE,
-  }));
+  const fetchPage = async (page: number) => {
+    try {
+      const data = await get<{
+        results: TMDBMovieSearchResult[];
+      }>("search/movie", {
+        query,
+        include_adult: false,
+        page,
+        ...(language ? { language } : {}),
+      });
+      return (data?.results ?? []).map((result) => ({
+        ...result,
+        media_type: TMDBContentTypes.MOVIE as const,
+      }));
+    } catch {
+      return [];
+    }
+  };
+
+  const [page1, page2] = await Promise.all([fetchPage(1), fetchPage(2)]);
+  return [...page1, ...page2];
 }
 
 async function searchTVShowsByLanguage(
   query: string,
   language?: string,
 ): Promise<TMDBShowSearchResult[]> {
-  const data = await get<{
-    results: TMDBShowSearchResult[];
-  }>("search/tv", {
-    query,
-    include_adult: false,
-    page: 1,
-    ...(language ? { language } : {}),
-  });
-  return data.results.map((result) => ({
-    ...result,
-    media_type: TMDBContentTypes.TV,
-  }));
+  const fetchPage = async (page: number) => {
+    try {
+      const data = await get<{
+        results: TMDBShowSearchResult[];
+      }>("search/tv", {
+        query,
+        include_adult: false,
+        page,
+        ...(language ? { language } : {}),
+      });
+      return (data?.results ?? []).map((result) => ({
+        ...result,
+        media_type: TMDBContentTypes.TV as const,
+      }));
+    } catch {
+      return [];
+    }
+  };
+
+  const [page1, page2] = await Promise.all([fetchPage(1), fetchPage(2)]);
+  return [...page1, ...page2];
 }
 
 function getPreferredSearchLanguage(language?: string): string {

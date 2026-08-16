@@ -12,10 +12,12 @@ export function SkipForward(props: {
 }) {
   const display = usePlayerStore((s) => s.display);
   const time = usePlayerStore((s) => s.progress.time);
-  const { isLoading, hasRenderedFrame } = usePlayerStore((s) => s.mediaPlaying);
+  const { isLoading, hasRenderedFrame, isPaused } = usePlayerStore(
+    (s) => s.mediaPlaying,
+  );
   const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
   const isPlaybackLocked = isPlaybackInteractionLocked(
-    { isLoading, hasRenderedFrame },
+    { isLoading, hasRenderedFrame, isPaused },
     isSubtitleSyncActive,
   );
   const commit = useCallback(() => {
@@ -41,10 +43,12 @@ export function SkipBackward(props: {
 }) {
   const display = usePlayerStore((s) => s.display);
   const time = usePlayerStore((s) => s.progress.time);
-  const { isLoading, hasRenderedFrame } = usePlayerStore((s) => s.mediaPlaying);
+  const { isLoading, hasRenderedFrame, isPaused } = usePlayerStore(
+    (s) => s.mediaPlaying,
+  );
   const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
   const isPlaybackLocked = isPlaybackInteractionLocked(
-    { isLoading, hasRenderedFrame },
+    { isLoading, hasRenderedFrame, isPaused },
     isSubtitleSyncActive,
   );
   const commit = useCallback(() => {

@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Tekstityksen synkronointi onnistui",
         "syncSubtitleFailed": "Tekstitystä ei voitu synkronoida",
         "syncSubtitleFailedWithDetail": "Tekstitystä ei voitu synkronoida: {{detail}}",
+        "syncRateLimit": "Liikaa pyyntöjä. Odota hetki ennen kuin synkronoit uudelleen.",
+        "syncServerBusy": "AI-palvelu on tällä hetkellä varattu. Yritä uudelleen muutaman sekunnin kuluttua.",
         "syncSubtitleOpen": "Synkronoi tekstitys tekoälyn kanssa",
         "syncSubtitleAction": "Synkronoi",
         "syncSubtitlePreparing": "Valmistellaan ääntä...",

@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Subtiitrite sünkroonimine õnnestus",
         "syncSubtitleFailed": "Subtiitreid ei saanud sünkroonida",
         "syncSubtitleFailedWithDetail": "Subtiitreid ei saanud sünkroonida: {{detail}}",
+        "syncRateLimit": "Liiga palju taotlusi. Enne uuesti sünkroonimist oodake hetk.",
+        "syncServerBusy": "AI-teenus on praegu hõivatud. Palun proovige mõne sekundi pärast uuesti.",
         "syncSubtitleOpen": "Sünkroonige subtiitrid tehisintellektiga",
         "syncSubtitleAction": "Sünkroonimine",
         "syncSubtitlePreparing": "Heli ettevalmistamine...",

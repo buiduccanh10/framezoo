@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "A felirat sikeresen szinkronizálva",
         "syncSubtitleFailed": "Nem sikerült szinkronizálni a feliratot",
         "syncSubtitleFailedWithDetail": "Nem sikerült szinkronizálni a feliratot: {{detail}}",
+        "syncRateLimit": "Túl sok kérés. Kérjük, várjon egy pillanatot az újbóli szinkronizálás előtt.",
+        "syncServerBusy": "Az AI szolgáltatás jelenleg foglalt. Kérjük, próbálja újra néhány másodperc múlva.",
         "syncSubtitleOpen": "Szinkronizálja a feliratot az AI-val",
         "syncSubtitleAction": "Szinkronizál",
         "syncSubtitlePreparing": "Hang előkészítése...",

@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Texti samstilltur tókst",
         "syncSubtitleFailed": "Ekki tókst að samstilla textann",
         "syncSubtitleFailedWithDetail": "Gat ekki samstillt texti: {{detail}}",
+        "syncRateLimit": "Of margar beiðnir. Vinsamlegast bíddu smá stund áður en þú samstillir aftur.",
+        "syncServerBusy": "Gervigreind þjónusta er upptekin eins og er. Vinsamlegast reyndu aftur eftir nokkrar sekúndur.",
         "syncSubtitleOpen": "Samstilltu texti við gervigreind",
         "syncSubtitleAction": "Samstilla",
         "syncSubtitlePreparing": "Undirbýr hljóð...",

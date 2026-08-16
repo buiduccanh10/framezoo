@@ -1,13 +1,10 @@
-from __future__ import annotations
-
-import asyncio
 import json
 import os
 import wave
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, Header, HTTPException, Request, Response, UploadFile
 
 import alignment as _alignment
 from alignment import (
@@ -21,6 +18,7 @@ from alignment import (
     parse_vtt,
     transcribe_speech_intervals,
 )
+from limiter import check_request_rate_limit, run_protected_inference
 from model_runtime import (
     ModelArch,
     Transcriber,
@@ -50,13 +48,16 @@ def alignment_result_from_speech(
     speech_intervals: list[tuple[int, int]],
     audio_start_ms: int,
     audio_end_ms: int,
+    search_centers: list[int] | None = None,
+    find_best_offset_fn: Any = None,
 ) -> dict[str, Any]:
     return _alignment_result_from_speech(
         cues,
         speech_intervals,
         audio_start_ms,
         audio_end_ms,
-        find_best_offset_fn=find_best_offset,
+        search_centers=search_centers,
+        find_best_offset_fn=find_best_offset_fn or find_best_offset,
     )
 
 
@@ -142,6 +143,7 @@ async def health() -> dict[str, Any]:
 
 @app.post("/v1/align")
 async def align(
+    request: Request,
     audio: UploadFile = File(...),
     vtt: UploadFile | None = File(default=None),
     subtitles: str | None = Form(default=None),
@@ -150,6 +152,8 @@ async def align(
     x_internal_token: str | None = Header(default=None),
 ) -> dict[str, Any]:
     validate_internal_token(x_internal_token)
+    await check_request_rate_limit(request)
+
     if vtt is None and subtitles is None:
         raise HTTPException(
             status_code=400,
@@ -169,7 +173,7 @@ async def align(
             raise HTTPException(status_code=400, detail="audio is empty")
 
         try:
-            return await asyncio.to_thread(
+            return await run_protected_inference(
                 align_vtt_batch,
                 audio_data,
                 subtitle_items,
@@ -178,6 +182,8 @@ async def align(
             )
         except (ValueError, wave.Error) as error:
             raise HTTPException(status_code=400, detail=str(error)) from error
+        except HTTPException:
+            raise
         except Exception as error:
             raise HTTPException(status_code=502, detail=str(error)) from error
 
@@ -193,7 +199,7 @@ async def align(
         raise HTTPException(status_code=400, detail="audio is empty")
 
     try:
-        return await asyncio.to_thread(
+        return await run_protected_inference(
             align_vtt,
             audio_data,
             vtt_data.decode("utf-8-sig"),
@@ -202,12 +208,15 @@ async def align(
         )
     except (ValueError, wave.Error) as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    except HTTPException:
+        raise
     except Exception as error:
         raise HTTPException(status_code=502, detail=str(error)) from error
 
 
 @app.post("/v1/align-batch")
 async def align_batch_endpoint(
+    request: Request,
     audio: UploadFile = File(...),
     subtitles: str = Form(...),
     language: str = Form("en"),
@@ -215,6 +224,8 @@ async def align_batch_endpoint(
     x_internal_token: str | None = Header(default=None),
 ) -> dict[str, Any]:
     validate_internal_token(x_internal_token)
+    await check_request_rate_limit(request)
+
     try:
         subtitle_items = parse_batch_subtitles(subtitles)
     except ValueError as error:
@@ -227,14 +238,19 @@ async def align_batch_endpoint(
         raise HTTPException(status_code=400, detail="audio is empty")
 
     try:
-        return await asyncio.to_thread(
+        res = await run_protected_inference(
             align_vtt_batch,
             audio_data,
             subtitle_items,
             normalize_language(language),
             max(0, int(audio_start_ms)),
         )
+        import logging
+        logging.getLogger("uvicorn.error").info("ALIGN_BATCH_OUT (start_ms=%s): %s", audio_start_ms, res)
+        return res
     except (ValueError, wave.Error) as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    except HTTPException:
+        raise
     except Exception as error:
         raise HTTPException(status_code=502, detail=str(error)) from error

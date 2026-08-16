@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Altyazı başarıyla senkronize edildi",
         "syncSubtitleFailed": "Altyazı senkronize edilemedi",
         "syncSubtitleFailedWithDetail": "Altyazı senkronize edilemedi: {{detail}}",
+        "syncRateLimit": "Çok fazla istek var. Tekrar senkronize etmeden önce lütfen biraz bekleyin.",
+        "syncServerBusy": "AI hizmeti şu anda meşgul. Lütfen birkaç saniye sonra tekrar deneyin.",
         "syncSubtitleOpen": "Altyazıyı AI ile senkronize edin",
         "syncSubtitleAction": "Senkronizasyon",
         "syncSubtitlePreparing": "Ses hazırlanıyor...",

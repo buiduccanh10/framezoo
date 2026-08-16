@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "تمت مزامنة الترجمة بنجاح",
         "syncSubtitleFailed": "تعذرت مزامنة الترجمة",
         "syncSubtitleFailedWithDetail": "تعذرت مزامنة العنوان الفرعي: {{detail}}",
+        "syncRateLimit": "طلبات كثيرة جدًا. الرجاء الانتظار لحظة قبل المزامنة مرة أخرى.",
+        "syncServerBusy": "خدمة الذكاء الاصطناعي مشغولة حاليًا. يرجى إعادة المحاولة خلال بضع ثوان.",
         "syncSubtitleOpen": "مزامنة الترجمة مع الذكاء الاصطناعي",
         "syncSubtitleAction": "مزامنة",
         "syncSubtitlePreparing": "جاري تحضير الصوت...",

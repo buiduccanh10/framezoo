@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Subtitle berhasil disinkronkan",
         "syncSubtitleFailed": "Tidak dapat menyinkronkan subtitle",
         "syncSubtitleFailedWithDetail": "Tidak dapat menyinkronkan subtitle: {{detail}}",
+        "syncRateLimit": "Terlalu banyak permintaan. Harap tunggu sebentar sebelum menyinkronkan lagi.",
+        "syncServerBusy": "Layanan AI sedang sibuk. Silakan coba lagi dalam beberapa detik.",
         "syncSubtitleOpen": "Sinkronkan subtitle dengan AI",
         "syncSubtitleAction": "Sinkronisasi",
         "syncSubtitlePreparing": "Mempersiapkan audio...",

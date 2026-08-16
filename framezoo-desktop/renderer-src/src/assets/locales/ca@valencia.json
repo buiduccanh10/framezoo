@@ -826,6 +826,8 @@
         "syncSubtitleSuccess": "Els subtítols s'han sincronitzat correctament",
         "syncSubtitleFailed": "No s'han pogut sincronitzar els subtítols",
         "syncSubtitleFailedWithDetail": "No s'ha pogut sincronitzar el subtítol: {{detail}}",
+        "syncRateLimit": "Massa peticions. Espereu un moment abans de tornar a sincronitzar.",
+        "syncServerBusy": "El servei d'IA està ocupat actualment. Si us plau, torna-ho a provar d'aquí a uns segons.",
         "syncSubtitleOpen": "Sincronitza subtítols amb IA",
         "syncSubtitleAction": "Sincronització",
         "syncSubtitlePreparing": "S'està preparant l'àudio...",
