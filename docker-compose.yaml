@@ -35,7 +35,10 @@ services:
       context: .
       dockerfile: moonshine-service/Dockerfile
     restart: unless-stopped
+    ports:
+      - "8000:8000"
     volumes:
+      - ./moonshine-service:/app
       - moonshine-cache:/root/.cache
     environment:
       MOONSHINE_LANGUAGE: ${MOONSHINE_LANGUAGE:-en}

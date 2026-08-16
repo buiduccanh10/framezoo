@@ -50,13 +50,16 @@ def alignment_result_from_speech(
     speech_intervals: list[tuple[int, int]],
     audio_start_ms: int,
     audio_end_ms: int,
+    search_centers: list[int] | None = None,
+    find_best_offset_fn: Any = None,
 ) -> dict[str, Any]:
     return _alignment_result_from_speech(
         cues,
         speech_intervals,
         audio_start_ms,
         audio_end_ms,
-        find_best_offset_fn=find_best_offset,
+        search_centers=search_centers,
+        find_best_offset_fn=find_best_offset_fn or find_best_offset,
     )
 
 
@@ -227,13 +230,16 @@ async def align_batch_endpoint(
         raise HTTPException(status_code=400, detail="audio is empty")
 
     try:
-        return await asyncio.to_thread(
+        res = await asyncio.to_thread(
             align_vtt_batch,
             audio_data,
             subtitle_items,
             normalize_language(language),
             max(0, int(audio_start_ms)),
         )
+        import logging
+        logging.getLogger("uvicorn.error").info("ALIGN_BATCH_OUT (start_ms=%s): %s", audio_start_ms, res)
+        return res
     except (ValueError, wave.Error) as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
     except Exception as error:

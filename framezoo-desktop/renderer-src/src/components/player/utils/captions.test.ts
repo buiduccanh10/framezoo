@@ -5,6 +5,7 @@ import {
   getCaptionTimelineIndex,
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
+  shiftVttPiecewiseTimestamps,
   shiftVttTimestamps,
   tryParseCanonicalVtt,
 } from "./captions";
@@ -144,7 +145,56 @@ First
 
 00:00:02.000 --> 00:00:03.000
 Second`);
-
     expect(getCaptionTimelineIndex(cues, 0, 2)).toBe(1);
+  });
+
+  it("shifts cues piecewise according to defined timeline segments", () => {
+    const vtt = `WEBVTT
+
+00:00:06.000 --> 00:00:12.000
+Ad to be removed
+
+00:01:57.957 --> 00:02:00.896
+Intro dialogue
+
+00:07:50.000 --> 00:07:55.000
+Main movie dialogue`;
+
+    const shifted = parseCanonicalVtt(
+      shiftVttPiecewiseTimestamps(
+        vtt,
+        [
+          { startMs: 0, endMs: 180_000, offsetMs: -104_000 },
+          { startMs: 180_000, endMs: 600_000, offsetMs: 2_500 },
+        ],
+        0,
+      ),
+    );
+
+    expect(shifted).toHaveLength(2);
+    expect(shifted[0].content).toBe("Intro dialogue");
+    expect(shifted[0].start).toBe(13957);
+    expect(shifted[1].content).toBe("Main movie dialogue");
+    expect(shifted[1].start).toBe(472500);
+  });
+
+  it("identifies and strips promotional ad cues from VTT text and canonical cues", () => {
+    const rawVtt = `WEBVTT
+
+00:00:06.000 --> 00:00:12.000
+Watch Online Movies and Series for FREE www.osdb.link/lm
+
+00:00:13.000 --> 00:00:16.000
+Support us and become VIP member to remove all ads from www.OpenSubtitles.org
+
+00:00:17.000 --> 00:00:20.000
+Phụ đề được biên dịch bởi PhimMoi
+
+00:00:25.000 --> 00:00:30.000
+Hello this is actual movie dialogue`;
+
+    const cues = parseCanonicalVtt(rawVtt);
+    expect(cues).toHaveLength(1);
+    expect(cues[0].content).toBe("Hello this is actual movie dialogue");
   });
 });

@@ -201,9 +201,28 @@ export function normalizeSubtitleToVtt(text: string, format?: string): string {
   throw new Error("Invalid subtitle format");
 }
 
+export const SUBTITLE_AD_PATTERNS: RegExp[] = [
+  /https?:\/\/\S+/i,
+  /www\.\S+/i,
+  /\b(?:opensubtitles|subscene|osdb|addic7ed|podnapisi|yify|rarbg|psa)\b/i,
+  /\b(?:vip\s+member|remove\s+all\s+ads|advertise\s+your\s+product|watch\s+online\s+movies|downloaded\s+from)\b/i,
+  /\b(?:dịch\s+bởi|biên\s+dịch|phụ\s+đề\s+bởi|thuyết\s+minh\s+bởi|chúc\s+các\s+bạn\s+xem\s+phim\s+vui\s+vẻ|phimmoi|xemphim)\b/i,
+  /\b(?:synced\s+by|corrected\s+by|subtitles\s+by|encoded\s+by|ripped\s+by|released\s+by)\b/i,
+  /\bosdb\.link\b/i,
+];
+
+export function isSubtitleAdOrCredit(text?: string): boolean {
+  if (!text) return false;
+  const clean = text.replace(/<[^>]*>/g, " ").trim();
+  return SUBTITLE_AD_PATTERNS.some((pattern) => pattern.test(clean));
+}
+
 export function filterDuplicateCaptionCues(cues: ContentCaption[]) {
   const seen = new Set<string>();
   return cues.filter((cap) => {
+    if (isSubtitleAdOrCredit(cap.content) || isSubtitleAdOrCredit(cap.text)) {
+      return false;
+    }
     const key = `${cap.start}|${cap.end}|${cap.content}`;
     if (seen.has(key)) return false;
     seen.add(key);
@@ -215,8 +234,29 @@ export function parseVttSubtitles(vtt: string) {
   return parse(vtt).filter((cue) => cue.type === "caption") as CaptionCueType[];
 }
 
+export function removeVttAds(vttText: string): string {
+  const normalizedVtt = normalizeSubtitleToVtt(vttText);
+  return normalizedVtt
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) => {
+      const lines = block.split(/\r?\n/);
+      const timingLineIndex = lines.findIndex((line) =>
+        VTT_TIMING_LINE_RE.test(line),
+      );
+      if (timingLineIndex === -1) return block;
+
+      const textLines = lines.slice(timingLineIndex + 1).join(" ");
+      if (isSubtitleAdOrCredit(textLines)) {
+        return null;
+      }
+      return block;
+    })
+    .filter((block): block is string => block !== null)
+    .join("\n\n");
+}
+
 export function parseCanonicalVtt(vttText: string): CaptionCueType[] {
-  const vtt = normalizeSubtitleToVtt(vttText);
+  const vtt = removeVttAds(vttText);
   return filterDuplicateCaptionCues(parseVttSubtitles(vtt));
 }
 
@@ -268,13 +308,23 @@ function formatVttTimestamp(milliseconds: number): string {
     .padStart(3, "0")}`;
 }
 
-export function shiftVttTimestamps(vttText: string, delay: number): string {
-  const normalizedVtt = normalizeSubtitleToVtt(vttText);
-  const delayMilliseconds = Number.isFinite(delay)
-    ? Math.round(delay * 1000)
-    : 0;
+export interface SubtitleTimingSegment {
+  startMs: number;
+  endMs: number;
+  offsetMs: number;
+}
 
-  if (delayMilliseconds === 0) return normalizedVtt;
+export function shiftVttPiecewiseTimestamps(
+  vttText: string,
+  segments: SubtitleTimingSegment[],
+  fallbackOffsetMs = 0,
+): string {
+  const normalizedVtt = normalizeSubtitleToVtt(vttText);
+  if (!segments || segments.length === 0) {
+    return shiftVttTimestamps(vttText, fallbackOffsetMs / 1000);
+  }
+
+  const sortedSegments = [...segments].sort((a, b) => a.startMs - b.startMs);
 
   return normalizedVtt
     .split(/\r?\n\s*\r?\n/)
@@ -284,6 +334,72 @@ export function shiftVttTimestamps(vttText: string, delay: number): string {
         VTT_TIMING_LINE_RE.test(line),
       );
       if (timingLineIndex === -1) return block;
+
+      const textLines = lines.slice(timingLineIndex + 1).join(" ");
+      if (isSubtitleAdOrCredit(textLines)) {
+        return null;
+      }
+
+      const timingLine = lines[timingLineIndex];
+      const match = VTT_TIMING_LINE_RE.exec(timingLine);
+      if (!match) return block;
+
+      const start = parseVttTimestamp(match[1]);
+      const end = parseVttTimestamp(match[2]);
+      if (!Number.isFinite(start) || !Number.isFinite(end)) return block;
+
+      let appliedOffsetMs = fallbackOffsetMs;
+      for (const seg of sortedSegments) {
+        if (start >= seg.startMs && start < seg.endMs) {
+          appliedOffsetMs = seg.offsetMs;
+          break;
+        }
+      }
+
+      const shiftedStart = Math.max(0, start + appliedOffsetMs);
+      const shiftedEnd = Math.max(0, end + appliedOffsetMs);
+      if (shiftedEnd <= shiftedStart) return null;
+
+      lines[timingLineIndex] =
+        `${formatVttTimestamp(shiftedStart)} --> ${formatVttTimestamp(shiftedEnd)}${match[3]}`;
+      return {
+        start: shiftedStart,
+        content: lines.join("\n"),
+      };
+    })
+    .filter(
+      (item): item is { start: number; content: string } | string =>
+        item !== null,
+    )
+    .sort((a, b) => {
+      if (typeof a === "string" || typeof b === "string") return 0;
+      return a.start - b.start;
+    })
+    .map((item) => (typeof item === "string" ? item : item.content))
+    .join("\n\n");
+}
+
+export function shiftVttTimestamps(vttText: string, delay: number): string {
+  const normalizedVtt = normalizeSubtitleToVtt(vttText);
+  const delayMilliseconds = Number.isFinite(delay)
+    ? Math.round(delay * 1000)
+    : 0;
+
+  return normalizedVtt
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) => {
+      const lines = block.split(/\r?\n/);
+      const timingLineIndex = lines.findIndex((line) =>
+        VTT_TIMING_LINE_RE.test(line),
+      );
+      if (timingLineIndex === -1) return block;
+
+      const textLines = lines.slice(timingLineIndex + 1).join(" ");
+      if (isSubtitleAdOrCredit(textLines)) {
+        return null;
+      }
+
+      if (delayMilliseconds === 0) return block;
 
       const timingLine = lines[timingLineIndex];
       const match = VTT_TIMING_LINE_RE.exec(timingLine);

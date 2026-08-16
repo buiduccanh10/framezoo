@@ -2,21 +2,28 @@ import { mwFetch } from "@/backend/helpers/fetch";
 import { conf } from "@/setup/config";
 
 import { extractAudioWindow } from "./audioCapture";
-import { shiftVttTimestamps } from "./captions";
+import {
+  SubtitleTimingSegment,
+  removeVttAds,
+  shiftVttPiecewiseTimestamps,
+  shiftVttTimestamps,
+} from "./captions";
 
 export const SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS = 60;
 export const SUBTITLE_ALIGNMENT_MIN_CONFIDENCE = 60;
 export const SUBTITLE_ALIGNMENT_MIN_CONSENSUS_WINDOWS = 2;
-export const SUBTITLE_ALIGNMENT_OFFSET_TOLERANCE_MS = 750;
+export const SUBTITLE_ALIGNMENT_OFFSET_TOLERANCE_MS = 1_200;
 export const SUBTITLE_ALIGNMENT_MIN_SCORE_MARGIN = 10;
-export const SUBTITLE_ALIGNMENT_MAX_PLAUSIBLE_OFFSET_MS = 45_000;
+export const SUBTITLE_ALIGNMENT_MAX_PLAUSIBLE_OFFSET_MS = 180_000;
 export const SUBTITLE_ALIGNMENT_MAX_WINDOWS = 6;
 export const SUBTITLE_ALIGNMENT_INITIAL_WINDOWS = 2;
 
 const SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS = [
   -120, 120, -240, 240,
 ];
-const SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS = [0, 1 / 3, 2 / 3, 1];
+export const SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS = [
+  0.15, 0.35, 0.55, 0.75,
+];
 const SUBTITLE_ALIGNMENT_MIN_AUDIO_WINDOW_SECONDS = 1;
 
 export interface SubtitleAlignmentResponse {
@@ -29,6 +36,7 @@ export interface SubtitleAlignmentResponse {
   }>;
   speechAnchorCount?: number;
   speechAnchorCoverage?: number;
+  segments?: SubtitleTimingSegment[];
   reason: string | null;
 }
 
@@ -256,11 +264,11 @@ export function buildAlignmentWindowPlan(
       : null;
   const fallbackStarts =
     maxStart !== null
-      ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map(
-          (fraction) => maxStart * fraction,
+      ? SUBTITLE_ALIGNMENT_TIMELINE_ANCHOR_FRACTIONS.map((fraction) =>
+          Math.round(maxStart * fraction),
         )
-      : SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS.map(
-          (offset) => currentStart + offset,
+      : SUBTITLE_ALIGNMENT_WINDOW_FALLBACK_OFFSETS_SECONDS.map((offset) =>
+          Math.round(currentStart + offset),
         );
 
   for (const fallbackStart of fallbackStarts) {
@@ -342,7 +350,9 @@ function buildUnalignedResult(
 
 function hasSpeechEvidence(result: SubtitleAlignmentResponse): boolean {
   return (
-    result.reason !== "no_speech_detected" && result.speechIntervals.length > 0
+    result.reason !== "no_speech_detected" &&
+    result.reason !== "insufficient_speech_in_window" &&
+    result.speechIntervals.length > 0
   );
 }
 
@@ -460,12 +470,40 @@ export async function collectAlignmentWindowResponses(options: {
   return windowResponses;
 }
 
+export interface SubtitleWindowCandidateEntry {
+  startAt: number;
+  result: SubtitleAlignmentResponse;
+}
+
 export function selectSubtitleAlignmentConsensus(
-  candidates: SubtitleAlignmentResponse[],
+  candidatesOrEntries:
+    | SubtitleAlignmentResponse[]
+    | SubtitleWindowCandidateEntry[],
 ): SubtitleAlignmentResponse {
+  const entries: SubtitleWindowCandidateEntry[] = candidatesOrEntries.map(
+    (item, index) => {
+      if ("startAt" in item && "result" in item) {
+        return item;
+      }
+      return {
+        startAt: index * 60,
+        result: item,
+      };
+    },
+  );
+
+  const candidates = entries.map((e) => e.result);
   const speechCandidates = candidates.filter(hasSpeechEvidence);
-  const validCandidates = getValidAlignmentCandidates(candidates);
-  if (validCandidates.length === 0) {
+  const validEntries = entries.filter(
+    (e) =>
+      hasSpeechEvidence(e.result) &&
+      e.result.aligned &&
+      Number.isFinite(e.result.offsetMs) &&
+      e.result.confidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE &&
+      Math.abs(e.result.offsetMs) <= SUBTITLE_ALIGNMENT_MAX_PLAUSIBLE_OFFSET_MS,
+  );
+
+  if (validEntries.length === 0) {
     return buildUnalignedResult(
       candidates,
       speechCandidates.length === 0
@@ -474,6 +512,7 @@ export function selectSubtitleAlignmentConsensus(
     );
   }
 
+  const validCandidates = validEntries.map((e) => e.result);
   const clusters = clusterAlignmentCandidates(validCandidates).sort(
     (first, second) => second.score - first.score,
   );
@@ -486,6 +525,56 @@ export function selectSubtitleAlignmentConsensus(
     bestCluster.candidates.length >= SUBTITLE_ALIGNMENT_MIN_CONSENSUS_WINDOWS &&
     bestCluster.averageConfidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE &&
     scoreMargin >= SUBTITLE_ALIGNMENT_MIN_SCORE_MARGIN;
+
+  // Check for Piecewise Discrepancy (e.g. Intro window has distinct offset vs main movie)
+  const introEntry = validEntries.find((e) => e.startAt <= 120);
+  const mainEntries = validEntries.filter((e) => e.startAt > 120);
+
+  if (
+    introEntry &&
+    mainEntries.length > 0 &&
+    introEntry.result.confidence >= 75
+  ) {
+    const mainCandidates = mainEntries.map((e) => e.result);
+    const mainClusters = clusterAlignmentCandidates(mainCandidates).sort(
+      (a, b) => b.score - a.score,
+    );
+    const mainBestCluster = mainClusters[0];
+
+    if (
+      mainBestCluster &&
+      mainBestCluster.averageConfidence >= SUBTITLE_ALIGNMENT_MIN_CONFIDENCE &&
+      Math.abs(introEntry.result.offsetMs - mainBestCluster.averageOffsetMs) >
+        15_000
+    ) {
+      const introOffset = Math.round(introEntry.result.offsetMs);
+      const mainOffset = Math.round(mainBestCluster.averageOffsetMs);
+      const segments: SubtitleTimingSegment[] = [
+        {
+          startMs: 0,
+          endMs: 180_000, // Intro / Recap (first 3 minutes)
+          offsetMs: introOffset,
+        },
+        {
+          startMs: 180_000,
+          endMs: Number.MAX_SAFE_INTEGER, // Main movie body
+          offsetMs: mainOffset,
+        },
+      ];
+
+      return {
+        ...introEntry.result,
+        aligned: true,
+        offsetMs: mainOffset,
+        confidence: Math.round(
+          (introEntry.result.confidence + mainBestCluster.averageConfidence) /
+            2,
+        ),
+        segments,
+        reason: null,
+      };
+    }
+  }
 
   if (!hasConsensus) {
     return buildUnalignedResult(
@@ -541,9 +630,13 @@ export async function alignSubtitlesWithCurrentStream(options: {
         startAt: plan.startAt,
         duration: windowDuration,
       });
+      const cleanedSubtitles = options.subtitles.map((sub) => ({
+        ...sub,
+        vttData: removeVttAds(sub.vttData),
+      }));
       const body = new FormData();
       appendAudio(body, audio);
-      body.append("subtitles", JSON.stringify(options.subtitles));
+      body.append("subtitles", JSON.stringify(cleanedSubtitles));
       body.append("language", options.language || "en");
       body.append("audioStartMs", String(Math.round(plan.startAt * 1000)));
 
@@ -565,31 +658,20 @@ export async function alignSubtitlesWithCurrentStream(options: {
   const results: Partial<
     Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>
   > = {};
-  const candidatesByTrack = new Map<
-    SubtitleAlignmentTrack,
-    SubtitleAlignmentResponse[]
-  >();
-  for (const subtitle of options.subtitles) {
-    const candidates = windowResponses
-      .map(({ response }) => response.results[subtitle.track])
-      .filter((result): result is SubtitleAlignmentResponse => result != null);
-    candidatesByTrack.set(subtitle.track, candidates);
-  }
-
-  const primarySubtitle = options.subtitles.find(
-    (subtitle) => subtitle.track === "primary",
-  );
-  if (primarySubtitle) {
-    results.primary = selectSubtitleAlignmentConsensus(
-      candidatesByTrack.get("primary") ?? [],
-    );
-  }
 
   for (const subtitle of options.subtitles) {
-    if (subtitle.track === "primary") continue;
-    results[subtitle.track] = selectSubtitleAlignmentConsensus(
-      candidatesByTrack.get(subtitle.track) ?? [],
-    );
+    const entries = windowResponses
+      .map(({ startAt, response }) => ({
+        startAt,
+        result: response.results[subtitle.track],
+      }))
+      .filter(
+        (
+          entry,
+        ): entry is { startAt: number; result: SubtitleAlignmentResponse } =>
+          entry.result != null,
+      );
+    results[subtitle.track] = selectSubtitleAlignmentConsensus(entries);
   }
 
   return { results };
@@ -633,8 +715,12 @@ export function applySubtitleAlignment(
   if (!result.aligned || !Number.isFinite(result.offsetMs)) {
     return vttData;
   }
-  // Apply the consensus offset once to the original cue timeline. A
-  // per-window cleaned VTT can contain local snapping from a different
-  // candidate offset and would reintroduce double-shift/drift.
+  if (result.segments && result.segments.length > 0) {
+    return shiftVttPiecewiseTimestamps(
+      vttData,
+      result.segments,
+      result.offsetMs,
+    );
+  }
   return shiftVttTimestamps(vttData, result.offsetMs / 1000);
 }
