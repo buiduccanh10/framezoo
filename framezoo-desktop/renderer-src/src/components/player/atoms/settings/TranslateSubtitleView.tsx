@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
-import { CaptionListItem } from "@/stores/player/slices/source";
+import { Caption, CaptionListItem } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 import { getPrettyLanguageNameFromLocale } from "@/utils/language";
 
@@ -92,9 +92,18 @@ export function TranslateSubtitleView({
     const friendlyName = getPrettyLanguageNameFromLocale(langCode);
 
     async function onClick() {
+      const sourceCaption = [
+        usePlayerStore.getState().caption.selected,
+        usePlayerStore.getState().caption.secondary,
+      ].find(
+        (currentCaption): currentCaption is Caption =>
+          currentCaption !== null &&
+          (currentCaption.id === caption.id ||
+            currentCaption.sourceCaption?.id === caption.id),
+      );
       clearTranslateTask();
       disableCaptions();
-      await translateCaption(caption, langCode);
+      await translateCaption(caption, langCode, sourceCaption);
     }
 
     return (

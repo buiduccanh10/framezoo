@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { DisplayInterface } from "@/components/player/display/displayInterface";
 
 import { usePlayerStore } from "../store";
-import type { CaptionListItem, PlayerMeta } from "./source";
+import type { Caption, CaptionListItem, PlayerMeta } from "./source";
 import type { SourceSliceSource } from "../utils/qualities";
 
 type ProgressUpdate = {
@@ -173,6 +173,42 @@ describe("external subtitle source transitions", () => {
     expect(state.mediaPlaying.isPaused).toBe(false);
     expect(load).toHaveBeenLastCalledWith(
       expect.objectContaining({ autoplay: true }),
+    );
+  });
+
+  it("keeps the translated task in sync when AI updates its VTT", () => {
+    const sourceCaption = createCaption("source-caption");
+    const translatedCaption: Caption = {
+      id: "source-caption-translated-en",
+      language: "en",
+      vttData: "WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nOld",
+      sourceCaption,
+    };
+    const alignedCaption: Caption = {
+      ...translatedCaption,
+      vttData: "WEBVTT\n\n00:00:00.000 --> 00:00:01.000\nOld",
+      alignmentBaseVttData: translatedCaption.vttData,
+      alignment: { offsetMs: -1000 },
+    };
+
+    usePlayerStore.setState((state) => {
+      state.caption.selected = translatedCaption;
+      state.caption.translateTask = {
+        targetCaption: sourceCaption,
+        targetLanguage: "en",
+        translatedCaption,
+        done: true,
+        error: false,
+        cancel: vi.fn(),
+      };
+    });
+
+    usePlayerStore.getState().setCaption(alignedCaption);
+
+    const state = usePlayerStore.getState();
+    expect(state.caption.selected).toEqual(alignedCaption);
+    expect(state.caption.translateTask?.translatedCaption).toEqual(
+      alignedCaption,
     );
   });
 });

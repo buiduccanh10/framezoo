@@ -9,6 +9,7 @@ import {
   applySubtitleAlignment,
   areSubtitleAlignmentResultsApplicable,
   getSubtitleAlignmentBaseVtt,
+  getSubtitleAlignmentInputVtt,
 } from "@/components/player/utils/subtitleAlignment";
 import { useInstalledAddons } from "@/desktop/addons/store";
 import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
@@ -306,7 +307,7 @@ export function useCaptions() {
           language: pausedState.currentAudioTrack?.language ?? "en",
           subtitles: targets.map(({ track, caption }) => ({
             track,
-            vttData: getSubtitleAlignmentBaseVtt(caption),
+            vttData: getSubtitleAlignmentInputVtt(caption),
           })),
           headers: contextSource.headers ?? contextSource.preferredHeaders,
           videoDuration: alignmentVideoDuration,
@@ -359,18 +360,19 @@ export function useCaptions() {
             target,
             result,
             currentCaption,
+            inputVttData: getSubtitleAlignmentInputVtt(target.caption),
             baseVttData: getSubtitleAlignmentBaseVtt(target.caption),
           };
         });
         const allAligned = areSubtitleAlignmentResultsApplicable(
           alignedTargets.map(
-            ({ target, result, currentCaption, baseVttData }) => ({
+            ({ target, result, currentCaption, inputVttData }) => ({
               result,
               expectedCaptionId: target.caption.id,
               currentCaptionId: currentCaption?.id,
-              expectedBaseVttData: baseVttData,
+              expectedBaseVttData: inputVttData,
               currentBaseVttData: currentCaption
-                ? getSubtitleAlignmentBaseVtt(currentCaption)
+                ? getSubtitleAlignmentInputVtt(currentCaption)
                 : undefined,
             }),
           ),
@@ -395,18 +397,28 @@ export function useCaptions() {
           target,
           result,
           currentCaption,
+          inputVttData,
           baseVttData,
         } of alignedTargets) {
           if (!result || !currentCaption) continue;
           const alignedVtt = applySubtitleAlignment(baseVttData, result);
+          const alignment = {
+            offsetMs: result.offsetMs,
+            ...(result.segments ? { segments: result.segments } : {}),
+          };
           if (
             alignedVtt !== currentCaption.vttData ||
-            currentCaption.alignmentBaseVttData !== baseVttData
+            currentCaption.alignmentBaseVttData !== baseVttData ||
+            currentCaption.alignment?.offsetMs !== alignment.offsetMs ||
+            JSON.stringify(currentCaption.alignment?.segments) !==
+              JSON.stringify(alignment.segments)
           ) {
             const nextCaption = {
               ...currentCaption,
               vttData: alignedVtt,
               alignmentBaseVttData: baseVttData,
+              alignmentSourceVttData: inputVttData,
+              alignment,
             };
             if (target.track === "primary") {
               setCaption(nextCaption);
@@ -490,13 +502,18 @@ export function useCaptions() {
 
   const selectedCaptionListItem = useMemo(
     () =>
-      captions.find((caption) => caption.id === selectedCaption?.id) ?? null,
-    [captions, selectedCaption?.id],
+      selectedCaption
+        ? (captions.find((caption) => caption.id === selectedCaption.id) ??
+          selectedCaption.sourceCaption ??
+          null)
+        : null,
+    [captions, selectedCaption],
   );
   const secondaryCaptionListItem = useMemo(
     () =>
       secondaryCaption
         ? (captions.find((caption) => caption.id === secondaryCaption.id) ??
+          secondaryCaption.sourceCaption ??
           null)
         : null,
     [captions, secondaryCaption],

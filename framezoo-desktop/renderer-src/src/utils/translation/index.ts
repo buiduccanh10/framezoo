@@ -2,11 +2,33 @@
 import subsrt from "subsrt-ts";
 import { Caption, ContentCaption } from "subsrt-ts/dist/types/handler";
 
-import { Caption as PlayerCaption } from "@/stores/player/slices/source";
+import {
+  shiftVttPiecewiseTimestamps,
+  shiftVttTimestamps,
+} from "@/components/player/utils/captions";
+import {
+  type Caption as PlayerCaption,
+  type SubtitleAlignmentState,
+} from "@/stores/player/slices/source";
 
 import { compressStr, decompressStr, sleep } from "./utils";
 
 const CAPTIONS_CACHE: Map<string, ArrayBuffer> = new Map<string, ArrayBuffer>();
+
+export function applyStoredCaptionAlignment(
+  vttData: string,
+  alignment?: SubtitleAlignmentState,
+): string {
+  if (!alignment) return vttData;
+  if (alignment.segments && alignment.segments.length > 0) {
+    return shiftVttPiecewiseTimestamps(
+      vttData,
+      alignment.segments,
+      alignment.offsetMs,
+    );
+  }
+  return shiftVttTimestamps(vttData, alignment.offsetMs / 1000);
+}
 
 // single will not be used if multi-line is supported
 export interface TranslateServiceConfig {

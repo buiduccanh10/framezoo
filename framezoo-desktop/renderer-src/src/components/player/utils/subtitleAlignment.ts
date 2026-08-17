@@ -80,12 +80,19 @@ export type AlignmentWindowRequest = (
 export type SubtitleAlignmentCaption = {
   vttData: string;
   alignmentBaseVttData?: string;
+  alignmentSourceVttData?: string;
 };
 
 export function getSubtitleAlignmentBaseVtt(
   caption: SubtitleAlignmentCaption,
 ): string {
   return caption.alignmentBaseVttData ?? caption.vttData;
+}
+
+export function getSubtitleAlignmentInputVtt(
+  caption: SubtitleAlignmentCaption,
+): string {
+  return caption.alignmentSourceVttData ?? getSubtitleAlignmentBaseVtt(caption);
 }
 
 export function areSubtitleAlignmentResultsApplicable(
