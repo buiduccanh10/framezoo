@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "AI aliñará os subtítulos para que coincidan co vídeo.",
         "syncSubtitleSupportedLanguages": "Idiomas de audio admitidos",
         "syncSubtitleSuccess": "Subtítulos sincronizados correctamente",
+        "syncSubtitleServerFallback": "A sincronización local non admite este idioma de audio; sincronizado usando o servidor.",
         "syncSubtitleFailed": "Non se puido sincronizar os subtítulos",
         "syncSubtitleFailedWithDetail": "Non se puido sincronizar o subtítulo: {{detail}}",
         "syncRateLimit": "Demasiadas solicitudes. Agarde un momento antes de sincronizar de novo.",

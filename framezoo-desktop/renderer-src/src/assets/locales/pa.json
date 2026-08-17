@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "ਵੀਡੀਓ ਨਾਲ ਮੇਲ ਕਰਨ ਲਈ ਉਪਸਿਰਲੇਖਾਂ ਨੂੰ AI ਦੁਆਰਾ ਇਕਸਾਰ ਕੀਤਾ ਜਾਵੇਗਾ।",
         "syncSubtitleSupportedLanguages": "ਸਮਰਥਿਤ ਆਡੀਓ ਭਾਸ਼ਾਵਾਂ",
         "syncSubtitleSuccess": "ਉਪਸਿਰਲੇਖ ਸਫਲਤਾਪੂਰਵਕ ਸਮਕਾਲੀ ਕੀਤਾ ਗਿਆ",
+        "syncSubtitleServerFallback": "ਸਥਾਨਕ ਸਿੰਕ ਇਸ ਆਡੀਓ ਭਾਸ਼ਾ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ ਹੈ; ਸਰਵਰ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਸਿੰਕ ਕੀਤਾ ਗਿਆ।",
         "syncSubtitleFailed": "ਉਪਸਿਰਲੇਖ ਨੂੰ ਸਿੰਕ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ",
         "syncSubtitleFailedWithDetail": "ਉਪਸਿਰਲੇਖ ਨੂੰ ਸਿੰਕ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ: {{detail}}",
         "syncRateLimit": "ਬਹੁਤ ਸਾਰੀਆਂ ਬੇਨਤੀਆਂ। ਦੁਬਾਰਾ ਸਿੰਕ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਕਿਰਪਾ ਕਰਕੇ ਇੱਕ ਪਲ ਉਡੀਕ ਕਰੋ।",

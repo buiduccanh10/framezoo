@@ -45,6 +45,7 @@ import {
   isExtensionActiveCached,
 } from "./backend/extension/messaging";
 import type { NativeStartupWarmupState } from "./desktop/electron";
+import { preloadMoonshineModels } from "./moonshine/runtime";
 import { initializeChromecast } from "./setup/chromecast";
 import { initializeImageFadeIn } from "./setup/imageFadeIn";
 import { initializeOldStores } from "./stores/__old/migrations";
@@ -72,49 +73,59 @@ function NativeStartupGate(props: { children: ReactNode }) {
 
   useEffect(() => {
     const api = window.electronAPI;
-    if (
-      !window.__FRAMEZOO_DESKTOP__ ||
-      typeof api?.getStartupNativeWarmupState !== "function" ||
-      typeof api.waitForStartupNativeWarmup !== "function"
-    ) {
-      setState({
-        status: "ready",
-        torrent: { status: "ready" },
-        libmpv: { status: "ready" },
-      });
-      return;
-    }
-
     let active = true;
     const publish = (next: NativeStartupWarmupState) => {
       if (active) setState(next);
     };
-    const cleanup = api.onStartupNativeWarmupState?.(publish);
+    const nativePromise =
+      window.__FRAMEZOO_DESKTOP__ &&
+      typeof api?.waitForStartupNativeWarmup === "function"
+        ? api.waitForStartupNativeWarmup()
+        : Promise.resolve({
+            status: "ready" as const,
+            torrent: { status: "ready" as const },
+            libmpv: { status: "ready" as const },
+          });
+    const moonshinePromise = preloadMoonshineModels();
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Startup warmup timed out")), 60_000),
+    );
 
-    void api
-      .getStartupNativeWarmupState()
-      .then(publish)
-      .catch(() => {
+    void Promise.race([
+      Promise.all([nativePromise, moonshinePromise]),
+      timeoutPromise,
+    ])
+      .then(([native, moonshine]) => {
         publish({
-          status: "degraded",
-          torrent: { status: "error", message: "Warmup state unavailable" },
-          libmpv: { status: "error", message: "Warmup state unavailable" },
+          status:
+            native.status === "degraded" || moonshine.status === "degraded"
+              ? "degraded"
+              : "ready",
+          torrent: native.torrent,
+          libmpv: native.libmpv,
+          moonshine:
+            moonshine.status === "degraded"
+              ? {
+                  status: "error",
+                  message: moonshine.message ?? "Moonshine startup degraded",
+                }
+              : { status: "ready" },
         });
-      });
-    void api
-      .waitForStartupNativeWarmup()
-      .then(publish)
-      .catch(() => {
+      })
+      .catch((error) => {
         publish({
           status: "degraded",
           torrent: { status: "error", message: "Native warmup failed" },
           libmpv: { status: "error", message: "Native warmup failed" },
+          moonshine: {
+            status: "error",
+            message: error instanceof Error ? error.message : String(error),
+          },
         });
       });
 
     return () => {
       active = false;
-      cleanup?.();
     };
   }, []);
 

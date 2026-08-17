@@ -13,7 +13,10 @@ import { useSubtitleStore } from "@/stores/subtitles";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getExternalSubtitleLanguageKey } from "@/utils/externalSubtitles/language";
 import googletranslate from "@/utils/translation/googletranslate";
-import { translate } from "@/utils/translation/index";
+import {
+  applyStoredCaptionAlignment,
+  translate,
+} from "@/utils/translation/index";
 import { ValuesOf } from "@/utils/typeguard";
 
 export const playerStatus = {
@@ -57,12 +60,26 @@ export interface PlayerNavigationState {
   playerMeta?: PlayerMeta;
 }
 
+export interface SubtitleAlignmentSegment {
+  startMs: number;
+  endMs: number;
+  offsetMs: number;
+}
+
+export interface SubtitleAlignmentState {
+  offsetMs: number;
+  segments?: SubtitleAlignmentSegment[];
+}
+
 export interface Caption {
   id: string;
   language: string;
   url?: string;
   vttData: string;
   alignmentBaseVttData?: string;
+  alignmentSourceVttData?: string;
+  alignment?: SubtitleAlignmentState;
+  sourceCaption?: CaptionListItem;
   trackId?: string;
   persisted?: boolean;
 }
@@ -174,6 +191,7 @@ export interface SourceSlice {
   translateCaption(
     targetCaption: CaptionListItem,
     targetLanguage: string,
+    sourceCaption?: Caption,
   ): Promise<void>;
   clearTranslateTask(): void;
   reset(): void;
@@ -407,6 +425,12 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     }
     set((s) => {
       s.caption.selected = caption;
+      if (
+        caption &&
+        s.caption.translateTask?.translatedCaption?.id === caption.id
+      ) {
+        s.caption.translateTask.translatedCaption = caption;
+      }
     });
   },
   setEmbeddedSubtitleTracks(captions) {
@@ -425,6 +449,12 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     );
     set((s) => {
       s.caption.secondary = caption;
+      if (
+        caption &&
+        s.caption.translateTask?.translatedCaption?.id === caption.id
+      ) {
+        s.caption.translateTask.translatedCaption = caption;
+      }
     });
   },
   setDualSubEnabled(enabled) {
@@ -712,6 +742,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   async translateCaption(
     targetCaption: CaptionListItem,
     targetLanguage: string,
+    sourceCaptionSnapshot?: Caption,
   ) {
     let store = get();
 
@@ -721,6 +752,28 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     }
 
     const abortController = new AbortController();
+    const activeCaption =
+      sourceCaptionSnapshot ??
+      [store.caption.selected, store.caption.secondary].find(
+        (caption): caption is Caption =>
+          caption !== null &&
+          (caption.id === targetCaption.id ||
+            caption.sourceCaption?.id === targetCaption.id),
+      );
+    const sourceCaption: Caption = activeCaption
+      ? {
+          ...activeCaption,
+          vttData: activeCaption.alignmentBaseVttData ?? activeCaption.vttData,
+          alignmentSourceVttData:
+            activeCaption.alignmentSourceVttData ??
+            activeCaption.alignmentBaseVttData ??
+            activeCaption.vttData,
+        }
+      : {
+          id: targetCaption.id,
+          language: targetCaption.language,
+          vttData: "",
+        };
 
     set((s) => {
       s.caption.translateTask = {
@@ -758,10 +811,13 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       }
       set((s) => {
         if (!s.caption.translateTask) return;
+        const fetchedVttData = sourceCaption.vttData || vttData;
         s.caption.translateTask.fetchedTargetCaption = {
-          id: targetCaption.id,
-          language: targetCaption.language,
-          vttData,
+          ...sourceCaption,
+          vttData: fetchedVttData,
+          alignmentSourceVttData:
+            sourceCaption.alignmentSourceVttData ?? fetchedVttData,
+          sourceCaption: targetCaption,
         };
       });
       store = get();
@@ -785,10 +841,27 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       }
       set((s) => {
         if (!s.caption.translateTask) return;
+        const translatedBaseVttData = result;
+        const translatedSourceCaption =
+          s.caption.translateTask.fetchedTargetCaption ?? sourceCaption;
+        const alignment = translatedSourceCaption.alignment;
         const translatedCaption: Caption = {
           id: `${targetCaption.id}-translated-${targetLanguage}`,
           language: targetLanguage,
-          vttData: result,
+          url: targetCaption.url,
+          vttData: applyStoredCaptionAlignment(
+            translatedBaseVttData,
+            alignment,
+          ),
+          alignmentSourceVttData:
+            translatedSourceCaption.alignmentSourceVttData,
+          ...(alignment
+            ? {
+                alignmentBaseVttData: translatedBaseVttData,
+                alignment,
+              }
+            : {}),
+          sourceCaption: targetCaption,
         };
         s.caption.translateTask.done = true;
         s.caption.translateTask.translatedCaption = translatedCaption;

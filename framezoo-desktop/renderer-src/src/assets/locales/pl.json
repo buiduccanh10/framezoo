@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Napisy zostaną dopasowane przez sztuczną inteligencję do filmu.",
         "syncSubtitleSupportedLanguages": "Obsługiwane języki audio",
         "syncSubtitleSuccess": "Napisy zostały pomyślnie zsynchronizowane",
+        "syncSubtitleServerFallback": "Lokalna synchronizacja nie obsługuje tego języka audio; synchronizowane przy użyciu serwera.",
         "syncSubtitleFailed": "Nie można zsynchronizować napisów",
         "syncSubtitleFailedWithDetail": "Nie można zsynchronizować napisów: {{detail}}",
         "syncRateLimit": "Zbyt wiele żądań. Poczekaj chwilę przed ponowną synchronizacją.",

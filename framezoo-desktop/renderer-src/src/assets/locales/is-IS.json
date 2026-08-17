@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Textar verða samræmdir af gervigreind til að passa við myndbandið.",
         "syncSubtitleSupportedLanguages": "Hljóðtungumál studd",
         "syncSubtitleSuccess": "Texti samstilltur tókst",
+        "syncSubtitleServerFallback": "Staðbundin samstilling styður ekki þetta hljóðtungumál; samstillt með því að nota netþjón.",
         "syncSubtitleFailed": "Ekki tókst að samstilla textann",
         "syncSubtitleFailedWithDetail": "Gat ekki samstillt texti: {{detail}}",
         "syncRateLimit": "Of margar beiðnir. Vinsamlegast bíddu smá stund áður en þú samstillir aftur.",

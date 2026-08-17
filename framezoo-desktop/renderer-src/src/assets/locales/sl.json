@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Podnapise bo poravnal umetna inteligenca, da bodo ustrezali videoposnetku.",
         "syncSubtitleSupportedLanguages": "Podprti avdio jeziki",
         "syncSubtitleSuccess": "Podnapisi so uspešno sinhronizirani",
+        "syncSubtitleServerFallback": "Lokalna sinhronizacija ne podpira tega zvočnega jezika; sinhroniziran s strežnikom.",
         "syncSubtitleFailed": "Podnapisov ni bilo mogoče sinhronizirati",
         "syncSubtitleFailedWithDetail": "Ni bilo mogoče sinhronizirati podnapisov: {{detail}}",
         "syncRateLimit": "Preveč zahtev. Pred ponovno sinhronizacijo počakajte trenutek.",

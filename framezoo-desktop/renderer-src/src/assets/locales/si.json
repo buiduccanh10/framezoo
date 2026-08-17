@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "වීඩියෝවට ගැළපීමට AI මගින් උපසිරැසි පෙළගස්වනු ඇත.",
         "syncSubtitleSupportedLanguages": "සහාය දක්වන ශ්‍රව්‍ය භාෂා",
         "syncSubtitleSuccess": "උපසිරැසි සාර්ථකව සමමුහුර්ත විය",
+        "syncSubtitleServerFallback": "දේශීය සමමුහුර්තකරණය මෙම ශ්‍රව්‍ය භාෂාවට සහය නොදක්වයි; සේවාදායකය භාවිතයෙන් සමමුහුර්ත කර ඇත.",
         "syncSubtitleFailed": "උපසිරැසි සමමුහුර්ත කිරීමට නොහැකි විය",
         "syncSubtitleFailedWithDetail": "උපසිරැසි සමමුහුර්ත කිරීමට නොහැකි විය: {{detail}}",
         "syncRateLimit": "ඉල්ලීම් වැඩියි. නැවත සමමුහුර්ත කිරීමට පෙර කරුණාකර මොහොතක් රැඳී සිටින්න.",

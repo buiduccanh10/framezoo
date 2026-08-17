@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "字幕はAIによって映像に合わせて調整されます。",
         "syncSubtitleSupportedLanguages": "サポートされている音声言語",
         "syncSubtitleSuccess": "字幕は正常に同期されました",
+        "syncSubtitleServerFallback": "ローカル同期はこの音声言語をサポートしていません。サーバーを使用して同期されます。",
         "syncSubtitleFailed": "字幕を同期できませんでした",
         "syncSubtitleFailedWithDetail": "字幕を同期できませんでした: {{detail}}",
         "syncRateLimit": "リクエストが多すぎます。再度同期するまでしばらくお待ちください。",

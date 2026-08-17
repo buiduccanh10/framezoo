@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "คำบรรยายจะถูกจัดตำแหน่งโดย AI เพื่อให้ตรงกับวิดีโอ",
         "syncSubtitleSupportedLanguages": "ภาษาเสียงที่รองรับ",
         "syncSubtitleSuccess": "ซิงค์คำบรรยายสำเร็จแล้ว",
+        "syncSubtitleServerFallback": "การซิงค์ในเครื่องไม่รองรับภาษาของเสียงนี้ ซิงค์โดยใช้เซิร์ฟเวอร์",
         "syncSubtitleFailed": "ไม่สามารถซิงค์คำบรรยายได้",
         "syncSubtitleFailedWithDetail": "ไม่สามารถซิงค์คำบรรยาย: {{detail}}",
         "syncRateLimit": "คำขอมากเกินไป โปรดรอสักครู่ก่อนที่จะซิงค์อีกครั้ง",

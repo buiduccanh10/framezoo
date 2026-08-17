@@ -541,6 +541,9 @@ struct MpvPlayer {
 std::mutex players_mutex;
 std::unordered_map<std::string, std::shared_ptr<MpvPlayer>> players;
 std::atomic<uint64_t> next_player_id{1};
+std::mutex audio_requests_mutex;
+std::unordered_map<std::string, std::shared_ptr<std::atomic<bool>>>
+    audio_request_cancellations;
 
 void render_update_callback(void* user) {
   auto* player = static_cast<MpvPlayer*>(user);
@@ -662,6 +665,9 @@ struct AudioExtractionRequest {
   std::string url;
   std::string output_path;
   std::string headers;
+  std::string request_id;
+  std::shared_ptr<std::atomic<bool>> cancelled =
+      std::make_shared<std::atomic<bool>>(false);
   double start_at = 0;
   double duration = 0;
   std::string error;
@@ -683,6 +689,14 @@ bool wait_for_audio_file(
   );
 
   while (true) {
+    if (request->cancelled->load(std::memory_order_acquire)) {
+      request->error = "libmpv audio extraction cancelled";
+      if (handle) {
+        const char* quit_command[] = {"quit", nullptr};
+        api->command(handle, quit_command);
+      }
+      return false;
+    }
     if (
         std::chrono::steady_clock::now() - started_at > timeout
     ) {
@@ -852,6 +866,10 @@ void complete_audio_extraction(
     void* data
 ) {
   auto* request = static_cast<AudioExtractionRequest*>(data);
+  if (!request->request_id.empty()) {
+    std::lock_guard<std::mutex> lock(audio_requests_mutex);
+    audio_request_cancellations.erase(request->request_id);
+  }
   if (status != napi_ok || !request->succeeded) {
     napi_value error;
     napi_create_string_utf8(
@@ -902,6 +920,7 @@ napi_value extract_audio(napi_env env, napi_callback_info info) {
     return throw_error(env, "invalid audio extraction request");
   }
   request->headers = get_headers(env, argv[0]);
+  get_string(env, argv[0], "requestId", &request->request_id);
   request->start_at = std::max(0.0, request->start_at);
   request->duration = std::min(60.0, std::max(1.0, request->duration));
 
@@ -929,17 +948,52 @@ napi_value extract_audio(napi_env env, napi_callback_info info) {
           complete_audio_extraction,
           request,
           &request->work
-      ) != napi_ok
+  ) != napi_ok
   ) {
     delete request;
     return throw_error(env, "failed to create audio extraction work");
   }
+  if (!request->request_id.empty()) {
+    std::lock_guard<std::mutex> lock(audio_requests_mutex);
+    audio_request_cancellations[request->request_id] = request->cancelled;
+  }
   if (napi_queue_async_work(env, request->work) != napi_ok) {
+    if (!request->request_id.empty()) {
+      std::lock_guard<std::mutex> lock(audio_requests_mutex);
+      audio_request_cancellations.erase(request->request_id);
+    }
     napi_delete_async_work(env, request->work);
     delete request;
     return throw_error(env, "failed to queue audio extraction work");
   }
   return promise;
+}
+
+napi_value cancel_audio_extraction(napi_env env, napi_callback_info info) {
+  size_t argc = 1;
+  napi_value argv[1];
+  if (
+      napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr) != napi_ok ||
+      argc < 1
+  ) {
+    return throw_error(env, "cancelAudioExtraction(requestId) expected");
+  }
+  std::string request_id;
+  if (!get_value_string(env, argv[0], &request_id) || request_id.empty()) {
+    return throw_error(env, "requestId must be a non-empty string");
+  }
+  bool cancelled = false;
+  {
+    std::lock_guard<std::mutex> lock(audio_requests_mutex);
+    auto found = audio_request_cancellations.find(request_id);
+    if (found != audio_request_cancellations.end()) {
+      found->second->store(true, std::memory_order_release);
+      cancelled = true;
+    }
+  }
+  napi_value result;
+  napi_get_boolean(env, cancelled, &result);
+  return result;
 }
 
 std::string get_headers(napi_env env, napi_value request) {
@@ -1502,6 +1556,8 @@ napi_value init(napi_env env, napi_value exports) {
        napi_default, nullptr},
       {"extractAudio", nullptr, extract_audio, nullptr, nullptr, nullptr,
        napi_default, nullptr},
+      {"cancelAudioExtraction", nullptr, cancel_audio_extraction, nullptr,
+       nullptr, nullptr, napi_default, nullptr},
       {"loadPlayer", nullptr, load_player, nullptr, nullptr, nullptr,
        napi_default, nullptr},
       {"destroyPlayer", nullptr, destroy_player, nullptr, nullptr, nullptr,

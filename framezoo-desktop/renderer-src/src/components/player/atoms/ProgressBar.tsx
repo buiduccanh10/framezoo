@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
+import { cancelActiveSubtitleSync } from "@/components/player/hooks/useCaptions";
 import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   getSegmentBoundsSeconds,
@@ -155,6 +156,15 @@ export function ProgressBar() {
             <span className="min-w-[3ch] text-right font-mono font-semibold text-video-context-type-accent">
               {syncProgress}%
             </span>
+            <button
+              type="button"
+              className="pointer-events-auto ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full text-type-secondary transition-colors hover:bg-white/10 hover:text-white"
+              aria-label={t("actions.cancel", "Cancel")}
+              title={t("actions.cancel", "Cancel")}
+              onClick={cancelActiveSubtitleSync}
+            >
+              <Icon icon={Icons.X} className="text-xs" />
+            </button>
           </div>
         </div>
       ) : null}

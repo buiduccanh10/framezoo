@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Phụ đề sẽ được căn chỉnh bởi AI cho khớp với video.",
         "syncSubtitleSupportedLanguages": "Ngôn ngữ audio được hỗ trợ",
         "syncSubtitleSuccess": "Đã đồng bộ phụ đề",
+        "syncSubtitleServerFallback": "Đồng bộ local không hỗ trợ ngôn ngữ audio này; đã chuyển sang server.",
         "syncSubtitleFailed": "Không thể đồng bộ phụ đề",
         "syncSubtitleFailedWithDetail": "Không thể đồng bộ hóa phụ đề: {{detail}}",
         "syncRateLimit": "Thao tác quá nhanh. Vui lòng đợi giây lát trước khi đồng bộ lại.",

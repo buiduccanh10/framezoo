@@ -65,6 +65,7 @@ export interface NativeStartupWarmupState {
   status: "idle" | "warming" | "ready" | "degraded";
   torrent: NativeWarmupComponentState;
   libmpv: NativeWarmupComponentState;
+  moonshine?: NativeWarmupComponentState;
 }
 
 export type StreamRule = {
@@ -131,6 +132,7 @@ export interface LibMpvAudioRequest {
   startAt: number;
   duration: number;
   headers?: Record<string, string>;
+  requestId?: string;
 }
 
 export interface LibMpvPlayerEvent {

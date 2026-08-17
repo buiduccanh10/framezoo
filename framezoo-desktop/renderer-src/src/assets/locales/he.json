@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "כתוביות יתאימו על ידי AI כך שיתאימו לסרטון.",
         "syncSubtitleSupportedLanguages": "שפות שמע נתמכות",
         "syncSubtitleSuccess": "כתוביות סנכרון בהצלחה",
+        "syncSubtitleServerFallback": "סנכרון מקומי אינו תומך בשפת שמע זו; מסונכרן באמצעות שרת.",
         "syncSubtitleFailed": "לא ניתן היה לסנכרן את הכתוביות",
         "syncSubtitleFailedWithDetail": "לא ניתן היה לסנכרן כתוביות: {{detail}}",
         "syncRateLimit": "יותר מדי בקשות. המתן רגע לפני שתסנכרן שוב.",

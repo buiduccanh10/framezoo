@@ -18,6 +18,7 @@ export function Captions(props: {
   const setHasOpenOverlay = usePlayerStore((s) => s.setHasOpenOverlay);
   const { setDirectCaption } = useCaptions();
   const translateTask = usePlayerStore((s) => s.caption.translateTask);
+  const selectedCaptionId = usePlayerStore((s) => s.caption.selected?.id);
   const isLoadingExternalSubtitles = usePlayerStore(
     (s) => s.isLoadingExternalSubtitles,
   );
@@ -52,14 +53,22 @@ export function Captions(props: {
     }
     if (translateTask.done) {
       const tCaption = translateTask.translatedCaption!;
+      if (selectedCaptionId === tCaption.id) {
+        return;
+      }
+      const sourceCaption = tCaption.sourceCaption;
       setDirectCaption(tCaption, {
         id: tCaption.id,
-        url: "",
+        url: tCaption.url ?? sourceCaption?.url ?? "",
         language: tCaption.language,
         needsProxy: false,
+        opensubtitles: sourceCaption?.opensubtitles,
+        source: sourceCaption?.source,
+        type: sourceCaption?.type,
+        trackId: sourceCaption?.trackId,
       });
     }
-  }, [translateTask, setDirectCaption]);
+  }, [selectedCaptionId, translateTask, setDirectCaption]);
 
   return (
     <OverlayAnchor id={router.id}>

@@ -218,6 +218,81 @@ contextBridge.exposeInMainWorld("electronAPI", {
       ipcRenderer.removeListener("desktop:native-warmup-state", handler);
     };
   },
+  hasMoonshineModel(
+    architecture: "tiny" | "base",
+    language: string,
+  ): Promise<boolean> {
+    return ipcRenderer.invoke(
+      "desktop:moonshine-model-has",
+      architecture,
+      language,
+    );
+  },
+  loadMoonshineLocalModel(model: {
+    language: string;
+    architecture: "tiny" | "base";
+    bundled: boolean;
+    files: Array<{ name: string; url: string }>;
+  }): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:moonshine-local-load", model);
+  },
+  transcribeMoonshineLocal(
+    requestId: string,
+    model: {
+      language: string;
+      architecture: "tiny" | "base";
+      bundled: boolean;
+      files: Array<{ name: string; url: string }>;
+    },
+    audio: ArrayBuffer,
+    sampleRate: number,
+  ): Promise<
+    | { lines: Array<{ startTime: number; duration: number }> }
+    | { cancelled: true }
+  > {
+    return ipcRenderer.invoke(
+      "desktop:moonshine-local-transcribe",
+      requestId,
+      model,
+      audio,
+      sampleRate,
+    );
+  },
+  cancelMoonshineLocal(requestId: string): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:moonshine-local-cancel", requestId);
+  },
+  downloadMoonshineModel(
+    requestId: string,
+    request: {
+      architecture: "tiny" | "base";
+      language: string;
+      files: Array<{
+        name: string;
+        url: string;
+        size: number;
+        checksum: string | null;
+        checksumType: string | null;
+      }>;
+    },
+  ): Promise<boolean> {
+    return ipcRenderer.invoke(
+      "desktop:moonshine-model-download",
+      requestId,
+      request,
+    );
+  },
+  cancelMoonshineModelDownload(requestId: string): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:moonshine-model-cancel", requestId);
+  },
+  onMoonshineModelDownloadProgress(listener: (progress: unknown) => void) {
+    const handler = (_event: Electron.IpcRendererEvent, progress: unknown) => {
+      listener(progress);
+    };
+    ipcRenderer.on("desktop:moonshine-model-progress", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:moonshine-model-progress", handler);
+    };
+  },
   ...(supportsLibMpv
     ? {
         createLibMpvPlayer(bounds: LibMpvBounds): Promise<string | null> {
@@ -247,6 +322,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
         },
         extractLibMpvAudio(request: LibMpvAudioRequest): Promise<Uint8Array> {
           return ipcRenderer.invoke("desktop:libmpv-extract-audio", request);
+        },
+        cancelLibMpvAudio(requestId: string): Promise<boolean> {
+          return ipcRenderer.invoke("desktop:libmpv-cancel-audio", requestId);
         },
         reparentLibMpvPlayer(
           playerId: string,

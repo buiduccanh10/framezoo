@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "வீடியோவுடன் பொருந்த, வசனங்கள் AI ஆல் சீரமைக்கப்படும்.",
         "syncSubtitleSupportedLanguages": "ஆதரிக்கப்படும் ஆடியோ மொழிகள்",
         "syncSubtitleSuccess": "வசனம் வெற்றிகரமாக ஒத்திசைக்கப்பட்டது",
+        "syncSubtitleServerFallback": "உள்ளூர் ஒத்திசைவு இந்த ஆடியோ மொழியை ஆதரிக்காது; சேவையகத்தைப் பயன்படுத்தி ஒத்திசைக்கப்பட்டது.",
         "syncSubtitleFailed": "வசனத்தை ஒத்திசைக்க முடியவில்லை",
         "syncSubtitleFailedWithDetail": "வசனத்தை ஒத்திசைக்க முடியவில்லை: {{detail}}",
         "syncRateLimit": "பல கோரிக்கைகள். மீண்டும் ஒத்திசைக்கும் முன் சிறிது நேரம் காத்திருக்கவும்.",

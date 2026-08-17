@@ -814,6 +814,7 @@
         "syncSubtitleConfirmDescription": "Subtitles will be aligned by AI to match the video.",
         "syncSubtitleSupportedLanguages": "Supported audio languages",
         "syncSubtitleSuccess": "Subtitle synced successfully",
+        "syncSubtitleServerFallback": "Local sync does not support this audio language; synced using server.",
         "syncSubtitleFailed": "Could not sync subtitle",
         "syncSubtitleFailedWithDetail": "Could not sync subtitle: {{detail}}",
         "syncRateLimit": "Too many requests. Please wait a moment before syncing again.",

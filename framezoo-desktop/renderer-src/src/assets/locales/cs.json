@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Titulky budou zarovnány AI tak, aby odpovídaly videu.",
         "syncSubtitleSupportedLanguages": "Podporované jazyky zvuku",
         "syncSubtitleSuccess": "Titulky byly úspěšně synchronizovány",
+        "syncSubtitleServerFallback": "Místní synchronizace nepodporuje tento jazyk zvuku; synchronizováno pomocí serveru.",
         "syncSubtitleFailed": "Titulky nelze synchronizovat",
         "syncSubtitleFailedWithDetail": "Nelze synchronizovat titulky: {{detail}}",
         "syncRateLimit": "Příliš mnoho požadavků. Před opětovnou synchronizací chvíli počkejte.",

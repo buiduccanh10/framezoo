@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Οι υπότιτλοι θα ευθυγραμμιστούν με AI ώστε να ταιριάζουν με το βίντεο.",
         "syncSubtitleSupportedLanguages": "Υποστηριζόμενες γλώσσες ήχου",
         "syncSubtitleSuccess": "Οι υπότιτλοι συγχρονίστηκαν με επιτυχία",
+        "syncSubtitleServerFallback": "Ο τοπικός συγχρονισμός δεν υποστηρίζει αυτήν τη γλώσσα ήχου. συγχρονισμός με χρήση διακομιστή.",
         "syncSubtitleFailed": "Δεν ήταν δυνατός ο συγχρονισμός των υπότιτλων",
         "syncSubtitleFailedWithDetail": "Δεν ήταν δυνατός ο συγχρονισμός των υπότιτλων: {{detail}}",
         "syncRateLimit": "Πάρα πολλά αιτήματα. Περιμένετε λίγο πριν συγχρονίσετε ξανά.",

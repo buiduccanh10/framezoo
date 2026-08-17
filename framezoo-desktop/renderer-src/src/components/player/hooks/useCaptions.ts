@@ -9,9 +9,14 @@ import {
   applySubtitleAlignment,
   areSubtitleAlignmentResultsApplicable,
   getSubtitleAlignmentBaseVtt,
+  getSubtitleAlignmentInputVtt,
 } from "@/components/player/utils/subtitleAlignment";
 import { useInstalledAddons } from "@/desktop/addons/store";
 import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
+import {
+  MoonshineModelCancelledError,
+  terminateMoonshineWorker,
+} from "@/moonshine/runtime";
 import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
@@ -29,6 +34,7 @@ import {
 
 let autoSelectionRequestId = 0;
 let subtitleAlignmentRequestId = 0;
+let activeSubtitleSyncCancel: (() => void) | null = null;
 const AUTO_SCORE_MAX_CANDIDATES = 8;
 const AUTO_SCORE_CONCURRENCY = 3;
 const AUTO_SCORE_PER_ITEM_TIMEOUT_MS = 1500;
@@ -83,8 +89,13 @@ function waitForStablePlaybackPosition(): Promise<number | null> {
 }
 
 export type SubtitleSyncOutcome =
-  | { status: "success" }
+  | { status: "success"; warningMessage?: string }
+  | { status: "cancelled" }
   | { status: "failed"; errorMessage?: string };
+
+export function cancelActiveSubtitleSync() {
+  activeSubtitleSyncCancel?.();
+}
 
 function extractSubtitleSyncErrorMessage(error: unknown): string | undefined {
   const queue: unknown[] = [error];
@@ -171,6 +182,7 @@ export function useCaptions() {
   const setCaptionAsTrack = usePlayerStore((s) => s.setCaptionAsTrack);
   const captionAsTrack = usePlayerStore((s) => s.caption.asTrack);
   const latestAutoSelectRequestIdRef = useRef<number | null>(null);
+  const syncAbortControllerRef = useRef<AbortController | null>(null);
   const subtitleSync = usePlayerStore((s) => s.subtitleSync);
   const setSubtitleSyncState = usePlayerStore((s) => s.setSubtitleSyncState);
   const isSyncingSubtitle = subtitleSync.active;
@@ -235,6 +247,12 @@ export function useCaptions() {
   const alignCaptionTracks = useCallback(
     async (targets: SubtitleSyncTarget[]): Promise<SubtitleSyncOutcome> => {
       const requestId = ++subtitleAlignmentRequestId;
+      const abortController = new AbortController();
+      syncAbortControllerRef.current = abortController;
+      activeSubtitleSyncCancel = () => {
+        abortController.abort();
+        terminateMoonshineWorker();
+      };
       const initialState = usePlayerStore.getState();
       const initialSource = initialState.source;
       const wasPlaying =
@@ -289,11 +307,12 @@ export function useCaptions() {
           language: pausedState.currentAudioTrack?.language ?? "en",
           subtitles: targets.map(({ track, caption }) => ({
             track,
-            vttData: getSubtitleAlignmentBaseVtt(caption),
+            vttData: getSubtitleAlignmentInputVtt(caption),
           })),
           headers: contextSource.headers ?? contextSource.preferredHeaders,
           videoDuration: alignmentVideoDuration,
           buffered: pausedState.progress.buffered,
+          signal: abortController.signal,
           onProgress: (progress) => {
             if (requestId === subtitleAlignmentRequestId) {
               setSubtitleSyncState({
@@ -341,18 +360,19 @@ export function useCaptions() {
             target,
             result,
             currentCaption,
+            inputVttData: getSubtitleAlignmentInputVtt(target.caption),
             baseVttData: getSubtitleAlignmentBaseVtt(target.caption),
           };
         });
         const allAligned = areSubtitleAlignmentResultsApplicable(
           alignedTargets.map(
-            ({ target, result, currentCaption, baseVttData }) => ({
+            ({ target, result, currentCaption, inputVttData }) => ({
               result,
               expectedCaptionId: target.caption.id,
               currentCaptionId: currentCaption?.id,
-              expectedBaseVttData: baseVttData,
+              expectedBaseVttData: inputVttData,
               currentBaseVttData: currentCaption
-                ? getSubtitleAlignmentBaseVtt(currentCaption)
+                ? getSubtitleAlignmentInputVtt(currentCaption)
                 : undefined,
             }),
           ),
@@ -361,7 +381,10 @@ export function useCaptions() {
         // Dual-subtitle sync is atomic. A partial apply would leave the two
         // tracks with different timing models while reporting failure.
         if (!allAligned) {
-          return { status: "failed" };
+          return {
+            status: "failed",
+            errorMessage: batchResult.errorMessage,
+          };
         }
 
         setSubtitleSyncState({
@@ -374,18 +397,28 @@ export function useCaptions() {
           target,
           result,
           currentCaption,
+          inputVttData,
           baseVttData,
         } of alignedTargets) {
           if (!result || !currentCaption) continue;
           const alignedVtt = applySubtitleAlignment(baseVttData, result);
+          const alignment = {
+            offsetMs: result.offsetMs,
+            ...(result.segments ? { segments: result.segments } : {}),
+          };
           if (
             alignedVtt !== currentCaption.vttData ||
-            currentCaption.alignmentBaseVttData !== baseVttData
+            currentCaption.alignmentBaseVttData !== baseVttData ||
+            currentCaption.alignment?.offsetMs !== alignment.offsetMs ||
+            JSON.stringify(currentCaption.alignment?.segments) !==
+              JSON.stringify(alignment.segments)
           ) {
             const nextCaption = {
               ...currentCaption,
               vttData: alignedVtt,
               alignmentBaseVttData: baseVttData,
+              alignmentSourceVttData: inputVttData,
+              alignment,
             };
             if (target.track === "primary") {
               setCaption(nextCaption);
@@ -408,8 +441,18 @@ export function useCaptions() {
             };
           }),
         });
-        return allAligned ? { status: "success" } : { status: "failed" };
+        return {
+          status: "success",
+          warningMessage: batchResult.warningMessage,
+        };
       } catch (error) {
+        if (
+          abortController.signal.aborted ||
+          (error instanceof DOMException && error.name === "AbortError") ||
+          error instanceof MoonshineModelCancelledError
+        ) {
+          return { status: "cancelled" };
+        }
         if (requestId !== subtitleAlignmentRequestId) {
           return { status: "failed" };
         }
@@ -423,6 +466,10 @@ export function useCaptions() {
         };
       } finally {
         if (requestId === subtitleAlignmentRequestId) {
+          if (syncAbortControllerRef.current === abortController) {
+            syncAbortControllerRef.current = null;
+            activeSubtitleSyncCancel = null;
+          }
           const finalState = usePlayerStore.getState();
           if (
             wasPlaying &&
@@ -455,13 +502,18 @@ export function useCaptions() {
 
   const selectedCaptionListItem = useMemo(
     () =>
-      captions.find((caption) => caption.id === selectedCaption?.id) ?? null,
-    [captions, selectedCaption?.id],
+      selectedCaption
+        ? (captions.find((caption) => caption.id === selectedCaption.id) ??
+          selectedCaption.sourceCaption ??
+          null)
+        : null,
+    [captions, selectedCaption],
   );
   const secondaryCaptionListItem = useMemo(
     () =>
       secondaryCaption
         ? (captions.find((caption) => caption.id === secondaryCaption.id) ??
+          secondaryCaption.sourceCaption ??
           null)
         : null,
     [captions, secondaryCaption],

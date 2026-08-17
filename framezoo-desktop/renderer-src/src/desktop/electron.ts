@@ -32,6 +32,7 @@ export interface NativeStartupWarmupState {
   status: "idle" | "warming" | "ready" | "degraded";
   torrent: NativeWarmupComponentState;
   libmpv: NativeWarmupComponentState;
+  moonshine?: NativeWarmupComponentState;
 }
 
 import type {
@@ -73,6 +74,61 @@ declare global {
       } | null>;
       onStartupNativeWarmupState?: (
         listener: (state: NativeStartupWarmupState) => void,
+      ) => () => void;
+      cancelLibMpvAudio?: (requestId: string) => Promise<boolean>;
+      hasMoonshineModel?: (
+        architecture: "tiny" | "base",
+        language: string,
+      ) => Promise<boolean>;
+      loadMoonshineLocalModel?: (model: {
+        language: string;
+        architecture: "tiny" | "base";
+        bundled: boolean;
+        files: Array<{ name: string; url: string }>;
+      }) => Promise<boolean>;
+      transcribeMoonshineLocal?: (
+        requestId: string,
+        model: {
+          language: string;
+          architecture: "tiny" | "base";
+          bundled: boolean;
+          files: Array<{ name: string; url: string }>;
+        },
+        audio: ArrayBuffer,
+        sampleRate: number,
+      ) => Promise<
+        | {
+            lines: Array<{ startTime: number; duration: number }>;
+          }
+        | {
+            cancelled: true;
+          }
+      >;
+      cancelMoonshineLocal?: (requestId: string) => Promise<boolean>;
+      downloadMoonshineModel?: (
+        requestId: string,
+        request: {
+          architecture: "tiny" | "base";
+          language: string;
+          files: Array<{
+            name: string;
+            url: string;
+            size: number;
+            checksum: string | null;
+            checksumType: string | null;
+          }>;
+        },
+      ) => Promise<boolean>;
+      cancelMoonshineModelDownload?: (requestId: string) => Promise<boolean>;
+      onMoonshineModelDownloadProgress?: (
+        listener: (progress: {
+          requestId: string;
+          language: string;
+          architecture: "tiny" | "base";
+          file: string;
+          loaded: number;
+          total: number;
+        }) => void,
       ) => () => void;
       sendExtensionMessage?: (
         name: string,

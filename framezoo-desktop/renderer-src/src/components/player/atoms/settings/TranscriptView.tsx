@@ -21,6 +21,11 @@ import {
   tryParseCanonicalVtt,
 } from "@/components/player/utils/captions";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
+import {
+  downloadMoonshineModel,
+  setMoonshineModelPromptHandler,
+} from "@/moonshine/runtime";
+import type { MoonshineModelEntry } from "@/moonshine/types";
 import { useToastStore } from "@/stores/interface/toast";
 import { usePlayerStore } from "@/stores/player/store";
 import { useSubtitleStore } from "@/stores/subtitles";
@@ -70,6 +75,7 @@ export function TranscriptView({
   const changeSelectionMode = onSelectionModeChange ?? setActiveCaptionTrack;
   const { syncSelectedCaption, canSyncSelectedCaption } = useCaptions();
   const syncModal = useModal("subtitle-sync-confirm");
+  const modelModal = useModal("moonshine-model-download");
   const showToast = useToastStore((s) => s.showToast);
 
   const [isSyncCooldown, setIsSyncCooldown] = useState(false);
@@ -78,7 +84,54 @@ export function TranscriptView({
   const [isDelayFocused, setIsDelayFocused] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
+  const [modelRequest, setModelRequest] = useState<{
+    entry: MoonshineModelEntry;
+    downloading: boolean;
+  } | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const modelResolverRef = useRef<((accepted: boolean) => void) | null>(null);
+  const modelAbortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    setMoonshineModelPromptHandler(
+      (entry) =>
+        new Promise<boolean>((resolve) => {
+          modelResolverRef.current = resolve;
+          setModelRequest({ entry, downloading: false });
+          modelModal.show();
+        }),
+    );
+    return () => {
+      setMoonshineModelPromptHandler(null);
+      modelAbortRef.current?.abort();
+      modelResolverRef.current?.(false);
+      modelResolverRef.current = null;
+    };
+  }, [modelModal]);
+
+  const resolveModelRequest = (accepted: boolean) => {
+    modelAbortRef.current?.abort();
+    modelAbortRef.current = null;
+    modelResolverRef.current?.(accepted);
+    modelResolverRef.current = null;
+    setModelRequest(null);
+    modelModal.hide();
+  };
+
+  const handleModelDownload = async () => {
+    if (!modelRequest || modelRequest.downloading) return;
+    const controller = new AbortController();
+    modelAbortRef.current = controller;
+    setModelRequest((current) =>
+      current ? { ...current, downloading: true } : current,
+    );
+    try {
+      await downloadMoonshineModel(modelRequest.entry, controller.signal);
+      resolveModelRequest(true);
+    } catch {
+      resolveModelRequest(false);
+    }
+  };
 
   const displayDelay = isDelayFocused ? delayInput : delay.toFixed(2);
 
@@ -91,6 +144,16 @@ export function TranscriptView({
     try {
       const outcome = await syncSelectedCaption();
       if (outcome.status === "success") {
+        if (outcome.warningMessage) {
+          showToast(
+            t("player.menus.subtitles.syncSubtitleServerFallback", {
+              defaultValue:
+                "Local sync does not support this audio language; synced using server.",
+            }),
+            "info",
+          );
+          return;
+        }
         showToast(
           t("player.menus.subtitles.syncSubtitleSuccess", {
             defaultValue: "Subtitle synced successfully",
@@ -99,6 +162,7 @@ export function TranscriptView({
         );
         return;
       }
+      if (outcome.status === "cancelled") return;
 
       const isRateLimit =
         Boolean(outcome.errorMessage) &&
@@ -336,6 +400,35 @@ export function TranscriptView({
         </span>
       </Menu.BackLink>
       <Menu.Section>
+        <Modal id={modelModal.id}>
+          <ModalCard className="!max-w-md">
+            <div className="space-y-5">
+              <div>
+                <h3 className="text-lg font-semibold text-white">
+                  Tải model {modelRequest?.entry.language.toUpperCase()}?
+                </h3>
+                <p className="mt-1 text-sm text-video-context-type-secondary">
+                  Model được lưu trong thiết bị để đồng bộ phụ đề local.
+                </p>
+              </div>
+              <div className="flex justify-end gap-2">
+                <Button
+                  theme="secondary"
+                  onClick={() => resolveModelRequest(false)}
+                >
+                  {t("actions.cancel", "Hủy")}
+                </Button>
+                <Button
+                  theme="purple"
+                  disabled={modelRequest?.downloading === true}
+                  onClick={() => void handleModelDownload()}
+                >
+                  {modelRequest?.downloading ? "Đang tải..." : "Tải model"}
+                </Button>
+              </div>
+            </div>
+          </ModalCard>
+        </Modal>
         <Modal id={syncModal.id}>
           <ModalCard className="!max-w-md">
             <div className="space-y-5">

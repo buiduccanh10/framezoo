@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Undertexter kommer att anpassas av AI för att matcha videon.",
         "syncSubtitleSupportedLanguages": "Ljudspråk som stöds",
         "syncSubtitleSuccess": "Undertexten har synkroniserats",
+        "syncSubtitleServerFallback": "Lokal synkronisering stöder inte detta ljudspråk; synkroniseras med servern.",
         "syncSubtitleFailed": "Det gick inte att synkronisera undertexten",
         "syncSubtitleFailedWithDetail": "Det gick inte att synkronisera undertexten: {{detail}}",
         "syncRateLimit": "För många förfrågningar. Vänta en stund innan du synkroniserar igen.",

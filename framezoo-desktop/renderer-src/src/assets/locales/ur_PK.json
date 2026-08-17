@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "سب ٹائٹلز کو ویڈیو سے مماثل کرنے کے لیے AI کے ذریعے منسلک کیا جائے گا۔",
         "syncSubtitleSupportedLanguages": "تائید شدہ آڈیو زبانیں۔",
         "syncSubtitleSuccess": "سب ٹائٹل کامیابی کے ساتھ مطابقت پذیر ہو گیا۔",
+        "syncSubtitleServerFallback": "مقامی مطابقت پذیری اس آڈیو زبان کو سپورٹ نہیں کرتی ہے۔ سرور کا استعمال کرتے ہوئے مطابقت پذیر۔",
         "syncSubtitleFailed": "سب ٹائٹل کی مطابقت پذیری نہیں ہو سکی",
         "syncSubtitleFailedWithDetail": "ذیلی عنوان کی مطابقت پذیری نہیں ہو سکی: {{detail}}",
         "syncRateLimit": "بہت زیادہ درخواستیں دوبارہ مطابقت پذیر ہونے سے پہلے براہ کرم ایک لمحہ انتظار کریں۔",

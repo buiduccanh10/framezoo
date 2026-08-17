@@ -9,6 +9,7 @@ import {
   buildAlignmentWindowPlan,
   collectAlignmentWindowResponses,
   getSubtitleAlignmentBaseVtt,
+  getSubtitleAlignmentInputVtt,
   getSubtitleAlignmentWindowDuration,
   selectSubtitleAlignmentConsensus,
 } from "./subtitleAlignment";
@@ -238,6 +239,30 @@ Original`;
     });
 
     expect(applySubtitleAlignment(baseVtt, baseResult)).toBe(shifted);
+  });
+
+  it("analyzes translated captions against their canonical source timeline", () => {
+    const sourceVtt = `WEBVTT
+
+00:00:05.000 --> 00:00:07.000
+Original`;
+    const translatedVtt = `WEBVTT
+
+00:00:04.500 --> 00:00:06.500
+Translated`;
+
+    expect(
+      getSubtitleAlignmentInputVtt({
+        vttData: translatedVtt,
+        alignmentSourceVttData: sourceVtt,
+      }),
+    ).toBe(sourceVtt);
+    expect(
+      getSubtitleAlignmentBaseVtt({
+        vttData: translatedVtt,
+        alignmentSourceVttData: sourceVtt,
+      }),
+    ).toBe(translatedVtt);
   });
 
   it("rejects an atomic apply when one subtitle track fails", () => {

@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "L'IA alinearà els subtítols perquè coincideixin amb el vídeo.",
         "syncSubtitleSupportedLanguages": "Idiomes d'àudio compatibles",
         "syncSubtitleSuccess": "Els subtítols s'han sincronitzat correctament",
+        "syncSubtitleServerFallback": "La sincronització local no admet aquest idioma d'àudio; sincronitzat mitjançant el servidor.",
         "syncSubtitleFailed": "No s'han pogut sincronitzar els subtítols",
         "syncSubtitleFailedWithDetail": "No s'ha pogut sincronitzar el subtítol: {{detail}}",
         "syncRateLimit": "Massa peticions. Espereu un moment abans de tornar a sincronitzar.",

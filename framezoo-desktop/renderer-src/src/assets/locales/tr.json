@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Altyazılar yapay zeka tarafından videoyla eşleşecek şekilde hizalanacak.",
         "syncSubtitleSupportedLanguages": "Desteklenen ses dilleri",
         "syncSubtitleSuccess": "Altyazı başarıyla senkronize edildi",
+        "syncSubtitleServerFallback": "Yerel senkronizasyon bu ses dilini desteklemez; sunucu kullanılarak senkronize edildi.",
         "syncSubtitleFailed": "Altyazı senkronize edilemedi",
         "syncSubtitleFailedWithDetail": "Altyazı senkronize edilemedi: {{detail}}",
         "syncRateLimit": "Çok fazla istek var. Tekrar senkronize etmeden önce lütfen biraz bekleyin.",

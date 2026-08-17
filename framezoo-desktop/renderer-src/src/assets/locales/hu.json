@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "A feliratokat mesterséges intelligencia igazítja a videóhoz.",
         "syncSubtitleSupportedLanguages": "Támogatott hangnyelvek",
         "syncSubtitleSuccess": "A felirat sikeresen szinkronizálva",
+        "syncSubtitleServerFallback": "A helyi szinkronizálás nem támogatja ezt a hangnyelvet; szerverrel szinkronizálva.",
         "syncSubtitleFailed": "Nem sikerült szinkronizálni a feliratot",
         "syncSubtitleFailedWithDetail": "Nem sikerült szinkronizálni a feliratot: {{detail}}",
         "syncRateLimit": "Túl sok kérés. Kérjük, várjon egy pillanatot az újbóli szinkronizálás előtt.",

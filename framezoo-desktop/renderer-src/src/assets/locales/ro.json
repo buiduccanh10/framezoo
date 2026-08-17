@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Subtitrările vor fi aliniate de AI pentru a se potrivi cu videoclipul.",
         "syncSubtitleSupportedLanguages": "Limbi audio acceptate",
         "syncSubtitleSuccess": "Subtitrarea a fost sincronizată cu succes",
+        "syncSubtitleServerFallback": "Sincronizarea locală nu acceptă această limbă audio; sincronizat folosind serverul.",
         "syncSubtitleFailed": "Subtitrarea nu a putut fi sincronizată",
         "syncSubtitleFailedWithDetail": "Nu s-a putut sincroniza subtitrarea: {{detail}}",
         "syncRateLimit": "Prea multe cereri. Vă rugăm să așteptați un moment înainte de a sincroniza din nou.",
