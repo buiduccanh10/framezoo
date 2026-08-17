@@ -211,4 +211,47 @@ describe("external subtitle source transitions", () => {
       alignedCaption,
     );
   });
+
+  it("resets captions, time, and unloads display when switching to a new episode", () => {
+    const load = vi.fn();
+    const setCaption = vi.fn();
+    const display = {
+      load,
+      destroy: vi.fn(),
+      getType: () => "web",
+      on: vi.fn(),
+      setCaption,
+      setSecondaryCaption: vi.fn(),
+    } as unknown as DisplayInterface;
+    usePlayerStore.getState().setDisplay(display);
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-1"), [], 0);
+    usePlayerStore.setState((s) => {
+      s.caption.selected = {
+        id: "caption-1",
+        language: "en",
+        vttData: "WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nHello",
+      };
+      s.progress.time = 45;
+      s.progress.duration = 1200;
+      s.mediaPlaying.hasRenderedFrame = true;
+    });
+
+    // User or autoplay triggers next episode
+    store.setMeta(createMeta(2), "sourceSelection");
+
+    const state = usePlayerStore.getState();
+    expect(state.status).toBe("sourceSelection");
+    expect(state.caption.selected).toBeNull();
+    expect(state.progress.time).toBe(0);
+    expect(state.progress.duration).toBe(0);
+    expect(state.mediaPlaying.hasRenderedFrame).toBe(false);
+    expect(state.source).toBeNull();
+    expect(load).toHaveBeenCalledWith(
+      expect.objectContaining({ source: null, reason: "store:set-meta" }),
+    );
+    expect(setCaption).toHaveBeenCalledWith(null);
+  });
 });

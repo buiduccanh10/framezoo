@@ -305,6 +305,10 @@ export function SecondarySubtitleRenderer(props?: {
 }
 
 export function SubtitleView(props: { controlsShown: boolean }) {
+  const status = usePlayerStore((s) => s.status);
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
   const caption = usePlayerStore((s) => s.caption.selected);
   const secondaryCaption = usePlayerStore((s) => s.caption.secondary);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
@@ -335,8 +339,17 @@ export function SubtitleView(props: { controlsShown: boolean }) {
     Boolean(caption) && !hasEmbeddedPrimaryCaption;
   const shouldRenderSecondaryCaption =
     Boolean(secondaryCaption) && !hasEmbeddedSecondaryCaption;
-  if (shouldUseNativeTrack || (!caption && !secondaryCaption) || isCasting)
+
+  if (
+    status !== "playing" ||
+    !source ||
+    (!hasRenderedFrame && !isCasting) ||
+    shouldUseNativeTrack ||
+    (!caption && !secondaryCaption) ||
+    isCasting
+  ) {
     return null;
+  }
   if (!shouldRenderPrimaryCaption && !shouldRenderSecondaryCaption) return null;
 
   const subtitleView = (

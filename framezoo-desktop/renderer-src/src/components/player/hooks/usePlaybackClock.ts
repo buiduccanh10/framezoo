@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import { playerStatus } from "@/stores/player/slices/source";
 import { usePlayerStore } from "@/stores/player/store";
 
 /**
@@ -15,6 +16,10 @@ export function usePlaybackClock(): number {
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
+  const hasRenderedFrame = usePlayerStore(
+    (s) => s.mediaPlaying.hasRenderedFrame,
+  );
+  const status = usePlayerStore((s) => s.status);
   const [clockTime, setClockTime] = useState(time);
   const anchorRef = useRef({ time, timestamp: 0 });
 
@@ -23,7 +28,15 @@ export function usePlaybackClock(): number {
     anchorRef.current = { time, timestamp };
     setClockTime(time);
 
-    if (!isPlaying || isPaused || isLoading || isSeeking || playbackRate <= 0) {
+    if (
+      !isPlaying ||
+      isPaused ||
+      isLoading ||
+      isSeeking ||
+      !hasRenderedFrame ||
+      status !== playerStatus.PLAYING ||
+      playbackRate <= 0
+    ) {
       return;
     }
 
@@ -46,7 +59,17 @@ export function usePlaybackClock(): number {
 
     animationFrame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animationFrame);
-  }, [duration, isLoading, isPaused, isPlaying, isSeeking, playbackRate, time]);
+  }, [
+    duration,
+    hasRenderedFrame,
+    isLoading,
+    isPaused,
+    isPlaying,
+    isSeeking,
+    playbackRate,
+    status,
+    time,
+  ]);
 
   return clockTime;
 }

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { PlayerMeta } from "@/stores/player/slices/source";
 
@@ -55,8 +55,24 @@ function makeTorrent(overrides: Partial<AddonStream> = {}): AddonStream {
 }
 
 describe("addon playback storage", () => {
+  const store = new Map<string, string>();
+
+  beforeEach(() => {
+    store.clear();
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => store.get(key) ?? null,
+      setItem: (key: string, value: string) => store.set(key, String(value)),
+      removeItem: (key: string) => store.delete(key),
+      clear: () => store.clear(),
+      get length() {
+        return store.size;
+      },
+      key: (index: number) => Array.from(store.keys())[index] ?? null,
+    });
+  });
+
   afterEach(() => {
-    localStorage.clear();
+    vi.unstubAllGlobals();
   });
 
   it("uses separate keys for movies and episodes", () => {
