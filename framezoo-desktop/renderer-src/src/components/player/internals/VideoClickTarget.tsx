@@ -353,6 +353,14 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
     isPlaybackLocked,
   ]);
 
+  const handlePointerMove = useCallback(
+    (e: PointerEvent<HTMLDivElement>) => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+      updateInterfaceHovering(PlayerHoverState.MOUSE_HOVER);
+    },
+    [updateInterfaceHovering],
+  );
+
   if (!show) return null;
 
   return (
@@ -377,6 +385,7 @@ export function VideoClickTarget(props: { showingControls: boolean }) {
         })}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
+        onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
         onContextMenu={(e) => e.preventDefault()}
       />

@@ -238,6 +238,8 @@ struct MpvPlayer {
     emit_property_snapshot("seeking", MPV_FORMAT_FLAG);
     emit_property_snapshot("paused-for-cache", MPV_FORMAT_FLAG);
     emit_property_snapshot("track-list", MPV_FORMAT_NODE);
+    emit_property_snapshot("video-params", MPV_FORMAT_NODE);
+    emit_property_snapshot("video-out-params", MPV_FORMAT_NODE);
   }
 
   void render() {
@@ -506,6 +508,19 @@ struct MpvPlayer {
               frame_event->type = "video-frame";
               emit(frame_event);
             }
+          }
+          if (
+              property &&
+              property->name &&
+              std::string(property->name) == "time-pos" &&
+              property->data &&
+              !video_frame_ready.exchange(true, std::memory_order_acq_rel)
+          ) {
+            auto* frame_event = new NativeEvent();
+            frame_event->player_id = id;
+            frame_event->generation = generation.load();
+            frame_event->type = "video-frame";
+            emit(frame_event);
           }
           const bool is_diagnostic_property =
               property && property->name &&

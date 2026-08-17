@@ -400,6 +400,20 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     const store = get();
     const oldMediaKey = getMediaKey(store.meta);
     const newMediaKey = getMediaKey(meta);
+    const isMediaChanged = newMediaKey !== oldMediaKey;
+
+    if (isMediaChanged || newStatus === playerStatus.SOURCE_SELECTION) {
+      store.display?.load({
+        source: null,
+        startAt: 0,
+        automaticQuality: false,
+        preferredQuality: null,
+        reason: "store:set-meta",
+      });
+      store.display?.setCaption(null);
+      store.display?.setSecondaryCaption?.(null);
+      store.clearTranslateTask();
+    }
 
     set((s) => {
       s.meta = meta;
@@ -407,8 +421,26 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.sourceId = null;
       s.interface.hideNextEpisodeBtn = false;
       if (newStatus) s.status = newStatus;
-      if (newMediaKey !== oldMediaKey) {
+      if (isMediaChanged) {
         s.externalSubtitleMediaKey = null;
+        s.caption.selected = null;
+        s.caption.secondary = null;
+        s.caption.translateTask = null;
+        s.captionList = [];
+        s.embeddedSubtitleTracksLoaded = false;
+        s.audioTracks = [];
+        s.currentAudioTrack = null;
+        s.currentQuality = null;
+        s.segmentQualityDebug = null;
+        s.source = null;
+        s.progress.time = 0;
+        s.progress.duration = 0;
+        s.progress.buffered = 0;
+        s.mediaPlaying.hasRenderedFrame = false;
+        s.mediaPlaying.isLoading = true;
+      } else if (newStatus === playerStatus.SOURCE_SELECTION) {
+        s.mediaPlaying.hasRenderedFrame = false;
+        s.mediaPlaying.isLoading = true;
       }
     });
   },

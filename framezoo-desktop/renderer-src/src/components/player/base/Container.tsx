@@ -28,14 +28,9 @@ function useHovering(containerEl: RefObject<HTMLDivElement>) {
   const updateInterfaceHovering = usePlayerStore(
     (s) => s.updateInterfaceHovering,
   );
-  const hovering = usePlayerStore((s) => s.interface.hovering);
 
   useEffect(() => {
-    if (!containerEl.current) return;
-    const el = containerEl.current;
-
-    function pointerMove(e: PointerEvent) {
-      if (e.pointerType !== "mouse") return;
+    function resetHover() {
       updateInterfaceHovering(PlayerHoverState.MOUSE_HOVER);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
@@ -44,20 +39,50 @@ function useHovering(containerEl: RefObject<HTMLDivElement>) {
       }, 3000);
     }
 
-    function pointerLeave(e: PointerEvent) {
-      if (e.pointerType !== "mouse") return;
-      updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    function pointerMove(e: PointerEvent | MouseEvent) {
+      if ("pointerType" in e && e.pointerType && e.pointerType !== "mouse") {
+        return;
+      }
+      resetHover();
     }
 
-    el.addEventListener("pointermove", pointerMove);
-    el.addEventListener("pointerleave", pointerLeave);
+    function pointerLeave(e: PointerEvent | MouseEvent) {
+      if ("pointerType" in e && e.pointerType && e.pointerType !== "mouse") {
+        return;
+      }
+      updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    }
+
+    const el = containerEl.current;
+    if (el) {
+      el.addEventListener("pointermove", pointerMove);
+      el.addEventListener("pointerleave", pointerLeave);
+      el.addEventListener("mousemove", pointerMove);
+    }
+
+    window.addEventListener("pointermove", pointerMove);
+    window.addEventListener("mousemove", pointerMove);
+    window.addEventListener("focus", resetHover);
 
     return () => {
-      el.removeEventListener("pointermove", pointerMove);
-      el.removeEventListener("pointerleave", pointerLeave);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      if (el) {
+        el.removeEventListener("pointermove", pointerMove);
+        el.removeEventListener("pointerleave", pointerLeave);
+        el.removeEventListener("mousemove", pointerMove);
+      }
+      window.removeEventListener("pointermove", pointerMove);
+      window.removeEventListener("mousemove", pointerMove);
+      window.removeEventListener("focus", resetHover);
     };
-  }, [containerEl, hovering, updateInterfaceHovering]);
+  }, [containerEl, updateInterfaceHovering]);
 }
 
 function BaseContainer(props: { children?: ReactNode }) {
@@ -73,7 +98,7 @@ function BaseContainer(props: { children?: ReactNode }) {
   }, [display, containerEl]);
 
   return (
-    <div ref={containerEl}>
+    <div ref={containerEl} className="w-full h-full">
       <OverlayDisplay>
         <div className="h-screen select-none">{props.children}</div>
       </OverlayDisplay>
