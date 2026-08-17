@@ -77,6 +77,7 @@ overrides:
   'find-my-way@<=9.6.0': '>=9.6.1'
   'shell-quote@<=1.8.4': '>=1.8.5'
   'fast-xml-parser@<5.7.0': '5.7.0'
+  'deepmerge-ts@<8.0.0': '>=8.0.0'
 
 minimumReleaseAgeExclude:
   - '@hono/node-server@2.1.0'
