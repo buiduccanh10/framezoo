@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Субтитрите ще бъдат подравнени от AI, за да съответстват на видеоклипа.",
         "syncSubtitleSupportedLanguages": "Поддържани аудио езици",
         "syncSubtitleSuccess": "Субтитрите са синхронизирани успешно",
+        "syncSubtitleServerFallback": "Локалното синхронизиране не поддържа този аудио език; синхронизирано чрез сървър.",
         "syncSubtitleFailed": "Субтитрите не можаха да се синхронизират",
         "syncSubtitleFailedWithDetail": "Субтитрите не можаха да се синхронизират: {{detail}}",
         "syncRateLimit": "Твърде много заявки. Моля, изчакайте малко, преди да синхронизирате отново.",

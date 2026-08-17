@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "سيتم محاذاة الترجمات بواسطة الذكاء الاصطناعي لتتناسب مع الفيديو.",
         "syncSubtitleSupportedLanguages": "اللغات الصوتية المدعومة",
         "syncSubtitleSuccess": "تمت مزامنة الترجمة بنجاح",
+        "syncSubtitleServerFallback": "المزامنة المحلية لا تدعم لغة الصوت هذه؛ تمت مزامنتها باستخدام الخادم.",
         "syncSubtitleFailed": "تعذرت مزامنة الترجمة",
         "syncSubtitleFailedWithDetail": "تعذرت مزامنة العنوان الفرعي: {{detail}}",
         "syncRateLimit": "طلبات كثيرة جدًا. الرجاء الانتظار لحظة قبل المزامنة مرة أخرى.",

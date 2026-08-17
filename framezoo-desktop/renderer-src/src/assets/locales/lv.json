@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Subtitri līdzinās AI, lai tie atbilstu videoklipam.",
         "syncSubtitleSupportedLanguages": "Atbalstītās audio valodas",
         "syncSubtitleSuccess": "Subtitri veiksmīgi sinhronizēti",
+        "syncSubtitleServerFallback": "Vietējā sinhronizācija neatbalsta šo audio valodu; sinhronizēts, izmantojot serveri.",
         "syncSubtitleFailed": "Nevarēja sinhronizēt subtitrus",
         "syncSubtitleFailedWithDetail": "Nevarēja sinhronizēt subtitrus: {{detail}}",
         "syncRateLimit": "Pārāk daudz pieprasījumu. Lūdzu, uzgaidiet brīdi pirms atkārtotas sinhronizācijas.",

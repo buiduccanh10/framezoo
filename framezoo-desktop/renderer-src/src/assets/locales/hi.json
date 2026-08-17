@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "वीडियो से मेल खाने के लिए उपशीर्षक को एआई द्वारा संरेखित किया जाएगा।",
         "syncSubtitleSupportedLanguages": "समर्थित ऑडियो भाषाएँ",
         "syncSubtitleSuccess": "उपशीर्षक सफलतापूर्वक समन्वयित हुआ",
+        "syncSubtitleServerFallback": "स्थानीय सिंक इस ऑडियो भाषा का समर्थन नहीं करता; सर्वर का उपयोग करके समन्वयित किया गया।",
         "syncSubtitleFailed": "उपशीर्षक सिंक नहीं कर सका",
         "syncSubtitleFailedWithDetail": "उपशीर्षक सिंक नहीं कर सका: {{detail}}",
         "syncRateLimit": "बहुत सारे अनुरोध. कृपया पुनः समन्वयन करने से पहले एक क्षण प्रतीक्षा करें।",

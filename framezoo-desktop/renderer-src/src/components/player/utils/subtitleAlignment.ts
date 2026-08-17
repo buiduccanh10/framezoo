@@ -1,4 +1,11 @@
 import { mwFetch } from "@/backend/helpers/fetch";
+import {
+  MoonshineLanguageUnavailableError,
+  MoonshineModelCancelledError,
+  disableMoonshineForSession,
+  ensureMoonshineModel,
+  transcribeMoonshine,
+} from "@/moonshine/runtime";
 import { conf } from "@/setup/config";
 
 import { extractAudioWindow } from "./audioCapture";
@@ -8,6 +15,7 @@ import {
   shiftVttPiecewiseTimestamps,
   shiftVttTimestamps,
 } from "./captions";
+import { alignLocalBatch } from "./localAlignment";
 
 export const SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS = 60;
 export const SUBTITLE_ALIGNMENT_MIN_CONFIDENCE = 60;
@@ -44,6 +52,8 @@ export type SubtitleAlignmentTrack = "primary" | "secondary";
 
 export interface SubtitleAlignmentBatchResponse {
   results: Partial<Record<SubtitleAlignmentTrack, SubtitleAlignmentResponse>>;
+  errorMessage?: string;
+  warningMessage?: string;
 }
 
 export type AlignmentWindowResponse = {
@@ -150,17 +160,43 @@ function appendAudio(body: FormData, audio: Uint8Array) {
   );
 }
 
+function getAudioDurationMs(audio: Uint8Array) {
+  const view = new DataView(audio.buffer, audio.byteOffset, audio.byteLength);
+  let offset = 12;
+  let channels = 1;
+  let bitsPerSample = 16;
+  let sampleRate = 16_000;
+  let dataSize = 0;
+  while (offset + 8 <= view.byteLength) {
+    const size = view.getUint32(offset + 4, true);
+    const start = offset + 8;
+    if (view.getUint32(offset, false) === 0x666d7420 && size >= 16) {
+      channels = view.getUint16(start + 2, true);
+      sampleRate = view.getUint32(start + 4, true);
+      bitsPerSample = view.getUint16(start + 14, true);
+    } else if (view.getUint32(offset, false) === 0x64617461) {
+      dataSize = size;
+      break;
+    }
+    offset = start + size + (size & 1);
+  }
+  const frameBytes = Math.max(1, channels * (bitsPerSample / 8));
+  return Math.round((dataSize / frameBytes / sampleRate) * 1000);
+}
+
 async function captureCurrentStreamAudio(options: {
   sourceUrl: string;
   startAt: number;
   duration: number;
   headers?: unknown;
+  signal?: AbortSignal;
 }) {
   return await extractAudioWindow({
     url: options.sourceUrl,
     startAt: options.startAt,
     duration: options.duration,
     headers: normalizeHeaders(options.headers),
+    signal: options.signal,
   });
 }
 
@@ -435,7 +471,13 @@ export async function collectAlignmentWindowResponses(options: {
         windowResponses.push({ startAt: plan.startAt, response });
       }
     } catch (error) {
-      if (options.signal?.aborted) throw error;
+      if (
+        options.signal?.aborted ||
+        error instanceof MoonshineModelCancelledError ||
+        (error instanceof DOMException && error.name === "AbortError")
+      ) {
+        throw error;
+      }
       lastError = error;
       console.warn("[subtitle-align] window skipped", {
         startAt: plan.startAt,
@@ -634,11 +676,58 @@ export async function alignSubtitlesWithCurrentStream(options: {
         ...sub,
         vttData: removeVttAds(sub.vttData),
       }));
+      const audioStartMs = Math.round(plan.startAt * 1000);
+      const language = options.language || "en";
+      let localLanguageError: MoonshineLanguageUnavailableError | null = null;
+      let localEntry = null;
+      try {
+        localEntry = await ensureMoonshineModel(language);
+        if (localEntry) {
+          const localSpeech = await transcribeMoonshine(
+            localEntry,
+            audio,
+            options.signal,
+          );
+          const speechIntervals = localSpeech.map(
+            ({ startMs, endMs }) =>
+              [startMs + audioStartMs, endMs + audioStartMs] as [
+                number,
+                number,
+              ],
+          );
+          return alignLocalBatch(
+            cleanedSubtitles,
+            speechIntervals,
+            audioStartMs,
+            audioStartMs + getAudioDurationMs(audio),
+          );
+        }
+      } catch (error) {
+        if (
+          error instanceof MoonshineModelCancelledError ||
+          (error instanceof DOMException && error.name === "AbortError")
+        ) {
+          throw error;
+        }
+        if (error instanceof MoonshineLanguageUnavailableError) {
+          localLanguageError = error;
+          console.info(
+            "[subtitle-align] local Moonshine language unavailable; using server",
+            { language: error.language },
+          );
+        } else {
+          disableMoonshineForSession();
+        }
+        console.warn("[subtitle-align] local Moonshine failed; using server", {
+          language,
+          error,
+        });
+      }
       const body = new FormData();
       appendAudio(body, audio);
       body.append("subtitles", JSON.stringify(cleanedSubtitles));
       body.append("language", options.language || "en");
-      body.append("audioStartMs", String(Math.round(plan.startAt * 1000)));
+      body.append("audioStartMs", String(audioStartMs));
 
       const response = await mwFetch<SubtitleAlignmentBatchResponse>(
         "/api/subtitle-align",
@@ -650,7 +739,20 @@ export async function alignSubtitlesWithCurrentStream(options: {
           timeout: 300_000,
         },
       );
-      return response;
+      if (
+        localLanguageError &&
+        options.subtitles.some(
+          ({ track }) => response.results[track]?.aligned !== true,
+        )
+      ) {
+        return {
+          ...response,
+          errorMessage: localLanguageError.message,
+        };
+      }
+      return localLanguageError
+        ? { ...response, warningMessage: localLanguageError.message }
+        : response;
     },
   });
   options.onProgress?.(1);
@@ -674,7 +776,22 @@ export async function alignSubtitlesWithCurrentStream(options: {
     results[subtitle.track] = selectSubtitleAlignmentConsensus(entries);
   }
 
-  return { results };
+  const hasUnalignedTrack = options.subtitles.some(
+    ({ track }) => results[track]?.aligned !== true,
+  );
+  const errorMessage = hasUnalignedTrack
+    ? windowResponses.find((item) => item.response.errorMessage)?.response
+        .errorMessage
+    : undefined;
+  const warningMessage = windowResponses.find(
+    (item) => item.response.warningMessage,
+  )?.response.warningMessage;
+
+  return {
+    results,
+    ...(errorMessage ? { errorMessage } : {}),
+    ...(warningMessage ? { warningMessage } : {}),
+  };
 }
 
 export async function alignSubtitleWithCurrentStream(options: {

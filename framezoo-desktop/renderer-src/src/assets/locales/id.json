@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Subtitle akan diselaraskan oleh AI agar sesuai dengan video.",
         "syncSubtitleSupportedLanguages": "Bahasa audio yang didukung",
         "syncSubtitleSuccess": "Subtitle berhasil disinkronkan",
+        "syncSubtitleServerFallback": "Sinkronisasi lokal tidak mendukung bahasa audio ini; disinkronkan menggunakan server.",
         "syncSubtitleFailed": "Tidak dapat menyinkronkan subtitle",
         "syncSubtitleFailedWithDetail": "Tidak dapat menyinkronkan subtitle: {{detail}}",
         "syncRateLimit": "Terlalu banyak permintaan. Harap tunggu sebentar sebelum menyinkronkan lagi.",

@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "字幕将由人工智能对齐以匹配视频。",
         "syncSubtitleSupportedLanguages": "支持的音频语言",
         "syncSubtitleSuccess": "字幕同步成功",
+        "syncSubtitleServerFallback": "本地同步不支持该音频语言；使用服务器同步。",
         "syncSubtitleFailed": "无法同步字幕",
         "syncSubtitleFailedWithDetail": "无法同步字幕：{{detail}}",
         "syncRateLimit": "请求太多。请稍等片刻，然后再次同步。",

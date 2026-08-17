@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Undertekster vil blive justeret af AI, så de matcher videoen.",
         "syncSubtitleSupportedLanguages": "Understøttede lydsprog",
         "syncSubtitleSuccess": "Undertekster synkroniseret",
+        "syncSubtitleServerFallback": "Lokal synkronisering understøtter ikke dette lydsprog; synkroniseret ved hjælp af server.",
         "syncSubtitleFailed": "Kunne ikke synkronisere undertekster",
         "syncSubtitleFailedWithDetail": "Kunne ikke synkronisere undertekst: {{detail}}",
         "syncRateLimit": "For mange anmodninger. Vent et øjeblik, før du synkroniserer igen.",

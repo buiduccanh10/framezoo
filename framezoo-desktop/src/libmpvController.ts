@@ -31,6 +31,7 @@ interface NativeLibMpvAddon {
   extractAudio(
     request: LibMpvAudioRequest & { outputPath: string },
   ): Promise<string>;
+  cancelAudioExtraction?(requestId: string): boolean;
   destroyPlayer(playerId: string): void;
   configureWindow?(parentHandle: Buffer): void;
 }
@@ -390,6 +391,10 @@ export class LibMpvController {
         return this.extractAudio(request);
       },
     );
+    ipcMain.handle(
+      "desktop:libmpv-cancel-audio",
+      async (_event, requestId: string) => this.cancelAudio(requestId),
+    );
 
     ipcMain.handle(
       "desktop:libmpv-reparent",
@@ -453,10 +458,7 @@ export class LibMpvController {
     } catch (error) {
       lastPlayerCreateError =
         error instanceof Error ? error.message : String(error);
-      this.broadcastError(
-        "create_failed",
-        lastPlayerCreateError,
-      );
+      this.broadcastError("create_failed", lastPlayerCreateError);
       return null;
     }
   }
@@ -602,6 +604,7 @@ export class LibMpvController {
     try {
       await this.addon.extractAudio({
         ...request,
+        requestId: request.requestId ?? `audio-${Date.now()}`,
         startAt: Math.max(0, request.startAt),
         duration: Math.min(60, Math.max(1, request.duration)),
         outputPath,
@@ -609,6 +612,15 @@ export class LibMpvController {
       return new Uint8Array(await fs.promises.readFile(outputPath));
     } finally {
       await fs.promises.rm(outputPath, { force: true }).catch(() => {});
+    }
+  }
+
+  public cancelAudio(requestId: string): boolean {
+    if (!requestId || !this.addon?.cancelAudioExtraction) return false;
+    try {
+      return this.addon.cancelAudioExtraction(requestId);
+    } catch {
+      return false;
     }
   }
 

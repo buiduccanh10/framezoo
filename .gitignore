@@ -23,6 +23,9 @@ framezoo-be/.nitro
 framezoo-be/.output
 framezoo-desktop/dist
 framezoo-desktop/renderer
+framezoo-desktop/renderer-src/public/moonshine/models
+framezoo-desktop/renderer-src/public/moonshine/catalog.json
+framezoo-desktop/renderer-src/public/moonshine/runtime
 framezoo-desktop/release
 /framezoo-desktop/resources/**
 !/framezoo-desktop/resources/**/

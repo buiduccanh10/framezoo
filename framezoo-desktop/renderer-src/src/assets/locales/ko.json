@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "자막은 AI가 영상에 맞게 정렬합니다.",
         "syncSubtitleSupportedLanguages": "지원되는 오디오 언어",
         "syncSubtitleSuccess": "자막이 동기화되었습니다.",
+        "syncSubtitleServerFallback": "로컬 동기화는 이 오디오 언어를 지원하지 않습니다. 서버를 사용하여 동기화되었습니다.",
         "syncSubtitleFailed": "자막을 동기화할 수 없습니다.",
         "syncSubtitleFailedWithDetail": "자막을 동기화할 수 없습니다: {{detail}}",
         "syncRateLimit": "요청이 너무 많습니다. 다시 동기화하기 전에 잠시 기다려 주세요.",

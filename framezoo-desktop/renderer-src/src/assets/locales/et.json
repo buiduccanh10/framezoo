@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Subtiitrid joondab AI, et need vastaksid videole.",
         "syncSubtitleSupportedLanguages": "Toetatud helikeeled",
         "syncSubtitleSuccess": "Subtiitrite sünkroonimine õnnestus",
+        "syncSubtitleServerFallback": "Kohalik sünkroonimine ei toeta seda helikeelt; sünkroonitud serveriga.",
         "syncSubtitleFailed": "Subtiitreid ei saanud sünkroonida",
         "syncSubtitleFailedWithDetail": "Subtiitreid ei saanud sünkroonida: {{detail}}",
         "syncRateLimit": "Liiga palju taotlusi. Enne uuesti sünkroonimist oodake hetk.",

@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Les sous-titres seront alignés par l'IA pour correspondre à la vidéo.",
         "syncSubtitleSupportedLanguages": "Langues audio prises en charge",
         "syncSubtitleSuccess": "Sous-titre synchronisé avec succès",
+        "syncSubtitleServerFallback": "La synchronisation locale ne prend pas en charge cette langue audio ; synchronisé à l'aide du serveur.",
         "syncSubtitleFailed": "Impossible de synchroniser les sous-titres",
         "syncSubtitleFailedWithDetail": "Impossible de synchroniser le sous-titre : {{detail}}",
         "syncRateLimit": "Trop de demandes. Veuillez patienter un moment avant de synchroniser à nouveau.",

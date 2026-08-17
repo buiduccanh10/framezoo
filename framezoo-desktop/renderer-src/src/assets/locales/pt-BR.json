@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "As legendas serão alinhadas pela IA para corresponder ao vídeo.",
         "syncSubtitleSupportedLanguages": "Idiomas de áudio suportados",
         "syncSubtitleSuccess": "Legenda sincronizada com sucesso",
+        "syncSubtitleServerFallback": "A sincronização local não oferece suporte a este idioma de áudio; sincronizado usando o servidor.",
         "syncSubtitleFailed": "Não foi possível sincronizar a legenda",
         "syncSubtitleFailedWithDetail": "Não foi possível sincronizar a legenda: {{detail}}",
         "syncRateLimit": "Muitos pedidos. Aguarde um momento antes de sincronizar novamente.",

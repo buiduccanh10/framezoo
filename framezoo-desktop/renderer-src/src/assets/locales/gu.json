@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "સબટાઈટલ વિડિયો સાથે મેળ કરવા માટે AI દ્વારા સંરેખિત કરવામાં આવશે.",
         "syncSubtitleSupportedLanguages": "સપોર્ટેડ ઓડિયો ભાષાઓ",
         "syncSubtitleSuccess": "સબટાઈટલ સફળતાપૂર્વક સમન્વયિત થયું",
+        "syncSubtitleServerFallback": "સ્થાનિક સમન્વયન આ ઓડિયો ભાષાને સમર્થન આપતું નથી; સર્વરનો ઉપયોગ કરીને સમન્વયિત.",
         "syncSubtitleFailed": "ઉપશીર્ષક સમન્વયિત કરી શકાયું નથી",
         "syncSubtitleFailedWithDetail": "ઉપશીર્ષક સમન્વયિત કરી શકાયું નથી: {{detail}}",
         "syncRateLimit": "ઘણી બધી વિનંતીઓ. ફરી સમન્વય કરતા પહેલા કૃપા કરીને થોડીવાર રાહ જુઓ.",

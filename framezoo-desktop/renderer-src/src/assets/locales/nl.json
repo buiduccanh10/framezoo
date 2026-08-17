@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Ondertitels worden door AI afgestemd op de video.",
         "syncSubtitleSupportedLanguages": "Ondersteunde audiotalen",
         "syncSubtitleSuccess": "Ondertiteling succesvol gesynchroniseerd",
+        "syncSubtitleServerFallback": "Lokale synchronisatie ondersteunt deze audiotaal niet; gesynchroniseerd met behulp van de server.",
         "syncSubtitleFailed": "Kan ondertiteling niet synchroniseren",
         "syncSubtitleFailedWithDetail": "Kon ondertiteling niet synchroniseren: {{detail}}",
         "syncRateLimit": "Te veel verzoeken. Wacht even voordat u opnieuw synchroniseert.",

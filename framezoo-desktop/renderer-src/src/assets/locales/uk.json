@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "Субтитри будуть вирівняні ШІ відповідно до відео.",
         "syncSubtitleSupportedLanguages": "Підтримувані мови аудіо",
         "syncSubtitleSuccess": "Субтитри успішно синхронізовано",
+        "syncSubtitleServerFallback": "Локальна синхронізація не підтримує цю мову звуку; синхронізовано за допомогою сервера.",
         "syncSubtitleFailed": "Не вдалося синхронізувати субтитри",
         "syncSubtitleFailedWithDetail": "Не вдалося синхронізувати субтитри: {{detail}}",
         "syncRateLimit": "Забагато запитів. Зачекайте трохи перед повторною синхронізацією.",

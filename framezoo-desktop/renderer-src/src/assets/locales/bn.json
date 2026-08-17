@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "সাবটাইটেলগুলি ভিডিওর সাথে মেলে AI দ্বারা সারিবদ্ধ করা হবে৷",
         "syncSubtitleSupportedLanguages": "সমর্থিত অডিও ভাষা",
         "syncSubtitleSuccess": "সাবটাইটেল সফলভাবে সিঙ্ক হয়েছে৷",
+        "syncSubtitleServerFallback": "স্থানীয় সিঙ্ক এই অডিও ভাষা সমর্থন করে না; সার্ভার ব্যবহার করে সিঙ্ক করা হয়েছে।",
         "syncSubtitleFailed": "সাবটাইটেল সিঙ্ক করা যায়নি",
         "syncSubtitleFailedWithDetail": "সাবটাইটেল সিঙ্ক করা যায়নি: {{detail}}",
         "syncRateLimit": "অনেক অনুরোধ. আবার সিঙ্ক করার আগে একটি মুহূর্ত অপেক্ষা করুন.",

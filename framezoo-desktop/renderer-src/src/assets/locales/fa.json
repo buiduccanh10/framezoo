@@ -824,6 +824,7 @@
         "syncSubtitleConfirmDescription": "زیرنویس ها با هوش مصنوعی تراز می شوند تا با ویدیو مطابقت داشته باشند.",
         "syncSubtitleSupportedLanguages": "پشتیبانی از زبان های صوتی",
         "syncSubtitleSuccess": "زیرنویس با موفقیت همگام سازی شد",
+        "syncSubtitleServerFallback": "همگام سازی محلی از این زبان صوتی پشتیبانی نمی کند. همگام سازی با استفاده از سرور",
         "syncSubtitleFailed": "زیرنویس همگام‌سازی نشد",
         "syncSubtitleFailedWithDetail": "زیرنویس همگام‌سازی نشد: {{detail}}",
         "syncRateLimit": "درخواست های خیلی زیاد لطفاً قبل از همگام سازی مجدد یک لحظه صبر کنید.",
