@@ -376,31 +376,102 @@ export async function ensureMoonshineModel(language: string) {
   return entry;
 }
 
-function getWavInfo(data: Uint8Array) {
-  if (data.byteLength < 44) throw new MoonshineRuntimeError("Invalid WAV");
+export function decodeMoonshineWav(data: Uint8Array) {
+  if (data.byteLength < 12) {
+    throw new MoonshineRuntimeError("Audio must be a RIFF/WAVE file");
+  }
   const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
-  let offset = 12;
-  let sampleRate = 0;
+  if (
+    view.getUint32(0, false) !== 0x52494646 ||
+    view.getUint32(8, false) !== 0x57415645
+  ) {
+    throw new MoonshineRuntimeError("Audio must be a RIFF/WAVE file");
+  }
+
+  let formatOffset = -1;
+  let formatLength = 0;
   let dataOffset = -1;
   let dataLength = 0;
+  let offset = 12;
   while (offset + 8 <= view.byteLength) {
     const size = view.getUint32(offset + 4, true);
     const start = offset + 8;
-    if (view.getUint32(offset, false) === 0x666d7420) {
-      sampleRate = view.getUint32(start + 4, true);
-    } else if (view.getUint32(offset, false) === 0x64617461) {
+    const end = start + size;
+    if (end > view.byteLength) {
+      throw new MoonshineRuntimeError("Audio contains a truncated WAV chunk");
+    }
+    const chunkId = view.getUint32(offset, false);
+    if (chunkId === 0x666d7420 && formatOffset < 0) {
+      formatOffset = start;
+      formatLength = size;
+    } else if (chunkId === 0x64617461 && dataOffset < 0) {
       dataOffset = start;
       dataLength = size;
-      break;
     }
-    offset = start + size + (size & 1);
+    offset = end + (size & 1);
   }
-  if (sampleRate <= 0 || dataOffset < 0 || dataLength <= 0) {
-    throw new MoonshineRuntimeError("WAV has no PCM data");
+
+  if (formatOffset < 0 || formatLength < 16 || dataOffset < 0) {
+    throw new MoonshineRuntimeError("Audio must contain valid WAV chunks");
   }
+
+  const audioFormat = view.getUint16(formatOffset, true);
+  const channels = view.getUint16(formatOffset + 2, true);
+  const sampleRate = view.getUint32(formatOffset + 4, true);
+  const blockAlign = view.getUint16(formatOffset + 12, true);
+  const bitsPerSample = view.getUint16(formatOffset + 14, true);
+
+  if (audioFormat === 0xfffe) {
+    if (
+      formatLength < 40 ||
+      view.getUint16(formatOffset + 16, true) < 22 ||
+      ![
+        0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa,
+        0x00, 0x38, 0x9b, 0x71,
+      ].every(
+        (value, index) => view.getUint8(formatOffset + 24 + index) === value,
+      )
+    ) {
+      throw new MoonshineRuntimeError(
+        "Audio must use PCM WAVE_FORMAT_EXTENSIBLE",
+      );
+    }
+  } else if (audioFormat !== 1) {
+    throw new MoonshineRuntimeError("Audio must be signed 16-bit PCM WAV");
+  }
+
+  if (
+    ![1, 2].includes(channels) ||
+    bitsPerSample !== 16 ||
+    blockAlign !== channels * 2 ||
+    sampleRate <= 0 ||
+    dataLength <= 0
+  ) {
+    throw new MoonshineRuntimeError("Audio must be signed 16-bit PCM WAV");
+  }
+  if (dataLength % blockAlign !== 0) {
+    throw new MoonshineRuntimeError(
+      "Audio data is not aligned to complete PCM frames",
+    );
+  }
+
+  const frameCount = dataLength / blockAlign;
+  const samples = new Float32Array(frameCount);
+  for (let frame = 0; frame < frameCount; frame += 1) {
+    let total = 0;
+    for (let channel = 0; channel < channels; channel += 1) {
+      total += view.getInt16(
+        dataOffset + frame * blockAlign + channel * 2,
+        true,
+      );
+    }
+    samples[frame] = total / channels / 32768;
+  }
+
   return {
+    samples,
     sampleRate,
-    durationMs: Math.round((dataLength / 2 / sampleRate) * 1000),
+    durationMs: Math.round((frameCount * 1000) / sampleRate),
   };
 }
 
@@ -410,29 +481,8 @@ export async function transcribeMoonshine(
   signal?: AbortSignal,
 ) {
   if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
-  const { sampleRate, durationMs } = getWavInfo(audio);
-  const dataView = new DataView(
-    audio.buffer,
-    audio.byteOffset,
-    audio.byteLength,
-  );
-  let dataOffset = -1;
-  let offset = 12;
-  while (offset + 8 <= dataView.byteLength) {
-    const size = dataView.getUint32(offset + 4, true);
-    const start = offset + 8;
-    if (dataView.getUint32(offset, false) === 0x64617461) {
-      dataOffset = start;
-      break;
-    }
-    offset = start + size + (size & 1);
-  }
-  if (dataOffset < 0) throw new MoonshineRuntimeError("WAV has no PCM data");
-  const sampleCount = Math.floor((dataView.byteLength - dataOffset) / 2);
-  const floatAudio = new Float32Array(sampleCount);
-  for (let index = 0; index < sampleCount; index += 1) {
-    floatAudio[index] = dataView.getInt16(dataOffset + index * 2, true) / 32768;
-  }
+  const { samples, sampleRate, durationMs } = decodeMoonshineWav(audio);
+  const floatAudio = samples;
   const timeoutMs = Math.max(
     LOCAL_INFERENCE_TIMEOUT_MIN_MS,
     (durationMs / 1000) * LOCAL_INFERENCE_TIMEOUT_FACTOR * 1000 +
@@ -488,7 +538,7 @@ export async function transcribeMoonshine(
   }
   return result.transcript.lines.map((line) => ({
     startMs: Math.round(line.startTime * 1000),
-    endMs: Math.round((line.startTime + line.duration) * 1000),
+    endMs: Math.round(line.startTime * 1000) + Math.round(line.duration * 1000),
   }));
 }
 

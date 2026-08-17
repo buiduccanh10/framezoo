@@ -204,10 +204,11 @@ export function normalizeSubtitleToVtt(text: string, format?: string): string {
 export const SUBTITLE_AD_PATTERNS: RegExp[] = [
   /https?:\/\/\S+/i,
   /www\.\S+/i,
+  /\.(?:org|com|net|link|tv|me)\b/i,
   /\b(?:opensubtitles|subscene|osdb|addic7ed|podnapisi|yify|rarbg|psa)\b/i,
-  /\b(?:vip\s+member|remove\s+all\s+ads|advertise\s+your\s+product|watch\s+online\s+movies|downloaded\s+from)\b/i,
-  /\b(?:dịch\s+bởi|biên\s+dịch|phụ\s+đề\s+bởi|thuyết\s+minh\s+bởi|chúc\s+các\s+bạn\s+xem\s+phim\s+vui\s+vẻ|phimmoi|xemphim)\b/i,
-  /\b(?:synced\s+by|corrected\s+by|subtitles\s+by|encoded\s+by|ripped\s+by|released\s+by)\b/i,
+  /\b(?:vip\s+member|remove\s+all\s+ads|advertise\s+your\s+product|support\s+us|watch\s+online|downloaded\s+from)\b/i,
+  /\b(?:subtitles?|sync(?:ed)?|resync(?:ed)?|corrected|translated|encoded|ripped|released)\s+by\b/i,
+  /\b(?:subtitles?\s+(?:downloaded|created|sync)|dịch\s+bởi|biên\s+dịch|phụ\s+đề\s+bởi|thuyết\s+minh\s+bởi|thực\s+hiện\s+bởi|vietsub\s+bởi|chúc\s+các\s+bạn\s+xem\s+phim\s+vui\s+vẻ|phimmoi|xemphim|motphim|bilutv|tvhay)\b/i,
   /\bosdb\.link\b/i,
 ];
 

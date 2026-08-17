@@ -3,8 +3,6 @@ import type {
   MoonshineAlignmentResult,
 } from "@/moonshine/types";
 
-import { tryParseCanonicalVtt } from "./captions";
-
 const MIN_ALIGNMENT_CONFIDENCE = 60;
 const MIN_ALIGNMENT_SPEECH_DURATION_MS = 1_000;
 const MAX_ALIGNMENT_OFFSET_MS = 45_000;
@@ -19,13 +17,54 @@ const MIN_SPEECH_ANCHOR_OVERLAP_MS = 120;
 const MIN_SPEECH_ANCHOR_COVERAGE = 0.2;
 const MIN_SPEECH_ANCHOR_COVERAGE_2_ANCHORS = 0.25;
 
-type Cue = { startMs: number; endMs: number };
+const TIMING_LINE_RE =
+  /^\s*((?:\d+:)?\d{1,2}:\d{2}(?:[.,]\d{3})?)\s+-->\s+((?:\d+:)?\d{1,2}:\d{2}(?:[.,]\d{3})?)(?:\s+.*)?$/;
+const CREDIT_AD_RE =
+  /https?:\/\/|www\.|osdb\.link|\.org\b|\.com\b|\.net\b|\.link\b|\.tv\b|\.me\b|opensubtitles|subscene|addic7ed|podnapisi|yify|rarbg|psa\b|vip\s*member|remove\s*all\s*ads|watch\s*online|support\s*us|subtitles?\s*(by|downloaded|created|sync)|synced?\s*by|resync\s*by|corrected\s*by|dịch\s*bởi|biên\s*dịch|thực\s*hiện\s*bởi|vietsub\s*bởi|phimmoi|xemphim|motphim|bilutv|tvhay/i;
+
+type Cue = { startMs: number; endMs: number; block: string };
 type Interval = [number, number];
 
+function parseTimestamp(value: string) {
+  const parts = value.replace(",", ".").split(":");
+  const secondsPart = parts.pop() ?? "0";
+  const [seconds, milliseconds] = secondsPart.split(".");
+  const minute = parts.length > 0 ? Number(parts.pop()) : 0;
+  const hour = parts.length > 0 ? Number(parts.pop()) : 0;
+  return (
+    hour * 3_600_000 +
+    minute * 60_000 +
+    Number(seconds) * 1_000 +
+    Number((milliseconds ?? "0").padEnd(3, "0").slice(0, 3))
+  );
+}
+
 function parseCues(vtt: string): Cue[] {
-  return tryParseCanonicalVtt(vtt)
-    .filter((cue) => cue.end > cue.start)
-    .map((cue) => ({ startMs: cue.start, endMs: cue.end }));
+  const cues: Cue[] = [];
+  for (const block of vtt.trim().split(/\r?\n\s*\r?\n/)) {
+    const lines = block.split(/\r?\n/);
+    const timingIndex = lines.findIndex((line) => TIMING_LINE_RE.test(line));
+    if (timingIndex < 0) continue;
+
+    const match = TIMING_LINE_RE.exec(lines[timingIndex]!);
+    if (!match) continue;
+
+    const startMs = parseTimestamp(match[1]!);
+    const endMs = parseTimestamp(match[2]!);
+    if (
+      !Number.isFinite(startMs) ||
+      !Number.isFinite(endMs) ||
+      endMs <= startMs
+    ) {
+      continue;
+    }
+    cues.push({ startMs, endMs, block });
+  }
+  return cues;
+}
+
+function isCreditOrAdCue(cue: Cue) {
+  return CREDIT_AD_RE.test(cue.block);
 }
 
 function mergeIntervals(
@@ -250,21 +289,37 @@ function evaluateOffset(
 }
 
 function estimateInitialCueStart(cues: Cue[]) {
-  const candidates = cues.slice(0, Math.min(10, cues.length));
+  const dialogueCues = cues.filter((cue) => !isCreditOrAdCue(cue));
+  const candidatesSource = dialogueCues.length > 0 ? dialogueCues : cues;
+  const candidates = candidatesSource.slice(
+    0,
+    Math.min(10, candidatesSource.length),
+  );
   const cue = candidates.find((item) => item.endMs - item.startMs >= 800);
-  return cue?.startMs ?? candidates[0]?.startMs ?? null;
+  return (
+    cue?.startMs ??
+    candidates[0]?.startMs ??
+    dialogueCues[0]?.startMs ??
+    cues[0]?.startMs ??
+    null
+  );
 }
 
 function estimateRelativeOffset(primary: Cue[], secondary: Cue[]) {
   if (!primary.length || !secondary.length) return null;
+  const cleanPrimary = primary.filter((cue) => !isCreditOrAdCue(cue));
+  const cleanSecondary = secondary.filter((cue) => !isCreditOrAdCue(cue));
+  const relativePrimary = cleanPrimary.length > 0 ? cleanPrimary : primary;
+  const relativeSecondary =
+    cleanSecondary.length > 0 ? cleanSecondary : secondary;
   const selectRelativeCues = (cues: Cue[]) => {
     const firstThirtyMinutes = cues.filter((cue) => cue.startMs <= 1_800_000);
     return (
       firstThirtyMinutes.length < 5 ? cues.slice(0, 100) : firstThirtyMinutes
     ).filter((cue) => cue.endMs > cue.startMs);
   };
-  const p = selectRelativeCues(primary);
-  const s = selectRelativeCues(secondary);
+  const p = selectRelativeCues(relativePrimary);
+  const s = selectRelativeCues(relativeSecondary);
   const pIntervals = mergeIntervals(
     p.map((cue) => [cue.startMs, cue.endMs] as Interval),
     250,
@@ -273,8 +328,8 @@ function estimateRelativeOffset(primary: Cue[], secondary: Cue[]) {
     s.map((cue) => [cue.startMs, cue.endMs] as Interval),
     250,
   );
-  const pStart = estimateInitialCueStart(primary);
-  const sStart = estimateInitialCueStart(secondary);
+  const pStart = estimateInitialCueStart(relativePrimary);
+  const sStart = estimateInitialCueStart(relativeSecondary);
   const initialDiff = pStart !== null && sStart !== null ? pStart - sStart : 0;
   if (!pIntervals.length || !sIntervals.length) {
     return pStart !== null && sStart !== null ? initialDiff : null;

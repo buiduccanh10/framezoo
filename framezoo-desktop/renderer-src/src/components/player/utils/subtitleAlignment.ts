@@ -2,6 +2,7 @@ import { mwFetch } from "@/backend/helpers/fetch";
 import {
   MoonshineLanguageUnavailableError,
   MoonshineModelCancelledError,
+  decodeMoonshineWav,
   disableMoonshineForSession,
   ensureMoonshineModel,
   transcribeMoonshine,
@@ -165,30 +166,6 @@ function appendAudio(body: FormData, audio: Uint8Array) {
     new Blob([audioCopy.buffer], { type: "audio/wav" }),
     "capture.wav",
   );
-}
-
-function getAudioDurationMs(audio: Uint8Array) {
-  const view = new DataView(audio.buffer, audio.byteOffset, audio.byteLength);
-  let offset = 12;
-  let channels = 1;
-  let bitsPerSample = 16;
-  let sampleRate = 16_000;
-  let dataSize = 0;
-  while (offset + 8 <= view.byteLength) {
-    const size = view.getUint32(offset + 4, true);
-    const start = offset + 8;
-    if (view.getUint32(offset, false) === 0x666d7420 && size >= 16) {
-      channels = view.getUint16(start + 2, true);
-      sampleRate = view.getUint32(start + 4, true);
-      bitsPerSample = view.getUint16(start + 14, true);
-    } else if (view.getUint32(offset, false) === 0x64617461) {
-      dataSize = size;
-      break;
-    }
-    offset = start + size + (size & 1);
-  }
-  const frameBytes = Math.max(1, channels * (bitsPerSample / 8));
-  return Math.round((dataSize / frameBytes / sampleRate) * 1000);
 }
 
 async function captureCurrentStreamAudio(options: {
@@ -706,7 +683,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
             cleanedSubtitles,
             speechIntervals,
             audioStartMs,
-            audioStartMs + getAudioDurationMs(audio),
+            audioStartMs + decodeMoonshineWav(audio).durationMs,
           );
         }
       } catch (error) {
