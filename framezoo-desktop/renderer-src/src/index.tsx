@@ -1,4 +1,4 @@
-import "@/setup/pwa";
+import "@/setup/appUpdate";
 import "core-js/stable";
 import "./stores/__old/imports";
 import "@/assets/css/index.css";

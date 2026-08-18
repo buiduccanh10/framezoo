@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from app import (
     MIN_ALIGNMENT_CONFIDENCE,
+    align_speech_batch,
     align_vtt_batch,
     alignment_result_from_speech,
     decode_wav,
@@ -11,6 +12,10 @@ from app import (
     find_best_offset,
     normalize_language,
     parse_batch_subtitles,
+    parse_speech_interval_windows,
+    parse_speech_intervals,
+    parse_window_durations,
+    parse_window_starts,
     parse_vtt,
 )
 def make_extensible_pcm_wav(
@@ -427,6 +432,44 @@ Third
         )
 
         self.assertEqual([item["track"] for item in subtitles], ["primary", "secondary"])
+
+    def test_parses_absolute_speech_intervals_for_local_alignment(self):
+        intervals = parse_speech_intervals(
+            '[{"startMs":12000,"endMs":18000},{"startMs":72000,"endMs":78000}]'
+        )
+        self.assertEqual(intervals, [(12_000, 18_000), (72_000, 78_000)])
+
+        windows = parse_speech_interval_windows(
+            '[[{"startMs":12000,"endMs":18000}],'
+            '[{"startMs":72000,"endMs":78000}]]',
+            2,
+        )
+        self.assertEqual(windows, [[(12_000, 18_000)], [(72_000, 78_000)]])
+        self.assertEqual(parse_window_starts("[0,60000]", 2), [0, 60_000])
+        self.assertEqual(
+            parse_window_durations("[60000,60000]", 2),
+            [60_000, 60_000],
+        )
+
+    def test_local_speech_batch_uses_the_same_alignment_core(self):
+        with patch(
+            "app._alignment.align_speech_batch",
+            return_value={"results": {"primary": {"aligned": True}}},
+        ) as align_core:
+            result = align_speech_batch(
+                [(12_000, 18_000)],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+                0,
+                60_000,
+            )
+
+        self.assertEqual(result["results"]["primary"]["aligned"], True)
+        self.assertEqual(align_core.call_args.args[:4], (
+            [(12_000, 18_000)],
+            [{"track": "primary", "vttData": "WEBVTT"}],
+            0,
+            60_000,
+        ))
 
     def test_rate_limiter_enforces_burst_limit(self):
         import asyncio

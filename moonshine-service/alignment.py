@@ -16,6 +16,7 @@ TIMING_RE = re.compile(
 
 MAX_AUDIO_BYTES = 8 * 1024 * 1024
 MAX_VTT_BYTES = 2 * 1024 * 1024
+MAX_ALIGNMENT_TOTAL_AUDIO_BYTES = 14 * 1024 * 1024
 MIN_ALIGNMENT_CONFIDENCE = 60
 MIN_SPEECH_INTERVAL_MS = 120
 MERGE_SPEECH_GAP_MS = 350
@@ -205,6 +206,12 @@ def parse_vtt(text: str) -> list[Cue]:
             )
         )
     return cues
+
+
+def parse_alignment_cues(text: str) -> list[Cue]:
+    cues = parse_vtt(text)
+    dialogue_cues = [cue for cue in cues if not is_credit_or_ad_cue(cue)]
+    return dialogue_cues or cues
 
 
 def decode_wav(data: bytes) -> tuple[list[float], int]:
@@ -797,71 +804,40 @@ def align_vtt(
 ) -> dict[str, Any]:
     decode = decode_wav_fn or decode_wav
     transcribe = transcribe_speech_intervals_fn or transcribe_speech_intervals
-    result_from_speech = alignment_result_fn or alignment_result_from_speech
     audio, sample_rate = decode(audio_data)
     audio_duration_ms = int(round(len(audio) * 1_000 / sample_rate))
     audio_end_ms = audio_start_ms + audio_duration_ms
-    cues = parse_vtt(vtt)
     speech_intervals = transcribe(
         audio,
         sample_rate,
         language,
         audio_start_ms,
     )
-    search_centers = compute_track_search_centers(
-        cues,
+    return align_speech_batch(
         speech_intervals,
+        [{"track": "primary", "vttData": vtt}],
         audio_start_ms,
-    )
-    try:
-        return result_from_speech(
-            cues,
-            speech_intervals,
-            audio_start_ms,
-            audio_end_ms,
-            search_centers=search_centers,
-        )
-    except TypeError:
-        return result_from_speech(
-            cues,
-            speech_intervals,
-            audio_start_ms,
-            audio_end_ms,
-        )
+        audio_end_ms,
+        alignment_result_fn=alignment_result_fn,
+    )["results"]["primary"]
 
 
-def align_vtt_batch(
-    audio_data: bytes,
+def align_speech_batch(
+    speech_intervals: list[tuple[int, int]],
     subtitles: list[dict[str, str]],
-    language: str,
     audio_start_ms: int,
-    decode_wav_fn: Callable[[bytes], tuple[list[float], int]] | None = None,
-    transcribe_speech_intervals_fn: Callable[
-        [list[float], int, str, int],
-        list[tuple[int, int]],
-    ]
-    | None = None,
+    audio_end_ms: int,
     alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    decode = decode_wav_fn or decode_wav
-    transcribe = transcribe_speech_intervals_fn or transcribe_speech_intervals
     result_from_speech = alignment_result_fn or alignment_result_from_speech
-    audio, sample_rate = decode(audio_data)
-    audio_duration_ms = int(round(len(audio) * 1_000 / sample_rate))
-    audio_end_ms = audio_start_ms + audio_duration_ms
-    speech_intervals = transcribe(
-        audio,
-        sample_rate,
-        language,
-        audio_start_ms,
-    )
+    speech_intervals = merge_intervals(speech_intervals)
 
     parsed_tracks: dict[str, list[Cue] | None] = {}
     for subtitle in subtitles:
         track = subtitle["track"]
         vtt = subtitle["vttData"]
         try:
-            parsed_tracks[track] = parse_vtt(vtt)
+            parsed_tracks[track] = parse_alignment_cues(vtt)
         except (IndexError, ValueError):
             parsed_tracks[track] = None
 
@@ -953,3 +929,290 @@ def align_vtt_batch(
                 audio_end_ms,
             )
     return {"results": results}
+
+
+def align_vtt_batch(
+    audio_data: bytes,
+    subtitles: list[dict[str, str]],
+    language: str,
+    audio_start_ms: int,
+    decode_wav_fn: Callable[[bytes], tuple[list[float], int]] | None = None,
+    transcribe_speech_intervals_fn: Callable[
+        [list[float], int, str, int],
+        list[tuple[int, int]],
+    ]
+    | None = None,
+    alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    decode = decode_wav_fn or decode_wav
+    transcribe = transcribe_speech_intervals_fn or transcribe_speech_intervals
+    audio, sample_rate = decode(audio_data)
+    audio_duration_ms = int(round(len(audio) * 1_000 / sample_rate))
+    audio_end_ms = audio_start_ms + audio_duration_ms
+    speech_intervals = transcribe(
+        audio,
+        sample_rate,
+        language,
+        audio_start_ms,
+    )
+    return align_speech_batch(
+        speech_intervals,
+        subtitles,
+        audio_start_ms,
+        audio_end_ms,
+        alignment_result_fn=alignment_result_fn,
+    )
+
+
+def _cluster_alignment_candidates(
+    candidates: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    sorted_candidates = sorted(
+        candidates,
+        key=lambda item: int(item["result"].get("offsetMs", 0)),
+    )
+    clusters: list[dict[str, Any]] = []
+
+    for candidate in sorted_candidates:
+        current = clusters[-1] if clusters else None
+        current_candidates = current["candidates"] if current else []
+        if (
+            current
+            and int(candidate["result"].get("offsetMs", 0))
+            - int(current_candidates[0]["result"].get("offsetMs", 0))
+            <= 1_200
+        ):
+            current_candidates.append(candidate)
+            continue
+        clusters.append({"candidates": [candidate]})
+
+    for cluster in clusters:
+        cluster_candidates = cluster["candidates"]
+        cluster["averageConfidence"] = sum(
+            int(item["result"].get("confidence", 0))
+            for item in cluster_candidates
+        ) / len(cluster_candidates)
+        cluster["averageOffsetMs"] = sum(
+            int(item["result"].get("offsetMs", 0))
+            for item in cluster_candidates
+        ) / len(cluster_candidates)
+        cluster["score"] = len(cluster_candidates) * 100 + cluster[
+            "averageConfidence"
+        ]
+
+    return clusters
+
+
+def _has_speech_evidence(result: dict[str, Any]) -> bool:
+    return (
+        result.get("reason")
+        not in {"no_speech_detected", "insufficient_speech_in_window"}
+        and bool(result.get("speechIntervals"))
+    )
+
+
+def _build_unaligned_consensus_result(
+    candidates: list[dict[str, Any]],
+    reason: str,
+) -> dict[str, Any]:
+    best = max(
+        candidates,
+        key=lambda item: int(item.get("confidence", 0)),
+        default=None,
+    )
+    return {
+        "aligned": False,
+        "offsetMs": 0,
+        "confidence": int(best.get("confidence", 0)) if best else 0,
+        "speechIntervals": best.get("speechIntervals", []) if best else [],
+        "reason": reason,
+    }
+
+
+def select_alignment_consensus(
+    entries: list[dict[str, Any]],
+) -> dict[str, Any]:
+    candidates = [entry["result"] for entry in entries]
+    speech_candidates = [
+        result for result in candidates if _has_speech_evidence(result)
+    ]
+    valid_entries = [
+        entry
+        for entry in entries
+        if _has_speech_evidence(entry["result"])
+        and entry["result"].get("aligned") is True
+        and isinstance(entry["result"].get("offsetMs"), int)
+        and int(entry["result"].get("confidence", 0)) >= MIN_ALIGNMENT_CONFIDENCE
+        and abs(int(entry["result"].get("offsetMs", 0)))
+        <= MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS
+    ]
+
+    if not valid_entries:
+        return _build_unaligned_consensus_result(
+            candidates,
+            "no_speech_detected"
+            if not speech_candidates
+            else "low_alignment_confidence",
+        )
+
+    clusters = sorted(
+        _cluster_alignment_candidates(valid_entries),
+        key=lambda cluster: cluster["score"],
+        reverse=True,
+    )
+    best_cluster = clusters[0]
+    second_cluster = clusters[1] if len(clusters) > 1 else None
+    score_margin = (
+        best_cluster["score"] - second_cluster["score"]
+        if second_cluster
+        else float("inf")
+    )
+
+    intro_entry = next(
+        (entry for entry in valid_entries if entry["startAt"] <= 120),
+        None,
+    )
+    main_entries = [
+        entry for entry in valid_entries if entry["startAt"] > 120
+    ]
+    if (
+        intro_entry
+        and main_entries
+        and int(intro_entry["result"].get("confidence", 0)) >= 75
+    ):
+        main_clusters = sorted(
+            _cluster_alignment_candidates(main_entries),
+            key=lambda cluster: cluster["score"],
+            reverse=True,
+        )
+        main_best_cluster = main_clusters[0] if main_clusters else None
+        if (
+            main_best_cluster
+            and main_best_cluster["averageConfidence"]
+            >= MIN_ALIGNMENT_CONFIDENCE
+            and abs(
+                int(intro_entry["result"].get("offsetMs", 0))
+                - main_best_cluster["averageOffsetMs"]
+            )
+            > 15_000
+        ):
+            intro_offset = int(intro_entry["result"]["offsetMs"])
+            main_offset = round(main_best_cluster["averageOffsetMs"])
+            return {
+                **intro_entry["result"],
+                "aligned": True,
+                "offsetMs": main_offset,
+                "confidence": round(
+                    (
+                        int(intro_entry["result"].get("confidence", 0))
+                        + main_best_cluster["averageConfidence"]
+                    )
+                    / 2
+                ),
+                "segments": [
+                    {
+                        "startMs": 0,
+                        "endMs": 180_000,
+                        "offsetMs": intro_offset,
+                    },
+                    {
+                        "startMs": 180_000,
+                        "endMs": 9_007_199_254_740_991,
+                        "offsetMs": main_offset,
+                    },
+                ],
+                "reason": None,
+            }
+
+    has_consensus = (
+        len(best_cluster["candidates"]) >= 2
+        and best_cluster["averageConfidence"] >= MIN_ALIGNMENT_CONFIDENCE
+        and score_margin >= 10
+    )
+    if not has_consensus:
+        return _build_unaligned_consensus_result(
+            candidates,
+            "insufficient_consensus"
+            if len(best_cluster["candidates"]) < 2
+            else "ambiguous_alignment",
+        )
+
+    representative = max(
+        best_cluster["candidates"],
+        key=lambda item: int(item["result"].get("confidence", 0)),
+    )["result"]
+    return {
+        **representative,
+        "aligned": True,
+        "offsetMs": round(best_cluster["averageOffsetMs"]),
+        "confidence": round(best_cluster["averageConfidence"]),
+        "reason": None,
+    }
+
+
+def align_speech_windows(
+    windows: list[tuple[list[tuple[int, int]], int, int]],
+    subtitles: list[dict[str, str]],
+    alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    entries_by_track: dict[str, list[dict[str, Any]]] = {
+        subtitle["track"]: [] for subtitle in subtitles
+    }
+
+    for speech_intervals, audio_start_ms, audio_end_ms in windows:
+        window_result = align_speech_batch(
+            speech_intervals,
+            subtitles,
+            audio_start_ms,
+            audio_end_ms,
+            alignment_result_fn=alignment_result_fn,
+        )
+        for track, result in window_result["results"].items():
+            entries_by_track.setdefault(track, []).append(
+                {
+                    "startAt": audio_start_ms / 1_000,
+                    "result": result,
+                }
+            )
+
+    return {
+        "results": {
+            track: select_alignment_consensus(entries)
+            for track, entries in entries_by_track.items()
+        }
+    }
+
+
+def align_vtt_windows(
+    windows: list[tuple[bytes, int]],
+    subtitles: list[dict[str, str]],
+    language: str,
+    decode_wav_fn: Callable[[bytes], tuple[list[float], int]] | None = None,
+    transcribe_speech_intervals_fn: Callable[
+        [list[float], int, str, int],
+        list[tuple[int, int]],
+    ]
+    | None = None,
+    alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    decode = decode_wav_fn or decode_wav
+    transcribe = transcribe_speech_intervals_fn or transcribe_speech_intervals
+    speech_windows: list[tuple[list[tuple[int, int]], int, int]] = []
+
+    for audio_data, audio_start_ms in windows:
+        audio, sample_rate = decode(audio_data)
+        audio_duration_ms = int(round(len(audio) * 1_000 / sample_rate))
+        audio_end_ms = audio_start_ms + audio_duration_ms
+        speech_intervals = transcribe(
+            audio,
+            sample_rate,
+            language,
+            audio_start_ms,
+        )
+        speech_windows.append((speech_intervals, audio_start_ms, audio_end_ms))
+
+    return align_speech_windows(
+        speech_windows,
+        subtitles,
+        alignment_result_fn=alignment_result_fn,
+    )

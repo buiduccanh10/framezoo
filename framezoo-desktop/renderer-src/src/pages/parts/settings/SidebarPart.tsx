@@ -6,8 +6,8 @@ import { Icons } from "@/components/Icon";
 import { SidebarLink, SidebarSection } from "@/components/layout/Sidebar";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { checkForAppUpdate, requestAppUpdate } from "@/setup/appUpdate";
 import { conf } from "@/setup/config";
-import { checkForAppUpdate, requestAppUpdate } from "@/setup/pwa";
 import { useAppUpdateStore } from "@/stores/appUpdate";
 
 export function SidebarPart(props: {

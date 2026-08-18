@@ -13,10 +13,6 @@ import {
 } from "@/components/player/utils/subtitleAlignment";
 import { useInstalledAddons } from "@/desktop/addons/store";
 import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
-import {
-  MoonshineModelCancelledError,
-  terminateMoonshineWorker,
-} from "@/moonshine/runtime";
 import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
@@ -251,7 +247,6 @@ export function useCaptions() {
       syncAbortControllerRef.current = abortController;
       activeSubtitleSyncCancel = () => {
         abortController.abort();
-        terminateMoonshineWorker();
       };
       const initialState = usePlayerStore.getState();
       const initialSource = initialState.source;
@@ -448,8 +443,7 @@ export function useCaptions() {
       } catch (error) {
         if (
           abortController.signal.aborted ||
-          (error instanceof DOMException && error.name === "AbortError") ||
-          error instanceof MoonshineModelCancelledError
+          (error instanceof DOMException && error.name === "AbortError")
         ) {
           return { status: "cancelled" };
         }
