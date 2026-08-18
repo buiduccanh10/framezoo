@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Συγχρονισμός υποτίτλων με AI",
         "syncSubtitleAction": "Συγχρονισμός",
         "syncSubtitlePreparing": "Προετοιμασία ήχου...",
+        "syncSubtitlePreparingAudio": "Προετοιμασία ήχου για συγχρονισμό...",
         "syncSubtitleWorking": "Το Framezoo συγχρονίζει υπότιτλους...",
         "syncSubtitleApplying": "Εφαρμογή συγχρονισμού υπότιτλων...",
         "settings": {

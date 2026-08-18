@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Sünkroonige subtiitrid tehisintellektiga",
         "syncSubtitleAction": "Sünkroonimine",
         "syncSubtitlePreparing": "Heli ettevalmistamine...",
+        "syncSubtitlePreparingAudio": "Heli ettevalmistamine sünkroonimiseks...",
         "syncSubtitleWorking": "Framezoo sünkroonib subtiitreid...",
         "syncSubtitleApplying": "Subtiitrite sünkroonimise rakendamine...",
         "settings": {

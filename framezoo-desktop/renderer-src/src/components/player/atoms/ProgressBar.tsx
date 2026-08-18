@@ -127,8 +127,11 @@ export function ProgressBar() {
   const withAlpha = (color: string, alpha: number) =>
     color.replace("/ 1)", `/ ${alpha})`);
   const syncPhaseLabel =
-    subtitleSync.phase === "pausing"
-      ? t("player.menus.subtitles.syncSubtitlePreparing", "Preparing audio...")
+    subtitleSync.phase === "pausing" || subtitleSync.phase === "capturing"
+      ? t(
+          "player.menus.subtitles.syncSubtitlePreparingAudio",
+          "Preparing audio to sync...",
+        )
       : subtitleSync.phase === "applying"
         ? t(
             "player.menus.subtitles.syncSubtitleApplying",

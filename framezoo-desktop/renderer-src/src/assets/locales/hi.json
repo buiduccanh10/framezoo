@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "उपशीर्षक को AI के साथ सिंक करें",
         "syncSubtitleAction": "साथ-साथ करना",
         "syncSubtitlePreparing": "ऑडियो तैयार किया जा रहा है...",
+        "syncSubtitlePreparingAudio": "सिंक करने के लिए ऑडियो तैयार किया जा रहा है...",
         "syncSubtitleWorking": "Framezoo उपशीर्षक समन्वयित कर रहा है...",
         "syncSubtitleApplying": "उपशीर्षक समन्वयन लागू किया जा रहा है...",
         "settings": {

@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "AI와 자막 동기화",
         "syncSubtitleAction": "동조",
         "syncSubtitlePreparing": "오디오 준비 중...",
+        "syncSubtitlePreparingAudio": "동기화할 오디오 준비 중...",
         "syncSubtitleWorking": "Framezoo에서 자막을 동기화하는 중입니다...",
         "syncSubtitleApplying": "자막 동기화 적용 중...",
         "settings": {

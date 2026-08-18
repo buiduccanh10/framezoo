@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Altyazıyı AI ile senkronize edin",
         "syncSubtitleAction": "Senkronizasyon",
         "syncSubtitlePreparing": "Ses hazırlanıyor...",
+        "syncSubtitlePreparingAudio": "Ses senkronize edilmeye hazırlanıyor...",
         "syncSubtitleWorking": "Framezoo altyazıları senkronize ediyor...",
         "syncSubtitleApplying": "Altyazı senkronizasyonu uygulanıyor...",
         "settings": {

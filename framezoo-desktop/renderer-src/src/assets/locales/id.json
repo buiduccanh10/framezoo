@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Sinkronkan subtitle dengan AI",
         "syncSubtitleAction": "Sinkronisasi",
         "syncSubtitlePreparing": "Mempersiapkan audio...",
+        "syncSubtitlePreparingAudio": "Mempersiapkan audio untuk disinkronkan...",
         "syncSubtitleWorking": "Framezoo sedang menyinkronkan subtitle...",
         "syncSubtitleApplying": "Menerapkan sinkronisasi subtitle...",
         "settings": {

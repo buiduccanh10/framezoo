@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Sinhronizacija podnapisov z AI",
         "syncSubtitleAction": "Sinhronizacija",
         "syncSubtitlePreparing": "Priprava zvoka ...",
+        "syncSubtitlePreparingAudio": "Priprava zvoka za sinhronizacijo ...",
         "syncSubtitleWorking": "Framezoo sinhronizira podnapise ...",
         "syncSubtitleApplying": "Uporaba sinhronizacije podnapisov ...",
         "settings": {

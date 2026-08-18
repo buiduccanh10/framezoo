@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "AI এর সাথে সাবটাইটেল সিঙ্ক করুন",
         "syncSubtitleAction": "সিঙ্ক",
         "syncSubtitlePreparing": "অডিও প্রস্তুত করা হচ্ছে...",
+        "syncSubtitlePreparingAudio": "সিঙ্ক করার জন্য অডিও প্রস্তুত করা হচ্ছে...",
         "syncSubtitleWorking": "Framezoo সাবটাইটেল সিঙ্ক করছে...",
         "syncSubtitleApplying": "সাবটাইটেল সিঙ্ক প্রয়োগ করা হচ্ছে...",
         "settings": {

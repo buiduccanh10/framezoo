@@ -103,7 +103,12 @@ export interface CaptionListItem {
 
 export type SubtitleTrack = "primary" | "secondary";
 
-export type SubtitleSyncPhase = "idle" | "pausing" | "analyzing" | "applying";
+export type SubtitleSyncPhase =
+  | "idle"
+  | "pausing"
+  | "capturing"
+  | "analyzing"
+  | "applying";
 
 export interface SubtitleSyncState {
   active: boolean;
