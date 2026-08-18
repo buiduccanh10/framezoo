@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Samstilltu texti við gervigreind",
         "syncSubtitleAction": "Samstilla",
         "syncSubtitlePreparing": "Undirbýr hljóð...",
+        "syncSubtitlePreparingAudio": "Undirbýr hljóð til að samstilla...",
         "syncSubtitleWorking": "Framezoo er að samstilla texta...",
         "syncSubtitleApplying": "Notar samstillingu texta...",
         "settings": {

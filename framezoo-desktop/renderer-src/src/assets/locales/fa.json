@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "همگام سازی زیرنویس با هوش مصنوعی",
         "syncSubtitleAction": "همگام سازی",
         "syncSubtitlePreparing": "در حال آماده سازی صدا...",
+        "syncSubtitlePreparingAudio": "در حال آماده سازی صدا برای همگام سازی...",
         "syncSubtitleWorking": "Framezoo در حال همگام سازی زیرنویس ها است...",
         "syncSubtitleApplying": "در حال اعمال همگام سازی زیرنویس...",
         "settings": {

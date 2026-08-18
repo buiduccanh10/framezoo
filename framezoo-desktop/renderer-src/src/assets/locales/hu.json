@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Szinkronizálja a feliratot az AI-val",
         "syncSubtitleAction": "Szinkronizál",
         "syncSubtitlePreparing": "Hang előkészítése...",
+        "syncSubtitlePreparingAudio": "Hang előkészítése a szinkronizáláshoz...",
         "syncSubtitleWorking": "A Framezoo szinkronizálja a feliratokat...",
         "syncSubtitleApplying": "Feliratszinkronizálás alkalmazása...",
         "settings": {

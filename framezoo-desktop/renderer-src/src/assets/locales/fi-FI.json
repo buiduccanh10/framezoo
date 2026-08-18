@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Synkronoi tekstitys tekoälyn kanssa",
         "syncSubtitleAction": "Synkronoi",
         "syncSubtitlePreparing": "Valmistellaan ääntä...",
+        "syncSubtitlePreparingAudio": "Valmistellaan ääntä synkronoitavaksi...",
         "syncSubtitleWorking": "Framezoo synkronoi tekstityksiä...",
         "syncSubtitleApplying": "Otetaan tekstityksen synkronointia käyttöön...",
         "settings": {

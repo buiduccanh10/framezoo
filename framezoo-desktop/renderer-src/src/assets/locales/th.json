@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "ซิงค์คำบรรยายกับ AI",
         "syncSubtitleAction": "ซิงค์",
         "syncSubtitlePreparing": "กำลังเตรียมเสียง...",
+        "syncSubtitlePreparingAudio": "กำลังเตรียมเสียงที่จะซิงค์...",
         "syncSubtitleWorking": "Framezoo กำลังซิงค์คำบรรยาย...",
         "syncSubtitleApplying": "กำลังใช้การซิงค์คำบรรยาย...",
         "settings": {

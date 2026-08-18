@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Synkronisera undertext med AI",
         "syncSubtitleAction": "Synkronisera",
         "syncSubtitlePreparing": "Förbereder ljud...",
+        "syncSubtitlePreparingAudio": "Förbereder ljud för synkronisering...",
         "syncSubtitleWorking": "Framezoo synkroniserar undertexter...",
         "syncSubtitleApplying": "Använder undertextsynkronisering...",
         "settings": {

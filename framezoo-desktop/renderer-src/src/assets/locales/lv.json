@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Sinhronizējiet subtitrus ar AI",
         "syncSubtitleAction": "Sinhronizēt",
         "syncSubtitlePreparing": "Notiek audio sagatavošana...",
+        "syncSubtitlePreparingAudio": "Notiek audio sagatavošana sinhronizēšanai...",
         "syncSubtitleWorking": "Framezoo sinhronizē subtitrus...",
         "syncSubtitleApplying": "Notiek subtitru sinhronizēšana...",
         "settings": {

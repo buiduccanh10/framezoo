@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Sincronizar subtítulos con AI",
         "syncSubtitleAction": "Sincronización",
         "syncSubtitlePreparing": "Preparando audio...",
+        "syncSubtitlePreparingAudio": "Preparando audio para sincronizar...",
         "syncSubtitleWorking": "Framezoo está sincronizando subtítulos...",
         "syncSubtitleApplying": "Aplicando sincronización de subtítulos...",
         "settings": {

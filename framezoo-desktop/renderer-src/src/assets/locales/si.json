@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "AI සමඟ උපසිරැසි සමමුහුර්ත කරන්න",
         "syncSubtitleAction": "සමමුහුර්ත කරන්න",
         "syncSubtitlePreparing": "ශ්‍රව්‍ය සූදානම් කරමින්...",
+        "syncSubtitlePreparingAudio": "සමමුහුර්ත කිරීමට ශ්‍රව්‍ය සූදානම් කරමින්...",
         "syncSubtitleWorking": "Framezoo උපසිරැසි සමමුහුර්ත කරයි...",
         "syncSubtitleApplying": "උපසිරැසි සමමුහුර්ත කිරීම යොදමින්...",
         "settings": {

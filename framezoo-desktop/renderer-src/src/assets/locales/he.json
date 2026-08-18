@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "סנכרן כתוביות עם AI",
         "syncSubtitleAction": "סנכרון",
         "syncSubtitlePreparing": "מכין אודיו...",
+        "syncSubtitlePreparingAudio": "מכין אודיו לסנכרון...",
         "syncSubtitleWorking": "Framezoo מסנכרן כתוביות...",
         "syncSubtitleApplying": "מחיל סנכרון כתוביות...",
         "settings": {

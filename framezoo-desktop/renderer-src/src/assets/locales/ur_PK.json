@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "سب ٹائٹل کو AI کے ساتھ سنک کریں۔",
         "syncSubtitleAction": "مطابقت پذیری",
         "syncSubtitlePreparing": "آڈیو تیار ہو رہا ہے...",
+        "syncSubtitlePreparingAudio": "مطابقت پذیری کے لیے آڈیو تیار کر رہا ہے...",
         "syncSubtitleWorking": "Framezoo سب ٹائٹلز کی مطابقت پذیری کر رہا ہے...",
         "syncSubtitleApplying": "سب ٹائٹل کی مطابقت پذیری کا اطلاق ہو رہا ہے...",
         "settings": {

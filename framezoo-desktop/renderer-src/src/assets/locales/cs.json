@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Synchronizujte titulky s AI",
         "syncSubtitleAction": "Synchronizovat",
         "syncSubtitlePreparing": "Příprava zvuku...",
+        "syncSubtitlePreparingAudio": "Příprava zvuku k synchronizaci...",
         "syncSubtitleWorking": "Framezoo synchronizuje titulky...",
         "syncSubtitleApplying": "Probíhá synchronizace titulků...",
         "settings": {

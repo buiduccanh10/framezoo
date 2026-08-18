@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "ធ្វើសមកាលកម្មចំណងជើងរងជាមួយ AI",
         "syncSubtitleAction": "ធ្វើសមកាលកម្ម",
         "syncSubtitlePreparing": "កំពុងរៀបចំអូឌីយ៉ូ...",
+        "syncSubtitlePreparingAudio": "កំពុងរៀបចំអូឌីយ៉ូដើម្បីធ្វើសមកាលកម្ម...",
         "syncSubtitleWorking": "Framezoo កំពុងធ្វើសមកាលកម្មចំណងជើងរង...",
         "syncSubtitleApplying": "កំពុងអនុវត្តការធ្វើសមកាលកម្មចំណងជើងរង...",
         "settings": {

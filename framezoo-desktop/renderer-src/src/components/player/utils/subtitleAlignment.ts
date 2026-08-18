@@ -294,7 +294,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
   signal?: AbortSignal;
   videoDuration?: number;
   buffered?: number;
-  onProgress?: (progress: number) => void;
+  onProgress?: (progress: number, phase?: "capturing" | "analyzing") => void;
 }): Promise<SubtitleAlignmentBatchResponse> {
   const windowPlan = buildAlignmentWindowPlan(
     options.startAt,
@@ -323,7 +323,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
     });
     windowStartsMs.push(Math.round(plan.startAt * 1000));
     windowDurationsMs.push(Math.round(windowDuration * 1000));
-    options.onProgress?.(((index + 1) / windowPlan.length) * 0.35);
+    options.onProgress?.(((index + 1) / windowPlan.length) * 0.35, "capturing");
   }
 
   let localSpeechIntervals: Array<
@@ -350,6 +350,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
         windowDurationsMs[index] = decoded.durationMs;
         options.onProgress?.(
           0.35 + ((index + 1) / capturedWindows.length) * 0.35,
+          "analyzing",
         );
       }
     }
@@ -391,7 +392,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
       appendAudio(body, window.audio, index);
     }
   }
-  options.onProgress?.(0.75);
+  options.onProgress?.(0.75, "analyzing");
 
   const response = await mwFetch<SubtitleAlignmentBatchResponse>(
     "/api/subtitle-align",
@@ -403,7 +404,7 @@ export async function alignSubtitlesWithCurrentStream(options: {
       timeout: 300_000,
     },
   );
-  options.onProgress?.(1);
+  options.onProgress?.(1, "analyzing");
   return localFallbackWarning
     ? { ...response, warningMessage: localFallbackWarning }
     : response;

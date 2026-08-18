@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "與AI同步字幕",
         "syncSubtitleAction": "同步",
         "syncSubtitlePreparing": "正在準備音訊...",
+        "syncSubtitlePreparingAudio": "正在準備音訊同步...",
         "syncSubtitleWorking": "Framezoo 正在同步字幕...",
         "syncSubtitleApplying": "正在套用字幕同步...",
         "settings": {

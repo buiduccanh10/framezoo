@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Đồng bộ phụ đề bằng AI",
         "syncSubtitleAction": "Đồng bộ",
         "syncSubtitlePreparing": "Đang chuẩn bị âm thanh...",
+        "syncSubtitlePreparingAudio": "Đang chuẩn bị âm thanh để đồng bộ...",
         "syncSubtitleWorking": "Framezoo đang đồng bộ hóa phụ đề...",
         "syncSubtitleApplying": "Đang áp dụng đồng bộ hóa phụ đề...",
         "settings": {

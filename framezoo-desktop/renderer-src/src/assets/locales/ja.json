@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "AIと字幕を同期する",
         "syncSubtitleAction": "同期",
         "syncSubtitlePreparing": "オーディオを準備しています...",
+        "syncSubtitlePreparingAudio": "オーディオを同期する準備をしています...",
         "syncSubtitleWorking": "Framezoo は字幕を同期しています...",
         "syncSubtitleApplying": "字幕同期を適用しています...",
         "settings": {

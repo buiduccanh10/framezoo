@@ -81,6 +81,7 @@ overrides:
 
 minimumReleaseAgeExclude:
   - '@hono/node-server@2.1.0'
+  - '@moonshine-ai/moonshine-wasm@0.1.4'
 
 audit:
   ignore:

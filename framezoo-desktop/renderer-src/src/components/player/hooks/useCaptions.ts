@@ -261,7 +261,7 @@ export function useCaptions() {
 
       setSubtitleSyncState({
         active: true,
-        phase: wasPlaying ? "pausing" : "analyzing",
+        phase: wasPlaying ? "pausing" : "capturing",
         progress: 0,
       });
 
@@ -292,7 +292,7 @@ export function useCaptions() {
 
         setSubtitleSyncState({
           active: true,
-          phase: "analyzing",
+          phase: "capturing",
           progress: 0,
         });
 
@@ -308,11 +308,11 @@ export function useCaptions() {
           videoDuration: alignmentVideoDuration,
           buffered: pausedState.progress.buffered,
           signal: abortController.signal,
-          onProgress: (progress) => {
+          onProgress: (progress, phase) => {
             if (requestId === subtitleAlignmentRequestId) {
               setSubtitleSyncState({
                 active: true,
-                phase: "analyzing",
+                phase: phase ?? (progress < 0.35 ? "capturing" : "analyzing"),
                 progress,
               });
             }

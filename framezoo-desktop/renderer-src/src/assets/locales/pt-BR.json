@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "Sincronize legendas com IA",
         "syncSubtitleAction": "Sincronizar",
         "syncSubtitlePreparing": "Preparando áudio...",
+        "syncSubtitlePreparingAudio": "Preparando áudio para sincronização...",
         "syncSubtitleWorking": "Framezoo está sincronizando legendas...",
         "syncSubtitleApplying": "Aplicando sincronização de legendas...",
         "settings": {

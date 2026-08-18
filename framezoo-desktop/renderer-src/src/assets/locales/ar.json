@@ -832,6 +832,7 @@
         "syncSubtitleOpen": "مزامنة الترجمة مع الذكاء الاصطناعي",
         "syncSubtitleAction": "مزامنة",
         "syncSubtitlePreparing": "جاري تحضير الصوت...",
+        "syncSubtitlePreparingAudio": "جارٍ تحضير الصوت للمزامنة...",
         "syncSubtitleWorking": "يقوم Framezoo بمزامنة الترجمة...",
         "syncSubtitleApplying": "جارٍ تطبيق مزامنة الترجمة...",
         "settings": {
