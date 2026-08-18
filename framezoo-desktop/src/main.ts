@@ -184,16 +184,26 @@ const moonshineNodeRuntime = new MoonshineNodeRuntime(
     path.join(__dirname, "..", "renderer-src", "public", "moonshine", "models"),
   ],
   () => path.join(app.getPath("userData"), "moonshine-models"),
-  () =>
-    path.join(
-      __dirname,
-      "..",
-      "node_modules",
-      "@moonshine-ai",
-      "moonshine-wasm",
-      "dist",
-      "index.js",
-    ),
+  () => {
+    const runtimeRoots = [
+      path.join(path.dirname(getRendererEntryPath()), "moonshine", "runtime"),
+      path.join(
+        __dirname,
+        "..",
+        "renderer-src",
+        "public",
+        "moonshine",
+        "runtime",
+      ),
+    ];
+    const runtimeRoot = runtimeRoots.find((root) =>
+      fs.existsSync(path.join(root, "module.js")),
+    );
+    if (!runtimeRoot) {
+      throw new Error("Moonshine runtime is unavailable");
+    }
+    return runtimeRoot;
+  },
 );
 
 // Warmup state – tracks whether the torrent engine has been initialised.

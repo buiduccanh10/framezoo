@@ -41,14 +41,22 @@ type PendingRequest = {
   reject: (error: Error) => void;
 };
 
-const workerSource = (moonshineModuleUrl: string) => `
+const workerSource = (moonshineRuntimeRootUrl: string) => `
 const { parentPort } = require("node:worker_threads");
-const moonshineModuleUrl = ${JSON.stringify(moonshineModuleUrl)};
+const moonshineRuntimeRootUrl = ${JSON.stringify(moonshineRuntimeRootUrl)};
 let runtimePromise;
 const transcribers = new Map();
 
 async function getRuntime() {
-  runtimePromise ??= import(moonshineModuleUrl);
+  runtimePromise ??= Promise.all([
+    import(new URL("enums.js", moonshineRuntimeRootUrl).href),
+    import(new URL("module.js", moonshineRuntimeRootUrl).href),
+    import(new URL("transcriber.js", moonshineRuntimeRootUrl).href),
+  ]).then(([enumsModule, moduleModule, transcriberModule]) => ({
+    ModelArch: enumsModule.ModelArch,
+    Transcriber: transcriberModule.Transcriber,
+    loadMoonshineModule: moduleModule.loadMoonshineModule,
+  }));
   return runtimePromise;
 }
 
@@ -128,19 +136,21 @@ export class MoonshineNodeRuntime {
   private readonly activeExternalRequestIds = new Set<string>();
   private readonly cancelledRequestIds = new Set<string>();
   private readonly loadedModels = new Set<string>();
-  private readonly moonshineModuleUrl: string;
+  private readonly moonshineRuntimeRootUrl: string;
 
   constructor(
     private readonly getBundledModelRoots: () => string[],
     private readonly getCachedModelRoot: () => string,
-    getMoonshineModulePath: () => string,
+    getMoonshineRuntimeRoot: () => string,
   ) {
-    this.moonshineModuleUrl = pathToFileURL(getMoonshineModulePath()).href;
+    this.moonshineRuntimeRootUrl = pathToFileURL(
+      `${getMoonshineRuntimeRoot()}${path.sep}`,
+    ).href;
   }
 
   private getWorker() {
     if (this.worker) return this.worker;
-    const worker = new Worker(workerSource(this.moonshineModuleUrl), {
+    const worker = new Worker(workerSource(this.moonshineRuntimeRootUrl), {
       eval: true,
     });
     worker.on("message", (response: MoonshineNodeResponse) => {

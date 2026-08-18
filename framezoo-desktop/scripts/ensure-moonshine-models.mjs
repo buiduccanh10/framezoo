@@ -16,6 +16,18 @@ const publicRoot = path.join(desktopRoot, "renderer-src", "public");
 const modelRoot = path.join(publicRoot, "moonshine", "models");
 const catalogPath = path.join(publicRoot, "moonshine", "catalog.json");
 const runtimeRoot = path.join(publicRoot, "moonshine", "runtime");
+const runtimeFiles = [
+  "asset-downloader.js",
+  "enums.js",
+  "errors.js",
+  "events.js",
+  "module.js",
+  "moonshine.mjs",
+  "moonshine.wasm",
+  "stream.js",
+  "transcriber.js",
+  "types.js",
+];
 
 const languages = ["en", "es", "zh", "ja", "ko", "vi", "uk", "ar"];
 const bundledLanguages = new Set(["en", "ko"]);
@@ -56,17 +68,20 @@ async function downloadAsset(url, filePath, expectedSize) {
 
 async function main() {
   const packageRoot = await fs.realpath(
-    path.join(
-      desktopRoot,
-      "node_modules",
-      "@moonshine-ai",
-      "moonshine-wasm",
-    ),
+    path.join(desktopRoot, "node_modules", "@moonshine-ai", "moonshine-wasm"),
   );
   await fs.rm(runtimeRoot, { recursive: true, force: true });
-  await fs.cp(path.join(packageRoot, "dist"), runtimeRoot, {
-    recursive: true,
-  });
+  await fs.mkdir(runtimeRoot, { recursive: true });
+  await fs.writeFile(
+    path.join(runtimeRoot, "package.json"),
+    '{"type":"module"}\n',
+  );
+  for (const file of runtimeFiles) {
+    await fs.copyFile(
+      path.join(packageRoot, "dist", file),
+      path.join(runtimeRoot, file),
+    );
+  }
 
   const module = await loadMoonshineModule();
   const catalog = {
@@ -86,11 +101,7 @@ async function main() {
       let manifest;
       try {
         manifest = JSON.parse(
-          module.sttDependencies(
-            language,
-            String(architecture.value),
-            false,
-          ),
+          module.sttDependencies(language, String(architecture.value), false),
         );
       } catch {
         if (
@@ -102,7 +113,8 @@ async function main() {
         }
         continue;
       }
-      const files = manifest.groups?.flatMap((group) => group.files ?? []) ?? [];
+      const files =
+        manifest.groups?.flatMap((group) => group.files ?? []) ?? [];
 
       if (files.length === 0) {
         catalog.unsupportedByArchitecture[architectureName].push(language);
@@ -112,8 +124,7 @@ async function main() {
       catalog.models[architectureName][language] = {
         language,
         architecture: architectureName,
-        bundled:
-          architectureName === "tiny" && bundledLanguages.has(language),
+        bundled: architectureName === "tiny" && bundledLanguages.has(language),
         files: files.map((file) => ({
           name: file.name,
           url: file.url,
@@ -123,10 +134,7 @@ async function main() {
         })),
       };
 
-      if (
-        architectureName === "tiny" &&
-        bundledLanguages.has(language)
-      ) {
+      if (architectureName === "tiny" && bundledLanguages.has(language)) {
         for (const file of files) {
           await downloadAsset(
             file.url,
