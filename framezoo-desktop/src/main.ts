@@ -63,9 +63,22 @@ const CRC32C_TABLE = (() => {
   return table;
 })();
 
-const DEVTOOLS_PROTECTION_ENABLED =
-  process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "true";
-const ENABLE_DEVTOOLS = !DEVTOOLS_PROTECTION_ENABLED;
+const ENABLE_DEVTOOLS =
+  Boolean(RENDERER_DEV_URL) ||
+  process.env.VITE_ENABLE_DEVTOOLS_PROTECTION === "false";
+
+function isAllowedRendererUrl(url: string) {
+  const allowedUrl = RENDERER_DEV_URL ?? PACKAGED_RENDERER_URL;
+  try {
+    const current = new URL(url);
+    const allowed = new URL(allowedUrl);
+    return (
+      current.protocol === allowed.protocol && current.host === allowed.host
+    );
+  } catch {
+    return false;
+  }
+}
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -992,7 +1005,7 @@ function createMainWindow() {
       preload: getPreloadPath(),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false,
+      sandbox: true,
       webSecurity: true,
       devTools: ENABLE_DEVTOOLS,
     },
@@ -1052,18 +1065,17 @@ function createMainWindow() {
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (/^https?:\/\//i.test(url)) {
       void shell.openExternal(url);
-      return { action: "deny" };
     }
-
-    return { action: "allow" };
+    return { action: "deny" };
   });
 
   mainWindow.webContents.on("will-navigate", (event, url) => {
+    if (isAllowedRendererUrl(url)) return;
     const currentUrl = mainWindow?.webContents.getURL();
     if (url !== currentUrl && /^https?:\/\//i.test(url)) {
-      event.preventDefault();
       void shell.openExternal(url);
     }
+    event.preventDefault();
   });
 
   mainWindow.webContents.on("page-title-updated", (event, title) => {

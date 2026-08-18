@@ -3,14 +3,130 @@ from unittest.mock import patch
 
 from alignment import (
     MIN_ALIGNMENT_CONFIDENCE,
+    align_speech_windows,
+    align_vtt_windows,
     alignment_result_from_speech,
     evaluate_offset,
     find_best_offset,
     parse_vtt,
+    select_alignment_consensus,
 )
 
 
 class AlignmentAlgorithmTests(unittest.TestCase):
+    @staticmethod
+    def make_aligned_result(offset_ms: int, confidence: int = 90):
+        return {
+            "aligned": True,
+            "offsetMs": offset_ms,
+            "confidence": confidence,
+            "speechIntervals": [{"startMs": 0, "endMs": 4_000}],
+            "reason": None,
+        }
+
+    def test_selects_consensus_on_server(self):
+        result = select_alignment_consensus(
+            [
+                {
+                    "startAt": 0,
+                    "result": self.make_aligned_result(-2_000, 80),
+                },
+                {
+                    "startAt": 60,
+                    "result": self.make_aligned_result(-2_300, 70),
+                },
+                {
+                    "startAt": 120,
+                    "result": self.make_aligned_result(30_000, 100),
+                },
+            ]
+        )
+
+        self.assertTrue(result["aligned"])
+        self.assertEqual(result["offsetMs"], -2_150)
+        self.assertEqual(result["confidence"], 75)
+
+    def test_builds_piecewise_result_on_server(self):
+        result = select_alignment_consensus(
+            [
+                {
+                    "startAt": 0,
+                    "result": self.make_aligned_result(-104_000, 96),
+                },
+                {
+                    "startAt": 473,
+                    "result": self.make_aligned_result(2_500, 94),
+                },
+                {
+                    "startAt": 1_104,
+                    "result": self.make_aligned_result(2_500, 90),
+                },
+            ]
+        )
+
+        self.assertTrue(result["aligned"])
+        self.assertEqual(result["offsetMs"], 2_500)
+        self.assertEqual(result["segments"][0]["offsetMs"], -104_000)
+        self.assertEqual(result["segments"][1]["offsetMs"], 2_500)
+
+    def test_aligns_all_uploaded_windows_before_server_consensus(self):
+        window_results = [
+            {"results": {"primary": self.make_aligned_result(-2_000, 80)}},
+            {"results": {"primary": self.make_aligned_result(-2_300, 70)}},
+        ]
+        with patch(
+            "alignment.align_speech_batch",
+            side_effect=window_results,
+        ) as align_batch:
+            result = align_speech_windows(
+                [
+                    ([(0, 4_000)], 0, 60_000),
+                    ([(600_000, 604_000)], 600_000, 660_000),
+                ],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+            )
+
+        self.assertEqual(align_batch.call_count, 2)
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertEqual(result["results"]["primary"]["offsetMs"], -2_150)
+
+    def test_audio_windows_transcribe_then_use_the_same_speech_core(self):
+        with (
+            patch(
+                "alignment.decode_wav",
+                side_effect=[
+                    ([0.0] * 1_000, 1_000),
+                    ([0.0] * 1_000, 1_000),
+                ],
+            ),
+            patch(
+                "alignment.transcribe_speech_intervals",
+                side_effect=[
+                    [(0, 4_000)],
+                    [(600_000, 604_000)],
+                ],
+            ),
+            patch(
+                "alignment.align_speech_batch",
+                side_effect=[
+                    {"results": {"primary": self.make_aligned_result(-2_000, 80)}},
+                    {"results": {"primary": self.make_aligned_result(-2_300, 70)}},
+                ],
+            ) as align_batch,
+        ):
+            result = align_vtt_windows(
+                [(b"first", 0), (b"second", 600_000)],
+                [{"track": "primary", "vttData": "WEBVTT"}],
+                "en",
+            )
+
+        self.assertEqual(align_batch.call_count, 2)
+        self.assertEqual(
+            align_batch.call_args_list[0].args[:3],
+            ([(0, 4_000)], [{"track": "primary", "vttData": "WEBVTT"}], 0),
+        )
+        self.assertTrue(result["results"]["primary"]["aligned"])
+
     def test_finds_offset_from_multiple_speech_anchors(self):
         vtt = """WEBVTT
 

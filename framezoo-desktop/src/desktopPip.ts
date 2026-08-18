@@ -55,6 +55,22 @@ export function createDesktopPipController(
     return `${pathToFileURL(options.rendererEntryPath).toString()}#${options.desktopPipRoute}`;
   }
 
+  function isAllowedPipUrl(url: string) {
+    const allowedUrl =
+      options.rendererDevUrl ??
+      options.rendererAppUrl ??
+      pathToFileURL(options.rendererEntryPath).toString();
+    try {
+      const current = new URL(url);
+      const allowed = new URL(allowedUrl);
+      return (
+        current.protocol === allowed.protocol && current.host === allowed.host
+      );
+    } catch {
+      return false;
+    }
+  }
+
   function sendState() {
     if (!pipWindow || pipWindow.isDestroyed() || !pipState) {
       return;
@@ -90,7 +106,7 @@ export function createDesktopPipController(
         preload: options.preloadPath,
         contextIsolation: true,
         nodeIntegration: false,
-        sandbox: false,
+        sandbox: true,
         webSecurity: true,
         devTools: options.enableDevTools,
         backgroundThrottling: false,
@@ -108,18 +124,17 @@ export function createDesktopPipController(
     pipWindow.webContents.setWindowOpenHandler(({ url }) => {
       if (/^https?:\/\//i.test(url)) {
         void shell.openExternal(url);
-        return { action: "deny" };
       }
-
-      return { action: "allow" };
+      return { action: "deny" };
     });
 
     pipWindow.webContents.on("will-navigate", (event, url) => {
+      if (isAllowedPipUrl(url)) return;
       const currentUrl = pipWindow?.webContents.getURL();
       if (url !== currentUrl && /^https?:\/\//i.test(url)) {
-        event.preventDefault();
         void shell.openExternal(url);
       }
+      event.preventDefault();
     });
 
     pipWindow.webContents.on("did-finish-load", () => {

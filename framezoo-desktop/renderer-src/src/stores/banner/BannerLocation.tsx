@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 
 import { Icon, Icons } from "@/components/Icon";
 import { useIsDesktopApp } from "@/hooks/useIsDesktopApp";
+import { requestAppUpdate } from "@/setup/appUpdate";
 import { conf } from "@/setup/config";
-import { requestAppUpdate } from "@/setup/pwa";
 import { useAppUpdateStore } from "@/stores/appUpdate";
 import { useBannerStore, useRegisterBanner } from "@/stores/banner";
 

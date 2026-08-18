@@ -1,17 +1,43 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const alignmentMocks = vi.hoisted(() => ({
+  extractAudioWindow: vi.fn(),
+  mwFetch: vi.fn(),
+  ensureMoonshineModel: vi.fn(),
+  transcribeMoonshine: vi.fn(),
+  decodeMoonshineWav: vi.fn(),
+  disableMoonshineForSession: vi.fn(),
+}));
+
+vi.mock("./audioCapture", () => ({
+  extractAudioWindow: alignmentMocks.extractAudioWindow,
+}));
+vi.mock("@/backend/helpers/fetch", () => ({
+  mwFetch: alignmentMocks.mwFetch,
+}));
+vi.mock("@/moonshine/runtime", () => ({
+  MoonshineLanguageUnavailableError: class extends Error {},
+  MoonshineModelCancelledError: class extends Error {},
+  decodeMoonshineWav: alignmentMocks.decodeMoonshineWav,
+  disableMoonshineForSession: alignmentMocks.disableMoonshineForSession,
+  ensureMoonshineModel: alignmentMocks.ensureMoonshineModel,
+  transcribeMoonshine: alignmentMocks.transcribeMoonshine,
+}));
+vi.mock("@/setup/config", () => ({
+  conf: () => ({ BACKEND_URL: "http://backend" }),
+}));
 
 import { parseCanonicalVtt } from "./captions";
 import {
   SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS,
   type SubtitleAlignmentResponse,
+  alignSubtitlesWithCurrentStream,
   applySubtitleAlignment,
   areSubtitleAlignmentResultsApplicable,
   buildAlignmentWindowPlan,
-  collectAlignmentWindowResponses,
   getSubtitleAlignmentBaseVtt,
   getSubtitleAlignmentInputVtt,
   getSubtitleAlignmentWindowDuration,
-  selectSubtitleAlignmentConsensus,
 } from "./subtitleAlignment";
 
 const baseResult: SubtitleAlignmentResponse = {
@@ -22,21 +48,77 @@ const baseResult: SubtitleAlignmentResponse = {
   reason: null,
 };
 
-const primarySubtitle = [{ track: "primary" as const }];
+describe("subtitle alignment client", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    alignmentMocks.extractAudioWindow.mockResolvedValue(
+      new Uint8Array([1, 2, 3]),
+    );
+    alignmentMocks.decodeMoonshineWav.mockReturnValue({ durationMs: 60_000 });
+    alignmentMocks.ensureMoonshineModel.mockResolvedValue({
+      language: "en",
+      architecture: "tiny",
+      files: [],
+    });
+    alignmentMocks.transcribeMoonshine.mockResolvedValue([
+      { startMs: 12_000, endMs: 18_000 },
+    ]);
+    alignmentMocks.mwFetch.mockResolvedValue({
+      results: { primary: baseResult },
+    });
+  });
 
-function makeWindowResponse(result: Partial<SubtitleAlignmentResponse> = {}) {
-  return {
-    results: {
-      primary: {
-        ...baseResult,
-        ...result,
-      },
-    },
-  };
-}
+  it("sends local absolute speech intervals without uploading audio", async () => {
+    await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 0,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 120,
+    });
 
-describe("subtitle alignment", () => {
-  it("prioritizes independent current and buffered windows", () => {
+    const request = alignmentMocks.mwFetch.mock.calls[0][1];
+    const entries = [...(request.body as FormData).entries()];
+    const fields = new Map(
+      entries.filter(([, value]) => typeof value === "string") as Array<
+        [string, string]
+      >,
+    );
+
+    expect(entries.filter(([name]) => name === "audio")).toHaveLength(0);
+    expect(JSON.parse(fields.get("speechIntervals")!)).toEqual([
+      [{ startMs: 12_000, endMs: 18_000 }],
+      [{ startMs: 72_000, endMs: 78_000 }],
+    ]);
+    expect(JSON.parse(fields.get("windowStartsMs")!)).toEqual([0, 60_000]);
+    expect(JSON.parse(fields.get("windowDurationsMs")!)).toEqual([
+      60_000, 60_000,
+    ]);
+  });
+
+  it("falls back to uploading every captured window when local inference fails", async () => {
+    alignmentMocks.ensureMoonshineModel.mockRejectedValue(
+      new Error("local model unavailable"),
+    );
+
+    const result = await alignSubtitlesWithCurrentStream({
+      sourceUrl: "https://example.test/video.m3u8",
+      startAt: 0,
+      language: "en",
+      subtitles: [{ track: "primary", vttData: "WEBVTT" }],
+      videoDuration: 120,
+    });
+
+    const request = alignmentMocks.mwFetch.mock.calls[0][1];
+    const entries = [...(request.body as FormData).entries()];
+
+    expect(entries.filter(([name]) => name === "audio")).toHaveLength(2);
+    expect(entries.some(([name]) => name === "speechIntervals")).toBe(false);
+    expect(result.warningMessage).toContain("server fallback");
+    expect(alignmentMocks.transcribeMoonshine).not.toHaveBeenCalled();
+  });
+
+  it("plans independent current, buffered, and fallback windows", () => {
     const plan = buildAlignmentWindowPlan(600, 3600, 900);
 
     expect(plan.slice(0, 2)).toEqual([
@@ -55,7 +137,7 @@ describe("subtitle alignment", () => {
     }
   });
 
-  it("deduplicates clamped windows and caps fallback work", () => {
+  it("caps duplicate or clamped windows", () => {
     const plan = buildAlignmentWindowPlan(0, 120);
 
     expect(plan.length).toBeLessThanOrEqual(6);
@@ -67,10 +149,7 @@ describe("subtitle alignment", () => {
 
   it("uses half-file windows for short videos", () => {
     expect(getSubtitleAlignmentWindowDuration(90)).toBe(45);
-
-    const plan = buildAlignmentWindowPlan(0, 90);
-
-    expect(plan.slice(0, 2)).toEqual([
+    expect(buildAlignmentWindowPlan(0, 90).slice(0, 2)).toEqual([
       { startAt: 0, priority: "nearby" },
       { startAt: 45, priority: "nearby" },
     ]);
@@ -83,125 +162,18 @@ describe("subtitle alignment", () => {
     expect(getSubtitleAlignmentWindowDuration(Number.NaN)).toBe(
       SUBTITLE_ALIGNMENT_AUDIO_WINDOW_SECONDS,
     );
+    expect(buildAlignmentWindowPlan(0, undefined).length).toBeGreaterThan(1);
   });
 
-  it("does not create duplicate windows for zero or sub-second videos", () => {
+  it("does not create duplicate windows for very short videos", () => {
     for (const duration of [0.5, 1.5]) {
       const plan = buildAlignmentWindowPlan(0, duration);
-
       expect(plan).toHaveLength(1);
       expect(new Set(plan.map((window) => window.startAt)).size).toBe(1);
     }
   });
 
-  it("uses fallback windows when duration is unavailable", () => {
-    expect(buildAlignmentWindowPlan(0, 0).length).toBeGreaterThan(1);
-    expect(buildAlignmentWindowPlan(0, undefined).length).toBeGreaterThan(1);
-  });
-
-  it("does not duplicate a buffered range inside the current window", () => {
-    const plan = buildAlignmentWindowPlan(600, 3600, 650);
-
-    expect(plan.slice(0, 2)).toEqual([
-      { startAt: 600, priority: "nearby" },
-      { startAt: 540, priority: "nearby" },
-    ]);
-    expect(plan.some((window) => window.priority === "buffered")).toBe(false);
-  });
-
-  it("uses timeline anchors only after nearby and buffered windows", () => {
-    const plan = buildAlignmentWindowPlan(600, 3600, 900);
-
-    expect(plan).toHaveLength(6);
-    expect(plan.slice(0, 2).map((window) => window.priority)).toEqual([
-      "nearby",
-      "buffered",
-    ]);
-    expect(
-      plan.slice(2).every((window) => window.priority === "fallback"),
-    ).toBe(true);
-  });
-
-  it("stops after two matching windows instead of extracting all anchors", async () => {
-    const plan = buildAlignmentWindowPlan(600, 3600, 900);
-    const requestedStarts: number[] = [];
-
-    const responses = await collectAlignmentWindowResponses({
-      windowPlan: plan,
-      subtitles: primarySubtitle,
-      requestWindow: async (window) => {
-        requestedStarts.push(window.startAt);
-        return makeWindowResponse({ offsetMs: -2000 });
-      },
-    });
-
-    expect(responses).toHaveLength(2);
-    expect(requestedStarts).toHaveLength(2);
-  });
-
-  it("opens fallback windows after no_speech_detected results", async () => {
-    const plan = buildAlignmentWindowPlan(600, 3600, 900);
-    const requestedStarts: number[] = [];
-
-    const responses = await collectAlignmentWindowResponses({
-      windowPlan: plan,
-      subtitles: primarySubtitle,
-      requestWindow: async (window) => {
-        requestedStarts.push(window.startAt);
-        if (requestedStarts.length <= 2) {
-          return makeWindowResponse({
-            aligned: false,
-            confidence: 0,
-            speechIntervals: [],
-            reason: "no_speech_detected",
-            offsetMs: 0,
-          });
-        }
-        return makeWindowResponse({ offsetMs: -2000 });
-      },
-    });
-
-    expect(responses).toHaveLength(4);
-    expect(requestedStarts).toHaveLength(4);
-    expect(requestedStarts[2]).not.toBe(requestedStarts[0]);
-  });
-
-  it("keeps searching when only one window has valid evidence", async () => {
-    const plan = buildAlignmentWindowPlan(600, 3600, 900);
-    let requestCount = 0;
-
-    const responses = await collectAlignmentWindowResponses({
-      windowPlan: plan,
-      subtitles: primarySubtitle,
-      requestWindow: async () => {
-        requestCount += 1;
-        return requestCount === 1
-          ? makeWindowResponse({ offsetMs: -2000 })
-          : makeWindowResponse({
-              aligned: false,
-              confidence: 0,
-              speechIntervals: [],
-              reason: "no_speech_detected",
-              offsetMs: 0,
-            });
-      },
-    });
-
-    expect(responses).toHaveLength(6);
-    expect(requestCount).toBe(6);
-    expect(
-      selectSubtitleAlignmentConsensus(
-        responses
-          .map(({ response }) => response.results.primary)
-          .filter(
-            (result): result is SubtitleAlignmentResponse =>
-              result !== undefined,
-          ),
-      ).aligned,
-    ).toBe(false);
-  });
-
-  it("applies a negative offset when the downloaded subtitle is late", () => {
+  it("applies a negative server offset", () => {
     const vtt = `WEBVTT
 
 00:00:05.000 --> 00:00:07.000
@@ -213,21 +185,7 @@ Hello`;
     expect([cue.start, cue.end]).toEqual([3000, 5000]);
   });
 
-  it("applies the consensus offset to the original VTT", () => {
-    const result = {
-      ...baseResult,
-    };
-
-    const original = `WEBVTT
-
-00:00:05.000 --> 00:00:07.000
-Original`;
-    const aligned = applySubtitleAlignment(original, result);
-    expect(aligned).toContain("00:00:03.000 --> 00:00:05.000");
-    expect(aligned).toContain("Original");
-  });
-
-  it("does not add the offset twice after a previous apply", () => {
+  it("does not add the server offset twice after a previous apply", () => {
     const original = `WEBVTT
 
 00:00:05.000 --> 00:00:07.000
@@ -241,7 +199,7 @@ Original`;
     expect(applySubtitleAlignment(baseVtt, baseResult)).toBe(shifted);
   });
 
-  it("analyzes translated captions against their canonical source timeline", () => {
+  it("uses the canonical source timeline for translated captions", () => {
     const sourceVtt = `WEBVTT
 
 00:00:05.000 --> 00:00:07.000
@@ -265,7 +223,33 @@ Translated`;
     ).toBe(translatedVtt);
   });
 
-  it("rejects an atomic apply when one subtitle track fails", () => {
+  it("applies piecewise segments returned by the server", () => {
+    const rawVtt = `WEBVTT
+
+00:01:57.957 --> 00:02:00.896
+Blood.
+
+00:07:50.500 --> 00:07:55.000
+Episode dialogue.`;
+    const result: SubtitleAlignmentResponse = {
+      ...baseResult,
+      offsetMs: 2500,
+      segments: [
+        { startMs: 0, endMs: 180000, offsetMs: -104000 },
+        {
+          startMs: 180000,
+          endMs: Number.MAX_SAFE_INTEGER,
+          offsetMs: 2500,
+        },
+      ],
+    };
+
+    const aligned = applySubtitleAlignment(rawVtt, result);
+    expect(aligned).toContain("00:00:13.957 --> 00:00:16.896");
+    expect(aligned).toContain("00:07:53.000 --> 00:07:57.500");
+  });
+
+  it("requires all target tracks to match the current caption state", () => {
     expect(
       areSubtitleAlignmentResultsApplicable([
         {
@@ -286,322 +270,15 @@ Translated`;
     ).toBe(false);
   });
 
-  it("keeps the original VTT when alignment confidence is insufficient", () => {
-    const vtt = `WEBVTT
-
-00:00:05.000 --> 00:00:07.000
-Hello`;
-    const result = {
-      ...baseResult,
-      aligned: false,
-      confidence: 20,
-    };
-
-    expect(applySubtitleAlignment(vtt, result)).toBe(vtt);
-  });
-
-  it("accepts two nearby windows and averages their offsets", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      { ...baseResult, offsetMs: -2000, confidence: 80 },
-      { ...baseResult, offsetMs: -2300, confidence: 70 },
-      { ...baseResult, offsetMs: 30_000, confidence: 100 },
-    ]);
-
-    expect(result.aligned).toBe(true);
-    expect(result.offsetMs).toBe(-2150);
-    expect(result.confidence).toBe(75);
-  });
-
-  it("rejects windows that do not reach offset consensus", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      { ...baseResult, offsetMs: -2000, confidence: 90 },
-      { ...baseResult, offsetMs: 10_000, confidence: 90 },
-    ]);
-
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("insufficient_consensus");
-  });
-
-  it("aligns a track independently when its offset differs from primary", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      { ...baseResult, offsetMs: 12_000, confidence: 90 },
-      { ...baseResult, offsetMs: 12_200, confidence: 90 },
-    ]);
-
-    expect(result.aligned).toBe(true);
-    expect(result.offsetMs).toBe(12_100);
-    expect(result.reason).toBeNull();
-  });
-
-  it("requires two matching windows even when one window is strong", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        offsetMs: 100,
-        confidence: 88,
-        speechAnchorCount: 4,
-        speechAnchorCoverage: 1,
-      },
-      {
-        ...baseResult,
-        offsetMs: -72_050,
-        confidence: 79,
-        speechAnchorCoverage: 0.4,
-      },
-      {
-        ...baseResult,
-        offsetMs: -143_825,
-        confidence: 82,
-        speechAnchorCoverage: 0.5,
-      },
-    ]);
-
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("insufficient_consensus");
-  });
-
-  it("accepts two reliable windows with high speech coverage", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        offsetMs: -6450,
-        confidence: 73,
-        speechAnchorCount: 7,
-        speechAnchorCoverage: 0.875,
-      },
-      {
-        ...baseResult,
-        offsetMs: -6700,
-        confidence: 72,
-        speechAnchorCount: 6,
-        speechAnchorCoverage: 0.8,
-      },
-    ]);
-
-    expect(result.aligned).toBe(true);
-    expect(result.offsetMs).toBe(-6575);
-  });
-
-  it("rejects a high-score single window with insufficient consensus", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        offsetMs: -1225,
-        confidence: 80,
-        speechAnchorCount: 3,
-        speechAnchorCoverage: 0.6,
-      },
-    ]);
-
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("insufficient_consensus");
-  });
-
-  it("rejects a single nearby window without strong speech anchors", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        offsetMs: 100,
-        confidence: 88,
-        speechAnchorCount: 1,
-        speechAnchorCoverage: 1,
-      },
-      { ...baseResult, offsetMs: -72_050, confidence: 79 },
-    ]);
-
-    expect(result.aligned).toBe(false);
-  });
-
-  it("rejects offsets outside the shared backend range", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        offsetMs: -250_000,
-        confidence: 90,
-        speechAnchorCount: 4,
-      },
-    ]);
-
-    expect(result.aligned).toBe(false);
-  });
-
-  it("accepts valid large cross-release offsets within plausible range", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        offsetMs: -103_000,
-        confidence: 85,
-        speechAnchorCount: 3,
-      },
-      {
-        ...baseResult,
-        offsetMs: -103_200,
-        confidence: 88,
-        speechAnchorCount: 3,
-      },
-    ]);
-
-    expect(result.aligned).toBe(true);
-    expect(result.offsetMs).toBe(-103_100);
-  });
-
-  it("does not chain offsets beyond the tolerance into one consensus cluster", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      { ...baseResult, offsetMs: 0 },
-      { ...baseResult, offsetMs: 1300 },
-      { ...baseResult, offsetMs: 2600 },
-    ]);
-
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("insufficient_consensus");
-  });
-
-  it("reports no speech when every candidate has no speech evidence", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        aligned: false,
-        offsetMs: 0,
-        confidence: 0,
-        speechIntervals: [],
-        reason: "no_speech_detected",
-      },
-      {
-        ...baseResult,
-        aligned: false,
-        offsetMs: 0,
-        confidence: 0,
-        speechIntervals: [],
-        reason: "no_speech_detected",
-      },
-    ]);
-
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("no_speech_detected");
-  });
-
-  it("does not accept two aligned windows without speech evidence", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      { ...baseResult, speechIntervals: [] },
-      { ...baseResult, offsetMs: -2300, speechIntervals: [] },
-    ]);
-
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("no_speech_detected");
-  });
-
-  it("treats insufficient_speech_in_window as lacking speech evidence", () => {
-    const result = selectSubtitleAlignmentConsensus([
-      {
-        ...baseResult,
-        aligned: false,
-        offsetMs: 0,
-        confidence: 0,
-        speechIntervals: [{ startMs: 0, endMs: 500 }],
-        reason: "insufficient_speech_in_window",
-      },
-      {
-        ...baseResult,
-        aligned: false,
-        offsetMs: 0,
-        confidence: 0,
-        speechIntervals: [{ startMs: 0, endMs: 800 }],
-        reason: "insufficient_speech_in_window",
-      },
-    ]);
-
-    expect(result.aligned).toBe(false);
-    expect(result.reason).toBe("no_speech_detected");
-  });
-
-  it("opens fallback windows after insufficient_speech_in_window results", async () => {
-    const plan = buildAlignmentWindowPlan(0, 3600);
-    const requestedStarts: number[] = [];
-
-    const responses = await collectAlignmentWindowResponses({
-      windowPlan: plan,
-      subtitles: primarySubtitle,
-      requestWindow: async (window) => {
-        requestedStarts.push(window.startAt);
-        if (requestedStarts.length <= 2) {
-          return makeWindowResponse({
-            aligned: false,
-            confidence: 0,
-            speechIntervals: [{ startMs: 0, endMs: 600 }],
-            reason: "insufficient_speech_in_window",
-            offsetMs: 0,
-          });
-        }
-        return makeWindowResponse({ offsetMs: -2000 });
-      },
-    });
-
-    expect(responses).toHaveLength(4);
-    expect(requestedStarts).toHaveLength(4);
-    expect(requestedStarts[2]).toBeGreaterThan(120);
-  });
-
-  it("constructs piecewise alignment segments when intro and main movie have distinct offsets", () => {
-    const rawVtt = `WEBVTT
-
-00:00:06.000 --> 00:00:12.000
-Watch Online Movies and Series for FREE www.osdb.link/lm
-
-00:01:57.957 --> 00:02:00.896
-Blood. Sometimes, it sets my teeth on edge.
-
-00:02:01.514 --> 00:02:03.903
-Other times, it helps me control the chaos.
-
-00:07:50.500 --> 00:07:55.000
-Episode dialogue in lab.
-`;
-
-    const windowEntries = [
-      {
-        startAt: 0,
-        result: {
-          aligned: true,
-          offsetMs: -104000,
-          confidence: 96,
-          speechIntervals: [{ startMs: 14000, endMs: 20000 }],
-          reason: null,
+  it("rejects a stale server result", () => {
+    expect(
+      areSubtitleAlignmentResultsApplicable([
+        {
+          result: baseResult,
+          expectedCaptionId: "primary",
+          currentCaptionId: "other",
         },
-      },
-      {
-        startAt: 473,
-        result: {
-          aligned: true,
-          offsetMs: 2500,
-          confidence: 94,
-          speechIntervals: [{ startMs: 473000, endMs: 480000 }],
-          reason: null,
-        },
-      },
-      {
-        startAt: 1104,
-        result: {
-          aligned: true,
-          offsetMs: 2500,
-          confidence: 90,
-          speechIntervals: [{ startMs: 1104000, endMs: 1110000 }],
-          reason: null,
-        },
-      },
-    ];
-
-    const result = selectSubtitleAlignmentConsensus(windowEntries);
-    expect(result.aligned).toBe(true);
-    expect(result.segments).toBeDefined();
-    expect(result.segments).toHaveLength(2);
-    expect(result.segments![0].offsetMs).toBe(-104000);
-    expect(result.segments![1].offsetMs).toBe(2500);
-
-    const alignedVtt = applySubtitleAlignment(rawVtt, result);
-    expect(alignedVtt).not.toContain("osdb.link");
-    expect(alignedVtt).toContain("00:00:13.957 --> 00:00:16.896");
-    expect(alignedVtt).toContain("Blood. Sometimes, it sets my teeth on edge.");
-    expect(alignedVtt).toContain("00:07:53.000 --> 00:07:57.500");
-    expect(alignedVtt).toContain("Episode dialogue in lab.");
+      ]),
+    ).toBe(false);
   });
 });
