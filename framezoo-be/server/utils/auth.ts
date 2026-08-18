@@ -25,6 +25,10 @@ const REFRESH_TOKEN_EXPIRY_SECONDS = parsePositiveInt(
   process.env.REFRESH_TOKEN_EXPIRY_SECONDS,
   30 * 24 * 60 * 60
 );
+const GUEST_TOKEN_EXPIRY_SECONDS = parsePositiveInt(
+  process.env.GUEST_TOKEN_EXPIRY_SECONDS,
+  30 * 60
+);
 const SESSION_EXPIRY_MS = REFRESH_TOKEN_EXPIRY_SECONDS * 1000;
 const SESSION_EXPIRY_SECONDS = REFRESH_TOKEN_EXPIRY_SECONDS;
 
@@ -39,12 +43,24 @@ type RefreshTokenPayload = {
   jti: string;
 };
 
+export type GuestTokenPayload = {
+  gid: string;
+  typ: 'guest';
+};
+
 export type SessionTokenBundle = {
   accessToken: string;
   refreshToken: string;
   tokenType: 'Bearer';
   expiresIn: number;
   refreshTokenExpiresIn: number;
+};
+
+export type GuestTokenBundle = {
+  accessToken: string;
+  tokenType: 'Bearer';
+  expiresIn: number;
+  guestId: string;
 };
 
 const buildOAuthTokenResponse = (tokens: SessionTokenBundle) => ({
@@ -58,6 +74,17 @@ const buildOAuthTokenResponse = (tokens: SessionTokenBundle) => ({
   expiresIn: tokens.expiresIn,
   refreshToken: tokens.refreshToken,
   refreshTokenExpiresIn: tokens.refreshTokenExpiresIn,
+});
+
+const buildGuestTokenResponse = (tokens: GuestTokenBundle) => ({
+  access_token: tokens.accessToken,
+  token_type: tokens.tokenType,
+  expires_in: tokens.expiresIn,
+  accessToken: tokens.accessToken,
+  tokenType: tokens.tokenType,
+  expiresIn: tokens.expiresIn,
+  guest_id: tokens.guestId,
+  guestId: tokens.guestId,
 });
 
 export function useAuth() {
@@ -491,6 +518,41 @@ export function useAuth() {
     return tryRefreshSessionFromEvent(event);
   };
 
+  const makeGuestToken = (
+    guestId?: string,
+    expiresInSeconds = GUEST_TOKEN_EXPIRY_SECONDS
+  ): GuestTokenBundle => {
+    const gid = guestId || randomUUID();
+    const payload: GuestTokenPayload = {
+      gid,
+      typ: 'guest',
+    };
+    const accessToken = sign(payload, getCryptoSecret(), {
+      expiresIn: expiresInSeconds,
+    });
+    return {
+      accessToken,
+      tokenType: 'Bearer',
+      expiresIn: expiresInSeconds,
+      guestId: gid,
+    };
+  };
+
+  const verifyGuestToken = (token: string): GuestTokenPayload | null => {
+    try {
+      const payload = verify(token, getCryptoSecret()) as JwtPayload & GuestTokenPayload;
+      if (payload && payload.typ === 'guest' && typeof payload.gid === 'string') {
+        return {
+          gid: payload.gid,
+          typ: 'guest',
+        };
+      }
+    } catch {
+      return null;
+    }
+    return null;
+  };
+
   return {
     getSession,
     getSessionAndBump,
@@ -498,9 +560,11 @@ export function useAuth() {
     makeAccessToken,
     makeRefreshToken,
     makeSessionToken,
+    makeGuestToken,
     verifyAccessToken,
     verifyRefreshToken,
     verifySessionToken,
+    verifyGuestToken,
     issueTokensForSession,
     rotateRefreshToken,
     getCurrentSession,
@@ -512,9 +576,11 @@ export function useAuth() {
     setAuthCookies,
     clearSessionCookie,
     toOAuthTokenResponse: buildOAuthTokenResponse,
+    toGuestTokenResponse: buildGuestTokenResponse,
     sessionCookieName: SESSION_COOKIE_NAME,
     refreshCookieName: REFRESH_COOKIE_NAME,
     accessTokenExpirySeconds: ACCESS_TOKEN_EXPIRY_SECONDS,
     refreshTokenExpirySeconds: SESSION_EXPIRY_SECONDS,
+    guestTokenExpirySeconds: GUEST_TOKEN_EXPIRY_SECONDS,
   };
 }

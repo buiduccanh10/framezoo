@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import Redis from 'ioredis';
 import { isValidInternalApiRequest } from '~/utils/internalApi';
 
@@ -25,6 +26,19 @@ const getPositiveInt = (value: string | undefined, fallback: number) => {
 };
 
 const getRateLimitConfig = (path: string) => {
+  const isAuthGuest =
+    path === '/api/auth/guest' ||
+    path.startsWith('/api/auth/guest?') ||
+    path === '/auth/guest' ||
+    path.startsWith('/auth/guest?');
+  if (isAuthGuest) {
+    return {
+      scope: 'auth-guest',
+      windowMs: getPositiveInt(process.env.RATE_LIMIT_AUTH_GUEST_WINDOW_MS, 60_000),
+      maxRequests: getPositiveInt(process.env.RATE_LIMIT_AUTH_GUEST_MAX_REQUESTS, 10),
+    };
+  }
+
   const isSubtitleAlign = path.startsWith('/api/subtitle-align');
   if (isSubtitleAlign) {
     return {
@@ -98,8 +112,29 @@ export default defineEventHandler(async event => {
   const trustProxy = String(process.env.TRUST_PROXY).toLowerCase() === 'true';
   const ip = getRequestIP(event, { xForwardedFor: trustProxy }) || '127.0.0.1';
   const { scope, windowMs, maxRequests } = getRateLimitConfig(path);
+
+  let identifier = ip;
+  if (scope !== 'auth-guest') {
+    const authHeader = getRequestHeader(event, 'authorization');
+    const bearerToken = authHeader?.startsWith('Bearer ')
+      ? authHeader.slice(7).trim()
+      : null;
+    if (bearerToken) {
+      try {
+        const decoded = jwt.decode(bearerToken) as { gid?: string; sid?: string } | null;
+        if (decoded?.gid) {
+          identifier = `gid:${decoded.gid}`;
+        } else if (decoded?.sid) {
+          identifier = `sid:${decoded.sid}`;
+        }
+      } catch {
+        // Fallback to IP on decode failure
+      }
+    }
+  }
+
   const currentBucket = Math.floor(Date.now() / windowMs);
-  const cacheKey = `rate-limit:${scope}:${ip}:${currentBucket}`;
+  const cacheKey = `rate-limit:${scope}:${identifier}:${currentBucket}`;
   const resetTime = Math.ceil(((currentBucket + 1) * windowMs) / 1000);
 
   let count: number;
