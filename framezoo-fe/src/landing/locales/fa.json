@@ -4,7 +4,8 @@
     "addons": "اکوسیستم",
     "download": "دانلود کنید",
     "language": "زبان",
-    "addonGuide": "راهنمای افزونه"
+    "addonGuide": "راهنمای افزونه",
+    "home": "صفحه اصلی"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "backHome": "به صفحه اصلی برگردید",
     "openingDescription": "مرورگر شما در حال تلاش برای باز کردن برنامه Framezoo Desktop است. اگر درخواستی ظاهر شد، لطفاً <1>Open Framezoo</1> را انتخاب کنید.",
     "download": "Framezoo را دانلود کنید"
+  },
+  "movies": {
+    "dragHint": "برای کاوش بکشید",
+    "movie": "فیلم",
+    "title": "داستان های محبوب برای ساعت بعدی شما.",
+    "series": "سری",
+    "eyebrow": "FRAMEZOO DISCOVERY",
+    "description": "چیزی را بیابید که ارزش تماشا کردن داشته باشد، جزئیات را باز کنید و با Framezoo به روشی بهتر برای تماشا بپردازید."
   }
 }

@@ -4,7 +4,8 @@
     "addons": "Ekosistem",
     "download": "Unduh",
     "language": "Bahasa",
-    "addonGuide": "Panduan tambahan"
+    "addonGuide": "Panduan tambahan",
+    "home": "Rumah"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -101,5 +102,13 @@
     "retry": "Coba buka Aplikasi Desktop lagi",
     "backHome": "Kembali ke beranda",
     "download": "Unduh Framezoo"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Seri",
+    "title": "Cerita populer untuk tontonan Anda berikutnya.",
+    "description": "Temukan sesuatu yang layak untuk ditonton, buka detailnya, dan nikmati cara menonton yang lebih baik dengan Framezoo.",
+    "dragHint": "Tarik untuk menjelajah",
+    "eyebrow": "PENEMUAN FRAMEZOO"
   }
 }

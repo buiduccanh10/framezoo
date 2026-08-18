@@ -4,7 +4,8 @@
     "addons": "生態系",
     "download": "ダウンロード",
     "language": "言語",
-    "addonGuide": "アドオンガイド"
+    "addonGuide": "アドオンガイド",
+    "home": "家"
   },
   "hero": {
     "eyebrow": "アルファフリックス デスクトップ / 01",
@@ -101,5 +102,13 @@
     "opening": "Framezoo を開く...",
     "download": "FrameZooをダウンロード",
     "backHome": "ホームページに戻る"
+  },
+  "movies": {
+    "movie": "映画",
+    "series": "シリーズ",
+    "title": "次回の視聴には人気のストーリーが含まれます。",
+    "description": "見る価値のあるものを見つけて詳細を開いて、Framezoo でより良い視聴方法を確立してください。",
+    "dragHint": "ドラッグして探索する",
+    "eyebrow": "フレームズー ディスカバリー"
   }
 }

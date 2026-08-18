@@ -4,7 +4,8 @@
     "addons": "Ökosystem",
     "download": "Herunterladen",
     "language": "Sprache",
-    "addonGuide": "Addon-Anleitung"
+    "addonGuide": "Addon-Anleitung",
+    "home": "Heim"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "retry": "Versuchen Sie erneut, die Desktop-App zu öffnen",
     "backHome": "Gehen Sie zurück zur Startseite",
     "download": "Laden Sie Framezoo herunter"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Serie",
+    "description": "Finden Sie etwas, das es wert ist, gesehen zu werden, öffnen Sie die Details und finden Sie mit Framezoo eine bessere Möglichkeit, es anzusehen.",
+    "title": "Beliebte Geschichten für Ihre nächste Uhr.",
+    "dragHint": "Zum Erkunden ziehen",
+    "eyebrow": "FRAMEZOO ENTDECKUNG"
   }
 }

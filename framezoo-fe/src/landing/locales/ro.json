@@ -4,7 +4,8 @@
     "addons": "Ecosistem",
     "download": "Descărcați",
     "language": "Limbă",
-    "addonGuide": "Ghid de suplimente"
+    "addonGuide": "Ghid de suplimente",
+    "home": "Acasă"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "download": "Descărcați Framezoo",
     "retry": "Încercați să deschideți din nou aplicația Desktop",
     "openingDescription": "Browserul dvs. încearcă să deschidă aplicația Framezoo Desktop. Dacă apare o solicitare, selectați <1>Open Framezoo</1>."
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Serie",
+    "title": "Povești populare pentru următorul tău ceas.",
+    "dragHint": "Trageți pentru a explora",
+    "description": "Găsiți ceva ce merită urmărit, deschideți detaliile și alegeți o modalitate mai bună de a viziona cu Framezoo.",
+    "eyebrow": "DECOPERIRE FRAMEZOO"
   }
 }

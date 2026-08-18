@@ -4,7 +4,8 @@
     "addons": "生态系统",
     "download": "下载",
     "language": "语言",
-    "addonGuide": "插件指南"
+    "addonGuide": "插件指南",
+    "home": "家"
   },
   "hero": {
     "eyebrow": "FRAMEZOO 桌面 / 01",
@@ -101,5 +102,13 @@
     "backHome": "返回首页",
     "opening": "打开 Framezoo...",
     "retry": "尝试再次打开桌面应用程序"
+  },
+  "movies": {
+    "movie": "电影",
+    "series": "系列",
+    "dragHint": "拖动探索",
+    "title": "您下一部观看的热门故事。",
+    "description": "找到值得观看的内容，打开细节，然后通过 Framezoo 找到更好的观看方式。",
+    "eyebrow": "框架动物园发现"
   }
 }

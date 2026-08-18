@@ -4,7 +4,8 @@
     "addons": "Ökosüsteem",
     "download": "Laadi alla",
     "language": "Keel",
-    "addonGuide": "Lisade juhend"
+    "addonGuide": "Lisade juhend",
+    "home": "Kodu"
   },
   "hero": {
     "eyebrow": "FRAMEZOO LAUAARV / 01",
@@ -101,5 +102,13 @@
     "backHome": "Mine tagasi avalehele",
     "openingDescription": "Teie brauser üritab avada Framezoo Desktopi rakendust. Kui kuvatakse viip, valige <1>Open Framezoo</1>.",
     "download": "Laadige alla Framezoo"
+  },
+  "movies": {
+    "series": "seeria",
+    "description": "Leidke midagi vaatamisväärset, avage üksikasjad ja leidke Framezoo abil parem vaatamisviis.",
+    "eyebrow": "FRAMEZOO AVASTAMINE",
+    "movie": "Film",
+    "title": "Populaarsed lood teie järgmise kella jaoks.",
+    "dragHint": "Uurimiseks lohistage"
   }
 }

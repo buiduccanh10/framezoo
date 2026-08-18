@@ -150,6 +150,9 @@ export function LandingPage() {
           />
         </a>
         <nav className="landing-nav-links" aria-label="Primary navigation">
+          <a href="#top" onClick={handleLandingHashClick}>
+            {activeCopy.nav.home}
+          </a>
           <a href="#experience" onClick={handleLandingHashClick}>
             {activeCopy.nav.features}
           </a>
@@ -176,10 +179,13 @@ export function LandingPage() {
           className="landing-top-sentinel"
           aria-hidden="true"
         />
-        <HeroSection
-          copy={activeCopy.hero}
-          onHashLinkClick={handleLandingHashClick}
-        />
+        <div className="landing-home">
+          <HeroSection
+            copy={activeCopy.hero}
+            movieCopy={activeCopy.movies}
+            onHashLinkClick={handleLandingHashClick}
+          />
+        </div>
         <FeatureSection copy={activeCopy.features} />
         <AddonGuideSection copy={activeCopy.addonGuide} />
         <DownloadSection

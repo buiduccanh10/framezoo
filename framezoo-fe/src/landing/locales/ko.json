@@ -4,7 +4,8 @@
     "addons": "생태계",
     "download": "다운로드",
     "language": "언어",
-    "addonGuide": "애드온 가이드"
+    "addonGuide": "애드온 가이드",
+    "home": "집"
   },
   "hero": {
     "eyebrow": "알파플릭스 데스크탑 / 01",
@@ -101,5 +102,13 @@
     "backHome": "홈페이지로 돌아가기",
     "download": "Framezoo 다운로드",
     "retry": "데스크톱 앱을 다시 열어보세요."
+  },
+  "movies": {
+    "movie": "영화",
+    "series": "시리즈",
+    "eyebrow": "프레임주 디스커버리",
+    "dragHint": "드래그하여 탐색하세요",
+    "title": "다음 시계에 관한 인기 스토리입니다.",
+    "description": "시청할 만한 콘텐츠를 찾고, 세부정보를 열어서 Framezoo를 통해 시청할 수 있는 더 나은 방법을 선택하세요."
   }
 }

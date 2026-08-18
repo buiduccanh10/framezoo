@@ -4,7 +4,8 @@
     "addons": "Ekosistem",
     "download": "İndirmek",
     "language": "Dil",
-    "addonGuide": "Eklenti kılavuzu"
+    "addonGuide": "Eklenti kılavuzu",
+    "home": "Ev"
   },
   "hero": {
     "eyebrow": "FRAMEZOO MASAÜSTÜ / 01",
@@ -101,5 +102,13 @@
     "openingDescription": "Tarayıcınız Framezoo Masaüstü uygulamasını açmaya çalışıyor. Bir istem görünürse lütfen <1>Framezoo'yu Aç</1> öğesini seçin.",
     "retry": "Masaüstü Uygulamasını tekrar açmayı deneyin",
     "backHome": "Ana sayfaya geri dön"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Seri",
+    "dragHint": "Keşfetmek için sürükleyin",
+    "description": "İzlemeye değer bir şey bulun, ayrıntıları açın ve Framezoo ile izlemenin daha iyi bir yolunu bulun.",
+    "title": "Bir sonraki izlemeniz için popüler hikayeler.",
+    "eyebrow": "FRAMEZOO KEŞFİ"
   }
 }

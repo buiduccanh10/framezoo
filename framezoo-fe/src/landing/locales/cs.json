@@ -4,7 +4,8 @@
     "addons": "Ekosystém",
     "download": "Stáhnout",
     "language": "Jazyk",
-    "addonGuide": "Průvodce addony"
+    "addonGuide": "Průvodce addony",
+    "home": "Domov"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -101,5 +102,13 @@
     "opening": "Otevírání Framezoo...",
     "retry": "Zkuste znovu otevřít aplikaci Desktop",
     "backHome": "Přejít zpět na domovskou stránku"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Série",
+    "dragHint": "Přetažením prozkoumejte",
+    "eyebrow": "OBJEV FRAMEZOO",
+    "title": "Oblíbené příběhy pro vaše příští hodinky.",
+    "description": "Najděte něco, co stojí za to sledovat, otevřete podrobnosti a usaďte se na lepší způsob sledování s Framezoo."
   }
 }

@@ -4,7 +4,8 @@
     "addons": "Vistkerfi",
     "download": "Sækja",
     "language": "Tungumál",
-    "addonGuide": "Addon leiðarvísir"
+    "addonGuide": "Addon leiðarvísir",
+    "home": "Heim"
   },
   "hero": {
     "eyebrow": "FRAMEZOO SKJÁLFTRÖF / 01",
@@ -101,5 +102,13 @@
     "openingDescription": "Vafrinn þinn er að reyna að opna Framezoo Desktop appið. Ef kvaðning birtist skaltu velja <1>Open Framezoo</1>.",
     "retry": "Reyndu að opna Desktop App aftur",
     "backHome": "Farðu aftur á heimasíðuna"
+  },
+  "movies": {
+    "series": "Röð",
+    "eyebrow": "FRAMEZOO UPPLÝSING",
+    "dragHint": "Dragðu til að kanna",
+    "description": "Finndu eitthvað sem er þess virði að horfa á, opnaðu smáatriðin og komdu þér fyrir á betri leið til að horfa með Framezoo.",
+    "movie": "Kvikmynd",
+    "title": "Vinsælar sögur fyrir næsta úr þitt."
   }
 }

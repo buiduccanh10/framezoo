@@ -4,7 +4,8 @@
     "addons": "Écosystème",
     "download": "Télécharger",
     "language": "Langue",
-    "addonGuide": "Guide des modules complémentaires"
+    "addonGuide": "Guide des modules complémentaires",
+    "home": "Maison"
   },
   "hero": {
     "eyebrow": "FRAMEZOO BUREAU / 01",
@@ -101,5 +102,13 @@
     "download": "Télécharger Framezoo",
     "retry": "Essayez à nouveau d'ouvrir l'application de bureau",
     "backHome": "Retour à la page d'accueil"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Série",
+    "title": "Histoires populaires pour votre prochaine montre.",
+    "eyebrow": "DÉCOUVERTE DU FRAMEZOO",
+    "dragHint": "Faites glisser pour explorer",
+    "description": "Trouvez quelque chose qui vaut la peine d'être regardé, ouvrez les détails et installez-vous dans une meilleure façon de regarder avec Framezoo."
   }
 }

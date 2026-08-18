@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Trang chủ",
     "features": "Trải nghiệm",
     "addons": "Hệ sinh thái",
     "download": "Tải xuống",
@@ -10,14 +11,22 @@
     "title": "Một nơi xem phim",
     "titleAccent": "đúng ý bạn.",
     "description": "Framezoo là trình phát có tính năng đồng bộ hóa phụ đề AI, phụ đề kép, siêu dữ liệu đa phương tiện và hỗ trợ tiện ích bổ sung.",
-    "primaryCta": "Tải app desktop",
+    "primaryCta": "Tải xuống",
     "secondaryCta": "Xem trải nghiệm",
     "imageAlt": "Trình phát Framezoo hiển thị màn hình khám phá",
     "version": "Bản desktop"
   },
+  "movies": {
+    "eyebrow": "KHÁM PHÁ CÙNG FRAMEZOO",
+    "title": "Những câu chuyện nổi bật cho lần xem tiếp theo.",
+    "description": "Tìm bộ phim phù hợp, mở chi tiết và bắt đầu trải nghiệm xem trọn vẹn hơn với Framezoo.",
+    "dragHint": "Kéo để khám phá",
+    "movie": "Phim",
+    "series": "Loạt"
+  },
   "features": {
     "featureLabel": "Player theo cách của bạn",
-    "experienceTitle": "Mọi thứ bạn cần ở một máy nghe nhạc.",
+    "experienceTitle": "Mọi thứ bạn cần ở một trình phát.",
     "overviewDescription": "Đồng bộ hóa phụ đề với AI, hiển thị phụ đề kép, khám phá siêu dữ liệu đa phương tiện và kiểm soát quá trình phát lại mà không cần rời khỏi câu chuyện.",
     "subtitleSync": "Đồng bộ phụ đề bằng AI",
     "subtitleSyncDescription": "Căn chỉnh đoạn hội thoại với hình ảnh trong vài giây với tính năng đồng bộ phụ đề AI.",

@@ -4,7 +4,8 @@
     "addons": "Ekosistēma",
     "download": "Lejupielādēt",
     "language": "Valoda",
-    "addonGuide": "Papildinājuma ceļvedis"
+    "addonGuide": "Papildinājuma ceļvedis",
+    "home": "Sākums"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "opening": "Notiek Framezoo atvēršana...",
     "backHome": "Dodieties atpakaļ uz sākumlapu",
     "download": "Lejupielādēt Framezoo"
+  },
+  "movies": {
+    "series": "sērija",
+    "movie": "Filma",
+    "dragHint": "Velciet, lai izpētītu",
+    "eyebrow": "FRAMEZOO ATKLĀŠANA",
+    "description": "Atrodiet kaut ko skatīšanās vērtu, atveriet detalizētu informāciju un iekārtojieties labākā skatīšanās veidā, izmantojot Framezoo.",
+    "title": "Populāri stāsti nākamajam pulkstenim."
   }
 }

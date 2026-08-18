@@ -4,7 +4,8 @@
     "addons": "Ökoszisztéma",
     "download": "Letöltés",
     "language": "Nyelv",
-    "addonGuide": "Addon útmutató"
+    "addonGuide": "Addon útmutató",
+    "home": "Otthon"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "retry": "Próbálja meg újra megnyitni az asztali alkalmazást",
     "openingDescription": "A böngészője megpróbálja megnyitni a Framezoo Desktop alkalmazást. Ha megjelenik egy üzenet, válassza az <1>Open Framezoo</1> lehetőséget.",
     "backHome": "Menjen vissza a kezdőlapra"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Sorozat",
+    "title": "Népszerű történetek a következő órához.",
+    "dragHint": "Húzza a felfedezéshez",
+    "eyebrow": "FRAMEZOO FELFEDEZÉS",
+    "description": "Keressen valamit, amit érdemes megnézni, nyissa meg a részleteket, és döntsön a Framezoo segítségével egy jobb nézési módban."
   }
 }

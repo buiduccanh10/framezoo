@@ -4,7 +4,8 @@
     "addons": "Ecosistema",
     "download": "Descargar",
     "language": "Linguaxe",
-    "addonGuide": "Guía de complementos"
+    "addonGuide": "Guía de complementos",
+    "home": "Casa"
   },
   "hero": {
     "eyebrow": "ESCRITORIO FRAMEZOO / 01",
@@ -101,5 +102,13 @@
     "retry": "Tenta abrir de novo a aplicación de escritorio",
     "opening": "Abrindo Framezoo...",
     "backHome": "Volver á páxina de inicio"
+  },
+  "movies": {
+    "series": "Serie",
+    "dragHint": "Arrastra para explorar",
+    "eyebrow": "DESCUBRIMENTO DE FRAMEZOO",
+    "movie": "Película",
+    "title": "Historias populares para o teu próximo reloxo.",
+    "description": "Busca algo que valga a pena ver, abre os detalles e asegúrate dunha mellor forma de ver con Framezoo."
   }
 }

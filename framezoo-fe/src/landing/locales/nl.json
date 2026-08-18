@@ -4,7 +4,8 @@
     "addons": "Ecosysteem",
     "download": "Downloaden",
     "language": "Taal",
-    "addonGuide": "Add-on-gids"
+    "addonGuide": "Add-on-gids",
+    "home": "Thuis"
   },
   "hero": {
     "eyebrow": "FRAMEZOO-BUREAUBLAD / 01",
@@ -101,5 +102,13 @@
     "download": "Framezoo downloaden",
     "openingDescription": "Uw browser probeert de Framezoo Desktop-app te openen. Als er een prompt verschijnt, selecteer dan <1>Open Framezoo</1>.",
     "backHome": "Ga terug naar de startpagina"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Serie",
+    "title": "Populaire verhalen voor je volgende horloge.",
+    "description": "Vind iets dat de moeite waard is om te bekijken, open de details en ga op zoek naar een betere manier om te kijken met Framezoo.",
+    "dragHint": "Sleep om te verkennen",
+    "eyebrow": "FRAMEZOO-ONTDEKKING"
   }
 }
