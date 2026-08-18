@@ -97,28 +97,34 @@ export async function recordUniqueDownload(
     return {
       identityType: identity.type,
       isUnique: false,
-      uniqueCount: null,
+      totalUniqueCount: null,
+      versionUniqueCount: null,
     };
   }
 
-  const uniqueCount = await prisma.download_unique_users.count({
-    where: {
-      version,
-      option_id: optionId,
-    },
-  });
+  const [totalUniqueCount, versionUniqueCount] = await Promise.all([
+    prisma.download_unique_users.count(),
+    prisma.download_unique_users.count({
+      where: {
+        version,
+        option_id: optionId,
+      },
+    }),
+  ]);
 
   log.info('Unique desktop download recorded', {
     evt: 'download_unique',
     version,
     optionId,
     identityType: identity.type,
-    uniqueCount,
+    totalUniqueCount,
+    versionUniqueCount,
   });
 
   return {
     identityType: identity.type,
     isUnique: true,
-    uniqueCount,
+    totalUniqueCount,
+    versionUniqueCount,
   };
 }
