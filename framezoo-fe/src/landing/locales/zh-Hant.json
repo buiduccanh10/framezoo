@@ -4,7 +4,8 @@
     "addons": "生態系統",
     "download": "下載",
     "language": "語言",
-    "addonGuide": "插件指南"
+    "addonGuide": "插件指南",
+    "home": "家"
   },
   "hero": {
     "eyebrow": "FRAMEZOO 桌面 / 01",
@@ -101,5 +102,13 @@
     "openingDescription": "您的瀏覽器正在嘗試開啟 Framezoo 桌面應用程式。如果出現提示，請選擇<1>Open Framezoo</1>。",
     "download": "下載 Framezoo",
     "retry": "嘗試再次開啟桌面應用程式"
+  },
+  "movies": {
+    "movie": "電影",
+    "dragHint": "拖曳探索",
+    "series": "系列",
+    "description": "找到值得觀看的內容，打開細節，然後透過 Framezoo 找到更好的觀看方式。",
+    "eyebrow": "框架動物園發現",
+    "title": "您下一部觀看的熱門故事。"
   }
 }

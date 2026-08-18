@@ -4,7 +4,8 @@
     "addons": "Ecossistema",
     "download": "Download",
     "language": "Linguagem",
-    "addonGuide": "Guia de complementos"
+    "addonGuide": "Guia de complementos",
+    "home": "Lar"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -101,5 +102,13 @@
     "openingDescription": "Seu navegador está tentando abrir o aplicativo Framezoo Desktop. Se um prompt aparecer, selecione <1>Open Framezoo</1>.",
     "download": "Baixar Framezoo",
     "backHome": "Voltar para a página inicial"
+  },
+  "movies": {
+    "eyebrow": "DESCOBERTA DO FRAMEZOO",
+    "description": "Encontre algo que valha a pena assistir, abra os detalhes e escolha uma maneira melhor de assistir com o Framezoo.",
+    "title": "Histórias populares para sua próxima exibição.",
+    "movie": "Filme",
+    "series": "Série",
+    "dragHint": "Arraste para explorar"
   }
 }

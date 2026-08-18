@@ -4,7 +4,8 @@
     "addons": "Ekosystem",
     "download": "Ladda ner",
     "language": "Språk",
-    "addonGuide": "Addon guide"
+    "addonGuide": "Addon guide",
+    "home": "Hem"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "openingDescription": "Din webbläsare försöker öppna Framezoo Desktop-appen. Om en prompt visas, välj <1>Open Framezoo</1>.",
     "retry": "Försök att öppna Desktop App igen",
     "backHome": "Gå tillbaka till hemsidan"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Serie",
+    "eyebrow": "FRAMEZOO UPPTÄCKT",
+    "description": "Hitta något värt att titta på, öppna detaljerna och sätt dig in på ett bättre sätt att titta på med Framezoo.",
+    "title": "Populära berättelser för din nästa klocka.",
+    "dragHint": "Dra för att utforska"
   }
 }

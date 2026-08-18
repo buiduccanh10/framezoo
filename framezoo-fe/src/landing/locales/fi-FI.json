@@ -4,7 +4,8 @@
     "addons": "Ekosysteemi",
     "download": "Lataa",
     "language": "Kieli",
-    "addonGuide": "Lisäyksen opas"
+    "addonGuide": "Lisäyksen opas",
+    "home": "Kotiin"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "retry": "Yritä avata Desktop App uudelleen",
     "download": "Lataa Framezoo",
     "openingDescription": "Selaimesi yrittää avata Framezoo Desktop -sovelluksen. Jos näyttöön tulee kehote, valitse <1>Open Framezoo</1>."
+  },
+  "movies": {
+    "movie": "Elokuva",
+    "series": "Sarja",
+    "title": "Suosittuja tarinoita seuraavaan kelloosi.",
+    "description": "Löydä jotain katsomisen arvoista, avaa yksityiskohdat ja ryhdy parempaan katseluun Framezoon avulla.",
+    "eyebrow": "FRAMEZOO LÖYTTÖ",
+    "dragHint": "Vedä tutkiaksesi"
   }
 }

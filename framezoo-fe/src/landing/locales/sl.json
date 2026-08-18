@@ -4,7 +4,8 @@
     "addons": "Ekosistem",
     "download": "Prenos",
     "language": "Jezik",
-    "addonGuide": "Vodnik po dodatkih"
+    "addonGuide": "Vodnik po dodatkih",
+    "home": "domov"
   },
   "hero": {
     "eyebrow": "FRAMEZOO DESKTOP / 01",
@@ -101,5 +102,13 @@
     "retry": "Poskusite znova odpreti namizno aplikacijo",
     "openingDescription": "Vaš brskalnik poskuša odpreti namizno aplikacijo Framezoo. Če se prikaže poziv, izberite <1>Odpri Framezoo</1>.",
     "backHome": "Nazaj na domačo stran"
+  },
+  "movies": {
+    "series": "serija",
+    "title": "Priljubljene zgodbe za vaš naslednji ogled.",
+    "movie": "Film",
+    "description": "Poiščite nekaj, kar je vredno ogleda, odprite podrobnosti in se odločite za boljši način gledanja s Framezoo.",
+    "dragHint": "Povlecite za raziskovanje",
+    "eyebrow": "FRAMEZOO DISCOVERY"
   }
 }

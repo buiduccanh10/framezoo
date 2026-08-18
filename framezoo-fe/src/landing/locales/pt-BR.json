@@ -4,7 +4,8 @@
     "addons": "Ecossistema",
     "download": "Download",
     "language": "Linguagem",
-    "addonGuide": "Guia de complementos"
+    "addonGuide": "Guia de complementos",
+    "home": "Lar"
   },
   "hero": {
     "eyebrow": "DESKTOP FRAMEZOO / 01",
@@ -101,5 +102,13 @@
     "opening": "Abrindo o Framezoo...",
     "download": "Baixar Framezoo",
     "backHome": "Voltar para a página inicial"
+  },
+  "movies": {
+    "movie": "Filme",
+    "series": "Série",
+    "dragHint": "Arraste para explorar",
+    "description": "Encontre algo que valha a pena assistir, abra os detalhes e escolha uma maneira melhor de assistir com o Framezoo.",
+    "eyebrow": "DESCOBERTA DO FRAMEZOO",
+    "title": "Histórias populares para sua próxima exibição."
   }
 }

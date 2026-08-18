@@ -4,7 +4,8 @@
     "addons": "Ecosistema",
     "download": "Descarregar",
     "language": "Llengua",
-    "addonGuide": "Guia de complements"
+    "addonGuide": "Guia de complements",
+    "home": "Casa"
   },
   "hero": {
     "eyebrow": "ESCRIPTORI FRAMEZOO / 01",
@@ -101,5 +102,13 @@
     "download": "Descarrega Framezoo",
     "backHome": "Torna a la pàgina d'inici",
     "retry": "Proveu d'obrir l'aplicació d'escriptori de nou"
+  },
+  "movies": {
+    "title": "Històries populars per al teu proper rellotge.",
+    "eyebrow": "DESCOBRIMENT DE FRAMEZOO",
+    "dragHint": "Arrossegueu per explorar",
+    "movie": "Pel·lícula",
+    "description": "Trobeu alguna cosa que valgui la pena veure, obriu els detalls i instal·leu-vos en una millor manera de veure-ho amb Framezoo.",
+    "series": "Sèrie"
   }
 }

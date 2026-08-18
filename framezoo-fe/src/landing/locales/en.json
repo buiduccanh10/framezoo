@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Home",
     "features": "Experience",
     "addons": "Ecosystem",
     "addonGuide": "Build an addon",
@@ -10,10 +11,18 @@
     "title": "A better place",
     "titleAccent": "to watch.",
     "description": "Framezoo is a player with AI subtitle sync, dual subtitles, rich media metadata, and addon support.",
-    "primaryCta": "Download desktop",
+    "primaryCta": "Download",
     "secondaryCta": "Explore the experience",
     "imageAlt": "Framezoo player showing the discovery screen",
     "version": "Desktop release"
+  },
+  "movies": {
+    "eyebrow": "FRAMEZOO DISCOVERY",
+    "title": "Popular stories for your next watch.",
+    "description": "Find something worth watching, open the details, and settle into a better way to watch with Framezoo.",
+    "dragHint": "Drag to explore",
+    "movie": "Movie",
+    "series": "Series"
   },
   "features": {
     "featureLabel": "The player, your way",

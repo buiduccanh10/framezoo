@@ -4,7 +4,8 @@
     "addons": "Ekosystem",
     "download": "Pobierać",
     "language": "Język",
-    "addonGuide": "Przewodnik po dodatkach"
+    "addonGuide": "Przewodnik po dodatkach",
+    "home": "Dom"
   },
   "hero": {
     "eyebrow": "KOMPUTER FRAMEZOO / 01",
@@ -101,5 +102,13 @@
     "retry": "Spróbuj ponownie otworzyć aplikację komputerową",
     "backHome": "Wróć do strony głównej",
     "download": "Pobierz Framezoo"
+  },
+  "movies": {
+    "movie": "Film",
+    "series": "Szereg",
+    "title": "Popularne historie do następnego zegarka.",
+    "eyebrow": "ODKRYCIE FRAMEZOO",
+    "dragHint": "Przeciągnij, aby eksplorować",
+    "description": "Znajdź coś wartego obejrzenia, otwórz szczegóły i wybierz lepszy sposób oglądania dzięki Framezoo."
   }
 }
