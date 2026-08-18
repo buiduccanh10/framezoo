@@ -47,11 +47,16 @@ export function useGlobalKeyboardEvents() {
         }
       }
 
-      // Handle Escape key to close modals
+      // Handle Escape key to close modals or exit player fullscreen
       if (event.key === "Escape") {
         const topModal = getTopModal();
         if (topModal) {
           hideModal(topModal);
+        } else {
+          const electronApi = (window as any).electronAPI;
+          if (electronApi?.exitPlayerFullscreen) {
+            void electronApi.exitPlayerFullscreen();
+          }
         }
       }
     };

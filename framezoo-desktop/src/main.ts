@@ -6,10 +6,12 @@ import {
   Menu,
   net,
   protocol,
+  screen,
   session,
   shell,
   type Input,
   type MenuItemConstructorOptions,
+  type Rectangle,
 } from "electron";
 import fs from "node:fs";
 import path from "node:path";
@@ -991,6 +993,84 @@ function installApplicationMenu() {
   }
 }
 
+let isWindowsFullScreen = false;
+let savedWindowBounds: Rectangle | null = null;
+let wasMaximizedBeforePlayerFullscreen = false;
+let fullscreenOrigin: "player" | "user" | null = null;
+
+function isAppFullScreen(): boolean {
+  if (!mainWindow || mainWindow.isDestroyed()) return false;
+  if (process.platform === "win32") {
+    return isWindowsFullScreen;
+  }
+  return mainWindow.isFullScreen();
+}
+
+function setAppFullScreen(fullscreen: boolean, origin: "player" | "user" = "user") {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+
+  if (process.platform === "win32") {
+    if (fullscreen === isWindowsFullScreen) return;
+    if (fullscreen) {
+      fullscreenOrigin = origin;
+      wasMaximizedBeforePlayerFullscreen = mainWindow.isMaximized();
+      savedWindowBounds = mainWindow.getBounds();
+      const currentDisplay = screen.getDisplayMatching(savedWindowBounds);
+      isWindowsFullScreen = true;
+      mainWindow.setAutoHideMenuBar(true);
+      mainWindow.setMenuBarVisibility(false);
+      mainWindow.setBounds(currentDisplay.bounds);
+      mainWindow.webContents.send("desktop:fullscreen-state", true);
+    } else {
+      isWindowsFullScreen = false;
+      mainWindow.setAutoHideMenuBar(false);
+      mainWindow.setMenuBarVisibility(true);
+      if (wasMaximizedBeforePlayerFullscreen) {
+        mainWindow.maximize();
+      } else if (savedWindowBounds) {
+        mainWindow.setBounds(savedWindowBounds);
+      } else {
+        mainWindow.setSize(1440, 900);
+        mainWindow.center();
+      }
+      fullscreenOrigin = null;
+      wasMaximizedBeforePlayerFullscreen = false;
+      mainWindow.webContents.send("desktop:fullscreen-state", false);
+    }
+  } else {
+    if (fullscreen) {
+      if (!mainWindow.isFullScreen()) {
+        fullscreenOrigin = origin;
+        savedWindowBounds = mainWindow.getBounds();
+        mainWindow.setFullScreen(true);
+      }
+    } else {
+      if (mainWindow.isFullScreen()) {
+        mainWindow.setFullScreen(false);
+      }
+      fullscreenOrigin = null;
+    }
+  }
+}
+
+function togglePlayerFullScreen() {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+  if (isAppFullScreen()) {
+    setAppFullScreen(false, "player");
+  } else {
+    setAppFullScreen(true, "player");
+  }
+}
+
+function exitPlayerFullScreen() {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+  // ONLY restore previous window state if fullscreen was initiated by the player.
+  // If the user already had the app window maximized/fullscreen, do not touch it.
+  if (fullscreenOrigin === "player") {
+    setAppFullScreen(false, "player");
+  }
+}
+
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     title: APP_NAME,
@@ -1033,8 +1113,12 @@ function createMainWindow() {
   mainWindow.on("enter-full-screen", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (process.platform === "win32") {
+        isWindowsFullScreen = true;
         mainWindow.setAutoHideMenuBar(true);
         mainWindow.setMenuBarVisibility(false);
+      }
+      if (!fullscreenOrigin) {
+        fullscreenOrigin = "user";
       }
       mainWindow.webContents.send("desktop:fullscreen-state", true);
     }
@@ -1043,9 +1127,12 @@ function createMainWindow() {
   mainWindow.on("leave-full-screen", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (process.platform === "win32") {
+        isWindowsFullScreen = false;
         mainWindow.setAutoHideMenuBar(false);
         mainWindow.setMenuBarVisibility(true);
       }
+      fullscreenOrigin = null;
+      wasMaximizedBeforePlayerFullscreen = false;
       mainWindow.webContents.send("desktop:fullscreen-state", false);
     }
   });
@@ -1099,6 +1186,10 @@ function createMainWindow() {
   mainWindow.on("closed", () => {
     desktopPipController.close();
     mainWindow = null;
+    savedWindowBounds = null;
+    wasMaximizedBeforePlayerFullscreen = false;
+    fullscreenOrigin = null;
+    isWindowsFullScreen = false;
     void torrentManager.stopAll();
   });
 
@@ -1372,7 +1463,41 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:toggle-fullscreen", async () => {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
-    mainWindow.setFullScreen(!mainWindow.isFullScreen());
+    togglePlayerFullScreen();
+    return true;
+  });
+
+  ipcMain.handle("desktop:exit-player-fullscreen", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    exitPlayerFullScreen();
+    return true;
+  });
+
+  ipcMain.handle(
+    "desktop:set-fullscreen",
+    async (_event, fullscreen: boolean) => {
+      if (!mainWindow || mainWindow.isDestroyed()) return false;
+      setAppFullScreen(Boolean(fullscreen), "user");
+      return true;
+    },
+  );
+
+  ipcMain.handle("desktop:exit-fullscreen", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    setAppFullScreen(false, "user");
+    return true;
+  });
+
+  ipcMain.handle("desktop:get-fullscreen-state", async () => {
+    return isAppFullScreen();
+  });
+
+  ipcMain.handle("desktop:minimize-window", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    if (process.platform !== "win32" && mainWindow.isFullScreen()) {
+      mainWindow.setFullScreen(false);
+    }
+    mainWindow.minimize();
     return true;
   });
 

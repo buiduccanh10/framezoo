@@ -116,6 +116,8 @@ export interface DisplayInterface extends Listener<DisplayInterfaceEvents> {
   processContainerElement(container: HTMLElement): void;
   processSurfaceElement?(container: HTMLElement | null): void;
   toggleFullscreen(): void;
+  exitFullscreen?(): void;
+  setFullscreen?(fullscreen: boolean): void;
   togglePictureInPicture(): void;
   setSeeking(active: boolean): void;
   setVolume(vol: number): void;

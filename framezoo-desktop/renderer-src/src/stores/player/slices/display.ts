@@ -191,6 +191,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     });
   },
   reset() {
+    get().display?.exitFullscreen?.();
     get().display?.load({
       source: null,
       startAt: 0,
@@ -205,6 +206,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.sourceId = null;
       s.interface.shouldStartFromBeginning = false;
       s.interface.skipNextSavedProgressResume = false;
+      s.interface.isFullscreen = false;
       s.progress.time = 0;
       s.progress.duration = 0;
     });

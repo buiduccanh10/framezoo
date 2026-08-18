@@ -139,6 +139,21 @@ contextBridge.exposeInMainWorld("electronAPI", {
   toggleFullscreen(): Promise<void> {
     return ipcRenderer.invoke("desktop:toggle-fullscreen");
   },
+  exitPlayerFullscreen(): Promise<void> {
+    return ipcRenderer.invoke("desktop:exit-player-fullscreen");
+  },
+  setFullscreen(fullscreen: boolean): Promise<void> {
+    return ipcRenderer.invoke("desktop:set-fullscreen", fullscreen);
+  },
+  exitFullscreen(): Promise<void> {
+    return ipcRenderer.invoke("desktop:exit-fullscreen");
+  },
+  getFullscreenState(): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:get-fullscreen-state");
+  },
+  minimizeWindow(): Promise<void> {
+    return ipcRenderer.invoke("desktop:minimize-window");
+  },
   onFullscreenState(listener: (isFullscreen: boolean) => void) {
     const handler = (
       _event: Electron.IpcRendererEvent,
