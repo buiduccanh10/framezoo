@@ -6,6 +6,7 @@ import {
 } from "react";
 
 import { getConfiguredBackendUrl } from "@/backend/download";
+import { ensureGuestToken } from "@/backend/guestAuth";
 
 import type { LandingCopy } from "./i18n";
 
@@ -153,9 +154,15 @@ export function MovieShowcaseSection({
 
     const loadMovies = async () => {
       try {
+        const guestToken = await ensureGuestToken(backendUrl);
+        const headers: Record<string, string> = { Accept: "application/json" };
+        if (guestToken) {
+          headers.Authorization = `Bearer ${guestToken}`;
+        }
+
         const response = await fetch(getTmdbEndpoint(backendUrl), {
           signal: controller.signal,
-          headers: { Accept: "application/json" },
+          headers,
         });
 
         if (!response.ok) {

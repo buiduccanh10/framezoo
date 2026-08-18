@@ -1,7 +1,10 @@
 import { jwtDecode } from "jwt-decode";
 import { ofetch } from "ofetch";
 
-import { getBackendAuthHeaders } from "@/utils/backendAuth";
+import {
+  getBackendAuthHeaders,
+  getBackendAuthHeadersAsync,
+} from "@/utils/backendAuth";
 
 type P<T> = Parameters<typeof ofetch<T, any>>;
 type R<T> = ReturnType<typeof ofetch<T, any>>;
@@ -9,6 +12,16 @@ type R<T> = ReturnType<typeof ofetch<T, any>>;
 const baseFetch = ofetch.create({
   retry: 0,
   credentials: "include",
+  async onRequest({ request, options }) {
+    const url =
+      typeof request === "string" ? request : (request as Request).url;
+    const asyncHeaders = await getBackendAuthHeadersAsync(
+      url,
+      options.headers,
+      options.baseURL,
+    );
+    options.headers = asyncHeaders;
+  },
 });
 let apiToken: string | null = null;
 

@@ -112,6 +112,16 @@ function App() {
   const navigate = useNavigate();
   const showModal = useOverlayStack((s) => s.showModal);
 
+  // Automatically restore previous window state if navigating away from video player routes
+  useEffect(() => {
+    if (!location.pathname.startsWith("/media/")) {
+      const electronApi = (window as any).electronAPI;
+      if (electronApi?.exitPlayerFullscreen) {
+        void electronApi.exitPlayerFullscreen();
+      }
+    }
+  }, [location.pathname]);
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const detailParam = searchParams.get("detail");

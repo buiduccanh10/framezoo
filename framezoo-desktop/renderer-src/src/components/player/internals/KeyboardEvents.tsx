@@ -733,7 +733,17 @@ export function KeyboardEvents() {
         dataRef.current.display?.[action]();
       }
       // Escape is locked
-      if (k === LOCKED_SHORTCUTS.ESCAPE) dataRef.current.router.close();
+      if (k === LOCKED_SHORTCUTS.ESCAPE) {
+        if (dataRef.current.router.isRouterActive) {
+          dataRef.current.router.close();
+        } else if (usePlayerStore.getState().interface.isFullscreen) {
+          if (dataRef.current.display?.exitFullscreen) {
+            dataRef.current.display.exitFullscreen();
+          } else {
+            dataRef.current.display?.toggleFullscreen();
+          }
+        }
+      }
 
       // Episode navigation (shows only) - customizable
       if (

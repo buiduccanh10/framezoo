@@ -99,6 +99,11 @@ type LibMpvElectronApi = {
   onLibMpvEvent?: (listener: (event: LibMpvPlayerEvent) => void) => () => void;
   onLibMpvLog?: (listener: (log: LibMpvLogEvent) => void) => () => void;
   toggleFullscreen?: () => Promise<void>;
+  exitPlayerFullscreen?: () => Promise<void>;
+  setFullscreen?: (fullscreen: boolean) => Promise<void>;
+  exitFullscreen?: () => Promise<void>;
+  getFullscreenState?: () => Promise<boolean>;
+  minimizeWindow?: () => Promise<void>;
   onFullscreenState?: (listener: (isFullscreen: boolean) => void) => () => void;
   getStartupNativeWarmupState?: () => Promise<{
     status?: string;
@@ -878,6 +883,22 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         pictureInPictureMode = null;
         emitPictureInPictureState(null);
       }
+      if (isFullscreen) {
+        isFullscreen = false;
+        emit("fullscreen", false);
+        const api = getElectronApi();
+        if (api?.exitPlayerFullscreen) {
+          void api.exitPlayerFullscreen();
+        } else if (api?.exitFullscreen) {
+          void api.exitFullscreen();
+        } else if (api?.setFullscreen) {
+          void api.setFullscreen(false);
+        } else if (api?.toggleFullscreen) {
+          void api.toggleFullscreen();
+        } else if (fscreen.fullscreenElement) {
+          void fscreen.exitFullscreen();
+        }
+      }
       fscreen.removeEventListener("fullscreenchange", fullscreenChanged);
     },
     load(ops) {
@@ -992,6 +1013,38 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       }
       if (!containerElement) return;
       void fscreen.requestFullscreen(containerElement);
+    },
+    exitFullscreen() {
+      const api = getElectronApi();
+      if (api?.exitPlayerFullscreen) {
+        void api.exitPlayerFullscreen();
+        return;
+      }
+      if (api?.exitFullscreen) {
+        void api.exitFullscreen();
+        return;
+      }
+      if (api?.setFullscreen) {
+        void api.setFullscreen(false);
+        return;
+      }
+      if (isFullscreen && api?.toggleFullscreen) {
+        void api.toggleFullscreen();
+        return;
+      }
+      if (fscreen.fullscreenElement) {
+        void fscreen.exitFullscreen();
+      }
+    },
+    setFullscreen(fullscreen: boolean) {
+      const api = getElectronApi();
+      if (api?.setFullscreen) {
+        void api.setFullscreen(fullscreen);
+        return;
+      }
+      if (fullscreen !== isFullscreen) {
+        thisDisplay.toggleFullscreen();
+      }
     },
     togglePictureInPicture() {
       void toggleDesktopPip();
