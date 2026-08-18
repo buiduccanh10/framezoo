@@ -56,12 +56,13 @@ export function LazyCarouselWrapper({
     threshold: 0,
   });
   const [hasRendered, setHasRendered] = useState(false);
+  const isIntersecting = intersection?.isIntersecting ?? false;
 
   useEffect(() => {
-    if (intersection?.isIntersecting) {
+    if (isIntersecting) {
       setHasRendered(true);
     }
-  }, [intersection]);
+  }, [isIntersecting]);
 
   return (
     <div ref={ref} className="min-h-[200px]">
@@ -294,8 +295,15 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const [isLoadingTrailers, setIsLoadingTrailers] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
   const showToast = useToastStore((s) => s.showToast);
-  const progress = useProgressStore((s) => s.items);
+  const progressItem = useProgressStore((s) =>
+    data.id ? s.items[data.id.toString()] : undefined,
+  );
   const updateItem = useProgressStore((s) => s.updateItem);
+  const progress = useMemo(
+    () =>
+      data.id && progressItem ? { [data.id.toString()]: progressItem } : {},
+    [data.id, progressItem],
+  );
 
   // Check if movie is watched (>90% progress)
   const isMovieWatched = useMemo(() => {
@@ -363,8 +371,15 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
   const allEpisodes = useMemo(() => {
     return Object.values(fetchedSeasons).flat();
   }, [fetchedSeasons]);
+  const hasFetchedSelectedSeason = Object.prototype.hasOwnProperty.call(
+    fetchedSeasons,
+    selectedSeason,
+  );
   const isLoadingSelectedSeason =
-    data.type === "show" && Boolean(loadingSeasons[selectedSeason]);
+    data.type === "show" &&
+    selectedSeason !== -1 &&
+    !hasFetchedSelectedSeason &&
+    (loadingSeasons[selectedSeason] ?? true);
 
   useEffect(() => {
     let isCancelled = false;
@@ -771,24 +786,25 @@ export function DetailsContent({ data, minimal = false }: DetailsContentProps) {
 
         {/* Episodes Carousel for TV Shows */}
         {data.type === "show" && data.seasonData && !minimal && (
-          <LazyCarouselWrapper
-            isLoading={isLoadingSelectedSeason}
-            skeleton={<CarouselSkeleton variant="episodes" />}
-          >
-            <EpisodeCarousel
-              episodes={allEpisodes}
-              showProgress={showProgress}
-              progress={progress}
-              selectedSeason={selectedSeason}
-              onSeasonChange={setSelectedSeason}
-              seasons={data.seasonData.seasons}
-              mediaId={data.id}
-              mediaTitle={data.title}
-              mediaPosterUrl={data.posterUrl}
-              totalEpisodes={data.episodes}
-              boundaryRef={contentRef}
-            />
-          </LazyCarouselWrapper>
+          <div className="min-h-[200px]">
+            {isLoadingSelectedSeason ? (
+              <CarouselSkeleton variant="episodes" />
+            ) : (
+              <EpisodeCarousel
+                episodes={allEpisodes}
+                showProgress={showProgress}
+                progress={progress}
+                selectedSeason={selectedSeason}
+                onSeasonChange={setSelectedSeason}
+                seasons={data.seasonData.seasons}
+                mediaId={data.id}
+                mediaTitle={data.title}
+                mediaPosterUrl={data.posterUrl}
+                totalEpisodes={data.episodes}
+                boundaryRef={contentRef}
+              />
+            )}
+          </div>
         )}
 
         {/* Cast Carousel */}

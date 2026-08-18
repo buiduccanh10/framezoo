@@ -31,39 +31,40 @@ export function DetailsModal({
 }: DetailsModalProps) {
   // Player details modal should always be minimal (hide episode carousel and movie watch button)
   const minimal = _minimal || id === "player-details";
-  const { hideModal, isModalVisible, modalStack, getModalData } =
-    useOverlayStack();
+  const hideModal = useOverlayStack((state) => state.hideModal);
+  const modalIndex = useOverlayStack((state) => state.modalStack.indexOf(id));
+  const modalData = useOverlayStack((state) => state.modalData[id]);
   const [detailsData, setDetailsData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const modalIndex = modalStack.indexOf(id);
   const zIndex = modalIndex >= 0 ? 1000 + modalIndex : 999;
 
   const hide = useCallback(() => hideModal(id), [hideModal, id]);
-  const isShown = isModalVisible(id);
-  const modalData = getModalData(id);
+  const isShown = modalIndex >= 0;
+  const requestedId = modalData?.id ?? _data?.id;
+  const requestedType = modalData?.type ?? _data?.type;
 
   // Only show modal if there's data to display
-  const shouldShow = Boolean(isShown && (modalData?.id || _data?.id));
+  const shouldShow = Boolean(isShown && requestedId && requestedType);
 
   useEffect(() => {
     let isCancelled = false;
 
     const fetchDetails = async () => {
-      // Use data from overlayStack or fallback to props for backward compatibility
-      const data = modalData || _data;
-      if (!data?.id || !data?.type) return;
+      if (!requestedId || !requestedType) return;
 
       setIsLoading(true);
       try {
         const type =
-          data.type === "movie" ? TMDBContentTypes.MOVIE : TMDBContentTypes.TV;
-        const basePromise = getMediaBaseDetails(data.id.toString(), type);
+          requestedType === "movie"
+            ? TMDBContentTypes.MOVIE
+            : TMDBContentTypes.TV;
+        const basePromise = getMediaBaseDetails(requestedId.toString(), type);
         const supplementalPromise = getMediaDetailSupplemental(
-          data.id.toString(),
+          requestedId.toString(),
           type,
         );
-        const logoPromise = getMediaLogo(data.id.toString(), type);
+        const logoPromise = getMediaLogo(requestedId.toString(), type);
         const supplementalAndLogoPromise = Promise.allSettled([
           supplementalPromise,
           logoPromise,
@@ -181,7 +182,7 @@ export function DetailsModal({
     return () => {
       isCancelled = true;
     };
-  }, [shouldShow, modalData, _data]);
+  }, [shouldShow, requestedId, requestedType]);
 
   useEffect(() => {
     if (!isShown) {
@@ -190,10 +191,10 @@ export function DetailsModal({
   }, [isShown]);
 
   useEffect(() => {
-    if (isShown && !modalData?.id && !_data?.id && !isLoading) {
+    if (isShown && !requestedId && !isLoading) {
       hide();
     }
-  }, [isShown, modalData, _data, isLoading, hide]);
+  }, [isShown, requestedId, isLoading, hide]);
 
   return (
     <OverlayPortal
