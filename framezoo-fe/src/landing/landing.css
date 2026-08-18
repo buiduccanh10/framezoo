@@ -29,6 +29,67 @@
     var(--landing-bg);
 }
 
+.deep-link-page {
+  display: grid;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 24px;
+  color: var(--landing-text, #fff8ee);
+  background: var(--landing-bg, #090707);
+}
+
+.deep-link-dialog {
+  width: min(100%, 360px);
+  padding: 24px;
+  text-align: center;
+  background: rgba(19, 9, 9, 0.94);
+  border: 1px solid var(--landing-line, rgba(255, 225, 210, 0.15));
+  border-radius: 18px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+}
+
+.deep-link-dialog h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.deep-link-dialog p {
+  margin: 12px 0 0;
+  color: var(--landing-muted, #b99f95);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.deep-link-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.deep-link-primary,
+.deep-link-secondary {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.deep-link-primary {
+  color: #1b0c08;
+  background: var(--landing-amber, #fff599);
+}
+
+.deep-link-secondary {
+  color: var(--landing-text, #fff8ee);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--landing-line, rgba(255, 225, 210, 0.15));
+}
+
 .landing-shell::before {
   position: absolute;
   z-index: -2;
