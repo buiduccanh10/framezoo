@@ -206,6 +206,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   let firstFrameLoggedGeneration = -1;
   let desktopPipClosedUnsubscribe: (() => void) | null = null;
   let desktopPipActionUnsubscribe: (() => void) | null = null;
+  let desktopPipTogglePromise: Promise<void> | null = null;
+  let desktopPipShouldResume = false;
+  let desktopPipTarget: "main" | "pip" = "main";
   let unbindFullscreen: (() => void) | null = null;
   // Tracks whether the current generation's file has fully loaded.
   // Used to drop stale `pause: true` events emitted during old-file teardown.
@@ -280,8 +283,13 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     desktopPipActionUnsubscribe =
       pipApi.onDesktopPipAction?.((action) => {
         if (action.type === "togglePlayback") {
-          if (paused) thisDisplay.play();
-          else thisDisplay.pause();
+          if (paused) {
+            thisDisplay.play();
+            desktopPipShouldResume = true;
+          } else {
+            thisDisplay.pause();
+            desktopPipShouldResume = false;
+          }
         } else if (action.type === "seekBy") {
           thisDisplay.setTime(time + action.delta);
         } else if (action.type === "seekTo") {
@@ -291,11 +299,21 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     desktopPipClosedUnsubscribe =
       pipApi.onDesktopPipClosed?.(() => {
-        if (pictureInPictureMode !== "desktop") return;
+        const wasDesktopPip =
+          pictureInPictureMode === "desktop" || desktopPipTarget === "pip";
+        if (!wasDesktopPip) return;
+
+        const shouldResume = desktopPipShouldResume;
+        desktopPipShouldResume = false;
+        desktopPipTarget = "main";
         if (playerId) {
-          void enqueueNativeOperation(() =>
-            api.reparentLibMpvPlayer?.(playerId!, "main"),
-          );
+          void enqueueNativeOperation(async () => {
+            const reparented =
+              (await api.reparentLibMpvPlayer?.(playerId!, "main")) ?? false;
+            if (reparented && shouldResume) {
+              await sendNativeCommand(playerId!, { type: "play" });
+            }
+          });
         }
         pictureInPictureMode = null;
         emitPictureInPictureState(null);
@@ -836,13 +854,14 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     };
   }
 
-  async function toggleDesktopPip() {
+  async function performDesktopPipToggle() {
     const api = getElectronApi() as
       | (LibMpvElectronApi & {
           openDesktopPipWindow?: (
             state: DesktopPipState,
             windowSize?: unknown,
           ) => Promise<boolean>;
+          activateDesktopPipWindow?: () => Promise<boolean>;
           closeDesktopPipWindow?: () => Promise<boolean>;
         })
       | null;
@@ -855,18 +874,76 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
 
     const state = buildPipState();
     if (!state || !api.openDesktopPipWindow) return;
-    const opened = await api.openDesktopPipWindow(
-      state,
-      getPersistedDesktopPipWindowSize(),
-    );
-    if (!opened) return;
-    const reparented = await enqueueNativeOperation(() =>
-      api.reparentLibMpvPlayer?.(playerId!, "pip"),
-    );
-    if (reparented) {
+
+    const shouldResume = !desiredPaused;
+    desktopPipShouldResume = shouldResume;
+
+    // Stop native playback before the PiP renderer starts its startup/auth
+    // gates. This prevents the hidden main window from advancing its clock
+    // while the PiP window is still showing its loading screen.
+    desiredPaused = true;
+    await sendNativeCommand(playerId, { type: "pause" });
+
+    let reparented = false;
+    let enteredPip = false;
+    try {
+      const opened = await api.openDesktopPipWindow(
+        state,
+        getPersistedDesktopPipWindowSize(),
+      );
+      if (!opened) return;
+
+      reparented =
+        (await enqueueNativeOperation(() =>
+          api.reparentLibMpvPlayer?.(playerId!, "pip"),
+        )) ?? false;
+      if (!reparented) return;
+
+      desktopPipTarget = "pip";
+      const activated = api.activateDesktopPipWindow
+        ? await api.activateDesktopPipWindow()
+        : true;
+      if (!activated || desktopPipTarget !== "pip") return;
+
+      enteredPip = true;
       emitPictureInPictureState("desktop");
       bindDesktopPipActions();
+      if (shouldResume) {
+        thisDisplay.play();
+      }
+    } finally {
+      if (!reparented || !enteredPip) {
+        if (reparented) {
+          desktopPipTarget = "main";
+          await enqueueNativeOperation(() =>
+            api.reparentLibMpvPlayer?.(playerId!, "main"),
+          );
+        }
+        await api.closeDesktopPipWindow?.();
+        desktopPipShouldResume = false;
+        if (shouldResume) {
+          thisDisplay.play();
+        }
+      }
     }
+  }
+
+  function toggleDesktopPip() {
+    if (desktopPipTogglePromise) {
+      const api = getElectronApi() as {
+        closeDesktopPipWindow?: () => Promise<boolean>;
+      } | null;
+      void api?.closeDesktopPipWindow?.();
+      return;
+    }
+
+    desktopPipTogglePromise = performDesktopPipToggle()
+      .catch((error) => {
+        console.warn("[libmpv] desktop PiP transition failed", error);
+      })
+      .finally(() => {
+        desktopPipTogglePromise = null;
+      });
   }
 
   const thisDisplay: DisplayInterface = {
@@ -1070,6 +1147,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     play() {
       desiredPaused = false;
+      if (pictureInPictureMode === "desktop") {
+        desktopPipShouldResume = true;
+      }
       if (!playerId) {
         void ensurePlayer();
         return;
@@ -1078,6 +1158,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     pause() {
       desiredPaused = true;
+      if (pictureInPictureMode === "desktop") {
+        desktopPipShouldResume = false;
+      }
       if (!playerId) return;
       void sendNativeCommand(playerId, { type: "pause" });
     },

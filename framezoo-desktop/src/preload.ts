@@ -76,6 +76,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   openDesktopPipWindow(state: unknown, windowSize?: unknown) {
     return ipcRenderer.invoke("desktop:pip-open", state, windowSize);
   },
+  signalDesktopPipReady() {
+    return ipcRenderer.invoke("desktop:pip-ready");
+  },
+  activateDesktopPipWindow() {
+    return ipcRenderer.invoke("desktop:pip-activate");
+  },
   updateDesktopPipWindow(state: unknown) {
     return ipcRenderer.invoke("desktop:pip-update", state);
   },
@@ -98,6 +104,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.on("desktop:pip-state", handler);
     return () => {
       ipcRenderer.removeListener("desktop:pip-state", handler);
+    };
+  },
+  onDesktopPipActivate(listener: () => void) {
+    const handler = () => {
+      listener();
+    };
+    ipcRenderer.on("desktop:pip-activate", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:pip-activate", handler);
     };
   },
   onDesktopPipClosed(listener: () => void) {

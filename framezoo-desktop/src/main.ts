@@ -1433,6 +1433,14 @@ function registerIpcHandlers() {
     },
   );
 
+  ipcMain.handle("desktop:pip-ready", (event) => {
+    return desktopPipController.ready(event.sender);
+  });
+
+  ipcMain.handle("desktop:pip-activate", async () => {
+    return desktopPipController.activate();
+  });
+
   ipcMain.handle("desktop:pip-update", async (_event, nextState: any) => {
     return desktopPipController.update(nextState ?? null);
   });
