@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { usePlayerStore } from "@/stores/player/store";
+
 import { makeLibMpvDisplayInterface } from "./libmpv";
 
 type Source = {
-  type: "mp4";
+  type: "mp4" | "hls";
   url: string;
 };
 
@@ -305,6 +307,63 @@ describe("libmpv display", () => {
     });
     expect(loading).toEqual([true, false]);
     expect(rendered).toEqual([1]);
+    display.destroy();
+  });
+
+  it("does not publish resume time from pre-frame property updates", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "https://example.test/torrent-file.mp4",
+      } as Source,
+      startAt: 1571,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "time-pos",
+      data: 1590,
+    });
+    expect(times).toEqual([]);
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "video-frame",
+    });
+    expect(times).toEqual([1571]);
+
     display.destroy();
   });
 
@@ -1102,8 +1161,110 @@ describe("libmpv display", () => {
 
     // The native initial seek lands at the resume position.
     timePos(30, 2);
+    expect(times).toEqual([10]);
+
+    // Resume UI time is published only after the first visible frame.
+    eventListener?.({
+      playerId: "player-1",
+      generation: 2,
+      type: "video-frame",
+    });
     expect(times).toEqual([10, 30]);
 
     display.destroy();
+  });
+
+  it("pauses before PiP startup and resumes only after reparent activation", async () => {
+    const commands: string[] = [];
+    const timeline: string[] = [];
+    let resolveOpen: (opened: boolean) => void = () => undefined;
+
+    usePlayerStore.setState({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      },
+      currentQuality: null,
+      mediaPlaying: {
+        ...usePlayerStore.getState().mediaPlaying,
+        isPaused: false,
+      },
+    });
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn((_id: string, command: { type: string }) => {
+        commands.push(command.type);
+        timeline.push(`command:${command.type}`);
+        return Promise.resolve(true);
+      }),
+      onLibMpvEvent: vi.fn().mockReturnValue(() => undefined),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+      openDesktopPipWindow: vi.fn(
+        () =>
+          new Promise<boolean>((resolve) => {
+            timeline.push("open");
+            resolveOpen = resolve;
+          }),
+      ),
+      activateDesktopPipWindow: vi.fn().mockImplementation(async () => {
+        timeline.push("activate");
+        return true;
+      }),
+      reparentLibMpvPlayer: vi
+        .fn()
+        .mockImplementation(async (_id: string, target: "main" | "pip") => {
+          timeline.push(`reparent:${target}`);
+          return true;
+        }),
+      onDesktopPipAction: vi.fn().mockReturnValue(() => undefined),
+      onDesktopPipClosed: vi.fn().mockReturnValue(() => undefined),
+      updateDesktopPipWindow: vi.fn(),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.load({
+      source: {
+        type: "hls",
+        url: "https://example.test/video.m3u8",
+      } as Source,
+      startAt: 0,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    display.togglePictureInPicture();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(timeline).toContain("open");
+    expect(commands).toContain("pause");
+    expect(timeline.indexOf("command:pause")).toBeLessThan(
+      timeline.indexOf("open"),
+    );
+
+    resolveOpen(true);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(timeline).toEqual([
+      "command:set-subtitle-track",
+      "command:set-secondary-subtitle-track",
+      "command:set-volume",
+      "command:set-playback-rate",
+      "command:play",
+      "command:pause",
+      "open",
+      "reparent:pip",
+      "activate",
+      "command:play",
+    ]);
+    expect(commands.at(-1)).toBe("play");
+
+    display.destroy();
+    usePlayerStore.setState({
+      source: null,
+      currentQuality: null,
+    });
   });
 });

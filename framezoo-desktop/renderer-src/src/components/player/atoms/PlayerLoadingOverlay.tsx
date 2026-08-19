@@ -133,14 +133,14 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
   const isTorrentPreparing = useMemo(() => {
     if (!torrentStatus || status !== playerStatus.PLAYING) return false;
     if (torrentStatus.state === "error") return false;
-    if (time > 0) return false;
     return (
+      !hasRenderedFrame ||
       torrentStatus.streamType === "pending" ||
       !torrentStatus.streamUrl ||
       (duration === 0 && buffered === 0) ||
       !Number.isFinite(duration)
     );
-  }, [torrentStatus, status, duration, buffered, time]);
+  }, [torrentStatus, status, duration, buffered, hasRenderedFrame]);
 
   const bufferedProgress =
     duration > 0 ? Math.min(100, (buffered / duration) * 100) : 0;
@@ -257,6 +257,7 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
     showOverlay &&
     (status === playerStatus.IDLE ||
       isPreparingSource ||
+      (status === playerStatus.PLAYING && !hasRenderedFrame) ||
       (playbackKey !== null && initialLoadPlaybackKey === playbackKey));
 
   const loadingMessages = useMemo(
@@ -294,7 +295,7 @@ export function PlayerLoadingOverlay(props: { sourceLoading?: boolean }) {
 
     const sources = [
       showBackdropImage ? backgroundImage : null,
-      backgroundImage ? null : meta?.logo,
+      meta?.logo,
     ].filter(Boolean) as string[];
     if (sources.length === 0) {
       setAssetsReady(true);

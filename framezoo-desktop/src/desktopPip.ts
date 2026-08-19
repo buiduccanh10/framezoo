@@ -12,6 +12,7 @@ const DESKTOP_PIP_MIN_WIDTH = 320;
 const DESKTOP_PIP_MIN_HEIGHT = 180;
 const DESKTOP_PIP_MAX_WIDTH = 1280;
 const DESKTOP_PIP_MAX_HEIGHT = 720;
+const DESKTOP_PIP_READY_TIMEOUT_MS = 30_000;
 
 function normalizeWindowSize(
   value: DesktopPipWindowSize | null | undefined,
@@ -42,6 +43,10 @@ export function createDesktopPipController(
 ) {
   let pipWindow: BrowserWindow | null = null;
   let pipState: DesktopPipState = null;
+  let pipReady = false;
+  let readyPromise: Promise<boolean> | null = null;
+  let resolveReady: ((ready: boolean) => void) | null = null;
+  let readyTimeout: ReturnType<typeof setTimeout> | null = null;
 
   function getPipUrl() {
     if (options.rendererDevUrl) {
@@ -79,12 +84,43 @@ export function createDesktopPipController(
     pipWindow.webContents.send("desktop:pip-state", pipState);
   }
 
+  function settleReady(ready: boolean) {
+    if (readyTimeout) {
+      clearTimeout(readyTimeout);
+      readyTimeout = null;
+    }
+
+    const resolve = resolveReady;
+    resolveReady = null;
+    readyPromise = null;
+    resolve?.(ready);
+  }
+
+  function waitForReady(): Promise<boolean> {
+    if (pipReady) return Promise.resolve(true);
+    if (readyPromise) return readyPromise;
+
+    readyPromise = new Promise<boolean>((resolve) => {
+      resolveReady = resolve;
+      readyTimeout = setTimeout(() => {
+        pipReady = false;
+        settleReady(false);
+        if (pipWindow && !pipWindow.isDestroyed()) {
+          pipWindow.close();
+        }
+      }, DESKTOP_PIP_READY_TIMEOUT_MS);
+    });
+
+    return readyPromise;
+  }
+
   function createWindow(windowSize?: DesktopPipWindowSize | null) {
     if (pipWindow && !pipWindow.isDestroyed()) {
       return pipWindow;
     }
 
     const normalizedWindowSize = normalizeWindowSize(windowSize);
+    pipReady = false;
 
     pipWindow = new BrowserWindow({
       width: normalizedWindowSize?.width ?? DESKTOP_PIP_DEFAULT_WIDTH,
@@ -146,8 +182,10 @@ export function createDesktopPipController(
     });
 
     pipWindow.on("closed", () => {
+      settleReady(false);
       pipWindow = null;
       pipState = null;
+      pipReady = false;
       options.onClosed?.();
     });
 
@@ -162,6 +200,8 @@ export function createDesktopPipController(
     },
     close() {
       pipState = null;
+      pipReady = false;
+      settleReady(false);
 
       if (!pipWindow || pipWindow.isDestroyed()) {
         return false;
@@ -173,7 +213,7 @@ export function createDesktopPipController(
     getState() {
       return pipState;
     },
-    open(
+    async open(
       nextState: DesktopPipState,
       nextWindowSize?: DesktopPipWindowSize | null,
     ) {
@@ -193,6 +233,29 @@ export function createDesktopPipController(
         window.show();
       }
 
+      return waitForReady();
+    },
+    ready(sender: { id: number }) {
+      if (
+        !pipWindow ||
+        pipWindow.isDestroyed() ||
+        pipWindow.webContents.id !== sender.id ||
+        !pipState
+      ) {
+        return false;
+      }
+
+      pipReady = true;
+      settleReady(true);
+      sendState();
+      return true;
+    },
+    activate() {
+      if (!pipReady || !pipWindow || pipWindow.isDestroyed()) {
+        return false;
+      }
+
+      pipWindow.webContents.send("desktop:pip-activate");
       return true;
     },
     update(nextState: DesktopPipState) {

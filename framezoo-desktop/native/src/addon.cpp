@@ -20,6 +20,8 @@
 
 namespace {
 
+constexpr uint64_t MPV_RENDER_UPDATE_FRAME = 1ULL << 0;
+
 struct NativeEvent {
   std::string player_id;
   int generation = 0;
@@ -120,7 +122,6 @@ struct MpvPlayer {
   std::thread event_thread;
   std::atomic<uint64_t> render_update_count{0};
   std::atomic<uint64_t> render_count{0};
-  std::atomic<bool> video_metadata_ready{false};
   std::atomic<bool> video_frame_ready{false};
   std::atomic<double> pending_start_at{0};
   bool software_render = false;
@@ -260,6 +261,8 @@ struct MpvPlayer {
 #endif
     surface_make_current(surface);
     const uint64_t update_flags = api.render_context_update(render_context);
+    const bool has_frame_update =
+        (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;
     mpv_opengl_fbo fbo{};
     fbo.fbo = 0;
@@ -302,6 +305,7 @@ struct MpvPlayer {
 
     if (
         result >= 0 &&
+        has_frame_update &&
         !video_frame_ready.exchange(true, std::memory_order_acq_rel)
     ) {
       auto* native_event = new NativeEvent();
@@ -325,6 +329,8 @@ struct MpvPlayer {
     }
 
     const uint64_t update_flags = api.render_context_update(render_context);
+    const bool has_frame_update =
+        (update_flags & MPV_RENDER_UPDATE_FRAME) != 0;
     if (!running.load(std::memory_order_acquire)) return;
 
     int size[2] = {width, height};
@@ -365,6 +371,7 @@ struct MpvPlayer {
     }
     if (
         result >= 0 &&
+        has_frame_update &&
         !video_frame_ready.exchange(true, std::memory_order_acq_rel)
     ) {
       auto* native_event = new NativeEvent();
@@ -419,6 +426,10 @@ struct MpvPlayer {
           native_event->type = "video-reconfig";
           emit(native_event);
           emit_playback_property_snapshots();
+#if defined(_WIN32)
+          // Windows renders through the native HWND instead of the custom
+          // render callback used by macOS. Use reconfig as its closest
+          // available first-frame signal.
           if (!video_frame_ready.exchange(true, std::memory_order_acq_rel)) {
             auto* frame_event = new NativeEvent();
             frame_event->player_id = id;
@@ -426,6 +437,7 @@ struct MpvPlayer {
             frame_event->type = "video-frame";
             emit(frame_event);
           }
+#endif
           break;
         case MPV_EVENT_END_FILE: {
           auto* end_file =
@@ -499,28 +511,7 @@ struct MpvPlayer {
               (std::string(property->name) == "video-params" ||
                std::string(property->name) == "video-out-params")
           ) {
-            video_metadata_ready.store(true, std::memory_order_release);
             surface_request_paint(surface);
-            if (!video_frame_ready.exchange(true, std::memory_order_acq_rel)) {
-              auto* frame_event = new NativeEvent();
-              frame_event->player_id = id;
-              frame_event->generation = generation.load();
-              frame_event->type = "video-frame";
-              emit(frame_event);
-            }
-          }
-          if (
-              property &&
-              property->name &&
-              std::string(property->name) == "time-pos" &&
-              property->data &&
-              !video_frame_ready.exchange(true, std::memory_order_acq_rel)
-          ) {
-            auto* frame_event = new NativeEvent();
-            frame_event->player_id = id;
-            frame_event->generation = generation.load();
-            frame_event->type = "video-frame";
-            emit(frame_event);
           }
           const bool is_diagnostic_property =
               property && property->name &&
@@ -1468,7 +1459,6 @@ napi_value load_player(napi_env env, napi_callback_info info) {
   player->generation.store(
       std::max(0, static_cast<int>(requested_generation))
   );
-  player->video_metadata_ready.store(false, std::memory_order_release);
   player->video_frame_ready.store(false, std::memory_order_release);
   player->pending_start_at.store(
       std::max(0.0, start_at),

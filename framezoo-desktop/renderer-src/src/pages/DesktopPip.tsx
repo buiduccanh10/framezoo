@@ -1,6 +1,7 @@
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
+import { Loading } from "@/components/layout/Loading";
 import { CaptionCue } from "@/components/player/base/SubtitleView";
 import { useSmoothPlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
@@ -18,7 +19,9 @@ type DesktopElectronApi = {
   closeDesktopPipWindow(): Promise<boolean>;
   focusMainWindow(): Promise<boolean>;
   getDesktopPipWindowState(): Promise<DesktopPipState | null>;
+  onDesktopPipActivate(listener: () => void): () => void;
   sendDesktopPipAction(action: DesktopPipAction): Promise<boolean>;
+  signalDesktopPipReady(): Promise<boolean>;
   onDesktopPipState(
     listener: (state: DesktopPipState | null) => void,
   ): () => void;
@@ -33,7 +36,9 @@ function getDesktopElectronApi(): DesktopElectronApi | null {
   if (
     !api ||
     typeof api.getDesktopPipWindowState !== "function" ||
-    typeof api.onDesktopPipState !== "function"
+    typeof api.onDesktopPipState !== "function" ||
+    typeof api.signalDesktopPipReady !== "function" ||
+    typeof api.onDesktopPipActivate !== "function"
   ) {
     return null;
   }
@@ -200,12 +205,14 @@ function PipProgress(props: {
 
 export default function DesktopPipPage() {
   const [pipState, setPipState] = useState<DesktopPipState | null>(null);
+  const [pipReady, setPipReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [controlsVisible, setControlsVisible] = useState(true);
   const [scrubbing, setScrubbing] = useState(false);
   const [hideTimer, setHideTimer] = useState<ReturnType<
     typeof setTimeout
   > | null>(null);
+  const readySignalled = useRef(false);
 
   const revealControls = useCallback(() => {
     setControlsVisible(true);
@@ -263,21 +270,47 @@ export default function DesktopPipPage() {
     }
 
     let active = true;
+    const publishState = (state: DesktopPipState | null) => {
+      if (!active) return;
+      setPipState(state);
+      if (!state || readySignalled.current) return;
+
+      readySignalled.current = true;
+      void api
+        .signalDesktopPipReady()
+        .then((ready) => {
+          if (active && !ready) {
+            readySignalled.current = false;
+            setError("Unable to initialize PiP");
+          }
+        })
+        .catch(() => {
+          if (active) {
+            readySignalled.current = false;
+            setError("Unable to initialize PiP");
+          }
+        });
+    };
+
     void api
       .getDesktopPipWindowState()
       .then((state) => {
-        if (active) setPipState(state);
+        publishState(state);
       })
       .catch(() => setError("Unable to load PiP state"));
 
     const unsubscribe = api.onDesktopPipState((state) => {
       setError(null);
-      setPipState(state);
+      publishState(state);
+    });
+    const unsubscribeActivate = api.onDesktopPipActivate(() => {
+      if (active) setPipReady(true);
     });
 
     return () => {
       active = false;
       unsubscribe();
+      unsubscribeActivate();
     };
   }, []);
 
@@ -304,10 +337,13 @@ export default function DesktopPipPage() {
     };
   }, []);
 
-  if (!pipState) {
+  if (!pipState || !pipReady) {
     return (
-      <div className="fixed inset-0 bg-black text-center text-xs text-white/60">
-        {error ?? "Loading PiP"}
+      <div className="fixed inset-0 flex items-center justify-center bg-black text-xs text-white/60">
+        <div className="flex items-center gap-2">
+          <Loading />
+          <span>{error ?? "Loading PiP"}</span>
+        </div>
       </div>
     );
   }

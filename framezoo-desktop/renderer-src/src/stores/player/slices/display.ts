@@ -25,6 +25,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     }
 
     // make display events update the state
+    let pendingTime: number | null = null;
     newDisplay.on("pause", () =>
       set((s) => {
         s.mediaPlaying.isPaused = true;
@@ -48,6 +49,10 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     );
     newDisplay.on("time", (time) =>
       set((s) => {
+        if (!s.mediaPlaying.hasRenderedFrame) {
+          pendingTime = time;
+          return;
+        }
         s.progress.time = time;
       }),
     );
@@ -68,12 +73,17 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     );
     newDisplay.on("loading", (isLoading) =>
       set((s) => {
+        if (isLoading) pendingTime = null;
         s.mediaPlaying.isLoading = isLoading;
       }),
     );
     newDisplay.on("rendered", () =>
       set((s) => {
         s.mediaPlaying.hasRenderedFrame = true;
+        if (pendingTime !== null) {
+          s.progress.time = pendingTime;
+          pendingTime = null;
+        }
       }),
     );
     newDisplay.on("qualities", (qualities) => {
@@ -188,6 +198,7 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
     set((s) => {
       s.display = newDisplay;
       s.mediaPlaying.hasRenderedFrame = false;
+      s.mediaPlaying.isLoading = false;
     });
   },
   reset() {
@@ -209,6 +220,12 @@ export const createDisplaySlice: MakeSlice<DisplaySlice> = (set, get) => ({
       s.interface.isFullscreen = false;
       s.progress.time = 0;
       s.progress.duration = 0;
+      s.progress.buffered = 0;
+      s.mediaPlaying.isPlaying = false;
+      s.mediaPlaying.isPaused = true;
+      s.mediaPlaying.isLoading = false;
+      s.mediaPlaying.hasPlayedOnce = false;
+      s.mediaPlaying.hasRenderedFrame = false;
     });
   },
 });
