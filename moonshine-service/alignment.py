@@ -382,11 +382,14 @@ def build_shifted_subtitle_intervals(
     audio_start_ms: int,
     audio_end_ms: int,
 ) -> list[tuple[int, int]]:
+    min_cue_end = audio_start_ms - offset_ms
+    max_cue_start = audio_end_ms - offset_ms
     return merge_activity_intervals(
         clip_intervals(
             [
                 (cue.start_ms + offset_ms, cue.end_ms + offset_ms)
                 for cue in cues
+                if cue.end_ms > min_cue_end and cue.start_ms < max_cue_start
             ],
             audio_start_ms,
             audio_end_ms,
@@ -828,24 +831,29 @@ def align_speech_batch(
     audio_start_ms: int,
     audio_end_ms: int,
     alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
+    parsed_tracks: dict[str, list[Cue] | None] | None = None,
+    delta_hint_ms: int | None = None,
+    has_precomputed_delta: bool = False,
 ) -> dict[str, Any]:
     result_from_speech = alignment_result_fn or alignment_result_from_speech
     speech_intervals = merge_intervals(speech_intervals)
 
-    parsed_tracks: dict[str, list[Cue] | None] = {}
-    for subtitle in subtitles:
-        track = subtitle["track"]
-        vtt = subtitle["vttData"]
-        try:
-            parsed_tracks[track] = parse_alignment_cues(vtt)
-        except (IndexError, ValueError):
-            parsed_tracks[track] = None
+    if parsed_tracks is None:
+        parsed_tracks = {}
+        for subtitle in subtitles:
+            track = subtitle["track"]
+            vtt = subtitle.get("vttData", "")
+            try:
+                parsed_tracks[track] = parse_alignment_cues(vtt)
+            except (IndexError, ValueError):
+                parsed_tracks[track] = None
 
     primary_cues = parsed_tracks.get("primary")
     secondary_cues = parsed_tracks.get("secondary")
-    delta_hint_ms = estimate_subtitle_relative_offset(
-        primary_cues, secondary_cues
-    )
+    if not has_precomputed_delta:
+        delta_hint_ms = estimate_subtitle_relative_offset(
+            primary_cues, secondary_cues
+        )
 
     results: dict[str, Any] = {}
     primary_offset_ms: int | None = None
@@ -1159,6 +1167,21 @@ def align_speech_windows(
         subtitle["track"]: [] for subtitle in subtitles
     }
 
+    parsed_tracks: dict[str, list[Cue] | None] = {}
+    for subtitle in subtitles:
+        track = subtitle["track"]
+        vtt = subtitle.get("vttData", "")
+        try:
+            parsed_tracks[track] = parse_alignment_cues(vtt)
+        except (IndexError, ValueError):
+            parsed_tracks[track] = None
+
+    primary_cues = parsed_tracks.get("primary")
+    secondary_cues = parsed_tracks.get("secondary")
+    delta_hint_ms = estimate_subtitle_relative_offset(
+        primary_cues, secondary_cues
+    )
+
     for speech_intervals, audio_start_ms, audio_end_ms in windows:
         window_result = align_speech_batch(
             speech_intervals,
@@ -1166,6 +1189,9 @@ def align_speech_windows(
             audio_start_ms,
             audio_end_ms,
             alignment_result_fn=alignment_result_fn,
+            parsed_tracks=parsed_tracks,
+            delta_hint_ms=delta_hint_ms,
+            has_precomputed_delta=True,
         )
         for track, result in window_result["results"].items():
             entries_by_track.setdefault(track, []).append(
