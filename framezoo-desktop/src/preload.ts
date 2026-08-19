@@ -169,6 +169,30 @@ contextBridge.exposeInMainWorld("electronAPI", {
   minimizeWindow(): Promise<void> {
     return ipcRenderer.invoke("desktop:minimize-window");
   },
+  maximizeWindow(): Promise<void> {
+    return ipcRenderer.invoke("desktop:maximize-window");
+  },
+  closeWindow(): Promise<void> {
+    return ipcRenderer.invoke("desktop:close-window");
+  },
+  isMaximized(): Promise<boolean> {
+    return ipcRenderer.invoke("desktop:is-maximized");
+  },
+  onMaximizeState(listener: (isMaximized: boolean) => void) {
+    const handler = (
+      _event: Electron.IpcRendererEvent,
+      isMaximized: boolean,
+    ) => {
+      listener(isMaximized);
+    };
+    ipcRenderer.on("desktop:maximize-state", handler);
+    return () => {
+      ipcRenderer.removeListener("desktop:maximize-state", handler);
+    };
+  },
+  platform: process.platform,
+  isWindows: process.platform === "win32",
+  isMac: process.platform === "darwin",
   onFullscreenState(listener: (isFullscreen: boolean) => void) {
     const handler = (
       _event: Electron.IpcRendererEvent,

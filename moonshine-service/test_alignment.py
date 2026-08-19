@@ -380,6 +380,38 @@ Other times, it helps me control the chaos.
         self.assertIsNotNone(offset)
         self.assertAlmostEqual(offset, -106_000, delta=750)
 
+    def test_align_speech_windows_dual_subtitles(self):
+        primary_vtt = """WEBVTT
+
+00:00:10.000 --> 00:00:14.000
+Hello world
+
+00:01:10.000 --> 00:01:14.000
+Second dialogue
+"""
+        secondary_vtt = """WEBVTT
+
+00:00:12.000 --> 00:00:16.000
+Xin chao the gioi
+
+00:01:12.000 --> 00:01:16.000
+Doan thoai thu hai
+"""
+        # Speech at 10s and 70s
+        windows = [
+            ([(10_000, 14_000)], 0, 60_000),
+            ([(70_000, 74_000)], 60_000, 120_000),
+        ]
+        subtitles = [
+            {"track": "primary", "vttData": primary_vtt},
+            {"track": "secondary", "vttData": secondary_vtt},
+        ]
+        result = align_speech_windows(windows, subtitles)
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertEqual(result["results"]["primary"]["offsetMs"], 0)
+        self.assertTrue(result["results"]["secondary"]["aligned"])
+        self.assertEqual(result["results"]["secondary"]["offsetMs"], -2_000)
+
 
 if __name__ == "__main__":
     unittest.main()

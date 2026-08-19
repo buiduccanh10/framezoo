@@ -444,10 +444,26 @@ export class LibMpvController {
       return null;
     }
 
-    const normalizedBounds = normalizeBounds(
-      bounds,
-      getNativeScaleFactor(this.mainWindow),
-    );
+    let normalizedBounds: LibMpvBounds;
+    if (
+      process.platform === "win32" &&
+      this.mainWindow &&
+      !this.mainWindow.isDestroyed()
+    ) {
+      const [contentWidth, contentHeight] = this.mainWindow.getContentSize();
+      const scale = getNativeScaleFactor(this.mainWindow);
+      normalizedBounds = {
+        x: 0,
+        y: 0,
+        width: Math.max(1, Math.round(contentWidth * scale)),
+        height: Math.max(1, Math.round(contentHeight * scale)),
+      };
+    } else {
+      normalizedBounds = normalizeBounds(
+        bounds,
+        getNativeScaleFactor(this.mainWindow),
+      );
+    }
     try {
       const id = this.addon.createPlayer(
         this.mainWindow.getNativeWindowHandle(),
@@ -478,11 +494,32 @@ export class LibMpvController {
     const player = this.players.get(playerId);
     if (!player || !this.addon || !this.mainWindow) return false;
 
-    player.bounds = normalizeBounds(
-      bounds,
-      getNativeScaleFactor(this.mainWindow),
-    );
-    if (player.target === "pip") return true;
+    if (player.target === "pip") {
+      player.bounds = normalizeBounds(
+        bounds,
+        getNativeScaleFactor(this.mainWindow),
+      );
+      return true;
+    }
+
+    if (
+      process.platform === "win32" &&
+      !this.mainWindow.isDestroyed()
+    ) {
+      const [contentWidth, contentHeight] = this.mainWindow.getContentSize();
+      const scale = getNativeScaleFactor(this.mainWindow);
+      player.bounds = {
+        x: 0,
+        y: 0,
+        width: Math.max(1, Math.round(contentWidth * scale)),
+        height: Math.max(1, Math.round(contentHeight * scale)),
+      };
+    } else {
+      player.bounds = normalizeBounds(
+        bounds,
+        getNativeScaleFactor(this.mainWindow),
+      );
+    }
 
     try {
       this.addon.resizePlayer(playerId, player.bounds);
