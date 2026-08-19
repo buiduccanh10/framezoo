@@ -214,6 +214,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
   // (torrent download slow). Such a pause is not a user pause and must not
   // flip the UI to the paused state.
   let cachePaused = false;
+  // Keep resume UI state stable until the first decoded frame is visible.
+  // time-pos can advance while libmpv is still resolving the initial seek.
+  let pendingInitialResumeTime: number | null = null;
 
   function logPlaybackMilestone(
     timingPhase: "libmpv_file_loaded" | "libmpv_video_frame",
@@ -540,7 +543,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     );
   }
 
-  function applyTimePosition(position: number) {
+  function publishTimePosition(position: number) {
     time = position;
     emit("time", time);
     if (time > bufferedTime) {
@@ -552,6 +555,11 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       emit("play", undefined);
     }
     syncPipState();
+  }
+
+  function applyTimePosition(position: number) {
+    if (pendingInitialResumeTime !== null) return;
+    publishTimePosition(position);
   }
 
   function handleEvent(event: LibMpvPlayerEvent) {
@@ -633,7 +641,12 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         firstFrameLoggedGeneration = generation;
         logPlaybackMilestone("libmpv_video_frame", "video-frame");
       }
+      const initialResumeTime = pendingInitialResumeTime;
+      pendingInitialResumeTime = null;
       emit("rendered", undefined);
+      if (initialResumeTime !== null) {
+        publishTimePosition(initialResumeTime);
+      }
       emit("loading", false);
       if (!paused) {
         emit("play", undefined);
@@ -907,6 +920,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       emit("audiotracks", []);
       emit("changedaudiotrack", null);
       time = Math.max(0, ops.startAt);
+      pendingInitialResumeTime = time > 0.5 ? time : null;
       bufferedTime = time;
       duration = ops.source?.duration ?? 0;
       desiredPaused = !(ops.autoplay ?? true);
@@ -920,6 +934,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         desiredPaused = true;
         pendingLoad = null;
         pendingSeekTarget = null;
+        pendingInitialResumeTime = null;
         const playerToDestroy = playerId;
         playerId = null;
         tracks = [];
@@ -1073,6 +1088,9 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         Math.min(nextTime, duration > 0 ? duration : Number.POSITIVE_INFINITY),
       );
       time = clamped;
+      if (pendingInitialResumeTime !== null) {
+        pendingInitialResumeTime = clamped;
+      }
       pendingSeekTarget = clamped;
       pendingSeekSetAt = performance.now();
       heldSeekPosition = null;

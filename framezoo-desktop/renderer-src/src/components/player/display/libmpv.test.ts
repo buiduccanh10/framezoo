@@ -308,6 +308,63 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
+  it("does not publish resume time from pre-frame property updates", async () => {
+    let eventListener:
+      | ((event: {
+          playerId: string;
+          generation: number;
+          type: string;
+          name?: string;
+          data?: unknown;
+        }) => void)
+      | undefined;
+    const times: number[] = [];
+
+    (window as any).electronAPI = {
+      createLibMpvPlayer: vi.fn().mockResolvedValue("player-1"),
+      loadLibMpvSource: vi.fn().mockResolvedValue(true),
+      sendLibMpvCommand: vi.fn().mockResolvedValue(true),
+      onLibMpvEvent: vi.fn((listener) => {
+        eventListener = listener;
+        return () => undefined;
+      }),
+      onLibMpvLog: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.processContainerElement(makeElement());
+    display.on("time", (time) => times.push(time));
+    display.load({
+      source: {
+        type: "mp4",
+        url: "https://example.test/torrent-file.mp4",
+      } as Source,
+      startAt: 1571,
+      automaticQuality: false,
+      preferredQuality: null,
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "property",
+      name: "time-pos",
+      data: 1590,
+    });
+    expect(times).toEqual([]);
+
+    eventListener?.({
+      playerId: "player-1",
+      generation: 1,
+      type: "video-frame",
+    });
+    expect(times).toEqual([1571]);
+
+    display.destroy();
+  });
+
   it("does not surface cache-buffering stalls as a user pause", async () => {
     let eventListener:
       | ((event: {
@@ -1102,6 +1159,14 @@ describe("libmpv display", () => {
 
     // The native initial seek lands at the resume position.
     timePos(30, 2);
+    expect(times).toEqual([10]);
+
+    // Resume UI time is published only after the first visible frame.
+    eventListener?.({
+      playerId: "player-1",
+      generation: 2,
+      type: "video-frame",
+    });
     expect(times).toEqual([10, 30]);
 
     display.destroy();
