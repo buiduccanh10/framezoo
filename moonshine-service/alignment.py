@@ -781,7 +781,7 @@ def compute_track_search_centers(
             if abs(hint) <= max_offset_ms:
                 centers.add(hint)
 
-    if cues and speech_intervals and audio_start_ms <= 60_000:
+    if cues and speech_intervals and audio_start_ms <= 15_000:
         sub_first_ms = estimate_initial_cue_start_ms(cues)
         if sub_first_ms is not None:
             speech_first_ms = speech_intervals[0][0]
@@ -832,8 +832,6 @@ def align_speech_batch(
     audio_end_ms: int,
     alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
     parsed_tracks: dict[str, list[Cue] | None] | None = None,
-    delta_hint_ms: int | None = None,
-    has_precomputed_delta: bool = False,
 ) -> dict[str, Any]:
     result_from_speech = alignment_result_fn or alignment_result_from_speech
     speech_intervals = merge_intervals(speech_intervals)
@@ -848,58 +846,9 @@ def align_speech_batch(
             except (IndexError, ValueError):
                 parsed_tracks[track] = None
 
-    primary_cues = parsed_tracks.get("primary")
-    secondary_cues = parsed_tracks.get("secondary")
-    if not has_precomputed_delta:
-        delta_hint_ms = estimate_subtitle_relative_offset(
-            primary_cues, secondary_cues
-        )
-
     results: dict[str, Any] = {}
-    primary_offset_ms: int | None = None
-
-    # 1. Align primary track first
-    if "primary" in parsed_tracks:
-        cues = parsed_tracks["primary"]
-        if cues is None:
-            results["primary"] = invalid_alignment_result(
-                speech_intervals,
-                "invalid_subtitle",
-            )
-        else:
-            primary_hints = (
-                [-delta_hint_ms] if delta_hint_ms is not None else None
-            )
-            primary_search_centers = compute_track_search_centers(
-                cues,
-                speech_intervals,
-                audio_start_ms,
-                additional_hints=primary_hints,
-            )
-            try:
-                res = result_from_speech(
-                    cues,
-                    speech_intervals,
-                    audio_start_ms,
-                    audio_end_ms,
-                    search_centers=primary_search_centers,
-                )
-            except TypeError:
-                res = result_from_speech(
-                    cues,
-                    speech_intervals,
-                    audio_start_ms,
-                    audio_end_ms,
-                )
-            results["primary"] = res
-            if res.get("aligned") and isinstance(res.get("offsetMs"), int):
-                primary_offset_ms = res["offsetMs"]
-
-    # 2. Align secondary and other tracks
     for subtitle in subtitles:
         track = subtitle["track"]
-        if track == "primary":
-            continue
         cues = parsed_tracks.get(track)
         if cues is None:
             results[track] = invalid_alignment_result(
@@ -908,21 +857,13 @@ def align_speech_batch(
             )
             continue
 
-        hints: list[int] = []
-        if delta_hint_ms is not None:
-            if primary_offset_ms is not None:
-                hints.append(primary_offset_ms + delta_hint_ms)
-            hints.append(delta_hint_ms)
-
         track_search_centers = compute_track_search_centers(
             cues,
             speech_intervals,
             audio_start_ms,
-            additional_hints=hints,
         )
-
         try:
-            results[track] = result_from_speech(
+            res = result_from_speech(
                 cues,
                 speech_intervals,
                 audio_start_ms,
@@ -930,12 +871,14 @@ def align_speech_batch(
                 search_centers=track_search_centers,
             )
         except TypeError:
-            results[track] = result_from_speech(
+            res = result_from_speech(
                 cues,
                 speech_intervals,
                 audio_start_ms,
                 audio_end_ms,
             )
+        results[track] = res
+
     return {"results": results}
 
 
@@ -988,7 +931,7 @@ def _cluster_alignment_candidates(
             current
             and int(candidate["result"].get("offsetMs", 0))
             - int(current_candidates[0]["result"].get("offsetMs", 0))
-            <= 1_200
+            <= 500
         ):
             current_candidates.append(candidate)
             continue
@@ -1176,12 +1119,6 @@ def align_speech_windows(
         except (IndexError, ValueError):
             parsed_tracks[track] = None
 
-    primary_cues = parsed_tracks.get("primary")
-    secondary_cues = parsed_tracks.get("secondary")
-    delta_hint_ms = estimate_subtitle_relative_offset(
-        primary_cues, secondary_cues
-    )
-
     for speech_intervals, audio_start_ms, audio_end_ms in windows:
         window_result = align_speech_batch(
             speech_intervals,
@@ -1190,8 +1127,6 @@ def align_speech_windows(
             audio_end_ms,
             alignment_result_fn=alignment_result_fn,
             parsed_tracks=parsed_tracks,
-            delta_hint_ms=delta_hint_ms,
-            has_precomputed_delta=True,
         )
         for track, result in window_result["results"].items():
             entries_by_track.setdefault(track, []).append(

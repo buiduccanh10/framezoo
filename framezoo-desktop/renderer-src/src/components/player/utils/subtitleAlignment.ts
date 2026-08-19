@@ -72,6 +72,21 @@ export function getSubtitleAlignmentInputVtt(
   return caption.alignmentSourceVttData ?? getSubtitleAlignmentBaseVtt(caption);
 }
 
+export function isSubtitleAlignmentResultApplicable(item: {
+  result?: SubtitleAlignmentResponse;
+  expectedCaptionId: string;
+  currentCaptionId?: string;
+  expectedBaseVttData?: string;
+  currentBaseVttData?: string;
+}): boolean {
+  return (
+    item.result?.aligned === true &&
+    item.currentCaptionId === item.expectedCaptionId &&
+    (item.expectedBaseVttData === undefined ||
+      item.expectedBaseVttData === item.currentBaseVttData)
+  );
+}
+
 export function areSubtitleAlignmentResultsApplicable(
   items: Array<{
     result?: SubtitleAlignmentResponse;
@@ -83,19 +98,7 @@ export function areSubtitleAlignmentResultsApplicable(
 ): boolean {
   return (
     items.length > 0 &&
-    items.every(
-      ({
-        result,
-        expectedCaptionId,
-        currentCaptionId,
-        expectedBaseVttData,
-        currentBaseVttData,
-      }) =>
-        result?.aligned === true &&
-        currentCaptionId === expectedCaptionId &&
-        (expectedBaseVttData === undefined ||
-          expectedBaseVttData === currentBaseVttData),
-    )
+    items.every((item) => isSubtitleAlignmentResultApplicable(item))
   );
 }
 

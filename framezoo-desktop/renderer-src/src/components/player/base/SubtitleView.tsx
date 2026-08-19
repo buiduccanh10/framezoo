@@ -171,8 +171,9 @@ export function CaptionCue({
 
   return (
     <p
-      className="mb-1 rounded px-4 py-1 text-center leading-normal"
+      className="mb-1 rounded px-4 py-1 text-center leading-normal transition-all duration-150 ease-out inline-block max-w-[90vw] break-words"
       style={{
+        transition: "all 0.15s ease-out",
         ...(nativePictureInPictureStyles ?? {
           marginBottom: "0.25rem",
           borderRadius: "0.25rem",
@@ -236,7 +237,7 @@ export function SubtitleRenderer(props?: {
   );
 
   return (
-    <div>
+    <div className="transition-all duration-200 ease-out flex flex-col items-center">
       {captionsToRender.map(({ cue, sourceIndex }) => (
         <CaptionCue
           key={makeQueId(sourceIndex, cue.start, cue.end)}
@@ -290,7 +291,10 @@ export function SecondarySubtitleRenderer(props?: {
   if (!vttData) return null;
 
   return (
-    <div className="opacity-90" style={{ opacity: 0.9 }}>
+    <div
+      className="opacity-90 transition-all duration-200 ease-out flex flex-col items-center"
+      style={{ opacity: 0.9 }}
+    >
       {captionsToRender.map(({ cue, sourceIndex }) => (
         <CaptionCue
           key={`secondary-${makeQueId(sourceIndex, cue.start, cue.end)}`}
@@ -355,7 +359,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   const subtitleView = (
     <Transition animation="slide-up" show>
       <div
-        className="pointer-events-none z-50 text-white absolute w-full flex flex-col items-center transition-[bottom]"
+        className="pointer-events-none z-50 text-white absolute w-full flex flex-col items-center transition-all duration-200 ease-out"
         style={{
           position: "absolute",
           left: 0,
@@ -366,6 +370,7 @@ export function SubtitleView(props: { controlsShown: boolean }) {
           alignItems: "center",
           pointerEvents: "none",
           color: "white",
+          transition: "bottom 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
           bottom:
             pictureInPictureMode === "document"
               ? "var(--framezoo-document-pip-subtitle-bottom, 1.15rem)"
