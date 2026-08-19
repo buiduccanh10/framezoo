@@ -1071,11 +1071,20 @@ function exitPlayerFullScreen() {
   }
 }
 
+let lastNormalBounds: Rectangle | null = null;
+
 function createMainWindow() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
+  const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
+  const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+
   mainWindow = new BrowserWindow({
     title: APP_NAME,
-    width: 1440,
-    height: 900,
+    width: initialWidth,
+    height: initialHeight,
+    minWidth: 960,
+    minHeight: 600,
     backgroundColor: "#00000000",
     transparent: true,
     titleBarStyle: "default" as const,
@@ -1109,6 +1118,20 @@ function createMainWindow() {
   mainWindow.webContents.on("render-process-gone", () => {
     libmpvController.destroyAll("main-window:render-process-gone");
   });
+
+  const updateNormalBounds = () => {
+    if (
+      mainWindow &&
+      !mainWindow.isDestroyed() &&
+      !mainWindow.isMaximized() &&
+      !mainWindow.isMinimized() &&
+      !isAppFullScreen()
+    ) {
+      lastNormalBounds = mainWindow.getBounds();
+    }
+  };
+  mainWindow.on("resize", updateNormalBounds);
+  mainWindow.on("move", updateNormalBounds);
 
   mainWindow.on("maximize", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
@@ -1525,7 +1548,27 @@ function registerIpcHandlers() {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     if (mainWindow.isMaximized()) {
       mainWindow.unmaximize();
+      if (lastNormalBounds) {
+        const currentDisplay = screen.getDisplayMatching(lastNormalBounds);
+        const workArea = currentDisplay?.workArea ?? { x: 0, y: 0, width: 1440, height: 900 };
+        const width = Math.min(workArea.width, Math.max(960, lastNormalBounds.width));
+        const height = Math.min(workArea.height, Math.max(600, lastNormalBounds.height));
+        mainWindow.setBounds({
+          x: Math.max(workArea.x, Math.min(lastNormalBounds.x, workArea.x + workArea.width - width)),
+          y: Math.max(workArea.y, Math.min(lastNormalBounds.y, workArea.y + workArea.height - height)),
+          width,
+          height,
+        });
+      } else {
+        const primaryDisplay = screen.getPrimaryDisplay();
+        const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
+        const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
+        const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+        mainWindow.setSize(initialWidth, initialHeight);
+        mainWindow.center();
+      }
     } else {
+      lastNormalBounds = mainWindow.getBounds();
       mainWindow.maximize();
     }
     return true;

@@ -149,13 +149,19 @@ export function createDesktopPipController(
       },
     });
 
-    pipWindow.setAlwaysOnTop(true, "screen-saver");
-    pipWindow.setVisibleOnAllWorkspaces(true, {
-      visibleOnFullScreen: true,
-      skipTransformProcessType: true,
-    });
-    pipWindow.setAspectRatio(16 / 9);
-    pipWindow.setWindowButtonVisibility(false);
+    if (process.platform === "darwin") {
+      pipWindow.setAlwaysOnTop(true, "screen-saver");
+      pipWindow.setVisibleOnAllWorkspaces(true, {
+        visibleOnFullScreen: true,
+        skipTransformProcessType: true,
+      });
+      pipWindow.setAspectRatio(16 / 9);
+      if (typeof (pipWindow as any).setWindowButtonVisibility === "function") {
+        (pipWindow as any).setWindowButtonVisibility(false);
+      }
+    } else {
+      pipWindow.setAlwaysOnTop(true);
+    }
 
     pipWindow.webContents.setWindowOpenHandler(({ url }) => {
       if (/^https?:\/\//i.test(url)) {
