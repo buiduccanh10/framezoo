@@ -1023,14 +1023,27 @@ function setAppFullScreen(fullscreen: boolean, origin: "player" | "user" = "user
       mainWindow.webContents.send("desktop:fullscreen-state", true);
     } else {
       isWindowsFullScreen = false;
-      mainWindow.setAutoHideMenuBar(false);
-      mainWindow.setMenuBarVisibility(true);
+      mainWindow.setAutoHideMenuBar(true);
+      mainWindow.setMenuBarVisibility(false);
       if (wasMaximizedBeforePlayerFullscreen) {
         mainWindow.maximize();
       } else if (savedWindowBounds) {
-        mainWindow.setBounds(savedWindowBounds);
+        const currentDisplay = screen.getDisplayMatching(savedWindowBounds);
+        const workArea = currentDisplay?.workArea ?? { x: 0, y: 0, width: 1440, height: 900 };
+        const width = Math.min(workArea.width, Math.max(960, savedWindowBounds.width));
+        const height = Math.min(workArea.height, Math.max(600, savedWindowBounds.height));
+        mainWindow.setBounds({
+          x: Math.max(workArea.x, Math.min(savedWindowBounds.x, workArea.x + workArea.width - width)),
+          y: Math.max(workArea.y, Math.min(savedWindowBounds.y, workArea.y + workArea.height - height)),
+          width,
+          height,
+        });
       } else {
-        mainWindow.setSize(1440, 900);
+        const primaryDisplay = screen.getPrimaryDisplay();
+        const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
+        const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
+        const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+        mainWindow.setSize(initialWidth, initialHeight);
         mainWindow.center();
       }
       fullscreenOrigin = null;
@@ -1071,11 +1084,20 @@ function exitPlayerFullScreen() {
   }
 }
 
+let lastNormalBounds: Rectangle | null = null;
+
 function createMainWindow() {
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
+  const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
+  const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+
   mainWindow = new BrowserWindow({
     title: APP_NAME,
-    width: 1440,
-    height: 900,
+    width: initialWidth,
+    height: initialHeight,
+    minWidth: 960,
+    minHeight: 600,
     backgroundColor: "#00000000",
     transparent: true,
     titleBarStyle: "default" as const,
@@ -1110,6 +1132,20 @@ function createMainWindow() {
     libmpvController.destroyAll("main-window:render-process-gone");
   });
 
+  const updateNormalBounds = () => {
+    if (
+      mainWindow &&
+      !mainWindow.isDestroyed() &&
+      !mainWindow.isMaximized() &&
+      !mainWindow.isMinimized() &&
+      !isAppFullScreen()
+    ) {
+      lastNormalBounds = mainWindow.getBounds();
+    }
+  };
+  mainWindow.on("resize", updateNormalBounds);
+  mainWindow.on("move", updateNormalBounds);
+
   mainWindow.on("maximize", () => {
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send("desktop:maximize-state", true);
@@ -1140,8 +1176,8 @@ function createMainWindow() {
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (process.platform === "win32") {
         isWindowsFullScreen = false;
-        mainWindow.setAutoHideMenuBar(false);
-        mainWindow.setMenuBarVisibility(true);
+        mainWindow.setAutoHideMenuBar(true);
+        mainWindow.setMenuBarVisibility(false);
       }
       fullscreenOrigin = null;
       wasMaximizedBeforePlayerFullscreen = false;
@@ -1525,7 +1561,27 @@ function registerIpcHandlers() {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
     if (mainWindow.isMaximized()) {
       mainWindow.unmaximize();
+      if (lastNormalBounds) {
+        const currentDisplay = screen.getDisplayMatching(lastNormalBounds);
+        const workArea = currentDisplay?.workArea ?? { x: 0, y: 0, width: 1440, height: 900 };
+        const width = Math.min(workArea.width, Math.max(960, lastNormalBounds.width));
+        const height = Math.min(workArea.height, Math.max(600, lastNormalBounds.height));
+        mainWindow.setBounds({
+          x: Math.max(workArea.x, Math.min(lastNormalBounds.x, workArea.x + workArea.width - width)),
+          y: Math.max(workArea.y, Math.min(lastNormalBounds.y, workArea.y + workArea.height - height)),
+          width,
+          height,
+        });
+      } else {
+        const primaryDisplay = screen.getPrimaryDisplay();
+        const workArea = primaryDisplay?.workArea ?? { width: 1440, height: 900 };
+        const initialWidth = Math.min(1440, Math.max(960, Math.round(workArea.width * 0.85)));
+        const initialHeight = Math.min(900, Math.max(600, Math.round(workArea.height * 0.85)));
+        mainWindow.setSize(initialWidth, initialHeight);
+        mainWindow.center();
+      }
     } else {
+      lastNormalBounds = mainWindow.getBounds();
       mainWindow.maximize();
     }
     return true;

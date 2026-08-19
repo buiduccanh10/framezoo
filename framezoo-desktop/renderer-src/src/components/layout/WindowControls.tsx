@@ -74,7 +74,7 @@ export function WindowControls(props: WindowControlsProps) {
       <button
         type="button"
         onClick={handleMinimize}
-        title="Minimize"
+        title="Thu nhỏ xuống thanh tác vụ (Minimize)"
         aria-label="Minimize"
         className={`${baseBtnClass} hover:bg-white/10 ${props.buttonClassName ?? ""}`}
       >
@@ -93,7 +93,11 @@ export function WindowControls(props: WindowControlsProps) {
       <button
         type="button"
         onClick={handleMaximize}
-        title={isMaximized ? "Restore" : "Maximize"}
+        title={
+          isMaximized
+            ? "Thu nhỏ kích thước (Restore)"
+            : "Phóng to cửa sổ (Maximize)"
+        }
         aria-label={isMaximized ? "Restore" : "Maximize"}
         className={`${baseBtnClass} hover:bg-white/10 ${props.buttonClassName ?? ""}`}
       >
@@ -139,7 +143,7 @@ export function WindowControls(props: WindowControlsProps) {
       <button
         type="button"
         onClick={handleClose}
-        title="Close"
+        title="Đóng (Close)"
         aria-label="Close"
         className={`${baseBtnClass} hover:bg-[#e81123] hover:text-white ${props.buttonClassName ?? ""}`}
       >
