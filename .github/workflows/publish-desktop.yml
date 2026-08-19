@@ -18,7 +18,7 @@ on:
 
 concurrency:
   group: publish-desktop-${{ github.event.workflow_run.head_branch || github.ref_name }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   actions: read
@@ -413,7 +413,18 @@ jobs:
           node scripts/verify-desktop-release-bundle.js desktop-release-bundle
           tar -czf desktop-release-bundle.tar.gz -C desktop-release-bundle .
       - name: Install SSH tools
-        run: sudo apt-get update && sudo apt-get install -y openssh-client
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            if sudo apt-get update -o Acquire::Retries=3; then
+              sudo apt-get install -y openssh-client
+              exit 0
+            fi
+            echo "apt-get update failed (attempt ${attempt}/3); retrying..."
+            sleep $((attempt * 5))
+          done
+          exit 1
       - name: Start SSH agent
         env:
           VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
