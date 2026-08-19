@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 import { CaptionCue } from "@/components/player/base/SubtitleView";
+import { useSmoothPlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   captionIsVisible,
   tryParseCanonicalVtt,
@@ -69,35 +70,41 @@ const PipCaptions = memo(function PipCaptionsView(props: {
   state: DesktopPipState;
   controlsVisible: boolean;
 }) {
+  const time = useSmoothPlaybackClock({
+    time: props.state.time,
+    duration: props.state.duration,
+    playbackRate: props.state.playbackRate,
+    isActive: !props.state.paused && props.state.playbackRate > 0,
+  });
   const styling = {
     ...useFallbackSubtitleStyling(),
   };
+  const primaryVttData = props.state.caption?.vttData;
+  const secondaryVttData = props.state.secondaryCaption?.vttData;
+  const primary = useMemo(
+    () => (primaryVttData ? tryParseCanonicalVtt(primaryVttData) : []),
+    [primaryVttData],
+  );
+  const secondary = useMemo(
+    () => (secondaryVttData ? tryParseCanonicalVtt(secondaryVttData) : []),
+    [secondaryVttData],
+  );
   const captions = useMemo(() => {
-    const primary = props.state.caption
-      ? tryParseCanonicalVtt(props.state.caption.vttData)
-      : [];
-    const secondary = props.state.secondaryCaption
-      ? tryParseCanonicalVtt(props.state.secondaryCaption.vttData)
-      : [];
     return {
       primary: primary.filter((cue) =>
-        captionIsVisible(
-          cue.start,
-          cue.end,
-          props.state.secondaryDelay,
-          props.state.time,
-        ),
+        captionIsVisible(cue.start, cue.end, props.state.primaryDelay, time),
       ),
       secondary: secondary.filter((cue) =>
-        captionIsVisible(
-          cue.start,
-          cue.end,
-          props.state.primaryDelay,
-          props.state.time,
-        ),
+        captionIsVisible(cue.start, cue.end, props.state.secondaryDelay, time),
       ),
     };
-  }, [props.state]);
+  }, [
+    primary,
+    props.state.primaryDelay,
+    props.state.secondaryDelay,
+    secondary,
+    time,
+  ]);
 
   const showSecondary =
     props.state.dualSubEnabled &&
