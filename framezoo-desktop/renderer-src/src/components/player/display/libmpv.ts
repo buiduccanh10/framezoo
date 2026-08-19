@@ -104,6 +104,12 @@ type LibMpvElectronApi = {
   exitFullscreen?: () => Promise<void>;
   getFullscreenState?: () => Promise<boolean>;
   minimizeWindow?: () => Promise<void>;
+  maximizeWindow?: () => Promise<void>;
+  closeWindow?: () => Promise<void>;
+  isMaximized?: () => Promise<boolean>;
+  onMaximizeState?: (listener: (isMaximized: boolean) => void) => () => void;
+  isWindows?: boolean;
+  platform?: string;
   onFullscreenState?: (listener: (isFullscreen: boolean) => void) => () => void;
   getStartupNativeWarmupState?: () => Promise<{
     status?: string;

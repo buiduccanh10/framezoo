@@ -988,8 +988,8 @@ function installApplicationMenu() {
 
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.setMenu(applicationMenu);
-    mainWindow.setAutoHideMenuBar(process.platform === "darwin");
-    mainWindow.setMenuBarVisibility(process.platform !== "darwin");
+    mainWindow.setAutoHideMenuBar(true);
+    mainWindow.setMenuBarVisibility(false);
   }
 }
 
@@ -1079,7 +1079,7 @@ function createMainWindow() {
     backgroundColor: "#00000000",
     transparent: true,
     titleBarStyle: "default" as const,
-    autoHideMenuBar: process.platform === "darwin",
+    autoHideMenuBar: true,
     icon: getWindowIconPath(),
     webPreferences: {
       preload: getPreloadPath(),
@@ -1108,6 +1108,18 @@ function createMainWindow() {
   });
   mainWindow.webContents.on("render-process-gone", () => {
     libmpvController.destroyAll("main-window:render-process-gone");
+  });
+
+  mainWindow.on("maximize", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send("desktop:maximize-state", true);
+    }
+  });
+
+  mainWindow.on("unmaximize", () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send("desktop:maximize-state", false);
+    }
   });
 
   mainWindow.on("enter-full-screen", () => {
@@ -1509,6 +1521,27 @@ function registerIpcHandlers() {
     return true;
   });
 
+  ipcMain.handle("desktop:maximize-window", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+    return true;
+  });
+
+  ipcMain.handle("desktop:close-window", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    mainWindow.close();
+    return true;
+  });
+
+  ipcMain.handle("desktop:is-maximized", async () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return false;
+    return mainWindow.isMaximized();
+  });
+
   torrentManager.subscribe(sendTorrentStatus);
 
   ipcMain.handle(
@@ -1640,6 +1673,7 @@ app.on("before-quit", () => {
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 app.commandLine.appendSwitch("enable-features", "DocumentPictureInPictureAPI");
+app.commandLine.appendSwitch("disable-features", "HardwareMediaKeyHandling");
 app.setName(APP_NAME);
 
 if (process.platform === "win32") {
