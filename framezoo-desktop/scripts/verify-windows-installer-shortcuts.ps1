@@ -1,10 +1,13 @@
+[CmdletBinding()]
 param (
-    [Parameter(Mandatory = $false)]
+    [Parameter(Position = 0, Mandatory = $false)]
+    [Alias("Path", "Installer", "FilePath")]
     [string]$InstallerPath,
 
-    [Parameter(Mandatory = $false)]
-    [ValidateSet("x64", "arm64")]
-    [string]$Arch = "x64"
+    [Parameter(Position = 1, Mandatory = $false)]
+    [Alias("Arch", "arch", "architecture", "TargetArch")]
+    [ValidateSet("x64", "arm64", "ia32", "x86")]
+    [string]$Architecture = "x64"
 )
 
 $ErrorActionPreference = "Stop"
@@ -16,7 +19,7 @@ if (-not $InstallerPath) {
         "release",
         "."
     )
-    $installerPattern = "Framezoo-*-$Arch.exe"
+    $installerPattern = "Framezoo-*-$Architecture.exe"
     foreach ($path in $searchPaths) {
         if (Test-Path $path) {
             $found = Get-ChildItem -Path $path -Filter $installerPattern -ErrorAction SilentlyContinue | Select-Object -First 1
@@ -27,20 +30,24 @@ if (-not $InstallerPath) {
         }
     }
     if (-not $InstallerPath) {
-        throw "Installer for architecture '$Arch' matching '$installerPattern' not found."
+        throw "Installer for architecture '$Architecture' matching '$installerPattern' not found."
     }
 }
 
-Write-Host "Verifying Framezoo $Arch installer: $InstallerPath"
+if (-not (Test-Path $InstallerPath)) {
+    throw "Installer path does not exist: $InstallerPath"
+}
 
-# Detect runner architecture
+Write-Host "Verifying Framezoo $Architecture installer: $InstallerPath"
+
+# Normalize runner architecture
 $runnerArch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString().ToLower()
 Write-Host "Host runner architecture: $runnerArch"
 
 # Case 1: Cross-Architecture Verification (e.g. ARM64 installer on x64 Windows runner)
 # Windows on x64 cannot run ARM64 binaries and electron-builder's NSIS script skips extraction on non-ARM64 OS.
-if ($Arch -eq "arm64" -and $runnerArch -ne "arm64") {
-    Write-Host "Cross-architecture detected (Target: $Arch, Runner: $runnerArch)."
+if ($Architecture -eq "arm64" -and $runnerArch -ne "arm64") {
+    Write-Host "Cross-architecture detected (Target: $Architecture, Runner: $runnerArch)."
     Write-Host "Skipping live execution test. Verifying NSIS package integrity via 7-Zip..."
 
     $7zExe = "7z"
@@ -74,10 +81,34 @@ if ($installProcess.ExitCode -ne 0) {
     throw "Installer exited with non-zero exit code: $($installProcess.ExitCode)"
 }
 
-Start-Sleep -Seconds 3
+Start-Sleep -Seconds 4
 
-$desktopShortcut = Join-Path ([Environment]::GetFolderPath("Desktop")) "Framezoo.lnk"
-$startMenuShortcut = Join-Path ([Environment]::GetFolderPath("Programs")) "Framezoo.lnk"
+function Find-FirstExistingPath {
+    param ([string[]]$Candidates)
+    foreach ($cand in $Candidates) {
+        if ($cand -and (Test-Path $cand)) {
+            return $cand
+        }
+    }
+    return $null
+}
+
+$desktopCandidates = @(
+    (Join-Path ([Environment]::GetFolderPath("Desktop")) "Framezoo.lnk"),
+    (Join-Path ([Environment]::GetFolderPath("CommonDesktopDirectory")) "Framezoo.lnk"),
+    (Join-Path $env:USERPROFILE "Desktop\Framezoo.lnk"),
+    (Join-Path $env:PUBLIC "Desktop\Framezoo.lnk")
+) | Select-Object -Unique
+
+$startMenuCandidates = @(
+    (Join-Path ([Environment]::GetFolderPath("Programs")) "Framezoo.lnk"),
+    (Join-Path ([Environment]::GetFolderPath("CommonPrograms")) "Framezoo.lnk"),
+    (Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Framezoo.lnk"),
+    (Join-Path $env:ProgramData "Microsoft\Windows\Start Menu\Programs\Framezoo.lnk")
+) | Select-Object -Unique
+
+$desktopShortcut = Find-FirstExistingPath -Candidates $desktopCandidates
+$startMenuShortcut = Find-FirstExistingPath -Candidates $startMenuCandidates
 
 function Verify-Shortcut {
     param (
@@ -85,15 +116,15 @@ function Verify-Shortcut {
         [string]$Label
     )
 
-    if (-not (Test-Path $Path)) {
-        throw "$Label shortcut does not exist at: $Path"
+    if (-not $Path -or -not (Test-Path $Path)) {
+        throw "$Label shortcut does not exist."
     }
 
     $wshShell = New-Object -ComObject WScript.Shell
     $shortcut = $wshShell.CreateShortcut($Path)
     $target = $shortcut.TargetPath
 
-    Write-Host "$Label shortcut target: $target"
+    Write-Host "$Label shortcut ($Path) target: $target"
 
     if (-not (Test-Path $target)) {
         throw "$Label shortcut target does not exist: $target"
@@ -103,14 +134,18 @@ function Verify-Shortcut {
 }
 
 Verify-Shortcut -Path $desktopShortcut -Label "Desktop"
-if (Test-Path $startMenuShortcut) {
+if ($startMenuShortcut) {
     Verify-Shortcut -Path $startMenuShortcut -Label "Start Menu"
 }
 
 # Cleanup: Uninstall test instance
-$uninstallExe = Join-Path $env:LOCALAPPDATA "Programs\Framezoo\Uninstall Framezoo.exe"
-if (Test-Path $uninstallExe) {
-    Write-Host "Cleaning up test installation..."
+$uninstallCandidates = @(
+    (Join-Path $env:LOCALAPPDATA "Programs\Framezoo\Uninstall Framezoo.exe"),
+    (Join-Path $env:ProgramFiles "Framezoo\Uninstall Framezoo.exe")
+)
+$uninstallExe = Find-FirstExistingPath -Candidates $uninstallCandidates
+if ($uninstallExe) {
+    Write-Host "Cleaning up test installation via $uninstallExe..."
     Start-Process -FilePath $uninstallExe -ArgumentList "/S" -Wait
 }
 
