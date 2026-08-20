@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { DisplayInterface } from "@/components/player/display/displayInterface";
+import { queryClient } from "@/utils/queryClient";
 
 import { usePlayerStore } from "../store";
 import type { Caption, CaptionListItem, PlayerMeta } from "./source";
@@ -74,6 +75,7 @@ describe("external subtitle source transitions", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.clearAllMocks();
+    queryClient.clear();
     subtitleMocks.handlers.length = 0;
     usePlayerStore.getState().reset();
     subtitleMocks.scrape.mockImplementation(
@@ -93,7 +95,14 @@ describe("external subtitle source transitions", () => {
     vi.useRealTimers();
   });
 
-  it("keeps captions when an older request belongs to the current episode", async () => {
+  it("deduplicates in-flight subtitle requests for the same episode", async () => {
+    let resolveScrape: ((captions: CaptionListItem[]) => void) | undefined;
+    subtitleMocks.scrape.mockReturnValueOnce(
+      new Promise<CaptionListItem[]>((resolve) => {
+        resolveScrape = resolve;
+      }),
+    );
+
     const store = usePlayerStore.getState();
 
     store.setMeta(createMeta(5));
@@ -103,18 +112,63 @@ describe("external subtitle source transitions", () => {
     store.setSource(createSource("source-b"), [], 0);
     await vi.advanceTimersByTimeAsync(100);
 
-    const caption = createCaption("episode-5-vietnamese");
-    const handlers = subtitleMocks.handlers;
-    expect(handlers).toHaveLength(2);
+    expect(subtitleMocks.scrape).toHaveBeenCalledTimes(1);
 
-    handlers[0]({
-      captions: [caption],
-      completed: 1,
-      total: 4,
-      sourceName: "Wyzie",
-    });
+    const caption = createCaption("episode-5-vietnamese");
+    resolveScrape?.([caption]);
+    await vi.runAllTimersAsync();
 
     expect(usePlayerStore.getState().captionList).toContainEqual(caption);
+  });
+
+  it("uses the React Query cache without scraping again", async () => {
+    const caption = createCaption("episode-5-vietnamese");
+    subtitleMocks.scrape.mockResolvedValueOnce([caption]);
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(5));
+    store.setSource(createSource("source-a"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(subtitleMocks.scrape).toHaveBeenCalledTimes(1);
+    expect(usePlayerStore.getState().captionList).toContainEqual(caption);
+
+    usePlayerStore.getState().reset();
+    usePlayerStore.getState().setMeta(createMeta(5));
+    usePlayerStore.getState().setSource(createSource("source-b"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(subtitleMocks.scrape).toHaveBeenCalledTimes(1);
+    expect(usePlayerStore.getState().captionList).toContainEqual(caption);
+  });
+
+  it("clears the old cache and replaces external captions on force refresh", async () => {
+    const oldCaption = createCaption("episode-5-old");
+    const newCaption = createCaption("episode-5-new");
+    subtitleMocks.scrape
+      .mockResolvedValueOnce([oldCaption])
+      .mockResolvedValueOnce([newCaption]);
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(5));
+    store.setSource(createSource("source-a"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(usePlayerStore.getState().captionList).toContainEqual(oldCaption);
+
+    await usePlayerStore
+      .getState()
+      .addExternalSubtitles(undefined, { forceRefresh: true });
+
+    const state = usePlayerStore.getState();
+    expect(subtitleMocks.scrape).toHaveBeenCalledTimes(2);
+    expect(state.captionList).not.toContainEqual(oldCaption);
+    expect(state.captionList).toContainEqual(newCaption);
+    const cachedQueries = queryClient
+      .getQueryCache()
+      .findAll({ queryKey: ["externalSubtitles"] });
+    expect(cachedQueries).toHaveLength(1);
+    expect(cachedQueries[0]?.state.data).toEqual([newCaption]);
   });
 
   it("rejects a late caption response from the previous episode", async () => {

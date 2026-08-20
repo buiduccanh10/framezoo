@@ -12,6 +12,12 @@ import { useQualityStore } from "@/stores/quality";
 import { useSubtitleStore } from "@/stores/subtitles";
 import { isAutoplayAllowed } from "@/utils/autoplay";
 import { getExternalSubtitleLanguageKey } from "@/utils/externalSubtitles/language";
+import {
+  EXTERNAL_SUBTITLE_CACHE_GC_MS,
+  EXTERNAL_SUBTITLE_CACHE_TTL_MS,
+  getExternalSubtitleQueryKey,
+  queryClient,
+} from "@/utils/queryClient";
 import googletranslate from "@/utils/translation/googletranslate";
 import {
   applyStoredCaptionAlignment,
@@ -103,6 +109,10 @@ export interface CaptionListItem {
 
 export type SubtitleTrack = "primary" | "secondary";
 
+export interface AddExternalSubtitlesOptions {
+  forceRefresh?: boolean;
+}
+
 export type SubtitleSyncPhase =
   | "idle"
   | "pausing"
@@ -192,7 +202,10 @@ export interface SourceSlice {
   enableAutomaticQuality(): void;
   redisplaySource(startAt: number): void;
   setCaptionAsTrack(asTrack: boolean): void;
-  addExternalSubtitles(requestId?: number): Promise<void>;
+  addExternalSubtitles(
+    requestId?: number,
+    options?: AddExternalSubtitlesOptions,
+  ): Promise<void>;
   translateCaption(
     targetCaption: CaptionListItem,
     targetLanguage: string,
@@ -696,12 +709,16 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       };
     });
   },
-  async addExternalSubtitles(requestId) {
+  async addExternalSubtitles(requestId, options) {
     const store = get();
     if (!store.meta) return;
     const activeRequestId = requestId ?? store.externalSubtitleRequestId + 1;
     const mediaKey = getExternalSubtitleMediaKey(store.meta);
     const requestedMediaKey = getMediaKey(store.meta);
+    const requestedMeta = store.meta;
+    if (!mediaKey || !requestedMediaKey) return;
+    const queryKey = getExternalSubtitleQueryKey(mediaKey);
+    const forceRefresh = options?.forceRefresh === true;
 
     set((s) => {
       if (requestId == null) {
@@ -714,50 +731,82 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           total: 0,
         };
         s.externalSubtitleMediaKey = mediaKey;
+        if (forceRefresh) {
+          s.captionList = s.captionList.filter(
+            (caption) => !caption.opensubtitles,
+          );
+        }
       }
     });
 
     try {
+      if (forceRefresh) {
+        await queryClient.cancelQueries({ queryKey, exact: true });
+        queryClient.removeQueries({ queryKey, exact: true });
+      }
+
       const { scrapeExternalSubtitles } =
         await import("@/utils/externalSubtitles");
-      await scrapeExternalSubtitles(
-        store.meta,
-        ({ captions, completed, total }) => {
-          const currentStore = get();
-          const isSameMedia =
-            getMediaKey(currentStore.meta) === requestedMediaKey;
-          if (!isSameMedia) return;
+      const captions = await queryClient.fetchQuery<CaptionListItem[]>({
+        queryKey,
+        staleTime: EXTERNAL_SUBTITLE_CACHE_TTL_MS,
+        gcTime: EXTERNAL_SUBTITLE_CACHE_GC_MS,
+        queryFn: () =>
+          scrapeExternalSubtitles(
+            requestedMeta,
+            ({ captions: sourceCaptions, completed, total }) => {
+              const currentStore = get();
+              if (
+                getMediaKey(currentStore.meta) !== requestedMediaKey ||
+                currentStore.externalSubtitleRequestId !== activeRequestId
+              ) {
+                return;
+              }
 
-          set((s) => {
-            if (getMediaKey(s.meta) !== requestedMediaKey) return;
+              set((s) => {
+                s.externalSubtitleLoadProgress = {
+                  completed,
+                  total,
+                };
 
-            // Keep results from an older request when the player still shows
-            // the same episode, but never let them update current progress.
-            if (s.externalSubtitleRequestId === activeRequestId) {
-              s.externalSubtitleLoadProgress = {
-                completed,
-                total,
-              };
-            }
+                if (sourceCaptions.length > 0) {
+                  const existingCaptionKeys = new Set(
+                    s.captionList.map(getCaptionIdentityKey),
+                  );
+                  const newCaptions = sourceCaptions.filter(
+                    (caption) =>
+                      !existingCaptionKeys.has(getCaptionIdentityKey(caption)),
+                  );
+                  s.captionList = sortCaptionList([
+                    ...s.captionList,
+                    ...newCaptions,
+                  ]);
+                }
+              });
+            },
+          ),
+      });
 
-            if (captions.length > 0) {
-              const existingCaptionKeys = new Set(
-                s.captionList.map(getCaptionIdentityKey),
-              );
-              const newCaptions = captions.filter(
-                (c) => !existingCaptionKeys.has(getCaptionIdentityKey(c)),
-              );
-              s.captionList = sortCaptionList([
-                ...s.captionList,
-                ...newCaptions,
-              ]);
-            }
-          });
-        },
-      );
+      const currentStore = get();
+      if (
+        getMediaKey(currentStore.meta) === requestedMediaKey &&
+        currentStore.externalSubtitleRequestId === activeRequestId
+      ) {
+        set((s) => {
+          const sourceCaptions = s.captionList.filter(
+            (caption) => !caption.opensubtitles,
+          );
+          s.captionList = sortCaptionList([...sourceCaptions, ...captions]);
+          s.externalSubtitleMediaKey = mediaKey;
+          s.externalSubtitleLoadProgress = {
+            completed: 1,
+            total: 1,
+          };
+        });
+      }
     } catch (error) {
       if (get().externalSubtitleRequestId !== activeRequestId) return;
-      console.error("Failed to scrape external subtitles:", error);
+      console.error("Failed to load external subtitles:", error);
     } finally {
       set((s) => {
         if (s.externalSubtitleRequestId === activeRequestId) {

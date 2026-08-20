@@ -29,17 +29,26 @@ SEARCH_RANGE_MS = MAX_ALIGNMENT_OFFSET_MS
 SEARCH_STEP_MS = 250
 REFINE_RANGE_MS = 750
 REFINE_STEP_MS = 25
+ACTIVITY_FINGERPRINT_BIN_MS = 100
+ACTIVITY_FINGERPRINT_TOP_K = 8
+ACTIVITY_FINGERPRINT_REFINE_RANGE_MS = 500
 SUBTITLE_ACTIVITY_MERGE_GAP_MS = 250
 MAX_SPEECH_ANCHOR_ERROR_MS = 1_800
 MIN_SPEECH_ANCHOR_OVERLAP_MS = 120
 MIN_SPEECH_ANCHOR_COVERAGE = 0.20
 MIN_SPEECH_ANCHOR_COVERAGE_2_ANCHORS = 0.25
+# Subtitle starts are the most reliable boundary for avoiding visible
+# pre-roll. Keep a small lead-in grace period for natural subtitle timing.
+SUBTITLE_EARLY_START_GRACE_MS = 250
+SPEECH_ANCHOR_START_WEIGHT = 0.65
+SPEECH_ANCHOR_END_WEIGHT = 0.35
+SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT = 0.15
 _TRANSCRIPTION_LOCK = threading.Lock()
 
 
 CREDIT_AD_PATTERNS = re.compile(
     r"(?i)("
-    r"https?://|www\.|osdb\.link|\.org\b|\.com\b|\.net\b|\.link\b|\.tv\b|\.me\b|"
+    r"https?://|www\.|osdb\.link|\.org\b|\.com\b|\.net\b|\.link\b|\.tv\b|\.me\b|\.app\b|"
     r"opensubtitles|subscene|addic7ed|podnapisi|yify|rarbg|psa\b|"
     r"vip\s*member|remove\s*all\s*ads|watch\s*online|support\s*us|"
     r"subtitles?\s*(by|downloaded|created|sync)|"
@@ -47,6 +56,17 @@ CREDIT_AD_PATTERNS = re.compile(
     r"dịch\s*bởi|biên\s*dịch|thực\s*hiện\s*bởi|vietsub\s*bởi|"
     r"phimmoi|xemphim|motphim|bilutv|tvhay"
     r")"
+)
+
+MALFORMED_ENCODING_PATTERNS = re.compile(
+    r"\ufffd|[\u0080-\u009f]|"
+    r"(?:\u00c3|\u00c2)[\u0080-\u00bf]|"
+    r"\u00e2(?:[\u0080-\u00bf]|\u20ac|\u2122|\u0153|\u2013|\u2014)|"
+    r"\u00f0[\u0080-\u00bf]"
+)
+MOJIBAKE_SYMBOLS = frozenset(
+    "\u00a4\u00a6\u00ab\u00ac\u00b1\u00b5\u00b6\u00bb\u00bc"
+    "\u00bd\u00be\u00bf\u00d7"
 )
 
 
@@ -61,13 +81,56 @@ class Cue:
 def is_credit_or_ad_cue(cue: Cue) -> bool:
     return bool(CREDIT_AD_PATTERNS.search(cue.block))
 
+def _cue_text(cue: Cue) -> str:
+    lines = cue.block.splitlines()
+    return " ".join(
+        line.strip()
+        for line in lines
+        if line.strip()
+        and not line.strip().isdigit()
+        and not TIMING_RE.match(line)
+    )
+
+def is_malformed_encoding_cue(cue: Cue) -> bool:
+    text = _cue_text(cue)
+    if not text:
+        return False
+    if MALFORMED_ENCODING_PATTERNS.search(text):
+        return True
+
+    compact_text = re.sub(r"\s+", "", text)
+    symbol_count = sum(
+        character in MOJIBAKE_SYMBOLS for character in compact_text
+    )
+    high_byte_count = sum(
+        0x80 <= ord(character) <= 0xFF for character in compact_text
+    )
+    return (
+        symbol_count >= 3
+        and high_byte_count >= 6
+        and symbol_count / max(1, len(compact_text)) >= 0.05
+    )
+
+def filter_alignment_cues(cues: list[Cue]) -> list[Cue]:
+    usable_cues = [
+        cue
+        for cue in cues
+        if not is_credit_or_ad_cue(cue) and not is_malformed_encoding_cue(cue)
+    ]
+    if usable_cues:
+        return usable_cues
+
+    # Preserve the existing ad-only fallback, but never reintroduce
+    # malformed-encoding cues as alignment anchors.
+    return [cue for cue in cues if not is_malformed_encoding_cue(cue)]
+
 
 def estimate_initial_cue_start_ms(cues: list[Cue] | None) -> int | None:
     if not cues:
         return None
-    dialogue_cues = [c for c in cues if not is_credit_or_ad_cue(c)]
+    dialogue_cues = filter_alignment_cues(cues)
     if not dialogue_cues:
-        dialogue_cues = cues
+        return None
     candidates = dialogue_cues[: min(10, len(dialogue_cues))]
     for cue in candidates:
         if cue.end_ms - cue.start_ms >= 800:
@@ -83,12 +146,8 @@ def estimate_subtitle_relative_offset(
     if not primary_cues or not secondary_cues:
         return None
 
-    clean_p = [c for c in primary_cues if not is_credit_or_ad_cue(c)]
-    clean_s = [c for c in secondary_cues if not is_credit_or_ad_cue(c)]
-    if not clean_p:
-        clean_p = primary_cues
-    if not clean_s:
-        clean_s = secondary_cues
+    clean_p = filter_alignment_cues(primary_cues)
+    clean_s = filter_alignment_cues(secondary_cues)
 
     # Use cues from the first 30 minutes (or up to 100 cues) to compare timing cadence
     p_cues = [c for c in clean_p if c.start_ms <= 1_800_000]
@@ -210,8 +269,7 @@ def parse_vtt(text: str) -> list[Cue]:
 
 def parse_alignment_cues(text: str) -> list[Cue]:
     cues = parse_vtt(text)
-    dialogue_cues = [cue for cue in cues if not is_credit_or_ad_cue(cue)]
-    return dialogue_cues or cues
+    return filter_alignment_cues(cues)
 
 
 def decode_wav(data: bytes) -> tuple[list[float], int]:
@@ -398,17 +456,114 @@ def build_shifted_subtitle_intervals(
     )
 
 
-def match_speech_anchors(
+def _fingerprint_bits_for_intervals(
+    intervals: list[tuple[int, int]],
+    origin_ms: int,
+    end_ms: int,
+) -> int:
+    bits = 0
+    bin_ms = ACTIVITY_FINGERPRINT_BIN_MS
+    for start_ms, interval_end_ms in intervals:
+        clipped_start = max(origin_ms, start_ms)
+        clipped_end = min(end_ms, interval_end_ms)
+        if clipped_end <= clipped_start:
+            continue
+
+        first_bin = max(0, (clipped_start - origin_ms) // bin_ms)
+        last_bin = max(
+            first_bin + 1,
+            (clipped_end - origin_ms + bin_ms - 1) // bin_ms,
+        )
+        bits |= ((1 << (last_bin - first_bin)) - 1) << first_bin
+    return bits
+
+
+def _shift_fingerprint_bits(bits: int, offset_ms: int) -> int:
+    offset_bins = int(round(offset_ms / ACTIVITY_FINGERPRINT_BIN_MS))
+    if offset_bins >= 0:
+        return bits << offset_bins
+    return bits >> -offset_bins
+
+
+def _fingerprint_bit_count(bits: int) -> int:
+    bit_count = getattr(bits, "bit_count", None)
+    if bit_count is not None:
+        return bit_count()
+    return bin(bits).count("1")
+
+
+def _build_activity_fingerprint(
+    cues: list[Cue],
+    speech_intervals: list[tuple[int, int]],
+    audio_start_ms: int,
+    audio_end_ms: int,
+) -> tuple[int, int, int]:
+    max_offset_ms = MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS
+    origin_ms = audio_start_ms - max_offset_ms
+    fingerprint_end_ms = audio_end_ms + max_offset_ms
+    audio_mask = _fingerprint_bits_for_intervals(
+        [(audio_start_ms, audio_end_ms)],
+        origin_ms,
+        fingerprint_end_ms,
+    )
+    speech_bits = _fingerprint_bits_for_intervals(
+        clip_intervals(speech_intervals, audio_start_ms, audio_end_ms),
+        origin_ms,
+        fingerprint_end_ms,
+    )
+    subtitle_intervals = merge_activity_intervals(
+        [
+            (cue.start_ms, cue.end_ms)
+            for cue in cues
+            if cue.end_ms > origin_ms and cue.start_ms < fingerprint_end_ms
+        ],
+        SUBTITLE_ACTIVITY_MERGE_GAP_MS,
+    )
+    subtitle_bits = _fingerprint_bits_for_intervals(
+        subtitle_intervals,
+        origin_ms,
+        fingerprint_end_ms,
+    )
+    return speech_bits, subtitle_bits, audio_mask
+
+
+def _score_activity_fingerprint(
+    speech_bits: int,
+    subtitle_bits: int,
+    audio_mask: int,
+    offset_ms: int,
+) -> float:
+    shifted_subtitle_bits = _shift_fingerprint_bits(
+        subtitle_bits,
+        offset_ms,
+    ) & audio_mask
+    speech_count = _fingerprint_bit_count(speech_bits)
+    subtitle_count = _fingerprint_bit_count(shifted_subtitle_bits)
+    if speech_count == 0 or subtitle_count == 0:
+        return 0.0
+
+    overlap_count = _fingerprint_bit_count(speech_bits & shifted_subtitle_bits)
+    union_count = _fingerprint_bit_count(speech_bits | shifted_subtitle_bits)
+    if overlap_count == 0 or union_count == 0:
+        return 0.0
+
+    recall = overlap_count / speech_count
+    precision = overlap_count / subtitle_count
+    iou = overlap_count / union_count
+    return iou * 0.50 + recall * 0.25 + precision * 0.25
+
+
+def _match_speech_anchor_boundaries(
     speech_intervals: list[tuple[int, int]],
     subtitle_intervals: list[tuple[int, int]],
-) -> tuple[int, list[int]]:
+) -> tuple[int, list[tuple[int, int, int]]]:
     used_subtitle_indices: set[int] = set()
-    anchor_errors: list[int] = []
+    anchor_errors: list[tuple[int, int, int]] = []
     last_subtitle_index = -1
 
     for speech_start, speech_end in speech_intervals:
         best_index: int | None = None
-        best_rank: tuple[float, int] | None = None
+        best_rank: tuple[float, float] | None = None
         speech_duration = speech_end - speech_start
 
         for index, (subtitle_start, subtitle_end) in enumerate(
@@ -426,9 +581,20 @@ def match_speech_anchors(
             if overlap < MIN_SPEECH_ANCHOR_OVERLAP_MS:
                 continue
 
-            boundary_error = min(
-                abs(speech_start - subtitle_start),
-                abs(speech_end - subtitle_end),
+            start_error = abs(speech_start - subtitle_start)
+            end_error = abs(speech_end - subtitle_end)
+            early_start_error = max(
+                0,
+                speech_start
+                - subtitle_start
+                - SUBTITLE_EARLY_START_GRACE_MS,
+            )
+            boundary_error = max(start_error, end_error)
+            weighted_boundary_error = (
+                start_error * SPEECH_ANCHOR_START_WEIGHT
+                + end_error * SPEECH_ANCHOR_END_WEIGHT
+                + early_start_error
+                * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT
             )
             overlap_ratio = overlap / max(
                 MIN_SPEECH_ANCHOR_OVERLAP_MS,
@@ -440,7 +606,7 @@ def match_speech_anchors(
             ):
                 continue
 
-            rank = (overlap_ratio, -boundary_error)
+            rank = (overlap_ratio, -weighted_boundary_error)
             if best_rank is None or rank > best_rank:
                 best_index = index
                 best_rank = rank
@@ -452,13 +618,33 @@ def match_speech_anchors(
         last_subtitle_index = best_index
         subtitle_start, subtitle_end = subtitle_intervals[best_index]
         anchor_errors.append(
-            min(
+            (
                 abs(speech_start - subtitle_start),
                 abs(speech_end - subtitle_end),
+                max(
+                    0,
+                    speech_start
+                    - subtitle_start
+                    - SUBTITLE_EARLY_START_GRACE_MS,
+                ),
             )
         )
 
     return len(anchor_errors), anchor_errors
+
+
+def match_speech_anchors(
+    speech_intervals: list[tuple[int, int]],
+    subtitle_intervals: list[tuple[int, int]],
+) -> tuple[int, list[int]]:
+    matched_anchors, boundary_errors = _match_speech_anchor_boundaries(
+        speech_intervals,
+        subtitle_intervals,
+    )
+    return matched_anchors, [
+        min(start_error, end_error)
+        for start_error, end_error, _ in boundary_errors
+    ]
 
 
 def evaluate_offset(
@@ -506,13 +692,36 @@ def evaluate_offset(
             0,
         )
 
-    matched_anchors, anchor_errors = match_speech_anchors(
+    matched_anchors, anchor_errors = _match_speech_anchor_boundaries(
         speech_activity,
         subtitle_activity,
     )
     anchor_coverage = matched_anchors / len(speech_activity)
+    start_errors = [errors[0] for errors in anchor_errors]
+    end_errors = [errors[1] for errors in anchor_errors]
+    early_start_errors = [errors[2] for errors in anchor_errors]
+    median_start_error_ms = (
+        sorted(start_errors)[len(start_errors) // 2]
+        if start_errors
+        else MAX_SPEECH_ANCHOR_ERROR_MS
+    )
+    median_end_error_ms = (
+        sorted(end_errors)[len(end_errors) // 2]
+        if end_errors
+        else MAX_SPEECH_ANCHOR_ERROR_MS
+    )
+    median_early_start_error_ms = (
+        sorted(early_start_errors)[len(early_start_errors) // 2]
+        if early_start_errors
+        else 0
+    )
     median_anchor_error_ms = (
-        sorted(anchor_errors)[len(anchor_errors) // 2]
+        round(
+            median_start_error_ms * SPEECH_ANCHOR_START_WEIGHT
+            + median_end_error_ms * SPEECH_ANCHOR_END_WEIGHT
+            + median_early_start_error_ms
+            * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT
+        )
         if anchor_errors
         else MAX_SPEECH_ANCHOR_ERROR_MS
     )
@@ -520,9 +729,23 @@ def evaluate_offset(
     speech_recall = overlap_duration / speech_duration
     subtitle_precision = overlap_duration / subtitle_duration
     activity_iou = overlap_duration / union_duration
+    start_score = max(
+        0.0,
+        1.0 - median_start_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+    )
+    end_score = max(
+        0.0,
+        1.0 - median_end_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+    )
+    early_start_penalty = min(
+        1.0,
+        median_early_start_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+    )
     boundary_score = max(
         0.0,
-        1.0 - median_anchor_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+        start_score * SPEECH_ANCHOR_START_WEIGHT
+        + end_score * SPEECH_ANCHOR_END_WEIGHT
+        - early_start_penalty * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT,
     )
     score = (
         activity_iou * 0.30
@@ -568,7 +791,7 @@ def find_best_offset(
 ) -> tuple[int, float]:
     centers = search_centers or [0]
 
-    def rank_offset(value: int) -> tuple[float, int]:
+    def rank_offset(value: int) -> tuple[float, int, int]:
         dist_to_center = min(abs(value - c) for c in centers)
         return (
             score_offset(
@@ -579,7 +802,16 @@ def find_best_offset(
                 audio_end_ms,
             ),
             -dist_to_center,
+            -abs(value),
         )
+
+    speech_bits, subtitle_bits, audio_mask = _build_activity_fingerprint(
+        cues,
+        speech_intervals,
+        audio_start_ms,
+        audio_end_ms,
+    )
+
     coarse_candidates_set: set[int] = set()
     for center in centers:
         for offset in range(
@@ -593,12 +825,59 @@ def find_best_offset(
     if not coarse_candidates_set:
         coarse_candidates_set.add(0)
 
-    coarse_offset = max(coarse_candidates_set, key=rank_offset)
-    refined_candidates = range(
-        coarse_offset - REFINE_RANGE_MS,
-        coarse_offset + REFINE_RANGE_MS + 1,
-        REFINE_STEP_MS,
+    fingerprint_ranked_candidates = sorted(
+        coarse_candidates_set,
+        key=lambda value: (
+            _score_activity_fingerprint(
+                speech_bits,
+                subtitle_bits,
+                audio_mask,
+                value,
+            ),
+            -min(abs(value - center) for center in centers),
+            -abs(value),
+        ),
+        reverse=True,
     )
+    top_fingerprint_score = _score_activity_fingerprint(
+        speech_bits,
+        subtitle_bits,
+        audio_mask,
+        fingerprint_ranked_candidates[0],
+    )
+
+    if top_fingerprint_score > 0:
+        coarse_candidates = set(
+            fingerprint_ranked_candidates[:ACTIVITY_FINGERPRINT_TOP_K]
+        )
+        for center in centers:
+            coarse_candidates.add(
+                min(
+                    coarse_candidates_set,
+                    key=lambda value: abs(value - center),
+                )
+            )
+        refined_candidates_set: set[int] = set()
+        for coarse_offset in coarse_candidates:
+            refined_candidates_set.update(
+                range(
+                    coarse_offset - ACTIVITY_FINGERPRINT_REFINE_RANGE_MS,
+                    coarse_offset
+                    + ACTIVITY_FINGERPRINT_REFINE_RANGE_MS
+                    + 1,
+                    REFINE_STEP_MS,
+                )
+            )
+        refined_candidates = refined_candidates_set
+    else:
+        # Preserve the exhaustive path for sparse or empty fingerprints.
+        coarse_offset = max(coarse_candidates_set, key=rank_offset)
+        refined_candidates = range(
+            coarse_offset - REFINE_RANGE_MS,
+            coarse_offset + REFINE_RANGE_MS + 1,
+            REFINE_STEP_MS,
+        )
+
     best_offset = max(refined_candidates, key=rank_offset)
     best_score = score_offset(
         cues,
@@ -781,11 +1060,18 @@ def compute_track_search_centers(
             if abs(hint) <= max_offset_ms:
                 centers.add(hint)
 
-    if cues and speech_intervals and audio_start_ms <= 60_000:
-        sub_first_ms = estimate_initial_cue_start_ms(cues)
-        if sub_first_ms is not None:
-            speech_first_ms = speech_intervals[0][0]
-            speech_guided_offset = speech_first_ms - sub_first_ms
+    if cues and speech_intervals:
+        candidate_cues = filter_alignment_cues(cues)
+        if not candidate_cues:
+            return sorted(centers)
+        speech_first_ms = speech_intervals[0][0]
+        nearest_cue = min(
+            candidate_cues,
+            key=lambda cue: abs(cue.start_ms - speech_first_ms),
+        )
+        anchor_starts = {candidate_cues[0].start_ms, nearest_cue.start_ms}
+        for anchor_start_ms in anchor_starts:
+            speech_guided_offset = speech_first_ms - anchor_start_ms
             if abs(speech_guided_offset) <= max_offset_ms:
                 centers.add(speech_guided_offset)
 
@@ -832,8 +1118,6 @@ def align_speech_batch(
     audio_end_ms: int,
     alignment_result_fn: Callable[..., dict[str, Any]] | None = None,
     parsed_tracks: dict[str, list[Cue] | None] | None = None,
-    delta_hint_ms: int | None = None,
-    has_precomputed_delta: bool = False,
 ) -> dict[str, Any]:
     result_from_speech = alignment_result_fn or alignment_result_from_speech
     speech_intervals = merge_intervals(speech_intervals)
@@ -848,58 +1132,9 @@ def align_speech_batch(
             except (IndexError, ValueError):
                 parsed_tracks[track] = None
 
-    primary_cues = parsed_tracks.get("primary")
-    secondary_cues = parsed_tracks.get("secondary")
-    if not has_precomputed_delta:
-        delta_hint_ms = estimate_subtitle_relative_offset(
-            primary_cues, secondary_cues
-        )
-
     results: dict[str, Any] = {}
-    primary_offset_ms: int | None = None
-
-    # 1. Align primary track first
-    if "primary" in parsed_tracks:
-        cues = parsed_tracks["primary"]
-        if cues is None:
-            results["primary"] = invalid_alignment_result(
-                speech_intervals,
-                "invalid_subtitle",
-            )
-        else:
-            primary_hints = (
-                [-delta_hint_ms] if delta_hint_ms is not None else None
-            )
-            primary_search_centers = compute_track_search_centers(
-                cues,
-                speech_intervals,
-                audio_start_ms,
-                additional_hints=primary_hints,
-            )
-            try:
-                res = result_from_speech(
-                    cues,
-                    speech_intervals,
-                    audio_start_ms,
-                    audio_end_ms,
-                    search_centers=primary_search_centers,
-                )
-            except TypeError:
-                res = result_from_speech(
-                    cues,
-                    speech_intervals,
-                    audio_start_ms,
-                    audio_end_ms,
-                )
-            results["primary"] = res
-            if res.get("aligned") and isinstance(res.get("offsetMs"), int):
-                primary_offset_ms = res["offsetMs"]
-
-    # 2. Align secondary and other tracks
     for subtitle in subtitles:
         track = subtitle["track"]
-        if track == "primary":
-            continue
         cues = parsed_tracks.get(track)
         if cues is None:
             results[track] = invalid_alignment_result(
@@ -908,21 +1143,13 @@ def align_speech_batch(
             )
             continue
 
-        hints: list[int] = []
-        if delta_hint_ms is not None:
-            if primary_offset_ms is not None:
-                hints.append(primary_offset_ms + delta_hint_ms)
-            hints.append(delta_hint_ms)
-
         track_search_centers = compute_track_search_centers(
             cues,
             speech_intervals,
             audio_start_ms,
-            additional_hints=hints,
         )
-
         try:
-            results[track] = result_from_speech(
+            res = result_from_speech(
                 cues,
                 speech_intervals,
                 audio_start_ms,
@@ -930,12 +1157,14 @@ def align_speech_batch(
                 search_centers=track_search_centers,
             )
         except TypeError:
-            results[track] = result_from_speech(
+            res = result_from_speech(
                 cues,
                 speech_intervals,
                 audio_start_ms,
                 audio_end_ms,
             )
+        results[track] = res
+
     return {"results": results}
 
 
@@ -1176,12 +1405,6 @@ def align_speech_windows(
         except (IndexError, ValueError):
             parsed_tracks[track] = None
 
-    primary_cues = parsed_tracks.get("primary")
-    secondary_cues = parsed_tracks.get("secondary")
-    delta_hint_ms = estimate_subtitle_relative_offset(
-        primary_cues, secondary_cues
-    )
-
     for speech_intervals, audio_start_ms, audio_end_ms in windows:
         window_result = align_speech_batch(
             speech_intervals,
@@ -1190,8 +1413,6 @@ def align_speech_windows(
             audio_end_ms,
             alignment_result_fn=alignment_result_fn,
             parsed_tracks=parsed_tracks,
-            delta_hint_ms=delta_hint_ms,
-            has_precomputed_delta=True,
         )
         for track, result in window_result["results"].items():
             entries_by_track.setdefault(track, []).append(

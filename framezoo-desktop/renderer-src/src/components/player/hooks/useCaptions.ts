@@ -7,9 +7,9 @@ import {
   type SubtitleAlignmentTrack,
   alignSubtitlesWithCurrentStream,
   applySubtitleAlignment,
-  areSubtitleAlignmentResultsApplicable,
   getSubtitleAlignmentBaseVtt,
   getSubtitleAlignmentInputVtt,
+  isSubtitleAlignmentResultApplicable,
 } from "@/components/player/utils/subtitleAlignment";
 import { useInstalledAddons } from "@/desktop/addons/store";
 import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
@@ -359,9 +359,9 @@ export function useCaptions() {
             baseVttData: getSubtitleAlignmentBaseVtt(target.caption),
           };
         });
-        const allAligned = areSubtitleAlignmentResultsApplicable(
-          alignedTargets.map(
-            ({ target, result, currentCaption, inputVttData }) => ({
+        const applicableTargets = alignedTargets.filter(
+          ({ target, result, currentCaption, inputVttData }) =>
+            isSubtitleAlignmentResultApplicable({
               result,
               expectedCaptionId: target.caption.id,
               currentCaptionId: currentCaption?.id,
@@ -370,12 +370,9 @@ export function useCaptions() {
                 ? getSubtitleAlignmentInputVtt(currentCaption)
                 : undefined,
             }),
-          ),
         );
 
-        // Dual-subtitle sync is atomic. A partial apply would leave the two
-        // tracks with different timing models while reporting failure.
-        if (!allAligned) {
+        if (applicableTargets.length === 0) {
           return {
             status: "failed",
             errorMessage: batchResult.errorMessage,
@@ -394,7 +391,7 @@ export function useCaptions() {
           currentCaption,
           inputVttData,
           baseVttData,
-        } of alignedTargets) {
+        } of applicableTargets) {
           if (!result || !currentCaption) continue;
           const alignedVtt = applySubtitleAlignment(baseVttData, result);
           const alignment = {

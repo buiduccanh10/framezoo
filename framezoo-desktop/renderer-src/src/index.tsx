@@ -315,7 +315,8 @@ root.render(
             persister: queryPersister,
             dehydrateOptions: {
               shouldDehydrateQuery: (query) =>
-                query.queryKey[0] === "tmdb" &&
+                (query.queryKey[0] === "tmdb" ||
+                  query.queryKey[0] === "externalSubtitles") &&
                 query.state.status === "success",
             },
           }}

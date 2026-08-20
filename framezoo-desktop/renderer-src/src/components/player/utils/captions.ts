@@ -69,6 +69,32 @@ export function getCaptionTimelineIndex(
   return nextIndex === -1 ? cues.length - 1 : Math.max(0, nextIndex - 1);
 }
 
+export function getCaptionLookahead(
+  cues: CaptionCueType[],
+  delay: number,
+  currentTime: number,
+): {
+  currentIndex: number | null;
+  currentCue: CaptionCueType | null;
+  nextIndex: number | null;
+  nextCue: CaptionCueType | null;
+} {
+  const currentIndex = cues.findIndex(({ start, end }) =>
+    captionIsVisible(start, end, delay, currentTime),
+  );
+  const nextIndex = cues.findIndex(
+    ({ start }, index) =>
+      index > currentIndex && start / 1000 + delay > currentTime,
+  );
+
+  return {
+    currentIndex: currentIndex === -1 ? null : currentIndex,
+    currentCue: currentIndex === -1 ? null : (cues[currentIndex] ?? null),
+    nextIndex: nextIndex === -1 ? null : nextIndex,
+    nextCue: nextIndex === -1 ? null : (cues[nextIndex] ?? null),
+  };
+}
+
 export function getCaptionTimelineNavigationIndex(
   currentIndex: number | null,
   direction: -1 | 1,

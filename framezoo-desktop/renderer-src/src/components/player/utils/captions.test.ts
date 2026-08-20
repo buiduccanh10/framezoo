@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   captionIsVisible,
+  getCaptionLookahead,
   getCaptionTimelineIndex,
   normalizeSubtitleToVtt,
   parseCanonicalVtt,
@@ -146,6 +147,40 @@ First
 00:00:02.000 --> 00:00:03.000
 Second`);
     expect(getCaptionTimelineIndex(cues, 0, 2)).toBe(1);
+  });
+
+  it("returns the active cue and its future cue for layout lookahead", () => {
+    const cues = parseCanonicalVtt(`WEBVTT
+
+00:00:01.000 --> 00:00:02.000
+First
+
+00:00:03.000 --> 00:00:04.000
+Second`);
+
+    expect(getCaptionLookahead(cues, 0, 1.5)).toMatchObject({
+      currentIndex: 0,
+      currentCue: cues[0],
+      nextIndex: 1,
+      nextCue: cues[1],
+    });
+  });
+
+  it("returns the first future cue while playback is in a gap", () => {
+    const cues = parseCanonicalVtt(`WEBVTT
+
+00:00:01.000 --> 00:00:02.000
+First
+
+00:00:03.000 --> 00:00:04.000
+Second`);
+
+    expect(getCaptionLookahead(cues, 0, 2.5)).toMatchObject({
+      currentIndex: null,
+      currentCue: null,
+      nextIndex: 1,
+      nextCue: cues[1],
+    });
   });
 
   it("shifts cues piecewise according to defined timeline segments", () => {

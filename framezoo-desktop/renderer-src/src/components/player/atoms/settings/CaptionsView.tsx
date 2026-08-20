@@ -622,7 +622,7 @@ export function CaptionsView({
   };
   const handleRefreshExternalSubtitles = useCallback(() => {
     if (isLoadingExternalSubtitles) return;
-    void addExternalSubtitles();
+    void addExternalSubtitles(undefined, { forceRefresh: true });
   }, [addExternalSubtitles, isLoadingExternalSubtitles]);
   const renderHeaderActions = (settingsPath: string) => (
     <div className="flex items-center gap-1">
