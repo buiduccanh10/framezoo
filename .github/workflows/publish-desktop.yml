@@ -330,6 +330,22 @@ jobs:
       - name: Build desktop artifacts
         shell: bash
         run: ${{ matrix.command }}
+      - name: Verify installer shortcuts
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem `
+            -Path framezoo-desktop/release `
+            -Filter "Framezoo-*-${{ matrix.arch }}.exe" `
+            -File |
+            Select-Object -First 1
+
+          if (-not $installer) {
+            throw "Windows ${{ matrix.arch }} installer was not generated."
+          }
+
+          ./framezoo-desktop/scripts/verify-windows-installer-shortcuts.ps1 `
+            -InstallerPath $installer.FullName `
+            -Architecture "${{ matrix.arch }}"
       # Strongest gate: load the addon exactly as the packaged app would, from
       # the packaged output, inside real Electron. A broken or missing native
       # binary fails the job and the release is never published.
