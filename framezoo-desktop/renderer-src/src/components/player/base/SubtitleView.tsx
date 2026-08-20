@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   type CaptionCueType,
   captionIsVisible,
+  getCaptionLookahead,
   makeQueId,
   sanitize,
   tryParseCanonicalVtt,
@@ -40,10 +41,59 @@ function useSeekFrozenCaptions<T>(
   return isSeeking ? lastStableCaptions.current : visibleCaptions;
 }
 
+function useSeekFrozenValue<T>(value: T, isSeeking: boolean): T {
+  const lastStableValue = useRef(value);
+
+  useEffect(() => {
+    if (!isSeeking) {
+      lastStableValue.current = value;
+    }
+  }, [isSeeking, value]);
+
+  return isSeeking ? lastStableValue.current : value;
+}
+
 type VisibleCaptionCue = {
   cue: CaptionCueType;
   sourceIndex: number;
 };
+
+type CaptionRenderState = {
+  visibleCaptions: VisibleCaptionCue[];
+  nextCaption: VisibleCaptionCue | null;
+};
+
+const SUBTITLE_FADE_DURATION_MS = 140;
+
+function getCaptionCueKey(caption: VisibleCaptionCue): string {
+  return makeQueId(caption.sourceIndex, caption.cue.start, caption.cue.end);
+}
+
+function getCaptionListKey(captions: VisibleCaptionCue[]): string {
+  return captions.map(getCaptionCueKey).join("|") || "empty";
+}
+
+function getCaptionRenderState(
+  parsedCaptions: CaptionCueType[],
+  delay: number,
+  videoTime: number,
+): CaptionRenderState {
+  const visibleCaptions = parsedCaptions.flatMap((cue, sourceIndex) =>
+    captionIsVisible(cue.start, cue.end, delay, videoTime)
+      ? [{ cue, sourceIndex }]
+      : [],
+  );
+  const lookahead = getCaptionLookahead(parsedCaptions, delay, videoTime);
+  const nextCaption =
+    lookahead.nextIndex === null || !parsedCaptions[lookahead.nextIndex]
+      ? null
+      : {
+          cue: parsedCaptions[lookahead.nextIndex],
+          sourceIndex: lookahead.nextIndex,
+        };
+
+  return { visibleCaptions, nextCaption };
+}
 
 function getRenderedSubtitleStyling(
   styling: SubtitleStyling,
@@ -171,9 +221,8 @@ export function CaptionCue({
 
   return (
     <p
-      className="mb-1 rounded px-4 py-1 text-center leading-normal transition-all duration-150 ease-out inline-block max-w-[90vw] break-words"
+      className="mb-1 inline-block max-w-[90vw] break-words rounded px-4 py-1 text-center leading-normal"
       style={{
-        transition: "all 0.15s ease-out",
         ...(nativePictureInPictureStyles ?? {
           marginBottom: "0.25rem",
           borderRadius: "0.25rem",
@@ -204,6 +253,175 @@ export function CaptionCue({
   );
 }
 
+function SubtitleTrackSlot({
+  currentCaptions,
+  nextCaption,
+  styling,
+  overrideCasing,
+  useNativePictureInPictureStyle = false,
+  opacity = 1,
+  layoutKey,
+}: {
+  currentCaptions: VisibleCaptionCue[];
+  nextCaption: VisibleCaptionCue | null;
+  styling: SubtitleStyling;
+  overrideCasing: boolean;
+  useNativePictureInPictureStyle?: boolean;
+  opacity?: number;
+  layoutKey: string;
+}) {
+  const currentKey = getCaptionListKey(currentCaptions);
+  const shouldMeasureLookahead = currentCaptions.length > 0;
+  const nextKey =
+    shouldMeasureLookahead && nextCaption
+      ? getCaptionCueKey(nextCaption)
+      : "empty";
+  const currentLayerRef = useRef<HTMLDivElement>(null);
+  const nextLayerRef = useRef<HTMLDivElement>(null);
+  const outgoingLayerRef = useRef<HTMLDivElement>(null);
+  const currentCaptionsRef = useRef(currentCaptions);
+  const displayedLayerRef = useRef({
+    key: currentKey,
+    captions: currentCaptions,
+  });
+  const [outgoingLayer, setOutgoingLayer] = useState<{
+    key: string;
+    captions: VisibleCaptionCue[];
+  } | null>(null);
+  const [incomingVisible, setIncomingVisible] = useState(true);
+  const [slotHeight, setSlotHeight] = useState(0);
+  const slotHeightRef = useRef(0);
+
+  currentCaptionsRef.current = currentCaptions;
+
+  useLayoutEffect(() => {
+    if (displayedLayerRef.current.key === currentKey) return;
+
+    const previousLayer = displayedLayerRef.current;
+    displayedLayerRef.current = {
+      key: currentKey,
+      captions: currentCaptionsRef.current,
+    };
+    setOutgoingLayer(previousLayer);
+    setIncomingVisible(false);
+
+    const frame = window.requestAnimationFrame(() => {
+      setIncomingVisible(true);
+    });
+    const timeout = window.setTimeout(() => {
+      setOutgoingLayer(null);
+    }, SUBTITLE_FADE_DURATION_MS);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
+    };
+  }, [currentKey]);
+
+  useLayoutEffect(() => {
+    slotHeightRef.current = 0;
+    setSlotHeight(0);
+  }, [layoutKey]);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const measuredHeight = Math.ceil(
+        Math.max(
+          currentLayerRef.current?.getBoundingClientRect().height ?? 0,
+          shouldMeasureLookahead
+            ? (nextLayerRef.current?.getBoundingClientRect().height ?? 0)
+            : 0,
+          outgoingLayerRef.current?.getBoundingClientRect().height ?? 0,
+        ),
+      );
+      if (measuredHeight === slotHeightRef.current) return;
+
+      slotHeightRef.current = measuredHeight;
+      setSlotHeight(measuredHeight);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+
+    if (typeof ResizeObserver === "undefined") {
+      return () => window.removeEventListener("resize", measure);
+    }
+
+    const observer = new ResizeObserver(measure);
+    [currentLayerRef.current, nextLayerRef.current, outgoingLayerRef.current]
+      .filter((element): element is HTMLDivElement => element !== null)
+      .forEach((element) => observer.observe(element));
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [
+    currentKey,
+    nextKey,
+    layoutKey,
+    outgoingLayer?.key,
+    shouldMeasureLookahead,
+  ]);
+
+  const renderCaptions = (captions: VisibleCaptionCue[], keyPrefix: string) =>
+    captions.map(({ cue, sourceIndex }) => (
+      <CaptionCue
+        key={`${keyPrefix}-${getCaptionCueKey({ cue, sourceIndex })}`}
+        text={cue.content}
+        styling={styling}
+        overrideCasing={overrideCasing}
+        useNativePictureInPictureStyle={useNativePictureInPictureStyle}
+      />
+    ));
+
+  return (
+    <div
+      className="relative w-full"
+      style={{
+        height: slotHeight > 0 ? `${slotHeight}px` : undefined,
+        transition: `height ${SUBTITLE_FADE_DURATION_MS}ms ease-out`,
+      }}
+    >
+      <div
+        ref={currentLayerRef}
+        className={`absolute inset-x-0 bottom-0 flex justify-center transition-opacity ease-out ${
+          incomingVisible ? "opacity-100" : "opacity-0"
+        }`}
+        style={{
+          opacity: incomingVisible ? opacity : 0,
+          transitionDuration: `${SUBTITLE_FADE_DURATION_MS}ms`,
+        }}
+      >
+        {renderCaptions(currentCaptions, "current")}
+      </div>
+
+      {outgoingLayer && (
+        <div
+          ref={outgoingLayerRef}
+          className="absolute inset-x-0 bottom-0 flex justify-center opacity-0"
+          style={{ opacity: incomingVisible ? 0 : opacity }}
+        >
+          {renderCaptions(
+            outgoingLayer.captions,
+            `outgoing-${outgoingLayer.key}`,
+          )}
+        </div>
+      )}
+
+      {shouldMeasureLookahead && nextCaption && (
+        <div
+          ref={nextLayerRef}
+          aria-hidden="true"
+          className="invisible absolute inset-x-0 bottom-0 flex justify-center"
+        >
+          {renderCaptions([nextCaption], "lookahead")}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function SubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
@@ -221,33 +439,29 @@ export function SubtitleRenderer(props?: {
     [vttData],
   );
 
-  const visibleCaptions = useMemo(
-    () =>
-      parsedCaptions.flatMap((cue, sourceIndex) =>
-        captionIsVisible(cue.start, cue.end, delay, videoTime)
-          ? [{ cue, sourceIndex }]
-          : [],
-      ),
+  const renderState = useMemo(
+    () => getCaptionRenderState(parsedCaptions, delay, videoTime),
     [parsedCaptions, videoTime, delay],
   );
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
-    visibleCaptions,
+    renderState.visibleCaptions,
+    isSeeking,
+  );
+  const nextCaption = useSeekFrozenValue<VisibleCaptionCue | null>(
+    renderState.nextCaption,
     isSeeking,
   );
 
   return (
-    <div className="transition-all duration-200 ease-out flex flex-col items-center">
-      {captionsToRender.map(({ cue, sourceIndex }) => (
-        <CaptionCue
-          key={makeQueId(sourceIndex, cue.start, cue.end)}
-          text={cue.content}
-          styling={renderedStyling}
-          overrideCasing={overrideCasing}
-          useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
-        />
-      ))}
-    </div>
+    <SubtitleTrackSlot
+      currentCaptions={captionsToRender}
+      nextCaption={nextCaption}
+      styling={renderedStyling}
+      overrideCasing={overrideCasing}
+      useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
+      layoutKey={`${vttData ?? ""}|${renderedStyling.size}|${renderedStyling.bold}|${props?.useNativePictureInPictureStyle ? "pip" : "player"}`}
+    />
   );
 }
 
@@ -273,38 +487,32 @@ export function SecondarySubtitleRenderer(props?: {
     [vttData],
   );
 
-  const visibleCaptions = useMemo(
-    () =>
-      parsedCaptions.flatMap((cue, sourceIndex) =>
-        captionIsVisible(cue.start, cue.end, delay, videoTime)
-          ? [{ cue, sourceIndex }]
-          : [],
-      ),
+  const renderState = useMemo(
+    () => getCaptionRenderState(parsedCaptions, delay, videoTime),
     [parsedCaptions, videoTime, delay],
   );
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
-    visibleCaptions,
+    renderState.visibleCaptions,
+    isSeeking,
+  );
+  const nextCaption = useSeekFrozenValue<VisibleCaptionCue | null>(
+    renderState.nextCaption,
     isSeeking,
   );
 
   if (!vttData) return null;
 
   return (
-    <div
-      className="opacity-90 transition-all duration-200 ease-out flex flex-col items-center"
-      style={{ opacity: 0.9 }}
-    >
-      {captionsToRender.map(({ cue, sourceIndex }) => (
-        <CaptionCue
-          key={`secondary-${makeQueId(sourceIndex, cue.start, cue.end)}`}
-          text={cue.content}
-          styling={renderedStyling}
-          overrideCasing={overrideCasing}
-          useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
-        />
-      ))}
-    </div>
+    <SubtitleTrackSlot
+      currentCaptions={captionsToRender}
+      nextCaption={nextCaption}
+      styling={renderedStyling}
+      overrideCasing={overrideCasing}
+      useNativePictureInPictureStyle={props?.useNativePictureInPictureStyle}
+      opacity={0.9}
+      layoutKey={`${vttData}|${renderedStyling.size}|${renderedStyling.bold}|${props?.useNativePictureInPictureStyle ? "pip" : "player"}`}
+    />
   );
 }
 
@@ -357,9 +565,9 @@ export function SubtitleView(props: { controlsShown: boolean }) {
   if (!shouldRenderPrimaryCaption && !shouldRenderSecondaryCaption) return null;
 
   const subtitleView = (
-    <Transition animation="slide-up" show>
+    <Transition animation="none" show>
       <div
-        className="pointer-events-none z-50 text-white absolute w-full flex flex-col items-center transition-all duration-200 ease-out"
+        className="pointer-events-none z-50 text-white absolute w-full flex flex-col items-center"
         style={{
           position: "absolute",
           left: 0,
@@ -370,7 +578,6 @@ export function SubtitleView(props: { controlsShown: boolean }) {
           alignItems: "center",
           pointerEvents: "none",
           color: "white",
-          transition: "bottom 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
           bottom:
             pictureInPictureMode === "document"
               ? "var(--framezoo-document-pip-subtitle-bottom, 1.15rem)"
