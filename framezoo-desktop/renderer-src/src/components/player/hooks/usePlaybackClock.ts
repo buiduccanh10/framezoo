@@ -15,6 +15,8 @@ export interface PlaybackClockAnchor {
   timestamp: number;
 }
 
+export const MAX_EXTRAPOLATION_SECONDS = 0.5;
+
 export function getProjectedPlaybackTime(
   anchor: PlaybackClockAnchor,
   now: number,
@@ -23,7 +25,10 @@ export function getProjectedPlaybackTime(
 ) {
   if (anchor.timestamp <= 0) return anchor.time;
 
-  const elapsed = Math.max(0, now - anchor.timestamp) / 1000;
+  const elapsed = Math.min(
+    MAX_EXTRAPOLATION_SECONDS,
+    Math.max(0, now - anchor.timestamp) / 1000,
+  );
   return Math.max(
     0,
     Math.min(
@@ -33,16 +38,6 @@ export function getProjectedPlaybackTime(
   );
 }
 
-export function getMonotonicPlaybackTime(
-  authoritativeTime: number,
-  projectedTime: number,
-  previousTime: number,
-  duration: number,
-) {
-  const nextTime = Math.max(0, authoritativeTime, projectedTime, previousTime);
-  return Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, nextTime);
-}
-
 export function useSmoothPlaybackClock({
   time,
   duration,
@@ -50,30 +45,15 @@ export function useSmoothPlaybackClock({
   isActive,
 }: SmoothPlaybackClockOptions): number {
   const [clockTime, setClockTime] = useState(time);
-  const clockTimeRef = useRef(time);
-  const anchorRef = useRef<PlaybackClockAnchor>({ time, timestamp: 0 });
+  const anchorRef = useRef<PlaybackClockAnchor>({
+    time,
+    timestamp: isActive ? performance.now() : 0,
+  });
 
   useEffect(() => {
-    const timestamp = performance.now();
-    const previousTime = clockTimeRef.current;
-    const projectedTime = getProjectedPlaybackTime(
-      anchorRef.current,
-      timestamp,
-      playbackRate,
-      duration,
-    );
-    const nextTime = isActive
-      ? getMonotonicPlaybackTime(time, projectedTime, previousTime, duration)
-      : Math.max(
-          0,
-          Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, time),
-        );
-
-    anchorRef.current = { time: nextTime, timestamp };
-    clockTimeRef.current = nextTime;
-    if (nextTime !== previousTime) {
-      setClockTime(nextTime);
-    }
+    const timestamp = isActive ? performance.now() : 0;
+    anchorRef.current = { time, timestamp };
+    setClockTime(time);
 
     if (!isActive || playbackRate <= 0) {
       return;
@@ -87,16 +67,8 @@ export function useSmoothPlaybackClock({
         playbackRate,
         duration,
       );
-      const next = getMonotonicPlaybackTime(
-        clockTimeRef.current,
-        projected,
-        clockTimeRef.current,
-        duration,
-      );
-
-      clockTimeRef.current = next;
-      setClockTime(next);
-      if (duration <= 0 || next < duration) {
+      setClockTime(projected);
+      if (duration <= 0 || projected < duration) {
         animationFrame = requestAnimationFrame(tick);
       }
     };

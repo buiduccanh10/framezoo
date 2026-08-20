@@ -295,14 +295,23 @@ function SubtitleTrackSlot({
   currentCaptionsRef.current = currentCaptions;
 
   useLayoutEffect(() => {
-    if (displayedLayerRef.current.key === currentKey) return;
+    if (displayedLayerRef.current.key === currentKey) {
+      if (!incomingVisible) {
+        setIncomingVisible(true);
+      }
+      return;
+    }
 
     const previousLayer = displayedLayerRef.current;
     displayedLayerRef.current = {
       key: currentKey,
       captions: currentCaptionsRef.current,
     };
-    setOutgoingLayer(previousLayer);
+    if (previousLayer.captions.length > 0) {
+      setOutgoingLayer(previousLayer);
+    } else {
+      setOutgoingLayer(null);
+    }
     setIncomingVisible(false);
 
     const frame = window.requestAnimationFrame(() => {
@@ -316,7 +325,7 @@ function SubtitleTrackSlot({
       window.cancelAnimationFrame(frame);
       window.clearTimeout(timeout);
     };
-  }, [currentKey]);
+  }, [currentKey, incomingVisible]);
 
   useLayoutEffect(() => {
     slotHeightRef.current = 0;
@@ -399,8 +408,11 @@ function SubtitleTrackSlot({
       {outgoingLayer && (
         <div
           ref={outgoingLayerRef}
-          className="absolute inset-x-0 bottom-0 flex justify-center opacity-0"
-          style={{ opacity: incomingVisible ? 0 : opacity }}
+          className="absolute inset-x-0 bottom-0 flex justify-center transition-opacity ease-out"
+          style={{
+            opacity: incomingVisible ? 0 : opacity,
+            transitionDuration: `${SUBTITLE_FADE_DURATION_MS}ms`,
+          }}
         >
           {renderCaptions(
             outgoingLayer.captions,
