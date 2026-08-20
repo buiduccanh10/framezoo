@@ -5,7 +5,7 @@ param (
     [string]$InstallerPath,
 
     [Parameter(Position = 1, Mandatory = $false)]
-    [Alias("Arch", "arch", "architecture", "TargetArch")]
+    [Alias("Arch", "TargetArch")]
     [ValidateSet("x64", "arm64", "ia32", "x86")]
     [string]$Architecture = "x64"
 )
