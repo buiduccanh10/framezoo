@@ -17,6 +17,15 @@ export type AddonStreamMedia = {
 export const ADDON_STREAMS_STALE_TIME_MS = 10 * 60 * 1000;
 export const ADDON_STREAMS_GC_TIME_MS = 60 * 60 * 1000;
 
+export interface AddonStreamPreference {
+  addonId: string;
+  sourceKind?: AddonStream["kind"];
+  quality: string;
+  name: string;
+  title: string;
+  bingeGroup?: string;
+}
+
 export function getAddonStreamQueryKey(
   addon: InstalledAddon,
   media: AddonStreamMedia,
@@ -32,6 +41,70 @@ export function getAddonStreamQueryKey(
     media.season ?? null,
     media.episode ?? null,
   ] as const;
+}
+
+export function getAddonStreamQuality(stream: AddonStream): string {
+  const text = [stream.name, stream.title, stream.description, stream.fileName]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  if (/\b(4k|2160p|uhd)\b/.test(text)) return "4K";
+  if (/\b(1440p|2k|qhd)\b/.test(text)) return "1440p";
+  if (/\b(1080p|1080i|fhd|full\s*hd)\b/.test(text)) return "1080p";
+  if (/\b(720p|720i|hd)\b/.test(text)) return "720p";
+  if (/\b(480p|480i|360p|240p|sd|dvd|cam|ts)\b/.test(text)) return "480p";
+  return "other";
+}
+
+function streamLines(value: string) {
+  return value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function extractPreferenceWords(value: string): string[] {
+  return value.toLowerCase().match(/[a-z]{4,}/g) || [];
+}
+
+export function matchesAddonStreamPreference(
+  stream: AddonStream,
+  preference: AddonStreamPreference,
+): boolean {
+  if (
+    stream.addonId !== preference.addonId ||
+    (preference.sourceKind && stream.kind !== preference.sourceKind) ||
+    getAddonStreamQuality(stream) !== preference.quality
+  ) {
+    return false;
+  }
+
+  // Stremio's stable cross-episode identity is bingeGroup. Do not fall back
+  // to title heuristics when the selected stream supplied one.
+  if (preference.bingeGroup) {
+    return stream.bingeGroup === preference.bingeGroup;
+  }
+
+  const streamName = stream.name || "";
+  if (streamName !== (preference.name || "")) return false;
+
+  const streamTitleLines = streamLines(stream.title || "");
+  const preferenceTitleLines = streamLines(preference.title || "");
+  if (streamTitleLines.length === 0 || preferenceTitleLines.length === 0) {
+    return stream.title === preference.title;
+  }
+
+  const streamLastLine = streamTitleLines[streamTitleLines.length - 1];
+  const preferenceLastLine =
+    preferenceTitleLines[preferenceTitleLines.length - 1];
+  const streamWords = extractPreferenceWords(streamLastLine);
+  const preferenceWords = extractPreferenceWords(preferenceLastLine);
+
+  return (
+    streamWords.some((word) => preferenceWords.includes(word)) ||
+    streamLastLine === preferenceLastLine
+  );
 }
 
 function getStreamKind(stream: StremioStream): AddonStream["kind"] | null {

@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { normalizeManifest } from "./manifest";
 import {
+  getAddonStreamQuality,
   getAddonStreamQueryKey,
   loadAllAddonStreamsDetailed,
+  matchesAddonStreamPreference,
   normalizeAddonStreams,
 } from "./streams";
 
@@ -76,6 +78,51 @@ describe("addon stream normalization", () => {
         "Reacher - Temporada 1 [HDTV 720p][Cap.101].mkv\n" +
         "👤 2 💾 1.52 GB 🌐 Peerflix",
     });
+  });
+
+  it("matches the same addon stream preference across episodes by binge group", () => {
+    const [selectedStream] = normalizeAddonStreams(addon, [
+      {
+        name: "1080p",
+        title: "Show S01E01 Release",
+        url: "magnet:?xt=urn:btih:episode-one",
+        behaviorHints: {
+          bingeGroup: "example-1080p",
+        },
+      },
+    ]);
+    const [nextEpisodeStream] = normalizeAddonStreams(addon, [
+      {
+        name: "1080p",
+        title: "Show S01E02 Release",
+        url: "magnet:?xt=urn:btih:episode-two",
+        behaviorHints: {
+          bingeGroup: "example-1080p",
+        },
+      },
+    ]);
+
+    expect(getAddonStreamQuality(selectedStream)).toBe("1080p");
+    expect(
+      matchesAddonStreamPreference(nextEpisodeStream, {
+        addonId: addon.manifest.id,
+        sourceKind: "torrent",
+        quality: "1080p",
+        name: selectedStream.name,
+        title: selectedStream.title,
+        bingeGroup: selectedStream.bingeGroup,
+      }),
+    ).toBe(true);
+    expect(
+      matchesAddonStreamPreference(nextEpisodeStream, {
+        addonId: addon.manifest.id,
+        sourceKind: "torrent",
+        quality: "1080p",
+        name: selectedStream.name,
+        title: selectedStream.title,
+        bingeGroup: "other-group",
+      }),
+    ).toBe(false);
   });
 });
 

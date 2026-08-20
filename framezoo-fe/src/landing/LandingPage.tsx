@@ -21,6 +21,7 @@ import {
 import { LandingLanguageSelector } from "./LandingLanguageSelector";
 import { LandingParticles } from "./LandingParticles";
 import { applyLandingSeo } from "./seo";
+import { useLandingMotion } from "./useLandingMotion";
 import "./landing.css";
 
 export function LandingPage() {
@@ -29,6 +30,7 @@ export function LandingPage() {
   const shellRef = useRef<HTMLDivElement>(null);
   const topSentinelRef = useRef<HTMLDivElement>(null);
   const activeCopy = getLandingCopy(locale);
+  useLandingMotion(shellRef);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -62,41 +64,6 @@ export function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const shell = shellRef.current;
-    if (!shell) return;
-
-    const revealNodes = Array.from(
-      shell.querySelectorAll<HTMLElement>(".landing-scroll-reveal"),
-    );
-    shell.classList.add("is-motion-ready");
-
-    if (typeof IntersectionObserver === "undefined") {
-      revealNodes.forEach((node) => node.classList.add("is-visible"));
-      return () => shell.classList.remove("is-motion-ready");
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        rootMargin: "0px 0px -10% 0px",
-        threshold: 0.16,
-      },
-    );
-
-    revealNodes.forEach((node) => observer.observe(node));
-    return () => {
-      observer.disconnect();
-      shell.classList.remove("is-motion-ready");
-    };
-  }, []);
-
-  useEffect(() => {
     const sentinel = topSentinelRef.current;
     if (!sentinel || typeof IntersectionObserver === "undefined") return;
 
@@ -122,11 +89,14 @@ export function LandingPage() {
     }
 
     const href = event.currentTarget.getAttribute("href");
-    const id = href?.startsWith("#") ? getLandingHashId(href) : null;
-    if (!href || !id || !document.getElementById(id)) return;
+    const scrollTarget =
+      event.currentTarget.dataset.scrollTarget ??
+      (href?.startsWith("#") ? href : null);
+    const id = scrollTarget ? getLandingHashId(scrollTarget) : null;
+    if (!scrollTarget || !id || !document.getElementById(id)) return;
 
     event.preventDefault();
-    navigateToLandingHash(href);
+    navigateToLandingHash(scrollTarget);
   };
 
   return (
@@ -150,19 +120,39 @@ export function LandingPage() {
           />
         </a>
         <nav className="landing-nav-links" aria-label="Primary navigation">
-          <a href="#top" onClick={handleLandingHashClick}>
+          <a
+            href="/"
+            data-scroll-target="#top"
+            onClick={handleLandingHashClick}
+          >
             {activeCopy.nav.home}
           </a>
-          <a href="#experience" onClick={handleLandingHashClick}>
+          <a
+            href="/experience"
+            data-scroll-target="#experience"
+            onClick={handleLandingHashClick}
+          >
             {activeCopy.nav.features}
           </a>
-          <a href="#ecosystem" onClick={handleLandingHashClick}>
+          <a
+            href="/ecosystem"
+            data-scroll-target="#ecosystem"
+            onClick={handleLandingHashClick}
+          >
             {activeCopy.nav.addons}
           </a>
-          <a href="#addon-guide" onClick={handleLandingHashClick}>
+          <a
+            href="/create-addon"
+            data-scroll-target="#addon-guide"
+            onClick={handleLandingHashClick}
+          >
             {activeCopy.nav.addonGuide}
           </a>
-          <a href="#download" onClick={handleLandingHashClick}>
+          <a
+            href="/download"
+            data-scroll-target="#download"
+            onClick={handleLandingHashClick}
+          >
             {activeCopy.nav.download}
           </a>
           <LandingLanguageSelector

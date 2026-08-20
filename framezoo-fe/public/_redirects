@@ -1,3 +1,7 @@
 /assets/* /assets/:splat 200
+/experience /experience/index.html 200
+/ecosystem /ecosystem/index.html 200
+/create-addon /create-addon/index.html 200
+/download /download/index.html 200
 /* /index.html 200
 ˜

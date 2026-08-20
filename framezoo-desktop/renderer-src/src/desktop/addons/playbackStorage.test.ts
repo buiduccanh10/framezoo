@@ -4,9 +4,11 @@ import type { PlayerMeta } from "@/stores/player/slices/source";
 
 import {
   clearLastTorrentSelection,
+  getLastStreamPreference,
   getLastTorrentSelection,
   getPlaybackSelectionKey,
   matchesSavedTorrentSelection,
+  saveLastStreamPreference,
   saveLastTorrentSelection,
 } from "./playbackStorage";
 import type { AddonStream } from "./types";
@@ -32,6 +34,15 @@ const episodeMeta: PlayerMeta = {
     number: 2,
     title: "Episode 2",
     tmdbId: "40",
+  },
+};
+
+const nextEpisodeMeta: PlayerMeta = {
+  ...episodeMeta,
+  episode: {
+    number: 3,
+    title: "Episode 3",
+    tmdbId: "41",
   },
 };
 
@@ -92,6 +103,17 @@ describe("addon playback storage", () => {
       fileName: "movie.mkv",
     });
     expect(getLastTorrentSelection(movieMeta)).toBeNull();
+  });
+
+  it("stores the selected addon preference at series scope", () => {
+    saveLastStreamPreference(episodeMeta, makeTorrent(), "1080p");
+
+    expect(getLastStreamPreference(nextEpisodeMeta)).toMatchObject({
+      seriesId: "20",
+      addonId: "addon.example",
+      sourceKind: "torrent",
+      quality: "1080p",
+    });
   });
 
   it("matches the same torrent file and rejects a changed torrent", () => {
