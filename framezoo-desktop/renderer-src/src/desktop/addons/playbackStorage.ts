@@ -1,8 +1,10 @@
 import type { PlayerMeta } from "@/stores/player/slices/source";
 
+import type { AddonStreamPreference } from "./streams";
 import type { AddonStream } from "./types";
 
 const STORAGE_KEY = "framezoo.desktop.playback-selections.v1";
+const PREFERENCE_STORAGE_KEY = "framezoo.desktop.stream-preferences.v1";
 const STORAGE_VERSION = 1 as const;
 
 export interface SavedTorrentSelection {
@@ -18,6 +20,14 @@ export interface SavedTorrentSelection {
 }
 
 type SavedTorrentSelectionMap = Record<string, SavedTorrentSelection>;
+
+export interface SavedStreamPreference extends AddonStreamPreference {
+  version: typeof STORAGE_VERSION;
+  seriesId: string;
+  savedAt: number;
+}
+
+type SavedStreamPreferenceMap = Record<string, SavedStreamPreference>;
 
 function readSelections(): SavedTorrentSelectionMap {
   try {
@@ -43,6 +53,30 @@ function writeSelections(selections: SavedTorrentSelectionMap) {
   }
 }
 
+function readPreferences(): SavedStreamPreferenceMap {
+  try {
+    const raw = localStorage.getItem(PREFERENCE_STORAGE_KEY);
+    if (!raw) return {};
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return {};
+    }
+
+    return parsed as SavedStreamPreferenceMap;
+  } catch {
+    return {};
+  }
+}
+
+function writePreferences(preferences: SavedStreamPreferenceMap) {
+  try {
+    localStorage.setItem(PREFERENCE_STORAGE_KEY, JSON.stringify(preferences));
+  } catch {
+    // Playback continues even when storage is unavailable or full.
+  }
+}
+
 export function getPlaybackSelectionKey(meta: PlayerMeta): string | null {
   if (!meta.tmdbId) return null;
   if (meta.type === "movie") return `movie:${meta.tmdbId}`;
@@ -60,6 +94,38 @@ export function getLastTorrentSelection(
   const selection = readSelections()[mediaKey];
   if (!selection || selection.version !== STORAGE_VERSION) return null;
   return selection;
+}
+
+export function getLastStreamPreference(
+  meta: PlayerMeta,
+): SavedStreamPreference | null {
+  if (meta.type !== "show" || !meta.tmdbId) return null;
+
+  const preference = readPreferences()[meta.tmdbId];
+  if (!preference || preference.version !== STORAGE_VERSION) return null;
+  return preference;
+}
+
+export function saveLastStreamPreference(
+  meta: PlayerMeta,
+  stream: AddonStream,
+  quality: string,
+): void {
+  if (meta.type !== "show" || !meta.tmdbId) return;
+
+  const preferences = readPreferences();
+  preferences[meta.tmdbId] = {
+    version: STORAGE_VERSION,
+    seriesId: meta.tmdbId,
+    addonId: stream.addonId,
+    sourceKind: stream.kind,
+    quality,
+    name: stream.name || "",
+    title: stream.title || "",
+    bingeGroup: stream.bingeGroup,
+    savedAt: Date.now(),
+  };
+  writePreferences(preferences);
 }
 
 export function saveLastTorrentSelection(

@@ -16,16 +16,20 @@ import { loadAddonStreams } from "@/desktop/addons/client";
 import { hasResource, supportsType } from "@/desktop/addons/manifest";
 import {
   clearLastTorrentSelection,
+  getLastStreamPreference,
   getLastTorrentSelection,
   getPlaybackSelectionKey,
   matchesSavedTorrentSelection,
+  saveLastStreamPreference,
   saveLastTorrentSelection,
 } from "@/desktop/addons/playbackStorage";
 import { useInstalledAddons } from "@/desktop/addons/store";
 import {
   ADDON_STREAMS_GC_TIME_MS,
   ADDON_STREAMS_STALE_TIME_MS,
+  getAddonStreamQuality,
   getAddonStreamQueryKey,
+  matchesAddonStreamPreference,
   normalizeAddonStreams,
 } from "@/desktop/addons/streams";
 import type {
@@ -129,22 +133,8 @@ function formatSize(bytes: number | null) {
   return `${value.toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
 }
 
-function getStreamQuality(stream: AddonStream): string {
-  const text = [stream.name, stream.title, stream.description, stream.fileName]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-
-  if (/\b(4k|2160p|uhd)\b/.test(text)) return "4K";
-  if (/\b(1440p|2k|qhd)\b/.test(text)) return "1440p";
-  if (/\b(1080p|1080i|fhd|full\s*hd)\b/.test(text)) return "1080p";
-  if (/\b(720p|720i|hd)\b/.test(text)) return "720p";
-  if (/\b(480p|480i|360p|240p|sd|dvd|cam|ts)\b/.test(text)) return "480p";
-  return "other";
-}
-
 function getTorrentQuality(stream: AddonStream): SourceQuality {
-  const quality = getStreamQuality(stream);
+  const quality = getAddonStreamQuality(stream);
   const qualityMap: Record<string, SourceQuality> = {
     "4K": "4k",
     "1440p": "1440",
@@ -220,6 +210,14 @@ export function SourceSelectPart(props: {
   const { playMedia, status } = usePlayer();
   const currentSourceId = usePlayerStore((state) => state.sourceId);
   const preferredStream = usePlayerStore((state) => state.preferredStream);
+  const savedStreamPreference = useMemo(
+    () => getLastStreamPreference(meta),
+    [meta],
+  );
+  const streamPreference = useMemo(() => {
+    if (preferredStream?.seriesId === meta.tmdbId) return preferredStream;
+    return savedStreamPreference;
+  }, [meta.tmdbId, preferredStream, savedStreamPreference]);
   const savedTorrentSelection = useMemo(
     () => getLastTorrentSelection(meta),
     [meta],
@@ -443,15 +441,18 @@ export function SourceSelectPart(props: {
           );
           saveLastTorrentSelection(meta, stream);
           if (!isAutoPlay && meta.type === "show") {
+            const quality = getAddonStreamQuality(stream);
             setPreferredStream({
               seriesId: meta.tmdbId,
               mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
               addonId: stream.addonId,
-              quality: getStreamQuality(stream),
+              sourceKind: stream.kind,
+              quality,
               name: stream.name || "",
               title: stream.title || "",
               bingeGroup: stream.bingeGroup,
             });
+            saveLastStreamPreference(meta, stream, quality);
           }
           onSelected?.();
 
@@ -471,15 +472,18 @@ export function SourceSelectPart(props: {
           );
           clearLastTorrentSelection(meta);
           if (!isAutoPlay && meta.type === "show") {
+            const quality = getAddonStreamQuality(stream);
             setPreferredStream({
               seriesId: meta.tmdbId,
               mediaKey: getPlaybackSelectionKey(meta) ?? undefined,
               addonId: stream.addonId,
-              quality: getStreamQuality(stream),
+              sourceKind: stream.kind,
+              quality,
               name: stream.name || "",
               title: stream.title || "",
               bingeGroup: stream.bingeGroup,
             });
+            saveLastStreamPreference(meta, stream, quality);
           }
           onSelected?.();
           if (previousTorrentSessionId) {
@@ -542,28 +546,28 @@ export function SourceSelectPart(props: {
         return;
       }
 
-      if (!savedAddonQuery || !savedAddonQuery.isLoading) {
-        hasAttemptedAutoSelect.current = true;
+      if (savedAddonQuery?.isLoading) {
+        return;
       }
+
+      // The provider may rotate hashes or file metadata. Treat the exact
+      // episode selection as stale, then try the series-level preference.
+      clearLastTorrentSelection(meta);
+    }
+
+    if (!streamPreference || streamPreference.seriesId !== meta.tmdbId) {
+      hasAttemptedAutoSelect.current = true;
       return;
     }
 
-    if (
-      !preferredStream ||
-      preferredStream.seriesId !== meta.tmdbId ||
-      preferredStream.mediaKey !== getPlaybackSelectionKey(meta)
-    ) {
-      return;
-    }
-
-    if (!selectedAddonId && preferredStream.addonId) {
+    if (!selectedAddonId && streamPreference.addonId) {
       const isAddonEnabled = enabledAddons.some(
-        (a) => a.manifest.id === preferredStream.addonId,
+        (a) => a.manifest.id === streamPreference.addonId,
       );
       if (isAddonEnabled) {
-        setSelectedAddonId(preferredStream.addonId);
+        setSelectedAddonId(streamPreference.addonId);
         const matchingQuality = qualityOptions.find(
-          (q) => q.id === preferredStream.quality,
+          (q) => q.id === streamPreference.quality,
         );
         if (matchingQuality) {
           setSelectedQuality(matchingQuality);
@@ -571,55 +575,9 @@ export function SourceSelectPart(props: {
       }
     }
 
-    const matchingStream = addonStreams.find((s) => {
-      if (s.addonId !== preferredStream.addonId) return false;
-
-      if (getStreamQuality(s) !== preferredStream.quality) return false;
-
-      const sName = s.name || "";
-      const pName = preferredStream.name || "";
-
-      let isHeuristicMatch = false;
-      if (sName === pName) {
-        const sTitleLines = (s.title || "")
-          .split("\n")
-          .map((l) => l.trim())
-          .filter(Boolean);
-        const pTitleLines = (preferredStream.title || "")
-          .split("\n")
-          .map((l) => l.trim())
-          .filter(Boolean);
-
-        if (sTitleLines.length > 0 && pTitleLines.length > 0) {
-          const sLastLine = sTitleLines[sTitleLines.length - 1];
-          const pLastLine = pTitleLines[pTitleLines.length - 1];
-
-          const extractWords = (str: string): string[] =>
-            str.toLowerCase().match(/[a-z]{4,}/g) || [];
-          const sWords = extractWords(sLastLine);
-          const pWords = extractWords(pLastLine);
-
-          const hasCommonWord = sWords.some((w) => pWords.includes(w));
-          if (hasCommonWord || sLastLine === pLastLine) {
-            isHeuristicMatch = true;
-          }
-        } else if (s.title === preferredStream.title) {
-          isHeuristicMatch = true;
-        }
-      }
-
-      if (isHeuristicMatch) return true;
-
-      if (
-        s.bingeGroup &&
-        preferredStream.bingeGroup &&
-        s.bingeGroup === preferredStream.bingeGroup
-      ) {
-        return true;
-      }
-
-      return false;
-    });
+    const matchingStream = addonStreams.find((stream) =>
+      matchesAddonStreamPreference(stream, streamPreference),
+    );
 
     if (matchingStream && !startingAddonId) {
       hasAttemptedAutoSelect.current = true;
@@ -628,7 +586,7 @@ export function SourceSelectPart(props: {
     }
 
     const preferredAddonIndex = eligibleAddons.findIndex(
-      (a) => a.manifest.id === preferredStream.addonId,
+      (a) => a.manifest.id === streamPreference.addonId,
     );
     const preferredQuery =
       preferredAddonIndex >= 0 ? addonStreamQueries[preferredAddonIndex] : null;
@@ -638,7 +596,7 @@ export function SourceSelectPart(props: {
   }, [
     addonStreams,
     addonStreamQueries,
-    preferredStream,
+    streamPreference,
     savedTorrentSelection,
     meta,
     mode,
@@ -653,7 +611,7 @@ export function SourceSelectPart(props: {
   const filteredAddonStreams = useMemo(() => {
     if (selectedQuality.id === "all") return addonStreams;
     return addonStreams.filter(
-      (stream) => getStreamQuality(stream) === selectedQuality.id,
+      (stream) => getAddonStreamQuality(stream) === selectedQuality.id,
     );
   }, [addonStreams, selectedQuality]);
   const selectedAddonStreams = useMemo(() => {

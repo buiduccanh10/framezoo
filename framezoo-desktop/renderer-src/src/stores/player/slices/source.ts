@@ -146,6 +146,7 @@ export interface PreferredStream {
   seriesId: string;
   mediaKey?: string;
   addonId: string;
+  sourceKind?: "torrent" | "hls" | "dash" | "file";
   quality: string;
   name: string;
   title: string;
