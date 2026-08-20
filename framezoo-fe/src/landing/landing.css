@@ -12,7 +12,7 @@
   position: relative;
   isolation: isolate;
   overflow: clip;
-  overflow-x: hidden;
+  overflow-x: clip;
   min-height: 100dvh;
   color: var(--landing-text);
   background:
@@ -189,6 +189,35 @@
   z-index: 1;
   width: min(1180px, calc(100% - 48px));
   margin-inline: auto;
+}
+
+.landing-category-main {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 72px;
+}
+
+.landing-category-intro {
+  width: min(860px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: clamp(72px, 12vw, 144px) 0 56px;
+}
+
+.landing-category-intro h1 {
+  max-width: 780px;
+  margin: 14px 0 0;
+  color: var(--landing-text);
+  font-size: clamp(2.5rem, 7vw, 5.8rem);
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.landing-category-intro p {
+  max-width: 680px;
+  margin: 26px 0 0;
+  color: var(--landing-muted);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  line-height: 1.7;
 }
 
 .landing-hero,
