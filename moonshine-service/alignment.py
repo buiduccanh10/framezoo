@@ -39,7 +39,7 @@ _TRANSCRIPTION_LOCK = threading.Lock()
 
 CREDIT_AD_PATTERNS = re.compile(
     r"(?i)("
-    r"https?://|www\.|osdb\.link|\.org\b|\.com\b|\.net\b|\.link\b|\.tv\b|\.me\b|"
+    r"https?://|www\.|osdb\.link|\.org\b|\.com\b|\.net\b|\.link\b|\.tv\b|\.me\b|\.app\b|"
     r"opensubtitles|subscene|addic7ed|podnapisi|yify|rarbg|psa\b|"
     r"vip\s*member|remove\s*all\s*ads|watch\s*online|support\s*us|"
     r"subtitles?\s*(by|downloaded|created|sync)|"
@@ -47,6 +47,17 @@ CREDIT_AD_PATTERNS = re.compile(
     r"dịch\s*bởi|biên\s*dịch|thực\s*hiện\s*bởi|vietsub\s*bởi|"
     r"phimmoi|xemphim|motphim|bilutv|tvhay"
     r")"
+)
+
+MALFORMED_ENCODING_PATTERNS = re.compile(
+    r"\ufffd|[\u0080-\u009f]|"
+    r"(?:\u00c3|\u00c2)[\u0080-\u00bf]|"
+    r"\u00e2(?:[\u0080-\u00bf]|\u20ac|\u2122|\u0153|\u2013|\u2014)|"
+    r"\u00f0[\u0080-\u00bf]"
+)
+MOJIBAKE_SYMBOLS = frozenset(
+    "\u00a4\u00a6\u00ab\u00ac\u00b1\u00b5\u00b6\u00bb\u00bc"
+    "\u00bd\u00be\u00bf\u00d7"
 )
 
 
@@ -61,13 +72,56 @@ class Cue:
 def is_credit_or_ad_cue(cue: Cue) -> bool:
     return bool(CREDIT_AD_PATTERNS.search(cue.block))
 
+def _cue_text(cue: Cue) -> str:
+    lines = cue.block.splitlines()
+    return " ".join(
+        line.strip()
+        for line in lines
+        if line.strip()
+        and not line.strip().isdigit()
+        and not TIMING_RE.match(line)
+    )
+
+def is_malformed_encoding_cue(cue: Cue) -> bool:
+    text = _cue_text(cue)
+    if not text:
+        return False
+    if MALFORMED_ENCODING_PATTERNS.search(text):
+        return True
+
+    compact_text = re.sub(r"\s+", "", text)
+    symbol_count = sum(
+        character in MOJIBAKE_SYMBOLS for character in compact_text
+    )
+    high_byte_count = sum(
+        0x80 <= ord(character) <= 0xFF for character in compact_text
+    )
+    return (
+        symbol_count >= 3
+        and high_byte_count >= 6
+        and symbol_count / max(1, len(compact_text)) >= 0.05
+    )
+
+def filter_alignment_cues(cues: list[Cue]) -> list[Cue]:
+    usable_cues = [
+        cue
+        for cue in cues
+        if not is_credit_or_ad_cue(cue) and not is_malformed_encoding_cue(cue)
+    ]
+    if usable_cues:
+        return usable_cues
+
+    # Preserve the existing ad-only fallback, but never reintroduce
+    # malformed-encoding cues as alignment anchors.
+    return [cue for cue in cues if not is_malformed_encoding_cue(cue)]
+
 
 def estimate_initial_cue_start_ms(cues: list[Cue] | None) -> int | None:
     if not cues:
         return None
-    dialogue_cues = [c for c in cues if not is_credit_or_ad_cue(c)]
+    dialogue_cues = filter_alignment_cues(cues)
     if not dialogue_cues:
-        dialogue_cues = cues
+        return None
     candidates = dialogue_cues[: min(10, len(dialogue_cues))]
     for cue in candidates:
         if cue.end_ms - cue.start_ms >= 800:
@@ -83,12 +137,8 @@ def estimate_subtitle_relative_offset(
     if not primary_cues or not secondary_cues:
         return None
 
-    clean_p = [c for c in primary_cues if not is_credit_or_ad_cue(c)]
-    clean_s = [c for c in secondary_cues if not is_credit_or_ad_cue(c)]
-    if not clean_p:
-        clean_p = primary_cues
-    if not clean_s:
-        clean_s = secondary_cues
+    clean_p = filter_alignment_cues(primary_cues)
+    clean_s = filter_alignment_cues(secondary_cues)
 
     # Use cues from the first 30 minutes (or up to 100 cues) to compare timing cadence
     p_cues = [c for c in clean_p if c.start_ms <= 1_800_000]
@@ -210,8 +260,7 @@ def parse_vtt(text: str) -> list[Cue]:
 
 def parse_alignment_cues(text: str) -> list[Cue]:
     cues = parse_vtt(text)
-    dialogue_cues = [cue for cue in cues if not is_credit_or_ad_cue(cue)]
-    return dialogue_cues or cues
+    return filter_alignment_cues(cues)
 
 
 def decode_wav(data: bytes) -> tuple[list[float], int]:
@@ -781,11 +830,18 @@ def compute_track_search_centers(
             if abs(hint) <= max_offset_ms:
                 centers.add(hint)
 
-    if cues and speech_intervals and audio_start_ms <= 15_000:
-        sub_first_ms = estimate_initial_cue_start_ms(cues)
-        if sub_first_ms is not None:
-            speech_first_ms = speech_intervals[0][0]
-            speech_guided_offset = speech_first_ms - sub_first_ms
+    if cues and speech_intervals:
+        candidate_cues = filter_alignment_cues(cues)
+        if not candidate_cues:
+            return sorted(centers)
+        speech_first_ms = speech_intervals[0][0]
+        nearest_cue = min(
+            candidate_cues,
+            key=lambda cue: abs(cue.start_ms - speech_first_ms),
+        )
+        anchor_starts = {candidate_cues[0].start_ms, nearest_cue.start_ms}
+        for anchor_start_ms in anchor_starts:
+            speech_guided_offset = speech_first_ms - anchor_start_ms
             if abs(speech_guided_offset) <= max_offset_ms:
                 centers.add(speech_guided_offset)
 
@@ -931,7 +987,7 @@ def _cluster_alignment_candidates(
             current
             and int(candidate["result"].get("offsetMs", 0))
             - int(current_candidates[0]["result"].get("offsetMs", 0))
-            <= 500
+            <= 1_200
         ):
             current_candidates.append(candidate)
             continue

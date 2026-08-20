@@ -391,7 +391,7 @@ export function useCaptions() {
           currentCaption,
           inputVttData,
           baseVttData,
-        } of alignedTargets) {
+        } of applicableTargets) {
           if (!result || !currentCaption) continue;
           const alignedVtt = applySubtitleAlignment(baseVttData, result);
           const alignment = {

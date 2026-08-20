@@ -3,11 +3,15 @@ from unittest.mock import patch
 
 from alignment import (
     MIN_ALIGNMENT_CONFIDENCE,
+    align_speech_batch,
     align_speech_windows,
     align_vtt_windows,
     alignment_result_from_speech,
+    compute_track_search_centers,
     evaluate_offset,
     find_best_offset,
+    is_malformed_encoding_cue,
+    parse_alignment_cues,
     parse_vtt,
     select_alignment_consensus,
 )
@@ -411,6 +415,194 @@ Doan thoai thu hai
         self.assertEqual(result["results"]["primary"]["offsetMs"], 0)
         self.assertTrue(result["results"]["secondary"]["aligned"])
         self.assertEqual(result["results"]["secondary"]["offsetMs"], -2_000)
+
+    def test_aligns_dual_subtitles_with_independent_offsets(self):
+        primary_vtt = """WEBVTT
+
+00:00:12.000 --> 00:00:16.000
+Primary one
+
+00:01:12.000 --> 00:01:16.000
+Primary two
+"""
+        secondary_vtt = """WEBVTT
+
+00:00:07.000 --> 00:00:11.000
+Secondary one
+
+00:01:07.000 --> 00:01:11.000
+Secondary two
+"""
+        subtitles = [
+            {"track": "primary", "vttData": primary_vtt},
+            {"track": "secondary", "vttData": secondary_vtt},
+        ]
+        windows = [
+            ([(10_000, 14_000)], 0, 60_000),
+            ([(70_000, 74_000)], 60_000, 120_000),
+        ]
+
+        batch_result = align_speech_batch(
+            [(10_000, 14_000), (70_000, 74_000)],
+            subtitles,
+            0,
+            120_000,
+        )
+        self.assertTrue(batch_result["results"]["primary"]["aligned"])
+        self.assertEqual(batch_result["results"]["primary"]["offsetMs"], -2_000)
+        self.assertTrue(batch_result["results"]["secondary"]["aligned"])
+        self.assertEqual(
+            batch_result["results"]["secondary"]["offsetMs"],
+            3_000,
+        )
+
+        result = align_speech_windows(windows, subtitles)
+
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertEqual(result["results"]["primary"]["offsetMs"], -2_000)
+        self.assertTrue(result["results"]["secondary"]["aligned"])
+        self.assertEqual(result["results"]["secondary"]["offsetMs"], 3_000)
+
+    def test_uses_independent_guided_centers_for_large_dual_offsets(self):
+        primary_vtt = """WEBVTT
+
+00:02:00.000 --> 00:02:04.000
+Primary dialogue
+
+00:02:10.000 --> 00:02:14.000
+Primary next dialogue
+"""
+        secondary_vtt = """WEBVTT
+
+00:02:30.000 --> 00:02:34.000
+Secondary dialogue
+
+00:02:40.000 --> 00:02:44.000
+Secondary next dialogue
+"""
+        speech = [(10_000, 14_000), (20_000, 24_000)]
+
+        result = align_speech_batch(
+            speech,
+            [
+                {"track": "primary", "vttData": primary_vtt},
+                {"track": "secondary", "vttData": secondary_vtt},
+            ],
+            0,
+            60_000,
+        )
+        primary_only = align_speech_batch(
+            speech,
+            [{"track": "primary", "vttData": primary_vtt}],
+            0,
+            60_000,
+        )
+        secondary_only = align_speech_batch(
+            speech,
+            [{"track": "secondary", "vttData": secondary_vtt}],
+            0,
+            60_000,
+        )
+
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertAlmostEqual(
+            result["results"]["primary"]["offsetMs"],
+            -110_000,
+            delta=750,
+        )
+        self.assertEqual(
+            result["results"]["primary"]["offsetMs"],
+            primary_only["results"]["primary"]["offsetMs"],
+        )
+        self.assertTrue(result["results"]["secondary"]["aligned"])
+        self.assertAlmostEqual(
+            result["results"]["secondary"]["offsetMs"],
+            -140_000,
+            delta=750,
+        )
+        self.assertEqual(
+            result["results"]["secondary"]["offsetMs"],
+            secondary_only["results"]["secondary"]["offsetMs"],
+        )
+
+    def test_filters_tryray_app_ad_before_aligning_primary(self):
+        primary_vtt = """WEBVTT
+
+00:00:07.000 --> 00:00:10.000
+Nhấn phát. Phụ đề xuất hiện. Hơn 200 ngôn ngữ. Một ứng dụng: tryray.app
+
+00:01:59.000 --> 00:02:03.000
+Máu. Thỉnh thoảng nó làm tôi ghê hết cả răng.
+
+00:02:03.000 --> 00:02:07.000
+Những đôi khi, nó giúp tôi kiểm soát được bản loạn.
+"""
+        secondary_vtt = """WEBVTT
+
+00:00:21.000 --> 00:00:23.000
+Last season on Dexter...
+
+00:00:23.000 --> 00:00:27.000
+Tonight's the night and it's going to happen again,
+"""
+        primary_cues = parse_alignment_cues(primary_vtt)
+        self.assertEqual(primary_cues[0].start_ms, 119_000)
+
+        result = align_speech_batch(
+            [(11_000, 15_000), (15_000, 19_000), (19_000, 23_000)],
+            [
+                {"track": "primary", "vttData": primary_vtt},
+                {"track": "secondary", "vttData": secondary_vtt},
+            ],
+            0,
+            60_000,
+        )
+
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertAlmostEqual(
+            result["results"]["primary"]["offsetMs"],
+            -108_000,
+            delta=750,
+        )
+
+    def test_filters_malformed_leading_secondary_cue_before_aligning(self):
+        secondary_vtt = """WEBVTT
+
+00:00:10.000 --> 00:00:14.000
+-==\u00b7\u00e7\u00ca\u00ceFRM\u00d7\u00d6\u00c4\u00bb\u00d7\u00e9==- \u00b7\u00d6\u00eb: \u00cb\u00cf\u00a3\u00bc\u00ac\u00ee
+
+00:01:50.000 --> 00:01:54.000
+If you were the Bay Harbor Butcher,
+
+00:01:54.000 --> 00:01:58.000
+would you use a place like this?
+"""
+        cues = parse_alignment_cues(secondary_vtt)
+
+        self.assertTrue(is_malformed_encoding_cue(parse_vtt(secondary_vtt)[0]))
+        self.assertEqual(cues[0].start_ms, 110_000)
+        self.assertEqual(
+            compute_track_search_centers(
+                cues,
+                [(14_000, 18_000), (18_000, 22_000)],
+                0,
+            ),
+            [-96_000, 0],
+        )
+
+        result = align_speech_batch(
+            [(14_000, 18_000), (18_000, 22_000)],
+            [{"track": "secondary", "vttData": secondary_vtt}],
+            0,
+            60_000,
+        )
+
+        self.assertTrue(result["results"]["secondary"]["aligned"])
+        self.assertAlmostEqual(
+            result["results"]["secondary"]["offsetMs"],
+            -96_000,
+            delta=750,
+        )
 
 
 if __name__ == "__main__":
