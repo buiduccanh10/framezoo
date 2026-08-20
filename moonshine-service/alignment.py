@@ -34,6 +34,12 @@ MAX_SPEECH_ANCHOR_ERROR_MS = 1_800
 MIN_SPEECH_ANCHOR_OVERLAP_MS = 120
 MIN_SPEECH_ANCHOR_COVERAGE = 0.20
 MIN_SPEECH_ANCHOR_COVERAGE_2_ANCHORS = 0.25
+# Subtitle starts are the most reliable boundary for avoiding visible
+# pre-roll. Keep a small lead-in grace period for natural subtitle timing.
+SUBTITLE_EARLY_START_GRACE_MS = 250
+SPEECH_ANCHOR_START_WEIGHT = 0.65
+SPEECH_ANCHOR_END_WEIGHT = 0.35
+SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT = 0.15
 _TRANSCRIPTION_LOCK = threading.Lock()
 
 
@@ -447,17 +453,17 @@ def build_shifted_subtitle_intervals(
     )
 
 
-def match_speech_anchors(
+def _match_speech_anchor_boundaries(
     speech_intervals: list[tuple[int, int]],
     subtitle_intervals: list[tuple[int, int]],
-) -> tuple[int, list[int]]:
+) -> tuple[int, list[tuple[int, int, int]]]:
     used_subtitle_indices: set[int] = set()
-    anchor_errors: list[int] = []
+    anchor_errors: list[tuple[int, int, int]] = []
     last_subtitle_index = -1
 
     for speech_start, speech_end in speech_intervals:
         best_index: int | None = None
-        best_rank: tuple[float, int] | None = None
+        best_rank: tuple[float, float] | None = None
         speech_duration = speech_end - speech_start
 
         for index, (subtitle_start, subtitle_end) in enumerate(
@@ -475,9 +481,20 @@ def match_speech_anchors(
             if overlap < MIN_SPEECH_ANCHOR_OVERLAP_MS:
                 continue
 
-            boundary_error = min(
-                abs(speech_start - subtitle_start),
-                abs(speech_end - subtitle_end),
+            start_error = abs(speech_start - subtitle_start)
+            end_error = abs(speech_end - subtitle_end)
+            early_start_error = max(
+                0,
+                speech_start
+                - subtitle_start
+                - SUBTITLE_EARLY_START_GRACE_MS,
+            )
+            boundary_error = max(start_error, end_error)
+            weighted_boundary_error = (
+                start_error * SPEECH_ANCHOR_START_WEIGHT
+                + end_error * SPEECH_ANCHOR_END_WEIGHT
+                + early_start_error
+                * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT
             )
             overlap_ratio = overlap / max(
                 MIN_SPEECH_ANCHOR_OVERLAP_MS,
@@ -489,7 +506,7 @@ def match_speech_anchors(
             ):
                 continue
 
-            rank = (overlap_ratio, -boundary_error)
+            rank = (overlap_ratio, -weighted_boundary_error)
             if best_rank is None or rank > best_rank:
                 best_index = index
                 best_rank = rank
@@ -501,13 +518,33 @@ def match_speech_anchors(
         last_subtitle_index = best_index
         subtitle_start, subtitle_end = subtitle_intervals[best_index]
         anchor_errors.append(
-            min(
+            (
                 abs(speech_start - subtitle_start),
                 abs(speech_end - subtitle_end),
+                max(
+                    0,
+                    speech_start
+                    - subtitle_start
+                    - SUBTITLE_EARLY_START_GRACE_MS,
+                ),
             )
         )
 
     return len(anchor_errors), anchor_errors
+
+
+def match_speech_anchors(
+    speech_intervals: list[tuple[int, int]],
+    subtitle_intervals: list[tuple[int, int]],
+) -> tuple[int, list[int]]:
+    matched_anchors, boundary_errors = _match_speech_anchor_boundaries(
+        speech_intervals,
+        subtitle_intervals,
+    )
+    return matched_anchors, [
+        min(start_error, end_error)
+        for start_error, end_error, _ in boundary_errors
+    ]
 
 
 def evaluate_offset(
@@ -555,13 +592,36 @@ def evaluate_offset(
             0,
         )
 
-    matched_anchors, anchor_errors = match_speech_anchors(
+    matched_anchors, anchor_errors = _match_speech_anchor_boundaries(
         speech_activity,
         subtitle_activity,
     )
     anchor_coverage = matched_anchors / len(speech_activity)
+    start_errors = [errors[0] for errors in anchor_errors]
+    end_errors = [errors[1] for errors in anchor_errors]
+    early_start_errors = [errors[2] for errors in anchor_errors]
+    median_start_error_ms = (
+        sorted(start_errors)[len(start_errors) // 2]
+        if start_errors
+        else MAX_SPEECH_ANCHOR_ERROR_MS
+    )
+    median_end_error_ms = (
+        sorted(end_errors)[len(end_errors) // 2]
+        if end_errors
+        else MAX_SPEECH_ANCHOR_ERROR_MS
+    )
+    median_early_start_error_ms = (
+        sorted(early_start_errors)[len(early_start_errors) // 2]
+        if early_start_errors
+        else 0
+    )
     median_anchor_error_ms = (
-        sorted(anchor_errors)[len(anchor_errors) // 2]
+        round(
+            median_start_error_ms * SPEECH_ANCHOR_START_WEIGHT
+            + median_end_error_ms * SPEECH_ANCHOR_END_WEIGHT
+            + median_early_start_error_ms
+            * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT
+        )
         if anchor_errors
         else MAX_SPEECH_ANCHOR_ERROR_MS
     )
@@ -569,9 +629,23 @@ def evaluate_offset(
     speech_recall = overlap_duration / speech_duration
     subtitle_precision = overlap_duration / subtitle_duration
     activity_iou = overlap_duration / union_duration
+    start_score = max(
+        0.0,
+        1.0 - median_start_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+    )
+    end_score = max(
+        0.0,
+        1.0 - median_end_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+    )
+    early_start_penalty = min(
+        1.0,
+        median_early_start_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+    )
     boundary_score = max(
         0.0,
-        1.0 - median_anchor_error_ms / MAX_SPEECH_ANCHOR_ERROR_MS,
+        start_score * SPEECH_ANCHOR_START_WEIGHT
+        + end_score * SPEECH_ANCHOR_END_WEIGHT
+        - early_start_penalty * SPEECH_ANCHOR_EARLY_START_PENALTY_WEIGHT,
     )
     score = (
         activity_iou * 0.30

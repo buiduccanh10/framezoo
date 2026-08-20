@@ -151,6 +151,56 @@ Again
         self.assertAlmostEqual(offset, -10_000, delta=750)
         self.assertGreater(score, 0.7)
 
+    def test_prefers_subtitle_start_alignment_over_end_only_match(self):
+        speech = [(11_000, 15_000)]
+
+        for early_ms in (500, 1_500):
+            with self.subTest(early_ms=early_ms):
+                cue_start_ms = 11_000 - early_ms
+                cue_start_seconds, cue_start_millis = divmod(
+                    cue_start_ms,
+                    1_000,
+                )
+                cues = parse_vtt(
+                    f"""WEBVTT
+
+00:00:{cue_start_seconds:02d}.{cue_start_millis:03d} --> 00:00:15.000
+Dialogue
+"""
+                )
+                expected_offset = early_ms
+
+                early_evidence = evaluate_offset(
+                    cues,
+                    speech,
+                    0,
+                    0,
+                    20_000,
+                )
+                corrected_evidence = evaluate_offset(
+                    cues,
+                    speech,
+                    expected_offset,
+                    0,
+                    20_000,
+                )
+                offset, _ = find_best_offset(
+                    cues,
+                    speech,
+                    0,
+                    20_000,
+                )
+
+                self.assertGreater(
+                    corrected_evidence.score,
+                    early_evidence.score,
+                )
+                self.assertAlmostEqual(
+                    offset,
+                    expected_offset,
+                    delta=750,
+                )
+
     def test_rejects_single_anchor_when_multiple_speech_intervals_exist(self):
         vtt = """WEBVTT
 
@@ -462,6 +512,42 @@ Secondary two
         self.assertEqual(result["results"]["primary"]["offsetMs"], -2_000)
         self.assertTrue(result["results"]["secondary"]["aligned"])
         self.assertEqual(result["results"]["secondary"]["offsetMs"], 3_000)
+
+    def test_corrects_early_primary_without_shifting_secondary(self):
+        primary_vtt = """WEBVTT
+
+00:00:02.000 --> 00:00:05.000
+Vietnamese dialogue
+
+00:01:02.000 --> 00:01:05.000
+Vietnamese dialogue two
+"""
+        secondary_vtt = """WEBVTT
+
+00:00:03.000 --> 00:00:05.000
+English dialogue
+
+00:01:03.000 --> 00:01:05.000
+English dialogue two
+"""
+        result = align_speech_batch(
+            [(3_000, 5_000), (63_000, 65_000)],
+            [
+                {"track": "primary", "vttData": primary_vtt},
+                {"track": "secondary", "vttData": secondary_vtt},
+            ],
+            0,
+            120_000,
+        )
+
+        self.assertTrue(result["results"]["primary"]["aligned"])
+        self.assertAlmostEqual(
+            result["results"]["primary"]["offsetMs"],
+            1_000,
+            delta=250,
+        )
+        self.assertTrue(result["results"]["secondary"]["aligned"])
+        self.assertEqual(result["results"]["secondary"]["offsetMs"], 0)
 
     def test_uses_independent_guided_centers_for_large_dual_offsets(self):
         primary_vtt = """WEBVTT
