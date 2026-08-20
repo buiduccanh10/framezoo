@@ -29,6 +29,9 @@ SEARCH_RANGE_MS = MAX_ALIGNMENT_OFFSET_MS
 SEARCH_STEP_MS = 250
 REFINE_RANGE_MS = 750
 REFINE_STEP_MS = 25
+ACTIVITY_FINGERPRINT_BIN_MS = 100
+ACTIVITY_FINGERPRINT_TOP_K = 8
+ACTIVITY_FINGERPRINT_REFINE_RANGE_MS = 500
 SUBTITLE_ACTIVITY_MERGE_GAP_MS = 250
 MAX_SPEECH_ANCHOR_ERROR_MS = 1_800
 MIN_SPEECH_ANCHOR_OVERLAP_MS = 120
@@ -453,6 +456,103 @@ def build_shifted_subtitle_intervals(
     )
 
 
+def _fingerprint_bits_for_intervals(
+    intervals: list[tuple[int, int]],
+    origin_ms: int,
+    end_ms: int,
+) -> int:
+    bits = 0
+    bin_ms = ACTIVITY_FINGERPRINT_BIN_MS
+    for start_ms, interval_end_ms in intervals:
+        clipped_start = max(origin_ms, start_ms)
+        clipped_end = min(end_ms, interval_end_ms)
+        if clipped_end <= clipped_start:
+            continue
+
+        first_bin = max(0, (clipped_start - origin_ms) // bin_ms)
+        last_bin = max(
+            first_bin + 1,
+            (clipped_end - origin_ms + bin_ms - 1) // bin_ms,
+        )
+        bits |= ((1 << (last_bin - first_bin)) - 1) << first_bin
+    return bits
+
+
+def _shift_fingerprint_bits(bits: int, offset_ms: int) -> int:
+    offset_bins = int(round(offset_ms / ACTIVITY_FINGERPRINT_BIN_MS))
+    if offset_bins >= 0:
+        return bits << offset_bins
+    return bits >> -offset_bins
+
+
+def _fingerprint_bit_count(bits: int) -> int:
+    bit_count = getattr(bits, "bit_count", None)
+    if bit_count is not None:
+        return bit_count()
+    return bin(bits).count("1")
+
+
+def _build_activity_fingerprint(
+    cues: list[Cue],
+    speech_intervals: list[tuple[int, int]],
+    audio_start_ms: int,
+    audio_end_ms: int,
+) -> tuple[int, int, int]:
+    max_offset_ms = MAX_PLAUSIBLE_ALIGNMENT_OFFSET_MS
+    origin_ms = audio_start_ms - max_offset_ms
+    fingerprint_end_ms = audio_end_ms + max_offset_ms
+    audio_mask = _fingerprint_bits_for_intervals(
+        [(audio_start_ms, audio_end_ms)],
+        origin_ms,
+        fingerprint_end_ms,
+    )
+    speech_bits = _fingerprint_bits_for_intervals(
+        clip_intervals(speech_intervals, audio_start_ms, audio_end_ms),
+        origin_ms,
+        fingerprint_end_ms,
+    )
+    subtitle_intervals = merge_activity_intervals(
+        [
+            (cue.start_ms, cue.end_ms)
+            for cue in cues
+            if cue.end_ms > origin_ms and cue.start_ms < fingerprint_end_ms
+        ],
+        SUBTITLE_ACTIVITY_MERGE_GAP_MS,
+    )
+    subtitle_bits = _fingerprint_bits_for_intervals(
+        subtitle_intervals,
+        origin_ms,
+        fingerprint_end_ms,
+    )
+    return speech_bits, subtitle_bits, audio_mask
+
+
+def _score_activity_fingerprint(
+    speech_bits: int,
+    subtitle_bits: int,
+    audio_mask: int,
+    offset_ms: int,
+) -> float:
+    shifted_subtitle_bits = _shift_fingerprint_bits(
+        subtitle_bits,
+        offset_ms,
+    ) & audio_mask
+    speech_count = _fingerprint_bit_count(speech_bits)
+    subtitle_count = _fingerprint_bit_count(shifted_subtitle_bits)
+    if speech_count == 0 or subtitle_count == 0:
+        return 0.0
+
+    overlap_count = _fingerprint_bit_count(speech_bits & shifted_subtitle_bits)
+    union_count = _fingerprint_bit_count(speech_bits | shifted_subtitle_bits)
+    if overlap_count == 0 or union_count == 0:
+        return 0.0
+
+    recall = overlap_count / speech_count
+    precision = overlap_count / subtitle_count
+    iou = overlap_count / union_count
+    return iou * 0.50 + recall * 0.25 + precision * 0.25
+
+
 def _match_speech_anchor_boundaries(
     speech_intervals: list[tuple[int, int]],
     subtitle_intervals: list[tuple[int, int]],
@@ -691,7 +791,7 @@ def find_best_offset(
 ) -> tuple[int, float]:
     centers = search_centers or [0]
 
-    def rank_offset(value: int) -> tuple[float, int]:
+    def rank_offset(value: int) -> tuple[float, int, int]:
         dist_to_center = min(abs(value - c) for c in centers)
         return (
             score_offset(
@@ -702,7 +802,16 @@ def find_best_offset(
                 audio_end_ms,
             ),
             -dist_to_center,
+            -abs(value),
         )
+
+    speech_bits, subtitle_bits, audio_mask = _build_activity_fingerprint(
+        cues,
+        speech_intervals,
+        audio_start_ms,
+        audio_end_ms,
+    )
+
     coarse_candidates_set: set[int] = set()
     for center in centers:
         for offset in range(
@@ -716,12 +825,59 @@ def find_best_offset(
     if not coarse_candidates_set:
         coarse_candidates_set.add(0)
 
-    coarse_offset = max(coarse_candidates_set, key=rank_offset)
-    refined_candidates = range(
-        coarse_offset - REFINE_RANGE_MS,
-        coarse_offset + REFINE_RANGE_MS + 1,
-        REFINE_STEP_MS,
+    fingerprint_ranked_candidates = sorted(
+        coarse_candidates_set,
+        key=lambda value: (
+            _score_activity_fingerprint(
+                speech_bits,
+                subtitle_bits,
+                audio_mask,
+                value,
+            ),
+            -min(abs(value - center) for center in centers),
+            -abs(value),
+        ),
+        reverse=True,
     )
+    top_fingerprint_score = _score_activity_fingerprint(
+        speech_bits,
+        subtitle_bits,
+        audio_mask,
+        fingerprint_ranked_candidates[0],
+    )
+
+    if top_fingerprint_score > 0:
+        coarse_candidates = set(
+            fingerprint_ranked_candidates[:ACTIVITY_FINGERPRINT_TOP_K]
+        )
+        for center in centers:
+            coarse_candidates.add(
+                min(
+                    coarse_candidates_set,
+                    key=lambda value: abs(value - center),
+                )
+            )
+        refined_candidates_set: set[int] = set()
+        for coarse_offset in coarse_candidates:
+            refined_candidates_set.update(
+                range(
+                    coarse_offset - ACTIVITY_FINGERPRINT_REFINE_RANGE_MS,
+                    coarse_offset
+                    + ACTIVITY_FINGERPRINT_REFINE_RANGE_MS
+                    + 1,
+                    REFINE_STEP_MS,
+                )
+            )
+        refined_candidates = refined_candidates_set
+    else:
+        # Preserve the exhaustive path for sparse or empty fingerprints.
+        coarse_offset = max(coarse_candidates_set, key=rank_offset)
+        refined_candidates = range(
+            coarse_offset - REFINE_RANGE_MS,
+            coarse_offset + REFINE_RANGE_MS + 1,
+            REFINE_STEP_MS,
+        )
+
     best_offset = max(refined_candidates, key=rank_offset)
     best_score = score_offset(
         cues,
