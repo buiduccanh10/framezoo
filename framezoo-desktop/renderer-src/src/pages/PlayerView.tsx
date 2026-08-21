@@ -50,8 +50,19 @@ export function RealPlayerView() {
   const progressItems = useProgressStore((s) => s.items);
   const updateProgress = useProgressStore((s) => s.updateItem);
   const torrentStatus = useActiveTorrentStatus();
+  const pendingTorrentSourceId =
+    torrentStatus?.streamType === "pending" ? torrentStatus.sourceId : null;
   const torrentPromotionRef = useRef<string | null>(null);
   const [sourceLoading, setSourceLoading] = useState(false);
+  const isSourceSwitchInProgress =
+    status === playerStatus.SOURCE_SELECTION &&
+    (sourceId !== null || pendingTorrentSourceId !== null);
+  const shouldShowInitialSourcePicker =
+    !router.isRouterActive && !isSourceSwitchInProgress;
+  const shouldShowSourceLoading =
+    sourceLoading ||
+    (status === playerStatus.SOURCE_SELECTION &&
+      pendingTorrentSourceId !== null);
   const preloadedMeta = (
     location.state as PlayerNavigationState | null | undefined
   )?.playerMeta;
@@ -232,7 +243,7 @@ export function RealPlayerView() {
     <PlayerPart
       backUrl={backUrl}
       onMetaChange={metaChange}
-      sourceLoading={sourceLoading}
+      sourceLoading={shouldShowSourceLoading}
     >
       {status !== playerStatus.PLAYING ? <BlurEllipsis /> : null}
       {status === playerStatus.IDLE && !preloadedMeta ? (
@@ -247,7 +258,10 @@ export function RealPlayerView() {
       ) : null}
       {(status === playerStatus.SOURCE_SELECTION ||
         status === playerStatus.PLAYBACK_ERROR) &&
-      playerMeta ? (
+      playerMeta &&
+      !router.isRouterActive &&
+      (status === playerStatus.PLAYBACK_ERROR ||
+        shouldShowInitialSourcePicker) ? (
         <SourceSelectPart
           meta={playerMeta}
           // Keep the fallback picker inside the player layout. "full" is

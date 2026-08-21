@@ -16,6 +16,7 @@ export interface TorrentStartRequest {
   sourceId: string;
   url: string;
   infoHash?: string;
+  trackers?: string[];
   fileIdx?: number;
   fileName?: string;
   startAt?: number;
@@ -38,6 +39,15 @@ export interface TorrentStatus {
   duration?: number | null;
   error: string | null;
   updatedAt: number;
+  discoveryPhase?: string;
+  trackersAttempted?: number;
+  trackersSucceeded?: number;
+  peersDiscovered?: number;
+  peersInjected?: number;
+  dhtRunning?: boolean;
+  listenAddress?: string | null;
+  lastDiscoveryAt?: number | null;
+  lastDiscoveryError?: string | null;
 }
 
 export interface TorrentSession {

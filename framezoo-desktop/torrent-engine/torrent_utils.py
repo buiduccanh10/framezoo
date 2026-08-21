@@ -6,7 +6,7 @@ import shutil
 import sys
 import tempfile
 from typing import Any, List, Optional, Set, Tuple
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 import torrent_constants as constants
 
@@ -21,11 +21,54 @@ def merge_tracker_sources(*sources: Any) -> List[str]:
             if not isinstance(value, str):
                 continue
             tracker = value.strip()
-            if not tracker or tracker in seen:
+            key = tracker.rstrip("/").lower()
+            if not tracker or key in seen:
                 continue
-            seen.add(tracker)
+            seen.add(key)
             merged.append(tracker)
     return merged
+
+
+def get_torrent_info_trackers(info: Any) -> List[str]:
+    """Return announce URLs embedded in a cached torrent metadata object."""
+    if info is None:
+        return []
+
+    trackers_method = getattr(info, "trackers", None)
+    if not callable(trackers_method):
+        return []
+
+    try:
+        entries = trackers_method()
+    except Exception:
+        return []
+
+    trackers: List[str] = []
+    for entry in entries:
+        value = getattr(entry, "url", entry)
+        if isinstance(value, str) and value.strip():
+            trackers.append(value)
+    return trackers
+
+
+def get_magnet_trackers(url: Any) -> List[str]:
+    if not isinstance(url, str) or not url.strip().lower().startswith("magnet:"):
+        return []
+    try:
+        return [
+            value.strip()
+            for value in parse_qs(urlparse(url).query).get("tr", [])
+            if isinstance(value, str) and value.strip()
+        ]
+    except ValueError:
+        return []
+
+
+def get_request_trackers(request: dict[str, Any]) -> List[str]:
+    return merge_tracker_sources(
+        get_magnet_trackers(request.get("url")),
+        request.get("trackers"),
+    )
 
 
 def normalized_info_hash(value: Any) -> Optional[str]:
@@ -44,7 +87,10 @@ def get_magnet(request: dict[str, Any]) -> str:
 
     info_hash = normalized_info_hash(request.get("infoHash"))
     if info_hash:
-        return "magnet:?xt=urn:btih:" + info_hash
+        parts = ["magnet:?xt=urn:btih:" + info_hash]
+        for tracker in get_request_trackers(request):
+            parts.append("tr=" + quote(tracker, safe=""))
+        return "&".join(parts)
 
     raise ValueError("torrent request requires a magnet URL or infoHash")
 

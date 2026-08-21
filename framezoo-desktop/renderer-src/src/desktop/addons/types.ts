@@ -89,6 +89,7 @@ export interface AddonStream {
   description: string;
   url: string;
   infoHash: string | null;
+  trackers?: string[];
   fileIdx: number | null;
   fileName: string | null;
   videoSize: number | null;

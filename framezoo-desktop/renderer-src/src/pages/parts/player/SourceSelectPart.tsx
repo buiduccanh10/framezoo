@@ -50,7 +50,6 @@ import {
   registerTorrentSession,
   scheduleTorrentStop,
   useActiveTorrentStatus,
-  waitForTorrentPlayable,
 } from "@/desktop/torrentPlaybackStore";
 import { ErrorCard } from "@/pages/parts/errors/ErrorCard";
 import { type PlayerMeta, playerStatus } from "@/stores/player/slices/source";
@@ -266,9 +265,12 @@ export function SourceSelectPart(props: {
 
   const hasAttemptedAutoSelect = useRef(false);
   const hasAutoSelectedSingleAddon = useRef(false);
+  const keepAddonListOpen = useRef(false);
+  const selectionOperation = useRef(0);
   useEffect(() => {
     hasAttemptedAutoSelect.current = false;
     hasAutoSelectedSingleAddon.current = false;
+    keepAddonListOpen.current = false;
   }, [meta.tmdbId, meta.season?.tmdbId, meta.episode?.tmdbId]);
 
   const qualityOptions: OptionItem[] = useMemo(
@@ -403,9 +405,17 @@ export function SourceSelectPart(props: {
   }, [eligibleAddons, selectedAddonId]);
 
   useEffect(() => {
-    if (mode !== "full" || selectedAddonId || !currentAddonId) return;
+    if (
+      mode !== "full" ||
+      selectedAddonId ||
+      !currentAddonId ||
+      keepAddonListOpen.current ||
+      pendingTorrentSourceId
+    ) {
+      return;
+    }
     setSelectedAddonId(currentAddonId);
-  }, [currentAddonId, mode, selectedAddonId]);
+  }, [currentAddonId, mode, pendingTorrentSourceId, selectedAddonId]);
 
   useEffect(() => {
     onStateChange?.(selectedAddonId ? "streams" : "addons");
@@ -413,8 +423,11 @@ export function SourceSelectPart(props: {
 
   const selectAddonStream = useCallback(
     async (stream: AddonStream) => {
-      setStartingAddonId(stream.id);
-      onLoadingChange?.(true);
+      const operationId = ++selectionOperation.current;
+      if (mode === "initial") {
+        setStartingAddonId(stream.id);
+        onLoadingChange?.(true);
+      }
       setAddonError(null);
       const previousTorrentSessionId = getActiveTorrentSessionId();
 
@@ -426,48 +439,22 @@ export function SourceSelectPart(props: {
             : getSavedProgressTime(progressItems, meta);
           if (wasStartFromBeginning) setShouldStartFromBeginning(false);
 
-          // 60-second timeout — long enough for the Windows Firewall dialog
-          // to appear and be answered if warmup hasn't completed yet, but
-          // short enough to surface an error rather than leaving the UI in a
-          // permanently stuck state.
-          const TORRENT_START_TIMEOUT_MS = 60_000;
-          const session = await Promise.race([
-            startTorrent({
-              sourceId: stream.id,
-              url: stream.url,
-              infoHash: stream.infoHash ?? undefined,
-              fileIdx: stream.fileIdx ?? undefined,
-              fileName: stream.fileName ?? undefined,
-              startAt,
-            }),
-            new Promise<never>((_, reject) =>
-              setTimeout(
-                () =>
-                  reject(
-                    new Error(
-                      t(
-                        "addons.player.torrentStartTimeout",
-                        "Taking too long to start stream. Check your network permissions and try again.",
-                      ),
-                    ),
-                  ),
-                TORRENT_START_TIMEOUT_MS,
-              ),
-            ),
-          ]);
+          const session = await startTorrent({
+            sourceId: stream.id,
+            url: stream.url,
+            infoHash: stream.infoHash ?? undefined,
+            trackers: stream.trackers,
+            fileIdx: stream.fileIdx ?? undefined,
+            fileName: stream.fileName ?? undefined,
+            startAt,
+          });
 
           registerTorrentSession(session.sessionId);
-          const playableStatus = await waitForTorrentPlayable(
-            session.sessionId,
-          );
-          const duration =
-            playableStatus.duration ?? session.duration ?? undefined;
-          const streamUrl = playableStatus.streamUrl ?? session.streamUrl;
           // When user explicitly chose "watch from beginning", ignore session.startAt
           // (sidecar may return a cached previous position and override our intent).
           const playbackStartAt = wasStartFromBeginning
             ? 0
-            : (playableStatus.startAt ?? session.startAt ?? startAt);
+            : (session.startAt ?? startAt);
           const mediaSource: SourceSliceSource = {
             id: stream.id,
             type: "file",
@@ -475,10 +462,10 @@ export function SourceSelectPart(props: {
             qualities: {
               unknown: {
                 type: "mp4",
-                url: streamUrl,
+                url: session.streamUrl,
               },
             },
-            duration,
+            duration: session.duration ?? undefined,
             isTorrent: true,
           };
 
@@ -540,16 +527,21 @@ export function SourceSelectPart(props: {
           }
         }
       } catch (reason) {
-        setAddonError(
-          reason instanceof Error ? reason.message : "Unable to start stream",
-        );
+        const message =
+          reason instanceof Error ? reason.message : "Unable to start stream";
+        if (message !== "Torrent session was replaced") {
+          setAddonError(message);
+        }
       } finally {
-        onLoadingChange?.(false);
-        setStartingAddonId(null);
+        if (operationId === selectionOperation.current && mode === "initial") {
+          onLoadingChange?.(false);
+          setStartingAddonId(null);
+        }
       }
     },
     [
       meta,
+      mode,
       onLoadingChange,
       onSelected,
       playMedia,
@@ -557,7 +549,6 @@ export function SourceSelectPart(props: {
       setPreferredStream,
       setShouldStartFromBeginning,
       shouldStartFromBeginning,
-      t,
     ],
   );
 
@@ -737,6 +728,7 @@ export function SourceSelectPart(props: {
           addon={selectedAddon}
           onBack={() => {
             hasAutoSelectedSingleAddon.current = true;
+            keepAddonListOpen.current = true;
             setSelectedAddonId(null);
             setAddonError(null);
           }}
@@ -811,7 +803,10 @@ export function SourceSelectPart(props: {
                         />
                       </div>
                     }
-                    onClick={() => setSelectedAddonId(addon.manifest.id)}
+                    onClick={() => {
+                      keepAddonListOpen.current = false;
+                      setSelectedAddonId(addon.manifest.id);
+                    }}
                   >
                     <span className="inline-flex h-full min-w-0 items-center gap-3 align-middle">
                       <AddonIcon
@@ -880,7 +875,7 @@ export function SourceSelectPart(props: {
           <Menu.Section>
             {selectedAddonStreams.map((stream) => {
               const startingStreamId =
-                startingAddonId ?? pendingTorrentSourceId;
+                mode === "initial" ? startingAddonId : null;
               const isStartingThisStream = startingStreamId === stream.id;
               const isCurrentStream = currentStream?.id === stream.id;
               const isSelected = startingStreamId
@@ -909,8 +904,12 @@ export function SourceSelectPart(props: {
                 <Menu.Link
                   key={stream.id}
                   active={isSelected}
-                  clickable={!startingStreamId}
-                  disabled={startingStreamId !== null && !isStartingThisStream}
+                  clickable={mode === "full" || !startingStreamId}
+                  disabled={
+                    mode !== "full" &&
+                    startingStreamId !== null &&
+                    !isStartingThisStream
+                  }
                   rightSide={
                     isSelected ? (
                       <Icon
@@ -1002,9 +1001,6 @@ export function SourceSelectPart(props: {
         ) : null}
         <div className="pointer-events-auto relative flex h-full w-full flex-col items-center justify-center gap-4 px-6 py-8">
           <Spinner className="text-3xl text-white/80" />
-          <p className="text-sm text-white/60">
-            {t("addons.player.startingStream", "Starting stream…")}
-          </p>
         </div>
       </div>
     );

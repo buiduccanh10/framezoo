@@ -58,6 +58,21 @@ describe("addon stream normalization", () => {
     expect(streams[1].fileName).toBe("movie.mkv");
   });
 
+  it("preserves tracker sources when normalizing metadata-only torrents", () => {
+    const [stream] = normalizeAddonStreams(addon, [
+      {
+        infoHash: "0123456789abcdef0123456789abcdef01234567",
+        sources: [
+          "tracker:http://tracker.example/announce",
+          "dht:0123456789abcdef0123456789abcdef01234567",
+        ],
+      },
+    ]);
+
+    expect(stream.trackers).toEqual(["http://tracker.example/announce"]);
+    expect(stream.url).toContain("tr=http%3A%2F%2Ftracker.example%2Fannounce");
+  });
+
   it("preserves Peerflix description when title is omitted", () => {
     const [stream] = normalizeAddonStreams(addon, [
       {

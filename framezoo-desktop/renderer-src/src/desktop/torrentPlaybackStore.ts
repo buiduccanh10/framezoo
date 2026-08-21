@@ -13,7 +13,6 @@ const listeners = new Set<() => void>();
 const pendingStopTimers = new Map<string, ReturnType<typeof setTimeout>>();
 let unsubscribe: (() => void) | null = null;
 const TORRENT_STOP_GRACE_MS = 3_000;
-const TORRENT_PLAYABLE_TIMEOUT_MS = 120_000;
 
 function publish() {
   for (const listener of listeners) listener();
@@ -80,7 +79,6 @@ export function getActiveTorrentSessionId() {
 
 export function waitForTorrentPlayable(
   sessionId: string,
-  timeoutMs = TORRENT_PLAYABLE_TIMEOUT_MS,
 ): Promise<TorrentStatus> {
   ensureSubscription();
 
@@ -91,7 +89,6 @@ export function waitForTorrentPlayable(
     const finishResolve = (status: TorrentStatus) => {
       if (settled) return;
       settled = true;
-      clearTimeout(timeoutId);
       unsubscribeWait();
       resolve(status);
     };
@@ -99,13 +96,16 @@ export function waitForTorrentPlayable(
     const finishReject = (error: Error) => {
       if (settled) return;
       settled = true;
-      clearTimeout(timeoutId);
       unsubscribeWait();
       reject(error);
     };
 
     const inspect = (status: TorrentStatus | null) => {
-      if (settled || activeSessionId !== sessionId) return;
+      if (settled) return;
+      if (activeSessionId !== sessionId) {
+        finishReject(new Error("Torrent session was replaced"));
+        return;
+      }
       if (!status) return;
       if (status.state === "error") {
         finishReject(
@@ -118,11 +118,6 @@ export function waitForTorrentPlayable(
       }
     };
 
-    const timeoutId = setTimeout(() => {
-      finishReject(
-        new Error("Torrent metadata did not become playable in time"),
-      );
-    }, timeoutMs);
     unsubscribeWait = subscribeActiveTorrentStatus(() => {
       inspect(activeStatus);
     });

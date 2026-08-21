@@ -3,7 +3,6 @@ from __future__ import annotations
 import math
 import mimetypes
 import os
-import shutil
 import sys
 import threading
 import time
@@ -32,6 +31,7 @@ class TorrentRuntime:
         handle: Any,
         save_path: str,
         persistent_cache: bool = False,
+        record: Any = None,
     ) -> None:
         self.engine = engine
         self.session_id = session_id
@@ -39,6 +39,7 @@ class TorrentRuntime:
         self.handle = handle
         self.save_path = save_path
         self.persistent_cache = persistent_cache
+        self.record = record
         self.cache_key = get_torrent_cache_key(request)
         self._resume_lock = threading.Lock()
         self.info: Any = None
@@ -78,6 +79,7 @@ class TorrentRuntime:
         self._reannounce_lock = threading.Lock()
         self._last_reannounce = 0.0
         self._focus_piece: Optional[int] = None
+        self._playback_focus_piece: Optional[int] = None
         self.status_thread = threading.Thread(
             target=self.publish_status,
             name="torrent-status-" + session_id,
@@ -118,8 +120,11 @@ class TorrentRuntime:
 
     def initialize_metadata(self) -> None:
         try:
-            self.wait_for_metadata(90)
+            self.wait_for_metadata()
         except Exception as error:
+            if self.stop_event.is_set():
+                self.metadata_complete.set()
+                return
             self.metadata_error = str(error)
             log_event(
                 "metadata failed",
@@ -129,9 +134,17 @@ class TorrentRuntime:
         finally:
             self.metadata_complete.set()
 
-    def wait_for_metadata(self, timeout: float) -> None:
-        deadline = time.monotonic() + timeout
-        while time.monotonic() < deadline and not self.stop_event.is_set():
+    def wait_for_metadata(self, timeout: Optional[float] = None) -> None:
+        deadline = (
+            time.monotonic() + timeout
+            if timeout is not None
+            else None
+        )
+        last_reannounce = 0.0
+        while (
+            (deadline is None or time.monotonic() < deadline)
+            and not self.stop_event.is_set()
+        ):
             if self.metadata_ready.is_set():
                 return
             status = self.handle.status()
@@ -158,24 +171,83 @@ class TorrentRuntime:
                     # sequential mode would start from piece 0 instead of
                     # the selected file's playhead.
                     self.handle.set_sequential_download(False)
+                    resume = getattr(self.handle, "resume", None)
+                    if callable(resume):
+                        try:
+                            resume()
+                        except Exception:
+                            pass
                     if self.persistent_cache:
                         self.persist_metadata()
                     self.metadata_ready.set()
+                    # Publish the loopback URL as soon as file metadata is
+                    # known. The player must be allowed to connect while the
+                    # first piece is still pending; serve() keeps the HTTP
+                    # body open until the piece arrives or the client leaves.
+                    self.stream_type = "file"
                     log_event(
-                        "metadata ready",
+                        "stream available",
                         sessionId=self.session_id,
                         fileName=self.file_path.rsplit("/", 1)[-1],
                         fileSize=self.file_size,
-                        timingPhase="metadata_ready",
+                        timingPhase="stream_available",
                         elapsedMs=self.elapsed_ms(),
                     )
                     self.prime_startup_ranges()
-                    self.wait_for_initial_chunk()
                 return
+            now = time.monotonic()
+            if (
+                now - last_reannounce
+                >= constants.METADATA_REANNOUNCE_INTERVAL
+            ):
+                self._force_reannounce_for_metadata()
+                last_reannounce = now
             time.sleep(0.2)
         if self.stop_event.is_set():
             return
         raise TimeoutError("timed out waiting for torrent metadata")
+
+    def _force_reannounce_for_metadata(self) -> None:
+        now = time.monotonic()
+        with self._reannounce_lock:
+            if (
+                now - getattr(self, "_last_reannounce", 0.0)
+                < constants.REANNOUNCE_COOLDOWN
+            ):
+                return
+
+            announced = False
+            force_reannounce = getattr(self.handle, "force_reannounce", None)
+            force_dht_announce = getattr(
+                self.handle,
+                "force_dht_announce",
+                None,
+            )
+            try:
+                if callable(force_reannounce):
+                    force_reannounce()
+                    announced = True
+            except Exception:
+                pass
+            try:
+                if callable(force_dht_announce):
+                    force_dht_announce()
+                    announced = True
+            except Exception:
+                pass
+            if not announced:
+                return
+            self._last_reannounce = now
+
+        status = self.handle.status()
+        log_event(
+            "metadata swarm reannounce",
+            sessionId=self.session_id,
+            peers=int(getattr(status, "num_peers", 0)),
+            downloadRate=int(getattr(status, "download_rate", 0)),
+            timingPhase="metadata_reannounce",
+            elapsedMs=self.elapsed_ms(),
+        )
 
     def session_payload(self) -> dict[str, Any]:
         return {
@@ -231,24 +303,23 @@ class TorrentRuntime:
                 sys.stderr.write(f"[sidecar] Failed to save resume data: {error}\n")
                 return False
 
-    def stop(self) -> None:
+    def stop(self, remove_torrent: bool = True) -> None:
         self.stop_event.set()
         self.engine.http_server.unregister(self.session_id)
         log_event("session stopped", sessionId=self.session_id)
         if not self._torrent_cleaned:
             if self.persistent_cache:
                 self.save_resume_data_sync()
-            try:
-                self.engine.session.remove_torrent(self.handle)
-            except Exception:
-                pass
-            if self.persistent_cache:
+            if remove_torrent:
                 try:
-                    os.utime(self.save_path, None)
-                except OSError:
+                    self.engine.session.remove_torrent(self.handle)
+                except Exception:
                     pass
-            else:
-                shutil.rmtree(self.save_path, ignore_errors=True)
+                if self.persistent_cache:
+                    try:
+                        os.utime(self.save_path, None)
+                    except OSError:
+                        pass
             self._torrent_cleaned = True
 
     def current_status(self) -> dict[str, Any]:
@@ -280,6 +351,15 @@ class TorrentRuntime:
         else:
             lifecycle = "buffering"
 
+        discovery_status: dict[str, Any] = {}
+        record = getattr(self, "record", None)
+        engine = getattr(self, "engine", None)
+        if record is not None and engine is not None:
+            try:
+                discovery_status = engine.get_discovery_status(record)
+            except Exception:
+                discovery_status = {}
+
         return {
             "sessionId": self.session_id,
             "sourceId": self.request.get("sourceId", ""),
@@ -304,6 +384,7 @@ class TorrentRuntime:
             "duration": None,
             "error": stream_error,
             "updatedAt": int(time.time() * 1000),
+            **discovery_status,
         }
 
     def _observe_status_milestones(self, status: Any) -> None:
@@ -426,7 +507,12 @@ class TorrentRuntime:
         self._schedule_pieces(pieces, set(pieces), reason)
 
     def prime_startup_ranges(self) -> None:
-        """Schedule head and tail pieces before libmpv issues HTTP probes."""
+        """Keep enough contiguous playback data active before libmpv's first frame.
+
+        Metadata probing can take longer than the first few pieces. A four-piece
+        burst leaves libtorrent with no high-priority demand, so it falls back
+        to low-priority background selection and the player appears stalled.
+        """
         if (
             self.info is None
             or self.file_index is None
@@ -440,46 +526,27 @@ class TorrentRuntime:
             piece_length = constants.STREAM_CHUNK_SIZE
 
         try:
-            head_pieces = sorted(
+            startup_pieces = sorted(
                 self.map_pieces(
                     0,
-                    max(1, piece_length * constants.STARTUP_WINDOW_PIECES),
-                ),
-            )[: constants.STARTUP_WINDOW_PIECES]
-            tail_start = max(
-                0,
-                self.file_size - constants.TAIL_PREFETCH_BYTES,
-            )
-            tail_pieces = [
-                piece
-                for piece in sorted(
-                    self.map_pieces(
-                        tail_start,
-                        constants.TAIL_PREFETCH_BYTES,
+                    max(
+                        constants.STARTUP_PREFETCH_BYTES,
+                        piece_length * constants.STARTUP_WINDOW_PIECES,
                     ),
-                )
-                if piece not in head_pieces
-            ]
-
-            if head_pieces:
+                ),
+            )
+            if startup_pieces:
                 self._schedule_pieces(
-                    head_pieces,
-                    set(head_pieces),
-                    reason="startup-prefetch",
-                )
-            if tail_pieces:
-                self._schedule_pieces(
-                    tail_pieces,
-                    set(tail_pieces),
+                    startup_pieces,
+                    {startup_pieces[0]},
                     reason="startup-prefetch",
                 )
 
             log_event(
                 "startup prefetch",
                 sessionId=self.session_id,
-                headPieces=head_pieces,
-                tailPieces=tail_pieces,
-                tailStart=tail_start,
+                startupBytes=constants.STARTUP_PREFETCH_BYTES,
+                startupPieces=startup_pieces,
                 timingPhase="startup_prefetch",
                 elapsedMs=self.elapsed_ms(),
             )
@@ -508,7 +575,7 @@ class TorrentRuntime:
             0,
             end,
             track_position=False,
-            timeout=constants.METADATA_WAIT_TIMEOUT,
+            timeout=None,
         )
         if stream is not None:
             stream.close()
@@ -640,21 +707,27 @@ class TorrentRuntime:
                         else max(0, piece - first_required_piece)
                     )
                     deadline_ms = distance * 25
-                elif index < constants.STARTUP_WINDOW_PIECES:
+                elif (
+                    not getattr(self, "_has_streamed_bytes", False)
+                    and index < constants.STARTUP_WINDOW_PIECES
+                ):
                     priority = constants.STREAM_HOT_PIECE_PRIORITY
-                    deadline_ms = (
-                        constants.PREFETCH_DEADLINE_BASE_MS
-                        + index * constants.PREFETCH_DEADLINE_STEP_MS
-                    )
+                    # Keep the bootstrap window active without adding more
+                    # time-critical pieces than the current playhead.
+                    deadline_ms = None
                 else:
                     priority = constants.STREAM_WARM_PIECE_PRIORITY
-                    deadline_ms = (
-                        constants.PREFETCH_DEADLINE_BASE_MS
-                        + index * constants.PREFETCH_DEADLINE_STEP_MS
-                    )
+                    deadline_ms = None
                 try:
                     self.handle.piece_priority(piece, priority)
-                    self._set_piece_deadline(piece, max(0, deadline_ms))
+                    if deadline_ms is None:
+                        if piece in getattr(self, "_piece_deadlines", {}):
+                            self._reset_piece_deadline(piece)
+                    else:
+                        self._set_piece_deadline(
+                            piece,
+                            max(0, deadline_ms),
+                        )
                     with self._piece_priority_lock:
                         self._boosted_pieces.add(piece)
                         self._piece_priorities = getattr(
@@ -710,6 +783,77 @@ class TorrentRuntime:
                 timingPhase="first_piece_prioritized",
                 elapsedMs=self.elapsed_ms(),
             )
+
+    def _reset_piece_deadline(self, piece: int) -> None:
+        reset_deadline = getattr(self.handle, "reset_piece_deadline", None)
+        if callable(reset_deadline):
+            try:
+                reset_deadline(piece)
+            except Exception:
+                pass
+        with self._piece_priority_lock:
+            self._piece_deadlines = getattr(
+                self,
+                "_piece_deadlines",
+                {},
+            )
+            self._piece_deadlines.pop(piece, None)
+
+    def _focus_playback_piece(self, target_piece: int) -> None:
+        """Move the time-critical window to the current playback head.
+
+        Startup prefetch may have queued deadlines for an earlier probe. Clear
+        those deadlines before the first playable range is scheduled, then
+        leave only the current head eligible for deadline-driven requests.
+        """
+        with self._piece_priority_lock:
+            if (
+                getattr(self, "_playback_focus_piece", None)
+                == target_piece
+            ):
+                return
+            self._playback_focus_piece = target_piece
+            clear_deadlines = getattr(
+                self.handle,
+                "clear_piece_deadlines",
+                None,
+            )
+            if callable(clear_deadlines):
+                try:
+                    clear_deadlines()
+                except Exception:
+                    pass
+            self._piece_deadlines = getattr(
+                self,
+                "_piece_deadlines",
+                {},
+            )
+            self._piece_deadlines.clear()
+            demoted = 0
+            for piece in list(self._boosted_pieces):
+                if piece == target_piece:
+                    continue
+                try:
+                    if self.handle.have_piece(piece):
+                        continue
+                    self.handle.piece_priority(
+                        piece,
+                        constants.STREAM_IDLE_FILE_PRIORITY,
+                    )
+                    self._piece_priorities[piece] = (
+                        constants.STREAM_IDLE_FILE_PRIORITY
+                    )
+                    demoted += 1
+                except Exception:
+                    continue
+        log_event(
+            "playback piece focused",
+            sessionId=self.session_id,
+            targetPiece=target_piece,
+            demotedPieces=demoted,
+            timingPhase="playback_piece_focus",
+            elapsedMs=self.elapsed_ms(),
+        )
     def _log_first_piece_ready(self, piece: Optional[int]) -> None:
         if piece is None or getattr(self, "_first_piece_ready_logged", False):
             return
@@ -1060,7 +1204,7 @@ class TorrentRuntime:
         self,
         start: int,
         end: int,
-        timeout: float = constants.RANGE_WAIT_TIMEOUT,
+        timeout: Optional[float] = constants.RANGE_WAIT_TIMEOUT,
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
         track_position: bool = True,
@@ -1129,7 +1273,11 @@ class TorrentRuntime:
                 elapsedMs=self.elapsed_ms(),
             )
 
-        deadline = time.monotonic() + timeout
+        deadline = (
+            time.monotonic() + timeout
+            if timeout is not None
+            else None
+        )
 
         if track_position:
             self.maybe_refocus(start)
@@ -1147,7 +1295,10 @@ class TorrentRuntime:
         stalled_target_piece: Optional[int] = None
         stalled_since = time.monotonic()
         target_stall_logged = False
-        while time.monotonic() < deadline and not self.stop_event.is_set():
+        while (
+            (deadline is None or time.monotonic() < deadline)
+            and not self.stop_event.is_set()
+        ):
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
                     "client disconnected during range wait",
@@ -1265,7 +1416,8 @@ class TorrentRuntime:
                     # blocks and only re-picks its missing ones, so repeated
                     # kicks are safe while it remains stalled.
                     if (
-                        stall_seconds >= constants.TARGET_KICK_DELAY
+                        target_availability is not None
+                        and stall_seconds >= constants.TARGET_KICK_DELAY
                         and now - last_kick
                         >= constants.TARGET_KICK_INTERVAL
                     ):
@@ -1319,16 +1471,23 @@ class TorrentRuntime:
         stream: Any,
         start: int,
         end: int,
-        timeout: float = constants.RANGE_WAIT_TIMEOUT,
+        timeout: Optional[float] = constants.RANGE_WAIT_TIMEOUT,
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
         track_position: bool = True,
     ) -> Optional[bytes]:
         end = min(end, self.file_piece_end(start))
         expected_length = end - start + 1
-        deadline = time.monotonic() + timeout
+        deadline = (
+            time.monotonic() + timeout
+            if timeout is not None
+            else None
+        )
 
-        while time.monotonic() < deadline and not self.stop_event.is_set():
+        while (
+            (deadline is None or time.monotonic() < deadline)
+            and not self.stop_event.is_set()
+        ):
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
                     "client disconnected during chunk read",
@@ -1385,8 +1544,14 @@ class TorrentRuntime:
                 timingPhase="http_request",
                 elapsedMs=self.elapsed_ms(),
             )
-        if not self.metadata_ready.is_set():
-            self.metadata_complete.wait(constants.METADATA_WAIT_TIMEOUT)
+        while (
+            not self.metadata_ready.is_set()
+            and not self.metadata_complete.is_set()
+            and not self.stop_event.is_set()
+        ):
+            if not is_client_connected(handler, connect_start):
+                return
+            self.metadata_complete.wait(0.5)
         if self.metadata_error:
             handler.send_error(502, self.metadata_error)
             return
@@ -1595,7 +1760,7 @@ class TorrentRuntime:
         handler: Optional[BaseHTTPRequestHandler] = None,
         connect_start: float = 0.0,
         track_position: bool = True,
-        timeout: float = constants.FIRST_RANGE_WAIT_TIMEOUT,
+        timeout: Optional[float] = constants.FIRST_RANGE_WAIT_TIMEOUT,
     ) -> Tuple[Optional[Any], Optional[bytes]]:
         """Wait for libtorrent to create and fill the first requested bytes."""
         chunk_end = min(
@@ -1610,16 +1775,26 @@ class TorrentRuntime:
         ):
             # The sparse file may not exist until libtorrent writes its first
             # block. Schedule the playhead before waiting for that file.
+            first_piece = min(self.map_pieces(start, 1), default=None)
+            if first_piece is not None:
+                self._focus_playback_piece(first_piece)
             self.prioritize_range(
                 start,
                 max(1, chunk_end - start + 1),
                 reason="first-chunk",
             )
-        deadline = time.monotonic() + timeout
+        deadline = (
+            time.monotonic() + timeout
+            if timeout is not None
+            else None
+        )
         if connect_start == 0.0:
             connect_start = time.monotonic()
 
-        while time.monotonic() < deadline and not self.stop_event.is_set():
+        while (
+            (deadline is None or time.monotonic() < deadline)
+            and not self.stop_event.is_set()
+        ):
             if handler and not is_client_connected(handler, connect_start):
                 log_event(
                     "client disconnected before first chunk",
@@ -1636,12 +1811,19 @@ class TorrentRuntime:
             except OSError:
                 return None, None
 
-            remaining = max(0.01, deadline - time.monotonic())
+            remaining = (
+                None
+                if deadline is None
+                else max(0.01, deadline - time.monotonic())
+            )
             chunk = self.read_range_chunk(
                 stream,
                 start,
                 chunk_end,
-                timeout=min(constants.RANGE_WAIT_TIMEOUT, remaining),
+                # The first HTTP pass has its own short header deadline.
+                # `RANGE_WAIT_TIMEOUT=None` only means the body may keep
+                # waiting after headers; it must not disable this deadline.
+                timeout=remaining,
                 handler=handler,
                 connect_start=connect_start,
                 track_position=track_position,

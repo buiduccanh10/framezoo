@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 import tempfile
 import threading
@@ -42,6 +43,68 @@ class SidecarStreamTest(unittest.TestCase):
 
         self.assertEqual(runtime.stream_type, "file")
 
+    def test_initial_chunk_wait_can_survive_the_default_range_timeout(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.stop_event = threading.Event()
+        runtime.file_size = 4
+        runtime.file_path = "episode.mkv"
+        runtime.save_path = tempfile.mkdtemp()
+        runtime.file_piece_end = MethodType(lambda self, _start: 3, runtime)
+        attempts = 0
+
+        Path(runtime.save_path, runtime.file_path).touch()
+
+        def read_range_chunk(self, _stream, _start, _end, timeout, **_kwargs):
+            nonlocal attempts
+            if timeout is not None:
+                raise AssertionError("initial chunk wait must not time out")
+            attempts += 1
+            return None if attempts == 1 else b"test"
+
+        runtime.read_range_chunk = MethodType(read_range_chunk, runtime)
+
+        try:
+            stream, chunk = runtime.open_first_chunk(
+                str(Path(runtime.save_path, runtime.file_path)),
+                0,
+                3,
+                track_position=False,
+                timeout=None,
+            )
+        finally:
+            shutil.rmtree(runtime.save_path, ignore_errors=True)
+
+        if stream is not None:
+            stream.close()
+        self.assertEqual(chunk, b"test")
+        self.assertEqual(attempts, 2)
+
+    def test_reannounces_while_waiting_for_metadata(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-metadata-reannounce-test"
+        runtime._reannounce_lock = threading.Lock()
+        runtime._last_reannounce = -constants.REANNOUNCE_COOLDOWN
+        calls = []
+
+        class FakeStatus:
+            num_peers = 0
+            download_rate = 0
+
+        class FakeHandle:
+            def status(self):
+                return FakeStatus()
+
+            def force_reannounce(self):
+                calls.append("tracker")
+
+            def force_dht_announce(self):
+                calls.append("dht")
+
+        runtime.handle = FakeHandle()
+        runtime._force_reannounce_for_metadata()
+
+        self.assertEqual(calls, ["tracker", "dht"])
+
     def test_keeps_requested_open_ended_ranges(self):
         large_end = 64 * 1024 * 1024
         self.assertEqual(
@@ -75,13 +138,62 @@ class SidecarStreamTest(unittest.TestCase):
         self.assertEqual(
             utils.merge_tracker_sources(
                 [" udp://one.example/announce ", "udp://two.example/announce"],
-                ["udp://one.example/announce", None],
+                ["udp://one.example/announce/", None],
                 ["udp://three.example/announce"],
             ),
             [
                 "udp://one.example/announce",
                 "udp://two.example/announce",
                 "udp://three.example/announce",
+            ],
+        )
+
+    def test_reads_trackers_from_cached_torrent_metadata(self):
+        class Entry:
+            def __init__(self, url):
+                self.url = url
+
+        class Info:
+            def trackers(self):
+                return iter(
+                    [
+                        Entry("http://cached.example/announce"),
+                        Entry("udp://cached.example:6969/announce"),
+                    ],
+                )
+
+        self.assertEqual(
+            utils.get_torrent_info_trackers(Info()),
+            [
+                "http://cached.example/announce",
+                "udp://cached.example:6969/announce",
+            ],
+        )
+
+    def test_preserves_magnet_trackers_from_request(self):
+        request = {
+            "infoHash": "a" * 40,
+            "trackers": ["http://tracker.example/announce"],
+        }
+        magnet = utils.get_magnet(request)
+        self.assertIn(
+            "tr=http%3A%2F%2Ftracker.example%2Fannounce",
+            magnet,
+        )
+        self.assertEqual(
+            utils.get_request_trackers(
+                {
+                    "url": (
+                        "magnet:?xt=urn:btih:%s"
+                        "&tr=http%%3A%%2F%%2Fmagnet.example%%2Fannounce"
+                    )
+                    % ("b" * 40),
+                    "trackers": ["udp://request.example/announce"],
+                },
+            ),
+            [
+                "http://magnet.example/announce",
+                "udp://request.example/announce",
             ],
         )
 
@@ -171,7 +283,10 @@ class SidecarStreamTest(unittest.TestCase):
         body_release = threading.Event()
 
         def open_first_chunk(self, _absolute_path, _start, _end, timeout, **_kwargs):
-            if timeout <= constants.INITIAL_RANGE_HEADER_WAIT_TIMEOUT:
+            if (
+                timeout is not None
+                and timeout <= constants.INITIAL_RANGE_HEADER_WAIT_TIMEOUT
+            ):
                 return None, None
             body_release.wait(2)
             return BytesIO(b"test"), b"test"
@@ -295,13 +410,111 @@ class SidecarStreamTest(unittest.TestCase):
 
         runtime.handle = FakeHandle()
         runtime._schedule_pieces([522], {522}, "tail-probe")
-        runtime._schedule_pieces([478, 479], {478}, "playback-head")
+        runtime._schedule_pieces(
+            [478, 479, 480, 481, 482],
+            {478},
+            "playback-head",
+        )
 
         self.assertIn((522, 7), runtime.handle.priorities)
         self.assertIn((478, 7), runtime.handle.priorities)
         self.assertIn((479, 4), runtime.handle.priorities)
-        self.assertEqual(len(runtime.handle.deadlines), 3)
+        self.assertIn((482, 2), runtime.handle.priorities)
+        self.assertGreaterEqual(len(runtime.handle.deadlines), 2)
         self.assertIn(0, [deadline for _, deadline, _ in runtime.handle.deadlines])
+
+    def test_first_playback_piece_demotes_startup_deadlines(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime._piece_priority_lock = threading.RLock()
+        runtime._boosted_pieces = set()
+        runtime._piece_priorities = {}
+        runtime._piece_deadlines = {}
+        runtime._has_streamed_bytes = False
+        runtime.session_id = "torrent-first-piece-focus-test"
+        runtime.elapsed_ms = lambda: 0
+
+        class FakeHandle:
+            def __init__(self):
+                self.priorities = []
+                self.deadlines = []
+                self.cleared_deadlines = 0
+
+            def have_piece(self, _piece):
+                return False
+
+            def piece_priority(self, piece, priority):
+                self.priorities.append((piece, priority))
+
+            def set_piece_deadline(self, piece, deadline, flags):
+                self.deadlines.append((piece, deadline, flags))
+
+            def reset_piece_deadline(self, piece):
+                self.deadlines.append((piece, None, None))
+
+            def clear_piece_deadlines(self):
+                self.cleared_deadlines += 1
+
+        runtime.handle = FakeHandle()
+        runtime._schedule_pieces(
+            [10, 11, 12, 13],
+            {10},
+            "startup-prefetch",
+        )
+        runtime._focus_playback_piece(12)
+
+        self.assertEqual(runtime.handle.cleared_deadlines, 1)
+        self.assertEqual(
+            runtime._piece_priorities[10],
+            constants.STREAM_IDLE_FILE_PRIORITY,
+        )
+        self.assertEqual(
+            runtime._piece_priorities[11],
+            constants.STREAM_IDLE_FILE_PRIORITY,
+        )
+        self.assertEqual(
+            runtime._piece_priorities[13],
+            constants.STREAM_IDLE_FILE_PRIORITY,
+        )
+        self.assertEqual(
+            runtime._piece_priorities[12],
+            constants.STREAM_HOT_PIECE_PRIORITY,
+        )
+        self.assertEqual(runtime._piece_deadlines, {})
+
+        runtime._schedule_pieces(
+            [12, 13, 14],
+            {12},
+            "first-chunk",
+        )
+        self.assertEqual(
+            runtime._piece_priorities[12],
+            constants.STREAM_PIECE_PRIORITY,
+        )
+        self.assertEqual(
+            runtime._piece_priorities[13],
+            constants.STREAM_HOT_PIECE_PRIORITY,
+        )
+        self.assertEqual(
+            runtime._piece_priorities[14],
+            constants.STREAM_HOT_PIECE_PRIORITY,
+        )
+        self.assertNotIn(13, runtime._piece_deadlines)
+        self.assertNotIn(14, runtime._piece_deadlines)
+
+        runtime._has_streamed_bytes = True
+        runtime._schedule_pieces(
+            [12, 13, 14],
+            {12},
+            "steady-state",
+        )
+        self.assertEqual(
+            runtime._piece_priorities[13],
+            constants.STREAM_WARM_PIECE_PRIORITY,
+        )
+        self.assertEqual(
+            runtime._piece_priorities[14],
+            constants.STREAM_WARM_PIECE_PRIORITY,
+        )
 
     def test_piece_scheduling_uses_hot_startup_window_and_warm_readahead(self):
         runtime = object.__new__(TorrentRuntime)
@@ -343,7 +556,7 @@ class SidecarStreamTest(unittest.TestCase):
         )
         self.assertEqual(runtime.handle.deadlines[0][1], 0)
 
-    def test_metadata_prefetches_head_and_tail_pieces(self):
+    def test_metadata_prefetches_contiguous_startup_window(self):
         runtime = object.__new__(TorrentRuntime)
         runtime.info = type(
             "FakeInfo",
@@ -354,8 +567,10 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.file_size = 4 * constants.STREAM_CHUNK_SIZE
         runtime.session_id = "torrent-startup-prefetch-test"
         scheduled = []
+        requested_lengths = []
 
-        def map_pieces(self, start, _length):
+        def map_pieces(self, start, length):
+            requested_lengths.append((start, length))
             if start == 0:
                 return {10, 11, 12, 13, 14}
             return {90, 91}
@@ -371,12 +586,15 @@ class SidecarStreamTest(unittest.TestCase):
             scheduled,
             [
                 (
-                    [10, 11, 12, 13],
-                    {10, 11, 12, 13},
+                    [10, 11, 12, 13, 14],
+                    {10},
                     "startup-prefetch",
                 ),
-                ([90, 91], {90, 91}, "startup-prefetch"),
             ],
+        )
+        self.assertEqual(
+            requested_lengths,
+            [(0, constants.STARTUP_PREFETCH_BYTES)],
         )
 
     def test_reannounces_when_target_piece_is_unavailable_with_active_rate(self):
@@ -585,7 +803,7 @@ class SidecarStreamTest(unittest.TestCase):
                 return FakeStatus()
 
             def piece_availability(self):
-                return [3, 3]
+                return [0, 0]
 
             def have_piece(self, _piece):
                 return False
@@ -606,7 +824,9 @@ class SidecarStreamTest(unittest.TestCase):
 
         return FakeHandle()
 
-    def test_kicks_while_swarm_makes_progress_when_required_piece_stalls(self):
+    def test_kicks_while_swarm_makes_progress_when_required_piece_stalls(
+        self,
+    ):
         runtime = object.__new__(TorrentRuntime)
         runtime.stop_event = threading.Event()
         runtime.info = None
@@ -751,7 +971,7 @@ class SidecarStreamTest(unittest.TestCase):
                 return FadingStatus()
 
             def piece_availability(self):
-                return [3, 3]
+                return [0, 0]
 
             def have_piece(self, _piece):
                 return False
@@ -828,7 +1048,7 @@ class SidecarStreamTest(unittest.TestCase):
                     return BusyStatus()
 
                 def piece_availability(self):
-                    return [3, 3]
+                    return [0, 0]
 
                 def have_piece(self, _piece):
                     return False
@@ -914,7 +1134,7 @@ class SidecarStreamTest(unittest.TestCase):
                     return FakeStatus()
 
                 def piece_availability(self):
-                    return [3]
+                    return [0]
 
                 def have_piece(self, _piece):
                     return False
@@ -1114,7 +1334,10 @@ class SidecarStreamTest(unittest.TestCase):
         runtime.focus_file()
         runtime.focus_file()
 
-        self.assertEqual(runtime.handle.file_priorities, [[0, 1, 0]])
+        self.assertEqual(
+            runtime.handle.file_priorities,
+            [[0, constants.STREAM_IDLE_FILE_PRIORITY, 0]],
+        )
         self.assertEqual(runtime.handle.sequential_calls, 1)
         self.assertFalse(runtime.handle.sequential_enabled)
 
