@@ -13,6 +13,7 @@ const listeners = new Set<() => void>();
 const pendingStopTimers = new Map<string, ReturnType<typeof setTimeout>>();
 let unsubscribe: (() => void) | null = null;
 const TORRENT_STOP_GRACE_MS = 3_000;
+const TORRENT_PLAYABLE_TIMEOUT_MS = 120_000;
 
 function publish() {
   for (const listener of listeners) listener();
@@ -75,6 +76,66 @@ export function getActiveTorrentStatus() {
 
 export function getActiveTorrentSessionId() {
   return activeSessionId;
+}
+
+export function waitForTorrentPlayable(
+  sessionId: string,
+  timeoutMs = TORRENT_PLAYABLE_TIMEOUT_MS,
+): Promise<TorrentStatus> {
+  ensureSubscription();
+
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    let unsubscribeWait: () => void = () => undefined;
+
+    const finishResolve = (status: TorrentStatus) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      unsubscribeWait();
+      resolve(status);
+    };
+
+    const finishReject = (error: Error) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      unsubscribeWait();
+      reject(error);
+    };
+
+    const inspect = (status: TorrentStatus | null) => {
+      if (settled || activeSessionId !== sessionId) return;
+      if (!status) return;
+      if (status.state === "error") {
+        finishReject(
+          new Error(status.error || "Torrent stream failed before playback"),
+        );
+        return;
+      }
+      if (status.streamType === "file" && status.streamUrl) {
+        finishResolve(status);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      finishReject(
+        new Error("Torrent metadata did not become playable in time"),
+      );
+    }, timeoutMs);
+    unsubscribeWait = subscribeActiveTorrentStatus(() => {
+      inspect(activeStatus);
+    });
+    void getTorrentStatus(sessionId)
+      .then(inspect)
+      .catch((error) => {
+        finishReject(
+          error instanceof Error
+            ? error
+            : new Error("Failed to read torrent status"),
+        );
+      });
+  });
 }
 
 export function subscribeActiveTorrentStatus(listener: () => void) {

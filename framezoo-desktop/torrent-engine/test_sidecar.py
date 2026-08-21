@@ -26,6 +26,22 @@ except ModuleNotFoundError as error:
 
 
 class SidecarStreamTest(unittest.TestCase):
+    def test_stream_stays_pending_until_initial_chunk_is_available(self):
+        runtime = object.__new__(TorrentRuntime)
+        runtime.session_id = "torrent-initial-chunk-test"
+        runtime.stream_type = "pending"
+        runtime.file_size = 1024
+        runtime.file_path = "episode.mkv"
+        runtime.save_path = tempfile.gettempdir()
+
+        def open_first_chunk(self, *_args, **_kwargs):
+            return BytesIO(b"header"), b"header"
+
+        runtime.open_first_chunk = MethodType(open_first_chunk, runtime)
+        runtime.wait_for_initial_chunk()
+
+        self.assertEqual(runtime.stream_type, "file")
+
     def test_keeps_requested_open_ended_ranges(self):
         large_end = 64 * 1024 * 1024
         self.assertEqual(

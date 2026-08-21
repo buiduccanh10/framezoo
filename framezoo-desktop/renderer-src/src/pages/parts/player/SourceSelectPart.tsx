@@ -1,5 +1,11 @@
 import { useQueries } from "@tanstack/react-query";
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -27,9 +33,9 @@ import { useInstalledAddons } from "@/desktop/addons/store";
 import {
   ADDON_STREAMS_GC_TIME_MS,
   ADDON_STREAMS_STALE_TIME_MS,
+  findAddonStreamPreference,
   getAddonStreamQuality,
   getAddonStreamQueryKey,
-  matchesAddonStreamPreference,
   normalizeAddonStreams,
 } from "@/desktop/addons/streams";
 import type {
@@ -43,6 +49,8 @@ import {
   getActiveTorrentSessionId,
   registerTorrentSession,
   scheduleTorrentStop,
+  useActiveTorrentStatus,
+  waitForTorrentPlayable,
 } from "@/desktop/torrentPlaybackStore";
 import { ErrorCard } from "@/pages/parts/errors/ErrorCard";
 import { type PlayerMeta, playerStatus } from "@/stores/player/slices/source";
@@ -159,21 +167,26 @@ function AddonIcon(props: { name: string; logo?: string }) {
 
 function SelectedAddonHeader(props: {
   addon: InstalledAddon;
-  onBack: () => void;
+  onBack?: () => void;
+  showBack?: boolean;
   rightSide?: React.ReactNode;
 }) {
+  const showBack = props.showBack ?? true;
+
   return (
     <div>
       <h3 className="flex items-center justify-between border-b border-video-context-border pb-3 pt-5 font-bold text-video-context-type-main">
         <div className="flex min-w-0 flex-1 items-center">
-          <button
-            type="button"
-            className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light hover:bg-opacity-10"
-            onClick={props.onBack}
-            aria-label="Back to addons"
-          >
-            <Icon className="text-xl" icon={Icons.ARROW_LEFT} />
-          </button>
+          {showBack ? (
+            <button
+              type="button"
+              className="-ml-2 shrink-0 rounded p-2 tabbable hover:bg-video-context-light hover:bg-opacity-10"
+              onClick={props.onBack}
+              aria-label="Back to addons"
+            >
+              <Icon className="text-xl" icon={Icons.ARROW_LEFT} />
+            </button>
+          ) : null}
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <AddonIcon
               name={props.addon.manifest.name}
@@ -208,7 +221,15 @@ export function SourceSelectPart(props: {
   const addons = useInstalledAddons();
   const progressItems = useProgressStore((state) => state.items);
   const { playMedia, status } = usePlayer();
+  const torrentStatus = useActiveTorrentStatus();
+  const pendingTorrentSourceId =
+    torrentStatus?.streamType === "pending" ? torrentStatus.sourceId : null;
   const currentSourceId = usePlayerStore((state) => state.sourceId);
+  const currentSource = usePlayerStore((state) => state.source);
+  const currentSourceIsTorrent =
+    currentSource?.type === "file" && currentSource.isTorrent === true;
+  const hasActiveTorrentSelection =
+    currentSourceIsTorrent || pendingTorrentSourceId !== null;
   const preferredStream = usePlayerStore((state) => state.preferredStream);
   const savedStreamPreference = useMemo(
     () => getLastStreamPreference(meta),
@@ -338,11 +359,29 @@ export function SourceSelectPart(props: {
     [addons, selectedAddonId],
   );
 
-  const currentAddonId = useMemo(() => {
-    if (!currentSourceId) return null;
-    const stream = addonStreams.find((s) => s.id === currentSourceId);
-    return stream?.addonId ?? null;
-  }, [currentSourceId, addonStreams]);
+  const currentStream = useMemo(() => {
+    const activeSourceId = pendingTorrentSourceId ?? currentSourceId;
+    if (activeSourceId) {
+      const exactStream = addonStreams.find(
+        (stream) => stream.id === activeSourceId,
+      );
+      if (exactStream) return exactStream;
+    }
+
+    if (!hasActiveTorrentSelection || !savedTorrentSelection) return null;
+    return (
+      addonStreams.find((stream) =>
+        matchesSavedTorrentSelection(savedTorrentSelection, stream),
+      ) ?? null
+    );
+  }, [
+    addonStreams,
+    hasActiveTorrentSelection,
+    currentSourceId,
+    pendingTorrentSourceId,
+    savedTorrentSelection,
+  ]);
+  const currentAddonId = currentStream?.addonId ?? null;
 
   useEffect(() => {
     setSelectedAddonId(null);
@@ -350,7 +389,7 @@ export function SourceSelectPart(props: {
     setSelectedQuality(qualityOptions[0]);
   }, [addonMedia, qualityOptions]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (
       hasAutoSelectedSingleAddon.current ||
       selectedAddonId ||
@@ -364,11 +403,16 @@ export function SourceSelectPart(props: {
   }, [eligibleAddons, selectedAddonId]);
 
   useEffect(() => {
+    if (mode !== "full" || selectedAddonId || !currentAddonId) return;
+    setSelectedAddonId(currentAddonId);
+  }, [currentAddonId, mode, selectedAddonId]);
+
+  useEffect(() => {
     onStateChange?.(selectedAddonId ? "streams" : "addons");
   }, [selectedAddonId, onStateChange]);
 
   const selectAddonStream = useCallback(
-    async (stream: AddonStream, isAutoPlay = false) => {
+    async (stream: AddonStream) => {
       setStartingAddonId(stream.id);
       onLoadingChange?.(true);
       setAddonError(null);
@@ -413,12 +457,17 @@ export function SourceSelectPart(props: {
           ]);
 
           registerTorrentSession(session.sessionId);
-          const duration = session.duration ?? undefined;
+          const playableStatus = await waitForTorrentPlayable(
+            session.sessionId,
+          );
+          const duration =
+            playableStatus.duration ?? session.duration ?? undefined;
+          const streamUrl = playableStatus.streamUrl ?? session.streamUrl;
           // When user explicitly chose "watch from beginning", ignore session.startAt
           // (sidecar may return a cached previous position and override our intent).
           const playbackStartAt = wasStartFromBeginning
             ? 0
-            : (session.startAt ?? startAt);
+            : (playableStatus.startAt ?? session.startAt ?? startAt);
           const mediaSource: SourceSliceSource = {
             id: stream.id,
             type: "file",
@@ -426,7 +475,7 @@ export function SourceSelectPart(props: {
             qualities: {
               unknown: {
                 type: "mp4",
-                url: session.streamUrl,
+                url: streamUrl,
               },
             },
             duration,
@@ -440,7 +489,7 @@ export function SourceSelectPart(props: {
             playbackStartAt,
           );
           saveLastTorrentSelection(meta, stream);
-          if (!isAutoPlay && meta.type === "show") {
+          if (meta.type === "show") {
             const quality = getAddonStreamQuality(stream);
             setPreferredStream({
               seriesId: meta.tmdbId,
@@ -471,7 +520,7 @@ export function SourceSelectPart(props: {
             stream.id,
           );
           clearLastTorrentSelection(meta);
-          if (!isAutoPlay && meta.type === "show") {
+          if (meta.type === "show") {
             const quality = getAddonStreamQuality(stream);
             setPreferredStream({
               seriesId: meta.tmdbId,
@@ -538,7 +587,7 @@ export function SourceSelectPart(props: {
 
       if (matchingStream && !startingAddonId) {
         hasAttemptedAutoSelect.current = true;
-        void selectAddonStream(matchingStream, true).catch(() => {
+        void selectAddonStream(matchingStream).catch(() => {
           // Auto-play failed (e.g. torrent engine unavailable).
           // Clear the saved selection so we don't retry on every mount.
           clearLastTorrentSelection(meta);
@@ -575,13 +624,14 @@ export function SourceSelectPart(props: {
       }
     }
 
-    const matchingStream = addonStreams.find((stream) =>
-      matchesAddonStreamPreference(stream, streamPreference),
+    const matchingStream = findAddonStreamPreference(
+      addonStreams,
+      streamPreference,
     );
 
     if (matchingStream && !startingAddonId) {
       hasAttemptedAutoSelect.current = true;
-      void selectAddonStream(matchingStream, true);
+      void selectAddonStream(matchingStream);
       return;
     }
 
@@ -627,6 +677,27 @@ export function SourceSelectPart(props: {
     }
     return counts;
   }, [filteredAddonStreams]);
+  const addonIdsWithStreams = useMemo(
+    () => new Set(addonStreams.map((stream) => stream.addonId)),
+    [addonStreams],
+  );
+  const singleAddonWithStreamsId =
+    addonIdsWithStreams.size === 1 ? [...addonIdsWithStreams][0] : null;
+  const hasMultipleAddonsWithStreams = addonIdsWithStreams.size > 1;
+
+  useLayoutEffect(() => {
+    if (
+      hasAutoSelectedSingleAddon.current ||
+      selectedAddonId ||
+      !singleAddonWithStreamsId
+    ) {
+      return;
+    }
+
+    hasAutoSelectedSingleAddon.current = true;
+    setSelectedAddonId(singleAddonWithStreamsId);
+  }, [selectedAddonId, singleAddonWithStreamsId]);
+
   const selectedAddonError = useMemo(
     () =>
       addonLoadErrors.find((error) => error.addonId === selectedAddonId) ??
@@ -652,7 +723,8 @@ export function SourceSelectPart(props: {
 
   const content = (
     <Menu.CardWithScrollable>
-      {showAddonList && (isInitialSelection || !onCancel) ? (
+      {showAddonList &&
+      (isInitialSelection || !onCancel || !hasMultipleAddonsWithStreams) ? (
         <Menu.Title rightSide={inlineDropdown}>
           {t("addons.player.chooseAddon", "Choose an addon")}
         </Menu.Title>
@@ -668,6 +740,7 @@ export function SourceSelectPart(props: {
             setSelectedAddonId(null);
             setAddonError(null);
           }}
+          showBack={hasMultipleAddonsWithStreams}
           rightSide={inlineDropdown}
         />
       )}
@@ -806,8 +879,13 @@ export function SourceSelectPart(props: {
         ) : (
           <Menu.Section>
             {selectedAddonStreams.map((stream) => {
-              const selected = currentSourceId === stream.id;
-              const isStartingThisStream = startingAddonId === stream.id;
+              const startingStreamId =
+                startingAddonId ?? pendingTorrentSourceId;
+              const isStartingThisStream = startingStreamId === stream.id;
+              const isCurrentStream = currentStream?.id === stream.id;
+              const isSelected = startingStreamId
+                ? isStartingThisStream
+                : isCurrentStream;
               const size = formatSize(stream.videoSize);
               const nameLines = streamLines(stream.name || stream.addonName);
               const titleLines = streamLines(stream.title || "");
@@ -830,11 +908,11 @@ export function SourceSelectPart(props: {
               return (
                 <Menu.Link
                   key={stream.id}
-                  active={selected || isStartingThisStream}
-                  clickable={!startingAddonId}
-                  disabled={startingAddonId !== null && !isStartingThisStream}
+                  active={isSelected}
+                  clickable={!startingStreamId}
+                  disabled={startingStreamId !== null && !isStartingThisStream}
                   rightSide={
-                    selected ? (
+                    isSelected ? (
                       <Icon
                         icon={Icons.CIRCLE_CHECK}
                         className="text-xl text-video-context-type-accent"

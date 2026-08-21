@@ -4,6 +4,7 @@ import math
 import mimetypes
 import os
 import shutil
+import sys
 import threading
 import time
 from http.server import BaseHTTPRequestHandler
@@ -97,7 +98,7 @@ class TorrentRuntime:
 
     def start(self) -> None:
         self.raw_stream_url = self.engine.http_server.register(self)
-        self.stream_type = "file"
+        self.stream_type = "pending"
         self.stream_url = self.raw_stream_url
         log_event(
             "session started",
@@ -169,6 +170,7 @@ class TorrentRuntime:
                         elapsedMs=self.elapsed_ms(),
                     )
                     self.prime_startup_ranges()
+                    self.wait_for_initial_chunk()
                 return
             time.sleep(0.2)
         if self.stop_event.is_set():
@@ -487,6 +489,40 @@ class TorrentRuntime:
                 sessionId=self.session_id,
                 error=str(error),
             )
+
+    def wait_for_initial_chunk(self) -> None:
+        """Do not expose the route until the media header bytes exist."""
+        if self.file_size <= 0 or not self.file_path:
+            raise ValueError("selected torrent file is empty")
+
+        absolute_path = os.path.abspath(
+            os.path.join(self.save_path, self.file_path.replace("\\", "/")),
+        )
+        root = os.path.abspath(self.save_path)
+        if not absolute_path.startswith(root + os.sep):
+            raise ValueError("invalid torrent file path")
+
+        end = min(self.file_size - 1, constants.STREAM_CHUNK_SIZE - 1)
+        stream, chunk = self.open_first_chunk(
+            absolute_path,
+            0,
+            end,
+            track_position=False,
+            timeout=constants.METADATA_WAIT_TIMEOUT,
+        )
+        if stream is not None:
+            stream.close()
+        if not chunk:
+            raise TimeoutError("timed out waiting for initial torrent bytes")
+
+        self.stream_type = "file"
+        log_event(
+            "stream ready",
+            sessionId=self.session_id,
+            firstChunkBytes=len(chunk),
+            timingPhase="stream_ready",
+            elapsedMs=self.elapsed_ms(),
+        )
 
     def focus_file(self) -> None:
         if self.info is None or self.file_index is None:

@@ -107,6 +107,30 @@ export function matchesAddonStreamPreference(
   );
 }
 
+export function findAddonStreamPreference(
+  streams: AddonStream[],
+  preference: AddonStreamPreference,
+): AddonStream | null {
+  const compatibleStreams = streams.filter(
+    (stream) =>
+      stream.addonId === preference.addonId &&
+      (!preference.sourceKind || stream.kind === preference.sourceKind),
+  );
+
+  const exactMatch = compatibleStreams.find((stream) =>
+    matchesAddonStreamPreference(stream, preference),
+  );
+  if (exactMatch) return exactMatch;
+
+  // Addons can rotate bingeGroup/title metadata between episodes. Keep the
+  // selected provider and quality instead of falling back to the addon list.
+  return (
+    compatibleStreams.find(
+      (stream) => getAddonStreamQuality(stream) === preference.quality,
+    ) ?? null
+  );
+}
+
 function getStreamKind(stream: StremioStream): AddonStream["kind"] | null {
   const url = stream.url?.trim() ?? "";
   const filename = stream.behaviorHints?.filename?.toLowerCase() ?? "";
