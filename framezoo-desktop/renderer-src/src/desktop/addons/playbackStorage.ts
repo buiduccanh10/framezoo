@@ -163,6 +163,40 @@ export function clearLastTorrentSelection(meta: PlayerMeta): void {
   writeSelections(selections);
 }
 
+export function clearMediaPlaybackStorage(tmdbId: string | number): void {
+  const idStr = String(tmdbId).trim();
+  if (!idStr) return;
+
+  const selections = readSelections();
+  let hasSelectionChanges = false;
+
+  for (const key of Object.keys(selections)) {
+    if (key === `movie:${idStr}` || key.startsWith(`show:${idStr}:`)) {
+      delete selections[key];
+      hasSelectionChanges = true;
+    }
+  }
+
+  if (hasSelectionChanges) {
+    writeSelections(selections);
+  }
+
+  const preferences = readPreferences();
+  if (preferences[idStr]) {
+    delete preferences[idStr];
+    writePreferences(preferences);
+  }
+}
+
+export function clearAllPlaybackStorage(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(PREFERENCE_STORAGE_KEY);
+  } catch {
+    // Playback continues even when storage is unavailable or full.
+  }
+}
+
 function sameFileSelection(
   saved: SavedTorrentSelection,
   stream: AddonStream,

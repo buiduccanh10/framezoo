@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import {
+  clearAllPlaybackStorage,
+  clearMediaPlaybackStorage,
+} from "@/desktop/addons/playbackStorage";
 import { PlayerMeta } from "@/stores/player/slices/source";
 
 export interface WatchHistoryItem {
@@ -154,13 +158,15 @@ export const useWatchHistoryStore = create(
         });
       },
       removeItem(id) {
+        // Parse the key to extract TMDB ID and episode ID for episodes
+        const isEpisode = id.includes("-");
+        const tmdbId = isEpisode ? id.split("-")[0] : id;
+        const episodeId = isEpisode ? id.split("-")[1] : undefined;
+
+        clearMediaPlaybackStorage(tmdbId);
+
         set((s) => {
           updateId += 1;
-
-          // Parse the key to extract TMDB ID and episode ID for episodes
-          const isEpisode = id.includes("-");
-          const tmdbId = isEpisode ? id.split("-")[0] : id;
-          const episodeId = isEpisode ? id.split("-")[1] : undefined;
 
           s.updateQueue.push({
             id: updateId.toString(),
@@ -182,6 +188,7 @@ export const useWatchHistoryStore = create(
         });
       },
       clear() {
+        clearAllPlaybackStorage();
         set((s) => {
           s.items = {};
         });

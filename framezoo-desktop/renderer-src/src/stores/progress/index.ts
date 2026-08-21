@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
+import {
+  clearAllPlaybackStorage,
+  clearMediaPlaybackStorage,
+} from "@/desktop/addons/playbackStorage";
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { useWatchHistoryStore } from "@/stores/watchHistory";
 import {
@@ -103,6 +107,7 @@ export const useProgressStore = create(
       items: {},
       updateQueue: [],
       removeItem(id) {
+        clearMediaPlaybackStorage(id);
         set((s) => {
           updateId += 1;
           s.updateQueue.push({
@@ -220,6 +225,7 @@ export const useProgressStore = create(
         });
       },
       clear() {
+        clearAllPlaybackStorage();
         set((s) => {
           s.items = {};
         });

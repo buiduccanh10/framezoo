@@ -3,7 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { PlayerMeta } from "@/stores/player/slices/source";
 
 import {
+  clearAllPlaybackStorage,
   clearLastTorrentSelection,
+  clearMediaPlaybackStorage,
   getLastStreamPreference,
   getLastTorrentSelection,
   getPlaybackSelectionKey,
@@ -158,4 +160,29 @@ describe("addon playback storage", () => {
 
     expect(getLastTorrentSelection(movieMeta)).toBeNull();
   });
+
+  it("clears all torrent selections and series preferences for a given tmdbId", () => {
+    saveLastTorrentSelection(movieMeta, makeTorrent());
+    saveLastTorrentSelection(episodeMeta, makeTorrent());
+    saveLastTorrentSelection(nextEpisodeMeta, makeTorrent());
+    saveLastStreamPreference(episodeMeta, makeTorrent(), "1080p");
+
+    clearMediaPlaybackStorage("20");
+
+    expect(getLastTorrentSelection(episodeMeta)).toBeNull();
+    expect(getLastTorrentSelection(nextEpisodeMeta)).toBeNull();
+    expect(getLastStreamPreference(episodeMeta)).toBeNull();
+    expect(getLastTorrentSelection(movieMeta)).not.toBeNull();
+  });
+
+  it("clears all playback storage completely", () => {
+    saveLastTorrentSelection(movieMeta, makeTorrent());
+    saveLastStreamPreference(episodeMeta, makeTorrent(), "1080p");
+
+    clearAllPlaybackStorage();
+
+    expect(getLastTorrentSelection(movieMeta)).toBeNull();
+    expect(getLastStreamPreference(episodeMeta)).toBeNull();
+  });
 });
+
