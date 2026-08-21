@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "În Cinema",
     "seasonUnwatched": "Sigur vrei să marchezi sezonul ca nevizionat?",
     "seasonWatched": "Sigur vrei să marchezi sezonul ca vizionat?",
     "types": {

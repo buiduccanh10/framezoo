@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "Di Bioskop",
     "seasonUnwatched": "Yakin ingin menandai season ini sebagai belum ditonton?",
     "seasonWatched": "Yakin ingin menandai season sebagai ditonton?",
     "types": {

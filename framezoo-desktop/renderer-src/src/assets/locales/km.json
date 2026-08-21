@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "នៅក្នុងរោងកុន",
     "seasonUnwatched": "តើ​អ្នក​ប្រាកដ​ជា​ចង់​សម្គាល់​រដូវ​កាល​ថា​មិន​បាន​មើល​ទេ?",
     "seasonWatched": "តើអ្នកប្រាកដថាចង់សម្គាល់រដូវកាលដូចដែលបានមើលទេ?",
     "types": {

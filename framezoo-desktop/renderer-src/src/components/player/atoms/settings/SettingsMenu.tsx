@@ -6,6 +6,7 @@ import { Icon, Icons } from "@/components/Icon";
 import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { useInstalledAddons } from "@/desktop/addons/store";
+import { useActiveTorrentStatus } from "@/desktop/torrentPlaybackStore";
 import { useOverlayRouter } from "@/hooks/useOverlayRouter";
 import { usePlayerStore } from "@/stores/player/store";
 import { qualityToString } from "@/stores/player/utils/qualities";
@@ -26,15 +27,18 @@ export function SettingsMenu({ id }: { id: string }) {
   );
   const subtitlesEnabled = useSubtitleStore((s) => s.enabled);
   const currentSourceId = usePlayerStore((s) => s.sourceId);
+  const torrentStatus = useActiveTorrentStatus();
+  const pendingTorrentSourceId =
+    torrentStatus?.streamType === "pending" ? torrentStatus.sourceId : null;
+  const activeSourceId = pendingTorrentSourceId ?? currentSourceId;
   const addonSourceName = useMemo(() => {
-    if (!currentSourceId) return "Addon streams";
+    if (!activeSourceId) return "Addon streams";
     return (
-      addons.find((addon) =>
-        currentSourceId.startsWith(`${addon.manifest.id}:`),
-      )?.manifest.name ?? "Addon streams"
+      addons.find((addon) => activeSourceId.startsWith(`${addon.manifest.id}:`))
+        ?.manifest.name ?? "Addon streams"
     );
-  }, [addons, currentSourceId]);
-  const sourceName = currentSourceId ? addonSourceName : "...";
+  }, [activeSourceId, addons]);
+  const sourceName = activeSourceId ? addonSourceName : "...";
   const { toggleLastUsed } = useCaptions();
 
   const selectedLanguagePretty = selectedCaptionLanguage

@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "En Cine",
     "seasonUnwatched": "Estás seguro de que queres marcar a tempada como sen ver?",
     "seasonWatched": "Estás seguro de que queres marcar a tempada como vista?",
     "types": {

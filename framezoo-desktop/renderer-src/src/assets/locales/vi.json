@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "M{{season}} T{{episode}}",
     "episodeShort": "T",
+    "inCinema": "Chiếu rạp",
     "seasonUnwatched": "Bạn có chắc chắn muốn đánh dấu mùa này là chưa xem không?",
     "seasonWatched": "Bạn có chắc chắn muốn đánh dấu mùa này là đã xem không?",
     "types": {

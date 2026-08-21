@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "ภ{{season}} ต{{episode}}",
     "episodeShort": "E",
+    "inCinema": "ในโรงภาพยนตร์",
     "seasonUnwatched": "คุณแน่ใจหรือไม่ว่าต้องการทำเครื่องหมายซีซันนี้ว่ายังไม่ได้รับชม",
     "seasonWatched": "คุณแน่ใจหรือไม่ว่าต้องการทำเครื่องหมายซีซันว่าดูแล้ว",
     "types": {

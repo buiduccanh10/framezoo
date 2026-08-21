@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "فصل {{season}} قسمت {{episode}}",
     "episodeShort": "E",
+    "inCinema": "در سینما",
     "seasonUnwatched": "آیا مطمئنید که می‌خواهید فصل را به‌عنوان تماشا نشده علامت بزنید؟",
     "seasonWatched": "آیا مطمئنید که می‌خواهید فصل را به‌عنوان تماشا شده علامت بزنید؟",
     "types": {

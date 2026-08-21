@@ -38,26 +38,51 @@ export function Section(props: {
 export function ScrollToActiveSection(props: {
   children: React.ReactNode;
   className?: string;
-  loaded?: boolean;
+  loaded?: any;
+  behavior?: ScrollBehavior;
+  autoScroll?: boolean;
 }) {
   const scrollingContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const active =
-      scrollingContainer.current?.querySelector("[data-active-link]");
+    if (props.autoScroll === false) return;
 
-    const boxRect = scrollingContainer.current?.getBoundingClientRect();
-    const activeLinkRect = active?.getBoundingClientRect();
-    if (!activeLinkRect || !boxRect) return;
+    const performScroll = () => {
+      const container = scrollingContainer.current;
+      if (!container) return;
 
-    const activeYPos = activeLinkRect.top - boxRect.top;
+      const active = container.querySelector<HTMLElement>("[data-active-link]");
+      if (!active) return;
 
-    scrollingContainer.current?.scrollTo({
-      top: activeYPos - boxRect.height / 2 + activeLinkRect.height / 2,
-      left: 0,
-      behavior: "smooth",
+      const boxRect = container.getBoundingClientRect();
+      const activeLinkRect = active.getBoundingClientRect();
+      if (!activeLinkRect || !boxRect || boxRect.height === 0) return;
+
+      const targetTop =
+        container.scrollTop +
+        (activeLinkRect.top - boxRect.top) -
+        (boxRect.height - activeLinkRect.height) / 2;
+
+      container.scrollTo({
+        top: Math.max(0, targetTop),
+        left: 0,
+        behavior: props.behavior ?? "smooth",
+      });
+    };
+
+    const frameId = requestAnimationFrame(() => {
+      performScroll();
     });
-  }, [props.loaded]);
+
+    const timerId = setTimeout(() => {
+      performScroll();
+    }, 100);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      clearTimeout(timerId);
+    };
+  }, [props.loaded, props.behavior, props.autoScroll]);
 
   return (
     <div

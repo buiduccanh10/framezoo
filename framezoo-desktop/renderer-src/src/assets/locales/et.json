@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "Kinos",
     "seasonUnwatched": "Kas olete kindel, et soovite hooaja vaatamata jätta?",
     "seasonWatched": "Kas soovite kindlasti hooaja vaadatuks märkida?",
     "types": {

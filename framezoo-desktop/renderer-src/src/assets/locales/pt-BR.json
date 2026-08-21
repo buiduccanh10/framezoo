@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "No cinema",
     "seasonUnwatched": "Tem certeza de que deseja marcar a temporada como não assistida?",
     "seasonWatched": "Tem certeza de que deseja marcar a temporada como assistida?",
     "types": {

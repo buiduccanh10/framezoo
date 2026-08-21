@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "映画で",
     "seasonUnwatched": "シーズンを未視聴としてマークしてもよろしいですか?",
     "seasonWatched": "シーズンを視聴済みとしてマークしてもよろしいですか?",
     "types": {

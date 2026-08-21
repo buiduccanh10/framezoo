@@ -142,13 +142,11 @@ def main():
     engine.stop("s2")
     print("PASS (phase 2)")
 
-    # ---- PHASE 3: re-selecting the same torrent replaces the active session ----
+    # ---- PHASE 3: re-selecting the same torrent reuses the active handle ----
     # Reproduces "next episode": the renderer auto-selects the same torrent
-    # while the previous session is still alive (stop grace), then stops the
-    # superseded session a few seconds later. The replacement session must own
-    # a fresh handle; otherwise libtorrent reuses the old handle for the
-    # duplicate add and the grace stop invalidates it mid-stream, freezing
-    # playback until the page is reloaded.
+    # while the previous session is still alive. Both playback routes share
+    # one libtorrent handle, so the deferred stop of the old route cannot
+    # invalidate the new route.
     engine.start("s3", request)
     runtime3 = engine.sessions["s3"]
     runtime3.handle.connect_peer(("127.0.0.1", 6889), 0)
@@ -158,7 +156,8 @@ def main():
 
     engine.start("s4", request)
     runtime4 = engine.sessions["s4"]
-    assert "s3" not in engine.sessions, "superseded session was not replaced"
+    assert "s3" in engine.sessions, "shared session was removed unexpectedly"
+    assert runtime4.handle is runtime3.handle, "torrent handle was not reused"
     runtime4.handle.connect_peer(("127.0.0.1", 6889), 0)
     runtime4.wait_for_metadata(15)
     print("[3] session s4 replaced s3; metadata_ready:", runtime4.metadata_ready.is_set())

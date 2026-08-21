@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "在電影院",
     "seasonUnwatched": "您確定要將本季標記為未觀看嗎？",
     "seasonWatched": "您確定要將該季標記為已觀看嗎？",
     "types": {

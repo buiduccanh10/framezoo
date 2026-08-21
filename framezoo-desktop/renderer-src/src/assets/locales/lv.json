@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "Sezona{{season}} Episode{{episode}}",
     "episodeShort": "E",
+    "inCinema": "Kinoteātrī",
     "seasonUnwatched": "Vai tiešām vēlaties atzīmēt sezonu kā neskatītu?",
     "seasonWatched": "Vai tiešām vēlaties atzīmēt sezonu kā skatītu?",
     "types": {

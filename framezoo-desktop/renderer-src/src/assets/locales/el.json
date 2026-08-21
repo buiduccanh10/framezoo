@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "Σ{{season}} Ε{{episode}}",
     "episodeShort": "E",
+    "inCinema": "Στον Κινηματογράφο",
     "seasonUnwatched": "Είστε βέβαιοι ότι θέλετε να χαρακτηρίσετε τη σεζόν ως απαρατήρητη;",
     "seasonWatched": "Είστε βέβαιοι ότι θέλετε να επισημάνετε τη σεζόν ως παρακολουθημένη;",
     "types": {

@@ -15,6 +15,7 @@ import {
 } from "electron";
 import fs from "node:fs";
 import path from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import { pathToFileURL } from "node:url";
 import { createDesktopAppUpdater } from "./desktopAppUpdater";
 import { createDesktopPipController } from "./desktopPip";
@@ -276,17 +277,16 @@ function runTorrentWarmup(): Promise<boolean> {
 
   setWarmupState({ status: "warming" });
   torrentWarmupPromise = (async () => {
-    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const timeoutController = new AbortController();
+    const timeoutPromise = delay(STARTUP_WARMUP_TIMEOUT_MS, undefined, {
+      signal: timeoutController.signal,
+    }).then(() => {
+      throw new Error("Torrent warmup timed out");
+    });
     try {
       await Promise.race([
         torrentManager.warmup(),
-        new Promise<never>(
-          (_, reject) =>
-            (timeoutId = setTimeout(
-              () => reject(new Error("Torrent warmup timed out")),
-              STARTUP_WARMUP_TIMEOUT_MS,
-            )),
-        ),
+        timeoutPromise,
       ]);
       setWarmupState({ status: "ready" });
       return true;
@@ -296,7 +296,7 @@ function runTorrentWarmup(): Promise<boolean> {
       setWarmupState({ status: "error", message });
       return false;
     } finally {
-      if (timeoutId) clearTimeout(timeoutId);
+      timeoutController.abort();
     }
   })().finally(() => {
     torrentWarmupPromise = null;

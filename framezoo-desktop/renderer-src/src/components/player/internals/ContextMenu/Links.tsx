@@ -178,6 +178,7 @@ export function ChevronLink(props: {
 
 export function SelectableLink(props: {
   selected?: boolean;
+  active?: boolean;
   loading?: boolean;
   onClick?: () => void;
   onDoubleClick?: () => void;
@@ -211,6 +212,7 @@ export function SelectableLink(props: {
       onClick={props.onClick}
       onDoubleClick={props.onDoubleClick}
       clickable={!props.disabled}
+      active={props.active}
       rightSide={rightContent}
       box={props.box}
       disabled={props.disabled}

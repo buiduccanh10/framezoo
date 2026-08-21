@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { normalizeManifest } from "./manifest";
 import {
+  findAddonStreamPreference,
   getAddonStreamQuality,
   getAddonStreamQueryKey,
   loadAllAddonStreamsDetailed,
@@ -55,6 +56,21 @@ describe("addon stream normalization", () => {
       "magnet:?xt=urn:btih:0123456789abcdef0123456789abcdef01234567",
     );
     expect(streams[1].fileName).toBe("movie.mkv");
+  });
+
+  it("preserves tracker sources when normalizing metadata-only torrents", () => {
+    const [stream] = normalizeAddonStreams(addon, [
+      {
+        infoHash: "0123456789abcdef0123456789abcdef01234567",
+        sources: [
+          "tracker:http://tracker.example/announce",
+          "dht:0123456789abcdef0123456789abcdef01234567",
+        ],
+      },
+    ]);
+
+    expect(stream.trackers).toEqual(["http://tracker.example/announce"]);
+    expect(stream.url).toContain("tr=http%3A%2F%2Ftracker.example%2Fannounce");
   });
 
   it("preserves Peerflix description when title is omitted", () => {
@@ -123,6 +139,51 @@ describe("addon stream normalization", () => {
         bingeGroup: "other-group",
       }),
     ).toBe(false);
+  });
+
+  it("keeps the same addon and quality when episode metadata rotates", () => {
+    const [selectedStream] = normalizeAddonStreams(addon, [
+      {
+        name: "Torrentio",
+        title: "Dexter S02E07 1080p BluRay",
+        url: "magnet:?xt=urn:btih:episode-seven",
+        behaviorHints: {
+          bingeGroup: "torrentio-1080p",
+        },
+      },
+    ]);
+    const [nextEpisodeStream, otherQualityStream] = normalizeAddonStreams(
+      addon,
+      [
+        {
+          name: "Torrentio",
+          title: "Dexter S02E08 1080p BluRay",
+          url: "magnet:?xt=urn:btih:episode-eight",
+          behaviorHints: {
+            bingeGroup: "rotated-1080p",
+          },
+        },
+        {
+          name: "Torrentio",
+          title: "Dexter S02E08 4K BluRay",
+          url: "magnet:?xt=urn:btih:episode-eight-4k",
+          behaviorHints: {
+            bingeGroup: "rotated-4k",
+          },
+        },
+      ],
+    );
+
+    expect(
+      findAddonStreamPreference([otherQualityStream, nextEpisodeStream], {
+        addonId: addon.manifest.id,
+        sourceKind: "torrent",
+        quality: "1080p",
+        name: selectedStream.name,
+        title: selectedStream.title,
+        bingeGroup: selectedStream.bingeGroup,
+      }),
+    ).toBe(nextEpisodeStream);
   });
 });
 

@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "С{{season}} Е{{episode}}",
     "episodeShort": "E",
+    "inCinema": "У кіно",
     "seasonUnwatched": "Ви впевнені, що хочете позначити сезон як непереглянутий?",
     "seasonWatched": "Ви впевнені, що хочете позначити сезон як переглянутий?",
     "types": {

@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "\"موسم{{season}} حلقة{{episode}}\"",
     "episodeShort": "ح",
+    "inCinema": "في السينما",
     "seasonUnwatched": "هل أنت متأكد أنك تريد وضع علامة على الموسم بأنه غير مراقب؟",
     "seasonWatched": "هل أنت متأكد أنك تريد وضع علامة على الموسم كما تمت مشاهدته؟",
     "types": {

@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "V kinu",
     "seasonUnwatched": "Ali ste prepričani, da želite sezono označiti kot neogledano?",
     "seasonWatched": "Ali ste prepričani, da želite sezono označiti kot ogledano?",
     "types": {

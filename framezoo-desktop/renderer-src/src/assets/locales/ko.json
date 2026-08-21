@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "시즌{{season}} {{episode}}화",
     "episodeShort": "E",
+    "inCinema": "영화관에서",
     "seasonUnwatched": "시즌을 시청하지 않은 것으로 표시하시겠습니까?",
     "seasonWatched": "시즌을 시청한 것으로 표시하시겠습니까?",
     "types": {

@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "சினிமாவில்",
     "seasonUnwatched": "சீசனை பார்க்காததாக நிச்சயமாகக் குறிக்க விரும்புகிறீர்களா?",
     "seasonWatched": "சீசனை பார்த்ததாக நிச்சயமாகக் குறிக்க விரும்புகிறீர்களா?",
     "types": {

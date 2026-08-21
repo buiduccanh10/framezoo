@@ -107,6 +107,30 @@ export function matchesAddonStreamPreference(
   );
 }
 
+export function findAddonStreamPreference(
+  streams: AddonStream[],
+  preference: AddonStreamPreference,
+): AddonStream | null {
+  const compatibleStreams = streams.filter(
+    (stream) =>
+      stream.addonId === preference.addonId &&
+      (!preference.sourceKind || stream.kind === preference.sourceKind),
+  );
+
+  const exactMatch = compatibleStreams.find((stream) =>
+    matchesAddonStreamPreference(stream, preference),
+  );
+  if (exactMatch) return exactMatch;
+
+  // Addons can rotate bingeGroup/title metadata between episodes. Keep the
+  // selected provider and quality instead of falling back to the addon list.
+  return (
+    compatibleStreams.find(
+      (stream) => getAddonStreamQuality(stream) === preference.quality,
+    ) ?? null
+  );
+}
+
 function getStreamKind(stream: StremioStream): AddonStream["kind"] | null {
   const url = stream.url?.trim() ?? "";
   const filename = stream.behaviorHints?.filename?.toLowerCase() ?? "";
@@ -145,13 +169,71 @@ function extractInfoHash(stream: StremioStream) {
   }
 }
 
-function getStreamUrl(stream: StremioStream, kind: AddonStream["kind"]) {
+function getStreamTrackers(stream: StremioStream): string[] {
+  const values = [
+    ...(stream.sources ?? []),
+    ...(() => {
+      try {
+        return new URL(stream.url ?? "").searchParams.getAll("tr");
+      } catch {
+        return [];
+      }
+    })(),
+  ];
+
+  const trackers: string[] = [];
+  const seen = new Set<string>();
+  for (const value of values) {
+    if (typeof value !== "string") continue;
+    const normalized = value.trim();
+    const tracker = /^tracker:/i.test(normalized)
+      ? normalized.slice("tracker:".length).trim()
+      : normalized;
+    if (
+      !/^(?:https?|udp):\/\//i.test(tracker) ||
+      seen.has(tracker.toLowerCase())
+    ) {
+      continue;
+    }
+    seen.add(tracker.toLowerCase());
+    trackers.push(tracker);
+  }
+  return trackers;
+}
+
+function getStreamUrl(
+  stream: StremioStream,
+  kind: AddonStream["kind"],
+  trackers: string[],
+) {
   const url = stream.url?.trim();
-  if (url) return url;
+  if (url) {
+    if (kind !== "torrent" || !url.toLowerCase().startsWith("magnet:")) {
+      return url;
+    }
+    try {
+      const magnet = new URL(url);
+      const existing = new Set(
+        magnet.searchParams.getAll("tr").map((value) => value.toLowerCase()),
+      );
+      for (const tracker of trackers) {
+        if (!existing.has(tracker.toLowerCase())) {
+          magnet.searchParams.append("tr", tracker);
+        }
+      }
+      return magnet.toString();
+    } catch {
+      return url;
+    }
+  }
 
   const infoHash = extractInfoHash(stream);
   if (kind === "torrent" && infoHash) {
-    return `magnet:?xt=urn:btih:${infoHash}`;
+    const magnet = new URL(`magnet:?xt=urn:btih:${infoHash}`);
+    for (const tracker of trackers) {
+      magnet.searchParams.append("tr", tracker);
+    }
+    return magnet.toString();
   }
 
   return null;
@@ -163,7 +245,8 @@ export function normalizeAddonStreams(
 ) {
   return streams.flatMap<AddonStream>((stream, index) => {
     const kind = getStreamKind(stream);
-    const url = kind ? getStreamUrl(stream, kind) : null;
+    const trackers = getStreamTrackers(stream);
+    const url = kind ? getStreamUrl(stream, kind, trackers) : null;
     if (!kind || !url) return [];
 
     return [
@@ -177,6 +260,7 @@ export function normalizeAddonStreams(
         description: stream.description?.trim() || "",
         url,
         infoHash: extractInfoHash(stream),
+        trackers,
         fileIdx: Number.isInteger(stream.fileIdx)
           ? (stream.fileIdx ?? null)
           : null,

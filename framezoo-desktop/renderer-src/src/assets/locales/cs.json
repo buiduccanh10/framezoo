@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "V kině",
     "seasonUnwatched": "Opravdu chcete sezónu označit jako nezhlédnutou?",
     "seasonWatched": "Opravdu chcete označit sezónu jako sledovanou?",
     "types": {

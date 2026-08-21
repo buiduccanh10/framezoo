@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} A{{episode}}",
     "episodeShort": "E",
+    "inCinema": "In de bioscoop",
     "seasonUnwatched": "Weet je zeker dat je het seizoen als niet bekeken wilt markeren?",
     "seasonWatched": "Weet je zeker dat je het seizoen als bekeken wilt markeren?",
     "types": {
