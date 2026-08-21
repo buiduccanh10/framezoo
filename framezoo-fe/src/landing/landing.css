@@ -1777,6 +1777,25 @@
   line-height: 1.5;
 }
 
+.landing-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+.landing-footer-nav a {
+  color: var(--landing-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.landing-footer-nav a:hover {
+  color: var(--landing-fg);
+}
+
 .landing-footer > span {
   color: var(--landing-accent);
   font-size: 0.62rem;

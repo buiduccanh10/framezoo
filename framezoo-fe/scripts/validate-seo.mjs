@@ -18,9 +18,12 @@ const softwareApplication = graph.find(
 const requiredSnippets = [
   '<html lang="en">',
   "<title>Framezoo Player | AI Subtitle Sync</title>",
-  'name="robots" content="index,follow"',
+  'name="robots" content="index,follow,max-image-preview:large"',
+  'name="thumbnail" content="https://framezoo.top/embed-preview-1.png"',
   'rel="canonical" href="https://framezoo.top/"',
   'property="og:image"',
+  'property="og:image:width" content="1200"',
+  'property="og:image:height" content="782"',
   'name="twitter:card"',
 ];
 
@@ -32,6 +35,11 @@ for (const snippet of requiredSnippets) {
 
 if (!softwareApplication) {
   throw new Error("Missing SoftwareApplication JSON-LD.");
+}
+
+const navigationList = graph.find((item) => item["@type"] === "ItemList");
+if (!navigationList || !Array.isArray(navigationList.itemListElement)) {
+  throw new Error("Missing ItemList/SiteNavigationElement in JSON-LD.");
 }
 
 if (
