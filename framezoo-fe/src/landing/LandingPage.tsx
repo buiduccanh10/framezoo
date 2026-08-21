@@ -186,6 +186,13 @@ export function LandingPage() {
 
       <footer className="landing-footer">
         <div>
+          <nav className="landing-footer-nav" aria-label="Footer navigation">
+            <a href="/">{activeCopy.nav.home}</a>
+            <a href="/experience">{activeCopy.nav.features}</a>
+            <a href="/ecosystem">{activeCopy.nav.addons}</a>
+            <a href="/create-addon">{activeCopy.nav.addonGuide}</a>
+            <a href="/download">{activeCopy.nav.download}</a>
+          </nav>
           <p>{activeCopy.footer.line}</p>
         </div>
       </footer>

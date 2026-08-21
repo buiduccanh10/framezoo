@@ -103,11 +103,15 @@ export function applyLandingSeo(
   const metadata = getLandingSeoMetadata(locale, category);
 
   document.title = metadata.title;
+  setMeta("name", "robots", "index,follow,max-image-preview:large");
   setMeta("name", "description", metadata.description);
+  setMeta("name", "thumbnail", SOCIAL_IMAGE_URL);
   setMeta("property", "og:title", metadata.title);
   setMeta("property", "og:description", metadata.description);
   setMeta("property", "og:url", metadata.canonical);
   setMeta("property", "og:image", SOCIAL_IMAGE_URL);
+  setMeta("property", "og:image:width", "1200");
+  setMeta("property", "og:image:height", "782");
   setMeta("property", "og:image:alt", "Framezoo player");
   setMeta(
     "property",

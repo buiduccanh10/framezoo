@@ -80,6 +80,10 @@ function applyRouteSeo(html, route) {
     `<link rel="canonical" href="${canonical}" />`,
   );
 
+  const pageShortTitle = route.title
+    .replace(" | Framezoo", "")
+    .replace("Framezoo | ", "");
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -91,12 +95,37 @@ function applyRouteSeo(html, route) {
       },
       {
         "@type": "WebPage",
+        "@id": `${canonical}#webpage`,
         name: route.title,
         url: canonical,
         description: route.description,
         isPartOf: {
           "@id": `${siteUrl}/#website`,
         },
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: `${siteUrl}/embed-preview-1.png`,
+          width: 1200,
+          height: 782,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${canonical}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: `${siteUrl}/`,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: pageShortTitle,
+            item: canonical,
+          },
+        ],
       },
     ],
   };

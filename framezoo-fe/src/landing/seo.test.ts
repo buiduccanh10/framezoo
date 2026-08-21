@@ -22,6 +22,22 @@ describe("landing SEO", () => {
         ?.content,
     ).toBe("Framezoo player");
     expect(
+      document.querySelector<HTMLMetaElement>('meta[name="robots"]')?.content,
+    ).toBe("index,follow,max-image-preview:large");
+    expect(
+      document.querySelector<HTMLMetaElement>('meta[name="thumbnail"]')
+        ?.content,
+    ).toBe("https://framezoo.top/embed-preview-1.png");
+    expect(
+      document.querySelector<HTMLMetaElement>('meta[property="og:image:width"]')
+        ?.content,
+    ).toBe("1200");
+    expect(
+      document.querySelector<HTMLMetaElement>(
+        'meta[property="og:image:height"]',
+      )?.content,
+    ).toBe("782");
+    expect(
       document.querySelector<HTMLMetaElement>('meta[property="og:locale"]')
         ?.content,
     ).toBe("en_US");

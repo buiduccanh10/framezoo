@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#090b0d" />
-    <meta name="robots" content="index,follow" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
     <meta
       name="description"
       content="Framezoo is a player with AI subtitle sync, dual subtitles, rich media metadata, and addon support."
@@ -22,6 +22,8 @@
     <meta property="og:url" content="https://framezoo.top/" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:image" content="https://framezoo.top/embed-preview-1.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="782" />
     <meta
       property="og:image:alt"
       content="Framezoo player showing the discovery screen"
@@ -39,6 +41,7 @@
       name="twitter:image"
       content="https://framezoo.top/embed-preview-1.png"
     />
+    <meta name="thumbnail" content="https://framezoo.top/embed-preview-1.png" />
     <link rel="canonical" href="https://framezoo.top/" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png?v=4" />
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=4" />
@@ -69,17 +72,50 @@
         "@graph": [
           {
             "@type": "WebSite",
+            "@id": "https://framezoo.top/#website",
             "name": "Framezoo",
             "url": "https://framezoo.top/",
-            "description": "A player with AI subtitle sync, dual subtitles, media metadata, and addon support."
+            "description": "A player with AI subtitle sync, dual subtitles, media metadata, and addon support.",
+            "hasPart": [
+              {
+                "@type": "WebPage",
+                "@id": "https://framezoo.top/experience#webpage",
+                "url": "https://framezoo.top/experience",
+                "name": "Features & Experience"
+              },
+              {
+                "@type": "WebPage",
+                "@id": "https://framezoo.top/ecosystem#webpage",
+                "url": "https://framezoo.top/ecosystem",
+                "name": "Addon Ecosystem"
+              },
+              {
+                "@type": "WebPage",
+                "@id": "https://framezoo.top/create-addon#webpage",
+                "url": "https://framezoo.top/create-addon",
+                "name": "Create Addon Guide"
+              },
+              {
+                "@type": "WebPage",
+                "@id": "https://framezoo.top/download#webpage",
+                "url": "https://framezoo.top/download",
+                "name": "Download"
+              }
+            ]
           },
           {
             "@type": "SoftwareApplication",
+            "@id": "https://framezoo.top/#software",
             "name": "Framezoo",
             "applicationCategory": "EntertainmentApplication",
             "applicationSubCategory": "Media player",
             "url": "https://framezoo.top/",
-            "image": "https://framezoo.top/embed-preview-1.png",
+            "image": {
+              "@type": "ImageObject",
+              "url": "https://framezoo.top/embed-preview-1.png",
+              "width": 1200,
+              "height": 782
+            },
             "description": "A player with AI subtitle sync, dual subtitles, media metadata, and addon support.",
             "featureList": [
               "AI subtitle sync",
@@ -94,6 +130,41 @@
               "priceCurrency": "USD",
               "availability": "https://schema.org/InStock"
             }
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://framezoo.top/#navigation",
+            "name": "Framezoo Navigation",
+            "itemListElement": [
+              {
+                "@type": "SiteNavigationElement",
+                "position": 1,
+                "name": "Features",
+                "url": "https://framezoo.top/experience",
+                "description": "AI subtitle sync, dual subtitles, and playback controls."
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 2,
+                "name": "Addons Ecosystem",
+                "url": "https://framezoo.top/ecosystem",
+                "description": "Source connectors, catalogs, and community addons."
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 3,
+                "name": "Addon Guide",
+                "url": "https://framezoo.top/create-addon",
+                "description": "How to build and publish addons for Framezoo."
+              },
+              {
+                "@type": "SiteNavigationElement",
+                "position": 4,
+                "name": "Download",
+                "url": "https://framezoo.top/download",
+                "description": "Download Framezoo desktop player for macOS and Windows."
+              }
+            ]
           }
         ]
       }
