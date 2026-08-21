@@ -997,11 +997,16 @@ let isWindowsFullScreen = false;
 let savedWindowBounds: Rectangle | null = null;
 let wasMaximizedBeforePlayerFullscreen = false;
 let fullscreenOrigin: "player" | "user" | null = null;
+let isFullScreenTransitioning = false;
+let targetFullScreen: boolean | null = null;
 
 function isAppFullScreen(): boolean {
   if (!mainWindow || mainWindow.isDestroyed()) return false;
   if (process.platform === "win32") {
     return isWindowsFullScreen;
+  }
+  if (targetFullScreen !== null) {
+    return targetFullScreen;
   }
   return mainWindow.isFullScreen();
 }
@@ -1051,37 +1056,32 @@ function setAppFullScreen(fullscreen: boolean, origin: "player" | "user" = "user
       mainWindow.webContents.send("desktop:fullscreen-state", false);
     }
   } else {
+    const currentFull = mainWindow.isFullScreen();
+    if (fullscreen === currentFull && !isFullScreenTransitioning) return;
+    if (isFullScreenTransitioning && targetFullScreen === fullscreen) return;
+
+    targetFullScreen = fullscreen;
+    isFullScreenTransitioning = true;
+    fullscreenOrigin = origin;
+
     if (fullscreen) {
-      if (!mainWindow.isFullScreen()) {
-        fullscreenOrigin = origin;
-        savedWindowBounds = mainWindow.getBounds();
-        mainWindow.setFullScreen(true);
-      }
+      savedWindowBounds = mainWindow.getBounds();
+      mainWindow.setFullScreen(true);
     } else {
-      if (mainWindow.isFullScreen()) {
-        mainWindow.setFullScreen(false);
-      }
-      fullscreenOrigin = null;
+      mainWindow.setFullScreen(false);
     }
+    mainWindow.webContents.send("desktop:fullscreen-state", fullscreen);
   }
 }
 
 function togglePlayerFullScreen() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  if (isAppFullScreen()) {
-    setAppFullScreen(false, "player");
-  } else {
-    setAppFullScreen(true, "player");
-  }
+  setAppFullScreen(!isAppFullScreen(), "player");
 }
 
 function exitPlayerFullScreen() {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  // ONLY restore previous window state if fullscreen was initiated by the player.
-  // If the user already had the app window maximized/fullscreen, do not touch it.
-  if (fullscreenOrigin === "player") {
-    setAppFullScreen(false, "player");
-  }
+  setAppFullScreen(false, "player");
 }
 
 let lastNormalBounds: Rectangle | null = null;
@@ -1159,6 +1159,8 @@ function createMainWindow() {
   });
 
   mainWindow.on("enter-full-screen", () => {
+    isFullScreenTransitioning = false;
+    targetFullScreen = true;
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (process.platform === "win32") {
         isWindowsFullScreen = true;
@@ -1173,6 +1175,8 @@ function createMainWindow() {
   });
 
   mainWindow.on("leave-full-screen", () => {
+    isFullScreenTransitioning = false;
+    targetFullScreen = false;
     if (mainWindow && !mainWindow.isDestroyed()) {
       if (process.platform === "win32") {
         isWindowsFullScreen = false;
@@ -1550,8 +1554,17 @@ function registerIpcHandlers() {
 
   ipcMain.handle("desktop:minimize-window", async () => {
     if (!mainWindow || mainWindow.isDestroyed()) return false;
-    if (process.platform !== "win32" && mainWindow.isFullScreen()) {
-      mainWindow.setFullScreen(false);
+    if (
+      process.platform !== "win32" &&
+      (mainWindow.isFullScreen() || isFullScreenTransitioning)
+    ) {
+      mainWindow.once("leave-full-screen", () => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.minimize();
+        }
+      });
+      setAppFullScreen(false, "user");
+      return true;
     }
     mainWindow.minimize();
     return true;

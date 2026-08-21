@@ -161,16 +161,21 @@ export function PlayerPart(props: PlayerPartProps) {
       </div>
 
       <Player.TopControls show={showTargets}>
-        <div className="grid grid-cols-[1fr,auto] xl:grid-cols-3 items-center gap-2">
-          <div className="flex min-w-0 items-center gap-1 ssm:gap-2">
-            <Player.BackLink url={props.backUrl} />
-            <span className="text mx-3 text-type-secondary">/</span>
-            <div className="min-w-0 max-w-full flex-1">
+        <div className="flex w-full items-center justify-between gap-4">
+          {/* Left section: Back link, slash, responsive title, and 3 action buttons */}
+          <div className="flex min-w-0 flex-1 items-center gap-1 ssm:gap-2">
+            <div className="shrink-0">
+              <Player.BackLink url={props.backUrl} />
+            </div>
+            <span className="text mx-1.5 md:mx-3 text-type-secondary shrink-0 select-none">
+              /
+            </span>
+            <div className="min-w-0 max-w-fit truncate">
               <Player.Title />
             </div>
 
             {isMobile && meta?.type === "show" && (
-              <span className="text-type-secondary text-sm whitespace-nowrap flex-shrink-0">
+              <span className="text-type-secondary text-sm whitespace-nowrap shrink-0">
                 {t("media.episodeDisplay", {
                   season: meta?.season?.number,
                   episode: meta?.episode?.number,
@@ -178,20 +183,26 @@ export function PlayerPart(props: PlayerPartProps) {
               </span>
             )}
 
-            <div className="flex items-center flex-shrink-0">
+            <div className="flex items-center shrink-0 ml-1">
               <Player.InfoButton />
               <Player.BookmarkButton />
               <Player.KeyboardCommandsButton />
             </div>
           </div>
-          <div className="text-center hidden xl:flex justify-center items-center">
-            <Player.EpisodeTitle />
-          </div>
-          <div className="hidden lg:flex items-center justify-end gap-3">
+
+          {/* Center section: Episode title (for TV shows on large screens) */}
+          {meta?.type === "show" ? (
+            <div className="text-center hidden xl:flex justify-center items-center shrink-0 px-4 min-w-0 truncate">
+              <Player.EpisodeTitle />
+            </div>
+          ) : null}
+
+          {/* Right section: Brand pill & Window controls (desktop) or mobile actions */}
+          <div className="hidden lg:flex items-center justify-end gap-3 shrink-0">
             <BrandPill />
             <WindowControls />
           </div>
-          <div className="flex lg:hidden items-center justify-end gap-2">
+          <div className="flex lg:hidden items-center justify-end gap-2 shrink-0">
             {status === playerStatus.PLAYING ? (
               <>
                 <Player.Airplay
