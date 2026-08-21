@@ -896,13 +896,16 @@ describe("libmpv display", () => {
     expect(times).toEqual([10, 60]);
 
     // mpv then snaps back to the keyframe while frames catch up — the cue
-    // at 60 must not blink out.
+    // at 60 must not blink out, and time must not backtrack.
     timePos(50);
     expect(times).toEqual([10, 60]);
 
-    // Forward flow resumes once playback actually reaches the position.
     timePos(59.8);
-    expect(times).toEqual([10, 60, 59.8]);
+    expect(times).toEqual([10, 60]);
+
+    // Forward flow resumes once playback actually passes the target position.
+    timePos(60.2);
+    expect(times).toEqual([10, 60, 60.2]);
 
     display.destroy();
   });
@@ -964,7 +967,7 @@ describe("libmpv display", () => {
     display.destroy();
   });
 
-  it("holds time updates during a normal stream cache pause", async () => {
+  it("continues processing time updates during background stream cache buffering", async () => {
     let eventListener:
       | ((event: {
           playerId: string;
@@ -1010,12 +1013,12 @@ describe("libmpv display", () => {
 
     property("time-pos", 60.2);
     property("paused-for-cache", true);
-    property("time-pos", 65);
-    expect(times).toEqual([60.2]);
-
-    property("paused-for-cache", false);
     property("time-pos", 60.4);
     expect(times).toEqual([60.2, 60.4]);
+
+    property("paused-for-cache", false);
+    property("time-pos", 60.6);
+    expect(times).toEqual([60.2, 60.4, 60.6]);
 
     display.destroy();
   });
