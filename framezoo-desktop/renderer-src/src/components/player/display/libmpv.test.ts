@@ -1270,4 +1270,46 @@ describe("libmpv display", () => {
       currentQuality: null,
     });
   });
+
+  it("synchronizes initial fullscreen state from electronAPI", async () => {
+    let fullscreenListener: ((isFull: boolean) => void) | undefined;
+    const fullscreenEvents: boolean[] = [];
+
+    (window as any).electronAPI = {
+      getFullscreenState: vi.fn().mockResolvedValue(true),
+      onFullscreenState: vi.fn((listener: (isFull: boolean) => void) => {
+        fullscreenListener = listener;
+        return () => {
+          fullscreenListener = undefined;
+        };
+      }),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.on("fullscreen", (isFull) => fullscreenEvents.push(isFull));
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(fullscreenEvents).toEqual([true]);
+
+    fullscreenListener?.(false);
+    expect(fullscreenEvents).toEqual([true, false]);
+
+    display.destroy();
+  });
+
+  it("calls exitFullscreen or setFullscreen(false) when exiting fullscreen", async () => {
+    const exitFullscreen = vi.fn().mockResolvedValue(undefined);
+    (window as any).electronAPI = {
+      exitFullscreen,
+      getFullscreenState: vi.fn().mockResolvedValue(true),
+      onFullscreenState: vi.fn().mockReturnValue(() => undefined),
+    };
+
+    const display = makeLibMpvDisplayInterface();
+    display.exitFullscreen?.();
+
+    expect(exitFullscreen).toHaveBeenCalledTimes(1);
+    display.destroy();
+  });
 });

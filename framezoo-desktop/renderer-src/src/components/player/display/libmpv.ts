@@ -1113,16 +1113,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
     },
     exitFullscreen() {
       const api = getElectronApi();
-      if (api?.exitPlayerFullscreen) {
-        void api.exitPlayerFullscreen();
-        return;
-      }
       if (api?.exitFullscreen) {
         void api.exitFullscreen();
         return;
       }
       if (api?.setFullscreen) {
         void api.setFullscreen(false);
+        return;
+      }
+      if (api?.exitPlayerFullscreen) {
+        void api.exitPlayerFullscreen();
         return;
       }
       if (isFullscreen && api?.toggleFullscreen) {
@@ -1263,6 +1263,17 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       isFullscreen = isFull;
       emit("fullscreen", isFull);
     }) ?? null;
+
+  if (electronApi?.getFullscreenState) {
+    electronApi
+      .getFullscreenState()
+      .then((isFull) => {
+        if (destroyed) return;
+        isFullscreen = Boolean(isFull);
+        emit("fullscreen", isFullscreen);
+      })
+      .catch(() => {});
+  }
 
   return thisDisplay;
 }
