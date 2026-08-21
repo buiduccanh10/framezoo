@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "সিজন{{season}} পর্ব{{episode}}",
     "episodeShort": "E",
+    "inCinema": "সিনেমায়",
     "seasonUnwatched": "আপনি কি ঋতুটিকে অপরিবর্তিত হিসাবে চিহ্নিত করার বিষয়ে নিশ্চিত?",
     "seasonWatched": "আপনি কি ঋতুটিকে দেখা হিসাবে চিহ্নিত করার বিষয়ে নিশ্চিত?",
     "types": {

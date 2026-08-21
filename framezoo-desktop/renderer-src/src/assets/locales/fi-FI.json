@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "K{{season}} J{{episode}}",
     "episodeShort": "J",
+    "inCinema": "Elokuvateatterissa",
     "seasonUnwatched": "Haluatko varmasti merkitä kauden katsomattomaksi?",
     "seasonWatched": "Haluatko varmasti merkitä kauden katsotuksi?",
     "types": {

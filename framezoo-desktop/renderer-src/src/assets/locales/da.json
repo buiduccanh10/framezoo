@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
+    "inCinema": "I Biograf",
     "seasonUnwatched": "Er du sikker på, at du vil markere sæsonen som uvist?",
     "seasonWatched": "Er du sikker på, at du vil markere sæsonen som set?",
     "types": {

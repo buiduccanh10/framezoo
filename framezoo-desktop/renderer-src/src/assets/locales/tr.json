@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} B{{episode}}",
     "episodeShort": "B",
+    "inCinema": "Sinemada",
     "seasonUnwatched": "Sezonu izlenmedi olarak işaretlemek istediğinizden emin misiniz?",
     "seasonWatched": "Sezonu izlendi olarak işaretlemek istediğinizden emin misiniz?",
     "types": {

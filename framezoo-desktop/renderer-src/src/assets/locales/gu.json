@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "સિઝન{{season}} એપિસોડ{{episode}}",
     "episodeShort": "E",
+    "inCinema": "સિનેમામાં",
     "seasonUnwatched": "શું તમે ખરેખર સીઝનને ન જોયા તરીકે ચિહ્નિત કરવા માંગો છો?",
     "seasonWatched": "શું તમે ખરેખર સીઝનને જોયેલી તરીકે ચિહ્નિત કરવા માંગો છો?",
     "types": {

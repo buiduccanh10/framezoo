@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "פ",
+    "inCinema": "בקולנוע",
     "seasonUnwatched": "האם אתה בטוח שאתה רוצה לסמן את העונה כלא נצפתה?",
     "seasonWatched": "האם אתה בטוח שאתה רוצה לסמן את העונה כצפית?",
     "types": {

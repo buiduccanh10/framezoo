@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "A",
+    "inCinema": "På bio",
     "seasonUnwatched": "Är du säker du vill markera säsongen som otittad?",
     "seasonWatched": "Är du säker du vill markera säsongen som tittad?",
     "types": {

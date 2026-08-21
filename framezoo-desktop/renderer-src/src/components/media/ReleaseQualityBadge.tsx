@@ -1,7 +1,9 @@
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 import type { TMDBMovieData } from "@/backend/metadata/types/tmdb";
 import type { TraktReleaseResponse } from "@/backend/metadata/types/trakt";
+import { Icon, Icons } from "@/components/Icon";
 
 export type ReleaseQualityVariant = "CAM" | "HD";
 
@@ -135,15 +137,26 @@ export function ReleaseQualityBadge({
   className?: string;
   compact?: boolean;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div
       className={classNames(
         compact
-          ? "inline-flex items-center justify-center rounded-md bg-gray-600/40 px-2 py-2 backdrop-blur-sm"
-          : "inline-flex items-center justify-center rounded-lg bg-gray-600/40 px-2 py-1 backdrop-blur-sm",
+          ? "inline-flex items-center justify-center gap-1 rounded-md bg-gray-600/40 px-2 py-1.5 backdrop-blur-sm"
+          : "inline-flex items-center justify-center gap-1.5 rounded-lg bg-gray-600/40 px-2.5 py-1 backdrop-blur-sm",
         className,
       )}
     >
+      {variant === "CAM" ? (
+        <Icon
+          icon={Icons.CINEMA}
+          className={classNames(
+            "shrink-0 text-yellow-400",
+            compact ? "text-md" : "text-xs",
+          )}
+        />
+      ) : null}
       <span
         className={classNames(
           compact
@@ -155,7 +168,7 @@ export function ReleaseQualityBadge({
           },
         )}
       >
-        {variant === "CAM" ? "In Cinema" : variant}
+        {variant === "CAM" ? t("media.inCinema", "In Cinema") : variant}
       </span>
     </div>
   );

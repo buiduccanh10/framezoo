@@ -575,6 +575,7 @@
   "media": {
     "episodeDisplay": "{{season}}. évad - {{episode}}. rész",
     "episodeShort": "rész",
+    "inCinema": "Moziban",
     "seasonUnwatched": "Biztosan nézetlenként szeretnéd megjelölni az évadot?",
     "seasonWatched": "Biztos, hogy megtekintettként szeretné megjelölni az évadot?",
     "types": {
