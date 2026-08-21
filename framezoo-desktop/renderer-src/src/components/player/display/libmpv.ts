@@ -574,15 +574,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       bufferedTime = time;
       emit("buffered", bufferedTime);
     }
-    if (!paused && time > 0) {
-      emit("loading", false);
-      emit("play", undefined);
-    }
     syncPipState();
   }
 
-  function applyTimePosition(position: number) {
+  function applyTimePosition(position: number, isSeekSettled = false) {
     if (pendingInitialResumeTime !== null) return;
+    if (!isSeekSettled && position < time) {
+      // Small decoder/audio clock jitter during continuous playback without seek:
+      // do not backtrack the player's published position.
+      return;
+    }
     publishTimePosition(position);
   }
 
@@ -691,11 +692,6 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
       case "time-pos":
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
           const rawPosition = Math.max(0, event.data);
-          if (cachePaused) {
-            // Keep the UI clock aligned with the last rendered frame while
-            // libmpv waits for more input.
-            break;
-          }
           if (pendingSeekTarget !== null) {
             if (
               (isSeeking || Math.abs(rawPosition - pendingSeekTarget) > 0.5) &&
@@ -706,7 +702,10 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             }
             pendingSeekTarget = null;
             heldSeekPosition = null;
-          } else if (rawPosition < time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
+            applyTimePosition(rawPosition, true);
+            break;
+          }
+          if (rawPosition < time - TIME_BACKTRACK_TOLERANCE_SECONDS) {
             // A backward jump without a pending seek is stale decoder state,
             // not user navigation.
             break;
@@ -781,7 +780,7 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
             heldSeekPosition !== null ? heldSeekPosition : pendingSeekTarget;
           pendingSeekTarget = null;
           heldSeekPosition = null;
-          applyTimePosition(settled);
+          applyTimePosition(settled, true);
         }
         break;
       case "paused-for-cache":

@@ -12,10 +12,9 @@ export function Time(props: { short?: boolean }) {
   const setTimeFormat = usePlayerStore((s) => s.setTimeFormat);
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
 
-  const { duration: timeDuration, draggingTime } = usePlayerStore(
-    (s) => s.progress,
-  );
-  const { isSeeking } = usePlayerStore((s) => s.interface);
+  const timeDuration = usePlayerStore((s) => s.progress.duration);
+  const draggingTime = usePlayerStore((s) => s.progress.draggingTime);
+  const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
   const clockTime = usePlaybackClock();
   const { t } = useTranslation();
   const hasHours = durationExceedsHour(timeDuration);

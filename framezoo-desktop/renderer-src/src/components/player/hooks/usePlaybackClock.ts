@@ -15,15 +15,17 @@ export interface PlaybackClockAnchor {
   timestamp: number;
 }
 
-export const MAX_EXTRAPOLATION_SECONDS = 0.5;
+export const MAX_EXTRAPOLATION_SECONDS = 10.0;
+export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 3.0;
+export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 3.0;
 
 export function getProjectedPlaybackTime(
   anchor: PlaybackClockAnchor,
   now: number,
   playbackRate: number,
   duration: number,
-) {
-  if (anchor.timestamp <= 0) return anchor.time;
+): number {
+  if (anchor.timestamp <= 0 || playbackRate <= 0) return anchor.time;
 
   const elapsed = Math.min(
     MAX_EXTRAPOLATION_SECONDS,
@@ -38,44 +40,108 @@ export function getProjectedPlaybackTime(
   );
 }
 
+export function getMonotonicPlaybackTime(
+  authoritativeTime: number,
+  currentClockTime: number,
+  isSeeking: boolean,
+  duration: number,
+): number {
+  const clampedAuth = Math.max(
+    0,
+    Math.min(
+      duration > 0 ? duration : Number.POSITIVE_INFINITY,
+      authoritativeTime,
+    ),
+  );
+
+  const delta = clampedAuth - currentClockTime;
+  const isDiscontinuity =
+    isSeeking ||
+    currentClockTime <= 0 ||
+    delta < -SEEK_DISCONTINUITY_BACKWARD_THRESHOLD ||
+    delta > SEEK_DISCONTINUITY_FORWARD_THRESHOLD;
+
+  if (isDiscontinuity) {
+    return clampedAuth;
+  }
+
+  return Math.max(currentClockTime, clampedAuth);
+}
+
 export function useSmoothPlaybackClock({
   time,
   duration,
   playbackRate,
   isActive,
-}: SmoothPlaybackClockOptions): number {
+  isSeeking = false,
+}: SmoothPlaybackClockOptions & { isSeeking?: boolean }): number {
   const [clockTime, setClockTime] = useState(time);
+  const clockTimeRef = useRef(time);
   const anchorRef = useRef<PlaybackClockAnchor>({
     time,
     timestamp: isActive ? performance.now() : 0,
   });
 
   useEffect(() => {
-    const timestamp = isActive ? performance.now() : 0;
-    anchorRef.current = { time, timestamp };
-    setClockTime(time);
+    const now = performance.now();
+    const clampedTime = Math.max(
+      0,
+      Math.min(duration > 0 ? duration : Number.POSITIVE_INFINITY, time),
+    );
+    const previousTime = clockTimeRef.current;
+    const delta = clampedTime - previousTime;
+
+    const isDiscontinuity =
+      isSeeking ||
+      previousTime <= 0 ||
+      delta < -SEEK_DISCONTINUITY_BACKWARD_THRESHOLD ||
+      delta > SEEK_DISCONTINUITY_FORWARD_THRESHOLD;
+
+    if (isDiscontinuity) {
+      anchorRef.current = {
+        time: clampedTime,
+        timestamp: isActive ? now : 0,
+      };
+      clockTimeRef.current = clampedTime;
+      setClockTime(clampedTime);
+    } else {
+      anchorRef.current = {
+        time: clampedTime,
+        timestamp: isActive ? now : 0,
+      };
+      if (clampedTime > previousTime) {
+        clockTimeRef.current = clampedTime;
+        setClockTime(clampedTime);
+      }
+    }
 
     if (!isActive || playbackRate <= 0) {
       return;
     }
 
     let animationFrame = 0;
-    const tick = (now: number) => {
+    const tick = (frameNow: number) => {
       const projected = getProjectedPlaybackTime(
         anchorRef.current,
-        now,
+        frameNow,
         playbackRate,
         duration,
       );
-      setClockTime(projected);
-      if (duration <= 0 || projected < duration) {
+      const next = Math.max(clockTimeRef.current, projected);
+
+      if (next !== clockTimeRef.current) {
+        clockTimeRef.current = next;
+        setClockTime(next);
+      }
+
+      if (duration <= 0 || next < duration) {
         animationFrame = requestAnimationFrame(tick);
       }
     };
 
     animationFrame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(animationFrame);
-  }, [duration, isActive, playbackRate, time]);
+  }, [duration, isActive, isSeeking, playbackRate, time]);
 
   return clockTime;
 }
@@ -91,7 +157,6 @@ export function usePlaybackClock(): number {
   const playbackRate = usePlayerStore((s) => s.mediaPlaying.playbackRate);
   const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
-  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
   const hasRenderedFrame = usePlayerStore(
     (s) => s.mediaPlaying.hasRenderedFrame,
@@ -101,7 +166,6 @@ export function usePlaybackClock(): number {
   const isActive =
     isPlaying &&
     !isPaused &&
-    !isLoading &&
     !isSeeking &&
     hasRenderedFrame &&
     status === playerStatus.PLAYING &&
@@ -112,5 +176,6 @@ export function usePlaybackClock(): number {
     duration,
     playbackRate,
     isActive,
+    isSeeking,
   });
 }

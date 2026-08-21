@@ -185,4 +185,3 @@ describe("addon playback storage", () => {
     expect(getLastStreamPreference(episodeMeta)).toBeNull();
   });
 });
-
