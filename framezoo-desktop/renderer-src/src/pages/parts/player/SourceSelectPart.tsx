@@ -775,7 +775,9 @@ export function SourceSelectPart(props: {
               </Menu.TextDisplay>
             </Menu.Section>
           ) : (
-            <Menu.Section>
+            <Menu.ScrollToActiveSection
+              loaded={`${currentAddonId}:${eligibleAddons.length}`}
+            >
               {eligibleAddons.map((addon) => {
                 const streamCount =
                   streamCountByAddon.get(addon.manifest.id) ?? 0;
@@ -789,6 +791,7 @@ export function SourceSelectPart(props: {
                 return (
                   <SelectableLink
                     key={addon.manifest.id}
+                    active={isSelected}
                     rightSide={
                       <div className="flex items-center gap-2">
                         {isSelected ? (
@@ -846,7 +849,7 @@ export function SourceSelectPart(props: {
                   </SelectableLink>
                 );
               })}
-            </Menu.Section>
+            </Menu.ScrollToActiveSection>
           )
         ) : selectedAddonLoading ? (
           <Menu.Section>
@@ -872,7 +875,9 @@ export function SourceSelectPart(props: {
             </Menu.TextDisplay>
           </Menu.Section>
         ) : (
-          <Menu.Section>
+          <Menu.ScrollToActiveSection
+            loaded={`${selectedAddonId}:${selectedQuality.id}:${currentStream?.id ?? ""}:${selectedAddonStreams.length}`}
+          >
             {selectedAddonStreams.map((stream) => {
               const startingStreamId =
                 mode === "initial" ? startingAddonId : null;
@@ -946,7 +951,7 @@ export function SourceSelectPart(props: {
                 </Menu.Link>
               );
             })}
-          </Menu.Section>
+          </Menu.ScrollToActiveSection>
         )}
         {activeError ? (
           <div className="px-1 pt-2">
