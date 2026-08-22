@@ -104,10 +104,15 @@ export function Link(props: {
 
   const content = (
     <div
-      className={classNames("flex items-center flex-1 h-full", props.className)}
+      className={classNames(
+        "flex items-center flex-1 h-full min-w-0",
+        props.className,
+      )}
     >
-      <div className="flex-1 text-left flex h-full">{props.children}</div>
-      <div className="flex">{props.rightSide}</div>
+      <div className="flex-1 text-left flex h-full min-w-0">
+        {props.children}
+      </div>
+      <div className="flex flex-shrink-0">{props.rightSide}</div>
     </div>
   );
 

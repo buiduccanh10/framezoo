@@ -130,12 +130,13 @@ export async function searchAllSubtitles(
     wyzieApiKey?: string;
     subsourceApiKey?: string;
     subsourceDownloadBaseUrl?: string;
+    preferredLanguages?: string[];
   }
 ): Promise<StremioSubtitle[]> {
   const downloadBaseUrl = options?.subsourceDownloadBaseUrl || '/addon/subtitles/download/subsource';
 
   const results = await Promise.allSettled([
-    fetchWyzieSubtitles(context, options?.wyzieApiKey),
+    fetchWyzieSubtitles(context, options?.wyzieApiKey, options?.preferredLanguages),
     fetchOpenSubtitles(context),
     fetchSubsourceSubtitlesList(context, options?.subsourceApiKey, downloadBaseUrl),
     fetchVdrkSubtitles(context),
