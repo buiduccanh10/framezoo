@@ -153,10 +153,14 @@ export function LanguageSubtitlesView({
   const [downloadReq, startDownload] = useAsyncFn(
     async (captionId: string) => {
       setCurrentlyDownloading(captionId);
-      if (selectionMode === "secondary") {
-        return selectSecondaryCaptionById(captionId);
+      try {
+        if (selectionMode === "secondary") {
+          return await selectSecondaryCaptionById(captionId);
+        }
+        return await selectCaptionById(captionId);
+      } finally {
+        setCurrentlyDownloading(null);
       }
-      return selectCaptionById(captionId);
     },
     [selectCaptionById, selectSecondaryCaptionById, selectionMode],
   );

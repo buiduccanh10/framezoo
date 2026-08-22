@@ -235,19 +235,21 @@ export function CaptionOption(props: CaptionOptionProps) {
       >
         <span
           data-active-link={props.selected ? true : undefined}
-          className="flex flex-col items-start"
+          className="flex flex-col items-start min-w-0 flex-1 w-full"
         >
-          <div className="flex items-center">
+          <div className="flex items-center min-w-0 w-full">
             {props.flag ? (
-              <span data-code={props.countryCode} className="mr-3 inline-flex">
+              <span
+                data-code={props.countryCode}
+                className="mr-3 inline-flex flex-shrink-0"
+              >
                 <FlagIcon langCode={props.countryCode} />
               </span>
             ) : null}
             <span
-              className={
-                props.flag || props.subtitleUrl || props.subtitleSource
-                  ? "truncate max-w-[100px]"
-                  : ""
+              className="truncate block min-w-0 flex-1"
+              title={
+                typeof props.children === "string" ? props.children : undefined
               }
             >
               {props.children}

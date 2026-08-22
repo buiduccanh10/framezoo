@@ -742,11 +742,42 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       }
     });
 
+    let progressTimer: NodeJS.Timeout | null = null;
+    let currentProgress = 5;
+
+    const startProgressTimer = () => {
+      progressTimer = setInterval(() => {
+        const activeStore = get();
+        if (
+          activeStore.externalSubtitleRequestId !== activeRequestId ||
+          !activeStore.isLoadingExternalSubtitles
+        ) {
+          if (progressTimer) clearInterval(progressTimer);
+          return;
+        }
+
+        if (currentProgress < 90) {
+          const step = Math.max(2, Math.floor((90 - currentProgress) / 7));
+          currentProgress = Math.min(90, currentProgress + step);
+          set((s) => {
+            if (s.externalSubtitleRequestId === activeRequestId) {
+              s.externalSubtitleLoadProgress = {
+                completed: currentProgress,
+                total: 100,
+              };
+            }
+          });
+        }
+      }, 150);
+    };
+
     try {
       if (forceRefresh) {
         await queryClient.cancelQueries({ queryKey, exact: true });
         queryClient.removeQueries({ queryKey, exact: true });
       }
+
+      startProgressTimer();
 
       const type = requestedMeta.type === "show" ? "series" : "movie";
       const id =
@@ -775,10 +806,12 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
               }
 
               set((s) => {
-                s.externalSubtitleLoadProgress = {
-                  completed,
-                  total,
-                };
+                if (total > 1) {
+                  s.externalSubtitleLoadProgress = {
+                    completed,
+                    total,
+                  };
+                }
 
                 if (sourceCaptions.length > 0) {
                   const existingCaptionKeys = new Set(
@@ -800,11 +833,17 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         },
       });
 
+      if (progressTimer) clearInterval(progressTimer);
+
       const currentStore = get();
       if (
         getMediaKey(currentStore.meta) === requestedMediaKey &&
         currentStore.externalSubtitleRequestId === activeRequestId
       ) {
+        if (captions.length === 0) {
+          queryClient.removeQueries({ queryKey, exact: true });
+        }
+
         set((s) => {
           const sourceCaptions = s.captionList.filter(
             (caption) => !caption.opensubtitles,
@@ -812,8 +851,8 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           s.captionList = sortCaptionList([...sourceCaptions, ...captions]);
           s.externalSubtitleMediaKey = mediaKey;
           s.externalSubtitleLoadProgress = {
-            completed: 1,
-            total: 1,
+            completed: 100,
+            total: 100,
           };
         });
       }
@@ -821,6 +860,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (get().externalSubtitleRequestId !== activeRequestId) return;
       console.error("Failed to load external subtitles:", error);
     } finally {
+      if (progressTimer) clearInterval(progressTimer);
       set((s) => {
         if (s.externalSubtitleRequestId === activeRequestId) {
           s.isLoadingExternalSubtitles = false;

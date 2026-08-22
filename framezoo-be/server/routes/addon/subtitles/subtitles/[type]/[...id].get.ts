@@ -1,4 +1,4 @@
-import { getRequestHeader, setHeader } from 'h3';
+import { getQuery, getRequestHeader, setHeader } from 'h3';
 
 import { resolveSubtitleContext, searchAllSubtitles } from '~/utils/subtitles';
 
@@ -31,11 +31,31 @@ export default defineEventHandler(async event => {
     ((config.subsourceApiKey as string | undefined) || process.env.SUBSOURCE_API_KEY || '').trim() ||
     undefined;
 
+  const query = getQuery(event);
+  const acceptLanguage = getRequestHeader(event, 'accept-language') || '';
+  const preferredLanguages: string[] = [];
+
+  if (typeof query.language === 'string') {
+    preferredLanguages.push(...query.language.split(',').map(s => s.trim().toLowerCase()));
+  }
+  if (typeof query.languages === 'string') {
+    preferredLanguages.push(...query.languages.split(',').map(s => s.trim().toLowerCase()));
+  }
+  if (acceptLanguage) {
+    const headerLangs = acceptLanguage
+      .split(',')
+      .map(part => part.split(';')[0].trim().toLowerCase().split('-')[0])
+      .filter(Boolean);
+    preferredLanguages.push(...headerLangs);
+  }
+
   const context = await resolveSubtitleContext(type, idStr);
+
   const subtitles = await searchAllSubtitles(context, {
     wyzieApiKey,
     subsourceApiKey,
     subsourceDownloadBaseUrl,
+    preferredLanguages: Array.from(new Set(preferredLanguages.filter(Boolean))),
   });
 
   setHeader(event, 'Content-Type', 'application/json');
