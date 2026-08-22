@@ -12,6 +12,7 @@ import {
   TMDB_METADATA_CACHE_TTL_MS,
   queryClient,
 } from "@/utils/queryClient";
+import { hasGenericEpisodeTitle } from "@/utils/season";
 
 import { mergeAndRankSearchResults } from "./searchRanking";
 import { MWMediaMeta, MWMediaType, MWSeasonMeta } from "./types/mw";
@@ -570,16 +571,63 @@ export async function getSeasonDetails(
     season_number: number;
   }>
 > {
-  const seasonData = await get<TMDBSeason>(`/tv/${id}/season/${season}`);
-  return seasonData.episodes.map((episode) => ({
-    id: episode.id,
-    name: episode.name,
-    episode_number: episode.episode_number,
-    overview: episode.overview,
-    still_path: episode.still_path,
-    air_date: episode.air_date,
-    season_number: season,
-  }));
+  const userLanguage = useLanguageStore.getState().language;
+  const isEnglish = userLanguage.toLowerCase().startsWith("en");
+
+  if (isEnglish) {
+    const seasonData = await get<TMDBSeason>(`/tv/${id}/season/${season}`);
+    return seasonData.episodes.map((episode) => ({
+      id: episode.id,
+      name: episode.name,
+      episode_number: episode.episode_number,
+      overview: episode.overview,
+      still_path: episode.still_path,
+      air_date: episode.air_date,
+      season_number: season,
+    }));
+  }
+
+  const [localizedSeason, englishSeason] = await Promise.all([
+    get<TMDBSeason>(`/tv/${id}/season/${season}`).catch(() => null),
+    get<TMDBSeason>(`/tv/${id}/season/${season}`, {
+      language: ENGLISH_TMDB_LANGUAGE,
+    }).catch(() => null),
+  ]);
+
+  const baseEpisodes =
+    localizedSeason?.episodes || englishSeason?.episodes || [];
+  const englishEpisodesMap = new Map(
+    (englishSeason?.episodes || []).map((e) => [e.episode_number, e]),
+  );
+
+  return baseEpisodes.map((episode) => {
+    const enEp = englishEpisodesMap.get(episode.episode_number);
+    const hasLocalizedTitle =
+      episode.name &&
+      !hasGenericEpisodeTitle(episode.name, episode.episode_number);
+    const hasLocalizedOverview =
+      episode.overview && episode.overview.trim().length > 0;
+
+    const name = hasLocalizedTitle
+      ? episode.name
+      : enEp?.name && !hasGenericEpisodeTitle(enEp.name, episode.episode_number)
+        ? enEp.name
+        : episode.name || enEp?.name || "";
+
+    const overview = hasLocalizedOverview
+      ? episode.overview
+      : enEp?.overview?.trim() || episode.overview || "";
+
+    return {
+      id: episode.id,
+      name,
+      episode_number: episode.episode_number,
+      overview,
+      still_path: episode.still_path ?? enEp?.still_path ?? null,
+      air_date: episode.air_date || enEp?.air_date || "",
+      season_number: season,
+    };
+  });
 }
 
 export async function getMediaDetails<
@@ -701,15 +749,59 @@ export async function getEpisodes(
   id: string,
   season: number,
 ): Promise<TMDBEpisodeShort[]> {
-  const data = await get<TMDBSeason>(`/tv/${id}/season/${season}`);
-  return data.episodes.map((e) => ({
-    id: e.id,
-    episode_number: e.episode_number,
-    title: e.name,
-    air_date: e.air_date,
-    still_path: e.still_path,
-    overview: e.overview,
-  }));
+  const userLanguage = useLanguageStore.getState().language;
+  const isEnglish = userLanguage.toLowerCase().startsWith("en");
+
+  if (isEnglish) {
+    const data = await get<TMDBSeason>(`/tv/${id}/season/${season}`);
+    return data.episodes.map((e) => ({
+      id: e.id,
+      episode_number: e.episode_number,
+      title: e.name,
+      air_date: e.air_date || "",
+      still_path: e.still_path ?? null,
+      overview: e.overview,
+    }));
+  }
+
+  const [localizedSeason, englishSeason] = await Promise.all([
+    get<TMDBSeason>(`/tv/${id}/season/${season}`).catch(() => null),
+    get<TMDBSeason>(`/tv/${id}/season/${season}`, {
+      language: ENGLISH_TMDB_LANGUAGE,
+    }).catch(() => null),
+  ]);
+
+  const baseEpisodes =
+    localizedSeason?.episodes || englishSeason?.episodes || [];
+  const englishEpisodesMap = new Map(
+    (englishSeason?.episodes || []).map((e) => [e.episode_number, e]),
+  );
+
+  return baseEpisodes.map((e) => {
+    const enEp = englishEpisodesMap.get(e.episode_number);
+    const hasLocalizedTitle =
+      e.name && !hasGenericEpisodeTitle(e.name, e.episode_number);
+    const hasLocalizedOverview = e.overview && e.overview.trim().length > 0;
+
+    const title = hasLocalizedTitle
+      ? e.name
+      : enEp?.name && !hasGenericEpisodeTitle(enEp.name, e.episode_number)
+        ? enEp.name
+        : e.name || enEp?.name || "";
+
+    const overview = hasLocalizedOverview
+      ? e.overview
+      : enEp?.overview?.trim() || e.overview || "";
+
+    return {
+      id: e.id,
+      episode_number: e.episode_number,
+      title,
+      air_date: e.air_date || enEp?.air_date || "",
+      still_path: e.still_path ?? enEp?.still_path ?? null,
+      overview,
+    };
+  });
 }
 
 /**

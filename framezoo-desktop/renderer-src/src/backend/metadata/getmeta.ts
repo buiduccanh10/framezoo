@@ -2,6 +2,11 @@ import { FetchError } from "ofetch";
 
 import { useLanguageStore } from "@/stores/language";
 import { getTmdbLanguageCode } from "@/utils/language";
+import {
+  TMDB_METADATA_CACHE_GC_MS,
+  TMDB_METADATA_CACHE_TTL_MS,
+  queryClient,
+} from "@/utils/queryClient";
 
 import { formatJWMeta, mediaTypeToJW } from "./justwatch";
 import {
@@ -77,13 +82,13 @@ export function formatTMDBMetaResult(
   throw new Error("unsupported type");
 }
 
-export async function getMetaFromId(
+async function fetchMetaFromId(
   type: MWMediaType,
   id: string,
   seasonId?: string,
 ): Promise<DetailedMeta | null> {
   const tmdbType = mediaTypeToTMDB(type);
-  const details = await getMediaDetails(id, tmdbType);
+  const details = await getMediaDetails(id, tmdbType, false);
 
   if (!details) return null;
 
@@ -126,6 +131,31 @@ export async function getMetaFromId(
     imdbId,
     tmdbId: id,
   };
+}
+
+export async function getMetaFromId(
+  type: MWMediaType,
+  id: string,
+  seasonId?: string,
+): Promise<DetailedMeta | null> {
+  const userLanguage = useLanguageStore.getState().language;
+  const formattedLanguage = getTmdbLanguageCode(userLanguage);
+
+  return queryClient.ensureQueryData({
+    queryKey: [
+      "detailedMeta",
+      type,
+      id,
+      seasonId ?? "default",
+      formattedLanguage,
+    ],
+    queryFn: () => fetchMetaFromId(type, id, seasonId),
+    revalidateIfStale: false,
+    staleTime: TMDB_METADATA_CACHE_TTL_MS,
+    gcTime: TMDB_METADATA_CACHE_GC_MS,
+    retry: 3,
+    retryDelay: (attemptIndex) => Math.min(2_000 * 2 ** attemptIndex, 8_000),
+  });
 }
 
 export async function getLegacyMetaFromId(

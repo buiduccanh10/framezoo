@@ -161,16 +161,16 @@ export function PlayerPart(props: PlayerPartProps) {
       </div>
 
       <Player.TopControls show={showTargets}>
-        <div className="flex w-full items-center justify-between gap-4">
+        <div className="relative flex w-full items-center justify-between gap-4">
           {/* Left section: Back link, slash, responsive title, and 3 action buttons */}
-          <div className="flex min-w-0 flex-1 items-center gap-1 ssm:gap-2">
+          <div className="flex min-w-0 max-w-[calc(50%-80px)] md:max-w-[calc(50%-140px)] items-center gap-1 ssm:gap-2 z-10">
             <div className="shrink-0">
               <Player.BackLink url={props.backUrl} />
             </div>
             <span className="text mx-1.5 md:mx-3 text-type-secondary shrink-0 select-none">
               /
             </span>
-            <div className="min-w-0 max-w-fit truncate">
+            <div className="min-w-0 truncate">
               <Player.Title />
             </div>
 
@@ -190,19 +190,21 @@ export function PlayerPart(props: PlayerPartProps) {
             </div>
           </div>
 
-          {/* Center section: Episode title (for TV shows on large screens) */}
+          {/* Center section: Episode title (centered between left controls and right brand/window controls) */}
           {meta?.type === "show" ? (
-            <div className="text-center hidden xl:flex justify-center items-center shrink-0 px-4 min-w-0 truncate">
-              <Player.EpisodeTitle />
+            <div className="pointer-events-none absolute inset-x-0 hidden md:flex justify-center items-center px-4">
+              <div className="pointer-events-auto max-w-[40%] truncate text-center">
+                <Player.EpisodeTitle />
+              </div>
             </div>
           ) : null}
 
           {/* Right section: Brand pill & Window controls (desktop) or mobile actions */}
-          <div className="hidden lg:flex items-center justify-end gap-3 shrink-0">
+          <div className="hidden lg:flex items-center justify-end gap-3 shrink-0 z-10">
             <BrandPill />
             <WindowControls />
           </div>
-          <div className="flex lg:hidden items-center justify-end gap-2 shrink-0">
+          <div className="flex lg:hidden items-center justify-end gap-2 shrink-0 z-10">
             {status === playerStatus.PLAYING ? (
               <>
                 <Player.Airplay
