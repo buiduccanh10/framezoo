@@ -38,7 +38,11 @@ function resolveRequestUrl(url: string, baseURL?: string): string {
 
 function getBackendOrigins(): string[] {
   const config = conf();
-  const urls = [config.BACKEND_URL, ...config.BACKEND_URLS].filter(
+  const origin =
+    typeof window !== "undefined" && window.location?.origin
+      ? window.location.origin
+      : "";
+  const urls = [config.BACKEND_URL, ...config.BACKEND_URLS, origin].filter(
     (value): value is string => Boolean(value),
   );
 
@@ -59,7 +63,9 @@ function getBackendOrigins(): string[] {
 
 export function isBackendApiRequest(url: string): boolean {
   const trimmed = url.trim();
-  if (trimmed.startsWith("/api/")) return true;
+  if (trimmed.startsWith("/api/") || trimmed.startsWith("/addon/subtitles/")) {
+    return true;
+  }
 
   const backendOrigins = getBackendOrigins();
   if (backendOrigins.length === 0) return false;
@@ -68,7 +74,8 @@ export function isBackendApiRequest(url: string): boolean {
     const parsedUrl = new URL(trimmed);
     return (
       backendOrigins.includes(parsedUrl.origin) &&
-      parsedUrl.pathname.startsWith("/api/")
+      (parsedUrl.pathname.startsWith("/api/") ||
+        parsedUrl.pathname.startsWith("/addon/subtitles/"))
     );
   } catch {
     return false;
@@ -111,7 +118,11 @@ export async function ensureGuestToken(
   pendingGuestTokenPromise = (async () => {
     try {
       const config = conf();
-      const backendUrl = normalizeUrl(config.BACKEND_URL || "");
+      const rawBackendUrl =
+        config.BACKEND_URL ||
+        (config.BACKEND_URLS.length > 0 ? config.BACKEND_URLS[0] : "") ||
+        (typeof window !== "undefined" ? window.location.origin : "");
+      const backendUrl = normalizeUrl(rawBackendUrl);
       if (!backendUrl) return null;
 
       const response = await fetch(`${backendUrl}/api/auth/guest`, {

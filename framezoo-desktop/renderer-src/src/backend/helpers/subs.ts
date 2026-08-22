@@ -6,8 +6,8 @@ import {
   decodeSubtitleBytes,
   normalizeSubtitleToVtt,
 } from "@/components/player/utils/captions";
-import { conf } from "@/setup/config";
 import { CaptionListItem } from "@/stores/player/slices/source";
+import { getBackendAuthHeadersAsync } from "@/utils/backendAuth";
 import { SimpleCache } from "@/utils/cache";
 
 import {
@@ -102,22 +102,9 @@ export async function downloadCaptionAsVtt(
       });
     }
   } else {
-    const headers = new Headers();
-    const isSubsourceDownload =
-      caption.source?.toLowerCase().includes("subsource") &&
-      /api\.subsource\.net\/api\/v1\/subtitles\/\d+\/download/.test(
-        caption.url,
-      );
-    if (isSubsourceDownload) {
-      const apiKey = conf().SUBSOURCE_API_KEY;
-      if (apiKey) {
-        headers.set("x-api-key", apiKey);
-        headers.set("api-key", apiKey);
-      }
-    }
-
+    const authHeaders = await getBackendAuthHeadersAsync(caption.url);
     const response = await fetch(caption.url, {
-      headers,
+      headers: authHeaders,
     });
     if (!response.ok) {
       throw new Error(

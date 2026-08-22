@@ -11,8 +11,6 @@ import {
   getSubtitleAlignmentInputVtt,
   isSubtitleAlignmentResultApplicable,
 } from "@/components/player/utils/subtitleAlignment";
-import { useInstalledAddons } from "@/desktop/addons/store";
-import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
 import { useLanguageStore } from "@/stores/language";
 import {
   Caption,
@@ -185,60 +183,6 @@ export function useCaptions() {
   const syncSubtitleProgress = subtitleSync.active
     ? subtitleSync.progress
     : null;
-
-  // ─── Addon subtitle injection ───────────────────────────────────────────────
-  const installedAddons = useInstalledAddons();
-  const meta = usePlayerStore((s) => s.meta);
-
-  useEffect(() => {
-    if (!meta) return;
-
-    // Derive Stremio-compatible type and id from the player meta
-    const type = meta.type === "show" ? "series" : "movie";
-    let id: string;
-
-    if (meta.type === "show" && meta.season != null && meta.episode != null) {
-      // Series episode: imdbId:season:episode
-      const imdbId = meta.imdbId ?? String(meta.tmdbId);
-      id = `${imdbId}:${meta.season.number}:${meta.episode.number}`;
-    } else {
-      id = meta.imdbId ?? String(meta.tmdbId);
-    }
-
-    let cancelled = false;
-
-    loadAllAddonSubtitles(installedAddons, type, id)
-      .then(({ captions }) => {
-        if (cancelled || captions.length === 0) return;
-
-        // Merge addon subtitles into the player captionList via the store,
-        // de-duplicating against entries already in the list.
-        usePlayerStore.setState((state) => {
-          const existingIds = new Set(state.captionList.map((c) => c.id));
-          const newCaptions = captions.filter((c) => !existingIds.has(c.id));
-          if (newCaptions.length === 0) return {};
-          return { captionList: [...state.captionList, ...newCaptions] };
-        });
-      })
-      .catch((err: unknown) => {
-        console.warn("[useCaptions] Addon subtitle fetch failed", err);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-    // Re-run when the video changes (meta id changes) or addon list changes
-  }, [
-    meta,
-    meta?.tmdbId,
-    meta?.type,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    meta?.type === "show" ? (meta as any)?.season?.number : undefined,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    meta?.type === "show" ? (meta as any)?.episode?.number : undefined,
-    installedAddons,
-  ]);
-  // ────────────────────────────────────────────────────────────────────────────
 
   const alignCaptionTracks = useCallback(
     async (targets: SubtitleSyncTarget[]): Promise<SubtitleSyncOutcome> => {

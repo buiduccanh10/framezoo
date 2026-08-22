@@ -29,6 +29,7 @@ export interface InstalledAddon {
   manifest: StremioManifest;
   enabled: boolean;
   addedAt: number;
+  isNative?: boolean;
 }
 
 export interface StremioSubtitle {
@@ -37,6 +38,10 @@ export interface StremioSubtitle {
   lang?: string;
   language?: string;
   label?: string;
+  source?: string;
+  type?: string;
+  isHearingImpaired?: boolean;
+  encoding?: string;
 }
 
 export interface StremioStream {

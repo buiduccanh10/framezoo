@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import { downloadCaptionAsVtt } from "@/backend/helpers/subs";
 import { SegmentQualityDebugInfo } from "@/components/player/display/displayInterface";
+import { getInstalledAddons } from "@/desktop/addons/storage";
+import { loadAllAddonSubtitles } from "@/desktop/addons/subtitles";
 import { useLanguageStore } from "@/stores/language";
 import { MakeSlice } from "@/stores/player/slices/types";
 import {
@@ -729,7 +731,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         s.isLoadingExternalSubtitles = true;
         s.externalSubtitleLoadProgress = {
           completed: 0,
-          total: 0,
+          total: 1,
         };
         s.externalSubtitleMediaKey = mediaKey;
         if (forceRefresh) {
@@ -746,15 +748,23 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         queryClient.removeQueries({ queryKey, exact: true });
       }
 
-      const { scrapeExternalSubtitles } =
-        await import("@/utils/externalSubtitles");
+      const type = requestedMeta.type === "show" ? "series" : "movie";
+      const id =
+        requestedMeta.type === "show" &&
+        requestedMeta.season != null &&
+        requestedMeta.episode != null
+          ? `${requestedMeta.imdbId ?? requestedMeta.tmdbId}:${requestedMeta.season.number}:${requestedMeta.episode.number}`
+          : (requestedMeta.imdbId ?? String(requestedMeta.tmdbId));
+
       const captions = await queryClient.fetchQuery<CaptionListItem[]>({
         queryKey,
         staleTime: EXTERNAL_SUBTITLE_CACHE_TTL_MS,
         gcTime: EXTERNAL_SUBTITLE_CACHE_GC_MS,
-        queryFn: () =>
-          scrapeExternalSubtitles(
-            requestedMeta,
+        queryFn: async () => {
+          const { captions: loadedCaptions } = await loadAllAddonSubtitles(
+            getInstalledAddons(),
+            type,
+            id,
             ({ captions: sourceCaptions, completed, total }) => {
               const currentStore = get();
               if (
@@ -785,7 +795,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
                 }
               });
             },
-          ),
+          );
+          return loadedCaptions;
+        },
       });
 
       const currentStore = get();

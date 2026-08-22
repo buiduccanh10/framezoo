@@ -6,6 +6,7 @@ const isPublicApiRequest = (path: string, method: string) => {
   if (method === 'POST' && path === '/api/subtitle-align') return true;
   if (method !== 'GET') return false;
   if (path === '/api/skip-segments') return true;
+  if (path.startsWith('/addon/subtitles/')) return true;
   return path === '/api/tmdb' || path.startsWith('/api/tmdb/');
 };
 
@@ -21,7 +22,12 @@ const isGuestAuthRequest = (path: string, method: string) => {
 export default defineEventHandler(async event => {
   const path = event.path.split('?')[0] || '';
 
-  if (!path.startsWith('/api/')) {
+  // Manifest is public
+  if (path === '/addon/subtitles/manifest.json') {
+    return;
+  }
+
+  if (!path.startsWith('/api/') && !path.startsWith('/addon/subtitles/')) {
     return;
   }
 

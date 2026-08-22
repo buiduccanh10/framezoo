@@ -479,9 +479,6 @@ importers:
       wait-on:
         specifier: ^9.0.3
         version: 9.0.10(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
-      wyzie-lib:
-        specifier: 2.5.2
-        version: 2.5.2
       zustand:
         specifier: ^5.0.14
         version: 5.0.14(@types/react@18.3.31)(immer@11.1.8)(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
@@ -5069,6 +5066,7 @@ packages:
   eslint@9.39.4:
     resolution: {integrity: sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -9071,9 +9069,6 @@ packages:
   wsl-utils@0.3.1:
     resolution: {integrity: sha512-g/eziiSUNBSsdDJtCLB8bdYEUMj4jR7AGeUo96p/3dTafgjHhpF4RiCFPiRILwjQoDXx5MqkBr4fwWtR3Ky4Wg==}
     engines: {node: '>=20'}
-
-  wyzie-lib@2.5.2:
-    resolution: {integrity: sha512-wqesyr1w0vegLM3XDLEp3X515bxWT7dSn2crx1xs0mny3m9UP+vdbR/CxtxObeo5uChksT7Pje9ZJCo90++X/g==}
 
   xcode@3.0.1:
     resolution: {integrity: sha512-kCz5k7J7XbJtjABOvkc5lJmkiDh8VhjVCGNiqdKCscmVpdVUpEAyXv1xmCLkQJ5dsHqx3IPO4XW+NTDhU/fatA==}
@@ -19600,8 +19595,6 @@ snapshots:
     dependencies:
       is-wsl: 3.1.1
       powershell-utils: 0.1.0
-
-  wyzie-lib@2.5.2: {}
 
   xcode@3.0.1:
     dependencies:

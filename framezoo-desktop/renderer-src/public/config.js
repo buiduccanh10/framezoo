@@ -17,8 +17,4 @@ window.__CONFIG__ = {
 
   // Enables Trakt-backed enrichment such as provider branding in details views.
   VITE_USE_TRAKT: false,
-
-  // External subtitle providers require public client-side API keys.
-  VITE_WYZIE_API_KEY: null,
-  VITE_SUBSOURCE_API_KEY: null,
 };
