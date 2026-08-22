@@ -159,7 +159,7 @@ export function NextEpisodeButton(props: {
       );
 
   const loadNextEpisode = useCallback(() => {
-    if (!meta || !nextEp || isPlaybackLocked) return;
+    if (!meta || !nextEp || (!props.showAsButton && isPlaybackLocked)) return;
 
     const metaCopy = { ...meta };
     metaCopy.episode = nextEp;
@@ -244,7 +244,6 @@ export function NextEpisodeButton(props: {
     return (
       <Button
         onClick={() => loadNextEpisode()}
-        disabled={isPlaybackLocked}
         theme="secondary"
         padding="md:px-12 p-2.5"
         className="w-full"
