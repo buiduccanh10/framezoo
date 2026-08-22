@@ -161,18 +161,20 @@ export function AddonsPage() {
                       ? t("addons.page.enabled", "Enabled")
                       : t("addons.page.disabled", "Disabled")}
                   </button>
-                  <button
-                    type="button"
-                    className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-red-500/20 hover:text-red-400"
-                    onClick={() => removeAddon(addon.manifest.id)}
-                    aria-label={t(
-                      "addons.page.removeAddon",
-                      "Remove this addon",
-                    )}
-                    title={t("addons.page.removeAddon", "Remove this addon")}
-                  >
-                    <Icon icon={Icons.X} className="text-base" />
-                  </button>
+                  {!addon.isNative ? (
+                    <button
+                      type="button"
+                      className="rounded-lg p-2 text-dropdown-text transition-colors hover:bg-red-500/20 hover:text-red-400"
+                      onClick={() => removeAddon(addon.manifest.id)}
+                      aria-label={t(
+                        "addons.page.removeAddon",
+                        "Remove this addon",
+                      )}
+                      title={t("addons.page.removeAddon", "Remove this addon")}
+                    >
+                      <Icon icon={Icons.X} className="text-base" />
+                    </button>
+                  ) : null}
                 </div>
               </div>
             ))

@@ -1,3 +1,4 @@
+import { conf } from "@/setup/config";
 import type { CaptionListItem } from "@/stores/player/slices/source";
 
 import { fetchAddonJson } from "./client";
@@ -19,12 +20,19 @@ export interface AddonSubtitleLoadResult {
   errors: AddonSubtitleLoadError[];
 }
 
+export interface AddonSubtitleProgressUpdate {
+  captions: CaptionListItem[];
+  completed: number;
+  total: number;
+  addonName?: string;
+}
+
 /**
  * Normalizes a raw StremioSubtitle from an addon into the internal
  * CaptionListItem format used by the player.
  *
- * The `source` field is set to the addon name so the subtitle panel can
- * display "English • SubDL" style labels.
+ * The `source` field is set to the provider source or addon name so the subtitle panel can
+ * display "English • Wyzie" style labels.
  */
 export function normalizeAddonSubtitle(
   addon: InstalledAddon,
@@ -42,12 +50,13 @@ export function normalizeAddonSubtitle(
     id,
     language,
     url,
+    type: sub.type,
     needsProxy: false,
-    // opensubtitles flag controls subtitle alignment; addon subtitles are not
-    // from OpenSubtitles so we leave it false.
-    opensubtitles: false,
+    opensubtitles: true,
     display: display ?? language,
-    source: addon.manifest.name,
+    source: sub.source || addon.manifest.name,
+    isHearingImpaired: sub.isHearingImpaired,
+    encoding: sub.encoding,
   };
 }
 
@@ -62,9 +71,24 @@ export async function loadAddonSubtitles(
   type: string,
   id: string,
 ): Promise<CaptionListItem[]> {
+  let baseUrl = addon.baseUrl || "";
+  if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
+    const config = conf();
+    const backend =
+      config.BACKEND_URL ||
+      (config.BACKEND_URLS.length > 0 ? config.BACKEND_URLS[0] : "") ||
+      (typeof window !== "undefined" ? window.location.origin : "");
+    const cleanBackend = backend ? backend.replace(/\/+$/, "") : "";
+    const cleanPath = baseUrl.replace(/^\/+/, "");
+    baseUrl = cleanPath ? `${cleanBackend}/${cleanPath}` : `${cleanBackend}/`;
+  }
+  if (!baseUrl.endsWith("/")) {
+    baseUrl = `${baseUrl}/`;
+  }
+
   const url = new URL(
     `subtitles/${type}/${encodeURIComponent(id)}.json`,
-    addon.baseUrl,
+    baseUrl,
   );
 
   console.debug("[desktop-addon] subtitle request", {
@@ -104,6 +128,7 @@ export async function loadAllAddonSubtitles(
   addons: InstalledAddon[],
   type: string,
   id: string,
+  onProgress?: (update: AddonSubtitleProgressUpdate) => void,
 ): Promise<AddonSubtitleLoadResult> {
   const eligibleAddons = addons
     .filter((addon) => addon.enabled)
@@ -118,52 +143,62 @@ export async function loadAllAddonSubtitles(
     })),
   });
 
-  const results = await Promise.allSettled(
-    eligibleAddons.map((addon) => loadAddonSubtitles(addon, type, id)),
-  );
+  const total = Math.max(eligibleAddons.length, 1);
+  if (eligibleAddons.length === 0) {
+    return { captions: [], errors: [] };
+  }
+
+  // Report initial progress
+  onProgress?.({
+    captions: [],
+    completed: 0,
+    total,
+  });
 
   const seen = new Set<string>();
   const captions: CaptionListItem[] = [];
   const errors: AddonSubtitleLoadError[] = [];
+  let completed = 0;
 
-  results.forEach((result, index) => {
-    const addon = eligibleAddons[index];
-    if (!addon) return;
-
-    if (result.status === "fulfilled") {
-      for (const caption of result.value) {
-        // De-duplicate by URL
-        if (!seen.has(caption.url)) {
-          seen.add(caption.url);
-          captions.push(caption);
+  await Promise.all(
+    eligibleAddons.map(async (addon) => {
+      try {
+        const addonCaptions = await loadAddonSubtitles(addon, type, id);
+        const newCaptions: CaptionListItem[] = [];
+        for (const caption of addonCaptions) {
+          if (!seen.has(caption.url)) {
+            seen.add(caption.url);
+            captions.push(caption);
+            newCaptions.push(caption);
+          }
         }
+        completed += 1;
+        onProgress?.({
+          captions: newCaptions,
+          completed,
+          total,
+          addonName: addon.manifest.name,
+        });
+      } catch (err: unknown) {
+        completed += 1;
+        const message =
+          err instanceof Error
+            ? err.message
+            : String(err ?? "Unknown addon error");
+        errors.push({
+          addonId: addon.manifest.id,
+          addonName: addon.manifest.name,
+          message,
+        });
+        onProgress?.({
+          captions: [],
+          completed,
+          total,
+          addonName: addon.manifest.name,
+        });
       }
-      console.debug("[desktop-addon] subtitles loaded", {
-        addonId: addon.manifest.id,
-        count: result.value.length,
-      });
-      return;
-    }
-
-    const message =
-      result.reason instanceof Error
-        ? result.reason.message
-        : String(result.reason ?? "Unknown addon error");
-
-    errors.push({
-      addonId: addon.manifest.id,
-      addonName: addon.manifest.name,
-      message,
-    });
-
-    console.error("[desktop-addon] subtitle request failed", {
-      addonId: addon.manifest.id,
-      addonName: addon.manifest.name,
-      type,
-      id,
-      message,
-    });
-  });
+    }),
+  );
 
   return { captions, errors };
 }

@@ -1,4 +1,8 @@
 import { sendExtensionRequest } from "@/backend/extension/messaging";
+import {
+  getBackendAuthHeadersAsync,
+  isBackendApiRequest,
+} from "@/utils/backendAuth";
 
 import { getDesktopAddonElectronApi } from "../electron";
 import { normalizeManifest, normalizeManifestUrl } from "./manifest";
@@ -28,16 +32,19 @@ type NativeAddonRequest =
       request: AddonProtocolRequest;
     };
 
-async function fetchWithTimeout(url: string) {
+async function fetchWithTimeout(url: string, headers?: HeadersInit) {
   const controller = new AbortController();
   const timeoutHandle = setTimeout(
     () => controller.abort(),
     ADDON_REQUEST_TIMEOUT_MS,
   );
 
+  const authHeaders = await getBackendAuthHeadersAsync(url, headers);
+
   try {
     return await fetch(url, {
       signal: controller.signal,
+      headers: authHeaders,
     });
   } catch (error) {
     if (controller.signal.aborted) throw requestTimeoutError(url);
@@ -92,10 +99,19 @@ async function fetchJson<T>(
 
   const fetchFromDesktop = async () => {
     const startedAt = Date.now();
+    const authHeaders = await getBackendAuthHeadersAsync(url);
+    const headersRecord: Record<string, string> = {};
+    authHeaders.forEach((val, key) => {
+      headersRecord[key] = val;
+    });
+
+    const headersCount = Object.keys(headersRecord).length;
+
     const result = await sendExtensionRequest<T>(
       {
         url,
         method: "GET",
+        ...(headersCount > 0 ? { headers: headersRecord } : {}),
       },
       ADDON_REQUEST_TIMEOUT_MS,
     );
@@ -122,7 +138,11 @@ async function fetchJson<T>(
     }
   };
 
-  if (nativeRequest && getDesktopAddonElectronApi()) {
+  if (
+    nativeRequest &&
+    getDesktopAddonElectronApi() &&
+    !isBackendApiRequest(url)
+  ) {
     return fetchFromNativeAddon();
   }
 
