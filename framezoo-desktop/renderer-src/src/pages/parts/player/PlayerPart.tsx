@@ -30,7 +30,7 @@ export interface PlayerPartProps {
 }
 
 export function PlayerPart(props: PlayerPartProps) {
-  const { showTargets, showTouchTargets } = useShouldShowControls();
+  const { showTargets } = useShouldShowControls();
   const status = usePlayerStore((s) => s.status);
   const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const { isMobile } = useIsMobile();
@@ -41,9 +41,7 @@ export function PlayerPart(props: PlayerPartProps) {
   const inControl = !enabled || isHost;
   const shouldShowBottomControls = showTargets;
   const shouldShowCenterMobileControls =
-    status === playerStatus.PLAYING &&
-    !isLoading &&
-    (isMobile ? showTargets : showTouchTargets);
+    status === playerStatus.PLAYING && !isLoading && isMobile && showTargets;
   const desktopActionIconClass = "text-[32px] leading-none";
   const desktopActionButtonClass =
     "h-14 w-14 shrink-0 flex items-center justify-center";
