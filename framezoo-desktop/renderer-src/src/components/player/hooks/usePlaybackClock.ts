@@ -16,8 +16,8 @@ export interface PlaybackClockAnchor {
 }
 
 export const MAX_EXTRAPOLATION_SECONDS = 10.0;
-export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 3.0;
-export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 3.0;
+export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 0.5;
+export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 1.5;
 
 export function getProjectedPlaybackTime(
   anchor: PlaybackClockAnchor,
