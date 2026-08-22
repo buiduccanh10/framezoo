@@ -1,5 +1,6 @@
 import { sendExtensionRequest } from "@/backend/extension/messaging";
 import {
+  ensureGuestToken,
   getBackendAuthHeadersAsync,
   isBackendApiRequest,
 } from "@/utils/backendAuth";
@@ -42,10 +43,27 @@ async function fetchWithTimeout(url: string, headers?: HeadersInit) {
   const authHeaders = await getBackendAuthHeadersAsync(url, headers);
 
   try {
-    return await fetch(url, {
+    let response = await fetch(url, {
       signal: controller.signal,
       headers: authHeaders,
     });
+
+    if (
+      (response.status === 401 || response.status === 403) &&
+      isBackendApiRequest(url)
+    ) {
+      const freshGuestToken = await ensureGuestToken(true);
+      if (freshGuestToken) {
+        const retryHeaders = new Headers(authHeaders);
+        retryHeaders.set("authorization", `Bearer ${freshGuestToken}`);
+        response = await fetch(url, {
+          signal: controller.signal,
+          headers: retryHeaders,
+        });
+      }
+    }
+
+    return response;
   } catch (error) {
     if (controller.signal.aborted) throw requestTimeoutError(url);
     throw error;

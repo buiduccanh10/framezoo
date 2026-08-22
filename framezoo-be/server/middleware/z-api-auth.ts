@@ -72,8 +72,18 @@ export default defineEventHandler(async event => {
   }
 
   // 2. Validate authenticated user session (via Bearer token or Cookie)
-  const session = await auth.getCurrentSessionForEvent(event);
-  event.context.session = session;
-  event.context.isGuest = false;
+  try {
+    const session = await auth.getCurrentSessionForEvent(event);
+    event.context.session = session;
+    event.context.isGuest = false;
+  } catch (err) {
+    // If this is a public API request (like /addon/subtitles/* or /api/tmdb/*),
+    // allow the request as guest rather than blocking it.
+    if (isPublicApiRequest(path, event.method)) {
+      event.context.isGuest = true;
+      return;
+    }
+    throw err;
+  }
 });
 
