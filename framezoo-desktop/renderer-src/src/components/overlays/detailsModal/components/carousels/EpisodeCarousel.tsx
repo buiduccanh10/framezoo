@@ -11,7 +11,7 @@ import { hasAired } from "@/components/player/utils/aired";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { getProgressPercentage, useProgressStore } from "@/stores/progress";
 import { measureInlineExpandableText } from "@/utils/inlineExpandText";
-import { formatSeasonTitle } from "@/utils/season";
+import { formatEpisodeTitle, formatSeasonTitle } from "@/utils/season";
 import { formatDateDDMMYY } from "@/utils/timestamp";
 
 import { EpisodeCarouselProps } from "../../types";
@@ -77,18 +77,6 @@ export function EpisodeCarousel({
   }>({});
   const updateItem = useProgressStore((s) => s.updateItem);
   const confirmModal = useModal("season-watch-confirm");
-
-  const hasGenericEpisodeTitle = (
-    episodeName: string | null | undefined,
-    episodeNumber: number,
-  ) => {
-    if (!episodeName) return true;
-    const normalizedName = episodeName.trim().toLowerCase();
-    return (
-      normalizedName === `episode ${episodeNumber}` ||
-      normalizedName === `ep ${episodeNumber}`
-    );
-  };
 
   const handleScroll = (direction: "left" | "right") => {
     if (!carouselRef.current) return;
@@ -758,14 +746,11 @@ export function EpisodeCarousel({
                   ) ?? false)
                 : false;
               const formattedReleaseDate = formatDateDDMMYY(episode.air_date);
-              const episodeTitle = hasGenericEpisodeTitle(
+              const episodeTitle = formatEpisodeTitle(
                 episode.name,
                 episode.episode_number,
-              )
-                ? t("details.episodeNumber", {
-                    number: episode.episode_number,
-                  })
-                : episode.name;
+                t,
+              );
               const episodeBadgeLabel = showFavorites
                 ? t("media.episodeDisplay", {
                     season: episode.season_number,
