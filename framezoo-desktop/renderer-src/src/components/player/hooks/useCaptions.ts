@@ -52,9 +52,9 @@ function waitForStablePlaybackPosition(): Promise<number | null> {
       const currentTime = state.progress.time;
 
       if (
-        !state.mediaPlaying.isPlaying &&
+        (state.mediaPlaying.isPaused || !state.mediaPlaying.isPlaying) &&
         Number.isFinite(currentTime) &&
-        (previousTime === null || Math.abs(currentTime - previousTime) <= 0.05)
+        (previousTime === null || Math.abs(currentTime - previousTime) <= 0.1)
       ) {
         stableSamples += 1;
       } else {
@@ -66,12 +66,7 @@ function waitForStablePlaybackPosition(): Promise<number | null> {
         stableSamples >= SUBTITLE_SYNC_STABLE_SAMPLES ||
         performance.now() >= deadline
       ) {
-        resolve(
-          stableSamples >= SUBTITLE_SYNC_STABLE_SAMPLES &&
-            Number.isFinite(currentTime)
-            ? currentTime
-            : null,
-        );
+        resolve(Number.isFinite(currentTime) ? currentTime : null);
         return;
       }
 
@@ -195,8 +190,8 @@ export function useCaptions() {
       const initialState = usePlayerStore.getState();
       const initialSource = initialState.source;
       const wasPlaying =
-        initialState.mediaPlaying.isPlaying &&
-        !initialState.mediaPlaying.isPaused;
+        !initialState.mediaPlaying.isPaused ||
+        initialState.mediaPlaying.isPlaying;
       let contextSource = initialSource;
 
       if (targets.length === 0 || initialSource?.type !== "file") {
@@ -400,11 +395,11 @@ export function useCaptions() {
           errorMessage: extractSubtitleSyncErrorMessage(error),
         };
       } finally {
+        if (syncAbortControllerRef.current === abortController) {
+          syncAbortControllerRef.current = null;
+          activeSubtitleSyncCancel = null;
+        }
         if (requestId === subtitleAlignmentRequestId) {
-          if (syncAbortControllerRef.current === abortController) {
-            syncAbortControllerRef.current = null;
-            activeSubtitleSyncCancel = null;
-          }
           const finalState = usePlayerStore.getState();
           if (
             wasPlaying &&
@@ -413,12 +408,12 @@ export function useCaptions() {
           ) {
             finalState.display.play();
           }
-          setSubtitleSyncState({
-            active: false,
-            phase: "idle",
-            progress: 0,
-          });
         }
+        setSubtitleSyncState({
+          active: false,
+          phase: "idle",
+          progress: 0,
+        });
       }
     },
     [

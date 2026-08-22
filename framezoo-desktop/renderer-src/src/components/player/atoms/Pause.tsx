@@ -11,7 +11,7 @@ export function Pause(props: { iconSizeClass?: string; className?: string }) {
   const isSubtitleSyncActive = usePlayerStore((s) => s.subtitleSync.active);
 
   const disabled = isPlaybackInteractionLocked(
-    { isLoading, hasRenderedFrame },
+    { isLoading, hasRenderedFrame, isPaused },
     isSubtitleSyncActive,
   );
 

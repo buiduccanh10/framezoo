@@ -22,7 +22,7 @@ export function LinkTitle(props: {
   return (
     <span
       className={classNames([
-        "flex h-full items-center font-medium text-left",
+        "flex h-full items-center font-medium text-left min-w-0 flex-1 w-full",
         props.box ? "flex-col justify-center gap-1 text-center" : "",
         props.textClass || "text-video-context-type-main",
       ])}
@@ -105,14 +105,16 @@ export function Link(props: {
   const content = (
     <div
       className={classNames(
-        "flex items-center flex-1 h-full min-w-0",
+        "flex items-center flex-1 h-full min-w-0 gap-2",
         props.className,
       )}
     >
       <div className="flex-1 text-left flex h-full min-w-0">
         {props.children}
       </div>
-      <div className="flex flex-shrink-0">{props.rightSide}</div>
+      {props.rightSide && (
+        <div className="flex flex-shrink-0 items-center">{props.rightSide}</div>
+      )}
     </div>
   );
 

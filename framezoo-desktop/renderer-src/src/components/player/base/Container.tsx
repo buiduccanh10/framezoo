@@ -31,41 +31,48 @@ function useHovering(containerEl: RefObject<HTMLDivElement>) {
 
   useEffect(() => {
     function resetHover() {
-      updateInterfaceHovering(PlayerHoverState.MOUSE_HOVER);
+      if (
+        usePlayerStore.getState().interface.hovering !==
+        PlayerHoverState.MOUSE_HOVER
+      ) {
+        updateInterfaceHovering(PlayerHoverState.MOUSE_HOVER);
+      }
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
+        if (usePlayerStore.getState().interface.isHoveringControls) {
+          resetHover();
+          return;
+        }
         updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
         timeoutRef.current = null;
       }, 3000);
     }
 
-    function pointerMove(e: PointerEvent | MouseEvent) {
-      if ("pointerType" in e && e.pointerType && e.pointerType !== "mouse") {
-        return;
-      }
+    function pointerMove() {
       resetHover();
     }
 
-    function pointerLeave(e: PointerEvent | MouseEvent) {
-      if ("pointerType" in e && e.pointerType && e.pointerType !== "mouse") {
-        return;
-      }
-      updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = null;
+    function pointerLeave(e: MouseEvent) {
+      if (!e.relatedTarget && !document.hasFocus()) {
+        updateInterfaceHovering(PlayerHoverState.NOT_HOVERING);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
       }
     }
 
     const el = containerEl.current;
     if (el) {
-      el.addEventListener("pointermove", pointerMove);
-      el.addEventListener("pointerleave", pointerLeave);
-      el.addEventListener("mousemove", pointerMove);
+      el.addEventListener("pointermove", pointerMove, { passive: true });
+      el.addEventListener("mousemove", pointerMove, { passive: true });
+      el.addEventListener("pointerenter", pointerMove, { passive: true });
+      el.addEventListener("mouseenter", pointerMove, { passive: true });
     }
 
-    window.addEventListener("pointermove", pointerMove);
-    window.addEventListener("mousemove", pointerMove);
+    window.addEventListener("pointermove", pointerMove, { passive: true });
+    window.addEventListener("mousemove", pointerMove, { passive: true });
+    document.addEventListener("mouseleave", pointerLeave, { passive: true });
     window.addEventListener("focus", resetHover);
 
     return () => {
@@ -75,11 +82,13 @@ function useHovering(containerEl: RefObject<HTMLDivElement>) {
       }
       if (el) {
         el.removeEventListener("pointermove", pointerMove);
-        el.removeEventListener("pointerleave", pointerLeave);
         el.removeEventListener("mousemove", pointerMove);
+        el.removeEventListener("pointerenter", pointerMove);
+        el.removeEventListener("mouseenter", pointerMove);
       }
       window.removeEventListener("pointermove", pointerMove);
       window.removeEventListener("mousemove", pointerMove);
+      document.removeEventListener("mouseleave", pointerLeave);
       window.removeEventListener("focus", resetHover);
     };
   }, [containerEl, updateInterfaceHovering]);
