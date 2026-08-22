@@ -693,10 +693,16 @@ export function makeLibMpvDisplayInterface(): DisplayInterface {
         if (typeof event.data === "number" && Number.isFinite(event.data)) {
           const rawPosition = Math.max(0, event.data);
           if (pendingSeekTarget !== null) {
+            const isNearTarget =
+              Math.abs(rawPosition - pendingSeekTarget) <= 3.5;
             if (
-              (isSeeking || Math.abs(rawPosition - pendingSeekTarget) > 0.5) &&
+              !isNearTarget &&
               performance.now() - pendingSeekSetAt <= PENDING_SEEK_TIMEOUT_MS
             ) {
+              // Stale pre-seek time-pos from before seek command was processed: drop it
+              break;
+            }
+            if (isSeeking && isNearTarget) {
               heldSeekPosition = rawPosition;
               break;
             }

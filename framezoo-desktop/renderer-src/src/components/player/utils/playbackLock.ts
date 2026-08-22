@@ -10,6 +10,5 @@ export function isPlaybackInteractionLocked(
 ): boolean {
   if (subtitleSyncActive) return true;
   if (!mediaPlaying.hasRenderedFrame) return true;
-  if (mediaPlaying.isPaused) return false;
-  return mediaPlaying.isLoading;
+  return false;
 }

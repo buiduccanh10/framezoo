@@ -16,8 +16,8 @@ export interface PlaybackClockAnchor {
 }
 
 export const MAX_EXTRAPOLATION_SECONDS = 10.0;
-export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 3.0;
-export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 3.0;
+export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 2.5;
+export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 2.5;
 
 export function getProjectedPlaybackTime(
   anchor: PlaybackClockAnchor,
@@ -104,15 +104,13 @@ export function useSmoothPlaybackClock({
       };
       clockTimeRef.current = clampedTime;
       setClockTime(clampedTime);
-    } else {
+    } else if (clampedTime > previousTime) {
       anchorRef.current = {
         time: clampedTime,
         timestamp: isActive ? now : 0,
       };
-      if (clampedTime > previousTime) {
-        clockTimeRef.current = clampedTime;
-        setClockTime(clampedTime);
-      }
+      clockTimeRef.current = clampedTime;
+      setClockTime(clampedTime);
     }
 
     if (!isActive || playbackRate <= 0) {
