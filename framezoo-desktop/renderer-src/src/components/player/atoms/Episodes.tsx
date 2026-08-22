@@ -30,7 +30,7 @@ import { useProgressStore } from "@/stores/progress";
 import { concurrentMap } from "@/utils/async";
 import { measureInlineExpandableText } from "@/utils/inlineExpandText";
 import { scrollToElement } from "@/utils/scroll";
-import { formatSeasonTitle } from "@/utils/season";
+import { formatEpisodeTitle, formatSeasonTitle } from "@/utils/season";
 
 import { hasAired } from "../utils/aired";
 
@@ -42,19 +42,6 @@ interface EpisodeGroup {
   label: string;
   startEpisodeNumber: number;
   endEpisodeNumber: number;
-}
-
-function hasGenericEpisodeTitle(
-  episodeTitle: string | null | undefined,
-  episodeNumber: number,
-) {
-  if (!episodeTitle) return true;
-
-  const normalizedTitle = episodeTitle.trim().toLowerCase();
-  return (
-    normalizedTitle === `episode ${episodeNumber}` ||
-    normalizedTitle === `ep ${episodeNumber}`
-  );
 }
 
 function createEpisodeGroups(episodes: any[]): EpisodeGroup[] {
@@ -128,11 +115,7 @@ function EpisodeItem({
   seasonNumber,
 }: EpisodeItemProps) {
   const { t } = useTranslation();
-  const episodeTitle = hasGenericEpisodeTitle(episode.title, episode.number)
-    ? t("details.episodeNumber", {
-        number: episode.number,
-      })
-    : episode.title;
+  const episodeTitle = formatEpisodeTitle(episode.title, episode.number, t);
   const episodeBadgeLabel = seasonNumber
     ? t("media.episodeDisplay", {
         season: seasonNumber,
