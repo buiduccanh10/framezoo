@@ -105,7 +105,8 @@ export function Link(props: {
   const content = (
     <div
       className={classNames(
-        "flex items-center flex-1 h-full min-w-0 gap-2",
+        "flex flex-1 h-full min-w-0 gap-2",
+        props.className?.includes("items-") ? undefined : "items-center",
         props.className,
       )}
     >

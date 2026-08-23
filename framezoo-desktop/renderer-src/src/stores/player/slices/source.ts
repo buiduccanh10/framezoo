@@ -153,6 +153,7 @@ export interface PreferredStream {
   name: string;
   title: string;
   bingeGroup?: string;
+  savedAt?: number;
 }
 
 export interface SourceSlice {
@@ -218,6 +219,14 @@ export interface SourceSlice {
   reset(): void;
 }
 
+export function getAddonMediaId(meta: PlayerMeta): string {
+  const isSpecialSeason = meta.type === "show" && meta.season?.number === 0;
+  const imdbId = meta.imdbId?.trim();
+
+  if (!isSpecialSeason && imdbId && /^tt\d+$/i.test(imdbId)) return imdbId;
+  return `tmdb:${meta.tmdbId}`;
+}
+
 /**
  * Generates a unique media key for tracking failed sources per media.
  * For movies: `${type}-${tmdbId}`
@@ -231,8 +240,10 @@ export function getMediaKey(meta: PlayerMeta | null): string | null {
   }
 
   // For shows, include season and episode IDs for per-episode tracking
-  if (meta.type === "show" && meta.season && meta.episode) {
-    return `${meta.type}-${meta.tmdbId}-${meta.season.tmdbId}-${meta.episode.tmdbId}`;
+  if (meta.type === "show") {
+    const seasonKey = meta.season?.tmdbId ?? meta.season?.number ?? "0";
+    const episodeKey = meta.episode?.tmdbId ?? meta.episode?.number ?? "0";
+    return `${meta.type}-${meta.tmdbId}-${seasonKey}-${episodeKey}`;
   }
 
   // Fallback if show data is incomplete
@@ -535,13 +546,16 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   ) {
     const store = get();
     const currentMediaKey = getExternalSubtitleMediaKey(store.meta);
+    const hasLoadedForCurrentMedia =
+      !!currentMediaKey && currentMediaKey === store.externalSubtitleMediaKey;
+    const isExternalLoading = store.isLoadingExternalSubtitles;
     const shouldReuseLoadedExternalSubtitles =
-      !!currentMediaKey &&
-      currentMediaKey === store.externalSubtitleMediaKey &&
-      hasCompletedExternalSubtitleLoad(
+      hasLoadedForCurrentMedia &&
+      (hasCompletedExternalSubtitleLoad(
         store.isLoadingExternalSubtitles,
         store.externalSubtitleLoadProgress,
-      );
+      ) ||
+        isExternalLoading);
     const existingExternalCaptions = shouldReuseLoadedExternalSubtitles
       ? store.captionList.filter((caption) => caption.opensubtitles)
       : [];
@@ -572,7 +586,9 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       s.segmentQualityDebug = null;
       s.captionList = mergedCaptions;
       s.externalSubtitleRequestId = nextRequestId;
-      s.isLoadingExternalSubtitles = !shouldReuseLoadedExternalSubtitles;
+      s.isLoadingExternalSubtitles = shouldReuseLoadedExternalSubtitles
+        ? isExternalLoading
+        : true;
       s.externalSubtitleLoadProgress = shouldReuseLoadedExternalSubtitles
         ? store.externalSubtitleLoadProgress
         : {
@@ -727,7 +743,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (requestId == null) {
         s.externalSubtitleRequestId = activeRequestId;
       }
-      if (s.externalSubtitleRequestId === activeRequestId) {
+      if (
+        s.externalSubtitleRequestId === activeRequestId ||
+        getMediaKey(s.meta) === requestedMediaKey
+      ) {
         s.isLoadingExternalSubtitles = true;
         s.externalSubtitleLoadProgress = {
           completed: 0,
@@ -749,7 +768,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       progressTimer = setInterval(() => {
         const activeStore = get();
         if (
-          activeStore.externalSubtitleRequestId !== activeRequestId ||
+          getMediaKey(activeStore.meta) !== requestedMediaKey ||
           !activeStore.isLoadingExternalSubtitles
         ) {
           if (progressTimer) clearInterval(progressTimer);
@@ -760,7 +779,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
           const step = Math.max(2, Math.floor((90 - currentProgress) / 7));
           currentProgress = Math.min(90, currentProgress + step);
           set((s) => {
-            if (s.externalSubtitleRequestId === activeRequestId) {
+            if (getMediaKey(s.meta) === requestedMediaKey) {
               s.externalSubtitleLoadProgress = {
                 completed: currentProgress,
                 total: 100,
@@ -779,13 +798,14 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
 
       startProgressTimer();
 
+      const baseMediaId = getAddonMediaId(requestedMeta);
       const type = requestedMeta.type === "show" ? "series" : "movie";
       const id =
         requestedMeta.type === "show" &&
         requestedMeta.season != null &&
         requestedMeta.episode != null
-          ? `${requestedMeta.imdbId ?? requestedMeta.tmdbId}:${requestedMeta.season.number}:${requestedMeta.episode.number}`
-          : (requestedMeta.imdbId ?? String(requestedMeta.tmdbId));
+          ? `${baseMediaId}:${requestedMeta.season.number}:${requestedMeta.episode.number}`
+          : baseMediaId;
 
       const captions = await queryClient.fetchQuery<CaptionListItem[]>({
         queryKey,
@@ -798,10 +818,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
             id,
             ({ captions: sourceCaptions, completed, total }) => {
               const currentStore = get();
-              if (
-                getMediaKey(currentStore.meta) !== requestedMediaKey ||
-                currentStore.externalSubtitleRequestId !== activeRequestId
-              ) {
+              if (getMediaKey(currentStore.meta) !== requestedMediaKey) {
                 return;
               }
 
@@ -836,10 +853,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
       if (progressTimer) clearInterval(progressTimer);
 
       const currentStore = get();
-      if (
-        getMediaKey(currentStore.meta) === requestedMediaKey &&
-        currentStore.externalSubtitleRequestId === activeRequestId
-      ) {
+      if (getMediaKey(currentStore.meta) === requestedMediaKey) {
         if (captions.length === 0) {
           queryClient.removeQueries({ queryKey, exact: true });
         }
@@ -857,12 +871,12 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         });
       }
     } catch (error) {
-      if (get().externalSubtitleRequestId !== activeRequestId) return;
+      if (getMediaKey(get().meta) !== requestedMediaKey) return;
       console.error("Failed to load external subtitles:", error);
     } finally {
       if (progressTimer) clearInterval(progressTimer);
       set((s) => {
-        if (s.externalSubtitleRequestId === activeRequestId) {
+        if (getMediaKey(s.meta) === requestedMediaKey) {
           s.isLoadingExternalSubtitles = false;
         }
       });

@@ -15,7 +15,7 @@ export interface PlaybackClockAnchor {
   timestamp: number;
 }
 
-export const MAX_EXTRAPOLATION_SECONDS = 10.0;
+export const MAX_EXTRAPOLATION_SECONDS = 1.5;
 export const SEEK_DISCONTINUITY_BACKWARD_THRESHOLD = 2.5;
 export const SEEK_DISCONTINUITY_FORWARD_THRESHOLD = 2.5;
 
@@ -104,13 +104,38 @@ export function useSmoothPlaybackClock({
       };
       clockTimeRef.current = clampedTime;
       setClockTime(clampedTime);
-    } else if (clampedTime > previousTime) {
+    } else if (clampedTime !== anchorRef.current.time) {
+      // The authoritative time has updated. Always update the anchor so we don't drift.
       anchorRef.current = {
         time: clampedTime,
         timestamp: isActive ? now : 0,
       };
-      clockTimeRef.current = clampedTime;
-      setClockTime(clampedTime);
+      // Only force a visual clock update if the real time is AHEAD of the extrapolated clock.
+      // If the real time is slightly behind (because we extrapolated a bit too fast),
+      // Math.max in the tick loop will gracefully pause the visual clock for a few ms
+      // until the real time catches up, avoiding micro-stutters backward.
+      if (clampedTime > previousTime) {
+        clockTimeRef.current = clampedTime;
+        setClockTime(clampedTime);
+      }
+    } else if (!isActive) {
+      // Clock is paused (e.g. buffering / isLoading). Explicitly zero out the
+      // anchor timestamp so that when the clock reactivates the rAF does NOT
+      // extrapolate from a stale past timestamp (which would cause a spurious
+      // forward jump followed by a backward discontinuity snap).
+      // We must preserve the original anchor.time to avoid committing extrapolated time.
+      anchorRef.current = {
+        time: anchorRef.current.time,
+        timestamp: 0,
+      };
+    } else if (anchorRef.current.timestamp <= 0) {
+      // Clock just reactivated (isActive: false → true) but time hasn't
+      // advanced yet to trigger the forward branch. Refresh the anchor to
+      // now so the rAF extrapolates from the present, not a stale moment.
+      anchorRef.current = {
+        time: anchorRef.current.time,
+        timestamp: now,
+      };
     }
 
     if (!isActive || playbackRate <= 0) {
@@ -156,6 +181,7 @@ export function usePlaybackClock(): number {
   const isPlaying = usePlayerStore((s) => s.mediaPlaying.isPlaying);
   const isPaused = usePlayerStore((s) => s.mediaPlaying.isPaused);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
+  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const hasRenderedFrame = usePlayerStore(
     (s) => s.mediaPlaying.hasRenderedFrame,
   );
@@ -165,6 +191,7 @@ export function usePlaybackClock(): number {
     isPlaying &&
     !isPaused &&
     !isSeeking &&
+    !isLoading &&
     hasRenderedFrame &&
     status === playerStatus.PLAYING &&
     playbackRate > 0;

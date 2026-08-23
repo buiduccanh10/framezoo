@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 
+import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import {
   type CaptionCueType,
   captionIsVisible,
@@ -19,23 +20,23 @@ export const wordOverrides: Record<string, string> = {
 export const DUAL_SUBTITLE_SIZE_SCALE = 0.78;
 export const SECONDARY_SUBTITLE_SIZE_SCALE = 0.88;
 
-// While the user is scrubbing (or the display is seeking), the video frame
+// While the user is scrubbing (or the display is seeking/buffering), the video frame
 // lags the timeline. Rendering cues for the in-flight time makes subtitles
 // flash ahead of the picture, so keep the last stable set of cues until the
-// seek settles.
+// seek or buffer settles.
 function useSeekFrozenCaptions<T>(
   visibleCaptions: T[],
-  isSeeking: boolean,
+  isFrozen: boolean,
 ): T[] {
   const lastStableCaptions = useRef<T[]>([]);
 
   useEffect(() => {
-    if (!isSeeking) {
+    if (!isFrozen) {
       lastStableCaptions.current = visibleCaptions;
     }
   });
 
-  return isSeeking ? lastStableCaptions.current : visibleCaptions;
+  return isFrozen ? lastStableCaptions.current : visibleCaptions;
 }
 
 type VisibleCaptionCue = {
@@ -241,10 +242,11 @@ function SubtitleTrackSlot({
 export function SubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoTime = usePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.selected?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
+  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const styling = useSubtitleStore((s) => s.styling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
   const delay = useSubtitleStore((s) => s.primaryDelay);
@@ -267,7 +269,7 @@ export function SubtitleRenderer(props?: {
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
     visibleCaptions,
-    isSeeking,
+    isSeeking || isLoading,
   );
 
   return (
@@ -284,10 +286,11 @@ export function SubtitleRenderer(props?: {
 export function SecondarySubtitleRenderer(props?: {
   useNativePictureInPictureStyle?: boolean;
 }) {
-  const videoTime = usePlayerStore((s) => s.progress.time);
+  const videoTime = usePlaybackClock();
   const vttData = usePlayerStore((s) => s.caption.secondary?.vttData);
   const dualSubEnabled = usePlayerStore((s) => s.caption.dualSubEnabled);
   const isSeeking = usePlayerStore((s) => s.interface.isSeeking);
+  const isLoading = usePlayerStore((s) => s.mediaPlaying.isLoading);
   const primaryStyling = useSubtitleStore((s) => s.styling);
   const styling = useSubtitleStore((s) => s.secondaryStyling);
   const overrideCasing = useSubtitleStore((s) => s.overrideCasing);
@@ -315,7 +318,7 @@ export function SecondarySubtitleRenderer(props?: {
 
   const captionsToRender = useSeekFrozenCaptions<VisibleCaptionCue>(
     visibleCaptions,
-    isSeeking,
+    isSeeking || isLoading,
   );
 
   if (!vttData) return null;

@@ -12,7 +12,6 @@ import { useCaptions } from "@/components/player/hooks/useCaptions";
 import { usePlaybackClock } from "@/components/player/hooks/usePlaybackClock";
 import { Menu } from "@/components/player/internals/ContextMenu";
 import { Input } from "@/components/player/internals/ContextMenu/Input";
-import { Link } from "@/components/player/internals/ContextMenu/Links";
 import {
   captionIsVisible,
   getCaptionDelayForCue,
@@ -330,7 +329,15 @@ export function TranscriptView({
   const virtualizer = useVirtualizer({
     count: deferredFilteredItems.length,
     getScrollElement: () => carouselRef.current,
-    estimateSize: () => 48,
+    estimateSize: (index) => {
+      const item = deferredFilteredItems[index];
+      if (!item) return 38;
+      const len = item.raw.length;
+      if (len > 100) return 76;
+      if (len > 50) return 56;
+      return 38;
+    },
+    getItemKey: (index) => deferredFilteredItems[index]?.key ?? index,
     overscan: 5,
   });
 
@@ -635,7 +642,7 @@ export function TranscriptView({
 
               return (
                 <div
-                  key={item.key}
+                  key={virtualItem.key}
                   data-que-id={item.key}
                   data-index={virtualItem.index}
                   ref={virtualizer.measureElement}
@@ -644,13 +651,26 @@ export function TranscriptView({
                     transform: `translateY(${virtualItem.start}px)`,
                   }}
                 >
-                  <Link
+                  <button
+                    type="button"
                     onClick={() => handleItemClick(item)}
-                    clickable
-                    className="items-start transition-colors duration-150 rounded-lg"
-                    active={isActive}
+                    data-active-link={isActive ? true : undefined}
+                    className={classNames(
+                      "group flex w-full items-start gap-2.5 rounded-lg px-2.5 py-1.5 text-left transition-colors duration-150 tabbable",
+                      isActive
+                        ? "bg-video-context-light/20 text-white shadow-sm"
+                        : "text-video-context-type-main hover:bg-white/10 hover:text-white",
+                    )}
                   >
-                    <span className="mr-3 flex-none w-[4.5rem] h-[1.75rem] flex items-center justify-center px-0 leading-tight rounded-md bg-video-context-light bg-opacity-20 text-video-context-type-main font-normal whitespace-nowrap overflow-hidden text-sm">
+                    <span
+                      className={classNames(
+                        "flex-none h-6 px-1.5 flex items-center justify-center rounded text-xs font-mono whitespace-nowrap transition-colors",
+                        isActive
+                          ? "bg-white/20 text-white font-semibold"
+                          : "bg-video-context-light/20 text-video-context-type-secondary group-hover:text-white group-hover:bg-white/15",
+                        showHours ? "min-w-[4.25rem]" : "min-w-[3.25rem]",
+                      )}
+                    >
                       {item.start < 0 || !Number.isFinite(item.start)
                         ? "N/A"
                         : formatSeconds(item.start, showHours)}
@@ -658,8 +678,8 @@ export function TranscriptView({
                     <span
                       className={
                         isActive
-                          ? "flex-1 text-white font-semibold text-sm leading-snug py-0.5"
-                          : "flex-1 text-video-context-type-main text-sm leading-snug py-0.5 hover:text-white transition-colors"
+                          ? "flex-1 min-w-0 break-words text-white font-semibold text-sm leading-snug py-0.5"
+                          : "flex-1 min-w-0 break-words text-video-context-type-main text-sm leading-snug py-0.5 hover:text-white transition-colors"
                       }
                     >
                       <span
@@ -667,7 +687,7 @@ export function TranscriptView({
                         dir="ltr"
                       />
                     </span>
-                  </Link>
+                  </button>
                 </div>
               );
             })

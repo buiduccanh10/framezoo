@@ -831,7 +831,13 @@ export function useCaptions() {
   }, [setCaption, setLanguage, setIsOpenSubtitles]);
 
   const selectLastUsedLanguage = useCallback(async () => {
-    if (source?.type === "file" && !embeddedSubtitleTracksLoaded) {
+    const hasExternalSubtitles = captions.some((c) => c.opensubtitles);
+    if (
+      source?.type === "file" &&
+      !embeddedSubtitleTracksLoaded &&
+      !hasExternalSubtitles &&
+      isLoadingExternalSubtitles
+    ) {
       return false;
     }
 
@@ -843,11 +849,13 @@ export function useCaptions() {
       fallbackToEnglish: false,
     });
   }, [
+    captions,
     embeddedSubtitleTracksLoaded,
+    isLoadingExternalSubtitles,
     lastSelectedLanguage,
+    selectLanguage,
     source,
     userLanguage,
-    selectLanguage,
   ]);
 
   const selectLastUsedLanguageIfEnabled = useCallback(async () => {
@@ -885,7 +893,15 @@ export function useCaptions() {
   // Validate selected caption when caption list changes
   useEffect(() => {
     if (captions.length === 0) return;
-    if (source?.type === "file" && !embeddedSubtitleTracksLoaded) return;
+    const hasExternalSubtitles = captions.some((c) => c.opensubtitles);
+    if (
+      source?.type === "file" &&
+      !embeddedSubtitleTracksLoaded &&
+      !hasExternalSubtitles &&
+      isLoadingExternalSubtitles
+    ) {
+      return;
+    }
 
     if (!selectedCaption) {
       const isNewSourceRequest =

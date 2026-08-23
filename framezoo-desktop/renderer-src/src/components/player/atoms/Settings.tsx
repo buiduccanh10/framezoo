@@ -240,7 +240,7 @@ function SettingsOverlay({ id }: { id: string }) {
         <OverlayPage
           id={id}
           path="/captions/transcript"
-          width={defaultWidth}
+          width={wideWidth}
           height={transcriptHeight}
         >
           <Menu.CardWithScrollable scrollLastChild>
