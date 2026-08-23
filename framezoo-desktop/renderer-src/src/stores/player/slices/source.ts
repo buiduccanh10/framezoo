@@ -630,7 +630,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     // This runs asynchronously so it doesn't block the stream loading
     if (!shouldReuseLoadedExternalSubtitles) {
       setTimeout(() => {
-        nextStore.addExternalSubtitles(requestId);
+        nextStore.addExternalSubtitles(requestId, { forceRefresh: true });
       }, 100);
     }
   },
