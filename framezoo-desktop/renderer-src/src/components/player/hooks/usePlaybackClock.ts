@@ -104,13 +104,20 @@ export function useSmoothPlaybackClock({
       };
       clockTimeRef.current = clampedTime;
       setClockTime(clampedTime);
-    } else if (clampedTime > previousTime) {
+    } else if (clampedTime !== anchorRef.current.time) {
+      // The authoritative time has updated. Always update the anchor so we don't drift.
       anchorRef.current = {
         time: clampedTime,
         timestamp: isActive ? now : 0,
       };
-      clockTimeRef.current = clampedTime;
-      setClockTime(clampedTime);
+      // Only force a visual clock update if the real time is AHEAD of the extrapolated clock.
+      // If the real time is slightly behind (because we extrapolated a bit too fast),
+      // Math.max in the tick loop will gracefully pause the visual clock for a few ms
+      // until the real time catches up, avoiding micro-stutters backward.
+      if (clampedTime > previousTime) {
+        clockTimeRef.current = clampedTime;
+        setClockTime(clampedTime);
+      }
     } else if (!isActive) {
       // Clock is paused (e.g. buffering / isLoading). Explicitly zero out the
       // anchor timestamp so that when the clock reactivates the rAF does NOT
