@@ -810,6 +810,7 @@
         "dualSubHint": "Selecione um idioma para a legenda secundária (mostrada acima da primária)",
         "embedded": "Integrado",
         "empty": "Não há legendas fornecidas para isso.",
+        "fetchFailed": "Não foi possível carregar as legendas. Tente novamente em alguns segundos.",
         "loadingExternal": "Carregando legendas externas...",
         "loadingExternalProgress": "Carregando legendas externas... ({{progress}}%)",
         "matchScoreLabel": "Correspondência ~{{score}}%",

@@ -810,6 +810,7 @@
         "dualSubHint": "Selectați o limbă pentru subtitrarea secundară (afișată deasupra principalului)",
         "embedded": "Încorporat",
         "empty": "Nu există subtitrări furnizate pentru aceasta.",
+        "fetchFailed": "Subtitrările nu s-au putut încărca, încercați din nou peste câteva secunde.",
         "loadingExternal": "Se încarcă subtitrări externe...",
         "loadingExternalProgress": "Se încarcă subtitrări externe... ({{progress}}%)",
         "matchScoreLabel": "Potrivire ~{{score}}%",

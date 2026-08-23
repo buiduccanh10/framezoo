@@ -810,6 +810,7 @@
         "dualSubHint": "בחר שפה עבור הכתובית המשנית (מוצגת למעלה הראשית)",
         "embedded": "מוטבע",
         "empty": "לא נמצאו כתוביות.",
+        "fetchFailed": "טעינת הכתוביות נכשלה, נסה שוב כמה שניות.",
         "loadingExternal": "טוען כתוביות חיצוניות...",
         "loadingExternalProgress": "טוען כתוביות חיצוניות... ({{progress}}%)",
         "matchScoreLabel": "התאמה ~{{score}}%",

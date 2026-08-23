@@ -810,6 +810,7 @@
         "dualSubHint": "Seleccioneu un idioma per al subtítol secundari (que es mostra a sobre del principal)",
         "embedded": "Incrustat",
         "empty": "No hi ha subtítols per a això.",
+        "fetchFailed": "No s&#39;han pogut carregar els subtítols. Torna-ho a intentar d&#39;aquí a uns segons.",
         "loadingExternal": "S'estan carregant subtítols externs...",
         "loadingExternalProgress": "S'estan carregant subtítols externs... ({{progress}}%)",
         "matchScoreLabel": "Coincidència ~{{score}}%",

@@ -810,6 +810,7 @@
         "dualSubHint": "选择辅助字幕的语言（显示在主要字幕上方）",
         "embedded": "嵌入式",
         "empty": "没有提供的字幕。",
+        "fetchFailed": "字幕加载失败，请稍后重试。",
         "loadingExternal": "正在加载外部字幕...",
         "loadingExternalProgress": "正在加载外部字幕... ({{progress}}%)",
         "matchScoreLabel": "匹配 ~{{score}}%",

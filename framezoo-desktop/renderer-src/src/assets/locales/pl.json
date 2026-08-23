@@ -810,6 +810,7 @@
         "dualSubHint": "Wybierz język dodatkowych napisów (pokazany powyżej podstawowego)",
         "embedded": "Osadzony",
         "empty": "Nie znaleziono napisów.",
+        "fetchFailed": "Nie udało się załadować napisów. Spróbuj ponownie za kilka sekund.",
         "loadingExternal": "Ładowanie napisów zewnętrznych...",
         "loadingExternalProgress": "Ładowanie napisów zewnętrznych... ({{progress}}%)",
         "matchScoreLabel": "Dopasuj ~{{score}}%",

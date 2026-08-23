@@ -810,6 +810,7 @@
         "dualSubHint": "Wählen Sie eine Sprache für den sekundären Untertitel (siehe oben)",
         "embedded": "Eingebettet",
         "empty": "Do si kei Ontertetel verfüegbar.",
+        "fetchFailed": "Untertitel konnten nicht geladen werden. Bitte versuchen Sie es in wenigen Sekunden erneut.",
         "loadingExternal": "Externe Untertitel werden geladen...",
         "loadingExternalProgress": "Externe Untertitel werden geladen... ({{progress}}%)",
         "matchScoreLabel": "Übereinstimmung mit ~{{score}} %",

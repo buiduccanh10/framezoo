@@ -810,6 +810,7 @@
         "dualSubHint": "Vælg et sprog til den sekundære undertekst (vist ovenfor primær)",
         "embedded": "Indlejret",
         "empty": "Der er ingen undertekster til dette.",
+        "fetchFailed": "Kunne ikke indlæse undertekster. Prøv igen om et par sekunder.",
         "loadingExternal": "Indlæser eksterne undertekster...",
         "loadingExternalProgress": "Indlæser eksterne undertekster... ({{progress}}%)",
         "matchScoreLabel": "Match ~{{score}}%",

@@ -810,6 +810,7 @@
         "dualSubHint": "Valige teisejärguliste subtiitrite keel (kuvatakse esmase subtiitrite kohal)",
         "embedded": "Manustatud",
         "empty": "Selle jaoks pole subtiitreid ette nähtud.",
+        "fetchFailed": "Subtiitrite laadimine ebaõnnestus, proovi paar sekundit uuesti.",
         "loadingExternal": "Väliste subtiitrite laadimine...",
         "loadingExternalProgress": "Väliste subtiitrite laadimine... ({{progress}}%)",
         "matchScoreLabel": "Vasta ~{{score}}%",

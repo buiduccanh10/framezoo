@@ -810,6 +810,7 @@
         "dualSubHint": "Izberite jezik za sekundarni podnapis (prikazan nad primarnim)",
         "embedded": "Vdelano",
         "empty": "Za to ni na voljo podnapisov.",
+        "fetchFailed": "Nalaganje podnapisov ni uspelo, poskusite znova čez nekaj sekund.",
         "loadingExternal": "Nalaganje zunanjih podnapisov ...",
         "loadingExternalProgress": "Nalaganje zunanjih podnapisov ... ({{progress}}%)",
         "matchScoreLabel": "Ujemanje ~{{score}}%",

@@ -810,6 +810,7 @@
         "dualSubHint": "İkincil altyazı için bir dil seçin (birincilin üzerinde gösterilmiştir)",
         "embedded": "Gömülü",
         "empty": "Bunun için sağlanan altyazı yok.",
+        "fetchFailed": "Altyazılar yüklenemedi, birkaç saniye sonra tekrar deneyin.",
         "loadingExternal": "Harici altyazılar yükleniyor...",
         "loadingExternalProgress": "Harici altyazılar yükleniyor... ({{progress}}%)",
         "matchScoreLabel": "~{{score}}% ile eşleş",
