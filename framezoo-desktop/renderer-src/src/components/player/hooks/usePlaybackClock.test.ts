@@ -30,10 +30,13 @@ describe("playback clock", () => {
     ).toBe(10 + MAX_EXTRAPOLATION_SECONDS);
   });
 
-  it("returns anchor time directly when timestamp is inactive / zero", () => {
+  it("returns anchor time directly when timestamp is inactive / zero (e.g. during buffering / isLoading)", () => {
     expect(
       getProjectedPlaybackTime({ time: 10, timestamp: 0 }, 1_500, 1, 120),
     ).toBe(10);
+    expect(
+      getProjectedPlaybackTime({ time: 25.5, timestamp: 0 }, 50_000, 1, 120),
+    ).toBe(25.5);
   });
 
   describe("getMonotonicPlaybackTime", () => {
