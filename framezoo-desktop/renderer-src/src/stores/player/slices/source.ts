@@ -169,6 +169,7 @@ export interface SourceSlice {
   currentAudioTrack: AudioTrack | null;
   captionList: CaptionListItem[];
   isLoadingExternalSubtitles: boolean;
+  externalSubtitleLoadError: string | null;
   externalSubtitleRequestId: number;
   externalSubtitleLoadProgress: {
     completed: number;
@@ -376,6 +377,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
   embeddedSubtitleTracksLoaded: false,
   captionList: [],
   isLoadingExternalSubtitles: false,
+  externalSubtitleLoadError: null,
   externalSubtitleRequestId: 0,
   externalSubtitleLoadProgress: {
     completed: 0,
@@ -748,6 +750,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         getMediaKey(s.meta) === requestedMediaKey
       ) {
         s.isLoadingExternalSubtitles = true;
+        s.externalSubtitleLoadError = null;
         s.externalSubtitleLoadProgress = {
           completed: 0,
           total: 1,
@@ -812,7 +815,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
         staleTime: EXTERNAL_SUBTITLE_CACHE_TTL_MS,
         gcTime: EXTERNAL_SUBTITLE_CACHE_GC_MS,
         queryFn: async () => {
-          const { captions: loadedCaptions } = await loadAllAddonSubtitles(
+          const { captions: loadedCaptions, errors } = await loadAllAddonSubtitles(
             getInstalledAddons(),
             type,
             id,
@@ -847,6 +850,11 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
             },
             { forceRefresh }
           );
+          
+          if (loadedCaptions.length === 0 && errors.length > 0) {
+            throw new Error(`Failed to fetch subtitles: ${errors.map(e => e.message).join(', ')}`);
+          }
+          
           return loadedCaptions;
         },
       });
@@ -874,6 +882,10 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
     } catch (error) {
       if (getMediaKey(get().meta) !== requestedMediaKey) return;
       console.error("Failed to load external subtitles:", error);
+      set((s) => {
+        s.externalSubtitleLoadError =
+          error instanceof Error ? error.message : String(error);
+      });
     } finally {
       if (progressTimer) clearInterval(progressTimer);
       set((s) => {

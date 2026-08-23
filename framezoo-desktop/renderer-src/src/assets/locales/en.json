@@ -800,6 +800,7 @@
         "dualSubHint": "Select a language for the secondary subtitle (shown above primary)",
         "embedded": "Embedded",
         "empty": "There are no provided subtitles for this.",
+        "fetchFailed": "Failed to load subtitles, try a few seconds.",
         "loadingExternal": "Loading external subtitles...",
         "loadingExternalProgress": "Loading external subtitles... ({{progress}}%)",
         "matchScoreLabel": "Match ~{{score}}%",
