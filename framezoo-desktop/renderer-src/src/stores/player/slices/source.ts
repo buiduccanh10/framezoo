@@ -845,6 +845,7 @@ export const createSourceSlice: MakeSlice<SourceSlice> = (set, get) => ({
                 }
               });
             },
+            { forceRefresh }
           );
           return loadedCaptions;
         },
