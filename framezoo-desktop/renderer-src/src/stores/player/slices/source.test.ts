@@ -330,4 +330,94 @@ describe("external subtitle source transitions", () => {
     );
     expect(setCaption).toHaveBeenCalledWith(null);
   });
+
+  it("retains external subtitles when stream promotion occurs within the same episode", async () => {
+    let resolveScrape:
+      | ((res: { captions: CaptionListItem[]; errors: any[] }) => void)
+      | undefined;
+    subtitleMocks.loadAll.mockImplementationOnce(
+      () =>
+        new Promise<{ captions: CaptionListItem[]; errors: any[] }>(
+          (resolve) => {
+            resolveScrape = resolve;
+          },
+        ),
+    );
+
+    const store = usePlayerStore.getState();
+    store.setMeta(createMeta(1));
+
+    // Initial pending stream
+    store.setSource(createSource("pending-torrent"), [], 0);
+    await vi.advanceTimersByTimeAsync(50);
+
+    // Promoted torrent stream for the same episode before scraping finishes
+    store.setSource(createSource("promoted-torrent"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    const caption = createCaption("episode-1-vietnamese");
+    resolveScrape?.({ captions: [caption], errors: [] });
+    await vi.runAllTimersAsync();
+
+    expect(usePlayerStore.getState().captionList).toContainEqual(caption);
+  });
+
+  it("formats addon query ID with tmdb: prefix when imdbId is absent", async () => {
+    const metaWithoutImdb: PlayerMeta = {
+      type: "show",
+      title: "Anime Show",
+      tmdbId: "85937",
+      releaseYear: 2019,
+      season: {
+        number: 1,
+        tmdbId: "season-1",
+        title: "Season 1",
+      },
+      episode: {
+        number: 3,
+        tmdbId: "episode-3",
+        title: "Episode 3",
+      },
+    };
+
+    const store = usePlayerStore.getState();
+    store.setMeta(metaWithoutImdb);
+    store.setSource(createSource("source-1"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(subtitleMocks.loadAll).toHaveBeenCalledWith(
+      expect.anything(),
+      "series",
+      "tmdb:85937:1:3",
+      expect.anything(),
+    );
+  });
+
+  it("automatically fetches addon subtitles when switching to next episode", async () => {
+    const captionEp1 = createCaption("episode-1-sub");
+    const captionEp2 = createCaption("episode-2-sub");
+    subtitleMocks.loadAll
+      .mockResolvedValueOnce({ captions: [captionEp1], errors: [] })
+      .mockResolvedValueOnce({ captions: [captionEp2], errors: [] });
+
+    const store = usePlayerStore.getState();
+
+    // Play episode 1
+    store.setMeta(createMeta(1));
+    store.setSource(createSource("source-ep1"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(usePlayerStore.getState().captionList).toContainEqual(captionEp1);
+
+    // Switch to episode 2
+    store.setMeta(createMeta(2), "sourceSelection");
+    store.setSource(createSource("source-ep2"), [], 0);
+    await vi.advanceTimersByTimeAsync(100);
+
+    expect(subtitleMocks.loadAll).toHaveBeenCalledTimes(2);
+    expect(usePlayerStore.getState().captionList).not.toContainEqual(
+      captionEp1,
+    );
+    expect(usePlayerStore.getState().captionList).toContainEqual(captionEp2);
+  });
 });
