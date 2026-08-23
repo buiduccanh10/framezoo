@@ -12,4 +12,3 @@ export * from "./internals/BookmarkButton";
 export * from "./internals/InfoButton";
 export * from "./internals/SkipEpisodeButton";
 export * from "./atoms/Chromecast";
-export * from "./atoms/Widescreen";
