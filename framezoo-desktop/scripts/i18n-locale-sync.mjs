@@ -185,23 +185,28 @@ function unmaskPlaceholders(text, saved) {
   return out;
 }
 
-async function translateText(source, targetLang) {
-  const url = new URL("https://translate.googleapis.com/translate_a/single");
-  url.searchParams.set("client", "gtx");
-  url.searchParams.set("sl", "en");
-  url.searchParams.set("tl", targetLang);
-  url.searchParams.set("dt", "t");
-  url.searchParams.set("q", source);
+const BATCH_API_URL = "https://translate-pa.googleapis.com/v1/translateHtml";
+const BATCH_API_KEY = "AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520";
 
+async function translateText(source, targetLang) {
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     try {
-      const res = await fetch(url);
+      const res = await fetch(BATCH_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json+protobuf",
+          "X-goog-api-key": BATCH_API_KEY,
+        },
+        body: JSON.stringify([[[source], "auto", targetLang], "te"]),
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      const translated = data?.[0]?.map((x) => x?.[0] ?? "").join("") ?? "";
-      if (translated) return translated;
-    } catch {
-      if (attempt < 3) await new Promise((r) => setTimeout(r, 2000 * attempt));
+      if (Array.isArray(data?.[0]) && typeof data[0][0] === "string") {
+        return data[0][0];
+      }
+    } catch (err) {
+      console.error(`Attempt ${attempt} error for ${targetLang}:`, err);
+      if (attempt < 3) await new Promise((r) => setTimeout(r, 1000 * attempt));
     }
   }
   return null;

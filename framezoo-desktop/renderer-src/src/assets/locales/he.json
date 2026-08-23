@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "לא ניתן היה לאחזר תמונה עבור מדיה זו",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "פ",
     "inCinema": "בקולנוע",
@@ -661,7 +662,7 @@
         "restart": "הפעל מחדש כדי לעדכן",
         "updating": "עִדכּוּן..."
       },
-      "offline": "תבדוק את חיבור האינטרנט שלך"
+      "offline": "לא ניתן להתחבר לשרת. אנא נסה שוב בעוד מספר שניות."
     },
     "download": {
       "empty": "עדיין לא הוגדרו הורדות.",

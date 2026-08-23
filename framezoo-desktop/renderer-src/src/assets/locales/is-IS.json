@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Gat ekki sótt mynd fyrir þetta efni",
     "episodeDisplay": "S{{season}} Þ{{episode}}",
     "episodeShort": "E",
     "inCinema": "Í Bíó",
@@ -661,7 +662,7 @@
         "restart": "Endurræstu til að uppfæra",
         "updating": "Uppfærir..."
       },
-      "offline": "Athugaðu net tengingu þína"
+      "offline": "Ekki tókst að tengjast netþjóninum. Reyndu aftur eftir nokkrar sekúndur."
     },
     "download": {
       "empty": "Engin niðurhal er stillt ennþá.",

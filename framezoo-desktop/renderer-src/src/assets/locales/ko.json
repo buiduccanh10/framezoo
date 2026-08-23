@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "이 미디어에 대한 이미지를 가져올 수 없습니다.",
     "episodeDisplay": "시즌{{season}} {{episode}}화",
     "episodeShort": "E",
     "inCinema": "영화관에서",
@@ -661,7 +662,7 @@
         "restart": "업데이트하려면 다시 시작하세요.",
         "updating": "업데이트 중..."
       },
-      "offline": "인터넷 연결을 확인해주세요"
+      "offline": "서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요."
     },
     "download": {
       "empty": "아직 구성된 다운로드가 없습니다.",

@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Kunde inte hämta en bild för detta medieinnehåll",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "A",
     "inCinema": "På bio",
@@ -661,7 +662,7 @@
         "restart": "Starta om för att uppdatera",
         "updating": "Uppdaterar..."
       },
-      "offline": "Kontrollera din internetanslutning, tokiga gås! 🦢"
+      "offline": "Det gick inte att ansluta till servern. Försök igen om några sekunder."
     },
     "download": {
       "empty": "Inga nedladdningar är konfigurerade än.",

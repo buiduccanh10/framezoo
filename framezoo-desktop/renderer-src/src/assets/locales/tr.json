@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Bu medya için bir resim alınamadı.",
     "episodeDisplay": "S{{season}} B{{episode}}",
     "episodeShort": "B",
     "inCinema": "Sinemada",
@@ -661,7 +662,7 @@
         "restart": "Güncellemek için yeniden başlatın",
         "updating": "Güncelleniyor..."
       },
-      "offline": "İnternet bağlantınızı kontrol ediniz"
+      "offline": "Sunucuya bağlanılamadı. Lütfen birkaç saniye sonra tekrar deneyin."
     },
     "download": {
       "empty": "Henüz hiçbir indirme işlemi yapılandırılmadı.",

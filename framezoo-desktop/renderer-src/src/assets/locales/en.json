@@ -563,6 +563,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Could not fetch an image for this media",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
     "inCinema": "In Cinema",
@@ -651,7 +652,7 @@
         "restart": "Restart to update",
         "updating": "Updating..."
       },
-      "offline": "Check your internet connection, silly goose! 🦢"
+      "offline": "Unable to connect to the server. Please retry in a few seconds."
     },
     "download": {
       "empty": "No downloads are configured yet.",

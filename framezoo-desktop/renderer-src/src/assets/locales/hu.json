@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Nem sikerült képet letölteni ehhez a médiához",
     "episodeDisplay": "{{season}}. évad - {{episode}}. rész",
     "episodeShort": "rész",
     "inCinema": "Moziban",
@@ -661,7 +662,7 @@
         "restart": "Indítsa újra a frissítéshez",
         "updating": "Frissítés..."
       },
-      "offline": "Nézd meg az internet kapcsolatodat, drágaságom!"
+      "offline": "Nem sikerült csatlakozni a szerverhez. Próbáld újra néhány másodperc múlva."
     },
     "download": {
       "empty": "Még nincsenek letöltések konfigurálva.",

@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Impossibile recuperare un&#39;immagine per questo contenuto multimediale",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "Nel cinema",
@@ -661,7 +662,7 @@
         "restart": "Riavvia per aggiornare",
         "updating": "Aggiornamento..."
       },
-      "offline": "Controlla la tua connessione internet, stupida oca! 🦢"
+      "offline": "Impossibile connettersi al server. Riprovare tra qualche secondo."
     },
     "download": {
       "empty": "Nessun download è stato ancora configurato.",

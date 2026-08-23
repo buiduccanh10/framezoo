@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "このメディアの画像を取得できませんでした",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
     "inCinema": "映画で",
@@ -661,7 +662,7 @@
         "restart": "更新するには再起動してください",
         "updating": "更新中..."
       },
-      "offline": "インターネット接続を確認してください、愚かなガチョウ! 🦢"
+      "offline": "サーバーに接続できませんでした。数秒後にもう一度お試しください。"
     },
     "download": {
       "empty": "ダウンロードはまだ構成されていません。",

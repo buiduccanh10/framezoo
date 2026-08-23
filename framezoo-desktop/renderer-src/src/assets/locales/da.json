@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Kunne ikke hente et billede til dette medie",
     "episodeDisplay": "S{{season}} - E{{episode}}",
     "episodeShort": "E",
     "inCinema": "I Biograf",
@@ -661,7 +662,7 @@
         "restart": "Genstart for at opdatere",
         "updating": "Opdaterer..."
       },
-      "offline": "Kontroller din internetforbindelse, fjollehoved!"
+      "offline": "Kan ikke oprette forbindelse til serveren. Prøv igen om et par sekunder."
     },
     "download": {
       "empty": "Ingen downloads er konfigureret endnu.",

@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Không thể tải hình ảnh cho phương tiện này.",
     "episodeDisplay": "M{{season}} T{{episode}}",
     "episodeShort": "T",
     "inCinema": "Chiếu rạp",
@@ -661,7 +662,7 @@
         "restart": "Khởi động lại để cập nhật",
         "updating": "Đang cập nhật..."
       },
-      "offline": "Hãy kiểm tra kết nối Internet của bạn"
+      "offline": "Không thể kết nối với máy chủ. Vui lòng thử lại sau vài giây."
     },
     "download": {
       "empty": "Chưa có nội dung tải xuống nào được định cấu hình.",

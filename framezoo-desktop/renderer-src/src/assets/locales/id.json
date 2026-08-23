@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Tidak dapat mengambil gambar untuk media ini.",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "Di Bioskop",
@@ -661,7 +662,7 @@
         "restart": "Mulai ulang untuk memperbarui",
         "updating": "Memperbarui..."
       },
-      "offline": "Periksa koneksi internet Anda"
+      "offline": "Tidak dapat terhubung ke server. Silakan coba lagi dalam beberapa detik."
     },
     "download": {
       "empty": "Belum ada unduhan yang dikonfigurasi.",

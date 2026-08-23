@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "No se pudo obtener una imagen para este medio.",
     "episodeDisplay": "T{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "En el cine",
@@ -661,7 +662,7 @@
         "restart": "Reiniciar para actualizar",
         "updating": "Actualizando..."
       },
-      "offline": "Verifica tu conexión a internet"
+      "offline": "No se pudo conectar con el servidor. Inténtelo de nuevo en unos segundos."
     },
     "download": {
       "empty": "Aún no se han configurado descargas.",
