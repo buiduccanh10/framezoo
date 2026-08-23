@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Nu s-a putut prelua o imagine pentru acest suport media",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "În Cinema",
@@ -661,7 +662,7 @@
         "restart": "Reporniți pentru a actualiza",
         "updating": "Se actualizează..."
       },
-      "offline": "Verificați-vă conexiunea de internet"
+      "offline": "Nu se poate conecta la server. Vă rugăm să încercați din nou în câteva secunde."
     },
     "download": {
       "empty": "Nu sunt încă configurate descărcări.",

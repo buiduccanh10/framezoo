@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "無法取得此媒體的圖像",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "在電影院",
@@ -661,7 +662,7 @@
         "restart": "重啟即可更新",
         "updating": "更新中..."
       },
-      "offline": "請檢查您的網絡連接"
+      "offline": "無法連接到伺服器。請稍後再試。"
     },
     "download": {
       "empty": "尚未配置下載。",

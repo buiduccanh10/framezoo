@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Er kon geen afbeelding voor dit medium worden opgehaald.",
     "episodeDisplay": "S{{season}} A{{episode}}",
     "episodeShort": "E",
     "inCinema": "In de bioscoop",
@@ -661,7 +662,7 @@
         "restart": "Start opnieuw op om te updaten",
         "updating": "Updaten..."
       },
-      "offline": "Controleer je internetverbinding"
+      "offline": "Kan geen verbinding maken met de server. Probeer het over een paar seconden opnieuw."
     },
     "download": {
       "empty": "Er zijn nog geen downloads geconfigureerd.",

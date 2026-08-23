@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Nevarēja ielādēt attēlu šim multivides failam.",
     "episodeDisplay": "Sezona{{season}} Episode{{episode}}",
     "episodeShort": "E",
     "inCinema": "Kinoteātrī",
@@ -661,7 +662,7 @@
         "restart": "Restartējiet, lai atjauninātu",
         "updating": "Notiek atjaunināšana..."
       },
-      "offline": "Pārbaudiet interneta savienojumu"
+      "offline": "Nevar izveidot savienojumu ar serveri. Lūdzu, mēģiniet vēlreiz pēc dažām sekundēm."
     },
     "download": {
       "empty": "Vēl nav konfigurēta neviena lejupielāde.",

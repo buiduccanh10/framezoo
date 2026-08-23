@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Slike za ta medij ni bilo mogoče pridobiti",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "V kinu",
@@ -661,7 +662,7 @@
         "restart": "Znova zaženite za posodobitev",
         "updating": "Posodabljanje ..."
       },
-      "offline": "Preverite vašo internetno povezavo"
+      "offline": "Ni mogoče vzpostaviti povezave s strežnikom. Poskusite znova čez nekaj sekund."
     },
     "download": {
       "empty": "Noben prenos še ni konfiguriran.",

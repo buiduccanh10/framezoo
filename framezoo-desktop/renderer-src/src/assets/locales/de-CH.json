@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Für dieses Medium konnte kein Bild abgerufen werden.",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "Im Kino",
@@ -661,7 +662,7 @@
         "restart": "Starten Sie neu, um zu aktualisieren",
         "updating": "Aktualisierung..."
       },
-      "offline": "Check mol dini Internet verbendig, silly goose! 🦢"
+      "offline": "Verbindung zum Server konnte nicht hergestellt werden. Bitte versuchen Sie es in wenigen Sekunden erneut."
     },
     "download": {
       "empty": "Es sind noch keine Downloads konfiguriert.",

@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Selle meedia jaoks ei õnnestunud pilti tuua",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "Kinos",
@@ -661,7 +662,7 @@
         "restart": "Värskendamiseks taaskäivitage",
         "updating": "Värskendamine..."
       },
-      "offline": "Kontrollige oma Interneti-ühendust"
+      "offline": "Serveriga ei õnnestu ühendust luua. Palun proovige uuesti mõne sekundi pärast."
     },
     "download": {
       "empty": "Ühtegi allalaadimist pole veel konfigureeritud.",

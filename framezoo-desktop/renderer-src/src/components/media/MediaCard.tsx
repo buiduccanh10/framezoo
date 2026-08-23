@@ -15,6 +15,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 import { resolvePublicUrl } from "@/utils/publicUrl";
 
 import { MediaBookmarkButton } from "./MediaBookmark";
+import { MediaPlaceholder } from "./MediaPlaceholder";
 import { ReleaseQualityBadge } from "./ReleaseQualityBadge";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
@@ -114,9 +115,15 @@ function MediaCardContent({
   const dotListContent = [t(`media.types.${media.type}`)];
 
   const [searchQuery] = useSearchQuery();
-  const posterUrl = media.poster
+  const hasValidPoster = Boolean(
+    media.poster &&
+    media.poster.trim().length > 0 &&
+    media.poster !== "/placeholder.png" &&
+    !media.poster.endsWith("/placeholder.png"),
+  );
+  const posterUrl = hasValidPoster
     ? (resolvePublicUrl(media.poster) ?? media.poster)
-    : (resolvePublicUrl("/placeholder.png") ?? "/placeholder.png");
+    : undefined;
 
   // Show skeleton if forced or if media hasn't loaded yet (empty title/poster)
   const shouldShowSkeleton = forceSkeleton || (!media.title && !media.poster);
@@ -168,12 +175,16 @@ function MediaCardContent({
               "mb-4",
             )}
           >
-            <LazyImage
-              src={posterUrl}
-              alt={media.title}
-              fallbackSrc={resolvePublicUrl("/placeholder.png")}
-              className="absolute inset-0 w-full object-cover"
-            />
+            {posterUrl ? (
+              <LazyImage
+                src={posterUrl}
+                alt={media.title}
+                fallbackSlot={<MediaPlaceholder />}
+                className="absolute inset-0 w-full object-cover"
+              />
+            ) : (
+              <MediaPlaceholder />
+            )}
 
             {(media.releaseQuality === "CAM" || series) && (
               <div className="absolute right-1.5 top-1.5 flex flex-col items-end gap-1">

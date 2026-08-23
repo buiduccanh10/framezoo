@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Nie można pobrać obrazu dla tego nośnika",
     "episodeDisplay": "S{{season}} - O{{episode}}",
     "episodeShort": "O",
     "inCinema": "W kinie",
@@ -661,7 +662,7 @@
         "restart": "Uruchom ponownie, aby zaktualizować",
         "updating": "Aktualizowanie..."
       },
-      "offline": "Sprawdź swoje połączenie internetowe, głupolku!"
+      "offline": "Nie można połączyć się z serwerem. Spróbuj ponownie za kilka sekund."
     },
     "download": {
       "empty": "Żadne pobieranie nie zostało jeszcze skonfigurowane.",

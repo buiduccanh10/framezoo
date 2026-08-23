@@ -7,6 +7,7 @@ import { resolvePublicUrl } from "@/utils/publicUrl";
 
 export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string;
+  fallbackSlot?: React.ReactNode;
   showSkeleton?: boolean;
 }
 
@@ -15,6 +16,7 @@ export function LazyImage({
   alt,
   className,
   fallbackSrc,
+  fallbackSlot,
   showSkeleton = true,
   loading = "lazy",
   decoding = "async",
@@ -73,12 +75,18 @@ export function LazyImage({
         <div className="absolute inset-0 animate-pulse bg-white/5" />
       )}
 
-      {/* Error Fallback Icon */}
-      {hasError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-mediaCard-hoverBackground">
-          <Icon icon={Icons.WARNING} className="text-type-secondary text-2xl" />
-        </div>
-      )}
+      {/* Error Fallback */}
+      {hasError &&
+        (fallbackSlot ?? (
+          <div className="absolute inset-0 flex items-center justify-center bg-mediaCard-hoverBackground p-4">
+            <img
+              src={resolvePublicUrl("/placeholder.png") ?? "/placeholder.png"}
+              alt=""
+              aria-hidden="true"
+              className="w-12 sm:w-14 h-auto max-w-[50%] object-contain opacity-80 select-none"
+            />
+          </div>
+        ))}
 
       {/* Actual Image */}
       {currentSrc && !hasError && (

@@ -33,6 +33,7 @@ import { SettingsSyncer } from "@/stores/subtitles/SettingsSyncer";
 import { ThemeProvider } from "@/stores/theme";
 import { WatchHistorySyncer } from "@/stores/watchHistory/WatchHistorySyncer";
 import { detectRegion, useRegionStore } from "@/utils/detectRegion";
+import { resolvePublicUrl } from "@/utils/publicUrl";
 import {
   TMDB_METADATA_CACHE_BUSTER,
   TMDB_METADATA_CACHE_TTL_MS,
@@ -169,7 +170,12 @@ function ErrorScreen(props: {
   return (
     <LargeTextPart
       iconSlot={
-        <Icon className="text-type-danger text-2xl" icon={Icons.WARNING} />
+        <img
+          src={resolvePublicUrl("/placeholder.png") ?? "/placeholder.png"}
+          alt=""
+          aria-hidden="true"
+          className="w-16 sm:w-20 h-auto object-contain select-none mb-2"
+        />
       }
     >
       {props.children}

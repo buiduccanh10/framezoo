@@ -14,13 +14,15 @@ import { resolvePublicUrl } from "@/utils/publicUrl";
 const PING_INTERVAL_MS = 5000;
 const PUBLIC_ONLINE_SKIP_TICKS = 10; // 50s
 const AUTH_ONLINE_SKIP_TICKS = 36; // 3m
+const MAX_CONSECUTIVE_FAILURES = 3;
 
 export function useOnlineListener() {
   const updateOnline = useBannerStore((s) => s.updateOnline);
   const account = useAuthStore((s) => s.account);
   const backendUrl = useBackendUrl();
   const isDesktopApp = useIsDesktopApp();
-  const ref = useRef<boolean>(true);
+  const isOnlineRef = useRef<boolean>(true);
+  const failureCountRef = useRef<number>(0);
 
   useEffect(() => {
     const backendBase = backendUrl?.replace(/\/+$/, "");
@@ -38,9 +40,10 @@ export function useOnlineListener() {
 
     let abort: null | AbortController = null;
     const interval = setInterval(() => {
-      // if online try once every 10 iterations intead of every iteration
       counter += 1;
-      if (ref.current) {
+      // If currently online and no recent failures, skip ticks to reduce polling frequency.
+      // If we experienced failures, poll every tick (5s) to retry and confirm status.
+      if (isOnlineRef.current && failureCountRef.current === 0) {
         if (counter < onlineSkipTicks) return;
       }
       counter = 0;
@@ -78,13 +81,17 @@ export function useOnlineListener() {
           })
       )
         .then(() => {
+          failureCountRef.current = 0;
+          isOnlineRef.current = true;
           updateOnline(true);
-          ref.current = true;
         })
         .catch((err) => {
           if (err.name === "AbortError") return;
-          updateOnline(false);
-          ref.current = false;
+          failureCountRef.current += 1;
+          if (failureCountRef.current >= MAX_CONSECUTIVE_FAILURES) {
+            isOnlineRef.current = false;
+            updateOnline(false);
+          }
         });
     }, PING_INTERVAL_MS);
 

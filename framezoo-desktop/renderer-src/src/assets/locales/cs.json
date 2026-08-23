@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Nepodařilo se načíst obrázek pro toto médium",
     "episodeDisplay": "S{{season}} E{{episode}}",
     "episodeShort": "E",
     "inCinema": "V kině",
@@ -661,7 +662,7 @@
         "restart": "Pro aktualizaci restartujte",
         "updating": "Aktualizace..."
       },
-      "offline": "Zkontrolujte své internetové připojení"
+      "offline": "Nelze se připojit k serveru. Zkuste to prosím znovu za několik sekund."
     },
     "download": {
       "empty": "Zatím nejsou nakonfigurována žádná stahování.",

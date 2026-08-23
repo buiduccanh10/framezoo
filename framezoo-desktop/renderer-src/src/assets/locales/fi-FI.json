@@ -573,6 +573,7 @@
     }
   },
   "media": {
+    "cannotFetchImage": "Tämän median kuvaa ei voitu hakea",
     "episodeDisplay": "K{{season}} J{{episode}}",
     "episodeShort": "J",
     "inCinema": "Elokuvateatterissa",
@@ -661,7 +662,7 @@
         "restart": "Käynnistä uudelleen päivittääksesi",
         "updating": "Päivitetään..."
       },
-      "offline": "Tarkista Internet-yhteytesi"
+      "offline": "Palvelimeen ei saada yhteyttä. Yritä uudelleen muutaman sekunnin kuluttua."
     },
     "download": {
       "empty": "Latauksia ei ole vielä määritetty.",
