@@ -52,6 +52,6 @@ export function useInitializeSource() {
     previousAppLanguageRef.current = appLanguage;
 
     if (!sourceIdentifier || !sourceId) return;
-    void addExternalSubtitles();
+    void addExternalSubtitles(undefined, { forceRefresh: true });
   }, [addExternalSubtitles, appLanguage, sourceIdentifier, sourceId]);
 }
